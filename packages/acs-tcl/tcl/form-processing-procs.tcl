@@ -876,7 +876,7 @@ ad_proc -public ad_form {
                     # The key exists, grab the existing values if we have an select_query clause
 
                     if { ![info exists select_query] && ![info exists select_query_name] } {
-                        return -code error "Key \"$key_name\" has the value \"[set $key_name]\" but no select_query or select_query_name clause exists"
+                        return -code error "Key \"$key_name\" has the value \"[set $key_name]\" but no select_query or select_query_name clause exists.  (This can be caused by having ad_form request blocks in the wrong order.)" 
                     }
 
                     if { [info exists select_query_name] } {
