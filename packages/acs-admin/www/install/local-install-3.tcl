@@ -82,7 +82,7 @@ if { ![empty_string_p $pkg_install_list] } {
         # Install the packages.
         set version_id [apm_package_install \
                             -enable \
-                            -install_path "[acs_root_dir]/packages" \
+                            -package_path "[acs_root_dir]/packages" \
                             -load_data_model \
                             -data_model_files $data_model_files \
                             $spec_file]
