@@ -34,7 +34,6 @@ aa_register_case job_start_end {
             auth::sync::job::create_entry \
                 -job_id $job_id \
                 -operation "insert" \
-                -authority_id [auth::authority::local] \
                 -username "foobar" \
                 -user_id [ad_conn user_id] \
                 -success
@@ -43,7 +42,6 @@ aa_register_case job_start_end {
             auth::sync::job::create_entry \
                 -job_id $job_id \
                 -operation "insert" \
-                -authority_id [auth::authority::local] \
                 -username "foobar" \
                 -user_id [ad_conn user_id] \
                 -message "A problem" \
@@ -111,7 +109,6 @@ aa_register_case job_actions {
             set entry_id [auth::sync::job::action \
                               -job_id $job_id \
                               -operation "insert" \
-                              -authority_id [auth::authority::local] \
                               -username $username1 \
                               -first_names $first_names1 \
                               -last_name $last_name1 \
@@ -152,7 +149,6 @@ aa_register_case job_actions {
             set entry_id [auth::sync::job::action \
                               -job_id $job_id \
                               -operation "insert" \
-                              -authority_id [auth::authority::local] \
                               -username $username1 \
                               -first_names [ad_generate_random_string] \
                               -last_name [ad_generate_random_string] \
@@ -190,7 +186,6 @@ aa_register_case job_actions {
             set entry_id [auth::sync::job::action \
                               -job_id $job_id \
                               -operation "update" \
-                              -authority_id [auth::authority::local] \
                               -username $username1 \
                               -first_names $first_names2 \
                               -last_name $last_name2 \
@@ -232,7 +227,6 @@ aa_register_case job_actions {
             set entry_id [auth::sync::job::action \
                               -job_id $job_id \
                               -operation "insert" \
-                              -authority_id [auth::authority::local] \
                               -username $username2 \
                               -first_names {} \
                               -last_name {<b>Foobar</b>} \
@@ -264,7 +258,6 @@ aa_register_case job_actions {
             set entry_id [auth::sync::job::action \
                               -job_id $job_id \
                               -operation "delete" \
-                              -authority_id [auth::authority::local] \
                               -username $username1]
             
             array unset entry
@@ -332,7 +325,6 @@ aa_register_case job_snapshot {
             set entry_id [auth::sync::job::action \
                               -job_id $job_id \
                               -operation "snapshot" \
-                              -authority_id [auth::authority::local] \
                               -username $username1 \
                               -first_names $first_names1 \
                               -last_name $last_name1 \
@@ -378,7 +370,6 @@ aa_register_case job_snapshot {
             set entry_id [auth::sync::job::action \
                               -job_id $job_id \
                               -operation "snapshot" \
-                              -authority_id [auth::authority::local] \
                               -username $username1 \
                               -first_names $first_names2 \
                               -last_name $last_name2 \
@@ -427,8 +418,7 @@ aa_register_case job_snapshot {
             }]
             
             auth::sync::job::snapshot_delete_remaining \
-                -job_id $job_id \
-                -authority_id [auth::authority::local]
+                -job_id $job_id
 
             #####
             #
@@ -464,6 +454,192 @@ aa_register_case job_batch_for_local {
             auth::sync::job::get -job_id $job_id -array job
 
             aa_log "job.message = '$job(message)'"
+            aa_true "job.message not empty when called for local authority" [exists_and_not_null job(message)]
+        }
+}
+
+
+aa_register_case job_batch_ims_dummy {
+    Test a batch job for the local authority
+} {
+    aa_stub acs_sc::invoke {
+        acs_sc::invoke__arg_parser
+
+        if { [string equal $contract GetDocument] && [string equal $operation GetDocument] } {
+            array set result {
+                doc_status ok
+                doc_message {}
+                document {}
+            }
+            
+            # Example document grabbed pulled from 
+            # http://www.imsglobal.org/enterprise/entv1p1/imsent_bestv1p1.html#1404584
+            set result(document) {
+<enterprise>
+  <properties>
+    <datasource>Dunelm Services Limited</datasource>
+    <target>Telecommunications LMS</target>
+    <type>DATABASE UPDATE</type>
+    <datetime>2001-08-08</datetime>
+  </properties>
+  <person recstatus = "1">
+    <comments>Add a new Person record.</comments>
+    <sourcedid>
+      <source>Dunelm Services Limited</source>
+      <id>CK1</id>
+    </sourcedid>
+    <name>
+      <fn>Clark Kent</fn>
+      <sort>Kent, C</sort>
+      <nickname>Superman</nickname>
+    </name>
+    <demographics>
+      <gender>2</gender>
+    </demographics>
+    <adr>
+      <extadd>The Daily Planet</extadd>
+      <locality>Metropolis</locality>
+      <country>USA</country>
+    </adr>
+  </person>
+  <person recstatus = "2">
+    <comments>Update a previously created record.</comments>
+    <sourcedid>
+      <source>Dunelm Services Limited</source>
+      <id>CS1</id>
+    </sourcedid>
+    <name>
+      <fn>Colin Smythe</fn>
+      <sort>Smythe, C</sort>
+      <nickname>Colin</nickname>
+      <n>
+        <family>Smythe</family>
+        <given>Colin</given>
+        <other>Manfred</other>
+        <other>Wingarde</other>
+        <prefix>Dr.</prefix>
+        <suffix>C.Eng</suffix>
+        <partname partnametype = "Initials">C.M.W.</partname>
+      </n>
+    </name>
+    <demographics>
+      <gender>2</gender>
+      <bday>1958-02-18</bday>
+      <disability>None.</disability>
+    </demographics>
+    <email>colin@dunelm.com</email>
+    <url>http://www.dunelm.com</url>
+    <tel teltype = "Mobile">4477932335019</tel>
+    <adr>
+      <extadd>Dunelm Services Limited</extadd>
+      <street>34 Acorn Drive</street>
+      <street>Stannington</street>
+      <locality> Sheffield</locality>
+      <region>S.Yorks</region>
+      <pcode>S7 6WA</pcode>
+      <country>UK</country>
+    </adr>
+    <photo imgtype = "gif">
+      <extref>http://www.dunelm.com/staff/colin2.gif</extref>
+    </photo>
+    <institutionrole primaryrole = "No" institutionroletype = "Alumni"/>
+    <datasource>dunelm:colinsmythe:1</datasource>
+  </person>
+  <person recstatus = "3">
+    <comments>Delete this record.</comments>
+    <sourcedid>
+      <source>Dunelm Services Limited</source>
+      <id>LL1</id>
+    </sourcedid>
+    <name>
+      <fn>Lois Lane</fn>
+      <sort>Lane, L</sort>
+    </name>
+  </person>
+</enterprise>
+}
+            
+            return [array get result]
+        } else {
+            acs_sc::invoke_unstubbed \
+                -contract $contract \
+                -operation $operation \
+                -impl $impl \
+                -impl_id $impl_id \
+                -call_args $call_args \
+                -error=$error_p
+        }
+    }
+
+    aa_run_with_teardown \
+        -rollback \
+        -test_code {
+            
+            # Create a new dummy authority with the dummy IMS get-document driver and the IMS Enterprise 1.1 process driver.
+            array set new_auth {
+                short_name dummy-test
+                pretty_name dummy-test
+                enabled_p t
+                sort_order 999
+                auth_impl_id {}
+                pwd_impl_id {}
+                forgotten_pwd_url {}
+                change_pwd_url {}
+                register_impl_id {}
+                register_url {}
+                help_contact_text {}
+                snapshot_p f
+                batch_sync_enabled_p f
+            }
+            set new_auth(get_doc_impl_id) 1
+            set new_auth(process_doc_impl_id) [acs_sc::impl::get_id -owner "acs-authentication" -name "IMS Enterprise 1.1"]
+            
+            set new_auth(get_doc_impl_id) [acs_sc::impl::get_id -owner "acs-authentication" -name "HTTPGet"]
+
+            set authority_id [auth::authority::create \
+                                  -array new_auth]
+            
+            set job_id [auth::authority::batch_sync -authority_id $authority_id]
+            
+            auth::sync::job::get -job_id $job_id -array job
+            
+            aa_equals "Number of actions" $job(num_actions) 3
+
+            aa_equals "Number of problems" $job(num_problems) 3
+           
+            foreach entry_id [auth::sync::job::get_entries -job_id $job_id] {
+                array unset entry
+                auth::sync::job::get_entry \
+                    -entry_id $entry_id \
+                    -array entry
+                
+                aa_false "Success_p is false" [template::util::is_true $entry(success_p)]
+                
+                array unset elm_msgs
+                array set elm_msgs $entry(element_messages)
+
+                aa_log "entry.operation = '$entry(operation)'"
+                aa_log "entry.username = '$entry(username)'"
+                aa_log "entry.message = '$entry(message)'"
+                aa_log "array names elm_msgs = '[array names elm_msgs]'"
+
+                switch $entry(operation) {
+                    insert {
+                        aa_true "email has a problem (email missing)" [util_sets_equal_p { email } [array names elm_msgs]]
+                    }
+                    update {
+                        aa_true "username has a problem (don't have this user)" [util_sets_equal_p { username } [array names elm_msgs]]
+                    }
+                    delete {
+                        aa_false "Message is not empty" [empty_string_p $entry(message)]
+                    }
+                }
+            }
+
+            aa_log "job.message = '$job(message)'"
+            aa_log "job.document = '$job(document)'"
 
         }
 }
+
+

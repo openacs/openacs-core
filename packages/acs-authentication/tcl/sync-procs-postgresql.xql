@@ -55,9 +55,9 @@
         <querytext>
 
             insert into auth_batch_job_entries
-            (entry_id, job_id, operation, authority_id, username, user_id, success_p, message, element_messages)
+            (entry_id, job_id, operation, username, user_id, success_p, message, element_messages)
             values
-            (:entry_id, :job_id, :operation, :authority_id, :username, :user_id, :success_p_db, :message, :element_messages)
+            (:entry_id, :job_id, :operation, :username, :user_id, :success_p_db, :message, :element_messages)
 
         </querytext>
     </fullquery>
