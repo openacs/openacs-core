@@ -10,7 +10,6 @@ ad_page_contract {
 } -properties {
     context:onevalue
     subsite_name:onevalue
-    acs_admin_available_p:onevalue
     acs_admin_url:onevalue
     instance_name:onevalue
 }
