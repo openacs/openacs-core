@@ -92,7 +92,7 @@
       </querytext>
 </fullquery>
 
-<fullquery name="item::publish.publish_status">
+<fullquery name="item::unpublish.update_publish_status">
     <querytext>
         update cr_items
         set publish_status = :publish_status
