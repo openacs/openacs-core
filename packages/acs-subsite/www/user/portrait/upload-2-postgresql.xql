@@ -2,9 +2,6 @@
 <queryset>
    <rdbms><type>postgresql</type><version>7.1</version></rdbms>
 
-<fullquery name="create_item">
-        <querytext>
-
 <fullquery name="create_rel">
         <querytext>
 
