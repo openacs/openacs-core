@@ -194,8 +194,12 @@ ad_proc ::twt::get_crawler_exclude_links {} {
     @author Peter Marklund
 } {
     global __crawler_exclude_links
-    
-    return $__crawler_exclude_links
+
+    if { [info exists __crawler_exclude_links] } {
+        return $__crawler_exclude_links
+    } else {
+        return {}
+    }
 }
 
 ad_proc ::twt::exclude_crawl_link_p { url } {
@@ -223,7 +227,11 @@ ad_proc ::twt::record_excluded_url { url } {
 ad_proc ::twt::get_excluded_urls {} {
     global __crawler_excluded_links
     
-    return $__crawler_excluded_links
+    if { [info exists __crawler_excluded_links] } {
+        return $__crawler_excluded_links
+    } else {
+        return {}
+    }
 }
 
 ad_proc ::twt::crawl_links { 
@@ -308,7 +316,6 @@ ad_proc ::twt::crawl_links {
         array set link $link_list
         set url $link(url)
         set absolute_url [tclwebtest::absolute_link $url]
-        #::twt::log "pm debug looping with url $absolute_url"
 
         # Don't revisit URL:s we have already tested
         # Don't follow relative anchors on pages - can't get them to work with TclWebtest
@@ -320,9 +327,12 @@ ad_proc ::twt::crawl_links {
         }
         set under_start_url_p [expr [string first $start_url_absolute $absolute_url] != -1]
 
-        if { $new_url_p && !$anchor_link_p && $under_start_url_p } {
+        set visit_p [expr $new_url_p && !$anchor_link_p && $under_start_url_p]
+        if { $visit_p } {
             crawl_links -previous_url $start_url_absolute $url
         }
+
+#        ::twt::log "pm debug looping with url $absolute_url visit_p=$visit_p new_url_p=$new_url_p under_start_url_p=$under_start_url_p anchor_link_p=$anchor_link_p"
     }
 }
 
