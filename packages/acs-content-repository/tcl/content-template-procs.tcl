@@ -18,7 +18,7 @@ ad_proc -public content::template::new {
     {-parent_id ""}
     {-is_live ""}
     {-template_id ""}
-    {-creation_date ""}
+    -creation_date
     {-creation_user ""}
     {-creation_ip ""}
 } {
@@ -33,16 +33,20 @@ ad_proc -public content::template::new {
 
     @return template_id of created template
 } {
-    return [package_exec_plsql -var_list [list \
+    set arg_list [list \
         [list name $name ] \
         [list text $text ] \
         [list parent_id $parent_id ] \
         [list is_live $is_live ] \
         [list template_id $template_id ] \
-        [list creation_date $creation_date ] \
         [list creation_user $creation_user ] \
         [list creation_ip $creation_ip ] \
-    ] content_template new]
+        [list package_id $package_id ] \
+    ]
+    if {[exists_and_not_null creation_date]} {
+        lappend arg_list [list creation_date $creation_date ]
+    }
+    return [package_exec_plsql -var_list  $arg_list content_template new]
 }
 
 
