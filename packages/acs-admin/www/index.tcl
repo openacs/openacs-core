@@ -5,7 +5,7 @@ ad_page_contract {
     @cvs-id $Id$
 }
 
-set page_title "[ad_conn instance_name] for [ad_system_name]"
+set page_title [ad_conn instance_name]
 
 db_multirow subsites subsite_admin_urls {}
 
