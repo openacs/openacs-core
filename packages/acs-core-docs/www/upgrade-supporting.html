@@ -56,8 +56,7 @@
 
           <span class="emphasis"><em>(many lines omitted)</em></span>
           [service0 bin]$
-          </pre></li><li><p>Use perl to replace <tt class="computeroutput">timestamp</tt> with <tt class="computeroutput">timestamptz</tt> in the dump file.</p><pre class="programlisting">find . -type f -name "*sql" | xargs perl -p -i.tmp -e "s/timestamp with time zone/timestamptz/g"
-          find . -type f -name "*sql" | xargs perl -p -i.tmp -e "s/\\wtimestamp[^t]/ timestamptz/g"</pre></li><li><p>Create a new user for PostgreSQL 7.3.x, as per the
+          </pre></li><li><p>Use perl to replace <tt class="computeroutput">timestamp</tt> with <tt class="computeroutput">timestamptz</tt> in the dump file.  See example perl code in step two in <a href="http://cvs.openacs.org/cvs/openacs-4/contrib/misc/upgrade_4.6_to_5.0.sh?only_with_tag=HEAD" target="_top">/contrib/misc/upgrade_4.6_to_5.0.sh</a></p></li><li><p>Create a new user for PostgreSQL 7.3.x, as per the
           Postgres installation guide. Keep in mind that your
           installation location is different, and your startup script
           (/etc/init.d/postgres73 should be named differently. You
