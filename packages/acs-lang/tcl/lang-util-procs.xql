@@ -11,12 +11,12 @@
       </querytext>
    </fullquery>
 
-   <fullquery name="lang::util::default_locale_from_lang.default_locale_from_lang">
+   <fullquery name="lang::util::default_locale_from_lang_not_cached.default_locale_from_lang">
       <querytext>
       
         select locale 
         from   ad_locales 
-        where  language = :language
+        where  language = '[db_quote $language]'
         and    default_p = 't'
     
       </querytext>
