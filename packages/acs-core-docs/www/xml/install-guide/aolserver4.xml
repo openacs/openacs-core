@@ -50,7 +50,6 @@ make install</action>
 [root aolserver]# <userinput>cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co nspostgres</userinput>
 [root aolserver]# <userinput>cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co nssha1</userinput>
 [root aolserver]# <userinput>cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co -r v2_7 nsoracle</userinput>
-[root aolserver]# <userinput>cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co nsxml</userinput>
 [root aolserver]# <userinput>wget http://www.tdom.org/tDOM-0.7.8.tar.gz</userinput>
 [root aolserver]# <userinput>tar xvfz tDOM-0.7.8.tar.gz</userinput>
 [root root]# 
@@ -62,7 +61,6 @@ cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co nscache
 cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co nspostgres
 cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co nssha1
 cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co -r v2_7 nsoracle
-cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co nsxml
 wget http://www.tdom.org/tDOM-0.7.8.tar.gz
 tar xvfz tDOM-0.7.8.tar.gz</action></screen>
     </listitem>
@@ -77,7 +75,7 @@ tar xvfz tDOM-0.7.8.tar.gz</action></screen>
 <action>cd /usr/local/src/aolserver40r5/aolserver
 ./configure --prefix=/usr/local/aolserver40r5 --with-tcl=/usr/local/lib/
 make install
-ln -s /usr/local/aolserver40r5 /usr/local/aolserver</action></screen>
+</action></screen>
       <para>If this is the only version of AOLserver in use, or is the default version, create a symlink.  If not, then be sure to use <computeroutput>/usr/local/aolserver40r5</computeroutput> instead of <computeroutput>/usr/local/aolserver</computeroutput> in future steps.</para>
       <screen>[root aolserver]# <userinput>ln -s /usr/local/aolserver40r5 /usr/local/aolserver</userinput></screen>
     </listitem>
@@ -98,7 +96,7 @@ ln -s /usr/local/aolserver40r5 /usr/local/aolserver</action></screen>
             </listitem>
             <listitem id="aolserver4-nspostgres-install">
               <para>Install nspostgres (if you want to use Postgres)</para>
-              <screen>[root nsrewrite]# <userinput>cd ../nspostgres</userinput>
+              <screen>[root nscache]# <userinput>cd ../nspostgres</userinput>
 [root nspostgres]# <userinput>make install POSTGRES=LSB ACS=1 INST=/usr/local/aolserver40r5 </userinput></screen>
               <para>If you get errors like:</para>
               <programlisting>nspostgres.c: In function `Ns_PgTableList':
@@ -123,7 +121,7 @@ nspostgres.c:679: warning: passing arg 3 of `Tcl_DStringAppend' as signed due to
             </listitem>
             <listitem id="aolserver4-nssha1-install">
               <para>Install nssha1</para>
-              <screen>[root nsrewrite]# <userinput>cd ../nssha1</userinput>
+              <screen>[root nspostgres]# <userinput>cd ../nssha1</userinput>
 [root nssha1]# <userinput>make</userinput></screen>
               <para>If the make fails you will have to edit nssha1.c. Comment out the following 2 lines (lines 139-140):        </para>
               <programlisting><emphasis role="bold">//</emphasis> typedef unsigned int u_int32_t;
