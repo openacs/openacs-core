@@ -342,7 +342,7 @@ end;' language 'plpgsql';
 
 -- function name
 create function party__name (integer)
-returns integer as '
+returns varchar as '
 declare
   party_id               alias for $1;  
 begin
