@@ -6,7 +6,9 @@ ad_library {
     @cvs-id $Id$
 }
 
-aa_register_case acs_api_browser_trivial_smoke_test {
+aa_register_case \
+    -cats {api smoke} \
+    acs_api_browser_trivial_smoke_test {
     Minimal smoke test for acs-api-browser package.
 } {    
 

@@ -6,7 +6,7 @@ ad_library {
     @cvs-id $Id$
 }
 
-aa_register_case acs_admin_trivial_smoke_test {
+aa_register_case -cats smoke acs_admin_trivial_smoke_test {
     Minimal smoke test for acs-admin package.
 } {    
 
@@ -18,7 +18,7 @@ aa_register_case acs_admin_trivial_smoke_test {
         }
 }
 
-aa_register_case apm_higher_version_installed_p {
+aa_register_case -cats {api smoke} apm_higher_version_installed_p {
     Test apm_higher_version_installed_p proc.
 } {    
 
