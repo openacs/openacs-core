@@ -27,11 +27,13 @@
         <a href=".?tab=localized-messages">Edit Messages</a>
       </li>
     </p>
+    <if @timezone_p@>
     <p>
       <li>
         <a href="set-system-timezone">Set system timezone</a>
       </li>
     </p>
+    </if>
     <p>
       <li>
         <a href="translator-mode-toggle">Toggle translator mode</a> (Currently 

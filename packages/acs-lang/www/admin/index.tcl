@@ -15,6 +15,8 @@ set locale_user [ad_locale user locale]
 set instance_name [ad_conn instance_name]
 set context_bar [ad_context_bar]
 
+set timezone_p [lang::system::timezone_support_p]
+
 set translator_mode_p [lang::util::translator_mode_p]
 
 if { [ad_permission_p 0 admin] } {
