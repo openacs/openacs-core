@@ -26,7 +26,7 @@ set translator_mode_p [lang::util::translator_mode_p]
 
 
 
-set parameter_url "/admin/site-map/parameter-set?[export_vars { {package_id {[ad_conn package_id]} } { return_url {[ad_return_url]} } }]"
+set parameter_url [export_vars -base "/shared/parameters" { {package_id {[ad_conn package_id]} } { return_url {[ad_return_url]} } }]
 
 
 #####
