@@ -295,10 +295,18 @@ ad_proc -private apm_load_catalog_files {
 } {
     Load catalog files for a package that is either installed or upgraded.
     If the package is upgraded message key upgrade status is reset before
-    loading the files.
+    loading the files. During installation of OpenACS when the acs-lang package
+    hasn't been installed yet this procedure won't do anything.
+    That's not a problem since catalog files will be loaded upon next server
+    restart.
 
     @author Peter Marklund
 } {
+    # If acs-lang hasn't been installed yet we simply return
+    if { [llength [info proc lang::catalog::import_messages_from_file]] == 0 || ![apm_package_installed_p acs-lang] } {
+        return
+    }
+
     if { $upgrade_p } {
         # Reset the upgrade status of message catalog keys before we load the catalog files
         lang::catalog::reset_upgrade_status_message_keys $package_key
