@@ -1,6 +1,6 @@
 -- $Id$
 
-create or replace view valid_uninstalled_binding as
+create or replace view valid_uninstalled_bindings as
     select c.contract_id, c.contract_name, i.impl_id, i.impl_name
     from acs_sc_contracts c, acs_sc_impls i
     where c.contract_name = i.impl_contract_name
@@ -19,7 +19,7 @@ create or replace view valid_uninstalled_binding as
 
 
 
-create or replace view invalid_uninstalled_binding as
+create or replace view invalid_uninstalled_bindings as
     select c.contract_id, c.contract_name, i.impl_id, i.impl_name
     from acs_sc_contracts c, acs_sc_impls i
     where c.contract_name = i.impl_contract_name
@@ -37,7 +37,7 @@ create or replace view invalid_uninstalled_binding as
 				and a.impl_operation_name = o.operation_name));
 
 
-create or replace view orphan_implementation as
+create or replace view orphan_implementations as
     select i.impl_id, i.impl_name, i.impl_contract_name
     from acs_sc_impls i
     where not exists (select 1
