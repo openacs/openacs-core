@@ -5,7 +5,7 @@
 		  OpenACS docs are written by the named authors, but may be edited
 		  by OpenACS documentation staff.
 		</p></div><p>
-	This is a beta release of OpenACS 4.5.  This release has been subjected
+	This is the official OpenACS 4.5 release.  This release has been subjected
 	to an organized test effort, but please bear in mind that we are still
 	in the process of developing testing tools, methodology, and scripts.
   </p><p>
@@ -16,6 +16,9 @@
 	or PostgreSQL 7.1.* can be found there as well.  Currently the
 	toolkit will not install under Oracle 9i due to Oracle having made
 	&quot;delete&quot; an illegal name for PL/SQL procedures and functions.
+  </p><p>
+        Some users have reported success running OpenACS 4.5 under PostgreSQL 7.2, but
+        there may still be some undetected problems with this platform.
   </p><p>
 	You may want to begin by reading our installation documentation for
 	<a href="unix-install.html">Installing on Unix/Linux</a> or <a href="win-install.html">Installing on Windows</a>.  Note
@@ -45,165 +48,14 @@
 	  are steps you must take manually in order to get this feature
 	  working.
 	</p></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="release-notes-testing"></a>Testing Notes</h3></div></div><p>
-	  Here are some notes from our testing group.  While not quite up to
-	  date it should give you some ideas of where things stand.
-	</p><pre class="programlisting">
- Summarised Testing Status
-
-Skin
-Minimal
-Release w/caution
-Comments:
-
-Package: Page
-Test Coverage: Minimal
-Release w/caution
-Comments:
-
-Package: Bboard
-Test Coverage: Reasonable
-Suggested Status: Alpha
-Comments:
-
-Package: Static Pages
-Test Coverage: Minimal
-Suggested Status: Release w/caution
-Comments:
-
-Package: Ticket Tracker
-Test Coverage: Reasonable
-Suggested Status: Alpha
-Comments: Don tested personally
-
-Package: Ticket Tracker Lite
-Test Coverage: Unknown
-Suggested Status: 
-Comments:
-
-Package: Acs-lang
-Test Coverage: Reasonable
-Suggested Status: Alpha
-Comments: Oracle only
-
-Package: Simple-survey
-Test Coverage: Reasonable
-Suggested Status: Alpha
-Comments:
-
-Package: Portal
-Test Coverage: Extensive
-Suggested Status: Alpha
-Comments:
-
-Package: Notes
-Test Coverage: Extensive
-Suggested Status: Alpha
-Comments:
-
-Package: Bookmarks
-Test Coverage: Extensive
-Suggested Status: Alpha
-Comments:
-
-Package: Clickthrough
-Test Coverage: Extensive
-Suggested Status: Alpha
-Comments:
-
-Package: Acs-mail
-Test Coverage: Reasonable
-Suggested Status: Release w/caution
-Comments:
-
-Package: Acs-messaging
-Test Coverage: Reasonable
-Suggested Status: Release w/caution
-Comments:
-
-Package: File manager
-Test Coverage: Minimal
-Suggested Status: Release w/caution
-Comments:
-
-Package: File Storage
-Test Coverage: Minimal
-Suggested Status: Release w/caution
-Comments:
-
-Package: Site-wide-search
-Test Coverage: Minimal
-Suggested Status: Release w/caution
-Comments:
-
-Package: General Comments
-Test Coverage: Extensive
-Suggested Status: Alpha
-Comments:
-
-Package: Acs-events
-Test Coverage: None
-Suggested Status: 
-Comments: Automated Testing
-
-Package: Acs-datetime
-Test Coverage: None
-Suggested Status: 
-Comments: Automated Testing
-
-Package: Acs-tcl
-Test Coverage: Reasonable
-Suggested Status: Release w/caution
-Comments: Automated Testing
-
-Package: Acs-templating
-Test Coverage: Reasonable
-Suggested Status: Release w/caution
-Comments: Automated Testing
-
-Package: Acs-util
-Test Coverage: Reasonable
-Suggested Status: Release w/caution
-Comments: Automated Testing
-
-Package: Acs-Content-repository
-Test Coverage: Minimal
-Suggested Status: Release w/caution
-Comments: Automated Testing
-
-Package: Acs-content
-Test Coverage: Minimal
-Suggested Status: Release w/caution
-Comments: Automated Testing
-
-Package: Acs-kernel
-Test Coverage: Reasonable
-Suggested Status: Alpha
-Comments: Automated Testing
-
-Package: Acs-subsite
-Test Coverage: Reasonable
-Suggested Status: Alpha
-Comments: 
-
-Package: Acs-bootstrap-installer
-Test Coverage: Extensive
-Suggested Status: Alpha
-Comments: Developers have used this extensively
-
-Package: Acs-api-browser
-Test Coverage: Minimal
-Suggested Status: Release w/caution
-Comments: Automated Testing
-
-Package: Acs-workflow
-Test Coverage: Minimal
-Suggested Status: Release w/caution
-Comments: 
-
-Package: calendar
-Test Coverage: Minimal
-Suggested Status: Alpha
-Comments: Don tested personally
+<p>
+We now maintain our
+<a href="http://213.107.207.131:8000/rc1-results/">test results</a>
+using a custom OpenACS 4.5 package developed by
+<a href="http://open-msg.com">OpenMSG</a>.   As can be seen from the notes, there are
+still some serious outstanding bugs in this release.   If you don't like this state of affairs consider
+volunteering to help out.  Just drop the <a href="mailto:dhogaza@pacifier.com">project manager</a> a
+quick note and you'll be signed up more quickly than you can say "wait! I've changed my mind!"
 	</pre></div><p><div class="cvstag">($Id$)</div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="openacs-overview.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="acs-admin.html">Next</a></td></tr><tr><td width="40%" align="left">Overview&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="general-documents.html">Up</a></td><td width="40%" align="right">&nbsp;Part Part II. For OpenACS Admins</td></tr></table><hr><address>rmello at fslc.usu.edu</address><address><a href="mailto:vinod@kurup.com">
 			vinod@kurup.com
 		  </a></address></div></body></html>
