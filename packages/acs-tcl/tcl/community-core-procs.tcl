@@ -9,6 +9,8 @@ ad_library {
 }
 
 namespace eval party {}
+namespace eval person {}
+namespace eval acs_user {}
 
 ad_proc -private cc_lookup_screen_name_user { screen_name } {
     return [db_string user_select {
@@ -159,80 +161,78 @@ ad_proc -public ad_user_remove {
     }
 }
 
-namespace eval person {
     
-    ad_proc -public new {
-        {-first_names:required}
-        {-last_name:required}
-    } {
-        create a new person
-    } {
-       
-        set extra_vars [ns_set create]
-        ns_set put $extra_vars first_names $first_names
-        ns_set put $extra_vars last_name $last_name
+ad_proc -public person::new {
+    {-first_names:required}
+    {-last_name:required}
+} {
+    create a new person
+} {
+   
+    set extra_vars [ns_set create]
+    ns_set put $extra_vars first_names $first_names
+    ns_set put $extra_vars last_name $last_name
 
-        set object_type "person"
-        return [package_instantiate_object -extra_vars $extra_vars $object_type]
-    }
+    set object_type "person"
+    return [package_instantiate_object -extra_vars $extra_vars $object_type]
+}
 
-    ad_proc -public delete {
-        {-person_id:required}
-    } {
-        delete a person
-    } {
-        db_exec_plsql delete_person {}
-    }
+ad_proc -public person::delete {
+    {-person_id:required}
+} {
+    delete a person
+} {
+    db_exec_plsql delete_person {}
+}
 
-    ad_proc -public get {
-        {-person_id:required} 
-    } {
-        get info for a person as a tcl array in list form
-    } {
-        db_1row get_person {}
-        
-        set person(person_id) $person_id
-        set person(first_names) $first_names
-        set person(last_name) $last_name
+ad_proc -public person::get {
+    {-person_id:required} 
+} {
+    get info for a person as a tcl array in list form
+} {
+    db_1row get_person {}
+    
+    set person(person_id) $person_id
+    set person(first_names) $first_names
+    set person(last_name) $last_name
 
-        return [array get person]
-    }
+    return [array get person]
+}
 
-    ad_proc -public name {
-        {-person_id:required}
-    } {
-        get the name of a person. Cached.
-    } {
-        return [util_memoize [list person::name_not_cached -person_id $person_id]]
-    }
+ad_proc -public person::name {
+    {-person_id:required}
+} {
+    get the name of a person. Cached.
+} {
+    return [util_memoize [list person::name_not_cached -person_id $person_id]]
+}
 
-    ad_proc -public name_flush {
-        {-person_id:required}
-    } {
-        Flush the person::name cache.
-    } {
-        util_memoize_flush [list person::name_not_cached -person_id $person_id]
-    }
+ad_proc -public person::name_flush {
+    {-person_id:required}
+} {
+    Flush the person::name cache.
+} {
+    util_memoize_flush [list person::name_not_cached -person_id $person_id]
+}
 
-    ad_proc -public name_not_cached {
-        {-person_id:required}
-    } {
-        get the name of a person
-    } {
-        db_1row get_person_name {}
-        return $person_name
-    }
+ad_proc -public person::name_not_cached {
+    {-person_id:required}
+} {
+    get the name of a person
+} {
+    db_1row get_person_name {}
+    return $person_name
+}
 
-    ad_proc -public update {
-        {-person_id:required}
-        {-first_names:required}
-        {-last_name:required}
-    } {
-        update the name of a person
-    } {
-        db_dml update_person {}
-        name_flush -person_id $person_id
-    }
+ad_proc -public person::update {
+    {-person_id:required}
+    {-first_names:required}
+    {-last_name:required}
+} {
+    update the name of a person
+} {
+    db_dml update_person {}
+    name_flush -person_id $person_id
 }
 
 ad_proc -public person::get_bio {
@@ -310,101 +310,93 @@ ad_proc -public person::update_bio {
 
 
 
-namespace eval acs_user {
+ad_proc -public acs_user::change_state {
+    {-user_id:required}
+    {-state:required}
+} {
+    Change the membership state of a user.
+} {
+    set rel_id [db_string select_rel_id {
+        select rel_id
+        from cc_users
+        where user_id = :user_id
+    } -default ""]
 
-    ad_proc -public change_state {
-        {-user_id:required}
-        {-state:required}
-    } {
-        Change the membership state of a user.
-    } {
-        set rel_id [db_string select_rel_id {
-            select rel_id
-            from cc_users
-            where user_id = :user_id
-        } -default ""]
-
-        if {[empty_string_p $rel_id]} {
-            return
-        }
-
-        membership_rel::change_state -rel_id $rel_id -state $state
+    if {[empty_string_p $rel_id]} {
+        return
     }
 
-    ad_proc -public approve {
-        {-user_id:required}
-    } {
-        Approve a user
-    } {
-        change_state -user_id $user_id -state "approved"
-    }
-
-    ad_proc -public ban {
-        {-user_id:required}
-    } {
-        Ban a user
-    } {
-        change_state -user_id $user_id -state "banned"
-    }
-
-    ad_proc -public reject {
-        {-user_id:required}
-    } {
-        Reject a user
-    } {
-        change_state -user_id $user_id -state "rejected"
-    }
-
-    ad_proc -public delete {
-        {-user_id:required}
-        {-permanent:boolean}
-    } {
-        Delete a user
-        
-        @param permanent If provided the user will be deleted permanently
-                           from the database. Otherwise the user
-                           state will merely be set to "deleted".
-    } {
-        if { ! $permanent_p } {
-            change_state -user_id $user_id -state "deleted"
-        } else {
-            db_exec_plsql permanent_delete {}
-        }
-    }
-
-    ad_proc -public unapprove {
-        {-user_id:required}
-    } {
-        Unapprove a user
-    } {
-        change_state -user_id $user_id -state "needs approval"
-    }
-
-    ad_proc -public get_by_username {
-        {-authority_id ""}
-        {-username:required}
-    } {
-        Returns user_id from authority and username.
-        
-        @param authority_id The authority. Defaults to local authority.
-
-        @param username The username of the user you're trying to find.
-
-        @return user_id of the user, or the empty string if no user found.
-    }  {
-        # Default to local authority
-        if { [empty_string_p $authority_id] } {
-            set authority_id [auth::authority::local]
-        }
-
-        return [db_string user_id_from_name {
-            select user_id
-            from users
-            where username = :username
-              and authority_id =:authority_id
-        } -default ""]
-    }    
+    membership_rel::change_state -rel_id $rel_id -state $state
 }
+
+ad_proc -public acs_user::approve {
+    {-user_id:required}
+} {
+    Approve a user
+} {
+    change_state -user_id $user_id -state "approved"
+}
+
+ad_proc -public acs_user::ban {
+    {-user_id:required}
+} {
+    Ban a user
+} {
+    change_state -user_id $user_id -state "banned"
+}
+
+ad_proc -public acs_user::reject {
+    {-user_id:required}
+} {
+    Reject a user
+} {
+    change_state -user_id $user_id -state "rejected"
+}
+
+ad_proc -public acs_user::delete {
+    {-user_id:required}
+    {-permanent:boolean}
+} {
+    Delete a user
+    
+    @param permanent If provided the user will be deleted permanently
+                       from the database. Otherwise the user
+                       state will merely be set to "deleted".
+} {
+    if { ! $permanent_p } {
+        change_state -user_id $user_id -state "deleted"
+    } else {
+        db_exec_plsql permanent_delete {}
+    }
+}
+
+ad_proc -public acs_user::unapprove {
+    {-user_id:required}
+} {
+    Unapprove a user
+} {
+    change_state -user_id $user_id -state "needs approval"
+}
+
+ad_proc -public acs_user::get_by_username {
+    {-authority_id ""}
+    {-username:required}
+} {
+    Returns user_id from authority and username.
+    
+    @param authority_id The authority. Defaults to local authority.
+
+    @param username The username of the user you're trying to find.
+
+    @return user_id of the user, or the empty string if no user found.
+}  {
+    # Default to local authority
+    if { [empty_string_p $authority_id] } {
+        set authority_id [auth::authority::local]
+    }
+
+    return [db_string user_id_from_username {} -default {}]
+}    
 
 
 ad_proc -public acs_user::get {
