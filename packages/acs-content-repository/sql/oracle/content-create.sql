@@ -449,6 +449,12 @@ create table cr_folders (
                      check (has_child_symlinks in ('t', 'f'))
 );  
 
+alter table cr_folders add (
+    package_id integer 
+    constraint cr_fldr_pkg_id_fk
+    references apm_packages
+);
+
 comment on table cr_folders is '
   Folders are used to support a virtual file system within the content
   repository.
