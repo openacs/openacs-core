@@ -94,6 +94,7 @@ namespace eval lang::catalog {
 
         @author Peter Marklund (peter@collaboraid.biz)
     } {      
+
         # Check arguments
         if { [empty_string_p $catalog_file_contents] } {
             error "lang::catalog::parse the catalog_file_contents arguments is the empty string"
@@ -112,11 +113,11 @@ namespace eval lang::catalog {
         array set msg_catalog_array {}
 
         # Parse the xml document
-        set tree [xml_parse $catalog_file_contents]
+        set tree [xml_parse -persist $catalog_file_contents]
 
         # Get the message catalog root node
-        set root_node [xml_doc_get_first_node_by_name $tree ${MESSAGE_CATALOG_TAG}]
-        if { [empty_string_p $root_node] } {
+        set root_node [xml_doc_get_first_node $tree]
+        if { ![string equal [xml_node_get_name $root_node] ${MESSAGE_CATALOG_TAG}] } {
             error "lang::catalog_parse: Could not find root node ${MESSAGE_CATALOG_TAG}"
         }
 
