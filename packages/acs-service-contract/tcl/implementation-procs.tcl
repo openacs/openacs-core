@@ -170,7 +170,7 @@ ad_proc -public acs_sc::impl::get_options {
     @author Peter Marklund
 } {
     set full_list [db_list_of_lists select_impl_options {
-        select case when impl_pretty_name != '' then impl_pretty_name else impl_name end as impl_name,
+        select case when impl_pretty_name is not null then impl_pretty_name else impl_name end as impl_name,
                impl_id
         from acs_sc_impls
         where impl_contract_name = :contract_name
