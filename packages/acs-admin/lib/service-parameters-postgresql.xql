@@ -13,10 +13,6 @@
                          apm_package_types
                     where ap.package_key = apm_package_types.package_key
                     and package_type = 'apm_service'
-                    and (
-                            acs_permission__permission_p(package_id, :user_id, 'read') = 't'
-                         or acs_permission__permission_p(package_id, acs__magic_object_id('the_public'), 'read') = 't'
-                        )
                     and   (ap.package_key != 'acs-subsite' or (select parent_id from site_nodes where object_id = package_id) is null)
                     order by instance_name
         </querytext>
