@@ -90,7 +90,7 @@ ad_proc -private acs_sc_generate_name {
 
     @author Neophytos Demetriou
 } {
-    return AcsSc.${contract}.${operation}.${impl}
+    return "AcsSc.[util_text_to_url -no_resolve -replacement "_" -text $contract].[util_text_to_url -no_resolve -replacement "_" -text $operation].[util_text_to_url -no_resolve -replacement "_" -text $impl]"
 }
 
 
