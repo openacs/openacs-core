@@ -29,19 +29,20 @@ create table auth_authorities (
                              check (enabled_p in ('t','f')),
     sort_order               integer not null,
     -- Id of the authentication service contract implementation
+    -- Cannot reference acs_sc_impls table as it doesn't exist yet
     auth_impl_id             integer
                              constraint auth_authority_auth_impl_fk
-                             references acs_sc_impls(impl_id),
+                             references acs_objects(object_id),
     -- Id of the password management service contact implementation
     pwd_impl_id              integer
                              constraint auth_authority_pwd_impl_fk
-                             references acs_sc_impls(impl_id),
+                             references acs_objects(object_id),
     forgotten_pwd_url        varchar2(4000),
     change_pwd_url           varchar2(4000),
     -- Id of the registration service contract implementation
     register_impl_id         integer
                              constraint auth_authority_reg_impl_fk
-                             references acs_sc_impls(impl_id),
+                             references acs_objects(object_id),
     register_url             varchar2(4000)
 );
 
