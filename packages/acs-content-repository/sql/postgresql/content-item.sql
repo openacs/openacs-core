@@ -1038,6 +1038,7 @@ declare
   v_rel_parent_id                  integer default 0;        
   v_rel_tree_level                 integer default 0;        
   v_path                           text    default '''';  
+  v_apath                          text    default '''';  
   v_rec                            record;
   v_item_id                        integer;
   v_rel_item_id                    integer;
@@ -1067,101 +1068,88 @@ begin
     -- elements of the item path as long as they are the same as the root
     -- folder
 
-    v_item_id         := get_path__item_id;
-    v_rel_item_id     := v_resolved_root_id;
+    for v_rec in 
+       select i3.name as name, 
+              i3.item_id as item_id,
+              i3.parent_id as parent_id, 
+              tree_level(i3.tree_sortkey) as level,
+              i4.parent_id as rel_parent_id,
+              tree_level(i4.tree_sortkey) as rel_tree_level,
+              i4.item_id as rel_item_id
+         from (select * from cr_items where item_id = get_path__item_id) i1,
+              (select * from cr_items where item_id = v_resolved_root_id) i2,
+              cr_items i3,
+              cr_items i4
+        where i3.tree_sortkey <= i1.tree_sortkey
+          and i1.tree_sortkey like (i3.tree_sortkey || ''%'')
+          and i4.tree_sortkey <= i2.tree_sortkey
+          and i2.tree_sortkey like (i4.tree_sortkey || ''%'')
+          and i4.parent_id <> 0
+          and i3.parent_id <> 0
+          and i4.item_id = i3.item_id
+     order by i3.tree_sortkey
 
-    -- FIXME: This can be simplified, but I want to look at the oracle version
-    --        first.  I suspect that it is not functioning correctly.
+      LOOP
+        v_name := v_rec.name;
+        v_parent_id := v_rec.parent_id;
+        v_tree_level := v_rec.level;
+        v_item_id := v_rec.item_id;
+        v_rel_parent_id := v_rec.rel_parent_id;
+        v_rel_tree_level := v_rec.rel_tree_level;
+        v_rel_item_id := v_rec.rel_item_id;
+        exit when v_parent_id <> v_rel_parent_id;        
+      end LOOP;
 
-    while v_parent_id = v_rel_parent_id LOOP
-        -- c_abs_cur
-        select 
-           name, parent_id, tree_level(tree_sortkey)
-        into 
-           v_name, v_parent_id, v_tree_level
-        from
-           cr_items
-        where 
-           parent_id <> 0 
-        and
-           item_id = v_item_id;
-
-        if NOT FOUND then
-          v_exit_p = ''t'';
-        else
-          v_item_id := v_parent_id;
-        end if;
-        
-        -- c_rel_cur
-        select 
-          parent_id, tree_level(tree_sortkey) as tree_level
-        into 
-          v_rel_parent_id, v_rel_tree_level
-        from 
-          cr_items
-        where
-          parent_id <> 0
-        and
-          item_id = v_rel_item_id;
-
-        if NOT FOUND then
-          v_rel_exit_p = ''t'';
-        else
-          v_rel_item_id := v_rel_parent_id;
-        end if;
-
-        -- root and item have common parent, so short circuit relative
-        -- path as ../item
-
-        if v_parent_id = v_rel_parent_id then
-           v_path := ''../'' || v_name;
-           return v_path;
-        end if;
-
-        if v_rel_exit_p or v_exit_p then
-           exit;
-        end if;
-    end LOOP;
 
     -- walk the remainder of the relative path, add a .. for each 
     -- additional step
 
-    if not v_rel_exit_p then 
-       v_path := v_path || ''../'';
-       for v_rec in  select
-                       i2.parent_id,
-                       tree_level(i2.tree_sortkey) as tree_level
-                     from
-                       cr_items i1, cr_items i2
-                     where 
-                       i2.parent_id <> 0
-                     and
-                       i1.item_id = v_rel_item_id
-                     and 
-                       i2.tree_sortkey <= i1.tree_sortkey
-                     and
-                       i1.tree_sortkey like (i2.tree_sortkey || ''%'')
-                     order by i2.tree_sortkey desc      
-       LOOP
-	 v_path := v_path || ''../'';
-       end LOOP;
-    end if;
+    for v_rec in  select
+                    i2.parent_id,
+                    tree_level(i2.tree_sortkey) as tree_level
+                  from
+                    (select * from cr_items 
+                     where item_id = v_resolved_root_id) i1, 
+                    cr_items i2,
+                    (select * from cr_items
+                    where item_id = v_rel_item_id) i3
+                  where 
+                    i2.parent_id <> 0
+                  and 
+                    i2.tree_sortkey <= i1.tree_sortkey
+                  and
+                    i2.tree_sortkey > i3.tree_sortkey
+                  and
+                    i1.tree_sortkey like (i2.tree_sortkey || ''%'')
+                  order by i2.tree_sortkey      
+    LOOP
+      v_path := v_path || ''../'';
+    end LOOP;
+
+    -- an item relative to itself is ''../item''
+    if v_resolved_root_id = get_path__item_id then
+	v_path := ''../'';
+    end if;    
+
+    v_path := rtrim(v_path,''/'');
 
     -- loop over the remainder of the absolute path
-
-    v_path = rtrim(v_path,''/'');
 
     for v_rec in select 
                        i2.name, i2.parent_id, 
                        tree_level(i2.tree_sortkey) as tree_level
                      from
-                       cr_items i1, cr_items i2
+                       (select * from cr_items 
+                        where item_id = get_path__item_id) i1, 
+                       cr_items i2,
+                       (select * from cr_items
+                        where item_id = v_item_id) i3
                      where 
                        i2.parent_id <> 0
-                     and
-                       i1.item_id = get_path__item_id
                      and 
                        i2.tree_sortkey <= i1.tree_sortkey
+                     and
+                       i2.tree_sortkey > i3.tree_sortkey
                      and
                        i1.tree_sortkey like (i2.tree_sortkey || ''%'')
                      order by i2.tree_sortkey    
@@ -1170,12 +1158,13 @@ begin
       v_path := v_path || ''/'' || v_rec.name;
     end LOOP;
 
+    v_path := ltrim(v_path,''/'');
+    if substr(v_path,length(v_path) - 1,2) = ''..'' then
+       v_path := v_path || ''/'';
+    end if;
+
   else
 
-    -- select name, level as tree_level from cr_items where parent_id <> 0
-    -- connect by prior parent_id = item_id start with 
-    -- item_id = get_path__item_id order by tree_level desc
-  
     -- this is an absolute path so prepend a ''/''
     -- prime the pump to be consistent with relative path execution plan
     -- loop over the remainder of the absolute path
@@ -1203,6 +1192,7 @@ begin
   return v_path;
  
 end;' language 'plpgsql';
+
 
 -- function get_virtual_path
 create function content_item__get_virtual_path (integer,integer)
