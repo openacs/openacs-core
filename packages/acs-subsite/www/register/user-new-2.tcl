@@ -139,10 +139,10 @@ if { !$double_click_p } {
 	
     } elseif { [ad_parameter RegistrationProvidesRandomPasswordP "security" 0] ||  [ad_parameter EmailRegistrationConfirmationToUserP "security" 0] } {
 	with_catch errmsg {
-	    ns_sendmail $email $notification_address "[_ acs-subsite.lt_Thank_you_for_visitin]"
+	    ns_sendmail $email $notification_address "[_ acs-subsite.lt_Welcome_to_system_nam]" "[_ acs-subsite.lt_Thank_you_for_visitin]"
 	} {
-	    ns_returnerror "error" "$error"
-	    ns_log Warning "Error sending registration confirmation to $email in user-new-2"
+	    ns_returnerror "500" "$errmsg"
+	    ns_log Warning "Error sending registration confirmation to $email in user-new-2. Error: $errmsg"
 	}
     }
 
@@ -150,7 +150,7 @@ if { !$double_click_p } {
         # we're supposed to notify the administrator when someone new registers
         ns_sendmail $notification_address $email "[_ acs-subsite.lt_New_registration_at_s]" "[_ acs-subsite.lt_first_names_last_name]
 $errmsg
-#>"
+"
     }
 }
 
