@@ -716,6 +716,19 @@ ad_proc -public template::util::leadingTrim { value } {
 # Create an html fragment to display a numeric range widget
 # interval_def is in form { start stop interval }
 
+ad_proc -public template::widget::numericrange {element_reference tag_attributes} {
+    Widget proc usable with ad_form,  need to define interval_def as 
+    {interval_def {start end step}}
+} { 
+  upvar $element_reference element
+
+  if { [info exists element(html)] } {
+    array set attributes $element(html)
+  }
+
+  return [template::widget::numericRange $element(name) $element(interval_def) $element(size) $element(value) $tag_attributes]
+}
+
 ad_proc -public template::widget::numericRange { name interval_def size {value ""} {tag_attributes {}} } {
     Create an html fragment to display a numeric range widget
     interval_def is in form { start stop interval }
@@ -734,7 +747,7 @@ ad_proc -public template::widget::numericRange { name interval_def size {value "
   if {$interval_size > 1} {
     # round minutes or seconds to nearest interval
     if { ![empty_string_p $value] } {
-      set value [expr $value-$value%$interval_size]
+      set value [expr {$value-($value - [lindex $interval_def 0])%$interval_size}]
     }
   }
 
