@@ -8,6 +8,7 @@
   <li><a href=group-types/>Group Types</a>
   <li><a href=rel-segments/>Relational Segments</a>
   <li><a href=rel-types/>Relationship Types</a>
+  <li><a href=host-node-map/>Host-Node Map</a>
 </ul>
 
 <if @acs_admin_available_p@ eq "t">
