@@ -1214,6 +1214,9 @@ db_multirow \
                {<a name="#">Anchor</a>}}}
 	} ...
 	</programlisting>
+	<warning>
+	<para>You must not give your your form the same name that your page has. Otherwise HTMLArea won't load.</para>
+	</warning>
 	<para>Convert your textarea widget to a richtext widget and enable htmlarea.</para>
 	<para>The <computeroutput>htmlarea_p</computeroutput>-flag can be used to prevent 
 	WYSIWYG functionality. Defaults to true if left away.</para>
