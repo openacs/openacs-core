@@ -8,7 +8,7 @@ ad_library {
 }
 
 proc_doc db_nextval { sequence } { Returns the next value for a sequence. This can utilize a pool of sequence values to save hits to the database. } {
-    return [db_string nextval "select nextval('$sequence')"]
+    return [db_string nextval "select ${sequence}.nextval"]
 }
 
 proc_doc db_exec_plsql { statement_name sql args } {
