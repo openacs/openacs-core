@@ -13,7 +13,6 @@
 
 # DEBUG: If any command fails - exit
 set -e
-set -x
 
 # Set the script directory to the current dir for convenience
 script_path=$(dirname $(which $0))
@@ -331,19 +330,8 @@ if parameter_true $do_install; then
       ${tclwebtest_dir}/tclwebtest -config_file $config_file dotlrn-links-check.test
   fi
 
-  # Run the Tcl API tests
-  ${tclwebtest_dir}/tclwebtest -config_file $config_file tcl-api-test.test
-
-  if [ $database == "postgres" ]; then
-      # Run vacuum analyze
-      echo "$0: Beginning 'vacuum analyze' at $(date)"
-      su  `get_config_param pg_db_user` -c "export LD_LIBRARY_PATH=${pg_bindir}/../lib; ${pg_bindir}/vacuumdb -p $pg_port -z `get_config_param pg_db_name`"
-  fi
-  
-  # Report the time at which we were done
-  echo "$0: Finished (re)installing $serverroot at $(date).  Access the new site at $server_url with admin username $admin_email and password $admin_password"
-  
   # Check errors in the log file
+  # We do this before the Tcl API tests as these tend to generate errors intentionally
   if [ -r ${error_log_file} ]; then
       seconds_since_installation_start=$(expr $(date +%s) - $installation_start_time)
       minutes_since_installation_start=$(expr $seconds_since_installation_start / 60 + 1)
@@ -357,6 +345,18 @@ if parameter_true $do_install; then
   else
       echo "$0: Log file ${error_log_file} not readable - cannot check for errors"
   fi
+  
+  # Run the Tcl API tests
+  ${tclwebtest_dir}/tclwebtest -config_file $config_file tcl-api-test.test
+
+  if [ $database == "postgres" ]; then
+      # Run vacuum analyze
+      echo "$0: Beginning 'vacuum analyze' at $(date)"
+      su  `get_config_param pg_db_user` -c "export LD_LIBRARY_PATH=${pg_bindir}/../lib; ${pg_bindir}/vacuumdb -p $pg_port -z `get_config_param pg_db_name`"
+  fi
+  
+  # Report the time at which we were done
+  echo "$0: Finished (re)installing $serverroot at $(date).  Access the new site at $server_url with admin username $admin_email and password $admin_password"
   
   # Warn about errors in the HTML returned from the server
   ./warn-if-installation-errors.sh `get_config_param openacs_output_file`
