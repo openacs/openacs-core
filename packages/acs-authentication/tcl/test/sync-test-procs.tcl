@@ -920,6 +920,17 @@ aa_register_case sync_batch_ims_test {
             aa_false "member_state not banned" [string equal $user(member_state) "banned"]
 
             # Check that first_user_id has had username/email changed
+
+            #####
+            # 
+            # Test GetElements
+            #
+            #####
+            
+            set elements [auth::sync::GetElements -authority_id $authority_id]
+            
+            aa_true "Elements are usernaem, email, first_names, last_name, url" [util_sets_equal_p { username email first_names last_name url } $elements]
+
         }
 }
 

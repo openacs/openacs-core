@@ -514,6 +514,31 @@ ad_proc -private auth::sync::ProcessDocument {
                 -call_args [list $job_id $document $parameters]]
 }
 
+ad_proc -private auth::sync::GetElements {
+    {-authority_id:required}
+} {
+    Wrapper for the GetElements operation of the auth_sync_process service contract.
+} {
+    set impl_id [auth::authority::get_element -authority_id $authority_id -element "process_doc_impl_id"]
+
+    if { [empty_string_p $impl_id] } {
+        # No implementation of auth_sync_process
+        set authority_pretty_name [auth::authority::get_element -authority_id $authority_id -element "pretty_name"]
+        error "The authority '$authority_pretty_name' doesn't support auth_sync_process"
+    }
+
+    set parameters [auth::driver::get_parameter_values \
+                        -authority_id $authority_id \
+                        -impl_id $impl_id]
+
+    return [acs_sc::invoke \
+                -error \
+                -contract "auth_sync_process" \
+                -impl_id $impl_id \
+                -operation GetElements \
+                -call_args [list $parameters]]
+}
+
 
 
 
@@ -611,6 +636,7 @@ ad_proc -private auth::sync::process_doc::ims::register_impl {} {
         pretty_name "IMS Enterprise 1.1"
         aliases {
             ProcessDocument auth::sync::process_doc::ims::ProcessDocument
+            GetElements auth::sync::process_doc::ims::GetElements
             GetParameters auth::sync::process_doc::ims::GetParameters
         }
     }
@@ -622,13 +648,22 @@ ad_proc -private auth::sync::process_doc::ims::register_impl {} {
 ad_proc -private auth::sync::process_doc::ims::unregister_impl {} {
     Unregister this implementation
 } {
-    acs_sc::impl::delete -contract_name "auth_sync_process" -impl_name "IMS Enterprise 1.1"
+    acs_sc::impl::delete -contract_name "auth_sync_process" -impl_name "IMS_Enterprise_v_1p1"
 }
 
 ad_proc -private auth::sync::process_doc::ims::GetParameters {} {
     Parameters for IMS Enterprise 1.1 auth_sync_process implementation.
 } {
     return {}
+}
+
+
+ad_proc -private auth::sync::process_doc::ims::GetElements {
+    parameters
+} {
+    Elements controlled by IMS Enterprise 1.1 auth_sync_process implementation.
+} {
+    return { username email first_names last_name url }
 }
 
 ad_proc -private auth::sync::process_doc::ims::ProcessDocument {
