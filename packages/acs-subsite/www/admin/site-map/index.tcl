@@ -162,13 +162,13 @@ db_foreach nodes_select {} {
       # Is the object a package?
       if {![empty_string_p $package_id]} {
 	if {$object_admin_p && ($parameter_count > 0)} {
-	  lappend controls "<a href=parameter-set?[export_url_vars package_id]>set parameters</a>"
+	  lappend controls "<a href=parameter-set?[export_url_vars package_id]>parameters</a>"
 	}
       }
 
       # Add a link to control permissioning
       if {$object_admin_p} {
-	lappend controls "<a href=\"../../permissions/one?[export_url_vars object_id]\">set permissions</a>"
+	lappend controls "<a href=\"../../permissions/one?[export_url_vars object_id]\">permissions</a>"
 	lappend controls "<a href=\"?[export_url_vars expand:multiple root_id rename_application=$node_id]\">rename</a>"
         lappend controls "<a href=\"instance-delete?package_id=$object_id&root_id=$root_id\" onclick=\"return confirm('Are you sure you want to delete node $name and any package mounted there?');\">delete</a>"
       }
