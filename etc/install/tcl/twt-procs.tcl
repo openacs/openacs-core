@@ -175,46 +175,77 @@ ad_proc ::twt::write_response_to_file { filename } {
     puts $file_id "[response body]"
 }
 
-ad_proc ::twt::crawl_links {} {
-    TODO: This proc currently doesn't crawl nearly as many links as we would like
+ad_proc ::twt::crawl_links { 
+    {-max_requests 2000}
+    start_url 
 } {
+    Crawl links recursively under the given
+    url. Will only visit links Does not visit links with external URLs (outside the server).
 
-    global __url_history
+    @param max_requests The maximum number of links that the proc will crawl
+    @param start_url    The url to start crawling from
 
-    set start_url [lindex $__url_history end]
-
+    @author Peter Marklund
+} {
     # Return if given start URL is external
-    global __server_url
-    set absolute_url [tclwebtest::absolute_link $start_url]
-    if { [string first $__server_url $absolute_url] == -1 } {
+    set server_url [::twt::config::server_url]
+    set start_url_absolute [tclwebtest::absolute_link $start_url]
+    if { [string first $server_url $start_url_absolute] == -1 } {
+        #::twt::log "pm debug returning because link $start_url_absolute is external"
         return
     }
 
     # Also return if this is the logout link
     if { [regexp {/register/logout} $start_url match] } {
+        #::twt::log "pm debug returning because link $start_url_absolute is logout"
         return
     }
 
-    ::twt::do_request $start_url
+    global __url_history
 
-    set errno 0
-    while { $errno == "0" } {
-	set errno [catch {
-            array set link_array [link find -next]} error]
+    # Return if maximum number of links is exceeded
+    if { [llength $__url_history] > $max_requests } {
+        ::twt::log "[::twt::config::alert_keyword] - maximum number of links exceeded, not following link to $start_url_absolute"
+        return
+    }
 
-         if { [string equal $errno "0"] } {
-            set url $link_array(url)
+    lappend __url_history $start_url_absolute
 
-            # Don't revisit URL:s we have already tested
-            # Don't follow relative anchors on pages - can't get them to work with TclWebtest
-            if { [lsearch -exact $__url_history $url] == -1 && [string range $url 0 0] != "#" } {
-                lappend __url_history $url
+    # Request the page
+    if { [catch {::twt::do_request $start_url_absolute} errmsg] } {
+        ::twt::log "[::twt::config::alert_keyword] - requesting url $start_url_absolute failed. Response status is [response status] and error is $errmsg"
+        return
+    }
 
-                crawl_links
-            } else {
-            }
-         }
-   }
+    # Get all links on the page
+    if { [catch {set all_links [link all]} errmsg] } {
+        #::twt::log "pm debug could not get links for url $start_url_absolute : $errmsg"
+        return
+    }
+
+    # Loop over and recurse on each appropriate link
+    foreach link_list $all_links {
+        array set link $link_list
+        set url $link(url)
+        set absolute_url [tclwebtest::absolute_link $url]
+        #::twt::log "pm debug looping with url $absolute_url"
+
+        # Don't revisit URL:s we have already tested
+        # Don't follow relative anchors on pages - can't get them to work with TclWebtest
+        set new_url_p [expr [lsearch -exact $__url_history $absolute_url] == -1]
+        if { [string range $url 0 0] == "#" } {
+            set anchor_link_p 1
+        } else {
+            set anchor_link_p 0
+        }
+        set under_start_url_p [expr [string first $start_url_absolute $absolute_url] != -1]
+        if { $new_url_p && !$anchor_link_p && $under_start_url_p } {
+            #::twt::log "pm debug appending to url history: $url and invoking crawl_links again" 
+            crawl_links $url
+        } else {
+            #::twt::log "pm debug skipping url $url $new_url_p $anchor_link_p $under_start_url_p"
+        }
+    }
 }
 
 ad_proc ::twt::multiple_select_value { name value } {

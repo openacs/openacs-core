@@ -8,12 +8,7 @@ if { [catch {
     login_site_wide_admin
 
     ::twt::log "crawling links starting from /dotlrn"        
-    lappend __url_history "${server_url}/dotlrn"
-    crawl_links
-
-    ::twt::log "crawling links starting from /dotlrn/admin"        
-    lappend __url_history "${server_url}/dotlrn/admin"
-    crawl_links 
+    ::twt::crawl_links /dotlrn
 
     # Test Execution END
 } result] } {
