@@ -833,10 +833,10 @@ for each row execute procedure cr_folder_del_ri_trg();
 create table cr_folder_type_map (
   folder_id	integer
 		constraint cr_folder_type_map_fldr_fk
-		references cr_folders,
+		references cr_folders on delete cascade,
   content_type  varchar(100)
 		constraint cr_folder_type_map_typ_fk
-		references acs_object_types,
+		references acs_object_types on delete cascade,
   constraint cr_folder_type_map_pk
   primary key (folder_id, content_type)
 );
