@@ -48,13 +48,13 @@ create table acs_reference_repositories (
     package_name	varchar(100)
 			constraint arr_package_name_uq unique,
     -- last updated
-    last_update		timestamp,
+    last_update		timestamptz,
     -- where is this data from
     source		varchar(1000),
     source_url		varchar(255),
     -- should default to today
-    effective_date	timestamp, -- default sysdate
-    expiry_date		timestamp,
+    effective_date	timestamptz, -- default sysdate
+    expiry_date		timestamptz,
     -- a text field to hold the maintainer
     maintainer_id	integer
 			constraint arr_maintainer_id_fk references persons(person_id),
@@ -69,9 +69,9 @@ create table acs_reference_repositories (
 
 -- default for Oracle
 
-create function acs_reference__new (integer,varchar,boolean,varchar,timestamp,
-varchar,varchar,timestamp,timestamp,integer,integer,varchar,varchar,
-integer,varchar,integer)
+create function acs_reference__new (integer,varchar,boolean,varchar,timestamptz,
+varchar,varchar,timestamptz,timestamptz,integer,integer,varchar,varchar,
+varchar,varchar,integer)
 returns integer as '
 declare
     p_repository_id   alias for $1; -- default null
@@ -150,8 +150,8 @@ end;
 ' language 'plpgsql';
 
 -- made initially for PG 
-create function acs_reference__new (varchar,timestamp,
-varchar,varchar,timestamp with time zone)
+create function acs_reference__new (varchar,timestamptz,
+varchar,varchar,timestamptz)
 returns integer as '
 declare
     p_table_name      alias for $1; -- 

@@ -20,7 +20,7 @@ comment on table acs_magic_objects is '
  objects like the site-wide organization, and the all users party.
 ';
 
-create function acs__add_user (integer,varchar,timestamp with time zone,integer,varchar,varchar,varchar,varchar,varchar,char,char,varchar,varchar,varchar,boolean,varchar)
+create function acs__add_user (integer,varchar,timestamptz,integer,varchar,varchar,varchar,varchar,varchar,char,char,varchar,varchar,varchar,boolean,varchar)
 returns integer as '
 declare
   user_id                alias for $1;  -- default null    

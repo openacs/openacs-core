@@ -50,7 +50,7 @@ create table acs_messages (     -- extends cr_items
     reply_to integer
         constraint acs_messages_reply_to_fk
             references acs_messages (message_id) on delete set null,
-    sent_date timestamp
+    sent_date timestamptz
         constraint acs_messages_sent_date_nn
             not null,
     sender integer
@@ -189,7 +189,7 @@ create table acs_messages_outgoing (
         constraint amo_to_address_nn
             not null,
     grouping_id integer,
-    wait_until timestamp
+    wait_until timestamptz
         constraint amo_wait_until_nn not null,
     constraint acs_messages_outgoing_pk
         primary key (message_id, to_address)

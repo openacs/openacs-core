@@ -267,7 +267,7 @@ create table apm_package_versions (
 		       constraint apm_package_vers_desc_for_ck
 		         check (description_format in ('text/html', 'text/plain')),
     description        text,
-    release_date       timestamp,
+    release_date       timestamptz,
     vendor             varchar(500),
     vendor_uri         varchar(1500),
     enabled_p          boolean default 'f'
@@ -281,8 +281,8 @@ create table apm_package_versions (
     data_model_loaded_p boolean default 'f'
                        constraint apm_package_vers_dml_p_nn not null,
     cvs_import_results text,
-    activation_date    timestamp,
-    deactivation_date  timestamp,
+    activation_date    timestamptz,
+    deactivation_date  timestamptz,
     -- FIXME: store the tarball in the content-repository
     -- distribution_tarball blob,
     item_id            integer,
@@ -292,7 +292,7 @@ create table apm_package_versions (
                        -- references cr_items(item_id),
     content_length     integer,
     distribution_uri   varchar(1500),
-    distribution_date  timestamp,
+    distribution_date  timestamptz,
     constraint apm_package_vers_id_name_un unique(package_key, version_name)
 );
 
@@ -1636,7 +1636,7 @@ end;' language 'plpgsql';
 
 
 -- function new
-create function apm_package__new (integer,varchar,varchar,varchar,timestamp with time zone,integer,varchar,integer)
+create function apm_package__new (integer,varchar,varchar,varchar,timestamptz,integer,varchar,integer)
 returns integer as '
 declare
   new__package_id             alias for $1;  -- default null  
@@ -1864,7 +1864,7 @@ begin
 end;' language 'plpgsql';
 
 -- create or replace package body apm_package_version 
-create function apm_package_version__new (integer,varchar,varchar,varchar,varchar,varchar,varchar,timestamp with time zone,varchar,varchar,boolean,boolean) returns integer as '
+create function apm_package_version__new (integer,varchar,varchar,varchar,varchar,varchar,varchar,timestamptz,varchar,varchar,boolean,boolean) returns integer as '
 declare
       apm_pkg_ver__version_id           alias for $1;  -- default null
       apm_pkg_ver__package_key		alias for $2;
@@ -2015,7 +2015,7 @@ end;' language 'plpgsql';
 
 
 -- function edit
-create function apm_package_version__edit (integer,integer,varchar,varchar,varchar,varchar,varchar,timestamp with time zone,varchar,varchar,boolean,boolean)
+create function apm_package_version__edit (integer,integer,varchar,varchar,varchar,varchar,varchar,timestamptz,varchar,varchar,boolean,boolean)
 returns integer as '
 declare
   edit__new_version_id         alias for $1;  -- default null  
@@ -2559,7 +2559,7 @@ end;' language 'plpgsql';
 
 
 -- function new
-create function apm_application__new (integer,varchar,varchar,varchar,timestamp with time zone,integer,varchar,integer)
+create function apm_application__new (integer,varchar,varchar,varchar,timestamptz,integer,varchar,integer)
 returns integer as '
 declare
   application_id         alias for $1;  -- default null  
@@ -2609,7 +2609,7 @@ end;' language 'plpgsql';
 
 -- create or replace package body apm_service
 -- function new
-create function apm_service__new (integer,varchar,varchar,varchar,timestamp with time zone,integer,varchar,integer)
+create function apm_service__new (integer,varchar,varchar,varchar,timestamptz,integer,varchar,integer)
 returns integer as '
 declare
   service_id             alias for $1;  -- default null  

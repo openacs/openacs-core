@@ -182,9 +182,9 @@ create table acs_objects (
 				references acs_objects(object_id),
 	security_inherit_p	boolean default 't' not null,
 	creation_user		integer,
-	creation_date		timestamp default now() not null,
+	creation_date		timestamptz default current_timestamp not null,
 	creation_ip		varchar(50),
-	last_modified		timestamp default now() not null,
+	last_modified		timestamptz default current_timestamp not null,
 	modifying_user		integer,
 	modifying_ip		varchar(50),
         tree_sortkey            varbit,
@@ -592,7 +592,7 @@ end;' language 'plpgsql';
 
 
 -- function new
-create function acs_object__new (integer,varchar,timestamp with time zone,integer,varchar,integer,boolean)
+create function acs_object__new (integer,varchar,timestamptz,integer,varchar,integer,boolean)
 returns integer as '
 declare
   new__object_id              alias for $1;  -- default null
@@ -603,7 +603,7 @@ declare
   new__context_id             alias for $6;  -- default null
   new__security_inherit_p     alias for $7;  -- default ''t''
   v_object_id                 acs_objects.object_id%TYPE;
-  v_creation_date	      timestamp;
+  v_creation_date	      timestamptz;
 begin
   if new__object_id is null then
    select acs_object_id_seq.nextval
@@ -633,7 +633,7 @@ begin
 end;' language 'plpgsql';
 
 -- function new
-create function acs_object__new (integer,varchar,timestamp with time zone,integer,varchar,integer)
+create function acs_object__new (integer,varchar,timestamptz,integer,varchar,integer)
 returns integer as '
 declare
   new__object_id              alias for $1;  -- default null
@@ -643,7 +643,7 @@ declare
   new__creation_ip            alias for $5;  -- default null
   new__context_id             alias for $6;  -- default null
   v_object_id                 acs_objects.object_id%TYPE;
-  v_creation_date	      timestamp;
+  v_creation_date	      timestamptz;
 begin
   if new__object_id is null then
    select acs_object_id_seq.nextval
@@ -1348,13 +1348,13 @@ begin
     return acs_object__update_last_modified(acs_object__update_last_modified__object_id, now());
 end;' language 'plpgsql';
 
-create function acs_object__update_last_modified (integer, timestamp with time zone)
+create function acs_object__update_last_modified (integer, timestamptz)
 returns integer as '
 declare
     acs_object__update_last_modified__object_id     alias for $1; 
     acs_object__update_last_modified__last_modified alias for $2; -- default now()
     v_parent_id                                     integer;
-    v_last_modified                                 timestamp;
+    v_last_modified                                 timestamptz;
 begin
     if acs_object__update_last_modified__last_modified is null then
         v_last_modified := now();

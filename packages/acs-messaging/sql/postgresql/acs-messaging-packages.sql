@@ -11,7 +11,7 @@
 --
 
 create function acs_message__edit (integer,varchar,varchar,varchar,
-text,integer,timestamp with time zone,integer,varchar,boolean)
+text,integer,timestamptz,integer,varchar,boolean)
 returns integer as '
 declare
     p_message_id    alias for $1;
@@ -74,7 +74,7 @@ end;' language 'plpgsql';
 -- Jon Griffin 05-21-2001
 ----------------
 
-create function acs_message__new (integer,integer,timestamp with time zone,integer,
+create function acs_message__new (integer,integer,timestamptz,integer,
 varchar,varchar,varchar,varchar,varchar,text,integer,integer,integer,
 varchar,varchar,boolean)
 returns integer as '
@@ -91,7 +91,7 @@ declare
         p_data          alias for $10; --default null,
         p_parent_id     alias for $11; --default 0,
         p_context_id    alias for $12;
-        p_creation_date timestamp := current_timestamp;  -- alias for $13 --default sysdate,
+        p_creation_date timestamptz := current_timestamp;  -- alias for $13 --default sysdate,
         p_creation_user alias for $13; --default null,
         p_creation_ip   alias for $14; --default null,
         p_object_type   alias for $15; --default ''acs_message'',
@@ -194,14 +194,14 @@ begin
     end if;
 end;' language 'plpgsql';
 
-create function acs_message__send (integer,varchar,integer,timestamp with time zone)
+create function acs_message__send (integer,varchar,integer,timestamptz)
 returns integer as '
 declare
     p_message_id    alias for $1;
     p_to_address    alias for $2;
     p_grouping_id   alias for $3;    -- default null
     p_wait_until    alias for $4;    -- default sysdate
-    v_wait_until timestamp;
+    v_wait_until timestamptz;
 begin
     v_wait_until := coalesce(p_wait_until, current_timestamp);
     insert into acs_messages_outgoing
@@ -211,14 +211,14 @@ begin
     return 1;
 end;' language 'plpgsql';
 
-create function acs_message__send (integer,integer,integer,timestamp with time zone)
+create function acs_message__send (integer,integer,integer,timestamptz)
 returns integer as '
 declare
     p_message_id    alias for $1;
     p_recipient_id  alias for $2;
     p_grouping_id   alias for $3;    -- default null
     p_wait_until    alias for $4;    -- default sysdate
-    v_wait_until timestamp;
+    v_wait_until timestamptz;
 begin
     v_wait_until := coalesce (p_wait_until, current_timestamp);
     insert into acs_messages_outgoing
@@ -258,7 +258,7 @@ end;' language 'plpgsql';
     -- by direct calls to CR code in the near future.
 
 create function acs_message__new_file (integer,integer,varchar,varchar,
-text,varchar,integer,timestamp,integer,varchar,boolean,varchar)
+text,varchar,integer,timestamptz,integer,varchar,boolean,varchar)
 returns integer as '
 declare
     p_message_id    alias for $1;
@@ -312,7 +312,7 @@ begin
 end;' language 'plpgsql';
 
 create function acs_message__edit_file (integer,varchar,text,varchar,
-integer,timestamp,integer,varchar,boolean)
+integer,timestamptz,integer,varchar,boolean)
 returns integer as '
 declare
     p_file_id       alias for $1;
@@ -358,7 +358,7 @@ begin
 end;' language 'plpgsql';
 
 create function acs_message__new_image (integer,integer,varchar,varchar,
-text,varchar,integer,integer,integer,timestamp,integer,varchar,boolean,varchar)
+text,varchar,integer,integer,integer,timestamptz,integer,varchar,boolean,varchar)
 returns integer as '
 declare
     p_message_id     alias for $1;
@@ -416,7 +416,7 @@ begin
 end;' language 'plpgsql';
 
 create function acs_message__edit_image (integer,varchar,text,varchar,
-integer,integer,integer,timestamp,integer,varchar,boolean)
+integer,integer,integer,timestamptz,integer,varchar,boolean)
 returns integer as '
 declare
     p_image_id       alias for $1;
@@ -476,7 +476,7 @@ end;' language 'plpgsql';
 
     -- XXX should just call content_extlink.new
 create function acs_message__new_extlink (varchar,integer,varchar,
-varchar,text,integer,timestamp,integer,varchar)
+varchar,text,integer,timestamptz,integer,varchar)
 returns integer as '
 declare
     p_name           alias for $1;    -- default null
