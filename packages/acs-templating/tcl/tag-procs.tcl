@@ -188,8 +188,9 @@ ad_proc -public template_tag_if_interp_expr {} {
     }
 
     default { 
-      # abort evaluation
-      error "Invalid operator <tt>$op</tt> in IF tag" 
+      # treat <if @foo_p@> as a shortcut for <if @foo_p@ true>
+      append condition "\[template::util::is_true $arg1\]"
+      set next [expr $i - 1]
     }
   }
 
