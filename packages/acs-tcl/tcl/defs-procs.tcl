@@ -340,7 +340,7 @@ ad_proc -deprecated ad_admin_footer {} {
     if { [llength [info procs ds_link]] == 1 } {
 	set ds_link [ds_link]
     } else {
-	set ds_link ""
+	et ds_link ""
     }
     return "<hr>
 $ds_link
@@ -356,13 +356,16 @@ ad_proc -public ad_return_complaint {
     Return a page complaining about the user's input 
     (as opposed to an error in our software, for which ad_return_error 
     is more appropriate)
-} {
-    template::multirow create complaints text
-    foreach elm $exception_text {
-        template::multirow append complaints $elm
-    }
-    ns_return 200 text/html [ad_parse_template -params [list complaints] "/packages/acs-tcl/lib/complain"]
 
+    @param exception_count Number of exceptions. Used to say either 'a problem' or 'some problems'.
+
+    @param exception_text HTML chunk to go inside an UL tag with the error messages.
+} {
+    ns_return 200 text/html [ad_parse_template \
+                                 -params [list [list exception_count $exception_count] \
+                                              [list exception_text $exception_text]] \
+                                 "/packages/acs-tcl/lib/complain"]
+    
     # raise abortion flag, e.g., for templating
     global request_aborted
     set request_aborted [list 200 "Problem with Your Input"]
