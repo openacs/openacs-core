@@ -318,17 +318,14 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
             global acs_blank_master__htmlareas
             lappend acs_blank_master__htmlareas $element(form_id)
 
-
-            regsub -all "\n" $contents "\\n" contents
-            regsub -all "\r" $contents "" contents
-            # Beware: & means "repeat the string being replaced"
-            regsub -all "'" $contents "\\&#39;" contents
+            # quote contents for javascript.
+            set contents [string map {\n \\n \r {} "'" "&\#39"} $contents]
 
             # What we are generating here is the call to write the richtext widget but we also 
             # need to pass what to generate in for browsers for which the richtext widget
             # won't work but which do have js enabled should output since we need the 
             # format widget (this for Safari among some others)
-            set output "<script type='text/javascript'><!--\nwriteRichText('$element(id)','$contents',500,200,true,false,'<input name=\"$element(id).format\" value=\"text/html\" type=\"hidden\"/>','[string map {\n \\n} $output]'); //--></script><noscript id=\"rte-noscr-$element(id)\">$output</noscript>"
+            set output "<script type='text/javascript'><!--\nwriteRichText('$element(id)','$contents',500,200,true,false,'<input name=\"$element(id).format\" value=\"text/html\" type=\"hidden\"/>','[string map {\n \\n \r {} "'" "&\#39"} $output]'); //--></script><noscript id=\"rte-noscr-$element(id)\">$output</noscript>"
 
         }
         # Spell-checker
