@@ -327,7 +327,7 @@ declare
   v_item_id              cr_items.item_id%TYPE;
   v_latest_revision      cr_revisions.revision_id%TYPE;
   v_live_revision        cr_revisions.revision_id%TYPE;
-                                        
+  v_rec                  record;                                      
 begin
 
   -- Get item id and latest/live revisions
@@ -346,7 +346,7 @@ begin
   -- Recalculate latest revision
   if v_latest_revision = delete__revision_id then
       for v_rec in 
-          select r.revision_id into v_latest_revision 
+          select r.revision_id
             from cr_revisions r, acs_objects o
            where o.object_id = r.revision_id
              and r.item_id = v_item_id
