@@ -1,8 +1,9 @@
 
-#if { ![string match  "your-ip-here" [ns_conn peeraddr]] } {
-#    ns_return 200 text/html "Forbidden"
-#    return
-#}
+# NOTE:
+# Comment out below two lines to use this page
+#
+ns_return 200 text/html "Forbidden"
+return
 
 
 sec_login_handler
