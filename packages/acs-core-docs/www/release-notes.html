@@ -112,450 +112,458 @@
         </p></li><li><p>
 	   Serving backup files and files from the CVS directories is turned off by default via the acs-kernel parameter
      	   ExcludedFiles in section request-processor (The variable provides a string match glob list of files and is defaulted to "*/CVS/* *~")
-	</p></li></ul></div><div class="cvstag">($Id$)</div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2529771"></a>Release 4.6.3</h3></div></div></div><p><a href="release-notes-4-6-3.html" target="_top">Release Notes for 4.6.3</a></p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2529786"></a>Release 4.6.2</h3></div></div></div><p><a href="release-notes-4-6-2.html" target="_top">Release Notes for 4.6.2</a></p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2529801"></a>Release 4.6</h3></div></div></div><p><a href="release-notes-4-6.html" target="_top">Release Notes for 4.6</a></p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2529816"></a>Release 4.5</h3></div></div></div><p><a href="release-notes-4-5.html" target="_top">Release Notes for 4.5</a></p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="changelog-latest"></a>Changelog (most recent release only)</h3></div></div></div><pre class="programlisting">2004-11-24 23:16  torbenb
+	</p></li></ul></div><div class="cvstag">($Id$)</div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2529750"></a>Release 4.6.3</h3></div></div></div><p><a href="release-notes-4-6-3.html" target="_top">Release Notes for 4.6.3</a></p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2529765"></a>Release 4.6.2</h3></div></div></div><p><a href="release-notes-4-6-2.html" target="_top">Release Notes for 4.6.2</a></p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2529780"></a>Release 4.6</h3></div></div></div><p><a href="release-notes-4-6.html" target="_top">Release Notes for 4.6</a></p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2529795"></a>Release 4.5</h3></div></div></div><p><a href="release-notes-4-5.html" target="_top">Release Notes for 4.5</a></p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="changelog-latest"></a>Changelog (most recent release only)</h3></div></div></div><pre class="programlisting">2005-02-28 01:22  maltes
 
-	* packages/acs-core-docs/www/xml/install-guide/aolserver.xml:
-	  adding test page for aolserver4, suggested by Aldert Nooitgedagt
+	* packages/acs-content-repository/tcl/content-revision-procs.tcl:
+	  Changed debugging message to level debug (from notice)
 
-2004-11-24 04:01  torbenb
+2005-02-27 17:47  joel
 
-	*
-	  packages/acs-core-docs/www/xml/engineering-standards/docbook-primer.xml:
-	  added documentation strategy section
+	* packages/:
+	  acs-authentication/catalog/acs-authentication.en_AU.ISO-8859-1.xml,
+	  acs-authentication/catalog/acs-authentication.es_CO.ISO-8859-1.xml,
+	  acs-kernel/catalog/acs-kernel.en_AU.ISO-8859-1.xml,
+	  acs-kernel/catalog/acs-kernel.es_CO.ISO-8859-1.xml,
+	  acs-lang/catalog/acs-lang.en_AU.ISO-8859-1.xml,
+	  acs-lang/catalog/acs-lang.es_CO.ISO-8859-1.xml,
+	  acs-lang/catalog/acs-lang.es_GT.ISO-8859-1.xml,
+	  acs-subsite/catalog/acs-subsite.en_AU.ISO-8859-1.xml,
+	  acs-subsite/catalog/acs-subsite.es_CO.ISO-8859-1.xml,
+	  acs-tcl/catalog/acs-tcl.en_AU.ISO-8859-1.xml,
+	  acs-tcl/catalog/acs-tcl.es_CO.ISO-8859-1.xml,
+	  acs-templating/catalog/acs-templating.en_AU.ISO-8859-1.xml,
+	  acs-templating/catalog/acs-templating.es_CO.ISO-8859-1.xml: [no
+	  log message]
 
-2004-11-24 02:13  torbenb
+2005-02-27 09:41  daveb
 
-	*
-	  packages/acs-core-docs/www/xml/engineering-standards/docbook-primer.xml:
-	  added marketing perspective to end-users docs, corrected spelling
-	  mistakes
+	* packages/acs-content-repository/: acs-content-repository.info,
+	  sql/postgresql/upgrade/upgrade-5.1.5d3-5.1.5d4.sql: Fix bug#2298.
+	  Create content_revision__del
 
-2004-11-23 23:53  torbenb
-
-	*
-	  packages/acs-core-docs/www/xml/engineering-standards/docbook-primer.xml:
-	  added developer documentation requirements
-
-2004-11-23 20:28  joel
-
-	* packages/acs-core-docs/www/: xml/releasing-openacs.xml,
-	  releasing-openacs-core.html: fixed typo
-
-2004-11-23 12:41  andrewg
-
-	* www/site-master.adp: Adding a span around the Site Wide Admin
-	  link so that .LRN can hide it via dotlrn-master.css.
-
-2004-11-23 12:09  vivianh
+2005-02-27 09:38  daveb
 
 	*
-	  packages/acs-subsite/sql/postgresql/upgrade/upgrade-5.1.2-5.1.3.sql:
-	  add support for upgrade
+	  packages/acs-content-repository/sql/postgresql/upgrade/upgrade-5.1.5d3-5.1.5d4.sql:
+	  Move file to correct name for upgrade.
 
-2004-11-23 12:07  vivianh
+2005-02-23 02:51  timoh
 
-	* packages/acs-subsite/sql/postgresql/: acs-subsite-create.sql,
-	  acs-subsite-drop.sql, site-node-selection-drop.sql,
-	  site-node-selection.sql: add suppor table for site-map creation
+	* packages/acs-content-repository/tcl/content-revision-procs.tcl:
+	  bugfix: provide default for variable lob_values
 
-2004-11-23 12:05  vivianh
+2005-02-23 02:24  timoh
 
-	* packages/acs-subsite/sql/oracle/upgrade/upgrade-5.1.2-5.1.3.sql:
-	  upgrade support
+	* packages/acs-content-repository/tcl/:
+	  content-revision-procs-oracle.xql, content-revision-procs.tcl:
+	  bugfix: fixed bug with lob-columns in attributes
 
-2004-11-23 12:04  vivianh
+2005-02-21 12:25  torbenb
 
-	* packages/acs-subsite/sql/oracle/: acs-subsite-drop.sql,
-	  site-node-selection-drop.sql: drop support
+	* etc/config.tcl: adding comment (from jcdldn in irc) about special
+	  case ip 0.0.0.0
 
-2004-11-23 12:01  vivianh
-
-	* packages/acs-subsite/sql/oracle/: acs-subsite-create.sql,
-	  site-node-selection.sql: add table to support site-map creation
-
-2004-11-23 10:49  vivianh
-
-	* packages/acs-subsite/www/admin/site-map/: allow-for-view.tcl,
-	  allow-for-view.xql, site-map-oracle.xql, site-map-postgresql.xql,
-	  site-map.adp, site-map.tcl: add files to support site-map
-	  creation
-
-2004-11-23 10:46  vivianh
-
-	* packages/acs-subsite/www/admin/site-map/index.adp: add link for
-	  build site-map
-
-2004-11-23 10:28  vivianh
-
-	* packages/acs-subsite/www/resources/default-master.css: add css
-	  for new calendar widget
-
-2004-11-23 10:28  vivianh
-
-	* packages/acs-subsite/www/resources/core.js: add Javascript for
-	  new calendar widget
-
-2004-11-22 16:29  enriquec
-
-	* www/blank-master.tcl: Adding the option Hide/Show toolbar in
-	  /dotlrn/admin. Fixing the "Error include" message when the
-	  installation of .lrn is done.
-
-2004-11-22 14:14  enriquec
-
-	* www/: blank-master.adp, blank-master.tcl: Adding include and link
-	  html tags if dotlrn is installed and if the dotlrn toolbar is
-	  enabled. I followed the same way as acs developper support
-	  toolbar.
-
-2004-11-21 11:32  torbenb
-
-	*
-	  packages/acs-core-docs/www/xml/engineering-standards/docbook-primer.xml:
-	  added developer tutorial documentation requirements
-
-2004-11-20 12:07  torbenb
-
-	*
-	  packages/acs-core-docs/www/xml/engineering-standards/docbook-primer.xml:
-	  added installation documenation requirements
-
-2004-11-19 21:08  torbenb
-
-	*
-	  packages/acs-core-docs/www/xml/engineering-standards/docbook-primer.xml:
-	  added administration documenation requirements
-
-2004-11-19 13:46  jader
-
-	* packages/acs-subsite/www/user/portrait/upload-2.tcl: Applying
-	  patch 617 for bug 2161, courtesy of Carsten Clasohm.
-
-2004-11-18 13:48  jader
-
-	* packages/acs-admin/www/server-restart.adp: Fix link to APM
-
-2004-11-18 13:46  jader
-
-	* packages/acs-admin/www/server-restart.adp: Add link to APM
-
-2004-11-18 12:27  torbenb
-
-	*
-	  packages/acs-core-docs/www/xml/engineering-standards/docbook-primer.xml:
-	  changing package status url to most recent version
-
-2004-11-18 11:01  torbenb
-
-	*
-	  packages/acs-core-docs/www/xml/engineering-standards/docbook-primer.xml:
-	  fixing typos
-
-2004-11-18 10:53  torbenb
-
-	*
-	  packages/acs-core-docs/www/xml/engineering-standards/docbook-primer.xml:
-	  adding end-user requirements section
-
-2004-11-18 08:17  gerardom
-
-	* packages/acs-tcl/tcl/security-procs.tcl: fixing bugs in procs to
-	  redirect to insecure url
-
-2004-11-18 01:00  torbenb
-
-	*
-	  packages/acs-core-docs/www/xml/engineering-standards/docbook-primer.xml:
-	  corrected error, converted lt,gt signs to entities within
-	  programlisting tag
-
-2004-11-17 12:32  torbenb
-
-	*
-	  packages/acs-core-docs/www/xml/engineering-standards/docbook-primer.xml:
-	  adding some docs about documentation development into existing
-	  meta docs
-
-2004-11-16 09:09  jader
-
-	* packages/acs-core-docs/www/xml/:
-	  developers-guide/permissions.xml,
-	  developers-guide/submissions.xml, engineering-standards/cvs.xml,
-	  install-guide/openacs.xml, install-guide/other-software.xml,
-	  install-guide/upgrade.xml: Updating the CVS references from
-	  openacs.org to cvs.openacs.org
-
-2004-11-15 10:29  jader
-
-	* packages/acs-api-browser/lib/search.adp: Add link to core and
-	  package documentation.
-
-2004-11-15 05:25  torbenb
+2005-02-21 11:53  torbenb
 
 	* packages/acs-core-docs/www/xml/install-guide/other-software.xml:
-	  added FreeBSD variant notes for daemontools and nsopenssl
+	  adding instructions to use both INST=/point/to/aolserver and
+	  AOLSERVER=/point/to/aolserver. By using both, helps prevent any
+	  overwrite of an existing installation of another version during
+	  this period of transition.
 
-2004-11-15 04:55  torbenb
+2005-02-21 02:57  torbenb
 
-	* packages/acs-core-docs/www/xml/install-guide/openacs.xml: added
-	  FreeBSD variant notes.  changed a typo chgrp in action tag to
-	  match chown in userinput section
+	* etc/config.tcl: adding a security comment to ns_param maxinput
+	  since the default value was recently increased by a factor of 10.
 
-2004-11-15 04:21  torbenb
+2005-02-18 20:11  torbenb
 
-	* packages/acs-core-docs/www/xml/install-guide/: os.xml,
-	  software.xml: Added note to use fetch instead of wget when
-	  installing on freebsd
+	* packages/acs-core-docs/www/xml/install-guide/openacs.xml: backing
+	  out a change I made, because it does not work well for the action
+	  copy-paste version. Instead, adding the full pathname for
+	  createdb and an explanation why the instruction uses
+	  fullpathname, when it would not be necessary for user pgsql
 
-2004-11-15 04:19  torbenb
+2005-02-18 12:41  torbenb
 
-	* packages/acs-core-docs/www/xml/install-guide/aolserver4.xml:
-	  Added FreeBSD variant, and a brief section on howto check if an
-	  existing tcl meets requirements
+	* packages/acs-core-docs/www/xml/install-guide/other-software.xml:
+	  fixing freebsd note typo, updating some aolserver module builds
+	  that were using INST=  to AOLSERVER=
 
-2004-11-15 03:06  torbenb
+2005-02-16 07:55  andrewg
 
-	* packages/acs-core-docs/www/xml/install-guide/postgres.xml:
-	  correcting my earlier use of computeroutput tags to userinput
-	  tags in tuning section
+	* packages/acs-tcl/tcl/: apm-procs.tcl, apm-procs.xql: Don't call
+	  site_nodes_sync from apm_package_rename.  site_nodes_sync
+	  rebuilds the entire site_nodes cache, which takes large sites,
+	  such as .LRN sites with tens of thousands of site nodes,
+	  completely offline for several minutes.  Instead, update the
+	  cache for the specific node(s) at which the package is mounted.
 
-2004-11-15 01:50  torbenb
+2005-02-16 02:03  torbenb
 
-	* packages/acs-core-docs/www/xml/install-guide/postgres.xml:
-	  Freebsd variant additions
+	* packages/acs-core-docs/www/xml/install-guide/openacs.xml: I
+	  neglected to change the prompt context to match the adjustments
+	  made a few minutes ago
 
-2004-11-15 00:00  torbenb
+2005-02-16 02:01  torbenb
 
-	* packages/acs-core-docs/www/xml/install-guide/os.xml: clarifying
-	  statements
+	* packages/acs-core-docs/www/openacs.html: making fix here in
+	  addition to the xml, in case the html is not regenerated before
+	  the 5.1.5 release
 
-2004-11-14 22:04  torbenb
+2005-02-16 00:48  torbenb
 
-	* packages/acs-core-docs/www/xml/install-guide/overview.xml: added
-	  FreeBSD variant for copy paste convenience
+	* packages/acs-core-docs/www/xml/install-guide/openacs.xml:
+	  creating database should be from user: postgres, not servicename
+	  to be consistent with rest of the docs
 
-2004-11-14 13:48  torbenb
+2005-02-15 16:14  victorg
 
-	* packages/acs-core-docs/www/xml/install-guide/software.xml:
-	  clarifications to page info
+	* packages/acs-content-repository/sql/:
+	  oracle/upgrade/upgrade-5.1.2d6-5.1.2d7.sql,
+	  postgresql/upgrade/upgrade-5.1.2d6-5.1.2d7.sql: Commented the
+	  creation of the index cr_items_name, already existed
 
-2004-11-14 12:55  torbenb
+2005-02-15 09:12  donb
 
-	* packages/acs-core-docs/www/xml/install-guide/overview.xml:
-	  language clarifications
+	* packages/acs-content-repository/tcl/: content-folder-procs.tcl,
+	  test/content-item-test-procs.tcl: Daveb fixed broken 5.1 code and
+	  tests
 
-2004-11-11 14:40  jader
+2005-02-14 11:45  daveb
 
-	* packages/acs-templating/tcl/date-procs.tcl: Improve robustness of
-	  template::util::date::set_property proc for dealing with hours
-	  that begin with a zero.
+	*
+	  packages/acs-content-repository/tcl/test/content-revision-test-procs.tcl:
+	  Fix test to work on Oracle with BLOB content.
 
-2004-11-11 14:06  jader
+2005-02-12 07:35  daveb
 
-	* packages/acs-subsite/: lib/login.adp, lib/login.tcl,
-	  www/register/recover-password.tcl: The registration/login pages
-	  were not honoring the EmailForgottenPasswordP parameter. This
-	  enforces that parameter, allowing admins to disable emailing out
-	  passwords.
+	* packages/acs-content-repository/tcl/filter-procs.tcl: Fix
+	  erroneous commit that merged in changes. This should effectively
+	  revert to 1.16.2.5 version that was intended with the previous
+	  commit.
 
-2004-11-08 11:58  joel
+2005-02-12 06:38  daveb
 
-	* packages/acs-core-docs/www/: acs-package-dev.html,
-	  acs-plat-dev.html, aolserver.html, aolserver4.html,
-	  apm-design.html, apm-requirements.html,
-	  automated-testing-best-practices.html, backup-recovery.html,
-	  bootstrap-acs.html, contributing-code.html, credits.html,
-	  cvs-guidelines.html, cvs-tips.html, db-api-detailed.html,
-	  db-api.html, doc-standards.html, docbook-primer.html,
-	  eng-standards-constraint-naming.html,
-	  eng-standards-filenaming.html, eng-standards-plsql.html,
-	  eng-standards-versioning.html, eng-standards.html,
-	  ext-auth-requirements.html, filename.html, form-builder.html,
-	  groups-design.html, groups-requirements.html, high-avail.html,
-	  how-do-I.html, i18n-convert.html, i18n-design.html,
-	  i18n-introduction.html, i18n-overview.html,
-	  i18n-requirements.html, i18n-translators.html, i18n.html,
-	  index.html, install-cvs.html, install-daemontools.html,
-	  install-full-text-search.html, install-next-nightly-vacuum.html,
-	  install-openacs-keepalive.html, install-qmail.html,
-	  install-redhat.html, install-steps.html, ix01.html,
-	  kernel-doc.html, kernel-overview.html, mac-installation.html,
-	  maint-performance.html, maintenance-deploy.html,
-	  maintenance-web.html, nxml-mode.html, object-identity.html,
-	  object-system-design.html, object-system-requirements.html,
-	  objects.html, openacs-cvs-concepts.html, openacs.html,
-	  oracle.html, packages.html, parties.html,
-	  permissions-design.html, permissions-requirements.html,
-	  permissions-tediously-explained.html, permissions.html,
-	  postgres.html, programming-with-aolserver.html,
-	  psgml-for-emacs.html, psgml-mode.html, release-notes-4-5.html,
-	  release-notes-4-6-2.html, release-notes-4-6-3.html,
-	  release-notes-4-6.html, release-notes.html,
-	  releasing-openacs-core.html, releasing-openacs.html,
-	  releasing-package.html, request-processor.html,
-	  requirements-template.html, rp-design.html, rp-requirements.html,
-	  security-design.html, security-notes.html,
-	  security-requirements.html, style-guide.html,
-	  subsites-design.html, subsites-requirements.html, subsites.html,
-	  tcl-doc.html, templates.html, tutorial-css-layout.html,
-	  tutorial-cvs.html, tutorial-database.html, tutorial-debug.html,
-	  tutorial-distribute.html, tutorial-newpackage.html,
-	  tutorial-pages.html, unix-installation.html,
-	  update-repository.html, update-translations.html,
-	  upgrade-4.5-to-4.6.html, upgrade-openacs-files.html,
-	  upgrade-overview.html, using-cvs-with-openacs.html,
-	  variables.html, win2k-installation.html,
-	  xml/releasing-openacs.xml, xml/engineering-standards/cvs.xml:
-	  fixes to cvs, releasing openacs
+	* packages/acs-content-repository/tcl/filter-procs.tcl: Revert
+	  change to content::init. Custom code belongs in file-storage.
 
-2004-11-04 16:19  jader
+2005-02-11 23:26  maltes
 
-	* packages/acs-subsite/lib/login.adp: Add a paragraph break to make
-	  it easier to see how to register.
+	* packages/acs-content-repository/tcl/filter-procs.tcl: Fixing the
+	  problem caused by the upgrade for filestorage that exchanges name
+	  and title. This should neither change behaviour nor decrease
+	  performance, therefore I commit without a TIP
 
-2004-11-04 15:33  jader
+2005-02-11 11:59  daveb
 
-	* etc/analog.cfg: Fix path in analog configuration file.
+	* packages/acs-core-docs/www/install-full-text-search-openfts.html:
+	  Move openfts to make room for tsearch2.
 
-2004-11-03 08:37  joel
+2005-02-11 11:59  daveb
 
-	* packages/acs-core-docs/www/: contributing-code.html,
-	  cvs-resources.html, index.html, openacs-cvs-concepts.html,
-	  using-cvs-with-openacs.html, xml/engineering-standards/cvs.xml,
-	  xml/index.xml: changed layout of CVS section
+	*
+	  packages/acs-core-docs/www/install-full-text-search-tsearch2.html:
+	  Add tserach2 docs
 
-2004-11-02 15:16  giancarlol
+2005-02-10 11:06  daveb
 
-	* packages/: acs-kernel/catalog/acs-kernel.it_IT.ISO-8859-1.xml,
-	  acs-subsite/catalog/acs-subsite.it_IT.ISO-8859-1.xml: Replaced
-	  HTML entities for special characters (Latin-1 supplement) with
-	  ISO-8859-1 encoding.
+	*
+	  packages/acs-content-repository/tcl/content-revision-procs-oracle.xql:
+	  Switch to support oracle 8.1.6
 
-2004-11-01 15:44  joel
+2005-02-09 08:14  daveb
 
-	* packages/acs-core-docs/www/cvs-guidelines.html: added section on
-	  using cvs
+	* packages/acs-content-repository/tcl/:
+	  content-revision-procs-oracle.xql,
+	  content-revision-procs-postgresql.xql,
+	  content-revision-procs.tcl, content-revision-procs.xql,
+	  test/content-item-test-procs.tcl: Remove broken generic query.
+	  Add correct Oracle specific blob compatible query.
 
-2004-11-01 15:39  joel
+2005-02-09 08:00  daveb
 
-	* packages/acs-core-docs/www/: acs-admin.html,
-	  acs-package-dev.html, acs-plat-dev.html, analog-install.html,
-	  analog-setup.html, aolserver.html, aolserver4.html,
-	  apm-design.html, apm-requirements.html, automated-backup.html,
-	  automated-testing-best-practices.html, backup-recovery.html,
-	  backups-with-cvs.html, bootstrap-acs.html, complete-install.html,
-	  configuring-new-site.html, credits.html, cvs-tips.html,
-	  database-management.html, db-api-detailed.html, db-api.html,
-	  dev-guide.html, doc-standards.html, docbook-primer.html,
-	  eng-standards-constraint-naming.html,
-	  eng-standards-filenaming.html, eng-standards-plsql.html,
-	  eng-standards-versioning.html, eng-standards.html,
-	  ext-auth-requirements.html, filename.html, for-everyone.html,
-	  form-builder.html, general-documents.html, groups-design.html,
-	  groups-requirements.html, high-avail.html, how-do-I.html,
-	  i18n-convert.html, i18n-design.html, i18n-introduction.html,
-	  i18n-overview.html, i18n-requirements.html,
-	  i18n-translators.html, i18n.html, index.html,
-	  individual-programs.html, install-cvs.html,
-	  install-daemontools.html, install-full-text-search.html,
-	  install-more-software.html, install-next-add-server.html,
-	  install-next-backups.html, install-next-nightly-vacuum.html,
-	  install-nsopenssl.html, install-nspam.html,
-	  install-openacs-delete-tablespace.html,
-	  install-openacs-inittab.html, install-openacs-keepalive.html,
-	  install-origins.html, install-overview.html,
-	  install-pam-radius.html, install-php.html, install-qmail.html,
-	  install-redhat.html, install-resources.html,
-	  install-squirrelmail.html, install-ssl.html, install-steps.html,
-	  install-tclwebtest.html, ix01.html, kernel-doc.html,
-	  kernel-overview.html, mac-installation.html,
-	  maint-performance.html, maintenance-deploy.html,
-	  maintenance-web.html, nxml-mode.html, object-identity.html,
-	  object-system-design.html, object-system-requirements.html,
-	  objects.html, openacs-overview.html, openacs-unpack.html,
-	  openacs.html, oracle.html, os-install.html, os-security.html,
-	  packages.html, parties.html, permissions-design.html,
-	  permissions-requirements.html,
-	  permissions-tediously-explained.html, permissions.html,
-	  postgres.html, profile-code.html,
-	  programming-with-aolserver.html, psgml-for-emacs.html,
-	  psgml-mode.html, release-notes-4-5.html,
-	  release-notes-4-6-2.html, release-notes-4-6-3.html,
-	  release-notes-4-6.html, release-notes.html,
-	  releasing-openacs-core.html, releasing-openacs.html,
-	  releasing-package.html, remote-postgres.html,
-	  request-processor.html, requirements-template.html,
-	  rp-design.html, rp-requirements.html, security-design.html,
-	  security-notes.html, security-requirements.html,
-	  snapshot-backup.html, style-guide.html, subsites-design.html,
-	  subsites-requirements.html, subsites.html, tcl-doc.html,
-	  templates.html, tutorial-admin-pages.html,
-	  tutorial-advanced.html, tutorial-caching.html,
-	  tutorial-categories.html, tutorial-comments.html,
-	  tutorial-css-layout.html, tutorial-cvs.html,
-	  tutorial-database.html, tutorial-debug.html,
-	  tutorial-distribute.html, tutorial-future-topics.html,
-	  tutorial-hierarchical.html, tutorial-html-email.html,
-	  tutorial-newpackage.html, tutorial-notifications.html,
-	  tutorial-pages.html, tutorial-schedule-procs.html,
-	  tutorial-specs.html, tutorial-vuh.html, tutorial.html,
-	  unix-installation.html, update-repository.html,
-	  update-translations.html, upgrade-4.5-to-4.6.html,
-	  upgrade-4.6.3-to-5.html, upgrade-5-0-dot.html,
-	  upgrade-openacs-files.html, upgrade-overview.html,
-	  upgrade-supporting.html, upgrade.html, uptime.html,
-	  variables.html, win2k-installation.html, xml/index.xml,
-	  xml/variables.ent, xml/engineering-standards/cvs.xml,
-	  xml/install-guide/other-software.xml: added section on using cvs
+	*
+	  packages/acs-content-repository/tcl/test/content-item-test-procs.tcl:
+	  Fix test to work correctly in oracle.
 
-2004-10-30 13:07  jader
+2005-02-09 06:25  daveb
 
-	* etc/config.tcl: The ssl contexts were missing from the config.tcl
-	  file, which will prevent anyone from using ssl on their sites.
+	* packages/acs-content-repository/tcl/: content-revision-procs.tcl,
+	  content-revision-procs.xql: Update content column in a seperate
+	  query to work correctly with Oracle.
 
-2004-10-29 14:49  jader
+2005-02-06 16:35  jader
 
-	* packages/acs-core-docs/www/files/nsd-postgres.txt: Added a
-	  comment in the file that the LD_LIBRARY_PATH may need
-	  /usr/local/aolserver/lib. Comment only, so no functionality
-	  changed.
+	* etc/config.tcl: Bump up defaults for many Aolserver configuration
+	  items based on forums conversation:
+	  http://openacs.org/forums/message-view?message_id=260846
 
-2004-10-28 17:57  rocaelh
+2005-02-06 16:26  jader
 
-	* packages/acs-subsite/www/admin/site-map/index.tcl: fix of the
-	  direct mounting package, clean up of the new site-map
-	  w/list-builder must be done
+	* etc/keepalive/: keepalive-cron.sh, keepalive.sh: The keepalive
+	  scripts need the path to the executables, unless the PATH is
+	  included in the script.
 
-2004-10-28 11:40  josee
+2005-02-06 16:18  jader
 
-	* packages/acs-subsite/www/admin/site-map/index.tcl: fixing bug
-	  #2139 (link causing problems)
+	* etc/keepalive/keepalive-cron.sh: Added in a note linking to a
+	  forum thread, in case there are problems.
 
-2004-10-28 10:35  enriquec
+2005-02-04 12:12  daveb
 
-	* packages/acs-authentication/tcl/authentication-procs.tcl: fixing
-	  typo (ref.bug#2088): datta_error -&gt; data_error
+	* packages/acs-service-contract/: acs-service-contract.info,
+	  tcl/implementation-procs.tcl, tcl/implementation-procs.xql: Add
+	  optional contract paraemter to impl::get_id
 
-2004-10-28 08:39  nimam
+2005-02-03 15:00  maltes
 
-	* packages/acs-subsite/: www/permissions/grant.tcl,
-	  www/permissions/perm-include.adp,
-	  www/permissions/perm-include.tcl,
-	  catalog/acs-subsite.de_DE.ISO-8859-1.xml,
-	  catalog/acs-subsite.en_US.ISO-8859-1.xml: Added the grant
-	  permission action to acs-subsite/www/permissions/perm-include.
-	  The existing action returns a list of all users in OpenACS which
-	  can take ages to render. With grant permissions the admin can set
-	  permissions for a single user that he can search for. To use
-	  acs-subsite/www/permissions/grant from any other page I added the
-	  optional return_url parameter that redirects back to that page
-	  where grant was called
+	* packages/acs-kernel/acs-kernel.info: 5.1.4 was already released,
+	  so the next version for acs-kernel is 5.1.5d1
 
-2004-10-22 06:44  nimam
+2005-02-03 12:36  joel
 
-	* packages/acs-admin/www/auth/: authority-oracle.xql,
-	  authority-postgresql.xql: Batch jobs are now ordered by start
-	  time
+	* packages/acs-admin/www/users/: password-update.adp,
+	  password-update.tcl: fixed breadcrumb in change password page
+
+2005-02-03 12:36  joel
+
+	* packages/acs-lang/www/admin/edit-localized-message.tcl: fix so
+	  that original message is shown when editing english
+
+2005-02-02 07:55  daveb
+
+	* packages/acs-templating/tcl/parse-procs.tcl: Add Don's change
+	  back in since the previous commits fix the other regexps to match
+	  this one.
+
+2005-02-02 07:39  daveb
+
+	* packages/acs-templating/tcl/: tag-init.tcl, tag-procs.tcl,
+	  util-procs.tcl: Merge from HEAD fixed to variable regular
+	  expressions.	add recognizing array variables like @xx.y.z@ as
+	  xx(y.z).  Note that the regexps show up in multiple places so any
+	  changes to the @ var regexps should be made carefully.  In
+	  particular if @x@ defined and if @x@ nil handle variables special
+	  since they can't be derefrenced
+
+2005-02-01 12:50  torbenb
+
+	* packages/acs-core-docs/www/xml/non-xml/release-notes-4-6.html:
+	  removed gremlin A0 characters
+
+2005-02-01 12:46  torbenb
+
+	* packages/acs-core-docs/www/xml/kernel/: apm-design.xml,
+	  ext-auth.xml: temporary fix of doc images from creating urls that
+	  return 404 errors to 302 errors (that work for many browsers and
+	  client services)
+
+2005-02-01 12:44  torbenb
+
+	* packages/acs-core-docs/www/xml/install-guide/: configuring.xml,
+	  maintenance.xml, recovery.xml, upgrade.xml: temporarily fixing
+	  image urls to return 302 errors that work with most clients,
+	  instead of current 404 errors
+
+2005-02-01 12:40  torbenb
+
+	* packages/acs-core-docs/www/xml/developers-guide/: i18n.xml,
+	  tutorial-advanced.xml, tutorial-db.xml, tutorial-pages.xml,
+	  tutorial.xml: temporary fix of doc images from creating urls that
+	  return 404 errors to 302 errors
+
+2005-01-30 23:49  torbenb
+
+	* packages/acs-core-docs/www/xml/install-guide/postgres.xml: added
+	  clarificaton to bison instructions
+
+2005-01-30 23:29  timoh
+
+	* packages/: acs-content-repository/acs-content-repository.info,
+	  acs-content-repository/sql/oracle/content-folder.sql,
+	  acs-content-repository/sql/oracle/content-item.sql,
+	  acs-content-repository/sql/oracle/packages-create.sql,
+	  acs-content-repository/sql/oracle/upgrade/upgrade-5.1.5d2-5.1.5d3.sql,
+	  acs-kernel/acs-kernel.info,
+	  acs-kernel/sql/oracle/acs-objects-create.sql,
+	  acs-kernel/sql/oracle/upgrade/upgrade-5.1.4-5.1.4d1.sql: fixed
+	  some upgrade scripts for oracle
+
+2005-01-30 00:35  torbenb
+
+	* packages/acs-core-docs/www/xml/developers-guide/rp.xml: fixing
+	  image url
+
+2005-01-30 00:31  torbenb
+
+	* packages/acs-core-docs/www/xml/developers-guide/permissions.xml:
+	  fixing image url
+
+2005-01-28 15:39  jeffd
+
+	* packages/acs-tcl/tcl/utilities-procs.tcl: add \r to Host header
+	  in util_httpopen since http says headers hsould be \r\n
+
+2005-01-28 09:10  jader
+
+	* packages/acs-tcl/tcl/utilities-procs.tcl: Fix to httpopen, from
+	  Nis Jorgensen. See:
+	  http://openacs.org/forums/message-view?message_id=32667
+
+2005-01-24 08:44  daveb
+
+	* packages/acs-core-docs/www/xml/install-guide/other-software.xml:
+	  Add tsearch2 install. Deprecate Openfts install and link to
+	  tsearch2 doc.
+
+2005-01-22 13:42  jader
+
+	* packages/acs-templating/tcl/widget-procs.tcl: Apply a patch 602
+	  (slightly modified) to make party_search be optional when it is
+	  declared to be optional. Fixes bug 2122.
+
+2005-01-22 13:23  jader
+
+	* etc/install/install.sh: Apply patch 622, makes install.sh respect
+	  pg_db_user and UNICODE
+
+2005-01-22 13:08  jader
+
+	* www/blank-master.adp: Fixes bug 2238 by adding in css file for
+	  developer support. The fix was made by Lars in March 2004 on
+	  HEAD.
+
+2005-01-21 12:38  daveb
+
+	* packages/acs-content-repository/tcl/filter-procs.tcl: Fix
+	  variable reference.
+
+2005-01-21 12:35  daveb
+
+	* packages/acs-content-repository/tcl/: filter-procs-oracle.xql,
+	  filter-procs-postgresql.xql, filter-procs.tcl: Replace pl/sql
+	  function in where clause with two queries (via Tcl API)
+
+2005-01-20 18:16  donb
+
+	* packages/acs-templating/: resources/lists/table.adp,
+	  tcl/paginator-procs.tcl: Cleaned up display a bit ... if you say
+	  "groupsize is 10" you now see a groupsize of 10 displayed not 11.
+	  If groupsize is 1 you only get next/prev page nav widgets rather
+	  than both page and group nav widgets.
+
+2005-01-19 11:36  maltes
+
+	* packages/acs-subsite/lib/login.adp: Added &lt;div id=register-login&gt;
+	  so we could control the look of the login box via CSS (at least a
+	  little)
+
+2005-01-18 16:46  jader
+
+	* etc/: analog.cfg, config.tcl: Log the request time as well. See:
+	  http://panoptic.com/wiki/aolserver/nslog
+
+2005-01-17 12:57  torbenb
+
+	* packages/acs-core-docs/www/xml/engineering-standards/cvs.xml:
+	  fixed cvs browser link, bug 2267
+
+2005-01-17 06:53  maltes
+
+	* www/site-master.adp: Added / for XHTML compliance
+
+2005-01-17 04:09  maltes
+
+	* www/blank-master.adp: Reverting forced switch to XHTML
+
+2005-01-17 04:01  maltes
+
+	* www/blank-master.adp: Modified to suit XHMTL 1.0 Transitional
+
+2005-01-17 01:23  maltes
+
+	* www/blank-master.adp: Added type to javascript as this was not
+	  valid XHTML
+
+2005-01-15 14:49  vivianh
+
+	* packages/acs-subsite/www/site-map/: index.adp, index.tcl:
+	  Checking if user site-wide-admin to show a link
+
+2005-01-14 10:15  vivianh
+
+	* packages/acs-subsite/www/admin/site-map/site-map.tcl: Context bar
+	  and Allow button modified
+
+2005-01-13 19:14  daveb
+
+	* packages/acs-content-repository/: acs-content-repository.info,
+	  sql/postgresql/content-folder.sql,
+	  sql/postgresql/upgrade/upgrade-5.1.4d4-5.1.4d5.sql,
+	  sql/postgresql/upgrade/upgrade-5.1.5d1-5.1.5d2.sql,
+	  tcl/content-folder-procs.tcl,
+	  tcl/test/content-folder-test-procs.tcl: Fix
+	  content_folder__is_subfolder pl/sql. Also fix tcl proc which was
+	  passing in the wrong list format to package_exec_plsql. Add
+	  upgrade script and tests.
+
+2005-01-13 15:39  daveb
+
+	* packages/acs-content-repository/tcl/: content-item-procs.tcl,
+	  content-revision-procs.tcl, test/content-item-test-procs.tcl:
+	  Revert to package_exec_plsql var_list list style for -attributes
+	  parameters. Fix test and documentation.
+
+2005-01-13 11:01  jader
+
+	* packages/acs-subsite/www/admin/site-map/index.adp: Fix bug #2263.
+	  Link to application new broken in site-map.
+
+2005-01-13 01:32  timoh
+
+	* packages/acs-templating/tcl/parse-procs.tcl: rolled back last
+	  change in template::adp_array_variable_regexp since it broke
+	  existing code
+
+2005-01-12 17:27  daveb
+
+	* packages/acs-content-repository/tcl/: content-revision-procs.tcl,
+	  test/content-item-test-procs.tcl: Fix content::revision::new to
+	  properly create subtypes of content_revision.
+
+2005-01-12 15:55  timoh
+
+	* packages/acs-templating/resources/forms/: blue.adp, coddo.adp,
+	  configuration.adp, grid.adp, plain.adp, plainest.adp,
+	  standard.adp, tiny-plain.adp, wizard.adp: bug in template
+	  operator in (partial string compare) -&gt; use seperate equality
+	  test in template
+
+2005-01-12 05:22  dedsc
+
+	*
+	  packages/acs-content-repository/sql/postgresql/content-folder.sql:
+	  fix to return folder id present in upgrade. just putting it here
+	  as well
+
+2005-01-11 18:14  donb
+
+	* packages/acs-subsite/www/permissions/perm-include-oracle.xql:
+	  Grrr Oracle doesn't like long idents
+
+2005-01-11 17:49  donb
+
+	* packages/acs-subsite/www/permissions/: perm-include-oracle.xql,
+	  perm-include-postgresql.xql: security_context_root is no longer
+	  object 0
+
+2005-01-11 17:38  donb
+
+	* packages/acs-subsite/www/permissions/: perm-include-oracle.xql,
+	  perm-include-postgresql.xql: Got rid of call to permission_p() in
+	  WHERE clause, which Jeff thought he'd already done but which I've
+	  not found in either 5.1 or HEAD.
 
 </pre></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="changelog"></a>Changelog for oacs-5-1</h3></div></div></div><pre class="programlisting">2005-02-28 01:22  maltes
 
