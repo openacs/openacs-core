@@ -255,10 +255,10 @@ set dotlrn_demo_data "no"
 set dotlrn_users_data_file "users-data.csv"
 set demo_users_password "guest"
 
-# Should links be crawled to search for broken pages? If so, specify the path
-# to start from here. To crawl the whole site, set this parameter to "/". To
-# not do any crawling, leave empty.
-set crawl_links_start_path ""
+#----------------------------------------------------------------------
+# Tcl API testing. Not recommended for production servers.
+#----------------------------------------------------------------------
+set do_tclapi_testing "no"
 
 #----------------------------------------------------------------------
 # HTTP level testing and demo data setup with tclwebtest
@@ -266,3 +266,8 @@ set crawl_links_start_path ""
 # A list of full paths for any additional tclwebtest scripts that should
 # be executed after install
 set tclwebtest_scripts ""
+
+# Should links be crawled to search for broken pages? If so, specify the path
+# to start from here. To crawl the whole site, set this parameter to "/". To
+# not do any crawling, leave empty.
+set crawl_links_start_path ""
