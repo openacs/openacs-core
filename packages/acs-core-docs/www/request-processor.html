@@ -1,9 +1,7 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>The Request Processor</title><meta name="generator" content="DocBook XSL Stylesheets V1.62.4"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="dev-guide.html" title="Chapter 8. Development Reference"><link rel="previous" href="objects.html" title="OpenACS Data Models and the Object System"><link rel="next" href="db-api.html" title="The OpenACS Database Access API"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="objects.html">Prev</a> </td><th width="60%" align="center">Chapter 8. Development Reference</th><td width="20%" align="right"> <a accesskey="n" href="db-api.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="request-processor"></a>The Request Processor</h2></div></div><div></div></div><div class="authorblurb"><p>
-By Pete Su
-<br>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>The Request Processor</title><meta name="generator" content="DocBook XSL Stylesheets V1.62.0"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="dev-guide.html" title="Chapter 8. Development Reference"><link rel="previous" href="objects.html" title="OpenACS Data Models and the Object System"><link rel="next" href="db-api.html" title="The OpenACS Database Access API"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="objects.html">Prev</a> </td><th width="60%" align="center">Chapter 8. Development Reference</th><td width="20%" align="right"> <a accesskey="n" href="db-api.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="request-processor"></a>The Request Processor</h2></div></div><div></div></div><div class="authorblurb"><p>By Pete Su</p>
           OpenACS docs are written by the named authors, and may be edited
           by OpenACS documentation staff.
-        </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="rp-overview"></a>Overview</h3></div></div><div></div></div><p>
+        </div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="rp-overview"></a>Overview</h3></div></div><div></div></div><p>
 This document is a brief introduction to the OpenACS 5.0.0b1 Request Processor;
 more details can be found in the <a href="rp-design.html">OpenACS 4 Request Processor Design</a>. Here we cover the high level concepts behind the
 system, and implications and usage for the application developer.
@@ -13,13 +11,13 @@ respond to every incoming URL reaching the server. The following
 diagram summarizes the stages of the request processor assuming a URL
 request like <tt class="computeroutput">http://someserver.com/notes/somepage.adp</tt>.
 
-</p><div class="mediaobject" align="center"><img src="images/rp-flow.gif" align="middle" longdesc="ld-id2846280.html"><div class="longdesc-link" align="right"><br clear="all"><span class="longdesc-link">[<a href="ld-id2846280.html" target="longdesc">D</a>]</span></div></div><p>
+</p><div class="mediaobject" align="center"><img src="images/rp-flow.gif" align="middle" longdesc="ld-id2918090.html"><div class="longdesc-link" align="right"><br clear="all"><span class="longdesc-link">[<a href="ld-id2918090.html" target="longdesc">D</a>]</span></div></div><p>
 
 </p><div class="variablelist"><dl><dt><span class="term">Stage 1: Search Site Map</span></dt><dd><p>
 The first thing the RP does is to map the given URL to the appropriate
 physical directory in the filesystem, from which to serve content.  We
 do this by searching the site map data model (touched on in the <a href="packages.html">Packages</a>, and further
-discussed in <a href="subsites.html" title="Writing OpenACS 5.0.0b1 Application Pages">the section called &#8220;Writing OpenACS 5.0.0b1 Application Pages&#8221;</a>). This data model maps URLs to objects representing
+discussed in <a href="subsites.html">Writing OpenACS Application Pages</a>). This data model maps URLs to objects representing
 content, and these objects are typically package instances. 
 </p><p>
 After looking up the appropriate object, the RP stores the URL, the ID

@@ -1,8 +1,7 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Install AOLserver 3.3oacs1</title><meta name="generator" content="DocBook XSL Stylesheets V1.62.4"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="complete-install.html" title="Chapter 3. Complete Installation"><link rel="previous" href="postgres.html" title="Install PostGreSQL"><link rel="next" href="openacs.html" title="Install OpenACS 5.0.0b1"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="postgres.html">Prev</a> </td><th width="60%" align="center">Chapter 3. Complete Installation</th><td width="20%" align="right"> <a accesskey="n" href="openacs.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="aolserver"></a>Install AOLserver 3.3oacs1</h2></div></div><div></div></div><div class="authorblurb"><p>
-    by <a href="mailto:vinod@kurup.com" target="_top">Vinod Kurup</a><br>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Install AOLserver 3.3oacs1</title><meta name="generator" content="DocBook XSL Stylesheets V1.62.0"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="complete-install.html" title="Chapter 3. Complete Installation"><link rel="previous" href="postgres.html" title="Install PostGreSQL"><link rel="next" href="openacs.html" title="Install OpenACS 5.0.0b1"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="postgres.html">Prev</a> </td><th width="60%" align="center">Chapter 3. Complete Installation</th><td width="20%" align="right"> <a accesskey="n" href="openacs.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="aolserver"></a>Install AOLserver 3.3oacs1</h2></div></div><div></div></div><div class="authorblurb"><p>by <a href="mailto:vinod@kurup.com" target="_top">Vinod Kurup</a></p>
           OpenACS docs are written by the named authors, and may be edited
           by OpenACS documentation staff.
-        </p></div><div class="orderedlist"><ol type="1"><li><a name="aolserver-tarball"></a><p><b>Unpack the Aolserver tarball. </b>Download the <a href="individual-programs.html#source-aolserver">aolserver tarball</a> and unpack it.</p><pre class="screen">[root@yourserver root]# <b class="userinput"><tt>cd /usr/local/src</tt></b>
+        </div><div class="orderedlist"><ol type="1"><li><a name="aolserver-tarball"></a><p><b>Unpack the Aolserver tarball. </b>Download the <a href="individual-programs.html#source-aolserver">aolserver tarball</a> and unpack it.</p><pre class="screen">[root@yourserver root]# <b class="userinput"><tt>cd /usr/local/src</tt></b>
 [root@yourserver src]# <b class="userinput"><tt>wget --passive http://uptime.openacs.org/aolserver-openacs/aolserver3.3oacs1.tar.gz</tt></b>
 --15:38:08--  http://uptime.openacs.org/aolserver-openacs/aolserver3.3oacs1.tar.gz
            =&gt; `aolserver3.3oacs1.tar.gz'
@@ -107,20 +106,15 @@ Length: 826,613 [application/x-compressed]
 <pre class="action"><span class="action">cd /usr/local/src
 wget --passive http://www.tdom.org/tDOM-0.7.8.tar.gz
 tar xzf tDOM-0.7.8.tar.gz
-cd tDOM-0.7.8/unix</span></pre> </pre><p>Edit the file CONFIG and change this section: 
-</p><pre class="programlisting"># ----------------------------------------------------
+cd tDOM-0.7.8/unix</span></pre> </pre><p>Edit the file CONFIG and change this section:</p><pre class="programlisting"># ----------------------------------------------------
 # aolsrc="/usr/src/aolserver-3.4"
 # ../configure --enable-threads --disable-tdomalloc \
 #   --with-aolserver=$aolsrc \
-#   --with-tcl=$aolsrc/tcl8.3.4/unix </pre><p>
-</p><p>to</p><p>
-</p><pre class="programlisting"># ----------------------------------------------------
+#   --with-tcl=$aolsrc/tcl8.3.4/unix </pre><p>to</p><pre class="programlisting"># ----------------------------------------------------
 aolsrc="/usr/local/src/aolserver/aolserver"
 ../configure --enable-threads --disable-tdomalloc \
   --with-aolserver=$aolsrc \
-  --with-tcl=$aolsrc/tcl8.3.2/unix</pre><p>
-      </p><p>And configure and compile:</p><p>
-      </p><pre class="screen">[root@yourserver unix]# <b class="userinput"><tt>sh CONFIG</tt></b>
+  --with-tcl=$aolsrc/tcl8.3.2/unix</pre><p>And configure and compile:</p><pre class="screen">[root@yourserver unix]# <b class="userinput"><tt>sh CONFIG</tt></b>
 creating cache ./config.cache
 checking for memmove... yes
   <span class="emphasis"><em>(many lines omitted)</em></span>
@@ -141,8 +135,7 @@ fi
 make
 cp libtdom0.7.8.so /usr/local/aolserver/bin/
 cd /usr/local/aolserver/bin
-ln -s libtdom0.7.8.so libtdom.so</span></pre></pre><p>
-</p></li><li><p><a href="install-nsopenssl.html" title="Install nsopenssl">Install nsopenssl</a>
+ln -s libtdom0.7.8.so libtdom.so</span></pre></pre></li><li><p><a href="install-nsopenssl.html" title="Install nsopenssl">Install nsopenssl</a>
       (OPTIONAL)</p></li><li><p><a href="install-full-text-search.html#install-openfts" title="Install OpenFTS module">Install Full Text Search with OpenFTS</a> (OPTIONAL)</p></li><li><p><a href="install-nspam.html" title="Install nspam">Install nspam</a> (OPTIONAL)</p></li><li><a name="install-aolserver-permissions"></a><p><b>Test AOLserver. </b>In order to test AOLserver, we'll run it using the
       sample-config.tcl file provided in the AOLserver distribution,
       under the nobody user and <tt class="computeroutput">web</tt>
