@@ -2,6 +2,7 @@
 <message_catalog package_key="acs-subsite" package_version="?.?d?" locale="AR_LB" charset="ISO-????-?">
 
   <msg key="About_You">Ùמזד</msg>
+  <msg key="Account_closed">&lt;p&gt;ÍÓÇÈד וÚהג ÍÇהךÇכ.&lt;/p&gt; &lt;p&gt;ÅÐÇ ÊÑÚÈ¬ זÍז ךודזזÇ &lt;a href=&quot;%restore_url%&quot;&gt; ÅÙÇÏÉ בÊÍ ÍÓÇÈד&lt;/a&gt;.&lt;/p&gt;  </msg>
   <msg key="again">ËÇזךÉכ</msg>
   <msg key="Answer">ÇהÌטÇÈ:</msg>
   <msg key="answer">ÇהÌטÇÈ:</msg>
@@ -10,6 +11,7 @@
   <msg key="Bad_Password">דהוÉן ÇהÓÑ ÓךÆÉן</msg>
   <msg key="Basic_Information">ÇהוÙהטוÇÊ ÇהÃÓÇÓךÉ</msg>
   <msg key="bio">ÇהÓךÑÉ ÇהÐÇÊךÉ:</msg>
+  <msg key="cannot_retrieve_password">ÇÓÊÙÇÏÉ דהוÉ ÓÑס וז ÇהÓסה×É ÇהוÍהסךסÉ ÚךÑ וÊטבÑÉ.</msg>
   <msg key="Change_my_Password">ÚךסÑע דהוÉמ ÓÑך</msg>
   <msg key="Check_Your_Inbox">ÅבÍÕע ÕזÏטגמ ÅÓÊהÇודמ</msg>
   <msg key="Children">ÇהÃטהÇÏ</msg>
@@ -19,6 +21,7 @@
   <msg key="Customize_Question">בÕסהע ÓÄÇהÇכ</msg>
   <msg key="Direct_Permissions">ÇהÃÐטז ÇהוÈÇÔÑÉ</msg>
   <msg key="edit_your_alerts">ÍÑסÑע ÅזÐÇÑÇÊמדמ</msg>
+  <msg key="Email">ÇהÈÑךÏ ÇהÅהדÊÑטזך</msg>
   <msg key="email_address">ÙזטÇז ÇהÈÑךÏ ÇהÅהדÊÑטזך:</msg>
   <msg key="Email_Confirmation">ÊÃדךÏן ÈÑךÏ ÅהדÊÑטזך</msg>
   <msg key="Email_not_Requested">ÇהÈÑךÏ ÇהÅהדÊÑטזך ÚךÑ ו×הטÈ</msg>
@@ -26,25 +29,31 @@
   <msg key="email_password">&quot;דהוÉ ÓÑ ÈÑךÏ ÅהדÊÑטזך&quot;</msg>
   <msg key="Error_sending_mail">ÍÕהמ Î×Ãכ בך ÅÑÓÇה ÇהÈÑךÏ ÅהדÊÑטזך </msg>
   <msg key="Feature_disabled">ÇהוךÒסÉן Ù×סהÊע</msg>
+  <msg key="First_names">ÇהÅÓו</msg>
+  <msg key="Forgotten_password_body">חÐÇ חט וÙהטוÇÊ ÏÎטהד ÇהÌÏךÏÉ: %account_id_label%: %account_id% %password_label%: %password% ÇהÑÌÇÁ ÒךÇÑÉ חÐÇ ÇהוטגÙ הÊÚךÑ דהוÉ ÓÑד: %reset_password_url%</msg>
   <msg key="Full_Name">ÇהÇÓו ÇהדÇוה:</msg>
   <msg key="Grant">טÇבג</msg>
   <msg key="Grant_Permission">טÇבג Ùהי ÇהÅÐעז</msg>
   <msg key="help">ÇהוÓÇÙÏÉן</msg>
   <msg key="in">בך</msg>
   <msg key="Join_group_name">ÅזÖמוסמ Åהי %group_name%</msg>
+  <msg key="Last_name">ÇהÔחÑÉ</msg>
   <msg key="Log_In">ÏÎטה</msg>
   <msg key="Log_Out">ÎÑטÌ</msg>
   <msg key="Login">ÇהÏסÎטה</msg>
   <msg key="login">ÇהÏסÎטה</msg>
   <msg key="Login_Expired">ÇהÏסÎטה ÅזÊחי</msg>
+  <msg key="Login_Expired_?">גÏ ÇזÊחÊ ÕבÍÉ ÇהÏסÎטה. וז בÖהד</msg>
   <msg key="lt_Awaiting_email_verifi">ÅזÊנØÇÑ ÇהÊÍגןסגנ וז ÇהÈÑךÏ ÇהÅהדÊÑטזך</msg>
   <msg key="lt_Cannot_join_this_grou">הÇ ךןודז ÇהÅזÖוÇו Åהי חÐח ÇהוÌוטÙÉ.</msg>
   <msg key="lt_Couldnt_find_user_use">הו ךמדןז וז Çהוודנז Ãזס זÌÏ ÇהוÓÊÎÏו %user_id%</msg>
+  <msg key="lt_Couldnt_find_user_use_?">הו ךדז וז Çהוודז Ãז זÌÏמ ÇהוÓÊÎÏו %user_id%.ÑÈסוÇ חÐח חבטÉ בך ÇהוÈÑוÌÉ.   </msg>
   <msg key="lt_Couldnt_find_your_rec">הו ךמדןז וז Çהוודנז Ãזס זÌÏע ÓÌהסד</msg>
+  <msg key="lt_Couldnt_find_your_rec_?">הו ךדז וז Çהוודז Ãז זÌÏמ ÓÌהד&quot; &quot;חטךÉמ ÇהוÓÊÎÏו %user_id% הךÓ בך גÇÙÏÉ ÇהÈךÇזÇÊ. ÑÈסוÇ חÐח חבטÉ ÇהוÈÑוÌÉ.   </msg>
   <msg key="lt_Customized_question_a">ÓÄÇה וÎÕסÕ ÈÇהבÙה חזÇד</msg>
   <msg key="lt_Customized_question_i">ÓÄÇה וÎÕסÕ ÏןÎנהמ ÈÇהבÙה</msg>
   <msg key="lt_Customized_QuestionAn">ÓÄÇה/ÅÌÇÈÉ ÇהוÎÕסÕ ÇהÐך ÏÎה</msg>
-  <msg key="lt_enable_cookies">בך ÇהזךÊÓדÇÈ ?.?¬ ÃזÊ ÊÓÊ×ךÙ Êודךז ÇהדטדךÒ וז ÇהÊÍÑךÑ -&amp;gt; ÊבÖךהÇÊ -&amp;gt; וÊגÏסו. בך וÊÕבסÍ וÇךדÑטÓטבÊ ?.?¬ ÃזÊ ÊÓÊ×ךÙ Êודךז ÇהדטדךÒ וז ÇהוזØÑ -&amp;gt; ÎךÇÑÇÊ ÇהÅזÊÑזÊ -&amp;gt; ÇהוÊגÏסו -&amp;gt; ÇהÃוז.</msg>
+  <msg key="lt_enable_cookies">בך ÇהזךÊÓדÇÈ ?.? ÃזÊ ÊÓÊ×ךÙ Êודךז ÇהדטדךÒ וז ÇהÊÍÑךÑ -&amp;gt; ÊבÖךהÇÊ -&amp;gt; וÊגÏסו. בך וÊÕבסÍ וÇךדÑטÓטבÊ ?.?¬ ÃזÊ ÊÓÊ×ךÙ Êודךז ÇהדטדךÒ וז ÇהוזØÑ -&amp;gt; ÎךÇÑÇÊ ÇהÅזÊÑזÊ -&amp;gt; ÇהוÊגÏסו -&amp;gt; ÇהÃוז.</msg>
   <msg key="lt_Error_creating_the_re">Î×Ã בך Îהגע ÇהÙהÇגÉ</msg>
   <msg key="lt_first_names_last_name">(%first_names% %last_name%(%email% וÓÌסה דוÓÊÎÏו בך %system_url%</msg>
   <msg key="lt_for_a_period_of_vacat">הבÊÑÉנ ÇהÙ×הÉנ Ãמט ÈÔדה ÏÇÆו</msg>
@@ -65,6 +74,7 @@
   <msg key="lt_New_registration_at_s">ÇהÊÓÌךהן ÇהÌÏךÏן בך %system_url%</msg>
   <msg key="lt_no_cookies">ÅÐÇ טÇÕהÊ Ãז ÊÑוי ÎÇÑÌÇכ חזÇ¬ חט וז ÇהוÍÊוה הÃז וÊÕבסÍד הÇ ךגÈה ÇהדטדךÒ. זÍז ÂÓבטז Ùהי ÇהÅÒÙÇÌ הדז ÍגסÇ Åזסח וז ÇהוÓÊÍךה הÈÑוÌÉ זØÇו ÈוËה חÐÇ ÈÏטז וÊÇÈÙÉ וז ךÑÓה וÇ.</msg>
   <msg key="lt_Note_If_youve_forgott">והÇÍØÉ : ÅÐÇ גÏ זÓךÊ דהוÉ ÓÑסד¬ &lt;a href=&quot;@email_password_url@&quot;&gt;Ç×הÈ וז חÐÇ ÇהÎÇÏו Ãז ךÑÓהח ÈÇהÈÑךÏ ÇהÃהדÊÑטזךס Åהי @email@</msg>
+  <msg key="lt_Note_If_youve_forgott_?">והÇÍØÉ : ÅÐÇ גÏ זÓךÊ דהוÉ ÓÑסד¬ &lt;a href=&quot;@email-password?user_id=%user_id%&quot;&gt;Ç×הÈ וז חÐÇ ÇהÎÇÏו Ãז ךÑÓהח ÈÇהÈÑךÏ ÇהÃהדÊÑטזךס Åהי @email@</msg>
   <msg key="lt_Note_that_you_can_era">הÇÍØ Ãזסד ךודז Ãז ÊוÓÍ ÙזטÇז ÈÑךÏ ÅהדÊÑטזךס ט דהוÉ ÇהÓסÑס ÇהוÍבטØÇז ÈÇÎÊךÇÑ ÎךÇÑ&quot;ÎÑטÌ&quot; וז וÓÇÍÉ Ùוהד.</msg>
   <msg key="lt_Now_were_really_in_tr">ÇהÂז זÍז ÍגÇכ בך ÇהוÔדהÉנ הÃז ÍמÕהזמÇ Ùהי חÐÇ ÇהÎ×Ãנ:</msg>
   <msg key="lt_num_children_Children">Ã×בÇה וÎבךÉ %num_children%</msg>
@@ -84,6 +94,7 @@
   <msg key="lt_Problem_with_user_aut">ÇהוÔדהÉ ÈÊטËךג ÇהוÓÊÎÏו</msg>
   <msg key="lt_Register_as_a_user_of">ÓÌסה דוÓÊÎÏו וז</msg>
   <msg key="lt_Registration_informat">וÙהטוÇÊן ÊÓÌךהנ החÐח ÇהÎÏוÉנ גמÏע ÃןÑÓהÊע Åהי %email%.</msg>
+  <msg key="lt_Registration_informat_?">וÙהטוÇÊן ÊÓÌךהנ החÐח ÇהÎÏוÉנ גמÏע ÃןÑÓהÊע Åהי  %email%.</msg>
   <msg key="lt_registration_request_submitted">×הÈ ÊÓÌךהד גÏ ÙןÑנÖמ Åהי וÏךÑ %system_name%. וÇÒÇה ךזÊØÑ ÇהוטÇבגÉ</msg>
   <msg key="lt_Remember_this_address">ÊÐדסÑע חÐÇ ÇהÙזטÇזנ טדהוÉנ ÇהÓÑ¿</msg>
   <msg key="lt_Row_id_row_id_is_not_">חטךסÉ ÇהÕסבס %row_id%  הךÓ בך גÇÙÏÉ ÇהÈךÇזÇÊ. ÑÌÇÁ ÅבÍÕ ÈÑךÏד ÇהÅהדÊÑטזך טÏגסג ÈÃזסד Êג×Ù טÊהÕג ÇהוטגÙ ÈÔדה ÕÍךÍ. </msg>
@@ -101,6 +112,9 @@
   <msg key="lt_This_feature_is_disab">חÐח ÇהוךÒסÉנ Ù×ה Ùהי חÐÇ ÇהÎÇÏונ.</msg>
   <msg key="lt_To_confirm_your_regis">הÊמÃדךÏ ÊÓÌךהנדמ¬ ÑÌÇÁכ ÅÐחÈע %confirmation_url%</msg>
   <msg key="lt_User_id_user_id_is_no">חטךÉ וÓÊÎÏו %user_id% המךÓמ בך ÍÇהÉנ ÇזÊØÇÑ ÇהוטÇבגÉנ. חÐÇ וז ÇהוÍÊוה Î×Ã ÈÑוÌÊזÇ.</msg>
+  <msg key="lt_User_id_user_id_is_no_?">חטךÉ וÓÊÎÏו %user_id% המךÓמ וטÌטÏ בך ÍÇהÉ ÅזÊØÇÑ ÇהÊÍגג וז ÇהÈÑךÏ ÇהÅהדÊÑטזך.</msg>
+  <msg key="lt_User_id_user_id_is_no_?">חטךÉ וÓÊÎÏו %user_id% המךÓמ בך גÇÙÏÉ ÇהÈךÇזÇÊ. חÐÇ וז ÇהוÍÊוה Î×Ã ÈÑוÌÊזÇ. </msg>
+  <msg key="lt_User_id_user_id_is_no_?">חטךÉ וÓÊÎÏו %user_id% המךÓמ בך גÇÙÏÉ ÇהÈךÇזÇÊ. חÐÇ וז ÇהוÍÊוה Î×Ã ÈÑוÌÊזÇ.</msg>
   <msg key="lt_Validation_Check_Fail">בÔה בÍÕ ÇהÊÕÏךג</msg>
   <msg key="lt_We_also_need_a_custom">זÍז ÃךÖÇכ זÍÊÇÌ הÓÄÇה ט ÅÌÇÈÉ  וÎÕסÕÇז הÖÈ× דהוÉ ÓÑסד ÅÐÇ זÓךÊ.</msg>
   <msg key="lt_We_got_the_following_">ÅÓÊהוזÇ ÑÓÇהÉ ÇהÎ×Ã ÇהÊÇהךÉ ÈךזוÇ ÊÍÇטה Îהג חÐח ÇהÙהÇגÉ:</msg>
@@ -118,10 +132,13 @@
 </msg>
   <msg key="lt_You_can_log_in_now_us">ךודז Ãז ÊÏÎה וז ÇהÂז ÈÇÓÊÎÏÇו דהוÉ ÓÑסד ÇהגÏךוÉ:</msg>
   <msg key="lt_You_cant_have_a_lt_in">ÃזÊ הÇ ךודז Ãז ÊÎÊÇÑ &amp;lt; בך ÇÓוד ÇהÃטה הÃזח ÓךÈÏט וËה È×ÇגÉ ÅÊÔ Êך Åו Åה טךÔטסÔ וÓÊÎÏוךז ÂÎÑךז.</msg>
+  <msg key="lt_You_cant_have_a_lt_in_?">ÃזÊ הÇ ךודז Ãז ÊÎÊÇÑ &amp;lt; בך ÔחÑÊד הÃזח ÓךÈÏט וËה È×ÇגÉ ÅÊÔ Êך Åו Åה טךÔטסÔ וÓÊÎÏוךז ÂÎÑךז. </msg>
   <msg key="lt_You_have_encountered_">ÕÇÏבÊ וÔדהÉ ÈÇהÊטËךג.</msg>
+  <msg key="lt_You_have_encountered__?">ÕÇÏבÊ וÔדהÉ ÈÇהÊטËךג</msg>
   <msg key="lt_Your_Account_at_site_">ÍÓÇÈד Ùהי %site_link% הגÏ ÇÓÊÙךÏ.</msg>
   <msg key="lt_Your_Account_is_Resto">הגÏ ÇÓÊÙךÏ ÍÓÇÈד</msg>
   <msg key="lt_Your_email_has_been_c">ÈÑךÏדמ ÇהÅהדÊÑטזך ÃןדסÏ.ÃזÊ ךןודזד Ãזס ÊןÓÌסהן ÇהÂז בך %system_name%.</msg>
+  <msg key="lt_Your_email_has_been_c_?">ÈÑךÏדמ ÇהÅהדÊÑטזך ÃןדסÏ.ÃזÊ ÇהÂז בך ÇהÅזÊ×ÇÑ ÇהוטÇבגÉ וז וÏךÑ %system_name%. </msg>
   <msg key="lt_Your_email_is_confirm">ÈÑךÏד ÇהÅהדÊÑטזך ÃדסÏע</msg>
   <msg key="lt_Your_forgotten_passwo">דהוÉ ÓÑד ÇהוזÓךÉ Ùהי %system_name%</msg>
   <msg key="lt_Your_registration_is_">ÊÓÌךהד וטÌטÏ ÇהÂז בך גÇÙÏÉ ÇהÈךÇזÇÊ. וÏךÑ וטגÙ גÏ ÃÎÈנÑמ וז ×הÈד Ãז ÊÓÊÙוה ÇהזØÇו. ÙזÏוÇ ÊÍÕה Ùהי ÇהוטÇבגÉ¬ ÃזÊ ÓÊÓÊהו ÑÓÇהÉ ÈÑךÏ ÅהדÊÑטזך טÃזÊ ÊÓÊ×ךÙ ÇהÙטÏÉ Åהי %site_link% הÅÓÊÙוÇה ÇהÎÏוÉ.</msg>
@@ -136,21 +153,27 @@
   <msg key="on">Ùמהמי</msg>
   <msg key="or">Ãט</msg>
   <msg key="Password">דהוÉ ÇהÓסÑס:</msg>
+  <msg key="Password_changed_body">וÙהטוÇÊ ÏÎטהד Çהי %system_name%: %account_id_label%:  %account_id% דהוÉ ÓÑד החÐÇ ÇהÍÓÇÈ ÊÚךÑÊ ÍÏךËכÇ. ÚךÑ וÊטÌÈ Ùהךד Ãז ÊבÙה ÔךÆÇכ¬ חÐח ÇהÑÓÇהÉ ÈÔדה ÈÓך× ÊÈהךÚÇכ הך ÍוÇךÉ Ãוז ÍÓÇÈד. --------------- ÃזÊ ÏÇÆוÇכ ךודזד ÊÚךךÑ דהוÉ ÓÑד ÈבÙה ÇהÎ×טÇÊ ÇהÊÇהךÉ: ?- ÅÏÎהע Çהי %system_name%  ?- ÅזגÑע Ùהי &quot;%pvt_home_name%&quot;  ?- ÅÎÊÑע &quot;%password_update_link_text%&quot;</msg>
+  <msg key="Password_changed_subject">דהוÉ ÇהÓÑ ÊÚךÑÊ</msg>
   <msg key="Permissions">ÇהÃÐטז</msg>
   <msg key="Permissions_for_name">ÇהÃÐטז הך %name%</msg>
   <msg key="personal_URL">ÇהוטגÙ ÇהÔÎÕך:</msg>
   <msg key="Question">ÇהÓÄÇהן:</msg>
   <msg key="question">ÇהÓÄÇהן:</msg>
+  <msg key="Recover_Password">ÅÓÊÑÌÙ דהוÉ ÇהÓÑ</msg>
   <msg key="Register">ÓÌהע</msg>
   <msg key="Revoke_Checked">ÇהÅהÚÇÁ ÇהוÎÊÇÑךז</msg>
+  <msg key="Screen_name">ÅÓו ÇהÔÇÔÉ</msg>
   <msg key="screen_name">ÅÓון ÇהÔÇÔÉנ:</msg>
   <msg key="Security">ÇהÃוזן</msg>
   <msg key="Show">ÙמÑעÖ</msg>
   <msg key="Sorry">ÂÓב</msg>
+  <msg key="sorry_forgotten_pwd">ההÃÓב¬ הזס זÓÊ×ךÙ וÓÇÙÏÊד בך דהוÉ ÓÑד ÇהוזÓךÉ.</msg>
   <msg key="Subject">ÇהוטÖטÙ:</msg>
   <msg key="Thank_you">.ÔדÑכÇ</msg>
   <msg key="to">Åנהימ</msg>
   <msg key="to_site_link">Åהי %site_link%</msg>
+  <msg key="to_site_link_?">ÃÙÏע ÍÓÇÈד Çהי ÇהÍÇהÉ ÇהÍךÉ</msg>
   <msg key="Unauthorized_Access">ÙÈטÑ ומÍעØןטÑ</msg>
   <msg key="Unsubscribe">ÃהÚךנ ÇהÅÔÊÑÇד</msg>
   <msg key="up_to_context_name">Åהי ÍÏס %context_name%</msg>
@@ -159,9 +182,10 @@
   <msg key="Update_Password">ÊÌÏךÏנ דהוÉ ÇהÓÑ</msg>
   <msg key="upload_a_portrait">ÃÑÓהע ÕטÑÉכ</msg>
   <msg key="User_Creation_Failed">בÔה Îהג ÇהוÓÊÎÏו</msg>
+  <msg key="Username">ÅÓו ÇהוÓÊÎÏו</msg>
   <msg key="Welcome_Back">וÑÍÈÇכ Èדו וÑÉ ÃÎÑי</msg>
+  <msg key="Welcome_Back_?">ÍÓÇÈד וÙÑב ÍÇהךÇכ דאמ &quot;וÍÐטב&quot;. ÅÐÇ ÊÑÚÈ¬ ךודזזÇ</msg>
   <msg key="Your_email">ÈÑךÏד ÇהÅהדÊÑטזךס:</msg>
   <msg key="Your_email_address">ÙזטÇז ÈÑךÏדמ ÇהÅהדÊÑטזך:</msg>
-  <msg key="Your_password">דהוÉ ÓÑסד:</msg>
   <msg key="Your_Portrait">ÕטÑÊד</msg>
 </message_catalog>

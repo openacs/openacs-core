@@ -2,25 +2,12 @@
 <message_catalog package_key="acs-subsite" package_version="5.0d4" locale="en_US" charset="ISO-8859-1">
 
   <msg key="About_You">About You</msg>
-  <msg key="Account_close_confirm_no_label">No, take me back to %pvt_home_name%</msg>
-  <msg key="Account_close_confirm_page_title">Confirm Closing Your Account</msg>
-  <msg key="Account_close_confirm_yes_label">Yes, please close my account</msg>
   <msg key="Account_closed">
     &lt;p&gt;Your account is currently closed.&lt;/p&gt;
     &lt;p&gt;If you wish, we can &lt;a href=&quot;%restore_url%&quot;&gt;reopen your account&lt;/a&gt;.&lt;/p&gt;
   </msg>
-  <msg key="Account_closed_workspace_msg">
-    &lt;p&gt;
-      &lt;font color=&quot;red&quot;&gt;
-        &lt;b&gt; Your account is currently closed. &lt;/b&gt; 
-      &lt;/font&gt;
-      &lt;a href=&quot;%login_url%&quot;&gt;Log in&lt;/a&gt; again to see what you can do about it.
-    &lt;/p&amp;;gt;
-  </msg>
-  <msg key="Account_reopened_message">Your account at %system_name% has been reopened. Welcome back.</msg>
-  <msg key="Account_reopened_title">Account Reopened</msg>
   <msg key="again">again</msg>
-  <msg key="Answer">Answer:</msg>
+  <msg key="Answer">Answer</msg>
   <msg key="answer">answer:</msg>
   <msg key="at">at</msg>
   <msg key="Awaiting_Approval">Awaiting Approval</msg>
@@ -181,7 +168,7 @@ choosing the &quot;log out&quot; option from your workspace.</msg>
 your email address and password.  This is convenient for you because,
 if you're the only person who uses your computer, you won't have to
 keep telling us your email address and password.</msg>
-  <msg key="lt_Password_Confirmation">Password Confirmation:</msg>
+  <msg key="lt_Password_Confirmation">Password Confirmation</msg>
   <msg key="lt_Personal_Home_Page_UR">Personal Home Page URL:</msg>
   <msg key="lt_Please_check_your_inb">Please check your inbox. Within the next few minutes, you should find
 a message from %system_owner% containing your password.</msg>
@@ -301,7 +288,7 @@ You can always change your password by doing the following:
   <msg key="Permissions">Permissions</msg>
   <msg key="Permissions_for_name">Permissions for %name%</msg>
   <msg key="personal_URL">personal URL:</msg>
-  <msg key="Question">Question:</msg>
+  <msg key="Question">Question</msg>
   <msg key="question">question:</msg>
   <msg key="Recover_Password">Recover Password</msg>
   <msg key="Register">Register</msg>
@@ -320,6 +307,7 @@ You can always change your password by doing the following:
   <msg key="Thank_you">Thank you.</msg>
   <msg key="to">to</msg>
   <msg key="to_site_link">to %site_link%</msg>
+  <msg key="to_site_link_1">restore your account to live status</msg>
   <msg key="Unauthorized_Access">Unauthorized Access</msg>
   <msg key="Unsubscribe">Unsubscribe</msg>
   <msg key="up_to_context_name">up to %context_name%</msg>
@@ -333,6 +321,6 @@ You can always change your password by doing the following:
   <msg key="Whos_Online_link_label">Users currently online</msg>
   <msg key="Whos_Online_title">Who's Online</msg>
   <msg key="Your_email">Your email:</msg>
-  <msg key="Your_email_address">Your email address:</msg>
+  <msg key="Your_email_address">Email address:</msg>
   <msg key="Your_Portrait">Your Portrait</msg>
 </message_catalog>

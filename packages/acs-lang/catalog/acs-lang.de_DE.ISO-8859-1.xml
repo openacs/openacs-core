@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
-<message_catalog package_key="acs-lang" package_version="5.0d1" locale="de_DE" charset="ISO-8859-1">
+<message_catalog package_key="acs-lang" package_version="5.0d3" locale="de_DE" charset="ISO-8859-1">
 
   <msg key="English">Englisch</msg>
   <msg key="French">Französisch</msg>
   <msg key="German">Deutsch</msg>
-  <msg key="localization-abday">{Son} {Mon} {Die} {Mit} {Don} {Fre} {Sam}</msg>
+  <msg key="localization-abday">{So} {Mo} {Di} {Mi} {Do} {Fr} {Sa}</msg>
   <msg key="localization-abmon">{Jan} {Feb} {Mär} {Apr} {Mai} {Jun} {Jul} {Aug} {Sep} {Okt} {Nov} {Dez}</msg>
   <msg key="localization-am_str"></msg>
   <msg key="localization-currency_symbol">€</msg>
@@ -17,7 +17,7 @@
   <msg key="localization-firstdayofweek">1</msg>
   <msg key="localization-formbuilder_time_format">HH24:MI</msg>
   <msg key="localization-frac_digits">2</msg>
-  <msg key="localization-grouping">3 3 </msg>
+  <msg key="localization-grouping">3 3</msg>
   <msg key="localization-int_curr_symbol">EUR </msg>
   <msg key="localization-int_frac_digits">2</msg>
   <msg key="localization-mon">{Januar} {Februar} {März} {April} {Mai} {Juni} {Juli} {August} {September} {Oktober} {November} {Dezember}</msg>

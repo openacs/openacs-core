@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<message_catalog package_key="acs-subsite" package_version="5.0d3" locale="fi_FI" charset="utf-8">
+<message_catalog package_key="acs-subsite" package_version="5.0d4" locale="fi_FI" charset="utf-8">
 
   <msg key="About_You">Tietoja sinusta</msg>
   <msg key="again">uudelleen</msg>
@@ -174,6 +174,5 @@ uudelleen:</msg>
   <msg key="Welcome_Back_1">Tunnuksesi on tällä hetkellä merkitty poistetuksi. Halutessasi voimme</msg>
   <msg key="Your_email">Sähköpostisi:</msg>
   <msg key="Your_email_address">Sähköpostiosoitteesi:</msg>
-  <msg key="Your_password">Salasanasi:</msg>
   <msg key="Your_Portrait">Kuvasi:</msg>
 </message_catalog>

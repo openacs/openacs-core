@@ -1,7 +1,8 @@
 <?xml version="1.0"?>
-<message_catalog package_key="acs-subsite" package_version="5.0d3" locale="nl_NL" charset="ISO-8859-1">
+<message_catalog package_key="acs-subsite" package_version="5.0d4" locale="nl_NL" charset="ISO-8859-1">
 
   <msg key="About_You">Over u</msg>
+  <msg key="Account_closed">&lt;p&gt;Uw registratie contract is gesloten.&lt;/p&gt; &lt;p&gt;Als u wilt kunnen we &lt;a href=&quot;%restore_url%&quot;&gt;deze heropenen&lt;/a&gt;.&lt;/p&gt;</msg>
   <msg key="again">opnieuw</msg>
   <msg key="Answer">Antwoord:</msg>
   <msg key="answer">antwoord:</msg>
@@ -10,6 +11,7 @@
   <msg key="Bad_Password">Foutief Wachtwoord</msg>
   <msg key="Basic_Information">Basisinformatie</msg>
   <msg key="bio">biografie:</msg>
+  <msg key="cannot_retrieve_password">Het verkrijgen van een wachtwoord via de gezaghebbende server wordt niet ondersteund.</msg>
   <msg key="Change_my_Password">Wijzig Wachtwoord</msg>
   <msg key="Check_Your_Inbox">Controleer uw e-postbus</msg>
   <msg key="Children">Kinderen</msg>
@@ -19,6 +21,7 @@
   <msg key="Customize_Question">Vraag Op Maat maken</msg>
   <msg key="Direct_Permissions">Directe permissies</msg>
   <msg key="edit_your_alerts">wijzig waarschuwingen</msg>
+  <msg key="Email">Email</msg>
   <msg key="email_address">e-mailadres:</msg>
   <msg key="Email_Confirmation">E-mailbevestiging</msg>
   <msg key="Email_not_Requested">E-mail niet gevraagd</msg>
@@ -26,12 +29,15 @@
   <msg key="email_password">&quot;e-mail wachtwoord&quot;</msg>
   <msg key="Error_sending_mail">Fout bij verzenden e-mail</msg>
   <msg key="Feature_disabled">Functie van onderdeel geblokkeerd</msg>
+  <msg key="First_names">Voornamen</msg>
+  <msg key="Forgotten_password_body">Hier zijn uw nieuwe login gegevens: %account_id_label%: %account_id% %password_label%: %password% Klik op de volgende link om uw wachtwoord te veranderen: %reset_password_url% </msg>
   <msg key="Full_Name">Volledige Naam:</msg>
   <msg key="Grant">Toekennen</msg>
   <msg key="Grant_Permission">Permissie toekennen</msg>
   <msg key="help">hulp</msg>
   <msg key="in">in</msg>
   <msg key="Join_group_name">Wordt lid van %group_name%</msg>
+  <msg key="Last_name">Achternaam.</msg>
   <msg key="Log_In">Log In</msg>
   <msg key="Log_Out">Log Out</msg>
   <msg key="Login">Login</msg>
@@ -146,17 +152,23 @@
   <msg key="on">op</msg>
   <msg key="or">of</msg>
   <msg key="Password">Wachtwoord:</msg>
+  <msg key="Password_changed_body">Uw login gegevens op %system_name% voor %account_id_label% %account_id%. 
+Uw wachtwoord is recent gewijzigd. U hoeft niets te doen, dit bericht is slechts bedoeld om de veiligheid van uw gegevens te verhogen. --------------- U kunt uw wachtwoord altijd wijzigen door het volgende te doen: 1. Login op %system_name% 2. Klik op de &quot;%pvt_home_name%&quot; link 3. Kies &quot;%password_update_link_text%&quot; </msg>
+  <msg key="Password_changed_subject">Wachtwoord is veranderd</msg>
   <msg key="Permissions">Permissies</msg>
   <msg key="Permissions_for_name">Permissies van %name%</msg>
   <msg key="personal_URL">persoonlijke URL</msg>
   <msg key="Question">Vraag:</msg>
   <msg key="question">vraag:</msg>
+  <msg key="Recover_Password">Terugkrijgen wachtwoord</msg>
   <msg key="Register">Inschrijven</msg>
   <msg key="Revoke_Checked">Gemarkeerde Intrekken</msg>
+  <msg key="Screen_name">Schermnaam</msg>
   <msg key="screen_name">schuilnaam:</msg>
   <msg key="Security">Veiligheid</msg>
   <msg key="Show">Toon</msg>
   <msg key="Sorry">Sorry</msg>
+  <msg key="sorry_forgotten_pwd">Sorry, wij kunnen u niet verder helpen met het wachtwoord dat u vergeten bent.</msg>
   <msg key="Subject">Onderwerp:</msg>
   <msg key="Thank_you">Bedankt.</msg>
   <msg key="to">naar</msg>
@@ -170,6 +182,7 @@
   <msg key="Update_Password">Bijwerken Wachtwoord</msg>
   <msg key="upload_a_portrait">Sla een portret op</msg>
   <msg key="User_Creation_Failed">Aanmaken gebruiker mislukt</msg>
+  <msg key="Username">Gebruikersnaam</msg>
   <msg key="Welcome_Back">Welkom Terug</msg>
   <msg key="Welcome_Back_1">De account is momenteel gemarkeerd als zijnde verwijderd. Indien gewenst, kunnen we</msg>
   <msg key="Your_email">E-mail:</msg>

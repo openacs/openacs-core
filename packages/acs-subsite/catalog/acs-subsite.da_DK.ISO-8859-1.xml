@@ -2,6 +2,7 @@
 <message_catalog package_key="acs-subsite" package_version="5.0d4" locale="da_DK" charset="ISO-8859-1">
 
   <msg key="About_You">Omkring dig</msg>
+  <msg key="Account_closed">&lt;p&gt;Din konto er i øjeblikket lukket.&lt;/p&gt; &lt;p&gt;Hvis du vil, kan vi &lt;a href=&quot;%restore_url%&quot;&gt;genåbne kontoen&lt;/a&gt;.&lt;/p&gt; </msg>
   <msg key="again">igen</msg>
   <msg key="Answer">Svar:</msg>
   <msg key="answer">svar:</msg>
@@ -10,6 +11,7 @@
   <msg key="Bad_Password">Dårlig adgangskode</msg>
   <msg key="Basic_Information">Staminformation</msg>
   <msg key="bio">biografi:</msg>
+  <msg key="cannot_retrieve_password">Der er ikke understøttet afhentning af adgangskoden hos den lokale autoritet.</msg>
   <msg key="Change_my_Password">Ændr min adgangskode</msg>
   <msg key="Check_Your_Inbox">Tjek din indbakke</msg>
   <msg key="Children">Børn</msg>
@@ -20,6 +22,7 @@
   <msg key="Customize_Question">Tilpas spørgsmål</msg>
   <msg key="Direct_Permissions">Direkte rettigheder</msg>
   <msg key="edit_your_alerts">redigere dine beskedalarmer</msg>
+  <msg key="Email">E-mail</msg>
   <msg key="email_address">e-mailadresse</msg>
   <msg key="Email_Confirmation">E-mailbeskræftigelse</msg>
   <msg key="Email_not_Requested">E-mail blev ikke forespurgt</msg>
@@ -27,12 +30,15 @@
   <msg key="email_password">&quot;send adgangskode&quot;</msg>
   <msg key="Error_sending_mail">Fejl ved afsendelse af mail</msg>
   <msg key="Feature_disabled">Muligheden er slået fra</msg>
+  <msg key="First_names">Fornavn(e)</msg>
+  <msg key="Forgotten_password_body">Her er informationerne, du skal bruge for at logge ind: %account_id_label%: %account_id% %password_label%: %password% Besøg venligst følgende link for at ændre din adgangskode: %reset_password_url% </msg>
   <msg key="Full_Name">Fulde navn:</msg>
   <msg key="Grant">Giv</msg>
   <msg key="Grant_Permission">Giv adgang</msg>
   <msg key="help">hjælp</msg>
   <msg key="in">i</msg>
   <msg key="Join_group_name">Slut til %group_name%</msg>
+  <msg key="Last_name">Efternavn</msg>
   <msg key="Log_In">Log ind</msg>
   <msg key="Log_Out">Log ud</msg>
   <msg key="Login">Log ind</msg>
@@ -137,33 +143,42 @@
   <msg key="Name">Navn:</msg>
   <msg key="New_Password">Ny adgangskode:</msg>
   <msg key="New_users">Nye brugere:</msg>
+  <msg key="no_portrait_title_message">dit portræt</msg>
+  <msg key="no_screen_name_message">&amp;lt; ingen sat op &amp;gt; </msg>
   <msg key="none">ingen</msg>
   <msg key="Note">Bemærk:</msg>
   <msg key="on">på</msg>
   <msg key="or">eller</msg>
   <msg key="Password">Adgangskode:</msg>
+  <msg key="Password_changed_body">Dine informationer til log ind på %system_name%: %account_id_label%: %account_id% Din adgangskode til den konto er ændret for nyligt. Det er ikke nødvendigt for dig at gøre noget; du har kun fået denne besked for at beskytte din kontos sikkerhed. --------------- Du kan altid ændre din adgangskode ved at gøre følgende: 1. Log ind på %system_name% 2. Klik på linket til &quot;%pvt_home_name%&quot; 3. Vælg &quot;%password_update_link_text%&quot; </msg>
+  <msg key="Password_changed_subject">Adgangskode ændret</msg>
   <msg key="Permissions">Rettigheder</msg>
   <msg key="Permissions_for_name">Rettigheder for %name%</msg>
   <msg key="personal_URL">personlig URL:</msg>
   <msg key="Question">Spørgsmål:</msg>
   <msg key="question">spørgsmål:</msg>
+  <msg key="Recover_Password">Gendan adgangskode</msg>
   <msg key="Register">Registrér</msg>
   <msg key="Revoke_Checked">Fjern markerede</msg>
+  <msg key="Screen_name">Skærmnavn</msg>
   <msg key="screen_name">skærmnavn:</msg>
   <msg key="Security">Sikkerhed</msg>
   <msg key="Show">Vis</msg>
   <msg key="Sorry">Beklager</msg>
+  <msg key="sorry_forgotten_pwd">Undskyld, vi kan ikke hjælpe dig med den glemte adgangskode.</msg>
   <msg key="Subject">Emne:</msg>
   <msg key="Thank_you">Mange tak.</msg>
   <msg key="to">til</msg>
   <msg key="to_site_link">til %site_link%</msg>
   <msg key="Unauthorized_Access">Uautoriseret adgang</msg>
   <msg key="Unsubscribe">Af-abonnere</msg>
+  <msg key="up_to_context_name">op til %context_name% </msg>
   <msg key="Update">Opdatér</msg>
   <msg key="update">opdatér</msg>
   <msg key="Update_Password">Opdatér adgangskode</msg>
   <msg key="upload_a_portrait">upload et portræt</msg>
   <msg key="User_Creation_Failed">Brugeroprettelse fejlede</msg>
+  <msg key="Username">Brugernavn</msg>
   <msg key="Welcome_Back">Velkommen tilbage</msg>
   <msg key="Your_email">Din e-mail:</msg>
   <msg key="Your_email_address">Din email-adresse:</msg>
