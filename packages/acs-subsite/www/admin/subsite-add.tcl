@@ -7,6 +7,8 @@ ad_page_contract {
     node_id:integer,optional
 }
 
+auth::require_login
+
 if { [string equal [ad_conn package_url] "/"] } {
     set page_title "New community"
     set subsite_pretty_name "Community name"
@@ -34,6 +36,10 @@ ad_form -name subsite -cancel_url . -form {
         {help_text "Choose the layout and navigation you want for your community."}
         {options [subsite::get_template_options]}
     }
+    {visibility:text(select)
+        {label "Visible to"}
+        {options { { "Members only" "members" } { "Anyone" "any" } }}
+    }
     {join_policy:text(select)
         {label "Join policy"}
         {options [group::get_join_policy_options]}
@@ -50,17 +56,31 @@ ad_form -name subsite -cancel_url . -form {
         break
     }
 } -new_data {
-    if { [catch {
+    db_transaction {
+        # Create and mount new subsite
         set new_package_id [site_node::instantiate_and_mount \
                                 -parent_node_id [ad_conn node_id] \
                                 -node_name $folder \
                                 -package_name $instance_name \
                                 -package_key acs-subsite]
         
+        # Set template
         parameter::set_value -parameter DefaultMaster -package_id $new_package_id -value $master_template
+
+        # Set join policy
         set group(join_policy) $join_policy
-        group::update -group_id [application_group::group_id_from_package_id -package_id $new_package_id] -array group
-    } errsmg] } {
+        set member_group_id [application_group::group_id_from_package_id -package_id $new_package_id]
+        group::update -group_id $member_group_id -array group
+
+        # Add current user as admin
+	set rel_id [relation_add -member_state "approved" "admin_rel" $member_group_id [ad_conn user_id]]
+        
+        # Set inheritance (called 'visibility' in form)
+        if { ![string equal $visibility "any"] } {
+            permission::set_not_inherit -object_id $new_package_id
+        }
+        
+    } on_error {
         ad_return_error "Problem Creating Application" "We had a problem creating the community."
     }
 } -after_submit {
