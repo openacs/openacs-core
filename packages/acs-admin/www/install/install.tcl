@@ -89,6 +89,8 @@ template::list::create \
     -elements {
         package_name {
             label "Package"
+            link_url_col install_url
+            link_html { title "Install this package" }
         }
         summary {
             label "Summary"
@@ -104,12 +106,6 @@ template::list::create \
             label "Upgrade"
             hide_p {[ad_decode $upgrades_p 1 0 1]}
             display_eval {[ad_decode $install_type "upgrade" "Upgrade" ""]}
-        }
-        install {
-            label "Install"
-            link_url_col install_url
-            link_html { title "Install single application" }
-            display_template {Install}
         }
     } -filters {
         package_type {
