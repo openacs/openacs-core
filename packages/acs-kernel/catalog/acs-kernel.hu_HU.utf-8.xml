@@ -2,7 +2,6 @@
 <message_catalog package_key="acs-kernel" package_version="5.0d13" locale="hu_HU" charset="utf-8">
 
   <msg key="authentication_authority">Jogosultság</msg>
-  <msg key="common_add">Hozzáad</msg>
   <msg key="common_apply">Alkalmaz</msg>
   <msg key="common_cancel">Mégsem</msg>
   <msg key="common_close">Bezár</msg>
@@ -18,7 +17,6 @@
   <msg key="common_no">Nem</msg>
   <msg key="common_previous">Előző</msg>
   <msg key="common_register">Regisztrál</msg>
-  <msg key="common_reset">Visszaállít</msg>
   <msg key="common_save">Mentés</msg>
   <msg key="common_stop">Állj</msg>
   <msg key="common_update">Módosít</msg>

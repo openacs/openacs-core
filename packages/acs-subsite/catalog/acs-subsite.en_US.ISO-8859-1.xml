@@ -6,6 +6,10 @@
   <msg key="About_You">About You</msg>
   <msg key="Account_at_system_closed">Your account at %system_name% has been closed.</msg>
   <msg key="Account_close_confirm_no_label">No, take me back to %pvt_home_name%</msg>
+  <description key="Account_close_confirm_no_label">Description please - does this refer to 'Close account' on the 'Your(/My) Account' page? Where ist the user taken if he doesn't confirm? On the 'MySpace' page? (pvt=private?)
+
+--Anja Wicht</description>
+
   <msg key="Account_close_confirm_yes_label">Yes, please close my account</msg>
   <msg key="Account_closed">
     &lt;p&gt;Your account is currently closed.&lt;/p&gt;
@@ -248,6 +252,8 @@ account was deleted for some reason.</msg>
   <msg key="No_pretty_plural">No %pretty_plural%</msg>
   <msg key="No_services">No services</msg>
   <msg key="none">none</msg>
+  <description key="none">Used to indicate that a list of permissions or objects is empty.</description>
+
   <msg key="Not_logged_in">Not logged in</msg>
   <msg key="Notes">Notes:</msg>
   <msg key="Notice">Notice:</msg>

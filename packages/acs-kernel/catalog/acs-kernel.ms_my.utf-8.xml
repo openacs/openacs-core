@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <message_catalog package_key="acs-kernel" package_version="5.0d13" locale="ms_my" charset="utf-8">
 
-  <msg key="authentication_authority">Pihak Berkuasa</msg>
-  <msg key="common_add">Tambah</msg>
   <msg key="common_apply">Mohon</msg>
   <msg key="common_cancel">Batal</msg>
   <msg key="common_close">Tutup</msg>

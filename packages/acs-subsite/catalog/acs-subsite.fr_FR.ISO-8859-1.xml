@@ -42,7 +42,6 @@
   <msg key="lt_Registration_informat_1">L'information concernant ce service a été envoyée à %email%.</msg>
   <msg key="lt_registration_request_submitted">Votre solicitude d'inscription a été envoyé à l'administrateur de %system_name% et est toujours en attente d'aprobation.</msg>
   <msg key="lt_Saving_email_address_">Adresse email et mot de passe sauvegardés</msg>
-  <msg key="lt_Show_everyone_else_at">Montrer aux autres utilisateurs de %sytem_name% à quoi vous ressemblez.</msg>
   <msg key="lt_Sorry_but_it_seems_th">Désolés mais vous avez été expulsé de %system_name%.</msg>
   <msg key="lt_There_was_a_problem_w">Impossible d'identifier votre compte</msg>
   <msg key="lt_To_confirm_your_regis">Pour confirmer votre inscription, allez à %confirmation_url%</msg>

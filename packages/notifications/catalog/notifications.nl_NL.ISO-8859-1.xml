@@ -3,18 +3,18 @@
 
   <msg key="Action">Handeling</msg>
   <msg key="Change">Wijzig</msg>
-  <msg key="Delivery_Method">Bezorgingsmethode</msg>
+  <msg key="Delivery_Method">Methode van Levering</msg>
   <msg key="Frequency">Frequentie</msg>
-  <msg key="Item">Element</msg>
-  <msg key="lt_Getting_too_much_emai">Krijgt je teveel e-mail? Beheer uw berichtmeldingen via: %manage_notifications_url%</msg>
-  <msg key="lt_Notification_Interval">Interval tussen berichtmeldingen</msg>
-  <msg key="lt_Request_Notification_">Berichtmelding aanvragen voor %pretty_name%  </msg>
-  <msg key="lt_system_name_-_Batched">[%system_name% - Groepsgewijze berichtmelding]</msg>
-  <msg key="lt_You_have_no_notificat">Er zijn voor jou geen berichtmeldingen aanwezig in het systeem.</msg>
-  <msg key="lt_You_have_requested_no">Je hebt berichtmeldingen geregistreerd voor %pretty_name%. Afmelden kan &lt;a href=&quot;%sub_url%&quot;&gt;hier&lt;/a&gt;.</msg>
-  <msg key="lt_You_may_a_hrefsub_url">Je kunt &lt;a href=&quot;%sub_url%&quot;&gt;berichtmeldingen&lt;/a&gt; aanvragen voor %pretty_name%.</msg>
-  <msg key="Manage_Notifications">Beheer berichtmeldingen</msg>
-  <msg key="Notification_type">Type berichtmelding</msg>
+  <msg key="Item">Item</msg>
+  <msg key="lt_Getting_too_much_emai">Krijgt u teveel e-mail? Beheer uw kennisgevingen via: %manage_notifications_url%</msg>
+  <msg key="lt_Notification_Interval">Interval Kennisgevingen</msg>
+  <msg key="lt_Request_Notification_">Verzoek om kennisgeving voor %pretty_name%  </msg>
+  <msg key="lt_system_name_-_Batched">[%system_name% - Groepsgewijze Kennisgeving]</msg>
+  <msg key="lt_You_have_no_notificat">Er zijn geen kennisgevingen voor u.</msg>
+  <msg key="lt_You_have_requested_no">U heeft om kennisgeving verzocht voor %pretty_name%. Afmelden kan &lt;a href=&quot;%sub_url%&quot;&gt;hier&lt;/a&gt;.</msg>
+  <msg key="lt_You_may_a_hrefsub_url">U kunt om &lt;a href=&quot;%sub_url%&quot;&gt;kennisgevingen verzoeken&lt;/a&gt; voor %pretty_name%.</msg>
+  <msg key="Manage_Notifications">Beheer Kennisgevingen</msg>
+  <msg key="Notification_type">Type Kennisgeving</msg>
   <msg key="Request_Notification">Verzoek om Kennisgeving</msg>
   <msg key="SUBJECT">ONDERWERP:</msg>
   <msg key="Unsubscribe">Afmelden</msg>

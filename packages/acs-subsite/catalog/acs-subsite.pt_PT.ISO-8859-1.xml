@@ -2,36 +2,22 @@
 <message_catalog package_key="acs-subsite" package_version="5.0d5" locale="pt_PT" charset="ISO-8859-1">
 
   <msg key="About_You">Sobre Si</msg>
-  <msg key="Account_close_confirm_no_label">Não, leve-me de volta a %pvt_home_name%</msg>
-  <msg key="Account_close_confirm_yes_label">Sim, por favor encerre a minha conta</msg>
   <msg key="Account_closed">&lt;p&gt;A sua conta encontra-se actualmente fechada.&lt;/p&gt; &lt;p&gt;Se desejar, podemos &lt;a href=&quot;%restore_url%&quot;&gt;reabrir a sua conta&lt;/a&gt;.&lt;/p&gt;</msg>
-  <msg key="Account_closed_workspace_msg">&lt;p&gt; &lt;font color=&quot;red&quot;&gt; &lt;b&gt; A sua conta está actualmente encerrada. &lt;/b&gt; &lt;/font&gt; Faça o &lt;a href=&quot;%login_url%&quot;&gt;login&lt;/a&gt; outra vez para ver o que pode fazer. &lt;/p&amp;;gt;</msg>
-  <msg key="Account_reopened_message">A sua conta em %system_name% foi reaberta. Bem vindo de volta.</msg>
-  <msg key="Account_reopened_title">Conta Reaberta</msg>
   <msg key="Answer">Resposta:</msg>
   <msg key="at">em</msg>
   <msg key="Bad_Password">Senha Incorrecta</msg>
   <msg key="Basic_Information">Informação Básica</msg>
   <msg key="cannot_retrieve_password">Recuperação de senha da autoridade local não é suportado.</msg>
-  <msg key="Change_locale_label">Mudar a língua</msg>
   <msg key="Change_my_Password">Mudar a minha Senha</msg>
   <msg key="Check_Your_Inbox">Verifique a Sua Caixa de Entrada</msg>
   <msg key="Children">Filhos</msg>
-  <msg key="Close_account_explanation">&lt;p&gt; Por favor confirma que quer encerrar a sua conta em %system_name%. &lt;/p&gt; &lt;p&gt; O encerramento da sua conta significa que não lhe será mais enviado notificações de email, nem irá aparecer em listas de membros em %system_name%. Contudo, as suas contribuições para a comunidade serão preservadas, uma vez que fazem parte da história da comunidade. &lt;/p&gt; &lt;p&gt; Note que pode reabrir a sua conta a qualquer altura, simplesmente ao efectuar novamente o login. &lt;/p&gt; </msg>
-  <msg key="Close_your_account">Encerrar a sua conta</msg>
   <msg key="Confirm">Confirmar:</msg>
   <msg key="Current_Password">Senha Actual:</msg>
-  <msg key="Currently_invisible_msg">&lt;p&gt; O seu estatuto online não está actualmente visível a outros utilizadores. &lt;/p&gt;</msg>
-  <msg key="Currently_visible_msg">&lt;p&gt; O seu estatuto online está actualmente visível a outros utilizadores. &lt;/p&gt;</msg>
   <msg key="Customize_Question">Personalizar Pergunta</msg>
   <msg key="Direct_Permissions">Permissões Directas</msg>
   <msg key="Email">Email</msg>
-  <msg key="email_body_Forgotten_password">Aqui está a informação sobre o seu novo login: %account_id_label%: %account_id% %password_label%: %password% Por favor visite a ligação seguinte para mudar a sua senha agora: %reset_password_url%</msg>
-  <msg key="email_body_Registration_password">Obrigado por se registar em %system_name%. Eis como pode efectuar o login para %system_url%: %account_id_label%: %account_id% %password_label%: %password% Por favor visite a ligação seguinte para mudar a sua senha agora: %reset_password_url%</msg>
   <msg key="Email_Confirmation">Confirmação do Email</msg>
   <msg key="Email_not_Requested">Email não Solicitado</msg>
-  <msg key="email_subject_Forgotten_password">A sua senha esquecida em %system_name%</msg>
-  <msg key="email_subject_Registration_password">Bem vindo a %system_name% </msg>
   <msg key="Error_sending_mail">Erro ao enviar correio</msg>
   <msg key="First_names">Primeiros nomes</msg>
   <msg key="Grant">Conceder</msg>
@@ -64,16 +50,12 @@
   <msg key="lt_To_confirm_your_regis">Para confirmar o seu registo, por favor vá a %confirmation_url% </msg>
   <msg key="lt_We_were_not_awaiting_">Não estávamos á espera do seu email. Deve haver algum engano.</msg>
   <msg key="lt_Welcome_to_system_nam">Bem vindo a %system_name% </msg>
-  <msg key="lt_What_other_people_see">O que as outras pessoas veêm quando clicam no seu nome</msg>
   <msg key="lt_You_cant_have_a_lt_in">Não pode ter um &amp;lt; no seu primeiro nome porque irá parecer-se com uma etiqueta HTML e confundir outros utilizadores.</msg>
   <msg key="lt_You_cant_have_a_lt_in_1">Não pode ter um &amp;lt; no seu último nome porque irá parecer-se com uma etiqueta HTML e confundir outros utilizadores.</msg>
   <msg key="lt_Your_email_has_been_c">O seu email foi confirmado. Pode agora entrar em %system_name%. </msg>
   <msg key="lt_Your_email_has_been_c_1">O seu email foi confirmado. Você está agora esperando a aprovação por parte do administrador de %system_name%.</msg>
   <msg key="lt_Your_email_is_confirm">O seu email está confirmado</msg>
   <msg key="lt_Your_URL_doesnt_have_">O seu URL não tem o formato correcto. Um URL válido tem de ser algo como \&quot;%valid_url_example%\&quot;.&quot;</msg>
-  <msg key="Make_yourself_invisible_label">Torne-se invisível</msg>
-  <msg key="Make_yourself_visible_label">Torne-se visível</msg>
-  <msg key="Manage_your_notifications">Gerir as suas notificações</msg>
   <msg key="New_Password">Nova Senha:</msg>
   <msg key="no_portrait_title_message">o seu retrato</msg>
   <msg key="none">nenhum</msg>
@@ -85,7 +67,6 @@
   <msg key="Question">Pergunta:</msg>
   <msg key="Recover_Password">Recuperar Senha</msg>
   <msg key="Register">Registar</msg>
-  <msg key="Registration_Approval_Notice">&lt;p&gt; Obrigado por se registar para %system_name%. Um administrador foi notificado acerca do seu pedido. &lt;/p&gt; &lt;p&gt; Uma vez que esteja aprovado, irá receber uma mensagem de email e pode voltar para começar a utilizar %system_name%. &lt;/p&gt;</msg>
   <msg key="Revoke_Checked">Revogação Verificada</msg>
   <msg key="Screen_name">Nome no ecrã</msg>
   <msg key="Show">Mostre</msg>
@@ -96,7 +77,5 @@
   <msg key="Update_Password">Actualizar Senha</msg>
   <msg key="upload_a_portrait">carregar um retrato</msg>
   <msg key="Username">Nome de utilizador</msg>
-  <msg key="Whos_Online_link_label">Utilizadores actualmente online</msg>
-  <msg key="Whos_Online_title">Quem está online</msg>
   <msg key="Your_Portrait">O seu Retrato</msg>
 </message_catalog>

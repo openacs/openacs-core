@@ -6,16 +6,12 @@
   <msg key="Answer">Antwort:</msg>
   <msg key="at">unter</msg>
   <msg key="Bad_Password">Falsches Passwort</msg>
-  <msg key="Basic_Information">Allgemeine Informationen:</msg>
-  <msg key="Change_locale_label">Sprache ändern</msg>
+  <msg key="Basic_Information">Grundlegende Informationen:</msg>
   <msg key="Change_my_Password">Passwort ändern</msg>
   <msg key="Check_Your_Inbox">Überpüfen Sie Ihr Postfach</msg>
   <msg key="Children">Untergeordnete Objekte</msg>
-  <msg key="Close_your_account">Benutzerkonto schließen</msg>
   <msg key="Confirm">Bestätigen:</msg>
   <msg key="Current_Password">Aktuelles Passwort:</msg>
-  <msg key="Currently_invisible_msg">Ihr Onlinestatus ist derzeit für andere Benutzer verborgen.</msg>
-  <msg key="Currently_visible_msg">Ihr Onlinestatus ist derzeit für andere Benutzer sichtbar.</msg>
   <msg key="Customize_Question">Frage ändern</msg>
   <msg key="Direct_Permissions">Explizite Berechtigungen</msg>
   <msg key="Email">E-Mail-Adresse</msg>
@@ -37,7 +33,7 @@
   <msg key="lt_New_registration_at_s">Neue Registrierung bei %system_url%</msg>
   <msg key="lt_Note_that_you_can_era">Hinweis: Sie können Ihre abgespeicherte eMail-Adresse und Ihr Passwort aus dem Browser löschen, indem Sie auf der dotLRN-Startseite die Option &quot;Abmelden&quot; wählen. </msg>
   <msg key="lt_num_children_Children">%num_children% untergeordnete Objekte ausgeblendet</msg>
-  <msg key="lt_On_portrait_publish_d">Am %portrait_publish_date% haben Sie die Datei &lt;a href=&quot;%subsite_url%user/portrait/&quot;&gt;%portrait_title%&lt;/a&gt; hochgeladen</msg>
+  <msg key="lt_On_portrait_publish_d">Am %portrait_publish_date% haben Sie die Datei &lt;a href=&quot;%subsite_url%user/portrait/&quot;&gt;%portrait_title%&lt;/a&gt; hochgeladen.</msg>
   <msg key="lt_Our_server_can_tell_y">Bestimmte Daten wie E-Mail-Adresse oder Passwort können vom Browser gespeichert werden. Das hat das den Vorteil, dass diese Daten bei privat genutzten Computern nicht bei jeder Sitzung neu eingegeben werden müssen. </msg>
   <msg key="lt_Password_Confirmation">Passwort bestätigen:</msg>
   <msg key="lt_Personal_Home_Page_UR">Adresse der persönlichen Homepage:</msg>
@@ -55,7 +51,6 @@
   <msg key="lt_To_confirm_your_regis">Zur Bestätigung Ihrer Registrierung klicken Sie bitte auf %confirmation_url%.</msg>
   <msg key="lt_We_were_not_awaiting_">Es wurde keine E-Mail von Ihnen erwartet. Es ist ein Fehler aufgetreten.</msg>
   <msg key="lt_Welcome_to_system_nam">Willkommen bei %system_name%.</msg>
-  <msg key="lt_What_other_people_see">Für andere Benutzer freigegebene persönliche Informationen </msg>
   <msg key="lt_You_cant_have_a_lt_in">Der Vorname darf keine spitzen Klammern enthalten, da diese gewöhnlich für HTML-Steuerzeichen verwendet werden und andere Benutzer verwirren könnten.</msg>
   <msg key="lt_You_cant_have_a_lt_in_1">Der Nachname darf keine spitzen Klammern enthalten, da diese gewöhnlich für HTML-Steuerzeichen verwendet werden und andere Benutzer verwirren könnten.</msg>
   <msg key="lt_Your_email_has_been_c">Ihre E-Mail-Adresse wurde bestätigt. Sie können sich nun bei %system_name% anmelden.</msg>
@@ -81,7 +76,5 @@
   <msg key="Update">Aktualisieren</msg>
   <msg key="Update_Password">Passwort aktualisieren</msg>
   <msg key="upload_a_portrait">Bild hochladen</msg>
-  <msg key="Whos_Online_link_label">Benutzer, die derzeit online sind</msg>
-  <msg key="Whos_Online_title">Wer ist online?</msg>
   <msg key="Your_Portrait">Ihr Bild:</msg>
 </message_catalog>
