@@ -70,6 +70,7 @@
             <file type="tcl_init" path="tcl/request-processor-init.tcl"/>
             <file type="tcl_procs" path="tcl/request-processor-procs.tcl"/>
             <file type="tcl_init" path="tcl/security-init.tcl"/>
+            <file type="query_file" db_type="postgresql" path="tcl/security-procs-postgresql.xql"/>
             <file type="tcl_procs" path="tcl/security-procs.tcl"/>
             <file type="tcl_procs" path="tcl/server-cluster-procs.tcl"/>
             <file type="tcl_procs" path="tcl/set-operation-procs.tcl"/>

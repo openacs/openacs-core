@@ -193,7 +193,7 @@ ad_proc -private db_exec { type db statement_name sql args } {
 } {
     set start_time [clock clicks]
 
-    ns_log Notice "PRE-QD: the SQL is $sql"
+    ns_log Notice "PRE-QD: the SQL is $sql for $statement_name"
 
     # Query Dispatcher (OpenACS - ben)
     set sql [db_fullquery_replace_sql $statement_name $sql]
@@ -233,8 +233,11 @@ proc_doc db_dml { statement_name sql args } {
 } {
     ad_arg_parser { bind } $args
 
+    # Query Dispatcher (OpenACS - ben)
+    set full_statement_name [db_fullquery_get_fullname $statement_name]
+
     db_with_handle db {
-	db_exec dml $db $statement_name $sql
+	db_exec dml $db $full_statement_name $sql
     }
 }
 
