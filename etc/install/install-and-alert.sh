@@ -12,7 +12,7 @@ set -x
 script_path=$(dirname $(which $0))
 cd $script_path
 
-source functions.sh
+source ./functions.sh
 
 # Get a proper environment set up
 if [ -f ~/.bashrc ]; then

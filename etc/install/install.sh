@@ -13,14 +13,17 @@
 # @author Lars Pind (lars@collaboraid.biz)
 # @author Joel Aufrecht (joel@aufrecht.org)
 
-# DEBUG: If any command fails - exit
+# If any command fails - exit
 set -e
+# Uncomment following line for debug mode
+#set -x
 
 # Set the script directory to the current dir for convenience
 script_path=$(dirname $(which $0))
 cd $script_path
 
-source functions.sh
+# If you don't say ./, it'll search for functions.sh in your path
+source ./functions.sh
 
 # TODO: create user if necessary
 # we should check for the existence of the specified user
@@ -42,7 +45,7 @@ source functions.sh
 # before we load the config file
 config_val_next=0
 server_next=0
-export config_file="install.tcl"
+export config_file="$script_path/install.tcl"
 server_overridden="no"
 for arg in "$@"
   do
@@ -195,7 +198,7 @@ prompt_continue $interactive
 echo "$0: Taking down $serverroot at $(date)"
 
 if parameter_true $use_daemontools; then
-    $svc_bindir/svc -kd ${svscanroot}
+    $svc_bindir/svc -d ${svscanroot}
 else
     # non-daemontools stop
     $stop_server_command
@@ -206,17 +209,25 @@ fi
 echo "$0: Waiting $shutdown_seconds seconds for server to shut down at $(date)"
 sleep $shutdown_seconds
 
+# Check that it's been shut down
+pid=`grep_for_pid "nsd.*$serverroot"`
+if ! [ "$pid" == "" ]; then
+    echo "The server is still running. You must shut down the server first."
+    echo "Process IDs of running servers: $pid"
+    exit
+fi
+	
 # Recreate the database user
 echo "$0: Recreating database user at $(date)"
 if [ $database == "postgres" ]; then
     # Postgres
     pg_bindir=`get_config_param pg_bindir`
     pg_port=`get_config_param pg_port`
-    pg_db_name=`get_config_param pg_db_name`
-    su  `get_config_param pg_db_user` -c "export LD_LIBRARY_PATH=${pg_bindir}/../lib; ${pg_bindir}/dropdb -p $pg_port $pg_db_name; ${pg_bindir}/createdb -p $pg_port $pg_db_name;";
+    db_name=`get_config_param db_name`
+    su  `get_config_param pg_db_user` -c "export LD_LIBRARY_PATH=${pg_bindir}/../lib; ${pg_bindir}/dropdb -p $pg_port $db_name; ${pg_bindir}/createdb -p $pg_port $db_name;";
     # createlang was part of this command but is not necessary (and causes an error) for 
     # newer installs
-    # ${pg_bindir}/createlang -p $pg_port plpgsql $pg_db_name";
+    # ${pg_bindir}/createlang -p $pg_port plpgsql $db_name";
 else
     #Oracle
     # Need to su to login shell for sqlplus to be in path. Should maybe make ORA_HOME
@@ -225,7 +236,7 @@ else
 fi
 
 # Check out new files
-if [ $do_checkout == "yes" ]; then
+if parameter_true $do_checkout; then
 
     # The pre_checkout script can move away any files or changes
     # to the source tree that we want to keep (for example an
@@ -243,8 +254,18 @@ if [ $do_checkout == "yes" ]; then
 		exit -1    
 	    fi
 	    rm ${svscanroot}
-	fi
-	$svc_bindir/svc -xd $svscan_sourcedir
+        fi
+        if [ -r "$svscan_sourcedir" ]; then
+            $svc_bindir/svc -dx $svscan_sourcedir
+        fi
+    fi
+
+    pid=`grep_for_pid "nsd.*$serverroot"`
+
+    if ! [ "$pid" == "" ]; then
+        echo "The server is still running. You must shut down the server first."
+        echo "Process IDs of running servers: $pid"
+        exit
     fi
 	
     echo "$0: Checking out OpenACS at $(date)"
@@ -256,6 +277,7 @@ if [ $do_checkout == "yes" ]; then
         # We need to update it with settings in install.tcl since certain parameters 
         # (such as serverroot) are duplicated between the two files.
         ./config-replace.sh $config_file
+        chmod +x $serverroot/etc/daemontools/run
     fi 
 
     # The post_checkout script can copy back any files (AOLServer config files,
@@ -365,7 +387,7 @@ if parameter_true $do_install; then
   if [ $database == "postgres" ]; then
       # Run vacuum analyze
       echo "$0: Beginning 'vacuum analyze' at $(date)"
-      su  `get_config_param pg_db_user` -c "export LD_LIBRARY_PATH=${pg_bindir}/../lib; ${pg_bindir}/vacuumdb -p $pg_port -z `get_config_param pg_db_name`"
+      su  `get_config_param pg_db_user` -c "export LD_LIBRARY_PATH=${pg_bindir}/../lib; ${pg_bindir}/vacuumdb -p $pg_port -z `get_config_param db_name`"
   fi
   
   # Report the time at which we were done

@@ -45,3 +45,8 @@ parameter_true () {
                     ;;
     esac
 }
+
+# peter_marklund/lars: ps|grep for pid of process using full path of executable
+grep_for_pid(){
+        echo `ps auwx | grep $1 | grep -v grep | awk '{print $2}'`
+}

@@ -6,20 +6,20 @@
 
 # This is the name of your server (website).
 # It will be used as the name of directories, the name of database users and/or tablespaces, etc.
-set server "service0"
+set server "test"
 
 # Server root directory. This is where all of the files for your server will live.
 # Some people like this to be at /web/${server}, but we recommend the below standard setting.
-set serverroot "/var/lib/aolserver/${server}"
+set serverroot "/web/${server}"
 
 # The host name (DNS) the server will be listening on
-set server_host localhost
+set server_host {}
 
 # The IP address the server will be listening on
-set server_ip 127.0.0.1
+set server_ip {}
 
 # The port number the server will be listening on
-set server_port 8000
+set server_port 8028
 
 # The URL where your server will be accessible. This is used by the installation scripts to complete the installation.
 # Don't forget to include the port number above
@@ -27,17 +27,17 @@ set server_url "http://${server_host}:${server_port}"
 
 # OS user and group that AOLserver runs as. We recommend that you create a new user for your server.
 # If you do not want to do that, change the user name below
-set aolserver_user "${server}"
+set aolserver_user "nsadmin"
 set aolserver_group "web"
 
 # OpenACS configuration
-set admin_email "postmaster@localhost"
+set admin_email "admin@collaboraid.net"
 set admin_username "admin"
-set admin_first_names "Your"
-set admin_last_name "Name"
-set admin_password "openacsrocks"
-set system_name "OpenACS"
-set publisher_name "Yourname"
+set admin_first_names "Admin"
+set admin_last_name "Collaboraid"
+set admin_password "password"
+set system_name "Test Server"
+set publisher_name "Collaboraid"
 
 # Should we automatically grab the OpenACS code from CVS?
 # If not, you must have already unpacked a tar-ball in the server root directory specified above
@@ -47,7 +47,7 @@ set do_checkout "yes"
 # For example, say "HEAD" to get the latest code, oacs-5-0-0 to get the 5.0.0 release.
 set oacs_branch "HEAD"
 
-# Choose which database you will use - Oracle or PostgreSQL
+# Choose which database you will use - Say 'oracle' or 'postgres'
 set database "postgres"
 
 #----------------------------------------------------------------------
@@ -67,7 +67,7 @@ set pg_host localhost
 set pg_port 5432
 
 # The home directory of your PostgreSQL server. Type 'which psql' to find this.
-set pg_bindir "/usr/local/pgsql/bin"
+set pg_bindir "/usr/local/pgsql-7.3/bin"
 
 
 

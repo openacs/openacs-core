@@ -9,7 +9,7 @@ cd $script_path
 
 file_name=$1
 
-source functions.sh
+source ./functions.sh
 
 alert_keyword=`get_config_param alert_keyword`
 
