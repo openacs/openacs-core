@@ -2,7 +2,7 @@ ad_page_contract {
     Package installation.
 }
 
-set page_title "Install Applications"
+set page_title "Install Software"
 
 set context [list $page_title]
 

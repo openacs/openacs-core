@@ -73,7 +73,7 @@ if { $ok_p } {
     set page_title "Missing Required Packages"
 }
 
-set context [list [list "." "Install Applications"] [list "local-install" "Install From Local File System"] $page_title]
+set context [list [list "." "Install Software"] [list "local-install" "Install From Local File System"] $page_title]
 
 # Add the extras to the list
 set package_key [concat $package_key $extra_package_keys]

@@ -1,11 +1,105 @@
 ad_page_contract {
     Install from local file system
-} {
 }
 
-set page_title "Install"
 
-set context [list [list "." "Install Applications"] [list "local-install" "Install From Local File System"] $page_title]
+#####
+#
+# Start progress bar
+#
+#####
+
+# TODO: We should execute this in a background-thread, so that
+# we don't risk running two installation processes at the same time (double-click, or two users)
+
+# TODO: Maybe set a body onload handler to display a warning message that the page has stopped loading, 
+# which it shouldn't. If people hit reload, we should preferably just re-display the progress bar
+# and continue waiting.
+
+
+ReturnHeaders
+
+ns_write "
+<html>
+<head>
+<link rel=\"stylesheet\" type=\"text/css\" href=\"/resources/acs-subsite/site-master.css\" media=\"all\">
+</head>
+<body">
+
+<div id=\"body\">
+  <div id=\"subsite-name\">
+    <if @title@ not nil>
+      <h1 class=\"subsite-page-title\">Installing packages...</h1>
+    </if>
+  </div>
+  <div id=\"navbar-body\">
+    <div id=\"subnavbar-body\">
+
+
+<table align=\"center\" style=\"margin-top: 144px; margin-bottom: 144px;\">
+  <tr>
+    <td align=\"center\">
+      <p>Installing packages, please wait ...</p>
+    </td>
+  </tr>
+  <tr>
+    <td align=\"center\">
+      <div style=\"font-size:16pt;padding:2px; align: center;\">
+        <span id=\"progress1\" style=\"background-color: #eeeeee;\">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+        <span id=\"progress2\" style=\"background-color: #eeeeee;\">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+        <span id=\"progress3\" style=\"background-color: #eeeeee;\">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+        <span id=\"progress4\" style=\"background-color: #eeeeee;\">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+        <span id=\"progress5\" style=\"background-color: #eeeeee;\">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td align=\"center\">
+      <p style=\"margin-top: 36px\">We will continue automatically when installation is complete.</p>
+    </td>
+  </tr>
+</table>
+
+
+      <div style=\"clear: both;\"></div>
+    </div>
+  </div>
+</div>
+
+
+<script language=\"javascript\">
+var progressEnd = 5;// set to number of progress <span>'s.
+var progressColor = 'blue';// set to progress bar color
+var progressInterval = 1000;// set to time between updates (milli-seconds)
+
+var progressAt = progressEnd;
+var progressTimer;
+function progress_update() {
+    if (progressAt > 0) {
+        document.getElementById('progress'+progressAt).style.backgroundColor = '#eeeeee';
+    }
+    progressAt++;
+    if (progressAt > progressEnd) progressAt = 1;
+    document.getElementById('progress'+progressAt).style.backgroundColor = progressColor;
+    progressTimer = setTimeout('progress_update()',progressInterval);
+}
+function progress_stop() {
+    clearTimeout(progressTimer);
+    progress_clear();
+}
+progress_update();// start progress bar
+</script>
+
+"
+
+
+
+#####
+#
+# Install packages
+#
+#####
+
 
 set pkg_install_list [ad_get_client_property apm pkg_install_list]
 
@@ -99,4 +193,14 @@ foreach pkg_info $pkg_install_list {
     incr installed_count
 }
 
+
+#####
+#
+# Done
+#
+#####
+
+set continue_url [export_vars -base local-install-4 { error_p }]
+ns_write "<script language=\"javascript\">window.location='$continue_url';</script>"
+ns_conn close
 
