@@ -96,7 +96,7 @@
         <div class="action-list">
           <ul>
             <if @num_of_locales@ gt 1>
-              <li><a href="@change_locale_url@">Change locale</a></li>
+              <li><include src="/packages/acs-lang/lib/change-locale-bar"></li>
             </if>
             <else>
               <if @locale_admin_url@ not nil>
