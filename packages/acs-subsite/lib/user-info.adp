@@ -5,9 +5,10 @@
   <p> <font color="red">#acs-subsite.Notice#</font> #acs-subsite.Elements_not_editable# </p>
 </if>
 
-<h2>You are in the following groups:</h2>
+<h2>#acs-subsite.You_are_in_the_follow#</h2>
 <ul>
 <multiple name="groups">
   <li>@groups.group_name@</li>
 </multiple>
 </ul>
+
