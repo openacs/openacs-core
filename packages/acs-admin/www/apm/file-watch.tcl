@@ -1,7 +1,9 @@
 ad_page_contract {
-    Schedules a file to be watched.
+    Watches a number of files for reload. Note that the
+    paths given to this page should be relative to package root,
+    not server root.
 
-    @author Jon Salz [jsalz@arsdigita.com]
+    @author Peter Marklund
     @creation-date 17 April 2000
     @cvs-id $Id$
 } {
@@ -30,4 +32,3 @@ doc_body_append "Marking the following files to be watched:<ul><li>[join $path_l
 
 [ad_footer]
 "
-
