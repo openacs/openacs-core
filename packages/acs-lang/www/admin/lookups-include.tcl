@@ -7,7 +7,7 @@ if { [catch {set message_key_context [exec find [acs_root_dir] -type f -regex ".
     global errorInfo
     regexp "^(.*)child process exited abnormally" $errorInfo match message_key_context
     set message_key_context [ad_quotehtml $message_key_context]
-    regsub -all "${full_key_pattern}" $message_key_context {<b>\1</b>} message_key_context
+    regsub -all "${full_key_pattern}" $message_key_context {<b>\0</b>} message_key_context
 }
 
 ns_log Notice "PM debug $message_key_context"
