@@ -183,7 +183,7 @@ ad_library {
 
 
 ad_proc -private db_state_array_name_is {{ -dbn "" }} {
-    Returns the name of the global db_state array for the given
+    @return the name of the global db_state array for the given
     database name.
 
     @param dbn The database name to use.  If empty_string, uses the
@@ -265,8 +265,7 @@ ad_proc -private -private db_driverkey {{
 
 
 ad_proc db_type { } {
-    Returns the RDBMS type (i.e. oracle, postgresql) this OpenACS installation is
-    using.  The nsv ad_database_type is set up during the bootstrap process.
+    @return the RDBMS type (i.e. oracle, postgresql) this OpenACS installation is using.  The nsv ad_database_type is set up during the bootstrap process.
 } {
     # Currently this should always be either "oracle" or "postgresql":
     # --atp@piskorski.com, 2003/03/16 22:01 EST
@@ -275,15 +274,13 @@ ad_proc db_type { } {
 }
 
 ad_proc db_compatible_rdbms_p { db_type } {
-    Returns 1 if the given db_type is compatible with the current RDBMS.  
+    @return 1 if the given db_type is compatible with the current RDBMS.  
 } {
     return [expr { [empty_string_p $db_type] || [string equal [db_type] $db_type] }]
 }
 
 ad_proc -deprecated db_package_supports_rdbms_p { db_type_list } {
-    Returns 1 if db_type_list contains the current RDMBS type.  A package
-    intended to run with a given RDBMS must note this in it's package info
-    file regardless of whether or not it actually uses the database. 
+    @return 1 if db_type_list contains the current RDMBS type.  A package intended to run with a given RDBMS must note this in it's package info file regardless of whether or not it actually uses the database. 
 
     @see apm_package_supports_rdbms_p
 } {
@@ -302,8 +299,7 @@ ad_proc -deprecated db_package_supports_rdbms_p { db_type_list } {
 }
 
 ad_proc db_legacy_package_p { db_type_list } {
-    Returns 1 if the package is a legacy package.  We can only tell for certain if
-    it explicitly supports Oracle 8.1.6 rather than the OpenACS more general oracle.
+    @return 1 if the package is a legacy package.  We can only tell for certain if it explicitly supports Oracle 8.1.6 rather than the OpenACS more general oracle.
 } {
     if { [lsearch $db_type_list "oracle-8.1.6"] != -1 } {
         return 1
@@ -312,20 +308,20 @@ ad_proc db_legacy_package_p { db_type_list } {
 }
 
 ad_proc db_version { } {
-    Returns the RDBMS version (i.e. 8.1.6 is a recent Oracle version; 7.1 a
+    @return the RDBMS version (i.e. 8.1.6 is a recent Oracle version; 7.1 a
     recent PostgreSQL version.
 } {
     return [nsv_get ad_database_version .]
 }
 
 ad_proc db_current_rdbms { } {
-    Returns the current rdbms type and version.
+    @return the current rdbms type and version.
 } {
     return [db_rdbms_create [db_type] [db_version]]
 }
 
 ad_proc db_known_database_types { } {
-    Returns a list of three-element lists describing the database engines known
+    @return a list of three-element lists describing the database engines known
     to OpenACS.  Each sublist contains the internal database name (used in file
     paths, etc), the driver name, and a "pretty name" to be used in selection
     forms displayed to the user.
@@ -343,7 +339,7 @@ ad_proc db_known_database_types { } {
 # Postgres too.  --atp@piskorski.com, 2003/04/08 05:34 EDT
 
 ad_proc db_null { } {
-    Returns an empty string, which Oracle thinks is null.  This routine was
+    @return an empty string, which Oracle thinks is null.  This routine was
     invented to provide an RDBMS-specific null value but doesn't actually
     work.  I (DRB) left it in to speed porting - we should really clean up
     the code an pull out the calls instead, though.
@@ -368,6 +364,7 @@ ad_proc -public db_nullify_empty_string { string } {
 
 ad_proc -public db_boolean { bool } {
     Converts a Tcl boolean (1/0) into a SQL boolean (t/f)
+    @return t or f
 } {
     if { $bool } {
         return "t"
@@ -379,15 +376,14 @@ ad_proc -public db_boolean { bool } {
 
 ad_proc -public db_nextval {{ -dbn "" } sequence } {
 
-    Returns the next value for a sequence. This can utilize a pool of
-    sequence values.
-
-    <p>
     Example:
 
      <pre>
      set new_object_id [db_nextval acs_object_id_seq]
      </pre>
+
+    @return the next value for a sequence. This can utilize a pool of
+    sequence values.
 
     @param sequence the name of an sql sequence
 
@@ -435,7 +431,7 @@ ad_proc -public db_nextval {{ -dbn "" } sequence } {
 
 
 ad_proc db_nth_pool_name {{ -dbn "" } n } { 
-    Returns the name of the pool used for the nth-nested selection (0-relative). 
+    @return the name of the pool used for the nth-nested selection (0-relative). 
 
     @param dbn The database name to use.  If empty_string, uses the default database.
 } {
@@ -452,7 +448,7 @@ ad_proc db_nth_pool_name {{ -dbn "" } n } {
 
 ad_proc -public db_with_handle {{ -dbn "" } db code_block } {
 
-    Places a usable database handle in $db and executes $code_block.
+    Places a usable database handle in <i>db</i> and executes <i>code_block</i>.
 
     @param dbn The database name to use.  If empty_string, uses the default database.
 } {
@@ -1027,8 +1023,7 @@ ad_proc -public db_string {{ -dbn "" } statement_name sql args } {
 
     Usage: <b>db_string</b> <i>statement-name sql</i> [ <tt>-default</tt> <i>default</i> ] [ <tt>-bind</tt> <i>bind_set_id</i> | <tt>-bind</tt> <i>bind_value_list</i> ]
   
-    <p>Returns the first column of the result of the SQL query $sql.
-    If the query doesn't return a row, returns $default (or raises an error if no $default is provided).
+    @return the first column of the result of the SQL query <i>sql</i>.  If the query doesn't return a row, returns <i>default</i> or raises an error if no <i>default</i> is provided.
 
     @param dbn The database name to use.  If empty_string, uses the default database.
 } {
@@ -1055,7 +1050,7 @@ ad_proc -public db_list {{ -dbn "" } statement_name sql args } {
 
     Usage: <b>db_list</b> <i>statement-name sql</i> [ <tt>-bind</tt> <i>bind_set_id</i> | <tt>-bind</tt> <i>bind_value_list</i> ]
     
-    <p>Returns a Tcl list of the values in the first column of the result of SQL query <tt>sql</tt>. 
+    @return a Tcl list of the values in the first column of the result of SQL query <tt>sql</tt>. 
     If <tt>sql</tt> doesn't return any rows, returns an empty list. Analogous to <tt>database_to_tcl_list</tt>.
 
     @param dbn The database name to use.  If empty_string, uses the default database.
@@ -1081,7 +1076,7 @@ ad_proc -public db_list_of_lists {{ -dbn "" } statement_name sql args } {
 
     Usage: <b>db_list_of_lists</b> <i>statement-name sql</i> [ <tt>-bind</tt> <i>bind_set_id</i> | <tt>-bind</tt> <i>bind_value_list</i> ]
 
-    <p>Returns a Tcl list, each element of which is a list of all column 
+    @return a Tcl list, each element of which is a list of all column 
     values in a row of the result of the SQL query<tt>sql</tt>. If 
     <tt>sql</tt> doesn't return any rows, returns an empty list. 
     Analogous to <tt>database_to_tcl_list_list</tt>.
@@ -1119,7 +1114,7 @@ ad_proc -public db_list_of_ns_sets {
 } {
     Usage: <b>db_list_of_ns_sets</b> <i>statement-name sql</i> [ <tt>-bind</tt> <i>bind_set_id</i> | <tt>-bind</tt> <i>bind_value_list</i> ]
 
-    <p>Returns a list of ns_sets with the values of each column of each row
+    @return a list of ns_sets with the values of each column of each row
     returned by the sql query specified.
 
     @param statement_name The name of the query.
@@ -1171,7 +1166,7 @@ ad_proc -public db_foreach {{ -dbn "" } statement_name sql args } {
         # This block is optional.
         ns_write "&lt;li&gt;No greebles!\n"
     }</pre></blockquote>
-
+    
     @param dbn The database name to use.  If empty_string, uses the default database.
 } {
     # Query Dispatcher (OpenACS - ben)
@@ -1766,7 +1761,7 @@ ad_proc -public db_dml {{ -dbn "" } statement_name sql args } {
 
 
 ad_proc -public db_resultrows {{ -dbn "" }} {
-    Returns the number of rows affected by the last DML command.
+    @return the number of rows affected by the last DML command.
 
     @param dbn The database name to use.  If empty_string, uses the default database.
 } {
@@ -1802,7 +1797,9 @@ ad_proc -public db_0or1row {{ -dbn "" } statement_name sql args } {
     <p>Performs the SQL query sql. If a row is returned, sets variables 
     to column values (or a set or array populated if -column_array 
     or column_set is specified) and returns 1. If no rows are returned, 
-    returns 0. If more than one row is returned, throws an error.
+    returns 0. 
+
+    @return 1 if variables are set, 0 if no rows are returned.  If more than one row is returned, throws an error.
 
     @param dbn The database name to use.  If empty_string, uses the default database.
 } {
@@ -1862,6 +1859,7 @@ ad_proc -public db_1row { args } {
     or column_set is specified). If no rows are returned, 
     throws an error.
 
+    @return 1 if variables are set.
     @param dbn The database name to use.  If empty_string, uses the default database.
 } {
     if { ![uplevel db_0or1row $args] } {
@@ -2129,7 +2127,7 @@ ad_proc -private db_abort_transaction_p {{ -dbn "" }} {
 
 ad_proc -public db_name {{ -dbn "" }} {
 
-    Returns the name of the database as reported by the driver.
+    @return the name of the database as reported by the driver.
 
     @param dbn The database name to use.  If empty_string, uses the default database.
 } {
@@ -2141,7 +2139,7 @@ ad_proc -public db_name {{ -dbn "" }} {
 
 
 ad_proc db_get_username {{ -dbn "" }} {
-    Returns the username parameter from the driver section of the
+    @return the username parameter from the driver section of the
     first database pool for the dbn.
 
     @param dbn The database name to use.  If empty_string, uses the default database.
@@ -2151,7 +2149,7 @@ ad_proc db_get_username {{ -dbn "" }} {
 }
 
 ad_proc db_get_password {{ -dbn "" }} {
-    Returns the password parameter from the driver section of the
+    @return the password parameter from the driver section of the
     first database pool for the dbn.
 
     @param dbn The database name to use.  If empty_string, uses the default database.
@@ -2164,7 +2162,7 @@ ad_proc db_get_sql_user {{ -dbn "" }} {
     <strong>Oracle only.</strong>
 
     <p>
-    Returns a valid Oracle user@database/password string to access a
+    @return a valid Oracle user@database/password string to access a
     database through sqlplus.
 
     <p>
@@ -2186,7 +2184,7 @@ ad_proc db_get_pgbin {{ -dbn "" }} {
     <strong>PostgreSQL only.</strong>
 
     <p>
-    Returns the pgbin parameter from the driver section of the first database pool.
+    @return the pgbin parameter from the driver section of the first database pool.
 
     @param dbn The database name to use.  If empty_string, uses the default database.
 } {
@@ -2200,7 +2198,7 @@ ad_proc db_get_port {{ -dbn "" }} {
     <strong>PostgreSQL only.</strong>
 
     <p>
-    Returns the port number from the first database pool.  It assumes the
+    @return the port number from the first database pool.  It assumes the
     datasource is properly formatted since we've already verified that we
     can connect to the pool.
     It returns an empty string for an empty port value.
@@ -2229,7 +2227,7 @@ ad_proc db_get_database {{ -dbn "" }} {
     <strong>PostgreSQL only.</strong>
 
     <p>
-    Returns the database name from the first database pool.  It assumes the 
+    @return the database name from the first database pool.  It assumes the 
     datasource is properly formatted since we've already verified that we
     can connect to the pool.
 
@@ -2250,7 +2248,7 @@ ad_proc db_get_dbhost {{ -dbn "" }} {
     <strong>PostgreSQL only.</strong>
 
     <p>
-    Returns the name of the database host from the first database pool.  
+    @return the name of the database host from the first database pool.  
     It assumes the datasource is properly formatted since we've already 
     verified that we can connect to the pool.
 
@@ -2554,7 +2552,7 @@ ad_proc -public db_tables {
     -pattern
     {-dbn ""}
 } {
-    Returns a Tcl list of all the tables owned by the connected user.
+    @return a Tcl list of all the tables owned by the connected user.
     
     @param pattern Will be used as LIKE 'pattern%' to limit the number of tables returned.
 
@@ -2619,7 +2617,7 @@ ad_proc -public db_tables {
 
 
 ad_proc -public db_table_exists {{ -dbn "" } table_name } {
-    Returns 1 if a table with the specified name exists in the database, otherwise 0.
+    @return 1 if a table with the specified name exists in the database, otherwise 0.
 
     @param dbn The database name to use.  If empty_string, uses the default database.
 
@@ -2656,7 +2654,7 @@ ad_proc -public db_table_exists {{ -dbn "" } table_name } {
 
 
 ad_proc -public db_columns {{ -dbn "" } table_name } {
-    Returns a Tcl list of all the columns in the table with the given name.
+    @return a Tcl list of all the columns in the table with the given name.
 
     @param dbn The database name to use.  If empty_string, uses the default database.
 
@@ -2680,7 +2678,7 @@ ad_proc -public db_columns {{ -dbn "" } table_name } {
 
 
 ad_proc -public db_column_exists {{ -dbn "" } table_name column_name } {
-    Returns 1 if the row exists in the table, 0 if not.
+    @return 1 if the row exists in the table, 0 if not.
 
     @param dbn The database name to use.  If empty_string, uses the default database.
     
@@ -2702,8 +2700,8 @@ ad_proc -public db_column_exists {{ -dbn "" } table_name column_name } {
 
 ad_proc -public db_column_type {{ -dbn "" } table_name column_name } {
 
-    Returns the Oracle Data Type for the specified column.
-    Returns -1 if the table or column doesn't exist.
+    @return the Oracle Data Type for the specified column.
+    @return -1 if the table or column doesn't exist.
 
     @param dbn The database name to use.  If empty_string, uses the default database.
 
@@ -2732,7 +2730,7 @@ ad_proc -public db_column_type {{ -dbn "" } table_name column_name } {
 
 ad_proc -public ad_column_type {{ -dbn "" } table_name column_name } {
 
-    Returns 'numeric' for number type columns, 'text' otherwise
+    @return 'numeric' for number type columns, 'text' otherwise
     Throws an error if no such column exists.
 
     @param dbn The database name to use.  If empty_string, uses the default database.
