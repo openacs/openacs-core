@@ -268,8 +268,7 @@ create function image__new (varchar,integer,integer,integer,varchar,integer,varc
     return v_item_id;
 end; ' language 'plpgsql';
 
-create function image__new_revision(integer, integer, varchar, varchar, timestamptz, varchar, varchar,
-                                    integer, varchar, integer, integer) returns integer as '
+create or replace function image__new_revision(integer, integer, varchar, varchar, timestamptz, varchar, varchar, integer, varchar, integer, integer) returns integer as '
 declare
    p_item_id          alias for $1;
    p_revision_id      alias for $2;
@@ -282,11 +281,11 @@ declare
    p_creation_ip      alias for $9;
    p_height           alias for $10;
    p_width            alias for $11;
-
+   v_revision_id      integer;
 begin
     -- We will let the caller fill in the LOB data or file path.
 
-    v_revision_id := content_revision__new (
+  v_revision_id := content_revision__new (
       p_title,
       p_description,
       p_publish_date,
