@@ -37,12 +37,14 @@ namespace eval parameter {
         {-parameter:required}
         {-default ""}
     } {
-        get a parameter
+        Get the value of a package parameter.
 
         @param package_id what package to get the parameter from. defaults to
                           [ad_conn package_id]
         @param parameter which parameter's value to get
         @param default what to return if we don't find a value
+
+        @return The string trimmed (leading and trailing spaces removed) parameter value
     } {
 
         if {[empty_string_p $package_id]} {
