@@ -76,7 +76,7 @@ aa_register_case ad_html_text_convert {
     Testing ad_html_text_convert.
 } {
     #----------------------------------------------------------------------
-    # text/enhanced
+    # from text/enhanced
     #----------------------------------------------------------------------
     
     set string "What?\n<i>Never mind, buddy</i>"
@@ -88,7 +88,7 @@ aa_register_case ad_html_text_convert {
     aa_equals "" [ad_html_text_convert -from "text/enhanced" -to "text/plain" -truncate_len 15 -- $string] "What?\n_Never..."
 
     #----------------------------------------------------------------------
-    # text/plain
+    # from text/plain
     #----------------------------------------------------------------------
 
     set string "What?\nNever mind, buddy"
@@ -100,7 +100,7 @@ aa_register_case ad_html_text_convert {
         "What?\nNever..."
     
     #----------------------------------------------------------------------
-    # text/fixed-width
+    # from text/fixed-width
     #----------------------------------------------------------------------
 
     set string "What?\nNever mind, buddy"
@@ -113,7 +113,7 @@ aa_register_case ad_html_text_convert {
     
 
     #----------------------------------------------------------------------
-    # text/html
+    # from text/html
     #----------------------------------------------------------------------
 
     set string "What?<br><i>Never mind, buddy</i>"
@@ -123,7 +123,9 @@ aa_register_case ad_html_text_convert {
     
     aa_equals "" [ad_html_text_convert -from "text/html" -to "text/plain" -truncate_len 15 -- $string] \
         "What?\n_Never..."
-    
+
+    set long_string [string repeat "Very long text. " 10]
+    aa_equals "No truncation" [ad_html_text_convert -from "text/html" -to "text/html" -truncate_len [string length $long_string] -- $long_string] $long_string
 
 }
 
@@ -139,4 +141,8 @@ aa_register_case string_truncate {
     aa_equals "" [string_truncate -len 11 -ellipsis "" -- "foobar greble"] "foobar"
     aa_equals "" [string_truncate -len 12 -ellipsis "" -- "foobar greble"] "foobar"
     aa_equals "" [string_truncate -len 13 -ellipsis "" -- "foobar greble"] "foobar greble"
+
+    set long_string [string repeat "Very long text. " 100]
+    aa_equals "No truncation" [string_truncate -len [string length $long_string] -- $long_string] $long_string
+
 }
