@@ -169,8 +169,13 @@ ad_proc -public auth::sync::job::end {
     
     # interactive_p, run_time_seconds, num_actions, num_problems
     get -job_id $job_id -array job
-        
-    if { ![template::util::is_true $job(interactive_p)] } {
+
+    set email_p [parameter::get_from_package_key \
+                     -parameter SyncEmailConfirmationP \
+                     -package_key "acs-authentication" \
+                     -default 0] 
+
+    if { ![template::util::is_true $job(interactive_p)] && $email_p } {
         # Only send out email if not an interactive job
 
         with_catch errmsg {
@@ -440,7 +445,10 @@ ad_proc -public auth::sync::purge_jobs {
     Purge jobs that are older than KeepBatchLogDays days.
 } {
     if { ![exists_and_not_null num_days] } {
-        set num_days [parameter::get_from_package_key -parameter KeepBatchLogDays -package_key "acs-authentication" -default 0]
+        set num_days [parameter::get_from_package_key \
+                          -parameter KeepBatchLogDays \
+                          -package_key "acs-authentication" \
+                          -default 0]
     }
     
     validate_integer num_days $num_days

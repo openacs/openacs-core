@@ -14,8 +14,8 @@
         <description format="text/html">Implements authentication-related security functions for OpenACS, including authentication, password maangement, account management, session management, etc.</description>
 
         <provides url="acs-authentication" version="5.0d3"/>
-        <requires url="acs-service-contract" version="4.7d2"/>
         <requires url="acs-kernel" version="5.0d10"/>
+        <requires url="acs-service-contract" version="4.7d2"/>
 
         <callbacks>
             <callback type="after-install"  proc="auth::package_install"/>
@@ -24,6 +24,7 @@
         <parameters>
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="KeepBatchLogDays"  default="0" description="The number of days to keep the log for a batch user synchronization job around. Say 0 if you want to keep the log forever."/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="RegisterAuthority"  default="local" description="The short name of the authority in which users are registered. Is best set in the Authentication admin UI."/>
+            <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="SyncEmailConfirmationP"  default="0" description="Send out email confirmation when batch sync is complete. 1 = Yes, 0 = No."/>
         </parameters>
 
     </version>

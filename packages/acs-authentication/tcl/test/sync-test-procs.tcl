@@ -678,7 +678,6 @@ aa_register_case sync_batch_ims_example_doc {
             }
 
             aa_log "job.message = '$job(message)'"
-            aa_log "job.document = '$job(document)'"
 
         }
 }
@@ -704,10 +703,10 @@ aa_register_case sync_batch_ims_test {
     <sourcedid>
       <id>$ims_doc(username)</id>
     </sourcedid>
-    <name>
+    <n>
       <given>$ims_doc(first_names)</given>
       <family>$ims_doc(last_name)</family>
-    </name>
+    </n>
     <email>$ims_doc(email)</email>
     <url>$ims_doc(url)</url>
   </person>
@@ -776,7 +775,6 @@ aa_register_case sync_batch_ims_test {
             aa_equals "Number of actions" $job(num_actions) 1
             aa_equals "Number of problems" $job(num_problems) 0
             aa_log "job.message = '$job(message)'"
-            aa_log "job.document = '$job(document)'"
 
             set entry_id [auth::sync::job::get_entries -job_id $job_id]
             aa_equals "One entry" [llength $entry_id] 1
@@ -820,7 +818,6 @@ aa_register_case sync_batch_ims_test {
             aa_equals "Number of actions" $job(num_actions) 1
             aa_equals "Number of problems" $job(num_problems) 0
             aa_log "job.message = '$job(message)'"
-            aa_log "job.document = '$job(document)'"
 
             set entry_id [auth::sync::job::get_entries -job_id $job_id]
             aa_equals "One entry" [llength $entry_id] 1
@@ -860,7 +857,6 @@ aa_register_case sync_batch_ims_test {
             aa_equals "Number of actions" $job(num_actions) 1
             aa_equals "Number of problems" $job(num_problems) 0
             aa_log "job.message = '$job(message)'"
-            aa_log "job.document = '$job(document)'"
 
             set entry_id [auth::sync::job::get_entries -job_id $job_id]
             aa_equals "One entry" [llength $entry_id] 1
@@ -900,7 +896,6 @@ aa_register_case sync_batch_ims_test {
             aa_equals "Number of actions" $job(num_actions) 1
             aa_equals "Number of problems" $job(num_problems) 0
             aa_log "job.message = '$job(message)'"
-            aa_log "job.document = '$job(document)'"
 
             set entry_id [auth::sync::job::get_entries -job_id $job_id]
             aa_equals "One entry" [llength $entry_id] 1
