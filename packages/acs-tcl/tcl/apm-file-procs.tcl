@@ -338,7 +338,7 @@ ad_proc -public apm_file_watchable_p { path } {
     set file_type [apm_guess_file_type $package_key $package_rel_path]
     # I would like to add test_procs to the list but currently test_procs files are used to register test cases
     # and we don't want to resource these files in every interpreter. Test procs should be defined in test_init files.
-    set watchable_file_types [list tcl_procs query_file]
+    set watchable_file_types [list tcl_procs query_file test_procs]
     set right_file_type_p [expr [lsearch -exact $watchable_file_types $file_type] != -1]
 
     # Both db type and file type must be right
