@@ -425,7 +425,7 @@ ad_proc -public ad_form {
     </blockquote>
 
     <blockquote><pre>
-    start_date:date,to_sql(sql_date),to_html(sql_date),optional
+    start_date:date,to_sql(linear_date),to_html(sql_date),optional
     </pre><p>
 
     Define the optional element "start_date" of type "date", get the sql_date property before executing
