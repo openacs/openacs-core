@@ -19,10 +19,30 @@ No results found
 </if>
 
 
+<if @private_results:rowcount@ gt 0>
+  <if @show_private_p@ true>
+    <p>
+      <b>Show</b> | <a href="@hide_private_url@">Hide</a> <b>@private_results:rowcount@ private</b> procedure matches
+    </p>
+    <ul>
+      <multiple name="private_results">
+        <li><if @private_results.score@ lt 10>&nbsp;&nbsp;</if>@private_results.score@: <a href=@private_results.url@>@private_results.proc@</a>
+         <i>@private_results.args;noquote@</i>
+       </multiple>
+    </ul>
+  </if>
+  <else>
+    <p>
+      <a href="@show_private_url@">Show</a> | <b>Hide</b> <b>@private_results:rowcount@ private</b> procedure matches
+    </p>
+  </else>
+</if>
+
+
 <if @deprecated_results:rowcount@ gt 0>
   <if @show_deprecated_p@ true>
     <p>
-      <b>Show</b> | <a href="@hide_deprecated_url@">Hide</a> deprecated procedure matches
+      <b>Show</b> | <a href="@hide_deprecated_url@">Hide</a> <b>@deprecated_results:rowcount@ deprecated</b> procedure matches
     </p>
     <ul>
       <multiple name="deprecated_results">
@@ -33,7 +53,9 @@ No results found
   </if>
   <else>
     <p>
-      <a href="@show_deprecated_url@">Show</a> | <b>Hide</b> deprecated procedure matches
+      <a href="@show_deprecated_url@">Show</a> | <b>Hide</b> <b>@deprecated_results:rowcount@ deprecated</b> procedure matches
     </p>
   </else>
 </if>
+
+
