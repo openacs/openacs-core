@@ -270,7 +270,7 @@ ad_proc -public template::list::create {
     }
 
     # Set default for no_data
-    set no_data [ad_decode $no_data "" "No $row_pretty_plural." $no_data]
+    set no_data [ad_decode $no_data "" [_ acs-templating.No_row_pretty_plural] $no_data]
     # Set ulevel to the level of the page, so we can access it later
     set list_properties(ulevel) "\#[expr [info level] - $ulevel]"
 
