@@ -14,21 +14,8 @@ set subsite_url [site_node_closest_ancestor_package_url]
 array set subsite_sitenode [site_node::get -url $subsite_url]
 set subsite_node_id $subsite_sitenode(node_id)
 
-db_multirow -extend { parameter_url } applications select_applications {
-    select n.node_id, 
-           n.name, 
-           p.package_id,
-           p.instance_name,
-           pt.pretty_name as package_pretty_name,
-           (select count(*) from apm_parameters par where par.package_key = pt.package_key) as num_parameters
-    from   site_nodes n,
-           apm_packages p,
-           apm_package_types pt
-    where  n.parent_id = :subsite_node_id
-    and    p.package_id = n.object_id
-    and    pt.package_key = p.package_key
-    order  by lower(p.instance_name)
-} {
+db_multirow -extend { parameter_url } applications select_applications {} {
+    set instance_name "[string repeat .. $level]$instance_name"
     if { $num_parameters > 0 } {
         set parameter_url [export_vars -base ../../shared/parameters { package_id { return_url [ad_return_url] } }]
     }
