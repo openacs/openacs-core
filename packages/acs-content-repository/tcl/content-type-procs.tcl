@@ -33,6 +33,17 @@ ad_proc -public content::type::create_attribute {
 
     @return NUMBER(38)
 } {
+    if {[db_type] == "oracle"} {
+	switch -- $column_spec {
+	    text { set column_spec clob }
+	    boolean { set column_spec "char(1)" }
+	}
+    } else {
+	switch -- $column_spec {
+	    clob { set column_spec text }
+	}
+    }
+
     return [package_exec_plsql -var_list [list \
         [list content_type $content_type ] \
         [list attribute_name $attribute_name ] \
