@@ -11,7 +11,7 @@ ad_proc ::twt::news::add_item_to_classes { server_url } {
     set news_item_list [get_items]
 
     set class_counter 0
-    foreach admin_url [::twt::class::get_admin_urls $server_url "[::twt::dotlrn::current_term_pretty_name]"] {
+    foreach admin_url [::twt::class::get_admin_urls] {
 
         # We want the professor of the class to post the news item
         # TODO
@@ -19,12 +19,12 @@ ad_proc ::twt::news::add_item_to_classes { server_url } {
         #user::login $email [::twt::user::get_password $email]
 
         # Admin page of the class
-        do_request $admin_url
+        ::twt::do_request $admin_url
 
         # News item add
         link follow ~u {news/+item-create}
 
-        set news_item [lindex [::twt::util::get_random_items_from_list $news_item_list 1] 0]
+        set news_item [lindex [::twt::get_random_items_from_list $news_item_list 1] 0]
 
         form find ~a preview
         set publish_title [lindex $news_item 0]

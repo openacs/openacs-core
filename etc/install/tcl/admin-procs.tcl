@@ -10,7 +10,7 @@ namespace eval ::twt::admin {}
 
 ad_proc ::twt::admin::install_all_packages { server_url } {
 
-    do_request "$server_url/acs-admin/apm/packages-install?checked_by_default_p=1"
+    ::twt::do_request "$server_url/acs-admin/apm/packages-install?checked_by_default_p=1"
     #assert text "Package Installation"
     # If there are no new packages to install, just return
     if { [regexp -nocase {no new packages to install} [response body] match] } {
@@ -32,7 +32,7 @@ ad_proc ::twt::admin::install_all_packages { server_url } {
 
 ad_proc ::twt::admin::add_main_site_folder { server_url folder_name } {
 
-	do_request "$server_url/admin/site-map"
+	::twt::do_request "$server_url/admin/site-map"
 
 	link follow ~c "new sub folder" 
 	form find ~a new 
@@ -43,7 +43,7 @@ ad_proc ::twt::admin::add_main_site_folder { server_url folder_name } {
 
 ad_proc ::twt::admin::mount_main_site_package { server_url folder_name instance_name package_key } {
 
-    do_request "$server_url/admin/site-map"
+    ::twt::do_request "$server_url/admin/site-map"
 
     # Follow the link to add a new application at the first matching folder name
     link find ~c $folder_name
@@ -72,7 +72,7 @@ ad_proc ::twt::admin::submit_acs_param_internal { old_parameter_value new_parame
 
 ad_proc ::twt::admin::set_acs_subsite_param { server_url old_parameter_value parameter_value } {
 
-    do_request "$server_url/admin/site-map"
+    ::twt::do_request "$server_url/admin/site-map"
     link follow ~u {parameter-set\?package%5fid=[0-9]+&package%5fkey=acs%2dsubsite&instance%5fname=Main%20Site}
 
     submit_acs_param_internal $old_parameter_value $parameter_value
@@ -80,7 +80,7 @@ ad_proc ::twt::admin::set_acs_subsite_param { server_url old_parameter_value par
 
 ad_proc ::twt::admin::set_acs_kernel_param { server_url param_section old_parameter_value parameter_value } {
 
-    do_request "$server_url/admin/site-map"
+    ::twt::do_request "$server_url/admin/site-map"
     link follow ~u {parameter-set\?package%5fid=[0-9]+&package%5fkey=acs%2dkernel}
 
     if { ![string equal $param_section "acs-kernel"] } {

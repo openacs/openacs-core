@@ -9,7 +9,7 @@ namespace eval ::twt::dotlrn {}
 
 ad_proc ::twt::dotlrn::add_term { server_url term_name start_month start_year end_month end_year } {
 
-    do_request "$server_url/dotlrn/admin/term-new"
+    ::twt::do_request "$server_url/dotlrn/admin/term-new"
     form find ~n add_term
     field find ~n "term_name"
 
@@ -38,9 +38,27 @@ ad_proc ::twt::dotlrn::current_term_pretty_name {} {
     return "Fall 2003/2004"
 }
 
+ad_proc ::twt::dotlrn::current_term_id {} {
+    ::twt::do_request [class_admin_url]
+
+    form find ~n term_form
+    field find ~n term_id
+    field select [current_term_pretty_name]
+    array set term_select_field [field current]
+    set term_id $term_select_field(value)
+
+    return $term_id
+}
+
+ad_proc ::twt::dotlrn::class_admin_url {
+    {-term_id "-1"}
+} {
+   return "dotlrn/admin/term?term_id=$term_id" 
+}
+
 ad_proc ::twt::dotlrn::add_department { server_url pretty_name description external_url } {
 
-    do_request "$server_url/dotlrn/admin/department-new"
+    ::twt::do_request "$server_url/dotlrn/admin/department-new"
     form find ~n add_department
     field find ~n "pretty_name"
     field fill $pretty_name
@@ -73,7 +91,7 @@ ad_proc ::twt::dotlrn::setup_departments { server_url } {
 
 ad_proc ::twt::dotlrn::add_subject { server_url department_pretty_name pretty_name description } {
 
-    do_request "$server_url/dotlrn/admin/class-new"
+    ::twt::do_request "$server_url/dotlrn/admin/class-new"
 
     form find ~n add_class
     field find ~n "form:id"
@@ -111,7 +129,7 @@ ad_proc ::twt::dotlrn::setup_subjects { server_url } {
 
 ad_proc ::twt::dotlrn::get_class_add_urls { server_url } {
 
-    return [::twt::util::get_url_list $server_url "$server_url/dotlrn/admin/classes" "class-instance-new"]
+    return [::twt::get_url_list "dotlrn/admin/classes" "class-instance-new"]
 }
 
 ad_proc ::twt::dotlrn::setup_classes { server_url } {
@@ -124,7 +142,7 @@ ad_proc ::twt::dotlrn::setup_classes_for_term { server_url term_name } {
 
     foreach link [get_class_add_urls $server_url] {
 
-        do_request $link
+        ::twt::do_request $link
         form find ~n "add_class_instance"
         field find
         field select $term_name
@@ -146,7 +164,7 @@ ad_proc ::twt::dotlrn::setup_communities { server_url } {
 
 ad_proc ::twt::dotlrn::add_community { server_url name description policy } {
     
-    do_request "${server_url}/dotlrn/admin/club-new"    
+    ::twt::do_request "${server_url}/dotlrn/admin/club-new"    
 
     form find ~n add_club
 
@@ -160,12 +178,23 @@ ad_proc ::twt::dotlrn::add_community { server_url name description policy } {
     form submit
 }
 
+ad_proc ::twt::dotlrn::get_user_admin_url { email } {
+    Get the .LRN admin URL for a user. This is awkward. If we could
+    lookup the user_id from email this would be much easier.
+} {
+    ::twt::do_request "dotlrn/admin/users-search?name=$email&form%3Aid=user_search"
+
+    link follow ~u {user}
+
+    return [response url]
+}
+
 ad_proc ::twt::dotlrn::add_site_wide_admin { server_url } {
 
     global __admin_last_name
 
     # Goto users page
-    do_request "$server_url/dotlrn/admin/users?type=pending"
+    ::twt::do_request "/dotlrn/admin/users?type=pending"
 
     # Goto the community page for the site-wide admin (assuming he's first in the list)
     link follow ~u {user\?user_id=}

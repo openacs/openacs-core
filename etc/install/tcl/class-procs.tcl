@@ -6,24 +6,33 @@
 
 namespace eval ::twt::class {}
 
-ad_proc ::twt::class::get_admin_urls { server_url term_pretty_name } {
+ad_proc ::twt::class::get_admin_urls { } {
     Returns a list with the fully qualified URLs of the admin pages of
     all .LRN classes.
 } {
-    set admin_url_base "$server_url/dotlrn/admin/term"
-    set admin_url_no_term "${admin_url_base}?term_id=-1"
+    set term_id [::twt::dotlrn::current_term_id]
+    set page_url [::twt::dotlrn::class_admin_url -term_id $term_id]
 
-    # First extract the term_id corresponding to the term_pretty_name
-    do_request $admin_url_no_term
-    form find ~n term_form
-    field find ~n term_id
-    field select $term_pretty_name
-    array set term_select_field [field current]
-    set term_id $term_select_field(value)
+    set url_pattern {/dotlrn/classes/.*/one-community-admin$}
 
-    set admin_url_term "${admin_url_base}?term_id=$term_id"
+    return [::twt::get_url_list $page_url $url_pattern]
+}
 
-    return [::twt::util::get_url_list $server_url $admin_url_term {/dotlrn/classes/.*/one-community-admin$}]
+ad_proc ::twt::class::get_urls { } {
+    Returns a list with the fully qualified URLs of the home pages of
+    all .LRN classes.
+} {
+    # The trick we use here is that we know that class urls are the admin
+    # URLs minus "one-community-admin"
+    set url_list [list]
+    set admin_url_list [get_admin_urls]
+
+    foreach admin_url $admin_url_list {
+        regexp {^(.*)one-community-admin$} $admin_url match class_url
+        lappend url_list $class_url
+    }
+
+    return $url_list
 }
 
 ad_proc ::twt::class::engineering_p { class_url } {
@@ -50,10 +59,10 @@ ad_proc ::twt::class::get_professor { class_url } {
 
 ad_proc ::twt::class::setup_memberships { server_url } {
 
-    foreach admin_url [get_admin_urls $server_url "[::twt::dotlrn::current_term_pretty_name]"] {
+    foreach admin_url [get_admin_urls] {
 
         # Admin page for the class
-        do_request "$admin_url"
+        ::twt::do_request "$admin_url"
 
         # Member management for the class
         follow_members_link
@@ -72,7 +81,7 @@ ad_proc ::twt::class::setup_memberships { server_url } {
             { [expr $admin_counter < 2 && $admin_counter < [llength $admin_users]] } \
             { incr admin_counter } {
 
-            set admin_label [::twt::util::get_random_items_from_list $admin_labels 1]
+            set admin_label [::twt::get_random_items_from_list $admin_labels 1]
             add_member [lindex $admin_users $admin_counter] $admin_label
         }
     }
@@ -109,12 +118,12 @@ ad_proc ::twt::class::add_member { email role } {
 
 ad_proc ::twt::class::setup_subgroups { server_url } {
 
-    foreach admin_url [get_admin_urls $server_url "[::twt::dotlrn::current_term_pretty_name]"] {
+    foreach admin_url [get_admin_urls] {
 
         foreach {name description policy} [subcommunity_properties_list] {
 
             # Admin page of one class
-            do_request $admin_url
+            ::twt::do_request $admin_url
 
             # Add subcommunity form
             link follow ~u subcommunity-new
@@ -145,14 +154,14 @@ ad_proc ::twt::class::subcommunity_properties_list {} {
 
 ad_proc ::twt::class::add_member_applets { server_url } {
 
-    foreach admin_url [get_admin_urls $server_url "[::twt::dotlrn::current_term_pretty_name]"] {
+    foreach admin_url [get_admin_urls] {
 
         # Only add the members applet to computing classes so that we can
         # demo adding it to other classes manually
         if { [regexp -nocase {comput} $admin_url match] } {
 
             # Admin page of the class
-            do_request $admin_url
+            ::twt::do_request $admin_url
         
             # Manage Applets
             link follow ~u {applets$}

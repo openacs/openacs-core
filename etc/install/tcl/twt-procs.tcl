@@ -1,19 +1,62 @@
 # Procs to support testing OpenACS with Tclwebtest.
 #
-# Utility procs.
+# Basic utility procs.
 #
 # @author Peter Marklund
 
-namespace eval ::twt::util {}
+namespace eval ::twt {}
 
-ad_proc ::twt::util::randomRange {range} {
-    Given an integer N, return an integer between 0 and N.
-} {
-
-     return [expr int([expr rand()] * $range)]
+ad_proc ::twt::log { message } {
+    set script_name [file tail [info script]]
+    puts ""
+    puts "##############################"
+    puts "#"
+    puts "# ${script_name}: $message"
+    puts "#"
+    puts "##############################"
+    puts ""
 }
 
-ad_proc ::twt::util::get_random_items_from_list { list number } {
+ad_proc ::twt::do_request { page_url } {
+    Takes a a url and invokes tclwebtest::do_request. The URL
+    can either be relative to server root or absolute 
+    (in which case it must start with with http://).
+} {
+    if { [regexp {^http://} $page_url] } {
+        # We were given an absolute url
+        set absolute_url $page_url
+    } else {
+        # Relative url - prepend system url
+        set absolute_url "[::twt::config::server_url]/$page_url"
+    }
+
+    ::tclwebtest::do_request $absolute_url
+}
+
+ad_proc ::twt::get_url_list { page_url link_url_pattern } {
+
+    ::twt::do_request $page_url
+
+    set urls_list [list]
+
+    # Loop over and add all links
+    set errno "0"
+    while { $errno == "0" } {
+	set errno [catch {
+            array set link_array [link find -next ~u "$link_url_pattern"]} error]
+
+         if { [string equal $errno "0"] } {
+            set url $link_array(url)
+     
+            lappend urls_list $url
+        }
+    }
+    
+
+    return $urls_list
+}
+
+ad_proc ::twt::get_random_items_from_list { list number } {
     Given a list and the lenght of the list to return, 
     return a list with a random subset of items from the input list.
 } {
@@ -58,7 +101,14 @@ ad_proc ::twt::util::get_random_items_from_list { list number } {
     }
 }
 
-ad_proc ::twt::util::write_response_to_file { filename } {
+ad_proc ::twt::randomRange {range} {
+    Given an integer N, return an integer between 0 and N.
+} {
+
+     return [expr int([expr rand()] * $range)]
+}
+
+ad_proc ::twt::write_response_to_file { filename } {
     Write the HTML body of the last HTTP response to the
     file with given path. If the directory of the file doesn't
     exist then create it.
@@ -72,40 +122,7 @@ ad_proc ::twt::util::write_response_to_file { filename } {
     puts $file_id "[response body]"
 }
 
-ad_proc ::twt::util::get_url_list { server_url page_url link_url_pattern } {
-
-    do_request "$page_url"
-
-    set urls_list [list]
-
-    # Loop over and add all links
-    set errno "0"
-    while { $errno == "0" } {
-	set errno [catch {
-            array set link_array [link find -next ~u "$link_url_pattern"]} error]
-
-         if { [string equal $errno "0"] } {
-            set url $link_array(url)
-     
-            if { [regexp {http://} $url match] } {
-                # Fully qualified URL
-                lappend urls_list $url
-            } elseif { [string index $url 0] == "/" } {
-                # Absolute path
-                lappend urls_list ${server_url}${url}
-            } else {
-                # Relative path
-                regexp {(http://[^?]+/)} $page_url match dir_url
-                lappend urls_list ${dir_url}${url}
-            }
-        }
-    }
-    
-
-    return $urls_list
-}
-
-ad_proc ::twt::util::crawl_links {} {
+ad_proc ::twt::crawl_links {} {
     TODO: This proc currently doesn't crawl nearly as many links as we would like
 } {
 
@@ -127,7 +144,7 @@ ad_proc ::twt::util::crawl_links {} {
         return
     }
 
-    do_request $start_url
+    ::twt::do_request $start_url
 
     set errno 0
     while { $errno == "0" } {
@@ -150,15 +167,4 @@ ad_proc ::twt::util::crawl_links {} {
             }
          }
    }
-}
-
-ad_proc ::twt::util::log { message } {
-    set script_name [file tail [info script]]
-    puts ""
-    puts "##############################"
-    puts "#"
-    puts "# ${script_name}: $message"
-    puts "#"
-    puts "##############################"
-    puts ""
 }
