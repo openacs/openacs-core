@@ -104,8 +104,12 @@ aa_register_case content_item {
             # delete the evil_name item
             #########################################################
             
-
-            aa_true "evil_name item deleted" [expr [content::item::delete -item_id $evil_item_id] == 0]
+            # in oracle content_item.del is not a fucntion and cannot
+            # return true or false so we have to rely on a query to
+            # see if the item exists or not
+            
+            content::item::delete -item_id $evil_item_id
+            aa_true "evil_name item deleted"
             array unset evil_name
             aa_true "evil_name item no longer exists" [expr \
                 [content::item::get \
