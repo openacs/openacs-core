@@ -8,6 +8,8 @@
 
 <h2>Audit Trail</h2>
 
+@first_translated_message;noquote@
+
 <include src="audit-include" current_locale="@current_locale;noquote@" message_key="@message_key;noquote@" package_key="@package_key;noquote@">
 
 <h2>Files that use this message</h2>

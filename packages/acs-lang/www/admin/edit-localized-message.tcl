@@ -94,13 +94,18 @@ ad_form -extend -name message -form {
         and    lm.locale = :default_locale
     }
 
-    db_0or1row select_translated_message {
-        select message as message
-        from   lang_messages
-        where  package_key = :package_key
-        and    message_key = :message_key
-        and    locale = :current_locale
-    }
+    set translated_p [db_0or1row select_translated_message {
+        select lm.message as message,
+               cu.first_names || ' ' || cu.last_name as creation_user_name,
+               cu.user_id as creation_user_id,
+               to_char(lm.creation_date, 'YYYY-MM-DD') as creation_date
+        from   lang_messages lm,
+               cc_users cu
+        where  lm.package_key = :package_key
+        and    lm.message_key = :message_key
+        and    lm.locale = :current_locale
+        and    cu.user_id = lm.creation_user
+    }]
     
     set original_message [ad_quotehtml $original_message]
     if { [exists_and_not_null message] } {
@@ -111,6 +116,43 @@ ad_form -extend -name message -form {
         set description [subst {(<a href="$description_edit_url">add description</a>)}]
     } else {
         set description "[ad_text_to_html -- $description] [subst { (<a href="$description_edit_url">edit</a>)}]"
+    }
+
+    # Augment the audit trail with info on who created the first message
+    if { ![string equal $current_locale $default_locale] && $translated_p } {
+        set edited_p [db_string edit_count {
+            select count(*)
+            from lang_messages_audit
+            where package_key = :package_key
+              and message_key = :message_key
+              and locale = :current_locale
+        }]
+
+        if { $edited_p } {
+            # The translation has been edited
+            # Get the creation user of the first revision
+            db_1row select_first_revision {
+               select cu.first_names || ' ' || cu.last_name as creation_user_name,
+                      cu.user_id as creation_user_id,
+                      to_char(lma.overwrite_date, 'YYYY-MM-DD') as creation_date
+               from lang_messages_audit lma,
+                    cc_users cu
+               where  lma.package_key = :package_key
+               and    lma.message_key = :message_key
+               and    lma.locale = :current_locale
+               and    cu.user_id = lma.overwrite_user
+               and    lma.audit_id = (select min(lm2.audit_id)
+                                     from lang_messages_audit lm2
+                                     where  lm2.package_key = :package_key
+                                     and    lm2.message_key = :message_key
+                                     and    lm2.locale = :current_locale
+                                     )                                     
+            }
+        } 
+
+        set first_translated_message "<ul> <li>First translated by [acs_community_member_link -user_id $creation_user_id -label $creation_user_name] on $creation_date</li></ul>"
+    } else {
+        set first_translated_message ""
     }
 } -on_submit {
 
@@ -123,4 +165,3 @@ ad_form -extend -name message -form {
     ad_returnredirect $return_url
     ad_script_abort
 }
-
