@@ -179,21 +179,24 @@ ad_proc -public tsearch2::driver_info {
     return [list package_key tsearch2-driver version 2 automatic_and_queries_p 0  stopwords_p 1]
 }
 
-ad_proc -public tsearch2::build_query {
-    -query
+ad_proc tsearch2::build_query { s } {
+    Convert conjunctions to query characters for tsearch2
+    and => &
+    not => !
+    or => |
+    space => | (or)
+    
+    @param string string to convert
+    @return returns formatted query string for tsearch2 tsquery
 } {
-    @author Dave Bauer (dave@thedesignexperience.org)
-    @creation-date 2004-06-05
-
-    @param query 
-
-    @return query formatted for passign to to_tsquery function
-    
-    @error 
-    
-} {
-    
-    set terms [split $query]
-    return [join $terms "&"]
-
+    # replace boolean words with boolean operators
+    set s [string map {" and " & " or " | " not " !} $s]
+    # remove leading and trailing spaces so they aren't turned into |
+    set s [string trim $s]
+    # remove any spaces between words and operators
+    regsub -all {\s+([!&|])\s+} $s {\1} s
+    # all remaining spaces between words turn into |
+    regsub -all {\s+} $s {|} s
+  
+    return $s
 }
