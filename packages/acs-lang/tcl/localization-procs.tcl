@@ -327,7 +327,7 @@ ad_proc -public clock_to_ansi {
     return [clock format $seconds -format "%Y-%m-%d %H:%M:%S"]
 }
 
-ad_proc -public lc_get  {
+ad_proc -public lc_get {
     {-locale ""}
     key
 } {
@@ -341,9 +341,10 @@ ad_proc -public lc_get  {
     # All localization message keys have a certain prefix
     set message_key "acs-lang.localization-$key"
 
-    # Set upvar level to -1 so that no attempt is made to interpolate variables
+    # Set upvar level to 0 so that no attempt is made to interpolate variables
     # into the string
-    return [lang::message::lookup $locale $message_key {} {} -1]
+    # Set translator_mode_p to 0 so we don't dress the message up with a link to translate
+    return [lang::message::lookup $locale $message_key {} {} 0 0]
 }
 
 ad_proc -public lc_time_fmt {
