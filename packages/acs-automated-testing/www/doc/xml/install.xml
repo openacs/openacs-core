@@ -1,0 +1,17 @@
+<?xml version='1.0' ?>
+<!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+               "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
+]>
+
+  <sect1 id="install">
+    <title>Installation</title>
+
+    <authorblurb>
+      <para>
+      by <ulink url="mailto:joel@aufrecht.org">Joel Aufrecht</ulink>
+      </para>
+    </authorblurb>
+    <para>Automated Testing is part of acs-core, and therefore should already be installed in any OpenACS system.  Individual automated tests are stored within each package in package/tcl/test.
+        </para>
+
+</sect1>
