@@ -819,15 +819,15 @@ ln -s /usr/local/ssl/lib/libcrypto.so.0.9.7 libcrypto.so.0.9.7
 </para>
 
       <para>SSL support must be enabled seperately in each OpenACS
-        server (<xref linkend="ssl-certificates"/>. <para>
+        server (<xref linkend="ssl-certificates"/>. </para>
 
-      <para>If your ports for SSL are priviledged (below 1024), you
+      <para>If your ports for SSL are privileged (below 1024), you
         will have to start AOLserver with prebinds for both your HTTP
         and your HTTPS port (usually by adding <computeroutput>-b
         <replaceable>your_ip:your_http_port</replaceable>,<replaceable>your_ip:your_https_port</replaceable></computeroutput>
         to the nsd call. If you are using daemontools, this can be
         changed in your <computeroutput>etc/daemontools/run
-        file</computeroutput>).<para>
+        file</computeroutput>).</para>
 
       <para>To enable SSL support in your server, make sure your
       etc/config.tcl file has a section on "OpenSSL 3 with AOLserver4". If
