@@ -13,7 +13,7 @@
   </para>
 
   <orderedlist>
-    <listitem><para>Install an OS and supporting software (see <xref linkend="unix-installation"/> or <xref linkend="install-redhat"/> for more details).</para>
+    <listitem><para>Install an OS and supporting software (see <xref linkend="unix-installation"/> or <xref linkend="install-redhat"/> for more details).  See the <xref linkend="compatibility-matrix"/>.</para>
     </listitem>
 
     <listitem><para>Install a database (see <xref linkend="oracle"/> or
@@ -21,7 +21,7 @@
     </listitem>
 
     <listitem>
-      <para> Install AOLserver (see <xref linkend="aolserver"/>).</para>
+      <para> Install AOLserver (<xref linkend="aolserver4"/>) .</para>
     </listitem>
 
     <listitem><para>Create a unique database and system user.
@@ -49,7 +49,7 @@
           PostgreSQL in Debian and Red Hat and FreeBSD ports works fine.</para>
       </listitem>
       <listitem>
-        <para>An experimental script <link
+        <para>Once AOLserver and a database are installed, a bash script <link
             linkend="install-with-script">automates the OpenACS checkout and
             installation</link>.
         </para>
