@@ -346,8 +346,6 @@ ad_proc -public apm_load_package {
     if {$load_tests_p} {
       apm_load_libraries -packages $package_key -test_init
     }
-
-    nsv_set apm_enabled_package $package_key 1    
 }
 
 ad_proc -private apm_load_queries {
