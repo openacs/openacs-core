@@ -30,14 +30,10 @@ create table auth_batch_jobs (
   doc_end_time               date,
   doc_status                 varchar2(4000),
   doc_message                varchar2(4000),
-  document_id                integer 
-                             constraint auth_batch_jobs_doc_fk
-                             references cr_items(item_id)
-                             on delete set null
+  documen                    clob
 );
 
 create index auth_batch_jobs_user_idx on auth_batch_jobs(creation_user);
-create index auth_batch_jobs_document_idx on auth_batch_jobs(document_id);
 
 
 create sequence auth_batch_job_entry_id_seq;
