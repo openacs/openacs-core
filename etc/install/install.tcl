@@ -134,7 +134,7 @@ set pg_bindir                 "/usr/local/pgsql/bin"
 #----------------------------------------------------------------------
 
 # The name of the Oracle user and tablespace. Will get created.
-set db_name                   ${server}
+set oracle_user               ${server}
 
 # Password for the Oracle user
 set oracle_password           ${db_name}
