@@ -774,6 +774,7 @@ ad_proc -public export_vars {
             set form_var_list [list]
             for {set i 0} {$i<[ns_set size $the_form]} {incr i} {
                 set varname [ns_set key $the_form $i]
+                regsub -all {:} $varname {\\:} varname
                 set varvalue [ns_set value $the_form $i]
                 lappend form_var_list [list $varname $varvalue]
             }
