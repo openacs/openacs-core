@@ -55,9 +55,10 @@ declare
 begin
 
    -- remove all constraints on this segment
-   for row in (select constraint_id 
+   for row in  select constraint_id 
                  from rel_constraints 
-                where rel_segment = delete__segment_id) loop
+                where rel_segment = delete__segment_id 
+   LOOP
 
        PERFORM rel_constraint__delete(row.constraint_id);
 

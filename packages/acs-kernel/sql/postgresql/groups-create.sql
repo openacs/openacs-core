@@ -326,20 +326,22 @@ begin
     return ''t'';
   else
     if group_contains_p__rel_id is null then
-      for map in (select *
+      for map in  select *
                   from group_component_map
                   where component_id = group_contains_p__component_id
-                  and group_id = container_id) loop
+                  and group_id = container_id 
+      LOOP
         if group_contains_p(group_contains_p__group_id, map.group_id) = ''t'' then
           return ''t'';
         end if;
       end loop;
     else
-      for map in (select *
+      for map in  select *
                   from group_component_map
                   where component_id = group_contains_p__component_id
                   and rel_id = group_contains_p__rel_id
-                  and group_id = container_id) loop
+                  and group_id = container_id 
+      LOOP
         if group_contains_p(group_contains_p__group_id, map.group_id) = ''t'' then
           return ''t'';
         end if;

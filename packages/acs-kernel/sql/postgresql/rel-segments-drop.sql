@@ -9,7 +9,8 @@ create function inline_0 ()
 declare 
         r       record;
 begin
-    for r in (select segment_id from rel_segments) loop
+    for r in select segment_id from rel_segments 
+    LOOP
 	PERFORM rel_segment__delete(r.segment_id);
     end loop;
 

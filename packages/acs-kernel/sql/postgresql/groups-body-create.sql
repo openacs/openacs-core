@@ -42,9 +42,10 @@ begin
 
   -- For all groups of which I am a component, insert a
   -- row in the group_member_index.
-  for map in (select distinct group_id
+  for map in select distinct group_id
 	      from group_component_map
-	      where component_id = v_object_id_one) loop
+	      where component_id = v_object_id_one 
+  LOOP
     insert into group_element_index
      (group_id, element_id, rel_id, container_id,
       rel_type, ancestor_rel_type)
@@ -110,9 +111,10 @@ begin
 
   -- For all direct or indirect containers of my new composite group, 
   -- add me and add my elements
-  for map in (select distinct group_id
+  for map in  select distinct group_id
 	      from group_component_map
-	      where component_id = v_object_id_one) loop
+	      where component_id = v_object_id_one 
+  LOOP
 
     -- Add a row for me
     insert into group_element_index
@@ -191,9 +193,10 @@ begin
   from acs_rels
   where rel_id = old.rel_id;
 
-  for map in (select *
+  for map in  select *
 	      from group_component_map
-	      where rel_id = old.rel_id) loop
+	      where rel_id = old.rel_id 
+  LOOP
 
     delete from group_element_index
     where rel_id = old.rel_id;
@@ -213,7 +216,7 @@ begin
   end loop;
 
 
-  for map in (select *
+  for map in  select *
               from group_component_map
 	      where group_id in (select group_id
 		               from group_component_map
@@ -227,7 +230,8 @@ begin
 				   union
 				   select v_object_id_two
 				   from dual)
-              and group_contains_p(group_id, component_id, rel_id) = ''f'') loop
+              and group_contains_p(group_id, component_id, rel_id) = ''f'' 
+  LOOP
 
     delete from group_element_index
     where group_id = map.group_id
@@ -319,10 +323,11 @@ begin
       return ''t'';
     end if;
 
-    for row in (select r.object_id_one as parent_id
+    for row in  select r.object_id_one as parent_id
                 from acs_rels r, composition_rels c
                 where r.rel_id = c.rel_id
-                and r.object_id_two = component_id) loop
+                and r.object_id_two = component_id 
+    LOOP
       if composition_rel__check_path_exists_p(row.parent_id, container_id) = ''t'' then
         return ''t'';
       end if;
@@ -351,10 +356,11 @@ begin
     -- that are also contained by CONTAINER_ID and verify that the
     -- GROUP_COMPONENT_INDEX contains the (GROUP_ID, DC.REL_ID,
     -- CONTAINER_ID) triple.
-    for dc in (select r.rel_id, r.object_id_one as container_id
+    for dc in  select r.rel_id, r.object_id_one as container_id
                from acs_rels r, composition_rels c
                where r.rel_id = c.rel_id
-               and r.object_id_two = check_index__component_id) loop
+               and r.object_id_two = check_index__component_id 
+    LOOP
 
       if composition_rel__check_path_exists_p(dc.container_id,
                              check_index__container_id) = ''t'' then
@@ -378,22 +384,24 @@ begin
     end loop;
 
     -- Loop through all the containers of CONTAINER_ID.
-    for r1 in (select r.object_id_one as container_id
+    for r1 in  select r.object_id_one as container_id
                from acs_rels r, composition_rels c
                where r.rel_id = c.rel_id
                and r.object_id_two = check_index__container_id
                union
                select check_index__container_id as container_id
-               from dual) loop
+               from dual 
+    LOOP
       -- Loop through all the components of COMPONENT_ID and make a
       -- recursive call.
-      for r2 in (select r.object_id_two as component_id
+      for r2 in  select r.object_id_two as component_id
                  from acs_rels r, composition_rels c
                  where r.rel_id = c.rel_id
                  and r.object_id_one = check_index__component_id
                  union
                  select check_index__component_id as component_id
-                 from dual) loop
+                 from dual 
+      LOOP
         if (r1.container_id != check_index__container_id or
             r2.component_id != check_index__component_id) and
            composition_rel__check_index(r2.component_id, r1.container_id) = ''f'' then
@@ -435,9 +443,10 @@ begin
 
     -- Now let''s check that the index doesn''t have any extraneous rows
     -- relating to this relation.
-    for row in (select *
+    for row in  select *
                 from group_component_index
-                where rel_id = check_representation__rel_id) loop
+                where rel_id = check_representation__rel_id  
+    LOOP
       if composition_rel__check_path_exists_p(row.component_id, row.group_id) = ''f'' then
         result := ''f'';
         PERFORM acs_log__error(''composition_rel.check_representation'',
@@ -603,10 +612,11 @@ begin
                     ''container_id = '' || check_index__container_id || ''.'');
     end if;
 
-    for row in (select r.object_id_one as container_id
+    for row in  select r.object_id_one as container_id
                 from acs_rels r, composition_rels c
                 where r.rel_id = c.rel_id
-                and r.object_id_two = check_index__group_id) loop
+                and r.object_id_two = check_index__group_id  
+    LOOP
       if membership_rel__check_index(row.container_id, check_index__member_id, check_index__container_id) = ''f'' then
         result := ''f'';
       end if;
@@ -643,9 +653,10 @@ begin
       result := ''f'';
     end if;
 
-    for row in (select *
+    for row in  select *
                 from group_member_index
-                where rel_id = check_representation__rel_id) loop
+                where rel_id = check_representation__rel_id 
+    LOOP
       if composition_rel__check_path_exists_p(row.container_id,
                                              row.group_id) = ''f'' then
         result := ''f'';
@@ -661,12 +672,7 @@ begin
    
 end;' language 'plpgsql';
 
-
-
--- show errors
-
-
-
+    
 -- create or replace package body acs_group
 -- function new
 create function acs_group__new (integer,varchar,timestamp,integer,varchar,varchar,varchar,varchar,varchar,integer)
@@ -724,6 +730,22 @@ begin
   
 end;' language 'plpgsql';
 
+-- function new
+create function acs_group__new (varchar) returns integer as '
+declare
+        gname   alias for $1;
+begin
+        return acs_group__new(null,
+                              ''group'',
+                              now(),
+                              null,
+                              null,
+                              null,
+                              null,
+                              gname,
+                              null,
+                              null);
+end;' language 'plpgsql';
 
 -- procedure delete
 create function acs_group__delete (integer)
@@ -734,20 +756,22 @@ declare
 begin
  
    -- Delete all segments defined for this group
-   for row in (select segment_id 
+   for row in  select segment_id 
                  from rel_segments 
-                where group_id = delete__group_id) loop
+                where group_id = delete__group_id 
+   LOOP
 
        PERFORM rel_segment__delete(row.segment_id);
 
    end loop;
 
    -- Delete all the relations of any type to this group
-   for row in (select r.rel_id, t.package_name
+   for row in select r.rel_id, t.package_name
                  from acs_rels r, acs_object_types t
                 where r.rel_type = t.object_type
                   and (r.object_id_one = delete__group_id
-                       or r.object_id_two = delete__group_id)) loop
+                       or r.object_id_two = delete__group_id) 
+   LOOP
       execute ''perform '' ||  row.package_name || ''__delete('' || row.rel_id || '')'';
    end loop;
  
@@ -803,19 +827,21 @@ begin
      result := ''f'';
    end if;
 
-   for c in (select c.rel_id
+   for c in select c.rel_id
              from acs_rels r, composition_rels c
              where r.rel_id = c.rel_id
-             and r.object_id_one = group_id) loop
+             and r.object_id_one = group_id 
+   LOOP
      if composition_rel__check_representation(c.rel_id) = ''f'' then
        result := ''f'';
      end if;
    end loop;
 
-   for m in (select m.rel_id
+   for m in  select m.rel_id
              from acs_rels r, membership_rels m
              where r.rel_id = m.rel_id
-             and r.object_id_one = group_id) loop
+             and r.object_id_one = group_id 
+   LOOP
      if membership_rel__check_representation(m.rel_id) = ''f'' then
        result := ''f'';
      end if;
