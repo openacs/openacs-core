@@ -115,7 +115,7 @@ cd admin/daemontools-0.76
 package/install</action></screen>
             </listitem>
             <listitem>
-              <para>Red Hat 9</para>
+              <para>Red Hat 9 through Fedora Core 3</para>
               <para>Make sure you have the source tarball in
           <computeroutput>/var/tmp</computeroutput>, or <link
           linkend="daemontools-download">download it</link>.
@@ -125,11 +125,11 @@ package/install</action></screen>
 [root root]# <userinput>cd /package/</userinput>
 [root package]# <userinput>tar xzf /var/tmp/daemontools-0.76.tar.gz</userinput>
 [root package]# <userinput>cd admin</userinput>
-[root admin]# <userinput>wget http://moni.csi.hu/pub/glibc-2.3.1/daemontools-0.76.errno.patch</userinput>
---14:19:24--  http://moni.csi.hu/pub/glibc-2.3.1/daemontools-0.76.errno.patch
+[root admin]# <userinput>wget http://www.qmail.org/moni.csi.hu/pub/glibc-2.3.1/daemontools-0.76.errno.patch</userinput>
+--14:19:24--  http://www.qmail.org/moni.csi.hu/pub/glibc-2.3.1/daemontools-0.76.errno.patch
            => `daemontools-0.76.errno.patch'
-Resolving moni.csi.hu... done.
-Connecting to moni.csi.hu[141.225.11.87]:80... connected.
+Resolving www.qmail.org... 192.203.178.37
+Connecting to www.qmail.org[192.203.178.37]:80... connected.
 HTTP request sent, awaiting response... 200 OK
 Length: 355 [text/plain]
 
