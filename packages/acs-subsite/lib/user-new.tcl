@@ -6,6 +6,10 @@
 #                   variables user_id, password, and account_messages will be added to the URL. Optional.
 # email           - Prepopulate the register form with given email. Optional.
 # return_url      - URL to redirect to after creation, will not get any query vars added
+# rel_group_id    - The name of a group which you want to relate this user to after creating the user.
+#                   Will add an element to the form where the user can pick a relation among the permissible 
+#                   rel-types for the group.
+
 
 # Set default parameter values
 array set parameter_defaults {
@@ -33,23 +37,58 @@ if { $self_register_p } {
 # Pre-generate user_id for double-click protection
 set user_id [db_nextval acs_object_id_seq]
 
-ad_form -name register -export {next_url user_id return_url} -form [auth::get_registration_form_elements] -on_request {
+ad_form -name register -export {next_url user_id return_url} -form [auth::get_registration_form_elements]
+
+if { [exists_and_not_null rel_group_id] } {
+    ad_form -extend -name register -form {
+        {rel_group_id:integer(hidden),optional}
+    }
+
+    if { [permission::permission_p -object_id $rel_group_id -privilege "admin"] } {
+        ad_form -extend -name register -form {
+            {rel_type:text(select)
+                {label "Role"}
+                {options {[group::get_rel_types_options -group_id $rel_group_id]}}
+            }
+        }
+    } else {
+        ad_form -extend -name register -form {
+            {rel_type:text(hidden)
+                {value "membership_rel"}
+            }
+        }
+    }
+}
+
+
+ad_form -extend -name register -on_request {
     # Populate elements from local variables
+
 } -on_submit {
 
-    array set creation_info [auth::create_user \
-                                 -user_id $user_id \
-                                 -verify_password_confirm \
-                                 -username $username \
-                                 -email $email \
-                                 -first_names $first_names \
-                                 -last_name $last_name \
-                                 -screen_name $screen_name \
-                                 -password $password \
-                                 -password_confirm $password_confirm \
-                                 -url $url \
-                                 -secret_question $secret_question \
-                                 -secret_answer $secret_answer]
+    db_transaction {
+        array set creation_info [auth::create_user \
+                                     -user_id $user_id \
+                                     -verify_password_confirm \
+                                     -username $username \
+                                     -email $email \
+                                     -first_names $first_names \
+                                     -last_name $last_name \
+                                     -screen_name $screen_name \
+                                     -password $password \
+                                     -password_confirm $password_confirm \
+                                     -url $url \
+                                     -secret_question $secret_question \
+                                     -secret_answer $secret_answer]
+     
+        if { [string equal $creation_info(creation_status) "ok"] && [exists_and_not_null rel_group_id] } {
+            group::add_member \
+                -group_id $rel_group_id \
+                -user_id $user_id \
+                -rel_type $rel_type
+        }
+    }
+
 
     # Handle registration problems
     
