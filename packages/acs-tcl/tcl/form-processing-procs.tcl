@@ -328,7 +328,7 @@ ad_proc -public ad_form {
     </pre><p>
 
     Define the optional element "start_date" of type "date", get the sql_date property before executing
-    any new_date, edit_date or on_submit block, set the sql_date property after performing any
+    any new_data, edit_data or on_submit block, set the sql_date property after performing any
     select_query. 
 
     <p>
