@@ -281,6 +281,7 @@ ad_proc -public lang::message::lookup {
     {default "TRANSLATION MISSING"}
     {substitution_list {}}
     {upvar_level 2}
+    {translator_mode_p 1}
 } {
     This proc is normally accessed through the _ procedure.
 
@@ -326,6 +327,10 @@ ad_proc -public lang::message::lookup {
                               in the message. The reason the default is 2 is that the lookup proc is
                               usually invoked by the underscore proc (_). Set upvar level to less than
                               1 if you don't want variable interpolation to be done.
+    
+    @param translator_mode_p  Set to 0 if you do not want this call to honor translator mode. 
+                              Useful if you're not using this message in the page itself, but e.g.
+                              for localization data or for the list of messages on the page.
 
     @author Jeff Davis (davis@arsdigita.com)
     @author Henry Minsky (hqm@arsdigita.com)
@@ -360,11 +365,6 @@ ad_proc -public lang::message::lookup {
             set locale $default_locale
         }
     } 
-
-    if { [lang::util::translator_mode_p] } {
-        # Translator mode - record the message lookup
-        lang::util::record_message_lookup $key
-    }
 
     # We remember the passed-in locale, because we want the translator mode to show which 
     # messages have been translated, and which have not.
@@ -407,6 +407,23 @@ ad_proc -public lang::message::lookup {
     # Set upvar_level to 0 and substitution_list empty to prevent substitution from happening
     if { [llength $substitution_list] > 0 || ($upvar_level >= 1 && [string first "%" $message] != -1) } {
         set message [lang::message::format $message $substitution_list [expr $upvar_level + 1]]
+    }
+
+    if { [lang::util::translator_mode_p] } {
+        # Translator mode - record the message lookup
+        lang::util::record_message_lookup $key
+        
+        if { $translator_mode_p } {
+            global message_key_num
+            if { ![info exists message_key_num] } {
+                set message_key_num 1
+            } else {
+                incr message_key_num
+            }
+            
+            # LARS: Trying new translator more -- encode the key in the page
+            set message "$message\x002\[\x001$key\x001\]\x002"
+        }
     }
 
     return $message
