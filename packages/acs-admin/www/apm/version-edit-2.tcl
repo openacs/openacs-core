@@ -27,7 +27,7 @@ ad_page_contract {
 	}
     }
 
-    version_name_ck -requires {version_uri} {	
+    version_name_ck -requires {version_name} {	
 	if {![regexp {^[0-9]+((\.[0-9]+)+((d|a|b|)[0-9]?)?)$} $version_name match]} {
 	    ad_complain
 	} 
@@ -50,7 +50,6 @@ ad_page_contract {
 }
 
 db_transaction {
-    ns_log Notice "$version_name"
     set version_id [apm_version_update $version_id $version_name $version_uri \
 	    $summary $description $description_format $vendor $vendor_uri $release_date]
     apm_package_install_owners [apm_package_install_owners_prepare $owner_name $owner_uri] $version_id
