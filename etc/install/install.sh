@@ -39,7 +39,7 @@
 
 #---------------------------------------------------------------------
 # Set the script directory to the current dir for convenience
-script_path=$(dirname $(which $0))
+export script_path=$(dirname $(which $0))
 cd $script_path
 
 
