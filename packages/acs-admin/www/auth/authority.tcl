@@ -213,12 +213,23 @@ list::create \
         end_time_pretty {
             label "End time"
         }            
+        run_time_seconds {
+            label "Run time"
+            html { align right }
+            display_template { 
+                <if @batch_jobs.run_time_seconds@ gt 0>@batch_jobs.run_time_seconds@ secs</if>
+            }
+        }
         num_actions {
             label "Actions"
             html { align right }
         }
         num_problems {
             label "Problems"
+            html { align right }
+        }
+        actions_per_minute {
+            label "Actions/Minute"
             html { align right }
         }
         short_message {
@@ -233,23 +244,14 @@ list::create \
 set display_batch_history_p [expr $authority_exists_p && [string equal $ad_form_mode "display"]]
 if { $display_batch_history_p } {
     
-    db_multirow -extend { job_url start_time_pretty end_time_pretty interactive_pretty short_message } batch_jobs select_batch_jobs {
-        select job_id,
-               to_char(job_start_time, 'YYYY-MM-DD HH24:MI:SS') as start_time_ansi,
-               to_char(job_end_time, 'YYYY-MM-DD HH24:MI:SS') as end_time_ansi,
-               snapshot_p,
-               (select count(e1.entry_id)
-                from   auth_batch_job_entries e1
-                where  e1.job_id = auth_batch_jobs.job_id) as num_actions,
-                (select count(e2.entry_id)
-                 from   auth_batch_job_entries e2
-                 where  e2.job_id = auth_batch_jobs.job_id
-                 and    e2.success_p = 'f') as num_problems,
-               interactive_p,
-               message
-        from auth_batch_jobs
-        where authority_id = :authority_id
-    } {
+    db_multirow -extend { 
+        job_url 
+        start_time_pretty
+        end_time_pretty
+        interactive_pretty 
+        short_message 
+        actions_per_minute
+    } batch_jobs select_batch_jobs {} {
         set job_url [export_vars -base batch-job { job_id }]
 
         set start_time_pretty [lc_time_fmt $start_time_ansi "%x %X"]
@@ -258,6 +260,11 @@ if { $display_batch_history_p } {
         set interactive_pretty [ad_decode $interactive_p "t" "Yes" "No"]
         
         set short_message [string_truncate -len 30 $message]
+
+        set actions_per_minute {}
+        if { $run_time_seconds > 0 && $num_actions > 0 } {
+            set actions_per_minute [expr round(60.0 * $num_actions / $run_time_seconds)]
+        }
     }
     if { [exists_and_not_null get_doc_impl_id] && [exists_and_not_null process_doc_impl_id] } {
         set batch_sync_run_url [export_vars -base batch-job-run { authority_id }]
