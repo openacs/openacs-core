@@ -57,8 +57,7 @@ db_transaction {
                                                          -package_key $package_key \
                                                          -node_id $node_id \
                                                          -package_name $instance_name \
-                                                         -context_id $context_id \
-                                                         -package_key $package_key]
+			                                 -context_id $context_id ]
     }
 
 } on_error {
