@@ -61,10 +61,12 @@ create table rel_segments (
         segment_name    varchar(230) not null,
         group_id        integer not null
                         constraint rel_segments_group_id_fk
-                        references groups (group_id),
+                        references groups (group_id)
+                        on delete cascade,
         rel_type        varchar(100) not null
                         constraint rel_segments_rel_type_fk
-                        references acs_rel_types (rel_type),
+                        references acs_rel_types (rel_type)
+                        on delete cascade,
         constraint rel_segments_grp_rel_type_uq unique(group_id, rel_type)
 );
 
@@ -160,12 +162,14 @@ create table party_approved_member_map (
                     constraint party_member_party_nn
                     not null
                     constraint party_member_party_fk
-                    references parties,
+                    references parties
+                    on delete cascade,
     member_id       integer
                     constraint party_member_member_nn
                     not null
                     constraint party_member_member_fk
-                    references parties,
+                    references parties
+                    on delete cascade,
     tag             integer
                     constraint party_member_tag_nn
                     not null,

@@ -234,13 +234,15 @@ comment on table group_rels is '
 create table group_element_index (
 	group_id	not null
 			constraint group_element_index_grp_id_fk
-			references groups (group_id),
+			references groups (group_id)
+                        on delete cascade,
 	element_id	not null
 			constraint group_element_index_elem_id_fk
 			references parties (party_id),
 	rel_id		not null
 			constraint group_element_index_rel_id_fk
-			references acs_rels (rel_id),
+			references acs_rels (rel_id)
+                        on delete cascade,
 	container_id	not null
 			constraint group_element_index_cont_id_fk
 			references groups (group_id),

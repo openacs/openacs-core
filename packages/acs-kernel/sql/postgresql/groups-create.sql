@@ -19,6 +19,7 @@
 create table composition_rels (
         rel_id          integer constraint composition_rel_rel_id_fk
                         references acs_rels (rel_id)
+                        on delete cascade
                         constraint composition_rel_rel_id_pk
                         primary key
 );
@@ -26,6 +27,7 @@ create table composition_rels (
 create table membership_rels (
         rel_id          integer constraint membership_rel_rel_id_fk
                         references acs_rels (rel_id)
+                        on delete cascade
                         constraint membership_rel_rel_id_pk
                         primary key,
         -- null means waiting for admin approval
@@ -37,6 +39,7 @@ create table membership_rels (
 create table admin_rels (
         rel_id          integer constraint admin_rel_rel_id_fk
                         references membership_rels (rel_id)
+                        on delete cascade
                         constraint admin_rel_rel_id_pk
                         primary key
 );
@@ -270,19 +273,24 @@ comment on table group_rels is '
 create table group_element_index (
 	group_id	integer not null
 			constraint group_element_index_grp_id_fk
-			references groups (group_id),
+			references groups (group_id)
+                        on delete cascade,
 	element_id	integer not null
 			constraint group_element_index_elem_id_fk
-			references parties (party_id),
+			references parties (party_id)
+                        on delete cascade,
 	rel_id		integer not null
 			constraint group_element_index_rel_id_fk
-			references acs_rels (rel_id),
+			references acs_rels (rel_id)
+                        on delete cascade,
 	container_id	integer not null
 			constraint group_element_index_cont_id_fk
-			references groups (group_id),
+			references groups (group_id)
+                        on delete cascade,
         rel_type        varchar(100) not null
                         constraint group_elem_index_rel_type_fk
-                        references acs_rel_types (rel_type),
+                        references acs_rel_types (rel_type)
+                        on delete cascade,
         ancestor_rel_type varchar(100) not null
                         constraint grp_el_idx_ancstr_rel_type_ck
                         check (ancestor_rel_type in ('composition_rel','membership_rel')),

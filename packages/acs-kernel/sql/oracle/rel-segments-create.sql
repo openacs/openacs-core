@@ -52,10 +52,12 @@ create table rel_segments (
         segment_name    varchar2(230) not null,
         group_id        not null
                         constraint rel_segments_group_id_fk
-                        references groups (group_id),
+                        references groups (group_id)
+                        on delete cascade,
         rel_type        not null
                         constraint rel_segments_rel_type_fk
-                        references acs_rel_types (rel_type),
+                        references acs_rel_types (rel_type)
+                        on delete cascade,
         constraint rel_segments_grp_rel_type_uq unique(group_id, rel_type)
 );
 

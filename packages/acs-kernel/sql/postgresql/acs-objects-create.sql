@@ -590,6 +590,8 @@ comment on table acs_static_attr_values is '
 -- ACS_OBJECT PACKAGE --
 ------------------------
 
+select define_function_args('acs_object__initialize_attributes','initialize_attributes__object_id');
+
 create or replace function acs_object__initialize_attributes (integer)
 returns integer as '
 declare
@@ -633,8 +635,10 @@ begin
    return 0; 
 end;' language 'plpgsql';
 
-
 -- function new
+
+select define_function_args('acs_object__new','new__object_id,new__object_type;acs_object,new__creation_date,new__creation_user,new__creation_ip,new__context_id,new__security_inherit_p;t,new__title,new__package_id');
+
 create or replace function acs_object__new (integer,varchar,timestamptz,integer,varchar,integer,boolean,varchar,integer)
 returns integer as '
 declare
@@ -691,6 +695,9 @@ begin
 end;' language 'plpgsql';
 
 -- function new
+
+select define_function_args('acs_object__new','new__object_id,new__object_type;acs_object,new__creation_date,new__creation_user,new__creation_ip,new__context_id');
+
 create or replace function acs_object__new (integer,varchar,timestamptz,integer,varchar,integer)
 returns integer as '
 declare
@@ -708,6 +715,8 @@ begin
                          ''t'', null, null);
 end;' language 'plpgsql';
 
+select define_function_args('acs_object__new','new__object_id,new__object_type;acs_object,new__creation_date,new__creation_user,new__creation_ip,new__context_id,new__security_inherit_p;t');
+
 create or replace function acs_object__new (integer,varchar,timestamptz,integer,varchar,integer,boolean)
 returns integer as '
 declare
@@ -723,6 +732,8 @@ begin
                          new__creation_user, new__creation_ip, new__context_id,
                          new__security_inherit_p, null, null);
 end;' language 'plpgsql';
+
+select define_function_args('acs_object__new','new__object_id,new__object_type;acs_object,new__creation_date,new__creation_user,new__creation_ip,new__context_id,new__security_inherit_p;t,new__title');
 
 create or replace function acs_object__new (integer,varchar,timestamptz,integer,varchar,integer,boolean,varchar)
 returns integer as '
@@ -741,6 +752,8 @@ begin
                          new__security_inherit_p, new__title, null);
 end;' language 'plpgsql';
 
+select define_function_args('acs_object__new','new__object_id,new__object_type;acs_object,new__creation_date,new__creation_user,new__creation_ip,new__context_id,new__security_inherit_p;t,new__title,new__package_id');
+
 create or replace function acs_object__new (integer,varchar,timestamptz,integer,varchar,integer,varchar,integer)
 returns integer as '
 declare
@@ -758,6 +771,8 @@ begin
                          ''t'', new__title, new__package_id);
 end;' language 'plpgsql';
 
+select define_function_args('acs_object__new','new__object_id,new__object_type;acs_object,new__creation_date,new__creation_user,new__creation_ip,new__context_id,new__title');
+
 create or replace function acs_object__new (integer,varchar,timestamptz,integer,varchar,integer,varchar)
 returns integer as '
 declare
@@ -774,6 +789,8 @@ begin
                          ''t'', new__title, null);
 end;' language 'plpgsql';
 
+select define_function_args('acs_object__new','object_id,object_type');
+
 create function acs_object__new (integer,varchar) returns integer as '
 declare
         object_id       alias for $1; -- default null
@@ -784,6 +801,9 @@ end;' language 'plpgsql';
 
 
 -- procedure delete
+
+select define_function_args('acs_object__delete','delete__object_id');
+
 create function acs_object__delete (integer)
 returns integer as '
 declare
@@ -840,6 +860,8 @@ end;' language 'plpgsql';
 
 
 -- function name
+select define_function_args('acs_object__name','name__object_id');
+
 create function acs_object__name (integer)
 returns varchar as '
 declare
@@ -901,6 +923,9 @@ end;' language 'plpgsql' stable strict;
 
 
 -- function default_name
+
+select define_function_args('acs_object__default_name','default_name__object_id');
+
 create or replace function acs_object__default_name (integer)
 returns varchar as '
 declare
@@ -919,6 +944,9 @@ end;' language 'plpgsql' stable strict;
 
 
 -- function package_id
+
+select define_function_args('acs_object__object_id','p_object_id');
+
 create or replace function acs_object__package_id (integer)
 returns integer as '
 declare
@@ -938,6 +966,9 @@ end;' language 'plpgsql' stable strict;
 
 
 -- procedure get_attribute_storage
+
+select define_function_args('acs_object__get_attribute_storage','object_id_in,attribute_name_in');
+
 create or replace function acs_object__get_attribute_storage (integer,varchar)
 returns text as '
 declare
@@ -1072,6 +1103,8 @@ begin
 end;' language 'plpgsql' stable;
 
 
+select define_function_args('acs_object__get_attr_storage_column','v_vals');
+
 create or replace function acs_object__get_attr_storage_column(text) 
 returns text as '
 declare
@@ -1086,6 +1119,8 @@ begin
         return substr(v_vals,1,v_idx - 1);
 
 end;' language 'plpgsql' immutable;
+
+select define_function_args('acs_object__get_attr_storage_table','v_vals');
 
 create or replace function acs_object__get_attr_storage_table(text) 
 returns text as '
@@ -1109,6 +1144,8 @@ begin
         return substr(v_tmp,1,v_idx - 1);
 
 end;' language 'plpgsql' immutable;
+
+select define_function_args('acs_object__get_attr_storage_sql','v_vals');
 
 create or replace function acs_object__get_attr_storage_sql(text) 
 returns text as '
@@ -1134,6 +1171,9 @@ begin
 end;' language 'plpgsql' immutable;
 
 -- function get_attribute
+
+select define_function_args('acs_object__get_attribute','object_id_in,attribute_name_in');
+
 create or replace function acs_object__get_attribute (integer,varchar)
 returns text as '
 declare
@@ -1168,6 +1208,9 @@ end;' language 'plpgsql' stable;
 
 
 -- procedure set_attribute
+
+select define_function_args('acs_object__set_attribute','object_id_in,attribute_name_in,value_in');
+
 create or replace function acs_object__set_attribute (integer,varchar,varchar)
 returns integer as '
 declare
@@ -1198,6 +1241,9 @@ end;' language 'plpgsql';
 
 
 -- function check_context_index
+
+select define_function_args('acs_object__check_context_index','check_context_index__object_id,check_context_index__ancestor_id,check_context_index__n_generations');
+
 create or replace function acs_object__check_context_index (integer,integer,integer)
 returns boolean as '
 declare
@@ -1361,6 +1407,8 @@ end;' language 'plpgsql';
 
 
 -- function check_path
+select define_function_args('acs_object__check_path','check_path__object_id,check_path__ancestor_id');
+
 create or replace function acs_object__check_path (integer,integer)
 returns boolean as '
 declare
@@ -1401,6 +1449,9 @@ end;' language 'plpgsql' stable;
 
 
 -- function check_representation
+
+select define_function_args('acs_object__check_representation','check_representation__object_id');
+
 create or replace function acs_object__check_representation (integer)
 returns boolean as '
 declare
