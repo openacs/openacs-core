@@ -148,7 +148,7 @@ ad_proc -public item::get_mime_info { revision_id {datasource_ref mime_info} } {
 } {
     set sql [db_map gmi_get_mime_info]
 
-    return [uplevel "db_0or1row ignore \"$sql\" -column_array mime_info"]
+    return [uplevel "db_0or1row ignore \"$sql\" -column_array $datasource_ref"]
 }
 
 
