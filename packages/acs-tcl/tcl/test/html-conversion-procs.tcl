@@ -49,3 +49,10 @@ following text
     }
 }
 
+
+aa_register_case ad_html_security_check_href_allowed {
+    tests is href attribute is allowed of A tags
+} {
+    set html "<a href=\"http://www.example/com\">An Link</a>"
+    aa_true "href is allowed for A tags" [string equal [ad_html_security_check $html] ""]
+}
