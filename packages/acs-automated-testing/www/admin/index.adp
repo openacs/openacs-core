@@ -74,9 +74,9 @@
           <td> @packageinfo.fails@ </td>
           <td>
             <if @packageinfo.fails@ gt 0>
-              <font color=#ff0000> fail </font>
+               <span style="background-color: red; color: white; font-weight: bold;">FAILED</span>
             </if><else>
-              passed
+              OK
             </else>
           </td>
         </else>
@@ -112,9 +112,9 @@
         </if><else>
           <td>
             <if @tests.fails@ gt 0>
-              <font color=#ff0000> fail </font>
+               <span style="background-color: red; color: white; font-weight: bold; padding: 4px;">FAILED</span>
             </if><else>
-              passed
+              OK
             </else>
           </td>
           <td> @tests.timestamp@ </td>
