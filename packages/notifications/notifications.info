@@ -8,13 +8,13 @@
     <singleton-p>t</singleton-p>
     <auto-mount>notifications</auto-mount>
 
-    <version name="5.0.0a5" url="http://openacs.org/repository/download/apm/notifications-5.0.0a5.apm">
+    <version name="5.0.0a6" url="http://openacs.org/repository/download/apm/notifications-5.0.0a6.apm">
         <owner url="http://openacs.org">OpenACS</owner>
         <summary>Notification Management</summary>
         <release-date>2003-11-07</release-date>
         <vendor url="http://openacs.org/">OpenACS</vendor>
 
-        <provides url="notifications" version="5.0.0a5"/>
+        <provides url="notifications" version="5.0.0a6"/>
         <requires url="acs-mail-lite" version="0.1d"/>
 
         <callbacks>
