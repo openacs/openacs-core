@@ -17,7 +17,7 @@ db_foreach host_node_pair {
     from host_node_map
 } {
     append table "<tr>
-    <td>$host</td>
+    <td><a href=\"http://$host\">$host</a></td>
     <td>$node_id</td>
     <td>$url</td>
     <td><a href=delete?host=$host&node_id=$node_id>delete</a></td>
