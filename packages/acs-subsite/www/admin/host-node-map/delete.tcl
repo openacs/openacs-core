@@ -7,6 +7,9 @@ ad_page_contract {
     node_id:integer
 }
 
+# Flush the cache
+util_memoize_flush_regexp "rp_lookup_node_from_host"
+
 db_dml host_node_delete {
     delete from host_node_map 
     where host = :host
