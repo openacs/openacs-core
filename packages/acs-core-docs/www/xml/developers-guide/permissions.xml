@@ -261,12 +261,12 @@ explained by example: consider some hypothetical rows in the
 <row><entry>...</entry>
 <entry><computeroutput>user</computeroutput></entry>
 <entry><computeroutput>123</computeroutput></entry>
-<entry>&nbsp;</entry><entry>...</entry></row>
+<entry> </entry><entry>...</entry></row>
 
 <row>
 <entry>...</entry>
 <entry><computeroutput>group</computeroutput></entry>
-<entry>&nbsp;</entry>
+<entry> </entry>
 <entry><computeroutput>456</computeroutput></entry>
 <entry>...</entry>
 </row>
@@ -274,8 +274,8 @@ explained by example: consider some hypothetical rows in the
 <row>
 <entry>...</entry>
 <entry><computeroutput>public</computeroutput></entry>
-<entry>&nbsp;</entry>
-<entry>&nbsp;</entry>
+<entry> </entry>
+<entry> </entry>
 <entry>...</entry>
 </row>
 </tbody>

@@ -183,23 +183,23 @@ mode from start to finish. Barring that, here are some handy commands:</para>
 </row>
 
 <row>
-<entry><computeroutput>C-c&nbsp;C-e</computeroutput></entry>
+<entry><computeroutput>C-c C-e</computeroutput></entry>
 <entry>Insert an element. Uses completion and only lets you insert elements that
 are valid</entry>
 </row>
 
 <row>
-<entry><computeroutput>C-c&nbsp;C-a</computeroutput></entry>
+<entry><computeroutput>C-c C-a</computeroutput></entry>
 <entry>Edit attributes of enclosing element.</entry>
 </row>
 
 <row>
-<entry><computeroutput>C-c&nbsp;C-x&nbsp;C-i</computeroutput></entry>
+<entry><computeroutput>C-c C-x C-i</computeroutput></entry>
 <entry>Show information about the document&#39;s DTD.</entry>
 </row>
 
 <row>
-<entry><computeroutput>C-c&nbsp;C-x&nbsp;C-e</computeroutput></entry>
+<entry><computeroutput>C-c C-x C-e</computeroutput></entry>
 <entry>Describe element. Shows for one element which elements can be parents,
 what its contents can be and lists its attributes.</entry>
 </row>

@@ -130,14 +130,14 @@ hypothetical rows in the <computeroutput>address_book</computeroutput> table:</p
 <entry>...</entry>
 <entry><computeroutput>user</computeroutput></entry>
 <entry><computeroutput>123</computeroutput></entry>
-<entry>&nbsp;</entry>
+<entry> </entry>
 <entry>...</entry>
 </row>
 
 <row>
 <entry>...</entry>
 <entry><computeroutput>group</computeroutput></entry>
-<entry>&nbsp;</entry>
+<entry> </entry>
 <entry><computeroutput>456</computeroutput></entry>
 <entry>...</entry>
 </row>
@@ -145,8 +145,8 @@ hypothetical rows in the <computeroutput>address_book</computeroutput> table:</p
 <row>
 <entry>...</entry>
 <entry><computeroutput>public</computeroutput></entry>
-<entry>&nbsp;</entry>
-<entry>&nbsp;</entry>
+<entry> </entry>
+<entry> </entry>
 <entry>...</entry>
 </row>
 </tbody></tgroup></informaltable>
@@ -758,7 +758,7 @@ this integrate with application level SQL queries?</para>
 </row>
 
 <row>
-<entry>&nbsp;</entry>
+<entry> </entry>
 <entry>Final edits before freeze</entry>
 <entry>08/24/2000</entry>
 <entry>Pete Su</entry>
