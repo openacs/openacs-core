@@ -30,7 +30,8 @@ prelim:
 	cp -u openacs.css ..
 
 html: prelim
-	cd .. ; $(XSLTPROC) --nonet --novalid --xinclude xml/openacs.xsl xml/index.xml
+# adding --nonet --novalid is much faster but generates a bunch of bogus error messages
+	cd .. ; $(XSLTPROC) --novalid --nonet --xinclude xml/openacs.xsl xml/index.xml
 
 pdf: html
 #	$(HTMLDOC) --batch ../for-everyone.book ../for-admins.book ../for-developers.book

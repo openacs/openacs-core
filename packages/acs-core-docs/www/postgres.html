@@ -1,8 +1,8 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Install PostGreSQL</title><meta name="generator" content="DocBook XSL Stylesheets V1.60.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="complete-install.html" title="Chapter 4. Complete Installation"><link rel="previous" href="oracle.html" title="Install Oracle 8.1.7"><link rel="next" href="aolserver.html" title="Install AOLserver 3.3oacs1"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="oracle.html">Prev</a> </td><th width="60%" align="center">Chapter 4. Complete Installation</th><td width="20%" align="right"> <a accesskey="n" href="aolserver.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="postgres"></a>Install PostGreSQL</h2></div></div><div></div></div><div class="authorblurb"><p>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Install PostGreSQL</title><meta name="generator" content="DocBook XSL Stylesheets V1.60.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="complete-install.html" title="Chapter 3. Complete Installation"><link rel="previous" href="oracle.html" title="Install Oracle 8.1.7"><link rel="next" href="aolserver.html" title="Install AOLserver 3.3oacs1"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="oracle.html">Prev</a> </td><th width="60%" align="center">Chapter 3. Complete Installation</th><td width="20%" align="right"> <a accesskey="n" href="aolserver.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="postgres"></a>Install PostGreSQL</h2></div></div><div></div></div><div class="authorblurb"><p>
 	by <a href="mailto:vinod@kurup.com" target="_top">Vinod Kurup</a><br>
           OpenACS docs are written by the named authors, and may be edited
           by OpenACS documentation staff.
-        </p></div><p>Skip this section if you will run only Oracle.</p><p>OpenACS 5.0.0a1 will run with <a href="individual-programs.html#source-postgresql">PostGreSQL</a> 7.2.x, 7.3.2,
+        </p></div><p>Skip this section if you will run only Oracle.</p><p>OpenACS 5.0.0a4 will run with <a href="individual-programs.html#source-postgresql">PostGreSQL</a> 7.2.x, 7.3.2,
   7.3.3, and 7.3.4.  7.3.4 is the recommended version of PostgreSQL.</p><div class="itemizedlist"><ul type="disc"><li><p><a name="install-postgres-rpm"></a><b>Using the Red Hat RPM. </b>Red Hat users: If you install PostGreSQL 7.3.4 from the Red Hat 9 RPM, you
   can skip a few steps.  These shell commands add a link so that the
   data directory appears to be in the same place as in a source
@@ -62,7 +62,7 @@ PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:/usr/bin/X11:/
 	  Change to the postgres user and run <tt class="computeroutput">./configure</tt> to set the compilation options automatically. This is the point at which you can
 	  configure PostgreSQL in various ways. For example, if you want to
 	  enable
-	  Unicode<a class="indexterm" name="id2820667"></a> support, add the flags <tt class="computeroutput">--enable-locale</tt> and <tt class="computeroutput">--enable-multibyte</tt>. If you want to see what the other possibilities are, run <tt class="computeroutput">./configure --help</tt>.
+	  Unicode<a class="indexterm" name="id2815532"></a> support, add the flags <tt class="computeroutput">--enable-locale</tt> and <tt class="computeroutput">--enable-multibyte</tt>. If you want to see what the other possibilities are, run <tt class="computeroutput">./configure --help</tt>.
 	</p><pre class="screen">[root@yourserver src]# <b class="userinput"><tt>su - postgres</tt></b>
 [postgres@yourserver pgsql]$<b class="userinput"><tt> cd /usr/local/src/postgresql-7.3.4</tt></b>
 [postgres@yourserver postgresql-7.3.4]$ <b class="userinput"><tt>./configure</tt></b>
@@ -159,11 +159,11 @@ logout
         state. Red Hat and Debian and SuSE each work a little
         differently.
 	</p><div class="itemizedlist"><ul type="disc"><li><p>Red Hat RPM:</p><p>The init script is already installed; just turn it on for the appropriate run levels.</p><pre class="screen">[root@yourserver root]# <b class="userinput"><tt>chkconfig --level 345 postgresql on</tt></b>
-[root@yourserver root]# </pre></li><li><p>Red Hat from source:</p><pre class="screen">[root@yourserver src]# <b class="userinput"><tt>cp /tmp/openacs-5.0.0a1/packages/acs-core-docs/www/files/postgresql.txt /etc/init.d/postgresql</tt></b>
+[root@yourserver root]# </pre></li><li><p>Red Hat from source:</p><pre class="screen">[root@yourserver src]# <b class="userinput"><tt>cp /tmp/openacs-5.0.0a4/packages/acs-core-docs/www/files/postgresql.txt /etc/init.d/postgresql</tt></b>
 [root@yourserver src]# <b class="userinput"><tt>chown root.root /etc/rc.d/init.d/postgresql</tt></b>
 [root@yourserver src]# <b class="userinput"><tt>chmod 755 /etc/rc.d/init.d/postgresql</tt></b>
 [root@yourserver src]# 
-<pre class="action"><span class="action">cp /tmp/openacs-5.0.0a1/packages/acs-core-docs/www/files/postgresql.txt /etc/init.d/postgresql
+<pre class="action"><span class="action">cp /tmp/openacs-5.0.0a4/packages/acs-core-docs/www/files/postgresql.txt /etc/init.d/postgresql
 chown root.root /etc/rc.d/init.d/postgresql
 chmod 755 /etc/rc.d/init.d/postgresql</span></pre></pre><p>Test the script.</p><pre class="screen">[root@yourserver root]# <b class="userinput"><tt>service postgresql stop</tt></b>
 Stopping PostgreSQL: ok
@@ -182,11 +182,11 @@ Starting PostgreSQL: ok
 <pre class="action"><span class="action">chkconfig --add postgresql
 chkconfig --level 345 postgresql on
 chkconfig --list postgresql
-service postgresql start</span></pre></pre></li><li><p>Debian:</p><pre class="screen">root:~# <b class="userinput"><tt>cp /tmp/openacs-5.0.0a1/packages/acs-core-docs/www/files/postgresql.txt /etc/init.d/postgresql</tt></b>
+service postgresql start</span></pre></pre></li><li><p>Debian:</p><pre class="screen">root:~# <b class="userinput"><tt>cp /tmp/openacs-5.0.0a4/packages/acs-core-docs/www/files/postgresql.txt /etc/init.d/postgresql</tt></b>
 root:~# <b class="userinput"><tt>chown root.root /etc/init.d/postgresql</tt></b>
 root:~# <b class="userinput"><tt>chmod 755 /etc/init.d/postgresql</tt></b>
 root:~# <pre class="action"><span class="action">
-cp /tmp/openacs-5.0.0a1/packages/acs-core-docs/www/files/postgresql.txt /etc/init.d/postgresql
+cp /tmp/openacs-5.0.0a4/packages/acs-core-docs/www/files/postgresql.txt /etc/init.d/postgresql
 chown root.root /etc/init.d/postgresql
 chmod 755 /etc/init.d/postgresql</span></pre></pre><p>Test the script</p><pre class="screen">root:~# <b class="userinput"><tt>/etc/init.d/postgresql stop</tt></b>
 Stopping PostgreSQL: ok
@@ -214,7 +214,7 @@ root:~#</pre></li><li><p>SuSE:</p><div class="note" style="margin-left: 0.5in; m
             <tt class="computeroutput">rc.d/</tt> part in each of the
             following commands.
 
-          </p></div><pre class="screen">root:~# <b class="userinput"><tt>cp /tmp/openacs-5.0.0a1/packages/acs-core-docs/www/files/postgresql.txt /etc/rc.d/init.d/postgresql</tt></b>
+          </p></div><pre class="screen">root:~# <b class="userinput"><tt>cp /tmp/openacs-5.0.0a4/packages/acs-core-docs/www/files/postgresql.txt /etc/rc.d/init.d/postgresql</tt></b>
 root:~# <b class="userinput"><tt>chown root.root /etc/rc.d/init.d/postgresql</tt></b>
 root:~# <b class="userinput"><tt>chmod 755 /etc/rc.d/init.d/postgresql</tt></b></pre><p>
 
