@@ -15,7 +15,7 @@
         <owner url="mailto:k2pts@yahoo.com">Neophytos Demetriou</owner>
         <owner url="mailto:k_vertigo@yahoo.com">Kapil Thangavelu</owner>
 
-        <!-- No dependency information -->
+        <provides url="acs-service-contract" version="4.2"/>
 
         <files>
             <file type="package_spec" path="acs-service-contract.info"/>
