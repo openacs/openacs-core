@@ -91,11 +91,11 @@ ad_proc -public site_node::instantiate_and_mount {
                           new node is created. Defaults to the main site node id.
     @param node_name      If node_id is not specified then this will be the name of the
                           new site node that is created. Defaults to package_key.
-    @param package_name The name of the new package instance. Defaults to pretty name of package type.
+    @param package_name   The name of the new package instance. Defaults to pretty name of package type.
     @param context_id     The context_id of the package. Defaults to the closest ancestor package
                           in the site map.
     @param package_key    The key of the package type to instantiate.
-    @param package_id    The id of the new package. Optional.
+    @param package_id     The id of the new package. Optional.
 
     @return The id of the instantiated package
                       
