@@ -161,7 +161,7 @@ create function image__new (varchar,integer,integer,integer,varchar,integer,varc
       new__creation_ip,
       ''content_item'',
       ''image'',
-      new__title,
+      null,
       new__description,
       new__mime_type,
       new__nls_language,
