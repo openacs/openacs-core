@@ -908,3 +908,62 @@ ad_proc -private aa_execute_rollback_tests {} {
     unset aa_rollback_test_statements
   }
 }
+
+
+namespace eval aa_test {}
+
+ad_proc -public aa_test::parse_test_server_file {
+    {-name:required}
+    {-array:required}
+} {
+    Processes the xml report outputted from install.sh for display.
+}
+    upvar 1 $array service
+
+    set path /var/log/openacs/test/$name
+
+    set tree [xml_parse -persist [template::util::read_file $path]]
+
+    set root_node [xml_doc_get_first_node $tree]
+
+    foreach entry { 
+        name os dbtype dbversion webserver openacs_cvs_flag adminemail adminpassword 
+        install_begin_epoch install_end_epoch install_end_timestamp num_errors 
+        install_duration install_duration_pretty script_path
+    } {
+        set service($entry) "n/a"
+    }
+    set service(path) $path
+    set service(filename) $name
+    set service(parse_errors) {}
+
+    set service(name) [xml_node_get_attribute $root_node "name"]
+    if { [empty_string_p $service(name)] } {
+        append service(parse_error) "No service name attribute;"
+    }
+
+    foreach child [xml_node_get_children $root_node] {
+        set info_type [xml_node_get_attribute $child "type"]
+        if { [empty_string_p $info_type] } {
+            append service(parse_error) "No type on info tag;"
+            continue
+        } 
+        set info_type [string map {- _} $info_type]
+        set info_value [xml_node_get_content $child]
+        set service($info_type) $info_value
+    }
+
+    if { [string is integer -strict $service(install_begin_epoch)] && [string is integer -strict $service(install_end_epoch)] } {
+        set service(install_duration) [expr $service(install_end_epoch) - $service(install_begin_epoch)]
+        set service(install_duration_pretty) [util::interval_pretty -seconds $service(install_duration)]
+    }
+
+    # TODO: Not working
+    set service(admin_login_url) "$service(url)register/?[export_vars { { email $service(adminemail) } { password $service(adminpassword) } }]"
+
+    set service(auto_test_url) "$service(url)test/admin"
+
+    set service(rebuild_cmd) "sh [file join $service(script_path) recreate.sh]"
+}
+
+
