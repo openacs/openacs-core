@@ -56,6 +56,18 @@ create or replace view enabled_locales as
 select * from ad_locales
 where enabled_p = 't';  
 
+create table ad_locale_user_prefs (
+  user_id               integer
+                        constraint ad_locale_user_prefs_users_fk
+                        references users (user_id) on delete cascade,
+  package_id            integer
+                        constraint lang_package_l_u_package_id_fk
+                        references apm_packages(package_id) on delete cascade,
+  locale                varchar(30) not null
+                        constraint trb_language_preference_lid_fk
+                        references ad_locales (locale) on delete cascade
+);
+
 insert into ad_locales 
        (locale, label, language, country, nls_language, nls_territory, 
         nls_charset, mime_charset, default_p, enabled_p) 
