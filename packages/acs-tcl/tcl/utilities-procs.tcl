@@ -4107,6 +4107,59 @@ ad_proc -public ad_generate_random_string {{length 8}} {
     return [string range [sec_random_token] 0 $length]
 }
 
+ad_proc -public with_finally {
+    -code:required
+    -finally:required
+} {
+    Execute CODE, then execute cleanup code FINALLY.
+    If CODE completes normally, its value is returned after
+    executing FINALLY.
+    If CODE exits non-locally (as with error or return), FINALLY
+    is executed anyway.
+
+    @param code Code to be executed that could throw and error
+    @param finally Cleanup code to be executed even if an error occurs
+} {
+    global errorInfo errorCode
+
+    # Execute CODE.
+    set return_code [catch {uplevel $code} string]
+    set s_errorInfo $errorInfo
+    set s_errorCode $errorCode
+
+    # As promised, always execute FINALLY.  If FINALLY throws an
+    # error, Tcl will propagate it the usual way.  If FINALLY contains
+    # stuff like break or continue, the result is undefined.
+    uplevel $finally
+
+    switch $return_code {
+	0 {
+	    # CODE executed without a non-local exit -- return what it
+	    # evaluated to.
+	    return $string
+	}
+	1 {
+	    # Error
+	    return -code error -errorinfo $s_errorInfo -errorcode $s_errorCode $string
+	}
+	2 {
+	    # Return from the caller.
+	    return -code return $string
+	}
+	3 {
+	    # break
+	    return -code break
+	}
+	4 {
+	    # continue
+	    return -code continue
+	}
+	default {
+	    return -code $return_code $string
+	}
+    }
+}
+
 ad_proc util_background_exec {
     {-pass_vars ""}
     {-name:required}

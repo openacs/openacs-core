@@ -6,4 +6,6 @@ ad_library {
 
 }
 
+nsv_set site_nodes_mutex mutex [ns_mutex create]
+
 site_node::init_cache

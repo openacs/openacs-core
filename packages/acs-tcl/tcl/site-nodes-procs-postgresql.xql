@@ -9,48 +9,43 @@
         </querytext>
     </fullquery>
 
-    <fullquery name="site_node::init_cache.select_site_nodes">
+    <fullquery name="site_node::update_cache.select_child_site_nodes">
         <querytext>
-            select site_node__url(site_nodes.node_id) as url,
-                   site_nodes.node_id,
-                   site_nodes.parent_id,
-                   site_nodes.name,
-                   site_nodes.directory_p,
-                   site_nodes.pattern_p,
-                   site_nodes.object_id,
-                   (select acs_objects.object_type
-                    from acs_objects
-                    where acs_objects.object_id = site_nodes.object_id) as object_type,
-                   apm_packages.package_key,
-                   apm_packages.package_id,
-                   apm_packages.instance_name,
-                   apm_package_types.package_type
-            from site_nodes left join 
-                 apm_packages on site_nodes.object_id = apm_packages.package_id left join
-                 apm_package_types using (package_key)
+	    select n.node_id,
+		   n.parent_id,
+		   n.name,
+		   n.directory_p,
+		   n.pattern_p,
+		   n.object_id,
+		   p.package_key,
+		   p.package_id,
+		   p.instance_name,
+		   t.package_type
+            from site_nodes n left join
+                 apm_packages p on n.object_id = p.package_id left join
+                 apm_package_types t using (package_key)
+	    where n.tree_sortkey between site_node_get_tree_sortkey(:node_id)
+	                         and tree_right(site_node_get_tree_sortkey(:node_id))
+	    order by n.tree_sortkey
         </querytext>
     </fullquery>
 
     <fullquery name="site_node::update_cache.select_site_node">
         <querytext>
-            select site_node__url(site_nodes.node_id) as url,
-                   site_nodes.node_id,
-                   site_nodes.parent_id,
-                   site_nodes.name,
-                   site_nodes.directory_p,
-                   site_nodes.pattern_p,
-                   site_nodes.object_id,
-                   (select acs_objects.object_type
-                    from acs_objects
-                    where acs_objects.object_id = site_nodes.object_id) as object_type,
-                   apm_packages.package_key,
-                   apm_packages.package_id,
-                   apm_packages.instance_name,
-                   apm_package_types.package_type
-            from site_nodes left join 
-                 apm_packages on site_nodes.object_id = apm_packages.package_id left join
-                 apm_package_types using (package_key)
-            where site_nodes.node_id = :node_id
+	    select n.node_id,
+		   n.parent_id,
+		   n.name,
+		   n.directory_p,
+		   n.pattern_p,
+		   n.object_id,
+		   p.package_key,
+		   p.package_id,
+		   p.instance_name,
+		   t.package_type
+            from site_nodes n left join 
+                 apm_packages p on n.object_id = p.package_id left join
+                 apm_package_types t using (package_key)
+            where n.node_id = :node_id
         </querytext>
     </fullquery>
 
