@@ -508,7 +508,8 @@ create table users (
 	second_to_last_visit	timestamptz,
 	n_sessions		integer default 1 not null,
 	password_question	varchar(1000),
-	password_answer		varchar(1000)
+	password_answer		varchar(1000),
+        password_changed_date   timestamptz
 );
 
 create table user_preferences (
