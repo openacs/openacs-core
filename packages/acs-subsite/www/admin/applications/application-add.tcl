@@ -43,15 +43,6 @@ ad_form -name application -cancel_url . -form {
     set instance_name $node(instance_name)
     set folder $node(name)
 } -on_submit {
-    if { ![empty_string_p $folder] } {
-        set existing_node(node_id) {}
-        set errno [catch { array set existing_node [site_node::get_from_url -exact -url "[ad_conn package_url]$folder"] }]
-        if { ([ad_form_new_p -key node_id] && !$errno) || (![ad_form_new_p -key node_id] && !$errno && $existing_node(node_id) != $node_id)} {
-            form set_error application folder "This folder name is already used"
-            break
-        }
-    }
-
     if { [empty_string_p $instance_name] } {
         # Find the package pretty name from the list of packages
 
@@ -66,15 +57,22 @@ ad_form -name application -cancel_url . -form {
         }
 
     }
+    
+    if { [ad_form_new_p -key node_id] } {
+        set current_node_id {}
+    } else {
+        set current_node_id $node_id
+    }
+    
+    set folder [site_node::verify_folder_name \
+                    -parent_node_id [ad_conn node_id] \
+                    -current_node_id $current_node_id \
+                    -folder $folder \
+                    -instance_name $instance_name]
 
-    # Autogenerate folder name
     if { [empty_string_p $folder] } {
-        set parent_node_id [ad_conn node_id]
-        set existing_urls [db_list existing_urls {}]
-
-        set folder [util_text_to_url \
-                      -existing_urls $existing_urls \
-                      -text $instance_name]
+        form set_error application folder "This folder name is already used"
+        break
     }
 } -new_data {
     if { [catch {
