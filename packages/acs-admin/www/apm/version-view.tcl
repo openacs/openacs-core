@@ -134,7 +134,7 @@ if { [llength $prompts] == 0 } {
 db_release_unused_handles
 
 set page_title "$pretty_name $version_name"
-set context [list [list "/acs-admin/apm/" "ACS Package Manager Administration"] $page_title]
+set context [list [list "/acs-admin/apm/" "Package Manager"] $page_title]
 
 
 append body "

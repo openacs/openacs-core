@@ -19,7 +19,7 @@ set page_title "Invoke Tcl Callback"
 
 
 set context [list \
-                 [list "." "ACS Package Manager Administration"] \
+                 [list "." "Package Manager"] \
                  [list [export_vars -base "version-view" { version_id }] "$pretty_name $version_name"] \
                  [list $return_url "Tcl Callbacks"] $page_title]
 
