@@ -58,6 +58,10 @@ if { ![db_0or1row user_information "select first_names, last_name, email, priv_e
     return
 }
 
+if { ![string match -nocase "http://*" $url] } {
+    set url "http://$url"
+}
+
 set bio [person::get_bio -person_id $user_id]
 
 # Do we show the portrait?

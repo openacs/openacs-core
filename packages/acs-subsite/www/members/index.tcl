@@ -28,7 +28,6 @@ if { !$admin_p && ![parameter::get -parameter "MembersCanSeeMembersP" -default 1
     ad_script_abort
 }
 
-
 if { $admin_p } {
     # We can skip the permissions check for "delete" because user had admin.
     set delete_p 1
