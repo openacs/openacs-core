@@ -59,7 +59,7 @@ foreach package_key $install {
         set package_path "[apm_workspace_install_dir]/$package_key"
     } else {
         set spec_file $version(path)
-        set package_path "[acs_root_dir]/packages"
+        set package_path "[acs_root_dir]/packages/$package_key"
     }
         
     set final_version_name $version(name)
@@ -92,7 +92,7 @@ foreach package_key $install {
     set data_model_files [apm_data_model_scripts_find \
                                    -upgrade_from_version_name $initial_version_name \
                                    -upgrade_to_version_name $final_version_name \
-                                   -package_path "$package_path/$package_key" \
+                                   -package_path $package_path \
                                    $package_key]
 
     ns_log Debug "Data model scripts: \nupgrade_from_version_name = $initial_version_name\nupgrade_to_version_name=$final_version_name\npackage_path=$package_path\npackage_key=$package_key\n => $data_model_files"
