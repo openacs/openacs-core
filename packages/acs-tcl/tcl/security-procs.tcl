@@ -958,7 +958,9 @@ ad_proc -private ad_login_page {} {
 
     set url [ad_conn url]
     if { [string match "*register/*" $url] || [string match "/index*" $url] || \
-	    [string match "/" $url] } {
+            [string match "/index*" $url] || \
+            [string match "/" $url] || \
+            [string match "*password-update*" $url] } {
 	return 1
     }
 
