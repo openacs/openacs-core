@@ -77,53 +77,53 @@ aa_register_case content_item {
             aa_true "Folder 1 is not empty" [string is false $is_empty]
 
             #########################################################
-            # create a cr_item with bad string
+            # create a cr_item with evil string
             #########################################################
             
-            set bad_string {-Bad [BAD] \077 \{ $Bad }
-            set bad_test_name  "${bad_string}cr_test_item[ad_generate_random_string]"
-            aa_log "bad_test_name is $bad_test_name"
-            set bad_item_id [db_nextval  "acs_object_id_seq"]
-            set returned_bad_item_id [content::item::new \
-                                            -name "${bad_test_name}" \
-                                            -item_id $bad_item_id \
+            set evil_string {-Bad [BAD] \077 \{ $Bad }
+            set evil_test_name  "${evil_string}cr_test_item[ad_generate_random_string]"
+            aa_log "evil_test_name is $evil_test_name"
+            set evil_item_id [db_nextval  "acs_object_id_seq"]
+            set returned_evil_item_id [content::item::new \
+                                            -name "${evil_test_name}" \
+                                            -item_id $evil_item_id \
                                             -parent_id $first_folder_id \
-                                            -attributes [list title "${bad_test_name}"]
+                                            -attributes [list title "${evil_test_name}"]
                                        ]
 
-            aa_true "Bad_name item created" [expr $bad_item_id == $returned_bad_item_id]
+            aa_true "Evil_name item created" [expr $evil_item_id == $returned_evil_item_id]
             # should be using content::item::get here, but it's not implemented
-            aa_true "Bad_name item exists" [expr $bad_item_id == \
+            aa_true "Evil_name item exists" [expr $evil_item_id == \
                                          [db_string get_item \
                                               "select item_id from
-                                               cr_items where item_id=:bad_item_id and name=:bad_test_name"]]
-            aa_true "Bad_name item's revision exists" \
+                                               cr_items where item_id=:evil_item_id and name=:evil_test_name"]]
+            aa_true "Evil_name item's revision exists" \
                 [expr \
                      {![string equal "" \
                             [db_string get_revision "select
                                                      latest_revision
- from cr_items, cr_revisions where latest_revision=revision_id and cr_items.item_id=:bad_item_id" -default ""]]}]
+ from cr_items, cr_revisions where latest_revision=revision_id and cr_items.item_id=:evil_item_id" -default ""]]}]
 
             #########################################################
-            # delete the bad_name item
+            # delete the evil_name item
             #########################################################
             
 
-            aa_true "bad_name item deleted" [expr [content::item::delete -item_id $bad_item_id] == 0]
+            aa_true "evil_name item deleted" [expr [content::item::delete -item_id $evil_item_id] == 0]
 
             # should be using content::item::get here, but it's not implemented
-            aa_true "bad_name item no longer exists" [string equal \
+            aa_true "evil_name item no longer exists" [string equal \
               [db_string get_item "select item_id 
                                      from cr_items 
-                                    where item_id=:bad_item_id 
-                                      and name='$bad_test_name'" -default "no"] "no"]
+                                    where item_id=:evil_item_id 
+                                      and name='$evil_test_name'" -default "no"] "no"]
 
-            set bad_item_revision [db_string get_revision "select latest_revision
+            set evil_item_revision [db_string get_revision "select latest_revision
                                                              from cr_items, 
                                                                   cr_revisions 
                                                             where latest_revision=revision_id 
-                                                              and cr_items.item_id=:bad_item_id" -default "no"]
-            aa_true "bad_name item revision does not exist" [string equal $bad_item_revision "no"]
+                                                              and cr_items.item_id=:evil_item_id" -default "no"]
+            aa_true "evil_name item revision does not exist" [string equal $evil_item_revision "no"]
 
 
             #########################################################
