@@ -4,6 +4,6 @@ create table notification_email_hold (
 				constraint notif_email_hold_reply_id_ref
 				references notification_replies(reply_id),
     to_addr			clob,
-    header			clob,
+    headers			clob,
     body			clob
 );
