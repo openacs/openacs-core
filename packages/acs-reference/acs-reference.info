@@ -4,9 +4,8 @@
 <package key="acs-reference" url="http://www.arsdigita.com/acs-repository/apm/packages/acs-reference" type="apm_service">
     <package-name>ACS Reference Data</package-name>
     <pretty-plural>ACS Reference Datas</pretty-plural>
-    <initial-install-p>f</initial-install-p>
+    <initial-install-p>t</initial-install-p>
     <singleton-p>t</singleton-p>
-    <auto-mount>acs-reference</auto-mount>
 
     <version name="5.0.1" url="http://openacs.org/repository/download/apm/acs-reference-5.0.1.apm">
         <owner url="mailto:jon@jongriffin.com">Jon Griffin</owner>
