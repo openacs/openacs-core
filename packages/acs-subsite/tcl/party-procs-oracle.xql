@@ -3,7 +3,19 @@
 <queryset>
    <rdbms><type>oracle</type><version>8.1.6</version></rdbms>
 
-<fullquery name="types_valid_for_rel_type_multirow.select_sub_rel_types">      
+<partialquery name="party::types_valid_for_rel_type_multirow.start_with_clause_party">
+      <querytext>
+        (object_type = 'group' or object_type = 'person')
+      </querytext>
+</partialquery>	      
+
+<partialquery name="party::types_valid_for_rel_type_multirow.start_with_clause">
+      <querytext>
+        object_type = :start_with
+      </querytext>
+</partialquery>	      
+
+<fullquery name="party::types_valid_for_rel_type_multirow.select_sub_rel_types">      
       <querytext>
       
 	select 

@@ -3,39 +3,41 @@
 <queryset>
    <rdbms><type>postgresql</type><version>7.1</version></rdbms>
 
-<fullquery name="types_valid_for_rel_type_multirow.select_sub_rel_types">      
+<partialquery name="party::types_valid_for_rel_type_multirow.start_with_clause_party">
       <querytext>
-      FIX ME OUTER JOIN
-FIX ME CONNECT BY
-FIX ME ROWNUM
+        (t1.object_type = 'group' or t1.object_type = 'person')
+      </querytext>
+</partialquery>	      
 
-	select 
-	    types.pretty_name, 
-	    types.object_type, 
-	    types.tree_level, 
-	    types.indent,
-	    case when valid_types.object_type = null then 0 else 1 end as valid_p
-	from 
-	    (select
-	        t.pretty_name, t.object_type, level as tree_level,
-	        replace(lpad(' ', (level - 1) * 4), 
-	                ' ', '&nbsp;') as indent,
-	        rownum as tree_rownum
-	     from 
-	        acs_object_types t
-	     connect by 
-	        prior t.object_type = t.supertype
-	     start with 
-	        $start_with_clause ) types,
-	    (select 
-	        object_type 
-	     from 
-	        rel_types_valid_obj_two_types
-	     where 
-	        rel_type = :rel_type ) valid_types
-	where 
-	    types.object_type = valid_types.object_type(+)
-	order by tree_rownum
+<partialquery name="party::types_valid_for_rel_type_multirow.start_with_clause">
+      <querytext>
+        t1.object_type = :start_with
+      </querytext>
+</partialquery>	      
+
+<fullquery name="party::types_valid_for_rel_type_multirow.select_sub_rel_types">      
+      <querytext>
+
+	select types.pretty_name, 
+	       types.object_type, 
+	       types.tree_level, 
+	       types.indent,
+	       case when valid_types.object_type = null then 0 else 1 end as valid_p
+	  from (select t2.pretty_name,
+		       t2.object_type,
+		       tree_level(t2.tree_sortkey) as tree_level,
+		       repeat('&nbsp;', (tree_level(t2.tree_sortkey) - 1) * 4) as indent,
+		       t2.tree_sortkey
+		  from acs_object_types t1,
+		       acs_object_types t2
+		 where t2.tree_sortkey like (t1.tree_sortkey || '%')
+	           and $start_with_clause ) types
+                  left outer join
+	            (select object_type 
+		       from rel_types_valid_obj_two_types
+		      where rel_type = :rel_type ) valid_types
+		    using (object_type)
+         order by types.tree_sortkey
 	
       </querytext>
 </fullquery>
