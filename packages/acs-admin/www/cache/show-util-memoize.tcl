@@ -32,7 +32,7 @@ foreach name $cached_names {
 	    template::multirow append matches [string range $key 0 200] \
 		    [string range $value 0 200] $value_size $safe_key \
 		    $date $raw_date
-	}	    
+	}
     }
 }
 
