@@ -19,7 +19,7 @@
         set    content = empty_blob()
         where  revision_id = :revision_id
         returning content into :1
-    </querytext>
+</querytext>
   </fullquery>
   
 </queryset>
