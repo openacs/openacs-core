@@ -57,6 +57,8 @@
             <file type="query_file" path="tcl/apm-procs.xql"/>
             <file type="tcl_procs" path="tcl/apm-xml-procs.tcl"/>
             <file type="query_file" path="tcl/apm-xml-procs.xql"/>
+            <file type="tcl_procs" path="tcl/community-core-2-procs.tcl"/>
+            <file type="query_file" path="tcl/community-core-2-procs.xql"/>
             <file type="query_file" db_type="oracle" path="tcl/community-core-procs-oracle.xql"/>
             <file type="query_file" db_type="postgresql" path="tcl/community-core-procs-postgresql.xql"/>
             <file type="tcl_procs" path="tcl/community-core-procs.tcl"/>
