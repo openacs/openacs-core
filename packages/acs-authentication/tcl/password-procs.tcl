@@ -108,9 +108,9 @@ ad_proc -public auth::password::change {
         set dummy $result(password_status)
     } {
         set result(password_status) failed_to_connect
-        set result(password_message) "Error invoking the password management driver."
+        set result(password_message) $errmsg
         global errorInfo
-        ns_log Error "Error invoking password management driver for authority_id = $authority_id: $errorInfo"
+        ns_log Error "Error invoking password management driver for authority_id = $user(authority_id):\n$errorInfo"
     }
     
     # Check the result code and provide canned responses
@@ -131,23 +131,26 @@ ad_proc -public auth::password::change {
         }
         default {
             set result(password_status) "failed_to_connect"
-            set result(password_message) "Illegal error code returned from password management driver"
+            set result(password_message) "Illegal code returned from password management driver"
+            ns_log Error "Error invoking password management driver for authority_id = $user(authority_id): Illegal return code from driver: $result(password_status)"
         }
     }
-    
+
     return [array get result]
 }
 
 ad_proc -public auth::password::recover_password {
-    {-authority_id:required}
-    {-username:required}
+    {-authority_id ""}
+    {-username ""}
+    {-email ""}
 } { 
     Handles forgotten passwords.  Attempts to retrieve a password; if not possibe, 
     attempts to reset a password.  If it succeeds, it emails the user.  For all 
     outcomes, it returns a message to be displayed.
 
     @param authority_id The ID of the authority that the user is trying to log into.
-    @param username The username that the user's trying to log in with.
+    @param username     The username that the user's trying to log in with.
+    @param email        Email can be supplied instead of authority_id and username.
 
     @return Array list with the following entries:
 
@@ -156,6 +159,32 @@ ad_proc -public auth::password::recover_password {
         <li> password_message: Human-readable message to be relayed to the user. May contain HTML.
     </ul>
 } {
+    if { [empty_string_p $username] } {
+        if { [empty_string_p $email] } {
+            set result(password_status) "failed_to_connect"
+            if { [auth::UseEmailForLoginP] } {
+                set result(password_message) "Email required"
+            } else {
+                set result(password_message) "Username required"
+            }
+            return [array get result]
+        }
+        set user_id [cc_lookup_email_user $email]
+        if { [empty_string_p $user_id] } {
+            set result(password_status) "failed_to_connect"
+            set result(password_message) "Unknown email"
+            return [array get result]
+        }
+        acs_user::get -user_id $user_id -array user
+        set authority_id $user(authority_id)
+        set username $user(username)
+    } else {
+        # Default to local authority
+        if { [empty_string_p $authority_id] } {
+            set authority_id [auth::authority::local]
+        }
+    }
+
     set forgotten_url [auth::password::get_forgotten_url \
                            -remote_only \
                            -authority_id $authority_id \
@@ -207,6 +236,7 @@ ad_proc -public auth::password::recover_password {
 ad_proc -public auth::password::get_forgotten_url {
     {-authority_id ""}
     {-username ""}
+    {-email ""}
     {-remote_only:boolean}
 } { 
     Returns the URL to redirect to for forgotten passwords. 
@@ -219,34 +249,41 @@ ad_proc -public auth::password::get_forgotten_url {
             or the empty string if none can be found.
 } {
     if { ![empty_string_p $username] } {
-        # We have the username
+        set local_url [export_vars -no_empty -base "[subsite::get_element -element url]register/recover-password" { authority_id username }]
+    } else {
+        set local_url [export_vars -no_empty -base "[subsite::get_element -element url]register/recover-password" { email }]
+    }
+    set forgotten_pwd_url {}
 
+    if { ![empty_string_p $username] } {
         if { [empty_string_p $authority_id] } {
             set authority_id [auth::authority::local]
         }
+    } else {
+        set user_id [cc_lookup_email_user $email]
+        if { ![empty_string_p $user_id] } {
+            acs_user::get -user_id $user_id -array user
+            set authority_id $user(authority_id)
+            set username $user(username)
+        }
+    }
+
+    if { ![empty_string_p $username] } {
+        # We have the username or email
+        
 
         set forgotten_pwd_url [auth::authority::get_element -authority_id $authority_id -element forgotten_pwd_url]
 
         if { ![empty_string_p $forgotten_pwd_url] } {
             regsub -all "{username}" $forgotten_pwd_url $username forgotten_pwd_url
-        } else {
-            if { !$remote_only_p } {
-                # If we can retrive or reset passwords we can use the local url
-                # In remote mode we fail
-                set can_retrieve_p [auth::password::can_retrieve_p -authority_id $authority_id]
-                set can_reset_p [auth::password::can_reset_p -authority_id $authority_id]
-                if { $can_retrieve_p || $can_reset_p } {
-                    set forgotten_pwd_url [export_vars -base "[subsite::get_element -element url]register/recover-password" { authority_id username }]
-                }
+        } elseif { !$remote_only_p } {
+            if { [auth::password::can_retrieve_p -authority_id $authority_id] || [auth::password::can_reset_p -authority_id $authority_id] } {
+                set forgotten_pwd_url $local_url
             }
         }
     } else {
         # We don't have the username
-
-        if { $remote_only_p } {
-            # Remote recovery can only be determined if we know the authority so we return the empty string
-            set forgotten_pwd_url {}
-        } else {            
+        if { !$remote_only_p } {
             set forgotten_pwd_url "[subsite::get_element -element url]register/recover-password"
         }
     }
@@ -444,14 +481,29 @@ ad_proc -private auth::password::email_password {
 
     @author Peter Marklund
 } {
-    set system_owner [ad_system_owner]
-    set system_name [ad_system_name]
-
     set user_id [acs_user::get_by_username -authority_id $authority_id -username $username]
     acs_user::get -user_id $user_id -array user
 
     set reset_password_url [export_vars -base "[ad_url]/user/password-update" {user_id {old_password $password}}]
-
+    set system_owner [ad_system_owner]
+    set system_name [ad_system_name]
+    if { [auth::UseEmailForLoginP] } {
+        set account_id_label [_ acs-subsite.Email]
+        set account_id $user(email)
+    } else {
+        set account_id_label [_ acs-subsite.Username]
+        set account_id $user(username)
+    }
+    # Hm, all this crummy code, just to justify the colons in the email body
+    set password_label [_ acs-subsite.Password]
+    if { [string length $password_label] > [string length $account_id_label] } {
+        set length [string length $password_label]
+    } else {
+        set length [string length $account_id_label]
+    }
+    set account_id_label [string range "$account_id_label[string repeat " " $length]" 0 [expr $length-1]]
+    set password_label [string range "$password_label[string repeat " " $length]" 0 [expr $length-1]]
+    
     set subject [_ acs-subsite.lt_Your_forgotten_passwo]
     set body [_ acs-subsite.Forgotten_password_body]
         

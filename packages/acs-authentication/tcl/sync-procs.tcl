@@ -112,7 +112,6 @@ ad_proc -public auth::sync::job::start {
     {-job_id ""}
     {-authority_id:required}
     {-interactive:boolean}
-    {-snapshot:boolean}
     {-creation_user ""}
 } {
     Record the beginning of a job.
@@ -120,8 +119,6 @@ ad_proc -public auth::sync::job::start {
     @param authority_id      The ID of the authority you're trying to sync
     
     @param interactive       Set this if this is an interactive job, i.e. it's initiated by a user.
-
-    @param snapshot          Set this if this is a snapshot job, as opposed to an incremental ('event driven') job.
 
     @return job_id           An ID for the new batch job. Used when calling other procs in this API.
     
@@ -137,13 +134,12 @@ ad_proc -public auth::sync::job::start {
         }
         
         set interactive_p [db_boolean $interactive_p]
-        set snapshot_p [db_boolean $snapshot_p]
 
         db_dml job_insert {
             insert into auth_batch_jobs
-            (job_id, interactive_p, snapshot_p, creation_user, authority_id)
+            (job_id, interactive_p, creation_user, authority_id)
             values
-            (:job_id, :interactive_p, :snapshot_p, :creation_user, :authority_id)
+            (:job_id, :interactive_p, :creation_user, :authority_id)
         }
 
     }
@@ -216,11 +212,16 @@ ad_proc -public auth::sync::job::end_get_document {
     {-doc_status:required}
     {-doc_message ""}
     {-document ""}
+    {-snapshot:boolean}
 } {
     Record the that we've finished getting the document, and record the status.
 
     @param job_id The ID of the batch job you're ending.
+
+    @param snapshot          Set this if this is a snapshot job, as opposed to an incremental ('event driven') job.
 } {
+    set snapshot_p [db_boolean $snapshot_p]
+
     db_dml update_doc_end {} -clobs [list $document]
 }
 
@@ -466,7 +467,7 @@ ad_proc -private auth::sync::sweeper {} {
 ad_proc -private auth::sync::GetDocument {
     {-authority_id:required}
 } {
-    Wrapper for the GetDocument operation of the GetDocument service contract.
+    Wrapper for the GetDocument operation of the auth_sync_retrieve service contract.
 } {
     set impl_id [auth::authority::get_element -authority_id $authority_id -element "get_doc_impl_id"]
 
@@ -482,7 +483,7 @@ ad_proc -private auth::sync::GetDocument {
 
     return [acs_sc::invoke \
                 -error \
-                -contract "GetDocument" \
+                -contract "auth_sync_retrieve" \
                 -impl_id $impl_id \
                 -operation GetDocument \
                 -call_args [list $parameters]]
@@ -509,6 +510,7 @@ ad_proc -private auth::sync::ProcessDocument {
 
     return [acs_sc::invoke \
                 -error \
+                -contract "auth_sync_process" \
                 -impl_id $impl_id \
                 -operation ProcessDocument \
                 -call_args [list $job_id $document $parameters]]
@@ -528,9 +530,10 @@ ad_proc -private auth::sync::get_doc::http::register_impl {} {
     Register this implementation
 } {
     set spec {
-        contract_name "GetDocument"
+        contract_name "auth_sync_retrieve"
         owner "acs-authentication"
         name "HTTPGet"
+        pretty_name "HTTP GET"
         aliases {
             GetDocument auth::sync::get_doc::http::GetDocument
             GetParameters auth::sync::get_doc::http::GetParameters
@@ -544,14 +547,15 @@ ad_proc -private auth::sync::get_doc::http::register_impl {} {
 ad_proc -private auth::sync::get_doc::http::unregister_impl {} {
     Unregister this implementation
 } {
-    acs_sc::impl::delete -contract_name "GetDocument" -impl_name "HTTPGet"
+    acs_sc::impl::delete -contract_name "auth_sync_retrieve" -impl_name "HTTPGet"
 }
 
 ad_proc -private auth::sync::get_doc::http::GetParameters {} {
     Parameters for HTTP GetDocument implementation.
 } {
     return {
-        url {The URL from which to retrieve the document}
+        IncrementalURL {The URL from which to retrieve document for incremental update. Will retrieve this most of the time.}
+        SnapshotURL {The URL from which to retrieve document for snapshot update. If specified, will get this once per month.}
     }
 }
 
@@ -564,39 +568,33 @@ ad_proc -private auth::sync::get_doc::http::GetDocument {
         doc_status failed_to_conntect
         doc_message {}
         document {}
+        snapshot_p f
     }
+    
+    ns_log Notice "LARS: parameters = $parameters"
 
     array set param $parameters
     
-    set result(document) [util_httpget $param(url)]
+    if { ![empty_string_p $param(SnapshotURL)] && [string equal [clock format [clock seconds] -format "%d"] "01"] } {
+        # On the first day of the month, we get a snapshot 
+        set url $param(SnapshotURL)
+        set result(snapshot_p) "t"
+    } else {
+        # All the other days of the month, we get the incremental
+        set url $param(IncrementalURL)
+    }
+
+    if { [empty_string_p $url] } {
+        error "No URL to get"
+    }
+
+    set result(document) [util_httpget $url]
 
     set result(doc_status) "ok"
 
     return [array get result]
 }
 
-#####
-#
-# auth::sync::entry namespace
-#
-#####
-
-ad_proc -public auth::sync::entry::get {
-    {-entry_id:required}
-    {-array:required}
-} {
-    Get information about a batch entry in an array.
-
-    @param entry_id        The ID of the batch entry you're ending.
-    
-    @param array         Name of an array into which you want the information.
-    
-    @author Peter Marklund
-} {
-    upvar 1 $array row
-
-    db_1row select_entry {} -column_array row
-}
 
 
 #####
@@ -611,10 +609,11 @@ ad_proc -private auth::sync::process_doc::ims::register_impl {} {
     set spec {
         contract_name "auth_sync_process"
         owner "acs-authentication"
-        name "IMS Enterprise 1.1"
+        name "IMS_Enterprise_v_1p1"
+        pretty_name "IMS Enterprise 1.1"
         aliases {
             ProcessDocument auth::sync::process_doc::ims::ProcessDocument
-            GetParameters auth::sync::proecss_doc::ims::GetParameters
+            GetParameters auth::sync::process_doc::ims::GetParameters
         }
     }
 

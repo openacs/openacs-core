@@ -320,14 +320,14 @@ ad_proc -private auth::get_doc::create_contract {} {
     Create service contract for account registration.
 } {
     set spec {
-        name "GetDocument"
+        name "auth_sync_retrieve"
         description "Retrieve a document, e.g. using HTTP, SMP, FTP, SOAP, etc."
         operations {
             GetDocument {
                 description {
                     Retrieves the document. Returns doc_status of 'ok', 'get_error', or 'failed_to_connect'. 
                     If not 'ok', then it should  set doc_message to explain the problem. If 'ok', it must set
-                    document to the document retrieved.
+                    document to the document retrieved, and set snapshot_p to t if it has retrieved a snapshot document.
                 }
                 input {
                     parameters:string,multiple
@@ -336,6 +336,7 @@ ad_proc -private auth::get_doc::create_contract {} {
                     doc_status:string
                     doc_message:string
                     document:string
+                    snapshot_p:string
                 }
             }
             GetParameters {

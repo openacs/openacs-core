@@ -506,11 +506,12 @@ aa_register_case sync_batch_ims_example_doc {
     aa_stub acs_sc::invoke {
         acs_sc::invoke__arg_parser
 
-        if { [string equal $contract GetDocument] && [string equal $operation GetDocument] } {
+        if { [string equal $contract "auth_sync_retrieve"] && [string equal $operation "GetDocument"] } {
             array set result {
                 doc_status ok
                 doc_message {}
                 document {}
+                snapshot_p f
             }
             
             # Example document grabbed pulled from 
@@ -629,11 +630,10 @@ aa_register_case sync_batch_ims_example_doc {
                 register_impl_id {}
                 register_url {}
                 help_contact_text {}
-                snapshot_p f
                 batch_sync_enabled_p f
             }
             set new_auth(get_doc_impl_id) 1
-            set new_auth(process_doc_impl_id) [acs_sc::impl::get_id -owner "acs-authentication" -name "IMS Enterprise 1.1"]
+            set new_auth(process_doc_impl_id) [acs_sc::impl::get_id -owner "acs-authentication" -name "IMS_Enterprise_v_1p1"]
             
             set new_auth(get_doc_impl_id) [acs_sc::impl::get_id -owner "acs-authentication" -name "HTTPGet"]
 
@@ -690,7 +690,7 @@ aa_register_case sync_batch_ims_test {
     aa_stub acs_sc::invoke {
         acs_sc::invoke__arg_parser
 
-        if { [string equal $contract GetDocument] && [string equal $operation GetDocument] } {
+        if { [string equal $contract "auth_sync_retrieve"] && [string equal $operation "GetDocument"] } {
             array set result {
                 doc_status ok
                 doc_message {}
@@ -742,11 +742,10 @@ aa_register_case sync_batch_ims_test {
                 register_impl_id {}
                 register_url {}
                 help_contact_text {}
-                snapshot_p f
                 batch_sync_enabled_p f
             }
             set new_auth(get_doc_impl_id) 1
-            set new_auth(process_doc_impl_id) [acs_sc::impl::get_id -owner "acs-authentication" -name "IMS Enterprise 1.1"]
+            set new_auth(process_doc_impl_id) [acs_sc::impl::get_id -owner "acs-authentication" -name "IMS_Enterprise_v_1p1"]
             
             set new_auth(get_doc_impl_id) [acs_sc::impl::get_id -owner "acs-authentication" -name "HTTPGet"]
 
@@ -929,10 +928,10 @@ aa_register_case sync_http_get_document {
 } {
     array set result [acs_sc::invoke \
                           -error \
-                          -contract "GetDocument" \
+                          -contract "auth_sync_retrieve" \
                           -impl "HTTPGet" \
                           -operation "GetDocument" \
-                          -call_args [list [list url "[ad_url]/SYSTEM/dbtest.tcl"]]]
+                          -call_args [list [list snapshot_url {} incremental_url "[ad_url]/SYSTEM/dbtest.tcl"]]]
     
 
     aa_equals "result.doc_status is ok" $result(doc_status) "ok"
