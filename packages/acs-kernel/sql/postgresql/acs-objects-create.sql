@@ -994,7 +994,7 @@ end;' language 'plpgsql';
 
 -- function get_attribute
 create function acs_object__get_attribute (integer,varchar)
-returns varchar as '
+returns text as '
 declare
   object_id_in           alias for $1;  
   attribute_name_in      alias for $2;  
@@ -1012,7 +1012,7 @@ begin
    v_table_name := acs_object__get_attr_storage_table(v_storage);
    v_key_sql    := acs_object__get_attr_storage_sql(v_storage);
 
-   for v_rec in execute ''select '' || quote_ident(v_column) || ''::varchar as return from '' || quote_ident(v_table_name) || '' where '' || v_key_sql
+   for v_rec in execute ''select '' || quote_ident(v_column) || ''::text as return from '' || quote_ident(v_table_name) || '' where '' || v_key_sql
       LOOP
         v_return := v_rec.return;
         exit;
