@@ -592,6 +592,30 @@ ad_proc -public site_node::get_parent {
     return [get -node_id $node(parent_id)]
 }
 
+ad_proc -public site_node::get_ancestors {
+    {-node_id:required}
+    {-element ""}
+} {
+    return the ancestors of this node
+} {
+    set result [list]
+    set array_result_p [string equal $element ""]
+
+    while {![string equal $node_id ""]} {
+        array set node [get -node_id $node_id]
+       
+        if {$array_result_p} {
+            lappend result [array get node]
+        } else {
+            lappend result $node($element)
+        }
+
+        set node_id $node(parent_id)
+    }
+    
+    return $result
+}
+
 ad_proc -public site_node::get_object_id {
     {-node_id:required}
 } {
