@@ -56,18 +56,6 @@ create table acs_privilege_hierarchy (
 
 create index acs_priv_hier_child_priv_idx on acs_privilege_hierarchy (child_privilege);
 
-create table acs_privilege_hierarchy_index (
-	privilege       varchar(100) not null 
-                        constraint acs_priv_hier_priv_fk
-			references acs_privileges (privilege),
-        child_privilege varchar(100) not null 
-                        constraint acs_priv_hier_child_priv_fk
-			references acs_privileges (privilege),
-        tree_sortkey    varbit
-);
-
-create index priv_hier_sortkey_idx on 
-acs_privilege_hierarchy_index (tree_sortkey);
 
 -- Added table to materialize view that previously used 
 -- acs_privilege_descendant_map name
@@ -89,7 +77,7 @@ create table acs_privilege_descendant_map (
 -- DanW: eliminated hierarchy index in favor of using descendant map
 
 
-create or replace function acs_priv_hier_ins_tr() returns opaque as '
+create function acs_priv_hier_ins_tr() returns opaque as '
 declare
         v_rec record;
         v_id  integer;
@@ -159,7 +147,7 @@ execute procedure acs_priv_hier_ins_tr ();
 
 
 
-create or replace function recurse_del_priv_hier(varchar,varchar) 
+create function recurse_del_priv_hier(varchar,varchar) 
 returns varchar as '
 declare
         parent  alias for $1;
@@ -187,7 +175,7 @@ begin
         return null;
 end;' language 'plpgsql';
 
-create or replace function acs_priv_hier_del_tr() returns opaque as '
+create function acs_priv_hier_del_tr() returns opaque as '
 declare
         v_rec record;
         v_id  integer;
