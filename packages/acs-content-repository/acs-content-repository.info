@@ -87,6 +87,8 @@
             <file type="query_file" db_type="oracle" path="tcl/acs-content-repository-init-oracle.xql"/>
             <file type="query_file" db_type="postgresql" path="tcl/acs-content-repository-init-postgresql.xql"/>
             <file type="tcl_init" path="tcl/acs-content-repository-init.tcl"/>
+            <file type="tcl_procs" path="tcl/acs-content-repository-procs.tcl"/>
+            <file type="query_file" path="tcl/acs-content-repository-procs.xql"/>
             <file type="tcl_procs" path="tcl/content-procs.tcl"/>
             <file type="query_file" db_type="oracle" path="tcl/doc-procs-oracle.xql"/>
             <file type="query_file" db_type="postgresql" path="tcl/doc-procs-postgresql.xql"/>
@@ -106,6 +108,7 @@
             <file type="query_file" db_type="oracle" path="tcl/revision-procs-oracle.xql"/>
             <file type="query_file" db_type="postgresql" path="tcl/revision-procs-postgresql.xql"/>
             <file type="tcl_procs" path="tcl/revision-procs.tcl"/>
+            <file type="query_file" path="tcl/revision-procs.xql"/>
             <file type="tcl_procs" path="tcl/search-procs.tcl"/>
             <file type="documentation" path="www/doc/api/content.html"/>
             <file type="documentation" path="www/doc/api/extlink.html"/>
