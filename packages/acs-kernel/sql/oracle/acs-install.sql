@@ -53,8 +53,16 @@ begin
   lang_id := apm_service.new (
       instance_name => 'OpenACS Localization Utils',
       package_key => 'acs-lang'
+      context_id => 
   );
   apm_package.enable(lang_id);
+
+  -- All users, whether registered or not, set their locale preference at /acs-lang
+  acs_permission.grant_permission (
+    object_id => lang_id, 
+    grantee_id => acs.magic_object_id ('the_public'), 
+    privilege => 'read'
+  );
 
   node_id := site_node.new (
     parent_id => site_node.node_id('/'),

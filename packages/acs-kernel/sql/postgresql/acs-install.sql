@@ -82,6 +82,13 @@ begin
 
   PERFORM apm_package__enable (lang_id);
 
+  -- All users, whether registered or not, set their locale preference at /acs-lang
+  PERFORM acs_permission__grant_permission (
+    lang_id, 
+    acs__magic_object_id (''the_public''), 
+    ''read''
+  );
+
   node_id := site_node__new (
     null,
     site_node__node_id(''/'', null),
