@@ -35,6 +35,7 @@ email from cc_users where user_id=:user_id
 
 # Use exists
 
+set ask_question_p 0
 if [exists_and_not_null answer] {
     # There was a question
     set value [db_string password_answer "select password_answer from users where user_id = :user_id"]
@@ -43,8 +44,6 @@ if [exists_and_not_null answer] {
     } else {
 	set validated_p 0
     }
-
-    set ask_question_p 0
 
 } else {
     # We check their first and last names
