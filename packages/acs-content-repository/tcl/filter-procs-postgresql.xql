@@ -5,30 +5,16 @@
 <fullquery name="content::get_folder_labels.get_url">      
       <querytext>
 
-    select
-      0 as tree_level, '' as name , 'Home' as title
-    from
-      dual
+    select 0 as tree_level, '' as name , 'Home' as title
     UNION
-    select
-      t.tree_level, i.name, content_item.get_title(t.context_id) as title
-    from (
-      select 
-        o2.context_id, tree_level(o2.tree_sortkey) as tree_level
-      from 
-        (select * from acs_objects where object_id = :item_id) o1, 
-        acs_objects o2
-      where
-        context_id <> content_item__get_root_folder()
-      and
-        o2.tree_sortkey <= o1.tree_sortkey
-      and 
-        o1.tree_sortkey like (o2.tree_sortkey || '%')
-      ) t, cr_items i
-    where
-      i.item_id = t.context_id
-    order by
-      tree_level
+    select t.tree_level, i.name, content_item.get_title(t.context_id) as title
+    from (select o2.context_id, tree_level(o2.tree_sortkey) as tree_level
+          from (select * from acs_objects where object_id = :item_id) o1, acs_objects o2
+          where context_id <> content_item__get_root_folder()
+            and o1.tree_sortkey between o2.tree_sortkey and tree_right(o2.tree_sortkey)) t,
+      cr_items i
+    where i.item_id = t.context_id
+    order by tree_level
 
       </querytext>
 </fullquery>

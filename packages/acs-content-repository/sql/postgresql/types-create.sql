@@ -551,11 +551,10 @@ begin
 --    connect by supertype = prior object_type 
 --    start with object_type = ''content_revision'' 
 
-  for type_rec in select object_type from acs_object_types 
-                   where tree_sortkey 
-                           like (select tree_sortkey || ''%''
-                                   from acs_object_types 
-                                  where object_type = ''content_revision'')
+  for type_rec in select o1.object_type
+                  from acs_object_types o1, acs_object_types o2
+                  where o1.tree_sortkey between o2.tree_sortkey and tree_right(o2.tree_sortkey)
+                    and o2.object_type = ''content_revision''
                   
   LOOP
     PERFORM content_type__refresh_view(type_rec.object_type);

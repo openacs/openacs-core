@@ -171,22 +171,20 @@ begin
         (select o2.object_id 
            from acs_objects o1, acs_objects o2
           where o1.object_id = has_revoke_authority__object_id
-            and o2.tree_sortkey <= o1.tree_sortkey
-            and o1.tree_sortkey like (o2.tree_sortkey || ''%'')) t
+            and o1.tree_sortkey between o2.tree_sortkey and tree_right(o2.tree_sortkey)) t
         (select i2.privilege, i2.child_privilege 
            from acs_privilege_hierarchy_index i1, 
                 acs_privilege_hierarchy_index i2 
           where i1.child_privilege = ''cm_perm''
-            and i2.tree_sortkey <= i1.tree_sortkey
-            and i1.tree_sortkey like (i2.tree_sortkey || ''%'')) h
+            and i1.tree_sortkey between i2.tree_sortkey and tree_right(i2.tree_sortkey)) h
       where
         content_permission__permission_p(
           t.object_id, has_revoke_authority__holder_id, h.child_privilege
-        ) = ''t''
-      and
+        ) 
+      and not
         content_permission__permission_p(
           t.object_id, has_revoke_authority__revokee_id, h.privilege
-        ) = ''f'';    
+        );    
    
 end;' language 'plpgsql';
 
@@ -264,18 +262,12 @@ begin
     for v_rec in select 
         o.object_id
       from
-        (select object_id, object_type 
-           from acs_objects 
-          where tree_sortkey 
-                  like (select tree_sortkey || ''%''
-                          from acs_objects
-                         where object_id = grant_permission__object_id)) o
-      where
-        content_permission__has_grant_authority (
-          o.object_id, holder_id, grant_permission__privilege
-        ) = ''t''
-      and
-        content_item__is_subclass (o.object_type, grant_permission__object_type) = ''t''
+        (select o1.object_id, o1.object_type 
+         from acs_objects o1, acs_objects o2
+         where o2.object_id = grant_permission__object_id
+           and o1.tree_sortkey between o2.tree_sortkey and tree_right(o2.tree_sortkey)) o
+      where content_permission__has_grant_authority (o.object_id, holder_id, grant_permission__privilege)
+        and content_item__is_subclass (o.object_type, grant_permission__object_type)
     LOOP   
       -- Grant the parent and revoke the children, since we do not need them
       -- anymore
@@ -339,15 +331,11 @@ begin
 --                    connect by context_id = prior object_id
 --                    start with object_id = revoke_permission__object_id
 
-    for v_rec in select 
-                   o.object_id 
-                 from
-                   (select object_id, object_type 
-                      from acs_objects 
-                     where tree_sortkey 
-                             like (select tree_sortkey || ''%''
-                                     from acs_objects
-                                    where object_id = revoke_permission__object_id)) o
+    for v_rec in select o.object_id 
+                 from (select o1.object_id, o1.object_type 
+                       from acs_objects o1, acs_objects o2
+                       where o1.tree_sortkey between o2.tree_sortkey and tree_right(o2.tree_sortkey)
+                         and o2.object_id = revoke_permission__object_id) o
                  where 
                    content_permission__has_revoke_authority (o.object_id, revoke_permission__holder_id, revoke_permission__privilege, revoke_permission__revokee_id) = ''t''
                  and

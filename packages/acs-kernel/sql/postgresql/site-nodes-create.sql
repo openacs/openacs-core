@@ -55,7 +55,7 @@ create table site_nodes (
         pattern_p       boolean default 'f' not null,
         object_id       integer constraint site_nodes_object_id_fk
                         references acs_objects (object_id),
-        tree_sortkey    varchar(4000)
+        tree_sortkey    varbit
 );
 
 create index site_nodes_object_id_idx on site_nodes (object_id);
@@ -63,26 +63,24 @@ create index site_nodes_tree_skey_idx on site_nodes (tree_sortkey);
 
 create function site_node_insert_tr () returns opaque as '
 declare
-        v_parent_sk     varchar;
-        max_key         varchar;
+        v_parent_sk     varbit default null;
+        v_max_value     integer;
 begin
         if new.parent_id is null then
-            select max(tree_sortkey) into max_key 
+            select max(tree_leaf_key_to_int(tree_sortkey)) into v_max_value 
               from site_nodes 
              where parent_id is null;
-
-            v_parent_sk := '''';
         else
-            select max(tree_sortkey) into max_key 
+            select max(tree_leaf_key_to_int(tree_sortkey)) into v_max_value 
               from site_nodes 
              where parent_id = new.parent_id;
 
-            select coalesce(max(tree_sortkey),'''') into v_parent_sk 
+            select tree_sortkey into v_parent_sk 
               from site_nodes 
              where node_id = new.parent_id;
         end if;
 
-        new.tree_sortkey := v_parent_sk || ''/'' || tree_next_key(max_key);
+        new.tree_sortkey := tree_next_key(v_parent_sk, v_max_value);
 
         return new;
 
@@ -94,8 +92,8 @@ execute procedure site_node_insert_tr ();
 
 create function site_node_update_tr () returns opaque as '
 declare
-        v_parent_sk     varchar;
-        max_key         varchar;
+        v_parent_sk     varbit default null;
+        v_max_value     integer;
         p_id            integer;
         v_rec           record;
         clr_keys_p      boolean default ''t'';
@@ -124,23 +122,21 @@ begin
              where node_id = v_rec.node_id;
 
             if p_id is null then
-                select max(tree_sortkey) into max_key
+                select max(tree_leaf_key_to_int(tree_sortkey)) into v_max_value
                   from site_nodes
                  where parent_id is null;
-
-                v_parent_sk := '''';
             else
-                select max(tree_sortkey) into max_key
+                select max(tree_leaf_key_to_int(tree_sortkey)) into v_max_value
                   from site_nodes 
                  where parent_id = p_id;
 
-                select coalesce(max(tree_sortkey),'''') into v_parent_sk 
+                select tree_sortkey into v_parent_sk 
                   from site_nodes 
                  where node_id = p_id;
             end if;
 
             update site_nodes 
-               set tree_sortkey = v_parent_sk || ''/'' || tree_next_key(max_key)
+               set tree_sortkey = tree_next_key(v_parent_sk, v_max_value)
              where node_id = v_rec.node_id;
 
         end LOOP;

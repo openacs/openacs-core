@@ -39,18 +39,11 @@ begin
 --    start with
 --      item_id = get_root_folder__item_id;    
 
-    select
-      i2.item_id into v_folder_id
-    from
-      cr_items i1, cr_items i2
-    where 
-      i2.parent_id = 0
-    and 
-      i1.item_id = get_root_folder__item_id
-    and
-      i2.tree_sortkey <= i1.tree_sortkey
-    and
-      i1.tree_sortkey like (i2.tree_sortkey || ''%'');
+    select i2.item_id into v_folder_id
+    from cr_items i1, cr_items i2
+    where i2.parent_id = 0
+    and i1.item_id = get_root_folder__item_id
+    and i1.tree_sortkey between i2.tree_sortkey and tree_right(i2.tree_sortkey);
 
     if NOT FOUND then
        raise EXCEPTION '' -20000: Could not find a root folder for item ID %. Either the item does not exist or its parent value is corrupted.'', get_root_folder__item_id;
@@ -1069,8 +1062,7 @@ begin
                      from (select * from cr_items where item_id = v_item_id) i1,
                           cr_items i2
                      where i2.parent_id <> 0
-                       and i2.tree_sortkey <= i1.tree_sortkey
-                       and i1.tree_sortkey like (i2.tree_sortkey || ''%'')
+                       and i1.tree_sortkey between i2.tree_sortkey and tree_right(i2.tree_sortkey)
                   order by i2.tree_sortkey
                      
         LOOP
@@ -1099,8 +1091,7 @@ begin
                      from (select * from cr_items where item_id = v_item_id) i1,
                           cr_items i2
                      where i2.parent_id <> 0
-                       and i2.tree_sortkey <= i1.tree_sortkey
-                       and i1.tree_sortkey like (i2.tree_sortkey || ''%'')
+                       and i1.tree_sortkey between i2.tree_sortkey and tree_right(i2.tree_sortkey)
                   order by i2.tree_sortkey
                      
         LOOP
@@ -1278,20 +1269,12 @@ begin
     -- this is an absolute path so prepend a ''/''
     -- loop over the absolute path
 
-    for v_rec in select
-                   i2.name, tree_level(i2.tree_sortkey) as tree_level
-                 from
-                   cr_items i1, cr_items i2
-                 where 
-                   i2.parent_id <> 0
-                 and
-                   i1.item_id = get_path__item_id
-                 and 
-                   i2.tree_sortkey <= i1.tree_sortkey
-                 and 
-                   i1.tree_sortkey like (i2.tree_sortkey || ''%'')
-                 order by
-                   tree_level
+    for v_rec in select i2.name, tree_level(i2.tree_sortkey) as tree_level
+                 from cr_items i1, cr_items i2
+                 where i2.parent_id <> 0
+                 and i1.item_id = get_path__item_id
+                 and i1.tree_sortkey between i2.tree_sortkey and tree_right(i2.tree_sortkey)
+                 order by tree_level
     LOOP
       v_path := v_path || ''/'' || v_rec.name;
     end loop;
@@ -2061,16 +2044,11 @@ begin
 --                       start with 
 --                         object_type = is_subclass__supertype
 
-  for v_inherit_val in select
-                         object_type
-                       from
-                         acs_object_types  
-                       where
-                         tree_sortkey 
-                            like (select tree_sortkey || ''%'' 
-                                    from acs_object_types 
-                                   where object_type = is_subclass__supertype)
-                       order by tree_sortkey
+  for v_inherit_val in select o.object_type
+                       from acs_object_types o, acs_object_types o2
+                       where o2.object_type = is_subclass__supertype
+                         and o.tree_sortkey between o2.tree_sortkey and tree_right(o2.tree_sortkey)
+                       order by o.tree_sortkey
   LOOP
     if v_inherit_val.object_type = is_subclass__object_type then
          v_subclass_p := ''t'';

@@ -221,16 +221,14 @@ begin
 --      and
 --	m.item_id = is_assigned__item_id);
 
-      return count(*) > 0 from dual where exists (select 1 from
-	(select keyword_id from cr_keywords
-	  where tree_sortkey like (select tree_sortkey || ''%''
-                                   from cr_keywords
-                                   where keyword_id = is_assigned__keyword_id)
-	 ) t, cr_item_keyword_map m
-      where
-	t.keyword_id = m.keyword_id
-      and
-	m.item_id = is_assigned__item_id);
+      return count(*) > 0
+      where exists (select 1
+                    from (select keyword_id from cr_keywords c, cr_keywords c2
+	                  where c2.keyword_id = is_assigned__keyword_id
+                            and c.tree_sortkey between c2.tree_sortkey and tree_right(c2.tree_sortkey))) t,
+                      cr_item_keyword_map m
+                    where t.keyword_id = m.keyword_id
+                      and m.item_id = is_assigned__item_id);
   end if;
 
   if is_assigned__recurse = ''down'' then
@@ -244,22 +242,15 @@ begin
 --      and
 --	m.item_id = is_assigned__item_id);
 
-      return count(*) > 0 from dual where exists ( select 1 from
-	(select 
-           k2.keyword_id
-         from 
-           cr_keywords k1, cr_keywords k2
-         where
-           k1.keyword_id = is_assigned__keyword_id
-         and 
-           k2.tree_sortkey <= k1.tree_sortkey
-         and 
-           k1.tree_sortkey like (k2.tree_sortkey || ''%'')) t, 
-        cr_item_keyword_map m
-      where
-	t.keyword_id = m.keyword_id
-      and
-	m.item_id = is_assigned__item_id);
+      return count(*) > 0
+      where exists (select 1
+                    from (select k2.keyword_id
+                          from cr_keywords k1, cr_keywords k2
+                          where k1.keyword_id = is_assigned__keyword_id
+                            and k1.tree_sortkey between k2.tree_sortkey and tree_right(k2.tree_sortkey)) t, 
+                      cr_item_keyword_map m
+                    where t.keyword_id = m.keyword_id
+                      and m.item_id = is_assigned__item_id);
 
   end if;  
 
@@ -291,21 +282,12 @@ begin
 --                order by 
 --                  tree_level desc 
 
-  for v_rec in select 
-                 heading 
-               from (
-                  select 
-                    k2.heading, tree_level(k2.tree_sortkey) as tree_level
-                  from 
-                    cr_keywords k1, cr_keywords k2
-                  where
-                    k1.keyword_id = get_path__keyword_id
-                  and 
-                    k2.tree_sortkey <= k1.tree_sortkey
-                  and 
-                    k1.tree_sortkey like (k2.tree_sortkey || ''%'')) k
-                order by 
-                  tree_level desc 
+  for v_rec in select heading 
+               from (select k2.heading, tree_level(k2.tree_sortkey) as tree_level
+                     from cr_keywords k1, cr_keywords k2
+                     where k1.keyword_id = get_path__keyword_id
+                       and k1.tree_sortkey between k2.tree_sortkey and tree_right(k2.tree_sortkey)) k
+                order by tree_level desc 
   LOOP
       v_heading := v_rec.heading;
       v_is_found := ''t'';

@@ -298,24 +298,14 @@ begin
 --                    level desc 
 
   -- iterate over the ancestor types and copy attributes
-  for type_rec in select                                                
-                    ot2.object_type, tree_level(ot2.tree_sortkey) as level
-                  from                                                
-                    acs_object_types ot1, acs_object_types ot2
-                  where                                               
-                    ot2.object_type <> ''acs_object''                       
-                  and                                                 
-                    ot2.object_type <> ''content_revision''
-                  and 
-                    ot1.object_type = (select object_type 
-                                         from acs_objects 
-                                        where object_id = copy__revision_id)
-                  and 
-                    ot2.tree_sortkey <= ot1.tree_sortkey
-                  and 
-                    ot1.tree_sortkey like (ot2.tree_sortkey || ''%'')
-                  order by
-                    level desc
+  for type_rec in select ot2.object_type, tree_level(ot2.tree_sortkey) as level
+                  from acs_object_types ot1, acs_object_types ot2, acs_objects o
+                  where ot2.object_type <> ''acs_object''                       
+                    and ot2.object_type <> ''content_revision''
+                    and o.object_id = copy__revision_id 
+                    and ot1.object_type = o.object_type 
+                    and ot1.tree_sortkey between ot2.tree_sortkey and tree_right(ot2.tree_sortkey)
+                  order by level desc
   LOOP
     PERFORM content_revision__copy_attributes(type_rec.object_type, 
                                               copy__revision_id, v_copy_id);

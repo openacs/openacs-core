@@ -499,16 +499,10 @@ begin
 --               start with
 --                 item_id = is_sub_folder__target_folder_id
 
-  for v_rec in select
-                 i2.parent_id
-               from
-                 cr_items i1, cr_items i2
-               where 
-                 i1.item_id = is_sub_folder__target_folder_id
-               and
-                 i2.tree_sortkey <= i1.tree_sortkey
-               and
-                 i1.tree_sortkey like (i2.tree_sortkey || ''%'')
+  for v_rec in select i2.parent_id
+               from cr_items i1, cr_items i2
+               where i1.item_id = is_sub_folder__target_folder_id
+                 and i1.tree_sortkey between i2.tree_sortkey and tree_right(i2.tree_sortkey)
                order by i2.tree_sortkey desc
   LOOP
     v_parent_id := v_rec.parent_id;
@@ -593,22 +587,16 @@ begin
 --        object_type = register_content_type__content_type;
     
     insert into cr_folder_type_map
-      select 
-        register_content_type__folder_id as folder_id, 
-        object_type as content_type
-      from
-        acs_object_types
-      where
-        object_type <> ''acs_object''
-      and
-        not exists (select 1 from cr_folder_type_map
-                    where folder_id = register_content_type__folder_id
-                    and content_type = acs_object_types.object_type)
-      and 
-         tree_sortkey 
-             like (select tree_sortkey || ''%''
-                     from acs_object_types 
-                    where object_type = register_content_type__content_type);
+      select register_content_type__folder_id as folder_id, 
+        o.object_type as content_type
+      from acs_object_types o, acs_object_types o2
+      where o.object_type <> ''acs_object''
+        and not exists (select 1
+                        from cr_folder_type_map
+                        where folder_id = register_content_type__folder_id
+                          and content_type = o.object_type)
+        and o2.object_type = register_content_type__content_type
+        and o.tree_sortkey between o2.tree_sortkey and tree_right(o2.tree_sortkey);
   end if;
 
   return 0; 
@@ -641,13 +629,11 @@ begin
 
     delete from cr_folder_type_map
     where folder_id = unregister_content_type__folder_id
-    and content_type in (select object_type
-                           from acs_object_types    
-	                  where object_type <> ''acs_object''
-                            and tree_sortkey 
-                                like (select tree_sortkey || ''%''
-                                        from acs_object_types
-                                        where object_type = unregister_content_type__content_type));
+    and content_type in (select o.object_type
+                           from acs_object_types o, acs_object_types o2
+	                  where o.object_type <> ''acs_object''
+                            and o2.object_type = unregister_content_type__content_type
+                            and o.tree_sortkey between o2.tree_sortkey and tree_right(o2.tree_sortkey));
 
   end if;
 
@@ -691,18 +677,12 @@ begin
 --                            object_type = is_registered.content_type 
 
     v_is_registered := 1;
-    for v_subtype_val in select 
-                           object_type
-                         from 
-                           acs_object_types
-                         where 
-                           object_type <> ''acs_object''
-                         and 
-                           tree_sortkey 
-                             like (select tree_sortkey || ''%''
-                                     from acs_object_types
-                                    where object_type = is_registered__content_type)
-                         order by tree_sortkey
+    for v_subtype_val in select o.object_type
+                         from acs_object_types o, acs_object_types o2
+                         where o.object_type <> ''acs_object''
+                           and o2.object_type = is_registered__content_type
+                           and o.tree_sortkey between o2.tree_sortkey and tree_right(o2.tree_sortkey)
+                         order by o.tree_sortkey
     LOOP
       if content_folder__is_registered(is_registered__folder_id,
                        v_subtype_val.object_type, ''f'') = ''f'' then

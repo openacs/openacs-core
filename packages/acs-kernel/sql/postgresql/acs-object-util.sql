@@ -35,23 +35,18 @@ begin
 end;' language 'plpgsql';
 
 
-
 create function acs_object_util__type_ancestor_type_p (varchar,varchar)
 returns boolean as '
 declare
     p_object_type1      alias for $1;
     p_object_type2      alias for $2;
-    v_exist_p           boolean := ''f'';
 begin
-    v_exist_p := acs_object_util__object_type_exist_p(p_object_type1);
 
-    if v_exist_p = ''f'' then
+    if not acs_object_util__object_type_exist_p(p_object_type1) then
         raise exception ''Object type % does not exist'', p_object_type1;
     end if;
 
-    v_exist_p := acs_object_util__object_type_exist_p(p_object_type2);
-
-    if v_exist_p = ''f'' then
+    if not acs_object_util__object_type_exist_p(p_object_type2) then
         raise exception ''Object type % does not exist'', p_object_type2;
     end if;
         
@@ -59,7 +54,7 @@ begin
                    from acs_object_types o1, acs_object_types o2
                    where p_object_type2 = o2.object_type
                      and o1.object_type = p_object_type1
-                     and o1.tree_sortkey between o2.tree_sortkey and tree_right(o2.tree_sortkey);
+                     and o1.tree_sortkey between o2.tree_sortkey and tree_right(o2.tree_sortkey));
 end;' language 'plpgsql';
 
 

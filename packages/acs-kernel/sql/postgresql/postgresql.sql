@@ -270,276 +270,239 @@ select get_func_header(proname,proargtypes) as definition,
        proname as fname 
   from pg_proc;
 
+----------------------------------------------------------------------------
+
 -- tree query support, m-vgID method.
 
-CREATE TABLE tree_encodings (
-        deci int primary key,
-	code char(1) 
-);
+-- DRB: I've replaced the old, text-based tree sort keys with a 
+-- more compact version based on bit strings.  PostgreSQL now 
+-- offers excellent support for arbitrary strings of bits, and
+-- does a good job of optimizing manipulations on these strings
+-- that fall on byte boundaries.  They're also fully supported 
+-- by PG's default high-concurrency nbtree index type.
 
-create index tree_encode_idx on tree_encodings(code);
+-- Benefits of this new approach over the old, text-based
+-- approach:
 
+-- 1. Breaks dependency on the text type's collation order.  This
+--    will be greatly appreciated by those who want to use OpenACS 4
+--    with full locale support, including the proper collation order.
 
-copy tree_encodings from stdin using delimiters '/' ;
-0/0
-1/1
-2/2
-3/3
-4/4
-5/5
-6/6
-7/7
-8/8
-9/9
-10/:
-11/;
-12/A
-13/B
-14/C
-15/D
-16/E
-17/F
-18/G
-19/H
-20/I
-21/J
-22/K
-23/L
-24/M
-25/N
-26/O
-27/P
-28/Q
-29/R
-30/S
-31/T
-32/U
-33/V
-34/W
-35/X
-36/Y
-37/Z
-38/a
-39/b
-40/c
-41/d
-42/e
-43/f
-44/g
-45/h
-46/i
-47/j
-48/k
-49/l
-50/m
-51/n
-52/o
-53/p
-54/q
-55/r
-56/s
-57/t
-58/u
-59/v
-60/w
-61/x
-62/y
-63/z
-64/¡
-65/¢
-66/£
-67/¤
-68/¥
-69/¦
-70/§
-71/¨
-72/©
-73/ª
-74/«
-75/¬
-76/­
-77/®
-78/¯
-79/°
-80/±
-81/²
-82/³
-83/´
-84/µ
-85/¶
-86/·
-87/¸
-88/¹
-89/º
-90/»
-91/¼
-92/½
-93/¾
-94/¿
-95/À
-96/Á
-97/Â
-98/Ã
-99/Ä
-100/Å
-101/Æ
-102/Ç
-103/È
-104/É
-105/Ê
-106/Ë
-107/Ì
-108/Í
-109/Î
-110/Ï
-111/Ð
-112/Ñ
-113/Ò
-114/Ó
-115/Ô
-116/Õ
-117/Ö
-118/×
-119/Ø
-120/Ù
-121/Ú
-122/Û
-123/Ü
-124/Ý
-125/Þ
-126/ß
-127/à
-128/á
-129/â
-130/ã
-131/ä
-132/å
-133/æ
-134/ç
-135/è
-136/é
-137/ê
-138/ë
-139/ì
-140/í
-141/î
-142/ï
-143/ð
-144/ñ
-145/ò
-146/ó
-147/ô
-148/õ
-149/ö
-150/÷
-151/ø
-152/ù
-153/ú
-154/û
-155/ü
-156/ý
-157/þ
-158/ÿ
-\.
+-- 2. Storage is one byte per level for each level in the tree that
+--    has fewer than 128 nodes.  If more nodes exist at a given level
+--    two bytes are occupied.  The old scheme used three bytes per
+--    level.  Along with saving space in data tables, this will speed
+--    key comparisons during index scans and increases the number of
+--    keys stored in any given index page.
 
-create function tree_default_encoding_base() returns integer as '
-begin
-        return 159;
-end;' language 'plpgsql' with (iscachable);
+-- 3. 32768 nodes per level are allowed in a given subtree, rather
+--    than the 25K or so supported in the text-based scheme (though
+--    in reality the old scheme supported more than enough nodes
+--    per level)
 
-create function tree_next_key(varchar) returns varchar as '
+-- PostgreSQL note: the PL/pgSQL parser doesn't seem to like the
+-- SQL92 standard "bit varying" so I've used the synonym "varbit"
+-- throughout.
+
+create function int_to_tree_key(integer) returns varbit as '
+
+-- Convert an integer into the bit string format used to store
+-- tree sort keys.
+
 declare
-       skey     alias for $1;
-       pos      integer;        
-       stop     boolean default ''f'';
-       carry    boolean default ''t'';
-       nkey     varchar default '''';
-       base     integer;
-       ch       char(1);
+  p_intkey        alias for $1;
 begin
-        base := tree_default_encoding_base();
+  if p_intkey <= 127 then
+    return substring(bitfromint4(p_intkey), 25, 8);
+  else
+    if p_intkey <= 32767 then
+      return substring(bitfromint4(2^15 + p_intkey), 17, 16);
+    else
+      raise exception ''int_to_tree_key: key too large.'';
+    end if;
+  end if;
+end;' language 'plpgsql' with (isstrict, iscachable);
 
-        if skey is null then
+create function tree_key_to_int(varbit, integer) returns integer as '
 
-           return ''00'';
+-- Convert the compressed key for the node at the given level to an 
+-- integer.
 
-        else
-           pos := length(skey);
-           LOOP               
-               ch := substr(skey,pos,1);
-               if carry then 
-                   select code::varchar || nkey,
-                          code = ''0'' 
-                     into nkey, carry
-                     from tree_encodings 
-                    where deci = (select (deci + 1) % base
-                                    from tree_encodings
-                                   where code = ch);
-               else
-                   nkey := ch::varchar || nkey;
-               end if;
-               pos := pos - 1;               
-               select substr(skey,pos - 1,1) = ''/'' into stop;
+declare
+  p_tree_key      alias for $1;
+  p_level         alias for $2;
+  v_level         integer default 0;
+  v_parent_pos    integer default 1;
+  v_pos           integer default 1;
+begin
 
-               exit when stop;
+  -- Find the right key first
+  while v_pos < length(p_tree_key) and v_level < p_level loop
+    v_parent_pos := v_pos;
+    v_level := v_level + 1;
+    if substring(p_tree_key, v_pos, 1) = ''1'' then
+      v_pos := v_pos + 16;
+    else
+      v_pos := v_pos + 8;
+    end if;
+  end loop;
 
-           END LOOP;
-           if carry then 
-              nkey := ''0'' || nkey;
-           end if;
-        end if;
+  if v_level < p_level then
+    raise exception ''tree_key_to_int: key is at a level less than %'', p_level;
+  end if;
 
-        select code::varchar || nkey into nkey
-          from tree_encodings 
-         where deci = length(nkey) - 1;
+  if substring(p_tree_key, v_parent_pos, 1) = ''1'' then
+    return bittoint4(substring(p_tree_key, v_parent_pos + 1, 15));
+  else
+    return bittoint4(substring(p_tree_key, v_parent_pos, 8));
+  end if;
 
-        return nkey;
+end;' language 'plpgsql' with (isstrict, iscachable);
 
+create function tree_root_key(varbit) returns varbit as '
+
+-- Return the tree_sortkey for the root node of the node with the 
+-- given tree_sortkey.
+
+declare
+  p_tree_key      alias for $1;
+begin
+
+  if substring(p_tree_key, 1, 1) = ''1'' then
+      return substring(p_tree_key, 1, 16);
+  else
+      return substring(p_tree_key, 1, 8);
+  end if;
+
+end;' language 'plpgsql' with (isstrict, iscachable);
+
+create function tree_leaf_key_to_int(varbit) returns integer as '
+
+-- Convert the bitstring for the last, or leaf, node represented by this key
+-- to an integer.
+
+declare
+  p_tree_key      alias for $1;
+  v_leaf_pos      integer default 1;
+  v_pos           integer default 1;
+begin
+
+  -- Find the leaf key first
+  while v_pos < length(p_tree_key) loop
+    v_leaf_pos := v_pos;
+    if substring(p_tree_key, v_pos, 1) = ''1'' then
+      v_pos := v_pos + 16;
+    else
+      v_pos := v_pos + 8;
+    end if;
+  end loop;
+
+  if substring(p_tree_key, v_leaf_pos, 1) = ''1'' then
+    return bittoint4(substring(p_tree_key, v_leaf_pos + 1, 15));
+  else
+    return bittoint4(substring(p_tree_key, v_leaf_pos, 8));
+  end if;
+
+end;' language 'plpgsql' with (isstrict, iscachable);
+
+create function tree_next_key(varbit, integer) returns varbit as '
+
+-- Create a new child of the given key with a leaf key number one greater than
+-- the child value parameter.  If the child value parameter is null, make the
+-- child the first child of the parent.
+
+declare
+  p_parent_key      alias for $1;
+  p_child_value     alias for $2;
+  v_child_value     integer;
+begin
+
+  if p_child_value is null then
+    v_child_value := 0;
+  else
+    v_child_value := p_child_value + 1;
+  end if;
+
+  if p_parent_key is null then
+    return int_to_tree_key(v_child_value);
+  else
+    return p_parent_key || int_to_tree_key(v_child_value);
+  end if;
+
+end;' language 'plpgsql' with(iscachable);
+
+create function tree_left(varbit) returns varbit as '
+
+-- Create a key less than or equal to that of any child of the
+-- current key.
+
+declare
+  key      alias for $1;
+begin
+  if key is null then
+    return ''X00'';
+  else
+    return key || ''X00'';
+  end if;
+end;' language 'plpgsql' with(iscachable);
+
+create function tree_right(varbit) returns varbit as '
+
+-- Create a key greater or equal to that of any child of the current key.
+-- Used in BETWEEN expressions to select the subtree rooted at the given
+-- key. 
+
+declare
+  key      alias for $1;
+begin
+  if key is null then
+    return ''XFFFF'';
+  else
+    return key || ''XFFFF'';
+  end if;
+end;' language 'plpgsql' with(iscachable);
+
+create function tree_level(varbit) returns integer as '
+
+-- Return the tree level of the given key.  The root level is defined
+-- to be at level one.
+
+declare
+  p_tree_key           alias for $1;
+  v_pos                integer;        
+  v_level              integer;
+  
+begin
+
+  if p_tree_key is null then
+    return 0;
+  end if;
+
+  v_pos := 1;
+  v_level := 0;
+
+  while v_pos <= length(p_tree_key) loop
+    v_level := v_level + 1;
+    if substring(p_tree_key, v_pos, 1) = ''1'' then
+      v_pos := v_pos + 16;
+    else
+      v_pos := v_pos + 8;
+    end if;
+  end loop;
+
+  return v_level;
+end;' language 'plpgsql' with(iscachable);
+
+create function tree_ancestor_p(varbit, varbit) returns boolean as '
+declare
+  p_potential_ancestor      alias for $1;
+  p_potential_child         alias for $2;
+begin
+  return position(p_potential_ancestor in p_potential_child) = 1;
 end;' language 'plpgsql';
 
 
-create function tree_level(varchar) returns integer as '
-declare
-        inkey     alias for $1;
-        cnt       integer default 0;
-begin
-        for i in 1..length(inkey) LOOP
-            if substr(inkey,i,1) = ''/'' then
-               cnt := cnt + 1;
-            end if;
-        end LOOP;
-
-        return cnt;
-
-end;' language 'plpgsql' with (iscachable);
-
--- DRB: Use tree_right() to do selects against tree_sortkey.  LIKE with
--- a non-constant right-hand operand never uses an index.  The following
--- queries will use an index and run much faster.
-
--- To get the children and the node (i.e. the subtree starting with the node):
-
--- tree_sortkey between t.tree_sortkey and tree_right(t.tree_sortkey)
-
--- To find a node's children in "t":
-
--- tree_sortkey between t.tree_sortkey and tree_right(t.tree_sortkey) and
--- tree_sortkey <> t.tree_sortkey
-
--- A directly executed query like this
-
--- tree_sortkey between t.tree_sortkey || chr(0) and tree_right(t.tree_sortkey)
-
--- works but the trailing chr(0) disappears if you put the concat in a 
--- PL/pgSQL function.  In fact the inline expression might well be considered a
--- bug and fixed by the PG team in the future so we shouldn't depend on it.
-
-create function tree_right(varchar) returns varchar as '
-declare
-  p_tree_sortkey alias for $1;
-begin
-  return p_tree_sortkey || chr(255);
-end;' language 'plpgsql' with (iscachable);
+----------------------------------------------------------------------------
 
 -- PG substitute for Oracle user_tab_columns view
 

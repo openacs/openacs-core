@@ -63,7 +63,7 @@ create table acs_privilege_hierarchy_index (
         child_privilege varchar(100) not null 
                         constraint acs_priv_hier_child_priv_fk
 			references acs_privileges (privilege),
-        tree_sortkey    varchar(4000)
+        tree_sortkey    varbit
 );
 
 create index priv_hier_sortkey_idx on 
@@ -112,9 +112,10 @@ acs_privilege_hierarchy_index (tree_sortkey);
 
 create function acs_priv_hier_ins_del_tr () returns opaque as '
 declare
-        new_key         varchar;
-        deleted_p       boolean;
+        new_value       integer;
+        new_key         varbit default null;
         v_rec           record;
+        deleted_p       boolean;
 begin
         -- if more than one node was deleted the second trigger call
         -- will error out.  This check avoids that problem.
@@ -148,7 +149,7 @@ begin
 
             -- top level node, so find the next key at this level.
 
-            select ''/'' || tree_next_key(max(tree_sortkey)) into new_key 
+            select max(tree_leaf_key_to_int(tree_sortkey)) into new_value 
               from acs_privilege_hierarchy_index
              where tree_level(tree_sortkey) = 1;
 
@@ -157,11 +158,11 @@ begin
             insert into acs_privilege_hierarchy_index 
                         (privilege, child_privilege, tree_sortkey)
                         values
-                        (v_rec.privilege, v_rec.child_privilege, new_key);
+                        (v_rec.privilege, v_rec.child_privilege, tree_next_key(null, new_value));
 
             -- now recurse down from this node
 
-            PERFORM priv_recurse_subtree(new_key, v_rec.child_privilege);
+            PERFORM priv_recurse_subtree(tree_next_key(null, new_value), v_rec.child_privilege);
 
         end LOOP;
 
@@ -173,13 +174,14 @@ create trigger acs_priv_hier_ins_del_tr after insert or delete
 on acs_privilege_hierarchy for each row
 execute procedure acs_priv_hier_ins_del_tr ();
 
-create function priv_recurse_subtree(varchar, varchar) 
+create function priv_recurse_subtree(varbit, varchar) 
 returns integer as '
 declare
         nkey            alias for $1;
         child_priv      alias for $2;
-        new_key         varchar;
+        new_value       integer;
         v_rec           record;
+        new_key         varbit;
 begin
 
         -- now iterate over all of the children of the 
@@ -193,12 +195,12 @@ begin
 
             -- calculate the next key for this level and parent
 
-            select tree_next_key(max(tree_sortkey)) into new_key
+            select max(tree_leaf_key_to_int(tree_sortkey)) into new_value
               from acs_privilege_hierarchy_index
-             where tree_sortkey like nkey || ''/%''
-               and tree_sortkey not like  nkey || ''/%/%'';
+             where tree_sortkey between nkey and tree_right(nkey)
+               and tree_level(tree_sortkey) = tree_level(nkey) + 1;
 
-            new_key := nkey || ''/'' || new_key;
+            new_key := tree_next_key(nkey, new_value);
 
             -- insert the new child node.
 
@@ -220,7 +222,7 @@ begin
            insert into acs_privilege_hierarchy_index
                        (privilege, child_privilege, tree_sortkey)
                        values 
-                       (child_priv, child_priv, nkey || ''/00'');
+                       (child_priv, child_priv, tree_next_key(nkey, null));
         end if;
 
         return null;

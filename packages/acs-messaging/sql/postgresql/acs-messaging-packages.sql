@@ -237,17 +237,15 @@ returns integer as '
 declare
     p_message_id alias for $1;
     v_message_id acs_messages.message_id%TYPE;
-    v_tree_sk varchar;
+    v_ancestor_sk varbit;
 begin
-    select tree_sortkey into v_tree_sk
+    select tree_root_key(tree_sortkey) into v_ancestor_sk
       from acs_messages
      where message_id = p_message_id;
 
-    v_tree_sk := substring(v_tree_sk from 0 for 4);
-
     select message_id into v_message_id
       from acs_messages
-     where tree_sortkey = v_tree_sk;
+     where tree_sortkey = v_ancestor_sk;
 
     return v_message_id;
 end;' language 'plpgsql';
