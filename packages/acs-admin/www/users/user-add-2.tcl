@@ -101,7 +101,7 @@ return
 }
 
 
-set administration_name [db_string unused "select
+set administration_name [db_string admin_name "select
 first_names || ' ' || last_name from persons where person_id = :admin_user_id"]
 
 set context_bar [ad_admin_context_bar [list "index.tcl" "Users"] "Notify added user"]
