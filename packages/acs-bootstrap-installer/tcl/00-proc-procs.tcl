@@ -375,22 +375,29 @@ ad_proc -public ad_proc {
     -deprecated:boolean
     -warn:boolean
     arg_list
-    args
+    [doc_string]
+    body 
 } {
+    Declare a procedure.
 
-    Declares a procedure.
+    Documentation may contain tags which will be parsed for display in 
+    the api browser.  Some tags are @param, @return, @error, @see, @author
+    (probably this should be better documented).
 
     @param public specifies that the procedure is part of a public API.
     @param private specifies that the procedure is package-private.
     @param deprecated specifies that the procedure should not be used.
-    @param warn specifies that the procedure should generate a warning when invoked.
+    @param warn specifies that the procedure should generate a warning when invoked (requires that 
+           -deprecated also be set)
     @param arg_list the list of switches and positional parameters which can be
         provided to the procedure.
-
+    @param [doc_string] documentation for the procedure (optional, but greatly desired).
+    @param body the procedure body.  Documentation may be provided for an arbitrary function 
+    by passing the body as a "-".
+                             
 } -
 
 ad_proc -public ad_arg_parser { allowed_args argv } {
-
     Parses an argument list for a database call (switches at the end).
     Switch values are placed in corresponding variable names in the calling
     environment.
@@ -482,16 +489,16 @@ ad_proc ad_method {
     docblock
     body
 } {
+    Defines a method for type based dispatch. This method can be
+    called using <code>ad_call_method</code>. The first arg to the
+    method is the target on which the type dispatch happens. Use this
+    with care.
+
     @param method_name the method name
     @param type the type for which this method will be used
     @param argblock the argument description block, is passed to ad_proc
     @param docblock the documentation block, is passed to ad_proc
     @param body the body, is passed to ad_proc
-
-    Defines a method for type based dispatch. This method can be
-    called using <code>ad_call_method</code>. The first arg to the
-    method is the target on which the type dispatch happens. Use this
-    with care.
 } {
     ad_proc ${method_name}__$type $argblock $docblock $body
 }
@@ -501,15 +508,15 @@ ad_proc ad_call_method {
     object_id
     args 
 } {
-    @param method_name method name
-    @param object_id the target, it is the first arg to the method
-    @param args the remaining arguments
-
     Calls method_name for the type of object_id with object_id as the
     first arg, and the remaining args are the remainder of the args to
     method_name. Example ad_call_method method1 foo bar baz calls the
     the method1 associated with the type of foo, with foo bar and baz
     as the 3 arguments.
+
+    @param method_name method name
+    @param object_id the target, it is the first arg to the method
+    @param args the remaining arguments
 } {
     return [apply ${method_name}__[util_memoize "acs_object_type $object_id"] [concat $object_id $args]]
 }
@@ -519,15 +526,15 @@ ad_proc ad_dispatch {
     type
     args 
 } {
-    @param method_name method name
-    @param object_id the target, it is the first arg to the method
-    @param args the remaining arguments
-
     Calls method_name for the type of object_id with object_id as the
     first arg, and the remaining args are the remainder of the args to
     method_name. Example ad_call_method method1 foo bar baz calls the
     the method1 associated with the type of foo, with foo bar and baz
     as the 3 arguments.
+
+    @param method_name method name
+    @param object_id the target, it is the first arg to the method
+    @param args the remaining arguments
 } {
     return [apply ${method_name}__$type $args]
 }
