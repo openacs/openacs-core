@@ -4,7 +4,7 @@
 <package key="ref-timezones" url="http://openacs.org/repository/apm/packages/ref-timezones" type="apm_service">
     <package-name>Reference Data - Timezone</package-name>
     <pretty-plural>Reference Data - Timezones</pretty-plural>
-    <initial-install-p>f</initial-install-p>
+    <initial-install-p>t</initial-install-p>
     <singleton-p>t</singleton-p>
 
     <version name="0.4" url="http://openacs.org/repository/download/apm/ref-timezones-0.4.apm">
