@@ -91,7 +91,8 @@ ad_proc -public template::element::create { form_id element_id args } {
                           where name is a unique identifier for the validation
                           step, expression is a block to Tcl code that evaluates to
                           1 or 0, and message is to be displayed to the user when 
-                          the validation step fails.
+                          the validation step fails, that is, if the expression 
+                          evaluates to 0.
 
     @option sign          specify for a hidden widget that its value should be
                           signed
