@@ -8,12 +8,12 @@ tr.subsite-header {
 
 }
 td.subsite-header {
-  padding-top: 12px;
-  padding-bottom: 12px;
+  padding-top: 6px;
+  padding-bottom: 6px;
 }
 
 td.system-name {
-  font-size: 180%;
+  font-size: 120%;
   font-weight: bold;
   padding-left: 8px;
 }
@@ -248,22 +248,19 @@ div.subsite-context-bar {
 }
 
 h1 {
-  font-size: 125%;
+  font-size: 100%;
   margin-top: 0px;
   margin-bottom: 12px;
 }
 h2 {
-  font-size: 115%;
   margin-top: 0px;
   margin-bottom: 12px;
 }
 h3 {
-  font-size: 110%;
   margin-top: 0px;
   margin-bottom: 12px;
 }
 h4 {
-  font-size: 105%;
   margin-top: 0px;
   margin-bottom: 12px;
 }
