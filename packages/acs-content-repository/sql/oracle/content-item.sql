@@ -11,6 +11,10 @@
 -- http://www.fsf.org/copyleft/gpl.html
 set serveroutput on size 1000000 format wrapped
 
+create or replace view content_item_globals as
+    select -100 as c_root_folder_id
+    from dual;
+
 create or replace package body content_item
 as
 
