@@ -125,11 +125,11 @@ tar xfj /tmp/postgresql-7.4.1.tar.bz2</action></screen>
 	  since it will not run as root.  Since nobody will log in
 	  directly as that user, we'll leave the password blank.
 	</para>
+      </formalpara>
         <para>
 	  Debian users should probably use adduser instead of
 	  useradd. Type <computeroutput>man adduser</computeroutput>
 	</para>
-      </formalpara>
       <screen>[root src]# <userinput>groupadd web</userinput>
 [root src]# <userinput>useradd -g web -d /usr/local/pgsql postgres</userinput>
 [root src]# <userinput>mkdir -p /usr/local/pgsql</userinput>
@@ -165,8 +165,8 @@ mkdir -p /usr/local/pgsql
 chown -R postgres:web /usr/local/pgsql /usr/local/src/postgresql-7.4.1
 chmod 750 /usr/local/pgsql</userinput></screen>
         </listitem>
-      </itemizedlist>
-</listitem>
+</itemizedlist>
+    </listitem>
     <listitem id="install-postgres-env">
       <formalpara>
         <title>Set up postgres's environment variables</title>
@@ -527,9 +527,11 @@ checkpoint_segments = 3     # in logfile segments (16MB each), min 1
         </listitem>
       </orderedlist>
     </listitem>
-  </itemizedlist>
-  
-  <sect2 id="install-postgres-moreinfo">
+  </orderedlist>
+</listitem>
+</itemizedlist>
+
+<sect2 id="install-postgres-moreinfo">
     <title>more information about PostgreSQL</title>
     
     <itemizedlist>

@@ -7,7 +7,7 @@ running OpenACS.
 Before OpenACS 3.3, the OpenACS startup process was extremely simple: after AOLserver
 performed its internal initialization (reading the configuration file,
 loading shared libraries and module code, etc.) it scanned through the Tcl
-library directory (generally <tt class="computeroutput">/web/</tt><span class="emphasis"><em><tt class="computeroutput">yourservername</tt></em></span><tt class="computeroutput">/tcl</tt>),
+library directory (generally <tt class="computeroutput">/var/lib/aolserver/</tt><span class="emphasis"><em><tt class="computeroutput">yourservername</tt></em></span><tt class="computeroutput">/tcl</tt>),
 sourcing each file in sequence. 
 </p><p>While this overall structure for initialization is still intact, package
 management has thrown a wrench into the works - there are a few extra things
@@ -28,9 +28,9 @@ same for all AOLservers, regardless of whether they are running OpenACS.
 </p><p>Next AOLserver sources, in lexicographical order, each file in the
 <tt class="computeroutput">/tcl</tt> directory. The first such file is
 <tt class="computeroutput">0-acs-init.tcl</tt>, which doesn't do much directly except to
-determine the OpenACS path root (e.g., <tt class="computeroutput">/web/</tt><span class="emphasis"><em><tt class="computeroutput">yourservername</tt></em></span>)
+determine the OpenACS path root (e.g., <tt class="computeroutput">/var/lib/aolserver/</tt><span class="emphasis"><em><tt class="computeroutput">yourservername</tt></em></span>)
 by trimming the final component from the path to the Tcl library directory
-(<tt class="computeroutput">/web/</tt><span class="emphasis"><em><tt class="computeroutput">yourservername</tt></em></span><tt class="computeroutput">/tcl</tt>). But
+(<tt class="computeroutput">/var/lib/aolserver/</tt><span class="emphasis"><em><tt class="computeroutput">yourservername</tt></em></span><tt class="computeroutput">/tcl</tt>). But
 <tt class="computeroutput">0-acs-init.tcl</tt>'s has an important function, namely sourcing
 <tt class="computeroutput">/packages/acs-core/bootstrap.tcl</tt>, which does the following:</p><div class="orderedlist"><ol type="1"><li><p><span class="strong">Initialize some NSVs used by the core</span>. These NSVs are
 documented in <tt class="computeroutput">/packages/acs-core/apm-procs.tcl</tt> - no need to

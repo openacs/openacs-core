@@ -1,5 +1,5 @@
 <?xml version='1.0' ?>
-<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+<!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
                "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
 <!ENTITY % myvars SYSTEM "../variables.ent">
 %myvars;
@@ -11,9 +11,9 @@
     <para>by <ulink url="mailto:vinod@kurup.com">Vinod Kurup</ulink></para>
   </authorblurb>
 
-
+  <para>We recommend the use of <link linkend="aolserver4">AOLserver 4.0.1</link> or later.  These instructions are retained as a resource.</para>
   <para>
-    (Debian users: we do not recommend installing Debian packages for
+    Debian users: we do not recommend installing Debian packages for
     Aolserver or Postgres. Several people have
     reported problems while trying to install using apt-get
     instead of from source. If you have the time to debug these

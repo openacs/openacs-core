@@ -129,10 +129,6 @@
         <xi:fallback>Section Missing</xi:fallback>
       </xi:include>
 
-      <xi:include href="install-guide/aolserver.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
-        <xi:fallback>Section Missing</xi:fallback>
-      </xi:include>
-
       <xi:include href="install-guide/aolserver4.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
         <xi:fallback>Section Missing</xi:fallback>
       </xi:include>
