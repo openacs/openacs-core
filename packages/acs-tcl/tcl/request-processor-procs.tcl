@@ -506,7 +506,7 @@ This file has generated an error.
       programmers.
       "
     }
-    ns_log "Error" [ns_conn method] $error_url [ns_conn query] $message
+    ns_log Error "[ns_conn method] $error_url [ns_conn query] $message"
 }
 
 ad_proc -private rp_path_prefixes {path} {
