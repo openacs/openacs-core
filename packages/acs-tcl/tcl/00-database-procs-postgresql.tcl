@@ -658,9 +658,16 @@ ad_proc db_source_sql_file { {-callback apm_ns_write_callback} file } {
 	set pgpass "<<$pgpass"
     }
 
-    set pghost [db_get_dbhost]
-    if { ![string equal $pghost ""] } {
-	set pghost "-h $pghost"
+    # DRB: Submitted patch was in error - the driver opens a -h hostname connection
+    # unless the hostname is localhost.   We need to do the same here.  The submitted
+    # patch checked for a blank hostname, which fails in the driver.  Arguably the
+    # driver's wrong but a lot of non-OpenACS folks use it, and even though I'm the
+    # maintainer we shouldn't break existing code over such trivialities...
+
+    if { [string equal [db_get_dbhost] "localhost"] } {
+        set pghost ""
+    } else {
+	set pghost "-h [db_get_dbhost]"
     }
 
     cd [file dirname $file]
@@ -668,6 +675,7 @@ ad_proc db_source_sql_file { {-callback apm_ns_write_callback} file } {
     if { $tcl_platform(platform) == "windows" } {
         set fp [open "|[file join [db_get_pgbin] psql] -h [ns_info hostname] $pgport $pguser -f $file_name [db_get_database]" "r"]
     } else {
+ns_log Notice "Huh? |[file join [db_get_pgbin] psql] $pghost $pgport $pguser -f $file_name [db_get_database] $pgpass"
         set fp [open "|[file join [db_get_pgbin] psql] $pghost $pgport $pguser -f $file_name [db_get_database] $pgpass" "r"]
     }
 
