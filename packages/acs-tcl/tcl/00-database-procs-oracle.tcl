@@ -17,13 +17,104 @@ ad_proc -public db_nullify_empty_string { string } {
     }
 }
 
-proc_doc db_nextval { sequence } { Returns the next value for a sequence. This can utilize a pool of sequence values to save hits to the database. } {
+ad_proc -public db_nextval { sequence } { 
+
+    Returns the next value for a sequence. This can utilize a pool of
+    sequence values.
+
+    <p>
+
+    Example:
+
+     <pre>
+     set new_object_id [db_nextval acs_object_id_seq]
+     </pre>
+
+    @param sequence the name of an sql sequence
+    @see <a href="/doc/db-api-detailed.html">/doc/db-api-detailed.html</a>
+
+} {
     return [db_string "nextval" "select $sequence.nextval from dual"]
 }
 
-proc_doc db_exec_plsql { statement_name sql args } {
+ad_proc -public db_exec_plsql { statement_name sql args } {
 
-    Executes a PL/SQL statement, returning the variable of bind variable <code>:1</code>.
+    Executes a PL/SQL statement, returning the variable of bind 
+    variable <code>:1</code>.
+
+    <p>
+
+    Example:
+
+    <pre>
+    db_exec_plsql delete_note {
+        begin
+        note.delete(:note_id);
+        end;
+    }
+    </pre>
+
+    If you need the return value, then do something like this:
+
+    <pre>
+    set new_note_id [db_exec_plsql create_note {
+        begin
+        :1 := note.new(
+          owner_id => :user_id,
+          title => :title,
+          body => :body,
+          creation_user => :user_id,
+          creation_ip => :peeraddr,
+          context_id => :package_id
+        );
+        end;
+    }]
+    </pre>
+
+    You can call several pl/sql statements at once, like this:
+
+    <pre>
+    db_exec_plsql delete_note {
+        begin
+        note.delete(:note_id);
+        note.delete(:another_note_id);
+        note.delete(:yet_another_note_id);
+        end;
+    }
+    </pre>
+
+    If you are using xql files then put the body of the query in a
+    <code>yourfilename-oracle.xql</code> file. E.g. the first example 
+    transformed to use xql files looks like this:
+    <p>
+
+    <code>yourfilename.tcl</code>:<br>
+    
+    <pre>
+    db_exec_plsql delete_note { }
+    </pre>
+    
+    <code>yourfilename-oracle.xql</code>:<br>
+
+    <pre>
+    &lt;fullquery name="delete_note">      
+      &lt;querytext>
+        begin
+        note.delete(:note_id);
+        end;
+      &lt;/querytext>
+    &lt;/fullquery>
+    </pre>
+
+
+    <p>
+
+    Note that this description is <b>oracle</b> specific, because 
+    this api-browser is running under oracle.
+
+
+    @see <a href="/doc/db-api-detailed.html">/doc/db-api-detailed.html</a>
+
 
 } {
     ad_arg_parser { bind_output bind } $args
@@ -94,8 +185,12 @@ ad_proc -private db_exec { type db statement_name pre_sql {ulevel 2} args } {
     return -code $errno -errorinfo $errorInfo -errorcode $errorCode $error
 }
 
-proc_doc db_dml { statement_name sql args } {
+ad_proc -public db_dml { statement_name sql args } {
+
     Do a DML statement.
+
+    @see <a href="/doc/db-api-detailed.html">/doc/db-api-detailed.html</a>
+
 } {
     ad_arg_parser { clobs blobs clob_files blob_files bind } $args
 
