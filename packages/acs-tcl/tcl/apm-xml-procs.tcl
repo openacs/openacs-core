@@ -415,7 +415,7 @@ ad_proc -public apm_read_package_info_file { path } {
 	    # Validate the file type: it must be null (unknown type) or
 	    # some value in [apm_file_type_keys].
 	    if { ![empty_string_p $type] && [lsearch -exact [apm_file_type_keys] $type] < 0 } {
-		error "Invalid file type \"$type\""
+		ns_log Warning "Unrecognized file type \"$type\" of file $file_path"
 	    }
 	    # Validate the database type: it must be null (unknown type) or
 	    # some value in [apm_db_type_keys].
