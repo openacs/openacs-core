@@ -5,6 +5,6 @@
 -- @cvs-id $Id$
 --
 
--- reload packages to get fixed version of content_folder.edit_name
+-- reload packages to get fixed version of content_folder.rename
 
 @@ ../packages-create.sql
