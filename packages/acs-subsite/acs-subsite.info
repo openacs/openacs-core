@@ -6,13 +6,14 @@
     <pretty-plural>Subsite Services</pretty-plural>
     <initial-install-p>t</initial-install-p>
     <singleton-p>f</singleton-p>
-    
+
     <version name="5.0.0a5" url="http://www.openacs.org/repository/download/apm/acs-subsite-5.0.0a5.apm">
         <owner url="http://openacs.org">OpenACS</owner>
-        <summary>Provides the ability to create subsite within the OpenACS Community System.</summary>
+        <summary>Subsite</summary>
         <release-date>2003-11-07</release-date>
         <vendor url="http://www.openacs.org/">OpenACS</vendor>
-        <description format="text/html">Aware of parties, groups, users, portraits, ...</description>
+        <description format="text/html">Provides for creating subsites within the OpenACS Community System.  Aware of parties, groups, users, portraits.  Can be themed via a per subsite master template.</description>
+
 
         <provides url="acs-subsite" version="5.0.0a5"/>
         <requires url="acs-content-repository" version="5.0.0a5"/>
