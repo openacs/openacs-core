@@ -6,59 +6,37 @@ ad_page_contract {
 
     @cvs-id $Id$
 } -query {
-    password_1
-    password_2
+    password_1:notnull
+    password_2:notnull
     {password_old ""}
-    {user_id ""}
+    {user_id:integer ""}
     {return_url ""}
+} -validate {
+    old_password_match -requires {user_id:integer password_old} {
+        if {![empty_string_p $user_id] && ![ad_check_password $user_id $password_old]} {
+            ad_complain "Your current password does not match what you entered in the form."
+        }
+    }
+    confirm_password -requires {password_2:notnull} {
+        if {[empty_string_p $password_2]} {
+            ad_complain "You need to confirm the password that you typed. (Type the same thing again.)"
+        }
+    }
+    new_password_match -requires {password_1:notnull password_2:notnull confirm_password} {
+        if {![string equal $password_1 $password_2]} {
+            ad_complain "Your passwords don't match! Presumably, you made a typo while entering one of them."
+        }
+    }
 } -properties {
     return_url:onevalue
     site_link:onevalue
 }
 
-set current_user_id [ad_verify_and_get_user_id]
-
 if {[empty_string_p $user_id]} {
-    set user_id $current_user_id
-    set admin_enabled_p 0
-    ad_require_permission $user_id "write"
+    set user_id [ad_verify_and_get_user_id]
+    permission::require_permission -party_id $user_id -object_id $user_id -privilege "write"
 } else {
-    set admin_enabled_p 1
-    ad_require_permission $user_id "admin"
-}
-
-set bind_vars [ad_tcl_vars_to_ns_set user_id password_1]
-
-set exception_text ""
-set exception_count 0
-
-if {!$admin_enabled_p && ![ad_check_password $user_id $password_old] } {
-    ns_log "Notice" "password matched"
-    append exception_text "<li>Your current password does not match what you entered in the form\n"
-    incr exception_count
-}
-
-
-if { ![info exists password_1] || [empty_string_p $password_1] } {
-    append exception_text "<li>You need to type in a password\n"
-    incr exception_count
-}
-
-if { ![info exists password_2] || [empty_string_p $password_2] } {
-    append exception_text "<li>You need to confirm the password that you typed.  (Type the same thing again.) \n"
-    incr exception_count
-}
-
-
-if { [string compare $password_2 $password_1] != 0 } {
-    append exception_text "<li>Your passwords don't match!  Presumably, you made a typo while entering one of them.\n"
-    incr exception_count
-}
-
-
-if { $exception_count > 0 } {
-    ad_return_complaint $exception_count $exception_text
-    return
+    permission::require_permission -party_id $user_id -object_id $user_id -privilege "admin"
 }
 
 if [empty_string_p $return_url] {
@@ -69,11 +47,11 @@ if [empty_string_p $return_url] {
 }
 
 if [catch {ad_change_password $user_id $password_1} errmsg] {
-    ad_return_error "Ouch!"  "Wasn't able to change your password for
-unknown reasons.  This is probably our fault. Please contact the
-system administrator."
+    ad_return_error "Wasn't able to change your password. Please contact the system administrator."
 }
 
 set site_link [ad_site_home_link]
+
+ad_user_login $user_id
 
 ad_returnredirect $return_url

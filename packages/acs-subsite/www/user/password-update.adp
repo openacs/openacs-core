@@ -12,7 +12,6 @@ for @first_names@ @last_name@ in @site_link@
 
 <table>
 
-<if @admin_enabled_p@ false>
 <if @password_old@ eq "">
   <tr>
     <th>Current Password:</th>
@@ -22,7 +21,6 @@ for @first_names@ @last_name@ in @site_link@
 <else>
   <input type="hidden" name="password_old" value=@password_old@>
 </else>
-</if>
 
   <tr>
     <th>New Password:</th>

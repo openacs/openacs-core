@@ -15,26 +15,16 @@ ad_page_contract {
     site_link:onevalue
 }
 
-set current_user_id [ad_verify_and_get_user_id]
-
-if [empty_string_p $user_id] {
-    set user_id $current_user_id
-    set admin_enabled_p 0
-    ad_require_permission $user_id "write"
+if {[empty_string_p $user_id]} {
+    set user_id [ad_verify_and_get_user_id]
+    permission::require_permission -party_id $user_id -object_id $user_id -privilege "write"
 } else {
-    set admin_enabled_p 1
-    ad_require_permission $user_id "admin"
+    permission::require_permission -party_id $user_id -object_id $user_id -privilege "admin"
 }
-
-set bind_vars [ad_tcl_vars_to_ns_set user_id]
 
 db_1row user_information {}
 
-if {$admin_enabled_p} {
-    set export_vars [export_form_vars return_url user_id]
-} else {
-    set export_vars [export_form_vars return_url]
-}
+set export_vars [export_form_vars return_url user_id]
 
 set site_link [ad_site_home_link]
 
