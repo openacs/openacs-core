@@ -5,6 +5,7 @@
 <ul>
 <li>Name:  @first_names@ @last_name@ (<a href="@public_link@">public page</a>)</li>
 <li>Email:  <a href="mailto:@email@">@email@</a></li>
+<li>Username:  @username@</li>
 <li>Screen name:  @screen_name;noquote@ </li>
 <if @url@ not nil>
   <li>Homepage: <a href="@url@">@url@</a></li>
