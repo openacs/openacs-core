@@ -10,6 +10,10 @@ set page_title "Subsite Configuration"
 
 set context [list "Configuration"]
 
+
+# TODO: Add join policy
+
+
 ad_form -name name -mode display -form {
     {instance_name:text
         {label "Subsite name"}
