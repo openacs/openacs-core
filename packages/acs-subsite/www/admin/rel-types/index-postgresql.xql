@@ -11,7 +11,7 @@
                    repeat('&nbsp;', (tree_level(t2.tree_sortkey) - tree_level(t1.tree_sortkey)) * 4) as indent
               from acs_object_types t1,
 		   acs_object_types t2
-	     where t2.tree_sortkey like (t1.tree_sortkey || '%')
+	     where t2.tree_sortkey between t1.tree_sortkey and tree_right(t1.tree_sortkey)
 	       and t1.object_type in ('membership_rel', 'composition_rel')) t left join
            (select r.rel_type, count(*) as number_relationships
               from acs_objects o, acs_rel_types r, 

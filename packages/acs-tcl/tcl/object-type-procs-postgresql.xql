@@ -13,7 +13,7 @@
                  where object_type = :object_type) o1, 
                acs_object_types o2
          where o2.tree_sortkey <= o1.tree_sortkey
-           and o1.tree_sortkey like (o2.tree_sortkey || '%')
+           and o1.tree_sortkey between o2.tree_sortkey and tree_right(o2.tree_sortkey)
          order by level desc
 
       </querytext>

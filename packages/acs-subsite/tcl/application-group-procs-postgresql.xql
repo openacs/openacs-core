@@ -91,9 +91,10 @@
 		    select ag.group_id as parent_group_id
 		    from application_groups ag,
 		         apm_packages,
-		         (select object_id, 1 as tree_rownum
-		          from site_nodes
-			  where tree_sortkey like (select tree_sortkey from site_nodes where node_id = :node_id) || '%') nodes
+		         (select s.object_id, 1 as tree_rownum
+		          from site_nodes s, site_nodes s2
+                          where s2.node_id = :node_id
+                            and s.tree_sortkey between s2.tree_sortkey and tree_right(s2.tree_sortkey)) nodes
                     where nodes.object_id = apm_packages.package_id
                       and apm_packages.package_id = ag.package_id
                     limit 1

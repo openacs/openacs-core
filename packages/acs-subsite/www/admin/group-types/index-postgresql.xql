@@ -14,7 +14,7 @@
 	      from acs_object_types t1,
 		   acs_object_types t2
 	     where t1.object_type = 'group'
-	       and t2.tree_sortkey like t1.tree_sortkey || '%') t
+	       and t2.tree_sortkey between t1.tree_sortkey and tree_right(t1.tree_sortkey)) t
                    left outer join
            (select o.object_type, count(*) as number_groups
               from groups g, acs_objects o,  

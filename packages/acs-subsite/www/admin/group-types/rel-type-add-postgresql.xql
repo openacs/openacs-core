@@ -11,7 +11,7 @@
       from (select t2.pretty_name, t2.object_type as rel_type, tree_level(t2.tree_sortkey) - tree_level(t1.tree_sortkey) + 1  as type_level
               from acs_object_types t1,
 		   acs_object_types t2
-             where t2.tree_sortkey like (t1.tree_sortkey || '%')
+             where t2.tree_sortkey between t1.tree_sortkey and tree_right(t1.tree_sortkey)
 	       and t2.object_type not in (select g.rel_type 
                                             from group_type_rels g 
                                            where g.group_type = :group_type)

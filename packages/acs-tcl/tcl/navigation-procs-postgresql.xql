@@ -9,8 +9,7 @@
            tree_level(n2.tree_sortkey) as level
     from (select * from site_nodes where node_id = :node_id) n1,
         site_nodes n2
-    where n2.tree_sortkey <= n1.tree_sortkey
-      and n1.tree_sortkey like (n2.tree_sortkey || '%')
+    where n1.tree_sortkey between n2.tree_sortkey and tree_right(n2.tree_sortkey)
  order by level asc
   
       </querytext>

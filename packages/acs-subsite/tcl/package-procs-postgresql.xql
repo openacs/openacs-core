@@ -26,8 +26,7 @@
 	  from acs_object_type_attributes attr, 
 	       (select t2.object_type, t2.table_name, (tree_level(t1.tree_sortkey) - tree_level(t2.tree_sortkey)) + 1 as type_level
 	          from acs_object_types t1, acs_object_types t2
-		 where t2.tree_sortkey <= t1.tree_sortkey
-		   and t1.tree_sortkey like (t2.tree_sortkey || '%')
+		 where t1.tree_sortkey between t2.tree_sortkey and tree_right(t2.tree_sortkey)
 		   and t1.object_type = :object_type) t
          where attr.ancestor_type = t.object_type
            and attr.object_type = :object_type
@@ -43,7 +42,7 @@
 	select t2.object_type
 	  from acs_object_types t1, acs_object_types t2
 	 where t2.dynamic_p = 't'
-	   and t2.tree_sortkey like (t1.tree_sortkey || '%')
+	   and t2.tree_sortkey between t1.tree_sortkey and tree_right(t1.tree_sortkey)
 	   and t1.object_type = :object_type
     
       </querytext>
@@ -70,8 +69,7 @@
 
 	select t2.object_type as ancestor_type
 	  from acs_object_types t1, acs_object_types t2
-	 where t2.tree_sortkey <= t1.tree_sortkey
-	   and t1.tree_sortkey like (t2.tree_sortkey || '%')
+	 where t1.tree_sortkey between t2.tree_sortkey and tree_right(t2.tree_sortkey)
 	   and t1.object_type = :object_type
     
       </querytext>
@@ -83,7 +81,7 @@
 
 	select t2.object_type as sub_type
 	  from acs_object_types t1, acs_object_types t2
-	 where t2.tree_sortkey like (t1.tree_sortkey || '%')
+	 where t2.tree_sortkey between t1.tree_sortkey and tree_right(t1.tree_sortkey)
 	   and t1.object_type = :object_type 
     
       </querytext>
@@ -126,11 +124,9 @@
                t.id_column as object_type_id_column
           from acs_object_type_attributes a, 
                (select t.object_type, t.table_name, t.id_column, tree_level(t.tree_sortkey) as type_level
-                  from acs_object_types t
-		 where tree_sortkey like
-		         (select tree_sortkey || '%'
-			    from acs_object_types
-			   where object_type = :start_with)) t
+                from acs_object_types t, acs_object_types t2
+		where t.tree_sortkey between t2.tree_sortkey and tree_right(t2.tree_sortkey)
+		  and t2.object_type = :start_with) t
          where a.object_type = :object_type
            and t.object_type = a.ancestor_type $storage_clause
          order by type_level, attribute_id
@@ -145,8 +141,7 @@
 	  from user_tab_columns cols, 
 	       (select upper(t2.table_name) as table_name
 	          from acs_object_types t1, acs_object_types t2
-		 where t2.tree_sortkey <= t1.tree_sortkey
-		   and t1.tree_sortkey like (t2.tree_sortkey || '%')
+		 where t1.tree_sortkey between t2.tree_sortkey and tree_right(t2.tree_sortkey)
 		   and t1.object_type = :object_type) t
 	 where cols.column_name in
 	          (select args.arg_name

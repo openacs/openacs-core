@@ -30,7 +30,7 @@
 		       t2.tree_sortkey
 		  from acs_object_types t1,
 		       acs_object_types t2
-		 where t2.tree_sortkey like (t1.tree_sortkey || '%')
+		 where t2.tree_sortkey between t1.tree_sortkey and tree_right(t1.tree_sortkey)
 	           and $start_with_clause ) types
                   left outer join
 	            (select object_type 
