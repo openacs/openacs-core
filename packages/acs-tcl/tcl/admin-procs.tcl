@@ -26,53 +26,12 @@ proc_doc ad_restrict_to_https {conn args why} {
     @author Allen Pulsifer (pulsifer@mediaone.net)
     @creation-date 2 November 2000
 } {
-    if { [ad_conn driver] == "nsssl" ||
-         [ad_conn driver] == "nsssle" ||
-	 [ad_conn driver] == "nsopenssl"} {
- 	return "filter_ok"
-    } 
-
-    set http_port [ns_config -int "ns/server/[ns_info server]/module/nssock" Port 80]
-    if { [ns_config ns/server/[ns_info server]/modules nsssl] != "" } {
-    set ssl_port [ns_config -int "ns/server/[ns_info server]/module/nsssl" Port 443]
-    } elseif { [ns_config ns/server/[ns_info server]/modules nsopenssl] != "" } {
-	set ssl_port [ns_config -int "ns/server/[ns_info server]/module/nsopenssl" ServerPort 443]
-    } elseif { [ns_config ns/server/[ns_info server]/modules nsssle] != "" } {
-    set ssl_port [ns_config -int "ns/server/[ns_info server]/module/nsssle" Port 443]
+    if { [security::secure_conn_p] } {
+        return "filter_ok"
     }
     
-    set host [ns_set iget [ad_conn headers] "host"]
-    if { [regexp {^(.*?):(.*)$} $host match host port] == 0 || [string compare $port $http_port] == 0 } {
-	set url [ad_conn url]
-
-        # ArsDigita probably meant to pass along any form variables (I hope)...
-        set form [ns_getform]
-
-        if {$form != ""} {
-            set size [ns_set size $form]
-            set url_args [list]
- 
-            for {set i 0} {$i < $size} {incr i} {
-                set key [ns_set key $form $i]
-                set val [ns_set value $form $i]
-                lappend url_args [ns_urlencode $key]=[ns_urlencode $val]
-            }
- 
-           append url "?[join $url_args &]"
-        }
-        
-
-	if { $ssl_port == 443 } {
-	    set redir "https://$host$url"
-	} else {
-	    set redir "https://$host:$ssl_port$url"
-	}
-	ad_returnredirect $redir
-        # continue here since in filter
-    } else {
-	ad_return_forbidden "Please use HTTPS" "Sorry, you must use HTTPS to access this page."
-        # continue here since in filter
-    }
+    ad_returnredirect [security::get_secure_qualified_url [ad_return_url]]
+    # No abort since in filter
     
     return "filter_return"
 }

@@ -515,7 +515,7 @@ ad_proc -private rp_filter { why } {
             if { [regexp {^GET [^\?]*\?(.*) HTTP} [ns_conn request] match vars] } {
                 append url ?$vars
             }
-            if { [ad_secure_conn_p] } {
+            if { [security::secure_conn_p] } {
                 # it's a secure connection.
                 ad_returnredirect https://[ad_host][ad_port]$url
                 return "filter_return"

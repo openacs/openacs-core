@@ -15,6 +15,10 @@ ad_page_contract {
 
 # TODO: Move to includeable chunk
 
+# Redirect to HTTPS if so configured
+if { [security::RestrictLoginToSSLP] } {
+    security::require_secure_conn
+}
 
 # TODO: log user out if currently logged in, if specified in the includeable chunk's parameters, e.g. not when creating accounts for other users
 ad_user_logout 
