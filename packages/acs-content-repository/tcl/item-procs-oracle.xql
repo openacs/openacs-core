@@ -70,6 +70,16 @@
       </querytext>
 </fullquery>
 
+<fullquery name="item::delete.delete_item">
+      <querytext>
+ 
+       begin
+        content_item.delete(:item_id);
+        end;
+  
+      </querytext>
+</fullquery>
+
 <fullquery name="item::copy.copy_item">      
       <querytext>
       

@@ -666,6 +666,17 @@ ad_proc -public item::get_content {
     return [get_revision_content $revision_id $item_id]
 }
 
+ad_proc -public item::delete {
+    {-item_id:required}
+} {
+    Delete a content item from the database. If the content item
+    to delete has children content items referencing its parent
+    via acs_objects.context_id then this proc will fail.
+
+    @author Peter Marklund
+} {
+    db_exec_plsql delete_item {}    
+}
   
 ad_proc -public item::publish {
     {-item_id:required}
