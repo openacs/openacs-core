@@ -319,116 +319,136 @@ ad_proc -public auth::sync::job::action {
     set authority_id [get_authority_id -job_id $job_id]
 
     db_transaction {
-        # We deal with insert/update in a snaphsot sync here
-        if { [string equal $operation "snapshot"] } {
-            set user_id [acs_user::get_by_username \
-                             -authority_id $authority_id \
-                             -username $username]
-            
-            if { ![empty_string_p $user_id] } {
-                # user exists, it's an update
-                set operation "update"
-            } else {
-                # user does not exist, it's an insert
-                set operation "insert"
-            }
-        }
-
+        set user_id [acs_user::get_by_username \
+                         -authority_id $authority_id \
+                         -username $username]
+        
         set success_p 1
         array set result {
             message {}
             element_messages {}
         }
         
-        with_catch errmsg {
-            switch $operation {
-                "insert" {
-                    # We set email_verified_p to 't', because we trust the email we get from the remote system
-                    
-                    array set result [auth::create_local_account \
-                                          -authority_id $authority_id \
-                                          -username $username \
-                                          -array user_info]
-
-                    if { ![string equal $result(creation_status) "ok"] } {
-                        set result(message) $result(creation_message)
-                        set success_p 0
-                    } else {
-                        set user_id $result(user_id)
-
-                        set add_to_dotlrn_p [parameter::get_from_package_key \
-                                                 -parameter SyncAddUsersToDotLrnP \
-                                                 -package_key "acs-authentication" \
-                                                 -default 0]
-
-                        if { $add_to_dotlrn_p } {
-                            # Add user to .LRN
-                            # Beware that this creates a portal and lots of other things for each user
-
-                            set type [parameter::get_from_package_key \
-                                          -parameter SyncDotLrnUserType \
-                                          -package_key "acs-authentication" \
-                                          -default "student"]
-
-                            set can_browse_p [parameter::get_from_package_key \
-                                                  -parameter SyncDotLrnAccessLevel \
-                                                  -package_key "acs-authentication" \
-                                                  -default 1]
-
-                            set read_private_data_p [parameter::get_from_package_key \
-                                                         -parameter SyncDotLrnReadPrivateDataP \
-                                                         -package_key "acs-authentication" \
-                                                         -default 1]
-                            
-                            dotlrn::user_add \
-                                -id $user_info(email) \
-                                -type $type \
-                                -can_browse=$can_browse_p \
-                                -user_id $user_id
-                            
-                            acs_privacy::set_user_read_private_data \
-                                -user_id $user_id \
-                                -object_id [dotlrn::get_package_id] \
-                                -value $read_private_data_p
-
-                        }
-                    }
-
-                    # We ignore account_status
-                }
-                "update" {
-                    # We set email_verified_p to 't', because we trust the email we get from the remote system
-                    array set result [auth::update_local_account \
-                                          -authority_id $authority_id \
-                                          -username $username \
-                                          -array user_info]
-                    
-                    if { ![string equal $result(update_status) "ok"] } {
-                        set result(message) $result(update_message)
-                        set success_p 0
-                    } else {
-                        set user_id $result(user_id)
-                    }
-                }
-                "delete" {
-                    array set result [auth::delete_local_account \
-                                          -authority_id $authority_id \
-                                          -username $username]
-                    
-                    if { ![string equal $result(delete_status) "ok"] } {
-                        set result(message) $result(delete_message)
-                        set success_p 0
-                    } else {
-                        set user_id $result(user_id)
-                    }
+        switch $operation {
+            snapshot {
+                if { ![empty_string_p $user_id] } {
+                    # user exists, it's an update
+                    set operation "update"
+                } else {
+                    # user does not exist, it's an insert
+                    set operation "insert"
                 }
             }
-        } {
-            # Get errorInfo and log it
-            global errorInfo
-            ns_log Error "Error during batch syncrhonization job:\n$errorInfo"
-            set success_p 0
-            set result(message) $errorInfo
+            update - delete {
+                if { [empty_string_p $user_id] } {
+                    # Updating/deleting a user that doesn't exist
+                    set success_p 0
+                    set result(message) "A user with username '$username' does not exist"
+                }
+            }
+            insert {
+                if { ![empty_string_p $user_id] } {
+                    set success_p 0
+                    set result(message) "A user with username '$username' already exists"
+                }
+            }
+        }
+
+        # Only actually perform the action if we didn't already encounter a problem
+        if { $success_p } {
+            with_catch errmsg {
+                switch $operation {
+                    "insert" {
+                        # We set email_verified_p to 't', because we trust the email we get from the remote system
+                        set user_info(email_verified_p) t
+
+                        array set result [auth::create_local_account \
+                                              -authority_id $authority_id \
+                                              -username $username \
+                                              -array user_info]
+
+                        if { ![string equal $result(creation_status) "ok"] } {
+                            set result(message) $result(creation_message)
+                            set success_p 0
+                        } else {
+                            set user_id $result(user_id)
+
+                            set add_to_dotlrn_p [parameter::get_from_package_key \
+                                                     -parameter SyncAddUsersToDotLrnP \
+                                                     -package_key "acs-authentication" \
+                                                     -default 0]
+
+                            if { $add_to_dotlrn_p } {
+                                # Add user to .LRN
+                                # Beware that this creates a portal and lots of other things for each user
+
+                                set type [parameter::get_from_package_key \
+                                              -parameter SyncDotLrnUserType \
+                                              -package_key "acs-authentication" \
+                                              -default "student"]
+
+                                set can_browse_p [parameter::get_from_package_key \
+                                                      -parameter SyncDotLrnAccessLevel \
+                                                      -package_key "acs-authentication" \
+                                                      -default 1]
+
+                                set read_private_data_p [parameter::get_from_package_key \
+                                                             -parameter SyncDotLrnReadPrivateDataP \
+                                                             -package_key "acs-authentication" \
+                                                             -default 1]
+                                
+                                dotlrn::user_add \
+                                    -id $user_info(email) \
+                                    -type $type \
+                                    -can_browse=$can_browse_p \
+                                    -user_id $user_id
+                                
+                                acs_privacy::set_user_read_private_data \
+                                    -user_id $user_id \
+                                    -object_id [dotlrn::get_package_id] \
+                                    -value $read_private_data_p
+
+                            }
+                        }
+
+                        # We ignore account_status
+                    }
+                    "update" {
+                        # We set email_verified_p to 't', because we trust the email we get from the remote system
+                        set user_info(email_verified_p) t
+
+                        array set result [auth::update_local_account \
+                                              -authority_id $authority_id \
+                                              -username $username \
+                                              -array user_info]
+                        
+                        if { ![string equal $result(update_status) "ok"] } {
+                            set result(message) $result(update_message)
+                            set success_p 0
+                        } else {
+                            set user_id $result(user_id)
+                        }
+                    }
+                    "delete" {
+                        array set result [auth::delete_local_account \
+                                              -authority_id $authority_id \
+                                              -username $username]
+                        
+                        if { ![string equal $result(delete_status) "ok"] } {
+                            set result(message) $result(delete_message)
+                            set success_p 0
+                        } else {
+                            set user_id $result(user_id)
+                        }
+                    }
+                }
+            } {
+                # Get errorInfo and log it
+                global errorInfo
+                ns_log Error "Error during batch syncrhonization job:\n$errorInfo"
+                set success_p 0
+                set result(message) $errorInfo
+            }
         }
 
         # Make a log entry
@@ -805,8 +825,8 @@ ad_proc -private auth::sync::process_doc::ims::ProcessDocument {
         set user_info(url) [xml_get_child_node_content_by_path $person_node { { url } }]
 
         # We need a little more logic to deal with first_names/last_name, since they may not be split up in the XML
-        set user_info(first_names) [xml_get_child_node_content_by_path $person_node { { n given } }]
-        set user_info(last_name) [xml_get_child_node_content_by_path $person_node { { n family } }]
+        set user_info(first_names) [xml_get_child_node_content_by_path $person_node { { name n given } }]
+        set user_info(last_name) [xml_get_child_node_content_by_path $person_node { { name n family } }]
 
         if { [empty_string_p $user_info(first_names)] || [empty_string_p $user_info(last_name)] } {
             set formatted_name [xml_get_child_node_content_by_path $person_node { { name fn } }]
