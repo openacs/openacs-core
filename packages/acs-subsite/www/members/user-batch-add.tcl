@@ -9,6 +9,8 @@ ad_page_contract {
     admin_email:onevalue
 }
 
+subsite::assert_user_may_add_member
+
 set admin_user_id [ad_verify_and_get_user_id]
 set admin_email [db_string unused "select email from 
 parties where party_id = :admin_user_id"]

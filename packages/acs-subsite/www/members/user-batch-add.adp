@@ -3,10 +3,18 @@
 <property name="context">@context;noquote@</property>
 
 <form method="post" action="user-batch-add-2">
-<p>Add these users to @system_name@, one user per line.</p>
-<br /><textarea name=userlist rows=15 cols=50>
-email, first name, last name
-</textarea>
+<p>
+  Add these users to @system_name@, one user per line. The format of the lines should be:
+</p>
+<p>
+  <code>
+  user@example.net, Jane, Austin<br />
+  user2@example.net, Emily, Dickinson
+  </code>
+</p>
+
+<textarea name=userlist rows=15 cols=50></textarea>
+
 <p>Each user will get this email:
 <br />From: <input name="from" value="@admin_email@">
 <br />Subject: <input name=subject value="You have been added as a user to @system_name@ at @system_url@" size=50>

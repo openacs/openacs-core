@@ -687,3 +687,26 @@ ad_proc -public subsite::get_application_options {} {
     return [db_list_of_lists package_types {}]
 }
 
+ad_proc -private subsite::assert_user_may_add_member {} {
+    Used on pages that add users to the application group of
+    the current subsite to assert that the currently logged in
+    user may add users.
+
+    @author Peter Marklund
+} {
+    auth::require_login
+
+    set group_id [application_group::group_id_from_package_id]
+
+    set admin_p [permission::permission_p -object_id $group_id -privilege "admin"]
+
+    if { !$admin_p } {
+        # If not admin, user must be member of group, and members must be allowed to invite other members
+        if { ![parameter::get -parameter "MembersCanInviteMembersP" -default 0] || \
+                 ![group::member_p -group_id $group_id] } {
+        
+            ad_return_forbidden "Cannot invite members" "I'm sorry, but you're not allowed to invite members to this group"
+            ad_script_abort
+        }
+    }
+}

@@ -12,6 +12,8 @@ ad_page_contract {
     exception_text:onevalue
 }
 
+subsite::assert_user_may_add_member
+
 # parse the notify_ids arguments 
 # ...
 
