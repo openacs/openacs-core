@@ -175,8 +175,10 @@ ad_proc -public template::util::spellcheck::get_element_formtext {
     close $f
     
     set lines [split $text "\n"]
-    
-    set dictionaryfile [file join [acs_package_root_dir acs-templating] resources forms ispell-words]
+
+    # Support for local, localized, dictionaries (UI to add to them is not implemented yet!)
+    set suffix [ad_decode $language "" "" "-$language"]
+    set dictionaryfile [file join [acs_package_root_dir acs-templating] resources forms webspell-local-dict$suffix]
 
     # The webspell wrapper is necessary because ispell requires
     # the HOME environment set, and setting env(HOME) doesn't appear
@@ -192,8 +194,12 @@ ad_proc -public template::util::spellcheck::get_element_formtext {
 	set language "--lang=$language"
     }
 
-    set ispell_proc [open "|$spelling_wrapper $tmpfile $dictionaryfile $spellchecker_path [ns_info home] $language" r]
-
+    if { [catch { set ispell_proc [open "|$spelling_wrapper [ns_info home] $spellchecker_path $language $dictionaryfile $tmpfile" r] } errmsg] } {
+	ad_return_error "Webspell could not be executed" "Spell-checking is enabled but the spell-check wrapper ([acs_root_dir]/bin/webspell) could not be executed. Check that the wrapper exists, and that its permissions are correct. <p>Here is the error message: <pre>$errmsg</pre>"
+	ad_script_abort
+    }
+    
+    
     # read will occasionally error out with "interrupted system call",
     # so retry a few times in the hopes that it will go away.
     set try 0
@@ -204,8 +210,8 @@ ad_proc -public template::util::spellcheck::get_element_formtext {
 	ns_log Notice "spellchecker had a problem: $errmsg"
     }
 
-    if { [catch [close $ispell_proc] errmsg] } {
-	ad_return_error "No Dictionary Found" "Spell-checking is enabled but the spell-check program could not be executed. Check the permissions on the spell-check program (_server_root_/bin/webspell). <p>Here is the error message: <pre>$errmsg</pre>"
+    if { [catch { close $ispell_proc } errmsg] } {
+	ad_return_error "No dictionary found" "Spell-checking is enabled but the spell-check dictionary could not be reached. Check that the dictionary exists, and that its permissions are correct. <p>Here is the error message: <pre>$errmsg</pre>"
 	ad_script_abort
     }
 
