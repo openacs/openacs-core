@@ -1,4 +1,4 @@
-alter table apm_package_types add column initial_install_p char(1) default 'f' not null;
+alter table apm_package_types add (initial_install_p char(1) default 'f' not null);
 
 comment on column apm_package_types.initial_install_p is '
  Indicates if the package should be installed during initial installation,
