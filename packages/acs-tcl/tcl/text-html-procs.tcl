@@ -561,7 +561,7 @@ attribute_array(heres)='  something for   you to = "consider" '</pre>
     # We maintain counter is so that we don't accidentally enter an infinite loop
     set count 0
     while { $i < [string length $html] && ![string equal [string index $html $i] {>}] } {
-	if { [incr count] > 100 } {
+	if { [incr count] > 1000 } {
 	    error "There appears to be a programming bug in ad_parse_html_attributes_upvar: We've entered an infinite loop."
 	}
 	if { [string equal [string range $html $i [expr { $i + 1 }]] "/>"] } {
@@ -790,7 +790,7 @@ ad_proc -public ad_html_to_text {
 	
 	set count 0
 	while 1 {
-	    if { [incr count] > 100 } {
+	    if { [incr count] > 1000 } {
 		error "There appears to be a programming bug in ad_html_to_text: We've entered an infinite loop."
 	    }
 	    # Find the positions of the first quote, apostrophe and greater-than sign.
