@@ -33,7 +33,7 @@ namespace eval notification::display {
             set sub_url [unsubscribe_url -request_id $request_id -url $url]
             set sub_chunk "You have requested notification for $pretty_name. You may <a href=\"$sub_url\">unsubscribe</a>."
         } else {
-            set sub_url [subscribe_url -type $type -object_id $object_id -url $url -user_id $user_id]
+            set sub_url [subscribe_url -type $type -object_id $object_id -url $url -user_id $user_id -pretty_name $pretty_name]
             set sub_chunk "You may <a href=\"$sub_url\">request notification</a> for $pretty_name."
         }
 
@@ -45,11 +45,12 @@ namespace eval notification::display {
         {-object_id:required}
         {-url:required}
         {-user_id:required}
+        {-pretty_name}
     } {
         set type_id [notification::type::get_type_id -short_name $type]
 
         set root_path [apm_package_url_from_key [notification::package_key]]
-        set subscribe_url "${root_path}request-new?type_id=$type_id&user_id=$user_id&object_id=$object_id&return_url=[ns_urlencode $url]"
+        set subscribe_url "${root_path}request-new?[export_vars { type_id user_id object_id pretty_name {return_url $url} }]"
 
         return $subscribe_url
     }
