@@ -57,7 +57,7 @@ ad_proc -public content::type::delete {
     ] content_type drop_type]
 }
 
-ad_proc -public content::type::create_attribute {
+ad_proc -public content::type::attribute::new {
     -content_type:required
     -attribute_name:required
     -datatype:required
@@ -103,7 +103,7 @@ ad_proc -public content::type::create_attribute {
 
 
 
-ad_proc -public content::type::drop_attribute {
+ad_proc -public content::type::attribute::delete {
     -content_type:required
     -attribute_name:required
     {-drop_column ""}
