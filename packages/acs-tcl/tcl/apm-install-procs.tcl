@@ -717,12 +717,30 @@ ad_proc -private apm_package_install {
             apm_load_queries -packages $package_key
         }
 
-        if { $upgrade_p } {
+        # Get the callbacks in an array, since we can't rely on the 
+        # before-upgrade being in the db (since it might have changed)
+        # and the before-install definitely won't be there since 
+        # it's not added til later here.
+
+        array set callbacks $version(callbacks)
+
+        if {$upgrade_p} {
             # Run before-upgrade
-            apm_invoke_callback_proc -version_id $version_id -type before-upgrade -arg_list [list from_version_name $upgrade_from_version_name to_version_name $version(name)]
+            if {[info exists callbacks(before-upgrade)]} {
+                apm_invoke_callback_proc \
+                    -proc_name $callbacks(before-upgrade) \
+                    -version_id $version_id \
+                    -type before-upgrade \
+                    -arg_list [list from_version_name $upgrade_from_version_name to_version_name $version(name)]
+            }
         } else {
             # Run before-install
-            apm_invoke_callback_proc -version_id $version_id -type before-install
+            if {[info exists callbacks(before-install)]} {
+                apm_invoke_callback_proc \
+                    -proc_name $callbacks(before-install) \
+                    -version_id $version_id \
+                    -type before-install
+            }
         }
 
         if { $load_data_model_p } {

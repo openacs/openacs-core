@@ -1214,7 +1214,6 @@ ad_proc -public apm_get_callback_proc {
     if { [empty_string_p $version_id] } {
         set version_id [apm_version_id_from_package_key $package_key]
     }
-
     return [db_string select_proc {} -default ""]
 }
 
@@ -1256,6 +1255,7 @@ ad_proc -public apm_unused_callback_types {
 }
 
 ad_proc -public apm_invoke_callback_proc {
+    {-proc_name {}}
     {-version_id ""}
     {-package_key ""}
     {-arg_list {}}
@@ -1265,6 +1265,11 @@ ad_proc -public apm_invoke_callback_proc {
     for a given package version. Any errors during
     invocation are logged.
 
+    @param callback_proc if this is provided it is called 
+      instead of attempting to look up the proc via the package_key or version_id
+      (needed for before-install callbacks since the db is not populated when those 
+       are called).
+
     @return 1 if invocation
     was carried out successfully, 0 if no proc to invoke could
     be found. Will propagate any error thrown by the callback.
@@ -1273,11 +1278,13 @@ ad_proc -public apm_invoke_callback_proc {
 } {
     array set arg_array $arg_list
 
-    set proc_name [apm_get_callback_proc \
-                       -version_id $version_id \
-                       -package_key $package_key \
-                       -type $type]
-    
+    if {[empty_string_p $proc_name]} {
+        set proc_name [apm_get_callback_proc \
+                           -version_id $version_id \
+                           -package_key $package_key \
+                           -type $type]
+    }
+
     if { [empty_string_p $proc_name] } {
         if { [string equal $type "after-instantiate"] } {
             # We check for the old proc on format: package_key_post_instantiation package_id
@@ -1293,7 +1300,7 @@ ad_proc -public apm_invoke_callback_proc {
             $proc_name $arg_array(package_id)
 
             return 1
-            
+
         } else {
             # No other callback procs to fall back on
             return 0
