@@ -8,7 +8,7 @@
 <li><a href="for-everyone.html">Part I: For Everyone</a>
 <li><a href="acs-admin.html">Part II: Administrator's Guide</a>
 <li><a href="acs-package-dev.html">Part III: Package Developer's Guide</a>
-<li><a href="acs-plat-dev.html">Part IV:Platform Developer's Guide</a>
+<li><a href="acs-plat-dev.html">Part IV: Platform Developer's Guide</a>
 </ul>
 
 <strong>Primers and References</strong>
