@@ -425,6 +425,10 @@ ad_proc -public ad_form {
     array set af_element_parameters [list] 
 
     if { [info exists form] } {
+
+        # Remove comment lines in form section (DanW)
+        regsub -all -line -- {^\s*\#.*$} $form "" form
+
         foreach element $form {
             set element_name_part [lindex $element 0]
 
@@ -470,6 +474,10 @@ ad_proc -public ad_form {
     set af_validate_elements($form_name) [list]
 
     if { [info exists validate] } {
+
+        # Remove comment lines in validate section (DanW)
+        regsub -all -line -- {^\s*\#.*$} $validate "" validate
+
         foreach validate_element $validate {
             if { [llength $validate_element] != 3 } {
                 return -code error "Validate block must have three arguments: element name, expression, error message"
