@@ -5,21 +5,24 @@
   <div style="float: right;">
     <if @main_site_p@ false>  
       <if @group_member_p@ true>
-        <span class="button"><a href="group-leave" class="button" title="Leave this community">Leave community</a></span>
+        <span class="button"><a href="group-leave" class="button"
+          title="#acs-subsite.Leave_this_community#">#acs-subsite.Leave_community#</a></span>
       </if>
       <else>
         <if @can_join_p@ true>
           <if @group_join_policy@ eq "open">
-            <a href="register/user-join" class="button" title="Join this community">Join community</a>
+            <a href="register/user-join" class="button"
+              title="#acs-subsite.Join_this_community">#acs-subsite.Join_community#</a>
           </if>
           <else>
-            <a href="register/user-join" class="button" title="Request membership of this community">Request membership</a>
+            <a href="register/user-join" class="button"
+              title="#acs-subsite.Req_membership_comm#">#acs-subsite.Request_membership#</a>
           </else>
         </if>
       </else>
     </if>
     <if @admin_p@ true> 
-      <a href="admin/" class="button" title="Administer @subsite_name@">Admin</a>
+      <a href="admin/" class="button" title="#acs-subsite.Administer_subsite#">#acs-subsite.Admin#</a>
     </if>
   </div>
 </if>
@@ -27,7 +30,7 @@
 <table width="100%">
   <tr>
     <td valign="top">
-      <h2>Applications</h2>
+      <h2>#acs-subsite.Applications#</h2>
       <include src="/packages/acs-subsite/lib/applications">
     </td>
     <td valign="top">
@@ -38,7 +41,7 @@
   <if @show_members_page_link_p@>
   <tr>
     <td valign="top" colspan="2">
-      <p> <b>&raquo;</b> <a href="members/">Members</a> </p>
+      <p> <b>&raquo;</b> <a href="members/">#acs-subsite.Members#</a> </p>
     </td>
   </tr>
   </if>

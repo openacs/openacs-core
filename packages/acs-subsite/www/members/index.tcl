@@ -15,7 +15,7 @@ ad_page_contract {
     }
 }
 
-set page_title "Members"
+set page_title [_ acs-subsite.Members]
 set context [list $page_title]
 
 set group_id [application_group::group_id_from_package_id]
@@ -35,7 +35,7 @@ if { $admin_p || ($user_id != 0 && $show_member_list_to == 1) || \
     set show_members_list_p 1
 } else {
     set show_members_list_p 0
-    set title "Cannot see the members list"
+    set title [_ acs-subsite.Cannot_see_memb_list]
 }
 
 if { $admin_p } {
@@ -49,7 +49,8 @@ if { $admin_p } {
 set actions {}
 
 if { $admin_p || [parameter::get -parameter "MembersCanInviteMembersP" -default 0] } {
-    set actions { "Invite" member-invite }
+    set actions [_ acs-subsite.Invite]
+    lappend actions { member-invite }
 }
 
 # TODO: Pagination
@@ -79,50 +80,50 @@ list::create \
     -actions $actions \
     -elements {
         name {
-            label "Name"
+            label "[_ acs-subsite.Name]"
             link_url_eval {[acs_community_member_url -user_id $user_id]}
         }
         email {
-            label "Email"
+            label "[_ acs-subsite.Email]"
             link_url_col email_url
-            link_html { title "Send email to this user" }
+            link_html { title "[_ acs-subsite.Send_email_to_this_user]" }
         }
         rel_role {
-            label "Role"
+            label "[_ acs-subsite.Role]"
             display_template {
                 @members.rel_role_pretty@
                 <if @members.make_admin_url@ not nil>
-                  (<a href="@members.make_admin_url@">Make administrator</a>)
+                  (<a href="@members.make_admin_url@">#acs-subsite.Make_administrator#</a>)
                 </if>
                 <if @members.make_member_url@ not nil>
-                  (<a href="@members.make_member_url@">Make member</a>)
+                  (<a href="@members.make_member_url@">#acs-subsite.Make_member#</a>)
                 </if>
             }
         }
         member_state_pretty {
-            label "Member State"
+            label "[_ acs-subsite.Member_State]"
             display_template {
                 @members.member_state_pretty@
                 <if @members.approve_url@ not nil>
-                  (<a href="@members.approve_url@">Approve</a>)
+                  (<a href="@members.approve_url@">#acs-subsite.Approve#</a>)
                 </if>
                 <if @members.reject_url@ not nil>
-                  (<a href="@members.reject_url@">Reject</a>)
+                  (<a href="@members.reject_url@">#acs-subsite.Reject#</a>)
                 </if>
                 <if @members.ban_url@ not nil>
-                  (<a href="@members.ban_url@">Ban</a>)
+                  (<a href="@members.ban_url@">#acs-subsite.Ban#</a>)
                 </if>
                 <if @members.delete_url@ not nil>
-                  (<a href="@members.delete_url@">Delete</a>)
+                  (<a href="@members.delete_url@">#acs-subsite.Delete#</a>)
                 </if>
                 <if @members.remove_url@ not nil>
-                  (<a href="@members.remove_url@">Remove</a>)
+                  (<a href="@members.remove_url@">#acs-subsite.Remove#</a>)
                 </if>
             }
         }
     } -filters {
         member_state {
-            label "Member State"
+            label "[_ acs-subsite.Member_State]"
             values $member_state_options
             where_clause {
                 mr.member_state = :member_state
@@ -131,15 +132,15 @@ list::create \
         }
     } -orderby {
         name {
-            label "Name"
+            label "[_ acs-subsite.Name]"
             orderby "lower(u.first_names || ' ' || u.last_name)"
         }
         email {
-            label "Email"
+            label "[_ acs-subsite.Email]"
             orderby "u.email"
         }
         rel_role {
-            label "Role"
+            label "[_ acs-subsite.Role]"
             orderby "role.pretty_name"
         }
     }

@@ -16,5 +16,5 @@
 </if>
 <else>
   <h4>@title@</h4>
-  Sorry, but you are not allowed to view the members list.
+  #acs-subsite.Mem_list_not_allowed#
 </else>
