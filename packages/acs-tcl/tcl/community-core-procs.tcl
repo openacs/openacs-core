@@ -429,6 +429,25 @@ ad_proc -public acs_user::update {
     db_dml user_update {}
 }
 
+ad_proc -public acs_user::site_wide_admin_p {
+    {-user_id ""}
+} {
+    Return 1 if the specified user (defaults to logged in user)
+    is site-wide administrator and 0 otherwise.
+
+    @param user_id The id of the user to check for admin privilege.
+
+    @author Peter Marklund
+} {
+    if { [empty_string_p $user_id]} {
+        set user_id [ad_conn user_id]
+    }
+
+    return [permission::permission_p -party_id $user_id \
+                                     -object_id [acs_lookup_magic_object security_context_root] \
+                                     -privilege "admin"]
+}
+
 ad_proc -public party::update {
     {-party_id:required}
     {-email:required}
@@ -444,5 +463,3 @@ ad_proc -public party::update {
 } {
     db_dml party_update {}
 }
-
-
