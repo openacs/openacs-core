@@ -3,7 +3,7 @@
 
 <fullquery name="param_name_unique_ck">      
       <querytext>
-	    select case when count(*) > 0 then 0 else 1 end
+	    select case when count(*) = 0 then 0 else 1 end
 	    from apm_parameters
 	    where parameter_name = :parameter_name
 	

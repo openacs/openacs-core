@@ -183,10 +183,10 @@ create table acs_objects (
 	security_inherit_p	boolean default 't' not null,
 	creation_user		integer,
 	creation_date		timestamp default now() not null,
-	creation_ip		varchar(50) default '' not null,
+	creation_ip		varchar(50),
 	last_modified		timestamp default now() not null,
 	modifying_user		integer,
-	modifying_ip		varchar(50) default '' not null,
+	modifying_ip		varchar(50),
         tree_sortkey            varchar(4000),
         constraint acs_objects_context_object_un
 	unique (context_id, object_id)
@@ -502,7 +502,7 @@ create table acs_attribute_values (
 	attribute_id	integer not null
 			constraint acs_attr_values_attr_id_fk
 			references acs_attributes (attribute_id),
-	attr_value	text default '' not null,
+	attr_value	text,
 	constraint acs_attribute_values_pk primary key
 	(object_id, attribute_id)
 );
@@ -522,7 +522,7 @@ create table acs_static_attr_values (
 	attribute_id	integer not null
 			constraint acs_static_a_v_attr_id_fk
 			references acs_attributes (attribute_id),
-	attr_value	text default '' not null,
+	attr_value	text,
 	constraint acs_static_a_v_pk primary key
 	(object_type, attribute_id)
 );
@@ -667,7 +667,7 @@ begin
     creation_date, creation_user, creation_ip)
   values
    (v_object_id, new__object_type, new__context_id,
-    new__creation_date, new__creation_user, coalesce(new__creation_ip,''''));
+    new__creation_date, new__creation_user, new__creation_ip);
 
   PERFORM acs_object__initialize_attributes(v_object_id);
 
@@ -713,8 +713,14 @@ begin
     order by o2.tree_sortkey desc
   loop
     -- Delete from the table.
-    execute ''delete from '' || quote_ident(obj_type.table_name) ||
-        '' where '' || quote_ident(obj_type.id_column) || '' =  '' || delete__object_id;
+
+    -- DRB: I removed the quote_ident calls that DanW originally included
+    -- because the table names appear to be stored in upper case.  Quoting
+    -- causes them to not match the actual lower or potentially mixed-case
+    -- table names.  We will just forbid squirrely names that include quotes.
+
+    execute ''delete from '' || obj_type.table_name ||
+        '' where '' || obj_type.id_column || '' =  '' || delete__object_id;
   end loop;
 
   return 0; 

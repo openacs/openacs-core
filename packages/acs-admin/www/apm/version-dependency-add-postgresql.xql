@@ -4,8 +4,9 @@
  
 <fullquery name="apm_all_service_uri">      
       <querytext>
-    select distinct service_uri, service_version
-    from   apm_package_dependencies
+    select distinct service_uri, service_version,
+        apm_package_version__sortable_version_name(service_version)
+    from apm_package_dependencies
     order by service_uri, apm_package_version__sortable_version_name(service_version)
 
       </querytext>

@@ -40,8 +40,8 @@ create table acs_object_types (
 	id_column	varchar(30) not null,
 	package_name	varchar(30) not null
 			constraint acs_object_types_pkg_name_un unique,
-	name_method	varchar(30) default '' not null,
-	type_extension_table varchar(30) default '' not null,
+	name_method	varchar(30),
+	type_extension_table varchar(30),
         dynamic_p       boolean default 'f',
         tree_sortkey    varchar(4000)
 );
@@ -237,7 +237,7 @@ create table acs_object_type_tables (
                         constraint acs_obj_type_tbls_obj_type_fk
 			references acs_object_types (object_type),
 	table_name	varchar(30) not null,
-	id_column	varchar(30) default '' not null,
+	id_column	varchar(30),
 	constraint acs_object_type_tables_pk
 	primary key (object_type, table_name)
 );
@@ -363,12 +363,12 @@ create table acs_attributes (
         references acs_object_type_tables,
 	attribute_name	varchar(100) not null,
 	pretty_name	varchar(100) not null,
-	pretty_plural	varchar(100) default '' not null,
+	pretty_plural	varchar(100),
 	sort_order	integer not null,
 	datatype	varchar(50) not null
 			constraint acs_attributes_datatype_fk
 			references acs_datatypes (datatype),
-	default_value	text default '' not null,
+	default_value	text,
 	min_n_values	integer default 1 not null
 			constraint acs_attributes_min_n_ck
 			check (min_n_values >= 0),
@@ -380,7 +380,7 @@ create table acs_attributes (
 			check (storage in ('type_specific',
 					   'generic')),
         static_p        boolean default 'f',
-	column_name	varchar(30) default '' not null,
+	column_name	varchar(30),
 	constraint acs_attributes_attr_name_un
 	unique (attribute_name, object_type),
 	constraint acs_attributes_pretty_name_un
@@ -438,7 +438,7 @@ create table acs_enum_values (
 	attribute_id	integer not null
 			constraint asc_enum_values_attr_id_fk
 			references acs_attributes (attribute_id),
-	enum_value	varchar(1000) default '' not null,
+	enum_value	varchar(1000),
 	pretty_name	varchar(100) not null,
 	sort_order	integer not null,
 	constraint acs_enum_values_pk
@@ -458,7 +458,7 @@ create table acs_attribute_descriptions (
 	constraint acs_attr_descs_ob_tp_at_na_fk
 	foreign key (object_type, attribute_name)
 	references acs_attributes (object_type, attribute_name),
-	description_key varchar(100) default '' not null,
+	description_key varchar(100),
 	constraint acs_attribute_descriptions_pk
 	primary key (object_type, attribute_name, description_key),
 	description	text not null
@@ -627,8 +627,8 @@ begin
       (create_type__object_type, create_type__pretty_name, 
        create_type__pretty_plural, create_type__supertype, 
        create_type__table_name, create_type__id_column, 
-       create_type__abstract_p, coalesce(create_type__type_extension_table,''''), 
-       v_package_name, coalesce(v_name_method,''''));
+       create_type__abstract_p, create_type__type_extension_table, 
+       v_package_name, v_name_method);
 
     return 0; 
 end;' language 'plpgsql';
@@ -755,10 +755,10 @@ begin
        min_n_values, max_n_values, storage, static_p)
     values
       (v_attribute_id, create_attribute__object_type, 
-       create_attribute__table_name, coalesce(create_attribute__column_name,''''), 
+       create_attribute__table_name, create_attribute__column_name, 
        create_attribute__attribute_name, create_attribute__pretty_name,
-       coalesce(create_attribute__pretty_plural,''''), v_sort_order, 
-       create_attribute__datatype, coalesce(create_attribute__default_value,''''),
+       create_attribute__pretty_plural, v_sort_order, 
+       create_attribute__datatype, create_attribute__default_value,
        create_attribute__min_n_values, create_attribute__max_n_values, 
        create_attribute__storage, create_attribute__static_p);
 
@@ -802,7 +802,7 @@ begin
      (object_type, attribute_name, description_key, description)
     values
      (add_description__object_type, add_description__attribute_name,
-      coalesce(add_description__description_key,''''), add_description__description);
+      add_description__description_key, add_description__description);
 
     return 0; 
 end;' language 'plpgsql';

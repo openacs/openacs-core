@@ -252,7 +252,7 @@ create table parties (
 			constraint parties_pk primary key,
 	email		varchar(100)
 			constraint parties_email_un unique,
-	url		varchar(200) default '' not null
+	url		varchar(200)
 );
 
 comment on table parties is '
@@ -321,7 +321,7 @@ begin
   insert into parties
    (party_id, email, url)
   values
-   (v_party_id, lower(new__email), coalesce(new__url,''''));
+   (v_party_id, lower(new__email), new__url);
 
   return v_party_id;
   
@@ -496,8 +496,8 @@ create table users (
 	last_visit		timestamp,
 	second_to_last_visit	timestamp,
 	n_sessions		integer default 1 not null,
-	password_question	varchar(1000) default '' not null,
-	password_answer		varchar(1000) default '' not null
+	password_question	varchar(1000),
+	password_answer		varchar(1000)
 );
 
 create table user_preferences (
@@ -509,7 +509,7 @@ create table user_preferences (
 	-- an ISO 639 language code (in lowercase)
 	language_preference	char(2) default 'en',
 	dont_spam_me_p		boolean default 'f',
-	email_type		varchar(64) default '' not null
+	email_type		varchar(64)
 );
 
 create function inline_1 ()
@@ -645,8 +645,8 @@ begin
    (user_id, password, salt, password_question, password_answer, screen_name,
     email_verified_p)
   values
-   (v_user_id, new__password, new__salt, coalesce(new__password_question,''''), 
-    coalesce(new__password_answer,''''), new__screen_name, new__email_verified_p);
+   (v_user_id, new__password, new__salt, new__password_question, 
+    new__password_answer, new__screen_name, new__email_verified_p);
 
   insert into user_preferences
     (user_id)
