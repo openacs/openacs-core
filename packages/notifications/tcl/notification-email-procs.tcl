@@ -50,7 +50,7 @@ namespace eval notification::email {
         {-type_id:required}
     } {
         if {[empty_string_p $object_id] || [empty_string_p $type_id]} {
-            return [reply_address_prefix]
+            return "[address_domain] mailer <[reply_address_prefix]@[address_domain]>"
         } else {
             return "[address_domain] mailer <[reply_address_prefix]-$object_id-$type_id@[address_domain]>"
         }
