@@ -131,8 +131,8 @@ ad_proc -public util_convert_line_breaks_to_html {
     # remove line breaks right before and after HTML tags that will insert a paragraph break themselves
     if { $includes_html_p } {
         foreach tag { ul ol li blockquote p div table tr td th } {
-            regsub -all -nocase "\\n\\s*(<${tag}\\s*\[^>\]*>)" $text {\1} text
-            regsub -all -nocase "(<${tag}\\s*\[^>\]*>)\\s*\\n" $text {\1} text
+            regsub -all -nocase "\\n\\s*(</?${tag}\\s*\[^>\]*>)" $text {\1} text
+            regsub -all -nocase "(</?${tag}\\s*\[^>\]*>)\\s*\\n" $text {\1} text
         }
     }
 
