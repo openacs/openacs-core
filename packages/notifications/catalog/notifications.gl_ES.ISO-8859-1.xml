@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<message_catalog package_key="notifications" package_version="4.6.4" locale="gl_ES" charset="ISO-8859-1">
+<message_catalog package_key="notifications" package_version="5.0d1" locale="gl_ES" charset="ISO-8859-1">
 
   <msg key="Action">Acción</msg>
   <msg key="Change">Mudar</msg>
