@@ -14,7 +14,7 @@ ad_page_contract {
 set system_locale [lang::system::locale -site_wide]
 set system_locale_label [ad_locale_get_label $system_locale]
 
-set page_title "Adminsitration of Localization"
+set page_title "Administration of Localization"
 set context [list]
 
 
