@@ -95,7 +95,7 @@ ad_proc -public get_content {} {
   }  
 
   if { [string equal [lindex [split $mime_type "/"] 0] "text"] } {
-    set text_sql ",\n    content.blob_to_string(content) as text"
+    set text_sql [db_map content_as_text]
   } else {
     set text_sql ""
   }
