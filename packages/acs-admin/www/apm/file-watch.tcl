@@ -9,26 +9,13 @@ ad_page_contract {
 } {
     version_id:integer
     paths:multiple
+    {return_url ""}
 } 
 
-apm_version_info $version_id
+set package_key [apm_package_key_from_version_id $version_id]
 
-set count 0
 foreach path $paths {
-    incr count
-
     apm_file_watch "packages/$package_key/$path"
-
-    lappend path_list $path
 }
 
-doc_body_append "[apm_header -form "method=post action=\"file-add-2\"" [list "version-view?version_id=$version_id" "$pretty_name $version_name"] [list "version-files?version_id=$version_id" "Files"] "Watch file"]"
-
-
-doc_body_append "Marking the following files to be watched:<ul><li>[join $path_list "<li>"]</ul>
-
-<a href=\"version-files?version_id=$version_id\">Return to the list of files for $pretty_name $version_name</a><br>
-<a href=\"./\">Return to the Package Manager</a>
-
-[ad_footer]
-"
+ad_returnredirect $return_url

@@ -1,6 +1,5 @@
 ad_page_contract {
-    Schedules all -procs.tcl and xql files of a package to be watched.
-
+    Cancels all watches in given package.
 
     @author Peter Marklund
     @cvs-id $Id$
@@ -9,6 +8,6 @@ ad_page_contract {
     {return_url "index"}
 } 
 
-apm_watch_all_files $package_key
+apm_cancel_all_watches $package_key
 
 ad_returnredirect $return_url
