@@ -31,7 +31,7 @@ begin
 
         return count(*) > 0
           from pg_class c, pg_attribute a
-         where c.relname = = lower(column_exists__table_name)
+         where c.relname = lower(column_exists__table_name)
            and c.oid = a.attrelid
            and a.attname = lower(column_exists__column_name);
 
