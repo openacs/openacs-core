@@ -33,6 +33,33 @@ ad_proc -public ad_form {
 
     <p>
 
+    <blockquote style="border: 1px dotted grey; padding: 8px; background-color: #ddddff;">
+
+    <b>Important note about how ad_form works:</b> ad_form operates in two modes:
+    <ol>
+    <li>Declaring the form
+    <li>Executing the form
+    </ol>
+    Through the -extend switch, you can declare the form in multiple steps, adding elements.
+    But as soon as you add an action block (on_submit, after_submit, new_data, edit_data, etc.), 
+    ad_form will consider the form complete, and <b>execute</b> the form, meaning validating element values,
+    and executing the action blocks. The execution will happen automatically the first time you 
+    call ad_form with an action block, and after that point, you cannot -extend the form later.
+    Also, if you don't supply any action blocks at all, the form will never be considered finished,
+    and thus validation will not get executed. Instead, you will get an error when the form is rendered.
+    
+    <p>
+
+    <b>Bottom line:</b> 
+    <ol>
+    <li>You must always have at least one action block, even if it's just -on_submit { }.
+    <li>You cannot extend the form after you've supplied any action block.
+    </ol>
+    
+    </blockquote>
+
+    <p>
+
     In order to make it possible to use ad_form to build common form snippets within procs, code
     blocks are executed at the current template parse level.   This is necessary if validate and
     similar blocks are to have access to the form's contents but may cause surprises for the
