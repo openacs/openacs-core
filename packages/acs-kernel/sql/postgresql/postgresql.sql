@@ -601,6 +601,8 @@ end;' language 'plpgsql';
 
 select create_tree_ancestor_keys();
 
+drop function create_tree_ancestor_keys();
+
 create function tree_ancestor_keys(varbit) returns setof varbit as '
 
 -- Return the set of tree_sortkeys for all of the ancestors of the given
@@ -665,15 +667,35 @@ create view user_tab_columns as
 
 -- PG substitute for Oracle user_col_comments view
 
-create view user_col_comments as
-  select upper(c.relname) as table_name,
-	 upper(a.attname) as column_name,
-	 d.description as comments
-    from pg_class c,
-         pg_attribute a
-           left outer join pg_description d on (a.oid = d.objoid)
-   where c.oid = a.attrelid
-     and a.attnum > 0;
+create function create_user_col_comments() returns boolean as '
+begin
+  if version() like ''%7.1%'' then
+    execute ''
+      create view user_col_comments as
+        select upper(c.relname) as table_name,
+      	 upper(a.attname) as column_name,
+      	 d.description as comments
+          from pg_class c,
+               pg_attribute a
+                 left outer join pg_description d on (a.oid = d.objoid)
+         where c.oid = a.attrelid
+           and a.attnum > 0'';
+  else
+    execute ''
+      create view user_col_comments as
+        select upper(c.relname) as table_name, 
+               upper(a.attname) as column_name, 
+               col_description(a.attrelid, a.attnum) as comments
+        from pg_class c
+          left join pg_attribute a 
+          on a.attrelid = c.oid 
+        where a.attnum > 0'';
+  end if;
+end;' language 'plpgsql';
+
+select create_user_col_comments();
+
+drop function create_user_col_comments();
 
 -- PG substitute for Oracle user_col_comments view
 
