@@ -18,12 +18,14 @@ ad_proc -public form {command args} {
     template::
 
     @see template::form
+    @see template::element
 } -
 
 ad_proc -public template::form { command args } {
-    template::form command invokes form functions.
-    Please see the individual functions for 
-    their arguments.
+
+    template::form command invokes form functions.  Please see the
+    individual functions for their arguments.  The template::element
+    api is used to manipulate form elements.
     
     @see template::form::create
     @see template::form::exists
@@ -36,6 +38,7 @@ ad_proc -public template::form { command args } {
     @see template::form::section
     @see template::form::set_values
     @see template::form::size
+    @see template::element
 } {
   eval template::form::$command $args
 }

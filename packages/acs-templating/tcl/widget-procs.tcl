@@ -9,6 +9,31 @@
 # This is free software distributed under the terms of the GNU Public
 # License.  Full text of the license is available from the GNU Project:
 # http://www.fsf.org/copyleft/gpl.html
+ad_proc -public template::widget {} {
+    The template::widget namespace contains the code 
+    for the various input widgets.
+
+    @see template::data::transform::search 
+    @see template::widget::button 
+    @see template::widget::checkbox 
+    @see template::widget::comment 
+    @see template::widget::file 
+    @see template::widget::hidden 
+    @see template::widget::inform 
+    @see template::widget::input 
+    @see template::widget::menu 
+    @see template::widget::multiselect 
+    @see template::widget::password 
+    @see template::widget::radio 
+    @see template::widget::search 
+    @see template::widget::select 
+    @see template::widget::submit 
+    @see template::widget::text 
+    @see template::widget::textarea  
+
+    @see template::element::create
+} -
+
 
 ad_proc -public template::widget::search { element_reference tag_attributes } {
 
