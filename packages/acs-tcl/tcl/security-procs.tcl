@@ -386,19 +386,28 @@ ad_proc -public ad_set_client_property {
 	set last_hit [ns_time]
 
 	db_transaction {
-	    db_dml prop_delete_dml {
-		delete from sec_session_properties
-		where  session_id = :session_id
-		and    module = :module
-		and    property_name = :name
-	    }
 
-            set clob_dml [db_map prop_insert_dml_clob]
+            # DRB: Older versions of this code did a delete/insert pair in an attempt
+            # to guard against duplicate insertions.  This didn't work if there were
+            # no value for this property in the table and two transactions ran in
+            # parallel.  The problem is that without an existing row the delete had
+            # nothing to lock on, thus allowing the two inserts to conflict.  This
+            # was discovered on a page built of frames, where the two requests from
+            # the browser spawned two AOLserver threads to service them.
+
+            # This code's a bit crude in that we assume the only error we get will
+            # be due to a unique violation, so be careful if you edit the queries!
+
+            set clob_insert_dml [db_map prop_insert_dml_clob]
 
             if { $clob == "t" && ![empty_string_p $clob_dml] } {
-                db_dml dummy $clob_dml -clobs [list $value]
+                if { [catch {db_dml dummy $clob_dml -clobs [list $value]} errmsg] } {
+                    db_dml prop_update_dml_clob "" -clobs [list $value]
+                }
             } else {
-	        db_dml prop_insert_dml ""
+                if { [catch {db_dml prop_insert_dml ""} ] } {
+                    db_dml prop_update_dml ""
+                }
 	    }
 	}
     }
