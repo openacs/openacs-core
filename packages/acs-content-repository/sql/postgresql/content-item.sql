@@ -890,7 +890,6 @@ begin
  
 end;' language 'plpgsql' stable;
 
--- new verson of is_valid_child that checks relation_tag 
 
 create or replace function content_item__is_valid_child (integer,varchar,varchar)
 returns boolean as '
@@ -952,7 +951,7 @@ begin
   return v_is_valid_child;
  
 end;' language 'plpgsql' stable;
---
+
 create or replace function content_item__is_valid_child (integer,varchar)
 returns boolean as '
 declare
@@ -1996,12 +1995,26 @@ end;' language 'plpgsql' stable;
 -- 2) make sure the content type of the content item is registered
 --   to the target folder
 -- 3) update the parent_id for the item
-
 create or replace function content_item__move (integer,integer)
 returns integer as '
 declare
   move__item_id                alias for $1;  
-  move__target_folder_id       alias for $2;  
+  move__target_folder_id       alias for $2;
+begin
+  perform content_item__move(
+	move__item_id,
+	move__targer_folder_id,
+	move__name
+	);
+return null;
+end;' language 'plpgsql';
+
+create or replace function content_item__move (integer,integer,varchar)
+returns integer as '
+declare
+  move__item_id                alias for $1;  
+  move__target_folder_id       alias for $2;
+  move__name                   alias for $3;
 begin
 
   if move__target_folder_id is null then 
@@ -2010,7 +2023,7 @@ begin
 
   if content_folder__is_folder(move__item_id) = ''t'' then
 
-    PERFORM content_folder__move(move__item_id, move__target_folder_id);
+    PERFORM content_folder__move(move__item_id, move__target_folder_id,move__name);
 
   else if content_folder__is_folder(move__target_folder_id) = ''t'' then
    
@@ -2020,10 +2033,11 @@ begin
        content_folder__is_registered(move__target_folder_id,
           content_item__get_content_type(content_symlink__resolve(move__item_id)),''f'') = ''t''
       then
-
     -- update the parent_id for the item
+
     update cr_items 
-      set parent_id = move__target_folder_id
+      set parent_id = move__target_folder_id,
+          name = coalesce(move__name, name)
       where item_id = move__item_id;
     end if;
 
@@ -2077,21 +2091,69 @@ declare
   v_storage_type                cr_items.storage_type%TYPE;
 begin
 
+	perform content_item__copy (
+		copy2__item_id,
+		copy2__target_folder_id,
+		copy2__creation_user,
+		copy2__creation_ip,
+		''''
+		);
+	return copy2__item_id;
+
+end;' language 'plpgsql';
+
+create or replace function content_item__copy (
+	integer,
+	integer,
+	integer,
+	varchar,
+	varchar
+) returns integer as '
+declare
+  copy__item_id                alias for $1;  
+  copy__target_folder_id       alias for $2;  
+  copy__creation_user          alias for $3;  
+  copy__creation_ip            alias for $4;  -- default null  
+  copy__name                   alias for $5; -- default null
+  v_current_folder_id           cr_folders.folder_id%TYPE;
+  v_num_revisions               integer;       
+  v_name                        cr_items.name%TYPE;
+  v_content_type                cr_items.content_type%TYPE;
+  v_locale                      cr_items.locale%TYPE;
+  v_item_id                     cr_items.item_id%TYPE;
+  v_revision_id                 cr_revisions.revision_id%TYPE;
+  v_is_registered               boolean;       
+  v_old_revision_id             cr_revisions.revision_id%TYPE;
+  v_new_revision_id             cr_revisions.revision_id%TYPE;
+  v_storage_type                cr_items.storage_type%TYPE;
+begin
+
   -- call content_folder.copy if the item is a folder
-  if content_folder__is_folder(copy2__item_id) = ''t'' then
+  if content_folder__is_folder(copy__item_id) = ''t'' then
     PERFORM content_folder__copy(
-        copy2__item_id,
-        copy2__target_folder_id,
-        copy2__creation_user,
-        copy2__creation_ip
-    );
+        copy__item_id,
+        copy__target_folder_id,
+        copy__creation_user,
+        copy__creation_ip,
+	copy__name
+    ); 
   -- call content_symlink.copy if the item is a symlink
-  else if content_symlink__is_symlink(copy2__item_id) = ''t'' then
+  else if content_symlink__is_symlink(copy__item_id) = ''t'' then
     PERFORM content_symlink__copy(
-        copy2__item_id,
-        copy2__target_folder_id,
-        copy2__creation_user,
-        copy2__creation_ip
+        copy__item_id,
+        copy__target_folder_id,
+        copy__creation_user,
+        copy__creation_ip,
+	copy__name
+    );
+  -- call content_extlink.copy if the item is an url
+  else if content_extlink__is_extlink(copy__item_id) = ''t'' then
+    PERFORM content_extlink__copy(
+        copy__item_id,
+        copy__target_folder_id,
+        copy__creation_user,
+        copy__creation_ip,
+	copy__name
     );
   -- call content_extlink.copy if the item is an url
   else if content_extlink__is_extlink(copy2__item_id) = ''t'' then
@@ -2102,7 +2164,7 @@ begin
         copy2__creation_ip
     );
   -- make sure the target folder is really a folder
-  else if content_folder__is_folder(copy2__target_folder_id) = ''t'' then
+  else if content_folder__is_folder(copy__target_folder_id) = ''t'' then
 
     select
       parent_id
@@ -2111,24 +2173,25 @@ begin
     from
       cr_items
     where
-      item_id = copy2__item_id;
+      item_id = copy__item_id;
 
-    -- can''t copy to the same folder
-    if copy2__target_folder_id != v_current_folder_id then
+    select
+      content_type, name, locale,
+      coalesce(live_revision, latest_revision), storage_type
+    into
+      v_content_type, v_name, v_locale, v_revision_id, v_storage_type
+    from
+      cr_items
+    where
+      item_id = copy__item_id;
 
-      select
-        content_type, name, locale,
-        coalesce(live_revision, latest_revision), storage_type
-      into
-        v_content_type, v_name, v_locale, v_revision_id, v_storage_type
-      from
-        cr_items
-      where
-        item_id = copy2__item_id;
+-- copy to a different folder, or allow copy to the same folder
+-- with a different name
 
+    if copy__target_folder_id != v_current_folder_id  or ( v_name != copy__name and copy__name is not null ) then
       -- make sure the content type of the item is registered to the folder
       v_is_registered := content_folder__is_registered(
-          copy2__target_folder_id,
+          copy__target_folder_id,
           v_content_type,
           ''f''
       );
@@ -2136,14 +2199,14 @@ begin
       if v_is_registered = ''t'' then
         -- create the new content item
         v_item_id := content_item__new(
-            v_name,
-            copy2__target_folder_id,
+            coalesce (copy__name, v_name),
+            copy__target_folder_id,
             null,
             v_locale,
             now(),
-            copy2__creation_user,
+            copy__creation_user,
             null,
-            copy2__creation_ip,
+            copy__creation_ip,
             ''content_item'',            
             v_content_type,
             null,
@@ -2154,26 +2217,24 @@ begin
             v_storage_type
         );
 
-        -- get the latest revision of the old item
-        select
+	select
           latest_revision into v_old_revision_id
         from
-          cr_items
+       	  cr_items
         where
-          item_id = copy2__item_id;
+       	  item_id = copy__item_id;
+	end if;
 
         -- copy the latest revision (if any) to the new item
-        if v_old_revision_id is not null then
+	if v_old_revision_id is not null then
           v_new_revision_id := content_revision__copy (
               v_old_revision_id,
               null,
               v_item_id,
-              copy2__creation_user,
-              copy2__creation_ip
+              copy__creation_user,
+              copy__creation_ip
           );
         end if;
-      end if;
-
 
     end if;
   end if; end if; end if; end if;
