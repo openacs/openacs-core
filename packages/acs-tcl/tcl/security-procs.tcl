@@ -590,6 +590,7 @@ ad_proc -public ad_get_login_url {
 
 ad_proc -public ad_get_logout_url {
     -return:boolean
+    {-return_url ""}
 } {
     
     Returns a URL to the logout page of the closest subsite, or the main site, if there's no current connection.
@@ -601,15 +602,19 @@ ad_proc -public ad_get_logout_url {
     @author Lars Pind (lars@collaboraid.biz)
 } {
     if { [ad_conn isconnected] } {
-        # No reason to have logout URL be subsite-specified, it doesn't show any pages, anyway
+        set url [subsite::get_element -element url]
+    } else {
         set url /
     }
 
     append url "register/logout"
 
-    if { $return_p } {
-        set url [export_vars -base $url { { return_url [ad_return_url -qualified] } }]
-    }
+    if { $return_p && [empty_string_p $return_url] } {
+        set return_url [ad_return_url]
+    } 
+    if { ![empty_string_p $return_url] } {
+        set url [export_vars -base $url { return_url }]
+    } 
 
     return $url
 }
