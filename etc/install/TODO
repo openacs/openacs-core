@@ -1,0 +1,1 @@
+- TclWebTest selects options in selects bases on label rather than value. I would like to be able to select based on value.
