@@ -98,7 +98,7 @@
                 <formerror id="@elements.id@">
                   <br>
                   <font face="tahoma,verdana,arial,helvetica,sans-serif" color="red">
-                    <b>\@formerror.@elements.id@\@<b>
+                    <b>\@formerror.@elements.id@;noquote\@<b>
                   </font>
                 </formerror>
               </noparse>

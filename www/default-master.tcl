@@ -10,15 +10,29 @@
 
 # fall back on defaults for title, signatory and header_stuff
 
-if [template::util::is_nil title]     { set title        [ad_conn instance_name]  }
-if [template::util::is_nil doc_type]     { 
-    set doc_type {<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-       "http://www.w3.org/TR/html4/loose.dtd">}
+if { [template::util::is_nil title] } {
+    set title [ad_conn instance_name]
 }
-if [template::util::is_nil signatory] { set signatory    [ad_system_owner] }
-if ![template::util::is_nil context] { set context_bar [eval ad_context_bar $context]}
-if [template::util::is_nil context_bar] { set context_bar [ad_context_bar]}
-if ![info exists header_stuff]        { set header_stuff {} }
+
+if { [template::util::is_nil doc_type] } { 
+    set doc_type {<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">}
+}
+
+if { [template::util::is_nil signatory] } {
+    set signatory [ad_system_owner]
+}
+
+if { ![template::util::is_nil context] } {
+    set context_bar [eval ad_context_bar $context]
+}
+
+if { [template::util::is_nil context_bar] } {
+    set context_bar [ad_context_bar]
+}
+
+if { ![info exists header_stuff] } {
+    set header_stuff {}
+}
 
 
 # Attributes
@@ -44,7 +58,7 @@ if { ![template::util::is_nil focus] } {
     # Handle elements wohse name contains a dot
     regexp {^([^.]*)\.(.*)$} $focus match form_name element_name
 
-    # Add safety code to test that the element exists '
+    # Add safety code to test that the element exists
     set header_stuff "$header_stuff
       <script language=\"JavaScript\">
         function acs_focus( form_name, element_name ){
@@ -69,7 +83,6 @@ if { [llength [namespace eval :: info procs ds_link]] == 1 } {
 } else {
     set ds_link ""
 }
-
 
 # Curriculum bar
 
