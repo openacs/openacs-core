@@ -649,7 +649,6 @@
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="AllowPersistentLoginP"  default="1" description="do we allow persistent logins?" section_name="user-login"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="EmailForgottenPasswordP"  default="1" description="Email users forgotten passwords" section_name="user-login"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="DefaultMaster"  default="/www/default-master" description="Path to the default master page (skin) for acs-templating.  Extensions                                             .adp/.tcl are implied."/>
-            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="UseSiteSpecificMaster"  default="0" description="Tell the default-master template that a template named site-specific-master in the same directory should be used instead of itself. "/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="RequireQuestionForPasswordResetP"  default="1" description="Do we require a question/answer pair to reset a users password?" section_name="user-login"/>
         </parameters>
 
