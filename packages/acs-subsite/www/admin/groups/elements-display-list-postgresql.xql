@@ -5,16 +5,17 @@
 
 <fullquery name="rel_type_info">      
       <querytext>
-      FIX ME CONNECT BY
 
     select object_type as ancestor_rel_type
       from acs_object_types
      where supertype = 'relationship'
        and object_type in (
-               select object_type from acs_object_types
-               start with object_type = :rel_type
-               connect by object_type = prior supertype
-           )
+               select t1.object_type
+	         from acs_object_types t1, acs_object_types t2
+		where t2.tree_sortkey <= t1.tree_sortkey
+		  and t1.tree_sortkey like (t2.tree_sortkey || '%')
+		  and t1.object_type = :rel_type
+	   )
 
       </querytext>
 </fullquery>

@@ -126,31 +126,15 @@ namespace eval group_type {
 	}
 
 	# Create the table if it doesn't exist. 
-	lappend plsql_drop [list drop_type "begin acs_object_type.drop_type('$group_type'); end;"]
-	lappend plsql [list "create_type" "
-BEGIN
- acs_object_type.create_type (
-   supertype     => :supertype,
-   object_type   => :group_type,
-   pretty_name   => :pretty_name,
-   pretty_plural => :pretty_plural,
-   table_name    => :table_name,
-   id_column     => :id_column,
-   package_name  => :package_name
- );
-END;"]
+	lappend plsql_drop [list drop_type [db_map drop_type]]
+	lappend plsql [list "create_type" [db_map create_type]]
   
         # Mark the type as dynamic
-        lappend plsql [list update_type "update acs_object_types set dynamic_p='t' where object_type = :group_type"]
+        lappend plsql [list update_type [db_map update_type]]
 
         # Now, copy the allowable relation types from the super type
         lappend plsql_drop [list remove_rel_types "delete from group_type_rels where group_type = :group_type"]
-        lappend plsql [list copy_rel_types \
-		"insert into group_type_rels 
-                 (group_rel_type_id, rel_type, group_type)
-                 select acs_object_id_seq.nextval, r.rel_type, :group_type
-                   from group_type_rels r
-                  where r.group_type = :supertype"]
+        lappend plsql [list copy_rel_types [db_map copy_rel_types]]
 
         if { $execute_p == "f" } {
 	    set text "-- Create script"

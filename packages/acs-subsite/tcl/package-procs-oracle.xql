@@ -170,4 +170,81 @@
 </fullquery>
 
  
+<partialquery name="package_generate_body.body">      
+      <querytext>
+
+create or replace package body ${package_name}
+as
+[package_insert_default_comment]
+  function new ( 
+         [plsql_utility::generate_attribute_parameters $attribute_list]
+  ) return ${table_name}.${id_column}%TYPE
+  is
+    v_$id_column ${table_name}.${id_column}%TYPE;
+  begin
+
+    v_$id_column := ${supertype_package_name}.new (
+                     [plsql_utility::generate_attribute_parameter_call_from_attributes \
+			     -prepend "new." \
+			     -indent 21 \
+			     $supertype_attr_list]
+                   );
+
+    insert into ${table_name} 
+    ($id_column[plsql_utility::generate_attribute_dml -ignore [list $id_column] $table_name $attribute_list]) 
+    values 
+    (v_$id_column[plsql_utility::generate_attribute_dml -prepend "new." -ignore [list $id_column] $table_name $attribute_list]);
+
+    return v_$id_column;
+
+  end new;
+
+  procedure delete (
+    $id_column      in ${table_name}.${id_column}%TYPE
+  )
+  is 
+  begin
+
+    ${supertype_package_name}.delete( $package_name.delete.$id_column );
+
+  end delete;
+
+end ${package_name};
+    
+      </querytext>
+</partialquery>
+
+ 
+<partialquery name="package_generate_spec.spec">      
+      <querytext>
+
+create or replace package $package_name as
+[package_insert_default_comment]
+  function new (
+         [plsql_utility::generate_attribute_parameters [package_create_attribute_list \
+		 -supertype $supertype \
+		 -object_name "NEW" \
+		 -table $table_name \
+		 -column $id_column \
+		 $object_type]]
+ ) return ${table_name}.${id_column}%TYPE;
+
+  procedure delete (
+    $id_column      in ${table_name}.${id_column}%TYPE
+  );
+END ${package_name};
+    
+      </querytext>
+</partialquery>
+
+ 
+<partialquery name="package_attribute_default.creation_date">      
+      <querytext>sysdate</querytext>
+</partialquery>
+
+<partialquery name="package_attribute_default.last_modified">      
+      <querytext>sysdate</querytext>
+</partialquery>
+
+ 
 </queryset>
