@@ -51,7 +51,7 @@ begin
    -- update the parent_id for the folder
    update cr_items 
      set parent_id = move__target_folder_id,
-         name = coalesce ( move_name, name )
+         name = coalesce ( move__name, name )
      where item_id = move__folder_id;
 
   -- update the has_child_folders flags
