@@ -746,12 +746,16 @@ begin
     if v_storage_type = ''lob'' then
         v_new_lob := empty_lob();
 
+	PERFORM lob_copy(v_lob, v_new_lob);
+
         update cr_revisions
            set content = null,
                content_length = v_content_length,
                lob = v_new_lob
          where revision_id = v_revision_id_dest;
-        PERFORM lob_copy(v_lob, v_new_lob);
+	-- this call has to be before the above instruction,
+	-- because lob references the v_new_lob 
+	--        PERFORM lob_copy(v_lob, v_new_lob);
     else 
         -- this will work for both file and text types... well sort of.
         -- this really just creates a reference to the first file which is
