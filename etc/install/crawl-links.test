@@ -1,0 +1,28 @@
+if { [catch {
+    # Source procedures
+    source tcl/test-procs.tcl
+
+    ::twt::log_section "Login the site wide admin"
+    ::twt::user::login_site_wide_admin
+
+    set exclude_list {delete remove /acs-admin/install}
+    ::twt::set_crawler_exclude_links $exclude_list
+
+    ::twt::log_section "crawling links starting from \"$crawl_links_start_path\""        
+    ::twt::crawl_links $crawl_links_start_path
+
+    if { [llength [::twt::get_excluded_urls]] > 0 } {
+        ::twt::log "Did not visit the following URLs because of exclude list: [join [::twt::get_excluded_urls] "\n"]"
+    } else {
+        ::twt::log "No URLs matched the exclude list ([join $exclude_list ", "])"
+    }
+} result] } {
+    global errorInfo
+    ::twt::log $result
+    ::twt::log "*** Tcl TRACE ***"
+    ::twt::log $errorInfo
+
+    ::twt::log "The response body is: [response body]"
+
+    error "Test failed: $result"
+}

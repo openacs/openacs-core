@@ -203,7 +203,7 @@ startup_loop_count=`get_config_param startup_loop_count`
 restart_loop_count=`get_config_param restart_loop_count`
 shutdown_loop_count=`get_config_param shutdown_loop_count`
 dotlrn_demo_data=`get_config_param dotlrn_demo_data`
-crawl_links=`get_config_param crawl_links`
+crawl_links_start_path=`get_config_param crawl_links_start_path`
 aolserver_user=`get_config_param aolserver_user`
 aolserver_group=`get_config_param aolserver_group`
 admin_email=`get_config_param admin_email`
@@ -259,7 +259,7 @@ fi
 x=0
 while test "$x" -lt $shutdown_loop_count ; do
 
-    pid=`grep_for_pid "nsd.*$serverroot"`
+    pid=`grep_for_pid "nsd.*$aolserver_config_file"`
     if [ "$pid" == "" ]; then
 	echo "$(date): Server is down"
 	break
@@ -271,7 +271,7 @@ while test "$x" -lt $shutdown_loop_count ; do
 done
 
 # Verify that the server is down, and abort if not  
-pid=$(grep_for_pid "nsd.*$serverroot")
+pid=$(grep_for_pid "nsd.*$aolserver_config_file")
 if ! [ "$pid" == "" ]; then
     echo "$(date): Cannot stop the server. You must shut down the server first."
     exit -1
@@ -529,10 +529,22 @@ if parameter_true $do_install; then
       
   #---------------------------------------------------------------
   # Search for broken pages
-  if parameter_true $crawl_links; then
-      echo "$(date): Starting to crawl links to search for broken pages at."
-      ${tclwebtest_dir}/tclwebtest -config_file $config_file dotlrn-links-check.test
+  if [ -n "$crawl_links_start_path" ]; then
+      echo "$(date): Starting to crawl links to search for broken pages. Start path is $crawl_links_start_path"
+      ${tclwebtest_dir}/tclwebtest -config_file $config_file crawl-links.test
   fi
+
+  #-------------------------------------------------------------------
+  # Run any additional tclwebtest scripts
+  if [ -n "$tclwebtest_scripts" ]; then
+      echo "$(date): Running additional tclwebtest scripts"
+
+      for tclwebtest_script_path in $tclwebtest_scripts
+      do
+        echo "$(date): Running tclwebtest script $tclwebtest_script_path"
+        ${tclwebtest_dir}/tclwebtest -config_file $config_file $tclwebtest_script_path
+      done
+  fi  
 
   #-------------------------------------------------------------------
   # Check errors in the log file
@@ -563,18 +575,6 @@ if parameter_true $do_install; then
       echo "$(date): Beginning 'vacuum analyze'."
       su  `get_config_param pg_db_user` -c "export LD_LIBRARY_PATH=${pg_bindir}/../lib; ${pg_bindir}/vacuumdb -p $pg_port -z $db_name"
   fi
-
-  #-------------------------------------------------------------------
-  # Run any additional tclwebtest scripts
-  if [ -n "$tclwebtest_scripts" ]; then
-      echo "$(date): Running additional tclwebtest scripts"
-
-      for tclwebtest_script_path in $tclwebtest_scripts
-      do
-        echo "$(date): Running tclwebtest script $tclwebtest_script_path"
-        ${tclwebtest_dir}/tclwebtest -config_file $config_file $tclwebtest_script_path
-      done
-  fi  
 
   #-------------------------------------------------------------------
   # Warn about errors in the HTML returned from the server
