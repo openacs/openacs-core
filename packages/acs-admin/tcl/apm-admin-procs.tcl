@@ -51,7 +51,11 @@ ad_proc apm_header { { -form "" } args } {
     } else {
         set title [lindex $args end]
         set context [concat [list [list $apm_url $apm_title]] $args]
-        set context_bar [eval ad_context_bar $context]
+        set cmd [list ad_context_bar --]
+        foreach elem $context {
+            lappend cmd $elem
+        }
+        set context_bar [eval $cmd]
     }
     set header [ad_header $title ""]
     append body "$header\n"

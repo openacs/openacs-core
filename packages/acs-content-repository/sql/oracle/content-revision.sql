@@ -195,7 +195,7 @@ begin
     creation_user, creation_date, creation_ip,
     last_modified, modifying_user, modifying_ip
   ) ( select 
-    v_copy_id, object_type, context_id, security_inherit_p, 
+    v_copy_id, object_type, v_target_item_id, security_inherit_p, 
     copy.creation_user, sysdate, copy.creation_ip,
     sysdate, copy.creation_user, copy.creation_ip from
     acs_objects where object_id = copy.revision_id

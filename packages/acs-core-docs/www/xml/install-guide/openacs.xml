@@ -8,7 +8,7 @@
   <title>Install OpenACS &version;</title>
 
   <authorblurb>
-    by <ulink url="mailto:vinod@kurup.com">Vinod Kurup</ulink>
+    <para>by <ulink url="mailto:vinod@kurup.com">Vinod Kurup</ulink></para>
   </authorblurb>
 
   <sect2 id="openacs-setup">
@@ -324,15 +324,11 @@ SQL&gt; exit</programlisting>
             </formalpara>
             <itemizedlist>
               <listitem id="create-service-db-user">
-                <para>PostGreSQL:</para>
+                <para>PostgreSQL:</para>
                 <para>Create a user in the database matching the service
-            name.  With default PostGreSQL authentication the name of
-            the user of the process will be matched to this account
-            automatically.</para>
+            name.  With default PostgreSQL authentication, a system user connecting locally automatically authenticates as the postgres user of the same name, if one exists.  We currently use postgres "super-users" for everything, which means that anyone with access to any of the openacs system accounts on a machine has full access to all postgresql databases on that machine.</para>
                 <screen>[root@yourserver root]# <userinput>su - postgres</userinput>
-[postgres@yourserver pgsql]$ <userinput>createuser <replaceable>service0</replaceable></userinput>
-Shall the new user be allowed to create databases? (y/n) <userinput>y</userinput>
-Shall the new user be allowed to create more new users? (y/n) <userinput>y</userinput>
+[postgres@yourserver pgsql]$ <userinput>createuser -a -d <replaceable>service0</replaceable></userinput>
 CREATE USER
 [postgres@yourserver pgsql]$ <userinput>exit</userinput>
 logout
@@ -349,14 +345,15 @@ CREATE DATABASE
 createdb -E UNICODE <replaceable>service0</replaceable></action></screen>
               </listitem>
               <listitem>
-                <para>Automate daily database Vacuuming.  This is a process which cleans out discarded data from the database.  A quick way to automate vacuuming is to edit the cron file for the database user.</para>
+                <para>Automate daily database Vacuuming.  This is a process which cleans out discarded data from the database.  A quick way to automate vacuuming is to edit the cron file for the database user.  Recommended: <computeroutput>VACUUM ANALYZE</computeroutput> every hour and <computeroutput>VACUUM FULL ANALYZE</computeroutput> every day.</para>
                 <indexterm>
                   <primary>Postgres</primary>
                   <secondary>Vacuuming</secondary>
                 </indexterm>
                 <screen>[service0@yourserver service0]$ <userinput>export EDITOR=emacs;crontab -e</userinput></screen>
                 <para>Add this line to the file.  The numbers and stars at the beginning are cron columns that specify when the program should be run - in this case, whenever the minute is 0 and the hour is 1, i.e., 1:00 am every day.</para>
-                <programlisting>0 1 * * * /usr/local/pgsql/bin/vacuumdb --analyze <replaceable>service0</replaceable></programlisting>
+                <programlisting>0 1-23 * * * /usr/local/pgsql/bin/vacuumdb --full --analyze <replaceable>service0</replaceable>
+0 0 * * * /usr/local/pgsql/bin/vacuumdb --full --analyze <replaceable>service0</replaceable></programlisting>
               </listitem>
               <listitem>
                 <para><link linkend="install-openfts-postgres">Add Full Text Search Support</link> (OPTIONAL)</para>
@@ -442,9 +439,9 @@ logout
           </listitem>
           <listitem>
             <para>
-	  AOLServer is very configurable. These settings should get you
+	  AOLserver is very configurable. These settings should get you
 	  started, but for more options, read the <ulink
-	  url="http://aolserver.com/docs/admin/config.html">AOLServer
+	  url="http://aolserver.com/docs/admin/config.html">AOLserver
 	  docs</ulink>.
 	</para>
           </listitem>
@@ -470,10 +467,10 @@ logout
 	  <computeroutput>nsd-postgres</computeroutput> with
 	  <computeroutput>nsd-oracle</computeroutput>).</para>
         <para>If you want to use port 80, there are complications.
-	  First, Aolserver must be root to use system ports such as
+	  First, AOLserver must be root to use system ports such as
 	  80, but refuses to run as root for security reasons.  Thus
 	  you must start as root and specify a non-root user ID and
-	  Group ID which Aolserver will switch to after claiming the
+	  Group ID which AOLserver will switch to after claiming the
 	  port.  To do so, find the UID and GID of the
 	  <replaceable>service0</replaceable> user via
 	  <computeroutput>grep <replaceable>service0</replaceable>
@@ -490,9 +487,8 @@ nsd: no process killed
       </listitem>
       <listitem id="connect-to-aolserver">
         <para>
-	  Attempt to connect to the service from a web browser.  You should specify a URL like:
-	</para>
-	<computeroutput>http://<replaceable>yourserver.test</replaceable>:8000</computeroutput>
+	  Attempt to connect to the service from a web browser.  You should specify a URL like: <computeroutput>http://<replaceable>yourserver.test</replaceable>:8000</computeroutput></para>
+
 	<para>
 	  You should see a page that looks like <ulink
         url="files/openacs-start.html">this</ulink>.  If you <link
@@ -594,10 +590,10 @@ Loading package .info files ... this will take a few minutes</programlisting>
 		  You&#39;ll see the final Installer page, &quot;OpenACS
 		  Installation: Complete.&quot; It will tell you that the server is
 		  being restarted; note that unless you already set up a way for
-		  AOLServer to restart itself (ie. inittab or daemontools),
+		  AOLserver to restart itself (ie. inittab or daemontools),
 		  you&#39;ll need to manually restart your service.
 		</para>
-        <screen>[service0@yourserver service0]$ <userinput>/usr/local/aolserver/bin/nsd-postgres -t /var/lib/aolserver/<emphasis><replaceable>service0</replaceable></emphasis>/config.tcl</userinput></screen>
+        <screen>[service0@yourserver service0]$ <userinput>/usr/local/aolserver/bin/nsd-postgres -t /var/lib/aolserver/<replaceable>service0</replaceable>/config.tcl</userinput></screen>
       </listitem>
 
       <listitem><para> 
@@ -650,7 +646,7 @@ Loading package .info files ... this will take a few minutes</programlisting>
         <para>Put in the appropriate lines for the database you are running.  If you will use both databases, put in both sets of lines.</para>
         <itemizedlist>
           <listitem>
-            <para>PostGreSQL:</para>
+            <para>PostgreSQL:</para>
             <programlisting>export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/pgsql/lib
 export PATH=$PATH:/usr/local/pgsql/bin</programlisting>
           </listitem>
@@ -679,7 +675,7 @@ logout
 </screen>
         <itemizedlist>
           <listitem>
-            <para>For PostGreSQL, you should see:</para>
+            <para>For PostgreSQL, you should see:</para>
         <screen>
 LD_LIBRARY_PATH=LD_LIBRARY_PATH=:/usr/local/pgsql/lib
 PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:/usr/bin/X11:/usr/X11R6/bin:/root/bin:/usr/local/pgsql/bin:/usr/local/pgsql/bin</screen>
@@ -702,9 +698,11 @@ logout
       </listitem>
       <listitem><para>Test your <link linkend="backup-recovery">backup and recovery</link> procedure.</para>
       </listitem>
+      <listitem><para>Set up <xref linkend="uptime"/>.</para>
+      </listitem>
     </itemizedlist>
 
+  <para><phrase role="cvstag">($Id$)</phrase></para>
   </sect2>
 
-  <para><phrase role="cvstag">($Id$)</phrase></para>
 </sect1>

@@ -1,13 +1,13 @@
   <sect1 id="database-management">
     <title>Database Management</title>
-    
+
     <authorblurb>
-      by <ulink url="mailto:joel@aufrecht.org">Joel Aufrecht</ulink>
+      <para>By <ulink url="mailto:joel@aufrecht.org">Joel Aufrecht</ulink></para>
     </authorblurb>
-    
+
     <sect2 id="remote-postgres">
-      <title>Running a PostGreSQL database on another server</title>
-      
+      <title>Running a PostgreSQL database on another server</title>
+
       <para>To run a database on a different machine than the
       webserver requires changes to the database configuration file
       and access control file, and to the OpenACS service's
@@ -93,7 +93,7 @@ SVRMGR&gt; drop tablespace <emphasis>service0</emphasis> including contents casc
         your server in <computeroutput>/etc/inittab</computeroutput>,
         reread the inittab with <computeroutput>/sbin/init
         q</computeroutput>, and then <computeroutput>restart-aolserver
-        <emphasis>service0</emphasis></computeroutput>.</para>
+        <replaceable>service0</replaceable></computeroutput>.</para>
     
       <para>Then, to drop the db, just do:</para>
       <programlisting>
@@ -126,9 +126,10 @@ joeuser:~$ crontab -e</programlisting>
     line:</para>
     <programlisting>
 0 1 * * * /usr/local/pgsql/bin/vacuumdb birdnotes</programlisting>
+    <para><phrase role="cvstag">($Id$)</phrase></para>
+
   </sect2>
 
-    <para><phrase role="cvstag">($Id$)</phrase></para>
 </sect1>
     
   <!--

@@ -13,7 +13,7 @@ ad_page_contract {
     {new_package_id:integer ""}
     node_id:integer,notnull
     {new_node_p f}
-    {node_name ""}
+    {node_name:trim ""}
     {instance_name ""}
     package_key:notnull
     {expand:integer,multiple ""}
@@ -62,7 +62,7 @@ db_transaction {
 
 } on_error {
     if {![db_string package_new_doubleclick_ck {} -default 0]} {
-	ad_return_complaint "Error Creating Package" "The following error was generated
+	ad_return_complaint 1 "Error Creating Package: The following error was generated
 		when attempting to create the package
 	<blockquote><pre>
 		[ad_quotehtml $errmsg]

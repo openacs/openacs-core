@@ -15,7 +15,7 @@
 ------------------
 
 -- rel_segment__new -- full version
-create function rel_segment__new (integer,varchar,timestamptz,integer,varchar,varchar,varchar,varchar,integer,varchar,integer)
+create or replace function rel_segment__new (integer,varchar,timestamptz,integer,varchar,varchar,varchar,varchar,integer,varchar,integer)
 returns integer as '
 declare
   new__segment_id        alias for $1;  -- default null  
@@ -45,7 +45,7 @@ begin
 end;' language 'plpgsql';
 
 -- rel_segment__new -- overloaded version for specifying only non-default values
-create function rel_segment__new (varchar,integer,varchar)
+create or replace function rel_segment__new (varchar,integer,varchar)
 returns integer as '
 declare
   new__segment_name      alias for $1;  
@@ -62,7 +62,7 @@ end;' language 'plpgsql';
 
 
 -- procedure delete
-create function rel_segment__delete (integer)
+create or replace function rel_segment__delete (integer)
 returns integer as '
 declare
   delete__segment_id            alias for $1;  
@@ -86,23 +86,21 @@ end;' language 'plpgsql';
 
 
 -- function get
-create function rel_segment__get (integer,varchar)
+create or replace function rel_segment__get (integer,varchar)
 returns integer as '
 declare
   get__group_id         alias for $1;  
   get__rel_type         alias for $2;  
-  v_segment_id          rel_segments.segment_id%TYPE;
 begin
-   select min(segment_id) into v_segment_id
+
+   return min(segment_id)
    from rel_segments
    where group_id = get__group_id
      and rel_type = get__rel_type;
-
-   return v_segment_id;
   
-end;' language 'plpgsql';
+end;' language 'plpgsql' stable strict;
 
-create function rel_segment__get_or_new(integer,varchar) returns integer as '
+create or replace function rel_segment__get_or_new(integer,varchar) returns integer as '
 declare
         gid     alias for $1;
         typ     alias for $2;
@@ -111,7 +109,7 @@ begin
 end;' language 'plpgsql';
 
 -- function get_or_new
-create function rel_segment__get_or_new (integer,varchar,varchar)
+create or replace function rel_segment__get_or_new (integer,varchar,varchar)
 returns integer as '
 declare
   get_or_new__group_id          alias for $1;  
@@ -160,20 +158,17 @@ end;' language 'plpgsql';
 
 
 -- function name
-create function rel_segment__name (integer)
+create or replace function rel_segment__name (integer)
 returns varchar as '
 declare
   name__segment_id             alias for $1;  
   name__segment_name           varchar(200);  
 begin
-  select segment_name
-  into name__segment_name
+  return segment_name
   from rel_segments
   where segment_id = name__segment_id;
 
-  return name__segment_name;
-  
-end;' language 'plpgsql';
+end;' language 'plpgsql' stable strict;
 
 
 

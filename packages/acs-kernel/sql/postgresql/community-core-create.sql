@@ -114,7 +114,7 @@
 --
 -- * Create constraints for creation_user and modifying_user
 
-create function inline_0 ()
+create or replace function inline_0 ()
 returns integer as '
 declare
   attr_id acs_attributes.attribute_id%TYPE;
@@ -255,6 +255,8 @@ create table parties (
 	url		varchar(200)
 );
 
+create index parties_email_lower_idx on parties(lower(email));
+
 comment on table parties is '
  Party is the supertype of person and organization. It exists because
  many other types of object can have relationships to parties.
@@ -269,7 +271,7 @@ comment on column parties.url is '
 -- PARTY PACKAGE --
 -------------------
 
-create function party__new (integer,varchar,timestamptz,integer,varchar,varchar,varchar,integer)
+create or replace function party__new (integer,varchar,timestamptz,integer,varchar,varchar,varchar,integer)
 returns integer as '
 declare
   new__party_id               alias for $1;  -- default null  
@@ -295,7 +297,7 @@ begin
   
 end;' language 'plpgsql';
 
-create function party__delete (integer)
+create or replace function party__delete (integer)
 returns integer as '
 declare
   party_id               alias for $1;  
@@ -305,7 +307,7 @@ begin
   return 0; 
 end;' language 'plpgsql';
 
-create function party__name (integer)
+create or replace function party__name (integer)
 returns varchar as '
 declare
   party_id               alias for $1;  
@@ -316,22 +318,18 @@ begin
    return null;
   end if;
   
-end;' language 'plpgsql';
+end;' language 'plpgsql' immutable strict;
 
-create function party__email (integer)
+create or replace function party__email (integer)
 returns varchar as '
 declare
-  email__party_id	alias for $1;  
-  party_email           varchar(200);  
+  email__party_id		alias for $1;
 begin
-  select email
-  into party_email
-  from parties
-  where party_id = email__party_id;
 
-  return party_email;
-  
-end;' language 'plpgsql';
+  return email from parties where party_id = email__party_id;
+
+end;' language 'plpgsql' stable strict;
+
 
 -- show errors
 
@@ -391,7 +389,7 @@ comment on table persons is '
 -- create or replace package body person
 -- function new
 select define_function_args('person__new','person_id,object_type;person,creation_date;now(),creation_user,creation_ip,email,url,first_names,last_name,context_id');
-create function person__new (integer,varchar,timestamptz,integer,varchar,varchar,varchar,varchar,varchar,integer)
+create or replace function person__new (integer,varchar,timestamptz,integer,varchar,varchar,varchar,varchar,varchar,integer)
 returns integer as '
 declare
   new__person_id              alias for $1;  -- default null  
@@ -422,7 +420,7 @@ end;' language 'plpgsql';
 
 
 -- procedure delete
-create function person__delete (integer)
+create or replace function person__delete (integer)
 returns integer as '
 declare
   delete__person_id     alias for $1;  
@@ -437,54 +435,43 @@ end;' language 'plpgsql';
 
 
 -- function name
-create function person__name (integer)
+create or replace function person__name (integer)
 returns varchar as '
 declare
   name__person_id        alias for $1;  
-  person_name            varchar(200);  
 begin
-  select first_names || '' '' || last_name
-  into person_name
+
+  return first_names || '' '' || last_name
   from persons
   where person_id = name__person_id;
 
-  return person_name;
-  
-end;' language 'plpgsql';
+end;' language 'plpgsql' stable strict;
 
 
 -- function first_names
-create function person__first_names (integer)
+create or replace function person__first_names (integer)
 returns varchar as '
 declare
   first_names__person_id        alias for $1;  
-  person_first_names     varchar(200);  
 begin
-  select first_names
-  into person_first_names
+  return first_names
   from persons
   where person_id = first_names__person_id;
-
-  return person_first_names;
   
-end;' language 'plpgsql';
+end;' language 'plpgsql' stable strict;
 
 
 -- function last_name
-create function person__last_name (integer)
+create or replace function person__last_name (integer)
 returns varchar as '
 declare
   last_name__person_id        alias for $1;  
-  person_last_name      varchar(200);  
 begin
-  select last_name
-  into person_last_name
+  return last_name
   from persons
   where person_id = last_name__person_id;
 
-  return person_last_name;
-  
-end;' language 'plpgsql';
+end;' language 'plpgsql' stable strict;
 
 
 -- show errors
@@ -524,6 +511,9 @@ create table users (
         unique (authority_id, username)
 );
 
+create index users_username_lower_idx on users(lower(username));
+create index users_screenname_lower_idx on users(lower(screen_name));
+
 create table user_preferences (
 	user_id			integer constraint user_prefs_user_id_fk
 				references users (user_id)
@@ -538,7 +528,7 @@ create table user_preferences (
         timezone                varchar(100)
 );
 
-create function inline_1 ()
+create or replace function inline_1 ()
 returns integer as '
 begin
 
@@ -730,7 +720,7 @@ begin
 end;' language 'plpgsql';
 
 
-create function acs_user__new(varchar,varchar,varchar,char,char) 
+create or replace function acs_user__new(varchar,varchar,varchar,char,char) 
 returns integer as '
 declare
         email   alias for $1;
@@ -761,7 +751,7 @@ end;' language 'plpgsql';
 
 
 -- function receives_alerts_p
-create function acs_user__receives_alerts_p (integer)
+create or replace function acs_user__receives_alerts_p (integer)
 returns boolean as '
 declare
   receives_alerts_p__user_id                alias for $1;  
@@ -774,11 +764,11 @@ begin
 
   return counter;
   
-end;' language 'plpgsql';
+end;' language 'plpgsql' stable;
 
 
 -- procedure approve_email
-create function acs_user__approve_email (integer)
+create or replace function acs_user__approve_email (integer)
 returns integer as '
 declare
   approve_email__user_id        alias for $1;  
@@ -792,7 +782,7 @@ end;' language 'plpgsql';
 
 
 -- procedure unapprove_email
-create function acs_user__unapprove_email (integer)
+create or replace function acs_user__unapprove_email (integer)
 returns integer as '
 declare
   unapprove_email__user_id      alias for $1;  
@@ -806,7 +796,7 @@ end;' language 'plpgsql';
 
 
 -- procedure delete
-create function acs_user__delete (integer)
+create or replace function acs_user__delete (integer)
 returns integer as '
 declare
   delete__user_id       alias for $1;  

@@ -40,7 +40,7 @@ create table acs_sc_msg_type_elements (
 );
 
 
-create function acs_sc_msg_type__new(varchar,varchar)
+create or replace function acs_sc_msg_type__new(varchar,varchar)
 returns integer as '
 declare
     p_msg_type_name             alias for $1;
@@ -72,7 +72,7 @@ begin
 end;' language 'plpgsql';
 
 
-create function acs_sc_msg_type__get_id(varchar)
+create or replace function acs_sc_msg_type__get_id(varchar)
 returns integer as '
 declare
     p_msg_type_name		alias for $1;
@@ -85,10 +85,10 @@ begin
    
     return v_msg_type_id;
 
-end;' language 'plpgsql';
+end;' language 'plpgsql' stable strict;
 
 
-create function acs_sc_msg_type__get_name(integer)
+create or replace function acs_sc_msg_type__get_name(integer)
 returns varchar as '
 declare
     p_msg_type_id		alias for $1;
@@ -101,10 +101,10 @@ begin
    
     return v_msg_type_name;
 
-end;' language 'plpgsql';
+end;' language 'plpgsql' stable strict;
 
 
-create function acs_sc_msg_type__delete(integer)
+create or replace function acs_sc_msg_type__delete(integer)
 returns integer as '
 declare
     p_msg_type_id		alias for $1;
@@ -117,8 +117,9 @@ begin
 
 end;' language 'plpgsql';
 
-
-create function acs_sc_msg_type__delete(varchar)
+-- XXX: this might be a bug that it does not return 0 as the above does.
+-- anyway now it is strict as being called with null is a noop and returns null
+create or replace function acs_sc_msg_type__delete(varchar)
 returns integer as '
 declare
     p_msg_type_name		alias for $1;
@@ -131,14 +132,14 @@ begin
 
     return v_msg_type_id;
 
-end;' language 'plpgsql';
+end;' language 'plpgsql' strict;
 
 
 
 
 
 
-create function acs_sc_msg_type__new_element(varchar,varchar,varchar,boolean,integer)
+create or replace function acs_sc_msg_type__new_element(varchar,varchar,varchar,boolean,integer)
 returns integer as '
 declare
     p_msg_type_name		alias for $1;
@@ -183,7 +184,7 @@ end;' language 'plpgsql';
 
 
 
-create function acs_sc_msg_type__parse_spec(varchar,varchar)
+create or replace function acs_sc_msg_type__parse_spec(varchar,varchar)
 returns integer as '
 declare
     p_msg_type_name		alias for $1;

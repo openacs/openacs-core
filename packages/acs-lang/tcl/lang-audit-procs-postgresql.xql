@@ -4,8 +4,10 @@
 
   <fullquery name="lang::audit::changed_message.lang_message_audit">
     <querytext>
-          insert into lang_messages_audit (package_key, message_key, locale, old_message, comment_text, overwrite_user) 
-            values (:package_key, :message_key, :locale, :old_message, :comment, :overwrite_user) 
+          insert into lang_messages_audit (package_key, message_key, locale, old_message, comment_text, overwrite_user,
+                                           deleted_p, sync_time, conflict_p, upgrade_status) 
+            values (:package_key, :message_key, :locale, :old_message, :comment, :overwrite_user,
+                                           :deleted_p, :sync_time, :conflict_p, :upgrade_status) 
     </querytext>
   </fullquery>
 

@@ -114,7 +114,7 @@ declare
   p_raw_date alias for $1;
 begin
   return "timestamptz" (p_raw_date || ''+00'');
-end;' language 'plpgsql';
+end;' language 'plpgsql' stable strict;
 
 create or replace function timezone__new (varchar, varchar) returns integer as '
 declare
@@ -144,11 +144,12 @@ declare
   p_tz alias for $1;
   v_tz_id integer;
 begin
-  select tz_id into v_tz_id 
+
+  return tz_id
   from   timezones
   where  tz = p_tz;
-  return v_tz_id;
-end;' language 'plpgsql';
+
+end;' language 'plpgsql' stable strict;
 
 create or replace function timezone__add_rule (varchar, varchar, integer, varchar, varchar, varchar, varchar, varchar) returns integer as '
 declare
@@ -211,7 +212,7 @@ begin
   from   timezone_rules
   where  tz_id = p_tz_id and v_base_time between utc_start and utc_end;
 
-end;' language 'plpgsql';
+end;' language 'plpgsql' stable;
 
 
 create or replace function timezone__get_offset (integer, timestamptz) returns interval as '
@@ -227,7 +228,7 @@ begin
   where  tz_id = p_tz_id and p_time between utc_start and utc_end;
 
   return "interval" (v_offset || ''seconds'');
-end;' language 'plpgsql';
+end;' language 'plpgsql' stable;
     
 create or replace function timezone__get_rawoffset (integer, timestamptz) returns interval as '
 declare
@@ -247,7 +248,7 @@ begin
   where  tz_id  = p_tz_id and p_time between utc_start and utc_end;
 
   return v_offset;
-end;' language 'plpgsql';
+end;' language 'plpgsql' stable;
 
 create or replace function timezone__get_abbrev (integer, timestamptz) returns varchar as '
 declare
@@ -262,7 +263,7 @@ begin
   where  tz_id = p_tz_id and p_time between local_start and local_end;
 	 
   return v_abbrev;
-end;' language 'plpgsql';
+end;' language 'plpgsql' stable;
 
 -- Returns a formatted date with timezone info appended  
 
@@ -298,7 +299,7 @@ begin
 
   return v_date;
 
-end;' language 'plpgsql';
+end;' language 'plpgsql' stable;
 
 -- Returns 't' if timezone is currently using DST
 create or replace function timezone__isdst_p (integer, timestamptz) returns boolean as '
@@ -314,4 +315,4 @@ begin
   where  tz_id = p_tz_id and p_time between local_start and local_end;
 
   return v_isdst_p;
-end;' language 'plpgsql';
+end;' language 'plpgsql' stable;

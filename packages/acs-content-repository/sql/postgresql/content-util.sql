@@ -20,9 +20,9 @@ begin
           from pg_class 
          where relname = lower(table_exists__table_name);
  
-end;' language 'plpgsql';
+end;' language 'plpgsql' stable strict;
 
-create function column_exists (varchar,varchar)
+create or replace function column_exists (varchar,varchar)
 returns boolean as '
 declare
         column_exists__table_name             alias for $1;  
@@ -35,9 +35,9 @@ begin
            and c.oid = a.attrelid
            and a.attname = lower(column_exists__column_name);
 
-end;' language 'plpgsql';
+end;' language 'plpgsql' stable;
 
-create function trigger_exists (varchar,varchar) returns boolean as '
+create or replace function trigger_exists (varchar,varchar) returns boolean as '
 declare 
         trigger_name    alias for $1;
         on_table        alias for $2;
@@ -48,9 +48,9 @@ begin
            and c.oid = t.tgrelid
            and t.tgname = lower(trigger_name);
 
-end;' language 'plpgsql';
+end;' language 'plpgsql' stable;
 
-create function trigger_func_exists (varchar) returns boolean as '
+create or replace function trigger_func_exists (varchar) returns boolean as '
 declare 
         trigger_name    alias for $1;
 begin
@@ -59,19 +59,19 @@ begin
          where proname = lower(trigger_name)
            and pronargs = 0;
 
-end;' language 'plpgsql';
+end;' language 'plpgsql' stable;
 
-create function rule_exists (varchar,varchar) returns boolean as '
+create or replace function rule_exists (varchar,varchar) returns boolean as '
 declare
         rule_name       alias for $1;
         table_name      alias for $2;
 begin
         return count(*) = 1
           from pg_rules
-         where tablename::varchar = table_name
-           and rulename::varchar = rule_name;
+         where tablename::varchar = lower(table_name)
+           and rulename::varchar = lower(rule_name);
 
-end;' language 'plpgsql';
+end;' language 'plpgsql' stable;
 
 -- java stuff, deal with this later.
 

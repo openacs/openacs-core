@@ -19,8 +19,7 @@
     ANSI format and then using <ulink url="/api-doc/proc-view?proc=lc%5ftime%5ffmt">lc_time_fmt</ulink> to format it for display.</para>
     <example>
       <title>Getting datetime from the database ANSI-style</title>
-      <programlisting>
-    db_multirow -extend { mydate_pretty } {
+      <programlisting>db_multirow -extend { mydate_pretty } {
     select to_char(mydate, 'YYYY-MM-DD HH24:MI:SS') as mydate_ansi,
           ...
     ...

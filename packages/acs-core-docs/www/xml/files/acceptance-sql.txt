@@ -1,4 +1,4 @@
--- acceptance-sql.txt by philg@mit.edu and jsc@arsdigita.com
+-- acceptance-sql.txt by philg@mit.edu and Jin S Choi
 --                      (Philip Greenspun and Jin Choi)
 
 -- SQL commands to test an Oracle installation

@@ -8,7 +8,7 @@
   <title>Credits</title>
 
   <authorblurb>
-	by <ulink url="mailto:vinod@kurup.com">Vinod Kurup</ulink>
+    <para>By <ulink url="mailto:vinod@kurup.com">Vinod Kurup</ulink></para>
   </authorblurb>
 
   <para><ulink url="mailto:vinod@kurup.com">Vinod Kurup</ulink> put
@@ -60,7 +60,7 @@
   <para>
     <emphasis role="strong">All questions and comments</emphasis> regarding
     this guide should be posted on the <ulink
-    url="http://openacs.org/bboard">OpenACS bboards</ulink>.
+    url="http://openacs.org/forums/">OpenACS forums</ulink>.
   </para>
 
   <para><phrase role="cvstag">($Id$)</phrase></para>
@@ -81,16 +81,15 @@
     <para>These are a few of my sources:</para>
     <itemizedlist>
       <listitem><para> 
-          <ulink url="http://developer.arsdigita.com/doc/unix-install.html">ArsDigita installation guide</ulink>
+          ArsDigita installation guide
         </para></listitem>
 
       <listitem><para>
-          <ulink
-          url="http://openacs.org/doc/openacs/install/">OpenACS 3.x installation guide</ulink>
+          OpenACS 3.x installation guide
         </para></listitem> 
 
       <listitem><para> 
-          <ulink url="http://www.orchardlabs.com/freebsd/">Gilbert Wong's FreeBSD
+          <ulink url="http://www.orchardlabs.com/">Gilbert Wong's FreeBSD
           installation guide</ulink>
         </para></listitem> 
 

@@ -3,7 +3,7 @@
 --
 -- @author rhs@mit.edu
 -- @creation-date 2000-08-22
--- @cvs-id groups-body-create.sql,v 1.1.4.1 2001/01/12 22:58:33 mbryzek Exp
+-- @cvs-id $Id$
 --
 
 --------------
@@ -921,7 +921,7 @@ begin
 
   return name__group_name;
   
-end;' language 'plpgsql';
+end;' language 'plpgsql' stable strict;
 
 create or replace function acs_group__member_p (integer, integer, boolean)
 returns boolean as '
@@ -944,7 +944,8 @@ begin
 	   and rels.object_id_one = p_group_id
            and rels.object_id_two = p_party_id;
   end if;
-end;' language 'plpgsql';
+end;' language 'plpgsql' stable;
+
 
 
 -- function check_representation
@@ -956,6 +957,11 @@ declare
   comp                   record;
   memb                   record;      
 begin
+   if group_id is null then 
+        --maybe we should just return ''f'' instead?
+	raise exception ''acs_group__check_representation called with null group_id'';
+   end if;
+
    res := ''t'';
    PERFORM acs_log__notice(''acs_group.check_representation'',
                   ''Running check_representation on group '' || group_id);

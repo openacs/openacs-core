@@ -5,11 +5,11 @@
 %myvars;
 ]>
 <sect1 id="rp-requirements" xreflabel="OpenACS 4 Request Processor Requirements">
-<title>OpenACS 4 Request Processor Requirements</title>
+<title>Request Processor Requirements</title>
 
 
 <authorblurb>
-by <ulink url="http://planitia.org">Rafael H. Schloming</ulink> 
+<para>By <ulink url="http://planitia.org">Rafael H. Schloming</ulink> </para>
 </authorblurb>
 
 

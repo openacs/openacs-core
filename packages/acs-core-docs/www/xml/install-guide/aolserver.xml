@@ -4,11 +4,11 @@
 <!ENTITY % myvars SYSTEM "../variables.ent">
 %myvars;
 ]>
-<sect1 id="aolserver" xreflabel="Install AOLserver 3.3+ad13">
+<sect1 id="aolserver" xreflabel="Install AOLserver 3.3oacs1">
   <title>Install AOLserver 3.3oacs1</title>
 
   <authorblurb>
-    by <ulink url="mailto:vinod@kurup.com">Vinod Kurup</ulink>
+    <para>by <ulink url="mailto:vinod@kurup.com">Vinod Kurup</ulink></para>
   </authorblurb>
 
   <orderedlist>
@@ -115,7 +115,7 @@ Done Building Sat Mar  8 10:31:35 PST 2003
 	  sets database environment variables before starting
 	  AOLserver; this allows the AOLserver instance can
 	  communicate with the database.  There is one script each for
-	  Oracle and PostGreSQL.  They don't conflict, so if you plan
+	  Oracle and PostgreSQL.  They don't conflict, so if you plan
 	  to use both databases, install both.</para>
       </formalpara>
       <itemizedlist>
@@ -130,7 +130,7 @@ cp /tmp/&tarballpath;/packages/acs-core-docs/www/files/nsd-oracle.txt ./nsd-orac
 chmod 750 nsd-oracle</action></screen>
             </listitem>
             <listitem>
-              <para>PostGreSQL</para>
+              <para>PostgreSQL</para>
               <screen>[root@yourserver aolserver]# <userinput>cd /usr/local/aolserver/bin</userinput>
 [root@yourserver bin]# <userinput>cp /tmp/&tarballpath;/packages/acs-core-docs/www/files/nsd-postgres.txt ./nsd-postgres</userinput>
 [root@yourserver bin]# <userinput>chmod 755 nsd-postgres</userinput>
@@ -168,7 +168,7 @@ Length: 826,613 [application/x-compressed]
 wget --passive http://www.tdom.org/tDOM-0.7.8.tar.gz
 tar xzf tDOM-0.7.8.tar.gz
 cd tDOM-0.7.8/unix</action> </screen>
-      <para>Edit the file CONFIG and change this section: 
+      <para>Edit the file CONFIG and change this section:</para>
 <programlisting># ----------------------------------------------------
 # aolsrc="/usr/src/aolserver-3.4"
 # ../configure --enable-threads --disable-tdomalloc \
@@ -203,7 +203,6 @@ make
 cp libtdom0.7.8.so /usr/local/aolserver/bin/
 cd /usr/local/aolserver/bin
 ln -s libtdom0.7.8.so libtdom.so</action></screen>
-</para>
     </listitem>
     <listitem>
       <para><link linkend="install-nsopenssl">Install nsopenssl</link>

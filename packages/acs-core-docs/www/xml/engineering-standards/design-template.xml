@@ -7,7 +7,7 @@
 <sect1 id="filename" xreflabel="Name of Document">
   <title>Detailed Design Documentation Template</title>
 
-  <para>By <ulink url="mailto:youremail@arsdigita.com">You</ulink></para>
+  <para>By <ulink url="mailto:youremail@example.com">You</ulink></para>
   
   <sect2 id="yourpackage-design-start-note">
     <title>Start Note</title>

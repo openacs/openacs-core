@@ -14,5 +14,9 @@ lang::system::locale_set_enabled \
         -locale $locale \
         -enabled_p $enabled_p
 
+if {$enabled_p} {
+    lang::catalog::import -locales [list $locale]
+}
+
 ad_returnredirect . 
 ad_script_abort

@@ -6,17 +6,17 @@
     <if @main_site_p@ false>  
       <if @group_member_p@ true>
         <span class="button"><a href="group-leave" class="button"
-          title="#acs-subsite.Leave_this_community#">#acs-subsite.Leave_community#</a></span>
+          title="#acs-subsite.Leave_this_subsite#">#acs-subsite.Leave_subsite#</a></span>
       </if>
       <else>
         <if @can_join_p@ true>
           <if @group_join_policy@ eq "open">
             <a href="register/user-join" class="button"
-              title="#acs-subsite.Join_this_community">#acs-subsite.Join_community#</a>
+              title="#acs-subsite.Join_this_subsite">#acs-subsite.Join_subsite#</a>
           </if>
           <else>
             <a href="register/user-join" class="button"
-              title="#acs-subsite.Req_membership_comm#">#acs-subsite.Request_membership#</a>
+              title="#acs-subsite.Req_membership_subs#">#acs-subsite.Request_membership#</a>
           </else>
         </if>
       </else>
@@ -34,7 +34,7 @@
       <include src="/packages/acs-subsite/lib/applications">
     </td>
     <td valign="top">
-      <h2>@communities_label@</h2>
+      <h2>#acs-subsite.Subsites#</h2>
       <include src="/packages/acs-subsite/lib/subsites">
     </td>
   </tr>

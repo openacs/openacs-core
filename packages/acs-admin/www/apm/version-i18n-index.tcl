@@ -26,3 +26,5 @@ set num_cat_files [llength [glob -nocomplain "[acs_package_root_dir $package_key
 
 set localize_url [export_vars -base "[apm_package_url_from_key "acs-lang"]admin/message-list" { package_key {locale {[ad_conn locale]}}}]
 
+set import_url [export_vars -base "/acs-lang/admin/import-messages" { package_key {return_url {[ad_return_url]}} }]
+set export_url [export_vars -base "/acs-lang/admin/export-messages" { package_key {return_url {[ad_return_url]}} }]

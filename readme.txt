@@ -1,6 +1,6 @@
 This is the OpenACS - the Open Architecture Community System.
 
-Version 5.0.0 beta 1
+Version 5.0.0 beta 4
 
 --------------
 

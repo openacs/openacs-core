@@ -5,13 +5,10 @@
 %myvars;
 ]>
 <sect1 id="object-system-design" xreflabel="OpenACS 4 Object Model Design">
-<title>OpenACS 4 Object Model Design</title>
+<title>Object Model Design</title>
 
 <authorblurb>
-by <ulink url="mailto:psu@arsdigita.com">Pete Su</ulink>,
-   <ulink url="mailto:mcyoon@arsdigita.com">Michael Yoon</ulink>,
-   <ulink url="mailto:richardl@arsdigita.com">Richard Li</ulink>
-   and <ulink url="mailto:rhs@arsdigita.com">Rafael Schloming</ulink>
+<para>By Pete Su, Michael Yoon, Richard Li, Rafael Schloming</para>
 </authorblurb>
 
 <sect2 id="object-system-design-essentials">
@@ -82,7 +79,7 @@ information to application data objects. Examples of application objects
 include:</para>
 
 <itemizedlist>
-<listitem><para>Bboard messages</para></listitem>
+<listitem><para>forum messages</para></listitem>
 
 <listitem><para>A user home page</para></listitem>
 
@@ -215,10 +212,9 @@ notion of &quot;scoping&quot; was introduced into the core data model.</para>
 <para>&quot;Scope&quot; is a term best explained by example. Consider some
 hypothetical rows in the <computeroutput>address_book</computeroutput> table:</para>
 
-<blockquote>
  
 <informaltable>
-<tgroup cols="3">
+<tgroup cols="5">
 <tbody>
 <row>
 <entry><emphasis role="strong">...</emphasis></entry>
@@ -252,7 +248,6 @@ hypothetical rows in the <computeroutput>address_book</computeroutput> table:</p
 <entry>...</entry>
 </row>
 </tbody></tgroup></informaltable>
-</blockquote>
 
 <para>The first row represents an entry in User 123&#39;s personal address book,
 the second row represents an entry in User Group 456&#39;s shared address
@@ -269,8 +264,8 @@ every object lives in a single <emphasis>context</emphasis>. A context is just a
 abstract name for the default security domain to which the object belongs.
 Each context has a unique identifier, and all the contexts in a system form a
 tree. Often this tree will reflect an observed hierarchy in a site, e.g. a
-bboard message would probably list a bboard topic as its context, and a
-bboard topic might list a subsite as its context. Thus, contexts make it
+forum message would probably list a forum topic as its context, and a
+forum topic might list a subsite as its context. Thus, contexts make it
 easier to break the site up into security domains according to its natural
 structure. An object&#39;s context is stored in the <computeroutput>context_id</computeroutput>
 column of the <computeroutput>acs_objects</computeroutput> table.</para>
@@ -1473,8 +1468,8 @@ on par with the old user/groups system in a more general way.</para>
 <title>Authors</title>
 
 
-<para><ulink url="mailto:psu@arsdigita.com">Pete Su</ulink> generated this document
-from material culled from other documents by <ulink url="mailto:mcyoon@arsdigita.com">Michael Yoon</ulink>, <ulink url="mailto:richardl@arsdigita.com">Richard Li</ulink> and <ulink url="mailto:rhs@arsdigita.com">Rafael Schloming</ulink>. But, any remaining lies
+<para>Pete Su generated this document
+from material culled from other documents by Michael Yoon, Richard Li and Rafael Schloming. But, any remaining lies
 are his and his alone.</para>
 
 </sect2>

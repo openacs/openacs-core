@@ -343,9 +343,6 @@ ad_proc -private template::form::template { id { style "" } } {
 
   template::code::adp::$file_stub
 
-  # unprotect registered tags and variable references
-  set __adp_output [string map { ~ < + @ } $__adp_output]
-
   return $__adp_output
 }
 
@@ -745,9 +742,7 @@ ad_proc -public template::form::set_values { id array_ref } {
   
   foreach name [array names values] {
     
-    template::element set_properties $id $name -value $values($name) 
-    # Resolve single value  / multiple value issues ?
-    template::element set_properties $id $name -values [list $values($name)]
+    template::element set_value $id $name $values($name) 
   }
 }
 

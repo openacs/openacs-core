@@ -10,7 +10,7 @@
 -- License.  Full text of the license is available from the GNU Project:
 -- http://www.fsf.org/copyleft/gpl.html
 
-create function content_extlink__new (varchar,varchar,varchar,varchar,integer,integer,timestamptz,integer,varchar)
+create or replace function content_extlink__new (varchar,varchar,varchar,varchar,integer,integer,timestamptz,integer,varchar)
 returns integer as '
 declare
   new__name                   alias for $1;  -- default null  
@@ -68,7 +68,7 @@ begin
 
 end;' language 'plpgsql';
 
-create function content_extlink__delete (integer)
+create or replace function content_extlink__delete (integer)
 returns integer as '
 declare
   delete__extlink_id             alias for $1;  
@@ -83,7 +83,7 @@ return 0;
 end;' language 'plpgsql';
 
 
-create function content_extlink__is_extlink (integer)
+create or replace function content_extlink__is_extlink (integer)
 returns boolean as '
 declare
   is_extlink__item_id                alias for $1;  
@@ -99,9 +99,9 @@ begin
   
   return v_extlink_p;
  
-end;' language 'plpgsql';
+end;' language 'plpgsql' stable;
 
-create function content_extlink__copy (integer,integer,integer,varchar)
+create or replace function content_extlink__copy (integer,integer,integer,varchar)
 returns integer as '
 declare
   copy__extlink_id             alias for $1;  

@@ -623,12 +623,7 @@ ad_proc -private apm_load_catalog_files {
         return
     }
 
-    if { $upgrade_p } {
-        # Reset the upgrade status of message catalog keys before we load the catalog files
-        lang::catalog::reset_upgrade_status_message_keys $package_key
-    }
-
-    # Load and cache I18N messages
+    # Load and cache I18N messages for all enabled locales
     lang::catalog::import -cache -package_key $package_key
 }
 
@@ -918,6 +913,7 @@ ad_proc -private apm_package_deinstall {
 }
 
 ad_proc -private apm_package_delete {
+    {-sql_drop_scripts ""}
     { 
 	-callback apm_dummy_callback
     }
@@ -925,9 +921,58 @@ ad_proc -private apm_package_delete {
     package_key
 } {
     
-    Deinstalls and deletes a package from the ACS and the filesystem.
+    Deinstall a package from the system. Will unmount and uninstantiate
+    package instances, invoke any before-unstall callback, source any
+    provided sql drop scripts, remove message keys, and delete
+    the package from the APM tables.
 
 } {
+    set version_id [apm_version_id_from_package_key $package_key]
+
+    # Unmount all instances of this package with the Tcl API that 
+    # invokes before-unmount callbacks
+    db_foreach all_package_instances {
+        select site_nodes.node_id
+        from apm_packages, site_nodes
+        where apm_packages.package_id = site_nodes.object_id
+        and   apm_packages.package_key = :package_key
+    } {
+        set url [site_node::get_url -node_id $node_id]
+        apm_callback_and_log $callback "Unmounting package instance at url $url <br />"
+        site_node::unmount -node_id $node_id
+    }    
+
+    # Delete the package instances with Tcl API that invokes 
+    # before-uninstantiate callbacks
+    db_foreach all_package_instances {
+        select package_id
+        from apm_packages
+        where package_key = :package_key
+    } {
+        apm_callback_and_log $callback "Deleting package instance $package_id <br />"
+        apm_package_instance_delete $package_id
+    }
+
+    # Invoke the before-uninstall Tcl callback before the sql drop scripts
+    apm_invoke_callback_proc -version_id $version_id -type before-uninstall
+
+    # Source SQL drop scripts
+    if {![empty_string_p $sql_drop_scripts]} {
+        
+        apm_callback_and_log $callback "Now executing drop scripts.
+    <ul>
+    "
+        foreach path $sql_drop_scripts {
+    	apm_callback_and_log $callback "<li><pre>"
+    	db_source_sql_file -callback $callback "[acs_package_root_dir $package_key]/$path"
+    	apm_callback_and_log $callback "</pre>"
+        }
+    }    
+
+    # Unregister I18N messages
+    lang::catalog::package_delete -package_key $package_key
+
+    # Remove package from APM tables
     apm_callback_and_log $callback "<li>Deleting $package_key..."
     db_exec_plsql apm_package_delete {
 	begin
@@ -937,7 +982,8 @@ ad_proc -private apm_package_delete {
             );
 	end;
     }
-    # Remove the files from the filesystem
+
+    # Optionally remove the files from the filesystem
     if {$remove_files_p==1} {
 	if { [catch { 
 	    file delete -force [acs_package_root_dir $package_key] 

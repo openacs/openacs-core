@@ -4,7 +4,15 @@
 <fullquery name="cc_lookup_screen_name_user.user_select">      
       <querytext>
       
-	select user_id from cc_users where upper(screen_name) = upper(:screen_name)
+	select user_id from cc_users where lower(screen_name) = lower(:screen_name)
+    
+      </querytext>
+</fullquery>
+
+<fullquery name="cc_lookup_email_user.user_select">      
+      <querytext>
+      
+	select user_id from cc_users where lower(email) = lower(:email)
     
       </querytext>
 </fullquery>
@@ -12,9 +20,9 @@
  
 <fullquery name="cc_email_from_party.email_from_party">      
       <querytext>
-      
+
 	select email from parties where party_id = :party_id
-    
+
       </querytext>
 </fullquery>
 
@@ -112,7 +120,7 @@
 
             select user_id
             from   users
-            where  upper(username) = upper(:username)
+            where  lower(username) = lower(:username)
             and    authority_id =:authority_id
 
       </querytext>
@@ -134,6 +142,46 @@
         select party_id 
         from   parties 
         where  lower(email) = lower(:email)
+
+      </querytext>
+</fullquery>
+
+
+<fullquery name="party::get_by_email.select_party_id">
+      <querytext>
+      
+        select party_id 
+        from   parties 
+        where  lower(email) = lower(:email)
+
+      </querytext>
+</fullquery>
+
+<fullquery name="acs_user::get_user_id_by_screen_name.select_user_id_by_screen_name">
+      <querytext>
+
+	select user_id from users where lower(screen_name) = lower(:screen_name)
+
+      </querytext>
+</fullquery>
+
+<fullquery name="acs_user::change_state.select_rel_id">
+      <querytext>
+
+	select rel_id
+        from cc_users
+        where user_id = :user_id
+
+      </querytext>
+</fullquery>
+
+<fullquery name="ad_user_new.update_question_answer">
+      <querytext>
+
+            update users
+            set    password_question = :password_question,
+                   password_answer = :password_answer
+            where  user_id = :user_id
 
       </querytext>
 </fullquery>

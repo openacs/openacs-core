@@ -187,17 +187,18 @@ create table acs_objects (
 	last_modified		timestamptz default current_timestamp not null,
 	modifying_user		integer,
 	modifying_ip		varchar(50),
-        tree_sortkey            varbit,
+        tree_sortkey            varbit
+				constraint acs_objects_tree_sortkey_un unique
+				constraint acs_objects_tree_sortkey_nn not null,
+        max_child_sortkey       varbit,
         constraint acs_objects_context_object_un
 	unique (context_id, object_id)
 );
 
-create index acs_objects_context_object_idx on
-       acs_objects (context_id, object_id);
-
-create index acs_objs_tree_skey_idx on acs_objects (tree_sortkey);
-
--- alter table acs_objects modify constraint acs_objects_context_object_un enable;
+-- The unique constriant about will force create of this index...
+-- create index acs_objects_context_object_idx onacs_objects (context_id, object_id);
+-- The unique constraint should generate an index automatically so this is not needed
+-- create index acs_objs_tree_skey_idx on acs_objects (tree_sortkey);
 
 create index acs_objects_creation_user_idx on acs_objects (creation_user);
 create index acs_objects_modify_user_idx on acs_objects (modifying_user);
@@ -230,106 +231,94 @@ for each row execute procedure acs_objects_last_mod_update_tr ();
 
 -- tree query support for acs_objects
 
-create function acs_objects_get_tree_sortkey(integer) returns varbit as '
+create or replace function acs_objects_get_tree_sortkey(integer) returns varbit as '
 declare
   p_object_id    alias for $1;
 begin
   return tree_sortkey from acs_objects where object_id = p_object_id;
-end;' language 'plpgsql';
+end;' language 'plpgsql' stable strict;
 
-create function acs_objects_insert_tr () returns opaque as '
+create function acs_objects_insert_tr() returns opaque as '
 declare
-        v_parent_sk     varbit default null;
-        v_max_value     integer;
+        v_parent_sk    		varbit default null;
+        v_max_child_sortkey	varbit;
 begin
-        if new.context_id is null then 
-            select max(tree_leaf_key_to_int(tree_sortkey)) into v_max_value 
-              from acs_objects 
-             where context_id is null;
-        else 
-            select max(tree_leaf_key_to_int(tree_sortkey)) into v_max_value 
-              from acs_objects 
-             where context_id = new.context_id;
+        if new.context_id is null then
+ 	    new.tree_sortkey := int_to_tree_key(new.object_id+1000);
+        else
+            SELECT tree_sortkey, tree_increment_key(max_child_sortkey)
+	    INTO v_parent_sk, v_max_child_sortkey
+            FROM acs_objects
+            WHERE object_id = new.context_id 
+            FOR UPDATE;
 
-            select tree_sortkey into v_parent_sk 
-              from acs_objects 
-             where object_id = new.context_id;
+	    UPDATE acs_objects 
+	    SET max_child_sortkey = v_max_child_sortkey
+	    WHERE object_id = new.context_id;
+
+            new.tree_sortkey := v_parent_sk || v_max_child_sortkey;
         end if;
 
-
-        new.tree_sortkey := tree_next_key(v_parent_sk, v_max_value);
-
+	new.max_child_sortkey := null;
         return new;
-
 end;' language 'plpgsql';
 
 create trigger acs_objects_insert_tr before insert 
 on acs_objects for each row 
 execute procedure acs_objects_insert_tr ();
 
+
 create function acs_objects_update_tr () returns opaque as '
 declare
         v_parent_sk     varbit default null;
-        v_max_value     integer;
-        ctx_id          integer;
-        v_rec           record;
-        clr_keys_p      boolean default ''t'';
+        v_max_child_sortkey	varbit;
+        v_old_parent_length	integer;
 begin
-        if new.object_id = old.object_id and 
-           ((new.context_id = old.context_id) or
-            (new.context_id is null and old.context_id is null)) then
+        if new.object_id = old.object_id
+           and ((new.context_id = old.context_id)
+                or (new.context_id is null 
+	            and old.context_id is null)) then
 
            return new;
 
         end if;
 
-        for v_rec in select object_id
-                       from acs_objects 
-                      where tree_sortkey between new.tree_sortkey and tree_right(new.tree_sortkey)
-                   order by tree_sortkey
-        LOOP
-            if clr_keys_p then
-               update acs_objects set tree_sortkey = null
-               where tree_sortkey between new.tree_sortkey and tree_right(new.tree_sortkey);
-               clr_keys_p := ''f'';
-            end if;
-            
-            select context_id into ctx_id
-              from acs_objects 
-             where object_id = v_rec.object_id;
+	-- the tree sortkey is going to change so get the new one and update it and all its
+	-- children to have the new prefix...
+	v_old_parent_length := length(new.tree_sortkey) + 1;
 
-            if ctx_id is null then 
-                select max(tree_leaf_key_to_int(tree_sortkey)) into v_max_value
-                  from acs_objects 
-                 where context_id is null;
-            else 
-                select max(tree_leaf_key_to_int(tree_sortkey)) into v_max_value
-                  from acs_objects 
-                 where context_id = ctx_id;
+	if new.context_id is null then
+            v_parent_sk := int_to_tree_key(new.object_id+1000);
+        else
+	    SELECT tree_sortkey, tree_increment_key(max_child_sortkey)
+	    INTO v_parent_sk, v_max_child_sortkey
+            FROM acs_objects
+            WHERE object_id = new.context_id
+            FOR UPDATE;
 
-                select tree_sortkey into v_parent_sk 
-                  from acs_objects 
-                 where object_id = ctx_id;
-            end if;
+	    UPDATE acs_objects
+            SET max_child_sortkey = v_max_child_sortkey
+  	    WHERE object_id = new.context_id;
 
-            update acs_objects 
-               set tree_sortkey = tree_next_key(v_parent_sk, v_max_value)
-             where object_id = v_rec.object_id;
+  	    v_parent_sk := v_parent_sk || v_max_child_sortkey;
+	end if;
 
-        end LOOP;
+	UPDATE acs_objects
+	SET tree_sortkey = v_parent_sk || substring(tree_sortkey, v_old_parent_length)
+        WHERE tree_sortkey between new.tree_sortkey and tree_right(new.tree_sortkey);
 
         return new;
-
 end;' language 'plpgsql';
 
-create trigger acs_objects_update_tr after update 
+create trigger acs_objects_update_tr after update
 on acs_objects
-for each row 
+for each row
 execute procedure acs_objects_update_tr ();
 
 -- show errors
 
 comment on table acs_objects is '
+The root table for the acs object heirarchy.  It all starts here folks.
 ';
 
 comment on column acs_objects.context_id is '
@@ -422,9 +411,10 @@ declare
         inner record;
         security_context_root integer;
 begin
-  if new.object_id = old.object_id and
-     new.context_id = old.context_id and
-     new.security_inherit_p = old.security_inherit_p then
+  if new.object_id = old.object_id
+     and ((new.context_id = old.context_id)
+	  or (new.context_id is null and old.context_id is null))
+     and new.security_inherit_p = old.security_inherit_p then
     return new;
   end if;
 
@@ -549,13 +539,15 @@ comment on table acs_static_attr_values is '
 -- ACS_OBJECT PACKAGE --
 ------------------------
 
-create function acs_object__initialize_attributes (integer)
+create or replace function acs_object__initialize_attributes (integer)
 returns integer as '
 declare
   initialize_attributes__object_id              alias for $1;  
   v_object_type                                 acs_objects.object_type%TYPE;
 begin
-   -- XXX This should be fixed to initialize supertypes properly.
+   if  initialize_attributes__object_id is null then 
+	raise exception ''acs_object__initialize_attributes called with null object_id'';
+   end if;
 
    -- Initialize dynamic attributes
    insert into acs_attribute_values
@@ -592,7 +584,7 @@ end;' language 'plpgsql';
 
 
 -- function new
-create function acs_object__new (integer,varchar,timestamptz,integer,varchar,integer,boolean)
+create or replace function acs_object__new (integer,varchar,timestamptz,integer,varchar,integer,boolean)
 returns integer as '
 declare
   new__object_id              alias for $1;  -- default null
@@ -633,7 +625,7 @@ begin
 end;' language 'plpgsql';
 
 -- function new
-create function acs_object__new (integer,varchar,timestamptz,integer,varchar,integer)
+create or replace function acs_object__new (integer,varchar,timestamptz,integer,varchar,integer)
 returns integer as '
 declare
   new__object_id              alias for $1;  -- default null
@@ -784,11 +776,11 @@ begin
 
   return object_name;
   
-end;' language 'plpgsql';
+end;' language 'plpgsql' stable strict;
 
 
 -- function default_name
-create function acs_object__default_name (integer)
+create or replace function acs_object__default_name (integer)
 returns varchar as '
 declare
   default_name__object_id   alias for $1;  
@@ -801,12 +793,12 @@ begin
   and o.object_type = ot.object_type;
 
   return object_type_pretty_name || '' '' || default_name__object_id;
-  
-end;' language 'plpgsql';
+
+end;' language 'plpgsql' stable strict;
 
 
 -- procedure get_attribute_storage
-create function acs_object__get_attribute_storage (integer,varchar)
+create or replace function acs_object__get_attribute_storage (integer,varchar)
 returns text as '
 declare
   object_id_in           alias for $1;  
@@ -859,7 +851,7 @@ begin
      a.object_type = t.object_type;
 
    if NOT FOUND then 
-      raise EXCEPTION ''-20000: No such attribute %::% in acs_object.get_attribute_storage.'', v_object_type, attribute_name_in;
+      raise EXCEPTION ''-20000: No such attribute % for object % in acs_object.get_attribute_storage.'', attribute_name_in, object_id_in;
    end if;
 
    -- This should really be done in a trigger on acs_attributes,
@@ -898,10 +890,10 @@ begin
          where 
            object_type = v_object_type;
          if NOT FOUND then 
-            raise EXCEPTION ''-20000: No data found for attribute %::% in acs_object.get_attribute_storage'', v_object_type, attribute_name_in;
+            raise EXCEPTION ''-20000: No data found for attribute %::% object_id % in acs_object.get_attribute_storage'', v_object_type, attribute_name_in, object_id_in;
          end if;
        else
-         raise EXCEPTION ''-20000: No table name specified for storage specific static attribute %::% in acs_object.get_attribute_storage.'',v_object_type, attribute_name_in;
+         raise EXCEPTION ''-20000: No table name specified for storage specific static attribute %::% object_id % in acs_object.get_attribute_storage.'',v_object_type, attribute_name_in, object_id_in;
        end if;
   
      end if;
@@ -913,7 +905,7 @@ begin
        where object_type = v_object_type 
        and table_name = v_table_name;
        if NOT FOUND then 
-          raise EXCEPTION ''-20000: No data found for attribute %::% in acs_object.get_attribute_storage'', v_object_type, attribute_name_in;
+          raise EXCEPTION ''-20000: No data found for attribute %::% object_id % in acs_object.get_attribute_storage'', v_object_type, attribute_name_in, object_id_in;
        end if;
    end if;
 
@@ -937,25 +929,25 @@ begin
 
    return v_column || '','' || v_table_name || '','' || v_key_sql; 
 
-end;' language 'plpgsql';
+end;' language 'plpgsql' stable;
 
 
-create function acs_object__get_attr_storage_column(text) 
+create or replace function acs_object__get_attr_storage_column(text) 
 returns text as '
 declare
         v_vals  alias for $1;
         v_idx   integer;
 begin
         v_idx := strpos(v_vals,'','');
-        if v_idx = 0 then 
-           raise exception ''invalid storage format: acs_object.get_attr_storage_column'';
+        if v_idx = 0 or v_vals is null then 
+           raise exception ''invalid storage format: acs_object.get_attr_storage_column %'',v_vals;
         end if;
 
         return substr(v_vals,1,v_idx - 1);
 
-end;' language 'plpgsql';
+end;' language 'plpgsql' immutable;
 
-create function acs_object__get_attr_storage_table(text) 
+create or replace function acs_object__get_attr_storage_table(text) 
 returns text as '
 declare
         v_vals  alias for $1;
@@ -963,20 +955,22 @@ declare
         v_tmp   varchar;
 begin
         v_idx := strpos(v_vals,'','');
-        if v_idx = 0 then 
-           raise exception ''invalid storage format: acs_object.get_attr_storage_table'';
+
+        if v_idx = 0 or v_vals is null then 
+           raise exception ''invalid storage format: acs_object.get_attr_storage_table %'',v_vals;
         end if;
+
         v_tmp := substr(v_vals,v_idx + 1);
         v_idx := strpos(v_tmp,'','');
         if v_idx = 0 then 
-           raise exception ''invalid storage format: acs_object.get_attr_storage_table'';
+           raise exception ''invalid storage format: acs_object.get_attr_storage_table %'',v_vals;
         end if;
 
         return substr(v_tmp,1,v_idx - 1);
 
-end;' language 'plpgsql';
+end;' language 'plpgsql' immutable;
 
-create function acs_object__get_attr_storage_sql(text) 
+create or replace function acs_object__get_attr_storage_sql(text) 
 returns text as '
 declare
         v_vals  alias for $1;
@@ -984,21 +978,23 @@ declare
         v_tmp   varchar;
 begin
         v_idx := strpos(v_vals, '','');
-        if v_idx = 0 then 
-           raise exception ''invalid storage format: acs_object.get_attr_storage_sql'';
+
+        if v_idx = 0 or v_vals is null then 
+           raise exception ''invalid storage format: acs_object.get_attr_storage_sql %'',v_vals;
         end if;
+
         v_tmp := substr(v_vals, v_idx + 1);
         v_idx := strpos(v_tmp, '','');
         if v_idx = 0 then 
-           raise exception ''invalid storage format: acs_object.get_attr_storage_sql'';
+           raise exception ''invalid storage format: acs_object.get_attr_storage_sql %'',v_vals;
         end if;
 
         return substr(v_tmp, v_idx + 1);
 
-end;' language 'plpgsql';
+end;' language 'plpgsql' immutable;
 
 -- function get_attribute
-create function acs_object__get_attribute (integer,varchar)
+create or replace function acs_object__get_attribute (integer,varchar)
 returns text as '
 declare
   object_id_in           alias for $1;  
@@ -1028,11 +1024,11 @@ begin
 
    return v_return;
 
-end;' language 'plpgsql';
+end;' language 'plpgsql' stable;
 
 
 -- procedure set_attribute
-create function acs_object__set_attribute (integer,varchar,varchar)
+create or replace function acs_object__set_attribute (integer,varchar,varchar)
 returns integer as '
 declare
   object_id_in           alias for $1;  
@@ -1044,6 +1040,10 @@ declare
   v_return               text; 
   v_storage              text;
 begin
+   if value_in is null then 
+	-- this will fail more cryptically in the execute so catch now. 
+	raise exception ''acs_object__set_attribute: attempt to set % to null for object_id %'',attribute_name_in, object_id_in;
+   end if;
 
    v_storage := acs_object__get_attribute_storage(object_id_in, attribute_name_in);
 
@@ -1058,7 +1058,7 @@ end;' language 'plpgsql';
 
 
 -- function check_context_index
-create function acs_object__check_context_index (integer,integer,integer)
+create or replace function acs_object__check_context_index (integer,integer,integer)
 returns boolean as '
 declare
   check_context_index__object_id              alias for $1;  
@@ -1068,6 +1068,9 @@ declare
   n_gens                                      integer;       
 begin
    -- Verify that this row exists in the index.
+   if check_context_index__object_id is null or check_context_index__ancestor_id is null then
+	raise exception ''object_id or ancestor_id is null in acs_object__check_context_index'';
+   end if;	
    select case when count(*) = 0 then 0 else 1 end into n_rows
    from acs_object_context_index
    where object_id = check_context_index__object_id
@@ -1218,7 +1221,7 @@ end;' language 'plpgsql';
 
 
 -- function check_path
-create function acs_object__check_path (integer,integer)
+create or replace function acs_object__check_path (integer,integer)
 returns boolean as '
 declare
   check_path__object_id              alias for $1;  
@@ -1226,6 +1229,10 @@ declare
   check_path__context_id             acs_objects.context_id%TYPE;
   check_path__security_inherit_p     acs_objects.security_inherit_p%TYPE;
 begin
+   if check_path__object_id is null or check_path__ancestor_id then
+	raise exception ''acs_object__check_path called with null object_id or ancestor_id'';
+   end if;
+
    if check_path__object_id = check_path__ancestor_id then
      return ''t'';
    end if;
@@ -1250,11 +1257,11 @@ begin
    return acs_object__check_path(check_path__context_id, 
                                  check_path__ancestor_id);
   
-end;' language 'plpgsql';
+end;' language 'plpgsql' stable;
 
 
 -- function check_representation
-create function acs_object__check_representation (integer)
+create or replace function acs_object__check_representation (integer)
 returns boolean as '
 declare
   check_representation__object_id              alias for $1;  
@@ -1264,6 +1271,10 @@ declare
   v_rec                                        record;  
   row                                          record; 
 begin
+   if check_representation__object_id is null then 
+	raise exception ''acs_object__check_representation called for null object_id'';
+   end if;
+
    result := ''t'';
    PERFORM acs_log__notice(''acs_object.check_representation'',
                   ''Running acs_object.check_representation on object_id = '' 

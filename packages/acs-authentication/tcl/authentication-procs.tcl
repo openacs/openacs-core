@@ -413,6 +413,9 @@ ad_proc -public auth::create_user {
         }
     }
 
+    set email [string trim $email]
+    set username [string trim $username]
+
     foreach elm [get_all_registration_elements] {
         if { [info exists $elm] } {
             set user_info($elm) [set $elm]
@@ -1357,6 +1360,13 @@ ad_proc -private auth::validate_account_info {
         if { ![exists_and_not_null user($elm)] } {
             set element_messages($elm) "Required"
         }
+    }
+
+    if { [info exists user(email)] } {
+        set user(email) [string trim $user(email)]
+    }
+    if { [info exists user(username)] } {
+        set user(username) [string trim $user(username)]
     }
 
     if { $update_p } {

@@ -64,4 +64,25 @@
   </tr>
  </form>
 
+ <if @db_doc_search_url@ not nil>
+  <form action="@db_doc_search_url@" method="get">
+   @db_doc_search_export;noquote@
+ </if>
+   <tr bgcolor="#DDDDDD">
+    <td colspan="2">
+     <if @db_doc_search_url@ not nil>
+       <h4>@db_pretty@ Search</h4>
+       <input type="text" name="@db_doc_search_query_name@" />
+       <input type="submit" value="Go" /><br />
+     </if>
+     <else>
+       <h4>@db_pretty@ Documentation</h4>
+     </else>
+     <a href="@db_doc_url@">Browse the @db_pretty@ documentation</a>
+    </td>
+   </tr>
+ <if @db_doc_search_url@ not nil>
+  </form>
+ </if>
+
 </table>

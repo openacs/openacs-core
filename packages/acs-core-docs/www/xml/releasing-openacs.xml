@@ -5,37 +5,45 @@
 <!ENTITY % myvars SYSTEM "variables.ent">
 %myvars;
 ]>
+
 <appendix id="releasing-openacs">
   <title>How to package and release OpenACS</title>
     <orderedlist>
       <listitem>
-        <para>Check out the cvs tree.  The files must be checked out
-        through a cvs account with write access.  In this example, the
-        cvs user on openacs.org is implied from the ssh login information
-        previously set up.  It could be overridden via <computeroutput>foobar@openacs.org</computeroutput>. </para>
-        <screen>
-<action>cd /tmp
-cvs -d :pserver:anonymous@openacs.org:/cvsroot checkout openacs-4
-</action>
+        <para>update the version number in
+          packages/acs-core-docs/www/xml/variables.ent, readme.txt,
+          and all core .info files.  Regenerate the html documentation
+          and commit all the changes.  Update the information in the
+          packages/acs-core-docs/www/xml/for-everyone/release-notes.xml
+          file.
+        </para>
+      </listitem>
+
+      <listitem>
+        <para>Check out the whole cvs tree.  The files must be checked
+        out through a cvs account with write access and should be a
+        checkout from the release branch.  In this example, the cvs
+        user on openacs.org is implied from the ssh login information
+        previously set up.  It could be overridden via
+        <computeroutput>foobar@openacs.org</computeroutput>. </para>
+        <screen><action>cd /var/tmp
+cvs -d /cvsroot checkout -r <replaceable>oacs-5-0</replaceable> openacs-4</action>
 </screen>
         <para>Repeat with the dotlrn cvs tree.</para>
-        <screen>
-<action>cd /tmp
+        <screen><action>cd /var/tmp
 mkdir dotlrn-packages
 cd dotlrn-packages
-cvs -d :pserver:anonymous@dotlrn@openacs.org:/dotlrn-cvsroot checkout dotlrn-all
+cvs -d /dotlrn-cvsroot checkout -r <replaceable>dotlrn-2-0</replaceable> dotlrn-all
 </action></screen>
       </listitem>
       <listitem>
         <para>Tag the tree.</para>
-        <screen><action>
-cd /tmp/openacs-4
-cvs tag <replaceable>openacs-5-0-0a1</replaceable>
+        <screen><action>cd /var/tmp/openacs-4
+cvs tag -F <replaceable>openacs-5-0-0a1</replaceable>
 </action></screen>
         <para>Tag dotLRN.  Since the dotLRN packages aren't all in one module, we iterate through all of the modules.  Log in first (cvs login) so that you don't have to log in for each module.</para>
-        <screen><action>
-cd /tmp/dotlrn-packages
-for dir in $(ls); do cd $dir; cvs tag <replaceable>dotlrn-2-0-0a3</replaceable>; cd ..; done
+        <screen><action>cd /var/tmp/dotlrn-packages
+for dir in *; do ( cd $dir &amp;&amp; cvs tag -F <replaceable>dotlrn-2-0-0a1</replaceable> ); done
 </action></screen>
       </listitem>
       <listitem>
@@ -49,18 +57,17 @@ for dir in $(ls); do cd $dir; cvs tag <replaceable>dotlrn-2-0-0a3</replaceable>;
             <orderedlist>
               <listitem>
                 <para>Go to a new working space and export the tagged files.</para>
-            <screen>
-<action>mkdir /tmp/tarball
-cd /tmp/tarball
-cvs -d :pserver:anonymous@openacs.org:/cvsroot export -r <replaceable>openacs-5-0-0a1</replaceable> -d openacs acs-core
+            <screen><action>mkdir /var/tmp/tarball
+cd /var/tmp/tarball
+cvs -d :pserver:anonymous@openacs.org:/cvsroot export -r <replaceable>openacs-5-0-0a1</replaceable> acs-core
+mv openacs-4 openacs
 </action></screen>
               </listitem>
               <listitem>
                 <para>Generate the tarball</para>
-            <screen><action>
-cd /tmp/tarball
-rm -rf /tmp/tarball/openacs/CVS
-tar cz -f <replaceable>openacs-5.0.0a1.tar.gz</replaceable> openacs
+            <screen><action>cd /var/tmp/tarball
+mv openacs openacs-<replaceable>5.0.0a1</replaceable>
+tar cz -f <replaceable>openacs-5.0.0a1.tar.gz</replaceable> openacs-<replaceable>5.0.0a1</replaceable>
 </action></screen>
               </listitem>
             </orderedlist>
@@ -76,17 +83,16 @@ tar cz -f <replaceable>openacs-5.0.0a1.tar.gz</replaceable> openacs
                 files. (was getting errors here trying to use -d, so
                 gave up and just moved things from openacs-4 to
                 openacs at the end)</para>
-            <screen>
-<action>mkdir /tmp/dotlrn-tarball
-cd /tmp/dotlrn-tarball
+            <screen><action>mkdir /var/tmp/dotlrn-tarball
+cd /var/tmp/dotlrn-tarball
 cvs -d :pserver:anonymous@openacs.org:/cvsroot export \
   -r <replaceable>openacs-5-0-0a1</replaceable> acs-core
-cd /tmp/dotlrn-tarball/openacs-4/packages
+cd /var/tmp/dotlrn-tarball/openacs-4/packages
 cvs -d :pserver:anonymous@openacs.org:/cvsroot export \
   -r <replaceable>openacs-5-0-0a1</replaceable> dotlrn-prereq
 cvs -d :pserver:anonymous@dotlrn.openacs.org:/dotlrn-cvsroot export \
   -r <replaceable>dotlrn-2-0-0a1</replaceable> dotlrn-core
-cd /tmp/dotlrn-tarball
+cd /var/tmp/dotlrn-tarball
 mv openacs-4 openacs
 </action></screen>
               </listitem>
@@ -94,18 +100,16 @@ mv openacs-4 openacs
                 <para>Copy the dotlrn install.xml file, which controls
                 which packages are installed on setup, to the root
                 location:</para>
-                <screen><action>
-cp /tmp/dotlrn-tarball/openacs-4/packages/dotlrn/install.xml /tmp/dotlrn-tarball/openacs
+                <screen><action>cp /var/tmp/dotlrn-tarball/openacs/packages/dotlrn/install.xml /var/tmp/dotlrn-tarball/openacs
 </action></screen>
               </listitem>
 
 
               <listitem>
                 <para>Generate the tarball</para>
-            <screen><action>
-cd /tmp/tarball
-rm -rf /tmp/tarball/openacs-4/CVS
-tar cz -f <replaceable>dotlrn-2.0.0a1.tar.gz</replaceable> openacs
+            <screen><action>cd /var/tmp/tarball
+mv openacs dotlrn-<replaceable>2.0.0a1</replaceable>
+tar cz -f <replaceable>dotlrn-2.0.0a1.tar.gz</replaceable> dotlrn-<replaceable>2.0.0a1</replaceable>
 </action></screen>
               </listitem>
             </orderedlist>

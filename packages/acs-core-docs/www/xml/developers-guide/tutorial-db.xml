@@ -8,7 +8,7 @@
     <title>Setting Up Database Objects</title>
     
     <authorblurb>
-      by <ulink url="mailto:joel@aufrecht.org">Joel Aufrecht</ulink>
+      <para>by <ulink url="mailto:joel@aufrecht.org">Joel Aufrecht</ulink></para>
     </authorblurb>
     
     <sect2>
@@ -18,8 +18,8 @@
       database scripts are database-specific and are thus in either
       the <computeroutput>myfirstpackage/sql/oracle</computeroutput> or
       <computeroutput>myfirstpackage/sql/postgresql</computeroutput>.
-      Packages can support Oracle, PostGreSQL, or both.  In this
-      tutorial, we'll work only with PostGreSQL</para>
+      Packages can support Oracle, PostgreSQL, or both.  In this
+      tutorial, we'll work only with PostgreSQL</para>
       <para>The first file will be
       <computeroutput>myfirstpackage-create.sql</computeroutput>.  The
       package manager requires a file with the name

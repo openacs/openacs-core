@@ -14,9 +14,10 @@ ad_page_contract {
 set system_locale [lang::system::locale -site_wide]
 set system_locale_label [ad_locale_get_label $system_locale]
 
-set page_title "Adminsitration of Localization"
+set page_title "Administration of Localization"
 set context [list]
 
+set site_wide_admin_p [acs_user::site_wide_admin_p]
 
 set timezone_p [lang::system::timezone_support_p]
 
@@ -24,7 +25,8 @@ set timezone [lang::system::timezone]
 
 set translator_mode_p [lang::util::translator_mode_p]
 
-
+set import_url [export_vars -base import-messages]
+set export_url [export_vars -base export-messages]
 
 set parameter_url [export_vars -base "/shared/parameters" { {package_id {[ad_conn package_id]} } { return_url {[ad_return_url]} } }]
 

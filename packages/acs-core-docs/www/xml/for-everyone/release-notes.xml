@@ -49,11 +49,11 @@ BEGINNING OF TEMPLATE
 END OF TEMPLATE -->
 
   <sect2 id="release-notes-5-0-0b1">
-    <title>Version 5.0.0 beta1</title>
+    <title>Version 5.0.0 beta</title>
 
     <para>
-	This is the first beta release of OpenACS 5.0.0.  This
-	release has a number of serious bugs, and is not suitable for
+	This is the second beta release of OpenACS 5.0.0 (tagged as oacs-5-0-0b4).  This
+	release may still have a number of serious bugs, and is not suitable for
 	production systems.  It has passed several release criteria,
 	including that it installs successfully, that all automated
 	tests succeed, and that there are no known severity 1
@@ -184,8 +184,34 @@ END OF TEMPLATE -->
 
   </itemizedlist>
 
-      </sect2>
+
+  <para>
+        Potential incompatibilities:
+  </para>
+
+  <itemizedlist>
+      <listitem>
+        <para>
+	   The undocumented special handling of ~ and +variable+ in formtemplates has been removed in favor of 
+	   using &lt;noparse&gt; and \@variable\@ (the standard templating mechanisms).  Locally 
+	   provided formtemplate styles still using these mechanisms will break.
+        </para>
+      </listitem>
+
+      <listitem>
+        <para>
+	   Serving backup files and files from the CVS directories is turned off by default via the acs-kernel parameter
+     	   ExcludedFiles in section request-processor (The variable provides a string match glob list of files and is defaulted to "*/CVS/* *~")
+	</para>
+      </listitem>
+
+  </itemizedlist>
+
+
+
   <para><phrase role="cvstag">($Id$)</phrase></para>
+  </sect2>
+
 
   <sect2>
     <title>Version 4.6.3</title>

@@ -11,8 +11,6 @@ set page_title "Subsite Configuration"
 set context [list "Configuration"]
 
 
-# TODO: Add join policy
-
 ad_form -name name -cancel_url [ad_conn url] -mode display -form {
     {instance_name:text
         {label "Subsite name"}
@@ -20,7 +18,7 @@ ad_form -name name -cancel_url [ad_conn url] -mode display -form {
     }
     {master_template:text(select)
         {label "Template"}
-        {help_text "Choose the layout and navigation you want for your community."}
+        {help_text "Choose the layout and navigation you want for your subsite."}
         {options [subsite::get_template_options]}
     }
     {visibility:text(select)

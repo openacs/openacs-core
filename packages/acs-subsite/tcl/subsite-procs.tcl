@@ -53,10 +53,12 @@ ad_proc -public subsite::after_mount {
             set segment_name "$truncated_subsite_name Members"
             set segment_id [rel_segments_new $subsite_group_id membership_rel $segment_name]
 
-            # Create a constraint that says "to be a member of this subsite you must be a member
-            # of the parent subsite.
+            # Create a constraint that says "to be a member of this
+            # subsite you must be a member of the parent subsite".
+	    set subsite_id [site_node_closest_ancestor_package acs-subsite]
 
             db_1row parent_subsite_query {}
+
             set constraint_name "Members of [string range $subsite_name 0 30] must be members of [string range $supersite_name 0 30]"
             set user_id [ad_conn user_id]
             set creation_ip [ad_conn peeraddr]

@@ -5,12 +5,10 @@
 %myvars;
 ]>
 <sect1 id="security-design" xreflabel="OpenACS 4 Security Design">
-<title>OpenACS 4 Security Design</title>
+<title>Security Design</title>
 
 <authorblurb>
-
-by <ulink url="mailto:richardl@arsdigita.com">Richard Li</ulink>, <ulink url="mailto:ashah@arsdigita.com">Archit Shah</ulink> 
-
+<para>By Richard Li and Archit Shah</para>
 </authorblurb>
 
 
@@ -114,8 +112,6 @@ authentication system by forcing all logins to occur over HTTPS.</para>
 <para>The authentication system issues up to four signed cookies (see below),
 with each cookie serving a different purpose. These cookies are:</para>
 
-<blockquote>
- 
 <informaltable>
 <tgroup cols="4">
 <tbody>
@@ -154,7 +150,6 @@ with each cookie serving a different purpose. These cookies are:</para>
 <entry>yes</entry>
 </row>
 </tbody></tgroup></informaltable>
-</blockquote>
 
 <itemizedlist>
 <listitem><para>ad_session_id</para>
@@ -298,8 +293,6 @@ immediately</para></listitem>
 The current state of the permanent login cookies is not taken into account
 when determining the appropriate action. 
 </para>
-<blockquote>
- 
 <informaltable>
 <tgroup cols="5">
 <tbody>
@@ -375,7 +368,6 @@ when determining the appropriate action.
 <entry>delete</entry>
 </row>
 </tbody></tgroup></informaltable>
-</blockquote>
 
 <para><computeroutput>ad_user_login</computeroutput>
 calls<computeroutput>sec_setup_session</computeroutput> which actually calls
@@ -484,7 +476,7 @@ cascading delete.
 
 </sect3>
 
-<sect4 id="secure-session-properties">
+<sect3 id="secure-session-properties">
 <title>Secure Session Properties</title>
 
 <para>Session properties can be set as secure. In this case,
@@ -492,7 +484,7 @@ cascading delete.
 secure. <computeroutput>ad_get_client_property</computeroutput> will behave as if the property
 had not been set if the property was not set securely.</para>
 
-</sect4>
+</sect3>
 
 <sect3 id="digital-signatures">
 <title>Digital Signatures &amp; Signed Cookies</title>
@@ -829,14 +821,14 @@ to work.</para>
 
 <itemizedlist>
 
-<listitem>URL sharing could be dangerous. If I happen to be browsing Amazon
+<listitem><para>URL sharing could be dangerous. If I happen to be browsing Amazon
 while logged in and I email a friend, he could conceivably receive it and follow
 it before my session has expired, gaining all of the privileges I
-had.</listitem>
+had.</para></listitem>
 
-<listitem>User-entered URLs are harder to handler. If a user is in the middle of
+<listitem><para>User-entered URLs are harder to handler. If a user is in the middle of
 a session and then types in the URL of some page, he could be kicked out of his
-session.</listitem>
+session.</para></listitem>
 
 </itemizedlist>
 

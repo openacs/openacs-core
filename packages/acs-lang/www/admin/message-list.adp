@@ -11,6 +11,8 @@
   </multiple>
 </p>
 
+<include src="/packages/acs-lang/lib/conflict-link" locale="@current_locale@" package_key="@package_key@"/>
+
 <if @create_p@ true>
   <p>
     <b>&raquo;</b> <a href="@new_message_url@">Create new message</a>
@@ -64,11 +66,11 @@
                   <else><span style="color: gray; font-style: italic;">Not translated</span></else>
                 </td>
               </if>
-              <if @create_p@ true>
+              <if @messages.translated_message@ not nil>
                 <td>
                   <a href="@messages.delete_url@" title="Delete this messages"><img src="/shared/images/Delete16.gif" border="0" width="16" height="16"></a>
                 </td>
-              </if>
+             </if>
             </tr>
           </multiple>
         </table>

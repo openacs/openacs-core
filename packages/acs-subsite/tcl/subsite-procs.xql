@@ -32,7 +32,7 @@
          where s1.node_id = :node_id
            and s2.node_id = s1.parent_id
            and p.package_id = s2.object_id
-	   and m.package_id = s2.object_id 
+	   and m.package_id = :subsite_id
 
       </querytext>
 </fullquery>

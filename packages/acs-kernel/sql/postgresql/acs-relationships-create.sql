@@ -120,7 +120,7 @@ end;' language 'plpgsql';
 
 
 -- function role_pretty_name
-create function acs_rel_type__role_pretty_name (varchar)
+create or replace function acs_rel_type__role_pretty_name (varchar)
 returns varchar as '
 declare
   role_pretty_name__role        alias for $1;  
@@ -132,7 +132,7 @@ begin
 
     return v_pretty_name;
    
-end;' language 'plpgsql';
+end;' language 'plpgsql' stable strict;
 
 
 -- function role_pretty_plural
@@ -148,7 +148,7 @@ begin
 
     return v_pretty_plural;
    
-end;' language 'plpgsql';
+end;' language 'plpgsql' stable strict;
 
 
 -- procedure create_type
@@ -262,15 +262,21 @@ end;' language 'plpgsql';
 
 
 -- procedure drop_type
-create function acs_rel_type__drop_type (varchar,boolean)
+create or replace function acs_rel_type__drop_type (varchar,boolean)
 returns integer as '
 declare
   drop_type__rel_type               alias for $1;  
   drop_type__cascade_p              alias for $2;  -- default ''f''  
 begin
-    -- XXX do cascade_p
+    -- XXX do cascade_p.
+    -- JCD: cascade_p seems to be ignored in acs_o_type__drop_type anyway...
+
+    if drop_type__cascade_p is null then 
+	drop_type__cascade_p := ''f'';
+    end if;
+
     delete from acs_rel_types
-    where rel_type = drop_type__rel_type;
+	  where rel_type = drop_type__rel_type;
 
     PERFORM acs_object_type__drop_type(drop_type__rel_type, 
                                        drop_type__cascade_p);

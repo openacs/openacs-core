@@ -5,10 +5,10 @@
 %myvars;
 ]>
 <sect1 id="subsites-design" xreflabel="OpenACS 4 Subsites Design Document">
-<title>OpenACS 4 Subsites Design Document</title>
+<title>Subsites Design Document</title>
 
 <authorblurb>
-by <ulink url="http://planitia.org">Rafael H. Schloming</ulink> 
+<para>By <ulink url="http://planitia.org">Rafael H. Schloming</ulink> </para>
 </authorblurb>
 
 <para><emphasis>*Note* This document has not gone through the any of the
@@ -36,7 +36,7 @@ demand.</emphasis></para>
 a particular user community. This definition covers a very broad range of
 requirements: from a Geocities style homepage where a user can install
 whatever available application he wants (e.g. a single user could have their
-own news and bboard), to a highly structured project subsite with multiple
+own news and forums), to a highly structured project subsite with multiple
 interdependent applications. Thus, flexibility in application deployment is
 the overarching philosophy of subsites.</para>
 

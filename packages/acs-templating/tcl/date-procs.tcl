@@ -309,7 +309,7 @@ ad_proc -public template::util::date::get_property { what date } {
            ![string equal $minutes {}] } {
 	  append value " [string range $pad [string length $hours] end]${hours}:[string range $pad [string length $minutes] end]$minutes"
 	  if { ![string equal $seconds {}] } {
-	      append value ":[string range $pad [string length $seconds] end]$second"
+	      append value ":[string range $pad [string length $seconds] end]$seconds"
 	  }
       }
       return $value

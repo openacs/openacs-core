@@ -631,14 +631,14 @@ ad_proc -public template::multirow {
     <dt> <b>template::multirow append datasourcename value [value ...]</b></dt>
     <dd> appends the row to an existing multirow.</dd>
     <dt> <b>template::multirow pop datasourcename </b></dt>
-    <dd> pops a row off an existing multirow, returning a list of the rows keys and values</dd>
+    <dd> pops a row off an existing multirow, returning a list of the rows keys gand values</dd>
     <dt> <b>template::multirow size datasourcename</b></dt>
     <dd> returns the rowcount</dd>
     <dt> <b>template::multirow columns datasourcename</b></dt>
     <dd> returns the columns in the datasource</dd>
     <dt> <b>template::multirow get datasourcename rownum [column]</b></dt>
     <dd> returns the row of of data (or the particular row/column if column is provided)</dd>
-    <dt> <b>template::multirow get datasourcename rownum column value</b></dt>
+    <dt> <b>template::multirow set datasourcename rownum column value</b></dt>
     <dd> set an element value</dd>
     <dt> <b>template::multirow foreach datasource code </b></dt>
     <dd> evaluate code block for each row (like db_foreach)</dd>

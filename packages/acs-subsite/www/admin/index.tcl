@@ -29,9 +29,4 @@ set acs_automated_testing_url [apm_package_url_from_key "acs-automated-testing"]
 
 set acs_lang_admin_url "[apm_package_url_from_key "acs-lang"]admin/"
 
-if { [string equal [ad_conn package_url] "/"] } {
-    set subsite_label "community"
-} else {
-    set subsite_label "subcommunity"
-}
 

@@ -13,9 +13,9 @@
         <database>postgresql</database>
     </database-support>
         <owner url="mailto:jon@jongriffin.com">Jon Griffin</owner>
-        <summary>This is geo-spatial country data.</summary>
-        <vendor url="www.mayuli.com">Mayuli Enterprises, LLC</vendor>
-        <description format="text/html">Countries supplies the ISO 3166 Country data.</description>
+        <summary>ISO 3166 country data.</summary>
+        <vendor url="http://www.mayuli.com">Mayuli Enterprises, LLC</vendor>
+        <description format="text/html">Countries supplies the ISO 3166 Country data for acs-reference.</description>
 
         <provides url="ref-countries" version="0.1d"/>
         <requires url="acs-kernel" version="4.6.2"/>

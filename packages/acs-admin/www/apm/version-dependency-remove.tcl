@@ -20,12 +20,12 @@ db_transaction {
 	}
 
 	default {
-	    ad_return complaint "Dependency Entry Error" "Depenendencies are either interfaces or requirements."
+	    ad_return complaint 1 "Dependency Entry Error: Depenendencies are either interfaces or requirements."
 	}
     }
     apm_package_install_spec $version_id
 } on_error {
-    ad_return_complaint "Database Error" "The database returned the following error:
+    ad_return_complaint 1 "Database Error: The database returned the following error:
 	<blockquote><pre>[ad_quotehtml $errmsg]</pre></blockquote>"
 }
 

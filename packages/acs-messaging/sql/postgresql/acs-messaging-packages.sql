@@ -191,7 +191,7 @@ begin
     else
         return ''f'';
     end if;
-end;' language 'plpgsql';
+end;' language 'plpgsql' stable;
 
 create or replace function acs_message__send (integer,varchar,integer,timestamptz)
 returns integer as '
@@ -247,7 +247,7 @@ begin
      where tree_sortkey = v_ancestor_sk;
 
     return v_message_id;
-end;' language 'plpgsql';
+end;' language 'plpgsql' stable strict;
 
     -- ACHTUNG!  WARNING!  ACHTUNG!  WARNING!  ACHTUNG!  WARNING! --
 
@@ -466,11 +466,9 @@ returns integer as '
 declare
     p_image_id  alias for $1;
 begin
-    -- XXX fix after image.delete exists
-    delete from images
-        where image_id = p_image_id;
-    perform content_item__delete(p_image_id);
-    return 1;
+    perform image__delete(p_image_id);
+
+    return 0;
 end;' language 'plpgsql';
 
     -- XXX should just call content_extlink.new
@@ -545,5 +543,5 @@ begin
         from acs_messages_all
         where message_id = p_message_id;
     return v_message_name;
-end;' language 'plpgsql';
+end;' language 'plpgsql' stable strict;
 

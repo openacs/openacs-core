@@ -8,12 +8,12 @@
   <title>OpenACS Internationalization Requirements</title>
 
   <authorblurb>
-      by Henry Minsky, 
+      <para>by Henry Minsky, 
        <ulink url="mailto:yon@openforce.net">Yon Feldman</ulink>, 
        <ulink url="mailto:lars@collaboraid.biz">Lars Pind</ulink>,
        <ulink url="mailto:peter@collaboraid.biz">Peter Marklund</ulink>, 
        <ulink url="mailto:christian@collaboraid.biz">Christian Hvid</ulink>,
-       and others.
+       and others.</para>
   </authorblurb>
 
   <sect2 id="i18n-requirements-introduction">
@@ -118,7 +118,11 @@ without a mechanism to incorporate the locale-specific changes
 cleanly back into the code base, it would require making a new fork
 of the source code for each locale.</para>
 
-</sect2><sect2 id="III._System/Application_Overview"><title>System/Application Overview</title>
+</sect2>
+
+<sect2 id="system-application-overview">
+
+<title>System/Application Overview</title>
 
 <para>A globalized application will perform some or all of the
 following steps to handle a page request for a specific
@@ -214,8 +218,8 @@ OpenACS?</para>
 
 <listitem>
 <para>A developer needs to author a web site which operates in
-multiple languages simultaneously. For example, arsDigita.com with
-content and navigation in English, German, and Japanese.</para>
+multiple languages simultaneously. For example, www.un.org with
+content and navigation in multiple languages.</para>
 
 <para>The site would have an end-user visible UI to support these
 languages, and the content management system must allow articles to
@@ -313,7 +317,7 @@ country abbreviations.</para>
 
 <blockquote>
 <para>See
-<ulink url="http://acs40.arsdigita.com/doc/acs-content-repository/requirements.html">Content
+<ulink url="/doc/acs-content-repository/requirements.html#100-20">Content
 Repository Requirement 100.20</ulink></para>
 
 <para><emphasis>10.10</emphasis> Provide a consistent
@@ -369,7 +373,9 @@ getting the current request locale from the
 </itemizedlist>
 </blockquote>
 
-</sect2><sect2 id="VI.C_Resource_Bundles_/_Content_Repository"><title>Resource Bundles / Content Repository</title>
+</sect2><sect2 id="resource-bundles">
+
+<title>Resource Bundles / Content Repository</title>
 
 <para><emphasis>30.0</emphasis></para>
 <para>A mechanism must be provided for a developer to group a set
@@ -380,7 +386,7 @@ identifier and a locale.</para>
 localizable nav-bar mechanism for a site? A navigation bar might be
 made up of a set of text strings and graphics, where the graphics
 themselves are locale-specific, such as images of English or
-Japanese text (as on www.arsdigita.com). It should be easy to
+Japanese text (as on www.un.org). It should be easy to
 specify alternate configurations of text and graphics to lay out
 the page for different locales.</para>
 
@@ -677,7 +683,7 @@ three (UCS2) or six (UCS4) bytes per character, make sure that
 column size declarations in the schema are large enough to
 accomodate required data (such as email addresses in
 Japanese).  <remark>Since 5.0.0, this is covered in the database
-install instructions for both PostGreSQL and Oracle.</remark></para>
+install instructions for both PostgreSQL and Oracle.</remark></para>
 </blockquote>
 
 </sect2><sect2 id="VI.I_Email_and_Messaging"><title>Email and

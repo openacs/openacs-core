@@ -1637,6 +1637,9 @@ ad_proc -public util_report_successful_library_load {{extra_message ""}} {
 ad_proc -public exists_and_not_null { varname } {
     Returns 1 if the variable name exists in the caller's environment and 
     is not the empty string.
+
+    Note you should enter the variable name, and not the variable value 
+    (varname not $varname which will pass variable varnames value into this function).
 } {
     upvar 1 $varname var 
     return [expr { [info exists var] && ![empty_string_p $var] }] 
@@ -4648,4 +4651,21 @@ ad_proc -public util::subst_safe { string } {
     regsub -all {\[} $string {\[} string
     regsub -all {\]} $string {\]} string
     return $string
+}
+
+ad_proc -public util::interval_pretty {
+    {-seconds 0}
+} { 
+    Takes a number of seconds and returns a pretty interval of the form "3h 49m 13s"
+} {
+    set result {}
+    if { $seconds > 0 } {
+        set hrs [expr $seconds / (60*60)]
+        set mins [expr ($seconds / 60) % 60]
+        set secs [expr $seconds % 60]
+        if { $hrs > 0 } { append result "${hrs}h " }
+        if { $hrs > 0 || $mins > 0 } { append result "${mins}m " }
+        append result "${secs}s"
+    }
+    return $result
 }

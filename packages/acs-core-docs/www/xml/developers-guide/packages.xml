@@ -5,10 +5,10 @@
 %myvars;
 ]>
 <sect1 id="packages" xreflabel="Packages">
-  <title>OpenACS &version; Packages</title>
+  <title>OpenACS Packages</title>
 
   <authorblurb>
-    By Pete Su and Bryan Quinn
+    <para>By Pete Su and Bryan Quinn</para>
   </authorblurb>
   
   <sect2 id="packages-overview">
@@ -37,7 +37,6 @@
     
 
     <programlisting>
-
 ROOT/
    bin/
    parameters/
@@ -46,19 +45,19 @@ ROOT/
         core tcl libraries here
      www/
          admin/
-             bboard/
-                 site wide admin for bboard
+             forums/
+                 site wide admin for forums
              intranet/
                  site wide admin for intranet
 
              ... and so on for all modules ...
 
-         bboard/
-             pages for bboard
+         forums/
+             pages for forums
              admin/
-                 other admin pages for bboard
+                 other admin pages for forums
          intranet/
-             pages for bboard
+             pages for intranet
              admin/
                  other admin pages for intranet
          doc/
@@ -67,8 +66,7 @@ ROOT/
                 core and application data models here
 
          ... and so on for all modules ... 
-
-    </programlisting>
+</programlisting>
 
     <para>
       In previous versions of OpenACS, you wrote a new application like this:
@@ -98,7 +96,6 @@ ROOT/
     
 
     <programlisting>
-
 ROOT/
     bin/
     packages/
@@ -115,8 +112,12 @@ ROOT/
         acs-test-harness/
         acs-util/
         acs-workflow/
-        bboard/
-               bboard.info
+        forums/
+               forums.info
+               catalog/
+                    i18n message catalogs
+               lib/
+		    includable page fragments (.tcl/.adp pairs)
                sql/
                     oracle/
                          oracle data model
@@ -125,11 +126,11 @@ ROOT/
                tcl/
                     tcl library code
                www/
+                    user visible pages
                     admin/
-                           administration pages
-                    other pages
+                         administration pages
                     doc/
-                          documentation
+                         documentation
         message-catalog/
         news/
         notification/
@@ -138,12 +139,12 @@ ROOT/
             bootstrap code
     www/
             misc pages
-    </programlisting>
+</programlisting>
 
 
     <para>
       Note that a major reorganization has happened here. The diagram only
-      expands the structure of the <computeroutput>bboard/</computeroutput> package directory,
+      expands the structure of the <computeroutput>forums/</computeroutput> package directory,
       but all the others are basically the same. Each package encapsulates
       all of its data model, library code, logic, adminstration pages and
       user pages in a single part of the file tree. This organization has
@@ -347,9 +348,9 @@ ROOT/
           files. In Oracle this can be done by including 
           <emphasis>@@ filename</emphasis> in the creation or drop
           scripts. See the <ulink
-        url="http://oradoc.photo.net/ora816/sqlplus.816/a75664/ch83.htm#1011677">
-        Oracle SQL*Plus documentation</ulink> for examples. In
-          PostgreSQL the same is acomplished by including <emphasis>\i</emphasis>.
+        url="http://www.orafaq.com/faqplus.htm#AT">
+        Oracle FAQ</ulink> for examples. In
+          PostgreSQL the same is acomplished by including <emphasis>\i filename</emphasis>.
         </entry>
         <entry>
           <computeroutput>sql/&lt;database&gt;/*.sql</computeroutput>
@@ -436,9 +437,9 @@ ROOT/
       <row>
         <entry>Administration UI</entry>
         <entry>The administration UI is used to administer the instances of
-          the package.  For example, the bboard administration UI is
+          the package.  For example, the forums administration UI is
           used to create new forums, moderate postings, and create new
-          categories for bboard postings.</entry>
+          categories for forums postings.</entry>
         <entry><computeroutput>www/admin/*</computeroutput></entry> 
       </row>
       <row>
@@ -552,7 +553,7 @@ ROOT/
           distinguish it from all the others. It is used as a database key to
           keep track of the package and as the name of the directory in the file
           system where all the files related to your package will live. Example
-          package keys in the current system include: <computeroutput>bboard</computeroutput>,
+          package keys in the current system include: <computeroutput>forums</computeroutput>,
           <computeroutput>acs-kernel</computeroutput> and so on. For the example application, we
           will use the package key <computeroutput>notes</computeroutput>.
         </para></listitem>
@@ -586,7 +587,7 @@ ROOT/
           Generally we think of packages as either being <emphasis>applications</emphasis>,
           meaning that the package is meant primarily for use by end-users, or
           <emphasis>services</emphasis> meaning that the package is meant to be a reusable
-          library of code, to be used by other packages. <computeroutput>bboard</computeroutput> is
+          library of code, to be used by other packages. <computeroutput>forums</computeroutput> is
           a good example of an application, while <computeroutput>acs-templating</computeroutput> is
           a good example of a service. Our example is an application, so pick
           that.
@@ -687,7 +688,7 @@ ROOT/
       this point, you should add your package files to your CVS repository.
       I'll assume that you have set up your development repository according
       to the standards described in 
-      <ulink url="http://acs40.arsdigita.com/acs40-project-central/client-build.html">these instructions</ulink>. If so, then you just do this:
+      <link linkend="cvs-service-import">this appendix</link>. If so, then you just do this:
     </para>
     
 
@@ -710,7 +711,7 @@ ROOT/
 
       <listitem><para>
       Now you can start developing the package. In addition to writing code,
-      you should also consider the tasks outlined in the <ulink url="http://acs40.arsdigita.com/acs40-project-central/package-submission.html">package submission guidelines</ulink>.
+      you should also consider the tasks outlined in the <link linkend="tutorial-newpackage">package development tutorial</link>.
     </para></listitem>
 
     </orderedlist>
@@ -840,7 +841,7 @@ http://your-server.your-domain.com/notes/hello.html
     <itemizedlist>
       <listitem><para><xref linkend="apm-design"/></para></listitem>
       <listitem><para><xref linkend="apm-requirements"/></para></listitem>
-      <listitem><para><ulink url="http://acs40.arsdigita.com/acs40-project-central/package-submission.html">Package submission guidelines</ulink></para></listitem>
+      <listitem><para><link linkend="tutorial-newpackage">package development tutorial</link></para></listitem>
     </itemizedlist>
 
     <para><phrase role="cvstag">($Id$)</phrase></para>

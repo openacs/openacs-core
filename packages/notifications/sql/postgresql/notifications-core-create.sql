@@ -166,7 +166,8 @@ create table notifications (
     -- this is to allow responses to notifications
     response_id                     integer
                                     constraint notif_reponse_id_fk
-                                    references acs_objects (object_id),
+                                    references acs_objects (object_id)
+                                    on delete cascade,
     -- this is the user that caused the notification to go out
     notif_user                      integer
                                     constraint notif_user_id_fk
