@@ -406,6 +406,7 @@ begin
                  i2.tree_sortkey <= i1.tree_sortkey
                and
                  i1.tree_sortkey like (i2.tree_sortkey || ''%'')
+               order by i2.tree_sortkey desc
   LOOP
     v_parent_id := v_rec.parent_id;
     exit when v_parent_id = is_sub_folder__folder_id;
@@ -575,6 +576,16 @@ begin
       content_type = is_registered__content_type;
 
   else
+--                         select
+--                            object_type
+--                          from 
+--                            acs_object_types
+--                          where 
+--                            object_type <> ''acs_object''
+--                          connect by 
+--                            prior object_type = supertype
+--                          start with 
+--                            object_type = is_registered.content_type 
 
     v_is_registered := 1;
     for v_subtype_val in select 
@@ -582,11 +593,13 @@ begin
                          from 
                            acs_object_types
                          where 
-                           object_type <> 'acs_object'
-                         connect by 
-                           prior object_type = supertype
-                         start with 
-                           object_type = is_registered.content_type 
+                           object_type <> ''acs_object''
+                         and 
+                           tree_sortkey 
+                             like (select tree_sortkey || ''%''
+                                     from acs_object_types
+                                    where object_type = is_registered__content_type)
+                         order by tree_sortkey
     LOOP
       if content_folder__is_registered(is_registered__folder_id,
                        v_subtype_val.object_type, ''f'') = ''f'' then

@@ -546,9 +546,16 @@ declare
         type_rec   record;       
 begin
 
+-- select object_type from acs_object_types 
+--    connect by supertype = prior object_type 
+--    start with object_type = ''content_revision'' 
+
   for type_rec in select object_type from acs_object_types 
-    connect by supertype = prior object_type 
-    start with object_type = ''content_revision'' 
+                   where tree_sortkey 
+                           like (select tree_sortkey || ''%''
+                                   from acs_object_types 
+                                  where object_type = ''content_revision'')
+                  
   LOOP
     PERFORM content_type__refresh_view(type_rec.object_type);
   end LOOP;

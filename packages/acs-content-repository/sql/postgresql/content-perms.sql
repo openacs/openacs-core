@@ -149,13 +149,34 @@ declare
   has_revoke_authority__privilege              alias for $3;  
   has_revoke_authority__revokee_id             alias for $4;  
 begin
+--    select 1 from 
+--        (select object_id from acs_objects 
+--           connect by prior context_id = object_id
+--           start with object_id = has_revoke_authority__object_id) t,
+--        (select privilege, child_privilege from acs_privilege_hierarchy
+--           connect by prior privilege = child_privilege
+--           start with child_privilege = ''cm_perm'') h
+--      where
+--        content_permission__permission_p(
+--          t.object_id, has_revoke_authority__holder_id, h.child_privilege
+--        ) = ''t''
+--      and
+--        content_permission__permission_p(
+--          t.object_id, has_revoke_authority__revokee_id, h.privilege
+--        ) = ''f'';    
+
     select 1 from 
-        (select object_id from acs_objects 
-           connect by prior context_id = object_id
-           start with object_id = has_revoke_authority__object_id) t,
-        (select privilege, child_privilege from acs_privilege_hierarchy
-           connect by prior privilege = child_privilege
-           start with child_privilege = ''cm_perm'') h
+        (select o2.object_id 
+           from acs_objects o1, acs_objects o2
+          where o1.object_id = has_revoke_authority__object_id
+            and o2.tree_sortkey <= o1.tree_sortkey
+            and o1.tree_sortkey like (o2.tree_sortkey || ''%'')) t
+        (select i2.privilege, i2.child_privilege 
+           from acs_privilege_hierarchy_index i1, 
+                acs_privilege_hierarchy_index i2 
+          where i1.child_privilege = ''cm_perm''
+            and i2.tree_sortkey <= i1.tree_sortkey
+            and i1.tree_sortkey like (i2.tree_sortkey || ''%'')) h
       where
         content_permission__permission_p(
           t.object_id, has_revoke_authority__holder_id, h.child_privilege
@@ -231,13 +252,28 @@ declare
   grant_permission__object_type            alias for $6;  
   v_object_id                              acs_objects.object_id%TYPE;
 begin
+--      select 
+--       o.object_id
+--      from
+--        (select object_id, object_type from acs_objects 
+--           connect by context_id = prior object_id
+--           start with object_id = grant_permission__object_id) o
+--      where
+--        content_permission__has_grant_authority (
+--          o.object_id, holder_id, grant_permission__privilege
+--        ) = ''t''
+--      and
+--        content_item__is_subclass (o.object_type, grant_permission__object_type) = ''t''
   
     for v_rec in select 
         o.object_id
       from
-        (select object_id, object_type from acs_objects 
-           connect by context_id = prior object_id
-           start with object_id = grant_permission__object_id) o
+        (select object_id, object_type 
+           from acs_objects 
+          where tree_sortkey 
+                  like (select tree_sortkey || ''%''
+                          from acs_objects
+                         where object_id = grant_permission__object_id)) o
       where
         content_permission__has_grant_authority (
           o.object_id, holder_id, grant_permission__privilege
@@ -303,13 +339,19 @@ declare
   revoke_permission__object_type            alias for $6;  
   v_rec                                     record;
 begin
+--                     select object_id, object_type from acs_objects 
+--                    connect by context_id = prior object_id
+--                    start with object_id = revoke_permission__object_id
 
     for v_rec in select 
                    o.object_id 
                  from
-                   (select object_id, object_type from acs_objects 
-                    connect by context_id = prior object_id
-                    start with object_id = revoke_permission__object_id) o
+                   (select object_id, object_type 
+                      from acs_objects 
+                     where tree_sortkey 
+                             like (select tree_sortkey || ''%''
+                                     from acs_objects
+                                    where object_id = revoke_permission__object_id)) o
                  where 
                    content_permission__has_revoke_authority (o.object_id, revoke_permission__holder_id, revoke_permission__privilege, revoke_permission__revokee_id) = ''t''
                  and

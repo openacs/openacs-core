@@ -717,8 +717,103 @@ create table cr_keywords (
 			 constraint cr_keywords_name_nil
 			 not null,
   description            text default '' not null,
-  has_children           boolean
+  has_children           boolean,
+  tree_sortkey           varchar(4000)
 );
+
+
+create function cr_keywords_insert_tr () returns opaque as '
+declare
+        v_parent_sk     varchar;
+        max_key         varchar;
+begin
+        if new.parent_id is null then 
+            select max(tree_sortkey) into max_key 
+              from cr_keywords 
+             where parent_id is null;
+
+            v_parent_sk := '''';
+        else 
+            select max(tree_sortkey) into max_key 
+              from cr_keywords 
+             where parent_id = new.parent_id;
+
+            select coalesce(max(tree_sortkey),'''') into v_parent_sk 
+              from cr_keywords 
+             where keyword_id = new.parent_id;
+        end if;
+
+
+        new.tree_sortkey := v_parent_sk || ''/'' || tree_next_key(max_key);
+
+        return new;
+
+end;' language 'plpgsql';
+
+create trigger cr_keywords_insert_tr before insert 
+on cr_keywords for each row 
+execute procedure cr_keywords_insert_tr ();
+
+create function cr_keywords_update_tr () returns opaque as '
+declare
+        v_parent_sk     varchar;
+        max_key         varchar;
+        p_id            integer;
+        v_rec           record;
+        clr_keys_p      boolean default ''t'';
+begin
+        if new.keyword_id = old.keyword_id and 
+           new.parent_id = old.parent_id then
+
+           return new;
+
+        end if;
+
+        for v_rec in select keyword_id
+                       from cr_keywords 
+                      where tree_sortkey like new.tree_sortkey || ''%''
+                   order by tree_sortkey
+        LOOP
+            if clr_keys_p then
+               update cr_keywords set tree_sortkey = null
+               where tree_sortkey like new.tree_sortkey || ''%'';
+               clr_keys_p := ''f'';
+            end if;
+            
+            select parent_id into p_id
+              from cr_keywords 
+             where keyword_id = v_rec.keyword_id;
+
+            if p_id is null then 
+                select max(tree_sortkey) into max_key
+                  from cr_keywords 
+                 where parent_id is null;
+
+                v_parent_sk := '''';
+            else 
+                select max(tree_sortkey) into max_key
+                  from cr_keywords 
+                 where parent_id = p_id;
+
+                select coalesce(max(tree_sortkey),'''') into v_parent_sk 
+                  from cr_keywords 
+                 where keyword_id = p_id;
+            end if;
+
+            update cr_keywords 
+               set tree_sortkey = v_parent_sk || ''/'' || tree_next_key(max_key)
+             where keyword_id = v_rec.keyword_id;
+
+        end LOOP;
+
+        return new;
+
+end;' language 'plpgsql';
+
+create trigger cr_keywords_update_tr after update 
+on cr_keywords
+for each row 
+execute procedure cr_keywords_update_tr ();
 
 comment on table cr_keywords is '
   Stores a subject taxonomy for classifying content items, analogous

@@ -606,9 +606,9 @@ begin
 --                  from
 --                    acs_object_types
 --                  where
---                    object_type <> 'acs_object'
+--                    object_type <> ''acs_object''
 --                  and
---                    object_type <> 'content_revision'
+--                    object_type <> ''content_revision''
 --                  start with
 --                    object_type = refresh_view__content_type
 --                  connect by
@@ -981,10 +981,11 @@ begin
 
   for type_rec in select ot.object_type 
                     from acs_object_types ot
-                   where tree_sortkey 
+                   where ot.tree_sortkey 
                          like (select tree_sortkey || ''%''
                                  from acs_object_types 
                                 where object_type = ''content_revision'')
+                   order by ot.tree_sortkey
   LOOP
     PERFORM content_type__refresh_view (type_rec.object_type);
   end LOOP;

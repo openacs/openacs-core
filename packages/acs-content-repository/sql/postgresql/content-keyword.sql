@@ -222,10 +222,21 @@ begin
 
   -- Look from specific to general
   if is_assigned__recurse = ''up'' then
+--      select 1 from dual where exists (select 1 from
+--	(select keyword_id from cr_keywords
+--	   connect by parent_id = prior keyword_id
+--	   start with keyword_id = is_assigned__keyword_id
+--	 ) t, cr_item_keyword_map m
+--      where
+--	t.keyword_id = m.keyword_id
+--      and
+--	m.item_id = is_assigned__item_id);
+
       select 1 from dual where exists (select 1 from
 	(select keyword_id from cr_keywords
-	   connect by parent_id = prior keyword_id
-	   start with keyword_id = is_assigned__keyword_id
+	  where tree_sortkey like (select tree_sortkey || ''%''
+                                   from cr_keywords
+                                   where keyword_id = is_assigned__keyword_id)
 	 ) t, cr_item_keyword_map m
       where
 	t.keyword_id = m.keyword_id
@@ -240,11 +251,28 @@ begin
   end if;
 
   if is_assigned__recurse = ''down'' then
+--      select 1 from dual where exists ( select 1 from
+--	(select keyword_id from cr_keywords
+--	   connect by prior parent_id = keyword_id
+--	   start with keyword_id = is_assigned__keyword_id
+--	 ) t, cr_item_keyword_map m
+--      where
+--	t.keyword_id = m.keyword_id
+--      and
+--	m.item_id = is_assigned__item_id);
+
       select 1 from dual where exists ( select 1 from
-	(select keyword_id from cr_keywords
-	   connect by prior parent_id = keyword_id
-	   start with keyword_id = is_assigned__keyword_id
-	 ) t, cr_item_keyword_map m
+	(select 
+           k2.keyword_id
+         from 
+           cr_keywords k1, cr_keywords k2
+         where
+           k1.keyword_id = is_assigned__keyword_id
+         and 
+           k2.tree_sortkey <= k1.tree_sortkey
+         and 
+           k1.tree_sortkey like (k2.tree_sortkey || ''%'')) t, 
+        cr_item_keyword_map m
       where
 	t.keyword_id = m.keyword_id
       and
@@ -268,21 +296,36 @@ end;' language 'plpgsql';
 create function content_keyword__get_path (integer)
 returns text as '
 declare
-  keyword_id             alias for $1;  
-  v_path                 text default '''';
-  v_is_found             boolean default ''f'';   
-  v_heading              cr_keywords.heading%TYPE;
-  v_rec                  record;
+  get_path_keyword_id             alias for $1;  
+  v_path                          text default '''';
+  v_is_found                      boolean default ''f'';   
+  v_heading                       cr_keywords.heading%TYPE;
+  v_rec                           record;
 begin
+--               select
+--                 heading 
+--               from (
+--                  select 
+--                    heading, level as tree_level
+--                  from cr_keywords
+--                    connect by prior parent_id = keyword_id
+--                    start with keyword_id = get_path.keyword_id) k 
+--                order by 
+--                  tree_level desc 
 
   for v_rec in select 
                  heading 
                from (
                   select 
-                    heading, level as tree_level
-                  from cr_keywords
-                    connect by prior parent_id = keyword_id
-                    start with keyword_id = get_path.keyword_id) k 
+                    k2.heading, tree_level(k2.tree_sortkey) as tree_level
+                  from 
+                    cr_keywords k1, cr_keywords k2
+                  where
+                    k1.keyword_id = get_path__keyword_id
+                  and 
+                    k2.tree_sortkey <= k1.tree_sortkey
+                  and 
+                    k1.tree_sortkey like (k2.tree_sortkey || ''%'')) k
                 order by 
                   tree_level desc 
   LOOP

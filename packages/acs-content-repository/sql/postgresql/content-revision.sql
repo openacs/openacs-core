@@ -584,7 +584,7 @@ returns text as '
 declare
   get_content__revision_id            alias for $1;  
   v_storage_type                      varchar;
-  v_lob_id
+  v_lob_id                            integer;
   v_data                              text;
 begin
        select storage_type, lob, 
