@@ -73,7 +73,7 @@ namespace eval lang::util {
 
         @author Peter marklund (peter@collaboraid.biz)
     } {
-        return {(<#\s*?([-a-zA-Z0-9_:\.]+)\s+([^<]+)#>)}
+        return {(<#\s*?([-a-zA-Z0-9_:\.]+)\s+(.+?)#>)}
     }
 
     ad_proc get_temporary_tags_indices { adp_file_string } {
