@@ -54,9 +54,9 @@ proc db_rdbms_compatible_p {rdbms_test rdbms_pattern} {
 	return 1
     }
 
-    # If the query being tested was written for a version that is older than the current RDBMS
-    # then we have compatibility. Otherwise we don't.
-    if {[db_rdbms_get_version $rdbms_pattern] <= [db_rdbms_get_version $rdbms_test]} {
+    # If the query being tested was written for a version that is older than 
+	# the current RDBMS then we have compatibility. Otherwise we don't.
+    if {[db_rdbms_get_version $rdbms_test] <= [db_rdbms_get_version $rdbms_pattern]} {
 	return 1
     }
 
