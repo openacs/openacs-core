@@ -78,3 +78,10 @@ ad_proc -public auth::authority::local {} {
     # one serving the create-administrator-2 page.
     return [db_string local_auth { select authority_id from auth_authorities where short_name = 'local' }]
 }
+
+ad_proc -public auth::UseEmailForLoginP {} {
+    Do we use email address for login? code wrapped in a catch, so the 
+    proc will not break regardless of what the parameter value is.
+} {
+    return 0
+}

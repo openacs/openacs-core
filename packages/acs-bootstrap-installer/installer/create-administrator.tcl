@@ -47,10 +47,7 @@ for this user.
 </tr>
 <tr>
   <th align=right>Username:</th>
-  <td><input name=username size=20><br>
-    Once your server is installed, you can choose to have users login with username instead of email.
-    This is particularly useful if you're authenticating against other services, such as LDAP or the 
-    local operating system, which may not use email as the basis of authentication.
+<td><input name=username size=20> <span style=\"color: red;\">\[*\]</span>
   </td>
 </tr>
 <tr>
@@ -75,6 +72,13 @@ for this user.
 </table>
 </blockquote>
 
+<h4>\[*\] About username</h4>
+
+<p>
+  Once your server is installed, you can choose to have users login with username instead of email.
+  This is particularly useful if you're authenticating against other services, such as LDAP or the 
+  local operating system, which may not use email as the basis of authentication.
+</p>
 "
 
 install_return 200 "Create Administrator" $body
