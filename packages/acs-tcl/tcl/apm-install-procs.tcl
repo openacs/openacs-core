@@ -1263,22 +1263,26 @@ ad_proc -private apm_mount_core_packages {} {
 
     # Mount acs-lang
     ns_log Notice "Mounting acs-lang"    
-    set acs_lang_id [site_node::instantiate_and_mount -package_key acs-lang]
+    set acs_lang_id [site_node::instantiate_and_mount -package_key acs-lang \
+                                                      -package_name "Internationalization"]
     permission::grant -party_id [acs_magic_object the_public] \
                       -object_id $acs_lang_id \
                       -privilege read
 
     # Mount acs-admin
-    ns_log Notice "Mounting acs-admin"    
-    site_node::instantiate_and_mount -package_key acs-admin
+    ns_log Notice "Mounting acs-admin"
+    site_node::instantiate_and_mount -package_key acs-admin \
+                                     -package_name "System Administration"
 
     # Mount acs-service-contract
     ns_log Notice "Mounting acs-service-contract"    
-    site_node::instantiate_and_mount -package_key acs-service-contract
+    site_node::instantiate_and_mount -package_key acs-service-contract \
+                                     -package_name "Service Contracts"
 
     # Mount the acs-content-repository
     ns_log Notice "Mounting acs-content-repository"    
-    site_node::instantiate_and_mount -package_key acs-content-repository
+    site_node::instantiate_and_mount -package_key acs-content-repository \
+                                     -package_name "Content Repository"
 
     # Mount acs-core-docs
     ns_log Notice "Mounting acs-core-docs"    
@@ -1289,7 +1293,8 @@ ad_proc -private apm_mount_core_packages {} {
     ns_log Notice "Mounting acs-api-browser"    
     set api_browser_id \
         [site_node::instantiate_and_mount -node_name api-doc \
-                                          -package_key acs-api-browser]
+                                          -package_key acs-api-browser \
+                                          -package_name "API Documentation"]
     # Only registered users should have permission to access the
     # api-browser
     permission::grant -party_id [acs_magic_object registered_users] \

@@ -181,16 +181,6 @@
               </tr>
               <tr bgcolor="#eeeeee">
                 <td>
-                  <a href="/doc/">Documentation</a>
-                </td>
-              </tr>
-              <tr bgcolor="#eeeeee">
-                <td>
-                  <a href="/api-doc/">API Documentation</a>
-                </td>
-              </tr>
-              <tr bgcolor="#eeeeee">
-                <td>
                   <a href="/admin/site-map/">Site map</a>
                 </td>
               </tr>
@@ -216,27 +206,12 @@
               </tr>
               <tr bgcolor="#eeeeee">
                 <td>
-                  <a href="/acs-admin/">Site-wide admin</a>
-                </td>
-              </tr>
-              <tr bgcolor="#eeeeee">
-                <td>
                   <a href="http://openacs.org/software/">Software Downloads</a>
                 </td>
               </tr>
               <tr bgcolor="#eeeeee">
                 <td>
                   <a href="http://openacs.org/">Developer Community</a>
-                </td>
-              </tr>
-              <tr bgcolor="#eeeeee">
-                <td>
-                  <a href="http://openacs.org/forums/forum-view?forum_id=14013">OpenACS bboard</a>
-                </td>
-              </tr>
-              <tr bgcolor="#eeeeee">
-                <td>
-                  <a href="http://openacs.org/forums/">Other bboards</a>
                 </td>
               </tr>
              <tr bgcolor="#eeeeee">
