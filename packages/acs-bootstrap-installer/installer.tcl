@@ -315,8 +315,10 @@ ad_proc -private install_do_packages_install {} {
 
         if { [file exists [apm_install_xml_file_path]] } {
             set root_node [apm_load_install_xml_file]
+            set acs_application(name) [apm_required_attribute_value $root_node name]
+            set acs_application(pretty_name) [apm_attribute_value -default $acs_application(name) $root_node pretty-name]
 
-            ns_write "<p>Loading packages for the [nsv_get acs_application pretty_name] application.</p>"
+            ns_write "<p>Loading packages for the $acs_application(pretty_name) application.</p>"
 
             set actions [xml_node_get_children_by_name $root_node actions]
             if { [llength $actions] > 1 } {
