@@ -7,7 +7,7 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>t</singleton-p>
     
-    <version name="5.1.0a1" url="http://openacs.org/repository/download/apm/acs-bootstrap-installer-5.1.0a1.apm">
+    <version name="5.1.0a2" url="http://openacs.org/repository/download/apm/acs-bootstrap-installer-5.1.0a2.apm">
         <owner url="mailto:dhogaza@pacifier.com">Don Baccus</owner>
         <summary>Bootstraps an OpenACS installation.</summary>
         <release-date>2004-03-10</release-date>
@@ -25,3 +25,4 @@
 
     </version>
 </package>
+

@@ -7,7 +7,7 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>t</singleton-p>
     
-    <version name="5.1.0a1" url="http://openacs.org/repository/download/apm/ref-timezones-5.1.0a1.apm">
+    <version name="5.1.0a2" url="http://openacs.org/repository/download/apm/ref-timezones-5.1.0a2.apm">
         <owner url="mailto:jon@mayuli.com">Jon Griffin</owner>
         <summary>Timezone data for acs-reference.</summary>
         <release-date>2004-03-10</release-date>
@@ -26,3 +26,4 @@
 
     </version>
 </package>
+

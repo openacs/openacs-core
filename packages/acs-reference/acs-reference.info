@@ -19,7 +19,7 @@
 &lt;li&gt; Monitoring the usage of reference data.
 &lt;/ul&gt;</description>
 
-        <provides url="acs-reference" version="5.0.4"/>
+        <provides url="acs-reference" version="5.1.0a2"/>
         <requires url="acs-kernel" version="5.0.0"/>
 
         <callbacks>
@@ -30,3 +30,4 @@
 
     </version>
 </package>
+
