@@ -13,7 +13,7 @@
     </database-support>
         <owner url="mailto:dhogaza@pacifier.com">Don Baccus</owner>
         <summary>Provides an interface for administering the Arsdigita Community System Installation.</summary>
-        <release-date>2001-04-27 00:00:00-07</release-date>
+        <release-date>2001-04-27</release-date>
         <vendor url="http://www.openacs.org/">OpenACS</vendor>
         <description format="text/html">A UI for administering the ACS system.</description>
 
