@@ -297,7 +297,7 @@ ad_proc ::twt::crawl_links {
     #::twt::log "pm debug about to invoke \"do_request $start_url_absolute\" start_url=$start_url previous_url=$previous_url"
     # Note that we are re-initializing start_url_absolute here since a trailing slash will be added if the URL is a directory
     # and we need that to resolve relative URLs
-    if { [catch {set start_url_absolute [::twt::do_request $start_url_absolute]} errmsg] } {
+    if { [catch {set foobar [::twt::do_request $start_url_absolute]} errmsg] } {
         if { ![string equal "$previous_url" ""] } {
             set previous_page_message " (link found on page $previous_url)"
         } else {
@@ -306,7 +306,8 @@ ad_proc ::twt::crawl_links {
         ::twt::log "[::twt::config::alert_keyword] - requesting url $start_url_absolute failed${previous_page_message}. Response status is [response status] and error is $errmsg"
         return
     } else {
-        #::twt::log "pm debug after do_request ::tclwebtest::url=$::tclwebtest::url"
+        #::twt::log "pm debug after do_request ::tclwebtest::url=$::tclwebtest::url start_url_absolute=$start_url_absolute foobar=$foobar"
+        set start_url_absolute $::tclwebtest::url
     }
 
     # Get all links on the page
@@ -329,6 +330,7 @@ ad_proc ::twt::crawl_links {
         } else {
             set anchor_link_p 0
         }
+        #::twt::log "pm debug under_start_url_p - string first $start_url_absolute $absolute_url"
         set under_start_url_p [expr [string first $start_url_absolute $absolute_url] != -1]
 
         set visit_p [expr $new_url_p && !$anchor_link_p && $under_start_url_p]
@@ -336,7 +338,7 @@ ad_proc ::twt::crawl_links {
             crawl_links -previous_url $start_url_absolute $url
         }
 
-#        ::twt::log "pm debug looping with url $absolute_url visit_p=$visit_p new_url_p=$new_url_p under_start_url_p=$under_start_url_p anchor_link_p=$anchor_link_p"
+        #::twt::log "pm debug looping with url $absolute_url visit_p=$visit_p new_url_p=$new_url_p under_start_url_p=$under_start_url_p anchor_link_p=$anchor_link_p"
     }
 }
 
