@@ -133,6 +133,12 @@ After adding <code>ns_cache</code>, please restart your server.
     set error_p 1
 } 
 
+# OpenNSD must have XML parsing.
+if {![xml_support_ok xml_status_msg]} {
+    append errors "XML support for OpenNSD is problematic:<p> $xml_status_msg"
+    set error_p 1
+} 
+
 # OpenNSD must support the "fancy" ADP parser.
 set adp_support [ns_config "ns/server/[ns_info server]/adp" DefaultParser]
 if { [string compare $adp_support "fancy"] } {

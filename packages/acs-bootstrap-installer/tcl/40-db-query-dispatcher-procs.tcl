@@ -5,8 +5,8 @@
 #
 # Ben Adida (ben@mit.edu)
 #
-# STATE OF THIS FILE (4/20/2001) - ben:
-# This is working well with relative and absolute path names
+# STATE OF THIS FILE (7/12/2001) - ben:
+# This is now patched to use ns_xml 1.4 which works!
 #
 
 # The Query Dispatcher is documented at http://openacs.org/
@@ -536,22 +536,23 @@ proc db_qd_internal_get_queryname_root {relative_path} {
 proc db_qd_internal_parse_init {stuff_to_parse file_path} {
     
     # Do initial parse
-    set parsed_doc [ns_xml parse -persist $stuff_to_parse]
+    set parsed_doc [xml_parse -persist $stuff_to_parse]
 
     # Initialize the parsing state
     set index 0
 
     # Get the list of queries out
-    set root_node [ns_xml doc root $parsed_doc]
+    set root_node [xml_doc_get_first_node $parsed_doc]
 
     # Check that it's a queryset
-    if {[ns_xml node name $root_node] != "queryset"} {
+    if {[xml_node_get_name $root_node] != "queryset"} {
+	db_qd_log Notice "OH OH, error, first node is [xml_node_get_name $root_node]"
 	# CHANGE THIS: throw an error!!!
 	return ""
     }
 
     # Extract the default RDBMS if there is one
-    set rdbms_nodes [xml_find_child_nodes $root_node rdbms]
+    set rdbms_nodes [xml_node_get_children_by_name $root_node rdbms]
     if {[llength $rdbms_nodes] > 0} {
 	set default_rdbms [db_rdbms_parse_from_xml_node [lindex $rdbms_nodes 0]]
 	db_qd_log Notice "Detected DEFAULT RDBMS for whole queryset: $default_rdbms"
@@ -559,7 +560,9 @@ proc db_qd_internal_parse_init {stuff_to_parse file_path} {
 	set default_rdbms ""
     }
 
-    set parsed_stuff [xml_find_child_nodes $root_node fullquery]
+    set parsed_stuff [xml_node_get_children_by_name $root_node fullquery]
+
+    db_qd_log Notice "end of parse_init: $index; $parsed_stuff; $parsed_doc; $default_rdbms; $file_path"
 
     return [list $index $parsed_stuff $parsed_doc $default_rdbms $file_path]
 }
@@ -587,7 +590,7 @@ proc db_qd_internal_parse_one_query {parsing_state} {
     # BASE CASE
     if {[llength $node_list] <= $index} {
 	# Clean up
-	ns_xml doc free $parsed_doc
+	xml_doc_free $parsed_doc
 
 	db_qd_log Notice "Cleaning up, done parsing"
 
@@ -616,20 +619,20 @@ proc db_qd_internal_parse_one_query {parsing_state} {
 
 # Parse one query from an XML node
 proc db_qd_internal_parse_one_query_from_xml_node {one_query_node {default_rdbms {}} {file_path {}}} {
-    db_qd_log Notice "parsing one query node in XML with name -[ns_xml node name $one_query_node]-"
+    db_qd_log Notice "parsing one query node in XML with name -[xml_node_get_name $one_query_node]-"
 
     # Check that this is a fullquery
-    if {[ns_xml node name $one_query_node] != "fullquery"} {
+    if {[xml_node_get_name $one_query_node] != "fullquery"} {
 	return ""
     }
     
-    set queryname [ns_xml node getattr $one_query_node name]
+    set queryname [xml_node_get_attribute $one_query_node name]
 
     # Get the text of the query
-    set querytext [ns_xml node getcontent [lindex [xml_find_child_nodes $one_query_node querytext] 0]]
+    set querytext [xml_node_get_content [xml_node_get_first_child_by_name $one_query_node querytext]]
 
     # Get the RDBMS
-    set rdbms_nodes [xml_find_child_nodes $one_query_node rdbms]
+    set rdbms_nodes [xml_node_get_children_by_name $one_query_node rdbms]
     
     # If we have no RDBMS specified, use the default
     if {[llength $rdbms_nodes] == 0} {
@@ -646,14 +649,14 @@ proc db_qd_internal_parse_one_query_from_xml_node {one_query_node {default_rdbms
 # Parse and RDBMS struct from an XML fragment node
 proc db_rdbms_parse_from_xml_node {rdbms_node} {
     # Check that it's RDBMS
-    if {[ns_xml node name $rdbms_node] != "rdbms"} {
+    if {[xml_node_get_name $rdbms_node] != "rdbms"} {
 	db_qd_log Notice "PARSER = BAD RDBMS NODE!"
 	return ""
     }
 
     # Get the type and version tags
-    set type [ns_xml node getcontent [lindex [xml_find_child_nodes $rdbms_node type] 0]]
-    set version [ns_xml node getcontent [lindex [xml_find_child_nodes $rdbms_node version] 0]]
+    set type [xml_node_get_content [xml_node_get_first_child_by_name $rdbms_node type]]
+    set version [xml_node_get_content [xml_node_get_first_child_by_name $rdbms_node version]]
 
     db_qd_log Notice "PARSER = RDBMS parser - $type - $version"
 
@@ -751,5 +754,6 @@ proc db_qd_internal_prepare_queryfile_content {file_content} {
 proc db_qd_log {level msg} {
     # Centralized DB QD logging
     # We switch everything to debug for now
-    ns_log Debug "QD_LOGGER = $msg"
+    ns_log Notice "QD_LOGGER = $msg"
 }
+
