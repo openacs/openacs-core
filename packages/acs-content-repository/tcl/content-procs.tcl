@@ -56,22 +56,32 @@ ad_proc -private cr_create_content_file_path {item_id revision_id} {
 
 # lifted from new-file-storage (DanW - OpenACS)
 
-ad_proc -public cr_create_content_file {item_id revision_id client_filename} {
-
+ad_proc -public cr_create_content_file {
+    -move:boolean
+    item_id 
+    revision_id 
+    client_filename
+} {
     Copies the file passed by client_filename to the content repository file
     storage area, and it returns the relative file path from the root of the
     content repository file storage area..
 
+    if the -move flag is given the file is renamed instead
 } {
-
     set content_file [cr_create_content_file_path $item_id $revision_id]
 
-    set ifp [open $client_filename r]
-    set ofp [open [cr_fs_path]$content_file w]
-
-    ns_cpfp $ifp $ofp
-    close $ifp
-    close $ofp
+    if { $move_p } { 
+        file rename -- $client_filename [cr_fs_path]$content_file
+    } else { 
+        # JCD: not sure why ns_cpfp is used.  tcl file copy is better 
+        # since it is smarter about buffer sizes.
+        set ifp [open $client_filename r]
+        set ofp [open [cr_fs_path]$content_file w]
+        
+        ns_cpfp $ifp $ofp
+        close $ifp
+        close $ofp
+    }
 
     return $content_file
 }
