@@ -225,13 +225,51 @@ ad_proc ::twt::dotlrn::test::manage_my_memberships {} {
 ad_proc ::twt::dotlrn::test::manage_my_memberships {} {
     Test that user can manage (join/drop) his own class and community memberships.
 } {
+    # First request some ids from the OpenACS server
+    set user_id [::twt::oacs::eval "ad_conn user_id"]
+    set class_community_id [::twt::oacs::get_class_to_join $user_id]
+    set club_join_community_id [::twt::oacs::get_club_to_join $user_id "open"]
+    set club_request_community_id [::twt::oacs::get_club_to_join $user_id "needs approval"]
+
+    # Visit the manage memberships page
     ::twt::do_request "/dotlrn/manage-memberships"
 
     # Join a class
-    link follow ~u "^register?community_id=$community_id"
+    set link_pattern "register.*community_id=$class_community_id"
+    link follow ~u $link_pattern
 
-    # Request membership for a class
+    # Assert class join link is gone
+    if { [::twt::count_links $link_pattern] > 0 } {
+        ::twt::log_alert "Class with community_id $community_id was joined but the join link still appears to be present"
+    }
+    
+    # Join a club
+    set link_pattern "register.*community_id=$club_join_community_id"
+    link follow ~u $link_pattern
+
+    # Assert join club link is gone
+    if { [::twt::count_links $link_pattern] > 0 } {
+        ::twt::log_alert "Club with community_id $community_id was joined but the join link still appears to be present"
+    }    
+    
+    # Request membership for a club
+    set link_pattern "register.*community_id=$club_request_community_id"
+    link follow ~u $link_pattern
+
+    # Assert request membership link is gone
+    if { [::twt::count_links $link_pattern] > 0 } {
+        ::twt::log_alert "Requested membership for club with community_id $community_id but the request link still appears to be present"
+    }    
 
     # Drop a class
-    
+    set link_pattern deregister
+    set deregister_count_before [::twt::count_links $link_pattern]
+    link follow ~u $link_pattern
+    set deregister_count_after [::twt::count_links $link_pattern]
+
+    # Assert there is now one less class to deregister from
+    ::twt::assert_equals \
+            "Should be one less class to dergister from after deregistering" \
+            $deregister_count_after \
+            [expr $deregister_count_before - 1]
 }

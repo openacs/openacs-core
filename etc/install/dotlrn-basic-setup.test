@@ -49,10 +49,17 @@ if { [catch {
     ::twt::log_section "Add news items - one per class"
     ::twt::news::add_item_to_classes $server_url
 
-    ::twt::log_section "Customize layout of the MySpace page as a student"
-    ::twt::user::login [::twt::user::get_random_users student 1]
+    set student_email [::twt::user::get_random_users student 1]
+    ::twt::log_section "Login as student $student_email"
+    ::twt::user::login $student_email
+
+    ::twt::log_section "Test customize layout page"
     ::twt::new_portal::test::customize_layout        
-    ::twt::user::login_site_wide_admin            
+
+    #::twt::log_section "Test the manage memberships page"
+    #::twt::dotlrn::test::manage_my_memberships
+
+    #::twt::user::login_site_wide_admin            
 
     # Test Execution END
 

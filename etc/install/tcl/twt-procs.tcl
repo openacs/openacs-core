@@ -233,3 +233,17 @@ ad_proc ::twt::multiple_select_value { name value } {
 
     ::tclwebtest::field_select -index $index
 }
+
+ad_proc ::twt::count_links { pattern } {
+
+    set count 0
+    foreach link_list [link all] {
+        array set link $link_list
+
+        if { [regexp $pattern $link(url)] } {
+            incr count
+        }
+    }
+
+    return $count
+}
