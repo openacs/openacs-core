@@ -20,7 +20,7 @@ ad_page_contract {
     group_name:onevalue
 }
 
-set context_bar [list [list "" "Groups"] [list one?[ad_export_vars group_id] "One Group"] "Add constraint"]
+set context_bar [list [list "[ad_conn package_url]admin/groups/" "Groups"] [list one?[ad_export_vars group_id] "One Group"] "Add constraint"]
 set export_vars [ad_export_vars -form {group_id rel_type return_url}]
 
 db_1row select_props {

@@ -27,7 +27,7 @@ ad_page_contract {
     supertype_pretty_name:onevalue
 }
 
-set context_bar [list [list "" "Relationship types"] "Add relation type"]
+set context_bar [list [list "[ad_conn package_url]admin/rel-types/" "Relationship types"] "Add relation type"]
 
 template::form create rel_type
 

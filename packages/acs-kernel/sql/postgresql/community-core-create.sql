@@ -665,6 +665,8 @@ comment on column users.n_sessions is '
 -- create or replace package body acs_user
 -- function new
 select define_function_args('user__new','user_id,object_type;user,creation_date;now(),creation_user,creation_ip,email,url,first_names,last_name,password,salt,password_question,password_answer,screen_name,email_verified_p;t,context_id');
+
+
 create function acs_user__new (integer,varchar,timestamp,integer,varchar,varchar,varchar,varchar,varchar,char,char,varchar,varchar,varchar,boolean,integer)
 returns integer as '
 declare
@@ -685,12 +687,23 @@ declare
   new__email_verified_p         alias for $15; -- default ''t''
   new__context_id               alias for $16; -- default null
   v_user_id                     users.user_id%TYPE;
+  person_exists			varchar;			
 begin
+  v_user_id := new__user_id;
+
+  select case when count(*) = 0 then ''f'' else ''t'' end into person_exists
+   from persons where person_id = v_user_id;
+
+  if person_exists = ''f'' then
+
   v_user_id :=
-   person__new(new__user_id, new__object_type,
+   person__new(v_user_id, new__object_type,
                new__creation_date, new__creation_user, new__creation_ip,
                new__email, new__url, new__first_names, new__last_name, 
                new__context_id);
+  else
+   update acs_objects set object_type = ''user'' where object_id = v_user_id;
+  end if;
 
   insert into users
    (user_id, password, salt, password_question, password_answer, screen_name,
@@ -707,6 +720,7 @@ begin
   return v_user_id;
   
 end;' language 'plpgsql';
+
 
 create function acs_user__new(varchar,varchar,varchar,char,char) 
 returns integer as '

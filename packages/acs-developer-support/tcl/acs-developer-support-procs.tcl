@@ -306,10 +306,10 @@ ad_proc ds_user_select_widget {}  {
 ad_proc -private ds_get_real_user_id {} { 
     Get the "real" user id.
 } {
-    if { [llength [info proc orig_ad_get_user_id]] == 1 } {
-        return [orig_ad_get_user_id]
+    if { [llength [info proc orig_ad_conn]] == 1 } {
+        return [orig_ad_conn user_id]
     } else {
-        return [ad_get_user_id]
+        return [ad_conn user_id]
     }
 }
 
@@ -322,6 +322,18 @@ ad_proc ds_get_user_id {{original 0}} {
         return $ds_user_id
     } else {
         return $orig_user_id
+    }
+}
+
+ad_proc ds_conn { args } {
+    Developer support version of ad_conn. Overloads "ad_conn user_id",
+    delegates to ad_conn in all other cases.
+} {
+    if { [lindex $args 0] == "user_id" || 
+         ([lindex $args 0] == "-get" && [lindex $args 1] == "user_id") } {
+        return [ds_get_user_id]
+    } else {
+        return [eval "orig_ad_conn [join $args]"]
     }
 }
 
@@ -345,9 +357,13 @@ ad_proc -private ds_replace_get_user_procs { enabled_p } {
 	    catch {
 		ad_set_client_property developer-support user_id [ad_get_user_id]
 	    }
+            rename ad_conn orig_ad_conn
 	    rename ad_get_user_id orig_ad_get_user_id
 	    rename ad_verify_and_get_user_id orig_ad_verify_and_get_user_id
 	    
+            proc ad_conn { args } {
+                eval "ds_conn [join $args]"
+            }
 	    proc ad_get_user_id {} {
                 ds_get_user_id
 	    }
@@ -357,6 +373,9 @@ ad_proc -private ds_replace_get_user_procs { enabled_p } {
 	}
     } else {
 	if { [llength [info proc orig_ad_get_user_id]] == 1 } {
+            rename ad_conn {}
+            rename orig_ad_conn ad_conn
+
 	    rename ad_get_user_id {}
 	    rename orig_ad_get_user_id ad_get_user_id
 

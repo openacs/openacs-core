@@ -29,6 +29,9 @@ db_1row select_segment_info {
 }
 
 set export_vars [export_form_vars segment_id]
-set context_bar [list [list "" "Relational segments"] [list one?[ad_export_vars segment_id] "One segment"] "Remove segment"]
+set context_bar [list \
+     [list "[ad_conn package_url]admin/rel-segments/" "Relational segments"] \
+     [list one?[ad_export_vars segment_id] "One segment"] \
+     "Remove segment"]
 
 ad_return_template

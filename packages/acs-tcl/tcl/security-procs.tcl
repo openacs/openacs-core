@@ -236,7 +236,7 @@ ad_proc -private sec_setup_session { new_user_id } {
         # the empty string
         set prev_user_id [ad_conn user_id]
 
-        if { $prev_user_id != 0 } {
+        if { $prev_user_id != 0 && $prev_user_id != $new_user_id } {
             # this is a change in identity so we should create
             # a new session so session-level data is not shared
             set session_id [sec_allocate_session]
@@ -298,6 +298,16 @@ ad_proc -private sec_lookup_property { id module name } {
     } {
 	return ""
     }
+
+    set new_last_hit [clock seconds]
+
+    db_dml update_last_hit_dml {
+        update sec_session_properties
+           set last_hit = :new_last_hit
+         where session_id = :id and
+               property_name = :name
+    }
+
     return [list $property_value $secure_p]
 }
 
@@ -1035,6 +1045,16 @@ ad_proc -private __ad_verify_signature {
 	return 1
     }
 
+    # check to see if IE is lame (and buggy!) and is expanding \n to \r\n
+    # See: http://www.arsdigita.com/bboard/q-and-a-fetch-msg?msg_id=000bfF
+    set value [string map [list \r ""] $value]
+    set computed_hash [ns_sha1 "$value$token_id$expire_time$secret_token"]
+
+    if { [string compare $computed_hash $hash] == 0 && ($expire_time > [ns_time] || $expire_time == 0) } {
+	return 1
+    }
+
+
     ns_log Debug "Security: The string compare is [string compare $computed_hash $hash]."
     # signature could not be authenticated
     return 0
@@ -1195,13 +1215,18 @@ ad_proc -private sec_get_token { token_id } {
 	return $tcl_secret_tokens($token_id)
     } else {
 	set token [ns_cache eval secret_tokens $token_id {
-	    return [db_string get_token {select token from secret_tokens
+	    set token [db_string get_token {select token from secret_tokens
                        	                 where token_id = :token_id} -default 0]
-	}]
 
-        if { $token == 0 } {
-	    error "Invalid token ID"
-	}
+	    # Very important to throw the error here if $token == 0
+	    # see: http://www.arsdigita.com/sdm/one-ticket?ticket_id=10760
+
+            if { $token == 0 } {
+	        error "Invalid token ID"
+	    }
+
+	    return $token
+	}]
 
 	set tcl_secret_tokens($token_id) $token
 	return $token

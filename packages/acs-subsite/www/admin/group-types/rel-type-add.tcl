@@ -19,7 +19,7 @@ ad_page_contract {
 }
 
 set return_url_enc [ad_urlencode "[ad_conn url]?[ad_conn query]"]
-set context_bar [list [list "" "Group types"] [list one?[ad_export_vars {group_type}] "One type"] "Add relation type"]
+set context_bar [list [list "[ad_conn package_url]admin/group-types/" "Group types"] [list one?[ad_export_vars {group_type}] "One type"] "Add relation type"]
 
 
 # Select out all the relationship types that are not currently

@@ -37,7 +37,7 @@ db_foreach node_list {
 doc_body_append "
 [ad_header "Host-Node Map"]
 <h2>Host-Node Map</h2>
-[ad_context_bar]
+[ad_context_bar "Host-Node Map"]
 <hr>
 <h3>Registered hostname/URL pairs</h3>
 <table border>

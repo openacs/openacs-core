@@ -63,7 +63,7 @@ if { ([lindex $dependency_results 0] == 1) || ![string compare $force_p "t"]} {
     Some of the packages you are trying to install have unsatisfied dependencies.  The packages
     with unsatisfied dependencies have been deselected.  If you wish to install packages that do
     not pass dependencies, please click the \"force\" option below.
-    <form action=packages-install-2>
+    <form action=packages-install-2 method=post>
     
     <ul>
     <li>To <b>install</b> a package is to load its data model.

@@ -16,7 +16,7 @@
         <li> <a href=elements-display?group_id=@group_id@&rel_type=@rels.rel_type@>Display all @rels.num_rels@ @rels.role_pretty_plural@</a> </li>
         </ul>
       </if><else>
-        <br><dd>
+        <br>
 	<include src="elements-display-list" group_id="@group_id@" rel_type="@rels.rel_type@" return_url_enc=@return_url_enc@ member_state="approved">
       </else>
     </else>

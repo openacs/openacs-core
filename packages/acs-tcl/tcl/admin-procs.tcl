@@ -12,6 +12,7 @@ proc_doc ad_ssl_available_p {} {
     Returns 1 if this AOLserver has the SSL module installed.
 } {
     if { [ns_config ns/server/[ns_info server]/modules nsssl] != "" ||
+         [ns_config ns/server/[ns_info server]/modules nsssle] != "" ||
          [ns_config ns/server/[ns_info server]/modules nsopenssl] != "" } {
 	return 1
     } else {
@@ -26,6 +27,7 @@ proc_doc ad_restrict_to_https {conn args why} {
     @creation-date 2 November 2000
 } {
     if { [ad_conn driver] == "nsssl" ||
+         [ad_conn driver] == "nsssle" ||
 	 [ad_conn driver] == "nsopenssl"} {
  	return "filter_ok"
     } 
@@ -35,11 +37,31 @@ proc_doc ad_restrict_to_https {conn args why} {
     set ssl_port [ns_config -int "ns/server/[ns_info server]/module/nsssl" Port 443]
     } elseif { [ns_config ns/server/[ns_info server]/modules nsopenssl] != "" } {
 	set ssl_port [ns_config -int "ns/server/[ns_info server]/module/nsopenssl" ServerPort 443]
+    } elseif { [ns_config ns/server/[ns_info server]/modules nsssle] != "" } {
+    set ssl_port [ns_config -int "ns/server/[ns_info server]/module/nsssle" Port 443]
     }
     
     set host [ns_set iget [ad_conn headers] "host"]
     if { [regexp {^(.*?):(.*)$} $host match host port] == 0 || [string compare $port $http_port] == 0 } {
 	set url [ad_conn url]
+
+        # ArsDigita probably meant to pass along any form variables (I hope)...
+        set form [ns_getform]
+
+        if {$form != ""} {
+            set size [ns_set size $form]
+            set url_args [list]
+ 
+            for {set i 0} {$i < $size} {incr i} {
+                set key [ns_set key $form $i]
+                set val [ns_set value $form $i]
+                lappend url_args [ns_urlencode $key]=[ns_urlencode $val]
+            }
+ 
+           append url "?[join $url_args &]"
+        }
+        
+
 	if { $ssl_port == 443 } {
 	    set redir "https://$host$url"
 	} else {
