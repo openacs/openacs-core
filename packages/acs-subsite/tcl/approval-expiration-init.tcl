@@ -8,11 +8,7 @@ ad_library {
 
 }
 
-# Get the main site node
-array set main_site [site_node::get -url /]
-
-# Get the package ID of the subsite mounted there 
-set ApprovalExpirationDays [parameter::get -parameter ApprovalExpirationDays -package_id $main_site(package_id) -default 0]
+set ApprovalExpirationDays [parameter::get -parameter ApprovalExpirationDays -package_id [ad_acs_kernel_id] -default 0]
 
 # Only schedule proc if we've set approvals to expire
 if { $ApprovalExpirationDays > 0 } {

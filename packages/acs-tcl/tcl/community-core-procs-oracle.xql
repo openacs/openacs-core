@@ -58,4 +58,69 @@
   </querytext>
 </fullquery>
  
+<fullquery name="acs_user::get.select_user_info_from_user_id">      
+      <querytext>
+
+          select user_id, 
+                 username,
+                 authority_id,
+                 first_names, 
+                 last_name, 
+                 first_names || ' ' || last_name as name,
+                 email, 
+                 url, 
+                 screen_name,
+                 priv_name,  
+                 priv_email,
+                 email_verified_p,
+                 email_bouncing_p,
+                 no_alerts_until,
+                 last_visit,
+                 second_to_last_visit,
+                 n_sessions,
+                 password_question,
+                 password_answer,
+                 password_changed_date,
+                 member_state,
+                 rel_id, 
+                 trunc(sysdate - password_changed_date) as password_age_days
+          from   cc_users 
+          where  user_id = :user_id
+
+      </querytext>
+</fullquery>
+ 
+<fullquery name="acs_user::get.select_user_info_from_username">
+      <querytext>
+
+          select user_id, 
+                 username,
+                 authority_id,
+                 first_names, 
+                 last_name, 
+                 first_names || ' ' || last_name as name,
+                 email, 
+                 url, 
+                 screen_name,
+                 priv_name,  
+                 priv_email,
+                 email_verified_p,
+                 email_bouncing_p,
+                 no_alerts_until,
+                 last_visit,
+                 second_to_last_visit,
+                 n_sessions,
+                 password_question,
+                 password_answer,
+                 password_changed_date,
+                 member_state,
+                 rel_id, 
+                 trunc(sysdate - password_changed_date) as password_age_days
+          from   cc_users 
+          where  authority_id = :authority_id
+          and    username = :username
+
+      </querytext>
+</fullquery>
+ 
 </queryset>

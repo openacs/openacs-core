@@ -94,6 +94,54 @@ ad_proc -public subsite::before_uninstantiate {
     application_group::delete -group_id [application_group::group_id_from_package_id -package_id $package_id]
 }
 
+ad_proc -public subsite::before_upgrade { 
+    {-from_version_name:required}
+    {-to_version_name:required}
+} {
+    Handles upgrade
+} {
+    apm_upgrade_logic \
+        -from_version_name $from_version_name \
+        -to_version_name $to_version_name \
+        -spec {
+            5.0d3 5.0d4 {
+                array set main_site [site_node::get -url /]
+                set main_site_id $main_site(package_id)
+
+                # Move parameter values from subsite to kernel
+
+                parameter::set_value \
+                    -package_id [ad_acs_kernel_id] \
+                    -parameter ApprovalExpirationDays \
+                    -value [parameter::get \
+                                -package_id $main_site_id \
+                                -parameter ApprovalExpirationDays \
+                                -default 0]
+                
+                parameter::set_value \
+                    -package_id [ad_acs_kernel_id] \
+                    -parameter PasswordExpirationDays \
+                    -value [parameter::get \
+                                -package_id $main_site_id \
+                                -parameter PasswordExpirationDays \
+                                -default 0]
+                
+                
+                apm_parameter_unregister \
+                    -package_key acs-subsite \
+                    -parameter ApprovalExpirationDays \
+                    {}
+
+                apm_parameter_unregister \
+                    -package_key acs-subsite \
+                    -parameter PasswordExpirationDays \
+                    {}
+            }
+        }
+}
+
+
+
 ad_proc -private subsite::instance_name_exists_p {
     node_id
     instance_name 

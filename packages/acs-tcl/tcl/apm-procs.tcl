@@ -758,13 +758,22 @@ ad_proc -public apm_parameter_register {
 }
 
 ad_proc -public apm_parameter_unregister { 
-    {
-	-callback apm_dummy_callback
-    } 
+    {-callback apm_dummy_callback}
+    {-package_key ""}
+    {-parameter ""}
     parameter_id
 } {
     Unregisters a parameter from the system.
 } {
+    if { [empty_string_p $parameter_id] } {
+        set parameter_id [db_string select_parameter_id { 
+            select parameter_id
+            from   apm_parameters
+            where  package_key = :package_key
+            and    parameter_name = :parameter
+        }]
+    }
+
     ns_log Debug "APM Unregistering parameter $parameter_id."
     db_foreach all_parameters_packages {
 	select package_id, parameter_id, parameter_name 
