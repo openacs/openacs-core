@@ -742,3 +742,29 @@ aa_register_case util__randomize_list {
     set randomized_list [util::randomize_list $org_list]
     aa_true "Long random list" [util_sets_equal_p $org_list $randomized_list]
 }
+
+aa_register_case acs_tcl__util_url_valid_p {
+    A very rudimentary test of util_url_valid_p
+} {
+    foreach url {
+        "http://example.com"
+        "https://example.com"
+        "ftp://example.com"
+        "http://example.com/"
+        "HTTP://example.com"
+        "http://example.com/foo/bar/blah"
+        "http://example.com?foo=bar&bar=foo"
+    } {
+        aa_true "Valid web URL $url" [util_url_valid_p "$url"]
+    }
+    foreach url {
+        "xhttp://example.com"
+        "httpx://example.com"
+        "wysiwyg://example.com"
+        "mailto:joe@example.com"
+        "foo"
+        "/foo/bar"
+    } {
+        aa_false "Invalid web URL $url" [util_url_valid_p "$url"]
+    }
+}

@@ -3255,11 +3255,11 @@ ad_proc -public util_email_unique_p { email } {
 }
 
 ad_proc -public util_url_valid_p { query_url } {
-    Returns 1 if a URL is a web URL (HTTP or HTTPS).
+    Returns 1 if a URL is a web URL (HTTP, HTTPS or FTP).
 
     @author Philip Greenspun (philg@mit.edu)
 } {
-    return [regexp {https?://[^ ].+} [string trim $query_url]]
+    return [regexp -nocase {^(http|https|ftp)://[^ ].+} [string trim $query_url]]
 }
 
 ad_proc -public value_if_exists { var_name } {
