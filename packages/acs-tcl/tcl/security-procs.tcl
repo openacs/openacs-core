@@ -541,6 +541,8 @@ ad_proc -public ad_redirect_for_registration {} {
 }
 
 ad_proc -public ad_get_login_url {
+    -authority_id
+    -username
     -return:boolean
 } {
     
@@ -568,8 +570,21 @@ ad_proc -public ad_get_login_url {
 
     append url "register/"
 
+    set export_vars [list]
+    if { [exists_and_not_null authority_id] } {
+        lappend export_vars authority_id
+        
+    }
+    if { [exists_and_not_null username] } {
+        lappend export_vars username
+        
+    }
     if { $return_p } {
-        set url [export_vars -base $url { { return_url [ad_return_url] } }]
+        lappend export_vars { return_url [ad_return_url] }
+    }
+
+    if { [llength $export_vars] > 0 } {
+        set url [export_vars -base $url $export_vars]
     }
 
     return $url
