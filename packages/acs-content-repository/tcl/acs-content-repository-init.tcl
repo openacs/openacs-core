@@ -7,6 +7,10 @@ template::filter add content::init
 # Walter McGinnis (wtem@olywa.net), 2001-09-23
 # based on original photo-album package code by Tom Baginski
 
+# Daveb: unless someone has a good reason this should go away for openacs 5.1
+# we should promote a tcl api to the cr instead of each package accessing
+# the pl/sql procs directly. 
+
 ad_schedule_proc -thread t -schedule_proc ns_schedule_daily [list 22 0] cr_delete_scheduled_files
 
 ad_proc -public acs_cr_scheduled_release_exec {} {
