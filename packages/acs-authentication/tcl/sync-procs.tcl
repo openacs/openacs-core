@@ -619,8 +619,10 @@ ad_proc -private auth::sync::get_doc::http::GetDocument {
     
     array set param $parameters
     
-    if { ![empty_string_p $param(SnapshotURL)] && [string equal [clock format [clock seconds] -format "%d"] "01"] } {
-        # On the first day of the month, we get a snapshot 
+    if { (![empty_string_p $param(SnapshotURL)] && [string equal [clock format [clock seconds] -format "%d"] "01"]) || \
+             [empty_string_p $param(IncrementalURL)] } {
+
+        # On the first day of the month, we get a snapshot
         set url $param(SnapshotURL)
         set result(snapshot_p) "t"
     } else {
@@ -629,7 +631,7 @@ ad_proc -private auth::sync::get_doc::http::GetDocument {
     }
 
     if { [empty_string_p $url] } {
-        error "No URL to get"
+        error "You must specify at least one URL to get."
     }
 
     set result(document) [util_httpget $url]
