@@ -176,7 +176,7 @@ ad_proc db_write_blob { statement_name sql args } {
     set full_statement_name [db_qd_get_fullname $statement_name]
 
     db_with_handle db { 
-	db_exec write_blob $db $full_statement_name $sql
+	db_exec write_blob_lob $db $full_statement_name $sql
     }
 }
 
@@ -186,8 +186,112 @@ ad_proc db_blob_get_file { statement_name sql args } {
     set full_statement_name [db_qd_get_fullname $statement_name]
 
     db_with_handle db {
-	eval [list db_exec blob_get_file $db $full_statement_name $sql 2 $file] $args
+	eval [list db_exec_lob blob_get_file $db $full_statement_name $sql 2 $file] $args
     }
+}
+
+ad_proc -private db_exec_lob { type db statement_name pre_sql {ulevel 2} args } {
+
+    A helper procedure to execute a SQL statement, potentially binding
+    depending on the value of the $bind variable in the calling environment
+    (if set).
+
+} {
+    set start_time [clock clicks]
+
+    ns_log Notice "PRE-QD: the SQL is $pre_sql for $statement_name"
+
+    # Query Dispatcher (OpenACS - ben)
+    set sql [db_qd_replace_sql $statement_name $pre_sql]
+
+    # insert tcl variable values (Openacs - Dan)
+    if {![string equal $sql $pre_sql]} {
+        set sql [uplevel $ulevel [list subst -nobackslashes $sql]]
+    }
+ 
+    set file_storage_p 0
+    upvar $ulevel storage_type storage_type
+
+    if {[info exists storage_type] && [string equal $storage_type file]} {
+        set file_storage_p 1
+        set original_type $type
+        set qtype 1row
+        ns_log Notice "db_exec_lob: file storage in use"
+    } else {
+        set qtype $type
+        ns_log Notice "db_exec_lob: blob storage in use"
+    }
+
+    ns_log Notice "POST-QD: the SQL is $sql"
+
+    set errno [catch {
+	upvar bind bind
+	if { [info exists bind] && [llength $bind] != 0 } {
+	    if { [llength $bind] == 1 } {
+		set selection [eval [list ns_ora $qtype $db -bind $bind $sql] $args]
+	    } else {
+		set bind_vars [ns_set create]
+		foreach { name value } $bind {
+		    ns_set put $bind_vars $name $value
+		}
+		set selection [eval [list ns_ora $qtype $db -bind $bind_vars $sql] $args]
+	    }
+	} else {
+	    set selection [uplevel $ulevel [list ns_ora $qtype $db $sql] $args]
+	}
+
+        if {$file_storage_p} {
+            set content [ns_set value $selection 0]
+            for {set i 0} {$i < [ns_set size $selection]} {incr i} {
+                set name [ns_set key $selection $i]
+                if {[string equal $name storage_type]} {
+                    set storage_type [ns_set value $selection $i]
+                } elseif {[string equal $name content]} {
+                    set content [ns_set value $selection $i]
+                }
+            }
+
+            switch $original_type {
+
+                blob_get_file {
+                    if {[file exists $content]} {
+                        set file [lindex $args 0]
+                        set ifp [open $content r]
+                        set ofp [open $file w]
+                        ns_cpfp $ifp $ofp
+                        close $ifp
+                        close $ofp
+                        return $selection
+                    } else {
+                        error "file: $content doesn't exist"
+                    }
+                 }
+
+                write_blob_lob {
+
+                    if {[file exists $content]} {
+                        set ofp [open $content r]
+                        ns_writefp $ofp
+                        close $ofp
+                        return $selection
+                    } else {
+                        error "file: $content doesn't exist"
+                    }
+                }
+            }
+        } else {
+            return $selection
+        }
+
+    } error]
+
+    ad_call_proc_if_exists ds_collect_db_call $db $type $statement_name $sql $start_time $errno $error
+    if { $errno == 2 } {
+	return $error
+    }
+
+    global errorInfo errorCode
+    return -code $errno -errorinfo $errorInfo -errorcode $errorCode $error
 }
 
 ad_proc db_get_sql_user { } {

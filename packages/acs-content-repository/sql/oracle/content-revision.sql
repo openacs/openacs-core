@@ -25,10 +25,12 @@ function new (
   creation_date	in acs_objects.creation_date%TYPE default sysdate,
   creation_user	in acs_objects.creation_user%TYPE default null,
   creation_ip	in acs_objects.creation_ip%TYPE default null
+
 ) return cr_revisions.revision_id%TYPE is
 
   v_revision_id integer;
   v_content_type acs_object_types.object_type%TYPE;
+  v_storage_type cr_items.storage_type%TYPE;
 
 begin
 
@@ -43,12 +45,16 @@ begin
       context_id    => item_id
   );
 
+  select storage_type into v_storage_type
+    from cr_items
+   where item_id = new.item_id;
+
   insert into cr_revisions (
     revision_id, title, description, mime_type, publish_date,
-    nls_language, content, item_id
+    nls_language, content, item_id, storage_type
   ) values (
     v_revision_id, title, description, mime_type, publish_date,
-    nls_language, data, item_id     
+    nls_language, data, item_id, v_storage_type
   );
 
   return v_revision_id;
@@ -70,6 +76,7 @@ function new (
 ) return cr_revisions.revision_id%TYPE is
 
   v_revision_id integer;
+  v_storage_type cr_items.storage_type%TYPE;
   blob_loc cr_revisions.content%TYPE;
 
 begin
@@ -462,11 +469,12 @@ procedure content_copy (
   revision_id	       in cr_revisions.revision_id%TYPE,
   revision_id_dest     in cr_revisions.revision_id%TYPE default null
 ) is
-  lobs			blob;
-  lobd			blob;
   v_item_id             cr_items.item_id%TYPE;
   v_content_length	integer;
   v_revision_id_dest	cr_revisions.revision_id%TYPE;
+  v_storage_type        cr_revisions.storage_type%TYPE;
+  v_filename            cr_revisions.filename%TYPE;
+  v_content             blob;
 begin
 
   select
@@ -499,9 +507,26 @@ begin
        When a BLOB, CLOB, or NCLOB is copied from one row to another row in 
        the same table or in a different table, the actual LOB value is
        copied, not just the LOB locator. */
-    update cr_revisions
-      set content = ( select content from cr_revisions
-                        where revision_id = content_copy.revision_id )
+
+    select 
+      storage_type, filename, content_length
+    into 
+      v_storage_type, v_filename, v_content_length
+    from 
+      cr_revisions
+    where
+      revision_id = content_copy.revision_id;
+
+    -- need to update the file name after the copy,
+    -- if this content item is in CR file storage.  The file name is based
+    -- off of the item_id and revision_id and it will be invalid for the 
+    -- copied revision.
+
+    update cr_revisions       
+      set content = (select content from cr_revisions where revision_id = content_copy.revision_id),
+          storage_type = v_storage_type,
+          filename = v_filename,
+          content_length = v_content_length
       where revision_id = v_revision_id_dest;
   end if;
 

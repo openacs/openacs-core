@@ -100,15 +100,16 @@ declare
   drop_type__content_type           alias for $1;  
   drop_type__drop_children_p        alias for $2;  -- default ''f''  
   drop_type__drop_table_p           alias for $3;  -- default ''f''
-  table_exists                      boolean;       
+  table_exists_p                      boolean;       
   v_table_name                      varchar;   
   is_subclassed_p                   boolean;      
   child_rec                         record;    
   attr_row                          record;
 begin
 
-  -- first we''ll rid ourselves of any dependent child types, if any , along with their
-  -- own dependent grandchild types
+  -- first we''ll rid ourselves of any dependent child types, if any , 
+  -- along with their own dependent grandchild types
+
   select 
     count(*) > 0 into is_subclassed_p 
   from 
@@ -152,13 +153,13 @@ begin
 
   -- we''ll remove the associated table if it exists
   select 
-    table_exists(lower(table_name)) into table_exists 
+    table_exists(lower(table_name)) into table_exists_p
   from 
     acs_object_types
   where 
     object_type = drop_type__content_type;
 
-  if table_exists and content_type__drop_table_p then
+  if table_exists_p and drop_type__drop_table_p then
     select 
       table_name into v_table_name 
     from 
@@ -166,12 +167,23 @@ begin
     where
       object_type = drop_type__content_type;
        
-    execute ''drop table '' || v_table_name ;
+    -- drop the rule and input/output views for the type
+    -- being dropped.
+    -- FIXME: this did not exist in the oracle code and it needs to be
+    -- tested.  Thanks to Vinod Kurup for pointing this out.
+    -- The rule dropping might be redundant as the rule might be dropped
+    -- when the view is dropped.
+
+    execute ''drop rule '' || v_table_name || ''_r'';
+    execute ''drop view '' || v_table_name || ''x'';
+    execute ''drop view '' || v_table_name || ''i'';
+
+    execute ''drop table '' || v_table_name;
   end if;
 
   PERFORM acs_object_type__drop_type(drop_type__content_type, ''f'');
 
-return 0; 
+  return 0; 
 end;' language 'plpgsql';
 
 
@@ -628,6 +640,10 @@ begin
   if table_exists(v_table_name || ''i'') then
      execute ''drop view '' || v_table_name || ''i'';
   end if;
+
+  -- FIXME:  need to look at content_revision__get_content.  Since the CR
+  -- can store data in a lob, a text field or in an external file, getting
+  -- the data attribute for this view will be problematic.
 
   execute ''create view '' || v_table_name ||
     ''i as select acs_objects.*, cr.revision_id, cr.title, cr.item_id,
