@@ -31,10 +31,20 @@
         creates additional files and directories to track status and
         log.  A daemontools directory is included in the OpenACS
         tarball at
-        <computeroutput>/var/lib/aolserver/<replaceable>service0</replaceable>/etc/daemontools</computeroutput>.  To use it, first ill any existing AOLserver instances.  As root, link the <computeroutput>daemontools</computeroutput> directory into the <computeroutput>/service</computeroutput> directory.  Daemontools' <computeroutput>svscan</computeroutput> process checks this directory every five seconds, and will quickly execute <computeroutput>run</computeroutput>.</para>
+        <computeroutput>/var/lib/aolserver/<replaceable>service0</replaceable>/etc/daemontools</computeroutput>.
+        To use it, first ill any existing AOLserver instances.  As
+        root, link the <computeroutput>daemontools</computeroutput>
+        directory into the <computeroutput>/service</computeroutput>
+        directory.  Daemontools'
+        <computeroutput>svscan</computeroutput> process checks this
+        directory every five seconds, and will quickly execute
+        <computeroutput>run</computeroutput>. Note that the run script
+        will need to be edited beforehand, to change
+        <replaceable>service0</replaceable> with your service name.</para>
             
             <screen>[service0 etc]$ <userinput>killall nsd</userinput>
 nsd: no process killed
+[service0 etc]$ <userinput>emacs /var/lib/aolserver/<replaceable>service0</replaceable>/etc/daemontools/run</userinput>
 [service0 etc]$ <userinput>exit</userinput>
 
 [root root]# <userinput>ln -s /var/lib/aolserver/<replaceable>service0</replaceable>/etc/daemontools/ /service/<replaceable>service0</replaceable></userinput></screen>
