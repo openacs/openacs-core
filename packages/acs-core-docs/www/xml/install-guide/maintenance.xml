@@ -445,8 +445,8 @@ emacs web/etc/daemontools/run
 /usr/local/pgsql/bin/psql -f /var/lib/aolserver/service0-dev/packages/acs-kernel/sql/postgresql/postgresql.sql service0
 mv /var/lib/aolserver/service0/database-backup/service0-nightly-backup.dmp.gz /var/lib/aolserver/service0-dev/database-backup/service0-nightly-backup-old.dmp.gz
 /bin/gunzip /var/lib/aolserver/service0-dev/database-backup/service0-nightly-backup.dmp.gz
-/usr/bin/perl -pi -e "s/^\\connect service0$/\\connect service0-dev/" /var/lib/aolserver/service0-dev/database-backup/service0-nightly-backup.dmp
-/usr/local/pgsql/bin/psql service0-dev < /var/lib/aolserver/service0-dev/database-backup/service0-nightly-backup.dmp
+/usr/bin/perl -pi -e 's/^\\connect service0$/\\connect service0-dev/' /var/lib/aolserver/service0-dev/database-backup/service0-nightly-backup.dmp
+/usr/local/pgsql/bin/psql service0-dev &lt; /var/lib/aolserver/service0-dev/database-backup/service0-nightly-backup.dmp
 /usr/local/bin/svc -u /service/service0-dev
 /bin/gzip /var/lib/aolserver/service0-dev/database-backup/service0-nightly-backup-old.dmp
 </programlisting>      
@@ -454,7 +454,7 @@ mv /var/lib/aolserver/service0/database-backup/service0-nightly-backup.dmp.gz /v
       <para>Your developmental server will always have data about a day
       old.</para>
 
-      <para>To make changes on service0-dev:<para>
+      <para>To make changes on service0-dev:</para>
 
 <programlisting>
 1) change the file on service0-dev as desired
