@@ -182,69 +182,13 @@ This section describes how we checked that the set of keys used in message looku
 in tcl, adp, and info files and the set of keys in the catalog file are identical.
 The scripts below assume that message lookups in adp and info files are on the format
 \#package_key.message_key\#, and that message lookups in tcl files are always done with
-the underscore procedure.
-</p>
-
-<p>
-To check that all keys in the dotlrn catalog file are actually used in message lookups in either
-tcl or adp or info files, we used:
+the underscore procedure. The script assumes that you have perl installed and in your path.
+Run the script like this:
 </p>
 
 <pre>
-# Check that all keys in the catalog file are either in tcl or adp or info files
-for catalog_key in $(mygrep '&lt;msg key="([^"]+)"' catalog/dotlrn.en_US.ISO-8859-1.xml); do find -iname '*.tcl'|xargs mygrep "(?ms)\[_\s+(?:\[ad_conn locale\]\s+)?\"?dotlrn\.$catalog_key\"?" || find -regex '.*\.\(info\|adp\)'|xargs mygrep '#dotlrn\.[a-zA-Z0-9_\.]+#' || echo "Warning key $catalog_key in catalog file not found in any adp or tcl file"; done
+acs-lang/bin/check-catalog.sh package_key
 </pre>
 
-<p>
-Conversely, in order too check that all
-keys in the message lookups in the adp, info, and tcl files have entries in the en_US catalog file we used
-the following command lines for the dotlrn package:
-</p>
-
-<pre>
-# Check that all message lookups in tcl files have entries in the message catalog (should return nothing)
-for tcl_message_key in $(find -iname '*.tcl'|xargs mygrep '(?ms)\[_\s+(?:\[ad_conn locale\]\s+)?"?dotlrn\.([a-zA-Z0-9_\.]+)"?'); do grep -L $tcl_message_key catalog/dotlrn.en_US.ISO-8859-1.xml || echo "Warning: key $tcl_message_key not in catalog file"; done
-# Check that all message lookups in adp and info files are in the catalog file
-for adp_message_key in $(find -regex '.*\.\(info\|adp\)'|xargs mygrep '#dotlrn\.([a-zA-Z0-9_\.]+)#'); do grep -L $adp_message_key catalog/dotlrn.en_US.ISO-8859-1.xml || echo "Warning: key $adp_message_key not in catalog file"; done
-</pre>
-
-The mygrep script used above is:
-
-<pre>
-#!/usr/bin/perl -w
-#
-# Loops through the input (input taken from files on the command line or from STDIN)
-# line by line and prints what was captured in the first
-# parenthesis of the pattern. Start the pattern with (?i) for case insensitive matching.
-# Use -m to match across multiple lines.
-#
-# Usage: mygrep [-m] <pattern> [files...]
-#
-
-if ($ARGV[0] =~ /^-m/) {
-      shift;
-      # Undefine the record separator to read the whole file in one go
-      undef $/;
-      $pattern = shift;
-      # Let . match newline
-      if ($pattern !~ /^\w*\(\?\w*s\w*\)/) {
-	  $pattern = "(?s)$pattern";
-      }
-} else {
-    $pattern = shift;
-}
-
-# Take input from STDIN or from files
-my $have_match = 0;
-while ($line = <>) {
-    if ($line =~ /$pattern/) {
-        if (defined($1)) {
-            print STDOUT "$1\n";
-        }
-        
-        $have_match = 1;
-    } 
-}
-
-$have_match ? exit 0 : exit 1;
-</pre>
+where package_key is the key of the package that you want to test. The script will run its
+test on the en_US xml catalog file.
