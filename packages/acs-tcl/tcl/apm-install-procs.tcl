@@ -751,12 +751,10 @@ ad_proc -private apm_package_upgrade_parameters {
     Upgrades the parameters to the current version.
 
 } {
-    set current_parameter_names [list]
     # Update each parameter that exists.
     foreach parameter $parameters {
 	set parameter_name [lindex $parameter 0]
 	# Keep a running tally of all parameters that are in the current version.
-	lappend current_parameter_names $parameter_name
 	set description [lindex $parameter 1]
 	set section_name [lindex $parameter 2]
 	set datatype [lindex $parameter 3]
@@ -776,18 +774,6 @@ ad_proc -private apm_package_upgrade_parameters {
 	    apm_parameter_register $parameter_name $description $package_key $default_value \
 		    $datatype $section_name $min_n_values $max_n_values
 	}	
-    }
-    ns_log Debug "APM: Removing parameters."
-    # Find parameters that are not in the current version and remove them.    
-    db_foreach all_parameters_for_package_key {
-	select parameter_id, parameter_name
-	from apm_parameters
-	where package_key =:package_key
-    } {
-	ns_log Debug "APM Checking parameter $parameter_name..."
-	if {[lsearch -exact $current_parameter_names $parameter_name] == -1} { 
-	    apm_parameter_unregister $parameter_id
-	}
     }
     ns_log Debug "APM: Parameter Upgrade Complete."
 }

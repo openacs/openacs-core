@@ -34,17 +34,6 @@
 </fullquery>
 
  
-<fullquery name="apm_package_upgrade_parameters.all_parameters_for_package_key">      
-      <querytext>
-      
-	select parameter_id, parameter_name
-	from apm_parameters
-	where package_key =:package_key
-    
-      </querytext>
-</fullquery>
-
- 
 <fullquery name="apm_package_install_dependencies.all_dependencies_for_version">      
       <querytext>
       
