@@ -22,7 +22,7 @@
           <title>BSD Note</title>
           <para>BSD users: in most places in these instructions, gmake
           will work better than make.  (<ulink
-          href="http://openacs.org/forums/message-view?message_id=136910">more
+          url="http://openacs.org/forums/message-view?message_id=136910">more
           information on FreeBSD installation</ulink>)</para>
         </note>
 </listitem>
