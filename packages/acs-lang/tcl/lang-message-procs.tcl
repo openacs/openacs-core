@@ -84,7 +84,7 @@ namespace eval lang::message {
                 nsv_set lang_message_$locale $key $message
             }
         } else { 
-            ns_log Notice "lang::message::register - Inserting into database message: $locale $key" 
+            ns_log Debug "lang::message::register - Inserting into database message: $locale $key" 
             db_transaction {
                 # As above, avoiding the bug#2011927 from Oracle.
     
@@ -378,31 +378,23 @@ ad_proc -public _mr { locale key message } {
 }
 
 ad_proc -public _ {
-    args
+    key
+    {substitution_list {}}
 } {
-    Short hand proc with flexible argument handling that invokes the lang::util::lookup proc. 
-    Returns a localized text from the 
-    message catalog for a certain locale.
-    This proc takes the following arguments in the given order (for further
-    details see the lang::util::lookup proc):
-
-    <pre>
-    locale            Locale to use for the message lookup. This argument is optional
-                      and if it's not provided ad_conn locale will be used.
-
-    key               Unique identifier for this message. Will be the same identifier
-                      for each locale.
-
-    default_text      Text to return if there is no message in the message catalog for
-                      the given locale. This argument is optional. 
+    Short hand proc that invokes the lang::util::lookup proc. 
+    Returns a localized text from the message catalog with the locale ad_conn locale
+    if invoked within a request, or the system locale otherwise.
+    
+    @param key        Unique identifier for this message. Will be the same identifier
+                      for each locale. The key is on the format package_key.message_key
 
     substitution_list A list of values to substitute into the message. This argument should
                       only be given for certain messages that contain place holders (on the syntax
-                      %1:pretty_name%, %2:another_pretty_name% etc) for embedding variable values. If you provide this 
-                      argument you must also all provide the other arguments (locale, key, and default_text).
-    </pre>
+                      %1:pretty_name%, %2:another_pretty_name% etc) for embedding variable values.
+                      If the message contains variables that should be interpolated and this argument
+                      is not provided then upvar will be used to fetch the varialbe values.
 
-    @return                  A localized piece of text.
+    @return           A localized message
     
     @author Jeff Davis (davis@arsdigita.com)
     @author Peter Marklund (peter@collaboraid.biz)
@@ -410,12 +402,7 @@ ad_proc -public _ {
 
     @see lang::message::lookup
 } {
-    switch [llength $args] {
-        1 { return [lang::message::lookup ""               [lindex $args 0] "TRANSLATION MISSING"] }
-        2 { return [lang::message::lookup [lindex $args 0] [lindex $args 1] "TRANSLATION MISSING"] }
-        3 { return [lang::message::lookup [lindex $args 0] [lindex $args 1] [lindex $args 2]] }
-        4 { return [lang::message::lookup [lindex $args 0] [lindex $args 1] [lindex $args 2] [lindex $args 3]] }
-    }
+    return [lang::message::lookup "" $key "TRANSLATION MISSING" $substitution_list]
 }
 
 #####
