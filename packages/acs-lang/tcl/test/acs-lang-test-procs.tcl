@@ -370,8 +370,13 @@ aa_register_case set_get_timezone {
             
             # Connection timezone
             aa_equals "Using user timezone" [lang::conn::timezone] $desired_user_timezone
+            
+            ad_conn -set isconnected 0
+            aa_equals "Fallback to system timezone when no connection" [lang::conn::timezone] $desired_system_timezone
+            ad_conn -set isconnected 1
+
             lang::user::set_timezone {}
-            aa_equals "Fallback to system timezone" [lang::conn::timezone] $desired_system_timezone
+            aa_equals "Fallback to system timezone when no user pref" [lang::conn::timezone] $desired_system_timezone
 
         } {
             set error_p 1

@@ -561,7 +561,11 @@ ad_proc -public lang::conn::timezone {} {
         return ""
     }
 
-    set timezone [lang::user::timezone]
+    set timezone {}
+    if { [ad_conn isconnected] } {
+        set timezone [lang::user::timezone]
+    }
+
     if { [empty_string_p $timezone] } {
         # No user timezone, return the system timezone
         set timezone [lang::system::timezone]
