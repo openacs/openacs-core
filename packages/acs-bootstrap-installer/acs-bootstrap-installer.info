@@ -38,6 +38,7 @@
             <file type="tcl_procs" path="tcl/10-utilities-procs.tcl"/>
             <file type="tcl_procs" path="tcl/20-db-bootstrap-procs.tcl"/>
             <file type="tcl_procs" path="tcl/30-apm-load-procs.tcl"/>
+            <file type="query_file" db_type="postgresql" path="installer/create-administrator-postgresql.xql"/>
         </files>
         <parameters>
         <!-- No version parameters -->

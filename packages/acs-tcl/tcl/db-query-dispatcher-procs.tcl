@@ -163,7 +163,7 @@ proc db_fullquery_get_fullname {local_name {added_stack_num 1}} {
 
 	# Get the URL and remove the .tcl
 	set url [ns_conn url]
-	regsub {.tcl$} $url {} url
+	regsub {\.tcl$} $url {} url
 
 	# Change all dots to colons, and slashes to dots
 	regsub -all {\.} $url {:} url
@@ -278,7 +278,13 @@ proc db_fullquery_internal_load_queries {file_pointer file_tag} {
     set parsing_state [db_fullquery_internal_parse_init $whole_file]
     
     ns_log Notice "QD = parsing state - $parsing_state"
-    
+
+    # We need this for queries with relative paths
+    set acs_file_path [ad_make_relative_path $file_tag]
+    set queryname_root [db_fullquery_internal_get_queryname_root $acs_file_path]
+
+    ns_log Notice "QD = queryname root is $queryname_root"
+
     while {1} {
 	set result [db_fullquery_internal_parse_one_query $parsing_state]
 	
@@ -293,6 +299,23 @@ proc db_fullquery_internal_load_queries {file_pointer file_tag} {
 	set parsing_state [lindex $result 1]
 
 	ns_log Notice "QD = loaded one query - [db_fullquery_get_name $one_query]"
+
+	# Relative Path for the Query
+	if {[string range [db_fullquery_get_name $one_query] 0 0] == "."} {
+	    set new_name "acs.${queryname_root}[db_fullquery_get_name $one_query]"
+
+	    set new_fullquery [db_fullquery_create \
+		    $new_name \
+		    [db_fullquery_get_querytext $one_query] \
+		    [db_fullquery_get_bind_vars $one_query] \
+		    [db_fullquery_get_query_type $one_query] \
+		    [db_fullquery_get_rdbms $one_query] \
+		    [db_fullquery_get_load_location $one_query]]
+
+	    set one_query $new_fullquery
+
+	    ns_log Notice "QD = relative path, replaced name with $new_name"
+	}
 
 	# Store the query
 	db_fullquery_internal_store_cache $one_query
@@ -361,6 +384,25 @@ proc db_fullquery_internal_load_cache {file_path} {
 }
 
 
+##
+## NAMING
+##
+
+proc db_fullquery_internal_get_queryname_root {relative_path} {
+    # remove the prepended "/packages/" string
+    regsub {^\/?packages\/} $relative_path {} relative_path
+
+    # remove the last component, the file name, since we're just looking for the root path
+    regsub {/[^/]*$} $relative_path {} relative_path
+
+    # Change all . to :
+    regsub -all {\.} $relative_path {:} relative_path    
+
+    # Change all / to . (hah, no reference to News for Nerds)
+    regsub -all {/} $relative_path {.} relative_path
+
+    return $relative_path
+}
 
 ##
 ## PARSING
@@ -392,6 +434,7 @@ proc db_fullquery_internal_parse_init {stuff_to_parse} {
     set rdbms_nodes [xml_find_child_nodes $root_node rdbms]
     if {[llength $rdbms_nodes] > 0} {
 	set default_rdbms [db_rdbms_parse_from_xml_node [lindex $rdbms_nodes 0]]
+	ns_log Notice "QD = Detected DEFAULT RDBMS for whole queryset: $default_rdbms"
     } else {
 	set default_rdbms ""
     }
@@ -439,7 +482,7 @@ proc db_fullquery_internal_parse_one_query {parsing_state} {
 
     # Update the parsing state so we know
     # what to parse next 
-    set parsing_state [list $index $node_list [lindex $parsing_state 2]]
+    set parsing_state [list $index $node_list [lindex $parsing_state 2] $default_rdbms]
 
     # Parse the actual query from XML
     set one_query [db_fullquery_internal_parse_one_query_from_xml_node $one_query_xml $default_rdbms]
@@ -469,6 +512,7 @@ proc db_fullquery_internal_parse_one_query_from_xml_node {one_query_node {defaul
     
     # If we have no RDBMS specified, use the default
     if {[llength $rdbms_nodes] == 0} {
+	ns_log Notice "QD = Wow, Nelly, no RDBMS for this query, using default rdbms $default_rdbms"
 	set rdbms $default_rdbms
     } else {
 	set rdbms_node [lindex $rdbms_nodes 0]
