@@ -8,8 +8,8 @@ ad_page_contract {
     {password_old ""}
 }
 
-
-set context_bar [list [list users Users] [list "user.tcl?user_id=$user_id" "usuario"] "Update Password"]
+acs_user::get -user_id $user_id -array userinfo
+set context [list [list "./" "Users"] [list "user.tcl?user_id=$user_id" $userinfo(email)] "Update Password"]
 
 set site_link [ad_site_home_link]
 
