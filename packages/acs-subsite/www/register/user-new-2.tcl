@@ -9,8 +9,8 @@ ad_page_contract {
     { password_confirmation }
     { first_names:notnull }
     { last_name:notnull }
-    { question }
-    { answer }
+    { question "" }
+    { answer "" }
     { url }
     { user_id:integer,notnull }
     { return_url [ad_pvt_home] }
