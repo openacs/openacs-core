@@ -34,7 +34,7 @@ check_tcl_file_lookups_are_in_catalog() {
 
     # Check that all message lookups in tcl files have entries in the message catalog
     for tcl_message_key in $(find -iname '*.tcl'|xargs ${script_path}/mygrep \
-                             "(?ms)\[_\s+(?:\[ad_conn locale\]\s+)?\"?${package_key}\.([a-zA-Z0-9_\.]+)\"?")
+                             "(?ms)\[_\s+(?:\[ad_conn locale\]\s+)?\"?${package_key}\.([a-zA-Z0-9_\-\.]+)\"?")
     do 
         egrep -q "<msg[[:space:]]+key=\"$tcl_message_key\"" catalog/${package_key}.en_US.ISO-8859-1.xml \
           || \
@@ -48,7 +48,7 @@ check_adp_file_lookups_are_in_catalog() {
 
     # Check that all message lookups in adp and info files are in the catalog file
     for adp_message_key in $(find -regex '.*\.\(info\|adp\)'|xargs ${script_path}/mygrep \
-                            "#${package_key}\.([a-zA-Z0-9_\.]+)#")
+                            "#${package_key}\.([a-zA-Z0-9_\-\.]+)#")
     do 
         egrep -q "<msg[[:space:]]+key=\"$adp_message_key\"" $catalog_file \
           || \
