@@ -81,61 +81,6 @@ comment on table acs_rel_types is '
  </blockquote>
 ';
 
--- create or replace package acs_rel_type
--- as
--- 
---   procedure create_role (
---     role	  in acs_rel_roles.role%TYPE,
---     pretty_name   in acs_rel_roles.pretty_name%TYPE default null,
---     pretty_plural in acs_rel_roles.pretty_plural%TYPE default null
---   );
--- 
---   procedure drop_role (
---     role	in acs_rel_roles.role%TYPE
---   );
--- 
---   function role_pretty_name (
---     role	in acs_rel_roles.role%TYPE
---   ) return acs_rel_roles.pretty_name%TYPE;
--- 
---   function role_pretty_plural (
---     role	in acs_rel_roles.role%TYPE
---   ) return acs_rel_roles.pretty_plural%TYPE;
--- 
---   procedure create_type (
---     rel_type		in acs_rel_types.rel_type%TYPE,
---     pretty_name		in acs_object_types.pretty_name%TYPE,
---     pretty_plural	in acs_object_types.pretty_plural%TYPE,
---     supertype		in acs_object_types.supertype%TYPE
--- 			   default 'relationship',
---     table_name		in acs_object_types.table_name%TYPE,
---     id_column		in acs_object_types.id_column%TYPE,
---     package_name	in acs_object_types.package_name%TYPE,
---     abstract_p		in acs_object_types.abstract_p%TYPE default 'f',
---     type_extension_table in acs_object_types.type_extension_table%TYPE
--- 			    default null,
---     name_method		in acs_object_types.name_method%TYPE default null,
---     object_type_one	in acs_rel_types.object_type_one%TYPE,
---     role_one		in acs_rel_types.role_one%TYPE default null,
---     min_n_rels_one	in acs_rel_types.min_n_rels_one%TYPE,
---     max_n_rels_one	in acs_rel_types.max_n_rels_one%TYPE,
---     object_type_two	in acs_rel_types.object_type_two%TYPE,
---     role_two		in acs_rel_types.role_two%TYPE default null,
---     min_n_rels_two	in acs_rel_types.min_n_rels_two%TYPE,
---     max_n_rels_two	in acs_rel_types.max_n_rels_two%TYPE
---   );
--- 
---   procedure drop_type (
---     rel_type		in acs_rel_types.rel_type%TYPE,
---     cascade_p		in char default 'f'
---   );
--- 
--- end acs_rel_type;
-
--- show errors
-
--- create or replace package body acs_rel_type
--- procedure create_role
 create function acs_rel_type__create_role (varchar,varchar,varchar)
 returns integer as '
 declare
@@ -148,6 +93,15 @@ begin
     values
      (create_role__role, coalesce(create_role__pretty_name,create_role__role), coalesce(create_role__pretty_plural,create_role__role));
 
+    return 0; 
+end;' language 'plpgsql';
+
+create function acs_rel_type__create_role (varchar)
+returns integer as '
+declare
+  create_role__role                   alias for $1;  
+begin
+    perform acs_rel_type__create_role(create_role__role, NULL, NULL);
     return 0; 
 end;' language 'plpgsql';
 

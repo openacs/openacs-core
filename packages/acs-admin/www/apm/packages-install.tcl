@@ -6,6 +6,7 @@ ad_page_contract {
     @cvs-id $Id$
 
 } {
+    {checked_by_default_p:boolean 1}
     {install_path [apm_workspace_install_dir]}
 }
 
@@ -16,31 +17,34 @@ ns_write "[apm_header "Package Installation"]
 "
 
 ### Selection Phase
-set spec_files [apm_scan_packages $install_path]
+set all_spec_files [apm_scan_packages $install_path]
 # Nothing in the install dir, maybe they just copied the files in under packages.
-if { [empty_string_p $spec_files] } {
-    set install_path "[acs_root_dir]/packages"
-    set all_spec_files [apm_scan_packages $install_path]
+if { [empty_string_p $all_spec_files] } {
+    set actual_install_path "[acs_root_dir]/packages"
+    set all_spec_files [apm_scan_packages $actual_install_path]
     # We don't need to copy any files, because they are already there.
     ad_set_client_property apm copy_files_p 0 
-    # Determine which spec files are new installs; install all of the new items.
-    foreach spec_file $all_spec_files {
-	array set version [apm_read_package_info_file $spec_file]
-	set version_name $version(name)
-	set package_name $version(package-name)
-	set package_key $version(package.key)
-        if { [db_package_supports_rdbms_p $version(database_support)] } {
-            if { [apm_package_registered_p $package_key] } {
-                if { [apm_higher_version_installed_p $package_key $version_name] } {
-                    lappend spec_files $spec_file
-                }
-            } else {
-                lappend spec_files $spec_file
-            }
-        }
-    }
 } else {
     ad_set_client_property apm copy_files_p 1 
+    set actual_install_path $install_path
+}
+
+# Determine which spec files are new installs; install all of the new items.
+set spec_files [list]
+foreach spec_file $all_spec_files {
+    array set version [apm_read_package_info_file $spec_file]
+    set version_name $version(name)
+    set package_name $version(package-name)
+    set package_key $version(package.key)
+    if { [db_package_supports_rdbms_p $version(database_support)] } {
+        if { [apm_package_registered_p $package_key] } {
+            if { [apm_higher_version_installed_p $package_key $version_name] } {
+                lappend spec_files $spec_file
+            }
+        } else {
+            lappend spec_files $spec_file
+        }
+    }
 }
 
 ns_log Debug $spec_files
@@ -71,16 +75,24 @@ if { [empty_string_p $spec_files] } {
     </ul>
     
     If you think you might want to use a package later (but not right away),
-    install it but don't enable it.
-    
-    <form action=packages-install-2 method=post>
+    install it but don't enable it.<p>
     "
+
+    if { $checked_by_default_p } {
+        ns_write "<a href=\"[ns_conn url]?checked_by_default_p=0&[export_url_vars install_path]\">Uncheck all boxes</a>"
+    } else {
+        ns_write "<a href=\"[ns_conn url]?checked_by_default_p=1&[export_url_vars install_path]\">Check all boxes</a>"
+    }
+    
+    ns_write "<form action=packages-install-2 method=post>"
+
     # Client properties do not deplete the limited URL variable space.
     ad_set_client_property apm spec_files $spec_files
-    ad_set_client_property apm install_path $install_path
+    ad_set_client_property apm install_path $actual_install_path
 
     set errors [list]
     set pkg_info_list [list]
+    set pkg_key_list [list]
     ns_log Debug "APM: Specification files available: $spec_files"
     foreach spec_file $spec_files {
 	### Parse the package.
@@ -93,10 +105,16 @@ if { [empty_string_p $spec_files] } {
 	    ns_log Debug "APM: Adding $package(package.key) to list for installation." 
 	    lappend pkg_info_list [pkg_info_new $package(package.key) $spec_file \
 		    $package(provides) $package(requires) ""]
+            lappend pkg_key_list $package(package.key)
 	}
     }
 	
-    set widget [apm_package_selection_widget $pkg_info_list]
+    if { $checked_by_default_p } {
+        set widget [apm_package_selection_widget $pkg_info_list $pkg_key_list $pkg_key_list]
+    } else {
+        set widget [apm_package_selection_widget $pkg_info_list]
+    }
+
     if {[empty_string_p $widget]} {
 	ns_write "There are no new packages available.<p>
 	[ad_footer]"

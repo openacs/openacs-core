@@ -165,9 +165,21 @@ ad_proc -private apm_package_selection_widget {pkg_info_list {to_install ""} {to
 		}
 	    
 	    append widget "  <tr valign=baseline bgcolor=[lindex $band_colors [expr { $counter % [llength $band_colors] }]]>"
-	    append widget "  <td align=center><input type=checkbox checked name=install value=\"$package_key\"
+
+	    if { ([lsearch -exact $to_install $package_key] != -1) } {
+                set install_checked "checked"
+            } else { 
+                set install_checked ""
+            }
+	    if { ([lsearch -exact $to_enable $package_key] != -1) } {
+                set enable_checked "checked"
+            } else { 
+                set enable_checked ""
+            }
+
+	    append widget "  <td align=center><input type=checkbox $install_checked name=install value=\"$package_key\"
 	   onclick=\"if (!checked) document.forms\[0\].elements\[$checkbox_count+1\].checked=false\"></td>
-	   <td align=center><input type=checkbox checked name=enable value=\"$package_key\"
+	   <td align=center><input type=checkbox $enable_checked name=enable value=\"$package_key\"
          onclick=\"if (checked) document.forms\[0\].elements\[$checkbox_count\].checked=true\"></td>
 	   <td>$package(package-name) $package(name)</td>
     <td>/packages/$package(package.key)/</td>
