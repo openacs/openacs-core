@@ -620,7 +620,7 @@ begin
    and a.storage = ''generic''
    and a.static_p = ''f'';
 
-   -- Retreive type for static attributes
+   -- Retrieve type for static attributes
    select object_type into v_object_type from acs_objects
      where object_id = initialize_attributes__object_id;
 

@@ -265,47 +265,6 @@ comment on table acs_privilege_hierarchy is '
 -- were granted moderate on a user.
 --'
 
---create or replace view acs_privilege_method_map
---as select r1.privilege, pmr.object_type, pmr.method
---     from acs_privileges r1, acs_privileges r2, acs_privilege_method_rules pmr
---    where r2.privilege in (select distinct rh.child_privilege
---                           from acs_privilege_hierarchy rh
---                           start with privilege = r1.privilege
---                           connect by prior child_privilege = privilege
---                           union
---                           select r1.privilege
---                           from dual)
---      and r2.privilege = pmr.privilege;
-
--- create or replace package acs_privilege
--- as
--- 
---   procedure create_privilege (
---     privilege	in acs_privileges.privilege%TYPE,
---     pretty_name   in acs_privileges.pretty_name%TYPE default null,
---     pretty_plural in acs_privileges.pretty_plural%TYPE default null 
---   );
--- 
---   procedure drop_privilege (
---     privilege	in acs_privileges.privilege%TYPE
---   );
--- 
---   procedure add_child (
---     privilege		in acs_privileges.privilege%TYPE,
---     child_privilege	in acs_privileges.privilege%TYPE
---   );
--- 
---   procedure remove_child (
---     privilege		in acs_privileges.privilege%TYPE,
---     child_privilege	in acs_privileges.privilege%TYPE
---   );
--- 
--- end;
-
--- show errors
-
--- create or replace package body acs_privilege
--- procedure create_privilege
 create function acs_privilege__create_privilege (varchar,varchar,varchar)
 returns integer as '
 declare
@@ -323,8 +282,15 @@ begin
     return 0; 
 end;' language 'plpgsql';
 
+create function acs_privilege__create_privilege (varchar)
+returns integer as '
+declare
+  create_privilege__privilege              alias for $1;
+begin
+    return acs_privilege__create_privilege(create_privilege__privilege, null, null);
+end;' language 'plpgsql';
 
--- procedure drop_privilege
+
 create function acs_privilege__drop_privilege (varchar)
 returns integer as '
 declare
@@ -336,7 +302,6 @@ begin
     return 0; 
 end;' language 'plpgsql';
 
--- procedure add_child
 create function acs_privilege__add_child (varchar,varchar)
 returns integer as '
 declare
@@ -351,7 +316,6 @@ begin
     return 0; 
 end;' language 'plpgsql';
 
--- procedure remove_child
 create function acs_privilege__remove_child (varchar,varchar)
 returns integer as '
 declare
@@ -364,10 +328,6 @@ begin
 
     return 0; 
 end;' language 'plpgsql';
-
-
-
--- show errors
 
 
 ------------------------------------
@@ -390,15 +350,6 @@ create table acs_permissions (
 
 create index acs_permissions_grantee_idx on acs_permissions (grantee_id);
 create index acs_permissions_privilege_idx on acs_permissions (privilege);
-
--- create view acs_privilege_descendant_map
--- as select p1.privilege, p2.privilege as descendant
---    from acs_privileges p1, acs_privileges p2
---    where p2.privilege in (select child_privilege
--- 			  from acs_privilege_hierarchy
--- 			  start with privilege = p1.privilege
--- 			  connect by prior child_privilege = privilege)
---    or p2.privilege = p1.privilege;
 
 create view acs_privilege_descendant_map
 as select p1.privilege, p2.privilege as descendant
@@ -484,20 +435,6 @@ create view acs_grantee_party_map as
 --    where oppm.object_id = my_table.my_id;
 --
 
--- create view all_object_party_privilege_map as
--- select /*+ ORDERED */ 
---                op.object_id,
---                pdm.descendant as privilege,
---                gpm.party_id as party_id
---         from acs_object_paths op, 
---              acs_permissions p, 
---              acs_privilege_descendant_map pdm,
---              acs_grantee_party_map gpm
---         where op.ancestor_id = p.object_id 
---          and pdm.privilege = p.privilege
---           and gpm.grantee_id = p.grantee_id;
-
-
 create view all_object_party_privilege_map as
 select         op.object_id,
                pdm.descendant as privilege,
@@ -510,36 +447,6 @@ select         op.object_id,
           and pdm.privilege = p.privilege
           and gpm.grantee_id = p.grantee_id;
 
-
---create or replace view acs_object_party_method_map
---as select opp.object_id, opp.party_id, pm.object_type, pm.method
---   from acs_object_party_privilege_map opp, acs_privilege_method_map pm
---   where opp.privilege = pm.privilege;
-
--- create or replace package acs_permission
--- as
--- 
---   procedure grant_permission (
---     object_id	 acs_permissions.object_id%TYPE,
---     grantee_id	 acs_permissions.grantee_id%TYPE,
---     privilege	 acs_permissions.privilege%TYPE
---   );
--- 
---   procedure revoke_permission (
---     object_id	 acs_permissions.object_id%TYPE,
---     grantee_id	 acs_permissions.grantee_id%TYPE,
---     privilege	 acs_permissions.privilege%TYPE
---   );
--- 
---   function permission_p (
---     object_id	 acs_objects.object_id%TYPE,
---     party_id	 parties.party_id%TYPE,
---     privilege	 acs_privileges.privilege%TYPE
---   ) return char;
--- 
--- end acs_permission;
-
--- show errors
 
 -- This table acts as a mutex for inserts/deletes from acs_permissions.
 -- This is used since postgresql's exception handing mechanism is non-
@@ -566,8 +473,6 @@ create trigger acs_permissions_lock_tr
 before insert or update or delete on acs_permissions_lock
 for each row execute procedure acs_permissions_lock_tr();
 
--- create or replace package body acs_permission
--- procedure grant_permission
 create function acs_permission__grant_permission (integer, integer, varchar)
 returns integer as '
 declare
@@ -701,6 +606,3 @@ begin
     end if;
 end;' language 'plpgsql';
 
-
-
--- show errors
