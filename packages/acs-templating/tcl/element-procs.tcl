@@ -60,11 +60,13 @@ ad_proc -public template::element::create { form_id element_id args } {
                       widgets must have a rendering procedure defined in 
                       the <tt>template::widget</tt> namespace.
 
-
     @option datatype  The name of a datatype for the element values.  Valid
                       datatypes must have a validation procedure defined in
                       the <tt>template::data::validate</tt> namespace.
 
+    @option label     The label for the form element.
+    
+    @option section   The section name for the element.
 
     @option html      A list of name-value attribute pairs to include in
                       the HTML tag for widget.  Typically used for additional
@@ -93,6 +95,9 @@ ad_proc -public template::element::create { form_id element_id args } {
                       1 or 0, and message is to be displayed to the user when 
                       the validation step fails.
 
+    @option help_text Text displayed with the element 
+
+    @option help      Display helpful hints (date widget only?)
 
     @option optional  A flag indicating that no value is required for this
                       element.  If a default value is specified, the default
