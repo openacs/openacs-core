@@ -151,7 +151,7 @@ namespace eval acs_user {
             where user_id = :user_id
         } -default ""]
 
-        if {![empty_string_p $rel_id]} {
+        if {[empty_string_p $rel_id]} {
             return
         }
 
