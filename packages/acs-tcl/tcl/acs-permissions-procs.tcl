@@ -103,7 +103,7 @@ namespace eval permission {
             } else {
                 ns_log notice "$party_id doesn't have $privilege on object $object_id"
                 ad_return_forbidden \
-                    "Security Violation" \
+                    "Permission Denied" \
                     "<blockquote>
   You don't have permission to $privilege [db_string name {}].
   <br>
