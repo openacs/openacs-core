@@ -320,7 +320,7 @@ as
    is
        v_impl_id		acs_sc_impls.impl_id%TYPE;
    begin
-       v_impl_id := acs_object.new ('acs_sc_implementation');
+       v_impl_id := acs_object.new (object_type => 'acs_sc_implementation');
        
        insert into acs_sc_impls (
 	      impl_id,
