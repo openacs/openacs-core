@@ -31,10 +31,24 @@ ad_proc -public template::data::validate::integer { value_ref message_ref } {
 
   upvar 2 $message_ref message $value_ref value
 
-  set result [regexp {^(-)?[0-9]+$} $value]
+  set result [regexp {^[+-]?\d+$} $value]
 
   if { ! $result } {
-    set message "Invalid number \"$value\""
+    set message "Invalid integer \"$value\""
+  }
+   
+  return $result 
+}
+
+ad_proc -public template::data::validate::float { value_ref message_ref } {
+
+  upvar 2 $message_ref message $value_ref value
+
+  # Not allowing for scientific notation. Would the databases swallow it?
+  set result [regexp {^([+-]?)(?=\d|\.\d)\d*(\.\d*)?$} $value]
+
+  if { ! $result } {
+    set message "Invalid decimal number \"$value\""
   }
    
   return $result 
