@@ -1038,6 +1038,32 @@ ad_proc -public auth::set_email_verified {
         -email_verified_p "t"
 }
 
+ad_proc -private auth::can_admin_system_without_authority_p {
+    {-authority_id:required}
+} {
+    Before disabling or deleting an authority we need to check
+    that there is at least one site-wide admin in a different
+    authority that can administer the system. This proc returns
+    1 if there is such an admin and 0 otherwise.
+
+    @author Peter Marklund
+} {
+    set number_of_admins_left [db_string count_admins_left {
+        select count(*)
+        from cc_users u,
+             acs_object_party_privilege_map pm,
+             acs_magic_objects mo
+        where authority_id <> :authority_id
+        and pm.privilege = 'admin'
+        and pm.object_id = mo.object_id
+        and mo.name = 'security_context_root'
+        and pm.party_id = u.user_id
+        and u.member_state = 'approved'
+    }]
+
+    return [ad_decode $number_of_admins_left "0" "0" "1"]
+}
+
 #####
 #
 # auth namespace private procs

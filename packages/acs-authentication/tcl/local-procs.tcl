@@ -81,7 +81,7 @@ ad_proc -private auth::local::authentication::register_impl {} {
         contract_name "auth_authentication"
         owner "acs-authentication"
         name "local"
-        pretty_name "Local Authentication Driver"
+        pretty_name "Local Authentication"
         aliases {
             Authenticate auth::local::authentication::Authenticate
             GetParameters auth::local::authentication::GetParameters
@@ -162,7 +162,7 @@ ad_proc -private auth::local::password::register_impl {} {
         contract_name "auth_password"
         owner "acs-authentication"
         name "local"
-        pretty_name "Local Password Driver"
+        pretty_name "Local Password"
         aliases {
             CanChangePassword auth::local::password::CanChangePassword
             ChangePassword auth::local::password::ChangePassword
@@ -321,7 +321,7 @@ ad_proc -private auth::local::registration::register_impl {} {
         contract_name "auth_registration"
         owner "acs-authentication"
         name "local"
-        pretty_name "Local Registration Driver"
+        pretty_name "Local Registration"
         aliases {
             GetElements auth::local::registration::GetElements
             Register auth::local::registration::Register

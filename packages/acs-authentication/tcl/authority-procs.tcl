@@ -115,6 +115,13 @@ ad_proc -public auth::authority::create {
             set creation_ip [ad_conn peeraddr]
         }
 
+        # Auto generate short name if not provided
+        if { [empty_string_p $short_name] } {
+            set short_name [string tolower $pretty_name]
+            regsub -all {\s|-} $short_name {_} short_name
+            set short_name [string_truncate -len 255 $short_name]
+        }
+
         set authority_id [db_exec_plsql create_authority {}]
 
         # Set the arguments not taken by the new function with an update statement
@@ -372,6 +379,7 @@ ad_proc -private auth::authority::get_column_defaults {} {
         short_name ""
         pretty_name ""
         help_contact_text ""
+        help_contact_text_format "text/enhanced"
         enabled_p "f"
         sort_order ""
         auth_impl_id ""
