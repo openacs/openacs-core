@@ -402,9 +402,10 @@ declare
   v_revision_id                      cr_revisions.revision_id%TYPE;
 begin
 
+  -- FIXME: need a way to deal with this xml call.
   select doc into clob_loc from cr_xml_docs where doc_id = import_xml__doc_id;
   v_revision_id := read_xml(import_xml__item_id, import_xml__revision_id, 
-                            import_xml__clob_loc);  
+                            clob_loc);  
 
   return v_revision_id;
  

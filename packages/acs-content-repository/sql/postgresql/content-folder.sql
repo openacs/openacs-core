@@ -47,7 +47,6 @@ declare
   new__creation_ip            alias for $9;  
   v_folder_id                 cr_folders.folder_id%TYPE;
   v_context_id                acs_objects.context_id%TYPE;
-  registered_p                boolean;
 begin
 
   -- set the context_id
@@ -56,10 +55,6 @@ begin
   else
     v_context_id := new__context_id;
   end if;
-
-  registered_p := content_folder__is_registered(new__parent_id,''content_folder'',''f'');
-  raise NOTICE ''parent_id = %, registered_p = %'',  
-                           new__parent_id, registered_p;
 
   -- parent_id = 0 means that this is a mount point
   if new__parent_id != 0 and 

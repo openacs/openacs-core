@@ -4,24 +4,42 @@ create table tst_ids (
        name  varchar(400)
 );
 
-create function dump_cr_items() returns integer as '
+create function content_test__save_val(integer,varchar) returns integer as '
+declare
+        v_id      alias for $1;
+        v_name    alias for $2;
+begin
+        insert into tst_ids (id,name) values (v_id, v_name);
+        return null;
+end;' language 'plpgsql';
+
+create function content_test__get_val(varchar) returns integer as '
+begin
+        return id from tst_ids where name = $1;
+end;' language 'plpgsql';
+
+create function content_test__dump() returns text as '
 declare
         v_rec   record;
-        v_str   varchar default ''\\n'';
+        v_str   text default ''\\n'';
 begin
         for v_rec in select repeat('' '',(tree_level(tree_sortkey)*2 - 1)) || name as name,
                             item_id, parent_id, 
                             tree_level(tree_sortkey) as level,
                             tree_sortkey
                        from cr_items
-                     order by tree_sortkey
+                   order by tree_sortkey
         LOOP
-            v_str := v_str || rpad(v_rec.name,40) || rpad(v_rec.item_id,6) ||
-                     rpad(v_rec.parent_id,6) || rpad(v_rec.level,6) || rpad(v_rec.tree_sortkey,30) || ''\\n'';
+            v_str := v_str                       || 
+                     rpad(v_rec.name,40)         || 
+                     rpad(v_rec.item_id,6)       ||
+                     rpad(v_rec.parent_id,6)     || 
+                     rpad(v_rec.level,6)         || 
+                     rpad(v_rec.tree_sortkey,30) || 
+                     ''\\n'';
         end LOOP;
 
-        raise notice ''%'', v_str;
-        return null;
+        return v_str;
 
 end;' language 'plpgsql';
 
@@ -36,7 +54,7 @@ begin
         return case when $1 then ''t''::char else ''f''::char end;
 end;' language 'plpgsql';
 
-create function test_content_create() returns integer as '
+create function content_test__create() returns integer as '
 declare
   folder_id		cr_folders.folder_id%TYPE;
   folder_b_id		cr_folders.folder_id%TYPE;
@@ -61,11 +79,8 @@ begin
 
    folder_id         := content_folder__new(''grandpa'',''Grandpa'',NULL,-100);
    folder_b_id       := content_folder__new(''grandma'',''Grandma'',NULL,-100);
-
    sub_folder_id     := content_folder__new(''pa'',''Pa'',NULL,folder_id);
-
    sub_sub_folder_id := content_folder__new(''me'',''Me'',NULL,sub_folder_id);
-
    item_id           := content_item__new(''puppy'',sub_sub_folder_id);
 
    simple_item_id := content_item__new(
@@ -110,18 +125,18 @@ begin
 	''Default Type Template''
    );
 
-   insert into tst_ids values (folder_id,''folder_id'');
-   insert into tst_ids values (folder_b_id,''folder_b_id'');
-   insert into tst_ids values (sub_folder_id,''sub_folder_id'');
-   insert into tst_ids values (sub_sub_folder_id,''sub_sub_folder_id'');
-   insert into tst_ids values (item_id,''item_id'');
-   insert into tst_ids values (simple_item_id,''simple_item_id'');
-   insert into tst_ids values (live_revision_id,''live_revision_id'');
-   insert into tst_ids values (late_revision_id,''late_revision_id'');
-   insert into tst_ids values (item_template_id,''item_template_id'');
-   insert into tst_ids values (type_template_id,''type_template_id'');
-   insert into tst_ids values (def_type_template_id,''def_type_template_id'');
-   insert into tst_ids values (dum_template_id,''dum_template_id'');
+   PERFORM content_test__save_val (folder_id,''folder_id'');
+   PERFORM content_test__save_val (folder_b_id,''folder_b_id'');
+   PERFORM content_test__save_val (sub_folder_id,''sub_folder_id'');
+   PERFORM content_test__save_val (sub_sub_folder_id,''sub_sub_folder_id'');
+   PERFORM content_test__save_val (item_id,''item_id'');
+   PERFORM content_test__save_val (simple_item_id,''simple_item_id'');
+   PERFORM content_test__save_val (live_revision_id,''live_revision_id'');
+   PERFORM content_test__save_val (late_revision_id,''late_revision_id'');
+   PERFORM content_test__save_val (item_template_id,''item_template_id'');
+   PERFORM content_test__save_val (type_template_id,''type_template_id'');
+   PERFORM content_test__save_val (def_type_template_id,''def_type_template_id'');
+   PERFORM content_test__save_val (dum_template_id,''dum_template_id'');
 
    PERFORM content_test__put_line(''-------------------------------------'');
    PERFORM content_test__put_line(''CREATING CONTENT FOLDERS AND ITEMS...'');
@@ -280,7 +295,7 @@ begin
            );
 
    found_folder_id := content_item__get_id(''grandpa/pa/me'', -100, ''f'');
-   insert into tst_ids values (found_folder_id,''found_folder_id'');
+   PERFORM content_test__save_val (found_folder_id,''found_folder_id'');
 
    PERFORM content_test__put_line(''-------------------------------------'');
    PERFORM content_test__put_line(''LOCATING CONTENT FOLDERS AND ITEMS...'');
@@ -349,7 +364,7 @@ begin
 
 end;' language 'plpgsql';
 
-create function test_content_check1() returns integer as '
+create function content_test__check1() returns integer as '
 declare
   folder_id		cr_folders.folder_id%TYPE;
   folder_b_id		cr_folders.folder_id%TYPE;
@@ -369,19 +384,9 @@ declare
 
   found_folder_id	cr_folders.folder_id%TYPE;
 begin
-   select id into folder_id from tst_ids where name = ''folder_id'';
-   select id into folder_b_id from tst_ids where name = ''folder_b_id'';
-   select id into sub_folder_id from tst_ids where name = ''sub_folder_id'';
-   select id into sub_sub_folder_id from tst_ids where name = ''sub_sub_folder_id'';
-   select id into item_id from tst_ids where name = ''item_id'';
-   select id into simple_item_id from tst_ids where name = ''simple_item_id'';
-   select id into live_revision_id from tst_ids where name = ''live_revision_id'';
-   select id into late_revision_id from tst_ids where name = ''late_revision_id'';
-   select id into item_template_id from tst_ids where name = ''item_template_id'';
-   select id into type_template_id from tst_ids where name = ''type_template_id'';
-   select id into def_type_template_id from tst_ids where name = ''def_type_template_id'';
-   select id into dum_template_id from tst_ids where name = ''dum_template_id'';
-   select id into found_folder_id from tst_ids where name = ''found_folder_id'';
+   folder_id         := content_test__get_val(''folder_id'');
+   sub_sub_folder_id := content_test__get_val(''sub_sub_folder_id'');
+
    PERFORM content_test__put_line(''-------------------------------------'');
    PERFORM content_test__put_line(''MOVING/RENAMING CONTENT FOLDERS...'');
    PERFORM content_test__put_line(''...all tests passed'');
@@ -392,7 +397,7 @@ begin
 
 end;' language 'plpgsql';
 
-create function test_content_check2() returns integer as '
+create function content_test__check2() returns integer as '
 declare
   folder_id		cr_folders.folder_id%TYPE;
   folder_b_id		cr_folders.folder_id%TYPE;
@@ -412,19 +417,10 @@ declare
 
   found_folder_id	cr_folders.folder_id%TYPE;
 begin
-   select id into folder_id from tst_ids where name = ''folder_id'';
-   select id into folder_b_id from tst_ids where name = ''folder_b_id'';
-   select id into sub_folder_id from tst_ids where name = ''sub_folder_id'';
-   select id into sub_sub_folder_id from tst_ids where name = ''sub_sub_folder_id'';
-   select id into item_id from tst_ids where name = ''item_id'';
-   select id into simple_item_id from tst_ids where name = ''simple_item_id'';
-   select id into live_revision_id from tst_ids where name = ''live_revision_id'';
-   select id into late_revision_id from tst_ids where name = ''late_revision_id'';
-   select id into item_template_id from tst_ids where name = ''item_template_id'';
-   select id into type_template_id from tst_ids where name = ''type_template_id'';
-   select id into def_type_template_id from tst_ids where name = ''def_type_template_id'';
-   select id into dum_template_id from tst_ids where name = ''dum_template_id'';
-   select id into found_folder_id from tst_ids where name = ''found_folder_id'';
+   item_id           := content_test__get_val(''item_id'');
+   sub_sub_folder_id := content_test__get_val(''sub_sub_folder_id'');
+   sub_folder_id     := content_test__get_val(''sub_folder_id'');
+
 
    PERFORM content_test__put_line(''Path for '' || item_id || '' is '' || 
                                   content_item__get_path(item_id,null)
@@ -462,13 +458,13 @@ begin
                                         null
                    );
 
-   insert into tst_ids values (symlink_a_id,''symlink_a_id'');
+   PERFORM content_test__save_val (symlink_a_id,''symlink_a_id'');
 
    return null;
 
 end;' language 'plpgsql';
 
-create function test_content_check3() returns integer as '
+create function content_test__check3() returns integer as '
 declare
   folder_id		cr_folders.folder_id%TYPE;
   folder_b_id		cr_folders.folder_id%TYPE;
@@ -488,21 +484,20 @@ declare
 
   found_folder_id	cr_folders.folder_id%TYPE;
 begin
-   select id into folder_id from tst_ids where name = ''folder_id'';
-   select id into folder_b_id from tst_ids where name = ''folder_b_id'';
-   select id into sub_folder_id from tst_ids where name = ''sub_folder_id'';
-   select id into sub_sub_folder_id from tst_ids where name = ''sub_sub_folder_id'';
-   select id into item_id from tst_ids where name = ''item_id'';
-   select id into simple_item_id from tst_ids where name = ''simple_item_id'';
-   select id into live_revision_id from tst_ids where name = ''live_revision_id'';
-   select id into late_revision_id from tst_ids where name = ''late_revision_id'';
-   select id into item_template_id from tst_ids where name = ''item_template_id'';
-   select id into type_template_id from tst_ids where name = ''type_template_id'';
-   select id into def_type_template_id from tst_ids where name = ''def_type_template_id'';
-   select id into dum_template_id from tst_ids where name = ''dum_template_id'';
-   select id into found_folder_id from tst_ids where name = ''found_folder_id'';
-
-   select id into symlink_a_id from tst_ids where name = ''symlink_a_id'';
+   folder_id            := content_test__get_val(''folder_id'');
+   folder_b_id          := content_test__get_val(''folder_b_id'');
+   sub_folder_id        := content_test__get_val(''sub_folder_id'');
+   sub_sub_folder_id    := content_test__get_val(''sub_sub_folder_id'');
+   item_id              := content_test__get_val(''item_id'');
+   simple_item_id       := content_test__get_val(''simple_item_id'');
+   live_revision_id     := content_test__get_val(''live_revision_id'');
+   late_revision_id     := content_test__get_val(''late_revision_id'');
+   item_template_id     := content_test__get_val(''item_template_id'');
+   type_template_id     := content_test__get_val(''type_template_id'');
+   def_type_template_id := content_test__get_val(''def_type_template_id'');
+   dum_template_id      := content_test__get_val(''dum_template_id'');
+   found_folder_id      := content_test__get_val(''found_folder_id'');
+   symlink_a_id         := content_test__get_val(''symlink_a_id'');
 
 
    PERFORM content_test__put_line(''Create a link in pa to aunty: Symlink is '' || symlink_a_id);
@@ -589,7 +584,7 @@ begin
 
 end;' language 'plpgsql';
 
-create function test_content_check4() returns integer as '
+create function content_test__check4() returns integer as '
 declare
   folder_id		cr_folders.folder_id%TYPE;
   folder_b_id		cr_folders.folder_id%TYPE;
@@ -609,19 +604,9 @@ declare
 
   found_folder_id	cr_folders.folder_id%TYPE;
 begin
-   select id into folder_id from tst_ids where name = ''folder_id'';
-   select id into folder_b_id from tst_ids where name = ''folder_b_id'';
-   select id into sub_folder_id from tst_ids where name = ''sub_folder_id'';
-   select id into sub_sub_folder_id from tst_ids where name = ''sub_sub_folder_id'';
-   select id into item_id from tst_ids where name = ''item_id'';
-   select id into simple_item_id from tst_ids where name = ''simple_item_id'';
-   select id into live_revision_id from tst_ids where name = ''live_revision_id'';
-   select id into late_revision_id from tst_ids where name = ''late_revision_id'';
-   select id into item_template_id from tst_ids where name = ''item_template_id'';
-   select id into type_template_id from tst_ids where name = ''type_template_id'';
-   select id into def_type_template_id from tst_ids where name = ''def_type_template_id'';
-   select id into dum_template_id from tst_ids where name = ''dum_template_id'';
-   select id into found_folder_id from tst_ids where name = ''found_folder_id'';
+   item_id           := content_test__get_val(''item_id'');
+   folder_b_id       := content_test__get_val(''folder_b_id'');
+   sub_sub_folder_id := content_test__get_val(''sub_sub_folder_id'');
 
    PERFORM content_test__put_line(''Path for item '' || item_id || '' is '' ||
                                   content_item__get_path(item_id,null)
@@ -631,11 +616,12 @@ begin
                                   '' to aunty '' || sub_sub_folder_id
            );
    PERFORM content_item__move(folder_b_id,sub_sub_folder_id);
+
    return null;
 
 end;' language 'plpgsql';
 
-create function test_content_check5() returns integer as '
+create function content_test__check5() returns integer as '
 declare
   folder_id		cr_folders.folder_id%TYPE;
   folder_b_id		cr_folders.folder_id%TYPE;
@@ -655,26 +641,28 @@ declare
 
   found_folder_id	cr_folders.folder_id%TYPE;
 begin
-   select id into folder_id from tst_ids where name = ''folder_id'';
-   select id into folder_b_id from tst_ids where name = ''folder_b_id'';
-   select id into sub_folder_id from tst_ids where name = ''sub_folder_id'';
-   select id into sub_sub_folder_id from tst_ids where name = ''sub_sub_folder_id'';
-   select id into item_id from tst_ids where name = ''item_id'';
-   select id into simple_item_id from tst_ids where name = ''simple_item_id'';
-   select id into live_revision_id from tst_ids where name = ''live_revision_id'';
-   select id into late_revision_id from tst_ids where name = ''late_revision_id'';
-   select id into item_template_id from tst_ids where name = ''item_template_id'';
-   select id into type_template_id from tst_ids where name = ''type_template_id'';
-   select id into def_type_template_id from tst_ids where name = ''def_type_template_id'';
-   select id into dum_template_id from tst_ids where name = ''dum_template_id'';
-   select id into found_folder_id from tst_ids where name = ''found_folder_id'';
+   folder_id            := content_test__get_val(''folder_id'');
+   folder_b_id          := content_test__get_val(''folder_b_id'');
+   sub_folder_id        := content_test__get_val(''sub_folder_id'');
+   sub_sub_folder_id    := content_test__get_val(''sub_sub_folder_id'');
+   item_id              := content_test__get_val(''item_id'');
+   simple_item_id       := content_test__get_val(''simple_item_id'');
+   live_revision_id     := content_test__get_val(''live_revision_id'');
+   late_revision_id     := content_test__get_val(''late_revision_id'');
+   item_template_id     := content_test__get_val(''item_template_id'');
+   type_template_id     := content_test__get_val(''type_template_id'');
+   def_type_template_id := content_test__get_val(''def_type_template_id'');
+   dum_template_id      := content_test__get_val(''dum_template_id'');
+   found_folder_id      := content_test__get_val(''found_folder_id'');
+
    PERFORM content_test__put_line(''Path for item '' || item_id || '' is '' ||
                                   content_item__get_path(item_id,null)
            );     
 
    PERFORM content_test__put_line(''--------------------------------'');
 
--- symlinks/revisions should be deleted automatically
+   -- symlinks/revisions should be deleted automatically
+
    PERFORM content_item__delete(simple_item_id);
    PERFORM content_template__delete(item_template_id);
    PERFORM content_item__delete(item_id);
@@ -690,24 +678,28 @@ begin
 
 end;' language 'plpgsql';
 
+\t
+select content_test__create();
+select content_test__check1();
+select content_test__check2();
+select content_test__dump();
 
-select test_content_create();
-select test_content_check1();
-select test_content_check2();
-select dump_cr_items();
-select test_content_check3();
-select test_content_check4();
-select test_content_check5();
-
-drop function test_content_create();
-drop function test_content_check1();
-drop function test_content_check2();
-drop function test_content_check3();
-drop function test_content_check4();
-drop function test_content_check5();
+select content_test__check3();
+select content_test__check4();
+select content_test__check5();
+select content_test__dump();
+\t
+drop function content_test__create();
+drop function content_test__check1();
+drop function content_test__check2();
+drop function content_test__check3();
+drop function content_test__check4();
+drop function content_test__check5();
 drop function content_test__put_line(text);
 drop function cast_char(boolean);
-drop function dump_cr_items();
+drop function content_test__dump();
+drop function content_test__get_val(varchar);
+drop function content_test__save_val(integer,varchar);
 
 drop table tst_ids;
 

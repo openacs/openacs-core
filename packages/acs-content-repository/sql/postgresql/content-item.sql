@@ -799,8 +799,8 @@ begin
     v_item_id         := get_path__item_id;
     v_rel_item_id     := v_resolved_root_id;
 
-    -- FIXME: should be replace this cursor emulation with one or two single
-    --        queries.
+    -- FIXME: This can be simplified, but I want to look at the oracle version
+    --        first.  I suspect that it is not functioning correctly.
 
     while v_parent_id = v_rel_parent_id LOOP
         select 
@@ -837,6 +837,14 @@ begin
           v_rel_item_id := v_rel_parent_id;
         end if;
 
+        -- root and item have common parent, so short circuit relative
+        -- path as ../item
+
+        if v_parent_id = v_rel_parent_id then
+           v_path := ''../'' || v_name;
+           return v_path;
+        end if;
+
         if v_rel_exit_p or v_exit_p then
            exit;
         end if;
@@ -866,14 +874,7 @@ begin
        end LOOP;
     end if;
 
-    -- an item relative to itself is ../item
-    if v_resolved_root_id = get_path__item_id then
-	v_path := ''../'' || v_name;
-        return v_path;
-    end if;
-
     -- loop over the remainder of the absolute path
-    -- v_path := v_path || v_name;
 
     v_path = rtrim(v_path,''/'');
 
@@ -929,7 +930,6 @@ begin
   return v_path;
  
 end;' language 'plpgsql';
-
 
 -- function get_virtual_path
 create function content_item__get_virtual_path (integer,integer)
