@@ -63,6 +63,8 @@ if { ![db_0or1row select_rel_info {
 }
 
 set rel(rel_type_enc) [ad_urlencode $rel(rel_type)]
+set rel(role_one_pretty_name) [lang::util::localize $rel(role_one_pretty_name)]
+set rel(role_two_pretty_name) [lang::util::localize $rel(role_two_pretty_name)]
 
 
 # Build up the list of attributes for the type specific lookup
