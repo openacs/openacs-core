@@ -204,9 +204,9 @@ declare
     p_object_id                     alias for $1;
     v_request                       RECORD;
 begin
-    for v_request in (select request_id
-                      from notification_requests
-                      where object_id= p_object_id)
+    for v_request in select request_id
+                     from notification_requests
+                     where object_id= p_object_id
     loop
         perform notification_request__delete(v_request.request_id);
     end loop;
