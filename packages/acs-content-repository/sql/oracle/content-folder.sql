@@ -83,26 +83,43 @@ begin
 
 end new;
 
-
 procedure del (
-  folder_id	in cr_folders.folder_id%TYPE
+  folder_id	in cr_folders.folder_id%TYPE,
+  cascade_p     in varchar2(1) default 'f'
 ) is
 
   v_count integer;
-  v_parent_id integer;
-  
+  v_parent_id cr_items.parent_id%TYPE;
+  v_child_item_id cr_items.item_id%TYPE;
+  cursor c_folder_children_cur is
+    select
+      item_id
+    from
+      cr_items
+    connect by
+      prior item_id=parent_id
+      start with parent_id = del.folder_id;
+
 begin
 
   -- check if the folder contains any items
 
   select count(*) into v_count from cr_items where parent_id = folder_id;
 
-  if v_count > 0 then
+  if v_count > 0 and cascade_p='f' then
     raise_application_error(-20000, 
     'Folder ID ' || folder_id || ' (' || content_item.get_path(folder_id) ||
     ') cannot be deleted because it is not empty.');
+  else
+    for v_child_item_id in c_folder_children_cur loop
+	if content_folder.is_folder(v_child_item_id) then
+	  perform content_folder.delete(v_child_item_id);
+        else
+         perform content_item.delete(v_child_item_id);
+      end if;
+    end loop;
   end if;  
-
+  
   content_folder.unregister_content_type(
       folder_id	       => content_folder.del.folder_id,
       content_type     => 'content_revision',
@@ -241,6 +258,7 @@ procedure copy (
   target_folder_id	in cr_folders.folder_id%TYPE,
   creation_user		in acs_objects.creation_user%TYPE,
   creation_ip		in acs_objects.creation_ip%TYPE default null
+  name                  in cr_items.name%TYPE default null
 ) is
   v_valid_folders_p     integer := 0;
   v_current_folder_id   cr_folders.folder_id%TYPE;
@@ -280,12 +298,15 @@ begin
   where
     item_id = copy.folder_id;  
 
-  if folder_id = content_item.get_root_folder or folder_id = content_template.get_root_folder or target_folder_id = folder_id or v_current_folder_id = target_folder_id then
+  if copy.name = '' then
+    copy.name := NULL;
+  end if;
+
+  if folder_id = content_item.get_root_folder or folder_id = content_template.get_root_folder or target_folder_id = folder_id then
     v_valid_folders_p := 0;
   end if;
 
   if v_valid_folders_p = 2 then 
-    if is_sub_folder(folder_id, target_folder_id) ^= 't' then
 
       -- get the source folder info
       select
@@ -299,6 +320,10 @@ begin
       and
         f.folder_id = copy.folder_id;
 
+  if is_sub_folder(folder_id, target_folder_id) ^= 't' or v_current_folder_id != copy.target_folder_id or (v_name != copy.name and copy.name is not null) then then
+      if copy.name is not null then
+	v_name := copy.name;
+      end if;
       -- create the new folder
       v_new_folder_id := content_folder.new(
 	  parent_id     => copy.target_folder_id,
