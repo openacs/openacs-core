@@ -416,7 +416,8 @@ function is_valid_child (
   --*/
 
   item_id	in cr_items.item_id%TYPE,
-  content_type  in acs_object_types.object_type%TYPE
+  content_type  in acs_object_types.object_type%TYPE,
+  relation_tag  in cr_child_rels.relation_tag%TYPE default null
 ) return char;
 
 procedure delete (

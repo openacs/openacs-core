@@ -132,11 +132,19 @@ begin
 
     begin
 
+     -- Figure out the relation_tag to use
+     if content_item.new.relation_tag is null then
+       v_rel_tag := content_item.get_content_type(v_parent_id) 
+         || '-' || content_item.new.content_type;
+     else
+       v_rel_tag := content_item.new.relation_tag;
+     end if;
+
      select object_type into v_parent_type from acs_objects
        where object_id = v_parent_id;
 
      if is_subclass(v_parent_type, 'content_item') = 't' and
-	is_valid_child(v_parent_id, content_item.new.content_type) = 'f' then
+	is_valid_child(v_parent_id, content_item.new.content_type, v_rel_tag) = 'f' then
 
        raise_application_error(-20000, 
 	 'This item''s content type ' || content_item.new.content_type ||
@@ -179,22 +187,14 @@ begin
   );
 
   -- if the parent is not a folder, insert into cr_child_rels
+  -- We checked above before creating the object that it is a valid rel
   if v_parent_id ^= 0 and
-    content_folder.is_folder(v_parent_id) = 'f' and 
-    content_item.is_valid_child(v_parent_id, 
-      content_item.new.content_type) = 't' then
+    content_folder.is_folder(v_parent_id) = 'f' then
 
     v_rel_id := acs_object.new(
       object_type	=> 'cr_item_child_rel',
       context_id	=> v_parent_id
     );
-
-    if content_item.new.relation_tag is null then
-      v_rel_tag := content_item.get_content_type(v_parent_id) 
-        || '-' || content_item.new.content_type;
-    else
-      v_rel_tag := content_item.new.relation_tag;
-    end if;
 
     insert into cr_child_rels (
       rel_id, parent_id, child_id, relation_tag, order_n
@@ -398,7 +398,8 @@ end is_publishable;
 
 function is_valid_child (
   item_id		in cr_items.item_id%TYPE,
-  content_type		in acs_object_types.object_type%TYPE
+  content_type		in acs_object_types.object_type%TYPE,
+  relation_tag          in cr_child_rels.relation_tag%TYPE default null
 ) return char
 is
   v_is_valid_child      char(1);
@@ -417,7 +418,10 @@ begin
     where
       parent_type = content_item.get_content_type( is_valid_child.item_id )
     and
-      child_type = is_valid_child.content_type;
+      child_type = is_valid_child.content_type
+    and 
+      (is_valid_child.relation_tag is null 
+       or is_valid_child.relation_tag = relation_tag);
 
     exception
       when NO_DATA_FOUND then
@@ -437,7 +441,10 @@ begin
   where
     parent_id = is_valid_child.item_id
   and
-    content_item.get_content_type( child_id ) = is_valid_child.content_type;
+    content_item.get_content_type( child_id ) = is_valid_child.content_type
+  and 
+    (is_valid_child.relation_tag is null 
+     or is_valid_child.relation_tag = relation_tag);
 
   if v_n_children < v_max_children then
     v_is_valid_child := 't';
