@@ -34,7 +34,7 @@ cvs tag <replaceable>openacs-5-0-0a1</replaceable>
 </action></screen>
         <para>Tag dotLRN.  Since the dotLRN packages aren't all in one module, we iterate through all of the modules.  Log in first (cvs login) so that you don't have to log in for each module.</para>
         <screen><action>
-cd /tmp/dotlrn-package
+cd /tmp/dotlrn-packages
 for dir in $(ls); do cd $dir; cvs tag <replaceable>dotlrn-2-0-0a3</replaceable>; cd ..; done
 </action></screen>
       </listitem>

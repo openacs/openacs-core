@@ -1,4 +1,4 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Install OpenACS 5.0.0a4</title><meta name="generator" content="DocBook XSL Stylesheets V1.62.4"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="complete-install.html" title="Chapter 3. Complete Installation"><link rel="previous" href="aolserver.html" title="Install AOLserver 3.3oacs1"><link rel="next" href="win2k-installation.html" title="OpenACS Installation Guide for Windows2000"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="aolserver.html">Prev</a> </td><th width="60%" align="center">Chapter 3. Complete Installation</th><td width="20%" align="right"> <a accesskey="n" href="win2k-installation.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="openacs"></a>Install OpenACS 5.0.0a4</h2></div></div><div></div></div><div class="authorblurb"><p>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Install OpenACS 5.0.0b1</title><meta name="generator" content="DocBook XSL Stylesheets V1.62.4"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="complete-install.html" title="Chapter 3. Complete Installation"><link rel="previous" href="aolserver.html" title="Install AOLserver 3.3oacs1"><link rel="next" href="win2k-installation.html" title="OpenACS Installation Guide for Windows2000"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="aolserver.html">Prev</a> </td><th width="60%" align="center">Chapter 3. Complete Installation</th><td width="20%" align="right"> <a accesskey="n" href="win2k-installation.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="openacs"></a>Install OpenACS 5.0.0b1</h2></div></div><div></div></div><div class="authorblurb"><p>
     by <a href="mailto:vinod@kurup.com" target="_top">Vinod Kurup</a><br>
           OpenACS docs are written by the named authors, and may be edited
           by OpenACS documentation staff.
@@ -72,8 +72,8 @@ username admin@yourserver.test and password 1
       tarball</a> and save it in
       <tt class="computeroutput">/tmp</tt> and proceed:</p><div class="orderedlist"><ol type="1"><li><p><a name="install-openacs-download"></a>Unpack the OpenACS tarball and rename it to <tt class="computeroutput">service0</tt>.  Secure the directory so that only the owner can access it.  Check the permissions by listing the directory.</p><pre class="screen">[root@yourserver root]# <b class="userinput"><tt>su - <span class="replaceable"><span class="replaceable">service0</span></span></tt></b>
 [service0@yourserver service0]$ <b class="userinput"><tt>cd /var/lib/aolserver</tt></b>
-[service0@yourserver aolserver]$ <b class="userinput"><tt>tar xzf /tmp/openacs-5.0.0a4.tgz</tt></b>
-[service0@yourserver aolserver]$ <b class="userinput"><tt>mv openacs-5.0.0a4 <span class="replaceable"><span class="replaceable">service0</span></span></tt></b>
+[service0@yourserver aolserver]$ <b class="userinput"><tt>tar xzf /tmp/openacs-5.0.0b1.tgz</tt></b>
+[service0@yourserver aolserver]$ <b class="userinput"><tt>mv openacs-5.0.0b1 <span class="replaceable"><span class="replaceable">service0</span></span></tt></b>
 [service0@yourserver aolserver]$ <b class="userinput"><tt>chmod -R 700 <span class="replaceable"><span class="replaceable">service0</span></span></tt></b>
 [service0@yourserver aolserver]$ <b class="userinput"><tt>ls -al</tt></b>
 total 3
@@ -86,8 +86,8 @@ logout
 [root@yourserver root]#
 <pre class="action"><span class="action">su - service0
 cd /var/lib/aolserver
-tar xzf /tmp/openacs-5.0.0a4.tgz
-mv openacs-5.0.0a4 service0
+tar xzf /tmp/openacs-5.0.0b1.tgz
+mv openacs-5.0.0b1 service0
 chmod -R 700 service0/
 exit</span></pre></pre></li><li><p><a href="cvs-service-import.html" title="Add the Service to CVS - OPTIONAL">Add the Service to CVS</a> (OPTIONAL)</p></li><li><p>Prepare the database</p><div class="itemizedlist"><ul type="disc"><li><p><a name="install-openacs-prepare-oracle"></a><b>Prepare Oracle for OpenACS. </b>If you won't be using Oracle, skip to <a href="openacs.html#install-openacs-prepare-postgres" title="Prepare PostgreSQL for an OpenACS Service">Prepare PostgreSQL for an OpenACS Service</a></p><p>
 	  You should be sure that your user account
@@ -315,7 +315,7 @@ nsd: no process killed
         AOLserver keepalive</a> (OPTIONAL)</p></li></ol></div></li><li><a name="install-openacs-using-installer"></a><p><b>Configure a Service with the OpenACS
           Installer. </b>
 	  Now that you've got AOLserver up and running, let's install OpenACS
-	  5.0.0a4.
+	  5.0.0b1.
 	</p><div class="itemizedlist"><ul type="disc"><li><p> 
 		  You should see a page from the webserver titled
 		  <tt class="computeroutput">OpenACS Installation:
@@ -371,7 +371,7 @@ Loading package .info files ... this will take a few minutes</pre><p>
 		  Give the server a few minutes to start up. Then
 		  reload the final page above. You should see the front page, with
 		  an area to login near the upper right.  Congratulations, OpenACS
-		  5.0.0a4 is now up and running!  
+		  5.0.0b1 is now up and running!  
 		</p></li></ul></div></li></ol></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="install-next-steps"></a>Next Steps</h3></div></div><div></div></div><div class="itemizedlist"><ul type="disc"><li><p>Install Full Text Search (OPTIONAL).  If you have <a href="install-full-text-search.html#install-openfts" title="Install OpenFTS module">installed OpenFTS</a> and enabled
         OpenFTS, you can now <a href="install-full-text-search.html#install-fts-engine" title="Install Full Text Search Engine">install</a> the OpenFTS Driver package and
         Full Text Search Engine package in the OpenACS service.</p></li><li><p>This is a good time to make a <a href="backup-recovery.html#snapshot-backup" title="Snapshot backup and recovery">backup</a> of your service.  If this is a

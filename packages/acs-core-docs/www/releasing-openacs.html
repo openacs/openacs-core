@@ -14,7 +14,7 @@ cvs -d :pserver:anonymous@dotlrn@openacs.org:/dotlrn-cvsroot checkout dotlrn-all
 cd /tmp/openacs-4
 cvs tag <span class="replaceable"><span class="replaceable">openacs-5-0-0a1</span></span>
 </span></pre></pre><p>Tag dotLRN.  Since the dotLRN packages aren't all in one module, we iterate through all of the modules.  Log in first (cvs login) so that you don't have to log in for each module.</p><pre class="screen"><pre class="action"><span class="action">
-cd /tmp/dotlrn-package
+cd /tmp/dotlrn-packages
 for dir in $(ls); do cd $dir; cvs tag <span class="replaceable"><span class="replaceable">dotlrn-2-0-0a3</span></span>; cd ..; done
 </span></pre></pre></li><li><p>Make the tarball</p><div class="itemizedlist"><ul type="disc"><li><p><b>openacs-core. </b></p><div class="orderedlist"><ol type="a"><li><p>Go to a new working space and export the tagged files.</p><pre class="screen">
 <pre class="action"><span class="action">mkdir /tmp/tarball
