@@ -4,7 +4,7 @@ ad_page_contract {
     testcase_id:nohtml
     package_key:nohtml
     {showsource 0}
-    {quiet 0}
+    {quiet 1}
 } -properties {
     title:onevalue
     context_bar:onevalue
@@ -20,24 +20,22 @@ ad_page_contract {
 set title "Test case $testcase_id"
 set context [list $title]
 
-db_multirow tests acs-automated-testing.testcase_query {
-    select to_char(timestamp,'DD-MM-YYYY HH24:MI:SS') timestamp, result, notes
-    from aa_test_results
-    where testcase_id = :testcase_id and
-    package_key = :package_key
-    order by test_id
-} {
-    if { ![info exists test_count($result)] } {
-        set test_count($result) 1
-    } else {
-        incr test_count($result)
-    }
+if {$quiet} {
+    set filter { and result = 'fail'}
+} else {
+    set filter {}
 }
 
-multirow create tests_quiet result count
-foreach result [array names test_count] {
-    multirow append tests_quiet $result $test_count($result)
+db_multirow tests_quiet summary {
+    select result, count(*) as count
+    from aa_test_results
+    where testcase_id = :testcase_id
+    and package_key = :package_key
+    group by result
 }
+
+
+db_multirow tests acs-automated-testing.testcase_query {}
 
 if {![db_0or1row acs-automated-testing.get_testcase_fails_count {
     select fails

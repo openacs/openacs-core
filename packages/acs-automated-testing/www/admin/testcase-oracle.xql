@@ -5,11 +5,12 @@
  
 <fullquery name="acs-automated-testing.testcase_query">
   <querytext>
-    select to_char(timestamp,'DD/MM/YYYY HH:MI:SS') timestamp, result, notes
-      from aa_test_results
-      where testcase_id = :testcase_id and
-            package_key = :package_key
-      order by test_id
+    select to_char(timestamp,'YYYY-MM-DD HH24:MI:SS') as timestamp, result, notes
+    from aa_test_results
+    where testcase_id = :testcase_id 
+        and package_key = :package_key
+    $filter
+    order by test_id
   </querytext>
 </fullquery>
 
