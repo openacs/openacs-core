@@ -667,7 +667,7 @@ declare
   v_lob_id                            integer;
   v_data                              text;
 begin
-       select i.storage_type, r.lob, 
+       select i.storage_type, r.lob 
          into v_storage_type, v_lob_id
          from cr_items i, cr_revisions r
         where i.item_id = r.item_id 
@@ -678,11 +678,10 @@ begin
         else 
            return content
              from cr_revisions
-            where revision_id = get_content_revision_id;
+            where revision_id = get_content__revision_id;
         end if;
 
 end;' language 'plpgsql';
-
 
 -- show errors
 
