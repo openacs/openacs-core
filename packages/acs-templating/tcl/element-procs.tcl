@@ -136,7 +136,7 @@ ad_proc -public template::element::set_properties { form_id element_id args } {
     @param form_id     The identifier of the form containing the element.
     @param element_id  The unique identifier of the element.
 
-    @see create
+    @see template::element::create
 } {
   get_reference
 
@@ -170,7 +170,7 @@ ad_proc -public template::element::get_value { form_id element_id } {
     @param element_id  The unique identifier of the element.
 
     @return The current value of the element.
-    @see get_values
+    @see template::element::get_values
 } {
   get_reference
 
@@ -191,7 +191,7 @@ ad_proc -public template::element::get_values { form_id element_id } {
     @param element_id  The unique identifier of the element.
 
     @return A list of current values for the element.
-    @see get_value
+    @see template::element::get_value
 } {
   get_reference
 
@@ -207,7 +207,8 @@ ad_proc -public template::element::get_property { form_id element_id property } 
     @param property    The property to be retreived
 
     @return The value of the property, or "" if the property does not exist
-    @see set_properties
+
+    @see template::element::set_properties
 } {
   get_reference
 

@@ -26,9 +26,9 @@ ad_proc -private publish::push_id { item_id {revision_id ""}} {
      The id of the revision to use. If missing, live
      revision will most likely be used
  
-  @see proc publish::pop_id 
-  @see proc publish::get_main_item_id
-  @see proc publish::get_main_revision_id
+  @see publish::pop_id 
+  @see publish::get_main_item_id
+  @see publish::get_main_revision_id
 
 } {
   variable item_id_stack 
@@ -82,9 +82,9 @@ ad_proc -private publish::pop_id {} {
   @return The popped item id, or the empty string if the string is
     already empty
  
-  @see proc publish::push_id 
-  @see proc publish::get_main_item_id
-  @see proc publish::get_main_revision_id
+  @see publish::push_id 
+  @see publish::get_main_item_id
+  @see publish::get_main_revision_id
 
 } {
   variable item_id_stack 
@@ -182,7 +182,7 @@ ad_proc -public publish::handle_binary_file {
      template, or "" if no template exists or the <tt>-no_merge</tt>
      flag was specified
  
-  @see proc publish::handle::image 
+  @see publish::handle::image 
 
 } {
 
@@ -240,7 +240,7 @@ ad_proc -private publish::html_args { argv } {
  
   @return An HTML string in format "name=value name=value ..."
  
-  @see proc publish::set_to_pairs
+  @see publish::set_to_pairs
 
 } {
   set extra_html ""
@@ -272,8 +272,8 @@ ad_proc -public publish::item_include_tag { item_id {extra_args {}} } {
  
   @return The HTML for the include tag
  
-  @see proc item::item_url
-  @see proc publish::html_args
+  @see item::get_url
+  @see publish::html_args
 
 } {
 
@@ -362,7 +362,7 @@ ad_proc -private publish::merge_with_template { item_id args } {
  
   @return The rendered HTML, or the empty string on failure
  
-  @see proc publish::handle_item
+  @see publish::handle_item
 
 } {
   #set ::content::item_id $item_id
@@ -487,7 +487,7 @@ ad_proc -public publish::get_mime_handler { mime_type } {
   @return The name of the proc which should be used to handle the mime-type,
    or an empty string on failure.
  
-  @see proc publish::handle_item
+  @see publish::handle_item
 
 } {
   set mime_pair [split $mime_type "/"]
@@ -517,9 +517,9 @@ ad_proc -private publish::get_main_item_id {} {
  
   @return the main item id
  
-  @see proc publish::pop_id 
-  @see proc publish::push_id 
-  @see proc publish::get_main_revision_id
+  @see publish::pop_id 
+  @see publish::push_id 
+  @see publish::get_main_revision_id
 
 } {
 
@@ -541,9 +541,9 @@ ad_proc -private publish::get_main_revision_id {} {
  
   @return the main item id
  
-  @see proc publish::pop_id 
-  @see proc publish::push_id 
-  @see proc publish::get_main_item_id
+  @see publish::pop_id 
+  @see publish::push_id 
+  @see publish::get_main_item_id
 
 } {
 
@@ -594,9 +594,9 @@ ad_proc -private publish::handle_item { item_id args } {
  
   @return The rendered HTML for the item, or an empty string on failure
  
-  @see proc publish::handle_binary_file
-  @see proc publish::handle::text
-  @see proc publish::handle::image
+  @see publish::handle_binary_file
+  @see publish::handle::text
+  @see publish::handle::image
 
 } {
 
@@ -729,8 +729,8 @@ ad_proc -public publish::render_subitem {
  
   @return The rendered HTML for the child item
  
-  @see proc publish::merge_with_template
-  @see proc publish::handle_item
+  @see publish::merge_with_template
+  @see publish::handle_item
 
 } {
 
@@ -803,7 +803,7 @@ ad_proc -private publish::process_tag { relation_type params } {
   @param relation_type  Either <tt>child</tt> or <tt>relation</tt>
   @param params         The ns_set id for extra HTML parameters
  
-  @see proc publish::render_subitem
+  @see publish::render_subitem
 
 } {
 
@@ -843,7 +843,7 @@ ad_proc -private publish::foreach_publish_path { url code {root_path ""} } {
      Use this root path instead of the paths specified in the INI
      file
   
-  @see proc publish::get_publish_roots
+  @see publish::get_publish_roots
 
 } {
   if { ![template::util::is_nil root_path] } {
@@ -876,8 +876,8 @@ ad_proc -private publish::write_multiple_blobs {
   @param url          Relative URL of the file to write
   @param revision_id  Write the blob for this revision 
  
-  @see proc publish::get_publish_roots
-  @see proc publish::write_multiple_files
+  @see publish::get_publish_roots
+  @see publish::write_multiple_files
 
 } {
   foreach_publish_path $url {
@@ -909,9 +909,9 @@ ad_proc -private publish::write_multiple_files { url text {root_path ""}} {
   @param url   Relative URL of the file to write
   @param text  A string of text to be written to the URL
  
-  @see proc template::util::write_file
-  @see proc publish::get_publish_roots
-  @see proc publish::write_multiple_blobs
+  @see template::util::write_file
+  @see publish::get_publish_roots
+  @see publish::write_multiple_blobs
 
 } {
     ns_log Notice "WRITE_MULTIPLE_FILES: root_path = $root_path"
@@ -955,8 +955,8 @@ ad_proc -public publish::write_content { revision_id args } {
   @return The relative URL of the file that was written, or an empty
           string on failure
  
-  @see proc content::get_content_value
-  @see proc publish::get_publish_roots
+  @see content::get_content_value
+  @see publish::get_publish_roots
 
 } {
 

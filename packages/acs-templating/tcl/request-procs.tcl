@@ -78,7 +78,7 @@ ad_proc -public template::request::set_param { name args } {
                       to 1 or 0, and message is to be displayed to the user 
                       when the validation step fails.
 
-    @see element::create
+    @see template::element::create
 } {
   set level [template::adp_level]
   eval template::element::create request $name $args

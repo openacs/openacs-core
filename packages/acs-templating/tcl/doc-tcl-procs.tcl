@@ -79,9 +79,9 @@ ad_proc -private doc::util::find_marker_indices { text marker } {
     of the text marker, returns a zero-element list
 
     @see namespace doc
-    @see proc doc::parse_file
-    @see proc doc::parse_namespace doc.html#doc::parse_namespace
-    @see proc doc::util::text_divider
+    @see doc::parse_file
+    @see doc::parse_namespace
+    @see doc::util::text_divider
 } {
 
   set indices_list [list]
@@ -108,7 +108,7 @@ ad_proc -private doc::util::text_divider { text_ref marker } {
     @param text name of string variable (not the string value itself)
     @param marker the string indicating text division
 
-    @see proc doc::util::find_marker_indices
+    @see doc::util::find_marker_indices
 } {
     upvar $text_ref text
     
@@ -581,9 +581,8 @@ ad_proc -private doc::parse_file { path } {
 ad_proc -private doc::parse_tcl_library { dir_list } {
     takes the absolute path of the tcl library directory and parses through it
 
-    @see proc doc::parse_file doc.html#doc::parse_file
-    @see namespace util util.html
-    @see proc template::util::comment_text_normalize util.html#template::util::comment_text_normalize
+    @see doc::parse_file 
+    @see template::util::comment_text_normalize
 
 
     @return a long lists of lists of lists, each list element contains 
