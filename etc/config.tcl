@@ -211,14 +211,25 @@ ns_param   $server            $servername
 ns_section ns/server/${server} 
 ns_param   directoryfile      $directoryfile
 ns_param   pageroot           $pageroot
+
 ns_param   maxconnections     5
 ns_param   maxdropped         0
-# Production sites with dedicated servers and a lot of memory can
-# increase minthreads and maxthreads to ~ 10 to increase performance.
-# You can also increase the threadtimeout to improve performance
 ns_param   maxthreads         5
 ns_param   minthreads         5
 ns_param   threadtimeout      120
+
+# Production sites with dedicated servers and a lot of memory can
+# set these parameters to increase performance. 
+# See http://openacs.org/forums/message-view?message_id=202297
+
+# ns_param maxconnections 100
+# ns_param maxkeepalive 100
+# ns_param keepalivetimeout 15
+# ns_param maxdropped 0
+# ns_param maxthreads 20
+# ns_param minthreads 20
+# ns_param threadtimeout 3600
+
 ns_param   globalstats        false    ;# Enable built-in statistics 
 ns_param   urlstats           false    ;# Enable URL statistics 
 ns_param   maxurlstats        1000     ;# Max number of URL's to do stats on
