@@ -1,7 +1,7 @@
 <html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Advanced Topics</title><meta name="generator" content="DocBook XSL Stylesheets V1.62.4"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="tutorial.html" title="Chapter 7. Development Tutorial"><link rel="previous" href="tutorial-debug.html" title="Debugging and Automated Testing"><link rel="next" href="dev-guide.html" title="Chapter 8. Development Reference"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="tutorial-debug.html">Prev</a> </td><th width="60%" align="center">Chapter 7. Development Tutorial</th><td width="20%" align="right"> <a accesskey="n" href="dev-guide.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="tutorial-advanced"></a>Advanced Topics</h2></div></div><div></div></div><div class="important" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Important</h3><p>This section is a work in progress.</p></div><div class="authorblurb"><p><p>by <a href="mailto:joel@aufrecht.org" target="_top">Joel Aufrecht</a></p><br>
           OpenACS docs are written by the named authors, and may be edited
           by OpenACS documentation staff.
-        </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2859828"></a>Overview</h3></div></div><div></div></div><p>This tutorial covers topics which are not essential to
+        </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2859299"></a>Overview</h3></div></div><div></div></div><p>This tutorial covers topics which are not essential to
     creating a minimal working package.  Each section can be used
     independently of all of the others; all sections assume that
     you've completed the basic tutorial.</p><div class="itemizedlist"><ul type="disc"><li><p>How to enforce security so that users can't
@@ -9,7 +9,7 @@
       ... what?</p></li><li><p>How to change the default stylesheets for Form
       Builder HTML forms.</p></li><li><p>How to make your package searchable with OpenFTS/Oracle</p></li><li><p>How to make your package send email notifications</p></li><li><p>How to prepare pagelets for inclusion in other pages</p></li><li><p>How and when to put procedures in a tcl procedure library</p></li><li><p>How to add general_comments to your pages</p></li><li><p>More on ad_form - data validation, other stuff.
       (plan to draw from Jon Griffin's doc)</p></li><li><p>How and when to implement caching</p></li><li><p>partialquery in xql</p></li><li><p>How to use the html/text entry widget to get the
-      "does this look right" confirm page </p></li><li><p>APM package dependencies</p></li></ul></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2860370"></a>Write the Requirements and Design Specs</h3></div></div><div></div></div><p>It's time to document.  For the tutorial we'll use
+      "does this look right" confirm page </p></li><li><p>APM package dependencies</p></li></ul></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2856449"></a>Write the Requirements and Design Specs</h3></div></div><div></div></div><p>It's time to document.  For the tutorial we'll use
       pre-written documentation.  When creating a package
       from scratch, start by copying the documentation template from
 	<tt class="computeroutput">/var/lib/aolserver/openacs-dev/packages/acs-core-docs/xml/docs/xml/package-documentation-template.xml</tt>
@@ -22,11 +22,11 @@
 	<tt class="computeroutput">www/doc</tt> directory.</p><p>For this tutorial, you should instead install the
 	pre-written documentation files for the tutorial app.  Log in
       as <span class="replaceable"><span class="replaceable">service0</span></span>, create the standard
-      directories, and copy the prepared documentation:</p><pre class="screen">[service0 service0]$ <b class="userinput"><tt>cd /var/lib/aolserver/service0/packages/samplenote/</tt></b>
-[service0 samplenote]$ <b class="userinput"><tt>mkdir -p www/doc/xml</tt></b>
-[service0 samplenote]$ <b class="userinput"><tt>cd www/doc/xml</tt></b>
-[service0 xml]$ <b class="userinput"><tt>cp /var/lib/aolserver/service0/packages/acs-core-docs/www/files/samplenote/* .</tt></b>
-[service0 xml]$</pre><p> OpenACS uses DocBook for documentation.  DocBook is
+      directories, and copy the prepared documentation:</p><pre class="screen">[service0@yourserver service0]$ <b class="userinput"><tt>cd /var/lib/aolserver/service0/packages/samplenote/</tt></b>
+[service0@yourserver samplenote]$ <b class="userinput"><tt>mkdir -p www/doc/xml</tt></b>
+[service0@yourserver samplenote]$ <b class="userinput"><tt>cd www/doc/xml</tt></b>
+[service0@yourserver xml]$ <b class="userinput"><tt>cp /var/lib/aolserver/service0/packages/acs-core-docs/www/files/samplenote/* .</tt></b>
+[service0@yourserver xml]$</pre><p> OpenACS uses DocBook for documentation.  DocBook is
 	an XML standard for semantic markup of documentation.  That
 	means that the tags you use indicate meaning, not intended
 	appearance.  The style sheet will determine appearance.  You
@@ -42,7 +42,7 @@
       is stored in the <tt class="computeroutput">www/docs/</tt>
       directory.  A Makefile is provided to generate html from the xml, and copy all of the
       supporting files.  If Docbook is set up correctly, all you need
-      to do is:</p><pre class="screen">[service0 xml]$<b class="userinput"><tt> make</tt></b>
+      to do is:</p><pre class="screen">[service0@yourserver xml]$<b class="userinput"><tt> make</tt></b>
 cd .. ; /usr/bin/xsltproc ../../../acs-core-docs/www/xml/openacs.xsl xml/index.xml
 Writing requirements-introduction.html for sect1(requirements-introduction)
 Writing requirements-overview.html for sect1(requirements-overview)
@@ -58,25 +58,25 @@ Writing user-guide.html for chapter(user-guide)
 Writing admin-guide.html for chapter(admin-guide)
 Writing bi01.html for bibliography
 Writing index.html for book
-[service0 xml]$</pre><p>Verify that the documentation was generated and reflects
-      your changes by browsing to <tt class="computeroutput">http://<span class="replaceable"><span class="replaceable">yoursite</span></span>:8000/samplenote/doc</tt></p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2860552"></a>Add the new package to CVS</h3></div></div><div></div></div><p>Before you do any more work, make sure that your work is
+[service0@yourserver xml]$</pre><p>Verify that the documentation was generated and reflects
+      your changes by browsing to <tt class="computeroutput">http://<span class="replaceable"><span class="replaceable">yoursite</span></span>:8000/samplenote/doc</tt></p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2859982"></a>Add the new package to CVS</h3></div></div><div></div></div><p>Before you do any more work, make sure that your work is
       protected by putting it all into cvs.  The <tt class="computeroutput">cvs
       add</tt> command is not recursive, so you'll have to
       traverse the directory tree manually and add as you go.  (<a href="http://www.piskorski.com/docs/cvs-conventions.html" target="_top">More on
-      CVS</a>)</p><pre class="screen">[service0 xml]$ <b class="userinput"><tt>cd ..</tt></b>
-[service0 doc]$ <b class="userinput"><tt>cd ..</tt></b>
-[service0 www]$ <b class="userinput"><tt>cd ..</tt></b>
-[service0 samplenote]$ <b class="userinput"><tt>cd ..</tt></b>
-[service0 packages]$ <b class="userinput"><tt>cvs add samplenote/</tt></b>
+      CVS</a>)</p><pre class="screen">[service0@yourserver xml]$ <b class="userinput"><tt>cd ..</tt></b>
+[service0@yourserver doc]$ <b class="userinput"><tt>cd ..</tt></b>
+[service0@yourserver www]$ <b class="userinput"><tt>cd ..</tt></b>
+[service0@yourserver samplenote]$ <b class="userinput"><tt>cd ..</tt></b>
+[service0@yourserver packages]$ <b class="userinput"><tt>cvs add samplenote/</tt></b>
 Directory /cvsroot/service0/packages/samplenote added to the repository
-[service0 packages]$ <b class="userinput"><tt>cd samplenote/</tt></b>
-[service0 samplenote]$ <b class="userinput"><tt>cvs add www</tt></b>
+[service0@yourserver packages]$ <b class="userinput"><tt>cd samplenote/</tt></b>
+[service0@yourserver samplenote]$ <b class="userinput"><tt>cvs add www</tt></b>
 Directory /cvsroot/service0/packages/samplenote/www added to the repository
-[service0 samplenote]$ <b class="userinput"><tt>cd www</tt></b>
-[service0 www]$ <b class="userinput"><tt>cvs add doc</tt></b>
+[service0@yourserver samplenote]$ <b class="userinput"><tt>cd www</tt></b>
+[service0@yourserver www]$ <b class="userinput"><tt>cvs add doc</tt></b>
 Directory /cvsroot/service0/packages/samplenote/www/doc added to the repository
-[service0 www]$ <b class="userinput"><tt>cd doc</tt></b>
-[service0 doc]$ <b class="userinput"><tt>cvs add *</tt></b>
+[service0@yourserver www]$ <b class="userinput"><tt>cd doc</tt></b>
+[service0@yourserver doc]$ <b class="userinput"><tt>cvs add *</tt></b>
 cvs add: cannot add special file `CVS'; skipping
 cvs add: scheduling file `admin-guide.html' for addition
 cvs add: scheduling file `bi01.html' for addition
@@ -101,13 +101,13 @@ cvs add: scheduling file `user-interface.dia' for addition
 cvs add: scheduling file `user-interface.png' for addition
 Directory /cvsroot/service0/packages/samplenote/www/doc/xml added to the repository
 cvs add: use 'cvs commit' to add these files permanently
-[service0 doc]$ <b class="userinput"><tt>cd xml</tt></b>
-[service0 xml]$ <b class="userinput"><tt>cvs add Makefile index.xml</tt></b>
+[service0@yourserver doc]$ <b class="userinput"><tt>cd xml</tt></b>
+[service0@yourserver xml]$ <b class="userinput"><tt>cvs add Makefile index.xml</tt></b>
 cvs add: scheduling file `Makefile' for addition
 cvs add: scheduling file `index.xml' for addition
 cvs add: use 'cvs commit' to add these files permanently
-[service0 xml]$<b class="userinput"><tt> cd ../../..</tt></b>
-[service0 samplenote]$ <b class="userinput"><tt>cvs commit -m "new package"</tt></b>
+[service0@yourserver xml]$<b class="userinput"><tt> cd ../../..</tt></b>
+[service0@yourserver samplenote]$ <b class="userinput"><tt>cvs commit -m "new package"</tt></b>
 cvs commit: Examining .
 cvs commit: Examining www
 cvs commit: Examining www/doc
@@ -119,8 +119,8 @@ Checking in www/doc/admin-guide.html;
 initial revision: 1.1
 done
 <span class="emphasis"><em>(many lines omitted)</em></span>
-[service0 samplenote]$</pre></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2855530"></a>Delete with confirmation</h3></div></div><div></div></div><p>We need a way to delete records.  We'll create a
-    recursive confirmation page.</p><p>Add this column to the table_def in index.tcl</p><pre class="programlisting">{delete "" {} {&lt;td&gt;&lt;a href="note-delete?note_id=$note_id"&gt;Delete&lt;/a&gt;&lt;/td&gt;}}</pre><p>Create the delete confirmation/execution page.</p><pre class="screen">[service0 www]$ <b class="userinput"><tt>emacs note-delete.tcl</tt></b></pre><pre class="programlisting">ad_page_contract {
+[service0@yourserver samplenote]$</pre></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2860141"></a>Delete with confirmation</h3></div></div><div></div></div><p>We need a way to delete records.  We'll create a
+    recursive confirmation page.</p><p>Add this column to the table_def in index.tcl</p><pre class="programlisting">{delete "" {} {&lt;td&gt;&lt;a href="note-delete?note_id=$note_id"&gt;Delete&lt;/a&gt;&lt;/td&gt;}}</pre><p>Create the delete confirmation/execution page.</p><pre class="screen">[service0@yourserver www]$ <b class="userinput"><tt>emacs note-delete.tcl</tt></b></pre><pre class="programlisting">ad_page_contract {
     A page that gets confirmation and then delete notes.
 
     @author joel@aufrecht.org
@@ -160,7 +160,7 @@ with hidden variables carrying both
 <tt class="computeroutput">note_id</tt> and
 <tt class="computeroutput">confirm_p</tt>.  If confirm_p is present,
 we delete the record, set redirection back to the index, and abort
-script execution.</p><p>The database commands:</p><pre class="screen">[service0 www]$ <b class="userinput"><tt>emacs note-delete.xql</tt></b></pre><pre class="programlisting">&lt;?xml version="1.0"?&gt;
+script execution.</p><p>The database commands:</p><pre class="screen">[service0@yourserver www]$ <b class="userinput"><tt>emacs note-delete.xql</tt></b></pre><pre class="programlisting">&lt;?xml version="1.0"?&gt;
 &lt;queryset&gt;
   &lt;fullquery name="do_delete"&gt;
     &lt;querytext&gt;
@@ -172,14 +172,14 @@ script execution.</p><p>The database commands:</p><pre class="screen">[service0 
       select samplenote__name(:note_id)
     &lt;/querytext&gt;
   &lt;/fullquery&gt;
-&lt;/queryset&gt;</pre><p>And the adp page:</p><pre class="screen">[service0 www]$ <b class="userinput"><tt>emacs note-delete.adp</tt></b></pre><pre class="programlisting">&lt;master&gt;
+&lt;/queryset&gt;</pre><p>And the adp page:</p><pre class="screen">[service0@yourserver www]$ <b class="userinput"><tt>emacs note-delete.adp</tt></b></pre><pre class="programlisting">&lt;master&gt;
 &lt;property name="title"&gt;@title@&lt;/property&gt;
 &lt;property name="context"&gt;{@title@}&lt;/property&gt;
 &lt;h2&gt;@title@&lt;/h2&gt;
 &lt;formtemplate id="note-del-confirm"&gt;&lt;/formtemplate&gt;
 &lt;/form&gt;</pre><p>The ADP is very simple.  The
 <tt class="computeroutput">formtemplate</tt> tag outputs the HTML
-form generated by the ad_form command with the matching name.  Test it by adding the new files in the APM and then deleting a few samplenotes.</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2855688"></a>General_comments</h3></div></div><div></div></div><p>You can track comments for any ACS Object.  Here we'll track
+form generated by the ad_form command with the matching name.  Test it by adding the new files in the APM and then deleting a few samplenotes.</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2859051"></a>General_comments</h3></div></div><div></div></div><p>You can track comments for any ACS Object.  Here we'll track
     comments for notes.  On the notes.tcl/adp pair, which is used to
     display individual notes, we want to put a link to add comments at
     the bottom of the screen.  If there are any comments, we want to
@@ -200,7 +200,7 @@ set comment_add_url "[general_comments_package_url]comment-add?[export_vars {
     there are comments. Then you pass the note id, which is also the
     acs_object id.</p><p>We put our two new variables in the notes.adp
     page.</p><pre class="programlisting">&lt;a href="@comment_add_url@"&gt;Add a comment&lt;/a&gt;
-@comments_html@</pre></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2855764"></a>Prepare the package for distribution.</h3></div></div><div></div></div><p>Browse to the package manager.  Click on
+@comments_html@</pre></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2859127"></a>Prepare the package for distribution.</h3></div></div><div></div></div><p>Browse to the package manager.  Click on
         <tt class="computeroutput"><span class="guilabel"><span class="guilabel">tutorialapp</span></span></tt>.</p><p>Click on <tt class="computeroutput"><span class="guilabel"><span class="guilabel">Generate a distribution file
         for this package from the
         filesystem</span></span></tt>.
@@ -208,5 +208,112 @@ set comment_add_url "[general_comments_package_url]comment-add?[export_vars {
         (<tt class="computeroutput"><span class="guilabel"><span class="guilabel">37.1KB</span></span></tt>)
         after the label <tt class="computeroutput"><span class="guilabel"><span class="guilabel">Distribution
         File:</span></span></tt> and save the file to
-        /tmp.</p><p><a class="indexterm" name="id2855816"></a>
-</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="tutorial-debug.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="dev-guide.html">Next</a></td></tr><tr><td width="40%" align="left">Debugging and Automated Testing </td><td width="20%" align="center"><a accesskey="u" href="tutorial.html">Up</a></td><td width="40%" align="right"> Chapter 8. Development Reference</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a><center><a href="http://openacs.org/doc/tutorial-advanced.html#comments">View comments on this page at openacs.org</a></center></body></html>
+        /tmp.</p><p><a class="indexterm" name="id2859179"></a>
+</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2859192"></a>Notifications</h3></div></div><div></div></div><div class="authorblurb"><p><p>by <a href="mailto:dave@student.usyd.edu.au" target="_top">David Bell</a> and <a href="mailto:simon@collaboraid.net" target="_top">Simon Carstensen</a></p><br>
+          OpenACS docs are written by the named authors, and may be edited
+          by OpenACS documentation staff.
+        </p></div><p>The notifications package allows you to send notifications through any 
+    defined communications medium (e.g. email, sms) upon some event occuring within 
+    the system.</p><p>This tutorial steps through the process of integrating the notifications 
+    package with your package.</p><p>First step is to create the notification types. To do this a script similar 
+    to the one below needs to be loaded into Postgresql. I create this script in a 
+    package-name/sql/postgresql/package-name-notifications-init.sql file. I then load 
+    this file from my create sql file. The following code snippet is taken from 
+    Weblogger. It creates a lars_blogger_notif notification type (which was created 
+    above).</p><pre class="programlisting">
+    create function inline_0() returns integer as '
+    declare
+            impl_id integer;
+            v_foo   integer;
+    begin
+        -- the notification type impl
+        impl_id := acs_sc_impl__new (
+                      ''NotificationType'',
+                      ''lars_blogger_notif_type'',
+                      ''lars-blogger''
+        );
+
+        v_foo := acs_sc_impl_alias__new (
+                    ''NotificationType'',
+                    ''lars_blogger_notif_type'',
+                    ''GetURL'',
+                    ''lars_blogger::notification::get_url'',
+                    ''TCL''
+        );
+
+        v_foo := acs_sc_impl_alias__new (
+                    ''NotificationType'',
+                    ''lars_blogger_notif_type'',
+                    ''ProcessReply'',
+                    ''lars_blogger::notification::process_reply'',
+                    ''TCL''
+        );
+
+        PERFORM acs_sc_binding__new (
+                    ''NotificationType'',
+                    ''lars_blogger_notif_type''
+        );
+
+        v_foo:= notification_type__new (
+	        NULL,
+                impl_id,
+                ''lars_blogger_notif'',
+                ''Blog Notification'',
+                ''Notifications for Blog'',
+		now(),
+                NULL,
+                NULL,
+		NULL
+        );
+
+        -- enable the various intervals and delivery methods
+        insert into notification_types_intervals
+        (type_id, interval_id)
+        select v_foo, interval_id
+        from notification_intervals where name in (''instant'',''hourly'',''daily'');
+
+        insert into notification_types_del_methods
+        (type_id, delivery_method_id)
+        select v_foo, delivery_method_id
+        from notification_delivery_methods where short_name in (''email'');
+
+        return (0);
+    end;
+    ' language 'plpgsql';
+
+    select inline_0();
+    drop function inline_0();
+    </pre><p>The next step is to setup our notification creation. A new notification must 
+    be added to the notification table for each blog entry added. We do this using the 
+    notification::new procedure</p><pre class="programlisting">
+        notification::new \
+            -type_id [notification::type::get_type_id \
+            -short_name lars_blogger_notif] \
+            -object_id $blog(package_id) \
+            -response_id $blog(entry_id) \
+            -notif_subject $blog(title) \
+            -notif_text $new_content
+    </pre><p>This code is placed in the tcl procedure that creates blog entries, right after
+    the entry gets created in the code. The <tt class="computeroutput">$blog(package_id)</tt> 
+    is the OpenACS object_id of the Weblogger instance to which the entry has been posted to 
+    and the <tt class="computeroutput">$new_content</tt> is the content of the entry.</p><p>The final step is to setup the notification subscription process. In this 
+    example we want to let a user find out when a new entry has been posted to the blog. To 
+    do this we put a link on the blog that allows them to subscribe to notifications of new 
+    entries. The notifications/requests-new page is very handy in this situation.</p><p>Such a link can be created using the <tt class="computeroutput">notification::display::request_widget</tt> 
+    proc:</p><pre class="programlisting">
+    set notification_chunk [notification::display::request_widget \
+        -type lars_blogger_notif \
+        -object_id $package_id \
+        -pretty_name [lars_blog_name] \
+        -url [lars_blog_public_package_url] \
+    ]
+    </pre><p>which will return something like
+
+    </p><pre class="programlisting">
+    You may &lt;a href="/notifications/request-new?..."&gt;request notification&lt;/a&gt; for Weblogger.</pre><p>
+
+    which can be readily put on the blog index page. The <tt class="computeroutput">pretty_name</tt> 
+    parameter is what appears at the end of the text returned (i.e. "... request notification&lt;/a&gt; for pretty_name"), 
+    The <tt class="computeroutput">url</tt> parameter should be set to the address we want the user 
+    to be redirected to after they have finished the subscription process.</p><p>This should be all you need to implement a notification system. For more examples
+    look at the forums package.</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="tutorial-debug.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="dev-guide.html">Next</a></td></tr><tr><td width="40%" align="left">Debugging and Automated Testing </td><td width="20%" align="center"><a accesskey="u" href="tutorial.html">Up</a></td><td width="40%" align="right"> Chapter 8. Development Reference</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a><center><a href="http://openacs.org/doc/tutorial-advanced.html#comments">View comments on this page at openacs.org</a></center></body></html>
