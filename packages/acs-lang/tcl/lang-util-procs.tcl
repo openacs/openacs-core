@@ -156,6 +156,7 @@ ad_proc lang::util::replace_temporary_tags_with_lookups {
     # Read messages from any existing catalog file
     # Get the package the files belong to
     set first_file [lindex $file_list 0]
+    
     if { ![regexp {/?packages/([^/]+)/} $first_file match package_key] } {
         error "lang::util::replace_temporary_tags_with_lookups - Could not extract package_key from file $first_file"
     }
@@ -299,14 +300,15 @@ ad_proc lang::util::replace_temporary_tags_with_lookups {
     }
 
     if { $number_of_replacements > 0 } {
-        # Use the messages array to generate a new catalog file
-        lang::catalog::export_messages_to_file $catalog_file_path [array get messages_array]
-
         # Register the messages in the database so that the new messages are immediately reflected
         # in the system
         foreach {message_key message_text} [array get messages_array] {
             lang::message::register en_US $package_key $message_key $message_text
         }
+
+        # Generate a new catalog file
+        array set catalog_file [apm_parse_catalog_path $catalog_file_path]
+        lang::catalog::export_package_to_files -locales [list $catalog_file(locale)] $catalog_file(package_key)
     }
 
     return $number_of_replacements
