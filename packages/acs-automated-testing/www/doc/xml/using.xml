@@ -1,0 +1,64 @@
+<?xml version='1.0' ?>
+<!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+"http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
+]>
+<sect1 id="usage">
+  <title>Usage</title>
+  <authorblurb>
+    <para>by <ulink url="mailto:joel@aufrecht.org">Joel Aufrecht</ulink></para>
+  </authorblurb>
+
+  <para>Here's the entire chain of code used to set up auto-rebuilding servers on test.openacs.org</para>
+
+  <itemizedlist>
+    <listitem>
+      <para>The master server shows the status of all other servers.  For test.openacs.org, it listens on port 80.</para>
+      <orderedlist>
+        <listitem>
+          <para>The acs-automated-testing parameter <computeroutput>IsInstallReportServer</computeroutput> is set to 1</para>
+        </listitem>
+        <listitem>
+          <para>The acs-automated-testing parameter <computeroutput>XMLReportDir</computeroutput> is set to <computeroutput>/var/log/openacs-install</computeroutput>.  This is arbitrary - it just needs to be somewhere all the servers can write to.</para>
+        </listitem>
+      </orderedlist>
+    </listitem>
+    <listitem>
+      <para>For each server that will be monitored:</para>
+      <orderedlist>
+        <listitem>
+          <para>Suppose the first test server is <replaceable>service1</replaceable>.  Set up a dedicated user and <ulink url="http://openacs.org/doc/openacs-5-0-0/openacs.html#install-with-script">automated install script</ulink>.</para>
+        </listitem>
+        <listitem>
+          <para>To run automated testing automatically each time the server is rebuilt, add this to /home/service1/install/install.tcl:</para>
+          <programlisting>       set do_tclapi_testing "yes"</programlisting>
+        </listitem>
+        <listitem>
+          <para>Get the results of the automated tests dumped where the master server can see them - in this example, the same directory as above, <computeroutput>/var/log/openacs-install</computeroutput>, by adding this to install.tcl  (requires 5.1):</para>
+          <programlisting>          set install_xml_file          "/var/lib/aolserver/service0/packages/acs-core-docs/www/files/install-autotest.xml"</programlisting>
+          <para>This will copy in the file <computeroutput>install-autotest.xml</computeroutput>:</para>
+          <programlisting><xi:include href="../../../../acs-core-docs/www/files/install-autotest.xml" xi:parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"><xi:fallback>example missing</xi:fallback></xi:include></programlisting>          
+          <para>which will, during install, configure that parameter in acs-automated-testing on the monitored server.</para>
+        </listitem>
+      </orderedlist>
+    </listitem>
+    <listitem>
+      <para>To enable the 'rebuild server' link, edit the file /usr/local/bin/rebuild-server.sh:</para>
+      <programlisting>#!/bin/sh
+# script to trigger a server rebuild
+
+# hard-coding the valid server names here for some minimal security
+case $1 in
+    service1) ;;
+    service2) ;;
+   "") echo "Usage: $0 servername"
+        exit;;
+    *) echo "$1 is not a permitted servername"
+       exit;;
+esac
+
+sudo /home/$1/install/install.sh 2>&amp;1</programlisting>
+      <para>and allow the <computeroutput>master</computeroutput> user to execute this file as root (this is a limitation of the automatic install script, which must be root).  In <computeroutput>/etc/sudoers</computeroutput>, include a line:</para>
+      <programlisting>master ALL = NOPASSWD: /usr/local/bin/rebuild-server.sh</programlisting>
+    </listitem>
+  </itemizedlist>
+</sect1>
