@@ -204,7 +204,7 @@ create or replace function content_folder__delete (integer, boolean)
 returns integer as '
 declare
   delete__folder_id              alias for $1;  
-  p_cascade_p      alias for $2;
+  p_cascade_p                    alias for $2;
   v_count                        integer;       
   v_child_row                    record;
   v_parent_id                    integer;  
@@ -396,7 +396,7 @@ declare
   copy__target_folder_id       alias for $2;  
   copy__creation_user          alias for $3;  
   copy__creation_ip            alias for $4;  -- default null  
-  v_valid_folders_p            integer        
+  v_valid_folders_p            integer;        
   v_current_folder_id          cr_folders.folder_id%TYPE;
   v_name                       cr_items.name%TYPE;
   v_label                      cr_folders.label%TYPE;
@@ -421,8 +421,8 @@ declare
   copy__target_folder_id       alias for $2;  
   copy__creation_user          alias for $3;  
   copy__creation_ip            alias for $4;  -- default null
-  copy__name              alias for $5; -- default null
-  v_valid_folders_p            integer        
+  copy__name                   alias for $5; -- default null
+  v_valid_folders_p            integer;
   v_current_folder_id          cr_folders.folder_id%TYPE;
   v_name                       cr_items.name%TYPE;
   v_label                      cr_folders.label%TYPE;

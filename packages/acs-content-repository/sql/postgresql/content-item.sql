@@ -2099,7 +2099,7 @@ begin
 		copy2__target_folder_id,
 		copy2__creation_user,
 		copy2__creation_ip,
-		''''
+		null
 		);
 	return copy2__item_id;
 
@@ -2157,14 +2157,6 @@ begin
         copy__creation_user,
         copy__creation_ip,
 	copy__name
-    );
-  -- call content_extlink.copy if the item is an url
-  else if content_extlink__is_extlink(copy2__item_id) = ''t'' then
-    PERFORM content_extlink__copy(
-        copy2__item_id,
-        copy2__target_folder_id,
-        copy2__creation_user,
-        copy2__creation_ip
     );
   -- make sure the target folder is really a folder
   else if content_folder__is_folder(copy__target_folder_id) = ''t'' then
