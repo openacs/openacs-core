@@ -30,22 +30,14 @@ descendants are referred to as "<em>Subject Categories</em>".</p>
 
 <p>The <tt>content_keyword</tt> object type is used to represent
 Subject Keywords (see <tt>content_keyword.sql</tt>) The
-<tt>content_keyword</tt> type inherits from <tt>content_item</tt>;
-thus, Subject Keywords are themselves content items and may use any of
-the attributes of the <tt>content_item</tt> type, such as
-<tt>name</tt> or <tt>locale</tt>:
+<tt>content_keyword</tt> type inherits from <tt>acs_object</tt>:
 
 <pre>
- acs_object_type.create_type (
-   supertype     => 'acs_object',
-   object_type   => 'content_keyword',
-   pretty_name   => 'Content Keyword',
-   pretty_plural => 'Content Keywords',
-   table_name    => 'cr_keywords',
-   id_column     => 'keyword_id',
-   name_method   => 'acs_object.default_name'
- );
-</pre>
+ acs_object_type.create_type ( supertype => 'acs_object', object_type
+   => 'content_keyword', pretty_name => 'Content Keyword',
+   pretty_plural => 'Content Keywords', table_name => 'cr_keywords',
+   id_column => 'keyword_id', name_method => 'acs_object.default_name'
+   ); </pre>
 
 In addition, the <tt>cr_keywords</tt> table (see <tt>content-create.sql</tt>) 
 contains extended attributes of Subject Keywords:

@@ -58,6 +58,10 @@
             <file type="data_model_upgrade" db_type="oracle" path="sql/oracle/upgrade/upgrade-4.0-4.0.1.sql"/>
             <file type="data_model_upgrade" db_type="oracle" path="sql/oracle/upgrade/upgrade-4.1-4.1.2.sql"/>
             <file type="data_model_upgrade" db_type="oracle" path="sql/oracle/upgrade/upgrade-4.5-4.6.sql"/>
+            <file type="data_model_upgrade" db_type="oracle" path="sql/oracle/upgrade/upgrade-4.6-4.6.1.sql"/>
+            <file type="data_model_upgrade" db_type="oracle" path="sql/oracle/upgrade/upgrade-4.6.1-4.6.2.sql"/>
+            <file type="data_model_upgrade" db_type="oracle" path="sql/oracle/upgrade/upgrade-4.6.2-4.6.3.sql"/>
+            <file type="data_model_upgrade" db_type="oracle" path="sql/oracle/upgrade/upgrade-4.6.3-4.6.4.sql"/>
             <file type="data_model_create" db_type="postgresql" path="sql/postgresql/acs-content-repository-create.sql"/>
             <file type="data_model" db_type="postgresql" path="sql/postgresql/content-create.sql"/>
             <file type="data_model" db_type="postgresql" path="sql/postgresql/content-drop.sql"/>
@@ -88,6 +92,9 @@
             <file type="data_model_upgrade" db_type="postgresql" path="sql/postgresql/upgrade/upgrade-4.1.2-4.5.sql"/>
             <file type="data_model_upgrade" db_type="postgresql" path="sql/postgresql/upgrade/upgrade-4.5-4.6.sql"/>
             <file type="data_model_upgrade" db_type="postgresql" path="sql/postgresql/upgrade/upgrade-4.6-4.6.1.sql"/>
+            <file type="data_model_upgrade" db_type="postgresql" path="sql/postgresql/upgrade/upgrade-4.6.1-4.6.2.sql"/>
+            <file type="data_model_upgrade" db_type="postgresql" path="sql/postgresql/upgrade/upgrade-4.6.2-4.6.3.sql"/>
+            <file type="data_model_upgrade" db_type="postgresql" path="sql/postgresql/upgrade/upgrade-4.6.3-4.6.4.sql"/>
             <file type="query_file" db_type="oracle" path="tcl/acs-content-repository-init-oracle.xql"/>
             <file type="query_file" db_type="postgresql" path="tcl/acs-content-repository-init-postgresql.xql"/>
             <file type="tcl_init" path="tcl/acs-content-repository-init.tcl"/>
