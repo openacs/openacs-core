@@ -66,6 +66,8 @@ ad_proc apm_guess_file_type { package_key path } {
     level of the package, are considered documentation files.
     <li>Files with a path component named <code>www</code> or <code>admin-www</code>
     are considered content-page files.
+    <li>Files with a path component named <code>lib</code>
+    are considered include_page files.
     <li>Files under package-key/tcl ending in <code>-procs(-)+()*.tcl)</code> or <code>-init.tcl</code> are considered
     Tcl procedure or Tcl initialization files, respectively.
     <li>File ending in <code>.tcl</code> are considered Tcl utility script files (normally
@@ -143,6 +145,8 @@ ad_proc apm_guess_file_type { package_key path } {
 
     } elseif { [lsearch $components_lesser "www"] >= 0 || [lsearch $components_lesser "admin-www"] >= 0 } {
 	set type "content_page"
+    } elseif { [lsearch $components_lesser "lib"] >= 0 } {
+	set type "include_page"
     } elseif { [string equal $extension ".tcl"] && [string equal [lindex $components_lesser 0] "tcl"] } {
         # A .tcl file residing under dir .../package_key/tcl/
         if { [regexp -- {-(procs|init)(-[0-9a-zA-Z]*)?\.tcl$} [file tail $path] "" kind] } {
