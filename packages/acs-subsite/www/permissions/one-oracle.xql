@@ -1,11 +1,11 @@
 <?xml version="1.0"?>
 
 <queryset>
-   <rdbms><type>postgresql</type><version>7.1</version></rdbms>
+   <rdbms><type>oracle</type><version>8.1.6</version></rdbms>
 
 <fullquery name="name">      
       <querytext>
-      select acs_object__name(:object_id) 
+      select acs_object.name(:object_id) from dual
       </querytext>
 </fullquery>
 
@@ -14,15 +14,15 @@
       <querytext>
       
   select grantee_id, grantee_name, privilege
-  from (select grantee_id, acs_object__name(grantee_id) as grantee_name,
+  from (select grantee_id, acs_object.name(grantee_id) as grantee_name,
                privilege, 1 as counter
         from acs_permissions_all
         where object_id = :object_id
         union all
-        select grantee_id, acs_object__name(grantee_id) as grantee_name,
+        select grantee_id, acs_object.name(grantee_id) as grantee_name,
                privilege, -1 as counter
         from acs_permissions
-        where object_id = :object_id) dummy
+        where object_id = :object_id)
   group by grantee_id, grantee_name, privilege
   having sum(counter) > 0
 
@@ -33,7 +33,7 @@
 <fullquery name="acl">      
       <querytext>
       
-  select grantee_id, acs_object__name(grantee_id) as grantee_name,
+  select grantee_id, acs_object.name(grantee_id) as grantee_name,
          privilege
   from acs_permissions
   where object_id = :object_id
@@ -45,7 +45,7 @@
 <fullquery name="context">      
       <querytext>
       
-  select acs_object__name(context_id)
+  select acs_object.name(context_id)
   from acs_objects
   where object_id = :object_id
 
@@ -56,7 +56,7 @@
 <fullquery name="children">      
       <querytext>
       
-	select object_id as c_object_id,acs_object__name(object_id) as c_name
+	select object_id as c_object_id,acs_object.name(object_id) as c_name
 	from acs_objects o
 	where context_id = :object_id
               and exists (select 1
