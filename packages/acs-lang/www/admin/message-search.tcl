@@ -13,8 +13,8 @@ ad_page_contract {
 set current_locale $locale
 set default_locale en_US
 
-set locale_label [ad_locale_get_label $current_locale]
-set default_locale_label [ad_locale_get_label $default_locale]
+set locale_label [lang::util::get_label $current_locale]
+set default_locale_label [lang::util::get_label $default_locale]
 
 set page_title "Search Messages"
 set context [list [list "package-list?[export_vars { locale }]" $locale_label] $page_title]
@@ -22,8 +22,8 @@ set context [list [list "package-list?[export_vars { locale }]" $locale_label] $
 set default_locale en_US
 
 set search_locales [list]
-lappend search_locales [list "Current locale - [ad_locale_get_label $locale]" $locale ]
-lappend search_locales [list "Master locale - [ad_locale_get_label $default_locale]" $default_locale]
+lappend search_locales [list "Current locale - [lang::util::get_label $locale]" $locale ]
+lappend search_locales [list "Master locale - [lang::util::get_label $default_locale]" $default_locale]
 
 set submit_p 0
 

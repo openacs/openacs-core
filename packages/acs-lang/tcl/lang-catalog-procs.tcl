@@ -180,7 +180,7 @@ ad_proc -private lang::catalog::get_catalog_file_path {
         # ISO-8859-1 an exception is that some developers may make the shortcut of editing
         # the en_US catalog files directly to add keys and they might mess up the
         # utf-8 encoding of the files when doing so.
-        set system_charset [ad_locale charset $locale]
+        set system_charset [lang::util::charset_for_locale $locale]
         set file_charset [ad_decode $system_charset "ISO-8859-1" $system_charset utf-8]
     }
 

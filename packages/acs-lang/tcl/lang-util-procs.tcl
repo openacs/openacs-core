@@ -675,8 +675,8 @@ ad_proc -public lang::util::translator_mode_set {
     translator_mode_p
 } {
     Sets whether translator mode is enabled for this session or
-    not. 
-    
+    not.
+
     @author Lars Pind (lars@collaboraid.biz)
     @creation-date October 24, 2002
 
@@ -686,7 +686,7 @@ ad_proc -public lang::util::translator_mode_set {
 } {
     ad_set_client_property acs-lang translator_mode_p $translator_mode_p
 }
-    
+
 ad_proc -private lang::util::record_message_lookup {
     message_key
 } {
@@ -714,7 +714,7 @@ ad_proc -private lang::util::get_message_lookups {} {
     @author Peter Marklund
 } {
     global __lang_message_lookups
-    
+
     if { [info exists __lang_message_lookups] } {
         return $__lang_message_lookups
     } else {
@@ -722,73 +722,35 @@ ad_proc -private lang::util::get_message_lookups {} {
     }
 }
 
-#####
-#
-# Compatibility procs
-#
-#####
 
-ad_proc -deprecated -warn lang_sort {
-    field 
-    {locale {}}
-} { 
-    Each locale can have a different alphabetical sort order. You can test
-    this proc with the following data:
-    <pre>
-    insert into lang_testsort values ('lama');
-    insert into lang_testsort values ('lhasa');
-    insert into lang_testsort values ('llama');
-    insert into lang_testsort values ('lzim');  
-    </pre>
+ad_proc -public lang::util::get_label { locale } {
 
-    @author Jeff Davis (davis@arsdigita.com)
+    Returns the label (name) of locale
 
-    @param field       Name of Oracle column
-    @param locale      Locale for sorting. 
-                       If locale is unspecified just return the column name
-    @return Language aware version of field for Oracle <em>ORDER BY</em> clause.
+    @author	Bruno Mattarollo (bruno.mattarollo@ams.greenpeace.org)
 
-    @see lang::util::sort
+    @param locale	Code for the locale, eg "en_US"
+
+    @return	String containing the label for the locale
+
 } {
-    return [lang::util::sort $field $locale]
+    return [db_string select {}]
 }
 
-ad_proc -deprecated -warn ad_locale_charset_for_locale { 
-    locale 
-} {
-    Returns the MIME charset name corresponding to a locale.
 
-    @see           ad_locale
-    @author        Henry Minsky (hqm@mit.edu)
-    @param locale  Name of a locale, as language_COUNTRY using ISO 639 and ISO 3166
-    @return        IANA MIME character set name
-    @see           lang::util::charset_for_locale
+ad_proc -private lang::util::escape_vars_if_not_null {
+    list
 } {
-    return [lang::util::charset_for_locale $locale]
+    Processes a list of variables before they are passed into
+    a regexp command.
+
+    @param list   List of variable names
+} {
+    foreach lm $list {
+	upvar $lm foreign_var
+	if { [exists_and_not_null foreign_var] } {
+	    set foreign_var "\[$foreign_var\]"
+	}
+    }
 }
 
-ad_proc -deprecated -warn ad_locale_locale_from_lang { 
-    language
-} {
-    Returns the default locale for a language
-    
-    @author          Henry Minsky (hqm@mit.edu)
-    @param language  Name of a country, using ISO-3166 two letter code
-    @return          Default locale
-    @see             lang::util::default_locale_from_lang
-} {
-    return [lang::util::default_locale_from_lang $language]
-}
-
-ad_proc -deprecated -warn ad_locale_language_name { 
-    language 
-} {
-    Returns the nls_language name for a language
-
-    @author          Henry Minsky (hqm@mit.edu)
-    @param language  Name of a country, using ISO-3166 two letter code
-    @return          The nls_language name of the language.
-    @see             lang::util::nls_language_from_language
-} {
-    return [lang::util::nls_language_from_language $language]
-}

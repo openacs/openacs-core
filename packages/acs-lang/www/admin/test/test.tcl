@@ -19,7 +19,7 @@ set french [_ fr test.French]
 set spanish [_ es test.Spanish]
 set german [_ de test.German]
 
-#set lang [ad_locale user language]
+#set lang [lang::user::language]
 set lang [ad_get_client_property lang locale]
 if {[empty_string_p $lang]} {
     set lang "en"

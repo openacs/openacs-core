@@ -20,10 +20,10 @@ set spanish [_ es test.Spanish]
 set german  [_ de test.German]
 
 
-set locale [ad_locale user locale]
+set locale [lang::user::locale]
 #set locale "ja_JP"
 
-set language [ad_locale user language]
+set language [lang::user::language]
 #set language ja
 
 set language_name [ad_locale_language_name $language]
