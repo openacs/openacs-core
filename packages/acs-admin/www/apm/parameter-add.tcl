@@ -41,12 +41,12 @@ plain text string that identifies the parameter.
 
 <tr>
   <td></td>
-  <td>Type a one-line description of your parameter.
+  <td>Type a description of your parameter.
 </tr>
 
 <tr valign=top>
   <th align=right><br>Description:</th>
-  <td><input name=description size=50><br>
+  <td><textarea name=description cols=60 rows=8></textarea>
 </td>
 </tr>
 
