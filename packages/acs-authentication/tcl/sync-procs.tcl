@@ -749,7 +749,9 @@ ad_proc -private auth::sync::process_doc::ims::unregister_impl {} {
 ad_proc -private auth::sync::process_doc::ims::GetParameters {} {
     Parameters for IMS Enterprise 1.1 auth_sync_process implementation.
 } {
-    return {}
+    return {
+        Elements {List of elements covered by IMS batch synchronization, which we should prevent users from editing in OpenACS. Example: 'username email first_names last_name url'.}
+    }
 }
 
 
@@ -758,7 +760,8 @@ ad_proc -private auth::sync::process_doc::ims::GetElements {
 } {
     Elements controlled by IMS Enterprise 1.1 auth_sync_process implementation.
 } {
-    return { username email first_names last_name url }
+    array set param $parameters
+    return $param(Elements)
 }
 
 ad_proc -private auth::sync::process_doc::ims::ProcessDocument {
