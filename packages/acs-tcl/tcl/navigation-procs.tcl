@@ -114,7 +114,7 @@ ad_proc -public ad_context_bar {
         # fix last element to just be literal string
         set context [lreplace $context end end [lindex [lindex $context end] 1]]
     } else {
-	if ![string match "{*}" $args] {
+	if ![string match "\{*" $args] {
 	    # args is not a list, transform it into one.
 	    set args [list $args]
 	}	
