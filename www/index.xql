@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <queryset>
-  <fullquery name="dbqd.www.index.user_name_select">
+  <fullquery name="user_name_select">
     <querytext>
 
 	select first_names || ' ' || last_name as name, email
