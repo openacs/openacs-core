@@ -2,11 +2,11 @@
 <html>
 <head>
 <meta content="text/html; charset=ISO-8859-1" http-equiv="Content-Type">
-<title>How to install ACS on Windows2000</title>
+<title>How to install OpenACS on Windows2000</title>
 <meta name="generator" content="DocBook XSL Stylesheets V1.45">
 <link rel="home" href="index.html" title="OpenACS Documentation">
 <link rel="up" href="win-install.html" title="Chapter 3. Installing on Windows">
-<link rel="previous" href="ch03s01.html" title="Overview">
+<link rel="previous" href="win-install.html" title="Chapter 3. Installing on Windows">
 <link rel="next" href="acs-dev.html" title="Part Part III. For OpenACS Developers">
 <link rel="stylesheet" href="openacs.css" type="text/css">
 </head>
@@ -14,7 +14,7 @@
 <div class="navheader">
 <a href="http://openacs.org"><img src="images/alex.jpg" border="0"></a><table width="100%" summary="Navigation header" border="0"><tr>
 <td width="20%" align="left">
-<a accesskey="p" href="ch03s01.html">Prev</a> </td>
+<a accesskey="p" href="win-install.html">Prev</a> </td>
 <th width="60%" align="center">Chapter 3. Installing on Windows</th>
 <td width="20%" align="right"> <a accesskey="n" href="acs-dev.html">Next</a>
 </td>
@@ -23,7 +23,7 @@
 </div>
 <div class="sect1">
 <div class="titlepage"><div><h2 class="title" style="clear: both">
-<a name="win2k-installation"></a>How to install ACS on Windows2000</h2></div></div>
+<a name="win2k-installation"></a>How to install OpenACS on Windows2000</h2></div></div>
 <div class="authorblurb"><p>By <a href="mailto:mburke@arsdigita.com" target="_top">Matthew Burke</a> and <a href="mailto:curtisg@arsdigita.com" target="_top">Curtis Galloway</a>
 </p></div>
 <div class="itemizedlist"><ul>
@@ -42,12 +42,12 @@
 <a name="win2kinstall-overview"></a>Overview</h3></div></div>
 <p>
     With the recent release of a win32 version of AOLserver, it is now
-    possible to run the ACS on Windows2000 and Windows98. This document
-    explains the steps necessary to get the ACS installed and running on your
+    possible to run the OpenACS on Windows2000 and Windows98. This document
+    explains the steps necessary to get the OpenACS installed and running on your
     machine. <div>Note:</div> We do not recommend running a production
     server on Windows98. But the platform is more than sufficient for working
     the <a href="http://photo.net/teaching/one-term-web" target="_top">problem sets</a> and
-    for getting a feel for the ACS. 
+    for getting a feel for the OpenACS. 
 </p>
 <p>You'll need to use the ArsDigita binary distribution of AOLserver
     for the Win32 platform, which contains patches for several problems we
@@ -83,13 +83,13 @@
     available free from <a href="http://www.pls.com" target="_top">http://www.pls.com</a>. 
 </p>
 <p>Although the <tt>zsh</tt> shell is the only command-line tool
-    required to install the ACS, if you are a UNIX person used to typing
+    required to install the OpenACS, if you are a UNIX person used to typing
     <tt>ls</tt> instead of <tt>dir</tt> you'll get along much
     better with the Cygwin toolkit from RedHat (available at <a href="http://sourceware.cygnus.com/cygwin" target="_top">http://sourceware.cygnus.com/cygwin</a>).
     This is a development library and set of tools that gives you a very
     UNIX-like environment under Windows. In particular, it includes
     <tt>bash</tt>, <tt>gzip</tt> and <tt>tar</tt>, which you can
-    use to perform the ACS installation instead of WinZip and zsh.</p>
+    use to perform the OpenACS installation instead of WinZip and zsh.</p>
 </div>
 <div class="sect2">
 <div class="titlepage"><div><h3 class="title">
@@ -97,7 +97,7 @@
 <p>
     When you install Oracle, a good rule of thumb is &quot;every default
     setting is wrong.&quot; We will not discuss Oracle configuration here
-    except to mention that the ACS requires Oracle's NLS_DATE_FORMAT
+    except to mention that the OpenACS requires Oracle's NLS_DATE_FORMAT
     parameter be set to 'YYYY-MM-DD'. Fixing this depends on whether
     Oracle Administration Assistant for Windows NT (<span class="emphasis"><i>yes,
     that's Windows <div>NT</div>)</i></span> will run on your
@@ -129,7 +129,7 @@
           If you are an Oracle achiever and have more than one Oracle
           installation on your machine, you will see <tt>HOME0, HOME1,
           HOME2</tt>, etc. Choose the subtree that corresponds to the
-          Oracle installtion you wish to use with the ACS.
+          Oracle installtion you wish to use with the OpenACS.
         </p></blockquote>
       </p></li>
 <li><p>If the <tt>NLS_DATE_FORMAT</tt> key is already present,
@@ -161,13 +161,13 @@
     Extract the ArsDigita AOLserver distribution onto the <tt>C:</tt>
     drive into the default <tt>aol30</tt> directory. You can install it
     on any drive, but it will make your life easier if you keep the AOLserver
-    binary and your ACS instance on the same drive. For the rest of these
+    binary and your OpenACS instance on the same drive. For the rest of these
     instructions, we'll assume that you used drive <tt>C:</tt>. 
 </p>
 </div>
 <div class="sect2">
 <div class="titlepage"><div><h3 class="title">
-<a name="win2kinstall-untar-acs"></a>Untar the ACS</h3></div></div>
+<a name="win2kinstall-untar-acs"></a>Untar the OpenACS</h3></div></div>
 <p>
     We recommend rooting webserver content in <tt>c:\web</tt>. Since most
     servers these days are expected to run multiple services from multiple IP
@@ -184,7 +184,7 @@
     you'll find our definitions files starting out with
     &quot;yourdomain.com&quot;.</p>
 <div class="itemizedlist"><ul>
-<li><p>download the ACS (see <a href="#source" target="_top">above</a>) into
+<li><p>download the OpenACS (see <a href="#source" target="_top">above</a>) into
       <tt>c:\temp\acs.tar.gz</tt>
 </p></li>
 <li><p>use WinZip (or equivalent) to extract the files to
@@ -258,7 +258,7 @@ zsh load-site-wide-search foo foopassword ctxsys-password
     configuration information for AOLserver. This should be called
     <tt>yourdomain</tt> and should be located in
     <tt>c:\aolserve3_0</tt>. The second is an .ini file that configures
-    the ACS and is discussed <a href="#ini" target="_top">below</a>. Note that pathnames in
+    the OpenACS and is discussed <a href="#ini" target="_top">below</a>. Note that pathnames in
     <tt>yourdomain</tt> must use forward slashes rather than the Windows
     back slashes. This is also true for the .ini file.</p>
 <p>The following items must be defined in <tt>yourdomain</tt>:</p>
@@ -282,7 +282,7 @@ zsh load-site-wide-search foo foopassword ctxsys-password
 </div>
 <div class="sect2">
 <div class="titlepage"><div><h3 class="title">
-<a name="wint2install-configure-acs"></a>Configuring ACS itself</h3></div></div>
+<a name="wint2install-configure-acs"></a>Configuring OpenACS itself</h3></div></div>
 <p>
     If you want a system that works, go to
     <tt>c:\web\yourdomain\parameters</tt> and copy <tt>ad.ini</tt> to
@@ -292,7 +292,7 @@ zsh load-site-wide-search foo foopassword ctxsys-password
 </p>
 <p>Each section of <tt>yourdomain.ini</tt> has a hardcoded
     &quot;yourservername&quot; in the name (e.g.
-    <tt>[ns/server/yourservername/acs]</tt>). This means that the ACS
+    <tt>[ns/server/yourservername/acs]</tt>). This means that the OpenACS
     will ignore your configuration settings unless your AOLserver name
     happens to be &quot;yourservername&quot;. Therefore you must go through
     <tt>yourdomain.ini</tt> and change &quot;yourservername&quot; to
@@ -340,7 +340,7 @@ bin\nsd -I -s yourdomain -t yourdomain.tcl
 <a name="win2kinstall-configure-permissions"></a>Configuring Permissions</h3></div></div>
 <p>
     Now, you need to protect the proper administration directories of the
-    ACS. You decide the policy although we recommend requiring the admin
+    OpenACS. You decide the policy although we recommend requiring the admin
     directories be accessible only via an SSL connection. Here are the
     directories to consider protecting: 
 </p>
@@ -375,10 +375,10 @@ select password from users where last_name = 'system';
 <div class="titlepage"><div><h3 class="title">
 <a name="win2kinstall-closing-down-access"></a>Closing Down Access</h3></div></div>
 <p>
-    The ACS ships with a user named &quot;anonymous&quot; (email
+    The OpenACS ships with a user named &quot;anonymous&quot; (email
     &quot;anonymous&quot;) to serve as a content owner. If you're
     operating a restricted-access site, make sure to change the anonymous
-    user's password. In recent versions of the ACS you cannot log into
+    user's password. In recent versions of the OpenACS you cannot log into
     &quot;anonymous&quot; because the account does not have a valid user
     state. Log in as a sysadmin and change the anonymous user's password
     from <tt>https://yourservername/admin/users</tt>. You should read the
@@ -410,16 +410,16 @@ select password from users where last_name = 'system';
 </div>
 <div class="sect2">
 <div class="titlepage"><div><h3 class="title">
-<a name="win2kinstall-multiple-acs"></a>Running Multiple Instances of the ACS</h3></div></div>
+<a name="win2kinstall-multiple-acs"></a>Running Multiple Instances of the OpenACS</h3></div></div>
 <p>
-    You can run multiple instances of the ACS on a physical machine but they
+    You can run multiple instances of the OpenACS on a physical machine but they
     must each be set up as a separate Windows service. Each instance of the
-    ACS must have its own:
+    OpenACS must have its own:
 </p>
 <div class="itemizedlist"><ul>
 <li><p>Oracle tablespace and a user account with the appropriate
       permissions on that tablespace. Each of these tablespaces must have the
-      ACS data model loaded.</p></li>
+      OpenACS data model loaded.</p></li>
 <li><p>file with the appropriate settings including server name,
       auxconfig, ipaddress, and port.</p></li>
 <li><p>Copy of the acs files in an appropriate directory under
@@ -436,7 +436,7 @@ select password from users where last_name = 'system';
       <tt>iguanasdirect</tt> and password <tt>secretiguanas</tt>
 </p></li>
 </ul></div>
-<p> For each of these tablespaces/users you would load the ACS data model as
+<p> For each of these tablespaces/users you would load the OpenACS data model as
     described <a href="#data" target="_top">above</a>. Then in <tt>c:\aolserver3_0</tt>
     create files for each service, i.e. <tt>lintcollectors</tt> and
     <tt>iguanasdirect</tt>. These files would point to their respective
@@ -465,21 +465,21 @@ bin\nsd -I -s iguanasdirect -t iguanasdirect.tcl
 <table width="100%" summary="Navigation footer">
 <tr>
 <td width="40%" align="left">
-<a accesskey="p" href="ch03s01.html">Prev</a> </td>
+<a accesskey="p" href="win-install.html">Prev</a> </td>
 <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
 <td width="40%" align="right"> <a accesskey="n" href="acs-dev.html">Next</a>
 </td>
 </tr>
 <tr>
-<td width="40%" align="left">Overview </td>
+<td width="40%" align="left">Chapter 3. Installing on Windows </td>
 <td width="20%" align="center"><a accesskey="u" href="win-install.html">Up</a></td>
 <td width="40%" align="right"> Part Part III. For OpenACS Developers</td>
 </tr>
 </table>
 <hr>
-<address><a href="mailto:rmello@cc.usu.edu">
-			rmello@cc.usu.edu
-		  </a></address>
+<address>
+			rmello at fslc.usu.edu
+		</address>
 <address><a href="mailto:vinod@kurup.com">
 			vinod@kurup.com
 		  </a></address>

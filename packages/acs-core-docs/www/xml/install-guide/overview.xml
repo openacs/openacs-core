@@ -8,7 +8,7 @@
 	</para>
 
 	<para>
-	  <quote>The ArsDigita Community System it is a toolkit of software
+	  <quote>The ArsDigita Community System (ACS) is a toolkit of software
 	  that will help you build Web services with a collaborative dimension,
 	  ranging from knowledge management within companies to B2C ecommerce
 	  to product support and community among the customers. The software is
@@ -17,20 +17,20 @@
 	</para>
 
 	<para>
-	  So that's what the ArsDigita Community System (ACS) is... what's
-	  OpenACS?  OpenACS was born when Don Baccus, Ben Adida, et al decided
-	  to port ACS from Oracle to PostgreSQL, thus making it a fully
-	  open-source solution.
+	  What's OpenACS? OpenACS was born when Don Baccus, Ben Adida,
+	  et al decided to port ACS from Oracle to
+	  PostgreSQL, thus making it a fully open-source solution.
 	</para>
 
 	<para>
-	  OpenACS 4 is the next generation of the web toolkit. It's based on
+	  OpenACS &version; is the next generation of the web toolkit. It's based on
 	  ACS 4, but no longer follows ArsDigita development. Unlike both ACS
 	  (which required Oracle) and OpenACS 3.x (which required PostgreSQL),
-	  OpenACS 4 allows you to use either database. It's also built in such
-	  a way to allow enterprising hackers to extend it to other
-	  databases. Don Baccus leads the development and numerous developers
-	  (and non-developers) contribute from around the world.
+	  OpenACS &version; allows you to use either database. It's also built in such
+	  a way to allow enterprising hackers (in the good sense of
+	  the word) to extend it to other databases. Don Baccus leads
+	  the development and numerous developers (and non-developers)
+	  contribute from around the world.
 	</para>
 
   </sect2>
@@ -38,7 +38,7 @@
   <sect2 id="install-purpose" xreflabel="Purpose of this document">
 	<title>Purpose of this document</title>
 	<para>
-	  This document will describe how to install OpenACS 4 from scratch,
+	  This document will describe how to install OpenACS &version; from scratch,
 	  using the source code. We will assume that you have an OS installed,
 	  but we'll discuss this more in the next section. For most of this
 	  guide, we will assume that you are using Linux on a PC, but we'll
@@ -217,8 +217,8 @@
 	<para>
 	  After reading through this tome, you may ask yourself if there is a
 	  better way. And there is! Jonathan Marsden has done all the dirty
-	  work to create RPMs for OpenACS4. These RPMs will install AOLServer,
-	  all the AOLServer modules, PostgreSQL and OpenACS4 simply by typing
+	  work to create RPMs for OpenACS &version;. These RPMs will install AOLServer,
+	  all the AOLServer modules, PostgreSQL and OpenACS &version; simply by typing
 	  one magic command. They're currently at <ulink
 	  url="http://www.xc.org/jonathan/openacs/openacs4-rpm-based-install.html">http://www.xc.org</ulink>,
 	  but will eventually also be available at <ulink
@@ -246,7 +246,8 @@
 		</para></listitem>
 
 	  <listitem><para>
-		  <ulink url="http://openacs.org/doc/openacs/install/">OpenACS 3.x installation guide</ulink>
+		  <ulink
+		  url="http://openacs.org/doc/openacs/install/">OpenACS 3.x installation guide</ulink>
 		</para></listitem> 
 
 	  <listitem><para> 

@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta content="text/html; charset=ISO-8859-1" http-equiv="Content-Type">
-<title>Writing OpenACS 4 Application Pages</title>
+<title>Writing OpenACS 4.5 Application Pages</title>
 <meta name="generator" content="DocBook XSL Stylesheets V1.45">
 <link rel="home" href="index.html" title="OpenACS Documentation">
 <link rel="up" href="dev-guide.html" title="Chapter 4. OpenACS Developer's Guide">
@@ -23,7 +23,7 @@
 </div>
 <div class="sect1">
 <div class="titlepage"><div><h2 class="title" style="clear: both">
-<a name="subsites"></a>Writing OpenACS 4 Application Pages</h2></div></div>
+<a name="subsites"></a>Writing OpenACS 4.5 Application Pages</h2></div></div>
 <div class="authorblurb"><p>
 By <a href="http://planitia.org/" target="_top">Rafael H. Schloming</a> 
 and <a href="mailto:psu@arsdigita.com" target="_top">Pete Su</a>
@@ -34,10 +34,10 @@ and <a href="mailto:psu@arsdigita.com" target="_top">Pete Su</a>
 <p>
 In this document, we'll examine the user interface pages of the Notes
 application in more detail, covering two separate aspects of page
-development in OpenACS 4. First, we'll talk about the code needed to make
+development in OpenACS 4.5. First, we'll talk about the code needed to make
 your pages aware of which application instance they are running
 in. Second, we'll talk about using the form builder to develop
-form-based user interfaces in OpenACS 4. While these seem like unrelated
+form-based user interfaces in OpenACS 4.5. While these seem like unrelated
 topics, they both come up in the example page that we are going to
 look at, so it makes sense to address them at the same time.
 </p>
@@ -46,8 +46,8 @@ look at, so it makes sense to address them at the same time.
 <div class="titlepage"><div><h3 class="title">
 <a name="subsites-instances"></a>Application Instances and Subsites</h3></div></div>
 <p>
-As you will recall from the <a href="packages.html" title="OpenACS 4 Packages">packages</a> tutorial, the Request
-Processor (RP) and Package Manager (APM) in OpenACS 4 allow site
+As you will recall from the <a href="packages.html" title="OpenACS 4.5 Packages">packages</a> tutorial, the Request
+Processor (RP) and Package Manager (APM) in OpenACS 4.5 allow site
 administrators to define an arbitrary mapping from URLs in the site to
 objects representing content. These objects may represent single
 files, or entire applications. The APM uses the site map to map
@@ -120,7 +120,7 @@ following the part that matched a site map entry.
 <p>
 In the Notes example, we are particularly interested in the
 <tt>package_id</tt> field.  If you study the data model and code,
-you'll see why. As we said before in the <a href="objects.html" title="OpenACS 4 Data Models and the Object System">data modeling</a> tutorial, the Notes application points the
+you'll see why. As we said before in the <a href="objects.html" title="OpenACS 4.5 Data Models and the Object System">data modeling</a> tutorial, the Notes application points the
 <tt>context_id</tt> of each Note object that it creates to the
 package instance that created it. That is, the <tt>context_id</tt>
 corresponds exactly to the <tt>package_id</tt> that comes in from
@@ -341,7 +341,7 @@ visible to that user. The end result is a site where users can come
 and write notes to themselves.
 </p>
 <p>
-This is a good example of the leverage available in the OpenACS 4
+This is a good example of the leverage available in the OpenACS 4.5
 system. The code that we have written for Notes is not at all more
 complex than a similar application without access control or site map
 awareness. By adding a small amount of code, we have taken a small,
@@ -354,7 +354,7 @@ multi-user features, access control, and centralized administration.
 <div class="titlepage"><div><h3 class="title">
 <a name="subsites-summary"></a>Summary</h3></div></div>
 <p>
-In OpenACS 4, application pages and scripts can be aware of the package
+In OpenACS 4.5, application pages and scripts can be aware of the package
 instance, or subsite in which they are executing. This is a powerful
 general purpose mechanism that can be used to structure web services
 in very flexible ways.
@@ -389,9 +389,9 @@ way, to create forms based pages with minimal duplication of code.
 </tr>
 </table>
 <hr>
-<address><a href="mailto:rmello@cc.usu.edu">
-			rmello@cc.usu.edu
-		  </a></address>
+<address>
+			rmello at fslc.usu.edu
+		</address>
 <address><a href="mailto:vinod@kurup.com">
 			vinod@kurup.com
 		  </a></address>

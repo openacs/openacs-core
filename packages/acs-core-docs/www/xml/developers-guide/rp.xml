@@ -9,7 +9,7 @@
 <sect2 id="rp-overview"><title>Overview</title>
 
 <para>
-This document is a brief introduction to the OpenACS 4 Request Processor;
+This document is a brief introduction to the OpenACS &version; Request Processor;
 more details can be found in the <xref linkend="rp-design"/>. Here we cover the high level concepts behind the
 system, and implications and usage for the application developer.
 </para>
@@ -41,7 +41,7 @@ mechanism for the following requirements of larger web services:
 
 To achieve this functionality above in OpenACS 3.x, developers used an ad
 hoc combination of AOLserver filters, the <computeroutput>ns_perm</computeroutput> call,
-special purpose code in pages, and other procedures.  In OpenACS 4, the
+special purpose code in pages, and other procedures.  In OpenACS &version;, the
 Request Processor, along with the OpenACS Package Manager, centralizes and
 unifies this functionality, making it more transparent and readily
 available to developers.
@@ -52,7 +52,7 @@ available to developers.
 <sect2 id="rp-thenewway"><title>The New Way</title>
 
 <para>
-The 4.0 Request Processor is a global filter and set of Tcl procs that
+The &version; Request Processor is a global filter and set of Tcl procs that
 respond to every incoming URL reaching the server. The following
 diagram summarizes the stages of the request processor assuming a URL
 request like <computeroutput>http://someserver.com/notes/somepage.adp</computeroutput>.
@@ -107,7 +107,7 @@ extracts or sets up new session tokens for the user.
 
 <listitem><para>
 Next, the Request Processor checks if the user has appropriate access
-privileges to the requested part of the site. In OpenACS 4, access control
+privileges to the requested part of the site. In OpenACS &version;, access control
 is dictated by the <ulink url="permissions">permissions system</ulink>. In
 this case, the RP checks if the user has "read" priviledges on the
 object in the site map specified by the URL. This object is typically

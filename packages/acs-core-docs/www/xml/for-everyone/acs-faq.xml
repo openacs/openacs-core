@@ -1,8 +1,8 @@
-<sect1 id="acs-faq" xreflabel="ArsDigita Community System FAQ">
-<title>ArsDigita Community System FAQ</title>
+<sect1 id="acs-faq" xreflabel="Open Architecture Community System FAQ">
+<title>Open Architecture Community System FAQ</title>
 
 <para>
-Updated for ACS 4, October 2000 
+Updated for OpenACS &version;, March 2002 
 </para>
 
 <sect2 id="acs-faq-free-enhancers" xreflabel="I have a site made of static html pages. How can I add some collaboration
@@ -11,8 +11,8 @@ features without setting up my own machine?">
 features without setting up my own machine?</title>
 
 <para>
-Some of the basic ArsDigita Community System modules are available as <ulink url="http://www.arsdigita.com/pages/free-services">free services</ulink>. Just
-sign up for them by filling out a form. 
+Some of the basic Open Architecture Community System modules are
+available as free services. Just sign up for them by filling out a form. 
 </para>
 
 <itemizedlist>
@@ -31,11 +31,6 @@ users to post comments</para></listitem>
 <listitem><para><ulink url="http://www.greenspun.com/click/">clickthrough.net</ulink> will track how
 many people follow links from your site to sites that you recommend</para></listitem>
 
-<listitem><para><ulink url="http://arsdigita.com/voxpopuli/">Vox
-Populi</ulink> will allow you to add polls to your site</para></listitem>
-
-<listitem><para><ulink url="http://arsdigita.com/telegraph/">Telegraph</ulink> will allow forms on your
-site to send email</para></listitem>
 </itemizedlist>
 
 <para>
@@ -45,37 +40,31 @@ Publishers</ulink> </para>
 </sect2>
 
 <sect2 id="acs-faq-infrastructure">
-<title>I would like to use the ArsDigita Community System. How do I set up the
+<title>I would like to use the Open Architecture Community System. How do I set up the
 basic infrastructure?</title>
 
-<para>To use the ArsDigita Community System, you need a computer with Unix or
-Linux, Oracle, AOLServer and the Oracle driver for AOLServer installed. </para>
+<para>To use the Open Architecture Community System, you need a computer with Unix or
+Linux, Oracle or PostgreSQL (currently), AOLServer and the Oracle or
+PostgreSQL driver for AOLServer installed. </para>
 
 <para>We have written an <link linkend="unix-install">installation guide</link> to
 aid you in the process. It takes you through the detailed steps necessary to
-build a working system from a bare hard drive through a basic ACS install.
+build a working system from a bare hard drive through a basic OpenACS install.
 Followed closely on a reasonably fast machine, this document will give you a
 complete system in 4-5 hours.</para>
 
-<para>The ArsDigita Community System can now be run under <link linkend="win2k-installation">Windows</link>.
+<para>The Open Architecture Community System can now be run under <link linkend="win2k-installation">Windows</link>.
 However we advise the use of Unix, as it is the most well-tested and best
-documented platform for ACS.</para>
-
-<para>Those who wish to pursue the 100% open-source route will want to check
-into the <ulink url="http://www.openacs.org">OpenACS</ulink> project. This is a port
-of the ACS headed up by a group of external developers. It currently uses <ulink url="http://www.postgresql.org">PostgreSQL</ulink> as its relational database of
-choice, though there are plans to make OpenACS work with other open-source
-databases in the future.
-</para>
+documented platform for OpenACS.</para>
 
 </sect2>
 
 <sect2 id="acs-faq-architecture-install">
-<title>I have a machine with Unix/Linux, Oracle and AOLServer installed. How do
-I install the ArsDigita Community System and the ArsDigita Server
+<title>I have a machine with Unix/Linux, Oracle or PostgreSQL and AOLServer installed. How do
+I install the Open Architecture Community System and the ArsDigita Server
 Architecture?</title>
 
-<para>We strongly recommend that you thoroughly examine the <link linkend="unix-install">step-by-step ACS
+<para>We strongly recommend that you thoroughly examine the <link linkend="unix-install">step-by-step OpenACS
 installation</link> guide, even if you already have a working Unix and Oracle
 installtion.</para>
 
@@ -83,9 +72,9 @@ installtion.</para>
 ArsDigita uses to generate properly running sites. Deviations from these
 defaults are recommended only if you are an expert system administrator.</para>
 
-<para>Once you have a working ACS installation, there are several utilities
-written by ArsDigita that can be installed to ensure that the server keeps
-running reliably.</para>
+<para>Once you have a working OpenACS installation, there are several utilities
+written by ArsDigita and the OpenACS community that can be installed
+to ensure that the server keeps running reliably.</para>
 
 <para>The <ulink url="http://www.arsdigita.com/asj/arsdigita-server-architecture">overview of
 the ArsDigita Server Architecture</ulink> is a good starting point for the
@@ -110,7 +99,7 @@ Installation</ulink>
 </para></listitem>
 
 <listitem><para><ulink url="http://photo.net/wtr/asa-audit">ArsDigita
-Server Architecture Audit</ulink> (mainly for ACS 3.x)</para></listitem>
+Server Architecture Audit</ulink> (mainly for OpenACS 3.x)</para></listitem>
 </itemizedlist>
 
 
@@ -118,10 +107,17 @@ Server Architecture Audit</ulink> (mainly for ACS 3.x)</para></listitem>
 </sect2>
 
 <sect2 id="acs-faq-acs-docs">
-<title>Where can I find ArsDigita Community System documentation?</title>
+<title>Where can I find Open Architecture Community System documentation?</title>
 
 <itemizedlist>
-<listitem><para>The latest developer resources are always available at <ulink url="http://www.arsdigita.com/developer">arsdigita.com</ulink></para></listitem>
+<listitem>
+	<para>The latest documentation and developer/user resources
+	  are always available at <ulink
+	  url="http://openacs.org/doc/">http://openacs.org/doc/
+	  </ulink>
+	</para>
+</listitem>
+      
 </itemizedlist>
 
 </sect2>
@@ -131,46 +127,17 @@ Server Architecture Audit</ulink> (mainly for ACS 3.x)</para></listitem>
 <title>What teaching and training is available? How can I sign up?</title>
 
 <itemizedlist>
-<listitem><para>The <ulink url="http://photo.net/teaching/one-day-web">One day web course</ulink> will be
-offered in several cities. (<ulink url="http://www.arsdigita.com/events/">Latest schedule and
-registration</ulink>)</para></listitem>
-
-<listitem><para><ulink url="http://photo.net/teaching/one-day-acs">ArsDigita Community System
-Conventions</ulink> are held quarterly in Cambridge and San Franscisco. (<ulink url="http://www.arsdigita.com/events/">Latest schedule
-and registration</ulink>)</para></listitem>
-
-<listitem><para>We conduct <ulink url="http://www.arsdigita.com/boot-camp/">1-3 week boot camps</ulink> covering
-the core skills needed to install, configure and extend the ArsDigita
-Community System and the ArsDigita Server Architecture. These are available
-to people who: </para>
-
-<orderedlist>
-<listitem><para>are planning to do something for a non-profit organization</para></listitem>
-
-<listitem><para>are willing to commit their time to support or extend the ArsDigita
-Community System and its community</para></listitem>
-
-<listitem><para>are MIT students</para></listitem>
-
-<listitem><para>are considering employment at ArsDigita</para></listitem>
-</orderedlist>
-
-<para>
-If interested, please apply <ulink url="http://www.arsdigita.com/events/">online</ulink>.</para></listitem>
-
-<listitem><para><ulink url="http://photo.net/teaching/one-term-web">Software Engineering for Web
-Applications</ulink> is taught by ArsDigita at MIT and Caltech. Students cover
-several problem sets and then complete a <ulink url="http://6916.lcs.mit.edu/project-gallery.html">gallery of student
-projects</ulink>. Materials for this course may be used at other Universities or
-for other programs at no charge. The problem sets have been used as course
-work at the University of Michigan, UC Berkeley, Stanford, and UCLA.</para></listitem>
-
-<listitem><para><ulink url="http://www.arsdigita.com/asj/">The ArsDigita Systems Journal</ulink>
-is an online publication is designed to share the knowledge acquired during
-the construction and operation of Web-based information systems.</para></listitem>
-</itemizedlist>
-
-<para>See also: <ulink url="http://philip.greenspun.com/teaching">Teaching</ulink> </para>
+<listitem><para>During the exuberance of the dot com boom, training
+	  was provided for free at ArsDigita and other locations. But
+	  now you'll probably have to pay for some training from one
+	  of the companies that do OpenACS work: <ulink
+	    url="http://openacs.org/community/">http://openacs.org/community/</ulink>
+</listitem>
+<listitem>
+	<para>See also: <ulink
+	url="http://philip.greenspun.com/teaching">Teaching</ulink>
+	</para>
+</listitem>
 
 </sect2>
 
@@ -181,6 +148,17 @@ the construction and operation of Web-based information systems.</para></listite
 ArsDigita offers a variety of free teaching material: 
 </para>
 
+    <para>
+      <emphasis>NOTE: This material was provided by ArsDigita
+      Corporation. As ArsDigita has ceased their operations, we don't
+      know for how long the following URLs will be operational, and we
+      could not simply mirror them before asking permission from th
+      authors. If arsdigita.com goes dead, you can find these
+      documents under <ulink
+      url="http://web.archive.org/web/*/http://arsdigita.com">http://web.archive.org/web/*/http://arsdigita.com</ulink>.
+      </emphasis>
+    </para>
+    
 <itemizedlist>
 <listitem><para><ulink url="http://www.arsdigita.com/books/panda/">Philip and Alex&#39;s Guide to
 Web Publishing</ulink></para></listitem>
@@ -206,7 +184,7 @@ database backed web developers</para></listitem>
 answer forum</ulink></para></listitem>
 
 <listitem><para><ulink url="http://philip.greenspun.com/teaching/psets/ps2/ps2">Problem Set 2</ulink>
-(extending the ArsDigita Community System, Web sites to support
+(extending the Open Architecture Community System, Web sites to support
 collaboration) <ulink url="http://photo.net/bboard/q-and-a?topic=Problem%20Set%202">Question and
 answer forum</ulink></para></listitem>
 
@@ -228,30 +206,31 @@ and answer forum</ulink>
 </itemizedlist>
 
 <itemizedlist>
-<listitem><para><ulink url="http://www.aolserver.com">AOLServer
+<listitem><para><ulink url="http://www.aolserver.com/">AOLServer
 Documentation</ulink></para></listitem>
 
 <listitem><para><ulink url="http://hojohn.photo.net/ora8doc">Oracle
 Documentation</ulink></para></listitem>
 
-<listitem><para><ulink url="http://sdss.fnal.gov:8000/dss/doc/www/tcl/tcl.commands">Tcl Quick
-Reference Manual</ulink></para></listitem>
+<listitem><para><ulink
+	    url="http://aolserver.com/docs/devel/tcl/">AOLserver Tcl
+	    Reference Manual</ulink></para></listitem>
 </itemizedlist>
 
 <para>Recommended purchases</para>
 
 <itemizedlist>
-<listitem><para><ulink url="http://www.amazon.com/exec/obidos/ISBN=1565922603/photonetA/">Unix
+<listitem><para><ulink url="http://www.amazon.com/exec/obidos/ISBN=1565922603/">Unix
 Power Tools</ulink> (helps students with the mechanics of the Unix shell and
 Emacs)</para></listitem>
 
-<listitem><para><ulink url="http://www.amazon.com/exec/obidos/ISBN=007882396X/photonetA/">Oracle 8:
+<listitem><para><ulink url="http://www.amazon.com/exec/obidos/ISBN=007882396X/">Oracle 8:
 The Complete Reference</ulink> (more concise than the online Oracle docs)</para></listitem>
 
-<listitem><para><ulink url="http://www.amazon.com/exec/obidos/ISBN=0136168302/photonetA/">Practical
+<listitem><para><ulink url="http://www.amazon.com/exec/obidos/ISBN=0136168302/">Practical
 Programming in Tcl and Tk</ulink> (Brent Welch 1997; Prentice-Hall;)</para></listitem>
 
-<listitem><para><ulink url="http://www.amazon.com/exec/obidos/ISBN=0961392126/photonetA/">Visual
+<listitem><para><ulink url="http://www.amazon.com/exec/obidos/ISBN=0961392126/">Visual
 Explanations : Images and Quantities, Evidence and Narrative</ulink> (Edward
 Tufte 1997; Graphics Press; order directly by calling (800) 822-2454) -
 general design principles</para></listitem>
@@ -286,28 +265,24 @@ site</ulink> discussion forum</para></listitem>
 <title>Where do I make feature suggestions, report bugs, and look for code
 patches?</title>
 
-<para>Go to the <ulink url="http://www.arsdigita.com/developer">ArsDigita developer
+<para>Go to the <ulink url="http://openacs.org/developer/">OpenACS developer
 site</ulink> for the latest details on how to contribute.</para>
 </sect2>
 
 
 <sect2 id="acs-faq-isps">
-<title>What ISPs and independent developers support the ArsDigita Community
-System? (aside from ArsDigita.com) How can I let ArsDigita know that i&#39;m
-an ACS developer?</title>
+<title>What ISPs and independent developers support the Open Architecture Community
+System? How can I let it be known that i&#39;m
+an OpenACS developer?</title>
 
 <para>The most current list of outside firms and people who implement and host
-ACS-based systems is available on the <ulink url="http://www.arsdigita.com/developer/">ArsDigita developer</ulink> site.</para>
-
-<para>If you&#39;re an ACS developer and would like to publicize your work,
-please send <ulink url="mailto:docwolf@arsdigita.com">email</ulink>.</para>
-
-
+OpenACS-based systems is available on the <ulink
+	url="http://openacs.org/community/">OpenACS Community</ulink> site.</para>
 
 </sect2>
 
 <sect2 id="acs-faq-contribute">
-<title>How can I contribute to the development of the ArsDigita Community
+<title>How can I contribute to the development of the Open Architecture Community
 System</title>
 
 <para>
@@ -316,7 +291,7 @@ online discussion forum</ulink> if you would like to contribute. We need:
 </para>
 
 <itemizedlist>
-<listitem><para>ACS buddies: Many interested users need a little help with the first
+<listitem><para>OpenACS buddies: Many interested users need a little help with the first
 installation and initial questions.</para></listitem>
 
 <listitem><para>Module experts: We need experts for both existing and modules in

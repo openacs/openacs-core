@@ -2,11 +2,11 @@
 <html>
 <head>
 <meta content="text/html; charset=ISO-8859-1" http-equiv="Content-Type">
-<title>Parties in OpenACS 4</title>
+<title>Parties in OpenACS 4.5</title>
 <meta name="generator" content="DocBook XSL Stylesheets V1.45">
 <link rel="home" href="index.html" title="OpenACS Documentation">
 <link rel="up" href="more-developer-info.html" title="Chapter 5. Other Developer Resources">
-<link rel="previous" href="ch05s01.html" title="Overview">
+<link rel="previous" href="more-developer-info.html" title="Chapter 5. Other Developer Resources">
 <link rel="next" href="object-identity.html" title="Object Identity">
 <link rel="stylesheet" href="openacs.css" type="text/css">
 </head>
@@ -14,7 +14,7 @@
 <div class="navheader">
 <a href="http://openacs.org"><img src="images/alex.jpg" border="0"></a><table width="100%" summary="Navigation header" border="0"><tr>
 <td width="20%" align="left">
-<a accesskey="p" href="ch05s01.html">Prev</a> </td>
+<a accesskey="p" href="more-developer-info.html">Prev</a> </td>
 <th width="60%" align="center">Chapter 5. Other Developer Resources</th>
 <td width="20%" align="right"> <a accesskey="n" href="object-identity.html">Next</a>
 </td>
@@ -23,7 +23,7 @@
 </div>
 <div class="sect1">
 <div class="titlepage"><div><h2 class="title" style="clear: both">
-<a name="parties"></a>Parties in OpenACS 4</h2></div></div>
+<a name="parties"></a>Parties in OpenACS 4.5</h2></div></div>
 <div class="authorblurb"><p>
 by <a href="http://planitia.org" target="_top">Rafael H. Schloming</a> 
 </p></div>
@@ -110,7 +110,7 @@ associated with a user into the four tables (acs_objects, parties, persons,
 users) is that it is now possible to &quot;nuke&quot; a user from a live
 system by removing his entry from the users table, but leaving the rest of
 his information present (i.e. turning him from a user into a person). This is
-because wherever possible the OpenACS 4 data model references the persons or
+because wherever possible the OpenACS 4.5 data model references the persons or
 parties table, <span class="strong"><i>not</i></span> the users table. If this feature is
 desired when extending the system, then the developers should be careful to
 only references the users table in situations where it is clear that the
@@ -380,7 +380,7 @@ each row in the mensa_users table has a corresponding row in each of the
 users, persons, parties, and acs_objects tables. This child table could then
 store any extra information relevant to the MENSA community.</p>
 <p><span class="strong"><i>Specializing Groups</i></span></p>
-<p>If one were to build an intranet application on top of the 4.0 party
+<p>If one were to build an intranet application on top of the 4.5 party
 system, it is likely that one would want to take advantage of the systems
 efficient representation of sophisticated organizational structures, but
 there would be much more specialized information associated with each group.
@@ -405,21 +405,21 @@ table or the groups table.</p>
 <table width="100%" summary="Navigation footer">
 <tr>
 <td width="40%" align="left">
-<a accesskey="p" href="ch05s01.html">Prev</a> </td>
+<a accesskey="p" href="more-developer-info.html">Prev</a> </td>
 <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
 <td width="40%" align="right"> <a accesskey="n" href="object-identity.html">Next</a>
 </td>
 </tr>
 <tr>
-<td width="40%" align="left">Overview </td>
+<td width="40%" align="left">Chapter 5. Other Developer Resources </td>
 <td width="20%" align="center"><a accesskey="u" href="more-developer-info.html">Up</a></td>
 <td width="40%" align="right"> Object Identity</td>
 </tr>
 </table>
 <hr>
-<address><a href="mailto:rmello@cc.usu.edu">
-			rmello@cc.usu.edu
-		  </a></address>
+<address>
+			rmello at fslc.usu.edu
+		</address>
 <address><a href="mailto:vinod@kurup.com">
 			vinod@kurup.com
 		  </a></address>

@@ -1,5 +1,5 @@
 <sect1 id="packages" xreflabel="Packages">
-  <title>OpenACS 4 Packages</title>
+  <title>OpenACS &version; Packages</title>
 
   <para>
     By <ulink url="mailto:psu@arsdigita.com">Pete Su</ulink> and
@@ -87,7 +87,7 @@ ROOT/
     </para>
 
     <para>
-      Here is how an OpenACS 4 server is laid out:
+      Here is how an OpenACS &version; server is laid out:
     </para>
 
     
@@ -162,7 +162,7 @@ ROOT/
       sends to our server to the right page in the appropriate
       package. While we are at it, this tool may as well also automate
       package installation, depedency checking, upgrades, and package
-      removal. In OpenACS 4, this tool is called APM.
+      removal. In OpenACS &version;, this tool is called APM.
     </para>
 
 
@@ -204,7 +204,7 @@ ROOT/
     <para>
       The following sections will show you how to make a package for the
       Notes application. In addition, they will discuss some new site
-      management features in OpenACS 4 that take advantage of the APM's package
+      management features in OpenACS &version; that take advantage of the APM's package
       instance model. The two most important of these are <emphasis>subsites</emphasis>,
       and the <emphasis>site map</emphasis> tool, which can be used to map applications to
       one or more arbitrary URLs in a running site.
@@ -713,7 +713,7 @@ ROOT/
     </para>
 
     <para>
-      In OpenACS 4, administrators can define an arbitrary mapping between the
+      In OpenACS &version;, administrators can define an arbitrary mapping between the
       URLs the user types and the actual file in the file system that is
       served. This mapping is called the <emphasis>site map</emphasis> and entries in the
       site map are called <emphasis>site nodes</emphasis>. Each site node maps a URL to an

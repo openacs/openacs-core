@@ -306,7 +306,7 @@
 
 
     <para>
-      Under OpenACS 4, parameters are set at two levels: at the global level by
+      Under OpenACS &version;, parameters are set at two levels: at the global level by
       the OpenACS-admin, and at the subsite level by a sub-admin.  In this
       section, list and discuss both levels of parameters.
     </para>

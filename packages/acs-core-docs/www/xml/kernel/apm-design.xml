@@ -1,5 +1,5 @@
-<sect1 id="apm-design" xreflabel="OpenACS 4 Package Manager Design">
-<title>OpenACS 4 Package Manager Design</title>
+<sect1 id="apm-design" xreflabel="OpenACS &version; Package Manager Design">
+<title>OpenACS &version; Package Manager Design</title>
 
 
 <authorblurb><para>
@@ -1068,6 +1068,14 @@ Salz, Michael Yoon, and Lars Pind.</para></listitem>
 <entry>10/02/2000</entry>
 <entry>Kai Wu</entry>
 </row>
+
+<row>
+<entry>1.0</entry>
+<entry>Edited for OpenACS &version; Beta release</entry>
+<entry>03/02/2002</entry>
+<entry>Roberto Mello</entry>
+</row>
+	  
 </tbody></tgroup></informaltable>
 
 

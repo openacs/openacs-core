@@ -1,5 +1,5 @@
-<sect1 id="release-notes" xreflabel="ACS 4.1 Release Notes">
-  <title>OpenACS 4.2-beta Release Notes</title>
+<sect1 id="release-notes" xreflabel="OpenACS &version; Release Notes">
+  <title>OpenACS &version; Release Notes</title>
 
   <authorblurb><para>
 	  by <ulink url="mailto:dhogaza@pacifier.com">Don Baccus</ulink> and
@@ -7,7 +7,7 @@
 	</para></authorblurb>
 
   <para>
-	This is a beta release of OpenACS 4.2.  This release has been subjected
+	This is a beta release of OpenACS &version;.  This release has been subjected
 	to an organized test effort, but please bear in mind that we are still
 	in the process of developing testing tools, methodology, and scripts.
   </para>
@@ -27,12 +27,12 @@
 	You may want to begin by reading our installation documentation for <xref
 	linkend="unix-install"/> or <xref
 	linkend="win-install"/>.  Note that the Windows
-	documentation is not current for OpenACS4.
+	documentation is not current for OpenACS &version;.
   </para>
 
   <para>
 	After installation, the full documentation set can be found by visiting
-	http://[your-host]/doc. Not all pieces are updated for OpenACS 4 at
+	http://[your-host]/doc. Not all pieces are updated for OpenACS &version; at
 	this moment.
   </para>
 
@@ -42,8 +42,8 @@
 	<para>
 	  If you're using Oracle 8.1.6 or 8.1.7 Enterprise Edition you may want
 	  to uncomment the SQL that causes InterMedia to keep online searching
-	  online while indexing.  The feature doesn't exist in Standard Edition
-	  and OpenACS 4 now defaults to being loadable in SE.  Just grep for
+	  online while indexing.  The feature doesn't exist in Standard Editionx
+	  and OpenACS &version; now defaults to being loadable in SE.  Just grep for
 	  'sync' to find the code.  
 	</para>
 

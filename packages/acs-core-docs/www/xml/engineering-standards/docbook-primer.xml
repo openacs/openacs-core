@@ -9,7 +9,7 @@
   </para>
 
   <sect2 id="dbprimer-overview" xreflabel="OpenACS Documentation Overview">
-    <title>Overview of OpenACS 4 Documentation</title>
+    <title>Overview of OpenACS &version; Documentation</title>
     <para>
       ArsDigita created a good documentation ground for us to build
       upon. Some sections of the documentation however, lack details
@@ -764,7 +764,7 @@ bash$  xsltproc /usr/share/sgml/docbook/stylesheet/xsl/nwalsh/html/chunk.xsl fil
 	  <row>
 	    <entry>0.3</entry>
 	    <entry>
-	      Added OpenACS information, updatet tools, added
+	      Added OpenACS information, updated tools, added
 	      extra links and added info to the Publishing section.
 	    </entry>
 	    <entry>12/24/2001</entry>

@@ -404,7 +404,7 @@ db_foreach user_group_memberships_by_role {
 }
 
 </pre>
-<p><span class="strong"><i><a name="dbapi_nulls_and_bind_vars"></a>Nulls and Bind Variables</i></span></p>
+<p><span class="strong"><i><a name="kernel.dbapi_nulls_and_bind_vars"></a>Nulls and Bind Variables</i></span></p>
 <p>
 When processing a DML statement, Oracle coerces empty strings into
 <tt>null</tt>. (This coercion does <span class="emphasis"><i>not</i></span> occur in the
@@ -566,7 +566,7 @@ Note that you never have to use <tt>ns_db</tt> anymore (including
 release the database handle. 
 </p>
 <div class="variablelist"><dl>
-<dt><span class="term"><span class="strong"><i><tt><a name="dbapi_db_abort_transaction"></a>db_abort_transaction</tt></i></span>
+<dt><span class="term"><span class="strong"><i><tt><a name="kernel.dbapi_db_abort_transaction"></a>db_abort_transaction</tt></i></span>
 </span></dt>
 <dd>
 <pre class="programlisting">
@@ -579,7 +579,7 @@ several nested transactions, all of them are terminated. Use this insetead of
 
 </p>
 </dd>
-<dt><span class="term"><span class="strong"><i><tt><a name="dbapi_db_null"></a>db_null</tt></i></span>
+<dt><span class="term"><span class="strong"><i><tt><a name="kernel.dbapi_db_null"></a>db_null</tt></i></span>
 
 </span></dt>
 <dd>
@@ -591,7 +591,7 @@ value <tt>null</tt>. See <a href="db-api.html#dbapi_nulls_and_bind_vars" title="
 above.</p>
 </dd>
 <dt><span class="term">
-<span class="strong"><i><tt><a name="dbapi_db_foreach"></a>db_foreach</tt></i></span>
+<span class="strong"><i><tt><a name="kernel.dbapi_db_foreach"></a>db_foreach</tt></i></span>
 </span></dt>
 <dd>
 <pre class="programlisting">
@@ -619,7 +619,7 @@ The code block may contain <tt>break</tt> statements (which terminate the
 loop and flush the database handle) and <tt>continue</tt> statements
 (which continue to the next row of the loop). </p>
 </dd>
-<dt><span class="term"><span class="strong"><i><tt><a name="dbapi_db_1row"></a>db_1row</tt></i></span></span></dt>
+<dt><span class="term"><span class="strong"><i><tt><a name="kernel.dbapi_db_1row"></a>db_1row</tt></i></span></span></dt>
 <dd>
 <pre class="programlisting">
 <span class="strong"><i>db_1row</i></span> <span class="emphasis"><i>statement-name</i></span> <span class="emphasis"><i>sql</i></span> [ -bind <span class="emphasis"><i>bind_set_id</i></span> | -bind <span class="emphasis"><i>bind_value_list</i></span> ] \
@@ -636,7 +636,7 @@ db_1row select_foo &quot;select foo, bar from greeble where greeble_id = $greebl
 
 </pre>
 </dd>
-<dt><span class="term"><span class="strong"><i><tt><a name="dbapi_db_0or1row"></a>db_0or1row</tt></i></span> </span></dt>
+<dt><span class="term"><span class="strong"><i><tt><a name="kernel.dbapi_db_0or1row"></a>db_0or1row</tt></i></span> </span></dt>
 <dd>
 <pre class="programlisting">
 <span class="strong"><i>db_0or1row</i></span> <span class="emphasis"><i>statement-name</i></span> <span class="emphasis"><i>sql</i></span> [ -bind <span class="emphasis"><i>bind_set_id</i></span> | -bind <span class="emphasis"><i>bind_value_list</i></span> ] \
@@ -646,7 +646,7 @@ db_1row select_foo &quot;select foo, bar from greeble where greeble_id = $greebl
 sets variables to column values and returns 1. If no rows are returned,
 returns 0. If more than one row is returned, throws an error. </p>
 </dd>
-<dt><span class="term"><span class="strong"><i><tt><a name="dbapi_db_nextval"></a>db_nextval</tt></i></span> </span></dt>
+<dt><span class="term"><span class="strong"><i><tt><a name="kernel.dbapi_db_nextval"></a>db_nextval</tt></i></span> </span></dt>
 <dd>
 <pre class="programlisting">
 <span class="strong"><i>db_nextval</i></span> <span class="emphasis"><i>sequence-name</i></span>
@@ -659,7 +659,7 @@ uses a value from the pool if available to save a round-trip to the database
 
 </p>
 </dd>
-<dt><span class="term"><span class="strong"><i><tt><a name="dbapi_db_register_pooled_sequence"></a>db_register_pooled_sequence</tt></i></span> </span></dt>
+<dt><span class="term"><span class="strong"><i><tt><a name="kernel.dbapi_db_register_pooled_sequence"></a>db_register_pooled_sequence</tt></i></span> </span></dt>
 <dd>
 <pre class="programlisting">
 <span class="strong"><i>db_register_pooled_sequence</i></span> <span class="emphasis"><i>sequence-name</i></span> <span class="emphasis"><i>pool-size</i></span>
@@ -669,7 +669,7 @@ size of <span class="emphasis"><i>pool-size</i></span> sequence values (see <spa
 
 </p>
 </dd>
-<dt><span class="term"><span class="strong"><i><tt><a name="dbapi_db_string"></a>db_string</tt></i></span> </span></dt>
+<dt><span class="term"><span class="strong"><i><tt><a name="kernel.dbapi_db_string"></a>db_string</tt></i></span> </span></dt>
 <dd>
 <pre class="programlisting">
 <span class="strong"><i>db_string</i></span> <span class="emphasis"><i>statement-name</i></span> <span class="emphasis"><i>sql</i></span> [ -default <span class="emphasis"><i>default</i></span> ] [ -bind <span class="emphasis"><i>bind_set_id</i></span> | -bind <span class="emphasis"><i>bind_value_list</i></span> ]
@@ -683,7 +683,7 @@ row, returns <span class="emphasis"><i><tt>default</tt></i></span> (or throws an
 
 </p>
 </dd>
-<dt><span class="term"><span class="strong"><i><tt><a name="dbapi_db_list"></a>db_list</tt></i></span></span></dt>
+<dt><span class="term"><span class="strong"><i><tt><a name="kernel.dbapi_db_list"></a>db_list</tt></i></span></span></dt>
 <dd>
 <pre class="programlisting">
 <span class="strong"><i>db_list</i></span> <span class="emphasis"><i>statement-name</i></span> <span class="emphasis"><i>sql</i></span> [ -bind <span class="emphasis"><i>bind_set_id</i></span> | -bind <span class="emphasis"><i>bind_value_list</i></span> ]
@@ -695,7 +695,7 @@ return any rows, returns an empty list. Analogous to
 
 </p>
 </dd>
-<dt><span class="term"><span class="strong"><i><tt><a name="dbapi_db_list_of_lists"></a>db_list_of_lists</tt></i></span></span></dt>
+<dt><span class="term"><span class="strong"><i><tt><a name="kernel.dbapi_db_list_of_lists"></a>db_list_of_lists</tt></i></span></span></dt>
 <dd>
 <pre class="programlisting">
 <span class="strong"><i>db_list_of_lists</i></span> <span class="emphasis"><i>statement-name</i></span> <span class="emphasis"><i>sql</i></span> [ -bind <span class="emphasis"><i>bind_set_id</i></span> | -bind <span class="emphasis"><i>bind_value_list</i></span> ]
@@ -707,7 +707,7 @@ in a row of the result of SQL query <span class="emphasis"><i><tt>sql</tt></i></
 
 </p>
 </dd>
-<dt><span class="term"><span class="strong"><i><tt><a name="dbapi_db_dml"></a>db_dml</tt></i></span></span></dt>
+<dt><span class="term"><span class="strong"><i><tt><a name="kernel.dbapi_db_dml"></a>db_dml</tt></i></span></span></dt>
 <dd>
 <pre class="programlisting">
 <span class="strong"><i>db_dml</i></span> <span class="emphasis"><i>statement-name</i></span> <span class="emphasis"><i>sql</i></span> \
@@ -745,9 +745,9 @@ of the files <tt>/var/tmp/the_photo</tt> and
 </p>
 </dd>
 <dt><span class="term">
-<span class="strong"><i><tt><a name="dbapi_db_write_clob"></a>db_write_clob</tt></i></span>,
-<span class="strong"><i><tt><a name="dbapi_db_write_blob"></a>db_write_blob</tt></i></span>,
-<span class="strong"><i><tt><a name="dbapi_db_blob_get_file"></a>db_blob_get_file</tt></i></span>
+<span class="strong"><i><tt><a name="kernel.dbapi_db_write_clob"></a>db_write_clob</tt></i></span>,
+<span class="strong"><i><tt><a name="kernel.dbapi_db_write_blob"></a>db_write_blob</tt></i></span>,
+<span class="strong"><i><tt><a name="kernel.dbapi_db_blob_get_file"></a>db_blob_get_file</tt></i></span>
 </span></dt>
 <dd>
 <pre class="programlisting">
@@ -762,14 +762,14 @@ of the files <tt>/var/tmp/the_photo</tt> and
 
 </p>
 </dd>
-<dt><span class="term"><span class="strong"><i><tt><a name="dbapi_db_release_unused_handles"></a>db_release_unused_handles</tt></i></span></span></dt>
+<dt><span class="term"><span class="strong"><i><tt><a name="kernel.dbapi_db_release_unused_handles"></a>db_release_unused_handles</tt></i></span></span></dt>
 <dd>
 <pre class="programlisting">
 <span class="strong"><i>db_release_unused_handles</i></span>
 </pre>
 <p>Releases any allocated, unused database handles. </p>
 </dd>
-<dt><span class="term"><span class="strong"><i><tt><a name="dbapi_db_transaction"></a>db_transaction</tt></i></span></span></dt>
+<dt><span class="term"><span class="strong"><i><tt><a name="kernel.dbapi_db_transaction"></a>db_transaction</tt></i></span></span></dt>
 <dd>
 <pre class="programlisting">
 <span class="strong"><i>db_transaction</i></span> <span class="emphasis"><i>code_block</i></span> [ on_error { <span class="emphasis"><i>code_block</i></span> } ]
@@ -814,7 +814,7 @@ print_the_foo ; # Writes out &quot;foo is 8&quot;
 
 </pre>
 </dd>
-<dt><span class="term"><span class="strong"><i><tt><a name="dbapi_db_resultrows"></a>db_resultrows</tt></i></span></span></dt>
+<dt><span class="term"><span class="strong"><i><tt><a name="kernel.dbapi_db_resultrows"></a>db_resultrows</tt></i></span></span></dt>
 <dd>
 <pre class="programlisting">
 <span class="strong"><i>db_resultrows</i></span>
@@ -825,7 +825,7 @@ statement.
 
 </p>
 </dd>
-<dt><span class="term"><span class="strong"><i><tt><a name="dbapi_db_with_handle"></a>db_with_handle</tt></i></span></span></dt>
+<dt><span class="term"><span class="strong"><i><tt><a name="kernel.dbapi_db_with_handle"></a>db_with_handle</tt></i></span></span></dt>
 <dd>
 <pre class="programlisting">
 <span class="strong"><i>db_with_handle</i></span> <span class="emphasis"><i>var</i></span> <span class="emphasis"><i>code_block</i></span>
@@ -855,7 +855,7 @@ db_with_handle db {
 
 </pre>
 </dd>
-<dt><span class="term"><span class="strong"><i><tt><a name="dbapi_db_nullify_empty_string"></a>db_nullify_empty_string</tt></i></span></span></dt>
+<dt><span class="term"><span class="strong"><i><tt><a name="kernel.dbapi_db_nullify_empty_string"></a>db_nullify_empty_string</tt></i></span></span></dt>
 <dd>
 <pre class="programlisting">
 <span class="strong"><i>db_nullify_empty_string</i></span> <span class="emphasis"><i>string</i></span>
@@ -912,9 +912,9 @@ db_dml foo_insert &quot;insert into foo(baz) values(:1)&quot; {[db_nullify_empty
 </tr>
 </table>
 <hr>
-<address><a href="mailto:rmello@cc.usu.edu">
-			rmello@cc.usu.edu
-		  </a></address>
+<address>
+			rmello at fslc.usu.edu
+		</address>
 <address><a href="mailto:vinod@kurup.com">
 			vinod@kurup.com
 		  </a></address>

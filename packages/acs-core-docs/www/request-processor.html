@@ -6,8 +6,8 @@
 <meta name="generator" content="DocBook XSL Stylesheets V1.45">
 <link rel="home" href="index.html" title="OpenACS Documentation">
 <link rel="up" href="dev-guide.html" title="Chapter 4. OpenACS Developer's Guide">
-<link rel="previous" href="packages.html" title="OpenACS 4 Packages">
-<link rel="next" href="db-api.html" title="The Database Access API">
+<link rel="previous" href="packages.html" title="OpenACS 4.5 Packages">
+<link rel="next" href="db-api.html" title="The OpenACS Database Access API">
 <link rel="stylesheet" href="openacs.css" type="text/css">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -30,7 +30,7 @@
 <div class="titlepage"><div><h3 class="title">
 <a name="rp-overview"></a>Overview</h3></div></div>
 <p>
-This document is a brief introduction to the OpenACS 4 Request Processor;
+This document is a brief introduction to the OpenACS 4.5 Request Processor;
 more details can be found in the <a href="rp-design.html">OpenACS 4 Request Processor Design</a>. Here we cover the high level concepts behind the
 system, and implications and usage for the application developer.
 </p>
@@ -62,7 +62,7 @@ mechanism for the following requirements of larger web services:
 
 To achieve this functionality above in OpenACS 3.x, developers used an ad
 hoc combination of AOLserver filters, the <tt>ns_perm</tt> call,
-special purpose code in pages, and other procedures.  In OpenACS 4, the
+special purpose code in pages, and other procedures.  In OpenACS 4.5, the
 Request Processor, along with the OpenACS Package Manager, centralizes and
 unifies this functionality, making it more transparent and readily
 available to developers.
@@ -72,7 +72,7 @@ available to developers.
 <div class="titlepage"><div><h3 class="title">
 <a name="rp-thenewway"></a>The New Way</h3></div></div>
 <p>
-The 4.0 Request Processor is a global filter and set of Tcl procs that
+The 4.5 Request Processor is a global filter and set of Tcl procs that
 respond to every incoming URL reaching the server. The following
 diagram summarizes the stages of the request processor assuming a URL
 request like <tt>http://someserver.com/notes/somepage.adp</tt>.
@@ -87,7 +87,7 @@ request like <tt>http://someserver.com/notes/somepage.adp</tt>.
 The first thing the RP does is to map the given URL to the appropriate
 physical directory in the filesystem, from which to serve content.  We
 do this by searching the site map data model (touched on in the <a href="packages.html">Packages</a>, and further
-discussed in <a href="subsites.html" title="Writing OpenACS 4 Application Pages">the section called &#8220;Writing OpenACS 4 Application Pages&#8221;</a>). This data model maps URLs to objects representing
+discussed in <a href="subsites.html" title="Writing OpenACS 4.5 Application Pages">the section called &#8220;Writing OpenACS 4.5 Application Pages&#8221;</a>). This data model maps URLs to objects representing
 content, and these objects are typically package instances. 
 </p>
 <p>
@@ -95,7 +95,7 @@ After looking up the appropriate object, the RP stores the URL, the ID
 of the object it found, and the package and package instance the
 object belongs to into the environment of the connection.  This
 environment can be queried using the <tt>ad_conn</tt> procedure,
-which is described in detail in <a href="rp-design.html">OpenACS 4 Request Processor Design</a>. The <a href="subsites.html" title="Writing OpenACS 4 Application Pages">page
+which is described in detail in <a href="rp-design.html">OpenACS 4 Request Processor Design</a>. The <a href="subsites.html" title="Writing OpenACS 4.5 Application Pages">page
 development</a> tutorial shows you how to use this interface to make
 your pages aware of which instance was requested.
 </p>
@@ -111,7 +111,7 @@ extracts or sets up new session tokens for the user.
 <dt><span class="term">Stage 3: Authorization</span></dt>
 <dd><p>
 Next, the Request Processor checks if the user has appropriate access
-privileges to the requested part of the site. In OpenACS 4, access control
+privileges to the requested part of the site. In OpenACS 4.5, access control
 is dictated by the <a href="permissions" target="_top">permissions system</a>. In
 this case, the RP checks if the user has &quot;read&quot; priviledges on the
 object in the site map specified by the URL. This object is typically
@@ -248,15 +248,15 @@ of the package.
 </td>
 </tr>
 <tr>
-<td width="40%" align="left">OpenACS 4 Packages </td>
+<td width="40%" align="left">OpenACS 4.5 Packages </td>
 <td width="20%" align="center"><a accesskey="u" href="dev-guide.html">Up</a></td>
-<td width="40%" align="right"> The Database Access API</td>
+<td width="40%" align="right"> The OpenACS Database Access API</td>
 </tr>
 </table>
 <hr>
-<address><a href="mailto:rmello@cc.usu.edu">
-			rmello@cc.usu.edu
-		  </a></address>
+<address>
+			rmello at fslc.usu.edu
+		</address>
 <address><a href="mailto:vinod@kurup.com">
 			vinod@kurup.com
 		  </a></address>

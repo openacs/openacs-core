@@ -2,11 +2,11 @@
 <html>
 <head>
 <meta content="text/html; charset=ISO-8859-1" http-equiv="Content-Type">
-<title>OpenACS 4 Packages</title>
+<title>OpenACS 4.5 Packages</title>
 <meta name="generator" content="DocBook XSL Stylesheets V1.45">
 <link rel="home" href="index.html" title="OpenACS Documentation">
 <link rel="up" href="dev-guide.html" title="Chapter 4. OpenACS Developer's Guide">
-<link rel="previous" href="objects.html" title="OpenACS 4 Data Models and the Object System">
+<link rel="previous" href="objects.html" title="OpenACS 4.5 Data Models and the Object System">
 <link rel="next" href="request-processor.html" title="The Request Processor">
 <link rel="stylesheet" href="openacs.css" type="text/css">
 </head>
@@ -23,7 +23,7 @@
 </div>
 <div class="sect1">
 <div class="titlepage"><div><h2 class="title" style="clear: both">
-<a name="packages"></a>OpenACS 4 Packages</h2></div></div>
+<a name="packages"></a>OpenACS 4.5 Packages</h2></div></div>
 <p>
     By <a href="mailto:psu@arsdigita.com" target="_top">Pete Su</a> and
     <a href="mailto:bquinn@arsdigita.com" target="_top">Bryan Quinn</a>
@@ -102,7 +102,7 @@ ROOT/
       or 4 different areas. 
     </p>
 <p>
-      Here is how an OpenACS 4 server is laid out:
+      Here is how an OpenACS 4.5 server is laid out:
     </p>
 <pre class="programlisting">
 
@@ -170,7 +170,7 @@ ROOT/
       sends to our server to the right page in the appropriate
       package. While we are at it, this tool may as well also automate
       package installation, depedency checking, upgrades, and package
-      removal. In OpenACS 4, this tool is called APM.
+      removal. In OpenACS 4.5, this tool is called APM.
     </p>
 </div>
 <div class="sect2">
@@ -205,7 +205,7 @@ ROOT/
 <p>
       The following sections will show you how to make a package for the
       Notes application. In addition, they will discuss some new site
-      management features in OpenACS 4 that take advantage of the APM's package
+      management features in OpenACS 4.5 that take advantage of the APM's package
       instance model. The two most important of these are <span class="emphasis"><i>subsites</i></span>,
       and the <span class="emphasis"><i>site map</i></span> tool, which can be used to map applications to
       one or more arbitrary URLs in a running site.
@@ -557,7 +557,7 @@ ROOT/
 	  directory that APM created will be empty except for the
 	  <tt>notes.info</tt> file. At this point, create a file called
 	  <tt>ROOT/packages/notes/sql/notes-create.sql</tt> and put the add
-	  the <a href="objects.html" title="OpenACS 4 Data Models and the Object System">data model</a> that we created before to
+	  the <a href="objects.html" title="OpenACS 4.5 Data Models and the Object System">data model</a> that we created before to
 	  this file. You should also create a file called
 	  <tt>ROOT/packages/notes/sql/notes-drop.sql</tt> that drops the
 	  data model.  </p>
@@ -635,7 +635,7 @@ ROOT/
       also hard to map mulitiple URLs to the same place in the file system.
     </p>
 <p>
-      In OpenACS 4, administrators can define an arbitrary mapping between the
+      In OpenACS 4.5, administrators can define an arbitrary mapping between the
       URLs the user types and the actual file in the file system that is
       served. This mapping is called the <span class="emphasis"><i>site map</i></span> and entries in the
       site map are called <span class="emphasis"><i>site nodes</i></span>. Each site node maps a URL to an
@@ -650,7 +650,7 @@ ROOT/
       of many indepdendent applications that actually run on a single shared
       code base. The <a href="request-processor.html" title="The Request Processor">request-processor</a> document shows
       you how OpenACS figures out which instance of your application was
-      requested by the user at any given time. The <a href="subsites.html" title="Writing OpenACS 4 Application Pages">page development</a> tutorial shows you how to use this
+      requested by the user at any given time. The <a href="subsites.html" title="Writing OpenACS 4.5 Application Pages">page development</a> tutorial shows you how to use this
       information in your user interface.
     </p>
 <p>
@@ -681,7 +681,7 @@ http://your-server.your-domain.com/notes/hello.html
       yet written Notes application at various places in the site. In a
       later document, we'll see how to write your applicationn so that the
       code can detect from where in the site it was invoked. This is the key
-      to supporting <a href="subsites.html" title="Writing OpenACS 4 Application Pages">subsites</a>.
+      to supporting <a href="subsites.html" title="Writing OpenACS 4.5 Application Pages">subsites</a>.
     </p>
 </div>
 <div class="sect2">
@@ -714,8 +714,8 @@ http://your-server.your-domain.com/notes/hello.html
 <div class="titlepage"><div><h3 class="title">
 <a name="packages-add-reading"></a>Additional Reading</h3></div></div>
 <div class="itemizedlist"><ul>
-<li><p><a href="apm-design.html">OpenACS 4 Package Manager Design</a></p></li>
-<li><p><a href="apm-requirements.html">OpenACS 4 Package Manager Requirements</a></p></li>
+<li><p><a href="apm-design.html">OpenACS 4.5 Package Manager Design</a></p></li>
+<li><p><a href="apm-requirements.html">OpenACS 4.5 Package Manager Requirements</a></p></li>
 <li><p><a href="http://acs40.arsdigita.com/acs40-project-central/package-submission.html" target="_top">Package submission guidelines</a></p></li>
 </ul></div>
 <p><div class="cvstag">($Id$)</div></p>
@@ -732,15 +732,15 @@ http://your-server.your-domain.com/notes/hello.html
 </td>
 </tr>
 <tr>
-<td width="40%" align="left">OpenACS 4 Data Models and the Object System </td>
+<td width="40%" align="left">OpenACS 4.5 Data Models and the Object System </td>
 <td width="20%" align="center"><a accesskey="u" href="dev-guide.html">Up</a></td>
 <td width="40%" align="right"> The Request Processor</td>
 </tr>
 </table>
 <hr>
-<address><a href="mailto:rmello@cc.usu.edu">
-			rmello@cc.usu.edu
-		  </a></address>
+<address>
+			rmello at fslc.usu.edu
+		</address>
 <address><a href="mailto:vinod@kurup.com">
 			vinod@kurup.com
 		  </a></address>

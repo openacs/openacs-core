@@ -2,19 +2,19 @@
 <html>
 <head>
 <meta content="text/html; charset=ISO-8859-1" http-equiv="Content-Type">
-<title>OpenACS 4 Data Models and the Object System</title>
+<title>OpenACS 4.5 Data Models and the Object System</title>
 <meta name="generator" content="DocBook XSL Stylesheets V1.45">
 <link rel="home" href="index.html" title="OpenACS Documentation">
 <link rel="up" href="dev-guide.html" title="Chapter 4. OpenACS Developer's Guide">
-<link rel="previous" href="ch04s01.html" title="Overview">
-<link rel="next" href="packages.html" title="OpenACS 4 Packages">
+<link rel="previous" href="dev-guide.html" title="Chapter 4. OpenACS Developer's Guide">
+<link rel="next" href="packages.html" title="OpenACS 4.5 Packages">
 <link rel="stylesheet" href="openacs.css" type="text/css">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <div class="navheader">
 <a href="http://openacs.org"><img src="images/alex.jpg" border="0"></a><table width="100%" summary="Navigation header" border="0"><tr>
 <td width="20%" align="left">
-<a accesskey="p" href="ch04s01.html">Prev</a> </td>
+<a accesskey="p" href="dev-guide.html">Prev</a> </td>
 <th width="60%" align="center">Chapter 4. OpenACS Developer's Guide</th>
 <td width="20%" align="right"> <a accesskey="n" href="packages.html">Next</a>
 </td>
@@ -23,14 +23,14 @@
 </div>
 <div class="sect1">
 <div class="titlepage"><div><h2 class="title" style="clear: both">
-<a name="objects"></a>OpenACS 4 Data Models and the Object System</h2></div></div>
+<a name="objects"></a>OpenACS 4.5 Data Models and the Object System</h2></div></div>
 <div class="authorblurb"><p>By <a href="mailto:psu@arsdigita.com" target="_top">Pete Su</a>
 </p></div>
 <div class="sect2">
 <div class="titlepage"><div><h3 class="title">
 <a name="objects-overview"></a>Overview</h3></div></div>
 <p>
-Developing data models in OpenACS 4 is much like developing data models
+Developing data models in OpenACS 4.5 is much like developing data models
 for OpenACS 3, save for the implementation.  As usual, you need to examine
 how to model the information that the application must store and
 manipulate, and define a suitable set of SQL tables.  In our Notes
@@ -64,12 +64,12 @@ things with Notes as well:
 <li style="list-style-type: opencircle"><p>Allow other applications to use notes in ways we don't know of yet.</p></li>
 </ul></div>
 <p>
-In OpenACS 4, the key to enabling these types of services on your
+In OpenACS 4.5, the key to enabling these types of services on your
 application data is to take advantage of the Object System.  The first
 question anyone asks is usually &quot;Just what are objects, and what do
 you use them for anyway?&quot;.  The short answer: objects are anything
 represented in the application's data model that will need to be
-managed by any central service in OpenACS 4, or that may be reusable in
+managed by any central service in OpenACS 4.5, or that may be reusable in
 the context of future applications. Every object in the system is
 represented using a row in the <tt>acs_objects</tt> table. This
 table defines all the standard attributes that are stored on every
@@ -110,7 +110,7 @@ make some calls to use our <tt>notes</tt> table as the basis for a
 new <span class="emphasis"><i>object type</i></span>. Object types are analogous to classes in
 programming languages such as C++ and Java. For example, in Java a
 class defines a set of attributes that store data and a set of methods
-that run code. In OpenACS 4, we use one or more Oracle tables to store the
+that run code. In OpenACS 4.5, we use one or more Oracle tables to store the
 data attributes, and we define a PL/SQL package to hold procedures to
 define the programming interface to the data model.
 </p>
@@ -128,11 +128,11 @@ below you'll find the code needed to describe a new object type called
 <p>
 Fire up your text editor and open the
 <tt>ROOT/packages/notes/sql/notes-create.sql</tt> file created
-during the earlier <a href="packages.html" title="OpenACS 4 Packages">created the package</a>.  Then, do the following:
+during the earlier <a href="packages.html" title="OpenACS 4.5 Packages">created the package</a>.  Then, do the following:
 </p>
 <div class="sect3">
 <div class="titlepage"><div><h4 class="title">
-<a name="id5377856"></a>Describe the new type to the type system</h4></div></div>
+<a name="id2800964"></a>Describe the new type to the type system</h4></div></div>
 <p>
 First, add an entry to the <tt>acs_object_types</tt> table with the following PL/SQL call:
 </p>
@@ -202,7 +202,7 @@ no need for us to define them.
 </div>
 <div class="sect3">
 <div class="titlepage"><div><h4 class="title">
-<a name="id5378019"></a>Define a table in which to store your objects</h4></div></div>
+<a name="id2801128"></a>Define a table in which to store your objects</h4></div></div>
 <p>
 The next thing we do is make a small modification to the data model to
 reflect the fact that each row in the <tt>notes</tt> table
@@ -234,7 +234,7 @@ transparently find any objects that are instances of any subtype of
 </div>
 <div class="sect3">
 <div class="titlepage"><div><h4 class="title">
-<a name="id5378144"></a>Define a package for type specific procedures</h4></div></div>
+<a name="id2801253"></a>Define a package for type specific procedures</h4></div></div>
 <p>
 The next step is to define a PL/SQL package for your new type, and
 write some basic procedures to create and delete objects. Here is a
@@ -268,7 +268,7 @@ show errors
 You might be wondering what all the extra parameters are to these
 calls, since we haven't mentioned them before.  These parameters are
 needed to fill out information that will be stored about the object
-that's not stored directly in the table you defined. The OpenACS 4 Object
+that's not stored directly in the table you defined. The OpenACS 4.5 Object
 System defines these attributes on the type <tt>acs_object</tt>
 since all objects should have these attributes. Internally, there are
 tables that store this information for you. Most of the data is pretty
@@ -290,7 +290,7 @@ later.
 </div>
 <div class="sect3">
 <div class="titlepage"><div><h4 class="title">
-<a name="id5378249"></a>Define a package body for type specific procedures</h4></div></div>
+<a name="id2801359"></a>Define a package body for type specific procedures</h4></div></div>
 <p>
 The PL/SQL package body contains the implementations of the procedures
 defined above. The only subtle thing going on here is that we must use
@@ -412,7 +412,7 @@ models that are meant to be integrated with the OpenACS object
 system. 
 </p>
 <p>
-There are two basic rules you should follow when designing OpenACS 4 data
+There are two basic rules you should follow when designing OpenACS 4.5 data
 models:
 
 
@@ -480,7 +480,7 @@ applications.
 <div class="titlepage"><div><h3 class="title">
 <a name="objects-summary"></a>Summary</h3></div></div>
 <p>
-Hooking into the OpenACS 4 object system brings the application developer
+Hooking into the OpenACS 4.5 object system brings the application developer
 numerous benefits, and doing it involves only four easy steps:
 
 
@@ -519,21 +519,21 @@ especially true for the <tt>context_id</tt> field.
 <table width="100%" summary="Navigation footer">
 <tr>
 <td width="40%" align="left">
-<a accesskey="p" href="ch04s01.html">Prev</a> </td>
+<a accesskey="p" href="dev-guide.html">Prev</a> </td>
 <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
 <td width="40%" align="right"> <a accesskey="n" href="packages.html">Next</a>
 </td>
 </tr>
 <tr>
-<td width="40%" align="left">Overview </td>
+<td width="40%" align="left">Chapter 4. OpenACS Developer's Guide </td>
 <td width="20%" align="center"><a accesskey="u" href="dev-guide.html">Up</a></td>
-<td width="40%" align="right"> OpenACS 4 Packages</td>
+<td width="40%" align="right"> OpenACS 4.5 Packages</td>
 </tr>
 </table>
 <hr>
-<address><a href="mailto:rmello@cc.usu.edu">
-			rmello@cc.usu.edu
-		  </a></address>
+<address>
+			rmello at fslc.usu.edu
+		</address>
 <address><a href="mailto:vinod@kurup.com">
 			vinod@kurup.com
 		  </a></address>

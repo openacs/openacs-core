@@ -11,7 +11,7 @@
   </para>
 
   <para><emphasis role="strong">NOTE:</emphasis> We've not yet tested
-	OpenACS 4 under Oracle 9i</para>
+	OpenACS &version; under Oracle 9i</para>
 
   <para><emphasis role="strong">NOTE:</emphasis> This document assumes that
 	you'll be installing Oracle on the same box as AOLServer. For more

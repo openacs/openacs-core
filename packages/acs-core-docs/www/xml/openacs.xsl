@@ -149,12 +149,7 @@
 		</table>
 		<hr/>
 		<address>
-		  <a>
-			<xsl:attribute name="href">
-			  <xsl:text>mailto:rmello@cc.usu.edu</xsl:text>
-			</xsl:attribute>
-			rmello@cc.usu.edu
-		  </a>
+			rmello at fslc.usu.edu
 		</address>
 		<address>
 		  <a>
