@@ -1,14 +1,14 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html><head><meta content="text/html; charset=ISO-8859-1" http-equiv="Content-Type"><title>The Request Processor</title><meta name="generator" content="DocBook XSL Stylesheets V1.50.0"><link rel="home" href="index.html" title="OpenACS Documentation"><link rel="up" href="dev-guide.html" title="Chapter 9. Development Reference"><link rel="previous" href="objects.html" title="OpenACS 4.6.2 Data Models and the Object System"><link rel="next" href="db-api.html" title="The OpenACS Database Access API"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="images/alex.jpg" border="0"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="objects.html">Prev</a>&nbsp;</td><th width="60%" align="center">Chapter 9. Development Reference</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="db-api.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><h2 class="title" style="clear: both"><a name="request-processor"></a>The Request Processor</h2></div></div><div class="authorblurb"><p>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>The Request Processor</title><meta name="generator" content="DocBook XSL Stylesheets V1.58.1"><link rel="home" href="index.html" title="OpenACS Documentation"><link rel="up" href="dev-guide.html" title="Chapter 9. Development Reference"><link rel="previous" href="objects.html" title="OpenACS 4.6.2 Data Models and the Object System"><link rel="next" href="db-api.html" title="The OpenACS Database Access API"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="images/alex.jpg" border="0"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="objects.html">Prev</a>&amp;nbsp;</td><th width="60%" align="center">Chapter 9. Development Reference</th><td width="20%" align="right">&amp;nbsp;<a accesskey="n" href="db-api.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><h2 class="title" style="clear: both"><a name="request-processor"></a>The Request Processor</h2></div></div><div class="authorblurb"><p>
 By Pete Su
 <br>
           OpenACS docs are written by the named authors, but may be edited
           by OpenACS documentation staff.
-        </p></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="rp-overview"></a>Overview</h3></div></div><p>
+        </p></div><div class="sect2" lang="en"><div class="titlepage"><div><h3 class="title"><a name="rp-overview"></a>Overview</h3></div></div><p>
 This document is a brief introduction to the OpenACS 4.6.2 Request Processor;
 more details can be found in the <a href="rp-design.html">OpenACS 4 Request Processor Design</a>. Here we cover the high level concepts behind the
 system, and implications and usage for the application developer.
-</p></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="rp-theoldway"></a>The Old Way</h3></div></div><p>
+</p></div><div class="sect2" lang="en"><div class="titlepage"><div><h3 class="title"><a name="rp-theoldway"></a>The Old Way</h3></div></div><p>
 In older versions of the OpenACS, the mapping between URLs and pages was
 simple. AOLserver, the usual webserver for the OpenACS, would find the
 appropriate file by appending the server's page-root to the path in
@@ -20,9 +20,9 @@ This was simple enough, but OpenACS did not provide a clean centralized
 mechanism for the following requirements of larger web services:
 
 
-</p><div class="itemizedlist"><ul type="opencircle"><li style="list-style-type: opencircle"><p>Support for more flexible mappings from URLs to content
-    </p></li><li style="list-style-type: opencircle"><p>Robust user authentication
-    </p></li><li style="list-style-type: opencircle"><p>Page level access control
+</p><div class="itemizedlist"><ul type="opencircle"><li style="list-style-type: circle"><p>Support for more flexible mappings from URLs to content
+    </p></li><li style="list-style-type: circle"><p>Robust user authentication
+    </p></li><li style="list-style-type: circle"><p>Page level access control
     </p></li></ul></div><p>
 
 
@@ -32,13 +32,13 @@ special purpose code in pages, and other procedures.  In OpenACS 4.6.2, the
 Request Processor, along with the OpenACS Package Manager, centralizes and
 unifies this functionality, making it more transparent and readily
 available to developers.
-</p></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="rp-thenewway"></a>The New Way</h3></div></div><p>
+</p></div><div class="sect2" lang="en"><div class="titlepage"><div><h3 class="title"><a name="rp-thenewway"></a>The New Way</h3></div></div><p>
 The 4.6.2 Request Processor is a global filter and set of Tcl procs that
 respond to every incoming URL reaching the server. The following
 diagram summarizes the stages of the request processor assuming a URL
 request like <tt>http://someserver.com/notes/somepage.adp</tt>.
 
-</p><div class="mediaobject"><img src="images/rp-flow.gif" align="center" longdesc="ld-id2859411.html"><div class="longdesc-link" align="right"><br clear="all"><span style="font-size: 8pt;">[<a href="ld-id2859411.html" target="longdesc">D</a>]</span></div></div><p>
+</p><div class="mediaobject"><img src="images/rp-flow.gif" align="center" longdesc="ld-id2920390.html"><div class="longdesc-link" align="right"><br clear="all"><span class="longdesc-link">[<a href="ld-id2920390.html" target="longdesc">D</a>]</span></div></div><p>
 
 </p><div class="variablelist"><dl><dt><span class="term">Stage 1: Search Site Map</span></dt><dd><p>
 The first thing the RP does is to map the given URL to the appropriate
@@ -91,7 +91,7 @@ described in <a href="rp-design.html">OpenACS 4 Request Processor Design</a>.
 Once the appropriate file is found, it is either served directly if
 it's static content, or sent to the template system or the standard
 Tcl interpreter if it's a dynamic page.
-</p></dd></dl></div></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="rp-basicapi"></a>Basic API</h3></div></div><p>
+</p></dd></dl></div></div><div class="sect2" lang="en"><div class="titlepage"><div><h3 class="title"><a name="rp-basicapi"></a>Basic API</h3></div></div><p>
 Once the flow of control reaches a dynamic page, the Request Processor
 has populated the environment of the request with several pieces of
 useful information. The RP's environment is accessible through the
@@ -153,4 +153,4 @@ of the package.
 </span></dt><dd><p>
 In a .vuh file, path_info is the trailing part of the URL not matched
 by the .vuh file.
-</p></dd></dl></div><p><div class="cvstag">($Id$)</div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="objects.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="db-api.html">Next</a></td></tr><tr><td width="40%" align="left">OpenACS 4.6.2 Data Models and the Object System&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="dev-guide.html">Up</a></td><td width="40%" align="right">&nbsp;The OpenACS Database Access API</td></tr></table><hr><address>rmello at fslc.usu.edu</address><address><a href="mailto:vinod@kurup.com">vinod@kurup.com</a></address></div><a name="comments"></a><center><a href="http://openacs.org/doc/openacs-4/request-processor.html#comments">View comments on this page at openacs.org</a></center></body></html>
+</p></dd></dl></div><div class="cvstag">($Id$)</div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="objects.html">Prev</a>&amp;nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right">&amp;nbsp;<a accesskey="n" href="db-api.html">Next</a></td></tr><tr><td width="40%" align="left">OpenACS 4.6.2 Data Models and the Object System&amp;nbsp;</td><td width="20%" align="center"><a accesskey="u" href="dev-guide.html">Up</a></td><td width="40%" align="right">&amp;nbsp;The OpenACS Database Access API</td></tr></table><hr><address>rmello at fslc.usu.edu</address><address><a href="mailto:vinod@kurup.com">vinod@kurup.com</a></address></div><a name="comments"></a><center><a href="http://openacs.org/doc/openacs-4/request-processor.html#comments">View comments on this page at openacs.org</a></center></body></html>

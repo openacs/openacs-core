@@ -1,9 +1,9 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html><head><meta content="text/html; charset=ISO-8859-1" http-equiv="Content-Type"><title>Setting Up Database Objects</title><meta name="generator" content="DocBook XSL Stylesheets V1.50.0"><link rel="home" href="index.html" title="OpenACS Documentation"><link rel="up" href="tutorial.html" title="Chapter 8. Development Tutorial"><link rel="previous" href="tutorial-newpackage.html" title="Creating a Package"><link rel="next" href="tutorial-pages.html" title="Creating Web Pages"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="images/alex.jpg" border="0"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="tutorial-newpackage.html">Prev</a>&nbsp;</td><th width="60%" align="center">Chapter 8. Development Tutorial</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="tutorial-pages.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><h2 class="title" style="clear: both"><a name="tutorial-database"></a>Setting Up Database Objects</h2></div></div><div class="authorblurb"><p>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Setting Up Database Objects</title><meta name="generator" content="DocBook XSL Stylesheets V1.58.1"><link rel="home" href="index.html" title="OpenACS Documentation"><link rel="up" href="tutorial.html" title="Chapter 8. Development Tutorial"><link rel="previous" href="tutorial.html" title="Chapter 8. Development Tutorial"><link rel="next" href="tutorial-pages.html" title="Creating Web Pages"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="images/alex.jpg" border="0"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="tutorial.html">Prev</a>&amp;nbsp;</td><th width="60%" align="center">Chapter 8. Development Tutorial</th><td width="20%" align="right">&amp;nbsp;<a accesskey="n" href="tutorial-pages.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><h2 class="title" style="clear: both"><a name="tutorial-database"></a>Setting Up Database Objects</h2></div></div><div class="authorblurb"><p>
       by <a href="mailto:joel@aufrecht.org" target="_top">Joel Aufrecht</a><br>
           OpenACS docs are written by the named authors, but may be edited
           by OpenACS documentation staff.
-        </p></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="id2852796"></a>Code the data model</h3></div></div><p>We create all database objects with scripts in the
+        </p></div><div class="sect2" lang="en"><div class="titlepage"><div><h3 class="title"><a name="id2912623"></a>Code the data model</h3></div></div><p>We create all database objects with scripts in the
       <tt>samplenote/sql/</tt> directory.  All
       database scripts are database-specific and are thus in either
       the <tt>samplenote/sql/oracle</tt> or
@@ -40,7 +40,7 @@ Directory /cvsroot/service0/packages/samplenote/sql/postgresql added to the repo
       <tt>@author</tt> which will be picked up
       by the API browser.  The string
       <tt>$Id$</tt> will automatically be
-      expanded when the file is checked in to cvs.</p><pre class="screen">[service0@yourserver postgresql]$ <b><tt>emacs samplenote-create.sql</tt></b></pre><p>Paste this into the file and save and close.</p><div class="figure"><p class="title"><b>Figure 8.2. Database Creation Script - master create file</b></p><pre class="programlisting">--
+      expanded when the file is checked in to cvs.</p><pre class="screen">[service0@yourserver postgresql]$ <b><tt>emacs samplenote-create.sql</tt></b></pre><p>Paste this into the file and save and close.</p><div class="figure"><a name="id2912816"></a><p class="title"><b>Figure 8.1. Database Creation Script - master create file</b></p><pre class="programlisting">--
 -- packages/samplenote/sql/postgresql/samplenote-create.sql
 --
 -- @author rhs@mit.edu
@@ -50,7 +50,7 @@ Directory /cvsroot/service0/packages/samplenote/sql/postgresql added to the repo
 --
 
 \i samplenote-table-create.sql
-\i samplenote-functions-create.sql</pre></div><p>Create the file to create the database table.</p><pre class="screen">[service0@yourserver postgresql]$ <b><tt>emacs samplenote-table-create.sql</tt></b></pre><p>Paste this into the file and save and close.</p><div class="figure"><p class="title"><b>Figure 8.3. Database Creation Script - table</b></p><pre class="programlisting">--
+\i samplenote-functions-create.sql</pre></div><p>Create the file to create the database table.</p><pre class="screen">[service0@yourserver postgresql]$ <b><tt>emacs samplenote-table-create.sql</tt></b></pre><p>Paste this into the file and save and close.</p><div class="figure"><a name="id2912863"></a><p class="title"><b>Figure 8.2. Database Creation Script - table</b></p><pre class="programlisting">--
 -- packages/samplenote/sql/postgresql/samplenote-table-create.sql
 --
 -- @author rhs@mit.edu
@@ -101,7 +101,7 @@ begin
 end;' language 'plpgsql';
 select inline_0 ();
 drop function inline_0 ();
-</pre></div><p>Create the file to create the functions used to manipulate records.</p><pre class="screen">[service0@yourserver postgresql]$ <b><tt>emacs samplenote-functions-create.sql</tt></b></pre><p>Paste this into the file and save and close.</p><div class="figure"><p class="title"><b>Figure 8.4. Database Creation Script - functions</b></p><pre class="programlisting">--
+</pre></div><p>Create the file to create the functions used to manipulate records.</p><pre class="screen">[service0@yourserver postgresql]$ <b><tt>emacs samplenote-functions-create.sql</tt></b></pre><p>Paste this into the file and save and close.</p><div class="figure"><a name="id2910891"></a><p class="title"><b>Figure 8.3. Database Creation Script - functions</b></p><pre class="programlisting">--
 -- packages/samplenote/sql/postgresql/samplenote-functions-create.sql
 --
 -- @author rhs@mit.edu
@@ -196,7 +196,7 @@ begin
 end;
 ' language 'plpgsql';
 </pre></div><p>Create a database file to drop everything if the package
-        is uninstalled.</p><pre class="screen">[service0@yourserver postgresql]$ <b><tt>emacs samplenote-drop.sql</tt></b></pre><div class="figure"><p class="title"><b>Figure 8.5. Database deletion script</b></p><pre class="programlisting">-- packages/samplenote/sql/samplenote-drop.sql
+        is uninstalled.</p><pre class="screen">[service0@yourserver postgresql]$ <b><tt>emacs samplenote-drop.sql</tt></b></pre><div class="figure"><a name="id2910997"></a><p class="title"><b>Figure 8.4. Database deletion script</b></p><pre class="programlisting">-- packages/samplenote/sql/samplenote-drop.sql
 -- drop script
 --
 -- @author rhs@mit.edu
@@ -310,4 +310,4 @@ DROP
                           0
 (1 row)
 
-[service0@yourserver postgresql]$</pre><p>Once both scripts are working without errors, run the create script one last time and proceed.</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="tutorial-newpackage.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="tutorial-pages.html">Next</a></td></tr><tr><td width="40%" align="left">Creating a Package&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="tutorial.html">Up</a></td><td width="40%" align="right">&nbsp;Creating Web Pages</td></tr></table><hr><address>rmello at fslc.usu.edu</address><address><a href="mailto:vinod@kurup.com">vinod@kurup.com</a></address></div><a name="comments"></a><center><a href="http://openacs.org/doc/openacs-4/tutorial-database.html#comments">View comments on this page at openacs.org</a></center></body></html>
+[service0@yourserver postgresql]$</pre><p>Once both scripts are working without errors, run the create script one last time and proceed.</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="tutorial.html">Prev</a>&amp;nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right">&amp;nbsp;<a accesskey="n" href="tutorial-pages.html">Next</a></td></tr><tr><td width="40%" align="left">Chapter 8. Development Tutorial&amp;nbsp;</td><td width="20%" align="center"><a accesskey="u" href="tutorial.html">Up</a></td><td width="40%" align="right">&amp;nbsp;Creating Web Pages</td></tr></table><hr><address>rmello at fslc.usu.edu</address><address><a href="mailto:vinod@kurup.com">vinod@kurup.com</a></address></div><a name="comments"></a><center><a href="http://openacs.org/doc/openacs-4/tutorial-database.html#comments">View comments on this page at openacs.org</a></center></body></html>

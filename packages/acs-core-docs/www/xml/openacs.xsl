@@ -5,7 +5,12 @@
 
 <!-- vinodk: Imports chunk.xsl                   -->
 
+<!-- Red Hat 8/xsl-stylesheets 1.50.0-3
   <xsl:import href="/usr/share/sgml/docbook/xsl-stylesheets-1.50.0-3/html/chunk.xsl"/>
+-->
+
+<!-- Red Hat 9/xsl-stylesheets 1.58.1-2 -->
+  <xsl:import href="/usr/share/sgml/docbook/xsl-stylesheets-1.58.1-2/html/chunk.xsl"/>
 
 <!-- vinodk: Not sure if this is needed                   -->
   <xsl:output media-type="text/html" encoding="iso-8859-1"/>
