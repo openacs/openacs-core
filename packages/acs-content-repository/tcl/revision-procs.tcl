@@ -71,8 +71,14 @@ ad_proc -public cr_write_content {
             if { $string_p } {
                 return [db_blob_get write_lob_content ""]
             }
+	    # need to set content_length header here
+	    ns_set put [ns_conn outputheaders] ContentLength $content_length
             ReturnHeaders $mime_type
-            db_write_blob write_lob_content ""
+	    # also need to check for HEAD method and skip sending
+	    # actual content
+	    if {![string equal -nocase "head" [ns_conn method]]} {
+		db_write_blob write_lob_content ""
+	    }
         }
     }
 
