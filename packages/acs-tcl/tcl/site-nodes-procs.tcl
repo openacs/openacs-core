@@ -431,7 +431,7 @@ ad_proc -public site_node::get_children {
 } {
     set node_url [get_url -node_id $node_id]
     
-    set child_urls [nsv_array names site_nodes "${node_url}*"]
+    set child_urls [nsv_array names site_nodes "${node_url}?*"]
 
     if { !$all_p } {
         set org_child_urls $child_urls
