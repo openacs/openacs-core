@@ -1,3 +1,15 @@
+ad_library {
+
+    Database Query API for the ArsDigita Templating System
+
+    @creation-date 29 September 2000
+    @author Karl Goldstein (karlg@arsdigita.com)
+            Stanislav Freidin (sfreidin@arsdigita.com)
+    @cvs-id $Id$
+
+}
+
+
 # Database Query API for the ArsDigita Templating System
 
 # Copyright (C) 1999-2000 ArsDigita Corporation
@@ -41,7 +53,33 @@ nsv_set __template_query_persistent_timeout . .
 # @option persistent Cache the query results persistently, so that
 #                    all subsequent requests use the results.
 
-proc template::query { statement_name result_name type sql args } {
+ad_proc -public template::query { statement_name result_name type sql args } {
+    Public interface to template query api.  This routine parses the arguements and
+    dispatches to the query command specified by the type arguement.
+
+ @option maxrows    Limits the query results of a multirow query
+                    to a fixed number of rows.
+ @option cache      Cache the query results keyed on an identifier
+                    that is unique for both the query and the bind variables
+                    used in the query.  The cached result reflects
+                    any initial specification of maxrows and startrows.
+ @option refresh    Force a query to be performed even if it is cached,
+                    and refresh the cache.
+                    Only applicable if the cache option is specified as well.
+                    Does not affect a previously specified timeout period.
+ @option timeout    The maximum period of time for which the cached results
+                    are valid in seconds.  Only applicable for
+                    persistently cached results.
+ @option persistent Cache the query results persistently, so that
+                    all subsequent requests use the results.
+
+    @return 1 if query was a success, 0 if it failed
+    @param statement_name Standard db_api query name
+    @param result_name Tcl variable name when doing an uplevel to set the returned result
+    @param type The query type
+    @param sql The sql to be used for the query
+    @param args Optional args: uplevel, cache, maxrows
+} {
 
   #set beginTime [clock clicks]
 
@@ -85,7 +123,13 @@ proc template::query { statement_name result_name type sql args } {
 
 # Process a onevalue query.  Use a single array to store the results.
 
-proc template::query::onevalue { statement_name db result_name sql } {
+ad_proc -private template::query::onevalue { statement_name db result_name sql } {
+    @param statement_name Standard db_api statement name used to hook into query dispatcher
+    @param db Database handle
+    @param result_name Tcl variable name to use when setting the result
+    @param sql Query to use when processing this command
+
+} {
 
   set full_statement_name [db_qd_get_fullname $statement_name]
 
@@ -112,7 +156,12 @@ proc template::query::onevalue { statement_name db result_name sql } {
 
 # Process a onerow query.  Use a single array to store the results.
 
-proc template::query::onerow { statement_name db result_name sql } {
+ad_proc -private template::query::onerow { statement_name db result_name sql } {
+    @param statement_name Standard db_api statement name used to hook into query dispatcher
+    @param db Database handle
+    @param result_name Tcl variable name to use when setting the result
+    @param sql Query to use when processing this command
+} {
 
   set full_statement_name [db_qd_get_fullname $statement_name]
 
@@ -152,7 +201,12 @@ proc template::query::onerow { statement_name db result_name sql } {
 # result.  Arrays are named name0, name1, name2 etc.  The variable
 # name.rowcount is also defined for checking and iteration.
 
-proc template::query::multirow { statement_name db result_name sql } {
+ad_proc -private template::query::multirow { statement_name db result_name sql } {
+    @param statement_name Standard db_api statement name used to hook into query dispatcher
+    @param db Database handle
+    @param result_name Tcl variable name to use when setting the result
+    @param sql Query to use when processing this command
+} {
 
   set full_statement_name [db_qd_get_fullname $statement_name]
 
@@ -226,7 +280,12 @@ proc template::query::multirow { statement_name db result_name sql } {
   }
 }
 
-proc template::query::multilist { statement_name db result_name sql } {
+ad_proc -private template::query::multilist { statement_name db result_name sql } {
+    @param statement_name Standard db_api statement name used to hook into query dispatcher
+    @param db Database handle
+    @param result_name Tcl variable name to use when setting the result
+    @param sql Query to use when processing this command
+} {
 
   set full_statement_name [db_qd_get_fullname $statement_name]
 
@@ -264,7 +323,12 @@ proc template::query::multilist { statement_name db result_name sql } {
 # to the column values specified in the -groupby option
 # See template::util::lnest for more details.
 
-proc template::query::nestedlist { statement_name db result_name sql } {
+ad_proc -private template::query::nestedlist { statement_name db result_name sql } {
+    @param statement_name Standard db_api statement name used to hook into query dispatcher
+    @param db Database handle
+    @param result_name Tcl variable name to use when setting the result
+    @param sql Query to use when processing this command
+} {
 
   set full_statement_name [db_qd_get_fullname $statement_name]
 
@@ -305,7 +369,12 @@ proc template::query::nestedlist { statement_name db result_name sql } {
   return $rows
 }
 
-proc template::query::onelist { statement_name db result_name sql } {
+ad_proc -private template::query::onelist { statement_name db result_name sql } {
+    @param statement_name Standard db_api statement name used to hook into query dispatcher
+    @param db Database handle
+    @param result_name Tcl variable name to use when setting the result
+    @param sql Query to use when processing this command
+} {
 
   set full_statement_name [db_qd_get_fullname $statement_name]
 
@@ -329,7 +398,12 @@ proc template::query::onelist { statement_name db result_name sql } {
   }
 }
 
-proc template::query::dml { statement_name db name sql } {
+ad_proc -private template::query::dml { statement_name db name sql } {
+    @param statement_name Standard db_api statement name used to hook into query dispatcher
+    @param db Database handle
+    @param result_name Tcl variable name to use when setting the result
+    @param sql Query to use when processing this command
+} {
 
   set full_statement_name [db_qd_get_fullname $statement_name]
 
@@ -346,7 +420,10 @@ proc template::query::dml { statement_name db name sql } {
 
 # @return 1 if result was successfully retrieved, 0 if failed
 
-proc get_cached_result { name type } {
+ad_proc -private get_cached_result { name type } {
+    @param name Name of cached result-set
+    @param type Type of query
+} {
 
   upvar opts opts
   set cache_key $opts(cache)
@@ -414,9 +491,11 @@ proc get_cached_result { name type } {
 
 # @private set_cached_result
 
-# Places a query result in the appropriate cache.
+ad_proc -private set_cached_result {} {
 
-proc set_cached_result {} {
+    Places a query result in the appropriate cache.
+
+} {
 
   upvar opts opts
   
@@ -447,7 +526,12 @@ proc set_cached_result {} {
 
 # Deprecated!
 
-proc template::query::iterate { statement_name db sql body } {
+ad_proc -private template::query::iterate { statement_name db sql body } {
+    @param statement_name Standard db_api statement name used to hook into query dispatcher
+    @param db Database handle
+    @param sql Query to use when processing this command
+    @param body Code body to be execute for each result row of the returned query
+} {
 
   set full_statement_name [db_qd_get_fullname $statement_name]
 
@@ -478,8 +562,13 @@ proc template::query::iterate { statement_name db sql body } {
 # Flush the cached queries where the query name matches the
 # specified string match
 
-proc template::query::flush_cache { cache_match } {
+ad_proc -private template::query::flush_cache { cache_match } {
 
+    Flush the cached queries where the query name matches the
+    specified string match
+
+    @param cache_match Name of query to match for cache flushing
+} {
   # Flush persistent cache
   set names [nsv_array names __template_query_persistent_cache]
   foreach name $names {
@@ -503,8 +592,12 @@ proc template::query::flush_cache { cache_match } {
 
 # Perform get/set operations on a multirow datasource
 
-proc template::multirow { op name args } {
-  
+ad_proc -public template::multirow { op name args } {
+    @param op Multirow datasource operation: create, extend, append, size, get, set
+    @param name Name of the multirow datasource
+    @param args optional args
+} {  
+
   switch -exact $op {
 
     create {
@@ -580,7 +673,9 @@ proc template::multirow { op name args } {
   }
 }
 
-proc template::url { command args } {
+ad_proc -public template::url { command args } {
+    
+} {
 
   global __template_url_params
   upvar 0 __template_url_params params
@@ -634,7 +729,9 @@ proc template::url { command args } {
 nsv_set __template_cache_value . .
 nsv_set __template_cache_timeout . .
 
-proc cache { command key args } {
+ad_proc -public cache { command key args } {
+    Generic Caching
+} {
 
   set result ""
 
