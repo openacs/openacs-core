@@ -50,12 +50,12 @@ plain text string that identifies the parameter.
 
 <tr>
   <td></td>
-  <td>Type a one-line description of your parameter.
+  <td>Type a description of your parameter.
 </tr>
 
 <tr valign=top>
   <th align=right><br>Description:</th>
-  <td><input name=description size=50 value=\"[ad_quotehtml $description]\"><br>
+  <td><textarea name=description cols=60 rows=8>[ad_quotehtml $description]</textarea>
 </td>
 </tr>
 
