@@ -56,8 +56,9 @@
             <file type="content_page" path="www/apm/package-load.tcl"/>
             <file type="content_page" path="www/apm/package-scan.tcl"/>
             <file type="content_page" path="www/apm/packages-install-2.tcl"/>
+            <file type="query_file" db_type="oracle" path="www/apm/packages-install-3-oracle.xql"/>
+            <file type="query_file" db_type="postgresql" path="www/apm/packages-install-3-postgresql.xql"/>
             <file type="content_page" path="www/apm/packages-install-3.tcl"/>
-            <file type="query_file" path="www/apm/packages-install-3.xql"/>
             <file type="content_page" path="www/apm/packages-install-4.tcl"/>
             <file type="content_page" path="www/apm/packages-install.tcl"/>
             <file type="query_file" db_type="oracle" path="www/apm/packages/index-oracle.xql"/>
