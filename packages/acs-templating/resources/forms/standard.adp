@@ -72,11 +72,9 @@
               </if>
 
               <else>
-                <font face="tahoma,verdana,arial,helvetica,sans-serif" size="-1">
-                  <noparse>
-                    <formwidget id="@elements.id@">
-                  </noparse>
-                </font>
+                <noparse>
+                  <formwidget id="@elements.id@">
+                </noparse>
               </else>
 
               <noparse>
