@@ -15,6 +15,10 @@
   <xsl:import href="/usr/share/sgml/docbook/xsl-stylesheets-1.58.1-2/html/chunk.xsl"/>
 -->
 
+<!-- Debian 3.0 chunk.xsl commented out
+  <xsl:import href="/usr/share/sgml/docbook/stylesheet/xsl/nwalsh/html/chunk.xsl"/>
+-->
+
 <!-- vinodk: Not sure if this is needed                   -->
   <xsl:output media-type="text/html" encoding="iso-8859-1"/>
 
