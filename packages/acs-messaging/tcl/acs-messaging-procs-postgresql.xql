@@ -3,10 +3,27 @@
 <queryset>
    <rdbms><type>postgresql</type><version>7.1</version></rdbms>
 
-<fullquery name="acs_message_p.acs_message_p">      
-    <querytext>
-        select acs_message__message_p(:message_id);
-    </querytext>
+<fullquery name="acs_messaging_send_query.insert_messaging_by_query">      
+      <querytext>
+      
+        insert into acs_messages_outgoing
+            (message_id, to_address, grouping_id, wait_until)
+        select :m__message_id, p.email, q.grouping_id,
+               coalesce(q.wait_until, current_timestamp) as wait_until
+            from ($query) q, parties p
+            where not exists (select 1 from acs_messages_outgoing o
+                                  where o.message_id = :m__message_id
+                                    and p.email = o.to_address)
+              and p.party_id = q.recipient_id
+    
+      </querytext>
+
+</fullquery>
+
+
+      <querytext>
+	    select acs_message__message_p(:message_id);
+      </querytext>
 </fullquery>
  
 <fullquery name="acs_messaging_first_ancestor.acs_message_first_ancestor">
