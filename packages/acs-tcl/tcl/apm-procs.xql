@@ -127,6 +127,14 @@
       where  version_id = :version_id
     </querytext>
   </fullquery>
+
+  <fullquery name="apm_package_rename.nodes_to_sync">      
+    <querytext>
+      select node_id
+      from site_nodes
+      where object_id = :package_id
+    </querytext>
+  </fullquery>
   
   <fullquery name="apm_parameter_sync.apm_parameter_names_and_values">      
     <querytext>

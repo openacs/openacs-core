@@ -1158,7 +1158,9 @@ ad_proc -public apm_package_rename {
         set instance_name = :instance_name
         where package_id = :package_id
     }
-    site_nodes_sync
+    foreach node_id [db_list nodes_to_sync {}] {
+        site_node::update_cache -node_id $node_id
+    }
 }
 
 ad_proc -public apm_set_callback_proc {
