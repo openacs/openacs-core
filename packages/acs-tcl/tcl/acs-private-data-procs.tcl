@@ -46,7 +46,7 @@ namespace eval acs_privacy {
     } {
 	grant permission to access private data
     } {
-        if {$value == "t"} {
+        if { [template::util::is_true $value] } {
             ad_permission_grant $user_id $object_id read_private_data
         } else {
             ad_permission_revoke $user_id $object_id read_private_data
