@@ -15,7 +15,9 @@
 @context_bar;noquote@
 <hr />
 <slave>
-
+<if @curriculum_bar_p@>
+<include src="/packages/curriculum/lib/bar" />
+</if>
 <hr />
 <address><a href="mailto:@signatory@">@signatory@</a></address>
 @ds_link@
