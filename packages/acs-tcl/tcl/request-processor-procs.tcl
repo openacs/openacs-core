@@ -706,7 +706,9 @@ ad_proc rp_report_error {
 
 } {
     if { ![info exists message] } {
-	upvar #0 errorInfo message
+	global errorInfo
+        # We need 'message' to be a copy, because errorInfo will get overridden by some of the template parsing below
+        set message $errorInfo
     }
 
     set error_url [ad_conn url]
