@@ -3,6 +3,13 @@
 <queryset>
    <rdbms><type>postgresql</type><version>7.1</version></rdbms>
 
+
+<fullquery name="drop_role">
+<querytext>
+select acs_rel_type__drop_role(:role)
+</querytext>
+</fullquery>
+
 <fullquery name="role_used_p">      
       <querytext>
       

@@ -5,12 +5,7 @@
 
 <fullquery name="drop_relationship_type">      
       <querytext>
-      
-	    BEGIN
-	      acs_rel_type__drop_type( rel_type  => :rel_type,
-                                      cascade_p => 't' );
-	    END;
-	
+	      select acs_rel_type__drop_type(:rel_type,'t')
       </querytext>
 </fullquery>
 

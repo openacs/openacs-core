@@ -281,7 +281,7 @@ ad_proc -public value_add {attribute_id enum_value sort_order} {
 } {
     # Just insert it if we can
     db_dml insert_enum_value {
-	insert into acs_enum_values v
+	insert into acs_enum_values
 	(attribute_id, sort_order, enum_value, pretty_name)
 	select :attribute_id, :sort_order, :enum_value, :enum_value
 	from dual

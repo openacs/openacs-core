@@ -60,7 +60,7 @@ if { ![string eq $operation "Yes, I really want to delete this relationship type
 	    rel_segments_delete $segment_id
 	}
 	    
-	db_dml drop_relationship_type {
+	db_exec_plsql drop_relationship_type {
 	    BEGIN
 	      acs_rel_type.drop_type( rel_type  => :rel_type,
                                       cascade_p => 't' );
