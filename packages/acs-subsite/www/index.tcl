@@ -40,3 +40,14 @@ set subsite_url [subsite::get_element -element url]
 set node_id [ad_conn node_id]
 
 db_multirow nodes site_nodes {}
+
+
+# User's group membership
+
+set group_id [application_group::group_id_from_package_id]
+set group_join_policy [group::join_policy -group_id $group_id]
+
+set group_member_p [group::member_p -group_id $group_id -user_id $user_id]
+set group_admin_p [group::admin_p -group_id $group_id -user_id $user_id]
+
+set can_join_p [expr !$group_admin_p && $group_member_p == 0 && $user_id != 0 && ![string equal $group_join_policy "closed"]]
