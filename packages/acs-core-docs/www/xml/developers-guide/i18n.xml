@@ -732,9 +732,33 @@ begins.
 
 &lt;/else&gt;</programlisting>
           <para>Another example, where bugs are concatenated with a number:</para>
-<programlisting>&lt;if @components.view_bugs_url@ not nil&gt;&lt;a href="@components.view_bugs_url@" title="View the @pretty_names.bugs@ for this component"&gt;&lt;/if&gt;@components.num_bugs@ &lt;if @components.num_bugs@ eq 1&gt;@pretty_names.bug@&lt;/if&gt;&lt;else&gt;@pretty_names.bugs@&lt;/else&gt;&lt;if @components.view_bugs_url@ not nil&gt;&lt;/a&gt;&lt;/if&gt;
+<programlisting>&lt;if @components.view_bugs_url@ not nil&gt;
+  &lt;a href="@components.view_bugs_url@" title="View the @pretty_names.bugs@ for this component"&gt;
+  &lt;/if&gt;
+  @components.num_bugs@ 
+  &lt;if @components.num_bugs@ eq 1&gt;
+    @pretty_names.bug@
+  &lt;/if&gt;
+  &lt;else&gt;
+    @pretty_names.bugs@
+  &lt;/else&gt;
+  &lt;if @components.view_bugs_url@ not nil&gt;
+  &lt;/a&gt;
+  &lt;/if&gt;
 
-&lt;if @components.view_bugs_url@ not nil&gt;&lt;a href="@components.view_bugs_url@" title="#bug-tracker.View_the_bug_fo_component#"&gt;&lt;/if&gt;@components.num_bugs@ &lt;if @components.num_bugs@ eq 1&gt;@pretty_names.bug@&lt;/if&gt;&lt;else&gt;@pretty_names.bugs@&lt;/else&gt;&lt;if @components.view_bugs_url@ not nil&gt;&lt;/a&gt;&lt;/if&gt;
+&lt;if @components.view_bugs_url@ not nil&gt;
+&lt;a href="@components.view_bugs_url@" title="#bug-tracker.View_the_bug_fo_component#"&gt;
+&lt;/if&gt;
+@components.num_bugs@ 
+&lt;if @components.num_bugs@ eq 1&gt;
+@pretty_names.bug@
+&lt;/if&gt;
+&lt;else&gt;
+@pretty_names.bugs@
+&lt;/else&gt;
+&lt;if @components.view_bugs_url@ not nil&gt;
+&lt;/a&gt;
+&lt;/if&gt;
 </programlisting>
           <para>It would probably be better to do this as something like:</para>
 <programlisting>&lt;if @components.view_bugs_url@ not nil&gt;
@@ -821,8 +845,10 @@ multirow append links "[_ bug-tracker.New_Bug]" "${url_prefix}bug-add"</programl
           </formalpara>
           <programlisting>
 &lt;msg key="You"&gt;You can filter by this %component_name% by viisting %filter_url_string%&lt;/msg&gt;
-&lt;msg key="You_1"&gt;You do not have permission to map this patch to a bug. Only the submitter of the patch and users with write permission on this Bug Tracker project (package instance) may do so.&lt;/msg&gt;
-&lt;msg key="You_2"&gt;You do not have permission to edit this patch. Only the submitter of the patch and users with write permission on the Bug Tracker project (package instance) may do so.&lt;/msg&gt;</programlisting>
+&lt;msg key="You_1"&gt;You do not have permission to map this patch to a bug. Only the submitter of the patch 
+and users with write permission on this Bug Tracker project (package instance) may do so.&lt;/msg&gt;
+&lt;msg key="You_2"&gt;You do not have permission to edit this patch. Only the submitter of the patch 
+and users with write permission on the Bug Tracker project (package instance) may do so.&lt;/msg&gt;</programlisting>
           <para>These would be more useful if they were, "you_can_filter", "you_do_not_have_permission_to_map_this_patch", and "you_do_not_have_permission_to_edit_this_patch".  Don't worry about exactly matching the english text, because that might change; instead try to capture the meaning of the phrase.  Ask yourself, if I was a translator and didn't know how this application worked, would this key and text make translation easy for me?
 </para>
           <para>Sometimes the automatic converter creates keys that don't semantically match their text.  Fix these:</para>
