@@ -2845,12 +2845,17 @@ ad_proc -public ad_call_proc_if_exists { proc args } {
 
 ad_proc -public ad_get_tcl_call_stack { {level -2} } {
     Returns a stack trace from where the caller was called.
+    See also ad_print_stack_trace which generates a more readable 
+    stack trace at the expense of truncating args.
 
     @param level The level to start from, relative to this
     proc. Defaults to -2, meaning the proc that called this 
     proc's caller.
 
+
     @author Lars Pind (lars@pinds.com)
+
+    @see ad_print_stack_trace
  } {
     set stack ""
     for { set x [expr [info level] + $level] } { $x > 0 } { incr x -1 } {
