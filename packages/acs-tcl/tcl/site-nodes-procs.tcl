@@ -70,9 +70,8 @@ namespace eval site_node {
         @param node_name      If node_id is not specified then this will be the name of the
                               new site node that is created. Defaults to package_key.
         @param package_name The name of the new package instance. Defaults to pretty name of package type.
-        @param context_id     The context_id of the package. Defaults to the package_id at the parent
-                              node in the site map. If there is no such package then context_id will be the
-                              id of the parent node itself.
+        @param context_id     The context_id of the package. Defaults to the closest ancestor package
+                              in the site map.
         @param package_key    The key of the package type to instantiate.
 
         @return The id of the instantiated package
@@ -93,18 +92,8 @@ namespace eval site_node {
 
         # Get the context_id of the new package
         if {[empty_string_p $context_id]} {
-            # Attempt to use the package_id at the parent node
-            if { [empty_string_p $parent_node_id] } {
-                set parent_node_id [site_node::get_parent_id -node_id $node_id]
-            }
-            array set node [site_node::get -node_id $parent_node_id]
-            set context_id $node(object_id)
-
-            if {[empty_string_p $context_id]} {
-                # No package at parent node, so use the id of the node itself instead
-                # Should we use default_context here instead?
-                set context_id $parent_node_id
-            }
+            # Default to the closest ancestor package_id
+            set context_id [site_node::closest_ancestor_package -node_id $node_id]
         }
 
         # Instantiate the package
@@ -251,7 +240,7 @@ namespace eval site_node {
 	    }
 	}
 
-        error "site node not found at url $url"
+        error "site node not found at url \"$url\""
     }
 
     ad_proc -public get_from_object_id {
@@ -349,7 +338,58 @@ namespace eval site_node {
         return $node(object_id)
     }
 
-    
+    ad_proc -public closest_ancestor_package {
+        {-url ""}
+        {-node_id ""}
+        {-package_key ""}
+    } {
+        Starting with the node at with given id, or at given url,
+        climb up the site map and return the id of the first not-null
+        mounted object. If no ancestor object is found the empty string is returned.
+        The id of the object at the given node itself will never be returned.
+
+        @param url          The url of the node to start from. You must provide either url or node_id.
+                            An empty url is taken to mean the main site.
+        @param node_id      The id of the node to start from. Takes precedence over any provided url.
+        @param package_key  Restrict search to objects of this package type.
+
+        @return The id of the first object found and an empty string if no object
+                is found. Throws an error if no node with given url can be found.
+
+        @author Peter Marklund
+    } {
+        # Make sure we have the id of the start node to work with
+        if { [empty_string_p $node_id] } {
+              if { [empty_string_p $url] } {
+                  set url "/"
+              } 
+
+              set node_id [site_node::get_node_id -url $url]
+        }
+
+        # Climb up the site map starting with node_id and stop when we have
+        # an object to use as context or when we have reached the root node
+        set loop_node_id $node_id
+        set main_node_id [site_node::get_node_id -url "/"]
+        set context_id ""
+        set context_package_key "___${package_key}"
+        while { [empty_string_p $context_id] && \
+                [expr [empty_string_p $package_key] || [string equal $package_key $context_package_key]]} {
+
+            set loop_node_id [site_node::get_parent_id -node_id $loop_node_id]
+        
+            if { [string equal $loop_node_id ""] } {
+                # There is no parent node - we reached the root of the site map
+                break
+            }
+        
+            array set node_array [site_node::get -node_id $loop_node_id]
+            set context_id $node_array(object_id)
+            set context_package_key $node_array(package_key)
+        }       
+
+        return $context_id
+    }    
 }
 
 ##############
