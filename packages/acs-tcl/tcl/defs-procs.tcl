@@ -357,42 +357,12 @@ ad_proc ad_return_complaint {
     (as opposed to an error in our software, for which ad_return_error 
     is more appropriate)
 } {
-    # there was an error in the user input 
-    if { $exception_count == 1 } {
-	set problem_string "a problem"
-	set please_correct "it"
-    } else {
-	set problem_string "some problems"
-	set please_correct "them"
+    template::multirow create complaints text
+    foreach elm $exception_text {
+        template::multirow append complaints $elm
     }
-	    
-    subsite::get -array subsite_info
+    ns_return 200 text/html [ad_parse_template -params [list complaints] "/packages/acs-tcl/lib/complain"]
 
-    doc_return 200 text/html "[ad_header_with_extra_stuff "Problem with Your Input" "" ""]
-    
-<h2>Problem with Your Input</h2>
-
-to <a href=\"$subsite_info(url)\">$subsite_info(instance_name)</a>
-
-<hr>
-
-We had $problem_string processing your entry:
-	
-<ul> 
-	
-$exception_text
-	
-</ul>
-	
-Please back up using your browser, correct $please_correct, and
-resubmit your entry.
-	
-<p>
-	
-Thank you.
-	
-[ad_footer]
-";					#"emacs
     # raise abortion flag, e.g., for templating
     global request_aborted
     set request_aborted [list 200 "Problem with Your Input"]
