@@ -42,9 +42,11 @@
             <file type="tcl_procs" path="tcl/apm-procs.tcl"/>
             <file type="tcl_procs" path="tcl/apm-xml-procs.tcl"/>
             <file type="tcl_procs" path="tcl/community-core-procs.tcl"/>
+            <file type="query_file" db_type="postgresql" path="tcl/community-core-procs-postgresql.xql"/>
             <file type="tcl_init" path="tcl/database-init.tcl"/>
             <file type="tcl_procs" path="tcl/db-query-dispatcher-procs.tcl"/>
             <file type="tcl_procs" path="tcl/defs-procs.tcl"/>
+            <file type="query_file" db_type="postgresql" path="tcl/defs-procs-postgresql.xql"/>
             <file type="tcl_procs" path="tcl/deprecated-utilities-procs.tcl"/>
             <file type="tcl_init" path="tcl/document-init.tcl"/>
             <file type="tcl_procs" path="tcl/document-procs.tcl"/>

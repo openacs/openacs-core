@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<queryset>
+<rdbms><type>postgresql</type><version>7.1</version></rdbms>
+
+<fullquery name=".community-core-procs.ad_user_new.user_insert">
+<querytext>
+select acs__add_user(
+	:user_id,
+	'person',
+	now(),
+	NULL,
+	:peeraddr,
+	:email,
+	:url,
+	:first_names,
+	:last_name,
+	:hashed_password,
+	:salt,
+	:password_question,
+	:password_answer,
+	NULL,
+	:email_verified_p,
+	:member_state)
+</querytext>
+</fullquery>
+
+</queryset>

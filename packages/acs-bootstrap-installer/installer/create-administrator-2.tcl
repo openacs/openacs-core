@@ -44,7 +44,10 @@ Please <a href=\"javascript:history.back()\">try again</a>.
         return
     }
 
-    db_dml grant_admin {
+    # Changed this from db_dml to db_exec_plsql (ben - OpenACS)
+    # why was this a DML? Thanks to Oracle-only, this didn't make a
+    # difference, but it broke our DB API. This new version is correct.
+    db_exec_plsql grant_admin {
       begin
         acs_permission.grant_permission (
           object_id => acs.magic_object_id('security_context_root'),
