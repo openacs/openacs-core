@@ -1,84 +1,83 @@
 <html>
   <head>
-    <title>Templating System Tag Reference: Switch</title>
+    <title>Templating System Tag Reference: switch</title>
   </head>
   <body bgcolor="#ffffff">
-  <h2>Switch</h2>
+  <!-- Documentation written by Roberto Mello --!>
+  <h2>switch</h2>
 
       <a href="..">Templating System</a> :
       <a href="../designer-guide.html">Designer Guide</a> :
-      <a href="reference.html">Tag Reference</a> : Switch
+      <a href="reference.html">Tag Reference</a> : switch 
     <hr>
 
 <h3>Summary</h3>
 
-<p>The <tt>switch</tt> tag is used to output one of n-sections when the switch variable matches one of the n-case statements.  A default section can also be output if none of the n-case statements matches the switch variable.</p>
+<p>The <tt>switch</tt> tag is used to output a template section only when
+a certain condition is met. You use it when you have several options to test,
+thus avoiding the need for successive &lt;if&gt; &lt;else&gt; blocks.</p>
 
 <h3>Usage Examples</h3>
+
 <pre>
-&lt;switch @x@&gt;
-    &lt;case value="Fred"&gt;
-         Hello Fred.
+&lt;switch flag=exact @some_var@&gt;
+    &lt;case value="a"&gt;
+        A was selected
     &lt;/case&gt;
-    &lt;case value="Greta"&gt;
-         Hello Greta.
-    &lt;/case&gt;
-    &lt;case value="Sam"&gt;
-         Hello Sam
+    &lt;case value="b"&gt;
+        B was selected
     &lt;/case&gt;
     &lt;default&gt;
-         I don't recognize your name.
+        Not a valid selection
+    &lt;/default&gt;
+&lt;/switch&gt;
+
+&lt;switch flag=glob @some_var@&gt;
+    &lt;case value="a*"&gt;
+        A value starting with "a" was selected. 
+    &lt;/case&gt;
+    &lt;case value="b?"&gt;
+        A value of "B" followed by any other character was selected. 
+    &lt;/case&gt;
+    &lt;case value="[A-Za-z]"&gt;
+        A character between capital A and capital Z, lowercase a and lowercase z was selected. 
+    &lt;/case&gt;
+    &lt;default&gt;
+        Not a valid selection
+    &lt;/default&gt;
+&lt;/switch&gt;
+
+&lt;switch flag=regexp @some_var@&gt;
+    &lt;case in "foo" "bar" "baz"&gt;
+        Foo, Bar or Baz was selected
+    &lt;/case&gt;
+    &lt;case value="a.+"&gt;
+        A was selected
+    &lt;/case&gt;
+    &lt;case value="b.+"&gt;
+        B was selected
+    &lt;/case&gt;
+    &lt;case value="c.+"&gt;
+        C was selected
+    &lt;/case&gt;
+    &lt;default&gt;
+        Not a valid selection
     &lt;/default&gt;
 &lt;/switch&gt;
 </pre>
-<p>Tcl-equivalent flags have the same meaning as in the tcl-switch statement.  Supported flags include exact, glob, and regexp.</p>
-<pre>
-&lt;switch flag=glob @x@&gt;
-    &lt;case value="F*"&gt;
-         Hello Fred.
-    &lt;/case&gt;
-    &lt;case value="G*"&gt;
-         Hello Greta.
-    &lt;/case&gt;
-    &lt;case value="H*"&gt;
-         Hello Sam
-    &lt;/case&gt;
-    &lt;default&gt;
-         You are in the section for people whose names start with F, G, or H.
-    &lt;/default&gt;
-&lt;/switch&gt;
-</pre>
-<p>
-Case tags also have an alternative form for matching a list of items.</p>
-<p>
-<pre>
-&lt;switch @x@&gt;
-    &lt;case in "Fred" "Greta" "Sam"&gt;
-         Your must be Fred Greta or Sam, but I'm not sure which one.
-    &lt;/case&gt;
-    &lt;default&gt;
-         I don't recognize your name.
-    &lt;/default&gt;
-&lt;/switch&gt;
-</pre>
-<p>
-<h3>Notes</h3>
 
-<ul>
-
-<li><p>Any legal variables that may be referenced in the template may
-also be used in <tt>switch</tt> statements.  
-
-<li><p>Phrases with spaces in them must be enclosed in double quotes and 
-curly braces to be matched correctly.  Failure to quote words with spaces 
-correctly results in an error.
-<pre>
-  &lt;case "{blue sky}">
-    &lt;td bgcolor=#0000ff>
-  &lt;/case></pre>
-
-</ul>
-
+    <h3>Notes</h3>
+    <ul>
+      <li> The <code>&lt;switch&gt;</code> tag works the same as Tcl's switch command. </li>
+      <li> The <code>exact</code> flag is optional, and is the default. </li>
+      <li> The <code>glob</code> flag matches values in glob-style matching, like the Tcl 
+           <a href="http://www.tcl.tk/man/tcl8.4/TclCmd/string.htm#M35"><code>string match</code></a>
+           command.</li>
+      <li> The <code>regexp</code> flag enables regular expression matching, 
+           (as described in the <a href="http://www.tcl.tk/man/tcl8.4/TclCmd/re_syntax.htm">re_syntax</a>
+           reference page). </li>
+    </ul>
+	 
 <hr>
 
-<a href="mailto:templating@arsdigita.com">templating@arsdigita.com</a>
+<a href="mailto:templating@openacs.org">templating@openacs.org</a>
