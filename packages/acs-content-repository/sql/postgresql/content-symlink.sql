@@ -56,7 +56,7 @@ begin
   -- PASSED ALL CHECKS --
 
   -- Select default name if the name is null
-  if  new__name is null then
+  if  new__name is null or new__name = '''' then
     select 
       ''symlink_to_'' ||  name into v_name
     from 
@@ -72,7 +72,7 @@ begin
   end if;
 
   -- Select default label if the label is null
-  if new__label is null then
+  if new__label is null or new__label = '''' then
     v_label := ''Symlink to '' || v_name;
   else
     v_label := new__label;

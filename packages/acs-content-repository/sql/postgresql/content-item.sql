@@ -183,7 +183,7 @@ begin
       v_parent_id
     );
 
-    if new__relation_tag is null then
+    if new__relation_tag is null or new__relation_tag = '''' then
       v_rel_tag := content_item__get_content_type(v_parent_id) 
         || ''-'' || new__content_type;
     else
@@ -199,7 +199,7 @@ begin
   end if;
 
   -- use the name of the item if no title is supplied
-  if new__title is null then
+  if new__title is null or new__title = '''' then
     v_title := new__name;
   else
     v_title := new__title;
@@ -225,8 +225,8 @@ begin
         new__creation_ip
     );
 
-  else if new__title is not null or 
-      new__text is not null then
+  else if (new__title is not null and new__title != '''') or 
+          (new__text is not null and new__text != '''') then
 
     v_revision_id := content_revision__new(
 	v_title,

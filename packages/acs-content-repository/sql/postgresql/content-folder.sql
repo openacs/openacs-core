@@ -167,19 +167,20 @@ declare
   v_name_already_exists_p        integer;
 begin
 
-  if rename__name is not null then
+  if rename__name is not null and rename__name != '''' then
     PERFORM content_item__rename(rename__folder_id, rename__name);
   end if;
 
-  if rename__label is not null and rename__description is not null then 
+  if rename__label is not null and rename__label != '''' and 
+     rename__description is not null and rename__description != '''' then 
 
     update cr_folders
       set label = rename__label,
       description = rename__description
       where folder_id = rename__folder_id;
 
-  else if rename__label is not null and rename__description is null then 
-
+  else if(rename__label is not null and rename__label != '''') and 
+         (rename__description is null or rename__description = '''') then  
     update cr_folders
       set label = rename__label
       where folder_id = rename__folder_id;

@@ -2276,7 +2276,7 @@ declare
       apm_pkg_ver__data_model_loaded_p	alias for $12; -- default ''f''
       v_version_id                      apm_package_versions.version_id%TYPE;
 begin
-      if apm_pkg_ver__version_id='''' then
+      if apm_pkg_ver__version_id = '''' or apm_pkg_ver__version_id is null then
          select acs_object_id_seq.nextval
 	 into v_version_id
 	 from dual;

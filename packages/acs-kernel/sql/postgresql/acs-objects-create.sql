@@ -753,7 +753,7 @@ begin
          and o1.tree_sortkey like (o2.tree_sortkey || ''%'') 
     order by o2.tree_sortkey desc
   loop
-   if obj_type.name_method != '''' then
+   if obj_type.name_method != '''' and obj_type.name_method is NOT null then
 
     -- Execute the first name_method we find (since we''re traversing
     -- up the type hierarchy from the object''s exact type) using
