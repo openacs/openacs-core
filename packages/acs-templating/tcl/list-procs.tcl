@@ -1267,7 +1267,7 @@ ad_proc -private template::list::render_filters {
     if { [string equal $style {}] } { 
         set style [parameter::get \
                        -package_id [apm_package_id_from_key "acs-templating"] \
-                       -parameter DefaultListStyle \
+                       -parameter DefaultListFilterStyle \
                        -default "filters"]
     }
     set file_stub "[template::get_resource_path]/lists/$style"
@@ -1730,6 +1730,18 @@ ad_proc -public template::list::filter::create {
       <li>
         <b>default_value</b>: The default value to use when no value is selected for this filter. Automatically sets has_default_p to 1.
       </li>
+      <li>
+        <b>where_clause</b>: What should go in the where clause of your query when 
+        filtering on this filter. For example "l.project_id = :project_id".
+      </li>
+      <li>
+        <b>where_clause_eval</b>: Same as where_clause, except this gets evaluated in the caller's context.
+      </li>
+      <li>
+        <b>other_label</b>: If your values above do not carry all possible values, we can display a special
+        'other' value when some other value is selected for this filter. You specify here what label should
+        be used for that element.
+      </li>
     </ul>
 
     <p>
@@ -1772,6 +1784,9 @@ ad_proc -public template::list::filter::create {
         values {}
         has_default_p 0
         default_value {}
+        where_clause {}
+        where_clause_eval {}
+        other_label {}
     }
 
     # Prepopulate some automatically generated values
@@ -1779,10 +1794,7 @@ ad_proc -public template::list::filter::create {
         clear_url {}
         urls {}
         add_urls {}
-        other_label {}
         selected_p {}
-        where_clause {}
-        where_clause_eval {}
     }
     
     # Let the filter know its own name
