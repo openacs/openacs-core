@@ -16,6 +16,8 @@ set work_dir "[acs_root_dir]/repository-builder/"
 set repository_dir "[acs_root_dir]/www/repository/"
 set repository_url "http://openacs.org/repository/"
 
+set exclude_package_list { cms cms-news-demo glossary site-wide-search spam library }
+
 set head_channel "5-1"
 
 
@@ -97,7 +99,6 @@ publish::mkdirs $work_dir
 cd $work_dir
     
 foreach channel [lsort -decreasing [array names channel_tag]] {
-
     ns_write "<li>Starting channel $channel with tag $channel_tag($channel)\n"
 
     # Wipe and re-create the checkout directory
@@ -120,13 +121,19 @@ foreach channel [lsort -decreasing [array names channel_tag]] {
         catch { exec $cvs_command -d $cvs_root -z3 co openacs-4/contrib/packages } output
     }
         
-    append manifest {<manifest>} \n
+    set manifest {<manifest>}
+    append manifest \n
     
     foreach packages_dir [list "${work_dir}openacs-4/packages" "${work_dir}openacs-4/contrib/packages"] {
-        foreach spec_file [apm_scan_packages $packages_dir] {
+        foreach spec_file [lsort [apm_scan_packages $packages_dir]] {
         
             set package_path [eval file join [lrange [file split $spec_file] 0 end-1]]
             set package_key [lindex [file split $spec_file] end-1]
+
+            if { [lsearch -exact $exclude_package_list $package_key] != -1 } {
+                ns_write "Package $package_key is on list of packages to exclude - skipping"
+                continue
+            }
 
             if { [array exists version] } {
                 array unset version
@@ -204,6 +211,7 @@ foreach channel [lsort -decreasing [array names channel_tag]] {
     }
     append manifest {</manifest>} \n
     
+    ns_write "<li>Writing $channel manifest to ${channel_dir}manifest.xml"
     set fw [open "${channel_dir}manifest.xml" w]
     puts $fw $manifest
     close $fw
