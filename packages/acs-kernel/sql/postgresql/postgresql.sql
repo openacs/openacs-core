@@ -468,6 +468,21 @@ begin
 
 end;' language 'plpgsql' with(iscachable);
 
+create function tree_increment_key(varbit)
+returns varbit as '
+declare
+    p_child_sort_key                alias for $1;
+    v_child_sort_key                integer;
+begin
+    if p_child_sort_key is null then
+        v_child_sort_key := 0;
+    else
+        v_child_sort_key := tree_leaf_key_to_int(p_child_sort_key) + 1;
+    end if;
+
+    return int_to_tree_key(v_child_sort_key);
+end;' language 'plpgsql' with(iscachable);
+
 create function tree_left(varbit) returns varbit as '
 
 -- Create a key less than or equal to that of any child of the
