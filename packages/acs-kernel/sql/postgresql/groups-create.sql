@@ -130,7 +130,7 @@ drop function inline_0 ();
 -- show errors
 
 create table group_types (
-        group_type              varchar(100) not null
+        group_type              varchar(400) not null
                                 constraint group_types_pk primary key
                                 constraint group_types_obj_type_fk
                                 references acs_object_types (object_type),
