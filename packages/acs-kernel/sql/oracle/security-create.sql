@@ -21,6 +21,7 @@ create table sec_session_properties (
                    constraint sec_session_prop_prop_name_nn
                    not null,
     property_value varchar2(4000),
+    property_clob  clob default null,
     -- transmitted only across secure connections?
     secure_p       char(1) 
                    constraint sec_session_prop_secure_p_ck

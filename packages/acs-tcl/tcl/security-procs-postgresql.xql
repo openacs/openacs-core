@@ -51,5 +51,4 @@
       </querytext>
 </fullquery>
 
-
 </queryset>

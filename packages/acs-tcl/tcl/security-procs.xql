@@ -64,7 +64,7 @@
 <fullquery name="sec_get_token.get_token">      
       <querytext>
       select token from secret_tokens
-      where token_id = :token_id
+                       	                 where token_id = :token_id
       </querytext>
 </fullquery>
 
