@@ -113,8 +113,6 @@ namespace eval site_node {
 
         either url or node_id is required, if both are passed url is ignored
 
-        packages/acs-tcl/tcl/site-nodes-procs.tcl
-        
         The array elements are: package_id, package_key, object_type, directory_p, 
         instance_namem, pattern_p, parent_id, node_id, object_id, url.
     } {
