@@ -61,8 +61,8 @@ namespace eval template {
              method post \
              section {} \
              mode edit \
-             edit_buttons [list [list [_ acs-kernel.common_ok] ok ]] \
-             display_buttons [list [list [_ acs-kernel.common_edit] edit]] \
+             edit_buttons [list [list [_ acs-kernel.common_OK] ok ]] \
+             display_buttons [list [list [_ acs-kernel.common_Edit] edit]] \
              show_required_p t]
   }
 
@@ -74,9 +74,9 @@ namespace eval template {
     variable default_button_labels
     array set default_button_labels \
 	[list back [_ acs-templating.Previous_with_arrow] \
-             repeat [_ acs-kernel.common_repeat] \
+             repeat [_ acs-kernel.common_Repeat] \
              next [_ acs-templating.Next_with_arrow] \
-             finish [_ acs-kernel.common_finish]]
+             finish [_ acs-kernel.common_Finish]]
   }
 
   namespace eval paginator {
