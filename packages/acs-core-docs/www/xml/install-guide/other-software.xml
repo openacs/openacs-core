@@ -369,16 +369,8 @@ mv analog-5.31 /usr/share/</action></screen>
       <sect1 id="install-nspam">
         <title>Install nspam</title>
 
-        <xi:include href="../../../../acs-authentication/www/doc/xml/install.xml"  xmlns:xi="http://www.w3.org/2001/XInclude">
-<xi:fallback>nspam is documented in acs-authentication.  This html
-      version of acs-core-docs was compiled without
-      acs-authentication. To view nspam installation instructions,
-      install acs-authentication and read <ulink
-      url="/doc/acs-authentication">/docs/acs-authentication</ulink>.
-  </xi:fallback>
-      </xi:include> 
       <para><ulink
-      url="/doc/acs-authentication/ext-auth-aolserver-config.html"></ulink></para>
+      url="/doc/acs-authentication/ext-auth-install.html"></ulink></para>
       </sect1>
 
     <sect1 id="install-full-text-search">

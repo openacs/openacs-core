@@ -4,131 +4,206 @@
 <!ENTITY % myvars SYSTEM "../variables.ent">
 %myvars;
 ]>
-<sect1 id="install-overview" xreflabel="Installation Overview">
-  <title>Overview</title>
-
-  <authorblurb>
-	by <ulink url="mailto:vinod@kurup.com">Vinod Kurup</ulink>
-  </authorblurb>
-
-  <sect2 id="install-purpose" xreflabel="Purpose of this document">
-	<title>Purpose of this document</title>
-	<para>
-
-	  This document will describe how to install, configure, and
-	  maintain an installation of OpenACS &version; on a Unix-like
-	  system, including all supporting software.  All examples
-	  in this chapter are part of the OpenACS &version;-P or
-	  OpenACS &version;-O Reference Platform, which use Red
-	  Hat 8.0.  Differences between the Reference Platform
-	  and common alternate platforms (Red Hat 9, Debian) are noted where known.
+  <chapter id="install-overview">
+    <title>Installation Overview</title>
+    
+    <authorblurb>
+      by <ulink url="mailto:vinod@kurup.com">Vinod Kurup</ulink>
+    </authorblurb>
+    
+    <sect1 id="install-steps">
+      <title>Basic Steps</title>
+      <para>
+	  The basic steps to getting OpenACS up and running are: 
 	</para>
-  </sect2>
+      
+      <orderedlist>
+        <listitem><para>Install an OS (<link
+      linkend="unix-install">Linux, FreeBSD, OpenBSD</link>, <xref linkend="install-redhat"/>, <xref linkend="mac-installation"/>, <xref
+              linkend="win2k-installation"/>).</para>
+        </listitem>
+        
+        <listitem><para>Install a database (<link
+	  linkend="oracle">Oracle</link> or
+	  <link linkend="postgres">PostgreSQL</link>).</para>
+        </listitem> 
 
-  <sect2 id="install-requirements" xreflabel="Requirements">
-    <title>Requirements</title>
-    <para>
+        <listitem>
+          <para><link linkend="aolserver">Install the AOLserver webserver</link>.</para>
+        </listitem>
+        
+        <listitem><para>Create a unique database and system user.
+      Install the OpenACS tarball, start and AOLserver instance, and
+      use the OpenACS web pages to complete installation
+      (<xref linkend="openacs"/>).</para>
+        </listitem>
+        
+      </orderedlist>
+      <sect2 id="install-rpms">
+        <title>Binaries and other shortcuts</title>
+        <orderedlist>
+          <listitem>
+            <para>The patched version of AOLserver we use is not currently
+      available in a precompiled binary.  </para>
+          </listitem>
+          <listitem>
+            <para>
+        The packaged version of
+      PostGreSQL in Debian and Red Hat and FreeBSD ports works fine.</para>
+          </listitem>
+          <listitem>
+            <para>Jonathan Marsden has created RPMs (at
+      <ulink
+      url="http://www.xc.org/jonathan/openacs/openacs4-rpm-based-install.html">http://www.xc.org</ulink>)
+      for OpenACS 4.5 but there are not yet any for version
+      &version;.  </para>
+          </listitem>
+          <listitem>
+            <para>An experimental script automating OpenACS checkout
+      and installation is in the openacs cvs tree at
+      <computeroutput>/etc/install.sh</computeroutput>.
+</para>
+          </listitem>
+<!--          <listitem>
+            <para>The <link linkend="quick">Quick Guide</link> lists the essential steps for a minimal install.
+</para>
+          </listitem>
+-->
+        </orderedlist>
+      </sect2>
+      <sect2 id="install-requirements">
+        <title>Requirements</title>
+        <para>
 	  You will need a PC (or equivalent) with at least these minimum
 	  requirements:
 	</para>
-    <itemizedlist>
-      <listitem><para>Pentium processor</para></listitem>
-      <listitem><para>128 MB RAM
+        <itemizedlist>
+          <listitem><para>Pentium processor</para></listitem>
+          <listitem><para>128 MB RAM
 		  (much more if you want Oracle)</para></listitem> 
-      <listitem><para>4 GB hard drive</para></listitem>
-    </itemizedlist>
-    <para>You will need all everthing marked REQUIRED in <xref
-    linkend="individual-programs">software</xref>.</para>
-    
-    <para>
-	  If you want to serve pages to people outside of your machine, you'll
-	  need a network connection of some type.
-	</para>
-    
-    <para>
-	  Running a reliable database-backed web server requires experience
-	  with the server's environment, in this case UNIX.  UNIX is not always
-	  an intuitive environment and this guide cannot hope to explain every
-	  nuance.  You should be comfortable with the following tasks before
-	  attempting an installation:
-	</para>
-    
-    <itemizedlist>
-      <listitem><para> 
-		  Adding users, groups, setting passwords  
-		</para></listitem>
-      <listitem><para> 		  
-		  (For Oracle) Starting an X server and running an X program remotely
-	  </para></listitem> 
-      
-      <listitem><para> 
-		  Basic file management using <computeroutput>cp, rm,
-			mv,</computeroutput> and <computeroutput>cd</computeroutput>
-		</para></listitem> 
-      
-      <listitem><para> 
-		  Compiling a program using ./config and make.
-		</para></listitem>
-	</itemizedlist>
-
-	<para>
-	  You can complete this install without the above knowledge,
-	  but if anything goes wrong it may take extra time to
-	  understand and correct the problem.  <link linkend="install-resources">Some useful UNIX resources</link>.
-	</para>
-
-	<para>
+          <listitem><para>4 GB hard drive</para></listitem>
+          <listitem><para>A Unix-like operating system with tcl, tdom, and
+      a mail transport agent.  (<xref
+                linkend="individual-programs"/>)</para>
+          </listitem>
+        </itemizedlist><para>
 	  All of the software that you will need is free and open-source,
 	  except for Oracle. You can obtain a free copy of Oracle for
 	  development purposes. This is described in the <xref
-	  linkend="install-oracle-getit"/> section.
+            linkend="install-oracle-getit"/> section.
 	</para>
-
-  </sect2>
-
-  <sect2 id="install-steps" xreflabel="Steps involved">
-	<title>Steps involved</title>
-	<para>
-	  The basic steps to getting OpenACS up and running are: 
-	</para>
-	
-    <orderedlist>
-      <listitem><para>Install an OS</para></listitem>
-      
-      <listitem><para>Install a database (Oracle or
-	  PostgreSQL)</para></listitem> 
-      
-      <listitem>
-		<para>Install a webserver (AOLServer)</para>
-	  </listitem>
-      
-      <listitem><para>Copy the OpenACS files into place and start the OpenACS installer, which will configure a database instance.</para></listitem>
-	</orderedlist>
-
-  </sect2>
-
-  <sect2>
-    <title>How to use this guide</title>
-    <itemizedlist>
-      <listitem>
-        <para><computeroutput>This</computeroutput> is text you will see on
+        <figure id="compatibility-matrix">
+          <title>Compatibility Matrix</title>
+          <informaltable>
+            <tgroup cols="8">
+              <colspec colname="c1"/>
+              <colspec colname="c2"/>
+              <colspec colname="3.2.5"/>
+              <colspec colname="4.5"/>
+              <colspec colname="4.6"/>
+              <colspec colname="4.6.1"/>
+              <colspec colname="4.6.2"/>
+              <colspec colname="4.6.3"/>
+              <colspec colname="5.0.0"/>
+              <spanspec align="center" colsep="0" rowsep="0" spanname="version" namest="c1" nameend="c2"/>
+              <tbody>
+                <row>
+                  <entry spanname="version">OpenACS Version</entry>
+                  <entry colname="3.2.5">3.2.5</entry>
+                  <entry colname="4.5">4.5</entry>
+                  <entry colname="4.6">4.6</entry>
+                  <entry colname="4.6.1">4.6.1</entry>
+                  <entry colname="4.6.2">4.6.2</entry>
+                  <entry colname="4.6.3">4.6.3</entry>
+                  <entry colname="5.0.0">5.0.0</entry>
+                </row>
+                <row>
+                  <entry morerows="6">AolServer</entry>
+                  <entry>3</entry>
+                  <entry namest="3.2.5" nameend="3.2.5" align="center">Verified</entry>
+                </row>
+                <row>
+                  <entry>3.3+ad13</entry>
+                  <entry namest="4.5" nameend="5.0.0" align="center">Verified</entry>
+                </row>
+                <row>
+                  <entry>3.3oacs1</entry>
+                  <entry namest="4.6.2" nameend="5.0.0" align="center">Verified</entry>
+                </row>  
+                <row>
+                  <entry>3.4.2</entry>
+                  <entry namest="4.6.2" align="center">No</entry>
+                </row>  
+                <row>
+                  <entry>3.4.2oacs1</entry>
+                  <entry namest="4.6.2" align="center">Verified</entry>
+                </row>  
+                <row>
+                  <entry>3.5.5</entry>
+                  <entry namest="4.6.2" align="center">Verified</entry>
+                </row>  
+                <row>
+                  <entry>4</entry>
+                  <entry namest="3.2.5" nameend="4.6.3"
+                    align="center">Verified but not for production</entry>
+                </row>
+                <row>
+                  <entry morerows="2">PostGreSQL</entry>
+                  <entry>7.0</entry>
+                  <entry namest="3.2.5" nameend="3.2.5" align="center">Verified</entry>
+                </row>
+                <row>
+                  <entry>7.2.x</entry>
+                  <entry namest="4.5" nameend="4.6.3" align="center">Verified</entry>
+                </row>
+                <row>
+                  <entry>7.3.2 - 7.3.4</entry>
+                  <entry namest="3.2.5" nameend="4.6.2" align="center">No</entry>
+                  <entry namest="4.6.3" nameend="5.0.0" align="center">Verified</entry>
+                </row>
+                <row>
+                  <entry morerows="2">Oracle</entry>
+                  <entry>8.1.6</entry>
+                  <entry namest="4.5" nameend="4.6.3" align="center">Verified</entry>
+                </row>
+                <row>
+                  <entry>8.1.7</entry>
+                  <entry namest="4.5" nameend="5.0.0" align="center">Verified</entry>
+                </row>
+                <row>
+                  <entry>9i</entry>
+                  <entry namest="3.2.5" nameend="4.6.3" align="center">No</entry>
+                  <entry namest="5.0.0" nameend="5.0.0" align="center">Untested</entry>
+                </row>
+              </tbody>
+            </tgroup>
+          </informaltable>
+        </figure>
+      </sect2>
+    </sect1>
+    
+    <sect1 id="how-to-use">
+      <title>How to use this guide</title>
+      <itemizedlist>
+        <listitem>
+          <para><computeroutput>This</computeroutput> is text you will see on
             screen, such as a <computeroutput><guibutton><accel>B</accel>utton</guibutton></computeroutput> or <computeroutput><guilabel><accel>link</accel></guilabel></computeroutput>
             in a radio button list or menu.</para>
-      </listitem>
-      <listitem><para><userinput>This is text that you will type.</userinput></para></listitem>
-      <listitem>
-        <para>This is text from a program or file which you may need to
+        </listitem>
+        <listitem><para><userinput>This is text that you will type.</userinput></para></listitem>
+        <listitem>
+          <para>This is text from a program or file which you may need to
 examine or edit:</para>
-        <programlisting>if {$database == "oracle"} {
+          <programlisting>if {$database == "oracle"} {
     set db_password        "mysitepassword"
 }</programlisting>
-      </listitem>
-      <listitem>
-        <para>This is text that you will
+        </listitem>
+        <listitem>
+          <para>This is text that you will
 <computeroutput>see</computeroutput> and <userinput>type</userinput> in a command shell, including <replaceable>text you may have to
 change</replaceable>.  It is followed by a list of just the commands,
 which you can copy and paste.</para>
-        <screen>[root@localhost root]# <userinput>su - nsadmin</userinput>
+          <screen>[root@localhost root]# <userinput>su - nsadmin</userinput>
 [nsadmin@localhost aolserver]$ <userinput>svc -d /service/<replaceable>server1</replaceable></userinput>
 [nsadmin@localhost aolserver]$ <userinput>dropdb <replaceable>server1</replaceable></userinput>
 DROP DATABASE
@@ -138,12 +213,106 @@ CREATE DATABASE
 svc -d /service/<replaceable>server1</replaceable>
 dropdb <replaceable>server1</replaceable>
 createdb <replaceable>server1</replaceable></action></screen>
-      </listitem>
-    </itemizedlist>
-  </sect2>
-  
-  <sect2 id="install-stuck" xreflabel="What if I get stuck?">
-	<title>What if I get stuck?</title>
+        </listitem>
+      </itemizedlist>
+      
+      <sect2>
+        <title>Paths and Users</title>
+        
+        <figure>
+          <title>Assumptions in this section</title>
+          <informaltable>
+            <tgroup cols="2">
+              <tbody>
+                <row>
+                  <entry>Fully qualified domain name of your server</entry>
+                  <entry><replaceable>yourserver.test</replaceable></entry>
+                </row>
+                <row>
+                  <entry>name of administrative access account</entry>
+                  <entry>remadmin</entry>
+                </row>
+                <row>
+                  <entry>OpenACS service</entry>
+                  <entry><indexterm>
+                      <primary>service0</primary>
+                    </indexterm>
+<replaceable>service0</replaceable></entry>
+                </row>
+                <row>
+                  <entry>OpenACS service account</entry>
+                  <entry><replaceable>service0</replaceable></entry>
+                </row>
+                <row>
+                  <entry>OpenACS database name</entry>
+                  <entry><replaceable>service0</replaceable></entry>
+                </row>
+                <row>
+                  <entry>Root of OpenACS service file tree</entry>
+                  <entry><replaceable>/var/lib/aolserver/service0</replaceable></entry>
+                </row>
+                <row>
+                  <entry>Location of source code tarballs for new software</entry>
+                  <entry>/tmp</entry>
+                </row>
+                <row>
+                  <entry>The OpenACS tarball contains some files which
+                are useful while setting up other software.  Those
+                files are located at:</entry>
+                  <entry>/tmp/&tarballpath;/packages/acs-core-docs/www/files</entry>
+                </row>
+                <row>
+                  <entry>Database backup directory</entry>
+                  <entry><replaceable>/var/lib/aolserver/service0/database-backup</replaceable></entry>
+                </row>
+                <row>
+                  <entry>Service config files</entry>
+                  <entry><replaceable>/var/lib/aolserver/service0/etc</replaceable></entry>
+                </row>
+                <row>
+                  <entry>Service log files</entry>
+                  <entry><replaceable>/var/lib/aolserver/service0/log</replaceable></entry>
+                </row>
+                <row>
+                  <entry>Compile directory</entry>
+                  <entry>/usr/local/src</entry>
+                </row>
+                <row>
+                  <entry>PostGreSQL directory</entry>
+                  <entry>/usr/local/pgsql</entry>
+                </row>
+                <row>
+                  <entry>AOLServer directory</entry>
+                  <entry>/usr/local/aolserver</entry>
+                </row>
+              </tbody>
+            </tgroup>
+          </informaltable>
+        </figure>
+
+        <para>
+	  None of these locations are set in stone - they're simply
+	  the values that we've chosen.  The values that you'll
+	  probably want to change, such as service name, are
+	  <replaceable>marked like this</replaceable>.  The other
+	  values we recommend you leave unchanged unless you have a
+	  reason to change them.</para>
+        
+        <note>
+          <para>
+	  Some of the paths and user accounts have been changed from
+	  those recommended in previous versions of this document to
+	  improve security and maintainability.  See <ulink
+	  url="http://openacs.org/forums/message-view?message_id=82934">this
+	  thread</ulink> for discussion.
+</para>
+        </note>
+
+        
+      </sect2>
+
+      <sect2 id="install-stuck">
+	<title>Getting Help during installation</title>
 	
 	<para>
 	  We'll do our best to assure that following our instructions will get
@@ -153,7 +322,7 @@ createdb <replaceable>server1</replaceable></action></screen>
 
 	<itemizedlist>
 	  <listitem>
-		<para>
+            <para>
 		  Keep track of the commands you are run and record their output. I
 		  like to do my installations in a shell inside of emacs
 		  (<computeroutput>M-x shell</computeroutput>) so that I can save
@@ -163,7 +332,7 @@ createdb <replaceable>server1</replaceable></action></screen>
 	  </listitem>
 
 	  <listitem>
-		<para>
+            <para>
 		  We'll point out where the error logs for the various pieces of
 		  software are. Output from those logs will help us help you. Don't
 		  worry if you feel overwhelmed by all the information in the error
@@ -174,7 +343,7 @@ createdb <replaceable>server1</replaceable></action></screen>
 	  </listitem>
 
 	  <listitem>
-		<para>
+            <para>
 		  Search the <ulink url="http://openacs.org/bboard/">bboards at
 		  openacs.org</ulink> - you'll often find many people who have
 		  struggled through the same spot that you're in.
@@ -182,7 +351,7 @@ createdb <replaceable>server1</replaceable></action></screen>
 	  </listitem>
 
 	  <listitem>
-		<para>
+            <para>
  The bottom of each page has a link to OpenACS.org, where you can post
 		  comments and read other users comments about the
 		  contents of the page.
@@ -190,7 +359,7 @@ createdb <replaceable>server1</replaceable></action></screen>
 	  </listitem>
 
 	  <listitem>
-		<para>
+            <para>
 		  Ask questions at the irc channel on openprojects.net
 		  (#openacs). They're knowledgeable and quite friendly
 		  if you can keep them on topic.
@@ -198,7 +367,7 @@ createdb <replaceable>server1</replaceable></action></screen>
 	  </listitem>
 
 	  <listitem>
-		<para>
+            <para>
 		  Post a question on the <ulink
 		  url="http://openacs.org/bboard/">bboards</ulink>. Make sure
 		  you've done a search first. When you do post, be sure to include
@@ -210,268 +379,16 @@ createdb <replaceable>server1</replaceable></action></screen>
 	  </listitem>
 
 	  <listitem>
-		<para>
+            <para>
 		  If you find errors in this document or if you have ideas about
 		  making it better, please post them in our
 		  <ulink
           url="http://openacs.org/bugtracker/openacs/">BugTracker</ulink>.
         </para>
-      </listitem>
-    </itemizedlist>
-  </sect2>
-
-  <sect2 id="install-rpms" xreflabel="Is there an easier way?">
-    <title>Is there an easier way?</title>
-    <para>
-
-      After reading through this tome, you may ask yourself if there is a
-      better way. Well, not quite. Jonathan Marsden has created RPMs (at
-      <ulink
-      url="http://www.xc.org/jonathan/openacs/openacs4-rpm-based-install.html">http://www.xc.org</ulink>)
-      for OpenACS 4.5 but there are not yet any for version
-      &version;. There has been talk about automating the install process,
-      but that hasn't happened yet. Stay tuned!
-
-    </para>
-  </sect2>
-
-  <sect2 id="install-origins" xreflabel="Where did this document come from?">
-    <title>Where did this document come from?</title>
-    <para>
-      This document was created by <ulink
-      url="mailto:vinod@kurup.com">Vinod Kurup</ulink>, but it's really
-      just plagiarism from a number of documents that came before it. If
-      I've used something that you've written without proper credit, let me
-      know and I'll fix it right away.
-    </para>
-    <para>Versions 4.6.2 to present were edited by <ulink
-    url="mailto:joel@aufrecht.org">Joel Aufrecht</ulink>.
-</para>
-    
-    <para>These are a few of my sources:</para>
-    <itemizedlist>
-      <listitem><para> 
-          <ulink url="http://developer.arsdigita.com/doc/unix-install.html">ArsDigita installation guide</ulink>
-        </para></listitem>
-
-      <listitem><para>
-          <ulink
-          url="http://openacs.org/doc/openacs/install/">OpenACS 3.x installation guide</ulink>
-        </para></listitem> 
-
-      <listitem><para> 
-          <ulink url="http://www.orchardlabs.com/freebsd/">Gilbert Wong's FreeBSD
-          installation guide</ulink>
-        </para></listitem> 
-
-      <listitem><para> 
-          <ulink url="http://kurup.com/acs/openacs-4.html">Vinod Kurup's Brief OpenACS4
-          installation guide</ulink>
-        </para></listitem>
-
-      <listitem><para> 
-          <ulink
-          url="http://www.aufrecht.org/openacs-4.5-quick-guide/">Joel
-          Aufrecht's OpenACS 4.5 Quick Guide.</ulink>
-        </para></listitem> 
-
-    </itemizedlist>
-    <para>
-      Please also see the <xref linkend="credits"/> section for more acknowledgements.
-    </para>
-  </sect2>
-
-    <sect2 id="os-install" xreflabel="Linux Install Guides">
-    <title>Linux Install Guides</title>
-    <para>
-      Here's a list of some helpful documentation for various OS's
-    </para>
-
-    <itemizedlist>
-      <listitem><para>
-          <ulink url="http://tinyplanet.ca/pubs/debian/">Painless Debian
-          GNU/Linux</ulink> by Stephen van Egmond
-        </para></listitem>
-
-      <listitem><para> 
-
-          <ulink
-          url="http://www.debian.org/releases/stable/installmanual">Official
-          Debian Guide</ulink> 
-
-        </para></listitem>
-
-      <listitem><para>
-
-          <ulink
-          url="http://www.redhat.com/docs/manuals/linux/">RedHat</ulink>
-
-        </para></listitem>
-
-      <listitem><para>
-
-          <ulink
-          url="http://www.linux-mandrake.com/en/fdoc.php3">Mandrake</ulink>
-
-        </para></listitem>
-
-      <listitem><para>
-
-          <ulink url="http://sdb.suse.de/sdb/en/html/">SuSE</ulink>
-
-        </para></listitem>
-
-    </itemizedlist>
-
-  </sect2>
-
-  <sect2 id="os-security" xreflabel="Security Information">
-    <title>Security Information</title>
-    <para>
-      Once you get your OS installed, it's imperative that you secure your
-      installation. As Jon Griffin repeatedly warns us, "No distribution is
-      secure out of the box."  The Reference Platform implements
-      some basic precautions, but security is a process, not a
-      condition.  If you are responsible for a computer hooked to the
-      internet, you are responsible for learning some rudiments of
-      security, such as monitoring the state of a computer,
-      maintaining patch levels, and keeping backups.  We recommend
-      these resources:
-    </para>
-
-    <itemizedlist>
-      <listitem>
-        <para>
-          <ulink url="http://www.openna.com/products/books/sol/solus.php">Securing and Optimizing Linux - version 2.0</ulink>
-        </para>
-      </listitem>
-      <listitem><para> 
-          <ulink url="http://jongriffin.com/static/linuxnotes">Jon
-          Griffin's notes</ulink>
-          </para></listitem>
-      <listitem><para> 
-          <ulink url="http://www.seifried.org/lasg/">Linux Administrators
-          Security Guide</ulink>
-          </para></listitem>
-      <listitem><para> 
-          <ulink
-            url="http://www.suse.com/en/support/howto/secure_webserv/index.html">Installation
-            of a Secure Webserver</ulink>
-        </para></listitem>
-
-      <listitem><para> 
-          <ulink
-            url="http://www.counterpane.com/crypto-gram.html">Bruce
-          Schneier's Crypto-Gram</ulink>, especially <ulink
-          url="http://www.counterpane.com/crypto-gram-0103.html#1">The
-          security patch treadmill</ulink> and <ulink
-          url="http://www.counterpane.com/crypto-gram-0107.html#5">Monitoring First</ulink>.</para>
-      </listitem>
-
-    </itemizedlist>
-  </sect2>
-
-  <sect2 id="install-resources" xreflabel="Resources">
-    <title>Resources</title>
-
-    <para>
-      Here are some resources that OpenACS users have found useful.
-    </para>
-
-    <sect3 id="install-resources-books">
-      <title>Books</title>
-
-      <itemizedlist>
-        <listitem><para>
-
-            <ulink
-            url="http://www.amazon.com/exec/obidos/ASIN/1558605347/photonetA">Philip
-            and Alex's Guide to Web Publishing</ulink> - A very readable
-            guide to database-backed community websites.
-
-          </para></listitem>
-
-        <listitem><para>
-
-            <ulink
-              url="http://www.amazon.com/exec/obidos/ISBN=1565922603/photonetA/">UNIX
-              Power Tools</ulink> - An excellent introduction to the
-              command line tools and basic programs of UNIX
-
-          </para></listitem>
-
-        <listitem><para>
-
-            <ulink
-            url="http://www.amazon.com/exec/obidos/ASIN/0130206016/photonetA">UNIX
-            System Administration Handbook</ulink> (formerly the "red book"
-            - now the "purple" book)
-
-          </para></listitem>
-
-        <listitem><para> 
-
-            <ulink
-            url="http://www.amazon.com/exec/obidos/ASIN/076453162X/photonetA">UNIX
-            System Administrator's Bible</ulink> -  (LePage and Iarerra 1998;
-            IDG) 
-
-          </para></listitem>
-
-        <listitem><para> 
-
-            <ulink
-            url="http://www.amazon.com/exec/obidos/ASIN/1565921518/photonetA">Running
-            Linux</ulink> </para></listitem>
-      
-      <listitem><para> <ulink
-            url="http://www.amazon.com/exec/obidos/ASIN/1565921526/photonetA">Learning
-            Gnu Emacs</ulink> </para></listitem>
-
-        <listitem><para> 
-
-            <ulink
-              url="http://www.amazon.com/exec/obidos/ASIN/1565925858/photonetA">Linux
-              in a Nutshell</ulink> 
-
-          </para></listitem>
-      </itemizedlist>
-
-    </sect3>
-
-    <sect3 id="install-resources-web">
-      <title>Web Sites</title>
-
-      <itemizedlist>
-        <listitem><para>
-
-            <ulink url="http://www.geek-girl.com/unix.html">The UNIX
-              Reference Desk</ulink>
-
-          </para></listitem>
-
-        <listitem><para> 
-
-            <ulink url="http://www.linuxdoc.org/">The Linux Documentation
-            Project</ulink> 
-
-          </para></listitem> 
-
-        <listitem><para>
-
-            <ulink
-            url="http://www-105.ibm.com/developerworks/education.nsf/linux-onlinecourse-bytitle/4AAA4E689F774DBC86256B4500645075?OpenDocument">LPI
-            certification exam preps</ulink> - A series of articles from
-            IBM developerworks on basic and intermediate Linux skills
-            (requires registration)
-
-            </para></listitem>
-
-    </itemizedlist>
-
-    </sect3>
-
-  </sect2>
-  <para><phrase role="cvstag">($Id$)</phrase></para>
-
-</sect1>
+          </listitem>
+        </itemizedlist>
+      </sect2>
+    </sect1>
+    <para><phrase role="cvstag">($Id$)</phrase></para>
+
+  </chapter>

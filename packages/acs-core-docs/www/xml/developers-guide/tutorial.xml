@@ -16,6 +16,10 @@
       <para>To start developing new code in OpenACS, we build a new
     package.  A package is a a discrete collection of web
     pages, tcl code, and database tables and procedures.  A package
+      with user interface is called an <emphasis
+      type="strong">application</emphasis>; a package which provides
+      functions to other packages and has no direct interface, a
+      <emphasis type="bold">service</emphasis>.  A package
     can be installed, upgraded, and removed.  It communicates with
     other packages through an API.  This chapter walks you through the
     minimum steps to create a useful package, including writing
@@ -23,13 +27,16 @@
       writing web pages, debugging, and automatic regression testing.
 </para>
 
+    <para>In this tutorial, we will make an application package for
+    displaying a list of text notes.
+</para>
   </sect2>
 
   <sect2><title>Before you begin</title>
     <para>You will need:</para>
     <itemizedlist>
-      <listitem><para>A computer with a working installation of OpenACS
-	    4.6.  If you don't have this, see <xref linkend="install-overview"/>.
+      <listitem><para>A computer with a working installation of
+	  OpenACS.  If you don't have this, see <xref linkend="install-overview"/>.
 	  </para></listitem>
       <listitem><para>Example files, which are included in the
 standard OpenACS &version; distribution.
@@ -55,7 +62,7 @@ standard OpenACS &version; distribution.
             </row>
             <row>
               <entry>New Package key</entry>
-              <entry><replaceable>samplenote</replaceable></entry>
+              <entry><replaceable>myfirstpackage</replaceable></entry>
             </row>
           </tbody>
         </tgroup>
@@ -70,14 +77,16 @@ standard OpenACS &version; distribution.
     files that belong in the package.  Each package is uniquely
     identified by a package key.  To start developing a new
     package, use the APM to create an empty package with our new
-    package key, <replaceable>samplenote</replaceable>.  This will create
+    package key, <replaceable>myfirstpackage</replaceable>.  This will create
     the initial directories, meta-information files, and database
     entries for a new package.  (<ulink
     url="apm-requirements.html">More info on APM</ulink>)
 </para>
     <orderedlist>
       <listitem>
-        <para>Browse to <computeroutput>http://<replaceable>yourserver</replaceable>:8000/acs-admin/apm</computeroutput>.
+        <para>Browse to
+        <computeroutput>http://<replaceable>yourserver</replaceable>:8000/<ulink
+        url="/acs-admin/apm">acs-admin/apm</ulink></computeroutput>.
 </para>
       </listitem>
       <listitem>
@@ -88,15 +97,19 @@ standard OpenACS &version; distribution.
         <itemizedlist>
           <listitem><para>
               <computeroutput>Package Key</computeroutput>:
-              <userinput>samplenote</userinput></para>
+              <userinput>myfirstpackage</userinput></para>
             </listitem>
             <listitem><para>
               <computeroutput>Package Name</computeroutput>:
-              <userinput>Notes</userinput>
+              <userinput>My First Package</userinput>
             </para></listitem>
             <listitem><para>
               <computeroutput>Package Plural</computeroutput>:
-              <userinput>Notes</userinput></para></listitem>
+              <userinput>My First Package</userinput></para></listitem>
+            <listitem><para>	  
+              <computeroutput>Auto-mount URI</computeroutput>:
+              <userinput>myfirstpackage</userinput>
+            </para></listitem>
             <listitem><para>	  
               <computeroutput>Initial Version</computeroutput>:
               <userinput>0.1d</userinput>
@@ -111,7 +124,7 @@ standard OpenACS &version; distribution.
       </listitem>
     </orderedlist>
       <para>This creates a package rooted at
-          <computeroutput>/web/<replaceable>service0</replaceable>/packages/<replaceable>samplenote</replaceable></computeroutput>.
+          <computeroutput>/var/lib/aolserver/<replaceable>service0</replaceable>/packages/<replaceable>myfirstpackage</replaceable></computeroutput>.
           This is the "home directory" of our new package, and all
           files in the package will be within this directory.</para>
     </sect2>
@@ -131,7 +144,8 @@ standard OpenACS &version; distribution.
       in this tutorial.</para>
       <orderedlist>
         <listitem><para>Browse to
-<computeroutput>http://yourserver.test:8000/admin/site-map/</computeroutput>.</para>
+<computeroutput>http://yourserver.test:8000<ulink
+        url="/acs-admin/site-map/">/admin/site-map/</ulink></computeroutput>.</para>
         </listitem>
         <listitem>
           <para>Click the <computeroutput><guilabel>new sub
@@ -143,144 +157,15 @@ and click <computeroutput><guibutton>New</guibutton></computeroutput>. </para></
         <listitem><para>This creates a new row called
 <computeroutput>note</computeroutput>.  In the new row, click the <computeroutput><guilabel>new
 application</guilabel></computeroutput> link</para></listitem>
-        <listitem><para>Type <userinput>Sample Note</userinput> where
+        <listitem><para>Type <userinput>My First Package</userinput> where
 it says
 <computeroutput><guilabel>untitled</guilabel></computeroutput>, choose
-<computeroutput><guilabel>Notes</guilabel></computeroutput> from the drop-down list, and
+<computeroutput><guilabel>My First Package</guilabel></computeroutput> from the drop-down list, and
 click <computeroutput><guibutton>New</guibutton></computeroutput>.
 </para></listitem>
       </orderedlist>
       <para>By mounting the package, we've caused all requests to
-      <computeroutput>http://yourserver.test:8000/note</computeroutput>
-      to be satisfied from the files at <computeroutput>/web/service0/packages/samplenote/www</computeroutput>.</para>
-    </sect2>
-    <sect2>
-      <title>Write the Requirements and Design Specs</title>
-      <para>It's time to document.  For the tutorial we'll use
-      pre-written documentation.  When creating a package
-      from scratch, start by copying the documentation template from
-	<computeroutput>/web/openacs-dev/packages/acs-core-docs/xml/docs/xml/package-documentation-template.xml</computeroutput>
-	to
-	<computeroutput>yourpackage/www/docs/xml/index.xml</computeroutput>.</para>
-      <para>You then edit that file with emacs to write the 
-	requirements and design sections, generate the html, and start
-	coding.  Store any supporting files, like page maps or schema
-      diagrams, in the <computeroutput>www/doc/xml</computeroutput>
-      directory, and store png or jpg versions of supporting files in the
-	<computeroutput>www/doc</computeroutput> directory.</para>
-      <para>For this tutorial, you should instead install the
-	pre-written documentation files for the tutorial app.  Log in
-      as <replaceable>service0</replaceable>, create the standard
-      directories, and copy the prepared documentation:</para>
-      <screen>[service0@yourserver service0]$ <userinput>cd /web/service0/packages/samplenote/</userinput>
-[service0@yourserver samplenote]$ <userinput>mkdir -p www/doc/xml</userinput>
-[service0@yourserver samplenote]$ <userinput>cd www/doc/xml</userinput>
-[service0@yourserver xml]$ <userinput>cp /web/service0/packages/acs-core-docs/www/files/samplenote/* .</userinput>
-[service0@yourserver xml]$</screen>
-      <para> OpenACS uses DocBook for documentation.  DocBook is
-	an XML standard for semantic markup of documentation.  That
-	means that the tags you use indicate meaning, not intended
-	appearance.  The style sheet will determine appearance.  You
-      will edit the text in an xml file, and then process the file
-      into html for reading.</para>
-      <para>Open the file <computeroutput>index.xml</computeroutput>
-      in emacs.  Examine the file.  Find the version history (look for the tag
-        <computeroutput>&lt;revhistory&gt;</computeroutput>).  Add a
-        new record to the document version history.  Look for the
-        <computeroutput>&lt;authorgroup&gt;</computeroutput> tag and
-        add yourself as a second author.  Save and exit.  For tips on
-        editing SGML files in emacs, see <xref
-        linkend="docbook-primer"/></para>
-      <para>Process the xml file to create html documentation.  The
-      html documentation, including supporting files such as pictures,
-      is stored in the <computeroutput>www/docs/</computeroutput>
-      directory.  A Makefile is provided to generate html from the xml, and copy all of the
-      supporting files.  If Docbook is set up correctly, all you need
-      to do is:</para>
-      <screen>[service0@yourserver xml]$<userinput> make</userinput>
-cd .. ; /usr/bin/xsltproc ../../../acs-core-docs/www/xml/openacs.xsl xml/index.xml
-Writing requirements-introduction.html for sect1(requirements-introduction)
-Writing requirements-overview.html for sect1(requirements-overview)
-Writing requirements-cases.html for sect1(requirements-cases)
-Writing sample-data.html for sect1(sample-data)
-Writing requirements.html for chapter(requirements)
-Writing design-data-model.html for sect1(design-data-model)
-Writing design-ui.html for sect1(design-ui)
-Writing design-config.html for sect1(design-config)
-Writing design-future.html for sect1(design-future)
-Writing filename.html for chapter(filename)
-Writing user-guide.html for chapter(user-guide)
-Writing admin-guide.html for chapter(admin-guide)
-Writing bi01.html for bibliography
-Writing index.html for book
-[service0@yourserver xml]$</screen>
-      <para>Verify that the documentation was generated and reflects
-      your changes by browsing to <computeroutput>http://<replaceable>yoursite</replaceable>:8000/samplenote/doc</computeroutput></para>
-    </sect2>
-    <sect2>
-      <title>Add the new package to CVS</title>
-      <para>Before you do any more work, make sure that your work is
-      protected by putting it all into cvs.  The <computeroutput>cvs
-      add</computeroutput> command is not recursive, so you'll have to
-      traverse the directory tree manually and add as you go.  (<ulink
-      url="http://www.piskorski.com/docs/cvs-conventions.html">More on
-      CVS</ulink>)</para>
-      <screen>[service0@yourserver xml]$ <userinput>cd ..</userinput>
-[service0@yourserver doc]$ <userinput>cd ..</userinput>
-[service0@yourserver www]$ <userinput>cd ..</userinput>
-[service0@yourserver samplenote]$ <userinput>cd ..</userinput>
-[service0@yourserver packages]$ <userinput>cvs add samplenote/</userinput>
-Directory /cvsroot/service0/packages/samplenote added to the repository
-[service0@yourserver packages]$ <userinput>cd samplenote/</userinput>
-[service0@yourserver samplenote]$ <userinput>cvs add www</userinput>
-Directory /cvsroot/service0/packages/samplenote/www added to the repository
-[service0@yourserver samplenote]$ <userinput>cd www</userinput>
-[service0@yourserver www]$ <userinput>cvs add doc</userinput>
-Directory /cvsroot/service0/packages/samplenote/www/doc added to the repository
-[service0@yourserver www]$ <userinput>cd doc</userinput>
-[service0@yourserver doc]$ <userinput>cvs add *</userinput>
-cvs add: cannot add special file `CVS'; skipping
-cvs add: scheduling file `admin-guide.html' for addition
-cvs add: scheduling file `bi01.html' for addition
-cvs add: scheduling file `data-model.dia' for addition
-cvs add: scheduling file `data-model.png' for addition
-cvs add: scheduling file `design-config.html' for addition
-cvs add: scheduling file `design-data-model.html' for addition
-cvs add: scheduling file `design-future.html' for addition
-cvs add: scheduling file `design-ui.html' for addition
-cvs add: scheduling file `filename.html' for addition
-cvs add: scheduling file `index.html' for addition
-cvs add: scheduling file `page-map.dia' for addition
-cvs add: scheduling file `page-map.png' for addition
-cvs add: scheduling file `requirements-cases.html' for addition
-cvs add: scheduling file `requirements-introduction.html' for addition
-cvs add: scheduling file `requirements-overview.html' for addition
-cvs add: scheduling file `requirements.html' for addition
-cvs add: scheduling file `sample-data.html' for addition
-cvs add: scheduling file `sample.png' for addition
-cvs add: scheduling file `user-guide.html' for addition
-cvs add: scheduling file `user-interface.dia' for addition
-cvs add: scheduling file `user-interface.png' for addition
-Directory /cvsroot/service0/packages/samplenote/www/doc/xml added to the repository
-cvs add: use 'cvs commit' to add these files permanently
-[service0@yourserver doc]$ <userinput>cd xml</userinput>
-[service0@yourserver xml]$ <userinput>cvs add Makefile index.xml</userinput>
-cvs add: scheduling file `Makefile' for addition
-cvs add: scheduling file `index.xml' for addition
-cvs add: use 'cvs commit' to add these files permanently
-[service0@yourserver xml]$<userinput> cd ../../..</userinput>
-[service0@yourserver samplenote]$ <userinput>cvs commit -m "new package"</userinput>
-cvs commit: Examining .
-cvs commit: Examining www
-cvs commit: Examining www/doc
-cvs commit: Examining www/doc/xml
-RCS file: /cvsroot/service0/packages/samplenote/www/doc/admin-guide.html,v
-done
-Checking in www/doc/admin-guide.html;
-/cvsroot/service0/packages/samplenote/www/doc/admin-guide.html,v  &lt;--  admin-guide.html
-initial revision: 1.1
-done
-<emphasis>(many lines omitted)</emphasis>
-[service0@yourserver samplenote]$</screen>
+      <computeroutput>http://yourserver.test:8000/myfirstpackage</computeroutput>
+      to be satisfied from the files at <computeroutput>/var/lib/aolserver/service0/packages/myfirstpackage/www</computeroutput>.</para>
     </sect2>
   </sect1>

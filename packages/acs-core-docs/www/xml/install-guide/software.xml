@@ -17,105 +17,6 @@
 	Transport Agent and source control system, are also needed for
 	a fully effective instance.
   </para>
-    <!--
-    <sect1 id="bundled-programs">
-    <title>Bundled Software</title>
-    <para>All of these materials are available bundled:</para>
-    <itemizedlist>
-    <listitem>
-    <formalpara>
-    <title>Reference Platform &version;-P (<ulink>tarball</ulink>, <ulink>ISO image</ulink>)</title>
-    <para>Reference Platform A: OpenACS &version;, AOLserver
-    3.3oacs1, PostGreSQL 7.2.4, and all supporting
-    files.  Also requires <ulink url="ftp://ftp.redhat.com/pub/redhat/linux/8.0/en/iso/i386/">Red Hat 8.0</ulink>.</para>
-  </formalpara>
-  </listitem>
-    <listitem>
-    <formalpara>
-    <title>Reference Platform &version;-O (<ulink>tarball</ulink>, <ulink>ISO image</ulink>)</title>
-    <para>Reference Platform B: OpenACS &version;, AOLserver
-    3.3oacs1, Oracle 8.1.7, and all supporting
-    files.  Also requires <ulink>Red Hat 8.0</ulink>.  Also
-    requires Oracle - see <xref linkend="oracle"/> for information on how to get Oracle.</para>
-  </formalpara>
-  </listitem>
-  </itemizedlist>
-  </sect1>
-    -->
-    <sect1 id="compatibility-matrix">
-      <title>Compatibility Matrix</title>
-      <authorblurb>
-        by <ulink url="mailto:joel@aufrecht.org">Joel Aufrecht</ulink>
-      </authorblurb>
-      <figure>
-        <title>Compatibility Matrix</title>
-        <informaltable>
-          <tgroup cols="8">
-            <colspec colname="c1"/>
-            <colspec colname="c2"/>
-            <colspec colname="3.2.5"/>
-            <colspec colname="4.5"/>
-            <colspec colname="4.6"/>
-            <colspec colname="4.6.1"/>
-            <colspec colname="4.6.2"/>
-            <colspec colname="4.6.3"/>
-            <spanspec align="center" colsep="0" rowsep="0" spanname="version" namest="c1" nameend="c2"/>
-            <tbody>
-              <row>
-                <entry spanname="version">OpenACS Version</entry>
-                <entry colname="3.2.5">3.2.5</entry>
-                <entry colname="4.5">4.5</entry>
-                <entry colname="4.6">4.6</entry>
-                <entry colname="4.6.1">4.6.1</entry>
-                <entry colname="4.6.2">4.6.2</entry>
-                <entry colname="4.6.3">4.6.3</entry>
-              </row>
-              <row>
-                <entry morerows="2">AolServer</entry>
-                <entry>3</entry>
-                <entry namest="3.2.5" nameend="3.2.5" align="center">Verified</entry>
-              </row>
-              <row>
-                <entry>3.3+ad13</entry>
-                <entry namest="4.5" nameend="4.6.3" align="center">Verified</entry>
-              </row>
-              <row>
-                <entry>3.3oacs1</entry>
-                <entry namest="4.6.2" nameend="4.6.3" align="center">Verified</entry>
-              </row>  
-              <row>
-                <entry morerows="2">PostGreSQL</entry>
-                <entry>7.0</entry>
-                <entry namest="3.2.5" nameend="3.2.5" align="center">Verified</entry>
-              </row>
-              <row>
-                <entry>7.2.x</entry>
-                <entry namest="4.5" nameend="4.6.3" align="center">Verified</entry>
-              </row>
-              <row>
-                <entry>7.3.2</entry>
-                <entry namest="3.2.5" nameend="4.6.2" align="center">Not compatible</entry>
-                <entry namest="4.6.3" nameend="4.6.3" align="center">Untested</entry>
-              </row>
-              <row>
-                <entry morerows="2">Oracle</entry>
-                <entry>8.1.6</entry>
-                <entry namest="4.5" nameend="4.6.3" align="center">Verified</entry>
-              </row>
-              <row>
-                <entry>8.1.7</entry>
-                <entry namest="4.5" nameend="4.6.3" align="center">Verified</entry>
-              </row>
-              <row>
-                <entry>9i</entry>
-                <entry namest="3.2.5" nameend="4.6.3" align="center">No</entry>
-              </row>
-            </tbody>
-          </tgroup>
-        </informaltable>
-      </figure>
-    </sect1>
-
     <sect1 id="individual-programs">
       <title>Individual Programs</title>
       <itemizedlist>
@@ -140,7 +41,7 @@
             <listitem>
               <formalpara>
                 <title>Linux</title>
-                <para><xref linkend="linux-installation"/>.  The installation assumes a linux kernel of 2.2.22 or newer, or 2.4.14 or newer.</para>
+                <para>The installation assumes a linux kernel of 2.2.22 or newer, or 2.4.14 or newer.</para>
               </formalpara>
             </listitem>
             <listitem>

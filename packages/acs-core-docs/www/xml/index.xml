@@ -8,7 +8,7 @@
 ]>
 
 <book>
-  <title>OpenACS Documentation</title>
+  <title>OpenACS Core Documentation</title>
     
   <part id="for-everyone">
     <title>OpenACS For Everyone</title>
@@ -93,33 +93,36 @@
 	  </para>
       </sect1>
       <xi:include href="for-everyone/release-notes.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
-        <xi:fallback>Section Missing</xi:fallback>
+        <xi:fallback>Release Notes Section Missing</xi:fallback>
       </xi:include>
     </chapter>
   </part>
   
   <part id="acs-admin">
     <title>Administrator's Guide</title>
-    <xi:include href="install-guide/quick.xml"  xmlns:xi="http://www.w3.org/2001/XInclude">
-      <xi:fallback>Section Missing</xi:fallback>
+
+    <xi:include href="install-guide/overview.xml"  xmlns:xi="http://www.w3.org/2001/XInclude">
+      <xi:fallback>Overview Section Missing</xi:fallback>
     </xi:include>
- 
+
+<!--    <xi:include href="install-guide/quick.xml"  xmlns:xi="http://www.w3.org/2001/XInclude">
+      <xi:fallback><para>Quick Guide Missing</para></xi:fallback>
+    </xi:include>
+-->
     <xi:include href="install-guide/software.xml"  xmlns:xi="http://www.w3.org/2001/XInclude">
       <xi:fallback>Section Missing</xi:fallback>
     </xi:include>
+
+    
  
-    <chapter id="unix-install">
-      <title>Installing on Unix/Linux</title>
-      <xi:include href="install-guide/overview.xml"  xmlns:xi="http://www.w3.org/2001/XInclude">
-      <xi:fallback>Section Missing</xi:fallback>
-    </xi:include>
- 
-      <xi:include href="install-guide/os.xml"  xmlns:xi="http://www.w3.org/2001/XInclude">
+    <chapter id="complete-install">
+      <title>Complete Installation</title>
+      <xi:include href="install-guide/os.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
       <xi:fallback>Section Missing</xi:fallback>
     </xi:include>
  
       <xi:include href="install-guide/oracle.xml"  xmlns:xi="http://www.w3.org/2001/XInclude">
-      <xi:fallback>Section Missing</xi:fallback>
+      <xi:fallback><para>Section Missing</para></xi:fallback>
     </xi:include>
  
       <xi:include  href="install-guide/postgres.xml"  xmlns:xi="http://www.w3.org/2001/XInclude">
@@ -134,24 +137,13 @@
       <xi:fallback>Section Missing</xi:fallback>
     </xi:include>
  
-      <xi:include href="install-guide/credits.xml"  xmlns:xi="http://www.w3.org/2001/XInclude">
-      <xi:fallback>Section Missing</xi:fallback>
-    </xi:include>
- 
-    </chapter>
-    <chapter id="win-install">
-      <title>Installing on Windows</title>
       <xi:include href="install-guide/win2kinstall.xml"  xmlns:xi="http://www.w3.org/2001/XInclude">
         <xi:fallback>Section missing</xi:fallback>
       </xi:include> 
-    </chapter>
-    <chapter id="mac-install">
-      <title>Installing on a Macintosh</title>
       <xi:include href="install-guide/macinstall.xml"  xmlns:xi="http://www.w3.org/2001/XInclude">
 <xi:fallback>Section missing</xi:fallback>
       </xi:include> 
-    </chapter>
-    
+    </chapter>    
     <chapter id="configure">
       <title>Configuring a New Service</title>
       <para>Placeholder</para> 
@@ -181,15 +173,15 @@
     <xi:include href="install-guide/other-software.xml"  xmlns:xi="http://www.w3.org/2001/XInclude">
 <xi:fallback>Section missing</xi:fallback>
       </xi:include> 
+    <xi:include href="install-guide/credits.xml"  xmlns:xi="http://www.w3.org/2001/XInclude">
+      <xi:fallback>Section Missing</xi:fallback>
+    </xi:include>
   </part>
 
   <part id="acs-package-dev">
     <title>For OpenACS Package Developers</title>
     <partintro>
-      <para>
-        This is the place to look if you want to extend OpenACS and build on
-	top of what's already here. Here you can find out about the
-	guts of the system.
+      <para>Tutorials and reference material for creating new OpenACS packages.
       </para>
     </partintro>
 
@@ -274,19 +266,26 @@
 <xi:fallback>Section missing</xi:fallback>
       </xi:include> 
       <xi:include href="engineering-standards/plsql.xml"  xmlns:xi="http://www.w3.org/2001/XInclude">
-<xi:fallback>Section missing</xi:fallback>
+      <xi:fallback>Section missing</xi:fallback>
       </xi:include> 
-    </chapter>
+
     <xi:include href="developers-guide/cvs.xml"  xmlns:xi="http://www.w3.org/2001/XInclude">
-<xi:fallback>Section missing</xi:fallback>
+<xi:fallback>CVS Section missing</xi:fallback>
       </xi:include> 
     <xi:include href="releasing-openacs.xml"  xmlns:xi="http://www.w3.org/2001/XInclude">
 <xi:fallback>'Releasing OpenACS' missing</xi:fallback>
       </xi:include> 
+    </chapter>
   </part>
   
   <part id="acs-plat-dev">
     <title>For OpenACS Platform Developers</title>
+    <preface>
+      <title>Platform Development</title>
+      <para>Information about the internal workings of OpenACS, useful
+      both for modifying the core functionality and for developing new
+      packages.</para>
+    </preface>
     <chapter id="kernel-doc">
       <title>Kernel Documentation</title>
 

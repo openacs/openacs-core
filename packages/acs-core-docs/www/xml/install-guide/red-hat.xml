@@ -19,6 +19,34 @@
     to install a new machine from scratch compared to installing each
     of these packages installed independently.)</para>
 
+    <para>The installation guide assumes you can do the following on
+    your platform:
+	</para>
+    
+    <itemizedlist>
+      <listitem><para> 
+		  Adding users, groups, setting passwords  
+		</para></listitem>
+      <listitem><para> 		  
+		  (For Oracle) Starting an X server and running an X program remotely
+	  </para></listitem> 
+      
+      <listitem><para> 
+		  Basic file management using <computeroutput>cp, rm,
+			mv,</computeroutput> and <computeroutput>cd</computeroutput>
+		</para></listitem> 
+      
+      <listitem><para> 
+		  Compiling a program using ./config and make.
+		</para></listitem>
+	</itemizedlist>
+
+	<para>
+	  You can complete this install without the above knowledge,
+	  but if anything goes wrong it may take extra time to
+	  understand and correct the problem.  <link linkend="install-resources">Some useful UNIX resources</link>.
+	</para>
+
     <orderedlist>
       <listitem id="install-first-step"><para>Unplug the network cable from your
           computer.  We don't want to connect to the network

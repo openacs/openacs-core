@@ -33,7 +33,7 @@ BEGINNING OF TEMPLATE
     <para>
   <para>
 	You may want to begin by reading our installation documentation for
-	<xref linkend="unix-install"/>.  Note that the Windows documentation is
+	<xref linkend="install-steps"/>.  Note that the Windows documentation is
 	not current for OpenACS &version;, but an alternative is to use John
 	Sequeira's <ulink
 	url="http://www.pobox.com/~johnseq/projects/oasisvm/">Oasis VM

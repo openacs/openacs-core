@@ -4,113 +4,28 @@
 <!ENTITY % myvars SYSTEM "../variables.ent">
 %myvars;
 ]>
-<sect1 id="linux-installation">
-  <title>Install Linux and supporting software</title>
+<sect1 id="unix-installation">
+  <title>Install Unix-like system and supporting software</title>
   
   <authorblurb>
     by <ulink url="mailto:joel@aufrecht.org">Joel Aufrecht</ulink>
   </authorblurb>
-  <sect2>
-    <title>Paths and Users</title>
-    
-    <figure>
-      <title>Assumptions in this section</title>
-        <informaltable>
-          <tgroup cols="2">
-            <tbody>
-              <row>
-                <entry>Fully qualified domain name of your server</entry>
-              <entry><replaceable>yourserver.test</replaceable></entry>
-              </row>
-              <row>
-                <entry>name of administrative access account</entry>
-                <entry>remadmin</entry>
-              </row>
-              <row>
-                <entry>OpenACS service</entry>
-              <entry><indexterm>
-                  <primary>service0</primary>
-                </indexterm>
-<replaceable>service0</replaceable></entry>
-              </row>
-              <row>
-                <entry>OpenACS service account</entry>
-              <entry><replaceable>service0</replaceable></entry>
-              </row>
-              <row>
-                <entry>OpenACS database name</entry>
-                <entry><replaceable>service0</replaceable></entry>
-              </row>
-              <row>
-                <entry>Root of OpenACS service file tree</entry>
-                <entry><replaceable>/web/service0</replaceable></entry>
-              </row>
-              <row>
-                <entry>Location of source code tarballs for new software</entry>
-                <entry>/tmp</entry>
-              </row>
-              <row>
-                <entry>The OpenACS tarball contains some files which
-                are useful while setting up other software.  Those
-                files are located at:</entry>
-                <entry>/tmp/&tarballpath;/packages/acs-core-docs/www/files</entry>
-              </row>
-              <row>
-                <entry>Database backup directory</entry>
-                <entry><replaceable>/web/service0/database-backup</replaceable></entry>
-              </row>
-              <row>
-                <entry>Service config files</entry>
-                <entry><replaceable>/web/service0/etc</replaceable></entry>
-              </row>
-              <row>
-                <entry>Service log files</entry>
-                <entry><replaceable>/web/service0/log</replaceable></entry>
-              </row>
-              <row>
-                <entry>Compile directory</entry>
-                <entry>/usr/local/src</entry>
-              </row>
-              <row>
-                <entry>PostGreSQL directory</entry>
-                <entry>/usr/local/pgsql</entry>
-              </row>
-              <row>
-                <entry>AOLServer directory</entry>
-                <entry>/usr/local/aolserver</entry>
-              </row>
-            </tbody>
-          </tgroup>
-        </informaltable>
-      </figure>
-
-      <para>
-	  None of these locations are set in stone - they're simply
-	  the values that we've chosen.  The values that you'll
-	  probably want to change, such as service name, are
-	  <replaceable>marked like this</replaceable>.  The other
-	  values we recommend you leave unchanged unless you have a
-	  reason to change them.</para>
-   
-    <note>
-      <para>
-	  Some of the paths and user accounts have been changed from
-	  those recommended in previous versions of this document to
-	  improve security and maintainability.  See <ulink
-	  url="http://openacs.org/forums/message-view?message_id=82934">this
-	  thread</ulink> for discussion.
-</para>
-    </note>
-
-    
-  </sect2>
-  <sect2 id="install-linux">
-    <title>Install Linux</title>
-    <para>You will need a PC running linux with the following software installed:</para>
+  <sect2 id="unix-install">
+    <title>a Unix-like system</title>
+    <para>You will need a computer running a unix-like system with the following software installed:</para>
     <itemizedlist>
-      <listitem><para>libxml2</para></listitem>
+      <listitem><para>tdom</para></listitem>
       <listitem><para>tcl</para></listitem>
-      <listitem><para>gmake and the compile and build environment.</para></listitem>
+      <listitem><para>gmake and the compile and build
+      environment.</para>
+        <note>
+          <title>BSD Note</title>
+          <para>BSD users: in most places in these instructions, gmake
+          will work better than make.  (<ulink
+          href="http://openacs.org/forums/message-view?message_id=136910">more
+          information on FreeBSD installation</ulink>)</para>
+        </note>
+</listitem>
     </itemizedlist>
     <para>and optionally these programs, which are included in most distributions:</para>
     <itemizedlist>
