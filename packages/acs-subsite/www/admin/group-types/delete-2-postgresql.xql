@@ -63,4 +63,13 @@ end;
 </partialquery>
 
  
+<partialquery name="delete_group_type">
+<querytext>
+begin
+delete from group_types where group_type=:group_type;
+return 1;
+end;
+</querytext>
+</partialquery> 
+
 </queryset>

@@ -174,6 +174,8 @@ create table $table_name (
 	    return -code error $errmsg
         }
 
+	# We need to add something to the group_types table, too! (Ben - OpenACS)
+	db_dml insert_group_type {}
 
         # Finally, create the PL/SQL package. 
 

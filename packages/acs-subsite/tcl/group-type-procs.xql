@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <queryset>
 
-<fullquery name="new.select_group_id_column">      
+<fullquery name="group_type::new.select_group_id_column">      
       <querytext>
       
 	    select upper(id_column) from acs_object_types where object_type='group'
@@ -10,7 +10,7 @@
 </fullquery>
 
  
-<fullquery name="new.supertype_table_column">      
+<fullquery name="group_type::new.supertype_table_column">      
       <querytext>
       
 	    select t.table_name as references_table,
@@ -21,5 +21,11 @@
       </querytext>
 </fullquery>
 
+
+<fullquery name="group_type::new.insert_group_type">
+	<querytext>
+		insert into group_types (group_type) values (:group_type)
+	</querytext>
+</fullquery>
  
 </queryset>

@@ -134,7 +134,8 @@ create table group_types (
                                 constraint group_types_pk primary key
                                 constraint group_types_obj_type_fk
                                 references acs_object_types (object_type),
-        approval_policy         varchar(30) not null,
+	-- commented out by Ben (OpenACS), to make it in sync with Oracle version..
+	--        approval_policy         varchar(30) not null,
         default_join_policy     varchar(30) default 'open' not null
                                 constraint group_types_join_policy_ck
                                 check (default_join_policy in 

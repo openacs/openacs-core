@@ -166,8 +166,6 @@ namespace eval rel_types {
                    references $references_table ($references_column)
                    constraint $pk_constraint_name primary key
 	)"} errmsg] } {
-	    ns_log Notice "BEN PROBLEM : $errmsg"
-
             # Roll back our work so for
             for { set i [expr [llength $plsql_drop] - 1] } { $i >= 0 } { incr i -1 } {
 		set drop_pair [lindex $plsql_drop $i]
@@ -194,6 +192,18 @@ namespace eval rel_types {
     } {
 	if {[catch {
 	    db_dml insert_rel_type {}
+	} errmsg]} {
+	}
+    }
+
+    ad_proc -public remove_permissible {
+	group_type
+	rel_type
+    } {
+	Add a permissible relationship for a given group type
+    } {
+	if {[catch {
+	    db_dml delete_rel_type {}
 	} errmsg]} {
 	}
     }

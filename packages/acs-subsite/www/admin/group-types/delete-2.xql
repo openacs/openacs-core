@@ -25,5 +25,4 @@
       </querytext>
 </fullquery>
 
- 
 </queryset>
