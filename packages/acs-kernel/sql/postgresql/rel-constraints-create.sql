@@ -77,12 +77,12 @@ declare
 begin
         select max(tree_sortkey) into max_key 
           from rel_constraints 
-         where rel_segment = new.rel_segment
+         where required_rel_segment = new.required_rel_segment
            and rel_side = new.rel_side;
 
         select coalesce(max(tree_sortkey),'''') into v_parent_sk 
           from rel_constraints 
-         where required_rel_segment = new.rel_segment
+         where rel_segment = new.required_rel_segment
            and rel_side = new.rel_side;
 
         new.tree_sortkey := v_parent_sk || ''/'' || tree_next_key(max_key);
@@ -602,16 +602,29 @@ select r.rel_type as viol_rel_type, r.rel_id as viol_rel_id,
 --                  and prior rel_side = 'two'
 --       );
 
+-- FIXME: note this view doesn't match acsclassic, but from the description 
+-- above, I believe that this view is correct.  The results from the 
+-- acsclassic version of this view make no sense - DCW 2001-04-18.
+
+-- drop view rc_segment_required_seg_map;
 create view rc_segment_required_seg_map as
 select rc.rel_segment, rc.rel_side, rc_required.required_rel_segment
 from rel_constraints rc, rel_constraints rc_required 
-where rc.rel_segment in (select c2.rel_segment
-                           from rel_constraints c1, rel_constraints c2
-                          where c2.rel_side = 'two'
-                            and c1.rel_side = 'two'
-                            and c1.rel_segment = rc_required.rel_segment 
-                            and c2.tree_sortkey <= c1.tree_sortkey
-                            and c1.tree_sortkey like (c2.tree_sortkey || '%'));
+where rc.rel_side = rc_required.rel_side 
+  and ((rc.rel_segment in (select rel_segment
+                             from rel_constraints
+                            where rel_side = 'two'
+                              and tree_sortkey 
+                                  like (select tree_sortkey || '%' 
+                                          from rel_constraints 
+                                         where rel_segment = rc_required.rel_segment and rel_side = 'two')))
+   or (rc.rel_segment in (select rel_segment
+                             from rel_constraints
+                            where rel_side = 'one'
+                              and tree_sortkey 
+                                  like (select tree_sortkey || '%' 
+                                          from rel_constraints 
+                                         where rel_segment = rc_required.rel_segment and rel_side = 'one'))));
 
 -- View: rc_segment_dependency_levels
 --

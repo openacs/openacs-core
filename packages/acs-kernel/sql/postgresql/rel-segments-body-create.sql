@@ -103,7 +103,7 @@ begin
 
    if v_segment_id is null then
 
-      if v_segment_name is not null then
+      if segment_name is not null then
          v_segment_name := segment_name;
       else
          select groups.group_name || '' - '' || acs_object_types.pretty_name ||
@@ -114,6 +114,7 @@ begin
            and acs_object_types.object_type = get_or_new__rel_type;
 
       end if;
+      raise notice ''segment name = %'', v_segment_name;
 
       v_segment_id := rel_segment__new (
           null,
