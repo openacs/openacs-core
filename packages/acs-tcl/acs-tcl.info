@@ -35,6 +35,7 @@
             <file type="query_file" db_type="postgresql" path="tcl/acs-permissions-procs-postgresql.xql"/>
             <file type="tcl_procs" path="tcl/acs-permissions-procs.tcl"/>
             <file type="query_file" path="tcl/acs-permissions-procs.xql"/>
+            <file type="tcl_procs" path="tcl/acs-private-data-procs.tcl"/>
             <file type="query_file" db_type="oracle" path="tcl/admin-init-oracle.xql"/>
             <file type="query_file" db_type="postgresql" path="tcl/admin-init-postgresql.xql"/>
             <file type="tcl_init" path="tcl/admin-init.tcl"/>
