@@ -53,6 +53,35 @@
   prepositions.
 </p>
 
+<h3>Valid message lookups</h3>
+
+<p>
+  In adp files message lookups are always done with the syntax <code>\#package_key.message_key\#</code>. In Tcl
+  files all message lookups *must* be on either of the following formats:
+
+  <ul>
+    <li>Typical static lookup: <code>[_ package_key.message_key]</code> - The message key and package key used here must be string literals, they can't result from variable evaluation.
+  </li> 
+
+  <li>
+    Static lookup with non-default locale: <code>[lang::message::lookup $locale package_key.message_key]</code> - The message key and package key used here must be string literals, they can't result from variable evaluation.
+  </li> 
+  <li>
+    Dynamic lookup: <code>[lang::util::localize $var_with_embedded_message_keys]</code> - In this case the message keys in the variable <code>var_with_embedded_message_keys</code> must appear as string literals <code>\#package_key.message_key\#</code> somewhere in the code. Here is an example of a dynamic lookup:
+    
+    <pre>
+      set message_key_array {
+         dynamic_key_1  \#package_key.message_key1\#
+         dynamic_key_2  \#package_key.message_key2\#
+      }
+
+      set my_text [lang::util::localize $message_key_array([get_dynamic_key])]
+    </pre>
+
+  </li>
+  </ul>  
+</p>
+
 <h3>Actions to take on adp files</h3>
 
 <p>
