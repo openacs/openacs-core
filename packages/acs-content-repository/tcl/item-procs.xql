@@ -92,4 +92,12 @@
       </querytext>
 </fullquery>
 
+<fullquery name="item::publish.publish_status">
+    <querytext>
+        update cr_items
+        set publish_status = :publish_status
+        where item_id = :item_id
+    </querytext>
+</fullquery>
+
 </queryset>
