@@ -272,61 +272,18 @@
             
             <listitem id="source-aolserver">
               <formalpara>
-                <title><ulink
-              url="http://uptime.openacs.org/aolserver-openacs/aolserver3.3oacs1.tar.gz">AOLserver 3.3oacs1</ulink>, REQUIRED</title>
-                <para>Mat Kovach's source distribution of AOLserver, including all of the patches listed below.</para>
+                <title><ulink url="http://aolserver.com">AOLserver 4.x</ulink>, REQUIRED</title>
+                <para>AOLserver 4.x</para>
               </formalpara>
-
-              <para>
-      Mat Kovach is graciously maintaining an AOLserver distribution that
-      includes all the patches and modules needed to run OpenACS &version;. These
-      instructions will describe how to install using his source
-      distribution. He also has binaries for SuSE 7.3 and OpenBSD 2.8 (and
-      perhaps more to come), currently located at <ulink
-      url="http://uptime.openacs.org/aolserver-openacs/">uptime.openacs.org</ulink>.
-    </para>
-
-              <para>
-      It's also possible to download all the pieces and patches yourself:
-    </para>
-              
-              <itemizedlist>
-                <listitem><para>
-          AOLserver is available at <ulink url="http://aolserver.com">aolserver.com</ulink> 
-        </para></listitem>
-                
-                <listitem><para>
-          The OpenACS PostgreSQL driver (nspostgres.so) is available from
-          <ulink
-          url="http://prdownloads.sourceforge.net/aolserver/nspostgres-3.5.tar.gz?download">SourceForge. If
-          you do decide to use nspostgres.so, you have to remember to
-          change the AOLserver config file to point to nspostgres.so
-          instead of postgres.so. This guide uses Mat Kovach's distro
-          (i.e. postgres.so)</ulink>
-
-        </para></listitem>
-
-                <listitem><para>
-          The patch that makes <computeroutput>exec</computeroutput> work
-          on BSD is available at <ulink
-          url="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=415475&amp;group_id=3152&amp;atid=303152">sourceforge.net</ulink>
-        </para></listitem>
-                
-                <listitem><para>
-          The patch that makes <computeroutput>ns_uuencode</computeroutput>
-          work for binary files is available at <ulink
-          url="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=474259&amp;group_id=3152&amp;atid=303152">sourceforge.net</ulink>
-        </para></listitem> 
-                
-                <listitem><para>
-          The patch that makes AOLserver respect the
-          <computeroutput>-g</computeroutput> flag is available at
-          <ulink
-          url="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=509413&amp;group_id=3152&amp;atid=303152">sourceforge.net</ulink>
-        </para></listitem>
-                
-              </itemizedlist>
             </listitem>
+
+            <listitem id="nspostgres-download">
+              <formalpara>
+                <title><ulink url="http://prdownloads.sourceforge.net/aolserver/nspostgres-4.0.tar.gz?download">nspostgres 4.x</ulink>, REQUIRED</title>
+		<para>Provides PostgreSQL capabilities for AOLserver.</para>
+              </formalpara>
+            </listitem>
+	
             <listitem id="nsopenssl-download">
               <formalpara>
                 <title><ulink
