@@ -98,13 +98,6 @@ namespace eval template {
 
   # specify what procs can be accessed directly
   namespace export form element request
-
-  # get the path to the system templates directory
-  proc get_resource_path {} {
-
-    set path "ns/server/[ns_info server]/ats"
-    return [ns_config $path ResourcePath [ns_info pageroot]/ats/resources]
-  }
 }
 
 # Generic wrapper for registered tag handlers.
