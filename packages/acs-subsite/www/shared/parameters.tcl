@@ -22,7 +22,7 @@ set package_url [site_node::get_url_from_object_id -object_id $package_id]
 set page_title "Parameters"
 
 if { [string equal $package_url [subsite::get_element -element url]] } {
-    set context [list $page_title]
+    set context [list [list "${package_url}admin/" "Administration"] $page_title]
 } else {
     set context [list [list $package_url $instance_name] [list "${package_url}admin/" "Administration"] $page_title]
 }
