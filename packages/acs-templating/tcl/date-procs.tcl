@@ -517,17 +517,13 @@ ad_proc -public template::util::date::defaultInterval { what } {
 
 ad_proc -public template::util::date::unpack { date } {
     Set the variables for each field of the date object in 
-    the calling frame
+    the calling frame.
+
+    sets: year month day hours minutes seconds format from a list formatted date string 
+
+    @see template::util::date::from_ans
 } {
-  uplevel {
-    set year    [lindex $date 0]
-    set month   [lindex $date 1]
-    set day     [lindex $date 2]
-    set hours   [lindex $date 3]
-    set minutes [lindex $date 4]
-    set seconds [lindex $date 5]
-    set format  [lindex $date 6]
-  }
+    uplevel [list foreach {year month day hours minutes seconds format} $date { break }]
 }
 
 ad_proc -public template::util::date::now_min_interval {} {
