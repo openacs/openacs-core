@@ -289,7 +289,7 @@ begin
 
         select max(tree_leaf_key_to_int(child.tree_sortkey)) into v_max_value 
           from cr_items child
-         where child.parent_id not in (select item_id from cr_items);
+         where not exists (select 1 from cr_items where child.parent_id = item_id);
     else 
         select max(tree_leaf_key_to_int(tree_sortkey)) into v_max_value 
           from cr_items 
@@ -351,7 +351,7 @@ begin
 
                 select max(tree_leaf_key_to_int(tree_sortkey)) into v_max_value
                   from cr_items child
-                 where child.parent_id not in (select item_id from cr_items);
+                 where not exists (select 1 from cr_items where child.parent_id = item_id);
             else 
                 select max(tree_leaf_key_to_int(tree_sortkey)) into v_max_value
                   from cr_items 
