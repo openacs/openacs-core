@@ -2,9 +2,20 @@
 <message_catalog package_key="acs-subsite" package_version="5.0d4" locale="en_US" charset="ISO-8859-1">
 
   <msg key="About_You">About You</msg>
+  <msg key="Account_close_confirm_no_label">No, take me back to %pvt_home_name%</msg>
+  <msg key="Account_close_confirm_page_title">Confirm Closing Your Account</msg>
+  <msg key="Account_close_confirm_yes_label">Yes, please close my account</msg>
   <msg key="Account_closed">
     &lt;p&gt;Your account is currently closed.&lt;/p&gt;
     &lt;p&gt;If you wish, we can &lt;a href=&quot;%restore_url%&quot;&gt;reopen your account&lt;/a&gt;.&lt;/p&gt;
+  </msg>
+  <msg key="Account_closed_workspace_msg">
+    &lt;p&gt;
+      &lt;font color=&quot;red&quot;&gt;
+        &lt;b&gt; Your account is currently closed. &lt;/b&gt; 
+      &lt;/font&gt;
+      &lt;a href=&quot;%login_url%&quot;&gt;Log in&lt;/a&gt; again to see what you can do about it.
+    &lt;/p&amp;;gt;
   </msg>
   <msg key="Account_reopened_message">Your account at %system_name% has been reopened. Welcome back.</msg>
   <msg key="Account_reopened_title">Account Reopened</msg>
@@ -20,6 +31,18 @@
   <msg key="Change_my_Password">Change my Password</msg>
   <msg key="Check_Your_Inbox">Check Your Inbox</msg>
   <msg key="Children">Children</msg>
+  <msg key="Close_account_explanation">
+&lt;p&gt; Please confirm that you would like to close your account at %system_name%. &lt;/p&gt;
+
+&lt;p&gt; Closing your account means that we will no longer send you email
+notifications, nor will you show up in lists of members at
+%system_name%. Your contributions to the community, however, will be
+preserved, as they're part of the community's history. &lt;/p&gt;
+
+&lt;p&gt; Note that you may reopen your account at any time, siply by
+logging in again. &lt;/p&gt;
+  </msg>
+  <msg key="Close_your_account">Close your account</msg>
   <msg key="Confirm">Confirm</msg>
   <msg key="Current_Password">Current Password</msg>
   <msg key="Current_users">Current users:</msg>
@@ -142,10 +165,10 @@ machine would be able to masquerade as you on our service.</msg>
   <msg key="lt_New_registration_at_s">New registration at %system_url%</msg>
   <msg key="lt_no_cookies">If you keep getting thrown back here, it is probably because your browser does not accept cookies.  We're sorry for the inconvenience but it really is impossible to program a system like this without keeping track of who is posting what.</msg>
   <msg key="lt_Note_If_youve_forgott">Note: If you've forgotten your password, &lt;a href=&quot;@email_password_url@&quot;&gt;ask this server to email it
-to @email@</msg>
+to %email%</msg>
   <msg key="lt_Note_If_youve_forgott_1">Note: If you've forgotten your password, &lt;a
     href=&quot;email-password?user_id=%user_id%&quot;&gt;ask this server to email it
-    to @email@</msg>
+    to %email%</msg>
   <msg key="lt_Note_that_you_can_era">Note that you can erase your saved email address and password by
 choosing the &quot;log out&quot; option from your workspace.</msg>
   <msg key="lt_Now_were_really_in_tr">Now we're really in trouble because we got this error:</msg>
@@ -222,6 +245,7 @@ name to generate certain kinds of user interface.</msg>
   is confirmed. Once you login, you can change your password.</msg>
   <msg key="lt_welcome_please_register">Welcome to %system_name%. Please begin the registration process by entering a valid email address and a password for signing into the system. We will direct you to another form to complete your registration.</msg>
   <msg key="lt_Welcome_to_system_nam">Welcome to %system_name%</msg>
+  <msg key="lt_What_other_people_see">What other people see when they click your name</msg>
   <msg key="lt_What_we_tell_other_us">What we tell other users about you</msg>
   <msg key="lt_when_trying_to_send_y">when trying to send you the following email:</msg>
   <msg key="lt_When_you_get_your_ema">When you get your email, go back
