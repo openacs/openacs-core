@@ -44,3 +44,5 @@
   </p>
 </if>
 
+<h2>Who's online?</h2>
+<b>&raquo;</b> <a href="/shared/whos-online">View a list of online users</a>
