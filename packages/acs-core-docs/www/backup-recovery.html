@@ -1,8 +1,8 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Backup and Recovery</title><meta name="generator" content="DocBook XSL Stylesheets V1.62.4"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="maintenance.html" title="Chapter 6. Maintenance"><link rel="previous" href="database-management.html" title="Database Management"><link rel="next" href="install-redhat.html" title="Appendix A. Install Red Hat 8/9"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="database-management.html">Prev</a> </td><th width="60%" align="center">Chapter 6. Maintenance</th><td width="20%" align="right"> <a accesskey="n" href="install-redhat.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="backup-recovery"></a>Backup and Recovery</h2></div></div><div></div></div><div class="authorblurb"><p>By <a href="mailto:dhogaza@pacifier.com" target="_top">Don Baccus</a> with additions
-      by <a href="mailto:joel@aufrecht.org" target="_top">Joel Aufrecht</a></p>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Backup and Recovery</title><meta name="generator" content="DocBook XSL Stylesheets V1.62.4"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="maintenance.html" title="Chapter 6. Maintenance"><link rel="previous" href="database-management.html" title="Database Management"><link rel="next" href="install-redhat.html" title="Appendix A. Install Red Hat 8/9"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="database-management.html">Prev</a> </td><th width="60%" align="center">Chapter 6. Maintenance</th><td width="20%" align="right"> <a accesskey="n" href="install-redhat.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="backup-recovery"></a>Backup and Recovery</h2></div></div><div></div></div><div class="authorblurb"><p><p>By <a href="mailto:dhogaza@pacifier.com" target="_top">Don Baccus</a> with additions
+      by <a href="mailto:joel@aufrecht.org" target="_top">Joel Aufrecht</a></p><br>
           OpenACS docs are written by the named authors, and may be edited
           by OpenACS documentation staff.
-        </div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="install-next-backups"></a>Backup Strategy</h3></div></div><div></div></div><p>
+        </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="install-next-backups"></a>Backup Strategy</h3></div></div><div></div></div><p>
       The purpose of backup is to enable recovery.  Backup and
       recovery are always risky; here are some steps that minimize the
       chance recovery is necessary:
@@ -36,7 +36,7 @@
       <tt class="computeroutput">/var/lib/aolserver/<span class="replaceable"><span class="replaceable">service0</span></span>/database-backup</tt>,
       then you can apply standard file-based backup strategies to
       <tt class="computeroutput">/var/lib/aolserver/<span class="replaceable"><span class="replaceable">service0</span></span></tt>
-    </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="snapshot-backup"></a>Snapshot backup and recovery</h3></div></div><div></div></div><p>This section describes how to make a one-time backup and
+    </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="snapshot-backup"></a>Manual backup and recovery</h3></div></div><div></div></div><p>This section describes how to make a one-time backup and
     restore of the files and database.  This is useful for rolling back to
     known-good versions of a service, such as at initial
     installation and just before an upgrade.  First, you back up the
@@ -106,7 +106,7 @@
                 . exporting dimensions
                 . exporting post-schema procedural objects and actions
                 . exporting statistics
-              Export terminated successfully without warnings.</pre></li></ul></div></li><li><p><b>PostGreSQL. </b>Create a backup file and verify that it was created and has a reasonable size (several megabytes).</p><pre class="screen">[root@localhost root]# <b class="userinput"><tt>su - service0</tt></b>
+              Export terminated successfully without warnings.</pre></li></ul></div></li><li><p><b>PostgreSQL. </b>Create a backup file and verify that it was created and has a reasonable size (several megabytes).</p><pre class="screen">[root@localhost root]# <b class="userinput"><tt>su - service0</tt></b>
             [service0@localhost service0]$ <b class="userinput"><tt>pg_dump -f /var/lib/aolserver/<span class="replaceable"><span class="replaceable">service0</span></span>/database-backup/before_upgrade_to_4.6.dmp <span class="replaceable"><span class="replaceable">service0</span></span></tt></b>
             [service0@localhost service0]$ <b class="userinput"><tt>ls -al /var/lib/aolserver/<span class="replaceable"><span class="replaceable">service0</span></span>/database-backup/before_upgrade_to_4.6.dmp </tt></b>
             -rw-rw-r-x    1 service0  service0   4005995 Feb 21 18:28 /var/lib/aolserver/service0/database-backup/before_upgrade_to_4.6.dmp
@@ -173,75 +173,9 @@
                 </pre></li></ul></div></li><li><p>Activate the service</p><pre class="screen">[root@yourserver root]# <b class="userinput"><tt>ln -s /var/lib/aolserver/<span class="replaceable"><span class="replaceable">service0</span></span>/etc/daemontools /service/<span class="replaceable"><span class="replaceable">service0</span></span></tt></b>
             [root@yourserver root]# <b class="userinput"><tt>sleep 10</tt></b>
             [root@yourserver root]# <b class="userinput"><tt>svgroup web /service/<span class="replaceable"><span class="replaceable">service0</span></span></tt></b>
-            [root@yourserver root]#</pre></li></ol></div></li></ol></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="automated-backup"></a>Automated Backup (OPTIONAL)</h3></div></div><div></div></div><p>Backup can encompass all files in
-    <tt class="computeroutput">/var/lib/aolserver/<span class="replaceable"><span class="replaceable">service0</span></span></tt>.  Use one cron job to back up the database to a file in
-    <tt class="computeroutput">/var/lib/aolserver/<span class="replaceable"><span class="replaceable">service0</span></span>/database-backup</tt>, and a second cron job to back up the entire file tree.</p><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="postgres-quick-backup"></a>Postgres automatic backup</h4></div></div><div></div></div><p>Backing up the database consists of creating a file
-      which is a picture of the database at a particular moment.
-      Postgres can be backed up while running.  </p><p>Depending on your overall backup strategy, you can
-      create a series of database backup files (recommended for a development server where you are using <a href="backup-recovery.html#backups-with-cvs" title="Using CVS for backup-recovery">the section called &#8220;Using CVS for backup-recovery&#8221;</a>), or you can create a
-      single nightly backup file which is then collected into a
-      bigger backup file that includes the other parts of the
-      service.  The latter technique is more generally recommended.  To make a new file every
-      night, edit the crontab file for <span class="replaceable"><span class="replaceable">service0</span></span>:</p><pre class="screen">[service0@yourserver service0]$ <b class="userinput"><tt>export EDITOR=emacs;crontab -e</tt></b></pre><p>Add this line to the file.  The numbers and stars at the beginning are cron columns that specify when the program should be run - in this case, whenever the minute is 0 and the hour is 1, i.e., 1:00 am every day.</p><pre class="programlisting">0 1 * * * /usr/local/pgsql/bin/pg_dump -f /var/lib/aolserver/service0/database-backup/service0_`date +\%Y-\%m-\%d`.dmp service0</pre><p>If you plan to back up the whole <tt class="computeroutput">/var/lib/aolserver/<span class="replaceable"><span class="replaceable">service0</span></span></tt> directory, then it would be redundant to keep a history of database backups.  In that case, set up the cron job to overwrite the previous backup each time:</p><pre class="programlisting">0 1 * * * /usr/local/pgsql/bin/pg_dump -f /var/lib/aolserver/service0/database-backup/service0_nightly.dmp service0</pre></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2841189"></a>A full Backup/Recovery cycle</h3></div></div><div></div></div><p><span class="emphasis"><em>On a test service</em></span>, make sure that your backup-recovery process work.  After backing up the database and file system, delete the service as detailed below and then recover it.</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="other-backup-strategies"></a>Other Backup Strategies</h3></div></div><div></div></div><p>Earlier strategies, included here because this section
-    hasn't been fully updated yet.</p><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="install-export-oracle"></a>Set Up Nightly Oracle Exports</h4></div></div><div></div></div><p>Edit the backup script to save the backup
-      file in <tt class="computeroutput">/var/lib/aolserver/<span class="replaceable"><span class="replaceable">service0</span></span>/database-backup</tt>.
-      While you're working with Oracle, you should configure it to do
-      automatic exports. An export is a separate backup copy of the
-      database.  This copy includes all of the database's state at the
-      time that the export was initiated. If your database is corrupted,
-      you can restore from one of these backups. You should do this step as
-      <tt class="computeroutput">root</tt>.
-      </p><p>
-        Automating backups is accomplished using the UNIX
-      <tt class="computeroutput">crontab</tt> facility.</p><p>
-        While still <tt class="computeroutput">root</tt>, run the
-        following command. You can replace the
-        <tt class="computeroutput">EDITOR="emacs -nw"</tt>
-        portion with whatever editor your prefer, such as
-        <tt class="computeroutput">EDITOR=vi</tt>.
-      </p><pre class="programlisting">
-        root:~# export EDITOR="emacs -nw"
-      root:~# crontab -e</pre><p>Now add the following line on a line by itself </p><pre class="programlisting">
-      0 23 * * * /usr/sbin/export-oracle</pre><p>
-        Save the file, exit the editor. Verify that the addition
-      succeeded by checking the output of the following command.</p><pre class="programlisting">
-        root:~# crontab -l | grep export-oracle
-        0 23 * * * /usr/sbin/export-oracle
-        root:~# exit
-      ; Logout</pre><p>If you see the line, go ahead and log out.</p></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="install-export-postgres"></a>Set up nightly Postgres exports</h4></div></div><div></div></div><p>This is an alternate method to the crontabls - backup.
-      Dowload <a href="files/acs-pgbackup-init.txt" target="_top">this script</a>
-      to <tt class="computeroutput">/tmp</tt>. At the top of the script
-      are several variables that you'll need to customize:
-      </p><div class="itemizedlist"><ul type="disc"><li><p>
-        <tt class="computeroutput">bak</tt> - location where you want
-        local backups to be saved
-        </p></li><li><p>
-        <tt class="computeroutput">servername</tt> - name of your server
-        (and database instance)
-        </p></li><li><p>
-        <tt class="computeroutput">ftp_user</tt> - username on your ftp
-        account 
-        </p></li><li><p>
-        <tt class="computeroutput">ftp_password</tt> - password on your
-        ftp account
-        </p></li><li><p>
-        <tt class="computeroutput">ftp_dir</tt> - path on the remote
-        server where your backups will be uploaded
-        </p></li><li><p>
-        <tt class="computeroutput">ftp_server</tt> - your ftp server
-        </p></li></ul></div><p>
-
-        Next, we'll save this file to our server's
-        <tt class="computeroutput">tcl</tt> directory so that it will be
-        loaded on startup. It will automatically be run every night at
-        midnight. Note that this script only backs up the database - not the
-        OpenACS scripts and file content.
-      </p><pre class="programlisting">
-        joeuser:~$ cp /tmp/acs-pgbackup-init.txt ~/var/lib/aolserver/birdnotes/tcl/acs-pgbackup-init.tcl
-      joeuser:~$ restart-aolserver birdnotes</pre><p>
-        That's it! The script will email you with each successful backup (or
-        if it fails, it will send you an email with the reason)
-      </p></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="backups-with-cvs"></a>Using CVS for backup-recovery</h3></div></div><div></div></div><p>If you are already using CVS, you probably don't
+            [root@yourserver root]#</pre></li></ol></div></li></ol></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="automated-backup"></a>Automated Backup (OPTIONAL)</h3></div></div><div></div></div><p>The recommended backup strategy for a production sit is to use an automated script which first backs up the database to a file in <tt class="computeroutput">/var/lib/aolserver/<span class="replaceable"><span class="replaceable">service0</span></span>/database-backup</tt> and then backs up all of <tt class="computeroutput">/var/lib/aolserver/<span class="replaceable"><span class="replaceable">service0</span></span></tt> to a single zip file, and then copies that zip file to another computer.</p><div class="orderedlist"><ol type="1"><li><p>Make sure that the manual backup process described above works.</p></li><li><p>Customize the default backup script.  Edit <tt class="computeroutput">/var/lib/aolserver/<span class="replaceable"><span class="replaceable">service0</span></span>/etc/backup.sh</tt> with your specific parameters.</p></li><li><p>
+        Make sure the file is executable:</p><pre class="programlisting">chmod +x backup.sh</pre></li><li><p>
+        Set this file to run automatically by adding a line to root's crontab. (Typically, with <tt class="computeroutput">export EDITOR=emacs; crontab -e</tt>.)  This example runs the backup script at 1:30 am every day.</p><pre class="programlisting">30 1 * * * *        sh /var/lib/aolserver/<span class="replaceable"><span class="replaceable">service0</span></span>/etc/backup.sh</pre></li></ol></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="backups-with-cvs"></a>Using CVS for backup-recovery</h3></div></div><div></div></div><p>CVS-only backup is often appropriate for development sites.  If you are already using CVS and your data is not important, you probably don't
     need to do anything to back up your files.  Just make
     sure that your current work is checked into the system.
     You can then roll back based on date - note the
