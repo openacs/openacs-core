@@ -22,4 +22,14 @@
     </querytext>
   </fullquery>
 
+  <fullquery name="lang::message::update_description.update_description">
+    <querytext>
+      update lang_message_keys
+      set    description = empty_clob()
+      where  message_key = :message_key
+      and    package_key = :package_key
+      returning description into :1
+    </querytext>
+  </fullquery>
+
 </queryset>

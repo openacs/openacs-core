@@ -54,4 +54,13 @@
     </querytext>
   </fullquery>
 
+  <fullquery name="lang::message::update_description.update_description_insert_null">
+    <querytext>
+      update lang_message_keys
+      set    description = null
+      where  message_key = :message_key
+      and    package_key = :package_key
+    </querytext>
+  </fullquery>
+
 </queryset>
