@@ -201,7 +201,9 @@ prompt_continue $interactive
 echo "$0: Taking down $serverroot at $(date)"
 
 if parameter_true $use_daemontools; then
+    echo "$0: supervise status is: $(svstat ${svscanroot})"
     $svc_bindir/svc -d ${svscanroot}
+    echo "$0: supervise status is: $(svstat ${svscanroot})"
 else
     # non-daemontools stop
     $stop_server_command
@@ -269,7 +271,9 @@ if parameter_true $do_checkout; then
 	    rm ${svscanroot}
         fi
         if [ -r "$svscan_sourcedir" ]; then
+            echo "$0: supervise status is: $(svstat ${svscanroot})"
             $svc_bindir/svc -dx $svscan_sourcedir
+            echo "$0: supervise status is: $(svstat ${svscanroot})"
         fi
     fi
 
@@ -308,8 +312,9 @@ if parameter_true $do_checkout; then
 	touch $svscan_sourcedir/down
 	ln -s $svscan_sourcedir $svscanroot
         # allow svscan to start
-	echo "$0: Waiting for 10 seconds for svscan to come up at $(date)"
-	sleep 10
+        echo "$0: Waiting for 10 seconds for svscan to come up at $(date)"
+        sleep 10
+        echo "$0: supervise status is: $(svstat ${svscanroot})"	
         # Check if svgroup is present, and if so, use it
 	if which svgroup &> /dev/null; then
 	    echo "$0: Giving group $aolserver_group control over the server: svgroup web ${svscanroot}"
@@ -324,7 +329,9 @@ if parameter_true $use_daemontools; then
     if [ -f $svscanroot/down ]; then
 	rm $svscanroot/down
     fi
-    $svc_bindir/svc -u $svscanroot
+    echo "$0: supervise status is: $(svstat ${svscanroot})"	
+        $svc_bindir/svc -u $svscanroot
+    echo "$0: supervise status is: $(svstat ${svscanroot})"	
 else
     # non-daemontools command
     $start_server_command
@@ -402,14 +409,20 @@ if parameter_true $do_install; then
 
   if [ $database == "postgres" ]; then
       # Run vacuum analyze
+      pg_bindir=`get_config_param pg_bindir`
       db_name=`get_config_param db_name`
       echo "$0: Beginning 'vacuum analyze' at $(date)"
       su  `get_config_param pg_db_user` -c "export LD_LIBRARY_PATH=${pg_bindir}/../lib; ${pg_bindir}/vacuumdb -p $pg_port -z $db_name"
   fi
-  
-  # Report the time at which we were done
-  echo "$0: Finished (re)installing $serverroot at $(date).  Access the new site at $server_url with admin username $admin_email and password $admin_password"
-  
+   
   # Warn about errors in the HTML returned from the server
   ./warn-if-installation-errors.sh `get_config_param install_output_file`
+
+  # Report the time at which we were done
+  echo "$0: Finished (re)installing $serverroot at $(date).  
+######################################################################
+  New site URL: $server_url
+admin username: $admin_email
+admin password: $admin_password
+######################################################################"
 fi
