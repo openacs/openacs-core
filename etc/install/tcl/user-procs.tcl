@@ -44,10 +44,8 @@ ad_proc ::twt::user::login { email } {
 
     ::twt::user::logout
 
-    global __server_url
-
     # Request the start page
-    ::twt::do_request "${__server_url}/register"
+    ::twt::do_request "[::twt::config::server_url]/register"
 
     # Login the user
     form find ~n login
@@ -59,9 +57,7 @@ ad_proc ::twt::user::login { email } {
 }
 
 ad_proc ::twt::user::logout {} {
-    global __server_url
-
-    ::twt::do_request "${__server_url}/register/logout"
+    ::twt::do_request "[::twt::config::server_url]/register/logout"
 }
 
 ad_proc ::twt::user::login_site_wide_admin {} {
@@ -79,7 +75,7 @@ ad_proc ::twt::user::add {
     full_access
     guest
 } {
-    ::twt::do_request "$server_url/dotlrn/admin/users"
+    ::twt::do_request "/dotlrn/admin/users"
     link follow ~u "user-add"
 
     form find ~a "/dotlrn/user-add"
@@ -195,7 +191,7 @@ ad_proc ::twt::user::set_passwords { server_url } {
         #puts "setting guest password for user $user_email"
 
         # User admin page
-        ::twt::do_request "${server_url}/dotlrn/admin/users"
+        ::twt::do_request "/dotlrn/admin/users"
 
         form find ~a "users-search"
         field fill $user_email ~n name    
