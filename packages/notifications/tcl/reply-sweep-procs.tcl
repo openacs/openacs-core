@@ -42,9 +42,12 @@ namespace eval notification::reply::sweep {
 
             ns_log Notice "NOTIF- one reply $reply_id of type $type_id"
 
-            notification::type::process_reply -type_id $type_id -reply_id $reply_id
-
-            notification::reply::delete -reply_id $reply_id
+	    if { [ catch {
+                notification::type::process_reply -type_id $type_id -reply_id $reply_id
+                notification::reply::delete -reply_id $reply_id
+	    } err ] } {
+		ns_log Error "NOTIF- notification::reply::sweep bombed on reply_id $reply_id - $err"
+            }
         }
     }
 
