@@ -270,14 +270,13 @@ ad_proc ad_table {
     </ul>
 
 } {
+
+    set full_statement_name [db_qd_get_fullname $statement_name]
+
     # This procedure needs a full rewrite!
     db_with_handle Tdb {
 	# Execute the query
-	if { ![empty_string_p $bind] } {
-	    set selection [ns_ora select $Tdb -bind $bind $sql_qry]
-	} else {
-	    set selection [ns_ora select $Tdb $sql_qry]
-	}
+        set selection [db_exec select $Tdb $full_statement_name $sql_qry]
 	set Tcount 0
 	set Tband_count 0
 	set Tpage_count 0
