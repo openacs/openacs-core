@@ -16,6 +16,7 @@ set httpsport                 8443
 #  /var/lib/aolserver/service0/packages/etc/daemontools/run
 
 # The hostname and address should be set to actual values.
+# setting the address to 0.0.0.0 means aolserver listens on all interfaces
 set hostname                  [ns_info hostname]
 set address                   [ns_info address]
 
