@@ -37,10 +37,7 @@ ad_proc -public ad_locale_system_tz_offset { } {
     @return number of hours to subtract from local (Oracle) time to get UTC
 } {
     set system_timezone [ad_locale_get_system_timezone]
-    return [db_string system_offset {
-	select ( (sysdate - timezone.local_to_utc (:system_timezone, sysdate)) * 24 )
-	from dual
-    }]
+    return [db_string system_offset {}]
 }
 
 

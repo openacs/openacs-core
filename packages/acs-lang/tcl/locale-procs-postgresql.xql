@@ -6,8 +6,7 @@
 <fullquery name="ad_locale_system_tz_offset.system_offset">      
       <querytext>
       
-	select ( (current_timestamp - timezone__local_to_utc (:system_timezone, current_timestamp)) * 24 )
-	
+	select timezone__get_offset (timezone__get_id(:system_timezone), current_timestamp)
     
       </querytext>
 </fullquery>
