@@ -73,4 +73,20 @@ namespace eval notification::delivery {
         return [acs_sc_call NotificationDeliveryMethod ScanReplies $args $impl_key]
     }
 
+    ad_proc -public get_id_from_name {
+        -name:required
+    } {
+
+        Return the delivery_method_id for the given name
+
+        @param name A delivery type name (email etc)
+
+        @author Don Baccus (dhogaza@pacifier.com)
+
+    } {
+
+        return [db_string get_delivery_method_id {}]
+
+    }
+
 }

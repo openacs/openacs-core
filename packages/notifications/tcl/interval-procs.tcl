@@ -1,11 +1,6 @@
 ad_library {
 
-    Notification Intervals.
-
-    Procs to manage notification intervals. Intervals are the duration of time between notifications.
-    Possible intervals range from "instantaneous" to "weekly".
-
-    CURRENTLY DEPRECATED AND USELESS.
+    Notification Intervals Utilities.
 
     @creation-date 2002-05-24
     @author Ben Adida <ben@openforce.biz>
@@ -15,16 +10,18 @@ ad_library {
 
 namespace eval notification::interval {
 
-    ad_proc -public schedule_all {} {
-        This schedules all the notification procs
+    ad_proc -public get_id_from_name {
+        -name:required
     } {
-    }
 
-    ad_proc -public sweep_notifications {
-        {-interval_id:required}
+        Returns the interval_id for a given interval_name
+
+        @param name The name of interval (weekly, etc)
+        @author Don Baccus (dhogaza@pacifier.com)
+
     } {
-        This sweeps for notifications in a particular interval
-    } {
+
+        return [db_string get_id {}]
 
     }
 

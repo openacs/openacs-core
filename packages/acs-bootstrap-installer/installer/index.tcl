@@ -61,9 +61,14 @@ before proceeding to better understand what is contained in this release.
 
 if { [file exists [acs_root_dir]/install.xml] } {
 
+    # Parse the xml document
     set file [open "[acs_root_dir]/install.xml"]
-    nsv_set acs_application node [xml_doc_get_first_node_by_name [xml_parse -persist [xml_prepare_data [read $file]]] application]
+    set root_node [xml_doc_get_first_node [xml_parse -persist [read $file]]]
     close $file
+
+    if { ![string equal [xml_node_get_name $root_node] application] } {
+        error "Installer: Could not find root node application in install.xml file"
+    }
 
     nsv_set acs_application name [apm_required_attribute_value [nsv_get acs_application node] name]
     nsv_set acs_application pretty_name \
