@@ -5,21 +5,21 @@
 
 <fullquery name="new.add_group">      
       <querytext>
---      FIX ME PLSQL
---  begin
-        select ${group_type}__new (
-                'Editor'        -- group_name
-                );
---  end;
+      FIX ME PLSQL
 
+	  begin
+	    :1 := ${group_type}.new (group_name => 'Editor');
+	  end;
+	
       </querytext>
 </fullquery>
 
-
-<fullquery name="delete.delete_group">
+ 
+<fullquery name="delete.delete_group">      
       <querytext>
---      FIX ME PLSQL
---	  BEGIN
+      FIX ME PLSQL
+
+	  BEGIN 
             -- the acs_group package takes care of segments referred
   	    -- to by rel_constraints.rel_segment. We delete the ones
 	    -- references by rel_constraints.required_rel_segment here.
@@ -29,16 +29,16 @@
                          where segs.segment_id = cons.required_rel_segment
                            and segs.group_id = :group_id) loop
 
-                rel_segment.delete(row.constraint_id);
+                rel_segment__delete(row.constraint_id);
 
             end loop;
 
 	    -- delete the actual group
-	    ${package_name}.delete(:group_id);
---	  END;
-
+	    ${package_name}.delete(:group_id); 
+	  END;
+        
       </querytext>
 </fullquery>
 
-
+ 
 </queryset>

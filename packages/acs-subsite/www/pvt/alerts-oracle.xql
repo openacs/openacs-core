@@ -3,6 +3,18 @@
 <queryset>
    <rdbms><type>oracle</type><version>8.1.6</version></rdbms>
 
+<fullquery name="alerts_list">      
+      <querytext>
+      
+    select bea.valid_p, bea.frequency, bea.keywords, bt.topic, bea.rowid
+    from bboard_email_alerts bea, bboard_topics bt
+    where bea.user_id = :user_id
+    and bea.topic_id = bt.topic_id
+    order by bea.frequency
+      </querytext>
+</fullquery>
+
+ 
 <fullquery name="alerts_list_2">      
       <querytext>
       

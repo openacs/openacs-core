@@ -5,39 +5,41 @@
 
 <fullquery name="rel_segments_new.create_rel_segment">      
       <querytext>
---      FIX ME PLSQL
---      declare
---      begin
-                select rel_segment__new(
-                        :segment_name,          -- segment_name
-                        :group_id,              -- group_id
-                        :context_id,            -- context_id
-                        :rel_type,              -- rel_type
-                        :creation_user,         -- creation_user
-                        :creation_ip            -- creation_ip
-                                 );
---      end;
 
+	select rel_segment__new(
+		null,
+		'rel_segment',
+		now(),
+		:creation_user,
+		:creation_ip,
+		null,
+		null,
+		:segment_name,
+		:group_id,
+		:rel_type,
+		:context_id
+)
+    
       </querytext>
 </fullquery>
 
-
-<fullquery name="rel_segments_delete.constraint_delete">
+ 
+<fullquery name="rel_segments_delete.constraint_delete">      
       <querytext>
---      FIX ME PLSQL
-                select rel_segment__delete(:constraint_id);
 
+	    select rel_segment__delete(:constraint_id)
+	
       </querytext>
 </fullquery>
 
-
-<fullquery name="rel_segments_delete.rel_segment_delete">
+ 
+<fullquery name="rel_segments_delete.rel_segment_delete">      
       <querytext>
---      FIX ME PLSQL
-	        select rel_segment__delete(:segment_id);
 
+	select rel_segment__delete(:segment_id)
+    
       </querytext>
 </fullquery>
 
-
+ 
 </queryset>
