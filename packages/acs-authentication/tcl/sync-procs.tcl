@@ -356,6 +356,41 @@ ad_proc -public auth::sync::job::action {
                         set success_p 0
                     } else {
                         set user_id $result(user_id)
+
+                        set dotlrn_urls [site_node::get_children \
+                                             -package_key "dotlrn" \
+                                             -node_id [site_node::get_node_id -url /]]
+
+                        if { [llength $dotlrn_urls] > 0  } {
+                            # .LRN is installed and mounted, add user to .LRN
+
+                            set type [parameter::get_from_package_key \
+                                          -parameter SyncDotLrnUserType \
+                                          -package_key "acs-authentication" \
+                                          -default "student"]
+
+                            set can_browse_p [parameter::get_from_package_key \
+                                                  -parameter SyncDotLrnAccessLevel \
+                                                  -package_key "acs-authentication" \
+                                                  -default 1]
+
+                            set read_private_data_p [parameter::get_from_package_key \
+                                                         -parameter SyncDotLrnReadPrivateDataP \
+                                                         -package_key "acs-authentication" \
+                                                         -default 1]
+                            
+                            dotlrn::user_add \
+                                -id $user_info(email) \
+                                -type $type \
+                                -can_browse=$can_browse_p \
+                                -user_id $user_id
+                            
+                            acs_privacy::set_user_read_private_data \
+                                -user_id $user_id \
+                                -object_id [dotlrn::get_package_id] \
+                                -value $read_private_data_p
+
+                        }
                     }
 
                     # We ignore account_status
