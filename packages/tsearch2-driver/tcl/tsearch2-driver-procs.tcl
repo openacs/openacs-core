@@ -198,7 +198,7 @@ ad_proc tsearch2::build_query { -query } {
     # remove any spaces between words and operators
     regsub -all {\s+([!&|])\s+} $query {\1} query
     # all remaining spaces between words turn into |
-    regsub -all {\s+} $query {|} query
+    regsub -all {\s+} $query {&} query
     # if a ! is by itself then prepend &
     regsub {(\w)([!])} $query {\1\&!} query
     return $query
