@@ -132,12 +132,20 @@ declare
   
     v_authority_id           integer;
     v_object_type            varchar;    
-
+    v_sort_order             integer;
+  
 begin
     if p_object_type is null then
         v_object_type := ''authority'';
     else
         v_object_type := p_object_type;
+    end if;
+
+    if p_sort_order is null then
+          select into v_sort_order max(sort_order) + 1
+                         from auth_authorities;
+    else
+        v_sort_order := p_sort_order;
     end if;
 
     -- Instantiate the ACS Object super type with auditing info
@@ -157,7 +165,7 @@ begin
                                   help_contact_text, get_doc_impl_id, process_doc_impl_id,
                                   snapshot_p, batch_sync_enabled_p)
     values (v_authority_id, p_short_name, p_pretty_name, p_enabled_p, 
-                                  p_sort_order, p_auth_impl_id, p_pwd_impl_id, 
+                                  v_sort_order, p_auth_impl_id, p_pwd_impl_id, 
                                   p_forgotten_pwd_url, p_change_pwd_url, p_register_impl_id,
                                   p_help_contact_text, p_get_doc_impl_id, p_process_doc_impl_id,
                                   p_snapshot_p, p_batch_sync_enabled_p);

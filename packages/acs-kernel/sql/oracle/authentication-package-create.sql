@@ -63,7 +63,17 @@ as
     return integer
     is
         v_authority_id integer; 
+        v_sort_order integer;        
     begin
+        if sort_order is null then
+          select max(sort_order) + 1
+                 into v_sort_order
+                 from auth_authorities;
+        else
+           v_sort_order := sort_order;
+        end if;
+
+
         v_authority_id  := acs_object.new(
             object_id     => new.authority_id,
             object_type   => new.object_type,
@@ -79,7 +89,7 @@ as
                                       help_contact_text, get_doc_impl_id, process_doc_impl_id,
                                       snapshot_p, batch_sync_enabled_p)
         values (v_authority_id, new.short_name, new.pretty_name, new.enabled_p, 
-                                      new.sort_order, new.auth_impl_id, new.pwd_impl_id, 
+                                      v_sort_order, new.auth_impl_id, new.pwd_impl_id, 
                                       new.forgotten_pwd_url, new.change_pwd_url, new.register_impl_id, 
                                       new.help_contact_text, new.get_doc_impl_id, new.process_doc_impl_id,
                                       new.snapshot_p, new.batch_sync_enabled_p);
