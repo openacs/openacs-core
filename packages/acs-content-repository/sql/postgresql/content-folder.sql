@@ -33,6 +33,8 @@ begin
 
 end;' language 'plpgsql';
 -- function new
+select define_function_args('content_folder__new','name,label,description,parent_id,context_id,folder_id,creation_date,creation_user,creation_ip');
+
 create function content_folder__new (varchar,varchar,varchar,integer,integer,integer,timestamptz,integer,varchar)
 returns integer as '
 declare
@@ -365,6 +367,32 @@ declare
   v_new_folder_id              cr_folders.folder_id%TYPE;
   v_folder_contents_val        record;
 begin
+	v_new_folder_id := content_folder__copy (
+			copy__folder_id,
+			copy__target_folder_id,
+			copy__creation_user,
+			copy_creation_ip,
+			NULL
+			);
+	return v_new_folder_id;
+end;' languagse 'plpgsql';
+
+create function content_folder__copy (integer,integer,integer,varchar,varchar)
+returns integer as '
+declare
+  copy__folder_id              alias for $1;  
+  copy__target_folder_id       alias for $2;  
+  copy__creation_user          alias for $3;  
+  copy__creation_ip            alias for $4;  -- default null
+  copy__name              alias for $5; -- default null
+  v_valid_folders_p            integer        
+  v_current_folder_id          cr_folders.folder_id%TYPE;
+  v_name                       cr_items.name%TYPE;
+  v_label                      cr_folders.label%TYPE;
+  v_description                cr_folders.description%TYPE;
+  v_new_folder_id              cr_folders.folder_id%TYPE;
+  v_folder_contents_val        record;
+begin
 
   select 
     count(*)
@@ -389,29 +417,28 @@ begin
   if copy__folder_id = content_item__get_root_folder(null) 
      or copy__folder_id = content_template__get_root_folder() 
      or copy__target_folder_id = copy__folder_id 
-     or v_current_folder_id = copy__target_folder_id then
-
     v_valid_folders_p := 0;
   end if;
 
-  if v_valid_folders_p = 2 then 
-    if content_folder__is_sub_folder(copy__folder_id, copy__target_folder_id) != ''t'' then
+    -- get the source folder info
+    select
+      name, label, description
+    into
+      v_name, v_label, v_description
+    from 
+      cr_items i, cr_folders f
+    where
+      f.folder_id = i.item_id
+    and
+      f.folder_id = copy__folder_id;
 
-      -- get the source folder info
-      select
-        name, label, description
-      into
-        v_name, v_label, v_description
-      from 
-        cr_items i, cr_folders f
-      where
-        f.folder_id = i.item_id
-      and
-        f.folder_id = copy__folder_id;
+  if v_valid_folders_p = 2 then 
+
+    if content_folder__is_sub_folder(copy__folder_id, copy__target_folder_id) != ''t'' or v_current_folder_id != copy__target_folder_id or (v_name != copy__name and copy__name is not null) then 
 
       -- create the new folder
       v_new_folder_id := content_folder__new(
-          v_name,
+          coalesce (copy__name, v_name),
 	  v_label,
 	  v_description,
 	  copy__target_folder_id,

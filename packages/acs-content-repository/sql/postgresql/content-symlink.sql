@@ -144,14 +144,19 @@ end;' language 'plpgsql';
 
 
 -- procedure copy
-create function content_symlink__copy (integer,integer,integer,varchar)
-returns integer as '
+create or replace functions content_symlink__copy (
+	integer,
+	integer,
+	integer,
+	varchar,
+	varchar) returns integer as '
 declare
   copy__symlink_id             alias for $1;  
   copy__target_folder_id       alias for $2;  
   copy__creation_user          alias for $3;  
   copy__creation_ip            alias for $4;  -- default null  
-  v_current_folder_id          cr_folders.folder_id%TYPE;
+  copy__name	               alias for $5; -- default null
+v_current_folder_id          cr_folders.folder_id%TYPE;
   v_name                       cr_items.name%TYPE;
   v_target_id                  cr_items.item_id%TYPE;
   v_label                      cr_symlinks.label%TYPE;
@@ -168,28 +173,29 @@ begin
     where
       item_id = copy__symlink_id;
 
-    -- can''t copy to the same folder
-    if copy__target_folder_id != v_current_folder_id then
+    -- can''t copy to the same folder unless name is different
 
-      select
-        i.name, content_symlink__resolve(i.item_id), s.label
-      into
-        v_name, v_target_id, v_label
-      from
-        cr_symlinks s, cr_items i
-      where
-        s.symlink_id = i.item_id
-      and
-        s.symlink_id = copy__symlink_id;
+    select
+      i.name, content_symlink__resolve(i.item_id), s.label
+    into
+      v_name, v_target_id, v_label
+    from
+      cr_symlinks s, cr_items i
+    where
+      s.symlink_id = i.item_id
+    and
+      s.symlink_id = copy__symlink_id;
 
-
+	-- copy to a different folder, or same folder if name
+	-- is different
+    if copy__target_folder_id != v_current_folder_id  or ( v_name <> copy_name and copy_name is not null ) then
       if content_folder__is_registered(copy__target_folder_id,
         ''content_symlink'',''f'') = ''t'' then
         if content_folder__is_registered(copy__target_folder_id,
           content_item__get_content_type(content_symlink__resolve(copy__symlink_id)),''f'') = ''t'' then
 
-          v_symlink_id := content_symlink__new(
-              v_name,
+	  v_symlink_id := content_symlink__new(
+              coalesce (copy__name,v_name),
 	      v_label,
               v_target_id,
               copy__target_folder_id,
@@ -205,7 +211,30 @@ begin
     end if;
   end if;
 
-  return 0; 
+  return v_symlink_id; 
+end;' language 'plpgsql';
+
+create function content_symlink__copy (integer,integer,integer,varchar)
+returns integer as '
+declare
+  copy__symlink_id             alias for $1;  
+  copy__target_folder_id       alias for $2;  
+  copy__creation_user          alias for $3;  
+  copy__creation_ip            alias for $4;  -- default null  
+  v_current_folder_id          cr_folders.folder_id%TYPE;
+  v_name                       cr_items.name%TYPE;
+  v_target_id                  cr_items.item_id%TYPE;
+  v_label                      cr_symlinks.label%TYPE;
+  v_symlink_id                 cr_symlinks.symlink_id%TYPE;
+begin
+	v_symlink_id := content_symlink__copy (
+		copy__symlink_id,
+		copy__target_folder_id,
+	        copy__creation_user,
+                copy__creation_ip,
+                NULL
+                );
+	return v_symlink_id;
 end;' language 'plpgsql';
 
 
