@@ -35,8 +35,11 @@ if { [info exists prefer_text_only_p]
 }
 
 if { ![template::util::is_nil focus] } {
-  template::multirow append \
-    attribute onLoad "javascript:document.${focus}.focus()"
+    # Handle elements wohse name contains a dot
+    regexp {^([^.]*)\.(.*)$} $focus match form_name element_name
+    
+    template::multirow append \
+            attribute onLoad "javascript:document.forms\['${form_name}'\].elements\['${element_name}'\].focus()"
 }
 
 
