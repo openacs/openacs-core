@@ -1,4 +1,4 @@
-<master>
+<master src="master">
   <property name="title">Localized Messages</property>
   <property name="context_bar">@context_bar@</property>
 
@@ -28,7 +28,7 @@
     <tr style="background: #EEEEEE">
      <td>@missing_translation.message_key@</td>
      <td>@missing_translation.default_message@</td>
-     <td>Translation Missing</td>
+     <td>TRANSLATION MISSING</td>
      <td>
       (<span class="edit-anchor"><a href="edit-localized-message?message_key=@missing_translation.escaped_key@&locales=@missing_translation.escaped_language@&package_key=@escaped_package_key@&translated_p=0">edit</a></span>)
      </td>

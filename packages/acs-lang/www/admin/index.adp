@@ -1,4 +1,4 @@
-<master>
+<master src="master">
   <property name="title">Administration of Localized Messages</property>
   <property name="header_stuff">
     <style>

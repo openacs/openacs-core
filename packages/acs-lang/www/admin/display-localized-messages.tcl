@@ -15,7 +15,15 @@ ad_page_contract {
 
 set tab [ns_urlencode "localized-messages"]
 set return_url "display-grouped-messages?tab=$tab&locales=$locales"
-set context_bar [ad_context_bar [list $return_url Listing] "Messages"]
+
+if { ! $translated_p } {
+    set title "Edit Untranslated - $package_key"
+} else {
+    set title "Edit Translated - $package_key"
+}
+
+set context_bar [ad_context_bar [list $return_url Listing] $title]
+
 set default_locale [ad_parameter DefaultLocale]
 set default_locale en_US
 
@@ -41,6 +49,7 @@ set cat_msg_not_translated {
                lm1.message_key = lm2.message_key and
                lm1.package_key = lm2.package_key
            )
+    order by upper(lm1.message_key)
 }
 
 # Query that get all the messages that HAVE a translation to
@@ -56,6 +65,7 @@ set cat_msg_translated {
            lm2.locale = :current_locale and
            lm1.message_key = lm2.message_key and
            lm1.package_key = lm2.package_key
+    order by upper(lm1.message_key)
 }
 
 template::multirow create missing_translation message_key locale default_message escaped_key escaped_language
@@ -63,11 +73,11 @@ template::multirow create translated_messages message_key locale default_message
 
 if { ! $translated_p } {
     db_foreach select_messages_not_translated $cat_msg_not_translated {
-        template::multirow append missing_translation $message_key $current_locale $default_message [ns_urlencode $message_key] [ns_urlencode $current_locale]
+        template::multirow append missing_translation $message_key $current_locale [ad_quotehtml $default_message] [ns_urlencode $message_key] [ns_urlencode $current_locale]
     }
 } else {
     db_foreach select_messages_translated $cat_msg_translated {
-        template::multirow append translated_messages $message_key $current_locale $default_message $translated_message [ns_urlencode $message_key] [ns_urlencode $current_locale]
+        template::multirow append translated_messages $message_key $current_locale [ad_quotehtml $default_message] [ad_quotehtml $translated_message] [ns_urlencode $message_key] [ns_urlencode $current_locale]
     }
 }
 

@@ -22,6 +22,13 @@ if { ![info exists locales] } {
     set current_locale $locales
 }
 
+# Query to get all packages that are prepared for translation
+
+set grouper_msg_all {
+    select distinct lm1.package_key
+    from   lang_messages lm1
+}
+
 # Query to get all the packages that have untranslated messages in the
 # selected locale
 
@@ -51,6 +58,7 @@ set grouper_msg_translated {
            lm1.package_key = lm2.package_key
 }
 
+template::multirow create all_packages_group package_key package_key_encoded locale_encoded
 template::multirow create missing_translation_group package_key package_key_encoded locale_encoded
 template::multirow create translated_messages_group package_key package_key_encoded locale_encoded
 
@@ -60,6 +68,10 @@ db_foreach select_messages_not_translated $grouper_msg_not_translated {
 
 db_foreach select_messages_translated $grouper_msg_translated {
     template::multirow append translated_messages_group $package_key [ns_urlencode $package_key] [ns_urlencode $current_locale]
+}
+
+db_foreach select_messages_all_packages $grouper_msg_all {
+    template::multirow append all_packages_group $package_key [ns_urlencode $package_key] [ns_urlencode $current_locale]
 }
 
 db_1row select_locale_lable {

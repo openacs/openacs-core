@@ -87,19 +87,15 @@ if { [form is_request message_editing] } {
     db_0or1row select_translated_message $sql_select_translated_message
 
     if { [exists_and_not_null translated_message] } {
-
-        element set_properties message_editing message -value $translated_message
-
+        element set_properties message_editing message -value [ad_quotehtml $translated_message]
     } else {
-
         element set_properties message_editing message -value "No Translation Available"
-
     }
    
     element set_properties message_editing message_key -value $message_key
     element set_properties message_editing package_key -value $package_key
     element set_properties message_editing locales -value $current_locale
-    element set_properties message_editing original_message -value $message
+    element set_properties message_editing original_message -value [ad_quotehtml $message]
 
 } else {
 

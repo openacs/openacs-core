@@ -1,4 +1,4 @@
-<master>
+<master src="master">
  <property name="title">Edit a message</property>
  <property name="header_stuff">@header_stuff@</property>
  <property name="context_bar">@context_bar@</property>
