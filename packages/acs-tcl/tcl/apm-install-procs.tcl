@@ -675,7 +675,10 @@ ad_proc -private apm_package_delete {
 	    apm_callback_and_log $callback "<li>Unable to delete [acs_package_root_dir $package_key]:<font color=red>$error</font>"
 	}
     }
-    
+
+    # Flush the installed_p cache
+    util_memoize_flush [list apm_package_installed_p_not_cached $package_key]
+
     apm_callback_and_log $callback "<p>Done."
 }
 
@@ -1364,24 +1367,29 @@ ad_proc -public apm_upgrade_logic {
     
     <blockquote><pre>
 
-    apm_upgrade_logic \ 
-            -from_version_name $from \ 
-            -to_version_name $to \ 
-            -spec {
-        1.1 1.2 {
-            ...
-        }
-        1.2 1.3 {
-            ...
-        }
-        1.4d 1.4d1 {
-            ...
-        }
-        2.1 2.3 {
-            ...
-        }
-        2.3 2.4 {
-            ...
+    ad_proc my_upgrade_callback {
+        {-from_version_name:required}
+        {-to_version_name:required}
+    } {
+        apm_upgrade_logic \ 
+                -from_version_name $from_version_name \ 
+                -to_version_name $to_version_name \ 
+                -spec {
+            1.1 1.2 {
+                ...
+            }
+            1.2 1.3 {
+                ...
+            }
+            1.4d 1.4d1 {
+                ...
+            }
+            2.1 2.3 {
+                ...
+            }
+            2.3 2.4 {
+                ...
+            }
         }
     }
     
