@@ -20,6 +20,10 @@ set context [list $page_title]
 
 set group_id [application_group::group_id_from_package_id]
 
+# Is this the main site? In that case, we don't offer to remove users completely,
+# only to ban/delete them.
+set main_site_p [string equal [site_node::get_url -node_id [ad_conn node_id]] "/"]
+
 set rel_type "membership_rel"
 
 set user_id [ad_conn user_id]
@@ -203,15 +207,26 @@ db_multirow -extend {
                         set make_member_url [export_vars -base make-member { rel_id }]
                     }
                 }
-                set remove_url [export_vars -base member-remove { rel_id }]
+                if { $main_site_p } {
+                    set ban_url [export_vars -base member-state-change { rel_id {member_state banned} }]
+                    set delete_url [export_vars -base member-state-change { rel_id {member_state deleted} }]
+                } else {
+                    set remove_url [export_vars -base member-remove { rel_id }]
+                }
             }
             "needs approval" {
                 set approve_url [export_vars -base member-state-change { rel_id { member_state approved } }]
-                set remove_url [export_vars -base member-remove { rel_id }]
+                if { $main_site_p } {
+                    set reject_url [export_vars -base member-state-change { rel_id {member_state rejected} }]
+                } else {
+                    set remove_url [export_vars -base member-remove { rel_id }]
+                }
             }
             "rejected" - "deleted" - "banned" {
                 set approve_url [export_vars -base member-state-change { rel_id { member_state approved } }]
-                set remove_url [export_vars -base member-remove { rel_id }]
+                if { !$main_site_p } {
+                    set remove_url [export_vars -base member-remove { rel_id }]
+                }
             }
         }
     }
