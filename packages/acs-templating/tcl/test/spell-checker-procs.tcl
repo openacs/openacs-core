@@ -6,7 +6,7 @@ ad_library {
     @cvs-id $Id$
 }
 
-aa_register_case spellcheck__get_element_formtext {
+aa_register_case -cats { api } spellcheck__get_element_formtext {
     Test the spell-check proc that does the actual spell-checking.
 } {    
     
@@ -145,7 +145,7 @@ aa_register_case spellcheck__get_element_formtext {
 }
 
 
-aa_register_case spellcheck__spellcheck_properties {
+aa_register_case -cats { api } spellcheck__spellcheck_properties {
     Test the proc that knows if spell-checking is activated, if it should be performed,
     and which value the pull-down menu should default to.
 } {    

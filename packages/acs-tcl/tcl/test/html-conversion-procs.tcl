@@ -6,7 +6,7 @@ ad_library {
 }
 
 
-aa_register_case ad_html_to_text_bold {
+aa_register_case -cats {api smoke} ad_html_to_text_bold {
 
     Test if it converts b tags correctly.
 
@@ -21,13 +21,12 @@ aa_register_case ad_html_to_text_bold {
 }
 
 
-aa_register_case ad_html_to_text_clipped_link {
+aa_register_case -cats {api smoke} -bugs 386 -error_level warning  \
+    ad_html_to_text_clipped_link {
 
     Test if it converts clipped links.
 
-    http://openacs.org/bugtracker/openacs/bug?bug_number=386
 } {
-
     # try with missing leading and trailing quote
 
     foreach html {{
@@ -50,14 +49,14 @@ following text
 }
 
 
-aa_register_case ad_html_security_check_href_allowed {
+aa_register_case -cats {api smoke} ad_html_security_check_href_allowed {
     tests is href attribute is allowed of A tags
 } {
     set html "<a href=\"http://www.example/com\">An Link</a>"
     aa_true "href is allowed for A tags" [string equal [ad_html_security_check $html] ""]
 }
 
-aa_register_case util_close_html_tags {
+aa_register_case -cats {api smoke} util_close_html_tags {
     Tests closing HTML tags.
 } {
     aa_equals "" [util_close_html_tags "<b>Foobar"] "<b>Foobar</B>"
@@ -72,7 +71,7 @@ aa_register_case util_close_html_tags {
 }
 
 
-aa_register_case ad_html_text_convert {
+aa_register_case -cats {api smoke} ad_html_text_convert {
     Testing ad_html_text_convert.
 } {
     #----------------------------------------------------------------------
@@ -129,7 +128,7 @@ aa_register_case ad_html_text_convert {
 
 }
 
-aa_register_case string_truncate {
+aa_register_case -cats {api smoke} string_truncate {
     Testing string truncation
 } {
     aa_equals "" [string_truncate -len  5 -ellipsis "" -- "foobar greble"] ""

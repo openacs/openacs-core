@@ -5,7 +5,7 @@ ad_library {
 }
 
 
-aa_register_case group_tag {
+aa_register_case -cats { api } -bugs { 428 } group_tag {
     Testing more than one group tag inside multiple.
 
     <p>

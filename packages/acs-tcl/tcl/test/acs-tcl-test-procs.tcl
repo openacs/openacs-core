@@ -24,7 +24,7 @@ ad_proc apm_test_callback_proc {
 }
 
 
-aa_register_case util__sets_equal_p {
+aa_register_case -cats {api smoke} util__sets_equal_p {
     Test the util_sets_equal_p proc.
 
     @author Peter Marklund
@@ -45,7 +45,7 @@ aa_stub apm_arg_names_for_callback_type {
     return [list arg1 arg2]
 }
 
-aa_register_case apm__test_info_file {
+aa_register_case -cats {api db smoke} apm__test_info_file {
     Test that the procs for interfacing with package info files - 
     apm_generate_package_spec and 
     apm_read_package_info_file - handle the newly added
@@ -122,7 +122,7 @@ aa_register_case apm__test_info_file {
     }
 }
 
-aa_register_case apm__test_callback_get_set {
+aa_register_case -cats {api db smoke} apm__test_callback_get_set {
     Test the procs apm_get_callback_proc,
                    apm_set_callback_proc,
                    apm_package_install_callbacks
@@ -162,7 +162,7 @@ aa_register_case apm__test_callback_get_set {
     }
 }
 
-aa_register_case apm__test_callback_invoke {
+aa_register_case -cats {db api smoke} apm__test_callback_invoke {
     Test the proc apm_invoke_callback_proc
 
     @author Peter Marklund
@@ -199,7 +199,7 @@ aa_register_case apm__test_callback_invoke {
     }
 }
 
-aa_register_case xml_get_child_node_content_by_path {
+aa_register_case -cats {api smoke} xml_get_child_node_content_by_path {
     Test xml_get_child_node_content_by_path
 } {
     set tree [xml_parse -persist {
@@ -246,9 +246,7 @@ aa_register_case xml_get_child_node_content_by_path {
 
 }
 
-aa_register_case -cats {
-    script
-} -on_error {
+aa_register_case -cats {api} -on_error {
     site_node::get_children returns root node!
 } site_node_get_children {
     Test site_node::get_children
@@ -290,7 +288,7 @@ aa_register_case -cats {
     
 }
 
-aa_register_case text_to_html {
+aa_register_case -cats {api smoke} text_to_html {
     Test code the supposedly causes ad_html_to_text to break
 } {
     
@@ -379,7 +377,7 @@ anybody have any ideas?
     aa_log "Text version: $text_version"
 }
 
-aa_register_case ad_page_contract_filters {
+aa_register_case -cats {api smoke} ad_page_contract_filters {
     Test ad_page_contract_filters 
 } {
     set filter integer
@@ -419,7 +417,7 @@ aa_register_case ad_page_contract_filters {
     }
 }
 
-aa_register_case export_vars {
+aa_register_case -cats {api smoke} export_vars {
     Testing export_vars
 } {
     set foo 1
@@ -465,7 +463,7 @@ aa_register_case export_vars {
         "$base?$export_no_base"            
 }
 
-aa_register_case site_node_verify_folder_name {
+aa_register_case -cats {api smoke} site_node_verify_folder_name {
     Testing site_node::veriy_folder_name
 } {
     set main_site_node_id [site_node::get_node_id -url /]
@@ -505,7 +503,7 @@ aa_register_case site_node_verify_folder_name {
 }
 
 
-aa_register_case -cats db db__transaction { 
+aa_register_case -cats {api db smoke} db__transaction { 
     test db_transaction
 } {
 
@@ -676,7 +674,7 @@ aa_register_case -cats db db__transaction {
 }
 
 
-aa_register_case util__subset_p {
+aa_register_case -cats {api smoke} util__subset_p {
     Test the util_subset_p proc.
 
     @author Peter Marklund
@@ -691,7 +689,7 @@ aa_register_case util__subset_p {
     aa_equals "List is not a subset" [util_get_subset_missing [list a b c d] [list a b c]] [list d]
 }
 
-aa_register_case acs_tcl__tcl_file_common_errors {
+aa_register_case -cats {smoke} acs_tcl__tcl_file_syntax_errors {
     Test all known tcl files for successful parsing "(in the [info complete] sense at least)" and other common errors.
 
     @author Jeff Davis
@@ -715,13 +713,38 @@ aa_register_case acs_tcl__tcl_file_common_errors {
 
         # Check that the file parses        
         aa_true "$file parses successfully" [info complete $data]
-
-        aa_true "$file should not contain '@returns'.  @returns is probably a typo of @return" [expr [string first @returns $data] == -1]
     }
-
 }
 
-aa_register_case util__randomize_list {
+aa_register_case -cats {} -error_level notice acs_tcl__tcl_file_common_errors {
+    Test all known tcl files for successful parsing "(in the [info complete] sense at least)" and other common errors.
+
+    @author Jeff Davis
+} {
+    # couple of local helper procs 
+    proc ::tcl_p {file} { 
+        return [expr [string match {*.tcl} $file] || [file isdirectory $file]]
+    }
+    
+    # if startdir is not [acs_root_dir]/packages, then somebody checked in the wrong thing by accident
+    set startdir [acs_root_dir]/packages
+    
+    aa_log "Checks starting from $startdir<br />"
+
+    #inspect every tcl file in the directory tree starting with $startdir
+    foreach file [ad_find_all_files -check_file_func ::tcl_p $startdir] { 
+
+        set fp [open $file "r"]
+        set data [read $fp]
+        close $fp
+
+	if {![regexp {/packages/acs-tcl/tcl/test/acs-tcl-test-procs\.tcl$} $file match]} {
+	    aa_true "$file should not contain '@returns'.  @returns is probably a typo of @return" [expr [string first @returns $data] == -1]
+	}
+    }
+}
+
+aa_register_case -cats {api smoke} util__randomize_list {
     Test util::randomize_list
 } {
     aa_equals "Emtpy list" [util::randomize_list {}] {}
@@ -743,8 +766,11 @@ aa_register_case util__randomize_list {
     aa_true "Long random list" [util_sets_equal_p $org_list $randomized_list]
 }
 
-aa_register_case acs_tcl__util_url_valid_p {
+aa_register_case -cats {api} acs_tcl__util_url_valid_p {
     A very rudimentary test of util_url_valid_p
+                                                                                                                             
+    @creation-date 2004-01-10
+    @author Branimir Dolicki (bdolicki@branimir.com)
 } {
     foreach url {
         "http://example.com"
@@ -767,4 +793,15 @@ aa_register_case acs_tcl__util_url_valid_p {
     } {
         aa_false "Invalid web URL $url" [util_url_valid_p "$url"]
     }
+}
+
+
+aa_register_case -cats {web smoke} -libraries tclwebtest front_page_1 {
+    
+} {
+    #set ::auto_path "/usr/local/tclwebtest/lib"
+    #aa_log "auto_path: $auto_path"
+    ::tclwebtest::do_request "[ad_url]/"
+    ::tclwebtest::assert text "Main Site"
+
 }

@@ -464,10 +464,14 @@ ad_proc -private lang::test::execute_upgrade {
     }
 }
 
-aa_register_case util__replace_temporary_tags_with_lookups {
-    Primarily tests lang::util::replace_temporary_tags_with_lookups,
-    Also tests the procs lang::catalog::export_messages_to_file, lang::catalog::parse,
-    lang::catalog::read_file, and lang::util::get_temporary_tags_indices.
+aa_register_case \
+    -procs {
+	lang::util::replace_temporary_tags_with_lookups
+	lang::catalog::export_messages_to_file
+	lang::catalog::parse
+	lang::catalog::read_file
+	lang::util::get_temporary_tags_indices
+    } util__replace_temporary_tags_with_lookups {
 
     A test tcl file and catalog file are created. The temporary tags in the
     tcl file are replaced with message lookups and keys and messages are appended
@@ -565,8 +569,10 @@ aa_register_case util__replace_temporary_tags_with_lookups {
     file delete "[acs_root_dir]/$tcl_backup_file"
 }
 
-aa_register_case util__get_hash_indices {
-    Tests the lang::util::get_hash_indices proc
+aa_register_case \
+    -procs {
+	lang::util::get_hash_indices
+    } util__get_hash_indices {
 
     @author Peter Marklund (peter@collaboraid.biz)
     @creation-date 21 October 2002
@@ -589,8 +595,10 @@ aa_register_case util__get_hash_indices {
   }
 }
 
-aa_register_case util__convert_adp_variables_to_percentage_signs {
-    Tests the lang::util::convert_adp_variables_to_percentage_signs proc.
+aa_register_case \
+    -procs {
+	lang::util::convert_adp_variables_to_percentage_signs
+    } util__convert_adp_variables_to_percentage_signs {
 
     @author Peter Marklund (peter@collaboraid.biz)
     @creation-date 25 October 2002
@@ -611,8 +619,10 @@ aa_register_case util__convert_adp_variables_to_percentage_signs {
                                                                                 $adp_chunk_expected]
 }
 
-aa_register_case util__replace_adp_text_with_message_tags {
-    Test the lang::util::replace_adp_text_with_message_tags proc.
+aa_register_case \
+    -procs {
+	lang::util::replace_adp_text_with_message_tags
+    } util__replace_adp_text_with_message_tags {
 
     @author Peter Marklund (peter@collaboraid.biz)
     @creation-date 28 October 2002
@@ -649,8 +659,10 @@ Test text"
     file delete $adp_file_path
 }
 
-aa_register_case message__format {
-    Tests the lang::message::format proc
+aa_register_case \
+	-procs {
+	    lang::message::format
+	} message__format {
 
     @author Peter Marklund (peter@collaboraid.biz)
     @creation-date 21 October 2002
@@ -666,8 +678,10 @@ aa_register_case message__format {
                                                                   $expected_message]
 }
 
-aa_register_case message__get_embedded_vars {
-    Tests the lang::message::get_embedded_vars proc
+aa_register_case \
+	-procs {
+	    lang::message::get_embedded_vars
+	} message__get_embedded_vars {
 
     @author Peter Marklund (peter@collaboraid.biz)
     @creation-date 12 November 2002
@@ -706,7 +720,12 @@ aa_register_case message__get_embedded_vars {
     }    
 }
 
-aa_register_case locale__test_system_package_setting {
+aa_register_case \
+	-procs {
+	    lang::system::set_locale
+	    lang::system::locale
+	    lang::system::site_wide_locale
+	} locale__test_system_package_setting {
     Tests whether the system package level setting works
 
     @author Lars Pind (lars@collaboraid.biz)
@@ -745,8 +764,10 @@ aa_register_case locale__test_system_package_setting {
     aa_true "Retrieved system locale ('$retrieved_locale') equals the one we just set ('$locale_to_set')" [string equal $locale_to_set $retrieved_locale]
 }
 
-aa_register_case locale__test_lang_conn_browser_locale {
-    Tests the proc lang::conn::browser_locale
+aa_register_case \
+	-procs {
+	    lang::conn::browser_locale
+	} locale__test_lang_conn_browser_locale {
 
     @author Peter Marklund
     @creation-date 2003-08-13
@@ -781,7 +802,9 @@ aa_register_case locale__test_lang_conn_browser_locale {
 }
 
 
-aa_register_case strange_oracle_problem {
+aa_register_case \
+	-cats db \
+	strange_oracle_problem {
     Strange Oracle problem when selecting by language
     
 } {
@@ -798,7 +821,13 @@ aa_register_case strange_oracle_problem {
 }
 
 
-aa_register_case set_get_timezone {
+aa_register_case \
+	-procs {
+	    lang::user::set_timezone
+	    lang::system::set_timezone
+	    lang::system::timezone
+	} set_get_timezone {
+
     Test that setting and getting user timezone works
 } {
     # We cannot test timezones if they are not installed
@@ -868,7 +897,11 @@ aa_register_case set_get_timezone {
     }
 }
 
-aa_register_case set_timezone_not_logged_in {
+aa_register_case \
+	-procs {
+	    lang::user::set_timezone
+	    lang::system::timezone
+	} set_timezone_not_logged_in {
     Test that setting and getting user timezone throws an error when user is not logged in
 } {
     # We cannot test timezones if they are not installed
@@ -893,7 +926,10 @@ aa_register_case lc_time_fmt_Z_timezone {
     aa_equals "%Z returns current timezone" [lc_time_fmt "2003-08-15 13:40:00" "%Z"] [lang::conn::timezone]
 }
 
-aa_register_case locale_language_fallback {
+aa_register_case \
+    -procs {
+	lang::message::lookup
+    } locale_language_fallback {
     Test that we fall back to 'default locale for language' when requesting a message 
     which exists in default locale for language, but not in the current locale
 } {
@@ -933,7 +969,12 @@ aa_register_case locale_language_fallback {
     }
 }
 
-aa_register_case upgrade {
+aa_register_case \
+    -procs {
+	lang::catalog::import
+	lang::message::edit
+	lang::message::get
+    } upgrade {
     Test that a package can be upgraded with new
     catalog files and that the resulting keys and messages
     in the database can then be exported properly.

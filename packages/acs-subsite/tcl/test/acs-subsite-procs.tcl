@@ -50,7 +50,7 @@ aa_register_case acs_subsite_expose_bug_1144 {
         }
 }
 
-aa_register_case acs_subsite_trivial_smoke_test {
+aa_register_case -cats smoke acs_subsite_trivial_smoke_test {
     Minimal smoke test.
 } {    
 
