@@ -26,6 +26,9 @@ begin
                     acs__magic_object_id(''default_context'')
 	       );
 
+
+  -- Make the -2 registered users group an application_group
+
   insert into application_groups
     (group_id, package_id)
   values
@@ -34,6 +37,13 @@ begin
   update acs_objects
   set object_type = ''application_group''
   where object_id = -2;
+
+  insert into group_rels
+    (group_rel_id, group_id, rel_type)
+  select nextval(''t_acs_object_id_seq''), -2, ''admin_rel'';
+
+
+  -- Create the members and admins rel segments
 
   perform rel_segment__new(
                    null,
@@ -46,6 +56,20 @@ begin
                    ''Main Site Members'',
                    -2,
                    ''membership_rel'',
+                   null
+                 );
+
+  perform rel_segment__new(
+                   null,
+                   ''rel_segment'',
+                   now(),
+                   null,
+                   null,
+                   null,
+                   null,
+                   ''Main Site Administrators'',
+                   -2,
+                   ''admin_rel'',
                    null
                  );
 

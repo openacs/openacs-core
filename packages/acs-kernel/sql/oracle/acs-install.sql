@@ -44,10 +44,21 @@ begin
   set object_type = 'application_group'
   where object_id = -2;
 
+  insert into group_rels
+  (group_rel_id, group_id, rel_type)
+  select acs_object_id_seq.nextval, -2, 'admin_rel'
+    from dual;
+
   segment_id := rel_segment.new(
     segment_name => 'Main Site Members',
     group_id => -2,
     rel_type => 'membership_rel'
+  );
+
+  segment_id := rel_segment.new(
+    segment_name => 'Main Site Administrators',
+    group_id => -2,
+    rel_type => 'admin_rel'
   );
 
   select user into schema_user from dual;
