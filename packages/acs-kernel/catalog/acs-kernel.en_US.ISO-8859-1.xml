@@ -18,8 +18,10 @@
   <msg key="common_login">Log in</msg>
   <msg key="common_next">Next</msg>
   <msg key="common_no">No</msg>
+  <msg key="common_ok">OK</msg>
   <msg key="common_previous">Previous</msg>
   <msg key="common_register">Register</msg>
+  <msg key="common_repeat">Repeat</msg>
   <msg key="common_reset">Reset</msg>
   <msg key="common_save">Save</msg>
   <msg key="common_stop">Stop</msg>
@@ -28,4 +30,9 @@
   <msg key="common_yes">Yes</msg>
   <msg key="member_role_pretty_name">Member</msg>
   <msg key="member_role_pretty_plural">Members</msg>
+  <msg key="member_state_approved">Approved</msg>
+  <msg key="member_state_banned">Banned</msg>
+  <msg key="member_state_deleted">Deleted</msg>
+  <msg key="member_state_needs_approval">Needs approval</msg>
+  <msg key="member_state_rejected">Rejected</msg>
 </message_catalog>
