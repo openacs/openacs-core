@@ -1,6 +1,6 @@
 <master>
 <property name="title">#notifications.Manage_Notifications#</property>
-<property name="context">#notifications.manage_notifications#</property>
+<property name="context">#notifications.Manage_Notifications#</property>
 
 <table class="table-display" cellpadding="5" cellspacing="1" bgcolor="#999999">
     <tr class="table-header" bgcolor="white">
@@ -18,7 +18,7 @@
     <tr class="even" bgcolor="#e9e9e9">
   </else>
     <td>@notifications.type@</td>
-    <td><a href=object-goto.tcl?object_id=@notifications.object_id@>@notifications.object_name@</a></td> 
+    <td><a href=object-goto.tcl?object_id=@notifications.object_id@&type_id=@notifications.type_id@>@notifications.object_name@</a></td> 
     <td>@notifications.interval@ (<a href=request-change-frequency.tcl?return_url=@return_url@&request_id=@notifications.request_id@>#notifications.Change#</a>)</td> 
     <td><a href=request-delete.tcl?return_url=@return_url@&request_id=@notifications.request_id@>#notifications.Unsubscribe#</a></td>
   </tr>
