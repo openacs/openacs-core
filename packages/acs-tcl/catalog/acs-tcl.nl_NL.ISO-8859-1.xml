@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<message_catalog package_key="acs-tcl" package_version="4.7.2d" locale="nl_NL" charset="ISO-8859-1">
+<message_catalog package_key="acs-tcl" package_version="5.0d1" locale="nl_NL" charset="ISO-8859-1">
 
   <msg key="approve">goedkeuren</msg>
   <msg key="approve_email">e-mail goedkeuren</msg>

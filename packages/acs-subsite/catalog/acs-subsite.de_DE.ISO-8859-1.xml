@@ -3,185 +3,75 @@
 
   <msg key="About_You">Benutzerinformation</msg>
   <msg key="Account_closed">&lt;p&gt;Ihr Benutzerkonto ist derzeit deaktiviert.&lt;/p&gt; &lt;p&gt;Falls gewünscht, können Sie es &lt;a href=&quot;%restore_url%&quot;&gt;wieder aktivieren lassen&lt;/a&gt;.&lt;/p&gt;</msg>
-  <msg key="again">erneut</msg>
   <msg key="Answer">Antwort:</msg>
-  <msg key="answer">Antwort:</msg>
   <msg key="at">unter</msg>
-  <msg key="Awaiting_Approval">Freischaltung beantragt</msg>
   <msg key="Bad_Password">Falsches Passwort</msg>
   <msg key="Basic_Information">Grundlegende Informationen:</msg>
-  <msg key="bio">Lebenslauf:</msg>
   <msg key="Change_my_Password">Passwort ändern</msg>
   <msg key="Check_Your_Inbox">Überpüfen Sie Ihr Postfach</msg>
   <msg key="Children">Untergeordnete Objekte</msg>
   <msg key="Confirm">Bestätigen:</msg>
   <msg key="Current_Password">Aktuelles Passwort:</msg>
-  <msg key="Current_users">Aktuelle Benutzer:</msg>
   <msg key="Customize_Question">Frage ändern</msg>
   <msg key="Direct_Permissions">Explizite Berechtigungen</msg>
-  <msg key="edit_your_alerts">Benachrichtigungsoptionen bearbeiten</msg>
   <msg key="Email">E-Mail-Adresse</msg>
-  <msg key="email_address">E-Mail-Adresse:</msg>
   <msg key="Email_Confirmation">E-Mail-Adresse bestätigen:</msg>
   <msg key="Email_not_Requested">E-Mail nicht angefordert</msg>
-  <msg key="Email_Password">Passwort per E-Mail zusenden</msg>
-  <msg key="email_password">&quot;Passwort per E-Mail zusenden&quot;</msg>
   <msg key="Error_sending_mail">Fehler beim Versenden der Mail</msg>
-  <msg key="Feature_disabled">Funktion deaktiviert</msg>
   <msg key="First_names">Vorname(n)</msg>
-  <msg key="Full_Name">Vollständiger Name:</msg>
   <msg key="Grant">Erteilen</msg>
   <msg key="Grant_Permission">Berechtigungen erteilen</msg>
-  <msg key="help">Hilfe</msg>
-  <msg key="in">in</msg>
   <msg key="Join_group_name">%group_name% hinzufügen</msg>
   <msg key="Last_name">Nachname</msg>
   <msg key="Log_In">Anmelden</msg>
-  <msg key="Log_Out">Abmelden</msg>
-  <msg key="Login">Anmelden</msg>
-  <msg key="login">anmelden</msg>
-  <msg key="Login_Expired">Anmeldung abgelaufen</msg>
-  <msg key="Login_Expired_1">Die Anmeldeseite ist abgelaufen. Bitte</msg>
-  <msg key="lt_Awaiting_email_verifi">Es wird auf E-Mail-Verifizierung gewartet.</msg>
   <msg key="lt_Cannot_join_this_grou">Diese Gruppe kann nicht hinzugefügt werden.</msg>
-  <msg key="lt_Couldnt_find_user_use">Benutzer %user_id% konnte nicht gefunden werden.</msg>
-  <msg key="lt_Couldnt_find_user_use_1">Benutzer %user_id% konnte nicht gefunden werden. Die Ursache ist wahrscheinlich ein Programmfehler.</msg>
-  <msg key="lt_Couldnt_find_your_rec">Der Datensatz konnte nicht gefunden werden.</msg>
-  <msg key="lt_Couldnt_find_your_rec_1">Der Datensatz für die Benutzeridentifikation %user_id% konnte nicht in der Datenbank gefunden werden. Die Ursache ist wahrscheinlich ein Programmfehler.</msg>
-  <msg key="lt_Customized_question_a">Es ist bereits eine benutzerdefinierte Frage vorhanden.</msg>
-  <msg key="lt_Customized_question_i">Es wurde bereits eine benutzerdefinierte Frage eingegeben.</msg>
-  <msg key="lt_Customized_QuestionAn">Eingegebene benutzerdefinierte Frage/Antwort</msg>
-  <msg key="lt_enable_cookies">In Netscape 4.0 können Cookies über
-Bearbeiten &amp;gt; Einstellungen &amp;gt; Erweitert aktiviert werden. In Microsoft Internet-Explorer 4.0 können Cookies über Ansicht &amp;gt; Interneteinstellungen &amp;gt; Erweitert &amp;gt; Sicherheit aktiviert werden.</msg>
-  <msg key="lt_Error_creating_the_re">Fehler beim Erstellen der Beziehung</msg>
   <msg key="lt_first_names_last_name">%first_names% %last_name% (%email%) ist als Benutzer von %system_url% registriert. 
       </msg>
-  <msg key="lt_for_a_period_of_vacat">zeitweise oder dauerhaft</msg>
-  <msg key="lt_for_first_names_last_">für %first_names% %last_name% auf &quot;%site_link%&quot; </msg>
-  <msg key="lt_for_future_reference_">Geben Sie eine Frage und eine Antwort ein. Die Daten können später gegebenenfalls zur Verifizierung verwendet werden.</msg>
-  <msg key="lt_For_security_reasons_">Aus Sicherheitsgründen läuft die Anmeldeseite nach einem bestimmten Zeitintervall ab. Dadurch soll verhindert werden, dass Unbefugte mit dem von Ihnen vorher eingegebenen Passwort auf den Dienst zugreifen.</msg>
-  <msg key="lt_Forgotten_Password__E">Passwort vergessen / E-Mail-Adresse eingeben</msg>
   <msg key="lt_Grant_Permission_on_n">Berechtigungen erteilen für %name%</msg>
-  <msg key="lt_Have_you_a_hrefemail-">Haben Sie &lt;a href=&quot;email-for-password&quot;&gt;Ihr Passwort vergessen?&lt;/a&gt;</msg>
-  <msg key="lt_If_you_have_a_Web_sit">Wenn Sie eine eigene Homepage besitzen, kann ein Link dorthin eingerichtet werden.</msg>
-  <msg key="lt_If_you_want_to_check_">Unter %member_link% können Sie überprüfen, welche Informationen für andere Benutzer des Systems sichtbar sind.</msg>
-  <msg key="lt_If_youre_getting_too_">Wenn Sie zu viele E-Mails vom System erhalten,  </msg>
-  <msg key="lt_If_youve_forgotten_yo">Wenn Sie Ihr Passwort vergessen haben, können Sie &lt;a href=&quot;%email_password_url%&quot;&gt;sich von diesem Server ein neues, zufallsgeneriertes Passwort per E-Mail zusenden lassen&lt;/a&gt;.</msg>
-  <msg key="lt_In_general_we_identif">Nachrichten und Beiträge, die Sie verfasst haben, werden mit Ihrem vollen Namen gekennzeichnet. Um Sie vor unerwünschter Massen-E-Mail (Spam) zu schützen, wird Ihre E-Mail-Adresse nur registrierten Benutzern angezeigt. Ein vollständiger Schutz Ihrer Daten wäre zwar technisch realisierbar, es ist aber ein wesentliches Merkmal einer 
-Gruppensoftware, dass Benutzer mit gleichen Interessen miteinander in Kontakt treten können.</msg>
   <msg key="lt_Inherited_Permissions">Vererbte Berechtigungen</msg>
   <msg key="lt_It_would_be_a_very_ba">Diese Option sollte nicht gewählt werden, wenn der Computer von mehreren Personen genutzt wird, etwa in einer Bibliothek oder einem universitären Rechenzentrum. Nachfolgende Benutzer können sonst mit Ihrem Passwort auf den Dienst zugreifen.</msg>
-  <msg key="lt_Leading_or_trailing_s">Vorangestellte und nachfolgende Leerzeichen werden vom Server entfernt. Sollten Sie Ihr Passwort einmal vergessen, können Sie es sich vom Server per E-Mail zusenden lassen.</msg>
   <msg key="lt_New_registration_at_s">Neue Registrierung bei %system_url%</msg>
-  <msg key="lt_no_cookies">Sollten Sie wiederholt zu dieser Seite zurückgeleitet werden, liegt das wahrscheinlich daran, dass Ihr Browser keine Cookies akzeptiert. Für die Nutzung des Systems ist die Aktivierung dieser Funktion erforderlich.</msg>
-  <msg key="lt_Note_If_youve_forgott">Hinweis: Wenn Sie Ihr Passwort vergessen haben, können Sie es sich &lt;a href=&quot;@email_password_url@&quot;&gt;vom Server an @email@ zusenden lassen&lt;/a&gt;.</msg>
-  <msg key="lt_Note_If_youve_forgott_1">Hinweis: Wenn Sie Ihr Passwort vergessen haben, können Sie es sich &lt;a href=&quot;email-password?user_id=%user_id%&quot;&gt;vom Server an @email@ zusenden lassen&lt;/a&gt;.</msg>
   <msg key="lt_Note_that_you_can_era">Hinweis: Sie können Ihre abgespeicherte eMail-Adresse und Ihr Passwort aus dem Browser löschen, indem Sie auf der dotLRN-Startseite die Option &quot;Abmelden&quot; wählen. </msg>
-  <msg key="lt_Now_were_really_in_tr">Es ist folgender schwerwiegender Fehler aufgetreten:</msg>
   <msg key="lt_num_children_Children">%num_children% untergeordnete Objekte ausgeblendet</msg>
   <msg key="lt_On_portrait_publish_d">Am %portrait_publish_date% haben Sie die Datei &lt;a href=&quot;%subsite_url%user/portrait/&quot;&gt;%portrait_title%&lt;/a&gt; hochgeladen.</msg>
   <msg key="lt_Our_server_can_tell_y">Bestimmte Daten wie E-Mail-Adresse oder Passwort können vom Browser gespeichert werden. Das hat das den Vorteil, dass diese Daten bei privat genutzten Computern nicht bei jeder Sitzung neu eingegeben werden müssen. </msg>
   <msg key="lt_Password_Confirmation">Passwort bestätigen:</msg>
   <msg key="lt_Personal_Home_Page_UR">Adresse der persönlichen Homepage:</msg>
-  <msg key="lt_Please_check_your_inb">Bitte überprüfen Sie Ihr Postfach. Innerhalb der nächsten Minuten sollten Sie dort eine Nachricht von %system_owner% mit Ihrem Passwort vorfinden.</msg>
-  <msg key="lt_Please_enter_your_ema">Bitte geben Sie hier Ihre eMail-Adresse und Ihr Passwort ein.</msg>
-  <msg key="lt_Please_follow_the_fol">Klicken Sie auf folgenden Link, um Ihr Passwort zurückzusetzen: %reset_password_url%  
-</msg>
   <msg key="lt_Please_read_and_follo">Bitte lesen Sie diese E-Mail und führen Sie die genannten Schritte aus.</msg>
-  <msg key="lt_Please_read_your_emai">Bitte überprüfen Sie Ihr Postfach.</msg>
   <msg key="lt_Please_try_to_a_hrefi">Bitte versuchen Sie noch einmal, sich &lt;a href=&quot;index&quot;&gt;anzumelden&lt;/a&gt;.</msg>
-  <msg key="lt_Please_verify_your_id">Zur Überprüfung Ihrer Identität werden folgende Angaben benötigt:</msg>
-  <msg key="lt_Please_Wait_for_our_E">Sie erhalten in Kürze eine E-Mail vom System. </msg>
   <msg key="lt_Problem_with_authenti">Es ist ein Authentifizierungsproblem aufgetreten.</msg>
-  <msg key="lt_Problem_with_user_aut">Es ist ein Problem mit der Benutzer-Authentifizierung aufgetreten.</msg>
-  <msg key="lt_Register_as_a_user_of">Registrieren als Benutzer von</msg>
   <msg key="lt_Registration_informat">Die Registrierungsinformationen für diesen Dienst wurden soeben an %email% gesendet.</msg>
   <msg key="lt_Registration_informat_1">Die Registrierungsinformationen für diesen Dienst wurden an %email% gesendet.
 </msg>
   <msg key="lt_registration_request_submitted">Ihr Registrierungsantrag wurde an den Administrator von %system_name% übermittelt. Es wird noch immer auf die Freischaltung gewartet.</msg>
-  <msg key="lt_Remember_this_address">Sollen diese Adresse und dieses Passwort gespeichert werden?</msg>
-  <msg key="lt_Row_id_row_id_is_not_">Der Datensatz mit der ID %row_id% ist nicht in der Datenbank vorhanden. Bitte überprüfen Sie, ob Sie die URL aus der E-Mail mittels Kopieren und Einfügen korrekt übernommen haben. </msg>
   <msg key="lt_Saving_email_address_">E-Mail-Adresse und Passwort werden gespeichert.</msg>
   <msg key="lt_Show_everyone_else_at">Sie können ein Bild von sich ins Netz stellen:</msg>
   <msg key="lt_Sorry_but_it_seems_th">Ihnen wurde der Zugang zu %system_name%verweigert.</msg>
-  <msg key="lt_Thank_you_for_visitin">Vielen Dank für Ihren Besuch bei %system_name%. Mit folgenden Eingaben können Sie sich bei %system_url% anmelden: Benutzeridentifikation:  %email% Passwort: %password%</msg>
-  <msg key="lt_The_full_name_given_d">Der angegebene vollständige Name stimmt nicht mit den im System gespeicherten Daten überein. Es ist ein Fehler aufgetreten.</msg>
-  <msg key="lt_The_password_you_type">Das von Ihnen eingegebene Passwort stimmt nicht mit den im System gespeicherten Daten überein. Falls Sie sich vertippt haben, gehen Sie bitte mit Hilfe des Browsers eine Seite zurück und geben Sie Ihr Passwort erneut ein. </msg>
-  <msg key="lt_The_passwords_youve_e">Sie haben zwei unterschiedliche Passwörter eingegeben.</msg>
-  <msg key="lt_The_validation_didnt_">Die Anmeldung ist fehlgeschlagen. Ihre Angaben passen nicht zu den im System gespeicherten Daten. Gehen Sie entweder mit Hilfe des Browsers oder über den Link &lt;a href=&quot;/register&quot;&gt;zurück zur Anmeldeseite&lt;/a&gt; und versuchen Sie es erneut.</msg>
-  <msg key="lt_Then_come_back_to_a_h">Wechseln Sie anschließend wieder zur &lt;a href=&quot;index?email=%email%&quot;&gt;Anmeldeseite&lt;/a&gt; und nutzen Sie %system_name%.</msg>
-  <msg key="lt_Then_you_should_eithe">Dann sollten Sie entweder</msg>
   <msg key="lt_There_was_a_problem_w">Es ist ein Problem bei der Authentifizierung Ihres Benutzerkontos aufgetreten.</msg>
-  <msg key="lt_This_feature_is_disab">Diese Funktion ist auf diesem Server deaktiviert.</msg>
   <msg key="lt_To_confirm_your_regis">Zur Bestätigung Ihrer Registrierung klicken Sie bitte auf %confirmation_url%.</msg>
-  <msg key="lt_User_id_user_id_is_no">Die Benutzeridentifikation %user_id% befindet sich nicht im Status 'Freischaltung beantragt'. Die Ursache ist wahrscheinlich ein Programmfehler.</msg>
-  <msg key="lt_User_id_user_id_is_no_1">Die Benutzeridentifikation %user_id% befindet sich nicht im Status 'E-Mail-Verifizierung erforderlich'.</msg>
-  <msg key="lt_User_id_user_id_is_no_2">Die Benutzeridentifikation %user_id% ist nicht in der Datenbank enthalten. Die Ursache ist wahrscheinlich ein Programmfehler.</msg>
-  <msg key="lt_User_id_user_id_is_no_3">Die Benutzeridentifikation %user_id% ist nicht in der Datenbank enthalten. Die Ursache ist wahrscheinlich ein Programmfehler.</msg>
-  <msg key="lt_Validation_Check_Fail">Validierung fehlgeschlagen</msg>
-  <msg key="lt_We_also_need_a_custom">Für den Fall, dass Sie Ihr Passwort vergessen, wird eine benutzerdefinierte Frage und Antwort benötigt.</msg>
-  <msg key="lt_We_got_the_following_">Beim Erstellen der Beziehung ist folgender Fehler aufgetreten:</msg>
-  <msg key="lt_We_know_your_email_ad">Sie haben bereits Ihre E-Mail-Adresse angegeben: &quot;%email%&quot;. Für die Erzeugung bestimmter Benutzerschnittstellen wird außerdem Ihr vollständiger Name benötigt.</msg>
-  <msg key="lt_We_need_a_password_fr">Zum Schutz Ihrer Identität bei der Teilnahme an Diskussionsforen, Fragen&amp;Antworten und anderen Gruppenaktivitäten wird ein Passwort für Sie benötigt.</msg>
   <msg key="lt_We_were_not_awaiting_">Es wurde keine E-Mail von Ihnen erwartet. Es ist ein Fehler aufgetreten.</msg>
-  <msg key="lt_We_were_unable_to_cre">Der Datensatz für den Benutzer konnte nicht erstellt werden.</msg>
-  <msg key="lt_We_will_generate_and_">Nach Bestätigung Ihrer Registrierung wird Ihnen ein zufallsgeneriertes Passwort zugesendet. Sobald Sie sich damit angemeldet haben, können Sie Ihr Passwort ändern.</msg>
-  <msg key="lt_welcome_please_register">Willkommen bei %system_name%. Um sich registrieren zu lassen, geben Sie bitte zunächst eine gültige E-Mail-Adresse und ein Passwort ein. Sie werden dann zu einem Formular weitergeleitet, mit dem Sie den Registrierungsantrag abschließen können.</msg>
   <msg key="lt_Welcome_to_system_nam">Willkommen bei %system_name%.</msg>
-  <msg key="lt_What_we_tell_other_us">Persönliche Informationen, die für andere Benutzer sichtbar sind:</msg>
-  <msg key="lt_when_trying_to_send_y">bei dem Versuch, Ihnen folgende E-Mail zu senden:</msg>
-  <msg key="lt_When_you_get_your_ema">Wenn Sie die E-Mail erhalten haben, gehen Sie zurück zur &lt;a href=&quot;index?email=%email%&quot;&gt;Anmeldeseite&lt;/a&gt; und nutzen Sie %system_name%.</msg>
-  <msg key="lt_You_can_log_in_now_us">Sie können sich nun mit Ihrem alten Passwort anmelden:</msg>
   <msg key="lt_You_cant_have_a_lt_in">Der Vorname darf keine spitzen Klammern enthalten, da diese gewöhnlich für HTML-Steuerzeichen verwendet werden und andere Benutzer verwirren könnten.</msg>
   <msg key="lt_You_cant_have_a_lt_in_1">Der Nachname darf keine spitzen Klammern enthalten, da diese gewöhnlich für HTML-Steuerzeichen verwendet werden und andere Benutzer verwirren könnten.</msg>
-  <msg key="lt_You_have_encountered_">Es ist ein Authentifizierungsproblem aufgetreten.</msg>
-  <msg key="lt_You_have_encountered__1">Es ist ein Authentifizierungsproblem aufgetreten.</msg>
-  <msg key="lt_Your_Account_at_site_">Ihr Benutzerkonto bei %site_link% ist wiederhergestellt.</msg>
-  <msg key="lt_Your_Account_is_Resto">Ihr Benutzerkonto ist wiederhergestellt.</msg>
   <msg key="lt_Your_email_has_been_c">Ihre E-Mail-Adresse wurde bestätigt. Sie können sich nun bei %system_name% anmelden.</msg>
   <msg key="lt_Your_email_has_been_c_1">Ihre E-Mail-Adresse wurde bestätigt. Sie warten nun auf Freischaltung durch den Administrator von %system_name%.</msg>
   <msg key="lt_Your_email_is_confirm">Ihre E-Mail-Adresse wurde bestätigt.</msg>
-  <msg key="lt_Your_forgotten_passwo">Ihr vergessenes Passwort für %system_name%</msg>
-  <msg key="lt_Your_registration_is_">Ihre Registrierungsdaten wurden in der Datenbank gespeichert. Ein Systemadministrator wurde über Ihren Registrierungsantrag für das System informiert. Sobald die Freischaltung erfolgt ist, werden Sie per E-Mail benachrichtigt und können zu %site_link% zurückkehren, um den Dienst zu nutzen.</msg>
   <msg key="lt_Your_URL_doesnt_have_">Die von Ihnen eingegebene URL hat nicht die richtige Form. Eine gültige URL könnte etwa lauten: \%valid_url_example%\</msg>
-  <msg key="Name">Name:</msg>
   <msg key="New_Password">Neues Passwort:</msg>
-  <msg key="New_users">Neue Benutzer:</msg>
   <msg key="no_portrait_title_message">Ihr Bild</msg>
-  <msg key="no_screen_name_message">&amp;lt; Nicht festgelegt &amp;gt;   </msg>
   <msg key="none">Keine</msg>
-  <msg key="Note">Hinweis:</msg>
-  <msg key="on">für</msg>
-  <msg key="or">oder</msg>
   <msg key="Password">Passwort:</msg>
   <msg key="Password_changed_subject">Passwort geändert</msg>
   <msg key="Permissions">Berechtigungen</msg>
   <msg key="Permissions_for_name">Zugriffsberechtigungen für %name%</msg>
-  <msg key="personal_URL">persönliche Homepage</msg>
   <msg key="Question">Frage:</msg>
-  <msg key="question">Frage:</msg>
   <msg key="Register">Registrieren</msg>
   <msg key="Revoke_Checked">Ausgewählte Berechtigungen aufheben</msg>
-  <msg key="screen_name">Screen name:</msg>
-  <msg key="Security">Sicherheit</msg>
   <msg key="Show">Anzeigen</msg>
-  <msg key="Sorry">&amp;nbsp;</msg>
-  <msg key="Subject">Betreff:</msg>
   <msg key="Thank_you">Vielen Dank.</msg>
-  <msg key="to">an</msg>
-  <msg key="to_site_link">zu %site_link%</msg>
-  <msg key="to_site_link_1">Ihr Benutzerkonto wiederhergestellt werden.</msg>
-  <msg key="Unauthorized_Access">Unberechtigter Zugriff</msg>
-  <msg key="Unsubscribe">Benachrichtigungsfunktion deaktivieren</msg>
   <msg key="up_to_context_name">Eine Ebene höher zu &quot;%context_name%&quot;</msg>
   <msg key="Update">Aktualisieren</msg>
-  <msg key="update">Aktualisieren</msg>
   <msg key="Update_Password">Passwort aktualisieren</msg>
   <msg key="upload_a_portrait">Bild hochladen</msg>
-  <msg key="User_Creation_Failed">Der Benutzer konnte nicht angelegt werden.</msg>
-  <msg key="Welcome_Back">Willkommen zurück.</msg>
-  <msg key="Welcome_Back_1">Ihr Benutzerkonto befindet sich gegenwärtig im Status 'gelöscht'. Falls gewünscht, kann </msg>
-  <msg key="Your_email">Ihre E-Mail-Adresse:</msg>
-  <msg key="Your_email_address">Ihre E-Mail-Adresse:</msg>
   <msg key="Your_Portrait">Ihr Bild:</msg>
 </message_catalog>

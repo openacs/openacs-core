@@ -15,7 +15,6 @@
   <msg key="lt_You_have_requested_no">Sie haben für &quot;%pretty_name%&quot; die Benachrichtigungsfunktion aktiviert. Sie können diese &lt;a href=&quot;%sub_url%&quot;&gt;deaktivieren&lt;/a&gt;. </msg>
   <msg key="lt_You_may_a_hrefsub_url">Sie können für &quot;%pretty_name%&quot; die &lt;a href=&quot;%sub_url%&quot;&gt;Benachrichtigungsfunktion aktivieren&lt;/a&gt;.</msg>
   <msg key="Manage_Notifications">Benachrichtigungs-Optionen verwalten</msg>
-  <msg key="manage_notifications">&quot;Benachrichtigungs-Optionen verwalten&quot;</msg>
   <msg key="Notification_type">Art der Benachrichtigung</msg>
   <msg key="Request_Notification">Benachrichtigung Anfordern</msg>
   <msg key="SUBJECT">BETREFF:</msg>

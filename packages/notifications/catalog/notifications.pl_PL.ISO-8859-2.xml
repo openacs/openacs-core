@@ -14,7 +14,6 @@
   <msg key="lt_You_have_requested_no">Ustwiono zawiadomienia o %pretty_name%. Mo¿esz &lt;a href=&quot;%sub_url%&quot;&gt;je usun±æ&lt;/a&gt;.</msg>
   <msg key="lt_You_may_a_hrefsub_url">Mo¿esz &lt;a href=&quot;%sub_url%&quot;&gt;ustawiæ zawiadomienia&lt;/a&gt; o %pretty_name%.</msg>
   <msg key="Manage_Notifications">Zarz±dzaj Zawiadomieniami</msg>
-  <msg key="manage_notifications">&quot;zarz±dzaj zawiadomieniami&quot;</msg>
   <msg key="Notification_type">Typ Zawiadomienia</msg>
   <msg key="Request_Notification">Ustaw Zawiadomienie</msg>
   <msg key="SUBJECT">TEMAT:</msg>

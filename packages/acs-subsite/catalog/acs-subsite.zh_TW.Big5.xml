@@ -2,65 +2,26 @@
 <message_catalog package_key="acs-subsite" package_version="5.0d4" locale="zh_TW" charset="Big5">
 
   <msg key="About_You">關於你</msg>
-  <msg key="again">再一次</msg>
   <msg key="Answer">解答:</msg>
-  <msg key="answer">解答:</msg>
   <msg key="at">在</msg>
-  <msg key="Awaiting_Approval">等候核可</msg>
   <msg key="Bad_Password">密碼錯誤</msg>
   <msg key="Basic_Information">基本資料</msg>
-  <msg key="bio">小傳:</msg>
   <msg key="Change_my_Password">變更我的密碼</msg>
   <msg key="Check_Your_Inbox">檢視你的信箱</msg>
   <msg key="Children">兒童</msg>
   <msg key="Confirm">確認:</msg>
   <msg key="Current_Password">目前的密碼:</msg>
-  <msg key="Current_users">目前的使用者:</msg>
   <msg key="Customize_Question">客制的問題</msg>
   <msg key="Direct_Permissions">直接許可</msg>
-  <msg key="edit_your_alerts">編輯你的警訊</msg>
-  <msg key="email_address">電子郵件地址:</msg>
   <msg key="Email_Confirmation">電子郵件確認</msg>
   <msg key="Email_not_Requested">未給予電子郵件</msg>
-  <msg key="Email_Password">電子郵件密碼</msg>
-  <msg key="email_password">電子郵件密碼</msg>
   <msg key="Error_sending_mail">郵件傳送錯誤</msg>
-  <msg key="Feature_disabled">功能停用</msg>
-  <msg key="Full_Name">全名</msg>
   <msg key="Grant">授與</msg>
   <msg key="Grant_Permission">授與權限</msg>
-  <msg key="help">輔助</msg>
-  <msg key="in">在</msg>
   <msg key="Join_group_name">加入 %group_name%</msg>
   <msg key="Log_In">登入</msg>
-  <msg key="Log_Out">登出</msg>
-  <msg key="Login">登入</msg>
-  <msg key="login">登入</msg>
-  <msg key="Login_Expired">登入逾時</msg>
-  <msg key="Login_Expired_1">登入網頁已逾時. 請</msg>
-  <msg key="lt_Awaiting_email_verifi">等候郵件確認</msg>
   <msg key="lt_Cannot_join_this_grou">無法加入此群組</msg>
-  <msg key="lt_Couldnt_find_user_use">查詢不到使用者 %user_id%</msg>
-  <msg key="lt_Couldnt_find_user_use_1">無法查詢到使用者 %user_id%. 可能是我們的程式碼錯誤.</msg>
-  <msg key="lt_Couldnt_find_your_rec">找不到你的紀錄</msg>
-  <msg key="lt_Couldnt_find_your_rec_1">找不到你的紀錄. 使用者代碼 %user_id% 不在資料庫. 可能是我們的程式碼錯誤.</msg>
-  <msg key="lt_Customized_question_a">客制化的問題已存在</msg>
-  <msg key="lt_Customized_question_i">客制化的問題已輸入</msg>
-  <msg key="lt_Customized_QuestionAn">客制化的問題/答案輸入</msg>
-  <msg key="lt_enable_cookies">於Netscape (Mozilla), 你可以從Edit -&amp;gt; Preferences -&amp;gt; Advanced啟動cookies. 而Microsoft Internet Explorer, 你可以從View -&amp;gt; Internet Options -&amp;gt; Advanced -&amp;gt; Security啟動cookies.</msg>
-  <msg key="lt_Error_creating_the_re">產生關聯時發生錯誤</msg>
   <msg key="lt_first_names_last_name">%first_names% %last_name% (%email%) 註冊為 %system_url% 的使用者</msg>
-  <msg key="lt_for_a_period_of_vacat">休假期間</msg>
-  <msg key="lt_for_first_names_last_">%last_name% %first_names% 於 %site_link%</msg>
-  <msg key="lt_for_future_reference_">請輸入一個問題及答案以供未來確認參考</msg>
-  <msg key="lt_For_security_reasons_">基於安全理由, 登入網頁會在一段時間後設為逾時, 以防止他人惡意使用你先前輸入的密碼作攻擊.</msg>
-  <msg key="lt_Forgotten_Password__E">忘記密碼 / 輸入你的Email</msg>
   <msg key="lt_Grant_Permission_on_n">授權給 %name%</msg>
-  <msg key="lt_Have_you_a_hrefemail-">您 &lt;a href=&quot;email-for-password&quot;&gt; 忘了密碼了嗎?&lt;/a&gt;</msg>
-  <msg key="lt_If_you_have_a_Web_sit">如果你有網站, 我們可以將搜索器指到那裡.</msg>
-  <msg key="lt_If_you_want_to_check_">假如你要檢查此服務的其他使用者, 請點 %member_link%</msg>
-  <msg key="lt_If_youre_getting_too_">如果你覺得收到太多我們的email</msg>
-  <msg key="lt_If_youve_forgotten_yo">如果你忘了你的密碼, 你可以點 &lt;a href=&quot;%email_password_url%&quot;&gt; 要求我們的系統重設你的密碼,然後email給你, 我們隨機產生的密碼&lt;/a&gt;.</msg>
-  <msg key="lt_In_general_we_identif">通常我們是根據你的全名來辨認你所傳送的內容.</msg>
   <msg key="lt_Inherited_Permissions">繼承的權限</msg>
 </message_catalog>

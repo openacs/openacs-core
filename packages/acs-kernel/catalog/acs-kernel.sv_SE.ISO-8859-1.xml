@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<message_catalog package_key="acs-kernel" package_version="5.0d8" locale="sv_SE" charset="ISO-8859-1">
+<message_catalog package_key="acs-kernel" package_version="5.0d12" locale="sv_SE" charset="ISO-8859-1">
 
   <msg key="authentication_authority">Domän</msg>
   <msg key="common_apply">OK</msg>

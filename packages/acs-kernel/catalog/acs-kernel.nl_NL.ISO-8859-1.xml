@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<message_catalog package_key="acs-kernel" package_version="5.0d8" locale="nl_NL" charset="ISO-8859-1">
+<message_catalog package_key="acs-kernel" package_version="5.0d12" locale="nl_NL" charset="ISO-8859-1">
 
   <msg key="authentication_authority">Autoriteit</msg>
   <msg key="common_apply">Toepassen</msg>

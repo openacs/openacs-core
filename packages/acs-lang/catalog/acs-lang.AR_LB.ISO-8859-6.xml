@@ -1,14 +1,9 @@
 <?xml version="?.?"?>
 <message_catalog package_key="acs-lang" package_version="?.?d?" locale="AR_LB" charset="ISO-????-?">
 
-  <msg key="Auto_Key">«деб «Ќ «д¬дк</msg>
   <msg key="English">≈жћдк“кс</msg>
   <msg key="French">бо—ожт”ркс</msg>
   <msg key="German">√одте«жркс</msg>
-  <msg key="key_?">ж’с ?</msg>
-  <msg key="key_?_?">ж’с ? _ еќ дб</msg>
-  <msg key="key_?">ж’с ?</msg>
-  <msg key="key_?">ж’с ?</msg>
   <msg key="localization-abday">{√Ќ} {≈Ћ} {Ћд} {√—} {ќе} {ће} {”»}</msg>
   <msg key="localization-abmon">{г?} {‘»«} {¬–«} {жк”} {√к«} {Ќ“к} { еи} {¬»} {√кд} { ?} { ?} {г?}</msg>
   <msg key="localization-am_str">’</msg>
@@ -39,7 +34,6 @@
   <msg key="localization-pm_str">е</msg>
   <msg key="localization-positive_sign"></msg>
   <msg key="localization-t_fmt">%r</msg>
-  <msg key="localization-t_fmt_ampm">%I:%M:%S %p</msg>
   <msg key="localization-thousands_sep">,</msg>
   <msg key="Spanish">≈р”т»«жркс</msg>
 </message_catalog>

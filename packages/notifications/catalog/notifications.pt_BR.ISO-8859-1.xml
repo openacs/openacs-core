@@ -14,7 +14,6 @@
   <msg key="lt_You_have_requested_no">Você solicitou notificação para %pretty_name%. Você pode &lt;a href=&quot;%sub_url%&quot;&gt;cancelar a assinatura&lt;/a&gt;.</msg>
   <msg key="lt_You_may_a_hrefsub_url">Você pode &lt;a href=&quot;%sub_url%&quot;&gt;solicitar notificação&lt;/a&gt; para %pretty_name%.</msg>
   <msg key="Manage_Notifications">Gerenciar Notificações</msg>
-  <msg key="manage_notifications">&quot;gerenciar notificações&quot;</msg>
   <msg key="Notification_type">Tipo de Notificação</msg>
   <msg key="Request_Notification">Solicitar Notificação</msg>
   <msg key="SUBJECT">ASSUNTO:</msg>

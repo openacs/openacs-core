@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<message_catalog package_key="acs-tcl" package_version="4.7.2d" locale="ko_KR" charset="EUC-KR">
+<message_catalog package_key="acs-tcl" package_version="5.0d1" locale="ko_KR" charset="EUC-KR">
 
   <msg key="approve">승인</msg>
   <msg key="approve_email">승인 전자우편</msg>

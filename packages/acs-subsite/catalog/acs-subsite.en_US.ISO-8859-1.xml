@@ -6,14 +6,10 @@
     &lt;p&gt;Your account is currently closed.&lt;/p&gt;
     &lt;p&gt;If you wish, we can &lt;a href=&quot;%restore_url%&quot;&gt;reopen your account&lt;/a&gt;.&lt;/p&gt;
   </msg>
-  <msg key="again">again</msg>
   <msg key="Answer">Answer</msg>
-  <msg key="answer">answer:</msg>
   <msg key="at">at</msg>
-  <msg key="Awaiting_Approval">Awaiting Approval</msg>
   <msg key="Bad_Password">Bad Password</msg>
   <msg key="Basic_Information">Basic Information</msg>
-  <msg key="bio">bio:</msg>
   <msg key="cannot_retrieve_password">Retrieving password from local authority is not supported.</msg>
   <msg key="Change_locale_label">Change language</msg>
   <msg key="Change_my_Password">Change my Password</msg>
@@ -33,32 +29,11 @@ logging in again. &lt;/p&gt;
   <msg key="Close_your_account">Close your account</msg>
   <msg key="Confirm">Confirm</msg>
   <msg key="Current_Password">Current Password</msg>
-  <msg key="Current_users">Current users:</msg>
   <msg key="Currently_invisible_msg">&lt;p&gt; Your online status is currently not visible to other users. &lt;/p&gt;</msg>
   <msg key="Currently_visible_msg">&lt;p&gt; Your online status is currently visible to other users. &lt;/p&gt;</msg>
   <msg key="Customize_Question">Customize Question</msg>
   <msg key="Direct_Permissions">Direct Permissions</msg>
-  <msg key="edit_your_alerts">edit your alerts</msg>
   <msg key="Email">Email</msg>
-  <msg key="email_address">email address:</msg>
-  <msg key="email_body_Admin_creation_password">
-%first_names% %last_name%, 
-
-You have been added as a user to %system_name%
-at %system_url%
-
-Here's how you can log in at %system_url%:
-
-%account_id_label%: %account_id%
-%password_label%: %password%
-
-Please visit the following link to change your password now:
-
-%reset_password_url%
-
-Thank you,
-%admin_first_names% %admin_last_name%
-</msg>
   <msg key="email_body_Forgotten_password">Here is your new login information:
 
 %account_id_label%: %account_id%
@@ -81,87 +56,26 @@ Please visit the following link to change your password now:
 </msg>
   <msg key="Email_Confirmation">Email Confirmation</msg>
   <msg key="Email_not_Requested">Email not Requested</msg>
-  <msg key="Email_Password">Email Password</msg>
-  <msg key="email_password">&quot;email password&quot;</msg>
-  <msg key="email_subject_Admin_creation_password">You have been added as a user to %system_name%</msg>
   <msg key="email_subject_Forgotten_password">Your forgotten password on %system_name%</msg>
   <msg key="email_subject_Registration_password">Welcome to %system_name%</msg>
   <msg key="Error_sending_mail">Error sending mail</msg>
-  <msg key="Feature_disabled">Feature disabled</msg>
   <msg key="First_names">First names</msg>
-  <msg key="Forgotten_password_body">Here is your new login information:
-
-%account_id_label%: %account_id%
-%password_label%: %password%
-
-Please visit the following link to change your password:
-
-%reset_password_url%</msg>
-  <msg key="Full_Name">Full Name:</msg>
   <msg key="Grant">Grant</msg>
   <msg key="Grant_Permission">Grant Permission</msg>
-  <msg key="help">help</msg>
-  <msg key="in">in</msg>
   <msg key="Join_group_name">Join %group_name%</msg>
   <msg key="Last_name">Last name</msg>
   <msg key="Log_In">Log In</msg>
-  <msg key="Log_Out">Log Out</msg>
-  <msg key="Login">Login</msg>
-  <msg key="login">login</msg>
-  <msg key="Login_Expired">Login Expired</msg>
-  <msg key="Login_Expired_1">The login page has expired. Please</msg>
-  <msg key="lt_Awaiting_email_verifi">Awaiting email verification</msg>
   <msg key="lt_Cannot_join_this_grou">Cannot join this group.</msg>
-  <msg key="lt_Couldnt_find_user_use">Couldn't find user %user_id%</msg>
-  <msg key="lt_Couldnt_find_user_use_1">Couldn't find user %user_id%. This is probably a bug in our code.</msg>
-  <msg key="lt_Couldnt_find_your_rec">Couldn't find your record</msg>
-  <msg key="lt_Couldnt_find_your_rec_1">Couldn't find your record&quot; &quot;User id %user_id% is not in the database.  This is probably our programming bug.</msg>
-  <msg key="lt_Customized_question_a">Customized question already there</msg>
-  <msg key="lt_Customized_question_i">Customized question is already entered</msg>
-  <msg key="lt_Customized_QuestionAn">Customized Question/Answer Entered</msg>
-  <msg key="lt_enable_cookies">In Netscape 4.0, you can enable cookies from Edit -&amp;gt; Preferences -&amp;gt; Advanced.  In Microsoft Internet Explorer 4.0, you can enable cookies from View -&amp;gt; Internet Options -&amp;gt; Advanced -&amp;gt; Security.</msg>
-  <msg key="lt_Error_creating_the_re">Error creating the relation</msg>
   <msg key="lt_first_names_last_name">%first_names% %last_name% (%email%) registered as a user of 
 %system_url%</msg>
-  <msg key="lt_for_a_period_of_vacat">for a period of vacation or permanently</msg>
-  <msg key="lt_for_first_names_last_">for %first_names% %last_name% in %site_link%</msg>
-  <msg key="lt_for_future_reference_">for future reference, please type in a question and an answer to use as
-    verification.</msg>
-  <msg key="lt_For_security_reasons_">For security reasons, the login page expires
-    after a certain interval to prevent malicious attackers from
-    logging in as you using previously entered passwords.</msg>
-  <msg key="lt_Forgotten_Password__E">Forgotten Password / Enter Your Email</msg>
   <msg key="lt_Grant_Permission_on_n">Grant Permission on %name%</msg>
-  <msg key="lt_Have_you_a_hrefemail-">Have you &lt;a href=&quot;email-for-password&quot;&gt;forgotten your password?&lt;/a&gt;</msg>
-  <msg key="lt_If_you_have_a_Web_sit">If you have a Web site, we'll be able to point searchers there.</msg>
-  <msg key="lt_If_you_want_to_check_">If you want to check what other users of this service are shown, visit
-%member_link%</msg>
-  <msg key="lt_If_youre_getting_too_">If you're getting too much email from us</msg>
-  <msg key="lt_If_youve_forgotten_yo">If you've forgotten your password, you can &lt;a href=&quot;%email_password_url%&quot;&gt;ask this server to reset your password and email a new randomly generated password to you&lt;/a&gt;.</msg>
-  <msg key="lt_In_general_we_identif">In general we identify content that you've posted by your full name.
-In an attempt to protect you from unsolicited bulk email (spam), we
-keep your email address hidden except from other registered users.
-Total privacy is technically feasible but an important element of an
-online community is that people can learn from each other.  So we try
-to make it possible for users with common interests to contact each
-other.</msg>
   <msg key="lt_Inherited_Permissions">Inherited Permissions</msg>
   <msg key="lt_It_would_be_a_very_ba">It would be a very bad idea to choose this option if you're using a
 shared computer in a library or school.  Any subsequent user of this
 machine would be able to masquerade as you on our service.</msg>
-  <msg key="lt_Leading_or_trailing_s">Leading or trailing spaces will be removed by the server.  
-  Don't obsess too much over your choice of password; if you forget it, our server will
-  offer to email it to you.</msg>
   <msg key="lt_New_registration_at_s">New registration at %system_url%</msg>
-  <msg key="lt_no_cookies">If you keep getting thrown back here, it is probably because your browser does not accept cookies.  We're sorry for the inconvenience but it really is impossible to program a system like this without keeping track of who is posting what.</msg>
-  <msg key="lt_Note_If_youve_forgott">Note: If you've forgotten your password, &lt;a href=&quot;@email_password_url@&quot;&gt;ask this server to email it
-to %email%</msg>
-  <msg key="lt_Note_If_youve_forgott_1">Note: If you've forgotten your password, &lt;a
-    href=&quot;email-password?user_id=%user_id%&quot;&gt;ask this server to email it
-    to %email%</msg>
   <msg key="lt_Note_that_you_can_era">Note that you can erase your saved email address and password by
 choosing the &quot;log out&quot; option from your workspace.</msg>
-  <msg key="lt_Now_were_really_in_tr">Now we're really in trouble because we got this error:</msg>
   <msg key="lt_num_children_Children">%num_children% Children Hidden</msg>
   <msg key="lt_On_portrait_publish_d">On %portrait_publish_date%, you uploaded &lt;a href=&quot;%subsite_url%user/portrait/?return_url=%pvt_home_url%&quot;&gt;%portrait_title%&lt;/a&gt;</msg>
   <msg key="lt_Our_server_can_tell_y">Our server can tell your browser to remember certain things, such as
@@ -170,22 +84,9 @@ if you're the only person who uses your computer, you won't have to
 keep telling us your email address and password.</msg>
   <msg key="lt_Password_Confirmation">Password Confirmation</msg>
   <msg key="lt_Personal_Home_Page_UR">Personal Home Page URL:</msg>
-  <msg key="lt_Please_check_your_inb">Please check your inbox. Within the next few minutes, you should find
-a message from %system_owner% containing your password.</msg>
-  <msg key="lt_Please_enter_your_ema">Please enter your email and password below.</msg>
-  <msg key="lt_Please_follow_the_fol">Please follow the following link to reset your password:
-
-%reset_password_url%
-
-</msg>
   <msg key="lt_Please_read_and_follo">Please read and follow the instructions in this email.</msg>
-  <msg key="lt_Please_read_your_emai">Please read your email</msg>
   <msg key="lt_Please_try_to_a_hrefi">Please try to &lt;a href=&quot;index&quot;&gt;log in&lt;/a&gt; again</msg>
-  <msg key="lt_Please_verify_your_id">Please verify your identity by providing the information below:</msg>
-  <msg key="lt_Please_Wait_for_our_E">Please Wait for our Email</msg>
   <msg key="lt_Problem_with_authenti">Problem with authentication</msg>
-  <msg key="lt_Problem_with_user_aut">Problem with user authentication</msg>
-  <msg key="lt_Register_as_a_user_of">Register as a user of</msg>
   <msg key="lt_Registration_informat">Registration information for this service has just been
 sent to %email%.</msg>
   <msg key="lt_Registration_informat_1">Registration information for this service has been
@@ -193,79 +94,30 @@ sent to %email%.</msg>
   <msg key="lt_registration_request_submitted">Your registration request has been submitted 
 to the %system_name% administrator.   It is still
 waiting approval.</msg>
-  <msg key="lt_Remember_this_address">Remember this address and password?</msg>
-  <msg key="lt_Row_id_row_id_is_not_">Row id %row_id% is not in the database.  Please check your email and verifiy that you have cut and pasted the url correctly.</msg>
   <msg key="lt_Saving_email_address_">Saving email address and password</msg>
   <msg key="lt_Show_everyone_else_at">Show everyone else at %system_name% how great looking you are:</msg>
   <msg key="lt_Sorry_but_it_seems_th">Sorry but it seems that you've been banned from %system_name%.</msg>
-  <msg key="lt_Thank_you_for_visitin">Thank you for visiting %system_name%.
-
-Here's how you can log in at %system_url%:
-	    
-Username:  %email%
-Password:  %password%
-</msg>
-  <msg key="lt_The_full_name_given_d">The full name given didn't match. There must be something wrong.</msg>
-  <msg key="lt_The_password_you_type">The password you typed doesn't match what we have in the database.
-If you think you made a typo, please back up using your browser and
-try again.</msg>
-  <msg key="lt_The_passwords_youve_e">The passwords you've entered don't match.</msg>
-  <msg key="lt_The_validation_didnt_">The validation didn't match what we had. Either press back on the browser and retype it in, or &lt;a href=&quot;/register&quot;&gt;go back to the login page&lt;/a&gt;.</msg>
-  <msg key="lt_Then_come_back_to_a_h">Then come back to &lt;a href=&quot;index?email=%email%&quot;&gt;the login page&lt;/a&gt; and use
-  %system_name%.</msg>
-  <msg key="lt_Then_you_should_eithe">Then you should either</msg>
   <msg key="lt_There_was_a_problem_w">There was a problem with authenticating your account</msg>
-  <msg key="lt_This_feature_is_disab">This feature is disabled on this server.</msg>
   <msg key="lt_To_confirm_your_regis">To confirm your registration, please go to %confirmation_url%</msg>
-  <msg key="lt_User_id_user_id_is_no">User id %user_id% is not in the awaiting approval state.  This is probably our programming bug.</msg>
-  <msg key="lt_User_id_user_id_is_no_1">User id %user_id% is not found in the need email verification state.</msg>
-  <msg key="lt_User_id_user_id_is_no_2">User id %user_id% is not in the database.  This is probably our programming bug.</msg>
-  <msg key="lt_User_id_user_id_is_no_3">User id %user_id% is not in the database.  This is probably out programming bug.</msg>
-  <msg key="lt_Validation_Check_Fail">Validation Check Failed</msg>
-  <msg key="lt_We_also_need_a_custom">We also need a customized question and answer to reset your password if you forget.</msg>
-  <msg key="lt_We_got_the_following_">We got the following error message while trying to create this relation:</msg>
-  <msg key="lt_We_know_your_email_ad">We know your email address already: &quot;%email%&quot;.  But we need your full
-name to generate certain kinds of user interface.</msg>
-  <msg key="lt_We_need_a_password_fr">We need a password from you to protect your identity as you
-  contribute to the Q&amp;A, discussion forums, and other community
-  activities on this site.</msg>
   <msg key="lt_We_were_not_awaiting_">We were not awaiting your email.  There must be some mistake.</msg>
-  <msg key="lt_We_were_unable_to_cre">We were unable to create your user record in the database.</msg>
-  <msg key="lt_We_will_generate_and_">We will generate and send to you a random password when your registration
-  is confirmed. Once you login, you can change your password.</msg>
-  <msg key="lt_welcome_please_register">Welcome to %system_name%. Please begin the registration process by entering a valid email address and a password for signing into the system. We will direct you to another form to complete your registration.</msg>
   <msg key="lt_Welcome_to_system_nam">Welcome to %system_name%</msg>
   <msg key="lt_What_other_people_see">What other people see when they click your name</msg>
-  <msg key="lt_What_we_tell_other_us">What we tell other users about you</msg>
-  <msg key="lt_when_trying_to_send_y">when trying to send you the following email:</msg>
-  <msg key="lt_When_you_get_your_ema">When you get your email, go back
-to &lt;a href=&quot;index?email=%email%&quot;&gt;the login page&lt;/a&gt; and use
-%system_name%.</msg>
-  <msg key="lt_You_can_log_in_now_us">You can log in now using your old
-password:</msg>
   <msg key="lt_You_cant_have_a_lt_in">You can't have a &amp;lt; in your first name because it will look like an HTML tag and confuse other users.</msg>
   <msg key="lt_You_cant_have_a_lt_in_1">You can't have a &amp;lt; in your last name because it will look like an HTML tag and confuse other users.</msg>
-  <msg key="lt_You_have_encountered_">You have encountered a problem with authentication.</msg>
-  <msg key="lt_You_have_encountered__1">You have encountered a problem with authentication</msg>
   <msg key="lt_Your_email_has_been_c">Your email has been confirmed. You may now log into
     %system_name%.</msg>
   <msg key="lt_Your_email_has_been_c_1">Your email has been confirmed. You are now awaiting approval
     from the %system_name% administrator.</msg>
   <msg key="lt_Your_email_is_confirm">Your email is confirmed</msg>
-  <msg key="lt_Your_forgotten_passwo">Your forgotten password on %system_name%</msg>
   <msg key="lt_Your_URL_doesnt_have_">Your URL doesn't have the correct form.  A valid URL would be something like &quot;%valid_url_example%&quot;.</msg>
   <msg key="Make_yourself_invisible_label">Make yourself invisible</msg>
   <msg key="Make_yourself_visible_label">Make yourself visible</msg>
   <msg key="Manage_your_notifications">Manage your notifications</msg>
-  <msg key="Name">Name:</msg>
   <msg key="New_Password">New Password</msg>
-  <msg key="New_users">New users:</msg>
   <msg key="no_portrait_title_message">your portrait</msg>
-  <msg key="no_screen_name_message">&amp;lt; none set up &amp;gt;</msg>
   <msg key="none">none</msg>
-  <msg key="Note">Note:</msg>
-  <msg key="on">on</msg>
-  <msg key="or">or</msg>
+  <description key="none">Used to indicate that a list of permissions or objects is empty.</description>
+
   <msg key="Password">Password</msg>
   <msg key="Password_changed_body">Your login information on %system_name%:
 
@@ -287,9 +139,7 @@ You can always change your password by doing the following:
   <msg key="Password_changed_subject">Password changed</msg>
   <msg key="Permissions">Permissions</msg>
   <msg key="Permissions_for_name">Permissions for %name%</msg>
-  <msg key="personal_URL">personal URL:</msg>
   <msg key="Question">Question</msg>
-  <msg key="question">question:</msg>
   <msg key="Recover_Password">Recover Password</msg>
   <msg key="Register">Register</msg>
   <msg key="Registration_Approval_Notice">
@@ -298,29 +148,15 @@ You can always change your password by doing the following:
   </msg>
   <msg key="Revoke_Checked">Revoke Checked</msg>
   <msg key="Screen_name">Screen name</msg>
-  <msg key="screen_name">screen name:</msg>
-  <msg key="Security">Security</msg>
   <msg key="Show">Show</msg>
-  <msg key="Sorry">Sorry</msg>
   <msg key="sorry_forgotten_pwd">Sorry, we can't help you with your forgotten password.</msg>
-  <msg key="Subject">Subject:</msg>
   <msg key="Thank_you">Thank you.</msg>
-  <msg key="to">to</msg>
-  <msg key="to_site_link">to %site_link%</msg>
-  <msg key="to_site_link_1">restore your account to live status</msg>
-  <msg key="Unauthorized_Access">Unauthorized Access</msg>
-  <msg key="Unsubscribe">Unsubscribe</msg>
   <msg key="up_to_context_name">up to %context_name%</msg>
   <msg key="Update">Update</msg>
-  <msg key="update">update</msg>
   <msg key="Update_Password">Update Password</msg>
   <msg key="upload_a_portrait">upload a portrait</msg>
-  <msg key="User_Creation_Failed">User Creation Failed</msg>
   <msg key="Username">Username</msg>
-  <msg key="Welcome_Back">Welcome Back</msg>
   <msg key="Whos_Online_link_label">Users currently online</msg>
   <msg key="Whos_Online_title">Who's Online</msg>
-  <msg key="Your_email">Your email:</msg>
-  <msg key="Your_email_address">Email address:</msg>
   <msg key="Your_Portrait">Your Portrait</msg>
 </message_catalog>

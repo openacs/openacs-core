@@ -14,7 +14,6 @@
   <msg key="lt_You_have_requested_no">Ha pedido notificación para %pretty_name%. Puede &lt;a href=&quot;%sub_url%&quot;&gt;darse de baja&lt;/a&gt;.</msg>
   <msg key="lt_You_may_a_hrefsub_url">Puede &lt;a href=&quot;%sub_url%&quot;&gt;activar un aviso&lt;/a&gt; para %pretty_name%.</msg>
   <msg key="Manage_Notifications">Administrar Notificaciones</msg>
-  <msg key="manage_notifications">&quot;administrar notificaciones&quot;</msg>
   <msg key="Notification_type">Tipo de Aviso</msg>
   <msg key="Request_Notification">Pedir Notificación</msg>
   <msg key="SUBJECT">Asunto:</msg>
