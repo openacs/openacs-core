@@ -55,6 +55,7 @@
             start with node_id = nvl(:root_id, site_node.node_id('/'))
             connect by prior node_id = parent_id and parent_id in ([join $expand ", "])) site_map
             where site_map.object_id = p.package_id (+)
+            order by url
         </querytext>
     </fullquery>
 
