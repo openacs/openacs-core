@@ -2843,7 +2843,7 @@ ad_proc util_email_valid_p { query_email } {
     return [regexp "^\[^@<>\"\t ]+@\[^@<>\".\t ]+(\\.\[^@<>\".\n ]+)+$" $query_email]
 }
 
-ad_proc util_email_unique_p { email } {
+ad_proc -public util_email_unique_p { email } {
     Returns 1 if the email passed in does not yet exist in the system.
 
     @author yon (yon@openforce.net)
@@ -2851,15 +2851,15 @@ ad_proc util_email_unique_p { email } {
     return [db_string email_unique_p {}]
 }
 
-ad_proc util_url_valid_p { query_url } {
+ad_proc -public util_url_valid_p { query_url } {
     Returns 1 if a URL is a web URL (HTTP or HTTPS).
 
     @author Philip Greenspun (philg@mit.edu)
 } {
-    return [regexp {https?://.+} $query_url]
+    return [regexp {https?://[^ ].+} $query_url]
 }
 
-ad_proc value_if_exists { var_name } {
+ad_proc -public value_if_exists { var_name } {
     If the specified variable exists in the calling environment,
     returns the value of that variable. Otherwise, returns the
     empty_string.
@@ -2870,7 +2870,7 @@ ad_proc value_if_exists { var_name } {
     }
 }
 
-ad_proc max { args } {
+ad_proc -public max { args } {
     Returns the maximum of a list of numbers. Example: <code>max 2 3 1.5</code> returns 3.
     
     @author Lars Pind (lars@pinds.com)
