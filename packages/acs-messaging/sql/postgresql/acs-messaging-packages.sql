@@ -5,7 +5,7 @@
 -- @author Phong Nguyen <phong@arsdigita.com>
 -- @author Jon Griffin <jon@jongriffin.com>
 -- @creation-date 2000-08-27
--- @cvs-id $Id$
+-- @cvs-id acs-messaging-packages.sql,v 1.10.4.2 2003/03/02 22:35:07 donb Exp
 --
 -- updated for OpenACS by Jon Griffin
 --
@@ -75,7 +75,7 @@ end;' language 'plpgsql';
 ----------------
 
 create function acs_message__new (integer,integer,timestamptz,integer,
-varchar,varchar,varchar,varchar,varchar,text,integer,integer,integer,
+varchar,varchar,varchar,varchar,text,integer,integer,integer,integer,
 varchar,varchar,boolean)
 returns integer as '
 declare
