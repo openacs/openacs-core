@@ -45,7 +45,9 @@ if { ![template::util::is_nil focus] } {
     }
 }
 
-multirow append attribute onload [join $onload " "]
+if {![empty_string_p $onload]} { 
+    multirow append attribute onload [join $onload " "]
+}
 
 # Header links (stylesheets, javascript)
 multirow create header_links rel type href media
