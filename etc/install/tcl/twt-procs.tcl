@@ -18,19 +18,9 @@ ad_proc ::twt::log { message } {
 }
 
 ad_proc ::twt::do_request { page_url } {
-    Takes a a url and invokes tclwebtest::do_request. The URL
-    can either be relative to server root or absolute 
-    (in which case it must start with with http://).
+    Takes a a url and invokes tclwebtest::do_request.
 } {
-    if { [regexp {^http://} $page_url] } {
-        # We were given an absolute url
-        set absolute_url $page_url
-    } else {
-        # Relative url - prepend system url
-        set absolute_url "[::twt::config::server_url]/$page_url"
-    }
-
-    ::tclwebtest::do_request $absolute_url
+    ::tclwebtest::do_request $page_url
 }
 
 ad_proc ::twt::get_url_list { page_url link_url_pattern } {

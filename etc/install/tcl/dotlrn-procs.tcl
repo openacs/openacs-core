@@ -9,7 +9,7 @@ namespace eval ::twt::dotlrn {}
 
 ad_proc ::twt::dotlrn::add_term { server_url term_name start_month start_year end_month end_year } {
 
-    ::twt::do_request "$server_url/dotlrn/admin/term-new"
+    ::twt::do_request "/dotlrn/admin/term-new"
     form find ~n add_term
     field find ~n "term_name"
 
@@ -53,12 +53,12 @@ ad_proc ::twt::dotlrn::current_term_id {} {
 ad_proc ::twt::dotlrn::class_admin_url {
     {-term_id "-1"}
 } {
-   return "dotlrn/admin/term?term_id=$term_id" 
+   return "/dotlrn/admin/term?term_id=$term_id" 
 }
 
 ad_proc ::twt::dotlrn::add_department { server_url pretty_name description external_url } {
 
-    ::twt::do_request "$server_url/dotlrn/admin/department-new"
+    ::twt::do_request "/dotlrn/admin/department-new"
     form find ~n add_department
     field find ~n "pretty_name"
     field fill $pretty_name
@@ -91,7 +91,7 @@ ad_proc ::twt::dotlrn::setup_departments { server_url } {
 
 ad_proc ::twt::dotlrn::add_subject { server_url department_pretty_name pretty_name description } {
 
-    ::twt::do_request "$server_url/dotlrn/admin/class-new"
+    ::twt::do_request "/dotlrn/admin/class-new"
 
     form find ~n add_class
     field find ~n "form:id"
@@ -129,7 +129,7 @@ ad_proc ::twt::dotlrn::setup_subjects { server_url } {
 
 ad_proc ::twt::dotlrn::get_class_add_urls { server_url } {
 
-    return [::twt::get_url_list "dotlrn/admin/classes" "class-instance-new"]
+    return [::twt::get_url_list "/dotlrn/admin/classes" "class-instance-new"]
 }
 
 ad_proc ::twt::dotlrn::setup_classes { server_url } {
@@ -164,7 +164,7 @@ ad_proc ::twt::dotlrn::setup_communities { server_url } {
 
 ad_proc ::twt::dotlrn::add_community { server_url name description policy } {
     
-    ::twt::do_request "${server_url}/dotlrn/admin/club-new"    
+    ::twt::do_request "/dotlrn/admin/club-new"    
 
     form find ~n add_club
 
@@ -182,9 +182,9 @@ ad_proc ::twt::dotlrn::get_user_admin_url { email } {
     Get the .LRN admin URL for a user. This is awkward. If we could
     lookup the user_id from email this would be much easier.
 } {
-    ::twt::do_request "dotlrn/admin/users-search?name=$email&form%3Aid=user_search"
+    ::twt::do_request "/dotlrn/admin/users-search?name=einstein&form%3Aid=user_search"
 
-    link follow ~u {user}
+    link follow ~u {user\?user}
 
     return [response url]
 }
@@ -197,7 +197,7 @@ ad_proc ::twt::dotlrn::add_site_wide_admin { server_url } {
     ::twt::do_request "/dotlrn/admin/users?type=pending"
 
     # Goto the community page for the site-wide admin (assuming he's first in the list)
-    link follow ~u {user\?user_id=}
+    link follow ~u {^user\?user}
 
     # Follow the add to dotlrn link
     link follow ~u "user-new-2"
