@@ -42,16 +42,17 @@ if { [regexp aspell $bin] } {
         set dicts [exec $bin dump dicts]
         set default_lang [exec $bin config lang]
         if { !$dialects_p } {
-            # If no dialects, the the default_lang locale returned from aspell
+            # If no dialects, then the default_lang locale returned from aspell
             # must be shortened to the first two letters, so that it matches
-            # the one of the names in the pull-down menu.
+            # one of the names in the pull-down menu.
             set default_lang [string range $default_lang 0 1]
         }
     } {
-        ns_log Error "Gettings dicts and default_lang for aspell failed with error message: \"$errmsg\""
+        ns_log Notice "Gettings dicts and default_lang for aspell failed with error message: \"$errmsg\""
+	ns_log Notice "You might want to upgrade to a more recent version of Aspell ..."
     }
 } elseif { [regexp ispell $bin] } {
-    # ispell - if someone knows how to get the availagle dictionaries and the
+    # ispell - if someone knows how to get the available dictionaries and the
     # default language from ispell, please add it here :-)
     set dicts ""
     set default_lang ""
