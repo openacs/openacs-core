@@ -21,6 +21,7 @@ ad_form -name register -form [auth::get_registration_form_elements] -on_submit {
                                  -username $username \
                                  -password $password \
                                  -password_confirm $password_confirm \
+                                 -verify_password_confirm \
                                  -secret_question $secret_question \
                                  -secret_answer $secret_answer]
 

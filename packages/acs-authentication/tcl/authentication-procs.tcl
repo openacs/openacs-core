@@ -209,6 +209,7 @@ ad_proc -private auth::issue_login {
 }
 
 ad_proc -public auth::create_user {
+    {-verify_password_confirm:boolean}
     {-user_id ""}
     {-username ""}
     {-email ""}
@@ -226,7 +227,11 @@ ad_proc -public auth::create_user {
     Create a user, and return creation status and account status.
     
     @param email_verified_p Whether the local account considers the email to be verified or not.
+
     @param member_state     Whether the local account has been approved.
+
+    @param verify_password_confirm
+                            Set this flag if you want the proc to verify that password and password_confirm match for you.
                             
     @return Array list containing the following entries:
 
@@ -269,9 +274,11 @@ ad_proc -public auth::create_user {
             set missing_elements_p 1
         }
     }
-    if { ![empty_string_p "$password$password_confirm"] && ![string equal $password $password_confirm] } {
-        set element_messages(password) "Passwords don't match"
-        set missing_elements_p 1
+    if { $verify_password_confirm_p } {
+        if { ![empty_string_p "$password$password_confirm"] && ![string equal $password $password_confirm] } {
+            set element_messages(password) "Passwords don't match"
+            set missing_elements_p 1
+        }
     }
     if { $missing_elements_p } {
         return [list \
