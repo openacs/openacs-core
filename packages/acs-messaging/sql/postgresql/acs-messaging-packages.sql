@@ -10,7 +10,7 @@
 -- updated for OpenACS by Jon Griffin
 --
 
-create function acs_message__edit (integer,varchar,varchar,varchar,
+create or replace function acs_message__edit (integer,varchar,varchar,varchar,
 text,integer,timestamptz,integer,varchar,boolean)
 returns integer as '
 declare
@@ -74,7 +74,7 @@ end;' language 'plpgsql';
 -- Jon Griffin 05-21-2001
 ----------------
 
-create function acs_message__new (integer,integer,timestamptz,integer,
+create or replace function acs_message__new (integer,integer,timestamptz,integer,
 varchar,varchar,varchar,varchar,text,integer,integer,integer,integer,
 varchar,varchar,boolean)
 returns integer as '
@@ -168,7 +168,7 @@ declare
         return v_message_id;
 end;' language 'plpgsql';
 
-create function acs_message__delete (integer)
+create or replace function acs_message__delete (integer)
 returns integer as '
 declare
     p_message_id    alias for $1;
@@ -178,7 +178,7 @@ begin
     return 1;
 end;' language 'plpgsql';
 
-create function acs_message__message_p (integer)
+create or replace function acs_message__message_p (integer)
 returns boolean as '
 declare
     p_message_id          alias for $1;
@@ -194,7 +194,7 @@ begin
     end if;
 end;' language 'plpgsql';
 
-create function acs_message__send (integer,varchar,integer,timestamptz)
+create or replace function acs_message__send (integer,varchar,integer,timestamptz)
 returns integer as '
 declare
     p_message_id    alias for $1;
@@ -211,7 +211,7 @@ begin
     return 1;
 end;' language 'plpgsql';
 
-create function acs_message__send (integer,integer,integer,timestamptz)
+create or replace function acs_message__send (integer,integer,integer,timestamptz)
 returns integer as '
 declare
     p_message_id    alias for $1;
@@ -232,7 +232,7 @@ end;' language 'plpgsql';
 
 -- Ported to take advantage of tree_sortkey column by DLP
 
-create function acs_message__first_ancestor (integer)
+create or replace function acs_message__first_ancestor (integer)
 returns integer as '
 declare
     p_message_id alias for $1;
@@ -257,7 +257,7 @@ end;' language 'plpgsql';
     -- functions will migrate to another PL/SQL package or be replaced
     -- by direct calls to CR code in the near future.
 
-create function acs_message__new_file (integer,integer,varchar,varchar,
+create or replace function acs_message__new_file (integer,integer,varchar,varchar,
 text,varchar,integer,timestamptz,integer,varchar,boolean,varchar)
 returns integer as '
 declare
@@ -311,7 +311,7 @@ begin
     return v_file_id;
 end;' language 'plpgsql';
 
-create function acs_message__edit_file (integer,varchar,text,varchar,
+create or replace function acs_message__edit_file (integer,varchar,text,varchar,
 integer,timestamptz,integer,varchar,boolean)
 returns integer as '
 declare
@@ -348,7 +348,7 @@ begin
     return v_revision_id;
 end;' language 'plpgsql';
 
-create function acs_message__delete_file (integer)
+create or replace function acs_message__delete_file (integer)
 returns integer as '
 declare
     p_file_id  alias for $1;
@@ -357,7 +357,7 @@ begin
     return 1;
 end;' language 'plpgsql';
 
-create function acs_message__new_image (integer,integer,varchar,varchar,
+create or replace function acs_message__new_image (integer,integer,varchar,varchar,
 text,varchar,integer,integer,integer,timestamptz,integer,varchar,boolean,varchar)
 returns integer as '
 declare
@@ -415,7 +415,7 @@ begin
     return v_image_id;
 end;' language 'plpgsql';
 
-create function acs_message__edit_image (integer,varchar,text,varchar,
+create or replace function acs_message__edit_image (integer,varchar,text,varchar,
 integer,integer,integer,timestamptz,integer,varchar,boolean)
 returns integer as '
 declare
@@ -462,7 +462,7 @@ begin
     return v_revision_id;
 end;' language 'plpgsql';
 
-create function acs_message__delete_image (integer)
+create or replace function acs_message__delete_image (integer)
 returns integer as '
 declare
     p_image_id  alias for $1;
@@ -475,7 +475,7 @@ begin
 end;' language 'plpgsql';
 
     -- XXX should just call content_extlink.new
-create function acs_message__new_extlink (varchar,integer,varchar,
+create or replace function acs_message__new_extlink (varchar,integer,varchar,
 varchar,text,integer,timestamptz,integer,varchar)
 returns integer as '
 declare
@@ -506,7 +506,7 @@ begin
 end;' language 'plpgsql';
     
 -- XXX should just edit extlink
-create function acs_message__edit_extlink (integer,varchar,varchar,text)
+create or replace function acs_message__edit_extlink (integer,varchar,varchar,text)
 returns integer as '
 declare
     p_extlink_id   alias for $1;
@@ -526,7 +526,7 @@ begin
     return 0;
 end;' language 'plpgsql';
 
-create function acs_message__delete_extlink (integer)
+create or replace function acs_message__delete_extlink (integer)
 returns integer as '
 declare
     p_extlink_id    alias for $1;
@@ -536,7 +536,7 @@ begin
 	return 0;
 end;' language 'plpgsql';
 
-create function acs_message__name (integer)
+create or replace function acs_message__name (integer)
 returns varchar as '
 declare
     p_message_id   alias for $1;
