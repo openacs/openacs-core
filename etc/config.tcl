@@ -112,18 +112,13 @@ ns_param   maxurlstats        1000     ;# Max number of URL's to do stats on
 #ns_param   directoryproc    _ns_dirlist          ;#  ...but not both!
 #ns_param   directorylisting  fancy               ;# Can be simple or fancy
 
-
 #
 # Special HTTP pages
 #
 
-ns_param   NotFoundResponse     "/global/file-not-found.adp"
+ns_param   NotFoundResponse     "/global/file-not-found.html"
 ns_param   ServerBusyResponse   "/global/busy.html"
 ns_param   ServerInternalErrorResponse "/global/error.html"
-ns_param   ForbiddenResponse    "/global/forbidden.html"
-ns_param   UnauthorizedResponse "/global/unauthorized.html"
-
-
 
 # 
 # ADP (AOLserver Dynamic Page) configuration 
@@ -149,9 +144,6 @@ ns_param   port               $httpport
 
 ns_section "ns/server/${server}/module/nsopenssl"
 
-# Typically where you store your certificates
-# Defaults to $AOLSERVER/servers/${servername}/modules/nsopenssl
-#ns_param ModuleDir                       ${homedir}/servers/${server}/modules/nsopenssl
 ns_param ModuleDir                       ${serverroot}/etc/certs
 
 # NSD-driven connections:
@@ -350,7 +342,7 @@ ns_param   nslog           ${bindir}/nslog.so
 ns_param   nssha1          ${bindir}/nssha1.so 
 ns_param   nscache         ${bindir}/nscache.so 
 ns_param   nsrewrite       ${bindir}/nsrewrite.so 
-ns_param   nsxml           ${bindir}/nsxml.so 
+ns_param   libtdom         ${bindir}/libtdom0.7.7.so
 
 # nsopenssl is commented out to prevent errors on load if all
 # the cert files are not present
