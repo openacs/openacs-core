@@ -15,6 +15,7 @@ ad_page_contract {
     { owner_uri:multiple}
     vendor
     vendor_uri
+    {auto_mount ""}
     {release_date ""}
     { upgrade_p 0 }
 } -validate {
@@ -51,7 +52,7 @@ ad_page_contract {
 
 db_transaction {
     set version_id [apm_version_update $version_id $version_name $version_uri \
-	    $summary $description $description_format $vendor $vendor_uri $release_date]
+	    $summary $description $description_format $vendor $vendor_uri $auto_mount $release_date]
     apm_package_install_owners [apm_package_install_owners_prepare $owner_name $owner_uri] $version_id
     apm_package_install_spec $version_id
     if {$upgrade_p} {

@@ -107,6 +107,17 @@ created instance.  Singleton packages are appropriate for services that should n
 such as the ACS Kernel.
 </tr>
 <tr>
+  <th align=right nowrap>Auto-mount URI</th>
+  <td><input name=auto_mount size=30></td>
+</tr>
+
+<tr>
+  <td></td>
+  <td>The URI (name) under the main site where the package will automatically be
+      mounted upon installation. This feature is typically only used by singleton packages.</td>
+</tr>
+
+<tr>
   <td></td>
   <td>Pick a canonical URL for your package. This should be a URL where the package can be downloaded.
 </tr>
