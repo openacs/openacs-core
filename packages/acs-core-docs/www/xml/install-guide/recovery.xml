@@ -1,6 +1,6 @@
-<sect1 id="backup-recovery">
-  <title>Backup and Recovery</title>
-  <authorblurb>
+  <sect1 id="backup-recovery">
+    <title>Backup and Recovery</title>
+    <authorblurb>
     by <ulink url="mailto:dhogaza@pacifier.com">Don Baccus</ulink>
       with additions by <ulink url="mailto:joel@aufrecht.org">Joel Aufrecht</ulink>  </authorblurb>
 
@@ -77,7 +77,7 @@
       <computeroutput>supervise</computeroutput> directory, which is
       unneccesary and has complicated permissions.  Make sure that you are using the cron job to back up the database to a file in <computeroutput>/web/<replaceable>service0</replaceable>/database-backup</computeroutput> so that the tar command will include the database.</para>
       <screen>[root@yourserver root]# <userinput>su - <replaceable>service0</replaceable></userinput>
-[service0@yourserver service0]$ <userinput>tar -cpsj --exclude /web/<replaceable>service0</replaceable>/etc/daemontools/supervise --file /tmp/<replaceable>service0</replaceable>-backup.tar.bz2 /web/<replaceable>service0</replaceable>/ --exclude /web/<replaceable>service0</replaceable>/etc/daemontools/supervise/</userinput>
+[service0@yourserver service0]$ <userinput>tar -cpsj --exclude /web/<replaceable>service0</replaceable>/etc/daemontools/supervise --file /tmp/<replaceable>service0</replaceable>-backup.tar.bz2 /web/<replaceable>service0</replaceable>/ </userinput>
 tar: Removing leading `/' from member names
 [service0@yourserver service0]$</screen>
     </sect2>

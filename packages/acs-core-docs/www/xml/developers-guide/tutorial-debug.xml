@@ -19,7 +19,10 @@
             database name.  You can use C-(up arrow) and C-(down arrow)
             for command history.</emphasis></para>
     </formalpara>
-    
+
+      <para>Hint: "Parse error near *" usually means that an xql file
+      wasn't recognized, because the tcl file is choking on the *SQL*
+      placeholder that it falls back on.</para>
     <formalpara>
       <title>Watching the server log</title>
 
