@@ -10,7 +10,7 @@ ad_library {
 
 # Use shiny new ns_cache-based util_memoize.
 
-ad_proc util_memoize {script {max_age ""}} {
+ad_proc -public util_memoize {script {max_age ""}} {
     If <i>script</i> has been executed before, return the value it
     returned last time, unless it was more than <i>max_age</i> seconds ago.
 
@@ -54,7 +54,7 @@ ad_proc util_memoize {script {max_age ""}} {
     return [lindex $pair 1]
 }
 
-ad_proc util_memoize_seed {script value {max_age ""}} {
+ad_proc -public util_memoize_seed {script value {max_age ""}} {
     Pretend <code>util_memoize</code> was called with <i>script</i> and
     it returned <i>value</i>.  Cache <i>value</i>, replacing any
     previous cache entry for <i>script</i>.
@@ -75,7 +75,7 @@ ad_proc util_memoize_seed {script value {max_age ""}} {
     ns_cache set util_memoize $script [list [ns_time] $value]
 }
 
-ad_proc util_memoize_flush_local {script} {
+ad_proc -private util_memoize_flush_local {script} {
     Forget any cached value for <i>script</i>.  You probably want to use
     <code>util_memoize_flush</code> to flush the caches on all servers
     in the cluster, in case clustering is enabled.
@@ -105,7 +105,7 @@ append flush_body {
     ns_cache flush util_memoize $script
 }
 
-ad_proc util_memoize_flush {script} {
+ad_proc -public util_memoize_flush {script} {
     Forget any cached value for <i>script</i>.  If clustering is
     enabled, flush the caches on all servers in the cluster.
 
@@ -114,7 +114,7 @@ ad_proc util_memoize_flush {script} {
 
 unset flush_body
 
-ad_proc util_memoize_cached_p {script {max_age ""}} {
+ad_proc -public util_memoize_cached_p {script {max_age ""}} {
     Check whether <i>script</i>'s value has been cached, and whether it
     was cached no more than <i>max_age</i> seconds ago.
 
