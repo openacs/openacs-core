@@ -1328,11 +1328,6 @@ begin
     where
       item_id = copy2.item_id;
 
-    if copy.name = '' then
-	copy.name := null;
-    end if;
-
-
     select
       content_type, name , locale,
       nvl(live_revision, latest_revision), storage_type
@@ -1344,10 +1339,10 @@ begin
       item_id = copy2.item_id;
 
     -- can't copy to the same folder unless name is different
-    if copy2.target_folder_id ^= v_current_folder_id or (v_name != copy.name and copy.name is not null) then
+    if copy2.target_folder_id ^= v_current_folder_id or (v_name != copy2.name and copy2.name is not null) then
 
-      if copy.name is not null then
-        v_name := copy_name;
+      if copy2.name is not null then
+        v_name := copy2.name;
       end if;
       -- make sure the content type of the item is registered to the folder
       v_is_registered := content_folder.is_registered(

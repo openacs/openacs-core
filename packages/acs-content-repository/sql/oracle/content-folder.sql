@@ -91,6 +91,7 @@ procedure del (
   v_count integer;
   v_parent_id cr_items.parent_id%TYPE;
   v_child_item_id cr_items.item_id%TYPE;
+
   cursor c_folder_children_cur is
     select
       item_id
@@ -106,18 +107,25 @@ begin
 
   select count(*) into v_count from cr_items where parent_id = folder_id;
 
-  if v_count > 0 and cascade_p='f' then
+  if v_count > 0 and content_folder.del.cascade_p='f' then
     raise_application_error(-20000, 
     'Folder ID ' || folder_id || ' (' || content_item.get_path(folder_id) ||
     ') cannot be deleted because it is not empty.');
   else
-    for v_child_item_id in c_folder_children_cur loop
-	if content_folder.is_folder(v_child_item_id) then
-	  content_folder.delete(v_child_item_id);
+    open c_folder_children_cur;
+	
+	 loop
+
+	fetch c_folder_children_cur into v_child_item_id;
+	exit when c_folder_children_cur%NOTFOUND;
+	if is_folder(v_child_item_id) = 't' then
+	  content_folder.del(v_child_item_id);
         else
-          content_item.delete(v_child_item_id);
+
+         content_item.del(v_child_item_id);
       end if;
     end loop;
+   close c_folder_children_cur;
   end if;  
   
   content_folder.unregister_content_type(
@@ -183,7 +191,8 @@ end rename;
 
 procedure move (
   folder_id		in cr_folders.folder_id%TYPE,
-  target_folder_id	in cr_folders.folder_id%TYPE
+  target_folder_id	in cr_folders.folder_id%TYPE,
+  name                  in cr_items.name%TYPE default null
 ) is
   v_source_folder_id integer;
   v_valid_folders_p integer := 0;
@@ -231,7 +240,8 @@ begin
 
    -- update the parent_id for the folder
    update cr_items 
-     set parent_id = move.target_folder_id
+     set parent_id = move.target_folder_id,
+	 name=nvl(move.name, cr_items.name)
      where item_id = move.folder_id;
 
   -- update the has_child_folders flags
@@ -257,7 +267,7 @@ procedure copy (
   folder_id		in cr_folders.folder_id%TYPE,
   target_folder_id	in cr_folders.folder_id%TYPE,
   creation_user		in acs_objects.creation_user%TYPE,
-  creation_ip		in acs_objects.creation_ip%TYPE default null
+  creation_ip		in acs_objects.creation_ip%TYPE default null,
   name                  in cr_items.name%TYPE default null
 ) is
   v_valid_folders_p     integer := 0;
@@ -316,14 +326,14 @@ begin
       and
         f.folder_id = copy.folder_id;
 
-  if is_sub_folder(folder_id, target_folder_id) ^= 't' or v_current_folder_id != copy.target_folder_id or (v_name != copy.name and copy.name is not null) then then
+  if is_sub_folder(folder_id, target_folder_id) ^= 't' or v_current_folder_id != copy.target_folder_id or (v_name != copy.name and copy.name is not null) then
       if copy.name is not null then
 	v_name := copy.name;
       end if;
       -- create the new folder
       v_new_folder_id := content_folder.new(
 	  parent_id     => copy.target_folder_id,
-          name	        => v_name,
+          name	        => nvl(copy.name,v_name),
 	  label	        => v_label,
 	  description   => v_description,
 	  creation_user => copy.creation_user,

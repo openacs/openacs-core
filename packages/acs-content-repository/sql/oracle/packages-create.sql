@@ -1,3 +1,4 @@
+
 -- Ensure that the data model is up-to-date before compiling packages
 
 @@ content-util.sql
@@ -1233,7 +1234,8 @@ procedure move (
   --    @see {content_folder.new}, {content_folder.copy}
   --*/
   folder_id		in cr_folders.folder_id%TYPE,
-  target_folder_id	in cr_folders.folder_id%TYPE
+  target_folder_id	in cr_folders.folder_id%TYPE,
+  name                  in cr_items.name%TYPE default null
 );
 
 procedure copy (
