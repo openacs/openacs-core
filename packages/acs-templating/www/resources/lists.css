@@ -137,3 +137,15 @@ span.list-inline-filter-selected {
 }
 a.list-inline-filter { 
 }
+
+
+td.list-filter-pane {
+  background-color: #ddddff;
+  vertical-align: top;
+}
+
+td.list-list-pane {
+  background-color: white;
+  valign: center;
+  padding-left: 10px;
+}
