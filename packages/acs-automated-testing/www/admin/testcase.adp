@@ -39,6 +39,10 @@
   </else>
   <p>
 
+  <ul>
+    <li> <a href="rerun?testcase_id=@testcase_id@&package_key=@package_key@&quiet=@quiet@">Rerun</a> this test case </li>
+  </ul>
+
 <b>Results</b>
   <table>
   <tr><th bgcolor=#c0c0c0>Time</th>
@@ -50,7 +54,12 @@
   </if>
   <else>
     <multiple name="tests">
-      <tr>
+      <if @tests.rownum@ odd>
+        <tr>
+      </if>
+      <else>
+        <tr bgcolor="#e9e9e9">
+      </else>
           
         <td> @tests.timestamp@ </td>
         <td>
