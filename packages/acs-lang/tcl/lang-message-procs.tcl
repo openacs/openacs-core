@@ -330,7 +330,12 @@ ad_proc -public lang::message::lookup {
         }
     } elseif { [string length $locale] == 2 } {
         # Only language provided, let's get the default locale for this language
-        set locale [lang::util::default_locale_from_lang $locale]
+        set default_locale [lang::util::default_locale_from_lang $locale]
+        if { [empty_string_p $default_locale] } {
+            error "Could not look up locale for language $locale"
+        } else {
+            set locale $default_locale
+        }
     } 
 
     if { [lang::util::translator_mode_p] } {

@@ -366,7 +366,7 @@ ad_proc -private lang::util::default_locale_from_lang_not_cached {
     Returns the default locale for a language. Not cached.
     
     @author          Henry Minsky (hqm@mit.edu)
-    @param language  Name of a country, using ISO-3166 two letter code
+    @param language  Name of a language, using a two or three letter ISO code
     @return          Default locale
     
     @see lang::util::default_locale_from_lang
@@ -375,14 +375,16 @@ ad_proc -private lang::util::default_locale_from_lang_not_cached {
     # Note that this query does not use bind variables, because these cause the query to not
     # match any rows in Oracle when the language key is less than 3 characters, 
     # because the column is a char(3), not a varchar2(3).
-    return [db_string default_locale_from_lang {}]
+    return [db_string default_locale_from_lang {} -default ""]
 }
 
 ad_proc -public lang::util::default_locale_from_lang { 
     language
 } {
-    Returns the default locale for a language
-    
+    Returns an enabled default locale for a language. If a language
+    only has one locale then that locale is returned. If no locale
+    could be found the empty string is returned.
+
     @author          Henry Minsky (hqm@mit.edu)
     @param language  Name of a country, using ISO-3166 two letter code
     @return          Default locale
