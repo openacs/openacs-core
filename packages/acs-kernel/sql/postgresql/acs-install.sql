@@ -15,6 +15,7 @@ declare
     node_id             site_nodes.node_id%TYPE;
     main_site_id        site_nodes.node_id%TYPE;
     admin_id            apm_packages.package_id%TYPE;
+    workflow_id         apm_packages.package_id%TYPE;
     docs_id             apm_packages.package_id%TYPE;
     api_doc_id          apm_packages.package_id%TYPE;
     schema_user         varchar(100);
@@ -83,6 +84,31 @@ begin
     site_node__node_id(''/'', null),
     ''acs-admin'',
     admin_id,
+    ''t'',
+    ''t'',
+    null,
+    null
+  );
+  
+
+  workflow_id := apm_service__new (
+      null,
+      ''ACS Workflow'',
+      ''acs-workflow'',
+      ''apm_service'',
+      now(),
+      null,
+      null,
+      null
+      );
+
+  PERFORM apm_package__enable (workflow_id);
+
+  node_id := site_node__new (
+    null,
+    site_node__node_id(''/'', null),
+    ''acs-workflow'',
+    workflow_id,
     ''t'',
     ''t'',
     null,
