@@ -32,15 +32,7 @@ if { ![util_email_valid_p $email] } {
 }
 
 # we're going to ask this guy to register
-if { ! [db_0or1row find_person {
-    select parties.party_id as user_id,
-           persons.first_names,
-           persons.last_name
-    from parties,
-         persons
-    where parties.party_id = persons.person_id
-    and lower(parties.email) = lower(:email)
-} ] } {
+if { ! [db_0or1row find_person "" ] } {
     set user_id [db_nextval acs_object_id_seq]
     set first_names ""
     set last_name ""
