@@ -590,8 +590,6 @@
             <file type="content_page" path="www/shared/portrait.adp"/>
             <file type="content_page" path="www/shared/portrait.tcl"/>
             <file type="content_page" path="www/shared/report-error.adp"/>
-            <file type="content_page" path="www/shared/send-email.adp"/>
-            <file type="content_page" path="www/shared/send-email.tcl"/>
             <file type="content_page" path="www/shared/session-update.tcl"/>
             <file type="query_file" db_type="postgresql" path="www/shared/whos-online-postgresql.xql"/>
             <file type="content_page" path="www/shared/whos-online.adp"/>
