@@ -124,7 +124,6 @@ ad_proc -public util_convert_line_breaks_to_html {
     regsub -all {[ \t]*\n} $text "\n" text
     
     # Wrap P's around paragraphs
-    set text "<p style=\"margin: 0px;\">$text</p>"
     regsub -all {([^\n\s])\n\n([^\n\s])} $text {\1</p><p>\2} text
 
     # Convert _single_ CRLF's to <br>'s to preserve line breaks
@@ -183,6 +182,8 @@ ad_proc -private util_close_html_tags {
     html_fragment 
     {break_soft 0} 
     {break_hard 0}
+    {ellipsis ""}
+    {more ""}
 } {
     Given an HTML fragment, this procedure will close any tags that
     have been left open.  The optional arguments let you specify that
@@ -206,6 +207,12 @@ ad_proc -private util_close_html_tags {
 
     @param break_hard the number of characters you want the html fragment 
     truncated to. Will truncate, regardless of what tag is currently in action.
+
+    @param ellipsis  This will get put at the end of the truncated string, if the string was truncated.
+                     However, this counts towards the total string length, so that the returned string 
+                     including ellipsis is guaranteed to be shorter than the 'len' provided.
+
+    @param more      This will get put at the end of the truncated string, if the string was truncated.
 
     @author Jeff Davis (davis@xarg.net)
     
@@ -273,6 +280,18 @@ ad_proc -private util_close_html_tags {
     set nobr_tagptr 0
     set nobr_len 0
 
+    if { $break_soft > 0 } {
+        set break_soft [expr $break_soft - [string length $ellipsis]]
+    }
+    if { $break_hard > 0 } {
+        set break_hard [expr $break_hard - [string length $ellipsis]]
+        if { $break_soft == 0 } {
+            set break_soft $break_hard
+        }
+    }
+
+    set broken_p 0
+
     set discard 0
 
     set tagptr -1
@@ -306,6 +325,7 @@ ad_proc -private util_close_html_tags {
                         # clip the last word
                         regsub "\[^ \t\n\r]*$" $pretag {} pretag
                         append out [string range $pretag 0 $break_soft]
+                        set broken_p 1
                         break
                     } elseif { $nobr &&  [expr [string length $pretag] + $out_len] > $break_hard } {
                         # we are in a nonbreaking tag and are past the hard break
@@ -318,6 +338,7 @@ ad_proc -private util_close_html_tags {
                             # if zero length result would be the result...
                             set out {}
                         }
+                        set broken_p 1
                         break
                     } 
                 }
@@ -419,13 +440,27 @@ ad_proc -private util_close_html_tags {
     # on exit of the look either we parsed it all or we truncated. 
     # we should now walk the stack and close any open tags.
 
-    for {set i $tagptr} { $i > -1 } {incr i -1} { 
+    # Chop off extra whitespace at the end
+    if { $broken_p } {
+        set end_index [expr [string length $out] -1]
+        while { $end_index >= 0 && [string is space [string index $out $end_index]] } {
+            incr end_index -1
+        } 
+        set out [string range $out 0 $end_index]
+    }
+
+    for { set i $tagptr } { $i > -1 } { incr i -1 } { 
         set tag $tagstack($i)
 
         # LARS: Only close tags which we aren't supposed to remove
         if { ![string equal $syn($tag) "discard"] && ![string equal $syn($tag) "remove"] } {
             append out "</$tagstack($i)>"
         }
+    }
+    
+    if { $broken_p } {
+        append out $ellipsis
+        append out $more
     }
     
     return $out
@@ -668,12 +703,14 @@ ad_proc ad_html_security_check { html } {
 			return "The attribute '$attr_name' is not allowed for $tagname tags"
 		    }
 		    
-		    if { [regexp {^\s*([^\s:]+):} $attr_value match protocol] } {
-			if { ![info exists allowed_protocol([string tolower $protocol])] && ![info exists allowed_protocol(*)] } {
-			    return "Your URLs can only use these protocols: [join $allowed_protocols_list ", "].
+                    if { ![string equal [string tolower $attr_name] "style"] } {
+                        if { [regexp {^\s*([^\s:]+):} $attr_value match protocol] } {
+                            if { ![info exists allowed_protocol([string tolower $protocol])] && ![info exists allowed_protocol(*)] } {
+                                return "Your URLs can only use these protocols: [join $allowed_protocols_list ", "].
 			    You have a '$protocol' protocol in there."
-			}
-		    }
+                            }
+                        }
+                    }
 		}
 	    }
 	}
@@ -1226,6 +1263,9 @@ ad_proc -public ad_html_text_convert {
     {-from text/plain}
     {-to text/html}
     {-maxlen 70}
+    {-truncate_len 70}
+    {-ellipsis "..."}
+    {-more ""}
     text
 } {
     Converts a chunk of text from a variety of formats to either 
@@ -1262,8 +1302,16 @@ ad_proc -public ad_html_text_convert {
     <li>text/html</li>
     </ul>
 
-    @param maxlen the maximum line width when generating text/plain
+    @param maxlen        The maximum line width when generating text/plain
+
+    @param truncate_len  The maximum total length of the output, included ellipsis.
     
+    @param ellipsis      This will get put at the end of the truncated string, if the string was truncated.
+                         However, this counts towards the total string length, so that the returned string 
+                         including ellipsis is guaranteed to be shorter than the 'truncate_len' provided.
+
+    @param more          This will get put at the end of the truncated string, if the string was truncated.
+
     @author Lars Pind (lars@pinds.com)
     @creation-date 19 July 2000
 } { 
@@ -1297,7 +1345,7 @@ ad_proc -public ad_html_text_convert {
                     set text [ad_enhanced_text_to_html $text]
 		}
                 text/plain {
-		    set text [ad_enhanced_text_to_plain_text -- $text]
+		    set text [ad_enhanced_text_to_plain_text -maxlen $maxlen -- $text]
 		}
 	    }
         }
@@ -1324,13 +1372,23 @@ ad_proc -public ad_html_text_convert {
         text/html {
 	    switch $to {
                 text/html {
-                    set text [util_close_html_tags $text]
+                    # Handled below
 		}
                 text/plain {
 		    set text [ad_html_to_text -maxlen $maxlen -- $text]
 		}
 	    }
 	} 
+    }
+
+    # Handle closing of HTML tags, truncation
+    switch $to {
+        text/html {
+            set text [util_close_html_tags $text $truncate_len $truncate_len $ellipsis $more]
+        }
+        text/plain {
+            set text [string_truncate -ellipsis $ellipsis -more $more -len $truncate_len -- $text]
+        }
     }
 
     return $text
@@ -1343,7 +1401,7 @@ ad_proc -public ad_enhanced_text_to_html {
     @author Lars Pind (lars@pinds.com)
     @creation-date 2003-01-27
 } {
-    return [ad_text_to_html -no_quote -includes_html -- [util_close_html_tags $text]]
+    return [ad_text_to_html -no_quote -includes_html -- $text]
 }
 
 ad_proc -public ad_enhanced_text_to_plain_text {
@@ -1437,42 +1495,58 @@ ad_proc util_remove_html_tags { html } {
 
 ad_proc -public string_truncate { 
     {-len 200}
-    {-format html}
-    {-no_format:boolean}
     {-ellipsis "..."}
+    {-more ""}
     string 
 } {
     Truncates a string to len characters (defaults to the
-    parameter TruncateDescriptionLength), adding an ellipsis (...) if the
+    parameter TruncateDescriptionLength), adding the string provided in the ellipsis parameter if the
     string was truncated. If format is html (default), any open
     HTML tags are closed. Otherwise, it's converted to text using
     ad_html_to_text.
 
-    Should always be called as string_truncate [-flags ...] -- string 
-    since otherwise strings which start with a - will treated as missing arguments.
+    The length of the resulting string, including the ellipsis, is guaranteed to be within the len specified.
 
-    @param len The lenght to truncate to. Defaults to parameter TruncateDescriptionLength.
-    @param format html or text.
-    @param no_format causes hyperlink tags not to get listed at the end of the output.
-    @param string The string to truncate.
+    Should always be called as string_truncate [-flags ...] -- string 
+    since otherwise strings which start with a - will treated as switches, and will cause an error.
+
+    @param len       The lenght to truncate to. If zero, no truncation will occur.
+
+    @param ellipsis  This will get put at the end of the truncated string, if the string was truncated.
+                     However, this counts towards the total string length, so that the returned string 
+                     including ellipsis is guaranteed to be shorter than the 'len' provided.
+
+    @param more      This will get put at the end of the truncated string, if the string was truncated.
+
+    @param string    The string to truncate.
+
     @return The truncated string, with HTML tags cloosed or
             converted to text, depending on format.
 
     @author Lars Pind (lars@pinds.com)
     @creation-date September 8, 2002
 } {
-    if { [string length $string] > $len } {
-        set string "[string range $string 0 [expr $len-[string length $ellipsis]-1]]$ellipsis"
-    } 
-    
-    if { [string equal $format "html"] && !$no_format_p } {
-        set string [util_close_html_tags $string]
-    } else {
-       if { $no_format_p } {
-           set string [ad_html_to_text -no_format -- $string]
-       } else {
-           set string [ad_html_to_text -- $string]
-       }
+    if { $len > 0 } {
+        if { [string length $string] > $len } {
+            set end_index [expr $len-[string length $ellipsis]-1]
+
+            # Back up to the nearest whitespace
+            if { ![string is space [string index $string [expr $end_index + 1]]] } {
+                while { $end_index >= 0 && ![string is space [string index $string $end_index]] } {
+                    incr end_index -1
+                }
+            }
+            
+            # Chop off extra whitespace at the end
+            while { $end_index >= 0 && [string is space [string index $string $end_index]] } {
+                incr end_index -1
+            } 
+                
+            set string [string range $string 0 $end_index]
+            
+            append string $ellipsis
+            append string $more
+        } 
     }
     return $string
 }
