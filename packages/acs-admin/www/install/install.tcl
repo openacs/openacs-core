@@ -43,7 +43,8 @@ foreach package_key [array names repository] {
                      $version(package-name) \
                      $version(name) \
                      $version(package.type) \
-                     $version(install_type)]
+                     $version(install_type) \
+                     $version(summary)]
         }
     }
 }
@@ -56,7 +57,7 @@ foreach package_key [array names repository] {
 #####
 
 # Sort the list alphabetically (in case package_name and package_key doesn't sort the same)
-multirow create packages package_key package_name version_name package_type install_type
+multirow create packages package_key package_name version_name package_type install_type summary
 foreach name [lsort -ascii [array names package]] {
     set row $package($name)
     multirow append packages \
@@ -64,7 +65,8 @@ foreach name [lsort -ascii [array names package]] {
         [lindex $row 1] \
         [lindex $row 2] \
         [lindex $row 3] \
-        [lindex $row 4]
+        [lindex $row 4] \
+        [lindex $row 5]
 }
 
 multirow extend packages install_url
@@ -87,6 +89,9 @@ template::list::create \
         package_name {
             label "Application"
         }
+        summary {
+            label "Summary"
+        }   
         version_name {
             label "Version"
         }
