@@ -6,8 +6,11 @@
   <a href="@forgotten_pwd_url@">#acs-subsite.Forgot_your_password#</a> <br />
 </if>
 
-<if @register_url@ not nil>
-  <a href="@register_url@">#acs-subsite.Register#</a>
-</if>
+<if @self_registration@ true>
 
+   <if @register_url@ not nil>
+      <a href="@register_url@">#acs-subsite.Register#</a>
+   </if>
+
+</if>
 
