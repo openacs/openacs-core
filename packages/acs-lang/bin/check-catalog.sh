@@ -3,6 +3,9 @@
 # Check consistency of the en_US message catalog of the given package.
 # Checks that the set of keys in the message catalog is identical to the
 # set of keys in the adp, info, and tcl files in the package.
+# Also checks that the info in the catalog filename matches info in
+# its xml content (package_key, locale and charset).
+#
 # The scripts assumes that message lookups in adp and info files are 
 # on the format #package_key.message_key#, and that message lookups 
 # in tcl files are always done with the underscore procedure. 
@@ -83,6 +86,9 @@ fi
 
 package_path="${script_path}/../../${package_key}"
 cd $package_path
+
+echo "$0: $package_key - checking catalog file name"
+${script_path}/check-catalog-file-path.pl $catalog_file_path
 
 echo "$0: $package_key - checking catalog keys are in lookups"
 check_catalog_keys_have_lookups $package_key
