@@ -1355,7 +1355,8 @@ ad_proc -public apm_package_instance_new {
     package_key
 } {
 
-    Creates a new instance of a package and call the post instantiation proc, if any.
+    Creates a new instance of a package and calls the post instantiation proc, if any. If the 
+    package is a singleton and already exists then this procedure will silently do nothing.
 
     @param instance_name The name of the package instance, defaults to the pretty name of the
                          package type.
