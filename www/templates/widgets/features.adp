@@ -4,7 +4,7 @@
 <multiple name=feature_items>
 <if @feature_items.rownum@ le @n_feature_items@>
   <span class="title"><a href="@feature_items.url@">@feature_items.title@</a></span><br>
-  <span class="item">@feature_items.description@</span>
+  <span class="item">@feature_items.description;noquote@</span>
   <br><br>
 </if>
 </multiple>
