@@ -13,10 +13,6 @@ ad_page_contract {
 
 ad_require_permission $object_id admin
 
-db_dml toggle_inherit {
-  update acs_objects
-  set security_inherit_p = decode(security_inherit_p, 't', 'f', 'f', 't')
-  where object_id = :object_id
-}
+permission::toggle_inherit -object_id $object_id
 
 ad_returnredirect one?[export_url_vars object_id]
