@@ -58,16 +58,6 @@ if { ![exists_and_not_null return_url] } {
     set return_url [ad_pvt_home]
 }
 
-# One common problem with login is that people can hit the back button
-# after a user logs out and relogin by using the cached password in
-# the browser. We generate a unique hashed timestamp so that users
-# cannot use the back button.
-
-set time [ns_time]
-set token_id [sec_get_random_cached_token_id]
-set token [sec_get_token $token_id]
-set hash [ns_sha1 "$time$token_id$token"]
-
 set authority_options [auth::authority::get_authority_options]
 
 if { ![exists_and_not_null authority_id] } {
@@ -141,7 +131,30 @@ ad_form -extend -name login -on_request {
     # Populate fields from local vars
 
     set persistent_p [ad_decode $default_persistent_login_p 1 "t" ""]
+
+    # One common problem with login is that people can hit the back button
+    # after a user logs out and relogin by using the cached password in
+    # the browser. We generate a unique hashed timestamp so that users
+    # cannot use the back button.
+    
+    set time [ns_time]
+    set token_id [sec_get_random_cached_token_id]
+    set token [sec_get_token $token_id]
+    set hash [ns_sha1 "$time$token_id$token"]
+
 } -on_submit {
+
+    # Check timestamp
+    set token [sec_get_token $token_id]
+    set computed_hash [ns_sha1 "$time$token_id$token"]
+    
+    if { [string compare $hash $computed_hash] != 0 || \
+             $time < [ns_time] - [ad_parameter -package_id [ad_acs_kernel_id] LoginExpirationTime security 600] } {
+        form set_error login password "The login page has expired. Please log in again."
+        element set_value login password {}
+        break
+    }
+
     if { ![exists_and_not_null authority_id] } {
         # Will be defaulted to local authority
         set authority_id {}
