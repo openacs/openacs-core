@@ -223,7 +223,7 @@
 </fullquery>
 
  
-<fullquery name="apm_upgrade_script_compare.test">      
+<fullquery name="apm_upgrade_script_compare.test_f1">      
       <querytext>
       
 	    begin
@@ -234,11 +234,11 @@
 </fullquery>
 
  
-<fullquery name="apm_upgrade_script_compare.test">      
+<fullquery name="apm_upgrade_script_compare.test_f2">      
       <querytext>
       
 	    begin
-	    :1 := apm_package_version.sortable_version_name('$f1_version_from');
+	    :1 := apm_package_version.sortable_version_name('$f2_version_from');
 	    end;
 	
       </querytext>
