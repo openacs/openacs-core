@@ -837,16 +837,27 @@ begin
   
 end;' language 'plpgsql';
 
-
--- function member_p
-create function acs_group__member_p (integer)
+create function acs_group__member_p (integer, integer, boolean)
 returns boolean as '
 declare
-  party_id               alias for $1;  
+  p_party_id               alias for $1;  
+  p_group_id               alias for $2;
+  p_cascade_membership     alias for $3;
 begin
-  -- TO DO: implement this for real
-  return ''t'';
-  
+  if p_cascade_membership  then
+    return count(*) > 0
+      from group_member_map
+      where group_id = p_group_id and
+            member_id = p_party_id;
+  else
+    return count(*) > 0
+      from acs_rels rels, all_object_party_privilege_map perm
+    where perm.object_id = rels.rel_id
+           and perm.privilege = ''read''
+           and rels.rel_type = ''membership_rel''
+	   and rels.object_id_one = p_group_id
+           and rels.object_id_two = p_party_id;
+  end if;
 end;' language 'plpgsql';
 
 

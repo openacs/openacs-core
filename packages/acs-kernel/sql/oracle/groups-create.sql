@@ -471,7 +471,9 @@ is
  ) return varchar2;
 
  function member_p (
-  party_id      in parties.party_id%TYPE
+  party_id      in parties.party_id%TYPE,
+  group_id	in groups.group_id%TYPE,
+  cascade_membership char	
  ) return char;
 
  function check_representation (
