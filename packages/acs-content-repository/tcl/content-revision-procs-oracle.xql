@@ -19,7 +19,17 @@
         set    content = empty_blob()
         where  revision_id = :revision_id
         returning content into :1
-</querytext>
+    </querytext>
   </fullquery>
-  
+
+  <fullquery name="content::revision::new.update_lob_attribute">
+    <querytext>
+		update $lob_table
+		set $lob_attribute = empty_clob()
+		where $lob_id_column = :revision_id
+		returning $lob_attribute into :1
+    </querytext>
+  </fullquery>
+
 </queryset>
+
