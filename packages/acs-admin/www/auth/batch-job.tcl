@@ -102,6 +102,7 @@ list::create \
         }
         username {
             label "Username"
+            link_url_col user_url
         }
         success_p {
             label "Success"
@@ -134,7 +135,7 @@ list::create \
         }
     }
 
-db_multirow -extend { entry_url short_message entry_time_pretty } batch_actions select_batch_actions "
+db_multirow -extend { entry_url short_message entry_time_pretty user_url } batch_actions select_batch_actions "
     select entry_id,
            to_char(entry_time, 'YYYY-MM-DD HH24:MI:SS') as entry_time_ansi,
            operation,
@@ -142,7 +143,8 @@ db_multirow -extend { entry_url short_message entry_time_pretty } batch_actions 
            user_id,
            success_p,
            message,
-           element_messages
+           element_messages,
+           (select count(*) from users u2 where u2.user_id = user_id) as user_exists_p
     from   auth_batch_job_entries
     where  [template::list::page_where_clause -name batch_actions]
     [template::list::filter_where_clauses -and -name batch_actions]
@@ -164,5 +166,12 @@ db_multirow -extend { entry_url short_message entry_time_pretty } batch_actions 
     }
     set short_message [string_truncate -len 25 $short_message]
 
+    if { $user_exists_p && ![empty_string_p $user_id]  } {
+        set user_url [acs_community_member_url -user_id $user_id]
+    } else {
+        set user_url {}
+    }
+
+    
     set entry_time_pretty [lc_time_fmt $entry_time_ansi "%x %X"]
 }
