@@ -4,9 +4,11 @@
 # Description: Displays information about a page request.
 # Inputs:      request
 
-ad_page_variables {
+ad_page_contract {
+} {
     request
-    { rp_show_debug_p 0 }
+    {rp_show_debug_p 0}
+    {getrow_p:boolean "f"}
 }
 
 ds_require_permission [ad_conn package_id] "admin"
@@ -196,25 +198,16 @@ if { [info exists property(oheaders)] } {
 }
 
 if { [info exists property(db)] } {
-    append body "<h3>Database Requests</h3>
-<blockquote><table cellspacing=0 cellpadding=0>
-<tr><th bgcolor=black><font color=white>&nbsp;&nbsp;Duration&nbsp;&nbsp;</th><th bgcolor=black><font color=white>&nbsp;&nbsp;Pool&nbsp;&nbsp;</th><th bgcolor=black><font color=white>Command</th></tr>
-\n"
+    multirow create dbreqs handle command sql duration_ms value
 
-    set colors { #DDDDDD #FFFFFF }
-
-    set total 0
-
-    set counter 0
     foreach { handle command statement_name sql start end errno return } $property(db) {
-	set bgcolor [lindex $colors [expr { $counter % [llength $colors] }]]
 
 	if { ![empty_string_p $handle] && [info exists pool($handle)] } {
 	    set statement_pool $pool($handle)
 	} else {
 	    set statement_pool ""
 	}
-
+        
 	if { $command == "gethandle" } {
 	    # Remember which handle was acquired from which pool.
 	    set statement_pool $sql
@@ -228,15 +221,47 @@ if { [info exists property(db)] } {
 	    } else {
 		set value "$statement_name: "
 	    }
-	    append value "$command $handle<blockquote><pre>[ns_quotehtml $sql]</pre></blockquote>\n"
+            
+            # TODO: Remove extra whitespace before query
+
+	    append value "$command $handle<blockquote><pre>[ns_quotehtml $sql]</pre></blockquote>"
 	}
 
-	append body "<tr valign=top><td align=right bgcolor=$bgcolor nowrap>&nbsp;&nbsp;[format "%.f" [expr { ($end - $start) }]]&nbsp;ms&nbsp;&nbsp;</td><td bgcolor=$bgcolor>&nbsp;&nbsp;$statement_pool&nbsp;&nbsp;</td><td bgcolor=$bgcolor>$value</td></tr>\n"
-	incr counter
+        if { ![string equal $command "getrow"] || [template::util::is_true $getrow_p] } {
+            multirow append dbreqs $handle $command $sql [expr { $end - $start }] $value
+        }
 
-	incr total [expr { $end - $start }]
     }
-    append body "<tr><td bgcolor=black align=right><font color=white><b>&nbsp;&nbsp;[format "%.f" [expr { $total }]]&nbsp;ms&nbsp;&nbsp;</td><th align=left>(total)</th></tr>\n"
-    append body "</table></blockquote>\n"
+
+    # TODO: Sort by duration, so you can see slowest queries at top
+    template::list::create \
+            -name dbreqs \
+            -elements {
+        duration_ms {
+            label "Duration"
+            html { align right }
+            display_template {@dbreqs.duration_ms@ ms}
+            aggregate sum
+        }
+        command {
+            label "Command"
+        }
+        sql {
+            label "SQL"
+            aggregate_label "Total Duration (ms)"
+            display_template {@dbreqs.value;noquote@}
+        }
+    } -filters {
+        getrow_p {
+            label "Getrow"
+            values {
+                {"Include" t}
+                {"Exclude" f}
+            }
+            default_value t
+        }
+        request {}
+    }
+            
 }
     
