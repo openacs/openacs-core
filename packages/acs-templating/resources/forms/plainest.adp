@@ -7,7 +7,7 @@
   <multiple name=elements>
 
     <if @elements.section@ not nil>
-      <tr><td colspan="2"><span style="font-weight: bold">@elements.section@</span></td></tr>
+      <tr><td colspan="2">@elements.section@</td></tr>
     </if>
 
     <group column="section">
@@ -25,7 +25,7 @@
       <else>
        <tr>
         <if @elements.label@ not nil>
-	<td><span style="font-weight: bold">@elements.label@</span>&nbsp;&nbsp;
+	<td>@elements.label@&nbsp;&nbsp;
           <if @elements.help_text@ not nil>
             <br />&nbsp;&nbsp;
             <span style="font-size: 90%"><noparse><formhelp id=@elements.id@></noparse></span><br />

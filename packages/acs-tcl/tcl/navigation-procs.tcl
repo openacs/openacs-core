@@ -12,10 +12,15 @@ ad_library {
 }
 
 
-ad_proc ad_context_bar { args } {
+ad_proc ad_context_bar { 
+    -node_id
+    args
+} {
 
     Returns a Yahoo-style hierarchical navbar. Includes "Your Workspace" or "Administration"
     if applicable, and the subsite if not global.
+
+    @param node_id If provided work up from this node, otherwise the current node
 
 } {
 
@@ -25,7 +30,10 @@ ad_proc ad_context_bar { args } {
       lappend context [list "[ad_pvt_home]" "[ad_pvt_home_name]"]
   }
 
-  set node_id [ad_conn node_id]
+  if { ![info exists node_id] } {
+      set node_id [ad_conn node_id]
+  }
+
   db_foreach context {
     select site_node.url(node_id) as url, object_id,
            acs_object.name(object_id) as object_name,

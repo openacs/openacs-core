@@ -30,7 +30,12 @@ specification for many physical pages, so the overall layout of a site can be mo
             <file path="resources/assets/corners/lower-right.gif"/>
             <file path="resources/assets/corners/upper-left.gif"/>
             <file path="resources/assets/corners/upper-right.gif"/>
+            <file path="resources/forms/confirm-button.adp"/>
+            <file path="resources/forms/confirm-button.tcl"/>
             <file path="resources/forms/grid.adp"/>
+            <file path="resources/forms/lars-standard.adp"/>
+            <file path="resources/forms/plain.adp"/>
+            <file path="resources/forms/plainest.adp"/>
             <file path="resources/forms/standard.adp"/>
             <file path="resources/forms/tabbed-dialog.adp"/>
             <file path="resources/forms/wizard.adp"/>
@@ -57,6 +62,7 @@ specification for many physical pages, so the overall layout of a site can be mo
             <file type="tcl_procs" path="tcl/doc-procs.tcl"/>
             <file type="tcl_procs" path="tcl/doc-tcl-procs.tcl"/>
             <file type="tcl_procs" path="tcl/element-procs.tcl"/>
+            <file type="tcl_procs" path="tcl/file-procs.tcl"/>
             <file type="tcl_procs" path="tcl/filter-procs.tcl"/>
             <file type="tcl_procs" path="tcl/form-procs.tcl"/>
             <file type="tcl_procs" path="tcl/mime-procs.tcl"/>

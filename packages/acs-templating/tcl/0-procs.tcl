@@ -33,6 +33,7 @@ namespace eval template {
   namespace eval util {
     namespace eval date {}
     namespace eval currency {}
+    namespace eval file {}
   }
 
   namespace eval element {

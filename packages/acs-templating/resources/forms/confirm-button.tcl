@@ -12,7 +12,6 @@ set __return_url__ [ad_conn url]
 # There's one exception - we set the special form element "__confirmed_p" true.  This
 # informs ad_form that the use has indeed confirmed the submission.
 
-ns_log Notice "Huh?"
 multirow create __form_contents__ __key__ __value__
 
 if { ![empty_string_p [set __form__ [ns_getform]]] } {
@@ -31,5 +30,3 @@ if { ![empty_string_p [set __form__ [ns_getform]]] } {
     }
 
 }
-
-ns_log Notice "Huh? done"
