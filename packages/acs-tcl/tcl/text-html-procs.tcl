@@ -1391,6 +1391,7 @@ ad_proc string_truncate {
     {-len 200}
     {-format html}
     {-no_format:boolean}
+    {-ellipsis "..."}
     string 
 } {
     Truncates a string to len characters (defaults to the
@@ -1410,7 +1411,7 @@ ad_proc string_truncate {
     @creation-date September 8, 2002
 } {
     if { [string length $string] > $len } {
-        set string "[string range $string 0 $len]..."
+        set string "[string range $string 0 [expr $len-[string length $ellipsis]]]$ellipsis"
     } 
     
     if { [string equal $format "html"] && !$no_format_p } {
