@@ -52,7 +52,7 @@
                 <title>Query Analysis example</title>
               <mediaobject>
                 <imageobject>
-                  <imagedata fileref="/doc/images/query-duration.png" format="PNG"/>
+                  <imagedata fileref="images/query-duration.png" format="PNG"/>
                 </imageobject>
               </mediaobject>
               </figure>
