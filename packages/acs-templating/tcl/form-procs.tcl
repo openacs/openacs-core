@@ -76,7 +76,8 @@ ad_proc -public template::form::create { id args } {
     @option cancel_label    The label of the Cancel button, if cancel_url is supplied.
                             Default is "Cancel".
     
-    @option display_buttons List of buttons to show when the form is in display mode. 
+    @option actions         A list of actions available on the form, which in practice means 
+                            a list of buttons to show when the form is in display mode. 
                             The value should be a list of lists, with the first element being the form label
                             and the second element being the name of the name of the form element. Defaults to
                             { { "Edit" edit } }. The name of the button clicked can be retrieved using 
@@ -87,15 +88,17 @@ ad_proc -public template::form::create { id args } {
                             is the name of the button which was called when the form changed from display 
                             mode to edit mode.
 
+    @option display_buttons List of buttons to show when the form is in display mode. 
+                            Equivalent to actions. If both actions and display_buttons are present, 
+                            'actions' is used. 'display_buttons' is deprecated.
+
+
     @option edit_buttons    List of buttons to show when the form is in edit mode. 
                             The value should be a list of lists, with the first element being the button label
                             and the second element being the name. Defaults to
                             { { "Ok" ok } }. The name of the button clicked can be retrieved using 
                             template::form::get_button. 
     
-    @option actions         A list of actions available on the form. Equivalent to, and 
-                            overrides display_buttons.
-
     @option has_submit      Set to 1 to suppress the OK or submit button automatically
                             added by the form builder. Use this if your form already includes its own 
                             submit button.
