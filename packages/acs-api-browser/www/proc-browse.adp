@@ -2,7 +2,7 @@
 <property name="title">@title;noquote@</property>
 <property name="context">@context;noquote@</property>
 
-@dimensional_slider@
+@dimensional_slider;noquote@
 
 <ul>
 <if @sort_by@ eq "file">
