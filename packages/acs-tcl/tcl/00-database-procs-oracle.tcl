@@ -27,6 +27,10 @@ proc_doc db_exec_plsql { statement_name sql args } {
 
 } {
     ad_arg_parser { bind_output } $args
+
+    # Query Dispatcher (OpenACS - ben)
+    set full_statement_name [db_qd_get_fullname $statement_name]
+
     if { [info exists bind_output] } {
 	return -code error "the -bind_output switch is not currently supported"
     }
@@ -35,9 +39,9 @@ proc_doc db_exec_plsql { statement_name sql args } {
 	# Right now, use :1 as the output value if it occurs in the statement,
 	# or not otherwise.
 	if { [regexp {:1} $sql] } {
-	    return [db_exec exec_plsql_bind $db $statement_name $sql 1 ""]
+	    return [db_exec exec_plsql_bind $db $full_statement_name $sql 1 ""]
 	} else {
-	    return [db_exec dml $db $statement_name $sql]
+	    return [db_exec dml $db $full_statement_name $sql]
 	}
     }
 }
@@ -50,6 +54,18 @@ ad_proc -private db_exec { type db statement_name sql args } {
 
 } {
     set start_time [clock clicks]
+
+    ns_log Notice "PRE-QD: the SQL is $pre_sql for $statement_name"
+
+    # Query Dispatcher (OpenACS - ben)
+    set sql [db_qd_replace_sql $statement_name $pre_sql]
+
+    # insert tcl variable values (Openacs - Dan)
+    if {![string equal $sql $pre_sql]} {
+        set sql [uplevel 2 [list subst -nobackslashes $sql]]
+    }
+
+    ns_log Notice "POST-QD: the SQL is $sql"
 
     set errno [catch {
 	upvar bind bind
@@ -81,6 +97,9 @@ proc_doc db_dml { statement_name sql args } {
     Do a DML statement.
 } {
     ad_arg_parser { clobs blobs clob_files blob_files bind } $args
+
+    # Query Dispatcher (OpenACS - ben)
+    set full_statement_name [db_qd_get_fullname $statement_name]
 
     # Only one of clobs, blobs, clob_files, and blob_files is allowed.
     # Remember which one (if any) is provided.
@@ -117,9 +136,9 @@ proc_doc db_dml { statement_name sql args } {
 	    for { set i 1 } { $i <= [llength $lob_argv] } { incr i } {
 		lappend bind_vars $i
 	    }
-	    eval [list db_exec "${command}_bind" $db $statement_name $sql $bind_vars] $lob_argv
+	    eval [list db_exec "${command}_bind" $db $full_statement_name $sql $bind_vars] $lob_argv
 	} else {
-	    eval [list db_exec $command $db $statement_name $sql] $lob_argv
+	    eval [list db_exec $command $db $full_statement_name $sql] $lob_argv
 	}
     }
 }
@@ -144,24 +163,30 @@ ad_proc db_continue_transaction {} {
 ad_proc db_write_clob { statement_name sql args } {
     ad_arg_parser { bind } $args
 
+    set full_statement_name [db_qd_get_fullname $statement_name]
+
     db_with_handle db {
-	db_exec write_clob $db $statement_name $sql
+	db_exec write_clob $db $full_statement_name $sql
     }
 }
 
 ad_proc db_write_blob { statement_name sql args } {
     ad_arg_parser { bind } $args
 
+    set full_statement_name [db_qd_get_fullname $statement_name]
+
     db_with_handle db { 
-	db_exec write_blob $db $statement_name $sql
+	db_exec write_blob $db $full_statement_name $sql
     }
 }
 
 ad_proc db_blob_get_file { statement_name sql args } {
     ad_arg_parser { bind file args } $args
 
+    set full_statement_name [db_qd_get_fullname $statement_name]
+
     db_with_handle db {
-	eval [list db_exec blob_get_file $db $statement_name $sql $file] $args
+	eval [list db_exec blob_get_file $db $full_statement_name $sql $file] $args
     }
 }
 
