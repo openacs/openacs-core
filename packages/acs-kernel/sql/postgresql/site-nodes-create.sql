@@ -204,14 +204,14 @@ execute procedure site_node_update_tr ();
 create function site_node__new (integer,integer,varchar,integer,boolean,boolean,integer,varchar)
 returns integer as '
 declare
-  new__node_id                alias for $1;  
-  new__parent_id              alias for $2;  
+  new__node_id                alias for $1;  -- default null  
+  new__parent_id              alias for $2;  -- default null    
   new__name                   alias for $3;  
-  new__object_id              alias for $4;  
+  new__object_id              alias for $4;   -- default null   
   new__directory_p            alias for $5;  
-  new__pattern_p              alias for $6;  
-  new__creation_user          alias for $7;  
-  new__creation_ip            alias for $8;  
+  new__pattern_p              alias for $6;   -- default ''f'' 
+  new__creation_user          alias for $7;   -- default null   
+  new__creation_ip            alias for $8;   -- default null   
   v_node_id                   site_nodes.node_id%TYPE;
   v_directory_p               site_nodes.directory_p%TYPE;
 begin
@@ -291,7 +291,7 @@ create function site_node__node_id (varchar,integer)
 returns integer as '
 declare
   node_id__url           alias for $1;  
-  node_id__parent_id     alias for $2;  
+  node_id__parent_id     alias for $2;  -- default null  
   v_pos                  integer;       
   v_first                site_nodes.name%TYPE;
   v_rest                 text; 

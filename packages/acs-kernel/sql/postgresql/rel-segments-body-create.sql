@@ -19,17 +19,17 @@
 create function rel_segment__new (integer,varchar,timestamp,integer,varchar,varchar,varchar,varchar,integer,varchar,integer)
 returns integer as '
 declare
-  new__segment_id        alias for $1;  
-  object_type            alias for $2;  
-  creation_date          alias for $3;  
-  creation_user          alias for $4;  
-  creation_ip            alias for $5;  
-  email                  alias for $6;  
-  url                    alias for $7;  
+  new__segment_id        alias for $1;  -- default null  
+  object_type            alias for $2;  -- default ''rel_segment''
+  creation_date          alias for $3;  -- default now()
+  creation_user          alias for $4;  -- default null
+  creation_ip            alias for $5;  -- default null
+  email                  alias for $6;  -- default null
+  url                    alias for $7;  -- default null
   new__segment_name      alias for $8;  
   new__group_id          alias for $9;  
   new__rel_type          alias for $10; 
-  context_id             alias for $11; 
+  context_id             alias for $11; -- default null
   v_segment_id           rel_segments.segment_id%TYPE;
 begin
   v_segment_id :=
@@ -94,7 +94,7 @@ returns integer as '
 declare
   get_or_new__group_id          alias for $1;  
   get_or_new__rel_type          alias for $2;  
-  segment_name                  alias for $3;  
+  segment_name                  alias for $3;  -- default null
   v_segment_id                  rel_segments.segment_id%TYPE;
   v_segment_name                rel_segments.segment_name%TYPE;
 begin

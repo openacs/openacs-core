@@ -140,8 +140,8 @@ create function acs_rel_type__create_role (varchar,varchar,varchar)
 returns integer as '
 declare
   create_role__role                   alias for $1;  
-  create_role__pretty_name            alias for $2;  
-  create_role__pretty_plural          alias for $3;  
+  create_role__pretty_name            alias for $2;  -- default null  
+  create_role__pretty_plural          alias for $3;  -- default null
 begin
     insert into acs_rel_roles
      (role, pretty_name, pretty_plural)
@@ -204,16 +204,16 @@ declare
   create_type__rel_type               alias for $1;  
   create_type__pretty_name            alias for $2;  
   create_type__pretty_plural          alias for $3;  
-  create_type__supertype              alias for $4;
+  create_type__supertype              alias for $4;  -- default ''relationship''
   create_type__table_name             alias for $5;  
   create_type__id_column              alias for $6;  
   create_type__package_name           alias for $7;  
   create_type__object_type_one        alias for $8; 
-  create_type__role_one               alias for $9; 
+  create_type__role_one               alias for $9;  -- default null 
   create_type__min_n_rels_one         alias for $10; 
   create_type__max_n_rels_one         alias for $11; 
   create_type__object_type_two        alias for $12; 
-  create_type__role_two               alias for $13; 
+  create_type__role_two               alias for $13; -- default null
   create_type__min_n_rels_two         alias for $14; 
   create_type__max_n_rels_two         alias for $15; 
 
@@ -259,11 +259,11 @@ declare
   create_type__rel_type               alias for $1;  
   create_type__pretty_name            alias for $2;  
   create_type__pretty_plural          alias for $3;  
-  create_type__supertype              alias for $4;  
+  create_type__supertype              alias for $4;  -- default ''relationship''  
   create_type__table_name             alias for $5;  
   create_type__id_column              alias for $6;  
   create_type__package_name           alias for $7;  
-  create_type__type_extension_table   alias for $8;  
+  create_type__type_extension_table   alias for $8;  -- default null
   create_type__object_type_one        alias for $9; 
   create_type__min_n_rels_one         alias for $10; 
   create_type__max_n_rels_one         alias for $11; 
@@ -312,7 +312,7 @@ create function acs_rel_type__drop_type (varchar,boolean)
 returns integer as '
 declare
   drop_type__rel_type               alias for $1;  
-  drop_type__cascade_p              alias for $2;  
+  drop_type__cascade_p              alias for $2;  -- default ''f''  
 begin
     -- XXX do cascade_p
     delete from acs_rel_types
@@ -489,13 +489,13 @@ for each row execute procedure acs_rels_in_tr ();
 create function acs_rel__new (integer,varchar,integer,integer,integer,integer,varchar)
 returns integer as '
 declare
-  new__rel_id            alias for $1;  
-  new__rel_type          alias for $2;  
+  new__rel_id            alias for $1;  -- default null  
+  new__rel_type          alias for $2;  -- default ''relationship''
   new__object_id_one     alias for $3;  
   new__object_id_two     alias for $4;  
-  context_id             alias for $5;  
-  creation_user          alias for $6;  
-  creation_ip            alias for $7;  
+  context_id             alias for $5;  -- default null
+  creation_user          alias for $6;  -- default null
+  creation_ip            alias for $7;  -- default null
   v_rel_id               acs_rels.rel_id%TYPE;
 begin
     -- XXX This should check that object_id_one and object_id_two are

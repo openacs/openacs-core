@@ -272,12 +272,12 @@ for each row execute procedure composition_rels_del_tr ();
 create function composition_rel__new (integer,varchar,integer,integer,integer,varchar)
 returns integer as '
 declare
-  new__rel_id            alias for $1;  
-  rel_type               alias for $2;  
+  new__rel_id            alias for $1;  -- default null  
+  rel_type               alias for $2;  -- default ''composition_rel''
   object_id_one          alias for $3;  
   object_id_two          alias for $4;  
-  creation_user          alias for $5;  
-  creation_ip            alias for $6;  
+  creation_user          alias for $5;  -- default null
+  creation_ip            alias for $6;  -- default null
   v_rel_id               integer;       
 begin
     v_rel_id := acs_rel__new (
@@ -486,13 +486,13 @@ end;' language 'plpgsql';
 create function membership_rel__new (integer,varchar,integer,integer,varchar,integer,varchar)
 returns integer as '
 declare
-  new__rel_id            alias for $1;  
-  rel_type               alias for $2;  
+  new__rel_id            alias for $1;  -- default null  
+  rel_type               alias for $2;  -- default ''membership_rel''
   object_id_one          alias for $3;  
   object_id_two          alias for $4;  
-  new__member_state      alias for $5;  
-  creation_user          alias for $6;  
-  creation_ip            alias for $7;  
+  new__member_state      alias for $5;  -- default ''approved''
+  creation_user          alias for $6;  -- default null
+  creation_ip            alias for $7;  -- default null
   v_rel_id               integer;       
 begin
     v_rel_id := acs_rel__new (
@@ -705,16 +705,16 @@ end;' language 'plpgsql';
 create function acs_group__new (integer,varchar,timestamp,integer,varchar,varchar,varchar,varchar,varchar,integer)
 returns integer as '
 declare
-  new__group_id              alias for $1;  
-  new__object_type           alias for $2;  
-  new__creation_date         alias for $3;  
-  new__creation_user         alias for $4;  
-  new__creation_ip           alias for $5;  
-  new__email                 alias for $6;  
-  new__url                   alias for $7;  
+  new__group_id              alias for $1;  -- default null  
+  new__object_type           alias for $2;  -- default ''group''
+  new__creation_date         alias for $3;  -- default now()
+  new__creation_user         alias for $4;  -- default null
+  new__creation_ip           alias for $5;  -- default null
+  new__email                 alias for $6;  -- default null
+  new__url                   alias for $7;  -- default null
   new__group_name            alias for $8;  
-  new__join_policy           alias for $9;
-  new__context_id            alias for $10;  
+  new__join_policy           alias for $9;  -- default null
+  new__context_id            alias for $10; -- default null
   v_group_id                 groups.group_id%TYPE;
   v_group_type_exists_p      integer;
   v_join_policy              groups.join_policy%TYPE;

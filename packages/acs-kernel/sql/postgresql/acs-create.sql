@@ -63,22 +63,22 @@ comment on table acs_magic_objects is '
 create function acs__add_user (integer,varchar,timestamp,integer,varchar,varchar,varchar,varchar,varchar,char,char,varchar,varchar,varchar,boolean,varchar)
 returns integer as '
 declare
-  user_id                alias for $1;  
-  object_type            alias for $2;  
-  creation_date          alias for $3;  
-  creation_user          alias for $4;  
-  creation_ip            alias for $5;  
+  user_id                alias for $1;  -- default null    
+  object_type            alias for $2;  -- default ''user''
+  creation_date          alias for $3;  -- default now()
+  creation_user          alias for $4;  -- default null
+  creation_ip            alias for $5;  -- default null
   email                  alias for $6;  
-  url                    alias for $7;  
+  url                    alias for $7;  -- default null
   first_names            alias for $8;  
   last_name              alias for $9;  
   password               alias for $10; 
   salt                   alias for $11; 
-  password_question      alias for $12; 
-  password_answer        alias for $13; 
-  screen_name            alias for $14; 
-  email_verified_p       alias for $15; 
-  member_state           alias for $16; 
+  password_question      alias for $12; -- default null
+  password_answer        alias for $13; -- default null
+  screen_name            alias for $14; -- default null
+  email_verified_p       alias for $15; -- default ''t''
+  member_state           alias for $16; -- default ''approved''
   v_user_id              users.user_id%TYPE;
   v_rel_id               membership_rels.rel_id%TYPE;
 begin

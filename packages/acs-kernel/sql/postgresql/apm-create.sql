@@ -1635,9 +1635,9 @@ declare
   pretty_plural          alias for $3;  
   package_uri            alias for $4;  
   package_type           alias for $5;  
-  singleton_p            alias for $6;  
-  spec_file_path         alias for $7;  
-  spec_file_mtime        alias for $8;  
+  singleton_p            alias for $6;  -- default ''f''  
+  spec_file_path         alias for $7;  -- default null
+  spec_file_mtime        alias for $8;  -- default null
 begin
     PERFORM apm_package_type__create_type(
     	package_key,
@@ -1659,13 +1659,13 @@ create function apm__update_package (varchar,varchar,varchar,varchar,varchar,boo
 returns varchar as '
 declare
   package_key            alias for $1;  
-  pretty_name            alias for $2;  
-  pretty_plural          alias for $3;  
-  package_uri            alias for $4;  
-  package_type           alias for $5;  
-  singleton_p            alias for $6;  
-  spec_file_path         alias for $7;  
-  spec_file_mtime        alias for $8;  
+  pretty_name            alias for $2;  -- default null
+  pretty_plural          alias for $3;  -- default null  
+  package_uri            alias for $4;  -- default null  
+  package_type           alias for $5;  -- default null  
+  singleton_p            alias for $6;  -- default null  
+  spec_file_path         alias for $7;  -- default null  
+  spec_file_mtime        alias for $8;  -- default null  
 begin
  
     return apm_package_type__update_type(
@@ -1687,7 +1687,7 @@ create function apm__unregister_package (varchar,boolean)
 returns integer as '
 declare
   package_key            alias for $1;  
-  cascade_p              alias for $2;  
+  cascade_p              alias for $2;  -- default ''t''  
 begin
    PERFORM apm_package_type__drop_type(
 	package_key,
@@ -1722,9 +1722,9 @@ declare
   pretty_name            alias for $2;  
   pretty_plural          alias for $3;  
   package_uri            alias for $4;  
-  singleton_p            alias for $5;  
-  spec_file_path         alias for $6;  
-  spec_file_mtime        alias for $7;  
+  singleton_p            alias for $5;  -- default ''f'' 
+  spec_file_path         alias for $6;  -- default null
+  spec_file_mtime        alias for $7;  -- default null
 begin
    PERFORM apm__register_package(
 	package_key,
@@ -1746,7 +1746,7 @@ create function apm__unregister_application (varchar,boolean)
 returns integer as '
 declare
   package_key            alias for $1;  
-  cascade_p              alias for $2;  
+  cascade_p              alias for $2;  -- default ''f''  
 begin
    PERFORM apm__unregister_package (
 	package_key,
@@ -1765,9 +1765,9 @@ declare
   pretty_name            alias for $2;  
   pretty_plural          alias for $3;  
   package_uri            alias for $4;  
-  singleton_p            alias for $5;  
-  spec_file_path         alias for $6;  
-  spec_file_mtime        alias for $7;  
+  singleton_p            alias for $5;  -- default ''f''  
+  spec_file_path         alias for $6;  -- default null
+  spec_file_mtime        alias for $7;  -- default null
 begin
    PERFORM apm__register_package(
 	package_key,
@@ -1789,7 +1789,7 @@ create function apm__unregister_service (varchar,boolean)
 returns integer as '
 declare
   package_key            alias for $1;  
-  cascade_p              alias for $2;  
+  cascade_p              alias for $2;  -- default ''f''  
 begin
    PERFORM apm__unregister_package (
 	package_key,
@@ -1804,15 +1804,15 @@ end;' language 'plpgsql';
 create function apm__register_parameter (integer,varchar,varchar,varchar,varchar,varchar,varchar,integer,integer)
 returns integer as '
 declare
-  register_parameter__parameter_id           alias for $1;  
+  register_parameter__parameter_id           alias for $1;  -- default null  
   register_parameter__package_key            alias for $2;  
   register_parameter__parameter_name         alias for $3;  
-  register_parameter__description            alias for $4;  
-  register_parameter__datatype               alias for $5;  
-  register_parameter__default_value          alias for $6;  
-  register_parameter__section_name           alias for $7;  
-  register_parameter__min_n_values           alias for $8;  
-  register_parameter__max_n_values           alias for $9;  
+  register_parameter__description            alias for $4;  -- default null  
+  register_parameter__datatype               alias for $5;  -- default ''string''  
+  register_parameter__default_value          alias for $6;  -- default null  
+  register_parameter__section_name           alias for $7;  -- default null 
+  register_parameter__min_n_values           alias for $8;  -- default 1
+  register_parameter__max_n_values           alias for $9;  -- default 1
 
   v_parameter_id         apm_parameters.parameter_id%TYPE;
   cur_val                record;
@@ -1862,13 +1862,13 @@ create function apm__update_parameter (integer,varchar,varchar,varchar,varchar,v
 returns varchar as '
 declare
   update_parameter__parameter_id           alias for $1;  
-  update_parameter__parameter_name         alias for $2;  
-  update_parameter__description            alias for $3;  
-  update_parameter__datatype               alias for $4;  
-  update_parameter__default_value          alias for $5;  
-  update_parameter__section_name           alias for $6;  
-  update_parameter__min_n_values           alias for $7;  
-  update_parameter__max_n_values           alias for $8;  
+  update_parameter__parameter_name         alias for $2;  -- default null  
+  update_parameter__description            alias for $3;  -- default null
+  update_parameter__datatype               alias for $4;  -- default ''string''
+  update_parameter__default_value          alias for $5;  -- default null
+  update_parameter__section_name           alias for $6;  -- default null
+  update_parameter__min_n_values           alias for $7;  -- default 1
+  update_parameter__max_n_values           alias for $8;  -- default 1
 begin
     update apm_parameters 
 	set parameter_name = coalesce(update_parameter__parameter_name, parameter_name),
@@ -1907,7 +1907,7 @@ end;' language 'plpgsql';
 create function apm__unregister_parameter (integer)
 returns integer as '
 declare
-  unregister_parameter__parameter_id           alias for $1;  
+  unregister_parameter__parameter_id           alias for $1;  -- default null
 begin
     delete from apm_parameter_values 
     where parameter_id = unregister_parameter__parameter_id;
@@ -2070,14 +2070,14 @@ end;' language 'plpgsql';
 create function apm_package__new (integer,varchar,varchar,varchar,timestamp,integer,varchar,integer)
 returns integer as '
 declare
-  new__package_id             alias for $1;  
-  new__instance_name          alias for $2;  
+  new__package_id             alias for $1;  -- default null  
+  new__instance_name          alias for $2;  -- default null
   new__package_key            alias for $3;  
-  new__object_type            alias for $4;  
-  new__creation_date          alias for $5;  
-  new__creation_user          alias for $6;  
-  new__creation_ip            alias for $7;  
-  new__context_id             alias for $8;  
+  new__object_type            alias for $4;  -- default ''apm_package''
+  new__creation_date          alias for $5;  -- default now()
+  new__creation_user          alias for $6;  -- default null
+  new__creation_ip            alias for $7;  -- default null
+  new__context_id             alias for $8;  -- default null
   v_singleton_p               integer;       
   v_package_type              apm_package_types.package_type%TYPE;
   v_num_instances             integer;       
@@ -2262,9 +2262,9 @@ end;' language 'plpgsql';
 -- create or replace package body apm_package_version 
 create function apm_package_version__new (integer,varchar,varchar,varchar,varchar,varchar,varchar,timestamp,varchar,varchar,boolean,boolean) returns integer as '
 declare
-      apm_pkg_ver__version_id           alias for $1;
+      apm_pkg_ver__version_id           alias for $1;  -- default null
       apm_pkg_ver__package_key		alias for $2;
-      apm_pkg_ver__version_name		alias for $3;
+      apm_pkg_ver__version_name		alias for $3;  -- default null
       apm_pkg_ver__version_uri		alias for $4;
       apm_pkg_ver__summary              alias for $5;
       apm_pkg_ver__description_format	alias for $6;
@@ -2272,8 +2272,8 @@ declare
       apm_pkg_ver__release_date		alias for $8;
       apm_pkg_ver__vendor               alias for $9;
       apm_pkg_ver__vendor_uri		alias for $10;
-      apm_pkg_ver__installed_p		alias for $11;		
-      apm_pkg_ver__data_model_loaded_p	alias for $12;	
+      apm_pkg_ver__installed_p		alias for $11; -- default ''f''		
+      apm_pkg_ver__data_model_loaded_p	alias for $12; -- default ''f''
       v_version_id                      apm_package_versions.version_id%TYPE;
 begin
       if apm_pkg_ver__version_id='''' then
@@ -2364,7 +2364,7 @@ create function apm_package_version__copy (integer,integer,varchar,varchar)
 returns integer as '
 declare
   copy__version_id             alias for $1;  
-  copy__new_version_id         alias for $2;  
+  copy__new_version_id         alias for $2;  -- default null  
   copy__new_version_name       alias for $3;  
   copy__new_version_uri        alias for $4;  
   v_version_id                 integer;       
@@ -2411,9 +2411,9 @@ end;' language 'plpgsql';
 create function apm_package_version__edit (integer,integer,varchar,varchar,varchar,varchar,varchar,timestamp,varchar,varchar,char,char)
 returns integer as '
 declare
-  edit__new_version_id         alias for $1;  
+  edit__new_version_id         alias for $1;  -- default null  
   edit__version_id             alias for $2;  
-  edit__version_name           alias for $3;  
+  edit__version_name           alias for $3;  -- default null
   edit__version_uri            alias for $4;  
   edit__summary                alias for $5;  
   edit__description_format     alias for $6;  
@@ -2421,8 +2421,8 @@ declare
   edit__release_date           alias for $8;  
   edit__vendor                 alias for $9;  
   edit__vendor_uri             alias for $10; 
-  edit__installed_p            alias for $11; 
-  edit__data_model_loaded_p    alias for $12; 
+  edit__installed_p            alias for $11; -- default ''f''
+  edit__data_model_loaded_p    alias for $12; -- default ''f''
   v_version_id                 apm_package_versions.version_id%TYPE;
   version_unchanged_p          integer;       
 begin
@@ -2463,11 +2463,11 @@ end;' language 'plpgsql';
 create function apm_package_version__add_file (integer,integer,varchar,varchar, varchar)
 returns integer as '
 declare
-  add_file__file_id                alias for $1;  
+  add_file__file_id                alias for $1;  -- default null  
   add_file__version_id             alias for $2;  
   add_file__path                   alias for $3;  
   add_file__file_type              alias for $4;  
-  add_file__db_type                alias for $5;
+  add_file__db_type                alias for $5;  -- default null
   v_file_id                        apm_package_files.file_id%TYPE;
   v_file_exists_p                  integer;       
 begin
@@ -2513,7 +2513,7 @@ end;' language 'plpgsql';
 create function apm_package_version__add_interface (integer,integer,varchar,varchar)
 returns integer as '
 declare
-  add_interface__interface_id         alias for $1;  
+  add_interface__interface_id         alias for $1;  -- default null  
   add_interface__version_id           alias for $2;  
   add_interface__interface_uri        alias for $3;  
   add_interface__interface_version    alias for $4;  
@@ -2571,7 +2571,7 @@ end;' language 'plpgsql';
 create function apm_package_version__add_dependency (integer,integer,varchar,varchar)
 returns integer as '
 declare
-  add_dependency__dependency_id          alias for $1;  
+  add_dependency__dependency_id          alias for $1;  -- default null  
   add_dependency__version_id             alias for $2;  
   add_dependency__dependency_uri         alias for $3;  
   add_dependency__dependency_version     alias for $4;  
@@ -2801,8 +2801,8 @@ declare
   create_type__package_uri            alias for $4;  
   create_type__package_type           alias for $5;  
   create_type__singleton_p            alias for $6;  
-  create_type__spec_file_path         alias for $7;  
-  create_type__spec_file_mtime        alias for $8;  
+  create_type__spec_file_path         alias for $7;  -- default null  
+  create_type__spec_file_mtime        alias for $8;  -- default null
 begin
    insert into apm_package_types
     (package_key, pretty_name, pretty_plural, package_uri, package_type,
@@ -2821,13 +2821,13 @@ create function apm_package_type__update_type (varchar,varchar,varchar,varchar,v
 returns varchar as '
 declare
   update_type__package_key            alias for $1;  
-  update_type__pretty_name            alias for $2;  
-  update_type__pretty_plural          alias for $3;  
-  update_type__package_uri            alias for $4;  
-  update_type__package_type           alias for $5;  
-  update_type__singleton_p            alias for $6;  
-  update_type__spec_file_path         alias for $7;  
-  update_type__spec_file_mtime        alias for $8;  
+  update_type__pretty_name            alias for $2;  -- default null  
+  update_type__pretty_plural          alias for $3;  -- default null
+  update_type__package_uri            alias for $4;  -- default null
+  update_type__package_type           alias for $5;  -- default null  
+  update_type__singleton_p            alias for $6;  -- default null  
+  update_type__spec_file_path         alias for $7;  -- default null  
+  update_type__spec_file_mtime        alias for $8;  -- default null  
 begin
       UPDATE apm_package_types SET
       	pretty_name = coalesce(update_type__pretty_name, pretty_name),
@@ -2849,7 +2849,7 @@ create function apm_package_type__drop_type (varchar,boolean)
 returns integer as '
 declare
   drop_type__package_key            alias for $1;  
-  drop_type__cascade_p              alias for $2; 
+  drop_type__cascade_p              alias for $2;  -- default ''f''
   cur_val                           record; 
 begin
     if drop_type__cascade_p = ''t'' then
@@ -2908,7 +2908,7 @@ end;' language 'plpgsql';
 create function apm_parameter_value__new (integer,integer,integer,varchar)
 returns integer as '
 declare
-  new__value_id               alias for $1;  
+  new__value_id               alias for $1;  -- default null  
   new__package_id             alias for $2;  
   new__parameter_id           alias for $3;  
   new__attr_value             alias for $4;  
@@ -2936,7 +2936,7 @@ end;' language 'plpgsql';
 create function apm_parameter_value__delete (integer)
 returns integer as '
 declare
-  delete__value_id               alias for $1;  
+  delete__value_id               alias for $1;  -- default null
 begin
     delete from apm_parameter_values 
     where value_id = delete__value_id;
@@ -2950,14 +2950,14 @@ end;' language 'plpgsql';
 create function apm_application__new (integer,varchar,varchar,varchar,timestamp,integer,varchar,integer)
 returns integer as '
 declare
-  application_id         alias for $1;  
-  instance_name          alias for $2;  
+  application_id         alias for $1;  -- default null  
+  instance_name          alias for $2;  -- default null
   package_key            alias for $3;  
-  object_type            alias for $4;  
-  creation_date          alias for $5;  
-  creation_user          alias for $6;  
-  creation_ip            alias for $7;  
-  context_id             alias for $8;  
+  object_type            alias for $4;  -- default ''apm_application''
+  creation_date          alias for $5;  -- default now()
+  creation_user          alias for $6;  -- default null
+  creation_ip            alias for $7;  -- default null
+  context_id             alias for $8;  -- default null
   v_application_id       integer;       
 begin
     v_application_id := apm_package__new (
@@ -3000,14 +3000,14 @@ end;' language 'plpgsql';
 create function apm_service__new (integer,varchar,varchar,varchar,timestamp,integer,varchar,integer)
 returns integer as '
 declare
-  service_id             alias for $1;  
-  instance_name          alias for $2;  
+  service_id             alias for $1;  -- default null  
+  instance_name          alias for $2;  -- default null
   package_key            alias for $3;  
-  object_type            alias for $4;  
-  creation_date          alias for $5;  
-  creation_user          alias for $6;  
-  creation_ip            alias for $7;  
-  context_id             alias for $8;  
+  object_type            alias for $4;  -- default ''apm_service''
+  creation_date          alias for $5;  -- default now()
+  creation_user          alias for $6;  -- default null
+  creation_ip            alias for $7;  -- default null
+  context_id             alias for $8;  -- default null
   v_service_id           integer;       
 begin
     v_service_id := apm_package__new (

@@ -647,12 +647,12 @@ end;' language 'plpgsql';
 create function acs_object__new (integer,varchar,timestamp,integer,varchar,integer)
 returns integer as '
 declare
-  new__object_id              alias for $1;  
-  new__object_type            alias for $2;  
-  new__creation_date          alias for $3;  
-  new__creation_user          alias for $4;  
-  new__creation_ip            alias for $5;  
-  new__context_id             alias for $6;  
+  new__object_id              alias for $1;  -- default null
+  new__object_type            alias for $2;  -- default ''acs_object''
+  new__creation_date          alias for $3;  -- default now()
+  new__creation_user          alias for $4;  -- default null
+  new__creation_ip            alias for $5;  -- default null
+  new__context_id             alias for $6;  -- default null
   v_object_id                 acs_objects.object_id%TYPE;
 begin
   if new__object_id is null then
@@ -677,8 +677,8 @@ end;' language 'plpgsql';
 
 create function acs_object__new (integer,varchar) returns integer as '
 declare
-        object_id       alias for $1;
-        object_type     alias for $2;
+        object_id       alias for $1; -- default null
+        object_type     alias for $2; -- default ''acs_object''
 begin
         return acs_object__new(object_id,object_type,now(),null,null,null);
 end;' language 'plpgsql';

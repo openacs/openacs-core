@@ -304,14 +304,14 @@ comment on column parties.url is '
 create function party__new (integer,varchar,timestamp,integer,varchar,varchar,varchar,integer)
 returns integer as '
 declare
-  new__party_id               alias for $1;  
-  new__object_type            alias for $2;  
-  new__creation_date          alias for $3;  
-  new__creation_user          alias for $4;  
-  new__creation_ip            alias for $5;  
+  new__party_id               alias for $1;  -- default null  
+  new__object_type            alias for $2;  -- default ''party''
+  new__creation_date          alias for $3;  -- default now()
+  new__creation_user          alias for $4;  -- default null
+  new__creation_ip            alias for $5;  -- default null
   new__email                  alias for $6;  
-  new__url                    alias for $7;  
-  new__context_id             alias for $8;  
+  new__url                    alias for $7;  -- default null
+  new__context_id             alias for $8;  -- default null
   v_party_id                  parties.party_id%TYPE;
 begin
   v_party_id :=
@@ -416,16 +416,16 @@ comment on table persons is '
 create function person__new (integer,varchar,timestamp,integer,varchar,varchar,varchar,varchar,varchar,integer)
 returns integer as '
 declare
-  new__person_id              alias for $1;  
-  new__object_type            alias for $2;  
-  new__creation_date          alias for $3;  
-  new__creation_user          alias for $4;  
-  new__creation_ip            alias for $5;  
+  new__person_id              alias for $1;  -- default null  
+  new__object_type            alias for $2;  -- default ''person''
+  new__creation_date          alias for $3;  -- default now()
+  new__creation_user          alias for $4;  -- default null
+  new__creation_ip            alias for $5;  -- default null
   new__email                  alias for $6;  
-  new__url                    alias for $7;  
-  new__first_names            alias for $8;  
+  new__url                    alias for $7;  -- default null
+  new__first_names            alias for $8; 
   new__last_name              alias for $9;  
-  new__context_id             alias for $10; 
+  new__context_id             alias for $10; -- default null 
   v_person_id                 persons.person_id%TYPE;
 begin
   v_person_id :=
@@ -617,22 +617,22 @@ comment on column users.n_sessions is '
 create function acs_user__new (integer,varchar,timestamp,integer,varchar,varchar,varchar,varchar,varchar,char,char,varchar,varchar,varchar,boolean,integer)
 returns integer as '
 declare
-  new__user_id                  alias for $1;  
-  new__object_type              alias for $2;  
-  new__creation_date            alias for $3;  
-  new__creation_user            alias for $4;  
-  new__creation_ip              alias for $5;  
+  new__user_id                  alias for $1;  -- default null  
+  new__object_type              alias for $2;  -- default ''user''
+  new__creation_date            alias for $3;  -- default now()
+  new__creation_user            alias for $4;  -- default null
+  new__creation_ip              alias for $5;  -- default null
   new__email                    alias for $6;  
-  new__url                      alias for $7;  
+  new__url                      alias for $7;  -- default null
   new__first_names              alias for $8;  
   new__last_name                alias for $9;  
   new__password                 alias for $10; 
   new__salt                     alias for $11; 
-  new__password_question        alias for $12; 
-  new__password_answer          alias for $13; 
-  new__screen_name              alias for $14; 
-  new__email_verified_p         alias for $15; 
-  new__context_id               alias for $16; 
+  new__password_question        alias for $12; -- default null
+  new__password_answer          alias for $13; -- default null
+  new__screen_name              alias for $14; -- default null
+  new__email_verified_p         alias for $15; -- default ''t''
+  new__context_id               alias for $16; -- default null
   v_user_id                     users.user_id%TYPE;
 begin
   v_user_id :=

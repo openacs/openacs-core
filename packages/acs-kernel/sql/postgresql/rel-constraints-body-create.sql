@@ -18,15 +18,15 @@
 create function rel_constraint__new (integer,varchar,varchar,integer,char,integer,integer,integer,varchar)
 returns integer as '
 declare
-  new__constraint_id          alias for $1;  
-  new__constraint_type        alias for $2;  
+  new__constraint_id          alias for $1;  -- default null  
+  new__constraint_type        alias for $2;  -- default ''rel_constraint''
   new__constraint_name        alias for $3;  
   new__rel_segment            alias for $4;  
-  new__rel_side               alias for $5;  
+  new__rel_side               alias for $5;  -- default ''two''
   new__required_rel_segment   alias for $6;  
-  new__context_id             alias for $7;  
-  new__creation_user          alias for $8;  
-  new__creation_ip            alias for $9;  
+  new__context_id             alias for $7;  -- default null
+  new__creation_user          alias for $8;  -- default null
+  new__creation_ip            alias for $9;  -- default null
   v_constraint_id             rel_constraints.constraint_id%TYPE;
 begin
     v_constraint_id := acs_object__new (

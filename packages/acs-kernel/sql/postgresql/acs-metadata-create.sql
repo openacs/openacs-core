@@ -596,11 +596,11 @@ declare
   create_type__pretty_plural          alias for $3;  
   create_type__supertype              alias for $4;  
   create_type__table_name             alias for $5;  
-  create_type__id_column              alias for $6;  
-  create_type__package_name           alias for $7;  
-  create_type__abstract_p             alias for $8;  
-  create_type__type_extension_table   alias for $9;  
-  create_type__name_method            alias for $10; 
+  create_type__id_column              alias for $6;  -- default ''XXX''
+  create_type__package_name           alias for $7;  -- default null
+  create_type__abstract_p             alias for $8;  -- default ''f''
+  create_type__type_extension_table   alias for $9;  -- default null
+  create_type__name_method            alias for $10; -- default null
   v_package_name acs_object_types.package_name%TYPE;
   v_name_method                       varchar;
   v_idx                               integer;
@@ -639,7 +639,7 @@ create function acs_object_type__drop_type (varchar,boolean)
 returns integer as '
 declare
   drop_type__object_type            alias for $1;  
-  drop_type__cascade_p              alias for $2;  
+  drop_type__cascade_p              alias for $2;  -- default ''f''
   row                               record;
 begin
 
@@ -725,15 +725,15 @@ declare
   create_attribute__attribute_name         alias for $2;  
   create_attribute__datatype               alias for $3;  
   create_attribute__pretty_name            alias for $4;  
-  create_attribute__pretty_plural          alias for $5;  
-  create_attribute__table_name             alias for $6;  
-  create_attribute__column_name            alias for $7;  
-  create_attribute__default_value          alias for $8;  
-  create_attribute__min_n_values           alias for $9;  
-  create_attribute__max_n_values           alias for $10; 
-  create_attribute__sort_order             alias for $11; 
-  create_attribute__storage                alias for $12; 
-  create_attribute__static_p               alias for $13; 
+  create_attribute__pretty_plural          alias for $5;  -- default null
+  create_attribute__table_name             alias for $6;  -- default null
+  create_attribute__column_name            alias for $7;  -- default null
+  create_attribute__default_value          alias for $8;  -- default null
+  create_attribute__min_n_values           alias for $9;  -- default 1
+  create_attribute__max_n_values           alias for $10; -- default 1
+  create_attribute__sort_order             alias for $11; -- default null
+  create_attribute__storage                alias for $12; -- default ''type_specific''
+  create_attribute__static_p               alias for $13; -- default ''f''
 
   v_sort_order           acs_attributes.sort_order%TYPE;
   v_attribute_id         acs_attributes.attribute_id%TYPE;

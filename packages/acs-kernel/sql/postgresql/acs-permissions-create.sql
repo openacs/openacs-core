@@ -310,8 +310,8 @@ create function acs_privilege__create_privilege (varchar,varchar,varchar)
 returns integer as '
 declare
   create_privilege__privilege              alias for $1;  
-  create_privilege__pretty_name            alias for $2;  
-  create_privilege__pretty_plural          alias for $3;  
+  create_privilege__pretty_name            alias for $2;  -- default null  
+  create_privilege__pretty_plural          alias for $3;  -- default null
 begin
     insert into acs_privileges
      (privilege, pretty_name, pretty_plural)

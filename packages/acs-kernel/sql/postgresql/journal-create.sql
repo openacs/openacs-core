@@ -91,14 +91,14 @@ comment on table journal_entries is '
 create function journal_entry__new (integer,integer,varchar,varchar,timestamp,integer,varchar,varchar)
 returns integer as '
 declare
-  new__journal_id             alias for $1;  
+  new__journal_id             alias for $1;  -- default null  
   new__object_id              alias for $2;  
   new__action                 alias for $3;  
-  new__action_pretty          alias for $4;  
-  new__creation_date          alias for $5;  
-  new__creation_user          alias for $6;  
-  new__creation_ip            alias for $7;  
-  new__msg                    alias for $8;  
+  new__action_pretty          alias for $4;  -- default null
+  new__creation_date          alias for $5;  -- default now()
+  new__creation_user          alias for $6;  -- default null
+  new__creation_ip            alias for $7;  -- default null
+  new__msg                    alias for $8;  -- default null
   v_journal_id                journal_entries.journal_id%TYPE;
 begin
 	v_journal_id := acs_object__new (

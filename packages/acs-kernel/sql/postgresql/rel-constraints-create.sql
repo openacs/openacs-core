@@ -607,10 +607,8 @@ select rc.rel_segment, rc.rel_side, rc_required.required_rel_segment
 from rel_constraints rc, rel_constraints rc_required 
 where rc.rel_segment in (select c2.rel_segment
                            from rel_constraints c1, rel_constraints c2
-                          where exists (select 1 
-                                          from rel_constraints
-                                         where rel_side = 'two'
-                                           and rel_segment = c2.required_rel_segment)
+                          where c2.rel_side = 'two'
+                            and c1.rel_side = 'two'
                             and c1.rel_segment = rc_required.rel_segment 
                             and c2.tree_sortkey <= c1.tree_sortkey
                             and c1.tree_sortkey like (c2.tree_sortkey || '%'));
