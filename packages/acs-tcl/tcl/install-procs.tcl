@@ -54,7 +54,7 @@ ad_proc -private ::install::xml::action::source { node } {
         }
 
         set name [apm_required_attribute_value $param name]
-        set value [apm_required_attribute_value $param value]
+        set value [apm_attribute_value -default {} $param value]
 
         set parameters($name) $value
     }
