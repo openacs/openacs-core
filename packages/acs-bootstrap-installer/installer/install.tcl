@@ -48,6 +48,9 @@ if { ![install_good_data_model_p] } {
     install_do_data_model_install
 } else {
     ns_write "Kernel data model already installed."
+    # If kernel is installed it probably means this page has already been requested,
+    # let's exit
+    return
 }
 
 ##############
@@ -162,6 +165,8 @@ ns_write "<b>Installation finished</b>
 <p> The server has been shut down. Normally, it should come back up by itself after a minute or so. </p>
 
 <p> If not, please check your server error log, or contact your system administrator. </p>
+
+<p> When the server is back up you can visit <a href=\"/\">the system homepage</a> </p>
 
 [install_footer]
 "
