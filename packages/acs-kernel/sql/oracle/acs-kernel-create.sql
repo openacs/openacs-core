@@ -30,4 +30,7 @@ set feedback off
 @@ apm-create
 @@ acs-create
 
+-- added by Ben for OpenACS
+@@ acs-create-2
+
 set feedback on
