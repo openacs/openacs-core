@@ -12,6 +12,7 @@
 @@ application-groups-create
 @@ subsite-callbacks-create
 @@ host-node-map-create
+@@ user-sc-create
 
 -- This view lets us avoid using acs_object.name to get party_names.
 -- 
