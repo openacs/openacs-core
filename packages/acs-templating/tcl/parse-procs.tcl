@@ -26,7 +26,6 @@ ad_proc -private template::adp_parse { __adp_stub __args } {
   # declare any variables passed in to an include or master
   # TODO: call adp_set_vars instead.
 
-
   foreach {__key __value} $__args {
     if {[string match "&*" $__key]} {	# "&" triggers call by reference
       if {[string compare "&" $__key]} {
@@ -47,15 +46,15 @@ ad_proc -private template::adp_parse { __adp_stub __args } {
       set $__key $__value
     }
   }
-
+  
   # set the stack frame at which the template is being parsed so that
   # other procedures can reference variables cleanly
   variable parse_level
   lappend parse_level [info level]
-
+  
   # execute the code to prepare the data sources for a template
   if { [catch { adp_prepare } errMsg] } {
-
+    
     # return without rendering any HTML if the code aborts
     if { [string equal $errMsg ADP_ABORT] } { 
       return "" 
@@ -86,39 +85,41 @@ ad_proc -private template::adp_parse { __adp_stub __args } {
     # it's a regular templated page
     set templated_p 1
   }
-
+  
   if { $templated_p } { # it's a templated page
-
+    
     # ensure that template output procedure exists and is up-to-date
     template::adp_init $template_extension $__adp_stub
-
+    
     # get result of template output procedure into __adp_output, and properties into __adp_properties
     template::code::${template_extension}::$__adp_stub
     # call the master template if one has been defined
     if { [info exists __adp_master] } {
-
+      
       # pass properties on to master template
       set __adp_output [template::adp_parse $__adp_master \
         [concat [list __adp_slave $__adp_output] [array get __adp_properties]]]
     }
-  } {
+  } else {
     # no template;  errMsg tells us if adp_prepare at least found a script.
-    if !$errMsg {
-      #No template. Perhaps there is an html file.
+    if { !$errMsg } {
+      # No template. Perhaps there is an html file.
       if { [file exists $__adp_stub.html] } {
-	ns_log notice "getting output from html file"
+	ns_log notice "getting output from .html file"
 	set __adp_output [template::util::read_file "${__adp_stub}.html"]
       } elseif  { [file exists $__adp_stub.htm] } {
+	ns_log notice "getting output from .htm file"
 	set __adp_output [template::util::read_file "${__adp_stub}.htm"]
       } else {
 	error "No script or template found for page '$__adp_stub'"
       }
     }
-
-    # pop off parse level
-    template::util::lpop parse_level
-
-    return $__adp_output				; # empty in non-templated page
+  }
+  
+  # pop off parse level
+  template::util::lpop parse_level
+  
+  return $__adp_output				; # empty in non-templated page
 }
 
 ad_proc -private template::adp_set_vars {} {
