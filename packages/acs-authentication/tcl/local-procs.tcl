@@ -439,8 +439,9 @@ ad_proc -private auth::local::registration::Register {
                 -username $username \
                 -authority_id $authority_id \
                 -password $password \
-                -message_type "Registration" \
-                -from [parameter::get -parameter NewRegistrationEmailAddress -default [ad_system_owner]]
+                -from [parameter::get -parameter NewRegistrationEmailAddress -default [ad_system_owner]] \
+                -subject_msg_key "acs-subsite.email_subject_Registration_password" \
+                -body_msg_key "acs-subsite.email_body_Registration_password" 
 	} {
             # We don't fail hard here, just log an error
             global errorInfo
