@@ -345,12 +345,12 @@ Usually it should include the port if your server is not on port 80<br><br>
 </tr>
 <tr>
   <th align=right>System Name:</th>
-  <td>[install_input_widget system_name]<br>
+  <td>[install_input_widget -value "yourdomain Network" system_name]<br>
 The name of your system.<br><br>
 </tr>
 <tr>
   <th align=right>Publisher Name:</th>
-  <td>[install_input_widget publisher_name]<br>
+  <td>[install_input_widget -value "Yourdomain Network, Inc." publisher_name]<br>
 The legal name of the person or corporate entity responsible for the site.<br><br>
 </tr>
 <tr>
