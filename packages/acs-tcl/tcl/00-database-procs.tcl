@@ -1313,6 +1313,10 @@ ad_proc -public db_multirow {
     args 
 } {
     @param dbn The database name to use.  If empty_string, uses the default database.
+    
+    @param unclobber If set, will cause the proc to not overwrite local variables. Actually, what happens
+    is that the local variables will be overwritten, so you can access them within the code block. However, 
+    if you specify -unclobber, we will revert them to their original state after execution of this proc.
 
    Usage:
     <blockquote>
