@@ -17,7 +17,7 @@ set focus ""
 set authority_options [auth::authority::get_authority_options]
 
 if { [llength $authority_options] > 1 } {
-    ad_form -name recover_password -edit_buttons [list [list [_ acs-subsite.Recover_Password_Button] ok]] -form {
+    ad_form -name recover_password -edit_buttons [list [list [_ acs-kernel.common_continue] ok]] -form {
         {authority_id:integer(select) 
             {label "[_ acs-kernel.authentication_authority]"} 
             {options $authority_options}
@@ -25,8 +25,8 @@ if { [llength $authority_options] > 1 } {
         }
     }
 } else {
-    ad_form -name recover_password -edit_buttons [list [list [_ acs-subsite.Recover_Password_Button] ok]] -form {
-        {authority_id:integer(hidden) 
+    ad_form -name recover_password -edit_buttons [list [list [_ acs-kernel.common_continue] ok]] -form {
+        {authority_id:integer(hidden),optional 
             {value $authority_id}
         }
     }

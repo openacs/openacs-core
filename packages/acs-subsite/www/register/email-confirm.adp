@@ -1,18 +1,17 @@
 <master>
-  <property name="title">#acs-subsite.Email_Confirmation#</property>
   <property name="context">{#acs-subsite.Email_Confirmation#}</property>
 
-<if @email_verified_p@ eq "f">
+<if @user_info.email_verified_p@ true>
 
   <property name="title">#acs-subsite.lt_Your_email_is_confirm#</property>
 
-  <if @member_state@ eq "approved">
+  <if @user_info.member_state@ eq "approved">
 
     #acs-subsite.lt_Your_email_has_been_c#
     <p>
     <form action="index" method=post>
     @export_vars;noquote@
-    <input type=submit value="Continue">
+    <input type=submit value="#acs-kernel.common_continue#">
     </form>
 
     <p> #acs-subsite.lt_Note_If_youve_forgott_1#</a>. </p>
