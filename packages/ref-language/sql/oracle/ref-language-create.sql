@@ -46,4 +46,4 @@ end;
 /
 
 -- data
-@../common/language-data
+@ '../common/language-data'
