@@ -1,0 +1,27 @@
+
+Mon Dec 11 23:15:49 2000
+
+acs-lang package version 4.0
+
+Changes from the previous version
+
++ The timezones code now uses the acs-references package timezones database
+
++ There is default code to store and cache the user's locale
+preference, using session variables
+
++ The message catalog works on a per-package basis, so each package
+can defines its own /catalog directory. By default, the catalog under
+/packages/acs-lang will get loaded at server startup. Other packages
+should explicitly call 
+
+  lang_catalog_load <package-key>
+
+in their init.tcl file.
+
+Messages keys which are loaded are automatically prefixed with the
+package key.
+
+
++ The lang_message_lookup function takes an optional default value
+

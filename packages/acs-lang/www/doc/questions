@@ -1,0 +1,131 @@
+X-Authentication-Warning: gnabgib.no: brech set sender to christian@arsdigita.com using -f 
+From: Christian Brechbuehler <christian@arsdigita.com> 
+Date: Thu, 11 Jan 2001 22:03:13 -0500 (EST) 
+To: Henry Minsky <hqm@ai.mit.edu> 
+Subject: internationalization 
+X-Mailer: VM 6.75 under Emacs 20.4.1 
+X-MIME-Autoconverted: from quoted-printable to 8bit by life.ai.mit.edu id RAA06790 
+
+
+Hi Henry,
+
+
+you put a few questions in the requirements document.  I'd like to
+follow up on these, and comment about some other requirements.
+
+
+
+* Resource Bundles / Content Repository
+
+
+Not sure.  Nav-bar: I'd probably try to write it as an <include>able
+templated page, a.k.a. widget.  With several locales, the (yet to be
+specified) template selection mechanism will pick the right one.
+
+
+
+> Design question: Do we want to mandate that all template files be
+> stored in UTF8? I don't think so, because most people don't have
+> Unicode editors, or don't want to be bothered with an extra step to
+> convert files to UTF8 and back when editing them in their favorite
+> editor.
+
+
+Most people around here seem to have emacs as their favorite editor.
+There seems to be some UTF-8 support around, although some of the
+stuff involves recompiling emacs.  I'd prefer an appropriate (minor?)
+mode for editing UTF-8.  From http://www.cl.cam.ac.uk/~mgk25/unicode.html:
+
+
+    <LI>Miyashita Hisashi has written <A
+    HREF="ftp://ftp.m17n.org/pub/mule/Mule-UCS/">MULE-UCS</A>, a character
+    set translation package for Emacs 20.6 or higher, which can translate
+    between the Mule encoding (used internally by Emacs) and ISO 10646.
+    
+    <LI>Otfried Cheong provides on his <A
+    HREF="http://www.cs.uu.nl/~otfried/Mule/">Unicode encoding for GNU
+    Emacs</A> page an extension to MULE-UCS that covers the entire BMP by
+    adding <SAMP>utf-8</SAMP> as another Emacs character set. His page
+    also contains a short installation guide for MULE-UCS.
+    
+    <LI><A HREF="http://turnbull.sk.tsukuba.ac.jp/Tools/XEmacs/">UTF-8
+    xemacs patch</A> by Tomohiko Morioka.
+
+
+
+> Same question for script and template files, how do we know what
+> language and character set they are authored in? Should we overload
+> the filename suffix (e.g., '.shiftjis.adp', '.ja_JP.euc.adp')?
+
+
+I think we'll have to mess with the request processor anyway to teach
+it that x.ja_JP.adp is a hit for HTTP request "x", at least if the
+locale is ja_JP.  Then we can bring in the encoding in the name as
+well.  We could put the encoding in the first line, but that would
+go against requirement 50.20 (similar to 40.70).
+
+
+
+> Should we mandate that there is a one-to-one mapping from locale to
+> character set? e.g. ja_JP -> ShiftJIS, fr_FR -> ISO-8859-1 
+
+
+Make that many-to-one.  E.g., quite a number of Western locales use
+ISO-8859-1.
+
+
+
+> Should we require all Tcl files be stored as UTF8? That seems too
+> much of a burden on developers.
+
+
+Most tcl scripts will be 7-bit ASCII anyway, and hence UTF-8 a priori.
+This requirement doesn't seem too strict to me.  I just shouldn't put
+"@author=Brechbühler" in them :-).
+
+
+
+60.10 (ACS error messages):
+
+
+I just looked into those error mechanism for
+http://www.arsdigita.com/sdm/one-ticket?ticket_id=9178.  When we go
+templated as I suggest, we should be do that with awareness to the
+lang package.
+
+
+
+70.0 Question:  "created" by the designer(s)?
+
+
+
+70.10 Comment:  Shan Shan Huang is writing a WAP package.  For now she
+   chose ".wdp" extension (I didn't like .wml, because normal
+   templates use .adp, not .html).  But I'd like to treat wap more or
+   less the same way; we might switch to foo.wml.adp, or even
+   foo.fr.wml.adp for the french WAP version.
+
+
+70.20 is an interesting problem.  So far the RP looks under the page
+   root for foo.{adp,tcl,html,...}, then in the file according to the
+   site map.  We'll have to extend it to look first for foo.en_GB.adp,
+   then foo.en.adp, then foo.adp.
+     This solution would imply that foo.adp (or even a foo.tcl) in the
+   server root overrides any more specific templates in a mounted
+   package.
+
+
+80.10 Yes, even Swedish and German differ!  (Both ISO-8859-1, right?)
+
+
+90.50 drop "would" from "would should".
+
+
+100.10 "three bytes" implies UCS-2 (and not UCS-4).
+
+
+
+Just my assorted thoughts
+
+
+  Christian
