@@ -40,33 +40,6 @@
       </querytext>
 </fullquery>
 
-
-<fullquery name="content::init.get_item_info">      
-      <querytext>
-
-    select 
-      item_id, content_type
-    from 
-      cr_items
-    where
-      item_id = content_item__get_id(:url, :content_root, 'f')
-
-      </querytext>
-</fullquery>
-
-<fullquery name="content::init.get_template_info">      
-      <querytext>
-
-    select 
-      item_id, content_type
-    from 
-      cr_items
-    where
-      item_id = content_item__get_id(:url, :template_root, 'f')
-
-      </querytext>
-</fullquery>
-
 <fullquery name="content::init.get_template_url">      
       <querytext>
 
