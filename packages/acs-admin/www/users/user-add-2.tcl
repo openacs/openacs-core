@@ -3,11 +3,7 @@ ad_page_contract {
     @cvs-id $Id$
 } -query {
     user_id
-    email
-    first_names
-    last_name
     password
-    password_confirmation
     {referer "/acs-admin/users"}
 } -properties {
     context:onevalue
@@ -23,82 +19,16 @@ ad_page_contract {
 
 set admin_user_id [ad_verify_and_get_user_id]
 
-# email first_names last_name, user_id
-
-# Error Count and List
-set exception_count 0
-set exception_text ""
-
-# Check input
-
-if {![info exists user_id] || [empty_string_p $user_id] } {
-    incr exception_count
-    append exception_text "<li>Your browser dropped the user_id variable or something is wrong with our code.\n"
-}
-
-
-
-if {![info exists email] || ![util_email_valid_p $email]} {
-    incr exception_count
-    append exception_text "<li>The email address that you typed doesn't look right to us.  Examples of valid email addresses are 
-<ul>
-<li>Alice1234@aol.com
-<li>joe_smith@hp.com
-<li>pierre@inria.fr
-</ul>
-"
-} else {
-    set email_count [db_string unused "select count(email)
-from parties where email = lower(:email)
-and party_id <> :user_id"]
-
-    # note, we dont' produce an error if this is a double click
-    if {$email_count > 0} {
-	incr exception_count
-	append exception_text "<li> $email was already in the database."
-    }
-
-}
-
-if {![info exists first_names] || [empty_string_p $first_names]} {
-    incr exception_count
-    append exception_text "<li> You didn't enter a first name."
-}
-
-if {![info exists last_name] || [empty_string_p $last_name]} {
-    incr exception_count
-    append exception_text "<li> You didn't enter a last name."
-}
-
-if { ![string equal $password $password_confirmation] } {
-    incr exception_count
-    append exception_text "<li> The two passwords didn't match."
-}
-
-# We've checked everything.
-# If we have an error, return error page, otherwise, do the insert
-
-if {$exception_count > 0} {
-    ad_return_complaint $exception_count $exception_text
-    return
+# Get user info
+acs_user::get -user_id $user_id -array user
+# easier to work with scalar vars than array
+foreach var_name [array names user] {
+    set $var_name $user($var_name)
 }
 
 if { [empty_string_p $password] } {
     set password [ad_generate_random_string]
 }
-
-if { [db_string double_click {}] != 0 } {
-    # This was a double-click. Ignore.
-} else {
-    set user_id [ad_user_new $email $first_names $last_name $password "" "" "" "t" "approved" $user_id]
-
-    if { !$user_id } {
-        # not a double click, and it failed
-        ad_return_error "Insert Failed" "We were unable to create your user record in the database."
-        ad_script_abort
-    }
-}
-
 
 set administration_name [db_string admin_name "select
 first_names || ' ' || last_name from persons where person_id = :admin_user_id"]
