@@ -278,7 +278,7 @@ doc_body_append "
 </table>
 
 <p />
-<a href=\"unmounted.tcl\">Unmounted Applications</a> <p />
+<a href=\"unmounted\">Unmounted Applications</a> <p />
 
 <p />
        <center><strong>Configurable Services</strong></center>
