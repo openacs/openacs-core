@@ -747,7 +747,7 @@ aa_register_case -cats {} -error_level notice acs_tcl__tcl_file_common_errors {
 aa_register_case -cats {db smoke production_safe} acs-tcl__named_constraints {
     Check that there are no tables with unnamed constraints
 
-
+    @author Jeff Davis davis@xarg.net
 } {
     switch -exact -- [db_name] { 
         PostgreSQL { 
@@ -812,6 +812,63 @@ aa_register_case -cats {smoke production_safe} acs-tcl__check_info_files {
     }
 }
 
+aa_register_case -cats {smoke production_safe} acs-tcl__check_upgrade_ordering { 
+    Check that all the upgrade files are well ordered (non-overlapping and v1 > v2)
+
+    @author Jeff Davis davis@xarg.net
+} {
+    foreach dir [lsort [glob -nocomplain -types f "[acs_root_dir]/packages/*/*.info"]] {
+
+        set error_p 0
+
+        regexp {/([^/]*).info} $dir match package
+        set files [apm_get_package_files -package_key $package -file_types data_model_upgrade]
+
+        # build list of files for each db type, sort, check strict ordering.
+        foreach db_type {postgresql oracle} {
+            set upgrades [list]
+            foreach file $files {
+                set db [apm_guess_db_type $package $file]
+                if {[string is space $db] 
+                    || [string equal $db $db_type]} {
+                    set tail [file tail $file]
+                    if {[regexp {\-(.*)-(.*).sql} $tail match v1 v2]} {
+                        set v1s [apm_version_sortable $v1]
+                        set v2s [apm_version_sortable $v2]
+                        if {[string compare $v1s $v2s] > -1} {
+                            set error_p 1
+                            aa_log_result fail "$file: from after to version"
+                        } else {
+                            lappend upgrades [list $v1s $v2s $v1 $v2 $file]
+                        }
+                    } else {
+                        set error_p 1
+                        aa_log_result fail "$file: could not find version numbers"
+                    }
+                }
+            }
+
+            # if we have more than 1 upgrade check they are well ordered.
+            if {[llength $upgrades] > 1} {
+                set u1 [lsort -dictionary -index 0 $upgrades]
+                set u2 [lsort -dictionary -index 1 $upgrades]
+
+                foreach f1 $u1 f2 $u2 {
+                    if {![string equal $f1 $f2]} {
+                        set error_p 1
+                        aa_log_result fail "$package upgrade not well ordered [lindex $f1 end] [lindex $f2 end]\n"
+                    }
+                }
+            }
+        }
+
+        if {!$error_p} {
+            aa_log_result pass "$package upgrades well ordered"
+        }
+    }
+}
+
+
 aa_register_case -cats {api smoke} util__randomize_list {
     Test util::randomize_list
 } {
@@ -836,7 +893,7 @@ aa_register_case -cats {api smoke} util__randomize_list {
 
 aa_register_case -cats {api} acs_tcl__util_url_valid_p {
     A very rudimentary test of util_url_valid_p
-                                                                                                                             
+
     @creation-date 2004-01-10
     @author Branimir Dolicki (bdolicki@branimir.com)
 } {

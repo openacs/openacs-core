@@ -147,21 +147,21 @@
       </querytext>
 </fullquery>
 
- 
-<fullquery name="apm_upgrade_script_compare.test_f1">      
+
+<fullquery name="apm_upgrade_script_compare.test_f1">
       <querytext>
 
-	    select apm_package_version__sortable_version_name('$f1_version_from');
-	
+	    select apm_package_version__sortable_version_name(:f1_version_from);
+
       </querytext>
 </fullquery>
 
- 
-<fullquery name="apm_upgrade_script_compare.test_f2">      
+
+<fullquery name="apm_upgrade_script_compare.test_f2">
       <querytext>
 
-	    select apm_package_version__sortable_version_name('$f2_version_from');
-	
+	    select apm_package_version__sortable_version_name(:f2_version_from);
+
       </querytext>
 </fullquery>
 
@@ -234,6 +234,12 @@
                    apm_package_version__sortable_version_name(:version_name_2) as sortable_version_2
             from   dual
 
+      </querytext>
+</fullquery>
+
+<fullquery name="apm_version_sortable.sortable_version">
+      <querytext>
+	    select apm_package_version__sortable_version_name(:version)
       </querytext>
 </fullquery>
 

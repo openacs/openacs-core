@@ -286,4 +286,11 @@
       </querytext>
 </fullquery>
 
+
+<fullquery name="apm_version_sortable.sortable_version">
+      <querytext>
+	    select apm_package_version.sortable_version_name(:version) from dual
+      </querytext>
+</fullquery>
+
 </queryset>

@@ -790,9 +790,12 @@ ad_proc -public ad_html_to_text {
 	
 	set count 0
 	while 1 {
-	    if { [incr count] > 1000 } {
-		error "There appears to be a programming bug in ad_html_to_text: We've entered an infinite loop."
-	    }
+            if {[incr count] > 1000 } {
+                # JCD: the programming bug is that an unmatched < in the input runs off forever looking for 
+                # it's closing > and in some long text like program listings you can have lots of quotes 
+                # before you find that >
+                error "There appears to be a programming bug in ad_html_to_text: We've entered an infinite loop."
+            }
 	    # Find the positions of the first quote, apostrophe and greater-than sign.
 	    set quote_idx [string first \" $html $i]
 	    set apostrophe_idx [string first ' $html $i]
