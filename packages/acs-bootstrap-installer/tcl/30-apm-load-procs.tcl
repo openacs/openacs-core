@@ -140,6 +140,54 @@ ad_proc apm_guess_file_type { package_key path } {
     return $type
 }
 
+ad_proc -public apm_get_package_files {
+   {-package_key:required}
+   {-file_types {}}
+} {
+  <p>
+  Returns all files, or files of a certain types, belonging to an APM
+  package. Ignores files based on proc apm_include_file_p and determines file type
+  of files with proc apm_guess_file_type. Only returns file with no db type or a
+  db type matching that of the system.
+  </p>
+
+  <p>
+  Goes directly to the filesystem to find
+  files instead of using a file listing in the package info file or the database.
+  </p>
+
+  @param package_key    The key of the package to return file paths for
+  @param file_types     The type of files to return. If not provided files of all types
+                        recognized by the APM are returned.
+  
+  @return The paths, relative to the root dir of the package, of matching files.
+
+  @author Peter Marklund
+
+  @see apm_include_file_p
+  @see apm_guess_file_type
+  @see apm_guess_db_type
+} {
+    set package_path [acs_package_root_dir $package_key]
+    set files [lsort [ad_find_all_files -check_file_func apm_include_file_p $package_path]]
+
+    set matching_files [list]
+    foreach file $files {
+        set rel_path [string range $file [expr [string length $package_path] + 1] end]
+        set file_type [apm_guess_file_type $package_key $rel_path]
+        set file_db_type [apm_guess_db_type $package_key $rel_path]
+
+        set type_match_p [expr [empty_string_p $file_types] || [lsearch $file_types $file_type] != -1]
+        set db_match_p [expr [empty_string_p $file_db_type] || [string equal $file_db_type [db_type]]]
+
+        if { $type_match_p && $db_match_p } {
+            lappend matching_files $rel_path
+        }
+    }
+
+    return $matching_files
+}
+
 ad_proc -private apm_parse_catalog_path { file_path } {
     Given the path of a file attempt to extract package_key, 
     prefix, charset and locale
@@ -275,9 +323,7 @@ ad_proc apm_source { __file } {
 	return 0
     }
 
-    set root_dir_len [string length [acs_root_dir]]
-    set rel_path [string range $__file [expr $root_dir_len + 1] end]
-    nsv_set apm_library_mtime $rel_path [file mtime $__file]    
+    nsv_set apm_library_mtime [ad_make_relative_path $__file] [file mtime $__file]    
 
     return 1
 }

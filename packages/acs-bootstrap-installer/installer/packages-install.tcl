@@ -37,7 +37,7 @@ install_redefine_ad_conn
 set dependency_results [apm_dependency_check -initial_install [apm_scan_packages -new [file join [acs_root_dir] packages]]]
 set dependencies_satisfied_p [lindex $dependency_results 0]
 set pkg_list [lindex $dependency_results 1]
-apm_packages_full_install -callback apm_dummy_callback $pkg_list
+apm_packages_full_install -callback apm_ns_write_callback $pkg_list
 
 # Complete the initial install.
 
@@ -47,7 +47,7 @@ if { ![ad_acs_admin_node] } {
 
     # Mount the main site
     cd [file join [acs_root_dir] packages acs-kernel sql [db_type]]
-    db_source_sql_file -callback apm_dummy_callback acs-install.sql
+    db_source_sql_file -callback apm_ns_write_callback acs-install.sql
 
     # Make sure the site-node cache is updated with the main site
     site_node::init_cache
