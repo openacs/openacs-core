@@ -51,7 +51,7 @@
         or
           lower(text) like '%function%'
       )
-      order by line_header"
+      order by line_header
     
       </querytext>
 </fullquery> 
@@ -72,7 +72,7 @@
         or
           lower(text) like '%function%'
       )
-      order by line_header" -eval {
+      order by line_header
 
     
       </querytext>
