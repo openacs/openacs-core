@@ -13,6 +13,7 @@ ad_library {
     @author Bruno Mattarollo (bruno.mattarollo@ams.greenpeace.org)
     @author Peter Marklund (peter@collaboraid.biz)
     @author Lars Pind (lars@collaboraid.biz)
+    @author Christian Hvid
     @cvs-id $Id$
 }
 
@@ -120,17 +121,18 @@ namespace eval lang::util {
         return $indices_list
     }    
 
-    ad_proc extract_keys_from_adps { adp_files } {
+    ad_proc replace_adp_message_tags_with_lookups { adp_files } {
         Modify the given adp templates by replacing occurencies of
     
         <#package_key.message_key Some en_US text#>
     
         with #package_key.message_key# and create entries in the file
         $package_root/catalog/$package_key.en_US.iso-8859-1.cat for
-        each of these keys.
+        each of these keys. Returns the number of replacements done.
     
         @author Peter marklund (peter@collaboraid.biz)
     } {
+        set number_of_replacements "0"
     
         # First open the catalog file of the package to add new message keys to
         if { [llength $adp_files] > 0 } {
@@ -147,16 +149,19 @@ namespace eval lang::util {
             set catalog_file_path "$catalog_dir/$package_key.en_US.iso-8859-1.cat"
             ns_log Notice "lang_extract_keys_from_adps: opening catalog file $catalog_file_path for writing"
             set catalog_file_id [open "$catalog_file_path" a+]
-            # The file may not end in a new line so add one
-            puts $catalog_file_id "\n"
+
+            # Use the original catalog file contents to determine if a key should
+            # be added to the catalog file or not
+            set original_catalog_file_contents [read $catalog_file_id]
+
+            if { ![regexp {\n$} $original_catalog_file_contents match] } {
+                # The file does not end in a new line so add one
+                puts $catalog_file_id "\n"                
+            }
         } else {
             # No files to process so return
             return
         }
-
-        # Use the original catalog file contents to determine if a key should
-        # be added to the catalog file or not
-        set original_catalog_file_contents [read $catalog_file_id]
 
         # Keep track of the messages added to the catalog file
         array set added_catalog_messages {}
@@ -185,6 +190,8 @@ namespace eval lang::util {
             # Get the indices of the first and last char of the <#...#> text snippets
             set message_key_indices [lang::util::get_adp_message_indices $file_contents]
             foreach index_pair $message_key_indices {
+
+                incr number_of_replacements
 
                 set tag_start_idx [lindex $index_pair 0]
                 set tag_end_idx [lindex $index_pair 1]
@@ -244,6 +251,8 @@ namespace eval lang::util {
         if { [info exists catalog_file_id] } {
             close $catalog_file_id
         }
+
+        return $number_of_replacements
     }   
 
     ad_proc -private get_unique_key_to_add_to_catalog_file {
@@ -368,6 +377,157 @@ namespace eval lang::util {
         return [db_string nls_language_from_language {}]
     }
 
+
+    ad_proc -private remove_gt_lt {
+        s
+    } {
+        Removes < > and replaces them with &lt &gt;
+    } {
+        regsub -all "<" $s {\&lt;} s
+        regsub -all ">" $s {\&gt;} s
+        return $s
+    }
+        
+
+    ad_proc -public replace_adp_text_with_message_tags { 
+        file_name
+        mode
+        {keys {}}
+        
+    } {
+        Prepares an .adp-file for localization by inserting temporary hash-tags
+        around text strings that looks like unlocalized plain text. Needless to say
+        this is a little shaky so not all plain text is caught and the script may insert
+        hash-tags around stuff that should not be localized. It is conservative though.
+
+        There are two modes the script can be run in:
+
+        - report : do *not* write changes to the file but return a report with suggested changes.
+
+        - write : write changes in the file - it expects a list of keys and will insert them
+          in the order implied by the report - a report is also returned.
+
+        The report is list of two lists: The first being a list of pairs (key, text with context)
+        and the second is a list of suspious looking garbage. In report mode the keys are suggested
+        keys and in write mode the keys are the keys supplied in the keys parameter.
+
+        @author Christian Hvid
+        @author Jeff Davis
+
+    } {
+        set state text 
+        set out {}
+
+        set report [list]
+        set garbage [list]
+
+        set n 0
+    
+        # open file and read its content
+
+        set fp [open $file_name "r"]
+        set s [read $fp]
+        close $fp
+
+        #ns_write "input== s=[string range $s 0 600]\n"
+        set x {}
+        while {![empty_string_p $s] && $n < 1000} { 
+            if { $state == "text" } { 
+    
+                # clip non tag stuff
+                if {![regexp {(^[^<]*?)(<.*)$} $s match text s x]} { 
+                    set text $s
+                    set s {}
+                } 
+    
+                # make sure the string is non empty and contains at least one letter.
+                if {![empty_string_p $text] 
+                    && ![string is space $text] 
+                    && [string match -nocase {*[A-Z]*} $text]
+                    && ![regexp {^\s*@[A-Za-z_.-]*@\s*$} $text]
+                    && ![string match {*&nbsp;*} $text]
+                    && ![string match {*@*} $text]
+                    && ![string match {*\#*} $text]
+                    && ![string match {*\{*} $text]
+                    && ![string match {*\}*} $text]
+                    && [string length $text] > 1
+                } {
+                    regexp {^(\s*)(.*?)(\s*)$} $text match lead text lag
+    
+                    if { $mode == "report" } {
+                        # create a key for the text
+                        
+                        regsub -all " " $text "_" key
+                        # Do not allow . in the key as dot is used as a separator to qualify a key
+                        # with the package key. The prepending with package key is done at a later
+                        # stage
+                        regsub -all {[^-a-zA-Z0-9_]} $key "" key
+                        
+                        # is this key too long?
+                        
+                        if { [string length $key] > 20 } {
+                            set key "lt_[string range $key 0 20]"
+                        }
+                        
+                        lappend report [list $key "<code>[string range [remove_gt_lt $out$lead] end-20 end]<b><span style=background:#ffffc0>$text</span></b>[string range [remove_gt_lt $lag$s] 0 20]</code>" ]
+                    } else {    
+                        if { [lindex $keys $n] != "" } {
+                            lappend report [list [lindex $keys $n] "<code>[string range [remove_gt_lt $out$lead] end-20 end]<b><span style=background:#ffffc0>$text</span></b>[string range [remove_gt_lt $lag$s] 0 20]</code>" ]
+                            append out "$lead<\#[lindex $keys $n] $text\#>$lag"
+                        } else {
+                            lappend garbage "<code>[string range [remove_gt_lt $out$lead] end-20 end]<b><span style=background:#ffffc0>$text </span></b>[string range [remove_gt_lt $lag$s] 0 20]</code>"
+                            append out "$lead$text$lag"
+                        }
+                    }
+
+                    incr n
+    
+                } else { 
+                    # this was not something we should localize
+    
+                    append out $text
+    
+                    # but this maybe something that should be localized by hand
+    
+                    if { ![string match {*\#*} $text] && ![string is space $text] && [string match -nocase {*[A-Z]*} $text] && ![regexp {^\s*@[^@]+@\s*$} $text] } {
+    
+                        # log a comment on it and make a short version of the text that is easier to read
+    
+                        regsub -all "\n" $text "" short_text
+    
+                        set short_text [string range $short_text 0 40]
+                        
+                        lappend garbage "<code>$short_text</code>"
+
+                    }
+    
+                }
+                set state tag            
+    
+            } elseif { $state == "tag"} { 
+                if {![regexp {(^<[^>]*?>)(.*)$} $s match tag s]} { 
+                    set s {}
+                } 
+                append out $tag
+                set state text
+    
+            }
+        }
+
+        if { $mode == "write" } {
+            if { $n > 0 } {
+                # backup original file - fail silently if backup already exists
+
+                if { [catch {file copy $file_name $file_name.orig}] } { }
+            
+                set fp [open $file_name "w"]
+                puts $fp $out
+                close $fp
+            }
+        }
+
+        return [list $report $garbage]
+    }
 
 }
 
