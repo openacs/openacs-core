@@ -1622,7 +1622,8 @@ ad_page_contract_filter -type post date { name date } {
     if { [regexp {^(0*)(([1-9][0-9]*|0))$} $date(month) match zeros real_value] } {
 	set date(month) $real_value
     } else {
-	set date(month) [expr [lsearch [nsv_get _nsdb months] $date(month)] + 1]
+        set months_list {January February March April May June July August September October November December}
+	set date(month) [expr [lsearch $months_list $date(month)] + 1]
     }
 
     if {
