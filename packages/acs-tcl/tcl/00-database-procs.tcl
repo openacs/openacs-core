@@ -468,7 +468,7 @@ ad_proc -public db_with_handle {{ -dbn "" } db code_block } {
     }
     if { $db_state(n_handles_used) >= [llength $db_state(handles)] } {
         set pool [db_nth_pool_name -dbn $dbn $db_state(n_handles_used)]
-        set start_time [clock clicks]
+        set start_time [clock clicks -milliseconds]
         set errno [catch {
             set db [ns_db gethandle $pool]
         } error]
@@ -743,7 +743,7 @@ ad_proc -private db_exec_plpgsql { db statement_name pre_sql fname } {
     @see db_exec_plsql
 
 } {
-    set start_time [clock clicks]
+    set start_time [clock clicks -milliseconds]
 
     set sql [db_qd_replace_sql $statement_name $pre_sql]
 
@@ -886,7 +886,7 @@ ad_proc -public db_release_unused_handles {{ -dbn "" }} {
                 break
             }
 
-            set start_time [clock clicks]
+            set start_time [clock clicks -milliseconds]
             ns_db releasehandle $db
             ad_call_proc_if_exists ds_collect_db_call $db releasehandle "" "" $start_time 0 ""
             incr index_to_examine -1
@@ -902,7 +902,7 @@ ad_proc -private db_getrow { db selection } {
     routines as necessary.
 
 } {
-    set start_time [clock clicks]
+    set start_time [clock clicks -milliseconds]
     set errno [catch { return [ns_db getrow $db $selection] } error]
     ad_call_proc_if_exists ds_collect_db_call $db getrow "" "" $start_time $errno $error
     if { $errno == 2 } {
@@ -920,7 +920,7 @@ ad_proc -private db_exec { type db statement_name pre_sql {ulevel 2} args } {
     (if set).
 
 } {
-    set start_time [clock clicks]
+    set start_time [clock clicks -milliseconds]
     set driverkey [db_driverkey -handle_p 1 $db]
 
     # Note: Although marked as private, db_exec is in fact called
@@ -2930,7 +2930,7 @@ ad_proc -private db_exec_lob_oracle {{
     depending on the value of the $bind variable in the calling environment
     (if set).
 } {
-    set start_time [clock clicks]
+    set start_time [clock clicks -milliseconds]
 
     set sql [db_qd_replace_sql $statement_name $pre_sql]
 
@@ -3049,7 +3049,7 @@ ad_proc -private db_exec_lob_postgresql {{
     Low level replacement for db_exec which emulates blob handling.
 
 } {
-    set start_time [clock clicks]
+    set start_time [clock clicks -milliseconds]
 
     # Query Dispatcher (OpenACS - ben)
     set sql [db_qd_replace_sql $statement_name $pre_sql]

@@ -79,12 +79,12 @@ ad_proc -public cmp_page_filter { why } {
     regexp {^/([^/]*)(.*)} $url_stub all package_key rest
     set file_stub "[acs_root_dir]/packages/$package_key/www$rest"
 
-    set beginTime [clock clicks]
+    set beginTime [clock clicks -milliseconds]
 
     set output "<pre>[ns_quotehtml \
       [template::adp_compile -file $file_stub.adp]]</pre>"
 
-    set timeElapsed [expr ([clock clicks] - $beginTime) / 1000]
+    set timeElapsed [expr ([clock clicks -milliseconds] - $beginTime)]
     ns_log debug "cmp_page_filter: Time elapsed: $timeElapsed"
 
   } errMsg] } {
@@ -106,13 +106,13 @@ ad_proc -public dat_page_filter { why } {
     regexp {^/([^/]*)(.*)} $url_stub all package_key rest
     set code_stub "[acs_root_dir]/packages/$package_key/www$rest"
 
-    set beginTime [clock clicks]
+    set beginTime [clock clicks -milliseconds]
 
     set file_stub [template::get_resource_path]/messages/datasources
 
     set output [template::adp_parse $file_stub [list code_stub $code_stub]]
 
-    set timeElapsed [expr ([clock clicks] - $beginTime) / 1000]
+    set timeElapsed [expr ([clock clicks -milliseconds] - $beginTime)]
     ns_log debug " dat_page_filter: Time elapsed: $timeElapsed"
 
   } errMsg] } {
@@ -155,11 +155,11 @@ namespace eval template {
 ad_proc -public frm_page_filter { why } {
     if { [catch {
 
-      set beginTime [clock clicks]
+      set beginTime [clock clicks -milliseconds]
 
       set output [template::frm_page_handler]
 
-      set timeElapsed [expr ([clock clicks] - $beginTime) / 1000.]
+      set timeElapsed [expr ([clock clicks -milliseconds] - $beginTime)]
       ns_log debug "frm_page_filter: Time elapsed: $timeElapsed"
 
     } errMsg] } {
