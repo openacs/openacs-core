@@ -120,7 +120,7 @@ end;
 -- The Oracle version does allow a non-image type to be specified, as does my
 -- alternative down below.  This needs a little more straightening out.
 
-create function image__new (varchar,integer,integer,integer,varchar,integer,varchar,varchar,varchar,varchar,boolean,timestamp,varchar,integer,integer,integer
+create function image__new (varchar,integer,integer,integer,varchar,integer,varchar,varchar,varchar,varchar,boolean,timestamp with time zone,varchar,integer,integer,integer
   ) returns integer as '
   declare
     new__name		alias for $1;
@@ -284,7 +284,7 @@ create function image__new (varchar,integer,integer,integer,varchar,integer,varc
     return v_item_id;
 end; ' language 'plpgsql';
 
-create function image__new_revision(integer, integer, varchar, varchar, timestamp, varchar, varchar,
+create function image__new_revision(integer, integer, varchar, varchar, timestamp with time zone, varchar, varchar,
                                     integer, varchar, integer, integer) returns integer as '
 declare
    p_item_id          alias for $1;

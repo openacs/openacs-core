@@ -708,7 +708,7 @@ end;' language 'plpgsql';
 -- function new
 select define_function_args('acs_group__new','group_id,object_type;group,creation_date;now(),creation_user,creation_ip,email,url,group_name,join_policy,context_id');
 
-create function acs_group__new (integer,varchar,timestamp,integer,varchar,varchar,varchar,varchar,varchar,integer)
+create function acs_group__new (integer,varchar,timestamp with time zone,integer,varchar,varchar,varchar,varchar,varchar,integer)
 returns integer as '
 declare
   new__group_id              alias for $1;  -- default null  

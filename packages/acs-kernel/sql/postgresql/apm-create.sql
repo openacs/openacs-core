@@ -1637,7 +1637,7 @@ end;' language 'plpgsql';
 
 
 -- function new
-create function apm_package__new (integer,varchar,varchar,varchar,timestamp,integer,varchar,integer)
+create function apm_package__new (integer,varchar,varchar,varchar,timestamp with time zone,integer,varchar,integer)
 returns integer as '
 declare
   new__package_id             alias for $1;  -- default null  
@@ -1865,7 +1865,7 @@ begin
 end;' language 'plpgsql';
 
 -- create or replace package body apm_package_version 
-create function apm_package_version__new (integer,varchar,varchar,varchar,varchar,varchar,varchar,timestamp,varchar,varchar,boolean,boolean) returns integer as '
+create function apm_package_version__new (integer,varchar,varchar,varchar,varchar,varchar,varchar,timestamp with time zone,varchar,varchar,boolean,boolean) returns integer as '
 declare
       apm_pkg_ver__version_id           alias for $1;  -- default null
       apm_pkg_ver__package_key		alias for $2;
@@ -1881,7 +1881,7 @@ declare
       apm_pkg_ver__data_model_loaded_p	alias for $12; -- default ''f''
       v_version_id                      apm_package_versions.version_id%TYPE;
 begin
-      if apm_pkg_ver__version_id = '''' or apm_pkg_ver__version_id is null then
+      if apm_pkg_ver__version_id is null then
          select nextval(''t_acs_object_id_seq'')
 	 into v_version_id
 	 from dual;
@@ -2016,7 +2016,7 @@ end;' language 'plpgsql';
 
 
 -- function edit
-create function apm_package_version__edit (integer,integer,varchar,varchar,varchar,varchar,varchar,timestamp,varchar,varchar,boolean,boolean)
+create function apm_package_version__edit (integer,integer,varchar,varchar,varchar,varchar,varchar,timestamp with time zone,varchar,varchar,boolean,boolean)
 returns integer as '
 declare
   edit__new_version_id         alias for $1;  -- default null  
@@ -2560,7 +2560,7 @@ end;' language 'plpgsql';
 
 
 -- function new
-create function apm_application__new (integer,varchar,varchar,varchar,timestamp,integer,varchar,integer)
+create function apm_application__new (integer,varchar,varchar,varchar,timestamp with time zone,integer,varchar,integer)
 returns integer as '
 declare
   application_id         alias for $1;  -- default null  
@@ -2610,7 +2610,7 @@ end;' language 'plpgsql';
 
 -- create or replace package body apm_service
 -- function new
-create function apm_service__new (integer,varchar,varchar,varchar,timestamp,integer,varchar,integer)
+create function apm_service__new (integer,varchar,varchar,varchar,timestamp with time zone,integer,varchar,integer)
 returns integer as '
 declare
   service_id             alias for $1;  -- default null  
