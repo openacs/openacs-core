@@ -172,6 +172,16 @@ ad_proc -public init { urlvar rootvar {content_root ""} {template_root ""} {cont
   set item_info(item_id) [::content::item::get_id -item_path $url \
                    -root_folder_id $content_root \
                    -resolve_index "f"]
+  # Make sure we are not dealing with an upgraded file and there exists a file with the title
+
+  if { [string equal "" $item_info(item_id)] } { 
+      set splitted_url [split $url "/"]
+      set item_url_title [lindex $splitted_url end]
+      set item_url_folder [lindex $splitted_url end-1]
+      set item_info(item_id) [db_string test "select i.item_id from cr_revisions r, cr_items i where r.item_id = i.item_id and r.title = :item_url_title and i.parent_id = (select item_id from cr_items where name = :item_url_folder) order by revision_id desc limit 1" -default ""]
+  }
+
+  
   set item_info(content_type) [::content::item::get_content_type \
                         -item_id $item_info(item_id)]
   
