@@ -284,7 +284,6 @@ ad_proc -public template::util::date::compare { date1 date2 } {
 # mutate properties of the Date object
 
 ad_proc -public template::util::date::set_property { what date value } {
-
   # Erase leading zeroes from the value, but make sure that 00
   # is not completely erased
   set value [template::util::leadingTrim $value]
@@ -383,8 +382,10 @@ ad_proc -public template::util::date::now_min_interval {} {
     @author Walter McGinnis (wtem@olywa.net)
     @creation_date 2002-01-06
 } {
-  set now [clock format [clock seconds] -format "%Y %m %d %H %M %S"]
-  set today [list]
+  set now [list]
+  foreach v [clock format [clock seconds] -format "%Y %m %d %H %M %S"] {
+      lappend now [template::util::leadingTrim $v]
+  }
     
   # manipulate the minute value so it rounds up to nearest minute interval
   set minute [lindex $now 4]
@@ -401,14 +402,10 @@ ad_proc -public template::util::date::now_min_interval {} {
       }
   }
 
-  # replaace the minute value in the now list with new value
+  # replace the minute value in the now list with new value
   set now [lreplace $now 4 4 $minute]
-  set today [list]
-  foreach v $now {
-      lappend today [template::util::leadingTrim $v]
-  }
 
-  return [eval create $today]
+  return [eval create $now]
 }
 
 ad_proc -public template::util::date::now_min_interval_plus_hour {} {
@@ -419,8 +416,10 @@ ad_proc -public template::util::date::now_min_interval_plus_hour {} {
     @author Walter McGinnis (wtem@olywa.net)
     @creation_date 2002-01-06
 } {
-  set now [clock format [clock seconds] -format "%Y %m %d %H %M %S"]
-  set today [list]
+  set now [list]
+  foreach v [clock format [clock seconds] -format "%Y %m %d %H %M %S"] {
+      lappend now [template::util::leadingTrim $v]
+  }
     
   # manipulate the minute value so it rounds up to nearest minute interval
   set minute [lindex $now 4]
@@ -440,13 +439,9 @@ ad_proc -public template::util::date::now_min_interval_plus_hour {} {
   # get the hour value
   set hour [lindex $now 3]
   # replace the hour and minute values in the now list with new values
-  set now [lreplace $now 3 4 [incr hour] $minute]
-  set today [list]
-  foreach v $now {
-      lappend today [template::util::leadingTrim $v]
-  }
+  set now [lreplace $now 3 4 [incr hour $minute]]
 
-  return [eval create $today]
+  return [eval create $now]
 }
 
 ad_proc -public template::util::date::add_time { {-time_array_name:required} {-date_array_name:required} } {

@@ -32,6 +32,7 @@ namespace eval template {
   namespace eval query {}
   namespace eval util {
     namespace eval date {}
+    namespace eval currency {}
   }
 
   namespace eval element {
