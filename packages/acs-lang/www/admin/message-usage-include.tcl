@@ -7,7 +7,8 @@
 
 set full_key "$package_key.$message_key"
 
-# LARS: Hack to handle acs-lang.localization- messages
+# Since acs-lang.localization- messages use the lc_get proc (that leaves out the acs-lang.localization- part)
+# for lookups we need a special regexp for them 
 if { [string match "acs-lang.localization-*" $full_key] } {
     set grepfor "${full_key}|lc_get \[\"\{\]?[string range $message_key [string length "localization-"] end]\[\"\}\]?"
 } else {
