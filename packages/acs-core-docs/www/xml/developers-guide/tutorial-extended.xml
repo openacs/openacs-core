@@ -1,0 +1,88 @@
+<sect1 id="tutorial">
+  <title>OpenACS &version; Package Tutorial</title>
+
+  <authorblurb>
+    by <ulink url="mailto:joel@aufrecht.org">Joel Aufrecht</ulink>
+  </authorblurb>
+  
+  <sect2>
+    <title>Overview</title>
+    <para>How to create a package.  Includes</para>
+
+    <itemizedlist>
+      <listitem><para>How to use the APM to start a new
+      package</para></listitem>
+
+      <listitem><para>How to write documentation, including self-documenting code</para></listitem>
+      <listitem><para>How to set up the database tables and procedures for your new package, including:</para>
+        <itemizedlist>
+          <listitem><para>How to create automated install/uninstall/upgrade scripts</para></listitem>
+          <listitem><para>How and when and why to use acs_objects</para></listitem>
+          <listitem><para>How to use stored procedures for __new, __delete, and __name stored procedures</para></listitem>
+          <listitem><para>How to use the content management tables so that ... what?</para></listitem>
+        </itemizedlist>
+      </listitem>
+      <listitem><para>How to make your package searchable with OpenFTS/Oracle</para></listitem>
+      <listitem><para>How to make your package send email notifications</para></listitem>
+      <listitem><para>How to use tcl/adp pairs to present pages,
+          including</para>
+        <itemizedlist>
+          <listitem><para>How to use ad_page_contract</para></listitem>
+          <listitem><para>How to use the template system</para></listitem>
+          <listitem><para>How to prepare pagelets for inclusion in other pages</para></listitem>
+        </itemizedlist>
+      </listitem>
+      <listitem><para>How and when to put procedures in a tcl procedure library</para></listitem>
+      <listitem><para>How to add general_comments to your pages</para></listitem>
+      <listitem><para>How to use a single ad_form to make a page that shows insert/edit forms, validates data, and does the database work. (plan to draw from Jon Griffin's doc)</para></listitem>
+      <listitem><para>How to add automated regression testing to your packages</para></listitem>
+      <listitem><para>How and when to implement caching</para></listitem>
+      <listitem><para>How to isolate database code for portability</para></listitem>
+      <listitem><para>How to use the html/text entry widget to get the "does this look</para></listitem>
+      <listitem><para>right" confirm page </para></listitem>
+      <listitem><para>How to debug; how to output to log</para></listitem>
+      <listitem><para>APM package dependencies</para></listitem>
+    </itemizedlist>
+
+  </sect2>
+  <sect2>
+    <title>General_comments</title>
+    <para>blah blah introduction (steal text from gc docs)</para>
+    <para>You can track comments for any ACS Object.  Here we'll track
+    comments for notes.  On the notes.tcl/adp pair, which is used to
+    display individual notes, we want to put a link to add comments at
+    the bottom of the screen.  If there are any comments, we want to
+    show them.</para>
+    <para>First, we need to generate a url for adding comments.  In notes.tcl:</para>
+    <programlisting>
+set comment_add_url "[general_comments_package_url]comment-add?[export_vars {
+ { object_id $note_id } 
+ { object_name $title } 
+ { return_url "[ad_conn url]?[ad_conn query]"} 
+}]"
+</programlisting>
+    <para>This calls a global, public tcl function that the
+    general_comments package registered, to get its url. You then
+    embed in that url the id of the note and its title, and set the
+    return_url to the current url so that the user can return after
+    adding a comment.</para>
+    <para>Now we need to create html that shows any existing comments.
+    We do this with another general_comments function:</para>
+    <programlisting>set comments_html [general_comments_get_comments
+    -print_content_p 1 $note_id]</programlisting>
+    <para>First, we pass in an optional parameter that that says to actually
+    show the contents of the comments, instead of just the fact that
+    there are comments. Then you pass the note id, which is also the
+    acs_object id.</para>
+    <para>Now we put our two new variables in the notes.adp
+    page.</para>
+    <programlisting>&lt;a href="@comment_add_url@"&gt;Add a comment&lt;/a&gt;
+@comments_html@</programlisting>
+  </sect2>
+
+</sect1>
+<!--
+       Local Variables:
+       sgml-parent-document: ("../index.xml" "book" "sect1")
+       End:
+-->
