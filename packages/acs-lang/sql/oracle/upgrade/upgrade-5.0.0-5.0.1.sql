@@ -46,7 +46,7 @@ insert into ad_locales
 insert into ad_locales 
        (locale, label, language, country, nls_language, nls_territory, 
         nls_charset, mime_charset, default_p, enabled_p)
- values ('HR_HR', 'Croatian', 'HR', 'HR', 'CROATIAN', 'CROATIA','UTF8','UTF-8','t','t');
+ values ('HR_HR', 'Croatian', 'HR', 'HR', 'CROATIAN', 'CROATIA','UTF8','UTF-8','t','f');
 
 -- fix http://openacs.org/bugtracker/openacs/bug?bug%5fnumber=1464
 update ad_locales
