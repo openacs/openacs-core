@@ -53,4 +53,16 @@
 </fullquery>
 
  
+<fullquery name="relation::get_id.select_rel_id">      
+      <querytext>
+
+          select rel_id 
+          from   acs_rels 
+          where  rel_type = :rel_type
+          and    object_id_one = :object_id_one
+          and    object_id_two = :object_id_two
+
+      </querytext>
+</fullquery>
+
 </queryset>
