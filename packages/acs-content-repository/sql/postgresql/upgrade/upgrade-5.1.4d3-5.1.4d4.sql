@@ -125,3 +125,6 @@ where
 
   return v_folder_id; 
 end;' language 'plpgsql';
+
+-- properly set default of creation_date
+select define_function_args('content_template__new','name,parent_id,template_id,creation_date;now,creation_user,creation_ip');
