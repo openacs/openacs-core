@@ -112,6 +112,11 @@ namespace eval site_node {
         returns an array representing the site node that matches the given url
 
         either url or node_id is required, if both are passed url is ignored
+
+        packages/acs-tcl/tcl/site-nodes-procs.tcl
+        
+        The array elements are: package_id, package_key, object_type, directory_p, 
+        instance_namem, pattern_p, parent_id, node_id, object_id, url.
     } {
         if {[empty_string_p $url] && [empty_string_p $node_id]} {
             error "site_node::get \"must pass in either url or node_id\""
@@ -131,6 +136,8 @@ namespace eval site_node {
         {-node_id:required}
     } {
         returns an array representing the site node for the given node_id
+        
+        @see site_node::get
     } {
         return [get_from_url -url [get_url -node_id $node_id]]
     }
@@ -139,6 +146,8 @@ namespace eval site_node {
         {-url:required}
     } {
         returns an array representing the site node that matches the given url
+
+        @see site_node::get
     } {
         # attempt an exact match
         if {[nsv_exists site_nodes $url]} {
