@@ -88,9 +88,8 @@ ad_proc -public ::content::folder::delete {
 } {
     return [package_exec_plsql \
 		-var_list [list \
-			       folder_id $folder_id \
-			       cascape_p $cascade_p
-			  ] \
+			       [list folder_id $folder_id ] \
+			       [list cascade_p $cascade_p] ] \
 		content_folder delete ]
 }
 
@@ -244,7 +243,7 @@ ad_proc -public content::folder::is_empty {
 } {
     return [package_exec_plsql \
 		-var_list [list \
-			       folder_id $folder_id \
+			       [list folder_id $folder_id ] \
 			      ] \
 		content_folder is_empty]
 }
