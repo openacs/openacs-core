@@ -26,7 +26,6 @@ if { ![info exists email] } {
     set email {}
 }
 
-set expired_p 0
 if { [empty_string_p $email] && [empty_string_p $username] && [ad_conn untrusted_user_id] != 0 } {
     acs_user::get -user_id [ad_conn untrusted_user_id] -array untrusted_user
     if { [auth::UseEmailForLoginP] } {
@@ -152,10 +151,16 @@ ad_form -extend -name login -on_request {
     set token [sec_get_token $token_id]
     set computed_hash [ns_sha1 "$time$token_id$token"]
     
+    set expiration_time [parameter::get -parameter LoginExpirationTime -package_id [ad_acs_kernel_id] -default 600]
+    if { $expiration_time < 30 } { 
+        # If expiration_time is less than 30 seconds, it's practically impossible to login
+        # and you will have completely hosed login on your entire site
+        set expiration_time 30
+    }
+
     if { [string compare $hash $computed_hash] != 0 || \
-             $time < [ns_time] - [ad_parameter -package_id [ad_acs_kernel_id] LoginExpirationTime security 600] } {
-        set message [_ acs-subsite.Login_has_expired]
-        ad_returnredirect [export_vars -base [ad_conn url] { message return_url }]
+             $time < [ns_time] - $expiration_time } {
+        ad_returnredirect -message [_ acs-subsite.Login_has_expired] -- [export_vars -base [ad_conn url] { return_url }]
         ad_script_abort
     }
 
