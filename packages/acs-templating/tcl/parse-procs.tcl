@@ -100,18 +100,6 @@ ad_proc -private template::adp_parse { __adp_stub __args } {
       set __adp_output [template::adp_parse $__adp_master \
         [concat [list __adp_slave $__adp_output] [array get __adp_properties]]]
     }
-
-    # if developer support is turned on, wrap the template in an
-    # identifying frame
-    if { [llength [info procs ::ds_show_p]] && [ds_show_p] } {
-      set __ds_adp_reveal_stub \
-          [acs_root_dir]/packages/acs-developer-support/lib/adp-reveal
-      if { ![string equal $__adp_stub $__ds_adp_reveal_stub] && [file exists ${__ds_adp_reveal_stub}.$template_extension] } {
-        set __adp_output [template::adp_parse $__ds_adp_reveal_stub \
-         [list __adp_slave $__adp_output ds_adp_stub $__adp_stub ds_adp_template_extension $template_extension]]
-      }
-    }
-
   } else {
     # no template;  errMsg tells us if adp_prepare at least found a script.
     if { !$errMsg } {
