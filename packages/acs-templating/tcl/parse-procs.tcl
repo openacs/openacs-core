@@ -355,6 +355,9 @@ ad_proc -public template::adp_compile { source_type source } {
   # the parse list now contains the code
   set code [join $parse_list "\n"]
 
+  # Substitute #foo# message keys with values from the message catalog
+  while {[regsub -all {([^\\])\#([-a-zA-Z0-9_:\.]+)\#} $code {\1[_ [ad_conn locale] {\2}]} code]} {}
+
   # substitute array variable references
   set pattern {([^\\])@([a-zA-Z0-9_]+)\.([a-zA-Z0-9_]+)@}
   # loop to handle the case of adjacent variable references, like @a@@b@
@@ -365,6 +368,9 @@ ad_proc -public template::adp_compile { source_type source } {
 
   # unescape protected @ references
   set code [string map { \\@ @ } $code]
+
+  # unescape protected # references
+  set code [string map { \\# # } $code]
 
   return $code
 }
