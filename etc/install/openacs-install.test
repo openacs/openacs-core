@@ -1,5 +1,5 @@
 # Source procedures
-source "tclwebtest-functions.tcl"
+source tcl/test-procs.tcl
 
 # Test Execution START
 
@@ -41,6 +41,6 @@ field fill "$new_registrations_email"
 
 form submit
 
-write_response_to_file $openacs_output_file
+twt::util::write_response_to_file $install_output_file
 
 # Test Execution END

@@ -4,12 +4,12 @@
 #
 # @author Peter Marklund
 
-namespace eval twt::forums {}
+namespace eval ::twt::forums {}
 
-ad_proc twt::forums::add_default_forums { server_url } {
+ad_proc ::twt::forums::add_default_forums { server_url } {
     Adds a general forum to each class. Goes via the class admin pages.
 } {
-    foreach admin_url [class::get_admin_urls $server_url "Fall 2003/2004"] {
+    foreach admin_url [::twt::class::get_admin_urls $server_url "Fall 2003/2004"] {
 
         # Admin page of one class
         do_request $admin_url
@@ -23,7 +23,7 @@ ad_proc twt::forums::add_default_forums { server_url } {
     }    
 }
 
-ad_proc twt::forums::add_postings {} {
+ad_proc ::twt::forums::add_postings {} {
     global __server_url
 
     # Request the start page

@@ -4,12 +4,12 @@
 #
 # @author Peter Marklund
 
-namespace eval twt::class {}
+namespace eval ::twt::class {}
 
-ad_proc twt::class::get_admin_urls { server_url term_pretty_name } {
+ad_proc ::twt::class::get_admin_urls { server_url term_pretty_name } {
     Returns a list with the fully qualified URLs of the admin pages of
     all .LRN classes.
-}
+} {
     set admin_url_base "$server_url/dotlrn/admin/term"
     set admin_url_no_term "${admin_url_base}?term_id=-1"
 
@@ -23,20 +23,20 @@ ad_proc twt::class::get_admin_urls { server_url term_pretty_name } {
 
     set admin_url_term "${admin_url_base}?term_id=$term_id"
 
-    return [util::get_url_list $server_url $admin_url_term {/dotlrn/classes/.*/one-community-admin$}]
+    return [::twt::util::get_url_list $server_url $admin_url_term {/dotlrn/classes/.*/one-community-admin$}]
 }
 
-ad_proc twt::class::engineering_p { class_url } {
+ad_proc ::twt::class::engineering_p { class_url } {
 
     return [regexp {dotlrn/classes/(computer-science|mathematics)} $class_url match]
 }
 
-ad_proc twt::class::follow_members_link {} {
+ad_proc ::twt::class::follow_members_link {} {
 
     link follow ~u {members$}    
 }
 
-ad_proc twt::class::get_professor { class_url } {
+ad_proc ::twt::class::get_professor { class_url } {
 
     # TODO: find the professor of the class
     class::follow_members_link
@@ -48,9 +48,9 @@ ad_proc twt::class::get_professor { class_url } {
     return [user::get_random_users professor 1]
 }
 
-ad_proc twt::class::setup_memberships { server_url } {
+ad_proc ::twt::class::setup_memberships { server_url } {
 
-    foreach admin_url [class::get_admin_urls $server_url "Fall 2003/2004"] {
+    foreach admin_url [get_admin_urls $server_url "Fall 2003/2004"] {
 
         # Admin page for the class
         do_request "$admin_url"
@@ -59,32 +59,32 @@ ad_proc twt::class::setup_memberships { server_url } {
         follow_members_link
 
         # Add all students
-        add_members [user::get_users student] "Student"
+        add_members [::twt::user::get_users student] "Student"
 
         # Add a random professor
-        add_member [user::get_random_users professor 1] "Professor"
+        add_member [::twt::user::get_random_users professor 1] "Professor"
 
         # Add two random staff
-        set admin_users [user::get_random_users staff 2]
+        set admin_users [::twt::user::get_random_users staff 2]
         set admin_labels [list "Course Assistant" "Teaching Assistant"]
         set admin_counter 0
         for { set admin_counter 0 } \
             { [expr $admin_counter < 2 && $admin_counter < [llength $admin_users]] } \
             { incr admin_counter } {
 
-            set admin_label [get_random_items_from_list $admin_labels 1]
+            set admin_label [::twt::util::get_random_items_from_list $admin_labels 1]
             add_member [lindex $admin_users $admin_counter] $admin_label
         }
     }
 }
 
-ad_proc twt::class::add_members { email_list role } {
+ad_proc ::twt::class::add_members { email_list role } {
     foreach email $email_list {
         add_member $email $role
     }
 }
 
-ad_proc twt::class::add_member { email role } {
+ad_proc ::twt::class::add_member { email role } {
 
     if { [empty_string_p $email] } {
         return
@@ -107,9 +107,9 @@ ad_proc twt::class::add_member { email role } {
     form submit
 }
 
-ad_proc twt::class::setup_subgroups { server_url } {
+ad_proc ::twt::class::setup_subgroups { server_url } {
 
-    foreach admin_url [class::get_admin_urls $server_url "Fall 2003/2004"] {
+    foreach admin_url [get_admin_urls $server_url "Fall 2003/2004"] {
 
         foreach {name description policy} [subcommunity_properties_list] {
 
@@ -129,7 +129,7 @@ ad_proc twt::class::setup_subgroups { server_url } {
     }    
 }
 
-ad_proc twt::class::subcommunity_properties_list {} {
+ad_proc ::twt::class::subcommunity_properties_list {} {
 
     set property_list [list]
 
@@ -143,9 +143,9 @@ ad_proc twt::class::subcommunity_properties_list {} {
     return $property_list
 }
 
-ad_proc twt::class::add_member_applets { server_url } {
+ad_proc ::twt::class::add_member_applets { server_url } {
 
-    foreach admin_url [class::get_admin_urls $server_url "Fall 2003/2004"] {
+    foreach admin_url [get_admin_urls $server_url "Fall 2003/2004"] {
 
         # Only add the members applet to computing classes so that we can
         # demo adding it to other classes manually

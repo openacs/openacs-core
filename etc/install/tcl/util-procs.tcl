@@ -4,16 +4,16 @@
 #
 # @author Peter Marklund
 
-namespace eval twt::util {}
+namespace eval ::twt::util {}
 
-ad_proc twt::util::randomRange {range} {
+ad_proc ::twt::util::randomRange {range} {
     Given an integer N, return an integer between 0 and N.
 } {
 
      return [expr int([expr rand()] * $range)]
 }
 
-ad_proc twt::util::get_random_items_from_list { list number } {
+ad_proc ::twt::util::get_random_items_from_list { list number } {
     Given a list and the lenght of the list to return, 
     return a list with a random subset of items from the input list.
 } {
@@ -58,7 +58,7 @@ ad_proc twt::util::get_random_items_from_list { list number } {
     }
 }
 
-ad_proc twt::util::write_response_to_file { filename } {
+ad_proc ::twt::util::write_response_to_file { filename } {
     Write the HTML body of the last HTTP response to the
     file with given path. If the directory of the file doesn't
     exist then create it.
@@ -72,7 +72,7 @@ ad_proc twt::util::write_response_to_file { filename } {
     puts $file_id "[response body]"
 }
 
-ad_proc twt::util::get_url_list { server_url page_url link_url_pattern } {
+ad_proc ::twt::util::get_url_list { server_url page_url link_url_pattern } {
 
     do_request "$page_url"
 
@@ -105,7 +105,7 @@ ad_proc twt::util::get_url_list { server_url page_url link_url_pattern } {
     return $urls_list
 }
 
-ad_proc twt::util::crawl_links {} {
+ad_proc ::twt::util::crawl_links {} {
     TODO: This proc currently doesn't crawl nearly as many links as we would like
 } {
 
@@ -150,4 +150,15 @@ ad_proc twt::util::crawl_links {} {
             }
          }
    }
+}
+
+ad_proc ::twt::util::log { message } {
+    set script_name [file tail [info script]]
+    puts ""
+    puts "##############################"
+    puts "#"
+    puts "# $script_name - $message"
+    puts "#"
+    puts "##############################"
+    puts ""
 }

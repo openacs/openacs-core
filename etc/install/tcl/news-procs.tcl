@@ -4,19 +4,19 @@
 #
 # @author Peter Marklund
 
-namespace eval twt::news {}
+namespace eval ::twt::news {}
 
-ad_proc twt::news::add_item_to_classes { server_url } {
+ad_proc ::twt::news::add_item_to_classes { server_url } {
 
     set news_item_list [get_items]
 
     set class_counter 0
-    foreach admin_url [class::get_admin_urls $server_url "Fall 2003/2004"] {
+    foreach admin_url [::twt::class::get_admin_urls $server_url "Fall 2003/2004"] {
 
         # We want the professor of the class to post the news item
         # TODO
-        #set email [class::get_professor $admin_url]
-        #user::login $email [user::get_password $email]
+        #set email [::twt::class::get_professor $admin_url]
+        #user::login $email [::twt::user::get_password $email]
 
         # Admin page of the class
         do_request $admin_url
@@ -24,7 +24,7 @@ ad_proc twt::news::add_item_to_classes { server_url } {
         # News item add
         link follow ~u {news/+item-create}
 
-        set news_item [get_random_item $news_item_list $class_counter]
+        set news_item [lindex [::twt::util::get_random_items_from_list $news_item_list 1] 0]
 
         form find ~a preview
         set publish_title [lindex $news_item 0]
@@ -43,17 +43,10 @@ ad_proc twt::news::add_item_to_classes { server_url } {
     }
 
     # Re-login the site-wide admin
-    login_site_wide_admin
+    #login_site_wide_admin
 }
 
-ad_proc twt::news::get_random_item { news_list counter } {
-
-    set item_index [expr $counter % [llength $news_list]]
-
-    return [lindex $news_list $item_index]
-}
-
-ad_proc twt::news::get_items {} {
+ad_proc ::twt::news::get_items {} {
 
     set news_item_list [list]
 
