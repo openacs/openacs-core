@@ -6,7 +6,7 @@
 
 namespace eval ::twt {}
 
-ad_proc ::twt::log { message } {
+ad_proc ::twt::log_section { message } {
     set script_name [file tail [info script]]
     puts ""
     puts "##############################"
@@ -17,10 +17,44 @@ ad_proc ::twt::log { message } {
     puts ""
 }
 
+ad_proc ::twt::log { message } {
+    set script_name [file tail [info script]]
+    puts "${script_name}: $message"
+}
+
 ad_proc ::twt::do_request { page_url } {
-    Takes a a url and invokes tclwebtest::do_request.
+    Takes a a url and invokes tclwebtest::do_request. Will retry
+    the request a number of times if it fails because of a socket
+    connect problem.
 } {
-    ::tclwebtest::do_request $page_url
+    set retry_count 0
+    set retry_max 10
+    set error_p 0
+    while { [catch {::tclwebtest::do_request $page_url} errmsg] } {
+        set error_p 1
+        global errorInfo
+
+        if { [regexp {host is unreachable} $errmsg] } {
+            # Socket problem - retry $retry_max times
+            if { $retry_count < $retry_max } {
+                ::twt::log "Failed to connect to server with error \"$errmsg\" - retrying"
+                incr retry_count
+                exec "sleep" "5"
+                continue
+            } else {
+                ::twt::log "Failed to connect to server with error \"$errmsg\" - giving up"
+                break
+            }
+        } else {
+            break
+        }
+    }
+
+    if { $error_p } {
+        # Either some non-socket error, or a socket problem occuring with more than
+        # $retry_max times. Propagate the error while retaining the stack trace
+        error "::tclwebtest::do_request threw error $errmsg with errorInfo $errorInfo"
+    }
 }
 
 ad_proc ::twt::get_url_list { page_url link_url_pattern } {

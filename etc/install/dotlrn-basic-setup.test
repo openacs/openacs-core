@@ -3,46 +3,46 @@ if { [catch {
 
     # Test Execution START
         
-    ::twt::log "Login the site wide admin"
+    ::twt::log_section "Login the site wide admin"
     ::twt::user::login_site_wide_admin
     
-    ::twt::log "Add the site wide admin to dotLRN"
+    ::twt::log_section "Add the site wide admin to dotLRN"
     ::twt::dotlrn::add_site_wide_admin $server_url
     
-    ::twt::log "Upload users"
+    ::twt::log_section "Upload users"
     ::twt::user::upload_users $server_url
 
-    ::twt::log "Set up terms"
+    ::twt::log_section "Set up terms"
     ::twt::dotlrn::setup_terms $server_url
     
-    ::twt::log "Set up departments"
+    ::twt::log_section "Set up departments"
     ::twt::dotlrn::setup_departments $server_url
     
-    ::twt::log "Set up subjects"
+    ::twt::log_section "Set up subjects"
     ::twt::dotlrn::setup_subjects $server_url
     
-    ::twt::log "Set up classes"
+    ::twt::log_section "Set up classes"
     ::twt::dotlrn::setup_classes $server_url
     
-    ::twt::log "Set up communities (i.e. Tennis Club etc.)"
+    ::twt::log_section "Set up communities (i.e. Tennis Club etc.)"
     ::twt::dotlrn::setup_communities $server_url    
     
-    ::twt::log "Add class members, i.e. professors, students and assistants"
+    ::twt::log_section "Add class members, i.e. professors, students and assistants"
     ::twt::class::setup_memberships $server_url
     
-    ::twt::log "Add class subgroups"
+    ::twt::log_section "Add class subgroups"
     ::twt::class::setup_subgroups $server_url
     
-    ::twt::log "Add class member applet"    
+    ::twt::log_section "Add class member applet"    
     ::twt::class::add_member_applets $server_url
     
-    ::twt::log "Set up class forums - one per class"
+    ::twt::log_section "Set up class forums - one per class"
     ::twt::forums::add_default_forums $server_url
     
-    ::twt::log "Add forum postings"
+    ::twt::log_section "Add forum postings"
     ::twt::forums::add_postings 
     
-    ::twt::log "Add news items - one per class"
+    ::twt::log_section "Add news items - one per class"
     ::twt::news::add_item_to_classes $server_url
 
     # Test Execution END
