@@ -2,6 +2,7 @@ ad_page_contract {
     Flush one or more values from util_memoize's cache
 } {
     suffix
+    {return_url "."}
 }
 
 if [string equal $suffix "util_memoize"] {   
@@ -15,4 +16,4 @@ if [string equal $suffix "util_memoize"] {
     } 
 }
 
-ad_returnredirect "index"
+ad_returnredirect $return_url

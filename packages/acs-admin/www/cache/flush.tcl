@@ -5,6 +5,7 @@ ad_page_contract {
     pattern
     raw_date
     key:allhtml
+    {return_url "show-util-memoize?pattern=$pattern"}
 }
 
 if {[catch {set pair [ns_cache get util_memoize $key]} errmsg]} {
@@ -32,4 +33,4 @@ if {[catch {set pair [ns_cache get util_memoize $key]} errmsg]} {
 
 ns_cache flush util_memoize $key
 
-ad_returnredirect "show-util-memoize?pattern=$pattern"
+ad_returnredirect $return_url
