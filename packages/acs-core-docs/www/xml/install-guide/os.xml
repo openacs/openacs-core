@@ -1,360 +1,429 @@
-<sect1 id="operating-system" xreflabel="Install an Operating System">
-  <title>Install an Operating System</title>
-
+<sect1 id="linux-installation">
+  <title>Install Linux and supporting software</title>
+  
   <authorblurb>
-	by <ulink url="mailto:vinod@kurup.com">Vinod Kurup</ulink>
+    by <ulink url="mailto:joel@aufrecht.org">Joel Aufrecht</ulink>
   </authorblurb>
+  <sect2>
+    <title>Paths and Users</title>
+    
+    <figure>
+      <title>Assumptions in this section</title>
+        <informaltable>
+          <tgroup cols="2">
+            <tbody>
+              <row>
+                <entry>Fully qualified domain name of your server</entry>
+              <entry><replaceable>yourserver.test</replaceable></entry>
+              </row>
+              <row>
+                <entry>name of administrative access account</entry>
+                <entry>remadmin</entry>
+              </row>
+              <row>
+                <entry>OpenACS service</entry>
+              <entry><indexterm>
+                  <primary>service0</primary>
+                </indexterm>
+<replaceable>service0</replaceable></entry>
+              </row>
+              <row>
+                <entry>OpenACS service account</entry>
+              <entry><replaceable>service0</replaceable></entry>
+              </row>
+              <row>
+                <entry>OpenACS database name</entry>
+                <entry><replaceable>service0</replaceable></entry>
+              </row>
+              <row>
+                <entry>Root of OpenACS service file tree</entry>
+                <entry><replaceable>/web/service0</replaceable></entry>
+              </row>
+              <row>
+                <entry>Location of source code tarballs for new software</entry>
+                <entry>/tmp</entry>
+              </row>
+              <row>
+                <entry>The OpenACS tarball contains some files which
+                are useful while setting up other software.  Those
+                files are located at:</entry>
+                <entry>/tmp/openacs-4-6/packages/acs-core-docs/www/files</entry>
+              </row>
+              <row>
+                <entry>Database backup directory</entry>
+                <entry><replaceable>/web/service0/database-backup</replaceable></entry>
+              </row>
+              <row>
+                <entry>Service config files</entry>
+                <entry><replaceable>/web/service0/etc</replaceable></entry>
+              </row>
+              <row>
+                <entry>Service log files</entry>
+                <entry><replaceable>/web/service0/log</replaceable></entry>
+              </row>
+              <row>
+                <entry>Compile directory</entry>
+                <entry>/usr/local/src</entry>
+              </row>
+              <row>
+                <entry>PostGreSQL directory</entry>
+                <entry>/usr/local/pgsql</entry>
+              </row>
+              <row>
+                <entry>AOLServer directory</entry>
+                <entry>/usr/local/aolserver</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </informaltable>
+      </figure>
 
-  <para>
-	We won't provide detailed instructions to install an operating system
-	since there are so many valid choices available and each OS has their
-	own installation procedures.
-  </para>
+      <para>
+	  None of these locations are set in stone - they're simply
+	  the values that we've chosen.  The values that you'll
+	  probably want to change, such as service name, are
+	  <replaceable>marked like this</replaceable>.  The other
+	  values we recommend you leave unchanged unless you have a
+	  reason to change them.</para>
+   
+    <note>
+      <para>
+	  Some of the paths and user accounts have been changed from
+	  those recommended in previous versions of this document to
+	  improve security and maintainability.  See <ulink
+	  url="http://openacs.org/forums/message-view?message_id=82934">this
+	  thread</ulink> for discussion.
+</para>
+    </note>
 
-  <sect2 id="os-other" xreflabel="Other OpenACS Guides">
-	<title>Other OpenACS Guides</title>
-
-	<para>
-	  Members of the OpenACS community use a variety of UNIX, Linux, BSD
-	  and even Windows systems. The remainder of this guide will
-	  be specific to Linux. Users of other OS's may find some helpful
-	  information here, but we recommend that you instead use one of these
-	  OS specific guides to install OpenACS &version;.
-	</para>
-
-	<itemizedlist>
-	  <listitem><para>
-		  <ulink url="http://www.orchardlabs.com/freebsd/">FreeBSD guide</ulink>
-		</para></listitem>
-
-	  <listitem><para> 
-		  <ulink url="http://openacs.org/new-file-storage/one-folder?file_id=209">Mac OS X guide</ulink>
-		</para>
-		<para>
-		  This guide is currently valid for Mac OS 10.04, but it's being
-		  updated for OS 10.1 as we speak. In the meantime, eager 10.1
-		  users can see this <ulink
-		  url="http://openacs.org/bboard/q-and-a-fetch-msg.tcl?msg_id=0002mP&amp;topic_id=11&amp;topic=OpenACS">bboard
-		  thread</ulink> for some help.  
-		</para></listitem>
-
-	  <listitem><para>
-		  <xref linkend="win2k-installation" />
-		</para>
-		<para>
-
-		  This was written for ACS and has <emphasis>not</emphasis> yet
-		  been updated for OpenACS. (Note: AOLServer is not currently
-		  supported on Windows, but this may change soon. Keep an eye on
-		  the AOLserver mailing list or the OpenACS forums) Another
-		  alternative is to use John Sequeira's <ulink
-		  url="http://www.pobox.com/~johnseq/projects/oasisvm/">Oasis
-		  VM</ulink>, which is basically a fully working OpenACS &version;
-		  system that you load into <ulink
-		  url="http://vmware.com">VMware</ulink>.
-
-		</para>
-	  </listitem>
-	  
-	</itemizedlist>
-
+    
   </sect2>
-
-  <sect2 id="os-linux" xreflabel="Linux information">
-	<title>Linux Information</title>
-
-	<para>
-	  I'm currently using Debian GNU/Linux, so this guide may show that
-	  bias. Installation on any Linux distribution should be similar and
-	  we'll try to point out differences where they exist.
-	</para>
-
-	<para>
-	  When you do install your system, be sure to set up enough swap space
-	  - at least 400 MB for Oracle, less for PostgreSQL. A rule of thumb is
-	  to set aside a swap partition which is twice your RAM size.
-	</para>
-
-	<para>
-	  Some things that you will need:
-	</para>
-
-	<informaltable>
-	  <tgroup cols="2">
-		<thead>
-		  <row>
-			<entry>Requirement</entry>
-			<entry>Reason</entry>
-		  </row>
-		</thead>
-
-		<tbody>
-		  <row>
-			<entry>recent kernel</entry> 
-
-			<entry>
-
-			  Version 2.2.22 or greater is the standard requirement. I used
-			  version 2.4.19 for this guide.
-
-			</entry>
-		  </row>
-
-		  <row>
-			<entry>bash</entry> 
-			<entry>
-
-			  Bash is the standard Linux shell and we assume you are using
-			  bash for these instructions.  If not, you will need to
-			  substitute your shell's conventions for setting environment
-			  variables when appropriate.
-
-			</entry>
-		  </row>
-
-		  <row>
-			<entry>glibc 2.1 (or greater)</entry> 
-			<entry>
-			  You need recent versions of these libraries for Oracle to
-			  work properly. If you want Unicode support, you'll need glibc
-			  2.2.
-			</entry>
-		  </row>
-
-		  <row>
-			<entry>GNU Make (3.76.1 or better)</entry> 
-			<entry>
-			  PostgreSQL and AOLserver require gmake to compile. Note that
-			  on most linux distributions, GNU Make is simply named
-			  <computeroutput>make</computeroutput> and there is no
-			  <computeroutput>gmake</computeroutput>, whereas on BSD
-			  distributions, <computeroutput>make</computeroutput> and
-			  <computeroutput>gmake</computeroutput> are different.
-			</entry>
-		  </row>
-
-		  <row>
-			<entry>Tcl 8.3 development package (headers, libraries)</entry>
-			<entry>
-			  The site-wide-search service, OpenFTS, requires these to
-			  compile. (Debian users: <computeroutput>apt-get install
-			  tcl8.3-dev</computeroutput>)
-			</entry>
-		  </row>
-
-		  <row>
-			<entry>libxml2</entry>
-			<entry>
-
-			  OpenACS &version; stores queries in XML files, so libxml2 is
-			  used to parse these files. (Debian users:
-			  <computeroutput>apt-get install libxml2-dev</computeroutput>)
-
-			</entry>
-		  </row>
-
-		  <row>
-			<entry>daemontools</entry>
-			<entry>
-
-			  If you decide to follow our recommendations, you'll need
-			  daemontools installed. We'll explain where to get it when you
-			  need it.
-
-			</entry>
-		  </row>
-
-		  <row>
-			<entry>docbook-xml, docbook-xsl, libxslt, xsltproc</entry>
-			<entry>
-
-			  Only needed if you plan to write or edit OpenACS
-			  documentation. (docbook-xml v4.2, docbook-xsl v1.56, libxslt
-			  1.0.21, xsltproc 1.0.21)
-
-			</entry>
-		  </row>
-
-		  <row>
-			<entry>a MTA (Mail Transfer Agent)</entry>
-			<entry>
-
-			  An MTA is needed for OpenACS to send notifications or handle
-			  incoming mail. Qmail seems to be the most popular choice in
-			  the OpenACS community. Other options include Postfix, Exim
-			  and Sendmail.
-
-			</entry>
-		  </row>
-
-		</tbody>
-	  </tgroup>
-	</informaltable>
-
-
-	<para>
-	  Locations:
-	</para>
-
-	<itemizedlist>
-	  <listitem><para> 
-
-		  We'll compile stuff in
-		  <computeroutput>/usr/local/src</computeroutput>
-
-		  </para></listitem>
-
-	  <listitem><para>
-		  
-		  PostgreSQL will go into
-		  <computeroutput>/usr/local/pgsql</computeroutput>
-
-		</para></listitem>
-
-	  <listitem><para>
-
-		  AOLServer will go into
-		  <computeroutput>/usr/local/aolserver</computeroutput>
-
-		</para></listitem>
-
-	  <listitem><para>
-
-		  The web root will go into your home directory
-		  (e.g. <computeroutput>/home/<emphasis>joeuser</emphasis>/web</computeroutput>)
-
-		</para></listitem>
-	</itemizedlist>
-
-	<para>
-
-	  None of these locations are set in stone - they're simply the values
-	  that we've chosen. You are free to install your software in other
-	  locations, but you'll need to adjust the instructions in this
-	  document to point to those locations.
-
-	</para>
-
-	<para>
-
-	  Note that previous versions of this document recommended using
-	  <computeroutput>/web</computeroutput> for the web root and running
-	  AOLserver as the <computeroutput>nsadmin</computeroutput> user. For
-	  security and compatibility reasons, this is no longer recommended.
-
-	</para>
-
-	<para>
-
-	  This guide will use <computeroutput>joeuser</computeroutput> as a
-      normal user. Substitute your own username wherever you see
-      <computeroutput>joeuser</computeroutput>.
-
-    </para>
-  </sect2>
-
-  <sect2 id="os-install" xreflabel="Linux Install Guides">
-    <title>Linux Install Guides</title>
-    <para>
-      Here's a list of some helpful documentation for various OS's
-    </para>
-
+  <sect2 id="install-linux">
+    <title>Install Linux</title>
+    <para>You will need a PC running linux with the following software installed:</para>
     <itemizedlist>
-      <listitem><para>
-          <ulink url="http://tinyplanet.ca/pubs/debian/">Painless Debian
-          GNU/Linux</ulink> by Stephen van Egmond
-        </para></listitem>
-
-      <listitem><para> 
-
-          <ulink
-          url="http://www.debian.org/releases/stable/installmanual">Official
-          Debian Guide</ulink> 
-
-        </para></listitem>
-
-      <listitem><para>
-
-          <ulink
-          url="http://www.redhat.com/docs/manuals/linux/">RedHat</ulink>
-
-        </para></listitem>
-
-      <listitem><para>
-
-          <ulink
-          url="http://www.linux-mandrake.com/en/fdoc.php3">Mandrake</ulink>
-
-        </para></listitem>
-
-      <listitem><para>
-
-          <ulink url="http://sdb.suse.de/sdb/en/html/">SuSE</ulink>
-
-        </para></listitem>
-
+      <listitem><para>libxml2</para></listitem>
+      <listitem><para>tcl</para></listitem>
+      <listitem><para>gmake and the compile and build environment.</para></listitem>
     </itemizedlist>
-
-  </sect2>
-
-  <sect2 id="os-security" xreflabel="Security Information">
-    <title>Security Information</title>
-    <para>
-
-      Once you get your OS installed, it's imperative that you secure your
-      installation. As Jon Griffin repeatedly warns us, "No distribution is
-      secure out of the box." Again, this topic is too big to cover properly
-      here, so see these links.
-
-    </para>
-
+    <para>and optionally this software:</para>
     <itemizedlist>
-
-      <listitem>
-        <para>
-
-          <ulink url="http://www.openna.com/products/books/sol/solus.php">Securing and Optimizing Linux - version 2.0</ulink>
-
-        </para>
-      </listitem>
-
-      <listitem><para> 
-
-          <ulink url="http://jongriffin.com/static/linuxnotes">Jon
-          Griffin's notes</ulink>
-
-          </para></listitem>
-
-      <listitem><para> 
-
-          <ulink url="http://www.seifried.org/lasg/">Linux Administrators
-          Security Guide</ulink>
-
-          </para></listitem>
-
-      <listitem><para> 
-
-          <ulink
-            url="http://www.suse.com/en/support/howto/secure_webserv/index.html">Installation
-            of a Secure Webserver</ulink>
-
-        </para></listitem>
-
-      <listitem><para>
-
-          Others?
-
-          </para></listitem>
-
+      <listitem><para>emacs</para></listitem>
+      <listitem><para>cvs</para></listitem>
+      <listitem><para>ImageMagick</para></listitem>
+      <listitem><para>DocBook and supporting software</para></listitem>
     </itemizedlist>
+    <para>You can follow the <link linkend="install-redhat">walkthrough of the
+    Red Hat 8.0 Install for OpenACS</link>.</para>
   </sect2>
 
+  <sect2 id="install-more-software">
+    <title>Install additional supporting software</title>
+    <para>This section assumes that the source tarballs for supporting
+    software are in <computeroutput>/tmp</computeroutput>.  It assumes
+    that you begin each continuous block of commands as root, and you
+    should end each block as root.  It doesn't care which directory
+    you start in.  Text instructions always precede the commands they refer to.</para>
+    <sect3 id="openacs-unpack">
+      <title>Unpack the OpenACS tarball</title>
+      <para>The OpenACS tarball contains sample configuration files
+      for some of the packages listed below.  In order to access those
+      files, unpack the tarball now.</para>
+      <screen>[root@yourserver root]# <userinput>cd /tmp</userinput>
+[root@yourserver tmp]# <userinput>tar xzf openacs-4-6.tgz</userinput>
+<action>cd /tmp
+tar xzf openacs-4-6.tgz</action></screen>
+    </sect3>
 
-    <para><phrase role="cvstag">($Id$)</phrase></para>
+    <sect3 id="install-cvs">
+      <title>Initialize CVS (OPTIONAL)</title>
+      <indexterm>
+        <primary>cvs</primary>
+        <secondary>initializing</secondary>
+      </indexterm>
+      <para>CVS is a source control system.  Create and prepare a
+      directory for a local cvs repository.</para>
+      <screen>[root@yourserver tmp]# <userinput>mkdir /cvsroot</userinput>
+[root@yourserver tmp]#<userinput> cvs -d /cvsroot init</userinput>
+[root@yourserver tmp]#
+<action>mkdir /cvsroot
+cvs -d /cvsroot init</action></screen>
+    </sect3>
 
+    <sect3>
+      <title>Add PSGML commands to emacs init file (OPTIONAL)</title>
+      <para><indexterm>
+          <primary>DocBook</primary>
+          <secondary>emacs configuration for</secondary>
+        </indexterm>
+If you plan to write or edit any documentation with emacs, install a
+      customized emacs configuration file with DocBook commands in the skeleton
+      directory, so it will be used for all new users.  The file also
+      fixes the backspace -> help mis-mapping that often occurs in
+      terminals.</para>
+
+      <screen>[root@yourserver tmp]# <userinput>cp /tmp/openacs-4-6/packages/acs-core-docs/www/files/emacs.txt /etc/skel/.emacs</userinput>
+[root@yourserver tmp]# </screen>
+    </sect3>
+
+
+    <sect3 id="install-daemontools">
+      <title>Install Daemontools (OPTIONAL)</title>
+      <para>Daemontools is a collection of programs for controlling
+      other processes.  We use daemontools to run and monitor AOLServer.  It is
+      installed in /package.  These commands install daemontools and
+      svgroup.  svgroup is a script for granting permissions, to allow
+      users other than root to use daemontools for specific
+      services.</para>
+      <orderedlist>
+        <listitem>
+          <para>Install Daemontools</para>
+          <indexterm>
+            <primary>daemontools</primary>
+            <secondary>installation</secondary>
+          </indexterm>
+          <itemizedlist>
+            <listitem>
+              <para>Red Hat</para>
+              <para>Make sure you have the source tarball in
+          <computeroutput>/tmp</computeroutput>, or <link
+          linkend="daemontools-download">download it</link>.  (The -p
+              flag in mkdir causes all implied directories in the path
+              to be made as well.)</para>
+              <screen>[root@yourserver root]# <userinput>mkdir -p /package</userinput>
+[root@yourserver root]# <userinput>chmod 1755 /package/</userinput>
+[root@yourserver root]# <userinput>cd /package/</userinput>
+[root@yourserver package]# <userinput>tar xzf /tmp/daemontools-0.76.tar.gz</userinput>
+[root@yourserver package]# <userinput>cd admin/daemontools-0.76/</userinput>
+[root@yourserver daemontools-0.76]# <userinput>package/install</userinput>
+Linking ./src/* into ./compile...
+(many lines omitted)
+Creating /service...
+Adding svscanboot to inittab...
+init should start svscan now.
+[root@yourserver root]#
+<action>mkdir -p /package 
+chmod 1755 /package 
+cd /package 
+tar xzf /tmp/daemontools-0.76.tar.gz 
+cd admin/daemontools-0.76 
+package/install</action></screen>
+            </listitem>
+            <listitem>
+              <para>Debian</para>
+              <screen>root:~# apt-get install daemontools-installer
+root:~# build-daemontools</screen>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+        <listitem>
+      <para>Verify that svscan is running.  If it is, you should see
+      these two processes running:</para>
+      <screen>[root@yourserver root]# <userinput>ps -auxw | grep service</userinput>
+root     13294  0.0  0.1  1352  272 ?        S    09:51   0:00 svscan /service
+root     13295  0.0  0.0  1304  208 ?        S    09:51   0:00 readproctitle service errors: .......................................
+[root@yourserver root]#</screen>
+        </listitem>
+        <listitem>
+          <para>Install a script to grant non-root users permission to
+        control daemontools services.</para>
+          <screen>[root@yourserver root]# <userinput>cp /tmp/openacs-4-6/packages/acs-core-docs/www/files/svgroup.txt /usr/local/bin/svgroup</userinput>
+[root@yourserver root]# <userinput>chmod 755 /usr/local/bin/svgroup</userinput>
+<action>cp /tmp/openacs-4-6/packages/acs-core-docs/www/files/svgroup.txt /usr/local/bin/svgroup 
+chmod 755 /usr/local/bin/svgroup</action></screen>
+        </listitem>
+      </orderedlist>
+    </sect3>
+    <sect3>
+      <title>Install qmail (OPTIONAL)</title>
+      <para>Qmail is a Mail Transfer Agent.  It handles incoming and outgoing mail.  Install qmail if you want your OpenACS server to send and receive mail, and you don't want to use an alternate MTA.</para>
+      <orderedlist>
+        <listitem>
+          <formalpara>
+            <title>Install ucspi</title>
+            <para>This program handles incoming tcp connections.</para>
+          </formalpara>
+          <screen>[root@yourserver root]# <userinput>cd /usr/local/src</userinput>
+[root@yourserver src]# <userinput>tar xzf /tmp/ucspi-tcp-0.88.tar.gz</userinput>
+[root@yourserver src]# <userinput>cd ucspi-tcp-0.88</userinput>
+[root@yourserver ucspi-tcp-0.88]#<userinput> make</userinput>
+( cat warn-auto.sh; \
+echo 'main="$1"; shift'; \
+(many lines omitted)
+./compile instcheck.c
+./load instcheck hier.o auto_home.o unix.a byte.a
+[root@yourserver ucspi-tcp-0.88]# <userinput>make setup check</userinput>
+./install
+./instcheck
+[root@yourserver ucspi-tcp-0.88]#
+<action>cd /usr/local/src 
+tar xzf /tmp/ucspi-tcp-0.88.tar.gz 
+cd ucspi-tcp-0.88 
+make 
+make setup check</action></screen>
+          <para>Verify that ucspi-tcp was installed successfully by
+running the tcpserver program which is part of ucspi-tcp:</para>
+          <screen>[root@yourserver ucspi-tcp-0.88]# <userinput>tcpserver</userinput>
+tcpserver: usage: tcpserver [ -1UXpPhHrRoOdDqQv ] [ -c limit ] [ -x rules.cdb ] [ -B banner ] [ -g gid ] [ -u uid
+] [ -b backlog ] [ -l localname ] [ -t timeout ] host port program
+[root@yourserver ucspi-tcp-0.88]#
+</screen>
+          <para><indexterm>
+              <primary>qmail</primary>
+              <secondary>rcpthosts error message</secondary>
+            </indexterm>
+(I'm not sure if this next step is 100% necessary, but when I skip it
+I get problems.  If you get the error <computeroutput>553 sorry, that domain isn't in my list of allowed rcpthosts (#5.7.1)</computeroutput> then you need to do this.)  AOLServer sends outgoing mail via the ns_sendmail
+command, which pipes a command to the sendmail executable.  Or, in our
+case, the qmail replacement wrapper for the sendmail executable.  In
+some cases, though, the outgoing mail requset is apparently sent
+through tcp/ip, so that it comes to qmail from 127.0.0.1 (a special IP
+address that means the local machine - the "loopback" interface).
+Unless this mail is addressed to the same machine, qmail thinks that
+it's an attempt to relay mail, and rejects it.  So these two commands
+set up an exception so that any mail sent from 127.0.0.1 is allowed to
+send outgoing mail.</para>
+          <screen>[root@yourserver ucspi-tcp-0.88]# <userinput>cp /tmp/openacs-4-6/packages/acs-core-docs/www/files/tcp.smtp.txt /etc/tcp.smtp</userinput>
+[root@yourserver ucspi-tcp-0.88]# <userinput>tcprules /etc/tcp.smtp.cdb /etc/tcp.smtp.tmp &lt; /etc/tcp.smtp</userinput>
+<action>cp /tmp/openacs-4-6/packages/acs-core-docs/www/files/tcp.smtp.txt /etc/tcp.smtp 
+tcprules /etc/tcp.smtp.cdb /etc/tcp.smtp.tmp &lt; /etc/tcp.smtp </action></screen>
+          </listitem>
+          <listitem>
+            <formalpara>
+              <title>Install Qmail</title>
+              <indexterm>
+                <primary>qmail</primary>
+                <secondary>installation</secondary>
+              </indexterm>
+              <para></para>
+            </formalpara>
+            <para>First, set up the standard supporting users and build the binaries:</para>
+            <screen>[root@yourserver root]# <userinput>cd /usr/local/src</userinput>
+[root@yourserver src]# <userinput>tar xzf /tmp/qmail-1.03.tar.gz</userinput>
+[root@yourserver src]# <userinput>mkdir /var/qmail</userinput>
+[root@yourserver src]#<userinput> groupadd nofiles</userinput>
+[root@yourserver src]# <userinput>useradd -g nofiles -d /var/qmail/alias alias</userinput>
+[root@yourserver src]# <userinput>useradd -g nofiles -d /var/qmail qmaild</userinput>
+[root@yourserver src]# <userinput>useradd -g nofiles -d /var/qmail qmaill</userinput>
+[root@yourserver src]# <userinput>useradd -g nofiles -d /var/qmail qmailp</userinput>
+[root@yourserver src]# <userinput>groupadd qmail</userinput>
+[root@yourserver src]# <userinput>useradd -g qmail -d /var/qmail qmailq</userinput>
+[root@yourserver src]# <userinput>useradd -g qmail -d /var/qmail qmailr</userinput>
+[root@yourserver src]# <userinput>useradd -g qmail -d /var/qmail qmails</userinput>
+[root@yourserver src]# <userinput>cd qmail-1.03</userinput>
+[root@yourserver qmail-1.03]# <userinput>make setup check</userinput>
+( cat warn-auto.sh; \
+echo CC=\'`head -1 conf-cc`\'; \
+(many lines omitted)
+./install
+./instcheck
+[root@yourserver qmail-1.03]#
+<action>cd /usr/local/src 
+tar xzf /tmp/qmail-1.03.tar.gz 
+mkdir /var/qmail 
+groupadd nofiles 
+useradd -g nofiles -d /var/qmail/alias alias 
+useradd -g nofiles -d /var/qmail qmaild 
+useradd -g nofiles -d /var/qmail qmaill 
+useradd -g nofiles -d /var/qmail qmailp 
+groupadd qmail 
+useradd -g qmail -d /var/qmail qmailq 
+useradd -g qmail -d /var/qmail qmailr 
+useradd -g qmail -d /var/qmail qmails
+cd qmail-1.03 
+make setup check</action></screen>
+          <para>Replace sendmail with qmail's wrapper.</para>
+          <indexterm>
+            <primary>sendmail</primary>
+            <secondary>removing</secondary>
+          </indexterm>
+          <screen>[root@yourserver qmail-1.03]# <userinput>rm -f /usr/bin/sendmail</userinput>
+[root@yourserver qmail-1.03]# <userinput>ln -s /var/qmail/bin/sendmail /usr/sbin/sendmail</userinput>
+[root@yourserver qmail-1.03]#
+<action>rm -f /usr/bin/sendmail 
+ln -s /var/qmail/bin/sendmail /usr/sbin/sendmail</action></screen>
+          <para>Configure qmail - specifically, run the config script to set up files in <computeroutput>/var/qmail/control</computeroutput> specifying the computer's identity and which addresses it should accept mail for.  This command will automatically set up qmail correctly if you have correctly set a valid host nome.  If not, you'll want to read <computeroutput>/var/qmail/doc/INSTALL.ctl</computeroutput> to find out how to configure qmail.</para>
+            <screen>[root@yourserver qmail-1.03]# <userinput>./config-fast <replaceable>yourserver.test</replaceable></userinput>
+Your fully qualified host name is yourserver.test.
+Putting yourserver.test into control/me...
+Putting yourserver.test into control/defaultdomain...
+Putting yourserver.test into control/plusdomain...
+Putting yourserver.test into control/locals...
+Putting yourserver.test into control/rcpthosts...
+Now qmail will refuse to accept SMTP messages except to yourserver.test.
+Make sure to change rcpthosts if you add hosts to locals or virtualdomains!
+[root@yourserver qmail-1.03]#
+<action>./config-fast <replaceable>yourserver.test</replaceable></action></screen>
+          <para>All incoming mail that isn't for a specific user is handled by the <computeroutput>alias</computeroutput> user.  This includes all root mail.  These commands prepare the alias user to receive mail.</para>
+          <screen>[root@yourserver qmail-1.03]# <userinput>cd ~alias; touch .qmail-postmaster .qmail-mailer-daemon .qmail-root</userinput>
+[root@yourserver alias]# <userinput>chmod 644 ~alias/.qmail*</userinput>
+[root@yourserver alias]# <userinput>/var/qmail/bin/maildirmake ~alias/Maildir/</userinput>
+[root@yourserver alias]# <userinput>chown -R alias.nofiles /var/qmail/alias/Maildir</userinput>
+[root@yourserver alias]#
+<action>cd ~alias; touch .qmail-postmaster .qmail-mailer-daemon .qmail-root 
+chmod 644 ~alias/.qmail* 
+/var/qmail/bin/maildirmake ~alias/Maildir/ 
+chown -R alias.nofiles /var/qmail/alias/Maildir</action></screen>
+            <indexterm>
+              <primary>qmail</primary>
+              <secondary>Maildir</secondary>
+            </indexterm>
+            <para>Configure qmail to use the Maildir delivery format
+          (instead of mbox), and install a version of the qmail startup script modified to use Maildir.</para>
+            <screen>[root@yourserver alias]# <userinput>echo "./Maildir" > /var/qmail/bin/.qmail</userinput>
+[root@yourserver alias]# <userinput>cp /tmp/openacs-4-6/packages/acs-core-docs/www/files/qmail.rc.txt /var/qmail/rc</userinput>
+[root@yourserver alias]# <userinput>chmod 755 /var/qmail/rc</userinput>
+[root@yourserver alias]# 
+<action>echo "./Maildir" &gt; /var/qmail/bin/.qmail 
+cp /tmp/openacs-4-6/packages/acs-core-docs/www/files/qmail.rc.txt /var/qmail/rc 
+chmod 755 /var/qmail/rc 
+</action></screen>
+            <para>Set up the skeleton directory so that new users will
+          be configured for qmail.</para>
+            <screen>[root@localhost root]# <userinput>/var/qmail/bin/maildirmake /etc/skel/Maildir</userinput>
+[root@localhost root]# <userinput>echo "./Maildir/" > /etc/skel/.qmail</userinput>
+[root@localhost root]# 
+<action>/var/qmail/bin/maildirmake /etc/skel/Maildir
+echo "./Maildir/" > /etc/skel/.qmail</action></screen>
+
+            <para>Qmail runs in two parts.  First, several different
+          qmail daemons are started by the qmail rc file.  Second, a
+          process is started in within tcpserver to listen for incoming smtp traffic.  Run both of these commands to start qmail.  Be very careful about line breaks - there should be a total of two commands here.  Note also that the tcpserver command takes the uid and guid of <computeroutput>qmaild</computeroutput>, which will only be 502 and 501 if you have followed all of these instructions exactly and in order.  Otherwise, <userinput>grep qmaild /etc/passwd</userinput> to find uid and guid, in that order.</para>
+          <screen>[root@yourserver alias]# <userinput>/usr/local/bin/tcpserver -x /etc/tcp.smtp.cdb -v -u <replaceable>502</replaceable> -g <replaceable>501</replaceable> 0 smtp /var/qmail/bin/qmail-smtpd 2>&amp;1 | /var/qmail/bin/splogger smtpd 3 &amp;</userinput>
+[1] 15863
+[root@yourserver alias]# <userinput>csh -cf '/var/qmail/rc &amp;'</userinput>
+[1] 15865
+[root@yourserver alias]#
+<action>/usr/local/bin/tcpserver -x /etc/tcp.smtp.cdb -v -u <replaceable>502</replaceable> -g <replaceable>501</replaceable> 0 smtp /var/qmail/bin/qmail-smtpd 2&gt;&amp;1 | /var/qmail/bin/splogger smtpd 3 &amp; 
+csh -cf '/var/qmail/rc &amp;'</action></screen>
+          <para>Verify that seven different qmail threads are running:</para>
+          <screen>[root@yourserver alias]# <userinput>ps -auxw | grep qmail</userinput>
+qmaild   15862  0.0  0.1  1380  452 pts/1    S    10:26   0:00 /usr/local/bin/tcpserver -x /etc/tcp.smtp.cdb -v -u 502 -g 501 0 smtp
+root     15863  0.0  0.1  1332  412 pts/1    S    10:26   0:00 /var/qmail/bin/splogger smtpd 3
+qmails   15865  0.0  0.1  1360  316 pts/1    S    10:26   0:00 qmail-send
+qmaill   15866  0.0  0.1  1328  408 pts/1    S    10:26   0:00 splogger qmail
+root     15867  0.0  0.1  1328  268 pts/1    S    10:26   0:00 qmail-lspawn ./Maildir/
+qmailr   15868  0.0  0.1  1324  268 pts/1    S    10:26   0:00 qmail-rspawn
+qmailq   15869  0.0  0.1  1320  276 pts/1    S    10:26   0:00 qmail-clean
+[root@yourserver alias]#</screen>
+          <para>Further verify by sending and receiving email.  Incoming mail for root is stored in <computeroutput>/var/qmail/alias/Maildir</computeroutput>.  If it worked, make it permanent by putting the same commands in your startup scripts.  (These instructions put the commands in rc.local, which means that they'll be run once, on boot.  There will be no monitoring and no interface to start and stop and check status.  We ought instead to either use full init scripts or daemontools.)</para>
+          <screen>[root@yourserver alias]# <userinput>echo "/usr/local/bin/tcpserver -x /etc/tcp.smtp.cdb -v -u <replaceable>502</replaceable> -g <replaceable>501</replaceable> 0 smtp /var/qmail/bin/qmail-smtpd \ " &gt;&gt; /etc/rc.local</userinput>
+[root@yourserver alias]# <userinput>echo "2&gt;&amp;1 | /var/qmail/bin/splogger smtpd 3 &amp;  " &gt;&gt; /etc/rc.local</userinput>
+[root@yourserver alias]# <userinput>echo "csh -cf '/var/qmail/rc &amp;' " &gt;&gt; /etc/rc.local</userinput>
+[root@yourserver alias]# 
+<action>echo "/usr/local/bin/tcpserver -x /etc/tcp.smtp.cdb -v -u <replaceable>502</replaceable> -g <replaceable>501</replaceable> 0 smtp /var/qmail/bin/qmail-smtpd \ " &gt;&gt; /etc/rc.local
+echo "2&gt;&amp;1 | /var/qmail/bin/splogger smtpd 3 &amp;  " &gt;&gt; /etc/rc.local
+echo "csh -cf '/var/qmail/rc &amp;' " &gt;&gt; /etc/rc.local</action></screen>
+          </listitem>
+        </orderedlist>
+    </sect3>
+  </sect2>
+  
+  <para><phrase role="cvstag">($Id$)</phrase></para>
+  
 </sect1>
 <!--
    Local Variables:
-   sgml-parent-document: ("../index.xml" "book" "sect1")
+   sgml-parent-document: ("../index.xml" "book" "chapter")
    End:
 -->

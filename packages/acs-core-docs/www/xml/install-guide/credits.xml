@@ -9,10 +9,10 @@
 	together the January 2002 version of this guide from many sources of
 	information.</para>
 
+  <para><ulink url="mailto:joel@aufrecht.org">Joel Aufrecht</ulink>
+	updated the document in March 2003.</para>
+
   <itemizedlist>
-	<listitem><para>
-		<xref linkend="operating-system">OpenACS &version; Installation Guide</xref>
-	  </para></listitem>
 
 	<listitem><para>
 		<ulink url="http://openacs.org/doc/openacs/install/">OpenACS 3.x Installation Guide</ulink>
