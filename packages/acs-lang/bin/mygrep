@@ -25,11 +25,13 @@ if ($ARGV[0] =~ /^-m/) {
 # Take input from STDIN or from files
 my $have_match = 0;
 while ($line = <>) {
-    if ($line =~ /$pattern/) {
+    while ($line =~ /$pattern/) {
         if (defined($1)) {
             print STDOUT "$1\n";
         }
-        
+
+        # Do next matching on whatever comes after last match
+        $line=$';
         $have_match = 1;
     } 
 }
