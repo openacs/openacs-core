@@ -170,13 +170,13 @@ root      5582  0.0  0.2  3276  628 pts/0    S    11:55   0:00 grep nsd
 			<computeroutput>/usr/local/bin</computeroutput>. 
 		  </para>
 		<programlisting>
-joeuser:~$ su - 
+[joeuser ~]$ su - 
 Password: ***********
-root:~# cp /tmp/restart-aolserver.txt /usr/local/bin/restart-aolserver
-root:~# chown root.web /usr/local/bin/restart-aolserver
-root:~# chmod 4750 /usr/local/bin/restart-aolserver
-root:~# ln -s /usr/bin/perl /usr/local/bin/perl
-root:~# exit</programlisting>
+[root ~]# cp /tmp/restart-aolserver.txt /usr/local/bin/restart-aolserver
+[root ~]# chown root.web /usr/local/bin/restart-aolserver
+[root ~]# chmod 4750 /usr/local/bin/restart-aolserver
+[root ~]# ln -s /usr/bin/perl /usr/local/bin/perl
+[root ~]# exit</programlisting>
       </listitem>
 
       <listitem><para> 
@@ -188,12 +188,12 @@ root:~# exit</programlisting>
 			running. You should see the following lines. </para>
 
 		<programlisting>
-joeuser:~$ killall nsd
+[joeuser ~]$ killall nsd
 nsd: no process killed
-joeuser:~$ /usr/local/aolserver/bin/nsd-postgres -t ~/var/lib/aolserver/<emphasis>birdnotes</emphasis>/nsd.tcl
-joeuser:~$ restart-aolserver <emphasis>birdnotes</emphasis>
+[joeuser ~]$ /usr/local/aolserver/bin/nsd-postgres -t ~/var/lib/aolserver/<emphasis>birdnotes</emphasis>/nsd.tcl
+[joeuser ~]$ restart-aolserver <emphasis>birdnotes</emphasis>
 Killing 23727 
-joeuser:~$ killall nsd
+[joeuser ~]$ killall nsd
 nsd: no process killed</programlisting>
 
         <para>
@@ -210,9 +210,9 @@ nsd: no process killed</programlisting>
           <computeroutput>/etc/inittab</computeroutput> for
           editing. </para>
         <programlisting>
-joeuser:~$ su -
+[joeuser ~]$ su -
 Password: ************
-root:~# emacs -nw /etc/inittab</programlisting>
+[root ~]# emacs -nw /etc/inittab</programlisting>
       </listitem>
 
       <listitem><para> 
@@ -236,9 +236,9 @@ nss1:345:respawn:/usr/local/aolserver/bin/nsd-postgres -i -u nobody -g web -t /h
             <computeroutput>/etc/inittab</computeroutput>. </para>
 
           <programlisting>
-root:~# killall nsd    
+[root ~]# killall nsd    
 nsd: no process killed
-root:~# /sbin/init q</programlisting>        
+[root ~]# /sbin/init q</programlisting>        
         </listitem>
 
         <listitem><para> 
@@ -247,7 +247,7 @@ root:~# /sbin/init q</programlisting>
             again. </para>
 
           <programlisting>
-root:~# restart-aolserver <emphasis>birdnotes</emphasis>
+[root ~]# restart-aolserver <emphasis>birdnotes</emphasis>
 Killing 23750</programlisting>
         </listitem>
       </itemizedlist>

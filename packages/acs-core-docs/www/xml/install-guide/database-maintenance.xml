@@ -97,7 +97,7 @@ SVRMGR&gt; drop tablespace <emphasis>service0</emphasis> including contents casc
     
       <para>Then, to drop the db, just do:</para>
       <programlisting>
-service0:~$ dropdb <emphasis>service0</emphasis>
+[service0 ~]$ dropdb <emphasis>service0</emphasis>
 DROP DATABASE</programlisting>
     </sect3>
   </sect2>
@@ -120,7 +120,7 @@ DROP DATABASE</programlisting>
 
     <para>Edit your crontab:</para>
     <programlisting>
-joeuser:~$ crontab -e</programlisting>
+[joeuser ~]$ crontab -e</programlisting>
 
     <para>We'll set vacuum up to run nightly at 1 AM. Add the following
     line:</para>

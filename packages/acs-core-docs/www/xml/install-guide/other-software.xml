@@ -157,8 +157,8 @@ package/install</action></screen>
             </listitem>
             <listitem>
               <para>Debian</para>
-              <screen>root:~# <userinput>apt-get install daemontools-installer</userinput>
-root:~# <userinput>build-daemontools</userinput></screen>
+              <screen>[root ~]# <userinput>apt-get install daemontools-installer</userinput>
+[root ~]# <userinput>build-daemontools</userinput></screen>
             </listitem>
           </itemizedlist>
         </listitem>

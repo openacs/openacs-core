@@ -99,10 +99,10 @@
               Login as root. The following commands will install the export script:
               </para> 
               <programlisting>
-                joeuser:~$ su -
+                [joeuser ~]$ su -
                 Password: ***********
-                root:~# cp /tmp/export-oracle.txt /usr/sbin/export-oracle
-              root:~# chmod 700 /usr/sbin/export-oracle</programlisting>
+                [root ~]# cp /tmp/export-oracle.txt /usr/sbin/export-oracle
+              [root ~]# chmod 700 /usr/sbin/export-oracle</programlisting>
               </listitem>
 
               <listitem><para>
@@ -111,9 +111,9 @@
               <computeroutput>/ora8/m02/oracle-exports</computeroutput>.</para>
 
               <programlisting>
-                root:~# mkdir /ora8/m02/oracle-exports
-                root:~# chown oracle.dba /ora8/m02/oracle-exports
-              root:~# chmod 770 /ora8/m02/oracle-exports</programlisting>
+                [root ~]# mkdir /ora8/m02/oracle-exports
+                [root ~]# chown oracle.dba /ora8/m02/oracle-exports
+              [root ~]# chmod 770 /ora8/m02/oracle-exports</programlisting>
               </listitem>
 
               <listitem><para> 
@@ -131,7 +131,7 @@
               </para>
 
               <programlisting>
-                root:~# /usr/sbin/export-oracle
+                [root ~]# /usr/sbin/export-oracle
                 mv: /ora8/m02/oracle-exports/oraexport-service_name.dmp.gz: No such file or directory
 
                 Export: Release 8.1.6.1.0 - Production on Sun Jun 11 18:07:45 2000
