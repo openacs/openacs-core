@@ -548,13 +548,23 @@ ad_proc -private ad_parameter_cache {
 	return
     }
     if {[info exists set]} {
-	nsv_set "ad_param_$package_id" $parameter_name $set
+	nsv_set "ad_param_${package_id}" $parameter_name $set
 	return $set
     } elseif { [nsv_exists ad_param_$package_id $parameter_name] } {
 	return [nsv_get ad_param_$package_id $parameter_name]
     } else {
-        ns_log Warning "APM: $parameter_name does not exist"
-	return ""
+        set value [db_string select_parameter_value {
+            select apm_parameter_values.attr_value
+            from apm_parameters,
+                 apm_parameter_values
+            where apm_parameter_values.package_id = :package_id
+            and apm_parameter_values.parameter_id = apm_parameters.parameter_id
+            and apm_parameters.parameter_name = :parameter_name
+        } -default ""]
+
+	nsv_set "ad_param_${package_id}" $parameter_name $value
+
+	return $value
     }
 }
 
