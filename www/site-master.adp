@@ -13,6 +13,7 @@
     @header_stuff;noquote@
   </property>
 
+
 <!-- Header -->
 
 <div id="site-header">
@@ -40,7 +41,7 @@
 
   <div class="action-list users-online">
     <ul>
-      <li><a href="@whos_online_url@">@num_users_online@ <if @num_users_online@ eq 1>member</if><else>members</else> online</a></li>
+      <li><a href="@whos_online_url@">@num_users_online@ <if @num_users_online@ eq 1>#acs-subsite.Member#</if><else>#acs-subsite.Members#</else> #acs-subsite.Online#</a></li>
     </ul>
   </div>
 
@@ -91,22 +92,20 @@
 
 <slave>
 
-    <div id="site-footer">
-      <if @num_of_locales@ gt 1 or @locale_admin_url@ not nil>
-        <div class="action-list">
-          <ul>
-            <if @num_of_locales@ gt 1>
-              <li><include src="/packages/acs-lang/lib/change-locale-bar"></li>
-            </if>
-            <else>
-              <if @locale_admin_url@ not nil>
-                <li><a href="@locale_admin_url@">Install locales</a></li>
-              </if>
-            </else>
-          </ul>
-        </div>
+<div id="site-footer">
+  <div class="action-list">
+    <ul>
+      <if @num_of_locales@ gt 1>
+        <li><a href="@change_locale_url@">#acs-subsite.Change_locale_label#</a></li>
       </if>
-    </div>
+      <else>
+        <if @locale_admin_url@ not nil>
+          <li><a href="@locale_admin_url@">Install locales</a></li>
+        </if>
+      </else>
+    </ul>
+  </div>
+</div>
 
 <if @curriculum_bar_p@ true>
   <p><include src="/packages/curriculum/lib/bar" />
