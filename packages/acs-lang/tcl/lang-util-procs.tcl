@@ -166,7 +166,7 @@ namespace eval lang::util {
         if { [file exists $catalog_file_path] } {
             set catalog_file_contents [lang::catalog::read_file $catalog_file_path]
             array set catalog_array [lang::catalog::parse $catalog_file_contents]            
-            array set messages_array [lindex [array get catalog_array messages] 1]
+            array set messages_array [lindex [array get catalog_array messages] 1]            
         } else {
             array set messages_array {}
         }
@@ -289,13 +289,16 @@ namespace eval lang::util {
             puts -nonewline $file_id $modified_file_contents
             close $file_id
         }
-    
-        # Use the messages array to generate a new catalog file
-        lang::catalog::export_messages_to_file $catalog_file_path [array get messages_array]
 
-        # Register the messages in the database so that it is in sync with the catalog file
-        foreach {message_key message_text} [array get messages_array] {
-            lang::message::register en_US $package_key $message_key $message_text
+        if { $number_of_replacements > 0 } {
+            # Use the messages array to generate a new catalog file
+            lang::catalog::export_messages_to_file $catalog_file_path [array get messages_array]
+
+            # Register the messages in the database so that the new messages are immediately reflected
+            # in the system
+            foreach {message_key message_text} [array get messages_array] {
+                lang::message::register en_US $package_key $message_key $message_text
+            }
         }
     
         return $number_of_replacements
