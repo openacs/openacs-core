@@ -21,6 +21,7 @@ db_multirow -extend { url admin_url param_url } packages services_select {} {
     if { $parameter_count > 0 } {
         set param_url [export_vars -base "/shared/parameters" { package_id { return_url {[ad_return_url]} } }]
     }
+    set instance_name [lang::util::localize $instance_name]
 
     if { [empty_string_p $url] && [empty_string_p $admin_url] && [empty_string_p $param_url] } {
         continue
