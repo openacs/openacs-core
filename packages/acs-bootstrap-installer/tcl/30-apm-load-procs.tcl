@@ -309,7 +309,7 @@ ad_proc -private apm_guess_db_type { package_key path } {
 
 } {
     set components [split $path "/"]
-    set file_type [apm_guess_file_type $package_key $path]]
+    set file_type [apm_guess_file_type $package_key $path]
 
     if { [string match "data_model*" $file_type] ||
          [string match "ctl_file" $file_type] } {
