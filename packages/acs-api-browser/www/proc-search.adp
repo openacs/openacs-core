@@ -5,7 +5,7 @@
 <h3>Procedure Matches:</h3>
 <ul>
   <multiple name="results">
-  <li>@results.score@: <a href=@results.url@>@results.proc@</a>
+  <li> <if @results.score@ lt 10>&nbsp;&nbsp;</if>@results.score@: <a href=@results.url@>@results.proc@</a>
    <i>@results.args@</i>
    </multiple>
 </ul>

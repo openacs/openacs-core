@@ -61,9 +61,14 @@ foreach proc [nsv_array names api_proc_doc] {
     ## Name Search:
     ###############
     if {$name_weight} {
+        # JCD: this was a little perverse since exact matches were
+        # actually worth less than matches in the name (if there were
+        # 2 or more, which happens with namespaces) so I doubled the
+        # value of an exact match.
+
         ##Exact match:
         if {[string tolower $query_string] == [string tolower $proc]} {
-            incr score $name_weight
+            incr score [expr $name_weight * 2]
         }
         incr score [expr $name_weight * [ad_keywords_score $query_string $proc]] 
     }
@@ -106,7 +111,12 @@ foreach proc [nsv_array names api_proc_doc] {
     #####
     ## Place Needed info in matches
     if {$score} {
-        lappend matches [list $proc $score $doc_elements(positionals)]
+        if {$doc_elements(varargs_p)} { 
+            set args "$doc_elements(positionals) \[&nbsp;args...&nbsp;\]"
+        } else { 
+            set args $doc_elements(positionals)
+        }   
+        lappend matches [list $proc $score $args]
     }
 }
 
