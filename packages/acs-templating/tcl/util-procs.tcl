@@ -283,7 +283,7 @@ ad_proc -public template::util::vars_to_array { arrayname args } {
 
   foreach var $args {
     upvar $var value
-    set arr($var) $valure
+    set arr($var) $value
   }
 }
 
