@@ -59,13 +59,17 @@ ns_param   nslog              ${bindir}/nslog.so
 ns_param   nssha1             ${bindir}/nssha1.so 
 ns_param   nscache            ${bindir}/nscache.so 
 
-#nsrewrite is not used by any standard OpenACS code
-#ns_param   nsrewrite          ${bindir}/nsrewrite.so 
+# openacs <5.x requires nsxml
+# ns_param nsxml              ${bindir}/nsxml.so
+
 
 #---------------------------------------------------------------------
 # nsopenssl will fail unless the cert files are present as specified
 # later in this file, so it's disabled by default
 #ns_param   nsopenssl          ${bindir}/nsopenssl.so
+
+# authorize-gateway package requires dqd_utils
+# ns_param   dqd_utils dqd_utils[expr {int($tcl_version)}].so
 
 # Full Text Search
 #ns_param   nsfts              ${bindir}/nsfts.so
@@ -80,6 +84,7 @@ ns_param   nscache            ${bindir}/nscache.so
 #ns_param   nsperm             ${bindir}/nsperm.so 
 #ns_param   nscgi              ${bindir}/nscgi.so 
 #ns_param   nsjava             ${bindir}/libnsjava.so
+#ns_param   nsrewrite          ${bindir}/nsrewrite.so 
 
 if { [ns_info version] >= 4 } {
     # Required for AOLserver 4.x
@@ -143,6 +148,7 @@ set directoryfile             index.tcl,index.adp,index.html,index.htm
 ns_section ns/parameters 
 ns_param   serverlog          ${serverroot}/log/error.log 
 ns_param   home               $homedir 
+# maxkeepalive is ignored in aolserver4.x
 ns_param   maxkeepalive       0
 ns_param   logroll            on
 ns_param   maxbackup          5
@@ -368,12 +374,21 @@ if { [ns_info version] < 4} {
     ns_param KeyFile               keyfile.pem
     #ns_param CADir                 ca-client/dir
     #ns_param CAFile                ca-client/ca-client.crt
+    # for Protocols                "ALL" = "SSLv2, SSLv3, TLSv1"
     ns_param Protocols             "SSLv3, TLSv1" 
     ns_param CipherSuite           "ALL:!ADH:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv2:+EXP" 
     ns_param PeerVerify            false
     ns_param PeerVerifyDepth       3
     ns_param Trace                 false
     
+    # following from bartt's openssl3 nsd4.tcl (and he should know =)
+    # http://www.mail-archive.com/aolserver@listserv.aol.com/msg07092.html
+    ns_param SessionCache true
+    ns_param SessionCacheID 1
+    ns_param SessionCacheSize 512
+    ns_param SessionCacheTimeout 300
+
+
     #ns_section "ns/server/${server}/module/nsopenssl/sslcontext/admins"
     #ns_param Role                  server
     #ns_param ModuleDir             /path/to/dir
@@ -381,6 +396,7 @@ if { [ns_info version] < 4} {
     #ns_param KeyFile               server/server.key 
     #ns_param CADir                 ca-client/dir 
     #ns_param CAFile                ca-client/ca-client.crt
+    # for Protocols                "ALL" = "SSLv2, SSLv3, TLSv1"
     #ns_param Protocols             "All"
     #ns_param CipherSuite           "ALL:!ADH:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv2:+EXP" 
     #ns_param PeerVerify            false
@@ -394,12 +410,20 @@ if { [ns_info version] < 4} {
     ns_param KeyFile               keyfile.pem 
     #ns_param CADir                 ${serverroot}/etc/certs
     #ns_param CAFile                certfile.pem
+    # for Protocols                "ALL" = "SSLv2, SSLv3, TLSv1"
     ns_param Protocols             "SSLv2, SSLv3, TLSv1" 
     ns_param CipherSuite           "ALL:!ADH:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv2:+EXP" 
     ns_param PeerVerify            false
     ns_param PeerVerifyDepth       3
     ns_param Trace                 false
     
+    # following from bartt's openssl3 nsd4.tcl (and he should know =)
+    # http://www.mail-archive.com/aolserver@listserv.aol.com/msg07092.html
+    ns_param SessionCache true
+    ns_param SessionCacheID 1
+    ns_param SessionCacheSize 512
+    ns_param SessionCacheTimeout 300
+
     # SSL drivers. Each driver defines a port to listen on and an explitictly named
     # SSL context to associate with it. Note that you can now have multiple driver
     # connections within a single virtual server, which can be tied to different
@@ -415,7 +439,13 @@ if { [ns_info version] < 4} {
     ns_param port                  $httpsport
     ns_param hostname              $hostname
     ns_param address               $address
-    
+    # following added per
+    # http://www.mail-archive.com/aolserver@listserv.aol.com/msg07365.html
+    # Maximum File Size for uploads:
+    ns_param   maxinput           [expr 5 * 1024 * 1024] ;# in bytes
+    # Maximum request time
+    ns_param   recvwait           [expr 5 * 60] ;# in minutes
+
     ns_section "ns/server/${server}/module/nsopenssl/ssldriver/admins"
     ns_param sslcontext            admins
     # ns_param port                  $httpsport_admins
@@ -616,5 +646,6 @@ ns_param options "OPTIONS COPY GET PUT MOVE DELETE HEAD MKCOL POST PROPFIND PROP
 # read-only WebDAV options
 #ns_param options "OPTIONS COPY GET HEAD MKCOL POST PROPFIND PROPPATCH"
 
+ns_log notice "nsd.tcl: using threadsafe tcl: [info exists tcl_platform(threaded)]"
 ns_log notice "nsd.tcl: finished reading config file."
 
