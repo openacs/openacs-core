@@ -102,7 +102,7 @@ ad_form -extend -name user_info -form {
     set user_info(authority_id) $user(authority_id)
     set user_info(username) $user(username)
     foreach elm $form_elms {
-        if { [empty_string_p $mode($elm)] } {
+        if { [empty_string_p $mode($elm)] && [info exists $elm] } {
             set user_info($elm) [string trim [set $elm]]
         }
     }
