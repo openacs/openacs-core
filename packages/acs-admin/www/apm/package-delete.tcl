@@ -40,13 +40,15 @@ $file_list
 
 set body "[apm_header -form "action=\"package-delete-2\" method=\"post\"" [list "version-view?version_id=$version_id" "$pretty_name $version_name"] "Delete"]
 
-Deleting a package removes it from the filesystem and removes all record of it from the APM's
-database.
+<p>Deleting a package removes all record of it from the APM's database.</p>
+
 <p>
 
 [export_form_vars version_id]
 $file_list
 
+<p>
+<input type=\"checkbox\" name=\"remove_files\" value=\"1\"> Also delete package files from the filesystem.</p>
 <input type=submit value=\"Delete Package\">
 </form>
 [ad_footer]"
