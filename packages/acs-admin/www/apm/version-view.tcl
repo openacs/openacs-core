@@ -204,13 +204,19 @@ doc_body_append "
 </blockquote>
 
 <ul>
-<li><a href=\"version-edit?version_id=$version_id\">Edit information for this version of the package or create a new version</a>
-<li><a href=\"version-dependencies?version_id=$version_id\">Manage dependency information</a>
-<li><a href=\"version-files?version_id=$version_id\">Manage file information</a>
-<li><a href=\"version-parameters?version_id=$version_id\">Manage parameter information</a>
-<li><a href=\"version-callbacks?version_id=$version_id\">Manage Tcl Callbacks</a>
-<li><a href=\"version-generate-info?version_id=$version_id\">Display an XML package specification file for this version</a>
-<li><a href=\"version-i18n-index?version_id=$version_id\">Manage Internationalization</a>
+<li><a href=\"version-edit?[export_vars { version_id }]\">Edit above information</a> (Also use this to create a new version)
+</ul>
+<h4>Manage</h4>
+<ul>
+<li><a href=\"version-files?[export_vars { version_id }]\">Files</a>
+<li><a href=\"version-dependencies?[export_vars { version_id }]\">Dependencies and Provides</a>
+<li><a href=\"version-parameters?[export_vars { version_id }]\">Parameters</a>
+<li><a href=\"version-callbacks?[export_vars { version_id }]\">Tcl Callbacks (install, instantiate, mount)</a>
+<li><a href=\"version-i18n-index?[export_vars { version_id }]\">Internationalization</a>
+</ul>
+<h4>XML .info package specification file</h4>
+<ul>
+<li><a href=\"version-generate-info?[export_vars { version_id }]\">Display an XML package specification file for this version</a>
 "
 
 if { ![info exists installed_version_id] || $installed_version_id == $version_id && \
@@ -218,28 +224,30 @@ if { ![info exists installed_version_id] || $installed_version_id == $version_id
     # As long as there isn't a different installed version, and this package is being
     # generated locally, allow the user to write a specification file for this version
     # of the package.
-    doc_body_append "<li><a href=\"version-generate-info?version_id=$version_id&write_p=1\">Write an XML package specification to the <tt>packages/$package_key/$package_key.info</tt> file</a>\n"
+    doc_body_append "<li><a href=\"version-generate-info?[export_vars { version_id }]&write_p=1\">Write an XML package specification to the <tt>packages/$package_key/$package_key.info</tt> file</a>\n"
 }
 
 if { $installed_p == "t" } {
     if { [empty_string_p $distribution_uri] } {
 	# The distribution tarball was either (a) never generated, or (b) generated on this
 	# system. Allow the user to make a tarball based on files in the filesystem.
-	doc_body_append "<li><a href=\"version-generate-tarball?version_id=$version_id\">Generate a distribution file for this package from the filesystem</a>\n"
+	doc_body_append "<p><li><a href=\"version-generate-tarball?[export_vars { version_id }]\">Generate a distribution file for this package from the filesystem</a>\n"
     }
 
+    doc_body_append "</ul><h4>Disable/Uninstall</h4><ul>"
+
     if { [info exists can_disable_p] } {
-	doc_body_append "<p><li><a href=\"version-disable?version_id=$version_id\">Disable this version of the package</a>\n"
+	doc_body_append "<p><li><a href=\"version-disable?[export_vars { version_id }]\">Disable this version of the package</a>\n"
     }
     if { [info exists can_enable_p] } {
-	doc_body_append "<p><li><a href=\"version-enable?version_id=$version_id\">Enable this version of the package</a>\n"
+	doc_body_append "<p><li><a href=\"version-enable?[export_vars { version_id }]\">Enable this version of the package</a>\n"
     }
     
     doc_body_append "<p>"
     
     if { $installed_p == "t" } {	
 	doc_body_append "
-	<li><a href=\"package-delete?version_id=$version_id\">Delete this package from your system.</a> (be very careful!)\n"
+	<li><a href=\"package-delete?[export_vars { version_id }]\">Uninstall this package from your system.</a> (be very careful!)\n"
 	
     }
 }

@@ -73,13 +73,17 @@ set table_def {
     { maintained "Maintained" "" {<td align=center>[ad_decode $distribution_uri "" "Locally" "Externally"]</td>} }
     {
 	action "" "" {<td bgcolor=white>&nbsp;&nbsp;[eval {
-	    ns_log Notice "Status for $version_id: [apm_version_load_status $version_id]"
+
+            # LARS: Ugh! We were calling the expensive 'apm_version_load_status' proc twice!
+            # ns_log Notice "Status for $version_id: [apm_version_load_status $version_id]"
+
+
 	    if { $installed_p == "t" && $enabled_p == "t" && \
-		    [string equal [apm_version_load_status $version_id] "needs_reload"] } {
+                    [string equal [apm_version_load_status $version_id] "needs_reload"]} {
 		format "<a href=\"version-reload?version_id=$version_id\">reload</a>"
 	    } else {
-		format ""
-	    }
+                set format ""
+            }
 	}]&nbsp;&nbsp;</td>}
     }
 }
