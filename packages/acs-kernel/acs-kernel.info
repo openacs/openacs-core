@@ -7,7 +7,7 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>t</singleton-p>
     
-    <version name="5.0d5" url="http://openacs.org/repository/download/apm/acs-kernel-5.0d5.apm">
+    <version name="5.0d6" url="http://openacs.org/repository/download/apm/acs-kernel-5.0d6.apm">
     <database-support>
         <database>oracle</database>
         <database>postgresql</database>
@@ -17,7 +17,7 @@
         <release-date>2003-02-18</release-date>
         <vendor url="http://openacs.org/">OpenACS</vendor>
 
-        <provides url="acs-kernel" version="5.0d5"/>
+        <provides url="acs-kernel" version="5.0d6"/>
 
         <callbacks>
         </callbacks>
@@ -65,7 +65,8 @@
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="HomeURL"  default="/pvt/home" description="the URL of the workspace link" section_name="system-information"/>
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="DefaultPersistentLoginP"  default="0" description="On the login screen, should the default be to login the user permanently (1) or not (0)." section_name="security"/>
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="UsePasswordWidgetForUsername"  default="0" description="Should we hide what the user types in the username field, the way we do with the password field? Set this to 1 if you are using sensitive information such as social security number for username." section_name="Security"/>
-            <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="UseEmailForUsername"  default="1" description="Say 1 if we should use email as the username for login purposes, and hide any mention of a username separate from email address from the users." section_name="Security"/>
+            <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="UseEmailForLoginP"  default="1" description="Say 1 if we should login with email instead of username." section_name="Security"/>
+            <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="EmailAccountOwnerOnPasswordChangeP"  default="1" description="Say 1 if you want us to send an email to the account owner when changing password for local accounts." section_name="Security"/>
         </parameters>
 
     </version>
