@@ -1,26 +1,34 @@
 <?xml version="1.0"?>
 <queryset>
 
-<fullquery name="users_state_authorized_or_deleted">      
-      <querytext>
-      select 
-email from cc_users where user_id=:user_id
-      </querytext>
-</fullquery>
+    <fullquery name="select_email">
+        <querytext>
+            select email
+            from cc_users
+            where user_id = :user_id
+        </querytext>
+    </fullquery>
 
- 
-<fullquery name="password_answer">      
-      <querytext>
-      select password_answer from users where user_id = :user_id
-      </querytext>
-</fullquery>
+    <fullquery name="select_answer_matches_p">
+        <querytext>
+            select count(*)
+            from dual
+            where exists (select 1
+                          from users
+                          where user_id = :user_id
+                          and password_answer = :answer)
+        </querytext>
+    </fullquery>
 
- 
-<fullquery name="first_last_name">      
-      <querytext>
-      select first_names as db_first_names, last_name as db_last_name from cc_users where user_id = $user_id
-      </querytext>
-</fullquery>
+    <fullquery name="select_names_match_p">
+        <querytext>
+            select count(*)
+            from dual
+            where exists (select 1
+                          from persons
+                          where first_names = :first_names
+                          and last_name = :last_name)
+        </querytext>
+    </fullquery>
 
- 
 </queryset>
