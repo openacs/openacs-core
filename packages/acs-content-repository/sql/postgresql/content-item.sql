@@ -1143,7 +1143,7 @@ begin
 end;' language 'plpgsql';
 
 
-create or replace function content_item__rename (integer,varchar)
+create or replace function content_item__edit_name (integer,varchar)
 returns integer as '
 declare
   rename__item_id                alias for $1;  

@@ -280,7 +280,7 @@ end;' language 'plpgsql';
 
 
 -- procedure rename
-create or replace function content_folder__rename (integer,varchar,varchar,varchar)
+create or replace function content_folder__edit_name (integer,varchar,varchar,varchar)
 returns integer as '
 declare
   rename__folder_id              alias for $1;  
@@ -291,7 +291,7 @@ declare
 begin
 
   if rename__name is not null and rename__name != '''' then
-    PERFORM content_item__rename(rename__folder_id, rename__name);
+    PERFORM content_item__edit_name(rename__folder_id, rename__name);
   end if;
 
   if rename__label is not null and rename__label != '''' and 

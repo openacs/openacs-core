@@ -444,14 +444,14 @@ begin
    --        );
 
    PERFORM content_test__put_line(''Renaming puppy to kitty...'');
-   PERFORM content_item__rename(item_id, ''kitty'');
+   PERFORM content_item__edit_name(item_id, ''kitty'');
    PERFORM content_test__put_line(''Renaming me to aunty...'');
-   PERFORM content_folder__rename(sub_sub_folder_id, ''aunty'',null,null);
+   PERFORM content_folder__edit_name(sub_sub_folder_id, ''aunty'',null,null);
    PERFORM content_test__put_line(''Path for '' || item_id || '' is '' || 
                                   content_item__get_path(item_id,null)
            );
    PERFORM content_test__put_line(''Renaming kitty to pa -- this should work'');
-   PERFORM content_item__rename(item_id, ''pa'');
+   PERFORM content_item__edit_name(item_id, ''pa'');
    PERFORM content_test__put_line(''Path for '' || item_id || '' is '' || 
                                   content_item__get_path(item_id,null)
            );

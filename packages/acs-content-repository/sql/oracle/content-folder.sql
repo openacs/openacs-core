@@ -160,7 +160,7 @@ procedure rename (
 begin
 
   if name is not null then
-    content_item.rename(folder_id, name);
+    content_item.edit_name(folder_id, name);
   end if;
 
   if label is not null and description is not null then 
