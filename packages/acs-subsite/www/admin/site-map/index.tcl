@@ -297,8 +297,8 @@ db_foreach services_select {
        acs_permission.permission_p(package_id, acs.magic_object_id('the_public'), 'read') = 't')
 } {
     set options [list]
-    if {[ad_permission_p $package_id admin]} {		
-	if {$parameter_count > 0} {
+    if {$parameter_count > 0} {
+        if {[ad_permission_p $package_id admin]} {		
 	    doc_body_append "  <li>$instance_name"
 	    lappend options "<a href=parameter-set?[export_url_vars package_id package_key instance_name]>set parameters</a>"
 	}
