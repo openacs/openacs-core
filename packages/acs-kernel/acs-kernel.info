@@ -7,7 +7,7 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>t</singleton-p>
     
-    <version name="5.2.0d2" url="http://openacs.org/repository/download/apm/acs-kernel-5.2.0d2.apm">
+    <version name="5.2.0d3" url="http://openacs.org/repository/download/apm/acs-kernel-5.2.0d3.apm">
         <owner url="mailto:dhogaza@pacifier.com">Don Baccus</owner>
         <summary>Routines and data models providing the foundation for OpenACS-based Web services.</summary>
         <release-date>2004-03-10</release-date>
@@ -18,7 +18,7 @@
             <level descr="Mature">2</level>
           </platform>
         </maturity>
-        <provides url="acs-kernel" version="5.2.0d2"/>
+        <provides url="acs-kernel" version="5.2.0d3"/>
         <callbacks>
         </callbacks>
         <parameters>
@@ -46,6 +46,7 @@
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="HostAdministrator"  default="somenerd@yourdomain.com" description="a person whom people can email with technical problems" section_name="system-information"/>
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="HttpCacheControlP"  default="1" description="Wether we output http headers on every request for dynamic pages that prevent browsers and proxies from caching the page." section_name="request-processor"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="IndexRedirectUrl"  description="If non-blank, serve the given template rather than the default index template.  Example: /dotlrn/index"/>
+            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="IndexInternalRedirectUrl"  description="If non-blank and IndexRedirectUrl is blank, serve the given template rather than the default index template, but with an rp_internal_redirect. Value is relative to serverroot. Example: /packages/dotlrn/index"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="InfoFilePermissionsMode"  default="0775" description="The default UNIX permissions to assign to the .info file when it is created." section_name="apm"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="LogDebugP"  default="0" description="log request-processor debug messages to the error log? very verbose." section_name="request-processor"/>
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="LoginPageExpirationTime"  default="600" description="The expiration time in seconds for the login page. This is needed to protect against browser cached passwords." section_name="security"/>
