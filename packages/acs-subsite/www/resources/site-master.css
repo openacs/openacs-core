@@ -611,7 +611,7 @@ html>body #tabs { bottom: 0px }
 
 /* Developer-support footer */
 
-#developer-support-footer {
+.developer-support-footer {
   float: left;
   padding: 6px;
   border: solid 1px gray;
