@@ -631,7 +631,7 @@ ad_proc -public template::multirow {
     <dt> <b>template::multirow append datasourcename value [value ...]</b></dt>
     <dd> appends the row to an existing multirow.</dd>
     <dt> <b>template::multirow pop datasourcename </b></dt>
-    <dd> pops a row off an existing multirow, returning a list of the rows keys and values</dd>
+    <dd> pops a row off an existing multirow, returning a list of the rows keys gand values</dd>
     <dt> <b>template::multirow size datasourcename</b></dt>
     <dd> returns the rowcount</dd>
     <dt> <b>template::multirow columns datasourcename</b></dt>

@@ -68,7 +68,11 @@ if { [ad_conn untrusted_user_id] != 0 } {
 # Context bar
 if { [template::util::is_nil no_context_p] } {
     if { ![template::util::is_nil context] } {
-        set context_bar [eval ad_context_bar -from_node $subsite_node_id $context]
+        set cmd [list ad_context_bar -from_node $subsite_node_id --]
+        foreach elem $context {
+            lappend cmd $elem
+        }
+        set context_bar [eval $cmd]
     }
     if [template::util::is_nil context_bar] { 
         set context_bar [ad_context_bar -from_node $subsite_node_id]
