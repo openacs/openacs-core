@@ -101,7 +101,7 @@ namespace eval rel_types {
 
     
     ad_proc -public new {
-	{ -supertype "" }
+	{ -supertype "relationship" }
 	{ -role_one "" }
 	{ -role_two "" }
 	rel_type 
