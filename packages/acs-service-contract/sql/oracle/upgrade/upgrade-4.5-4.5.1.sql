@@ -221,7 +221,7 @@ end acs_sc_impl_alias;
 show errors
 
 -- UPGRADE ISSUE 2
--- acs_sc_binding.exists_p was broken on Oracle if you installed
+-- acs_sc_binding.exists_p was broken on Oracle if you
 -- tested a binding for which the implementation was installed, but the
 -- contract wasn't.
 
@@ -336,3 +336,4 @@ as
 end acs_sc_binding;
 /
 show errors
+

@@ -7,16 +7,16 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>f</singleton-p>
 
-    <version name="4.5" url="http://www.openacs.org/repository/download/apm/search-4.5.apm">
+    <version name="4.6" url="http://www.openacs.org/repository/download/apm/search-4.6.apm">
     <database-support>
         <database>oracle</database>
         <database>postgresql</database>
     </database-support>
         <owner url="mailto:k2pts@yahoo.com">Neophytos Demetriou</owner>
-        <release-date>2002-05-15</release-date>
+        <release-date>2002-10-27</release-date>
         <vendor url="http://www.openacs.org/">OpenACS</vendor>
 
-        <provides url="search" version="4.5"/>
+        <provides url="search" version="4.6"/>
 
         <files>
             <file type="package_spec" path="search.info"/>
@@ -30,13 +30,13 @@
             <file type="data_model" db_type="oracle" path="sql/oracle/search-tables-drop.sql"/>
             <file type="data_model_create" db_type="postgresql" path="sql/postgresql/search-create.sql"/>
             <file type="data_model_drop" db_type="postgresql" path="sql/postgresql/search-drop.sql"/>
-            <file type="data_model_upgrade" db_type="postgresql" path="sql/postgresql/upgrade/upgrade-4.5-4.5.1.sql"/>
             <file type="data_model" db_type="postgresql" path="sql/postgresql/search-packages-create.sql"/>
             <file type="data_model" db_type="postgresql" path="sql/postgresql/search-packages-drop.sql"/>
             <file type="data_model" db_type="postgresql" path="sql/postgresql/search-sc-create.sql"/>
             <file type="data_model" db_type="postgresql" path="sql/postgresql/search-sc-drop.sql"/>
             <file type="data_model" db_type="postgresql" path="sql/postgresql/search-tables-create.sql"/>
             <file type="data_model" db_type="postgresql" path="sql/postgresql/search-tables-drop.sql"/>
+            <file type="data_model_upgrade" db_type="postgresql" path="sql/postgresql/upgrade/upgrade-4.5-4.5.1.sql"/>
             <file type="tcl_init" path="tcl/search-init.tcl"/>
             <file type="query_file" db_type="oracle" path="tcl/search-procs-oracle.xql"/>
             <file type="query_file" db_type="postgresql" path="tcl/search-procs-postgresql.xql"/>
@@ -45,6 +45,7 @@
             <file path="www/advanced-search.adp"/>
             <file type="tcl_util" path="www/advanced-search.tcl"/>
             <file type="documentation" path="www/doc/guidelines.html"/>
+            <file type="documentation" path="www/doc/index.html"/>
             <file type="content_page" path="www/help/basics.html"/>
             <file type="content_page" path="www/index.adp"/>
             <file type="content_page" path="www/index.tcl"/>
@@ -53,14 +54,13 @@
             <file type="content_page" path="www/search-results-top.adp"/>
             <file type="content_page" path="www/search.tcl"/>
             <file type="content_page" path="www/test.adp"/>
-            <file type="documentation" path="www/doc/index.html"/>
         </files>
         <parameters>
-            <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="LimitDefault"  default="10" description="Default limit value"/>
-            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="SearchTheWeb"  default="http://av.com/sites/search/web?q=%s AltaVista http://search.excite.com/search.gw?s=%s Excite http://www.google.com/search?q=%s Google http://hotbot.com/?MT=%s HotBot http://lycos.com/cgi-bin/pursuit?query=%s Lycos http://search.yahoo.com/search?p=%s Yahoo!" description="Search the Web (e.g. Google)"/>
-            <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="SearchIndexerInterval"  default="30" description="SearchIndexerInterval"/>
-            <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="FtsEngineDriver"  default="openfts-driver" description="Which search engine driver to use? You should enter the name of the related binding (e.g. openfts-driver, swish-driver,...)"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="Symbol2Interval"  default="m3 {3 month ago} m6 {6 month ago} y1 {1 year ago}" description="Translate symbol to date interval."/>
+            <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="FtsEngineDriver"  default="openfts-driver" description="Which search engine driver to use? You should enter the name of the related binding (e.g. openfts-driver, swish-driver,...)"/>
+            <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="SearchIndexerInterval"  default="30" description="SearchIndexerInterval"/>
+            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="SearchTheWeb"  default="http://av.com/sites/search/web?q=%s AltaVista http://search.excite.com/search.gw?s=%s Excite http://www.google.com/search?q=%s Google http://hotbot.com/?MT=%s HotBot http://lycos.com/cgi-bin/pursuit?query=%s Lycos http://search.yahoo.com/search?p=%s Yahoo!" description="Search the Web (e.g. Google)"/>
+            <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="LimitDefault"  default="10" description="Default limit value"/>
         </parameters>
 
     </version>
