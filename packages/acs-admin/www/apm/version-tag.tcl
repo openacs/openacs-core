@@ -21,7 +21,7 @@ if { $installed_p == "f" } {
 
 set files [db_list apm_all_paths {
 	select path from apm_package_files where version_id = :version_id order by path
-}
+}]
 
 if { [llength $files] == 0 } {
     ad_return_complaint 1 "<li>No files in this packages"
