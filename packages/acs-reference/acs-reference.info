@@ -30,29 +30,21 @@ data of this sort.
 
         <files>
             <file type="package_spec" path="acs-reference.info"/>
-            <file type="data_model" path="sql/common/country-data.sql"/>
-            <file type="data_model" path="sql/common/currency-data.sql"/>
-            <file type="data_model" path="sql/common/language-data.sql"/>
-            <file type="data_model" path="sql/common/s-and-p-data.sql"/>
-            <file type="data_model" path="sql/common/us-counties-data.sql"/>
-            <file type="data_model" path="sql/common/us-states.sql"/>
-            <file type="data_model" path="sql/common/us-zipcodes-data.sql"/>
             <file type="data_model_create" db_type="oracle" path="sql/oracle/acs-reference-create.sql"/>
-            <file type="data_model" db_type="oracle" path="sql/oracle/acs-reference-data.sql"/>
             <file type="data_model_drop" db_type="oracle" path="sql/oracle/acs-reference-drop.sql"/>
-            <file type="data_model" db_type="oracle" path="sql/oracle/country.sql"/>
-            <file type="data_model" db_type="oracle" path="sql/oracle/currency.sql"/>
-            <file type="data_model" db_type="oracle" path="sql/oracle/language.sql"/>
-            <file type="data_model" db_type="oracle" path="sql/oracle/s-and-p.sql"/>
-            <file type="data_model" db_type="oracle" path="sql/oracle/us-counties.sql"/>
-            <file type="data_model" db_type="oracle" path="sql/oracle/us-states.sql"/>
-            <file type="data_model" db_type="oracle" path="sql/oracle/us-zipcodes.sql"/>
             <file type="data_model_create" db_type="postgresql" path="sql/postgresql/acs-reference-create.sql"/>
-            <file type="data_model" db_type="postgresql" path="sql/postgresql/acs-reference-data.sql"/>
             <file type="data_model_drop" db_type="postgresql" path="sql/postgresql/acs-reference-drop.sql"/>
+            <file path="www/admin/format-list.adp"/>
+            <file type="tcl_util" path="www/admin/format-list.tcl"/>
+            <file path="www/admin/index.adp"/>
+            <file type="tcl_util" path="www/admin/index.tcl"/>
             <file type="documentation" path="www/doc/design.html"/>
             <file type="documentation" path="www/doc/index.html"/>
             <file type="documentation" path="www/doc/requirements.html"/>
+            <file path="www/index.adp"/>
+            <file type="tcl_util" path="www/index.tcl"/>
+            <file path="www/reference-data-list.adp"/>
+            <file type="tcl_util" path="www/reference-data-list.tcl"/>
         </files>
         <parameters>
         <!-- No version parameters -->
