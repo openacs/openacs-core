@@ -40,7 +40,7 @@ namespace eval template {
 
     # default settings 
     variable defaults
-    set defaults [list widget text datatype integer values {} help_text {}]
+    set defaults [list widget text datatype integer values {} help_text {} before_html {} after_html {}]
   }
 
   namespace eval request {}
