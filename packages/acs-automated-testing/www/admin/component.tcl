@@ -12,7 +12,7 @@ ad_page_contract {
 }
 
 set title "Component $component_id ($package_key)"
-set context_bar [list $title]
+set context [list $title]
 
 set component_bodys {}
 foreach component [nsv_get aa_test components] {
