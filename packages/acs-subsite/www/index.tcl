@@ -30,6 +30,16 @@ if { ![empty_string_p $redirect_url] } {
     ad_script_abort
 }
 
+# Handle IndexInternalRedirectUrl
+set redirect_url [parameter::get -parameter IndexInternalRedirectUrl -default {}]
+if { [empty_string_p $redirect_url] && $main_site_p } {
+    set redirect_url [parameter::get_from_package_key -package_key acs-kernel -parameter IndexInternalRedirectUrl]
+}
+if { ![empty_string_p $redirect_url] } {
+    rp_internal_redirect $redirect_url
+    ad_script_abort
+}
+
 set context [list]
 set package_id [ad_conn package_id]
 set admin_p [permission::permission_p -object_id $package_id -party_id [ad_conn untrusted_user_id] -privilege admin]
