@@ -14,6 +14,15 @@ proc_doc db_type { } {
     return [nsv_get ad_database_type .]
 }
 
+proc_doc db_null { } {
+    Returns an empty string, which Oracle thinks is null.  This routine was
+    invented to provide an RDBMS-specific null value but doesn't actually
+    work.  I (DRB) left it in to speed porting - we should really clean up
+    the code an pull out the calls instead, though.
+} {
+    return ""
+}
+
 proc_doc db_quote { string } { Quotes a string value to be placed in a SQL statement. } {
     regsub -all {'} "$string" {''} result
     return $result
