@@ -119,7 +119,7 @@ ad_proc -private apm_extract_tarball { version_id dir } {
     file mkdir $dir
     # cd, gunzip, and untar all in the same subprocess (to avoid having to
     # chdir first).
-    exec sh -c "cd $dir ; [apm_gunzip_cmd] -c $apm_file | [apm_tar_cmd] xf -"
+    exec sh -c "cd $dir ; [apm_gunzip_cmd] -q -c $apm_file | [apm_tar_cmd] xf -" 2>/dev/null
     file delete $apm_file
 }
 
@@ -149,7 +149,7 @@ ad_proc -private apm_generate_tarball { version_id } {
     # file; we need this to ensure that the tarballs are relative to the
     # package root directory ([acs_root_dir]/packages).
 
-    set cmd [list exec [apm_tar_cmd] cf -]
+    set cmd [list exec [apm_tar_cmd] cf -  2>/dev/null]
     foreach file $files {
 	lappend cmd -C "[acs_root_dir]/packages"
 	lappend cmd "$package_key/$file"
@@ -505,7 +505,7 @@ ad_proc -private apm_load_apm_file {
     }
     if { [catch {
 	set files [split [string trim \
-		[exec [apm_gunzip_cmd]  -c $file_path | [apm_tar_cmd] tf -] "\n"]]
+		[exec [apm_gunzip_cmd] -q -c $file_path | [apm_tar_cmd] tf -] "\n" 2>/dev/null]]
 	apm_callback_and_log $callback  "<li>Done. Archive is [format "%.1f" [expr { [file size $file_path] / 1024.0 }]]KB, with [llength $files] files.<li>"
     } errmsg] } {
 	apm_callback_and_log $callback "The follow error occured during the uncompression process:
@@ -549,7 +549,7 @@ ad_proc -private apm_load_apm_file {
     apm_callback_and_log $callback  "Extracting the .info file (<tt>$info_file</tt>)..."
     set tmpdir [ns_tmpnam]
     file mkdir $tmpdir
-    exec sh -c "cd $tmpdir ; [apm_gunzip_cmd] -c $file_path | [apm_tar_cmd] xf - $info_file"
+    exec sh -c "cd $tmpdir ; [apm_gunzip_cmd] -q -c $file_path | [apm_tar_cmd] xf - $info_file" 2>/dev/null
     
     if { [catch {
 	array set package [apm_read_package_info_file [file join $tmpdir $info_file]]
@@ -586,7 +586,7 @@ ad_proc -private apm_load_apm_file {
 	if {[file exists $package_key]} {
 	    file delete -force $package_key
 	}
-	exec sh -c "cd $install_path ; [apm_gunzip_cmd] -c $file_path | [apm_tar_cmd] xf -"
+	exec sh -c "cd $install_path ; [apm_gunzip_cmd] -q -c $file_path | [apm_tar_cmd] xf -" 2>/dev/null
     }
 }
 
