@@ -263,9 +263,9 @@ select 1;
 <fullquery name="package_exec_plsql.exec_plsql">      
       <querytext>
 
-	select ${package_name}__${plsql_name}([plpgsql_utility::generate_attribute_parameter_call \
+	select ${package_name}__${function_name}([plpgsql_utility::generate_attribute_parameter_call \
 		-prepend ":" \
-		${package_name}__new \
+		${package_name}__${function_name} \
 		$pieces])
 
       </querytext>
