@@ -66,7 +66,7 @@
       <querytext>
 
             update apm_package_versions
-            set    installed_p = (case when version_id = :version_id then 't' else 'f' end)
+            set    installed_p = (case when version_id = :version_id then 't' else 'f' end)::boolean
             where  package_key = :package_key
         
       </querytext>
