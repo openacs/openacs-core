@@ -16,9 +16,11 @@ ad_proc -private subsite::package_install {} {} {
 
 }
 
-ad_proc -public subsite::after_upgrade {
+ad_proc -private subsite::after_upgrade {
     {-from_version_name:required}
     {-to_version_name:required}
+} {
+    After upgrade callback for acs-subsite.
 } {
     apm_upgrade_logic \
         -from_version_name $from_version_name \

@@ -43,7 +43,10 @@ ad_proc -public template::util::currency::acquire { type { value "" } } {
 }
 
 ad_proc -public template::data::validate::currency { value_ref message_ref } {
+    form validation for currency type.
 
+    Should validate according to locale for example, the following forms: "$2.03" "Rs 50.42" "12.52L" "Y5,13c"
+} {
     upvar 2 $message_ref message $value_ref value
 
     # a currency is a 6 element list supporting, for example, the following forms: "$2.03" "Rs 50.42" "12.52L" "Y5,13c"
@@ -71,9 +74,9 @@ ad_proc -public template::data::validate::currency { value_ref message_ref } {
     } else {
 	return 1
     }
-}    
+}
 
-ad_proc -public template::data::transform::currency { element_ref } {
+ad_proc -private template::data::transform::currency { element_ref } {
 
     upvar $element_ref element
     set element_id $element(id)
@@ -84,7 +87,7 @@ ad_proc -public template::data::transform::currency { element_ref } {
     }
 
     # a currency is a 6 element list supporting, for example, the following forms: "$2.03" "Rs 50.42" "12.52L" "Y5,13c"
-    
+
     set have_values 0
 
     for { set i 0 } { $i <= 4 } { incr i } {
@@ -237,9 +240,8 @@ ad_proc -public template::util::currency::get_property { what currency_list } {
 ad_proc -public template::widget::currency {
     element_reference tag_attributes {mode edit}
 } {
-
     upvar $element_reference element
-    
+
     if { [info exists element(html)] } {
 	array set attributes $element(html)
     }
@@ -279,4 +281,3 @@ ad_proc -public template::widget::currency {
 
     return $output
 }
-

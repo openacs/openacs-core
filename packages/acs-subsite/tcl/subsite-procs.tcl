@@ -309,16 +309,15 @@ ad_proc -public subsite::upload_allowed {} {
     }
 }
 
-ad_proc subsite::util::sub_type_exists_p {
+ad_proc -public subsite::util::sub_type_exists_p {
     object_type
 } {
-    returns 1 if object_type has sub types, or 0 otherwise
+    @param object_type
+
+    @return 1 if object_type has sub types, or 0 otherwise
 
     @author Oumi Mehrotra (oumi@arsdigita.com)
     @creation-date 2000-02-07
-
-    @param object_type
-
 } {
 
     return [db_string sub_type_exists_p {
@@ -334,11 +333,11 @@ ad_proc subsite::util::sub_type_exists_p {
 }
 
 
-ad_proc subsite::util::object_type_path_list {
+ad_proc -public subsite::util::object_type_path_list {
     object_type
     {ancestor_type acs_object}
 } {
-
+    @return the object type heirarchy for the given object type from ancestor_type to object_type
 } {
     set path_list [list]
 
@@ -360,7 +359,7 @@ ad_proc subsite::util::object_type_path_list {
 
 }
 
-ad_proc subsite::util::object_type_pretty_name {
+ad_proc -public subsite::util::object_type_pretty_name {
     object_type
 } {
     returns pretty name of object.  We need this so often that I thought
@@ -377,7 +376,7 @@ ad_proc subsite::util::object_type_pretty_name {
     }]
 }
 
-ad_proc subsite::util::return_url_stack {
+ad_proc -public subsite::util::return_url_stack {
     return_url_list
 } {
     Given a list of return_urls, we recursively encode them into one
@@ -408,17 +407,17 @@ ad_proc subsite::util::return_url_stack {
 }
 
 
-ad_proc subsite::define_pageflow {
+ad_proc -public subsite::define_pageflow {
     {-sections_multirow "sections"}
     {-subsections_multirow "subsections"}
     {-section ""}
 } {
     Defines the page flow of the subsite
+
+    TODO: add an image
+    TODO: add link_p/selected_p for subsections
 } {
     set pageflow [get_pageflow_struct]
-    
-    # TODO: add an image
-    # TODO: add link_p/selected_p for subsections
 
     set base_url [subsite::get_element -element url]
 
@@ -467,7 +466,7 @@ ad_proc subsite::define_pageflow {
 }
 
 
-ad_proc subsite::add_section_row {
+ad_proc -public subsite::add_section_row {
     {-array:required}
     {-base_url:required}
     {-multirow:required}
@@ -527,6 +526,9 @@ ad_proc -public subsite::get_section_info {
     {-array "section_info"}
     {-sections_multirow "sections"}
 } {
+    Takes the sections_multirow and sets the passed array name
+    with the elements label and url of the selected section.
+} {
     upvar $array row
     # Find the label of the selected section
 
@@ -544,7 +546,7 @@ ad_proc -public subsite::get_section_info {
     }
 }
 
-ad_proc subsite::get_pageflow_struct {} {
+ad_proc -public subsite::get_pageflow_struct {} {
     # This is where the page flow structure is defined
     set subsections [list]
     lappend subsections home {
@@ -593,8 +595,10 @@ ad_proc subsite::get_pageflow_struct {} {
 
 
     set user_id [ad_conn user_id]
-    set admin_p [permission::permission_p -object_id \
-                     [site_node_closest_ancestor_package "acs-subsite"] -privilege admin -party_id [ad_conn untrusted_user_id]]
+    set admin_p [permission::permission_p \
+                     -object_id [site_node_closest_ancestor_package "acs-subsite"] \
+                     -privilege admin \
+                     -party_id [ad_conn untrusted_user_id]]
     set show_member_list_to [parameter::get -parameter "ShowMembersListTo" -package_id $subsite_id -default 2]
 
     if { $admin_p || ($user_id != 0 && $show_member_list_to == 1) || \

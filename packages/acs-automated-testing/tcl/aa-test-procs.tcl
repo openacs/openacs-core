@@ -1019,6 +1019,8 @@ ad_proc -private aa_execute_rollback_tests {} {
 namespace eval aa_test {}
 
 ad_proc -public aa_test::xml_report_dir {} {
+    returns the package parameter XMLReportDir.
+} {
     return [parameter::get -parameter XMLReportDir]
 }
 

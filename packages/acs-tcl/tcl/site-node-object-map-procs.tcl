@@ -8,37 +8,44 @@ ad_library {
     @cvs-id $Id$
 }
 
-namespace eval site_node_object_map {
+namespace eval site_node_object_map {}
 
-    ad_proc -public new {
-        {-object_id:required}
-        {-node_id:required}
-    } {
-        db_exec_plsql set_node_mapping {}
-    }
-
-    ad_proc -public del {
-        {-object_id:required}
-    } {
-        db_exec_plsql unset_node_mapping {}
-    }
-
-    ad_proc -public get_node_id {
-        {-object_id:required}
-    } {
-        return [db_string select_node_mapping {} -default ""]
-    }
-
-    ad_proc -public get_url {
-        {-object_id:required}
-    } {
-        set node_id [get_node_id -object_id $object_id]
-
-        if {[empty_string_p $node_id]} {
-            return $node_id
-        }
-
-        return [site_node::get_url -node_id $node_id]
-    }
-
+ad_proc -public site_node_object_map::new {
+    {-object_id:required}
+    {-node_id:required}
+} {
+    map object object_id to site_node node_id in table site_node_object_mappings
+} {
+    db_exec_plsql set_node_mapping {}
 }
+
+ad_proc -public site_node_object_map::del {
+    {-object_id:required}
+} {
+    unmap object object_id from site_node node_id in table site_node_object_mappings
+} {
+    db_exec_plsql unset_node_mapping {}
+}
+
+ad_proc -public site_node_object_map::get_node_id {
+    {-object_id:required}
+} {
+    @return the node_id of the site_node of the passed object_id
+} {
+    return [db_string select_node_mapping {} -default ""]
+}
+
+ad_proc -public site_node_object_map::get_url {
+    {-object_id:required}
+} {
+    @return the url corresponding to the site_node to which the passed object_id is mapped.
+} {
+    set node_id [site_node_object_map::get_node_id -object_id $object_id]
+
+    if {[empty_string_p $node_id]} {
+        return {}
+    }
+
+    return [site_node::get_url -node_id $node_id]
+}
+

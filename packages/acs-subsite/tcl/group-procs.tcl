@@ -416,7 +416,6 @@ ad_proc -public group::get_rel_types_options {
     @param group_id The ID of the group for which to get options.
 
     @param object_type The object type which must occupy side two of the relationship. Typically 'person' or 'group'.
-    
     @return a list of lists with label (role two pretty name) and ID (rel_type)
 } {
     # LARS:
@@ -432,6 +431,8 @@ ad_proc -public group::get_rel_types_options {
 ad_proc -public group::admin_p {
     {-group_id:required}
     {-user_id:required}
+} {
+    @return 1 if user_id is in teh admin_rel for group_id
 } {
     set admin_rel_id [relation::get_id \
                           -object_id_one $group_id \
@@ -450,20 +451,20 @@ ad_proc -public group::add_member {
     {-rel_type ""}
     {-member_state ""}
 } {
-    Adds a user to a group, checking that the rel_type is permissible given the user's privileges, 
+    Adds a user to a group, checking that the rel_type is permissible given the user's privileges,
     Can default both the rel_type and the member_state to their relevant values.
-} {       
+} {
     set admin_p [permission::permission_p -object_id $group_id -privilege "admin"]
-    
+
     # Only admins can add non-membership_rel members
     if { [empty_string_p $rel_type] || \
              (!$no_perm_check_p && ![empty_string_p $rel_type] && ![string equal $rel_type "membership_rel"] && \
                   ![permission::permission_p -object_id $group_id -privilege "admin"]) } {
         set rel_type "membership_rel"
     }
-    
+
     group::get -group_id $group_id -array group
-    
+
     if { !$no_perm_check_p } {
         set create_p [group::permission_p -privilege create $group_id]
         if { [string equal $group(join_policy) "closed"] && !$create_p } {

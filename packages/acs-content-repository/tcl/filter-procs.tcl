@@ -12,20 +12,25 @@ namespace eval content {
 }
 
 
-# Find the directory in the file system where templates are stored.
-# There are a variety of ways in which this can be set. The proc
-# looks for that directory in the following places in this order:
-# (1) the TemplateRoot parameter of the package for which the request is 
-#     made, i.e., [ad_conn package_id]
-# (2) the TemplateRoot parameter of the acs-content-repository
-# If it is not found in any of these places, it defaults to 
-# [acs_root_dir]/templates
-#
-# If the value resulting from the search does not start with a '/'
-# it is taken to be relative to [acs_root_dir]
+
 
 ad_proc -public content::get_template_root {} {
+    Find the directory in the file system where templates are stored.
+    There are a variety of ways in which this can be set. The proc
+    looks for that directory in the following places in this order:
+    (1) the TemplateRoot parameter of the package for which the request is
+        made, i.e., [ad_conn package_id]
+    (2) the TemplateRoot parameter of the acs-content-repository
 
+    If it is not found in any of these places, it defaults to
+
+    [acs_root_dir]/templates
+
+    If the value resulting from the search does not start with a '/'
+    it is taken to be relative to [acs_root_dir]
+
+    @return the template root (full path from /)
+} {
     # Look for package-defined root
     set package_id [ad_conn package_id]
     set template_root \
@@ -48,16 +53,20 @@ ad_proc -public content::get_template_root {} {
 
 }
 
-# return true if the request has content associated with it
 
 ad_proc -public content::has_content {} {
+    return true if the request has content associated with it
 
+    @return 1 if ::content::item_id is defined
+} { 
     variable item_id
 
     return [info exists item_id]
 }
 
 ad_proc -public content::get_item_id {} {
+    @return current value of ::content::item_id
+} {
 
     variable item_id
 
@@ -65,7 +74,11 @@ ad_proc -public content::get_item_id {} {
 }
 
 ad_proc -public content::get_content { { content_type {} } } {
+    sets the content in the array "content" in the callers scope
+    assumes item_id or revision_id is set in the ::content namespace.
 
+    @param content_type 
+} {
     variable item_id
     variable revision_id
 
@@ -113,21 +126,22 @@ ad_proc -public content::get_content { { content_type {} } } {
         ns_log notice "content::get_content: No data found for item $item_id, revision $revision_id"
         return 0
     }
-
 }
 
 
 ad_proc -public content::get_template_url {} {
-
+    @return current value of ::content::template_url
+} {
     variable template_url
 
     return $template_url
 }
 
-# Set a data source in the calling frame with folder URL and label
-# Useful for generating a context bar
 
 ad_proc -public content::get_folder_labels { { varname "folders" } } {
+    Set a data source in the calling frame with folder URL and label
+    Useful for generating a context bar
+} {
 
     variable item_id
 
@@ -142,7 +156,8 @@ ad_proc -public content::get_folder_labels { { varname "folders" } } {
 }
 
 ad_proc -public content::get_content_value { revision_id } {
-
+    @return content element corresponding to the provided revision_id
+} { 
     db_transaction {
         db_exec_plsql gcv_get_revision_id {
             begin
@@ -170,7 +185,10 @@ ad_proc -public content::init {
     {rev_id ""}
     {content_type ""}
 } {
-
+    Initialize the namespace variables for the ::content procs and 
+    figures out which template to use and  set up the template 
+    for the required content type etc.
+} {
     upvar $urlvar url $rootvar root_path
     variable root_folder_id
     variable item_id
@@ -188,17 +206,17 @@ ad_proc -public content::init {
                                 -resolve_index "f"]
     set item_info(content_type) [::content::item::get_content_type \
                                      -item_id $item_info(item_id)]
-  
+
     # No item found, so do not handle this request
-    if { [string equal "" $item_info(item_id)] } { 
+    if { [string equal "" $item_info(item_id)] } {
         set item_info(item_id) [::content::item::get_id -item_path $url \
                                     -root_folder_id $content_root \
                                     -resolve_index "f"]
         set item_info(content_type) [::content::item::get_content_type \
                                          -item_id $item_info(item_id)]
-        if { [string equal "" $item_info(item_id)] } { 
+        if { [string equal "" $item_info(item_id)] } {
             ns_log notice "content::init: no content found for url $url"
-            return 0 
+            return 0
         }
     }
 
@@ -289,10 +307,12 @@ ad_return_template
   return 1
 }
 
-# render the template and write it to the file system
+
 
 ad_proc -public content::deploy { url_stub } {
-
+    render the template and write it to the file system
+    with template::util::write_file
+} {
     set output_path [ns_info pageroot]$url_stub
 
     init url_stub root_path

@@ -9,7 +9,7 @@ ad_library {
     http://www.fsf.org/copyleft/gpl.html
 
     @creation-date 10 September 2000
-    @author Jeff Davis (davis@arsdigita.com)
+    @author Jeff Davis (davis@xarg.net)
     @author Bruno Mattarollo (bruno.mattarollo@ams.greenpeace.org)
     @author Peter Marklund (peter@collaboraid.biz)
     @author Lars Pind (lars@collaboraid.biz)
@@ -32,7 +32,7 @@ ad_proc -public lang::util::lang_sort {
     insert into lang_testsort values ('lzim');  
     </pre>
 
-    @author Jeff Davis (davis@arsdigita.com)
+    @author Jeff Davis (davis@xarg.net)
 
     @param field       Name of Oracle column
     @param locale      Locale for sorting. 
