@@ -34,7 +34,7 @@ tar xzf /tmp/nsopenssl-2.1.tar.gz
 cd nsopenssl-2.1
 make OPENSSL=/usr/lib/ssl
 cp nsopenssl.so /usr/local/aolserver/bin
-cp https.tcl /usr/local/aolserver/modules/tcl/</span></span></pre></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="install-nsopenssl-aolserver4"></a>Install on AOLserver4</h3></div></div></div><p> You will need the AOLserver4 source in <tt class="computeroutput">/usr/local/src/aolserver/aolserver</tt> and OpenSSL installed in <tt class="computeroutput">/usr/local/ssl</tt> (or at least symlinked there).</p><p><font color="red">&lt;title&gt;FreeBSD note:&lt;/title&gt;</font> build openssl with <b class="userinput"><tt>gmake install OPENSSL=/usr/local/openssl INST=/usr/local/aolserver</tt></b>
+cp https.tcl /usr/local/aolserver/modules/tcl/</span></span></pre></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="install-nsopenssl-aolserver4"></a>Install on AOLserver4</h3></div></div></div><p> You will need the AOLserver4 source in <tt class="computeroutput">/usr/local/src/aolserver/aolserver</tt> and OpenSSL installed in <tt class="computeroutput">/usr/local/ssl</tt> (or at least symlinked there).</p><p>FreeBSD note: build openssl with <b class="userinput"><tt>gmake install OPENSSL=/usr/local/openssl INST=/usr/local/aolserver</tt></b>
         </p><pre class="screen">[root bin]#<b class="userinput"><tt> cd /usr/local/src/aolserver</tt></b>
 [root aolserver]# <b class="userinput"><tt>cvs -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver login</tt></b>
 [root aolserver]# <b class="userinput"><tt>cvs -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co nsopenssl</tt></b>

@@ -822,7 +822,7 @@ cp https.tcl /usr/local/aolserver/modules/tcl/</action></screen>
       <sect2 id="install-nsopenssl-aolserver4">
         <title>Install on AOLserver4</title>
         <para> You will need the AOLserver4 source in <computeroutput>/usr/local/src/aolserver/aolserver</computeroutput> and OpenSSL installed in <computeroutput>/usr/local/ssl</computeroutput> (or at least symlinked there).</para>
-        <para><title>FreeBSD note:</title> build openssl with <userinput>gmake install OPENSSL=/usr/local/openssl INST=/usr/local/aolserver</userinput>
+        <para>FreeBSD note: build openssl with <userinput>gmake install OPENSSL=/usr/local/openssl INST=/usr/local/aolserver</userinput>
         </para>
 
       <screen>[root bin]#<userinput> cd /usr/local/src/aolserver</userinput>

@@ -1,6 +1,6 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Contributing code back to OpenACS</title><meta name="generator" content="DocBook XSL Stylesheets V1.66.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="cvs-guidelines.html" title="Chapter 13. 
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Contributing code back to OpenACS</title><meta name="generator" content="DocBook XSL Stylesheets V1.66.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="cvs-guidelines.html" title="Chapter 14. 
     CVS Guidelines
-  "><link rel="previous" href="openacs-cvs-concepts.html" title="OpenACS CVS Concepts"><link rel="next" href="cvs-resources.html" title="Additional Resources for CVS"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="openacs-cvs-concepts.html">Prev</a> </td><th width="60%" align="center">Chapter 13. 
+  "><link rel="previous" href="openacs-cvs-concepts.html" title="OpenACS CVS Concepts"><link rel="next" href="cvs-resources.html" title="Additional Resources for CVS"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="openacs-cvs-concepts.html">Prev</a> </td><th width="60%" align="center">Chapter 14. 
     CVS Guidelines
   </th><td width="20%" align="right"> <a accesskey="n" href="cvs-resources.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="contributing-code"></a>Contributing code back to OpenACS</h2></div></div></div><p>There are three main ways to contribute code to OpenACS:</p><div class="orderedlist"><ol type="1"><li><p>To contribute a small fix, if you do not have a developer account, submit a <a href="http://openacs.org/bugtracker/openacs/patch-submission-instructions.htm" target="_top">patch</a>.</p></li><li><p>If you are making many changes, or would like to become a direct contributor, send mail to <a href="mailto:oct@openacs.org" target="_top">the Core Team</a> asking for commit rights.  You can then commit code directly to the repository:</p><div class="orderedlist"><ol type="a"><li><p>Use one of the checkout methods described above to get files to your system.  This takes the place of steps 1 and 2 in <a href="openacs.html#install-from-tarball" title="Installation Option 2: Install from tarball">the section called &#8220;Installation Option 2: Install from tarball&#8221;</a>.  Continue setting up the site as described there.</p></li><li><p>Fix bugs and add features.</p></li><li><p>
             Commit that file (or files): </p><pre class="screen"><span class="action"><span class="action">cvs commit -m "what I did and why" filename</span></span></pre><p>
@@ -14,7 +14,7 @@
                 </p></li></ol></div></li><li><p>Add a new package.  Contact the <a href="mailto:oct@openacs.org" target="_top">Core Team</a> to get approval and to get a module alias created.</p><div class="orderedlist"><ol type="a"><li><p>
                 Check out acs-core on the HEAD branch.  (Weird things happen if you add files to a branch but not to HEAD):</p><pre class="screen"><span class="action"><span class="action">cd /tmp
 cvs -d:ext:cvs.openacs.org:/cvsroot checkout acs-core</span></span></pre><p>Copy your package directory from your working directory to this directory.  Make sure not to copy any CVS directories.</p><pre class="screen"><span class="action"><span class="action">cp -r /var/lib/aolserver/<span class="replaceable"><span class="replaceable">service0</span></span>/packages/<span class="replaceable"><span class="replaceable">newpackage</span></span> /tmp/openacs-4/packages</span></span></pre><p>Import the package into the cvs.openacs.org cvs repository:</p><pre class="screen"><span class="action"><span class="action">cd /tmp/openacs-4/packages/<span class="replaceable"><span class="replaceable">newpackage</span></span>
-cvs import -m "Initial import of <span class="replaceable"><span class="replaceable">newpackage</span></span>" openacs-4/packages/newpackage <span class="replaceable"><span class="replaceable">myname</span></span> <span class="replaceable"><span class="replaceable">0.1d</span></span></span></span></pre></li><li><p>Add the new package to the modules file. (An administrator has to do this step.)  On any machine, in a temporary directory:</p><pre class="screen"><span class="action"><span class="action">cvs -d :ext:cvs.openacs.org:/cvsroot co CVSROOT
+cvs import -m "Initial import of <span class="replaceable"><span class="replaceable">newpackage</span></span>" openacs-4/packages/newpackage <span class="replaceable"><span class="replaceable">myname</span></span> <span class="replaceable"><span class="replaceable">newpackage-0-1d</span></span></span></span></pre></li><li><p>Add the new package to the modules file. (An administrator has to do this step.)  On any machine, in a temporary directory:</p><pre class="screen"><span class="action"><span class="action">cvs -d :ext:cvs.openacs.org:/cvsroot co CVSROOT
 cd CVSROOT
 emacs modules</span></span></pre><p>Add a line of the form:</p><pre class="programlisting"><span class="replaceable"><span class="replaceable">photo-album-portlet</span></span> openacs-4/packages/<span class="replaceable"><span class="replaceable">photo-album-portlet</span></span></pre><p>Commit the change:</p><pre class="screen"><span class="action"><span class="action">cvs commit -m "added alias for package <span class="replaceable"><span class="replaceable">newpackage</span></span>" modules</span></span></pre><p>This should print something like:</p><div class="literallayout"><p>cvs commit: Examining .<br>
 **** Access allowed: Personal Karma exceeds Environmental Karma.<br>
@@ -122,7 +122,7 @@ cvs tag -b <span class="replaceable"><span class="replaceable">oacs-5-1</span></
           Tags
         </p><div class="orderedlist"><ol type="1"><li><p>
               When a package is released in final form, the developer
-              shall tag it "packagename-x-y-z-final" and "oacs-x-y-compat". x-y
+              shall tag it "packagename-x-y-z-final" and "openacs-x-y-compat". x-y
               should correspond to the current branch. If the package is
               compatible with several different core versions, several compat
               tags should be applied.
@@ -135,7 +135,7 @@ cvs tag -b <span class="replaceable"><span class="replaceable">oacs-5-1</span></
           flag which defaults to no-effect wouldn't require a TIP. Added a
           new mandatory flag to an existing function would require a
           TIP.
-        </p></li></ol></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id2564568"></a>
+        </p></li></ol></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id2621186"></a>
         Reasons
       </h4></div></div></div><p>
         We don't currently have clear standards for committing
@@ -171,7 +171,7 @@ cvs tag -b <span class="replaceable"><span class="replaceable">oacs-5-1</span></
         applies to all packages. This tag can be used to fork packages as
         needed, and provides a common ancestor between the fork and the
         OpenACS code so that patches can be generated.
-      </p></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2564622"></a>
+      </p></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2629540"></a>
       Informal Guidelines
     </h3></div></div></div><p>
       Informal guidelines which may be obsolete in places and should be reviewed:

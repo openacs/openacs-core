@@ -1,0 +1,689 @@
+2005-01-09 16:41  donb
+
+	* packages/acs-templating/tcl/parse-procs.tcl: Daveb made a change
+	  to the noquote regexp used to recognize array vars, but didn't
+	  make the change to the "normal" version of the proc.	His own
+	  test case caught it, I assume he must've caught it but forgot to
+	  commit ...
+
+2005-01-09 15:00  daveb
+
+	* packages/acs-content-repository/tcl/content-revision-procs.tcl:
+	  Fix call to content::item::content_type
+
+2005-01-09 13:59  daveb
+
+	* packages/acs-content-repository/tcl/: content-item-procs.tcl,
+	  content-item-procs.xql, content-revision-procs.tcl,
+	  test/content-item-test-procs.tcl: Add content::item::get. Add
+	  test case support for it.
+
+2005-01-09 13:01  joel
+
+	*
+	  packages/acs-content-repository/tcl/test/content-item-test-procs.tcl:
+	  renamed bad_string to evil_string
+
+2005-01-09 12:36  joel
+
+	*
+	  packages/acs-content-repository/tcl/test/content-item-test-procs.tcl:
+	  extended test case for content items
+
+2005-01-07 17:20  donb
+
+	* packages/forums/sql/oracle/upgrade/upgrade-1.0.6-1.0.7d.sql:
+	  Testing revealed a minor error in my upgrade script
+
+2005-01-07 16:32  daveb
+
+	* packages/acs-content-repository/tcl/content-symlink-procs.tcl:
+	  Make creation_date optional for content::symlink::new
+
+2005-01-07 13:23  donb
+
+	* packages/forums/lib/message/thread-chunk.adp: Oops screwed up
+	  tree nesting!  Fixed now ...
+
+2005-01-07 13:02  donb
+
+	* packages/forums/lib/message/: row.adp, thread-chunk.adp: Got rid
+	  of "reply" link in the message display if the presentation style
+	  is flat.
+
+2005-01-07 12:47  donb
+
+	* packages/forums/lib/message/: thread-chunk.adp, thread-chunk.tcl:
+	  Replaced bloody Tcl-in-Adp code that was uglifying the
+	  thread-chunk template
+
+2005-01-07 08:59  donb
+
+	* packages/forums/sql/: oracle/forums-messages-package-create.sql,
+	  oracle/upgrade/upgrade-1.0.6-1.0.7d.sql,
+	  postgresql/forums-messages-package-create.sql,
+	  postgresql/upgrade/upgrade-1.0.6-1.0.7d.sql: My changes weren't
+	  counting threaded deletes correctly ... this still needs
+	  retesting on Oracle/PG which I'll do in the next day or so by
+	  writing new test cases...
+
+2005-01-07 08:48  donb
+
+	* packages/forums/sql/oracle/upgrade/upgrade-1.0.6-1.0.7d.sql:
+	  Added previous "mutating table" fix to the upgrade script, too
+	  ...
+
+2005-01-07 08:43  donb
+
+	* packages/forums/sql/oracle/forums-messages-package-create.sql:
+	  Fixing "mutating table" problem but on my wrong machine, need to
+	  go test this on the server with Oracle on it ...
+
+2005-01-06 19:03  daveb
+
+	* packages/acs-content-repository/: acs-content-repository.info,
+	  sql/postgresql/content-item.sql,
+	  sql/postgresql/upgrade/upgrade-5.1.4d6-5.1.4d7.sql: Fix define
+	  function args for content_item__set_live revision
+
+2005-01-06 10:43  daveb
+
+	* packages/acs-content-repository/: acs-content-repository.info,
+	  sql/postgresql/content-template.sql,
+	  sql/postgresql/upgrade/upgrade-5.1.4d5-5.1.4d6.sql: Fix define
+	  function args for content_template__new to use the 8 parameter
+	  version.
+
+2005-01-06 10:30  donb
+
+	* packages/acs-subsite/tcl/package-procs-oracle.xql: Misspelled the
+	  query name for calling an Oracle function in
+	  package_exec_plsql...
+
+2005-01-06 10:06  daveb
+
+	* packages/acs-content-repository/tcl/content-keyword-procs.tcl:
+	  Creation_date and object_type are optional with defaults.
+
+2005-01-06 09:48  daveb
+
+	* packages/acs-content-repository/tcl/content-folder-procs.tcl:
+	  Don't pass creation_date on new unless its  not null.
+
+2005-01-06 08:54  daveb
+
+	* packages/acs-content-repository/tcl/content-item-procs.tcl: Fix
+	  delete command to use plsql "del"
+
+2005-01-06 08:38  daveb
+
+	* packages/acs-content-repository/: acs-content-repository.info,
+	  sql/postgresql/upgrade/upgrade-5.1.4d4-5.1.4d5.sql: Create __del
+	  functions to match oracle.
+
+2005-01-06 08:31  daveb
+
+	* packages/acs-content-repository/sql/postgresql/:
+	  content-item.sql, content-revision.sql, content-template.sql: Add
+	  __del function to match oracle so package_exec_plsql will work
+
+2005-01-05 07:52  jader
+
+	* packages/acs-authentication/tcl/authentication-procs.tcl: Fix bug
+	  2200 and bug 2242 in which there were problems with logging in
+	  after upgrading if you restarted the server first. The new code
+	  is less elegant, but it works correctly. It imposes a database
+	  hit on login, but it is cached, so it only is incurred once.
+
+2005-01-04 11:31  andrewg
+
+	* packages/forums/sql/oracle/: forums-messages-package-create.sql,
+	  upgrade/upgrade-1.0.6-1.0.7d.sql: Oracle 8 doesn't support
+	  current_timestamp, so I've changed it to sysdate
+
+2005-01-03 09:26  daveb
+
+	* packages/acs-templating/tcl/parse-procs.tcl: Roll back change to
+	  regular array variable regexp. Only noquote regexp needed to be
+	  changed.
+
+2005-01-03 08:38  daveb
+
+	* packages/acs-content-repository/tcl/: content-item-procs.tcl,
+	  content-type-procs.tcl, test/content-item-test-procs.tcl: Make
+	  id_column and table_name required for content::type::new.  Fix
+	  content::item::new to properly create a subtype of content
+	  revision based on the content_type paramter is attributes, title
+	  or text is specified.
+
+2005-01-02 21:28  jader
+
+	* packages/acs-authentication/tcl/authentication-procs.tcl: The
+	  user-new page called a proc in the authentications package which
+	  checked to see if a parameter was set or not. However, in
+	  upgraded sites, or if the user had entered a blank entry for the
+	  parameter, the proc would bomb.  I made the proc more robust by
+	  using string is false instead of ![parameter...  and also added
+	  in a util_user_message to make it more explicit what is happening
+	  if you aren't able to register (the behavior was very confusing).
+
+2005-01-01 10:45  daveb
+
+	* packages/acs-templating/tcl/: parse-procs.tcl,
+	  test/parse-test-procs.tcl: Allow adp array variable regexp to
+	  work with arrays with . in the key names. This happens when a
+	  formerror is generated on a form element where the element name
+	  has an embedded . so it can be interpreted as an array when
+	  processing the form. Added test cases.
+
+2004-12-30 13:01  daveb
+
+	* packages/acs-content-repository/tcl/: content-item-procs.tcl,
+	  test/content-item-test-procs.tcl: Clarify documenation for
+	  content::item::new and add test cases to ensure a new revision
+	  can be created.  Fixes bug#2232
+
+2004-12-30 05:58  daveb
+
+	* packages/search/www/search.tcl: Back out inefficient permission
+	  checking.
+
+2004-12-30 04:01  maltes
+
+	* packages/search/www/: advanced-search.adp, advanced-search.tcl,
+	  index.adp, search.adp, search.tcl: Internationalization of the
+	  Search Package
+
+2004-12-30 03:14  maltes
+
+	* packages/search/www/search.tcl: Limit Search results only to
+	  results a user actually has read permission
+
+2004-12-29 12:46  daveb
+
+	* packages/acs-content-repository/tcl/content-type-procs.tcl: Add
+	  documentation for column_spec of content::type::attribute::new
+
+2004-12-29 07:35  daveb
+
+	* packages/acs-content-repository/tcl/content-template-procs.tcl:
+	  Only pass creation_date if it is not empty.
+
+2004-12-29 07:28  joel
+
+	* etc/config.tcl: took my name out
+
+2004-12-29 07:26  daveb
+
+	*
+	  packages/acs-content-repository/sql/postgresql/upgrade/upgrade-5.1.4d3-5.1.4d4.sql:
+	  Set default for creation_date in content_template__new
+
+2004-12-29 07:19  daveb
+
+	* packages/acs-content-repository/: acs-content-repository.info,
+	  sql/postgresql/upgrade/upgrade-5.1.4d3-5.1.4d4.sql: Return new
+	  folder_id from content_folder__new
+
+2004-12-27 12:47  joel
+
+	* packages/acs-tcl/tcl/00-database-procs.tcl: removed some obsolete
+	  comments and added a link
+
+2004-12-27 12:40  joel
+
+	* etc/config.tcl: added link to documentation for second database
+
+2004-12-27 12:38  joel
+
+	* packages/acs-core-docs/www/: tutorial-advanced.html,
+	  tutorial-future-topics.html, tutorial-schedule-procs.html: added
+	  instructions for 2nd database access
+
+2004-12-27 12:29  joel
+
+	* packages/acs-core-docs/www/: tutorial-second-database.html,
+	  xml/developers-guide/tutorial-advanced.xml: added instructions
+	  for 2nd database access
+
+2004-12-25 19:31  joel
+
+	* packages/acs-core-docs/www/files/nsd-postgres.txt: moved the
+	  extra lib link from a comment to the lib path; it shouldn't
+	  affect performance and it will save others (like me) the time to
+	  diagnose and find this fix)
+
+2004-12-25 13:46  donb
+
+	* packages/forums/sql/oracle/: forums-messages-package-create.sql,
+	  upgrade/upgrade-1.0.6-1.0.7d.sql: last_child_post wasn't being
+	  initialized in the "new" function...
+
+2004-12-25 13:33  donb
+
+	* packages/acs-subsite/tcl/: package-procs-oracle.xql,
+	  package-procs-postgresql.xql, package-procs.tcl: Fixed
+	  package_exec_plsql so it works with Oracle procedures as well as
+	  functions (PG only has functions so was working fine for all
+	  cases)
+
+2004-12-24 17:05  donb
+
+	* packages/forums/sql/oracle/: forums-forums-create.sql,
+	  forums-messages-create.sql, forums-messages-package-create.sql,
+	  upgrade/upgrade-1.0.6-1.0.7d.sql: Added the thread and reply
+	  counting code previously commited for the PG version to the
+	  Oracle version.
+
+2004-12-23 09:58  donb
+
+	* packages/forums/sql/postgresql/upgrade/upgrade-1.0.6-1.0.7d.sql:
+	  Update query for reply counting was slightly in error ...
+
+2004-12-23 01:48  jarkko
+
+	* packages/acs-tcl/tcl/utilities-procs.tcl: Importing updated
+	  Simulation 1.0.1 and fixed ad_returnredirect to accept html
+	  switch (for not quoting the message relayed).
+
+2004-12-22 23:26  maltes
+
+	* packages/acs-lang/www/admin/set-system-timezone.tcl: Applied
+	  patch #619.Fixes timezone problem with timeanddate.com format
+
+2004-12-22 18:12  donb
+
+	* packages/forums/: forums.info,
+	  lib/forums/forums-chunk-oracle.xql,
+	  lib/forums/forums-chunk-postgresql.xql,
+	  lib/message/threads-chunk-oracle.xql,
+	  lib/message/threads-chunk-postgresql.xql,
+	  lib/message/threads-chunk.tcl,
+	  sql/postgresql/forums-forums-create.sql,
+	  sql/postgresql/forums-messages-create.sql,
+	  sql/postgresql/forums-messages-package-create.sql,
+	  sql/postgresql/upgrade/upgrade-1.0.6-1.0.7d.sql,
+	  tcl/forums-procs.tcl, tcl/messages-procs-oracle.xql,
+	  tcl/messages-procs-postgresql.xql, tcl/messages-procs.tcl,
+	  tcl/messages-procs.xql, tcl/test/forums-procs.tcl: Added tracking
+	  of threads in a forum and replies to a root post to the
+	  forums-forums and forums-messages datamodel, and fixed the
+	  necessary code.  Also cleaned up some stuff and wrote a test case
+	  for automated testing.  PG only at this point, will add the
+	  Oracle stuff shortly.
+
+2004-12-22 08:13  daveb
+
+	* packages/acs-content-repository/: acs-content-repository.info,
+	  sql/postgresql/content-folder.sql,
+	  sql/postgresql/upgrade/upgrade-5.1.4d2-5.1.4d3.sql: Set
+	  package_id from content_folder__new
+
+2004-12-21 10:22  daveb
+
+	* packages/acs-content-repository/: acs-content-repository.info,
+	  sql/postgresql/content-extlink.sql,
+	  sql/postgresql/content-folder.sql,
+	  sql/postgresql/content-item.sql,
+	  sql/postgresql/content-revision.sql,
+	  sql/postgresql/content-symlink.sql,
+	  sql/postgresql/content-type.sql,
+	  sql/postgresql/upgrade/upgrade-5.1.4d1-5.1.4d2.sql,
+	  tcl/content-extlink-procs.tcl, tcl/content-folder-procs.tcl,
+	  tcl/content-item-procs.tcl, tcl/content-keyword-procs.tcl,
+	  tcl/content-revision-procs.tcl, tcl/content-symlink-procs.tcl,
+	  tcl/content-template-procs.tcl, tcl/content-type-procs.tcl,
+	  tcl/test/content-item-test-procs.tcl,
+	  tcl/test/content-revision-test-procs.tcl: Add CR Tcl API from
+	  HEAD.
+
+2004-12-19 17:58  daveb
+
+	* packages/acs-templating/resources/forms/inline.adp: Inline form
+	  with widget and button on the same line for really simple forms
+	  such as filters for listbuilder.
+
+2004-12-18 16:10  donb
+
+	* packages/acs-templating/tcl/list-procs.tcl: Oops, a tiny blunder
+	  in my previous update, returned an illegal SQL snippet if there
+	  were no IDs selected.  The list builder should cleverly refuse to
+	  do the query in this case, but we'll settle for it doing a SELECT
+	  that returns nothing for now.
+
+2004-12-17 16:42  joel
+
+	* packages/acs-admin/tcl/: apm-admin-init.tcl, apm-admin-procs.tcl:
+	  converted build-repository.tcl to a proc and init
+
+2004-12-17 14:49  vivianh
+
+	* packages/acs-subsite/www/admin/site-map/allow-for-view.tcl:
+	  Adding child to parent select in checkbox list
+
+2004-12-17 11:19  jader
+
+	* packages/acs-subsite/www/doc/images.html: Add in new up and down
+	  images to images documentation page.
+
+2004-12-17 09:54  vivianh
+
+	* packages/acs-subsite/www/shared/community-member.tcl: bringing
+	  back previous tcl version :)
+
+2004-12-17 09:49  vivianh
+
+	* packages/acs-subsite/www/shared/: community-member.tcl,
+	  community-member-oracle.xql, community-member-postgresql.xql:
+	  bringing back previous version
+
+2004-12-17 09:40  vivianh
+
+	* packages/acs-subsite/www/shared/community-member.adp: bringing
+	  back previous version
+
+2004-12-17 09:35  vivianh
+
+	* packages/acs-subsite/www/pvt/home.xql: bringing back previous
+	  version
+
+2004-12-17 09:24  vivianh
+
+	* packages/acs-subsite/www/pvt/: home.adp, home.tcl: bringing back
+	  previous version
+
+2004-12-17 08:53  vivianh
+
+	* packages/acs-subsite/www/index.adp: adding users site map button
+
+2004-12-17 08:49  vivianh
+
+	* packages/acs-subsite/www/admin/site-map/site-map.tcl: adding
+	  bold, images and spaces
+
+2004-12-17 08:31  vivianh
+
+	* packages/acs-subsite/catalog/: acs-subsite.en_US.ISO-8859-1.xml,
+	  acs-subsite.es_ES.ISO-8859-1.xml: Adding users site map message
+
+2004-12-17 08:23  vivianh
+
+	* packages/acs-subsite/www/resources/: down.gif, up.gif: UP/DOWN
+	  images for users site map
+
+2004-12-17 08:14  vivianh
+
+	* packages/acs-subsite/www/shared/: community-member.adp,
+	  community-member.tcl: Check if parameter ShowEmailP is set to 1
+	  to allow users to show or hide their email
+
+2004-12-17 08:13  vivianh
+
+	* packages/acs-subsite/www/shared/: community-member-oracle.xql,
+	  community-member-postgresql.xql: query to show-email field in
+	  users table added
+
+2004-12-17 08:07  vivianh
+
+	* packages/acs-subsite/www/pvt/: home.adp, home.tcl, home.xql:
+	  Allows the user to choice if they want to show or hide their
+	  e-mail and ShowEmailP parameter check
+
+2004-12-17 08:06  vivianh
+
+	* packages/acs-subsite/www/pvt/: hide-email.tcl, hide-email.xql:
+	  Allows the user to choice if they want to show or hide their
+	  e-mail
+
+2004-12-15 14:40  jader
+
+	* packages/acs-subsite/www/doc/images.html: Add in xml.gif to doc
+	  page which shows all the images.
+
+2004-12-14 07:51  eduardop
+
+	* packages/acs-content-repository/tcl/content-type-procs.tcl: the
+	  former commit left the code broken
+
+2004-12-13 08:44  andrewg
+
+	* packages/acs-subsite/www/resources/xml.gif: Adding.
+
+2004-12-12 16:45  daveb
+
+	* packages/forums/lib/message/post.tcl: Fix preview hidden
+	  variables to support richtext
+
+2004-12-12 16:19  daveb
+
+	* packages/forums/: lib/message/post.tcl, lib/message/row.tcl,
+	  tcl/form-procs.tcl: Use richtext widget
+
+2004-12-12 12:15  daveb
+
+	* packages/acs-templating/tcl/spellcheck-procs.tcl: Skip validation
+	  when a widget is in spellcheck mode.
+
+2004-12-12 04:15  maltes
+
+	* etc/backup.sh: Added backing up the database on another server
+
+2004-12-09 12:11  tracya
+
+	* packages/forums/forums.info: upping version numbers for release
+
+2004-12-08 19:58  donb
+
+	* packages/acs-templating/tcl/list-procs-oracle.xql: Oracle testing
+	  uncovered a missing parenthesis.  Don't you wish EVERYONE tested
+	  their changes under Oracle as well as PG?
+
+2004-12-08 19:52  donb
+
+	* packages/acs-templating/tcl/: list-procs-oracle.xql,
+	  list-procs-postgresql.xql: Oops forgot the ever-so-important .xql
+	  files!
+
+2004-12-08 19:48  donb
+
+	* packages/acs-templating/tcl/: acs-templating-init.tcl,
+	  list-procs.tcl, paginator-procs.tcl: Greatly sped up pagination
+	  in the list builder.
+
+	  1. The list builder builds a separate (optionally cached)
+	  paginator for each page group, rather than each list.  No more
+	  filling of the Tcl cache with (say) 5500 forum entries when we
+	  know that users rarely march through the entire list of forums.
+
+	  2. Since the list builder builds an "in (list of ids)" query
+	  clause to select just those rows needed for this display page,
+	  there's no reason to sort the list of ids so I'm building the
+	  list within the list builder rather than using the more
+	  generalized paginator code.  Minor speedup ...
+
+	  This could probably be sped up more by simply caching the list of
+	  keys within the list builder and replicating some other paginator
+	  functionality in lightweight form specific to the list builder,
+	  but this will do for now.  And maybe forever.
+
+2004-12-08 15:27  richardh
+
+	* packages/acs-subsite/www/permissions/perm-include.tcl: Reverse
+	  previous commit - fix was actually in catalog. There was a
+	  duplicate value for 'Remove' and no 'Remove_All'.
+
+2004-12-08 15:20  richardh
+
+	* packages/acs-subsite/catalog/acs-subsite.en_US.ISO-8859-1.xml:
+	  The key 'Remove' had two values 'Remove' and 'Remove_All'. Have
+	  now changed the second 'Remove' key to 'Remove_All' and have
+	  removed the underscore from the value.
+
+2004-12-08 14:49  richardh
+
+	* packages/acs-subsite/www/permissions/perm-include.tcl: Correct
+	  message key 'acs-subsite.Remove_All' to acs-subsite.Remove' to
+	  eliminate MISSING KEY message.
+
+2004-12-07 09:43  alfredw
+
+	* packages/acs-content-repository/tcl/content-type-procs.tcl:
+	  Changed content::type::create_attribute and drop_attribute to the
+	  content::type::attribute::new and ::delete style.
+
+2004-12-07 00:28  alfredw
+
+	* packages/acs-content-repository/tcl/content-symlink-procs.tcl:
+	  renamed ::del to ::delete
+
+2004-12-07 00:24  alfredw
+
+	* packages/acs-content-repository/tcl/content-item-procs.tcl:
+	  updated a return type
+
+2004-12-07 00:09  alfredw
+
+	* packages/acs-content-repository/tcl/content-revision-procs.tcl:
+	  renamed ::del to ::delete
+
+2004-12-07 00:07  alfredw
+
+	* packages/acs-content-repository/tcl/content-extlink-procs.tcl:
+	  Copied ::new logic to content::extlink, added deprecated tags.
+
+2004-12-06 23:53  alfredw
+
+	* packages/acs-content-repository/tcl/content-extlink-procs.tcl:
+	  renamed ::del to ::delete
+
+2004-12-06 23:50  alfredw
+
+	* packages/acs-content-repository/tcl/content-type-procs.tcl:
+	  changed create_type to ::new and drop_type to ::delete made
+	  use_context default to "public" rather than be required in all
+	  cases.  added return values, and @see tags
+
+2004-12-06 23:13  alfredw
+
+	* packages/acs-content-repository/tcl/content-template-procs.tcl:
+	  Added return values and a @throws value.
+
+2004-12-06 22:58  alfredw
+
+	* packages/acs-content-repository/tcl/content-keyword-procs.tcl:
+	  Added return values, changed content::keyword::del to ::delete
+
+2004-12-06 22:23  alfredw
+
+	* packages/acs-content-repository/tcl/content-folder-procs.tcl:
+	  Added return values and other general cleanup.  .
+
+2004-12-06 04:02  timoh
+
+	* packages/acs-content-repository/tcl/content-template-procs.tcl:
+	  added parameter package_id to template::new
+
+2004-12-06 04:02  timoh
+
+	* packages/acs-content-repository/tcl/content-type-procs.tcl: added
+	  translation of database specific column-specs to other database
+	  format
+
+2004-12-05 01:49  torbenb
+
+	*
+	  packages/acs-core-docs/www/xml/engineering-standards/eng-standards-versioning.xml:
+	  added package maturity standards section per
+	  http://openacs.org/forums/message-view?message_id=160957 using
+	  tag conventions found in existing packages
+
+2004-12-04 22:24  torbenb
+
+	* etc/config.tcl: re-arranged sections according to Configuration
+	  File Hierarchy http://aolserver.com/docs/admin/config.html#3 and
+	  http://aolserver.com/docs/admin/config-reference.tcl.txt and
+	  reformatted spacing for readibility. No parameter changes made
+
+2004-12-04 18:03  torbenb
+
+	* etc/config.tcl: adding missing params, more annotation
+
+2004-12-04 17:21  torbenb
+
+	* packages/acs-core-docs/www/xml/install-guide/openacs.xml: typo
+	  correction
+
+2004-12-04 17:20  torbenb
+
+	* packages/acs-core-docs/www/xml/install-guide/maintenance.xml:
+	  adding absolute pathname to svgroup since /usr/local/bin is not
+	  necessarily in the default root pathnames
+
+2004-12-04 12:44  donb
+
+	* packages/forums/lib/message/: post.tcl, threads-chunk.tcl: Got
+	  paginator caching to work, coherently
+
+2004-12-04 09:54  donb
+
+	* packages/forums/lib/message/: threads-chunk-oracle.xql,
+	  threads-chunk-postgresql.xql, threads-chunk.xql: My pagination
+	  queries weren't complete.  Now they are ... but slower, sigh, at
+	  least until I rewrite pagination in the list builder.
+
+2004-12-03 19:27  donb
+
+	* packages/forums/lib/message/threads-chunk.tcl: Argh, gotta flush
+	  the paginator cache because we don't know if there's been a
+	  posting or not ...
+
+2004-12-03 19:19  donb
+
+	* packages/forums/www/: forum-view.adp, forum-view.tcl: Added
+	  pagination ...
+
+2004-12-03 19:06  donb
+
+	* packages/forums/lib/message/: threads-chunk-oracle.xql,
+	  threads-chunk-postgresql.xql, threads-chunk.tcl,
+	  threads-chunk.xql: Add pagination to the forums thread view page.
+
+2004-12-02 15:22  jader
+
+	* packages/acs-core-docs/www/xml/engineering-standards/cvs.xml:
+	  Changed tag for releasing from oacs-5-1-compat to
+	  openacs-5-1-compat
+
+2004-12-01 17:58  torbenb
+
+	*
+	  packages/acs-core-docs/www/xml/engineering-standards/docbook-primer.xml:
+	  fixing broken links
+
+2004-12-01 02:42  maltes
+
+	* www/robots.txt: initial import of the openacs.org files to the
+	  openacs-org branch.
+
+2004-11-30 13:43  joel
+
+	* packages/acs-core-docs/www/: contributing-code.html,
+	  releasing-package.html, xml/releasing-openacs.xml,
+	  xml/engineering-standards/cvs.xml: more fixes to adding packages
+
+2004-11-30 12:58  joel
+
+	* packages/acs-core-docs/www/: xml/engineering-standards/cvs.xml,
+	  contributing-code.html: fixing typos and tidying up
+
+2004-11-29 11:25  joel
+
+	* packages/acs-core-docs/www/xml/releasing-openacs.xml: making
+	  harmless white-space change to help Branimir test new mailing
+	  list
+
+2004-11-29 09:38  jader
+
+	* packages/acs-templating/tcl/list-procs.tcl: Add reference to how
+	  to sort hierarchical queries with list-builder.
+

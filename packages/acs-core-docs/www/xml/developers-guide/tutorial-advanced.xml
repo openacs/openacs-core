@@ -1101,7 +1101,7 @@ ns_param pools_legacy [list legacy]</programlisting>
   select bar from foo
   limit 10
 } {
-  ns_write "<br/>$bar"
+  ns_write "&lt;br/&gt;$bar"
 }</programlisting>
 
       </listitem>
