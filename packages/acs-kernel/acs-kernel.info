@@ -16,7 +16,7 @@
         <maturity>
           <platform id="openacs-core">
             <level descr="Mature">2</level>
-          <platform>
+          </platform>
         </maturity>
         <provides url="acs-kernel" version="5.1.0d1"/>
         <callbacks>
