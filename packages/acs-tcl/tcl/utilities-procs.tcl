@@ -2998,10 +2998,6 @@ ad_proc -public util_text_to_url {
 
     @author Tilmann Singer
 } {
-    if { [empty_string_p $text] && [empty_string_p $_text] } {
-        error "You must specify either -text or _text."
-    }
-
     if { [empty_string_p $text] } {
         set text $_text
     }
