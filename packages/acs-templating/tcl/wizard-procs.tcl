@@ -202,7 +202,9 @@ ad_proc -private template::wizard::add { step_id args } {
 }
 
 
-ad_proc -public template::wizard::get_current_step {} {
+ad_proc -public template::wizard::get_current_step {
+    -start
+} {
     <p>Set the step to display for this particular request This is
     determined by the wizard_step parameter.  If not set, the first step
     is used.</p>
@@ -215,12 +217,21 @@ ad_proc -public template::wizard::get_current_step {} {
     are preserved.  Once the form is finished processing the wizard will take
     over and rewrite the url.</p>
 
+    @param start Optionally specify 
+    
     @see template::wizard
 } {
     get_reference
 
     upvar #$level wizard:current_id current_id
-    set current_id [ns_queryget wizard_step${wizard_name} [lindex $steps 0]]
+    set current_id [ns_queryget wizard_step${wizard_name} {}]
+    if { [empty_string_p $current_id] } {
+        if { [info exists start] } {
+            set current_id $start
+        } else {
+            set current_id [lindex $steps 0]
+        }
+    }
 
     upvar #$level wizard:visited_step visited_step
     set visited_step [get_visited_step]
@@ -264,7 +275,11 @@ ad_proc -public template::wizard::get_current_step {} {
 
 	set last_index [expr [lsearch -exact $steps $current_id] - 1]
 	set last_id [lindex $steps $last_index]
-	template::forward [get_forward_url $last_id]
+
+        # LARS: I removed this, because it causes forms to not save their changes when you hit the back button
+        # If you construct your form, so it calls 'wizard forward' in the -after_submit block, things will 
+        # work the way you expect them to
+	#template::forward [get_forward_url $last_id]
     }
 }
 
