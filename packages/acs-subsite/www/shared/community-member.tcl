@@ -4,7 +4,7 @@ ad_page_contract {
     @param user_id defaults to currently logged in user if there is one
     @cvs-id $Id$
 } {
-    user_id:integer
+    {user_id:integer ""}
 } -properties {
     context:onevalue
     member_state:onevalue
@@ -58,7 +58,7 @@ if { ![db_0or1row user_information "select first_names, last_name, email, priv_e
     return
 }
 
-if { ![string match -nocase "http://*" $url] } {
+if { ![empty_string_p $url] && ![string match -nocase "http://*" $url] } {
     set url "http://$url"
 }
 
