@@ -23,7 +23,16 @@
   <li>Portrait:  <a href="/shared/portrait?user_id=@user_id@">@portrait_title@</a></li>
 </if>
 </ul>
-Member state: @member_state@ @user_finite_state_links;noquote@
+
+<if @warning_p@>
+    <!-- RBM: Added August 1, 2003 --!>
+    <p>
+      <b>WARNING:</b> This user is a site-wide administrator (maybe the only one).
+      Deleting or banning this user may mean you will be unable to administrate the site.
+    </p>
+</if>
+
+Member state: @member_state@ @user_finite_state_links@
 
 <h2>This user is a member of the following groups:</h2>
 <p>Note: These are the groups to which the user has been granted 
