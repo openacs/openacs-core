@@ -143,7 +143,7 @@ proc_doc ds_link {} { Returns the "Developer Information" link in a right-aligne
 	    }
 	}
 	
-        if { [ad_parameter -package_id [ds_instance_id] ShowCommentsInlineP "developer-support" 0] } {
+        if { [ad_parameter -package_id [ds_instance_id] ShowCommentsInlineP acs-developer-support 0] } {
             if { [nsv_exists ds_request "$ad_conn(request).comment"] } {
                 append out "<tr><td><br />"
                 foreach comment [nsv_get ds_request "$ad_conn(request).comment"] {
@@ -170,7 +170,7 @@ proc_doc ds_collect_connection_info {} { Collects information about the current 
         ds_replace_get_user_procs [ds_user_switching_enabled_p]
 
         ds_add start [ns_time]
-        ds_add conn startclicks [clock clicks]
+        ds_add conn startclicks [ad_conn start_clicks]
         for { set i 0 } { $i < [ns_set size [ad_conn headers]] } { incr i } {
             ds_add headers [ns_set key [ad_conn headers] $i] [ns_set value [ad_conn headers] $i]
         }
@@ -187,48 +187,53 @@ proc_doc ds_collect_db_call { db command statement_name sql start_time errno err
 }
 
 proc_doc ds_add { name args } { Sets a developer-support property for the current request. Should never be used except by elements of the request processor (e.g., security filters or abstract URLs). } {
-    if { [catch { nsv_exists ds_request . }] } {
-	ns_log "Warning" "ds_request NSVs not initialized"
-	return
-    }
+    
+    if { [ds_enabled_p] && [ds_collection_enabled_p] } { 
+        if { [catch { nsv_exists ds_request . }] } {
+            ns_log "Warning" "ds_request NSVs not initialized"
+            return
+        }
 
-    global ad_conn
-    if { ![info exists ad_conn(request)] } {
-	set ad_conn(request) [nsv_incr rp_properties request_count]
+        global ad_conn
+        if { ![info exists ad_conn(request)] } {
+            set ad_conn(request) [nsv_incr rp_properties request_count]
+        }
+        eval [concat [list nsv_lappend ds_request "$ad_conn(request).$name"] $args]
     }
-    eval [concat [list nsv_lappend ds_request "$ad_conn(request).$name"] $args]
 }
 
 proc_doc ds_comment { value } { Adds a comment to the developer-support information for the current request. } {
-
-    if { [ds_enabled_p] } { 
-        ds_add comment $value
-    }
+    ds_add comment $value
 }
 
 proc ds_sweep_data {} {
     set now [ns_time]
-    set lifetime [ad_parameter -package_id [ds_instance_id] DataLifetime "developer-support" 900]
+    set lifetime [ad_parameter -package_id [ds_instance_id] DataLifetime acs-developer-support 900]
 
-    # kill_requests is an array of request numbers to kill
-    array set kill_requests [list]
+    # Find the last request before the DataLifetime cutoff
 
     set names [nsv_array names ds_request]
+    set max_request 0
     foreach name $names {
-	if { [regexp {^([0-9]+)\.start$} $name "" request] && \
-                 $now - [lindex [nsv_get ds_request $name] 0] > $lifetime } {
-	    set kill_requests($request) 1
-	}
+	if { [regexp {^([0-9]+)\.start$} $name match request] 
+             && $now - [lindex [nsv_get ds_request $name] 0] > $lifetime } {
+            if {[expr {$request > $max_request}]} { 
+                set max_request $request
+            }
+        }
     }
+
+    # kill any request older than last request.
+
     set kill_count 0
     foreach name $names {
-	if { [regexp {^([0-9]+)\.} $name "" request] && \
-		[info exists kill_requests($request)] } {
+        if { [regexp {^([0-9]+)\.} $name "" request]
+             && [expr {$request <= $max_request}] } {
 	    incr kill_count
 	    nsv_unset ds_request $name
 	}
     }	
-
+    
     ns_log "Notice" "Swept developer support information for [array size kill_requests] requests ($kill_count nsv elements)"
 }
 

@@ -5,13 +5,26 @@
 # Description: Provides routines used to aggregate request/response information for debugging.
 
 ad_register_filter -critical t -priority 999999 trace * /* ds_trace_filter
-ad_schedule_proc [ad_parameter -package_id [ds_instance_id] DataSweepInterval "developer-support" 900] ds_sweep_data
+ad_schedule_proc [ad_parameter -package_id [ds_instance_id] DataSweepInterval acs-developer-support 900] ds_sweep_data
 nsv_array set ds_request [list]
 
 nsv_set ds_properties enabled_p [ad_parameter -package_id [ds_instance_id] EnabledOnStartupP acs-developer-support 0]
-nsv_set ds_properties enabled_ips *
-nsv_set ds_properties database_enabled_p [ad_parameter -package_id [ds_instance_id] \
-	DatabaseEnabledP developer-support 0]
+
+# Take the IP list (space or comma seperated) and turn it into a tcl list.
+set IPs [list]
+foreach ip [split [ad_parameter -package_id [ds_instance_id] EnabledIPs acs-developer-support *] { ,}] { 
+    if {[string equal $ip "*"]} { 
+        # a star means anything will match so just use the * instead
+        set IPs "*"
+        break
+    } elseif {![empty_string_p $ip]} { 
+        lappend IPs $ip
+    }
+}
+nsv_set ds_properties enabled_ips $IPs
+
+
+nsv_set ds_properties database_enabled_p [ad_parameter -package_id [ds_instance_id] DatabaseEnabledP developer-support 0]
 ds_set_user_switching_enabled [ad_parameter -package_id [ds_instance_id] UserSwitchingEnabledP acs-developer-support 0]
 
 

@@ -32,7 +32,7 @@ if { [info exists property(start)] } {
 
 <blockquote>
 <table cellspacing=0 cellpadding=0>
-<tr><th align=left>Request Start Time:&nbsp;</th><td>[ns_fmttime [lindex $property(start) 0]]\n"
+<tr><th align=left>Request Start Time:&nbsp;</th><td>[clock format [lindex $property(start) 0] -format "%Y-%m-%d %H:%M:%S"]\n"
 } else {
     doc_body_append "The information for this request is gone - either the server has been restarted, or
 the request is more than [ad_parameter DeveloperSupportLifetime "" 900] seconds old.
@@ -66,7 +66,7 @@ if { [info exists property(conn)] } {
 		    set value "[format "%.f" [expr { ($conn(endclicks) - $conn(startclicks)) / 1000 }]] ms"
 		}
 		end {
-		    set value [ns_fmttime $conn($key)]
+		    set value [clock format $conn($key) -format "%Y-%m-%d %H:%M:%S"  ]
 		}
 		user_id {
 		    if { [db_0or1row user_info "
