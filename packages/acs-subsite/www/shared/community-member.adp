@@ -61,7 +61,7 @@
 </if>
 
 
-<if @verified_user_id@ eq 0>
+<if @untrusted_user_id@ eq 0>
   <blockquote>
     If you were to <a href="@subsite_url@register/index?@login_export_vars@">log in</a>, you'd be able to get more information on your fellow community member.
   </blockquote>

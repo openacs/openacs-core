@@ -10,13 +10,14 @@ auth::require_login -account_status closed
 
 if { ![exists_and_not_null user_id] } {
     set user_id [ad_conn untrusted_user_id]
-} else {
+} elseif { $user_id != [auth::get_user_id -account_status closed] } {
     permission::require_permission -object_id $user_id -privilege admin
 }
 
 if { ![exists_and_not_null return_url] } {
     set return_url [ad_conn url]
 }
+
 
 set action_url "[subsite::get_element -element url]user/basic-info-update"
 
