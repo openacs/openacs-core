@@ -271,7 +271,7 @@ ad_proc -private lang::message::format {
                 if { [info exists variable_value] } {
                     append formated_message $variable_value
                 } else {
-                    error "Message contains a variable named '$variable_key' which doesn't exist in the caller's environment"
+                    error "Message contains a variable named '$variable_key' which doesn't exist in the caller's environment: message $localized_message"
                 }
             }
         }
