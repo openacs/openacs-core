@@ -1021,6 +1021,12 @@ ad_proc -public auth::update_local_account {
                     -username $user_info(username)
             }
 
+            if { [info exists user_info(authority_id)] } {
+                acs_user::update \
+                    -user_id $user_id \
+                    -authority_id $user_info(authority_id)
+            }
+
             # TODO: Portrait
         }
     } {
@@ -1382,7 +1388,7 @@ ad_proc -private auth::validate_account_info {
                 set element_messages(email) "We already have a group with this email"
             } else {
                 acs_user::get \
-                    -user_id $email_party_id \(Bscreen_
+                    -user_id $email_party_id \
                     -array email_user
                 
                 switch $email_user(member_state) {
