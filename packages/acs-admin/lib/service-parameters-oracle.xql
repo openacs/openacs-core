@@ -17,6 +17,7 @@
                             acs_permission.permission_p(package_id, :user_id, 'read') = 't'
                          or acs_permission.permission_p(package_id, acs.magic_object_id('the_public'), 'read') = 't'
                         )
+                    and   ap.package_key != 'acs-subsite'
                     order by instance_name
         </querytext>
     </fullquery>
