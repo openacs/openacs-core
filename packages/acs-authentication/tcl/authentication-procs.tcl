@@ -388,6 +388,7 @@ ad_proc -public auth::create_user {
     {-secret_question ""}
     {-secret_answer ""}
     {-email_verified_p ""} 
+    {-nologin:boolean}
 } {
     Create a user, and return creation status and account status.
     
@@ -589,7 +590,7 @@ ad_proc -public auth::create_user {
     }
         
     # Issue login cookie if login was successful
-    if { [string equal $creation_info(creation_status) "ok"] && [string equal $creation_info(account_status) "ok"] && [ad_conn user_id] == 0 } {
+    if { !$nologin_p && [string equal $creation_info(creation_status) "ok"] && [string equal $creation_info(account_status) "ok"] && [ad_conn user_id] == 0 } {
         auth::issue_login -user_id $creation_info(user_id)
     }
     

@@ -120,7 +120,7 @@ ad_proc -private auth::local::authentication::Authenticate {
         set auth_info(auth_status) "ok"
     } else {
         set auth_info(auth_status) "bad_password"
-        set auth_info(auth_message) "Invalid username or password"
+        set auth_info(auth_message) [_ acs-authentication.Invalid_username_or_password]
         return [array get auth_info]
     }
 
@@ -411,6 +411,8 @@ ad_proc -private auth::local::registration::Register {
         element_messages {}
         account_status "ok"
         account_message {}
+        generated_pwd_p 0
+        password {}
     }
 
     # We don't create anything here, so creation always succeeds
@@ -423,6 +425,8 @@ ad_proc -private auth::local::registration::Register {
         set password [ad_generate_random_string]
         set generated_pwd_p 1
     }
+    set result(generated_pwd_p) $generated_pwd_p
+    set result(password) $password
 
     # Set user's password
     set user_id [acs_user::get_by_username -username $username]

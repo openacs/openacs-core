@@ -38,11 +38,15 @@ END OF TEMPLATE -->
  
        <itemizedlist>
          <listitem>
-        <para>Under Development - update this no later than 5.1.0rc1</para>
+        <para>Lots of little tweaks and fixes</para>
       </listitem>
-     </itemizedlist>
+      <listitem>
+          <para>Complete Change list since 5.0.0 in Changelog</para>
+      </listitem>
+      <listitem><para><ulink
+      url="http://openacs.org/bugtracker/openacs/core?filter%2efix%5ffor%5fversion=125273&amp;filter%2estatus=closed">Many Bug fixes</ulink></para>
+      </listitem></itemizedlist>
    </sect2>
-
 
   <sect2 id="release-notes-5-0-4">
     <title>Version 5.0.4</title>

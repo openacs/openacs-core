@@ -133,9 +133,9 @@ if { $show_status_p } {
 switch -- $file_type {
     adp {
         if { $only_text_p } {
-            set text_only_filter "<a href=\"version-i18n?[export_vars -url -override {{only_text_p 0}} {pre_select_files_p version_id file_type show_status_p}]\">all adp files</a> / only apd files with translatable text"
+            set text_only_filter "<a href=\"version-i18n?[export_vars -url -override {{only_text_p 0}} {pre_select_files_p version_id file_type show_status_p}]\">all adp files</a> | only adp files with translatable text"
         } else {
-            set text_only_filter "<b>all adp files</b> / <a href=\"version-i18n?[export_vars -url -override {{only_text_p 1}} {pre_select_files_p version_id file_type show_status_p}]\">only apd files with translatable text</a>"
+            set text_only_filter "<b>all adp files</b> | <a href=\"version-i18n?[export_vars -url -override {{only_text_p 1}} {pre_select_files_p version_id file_type show_status_p}]\">only apd files with translatable text</a>"
         }    
 
         set file_type_filter "<b>Show adp files</b>: $text_only_filter | <a href=\"version-i18n?[export_vars -url -override {{file_type tcl}} {version_id pre_select_files_p show_status_p only_text_p}]\">Show tcl files</a> | <a href=\"version-i18n?[export_vars -url -override {{file_type sql}} {version_id pre_select_files_p show_status_p only_text_p}]\">Show sql files</a>"

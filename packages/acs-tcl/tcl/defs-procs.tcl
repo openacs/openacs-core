@@ -339,7 +339,7 @@ ad_proc -deprecated ad_admin_footer {} {
     if { [llength [info procs ds_link]] == 1 } {
 	set ds_link [ds_link]
     } else {
-	et ds_link ""
+	set ds_link ""
     }
     return "<hr>
 $ds_link
@@ -363,7 +363,7 @@ ad_proc -public ad_return_complaint {
     ns_return 200 text/html [ad_parse_template \
                                  -params [list [list exception_count $exception_count] \
                                               [list exception_text $exception_text]] \
-                                 "/packages/acs-tcl/lib/complain"]
+                                 "/packages/acs-tcl/lib/ad-return-complaint"]
     
     # raise abortion flag, e.g., for templating
     global request_aborted

@@ -2351,14 +2351,14 @@ ad_proc -public ad_set_cookie {
         if { ![string equal $expire "t"] } {
             # netscape seemed unhappy with huge max-age, so we use
             # expires which seems to work on both netscape and IE
-            append cookie "; Expires=Fri, 01-Jan-2035 01:00:00 GMT"
+            append cookie "; Expires=Mon, 01-Jan-2035 01:00:00 GMT"
         }
     } elseif { $max_age != "" } {
 	append cookie "; Max-Age=$max_age"
     }
 
     if { [string equal $expire "t"] } {
-        append cookie "; Expires=Fri, 01-Jan-1980 01:00:00 GMT"
+        append cookie "; Expires=Tue, 01-Jan-1980 01:00:00 GMT"
     }
 
     if { $domain != "" } {
@@ -4956,3 +4956,28 @@ ad_proc -public util::word_diff {
 
 	return $res
 }
+
+ad_proc -public util::string_length_compare { s1 s2 } {
+    String length comparison function for use with lsort's -command switch.
+} {
+    set l1 [string length $s1]
+    set l2 [string length $s2]
+    if { $l1 < $l2 } {
+	return -1
+    } elseif { $l1 > $l2 } {
+	return 1
+    } else {
+	return 0
+    }
+}
+
+ad_proc -public util::roll_server_log {{}} {
+    Invoke the AOLserver ns_logroll command with some bookend log records.  This rolls the error log, not the access log.
+} { 
+    # This param controlls how many backups of the server log to keep, 
+    ns_config -int "ns/parameters" maxbackup 7
+    ns_log Notice "util::roll_server_log: Rolling the server log now..." 
+    ns_logroll 
+    ns_log Notice "util::roll_server_log: Done rolling the server log." 
+    return 0
+} 

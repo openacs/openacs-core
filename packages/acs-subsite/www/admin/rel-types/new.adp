@@ -9,7 +9,7 @@ First, select the supertype for the new relationship type:
 
 Supertype: <select name=supertype>
 <multiple name="supertypes">
-  <option value="@supertypes.object_type@"> @supertypes.name@
+  <option value="@supertypes.object_type@"> @supertypes.name;noquote@
 </multiple>
 </select>
 

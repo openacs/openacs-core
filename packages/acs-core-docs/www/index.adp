@@ -2,7 +2,7 @@
 <center>
 <table border="0" cellpadding="8" cellspacing="0" width="80%">
 
-<tr><td valign="top">
+<tr><td valign="top" align="left">
 <strong>OpenACS Core Documentation</strong>
 <ul>
 <li><a href="for-everyone.html">Part I: For Everyone</a>
@@ -36,7 +36,7 @@ for Past and Future Versions of OpenACS</a>
 </ul>
 </td>
 
-<td valign="top">
+<td valign="top" align="left">
 <p><a href="/api-doc/">API Browser</a>
 <% 
 # This block of ADP code ensures that the Installer can still serve this

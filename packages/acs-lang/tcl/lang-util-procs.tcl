@@ -73,7 +73,7 @@ ad_proc lang::util::message_tag_regexp {} {
 
     @author Peter marklund (peter@collaboraid.biz)
 } {
-    return {(<#\s*?([-a-zA-Z0-9_:\.]+)\s+(.+?)#>)}
+    return {(<#\s*?([-a-zA-Z0-9_:\.]+)\s+(.+?)\s*?#>)}
 }
 
 ad_proc lang::util::get_temporary_tags_indices { adp_file_string } {
@@ -445,19 +445,39 @@ ad_proc -private lang::util::convert_adp_variables_to_percentage_signs { text } 
     Convert ADP variables to percentage_signs - the notation used to
     interpolate variable values into acs-lang messages.
 
-    <p>
-      We don't currently support having noquote vars in messages (i.e. we don't
-      substitute @var_name;noquote@).
-    </p>
-
     @author Peter Marklund
 } {
     # substitute array variable references
     # loop to handle the case of adjacent variable references, like @a@@b@
     while {[regsub -all [template::adp_array_variable_regexp] $text {\1%\2.\3%} text]} {}
+    while {[regsub -all [template::adp_array_variable_regexp_noquote] $text {\1%\2.\3;noquote%} text]} {}
 
     # substitute simple variable references
     while {[regsub -all [template::adp_variable_regexp] $text {\1%\2%} text]} {}
+    while {[regsub -all [template::adp_variable_regexp_noquote] $text {\1%\2;noquote%} text]} {}
+
+    return $text 
+}
+
+ad_proc -private lang::util::convert_percentage_signs_to_adp_variables { text } {
+    Convert percentage_signs message vars to adp var syntax.
+
+    @see lang::util::convert_adp_variables_to_percentage_signs
+
+    @author Peter Marklund
+} {
+    # substitute array variable references
+    # loop to handle the case of adjacent variable references, like @a@@b@
+    regsub -all {@} [template::adp_array_variable_regexp] {%} pattern
+    while {[regsub -all $pattern $text {\1@\2.\3@} text]} {}
+    regsub -all {@} [template::adp_array_variable_regexp_noquote] {%} pattern
+    while {[regsub -all $pattern $text {\1@\2.\3;noquote@} text]} {}
+
+    # substitute simple variable references
+    regsub -all {@} [template::adp_variable_regexp] {%} pattern
+    while {[regsub -all $pattern $text {\1@\2@} text]} {}
+    regsub -all {@} [template::adp_variable_regexp_noquote] {%} pattern
+    while {[regsub -all $pattern $text {\1@\2;noquote@} text]} {}
 
     return $text
 }

@@ -8,21 +8,9 @@ ad_page_contract {
     email:trim
 }
 
-auth::require_login
+subsite::assert_user_may_add_member
 
 set group_id [application_group::group_id_from_package_id]
-
-set admin_p [permission::permission_p -object_id $group_id -privilege "admin"]
-
-if { !$admin_p } {
-    # If not admin, user must be member of group, and members must be allowed to invite other members
-    if { ![parameter::get -parameter "MembersCanInviteMembersP" -default 0] || \
-             ![group::member_p -group_id $group_id] } {
-        
-        ad_return_forbidden "Cannot invite members" "I'm sorry, but you're not allowed to invite members to this group"
-        ad_script_abort
-    }
-}
 
 set page_title "Inivite Member to [ad_conn instance_name]"
 set context [list [list "." "Members"] "Invite"]

@@ -508,7 +508,7 @@ aa_register_case \
     set new_key_3 "key_1"
     set new_text_3 "$messages_array(key_1)"
     puts $tcl_file_id "# The following key should be auto-generated and inserted
-    # <#${new_key_1} ${new_text_1}#>
+    # <#  ${new_key_1} ${new_text_1} #>
     #
     # The following key should be made unique and inserted
     # <#${new_key_2} ${new_text_2}#>
@@ -598,25 +598,31 @@ aa_register_case \
 aa_register_case \
     -procs {
 	lang::util::convert_adp_variables_to_percentage_signs
+	lang::util::convert_percentage_signs_to_adp_variables
     } util__convert_adp_variables_to_percentage_signs {
 
     @author Peter Marklund (peter@collaboraid.biz)
     @creation-date 25 October 2002
 } {
-    set adp_chunk "<property name=\"title\">@array.variable_name@ @variable_name2@ peter@collaboraid.biz</property>"
-
+    set adp_chunk "<property name=\"title\">@array.variable_name@ @variable_name2;noquote@ peter@collaboraid.biz</property>"
     set adp_chunk_converted [lang::util::convert_adp_variables_to_percentage_signs $adp_chunk]
-    set adp_chunk_expected "<property name=\"title\">%array.variable_name% %variable_name2% peter@collaboraid.biz</property>"
-
-    aa_true "adp vars should be subsituted with percentage sings" [string equal $adp_chunk_converted \
-                                                                                $adp_chunk_expected]
+    set adp_chunk_expected "<property name=\"title\">%array.variable_name% %variable_name2;noquote% peter@collaboraid.biz</property>"
+    aa_equals "adp vars should be subsituted with percentage sings" $adp_chunk_converted $adp_chunk_expected
+    set adp_chunk_converted_back [lang::util::convert_percentage_signs_to_adp_variables $adp_chunk_converted]
+    aa_equals "after having converted the text with percentage signs back to adp we should have what we started with" $adp_chunk_converted $adp_chunk_expected
 
     # Test that a string can start with adp vars
-    set adp_chunk "@first_names@ @last_name@&nbsp;peter@collaboraid.biz"
+    set adp_chunk "@first_names.foobar;noquote@ @last_name@&nbsp;peter@collaboraid.biz"
     set adp_chunk_converted [lang::util::convert_adp_variables_to_percentage_signs $adp_chunk]
-    set adp_chunk_expected "%first_names% %last_name%&nbsp;peter@collaboraid.biz"
-    aa_true "adp vars should be subsituted with percentage sings" [string equal $adp_chunk_converted \
-                                                                                $adp_chunk_expected]
+    set adp_chunk_expected "%first_names.foobar;noquote% %last_name%&nbsp;peter@collaboraid.biz"
+    aa_equals "adp vars should be subsituted with percentage sings" $adp_chunk_converted $adp_chunk_expected
+    set adp_chunk_converted_back [lang::util::convert_percentage_signs_to_adp_variables $adp_chunk_converted]
+    aa_equals "after having converted the text with percentage signs back to adp we should have what we started with" $adp_chunk_converted $adp_chunk_expected
+
+    set percentage_chunk {You are <a href="%role.character_url%">%role.character_title%</a> (%role.role_pretty%)}
+    set percentage_chunk_converted [lang::util::convert_percentage_signs_to_adp_variables $percentage_chunk]
+    set percentage_chunk_expected {You are <a href="@role.character_url@">@role.character_title@</a> (@role.role_pretty@)}
+    aa_equals "converting percentage vars to adp vars" $percentage_chunk_converted $percentage_chunk_expected
 }
 
 aa_register_case \
@@ -674,8 +680,13 @@ aa_register_case \
     set subst_message [lang::message::format $localized_message $value_list]
     set expected_message "The frog jumped across the fence. About 50% of the time, he stumbled, or maybe it was %20 %times%."
 
-    aa_true "the frog should jump across the fence" [string equal $subst_message \
-                                                                  $expected_message]
+    aa_equals "the frog should jump across the fence" $subst_message $expected_message
+
+    set my_var(my_key) foo
+    set localized_message "A text with an array variable %my_var.my_key% in it"
+    set subst_message [lang::message::format $localized_message {} 1]
+    set expected_message "A text with an array variable foo in it"
+    aa_equals "embedded array variable" $subst_message $expected_message
 }
 
 aa_register_case \

@@ -16,17 +16,12 @@ ad_page_contract {
 set user_id [ad_maybe_redirect_for_registration]
 ad_require_permission $object_id admin
 
-#
 # RBM: Check if this is the Main Site and prevent the user from being
 #      able to remove Read permission on "The Public" and locking
 #      him/herself out.
 #
-
-set node_id [site_node::get_node_id_from_object_id -object_id $object_id]
-set ancestor [site_node::closest_ancestor_package -node_id $node_id]
 set extra_where_clause ""
-
-if {[empty_string_p $ancestor]} {
+if { [string equal $object_id [subsite::main_site_id]] } {
 	set extra_where_clause "AND grantee_id <> -1"
 }
 

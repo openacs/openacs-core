@@ -19,3 +19,6 @@
 
 <formtemplate id="user_create" style="standard-lars"></formtemplate>
 
+<p>
+You may use the <a href="user-batch-add">user bulk upload page</a> to add many users.
+</p>

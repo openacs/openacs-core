@@ -16,17 +16,9 @@
   </tr>
   <tr>
     <td>
-      <a href="@remote_install_url@">Install Application from Repository</a>
+      <a href="@remote_install_url@">Install from Repository</a>
     </td>
-    <td><a href="@local_install_url@">Install Application from Local</a></td>
-  </tr>
-  <tr>
-    <td>
-      <a href="@remote_service_install_url@">Install Service from Repository</a>
-    </td>
-    <td>
-      <a href="@local_service_install_url@">Install Service from Local</a>
-    </td>
+    <td><a href="@local_install_url@">Install from Local</a></td>
   </tr>
   <tr>
     <td>

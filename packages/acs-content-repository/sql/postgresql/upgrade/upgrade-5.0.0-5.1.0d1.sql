@@ -202,7 +202,7 @@ declare
 begin
   perform content_item__move(
         move__item_id,
-        move__targer_folder_id,
+        move__target_folder_id,
         move__name
         );
 return null;
@@ -550,6 +550,89 @@ begin
                 );
 end;' language 'plpgsql';
 
+create or replace function content_folder__move (integer,integer)
+returns integer as '
+declare
+  move__folder_id              alias for $1;  
+  move__target_folder_id       alias for $2;  
+begin
+
+  perform content_folder__move (
+                                move__folder_id,
+                                move__target_folder_id,
+                                NULL
+                               );
+  return null;
+end;' language 'plpgsql';
+
+create or replace function content_folder__move (integer,integer,varchar)
+returns integer as '
+declare
+  move__folder_id              alias for $1;  
+  move__target_folder_id       alias for $2;
+  move__name                   alias for $3;
+  v_source_folder_id           integer;       
+  v_valid_folders_p            integer;
+begin
+
+  select 
+    count(*)
+  into 
+    v_valid_folders_p
+  from 
+    cr_folders
+  where
+    folder_id = move__target_folder_id
+  or 
+    folder_id = move__folder_id;
+
+  if v_valid_folders_p != 2 then
+    raise EXCEPTION ''-20000: content_folder.move - Not valid folder(s)'';
+  end if;
+
+  if move__folder_id = content_item__get_root_folder(null) or
+    move__folder_id = content_template__get_root_folder() then
+    raise EXCEPTION ''-20000: content_folder.move - Cannot move root folder'';
+  end if;
+  
+  if move__target_folder_id = move__folder_id then
+    raise EXCEPTION ''-20000: content_folder.move - Cannot move a folder to itself'';
+  end if;
+
+  if content_folder__is_sub_folder(move__folder_id, move__target_folder_id) = ''t'' then
+    raise EXCEPTION ''-20000: content_folder.move - Destination folder is subfolder'';
+  end if;
+
+  if content_folder__is_registered(move__target_folder_id,''content_folder'',''f'') != ''t'' then
+    raise EXCEPTION ''-20000: content_folder.move - Destination folder does not allow subfolders'';
+  end if;
+
+  select parent_id into v_source_folder_id from cr_items 
+    where item_id = move__folder_id;
+
+   -- update the parent_id for the folder
+   update cr_items 
+     set parent_id = move__target_folder_id,
+         name = coalesce ( move_name, name )
+     where item_id = move__folder_id;
+
+  -- update the has_child_folders flags
+
+  -- update the source
+  update cr_folders set has_child_folders = ''f'' 
+    where folder_id = v_source_folder_id and not exists (
+      select 1 from cr_items 
+        where parent_id = v_source_folder_id 
+          and content_type = ''content_folder'');
+
+  -- update the destination
+  update cr_folders set has_child_folders = ''t''
+    where folder_id = move__target_folder_id;
+
+  return 0; 
+end;' language 'plpgsql';
+
+
 select define_function_args('content_extlink__new','name,url,label,description,parent_id,extlink_id,creation_date;now,creation_user,creation_ip');
 
 select define_function_args('content_folder__new','name,label,description,parent_id,context_id,folder_id,creation_date;now,creation_user,creation_ip,security_inherit_p');
@@ -791,7 +874,7 @@ begin
               from cr_items parent, 
                    cr_items child
              where child.item_id = v_rec.item_id
-             and   parent.item_id = chid.parent_id;
+             and   parent.item_id = child.parent_id;
 
             if p_id is null then 
 
@@ -833,3 +916,26 @@ execute procedure cr_items_tree_update_tr ();
 -- Don't know how to avoid this.
 update cr_items set parent_id = parent_id;
 
+
+-- OpenOffice MIME types
+
+insert into cr_mime_types (label,mime_type,file_extension) values ('OpenOffice Spreadsheet'   , 'application/vnd.sun.xml.calc', 'sxc');
+insert into cr_mime_types (label,mime_type,file_extension) values ('OpenOffice Spreadsheet Template', 'application/vnd.sun.xml.calc.template', 'stc');
+insert into cr_mime_types (label,mime_type,file_extension) values ('OpenOffice Draw', 'application/vnd.sun.xml.draw', 'sxd');
+insert into cr_mime_types (label,mime_type,file_extension) values ('OpenOffice Draw Template', 'application/vnd.sun.xml.draw.template', 'std');
+insert into cr_mime_types (label,mime_type,file_extension) values ('OpenOffice Impress', 'application/vnd.sun.xml.impress', 'sxi');
+insert into cr_mime_types (label,mime_type,file_extension) values ('OpenOffice Impress Template', 'application/vnd.sun.xml.impress.template', 'sti');
+insert into cr_mime_types (label,mime_type,file_extension) values ('OpenOffice Math', 'application/vnd.sun.xml.math', 'sxm');
+insert into cr_mime_types (label,mime_type,file_extension) values ('OpenOffice Writer', 'application/vnd.sun.xml.writer', 'sxw');
+insert into cr_mime_types (label,mime_type,file_extension) values ('OpenOffice Writer Global', 'application/vnd.sun.xml.writer.global', 'sxg');
+insert into cr_mime_types (label,mime_type,file_extension) values ('OpenOffice Writer Template', 'application/vnd.sun.xml.writer.template', 'stw');
+insert into cr_extension_mime_type_map (extension, mime_type) values ('sxc', 'application/vnd.sun.xml.calc');
+insert into cr_extension_mime_type_map (extension, mime_type) values ('stc', 'application/vnd.sun.xml.calc.template');
+insert into cr_extension_mime_type_map (extension, mime_type) values ('sxd', 'application/vnd.sun.xml.draw');
+insert into cr_extension_mime_type_map (extension, mime_type) values ('std', 'application/vnd.sun.xml.draw.template');
+insert into cr_extension_mime_type_map (extension, mime_type) values ('sxi', 'application/vnd.sun.xml.impress');
+insert into cr_extension_mime_type_map (extension, mime_type) values ('sti', 'application/vnd.sun.xml.impress.template');
+insert into cr_extension_mime_type_map (extension, mime_type) values ('sxm', 'application/vnd.sun.xml.math');
+insert into cr_extension_mime_type_map (extension, mime_type) values ('sxw', 'application/vnd.sun.xml.writer');
+insert into cr_extension_mime_type_map (extension, mime_type) values ('sxg', 'application/vnd.sun.xml.writer.global');
+insert into cr_extension_mime_type_map (extension, mime_type) values ('stw', 'application/vnd.sun.xml.writer.template');

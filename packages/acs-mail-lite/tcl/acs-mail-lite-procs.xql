@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
 <queryset>
 
-    <fullquery name="acs_mail_lite::bouncing_email_p.can_send_p">
+    <fullquery name="acs_mail_lite::bouncing_email_p.bouncing_p">
       <querytext>
 
-    	select case when email_bouncing_p = 't' then 0 else 1 end 
+    	select case when email_bouncing_p = 't' then 1 else 0 end 
 	as send_p 
       	from cc_users 
      	where lower(email) = lower(:email)
@@ -13,10 +13,10 @@
     </fullquery>
 
 
-    <fullquery name="acs_mail_lite::bouncing_user_p.can_send_p">
+    <fullquery name="acs_mail_lite::bouncing_user_p.bouncing_p">
       <querytext>
 
-    	select case when email_bouncing_p = 't' then 0 else 1 end 
+    	select case when email_bouncing_p = 't' then 1 else 0 end 
 	as send_p 
       	from cc_users 
      	where user_id = :user_id

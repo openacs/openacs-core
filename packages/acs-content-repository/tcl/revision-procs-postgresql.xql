@@ -4,7 +4,8 @@
 
 <fullquery name="cr_write_content.get_item_info">
       <querytext>
-          select i.storage_type, i.storage_area_key, r.mime_type, r.revision_id
+          select i.storage_type, i.storage_area_key, r.mime_type,
+          r.revision_id, r.content_length
           from cr_items i, cr_revisions r
           where r.revision_id = content_item__get_live_revision(:item_id) and i.item_id = r.item_id
       </querytext>
