@@ -154,7 +154,7 @@ Password:  %password%
 If you think you made a typo, please back up using your browser and
 try again.</msg>
   <msg key="lt_The_passwords_youve_e">The passwords you've entered don't match.</msg>
-  <msg key="lt_The_validation_didnt_">The validation didn't match what we had. Either press back on the browser and retype it in, or &lt;a href=\&quot;/register\&quot;&gt;go back to the login page&lt;/a&gt;.</msg>
+  <msg key="lt_The_validation_didnt_">The validation didn't match what we had. Either press back on the browser and retype it in, or &lt;a href=&quot;/register&quot;&gt;go back to the login page&lt;/a&gt;.</msg>
   <msg key="lt_Then_come_back_to_a_h">Then come back to &lt;a href=&quot;index?email=%email%&quot;&gt;the login page&lt;/a&gt; and use
   %system_name%.</msg>
   <msg key="lt_Then_you_should_eithe">Then you should either</msg>
