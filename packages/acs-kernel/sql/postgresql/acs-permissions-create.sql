@@ -541,6 +541,31 @@ select         op.object_id,
 
 -- show errors
 
+-- This table acts as a mutex for inserts/deletes from acs_permissions.
+-- This is used since postgresql's exception handing mechanism is non-
+-- existant.  A dup insert on acs_permissions will roll-back the 
+-- transaction and give an error, which is not what we want.  Using a 
+-- separate table for locking allows us exclusive access for 
+-- inserts/deletes, but does not block readers.  That way we don't 
+-- slow down permissions-checking which is known to have performance 
+-- problems already.
+
+-- (OpenACS - DanW)
+
+create table acs_permissions_lock (
+       lck  integer
+);
+
+create function acs_permissions_lock_tr () returns opaque as '
+begin
+        raise EXCEPTION ''FOR LOCKING ONLY, NO DML STATEMENTS ALLOWED'';
+        return null;
+end;' language 'plpgsql';
+
+create trigger acs_permissions_lock_tr 
+before insert or update or delete on acs_permissions_lock
+for each row execute procedure acs_permissions_lock_tr();
+
 -- create or replace package body acs_permission
 -- procedure grant_permission
 create function acs_permission__grant_permission (integer, integer, varchar)
@@ -549,18 +574,31 @@ declare
     grant_permission__object_id         alias for $1;
     grant_permission__grantee_id        alias for $2;
     grant_permission__privilege         alias for $3;
+    exists_p                            boolean;
 begin
-    insert into acs_permissions
-      (object_id, grantee_id, privilege)
-    values
-      (grant_permission__object_id, grant_permission__grantee_id, 
-       grant_permission__privilege);
+    lock table acs_permissions_lock;
 
-  -- FIXME: find out what this means?
-  -- exception
-  --  when dup_val_on_index then
-  --    return;
-  return 0; 
+    select count(*) > 0 into exists_p
+      from acs_permissions
+     where object_id = grant_permission__object_id
+       and grantee_id = grant_permission__grantee_id
+       and privilege = grant_permission__privilege;
+
+    if not exists_p then
+
+        insert into acs_permissions
+          (object_id, grantee_id, privilege)
+          values
+          (grant_permission__object_id, grant_permission__grantee_id, 
+          grant_permission__privilege);
+
+    end if;
+
+    -- exception
+    --  when dup_val_on_index then
+    --    return;
+
+    return 0; 
 end;' language 'plpgsql';
 
 
@@ -572,6 +610,8 @@ declare
     revoke_permission__grantee_id        alias for $2;
     revoke_permission__privilege         alias for $3;
 begin
+    lock table acs_permissions_lock;
+
     delete from acs_permissions
     where object_id = revoke_permission__object_id
     and grantee_id = revoke_permission__grantee_id
