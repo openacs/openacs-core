@@ -177,8 +177,8 @@ for directory in $DIRECTORIES
   # strip directory of slashes when using it in the backup file name
   FULLNAME=$BACKUPDIR/$DATE-$COMPUTER-${directory//\//-}-backup-$TYPE.tar.gz
   # to use bzip2 instead of gzip, change z to j in the tar flags
-  cd $NEWER
-  tar -zcpsh . --file $FULLNAME $directory
+  cd $directory
+  tar -zcpsh . --file $FULLNAME $NEWER
   $CHOWN $BACKUPUSER $FULLNAME
   $CHMOD 660 $FULLNAME
   if [[ -n $OTHERHOST ]]
