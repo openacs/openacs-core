@@ -1,6 +1,6 @@
 # tracks each file by interpreter to ensure that it is up-to-date
 
-proc watch_files {} {
+ad_proc -public watch_files {} {
   
   set files [list ats/paginator-procs.tcl ats/query-procs.tcl \
                   ats/debug-procs.tcl ats/filter-procs.tcl ats/util-procs.tcl]

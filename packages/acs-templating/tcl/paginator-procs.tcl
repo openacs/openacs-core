@@ -9,7 +9,7 @@
 # License.  Full text of the license is available from the GNU Project:
 # http://www.fsf.org/copyleft/gpl.html
 
-proc template::paginator { command args } {
+ad_proc -public template::paginator { command args } {
 
   eval paginator::$command $args
 }
@@ -35,7 +35,7 @@ proc template::paginator { command args } {
 #                     page number,, such as the first few
 #                     letters of a title or date.
 
-proc template::paginator::create { statement_name name query args } {
+ad_proc -public template::paginator::create { statement_name name query args } {
 
   set level [template::adp_level]
   variable parse_level
@@ -67,7 +67,7 @@ proc template::paginator::create { statement_name name query args } {
 
 # Initialize a paginated query.  Only called by create.
 
-proc template::paginator::init { statement_name result_name query } {
+ad_proc -public template::paginator::init { statement_name result_name query } {
 
   get_reference
 
@@ -127,7 +127,7 @@ proc template::paginator::init { statement_name result_name query } {
 
 # @return A number ranging from one to the number of pages in the query result.
 
-proc template::paginator::get_page { name rownum } {
+ad_proc -public template::paginator::get_page { name rownum } {
 
   get_reference
 
@@ -146,7 +146,7 @@ proc template::paginator::get_page { name rownum } {
 
 # @return A number ranging from one to the number of rows in the query result.
 
-proc template::paginator::get_row { name pagenum } {
+ad_proc -public template::paginator::get_row { name pagenum } {
 
   get_reference
 
@@ -164,7 +164,7 @@ proc template::paginator::get_row { name pagenum } {
 # @return A number ranging from one to the number of groups in the query 
 #         result, as determined by both the page size and the group size.
 
-proc template::paginator::get_group { name pagenum } {
+ad_proc -public template::paginator::get_group { name pagenum } {
 
   get_reference
 
@@ -185,7 +185,7 @@ proc template::paginator::get_group { name pagenum } {
 
 # @return A Tcl list of row identifiers.
 
-proc template::paginator::get_row_ids { name pagenum } {
+ad_proc -public template::paginator::get_row_ids { name pagenum } {
 
   get_reference
 
@@ -209,7 +209,7 @@ proc template::paginator::get_row_ids { name pagenum } {
 
 # @return A Tcl list of page numbers.
 
-proc template::paginator::get_pages { name group } {
+ad_proc -public template::paginator::get_pages { name group } {
 
   get_reference
 
@@ -250,7 +250,7 @@ proc template::paginator::get_pages { name group } {
 
 # @return A Tcl list of page numbers.
 
-proc template::paginator::get_groups { name group count } {
+ad_proc -public template::paginator::get_groups { name group count } {
 
   get_reference
 
@@ -296,7 +296,7 @@ proc template::paginator::get_groups { name group count } {
 # @param datasource  The name of the multirow datasource to create
 # @param pages       A Tcl list of page numbers.
 
-proc template::paginator::get_context { name datasource pages } {
+ad_proc -public template::paginator::get_context { name datasource pages } {
 
   get_reference
 
@@ -328,7 +328,7 @@ proc template::paginator::get_context { name datasource pages } {
 
 # @return A number representing the row count.
 
-proc template::paginator::get_row_count { name } {
+ad_proc -public template::paginator::get_row_count { name } {
 
   get_reference
 
@@ -343,7 +343,7 @@ proc template::paginator::get_row_count { name } {
 
 # @return A number representing the page count.
 
-proc template::paginator::get_page_count { name } {
+ad_proc -public template::paginator::get_page_count { name } {
 
   get_reference
 
@@ -358,7 +358,7 @@ proc template::paginator::get_page_count { name } {
 
 # @return A number represeting the group count.
 
-proc template::paginator::get_group_count { name } {
+ad_proc -public template::paginator::get_group_count { name } {
 
   get_reference
 
@@ -381,7 +381,7 @@ proc template::paginator::get_group_count { name } {
 # @param page        A page number representing the reference point from
 #                    which the display properties are calculated.
 
-proc template::paginator::get_display_info { name datasource page } {
+ad_proc -public template::paginator::get_display_info { name datasource page } {
 
   get_reference
   upvar 2 $datasource info
@@ -423,7 +423,7 @@ proc template::paginator::get_display_info { name datasource page } {
 # @param id_column  The name of the ID column in the display query (required
 #                   to order rows properly).
 
-proc template::paginator::get_data { statement_name name datasource query id_column page } {
+ad_proc -public template::paginator::get_data { statement_name name datasource query id_column page } {
 
   set ids [get_row_ids $name $page]
 
@@ -471,7 +471,7 @@ proc template::paginator::get_data { statement_name name datasource query id_col
 
 # Get a reference to the paginator properties (internal helper)
 
-proc template::paginator::get_reference {} {
+ad_proc -public template::paginator::get_reference {} {
   
   uplevel {
 

@@ -10,7 +10,7 @@
 # License.  Full text of the license is available from the GNU Project:
 # http://www.fsf.org/copyleft/gpl.html
 
-proc template::element { command form_id element_id args } {
+ad_proc -public template::element { command form_id element_id args } {
 
   eval template::element::$command $form_id $element_id $args
 }
@@ -56,7 +56,7 @@ proc template::element { command form_id element_id args } {
 #                   element.  If a default value is specified, the default
 #                   is used instead.
 
-proc template::element::create { form_id element_id args } {
+ad_proc -public template::element::create { form_id element_id args } {
 
   set level [template::adp_level]
 
@@ -127,7 +127,7 @@ proc template::element::create { form_id element_id args } {
 
 # @see create
 
-proc template::element::set_properties { form_id element_id args } {
+ad_proc -public template::element::set_properties { form_id element_id args } {
   get_reference
 
   # create a reference to opts as expected by get_opts
@@ -146,7 +146,7 @@ proc template::element::set_properties { form_id element_id args } {
 # @param element_id  The unique identifier of the element.
 # @param value       The value to apply
 
-proc template::element::set_value { form_id element_id value } {
+ad_proc -public template::element::set_value { form_id element_id value } {
 
   get_reference
 
@@ -165,7 +165,7 @@ proc template::element::set_value { form_id element_id value } {
 # @return The current value of the element.
 # @see get_values
 
-proc template::element::get_value { form_id element_id } {
+ad_proc -public template::element::get_value { form_id element_id } {
 
   get_reference
 
@@ -189,7 +189,7 @@ proc template::element::get_value { form_id element_id } {
 # @return A list of current values for the element.
 # @see get_value
 
-proc template::element::get_values { form_id element_id } {
+ad_proc -public template::element::get_values { form_id element_id } {
 
   get_reference
 
@@ -208,7 +208,7 @@ proc template::element::get_values { form_id element_id } {
 # @return The value of the property, or "" if the property does not exist
 # @see set_properties
 
-proc template::element::get_property { form_id element_id property } {
+ad_proc -public template::element::get_property { form_id element_id property } {
 
   get_reference
 
@@ -233,7 +233,7 @@ proc template::element::get_property { form_id element_id property } {
 # @param form_id     The identifier of the form containing the element.
 # @param element_id  The unique identifier of the element.
 
-proc template::element::validate { form_id element_id } {
+ad_proc -public template::element::validate { form_id element_id } {
 
   set level [template::adp_level]
 
@@ -365,7 +365,7 @@ proc template::element::validate { form_id element_id } {
 #                    template.
 # @param message     The text of the error message.
 
-proc template::element::set_error { form_id element_id message } {
+ad_proc -public template::element::set_error { form_id element_id message } {
 
   set level [template::adp_level]
 
@@ -378,7 +378,7 @@ proc template::element::set_error { form_id element_id message } {
 # Get all values for an element, performing any transformation defined
 # for the datatype.
 
-proc template::element::querygetall { element_ref } {
+ad_proc -public template::element::querygetall { element_ref } {
 
   upvar $element_ref element
 
@@ -409,7 +409,7 @@ proc template::element::querygetall { element_ref } {
 
 # @return 1 if the element exists in the form, or 0 otherwise
 
-proc template::element::exists { form_id element_id } {
+ad_proc -public template::element::exists { form_id element_id } {
 
   set level [template::adp_level]
 
@@ -424,7 +424,7 @@ proc template::element::exists { form_id element_id } {
 # element, and throws and error if the element does not exist.  Called
 # at the beginning of several of the element commands.
 
-proc template::element::get_reference {} {
+ad_proc -public template::element::get_reference {} {
 
   uplevel {
 
@@ -451,7 +451,7 @@ proc template::element::get_reference {} {
 # @return A string containing the HTML for an INPUT, SELECT or TEXTAREA
 #         form element.
 
-proc template::element::render { form_id element_id tag_attributes } {
+ad_proc -public template::element::render { form_id element_id tag_attributes } {
 
   get_reference
 
@@ -469,7 +469,7 @@ proc template::element::render { form_id element_id tag_attributes } {
 # @param element_id     The unique identifier of the element within the form.
 # @param tag_attributes Reserved for future use.
 
-proc template::element::render_help { form_id element_id tag_attributes } {
+ad_proc -public template::element::render_help { form_id element_id tag_attributes } {
 
   get_reference
 
@@ -487,7 +487,7 @@ proc template::element::render_help { form_id element_id tag_attributes } {
 #                       radio button or checkbox, such as JavaScript
 #                       handlers or special formatting.
 
-proc template::element::options { form_id element_id tag_attributes } {
+ad_proc -public template::element::options { form_id element_id tag_attributes } {
 
   get_reference
 
@@ -541,7 +541,7 @@ proc template::element::options { form_id element_id tag_attributes } {
 
 # define values from value, if the latter is more defined
 
-proc template::element::copy_value_to_values_if_defined {} {
+ad_proc -public template::element::copy_value_to_values_if_defined {} {
   upvar opts opts
   # values is always defined, init to "" from template::element::defaults
   if { [info exists opts(value)] && [llength $opts(values)] == 0 } {

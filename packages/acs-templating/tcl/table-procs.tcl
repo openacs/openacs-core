@@ -45,7 +45,7 @@
 
 # Create the widget data structure
 
-proc template::widget::table::create { statement_name name args } {
+ad_proc -public template::widget::table::create { statement_name name args } {
 
   upvar "tablewidget:${name}" widget
 
@@ -56,7 +56,7 @@ proc template::widget::table::create { statement_name name args } {
 }
 
 # Get the order by clause for the widget, other parameters (?)
-proc template::widget::table::get_params { name {level 1} } {
+ad_proc -public template::widget::table::get_params { name {level 1} } {
   
   upvar $level "tablewidget:${name}" widget
 
@@ -64,7 +64,7 @@ proc template::widget::table::get_params { name {level 1} } {
 }
 
 # Create the default column definition if none exists
-proc template::widget::table::default_column_def { name { level 2} } {
+ad_proc -public template::widget::table::default_column_def { name { level 2} } {
 
   upvar $level "tablewidget:${name}" widget
 
@@ -84,7 +84,7 @@ proc template::widget::table::default_column_def { name { level 2} } {
 }
 
 # Compose the query, if neccessary, and define the datasources
-proc template::widget::table::prepare { statement_name name {level 1} } {
+ad_proc -public template::widget::table::prepare { statement_name name {level 1} } {
   
   upvar $level "tablewidget:${name}" widget
  

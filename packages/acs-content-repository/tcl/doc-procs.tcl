@@ -7,7 +7,7 @@
 namespace eval doc {
 
 # Set up a data source with overall package info (overview, see also, etc.)
-    proc package_info { package_name info_ref } {
+    ad_proc -public package_info { package_name info_ref } {
         
         upvar $info_ref info
         
@@ -36,7 +36,7 @@ namespace eval doc {
 
   # Retreive the function header for a specific function
   # and parse out the javadoc comment
-  proc get_proc_header { proc_name package_name doc_ref code_ref { db "" } } {
+  ad_proc -public get_proc_header { proc_name package_name doc_ref code_ref { db "" } } {
 
     variable start_text;
     variable end_text;
@@ -64,7 +64,7 @@ namespace eval doc {
   # Prepare a multirow datasource for the param tags
   # Prepare a onerow datasource for all the other tags
  
-  proc parse_proc_header { doc_block code_block param_ref tags_ref code_ref {level 2}} {
+  ad_proc -public parse_proc_header { doc_block code_block param_ref tags_ref code_ref {level 2}} {
   
     upvar $level "${param_ref}:rowcount" param_rowcount   
     upvar $level $tags_ref tags
@@ -110,15 +110,15 @@ namespace eval doc {
 
   # Query the database and prepare the datasources
   # The user should call this procedure
-  proc get_proc_doc { proc_name package_name param_ref tags_ref code_ref args } {
+  ad_proc -public get_proc_doc { proc_name package_name param_ref tags_ref code_ref args } {
  
     upvar $tags_ref tags
 
     set opts(db) ""
     template::util::get_opts $args
 
-    get_proc_header $proc_name $package_name doc_block code_block $opts(db)
-    parse_proc_header $doc_block $code_block $param_ref $tags_ref $code_ref
+    doc::get_proc_header $proc_name $package_name doc_block code_block $opts(db)
+    doc::parse_proc_header $doc_block $code_block $param_ref $tags_ref $code_ref
 
     # Get the proc name
     if { [template::util::is_nil tags(name)] } {
@@ -150,7 +150,7 @@ namespace eval doc {
 
   # Return a list of all the packages in the data model, in form
   # { {label value} {label value} ... }
-  proc package_list { {db ""} } {
+  ad_proc -public package_list { {db ""} } {
 
     template::query get_packages result multilist "
       select distinct 
@@ -169,7 +169,7 @@ namespace eval doc {
 
   # Return a list of all the function creation headers in a package, in form
   # { value value ... }
-  proc func_list { package_name {db ""} } {
+  ad_proc -public func_list { package_name {db ""} } {
 
     template::query get_funcs result multilist "
       select distinct 
@@ -202,7 +202,7 @@ namespace eval doc {
 
   # Return a multirow datatsource for all the functions
   # { value value ... }
-  proc func_multirow { package_name result_ref {db ""} } {
+  ad_proc -public func_multirow { package_name result_ref {db ""} } {
 
     upvar "${result_ref}:rowcount" result_rowcount
     set result_rowcount 0

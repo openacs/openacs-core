@@ -11,7 +11,7 @@
 # License.  Full text of the license is available from the GNU Project:
 # http://www.fsf.org/copyleft/gpl.html
 
-proc template_tag_if_condition { chunk params condition_type } {
+ad_proc -public template_tag_if_condition { chunk params condition_type } {
 
   set condition "$condition_type \{"
 
@@ -63,7 +63,7 @@ proc template_tag_if_condition { chunk params condition_type } {
 # append all the tags together and then eval as a list to restore
 # quotes
 
-proc template_tag_if_concat_params { params } {
+ad_proc -public template_tag_if_concat_params { params } {
 
   set size [ns_set size $params]
 
@@ -78,7 +78,7 @@ proc template_tag_if_concat_params { params } {
 
 # Interpret an expression as part of the simplified IF syntax
 
-proc template_tag_if_interp_expr {} {
+ad_proc -public template_tag_if_interp_expr {} {
 
   upvar args args condition condition
 

@@ -189,7 +189,7 @@ ad_proc -private db_bind_var_substitution { sql { bind "" } } {
     return $lsql
 }
 
-ad_proc -private db_exec { type db statement_name pre_sql args } {
+ad_proc -private db_exec { type db statement_name pre_sql {ulevel 2} } {
 
     A helper procedure to execute a SQL statement, potentially binding
     depending on the value of the $bind variable in the calling environment
@@ -205,7 +205,7 @@ ad_proc -private db_exec { type db statement_name pre_sql args } {
 
     # insert tcl variable values (Openacs - Dan)
     if {![string equal $sql $pre_sql]} {
-        set sql [uplevel 2 [list subst -nobackslashes $sql]]
+        set sql [uplevel $ulevel [list subst -nobackslashes $sql]]
     }
 
     ns_log Notice "POST-QD: the SQL is $sql"
@@ -214,16 +214,16 @@ ad_proc -private db_exec { type db statement_name pre_sql args } {
 	upvar bind bind
 	if { [info exists bind] && [llength $bind] != 0 } {
 	    if { [llength $bind] == 1 } {
-		return [eval [list ns_pg_bind $type $db -bind $bind $sql] $args]
+		return [eval [list ns_pg_bind $type $db -bind $bind $sql]]
 	    } else {
 		set bind_vars [ns_set create]
 		foreach { name value } $bind {
 		    ns_set put $bind_vars $name $value
 		}
-		return [eval [list ns_pg_bind $type $db -bind $bind_vars $sql] $args]
+		return [eval [list ns_pg_bind $type $db -bind $bind_vars $sql]]
 	    }
 	} else {
-	    return [uplevel 2 [list ns_pg_bind $type $db $sql] $args]
+	    return [uplevel $ulevel [list ns_pg_bind $type $db $sql]]
 	}
     } error]
 
@@ -535,7 +535,7 @@ ad_proc db_source_sql_file { {-callback apm_ns_write_callback} file } {
     
     set file_name [file tail $file]
     cd [file dirname $file]
-    set fp [open "|[file join [db_get_pgbin] psql] [db_get_database] -f $file_name" "r"]
+    set fp [open "|[file join [db_get_pgbin] psql] -f $file_name [db_get_database]" "r"]
 
     while { [gets $fp line] >= 0 } {
 	# Don't bother writing out lines which are purely whitespace.

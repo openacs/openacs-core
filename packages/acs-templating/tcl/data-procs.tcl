@@ -9,12 +9,12 @@
 # License.  Full text of the license is available from the GNU Project:
 # http://www.fsf.org/copyleft/gpl.html
 
-proc template::data::validate { type value_ref message_ref } {
+ad_proc -public template::data::validate { type value_ref message_ref } {
 
   return [validate::$type $value_ref $message_ref]
 }
 
-proc template::data::validate::integer { value_ref message_ref } {
+ad_proc -public template::data::validate::integer { value_ref message_ref } {
 
   upvar 2 $message_ref message $value_ref value
 
@@ -27,13 +27,13 @@ proc template::data::validate::integer { value_ref message_ref } {
   return $result 
 }
 
-proc template::data::validate::text { value_ref message_ref } {
+ad_proc -public template::data::validate::text { value_ref message_ref } {
 
   # anything is valid for text
   return 1
 }
 
-proc template::data::validate::keyword { value_ref message_ref } {
+ad_proc -public template::data::validate::keyword { value_ref message_ref } {
 
   upvar 2 $message_ref message $value_ref value
 
@@ -46,7 +46,7 @@ proc template::data::validate::keyword { value_ref message_ref } {
   return $result 
 }
 
-proc template::data::validate::filename { value_ref message_ref } {
+ad_proc -public template::data::validate::filename { value_ref message_ref } {
 
   upvar 2 $message_ref message $value_ref value
 
@@ -59,7 +59,7 @@ proc template::data::validate::filename { value_ref message_ref } {
   return $result 
 }
 
-proc template::data::validate::url { value_ref message_ref } {
+ad_proc -public template::data::validate::url { value_ref message_ref } {
 
   upvar 2 $message_ref message $value_ref value
 
@@ -73,7 +73,7 @@ proc template::data::validate::url { value_ref message_ref } {
   return $result 
 }
 
-proc template::data::validate::date { value_ref message_ref } {
+ad_proc -public template::data::validate::date { value_ref message_ref } {
 
   upvar 2 $message_ref message $value_ref value
 
@@ -84,12 +84,12 @@ proc template::data::validate::date { value_ref message_ref } {
 # transformation to be applied correctly.  In reality, the transformation
 # should be on the element, not on the datatype.
 
-proc template::data::validate::search { value_ref message_ref } {
+ad_proc -public template::data::validate::search { value_ref message_ref } {
 
   return 1
 }
 
-proc template::data::validate::currency { value_ref message_ref } {
+ad_proc -public template::data::validate::currency { value_ref message_ref } {
 
     upvar 2 $message_ref message $value_ref value
 
@@ -118,7 +118,7 @@ proc template::data::validate::currency { value_ref message_ref } {
     }
 }    
 
-proc template::data::transform { type value_ref } {
+ad_proc -public template::data::transform { type value_ref } {
 
   set proc_name [info procs ::template::data::transform::$type]
 

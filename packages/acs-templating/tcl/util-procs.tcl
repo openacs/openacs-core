@@ -22,7 +22,7 @@ namespace eval template::query {}
 # Problem: there is currently no way to specify an option parameter that
 # begins with a dash.  This particularly problematic for negative numbers.
 
-proc template::util::get_opts { argv } {
+ad_proc -public template::util::get_opts { argv } {
 
   upvar opts opts
 
@@ -68,7 +68,7 @@ proc template::util::get_opts { argv } {
 
 # @return A list of option-value pairs suitable for appending to a command.
 
-proc template::util::list_opts { {array_ref opts} } {
+ad_proc -public template::util::list_opts { {array_ref opts} } {
  
   upvar $array_ref arr
 
@@ -89,7 +89,7 @@ proc template::util::list_opts { {array_ref opts} } {
 # @return 1 if the variable either not exist or is an empty string.  0 if
 #         the variable is either an array reference or a non-empty scalar.
 
-proc template::util::is_nil { ref } {
+ad_proc -public template::util::is_nil { ref } {
 
   upvar $ref var
 
@@ -116,7 +116,7 @@ proc template::util::is_nil { ref } {
 
 # @return 1 if the row exists, 0 if not
 
-proc template::util::is_unique { table columns values } {
+ad_proc -public template::util::is_unique { table columns values } {
 
   set query "select count(*) from $table where "
 
@@ -142,7 +142,7 @@ proc template::util::is_unique { table columns values } {
 
 # @return 0 if the variable can be interpreted as false; 1 for true if it can't.
 
-proc template::util::is_true { x } {
+ad_proc -public template::util::is_true { x } {
   expr [lsearch -exact {0 f false n no off ""} [string tolower $x]] == -1   
 }
 
@@ -154,7 +154,7 @@ proc template::util::is_true { x } {
 
 # @param ref The name of a list in the calling frame on which to operate.
 
-proc template::util::lpop { ref } {
+ad_proc -public template::util::lpop { ref } {
 
   upvar $ref the_list
 
@@ -169,7 +169,7 @@ proc template::util::lpop { ref } {
 #                traverse outward in the data structure.
 # @param args    Subsequent nodes to traverse.
 
-proc template::util::lnest { listref value next args } {
+ad_proc -public template::util::lnest { listref value next args } {
 
   upvar $listref inlist
   if { ! [info exists inlist] } {
@@ -236,7 +236,7 @@ proc template::util::lnest { listref value next args } {
 
 # @return A list in the form { key value key value key value ... }
 
-proc template::util::set_to_list { set args } {
+ad_proc -public template::util::set_to_list { set args } {
 
   set result [list]
 
@@ -258,7 +258,7 @@ proc template::util::set_to_list { set args } {
 # @param set  A reference to an ns_set.
 # @param args Any number of keys to declare as local variables.
 
-proc template::util::set_to_vars { set args } {
+ad_proc -public template::util::set_to_vars { set args } {
 
   if { [llength $args] == 0 } {
 
@@ -283,7 +283,7 @@ proc template::util::set_to_vars { set args } {
 
 # @param arrayname   The name of an array in the calling frame.
 
-proc template::util::array_to_vars { arrayname } {
+ad_proc -public template::util::array_to_vars { arrayname } {
 
   upvar $arrayname arr
 
@@ -299,7 +299,7 @@ proc template::util::array_to_vars { arrayname } {
 # @param arrayname   The name of an array in the calling frame.
 # @param args        Any number of local variables to include in the array
 
-proc template::util::vars_to_array { arrayname args } {
+ad_proc -public template::util::vars_to_array { arrayname args } {
 
   upvar $arrayname arr
 
@@ -320,7 +320,7 @@ proc template::util::vars_to_array { arrayname args } {
 #                  The length of this list should be the same as the values
 #                  list.
 
-proc template::util::list_to_array { values array_ref columns } {
+ad_proc -public template::util::list_to_array { values array_ref columns } {
 
   upvar $array_ref array
 
@@ -338,7 +338,7 @@ proc template::util::list_to_array { values array_ref columns } {
 # Converts a list of lists in the form { { key value } { key value } ... } 
 # to an array.
 
-proc template::util::list_of_lists_to_array { lists array_ref } {
+ad_proc -public template::util::list_of_lists_to_array { lists array_ref } {
 
   upvar $array_ref array
 
@@ -360,7 +360,7 @@ proc template::util::list_of_lists_to_array { lists array_ref } {
 # @param values    A list of values
 # @param array_ref The name of the array to create in the calling frame.
 
-proc template::util::list_to_lookup { values array_ref } {
+ad_proc -public template::util::list_to_lookup { values array_ref } {
   
   upvar $array_ref array
 
@@ -375,7 +375,7 @@ proc template::util::list_to_lookup { values array_ref } {
 # Return a representation of a multirow data source as a list,
 # suitable for passing by value in the form { { row } { row } { row } ... }
 
-proc template::util::multirow_to_list { name } {
+ad_proc -public template::util::multirow_to_list { name } {
 
   upvar $name:rowcount rowcount
 
@@ -390,7 +390,7 @@ proc template::util::multirow_to_list { name } {
   return $rows
 }
 
-proc template::util::list_to_multirow { name rows { level 1 } } {
+ad_proc -public template::util::list_to_multirow { name rows { level 1 } } {
 
   upvar $level $name:rowcount rowcount
   set rowcount [llength $rows]
@@ -416,7 +416,7 @@ proc template::util::list_to_multirow { name rows { level 1 } } {
 
 # @return A string with the contents of the file.
 
-proc template::util::read_file { path } {
+ad_proc -public template::util::read_file { path } {
 
   set fd [open $path]
   set text [read $fd]
@@ -432,7 +432,7 @@ proc template::util::read_file { path } {
 # @param path The absolute path to the file
 # @param text A string containing the text to write to the file.
 
-proc template::util::write_file { path text } {
+ad_proc -public template::util::write_file { path text } {
 
   file mkdir [file dirname $path]
 
@@ -445,7 +445,7 @@ proc template::util::write_file { path text } {
 
 # Resolve a URL into an absolute file path.
 
-proc template::util::url_to_file { url {reference_url ""} } {
+ad_proc -public template::util::url_to_file { url {reference_url ""} } {
 
   if { [string index $url 0] != "/" } {
 
@@ -463,7 +463,7 @@ proc template::util::url_to_file { url {reference_url ""} } {
 
 # Resolve the file name for a directory URL
 
-proc template::util::resolve_directory_url { url } {
+ad_proc -public template::util::resolve_directory_url { url } {
 
   set path [ns_info pageroot]$url
 
@@ -479,7 +479,7 @@ proc template::util::resolve_directory_url { url } {
 # Get the directory portion of a URL.  If the URL has a trailing
 # slash, then return the entire URL.
 
-proc template::util::get_url_directory { url } {
+ad_proc -public template::util::get_url_directory { url } {
 
   set directory $url
 
@@ -503,7 +503,7 @@ proc template::util::get_url_directory { url } {
 # Retrieve the value of a cookie and return it
 # Return the default if no such cookie exists
 
-proc template::util::get_cookie { name {default_value ""} } {
+ad_proc -public template::util::get_cookie { name {default_value ""} } {
 
   set headers [ns_conn headers]    
 
@@ -522,7 +522,7 @@ proc template::util::get_cookie { name {default_value ""} } {
 # may be persistent, session, or a number of minutes from the current
 # time.
 
-proc template::util::set_cookie { expire_state name value { domain "" } } {
+ad_proc -public template::util::set_cookie { expire_state name value { domain "" } } {
 
   if { [string match $domain {}] } { 
     set path "ns/server/[ns_info server]/module/nssock"
@@ -555,7 +555,7 @@ proc template::util::set_cookie { expire_state name value { domain "" } } {
 
 # Expires an existing cookie.
 
-proc template::util::clear_cookie { name { domain "" } } { 
+ad_proc -public template::util::clear_cookie { name { domain "" } } { 
 
   if { [string match $domain {}] } { 
     set path "ns/server/[ns_info server]/module/nssock"
@@ -568,7 +568,7 @@ proc template::util::clear_cookie { name { domain "" } } {
   ns_set put [ns_conn outputheaders] "Set-Cookie" $cookie
 } 
 
-proc template::util::quote_html { html } {
+ad_proc -public template::util::quote_html { html } {
 
   regsub -all \" [ns_quotehtml $html] \\&quot\; html
 
@@ -584,7 +584,7 @@ proc template::util::quote_html { html } {
 
 # @author simon
 
-proc template::util::multirow_quote_html {multirow_ref column_ref} {
+ad_proc -public template::util::multirow_quote_html {multirow_ref column_ref} {
     upvar $multirow_ref:rowcount rowcount
 
     for { set i 1 } { $i <= $rowcount } { incr i} {
@@ -609,7 +609,7 @@ proc template::util::multirow_quote_html {multirow_ref column_ref} {
 
 # @author simon
 
-proc template::util::multirow_foreach { name code_text } {
+ad_proc -public template::util::multirow_foreach { name code_text } {
   upvar $name:rowcount rowcount $name:columns columns i i
   upvar running_code running_code
 
@@ -642,7 +642,7 @@ proc template::util::multirow_foreach { name code_text } {
 # If section/key are present, read the parameter from the specified
 # section.key in the INI file, and cache them under the given name
 
-proc template::util::get_param { name {section {}} {key {}} } {
+ad_proc -public template::util::get_param { name {section {}} {key {}} } {
 
   if { ![nsv_exists __template_config $name] } {
 
@@ -676,7 +676,7 @@ proc template::util::get_param { name {section {}} {key {}} } {
 
 # Set a stored parameter
 
-proc template::util::set_param { name value } {
+ad_proc -public template::util::set_param { name value } {
   nsv_set __template_config $name $value
 }
 
@@ -684,7 +684,7 @@ proc template::util::set_param { name value } {
 
 # Analogous to SQL NVL
 
-proc template::util::nvl { value value_if_null } {
+ad_proc -public template::util::nvl { value value_if_null } {
   if { [template::util::is_nil value] } {
     return $value_if_null
   } else {
@@ -696,7 +696,7 @@ proc template::util::nvl { value value_if_null } {
 
 # Return a list of numbers, {1 2 3 ... n}
 
-proc template::util::number_list { last_number {start_at 0} } {
+ad_proc -public template::util::number_list { last_number {start_at 0} } {
   set ret [list]
   for {set i $start_at} { $i <= $ret } {incr i} {
     lappend ret $i
@@ -705,15 +705,15 @@ proc template::util::number_list { last_number {start_at 0} } {
 }
 
 
-proc pkg_root    key {return "/packages/$key"}
-proc pkg_widgets key {return "/packages/$key/widgets"}
+ad_proc -public pkg_root    key {return "/packages/$key"}
+ad_proc -public pkg_widgets key {return "/packages/$key/widgets"}
 
 # @public tcl_to_sql_list
 
 # Convert a TCL list to a SQL list, for use with the "in" statement
 # why doesn't this use ns_dbquotevalue?
 
-proc template::util::tcl_to_sql_list { lst } {
+ad_proc -public template::util::tcl_to_sql_list { lst } {
   if { [llength $lst] > 0 } {
     set sql "'"
     append sql [join $lst "', '"]
@@ -728,14 +728,14 @@ proc template::util::tcl_to_sql_list { lst } {
 
 # Get the template directory
 # The body is doublequoted, so it is interpreted when this file is read
-proc template::get_resource_path {} "
+ad_proc -public template::get_resource_path {} "
   return \"[file dir [file dir [info script]]]/resources\"
 "
 
 
 
 # return the variables and arrays of one frame as HTML
-proc stack_frame_values {level} {
+ad_proc -public stack_frame_values {level} {
   set varlist ""
   foreach i [if $level {
     uplevel \#$level {info locals}
@@ -766,7 +766,7 @@ proc stack_frame_values {level} {
 
 
 # return the whole call stack as HTML
-proc stack_dump {} {
+ad_proc -public stack_dump {} {
   append page "<h1>Tcl Call Trace</h1>
   <ul>"
   

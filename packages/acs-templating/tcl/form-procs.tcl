@@ -14,7 +14,7 @@
 
 # Commands for managing dynamic templated forms.
 
-proc template::form { command args } {
+ad_proc -public template::form { command args } {
 
   eval template::form::$command $args
 }
@@ -37,7 +37,7 @@ proc template::form { command args } {
 
 # @option elements A block of element specifications.
 
-proc template::form::create { id args } {
+ad_proc -public template::form::create { id args } {
 
   set level [template::adp_level]
 
@@ -89,7 +89,7 @@ proc template::form::create { id args } {
 
 # @return 1 if a form with the specified ID exists. 0 if it does not.
  
-proc template::form::exists { id } {
+ad_proc -public template::form::exists { id } {
 
   set level [template::adp_level]
   upvar #$level $id:elements elements 
@@ -108,7 +108,7 @@ proc template::form::exists { id } {
 
 # @return A string containing a template for the body of the form.
 
-proc template::form::template { id { style "" } } {
+ad_proc -public template::form::template { id { style "" } } {
 
   get_reference 
 
@@ -160,7 +160,7 @@ proc template::form::template { id { style "" } } {
 
 # @return A string containing the HTML for the body of the form.
 
-proc template::form::generate { id { style "" } } {
+ad_proc -public template::form::generate { id { style "" } } {
 
   set __adp_output [template $id $style]
   
@@ -195,7 +195,7 @@ proc template::form::generate { id { style "" } } {
 # @param id      The form identifier.
 # @param section The name of the current section.
 
-proc template::form::section { id section } {
+ad_proc -public template::form::section { id section } {
 
   get_reference
 
@@ -213,7 +213,7 @@ proc template::form::section { id section } {
 
 # @return A string containing the rendered tags.
 
-proc template::form::render { id tag_attributes } {
+ad_proc -public template::form::render { id tag_attributes } {
 
   get_reference
 
@@ -272,7 +272,7 @@ proc template::form::render { id tag_attributes } {
 
 # @param id               The form identifier
 
-proc template::form::check_elements { id } {
+ad_proc -public template::form::check_elements { id } {
 
   get_reference
 
@@ -315,7 +315,7 @@ proc template::form::check_elements { id } {
 
 # @return 1 if true or 0 if false
 
-proc template::form::is_request { id } {
+ad_proc -public template::form::is_request { id } {
 
   return [expr ! [is_submission $id]]
 }
@@ -331,7 +331,7 @@ proc template::form::is_request { id } {
 
 # @return 1 if true or 0 if false
 
-proc template::form::is_submission { id } {
+ad_proc -public template::form::is_submission { id } {
 
   set level [template::adp_level]
 
@@ -351,7 +351,7 @@ proc template::form::is_submission { id } {
 
 # @return 1 if true or 0 if false
 
-proc template::form::is_valid { id } {
+ad_proc -public template::form::is_valid { id } {
 
   set level [template::adp_level]
 
@@ -382,7 +382,7 @@ proc template::form::is_valid { id } {
 # @param args             A list of element identifiers. If the list is empty,
 #                         retreive all form elements
 
-proc template::form::get_values { id args } {
+ad_proc -public template::form::get_values { id args } {
 
   if { [llength $args] > 0 } {
     set elements $args
@@ -411,7 +411,7 @@ proc template::form::get_values { id args } {
 #                       "foo"
 # @param return         The combined list of values
 #
-proc template::form::get_combined_values { id args } {
+ad_proc -public template::form::get_combined_values { id args } {
 
   get_reference 
 
@@ -439,7 +439,7 @@ proc template::form::get_combined_values { id args } {
 # @param array_ref        The name of a local array variable whose
 #                         keys correspond to element identifiers in the form
 
-proc template::form::set_values { id array_ref } {
+ad_proc -public template::form::set_values { id array_ref } {
 
   upvar 2 $array_ref values
   
@@ -460,7 +460,7 @@ proc template::form::set_values { id array_ref } {
 # @return A string containing hidden input tags for inclusion in a
 # form.
 
-proc template::form::export {} {
+ad_proc -public template::form::export {} {
 
   set form [ns_getform]
   if { $form == "" } { return "" }
@@ -487,7 +487,7 @@ proc template::form::export {} {
 
 # @param id               The form identifier
 
-proc template::form::size { id } {
+ad_proc -public template::form::size { id } {
   template::form::get_reference
   return [llength $elements]
 }
@@ -497,7 +497,7 @@ proc template::form::size { id } {
 # Helper procedure used to access the basic data structures of a form object.
 # Called by several of the form commands.
 
-proc template::form::get_reference {} {
+ad_proc -public template::form::get_reference {} {
 
   uplevel {
     set level [template::adp_level]

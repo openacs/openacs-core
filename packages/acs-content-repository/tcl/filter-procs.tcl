@@ -22,7 +22,7 @@ variable revision_id
 # If the value resulting from the search does not start with a '/'
 # it is taken to be relative to [acs_root_dir]
 
-proc get_template_root {} {
+ad_proc -public get_template_root {} {
 
   # Look for package-defined root
   set package_id [ad_conn package_id]
@@ -48,21 +48,21 @@ proc get_template_root {} {
 
 # return true if the request has content associated with it
 
-proc has_content {} {
+ad_proc -public has_content {} {
 
   variable item_id
 
   return [info exists item_id]
 } 
 
-proc get_item_id {} {
+ad_proc -public get_item_id {} {
 
   variable item_id
 
   return $item_id
 } 
 
-proc get_content {} {
+ad_proc -public get_content {} {
  
   variable item_id
   variable revision_id
@@ -137,7 +137,7 @@ proc get_content {} {
 
 }
 
-proc get_template_url {} {
+ad_proc -public get_template_url {} {
 
   variable template_url
 
@@ -147,7 +147,7 @@ proc get_template_url {} {
 # Set a data source in the calling frame with folder URL and label
 # Useful for generating a context bar
 
-proc get_folder_labels { { varname "folders" } } {
+ad_proc -public get_folder_labels { { varname "folders" } } {
  
   variable item_id
 
@@ -189,7 +189,7 @@ proc get_folder_labels { { varname "folders" } } {
   }
 }
 
-proc init { urlvar rootvar {content_root ""} {template_root ""} {context "public"}} {
+ad_proc -public init { urlvar rootvar {content_root ""} {template_root ""} {context "public"}} {
 
   upvar $urlvar url $rootvar root_path
 
@@ -271,7 +271,7 @@ proc init { urlvar rootvar {content_root ""} {template_root ""} {context "public
 
 # render the template and write it to the file system
 
-proc deploy { url_stub } {
+ad_proc -public deploy { url_stub } {
   
   set output_path [ns_info pageroot]$url_stub
 

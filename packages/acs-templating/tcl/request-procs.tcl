@@ -19,7 +19,7 @@
 
 # @see form element
 
-proc template::request { command args } {
+ad_proc -public template::request { command args } {
   eval request::$command $args
 }
 
@@ -32,7 +32,7 @@ proc template::request { command args } {
 #                Equivalent to calling set_param for each parameter, but
 #                requiring slightly less typing.
 
-proc template::request::create { args } {
+ad_proc -public template::request::create { args } {
 
   eval template::form::create request $args
 
@@ -84,7 +84,7 @@ proc template::request::create { args } {
 
 # @see element::create
 
-proc template::request::set_param { name args } {
+ad_proc -public template::request::set_param { name args } {
 
   set level [template::adp_level]
   eval template::element::create request $name $args
@@ -108,7 +108,7 @@ proc template::request::set_param { name args } {
 
 # @return The value of the specified parameter.
 
-proc template::request::get_param { name } {
+ad_proc -public template::request::get_param { name } {
 
   set level [template::adp_level]
   upvar #$level request:$name param
@@ -137,7 +137,7 @@ proc template::request::get_param { name } {
 #             be used for layout purposes.
 # @param msg  The message text associated with the condition.
 
-proc template::request::error { args } {
+ad_proc -public template::request::error { args } {
 
   set level [template::adp_level]
   upvar #$level request:error requesterror
@@ -161,7 +161,7 @@ proc template::request::error { args } {
 
 # @return 1 if no error conditions exist, 0 otherwise.
 
-proc template::request::is_valid { { url "" } } {
+ad_proc -public template::request::is_valid { { url "" } } {
 
   set level [template::adp_level]
   upvar #$level request:error requesterror
