@@ -401,8 +401,7 @@
         calender entries, and notes) is stored in the database.
         OpenACS seperates the database with an abstraction layer,
         which means that several different databases all function
-        identically.  Currently OpenACS supports PostgreSQL 7.2 and
-        Oracle 8.1.7.  While you can run the core OpenACS on any
+        identically.  While you can run the core OpenACS on any
         supported database, not all contributed packages support all
         databases.</para>
           </formalpara>
