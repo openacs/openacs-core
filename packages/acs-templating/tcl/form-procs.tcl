@@ -366,6 +366,11 @@ ad_proc -private template::form::template { id { style "" } } {
 
   set file_stub [template::get_resource_path]/forms/$style
 
+  if { ![file exists "${file_stub}.adp"] } {
+      # We always have a template named 'standard'
+      set file_stub "[template::get_resource_path]/forms/standard"
+  }
+
   # set the asset url for images
   set assets "[template::get_resource_path]/assets"
   # assume resources are under page root (not safe)
@@ -397,12 +402,7 @@ ad_proc -private template::form::generate { id { style "" } } {
 
     @return A string containing the HTML for the body of the form.
 } {
-  if { [catch {
-      set __adp_output [template $id $style]
-  }] } {
-      set style "standard"
-      set __adp_output [template $id $style]
-  }
+  set __adp_output [template $id $style]
   
   set level [template::adp_level]
 
