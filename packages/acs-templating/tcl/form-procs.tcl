@@ -297,7 +297,12 @@ ad_proc -private template::form::template { id { style "" } } {
       set "buttons:${buttons:rowcount}(name)" "formbutton:$name"
   }
   
-  if { [string equal $style {}] } { set style standard }
+  if { [string equal $style {}] } { 
+      set style [parameter::get \
+                     -package_id [apm_package_id_from_key "acs-templating"] \
+                     -parameter DefaultFormStyle \
+                     -default "standard"]
+  }
   set file_stub [template::get_resource_path]/forms/$style
 
   # set the asset url for images
