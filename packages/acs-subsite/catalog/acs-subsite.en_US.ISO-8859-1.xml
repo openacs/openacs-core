@@ -27,12 +27,14 @@
   <msg key="email_password">&quot;email password&quot;</msg>
   <msg key="Error_sending_mail">Error sending mail</msg>
   <msg key="Feature_disabled">Feature disabled</msg>
+  <msg key="First_names">First names</msg>
   <msg key="Full_Name">Full Name:</msg>
   <msg key="Grant">Grant</msg>
   <msg key="Grant_Permission">Grant Permission</msg>
   <msg key="help">help</msg>
   <msg key="in">in</msg>
   <msg key="Join_group_name">Join %group_name%</msg>
+  <msg key="Last_name">Last name</msg>
   <msg key="Log_In">Log In</msg>
   <msg key="Log_Out">Log Out</msg>
   <msg key="Login">Login</msg>
@@ -220,6 +222,7 @@ approved, you'll get an email message and you can return to
   <msg key="Update_Password">Update Password</msg>
   <msg key="upload_a_portrait">upload a portrait</msg>
   <msg key="User_Creation_Failed">User Creation Failed</msg>
+  <msg key="Username">Username</msg>
   <msg key="Welcome_Back">Welcome Back</msg>
   <msg key="Welcome_Back_1">Your account is currently marked &quot;deleted&quot;. If you wish, we
 can</msg>
