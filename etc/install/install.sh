@@ -13,6 +13,7 @@
 
 # DEBUG: If any command fails - exit
 set -e
+set -x
 
 # Set the script directory to the current dir for convenience
 script_path=$(dirname $(which $0))
@@ -41,8 +42,7 @@ source functions.sh
 config_val_next=0
 server_next=0
 export config_file="config.tcl"
-export server="service0"
-
+server_overridden="no"
 for arg in "$@"
   do
   if [ $config_val_next == "1" ]; then
@@ -50,8 +50,10 @@ for arg in "$@"
       config_val_next=0
   fi
   if [ $server_next == "1" ]; then
+      # Overrides server setting in config file
       export server=$arg
       server_next=0
+      server_overridden="yes"
   fi
   if [ $arg == "--config-file" ]; then
       config_val_next=1
@@ -60,6 +62,15 @@ for arg in "$@"
       server_next=1
   fi
 done
+
+# Create a config file with overridden server name if it was
+# provided on the command line
+if parameter_true "$server_overridden"; then
+    echo "$0: Overriding config server setting with $server"
+    create_override_config_file $server $config_file
+else
+    export source_config_file=$config_file
+fi
 
 usage="$0 [OPTIONS]
     --server      Server name.  Overrides config file.
@@ -90,11 +101,6 @@ database=`get_config_param database`
 interactive="no"
 do_install="yes"
 server=`get_config_param server`
-
-# command-line settings override config file settings
-if [ -n $command_line_server ]; then
-    export server="$command_line_server"
-fi
 
 while [ -n "$1" ] ; do
    case "$1" in
@@ -212,7 +218,7 @@ else
     #Oracle
     # Need to su to login shell for sqlplus to be in path. Should maybe make ORA_HOME
     # a config param instead.
-    su - oracle -c "cd $script_path; config_file=$config_file ./oracle/recreate-user.sh";
+    su - oracle -c "cd $script_path; config_file=$source_config_file ./oracle/recreate-user.sh";
 fi
 
 # Check out new files
@@ -239,7 +245,7 @@ if [ $do_checkout == "yes" ]; then
     fi
 	
     echo "$0: Checking out OpenACS at $(date)"
-    config_file=$config_file dotlrn=$dotlrn ./checkout.sh
+    config_file=$source_config_file dotlrn=$dotlrn ./checkout.sh
 
     # The post_checkout script can copy back any files (AOLServer config files,
     # log files etc.) under the new source tree, and apply any patches
@@ -293,7 +299,7 @@ if parameter_true $do_install; then
 
   # Install OpenACS
   echo "$0: Starting installation of OpenACS at $(date)"
-  ${tclwebtest_dir}/tclwebtest -config_file $config_file openacs-install.test
+  ${tclwebtest_dir}/tclwebtest -config_file $source_config_file openacs-install.test
   
   # Restart the server
   echo "$0: Restarting server at $(date)"
@@ -315,17 +321,17 @@ if parameter_true $do_install; then
   if parameter_true "$dotlrn_demo_data"; then
       # Do .LRN demo data setup
       echo "$0: Starting basic setup of .LRN at $(date)"
-      ${tclwebtest_dir}/tclwebtest -config_file $config_file dotlrn-basic-setup.test
+      ${tclwebtest_dir}/tclwebtest -config_file $source_config_file dotlrn-basic-setup.test
   fi
       
   if parameter_true $crawl_links; then
       # Search for broken pages
       echo "$0: Starting to crawl links to search for broken pages at $(date)"
-      ${tclwebtest_dir}/tclwebtest -config_file $config_file dotlrn-links-check.test
+      ${tclwebtest_dir}/tclwebtest -config_file $source_config_file dotlrn-links-check.test
   fi
 
   # Run the Tcl API tests
-  ${tclwebtest_dir}/tclwebtest -config_file $config_file tcl-api-test.test
+  ${tclwebtest_dir}/tclwebtest -config_file $source_config_file tcl-api-test.test
 
   if [ $database == "postgres" ]; then
       # Run vacuum analyze
