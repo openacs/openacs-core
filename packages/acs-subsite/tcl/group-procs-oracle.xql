@@ -27,7 +27,7 @@
       </querytext>
 </fullquery>
 
-<fullquery name="member_p.user_is_member">      
+<fullquery name="group::member_p.user_is_member">      
       <querytext>
 	  select acs_group.member_p(:user_id,:group_id, :cascade) from dual
       </querytext>
