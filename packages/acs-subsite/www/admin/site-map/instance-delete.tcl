@@ -38,5 +38,5 @@ db_transaction {
     }
 }
 	
-ad_returnredirect unmounted.tcl
+ad_returnredirect unmounted
 	
