@@ -19,6 +19,7 @@ locale-specific formatting functions.
 
         <provides url="acs-lang" version="5.0d3"/>
         <requires url="acs-kernel" version="5.0d2"/>
+        <requires url="ref-timezones" version="4.0"/>
 
         <callbacks>
         </callbacks>
