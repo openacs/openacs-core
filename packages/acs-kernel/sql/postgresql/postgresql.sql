@@ -603,3 +603,46 @@ begin
   return 1;
 end;' language 'plpgsql';
 
+-- Returns an english-language description of the trigger type.  Used by the
+-- schema browser
+
+create function trigger_type (integer) returns varchar as '
+declare
+  tgtype            alias for $1;
+  description       varchar;
+  sep               varchar;
+begin
+
+ if tgtype & 2 then
+    description := ''BEFORE '';
+ else 
+    description := ''AFTER '';
+ end if;
+
+ sep := '''';
+
+ if tgtype & 4 then
+    description := description || ''INSERT '';
+    sep := ''OR '';
+ end if;
+
+ if tgtype & 8 then
+    description := description || sep || ''DELETE '';
+    sep := ''OR '';
+ end if;
+
+ if tgtype & 16 then
+    description := description || sep || ''UPDATE '';
+    sep := ''OR '';
+ end if;
+
+ if tgtype & 1 then
+    description := description || ''FOR EACH ROW'';
+ else
+    description := description || ''STATEMENT'';
+ end if;
+
+ return description;
+
+end;' language 'plpgsql';
+
