@@ -35,7 +35,8 @@ ad_proc -public ds_require_permission {
   object_id
   privilege
 } {
-    if {![permission::permission_p -party_id [ds_ad_conn user_id] -object_id $object_id -privilege $privilege]} {
+    set user_id [ds_ad_conn user_id]
+    if {![permission::permission_p -party_id $user_id -object_id $object_id -privilege $privilege]} {
     if {$user_id == 0} {
       ad_maybe_redirect_for_registration
     } else {
