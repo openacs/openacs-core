@@ -327,6 +327,10 @@ proc install_redefine_ad_conn {} {
     # Peter Marklund
     # We need to be able to invoke ad_conn in the installer. However
     # We cannot use the rp_filter that sets up ad_conn
+
+    # JCD: don't redefine ad_conn, just reset it and populate some things
+    ad_conn -reset
+
     ad_conn -set connected_p 1
     ad_conn -set user_id {}
     ad_conn -set node_id {}
