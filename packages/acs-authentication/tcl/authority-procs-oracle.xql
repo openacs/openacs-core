@@ -8,7 +8,6 @@
             begin
             :1 := authority.new(
                 authority_id => :authority_id,
-                null, -- object_type
                 short_name => :short_name,
                 pretty_name => :pretty_name,
                 enabled_p => :enabled_p,
@@ -32,7 +31,7 @@
         <querytext>
             begin
                 :1 := authority.del(
-                    authority_id => :authority_id
+                    delete_authority_id => :authority_id
                 );
             end;
         </querytext>
