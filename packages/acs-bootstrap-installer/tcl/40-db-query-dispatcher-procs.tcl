@@ -362,6 +362,12 @@ proc db_fullquery_compatible_p {fullquery {rdbms {}}} {
 #
 # The file_tag parameter is for later flushing of a series
 # of queries when a particular query file has been changed.
+#
+# DRB: it is now used to track the mtime of the query file when loaded,
+# used by the APM to determine when a package should be reloaded.  This
+# code depends on the file tag parameter being set to the actual file path
+# to the query file.
+
 proc db_qd_internal_load_queries {file_pointer file_tag} {
     # While there are surely efficient ways of loading large files,
     # we're going to assume smaller files for now. Plus, this doesn't happen
@@ -421,6 +427,10 @@ proc db_qd_internal_load_queries {file_pointer file_tag} {
 	# Store the query
 	db_qd_internal_store_cache $one_query
     }
+
+    set relative_path [string range $file_tag \
+        [expr { [string length [acs_root_dir]] + 1 }] end]
+    nsv_set apm_library_mtime $relative_path [file mtime $file_tag]
 }
 
 
@@ -442,9 +452,6 @@ proc db_qd_internal_get_cache {fullquery_name} {
 
     # See if we have the correct location for this query
     ns_log Notice "QD= query $fullquery_name from [db_fullquery_get_load_location $fullquery_array]"
-
-    # Let's reload this query file for now (ben)
-    db_qd_load_query_file [db_fullquery_get_load_location $fullquery_array]
 
     # reload the fullquery
     set fullquery_array [nsv_get OACS_FULLQUERIES $fullquery_name]
