@@ -90,7 +90,7 @@
             <file type="query_file" path="tcl/object-type-procs.xql"/>
             <file type="tcl_procs" path="tcl/openacs-kernel-procs.tcl"/>
             <file type="query_file" db_type="oracle" path="tcl/parameter-procs-oracle.xql"/>
-            <file type="query_file" path="tcl/parameter-procs-postrgesql.xql"/>
+            <file type="query_file" db_type="postgresql" path="tcl/parameter-procs-postgresql.xql"/>
             <file type="tcl_procs" path="tcl/parameter-procs.tcl"/>
             <file type="tcl_init" path="tcl/request-processor-init.tcl"/>
             <file type="query_file" path="tcl/request-processor-init.xql"/>
