@@ -9,6 +9,7 @@
 -- This is free software distributed under the terms of the GNU Public
 -- License.  Full text of the license is available from the GNU Project:
 -- http://www.fsf.org/copyleft/gpl.html
+set serveroutput on size 1000000 format wrapped
 
 create or replace package body content_item
 as
