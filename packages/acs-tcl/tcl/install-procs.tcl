@@ -383,13 +383,15 @@ ad_proc -public install::xml::action::create-user { node } {
         -url $url \
         -secret_question $secret_question \
         -secret_answer $secret_answer \
-        -email_verified_p 1]
+        -email_verified_p 1 \
+        -nologin \
+        ]
 
     if {[string equal $result(creation_status) "ok"] &&
         ![string equal $id ""]} {
         set ::install::xml::ids($id) $result(user_id)
     }
-  
+
     return [list $result(creation_message)]
 }
 
