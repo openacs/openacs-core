@@ -249,6 +249,17 @@ ad_proc -public template::util::date::get_property { what date } {
       }
       return $ret
     }
+    linear_date_no_time {
+      # Return a date in format "YYYY MM DD"
+      set clipped_date [lrange $date 0 2]
+      set ret [list]
+      set pad "0000"
+      foreach fragment $clipped_date {
+        lappend ret "[string range $pad [string length $fragment] end]$fragment"
+        set pad "00"
+      }
+      return $ret
+    }
     display_date {
 
       # Return a beautified date.  It should use the widget format string but DRB
