@@ -73,7 +73,7 @@ ad_proc lang::util::message_tag_regexp {} {
 
     @author Peter marklund (peter@collaboraid.biz)
 } {
-    return {(<#\s*?([-a-zA-Z0-9_:\.]+)\s+(.+?)#>)}
+    return {(<#\s*?([-a-zA-Z0-9_:\.]+)\s+(.+?)\s*?#>)}
 }
 
 ad_proc lang::util::get_temporary_tags_indices { adp_file_string } {

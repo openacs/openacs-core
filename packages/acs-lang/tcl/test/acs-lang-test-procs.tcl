@@ -508,7 +508,7 @@ aa_register_case \
     set new_key_3 "key_1"
     set new_text_3 "$messages_array(key_1)"
     puts $tcl_file_id "# The following key should be auto-generated and inserted
-    # <#${new_key_1} ${new_text_1}#>
+    # <#  ${new_key_1} ${new_text_1} #>
     #
     # The following key should be made unique and inserted
     # <#${new_key_2} ${new_text_2}#>
