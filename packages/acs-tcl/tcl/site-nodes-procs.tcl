@@ -229,14 +229,21 @@ ad_proc -public site_node_create_package_instance {
     Creates a new instance of the specified package and flushes the
     in-memory site map (if sync_p is t).
 
+    DRB: I've modified this so it doesn't call the package's post instantiation proc until
+    after the site node map is updated.   Delaying the call in this way allows the package to
+    find itself in the map.   The code that mounts a subsite, in particular, needs to be able
+    to do this so it can find the nearest parent node that defines an application group (the
+    code in aD ACS 4.2 was flat-out broken). 
+
     @author Michael Bryzek (mbryzek@arsdigita.com)
     @creation-date 2001-02-05
 
     @return The package_id of the newly mounted package 
-
 } {
-    # Instantiate the package
-    set package_id [apm_package_instance_new $instance_name $context_id $package_key]
+
+    # Create  the package.
+
+    set package_id [apm_package_create_instance $instance_name $context_id $package_key]
 
     # Update the site map
     db_dml update_site_nodes {
@@ -249,6 +256,8 @@ ad_proc -public site_node_create_package_instance {
     if { [string eq $sync_p "t"] } {
 	site_nodes_sync
     }
+
+    apm_package_call_post_instantiation_proc $package_id $package_key
 
     return $package_id
 

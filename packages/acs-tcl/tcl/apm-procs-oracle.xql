@@ -140,9 +140,8 @@
     
       </querytext>
 </fullquery>
-
  
-<fullquery name="apm_package_instance_new.apm_package_instance_new">      
+<fullquery name="apm_package_create_instance.apm_package_instance_new">      
       <querytext>
       
 	begin

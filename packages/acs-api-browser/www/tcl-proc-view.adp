@@ -7,7 +7,13 @@
 
 <hr>
 
-Sorry, no Tcl API procedures were found with that name.<p>
+Sorry, no Tcl API procedures were found with that name.
+
+<p>
+
+You can try searching the <a href="@tcl_api_root@">AOLserver documentation</a> yourself.
+
+<p>
 
 <table cellpadding=5>
   <tr>
