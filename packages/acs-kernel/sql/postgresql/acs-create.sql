@@ -214,34 +214,41 @@ drop function inline_0 ();
 
 -- show errors
 
-create function inline_1 ()
-returns integer as '
-begin
+begin;
+
  --------------------------------------------------------------
  -- Some privilege that will be fundamental to all objects. --
  --------------------------------------------------------------
 
- PERFORM acs_privilege__create_privilege(''read'', null, null);
- PERFORM acs_privilege__create_privilege(''write'', null, null);
- PERFORM acs_privilege__create_privilege(''create'', null, null);
- PERFORM acs_privilege__create_privilege(''delete'', null, null);
- PERFORM acs_privilege__create_privilege(''admin'', null, null);
+ select acs_privilege__create_privilege('read', null, null);
+ select acs_privilege__create_privilege('write', null, null);
+ select acs_privilege__create_privilege('create', null, null);
+ select acs_privilege__create_privilege('delete', null, null);
+ select acs_privilege__create_privilege('admin', null, null);
 
  ---------------------------------------------------------
  -- Administrators can read, write, create, and delete. -- 
  ---------------------------------------------------------
 
- PERFORM acs_privilege__add_child(''admin'', ''read'');
- PERFORM acs_privilege__add_child(''admin'', ''write'');
- PERFORM acs_privilege__add_child(''admin'', ''create'');
- PERFORM acs_privilege__add_child(''admin'', ''delete'');
+ -- temporarily drop this trigger to avoid a data-change violation 
+ -- on acs_privilege_hierarchy_index while updating the child privileges.
 
- return 0;
-end;' language 'plpgsql';
+ drop trigger acs_priv_hier_ins_del_tr on acs_privilege_hierarchy;
 
-select inline_1 ();
+ select acs_privilege__add_child('admin', 'read');
+ select acs_privilege__add_child('admin', 'write');
+ select acs_privilege__add_child('admin', 'create');
 
-drop function inline_1 ();
+ -- re-enable the trigger before the last insert to force the 
+ -- acs_privilege_hierarchy_index table to be updated.
+
+ create trigger acs_priv_hier_ins_del_tr after insert or delete
+ on acs_privilege_hierarchy for each row
+ execute procedure acs_priv_hier_ins_del_tr ();
+
+ select acs_privilege__add_child('admin', 'delete');
+
+end;
 
 
 -- show errors

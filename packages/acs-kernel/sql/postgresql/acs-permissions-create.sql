@@ -89,8 +89,8 @@ acs_privilege_hierarchy_index (tree_sortkey);
 --           connect by prior privilege = child_privilege
 --           start with child_privilege = 'cm_perm'
 
--- This query is finding all of the ancestor permissions of 'cm_perm'. The
--- equivalent query for the postgresql tree-query model would be:
+-- This query is used to find all of the ancestor permissions of 'cm_perm'. 
+-- The equivalent query for the postgresql tree-query model would be:
 
 -- select  h2.privilege 
 --   from acs_privilege_hierarchy_index h1, 
@@ -99,69 +99,20 @@ acs_privilege_hierarchy_index (tree_sortkey);
 --    and h1.tree_sortkey like (h2.tree_sortkey || '%')
 --    and h2.tree_sortkey < h1.tree_sortkey;
 
+-- Also since acs_privilege_descendant_map is simply a path enumeration of
+-- acs_privilege_hierarchy, we should be able to replace the above connect-by
+-- with: 
 
-create function priv_recurse_subtree(varchar, varchar, varchar) 
-returns integer as '
-declare
-        nkey            alias for $1;
-        priv            alias for $2;
-        child_priv      alias for $3;
-        new_key         varchar;
-        v_rec           record;
-begin
+-- select privilege 
+-- from acs_privilege_descendant_map 
+-- where descendant = 'cm_perm'
 
-        -- now iterate over all of the children of the 
-        -- previous node.
-        
-        for v_rec in select privilege, child_privilege
-                       from acs_privilege_hierarchy
-                      where privilege = child_priv
+-- This would be better, since the same query could be used for both oracle
+-- and postgresql.
 
-        LOOP
-
-            -- calculate the next key for this level and parent
-
-            select tree_next_key(max(tree_sortkey)) into new_key
-              from acs_privilege_hierarchy_index
-             where tree_sortkey like nkey || ''/%''
-               and tree_sortkey not like  nkey || ''/%/%'';
-
-            new_key := nkey || ''/'' || new_key;
-
-            -- insert the new child node.
-
-            insert into acs_privilege_hierarchy_index
-                        (privilege, child_privilege, tree_sortkey)
-                        values
-                        (v_rec.privilege, v_rec.child_privilege, new_key);
-
-            -- keep recursing down until no more children are found
-
-            PERFORM priv_recurse_subtree(new_key, 
-                                         v_rec.privilege, 
-                                         v_rec.child_privilege);
-        end LOOP;
-
-        -- no children found, so insert the child node as its own separate 
-        -- node.
-
-        if NOT FOUND then
-           insert into acs_privilege_hierarchy_index
-                       (privilege, child_privilege, tree_sortkey)
-                       values 
-                       (child_priv, child_priv, nkey || ''/00'');
-        end if;
-
-        return null;
-
-end;' language 'plpgsql';
-
-drop function acs_priv_hier_ins_del_tr ();
 create function acs_priv_hier_ins_del_tr () returns opaque as '
 declare
         new_key         varchar;
-        child_exists_p  boolean;
-        parent_exists_p boolean;
         deleted_p       boolean;
         v_rec           record;
 begin
@@ -222,6 +173,62 @@ end;' language 'plpgsql';
 create trigger acs_priv_hier_ins_del_tr after insert or delete
 on acs_privilege_hierarchy for each row
 execute procedure acs_priv_hier_ins_del_tr ();
+
+create function priv_recurse_subtree(varchar, varchar, varchar) 
+returns integer as '
+declare
+        nkey            alias for $1;
+        priv            alias for $2;
+        child_priv      alias for $3;
+        new_key         varchar;
+        v_rec           record;
+begin
+
+        -- now iterate over all of the children of the parent of the 
+        -- previous node.
+        
+        for v_rec in select privilege, child_privilege
+                       from acs_privilege_hierarchy
+                      where privilege = child_priv
+
+        LOOP
+
+            -- calculate the next key for this level and parent
+
+            select tree_next_key(max(tree_sortkey)) into new_key
+              from acs_privilege_hierarchy_index
+             where tree_sortkey like nkey || ''/%''
+               and tree_sortkey not like  nkey || ''/%/%'';
+
+            new_key := nkey || ''/'' || new_key;
+
+            -- insert the new child node.
+
+            insert into acs_privilege_hierarchy_index
+                        (privilege, child_privilege, tree_sortkey)
+                        values
+                        (v_rec.privilege, v_rec.child_privilege, new_key);
+
+            -- keep recursing down until no more children are found
+
+            PERFORM priv_recurse_subtree(new_key, 
+                                         v_rec.privilege, 
+                                         v_rec.child_privilege);
+        end LOOP;
+
+        -- no children found, so insert the child node as its own separate 
+        -- node.
+
+        if NOT FOUND then
+           insert into acs_privilege_hierarchy_index
+                       (privilege, child_privilege, tree_sortkey)
+                       values 
+                       (child_priv, child_priv, nkey || ''/00'');
+        end if;
+
+        return null;
+
+end;' language 'plpgsql';
 
 --create table acs_privilege_method_rules (
 --	privilege	not null constraint acs_priv_method_rules_priv_fk
@@ -332,7 +339,6 @@ begin
     return 0; 
 end;' language 'plpgsql';
 
-
 -- procedure add_child
 create function acs_privilege__add_child (varchar,varchar)
 returns integer as '
@@ -347,7 +353,6 @@ begin
 
     return 0; 
 end;' language 'plpgsql';
-
 
 -- procedure remove_child
 create function acs_privilege__remove_child (varchar,varchar)
