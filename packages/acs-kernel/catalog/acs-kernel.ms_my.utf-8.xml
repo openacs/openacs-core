@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<message_catalog package_key="acs-kernel" package_version="5.0d13" locale="ms_my" charset="utf-8">
+
+  <msg key="authentication_authority">Pihak Berkuasa</msg>
+  <msg key="common_add">Tambah</msg>
+  <msg key="common_apply">Mohon</msg>
+  <msg key="common_cancel">Batal</msg>
+  <msg key="common_close">Tutup</msg>
+  <msg key="common_continue">Terus</msg>
+  <msg key="common_default">Kembali yang Asal</msg>
+  <msg key="common_delete">Hapus</msg>
+  <msg key="common_discard">Buang</msg>
+  <msg key="common_edit">Edit</msg>
+  <msg key="common_finish">Selesai</msg>
+  <msg key="common_help">Bantuan</msg>
+  <msg key="common_login">Log Masuk</msg>
+  <msg key="common_next">Terus</msg>
+  <msg key="common_no">Tidak</msg>
+  <msg key="common_previous">Sebelum</msg>
+  <msg key="common_register">Daftar</msg>
+  <msg key="common_reset">Kembali pada Asal</msg>
+  <msg key="common_save">Simpan</msg>
+  <msg key="common_stop">Berhenti</msg>
+  <msg key="common_update">Kemaskini</msg>
+  <msg key="common_view">Lihat</msg>
+  <msg key="common_yes">Ya</msg>
+  <msg key="member_role_pretty_name">Ahli</msg>
+  <msg key="member_role_pretty_plural">Ahli-ahli</msg>
+</message_catalog>
