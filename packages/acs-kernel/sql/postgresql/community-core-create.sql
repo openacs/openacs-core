@@ -413,6 +413,7 @@ comment on table persons is '
 
 -- create or replace package body person
 -- function new
+select define_function_args('person__new','person_id,object_type;person,creation_date;now(),creation_user,creation_ip,email,url,first_names,last_name,context_id');
 create function person__new (integer,varchar,timestamp,integer,varchar,varchar,varchar,varchar,varchar,integer)
 returns integer as '
 declare
@@ -614,6 +615,7 @@ comment on column users.n_sessions is '
 
 -- create or replace package body acs_user
 -- function new
+select define_function_args('user__new','user_id,object_type;user,creation_date;now(),creation_user,creation_ip,email,url,first_names,last_name,password,salt,password_question,password_answer,screen_name,email_verified_p;t,context_id');
 create function acs_user__new (integer,varchar,timestamp,integer,varchar,varchar,varchar,varchar,varchar,char,char,varchar,varchar,varchar,boolean,integer)
 returns integer as '
 declare
