@@ -2,10 +2,22 @@
 <message_catalog package_key="acs-subsite" package_version="5.0d4" locale="en_US" charset="ISO-8859-1">
 
   <msg key="About_You">About You</msg>
+  <msg key="Account_close_confirm_no_label">No, take me back to %pvt_home_name%</msg>
+  <msg key="Account_close_confirm_yes_label">Yes, please close my account</msg>
   <msg key="Account_closed">
     &lt;p&gt;Your account is currently closed.&lt;/p&gt;
     &lt;p&gt;If you wish, we can &lt;a href=&quot;%restore_url%&quot;&gt;reopen your account&lt;/a&gt;.&lt;/p&gt;
   </msg>
+  <msg key="Account_closed_workspace_msg">
+    &lt;p&gt;
+      &lt;font color=&quot;red&quot;&gt;
+        &lt;b&gt; Your account is currently closed. &lt;/b&gt; 
+      &lt;/font&gt;
+      &lt;a href=&quot;%login_url%&quot;&gt;Log in&lt;/a&gt; again to see what you can do about it.
+    &lt;/p&amp;;gt;
+  </msg>
+  <msg key="Account_reopened_message">Your account at %system_name% has been reopened. Welcome back.</msg>
+  <msg key="Account_reopened_title">Account Reopened</msg>
   <msg key="Answer">Answer</msg>
   <msg key="at">at</msg>
   <msg key="Bad_Password">Bad Password</msg>
