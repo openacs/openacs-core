@@ -197,7 +197,7 @@ password:</msg>
 been notified of your request to use the system.  Once you're
 approved, you'll get an email message and you can return to
 %site_link% to use the service.</msg>
-  <msg key="lt_Your_URL_doesnt_have_">Your URL doesn't have the correct form.  A valid URL would be something like \&quot;%valid_url_example%\&quot;.&quot;</msg>
+  <msg key="lt_Your_URL_doesnt_have_">Your URL doesn't have the correct form.  A valid URL would be something like &quot;%valid_url_example%&quot;.</msg>
   <msg key="Name">Name:</msg>
   <msg key="New_Password">New Password</msg>
   <msg key="New_users">New users:</msg>
