@@ -16,7 +16,7 @@ create table countries (
     a3  char(3),
     -- this is the numeric code - hardly used
     -- it is a char because of leading zeros so it isn't really a number
-    numeric char(3),
+    n3 char(3),
     -- this violates 3nf but is used for 2 reasons
     -- 1. to help efficiency
     -- 2. to make querys not fail if no translation exists yet
@@ -40,29 +40,19 @@ comment on column countries.a3 is '
    This is the three letter abbreviation - hardly used.
 ';
 
-comment on column countries.numeric is ' 
+comment on column countries.n3 is ' 
     This is the numeric code - hardly used.
 ';
 
 -- add this table into the reference repository
 
-create function inline_0 ()
-returns integer as '
-begin
-    PERFORM acs_reference__new (
-        ''COUNTRIES'', -- table_name
-        ''ISO 3166'', -- source
-        ''http://www.din.de/gremien/nas/nabd/iso3166ma/codlstp1/db_en.html'', -- source_url
-        to_date('2000-08-21','YYYY-MM-DD'), -- last_update
-        sysdate() -- effective_date
+select acs_reference__new (
+        'COUNTRIES', -- table_name
+        '2000-08-21',
+        'ISO 3166', -- source
+        'http://www.din.de/gremien/nas/nabd/iso3166ma/codlstp1/db_en.html', -- source_url
+        now() -- effective_date
     );
-
-    return 0
-end;' language 'plpgsql';
-
-select inline_0 ();
-
-drop function inline_0 ();
 
 -- This is the translated mapping of country names
 
@@ -72,7 +62,7 @@ create table country_names (
         constraint country_names_iso_fk
         references countries (iso),
     -- lookup into the language_codes table
-    language_code 
+    language_code char(2)
         constraint country_names_language_code_fk
         references language_codes (language_id),
     -- the translated name
@@ -87,10 +77,19 @@ comment on column country_names.language_code is '
     This is a lookup into the iso languages table.
 ';
 
+-- DRB: Added this so the drop script will get rid of it.  Currently
+-- country_names is unused.
+
+select acs_reference__new (
+        'COUNTRY_NAMES', -- table_name
+        null,
+        'Internal', -- source
+        '', -- source_url
+        now() -- effective_date
+    );
 -- I need to know the easy way to add extended chars in sqlplus then I can add french and spanish
 
 -- ISO country codes
-/i ../common/ref-country-data.sql
-
-
-
+begin;
+\i ../common/ref-country-data.sql
+end;
