@@ -1,51 +1,129 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Appendix E. How to package and release OpenACS</title><meta name="generator" content="DocBook XSL Stylesheets V1.62.0"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="acs-package-dev.html" title="Part III. For OpenACS Package Developers"><link rel="previous" href="cvs-tips.html" title="Appendix D. Using CVS with an OpenACS Site"><link rel="next" href="acs-plat-dev.html" title="Part IV. For OpenACS Platform Developers"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="cvs-tips.html">Prev</a> </td><th width="60%" align="center">Part III. For OpenACS Package Developers</th><td width="20%" align="right"> <a accesskey="n" href="acs-plat-dev.html">Next</a></td></tr></table><hr></div><div class="appendix" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="releasing-openacs"></a>Appendix E. How to package and release OpenACS</h2></div></div><div></div></div><div class="orderedlist"><ol type="1"><li><p>update the version number in packages/acs-core-docs/www/xml/variables.ent, readme.txt,
-          and all core .info files.  Regenerate the html documentation and commit all the changes.
-        </p></li><li><p>Check out the cvs tree.  The files must be checked out
-        through a cvs account with write access.  In this example, the
-        cvs user on openacs.org is implied from the ssh login information
-        previously set up.  It could be overridden via <tt class="computeroutput">foobar@openacs.org</tt>. </p><pre class="screen">
-<pre class="action"><span class="action">cd /tmp
-cvs -d :pserver:anonymous@openacs.org:/cvsroot checkout openacs-4
-</span></pre>
-</pre><p>Repeat with the dotlrn cvs tree.</p><pre class="screen">
-<pre class="action"><span class="action">cd /tmp
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Appendix E. How to package and release OpenACS</title><meta name="generator" content="DocBook XSL Stylesheets V1.62.0"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="acs-package-dev.html" title="Part III. For OpenACS Package Developers"><link rel="previous" href="cvs-tips.html" title="Appendix D. Using CVS with an OpenACS Site"><link rel="next" href="acs-plat-dev.html" title="Part IV. For OpenACS Platform Developers"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="cvs-tips.html">Prev</a> </td><th width="60%" align="center">Part III. For OpenACS Package Developers</th><td width="20%" align="right"> <a accesskey="n" href="acs-plat-dev.html">Next</a></td></tr></table><hr></div><div class="appendix" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="releasing-openacs"></a>Appendix E. How to package and release OpenACS</h2></div></div><div></div></div><div class="orderedlist"><ol type="1"><li><p>Update documentation version numbers:</p><div class="orderedlist"><ol type="a"><li><p>Update /packages/acs-core-docs/www/xml/variables.ent with the new version number and regenerate all HTML docs
+            </p></li><li><p>Update /readme.txt with the new version number</p></li><li><p>
+              Commit changes
+            </p></li></ol></div></li><li><p>Check out the whole cvs tree.  The files must be checked
+          out through a cvs account with write access and should be a
+          checkout from the release branch.  In this example, we are assuming
+          this is being done as a local user on openacs.org (which make the 
+          checkout and tagging operations much faster).</p><pre class="screen"><span class="action"><span class="action">cd /var/tmp
+cvs -d /cvsroot checkout -r <span class="replaceable"><span class="replaceable">oacs-5-0</span></span> openacs-4</span></span></pre><p>Repeat with the dotlrn cvs tree.</p><pre class="screen"><span class="action"><span class="action">cd /var/tmp
 mkdir dotlrn-packages
 cd dotlrn-packages
-cvs -d :pserver:anonymous@dotlrn@openacs.org:/dotlrn-cvsroot checkout dotlrn-all
-</span></pre></pre></li><li><p>Tag the tree.</p><pre class="screen"><pre class="action"><span class="action">
-cd /tmp/openacs-4
-cvs tag <span class="replaceable"><span class="replaceable">openacs-5-0-0a1</span></span>
-</span></pre></pre><p>Tag dotLRN.  Since the dotLRN packages aren't all in one module, we iterate through all of the modules.  Log in first (cvs login) so that you don't have to log in for each module.</p><pre class="screen"><pre class="action"><span class="action">
-cd /tmp/dotlrn-packages
-for dir in $(ls); do cd $dir; cvs tag <span class="replaceable"><span class="replaceable">dotlrn-2-0-0a3</span></span>; cd ..; done
-</span></pre></pre></li><li><p>Make the tarball</p><div class="itemizedlist"><ul type="disc"><li><p><b>openacs-core. </b></p><div class="orderedlist"><ol type="a"><li><p>Go to a new working space and export the tagged files.</p><pre class="screen">
-<pre class="action"><span class="action">mkdir /tmp/tarball
-cd /tmp/tarball
-cvs -d :pserver:anonymous@openacs.org:/cvsroot export -r <span class="replaceable"><span class="replaceable">openacs-5-0-0a1</span></span> acs-core
-mv openacs-4 openacs
-</span></pre></pre></li><li><p>Generate the tarball</p><pre class="screen"><pre class="action"><span class="action">
-cd /tmp/tarball
-tar cz -f <span class="replaceable"><span class="replaceable">openacs-5.0.0a1.tar.gz</span></span> openacs
-</span></pre></pre></li></ol></div></li><li><p><b>dotlrn. </b></p><div class="orderedlist"><ol type="a"><li><p>Go to a new working space and export the tagged
+cvs -d /dotlrn-cvsroot checkout -r <span class="replaceable"><span class="replaceable">dotlrn-2-0</span></span> dotlrn-all
+</span></span></pre></li><li><p>Tag the tree.</p><pre class="screen"><span class="action"><span class="action">cd /var/tmp/openacs-4
+cvs tag -F <span class="replaceable"><span class="replaceable">openacs-5-0-0a1</span></span>
+</span></span></pre><p>Note that we use the <span class="action"><span class="action">-F</span></span> flag which will force the tag to the new version (just in 
+          case someone has created the tag already on another version).  Excercise care when doing this since 
+          you don't want to inadvertently move a prior release tag.  Also if the tagging goes horribly wrong 
+          for some reason you can delete the tag via "<span><b class="command">cvs tag -d &lt;symbolic_tag&gt;</b></span>".</p><p>Tag dotLRN.  Since the dotLRN packages aren't all in one
+          module, we iterate through all of the modules.  Log in first
+          (cvs login) so that you don't have to log in for each
+          module.</p><pre class="screen"><span class="action"><span class="action">cd /var/tmp/dotlrn-packages
+for dir in *; do ( cd $dir &amp;&amp; cvs tag -F <span class="replaceable"><span class="replaceable">dotlrn-2-0-0a1</span></span> ); done
+</span></span></pre></li><li><p>Make the tarball</p><div class="itemizedlist"><ul type="disc"><li><p><b>openacs-core. </b></p><div class="orderedlist"><ol type="a"><li><p>Go to a new working space and export the tagged files.</p><pre class="screen"><span class="action"><span class="action">mkdir /var/tmp/tarball
+cd /var/tmp/tarball
+cvs -d /cvsroot export -r <span class="replaceable"><span class="replaceable">openacs-5-0-0a1</span></span> acs-core
+</span></span></pre></li><li><p>Generate the tarball.</p><pre class="screen"><span class="action"><span class="action">cd /var/tmp/tarball
+mv openacs-4 openacs-<span class="replaceable"><span class="replaceable">5.0.0a1</span></span>
+tar cz -f <span class="replaceable"><span class="replaceable">openacs-5.0.0a1.tar.gz</span></span> openacs-<span class="replaceable"><span class="replaceable">5.0.0a1</span></span>
+</span></span></pre></li></ol></div></li><li><p><b>dotlrn. </b></p><div class="orderedlist"><ol type="a"><li><p>Go to a new working space and export the tagged
                 files. (was getting errors here trying to use -d, so
                 gave up and just moved things from openacs-4 to
-                openacs at the end)</p><pre class="screen">
-<pre class="action"><span class="action">mkdir /tmp/dotlrn-tarball
-cd /tmp/dotlrn-tarball
-cvs -d :pserver:anonymous@openacs.org:/cvsroot export \
-  -r <span class="replaceable"><span class="replaceable">openacs-5-0-0a1</span></span> acs-core
-cd /tmp/dotlrn-tarball/openacs-4/packages
-cvs -d :pserver:anonymous@openacs.org:/cvsroot export \
-  -r <span class="replaceable"><span class="replaceable">openacs-5-0-0a1</span></span> dotlrn-prereq
-cvs -d :pserver:anonymous@dotlrn.openacs.org:/dotlrn-cvsroot export \
-  -r <span class="replaceable"><span class="replaceable">dotlrn-2-0-0a1</span></span> dotlrn-core
-cd /tmp/dotlrn-tarball
-mv openacs-4 openacs
-</span></pre></pre></li><li><p>Copy the dotlrn install.xml file, which controls
+                openacs at the end)</p><pre class="screen"><span class="action"><span class="action">mkdir /var/tmp/dotlrn-tarball
+cd /var/tmp/dotlrn-tarball
+cvs -d /cvsroot export -r <span class="replaceable"><span class="replaceable">openacs-5-0-0a1</span></span> acs-core
+cd /var/tmp/dotlrn-tarball/openacs-4/packages
+cvs -d /cvsroot export -r <span class="replaceable"><span class="replaceable">openacs-5-0-0a1</span></span> dotlrn-prereq
+cvs -d /dotlrn-cvsroot export -r <span class="replaceable"><span class="replaceable">dotlrn-2-0-0a1</span></span> dotlrn-core
+</span></span></pre></li><li><p>Copy the dotlrn install.xml file, which controls
                 which packages are installed on setup, to the root
-                location:</p><pre class="screen"><pre class="action"><span class="action">
-cp /tmp/dotlrn-tarball/openacs/packages/dotlrn/install.xml /tmp/dotlrn-tarball/openacs
-</span></pre></pre></li><li><p>Generate the tarball</p><pre class="screen"><pre class="action"><span class="action">
-cd /tmp/tarball
-tar cz -f <span class="replaceable"><span class="replaceable">dotlrn-2.0.0a1.tar.gz</span></span> openacs
-</span></pre></pre></li></ol></div></li></ul></div></li><li><p>Test the new tarball</p></li><li><p>Update on the site</p></li></ol></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="cvs-tips.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="acs-plat-dev.html">Next</a></td></tr><tr><td width="40%" align="left">Appendix D. Using CVS with an OpenACS Site </td><td width="20%" align="center"><a accesskey="u" href="acs-package-dev.html">Up</a></td><td width="40%" align="right"> Part IV. For OpenACS Platform Developers</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a><center><a href="http://openacs.org/doc/releasing-openacs.html#comments">View comments on this page at openacs.org</a></center></body></html>
+                location:</p><pre class="screen"><span class="action"><span class="action">cp /var/tmp/dotlrn-tarball/openacs-4/packages/dotlrn/install.xml \
+   /var/tmp/dotlrn-tarball/openacs-4
+</span></span></pre></li><li><p>Generate the tarball</p><pre class="screen"><span class="action"><span class="action">cd /var/tmp/dotlrn-tarball
+mv openacs-4 dotlrn-<span class="replaceable"><span class="replaceable">2.0.0a1</span></span>
+tar cz -f <span class="replaceable"><span class="replaceable">dotlrn-2.0.0a1.tar.gz</span></span> dotlrn-<span class="replaceable"><span class="replaceable">2.0.0a1</span></span>
+</span></span></pre></li></ol></div></li></ul></div></li><li><p>Test the new tarball</p></li><li><p>Update openacs.org frontpage, bug-tracker versions, project page, etc.</p></li><li><p>Clean up after yourself.</p><pre class="screen"><span class="action"><span class="action">cd /var/tmp
+rm -rf tarball dotlrn-tarball dotlrn-packages openacs-<span class="replaceable"><span class="replaceable">5.0.0a1</span></span></span></span></pre></li></ol></div><p>
+      Here is a shell script that automates this whole process...
+    </p><pre class="programlisting">#!/bin/bash
+
+# if TAG=1 create the cvs tags otherwise assume they exist.
+TAG=1
+
+# What release version are we building; version format should be
+# dashes rather than dots eg. OACS_VERSION=5-0-0b4
+
+OACS_VERSION=5-0-0b4
+DOTLRN_VERSION=2-0-0b4
+
+OACS_BRANCH=oacs-5-0
+DOTLRN_BRANCH=dotlrn-2-0
+
+DOTLRN_CVSROOT=/dotlrn-cvsroot
+OACS_CVSROOT=/cvsroot
+
+#
+# Nothing below here should need to change...
+#
+BASE=/var/tmp/release-$OACS_VERSION
+mkdir $BASE
+if [ ! -d $BASE ]; then 
+    echo "Failed creating base dir $BASE"
+    exit 1
+fi
+
+cd $BASE 
+
+if [ $TAG -eq 1 ]; then 
+
+    # Checkout and tag the release 
+    cvs -d $OACS_CVSROOT checkout -r $OACS_BRANCH openacs-4
+    cd openacs-4 
+    cvs tag -F openacs-$OACS_VERSION 
+    cd ../
+
+
+    # Checkout and tag the dotlrn release
+    mkdir dotlrn-packages
+    cd dotlrn-packages
+    cvs -d $DOTLRN_CVSROOT checkout -r $DOTLRN_BRANCH dotlrn-all
+    for dir in *; do ( cd $dir &amp;&amp; cvs tag -F dotlrn-$DOTLRN_VERSION ); done
+    cd ../
+
+    #
+    # Should check for .sql .xql .adp .tcl .html .xml executable files and squak if found.
+    #
+
+fi
+
+
+
+# Generate tarballs...
+#
+
+# openacs
+#
+mkdir tarball
+cd tarball
+cvs -d $OACS_CVSROOT export -r openacs-$OACS_VERSION acs-core
+mv opeancs-4 openacs-${OACS_VERSION//-/.}
+tar -czf ../openacs-${OACS_VERSION//-/.}.tar.gz openacs-${OACS_VERSION//-/.}
+cd ..
+
+# dotlrn
+#
+mkdir dotlrn-tarball
+cd dotlrn-tarball
+cvs -d $OACS_CVSROOT export -r openacs-$OACS_VERSION acs-core
+cd  openacs-4/packages
+cvs -d $OACS_CVSROOT export -r openacs-$OACS_VERSION dotlrn-prereq
+cvs -d $DOTLRN_CVSROOT export -r dotlrn-$DOTLRN_VERSION dotlrn-core
+cd ../..
+cp -f openacs-4/packages/dotlrn/install.xml openacs-4
+mv openacs-4 dotlrn-${DOTLRN_VERSION//-/.}
+tar -czf ../dotlrn-${DOTLRN_VERSION//-/.}.tar.gz dotlrn-${DOTLRN_VERSION//-/.}
+
+
+# Clean up after ourselves...
+cd $BASE &amp;&amp; rm -rf dotlrn-tarball tarball openacs-4 dotlrn-packages
+</pre></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="cvs-tips.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="acs-plat-dev.html">Next</a></td></tr><tr><td width="40%" align="left">Appendix D. Using CVS with an OpenACS Site </td><td width="20%" align="center"><a accesskey="u" href="acs-package-dev.html">Up</a></td><td width="40%" align="right"> Part IV. For OpenACS Platform Developers</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a><center><a href="http://openacs.org/doc/releasing-openacs.html#comments">View comments on this page at openacs.org</a></center></body></html>
