@@ -238,17 +238,17 @@ ad_proc -public template::util::spellcheck::get_element_formtext {
     set processed_text ""
 
     set line [lindex $lines 0]
-    
+
     foreach ispell_line $ispell_lines {
 	switch -glob -- $ispell_line {
 	    \#* {
 		regexp "^\# (\[^ \]+) (\[0-9\]+)" $ispell_line dummy word pos
 		regsub $word $line "\#$error_num\#" line
-		lappend errors [list miss $error_num $word]
+		lappend errors [list miss $error_num $word dummy]
 		incr error_num
 	    }
 	    &* {
-		regexp {^& ([^ ]+) ([0-9]+) ([0-9]+): (.*)$} $ispell_line dummy word n_options pos options
+		regexp "^& (\[^ \]+) (\[0-9\]+) (\[0-9\]+): (.*)$" $ispell_line dummy word n_options pos options
 		regsub $word $line "\#$error_num\#" line
 		lappend errors [list nearmiss $error_num $word $options]
 		incr error_num
@@ -265,7 +265,9 @@ ad_proc -public template::util::spellcheck::get_element_formtext {
 
     set formtext $processed_text
 
-    foreach { errtype errnum errword erroptions } [join $errors] {
+    set error_list [join $errors]
+
+    foreach { errtype errnum errword erroptions } $error_list {
 	set wordlen [string length $errword]
 	
 	if { [string equal "miss" $errtype] } {
