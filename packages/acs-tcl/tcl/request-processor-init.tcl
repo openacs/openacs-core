@@ -26,8 +26,8 @@ if { [ad_parameter -package_id [ad_acs_kernel_id] PerformanceModeP request-proce
 
 # JCD this belongs in acs-permission-init.tcl but I did not want to duplicate [ad_acs_kernel_id]
 # Nuke the existing definition. and create one with the parameter set
-rename permission::cache_p {}
-proc permission::cache_p {} "return [ad_parameter -package_id [ad_acs_kernel_id] PermissionCacheP permissions 0]"
+
+#JCD move into first call of cache_p
 
 
 nsv_set rp_properties request_count 0
@@ -77,11 +77,9 @@ ad_after_server_initialization filters_register {
 
     set filter_index 0
     foreach filter_info $filters {
-       ns_log Debug "filters_register: Registering $filter_info" 
-
 	util_unlist $filter_info priority kind method path \
 		proc arg debug critical description script
-	
+
 	# Figure out how to invoke the filter, based on the number of arguments.
 	if { [llength [info procs $proc]] == 0 } {
 	    # [info procs $proc] returns nothing when the procedure has been
@@ -98,9 +96,11 @@ ad_after_server_initialization filters_register {
 	    set debug_p 0
 	}
 
-	ns_register_filter $kind $method $path rp_invoke_filter \
+        ns_log Notice "ns_register_filter $kind $method $path rp_invoke_filter \
+		[list $filter_index $debug_p $arg_count $proc $arg]"
+        ns_register_filter $kind $method $path rp_invoke_filter \
 		[list $filter_index $debug_p $arg_count $proc $arg]
-	
+
 	incr filter_index
     }
 }
@@ -138,6 +138,7 @@ ad_after_server_initialization procs_register {
 	    set debug_p 0
 	}
 
+	ns_log Notice "ns_register_proc $noinherit_switch [list $method $path rp_invoke_proc [list $proc_index $debug_p $arg_count $proc $arg]]"
 	eval ns_register_proc $noinherit_switch \
 		[list $method $path rp_invoke_proc [list $proc_index $debug_p $arg_count $proc $arg]]
     }
