@@ -250,7 +250,11 @@ ad_proc -private apm_load_libraries {
 
 } {
     
-    set packages [db_list apm_enabled_packages {
+    # DRB: query extractor's dumb about repeated query
+    # names so I changed these to be unique.  We should
+    # really be sharing these at some level rather than
+    # duping them anyway.
+    set packages [db_list apm_enabled_packages_l {
 	select distinct package_key
 	from apm_package_versions
 	where enabled_p='t'
@@ -295,7 +299,7 @@ ad_proc -private apm_load_libraries {
 ad_proc -private apm_load_queries {
     {-callback apm_dummy_callback}
 } {
-    set packages [db_list apm_enabled_packages {
+    set packages [db_list apm_enabled_packages_q {
 	select distinct package_key
 	from apm_package_versions
 	where enabled_p='t'
