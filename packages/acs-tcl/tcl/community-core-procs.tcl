@@ -507,6 +507,8 @@ ad_proc -public acs_user::get_element {
 
 ad_proc -public acs_user::update {
     {-user_id:required}
+    {-authority_id}
+    {-username}
     {-screen_name}
     {-password_question}
     {-password_answer}
@@ -514,7 +516,9 @@ ad_proc -public acs_user::update {
     Update information about a user. 
     Feel free to expand this with more switches later as needed, as long as they're optional.
 
-    @param  party_id           The ID of the party to edit
+    @param  user_id            The ID of the user to edit
+    @option authority_id       Authortiy
+    @option username           Username
     @option screen_name        The new screen_name for the user
     @option password_question  The new password_question for the user
     @option password_answer    The new password_question for the user
@@ -522,7 +526,7 @@ ad_proc -public acs_user::update {
     @author Lars Pind (lars@collaboraid.biz)
 } {
     set cols [list]
-    foreach var { screen_name password_question password_answer  } {
+    foreach var { authority_id username screen_name password_question password_answer  } {
         if { [info exists $var] } {
             lappend cols "$var = :$var"
         }
