@@ -193,7 +193,7 @@ begin
     insert into cr_child_rels (
       rel_id, parent_id, child_id, relation_tag, order_n
     ) values (
-      v_rel_id, v_parent_id, v_item_id, coalesce(v_rel_tag,''''), v_item_id
+      v_rel_id, v_parent_id, v_item_id, v_rel_tag, v_item_id
     );
 
   end if;
@@ -1746,7 +1746,7 @@ begin
         rel_id, item_id, related_object_id, order_n, relation_tag
       ) values (
         v_rel_id, relate__item_id, relate__object_id, v_order_n, 
-        coalesce(relate__relation_tag,'''')
+        relate__relation_tag
       );
 
     -- if relationship already exists, update it
@@ -1860,7 +1860,7 @@ begin
       item_id, old_revision, new_revision, old_status, new_status, publish_date
     ) values (
       new.item_id, old.live_revision, new.live_revision, 
-      coalesce(old.publish_status,''''), coalesce(new.publish_status,''''),
+      old.publish_status, new.publish_status,
       now()
     );
 

@@ -3,9 +3,8 @@
 
 <fullquery name="users_n_users">      
       <querytext>
-      FIX ME DECODE (USE SQL92 CASE) select 
-    count(*) as n_users, 
-    sum(decode(member_state,'deleted',1,0)) as n_deleted_users, 
+    select count(*) as n_users, 
+    sum(case when member_state = 'deleted' then 1 else 0 end) as n_deleted_users, 
     max(creation_date) as last_registration
     from cc_users
     where email not in ('anonymous', 'system')

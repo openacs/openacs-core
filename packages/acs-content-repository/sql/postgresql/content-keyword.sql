@@ -118,7 +118,7 @@ begin
   insert into cr_keywords 
     (heading, description, keyword_id, parent_id)
   values
-    (new__heading, coalesce(new__description,''''), v_id, new__parent_id);
+    (new__heading, new__description, v_id, new__parent_id);
 
   return v_id;
  

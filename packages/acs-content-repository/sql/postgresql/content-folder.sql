@@ -87,7 +87,7 @@ begin
     insert into cr_folders (
       folder_id, label, description
     ) values (
-      v_folder_id, coalesce(new__label,''''), coalesce(new__description,'''')
+      v_folder_id, new__label, new__description
     );
 
     -- inherit the attributes of the parent folder

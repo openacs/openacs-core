@@ -51,9 +51,9 @@ begin
     revision_id, title, description, mime_type, publish_date,
     nls_language, lob, item_id, storage_type, content_length
   ) values (
-    v_revision_id, coalesce(new__title,''''), coalesce(new__description,''''),
+    v_revision_id, new__title, new__description,
     new__mime_type, 
-    new__publish_date, coalesce(new__nls_language,''''), new__data, 
+    new__publish_date, new__nls_language, new__data, 
     new__item_id, ''lob'', 1     
   );
 
@@ -121,10 +121,10 @@ begin
     revision_id, title, description, mime_type, publish_date,
     nls_language, content, item_id, storage_type, content_length
   ) values (
-    v_revision_id, coalesce(new__title,''''), coalesce(new__description,''''),
+    v_revision_id, new__title, new__description,
      new__mime_type, 
-    new__publish_date, coalesce(new__nls_language,''''), 
-    coalesce(new__text,''''), new__item_id, ''text'',
+    new__publish_date, new__nls_language, 
+    new__text, new__item_id, ''text'',
     length(new__text)
   );
 
