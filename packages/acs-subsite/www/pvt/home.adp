@@ -12,6 +12,7 @@
 </if>
 
 <ul class="action-links">
+  <li><a href="../user/email-privacy-level">#acs-subsite.Change_my_email_P#</a></li>
   <li><a href="../user/password-update">#acs-subsite.Change_my_Password#</a></li>
   <if @change_locale_url@ not nil>
     <li><a href="@change_locale_url@">#acs-subsite.Change_locale_label#</a></li>

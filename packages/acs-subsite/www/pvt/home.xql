@@ -40,5 +40,14 @@ and attribute_id =
       </querytext>
 </fullquery>
 
+<fullquery name="email_info">      
+      <querytext>
+	    select email
+	    from cc_users 
+	    where user_iad=:user_id
+      </querytext>
+</fullquery>
+
+
  
 </queryset>
