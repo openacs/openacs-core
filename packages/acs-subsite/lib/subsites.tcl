@@ -15,6 +15,7 @@ if { $admin_p } {
 list::create \
     -name subsites \
     -multirow subsites \
+    -no_data "No $pretty_plural" \
     -elements {
         instance_name {
             label "Name"
