@@ -447,7 +447,6 @@ ad_proc -private template::form::render { id tag_attributes } {
       set name "formbutton:$name"
 
       template::element create $id $name -widget submit -label $label -datatype text
-      ns_log Notice "LARS: template::element create $id $name -widget submit -label $label -datatype text"
   }
 
   # make a reference to the formerror array with any validation messages
