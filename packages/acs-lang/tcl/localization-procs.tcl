@@ -64,10 +64,10 @@ ad_proc -public lc_parse_number {
 	error "Unsupported Locale"
     }
 
-    set dec [nsv_get locale "$locale,decimal_point"]
-    set thou [nsv_get locale "$locale,mon_thousands_sep"][nsv_get locale "$locale,thousands_sep"]
-    set neg [nsv_get locale "$locale,negative_sign"]
-    set pos [nsv_get locale "$locale,positive_sign"]
+    set dec [lc_get -locale $locale "decimal_point"]
+    set thou [lc_get -locale $locale "mon_thousands_sep"][lc_get -locale $locale "thousands_sep"]
+    set neg [lc_get -locale $locale "negative_sign"]
+    set pos [lc_get -locale $locale "positive_sign"]
 
     ad_locale_escape_vars_if_not_null {dec thou neg pos}
 
@@ -162,6 +162,7 @@ ad_proc -private lc_sepfmt {
         }
         set group [lindex $grouping 0]
     } 
+    
     return $num 
 }
 
@@ -182,19 +183,15 @@ ad_proc -public lc_numeric {
     @return         Localized form of the number
 
 } { 
-    if { ![exists_and_not_null locale] } {
-        set locale [ad_conn locale]
-    }
-    
     if {![empty_string_p $fmt]} { 
         set out [format $fmt $num]
     } else { 
         set out $num
     }
 
-    set sep [nsv_get locale "$locale,thousands_sep"]
-    set dec [nsv_get locale "$locale,decimal_point"]
-    set grouping [nsv_get locale "$locale,grouping"]
+    set sep [lc_get -locale $locale "thousands_sep"]
+    set dec [lc_get -locale $locale "decimal_point"]
+    set grouping [lc_get -locale $locale "grouping"]
     
     regsub {\.} $out $dec out
 
@@ -266,9 +263,9 @@ ad_proc -private lc_monetary {
     } else {
 	# look up the digits
 	if {[string compare $style int] == 0} { 
-	    set dig [nsv_get locale "$locale,int_frac_digits"]
+	    set dig [lc_get -locale $locale "int_frac_digits"]
 	} else { 
-	    set dig [nsv_get locale "$locale,frac_digits"]
+	    set dig [lc_get -locale $locale "frac_digits"]
 	}
     }
 
@@ -287,9 +284,9 @@ ad_proc -private lc_monetary {
     if {[empty_string_p $forced_currency_symbol]} {
 	if {$label_p} {
 	    if {[string compare $style int] == 0} { 
-		set sym [nsv_get locale "$locale,int_curr_symbol"]
+		set sym [lc_get -locale $locale "int_curr_symbol"]
 	    } else { 
-		set sym [nsv_get locale "$locale,currency_symbol"]
+		set sym [lc_get -locale $locale "currency_symbol"]
 	    }
 	} else { 
 	    set sym {}
@@ -300,24 +297,24 @@ ad_proc -private lc_monetary {
 
     # signorama
     if {$neg} { 
-        set cs_precedes [nsv_get locale "$locale,n_cs_precedes"]
-        set sep_by_space [nsv_get locale "$locale,n_sep_by_space"]
-        set sign_pos [nsv_get locale "$locale,n_sign_posn"]
-        set sign [nsv_get locale "$locale,negative_sign"]
+        set cs_precedes [lc_get -locale $locale "n_cs_precedes"]
+        set sep_by_space [lc_get -locale $locale "n_sep_by_space"]
+        set sign_pos [lc_get -locale $locale "n_sign_posn"]
+        set sign [lc_get -locale $locale "negative_sign"]
     } else {
-        set cs_precedes [nsv_get locale "$locale,p_cs_precedes"]
-        set sep_by_space [nsv_get locale "$locale,p_sep_by_space"]
-        set sign_pos [nsv_get locale "$locale,p_sign_posn"]
-        set sign [nsv_get locale "$locale,positive_sign"]
+        set cs_precedes [lc_get -locale $locale "p_cs_precedes"]
+        set sep_by_space [lc_get -locale $locale "p_sep_by_space"]
+        set sign_pos [lc_get -locale $locale "p_sign_posn"]
+        set sign [lc_get -locale $locale "positive_sign"]
     } 
     
     # decimal seperator
-    set dec [nsv_get locale "$locale,mon_decimal_point"]
+    set dec [lc_get -locale $locale "mon_decimal_point"]
     regsub {\.} $out $dec out
 
     # commify
-    set sep [nsv_get locale "$locale,mon_thousands_sep"]
-    set grouping [nsv_get locale "$locale,mon_grouping"]
+    set sep [lc_get -locale $locale "mon_thousands_sep"]
+    set grouping [lc_get -locale $locale "mon_grouping"]
     set num [lc_sepfmt $out $grouping $sep]
     
     return [subst [nsv_get locale "money:$cs_precedes$sign_pos$sep_by_space"]]
@@ -336,15 +333,20 @@ ad_proc -public clock_to_ansi {
 }
 
 ad_proc -public lc_get  {
+    {-locale ""}
     key
 } {
     Get a certain format string for the current locale.
+
     @param key the key of for the format string you want.
     @return the format string for the current locale.
-    @see packages/acs-lang/tcl/localization-data-init.tcl
+
     @author Lars Pind (lars@pinds.com)
 } {
-    return [nsv_get locale "[ad_conn locale],$key"]
+    # All localization message keys have a certain prefix
+    set message_key "acs-lang.localization-$key"
+    
+    return [lang::message::lookup $locale $message_key]
 }
 
 ad_proc -public lc_time_fmt {
@@ -370,6 +372,8 @@ ad_proc -public lc_time_fmt {
       %d           Day of the month as a decimal number (01-31).
       %D           Date in the format mm/dd/yy.
       %e           Day of the month as a decimal number (1-31 in at
+                   two-digit field with leading <space> fill).
+      %E           Month number as a decimal number (1-12 in at
                    two-digit field with leading <space> fill).
       %f           Weekday as a decimal number (1(Monday)-7).
       %F           is replaced by the date in the format YYYY-MM-DD
@@ -429,14 +433,6 @@ ad_proc -public lc_time_fmt {
     set matchtime {0?([1-2]?[0-9]):0?([1-5]?[0-9]):0?([1-6]?[0-9])}
     set matchfull "$matchdate $matchtime"
     
-    if {![nsv_exists locale "$locale,d_t_fmt"]} {
-	ns_log Error "Unsupported locale: $locale; using site-wide default."
-        set locale [lang::system::locale -site_wide]
-        if {![nsv_exists locale "$locale,d_t_fmt"]} {
-            error "Site-Wide locale $locale doesn't have date and time formats defined."
-        }
-    }
-    
     set lc_time_p 1
     if {![regexp -- $matchfull $datetime match lc_time_year lc_time_month lc_time_days lc_time_hours lc_time_minutes lc_time_seconds]} {
 	if {[regexp -- $matchdate $datetime match lc_time_year lc_time_month lc_time_days]} {
@@ -473,6 +469,7 @@ ad_proc -public lc_time_fmt {
 
     # Direct Subst
     set percent_match(e) {[lc_leading_space $lc_time_days]}
+    set percent_match(E) {[lc_leading_space $lc_time_month]}
     set percent_match(f) {[lc_wrap_sunday $lc_time_day_no]}
     set percent_match(Y) {$lc_time_year}
 
@@ -491,11 +488,11 @@ ad_proc -public lc_time_fmt {
     set percent_match(Z) {}
 
     # Straight (localian) lookups
-    set percent_match(a) {[lindex [nsv_get locale "$locale,abday"] $lc_time_day_no]}
-    set percent_match(A) {[lindex [nsv_get locale "$locale,day"] $lc_time_day_no]}
-    set percent_match(b) {[lindex [nsv_get locale "$locale,abmon"] [expr $lc_time_month-1]]}
-    set percent_match(h) {[lindex [nsv_get locale "$locale,abmon"] [expr $lc_time_month-1]]}
-    set percent_match(B) {[lindex [nsv_get locale "$locale,mon"] [expr $lc_time_month-1]]}
+    set percent_match(a) {[lindex [lc_get -locale $locale "abday"] $lc_time_day_no]}
+    set percent_match(A) {[lindex [lc_get -locale $locale "day"] $lc_time_day_no]}
+    set percent_match(b) {[lindex [lc_get -locale $locale "abmon"] [expr $lc_time_month-1]]}
+    set percent_match(h) {[lindex [lc_get -locale $locale "abmon"] [expr $lc_time_month-1]]}
+    set percent_match(B) {[lindex [lc_get -locale $locale "mon"] [expr $lc_time_month-1]]}
     set percent_match(p) {[lc_time_name_meridian $locale $lc_time_hours]}
 
     # Finally, static string replacements
@@ -509,23 +506,23 @@ ad_proc -public lc_time_fmt {
 	switch -exact -- $percent_modifier {
 	    x {
 		append transformed_string $done_portion
-		set to_process "[nsv_get locale "$locale,d_fmt"]$remaining"
+		set to_process "[lc_get -locale $locale "d_fmt"]$remaining"
 	    }
 	    X {
 		append transformed_string $done_portion
-		set to_process "[nsv_get locale "$locale,t_fmt"]$remaining"
+		set to_process "[lc_get -locale $locale "t_fmt"]$remaining"
 	    }
 	    c {
 		append transformed_string $done_portion
-		set to_process "[nsv_get locale "$locale,d_t_fmt"]$remaining"	
+		set to_process "[lc_get -locale $locale "d_t_fmt"]$remaining"	
 	    }
 	    q {
 		append transformed_string $done_portion
-		set to_process "[nsv_get locale "$locale,dlong_fmt"]$remaining"	
+		set to_process "[lc_get -locale $locale "dlong_fmt"]$remaining"	
 	    }
 	    Q {
 		append transformed_string $done_portion
-		set to_process "[nsv_get locale "$locale,dlongweekday_fmt"]$remaining"	
+		set to_process "[lc_get -locale $locale "dlongweekday_fmt"]$remaining"	
 	    }
 	    default {
 		append transformed_string "${done_portion}[subst $percent_match($percent_modifier)]"
@@ -562,7 +559,7 @@ ad_proc -public lc_time_utc_to_local {
 	set local_time [db_exec_plsql utc_to_local {}]
     } errmsg]
     } {
-	ns_log Notice "Query exploded on time conversion from UTC, probably just an invalid date, $time_value: $errmsg"
+	ns_log Warning "Query exploded on time conversion from UTC, probably just an invalid date, $time_value: $errmsg"
     }
 
     if {[empty_string_p $local_time]} {
@@ -592,7 +589,7 @@ ad_proc -public lc_time_local_to_utc {
 	set utc_time [db_exec_plsql local_to_utc {}]
     } errmsg]
     } {
-	ns_log Notice "Query exploded on time conversion to UTC, probably just an invalid date, $time_value: $errmsg"
+	ns_log Warning "Query exploded on time conversion to UTC, probably just an invalid date, $time_value: $errmsg"
     }
 
     if {[empty_string_p $utc_time]} {
@@ -638,9 +635,9 @@ ad_proc -private lc_time_name_meridian { locale hours } {
     Returns locale data depending on AM or PM.
 } {
     if {$hours > 11} {
-	return [nsv_get locale "$locale,pm_str"]
+	return [lc_get -locale $locale "pm_str"]
     } else {
-	return [nsv_get locale "$locale,am_str"]
+	return [lc_get -locale $locale "am_str"]
     }
 }
 
