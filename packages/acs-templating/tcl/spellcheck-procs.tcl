@@ -199,7 +199,6 @@ ad_proc -public template::util::spellcheck::get_element_formtext {
 	ad_script_abort
     }
     
-    
     # read will occasionally error out with "interrupted system call",
     # so retry a few times in the hopes that it will go away.
     set try 0
@@ -210,6 +209,8 @@ ad_proc -public template::util::spellcheck::get_element_formtext {
 	ns_log Notice "spellchecker had a problem: $errmsg"
     }
 
+    fconfigure $ispell_proc -blocking 0
+    
     if { [catch { close $ispell_proc } errmsg] } {
 	ad_return_error "No dictionary found" "Spell-checking is enabled but the spell-check dictionary could not be reached. Check that the dictionary exists, and that its permissions are correct. <p>Here is the error message: <pre>$errmsg</pre>"
 	ad_script_abort
