@@ -2,9 +2,8 @@
 	by <a href="mailto:vinod@kurup.com" target="_top">Vinod Kurup</a><br>
           OpenACS docs are written by the named authors, and may be edited
           by OpenACS documentation staff.
-        </p></div><p>Skip this section if you will run only Oracle.</p><p>OpenACS 5.0.0a1 will run with PostGreSQL 7.2.x or 7.3.2.  It
-  has not been fully tested with 7.3.2; 7.2.4 is the recommended
-  version of PostgreSQL to use.</p><div class="itemizedlist"><ul type="disc"><li><p><a name="install-postgres-rpm"></a><b>Using the Red Hat RPM. </b>Red Hat users: If you install PostGreSQL 7.3.2 from the Red Hat 9 RPM, you
+        </p></div><p>Skip this section if you will run only Oracle.</p><p>OpenACS 5.0.0a1 will run with <a href="individual-programs.html#source-postgresql">PostGreSQL</a> 7.2.x, 7.3.2,
+  7.3.3, and 7.3.4.  7.3.4 is the recommended version of PostgreSQL.</p><div class="itemizedlist"><ul type="disc"><li><p><a name="install-postgres-rpm"></a><b>Using the Red Hat RPM. </b>Red Hat users: If you install PostGreSQL 7.3.4 from the Red Hat 9 RPM, you
   can skip a few steps.  These shell commands add a link so that the
   data directory appears to be in the same place as in a source
   install; start the service; create a new group for web service
@@ -27,12 +26,12 @@ echo "export LD_LIBRARY_PATH=/usr/local/pgsql/lib" &gt;&gt; ~postgres/.bash_prof
 echo "export PATH=$PATH:/usr/local/pgsql/bin" &gt;&gt; ~postgres/.bash_profile
 groupadd web
 su - postgres</span></pre></pre><p>... and then skip to <a href="postgres.html#install-plpgsql" title="">6</a>.  Something similar may work for other binary packages as well.</p></li></ul></div><div class="orderedlist"><ol type="1"><li><p><b>Unpack PostGreSQL. </b>If you have not downloaded the postgresql tarball to
-        <tt class="computeroutput">/tmp/postgresql-7.2.4.tar.gz</tt>,
+        <tt class="computeroutput">/tmp/postgresql-7.3.4.tar.gz</tt>,
         <a href="individual-programs.html#source-postgresql">get it</a>.</p><pre class="screen">[root@yourserver root]# <b class="userinput"><tt>cd /usr/local/src</tt></b>
-[root@yourserver src]# <b class="userinput"><tt>tar xzf /tmp/postgresql-7.2.4.tar.gz</tt></b>
+[root@yourserver src]# <b class="userinput"><tt>tar xzf /tmp/postgresql-7.3.4.tar.gz</tt></b>
 [root@yourserver src]# 
 <pre class="action"><span class="action">cd /usr/local/src
-tar xzf /tmp/postgresql-7.2.4.tar.gz</span></pre></pre></li><li><p><b>Create the Postgres user. </b>
+tar xzf /tmp/postgresql-7.3.4.tar.gz</span></pre></pre></li><li><p><b>Create the Postgres user. </b>
 	  Create a user and group (if you haven't done so before) for
 	  PostgreSQL. This is the account that PostgreSQL will run as
 	  since it will not run as root.  Since nobody will log in
@@ -40,13 +39,13 @@ tar xzf /tmp/postgresql-7.2.4.tar.gz</span></pre></pre></li><li><p><b>Create the
 	</p><pre class="screen">[root@yourserver src]# <b class="userinput"><tt>groupadd web</tt></b>
 [root@yourserver src]# <b class="userinput"><tt>useradd -g web -d /usr/local/pgsql postgres</tt></b>
 [root@yourserver src]# <b class="userinput"><tt>mkdir -p /usr/local/pgsql</tt></b>
-[root@yourserver src]# <b class="userinput"><tt>chown -R postgres.web /usr/local/pgsql /usr/local/src/postgresql-7.2.4</tt></b>
+[root@yourserver src]# <b class="userinput"><tt>chown -R postgres.web /usr/local/pgsql /usr/local/src/postgresql-7.3.4</tt></b>
 [root@yourserver src]# <b class="userinput"><tt>chmod 750 /usr/local/pgsql</tt></b>
 [root@yourserver src]#
 <pre class="action"><span class="action">groupadd web
 useradd -g web -d /usr/local/pgsql postgres
 mkdir -p /usr/local/pgsql
-chown -R postgres.web /usr/local/pgsql /usr/local/src/postgresql-7.2.4
+chown -R postgres.web /usr/local/pgsql /usr/local/src/postgresql-7.3.4
 chmod 750 /usr/local/pgsql</span></pre></pre></li><li><a name="install-postgres-env"></a><p><b>Set up postgres's environment variables. </b>They are necessary for the executable to find its supporting
 	libraries.  For convenience, we'll simply append the necessary
 	lines to the postgres shell config file.</p><pre class="screen">[root@yourserver src]# <b class="userinput"><tt>echo "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/pgsql/lib" &gt;&gt; ~postgres/.bashrc</tt></b>
@@ -63,29 +62,29 @@ PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:/usr/bin/X11:/
 	  Change to the postgres user and run <tt class="computeroutput">./configure</tt> to set the compilation options automatically. This is the point at which you can
 	  configure PostgreSQL in various ways. For example, if you want to
 	  enable
-	  Unicode<a class="indexterm" name="id2820672"></a> support, add the flags <tt class="computeroutput">--enable-locale</tt> and <tt class="computeroutput">--enable-multibyte</tt>. If you want to see what the other possibilities are, run <tt class="computeroutput">./configure --help</tt>.
+	  Unicode<a class="indexterm" name="id2820667"></a> support, add the flags <tt class="computeroutput">--enable-locale</tt> and <tt class="computeroutput">--enable-multibyte</tt>. If you want to see what the other possibilities are, run <tt class="computeroutput">./configure --help</tt>.
 	</p><pre class="screen">[root@yourserver src]# <b class="userinput"><tt>su - postgres</tt></b>
-[postgres@yourserver pgsql]$<b class="userinput"><tt> cd /usr/local/src/postgresql-7.2.4</tt></b>
-[postgres@yourserver postgresql-7.2.4]$ <b class="userinput"><tt>./configure</tt></b>
+[postgres@yourserver pgsql]$<b class="userinput"><tt> cd /usr/local/src/postgresql-7.3.4</tt></b>
+[postgres@yourserver postgresql-7.3.4]$ <b class="userinput"><tt>./configure</tt></b>
 creating cache ./config.cache
 checking host system type... i686-pc-linux-gnu
 (many lines omitted&gt;
 linking ./src/makefiles/Makefile.linux to src/Makefile.port
 linking ./src/backend/port/tas/dummy.s to src/backend/port/tas.s
-[postgres@yourserver postgresql-7.2.4]$ <b class="userinput"><tt>make all</tt></b>
+[postgres@yourserver postgresql-7.3.4]$ <b class="userinput"><tt>make all</tt></b>
 make -C doc all
-make[1]: Entering directory `/usr/local/src/postgresql-7.2.4/doc'
+make[1]: Entering directory `/usr/local/src/postgresql-7.3.4/doc'
 (many lines omitted)
-make[1]: Leaving directory `/usr/local/src/postgresql-7.2.4/src'
+make[1]: Leaving directory `/usr/local/src/postgresql-7.3.4/src'
 All of PostgreSQL successfully made. Ready to install.
-[postgres@yourserver postgresql-7.2.4]$ <b class="userinput"><tt>make install</tt></b>
+[postgres@yourserver postgresql-7.3.4]$ <b class="userinput"><tt>make install</tt></b>
 make -C doc install
-make[1]: Entering directory `/usr/local/src/postgresql-7.2.4/doc'
+make[1]: Entering directory `/usr/local/src/postgresql-7.3.4/doc'
 (many lines omitted)
 Thank you for choosing PostgreSQL, the most advanced open source database
 engine.
 <pre class="action"><span class="action">su - postgres
-cd /usr/local/src/postgresql-7.2.4
+cd /usr/local/src/postgresql-7.3.4
 ./configure
 make all
 make install</span></pre></pre></li><li><a name="install-postgres-startup"></a><p><b>Start PostgreSQL. </b>
