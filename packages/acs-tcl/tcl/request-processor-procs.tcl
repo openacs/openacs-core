@@ -718,7 +718,7 @@ ad_proc rp_report_error {
 		ns_log "Automatic Error Reporting Misconfigured.  Please add a field in the acs/rp section of form ErrorReportURL=http://your.errors/here."
 	    } else {
 		set auto_report 1
-		ns_returnerror 200 "</table></table></table></h1></b></i>
+		ns_returnerror 500 "</table></table></table></h1></b></i>
                <form method=\"post\" action=\"$report_url\">
 [export_form_vars error_url error_info]
 This file has generated an error.  
@@ -728,11 +728,11 @@ This file has generated an error.
 	    }
 	} else {
 	    # No automatic report.
-	    ns_returnerror 200 "</table></table></table></h1></b></i>
+	    ns_returnerror 500 "</table></table></table></h1></b></i>
 	<blockquote><pre>[ns_quotehtml $message]</pre></blockquote>[ad_footer]"
 	}
     } else {
-	ns_returnerror 200 "
+	ns_returnerror 500 "
       The server has encountered an internal server error. The error
       has been logged and will be investigated by our system
       programmers.
