@@ -61,7 +61,7 @@ proc ad_parse_documentation_string { doc_string elements_var } {
 	# lars@pinds.com, 8 July, 2000
 	# We don't do a string trim anymore, because it breaks the formatting of 
 	# code examples in the documentation, something that we want to encourage.
-        
+
 	# set line [string trim $line]
 
         if { [regexp {^[ \t]*@([-a-zA-Z_]+)(.*)$} $line "" element remainder] } {
@@ -167,10 +167,20 @@ proc ad_proc args {
         # Set up the remaining arguments.
         set proc_name [lindex $args $i]
     } else {
-        # We are creating a callback contract or implementation so there is
-        # no proc name
-        if { $n_args_remaining < 2 || $n_args_remaining > 3} {
-            return -code error "Wrong number of arguments passed to ad_proc"
+        if {![string equal $impl ""]} {
+            # We are creating an implementation...
+            if {$n_args_remaining != 3} {
+                return -code error "ad_proc callback implementation must have: arguments (can be empty) docs code_body"
+            }
+        }
+        if {[string equal $impl ""]} {
+            # We are creating an callback contract...
+            if {!( $n_args_remaining == 3 || $n_args_remaining == 2 ) } {
+                return -code error "ad_proc callback contract must have: arguments docs \[empty_code_body\]"
+            } elseif {![string equal [lindex $args end] ""]
+                      && ![string equal [lindex $args end] "-"]} {
+                return -code error "ad_proc callback contract must have an empty code_body"
+            }
         }
 
         set callback [string trimleft $callback ::]
@@ -207,17 +217,17 @@ proc ad_proc args {
     if { ![string match ::* $proc_name] } {
         set proc_name ${parent_namespace}::$proc_name
     }
-    set proc_name [string trimleft $proc_name ::]
-
-    if {![string eq $parent_namespace {}]} { 
+    if {![string eq $parent_namespace {}] && ![string match ::* $proc_name]} {
         ns_log Debug "proc $proc_name_as_passed declared in namespace $parent_namespace via namespace eval; coding standard is to declare as $proc_name"
     }
+    set proc_name [string trimleft $proc_name ::]
+
 
     if { ![string equal $callback ""] } {
         # Do a namespace eval of each namespace to ensure it exists
         set namespaces [split $proc_name ::]
         set namespaces [lrange $namespaces 0 end-1]
-        
+
         set curr_ns ""
         foreach ns $namespaces {
             if {![string equal $ns ""]} {
@@ -226,7 +236,6 @@ proc ad_proc args {
             }
         }
     }
-     
 
     set arg_list [lindex $args [expr { $i + 1 }]]
     if { $n_args_remaining == 3 } {
@@ -238,6 +247,15 @@ proc ad_proc args {
         ad_parse_documentation_string [lindex $args end-1] doc_elements
     }
     set code_block [lindex $args end]
+
+    if {![string equal $callback ""]
+        && ![string equal $impl ""] } {
+        if {[info exists doc_elements(see)]} {
+            lappend doc_elements(see) "callback::${callback}::contract"
+        } else {
+            set doc_elements(see) "callback::${callback}::contract"
+        }
+    }
 
     #####
     #
@@ -391,9 +409,7 @@ proc ad_proc args {
             return
         } else {
             # we are creating a callback so create an empty body
-            set code_block {
-                # this is a callback which only invokes its arg parser
-            }
+            set code_block { # this is a callback contract which only invokes its arg parser for input validation }
         }
     }
 
