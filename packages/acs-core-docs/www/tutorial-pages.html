@@ -1,19 +1,18 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Creating Web Pages</title><meta name="generator" content="DocBook XSL Stylesheets V1.58.1"><link rel="home" href="index.html" title="OpenACS Documentation"><link rel="up" href="tutorial.html" title="Chapter 10. Development Tutorial"><link rel="previous" href="tutorial-database.html" title="Setting Up Database Objects"><link rel="next" href="tutorial-debug.html" title="Debugging and Automated Testing"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="images/alex.jpg" border="0"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="tutorial-database.html">Prev</a> </td><th width="60%" align="center">Chapter 10. Development Tutorial</th><td width="20%" align="right"> <a accesskey="n" href="tutorial-debug.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><h2 class="title" style="clear: both"><a name="tutorial-pages"></a>Creating Web Pages</h2></div></div><div class="authorblurb"><p>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Creating Web Pages</title><meta name="generator" content="DocBook XSL Stylesheets V1.60.1"><link rel="home" href="index.html" title="OpenACS Documentation"><link rel="up" href="tutorial.html" title="Chapter 10. Development Tutorial"><link rel="previous" href="tutorial-database.html" title="Setting Up Database Objects"><link rel="next" href="tutorial-debug.html" title="Debugging and Automated Testing"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="tutorial-database.html">Prev</a> </td><th width="60%" align="center">Chapter 10. Development Tutorial</th><td width="20%" align="right"> <a accesskey="n" href="tutorial-debug.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="tutorial-pages"></a>Creating Web Pages</h2></div></div><div></div></div><div class="authorblurb"><p>
     by <a href="mailto:joel@aufrecht.org" target="_top">Joel Aufrecht</a><br>
           OpenACS docs are written by the named authors, and may be edited
           by OpenACS documentation staff.
-        </p></div><div class="sect2" lang="en"><div class="titlepage"><div><h3 class="title"><a name="id2928718"></a>Build the &quot;Index&quot; page</h3></div></div><p>Each user-visible page in your package has, typically,
-      three parts.  The <tt>xql</tt> file contains any database queries, the
-      <tt>tcl</tt> file holds the procedural logic for the page and does things
+        </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2830289"></a>Build the "Index" page</h3></div></div><div></div></div><p>Each user-visible page in your package has, typically,
+      three parts.  The <tt class="computeroutput">xql</tt> file contains any database queries, the
+      <tt class="computeroutput">tcl</tt> file holds the procedural logic for the page and does things
       like check permissions, invoke the database queries, and modify
-      variables, and the <tt>adp</tt> page
+      variables, and the <tt class="computeroutput">adp</tt> page
       holds html.  The default page in any directory is
-      <tt>index</tt>, so we'll build that
+      <tt class="computeroutput">index</tt>, so we'll build that
       first, starting with the tcl file:
-</p><pre class="screen">[service0@yourserver samplenote]$<b><tt> mkdir /web/service0/packages/samplenote/www</tt></b>
-[service0@yourserver samplenote]$<b><tt> cd /web/service0/packages/samplenote/www</tt></b>
-[service0@yourserver www]$ <b><tt>emacs index.tcl</tt></b></pre><p>Paste this into the file.</p><pre class="programlisting">ad_page_contract {
+</p><pre class="screen">[service0@yourserver samplenote]$<b class="userinput"><tt> mkdir /web/service0/packages/samplenote/www</tt></b>
+[service0@yourserver samplenote]$<b class="userinput"><tt> cd /web/service0/packages/samplenote/www</tt></b>
+[service0@yourserver www]$ <b class="userinput"><tt>emacs index.tcl</tt></b></pre><p>Paste this into the file.</p><pre class="programlisting">ad_page_contract {
     This is the main page for the package.  It displays all of the Notes and provides links to edit them and to create new Notes.
 
     @author rhs@mit.edu
@@ -29,36 +28,36 @@
 }
 # define the columns in the table
 set table_def   {
-    {title &quot;Note&quot;}
-    {body &quot;Contents&quot;}
-    {edit &quot;&quot; {} {&lt;td&gt;&lt;a href=&quot;note-edit?note_id=$note_id&quot;&gt;Edit&lt;/a&gt;&lt;/td&gt;}}
+    {title "Note"}
+    {body "Contents"}
+    {edit "" {} {&lt;td&gt;&lt;a href="note-edit?note_id=$note_id"&gt;Edit&lt;/a&gt;&lt;/td&gt;}}
 }
 
 # construct an html table from the samplenotes database table
 set table_html [ad_table -Torderby $orderby notes_query { *SQL* } $table_def]</pre><p>  There are several things to
 note about the file:</p><div class="itemizedlist"><ul type="disc"><li><p>The page begins with an
-        <tt><a href="/api-doc/proc-view?proc=ad%5fpage%5fcontract" target="_top">ad_page_contract</a></tt> function.
+        <tt class="computeroutput"><a href="/api-doc/proc-view?proc=ad%5fpage%5fcontract" target="_top">ad_page_contract</a></tt> function.
         This is where we declare the input and output variables and
         their types and restrictions.  It's also where we document the
         page, including descriptions of the parameters and return.
         (<a href="/doc/tcl-doc.html" target="_top">More information about TCL
         pages and page contracts</a>)</p></li><li><p>We have one input variable,
-          <tt>orderby</tt>, which is optional
-          and defaults to <tt>title</tt>.</p></li><li><p>We have one output variable, <tt>table_html</tt></p></li><li><p>We populate the table_html variable with a function call, <tt><a href="/api-doc/proc-view?proc=ad%5f_table" target="_top">ad_table</a></tt>, which does most of the work of generating an html table from a database recordset.  We pass it several parameters:</p><div class="variablelist"><dl><dt><span class="term">-Torderby $orderby</span></dt><dd><p>If the user has selected a column for sorting, this passes that information to the function.</p></dd><dt><span class="term">notes_query</span></dt><dd><p>This is the name of the SQL query that we'll put in the xql file.</p></dd><dt><span class="term">{ *SQL* }</span></dt><dd><p>This is a dummy placeholder.  It's possible to put sql directly in the tcl file, but this is deprecated because it's harder to make portable.</p></dd><dt><span class="term">$table_def</span></dt><dd><p>Here we pass in the variable we just constructed; it contains a list of column names and display titles.</p></dd></dl></div></li></ul></div><p>Put the database query into a separate file.  If the
+          <tt class="computeroutput">orderby</tt>, which is optional
+          and defaults to <tt class="computeroutput">title</tt>.</p></li><li><p>We have one output variable, <tt class="computeroutput">table_html</tt></p></li><li><p>We populate the table_html variable with a function call, <tt class="computeroutput"><a href="/api-doc/proc-view?proc=ad%5f_table" target="_top">ad_table</a></tt>, which does most of the work of generating an html table from a database recordset.  We pass it several parameters:</p><div class="variablelist"><dl><dt><span class="term">-Torderby $orderby</span></dt><dd><p>If the user has selected a column for sorting, this passes that information to the function.</p></dd><dt><span class="term">notes_query</span></dt><dd><p>This is the name of the SQL query that we'll put in the xql file.</p></dd><dt><span class="term">{ *SQL* }</span></dt><dd><p>This is a dummy placeholder.  It's possible to put sql directly in the tcl file, but this is deprecated because it's harder to make portable.</p></dd><dt><span class="term">$table_def</span></dt><dd><p>Here we pass in the variable we just constructed; it contains a list of column names and display titles.</p></dd></dl></div></li></ul></div><p>Put the database query into a separate file.  If the
       database query is exactly the same for Oracle and PostgreSQL, it
       can go into a file with the same name as the tcl file but an xql
-      extension, e.g., <tt>index.xql</tt>.  If
+      extension, e.g., <tt class="computeroutput">index.xql</tt>.  If
       it is database-specific, it goes in
-      <tt>index-oracle.xql</tt> or
-      <tt>index-postgresql.xql</tt>.  The
+      <tt class="computeroutput">index-oracle.xql</tt> or
+      <tt class="computeroutput">index-postgresql.xql</tt>.  The
       format is the same in each case, an XML structure that contains
-      the SQL query.  Create the file now.</p><pre class="screen">[service0@yourserver www]$<b><tt> emacs index.xql</tt></b></pre><p>Note that the
-      <tt>name</tt> parameter of the
-      <tt>fullquery</tt> tag exactly matches
+      the SQL query.  Create the file now.</p><pre class="screen">[service0@yourserver www]$<b class="userinput"><tt> emacs index.xql</tt></b></pre><p>Note that the
+      <tt class="computeroutput">name</tt> parameter of the
+      <tt class="computeroutput">fullquery</tt> tag exactly matches
       the SQL query name specified in the
-      <tt>ad_table</tt> call.  Also, the SQL query ends with a tcl function call that generates a SQL ORDER BY clause using several TCL variables.  </p><pre class="programlisting">&lt;?xml version=&quot;1.0&quot;?&gt;
+      <tt class="computeroutput">ad_table</tt> call.  Also, the SQL query ends with a tcl function call that generates a SQL ORDER BY clause using several TCL variables.  </p><pre class="programlisting">&lt;?xml version="1.0"?&gt;
 &lt;queryset&gt;
-  &lt;fullquery name=&quot;notes_query&quot;&gt;
+  &lt;fullquery name="notes_query"&gt;
     &lt;querytext&gt;
     select note_id,
            title,
@@ -67,26 +66,26 @@ note about the file:</p><div class="itemizedlist"><ul type="disc"><li><p>The pag
     [ad_order_by_from_sort_spec $orderby $table_def]
     &lt;/querytext&gt;
   &lt;/fullquery&gt;
-&lt;/queryset&gt;</pre><p>Create the user-visible page.</p><pre class="screen">[service0@yourserver www]$ <b><tt>emacs index.adp</tt></b></pre><p>The first line indicates that this page should be rendered within the the master template, which defaults to <tt>/web/service0/www/default-master</tt>.  The second line passes a <tt>title</tt> variable to the master template.  The third line inserts the contents of the variable <tt>table_html</tt>.  The last line is a link to a page we haven't created yet.</p><pre class="programlisting">&lt;master&gt;
-&lt;property name=&quot;title&quot;&gt;Sample Notes&lt;/property&gt;
+&lt;/queryset&gt;</pre><p>Create the user-visible page.</p><pre class="screen">[service0@yourserver www]$ <b class="userinput"><tt>emacs index.adp</tt></b></pre><p>The first line indicates that this page should be rendered within the the master template, which defaults to <tt class="computeroutput">/web/service0/www/default-master</tt>.  The second line passes a <tt class="computeroutput">title</tt> variable to the master template.  The third line inserts the contents of the variable <tt class="computeroutput">table_html</tt>.  The last line is a link to a page we haven't created yet.</p><pre class="programlisting">&lt;master&gt;
+&lt;property name="title"&gt;Sample Notes&lt;/property&gt;
 @table_html@
-&lt;p&gt;&lt;a href=&quot;note-edit&quot;&gt;Add a note&lt;/a&gt;&lt;/p&gt;</pre></div><div class="sect2" lang="en"><div class="titlepage"><div><h3 class="title"><a name="id2914976"></a>Making the APM load your files</h3></div></div><p>Before we can test these files, we have to notify the
+&lt;p&gt;&lt;a href="note-edit"&gt;Add a note&lt;/a&gt;&lt;/p&gt;</pre></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2841987"></a>Making the APM load your files</h3></div></div><div></div></div><p>Before we can test these files, we have to notify the
       package manager that they exist.  (More precisely, the tcl and
       adp will work fine as-is, but the xql file will not be
-      recognized until we tell the APM about it.).</p><div class="itemizedlist"><ul type="disc"><li><p> Go to <tt>http://yourserver.test:8000/acs-admin/apm</tt></p></li><li><p>Click on the <tt>samplenote</tt> link</p></li><li><p>Click <tt>Manage file information</tt></p></li><li><p>
+      recognized until we tell the APM about it.).</p><div class="itemizedlist"><ul type="disc"><li><p> Go to <tt class="computeroutput">http://yourserver.test:8000/acs-admin/apm</tt></p></li><li><p>Click on the <tt class="computeroutput">samplenote</tt> link</p></li><li><p>Click <tt class="computeroutput">Manage file information</tt></p></li><li><p>
             Check the values in the file type column for your files. A
             question mark means the APM doesn't recognize the file
             type and probably means you have mistyped a filename.
           </p></li><li><p>
             At the bottom of the file list page - click on the
-            <tt>watch all files</tt> link.
+            <tt class="computeroutput">watch all files</tt> link.
             Unlike adp and tcl pages, xql pages get cached.  (And new
             xql files don't get loaded when they're watched or the
             server is restarted.)  Watching an xql file causes the APM
             to load the contents of the XQL into memory so that it can
             be used, and to reload it whenever the file is changed.
             The watch will last until the server is restarted.
-          </p></li></ul></div><p>Now that the APM is aware of your files, check to make sure that the self-documenting code is working.</p><div class="itemizedlist"><ul type="disc"><li><p>Browse to <tt>http://yourserver.test:8000/api-doc/</tt></p></li><li><p>Click <tt>Notes 0.1d</tt></p></li><li><p>Click <tt>Content Pages</tt></p></li><li><p>Click <tt>index.tcl</tt> and examine the results.</p></li></ul></div></div><div class="sect2" lang="en"><div class="titlepage"><div><h3 class="title"><a name="id2910349"></a>Test the index page</h3></div></div><p>Go to <tt>http://<span class="replaceable">yourserver.test:8000</span>/note/</tt>.  You should see this:</p><pre class="screen">
+          </p></li></ul></div><p>Now that the APM is aware of your files, check to make sure that the self-documenting code is working.</p><div class="itemizedlist"><ul type="disc"><li><p>Browse to <tt class="computeroutput">http://yourserver.test:8000/api-doc/</tt></p></li><li><p>Click <tt class="computeroutput">Notes 0.1d</tt></p></li><li><p>Click <tt class="computeroutput">Content Pages</tt></p></li><li><p>Click <tt class="computeroutput">index.tcl</tt> and examine the results.</p></li></ul></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2838065"></a>Test the index page</h3></div></div><div></div></div><p>Go to <tt class="computeroutput">http://<span class="replaceable"><span class="replaceable">yourserver.test:8000</span></span>/note/</tt>.  You should see this:</p><pre class="screen">
 Sample Notes
 Your Workspace : Main Site : Sample Note 
 
@@ -95,39 +94,39 @@ No data found.
 Add a note.
 
 foo@yourserver.test
-</pre><p>Since our table is empty, it's a pretty boring page.  So next we'll make it possible to add records. </p><p>If you get any other output, such as an error message, skip to <a href="tutorial-debug.html" title="Debugging and Automated Testing">the section called &#8220;Debugging and Automated Testing&#8221;</a>.</p></div><div class="sect2" lang="en"><div class="titlepage"><div><h3 class="title"><a name="id2910399"></a>Add the add/edit page</h3></div></div><p>We'll create a single page to handle both adding and
+</pre><p>Since our table is empty, it's a pretty boring page.  So next we'll make it possible to add records. </p><p>If you get any other output, such as an error message, skip to <a href="tutorial-debug.html" title="Debugging and Automated Testing">Section , &#8220;Debugging and Automated Testing&#8221;</a>.</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2838109"></a>Add the add/edit page</h3></div></div><div></div></div><p>We'll create a single page to handle both adding and
       editing records.  In this recursive approach, the same tcl
       function can present a blank HTML form, present the same form
       pre-loaded with an existing record, and handle the resulting
       submission of either updated or new records.  This recursive
       approach reduces the total amount of code and files.  First,
-      create the tcl:</p><pre class="screen">[service0@yourserver www]$ <b><tt>emacs note-edit.tcl</tt></b></pre><p>Paste and save and edit:</p><pre class="programlisting">ad_page_contract {
+      create the tcl:</p><pre class="screen">[service0@yourserver www]$ <b class="userinput"><tt>emacs note-edit.tcl</tt></b></pre><p>Paste and save and edit:</p><pre class="programlisting">ad_page_contract {
         Simple add/edit form for samplenote.
 } {
     note_id:integer,optional
 }
 set user_id [ad_maybe_redirect_for_registration]
-set title &quot;Add a note&quot;
+set title "Add a note"
 
 if {[exists_and_not_null note_id]} {
-    set title &quot;Edit a note&quot;
+    set title "Edit a note"
 }
 
 ad_form -name note -form {
     note_id:key
     {title:text
-        {label &quot;Title&quot;}
+        {label "Title"}
     }
     {body:text(textarea)
-        {label &quot;Body&quot;}
+        {label "Body"}
     }
 } -select_query_name note_query -new_data {
 db_1row do_insert { *SQL* }
 } -edit_data {
 db_dml do_update { *SQL* }
 } -after_submit {
-ad_returnredirect &quot;index&quot;
-}</pre><p>We use <tt><a href="/api-doc/proc-view?proc=ad_form" target="_top">ad_form</a></tt>
+ad_returnredirect "index"
+}</pre><p>We use <tt class="computeroutput"><a href="/api-doc/proc-view?proc=ad_form" target="_top">ad_form</a></tt>
     to automate most of the work here.  Ad_form is a wrapper for the
     <a href="/api-doc/proc-view?proc=template%3a%3aform" target="_top">template
     functions</a> for creating HTML forms.  These functions should
@@ -136,19 +135,19 @@ ad_returnredirect &quot;index&quot;
     the appearance of forms.  </p><p>The page takes a single, optional input parameter,
     note_id.  If it's present, ad_form will assume that we're editing
     an existing record, look up that record, and pre-populate the
-    form.  We'll also check and change the page title if necessary.  We check user_id with <tt><a href="/api-doc/proc-view?proc=ad_maybe_redirect_for_registration" target="_top">ad_maybe_redirect_for_registration</a></tt>,
+    form.  We'll also check and change the page title if necessary.  We check user_id with <tt class="computeroutput"><a href="/api-doc/proc-view?proc=ad_maybe_redirect_for_registration" target="_top">ad_maybe_redirect_for_registration</a></tt>,
     which will redirect to the login page (with an automatic return
     path to bring them back after login or registration) if the
     visitor isn't logged in.  Then we call ad_form, specifying the
     primary key of the table, the fields we want to edit, and
-    functions for insert and update.</p><p>Next, we create the database functions.</p><pre class="screen">[service0@yourserver www]$ <b><tt>emacs note-edit.xql</tt></b></pre><pre class="programlisting">&lt;?xml version=&quot;1.0&quot;?&gt;
+    functions for insert and update.</p><p>Next, we create the database functions.</p><pre class="screen">[service0@yourserver www]$ <b class="userinput"><tt>emacs note-edit.xql</tt></b></pre><pre class="programlisting">&lt;?xml version="1.0"?&gt;
 &lt;queryset&gt;
-  &lt;fullquery name=&quot;do_insert&quot;&gt;
+  &lt;fullquery name="do_insert"&gt;
     &lt;querytext&gt;
         select samplenote__new(null,:title, :body,null,:user_id,null,null)
     &lt;/querytext&gt;
   &lt;/fullquery&gt;
-  &lt;fullquery name=&quot;do_update&quot;&gt;
+  &lt;fullquery name="do_update"&gt;
     &lt;querytext&gt;
        update samplenote
           set title = :title,
@@ -156,7 +155,7 @@ ad_returnredirect &quot;index&quot;
         where note_id = :note_id
     &lt;/querytext&gt;
   &lt;/fullquery&gt;
-  &lt;fullquery name=&quot;note_query&quot;&gt;
+  &lt;fullquery name="note_query"&gt;
     &lt;querytext&gt;
       select title,
              body
@@ -164,17 +163,17 @@ ad_returnredirect &quot;index&quot;
        where note_id = :note_id
     &lt;/querytext&gt;
   &lt;/fullquery&gt;
-&lt;/queryset&gt;</pre><p>Create the user-visible page:</p><pre class="screen">[service0@yourserver www]$ <b><tt>emacs note-edit.adp</tt></b></pre><pre class="programlisting">&lt;master&gt;
-&lt;property name=&quot;title&quot;&gt;@title@&lt;/property&gt;
-&lt;property name=&quot;context&quot;&gt;{@title@}&lt;/property&gt;
-&lt;formtemplate id=&quot;note&quot;&gt;&lt;/formtemplate&gt;
+&lt;/queryset&gt;</pre><p>Create the user-visible page:</p><pre class="screen">[service0@yourserver www]$ <b class="userinput"><tt>emacs note-edit.adp</tt></b></pre><pre class="programlisting">&lt;master&gt;
+&lt;property name="title"&gt;@title@&lt;/property&gt;
+&lt;property name="context"&gt;{@title@}&lt;/property&gt;
+&lt;formtemplate id="note"&gt;&lt;/formtemplate&gt;
 </pre><p>The property tags are passed to the master template, which
       uses their values to set the page title and context bar
       (breadcrumb trail).  We use the same variable,
-      <tt>title</tt>, for both variables but
+      <tt class="computeroutput">title</tt>, for both variables but
       wrap it in curly brackets for context so that the spaces aren't
       interpreted separators.  The formtemplate tag outputs the form
-      html with the matching name.</p><p>Go to the APM as before and reload.  Then test all this by going to the package home page and adding and editing a few records.</p></div><div class="sect2" lang="en"><div class="titlepage"><div><h3 class="title"><a name="id2930303"></a>Adding files to cvs</h3></div></div><p>Put your new work into source control.</p><pre class="screen">[service0@yourserver www]$ <b><tt>cvs add *.adp *.tcl *.xql</tt></b>
+      html with the matching name.</p><p>Go to the APM as before and reload.  Then test all this by going to the package home page and adding and editing a few records.</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2838275"></a>Adding files to cvs</h3></div></div><div></div></div><p>Put your new work into source control.</p><pre class="screen">[service0@yourserver www]$ <b class="userinput"><tt>cvs add *.adp *.tcl *.xql</tt></b>
 cvs add: cannot add special file `CVS'; skipping
 cvs add: doc/CVS already exists
 cvs add: scheduling file `index.adp' for addition
@@ -184,7 +183,7 @@ cvs add: scheduling file `note-edit.adp' for addition
 cvs add: scheduling file `note-edit.tcl' for addition
 cvs add: scheduling file `note-edit.xql' for addition
 cvs add: use 'cvs commit' to add these files permanently
-[service0@yourserver www]$ <b><tt> cvs commit -m &quot;new work&quot;</tt></b>
+[service0@yourserver www]$ <b class="userinput"><tt> cvs commit -m "new work"</tt></b>
 /cvsroot/service0/packages/samplenote/www/note-edit.xql~,v  &lt;--  note-edit.xql
 <span class="emphasis"><em>(many lines omitted)</em></span>
 initial revision: 1.1

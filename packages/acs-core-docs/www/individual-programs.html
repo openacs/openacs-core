@@ -1,4 +1,4 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Individual Programs</title><meta name="generator" content="DocBook XSL Stylesheets V1.60.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="software-versions.html" title="Chapter 3. Prerequisite Software"><link rel="previous" href="compatibility-matrix.html" title="Compatibility Matrix"><link rel="next" href="unix-install.html" title="Chapter 4. Installing on Unix/Linux"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="images/alex.jpg" border="0"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="compatibility-matrix.html">Prev</a> </td><th width="60%" align="center">Chapter 3. Prerequisite Software</th><td width="20%" align="right"> <a accesskey="n" href="unix-install.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="individual-programs"></a>Individual Programs</h2></div></div><div></div></div><div class="itemizedlist"><ul type="disc"><li><a name="openacs-download"></a><p><b><a href="http://openacs.org/projects/openacs/download/" target="_top">OpenACS 5.0.0d</a>. </b>The OpenACS tarball comprises the core packages and
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Individual Programs</title><meta name="generator" content="DocBook XSL Stylesheets V1.60.1"><link rel="home" href="index.html" title="OpenACS Documentation"><link rel="up" href="software-versions.html" title="Chapter 3. Prerequisite Software"><link rel="previous" href="compatibility-matrix.html" title="Compatibility Matrix"><link rel="next" href="unix-install.html" title="Chapter 4. Installing on Unix/Linux"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="compatibility-matrix.html">Prev</a> </td><th width="60%" align="center">Chapter 3. Prerequisite Software</th><td width="20%" align="right"> <a accesskey="n" href="unix-install.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="individual-programs"></a>Individual Programs</h2></div></div><div></div></div><div class="itemizedlist"><ul type="disc"><li><a name="openacs-download"></a><p><b><a href="http://openacs.org/projects/openacs/download/" target="_top">OpenACS 5.0.0a1</a>. </b>The OpenACS tarball comprises the core packages and
             many useful additional packages.  This includes a full set
             of documentation.  The tarball works with both PostGreSQL
             and Oracle.</p></li><li><p><b>Operating System. </b>OpenACS is designed for a Unix-like system.  It is
@@ -30,7 +30,7 @@
               distributions. </p></li><li><p><b>TCL 8.3 development headers and libraries, OPTIONAL. </b>  The site-wide-search service, OpenFTS, requires these to
 			  compile. (Debian users: <tt class="computeroutput">apt-get install
 			  tcl8.3-dev</tt>).  You need this
-              to install OpenFTS.</p></li></ul></div></li><li><a name="source-tdom"></a><p><b>tDOM, REQUIRED. </b>OpenACS 5.0.0d stores
+              to install OpenFTS.</p></li></ul></div></li><li><a name="source-tdom"></a><p><b>tDOM, REQUIRED. </b>OpenACS 5.0.0a1 stores
           queries in XML files, so we use an AOLserver module called
           tDOM to parse these files.  (This replaces libxml2, which
           was used prior to 4.6.4.)  tDOM is available from <a href="http://tdom.org" target="_top">http://tdom.org</a>).</p></li><li><p><b>Web Server. </b>The web server handles incoming HTTP requests, provides
@@ -40,7 +40,7 @@
         running Apache with mod_nsd - see <a href="http://openacs.org/forums/message-view?message_id=21461" target="_top">this
         post.</a></p><div class="itemizedlist"><ul type="circle"><li><a name="source-aolserver"></a><p><b><a href="http://uptime.openacs.org/aolserver-openacs/aolserver3.3oacs1.tar.gz" target="_top">AOLserver 3.3oacs1</a>, REQUIRED. </b>Mat Kovach's source distribution of AOLserver, including all of the patches listed below.</p><p>
       Mat Kovach is graciously maintaining an AOLserver distribution that
-      includes all the patches and modules needed to run OpenACS 5.0.0d. These
+      includes all the patches and modules needed to run OpenACS 5.0.0a1. These
       instructions will describe how to install using his source
       distribution. He also has binaries for SuSE 7.3 and OpenBSD 2.8 (and
       perhaps more to come), currently located at <a href="http://uptime.openacs.org/aolserver-openacs/" target="_top">uptime.openacs.org</a>.
@@ -77,7 +77,8 @@
               0.1</a>, OPTIONAL. </b>Provides PAM capabilities for AOLserver.  You
               need this if you want OpenACS users to authenticate
               through a PAM module (such as RADIUS).  (<a href="http://braindamage.alal.com/software/nspam.html" target="_top">home
-              page</a>)</p></li><li><a name="nsldap-download"></a><p><b><a href="http://sourceforge.net/project/showfiles.php?group_id=3152" target="_top">ns_ldap 0.r8
+              page</a>)</p></li><li><a name="pam-radius-download"></a><p><b><a href="ftp://ftp.freeradius.org/pub/radius/pam_radius-1.3.16.tar" target="_top">pam_radius 1.3.16</a>, OPTIONAL. </b>Provides RADIUS capabilities for PAM.  You need
+              this if you want to use RADIUS authentication via PAM in OpenACS.</p></li><li><a name="nsldap-download"></a><p><b><a href="http://sourceforge.net/project/showfiles.php?group_id=3152" target="_top">ns_ldap 0.r8
               </a>, OPTIONAL. </b>Provides LDAP capabilities for AOLserver.  You need
               this if you want to use LDAP authentication in OpenACS.</p></li><li><a name="openfts-download"></a><p><b><a href="http://unc.dl.sourceforge.net/sourceforge/openfts/Search-OpenFTS-tcl-0.3.2.tar.gz" target="_top">OpenFTS TCL 0.3.2</a>, OPTIONAL. </b>Adds full-text-search to PostGreSQL and includes a
                driver for AOLserver.  You need this if you want users

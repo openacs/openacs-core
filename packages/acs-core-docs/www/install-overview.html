@@ -1,22 +1,21 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Overview</title><meta name="generator" content="DocBook XSL Stylesheets V1.58.1"><link rel="home" href="index.html" title="OpenACS Documentation"><link rel="up" href="unix-install.html" title="Chapter 4. Installing on Unix/Linux"><link rel="previous" href="unix-install.html" title="Chapter 4. Installing on Unix/Linux"><link rel="next" href="linux-installation.html" title="Install Linux and supporting software"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="images/alex.jpg" border="0"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="unix-install.html">Prev</a> </td><th width="60%" align="center">Chapter 4. Installing on Unix/Linux</th><td width="20%" align="right"> <a accesskey="n" href="linux-installation.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><h2 class="title" style="clear: both"><a name="install-overview"></a>Overview</h2></div></div><div class="authorblurb"><p>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Overview</title><meta name="generator" content="DocBook XSL Stylesheets V1.60.1"><link rel="home" href="index.html" title="OpenACS Documentation"><link rel="up" href="unix-install.html" title="Chapter 4. Installing on Unix/Linux"><link rel="previous" href="unix-install.html" title="Chapter 4. Installing on Unix/Linux"><link rel="next" href="linux-installation.html" title="Install Linux and supporting software"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="unix-install.html">Prev</a> </td><th width="60%" align="center">Chapter 4. Installing on Unix/Linux</th><td width="20%" align="right"> <a accesskey="n" href="linux-installation.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="install-overview"></a>Overview</h2></div></div><div></div></div><div class="authorblurb"><p>
 	by <a href="mailto:vinod@kurup.com" target="_top">Vinod Kurup</a><br>
           OpenACS docs are written by the named authors, and may be edited
           by OpenACS documentation staff.
-        </p></div><div class="sect2" lang="en"><div class="titlepage"><div><h3 class="title"><a name="install-purpose"></a>Purpose of this document</h3></div></div><p>
+        </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="install-purpose"></a>Purpose of this document</h3></div></div><div></div></div><p>
 
 	  This document will describe how to install, configure, and
-	  maintain an installation of OpenACS 5.0.0d on a Unix-like
+	  maintain an installation of OpenACS 5.0.0a1 on a Unix-like
 	  system, including all supporting software.  All examples
-	  in this chapter are part of the OpenACS 5.0.0d-P or
-	  OpenACS 5.0.0d-O Reference Platform, which use Red
+	  in this chapter are part of the OpenACS 5.0.0a1-P or
+	  OpenACS 5.0.0a1-O Reference Platform, which use Red
 	  Hat 8.0.  Differences between the Reference Platform
 	  and common alternate platforms (Red Hat 9, Debian) are noted where known.
-	</p></div><div class="sect2" lang="en"><div class="titlepage"><div><h3 class="title"><a name="install-requirements"></a>Requirements</h3></div></div><p>
+	</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="install-requirements"></a>Requirements</h3></div></div><div></div></div><p>
 	  You will need a PC (or equivalent) with at least these minimum
 	  requirements:
 	</p><div class="itemizedlist"><ul type="disc"><li><p>Pentium processor</p></li><li><p>128 MB RAM
-		  (much more if you want Oracle)</p></li><li><p>4 GB hard drive</p></li></ul></div><p>You will need all everthing marked REQUIRED in <a href="individual-programs.html" title="Individual Programs">the section called &#8220;Individual Programs&#8221;</a>.</p><p>
+		  (much more if you want Oracle)</p></li><li><p>4 GB hard drive</p></li></ul></div><p>You will need all everthing marked REQUIRED in <a href="individual-programs.html" title="Individual Programs">Section , &#8220;Individual Programs&#8221;</a>.</p><p>
 	  If you want to serve pages to people outside of your machine, you'll
 	  need a network connection of some type.
 	</p><p>
@@ -30,8 +29,8 @@
 		</p></li><li><p> 		  
 		  (For Oracle) Starting an X server and running an X program remotely
 	  </p></li><li><p> 
-		  Basic file management using <tt>cp, rm,
-			mv,</tt> and <tt>cd</tt>
+		  Basic file management using <tt class="computeroutput">cp, rm,
+			mv,</tt> and <tt class="computeroutput">cd</tt>
 		</p></li><li><p> 
 		  Compiling a program using ./config and make.
 		</p></li></ul></div><p>
@@ -42,36 +41,36 @@
 	  All of the software that you will need is free and open-source,
 	  except for Oracle. You can obtain a free copy of Oracle for
 	  development purposes. This is described in the <a href="oracle.html#install-oracle-getit">Acquire Oracle</a> section.
-	</p></div><div class="sect2" lang="en"><div class="titlepage"><div><h3 class="title"><a name="install-steps"></a>Steps involved</h3></div></div><p>
+	</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="install-steps"></a>Steps involved</h3></div></div><div></div></div><p>
 	  The basic steps to getting OpenACS up and running are: 
 	</p><div class="orderedlist"><ol type="1"><li><p>Install an OS</p></li><li><p>Install a database (Oracle or
-	  PostgreSQL)</p></li><li><p>Install a webserver (AOLServer)</p></li><li><p>Copy the OpenACS files into place and start the OpenACS installer, which will configure a database instance.</p></li></ol></div></div><div class="sect2" lang="en"><div class="titlepage"><div><h3 class="title"><a name="id2920654"></a>How to use this guide</h3></div></div><div class="itemizedlist"><ul type="disc"><li><p><tt>This</tt> is text you will see on
-            screen, such as a <tt><span class="guibutton"><u>B</u>utton</span></tt> or <tt><span class="guilabel"><u>link</u></span></tt>
-            in a radio button list or menu.</p></li><li><p><b><tt>This is text that you will type.</tt></b></p></li><li><p>This is text from a program or file which you may need to
-examine or edit:</p><pre class="programlisting">if {$database == &quot;oracle&quot;} {
-    set db_password        &quot;mysitepassword&quot;
+	  PostgreSQL)</p></li><li><p>Install a webserver (AOLServer)</p></li><li><p>Copy the OpenACS files into place and start the OpenACS installer, which will configure a database instance.</p></li></ol></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2814827"></a>How to use this guide</h3></div></div><div></div></div><div class="itemizedlist"><ul type="disc"><li><p><tt class="computeroutput">This</tt> is text you will see on
+            screen, such as a <tt class="computeroutput"><span class="guibutton"><span class="guibutton"><u><span class="accel">B</span></u>utton</span></span></tt> or <tt class="computeroutput"><span class="guilabel"><span class="guilabel"><u><span class="accel">link</span></u></span></span></tt>
+            in a radio button list or menu.</p></li><li><p><b class="userinput"><tt>This is text that you will type.</tt></b></p></li><li><p>This is text from a program or file which you may need to
+examine or edit:</p><pre class="programlisting">if {$database == "oracle"} {
+    set db_password        "mysitepassword"
 }</pre></li><li><p>This is text that you will
-<tt>see</tt> and <b><tt>type</tt></b> in a command shell, including <span class="replaceable">text you may have to
-change</span>.  It is followed by a list of just the commands,
-which you can copy and paste.</p><pre class="screen">[root@localhost root]# <b><tt>su - nsadmin</tt></b>
-[nsadmin@localhost aolserver]$ <b><tt>svc -d /service/<span class="replaceable">server1</span></tt></b>
-[nsadmin@localhost aolserver]$ <b><tt>dropdb <span class="replaceable">server1</span></tt></b>
+<tt class="computeroutput">see</tt> and <b class="userinput"><tt>type</tt></b> in a command shell, including <span class="replaceable"><span class="replaceable">text you may have to
+change</span></span>.  It is followed by a list of just the commands,
+which you can copy and paste.</p><pre class="screen">[root@localhost root]# <b class="userinput"><tt>su - nsadmin</tt></b>
+[nsadmin@localhost aolserver]$ <b class="userinput"><tt>svc -d /service/<span class="replaceable"><span class="replaceable">server1</span></span></tt></b>
+[nsadmin@localhost aolserver]$ <b class="userinput"><tt>dropdb <span class="replaceable"><span class="replaceable">server1</span></span></tt></b>
 DROP DATABASE
-[nsadmin@localhost aolserver]$ <b><tt>createdb <span class="replaceable">server1</span></tt></b>
+[nsadmin@localhost aolserver]$ <b class="userinput"><tt>createdb <span class="replaceable"><span class="replaceable">server1</span></span></tt></b>
 CREATE DATABASE
-<pre class="action">su - nsadmin
-svc -d /service/<span class="replaceable">server1</span>
-dropdb <span class="replaceable">server1</span>
-createdb <span class="replaceable">server1</span></pre></pre></li></ul></div></div><div class="sect2" lang="en"><div class="titlepage"><div><h3 class="title"><a name="install-stuck"></a>What if I get stuck?</h3></div></div><p>
+<pre class="action"><span class="action">su - nsadmin
+svc -d /service/<span class="replaceable"><span class="replaceable">server1</span></span>
+dropdb <span class="replaceable"><span class="replaceable">server1</span></span>
+createdb <span class="replaceable"><span class="replaceable">server1</span></span></span></pre></pre></li></ul></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="install-stuck"></a>What if I get stuck?</h3></div></div><div></div></div><p>
 	  We'll do our best to assure that following our instructions will get
 	  you to the promised land. If something goes wrong, don't
 	  panic. There are plenty of ways to get help. Here are some tips:
 	</p><div class="itemizedlist"><ul type="disc"><li><p>
 		  Keep track of the commands you are run and record their output. I
 		  like to do my installations in a shell inside of emacs
-		  (<tt>M-x shell</tt>) so that I can save
+		  (<tt class="computeroutput">M-x shell</tt>) so that I can save
 		  the output if needed. An alternative would be to use the
-		  <tt>script</tt> command.
+		  <tt class="computeroutput">script</tt> command.
 		</p></li><li><p>
 		  We'll point out where the error logs for the various pieces of
 		  software are. Output from those logs will help us help you. Don't
@@ -102,16 +101,16 @@ createdb <span class="replaceable">server1</span></pre></pre></li></ul></div></d
 		  If you find errors in this document or if you have ideas about
 		  making it better, please post them in our
 		  <a href="http://openacs.org/bugtracker/openacs/" target="_top">BugTracker</a>.
-        </p></li></ul></div></div><div class="sect2" lang="en"><div class="titlepage"><div><h3 class="title"><a name="install-rpms"></a>Is there an easier way?</h3></div></div><p>
+        </p></li></ul></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="install-rpms"></a>Is there an easier way?</h3></div></div><div></div></div><p>
 
       After reading through this tome, you may ask yourself if there is a
       better way. Well, not quite. Jonathan Marsden has created RPMs (at
       <a href="http://www.xc.org/jonathan/openacs/openacs4-rpm-based-install.html" target="_top">http://www.xc.org</a>)
       for OpenACS 4.5 but there are not yet any for version
-      5.0.0d. There has been talk about automating the install process,
+      5.0.0a1. There has been talk about automating the install process,
       but that hasn't happened yet. Stay tuned!
 
-    </p></div><div class="sect2" lang="en"><div class="titlepage"><div><h3 class="title"><a name="install-origins"></a>Where did this document come from?</h3></div></div><p>
+    </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="install-origins"></a>Where did this document come from?</h3></div></div><div></div></div><p>
       This document was created by <a href="mailto:vinod@kurup.com" target="_top">Vinod Kurup</a>, but it's really
       just plagiarism from a number of documents that came before it. If
       I've used something that you've written without proper credit, let me
@@ -132,7 +131,7 @@ createdb <span class="replaceable">server1</span></pre></pre></li></ul></div></d
           Aufrecht's OpenACS 4.5 Quick Guide.</a>
         </p></li></ul></div><p>
       Please also see the <a href="credits.html">Credits</a> section for more acknowledgements.
-    </p></div><div class="sect2" lang="en"><div class="titlepage"><div><h3 class="title"><a name="os-install"></a>Linux Install Guides</h3></div></div><p>
+    </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="os-install"></a>Linux Install Guides</h3></div></div><div></div></div><p>
       Here's a list of some helpful documentation for various OS's
     </p><div class="itemizedlist"><ul type="disc"><li><p>
           <a href="http://tinyplanet.ca/pubs/debian/" target="_top">Painless Debian
@@ -154,10 +153,10 @@ createdb <span class="replaceable">server1</span></pre></pre></li></ul></div></d
 
           <a href="http://sdb.suse.de/sdb/en/html/" target="_top">SuSE</a>
 
-        </p></li></ul></div></div><div class="sect2" lang="en"><div class="titlepage"><div><h3 class="title"><a name="os-security"></a>Security Information</h3></div></div><p>
+        </p></li></ul></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="os-security"></a>Security Information</h3></div></div><div></div></div><p>
       Once you get your OS installed, it's imperative that you secure your
-      installation. As Jon Griffin repeatedly warns us, &quot;No distribution is
-      secure out of the box.&quot;  The Reference Platform implements
+      installation. As Jon Griffin repeatedly warns us, "No distribution is
+      secure out of the box."  The Reference Platform implements
       some basic precautions, but security is a process, not a
       condition.  If you are responsible for a computer hooked to the
       internet, you are responsible for learning some rudiments of
@@ -178,9 +177,9 @@ createdb <span class="replaceable">server1</span></pre></pre></li></ul></div></d
         </p></li><li><p> 
           <a href="http://www.counterpane.com/crypto-gram.html" target="_top">Bruce
           Schneier's Crypto-Gram</a>, especially <a href="http://www.counterpane.com/crypto-gram-0103.html#1" target="_top">The
-          security patch treadmill</a> and <a href="http://www.counterpane.com/crypto-gram-0107.html#5" target="_top">Monitoring First</a>.</p></li></ul></div></div><div class="sect2" lang="en"><div class="titlepage"><div><h3 class="title"><a name="install-resources"></a>Resources</h3></div></div><p>
+          security patch treadmill</a> and <a href="http://www.counterpane.com/crypto-gram-0107.html#5" target="_top">Monitoring First</a>.</p></li></ul></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="install-resources"></a>Resources</h3></div></div><div></div></div><p>
       Here are some resources that OpenACS users have found useful.
-    </p><div class="sect3" lang="en"><div class="titlepage"><div><h4 class="title"><a name="install-resources-books"></a>Books</h4></div></div><div class="itemizedlist"><ul type="disc"><li><p>
+    </p><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="install-resources-books"></a>Books</h4></div></div><div></div></div><div class="itemizedlist"><ul type="disc"><li><p>
 
             <a href="http://www.amazon.com/exec/obidos/ASIN/1558605347/photonetA" target="_top">Philip
             and Alex's Guide to Web Publishing</a> - A very readable
@@ -195,8 +194,8 @@ createdb <span class="replaceable">server1</span></pre></pre></li></ul></div></d
           </p></li><li><p>
 
             <a href="http://www.amazon.com/exec/obidos/ASIN/0130206016/photonetA" target="_top">UNIX
-            System Administration Handbook</a> (formerly the &quot;red book&quot;
-            - now the &quot;purple&quot; book)
+            System Administration Handbook</a> (formerly the "red book"
+            - now the "purple" book)
 
           </p></li><li><p> 
 
@@ -213,7 +212,7 @@ createdb <span class="replaceable">server1</span></pre></pre></li></ul></div></d
             <a href="http://www.amazon.com/exec/obidos/ASIN/1565925858/photonetA" target="_top">Linux
               in a Nutshell</a> 
 
-          </p></li></ul></div></div><div class="sect3" lang="en"><div class="titlepage"><div><h4 class="title"><a name="install-resources-web"></a>Web Sites</h4></div></div><div class="itemizedlist"><ul type="disc"><li><p>
+          </p></li></ul></div></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="install-resources-web"></a>Web Sites</h4></div></div><div></div></div><div class="itemizedlist"><ul type="disc"><li><p>
 
             <a href="http://www.geek-girl.com/unix.html" target="_top">The UNIX
               Reference Desk</a>

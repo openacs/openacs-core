@@ -1,9 +1,8 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Parties in OpenACS 5.0.0d</title><meta name="generator" content="DocBook XSL Stylesheets V1.58.1"><link rel="home" href="index.html" title="OpenACS Documentation"><link rel="up" href="dev-guide.html" title="Chapter 11. Development Reference"><link rel="previous" href="subsites.html" title="Writing OpenACS 5.0.0d Application Pages"><link rel="next" href="permissions-tediously-explained.html" title="OpenACS 4.x Permissions Tediously Explained"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="images/alex.jpg" border="0"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="subsites.html">Prev</a> </td><th width="60%" align="center">Chapter 11. Development Reference</th><td width="20%" align="right"> <a accesskey="n" href="permissions-tediously-explained.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><h2 class="title" style="clear: both"><a name="parties"></a>Parties in OpenACS 5.0.0d</h2></div></div><div class="authorblurb"><p>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Parties in OpenACS 5.0.0a1</title><meta name="generator" content="DocBook XSL Stylesheets V1.60.1"><link rel="home" href="index.html" title="OpenACS Documentation"><link rel="up" href="dev-guide.html" title="Chapter 11. Development Reference"><link rel="previous" href="subsites.html" title="Writing OpenACS 5.0.0a1 Application Pages"><link rel="next" href="permissions-tediously-explained.html" title="OpenACS 4.x Permissions Tediously Explained"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="subsites.html">Prev</a> </td><th width="60%" align="center">Chapter 11. Development Reference</th><td width="20%" align="right"> <a accesskey="n" href="permissions-tediously-explained.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="parties"></a>Parties in OpenACS 5.0.0a1</h2></div></div><div></div></div><div class="authorblurb"><p>
 by <a href="http://planitia.org" target="_top">Rafael H. Schloming</a><br>
           OpenACS docs are written by the named authors, and may be edited
           by OpenACS documentation staff.
-        </p></div><div class="sect2" lang="en"><div class="titlepage"><div><h3 class="title"><a name="parties-intro"></a>Introduction</h3></div></div><p>While many applications must deal with individuals and many applications
+        </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="parties-intro"></a>Introduction</h3></div></div><div></div></div><p>While many applications must deal with individuals and many applications
 must deal with groups, most applications must deal with individuals
 <span class="emphasis"><em>or</em></span> groups. It is often the case with such applications that in many
 respects both individuals and groups are treated in an identical manner. It
@@ -11,11 +10,11 @@ is this latter class of application that makes it extremely useful to model
 individuals and groups as specializations of one supertype. This concept is
 so commonly used throughout human language and thought that we don't even
 need to invent for it some bizarre and specialized terminology. This
-supertype is called a &quot;party&quot;.</p><p>A classic example use of the &quot;party&quot; supertype is evident
+supertype is called a "party".</p><p>A classic example use of the "party" supertype is evident
 in a common address book. A typical person's address book might contain
 the address of his doctor, and his cable company. So what do we label the
 first field in an entry in his address book? It isn't a person, and it
-isn't a company. It is a &quot;party&quot;.</p></div><div class="sect2" lang="en"><div class="titlepage"><div><h3 class="title"><a name="parties-data-model"></a>The Data Model</h3></div></div><p>Most developers who do significant work with the OpenACS will become
+isn't a company. It is a "party".</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="parties-data-model"></a>The Data Model</h3></div></div><div></div></div><p>Most developers who do significant work with the OpenACS will become
 intimately familiar with the parties data model, and probably extend it on
 many occasions. For this reason the parties developer guide will begin with
 an introduction to the data model.</p><p><span class="strong">Parties</span></p><p>The central table in the parties data model is the parties table itself.
@@ -24,7 +23,7 @@ unique email address and an optional url. A party is an acs object, so
 permissions may granted and revoked on parties and auditing information is
 stored in the acs objects table.</p><pre class="programlisting">
 
-<tt>create table parties (
+<tt class="computeroutput">create table parties (
     party_id    not null
             constraint parties_party_id_fk references
             acs_objects (object_id)
@@ -47,7 +46,7 @@ persons table then there must be a corresponding row in the parties table.
 Also note that an individual need not be known to the system as a user. A
 user is in fact a further specialized form of an individual.</p><pre class="programlisting">
 
-<tt>create table persons (
+<tt class="computeroutput">create table persons (
     person_id   not null
             constraint persons_person_id_fk
             references parties (party_id)
@@ -64,16 +63,16 @@ key of the persons table. Once again this guarantees that if there is a row
 in the users table then there must be a row in the persons table and a row in
 the parties table.</p><p>One of the interesting benefits of decomposing all the information
 associated with a user into the four tables (acs_objects, parties, persons,
-users) is that it is now possible to &quot;nuke&quot; a user from a live
+users) is that it is now possible to "nuke" a user from a live
 system by removing his entry from the users table, but leaving the rest of
 his information present (i.e. turning him from a user into a person). This is
-because wherever possible the OpenACS 5.0.0d data model references the persons or
+because wherever possible the OpenACS 5.0.0a1 data model references the persons or
 parties table, <span class="strong">not</span> the users table. If this feature is
 desired when extending the system, then the developers should be careful to
 only references the users table in situations where it is clear that the
 references is to a user and not to an individual.</p><pre class="programlisting">
 
-<tt>create table users (
+<tt class="computeroutput">create table users (
     user_id         not null
                 constraint users_user_id_fk
                 references persons (person_id)
@@ -107,7 +106,7 @@ that in the parties table) is the name of the group. As you might guess there
 is another piece to the groups data model that records relations between
 parties and groups.</p><pre class="programlisting">
 
-<tt>create table groups (
+<tt class="computeroutput">create table groups (
     group_id    not null
             constraint groups_group_id_fk
             references parties (party_id)
@@ -118,7 +117,7 @@ parties and groups.</p><pre class="programlisting">
 
 </pre><p><span class="strong">Group Relations</span></p><p>One surprise here is that there are actually two relations involved. One
 is the normal membership relation between parties and groups. A party may be
-a &quot;member&quot; of a group. The other relation is a composition
+a "member" of a group. The other relation is a composition
 relation between two groups. To fully understand why two relations are
 necessary, and the situations in which each is appropriate, let's
 consider an example. Greenpeace is an organization that can have as members
@@ -129,7 +128,7 @@ member of Greenpeace, i.e., membership is not transitive with respect to
 itself. Now let's consider a multinational corporation. This corporation
 might have a U.S. division and a European division. A member of either the
 U.S. or European division is automatically a member of the company. In this
-situation the U.S. and European divisions are &quot;components&quot; of
+situation the U.S. and European divisions are "components" of
 the company, i.e., membership <span class="emphasis"><em>is</em></span> transitive with respect to
 composition. Having a membership relation between groups and parties, and
 having a composition relation between groups and groups allows us to easily
@@ -141,7 +140,7 @@ circumstances to make someone a member of a group of which they are already a
 member. This is because there is a distinction between direct membership and
 indirect membership (membership via some component or sub component).</p><pre class="programlisting">
 
-<tt>create or replace package membership_rel
+<tt class="computeroutput">create or replace package membership_rel
 as
 
   function new (
@@ -191,7 +190,7 @@ if you don't want users seeing some random PL/SQL error message, it is a
 good idea to not give them the option to create a composition relation that
 would result in a cycle.</p><pre class="programlisting">
 
-<tt>create or replace package composition_rel
+<tt class="computeroutput">create or replace package composition_rel
 as
 
   function new (
@@ -212,12 +211,12 @@ end composition_rel;
 show errors
 </tt>
 
-</pre></div><div class="sect2" lang="en"><div class="titlepage"><div><h3 class="title"><a name="parties-views"></a>Views</h3></div></div><p>The data model described above does a reasonable job of representing many
+</pre></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="parties-views"></a>Views</h3></div></div><div></div></div><p>The data model described above does a reasonable job of representing many
 of the situations one is likely to encounter when modeling organizational
 structures, but we still need to be able to efficiently answer questions like
-&quot;what members are in this group and all of its components?&quot;, and
-&quot;of what groups is this party a member either directly or
-indirectly?&quot;. Composition relations allow you to describe an arbitrary
+"what members are in this group and all of its components?", and
+"of what groups is this party a member either directly or
+indirectly?". Composition relations allow you to describe an arbitrary
 Directed Acyclic Graph (DAG) between a group and its components. For these
 reasons the party system provides a bunch of views that take advantage of the
 internal representation of group relations to answer questions like these
@@ -232,7 +231,7 @@ in acs_rels that contains the relation object that relates component_id to
 container_id. The rel_id might be useful for retrieving or updating standard
 auditing info for the relation.</p><pre class="programlisting">
 
-<tt>create or replace view group_component_map
+<tt class="computeroutput">create or replace view group_component_map
 as select group_id, component_id, container_id, rel_id
 ...
 </tt>
@@ -241,7 +240,7 @@ as select group_id, component_id, container_id, rel_id
 Note that this view will return all membership relations regardless of
 membership state.</p><pre class="programlisting">
 
-<tt>create or replace view group_member_map
+<tt class="computeroutput">create or replace view group_member_map
 as select group_id, member_id, container_id, rel_id
 ...
 </tt>
@@ -249,7 +248,7 @@ as select group_id, member_id, container_id, rel_id
 </pre><p>The group_approved_member_map is the same as the group_member_map except
 it only returns entries that relate to approved members.</p><pre class="programlisting">
 
-<tt>create or replace view group_approved_member_map
+<tt class="computeroutput">create or replace view group_approved_member_map
 as select group_id, member_id, container_id, rel_id
 ...
 </tt>
@@ -258,7 +257,7 @@ as select group_id, member_id, container_id, rel_id
 direct membership and indirect membership. It simply returns all members of a
 group including members of components. (It is the transitive closure.)</p><pre class="programlisting">
 
-<tt>create or replace view group_distinct_member_map
+<tt class="computeroutput">create or replace view group_distinct_member_map
 as select group_id, member_id
 ...
 </tt>
@@ -271,7 +270,7 @@ that party to itself. If a view is a group containing three individuals, this
 view will have four rows for that party, one for each member, and one from
 the party to itself.</p><pre class="programlisting">
 
-<tt>create or replace view party_member_map
+<tt class="computeroutput">create or replace view party_member_map
 as select party_id, member_id
 ...
 </tt>
@@ -279,12 +278,12 @@ as select party_id, member_id
 </pre><p>This view is the same as above except that when it expands groups, it only
 pays attention to approved members.</p><pre class="programlisting">
 
-<tt>create or replace view party_approved_member_map
+<tt class="computeroutput">create or replace view party_approved_member_map
 as select party_id, member_id
 ...
 </tt>
 
-</pre></div><div class="sect2" lang="en"><div class="titlepage"><div><h3 class="title"><a name="parties-extending-data-model"></a>Extending The Parties Data Model</h3></div></div><p>As is, the parties data model can represent some fairly sophisticated real
+</pre></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="parties-extending-data-model"></a>Extending The Parties Data Model</h3></div></div><div></div></div><p>As is, the parties data model can represent some fairly sophisticated real
 world situations, and a lot of work has been put into making this efficient,
 but it is foolish to assume that this data model is sufficient for every
 application. It therefore seems likely that developers will want to extend
@@ -299,7 +298,7 @@ subtype of users, say mensa_users. This child table of the users table would
 have a primary key that references the users table, thereby guaranteeing that
 each row in the mensa_users table has a corresponding row in each of the
 users, persons, parties, and acs_objects tables. This child table could then
-store any extra information relevant to the MENSA community.</p><p><span class="strong">Specializing Groups</span></p><p>If one were to build an intranet application on top of the 5.0.0d party
+store any extra information relevant to the MENSA community.</p><p><span class="strong">Specializing Groups</span></p><p>If one were to build an intranet application on top of the 5.0.0a1 party
 system, it is likely that one would want to take advantage of the systems
 efficient representation of sophisticated organizational structures, but
 there would be much more specialized information associated with each group.
@@ -313,4 +312,4 @@ membership relations with mutable pieces of state that drove us to include a
 single integer primary key in what could be thought of as a pure relation.
 Because a membership relation is an ordinary acs object with <a href="object-identity.html" target="_top">object identity</a>, it is as easy to extend the
 membership relation to store extra information as it is to extend the users
-table or the groups table.</p><div class="cvstag">($Id$)</div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="subsites.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="permissions-tediously-explained.html">Next</a></td></tr><tr><td width="40%" align="left">Writing OpenACS 5.0.0d Application Pages </td><td width="20%" align="center"><a accesskey="u" href="dev-guide.html">Up</a></td><td width="40%" align="right"> OpenACS 4.x Permissions Tediously Explained</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a><center><a href="http://openacs.org/doc/parties.html#comments">View comments on this page at openacs.org</a></center></body></html>
+table or the groups table.</p><div class="cvstag">($Id$)</div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="subsites.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="permissions-tediously-explained.html">Next</a></td></tr><tr><td width="40%" align="left">Writing OpenACS 5.0.0a1 Application Pages </td><td width="20%" align="center"><a accesskey="u" href="dev-guide.html">Up</a></td><td width="40%" align="right"> OpenACS 4.x Permissions Tediously Explained</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a><center><a href="http://openacs.org/doc/parties.html#comments">View comments on this page at openacs.org</a></center></body></html>

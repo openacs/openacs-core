@@ -69,7 +69,7 @@
             <entry namest="4.5" nameend="4.6.3" align="center">Verified</entry>
           </row>
           <row>
-            <entry>7.3.2</entry>
+            <entry>7.3.2 - 7.3.4</entry>
             <entry namest="3.2.5" nameend="4.6.2" align="center">Incompatible</entry>
             <entry namest="4.6.3" nameend="4.6.3"
             align="center">Mostly compatible (news is broken)</entry>

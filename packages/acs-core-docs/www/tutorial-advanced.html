@@ -1,9 +1,8 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Advanced Topics</title><meta name="generator" content="DocBook XSL Stylesheets V1.58.1"><link rel="home" href="index.html" title="OpenACS Documentation"><link rel="up" href="tutorial.html" title="Chapter 10. Development Tutorial"><link rel="previous" href="tutorial-debug.html" title="Debugging and Automated Testing"><link rel="next" href="dev-guide.html" title="Chapter 11. Development Reference"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="images/alex.jpg" border="0"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="tutorial-debug.html">Prev</a> </td><th width="60%" align="center">Chapter 10. Development Tutorial</th><td width="20%" align="right"> <a accesskey="n" href="dev-guide.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><h2 class="title" style="clear: both"><a name="tutorial-advanced"></a>Advanced Topics</h2></div></div><div class="important" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Important</h3><p>This section is a work in progress.</p></div><div class="authorblurb"><p>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Advanced Topics</title><meta name="generator" content="DocBook XSL Stylesheets V1.60.1"><link rel="home" href="index.html" title="OpenACS Documentation"><link rel="up" href="tutorial.html" title="Chapter 10. Development Tutorial"><link rel="previous" href="tutorial-debug.html" title="Debugging and Automated Testing"><link rel="next" href="dev-guide.html" title="Chapter 11. Development Reference"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="tutorial-debug.html">Prev</a> </td><th width="60%" align="center">Chapter 10. Development Tutorial</th><td width="20%" align="right"> <a accesskey="n" href="dev-guide.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="tutorial-advanced"></a>Advanced Topics</h2></div></div><div></div></div><div class="important" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Important</h3><p>This section is a work in progress.</p></div><div class="authorblurb"><p>
     by <a href="mailto:joel@aufrecht.org" target="_top">Joel Aufrecht</a><br>
           OpenACS docs are written by the named authors, and may be edited
           by OpenACS documentation staff.
-        </p></div><div class="sect2" lang="en"><div class="titlepage"><div><h3 class="title"><a name="id2966023"></a>Overview</h3></div></div><p>This tutorial covers topics which are not essential to
+        </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2837386"></a>Overview</h3></div></div><div></div></div><p>This tutorial covers topics which are not essential to
     creating a minimal working package.  Each section can be used
     independently of all of the others; all sections assume that
     you've completed the basic tutorial.</p><div class="itemizedlist"><ul type="disc"><li><p>How to enforce security so that users can't
@@ -11,8 +10,8 @@
       ... what?</p></li><li><p>How to change the default stylesheets for Form
       Builder HTML forms.</p></li><li><p>How to make your package searchable with OpenFTS/Oracle</p></li><li><p>How to make your package send email notifications</p></li><li><p>How to prepare pagelets for inclusion in other pages</p></li><li><p>How and when to put procedures in a tcl procedure library</p></li><li><p>How to add general_comments to your pages</p></li><li><p>More on ad_form - data validation, other stuff.
       (plan to draw from Jon Griffin's doc)</p></li><li><p>How and when to implement caching</p></li><li><p>partialquery in xql</p></li><li><p>How to use the html/text entry widget to get the
-      &quot;does this look right&quot; confirm page </p></li><li><p>APM package dependencies</p></li></ul></div></div><div class="sect2" lang="en"><div class="titlepage"><div><h3 class="title"><a name="id2959129"></a>Delete with confirmation</h3></div></div><p>We need a way to delete records.  We'll create a
-    recursive confirmation page.</p><p>Add this column to the table_def in index.tcl</p><pre class="programlisting">{delete &quot;&quot; {} {&lt;td&gt;&lt;a href=&quot;note-delete?note_id=$note_id&quot;&gt;Delete&lt;/a&gt;&lt;/td&gt;}}</pre><p>Create the delete confirmation/execution page.</p><pre class="screen">[service0@yourserver www]$ <b><tt>emacs note-delete.tcl</tt></b></pre><pre class="programlisting">ad_page_contract {
+      "does this look right" confirm page </p></li><li><p>APM package dependencies</p></li></ul></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2837099"></a>Delete with confirmation</h3></div></div><div></div></div><p>We need a way to delete records.  We'll create a
+    recursive confirmation page.</p><p>Add this column to the table_def in index.tcl</p><pre class="programlisting">{delete "" {} {&lt;td&gt;&lt;a href="note-delete?note_id=$note_id"&gt;Delete&lt;/a&gt;&lt;/td&gt;}}</pre><p>Create the delete confirmation/execution page.</p><pre class="screen">[service0@yourserver www]$ <b class="userinput"><tt>emacs note-delete.tcl</tt></b></pre><pre class="programlisting">ad_page_contract {
     A page that gets confirmation and then delete notes.
 
     @author joel@aufrecht.org
@@ -23,64 +22,64 @@
     confirm_p:optional
 }
 
-set title &quot;Delete Note&quot;
+set title "Delete Note"
 
 if {![exists_and_not_null confirm_p]} {
     # first pass, not confirmed.  Display a form for confirmation
     set note_name [db_string get_name { *SQL }]
-    set title &quot;Delete $note_name&quot;
+    set title "Delete $note_name"
     template::form::create note-del-confirm
     template::element::create note-del-confirm note_id -value $note_id -widget hidden
     template::element::create note-del-confirm confirm_p -value 1 -widget hidden
     template::element::create note-del-confirm submit \
-      -label &quot;Confirm deletion of $note_name&quot; \
+      -label "Confirm deletion of $note_name" \
       -widget submit
 } else {
     # second pass, confirmed.  Call the database to delete the record
     db_1row do_delete { *SQL* }
-    ad_returnredirect &quot;index&quot;
+    ad_returnredirect "index"
     ad_script_abort
 }</pre><p>This page requires a
-<tt>note_id</tt> to determine which record
+<tt class="computeroutput">note_id</tt> to determine which record
 should be deleted.  It also looks for a confirmation variable, which
 should initially be absert.  If it is absent, we create a form to
 allow the user to confirm the deletion.  Note that in
-<tt>entry-edit.tcl</tt> we used <tt>ad_form</tt> to access the Form Template
+<tt class="computeroutput">entry-edit.tcl</tt> we used <tt class="computeroutput">ad_form</tt> to access the Form Template
 commands; here, we call them directly because we don't need the extra
 features of ad_form.  The form calls itself, but
 with hidden variables carrying both
-<tt>note_id</tt> and
-<tt>confirm_p</tt>.  If confirm_p is present,
+<tt class="computeroutput">note_id</tt> and
+<tt class="computeroutput">confirm_p</tt>.  If confirm_p is present,
 we delete the record, set redirection back to the index, and abort
-script execution.</p><p>The database commands:</p><pre class="screen">[service0@yourserver www]$ <b><tt>emacs note-delete.xql</tt></b></pre><pre class="programlisting">&lt;?xml version=&quot;1.0&quot;?&gt;
+script execution.</p><p>The database commands:</p><pre class="screen">[service0@yourserver www]$ <b class="userinput"><tt>emacs note-delete.xql</tt></b></pre><pre class="programlisting">&lt;?xml version="1.0"?&gt;
 &lt;queryset&gt;
-  &lt;fullquery name=&quot;do_delete&quot;&gt;
+  &lt;fullquery name="do_delete"&gt;
     &lt;querytext&gt;
       select samplenote__delete(:note_id)
     &lt;/querytext&gt;
   &lt;/fullquery&gt;
-  &lt;fullquery name=&quot;get_name&quot;&gt;
+  &lt;fullquery name="get_name"&gt;
     &lt;querytext&gt;
       select samplenote__name(:note_id)
     &lt;/querytext&gt;
   &lt;/fullquery&gt;
-&lt;/queryset&gt;</pre><p>And the adp page:</p><pre class="screen">[service0@yourserver www]$ <b><tt>emacs note-delete.adp</tt></b></pre><pre class="programlisting">&lt;master&gt;
-&lt;property name=&quot;title&quot;&gt;@title@&lt;/property&gt;
-&lt;property name=&quot;context&quot;&gt;{@title@}&lt;/property&gt;
+&lt;/queryset&gt;</pre><p>And the adp page:</p><pre class="screen">[service0@yourserver www]$ <b class="userinput"><tt>emacs note-delete.adp</tt></b></pre><pre class="programlisting">&lt;master&gt;
+&lt;property name="title"&gt;@title@&lt;/property&gt;
+&lt;property name="context"&gt;{@title@}&lt;/property&gt;
 &lt;h2&gt;@title@&lt;/h2&gt;
-&lt;formtemplate id=&quot;note-del-confirm&quot;&gt;&lt;/formtemplate&gt;
+&lt;formtemplate id="note-del-confirm"&gt;&lt;/formtemplate&gt;
 &lt;/form&gt;</pre><p>The ADP is very simple.  The
-<tt>formtemplate</tt> tag outputs the HTML
-form generated by the ad_form command with the matching name.  Test it by adding the new files in the APM and then deleting a few samplenotes.</p></div><div class="sect2" lang="en"><div class="titlepage"><div><h3 class="title"><a name="id2918539"></a>General_comments</h3></div></div><p>You can track comments for any ACS Object.  Here we'll track
+<tt class="computeroutput">formtemplate</tt> tag outputs the HTML
+form generated by the ad_form command with the matching name.  Test it by adding the new files in the APM and then deleting a few samplenotes.</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2837247"></a>General_comments</h3></div></div><div></div></div><p>You can track comments for any ACS Object.  Here we'll track
     comments for notes.  On the notes.tcl/adp pair, which is used to
     display individual notes, we want to put a link to add comments at
     the bottom of the screen.  If there are any comments, we want to
     show them.</p><p>First, we need to generate a url for adding comments.  In notes.tcl:</p><pre class="programlisting">
-set comment_add_url &quot;[general_comments_package_url]comment-add?[export_vars {
+set comment_add_url "[general_comments_package_url]comment-add?[export_vars {
  { object_id $note_id } 
  { object_name $title } 
- { return_url &quot;[ad_conn url]?[ad_conn query]&quot;} 
-}]&quot;
+ { return_url "[ad_conn url]?[ad_conn query]"} 
+}]"
 </pre><p>This calls a global, public tcl function that the
     general_comments package registered, to get its url. You then
     embed in that url the id of the note and its title, and set the
@@ -91,14 +90,14 @@ set comment_add_url &quot;[general_comments_package_url]comment-add?[export_vars
     show the contents of the comments, instead of just the fact that
     there are comments. Then you pass the note id, which is also the
     acs_object id.</p><p>We put our two new variables in the notes.adp
-    page.</p><pre class="programlisting">&lt;a href=&quot;@comment_add_url@&quot;&gt;Add a comment&lt;/a&gt;
-@comments_html@</pre></div><div class="sect2" lang="en"><div class="titlepage"><div><h3 class="title"><a name="id2918618"></a>Prepare the package for distribution.</h3></div></div><p>Browse to the package manager.  Click on
-        <tt><span class="guilabel">tutorialapp</span></tt>.</p><p>Click on <tt><span class="guilabel">Generate a distribution file
+    page.</p><pre class="programlisting">&lt;a href="@comment_add_url@"&gt;Add a comment&lt;/a&gt;
+@comments_html@</pre></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2837318"></a>Prepare the package for distribution.</h3></div></div><div></div></div><p>Browse to the package manager.  Click on
+        <tt class="computeroutput"><span class="guilabel"><span class="guilabel">tutorialapp</span></span></tt>.</p><p>Click on <tt class="computeroutput"><span class="guilabel"><span class="guilabel">Generate a distribution file
         for this package from the
-        filesystem</span></tt>.
+        filesystem</span></span></tt>.
 </p><p>Click on the file size
-        (<tt><span class="guilabel">37.1KB</span></tt>)
-        after the label <tt><span class="guilabel">Distribution
-        File:</span></tt> and save the file to
-        /tmp.</p><p><a class="indexterm" name="id2940810"></a>
+        (<tt class="computeroutput"><span class="guilabel"><span class="guilabel">37.1KB</span></span></tt>)
+        after the label <tt class="computeroutput"><span class="guilabel"><span class="guilabel">Distribution
+        File:</span></span></tt> and save the file to
+        /tmp.</p><p><a class="indexterm" name="id2837365"></a>
 </p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="tutorial-debug.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="dev-guide.html">Next</a></td></tr><tr><td width="40%" align="left">Debugging and Automated Testing </td><td width="20%" align="center"><a accesskey="u" href="tutorial.html">Up</a></td><td width="40%" align="right"> Chapter 11. Development Reference</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a><center><a href="http://openacs.org/doc/tutorial-advanced.html#comments">View comments on this page at openacs.org</a></center></body></html>
