@@ -76,7 +76,8 @@ ad_proc ad_pvt_home {} {
     This is the URL of a user's private workspace on the system, usually
     /pvt/home.tcl
 } {
-    return [ad_parameter -package_id [ad_acs_kernel_id] HomeURL]
+    # LARS: We remove the trailing slash from the subsite url, because the HomeURL parameter is expected to start with a slash.
+    return "[string range [site_node_closest_ancestor_package_url] 0 end-1][ad_parameter -package_id [ad_acs_kernel_id] HomeURL]"
 }
 
 ad_proc ad_admin_home {} {
@@ -143,7 +144,8 @@ ad_proc -public acs_community_member_url {
 } {
     @return the url for the community member page of a particular user
 } {
-    return "[ad_parameter -package_id [ad_acs_kernel_id] CommunityMemberURL]?[export_vars user_id]"
+    # LARS: We remove the trailing slash from the subsite url, because the HomeURL parameter is expected to start with a slash.
+    return "[string range [site_node_closest_ancestor_package_url] 0 end-1][ad_parameter -package_id [ad_acs_kernel_id] CommunityMemberURL]?[export_vars user_id]"
 }
 
 ad_proc -public acs_community_member_link {
