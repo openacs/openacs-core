@@ -53,5 +53,5 @@ if { [info exists files_to_watch_p] } {
 }
 
 append body "
-<p><b>&raquo;</b> <a href=\"$return_url\">Return</a></p>"
+<a href=\"$return_url\" class=\"action\">Return</a>"
 
