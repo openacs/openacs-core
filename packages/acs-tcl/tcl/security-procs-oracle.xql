@@ -33,7 +33,7 @@
 <fullquery name="populate_secret_tokens_db.insert_random_token">      
       <querytext>
       
-	    insert /*+ APPEND */ into secret_tokens(token_id, token, timestamp)
+	    insert /*+ APPEND */ into secret_tokens(token_id, token, token_timestamp)
 	    values(sec_security_token_id_seq.nextval, :random_token, sysdate)
 	
       </querytext>

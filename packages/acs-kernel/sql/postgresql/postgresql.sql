@@ -691,6 +691,7 @@ begin
           on a.attrelid = c.oid 
         where a.attnum > 0'';
   end if;
+  return ''t'';
 end;' language 'plpgsql';
 
 select create_user_col_comments();
