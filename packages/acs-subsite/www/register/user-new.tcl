@@ -63,7 +63,6 @@ ad_form -name register -form [auth::get_registration_form_elements] -on_request 
             # Continue below
         }
         default {
-            error $creation_info(account_message)
             # Display the message on a separate page
             ad_returnredirect [export_vars -base "[subsite::get_element -element url]register/account-closed" { { message $creation_info(account_message) } }]
             ad_script_abort
