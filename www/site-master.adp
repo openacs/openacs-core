@@ -8,12 +8,6 @@
   <if @focus@ not nil>
     <property name="focus">@focus;noquote@</property>
   </if>
-  <if @context_bar@ not nil>
-    <property name="context_bar">@context_bar;noquote@</property>
-  </if>
-  <if @context@ not nil>
-    <property name="context">@context;noquote@</property>
-  </if>
   <property name="header_stuff">
     @header_stuff;noquote@
     <link rel="stylesheet" type="text/css" href="@css_url@" media="all">
@@ -57,9 +51,16 @@
     </td>
   </tr>
 </table>
-
-<if @sw_admin_p@ true>
+<if @user_messages:rowcount@ gt 0>
+  <div id="general-message">
+    <ul>
+      <multiple name="user_messages">
+        <li>@user_messages.message;noquote@</li>
+      </multiple>
+    </ul>
+  </div>
 </if>
+
 
 <slave>
 
