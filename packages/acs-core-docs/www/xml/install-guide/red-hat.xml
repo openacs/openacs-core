@@ -345,7 +345,7 @@ Password:
           Red Hat 8.0 system kernel (2.4.18-14, which you can check
           with <userinput>uname -a</userinput>) has several <ulink
           url="https://rhn.redhat.com/errata/RHSA-2003-098.html">security problems</ulink>.  Download the new kernel, install it, and reboot.</para>
-<screen>[root root]# <userinput>cd /tmp</userinput>
+<screen>[root root]# <userinput>cd /var/tmp</userinput>
 [root tmp]# <userinput>wget http://updates.redhat.com/7.1/en/os/i686/kernel-2.4.18-27.7.x.i686.rpm</userinput>
 --20:39:00--  http://updates.redhat.com/7.1/en/os/i686/kernel-2.4.18-27.7.x.i686.rpm
            => `kernel-2.4.18-27.7.x.i686.rpm'
@@ -368,7 +368,7 @@ Broadcast message from root (pts/0) (Sat May  3 20:46:39 2003):
 
 The system is going down for reboot NOW!
 [root tmp]#
-<action>cd /tmp
+<action>cd /var/tmp
 wget http://updates.redhat.com/7.1/en/os/i686/kernel-2.4.18-27.7.x.i686.rpm
 rpm -Uvh kernel-2.4.18-27.7.x.i686.rpm
 reboot</action></screen>

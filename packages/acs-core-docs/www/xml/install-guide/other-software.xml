@@ -12,7 +12,7 @@
     </authorblurb>
     
       <para>This section assumes that the source tarballs for supporting
-    software are in <computeroutput>/tmp</computeroutput>.  It assumes
+    software are in <computeroutput>/var/tmp</computeroutput>.  It assumes
     that you begin each continuous block of commands as root, and you
     should end each block as root.  It doesn't care which directory
     you start in.  Text instructions always precede the commands they
@@ -23,12 +23,12 @@
         <para>The OpenACS tarball contains sample configuration files
       for some of the packages listed below.  In order to access those
       files, unpack the tarball now.</para>
-        <screen>[root root]# <userinput>cd /tmp</userinput>
+        <screen>[root root]# <userinput>cd /var/tmp</userinput>
 [root tmp]# <userinput>tar xzf &tarballpath;.tgz</userinput>
-<action>cd /tmp
+<action>cd /var/tmp
 tar xzf &tarballpath;.tgz</action></screen>
       <para>If you are installing from a different method and just need the configuration files, you can instead get them from CVS:</para>
-<screen>[root root]# <userinput>cd /tmp</userinput>
+<screen>[root root]# <userinput>cd /var/tmp</userinput>
 [root tmp]# <userinput>cvs -d :pserver:anonymous@openacs.org:/cvsroot co openacs-4/packages/acs-core-docs/www/files/</userinput>
 cvs checkout: warning: failed to open /root/.cvspass for reading: No such file or directory
 cvs server: Updating openacs-4/packages/acs-core-docs/www/files
@@ -37,7 +37,7 @@ U openacs-4/packages/acs-core-docs/www/files/README.TXT
 U openacs-4/packages/acs-core-docs/www/files/template-ini.ini
 U openacs-4/packages/acs-core-docs/www/files/winnsd.txt
 [root tmp]# <userinput>mv openacs-4 &tarballpath;</userinput>
-<action>cd /tmp
+<action>cd /var/tmp
 cvs -d :pserver:anonymous@openacs.org:/cvsroot co openacs-4/packages/acs-core-docs/www/files/
 mv openacs-4 openacs-5.0.0a4</action></screen>
       </sect1>
@@ -68,7 +68,7 @@ If you plan to write or edit any documentation with emacs, install a
       fixes the backspace -> help mis-mapping that often occurs in
       terminals.</para>
 
-      <screen>[root tmp]# <userinput>cp /tmp/&tarballpath;/packages/acs-core-docs/www/files/emacs.txt /etc/skel/.emacs</userinput>
+      <screen>[root tmp]# <userinput>cp /var/tmp/&tarballpath;/packages/acs-core-docs/www/files/emacs.txt /etc/skel/.emacs</userinput>
 cp: overwrite `/etc/skel/.emacs'? <userinput>y</userinput>
 [root tmp]# </screen>
       <para>Debian users:</para>
@@ -98,7 +98,7 @@ cp: overwrite `/etc/skel/.emacs'? <userinput>y</userinput>
               <screen>[root root]# <userinput>mkdir -p /package</userinput>
 [root root]# <userinput>chmod 1755 /package/</userinput>
 [root root]# <userinput>cd /package/</userinput>
-[root package]# <userinput>tar xzf /tmp/daemontools-0.76.tar.gz</userinput>
+[root package]# <userinput>tar xzf /var/tmp/daemontools-0.76.tar.gz</userinput>
 [root package]# <userinput>cd admin/daemontools-0.76/</userinput>
 [root daemontools-0.76]# <userinput>package/install</userinput>
 Linking ./src/* into ./compile...
@@ -110,20 +110,20 @@ init should start svscan now.
 <action>mkdir -p /package 
 chmod 1755 /package 
 cd /package 
-tar xzf /tmp/daemontools-0.76.tar.gz 
+tar xzf /var/tmp/daemontools-0.76.tar.gz 
 cd admin/daemontools-0.76 
 package/install</action></screen>
             </listitem>
             <listitem>
               <para>Red Hat 9</para>
               <para>Make sure you have the source tarball in
-          <computeroutput>/tmp</computeroutput>, or <link
+          <computeroutput>/var/tmp</computeroutput>, or <link
           linkend="daemontools-download">download it</link>.
 </para>
               <screen>[root root]# <userinput>mkdir -p /package</userinput>
 [root root]# <userinput>chmod 1755 /package/</userinput>
 [root root]# <userinput>cd /package/</userinput>
-[root package]# <userinput>tar xzf /tmp/daemontools-0.76.tar.gz</userinput>
+[root package]# <userinput>tar xzf /var/tmp/daemontools-0.76.tar.gz</userinput>
 [root package]# <userinput>cd admin</userinput>
 [root admin]# <userinput>wget http://moni.csi.hu/pub/glibc-2.3.1/daemontools-0.76.errno.patch</userinput>
 --14:19:24--  http://moni.csi.hu/pub/glibc-2.3.1/daemontools-0.76.errno.patch
@@ -148,7 +148,7 @@ init should start svscan now.
 <action>mkdir -p /package 
 chmod 1755 /package 
 cd /package 
-tar xzf /tmp/daemontools-0.76.tar.gz 
+tar xzf /var/tmp/daemontools-0.76.tar.gz 
 cd admin
 wget http://moni.csi.hu/pub/glibc-2.3.1/daemontools-0.76.errno.patch
 cd daemontools-0.76
@@ -173,9 +173,9 @@ root     13295  0.0  0.0  1304  208 ?        S    09:51   0:00 readproctitle ser
         <listitem>
           <para>Install a script to grant non-root users permission to
         control daemontools services.</para>
-          <screen>[root root]# <userinput>cp /tmp/&tarballpath;/packages/acs-core-docs/www/files/svgroup.txt /usr/local/bin/svgroup</userinput>
+          <screen>[root root]# <userinput>cp /var/tmp/&tarballpath;/packages/acs-core-docs/www/files/svgroup.txt /usr/local/bin/svgroup</userinput>
 [root root]# <userinput>chmod 755 /usr/local/bin/svgroup</userinput>
-<action>cp /tmp/&tarballpath;/packages/acs-core-docs/www/files/svgroup.txt /usr/local/bin/svgroup 
+<action>cp /var/tmp/&tarballpath;/packages/acs-core-docs/www/files/svgroup.txt /usr/local/bin/svgroup 
 chmod 755 /usr/local/bin/svgroup</action></screen>
         </listitem>
       </orderedlist>
@@ -243,9 +243,9 @@ Unless this mail is addressed to the same machine, qmail thinks that
 it's an attempt to relay mail, and rejects it.  So these two commands
 set up an exception so that any mail sent from 127.0.0.1 is allowed to
 send outgoing mail.</para>
-          <screen>[root ucspi-tcp-0.88]# <userinput>cp /tmp/&tarballpath;/packages/acs-core-docs/www/files/tcp.smtp.txt /etc/tcp.smtp</userinput>
+          <screen>[root ucspi-tcp-0.88]# <userinput>cp /var/tmp/&tarballpath;/packages/acs-core-docs/www/files/tcp.smtp.txt /etc/tcp.smtp</userinput>
 [root ucspi-tcp-0.88]# <userinput>tcprules /etc/tcp.smtp.cdb /etc/tcp.smtp.tmp &lt; /etc/tcp.smtp</userinput>
-<action>cp /tmp/&tarballpath;/packages/acs-core-docs/www/files/tcp.smtp.txt /etc/tcp.smtp 
+<action>cp /var/tmp/&tarballpath;/packages/acs-core-docs/www/files/tcp.smtp.txt /etc/tcp.smtp 
 tcprules /etc/tcp.smtp.cdb /etc/tcp.smtp.tmp &lt; /etc/tcp.smtp </action></screen>
           </listitem>
           <listitem>
@@ -357,11 +357,11 @@ chown -R alias.nofiles /var/qmail/alias/Maildir</action></screen>
             <para>Configure qmail to use the Maildir delivery format
           (instead of mbox), and install a version of the qmail startup script modified to use Maildir.</para>
             <screen>[root alias]# <userinput>echo "./Maildir" > /var/qmail/bin/.qmail</userinput>
-[root alias]# <userinput>cp /tmp/&tarballpath;/packages/acs-core-docs/www/files/qmail.rc.txt /var/qmail/rc</userinput>
+[root alias]# <userinput>cp /var/tmp/&tarballpath;/packages/acs-core-docs/www/files/qmail.rc.txt /var/qmail/rc</userinput>
 [root alias]# <userinput>chmod 755 /var/qmail/rc</userinput>
 [root alias]# 
 <action>echo "./Maildir" &gt; /var/qmail/bin/.qmail 
-cp /tmp/&tarballpath;/packages/acs-core-docs/www/files/qmail.rc.txt /var/qmail/rc 
+cp /var/tmp/&tarballpath;/packages/acs-core-docs/www/files/qmail.rc.txt /var/qmail/rc 
 chmod 755 /var/qmail/rc 
 </action></screen>
             <para>Set up the skeleton directory so that new users will
@@ -378,13 +378,13 @@ echo "./Maildir/" > /etc/skel/.qmail</action></screen>
 [root root]# <userinput>mkdir -p /var/qmail/supervise/qmail-smtpd/log</userinput>
 [root root]# <userinput>mkdir /var/log/qmail</userinput>
 [root root]# <userinput>chown qmaill /var/log/qmail</userinput>
-[root root]# <userinput>cp /tmp/&tarballpath;/packages/acs-core-docs/www/files/qmailctl.txt /var/qmail/bin/qmailctl</userinput>
+[root root]# <userinput>cp /var/tmp/&tarballpath;/packages/acs-core-docs/www/files/qmailctl.txt /var/qmail/bin/qmailctl</userinput>
 [root root]# <userinput>chmod 755 /var/qmail/bin/qmailctl</userinput>
 [root root]# <userinput>ln -s /var/qmail/bin/qmailctl /usr/bin</userinput>
-[root root]# <userinput>cp /tmp/&tarballpath;/packages/acs-core-docs/www/files/qmail-send-run.txt /var/qmail/supervise/qmail-send/run </userinput>
-[root root]# <userinput>cp /tmp/&tarballpath;/packages/acs-core-docs/www/files/qmail-send-log-run.txt /var/qmail/supervise/qmail-send/log/run</userinput>
-[root root]# <userinput>cp /tmp/&tarballpath;/packages/acs-core-docs/www/files/qmail-smtpd-run.txt /var/qmail/supervise/qmail-smtpd/run</userinput>
-[root root]# <userinput>cp /tmp/&tarballpath;/packages/acs-core-docs/www/files/qmail-smtpd-log-run.txt /var/qmail/supervise/qmail-smtpd/log/run</userinput>
+[root root]# <userinput>cp /var/tmp/&tarballpath;/packages/acs-core-docs/www/files/qmail-send-run.txt /var/qmail/supervise/qmail-send/run </userinput>
+[root root]# <userinput>cp /var/tmp/&tarballpath;/packages/acs-core-docs/www/files/qmail-send-log-run.txt /var/qmail/supervise/qmail-send/log/run</userinput>
+[root root]# <userinput>cp /var/tmp/&tarballpath;/packages/acs-core-docs/www/files/qmail-smtpd-run.txt /var/qmail/supervise/qmail-smtpd/run</userinput>
+[root root]# <userinput>cp /var/tmp/&tarballpath;/packages/acs-core-docs/www/files/qmail-smtpd-log-run.txt /var/qmail/supervise/qmail-smtpd/log/run</userinput>
 [root root]# <userinput>chmod 755 /var/qmail/supervise/qmail-send/run</userinput>
 [root root]# <userinput>chmod 755 /var/qmail/supervise/qmail-send/log/run</userinput>
 [root root]# <userinput>chmod 755 /var/qmail/supervise/qmail-smtpd/run</userinput>
@@ -395,13 +395,13 @@ echo "./Maildir/" > /etc/skel/.qmail</action></screen>
 mkdir -p /var/qmail/supervise/qmail-smtpd/log
 mkdir /var/log/qmail
 chown qmaill /var/log/qmail
-cp /tmp/&tarballpath;/packages/acs-core-docs/www/files/qmailctl.txt /var/qmail/bin/qmailctl
+cp /var/tmp/&tarballpath;/packages/acs-core-docs/www/files/qmailctl.txt /var/qmail/bin/qmailctl
 chmod 755 /var/qmail/bin/qmailctl
 ln -s /var/qmail/bin/qmailctl /usr/bin
-cp /tmp/&tarballpath;/packages/acs-core-docs/www/files/qmail-send-run.txt /var/qmail/supervise/qmail-send/run
-cp /tmp/&tarballpath;/packages/acs-core-docs/www/files/qmail-send-log-run.txt /var/qmail/supervise/qmail-send/log/run
-cp /tmp/&tarballpath;/packages/acs-core-docs/www/files/qmail-smtpd-run.txt /var/qmail/supervise/qmail-smtpd/run
-cp /tmp/&tarballpath;/packages/acs-core-docs/www/files/qmail-smtpd-log-run.txt /var/qmail/supervise/qmail-smtpd/log/run
+cp /var/tmp/&tarballpath;/packages/acs-core-docs/www/files/qmail-send-run.txt /var/qmail/supervise/qmail-send/run
+cp /var/tmp/&tarballpath;/packages/acs-core-docs/www/files/qmail-send-log-run.txt /var/qmail/supervise/qmail-send/log/run
+cp /var/tmp/&tarballpath;/packages/acs-core-docs/www/files/qmail-smtpd-run.txt /var/qmail/supervise/qmail-smtpd/run
+cp /var/tmp/&tarballpath;/packages/acs-core-docs/www/files/qmail-smtpd-log-run.txt /var/qmail/supervise/qmail-smtpd/log/run
 chmod 755 /var/qmail/supervise/qmail-send/run
 chmod 755 /var/qmail/supervise/qmail-send/log/run
 chmod 755 /var/qmail/supervise/qmail-smtpd/run
@@ -424,9 +424,9 @@ messages in queue but not yet preprocessed: 0
     <sect1 id="analog-install">
       <title>Install Analog web file analyzer</title>
             <para>Download the Analog <link linkend="analog-download">source tarball</link> in
-<computeroutput>/tmp</computeroutput>.  Unpack, compile, and install analog.</para>
+<computeroutput>/var/tmp</computeroutput>.  Unpack, compile, and install analog.</para>
             <screen>[root aolserver]# <userinput>cd /usr/local/src</userinput>
-[root src]# <userinput>tar xzf /tmp/analog-5.32.tar.gz</userinput>
+[root src]# <userinput>tar xzf /var/tmp/analog-5.32.tar.gz</userinput>
 [root src]# <userinput>cd analog-5.32</userinput>
 [root analog-5.32]# <userinput>make</userinput>
 cd src &amp;&amp; make
@@ -439,7 +439,7 @@ make[1]: Leaving directory `/usr/local/src/analog-5.32/src'
 [root src]#<userinput> mv analog-5.32 /usr/share/</userinput>
 [root src]#
 <action>cd /usr/local/src
-tar xzf /tmp/analog-5.32.tar.gz
+tar xzf /var/tmp/analog-5.32.tar.gz
 cd analog-5.32
 make
 cd ..
@@ -467,7 +467,7 @@ mv analog-5.32 /usr/share/</action></screen>
         </indexterm>
       <para>If you want full text search, and you are running PostgreSQL, install this module to support FTS.  Do this step after you have installed both PostgreSQL and
       AOLserver.  You will need the <link linkend="openfts-download">openfts
-      tarball</link> in <computeroutput>/tmp</computeroutput>.</para>
+      tarball</link> in <computeroutput>/var/tmp</computeroutput>.</para>
           <orderedlist>
             <listitem>
               <para>Install Tsearch.  This is a PostgreSQL module that
@@ -498,7 +498,7 @@ exit</action></screen>
               <para>Unpack the OpenFTS tarball and compile and install
               the driver.</para>
               <screen>[root root]# <userinput>cd /usr/local/src</userinput>
-[root src]# <userinput>tar xzf /tmp/Search-OpenFTS-tcl-0.3.2.tar.gz</userinput>
+[root src]# <userinput>tar xzf /var/tmp/Search-OpenFTS-tcl-0.3.2.tar.gz</userinput>
 [root src]# <userinput>cd /usr/local/src/Search-OpenFTS-tcl-0.3.2/</userinput>
 [root Search-OpenFTS-tcl-0.3.2]# <userinput>./configure --with-aolserver-src=/usr/local/src/aolserver/aolserver --with-tcl=/usr/lib/</userinput>
 checking prefix... /usr/local
@@ -520,7 +520,7 @@ n_stem.o italian_stem.o norwegian_stem.o portuguese_stem.o russian_stem.o nsfts.
 [root aolserver]# <userinput>cp nsfts.so /usr/local/aolserver/bin/</userinput>
 [root aolserver]#
 <action>cd /usr/local/src 
-tar xzf /tmp/Search-OpenFTS-tcl-0.3.2.tar.gz
+tar xzf /var/tmp/Search-OpenFTS-tcl-0.3.2.tar.gz
 cd /usr/local/src/Search-OpenFTS-tcl-0.3.2/
 ./configure --with-aolserver-src=/usr/local/src/aolserver/aolserver --with-tcl=/usr/lib/
 make
@@ -761,7 +761,7 @@ line, click
       <computeroutput>/usr/local/src/aolserver</computeroutput> and
       the <link
           linkend="nsopenssl-download">nsopenssl tarball</link> in
-          <computeroutput>/tmp</computeroutput>.</para>
+          <computeroutput>/var/tmp</computeroutput>.</para>
       <para>Red Hat 9 note: see <ulink
           url="http://openacs.org/forums/message-view?message_id=92882">this
           thread</ulink> for details on compiling nsopenssl.)</para>
@@ -789,7 +789,7 @@ cp https.tcl /usr/local/aolserver/modules/tcl/</action></screen>
       information</ulink>):</para>
 <screen><action>apt-get install libssl-dev
 cd /usr/local/src/aolserver
-tar xzf /tmp/nsopenssl-2.1.tar.gz
+tar xzf /var/tmp/nsopenssl-2.1.tar.gz
 cd nsopenssl-2.1
 make OPENSSL=/usr/lib/ssl
 cp nsopenssl.so /usr/local/aolserver/bin
@@ -851,7 +851,7 @@ ln -s /usr/local/ssl/lib/libcrypto.so.0.9.7 libcrypto.so.0.9.7
       <para>Download the <link linkend="source-tclwebtest">tclwebtest
       source</link>, unpack it, and put it an appropriate
       place.  (tclwebtest 1.0 will be required for auto-tests in OpenACS 5.1.  When it exists, the cvs command here will be replaced with http://prdownloads.sourceforge.net/tclwebtest/tclwebtest-0.3.tar.gz?download.) As root:</para>
-      <screen><action>cd /tmp
+      <screen><action>cd /var/tmp
 cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/tclwebtest co tclwebtest
 #wget http://umn.dl.sourceforge.net/sourceforge/tclwebtest/tclwebtest-1.0.tar.gz
 #tar xvzf tclwebtest-1-0.tar.gz

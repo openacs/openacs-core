@@ -165,13 +165,13 @@ createdb <replaceable>$OPENACS_SERVICE_NAME</replaceable></action></screen>
             </row>
             <row>
               <entry>Location of source code tarballs for new software</entry>
-              <entry>/tmp</entry>
+              <entry>/var/tmp</entry>
             </row>
             <row>
               <entry>The OpenACS tarball contains some files which
                 are useful while setting up other software.  Those
                 files are located at:</entry>
-              <entry>/tmp/&tarballpath;/packages/acs-core-docs/www/files</entry>
+              <entry>/var/tmp/&tarballpath;/packages/acs-core-docs/www/files</entry>
             </row>
             <row>
               <entry>Database backup directory</entry>

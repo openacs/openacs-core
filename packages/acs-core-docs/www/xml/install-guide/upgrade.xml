@@ -364,13 +364,13 @@ parameter::set_value -package_id [ad_acs_kernel_id] -parameter UsePasswordWidget
         </formalpara>
         <screen>[root root]# <userinput>su - <replaceable>$OPENACS_SERVICE_NAME</replaceable></userinput>
 [$OPENACS_SERVICE_NAME aolserver]$ <userinput>cd /var/lib/aolserver</userinput>
-[$OPENACS_SERVICE_NAME web]$ <userinput>tar xzf /tmp/openacs-5-1.tar.gz</userinput>
+[$OPENACS_SERVICE_NAME web]$ <userinput>tar xzf /var/tmp/openacs-5-1.tar.gz</userinput>
 [$OPENACS_SERVICE_NAME web]$ <userinput>cp -r openacs-5-1/* openacs-4</userinput>
 [$OPENACS_SERVICE_NAME openacs-upgrade]$ <userinput>exit</userinput>
 [root root]#
 <action>su - <replaceable>$OPENACS_SERVICE_NAME</replaceable>
 cd /var/lib/aolserver
-tar xzf /tmp/openacs-5-1.tgz
+tar xzf /var/tmp/openacs-5-1.tgz
 cp -r openacs-5-1/* openacs-4
 exit</action></screen>
       </listitem>
@@ -500,7 +500,7 @@ exit</action></screen>
 [$OPENACS_SERVICE_NAME tmp]$ <userinput>mkdir <replaceable>$OPENACS_SERVICE_NAME</replaceable>-upgrade</userinput>
 [$OPENACS_SERVICE_NAME tmp]$ <userinput>cvs checkout -d <replaceable>$OPENACS_SERVICE_NAME</replaceable>-upgrade -jOpenACS:yesterday -jOpenACS -kk <replaceable>$OPENACS_SERVICE_NAME</replaceable> &gt; cvs.txt 2&gt;&amp;1</userinput>
 (CVS feedback here)</screen>
-          <para>The file /tmp/openacs-upgrade/cvs.txt contains the
+          <para>The file /var/tmp/openacs-upgrade/cvs.txt contains the
             results of the upgrade.  If you changed files that are
             part of the OpenACS tarball and those changes conflict,
             you'll have to manually reconcile them.  Use the emacs
@@ -614,7 +614,7 @@ exit</action></screen>
         <listitem>
           <para>Build and install the new OpenFTS driver and supporting tcl procedures.  (This section of shell code is not fully documented; please exercise care.)</para>
           <screen>cd /usr/local/src/
-          tar xzf /tmp/Search-OpenFTS-tcl-0.3.2.tar.gz
+          tar xzf /var/tmp/Search-OpenFTS-tcl-0.3.2.tar.gz
           chown -R root.root Search-OpenFTS-tcl-0.3.2/
           cd Search-OpenFTS-tcl-0.3.2/
           ./configure --with-aolserver-src=/usr/local/src/aolserver/aolserver --with-tcl=/usr/lib/
