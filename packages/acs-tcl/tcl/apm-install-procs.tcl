@@ -631,6 +631,7 @@ ad_proc -private apm_load_catalog_files {
     lang::catalog::import -cache -package_key $package_key
 }
 
+namespace eval apm {}
 
 ad_proc -private apm_package_install { 
     {-enable:boolean}
@@ -1932,6 +1933,111 @@ ad_proc -public apm_get_repository_channel {} {
     return [join [lrange $kernel_versionv 0 1] "-"]
 }
 
+ad_proc -private apm_load_install_xml {filename binds} {
+    Loads an install file and returns the root node.
+    errors out if the file is not there.
+    substitutes variables before parsing so you can provide interpolated values.
+    @param filename relative to serverroot, leading slash needed.
+    @param binds list of {variable value variable value ...}
+
+    @return root_node of the parsed xml file.
+
+    @author Jeff Davis davis@xarg.net
+    @creation-date 2003-10-30
+} {
+    # Abort if there is no install.xml file
+    set filename [acs_root_dir]$filename
+
+    if { ![file exists $filename] } {
+        error "File $filename not found"
+    }
+
+    # Read the whole file
+    set file [open $filename]
+    set __the_body__ [read $file]
+    close $file
+    # Interpolate the vars.
+    if {![empty_string_p binds]} { 
+        foreach {var val} $binds {
+            set $var [ad_quotehtml $val]
+        }
+        if {![info exists Id]} { 
+            set Id {$Id}
+        }
+        if {[catch {set __the_body__ [subst -nobackslashes -nocommands ${__the_body__}]} err]} { 
+            error $err
+        }
+    }
+
+    set root_node [xml_doc_get_first_node [xml_parse -persist ${__the_body__}]]
+    return $root_node
+}
+
+ad_proc -public apm::process_install_xml {filename binds} {
+    process an xml install definition file which is expected to contain 
+    directives to install, mount and configure a series of packages.
+
+    @parameter filename path to the xml file relative to serverroot.
+    @param binds list of {variable value variable value ...}
+
+    @return list of messages
+
+    @author Jeff Davis (swiped from acs-bootstrap-installer though)
+    @creation-date 2003-10-30
+} {
+    variable ::install::xml::ids
+    array unset ids 
+    array set ids [list]
+
+    set root_node [apm_load_install_xml $filename $binds] 
+
+    set acs_application(name) [apm_required_attribute_value $root_node name]
+    set acs_application(pretty_name) [apm_attribute_value -default $acs_application(name) $root_node pretty-name]
+
+    lappend out "Loading packages for the $acs_application(pretty_name) application."
+
+    set actions [xml_node_get_children_by_name $root_node actions]
+
+    if { [llength $actions] != 1 } {
+        ns_log Error "Error in \"$filename\": only one action node is allowed, found: [llength $actions]"
+        error "Error in \"$filename\": only one action node is allowed"
+    }
+
+    set actions [xml_node_get_children [lindex $actions 0]]
+
+    foreach action $actions {
+        set install_proc_out [apm_invoke_install_proc -node $action]
+        set out [concat $out $install_proc_out]
+    }
+
+    return $out
+}
+
+ad_proc -private apm_invoke_install_proc {
+  {-type "action"}
+  {-node:required}
+} {
+    read an xml install element and invoke the appropriate processing
+    procedure.
+
+    @param type the type of element to search for
+    @param node the xml node to process
+
+    @return the result of the invoked proc
+
+    @author Lee Denison
+    @creation-date 2004-06-16
+} {
+    set name [xml_node_get_name $node]
+    set command [info commands ::install::xml::${type}::${name}]
+
+    if {[llength $command] == 0} {
+        error "Error: got bad node \"$name\""
+        }
+
+    return [eval [list ::install::xml::${type}::${name} $node]]
+}
+ 
 ##############
 #
 # Dynamic package version attributes (namespace apm::package_version::attributes)
