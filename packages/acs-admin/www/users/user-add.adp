@@ -1,5 +1,6 @@
 <master>
 <property name=title>Add a user</property>
+<property name="focus">user.email</property>
 
 <h2>Add a user</h2>
 
@@ -7,7 +8,7 @@
 
 <hr>
 
-<form action=user-add-2 method=post>
+<form action=user-add-2 method=post name="user">
 @export_vars@
 <input type="hidden" name="referer" value="@referer@"></input>
 <table>
