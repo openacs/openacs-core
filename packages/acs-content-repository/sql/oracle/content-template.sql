@@ -30,12 +30,14 @@ function new (
 			   default sysdate,
   creation_user	in acs_objects.creation_user%TYPE
 			   default null,
-  creation_ip	in acs_objects.creation_ip%TYPE default null
+  creation_ip	in acs_objects.creation_ip%TYPE default null,
+  package_id    in acs_objects.package_id%TYPE
 ) return cr_templates.template_id%TYPE
 is
 
   v_template_id		cr_templates.template_id%TYPE;
   v_parent_id		cr_items.parent_id%TYPE;
+  v_package_id		acs_objects.package_id%TYPE;
 
 begin
 
@@ -53,11 +55,18 @@ begin
         'This folder does not allow templates to be created');
 
   else
+    if package_id is null then
+      v_package_id := acs_object.package_id(v_parent_id);
+    else
+      v_package_id := package_id;
+    end if;
+
     v_template_id := content_item.new (
         item_id       => content_template.new.template_id,
         name          => content_template.new.name, 
         text          => content_template.new.text, 
         parent_id     => v_parent_id,
+        package_id    => v_package_id,
         content_type  => 'content_template',
         is_live       => content_template.new.is_live, 
         creation_date => content_template.new.creation_date, 

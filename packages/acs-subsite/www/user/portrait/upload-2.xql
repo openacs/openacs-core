@@ -43,4 +43,14 @@
         </querytext>
 </fullquery>
 
+<fullquery name="update_object_title">
+        <querytext>
+
+	    update acs_objects
+	    set title = :title
+	    where object_id = :revision_id
+
+        </querytext>
+</fullquery>
+
 </queryset>

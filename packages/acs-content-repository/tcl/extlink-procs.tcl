@@ -16,6 +16,7 @@ ad_proc content_extlink::new {
     {-name ""}
     {-label ""}
     {-description ""}
+    {-package_id ""}
 } {
 
     Create a new external link.
@@ -26,11 +27,16 @@ ad_proc content_extlink::new {
     @name Name to assign the object (defaults to "link extlink_id")
     @label Label for the extlink (defaults to the URL)
     @description An extended description of the link (defaults to NULL)
+    @package_id Package Id of the package that created the link
 
 } {
 
     set creation_user [ad_conn user_id]
     set creation_ip [ad_conn peeraddr]
+
+    if {[empty_string_p $package_id]} {
+	set package_id [ad_conn package_id]
+    }
 
     return [db_exec_plsql extlink_new {}]
 

@@ -12,6 +12,29 @@
 
 -- create or replace package body content_folder
 
+create or replace function content_folder__new(varchar,varchar,varchar,integer,integer) 
+returns integer as '
+declare
+  new__name                   alias for $1;  
+  new__label                  alias for $2;  
+  new__description            alias for $3;  -- default null  
+  new__parent_id              alias for $4;  -- default null
+  new__package_id             alias for $5;  -- default null
+begin
+        return content_folder__new(new__name,
+                                   new__label,
+                                   new__description,
+                                   new__parent_id,
+                                   null,
+                                   null,
+                                   now(),
+                                   null,
+                                   null,
+                                   new__package_id
+               );
+
+end;' language 'plpgsql';
+
 create or replace function content_folder__new(varchar,varchar,varchar,integer) 
 returns integer as '
 declare
@@ -28,10 +51,12 @@ begin
                                    null,
                                    now(),
                                    null,
+                                   null,
                                    null
                );
 
 end;' language 'plpgsql';
+
 -- function new
 create or replace function content_folder__new (varchar,varchar,varchar,integer,integer,integer,timestamptz,integer,varchar)
 returns integer as '
@@ -45,8 +70,38 @@ declare
   new__creation_date          alias for $7;  -- default now()
   new__creation_user          alias for $8;  -- default null
   new__creation_ip            alias for $9;  -- default null
+begin
+        return content_folder__new(new__name,
+                                   new__label,
+                                   new__description,
+                                   new__parent_id,
+                                   new__content_id,
+                                   new__folder_id,
+                                   new__creation_date,
+                                   new__creation_user,
+                                   new__creation_ip,
+                                   null
+               );
+
+end;' language 'plpgsql';
+
+-- function new
+create or replace function content_folder__new (varchar,varchar,varchar,integer,integer,integer,timestamptz,integer,varchar,integer)
+returns integer as '
+declare
+  new__name                   alias for $1;  
+  new__label                  alias for $2;  
+  new__description            alias for $3;  -- default null
+  new__parent_id              alias for $4;  -- default null
+  new__context_id             alias for $5;  -- default null
+  new__folder_id              alias for $6;  -- default null
+  new__creation_date          alias for $7;  -- default now()
+  new__creation_user          alias for $8;  -- default null
+  new__creation_ip            alias for $9;  -- default null
+  new__package_id             alias for $10;  -- default null
   v_folder_id                 cr_folders.folder_id%TYPE;
   v_context_id                acs_objects.context_id%TYPE;
+  v_package_id                acs_objects.package_id%TYPE;
 begin
 
   -- set the context_id
@@ -65,6 +120,12 @@ begin
 
   else
 
+    v_package_id := new__package_id;
+
+    if new__parent_id is not null and new__package_id is null then
+        v_package_id := acs_object__package_id(content_item__get_root_folder(new__parent_id));
+    end if;
+
     v_folder_id := content_item__new(
         new__name, 
         new__parent_id,
@@ -81,14 +142,20 @@ begin
         ''text/plain'',
         null,
         null,
-        ''text''    
+        ''text'',
+        v_package_id
     );
 
     insert into cr_folders (
-      folder_id, label, description
+      folder_id, label, description, package_id
     ) values (
-      v_folder_id, new__label, new__description
+      v_folder_id, new__label, new__description, v_package_id
     );
+
+    -- set the correct object title
+    update acs_objects
+    set title = new__label
+    where object_id = v_folder_id;
 
     -- inherit the attributes of the parent folder
     if new__parent_id is not null then
@@ -117,7 +184,7 @@ end;' language 'plpgsql';
 
 select define_function_args('content_folder__new','name,label,description,parent_id,context_id,folder_id,creation_date;now,creation_user,creation_ip,security_inherit_p;t');
 
-create or replace function content_folder__new (varchar,varchar,varchar,integer,integer,integer,timestamptz,integer,varchar, boolean)
+create or replace function content_folder__new (varchar,varchar,varchar,integer,integer,integer,timestamptz,integer,varchar,boolean,integer)
 returns integer as '
 declare
   new__name                   alias for $1;  
@@ -130,6 +197,8 @@ declare
   new__creation_user          alias for $8;  -- default null
   new__creation_ip            alias for $9;  -- default null
   new__security_inherit_p     alias for $10;  -- default true	
+  new__package_id             alias for $11;  -- default null
+  v_package_id                acs_objects.package_id%TYPE;
   v_folder_id                 cr_folders.folder_id%TYPE;
   v_context_id                acs_objects.context_id%TYPE;
 begin
@@ -150,6 +219,12 @@ begin
 
   else
 
+    v_package_id := new__package_id;
+
+    if new__parent_id is not null and new__package_id is null then
+        v_package_id := acs_object__package_id(content_item__get_root_folder(new__parent_id));
+    end if;
+
     v_folder_id := content_item__new(
 	new__folder_id,
 	new__name, 
@@ -166,13 +241,20 @@ begin
 	new__security_inherit_p,
 	''CR_FILES'',
 	''content_folder'',
-        ''content_folder'');
+        ''content_folder'',
+        v_package_id
+    );
 
     insert into cr_folders (
-      folder_id, label, description
+      folder_id, label, description, package_id
     ) values (
-      v_folder_id, new__label, new__description
+      v_folder_id, new__label, new__description, v_package_id
     );
+
+    -- set the correct object title
+    update acs_objects
+    set title = new__label
+    where object_id = v_folder_id;
 
     -- inherit the attributes of the parent folder
     if new__parent_id is not null then
@@ -196,6 +278,35 @@ where
   end if;
 
   return null; 
+end;' language 'plpgsql';
+
+create or replace function content_folder__new (varchar,varchar,varchar,integer,integer,integer,timestamptz,integer,varchar,boolean)
+returns integer as '
+declare
+  new__name                   alias for $1;  
+  new__label                  alias for $2;  
+  new__description            alias for $3;  -- default null
+  new__parent_id              alias for $4;  -- default null
+  new__context_id             alias for $5;  -- default null
+  new__folder_id              alias for $6;  -- default null
+  new__creation_date          alias for $7;  -- default now()
+  new__creation_user          alias for $8;  -- default null
+  new__creation_ip            alias for $9;  -- default null
+  new__security_inherit_p     alias for $10;  -- default true	
+begin
+        return content_folder__new(new__name,
+                                   new__label,
+                                   new__description,
+                                   new__parent_id,
+                                   new__content_id,
+                                   new__folder_id,
+                                   new__creation_date,
+                                   new__creation_user,
+                                   new__creation_ip,
+                                   new__security_inherit_p,
+                                   null
+               );
+
 end;' language 'plpgsql';
 
 -- procedure delete
@@ -292,6 +403,12 @@ begin
 
   if rename__name is not null and rename__name != '''' then
     PERFORM content_item__rename(rename__folder_id, rename__name);
+  end if;
+
+  if rename__label is not null and rename_label != '''' then
+    update acs_objects
+    set title = rename__label
+    where object_id = rename__folder_id;
   end if;
 
   if rename__label is not null and rename__label != '''' and 
@@ -414,7 +531,7 @@ begin
 	return v_new_folder_id;
 end;' language 'plpgsql';
 
-create function content_folder__copy (integer,integer,integer,varchar,varchar)
+create or replace function content_folder__copy (integer,integer,integer,varchar,varchar)
 returns integer as '
 declare
   copy__folder_id              alias for $1;  
@@ -483,7 +600,8 @@ begin
           null,
           now(),
 	  copy__creation_user,
-	  copy__creation_ip
+	  copy__creation_ip,
+          null
       );
 
       -- copy attributes of original folder
@@ -513,7 +631,8 @@ begin
 	    v_folder_contents_val.item_id,
 	    v_new_folder_id,
 	    copy__creation_user,
-	    copy__creation_ip    
+	    copy__creation_ip,
+            null
 	);
 
       end loop;

@@ -223,6 +223,7 @@ ad_proc -public person::update {
     update the name of a person
 } {
     db_dml update_person {}
+    db_dml update_object_title {}
     name_flush -person_id $person_id
 }
 
@@ -627,6 +628,9 @@ ad_proc -public party::update {
         }
     }
     db_dml party_update {}
+    if {[info exists email]} {
+	db_dml object_title_update {}
+    }
     acs_user::flush_cache -user_id $party_id
 }
 

@@ -74,7 +74,9 @@ function new (
   data	        in cr_revisions.content%TYPE default null,
   relation_tag  in cr_child_rels.relation_tag%TYPE default null,
   is_live       in char default 'f',
-  storage_type  in cr_items.storage_type%TYPE default 'lob'
+  storage_type  in cr_items.storage_type%TYPE default 'lob',
+  package_id    in acs_objects.package_id%TYPE default null
+
 ) return cr_items.item_id%TYPE
 is
   v_parent_id      cr_items.parent_id%TYPE;
@@ -84,6 +86,7 @@ is
   v_title	   cr_revisions.title%TYPE;
   v_rel_id	   acs_objects.object_id%TYPE;
   v_rel_tag        cr_child_rels.relation_tag%TYPE;
+  v_package_id     acs_objects.package_id%TYPE;
   v_context_id     acs_objects.context_id%TYPE;
   v_storage_type   cr_items.storage_type%TYPE;
 begin
@@ -106,6 +109,12 @@ begin
     v_parent_id := c_root_folder_id;
   else
     v_parent_id := parent_id;
+  end if;
+
+  if package_id is null then
+    v_package_id := acs_object.package_id(content_item.get_root_folder(v_parent_id));
+  else
+    v_package_id := package_id;
   end if;
 
   -- Determine context_id
@@ -166,7 +175,9 @@ begin
 
   v_item_id := acs_object.new(
       object_id	        => content_item.new.item_id,
-      object_type	=> content_item.new.item_subtype, 
+      object_type	=> content_item.new.item_subtype,
+      title             => content_item.new.name,
+      package_id        => v_package_id,
       context_id        => v_context_id,
       creation_date	=> content_item.new.creation_date, 
       creation_user	=> content_item.new.creation_user, 
@@ -193,6 +204,8 @@ begin
 
     v_rel_id := acs_object.new(
       object_type	=> 'cr_item_child_rel',
+      title		=> v_rel_tag || ': ' || v_parent_id || ' - ' || v_item_id,
+      package_id	=> v_package_id,
       context_id	=> v_parent_id
     );
 
@@ -220,6 +233,7 @@ begin
     v_revision_id := content_revision.new(
         item_id	      => v_item_id,
 	title	      => v_title,
+        package_id    => v_package_id,
 	description   => content_item.new.description,
 	data	      => content_item.new.data,
 	mime_type     => content_item.new.mime_type,
@@ -235,6 +249,7 @@ begin
     v_revision_id := content_revision.new(
 	item_id	      => v_item_id,
 	title	      => v_title,
+        package_id    => v_package_id,
 	description   => content_item.new.description,
 	text	      => content_item.new.text,
 	mime_type     => content_item.new.mime_type,
@@ -634,6 +649,10 @@ begin
     update cr_items
       set name = rename.name
       where item_id = rename.item_id;
+
+    update acs_objects
+      set title = rename.name
+      where object_id = rename.item_id;
   else
     close exists_cur;
     if exists_id <> rename.item_id then
@@ -1233,6 +1252,12 @@ begin
       where item_id = move.item_id;
     end if;
 
+    if name is not null then
+      update acs_objects
+        set title = move.name
+        where object_id = move.item_id;
+    end if;
+
   end if;
 end move;
 
@@ -1584,6 +1609,7 @@ is
   v_rel_id		integer;
   v_exists		integer;
   v_order_n		cr_item_rels.order_n%TYPE;
+  v_package_id          acs_objects.package_id%TYPE;
 begin
 
   -- check the relationship is valid
@@ -1622,6 +1648,7 @@ begin
       v_exists := 0;
     end;
 
+    v_package_id := acs_object.package_id(relate.item_id);
 
     -- if order_n is null, use rel_id (the order the item was related)
     if relate.order_n is null then
@@ -1636,6 +1663,8 @@ begin
       --dbms_output.put_line( 'creating new relationship...');
       v_rel_id := acs_object.new(
         object_type     => relation_type,
+        title           => relation_tag || ': ' || relate.item_id || ' - ' || relate.object_id,
+        package_id      => v_package_id,
         context_id      => item_id
       );
       insert into cr_item_rels (
@@ -1652,6 +1681,10 @@ begin
         order_n = v_order_n
       where
         rel_id = v_rel_id;
+
+      update acs_objects set
+        title = relate.relation_tag || ': ' || relate.item_id || ' - ' || relate.object_id
+      where object_id = v_rel_id;
     end if;
 
   end if;

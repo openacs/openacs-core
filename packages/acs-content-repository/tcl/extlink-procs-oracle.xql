@@ -14,7 +14,8 @@
                   parent_id => :parent_id,
                   extlink_id => :extlink_id,
                   creation_user => :creation_user,
-                  creation_ip => :creation_ip
+                  creation_ip => :creation_ip,
+                  package_id => :package_id
                 );
         end;
 
@@ -27,7 +28,8 @@
         update acs_objects
         set last_modified = sysdate,
           modifying_user = :modifying_user,
-          modifying_ip = :modifying_ip
+          modifying_ip = :modifying_ip,
+          title = :label
         where object_id = :extlink_id
 
       </querytext>

@@ -25,20 +25,30 @@ function new (
   creation_date	in acs_objects.creation_date%TYPE default sysdate,
   creation_user	in acs_objects.creation_user%TYPE default null,
   creation_ip	in acs_objects.creation_ip%TYPE default null,
-  filename	in cr_revisions.filename%TYPE default null
+  filename	in cr_revisions.filename%TYPE default null,
+  package_id	in acs_objects.package_id%TYPE default null
 
 ) return cr_revisions.revision_id%TYPE is
 
   v_revision_id integer;
+  v_package_id acs_objects.package_id%TYPE;
   v_content_type acs_object_types.object_type%TYPE;
 
 begin
 
   v_content_type := content_item.get_content_type(item_id);
 
+  if package_id is null then
+    v_package_id := acs_object.package_id(item_id);
+  else
+    v_package_id := package_id;
+  end if;
+
   v_revision_id := acs_object.new(
       object_id     => revision_id,
-      object_type   => v_content_type, 
+      object_type   => v_content_type,
+      title         => title,
+      package_id    => v_package_id,
       creation_date => creation_date, 
       creation_user => creation_user, 
       creation_ip   => creation_ip, 
@@ -68,7 +78,8 @@ function new (
   revision_id   in cr_revisions.revision_id%TYPE default null,
   creation_date	in acs_objects.creation_date%TYPE default sysdate,
   creation_user	in acs_objects.creation_user%TYPE default null,
-  creation_ip	in acs_objects.creation_ip%TYPE default null
+  creation_ip	in acs_objects.creation_ip%TYPE default null,
+  package_id	in acs_objects.package_id%TYPE default null
 ) return cr_revisions.revision_id%TYPE is
 
   v_revision_id integer;
@@ -89,7 +100,8 @@ begin
       revision_id   => revision_id,
       creation_date => creation_date,
       creation_user => creation_user,
-      creation_ip   => creation_ip
+      creation_ip   => creation_ip,
+      package_id    => package_id
   );
 
   select 
@@ -193,11 +205,13 @@ begin
   insert into acs_objects ( 
     object_id, object_type, context_id, security_inherit_p, 
     creation_user, creation_date, creation_ip,
-    last_modified, modifying_user, modifying_ip
+    last_modified, modifying_user, modifying_ip,
+    title, package_id
   ) ( select 
     v_copy_id, object_type, v_target_item_id, security_inherit_p, 
     copy.creation_user, sysdate, copy.creation_ip,
-    sysdate, copy.creation_user, copy.creation_ip from
+    sysdate, copy.creation_user, copy.creation_ip,
+    title, package_id from
     acs_objects where object_id = copy.revision_id
   );
   

@@ -27,7 +27,8 @@ as
         creation_user in acs_objects.creation_user%TYPE default null,
         creation_ip   in acs_objects.creation_ip%TYPE   default null,
         object_type   in acs_objects.object_type%TYPE   default 'acs_message',
-        is_live       in char                           default 't'
+        is_live       in char                           default 't',
+        package_id    in acs_objects.package_id%TYPE    default null
     ) return acs_objects.object_id%TYPE;
 
     function edit (
@@ -88,7 +89,8 @@ as
         creation_user in acs_objects.creation_user%TYPE default null,
         creation_ip   in acs_objects.creation_ip%TYPE   default null,
         is_live       in char                           default 't',
-        storage_type  in cr_items.storage_type%TYPE	default 'file'
+        storage_type  in cr_items.storage_type%TYPE	default 'file',
+        package_id    in acs_objects.package_id%TYPE    default null
     ) return acs_objects.object_id%TYPE;
 
     function edit_file (
@@ -121,7 +123,8 @@ as
         creation_user in acs_objects.creation_user%TYPE default null,
         creation_ip   in acs_objects.creation_ip%TYPE   default null,
         is_live       in char                           default 't',
-        storage_type  in cr_items.storage_type%TYPE	default 'file'
+        storage_type  in cr_items.storage_type%TYPE	default 'file',
+        package_id    in acs_objects.package_id%TYPE    default null
     ) return acs_objects.object_id%TYPE;
 
     function edit_image (
@@ -151,7 +154,8 @@ as
         parent_id     in acs_objects.context_id%TYPE,
         creation_date in acs_objects.creation_date%TYPE default sysdate,
         creation_user in acs_objects.creation_user%TYPE default null,
-        creation_ip   in acs_objects.creation_ip%TYPE   default null
+        creation_ip   in acs_objects.creation_ip%TYPE   default null,
+        package_id    in acs_objects.package_id%TYPE    default null
     ) return cr_extlinks.extlink_id%TYPE;
 
     function edit_extlink (
@@ -193,7 +197,8 @@ as
         creation_user in acs_objects.creation_user%TYPE default null,
         creation_ip   in acs_objects.creation_ip%TYPE   default null,
         object_type   in acs_objects.object_type%TYPE   default 'acs_message',
-        is_live       in char                           default 't'
+        is_live       in char                           default 't',
+        package_id    in acs_objects.package_id%TYPE    default null
     ) return acs_objects.object_id%TYPE
     is
         v_message_id   acs_messages.message_id%TYPE;
@@ -226,7 +231,8 @@ as
             creation_date  => creation_date,
             creation_user  => creation_user,
             creation_ip    => creation_ip,
-            item_subtype   => object_type
+            item_subtype   => object_type,
+            package_id     => package_id
         );
 
         insert into acs_messages 
@@ -394,7 +400,8 @@ as
         creation_user in acs_objects.creation_user%TYPE default null,
         creation_ip   in acs_objects.creation_ip%TYPE   default null,
         is_live       in char                           default 't',
-        storage_type  in cr_items.storage_type%TYPE	default 'file'
+        storage_type  in cr_items.storage_type%TYPE	default 'file',
+        package_id    in acs_objects.package_id%TYPE    default null
     ) return acs_objects.object_id%TYPE
     is
         v_file_id      cr_items.item_id%TYPE;
@@ -408,7 +415,8 @@ as
             creation_date  => creation_date,
             creation_user  => creation_user,
             creation_ip    => creation_ip,
-            storage_type   => storage_type
+            storage_type   => storage_type,
+            package_id     => package_id
         );
 
         -- create an initial revision for the new attachment
@@ -482,7 +490,8 @@ as
         creation_user  in acs_objects.creation_user%TYPE  default null,
         creation_ip    in acs_objects.creation_ip%TYPE    default null,
         is_live        in char                            default 't',
-        storage_type   in cr_items.storage_type%TYPE      default 'file'
+        storage_type   in cr_items.storage_type%TYPE      default 'file',
+        package_id    in acs_objects.package_id%TYPE      default null
     ) return acs_objects.object_id%TYPE
     is
         v_image_id     cr_items.item_id%TYPE;
@@ -496,7 +505,8 @@ as
             creation_date  => creation_date,
             creation_user  => creation_user,
             creation_ip    => creation_ip,
-            storage_type   => storage_type
+            storage_type   => storage_type,
+            package_id     => package_id
         );
 
         -- create an initial revision for the new attachment
@@ -580,7 +590,8 @@ as
         parent_id      in acs_objects.context_id%TYPE,
         creation_date  in acs_objects.creation_date%TYPE  default sysdate,
         creation_user  in acs_objects.creation_user%TYPE  default null,
-        creation_ip    in acs_objects.creation_ip%TYPE    default null
+        creation_ip    in acs_objects.creation_ip%TYPE    default null,
+        package_id    in acs_objects.package_id%TYPE      default null
     ) return cr_extlinks.extlink_id%TYPE
     is
         v_extlink_id  cr_extlinks.extlink_id%TYPE;
@@ -594,7 +605,8 @@ as
             extlink_id     => new_extlink.extlink_id,   
             creation_date  => new_extlink.creation_date,
             creation_user  => new_extlink.creation_user,
-            creation_ip    => new_extlink.creation_ip 
+            creation_ip    => new_extlink.creation_ip,
+            package_id     => new_extlink.package_id
         );
     end new_extlink;        
     

@@ -1,113 +1,98 @@
--- Data model to support content repository of the ArsDigita
--- Publishing System
+update acs_objects
+set title = (select label
+             from cr_folders
+             where folder_id = object_id),
+package_id = (select package_id
+             from apm_packages
+             where package_key = 'acs-content-repository')
+where object_type = 'content_folder'
+and object_id < 0;
 
--- Copyright (C) 1999-2000 ArsDigita Corporation
--- Author: Hiro Iwashima (iwashima@mit.edu)
+update acs_objects
+set title = (select label
+             from cr_folders
+             where folder_id = object_id),
+package_id = (select coalesce(package_id, acs_object__package_id(content_item__get_root_folder(folder_id)))
+             from cr_folders
+             where folder_id = object_id)
+where object_type = 'content_folder'
+and object_id > 0;
 
--- $Id$
+update acs_objects
+set title = (select name
+             from cr_items
+             where item_id = object_id),
+package_id = acs_object__package_id(content_item__get_root_folder(object_id))
+where object_type = 'content_item';
 
--- This is free software distributed under the terms of the GNU Public
--- License.  Full text of the license is available from the GNU Project:
--- http://www.fsf.org/copyleft/gpl.html
+update acs_objects
+set title = (select title
+             from cr_revisions
+             where revision_id = object_id),
+package_id = (select acs_object__package_id(item_id)
+             from cr_revisions
+             where revision_id = object_id)
+where object_type in ('content_revision', 'image');
 
--- This is to handle images
+update acs_objects
+set title = (select label
+             from cr_symlinks
+             where symlink_id = object_id),
+package_id = (select acs_object__package_id(target_id)
+             from cr_symlinks
+             where symlink_id = object_id)
+where object_type = 'content_symlink';
 
-create table images (
-   image_id       integer
-                  constraint images_image_id_fk
-                  references cr_revisions
-                  constraint images_pk
-                  primary key,
-   width          integer,
-   height         integer
-);
+update acs_objects
+set title = (select label
+             from cr_extlinks
+             where extlink_id = object_id),
+package_id = (select acs_object__package_id(parent_id)
+             from cr_items
+             where item_id = object_id)
+where object_type = 'content_extlink';
 
+update acs_objects
+set title = (select heading
+             from cr_keywords
+             where keyword_id = object_id)
+where object_type = 'content_keyword';
 
-begin;
+update acs_objects
+set title = (select name
+             from cr_items
+             where item_id = object_id),
+package_id = (select acs_object__package_id(parent_id)
+             from cr_items
+             where item_id = object_id)
+where object_type = 'content_template';
 
- select content_type__create_type (
-   'image',
-   'content_revision',
-   'Image',
-   'Images',
-   'images',
-   'image_id',
-   null
- );
+update acs_objects
+set title = (select relation_tag || ': ' || item_id || ' - ' || related_object_id
+             from cr_item_rels
+             where rel_id = object_id),
+package_id = (select acs_object__package_id(item_id)
+             from cr_item_rels
+             where rel_id = object_id)
+where object_type = 'cr_item_rel';
 
- select content_type__create_attribute (
-   'image',
-   'width',
-   'integer',
-   'Width',
-   'Widths',
-   null,
-   null,
-   'text'
- );
+update acs_objects
+set title = (select relation_tag || ': ' || parent_id || ' - ' || child_id
+             from cr_child_rels
+             where rel_id = object_id),
+package_id = (select acs_object__package_id(parent_id)
+             from cr_child_rels
+             where rel_id = object_id)
+where object_type = 'cr_item_child_rel';
 
- select content_type__create_attribute (
-   'image',
-   'height',
-   'integer',
-   'Height',
-   'Heights',
-   null,
-   null,
-   'text'
- );
+\i ../content-item.sql
+\i ../content-revision.sql
+\i ../content-folder.sql
+\i ../content-template.sql
+\i ../content-symlink.sql
+\i ../content-extlink.sql
+\i ../content-keyword.sql
 
-end;
-
--- register MIME types to this content type
-begin;
-
-  select content_type__register_mime_type(
-    'image',
-    'image/jpeg'
-  );
-
-  select content_type__register_mime_type(
-    'image',
-    'image/gif'
-  );
-
-end;
-
-
--- content-image.sql patch
---
--- adds standard image pl/sql package
---
--- Walter McGinnis (wtem@olywa.net), 2001-09-23
--- based on original photo-album package code by Tom Baginski
---
-
-/*
- Creates a new image
- Binary file stored in file-system
-*/
-
--- DRB: This code has some serious problem, IMO.  It's impossible to derive a new
--- type from "image" and make use of it, for starters.  Photo-album uses two 
--- content types to store a photograph - pa_photo and image.  pa_photo would, in
--- the world of real object-oriented languages, be derived from image and there's
--- really no reason not to do so in the OpenACS object type system.  The current
--- style requires separate content_items and content_revisions for both the 
--- pa_photo extended type and the image base type.  They're only tied together
--- by the coincidence of both being the live revision at the same time.  Delete
--- one or the other and guess what, that association's broken!
-
--- This is not, to put it mildly, clean.  Nor is it efficient to fill the RDBMS
--- with twice as many objects as you need...
-
--- The Oracle version does allow a non-image type to be specified, as does my
--- alternative down below.  This needs a little more straightening out.
-
--- DRB: BLOB issues make it impractical to use package_instantiate_object to create
--- new revisions that contain binary data so a higher-level Tcl API is required rather
--- than the standard package_instantiate_object.  So we don't bother calling define_function_args
--- here.
 
 create function image__new (varchar,integer,integer,integer,varchar,integer,varchar,varchar,varchar,varchar,boolean,timestamptz,varchar,integer,integer,integer,integer
   ) returns integer as '
@@ -211,7 +196,7 @@ create function image__new (varchar,integer,integer,integer,varchar,integer,varc
     return v_item_id;
 end; ' language 'plpgsql';
 
-create function image__new (varchar,integer,integer,integer,varchar,integer,varchar,varchar,varchar,varchar,boolean,timestamptz,varchar,integer,integer,integer
+create or replace function image__new (varchar,integer,integer,integer,varchar,integer,varchar,varchar,varchar,varchar,boolean,timestamptz,varchar,integer,integer,integer
   ) returns integer as '
   declare
     new__name		alias for $1;
@@ -333,7 +318,7 @@ create function image__new (varchar,integer,integer,integer,varchar,integer,varc
     return v_item_id;
 end; ' language 'plpgsql';
 
-create function image__new (varchar,integer,integer,integer,varchar,integer,varchar,varchar,varchar,varchar,varchar,
+create or replace function image__new (varchar,integer,integer,integer,varchar,integer,varchar,varchar,varchar,varchar,varchar,
                             varchar,timestamptz,integer, integer) returns integer as '
   declare
     p_name              alias for $1;
@@ -453,15 +438,3 @@ begin
    );
 
 end;' language 'plpgsql';
-
-create function image__delete (integer)
-returns integer as '
-declare
-  v_item_id		alias for $1;
-begin
-
-    -- This should take care of deleting revisions, too.
-    PERFORM content_item__delete (v_item_id);
-    return 0;
-
-end; ' language 'plpgsql';
