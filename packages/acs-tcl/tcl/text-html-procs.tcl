@@ -835,7 +835,7 @@ ad_proc -public ad_html_to_text {
 			if { [llength $img_info] == 0 } {
 			    ad_html_to_text_put_text output {[IMAGE]}
 			} else {
-			    ad_html_to_text_put_text output "\[IMAGE: [join $img_info " "]\]"
+			    ad_html_to_text_put_text output "\[IMAGE: [join $img_info " "] \]"
 			}
 		    }
 		}
