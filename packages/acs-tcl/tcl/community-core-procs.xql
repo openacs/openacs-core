@@ -4,7 +4,7 @@
 <fullquery name="cc_lookup_screen_name_user.user_select">      
       <querytext>
       
-	select user_id from cc_users where lower(screen_name) = lower(:screen_name)
+	select user_id from acs_users_all where lower(screen_name) = lower(:screen_name)
     
       </querytext>
 </fullquery>
@@ -12,7 +12,7 @@
 <fullquery name="cc_lookup_email_user.user_select">      
       <querytext>
       
-	select user_id from cc_users where lower(email) = lower(:email)
+	select user_id from acs_users_all where lower(email) = lower(:email)
     
       </querytext>
 </fullquery>
