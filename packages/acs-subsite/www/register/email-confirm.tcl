@@ -21,13 +21,13 @@ ad_page_contract {
 # we take authorized here in case the
 # person responds more than once
 
-set sql "select member_state, email, user_id, email_verified_p
-         from cc_users
-         where rowid = :row_id"
-
 # we want to catch DB errors related to illegal rowids.
 # but, we also have to make sure to get the rturn value from db_0or1row too.
-set status [catch {set rowid_check [db_0or1row register_email_user_info_get $sql]}]
+set status [catch {set rowid_check [db_0or1row register_email_user_info_get {
+    select member_state, email, user_id, email_verified_p
+    from cc_users
+    where rowid = :row_id
+}]}]
 
 if { $status != 0 || $rowid_check == 0} {
     db_release_unused_handles
