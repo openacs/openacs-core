@@ -7,7 +7,7 @@ ad_library {
     @cvs-id $Id$
 }
 
-ad_doc db_compatible_rdbms_p { db_type } {
+ad_proc db_compatible_rdbms_p { db_type } {
     Returns 1 if the given db_type is compatible with the current RDBMS.  If db_type
     is blank we assume this is a legacy Oracle package that's not been moved to
     the OpenACS multidb framework.
