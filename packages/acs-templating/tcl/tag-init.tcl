@@ -704,11 +704,11 @@ template_tag case { chunk params } {
 
     # insert the case statement and eval the chunk in between
 
-    if ![string equal $value ""] {
+    if { ![string equal $value ""] } {
 
         # processing <case value= ...> form
 
-        template::adp_append_code "$value {" -nobreak        
+        template::adp_append_code "[list $value] {" -nobreak        
 
         template::adp_compile_chunk $chunk
 
