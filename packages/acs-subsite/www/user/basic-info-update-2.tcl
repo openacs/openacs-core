@@ -61,6 +61,11 @@ if { ![info exists email] || ![util_email_valid_p $email] } {
     </ul>"
 }
 
+if { [string equal $url "http://"] } {
+    #its just the url hint ignore it.
+    set url ""
+}
+
 if { ![empty_string_p $url] && ![util_url_valid_p $url] } {
     incr exception_count
     append exception_text "<li>Your URL doesn't really look like a URL."
