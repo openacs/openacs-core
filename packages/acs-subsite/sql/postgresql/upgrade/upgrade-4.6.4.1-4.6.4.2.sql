@@ -18,7 +18,7 @@ values
 
 insert into group_rels
     (group_rel_id, group_id, rel_type)
-select acs_object_id_seq.nextval, group_id, 'admin_rel'
+select nextval('t_acs_object_id_seq'), group_id, 'admin_rel'
 from   groups g, acs_objects o
 where  o.object_id = g.group_id
 and    o.object_type = 'application_group';
