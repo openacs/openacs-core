@@ -203,3 +203,18 @@ aa_register_case message__format {
     aa_true "the frog should jump across the fence" [string equal $subst_message \
                                                                   $expected_message]
 }
+
+aa_register_case message__get_missing_embedded_vars {
+    Tests the lang::message::get_missing_embedded_vars proc
+
+    @author Peter Marklund (peter@collaboraid.biz)
+    @creation-date 12 November 2002
+} {
+    set en_us_message "this is a message with some %vars% and some more %variables%"
+    set new_message "this message contains no vars"
+
+    set missing_vars_list [lang::message::get_missing_embedded_vars $en_us_message $new_message]
+
+    aa_true "check the missing vars" [expr [string equal [lindex $missing_vars_list 0] "vars"] && \
+                                           [string equal [lindex $missing_vars_list 1] "variables"]]
+}
