@@ -20,6 +20,7 @@ create table auth_authorities (
                              unique,
     pretty_name              varchar2(4000),
     help_contact_text        varchar2(4000),
+    help_contact_text_format varchar(200),
     enabled_p                char(1) default 't' 
                              constraint auth_authority_enabled_p_nn
                              not null 
@@ -47,12 +48,6 @@ create table auth_authorities (
     get_doc_impl_id          integer references acs_objects(object_id),
     -- Id of service contract processing batch sync doc
     process_doc_impl_id      integer references acs_objects(object_id),
-    -- Are batch syncs snapshots or of incremental type
-    snapshot_p               char(1) default 'f' 
-                             constraint auth_authority_snapshot_p_nn
-                             not null 
-                             constraint auth_authority_snapshot_p_ck
-                             check (snapshot_p in ('t','f')),
     batch_sync_enabled_p     char(1) default 'f' 
                              constraint auth_authority_bs_enabled_p_nn
                              not null 
