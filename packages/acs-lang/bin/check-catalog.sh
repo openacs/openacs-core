@@ -1,16 +1,24 @@
 #!/bin/sh
 #
-# Check consistency of the en_US message catalog of the given package.
-# Checks that the set of keys in the message catalog is identical to the
-# set of keys in the adp, info, sql, and tcl files in the package.
-# Also checks that the info in the catalog filename matches info in
+# This script attempts to check that catalog files of a certain package
+# (or all packages if no package key is provided) are consistent with
+# eachother and that they are consistent with lookups in the code. More
+# specifically the script does the following:
+#
+# 1) Checks that the info in the catalog filename matches info in
 # its xml content (package_key, locale and charset).
+# 
+# 2) Checks that the set of keys in the message catalog is identical to the
+# set of keys in the adp, info, sql, and tcl files in the package.
+#
+# 3) Checks that the set of keys in non-en_US catalog files is present
+#    in the en_US catalog file of the package.
 #
 # The scripts assumes that message lookups in adp and info files are 
 # on the format #package_key.message_key#, and that message lookups 
 # in tcl files are always done with the underscore procedure. 
 #
-# usage: check-catalog.sh package_key
+# usage: check-catalog.sh [package_key]
 #
 # @author Peter Marklund (peter@collaboraid.biz)
 
