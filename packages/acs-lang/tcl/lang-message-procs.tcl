@@ -60,21 +60,6 @@ ad_proc -public lang::message::register {
     @see lang::message::lookup
     @see _
 } { 
-    # Create a globally unique key for the cache
-    set key "${package_key}.${message_key}"
-
-    # Insert the message key into the database if it doesn't
-    # already exist
-    set key_exists_p [db_string message_key_exists_p {}]
-
-    if { ! $key_exists_p } {
-        set key_upgrade_status [ad_decode $upgrade_p 1 "added" "no_upgrade"]
-        if { $upgrade_p } {
-            ns_log Notice "lang::message::register - Giving message key $message_key an upgrade status of $key_upgrade_status"
-        }
-        db_dml insert_message_key {}
-    }
-
     # Qualify the locale variable value with a country code if it is
     # just a language
     if { [string length $locale] == 2 } {
@@ -84,6 +69,30 @@ ad_proc -public lang::message::register {
         # let's get the default locale for that language
         set locale [util_memoize [list ad_locale_locale_from_lang $locale]]
     } 
+
+    # Create a globally unique key for the cache
+    set key "${package_key}.${message_key}"
+
+    # Insert the message key into the database if it doesn't
+    # already exist
+    set key_exists_p [db_string message_key_exists_p {}]
+
+    if { ! $key_exists_p } {
+        if { [string equal $locale "en_US"] } {
+            set key_upgrade_status [ad_decode $upgrade_p 1 "added" "no_upgrade"]
+            if { $upgrade_p } {
+                ns_log Notice "lang::message::register - Giving message key $message_key an upgrade status of $key_upgrade_status"
+            }
+            db_dml insert_message_key {}
+        } else {
+            # Non-default locale
+            # The system will not function correctly if there are keys registered in other locales
+            # than en_US that are not present for en_US. This introduces the inconvenience of having to
+            # register the en_US messages first, but that is manageable
+            ns_log Error "lang::message::register - refusing to register message for non-en_US locale ${locale}. The message key ${package_key}.${message_key} bust be registered in en_US first"
+            return -1
+        }
+    }
 
     # Different logic for update and insert
     if { [nsv_exists lang_message_$locale $key] } { 
