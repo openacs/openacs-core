@@ -100,7 +100,7 @@ ad_proc apm_guess_file_type { package_key path } {
     if { [string equal $extension ".sql"] } {
 	if { [lsearch -glob $components "*upgrade-*-*"] >= 0 } {
 	    set type "data_model_upgrade"
-	} elseif { [regexp -- "^$package_key-(create|drop)\.sql" [file tail $path] "" kind] } {
+	} elseif { [regexp -- "^$package_key-(create|drop)\.sql\$" [file tail $path] "" kind] } {
 	    set type "data_model_$kind"
 	} else {
 	    set type "data_model"
@@ -149,6 +149,7 @@ ad_proc apm_guess_file_type { package_key path } {
 }
 
 ad_proc -public apm_get_package_files {
+   {-all_db_types:boolean}
    {-package_key:required}
    {-file_types {}}
 } {
@@ -186,7 +187,11 @@ ad_proc -public apm_get_package_files {
         set file_db_type [apm_guess_db_type $package_key $rel_path]
 
         set type_match_p [expr [empty_string_p $file_types] || [lsearch $file_types $file_type] != -1]
-        set db_match_p [expr [empty_string_p $file_db_type] || [string equal $file_db_type [db_type]]]
+        if { $all_db_types_p } {
+            set db_match_p 1
+        } else {
+            set db_match_p [expr [empty_string_p $file_db_type] || [string equal $file_db_type [db_type]]]
+        }
 
         if { $type_match_p && $db_match_p } {
             lappend matching_files $rel_path
@@ -222,8 +227,8 @@ ad_proc -private apm_guess_db_type { package_key path } {
 
     2. Other files.
 
-       If the file name contains a dash and database type, the file is assumed to be
-       specific to that database type.
+       If it is a tcl or xql file whose name ends in a dash and database type, 
+       the file is assumed to be specific to that database type.
 
        Example: "tcl/10-database-postgresql-proc.tcl" is asusmed to be the file that
        defines the PostgreSQL-specific portions of the database API.
@@ -246,7 +251,7 @@ ad_proc -private apm_guess_db_type { package_key path } {
 
     set file_name [file tail $path]
     foreach known_database_type [nsv_get ad_known_database_types .] {
-        if { [string match "*-[lindex $known_database_type 0]\.*" $file_name] } {
+        if { [regexp -- "\-[lindex $known_database_type 0]\.(xql|tcl)\$" $file_name match] } {
             return [lindex $known_database_type 0]
         }
     }
@@ -274,6 +279,35 @@ ad_proc apm_package_supports_rdbms_p {
      }
 
      return 0
+}
+
+ad_proc apm_package_supports_rdbms_p {
+    {-package_key:required}
+} {
+    Returns 1 if the given package supports the rdbms of the system and 0 otherwise.
+    The package is considedered to support the given rdbms if there is at least one
+    file in the package of matching db_type, or if there are no files in the package
+    of a certain db type.
+
+    @author Peter Marklund
+} {    
+    set system_db_type [db_type]
+
+    set has_db_types_p 0
+
+    foreach file [apm_get_package_files -all_db_types -package_key $package_key] {
+        set db_type [apm_guess_db_type $package_key $file]
+        ns_log Notice "pm debug $file db type $db_type"
+       if { ![empty_string_p $db_type] } {
+            set has_db_types_p 1
+        }
+        
+        if { [string equal $system_db_type $db_type] } {
+            return 1
+        }
+     }
+
+    return [expr ! $has_db_types_p]
 }
 
 ad_proc apm_source { __file } {
