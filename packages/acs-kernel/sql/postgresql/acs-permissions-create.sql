@@ -69,6 +69,20 @@ create table acs_privilege_hierarchy_index (
 create index priv_hier_sortkey_idx on 
 acs_privilege_hierarchy_index (tree_sortkey);
 
+-- Added table to materialize view that previously used 
+-- acs_privilege_descendant_map name
+--
+-- DanW (dcwickstrom@earthlink.net) 30 Jan, 2003
+
+create table acs_privilege_descendant_map (
+	privilege       varchar(100) not null 
+                        constraint acs_priv_hier_priv_fk
+			references acs_privileges (privilege),
+        descendant      varchar(100) not null 
+                        constraint acs_priv_hier_child_priv_fk
+			references acs_privileges (privilege)
+
+);
 
 -- This trigger is used to create a pseudo-tree hierarchy that
 -- can be used to emulate tree queries on the acs_privilege_hierarchy table.
@@ -165,6 +179,13 @@ begin
             PERFORM priv_recurse_subtree(tree_next_key(null, new_value), v_rec.child_privilege);
 
         end LOOP;
+
+        -- materialize the map view to speed up queries
+        -- DanW (dcwickstrom@earthlink.net) 30 Jan, 2003
+        delete from acs_privilege_descendant_map;
+
+        insert into acs_privilege_descendant_map (privilege, descendant) 
+        select privilege, descendant from acs_privilege_descendant_map_view;
 
         return new;
 
@@ -353,7 +374,12 @@ create table acs_permissions (
 create index acs_permissions_grantee_idx on acs_permissions (grantee_id);
 create index acs_permissions_privilege_idx on acs_permissions (privilege);
 
-create view acs_privilege_descendant_map
+-- Added table to materialize view that previously used 
+-- acs_privilege_descendant_map name
+--
+-- DanW (dcwickstrom@earthlink.net) 30 Jan, 2003
+
+create view acs_privilege_descendant_map_view
 as select p1.privilege, p2.privilege as descendant
    from acs_privileges p1, acs_privileges p2
    where exists (select h2.child_privilege
