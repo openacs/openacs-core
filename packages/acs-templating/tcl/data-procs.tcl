@@ -9,6 +9,11 @@
 # License.  Full text of the license is available from the GNU Project:
 # http://www.fsf.org/copyleft/gpl.html
 
+namespace eval template {}
+namespace eval template::data {}
+namespace eval template::data::validate {}
+namespace eval template::data::transform {}
+
 ad_proc -public template::data::validate { type value_ref message_ref } {
     This proc invokes the validation code for a given type.
 

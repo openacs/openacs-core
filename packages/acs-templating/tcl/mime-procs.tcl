@@ -1,3 +1,5 @@
+namespace eval template {}
+
 ad_library {
 
     Provides procedures needed to determine mime type required for the

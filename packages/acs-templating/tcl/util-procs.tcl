@@ -10,6 +10,7 @@
 # License.  Full text of the license is available from the GNU Project:
 # http://www.fsf.org/copyleft/gpl.html
 
+namespace eval template {}
 namespace eval template::util {}
 namespace eval template::query {}
 

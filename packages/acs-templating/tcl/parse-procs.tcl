@@ -11,6 +11,8 @@
 # License.  Full text of the license is available from the GNU Project:
 # http://www.fsf.org/copyleft/gpl.html
 
+namespace eval template {}
+
 ad_proc -private template::adp_parse { __adp_stub __args } {
     Execute procedures to prepare data sources and then to output
     template.

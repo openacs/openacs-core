@@ -10,6 +10,9 @@
 # License.  Full text of the license is available from the GNU Project:
 # http://www.fsf.org/copyleft/gpl.html
 
+namespace eval template {}
+namespace eval template::element {}
+
 ad_proc -public element { command form_id element_id args } {
     element is really template::element although when in the
     "template" namespace you may omit the template:: qualifier.

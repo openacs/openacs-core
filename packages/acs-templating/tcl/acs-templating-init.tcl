@@ -11,6 +11,9 @@
 
 # Initialize namespaces used by template procs
 
+namespace eval template {}
+namespace eval template::form {}
+
 namespace eval template {
 
   namespace export query request form element
@@ -53,7 +56,14 @@ namespace eval template {
     
     # default settings
     variable defaults
-    set defaults [list method post section {} mode edit edit_buttons { { "OK" ok } } display_buttons { { "Edit" edit } } show_required_p t]
+    set defaults \
+        [list \
+             method post \
+             section {} \
+             mode edit \
+             edit_buttons [list [list [_ acs-kernel.common_ok] ok ]] \
+             display_buttons [list [list [_ acs-kernel.common_edit] edit]] \
+             show_required_p t]
   }
 
   namespace eval wizard {
@@ -63,7 +73,7 @@ namespace eval template {
     # An array of default buttons and their names
     variable default_button_labels
     array set default_button_labels \
-      [list back "<< Previous" repeat "Repeat" next "Next >>" finish "Finish"]
+	[list back [_ acs-templating.Previous_with_arrow] [_ acs-kernel.common_repeat] next [_ acs-templating.Next_with_arrow] finish [_ acs-kernel.common_finish]]
   }
 
   namespace eval paginator {
@@ -101,58 +111,3 @@ namespace eval template {
   namespace export form element request
 }
 
-ad_proc -public template_tag { name arglist body } {
-    Generic wrapper for registered tag handlers.
-} {
-
-  # LARS:
-  # We only ns_register_adptag the tag if it hasn't already been registered
-  # (if the proc doesn't exist).
-  # This makes debugging templating tags so much easier, because you don't have
-  # to restart the server each time.
-  set exists_p [llength [info procs template_tag_$name]]
-
-  switch [llength $arglist] {
-
-    1 { 
-
-      # empty tag
-      eval "proc template_tag_$name { params } {
-	
-	template::adp_tag_init $name
-	
-	$body
-
-        return \"\"
-      }"
-
-      if { !$exists_p } {
-        ns_register_adptag $name template_tag_$name 
-      }
-    }
-
-    2 { 
-
-      # balanced tag so push on/pop off tag name and parameters on a stack
-      eval "proc template_tag_$name { chunk params } {
-	
-	template::adp_tag_init $name
-
-	variable template::tag_stack
-	lappend tag_stack \[list $name \$params\]
-	
-	$body
-
-	template::util::lpop tag_stack
-
-        return \"\"
-      }"
-
-      if { !$exists_p } {
-        ns_register_adptag $name /$name template_tag_$name 
-      }
-    }
-
-    default { error "Invalid number of arguments to tag handler." }
-  }
-}

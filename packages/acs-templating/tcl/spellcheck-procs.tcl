@@ -6,6 +6,10 @@ ad_library {
     @cvs-id $Id$
 }
 
+namespace eval template {}
+namespace eval template::data {}
+namespace eval template::data::transform {}
+namespace eval template::util {}
 namespace eval template::util::spellcheck {}
 
 ad_proc -public template::util::spellcheck { command args } {

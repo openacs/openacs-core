@@ -6,6 +6,7 @@ ad_library {
     @cvs-id $Id$
 }
 
+namespace eval template {}
 namespace eval template::list {}
 namespace eval template::list::element {}
 namespace eval template::list::filter {}

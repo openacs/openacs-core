@@ -1,3 +1,10 @@
+namespace eval template {}
+namespace eval template::data {}
+namespace eval template::data::transform {}
+namespace eval template::data::validate {}
+namespace eval template {}
+namespace eval template::util {}
+namespace eval template::util::file {}
 
 
 ad_proc -public template::data::transform::file { element_ref } {

@@ -9,6 +9,12 @@
 # This is free software distributed under the terms of the GNU Public
 # License.  Full text of the license is available from the GNU Project:
 # http://www.fsf.org/copyleft/gpl.html
+
+namespace eval template {}
+namespace eval template::widget {}
+namespace eval template::data {}
+namespace eval template::data::transform {}
+
 ad_proc -public template::widget {} {
     The template::widget namespace contains the code 
     for the various input widgets.

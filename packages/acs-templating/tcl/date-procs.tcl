@@ -11,6 +11,13 @@
 
 # Prepare an array to map symbolic month names to their indices
 
+namespace eval template {}
+namespace eval template::data {}
+namespace eval template::util {}
+namespace eval template::util::date {}
+namespace eval template::widget {}
+namespace eval template::data::transform {}
+
 ad_proc -public template::util::date { command args } {
     Dispatch procedure for the date object
 } {

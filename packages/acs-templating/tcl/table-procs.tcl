@@ -45,6 +45,11 @@
 
 # Create the widget data structure
 
+namespace eval template {}
+namespace eval template::widget {}
+namespace eval template::widget::table {}
+
+
 ad_proc -public template::widget::table::create { statement_name name args } {
 
   upvar "tablewidget:${name}" widget
@@ -232,8 +237,3 @@ template_tag tablewidget { chunk params } {
     template::adp_compile $chunk
   }
 }
- 
-
-
-
- 

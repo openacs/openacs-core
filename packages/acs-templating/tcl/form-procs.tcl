@@ -11,6 +11,8 @@
 # http://www.fsf.org/copyleft/gpl.html
 
 # Commands for managing dynamic templated forms.
+namespace eval template {}
+namespace eval template::form {}
 
 ad_proc -public form {command args} { 
     form is really template::form although when in 

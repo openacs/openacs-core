@@ -13,6 +13,14 @@
 # to tie this in with the acs-lang money database as this code's far too
 # simplistic.
 
+namespace eval template {}
+namespace eval template::util {}
+namespace eval template::util::currency {}
+namespace eval template::data::validate::currency {}
+namespace eval template::data::transform::currency {}
+namespace eval template::util::currency::set_property {}
+namespace eval template::widget::currency {}
+ 
 ad_proc -public template::util::currency { command args } {
     Dispatch procedure for the currency object
 } {
@@ -58,7 +66,7 @@ ad_proc -public template::data::validate::currency { value_ref message_ref } {
     }
 
     if { ! $whole_part_valid_p || ! $fractional_part_valid_p } {
-	set message "Invalid currency [join [lrange $value 0 4] ""]"
+	set message "[_ acs-templating.Invalid_currency] [join [lrange $value 0 4] ""]"
 	return 0
     } else {
 	return 1
