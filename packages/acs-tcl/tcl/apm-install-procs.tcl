@@ -448,6 +448,24 @@ ad_proc -private apm_package_install {
                 $singleton_p
 	}
 
+        # Source Tcl procs and queries to be able
+        # to invoke any Tcl callbacks after mounting and instantiation. Note that this reloading 
+        # is only done in the Tcl interpreter of this particular request.
+        apm_load_libraries -procs -force_reload -packages $package_key
+        apm_load_queries -packages $package_key
+
+        if { $upgrade_p } {
+            # Run before-upgrade
+            apm_invoke_callback_proc -version_id $version_id -type before-upgrade -arg_list [list from_version_name $upgrade_from_version_name to_version_name $version(name)]
+        } else {
+            # Run before-install
+            apm_invoke_callback_proc -version_id $version_id -type before-install
+        }
+
+        if { $load_data_model_p } {
+            apm_package_install_data_model -callback $callback -data_model_files $data_model_files $spec_file_path
+        }
+
 	# If an older version already exists in apm_package_versions, update it;
 	# otherwise, insert a new version.
 	if { $upgrade_p } {
@@ -493,24 +511,6 @@ ad_proc -private apm_package_install {
 [ad_quotehtml $errmsg]
 </blockquote></pre>"
 	return 0
-    }
-
-    # Source Tcl procs and queries to be able
-    # to invoke any Tcl callbacks after mounting and instantiation. Note that this reloading 
-    # is only done in the Tcl interpreter of this particular request.
-    apm_load_libraries -procs -force_reload -packages $package_key
-    apm_load_queries -packages $package_key
-
-    if { $upgrade_p } {
-        # Run before-upgrade
-        apm_invoke_callback_proc -version_id $version_id -type before-upgrade -arg_list [list from_version_name $upgrade_from_version_name to_version_name $version(name)]
-    } else {
-        # Run before-install
-        apm_invoke_callback_proc -version_id $version_id -type before-install
-    }
-
-    if { $load_data_model_p } {
-        apm_package_install_data_model -callback $callback -data_model_files $data_model_files $spec_file_path
     }
 
     # Enable the package
