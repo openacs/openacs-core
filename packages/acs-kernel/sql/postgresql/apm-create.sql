@@ -242,9 +242,8 @@ create table apm_package_versions (
                        constraint apm_package_vers_ver_uri_un unique,
     summary 	       varchar(3000) default '' not null,
     description_format varchar(100) 
-		       constraint apm_package_vers_desc_for_nn not null
 		       constraint apm_package_vers_desc_for_ck
-		         check (description_format in ('', 'text/html', 'text/plain')),
+		         check (description_format in ('text/html', 'text/plain')),
     description        text default '' not null,
     release_date       timestamp,
     vendor             varchar(500) default '' not null,
@@ -2086,7 +2085,7 @@ begin
 	  new__creation_ip,
 	  new__context_id
 	 );
-       if instance_name is null then 
+       if new__instance_name is null then 
 	 v_instance_name := new__package_key || '' '' || v_package_id;
        else
 	 v_instance_name := new__instance_name;
@@ -2612,7 +2611,7 @@ declare
   a_start                integer;       
   a_end                  integer;       
   a_order                varchar(1000); 
-  a_char                 boolean;       
+  a_char                 char(1);       
   a_seen_letter          boolean default ''f'';        
 begin
 	a_start := 1;
@@ -2648,7 +2647,7 @@ begin
 	    -- what''s the next character? if a period, just skip it
 	    a_char := substr(version_name, a_end, 1);
 	    if a_char = ''.'' then
-		null;
+		return null;
 	    else
 		-- if the next character was a letter, append the appropriate characters
 		if a_char = ''d'' then
@@ -2683,7 +2682,9 @@ create function apm_package_version__version_name_greater (varchar,varchar)
 returns integer as '
 declare
   version_name_one       alias for $1;  
-  version_name_two       alias for $2;  
+  version_name_two       alias for $2;
+  a_order_a		 varchar(250);
+  a_order_b		 varchar(250);  
 begin
 	a_order_a := apm_package_version__sortable_version_name(version_name_one);
 	a_order_b := apm_package_version__sortable_version_name(version_name_two);

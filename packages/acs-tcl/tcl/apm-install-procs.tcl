@@ -41,6 +41,10 @@ ad_proc apm_scan_packages {
 
 	# At this point, we should have a directory that is equivalent to a package_key.
 	if { [apm_package_installed_p $package_key] } {
+
+	    # Load up the queries (OpenACS Query Dispatcher - ben)
+	    apm_package_install_queries $package_key
+
 	    if {$new_p} {
 		continue
 	    }
@@ -295,6 +299,8 @@ ad_proc -private apm_package_install {
     array set version [apm_read_package_info_file $spec_file_path]
     set package_key $version(package.key)
 
+    # Install Queries (OpenACS Query Dispatcher - ben)
+    apm_package_install_queries $package_key
 
     if { $copy_files_p } {
 	if { [empty_string_p $install_path] } {
@@ -745,7 +751,7 @@ ad_proc -private apm_package_install_queries {package_key} {
     set files [glob -nocomplain ${path}/www/*.sql]
     set files [concat $files [glob -nocomplain ${path}/tcl/*.sql]]
 
-    ns_log Notice "APM/QD = loading up package query files"
+    ns_log Notice "APM/QD = loading up package query files for $package_key"
 
     foreach file $files {
 	ns_log Notice "APM/QD = one file $file"

@@ -47,4 +47,16 @@ select apm_package_version__remove_interface(
 <rdbms><type>postgresql</type><version>7.1</version></rdbms>
 </fullquery>
 
+<fullquery name="acs.acs-tcl.tcl.apm-procs.apm_dependency_add.dependency_add">
+<querytext>
+select apm_package_version__add_dependency(
+    :dependency_id,
+    :version_id,
+    :dependency_uri,
+    :dependency_version
+)
+</querytext>
+<rdbms><type>postgresql</type><version>7.1</version></rdbms>
+</fullquery>
+
 </queryset>
