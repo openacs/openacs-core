@@ -40,8 +40,8 @@
 	    <noparse>
             <table cellpadding="4" cellspacing="0" border="0">
 	      <formgroup id=@elements.id@>
-		<tr><td>\@formgroup.widget@</td>
-                    <td><label for="@elements.form_id@:elements:@elements.id@:\@formgroup.option@">\@formgroup.label@</label></td></tr>
+		<tr><td>\@formgroup.widget;noquote@</td>
+                    <td><label for="@elements.form_id@:elements:@elements.id@:\@formgroup.option@">\@formgroup.label;noquote@</label></td></tr>
 	      </formgroup>
 	      </table>
 	      <formerror id=@elements.id@><br>
