@@ -23,43 +23,43 @@
 <!-- Header -->
 
 <table cellspacing="0" cellpadding="0" width="100%" class="subsite-header" border="0">
-  <tr class="subsite-header">
+  <tr>
     <td class="system-name">
-      <a href="@system_url@" class="system-name">@system_name@</a>
+      <a href="@system_url@">@system_name@</a>
     </td>
 
-    <td align="center" class="subsite-header">
-      <if @user_id@ ne 0>#acs-subsite.Welcome_user#</if>
+    <td align="center">
+      <if @untrusted_user_id@ ne 0>
+        #acs-subsite.Welcome_user#
+        <if @user_id@ eq 0>
+          (<a href="@login_url@" class="refresh">#acs-subsite.Refresh_login#</a>)
+        </if>
+      </if>
       <else>
         #acs-subsite.Not_logged_in#
       </else>
     </td>
 
-    <td align="right" class="subsite-header" style="padding-right: 8px;">
+    <td align="right" style="padding-right: 8px;" class="button-bar">
       <if @admin_url@ not nil>
         &nbsp;
-        <a href="@admin_url@" title="#acs-subsite.Site_wide_administration#"
-          class="button">#acs-subsite.Admin#</a>
+        <a href="@admin_url@" title="#acs-subsite.Site_wide_administration#">#acs-subsite.Admin#</a>
       </if>
       <if @devhome_url@ not nil>
         &nbsp;
-        <a href="@devhome_url@" title="#acs-subsite.Developers_Admin#"
-          class="button">#acs-subsite.DevAdmin#</a>
+        <a href="@devhome_url@" title="#acs-subsite.Developers_Admin#">#acs-subsite.DevAdmin#</a>
       </if>
       <if @pvt_home_url@ not nil>
         &nbsp;
-        <a href="@pvt_home_url@" title="#acs-subsite.Change_pass_email_por#"
-          class="button">@pvt_home_name@</a>
-      </if>
-      <if @logout_url@ not nil>
-        &nbsp;
-        <a href="@logout_url@" title="#acs-subsite.Logout_from_system#"
-          class="button">#acs-subsite.Logout#</a>
+        <a href="@pvt_home_url@" title="#acs-subsite.Change_pass_email_por#">@pvt_home_name@</a>
       </if>
       <if @login_url@ not nil>
         &nbsp;
-        <a href="@login_url@" title="#acs-subsite.Log_in_to_system#"
-          class="button">#acs-subsite.Log_In#</a>
+        <a href="@login_url@" title="#acs-subsite.Log_in_to_system#">#acs-subsite.Log_In#</a>
+      </if>
+      <if @logout_url@ not nil>
+        &nbsp;
+        <a href="@logout_url@" title="#acs-subsite.Logout_from_system#">#acs-subsite.Logout#</a>
       </if>
     </td>
   </tr>
