@@ -112,3 +112,8 @@ ad_form -extend -name search -form {
         {label "Search for"}
     }
 }
+
+
+set import_all_url [export_vars -base import-locale-from-files { { locale $current_locale } }]
+set export_all_url [export_vars -base export-locale-from-files { { locale $current_locale } }]
+

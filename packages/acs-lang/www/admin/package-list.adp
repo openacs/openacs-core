@@ -8,7 +8,10 @@ Search <formwidget id="search_locale"> for <formwidget id="q"> <input type="subm
 
 <if @locale_enabled_p@>
   <p>
-    <b>&raquo;</b> <a href="import-locale-from-files?locale=@current_locale@" title="Imports all messages for this locale from the catalog files"  onclick="return confirm('Importing messages for this locale from the filesystem should typically only be done once. If you already have translated messages in this locale those may be overwritten by the import, so be very cautious.');">Import all messages for this locale</a>
+    <b>&raquo;</b> <a href="@import_all_url@" title="Imports all messages for this locale from the catalog files"  onclick="return confirm('Importing messages for this locale from the filesystem should typically only be done once. If you already have translated messages in this locale those may be overwritten by the import, so be very cautious.');">Import all messages for this locale</a>
+  </p>
+  <p>
+    <b>&raquo;</b> <a href="@export_all_url@" title="Export all messages for this locale to the catalog files">Export all messages for this locale</a>
   </p>
 </if>
 

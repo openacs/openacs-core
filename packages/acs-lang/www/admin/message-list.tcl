@@ -28,7 +28,7 @@ set locale_label [ad_locale_get_label $current_locale]
 set default_locale_label [ad_locale_get_label $default_locale]
 
 set page_title $package_key
-set context [list [list "package-list?[export_vars { locale }]" $locale_label] $page_title]
+set context [list [list [export_vars -base package-list { locale }] $locale_label] $page_title]
 
 set site_wide_admin_p [permission::permission_p \
                            -party_id [ad_conn user_id] \

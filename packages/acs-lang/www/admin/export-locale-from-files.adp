@@ -3,7 +3,7 @@
  <property name="context">@context;noquote@</property>
 
 <p>
-  Import finished.
+  Export finished.
 </p>
 
 <p>
