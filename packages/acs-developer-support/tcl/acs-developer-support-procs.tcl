@@ -31,7 +31,7 @@ ad_proc -public ds_require_permission {
     if {$user_id == 0} {
       ad_maybe_redirect_for_registration
     } else {
-      ns_log Notice "$user_id doesn't have $privilege on object $object_id"
+      ns_log Warning "$user_id doesn't have $privilege on object $object_id"
       ad_return_forbidden "Permission Denied" "<blockquote>
       <p>You don't have permission to $privilege [db_string name {select acs_object.name(:object_id) from dual}].</p>
       </blockquote>"
@@ -269,7 +269,7 @@ ad_proc -private ds_sweep_data {} {
 	}
     }	
     
-    ns_log "Notice" "Swept developer support information for [array size kill_requests] requests ($kill_count nsv elements)"
+    ns_log "Debug" "Swept developer support information for [array size kill_requests] requests ($kill_count nsv elements)"
 }
 
 ad_proc -private ds_trace_filter { conn args why } { Adds developer-support information about the end of sessions.} {
