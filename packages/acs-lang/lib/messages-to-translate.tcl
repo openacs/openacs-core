@@ -1,3 +1,5 @@
+set locale [ad_conn locale]
+
 set display_p [expr [lang::util::translator_mode_p] && ![string equal [ad_conn locale] "en_US"]]
 
 template::list::create \
@@ -42,8 +44,8 @@ if { $display_p } {
         set locale [ad_conn locale]
 
         # Extra args mean no substitution
-        set orig_text [lang::message::lookup "en_US" $message_key {} {} 0]
-        set translated_text [lang::message::lookup $locale $message_key {} {} 0]
+        set orig_text [lang::message::lookup "en_US" $message_key {} {} 0 0]
+        set translated_text [lang::message::lookup $locale $message_key {} {} 0 0]
 
         set key_split [split $message_key "."]
         set package_key_part [lindex $key_split 0]
