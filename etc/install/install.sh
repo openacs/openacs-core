@@ -213,6 +213,7 @@ install_xml_file=`get_config_param install_xml_file`
 tclwebtest_scripts=`get_config_param tclwebtest_scripts`
 do_tclapi_testing=`get_config_param do_tclapi_testing`
 report_scp_target=`get_config_param report_scp_target`
+server_description=`get_config_param server_description`
 
 # If pre/post checkout scripts have been provided, check that they can
 # be executed
@@ -613,6 +614,7 @@ if parameter_true $do_install; then
 
   xmlreportfile=$script_path/$HOSTNAME-$server-installreport.xml
   echo "<service name=\"$server\">" > $xmlreportfile
+  echo "  <info type=\"description\">$server_description</info>" >> $xmlreportfile
   echo "  <info type=\"os\">$(uname -a)</info>" >> $xmlreportfile
   echo "  <info type=\"dbtype\">$database</info>" >> $xmlreportfile
   if [ $database == "postgres" ]; then
