@@ -8,7 +8,7 @@ if { [catch {
     ::twt::user::login_site_wide_admin
 
     # Run all tests
-    ::twt::do_request "test/admin/rerun?package_key=&category=&view_by=package&quiet=0"
+    ::twt::do_request "/test/admin/rerun?package_key=&category=&view_by=package&quiet=0"
 
     # Grep for packages with failed tests
     if { [regexp -nocase {fail} [response body]] } {
