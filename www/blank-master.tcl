@@ -18,6 +18,10 @@ if { [template::util::is_nil title] } {
     set title [ad_conn instance_name]  
 }
 
+#AG: Markup in <title> tags doesn't render well.
+set title [ns_striphtml $title]
+
+
 if { ![info exists header_stuff] } {
     set header_stuff {} 
 }
