@@ -27,4 +27,14 @@
 <input type=submit value="Update">
 </center></p>
 
+<if @portrait_state@ eq upload>
+
+<a href="/user/portrait/upload">Upload a Portrait</a>
+
+</if>
+<if @portrait_state@ eq show>
+
+On @portrait_publish_date@, you uploaded <a href="/user/portrait/">@portrait_title@</a>.
+
+</if>
 
