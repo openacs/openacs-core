@@ -965,6 +965,71 @@ cp pam_radius_auth.so /lib/security/
         </listitem>
       </orderedlist>
     </sect1>
+    <sect1 id="install-pam-radius">
+      <title>Install LDAP for use as external authentication</title>
+      <authorblurb>
+        <para>By <ulink url="mailto:openacs@sussdorff.de">Malte Sussdorff</ulink></para>
+      </authorblurb>
+      
+      <para>This step by step guide on how to use LDAP for external authentication using the LDAP bind command, which differs from the approach usually taken by auth-ldap. Both will be dealt with in these section</para>
+      <orderedlist>
+        <listitem id="install-openldap">
+          <formalpara>
+            <title>Install openldap</title>
+            <para>Download and install ns_ldap</para>
+          </formalpara>
+          <screen>[root aolserver]# <userinput>cd /usr/local/src/</userinput>
+          [root src]# <userinput>wget ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/openldap-2.2.17.tgz</userinput>
+          [root src]# <userinput>tar xvfz openldap-2.2.17.tgz</userinput>
+          [root src]# <userinput>cd openldap-2.2.17</userinput>
+          [root src]# <userinput>./configure --prefix=/usr/local/openldap</userinput>
+          [root openldap]# <userinput>make install</userinput>
+          [root openldap]#
+<action>cd /usr/local/src/
+wget ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/openldap-2.2.17.tgz
+tar xvfz openldap-2.2.17.tgz
+cd openldap-2.2.17
+./configure --prefix=/usr/local/openldap --disable-slapd
+make install
+</action>
+          </screen>
+        </listitem>
+        <listitem id="install-ns_ldap">
+          <formalpara>
+            <title>Install ns_ldap</title>
+            <para>Download and install ns_ldap</para>
+          </formalpara>
+          <screen>[root aolserver]# <userinput>cd /usr/local/src/aolserver/</userinput>
+          [root aolserver]# <userinput>wget http://www.sussdorff.de/ressources/nsldap.tgz</userinput>
+          [root aolserver]# <userinput>tar xfz nsldap.tgz</userinput>
+          [root aolserver]# <userinput>cd nsldap</userinput>
+          [root ns_pam-0.1]# <userinput>make install LDAP=/usr/local/openldap INST=/usr/local/aolserver</userinput>
+          [root ns_pam-0.1]#
+<action>cd /usr/local/src/aolserver/
+wget http://www.sussdorff.de/resources/nsldap.tgz
+tar xfz nsldap.tgz
+cd nsldap
+make install LDAP=/usr/local/openldap INST=/usr/local/aolserver
+</action>
+          </screen>
+        </listitem>
+        <listitem id="configure-ns_ldap">
+          <formalpara>
+            <title>Configure ns_ldap for traditional use</title>
+          </formalpara>
+          <para>Traditionally OpenACS has supported ns_ldap for authentification by storing the OpenACS password in an encrypted field within the LDAP server called "userPassword". Furthermore a CN field was used for searching for the username, usually userID or something similar. This field is identical to the <emphasis>username</emphasis>stored in OpenACS. Therefore the login will only work if you change login method to make use of the username instead.</para>  
+          <itemizedlist>
+            <listitem>Change <emphasis>config.tcl</emphasis>. Remove the <emphasis>#</emphasis> in front of <computeroutput>ns_param nsldap ${bindir}/nsldap.so</computeroutput> to enable the loading of the ns_ldap module.</listitem>
+          </itemizedlist>
+        </listitem>
+        <listitem id="configure-ns_ldap-bind">
+          <formalpara>
+            <title>Configure ns_ldap for use with LDAP bind</title>
+          </formalpara>
+          <para>LDAP authentication usually is done by trying to bind (aka. login) a user with the LDAP server. The password of the user is not stored in any field of the LDAP server, but kept internally. The latest version of ns_ldap supports this method with the <emphasize>ns_ldap bind</emphasize> command. All you have to do to enable this is to configure auth_ldap to make use of the BIND authentification instead. Alternatively you can write a small script on how to calculate the username out of the given input (e.g. if the OpenACS username is malte.fb03.tu, the LDAP request can be translated into "ou=malte,ou=fb03,o=tu" (this example is encoded in auth_ldap and you just have to comment it out to make use of it).</para>
+        </listitem>
+      </orderedlist>
+    </sect1>
     <xi:include href="aolserver.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
       <xi:fallback>Section Missing</xi:fallback>
     </xi:include>
