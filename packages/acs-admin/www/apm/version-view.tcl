@@ -142,8 +142,8 @@ $prompt_text
 <table>
 <tr valign=baseline><th align=left>Package Name:</th><td>$pretty_name</td></th></tr>
 <tr valign=baseline><th align=left>Version:</th><td>$version_name</td></tr>
-<tr valign=baseline><th align=left>OpenACS Core:</th><td>$initial_install_p</td></tr>
-<tr valign=baseline><th align=left>Singleton:</th><td>$singleton_p</td></tr>
+<tr valign=baseline><th align=left>OpenACS Core:</th><td>[ad_decode $initial_install_p "t" "Yes" "No"]</td></tr>
+<tr valign=baseline><th align=left>Singleton:</th><td>[ad_decode $singleton_p "t" "Yes" "No"]</td></tr>
 <tr valign=baseline><th align=left>Auto-mount:</th><td>$auto_mount</td></tr>
 <tr valign=baseline><th align=left>Status:</th><td>$status</td></tr>
 <tr valign=baseline><th align=left>Data Model:</th><td>$data_model_status</td></th></tr>
@@ -162,7 +162,6 @@ doc_body_append "
 doc_body_append "
 <tr valign=baseline><th align=left>CVS:</th><td>$cvs_status</td></tr>
 <tr valign=baseline><th align=left>[ad_decode [llength $owners] 1 "Owner" "Owners"]:</th><td>[join $owners "<br>"]</td></th></tr>
-<tr valign=baseline><th align=left>Registered Files:</th><td>$n_files</td></th></tr>
 <tr valign=baseline><th align=left>Package Key:</th><td>$package_key</td></th></tr>
 <tr valign=baseline><th align=left>Summary:</th><td>$summary</td></tr>
 <tr valign=baseline><th align=left>Description:</th><td>$description</td></tr>
