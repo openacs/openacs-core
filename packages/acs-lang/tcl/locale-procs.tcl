@@ -53,11 +53,13 @@ ad_proc -public lang::system::site_wide_locale {
 ad_proc -private lang::system::package_level_locale_not_cached {
     package_id
 } {
-    return [db_string get_system_locale {} -default {}]
+    return [db_string get_package_locale {} -default {}]
 }
 
 ad_proc -public lang::system::package_level_locale {
     package_id
+} {
+    @return empty string if not use_package_level_locales_p, or the package locale from apm_packages table.
 } {
     if { ![use_package_level_locales_p] } {
         return {}

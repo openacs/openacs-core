@@ -60,12 +60,13 @@ ad_proc -public template::widget::party_search { element_reference tag_attribute
     for groups or persons.
 
     @author Tilmann Singer
+
 } {
 
     upvar $element_reference element
 
     if { ![info exists element(options)] } {
-        
+
         # initial submission or no data (no options): a text box
         set output [input text element $tag_attributes]
 
@@ -77,7 +78,7 @@ ad_proc -public template::widget::party_search { element_reference tag_attribute
         if { ![info exists element(confirmed_p)] } {
             append output "<input type=\"hidden\" name=\"$element(id):confirmed_p\" value=\"t\" />"
         }
-            
+
         append output [select $element_reference $tag_attributes]
     }
     return $output
@@ -87,8 +88,7 @@ ad_proc -public template::data::validate::party_search { value_ref message_ref }
     return 1
 }
 
-ad_proc -public template::data::transform::party_search { element_ref } {
-
+ad_proc -private template::data::transform::party_search { element_ref } {
     upvar $element_ref element
     set element_id $element(id)
 
@@ -109,7 +109,7 @@ ad_proc -public template::data::transform::party_search { element_ref } {
         template::element::set_error $element(form_id) $element_id "Please enter a search string."
         return [list]
     }
-     
+
     if { [ns_queryexists $element_id:search_string] } {
         # request comes from a page with a select widget and the
         # search string has been passed as hidden value
@@ -173,18 +173,35 @@ ad_proc -public template::data::transform::party_search { element_ref } {
 
 
 ad_proc -public template::widget::search { element_reference tag_attributes } {
+    Here is an example of using the search widget with ad_form:
 
+<pre>
+    ad_form -name test -form {
+        {user:search,optional
+            {result_datatype integer}
+            {label "Email"}
+            {help_text "Search for a user by email address"}
+            {search_query {
+                select email from cc_users where lower(email) like '%'||lower(:value)||'%'
+            }}
+        }
+    }
+</pre>
+    Can be either a select widget initially if options supplied 
+    or a text box which on submit changes to a select widget.
+
+} {
   upvar $element_reference element
 
   if { ! [info exists element(options)] } {
-    
+
     # initial submission or no data (no options): a text box
     set output [input text element $tag_attributes]
 
   } else {
 
     # options provided so use a select list
-    # include an extra hidden element to indicate that the 
+    # include an extra hidden element to indicate that the
     # value is being selected as opposed to entered
 
     set output "\n<input type=\"hidden\" name=\"$element(id):select\" value=\"t\" />"
@@ -231,7 +248,7 @@ ad_proc -public template::widget::textarea { element_reference tag_attributes } 
   return $output
 }
 
-ad_proc -public template::widget::textarea_internal { 
+ad_proc -private template::widget::textarea_internal { 
     name 
     attribute_reference
     {value {}}

@@ -55,7 +55,7 @@ aa_register_case -cats {smoke production_safe} -error_level notice files__tcl_fi
     set startdir [acs_root_dir]/packages
     
     aa_log "Checks starting from $startdir"
-
+    set count 0
     #inspect every tcl file in the directory tree starting with $startdir
     foreach file [ad_find_all_files -check_file_func ::tcl_p $startdir] { 
 
@@ -64,9 +64,12 @@ aa_register_case -cats {smoke production_safe} -error_level notice files__tcl_fi
         close $fp
 
 	if {![regexp {/packages/acs-tcl/tcl/test/acs-tcl-test-procs\.tcl$} $file match]} {
-	    aa_true "$file should not contain '@returns'.  @returns is probably a typo of @return" [expr [string first @returns $data] == -1]
+	    if {[string first @returns $data] < 0} { 
+                aa_log_result fail "$file should not contain '@returns'.  @returns is probably a typo of @return" 
+            }
 	}
     }
+    aa_log "Checked $count tcl files"
 }
 
 aa_register_case -cats {smoke production_safe} files__check_info_files {

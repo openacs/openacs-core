@@ -718,6 +718,8 @@ ad_proc -public take_until {p xs} "returns the list of elements upto and includi
 # --------------------------------------------------------------------------------
 
 ad_proc -public factorial {n} {
+    compute n!
+} {
     product [enum_from_to 1 $n]
 }
 
@@ -739,6 +741,8 @@ ad_proc -public pascal {size} "prints Pascal's triangle" {
 }
 
 ad_proc -public prime_p {n} {
+    @return 1 if n is prime
+} { 
     if { $n<2 } { return 0 }
     if { $n==2 } { return 1 }
     if { [even_p $n] } { return 0 }

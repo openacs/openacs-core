@@ -8,7 +8,7 @@ ad_library {
     http://www.fsf.org/copyleft/gpl.html
 
     @creation-date 10 September 2000
-    @author Jeff Davis (davis@arsdigita.com)
+    @author Jeff Davis (davis@xarg.net)
     @author Bruno Mattarollo (bruno.mattarollo@ams.greenpeace.org)
     @author Peter Marklund (peter@collaboraid.biz)
     @author Lars Pind (lars@collaboraid.biz)
@@ -703,7 +703,7 @@ ad_proc -public lang::message::lookup {
                               Useful if you're not using this message in the page itself, but e.g.
                               for localization data or for the list of messages on the page.
 
-    @author Jeff Davis (davis@arsdigita.com)
+    @author Jeff Davis (davis@xarg.net)
     @author Henry Minsky (hqm@arsdigita.com)
     @author Peter Marklund (peter@collaboraid.biz)
 
@@ -878,7 +878,7 @@ ad_proc -public _mr { locale key message } {
 
     package_key.message_key
 
-    @author Jeff Davis (davis@arsdigita.com)
+    @author Jeff Davis (davis@xarg.net)
     
     @param locale  Abbreviation for language of the message or the locale.
     @param key     Unique identifier for this message. Will be the same identifier
@@ -921,7 +921,7 @@ ad_proc -public _ {
 
     @return           A localized message
     
-    @author Jeff Davis (davis@arsdigita.com)
+    @author Jeff Davis (davis@xarg.net)
     @author Peter Marklund (peter@collaboraid.biz)
     @author Christian Hvid (chvid@collaboraid.biz)
 

@@ -66,9 +66,11 @@ ad_proc -private auth::package_uninstall {} {} {
     }
 }
 
-ad_proc -public auth::after_upgrade {
+ad_proc -private auth::after_upgrade {
     {-from_version_name:required}
     {-to_version_name:required}
+} {
+    After upgrade callback.
 } {
     apm_upgrade_logic \
         -from_version_name $from_version_name \
@@ -76,7 +78,7 @@ ad_proc -public auth::after_upgrade {
         -spec {
             5.0a1 5.0a2 {
                 db_transaction {
-                    
+
                     # Delete and recreate contract
                     auth::process_doc::delete_contract
                     auth::process_doc::create_contract

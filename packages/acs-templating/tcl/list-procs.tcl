@@ -667,6 +667,8 @@ ad_proc -public template::list::write_output {
 ad_proc -public template::list::csv_quote {
     string
 } {
+    Quote a string for inclusion as a csv element
+} {
     regsub -all {\"} $string {""} result
     return $result
 }
@@ -1671,6 +1673,8 @@ ad_proc -public template::list::element::get_refname {
     {-list_name:required}
     {-element_name:required}
 } {
+    @return the name used for the list element properties array.
+} {
     return "$list_name:element:$element_name:properties"
 }
 
@@ -1680,11 +1684,13 @@ ad_proc -public template::list::element::get_reference {
     {-local_name "element_properties"}
     {-create:boolean}
 } {
+    upvar the list element to the callers scope as $local_name
+} {
     # Check that the list exists
     template::list::get_reference -name $list_name
 
     set refname [get_refname -list_name $list_name -element_name $element_name]
-    
+
     if { !$create_p && ![uplevel \#[template::adp_level] [list info exists $refname]] } {
         error "Element '$element_name' not found in list '$list_name'"
     }
@@ -1697,6 +1703,8 @@ ad_proc -public template::list::element::get_property {
     {-list_name:required}
     {-element_name:required}
     {-property:required}
+} {
+    @return the element property in the named list.
 } {
     get_reference \
         -list_name $list_name \

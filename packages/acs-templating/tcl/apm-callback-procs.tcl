@@ -9,9 +9,11 @@ ad_library {
 namespace eval template {}
 namespace eval template::apm {}
 
-ad_proc -public template::apm::before_upgrade {
+ad_proc -private template::apm::before_upgrade {
     {-from_version_name:required}
     {-to_version_name:required}
+} {
+    before upgrade apm callback for acs-templating.
 } {
     apm_upgrade_logic \
         -from_version_name $from_version_name \
@@ -19,7 +21,7 @@ ad_proc -public template::apm::before_upgrade {
         -spec {
             4.6.4 5.0d1 {
                 db_transaction {
-                 
+
                     # Change 'standard-lars' to 'standard'
 
                     set package_id [apm_package_id_from_key "acs-templating"]
@@ -42,7 +44,7 @@ ad_proc -public template::apm::before_upgrade {
                         set DefaultFormStyle [parameter::get \
                                                   -package_id $package_id \
                                                   -parameter DefaultFormStyle]
-                        
+
                         if { [string equal $DefaultFormStyle "standard-lars"] } {
                             parameter::set_value \
                                 -package_id $package_id \
@@ -50,7 +52,6 @@ ad_proc -public template::apm::before_upgrade {
                                 -value "standard"
                         }
                     }
-                    
                 }
             }
         }

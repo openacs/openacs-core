@@ -11,7 +11,7 @@
 # License.  Full text of the license is available from the GNU Project:
 # http://www.fsf.org/copyleft/gpl.html
 
-ad_proc -public template_tag_if_condition { chunk params condition_type } {
+ad_proc -private template_tag_if_condition { chunk params condition_type } {
 
   set condition "$condition_type \{"
 

@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <queryset>
 
-   <fullquery name="lang::system::package_level_locale_not_cached.get_system_locale">      
+   <fullquery name="lang::system::package_level_locale_not_cached.get_package_locale">      
       <querytext>
         select default_locale
         from   apm_packages

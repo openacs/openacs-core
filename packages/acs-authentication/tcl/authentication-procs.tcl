@@ -66,7 +66,6 @@ ad_proc -public auth::refresh_login {} {
     if { ![string equal [ad_conn auth_level] "expired"] } {
         return [ad_conn user_id]
     }
-        
 
     # The -return switch causes the URL to return to the current page
     ad_returnredirect [ad_get_login_url -return]
@@ -74,16 +73,16 @@ ad_proc -public auth::refresh_login {} {
 }
 
 ad_proc -public auth::self_registration {} {
-    #Check AllowSelfRegister parameter
-
+    Check AllowSelfRegister parameter and set user message if 
+    self registration not allowed.
+} { 
     if { [string is false [parameter::get_from_package_key \
 			       -package_key acs-authentication \
 			       -parameter AllowSelfRegister]] } {
 	util_user_message -message "Self registration is not allowed"
 	ad_maybe_redirect_for_registration
     }
-}          
-
+}
 
 ad_proc -public auth::get_user_id {
     {-level ok}
@@ -94,17 +93,16 @@ ad_proc -public auth::get_user_id {
     high security level, return 0.
 
     @return user_id of user, if the user is logged in, 0 otherwise.
-            
 
     @see ad_script_abort
 } {
     set untrusted_user_id [ad_conn untrusted_user_id]
-    
+
     # Do we have any user_id at all?
     if { $untrusted_user_id == 0 } {
         return 0
     }
-    
+
     # Check account status
     if { [string equal $account_status "ok"] && ![string equal [ad_conn account_status] "ok"] } {
         return 0
