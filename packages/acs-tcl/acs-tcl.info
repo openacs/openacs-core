@@ -80,8 +80,6 @@
             <file type="query_file" db_type="postgresql" path="tcl/membership-rel-procs-postgresql.xql"/>
             <file type="tcl_procs" path="tcl/membership-rel-procs.tcl"/>
             <file type="tcl_procs" path="tcl/memoize-procs.tcl"/>
-            <file type="query_file" db_type="oracle" path="tcl/navigation-procs-oracle.xql"/>
-            <file type="query_file" db_type="postgresql" path="tcl/navigation-procs-postgresql.xql"/>
             <file type="tcl_procs" path="tcl/navigation-procs.tcl"/>
             <file type="query_file" db_type="oracle" path="tcl/object-procs-oracle.xql"/>
             <file type="query_file" db_type="postgresql" path="tcl/object-procs-postgresql.xql"/>
