@@ -22,6 +22,7 @@ create table auth_authorities (
                              unique,
     pretty_name              varchar2(4000),
     help_contact_text        varchar2(4000),
+    help_contact_text_format varchar(200),
     enabled_p                char(1) default 't' 
                              constraint auth_authority_enabled_p_nn
                              not null 
