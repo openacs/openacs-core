@@ -58,7 +58,9 @@ from parties where email = lower(:email)"]
     
     set password [ad_generate_random_string]
     
-    set user_id [ad_user_new $email $first_names $last_name $password "" "" "" "t" "approved"]
+    array set auth_status_array [auth::create_user -email $email -first_names $first_names -last_name $last_name -password $password]
+
+    set user_id $auth_status_array(user_id)
     
     append success_text "Created user $user_id for ($row)<br\>"
     
