@@ -200,6 +200,9 @@ ad_proc -private template::query::multirow { statement_name db result_name sql }
     @param result_name Tcl variable name to use when setting the result
 
     @param sql Query to use when processing this command
+
+    @see db_multirow
+    @see template::multirow
 } {
 
   upvar opts opts
@@ -636,19 +639,15 @@ ad_proc -public template::multirow {
     <dd> upvar the multirow, aliasing to new_name if provided</dd>
     </dl>
     
-    @param local 
-           If set, the multirow will be looked for in the scope the number 
+    @param local If set, the multirow will be looked for in the scope the number 
            of levels up given by ulevel (normally the caller's scope), 
            instead of the <code>[template::adp_level]</code> scope, which 
            is the default.
 
-    @param ulevel 
-           Used in conjunction with the "local" parameter to specify how 
+    @param ulevel Used in conjunction with the "local" parameter to specify how 
            many levels up the multirow variable resides.
 
-    @param command
-           Multirow datasource operation: create, extend, append, 
-                                          size, get, set, foreach
+    @param command Multirow datasource operation: create, extend, append, size, get, set, foreach, upvar
 
     @param name Name of the multirow datasource
 

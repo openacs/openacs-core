@@ -15,7 +15,7 @@
 	  <tr><td><b><i>Gender</i>:</b></td><td>
 	  <formgroup id="gender">@formgroup.label@ @formgroup.widget@
 	  </formgroup>
-	  <formerror id="gender"><br><font color=red><small>Please include gender informatoin about your entry subject</small></font></formerror>
+	  <formerror id="gender"><br><font color=red><small>Please include gender information about your entry subject</small></font></formerror>
 	  </td></tr>
 	  <tr><td><b><i>Birthday</i>:</b></td><td><formwidget id="birthday"></td></tr>
 	  <tr><td><b><i>Address</i>:</b></td><td><formwidget id="address"></td></tr>
@@ -89,7 +89,7 @@ NO!
 <hr>
 <a href="mailto:templating@arsdigita.com">templating@arsdigita.com</a>
 <!-- hhmts start -->
-Last modified: Wed Nov 15 18:21:30 EST 2000
+Last modified: Sun Oct  6 02:38:25 EDT 2002
 <!-- hhmts end -->
 </body> </html>
 

@@ -14,6 +14,12 @@ ad_page_contract {
 # hostname, use yourdomain.com if that fails too.
 if { [catch {
     set system_url "http://[ns_config "ns/server/[ns_info server]/module/nssock" hostname [ns_info hostname]]"
+
+    # append port number if non-standard port
+    if { !([ns_conn port] == 0 || [ns_conn port] == 80) } {
+        append system_url ":[ns_conn port]"
+    }
+
 }] } {
     set system_url "http://yourdomain.com"
 }

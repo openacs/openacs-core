@@ -36,7 +36,7 @@
 	  </td>
         </if>
 	<if @elements.widget@ in radio checkbox>
-            <if @elements.label@ nil><td colspan=2>></if>
+            <if @elements.label@ nil><td colspan=2></if>
 	    <else><td></else>
 	    <noparse>
             <table cellpadding=4 cellspacing=0 border=0>
@@ -104,7 +104,7 @@
 
 <if @form_properties.has_submit@ nil>
   <tr bgcolor=white>
-    <td align=right>
+    <td>
       <input type=submit name="ok" value="     OK     ">
       <input type=submit name="cancel" value="Cancel">
     </td>

@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
 <queryset>
+<rdbms><type>postgresql</type><version>7.1</version></rdbms>
 
 <fullquery name="apm_package_upgrade_from">      
       <querytext>

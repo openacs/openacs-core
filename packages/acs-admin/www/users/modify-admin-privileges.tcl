@@ -22,20 +22,14 @@ if ![info exists confirmed_p] {
 
 if $confirmed_p {
     if [string equal grant $action] {
-        db_exec_plsql grant_admin {
-            select acs_permission__grant_permission(
-                acs__magic_object_id('security_context_root'),
-                :user_id,
-                'admin')
-        }
+        permission::grant -object_id [acs_magic_object "security_context_root"] -party_id $user_id -privilege "admin"
     } else {
-        db_exec_plsql revoke_admin {
-            select acs_permission__revoke_permission(
-                acs__magic_object_id('security_context_root'),
-                :user_id,
-                'admin')
-        }
+        permission::revoke -object_id [acs_magic_object "security_context_root"] -party_id $user_id -privilege "admin"
     }
 
     ad_returnredirect $return_url
+
+    # We need to flush all permission checks pertaining to this user.
+    # this is expensive so maybe we should check if we in fact are cacheing.
+    util_memoize_flush_regexp "^permission::.*-party_id $user_id"
 }

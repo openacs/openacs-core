@@ -2,7 +2,7 @@
 
 -- Copyright (C) 20000 ArsDigita Corporation
 
--- $ID$
+-- $Id$
 
 -- This is free software distributed under the terms of the GNU Public
 -- License.  Full text of the license is available from the GNU Project:

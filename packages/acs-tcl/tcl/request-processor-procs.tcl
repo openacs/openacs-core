@@ -30,6 +30,10 @@ ad_proc -public rp_internal_redirect {
 
     Parameters will stay the same as in the initial request.
 
+    Keep in mind that if you do an internal redirect to something other than
+    the current directory that relative links returned to the clients
+    browser may be broken (since the client will have the original URL).
+
     @param absolute_path If set the path is an absolute path within the host filesystem
     @param path path to the file to serve
 
@@ -108,11 +112,15 @@ ad_proc rp_form_put { name value } {
     when you do an rp_internal_redirect to a new page, and you want to
     feed that page with certain query variables.
 
+    Note that the variable will just be appended to the form ns_set
+    which may not be what you want, if it exists already you will
+    now have two entries in the ns_set which may cause ad_page_contract to
+    break.  Also, only simple variables may be added, not arrays.
+
     @author Lars Pind (lars@pinds.com)
     @creation-date August 20, 2002
 
-    @return the form ns_set, in case you're interested. Mostly you'll
-    probably want to discard the result.
+    @return the form ns_set, in case you're interested. Mostly you will want to discard the result.
 
  } {
     set form [rp_getform]
@@ -706,15 +714,21 @@ $message"
 ad_proc -private rp_path_prefixes {path} {
   Returns all the prefixes of a path ordered from most to least specific.
 } {
-  set path [string trimright $path /]
   if {[string index $path 0] != "/"} {
     set path "/$path"
   }
+  set path [string trimright $path /]
+  if { [string length $path] == 0 } {
+    return "/"
+  }
+
   set components [split $path "/"]
   set prefixes [list]
-  for {set i [expr [llength $components] -1]} {$i >= 0} {incr i -1} {
+  for {set i [expr [llength $components] -1]} {$i > 0} {incr i -1} {
     lappend prefixes "[join [lrange $components 0 $i] "/"]/"
+    lappend prefixes "[join [lrange $components 0 $i] "/"]"
   }
+  lappend prefixes "/"
 
   return $prefixes
 }

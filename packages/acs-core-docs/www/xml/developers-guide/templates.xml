@@ -26,7 +26,7 @@ In ATS, you write two files for every user-visible page in the
 system. One is a plain <computeroutput>.tcl</computeroutput> file and the other is a
 special <computeroutput>.adp</computeroutput> file. The <computeroutput>.tcl</computeroutput> file runs a
 script that sets up a set of name/value bindings that we call <emphasis>data
-sources</emphasis>. These <ulink url="/docs/acs-templating/guide/data.html">data sources</ulink> are generally the results of Tcl and/or database queries
+sources</emphasis>. These <ulink url="/doc/acs-templating/guide/data.html">data sources</ulink> are generally the results of Tcl and/or database queries
 or some combination thereof. The template system automatically makes
 them available to the <computeroutput>.adp</computeroutput> file, or the display part of
 the template, which is written in a combination of HTML, special

@@ -21,7 +21,7 @@ proc_doc db_nextval { sequence } {
         return $nextval
     } else {
         ns_log debug "db_nextval: sequence($sequence) is not a real sequence.  perhaps it uses the view hack."
-        db_0or1row nextval_view "select ${sequence}.nextval as nextval"
+        db_0or1row nextval_view "select nextval from ${sequence}"
         return $nextval
     }
 }

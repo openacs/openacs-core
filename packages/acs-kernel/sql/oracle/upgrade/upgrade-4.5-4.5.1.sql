@@ -715,6 +715,448 @@ end acs_object;
 show errors
 
 
+-- new function apm_package.parent_id
+
+create or replace package apm_package
+as
+
+function new (
+  package_id		in apm_packages.package_id%TYPE 
+			default null,
+  instance_name		in apm_packages.instance_name%TYPE
+			default null,
+  package_key		in apm_packages.package_key%TYPE,
+  object_type		in acs_objects.object_type%TYPE
+			default 'apm_package', 
+  creation_date		in acs_objects.creation_date%TYPE 
+			default sysdate,
+  creation_user		in acs_objects.creation_user%TYPE 
+			default null,
+  creation_ip		in acs_objects.creation_ip%TYPE 
+			default null,
+  context_id		in acs_objects.context_id%TYPE 
+			default null
+  ) return apm_packages.package_id%TYPE;
+
+  procedure delete (
+   package_id		in apm_packages.package_id%TYPE
+  );
+
+  function initial_install_p (
+	package_key		in apm_packages.package_key%TYPE
+  ) return integer;
+
+  function singleton_p (
+	package_key		in apm_packages.package_key%TYPE
+  ) return integer;
+
+  function num_instances (
+	package_key		in apm_package_types.package_key%TYPE
+  ) return integer;
+
+  function name (
+    package_id		in apm_packages.package_id%TYPE
+  ) return varchar2;
+
+ -- Enable a package to be utilized by a subsite.
+  procedure enable (
+   package_id		in apm_packages.package_id%TYPE
+  );
+  
+  procedure disable (
+   package_id		in apm_packages.package_id%TYPE
+  );
+
+  function highest_version (
+   package_key		in apm_package_types.package_key%TYPE
+  ) return apm_package_versions.version_id%TYPE;
+  
+    function parent_id (
+        package_id in apm_packages.package_id%TYPE
+    ) return apm_packages.package_id%TYPE;
+
+end apm_package;
+/
+show errors
+
+create or replace package body apm_package
+as
+  procedure initialize_parameters (
+    package_id			in apm_packages.package_id%TYPE,
+    package_key		        in apm_package_types.package_key%TYPE
+  )
+  is
+   v_value_id apm_parameter_values.value_id%TYPE;
+   cursor cur is
+       select parameter_id, default_value
+       from apm_parameters
+       where package_key = initialize_parameters.package_key;
+  begin
+    -- need to initialize all params for this type
+    for cur_val in cur
+      loop
+        v_value_id := apm_parameter_value.new(
+          package_id => initialize_parameters.package_id,
+          parameter_id => cur_val.parameter_id,
+          attr_value => cur_val.default_value
+        ); 
+      end loop;   
+  end initialize_parameters;
+
+ function new (
+  package_id		in apm_packages.package_id%TYPE 
+			default null,
+  instance_name		in apm_packages.instance_name%TYPE
+			default null,
+  package_key		in apm_packages.package_key%TYPE,
+  object_type		in acs_objects.object_type%TYPE
+			default 'apm_package', 
+  creation_date		in acs_objects.creation_date%TYPE 
+			default sysdate,
+  creation_user		in acs_objects.creation_user%TYPE 
+			default null,
+  creation_ip		in acs_objects.creation_ip%TYPE 
+			default null,
+  context_id		in acs_objects.context_id%TYPE 
+			default null
+  ) return apm_packages.package_id%TYPE
+  is 
+   v_singleton_p integer;
+   v_package_type apm_package_types.package_type%TYPE;
+   v_num_instances integer;
+   v_package_id apm_packages.package_id%TYPE;
+   v_instance_name apm_packages.instance_name%TYPE; 
+  begin
+   v_singleton_p := apm_package.singleton_p(
+			package_key => apm_package.new.package_key
+		    );
+   v_num_instances := apm_package.num_instances(
+			package_key => apm_package.new.package_key
+		    );
+  
+   if v_singleton_p = 1 and v_num_instances >= 1 then
+       select package_id into v_package_id 
+       from apm_packages
+       where package_key = apm_package.new.package_key;
+       return v_package_id;
+   else
+       v_package_id := acs_object.new(
+          object_id => package_id,
+          object_type => object_type,
+          creation_date => creation_date,
+          creation_user => creation_user,
+	  creation_ip => creation_ip,
+	  context_id => context_id
+	 );
+       if instance_name is null then 
+	 v_instance_name := package_key || ' ' || v_package_id;
+       else
+	 v_instance_name := instance_name;
+       end if;
+
+       select package_type into v_package_type
+       from apm_package_types
+       where package_key = apm_package.new.package_key;
+
+       insert into apm_packages
+       (package_id, package_key, instance_name)
+       values
+       (v_package_id, package_key, v_instance_name);
+
+       if v_package_type = 'apm_application' then
+	   insert into apm_applications
+	   (application_id)
+	   values
+	   (v_package_id);
+       else
+	   insert into apm_services
+	   (service_id)
+	   values
+	   (v_package_id);
+       end if;
+
+       initialize_parameters(
+	   package_id => v_package_id,
+	   package_key => apm_package.new.package_key
+       );
+       return v_package_id;
+
+  end if;
+end new;
+  
+  procedure delete (
+   package_id		in apm_packages.package_id%TYPE
+  )
+  is
+    cursor all_values is
+    	select value_id from apm_parameter_values
+	where package_id = apm_package.delete.package_id;
+    cursor all_site_nodes is
+    	select node_id from site_nodes
+	where object_id = apm_package.delete.package_id;
+  begin
+    -- Delete all parameters.
+    for cur_val in all_values loop
+    	apm_parameter_value.delete(value_id => cur_val.value_id);
+    end loop;    
+    delete from apm_applications where application_id = apm_package.delete.package_id;
+    delete from apm_services where service_id = apm_package.delete.package_id;
+    delete from apm_packages where package_id = apm_package.delete.package_id;
+    -- Delete the site nodes for the objects.
+    for cur_val in all_site_nodes loop
+    	site_node.delete(cur_val.node_id);
+    end loop;
+    -- Delete the object.
+    acs_object.delete (
+	object_id => package_id
+    );
+   end delete;
+
+    function initial_install_p (
+	package_key		in apm_packages.package_key%TYPE
+    ) return integer
+    is
+        v_initial_install_p integer;
+    begin
+        select 1 into v_initial_install_p
+	from apm_package_types
+	where package_key = initial_install_p.package_key
+        and initial_install_p = 't';
+	return v_initial_install_p;
+	
+	exception 
+	    when NO_DATA_FOUND
+            then
+                return 0;
+    end initial_install_p;
+
+    function singleton_p (
+	package_key		in apm_packages.package_key%TYPE
+    ) return integer
+    is
+        v_singleton_p integer;
+    begin
+        select 1 into v_singleton_p
+	from apm_package_types
+	where package_key = singleton_p.package_key
+        and singleton_p = 't';
+	return v_singleton_p;
+	
+	exception 
+	    when NO_DATA_FOUND
+            then
+                return 0;
+    end singleton_p;
+
+    function num_instances (
+	package_key		in apm_package_types.package_key%TYPE
+    ) return integer
+    is
+        v_num_instances integer;
+    begin
+        select count(*) into v_num_instances
+	from apm_packages
+	where package_key = num_instances.package_key;
+        return v_num_instances;
+	
+	exception
+	    when NO_DATA_FOUND
+	    then
+	        return 0;
+    end num_instances;
+
+  function name (
+    package_id		in apm_packages.package_id%TYPE
+  ) return varchar2
+  is
+    v_result apm_packages.instance_name%TYPE;
+  begin
+    select instance_name into v_result
+    from apm_packages
+    where package_id = name.package_id;
+
+    return v_result;
+  end name;
+
+    procedure enable (
+       package_id			in apm_packages.package_id%TYPE
+    )
+    is
+    begin
+      update apm_packages 
+      set enabled_p = 't'
+      where package_id = enable.package_id;	
+    end enable;
+    
+    procedure disable (
+       package_id			in apm_packages.package_id%TYPE
+    )
+    is
+    begin
+      update apm_packages 
+      set enabled_p = 'f'
+      where package_id = disable.package_id;	
+    end disable;
+	
+   function highest_version (
+     package_key		in apm_package_types.package_key%TYPE
+   ) return apm_package_versions.version_id%TYPE
+   is
+     v_version_id apm_package_versions.version_id%TYPE;
+   begin
+     select version_id into v_version_id
+	from apm_package_version_info i 
+	where apm_package_version.sortable_version_name(version_name) = 
+             (select max(apm_package_version.sortable_version_name(v.version_name))
+	             from apm_package_version_info v where v.package_key = highest_version.package_key)
+	and package_key = highest_version.package_key;
+     return v_version_id;
+     exception
+         when NO_DATA_FOUND
+         then
+         return 0;
+   end highest_version;
+
+    function parent_id (
+        package_id in apm_packages.package_id%TYPE
+    ) return apm_packages.package_id%TYPE
+    is
+        v_package_id apm_packages.package_id%TYPE;
+    begin
+        select sn1.object_id
+        into v_package_id
+        from site_nodes sn1
+        where sn1.node_id = (select sn2.parent_id
+                             from site_nodes sn2
+                             where sn2.object_id = apm_package.parent_id.package_id);
+
+        return v_package_id;
+
+        exception when NO_DATA_FOUND then
+            return -1;
+    end parent_id;
+
+end apm_package;
+/
+show errors
+
+
 -- acs-permissions-create.sql
 
+create or replace package body acs_permission
+as
+  procedure grant_permission (
+    object_id	 acs_permissions.object_id%TYPE,
+    grantee_id	 acs_permissions.grantee_id%TYPE,
+    privilege	 acs_permissions.privilege%TYPE
+  )
+  as
+  begin
+    insert into acs_permissions
+      (object_id, grantee_id, privilege)
+    values
+      (object_id, grantee_id, privilege);
+  exception
+    when dup_val_on_index then
+      return;
+  end grant_permission;
+  --
+  procedure revoke_permission (
+    object_id	 acs_permissions.object_id%TYPE,
+    grantee_id	 acs_permissions.grantee_id%TYPE,
+    privilege	 acs_permissions.privilege%TYPE
+  )
+  as
+  begin
+    delete from acs_permissions
+    where object_id = revoke_permission.object_id
+    and grantee_id = revoke_permission.grantee_id
+    and privilege = revoke_permission.privilege;
+  end revoke_permission;
 
+  function permission_p (
+    object_id	 acs_objects.object_id%TYPE,
+    party_id	 parties.party_id%TYPE,
+    privilege	 acs_privileges.privilege%TYPE
+  ) return char
+  as
+    exists_p char(1);
+  begin
+    --
+    -- direct permissions
+    select decode(count(*),0,'f','t') into exists_p
+    from dual where exists (
+        select 'x'
+          from acs_object_grantee_priv_map
+         where object_id = permission_p.object_id
+           and grantee_id = permission_p.party_id
+           and privilege = permission_p.privilege);
+    if exists_p = 't' then
+        return 't';
+    end if;
+    --
+    -- public-like permissions
+    select decode(count(*),0,'f','t') into exists_p
+    from dual where exists (
+        select 'x'
+          from acs_object_grantee_priv_map
+         where object_id = permission_p.object_id
+           and 0 = permission_p.party_id
+           and privilege = permission_p.privilege
+           and grantee_id = -1);
+    if exists_p = 't' then
+        return 't';
+    end if;
+    --
+    -- public permissions
+    select decode(count(*),0,'f','t') into exists_p
+    from dual where exists (
+        select 'x'
+          from acs_object_grantee_priv_map m, users u
+         where object_id = permission_p.object_id
+           and u.user_id = permission_p.party_id
+           and privilege = permission_p.privilege
+           and m.grantee_id = -1);
+    if exists_p = 't' then
+        return 't';
+    end if;
+    --
+    -- group permmissions
+    select decode(count(*),0,'f','t') into exists_p
+    from dual where exists (
+          select 'x'
+          from acs_object_grantee_priv_map ogpm,
+               group_approved_member_map gmm
+         where object_id = permission_p.object_id
+           and gmm.member_id = permission_p.party_id
+           and privilege = permission_p.privilege
+           and ogpm.grantee_id = gmm.group_id);
+    if exists_p = 't' then
+        return 't';
+    end if;
+    --
+    -- relational segment approved group
+    select decode(count(*),0,'f','t') into exists_p
+    from dual where exists (
+        select 'x'
+          from acs_object_grantee_priv_map ogpm,
+               rel_seg_approved_member_map rsmm
+         where object_id = permission_p.object_id
+           and rsmm.member_id = permission_p.party_id
+           and privilege = permission_p.privilege
+           and ogpm.grantee_id = rsmm.segment_id);
+    if exists_p = 't' then
+        return 't';
+    end if;
+    return exists_p;
+  end;
+  --
+end acs_permission;
+/
+show errors
+
+-- add indices (yon)
+
+create index users_email_verified_idx on users (email_verified_p);
+create index member_rels_member_state_idx on membership_rels (member_state);
+create index site_nodes_parent_id_idx on site_nodes(parent_id,object_id,node_id);
