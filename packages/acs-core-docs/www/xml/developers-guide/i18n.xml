@@ -761,8 +761,9 @@ multirow append links "[_ bug-tracker.New_Bug]" "${url_prefix}bug-add"</programl
           <para>... and include the variable in the key: <computeroutput>"New %bug_label%"</computeroutput>.  This gives translators more control over the phrase.</para>
 
 
-          <para>In this bad example, full name is created by concatenating first and last name (admittedly this is pervasive in the toolkit):</para>
-          <programlisting>&lt;a href="@past_version.maintainer_url@" title="#bug-tracker.Email# @past_version.maintainer_email@"&gt;@past_version.maintainer_first_names@ @past_version.maintainer_last_name@&lt;/a&gt;</programlisting>
+          <para>In this example of bad i18n, full name is created by concatenating first and last name (admittedly this is pervasive in the toolkit):</para>
+          <programlisting>&lt;a href="@past_version.maintainer_url@" title="#bug-tracker.Email# @past_version.maintainer_email@"&gt;
+@past_version.maintainer_first_names@ @past_version.maintainer_last_name@&lt;/a&gt;</programlisting>
         </listitem>
         
         
@@ -802,14 +803,14 @@ multirow append links "[_ bug-tracker.New_Bug]" "${url_prefix}bug-add"</programl
        -entry_id $entry_id \ 	    
        -key "resolution" \ 	    
        -value [db_string select_resolution_code {}]</programlisting>
-          <para>This is internationalized to </para>
+          <para>This is incorrectly internationalized to </para>
           <programlisting>  workflow::case::add_log_data \ 	    
        -entry_id $entry_id \
        -key "[_ bug-tracker.resolution]" \
        -value [db_string select_resolution_code {}]</programlisting>
        <para>But <computeroutput>resolution</computeroutput> is a keyword in a table and in the code, so this breaks the code.  It should not have been internationalized at all.  Here's another example of text that should not have been internationalized:</para>
        <programlisting>{show_patch_status "open"}</programlisting>
-       <para>was changed to</para>
+       <para>It is broken if changed to</para>
        <programlisting>{show_patch_status "[_ bug-tracker.open]"}</programlisting>
           </listitem>
 
@@ -826,8 +827,8 @@ multirow append links "[_ bug-tracker.New_Bug]" "${url_prefix}bug-add"</programl
 </para>
           <para>Sometimes the automatic converter creates keys that don't semantically match their text.  Fix these:</para>
           <programlisting>&lt;msg key="Fix"&gt;for version&lt;/msg&gt;
- &lt;msg key="Fix_1"&gt;for&lt;/msg&gt;
- &lt;msg key="Fix_2"&gt;for Bugs&lt;/msg&gt;</programlisting>
+&lt;msg key="Fix_1"&gt;for&lt;/msg&gt;
+&lt;msg key="Fix_2"&gt;for Bugs&lt;/msg&gt;</programlisting>
 
           <para>Another example: <computeroutput>Bug-tracker component maintainer"</computeroutput> was converted to <computeroutput>"[_ bug-tracker.Bug-tracker]"</computeroutput>.  Instead, it should be <computeroutput>bug_tracker_component_maintainer</computeroutput>.</para>
         </listitem>
@@ -848,9 +849,9 @@ the message appears.
             <para>Watch out for quoting and escaping when editing text that is also code.  For example, the original string </para>
           </formalpara>
           <programlisting>set title "Patch \"$patch_summary\" is nice."</programlisting>
-          <para>is broken if converted to </para>
+          <para>breaks if the message text retains all of the escaping that was in the tcl command:</para>
           <programlisting>&lt;msg&gt;Patch \&quot;$patch_summary\&quot; is nice.&lt;/msg&gt;</programlisting>
-          <para>instead it should be</para>
+          <para>When it becomes a key, it should be:</para>
           <programlisting>&lt;msg&gt;Patch &quot;$patch_summary&quot; is nice.&lt;/msg&gt;</programlisting>
           <para>Also, some keys had %var;noquote%, which is not needed since those
           variables are not quoted (and in fact the variable won't even be
