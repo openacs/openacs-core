@@ -2159,6 +2159,13 @@ ad_proc ad_get_cookie {
     set headers [ad_conn headers]
     set cookie [ns_set iget $headers Cookie]
     if { [regexp " $name=(\[^;\]*)" " $cookie" match value] } {
+
+        # If the cookie was set to a blank value we actually stored two quotes.  We need
+        # to undo the kludge on the way out.
+
+        if { $value == "\"\"" } {
+              set value ""
+        }
 	return $value
     }
 
