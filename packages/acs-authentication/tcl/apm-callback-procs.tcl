@@ -10,6 +10,8 @@ namespace eval auth {}
 namespace eval auth::authentication {}
 namespace eval auth::password {}
 namespace eval auth::registration {}
+namespace eval auth::getdoc {}
+namespace eval auth::processdoc {}
 
 
 ad_proc -private auth::package_install {} {} {
@@ -19,7 +21,9 @@ ad_proc -private auth::package_install {} {} {
         auth::authentication::create_contract
         auth::password::create_contract
         auth::registration::create_contract
-        
+        auth::getdoc::create_contract
+        auth::processdoc::create_contract
+
         # Register local authentication implementations and update the local authority
         auth::local::install
     }
@@ -36,6 +40,8 @@ ad_proc -private auth::package_uninstall {} {} {
         auth::authentication::delete_contract
         auth::password::delete_contract
         auth::registration::delete_contract
+        auth::getdoc::delete_contract
+        auth::processdoc::delete_contract
     }
 }
 
@@ -51,7 +57,7 @@ ad_proc -private auth::authentication::create_contract {} {
 } {
     set spec {
         name "auth_authentication"
-        description "Service contract to handle authentication"
+        description "Authenticate users and retrieve their account status."
         operations {
             Authenticate {
                 description {
@@ -106,7 +112,7 @@ ad_proc -private auth::password::create_contract {} {
 } {
     set spec {
         name "auth_password"
-        description "Service contract for password management."
+        description "Update, reset, and retrieve passwords for authentication."
         operations {
             CanChangePassword {
                 description {
@@ -227,7 +233,7 @@ ad_proc -private auth::registration::create_contract {} {
 } {
     set spec {
         name "auth_registration"
-        description "Service contract to handle account registration"
+        description "Registering accounts for authentication"
         operations {
             GetElements {
                 description {
@@ -289,3 +295,100 @@ ad_proc -private auth::registration::delete_contract {} {
 } {
     acs_sc::contract::delete -name "auth_registration"
 }
+
+
+#####
+#
+# auth_getdoc service contract
+#
+#####
+
+ad_proc -private auth::getdoc::create_contract {} {
+    Create service contract for account registration.
+} {
+    set spec {
+        name "auth_getdoc"
+        description "Retrieve a document, e.g. using HTTP, SMP, FTP, SOAP, etc."
+        operations {
+            GetDocument {
+                description {
+                    Retrieves a document from somewhere, somehow.
+                }
+                input {
+                    parameters:string,multiple
+                }
+                output {
+                    doc_status:string
+                    doc_message:string
+                    document:string
+                }
+            }
+            GetParameters {
+                description {
+                    Get an array-list of the parameters required by this service contract implementation.
+                }
+                output {
+                    parameters:string,multiple
+                }
+            }
+        }
+    }
+
+    acs_sc::contract::new_from_spec -spec $spec
+}
+
+
+ad_proc -private auth::getdoc::delete_contract {} {
+    Delete service contract for account registration.
+} {
+    acs_sc::contract::delete -name "auth_getdoc"
+}
+
+
+
+#####
+#
+# auth_processdoc service contract
+#
+#####
+
+ad_proc -private auth::processdoc::create_contract {} {
+    Create service contract for account registration.
+} {
+    set spec {
+        name "auth_processdoc"
+        description "Process a document containing user information from a remote authentication authority"
+        operations {
+            ProcessDocument {
+                description {
+                    Process a user synchronization document.
+                }
+                input {
+                    job_id:integer
+                    document:string
+                    paraemters:string,multiple
+                }
+            }
+            GetParameters {
+                description {
+                    Get an array-list of the parameters required by this service contract implementation.
+                }
+                output {
+                    parameters:string,multiple
+                }
+            }
+        }
+    }
+
+    acs_sc::contract::new_from_spec -spec $spec
+}
+
+
+ad_proc -private auth::processdoc::delete_contract {} {
+    Delete service contract for account registration.
+} {
+    acs_sc::contract::delete -name "auth_processdoc"
+}
+
+
+
