@@ -34,7 +34,7 @@ namespace eval notification::email {
     }
 
     ad_proc -public manage_notifications_url {} {
-        return "[ad_url]/[apm_package_url_from_key [notification::package_key]]manage"
+        return "[ad_url][apm_package_url_from_key [notification::package_key]]manage"
     }
 
     ad_proc -public reply_address_prefix {} {
