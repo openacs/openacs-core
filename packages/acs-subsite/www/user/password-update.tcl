@@ -17,12 +17,13 @@ ad_page_contract {
 
 if {[empty_string_p $user_id]} {
     set user_id [ad_verify_and_get_user_id]
-    permission::require_permission -party_id $user_id -object_id $user_id -privilege "write"
-} else {
-    permission::require_permission -object_id $user_id -privilege "admin"
 }
 
-set admin_p [permission::permission_p -object_id $user_id -privilege "admin"]
+set admin_p [permission::permission_p -object_id $user_id -privilege admin]
+
+if {!$admin_p} {
+    permission::require_permission -party_id $user_id -object_id $user_id -privilege write
+}
 
 db_1row user_information {}
 
