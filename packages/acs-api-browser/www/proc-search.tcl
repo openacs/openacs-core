@@ -18,6 +18,7 @@ ad_page_contract {
     {param_weight:optional 0}
     {source_weight:optional 0}
     {search_type:optional 0}
+    {exact_match_p 0}
     query_string
 } -properties {
     title:onevalue
@@ -69,8 +70,9 @@ foreach proc [nsv_array names api_proc_doc] {
         ##Exact match:
         if {[string tolower $query_string] == [string tolower $proc]} {
             incr score [expr $name_weight * 2]
+        } elseif { ! $exact_match_p } {
+            incr score [expr $name_weight * [ad_keywords_score $query_string $proc]] 
         }
-        incr score [expr $name_weight * [ad_keywords_score $query_string $proc]] 
     }
    
     ################
