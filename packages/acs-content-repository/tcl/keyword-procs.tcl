@@ -10,7 +10,7 @@ ad_library {
 namespace eval cr {}
 namespace eval cr::keyword {}
 
-ad_proc -public cr::keyword::new {
+ad_proc -public -deprecated cr::keyword::new {
     {-heading:required}
     {-description ""}
     {-parent_id ""}
@@ -19,6 +19,7 @@ ad_proc -public cr::keyword::new {
     {-package_id ""}
 } {
     Create a new keyword
+    @see content::keyword::new
 } {
     set user_id [ad_conn user_id]
     set creation_ip [ad_conn peeraddr]
@@ -32,21 +33,23 @@ ad_proc -public cr::keyword::new {
     return $keyword_id
 }
 
-ad_proc -public cr::keyword::delete {
+ad_proc -public -deprecated cr::keyword::delete {
     {-keyword_id:required}
 } {
     Delete a keyword.
 
     @author Peter Marklund
+    @see content::keyword::delete
 } {
     db_exec_plsql delete_keyword {}
 }
 
-ad_proc -public cr::keyword::set_heading {
+ad_proc -public -deprecated cr::keyword::set_heading {
     {-keyword_id:required}
     {-heading:required}
 } {
     Update a keyword heading
+    @see content::keyword::set_heading
 } {
     db_exec_plsql set_heading { }
 }
@@ -61,13 +64,14 @@ ad_proc -public cr::keyword::get_keyword_id {
     return [db_string select_keyword_id {} -default {}]
 }
 
-ad_proc -public cr::keyword::item_unassign {
+ad_proc -public -deprecated cr::keyword::item_unassign {
     {-keyword_id:required}
     {-item_id:required}
 } {
     Unassign a single keyword from a content item.
 
     Returns the supplied item_id for convenience.
+    @see content::keyword::item_unassign
 } {
     db_exec_plsql item_unassign {}
 
@@ -88,7 +92,7 @@ ad_proc -public cr::keyword::item_unassign_children {
     return $item_id
 }
 
-ad_proc -public cr::keyword::item_assign {
+ad_proc -public -deprecated cr::keyword::item_assign {
     {-item_id:required}
     {-keyword_id:required}
     {-singular:boolean}
@@ -101,6 +105,7 @@ ad_proc -public cr::keyword::item_assign {
     @param keyword_id A list of keywords to assign.
 
     @return the supplied item_id for convenience.
+    @see content::keyword::item_assign
 } {
     # First, unassign for the parents of each/all
     if {$singular_p} {
