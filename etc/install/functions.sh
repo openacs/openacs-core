@@ -1,7 +1,7 @@
 # Access config parameters in the TCL file through this function
 
 get_config_param () {
-    echo "source $config_file; puts [set $1]" | tclsh
+    echo "source $config_file; puts -nonewline [set $1]" | tclsh
 }
 
 create_override_config_file () {
