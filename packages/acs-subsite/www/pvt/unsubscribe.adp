@@ -1,6 +1,6 @@
 <master>
 <property name="title">Confirm Unsubscribe</property>
-<property name="context">Confirm Unsubscribe</property>
+<property name="context">@context@</property>
 
 
 <p>Confirm that you'd like to unsubscribe from @site_link;noquote@.</p>

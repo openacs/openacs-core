@@ -14,11 +14,14 @@ ad_page_contract {
     admin_enabled_p:onevalue
     export_vars:onevalue
     site_link:onevalue
+    context:onevalue
 }
 
 if {[empty_string_p $user_id]} {
     set user_id [ad_verify_and_get_user_id]
 }
+
+set context [list [list [ad_pvt_home] "Your Account"] [_ acs-subsite.Update_Password]]
 
 # We have a special provision here for expired passwords
 # The user will not be logged in, but we're supposed to log them in after we're done

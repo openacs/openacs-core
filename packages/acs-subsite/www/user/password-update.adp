@@ -1,7 +1,7 @@
 <master>
   <property name="title">#acs-subsite.Update_Password#</property>
   <property name="context_bar">#acs-subsite.lt_for_first_names_last_#</property>
-  <property name="context">#acs-subsite.Update_Password#</property>
+  <property name="context">@context@</property>
   <property name="focus">@focus@</property>
 
 <if @expired_p@ true>
