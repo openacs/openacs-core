@@ -196,7 +196,7 @@ namespace eval lang::catalog {
            set messages_list [list]
            all_messages_for_package_and_locale $package_key $locale
            template::util::multirow_foreach all_messages {
-               lappend messages_list $message_key $message
+               lappend messages_list @all_messages.message_key@ @all_messages.message@
            }
 
            # Write the messages to the file
