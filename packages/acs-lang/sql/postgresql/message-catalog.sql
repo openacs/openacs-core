@@ -1,26 +1,47 @@
 --
--- packages/acs-i18n/sql/language-create.sql
+-- packages/acs-lang/sql/postgresql/message-catalog.sql
 --
 -- @author Jeff Davis (davis@xarg.net)
+-- @author Christian Hvid
 -- @creation-date 2000-09-10
 -- @cvs-id $Id$
 --
 
 begin;
 
-create table lang_messages (    
-  key                     varchar(200),
-  locale                  varchar(30) 
-                          constraint lang_messages_locale_fk
-                          references ad_locales(locale)
-                          constraint lang_messages_locale_nn
-                          not null,
-  message                 text,
-  registered_p            boolean,
-  constraint lang_messages_pk 
-  primary key (key, locale)
+create table lang_message_keys ( 
+    message_key        varchar(200)
+                       constraint lang_message_keys_message_key_nn
+                       not null,
+    package_key        varchar(100)
+                       constraint lang_message_keys_fk
+                       references apm_package_types(package_key)
+                       constraint lang_message_keys_package_key_nn
+                       not null,
+    constraint lang_message_keys_pk
+    primary key (message_key, package_key)
 );
 
+create table lang_messages (    
+    message_key        varchar(200)
+                       constraint lang_messages_message_key_nn
+                       not null,
+    package_key        varchar(100)
+                       constraint lang_messages_package_key_nn
+                       not null,
+    locale             varchar(30) 
+                       constraint lang_messages_locale_fk
+                       references ad_locales(locale)
+                       constraint lang_messages_locale_nn
+                       not null,
+    message            text,
+    constraint lang_messages_fk
+    foreign key (message_key, package_key) 
+    references lang_message_keys(message_key, package_key)
+    on delete cascade,
+    constraint lang_messages_pk 
+    primary key (message_key, package_key, locale)
+);
 
 -- ****************************************************************************
 -- * The lang_translate_columns table holds the columns that require translation.

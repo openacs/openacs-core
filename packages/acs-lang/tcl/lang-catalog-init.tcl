@@ -22,10 +22,5 @@ ad_library {
 
 # This is done in a scheduled proc so that it won't take up time at server startup.
 # Instead, it can be done by a thread after the server has started multithreading.
-#
-# Peter Marklund, 7 October 2002: Commenting out since we don't want to source the catalog
-# files on every startup (we want to source them just once). If the acs_messages table 
-# had a package_key column we could easily
-# check if a certain package has already had its catalog files sourced or not.
 
-#ad_schedule_proc -once t 5 lang::catalog::load_all
+ad_schedule_proc -once t 5 lang::catalog::import_from_all_files

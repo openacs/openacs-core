@@ -9,17 +9,7 @@ ad_page_contract {
 } -properties {
 }
 
-# Check the locale from the user
-if { [exists_and_not_null locales] } {
-    set locale_user $locales
-} else {
-    set locale_user [ad_locale_locale_from_lang [ad_locale user language]]
-}
-
-#  AS - doesn't work
-#  set encoding_charset [ad_locale charset $locale_user]
-#  ns_setformencoding $encoding_charset
-#  ns_set put [ns_conn outputheaders] "content-type" "text/html; charset=$encoding_charset"
+set locale_user [ad_conn locale]
 
 set context_bar [ad_context_bar "Locales Administration"]
 
@@ -32,5 +22,3 @@ db_multirow -extend { escaped_locale } locales select_locales {
 } {
     set escaped_locale [ns_urlencode $locale]
 }
-
-db_release_unused_handles

@@ -1,33 +1,45 @@
 --
--- packages/gp-lang/sql/language-create.sql
+-- packages/acs-lang/sql/oracle/language-create.sql
 --
 -- @author Jeff Davis (davis@arsdigita.com)
+-- @author Christian Hvid
 -- @author Bruno Mattarollo (bruno.mattarollo@ams.greenpeace.org)
 --
 -- @creation-date 2000-09-10
 -- @cvs-id $Id$
 --
-
-create table lang_keys (
-    key                varchar2(200),
+create table lang_message_keys ( 
+    message_key        varchar2(200)
+                       constraint lang_message_keys_m_key_nn
+                       not null,
     package_key        varchar2(100)
-                       constraint lang_keys_pk_fk
-                       references apm_package_types (package_key)
+                       constraint lang_message_keys_fk
+                       references apm_package_types(package_key)
+                       constraint lang_message_keys_p_key_nn
+                       not null,
+    constraint lang_message_keys_pk
+    primary key (message_key, package_key)
 );
 
 create table lang_messages (    
-    key                    varchar2(200)
-                           constraint lang_messages_key_fk
-                           references lang_keys(key),
-    locale                 varchar2(30) 
-                           constraint lang_messages_locale_fk
-                           references ad_locales(locale)
-                           constraint lang_messages_locale_nn
-                           not null,
-    message                clob,
-    registered_p           char(1)
-                           constraint lm_tranlated_p_ck check(registered_p in ('t','f')),
-    constraint lang_messages_pk primary key (key, locale)
+    message_key        varchar2(200)
+                       constraint lang_messages_message_key_nn
+                       not null,
+    package_key        varchar2(100)
+                       constraint lang_messages_package_key_nn
+                       not null,
+    locale             varchar2(30) 
+                       constraint lang_messages_locale_fk
+                       references ad_locales(locale)
+                       constraint lang_messages_locale_nn
+                       not null,
+    message            clob,
+    constraint lang_messages_fk
+    foreign key (message_key, package_key) 
+    references lang_message_keys(message_key, package_key)
+    on delete cascade,
+    constraint lang_messages_pk 
+    primary key (message_key, package_key, locale)
 );
 
 comment on table lang_messages is '

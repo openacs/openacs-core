@@ -5,18 +5,18 @@
   <fullquery name="lang::message::register.lang_message_update">
     <querytext>
       update lang_messages
-      set    registered_p = 't',
-             message = empty_clob()
+      set    message = empty_clob()
       where  locale = :locale 
-      and    key = :key
+      and    message_key = :message_key
+      and    package_key = :package_key
       returning message into :1
     </querytext>
   </fullquery>
 
   <fullquery name="lang::message::register.lang_message_insert">      
     <querytext>
-      insert into lang_messages (key, locale, message, registered_p) 
-      values (:key, :locale, empty_clob(), 't') 
+      insert into lang_messages (package_key, message_key, locale, message) 
+      values (:package_key, :message_key, :locale, empty_clob()) 
       returning message into :1
     </querytext>
   </fullquery>
