@@ -84,3 +84,18 @@ proc xml_node_get_content {node_id} {
 #   ns_log notice "xml_node_get_content [$node_id nodeName] --> [$node_id text]"
     return [$node_id text]
 }
+
+# Get Node Type
+proc xml_node_get_type {node_id} {
+    return [$node_id nodeType]
+}
+
+# Render the doc
+proc xml_doc_render {doc_id {indent_p f}} {
+    if { [string is true $indent_p] } {
+        return [$doc_id asXML]
+    } else {
+        return [$doc_id asXML -indent none]
+    }
+}
+
