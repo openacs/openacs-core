@@ -18,7 +18,7 @@ declare
                   package_name,
                   repository_id
 	 from     acs_reference_repositories
-	 where table_name = 'language_codes';
+	 where upper(table_name) = 'LANGUAGE_CODES';
 begin
     for rec in refsrc_cur loop
 	 dbms_output.put_line('Dropping ' || rec.table_name);
