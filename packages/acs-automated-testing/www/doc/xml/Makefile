@@ -18,4 +18,4 @@ HTMLDOC=/usr/bin/htmldoc
 
 all:
 
-	cd .. ; $(XSLTPROC) --nonet --novalid --xinclude ../../../acs-core-docs/www/xml/openacs.xsl xml/index.xml
+	cd .. ; $(XSLTPROC) --nonet --xinclude ../../../acs-core-docs/www/xml/openacs.xsl xml/index.xml
