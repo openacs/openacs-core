@@ -25,10 +25,14 @@ ad_proc -public auth::driver::get_parameters {
     @author Simon Carstensen (simon@collaboraid.biz)
     @creation-date 2003-08-27
 } {
-    return [acs_sc::invoke \
-                -error \
-                -impl_id $impl_id \
-                -operation GetParameters]
+    set parameters {}
+    with_catch errmsg {
+        set parameters [acs_sc::invoke \
+                            -error \
+                            -impl_id $impl_id \
+                            -operation GetParameters]
+    } {}
+    return $parameters
 }
 
 ad_proc -public auth::driver::get_parameter_values {
@@ -84,3 +88,18 @@ ad_proc -public auth::driver::set_parameter_value {
         db_dml insert_parameter {} -clobs [list $value]
     }
 }
+
+ad_proc -public auth::driver::GetParameters { 
+    {-impl_id:required}
+} {
+    Returns a list of names of parameters for the driver
+
+    @author Simon Carstensen (simon@collaboraid.biz)
+    @creation-date 2003-08-27
+} {
+    return [acs_sc::invoke \
+                -error \
+                -impl_id $impl_id \
+                -operation GetParameters]
+}
+
