@@ -1,5 +1,5 @@
 <if @show_p@ true>
-  <div class="developer-support-footer-off">
+  <div class="developer-support-footer">
     <if @comments:rowcount@ gt 0>
       <multiple name="comments">
         <b>Comment:</b> <pre style="display: inline;">@comments.text@</pre><br />
