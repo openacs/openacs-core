@@ -465,9 +465,9 @@ ad_proc -private rp_resources_filter { why } {
     @author Don Baccus (dhogaza@pacifier.com)
 
 } {
-    set path "[acs_package_root_dir [lindex [ns_conn urlv] 1]]/www/resources/[lrange [ns_conn urlv] 2 end]"
+    set path "[acs_package_root_dir [lindex [ns_conn urlv] 1]]/www/resources/[join [lrange [ns_conn urlv] 2 end] /]"
     if { ![file exists $path] } {
-        set path "[acs_root_dir]/www/resources/[lrange [ns_conn urlv] 1 end]"
+        set path "[acs_root_dir]/www/resources/[join [lrange [ns_conn urlv] 1 end] /]"
     }
     if { [file exists $path] } {
         ns_returnfile 200 [ns_guesstype $path] $path
