@@ -614,14 +614,14 @@ procedure rename (
     from 
       cr_items
     where
-      name = name
+      name = rename.name
     and 
       parent_id = (select 
 		     parent_id
 		   from
 		     cr_items
 		   where
-		     item_id = item_id);
+		     item_id = rename.item_id);
 
   exists_id integer;
 begin
@@ -632,13 +632,13 @@ begin
   if exists_cur%NOTFOUND then
     close exists_cur;
     update cr_items
-      set name = name
-      where item_id = item_id;
+      set name = rename.name
+      where item_id = rename.item_id;
   else
     close exists_cur;
-    if exists_id <> item_id then
+    if exists_id <> rename.item_id then
       raise_application_error(-20000, 
-        'An item with the name ' || name || 
+        'An item with the name ' || rename.name || 
         ' already exists in this directory.');
     end if;
   end if;
