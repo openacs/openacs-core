@@ -18,7 +18,7 @@ if { ![exists_and_not_null return_url] } {
 
 set action_url "[subsite::get_element -element url]user/basic-info-update"
 
-acs_user::get -array user -include_bio
+acs_user::get -user_id $user_id -array user -include_bio
 
 set authority_name [auth::authority::get_element -authority_id $user(authority_id) -element pretty_name]
 
@@ -30,17 +30,19 @@ set read_only_elements [auth::sync::get_sync_elements -authority_id $user(author
 foreach elm $read_only_elements {
     set mode($elm) {display}
 }
-set focus {}
+set first_element {}
 foreach elm $form_elms {
     if { [empty_string_p $mode($elm)] } {
-        set focus "user_login.$elm"
+        set first_element $elm
         break
     }
 }
+set focus "user_info.$first_element"
 set read_only_notice_p [expr [llength $read_only_elements] > 0]
 set edit_mode_p [expr ![empty_string_p [form::get_action user_info]]]
 
 ad_form -name user_info -cancel_url $return_url -action $action_url -mode display -form {
+    {user_id:integer(hidden),optional}
     {return_url:text(hidden),optional {value $return_url}}
 }
 
@@ -90,41 +92,49 @@ ad_form -extend -name user_info -form {
         {label "About yourself"}
         {html {rows 8 cols 60}}
         {mode $mode(bio)}
+        {display_value {[ad_text_to_html -- $user(bio)]}}
     }
 } -on_request {
     foreach var { first_names last_name email username screen_name url bio } {
         set $var $user($var)
     }
 } -on_submit {
-    db_transaction {
+    set user_info(authority_id) $user(authority_id)
+    set user_info(username) $user(username)
+    foreach elm $form_elms {
+        if { [empty_string_p $mode($elm)] } {
+            set user_info($elm) [string trim [set $elm]]
+        }
+    }
 
-        # TODO: Only change editable elements
+    array set result [auth::update_local_account \
+                          -authority_id $user(authority_id) \
+                          -username $user(username) \
+                          -array user_info]
 
-        person::update \
-            -person_id $user_id \
-            -first_names $first_names \
-            -last_name $last_name
-        
-        party::update \
-            -party_id $user_id \
-            -email $email \
-            -url $url
 
-        acs_user::update \
-            -user_id $user_id \
-            -screen_name $screen_name
-
-        person::update_bio \
-            -person_id $user_id \
-            -bio $bio
+    # Handle authentication problems
+    switch $result(update_status) {
+        ok {
+            # Continue below
+        }
+        default {
+            # Adding the error to the first element, but only if there are no element messages
+            if { [llength $result(element_messages)] == 0 } {
+                form set_error user_info $first_element $result(update_message)
+            }
+                
+            # Element messages
+            foreach { elm_name elm_error } $result(element_messages) {
+                form set_error user_info $elm_name $elm_error
+            }
+            break
+        }
     }
 } -after_submit {
     ad_returnredirect $return_url
     ad_script_abort
 }
-
-# TODO: Validate email: [util_email_valid_p $email]
-# TODO: Validate email unique
 
 # LARS HACK: Make the URL and email elements real links
 if { ![form is_valid user_info] } {
@@ -137,3 +147,4 @@ if { ![form is_valid user_info] } {
 		"<a href=\"[element get_value user_info url]\">[element get_value user_info url]</a>"
     }
 }
+

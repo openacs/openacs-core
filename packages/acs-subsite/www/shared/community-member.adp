@@ -56,7 +56,7 @@
     <b>Biography:</b>
    </p>
    <blockquote>
-     @bio@
+     @bio;noquote@
    </blockquote>
 </if>
 
