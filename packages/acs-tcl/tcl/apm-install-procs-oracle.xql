@@ -70,7 +70,7 @@
       <querytext>
       
 	begin
-	 apm_package_version.delete(version_id => :version_id);	 
+	 apm_package_version.del(version_id => :version_id);	 
 	end;
     
       </querytext>

@@ -420,7 +420,7 @@ function is_valid_child (
   relation_tag  in cr_child_rels.relation_tag%TYPE default null
 ) return char;
 
-procedure delete (
+procedure del (
   --/** Deletes the specified content item, along with any revisions, symlinks, 
   --    workflows, associated templates, associated keywords, 
   --    child and item relationships for the item. Use with caution - this
@@ -873,7 +873,7 @@ function copy (
   creation_ip		in acs_objects.creation_ip%TYPE default null
 ) return cr_revisions.revision_id%TYPE;
 
-procedure delete (
+procedure del (
   --/** Deletes the revision.
   --    @author Karl Goldstein
   --    @param revision_id The id of the revision to delete
@@ -1031,7 +1031,7 @@ function new (
 ) return cr_symlinks.symlink_id%TYPE;
 
 
-procedure delete (
+procedure del (
   --/** Deletes the symlink
   --    @author Karl Goldstein
   --    @param symlink_id The id of the symlink to delete
@@ -1129,7 +1129,7 @@ function new (
 ) return cr_extlinks.extlink_id%TYPE;
 
 
-procedure delete (
+procedure del (
   --/** Deletes the extlink
   --    @author Karl Goldstein
   --    @param extlink_id The id of the extlink to delete
@@ -1188,7 +1188,7 @@ function new (
   creation_ip	in acs_objects.creation_ip%TYPE default null
 ) return cr_folders.folder_id%TYPE;
 
-procedure delete (
+procedure del (
   --/** Delete a folder. An error is thrown if the folder is not empty
   --    @author Karl Goldstein
   --    @param folder_id    The id of the folder to delete
@@ -1409,7 +1409,7 @@ function new (
   creation_ip	in acs_objects.creation_ip%TYPE default null
 ) return cr_templates.template_id%TYPE;
 
-procedure delete (
+procedure del (
   --/** Deletes the specified template, and unregisters the template from
   --    all content types and content items.
   --    Use with caution - this operation cannot be undone.
@@ -1481,7 +1481,7 @@ function new (
   object_type   in acs_object_types.object_type%TYPE default 'content_keyword'
 ) return cr_keywords.keyword_id%TYPE;
 
-procedure delete (
+procedure del (
   --/** Deletes the specified keyword, which must be a leaf. Unassigns the
   --    keyword from all content items.  Use with caution - this
   --    operation cannot be undone.

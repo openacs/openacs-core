@@ -370,7 +370,7 @@ as
     delete from notes 
     where note_id = note.delete.note_id; 
  
-    acs_object.delete(note_id); 
+    acs_object.del(note_id); 
   end delete; 
  
 end note; 

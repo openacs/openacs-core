@@ -43,7 +43,7 @@ as
         is_live       in char                           default 't'
     ) return acs_objects.object_id%TYPE;
 
-    procedure delete (
+    procedure del (
         message_id    in acs_messages.message_id%TYPE
     );
 
@@ -301,15 +301,15 @@ as
 
     end edit;   
 
-    procedure delete (
+    procedure del (
         message_id    in acs_messages.message_id%TYPE
     )
     is
     begin
         delete from acs_messages
-            where message_id = acs_message.delete.message_id;
-        content_item.delete(message_id);
-    end delete;
+            where message_id = acs_message.del.message_id;
+        content_item.del(message_id);
+    end del;
 
     function message_p (
         message_id    in acs_messages.message_id%TYPE
@@ -465,7 +465,7 @@ as
     ) 
     is
     begin
-        content_item.delete(delete_file.file_id);       
+        content_item.del(delete_file.file_id);       
     end delete_file;    
 
     function new_image (
@@ -567,7 +567,7 @@ as
         -- XXX fix after image.delete exists
         delete from images
             where image_id = delete_image.image_id;
-        content_item.delete(image_id);
+        content_item.del(image_id);
     end delete_image;
 
     -- XXX should just call content_extlink.new
@@ -623,7 +623,7 @@ as
         extlink_id  in cr_extlinks.extlink_id%TYPE
     ) is
     begin
-        content_extlink.delete(extlink_id => delete_extlink.extlink_id);
+        content_extlink.del(extlink_id => delete_extlink.extlink_id);
     end delete_extlink;
 
     function name (

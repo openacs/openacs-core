@@ -43,7 +43,7 @@
   <fullquery name="acs_sc::contract::delete.delete_by_name">
     <querytext>
       begin
-        acs_sc_contract.delete(
+        acs_sc_contract.del(
             contract_name => :name
         );
       end;
@@ -78,7 +78,7 @@
   <fullquery name="acs_sc::contract::operation::delete.delete_by_name">
     <querytext>
         begin
-          acs_sc_operation.delete(
+          acs_sc_operation.del(
             contract_name => :contract_name, 
             operation_name => :operation_name
           );

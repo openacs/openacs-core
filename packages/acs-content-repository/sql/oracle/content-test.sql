@@ -295,16 +295,16 @@ dbms_output.put_line('--------------------------------');
 
 -- symlinks/revisions should be deleted automatically
 /*
-content_item.delete(simple_item_id);
-content_template.delete(item_template_id);
-content_item.delete(item_id);
-content_template.delete(type_template_id);
-content_template.delete(def_type_template_id);
-content_template.delete(dum_template_id);
-content_folder.delete(sub_sub_folder_id);
-content_folder.delete(sub_folder_id);
-content_folder.delete(folder_id);
-content_folder.delete(folder_b_id);
+content_item.del(simple_item_id);
+content_template.del(item_template_id);
+content_item.del(item_id);
+content_template.del(type_template_id);
+content_template.del(def_type_template_id);
+content_template.del(dum_template_id);
+content_folder.del(sub_sub_folder_id);
+content_folder.del(sub_folder_id);
+content_folder.del(folder_id);
+content_folder.del(folder_b_id);
 */
 end;
 /

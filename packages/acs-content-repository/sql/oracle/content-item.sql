@@ -464,7 +464,7 @@ end is_valid_child;
  5) delete all permissions associated with this item
  6) delete keyword associations
  7) delete all associated comments */
-procedure delete (
+procedure del (
   item_id in cr_items.item_id%TYPE
 ) is
 
@@ -482,7 +482,7 @@ procedure delete (
     from 
       cr_symlinks
     where 
-      target_id = content_item.delete.item_id;
+      target_id = content_item.del.item_id;
 
   cursor c_revision_cur is
     select
@@ -490,7 +490,7 @@ procedure delete (
     from
       cr_revisions
     where
-      item_id = content_item.delete.item_id;
+      item_id = content_item.del.item_id;
 
   cursor c_rel_cur is
     select
@@ -498,9 +498,9 @@ procedure delete (
     from
       cr_item_rels
     where
-      item_id = content_item.delete.item_id
+      item_id = content_item.del.item_id
     or
-      related_object_id = content_item.delete.item_id;      
+      related_object_id = content_item.del.item_id;      
 
   cursor c_child_cur is
     select
@@ -508,7 +508,7 @@ procedure delete (
     from
       cr_child_rels
     where
-      child_id = content_item.delete.item_id;
+      child_id = content_item.del.item_id;
 
   cursor c_parent_cur is
     select
@@ -516,7 +516,7 @@ procedure delete (
     from
       cr_child_rels
     where
-      parent_id = content_item.delete.item_id;
+      parent_id = content_item.del.item_id;
 
   --  this is strictly for debugging
   --  cursor c_error_cur is
@@ -541,56 +541,56 @@ begin
   dbms_output.put_line('Deleting symlinks...');
   -- 2) delete all symlinks to this item
   for v_symlink_val in c_symlink_cur loop
-    content_symlink.delete(v_symlink_val.symlink_id);
+    content_symlink.del(v_symlink_val.symlink_id);
   end loop;
 
   dbms_output.put_line('Unscheduling item...');
   delete from cr_release_periods
-    where item_id = content_item.delete.item_id;
+    where item_id = content_item.del.item_id;
 
   dbms_output.put_line('Deleting associated revisions...');
   -- 3) delete all revisions of this item
   delete from cr_item_publish_audit
-    where item_id = content_item.delete.item_id;
+    where item_id = content_item.del.item_id;
   for v_revision_val in c_revision_cur loop
-    content_revision.delete(v_revision_val.revision_id);
+    content_revision.del(v_revision_val.revision_id);
   end loop;
   
   dbms_output.put_line('Deleting associated item templates...');
   -- 4) unregister all templates to this item
   delete from cr_item_template_map
-    where item_id = content_item.delete.item_id; 
+    where item_id = content_item.del.item_id; 
 
   dbms_output.put_line('Deleting item relationships...');
   -- Delete all relations on this item
   for v_rel_val in c_rel_cur loop
-    acs_rel.delete(v_rel_val.rel_id);
+    acs_rel.del(v_rel_val.rel_id);
   end loop;  
 
   dbms_output.put_line('Deleting child relationships...');
   for v_rel_val in c_child_cur loop
-    acs_rel.delete(v_rel_val.rel_id);
+    acs_rel.del(v_rel_val.rel_id);
   end loop;  
 
   dbms_output.put_line('Deleting parent relationships...');
   for v_rel_val in c_parent_cur loop
-    acs_rel.delete(v_rel_val.rel_id);
-    content_item.delete(v_rel_val.child_id);
+    acs_rel.del(v_rel_val.rel_id);
+    content_item.del(v_rel_val.child_id);
   end loop;  
 
   dbms_output.put_line('Deleting associated permissions...');
   -- 5) delete associated permissions
   delete from acs_permissions
-    where object_id = content_item.delete.item_id;
+    where object_id = content_item.del.item_id;
 
   dbms_output.put_line('Deleting keyword associations...');
   -- 6) delete keyword associations
   delete from cr_item_keyword_map
-    where item_id = content_item.delete.item_id;
+    where item_id = content_item.del.item_id;
 
   dbms_output.put_line('Deleting associated comments...');
   -- 7) delete associated comments
-  journal_entry.delete_for_object( content_item.delete.item_id );
+  journal_entry.delete_for_object( content_item.del.item_id );
 
   -- context_id debugging loop
   --for v_error_val in c_error_cur loop
@@ -599,9 +599,9 @@ begin
   --end loop;
 
   dbms_output.put_line('Deleting content item...');
-  acs_object.delete(content_item.delete.item_id);
+  acs_object.del(content_item.del.item_id);
 
-end delete;
+end del;
 
 
 procedure rename (
@@ -614,14 +614,14 @@ procedure rename (
     from 
       cr_items
     where
-      name = rename.name
+      name = name
     and 
       parent_id = (select 
 		     parent_id
 		   from
 		     cr_items
 		   where
-		     item_id = rename.item_id);
+		     item_id = item_id);
 
   exists_id integer;
 begin
@@ -632,13 +632,13 @@ begin
   if exists_cur%NOTFOUND then
     close exists_cur;
     update cr_items
-      set name = rename.name
-      where item_id = rename.item_id;
+      set name = name
+      where item_id = item_id;
   else
     close exists_cur;
-    if exists_id <> rename.item_id then
+    if exists_id <> item_id then
       raise_application_error(-20000, 
-        'An item with the name ' || rename.name || 
+        'An item with the name ' || name || 
         ' already exists in this directory.');
     end if;
   end if;
@@ -1644,7 +1644,7 @@ procedure unrelate (
 begin
 
   -- delete the relation object
-  acs_rel.delete( unrelate.rel_id );
+  acs_rel.del( unrelate.rel_id );
 
   -- delete the row from the cr_item_rels table
   delete from cr_item_rels where rel_id = unrelate.rel_id;

@@ -386,7 +386,7 @@ as
   context_id    in acs_objects.context_id%TYPE default null
  ) return acs_objects.object_id%TYPE;
 
- procedure delete (
+ procedure del (
   object_id	in acs_objects.object_id%TYPE
  );
 
@@ -518,7 +518,7 @@ as
   return v_object_id;
  end new;
 
- procedure delete (
+ procedure del (
   object_id	in acs_objects.object_id%TYPE
  )
  is
@@ -526,7 +526,7 @@ as
  begin
   
   -- Delete dynamic/generic attributes
-  delete from acs_attribute_values where object_id = acs_object.delete.object_id;
+  delete from acs_attribute_values where object_id = acs_object.del.object_id;
 
   -- Delete directly assigned permissions
   --
@@ -543,7 +543,7 @@ as
       from acs_object_types
       start with object_type = (select object_type
                                 from acs_objects o
-                                where o.object_id = acs_object.delete.object_id)
+                                where o.object_id = acs_object.del.object_id)
       connect by object_type = prior supertype)
   loop
     -- Delete from the table if it exists.
@@ -559,7 +559,7 @@ as
 
   end loop;
 
- end delete;
+ end del;
 
  function name (
   object_id	in acs_objects.object_id%TYPE

@@ -41,7 +41,7 @@ begin
      raise_application_error(-20000,'Duplicate insert succeeded where it should have done nothing.');
   end if;
 
-  subsite_callback.delete(v_callback_id);
+  subsite_callback.del(v_callback_id);
 
   v_callback_id := subsite_callback.new(object_type=>'group',
                                         event_type=>'insert',
@@ -58,7 +58,7 @@ begin
      raise_application_error(-20000,'Insert failed');
   end if;
 
-  subsite_callback.delete(v_callback_id);
+  subsite_callback.del(v_callback_id);
 
   select count(*) into v_count
     from subsite_callbacks

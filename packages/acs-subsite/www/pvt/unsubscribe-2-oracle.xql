@@ -17,7 +17,7 @@ where group_id = acs.magic_object_id('registered_users')
       <querytext>
       
 begin
-  membership_rel.deleted( rel_id => :rel_id );
+  membership_rel.del( rel_id => :rel_id );
 end;
       </querytext>
 </fullquery>

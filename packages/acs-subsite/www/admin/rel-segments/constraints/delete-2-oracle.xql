@@ -6,7 +6,7 @@
 <fullquery name="delete_constraint">      
       <querytext>
       
-	begin rel_constraint.delete(constraint_id => :constraint_id); end;
+	begin rel_constraint.del(constraint_id => :constraint_id); end;
     
       </querytext>
 </fullquery>

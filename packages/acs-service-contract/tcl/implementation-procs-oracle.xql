@@ -44,7 +44,7 @@
     <fullquery name="acs_sc::impl::delete.delete_impl">
         <querytext>
             begin
-                acs_sc_impl.delete(
+                acs_sc_impl.del(
                        impl_contract_name => :contract_name, 
                        impl_name => :impl_name
                    );

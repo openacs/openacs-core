@@ -5,7 +5,7 @@
 
     <fullquery name="site_node::delete.delete_site_node">
         <querytext>
-            begin site_node.delete(:node_id); end;
+            begin site_node.del(:node_id); end;
         </querytext>
     </fullquery>
 

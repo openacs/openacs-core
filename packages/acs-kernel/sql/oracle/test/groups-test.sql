@@ -92,23 +92,23 @@ begin
   end loop;
 
   -- Remove the test groups.
-  acs_group.delete(G);
-  acs_group.delete(F);
-  acs_group.delete(E);
-  acs_group.delete(D);
-  acs_group.delete(C);
-  acs_group.delete(B);
-  acs_group.delete(A);
+  acs_group.del(G);
+  acs_group.del(F);
+  acs_group.del(E);
+  acs_group.del(D);
+  acs_group.del(C);
+  acs_group.del(B);
+  acs_group.del(A);
 
   -- Remove the test members.
-  acs_user.delete(joe);
-  acs_user.delete(jane);
-  acs_user.delete(bob);
-  acs_user.delete(betty);
-  acs_user.delete(jack);
-  acs_user.delete(jill);
-  acs_user.delete(sven);
-  acs_user.delete(stacy);
+  acs_user.del(joe);
+  acs_user.del(jane);
+  acs_user.del(bob);
+  acs_user.del(betty);
+  acs_user.del(jack);
+  acs_user.del(jill);
+  acs_user.del(sven);
+  acs_user.del(stacy);
 end;
 /
 show errors

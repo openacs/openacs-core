@@ -6,7 +6,7 @@
     <fullquery name="notification::reply::delete.delete_reply">
         <querytext>
             declare begin
-                notification_reply.delete(reply_id => :reply_id);
+                notification_reply.del(reply_id => :reply_id);
             end;
         </querytext>
     </fullquery>

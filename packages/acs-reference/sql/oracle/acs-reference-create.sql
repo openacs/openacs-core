@@ -92,7 +92,7 @@ as
         last_name       in persons.last_name%TYPE default null
     ) return acs_objects.object_id%TYPE;
 
-    procedure delete (
+    procedure del (
         repository_id in acs_reference_repositories.repository_id%TYPE
     );
 
@@ -174,7 +174,7 @@ as
         return v_repository_id;    
     end new;
 
-    procedure delete (
+    procedure del (
         repository_id in acs_reference_repositories.repository_id%TYPE
     )
     is
@@ -182,15 +182,15 @@ as
     begin
 	select maintainer_id into v_maintainer_id
 	from   acs_reference_repositories
-	where  repository_id = acs_reference.delete.repository_id;
+	where  repository_id = acs_reference.del.repository_id;
 
         delete from acs_reference_repositories
-        where  repository_id = acs_reference.delete.repository_id;
+        where  repository_id = acs_reference.del.repository_id;
 
-        acs_object.delete(repository_id);
-	person.delete(v_maintainer_id);
+        acs_object.del(repository_id);
+	person.del(v_maintainer_id);
 
-    end delete;
+    end del;
 
     function is_expired_p (
 	repository_id integer

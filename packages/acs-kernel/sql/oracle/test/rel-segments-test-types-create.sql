@@ -57,7 +57,7 @@ is
 	object_id_two	in parties.party_id%TYPE
   ) return blah_member_rels.rel_id%TYPE;
 
-  procedure delete (
+  procedure del (
 	rel_id		in blah_member_rels.rel_id%TYPE
   );
 end blah_member_rel;
@@ -95,7 +95,7 @@ is
 
   end new;
 
-  procedure delete (
+  procedure del (
 	rel_id		in blah_member_rels.rel_id%TYPE
   )
   is
@@ -103,7 +103,7 @@ is
 
 	delete from blah_member_rels where rel_id = rel_id;
 
-	membership_rel.delete(rel_id);
+	membership_rel.del(rel_id);
 
   end delete;
 end blah_member_rel;
@@ -123,7 +123,7 @@ is
 	object_id_two	in parties.party_id%TYPE
   ) return yippe_member_rels.rel_id%TYPE;
 
-  procedure delete (
+  procedure del (
 	rel_id		in yippe_member_rels.rel_id%TYPE
   );
 end yippe_member_rel;
@@ -161,7 +161,7 @@ is
 
   end new;
 
-  procedure delete (
+  procedure del (
 	rel_id		in yippe_member_rels.rel_id%TYPE
   )
   is
@@ -169,7 +169,7 @@ is
 
 	delete from yippe_member_rels where rel_id = rel_id;
 
-	membership_rel.delete(rel_id);
+	membership_rel.del(rel_id);
 
   end delete;
 end yippe_member_rel;

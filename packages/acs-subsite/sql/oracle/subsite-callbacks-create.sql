@@ -98,7 +98,7 @@ create or replace package subsite_callback as
        sort_order          IN subsite_callbacks.sort_order%TYPE default null
   ) return subsite_callbacks.callback_id%TYPE;
 
-  procedure delete (
+  procedure del (
   --/** Deletes the specified callback
   -- 
   --    @author Michael Bryzek (mbryzek@arsdigita.com)
@@ -164,13 +164,13 @@ create or replace package body subsite_callback as
   END new;
 
 
-  procedure delete (
+  procedure del (
        callback_id         IN subsite_callbacks.callback_id%TYPE
   )
   is
   begin
-     delete from subsite_callbacks where callback_id=subsite_callback.delete.callback_id;
-  end delete;
+     delete from subsite_callbacks where callback_id=subsite_callback.del.callback_id;
+  end del;
 
 end subsite_callback;
 /

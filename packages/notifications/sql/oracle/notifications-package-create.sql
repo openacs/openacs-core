@@ -23,7 +23,7 @@ as
       context_id                        in acs_objects.context_id%TYPE default null
    ) return notification_intervals.interval_id%TYPE;
 
-   procedure delete (
+   procedure del (
       interval_id                       in notification_intervals.interval_id%TYPE
    );
 
@@ -63,13 +63,13 @@ as
       return v_interval_id;
    end new;
 
-   procedure delete (
+   procedure del (
       interval_id                       in notification_intervals.interval_id%TYPE
    )
    is 
    begin
-      acs_object.delete(interval_id);
-   end delete;
+      acs_object.del(interval_id);
+   end del;
 
 end notification_interval;
 /
@@ -91,7 +91,7 @@ as
       context_id                        in acs_objects.context_id%TYPE default null
    ) return notification_delivery_methods.delivery_method_id%TYPE;
 
-   procedure delete (
+   procedure del (
       delivery_method_id                in notification_delivery_methods.delivery_method_id%TYPE
    );
 
@@ -132,13 +132,13 @@ as
       return v_delivery_method_id;
    end new;
 
-   procedure delete (
+   procedure del (
       delivery_method_id                in notification_delivery_methods.delivery_method_id%TYPE
    )
    is
    begin
-      acs_object.delete (delivery_method_id);
-   end delete;
+      acs_object.del (delivery_method_id);
+   end del;
 
 end notification_delivery_method;
 /
@@ -161,7 +161,7 @@ as
       context_id                        in acs_objects.context_id%TYPE default null
    ) return notification_types.type_id%TYPE;
 
-   procedure delete (
+   procedure del (
       type_id                           in notification_types.type_id%TYPE default null
    );
 
@@ -203,13 +203,13 @@ as
       return v_type_id;
    end new;
 
-   procedure delete (
+   procedure del (
       type_id                           in notification_types.type_id%TYPE default null
    )
    is
    begin
-      acs_object.delete(type_id);
-   end delete;
+      acs_object.del(type_id);
+   end del;
 
 end notification_type;
 /
@@ -237,7 +237,7 @@ as
       context_id                        in acs_objects.context_id%TYPE default null
    ) return notification_requests.request_id%TYPE;
 
-   procedure delete (
+   procedure del (
       request_id                        in notification_requests.request_id%TYPE default null
    );
 
@@ -284,7 +284,7 @@ as
       return v_request_id;                          
    end new;
 
-   procedure delete (
+   procedure del (
       request_id                        in notification_requests.request_id%TYPE default null
    )
    is
@@ -294,10 +294,10 @@ as
                              where n.response_id = nr.object_id
                                and nr.request_id = request_id)
      loop
-      acs_object.delete(v_notifications.notification_id);
+      acs_object.del(v_notifications.notification_id);
      end loop;
-     acs_object.delete(request_id);
-   end delete;
+     acs_object.del(request_id);
+   end del;
 
    procedure delete_all (
       object_id                        in notification_requests.object_id%TYPE default null
@@ -308,7 +308,7 @@ as
       for v_request in
       (select request_id from notification_requests where object_id= delete_all.object_id)
       LOOP    
-              notification_request.delete(v_request.request_id);
+              notification_request.del(v_request.request_id);
       END LOOP;
    end delete_all;
 
@@ -340,7 +340,7 @@ as
       context_id                        in acs_objects.context_id%TYPE default null
    ) return notifications.notification_id%TYPE;
 
-   procedure delete (
+   procedure del (
       notification_id                   in notifications.notification_id%TYPE default null
    );
 
@@ -388,15 +388,15 @@ as
       return v_notification_id;
    end new;
 
-   procedure delete (
+   procedure del (
       notification_id                   in notifications.notification_id%TYPE default null
    )
    is
    begin
-      delete from notifications where notification_id = notification.delete.notification_id;
+      delete from notifications where notification_id = notification.del.notification_id;
 
-      acs_object.delete (notification_id);
-   end delete;
+      acs_object.del (notification_id);
+   end del;
 
 end notification;
 /

@@ -16,7 +16,7 @@ as
        contract_id	in acs_sc_contracts.contract_id%TYPE
    ) return acs_sc_contracts.contract_name%TYPE;
 
-   procedure delete (
+   procedure del (
        contract_name	in acs_sc_contracts.contract_name%TYPE default null,
        contract_id	in acs_sc_contracts.contract_id%TYPE default null
    );
@@ -43,7 +43,7 @@ as
    ) return acs_sc_operations.operation_id%TYPE;
 
 
-   procedure delete (
+   procedure del (
        operation_id		acs_sc_operations.operation_id%TYPE default null,
        operation_name		acs_sc_operations.operation_name%TYPE default null,
        contract_name		acs_sc_contracts.contract_name%TYPE default null
@@ -72,7 +72,7 @@ as
        impl_id			acs_sc_impls.impl_id%TYPE
    ) return acs_sc_impls.impl_name%TYPE;
 
-   procedure delete (
+   procedure del (
        impl_contract_name	acs_sc_impls.impl_contract_name%TYPE,
        impl_name		acs_sc_impls.impl_name%TYPE
    );
@@ -108,7 +108,7 @@ as
        impl_pl			acs_sc_impl_aliases.impl_pl%TYPE
    ) return acs_sc_impl_aliases.impl_id%TYPE;
 
-   function delete (
+   function del (
        impl_contract_name	acs_sc_contracts.contract_name%TYPE,
        impl_name		acs_sc_impls.impl_name%TYPE,
        impl_operation_name	acs_sc_operations.operation_name%TYPE
@@ -127,7 +127,7 @@ as
        impl_name	acs_sc_impls.impl_name%TYPE default null
    );
 
-   procedure delete(
+   procedure del (
        contract_id	acs_sc_contracts.contract_id%TYPE default null,
        contract_name	acs_sc_contracts.contract_name%TYPE default null,
        impl_id		acs_sc_impls.impl_id%TYPE default null,
@@ -198,7 +198,7 @@ as
 
    end get_name;
 
-   procedure delete (
+   procedure del (
        contract_name	in acs_sc_contracts.contract_name%TYPE default null,
        contract_id	in acs_sc_contracts.contract_id%TYPE default null
    )
@@ -221,9 +221,9 @@ as
 
        delete from acs_sc_contracts
               where contract_id = v_contract_id;
-       acs_object.delete(v_contract_id);
+       acs_object.del(v_contract_id);
 
-   end delete;
+   end del;
 
 end acs_sc_contract;
 /
@@ -297,7 +297,7 @@ as
    end get_id;
 
 
-   procedure delete (
+   procedure del (
        operation_id		acs_sc_operations.operation_id%TYPE default null,
        operation_name		acs_sc_operations.operation_name%TYPE default null,
        contract_name		acs_sc_contracts.contract_name%TYPE default null
@@ -321,7 +321,7 @@ as
        delete from acs_sc_operations
 	   where operation_id = v_operation_id;
 
-   end delete;
+   end del;
 
    	   	
 end acs_sc_operation;
@@ -393,16 +393,16 @@ as
 
    end get_name;
 
-   procedure delete (
+   procedure del (
        impl_contract_name	acs_sc_impls.impl_contract_name%TYPE,
        impl_name		acs_sc_impls.impl_name%TYPE
    )
    as
    begin
        delete from acs_sc_impls
-       where impl_contract_name = acs_sc_impl.delete.impl_contract_name
-       and impl_name = acs_sc_impl.delete.impl_name;   	
-   end delete;
+       where impl_contract_name = acs_sc_impl.del.impl_contract_name
+       and impl_name = acs_sc_impl.del.impl_name;   	
+   end del;
 
 
    /* next 2 functions are deprecated. */
@@ -443,7 +443,7 @@ as
 	-- FUNCTION DEPRECATED. USE acs_sc_impl_alias.delete
 	dbms_output.put_line('acs_sc_impl.delete_alias DEPRECATED. Use acs_sc_impl_alias.delete');
 
-	v_impl_id := acs_sc_impl_alias.delete(
+	v_impl_id := acs_sc_impl_alias.del(
 		impl_contract_name,
 		impl_name,
 		impl_operation_name
@@ -493,7 +493,7 @@ as
 
    end new;
 
-   function delete (
+   function del (
        impl_contract_name	acs_sc_contracts.contract_name%TYPE,
        impl_name			acs_sc_impls.impl_name%TYPE,
        impl_operation_name	acs_sc_operations.operation_name%TYPE
@@ -504,13 +504,13 @@ as
        v_impl_id := acs_sc_impl.get_id(impl_contract_name,impl_name);
 
        delete from acs_sc_impl_aliases
-       where impl_contract_name = acs_sc_impl_alias.delete.impl_contract_name
-       and impl_name = acs_sc_impl_alias.delete.impl_name
-       and impl_operation_name = acs_sc_impl_alias.delete.impl_operation_name;
+       where impl_contract_name = acs_sc_impl_alias.del.impl_contract_name
+       and impl_name = acs_sc_impl_alias.del.impl_name
+       and impl_operation_name = acs_sc_impl_alias.del.impl_operation_name;
 
        return v_impl_id;
 
-   end delete;
+   end del;
 
 end acs_sc_impl_alias;
 /
@@ -580,7 +580,7 @@ as
 
    end new;
 
-   procedure delete(
+   procedure del (
        contract_id	acs_sc_contracts.contract_id%TYPE default null,
        contract_name	acs_sc_contracts.contract_name%TYPE default null,
        impl_id		acs_sc_impls.impl_id%TYPE default null,
@@ -607,7 +607,7 @@ as
        delete from acs_sc_bindings
            where  contract_id = v_contract_id
 	   and impl_id = v_impl_id;
-   end delete;
+   end del;
 
    function exists_p (
        contract_name        acs_sc_contracts.contract_name%TYPE,

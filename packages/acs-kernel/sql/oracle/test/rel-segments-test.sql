@@ -218,38 +218,38 @@ begin
 
 
   -- Remove the test segments.
-  acs_rel_segment.delete(seg_G_blahs);
-  acs_rel_segment.delete(seg_E_yippes);
-  acs_rel_segment.delete(acs_rel_segment.get(F,'membership_rel'));
+  acs_rel_segment.del(seg_G_blahs);
+  acs_rel_segment.del(seg_E_yippes);
+  acs_rel_segment.del(acs_rel_segment.get(F,'membership_rel'));
 
   -- Remove the test memebership relations
   for r in (select * from blah_member_rels) loop
-    blah_member_rel.delete(r.rel_id);
+    blah_member_rel.del(r.rel_id);
   end loop;
 
   for r in (select * from yippe_member_rels) loop
-    yippe_member_rel.delete(r.rel_id);
+    yippe_member_rel.del(r.rel_id);
   end loop;
 
 
   -- Remove the test groups.
-  acs_group.delete(G);
-  acs_group.delete(F);
-  acs_group.delete(E);
-  acs_group.delete(D);
-  acs_group.delete(C);
-  acs_group.delete(B);
-  acs_group.delete(A);
+  acs_group.del(G);
+  acs_group.del(F);
+  acs_group.del(E);
+  acs_group.del(D);
+  acs_group.del(C);
+  acs_group.del(B);
+  acs_group.del(A);
 
   -- Remove the test members.
-  acs_user.delete(joe);
-  acs_user.delete(jane);
-  acs_user.delete(bob);
-  acs_user.delete(betty);
-  acs_user.delete(jack);
-  acs_user.delete(jill);
-  acs_user.delete(sven);
-  acs_user.delete(stacy);
+  acs_user.del(joe);
+  acs_user.del(jane);
+  acs_user.del(bob);
+  acs_user.del(betty);
+  acs_user.del(jack);
+  acs_user.del(jill);
+  acs_user.del(sven);
+  acs_user.del(stacy);
 end;
 /
 show errors

@@ -37,7 +37,7 @@
       <querytext>
 
           begin
-            content_extlink.delete (
+            content_extlink.del (
               extlink_id => :extlink_id
             );
           end;

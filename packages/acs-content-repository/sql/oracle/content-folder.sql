@@ -84,7 +84,7 @@ begin
 end new;
 
 
-procedure delete (
+procedure del (
   folder_id	in cr_folders.folder_id%TYPE
 ) is
 
@@ -104,17 +104,17 @@ begin
   end if;  
 
   content_folder.unregister_content_type(
-      folder_id	       => content_folder.delete.folder_id,
+      folder_id	       => content_folder.del.folder_id,
       content_type     => 'content_revision',
       include_subtypes => 't' );
 
   delete from cr_folder_type_map
-    where folder_id = content_folder.delete.folder_id;
+    where folder_id = content_folder.del.folder_id;
 
   select parent_id into v_parent_id from cr_items 
-    where item_id = content_folder.delete.folder_id;
+    where item_id = content_folder.del.folder_id;
 
-  content_item.delete(folder_id);
+  content_item.del(folder_id);
 
   -- check if any folders are left in the parent
   update cr_folders set has_child_folders = 'f' 
@@ -122,7 +122,7 @@ begin
       select 1 from cr_items 
         where parent_id = v_parent_id and content_type = 'content_folder');
 
-end delete;
+end del;
 
 -- renames a folder, making sure the new name is not already in use
 procedure rename (
@@ -141,15 +141,15 @@ begin
   if label is not null and description is not null then 
 
     update cr_folders
-      set label = rename.label,
-      description = rename.description
-      where folder_id = rename.folder_id;
+      set label = label,
+      description = description
+      where folder_id = folder_id;
 
   elsif label is not null and description is null then 
 
     update cr_folders
-      set label = rename.label
-      where folder_id = rename.folder_id;
+      set label = label
+      where folder_id = folder_id;
 
   end if;
 

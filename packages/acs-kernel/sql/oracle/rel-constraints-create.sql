@@ -96,8 +96,12 @@ comment on column rel_constraints.required_rel_segment is '
 -- where the relation's container_id (i.e., object_id_one) is not in the 
 -- relational segment required_rel_segment.
 
-create or replace view rel_constraints_violated_one as
-select constrained_rels.*
+create or replace view rel_constraints_violated_one as 
+select constrained_rels.constraint_id, constrained_rels.constraint_name,
+   constrained_rels.rel_id, constrained_rels.container_id,
+   constrained_rels.party_id, constrained_rels.rel_type, 
+   constrained_rels.rel_segment,constrained_rels.rel_side, 
+   constrained_rels.required_rel_segment
 from (select rel_constraints.constraint_id, rel_constraints.constraint_name, 
              r.rel_id, r.container_id, r.party_id, r.rel_type, 
              rel_constraints.rel_segment,
@@ -109,9 +113,8 @@ from (select rel_constraints.constraint_id, rel_constraints.constraint_name,
      ) constrained_rels,
      rel_segment_party_map rspm
 where rspm.segment_id(+) = constrained_rels.required_rel_segment
-  and rspm.party_id(+) = constrained_rels.container_id
+  and constrained_rels.container_id is null
   and rspm.party_id is null;
-
 
 -- View rel_constraints_violated_two
 --
@@ -123,7 +126,11 @@ where rspm.segment_id(+) = constrained_rels.required_rel_segment
 -- relational segment required_rel_segment.
 
 create or replace view rel_constraints_violated_two as
-select constrained_rels.*
+select constrained_rels.constraint_id, constrained_rels.constraint_name,
+   constrained_rels.rel_id, constrained_rels.container_id,
+   constrained_rels.party_id, constrained_rels.rel_type, 
+   constrained_rels.rel_segment,constrained_rels.rel_side, 
+   constrained_rels.required_rel_segment
 from (select rel_constraints.constraint_id, rel_constraints.constraint_name, 
              r.rel_id, r.container_id, r.party_id, r.rel_type, 
              rel_constraints.rel_segment,
@@ -135,7 +142,7 @@ from (select rel_constraints.constraint_id, rel_constraints.constraint_name,
      ) constrained_rels,
      rel_segment_party_map rspm
 where rspm.segment_id(+) = constrained_rels.required_rel_segment
-  and rspm.party_id(+) = constrained_rels.party_id
+  and constrained_rels.party_id is null
   and rspm.party_id is null;
 
 
@@ -439,7 +446,7 @@ as
     creation_ip		in acs_objects.creation_ip%TYPE default null
   ) return rel_constraints.constraint_id%TYPE;
 
-  procedure delete (
+  procedure del (
     constraint_id	in rel_constraints.constraint_id%TYPE
   );
 

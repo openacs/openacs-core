@@ -25,9 +25,9 @@ begin
 
  dbms_output.put_line('Calling acs_object.name() to get the name of user 1: ' || acs_object.name(1));
 
- dbms_output.put_line('Calling acs_user.delete() to delete user 1');
+ dbms_output.put_line('Calling acs_user.del() to delete user 1');
 
- acs_user.delete(1);
+ acs_user.del(1);
 end;
 /
 show errors

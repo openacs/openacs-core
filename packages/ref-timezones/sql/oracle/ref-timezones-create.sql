@@ -96,7 +96,7 @@ as
         gmt_offset in timezones.gmt_offset%type
     );
 
-    procedure delete (
+    procedure del (
 	 tz_id	   in timezones.tz_id%TYPE
     );
 
@@ -199,7 +199,7 @@ as
 	      (timezone_seq.nextval, tz, gmt_offset);
     end;
 	 
-    procedure delete (
+    procedure del (
 	 tz_id	   in timezones.tz_id%TYPE
     )
     is

@@ -50,7 +50,7 @@ as
 	msg_type_spec	 in varchar2
      ) return acs_sc_msg_types.msg_type_id%TYPE;
 
-    procedure delete (
+    procedure del (
         msg_type_id	 in acs_sc_msg_types.msg_type_id%TYPE default null,
 	msg_type_name	 in acs_sc_msg_types.msg_type_name%TYPE default null
     );
@@ -114,7 +114,7 @@ as
 
      end new;
 
-     procedure delete (
+     procedure del (
          msg_type_id	 in acs_sc_msg_types.msg_type_id%TYPE default null,
 	 msg_type_name	 in acs_sc_msg_types.msg_type_name%TYPE default null
      )
@@ -138,7 +138,7 @@ as
 	delete from acs_sc_msg_types 
 	       where msg_type_id = v_msg_type_id;
 
-     end delete;
+     end del;
 
     function get_id (
         msg_type_name in acs_sc_msg_types.msg_type_name%TYPE

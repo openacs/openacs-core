@@ -66,12 +66,12 @@ ad_proc -public rel_segments_delete {
 	 where c.required_rel_segment = :segment_id
     } {
 	db_exec_plsql constraint_delete {
-	    begin rel_constraint.delete(:constraint_id); end;
+	    begin rel_constraint.del(:constraint_id); end;
 	}
     }
 
     db_exec_plsql rel_segment_delete {
-	begin rel_segment.delete(:segment_id); end;
+	begin rel_segment.del(:segment_id); end;
     }
     
 }

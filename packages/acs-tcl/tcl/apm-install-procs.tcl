@@ -716,7 +716,7 @@ ad_proc -private apm_package_version_delete {
 } {
     db_exec_plsql apm_version_delete {
 	begin
-	 apm_package_version.delete(version_id => :version_id);	 
+	 apm_package_version.del(version_id => :version_id);	 
 	end;
     }
 }

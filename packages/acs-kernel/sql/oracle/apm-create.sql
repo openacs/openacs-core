@@ -1024,7 +1024,7 @@ function new (
 			default null
   ) return apm_packages.package_id%TYPE;
 
-  procedure delete (
+  procedure del (
    package_id		in apm_packages.package_id%TYPE
   );
 
@@ -1078,7 +1078,7 @@ as
 				        default 'f'
   ) return apm_package_versions.version_id%TYPE;
 
-  procedure delete (
+  procedure del (
       version_id		in apm_packages.package_id%TYPE
   );
 
@@ -1235,7 +1235,7 @@ as
     attr_value			in apm_parameter_values.attr_value%TYPE
   ) return apm_parameter_values.value_id%TYPE;
 
-  procedure delete (
+  procedure del (
     value_id			in apm_parameter_values.value_id%TYPE default null
   );
  end apm_parameter_value;
@@ -1258,7 +1258,7 @@ function new (
     context_id		in acs_objects.context_id%TYPE default null
   ) return acs_objects.object_id%TYPE;
 
-  procedure delete (
+  procedure del (
     application_id		in acs_objects.object_id%TYPE
   );
 
@@ -1282,7 +1282,7 @@ as
     context_id		in acs_objects.context_id%TYPE default null
   ) return acs_objects.object_id%TYPE;
 
-  procedure delete (
+  procedure del (
     service_id		in acs_objects.object_id%TYPE
   );
 
@@ -1574,7 +1574,7 @@ as
     where parameter_id = unregister_parameter.parameter_id;
     delete from apm_parameters 
     where parameter_id = unregister_parameter.parameter_id;
-    acs_object.delete(parameter_id);
+    acs_object.del(parameter_id);
   end unregister_parameter;
 
   function id_for_name (
@@ -1781,33 +1781,33 @@ as
   end if;
 end new;
   
-  procedure delete (
+  procedure del (
    package_id		in apm_packages.package_id%TYPE
   )
   is
     cursor all_values is
     	select value_id from apm_parameter_values
-	where package_id = apm_package.delete.package_id;
+	where package_id = apm_package.del.package_id;
     cursor all_site_nodes is
     	select node_id from site_nodes
-	where object_id = apm_package.delete.package_id;
+	where object_id = apm_package.del.package_id;
   begin
     -- Delete all parameters.
     for cur_val in all_values loop
-    	apm_parameter_value.delete(value_id => cur_val.value_id);
+    	apm_parameter_value.del(value_id => cur_val.value_id);
     end loop;    
-    delete from apm_applications where application_id = apm_package.delete.package_id;
-    delete from apm_services where service_id = apm_package.delete.package_id;
-    delete from apm_packages where package_id = apm_package.delete.package_id;
+    delete from apm_applications where application_id = apm_package.del.package_id;
+    delete from apm_services where service_id = apm_package.del.package_id;
+    delete from apm_packages where package_id = apm_package.del.package_id;
     -- Delete the site nodes for the objects.
     for cur_val in all_site_nodes loop
-    	site_node.delete(cur_val.node_id);
+    	site_node.del(cur_val.node_id);
     end loop;
     -- Delete the object.
-    acs_object.delete (
+    acs_object.del (
 	object_id => package_id
     );
-   end delete;
+   end del;
 
     function initial_install_p (
 	package_key		in apm_packages.package_key%TYPE
@@ -1964,23 +1964,23 @@ as
       return v_version_id;		
     end new;
 
-    procedure delete (
+    procedure del (
       version_id		in apm_packages.package_id%TYPE
     )
     is
     begin
       delete from apm_package_owners 
-      where version_id = apm_package_version.delete.version_id; 
+      where version_id = apm_package_version.del.version_id; 
 
       delete from apm_package_dependencies
-      where version_id = apm_package_version.delete.version_id;
+      where version_id = apm_package_version.del.version_id;
 
       delete from apm_package_versions 
-	where version_id = apm_package_version.delete.version_id;
+	where version_id = apm_package_version.del.version_id;
 
-      acs_object.delete(apm_package_version.delete.version_id);
+      acs_object.del(apm_package_version.del.version_id);
 
-    end delete;
+    end del;
 
     procedure enable (
        version_id			in apm_package_versions.version_id%TYPE
@@ -2429,7 +2429,7 @@ as
     if cascade_p = 't' then
         for cur_val in all_package_ids
         loop
-            apm_package.delete(
+            apm_package.del(
 	        package_id => cur_val.package_id
 	    );
         end loop;
@@ -2442,7 +2442,7 @@ as
         -- Unregister all versions
 	for cur_val in all_versions
 	loop
-	    apm_package_version.delete(version_id => cur_val.version_id);
+	    apm_package_version.del(version_id => cur_val.version_id);
         end loop;
     end if;
     delete from apm_package_types
@@ -2491,15 +2491,15 @@ as
    return v_value_id;
   end new;
 
-  procedure delete (
+  procedure del (
     value_id			in apm_parameter_values.value_id%TYPE default null
   )
   is
   begin
     delete from apm_parameter_values 
-    where value_id = apm_parameter_value.delete.value_id;
-    acs_object.delete(value_id);
-  end delete;
+    where value_id = apm_parameter_value.del.value_id;
+    acs_object.del(value_id);
+  end del;
 
  end apm_parameter_value;
 /
@@ -2536,16 +2536,16 @@ as
     return v_application_id;
   end new;
 
-  procedure delete (
+  procedure del (
     application_id		in acs_objects.object_id%TYPE
   )
   is
   begin
     delete from apm_applications
-    where application_id = apm_application.delete.application_id;
-    apm_package.delete(
+    where application_id = apm_application.del.application_id;
+    apm_package.del(
         package_id => application_id);
-  end delete;
+  end del;
 
 end;
 /
@@ -2581,17 +2581,17 @@ as
     return v_service_id;
   end new;
 
-  procedure delete (
+  procedure del (
     service_id		in acs_objects.object_id%TYPE
   )
   is
   begin
     delete from apm_services
-    where service_id = apm_service.delete.service_id;
-    apm_package.delete(
+    where service_id = apm_service.del.service_id;
+    apm_package.del(
 	package_id => service_id
     );
-  end delete;
+  end del;
 
 end;
 /

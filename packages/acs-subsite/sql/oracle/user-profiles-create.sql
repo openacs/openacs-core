@@ -64,7 +64,7 @@ as
     creation_ip         in acs_objects.creation_ip%TYPE default null
   ) return user_profiles.profile_id%TYPE;
 
-  procedure delete (
+  procedure del (
     profile_id      in user_profiles.profile_id%TYPE
   );
 
@@ -104,13 +104,13 @@ as
     return v_profile_id;
   end new;
 
-  procedure delete (
+  procedure del (
     profile_id      in user_profiles.profile_id%TYPE
   )
   is
   begin
 
-    membership_rel.delete(profile_id);
+    membership_rel.del(profile_id);
 
   end delete;
 

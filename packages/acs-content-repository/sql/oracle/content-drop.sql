@@ -38,7 +38,7 @@ begin
     include_subtypes	=> 't'
   );
 
-  content_folder.delete(v_id);
+  content_folder.del(v_id);
     
 
   -- the root folder for content items	
@@ -62,7 +62,7 @@ begin
     include_subtypes	=> 't'
   );	 
 
-  content_folder.delete (v_id);
+  content_folder.del (v_id);
 
 end;
 /

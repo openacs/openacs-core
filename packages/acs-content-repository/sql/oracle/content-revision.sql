@@ -222,7 +222,7 @@ begin
   return v_copy_id;
 end copy;
 
-procedure delete (
+procedure del (
   revision_id	in cr_revisions.revision_id%TYPE
 ) is
   v_item_id         cr_items.item_id%TYPE;
@@ -233,7 +233,7 @@ begin
 
   -- Get item id and latest/live revisions
   select item_id into v_item_id from cr_revisions 
-    where revision_id = content_revision.delete.revision_id;
+    where revision_id = content_revision.del.revision_id;
 
   select 
     latest_revision, live_revision
@@ -245,13 +245,13 @@ begin
     item_id = v_item_id;
 
   -- Recalculate latest revision
-  if v_latest_revision = content_revision.delete.revision_id then
+  if v_latest_revision = content_revision.del.revision_id then
     declare
       cursor c_revision_cur is
         select r.revision_id from cr_revisions r, acs_objects o
          where o.object_id = r.revision_id
            and r.item_id = v_item_id
-           and r.revision_id <> content_revision.delete.revision_id
+           and r.revision_id <> content_revision.del.revision_id
         order by o.creation_date desc;
     begin
       open c_revision_cur;
@@ -267,20 +267,20 @@ begin
   end if; 
  
   -- Clear live revision
-  if v_live_revision = content_revision.delete.revision_id then
+  if v_live_revision = content_revision.del.revision_id then
     update cr_items set live_revision = null
       where item_id = v_item_id;   
   end if; 
 
   -- Clear the audit
   delete from cr_item_publish_audit
-    where old_revision = content_revision.delete.revision_id
-       or new_revision = content_revision.delete.revision_id;
+    where old_revision = content_revision.del.revision_id
+       or new_revision = content_revision.del.revision_id;
 
   -- Delete the revision
-  acs_object.delete(revision_id);
+  acs_object.del(revision_id);
 
-end delete;
+end del;
 
 function get_number (
   revision_id   in cr_revisions.revision_id%TYPE

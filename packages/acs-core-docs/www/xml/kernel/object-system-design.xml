@@ -1066,7 +1066,7 @@ so developers who need to do this will probably have to be fairly familiar
 with the data model at a lower level.</para>
 
 <para>The function <computeroutput>acs_object.new()</computeroutput> makes a new object for you. The
-function <computeroutput>acs_object.delete()</computeroutput> deletes an object. As before, this
+function <computeroutput>acs_object.del()</computeroutput> deletes an object. As before, this
 is an abbreviated interface with all the long type specs removed. See the
 data model or developer&#39;s guide for the full interface.</para>
 
@@ -1443,7 +1443,7 @@ group:</para>
     delete from membership_rels
     where rel_id = membership_rel.delete.rel_id;
 
-    acs_rel.delete(rel_id);
+    acs_rel.del(rel_id);
   end;
 </computeroutput>
 

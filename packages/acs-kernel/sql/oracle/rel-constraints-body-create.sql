@@ -48,12 +48,12 @@ as
      return v_constraint_id;
   end;
 
-  procedure delete (
+  procedure del (
     constraint_id	in rel_constraints.constraint_id%TYPE
   )
   is
   begin
-    acs_object.delete(constraint_id);
+    acs_object.del(constraint_id);
   end;
 
   function get_constraint_id (
@@ -73,7 +73,6 @@ as
     return v_constraint_id;
 
   end;  
-
 
   function violation (
     rel_id	in acs_rels.rel_id%TYPE
@@ -115,6 +114,7 @@ as
     return v_error;
 
   end violation;
+
 
   function violation_if_removed (
     rel_id	in acs_rels.rel_id%TYPE

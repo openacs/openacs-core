@@ -45,7 +45,7 @@ if { [string eq $operation "Yes, I really want to delete this constraint"] } {
     }
     
     db_exec_plsql delete_constraint {
-	begin rel_constraint.delete(constraint_id => :constraint_id); end;
+	begin rel_constraint.del(constraint_id => :constraint_id); end;
     }
     db_release_unused_handles
 

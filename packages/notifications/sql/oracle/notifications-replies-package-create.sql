@@ -27,7 +27,7 @@ as
       context_id                        in acs_objects.context_id%TYPE default null
    ) return notification_replies.reply_id%TYPE;
 
-   procedure delete (
+   procedure del (
       reply_id                          in notification_replies.reply_id%TYPE
    );
 end notification_reply;
@@ -70,13 +70,13 @@ as
         return v_reply_id;
    end new;
 
-   procedure delete (
+   procedure del (
       reply_id                          in notification_replies.reply_id%TYPE
    )
    is
    begin
-      acs_object.delete(object_id => reply_id);
-   end delete;
+      acs_object.del(object_id => reply_id);
+   end del;
 
 end notification_reply;
 /

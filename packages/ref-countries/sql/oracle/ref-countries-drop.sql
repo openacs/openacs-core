@@ -27,7 +27,7 @@ begin
 	 if rec.package_name is not null then
 	     execute immediate 'drop package ' || rec.package_name;
          end if;
-         acs_reference.delete(rec.repository_id);
+         acs_reference.del(rec.repository_id);
     end loop;
 end;
 /
