@@ -26,7 +26,7 @@ ad_form -name subsite -cancel_url . -form {
         {help_text "The name of the new community you're setting up."}
         {html {size 30}}
     }
-    {folder:text,optional
+    {folder:url_element(text),optional
         {label "URL folder name"}
         {help_text "This should be a short string, all lowercase, with hyphens instead of spaces, whicn will be used in the URL of the new application. If you leave this blank, we will generate one for you from name of the application."}
         {html {size 30}}
