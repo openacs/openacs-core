@@ -18,6 +18,109 @@
 	a fully effective instance.
   </para>
 
+    <table id="compatibility-matrix">
+      <title>Version Compatibility Matrix</title>
+      <tgroup cols="9">
+        <colspec colname="c1"/>
+        <colspec colname="c2"/>
+        <colspec colname="3.2.5"/>
+        <colspec colname="4.5"/>
+        <colspec colname="4.6"/>
+        <colspec colname="4.6.1"/>
+        <colspec colname="4.6.2"/>
+        <colspec colname="4.6.3"/>
+        <colspec colname="5.0.0"/>
+        <thead>
+          <row>
+            <entry align="center" namest="c1" nameend="c2">OpenACS Version</entry>
+            <entry colname="3.2.5">3.2.5</entry>
+            <entry colname="4.5"> 4.5 </entry>
+            <entry colname="4.6"> 4.6 </entry>
+            <entry colname="4.6.1">4.6.1</entry>
+            <entry colname="4.6.2">4.6.2</entry>
+            <entry colname="4.6.3">4.6.3</entry>
+            <entry colname="5.0.0">5.0.0</entry>
+          </row>
+        </thead>
+        <tbody>
+          <row>
+            <entry morerows="6">AOLserver</entry>
+            <entry>3</entry>
+            <entry namest="3.2.5" nameend="3.2.5" align="center" ><?dbhtml bgcolor="lightgreen" ?><?dbfo bgcolor="lightgreen" ?>Yes</entry>
+            <entry namest="4.5" nameend="5.0.0" align="center"><?dbhtml bgcolor="red" ?><?dbfo bgcolor="red" ?>No</entry>
+          </row>
+          <row>
+            <entry>3.3+ad13</entry>
+            <entry namest="3.2.5" nameend="3.2.5" align="center"><?dbhtml bgcolor="yellow" ?><?dbfo bgcolor="yellow" ?>Maybe</entry>
+            <entry namest="4.5" nameend="5.0.0" align="center"><?dbhtml bgcolor="lightgreen" ?><?dbfo bgcolor="lightgreen" ?>Yes</entry>
+          </row>
+          <row>
+            <entry>3.3oacs1</entry>
+            <entry namest="3.2.5" nameend="3.2.5" align="center"><?dbhtml bgcolor="yellow" ?><?dbfo bgcolor="yellow" ?>Maybe</entry>
+            <entry namest="4.5" nameend="5.0.0" align="center"><?dbhtml bgcolor="lightgreen" ?><?dbfo bgcolor="lightgreen" ?>Yes</entry>
+          </row>
+          <row>
+            <entry>3.4.2</entry>
+            <entry namest="3.2.5" nameend="5.0.0" align="center"><?dbhtml bgcolor="red" ?><?dbfo bgcolor="red" ?>No</entry>
+          </row>
+          <row>
+            <entry>3.4.2oacs1</entry>
+            <entry namest="3.2.5" nameend="4.6.1" align="center"><?dbhtml bgcolor="yellow" ?><?dbfo bgcolor="yellow" ?>Maybe</entry>
+            <entry namest="4.6.2" nameend="4.6.3" align="center"><?dbhtml bgcolor="lightgreen" ?><?dbfo bgcolor="lightgreen" ?>Yes</entry>
+            <entry namest="5.0.0" nameend="5.0.0" align="center"><?dbhtml bgcolor="yellow" ?><?dbfo bgcolor="yellow" ?>Maybe</entry>
+          </row>
+          <row>
+            <entry>3.5.5</entry>
+            <entry namest="3.2.5" nameend="4.6.1" align="center"><?dbhtml bgcolor="yellow" ?><?dbfo bgcolor="yellow" ?>Maybe</entry>
+            <entry namest="4.6.2" nameend="4.6.3" align="center"><?dbhtml bgcolor="lightgreen" ?><?dbfo bgcolor="lightgreen" ?>Yes</entry>
+            <entry namest="5.0.0" nameend="5.0.0" align="center"><?dbhtml bgcolor="red" ?><?dbfo bgcolor="red" ?>No</entry>
+          </row>
+          <row>
+            <entry>4.0</entry>
+            <entry namest="3.2.5" nameend="4.6.1" align="center"><?dbhtml bgcolor="yellow" ?><?dbfo bgcolor="yellow" ?>Maybe</entry>
+            <entry namest="4.6.2" nameend="5.0.0" align="center"><?dbhtml bgcolor="lightgreen" ?><?dbfo bgcolor="lightgreen" ?>Yes</entry>
+          </row>
+          <row>
+            <entry morerows="3">PostgreSQL</entry>
+            <entry>7.0</entry>
+            <entry namest="3.2.5" nameend="3.2.5" align="center"><?dbhtml bgcolor="lightgreen" ?><?dbfo bgcolor="lightgreen" ?>Yes</entry>
+            <entry namest="4.5" nameend="5.0.0" align="center"><?dbhtml bgcolor="red" ?><?dbfo bgcolor="red" ?>No</entry>
+          </row>
+          <row>
+            <entry>7.2.x</entry>
+            <entry namest="4.5" nameend="4.6.3" align="center"><?dbhtml bgcolor="lightgreen" ?><?dbfo bgcolor="lightgreen" ?>Yes</entry>
+            <entry namest="5.0.0" nameend="5.0.0" align="center"><?dbhtml bgcolor="red" ?><?dbfo bgcolor="red" ?>No</entry>
+          </row>
+          <row>
+            <entry>7.3.2 - 7.3.4</entry>
+            <entry namest="3.2.5" nameend="4.6.2" align="center"><?dbhtml bgcolor="red" ?><?dbfo bgcolor="red" ?>No</entry>
+            <entry namest="4.6.3" nameend="5.0.0" align="center"><?dbhtml bgcolor="lightgreen" ?><?dbfo bgcolor="lightgreen" ?>Yes</entry>
+          </row>
+          <row>
+            <entry>7.4</entry>
+            <entry namest="3.2.5" nameend="4.6.3" align="center"><?dbhtml bgcolor="red" ?><?dbfo bgcolor="red" ?>No</entry>
+            <entry namest="5.0.0" nameend="5.0.0" align="center"><?dbhtml bgcolor="yellow" ?><?dbfo bgcolor="yellow" ?>Maybe</entry>
+          </row>
+          <row>
+            <entry morerows="2">Oracle</entry>
+            <entry>8.1.6</entry>
+            <entry namest="3.2.5" nameend="3.2.5" align="center"><?dbhtml bgcolor="yellow" ?><?dbfo bgcolor="yellow" ?>Maybe</entry>
+            <entry namest="4.5" nameend="5.0.0" align="center"><?dbhtml bgcolor="lightgreen" ?><?dbfo bgcolor="lightgreen" ?>Yes</entry>
+          </row>
+          <row>
+            <entry>8.1.7</entry>
+            <entry namest="3.2.5" nameend="3.2.5" align="center"><?dbhtml bgcolor="yellow" ?><?dbfo bgcolor="yellow" ?>Maybe</entry>
+            <entry namest="4.5" nameend="5.0.0" align="center"><?dbhtml bgcolor="lightgreen" ?><?dbfo bgcolor="lightgreen" ?>Yes</entry>
+          </row>
+          <row>
+            <entry>9i</entry>
+            <entry namest="3.2.5" nameend="4.6.3" align="center"><?dbhtml bgcolor="red" ?><?dbfo bgcolor="red" ?>No</entry>
+            <entry namest="5.0.0" nameend="5.0.0" align="center"><?dbhtml bgcolor="lightgreen" ?><?dbfo bgcolor="lightgreen" ?>Yes</entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table>
+
       <itemizedlist>
         <listitem id="openacs-download"><formalpara><title><ulink
             url="http://openacs.org/projects/openacs/download/">OpenACS &version;</ulink></title>
