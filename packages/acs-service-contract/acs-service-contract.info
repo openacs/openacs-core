@@ -7,7 +7,7 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>t</singleton-p>
     
-    <version name="5.1.4" url="http://openacs.org/repository/download/apm/acs-service-contract-5.1.4.apm">
+    <version name="5.1.5d2" url="http://openacs.org/repository/download/apm/acs-service-contract-5.1.5d2.apm">
         <owner url="http://openacs.org">OpenACS</owner>
         <summary>API and UI for service contracts</summary>
         <release-date>2005-01-09</release-date>
@@ -17,7 +17,7 @@
         Examples are the contracts used for search which provide a means to get content on a given object and to translate an object_id to a 
         url or the contracts used by dotlrn and new-portals to allow packages to provide portalized panes.</description>
 
-        <provides url="acs-service-contract" version="5.1.4"/>
+        <provides url="acs-service-contract" version="5.1.5d2"/>
         <requires url="acs-kernel" version="5.0.0"/>
 
         <callbacks>
