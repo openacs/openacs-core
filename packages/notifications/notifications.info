@@ -20,6 +20,9 @@
 
         <files>
             <file type="package_spec" path="notifications.info"/>
+            <file type="data_model" db_type="oracle" path="sql/oracle/delivery-method-sc-create.sql"/>
+            <file type="data_model" db_type="oracle" path="sql/oracle/email-sc-impl-create.sql"/>
+            <file type="data_model" db_type="oracle" path="sql/oracle/notification-type-sc-create.sql"/>
             <file type="data_model" db_type="oracle" path="sql/oracle/notifications-core-create.sql"/>
             <file type="data_model" db_type="oracle" path="sql/oracle/notifications-core-drop.sql"/>
             <file type="data_model_create" db_type="oracle" path="sql/oracle/notifications-create.sql"/>
@@ -36,8 +39,10 @@
             <file type="data_model" db_type="postgresql" path="sql/postgresql/notifications-package-create.sql"/>
             <file type="data_model" db_type="postgresql" path="sql/postgresql/notifications-package-drop.sql"/>
             <file type="tcl_procs" path="tcl/delivery-method-procs.tcl"/>
+            <file type="query_file" path="tcl/delivery-method-procs.xql"/>
             <file type="tcl_procs" path="tcl/interval-procs.tcl"/>
             <file type="tcl_procs" path="tcl/notification-display-procs.tcl"/>
+            <file type="tcl_procs" path="tcl/notification-email-procs.tcl"/>
             <file type="query_file" db_type="oracle" path="tcl/notification-procs-oracle.xql"/>
             <file type="query_file" db_type="postgresql" path="tcl/notification-procs-postgresql.xql"/>
             <file type="tcl_procs" path="tcl/notification-procs.tcl"/>
@@ -52,7 +57,9 @@
             <file type="tcl_procs" path="tcl/notification-type-procs.tcl"/>
             <file type="query_file" path="tcl/notification-type-procs.xql"/>
             <file type="tcl_procs" path="tcl/notifications-security-procs.tcl"/>
+            <file type="tcl_init" path="tcl/reply-sweep-init.tcl"/>
             <file type="tcl_procs" path="tcl/reply-sweep-procs.tcl"/>
+            <file type="query_file" path="tcl/reply-sweep-procs.xql"/>
             <file type="tcl_init" path="tcl/sweep-init.tcl"/>
             <file type="query_file" db_type="oracle" path="tcl/sweep-procs-oracle.xql"/>
             <file type="query_file" db_type="postgresql" path="tcl/sweep-procs-postgresql.xql"/>

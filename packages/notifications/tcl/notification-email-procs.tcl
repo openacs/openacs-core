@@ -14,6 +14,14 @@ namespace eval notification::email {
         return "ny03.openforce.net"
     }
 
+    ad_proc -private parse_email_address {email} {
+        if {![regexp {<([^>]*)>} $email all clean_email]} {
+            return $email
+        } else {
+            return $clean_email
+        }
+    }
+
     ad_proc -public reply_address {
         {-object_id:required}
         {-type_id:required}
@@ -55,7 +63,7 @@ namespace eval notification::email {
     }
 
     ad_proc -private qmail_mail_queue_dir {} {
-        return ""
+        return "/home/oracle/queues/forums"
     }
     
     ad_proc -private load_qmail_mail_queue {
@@ -75,7 +83,7 @@ namespace eval notification::email {
             return [list]
         }
 
-        set mail_link_ids [list]
+        set list_of_reply_ids [list]
         set new_messages_p 0
         
         foreach msg $messages {
@@ -133,6 +141,8 @@ namespace eval notification::email {
             if [catch {set to $email_headers(to)}] {
                 set to ""
             }
+
+            set from [parse_email_address $from]
             
             # Find the from user
             set from_user [cc_lookup_email_user $from]
@@ -140,14 +150,20 @@ namespace eval notification::email {
             # We don't accept empty users for now
             if {[empty_string_p $from_user]} {
                 ns_log Notice "NOTIF-INCOMING-EMAIL: no user $from"
+                if {[catch {ns_unlink $msg} errmsg]} {
+                    ns_log Notice "NOTIF-INCOMING-EMAIL: couldn't remove message"
+                }
                 continue
             }
             
-            set to_stuff [notification::reply::parse_reply_address -reply_address $to]
+            set to_stuff [parse_reply_address -reply_address $to]
 
             # We don't accept a bad incoming email address
             if {[empty_string_p $to_stuff]} {
                 ns_log Notice "NOTIF-INCOMING-EMAIL: bad to address $to"
+                if {[catch {ns_unlink $msg} errmsg]} {
+                    ns_log Notice "NOTIF-INCOMING-EMAIL: couldn't remove message"
+                }
                 continue
             }
 
@@ -163,6 +179,8 @@ namespace eval notification::email {
                         -content $body]
                 
                 catch {ns_unlink $msg}	
+
+                lappend list_of_reply_ids $reply_id
             } on_error {
                 ns_log Error "Error inserting incoming email into the queue"
             }

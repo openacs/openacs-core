@@ -45,7 +45,7 @@ namespace eval notification::delivery {
         set impl_key [get_impl_key -delivery_method_id $delivery_method_id]
 
         # Prepare the arguments
-        set args [list $to_user_id $reply_object_id $subject $content]
+        set args [list]
 
         ns_log Notice "NOTIF-DELIV-METHOD: about to call acs_sc on $impl_key"
 
