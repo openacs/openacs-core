@@ -4,7 +4,7 @@
 <package key="acs-reference" url="http://www.arsdigita.com/acs-repository/apm/packages/acs-reference" type="apm_service">
     <package-name>Reference Data</package-name>
     <pretty-plural>Reference Datas</pretty-plural>
-    <initial-install-p>f</initial-install-p>
+    <initial-install-p>t</initial-install-p>
     <singleton-p>t</singleton-p>
 
     <version name="0.3d" url="http://www.arsdigita.com/acs-repository/download/apm/acs-reference-0.3d.apm">
