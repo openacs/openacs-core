@@ -72,7 +72,7 @@ ad_proc -public ad_form {
         return
     }
 
-    gp_return_template
+    ad_return_template
 
     </pre></blockquote>
 
@@ -85,7 +85,7 @@ ad_proc -public ad_form {
 
     <p>
 
-    The call to gp_return_template then renders the page - it is your responsibility to render the form
+    The call to ad_return_template then renders the page - it is your responsibility to render the form
     in your template by use of the ATS formtemplate tag.
  
     <p>
@@ -360,10 +360,9 @@ ad_proc -public ad_form {
         return -code error "No \"form\" block has been specified for form \"$form_name\""
     }
 
-    # If we're not extending
+    # If we're not extending - this needs integration with the ATS form builder ...
     if { !$extend_p } {
-        global gp_conn
-        incr gp_conn(form_count)
+        # incr ad_conn(form_count)
     }
 
     ####################
@@ -854,9 +853,9 @@ ad_proc -public ad_set_form_values {
     foreach arg $args {
         if { [llength $arg] == 1 } {
             upvar $arg value
-            gp_set_element_value -element $arg $value
+            ad_set_element_value -element $arg $value
         } else {
-            gp_set_element_value -element [lindex $arg 0] [lindex $arg 1]
+            ad_set_element_value -element [lindex $arg 0] [lindex $arg 1]
         }
     }
 }
