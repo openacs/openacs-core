@@ -7,17 +7,17 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>t</singleton-p>
 
-    <version name="4.5" url="http://www.openacs.org/repository/download/apm/acs-service-contract-4.5.apm">
+    <version name="4.5.1" url="http://www.openacs.org/repository/download/apm/acs-service-contract-4.5.1.apm">
     <database-support>
         <database>oracle</database>
         <database>postgresql</database>
     </database-support>
         <owner url="mailto:k_vertigo@yahoo.com">Kapil Thangavelu</owner>
         <owner url="mailto:k2pts@yahoo.com">Neophytos Demetriou</owner>
-        <release-date>2002-05-15</release-date>
+        <release-date>2002-08-14</release-date>
         <vendor url="http://www.openacs.org/">OpenACS</vendor>
 
-        <provides url="acs-service-contract" version="4.5"/>
+        <provides url="acs-service-contract" version="4.5.1"/>
 
         <files>
             <file type="package_spec" path="acs-service-contract.info"/>
