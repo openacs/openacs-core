@@ -5,7 +5,7 @@ ad_page_contract {
     @cvs-id $Id$
 }
 
-set title "ACS Administration for [ad_system_name]"
+set title "[ad_conn instance_name] for [ad_system_name]"
 
 set page "
 [ad_admin_header $title]
@@ -13,7 +13,7 @@ set page "
 [ad_context_bar]
 <hr>
 
-ACS Administration is used to administer the site-wide services of the ArsDigita Community System.
+[ad_conn instance_name] is used to administer the site-wide services of the ArsDigita Community System.
 
 <ul>
   <li><a href=apm>ACS Package Manager</a>
