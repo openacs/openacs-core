@@ -76,48 +76,49 @@ ad_proc -private search::indexer {} {
 
         array unset datasource
         switch -- $event {
+            UPDATE -
             INSERT {
                 # Don't bother reindexing if we've already inserted/updated this object in this run
                 if {![info exists seen($object_id)]} {
                     set object_type [acs_object_type $object_id]
                     if {[acs_sc_binding_exists_p FtsContentProvider $object_type]} {
                         array set datasource {mime {} storage_type {} keywords {}}
-                        array set datasource [acs_sc_call FtsContentProvider datasource [list $object_id] $object_type]
-                        if {$syndicate} {
-                            search::syndicate -datasource datasource
+                        if {[catch {
+                            array set datasource  [acs_sc_call FtsContentProvider datasource [list $object_id] $object_type]
+                            if {$syndicate} {
+                                search::syndicate -datasource datasource
+                            }
+
+                            search::content_get txt $datasource(content) $datasource(mime) $datasource(storage_type)
+
+                            acs_sc_call FtsEngineDriver \
+                                [ad_decode $event UPDATE update_index index] \
+                                [list $datasource(object_id) $txt $datasource(title) $datasource(keywords)] $driver
+                        } errMsg]} {
+                            ns_log Error "search::indexer: error getting datasource for $object_id $object_type: $errMsg\n[ad_print_stack_trace]\n"
+                        } else {
+                            search::dequeue -object_id $object_id -event_date $event_date -event $event
+                            set seen($object_id) 1
                         }
-                        search::content_get txt $datasource(content) $datasource(mime) $datasource(storage_type)
-                        acs_sc_call FtsEngineDriver index \
-                            [list $datasource(object_id) $txt $datasource(title) $datasource(keywords)] $driver
                     }
                     # Remember seeing this object so we can avoid reindexing it later
-                    set seen($object_id) 1
                 }
             }
             DELETE {
-                acs_sc_call FtsEngineDriver unindex [list $object_id] $driver
-                db_dml nuke_syn {delete from syndication where object_id = :object_id} 
-                # unset seen since you could conceivably delete one but then subsequently 
+                if {[catch {
+                    acs_sc_call FtsEngineDriver unindex [list $object_id] $driver
+                    db_dml nuke_syn {delete from syndication where object_id = :object_id}
+                } errMsg]} {
+                            ns_log Error "search::indexer: error getting datasource for $object_id $object_type: $errMsg\n[ad_print_stack_trace]\n"
+                    ns_log Error "search::indexer: error getting datasource for $object_id $object_type: $errMsg"
+                } else {
+                    search::dequeue -object_id $object_id -event_date $event_date -event $event
+                }
+
+                # unset seen since you could conceivably delete one but then subsequently
                 # reinsert it (eg when rolling back/forward the live revision).
                 if {[info exists seen($object_id)]} {
                     unset seen($object_id)
-                }
-            }
-            UPDATE {
-                # Don't bother reindexing if we've already inserted/updated this object in this run
-                if {![info exists seen($object_id)]} {
-                    set object_type [acs_object_type $object_id]
-                    if {[acs_sc_binding_exists_p FtsContentProvider $object_type]} {
-                        array set datasource {mime {} storage_type {} keywords {}}
-                        array set datasource [acs_sc_call FtsContentProvider datasource [list $object_id] $object_type]
-                        search::content_get txt $datasource(content) $datasource(mime) $datasource(storage_type)
-                        if {$syndicate} { 
-                            search::syndicate -datasource datasource
-                        } 
-                        acs_sc_call FtsEngineDriver update_index [list $datasource(object_id) $txt $datasource(title) $datasource(keywords)] $driver
-                    }
-                    # Remember seeing this object so we can avoid reindexing it later
-                    set seen($object_id) 1
                 }
             }
         }
