@@ -498,11 +498,11 @@ ad_proc -public ad_parameter_from_file {
 
 
 ad_proc -private ad_parameter_cache {
-    {
-	-set ""
-	-delete:boolean
-    }
-    package_id parameter_name} {
+    -set
+    -delete:boolean
+    package_id
+    parameter_name
+} {
     
     Manages the cache for ad_paremeter.
     @param -set Use this flag to indicate a value to set in the cache.
@@ -517,7 +517,7 @@ ad_proc -private ad_parameter_cache {
 	}
 	return
     }
-    if {![empty_string_p $set] } {
+    if {[info exists set]} {
 	ns_log Notice "Caching $parameter_name for $package_id to $set"
 	nsv_set "ad_param_$package_id" $parameter_name $set
 	return $set

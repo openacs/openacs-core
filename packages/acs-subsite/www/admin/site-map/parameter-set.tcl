@@ -36,6 +36,9 @@ if {[exists_and_not_null dimensional_list] } {
     ns_log Notice [ad_dimensional_sql $dimensional_list]
 }
 
+# DRB: This should be rewritten to optionally allow for the definition of possible parameter values,
+# with a drop-down select widget used rather than a text input widget. 
+
 lappend table_def [list attr_value "Value" no_sort \
 	{<td>
 	   <input name=params.$parameter_id value=\"$attr_value\" size=50>
