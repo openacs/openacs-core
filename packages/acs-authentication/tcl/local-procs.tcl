@@ -243,9 +243,8 @@ ad_proc -private auth::local::password::ChangePassword {
         return [array get result]
     }
 
-    # Invalidate existing login tokens
-    # TODO: We probably need to re-cookie the user, then ...
-    # sec_change_user_auth_token $user_id
+    # Invalidate existing login tokens sitting on random other browsers, just in case
+    sec_change_user_auth_token $user_id
 
     set result(password_status) "ok"
 
