@@ -30,7 +30,8 @@ set use_timezone_p [expr [lang::system::timezone_support_p] && [ad_conn user_id]
 # Create a list of lists containing the possible locale choiches
 
 set list_of_locales [db_list_of_lists locale_loop { select label, locale from enabled_locales order by label }]
-set list_of_locales [linsert $list_of_locales 0 [list (default) ""]]
+
+set list_of_package_locales [linsert $list_of_locales 0 [list (default) ""]]
 
 form create locale
 
@@ -52,7 +53,10 @@ if { $package_level_locales_p } {
         -value "Your locale setting for the whole site."
 }
 
-element create locale site_wide_locale -datatype text -widget select -optional \
+element create locale site_wide_locale \
+    -datatype text \
+    -widget select \
+    -optional \
     -label "Your Preferred Locale" \
     -options $list_of_locales
 
@@ -62,7 +66,7 @@ if { $package_level_locales_p } {
     
     element create locale package_level_locale -datatype text -widget select -optional \
             -label "Locale for [apm_instance_name_from_id $package_id]" \
-            -options $list_of_locales
+            -options $list_of_package_locales
 }
 
 if { $use_timezone_p } {
@@ -77,11 +81,22 @@ if { [form is_request locale] } {
     if { $package_level_locales_p } {
         element set_properties locale package_level_locale -value [lang::user::package_level_locale $package_id]
     }
-    element set_properties locale site_wide_locale -value [lang::user::site_wide_locale]
+    
+    set site_wide_locale [lang::user::site_wide_locale]
+    if { [empty_string_p $site_wide_locale] } {
+        set site_wide_locale [lang::system::site_wide_locale]
+    }
+
+    element set_properties locale site_wide_locale -value $site_wide_locale
     element set_properties locale return_url_info -value $return_url
     element set_properties locale package_id_info -value $package_id
+
     if { $use_timezone_p } {
-        element set_properties locale timezone -value [lang::user::timezone]
+        set timezone [lang::user::timezone]
+        if { [empty_string_p $timezone] } {
+            set timezone [lang::system::timezone]
+        }
+        element set_properties locale timezone -value $timezone
     }
 }
 
