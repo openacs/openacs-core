@@ -96,3 +96,9 @@ if { $num_of_locales > 1 } {
 
 # Curriculum bar
 set curriculum_bar_p [llength [site_node::get_children -all -filters { package_key "curriculum" } -node_id $subsite_node_id]]
+
+
+set num_users_online [lc_numeric [whos_online::num_users]]
+
+set whos_online_url "[subsite::get_element -element url]shared/whos-online"
+
