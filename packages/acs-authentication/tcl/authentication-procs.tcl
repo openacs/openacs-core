@@ -639,6 +639,7 @@ ad_proc -public auth::create_local_account {
         element_messages {}
         account_status ok
         account_message {}
+        user_id {}
     }
 
     # PHASE II: This needs to be controlled by a parameter
@@ -777,6 +778,7 @@ ad_proc -public auth::update_local_account {
         update_status update_error
         update_message {}
         element_messages {}
+        user_id {}
     }
 
     # Validate data
@@ -809,7 +811,10 @@ ad_proc -public auth::update_local_account {
             set $varname $user_info($varname)
         }
     }
+    
+    # We get user_id from validate_user_info above, and set it in the result array so our caller can get it
     set user_id $user_info(user_id)
+    set result(user_id) $user_id
 
     set error_p 0
     with_catch errmsg {
@@ -878,6 +883,7 @@ ad_proc -public auth::delete_local_account {
     array set result {
         delete_status ok
         delete_message {}
+        user_id {}
     }
 
     set user_id [acs_user::get_by_username \
@@ -892,6 +898,8 @@ ad_proc -public auth::delete_local_account {
     
     # Mark the account banned
     acs_user::ban -user_id $user_id
+
+    set result(user_id) $user_id
 
     return [array get result]
 }
@@ -947,7 +955,7 @@ ad_proc -private auth::validate_user_info {
         set user(email) [string tolower $user(email)]
     }
     
-    if { ![exists_and_not_null $user(url)] || ([info exists user(url)] && [string equal $user(url) "http://"]) } {
+    if { ![exists_and_not_null user(url)] || ([info exists user(url)] && [string equal $user(url) "http://"]) } {
         # The user left the default hint for the url
         set user(url) {}
     } elseif { ![util_url_valid_p $user(url)] } {

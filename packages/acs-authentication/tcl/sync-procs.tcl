@@ -271,6 +271,8 @@ ad_proc -public auth::sync::job::action {
                     if { ![string equal $result(creation_status) "ok"] } {
                         set result(message) $result(creation_message)
                         set success_p 0
+                    } else {
+                        set user_id $result(user_id)
                     }
 
                     # We ignore account_status
@@ -289,6 +291,8 @@ ad_proc -public auth::sync::job::action {
                     if { ![string equal $result(update_status) "ok"] } {
                         set result(message) $result(update_message)
                         set success_p 0
+                    } else {
+                        set user_id $result(user_id)
                     }
                 }
                 "delete" {
@@ -299,6 +303,8 @@ ad_proc -public auth::sync::job::action {
                     if { ![string equal $result(delete_status) "ok"] } {
                         set result(message) $result(delete_message)
                         set success_p 0
+                    } else {
+                        set user_id $result(user_id)
                     }
                 }
             }
