@@ -404,7 +404,7 @@ ad_proc -public content::item::get_template {
     @param item_id
     @param use_context
 
-    @return NUMBER(38)
+    @return template_id
 } {
     return [package_exec_plsql -var_list [list \
         [list item_id $item_id ] \
