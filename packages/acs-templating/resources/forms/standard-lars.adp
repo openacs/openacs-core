@@ -42,7 +42,7 @@
             <table cellpadding=4 cellspacing=0 border=0>
 	      <formgroup id=@elements.id@>
 		<tr><td>\@formgroup.widget@</td>
-                    <td>\@formgroup.label@</td></tr>
+                    <td><font face="tahoma,verdana,arial,helvetica,sans-serif" size="-1"><label for="@elements.form_id@:elements:@elements.id@:\@formgroup.option@">\@formgroup.label@</label></font></td></tr>
 	      </formgroup>
 	      </table>
 	      <formerror id=@elements.id@><br>
