@@ -503,7 +503,7 @@ ad_proc -private apm_package_install {
 </blockquote></pre>"
 	return 0
     }
-    if {![string compare $package_type "apm_service"] && ![string compare $singleton_p "t"]} {
+    if { [string equal $package_type "apm_service"] && [string equal $singleton_p "t"]} {
 	# This is a singleton package.  Instantiate it automatically.
 	if {[catch {
 	    db_exec_plsql package_instantiate_mount {
@@ -525,8 +525,8 @@ ad_proc -private apm_package_install {
 	}
     }
 
-    # Load Tcl libraries and xql queries so that restart is not necessary
-    apm_load_package -force_reload_p 1 $package_key
+    # Load Tcl libraries and xql queries so that restart is not necessary    
+    apm_load_package -force_reload -load_tests=[apm_load_tests_p] $package_key
 
     return $version_id
 }
