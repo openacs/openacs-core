@@ -654,7 +654,7 @@ ad_proc -private rp_handler {} {
 	ad_try {
 	  ad_conn -set path_info \
 	      [string range $path [expr [string length $prefix] - 1] end]
-	  rp_serve_abstract_file -noredirect \
+	  rp_serve_abstract_file -noredirect -nodirectory \
 	      -extension_pattern ".vuh" "$root$prefix"
 	  set tcl_url2file([ad_conn url]) [ad_conn file]
 	  set tcl_url2path_info([ad_conn url]) [ad_conn path_info]
@@ -669,16 +669,6 @@ ad_proc -private rp_handler {} {
 	  continue
 	}
 
-	return
-      }
-    }
-
-    if {[info exists dir_index]} {
-      set listings [ns_config "ns/server/[ns_info server]" \
-	  "directorylisting" "none"]
-      if { [nsv_get rp_directory_listing_p .] } {
-	ns_returnnotice 200 "Directory listing of $dir_index" \
-	    [rp_html_directory_listing $dir_index]
 	return
       }
     }
@@ -700,6 +690,7 @@ ad_proc -private rp_handler {} {
 
 ad_proc -private rp_serve_abstract_file {
   -noredirect:boolean
+  -nodirectory:boolean
   {-extension_pattern ".*"}
   path
 } {
@@ -759,7 +750,7 @@ ad_proc -private rp_serve_abstract_file {
 	
 	ad_raise redirect $url
       } else {
-	if { [info exists dir_index] } {
+	if { [info exists dir_index] && !$nodirectory_p } {
 	  ad_raise directory $dir_index
 	} else {
 	  # Nothing at all found! 404 time.
