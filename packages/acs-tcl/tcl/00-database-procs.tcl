@@ -210,7 +210,7 @@ ad_proc -private -private db_driverkey {{
 }
 
 
-ad_proc db_type { } {
+ad_proc -public db_type { } {
     @return the RDBMS type (i.e. oracle, postgresql) this OpenACS installation is using.  The nsv ad_database_type is set up during the bootstrap process.
 } {
     # Currently this should always be either "oracle" or "postgresql":
@@ -219,7 +219,7 @@ ad_proc db_type { } {
     return [nsv_get ad_database_type .]
 }
 
-ad_proc db_compatible_rdbms_p { db_type } {
+ad_proc -public db_compatible_rdbms_p { db_type } {
     @return 1 if the given db_type is compatible with the current RDBMS.  
 } {
     return [expr { [empty_string_p $db_type] || [string equal [db_type] $db_type] }]
@@ -244,7 +244,7 @@ ad_proc -deprecated db_package_supports_rdbms_p { db_type_list } {
     return 0
 }
 
-ad_proc db_legacy_package_p { db_type_list } {
+ad_proc -private db_legacy_package_p { db_type_list } {
     @return 1 if the package is a legacy package.  We can only tell for certain if it explicitly supports Oracle 8.1.6 rather than the OpenACS more general oracle.
 } {
     if { [lsearch $db_type_list "oracle-8.1.6"] != -1 } {
@@ -253,20 +253,20 @@ ad_proc db_legacy_package_p { db_type_list } {
     return 0
 }
 
-ad_proc db_version { } {
+ad_proc -public db_version { } {
     @return the RDBMS version (i.e. 8.1.6 is a recent Oracle version; 7.1 a
     recent PostgreSQL version.
 } {
     return [nsv_get ad_database_version .]
 }
 
-ad_proc db_current_rdbms { } {
+ad_proc -public db_current_rdbms { } {
     @return the current rdbms type and version.
 } {
     return [db_rdbms_create [db_type] [db_version]]
 }
 
-ad_proc db_known_database_types { } {
+ad_proc -public db_known_database_types { } {
     @return a list of three-element lists describing the database engines known
     to OpenACS.  Each sublist contains the internal database name (used in file
     paths, etc), the driver name, and a "pretty name" to be used in selection
@@ -293,7 +293,7 @@ ad_proc db_null { } {
     return ""
 }
 
-ad_proc db_quote { string } { Quotes a string value to be placed in a SQL statement. } {
+ad_proc -public db_quote { string } { Quotes a string value to be placed in a SQL statement. } {
     regsub -all {'} "$string" {''} result
     return $result
 }
@@ -376,7 +376,7 @@ ad_proc -public db_nextval {{ -dbn "" } sequence } {
 }
 
 
-ad_proc db_nth_pool_name {{ -dbn "" } n } { 
+ad_proc -public db_nth_pool_name {{ -dbn "" } n } { 
     @return the name of the pool used for the nth-nested selection (0-relative). 
 
     @param dbn The database name to use.  If empty_string, uses the default database.
@@ -2138,7 +2138,7 @@ ad_proc -public db_name {{ -dbn "" }} {
 }
 
 
-ad_proc db_get_username {{ -dbn "" }} {
+ad_proc -public db_get_username {{ -dbn "" }} {
     @return the username parameter from the driver section of the
     first database pool for the dbn.
 
@@ -2148,7 +2148,7 @@ ad_proc db_get_username {{ -dbn "" }} {
     return [ns_config "ns/db/pool/$pool" User]    
 }
 
-ad_proc db_get_password {{ -dbn "" }} {
+ad_proc -public db_get_password {{ -dbn "" }} {
     @return the password parameter from the driver section of the
     first database pool for the dbn.
 
@@ -2158,7 +2158,7 @@ ad_proc db_get_password {{ -dbn "" }} {
     return [ns_config "ns/db/pool/$pool" Password]
 }
 
-ad_proc db_get_sql_user {{ -dbn "" }} {
+ad_proc -public db_get_sql_user {{ -dbn "" }} {
     <strong>Oracle only.</strong>
 
     <p>
@@ -2180,7 +2180,7 @@ ad_proc db_get_sql_user {{ -dbn "" }} {
     }
 }
 
-ad_proc db_get_pgbin {{ -dbn "" }} {
+ad_proc -public db_get_pgbin {{ -dbn "" }} {
     <strong>PostgreSQL only.</strong>
 
     <p>
@@ -2194,7 +2194,7 @@ ad_proc db_get_pgbin {{ -dbn "" }} {
 }
 
 
-ad_proc db_get_port {{ -dbn "" }} {
+ad_proc -public db_get_port {{ -dbn "" }} {
     <strong>PostgreSQL only.</strong>
 
     <p>
@@ -2223,7 +2223,7 @@ ad_proc db_get_port {{ -dbn "" }} {
 }
 
 
-ad_proc db_get_database {{ -dbn "" }} {
+ad_proc -public db_get_database {{ -dbn "" }} {
     <strong>PostgreSQL only.</strong>
 
     <p>
@@ -2244,7 +2244,7 @@ ad_proc db_get_database {{ -dbn "" }} {
 }
 
  
-ad_proc db_get_dbhost {{ -dbn "" }} {
+ad_proc -public db_get_dbhost {{ -dbn "" }} {
     <strong>PostgreSQL only.</strong>
 
     <p>
@@ -2264,7 +2264,7 @@ ad_proc db_get_dbhost {{ -dbn "" }} {
     return [string range $datasource 0 [expr $first_colon_pos - 1]]
 }
 
-ad_proc db_source_sql_file {{
+ad_proc -public db_source_sql_file {{
     -dbn ""
     -callback apm_ns_write_callback
 } file } {
@@ -2379,7 +2379,7 @@ ad_proc db_source_sql_file {{
     }
 }
 
-ad_proc db_load_sql_data {{
+ad_proc -public db_load_sql_data {{
     -dbn ""
     -callback apm_ns_write_callback
 } file } {
@@ -2517,7 +2517,7 @@ ad_proc db_load_sql_data {{
     }
 }
 
-ad_proc db_source_sqlj_file {{
+ad_proc -public db_source_sqlj_file {{
     -dbn ""
     -callback apm_ns_write_callback
 } file } {
@@ -2835,7 +2835,7 @@ ad_proc -public db_blob_get_file {{ -dbn "" } statement_name sql args } {
 }
 
 
-ad_proc db_blob_get {{ -dbn "" } statement_name sql args } {
+ad_proc -public db_blob_get {{ -dbn "" } statement_name sql args } {
     <strong>PostgreSQL only.</strong>
 
     @param dbn The database name to use.  If empty_string, uses the default database.

@@ -12,7 +12,7 @@ ad_page_contract {
     root:trim,integer,optional
 }
 
-set user_id [ad_maybe_redirect_for_registration]
+set user_id [auth::require_login]
 
 set context "Permissions"
 

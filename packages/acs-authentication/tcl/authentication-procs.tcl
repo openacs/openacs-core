@@ -80,7 +80,7 @@ ad_proc -public auth::self_registration {} {
 			       -package_key acs-authentication \
 			       -parameter AllowSelfRegister]] } {
 	util_user_message -message "Self registration is not allowed"
-	ad_maybe_redirect_for_registration
+	auth::require_login
     }
 }
 

@@ -17,7 +17,7 @@ ad_page_contract {
     administration_name:onevalue
 }
 
-set admin_user_id [ad_verify_and_get_user_id]
+set admin_user_id [ad_conn user_id]
 
 # Get user info
 acs_user::get -user_id $user_id -array user

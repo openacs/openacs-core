@@ -164,7 +164,7 @@ ad_proc -public cr_import_content {
 } {
 
     if { ![info exists creation_user] } {
-        set creation_user [ad_verify_and_get_user_id]
+        set creation_user [ad_conn user_id]
     }
 
     if { ![info exists creation_ip] } {

@@ -6,7 +6,7 @@ ad_page_contract {
 } {
 }
 
-set user_id [ad_verify_and_get_user_id]
+set user_id [ad_conn user_id]
 
 db_1row apm_get_name { 
     select first_names || ' ' || last_name user_name, email from cc_users where user_id = :user_id

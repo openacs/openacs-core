@@ -42,7 +42,7 @@ ad_page_contract {
     node_type_ck {The node type you specified is invalid}
 }
 
-set user_id [ad_verify_and_get_user_id]
+set user_id [ad_conn user_id]
 set ip_address [ad_conn peeraddr]
 
 db_transaction {

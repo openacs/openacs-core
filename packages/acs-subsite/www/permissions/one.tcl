@@ -13,7 +13,7 @@ ad_page_contract {
     {application_url ""}
 }
 
-set user_id [ad_maybe_redirect_for_registration]
+set user_id [auth::require_login]
 ad_require_permission $object_id admin
 
 # RBM: Check if this is the Main Site and prevent the user from being
