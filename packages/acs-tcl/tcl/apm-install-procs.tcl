@@ -734,12 +734,14 @@ ad_proc -private apm_package_install_files { {-callback apm_dummy_callback} file
 	delete from apm_package_files where version_id = :version_id
     }
     
-    foreach item $files {
+    db_transaction {
+        foreach item $files {
 	
-	set path [lindex $item 0]
-	set file_type [lindex $item 1]
-        set db_type [lindex $item 2]
-	apm_file_add $version_id $path $file_type $db_type
+	    set path [lindex $item 0]
+	    set file_type [lindex $item 1]
+            set db_type [lindex $item 2]
+	    apm_file_add $version_id $path $file_type $db_type
+        }
     }
 }
 
