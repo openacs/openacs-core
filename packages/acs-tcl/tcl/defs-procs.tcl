@@ -628,6 +628,7 @@ ad_proc -private ad_requested_object_id {} {
 }
 
 ad_proc -deprecated ad_parameter {
+    -localize:boolean
     -set
     {-package_id ""}
     name
@@ -657,7 +658,7 @@ ad_proc -deprecated ad_parameter {
     if {[info exists set]} {
 	set ns_param [parameter::set_value -package_id $package_id -parameter $name -value $set]
     } else {
-        set ns_param [parameter::get -package_id $package_id -parameter $name -default $default]
+        set ns_param [parameter::get -localize=$localize_p -package_id $package_id -parameter $name -default $default]
     }
 
     return $ns_param
