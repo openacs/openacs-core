@@ -134,7 +134,7 @@ db_foreach nodes_select {} {
 	    # Is the object a package?
 	    if {![empty_string_p $package_id]} {
 		if {$object_admin_p && ($parameter_count > 0)} {
-		    lappend controls "<a href=parameter-set?[export_url_vars package_id]>parameters</a>"
+		    lappend controls "<a href=\"[export_vars -base "../parameters" { package_id {return_url {[ad_return_url]} } }]\">parameters</a>"
 		}
 	    }
 	    
@@ -299,7 +299,7 @@ doc_body_append "
 db_foreach services_select {} {
     if {$parameter_count > 0} {
         if {[ad_permission_p $package_id admin]} {		
-	    doc_body_append "  <li><a href=parameter-set?[export_url_vars package_id package_key instance_name]>$instance_name</a>"
+	    doc_body_append "  <li><a href=\"[export_vars -base "../parameters" { package_id { return_url {[ad_return_url]} } }]\">$instance_name</a>"
 	}
     }
     doc_body_append "\n"
