@@ -20,7 +20,6 @@ make install</span></span>
 [root aolserver]# <b class="userinput"><tt>cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver login</tt></b>
 [root aolserver]# <b class="userinput"><tt>cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co  -r aolserver_v40_r2 aolserver</tt></b>
 [root aolserver]# <b class="userinput"><tt>cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co nscache</tt></b>
-[root aolserver]# <b class="userinput"><tt>cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co nsrewrite</tt></b>
 [root aolserver]# <b class="userinput"><tt>cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co nspostgres</tt></b>
 [root aolserver]# <b class="userinput"><tt>cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co nssha1</tt></b>
 [root aolserver]# <b class="userinput"><tt>cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co nsoracle</tt></b>
@@ -33,7 +32,6 @@ mkdir aolserver40r2
 cd aolserver40r2
 cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co -r aolserver_v40_r2 aolserver
 cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co nscache
-cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co nsrewrite
 cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co nspostgres
 cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co nssha1
 cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co nsoracle
@@ -47,8 +45,7 @@ tar xvfz tDOM-0.7.8.tar.gz</span></span></pre></li><li><a name="aolserver4-insta
 make install
 ln -s /usr/local/aolserver40r2 /usr/local/aolserver</span></span></pre><p>If this is the only version of AOLserver in use, or is the default version, create a symlink.  If not, then be sure to use <tt class="computeroutput">/usr/local/aolserver40r2</tt> instead of <tt class="computeroutput">/usr/local/aolserver</tt> in future steps.</p><pre class="screen">[root aolserver]# <b class="userinput"><tt>ln -s /usr/local/aolserver40r2 /usr/local/aolserver</tt></b></pre></li><li><a name="aolserver4-modules-install"></a><p><b>Configure, compile and install the modules. </b>
           </p><div class="orderedlist"><ol type="a"><li><p><a name="aolserver4-nscache-install"></a>Install nscache</p><pre class="screen">[root aolserver]# <b class="userinput"><tt>cd /usr/local/src/aolserver40r2/nscache</tt></b>
-[root nscache]# <b class="userinput"><tt>make install</tt></b></pre></li><li><p><a name="aolserver4-nsrewrite-install"></a>Install nsrewrite</p><pre class="screen">[root nscache]# <b class="userinput"><tt>cd ../nsrewrite</tt></b>
-[root nsrewrite]# <b class="userinput"><tt>make install</tt></b></pre></li><li><p><a name="aolserver4-nsoracle-install"></a>Install nsoracle (if you want to use Oracle)</p><pre class="screen">[root nscache]# <b class="userinput"><tt>cd ../nsoracle</tt></b>
+[root nscache]# <b class="userinput"><tt>make install</tt></b></pre></li><li><p><a name="aolserver4-nsoracle-install"></a>Install nsoracle (if you want to use Oracle)</p><pre class="screen">[root nscache]# <b class="userinput"><tt>cd ../nsoracle</tt></b>
 [root nsoracle]# <b class="userinput"><tt>make install</tt></b></pre></li><li><p><a name="aolserver4-nspostgres-install"></a>Install nspostgres (if you want to use Postgres)</p><pre class="screen">[root nsrewrite]# <b class="userinput"><tt>cd ../nspostgres</tt></b>
 [root nspostgres]# <b class="userinput"><tt>make install POSTGRES=LSB ACS=1 INST=/usr/local/aolserver40r2 </tt></b></pre><p>If you get errors like:</p><pre class="programlisting">nspostgres.c: In function `Ns_PgTableList':
 nspostgres.c:679: warning: passing arg 3 of `Tcl_DStringAppend' as signed due to prototype</pre><p>then PostGreSQL is probably not in the standard location.  The location of PostGreSQL is very dependent on which method was used to install it.  To correct the problem, replace <tt class="computeroutput">LSB</tt> with the path to the path to your PostGreSQL installation.  Often this is <tt class="computeroutput">/usr/local/pgsql</tt>.</p><p>If you run into problems with libpq.a do the following (and repeat the step above)</p><pre class="screen">[root nspostgres]# <b class="userinput"><tt>ranlib /usr/local/pgsql/lib/libpq.a</tt></b></pre><p>If you run into problems with the linker, edit the Makefile. Add <tt class="computeroutput">-lnsdb</tt> to the <tt class="computeroutput">MODLIBS</tt> var.</p><pre class="programlisting">MODLIBS = -L$(PGLIB) -lpq <span class="bold"><b>-lnsdb</b></span></pre></li><li><p><a name="aolserver4-nssha1-install"></a>Install nssha1</p><pre class="screen">[root nsrewrite]# <b class="userinput"><tt>cd ../nssha1</tt></b>

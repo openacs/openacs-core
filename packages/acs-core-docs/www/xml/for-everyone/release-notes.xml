@@ -30,23 +30,53 @@ BEGINNING OF TEMPLATE
 	  url="http://openacs.org/">OpenACS website</ulink>.
   </para>
     
-    <para>
-  <para>
-	You may want to begin by reading our installation documentation for
-	<xref linkend="install-steps"/>.  Note that the Windows documentation is
-	not current for OpenACS &version;, but an alternative is to use John
-	Sequeira's <ulink
-	url="http://www.pobox.com/~johnseq/projects/oasisvm/">Oasis VM
-	project</ulink>.
-  </para>
-    
-    <para>
-	After installation, the full documentation set can be found by visiting
-	<filename>http://yourserver/doc</filename>.
-  </para>
-    
   </sect2>
 END OF TEMPLATE -->
+
+   <sect2 id="release-notes-5-1-0">
+     <title>Version 5.1.0</title>
+ 
+       <itemizedlist>
+         <listitem>
+        <para>Under Development - update this no later than 5.1.0rc1</para>
+      </listitem>
+     </itemizedlist>
+     </sect2>
+
+   <sect2 id="release-notes-5-0-2">
+     <title>Version 5.0.2</title>
+ 
+       <itemizedlist>
+         <listitem>
+         <para>Bug fixes: <ulink url="http://openacs.org/bugtracker/openacs/bug?bug%5fnumber=1495">#1495. Croatian enabled by default</ulink>, <ulink url="http://openacs.org/bugtracker/openacs/bug?bug%5fnumber=1496">#1496. APM automated install fails if files have spaces in their names</ulink>, <ulink url="http://openacs.org/bugtracker/openacs/bug?bug%5fnumber=1494">#1494. automated upgrade crashes (halting the upgrade process)</ulink></para>
+         </listitem>
+         <listitem>
+           <para>Complete Change list since 5.0.0 in Changelog</para>
+         </listitem>
+         <listitem>
+         <para>File tagging scheme in CVS changed to follow <ulink url="http://openacs.org/forums/message-view?message_id=161375">TIP #46: (Approved) Rules for Version Numbering and CVS tagging of Packages</ulink></para>
+         </listitem>
+     </itemizedlist>
+     </sect2>
+ 
+   <sect2 id="release-notes-5-0-1">
+     <title>Version 5.0.1</title>
+       <itemizedlist>
+         <listitem>
+           <para>All work on the translation server from 7 Nov 2003 to 7 Feb 2004 is now included in catalogs.</para>
+         </listitem>
+         <listitem>
+           <para>One new function in acs-tcl, util::age_pretty</para>
+         </listitem>
+         <listitem>
+           <para>Complete Change list since 5.0.0 in Changelog</para>
+         </listitem>
+         <listitem>
+           <para>Many documentation updates and doc bug fixes </para>
+         </listitem>
+     </itemizedlist>
+     </sect2>
+ 
 
   <sect2 id="release-notes-5-0-0">
     <title>Version 5.0.0</title>
