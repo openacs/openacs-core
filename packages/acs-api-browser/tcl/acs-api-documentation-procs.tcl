@@ -107,7 +107,7 @@ ad_proc -private api_format_author_list { authors } {
     }
     append out "<dt><b>Author[ad_decode [llength $authors] 1 "" "s"]:</b>\n"
     foreach author $authors {
-	append out "<dd>[api_format_author $author]\n"
+	append out "<dd>[api_format_author $author]</dd>\n"
     }
     return $out
 }
@@ -125,7 +125,7 @@ ad_proc -private api_format_changelog_list { changelog } {
 } {
     append out "<dt><b>Changelog:</b>\n"
     foreach change $changelog {
-	append out "<dd>[api_format_changelog_change $change]\n"
+	append out "<dd>[api_format_changelog_change $change]</dd>\n"
     }
     return $out
 }
@@ -140,13 +140,13 @@ ad_proc -private api_format_common_elements { doc_elements_var } {
 	append out [api_format_author_list $doc_elements(author)]
     }
     if { [info exists doc_elements(creation-date)] } {
-	append out "<dt><b>Created:</b>\n<dd>[lindex $doc_elements(creation-date) 0]\n"
+	append out "<dt><b>Created:</b>\n<dd>[lindex $doc_elements(creation-date) 0]</dd>\n"
     }
     if { [info exists doc_elements(change-log)] } {
 	append out [api_format_changelog_list $doc_elements(change-log)]
     }
     if { [info exists doc_elements(cvs-id)] } {
-	append out "<dt><b>CVS ID:</b>\n<dd><code>[ns_quotehtml [lindex $doc_elements(cvs-id) 0]]</code>\n"
+	append out "<dt><b>CVS ID:</b>\n<dd><code>[ns_quotehtml [lindex $doc_elements(cvs-id) 0]]</code></dd>\n"
     }
     if { [info exists doc_elements(see)] } {
 	append out [api_format_see_list $doc_elements(see)]
@@ -263,11 +263,17 @@ ad_proc -private api_format_author { author_string } {
 ad_proc -private api_format_see { see } {
     regsub -all {proc *} $see {} see
     set see [string trim $see]
-    if {[nsv_exists api_proc_doc $see]} { 
+    if {[nsv_exists api_proc_doc $see]} {
         return "<a href=\"proc-view?proc=[ns_urlencode ${see}]\">$see</a>"
-    } else { 
-        return $see
     }
+    if {[string match /doc/*.html $see]
+        || [util_url_valid_p $see]} { 
+        return "<a href=\"${see}]\">$see</a>"
+    }
+    if {[file exists "[get_server_root]${see}"]} {
+        return "<a href=\"content-page-view?source_p=1&path=[ns_urlencode $see]\">$see</a>"
+    }
+    return ${see}
 }
 
 ad_proc -public api_library_documentation {
@@ -582,27 +588,33 @@ ad_proc -public api_proc_documentation {
 	set xql_base_name [get_server_root]/
 	append xql_base_name [file rootname $doc_elements(script)]
 	if { $xql_p } {
+                set there {}
+                set missing {}
 		if { [file exists ${xql_base_name}.xql] } {
-			append out "<dt><b>Generic XQL file:</b></dt>
+			append there "<dt><b>Generic XQL file:</b></dt>
 <blockquote>[api_quote_file ${xql_base_name}.xql]</blockquote>
 <p>\n"
 		} else {
-			append out "<dt><b>Generic XQL file:</b> ${xql_base_name}.xql does not exist</dt><p>\n"
+                      lappend missing Generic
 		}
 		if { [file exists ${xql_base_name}-postgresql.xql] } {
-			append out "<dt><b>Postgresql XQL file:</b></dt>
+			append there "<dt><b>Postgresql XQL file:</b></dt>
 <blockquote>[api_quote_file ${xql_base_name}-postgresql.xql]</blockquote>
 <p>\n"
 		} else {
-			append out "<dt><b>Postgresql XQL file:</b> ${xql_base_name}-postgresql.xql does not exist</dt><p>\n"
+                      lappend missing PostgreSQL
 		}
 		if { [file exists ${xql_base_name}-oracle.xql] } {
-			append out "<dt><b>Oracle XQL file:</b></dt>
+			append there "<dt><b>Oracle XQL file:</b></dt>
 <blockquote>[api_quote_file ${xql_base_name}-oracle.xql]</blockquote>
 <p>\n"
 		} else {
-			append out "<dt><b>Oracle XQL file:</b> ${xql_base_name}-oracle.xql does not exist</dt><p>\n"
+                    lappend missing Oracle
 		}
+                if {[llength $missing] > 0} { 
+		    append out "<dt><b>XQL Not present:</b></dt><dd>[join $missing ", "]</dd>"
+                }
+                append out $there  
 	}
 
 	# No "see also" yet.
