@@ -147,7 +147,7 @@ ad_proc parse_incoming_email {
   }
 
   if { [info exists html] } {
-    set body [ad_html_to_text $html]
+    set body [ad_html_to_text -- $html]
   } elseif { [info exists plain] } {
     set body $plain
   } else {

@@ -716,7 +716,7 @@ ad_proc -public api_describe_function {
             array set doc_elements [nsv_get api_proc_doc $function]
             switch $format {
                 text/plain {
-                    lappend matches [ad_html_to_text [api_proc_documentation -script $function]]
+                    lappend matches [ad_html_to_text -- [api_proc_documentation -script $function]]
                 }
                 default {
                     lappend matches [api_proc_documentation -script $function]
