@@ -1,14 +1,11 @@
 <sect1 id="oracle" xreflabel="Install Oracle">
   <title>Install Oracle 8.1.7</title>
 
-  <para>Skip this page if you're not interested in Oracle</para>
+  <authorblurb>
+	by <ulink url="mailto:vinod@kurup.com">Vinod Kurup</ulink>
+  </authorblurb>
 
-  <para><emphasis role="strong">NOTE:</emphasis><emphasis> This document
-	  was originally written based on Oracle, version 8.1.6.  However, the
-	  same approach should lead to a successful installation of Oracle
-	  8.1.7. If you encounter any incompatibilities, please <ulink
-	  url="mailto:vinod@kurup.com">let us know</ulink></emphasis>
-  </para>
+  <para>Skip this page if you're not interested in Oracle</para>
 
   <para><emphasis role="strong">NOTE:</emphasis> We've not yet tested
 	OpenACS &version; under Oracle 9i</para>
@@ -58,7 +55,7 @@
 			</para>
 			<programlisting>
 $ cd /directory/where/oracle/is
-$ tar -xvf oracle81701.tar</programlisting>
+$ tar xvf oracle81701.tar</programlisting>
 		  </listitem>
 		</itemizedlist>
 	  </listitem>
@@ -82,6 +79,11 @@ $ tar -xvf oracle81701.tar</programlisting>
 	  the defaults, so a change made here will necessitate further changes
 	  later. For a guide to the defaults, please see <xref
 	  linkend="install-oracle-defaults"/>.
+	</para>
+
+	<para>
+	  For additional resources/documentation, please see this <ulink
+	  url="http://openacs.org/bboard/q-and-a-fetch-msg.tcl?msg_id=0003o2&amp;topic_id=11&amp;topic=OpenACS">thread</ulink>.
 	</para>
 
   </sect2>
@@ -403,6 +405,30 @@ oracle:/where/oracle/Disk1$ ./runInstaller</programlisting>
 		  Installer&#39; (OUI). Click on
 		  &quot;<computeroutput>Next</computeroutput>&quot;
 		</para>
+
+		<note>
+		  <para>
+			Some people have had trouble with this step on RedHat 7.3. If
+			so, try the following steps before calling
+			<command>./runInstaller</command>:
+		  </para>
+		  <orderedlist>
+			<listitem>
+			  <para>Install the compat-glibc, compat-egcs, compat-libs RPM for 2.1.3.</para>
+			</listitem>
+			<listitem>
+			  <para>
+				Execute the following command: <command>/usr/i386-glib21-linux/bin/i386-glibc21-linux-env.sh</command>
+			  </para>
+			</listitem>
+
+			<listitem>
+			  <para>
+				Type <command>export LD_ASSUME_KERNEL=2.2.5</command>
+			  </para>
+			</listitem>
+		  </orderedlist>
+		</note>
 	  </listitem>
 
 	  <listitem><para>
@@ -674,12 +700,17 @@ joeuser:~$ exit</programlisting>
 			  <computeroutput>root</computeroutput>
 			</para></listitem>
 
-		  <listitem><para>
-			  Run the script.
+		  <listitem><para> 
+			Run the script. Switch to the oracle user first
+			to set the environment appropriately and then do
+			<command>su</command> to get root privileges, while keeping
+			the oracle user's enviroment.
 			</para>
 
 			<programlisting>
-joeuser:~$ su -
+joeuser:~$ su - oracle
+Password: *********
+oracle:~$ su
 Password: *********
 root:~# /ora8/m01/app/oracle/product/8.1.7/root.sh
 ; You should see the following.   
@@ -908,6 +939,26 @@ joeuser:~$ exit</programlisting>
 	  database. Be warned that this process takes about an hour on a
 	  Pentium II with 128 MB of RAM.
 	</para>
+
+	<note>
+	  <para>RedHat 7.3 users: Before running <command>dbassist</command>, do the following.</para>
+	  <orderedlist>
+		<listitem><para>
+			Download the <ulink
+			url="http://otn.oracle.com/software/products/oracle8i/htdocs/linuxsoft.html">glibc
+			patch</ulink> from Oracle Technet into <screen>/tmp</screen>.
+		  </para></listitem>
+		<listitem><para>
+			cd $ORACLE_HOME
+			</para></listitem>
+		<listitem><para>
+			tar xzf /tmp/glibc2.1.3-stubs.tgz
+			</para></listitem>
+		<listitem><para>
+			./setup_stubs
+			</para></listitem>
+	  </orderedlist>
+	</note>
 
 	<itemizedlist>
 	  <listitem><para> 
@@ -1719,9 +1770,19 @@ SQL&gt; select sysdate from dual;</programlisting>
 	  If the date does not conform to this format, double-check that you
 	  included the necessary line in the init scripts. If it still
 	  isn&#39;t working, make sure that you have restarted the database
-	  since adding the line if you didn&#39;t do it prior to database
-	  creation.
+	  since adding the line:
 	</para>
+
+	<programlisting>
+nsadmin:~$ svrmgrl
+SVRMGR> connect internal
+Connected.
+SVRMGR> shutdown
+Database closed.
+Database dismounted.
+ORACLE instance shut down.
+SVRMGR> startup
+ORACLE instance started.</programlisting>
 
 	<para>
 	  If you&#39;re sure that you have restarted the database since adding
@@ -1854,3 +1915,8 @@ SQL&gt; drop tablespace <emphasis>table_space_name</emphasis> including contents
   <para><phrase role="cvstag">($Id$)</phrase></para>
 
 </sect1>
+<!--
+   Local Variables:
+   sgml-parent-document: ("../index.xml" "book" "sect1")
+   End:
+-->
