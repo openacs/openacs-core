@@ -101,6 +101,7 @@ template_tag multiple { chunk params } {
   set name     [template::get_attribute multiple $params name       ]
   set startrow [template::get_attribute multiple $params startrow  0]
   set maxrows  [template::get_attribute multiple $params maxrows  -1]; #unlimit
+  set delimiter [template::get_attribute multiple $params delimiter ""]
 
   set tag_id [template::current_tag]
 
@@ -123,6 +124,19 @@ template_tag multiple { chunk params } {
     upvar 0 $name:\$$i $name
   " -nobreak
   template::adp_compile_chunk $chunk
+
+  if { ![empty_string_p $delimiter] } {
+      template::adp_append_code " if { \$$i < \${$name:rowcount}"
+
+      if {$maxrows >= 0} {
+	  template::adp_append_code " && \$$i < [expr $maxrows + $startrow]" \
+	      -nobreak
+      }
+
+      template::adp_append_code " } {\n"
+      template::adp_append_string $delimiter
+      template::adp_append_code "\n}\n"
+  }
 
   template::adp_append_code "}
 
@@ -176,6 +190,7 @@ template_tag list { chunk params } {
 template_tag group { chunk params } {
 
   set column [template::get_attribute group $params column]
+  set delimiter [template::get_attribute group $params delimiter ""]
 
   # Scan the parameter stack backward, looking for the tag name
 
@@ -234,6 +249,13 @@ template_tag group { chunk params } {
       if { !\[string equal \[set \"${name}:next(${column})\"\] \$${name}(${column})\] } { 
         break
       }
+  "
+
+  if { ![empty_string_p $delimiter] } {
+      template::adp_append_string $delimiter
+  }
+
+  template::adp_append_code "
       incr $i
       upvar 0 $name:\$$i $name
       incr __${tag_id}_group_rowcount

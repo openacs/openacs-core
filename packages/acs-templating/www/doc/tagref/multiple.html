@@ -95,6 +95,20 @@ at the beginning of the data source:
 <p>This attribute will cause processing of the data source to begin at row 
 <var>n + 1</var>.</p>
 
+<li><p>[Note: Carsten added this feature during the Berlin Hackaton 2004-02-14]
+<p>The <tt>delimiter</tt> attribute will add a string after each row except
+the last row:
+</p>
+
+<pre>
+  &lt;multiple delimiter=" | ">
+  ...
+</pre>
+
+<p>This attribute will cause the rows to appear to be sepparated by
+vertical bars. This is much more convenient than using the <tt>&lt;if></tt>
+tags to check whether we are on the last row.</p>
+
 <li><p>The <tt>startrow</tt> and <tt>maxrows</tt> attributes may be
 used together to output any range from the data source.</p>
 
