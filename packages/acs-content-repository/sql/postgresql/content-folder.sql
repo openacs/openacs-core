@@ -33,8 +33,6 @@ begin
 
 end;' language 'plpgsql';
 -- function new
-select define_function_args('content_folder__new','name,label,description,parent_id,context_id,folder_id,creation_date,creation_user,creation_ip');
-
 create or replace function content_folder__new (varchar,varchar,varchar,integer,integer,integer,timestamptz,integer,varchar)
 returns integer as '
 declare
@@ -116,6 +114,8 @@ begin
 end;' language 'plpgsql';
 
 -- function new -- accepts security_inherit_p DaveB
+
+select define_function_args('content_folder__new','name,label,description;null,parent_id;null,context_id;null,folder_id;null,creation_date;current_timestamp,creation_user;null,creation_ip;null,security_inherit_p;null');
 
 create or replace function content_folder__new (varchar,varchar,varchar,integer,integer,integer,timestamptz,integer,varchar, boolean)
 returns integer as '

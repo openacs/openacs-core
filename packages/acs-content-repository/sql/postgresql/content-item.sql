@@ -42,6 +42,9 @@ begin
 end;' language 'plpgsql' stable;
 
 -- new 19 param version of content_item__new
+
+select define_function_args('content_item__new','name,parent_id;null,item_id;null,locale;null,creation_date;current_timestamp,creation_user;null,context_id;null,creation_ip;null,item_subtype;content_item,content_type;content_revision,title;null,description;null,mime_type;text/plain,nls_language;null,text;null,data;null,relation_tag;null,is_live;f,storage_type;lob');
+
 create or replace function content_item__new (
   cr_items.name%TYPE,
   cr_items.parent_id%TYPE,

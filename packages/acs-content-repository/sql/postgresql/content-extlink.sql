@@ -10,6 +10,8 @@
 -- License.  Full text of the license is available from the GNU Project:
 -- http://www.fsf.org/copyleft/gpl.html
 
+select define_function_args('content_extlink__new','name;null,url,label;null,description;null,parent_id,extlink_id;null,creation_date;current_timestamp,creation_user;null,creation_ip;null');
+
 create or replace function content_extlink__new (varchar,varchar,varchar,varchar,integer,integer,timestamptz,integer,varchar)
 returns integer as '
 declare

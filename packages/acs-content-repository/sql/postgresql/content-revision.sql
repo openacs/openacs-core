@@ -13,6 +13,12 @@
 -- create or replace package body content_revision
 
 -- function new
+
+-- DRB: BLOB issues make it impractical to use package_instantiate_object to create
+-- new revisions that contain binary data so a higher-level Tcl API is required rather
+-- than the standard package_instantiate_object.  So we don't bother calling define_function_args
+-- here.
+
 create or replace function content_revision__new (varchar,varchar,timestamptz,varchar,varchar,integer,integer,integer,timestamptz,integer,varchar)
 returns integer as '
 declare

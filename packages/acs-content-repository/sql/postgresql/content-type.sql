@@ -45,6 +45,9 @@ for each row execute procedure cr_type_template_map_tr ();
 
 -- create or replace package body content_type is
 -- procedure create_type
+
+select define_function_args('content_type__create_type','content_type,super_type;content_revision,pretty_name,pretty_plural,table_name;null,id_colum;XXX,name_method;null');
+
 create or replace function content_type__create_type (varchar,varchar,varchar,varchar,varchar,varchar,varchar)
 returns integer as '
 declare
@@ -195,6 +198,7 @@ begin
   return 0; 
 end;' language 'plpgsql';
 
+select define_function_args('content_type__create_attribute','content_type,attribute_name,datatype,pretty_name,pretty_plural;null,sort_order;null,default_value;null,column_spec;text');
 
 -- function create_attribute
 create or replace function content_type__create_attribute (varchar,varchar,varchar,varchar,varchar,integer,varchar,varchar)

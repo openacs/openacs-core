@@ -91,6 +91,9 @@ end;' language 'plpgsql' stable;
 
 
 -- function new
+
+select define_function_args('content_keyword__new','heading,description;null,parent_id;null,keyword_id;null,creation_date;current_timestamp,creation_user;null,creation_ip;null,object_type;content_keyword');
+
 create or replace function content_keyword__new (varchar,varchar,integer,integer,timestamptz,integer,varchar,varchar)
 returns integer as '
 declare
