@@ -202,6 +202,7 @@ ad_proc ad_table {
         -Textra_vars {}
 	-Textra_rows {}
 	-bind {}
+        -dbn {}
     }
     statement_name sql_qry Tdatadef
 } {
@@ -270,12 +271,13 @@ ad_proc ad_table {
     </pre>
     </ul>
 
+    @param dbn The database name to use.  If empty_string, uses the default database.
 } {
 
     set full_statement_name [db_qd_get_fullname $statement_name]
 
     # This procedure needs a full rewrite!
-    db_with_handle Tdb {
+    db_with_handle -dbn $dbn Tdb {
 	# Execute the query
         set selection [db_exec select $Tdb $full_statement_name $sql_qry]
 	set Tcount 0

@@ -7,10 +7,159 @@ ad_library {
     @cvs-id $Id$
 }
 
+
+# TODO: The multi-db work below is incomplete.  Using the default
+# database should work the same as it always has in OpenACS, but using
+# the new -dbn switch will give errors in many cases.  See below under
+# BUGS: --atp@piskorski.com, 2003/03/17 14:27 EST
+
+# As originally released in (at least) ACS 4.2 through OpenACS 4.6,
+# this DB API supported only a single, default database.  You could
+# define any number of different database drivers and pools in
+# AOLserver, but could only use ONE database here.
+#
+# I have eliminated this restriction.  Now, in OpenACS 4.7 and later,
+# to access a non-default database, simply pas the optional -dbn
+# (Database Name) switch to any of the DB API procs which support it.
+#
+# BUGS, and Other Limitations and Caveats:
+#
+#   - Currently, using the -dbn switch to access any database which
+# uses a different driver than the default database will fail, because
+# there are separte Oracle and PostgreSQL implementations of db_exec,
+# and db_exec is used for basica stuff like db_string, etc.  Argh.
+# --atp@piskorski.com, 2003/03/17 14:27 EST
+#
+# Note that -dbn specifies a "Database Name", NOT a database pool!
+#
+# I could have provided access to secondary databases via a -pool
+# rather than a -dbn switch, but chose not to, as the existing DB API
+# already had the nicely general feature that if you try to do nested
+# queries, the DB API will transparently grab a second database handle
+# from another pool to make it work.  You can nest your queries as
+# many levels deep as you have database pools defined for that
+# database.  So, the existing API essentially already supported the
+# notion of "binning" database pools into logical "databases", it just
+# didn't provide any way to define more than the single, default
+# database!  Thus I chose to preserve this "binning" by specifying
+# databases via the -dbn switch rather than database pools via a -pool
+# switch.
+#
+# To define what databases exist, and what pools belong to what
+# databases, you need to put something like this in your nsd.tcl
+# AOLserver config file:
+#
+#   ns_section ns/server/$server_name/acs/database
+#     ns_param databases  [list ora pg foo]
+#     ns_param pools_ora  [list main subquery log]
+#     ns_param pools_pg   [list pg-main pg-subquery pg-log]
+#     ns_param pools_foo  [list foo1 foo2]
+#
+
+# Note that the FIRST database listed in the databases parameter - in
+# this case 'ora' - becomes the default database, used for all normal
+# OpenACS transactions!
+#
+# Note also that since each database is just a logical bucket for
+# holding database pools, you are free to do weird stuff like assign
+# the same pool to more than one database, or define more than one
+# logical database for a single real, physical database.
+#
+# --atp@piskorski.com, 2003/03/16 21:30 EST
+
+
+# We now use the following global variables:
+#
+# Server-Global variables:
+#   One nsv array:
+#     db_default_database .
+#   One nsv array per Database Name:
+#     db_available_pools $dbn
+#     db_driver_type_is $dbn
+#
+# Thread-Global variables:
+#   One Tcl array per Database Name:
+#     db_state_${dbn}
+#
+# The db_available_pools and db_state arrays are used in exactly the
+# same manner as they were before, except that in the original DB API
+# we had only one of each array total, while now we have one of each
+# array per database.
+#
+# We use the procs db_state_array_name_is, db_available_pools, and
+# db_driver_type_is to help keep track of these different arrays.
+# Note that most code should now NEVER read from any of the
+# db_available_pools nsvs listed above, but should instead use the
+# proc db_available_pools provided for that purpose.
+#
+# The original implementation comments on the use of these global
+# variables are below:
+#
+# --atp@piskorski.com, 2003/03/16 21:30 EST
+
+
+# Old comments, from before adding the above multi-db support:
+# --atp@piskorski.com, 2003/03/16 21:31 EST
+
+# NSV db_pooled_sequences($sequence) is the number of sequence values for the
+#     sequence named $sequence that should be pooled.
+# NSV db_pooled_nextvals($sequence) is a list of available sequence values for
+#     the sequence named $sequence. It is a ring buffer (values are added to the
+#     end and popped from the beginning).
+# NSV db_pooled_nextvals(.mutex) is a mutex guarding the db_pooled_nextvals.
+
+# global db_state(handles) is a list of handles that have been allocated.
+#
+# global db_state(n_handles_used) is the number of handles in this list that are
+# presently in use.
+#
+# E.g.:
+#
+#        db_foreach statement_name "select ..." {
+#            # $db_state(handles) is "nsdb1"; $db_state(n_handles_used) is 1
+#            db_foreach statement_name "select ..." {
+#                # $db_state(handles) is "nsdb1 nsdb2"; $db_state(n_handles_used) is 2
+#            }
+#            # $db_state(handles) is "nsdb1 nsdb2"; $db_state(n_handles_used) is 1
+#            db_release_unused_handles
+#            # $db_state(handles) is "nsdb1"; $db_state(n_handles_used) is 1
+#        }
+#        # $db_state(handles) is "nsdb1"; $db_state(n_handles_used) is 0
+#        db_release_unused_handles
+#        # $db_state(handles) is ""; $db_state(n_handles_used) is 0
+#
+# The list of available pools are stored in the nsv db_available_pools(.) = { pool1 pool2 pool3 }
+#
+# This list is defined in the [ns/server/yourserver/acs/database] section using the key
+# AvailablePool=foo (one line per pool).
+#
+# If none are specified, it defaults to all the pools available to AOLserver.
+
+
+ad_proc -private db_state_array_name_is {{ -dbn "" }} {
+    Returns the name of the global db_state array for the given
+    database name.
+
+    @param dbn The database name to use.  If empty_string, uses the
+    default database.
+
+    @author Andrew Piskorski (atp@piskorski.com)
+    @creation-date 2003/03/16
+} {
+    if { [empty_string_p $dbn] } {
+        set dbn [nsv_get {db_default_database} .]
+    }
+    return "db_state_${dbn}"
+}
+
+
 proc_doc db_type { } {
     Returns the RDBMS type (i.e. oracle, postgresql) this OpenACS installation is
     using.  The nsv ad_database_type is set up during the bootstrap process.
 } {
+    # Currently this should always be either "oracle" or "postgresql":
+    # --atp@piskorski.com, 2003/03/16 22:01 EST
+
     return [nsv_get ad_database_type .]
 }
 
@@ -90,10 +239,14 @@ proc_doc db_quote { string } { Quotes a string value to be placed in a SQL state
     return $result
 }
 
-proc_doc db_nth_pool_name { n } { 
+
+ad_proc db_nth_pool_name {{ -dbn "" } n } { 
     Returns the name of the pool used for the nth-nested selection (0-relative). 
+
+    @param dbn The database name to use.  If empty_string, uses the default database.
 } {
-    set available_pools [nsv_get db_available_pools .]
+    set available_pools [db_available_pools -dbn $dbn]
+
     if { $n < [llength $available_pools] } {
 	set pool [lindex $available_pools $n]
     } else {
@@ -102,14 +255,15 @@ proc_doc db_nth_pool_name { n } {
     return $pool
 }
 
-proc_doc db_with_handle { db code_block } {
 
-Places a usable database handle in $db and executes $code_block.
+ad_proc db_with_handle {{ -dbn "" } db code_block } {
 
+    Places a usable database handle in $db and executes $code_block.
+
+    @param dbn The database name to use.  If empty_string, uses the default database.
 } {
     upvar 1 $db dbh
-
-    global db_state
+    upvar "#0" [db_state_array_name_is -dbn $dbn] db_state
 
     # Initialize bookkeeping variables.
     if { ![info exists db_state(handles)] } {
@@ -119,7 +273,7 @@ Places a usable database handle in $db and executes $code_block.
 	set db_state(n_handles_used) 0
     }
     if { $db_state(n_handles_used) >= [llength $db_state(handles)] } {
-	set pool [db_nth_pool_name $db_state(n_handles_used)]
+	set pool [db_nth_pool_name -dbn $dbn $db_state(n_handles_used)]
 	set start_time [clock clicks]
 	set errno [catch {
 	    set db [ns_db gethandle $pool]
@@ -168,12 +322,14 @@ Places a usable database handle in $db and executes $code_block.
     }
 }
 
-proc_doc db_release_unused_handles {} {
+
+ad_proc db_release_unused_handles {{ -dbn "" }} {
 
     Releases any database handles that are presently unused.
 
+    @param dbn The database name to use.  If empty_string, uses the default database.
 } {
-    global db_state
+    upvar "#0" [db_state_array_name_is -dbn $dbn] db_state
 
     if { [info exists db_state(n_handles_used)] } {
 	# Examine the elements at the end of db_state(handles), killing off
@@ -198,6 +354,7 @@ proc_doc db_release_unused_handles {} {
     }
 }
 
+
 ad_proc -private db_getrow { db selection } {
 
     A helper procedure to perform an ns_db getrow, invoking developer support
@@ -214,19 +371,22 @@ ad_proc -private db_getrow { db selection } {
     return -code $errno -errorinfo $errorInfo -errorcode $errorCode $error
 }
 
-proc_doc db_string { statement_name sql args } {
+
+ad_proc db_string {{ -dbn "" } statement_name sql args } {
+
     Usage: <b>db_string</b> <i>statement-name sql</i> [ <tt>-default</tt> <i>default</i> ] [ <tt>-bind</tt> <i>bind_set_id</i> | <tt>-bind</tt> <i>bind_value_list</i> ]
   
     <p>Returns the first column of the result of the SQL query $sql.
     If the query doesn't return a row, returns $default (or raises an error if no $default is provided).
 
+    @param dbn The database name to use.  If empty_string, uses the default database.
 } {
     # Query Dispatcher (OpenACS - ben)
     set full_name [db_qd_get_fullname $statement_name]
 
     ad_arg_parser { default bind } $args
 
-    db_with_handle db {
+    db_with_handle -dbn $dbn db {
 	set selection [db_exec 0or1row $db $full_name $sql]
     }
 
@@ -239,12 +399,15 @@ proc_doc db_string { statement_name sql args } {
     return [ns_set value $selection 0]
 }
 
-proc_doc db_list { statement_name sql args } {
+
+ad_proc db_list {{ -dbn "" } statement_name sql args } {
+
     Usage: <b>db_list</b> <i>statement-name sql</i> [ <tt>-bind</tt> <i>bind_set_id</i> | <tt>-bind</tt> <i>bind_value_list</i> ]
     
     <p>Returns a Tcl list of the values in the first column of the result of SQL query <tt>sql</tt>. 
     If <tt>sql</tt> doesn't return any rows, returns an empty list. Analogous to <tt>database_to_tcl_list</tt>.
-	
+
+    @param dbn The database name to use.  If empty_string, uses the default database.
 } {
     ad_arg_parser { bind } $args
 
@@ -252,7 +415,7 @@ proc_doc db_list { statement_name sql args } {
     set full_statement_name [db_qd_get_fullname $statement_name]
 
     # Can't use db_foreach here, since we need to use the ns_set directly.
-    db_with_handle db {
+    db_with_handle -dbn $dbn db {
 	set selection [db_exec select $db $full_statement_name $sql]
 	set result [list]
 	while { [db_getrow $db $selection] } {
@@ -262,7 +425,9 @@ proc_doc db_list { statement_name sql args } {
     return $result
 }
 
-proc_doc db_list_of_lists { statement_name sql args } {
+
+ad_proc db_list_of_lists {{ -dbn "" } statement_name sql args } {
+
     Usage: <b>db_list_of_lists</b> <i>statement-name sql</i> [ <tt>-bind</tt> <i>bind_set_id</i> | <tt>-bind</tt> <i>bind_value_list</i> ]
 
     <p>Returns a Tcl list, each element of which is a list of all column 
@@ -270,6 +435,7 @@ proc_doc db_list_of_lists { statement_name sql args } {
     <tt>sql</tt> doesn't return any rows, returns an empty list. 
     Analogous to <tt>database_to_tcl_list_list</tt>.
 
+    @param dbn The database name to use.  If empty_string, uses the default database.
 } {
     ad_arg_parser { bind } $args
 
@@ -277,7 +443,7 @@ proc_doc db_list_of_lists { statement_name sql args } {
     set full_statement_name [db_qd_get_fullname $statement_name]
 
     # Can't use db_foreach here, since we need to use the ns_set directly.
-    db_with_handle db {
+    db_with_handle -dbn $dbn db {
 	set selection [db_exec select $db $full_statement_name $sql]
 
 	set result [list]
@@ -293,7 +459,8 @@ proc_doc db_list_of_lists { statement_name sql args } {
     return $result
 }
 
-ad_proc -public db_list_of_ns_sets {
+
+ad_proc -public db_list_of_ns_sets {{ -dbn "" }
     statement_name
     sql
     {args ""}
@@ -308,12 +475,14 @@ ad_proc -public db_list_of_ns_sets {
     @param args Any additional arguments.
 
     @return list of ns_sets, one per each row return by the SQL query
+
+    @param dbn The database name to use.  If empty_string, uses the default database.
 } {
     ad_arg_parser { bind } $args
 
     set full_statement_name [db_qd_get_fullname $statement_name]
 
-    db_with_handle db {
+    db_with_handle -dbn $dbn db {
         set result [list]
         set selection [db_exec select $db $full_statement_name $sql]
 
@@ -325,7 +494,9 @@ ad_proc -public db_list_of_ns_sets {
     return $result
 }
 
-proc_doc db_foreach { statement_name sql args } {
+
+ad_proc db_foreach {{ -dbn "" } statement_name sql args } {
+
     Usage: 
     <blockquote>
     db_foreach <em><i>statement-name sql</i></em> [ -bind <em><i>bind_set_id</i></em> | -bind <em><i>bind_value_list</i></em> ] \
@@ -349,6 +520,7 @@ proc_doc db_foreach { statement_name sql args } {
 	ns_write "&lt;li&gt;No greebles!\n"
     }</pre></blockquote>
 
+    @param dbn The database name to use.  If empty_string, uses the default database.
 } {
     # Query Dispatcher (OpenACS - ben)
     set full_statement_name [db_qd_get_fullname $statement_name]
@@ -383,7 +555,7 @@ proc_doc db_foreach { statement_name sql args } {
 	upvar 1 $column_set selection
     }
 
-    db_with_handle db {
+    db_with_handle -dbn $dbn db {
 	set selection [db_exec select $db $full_statement_name $sql]
 
 	set counter 0
@@ -439,16 +611,20 @@ proc_doc db_foreach { statement_name sql args } {
     }
 }
 
+
 ad_proc -public db_multirow {
     -local:boolean
     -append:boolean
     {-upvar_level 1}
     {-extend {}}
+    {-dbn ""}
     var_name
     statement_name
     sql
     args 
 } {
+    @param dbn The database name to use.  If empty_string, uses the default database.
+
    Usage:
     <blockquote>
     db_multirow [ -local ] [ -upvar_level <em><i>n_levels_up</i></em> ] [ -append ] [ -extend <em><i>column_list</i></em> ] \
@@ -564,7 +740,7 @@ ad_proc -public db_multirow {
 	set counter 0
     } 
 
-    db_with_handle db {
+    db_with_handle -dbn $dbn db {
 	set selection [db_exec select $db $full_statement_name $sql]
         set local_counter 0
 
@@ -661,7 +837,8 @@ Columns in this query: [join [lsort -ascii $local_columns] ", "]" "" "ACS_MULTIR
 }
 
 
-ad_proc db_0or1row { statement_name sql args } { 
+ad_proc db_0or1row {{ -dbn "" } statement_name sql args } { 
+
     Usage: 
     <blockquote>
     db_0or1row <i>statement-name sql</i> [ -bind <i>bind_set_id</i> | -bind <i>bind_value_list</i> ] \
@@ -674,6 +851,7 @@ ad_proc db_0or1row { statement_name sql args } {
     or column_set is specified) and returns 1. If no rows are returned, 
     returns 0. If more than one row is returned, throws an error.
 
+    @param dbn The database name to use.  If empty_string, uses the default database.
 } {
     ad_arg_parser { bind column_array column_set } $args
 
@@ -695,7 +873,7 @@ ad_proc db_0or1row { statement_name sql args } {
 	upvar 1 $column_set selection
     }
 
-    db_with_handle db {
+    db_with_handle -dbn $dbn db {
 	set selection [db_exec 0or1row $db $full_statement_name $sql]
     }
     
@@ -717,6 +895,7 @@ ad_proc db_0or1row { statement_name sql args } {
     return 1
 }
 
+
 ad_proc db_1row { args } {
     Usage: 
     <blockquote>
@@ -730,6 +909,7 @@ ad_proc db_1row { args } {
     or column_set is specified). If no rows are returned, 
     throws an error.
 
+    @param dbn The database name to use.  If empty_string, uses the default database.
 } {
     if { ![uplevel db_0or1row $args] } {
 	return -code error "Query did not return any rows."
@@ -737,7 +917,7 @@ ad_proc db_1row { args } {
 }
 
 
-ad_proc db_transaction { transaction_code args } {
+ad_proc db_transaction {{ -dbn ""} transaction_code args } {
     Usage: <b><i>db_transaction</i></b> <i>transaction_code</i> [ on_error { <i>error_code_block</i> } ]
     
     Executes transaction_code with transactional semantics.  This means that either all of the database commands
@@ -772,9 +952,9 @@ ad_proc db_transaction { transaction_code args } {
     } 
     </pre>
 
+    @param dbn The database name to use.  If empty_string, uses the default database.
 } {
-
-    global db_state 
+    upvar "#0" [db_state_array_name_is -dbn $dbn] db_state
     
     set syn_err "db_transaction: Invalid arguments. Use db_transaction { code } \[on_error { error_code_block }\] "
     set arg_c [llength $args]
@@ -795,7 +975,7 @@ ad_proc db_transaction { transaction_code args } {
     # Make the error message and database handle available to the on_error block.
     upvar errmsg errmsg
     
-    db_with_handle db {
+    db_with_handle -dbn $dbn db {
 	# Preserve the handle, since db_with_handle kills it after executing
 	# this block.
 	set dbh $db	
@@ -825,7 +1005,7 @@ ad_proc db_transaction { transaction_code args } {
 	3 {
 	    # TCL_BREAK - Abort the transaction and do the break.
 	    ns_db dml $dbh "abort transaction"
-	    db_release_unused_handles
+	    db_release_unused_handles -dbn $dbn
 	    break
 	}
 	4 {
@@ -942,23 +1122,29 @@ ad_proc db_transaction { transaction_code args } {
 }
 
 
-ad_proc db_abort_transaction {} { 
+ad_proc db_abort_transaction {{ -dbn "" }} {
     
     Aborts all levels of a transaction. That is if this is called within 
     several nested transactions, all of them are terminated. Use this 
     instead of db_dml "abort" "abort transaction".
+
+    @param dbn The database name to use.  If empty_string, uses the default database.
 } {
-    global db_state
-    db_with_handle db {
+    upvar "#0" [db_state_array_name_is -dbn $dbn] db_state
+
+    db_with_handle -dbn $dbn db {
 	# We set the abort flag to true.
 	set db_state(db_abort_p,$db) 1
     }
 }
 
 
-ad_proc db_abort_transaction_p {} { } {
-    global db_state
-    db_with_handle db {
+ad_proc db_abort_transaction_p {{ -dbn "" }} {
+    @param dbn The database name to use.  If empty_string, uses the default database.
+} {
+    upvar "#0" [db_state_array_name_is -dbn $dbn] db_state
+
+    db_with_handle -dbn $dbn db {
 	if { [info exists db_state(db_abort_p,$db)] } { 
 	    return $db_state(db_abort_p,$db)
 	} else {
@@ -968,48 +1154,15 @@ ad_proc db_abort_transaction_p {} { } {
     }
 }
 
-ad_proc -public db_name { } {
+
+ad_proc -public db_name {{ -dbn "" }} {
 
     Returns the name of the database as reported by the driver.
 
+    @param dbn The database name to use.  If empty_string, uses the default database.
 } {
-    db_with_handle db {
+    db_with_handle -dbn $dbn db {
         set dbtype [ns_db dbtype $db]
     }
     return $dbtype
 }
-
-# NSV db_pooled_sequences($sequence) is the number of sequence values for the
-#     sequence named $sequence that should be pooled.
-# NSV db_pooled_nextvals($sequence) is a list of available sequence values for
-#     the sequence named $sequence. It is a ring buffer (values are added to the
-#     end and popped from the beginning).
-# NSV db_pooled_nextvals(.mutex) is a mutex guarding the db_pooled_nextvals.
-
-# global db_state(handles) is a list of handles that have been allocated.
-#
-# global db_state(n_handles_used) is the number of handles in this list that are
-# presently in use.
-#
-# E.g.:
-#
-#        db_foreach statement_name "select ..." {
-#            # $db_state(handles) is "nsdb1"; $db_state(n_handles_used) is 1
-#            db_foreach statement_name "select ..." {
-#                # $db_state(handles) is "nsdb1 nsdb2"; $db_state(n_handles_used) is 2
-#            }
-#            # $db_state(handles) is "nsdb1 nsdb2"; $db_state(n_handles_used) is 1
-#            db_release_unused_handles
-#            # $db_state(handles) is "nsdb1"; $db_state(n_handles_used) is 1
-#        }
-#        # $db_state(handles) is "nsdb1"; $db_state(n_handles_used) is 0
-#        db_release_unused_handles
-#        # $db_state(handles) is ""; $db_state(n_handles_used) is 0
-#
-# The list of available pools are stored in the nsv db_available_pools(.) = { pool1 pool2 pool3 }
-#
-# This list is defined in the [ns/server/yourserver/acs/database] section using the key
-# AvailablePool=foo (one line per pool).
-#
-# If none are specified, it defaults to all the pools available to AOLserver.
-#
