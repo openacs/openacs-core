@@ -15,7 +15,7 @@ begin
                 null
             );
 
-    insert into acs_sc_contract (
+    insert into acs_sc_contracts (
         contract_id,
         contract_name,
         contract_desc
@@ -39,7 +39,7 @@ declare
 begin
 
     select contract_id into v_contract_id
-    from acs_sc_contract
+    from acs_sc_contracts
     where contract_name = p_contract_name;
 
     return v_contract_id;
@@ -56,7 +56,7 @@ declare
 begin
 
     select contract_name into v_contract_name
-    from acs_sc_contract
+    from acs_sc_contracts
     where contract_id = p_contract_id;
 
     return v_contract_name;
@@ -71,7 +71,7 @@ declare
     p_contract_id		alias for $1;
 begin
 
-    delete from acs_sc_contract
+    delete from acs_sc_contracts
     where contract_id = p_contract_id;
 
     return 0;
@@ -128,7 +128,7 @@ begin
 
      v_operation_outputtype_id := acs_sc_msg_type__get_id(p_operation_outputtype);
 
-    insert into acs_sc_operation (
+    insert into acs_sc_operations (
         contract_id,
         operation_id,
 	contract_name,
@@ -165,7 +165,7 @@ declare
 begin
 
     select operation_id into v_operation_id
-    from acs_sc_operation
+    from acs_sc_operations
     where contract_name = p_contract_name 
     and operation_name = p_operation_name;
 
@@ -181,7 +181,7 @@ declare
     p_operation_id		alias for $1;
 begin
 
-    delete from acs_sc_operation
+    delete from acs_sc_operations
     where operation_id = p_operation_id;
 
     return 0;
@@ -229,7 +229,7 @@ begin
                 null
             );
 
-    insert into acs_sc_impl (
+    insert into acs_sc_impls (
         impl_id,
 	impl_name,
         impl_owner_name,
@@ -256,7 +256,7 @@ declare
 begin
 
     select impl_id into v_impl_id
-    from acs_sc_impl
+    from acs_sc_impls
     where impl_name = p_impl_name
     and impl_contract_name = p_impl_contract_name;
 
@@ -273,7 +273,7 @@ declare
 begin
 
     select impl_name into v_impl_name
-    from acs_sc_impl
+    from acs_sc_impls
     where impl_id = p_impl_id;
 
     return v_impl_name;
@@ -289,7 +289,7 @@ declare
     p_impl_name			alias for $2;
 begin
 
-    delete from acs_sc_impl
+    delete from acs_sc_impls
     where impl_contract_name = p_impl_contract_name
     and impl_name = p_impl_name;
 
@@ -315,7 +315,7 @@ begin
 
     v_impl_id := acs_sc_impl__get_id(p_impl_contract_name,p_impl_name);
 
-    insert into acs_sc_impl_alias (
+    insert into acs_sc_impl_aliases (
         impl_id,
 	impl_name,
 	impl_contract_name,
@@ -349,7 +349,7 @@ begin
 
     v_impl_id := acs_sc_impl__get_id(p_impl_name);
 
-    delete from acs_sc_impl_alias 
+    delete from acs_sc_impl_aliases 
     where impl_contract_name = p_impl_contract_name 
     and impl_name = p_impl_name
     and impl_operation_name = p_impl_operation_name;
@@ -374,10 +374,10 @@ begin
     v_impl_name := acs_sc_impl__get_name(p_impl_id);
 
     select count(*) into v_count
-    from acs_sc_operation
+    from acs_sc_operations
     where contract_id = p_contract_id
     and operation_name not in (select impl_operation_name
-		       	       from acs_sc_impl_alias
+		       	       from acs_sc_impl_aliases
 			       where impl_contract_name = v_contract_name
 			       and impl_id = p_impl_id);
 
@@ -385,7 +385,7 @@ begin
         raise exception ''Binding of % to % failed.'', v_contract_name, v_impl_name;
     end if;
 
-    insert into acs_sc_binding (
+    insert into acs_sc_bindings (
         contract_id,
 	impl_id
     ) values (
@@ -427,7 +427,7 @@ declare
     p_impl_id			alias for $2;
 begin
 
-    delete from acs_sc_binding
+    delete from acs_sc_bindings
     where contract_id = p_contract_id
     and impl_id = p_impl_id;
 
@@ -471,7 +471,7 @@ begin
     v_impl_id := acs_sc_impl__get_id(p_contract_name,p_impl_name);
 
     select case when count(*)=0 then 0 else 1 end into v_exists_p
-    from acs_sc_binding
+    from acs_sc_bindings
     where contract_id = v_contract_id
     and impl_id = v_impl_id;
 

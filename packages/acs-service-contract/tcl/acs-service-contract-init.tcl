@@ -4,7 +4,7 @@ db_foreach impl_operation {
         impl_contract_name, 
         impl_operation_name,
         impl_name
-    from acs_sc_impl_alias
+    from acs_sc_impl_aliases
 } {
 
     set binding_exists_p [db_exec_plsql binding_exists_p {select acs_sc_binding__exists_p(:impl_contract_name,:impl_name)}]
