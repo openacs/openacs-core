@@ -115,7 +115,7 @@ dropdb <replaceable>$OPENACS_SERVICE_NAME</replaceable>
 createdb <replaceable>$OPENACS_SERVICE_NAME</replaceable></action></screen>
         <formalpara id="cut-and-paste-name-var">
           <title>Setting a global shell variable for cut and paste</title>
-          <para>In order to cut and paste the instructions into your shell, you must set the environment variable $OPENACS_SERVICE_NAME.  In order to set it globally so that it works for any new users or special service users you may create, edit the file <computeroutput>/etc/profile</computeroutput> and add this line:</para>
+          <para>In order to cut and paste the instructions into your shell, you must set the environment variable $OPENACS_SERVICE_NAME.  In order to set it globally so that it works for any new users or special service users you may create, edit the file <computeroutput>/etc/profile</computeroutput> ( <computeroutput>/etc/share/skel/dot.profile</computeroutput> for FreeBSD) and add this line:</para>
         </formalpara>
         <programlisting>export OPENACS_SERVICE_NAME=<replaceable>service0</replaceable></programlisting>
       </listitem>
