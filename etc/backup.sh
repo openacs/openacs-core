@@ -86,7 +86,7 @@ if [[ $DOM = "01" || $DOW = "Sun" ]];
     TYPE="full";
 fi
 
-if $TYPE == "full";
+if [ $TYPE == "full" ];
     then
     NEWER=""
 else
