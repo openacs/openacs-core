@@ -432,10 +432,10 @@ begin
   for outer in select object_id from acs_object_context_index where 
                ancestor_id = old.object_id and object_id <> old.object_id loop
     for inner in select ancestor_id from acs_object_context_index where
-                 object_id = old.object_id loop
+                 object_id = old.object_id and ancestor_id <> old.object_id loop
       delete from acs_object_context_index
       where object_id = outer.object_id
-        and ancestor_id = inner.object_id;
+        and ancestor_id = inner.ancestor_id;
     end loop;
   end loop;
 
