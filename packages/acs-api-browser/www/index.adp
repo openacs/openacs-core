@@ -44,7 +44,7 @@
  <form action="tcl-proc-view" method="get">
   <tr bgcolor="#DDDDDD">
    <td colspan="2">
-    <h4>AOLserver API Search</h4>
+    <h4>AOLserver Tcl API Search</h4>
     <input type="text" name="tcl_proc" />
     <input type="submit" value="Go" /><br />
     (enter <em>exact</em> procedure name)<br />
