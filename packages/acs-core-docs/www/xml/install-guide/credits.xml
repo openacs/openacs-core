@@ -47,14 +47,14 @@
 	Several people have helped with this document, including Torben
 	Brosten, Don Baccus, Roberto Mello, Talli Somekh, Dave Bauer, Jim
 	Lynch, Jon Griffin, Daryl Biberdorf, Bjorn Thor Jonsson, Jade Rubick,
-	Fred Yankowski, Dan Chak, Sebastiano Pilla, Reuven Lerner and Malte
-	Sussdorff.
+	Fred Yankowski, Dan Chak, Sebastiano Pilla, Reuven Lerner, Malte
+	Sussdorff, Stan Kaufman and Pascal Scheffers.
   </para>
 
   <para>
-	<emphasis role="strong">All questions and comments</emphasis> regarding
-	this guide should be posted on the <ulink
-	url="http://openacs.org/bboard">OpenACS bboards</ulink>.
+    <emphasis role="strong">All questions and comments</emphasis> regarding
+    this guide should be posted on the <ulink
+    url="http://openacs.org/bboard">OpenACS bboards</ulink>.
   </para>
 
   <para><phrase role="cvstag">($Id$)</phrase></para>

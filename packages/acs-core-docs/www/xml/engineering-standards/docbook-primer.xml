@@ -61,12 +61,12 @@
 
     <para>
       Theoretically any strict DTD would have been sufficient - we could even write our own. But DocBook has been around
-      for a while (since <ulink url="http://docbook.org/tdg/html/ch01.html#AEN971">early 90's</ulink>), 
+      for a while (since <ulink url="http://docbook.org/tdg/en/html/ch01.html#d0e2132">early 90's</ulink>), 
       it's well-tested, it's complete, it's extremely well-suited for technical documents
       and best of all, it's open-source. A growing community surrounds DocBook (has 
-      <ulink url="http://www.oasis-open.org/docbook/mailinglist/index.html">mailing lists</ulink>) 
+      <ulink url="http://www.oasis-open.org/committees/docbook/mailinglist/index.html">mailing lists</ulink>) 
       and a number of free and commercial
-      <ulink url="http://www.oasis-open.org/docbook/tools/index.html">tools</ulink> are available
+      <ulink url="http://www.oasis-open.org/committees/docbook/tools/index.html">tools</ulink> are available
       for editing and publishing DocBook documents.
     </para>
 
@@ -74,7 +74,7 @@
       This primer walks you through the basics, and should cover the
       needs for 95 percent of the documentation we produce. However,
       you're always welcome to check out DocBook's
-      <ulink url="http://docbook.org/tdg/html/refelem.html">
+      <ulink url="http://docbook.org/tdg/en/html/part2.html">
 	list of elements</ulink> and use more exotic features in your
       documents. The list is made up of SGML-elements but basically
       the same elements are valid in the XML DTD <emphasis
@@ -734,7 +734,7 @@ bash$  xsltproc /usr/share/sgml/docbook/stylesheet/xsl/nwalsh/html/chunk.xsl fil
       <listitem>
 	<para>
 	  In the process of transforming your HTML into XML, 
-	  <ulink url="http://www.w3.org/People/Raggett/tidy/">HTML tidy</ulink>
+	  <ulink url="http://tidy.sourceforge.net/">HTML tidy</ulink>
 	  can be a a handy tool to make your HTML "regexp'able".
 	  <ulink url="mailto:bcalef@arsdigita.com">Brandoch Calef</ulink> has made a 
 	  <ulink url="http://developer.arsdigita.com/working-papers/bcalef/html-to-docbook.html#html2docbook">Perl script</ulink>

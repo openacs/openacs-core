@@ -208,167 +208,165 @@
 	  <listitem>
 		<para>
 		  If you find errors in this document or if you have ideas about
-		  making it better, please post them in our bug tracker - the
+		  making it better, please post them in our
 		  <ulink
-		  url="http://openacs.org/sdm/open-bafs.tcl?module_id=54&amp;package_id=9">SDM</ulink>.
-		</para>
-	  </listitem>
-	</itemizedlist>
+          url="http://openacs.org/bugtracker/openacs/">BugTracker</ulink>.
+        </para>
+      </listitem>
+    </itemizedlist>
   </sect2>
 
   <sect2 id="install-rpms" xreflabel="Is there an easier way?">
-	<title>Is there an easier way?</title>
-	<para>
-	  After reading through this tome, you may ask yourself if there is a
-	  better way. And there is! Jonathan Marsden has done all the dirty
-	  work to create RPMs for OpenACS &version;. These RPMs will install AOLServer,
-	  all the AOLServer modules, PostgreSQL and OpenACS &version; simply by typing
-	  one magic command. They're currently at <ulink
-	  url="http://www.xc.org/jonathan/openacs/openacs4-rpm-based-install.html">http://www.xc.org</ulink>,
-	  but will eventually also be available at <ulink
-	  url="http://openacs.org/software/">http://openacs.org/software</ulink>. They're
-	  quite new and Jonathan invites (and is quite responsive to)
-	  feedback. Leave comments at this <ulink
-	  url="http://openacs.org/bboard/q-and-a-fetch-msg.tcl?msg_id=0003hx&amp;topic_id=11&amp;topic=OpenACS">thread</ulink>.
-	</para>
+    <title>Is there an easier way?</title>
+    <para>
+
+      After reading through this tome, you may ask yourself if there is a
+      better way. Well, not quite. Jonathan Marsden has created RPMs (at
+      <ulink
+      url="http://www.xc.org/jonathan/openacs/openacs4-rpm-based-install.html">http://www.xc.org</ulink>)
+      for OpenACS 4.5 but there are not yet any for version
+      &version;. There has been talk about automating the install process,
+      but that hasn't happened yet. Stay tuned!
+
+    </para>
   </sect2>
 
   <sect2 id="install-origins" xreflabel="Where did this document come from?">
-	<title>Where did this document come from?</title>
-	<para>
-	  This document was created by <ulink
-	  url="mailto:vinod@kurup.com">Vinod Kurup</ulink>, but it's really
-	  just plagiarism from a number of documents that came before it. If
-	  I've used something that you've written without proper credit, let me
-	  know and I'll fix it right away.
-	</para>
-	
-	<para>These are a few of my sources:</para>
-	<itemizedlist>
-	  <listitem><para> 
-		  <ulink url="http://developer.arsdigita.com/doc/unix-install.html">ArsDigita installation guide</ulink>
-		</para></listitem>
+    <title>Where did this document come from?</title>
+    <para>
+      This document was created by <ulink
+      url="mailto:vinod@kurup.com">Vinod Kurup</ulink>, but it's really
+      just plagiarism from a number of documents that came before it. If
+      I've used something that you've written without proper credit, let me
+      know and I'll fix it right away.
+    </para>
+    
+    <para>These are a few of my sources:</para>
+    <itemizedlist>
+      <listitem><para> 
+          <ulink url="http://developer.arsdigita.com/doc/unix-install.html">ArsDigita installation guide</ulink>
+        </para></listitem>
 
-	  <listitem><para>
-		  <ulink
-		  url="http://openacs.org/doc/openacs/install/">OpenACS 3.x installation guide</ulink>
-		</para></listitem> 
+      <listitem><para>
+          <ulink
+          url="http://openacs.org/doc/openacs/install/">OpenACS 3.x installation guide</ulink>
+        </para></listitem> 
 
-	  <listitem><para> 
-		  <ulink url="http://www.orchardlabs.com/freebsd/">Gilbert Wong's FreeBSD
-		  installation guide</ulink>
-		</para></listitem> 
+      <listitem><para> 
+          <ulink url="http://www.orchardlabs.com/freebsd/">Gilbert Wong's FreeBSD
+          installation guide</ulink>
+        </para></listitem> 
 
-	  <listitem><para> 
-		  <ulink url="http://kurup.com/acs/openacs-4.html">My own Brief OpenACS4
-		  installation guide</ulink>
-		</para></listitem>
-	</itemizedlist>
+      <listitem><para> 
+          <ulink url="http://kurup.com/acs/openacs-4.html">My own Brief OpenACS4
+          installation guide</ulink>
+        </para></listitem>
+    </itemizedlist>
 
-	<para>
-	  Please also see the <xref linkend="credits"/> section for more acknowledgements.
-	</para>
+    <para>
+      Please also see the <xref linkend="credits"/> section for more acknowledgements.
+    </para>
   </sect2>
 
   <sect2 id="install-resources" xreflabel="Resources">
-	<title>Resources</title>
+    <title>Resources</title>
 
-	<para>
-	  Here are some resources that OpenACS users have found useful.
-	</para>
+    <para>
+      Here are some resources that OpenACS users have found useful.
+    </para>
 
-	<sect3 id="install-resources-books">
-	  <title>Books</title>
+    <sect3 id="install-resources-books">
+      <title>Books</title>
 
-	  <itemizedlist>
-		<listitem><para>
+      <itemizedlist>
+        <listitem><para>
 
-			<ulink
-			url="http://www.amazon.com/exec/obidos/ASIN/1558605347/photonetA">Philip
-			and Alex's Guide to Web Publishing</ulink> - A very readable
-			guide to database-backed community websites.
+            <ulink
+            url="http://www.amazon.com/exec/obidos/ASIN/1558605347/photonetA">Philip
+            and Alex's Guide to Web Publishing</ulink> - A very readable
+            guide to database-backed community websites.
 
-		  </para></listitem>
+          </para></listitem>
 
-		<listitem><para>
+        <listitem><para>
 
-			<ulink
-			  url="http://www.amazon.com/exec/obidos/ISBN=1565922603/photonetA/">UNIX
-			  Power Tools</ulink> - An excellent introduction to the
-			  command line tools and basic programs of UNIX
+            <ulink
+              url="http://www.amazon.com/exec/obidos/ISBN=1565922603/photonetA/">UNIX
+              Power Tools</ulink> - An excellent introduction to the
+              command line tools and basic programs of UNIX
 
-		  </para></listitem>
+          </para></listitem>
 
-		<listitem><para>
+        <listitem><para>
 
-			<ulink
-			url="http://www.amazon.com/exec/obidos/ASIN/0130206016/photonetA">UNIX
-			System Administration Handbook</ulink> (formerly the "red book"
-			- now the "purple" book)
+            <ulink
+            url="http://www.amazon.com/exec/obidos/ASIN/0130206016/photonetA">UNIX
+            System Administration Handbook</ulink> (formerly the "red book"
+            - now the "purple" book)
 
-		  </para></listitem>
+          </para></listitem>
 
-		<listitem><para> 
+        <listitem><para> 
 
-			<ulink
-			url="http://www.amazon.com/exec/obidos/ASIN/076453162X/photonetA">UNIX
-			System Administrator's Bible</ulink> -  (LePage and Iarerra 1998;
-			IDG) 
+            <ulink
+            url="http://www.amazon.com/exec/obidos/ASIN/076453162X/photonetA">UNIX
+            System Administrator's Bible</ulink> -  (LePage and Iarerra 1998;
+            IDG) 
 
-		  </para></listitem>
+          </para></listitem>
 
-		<listitem><para> 
+        <listitem><para> 
 
-			<ulink
-			url="http://www.amazon.com/exec/obidos/ASIN/1565921518/photonetA">Running
-			Linux</ulink> </para></listitem>
-	  
-	  <listitem><para> <ulink
-			url="http://www.amazon.com/exec/obidos/ASIN/1565921526/photonetA">Learning
-			Gnu Emacs</ulink> </para></listitem>
+            <ulink
+            url="http://www.amazon.com/exec/obidos/ASIN/1565921518/photonetA">Running
+            Linux</ulink> </para></listitem>
+      
+      <listitem><para> <ulink
+            url="http://www.amazon.com/exec/obidos/ASIN/1565921526/photonetA">Learning
+            Gnu Emacs</ulink> </para></listitem>
 
-		<listitem><para> 
+        <listitem><para> 
 
-			<ulink
-			  url="http://www.amazon.com/exec/obidos/ASIN/1565925858/photonetA">Linux
-			  in a Nutshell</ulink> 
+            <ulink
+              url="http://www.amazon.com/exec/obidos/ASIN/1565925858/photonetA">Linux
+              in a Nutshell</ulink> 
 
-		  </para></listitem>
-	  </itemizedlist>
+          </para></listitem>
+      </itemizedlist>
 
-	</sect3>
+    </sect3>
 
-	<sect3 id="install-resources-web">
-	  <title>Web Sites</title>
+    <sect3 id="install-resources-web">
+      <title>Web Sites</title>
 
-	  <itemizedlist>
-		<listitem><para>
+      <itemizedlist>
+        <listitem><para>
 
-			<ulink url="http://www.geek-girl.com/unix.html">The UNIX
-			  Reference Desk</ulink>
+            <ulink url="http://www.geek-girl.com/unix.html">The UNIX
+              Reference Desk</ulink>
 
-		  </para></listitem>
+          </para></listitem>
 
-		<listitem><para> 
+        <listitem><para> 
 
-			<ulink url="http://www.linuxdoc.org/">The Linux Documentation
-			Project</ulink> 
+            <ulink url="http://www.linuxdoc.org/">The Linux Documentation
+            Project</ulink> 
 
-		  </para></listitem> 
+          </para></listitem> 
 
-		<listitem><para>
+        <listitem><para>
 
-			<ulink
-			url="http://www-105.ibm.com/developerworks/education.nsf/linux-onlinecourse-bytitle/4AAA4E689F774DBC86256B4500645075?OpenDocument">LPI
-			certification exam preps</ulink> - A series of articles from
-			IBM developerworks on basic and intermediate Linux skills
-			(requires registration)
+            <ulink
+            url="http://www-105.ibm.com/developerworks/education.nsf/linux-onlinecourse-bytitle/4AAA4E689F774DBC86256B4500645075?OpenDocument">LPI
+            certification exam preps</ulink> - A series of articles from
+            IBM developerworks on basic and intermediate Linux skills
+            (requires registration)
 
-			</para></listitem>
+            </para></listitem>
 
-	</itemizedlist>
+    </itemizedlist>
 
-	</sect3>
+    </sect3>
 
   </sect2>
   <para><phrase role="cvstag">($Id$)</phrase></para>

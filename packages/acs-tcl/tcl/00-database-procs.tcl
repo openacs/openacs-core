@@ -520,6 +520,7 @@ ad_proc -public db_multirow {
     set user_url [acs_community_member_url -user_id $user_id]
 }</pre>
 
+   @see template::multirow
 } {
     # Query Dispatcher (OpenACS - ben)
     set full_statement_name [db_qd_get_fullname $statement_name]

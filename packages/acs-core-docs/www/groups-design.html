@@ -1,9 +1,9 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html><head><meta content="text/html; charset=ISO-8859-1" http-equiv="Content-Type"><title>OpenACS 4 Groups Design</title><meta name="generator" content="DocBook XSL Stylesheets V1.50.0"><link rel="home" href="index.html" title="OpenACS Documentation"><link rel="up" href="kernel-doc.html" title="Chapter 7. Kernel Documentation"><link rel="previous" href="groups-requirements.html" title="OpenACS 4 Groups Requirements"><link rel="next" href="subsites-requirements.html" title="OpenACS 4 Subsites Requirements"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="images/alex.jpg" border="0"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="groups-requirements.html">Prev</a>&nbsp;</td><th width="60%" align="center">Chapter 7. Kernel Documentation</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="subsites-requirements.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><h2 class="title" style="clear: both"><a name="groups-design"></a>OpenACS 4 Groups Design</h2></div></div><div class="authorblurb"><p>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>OpenACS 4 Groups Design</title><meta name="generator" content="DocBook XSL Stylesheets V1.56.1"><link rel="home" href="index.html" title="OpenACS Documentation"><link rel="up" href="kernel-doc.html" title="Chapter 7. Kernel Documentation"><link rel="previous" href="groups-requirements.html" title="OpenACS 4 Groups Requirements"><link rel="next" href="subsites-requirements.html" title="OpenACS 4 Subsites Requirements"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="images/alex.jpg" border="0"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="groups-requirements.html">Prev</a>&nbsp;</td><th width="60%" align="center">Chapter 7. Kernel Documentation</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="subsites-requirements.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><h2 class="title" style="clear: both"><a name="groups-design"></a>OpenACS 4 Groups Design</h2></div></div><div class="authorblurb"><p>
 by <a href="http://planitia.org" target="_top">Rafael H. Schloming</a> and <a href="mailto:mthomas@arsdigita.com" target="_top">Mark Thomas</a><br>
-		  OpenACS docs are written by the named authors, but may be edited
-		  by OpenACS documentation staff.
-		</p></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="groups-design-essentials"></a>Essentials</h3></div></div><div class="itemizedlist"><ul type="disc"><li><p>User directory</p></li><li><p>Sitewide administrator directory</p></li><li><p>Subsite administrator directory</p></li><li><p>TCL script directory</p></li><li><p><a href="groups-requirements.html">OpenACS 4 Groups Requirements</a></p></li><li><p>Data model</p></li><li><p>PL/SQL file </p><div class="itemizedlist"><ul type="round"><li><p><a href="/doc/sql/display-sql?url=community-core-create.sql&amp;package_key=acs-kernel" target="_top">
+          OpenACS docs are written by the named authors, but may be edited
+          by OpenACS documentation staff.
+        </p></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="groups-design-essentials"></a>Essentials</h3></div></div><div class="itemizedlist"><ul type="disc"><li><p>User directory</p></li><li><p>Sitewide administrator directory</p></li><li><p>Subsite administrator directory</p></li><li><p>TCL script directory</p></li><li><p><a href="groups-requirements.html">OpenACS 4 Groups Requirements</a></p></li><li><p>Data model</p></li><li><p>PL/SQL file </p><div class="itemizedlist"><ul type="circle"><li><p><a href="/doc/sql/display-sql?url=community-core-create.sql&amp;package_key=acs-kernel" target="_top">
 community-core-create.sql</a></p></li><li><p><a href="/doc/sql/display-sql?url=groups-create.sql&amp;package_key=acs-kernel" target="_top">groups-create.sql</a></p></li></ul></div></li><li><p>ER diagram</p></li><li><p>Transaction flow diagram</p></li></ul></div></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="groups-design-intro"></a>Introduction</h3></div></div><p>Almost all database-backed websites have users, and need to model the
 grouping of users. The OpenACS 4 Parties and Groups system is intended to provide
 the flexibility needed to model complex real-world organizational structures,
@@ -62,16 +62,16 @@ knowledge level attributes for the group and its subtypes.</p></dd><dt><span cla
 </span></dt><dd><p>The set of direct membership relationships between a group and a
 party.</p></dd><dt><span class="term"><tt>group_member_index</tt>
 
-</span></dt><dd><p>A mapping of a party <span class="strong"><em>P</em></span> to the groups
-{<span class="strong"><em>G<sub>i</sub></em></span>}the party is a member of; this mapping
+</span></dt><dd><p>A mapping of a party <span class="strong">P</span> to the groups
+{<span class="strong">G<sub>i</sub></span>}the party is a member of; this mapping
 includes the type of relationship by including the appropriate<tt>rel_id</tt>
 from the <tt>membership_rels</tt> table.</p></dd><dt><span class="term"><tt>composition_rels</tt>
 
 </span></dt><dd><p>The set of direct component relationships between a group and another
 group.</p></dd><dt><span class="term"><tt>group_component_index</tt>
 
-</span></dt><dd><p>A mapping of a group <span class="strong"><em>G</em></span>to the set of groups
-{<span class="strong"><em>G<sub>i</sub></em></span>} that <span class="strong"><em>G</em></span> is a component of;
+</span></dt><dd><p>A mapping of a group <span class="strong">G</span>to the set of groups
+{<span class="strong">G<sub>i</sub></span>} that <span class="strong">G</span> is a component of;
 this mapping includes the type of relationship by including the
 appropriate<tt>rel_id</tt> from the <tt>composition_rels</tt> table.</p></dd></dl></div><p>New groups are created through the <tt>group.new</tt> constructor.
 When a specialized type of group is required, the group type can be extended
@@ -116,26 +116,26 @@ of relationship by including the appropriate<tt>rel_id</tt> from the
 
 </span></dt><dd><p>A person may appear in the group member map multiple times, for example,
 by being a member of two different groups that are both components of a third
-group. This view is strictly a mapping of <span class="strong"><em>approved</em></span> members
+group. This view is strictly a mapping of <span class="strong">approved</span> members
 to groups.</p></dd><dt><span class="term"><tt>group_component_map</tt>
 
-</span></dt><dd><p>A mapping of a group <span class="strong"><em>G</em></span>to the set of groups
-{<span class="strong"><em>G<sub>i</sub></em></span>} group <span class="strong"><em>G</em></span> is a component of;
+</span></dt><dd><p>A mapping of a group <span class="strong">G</span>to the set of groups
+{<span class="strong">G<sub>i</sub></span>} group <span class="strong">G</span> is a component of;
 this mapping includes the type of relationship by including the
 appropriate<tt>rel_id</tt> from the <tt>composition_rels</tt> table.</p></dd><dt><span class="term"><tt>party_member_map</tt>
 
-</span></dt><dd><p>A mapping of a party <span class="strong"><em>P</em></span> to the set of parties
-{<span class="strong"><em>P<sub>i</sub></em></span>} party <span class="strong"><em>P</em></span> is a member
+</span></dt><dd><p>A mapping of a party <span class="strong">P</span> to the set of parties
+{<span class="strong">P<sub>i</sub></span>} party <span class="strong">P</span> is a member
 of.</p></dd><dt><span class="term"><tt>party_approved_member_map</tt>
 
-</span></dt><dd><p>A mapping of a party <span class="strong"><em>P</em></span> to the set of parties
-{<span class="strong"><em>P<sub>i</sub></em></span>} party <span class="strong"><em>P</em></span> is an
-<span class="strong"><em>approved</em></span> member of.</p></dd></dl></div></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="groups-design-api"></a>API</h3></div></div><p>
+</span></dt><dd><p>A mapping of a party <span class="strong">P</span> to the set of parties
+{<span class="strong">P<sub>i</sub></span>} party <span class="strong">P</span> is an
+<span class="strong">approved</span> member of.</p></dd></dl></div></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="groups-design-api"></a>API</h3></div></div><p>
 The API consists of tables and views and PL/SQL functions. 
 </p><div class="sect3"><div class="titlepage"><div><h4 class="title"><a name="groups-design-tables-views"></a>Tables and Views</h4></div></div><p>The <tt>group_types</tt> table is used to create new types of groups.</p><p>The <tt>group_member_map</tt>, <tt>group_approved_member_map</tt>,
 <tt>group_distinct_member_map</tt>, <tt>group_component_map</tt>,
 <tt>party_member_map</tt>, and <tt>party_approved_member_map</tt> views are
-used to query group membership and composition.</p></div><div class="sect3"><div class="titlepage"><div><h4 class="title"><a name="groups-design-pl-sql-api"></a>PL/SQL API</h4></div></div><p><span class="strong"><em>Person</em></span></p><p><tt>person.new</tt> creates a new person and returns the
+used to query group membership and composition.</p></div><div class="sect3"><div class="titlepage"><div><h4 class="title"><a name="groups-design-pl-sql-api"></a>PL/SQL API</h4></div></div><p><span class="strong">Person</span></p><p><tt>person.new</tt> creates a new person and returns the
 <tt>person_id</tt>. The function must be given the full name of the person in
 two pieces: <tt>first_names</tt> and <tt>last_name</tt>. All other fields are
 optional and default to null except for <tt>object_type</tt> which defaults
@@ -162,7 +162,7 @@ procedure person.delete (
 function person.name (
   person_id     persons.person_id%TYPE
 ) return varchar;
-</pre><p><span class="strong"><em>User</em></span></p><p><tt>acs_user.new</tt> creates a new user and returns the <tt>user_id</tt>.
+</pre><p><span class="strong">User</span></p><p><tt>acs_user.new</tt> creates a new user and returns the <tt>user_id</tt>.
 The function must be given the user's email address and the full name of
 the user in two pieces: <tt>first_names</tt> and <tt>last_name</tt>. All
 other fields are optional. The interface for this function is:</p><pre class="programlisting">
@@ -204,7 +204,7 @@ procedure acs_user.approve_email (
 procedure acs_user.unapprove_email (
   user_id       users.user_id%TYPE
 );
-</pre><p><span class="strong"><em>Group</em></span></p><p><tt>acs_group.new</tt> creates a new group and returns the
+</pre><p><span class="strong">Group</span></p><p><tt>acs_group.new</tt> creates a new group and returns the
 <tt>group_id</tt>. All fields are optional and default to null except for
 <tt>object_type</tt> which defaults to 'group',
 <tt>creation_date</tt> which defaults to <tt>sysdate</tt>, and
@@ -232,7 +232,7 @@ function acs_group.member_p (
   group_id      groups.group_id%TYPE,
   party_id      parties.party_id%TYPE,
 ) return char;
-</pre><p><span class="strong"><em>Membership Relationship</em></span></p><p><tt>membership_rel.new</tt> creates a new membership relationship type
+</pre><p><span class="strong">Membership Relationship</span></p><p><tt>membership_rel.new</tt> creates a new membership relationship type
 between two parties and returns the relationship type's <tt>rel_id</tt>.
 All fields are optional and default to null except for <tt>rel_type</tt>
 which defaults to membership_rel. The interface for this function is:</p><pre class="programlisting">
@@ -278,7 +278,7 @@ interface for this procedure is:</p><pre class="programlisting">
 procedure membership_rel.delete (
   rel_id           membership_rels.rel_id%TYPE
 );
-</pre><p><span class="strong"><em>Composition Relationship</em></span></p><p><tt>composition_rel.new</tt> creates a new composition relationship type
+</pre><p><span class="strong">Composition Relationship</span></p><p><tt>composition_rel.new</tt> creates a new composition relationship type
 and returns the relationship's <tt>rel_id</tt>. All fields are optional
 and default to null except for <tt>rel_type</tt> which defaults to
 composition_rel. The interface for this function is:</p><pre class="programlisting">
@@ -301,6 +301,4 @@ procedure membership_rel.delete (
 
 </span></dt><dd><p><a href="mailto:rhs@mit.edu" target="_top">Rafael H. Schloming</a></p></dd><dt><span class="term">Documentation author
 
-</span></dt><dd><p><a href="mailto:mthomas@arsdigita.com" target="_top">Mark Thomas</a></p></dd></dl></div></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="groups-design-rev-history"></a>Revision History</h3></div></div><div class="informaltable"><table border="1"><colgroup><col><col><col><col></colgroup><tbody><tr><td><span class="strong"><em>Document Revision #</em></span></td><td><span class="strong"><em>Action Taken, Notes</em></span></td><td><span class="strong"><em>When?</em></span></td><td><span class="strong"><em>By Whom?</em></span></td></tr><tr><td>0.1</td><td>Creation</td><td>08/22/2000</td><td><a href="mailto:rhs@mit.edu" target="_top">Rafael H. Schloming</a></td></tr><tr><td>0.2</td><td>Initial Revision</td><td>08/30/2000</td><td><a href="mailto:mthomas@arsdigita.com" target="_top">Mark Thomas</a></td></tr><tr><td>0.3</td><td>Additional revisions; tried to clarify membership/compostion</td><td>09/08/2000</td><td><a href="mailto:mthomas@arsdigita.com" target="_top">Mark Thomas</a></td></tr></tbody></table></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="groups-requirements.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="subsites-requirements.html">Next</a></td></tr><tr><td width="40%" align="left">OpenACS 4 Groups Requirements&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="kernel-doc.html">Up</a></td><td width="40%" align="right">&nbsp;OpenACS 4 Subsites Requirements</td></tr></table><hr><address>rmello at fslc.usu.edu</address><address><a href="mailto:vinod@kurup.com">
-			vinod@kurup.com
-		  </a></address></div></body></html>
+</span></dt><dd><p><a href="mailto:mthomas@arsdigita.com" target="_top">Mark Thomas</a></p></dd></dl></div></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="groups-design-rev-history"></a>Revision History</h3></div></div><div class="informaltable"><table border="1"><colgroup><col><col><col><col></colgroup><tbody><tr><td><span class="strong">Document Revision #</span></td><td><span class="strong">Action Taken, Notes</span></td><td><span class="strong">When?</span></td><td><span class="strong">By Whom?</span></td></tr><tr><td>0.1</td><td>Creation</td><td>08/22/2000</td><td><a href="mailto:rhs@mit.edu" target="_top">Rafael H. Schloming</a></td></tr><tr><td>0.2</td><td>Initial Revision</td><td>08/30/2000</td><td><a href="mailto:mthomas@arsdigita.com" target="_top">Mark Thomas</a></td></tr><tr><td>0.3</td><td>Additional revisions; tried to clarify membership/compostion</td><td>09/08/2000</td><td><a href="mailto:mthomas@arsdigita.com" target="_top">Mark Thomas</a></td></tr></tbody></table></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="groups-requirements.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="subsites-requirements.html">Next</a></td></tr><tr><td width="40%" align="left">OpenACS 4 Groups Requirements&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="kernel-doc.html">Up</a></td><td width="40%" align="right">&nbsp;OpenACS 4 Subsites Requirements</td></tr></table><hr><address>rmello at fslc.usu.edu</address><address><a href="mailto:vinod@kurup.com">vinod@kurup.com</a></address></div><a name="comments"></a><center><a href="http://openacs.org/doc/openacs-4/groups-design.html#comments">View comments on this page at openacs.org</a></center></body></html>

@@ -11,18 +11,14 @@ ad_page_contract {
   { operation "" }
 }
 
-ad_require_permission $object_id admin
+permission::require_permission -object_id $object_id -privilege admin
 
 if { [string eq $operation "Yes"] } {
     db_transaction {
 	foreach item $revoke_list {
 	    set party_id [lindex $item 0]
 	    set privilege [lindex $item 1]
-	    db_exec_plsql revoke {
-		begin
-		    acs_permission.revoke_permission(:object_id, :party_id, :privilege);
-		end;
-	    }
+            permission::revoke -party_id $party_id -object_id $object_id -privilege $privilege
 	}
     }
 }

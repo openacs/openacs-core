@@ -251,6 +251,14 @@ of the package.
 </para></listitem></varlistentry>
 
 
+<varlistentry><term><computeroutput>[ad_conn path_info]</computeroutput>
+
+</term><listitem><para>
+In a .vuh file, path_info is the trailing part of the URL not matched
+by the .vuh file.
+</para></listitem></varlistentry>
+
+
 </variablelist>
 
 <para><phrase role="cvstag">($Id$)</phrase></para>

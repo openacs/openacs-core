@@ -128,13 +128,12 @@ create function content_keyword__delete (integer)
 returns integer as '
 declare
   delete__keyword_id             alias for $1;  
-  v_item_id                      integer;      
   v_rec                          record; 
 begin
 
   for v_rec in select item_id from cr_item_keyword_map 
     where keyword_id = delete__keyword_id LOOP
-    PERFORM content_keyword__item_unassign(v_item_id, delete__keyword_id);
+    PERFORM content_keyword__item_unassign(v_rec.item_id, delete__keyword_id);
   end LOOP;
 
   PERFORM acs_object__delete(delete__keyword_id);

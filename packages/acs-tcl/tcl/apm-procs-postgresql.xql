@@ -122,6 +122,13 @@
 </fullquery>
 
  
+<fullquery name="apm_package_instance_delete.apm_package_instance_delete">
+  <querytext>
+	select apm_package__delete(:package_id);
+  </querytext>
+</fullquery>
+
+
 <fullquery name="apm_parameter_unregister.parameter_unregister">      
       <querytext>
       

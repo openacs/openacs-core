@@ -44,18 +44,14 @@ Please <a href=\"javascript:history.back()\">try again</a>.
         return
     }
 
-    # Changed this from db_dml to db_exec_plsql (ben - OpenACS)
-    # why was this a DML? Thanks to Oracle-only, this didn't make a
-    # difference, but it broke our DB API. This new version is correct.
-    db_exec_plsql grant_admin {
-      begin
-        acs_permission.grant_permission (
-          object_id => acs.magic_object_id('security_context_root'),
-          grantee_id => :user_id,
-          privilege => 'admin'
-        );
-      end;
-    }
+    # stub util_memoize_flush...
+    rename util_memoize_flush util_memoize_flush_saved
+    proc util_memoize_flush {args} {}
+    permission::grant -party_id $user_id -object_id [acs_lookup_magic_object security_context_root] -privilege "admin"
+    # nuke stub 
+    rename util_memoize_flush {}
+    rename util_memoize_flush_saved util_memoize_flush
+
   }
 }
     

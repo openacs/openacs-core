@@ -5,7 +5,7 @@
       <querytext>
       
     select first_names, last_name, email, url,
-    coalesce(screen_name,'&lt none set up &gt') as screen_name
+    coalesce(screen_name,'&lt; none set up &gt;') as screen_name
     from cc_users 
     where user_id=:user_id
 
