@@ -10,13 +10,16 @@
       <li>URL: <a href="@service.url@">@service.url@</a>
     </ul>
   </li>
-  <if @admin_p@>
-    <li>Login:
-      <ul>
+  <li>Login:
+    <ul>
+      <if @admin_p@>
         <li><a href="@admin_login_url@">Admin user</a> (pwd: @service.adminpassword@)
-      </ul>
-    </li>
-  </if>
+      </if>
+      <else>
+        <li>You need to login as admin on this server to access admin password of remote server.</li>
+      </else>
+    </ul>
+  </li>
   </li>
   <li>Installation: 
     <ul>
