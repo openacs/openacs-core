@@ -848,6 +848,8 @@ ad_proc -private template::list::prepare_for_rendering {
 
     if { $__list_properties(dynamic_cols_p) || $__list_properties(aggregates_p) } {
         foreach element_ref $__list_properties(element_refs) {
+            # We don't need to prefix it with __ to become __element_properties here
+            # because we're not doing the multirow foreach loop yet.
             upvar #$__level $element_ref element_properties
             
             # display_eval, link_url_eval
@@ -888,6 +890,9 @@ ad_proc -private template::list::prepare_for_rendering {
         template::multirow foreach $__list_properties(multirow) {
 
             foreach element_ref $__list_properties(element_refs) {
+                # We do need to prefix it with __ to become __element_properties here
+                # because we are inside the multirow foreach loop yet.
+                # LARS: That means we should probably also __-prefix element_ref, eval_property, and others.
                 upvar #$__level $element_ref __element_properties
                 
                 # display_eval, link_url_eval
