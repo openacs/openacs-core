@@ -274,7 +274,7 @@ ad_proc -public template::util::date::get_property { what date } {
 # Perform date comparison; same syntax as string compare
 
 ad_proc -public template::util::date::compare { date1 date2 } {
-  return [string compare [get_property sql_date $date1] [get_property sql_date $date2]]
+  return [string compare [get_property clock $date1] [get_property clock $date2]]
 }
 
 # mutate properties of the Date object
