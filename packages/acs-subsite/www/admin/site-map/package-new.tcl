@@ -15,7 +15,17 @@ ad_page_contract {
     root_id:integer,optional
 }
 
-set context_id [ad_conn package_id]
+set context_id [db_string context_id {
+    select parent.object_id as context_id
+    from   site_nodes parent, site_nodes child
+    where  child.node_id = :node_id
+    and    parent.node_id = child.parent_id
+}]
+
+# If the parent node didn't have anything mounted, use the current package_id as context_id
+if { [empty_string_p $context_id] } {
+    set context_id [ad_conn package_id]
+}
 
 if { [empty_string_p $instance_name] } {
         set instance_name [db_string instance_default_name "select pretty_name from apm_package_types where package_key = :package_key"]
