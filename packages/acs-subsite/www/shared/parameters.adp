@@ -5,7 +5,7 @@
 
 
 <if @counter@ gt 0>
-  <formtemplate id="parameters" style="configuration"></formtemplate>
+  <formtemplate id="parameters"></formtemplate>
 
   <if @display_warning_p@ true>
     <span style="color: red; font-weight: bold;">(*)</span>
