@@ -165,6 +165,24 @@ mkdir -p /usr/local/pgsql
 chown -R postgres:web /usr/local/pgsql /usr/local/src/postgresql-7.4.1
 chmod 750 /usr/local/pgsql</userinput></screen>
         </listitem>
+        <listitem>
+          <formalpara>
+            <title>FreeBSD users:</title>
+          <para> need to add more parameters.
+          </para>
+          </formalpara>
+      <screen>[root src]# <userinput>mkdir -p /usr/local/pgsql</userinput>
+[root src]# <userinput>pw groupadd -n web</userinput>
+[root src]# <userinput>pw useradd -n postgres -g web -d /usr/local/pgsql -s /bin/bash</userinput>
+[root src]# <userinput>chown -R postgres:web /usr/local/pgsql /usr/local/src/postgresql-7.4.5</userinput>
+[root src]# <userinput>chmod -R 750 /usr/local/pgsql</userinput>
+[root src]#
+<action>mkdir -p /usr/local/pgsql
+pw groupadd -n web
+pw useradd -n postgres -g web -d /usr/local/pgsql -s /bin/bash
+chown -R postgres:web /usr/local/pgsql /usr/local/src/postgresql-7.4.5
+chmod -R 750 /usr/local/pgsql</action></screen>
+        </listitem>
 </itemizedlist>
     </listitem>
     <listitem id="install-postgres-env">
@@ -235,7 +253,8 @@ make install</action></screen>
 	<para>
 	  The <computeroutput>initdb</computeroutput> command initializes the
 	  database. <computeroutput>pg_ctl</computeroutput> is used to start up
-	  PostgreSQL.
+	  PostgreSQL. If PostgreSQL is unable to allocate enough memory, see section 11
+          Tuning PostgreSQL (below).
 	</para>
       </formalpara>
       <screen>[postgres postgresql-7.4.5]$ <userinput>/usr/local/pgsql/bin/initdb -D /usr/local/pgsql/data</userinput>
@@ -397,6 +416,27 @@ Stopping PostgreSQL: ok
 Starting PostgreSQL: ok
 [root ~]#</screen>
         </listitem>
+
+        <listitem><para>FreeBSD:</para>
+          <screen>[root ~]# <userinput>cp /tmp/&tarballpath;/packages/acs-core-docs/www/files/postgresql.txt /usr/local/etc/rc.d/postgresql.sh</userinput>
+[root ~]# <userinput>chown root:wheel /usr/local/etc/rc.d/postgresql.sh</userinput>
+[root ~]# <userinput>chmod 755 /usr/local/etc/rc.d/postgresql.sh</userinput>
+[root ~]# <action>
+cp /tmp/&tarballpath;/packages/acs-core-docs/www/files/postgresql.txt /usr/local/etc/rc.d/postgresql.sh
+chown root:wheel /usr/local/etc/rc.d/postgresql.sh
+chmod 755 /usr/local/etc/rc.d/postgresql.sh</action></screen>
+          <para>Test the script</para>
+          
+          <screen>[root ~]# <userinput>/usr/local/etc/rc.d/postgresql.sh stop</userinput>
+Stopping PostgreSQL: ok
+[root ~]# </screen>
+          <para>If PostgreSQL successfully stopped, then turn it back on because we'll use
+		  it later.</para>
+          
+		<screen>[root root]# <userinput>/usr/local/etc/rc.d/postgresql.sh start</userinput>
+Starting PostgreSQL: ok
+[root root]#
+<action>/usr/local/etc/rc.d/postgresql.sh start</action></screen>
         
         <listitem><para>SuSE:</para>
           
@@ -523,6 +563,25 @@ checkpoint_segments = 3     # in logfile segments (16MB each), min 1
           restart</computeroutput>) so that the changes take effect.</para>
         </listitem>
       </orderedlist>
+
+      <para><title>FreeBSD users:</title> See <computeroutput>man syctl</computeroutput>, <computeroutput>man 5 sysctl</computeroutput>
+      and <computeroutput>man 5 loader.conf</computeroutput>.</para>
+
+      <para>Performance tuning resources:</para>
+
+    <itemizedlist>
+      <listitem><para>
+        <ulink url="http://www.postgresql.org/docs/7.4/interactive/kernel-resources.html">Managing Kernel Resources</ulink>
+        about PostgreSQL shared memory and semaphores with specific operating system notes.
+        </para></listitem>
+      <listitem><para>
+        <ulink url="http://developer.postgresql.org/docs/postgres/kernel-resources.html">Managing Kernel Resources (development version)</ulink>
+          This information may be experimental.
+        </para></listitem>
+        <listitem><para>
+        <ulink url="http://www.varlena.com/varlena/GeneralBits/Tidbits/perf.html">Tuning PostgreSQL for performance</ulink></para>
+        </listitem>
+      </itemizedlist>
     </listitem>
   </orderedlist>
 </listitem>
@@ -563,9 +622,6 @@ checkpoint_segments = 3     # in logfile segments (16MB each), min 1
 
         </para></listitem>
 
-        <listitem><para>
-        <ulink url="http://www.varlena.com/varlena/GeneralBits/Tidbits/perf.html">Tuning PostgreSQL for performance</ulink></para>
-      </listitem>
     </itemizedlist>
   <para><phrase role="cvstag">($Id$)</phrase></para>
   </sect2>
