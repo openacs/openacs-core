@@ -7,7 +7,7 @@ ad_page_contract {
 
 set page_title "Install From Local File System"
 
-set context [list [list "." "Install Applications"] $page_title]
+set context [list [list "." "Install Software"] $page_title]
 
 array set installed_version [list]
 db_foreach installed_packages { 
