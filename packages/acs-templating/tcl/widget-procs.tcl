@@ -38,31 +38,39 @@ ad_proc -public template::widget::textarea { element_reference tag_attributes } 
 
   upvar $element_reference element
 
-  if { [info exists element(html)] } {
-    array set attributes $element(html)
-  }
-
-  array set attributes $tag_attributes
-
-  set output "<textarea name=\"$element(name)\""
-
-  foreach name [array names attributes] {
-    if { [string equal $attributes($name) {}] } {
-      append output " $name"
-    } else {
-      append output " $name=\"$attributes($name)\""
+  if { ![string equal $element(mode) "edit"] } {
+    set output {}
+    if { [info exists element(value)] } {
+      append output [ad_quotehtml $element(value)]
+      append output "<input type=\"hidden\" name=\"$element(name)\" value=\"[ad_quotehtml $element(value)]\">"
     }
+  } else {
+    if { [info exists element(html)] } {
+      array set attributes $element(html)
+    }
+    
+    array set attributes $tag_attributes
+    
+    set output "<textarea name=\"$element(name)\""
+    
+    foreach name [array names attributes] {
+      if { [string equal $attributes($name) {}] } {
+        append output " $name"
+      } else {
+        append output " $name=\"$attributes($name)\""
+      }
+    }
+    
+    append output ">"
+    
+    if { [info exists element(value)] } {
+      # As per scottwseago's request
+      append output [ad_quotehtml $element(value)]
+    } 
+    
+    append output "</textarea>"
   }
-
-  append output ">"
-
-  if { [info exists element(value)] } {
-    # As per scottwseago's request
-    append output [ad_quotehtml $element(value)]
-  } 
-
-  append output "</textarea>"
-
+  
   return $output
 }
 
@@ -94,21 +102,42 @@ ad_proc -public template::widget::input { type element_reference tag_attributes 
       set attributes(id) "$element(form_id):elements:$element(name):$element(value)"
   }
 
-  set output "<input type=\"$type\" name=\"$element(name)\""
-
-  if { [info exists element(value)] } {
-    append output " value=\"[template::util::quote_html $element(value)]\""
-  } 
-
-  foreach name [array names attributes] {
-    if { [string equal $attributes($name) {}] } {
-      append output " $name"
-    } else {
-      append output " $name=\"$attributes($name)\""
+  if { ![string equal $element(mode) "edit"] && ![string equal $element(widget) "hidden"] && \
+      ![string equal $type "submit"] && ![string equal $type "button"] && \
+      ![string equal $type "clear"] } {
+    
+    set output ""
+    switch $type {
+      checkbox - radio {
+        # There's a 'subst' done on the contents here
+        append output "<img src=\"/shared/${type}\$checked\" width=\"13\" height=\"13\">"
+        # This is ugly, but it works: Only export the value when we're on a selected option
+        append output "\[ad_decode \$checked \"checked\" \"<input type=\\\"hidden\\\" name=\\\"$element(name)\\\" value=\\\"\$value\\\">\" \"\"\]"
+      }
+      default {
+        if { [info exists element(value)] } {
+          append output [ad_quotehtml $element(value)]
+          append output "<input type=\"hidden\" name=\"$element(name)\" value=\"[ad_quotehtml $element(value)]\">"
+        }
+      }
     }
-  }
+  } else {
+    set output "<input type=\"$type\" name=\"$element(name)\""
 
-  append output " />"
+    if { [info exists element(value)] } {
+      append output " value=\"[template::util::quote_html $element(value)]\""
+    } 
+
+    foreach name [array names attributes] {
+      if { [string equal $attributes($name) {}] } {
+        append output " $name"
+      } else {
+        append output " $name=\"$attributes($name)\""
+      }
+    }
+    
+    append output " />"
+  }
 
   return $output
 }
@@ -180,40 +209,58 @@ ad_proc -public template::widget::button { element_reference tag_attributes } {
 }
 
 ad_proc -public template::widget::menu { widget_name options_list values_list \
-                              attribute_reference } {
+                              attribute_reference {mode edit} } {
 
   upvar $attribute_reference attributes
-
-  set output "<select name=\"$widget_name\" "
-
-  foreach name [array names attributes] {
-    if { [string equal $attributes($name) {}] } {
-      append output " $name"
-    } else {
-      append output " $name=\"$attributes($name)\""
-    }
-  }
-
-  append output ">\n"
-
+  
   # Create an array for easier testing of selected values
   template::util::list_to_lookup $values_list values 
-
-  foreach option $options_list {
-
-    set label [lindex $option 0]
-    set value [lindex $option 1]
-
-    append output "  <option value=\"[template::util::quote_html $value]\" "
-
-    if { [info exists values($value)] } {
-      append output "selected=\"selected\""
+  
+  if { ![string equal $mode "edit"] } {
+    set selected_list [list]
+    set output {}
+    
+    foreach option $options_list {
+      
+      set label [lindex $option 0]
+      set value [lindex $option 1]
+      
+      if { [info exists values($value)] } {
+        lappend selected_list $label
+        append output "<input type=\"hidden\" name=\"$widget_name\" value=\"[ad_quotehtml $value]\">"
+      }
     }
-
-    append output ">$label</option>\n"
+    
+    append output [join $selected_list ", "]
+  } else {
+    set output "<select name=\"$widget_name\" "
+  
+    foreach name [array names attributes] {
+      if { [string equal $attributes($name) {}] } {
+        append output " $name"
+      } else {
+        append output " $name=\"$attributes($name)\""
+      }
+    }
+  
+    append output ">\n"
+  
+    foreach option $options_list {
+  
+      set label [lindex $option 0]
+      set value [lindex $option 1]
+  
+      append output "  <option value=\"[template::util::quote_html $value]\" "
+  
+      if { [info exists values($value)] } {
+        append output "selected=\"selected\""
+      }
+  
+      append output ">$label</option>\n"
+    }
+  
+    append output "</select>"
   }
-
-  append output "</select>"
 
   return $output
 }
@@ -229,7 +276,7 @@ ad_proc -public template::widget::select { element_reference tag_attributes } {
   array set attributes $tag_attributes
 
   return [template::widget::menu \
-    $element(name) $element(options) $element(values) attributes]
+    $element(name) $element(options) $element(values) attributes $element(mode)]
 }
 
 ad_proc -public template::widget::multiselect { element_reference tag_attributes } {
@@ -255,7 +302,7 @@ ad_proc -public template::widget::multiselect { element_reference tag_attributes
   }
 
   return [template::widget::menu \
-    $element(name) $element(options) $element(values) attributes]
+    $element(name) $element(options) $element(values) attributes $element(mode)]
 }
 
 ad_proc -public template::data::transform::search { element_ref } {
@@ -330,38 +377,6 @@ ad_proc -public template::data::transform::search { element_ref } {
   return [list $value]
 }
 
-
-
-ad_proc -public template::widget::textarea { element_reference tag_attributes } {
-
-  upvar $element_reference element
-
-  if { [info exists element(html)] } {
-    array set attributes $element(html)
-  }
-
-  array set attributes $tag_attributes
-
-  set output "<textarea name=\"$element(name)\""
-
-  foreach name [array names attributes] {
-    if { [string equal $attributes($name) {}] } {
-      append output " $name"
-    } else {
-      append output " $name=\"$attributes($name)\""
-    }
-  }
-
-  append output ">"
-
-  if { [info exists element(value)] } {
-    append output "[template::util::quote_html $element(value)]"
-  } 
-
-  append output "</textarea>"
-  return $output
-}
-
 ad_proc -public template::widget::comment { element_reference tag_attributes } {
 
   upvar $element_reference element
@@ -382,24 +397,7 @@ ad_proc -public template::widget::comment { element_reference tag_attributes } {
       append output "<p><b>$element(header)</b></p>"
   }
 
-  append output "<textarea name=\"$element(name)\""
-
-  foreach name [array names attributes] {
-    if { [string equal $attributes($name) {}] } {
-      append output " $name"
-    } else {
-      append output " $name=\"$attributes($name)\""
-    }
-  }
-
-  append output ">"
-
-  if { [info exists element(value)] } {
-    # As per scottwseago's request
-    append output [ad_quotehtml $element(value)]
-  } 
-
-  append output "</textarea>"
+  append output [textarea $element_reference $tag_attributes]
 
   return $output
 }

@@ -76,13 +76,16 @@ ad_proc -public template::form::create { id args } {
   upvar #$level $id:submission submission
 
   if { [string equal $id request] } {
-
     # request is the magic ID for the form holding query parameters
     set submission 1
-
   } else {
-
     set submission [string equal $id [ns_queryget form:id]]
+  }
+
+  if { ![empty_string_p [ns_queryget "__edit"]] } {
+    # The magic button named __edit means we should now be in edit mode
+    set submission 0
+    set opts(mode) "edit"
   }
 
   # add elements specified at the time the form is created
@@ -136,7 +139,14 @@ ad_proc -private template::form::template { id { style "" } } {
     upvar #$level $element_ref elements:${elements:rowcount} 
     set "elements:${elements:rowcount}(rownum)" ${elements:rowcount}
   }
-    
+
+  set buttons:rowcount 0
+  foreach button $form_properties(buttons) {
+      incr buttons:rowcount
+      set "buttons:${buttons:rowcount}(label)" [lindex $button 0]
+      set "buttons:${buttons:rowcount}(name)" [lindex $button 1]
+  }
+  
   if { [string equal $style {}] } { set style standard }
   set file_stub [template::get_resource_path]/forms/$style
 
@@ -226,6 +236,9 @@ ad_proc -private template::form::render { id tag_attributes } {
   if { [info exists $id:error] } {
 
     uplevel #$level "upvar 0 $id:error formerror"
+    
+    # There were errors on the form, force edit mode
+    set properties(mode) edit
 
   } else {
 
@@ -233,6 +246,19 @@ ad_proc -private template::form::render { id tag_attributes } {
     # been set by another form on the same page
     upvar #$level formerror formerror
     if { [info exists formerror] } { unset formerror }
+  }
+
+  # Propagate form mode to all form elements
+  foreach element_ref $elements { 
+ 
+    # get a reference by element ID 
+    upvar #$level $element_ref element
+   
+    # Check if the element has an empty string mode, and in 
+    # that case, set to form mode
+    if { [string equal $element(mode) {}] } {
+      set element(mode) $properties(mode)
+    }
   }
 
   # get any additional attributes developer specified to include in form tag
