@@ -10,11 +10,23 @@ ad_library {
 
 namespace eval notification::security {
 
+    ad_proc -public can_notify_user {
+        {-user_id:required}
+        {-delivery_method_id ""}
+    } {
+        This proc can be expanded to deal with cases when we don't want to 
+        send a notification.  For instance we could check email_bouncing_p 
+        or if a user is on vacation. Right now it just makes sure its an 
+        approved user.
+    } {
+        return [db_string user_approved_p {}]
+    }
+
     ad_proc -public can_notify_object_p {
         {-user_id ""}
         {-object_id:required}
-    } {
-        # HACK
+    } { 
+        # hack
         return 1
     }
 

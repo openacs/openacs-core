@@ -104,7 +104,7 @@ namespace eval notification::sweep {
 
                 # append content to built-up content
                 ns_log Notice "NOTIF-BATCHED: appending one notif!"
-                append batched_content "SUBJECT: [ns_set get $notif object_name] - [ns_set get $notif notif_subject]\n[ns_set get $notif notif_text]\n=====================\n"
+                append batched_content "SUBJECT: [ns_set get $notif notif_subject]\n[ns_set get $notif notif_text]\n=====================\n"
                 lappend list_of_notification_ids [ns_set get $notif notification_id]
 
                 # Set the vars
@@ -120,7 +120,7 @@ namespace eval notification::sweep {
                     # Send it
                     notification::delivery::send -to_user_id [ns_set get $notif user_id] \
                             -notification_type_id [ns_set get $notif type_id] \
-                            -subject "\[[ns_set get $notif object_name]\] [ns_set get $notif notif_subject]" \
+                            -subject [ns_set get $notif notif_subject] \
                             -content [ns_set get $notif notif_text] \
                             -reply_object_id [ns_set get $notif response_id] \
                             -delivery_method_id [ns_set get $notif delivery_method_id]

@@ -26,6 +26,12 @@ namespace eval notification::delivery {
     } {
         do the delivery of certain content to a particular user
     } {
+        #need to check if its ok to notify this user in this way.  For now just checks if they are an approved user.
+        if { ![notification::security::can_notify_user -user_id $to_user_id -delivery_method_id $delivery_method_id] } {
+            ns_log notice "Blocked notification to $to_user_id subject:$subject"
+            return "Blocked"
+        }
+
         # Get the implementation key
         set impl_key [get_impl_key -delivery_method_id $delivery_method_id]
 
