@@ -40,9 +40,7 @@
      </querytext>
    </fullquery>
 
-   <fullquery
-   name="acs_mail_lite::check_bounces.delete_log_if_no_recent_bounce"\
->
+   <fullquery name="acs_mail_lite::check_bounces.delete_log_if_no_recent_bounce">
      <querytext>
 
        delete from acs_mail_lite_bounce
