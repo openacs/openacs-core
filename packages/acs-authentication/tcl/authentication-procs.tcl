@@ -380,6 +380,7 @@ ad_proc -public auth::create_user {
                              would be created but closed.
       <li> account_message:  A human-readable explanation of why the account was closed. May include HTML, and thus shouldn't
                              be quoted. Guaranteed to be non-empty if account_status is not ok.
+      <li> user_id:          The user_id of the created user. Only when creation_status is ok.
     </ul>
 
     @see auth::get_all_registration_elements
