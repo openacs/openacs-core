@@ -558,6 +558,69 @@ ad_proc -public site_node::closest_ancestor_package {
 }    
 
 
+ad_proc -public site_node::verify_folder_name {
+    {-parent_node_id:required}
+    {-current_node_id ""}
+    {-instance_name ""}
+    {-folder ""}
+} {
+    Verifies that the given folder name is valid for a folder under the given parent_node_id.
+    If current_node_id is supplied, it's assumed that we're renaming an existing node, not creating a new one.
+    If folder name is not supplied, we'll generate one from the instance name, which must then be supplied.
+    Returns folder name to use, or empty string if the supplied folder name wasn't acceptable.
+} {
+    set existing_urls [site_node::get_children -node_id $parent_node_id -element name]
+    
+    array set parent_node [site_node::get -node_id $parent_node_id]
+    if { ![empty_string_p $parent_node(package_key)] } {
+        # Find all the page or directory names under this package
+        foreach path [glob -nocomplain -types d "[acs_package_root_dir $parent_node(package_key)]/www/*"] {
+            lappend existing_urls [lindex [file split $path] end]
+        }
+        foreach path [glob -nocomplain -types f "[acs_package_root_dir $parent_node(package_key)]/www/*.adp"] {
+            lappend existing_urls [file rootname [lindex [file split $path] end]]
+        }
+        foreach path [glob -nocomplain -types f "[acs_package_root_dir $parent_node(package_key)]/www/*.tcl"] {
+            set name [file rootname [lindex [file split $path] end]]
+            if { [lsearch $existing_urls $name] == -1 } {
+                lappend existing_urls $name
+            }
+        }
+    } 
+
+    if { ![empty_string_p $folder] } {
+        if { [lsearch $existing_urls $folder] != -1 } {
+            # The folder is on the list
+            if { [empty_string_p $current_node_id] } {
+                # New node: Complain
+                return {}
+            } else {
+                # Existing node: Check to see if it's this one
+                set errno [catch { array set existing_node [site_node::get_from_url -exact -url "[ad_conn package_url]$folder"] }]
+
+                # If errno != 0 it means we didn't find an existing site node with this URL, hence the conflict must
+                # be with a directory
+                # Otherwise, if the node with the folder name is not the node we're editing, we're also in trouble
+                if { $errno != 0 || $existing_node(node_id) != $current_node_id } {
+                    return {}
+                }
+            }
+        }
+    } else {
+        # Autogenerate folder name
+        if { [empty_string_p $instance_name] } {
+            error "Instance name must be supplied when folder name is empty."
+        }
+
+        set folder [util_text_to_url \
+                        -existing_urls $existing_urls \
+                        -text $instance_name]
+    }
+    return $folder
+}
+
+
+
 ##############
 #
 # Deprecated Procedures
