@@ -85,7 +85,7 @@
       </querytext>
    </fullquery>
 
-   <fullquery name="lang::user::timezone.select_user_timezone">
+   <fullquery name="lang::user::timezone_no_cache.select_user_timezone">
       <querytext>
         select timezone
         from   user_preferences

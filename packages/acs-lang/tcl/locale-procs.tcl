@@ -338,6 +338,11 @@ ad_proc -public lang::user::language {
     return [string range [locale -package_id $package_id -site_wide=$site_wide_p] 0 1]
 }
 
+
+ad_proc -private lang::user::timezone_no_cache {user_id} {
+    return [db_string select_user_timezone {} -default ""]
+}
+    
 ad_proc -public lang::user::timezone {} {
     Get the user's timezone. Returns the empty string if the user
     has no timezone set.
@@ -349,7 +354,7 @@ ad_proc -public lang::user::timezone {} {
         return ""
     }
 
-    return [db_string select_user_timezone {} -default ""]
+    return [util_memoize [list lang::user::timezone_no_cache $user_id]]
 }
     
 ad_proc -public lang::user::set_timezone { 
@@ -369,6 +374,7 @@ ad_proc -public lang::user::set_timezone {
         error "User not logged in"
     } else {
         db_dml set_user_timezone {}
+        util_memoize_flush [list lang::user::timezone_no_cache $user_id]
     }
 }
 
