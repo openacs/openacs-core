@@ -315,7 +315,7 @@ ad_proc -deprecated site_node_create_package_instance {
 
     site_node::mount -node_id $node_id -object_id $package_id
 
-    apm_package_call_post_instantiation_proc $package_id $package_key
+    apm_invoke_callback_proc -package_key $package_key -type "after-instantiate" -arg_list [list package_id $package_id]
 
     return $package_id
 }

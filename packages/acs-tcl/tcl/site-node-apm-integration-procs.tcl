@@ -30,7 +30,7 @@ namespace eval site_node_apm_integration {
             site_node::update_cache -node_id $node_id
             
             # call post instantiation proc for the package
-            apm_package_call_post_instantiation_proc $package_id $package_key
+            apm_invoke_callback_proc -package_key $package_key -type "after-instantiate" -arg_list [list package_id $package_id]
         }
 
         return $package_id

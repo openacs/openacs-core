@@ -485,6 +485,8 @@ ad_proc -private apm_package_install {
 	apm_package_install_dependencies -callback $callback $version(provides) $version(requires) $version_id
 	apm_package_install_owners -callback $callback $version(owners) $version_id
 	apm_package_install_files -callback $callback $version(files) $version_id
+        apm_package_install_callbacks -callback $callback $version(callbacks) $version_id
+
 	apm_callback_and_log $callback "<p>Installed $version(package-name), version $version(name).<p>"
     } {
 	apm_callback_and_log $callback "<p>Failed to install $version(package-name), version $version(name).  The following error was generated:
@@ -512,8 +514,12 @@ ad_proc -private apm_package_install {
 	    <pre><blockquote>[ad_quotehtml $errmsg]</blockquote></pre>"
 	} else {
 	    apm_callback_and_log $callback "[string totitle $package_key] instantiated as $package_key.<p>"
+
+            apm_invoke_callback_proc -version_id $version_id -type after-instantiate
 	}
     }
+
+    apm_invoke_callback_proc -version_id $version_id -type after-install
 
     return $version_id
 }
@@ -863,6 +869,25 @@ ad_proc -private apm_package_install_files { {-callback apm_dummy_callback} file
             set db_type [lindex $item 2]
 	    apm_file_add $version_id $path $file_type $db_type
         }
+    }
+}
+
+ad_proc -private apm_package_install_callbacks {
+    {-callback apm_dummy_callback}
+    callback_list
+    version_id
+} {
+    Install the Tcl proc callbacks for the package version.
+
+    @author Peter Marklund
+} {
+    db_dml delete_all_callbacks {
+        delete from apm_package_callbacks
+        where version_id = :version_id
+    }
+
+    foreach {type proc} $callback_list {
+        apm_set_callback_proc -version_id $version_id -type $type $proc
     }
 }
 

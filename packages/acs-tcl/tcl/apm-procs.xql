@@ -146,6 +146,14 @@
       where package_id = :package_id
     </querytext>
   </fullquery>
+
+  <fullquery name="apm_version_id_from_package_key.get_id">      
+    <querytext>
+        select version_id 
+        from apm_enabled_package_versions 
+        where package_key = :package_key
+    </querytext>
+  </fullquery>
   
   <fullquery name="apm_package_id_from_key_mem.apm_package_id_from_key">      
     <querytext>
@@ -172,5 +180,32 @@
       and a.package_id = :package_id
     </querytext>
   </fullquery>
-  
+
+  <fullquery name="apm_get_callback_proc.select_proc">      
+    <querytext>
+        select proc
+        from apm_package_callbacks
+        where version_id = :version_id
+        and   type = :type
+    </querytext>
+  </fullquery>
+
+  <fullquery name="apm_set_callback_proc.insert_proc">      
+    <querytext>
+        insert into apm_package_callbacks
+          (version_id, type, proc)
+        values (:version_id, :type, :proc)
+    </querytext>
+  </fullquery>  
+
+  <fullquery name="apm_remove_callback_proc.delete_proc">      
+    <querytext>
+        delete from apm_package_callbacks
+        where version_id = (select version_id 
+                            from apm_enabled_package_versions 
+                            where package_key = :package_key)
+        and   type = :type
+    </querytext>
+  </fullquery>  
+
 </queryset>
