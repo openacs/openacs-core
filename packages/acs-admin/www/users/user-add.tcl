@@ -15,4 +15,6 @@ set context [list [list "./" "Users"] "Add user"]
 set user_id [db_nextval acs_object_id_seq]
 set export_vars [export_form_vars user_id]
 
+set next_url user-add-2
+
 ad_return_template
