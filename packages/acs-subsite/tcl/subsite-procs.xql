@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <queryset>
 
-<fullquery name="acs_subsite_post_instantiation.subsite_name_query">      
+<fullquery name="subsite::configure.subsite_name_query">      
       <querytext>
       
 	    select instance_name
@@ -12,7 +12,7 @@
 </fullquery>
 
  
-<fullquery name="acs_subsite_post_instantiation.parent_subsite_query">      
+<fullquery name="subsite::configure.parent_subsite_query">      
       <querytext>
       
 		select m.group_id as supersite_group_id,
@@ -28,7 +28,7 @@
 </fullquery>
 
  
-<fullquery name="acs_subsite_post_instantiation.select_name_exists_p">      
+<fullquery name="subsite::instance_name_exists_p.select_name_exists_p">      
       <querytext>
       
 	select count(*) 
@@ -40,7 +40,7 @@
 </fullquery>
 
  
-<fullquery name="acs_subsite_post_instantiation.select_pretty_name">      
+<fullquery name="subsite::util::object_type_pretty_name.select_pretty_name">      
       <querytext>
       
 	select pretty_name from acs_object_types 
