@@ -108,7 +108,7 @@ make install</action></screen>
             <listitem id="aolserver4-nspostgres-install">
               <para>Install nspostgres (if you want to use Postgres)</para>
               <screen>[root nsrewrite]# <userinput>cd ../nspostgres</userinput>
-[root nspostgres]# <userinput>sudo make install POSTGRES=/usr/local/pgsql ACS=1 </userinput></screen>
+[root nspostgres]# <userinput>sudo make install POSTGRES=/usr/local/pgsql ACS=1 INST=/usr/local/aolserver </userinput></screen>
               <para>If you run into problems with libpq.a do the following (and repeat the step above)</para>
               <screen>[root nspostgres]# <userinput>sudo ranlib /usr/local/pgsql/lib/libpq.a</userinput></screen>
               <para>If you run into problems with the linker, edit the Makefile. Add <computeroutput>-lnsdb</computeroutput> to the <computeroutput>MODLIBS</computeroutput> var.</para>
@@ -137,6 +137,39 @@ make install</action></screen>
           </orderedlist>
         </para>
       </formalpara>
+    </listitem>
+    <listitem id="aolserver-db-wrapper">
+      <formalpara>
+        <title>Add a database-specific wrapper script.</title>
+<para>This script
+	  sets database environment variables before starting
+	  AOLserver; this allows the AOLserver instance can
+	  communicate with the database.  There is one script each for
+	  Oracle and PostgreSQL.  They don't conflict, so if you plan
+	  to use both databases, install both.</para>
+      </formalpara>
+      <itemizedlist>
+            <listitem>
+              <para>Oracle</para>
+              <screen>[root aolserver]# <userinput>cd /usr/local/aolserver/bin</userinput>
+[root bin]# <userinput>cp /tmp/&tarballpath;/packages/acs-core-docs/www/files/nsd-oracle.txt ./nsd-oracle</userinput>
+[root bin]# <userinput>chmod 750 nsd-oracle</userinput>
+[root bin]#
+<action>cd /usr/local/aolserver/bin
+cp /tmp/&tarballpath;/packages/acs-core-docs/www/files/nsd-oracle.txt ./nsd-oracle
+chmod 750 nsd-oracle</action></screen>
+            </listitem>
+            <listitem>
+              <para>PostgreSQL</para>
+              <screen>[root aolserver]# <userinput>cd /usr/local/aolserver/bin</userinput>
+[root bin]# <userinput>cp /tmp/&tarballpath;/packages/acs-core-docs/www/files/nsd-postgres.txt ./nsd-postgres</userinput>
+[root bin]# <userinput>chmod 755 nsd-postgres</userinput>
+[root bin]#
+<action>cd /usr/local/aolserver/bin
+cp /tmp/&tarballpath;/packages/acs-core-docs/www/files/nsd-postgres.txt ./nsd-postgres
+chmod 755 nsd-postgres</action></screen>
+        </listitem>
+      </itemizedlist>
     </listitem>
     <listitem>
       <para><link linkend="install-aolserver-permissions">Test AOLserver</link>.</para>
