@@ -7,8 +7,24 @@ ad_library {
     @cvs-id $Id$
 }
 
-proc_doc db_nextval { sequence } { Returns the next value for a sequence. This can utilize a pool of sequence values to save hits to the database. } {
-    return [db_string nextval "select ${sequence}.nextval"]
+proc_doc db_nextval { sequence } { 
+    Returns the next value for a sequence. 
+    This can utilize a pool of sequence values to save hits to the database. 
+} {
+    # the following query will return a nextval if the sequnce
+    # is of relkind = 'S' (a sequnce).  if it is not of relkind = 'S'
+    # we will try querying it as a view
+    db_0or1row nextval_sequence "select nextval('${sequence}') as nextval
+                                  where (select relkind 
+                                           from pg_class 
+                                          where relname = '${sequence}') = 'S'"
+    if {[info exists nextval]} {
+        return $nextval
+    } else {
+        ns_log notice "db_nextval: sequence($sequence) is not a real sequence.  perhaps it uses the view hack."
+        db_0or1row nextval_view "select ${sequence}.nextval as nextval"
+        return $nextval
+    }
 }
 
 proc_doc db_exec_plsql { statement_name sql args } {
