@@ -22,7 +22,9 @@ end get_root_folder;
 
 function new (
   name          in cr_items.name%TYPE,
+  text          in varchar2 default null,
   parent_id     in cr_items.parent_id%TYPE default null,
+  is_live 		in char default 't',
   template_id	in cr_templates.template_id%TYPE default null,
   creation_date	in acs_objects.creation_date%TYPE
 			   default sysdate,
@@ -54,8 +56,10 @@ begin
     v_template_id := content_item.new (
         item_id       => content_template.new.template_id,
         name          => content_template.new.name, 
+        text          => content_template.new.text, 
         parent_id     => v_parent_id,
         content_type  => 'content_template',
+        is_live       => content_template.new.is_live, 
         creation_date => content_template.new.creation_date, 
         creation_user => content_template.new.creation_user, 
         creation_ip   => content_template.new.creation_ip

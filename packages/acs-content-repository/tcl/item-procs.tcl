@@ -77,15 +77,20 @@ ad_proc -public item::get_template_url { item_id {context public} } {
 }
   
 
-ad_proc -public item::get_url { item_id } {
+ad_proc -public item::get_url {
+    item_id
+    {-root_folder_id "null"}
+} {
 
   @public get_url
  
   Retrieves the relative URL stub to th item. The URL is relative to the
   page root, and has no extension (Example: "/foo/bar/baz"). 
  
-  @param  item_id   The item id
- 
+  @param  item_id         The item id
+  @param  root_folder_id  Starts path resolution from this folder.
+                          Defaults to the root of the sitemap (when null).
+
   @return The relative URL to the item, or an empty string on failure
   @see proc item::get_extended_url
 

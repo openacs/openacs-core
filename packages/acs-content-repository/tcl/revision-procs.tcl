@@ -1,15 +1,19 @@
 # upload an item revision from a file
 
 ad_proc -public cr_write_content {
+    -string:boolean
     -item_id
     -revision_id
 } {
 
+    @param string specifies whether the content should be returned as a string
+           or (the default) be written to the HTML connection (ola@polyxena.net)
     @param item_id the item to write
     @param revision_id revision to write
     @author Don Baccus (dhogaza@pacifier.com)
 
-    Write out the specified content to the current HTML connection.  Only one of 
+    Write out the specified content to the current HTML connection or return
+    it to the caller by using the -string flag.  Only one of 
     item_id and revision_id should be passed to this procedure.  If item_id is
     provided the item's live revision will be written, otherwise the specified
     revision.
@@ -50,9 +54,13 @@ ad_proc -public cr_write_content {
 
 
     switch $storage_type {
-        text { 
+        text {
+            set text [db_string write_text_content ""]
+            if { $string_p } {
+                return $text
+            }
             ReturnHeaders $mime_type
-            ns_write [db_string write_text_content ""]
+            ns_write $text
         }
         file {
             set path [cr_fs_path $storage_area_key]
@@ -60,6 +68,9 @@ ad_proc -public cr_write_content {
             ns_returnfile 200 $mime_type $filename
         }
         lob  {
+            if { $string_p } {
+                return [db_blob_get write_lob_content ""]
+            }
             ReturnHeaders $mime_type
             db_write_blob write_lob_content ""
         }

@@ -62,7 +62,7 @@ ad_proc -public get_item_id {} {
   return $item_id
 } 
 
-ad_proc -public get_content {} {
+ad_proc -public get_content { { content_type {} } } {
  
   variable item_id
   variable revision_id
@@ -88,14 +88,16 @@ ad_proc -public get_content {} {
     return
   }  
 
-  if { [string equal [lindex [split $mime_type "/"] 0] "text"] } {
+  if { [string equal -length 4 "text" $mime_type] } {
     set text_sql [db_map content_as_text]
   } else {
     set text_sql ""
   }
  
   # Get the content type
-  set content_type [db_string get_content_type ""]
+  if { [empty_string_p $content_type] } {
+      set content_type [db_string get_content_type ""]
+  }
 
   # Get the table name
   set table_name [db_string get_table_name ""]
@@ -152,7 +154,7 @@ ad_proc -public get_content_value { revision_id } {
 }
 
 
-ad_proc -public init { urlvar rootvar {content_root ""} {template_root ""} {context "public"} {rev_id ""}} {
+ad_proc -public init { urlvar rootvar {content_root ""} {template_root ""} {context "public"} {rev_id ""} {content_type ""} } {
 
   upvar $urlvar url $rootvar root_path
 
@@ -181,7 +183,9 @@ ad_proc -public init { urlvar rootvar {content_root ""} {template_root ""} {cont
   set item_url $url
 
   set item_id $item_info(item_id)
-  set content_type $item_info(content_type)
+  if { [empty_string_p $content_type] } {
+      set content_type $item_info(content_type)
+  }
 
   # Make sure that a live revision exists
   if [empty_string_p $rev_id] {
@@ -220,6 +224,38 @@ ad_proc -public init { urlvar rootvar {content_root ""} {template_root ""} {cont
       set text [content::get_content_value $info(template_id)]
       template::util::write_file $file $text
   }
+
+  set file ${root_path}/${url}.tcl
+  if ![file exists $file] {
+
+      file mkdir [file dirname $file]
+      set text "\# Put the current revision's attributes in a onerow datasource named \"content\".
+\# The detected content type is \"$content_type\".
+
+content::get_content $content_type
+
+if { !\[string equal -length 4 \"text\" \$content(mime_type)\] } {
+    \# It's a file.
+    cr_write_content -revision_id \$content(revision_id)
+    ad_script_abort
+}
+
+\# Ordinary text/* mime type.
+template::util::array_to_vars content
+
+set text \[cr_write_content -string -revision_id \$revision_id\]
+
+set text \[ad_html_text_convert -from \$mime_type -to text/html \$text\]
+
+set context {\$title}
+
+ad_return_template
+"
+
+      template::util::write_file $file $text
+  }
+
+
 
   return 1
 }

@@ -26,7 +26,7 @@
 <fullquery name="item::get_url.gu_get_path">      
       <querytext>
       
-    select content_item.get_path(:item_id) from dual
+    select content_item.get_path(:item_id, $root_folder_id) from dual
   
       </querytext>
 </fullquery>
