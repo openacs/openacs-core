@@ -1,4 +1,4 @@
-<master>
+<master src="master">
 <property name="title">Delete locale</property>
 <property name="context_bar">@context_bar@</property>
 
