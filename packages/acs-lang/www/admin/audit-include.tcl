@@ -2,8 +2,6 @@ set trail_counter 0
 
 multirow create audit_inv creation_user_id creation_user_name creation_date old_message new_message old_new_message comment_text
 
-set new_message [lang::message::lookup $current_locale "${package_key}.${message_key}"]
-
 db_foreach audit_inv_select {
     select a.old_message,
            p.first_names || ' ' || p.last_name as overwrite_user_name,
