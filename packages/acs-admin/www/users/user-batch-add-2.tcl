@@ -5,7 +5,7 @@ ad_page_contract {
     userlist
     from
     subject
-    message
+    message:allhtml
 } -properties {
     title:onevalue
     success_text:onevalue
@@ -77,7 +77,7 @@ from parties where email = lower(:email)"]
     
     set sub_message $message
     foreach key $key_list value $value_list {
-	regsub -all "#$key#" $sub_message $value sub_message
+	regsub -all "<$key>" $sub_message $value sub_message
     }
     
     if {[catch {ns_sendmail "$email" "$from" "$subject" "$sub_message"} errmsg]} {
