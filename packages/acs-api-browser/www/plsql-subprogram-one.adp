@@ -1,10 +1,6 @@
-<%= [ad_header $name] %>
-
-<h2>@name@</h2>
-
-<%= [ad_context_bar {"" "API Browser"} {"plsql-subprograms-all" "All PL/SQL Subprograms"} "One PL/SQL Subprogram"] %>
-
-<hr>
+<master>
+<property name=title>@title@</property>
+<property name=context_bar>@context_bar@</property>
 
 <if @package_slider_list@ ne "">
 <table align=right><tr><td>
@@ -18,5 +14,4 @@
 </pre>
 </blockquote>
 
-<%= [ad_footer] %>
 
