@@ -53,6 +53,7 @@
             select site_node__url(node_id)
             from site_nodes
             where object_id = :object_id
+            order by site_node__url(node_id) desc
         </querytext>
     </fullquery>
 

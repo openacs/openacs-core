@@ -267,10 +267,12 @@ namespace eval site_node {
     ad_proc -public get_all_from_object_id {
         {-object_id:required}
     } {
-        return a list of site nodes associated with the given object_id
+        Return a list of site node info associated with the given object_id. 
+        The nodes will be ordered descendingly by url (children before their parents).
     } {
         set node_id_list [list]
 
+        set url_list [list]
         foreach url [get_url_from_object_id -object_id $object_id] {
             lappend node_id_list [get -url $url]
         }
@@ -295,7 +297,10 @@ namespace eval site_node {
         {-object_id:required}
     } {
         returns a list of urls for site_nodes that have the given object
-        mounted or the empty list if there are none
+        mounted or the empty list if there are none. The
+        url:s will be returned in descending order meaning any children will
+        come before their parents. This ordering is useful when deleting site nodes
+        as we must delete child site nodes before their parents.
     } {
         return [db_list select_url_from_object_id {}]
     }
