@@ -595,7 +595,7 @@ ad_form -extend \
       SELECT
       c.*,
       o.context_id,
-      lpad('.',(tree_level(o.tree_sortkey) - 4), '.') as indent
+      tree_level(o.tree_sortkey)
       FROM
       blog_categories c,
       acs_objects o
@@ -605,12 +605,18 @@ ad_form -extend \
       o.tree_sortkey"
     </programlisting>
 
+    <para>Note the use of the
+    <computeroutput>tree_level()</computeroutput> function, which
+    gives you the level, starting from 1, 2, 3... </para>
+
     <para>Here's an example, pulling all of the children for a given
   parent:</para> 
 
     <programlisting>
       SELECT 
-      children.*
+      children.*,
+      tree_level(children.tree_sortkey) -
+        tree_level(parent.tree_sortkey) as level
       FROM 
       some_table parent, 
       some_table children
@@ -620,11 +626,22 @@ ad_form -extend \
       and parent.key = :the_parent_key;
       </programlisting>
 
+    <para>The reason we substract the parent's tree_level from the
+    child's tree_level is that the tree_levels are global, so if you
+    want the parent's tree_level to start with 0, you'll want the
+    subtraction in there. This is a reason you'll commonly see magic
+    numbers in tree_sortkey SQL queries, like
+    <computeroutput>tree_level(children.tree_sortkey) -
+    4</computeroutput>. That is basically an incorrect way to do it,
+    and subtracting the parent's tree_level is the preferred method.<para>
+
     <para>This example does not include the parent. To return the entire subtree including the parent, leave out the non-equals clause:</para>
 
     <programlisting>
       SELECT
-      subtree.*
+      subtree.*,
+      tree_level(children.tree_sortkey) -
+        tree_level(parent.tree_sortkey) as level
       FROM some_table parent, some_table subtree
       WHERE 
       subtree.tree_sorktey between parent.tree_sortkey and tree_right(parent.tree_sortkey)
