@@ -502,9 +502,9 @@ as
        v_impl_id := acs_sc_impl.get_id(impl_contract_name,impl_name);
 
        delete from acs_sc_impl_aliases
-       where impl_contract_name = delete_alias.impl_contract_name
-       and impl_name = delete_alias.impl_name
-       and impl_operation_name = delete_alias.impl_operation_name;
+       where impl_contract_name = acs_sc_impl_alias.delete.impl_contract_name
+       and impl_name = acs_sc_impl_alias.delete.impl_name
+       and impl_operation_name = acs_sc_impl_alias.delete.impl_operation_name;
 
        return v_impl_id;
 
