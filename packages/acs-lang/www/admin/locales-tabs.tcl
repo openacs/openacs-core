@@ -19,7 +19,7 @@ multirow create tabs name key url
 
 if { $show_locales_p == "t" } {
 
-    set list_tabs [list { Locales locales } { Messages localized-messages } ]
+    set list_tabs [list { Home home } { Locales locales } { Messages localized-messages } ]
 
 } else {
 

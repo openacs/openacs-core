@@ -1,4 +1,4 @@
-<master src="master">
+<master>
 <property name="title">Administration of Localized Messages</property>
 
 <h2>Edit locale</h2>

@@ -23,7 +23,7 @@ set locale_user [ad_locale_locale_from_lang [ad_locale user language]]
 #  ns_setformencoding $encoding_charset
 #  ns_set put [ns_conn outputheaders] "content-type" "text/html; charset=$encoding_charset"
 
-set context_bar [ad_context_bar [list "index?tab=locales" "Locales"] "Editing Locale"]
+set context_bar [ad_context_bar "Editing Locale"]
 
 form create locale_editing
 

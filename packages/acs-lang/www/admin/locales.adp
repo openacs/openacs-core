@@ -26,4 +26,4 @@
   </td>
  </tr>
 </table>
-<p>(<a href="locale-new">New locale</a>)</p>
+<p>(<a href="locale-new">Create New Locale</a>)</p>

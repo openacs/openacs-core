@@ -12,7 +12,8 @@ ad_page_contract {
 }
 
 set return_url "index?tab=[ns_urlencode localized-messages]"
-set context_bar [ad_context_bar [list $return_url "Locales & Messages"] "Listing"]
+set page_title "Messages"
+set context_bar [ad_context_bar $page_title]
 set default_locale en_US
 
 if { ![info exists locales] } {
