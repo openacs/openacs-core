@@ -40,6 +40,10 @@
       </else>
     </td>
 
+    <td align="center" class="button-bar">
+      <a href="@whos_online_url@">@num_users_online@ <if @num_users_online@ eq 1>user</if><else>users</else> online</a>
+    </td>
+
     <td align="right" style="padding-right: 8px;" class="button-bar">
       <if @admin_url@ not nil>
         <a href="@admin_url@" title="#acs-subsite.Site_wide_administration#">#acs-subsite.Admin#</a>
