@@ -1,3 +1,4 @@
+
 <table cellspacing="1" cellpadding="0" border="0">
   <tr>
     <td>
@@ -76,7 +77,7 @@
                         <td>
                           <font face="tahoma,verdana,arial,helvetica,sans-serif" size="-1">
                             <label for="@elements.form_id@:elements:@elements.id@:\@formgroup.option@">
-                              \@formgroup.label@
+                              \@formgroup.label;noquote@
                             </label>
                           </font>
                         </td>
