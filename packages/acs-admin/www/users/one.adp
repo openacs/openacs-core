@@ -2,23 +2,17 @@
 <property name=title>@first_names;noquote@ @last_name;noquote@</property>
 <property name="context">@context;noquote@</property>
 
+<h2>Basic Information</h2>
+
+<include src="/packages/acs-subsite/lib/user-info" user_id="@user_id@" return_url="@return_url@">
+
 <ul>
-<li>Name:  @first_names@ @last_name@ (<a href="@public_link@">public page</a>)</li>
-<li>Email:  <a href="mailto:@email@">@email@</a></li>
-<li>Username:  @username@</li>
-<li>Screen name:  @screen_name;noquote@ </li>
-<if @url@ not nil>
-  <li>Homepage: <a href="@url@">@url@</a></li>
-</if>
 <li>User ID:  @user_id@</li>
-</ul>
-[<a href="/user/basic-info-update?@export_edit_vars@">edit user information</a>]
-<ul>
+<li><a href="@public_link@">View community member page</a></li>
 <li>Registration date:  @registration_date@</li>
 <li>Registration IP: @creation_ip@ (<a href="complex-search?target=one&amp;ip=@creation_ip@" title="other registrations from this IP address">others</a>)</li>
-<if @last_visit@ not nil>
-  <li>Last visit: @last_visit@</li>
-</if>
+<li>Last visit: @last_visit_pretty@</li>
+
 
 <if @portrait_p@ eq 1>
   <li>Portrait:  <a href="/shared/portrait?user_id=@user_id@">@portrait_title@</a></li>

@@ -7,14 +7,18 @@
 </if><else>
   <if @criteria:rowcount@ eq 1>
     for users matching the criterion:
+    <ul>
     <multiple name="criteria">
       <li> @criteria.data@ </li>
     </multiple>
+    </ul>
   </if><else>
     for users matching <b> @combine_method@ </b> of the criteria:
+    <ul>
     <multiple name="criteria">
       <li> @criteria.data@ </li>
     </multiple>
+    </ul>
   </else>
 </else>
 

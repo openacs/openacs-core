@@ -23,12 +23,11 @@ ad_page_contract {
     user_finite_state_links:onevalue
 }
 
-if ![db_0or1row user_info "select first_names, last_name, username, email, coalesce(screen_name,'&lt none set up &gt') as screen_name, creation_date, creation_ip, last_visit, member_state, email_verified_p, url
-from cc_users
-where user_id = :user_id"] {
+if { ![db_0or1row user_info {}] } {
     ad_return_complaint 1 "<li>We couldn't find user #$user_id; perhaps this person was deleted?"
     return
 }
+set last_visit_pretty [lc_time_fmt $last_visit_ansi "%q %X"]
 
 #
 # RBM: Check if the requested user is a site-wide admin and warn the 
