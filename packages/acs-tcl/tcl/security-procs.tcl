@@ -551,7 +551,7 @@ ad_proc -public ad_get_login_url {
         # actually have permission to view that subsite, otherwise we'll get into an infinite redirect loop
         array set site_node [site_node::get_from_url -url $url]
         set package_id $site_node(object_id)
-        if { ![permission::permission_p -object_id $site_node(object_id) -privilege read] } {
+        if { ![permission::permission_p -object_id $site_node(object_id) -privilege read -party_id 0] } {
             set url /
         }
     } else {
