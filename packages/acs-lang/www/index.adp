@@ -3,7 +3,9 @@
   <property name="context_bar">@context_bar;noquote@</property>
 
 <if @admin_p@>
-  <a href="admin">Administration</a>
+  <div style="float: right;">
+    <a href="admin" class="button">Administration</a>
+  </div>
 </if>
 
 <blockquote>
