@@ -56,6 +56,7 @@ ad_proc -public ad_form {
 
     ad_page_contract {
 
+
         Simple add/edit form
 
     } {
@@ -356,6 +357,10 @@ ad_proc -public ad_form {
     <p>
     </blockquote>
 
+    @see ad_form_new_p
+    @see ad_set_element_value
+    @see ad_set_form_values
+
 } {
 
     set level [template::adp_level]
@@ -377,7 +382,7 @@ ad_proc -public ad_form {
 
     set valid_args { form method action mode html name select_query select_query_name new_data on_refresh
                      edit_data validate on_submit after_submit confirm_template on_request new_request edit_request
-                     export cancel_url cancel_label has_edit actions };
+                     export cancel_url cancel_label has_edit actions show_required_p };
 
     ad_arg_parser $valid_args $args
 
@@ -551,6 +556,10 @@ ad_proc -public ad_form {
             lappend create_command "-actions" $actions
         }
 
+        if { [info exists show_required_p] } {
+            lappend create_command "-show_required_p" $show_required_p
+        }
+
         # Create the form
 
         eval $create_command
@@ -680,6 +689,7 @@ ad_proc -public ad_form {
                     format -
                     mode -
                     value -
+                    display_value - 
 		    section -
                     before_html -
                     after_html -
