@@ -2,6 +2,20 @@
   <property name="title">@page_title;noquote@</property>
   <property name="context">@context;noquote@</property>
 
+<h2>Install from OpenACS Repository</h2>
+
+<p>
+  <b>&raquo;</b> <a href="@remote_install_url@">Install new application</a>
+</p>
+
+<p>
+  <b>&raquo;</b> <a href="@remote_service_install_url@">Install new service</a>
+</p>
+
+<p>
+  <b>&raquo;</b> <a href="@remote_upgrade_url@">Upgrade your system</a>
+</p>
+
 <h2>Install from local file system</h2>
 
 <p>
@@ -15,6 +29,8 @@
 <p>
   <b>&raquo;</b> <a href="@local_upgrade_url@">Upgrade your system</a>
 </p>
+
+
 
 <h2>Already Installed Packages</h2>
 

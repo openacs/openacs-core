@@ -208,16 +208,20 @@ ad_proc -private apm_dependency_check {
     spec_files
 } {
     Check dependencies of all the packages provided.
-    @param spec_files A list of spec files to be processed.
+
+    @param spec_files      A list of spec files to be processed.
+
     @param initial_install Only process spec files with the initial install attribute.
-    @param pkg_info_all If you supply this argument, when a
-    requirement goes unsatisfied, instead of failing, this proc will
-    try to add whatever other packages are needed to the install set. The list of package keys to
-    add will be the third element in the list returned.
+
+    @param pkg_info_all    If you supply this argument, when a
+                           requirement goes unsatisfied, instead of failing, this proc will
+                           try to add whatever other packages are needed to the install set. The list of package keys to
+                           add will be the third element in the list returned.
+
     @return A list whose first element indicates whether dependencies were satisfied (1 if so, 0 otherwise).\
-    The second element is the package info list with the packages ordered according to dependencies.\
-    Packages that can be installed come first.  Any packages that failed the dependency check come last.
-    The third element is a list of package keys on additional packages to install, in order to satisfy dependencies.
+            The second element is the package info list with the packages ordered according to dependencies.\
+            Packages that can be installed come first.  Any packages that failed the dependency check come last.
+            The third element is a list of package keys on additional packages to install, in order to satisfy dependencies.
 } {
     #### Iterate over the list of info files.
     ## Every time we satisfy another package, remove it from install_pend, and loop again.
@@ -360,6 +364,245 @@ ad_proc -private apm_dependency_check {
     }
 
     return [list 1 $install_in $extra_package_keys]
+}
+
+ad_proc -private apm_dependency_check_new {
+    {-repository_array:required}
+    {-package_keys:required}
+} {
+    Checks dependencies and finds out which packages are required to install the requested packages.
+    In case some packages cannot be installed due to failed dependencies, it returns which packages out 
+    of the requested can be installed, and which packages, either originally requested or required by those,
+    could not be installed, and why.
+
+    @param package_keys     The list of package_keys of the packages requested to be installed.
+
+    @param repository_array Name of an array in the caller's namespace containing the repository of 
+                            available packages as returned by apm_get_package_repository.
+
+    @return             An array list with the following elements:
+    
+    <ul>
+    
+      <li>status: 'ok' or 'failed'.
+    
+      <li>install: If status is 'ok', this is the complete list of packages that need to be installed, 
+                   in the order in which they need to be installed.
+                   If status is 'failed', the list of packages that can be installed.
+
+      <li>failed: If status is 'failed', an array list keyed by package_key of 2-tuples of 
+                  (required-uri, required-version) of requirements that could not be satisfied.
+
+      <li>packages: The list of package_keys of the packages touched upon, either because they 
+                    were originally requested, or because they were required. If status is 'ok', 
+                    will be identical to 'install'.
+                  
+    
+    </ul>
+
+    @see apm_get_package_repository
+} {
+    upvar 1 $repository_array repository
+
+    array set result {
+        status failed
+        install {}
+        failed {}
+        packages {}
+    }
+    
+    # 'pending_packages' is an array keyed by package_key with a value of 1 for each package pending installation
+    # When dependencies have been met, the entry will be unset
+    array set pending_packages [list]
+    foreach package_key $package_keys {
+        set pending_packages($package_key) 1
+    }
+
+    # 'installed_packages' is an array keyed by package_key with a value of 1 for each package 
+    # whose dependencies have been met and is ready to be installed
+    array set installed_packages [list]
+
+    # 'provided' will keep track of what we've provided with the currently installed packages
+    # combined with the packages which we're already able to install
+    apm_get_installed_provides -array provided
+
+    # 'required' will keep track of unsatisfied dependencies
+    # keyed by (service-uri) and will contain the largest version number required
+    array set required [list]
+
+    # 'required_by' will keep track of unsatisfied dependencies
+    # keyed by (service-uri) and will contain the largest version number required
+    array set required_by [list]
+
+    # Just to get us started
+    set updated_p 1
+
+    ns_log Notice "LARS: STARTING DEPENDENCY CHECK"
+
+    # Outer loop tries to find a package from the repository to add if 
+    # we're stuck because of unsatisfied dependencies
+    while { $updated_p } {
+
+        # Keep looping over pending_package_keys, trying to add packages
+        # So long as we've added another, try looping again, as there may be cross-dependencies
+        while { $updated_p && [llength [array names pending_packages]] > 0 } {
+            set updated_p 0
+
+            # Try to add a package from 
+            foreach package_key [array names pending_packages] {
+                
+                array unset version
+                array set version $repository($package_key)
+
+                set satisfied_p 1
+                foreach req $version(requires) {
+                    set req_uri [lindex $req 0]
+                    set req_version [lindex $req 1]
+
+                    if { ![info exists provided($req_uri)] || \
+                             [apm_version_names_compare $provided($req_uri) $req_version]== -1 } {
+
+                        ns_log Notice "LARS: $package_key requires $req_uri $req_version => failed"
+
+                        set satisfied_p 0
+
+                        # Mark this as a requirement
+                        if { ![info exists required($req_uri)] || \
+                                 [apm_version_names_compare $required($req_uri) $req_version] == -1 } {
+                            set required($req_uri) $req_version
+                        }
+                    } else {
+                        ns_log Notice "LARS: $package_key requires $req_uri $req_version => OK"
+                    }
+                }
+                
+                if { $satisfied_p } {
+                    # Record as set to go
+                    set installed_packages($package_key) 1
+                    
+                    # Remove from pending list
+                    unset pending_packages($package_key)
+
+                    # Add to install-list, as this is important for ordering the installation of packages correctly
+                    lappend result(install) $package_key
+
+                    # Add to list of packages touched
+                    lappend result(packages) $package_key
+
+                    # Record what this package provides, and remove it from the required list, if appropriate
+                    foreach prov $version(provides) {
+                        set prov_uri [lindex $prov 0]
+                        set prov_version [lindex $prov 1]
+                        # If what we provide is not already provided, or the alredady provided version is
+                        # less than what we provide, record this new provision
+                        if { ![info exists provided($prov_uri)] || \
+                                 [apm_version_names_compare $provided($prov_uri) $prov_version] == -1 } {
+                            set provided($prov_uri) $prov_version
+                        }
+                        # If what we provide is required, and the required version is less than what we provide,
+                        # drop the requirement
+                        if { [info exists required($prov_uri)] && \
+                                 [apm_version_names_compare $required($prov_uri) $prov_version] <= 0 } {
+                            array unset required($prov_uri)
+                        }
+                    }
+
+                    # Another package has been added, so repeat
+                    set updated_p 1
+                }
+            }
+        }
+
+        # Inner loop completed. Either we're done, or there are packages that have dependencies
+        # not currently on the pending_package_keys list.
+
+        set updated_p 0
+        
+        if { [llength [array names pending_packages]] > 0 } {
+            # There are packages that have unsatisfied dependencies
+            # Those unmet requirements will be registered in the 'required' array
+            
+            # Let's find a package which satisfies at least one of the requirements in 'required'
+
+            foreach package_key [array names repository] {
+                if { [info exists pending_packages($package_key)] || \
+                         [info exists installed_packages($package_key)] } {
+                    # Packages already on the pending list, or already verified ok won't help us any
+                    continue
+                }
+
+                array unset version
+                array set version $repository($package_key)
+
+                ns_log Notice "LARS: Considering $package_key: [array get version]"
+
+                # Let's see if this package provides anything we need
+                foreach prov $version(provides) {
+                    set prov_uri [lindex $prov 0]
+                    set prov_version [lindex $prov 1]
+
+                    if { [info exists required($prov_uri)] && \
+                             [apm_version_names_compare $required($prov_uri) $prov_version] <= 0 } {
+
+                        ns_log Notice "LARS: Adding $package_key, as it provides $prov_uri $prov_version"
+
+                        # If this package provides something that's required in a version high enough
+                        # add it to the pending list
+                        set pending_packages($package_key) 1
+
+                        # We've changed something
+                        set updated_p 1
+                        
+                        # Let's try for another go at installing packages
+                        break
+                    }
+                }
+
+                # Break all the way back to installing pending packages again
+                if { $updated_p } {
+                    break
+                }
+            }
+        }
+    }
+
+    if { [llength [array names pending_packages]] == 0 } {
+        set result(status) ok
+    } else {
+        set result(status) failed
+
+        array set failed [list]
+
+        # There were problems, now be helpful
+
+        # Find out which packages couldn't be installed and why
+        foreach package_key [array names pending_packages] {
+            array unset version
+            array set version $repository($package_key)
+
+            # Add to touched upon packages
+            lappend result(packages) $package_key
+            
+            # Find unsatisfied requirements
+            foreach req $version(requires) {
+                set req_uri [lindex $req 0]
+                set req_version [lindex $req 1]
+                if { ![info exists provided($req_uri)] || \
+                         [apm_version_names_compare $provided($req_uri) $req_version] == -1 } {
+                    lappend failed($package_key) [list $req_uri $req_version]
+                    if { [info exists provided($req_uri)] } {
+                        ns_log Notice "LARS: Failed dependency: $package_key requires $req_uri $req_version, but we only provide $provided($req_uri)"
+                    } else {
+                        ns_log Notice "LARS: Failed dependency: $package_key requires $req_uri $req_version, but we don't have it"
+                    }
+                }
+            }
+        }
+
+        set result(failed) [array get failed]
+    }
+        
+    return [array get result]
 }
 
 ad_proc -private apm_load_catalog_files {
@@ -1191,6 +1434,7 @@ ad_proc -private apm_upgrade_script_compare {f1 f2} {
 }
 
 ad_proc -private apm_ctl_files_find {
+    {-package_path ""}
     package_key
 } {
 
@@ -1203,7 +1447,7 @@ ad_proc -private apm_ctl_files_find {
 
 } {
 
-    set file_list [apm_get_package_files -file_types [list ctl_file] -package_key $package_key]
+    set file_list [apm_get_package_files -file_types [list ctl_file] -package_path $package_path -package_key $package_key]
     set files [list]
 
     foreach path $file_list {
@@ -1365,29 +1609,40 @@ ad_proc -private apm_mount_core_packages {} {
     ns_log Notice "Finished mounting of core packages"
 }
 
-ad_proc -private apm_version_name_compare {
-    version_name_1
-    version_name_2
-} {
-    Compare two version names (e.g. '1.2d3' and '3.5b') as for which comes before which. The example here would return -1.
-    @param version_name_1 the first version name
-    @param version_name_2 the second version name
-    @return 1 if version_name_1 comes after version_name_2, 0 if they are the same, -1 if version_name_1 comes before version_name_2.
-    @author Lars Pind
-} {
-    db_1row select_sortable_versions {}
-    return [string compare $sortable_version_1 $sortable_version_2]
-}
-
 ad_proc -public apm_version_names_compare {
     version_name_1
     version_name_2
 } {
-    Compare two version names (e.g. '1.2d3' and '3.5b') as for which comes before which. The example here would return -1.
-    @param version_name_1 the first version name
-    @param version_name_2 the second version name
-    @return 1 if version_name_1 comes after version_name_2, 0 if they are the same, -1 if version_name_1 comes before version_name_2.
+    Compare two version names for which is earlier than the other.
 
+    Example:
+
+    <ul> 
+
+      <li>apm_version_names_compare "1.2d3" "3.5b" => -1
+
+      <li> apm_version_names_compare "3.5b" "3.5b" => 0
+
+      <li> apm_version_names_compare "3.5b" "1.2d3" => 1
+
+    </ul>
+
+    @param version_name_1 the first version name
+
+    @param version_name_2 the second version name
+
+    @return 
+    
+    <ul>
+
+      <li> -1: the first version is smallest
+
+      <li> 0: they're identical
+    
+      <li> 1: the second version is smallest
+
+    </ul>
+    
     @author Lars Pind
 } {
     db_1row select_sortable_versions {}
@@ -1479,6 +1734,129 @@ ad_proc -public apm_upgrade_logic {
         uplevel $chunks($key)
     }
 }
+
+
+ad_proc -private apm_get_package_repository {
+    {-repository_url ""}
+    {-array:required}
+} {
+    Gets a list of packages available for install from either a remote package repository
+    or the local file system.
+
+    @param repository_url The URL for the repository channel to get from, or the empty string to
+                          seach the local file system instead.
+    
+    @param array          Name of an array where you want the repository stored. It will be keyed by package-key,
+                          and each entry will be an array list list what's returned by apm_read_package_info_file.
+
+    @see apm_read_package_info_file
+
+    @author Lars Pind (lars@collaboraid.biz)
+} {
+    # This will be a list of array-lists of packages available for install
+    upvar 1 $array repository
+
+    apm_get_installed_versions -array installed_version
+
+    if { ![empty_string_p $repository_url] } {
+        set manifest_url "${repository_url}manifest.xml"
+    
+        # See if we already have it in a client property
+        set manifest [ad_get_client_property acs-admin [string range $manifest_url end-49 end]]
+
+        if { [empty_string_p $manifest] } {
+            # Nope, get it now
+            array set result [ad_httpget -url $manifest_url]
+        
+            if { ![string equal $result(status) 200] } {
+                error "Couldn't get the package list. Please try again later."
+            }
+            
+            set manifest $result(page)
+            
+            # Store for subsequent requests
+            ad_set_client_property acs-admin [string range $manifest_url end-49 end] $manifest
+        }
+
+        # Parse manifest
+        
+        set tree [xml_parse -persist $manifest]
+        set root_node [xml_doc_get_first_node $tree]
+        
+        foreach package_node [xml_node_get_children_by_name $root_node "package"] {
+            array unset version
+            set version(package.key) [xml_node_get_content [xml_node_get_first_child_by_name $package_node "package-key"]]
+            set version(name) [xml_node_get_content [xml_node_get_first_child_by_name $package_node "version"]]
+            set version(package-name) [xml_node_get_content [xml_node_get_first_child_by_name $package_node "pretty-name"]]
+            set version(package.type) [xml_node_get_content [xml_node_get_first_child_by_name $package_node "package-type"]]
+            set version(download_url) [xml_node_get_content [xml_node_get_first_child_by_name $package_node "download-url"]]
+
+            foreach dependency_type { provides requires } {
+                set version($dependency_type) {}
+                foreach dependency_node [xml_node_get_children_by_name $package_node "$dependency_type"] {
+                    lappend version($dependency_type) \
+                        [list [xml_node_get_attribute $dependency_node "url"] \
+                             [xml_node_get_attribute $dependency_node "version"]]
+                }
+            }
+
+            if { ![info exists installed_version($version(package.key))] } {
+                # Package is not installed
+                set version(install_type) install
+            } elseif { [string equal $version(name) $installed_version($version(package.key))] || \
+                           [apm_higher_version_installed_p $version(package.key) $version(name)] != 1 } {
+                # This version or a higher version already installed
+                set version(install_type) already_installed
+            } else {
+                # Earlier version installed, this is an upgrade
+                set version(install_type) upgrade
+            }
+
+            ns_log Notice "LARS: $version(package.key) = $version(install_type) -- [array get installed_version]"
+            
+            if { ![string equal $version(install_type) already_installed] } {
+                set repository($version(package.key)) [array get version]
+            }
+        }
+    } else {
+        # Parse spec files
+        foreach spec_file [apm_scan_packages "[acs_root_dir]/packages"] {
+            with_catch errmsg {
+                array unset version
+                array set version [apm_read_package_info_file $spec_file]
+                
+                # If the package doesn't support this RDBMS, it's not really available for install
+                if { [apm_package_supports_rdbms_p -package_key $version(package.key)] } {
+
+                    if { ![info exists installed_version($version(package.key))] } {
+                        # Package is not installed
+                        set version(install_type) install
+                    } elseif { [string equal $version(name) $installed_version($version(package.key))] || \
+                                   [apm_higher_version_installed_p $version(package.key) $version(name)] != 1 } {
+                        # This version or a higher version already installed
+                        set version(install_type) already_installed
+                    } else {
+                        # Earlier version installed, this is an upgrade
+                        set version(install_type) upgrade
+                    }
+
+                    if { ![string equal $version(install_type) already_installed] } {
+                        set repository($version(package.key)) [array get version]
+                    }
+                }
+            } {
+                # We don't error hard here, because we don't want the whole process to fail if there's just one
+                # package with a bad .info file
+                global errorInfo
+                ns_log Error "Error while checking package info file $spec_file: $errmsg\n$errorInfo"
+            }
+        }
+    }
+}
+
+
+
+
 
 
 ##############
