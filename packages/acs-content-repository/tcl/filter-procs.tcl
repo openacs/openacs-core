@@ -208,10 +208,10 @@ ad_proc -public content::init {
     if { [empty_string_p $rev_id] } {
       if {[string equal "best" $revision]} {
 	  # lastest_revision unless live_revision is set, then live_revision
-	  set revision_id [item::get_best_revision $item_id]
+	  set revision_id [::item::get_best_revision $item_id]
       } else {
 	  # default live_revision
-	  set revision_id [item::get_live_revision $item_id]
+	  set revision_id [::item::get_live_revision $item_id]
       }
 
       if { [string equal "" $revision_id] } {
