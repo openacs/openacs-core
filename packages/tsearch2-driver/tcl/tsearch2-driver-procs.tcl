@@ -134,7 +134,8 @@ ad_proc -public tsearch2::search {
     if {[string is integer $offset]} {
 	set offset_clause " offset :offset "
     }
-    set query_text "select object_id from txt where fti @@ to_tsquery('default',:query) and exists (select 1 from                    from acs_object_party_privilege_map m
+    set query_text "select object_id from txt where fti @@ to_tsquery('default',:query) and exists (select 1
+                  from acs_object_party_privilege_map m
                    where m.object_id = txt.object_id
                      and m.party_id = :user_id
                      and m.privilege = 'read')order by rank(fti,to_tsquery('default',:query))  ${limit_clause} ${offset_clause}"
