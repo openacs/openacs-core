@@ -11,6 +11,7 @@
                 user_id => :user_id,
 		email => :email,
 		url => :url,
+                authority_id => :authority_id,
 		username => :username,
 		first_names => :first_names,
 		last_name => :last_name,

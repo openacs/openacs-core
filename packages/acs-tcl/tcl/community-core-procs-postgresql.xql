@@ -12,7 +12,7 @@
                 now(),
                 null,
                 :peeraddr,
-                null,   -- authority
+                :authority_id,
                 :username,
                 :email,
                 :url,
