@@ -367,6 +367,16 @@ ad_proc -private template::element::validate { form_id element_id } {
        continue
     }
 
+    if { [info exists element(maxlength)] } {
+      set value_bytelength [string bytelength $value]
+      if {  $value_bytelength > $element(maxlength) } {
+        set excess_no_bytes [expr { $value_bytelength - $element(maxlength) }]
+        set message "$label is [ad_decode $excess_no_bytes "1" "one character" "$excess_no_bytes characters"] too long."
+        lappend v_errors $message
+        set formerror($element_id:maxlength) $message
+      }
+    }
+
     if { ! [template::data::validate $element(datatype) value message] } {
 
       # the submission is invalid

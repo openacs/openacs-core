@@ -680,11 +680,15 @@ ad_proc -public ad_form {
                     after_html -
                     result_datatype -
                     search_query -
-                    search_query_name {
+                    search_query_name -
+                    maxlength {
                         if { [llength $extra_arg] > 2 || [llength $extra_arg] == 1 } {
                             return -code error "element $element_name: \"$extra_arg\" requires exactly one argument"
                         }
                         lappend form_command [uplevel [list subst [lindex $extra_arg 1]]]
+                    }
+                    default {
+                        ns_log Error "Unknown switch '[lindex $extra_arg 0]' to ad_form on url [util_get_current_url]"
                     }
                 }
             }

@@ -184,6 +184,10 @@ ad_proc -public template::widget::input { type element_reference tag_attributes 
         append output " $name=\"$attributes($name)\""
       }
     }
+
+    if { [info exists element(maxlength)] } {
+        append output " maxlength=\"$element(maxlength)\""
+    }
     
     append output " />"
   }
