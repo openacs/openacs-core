@@ -1,5 +1,6 @@
 ad_page_contract {
-    Show internationalization status for a certain package version.
+    A form to help semi-automate the conversion of tcl and adp files from using literal
+    text strings to using the message catalog.
 
     @author Peter Marklund (peter@collaboraid.biz)
     @creation-date 8 October 2002
@@ -13,7 +14,7 @@ ad_page_contract {
 
 db_1row package_version_info "select pretty_name, version_name from apm_package_version_info where version_id = :version_id"
 
-set page_title "Internationalization of $pretty_name $version_name"
+set page_title "Message catalog lookups for adp and tcl files of $pretty_name $version_name"
 set context_bar [ad_context_bar $page_title]
 
 set file_option_list [list]
