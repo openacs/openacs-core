@@ -44,18 +44,27 @@ namespace eval notification::type {
     } {
 	return the notification type ID given a short name. Short names are unique but not primary keys.
     } {
+        return [util_memoize [list notification::type::get_type_id_not_cached $short_name]]
+    }
+    
+    ad_proc -public get_type_id_not_cached {
+        short_name
+    } {
+	return the notification type ID given a short name. Short names are unique but not primary keys.
+    } {
         return [db_string select_type_id {} -default {}]
     }
     
     ad_proc -public delete {
         {-short_name:required}
     } {
-	remove a notification type. This is very rare (and thus not even implemented right now).
+	Remove a notification type. This is very rare.
     } {
         set type_id [get_type_id -short_name $short_name]
-        
-        # do the delete
-        # FIXME: implement
+
+        db_exec_plsql delete_notification_type {}
+
+        util_memoize_flush [list notification::type::get_type_id_not_cached $short_name]
     }
     
     ad_proc -public get {

@@ -8,16 +8,16 @@
     <singleton-p>t</singleton-p>
     <auto-mount>notifications</auto-mount>
 
-    <version name="0.3d" url="http://openacs.org/repository/download/apm/notifications-0.3d.apm">
+    <version name="0.5d" url="http://openacs.org/repository/download/apm/notifications-0.4d.apm">
     <database-support>
         <database>oracle</database>
         <database>postgresql</database>
     </database-support>
         <owner url="mailto:ben@openforce.net">Ben Adida</owner>
         <summary>Notification Management</summary>
-        <release-date>2002-08-19</release-date>
+        <release-date>2003-02-17</release-date>
 
-        <provides url="notifications" version="0.3d"/>
+        <provides url="notifications" version="0.4d"/>
         <requires url="acs-mail-lite" version="0.1d"/>
 
         <files>
@@ -34,6 +34,7 @@
             <file type="data_model" db_type="oracle" path="sql/oracle/notifications-replies-create.sql"/>
             <file type="data_model" db_type="oracle" path="sql/oracle/notifications-replies-package-create.sql"/>
             <file type="data_model_upgrade" db_type="oracle" path="sql/oracle/upgrade/upgrade-0.1d-0.2d.sql"/>
+            <file type="data_model_upgrade" db_type="oracle" path="sql/oracle/upgrade/upgrade-0.3d-0.4d.sql"/>
             <file type="data_model" db_type="postgresql" path="sql/postgresql/delivery-method-sc-create.sql"/>
             <file type="data_model" db_type="postgresql" path="sql/postgresql/email-sc-impl-create.sql"/>
             <file type="data_model" db_type="postgresql" path="sql/postgresql/notification-type-sc-create.sql"/>
@@ -47,6 +48,7 @@
             <file type="data_model" db_type="postgresql" path="sql/postgresql/notifications-replies-create.sql"/>
             <file type="data_model" db_type="postgresql" path="sql/postgresql/notifications-replies-package-create.sql"/>
             <file type="data_model_upgrade" db_type="postgresql" path="sql/postgresql/upgrade/upgrade-0.1d-0.2d.sql"/>
+            <file type="data_model_upgrade" db_type="postgresql" path="sql/postgresql/upgrade/upgrade-0.3d-0.4d.sql"/>
             <file type="tcl_procs" path="tcl/delivery-method-procs.tcl"/>
             <file type="query_file" path="tcl/delivery-method-procs.xql"/>
             <file type="tcl_procs" path="tcl/interval-procs.tcl"/>
@@ -64,6 +66,8 @@
             <file type="query_file" db_type="postgresql" path="tcl/notification-request-procs-postgresql.xql"/>
             <file type="tcl_procs" path="tcl/notification-request-procs.tcl"/>
             <file type="query_file" path="tcl/notification-request-procs.xql"/>
+            <file type="query_file" db_type="oracle" path="tcl/notification-type-procs-oracle.xql"/>
+            <file type="query_file" db_type="postgresql" path="tcl/notification-type-procs-postgresql.xql"/>
             <file type="tcl_procs" path="tcl/notification-type-procs.tcl"/>
             <file type="query_file" path="tcl/notification-type-procs.xql"/>
             <file type="tcl_procs" path="tcl/notifications-security-procs.tcl"/>
@@ -75,6 +79,7 @@
             <file type="query_file" db_type="oracle" path="tcl/sweep-procs-oracle.xql"/>
             <file type="query_file" db_type="postgresql" path="tcl/sweep-procs-postgresql.xql"/>
             <file type="tcl_procs" path="tcl/sweep-procs.tcl"/>
+            <file type="query_file" path="tcl/sweep-procs.xql"/>
             <file type="content_page" path="www/index.tcl"/>
             <file type="content_page" path="www/manage-oracle.xql"/>
             <file type="content_page" path="www/manage-postgresql.xql"/>
@@ -92,11 +97,13 @@
             <file type="content_page" path="www/request-new.tcl"/>
             <file type="content_page" path="www/test.tcl"/>
         </files>
+        <callbacks>
+        </callbacks>
         <parameters>
-            <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="EmailQmailQueueScanP" default="0" description="Should the package scan the qmail queue for incoming mail? (1 is true, 0 is false)" section_name="email"/>
-            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="EmailQmailQueue"  description="The location of the qmail queue for incoming email" section_name="email"/>
-            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="EmailReplyAddressPrefix"  default="notification" description="The prefix for email replies" section_name="email"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="EmailDomain"  description="The domain for the notification email address" section_name="email"/>
+            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="EmailQmailQueue"  description="The location of the qmail queue for incoming email" section_name="email"/>
+            <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="EmailQmailQueueScanP"  default="0" description="Should the package scan the qmail queue for incoming mail? (1 is true, 0 is false)" section_name="email"/>
+            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="EmailReplyAddressPrefix"  default="notification" description="The prefix for email replies" section_name="email"/>
         </parameters>
 
     </version>
