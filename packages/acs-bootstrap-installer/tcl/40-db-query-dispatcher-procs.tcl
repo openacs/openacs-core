@@ -167,7 +167,7 @@ proc db_qd_get_fullname {local_name {added_stack_num 1}} {
 	set proc_name [info level [expr "-2 - $added_stack_num"]]
     }
 
-    set list_of_source_procs {ns_sourceproc apm_source template::adp_parse}
+    set list_of_source_procs {ns_sourceproc apm_source template::adp_parse rp_handle_tcl_request}
 
     # We check if we're running the special ns_ proc that tells us
     # whether this is an URL or a Tcl proc.
@@ -190,6 +190,12 @@ proc db_qd_get_fullname {local_name {added_stack_num 1}} {
 	    ns_log Notice "QD= We are in a WWW page, woohoo!"
 	    set real_url_p 1
 	    set url [ns_conn url]
+        } elseif {[regexp {^rp_handle_tcl_request} $proc_name all]} {
+	    ns_log Notice "QD= We are in a VUH page sourced by rp_handle_tcl_request, woohoo!"
+	    set real_url_p 0
+            regsub {\.vuh} [ad_conn file] {} url
+	    set url [ad_make_relative_path $url]
+	    regsub {^/?packages} $url {} url
 	} else {
 	    ns_log Notice "QD= We are in a WWW page sourced by apm_source, woohoo!"
 	    set real_url_p 0
@@ -201,6 +207,7 @@ proc db_qd_get_fullname {local_name {added_stack_num 1}} {
 	# Get the URL and remove the .tcl
 	regsub {^/} $url {} url
 	regsub {\.tcl$} $url {} url
+	regsub {\.vuh$} $url {} url
 
 	# Change all dots to colons, and slashes to dots
 	regsub -all {\.} $url {:} url
