@@ -11,7 +11,7 @@ ad_page_contract {
 } {
     locale
     package_key
-} -properties {
+    {message_key ""}
 }
 
 
@@ -59,8 +59,14 @@ element create message_new locale -label "locale" -datatype text -widget hidden
 
 if { [form is_request message_new] } {
 
-    element set_properties message_new package_key -value $package_key
-    element set_properties message_new locale -value $current_locale
+    element set_value message_new package_key $package_key
+    element set_value message_new locale $current_locale
+    element set_value message_new message_key $message_key
+    if { [empty_string_p $message_key] } {
+        set focus message_new.message_key
+    } else {
+        set focus message_new.message
+    }
 
 } else {
 
