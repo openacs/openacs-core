@@ -1,5 +1,13 @@
 ns_log notice "nsd.tcl: starting to read config file..."
 
+###################################################################### 
+#
+# Instance-specific settings 
+# These default settings will only work in limited circumstances
+# Two servers with default settings cannot run on the same host
+#
+###################################################################### 
+
 # which database do you want? postgres or oracle
 set database              postgres 
 
@@ -7,6 +15,7 @@ if {$database == "oracle"} {
     set db_password        "mysitepassword"
 }
 
+# change to 80 and 443 for production use
 set httpport              8000
 set httpsport             8443 
 
@@ -23,14 +32,53 @@ set serverroot          "/var/lib/aolserver/${server}"
 # if debug is false, all debugging will be turned off
 set debug false
 
-# you shouldn't need to adjust much below here
-# for a standard install
-
-# 
-# AOLserver's home and binary directories. Autoconfigurable. 
-#
 set homedir                 /usr/local/aolserver
 set bindir                  [file dirname [ns_info nsd]] 
+
+# which modules should be loaded?  Missing modules break the server, so
+# don't uncomment modules unless they have been installed.
+
+ns_section ns/server/${server}/modules 
+ns_param   nssock          ${bindir}/nssock.so 
+ns_param   nslog           ${bindir}/nslog.so 
+ns_param   nssha1          ${bindir}/nssha1.so 
+ns_param   nscache         ${bindir}/nscache.so 
+ns_param   nsrewrite       ${bindir}/nsrewrite.so 
+ns_param   libtdom         ${bindir}/libtdom.so
+
+# nsopenssl will fail unless the cert files are present as specified
+# later in this file, so it's disabled by default
+#ns_param   nsopenssl       ${bindir}/nsopenssl.so
+
+# Full Text Search
+#ns_param   nsfts           ${bindir}/nsfts.so
+
+# PAM authentication
+#ns_param   nspam           ${bindir}/nspam.so
+
+# LDAP authentication
+#ns_param   nsldap           ${bindir}/nsldap.so
+
+# These modules aren't used in standard OpenACS installs
+#ns_param   nsperm          ${bindir}/nsperm.so 
+#ns_param   nscgi           ${bindir}/nscgi.so 
+#ns_param   nsjava          ${bindir}/libnsjava.so
+
+
+###################################################################### 
+#
+# End of instance-specific settings 
+#
+# Nothing below this point need be changed in a default install.
+#
+###################################################################### 
+
+
+###################################################################### 
+#
+# AOLserver's directories. Autoconfigurable. 
+#
+###################################################################### 
 
 #
 # Where are your pages going to live ?
@@ -82,7 +130,7 @@ ns_param   autoclose      on
 ns_param   debug          $debug
  
 
-############################################################ 
+###################################################################### 
 # 
 # Server-level configuration 
 # 
@@ -91,6 +139,8 @@ ns_param   debug          $debug
 #  one server is in use so it is set at the top in the "server" Tcl variable
 #  Other host-specific values are set up above as Tcl variables, too.
 # 
+###################################################################### 
+
 ns_section ns/servers 
 ns_param   $server     $servername 
 
@@ -120,9 +170,12 @@ ns_param   NotFoundResponse     "/global/file-not-found.html"
 ns_param   ServerBusyResponse   "/global/busy.html"
 ns_param   ServerInternalErrorResponse "/global/error.html"
 
+###################################################################### 
 # 
 # ADP (AOLserver Dynamic Page) configuration 
 # 
+###################################################################### 
+
 ns_section ns/server/${server}/adp 
 ns_param   map           /*.adp    ;# Extensions to parse as ADP's 
 #ns_param   map          "/*.html" ;# Any extension can be mapped 
@@ -133,14 +186,23 @@ ns_param   defaultparser fancy
 ns_section ns/server/${server}/adp/parsers
 ns_param   fancy    ".adp"
  
+###################################################################### 
 # 
 # Socket driver module (HTTP)  -- nssock 
 # 
+###################################################################### 
+
 ns_section ns/server/${server}/module/nssock
 ns_param   timeout            120
 ns_param   address            $address
 ns_param   hostname           $hostname
 ns_param   port               $httpport
+
+###################################################################### 
+#
+# OpenSSL
+#
+###################################################################### 
 
 ns_section "ns/server/${server}/module/nsopenssl"
 
@@ -199,11 +261,14 @@ ns_param SockClientTrace                 false
 ns_param SeedBytes                       1024
 
 
+###################################################################### 
 # 
 # Database drivers 
-# The database driver is specified here. PostgreSQL driver being loaded.
+# The database driver is specified here.
 # Make sure you have the driver compiled and put it in {aolserverdir}/bin
 #
+###################################################################### 
+
 ns_section "ns/db/drivers" 
 if { $database == "oracle" } {
     ns_param   ora8            ${bindir}/ora8.so
@@ -215,7 +280,7 @@ if { $database == "oracle" } {
 # Database Pools: This is how AOLserver  ``talks'' to the RDBMS. You need 
 # three for OpenACS: main, log, subquery. Make sure to replace ``yourdb'' 
 # and ``yourpassword'' with the actual values for your db name and the 
-# password for it.
+# password for it, if needed.  
 
 # AOLserver can have different pools connecting to different databases 
 # and even different different database servers.
@@ -290,9 +355,13 @@ ns_section ns/server/${server}/redirects
 ns_param   404                "global/file-not-found.html"
 ns_param   403                "global/forbidden.html"
 
+
+###################################################################### 
 # 
 # Access log -- nslog 
 # 
+###################################################################### 
+
 ns_section ns/server/${server}/module/nslog 
 ns_param   file                 ${serverroot}/log/${server}.log
 ns_param   enablehostnamelookup false
@@ -306,11 +375,13 @@ ns_param   rollhour             0
 ns_param   rollonsignal         true
 ns_param   rolllog              true
 
+###################################################################### 
 #
 # nsjava - aolserver module that embeds a java virtual machine.  Needed to 
 #          support webmail.  See http://nsjava.sourceforge.net for further 
 #          details. This may need to be updated for OpenACS4 webmail
 #
+###################################################################### 
 
 ns_section ns/server/${server}/module/nsjava
 ns_param   enablejava         off  ;# Set to on to enable nsjava.
@@ -320,11 +391,14 @@ ns_param   destroyjvm         off  ;# Destroy jvm on shutdown.
 ns_param   disablejitcompiler off  
 ns_param   classpath          /usr/local/jdk/jdk118_v1/lib/classes.zip:${bindir}/nsjava.jar:${pageroot}/webmail/java/activation.jar:${pageroot}/webmail/java/mail.jar:${pageroot}/webmail/java 
 
+###################################################################### 
 # 
 # CGI interface -- nscgi, if you have legacy stuff. Tcl or ADP files inside 
 # AOLserver are vastly superior to CGIs. I haven't tested these params but they
 # should be right.
 # 
+###################################################################### 
+
 #ns_section "ns/server/${server}/module/nscgi" 
 #       ns_param   map "GET  /cgi-bin/ /web/$server/cgi-bin"
 #       ns_param   map "POST /cgi-bin/ /web/$server/cgi-bin" 
@@ -333,27 +407,15 @@ ns_param   classpath          /usr/local/jdk/jdk118_v1/lib/classes.zip:${bindir}
 #ns_section "ns/interps/CGIinterps" 
 #       ns_param .pl "/usr/bin/perl"
 
-# 
-# Modules to load 
-# 
-ns_section ns/server/${server}/modules 
-ns_param   nssock          ${bindir}/nssock.so 
-ns_param   nslog           ${bindir}/nslog.so 
-ns_param   nssha1          ${bindir}/nssha1.so 
-ns_param   nscache         ${bindir}/nscache.so 
-ns_param   nsrewrite       ${bindir}/nsrewrite.so 
-ns_param   libtdom         ${bindir}/libtdom.so
 
-# nsopenssl is commented out to prevent errors on load if all
-# the cert files are not present
-#ns_param   nsopenssl       ${bindir}/nsopenssl.so
+###################################################################### 
+#
+# PAM authentication
+#
+###################################################################### 
 
-# Full Text Search
-#ns_param   nsfts           ${bindir}/nsfts.so
-
-#ns_param   nsperm          ${bindir}/nsperm.so 
-#ns_param   nscgi           ${bindir}/nscgi.so 
-#ns_param   nsjava          ${bindir}/libnsjava.so
+ns_section ns/server/${server}/module/nspam
+ns_param   PamDomain               "pam_domain"
 
 ns_log notice "nsd.tcl: finished reading config file."
 
