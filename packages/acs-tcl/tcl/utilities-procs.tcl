@@ -2822,14 +2822,22 @@ ad_proc -public util_text_to_url {
     {-existing_urls {}}
     {-no_resolve:boolean}
     {-replacement "-"}
-    text
+    {-text ""}
+    {_text ""}
 } {
     Modify a string so that it is suited as a well formatted URL path element.
-    for example given "Foo Bar" and it will return "foo-bar".  Also, 
-    if given a list of existing urls it can catch duplicate or optionally 
-    create an unambiguous url by appending -N.
+    Also, if given a list of existing urls it can catch duplicate or optionally 
+    create an unambiguous url by appending a dash and a digit.
+
+    <p>
+
+    Examples:<br>
+    <code>util_text_to_url -text "Foo Bar"</code> returns <code>foo-bar</code><br>
+    <code>util_text_to_url -existing_urls {foo-bar some-other-item} -text "Foo Bar"</code> returns <code>foo-bar-2</code><br>
+
 
     @param text the text to modify, e.g. "Foo Bar"
+    @param _text the text to modify, e.g. "Foo Bar" (Deprecated, use -text instead. Fails when the value starts with a dash.)
 
     @param existing_urls a list of URLs that already exist on the same level and would cause a conflict
 
@@ -2838,8 +2846,16 @@ ad_proc -public util_text_to_url {
 
     @param replacement the character that is used to replace illegal characters
 
-    @author Tillman Singer
+    @author Tilmann Singer
 } {
+    if { [empty_string_p $text] && [empty_string_p $_text] } {
+        error "You must specify either -text or _text."
+    }
+
+    if { [empty_string_p $text] } {
+        set text $_text
+    }
+
     set original_text $text
     set text [string trim [string tolower $original_text]]
 
