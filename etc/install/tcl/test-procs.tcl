@@ -7,10 +7,8 @@
 
 namespace eval ::twt {}
 
-set script_dir [file dirname [info script]]
-
 # Source all *-procs.tcl files in this directory
-foreach path [glob ${script_dir}/*-procs.tcl] {
+foreach path [glob [file dirname [info script]]/*-procs.tcl] {
     if { ![regexp {test-procs\.tcl$} $path] } {
         source $path
     }
