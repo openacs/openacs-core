@@ -611,7 +611,7 @@ Loading package .info files ... this will take a few minutes</programlisting>
     <title>Next Steps</title>
     <itemizedlist>
       <listitem>
-        <para>Use daemontools <computeroutput>supervice</computeroutput> and <computeroutput>svc</computeroutput>, or <computeroutput>inittab</computeroutput>, to <link linkend="install-openacs-inittab">automate server startup and shutdown.</link></para>
+        <para>Use daemontools <computeroutput>supervise</computeroutput> and <computeroutput>svc</computeroutput>, or <computeroutput>inittab</computeroutput>, to <link linkend="install-openacs-inittab">automate server startup and shutdown.</link></para>
       </listitem>
       <listitem>
         <para>Install Full Text Search (OPTIONAL).  If you have <link
