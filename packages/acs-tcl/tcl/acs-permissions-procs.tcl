@@ -56,7 +56,10 @@ ad_proc -public permission::permission_p {
 } {
     if { [empty_string_p $party_id] } {
         set party_id [ad_conn user_id]
-    }
+        set no_party_p 1
+    } else {
+        set no_party_p 0
+    }    
 
     if { $no_cache_p || ![permission::cache_p] } {
         util_memoize_flush "permission::permission_p_not_cached -party_id $party_id -object_id $object_id -privilege $privilege"
@@ -66,7 +69,7 @@ ad_proc -public permission::permission_p {
                     [parameter::get -package_id [ad_acs_kernel_id] -parameter PermissionCacheTimeout -default 300]]
     }
 
-    if { $party_id == 0 && [ad_conn user_id] == 0 && [ad_conn untrusted_user_id] != 0 && ![template::util::is_true $permission_p] } {
+    if { $no_party_p && [ad_conn user_id] == 0 && [ad_conn untrusted_user_id] != 0 && ![template::util::is_true $permission_p] } {
         set untrusted_permission_p [permission_p_not_cached \
                                         -party_id [ad_conn untrusted_user_id] \
                                         -object_id $object_id \
@@ -74,7 +77,9 @@ ad_proc -public permission::permission_p {
         if { $permission_p != $untrusted_permission_p } {
             # Bump to registration page
             ns_log Notice "permission_p: party_id=$party_id ([acs_object_name $party_id]), object_id=$object_id ([acs_object_name $object_id]), privilege=$privilege. Result=>$permission_p. Untrusted-Result=>$untrusted_permission_p\n[ad_get_tcl_call_stack]"
-            auth::require_login
+            if { ![ad_login_page] } {
+                auth::require_login
+            }
         }
     }
 
