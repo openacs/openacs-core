@@ -321,7 +321,7 @@ namespace eval notification::email {
                         -subject $email_headers(subject) \
                         -content $body]
 	        set headers $orig_headers
-                db_dml holdinsert {}
+                db_dml holdinsert {} -clobs [list $to_addr $headers $body]
                 catch {ns_unlink $msg}
 
                 lappend list_of_reply_ids $reply_id
