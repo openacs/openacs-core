@@ -141,7 +141,9 @@ standard OpenACS &version; distribution.
       <para>This creates a package rooted at
           <computeroutput>/var/lib/aolserver/<replaceable>$OPENACS_SERVICE_NAME</replaceable>/packages/<replaceable>myfirstpackage</replaceable></computeroutput>.
           This is the "home directory" of our new package, and all
-          files in the package will be within this directory.</para>
+          files in the package will be within this directory. <ulink
+          url="packages.html">More on the structure of
+          packages</ulink). </para>
     </sect2>
     <sect2>
       <title>Add an Application Instance to the Server</title>
