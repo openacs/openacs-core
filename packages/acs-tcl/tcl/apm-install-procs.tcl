@@ -1193,7 +1193,7 @@ ad_proc -private apm_package_install_spec { version_id } {
     Creates the package directory if it doesn't already exist. Overwrites
     any existing specification file; or if none exists yet, creates
     $package_key/$package_key.info and adds this new file to apm_version_files
-    in the database.
+    in the database.  Adds minimal directories.
 
 } {
     set spec [apm_generate_package_spec $version_id]
@@ -1223,6 +1223,14 @@ ad_proc -private apm_package_install_spec { version_id } {
 	set file [open $path "w"]
 	puts -nonewline $file $spec
 	close $file
+
+        # create minimal directories
+        foreach dir {www www/doc tcl tcl/test sql sql/postgresql sql/oracle} {
+	set path "[acs_package_root_dir $package_key]/$dir"
+            if { ![file exists $path] } {
+                file mkdir $path
+            }
+        }
 
 	# Mark $version_id as the only installed version of the package.
 	db_dml version_mark_installed {
