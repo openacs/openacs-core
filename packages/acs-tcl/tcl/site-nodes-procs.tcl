@@ -429,7 +429,12 @@ ad_proc -public site_node::get_children {
     
     @param package_key   If specified, this will limit the returned nodes to those with a
                          package of the specified package key mounted. Conflicts with the
-                        -package_type option.
+                         -package_type option.
+
+    @param filters       Takes a list of { element value element value ... } for filtering 
+                         the result list. Only nodes where element is value for each of the 
+                         filters in the list will get included. For example: 
+                         -filters { package_key "acs-subsite" }.
                      
     @param element       The element of the site node you wish returned. Defaults to url, but 
                          the following elements are available: object_type, url, object_id,
