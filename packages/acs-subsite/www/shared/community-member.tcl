@@ -17,9 +17,7 @@ ad_page_contract {
     height:onevalue
     system_name:onevalue
     pretty_creation_date:onevalue
-    show_intranet_info_p:onevalue
     show_email_p:onevalue
-    intranet_info:onevalue
     url:onevalue
     bio:onevalue
     verified_user_id:onevalue
@@ -46,15 +44,6 @@ if { [empty_string_p $user_id] } {
 
 set bind_vars [ad_tcl_vars_to_ns_set user_id]
 
-# XXX add portraits to this page
-
-#  if { ![db_0or1row user_information "select first_names, last_name, email, priv_email, 
-#  url, banning_note, registration_date, user_state,
-#  portrait_upload_date, portrait_original_width, portrait_original_height, portrait_client_file_name, bio,
-#  portrait_thumbnail_width, portrait_thumbnail_height
-#  from users 
-#  where user_id=:user_id" -bind $bind_vars] } {
-# }
     
 if { ![db_0or1row user_information "select first_names, last_name, email, priv_email, url, creation_date, member_state from cc_users where user_id = :user_id" -bind $bind_vars]} {
     
@@ -63,22 +52,7 @@ if { ![db_0or1row user_information "select first_names, last_name, email, priv_e
     return
 }
 
-  set bio [db_string biography "
-  select attr_value
-  from acs_attribute_values
-  where object_id = :user_id
-  and attribute_id =
-     (select attribute_id
-      from acs_attributes
-      where object_type = 'person'
-      and attribute_name = 'bio')" -default ""]
-
-#  set bio [db_exec_plsql bio "
-#  begin
-#  :1 := acs_object.get_attribute (
-#    object_id_in => :user_id,
-#    attribute_name_in => 'bio');
-#  end;"]
+set bio [person::get_bio -person_id $user_id]
 
 # Do we show the portrait?
 set inline_portrait_state "none"
@@ -103,39 +77,20 @@ and a.rel_type = 'user_portrait_rel'"] {
     }
 }
 
-# Let's see if we can show all intranet-specific information
-#  set show_intranet_info_p 1
-#  if { [im_enabled_p] && [ad_parameter KeepSharedInfoPrivate intranet 0] } {
-#      set current_user_id [ad_get_user_id]
-#      if { $current_user_id != $user_id && ![im_user_is_authorized_p $current_user_id] } {
-	set show_intranet_info_p 0
-#      }
-#}
 
-if { $show_intranet_info_p } {
-    set intranet_info [im_user_information $user_id]
+if { $priv_email <= [ad_privacy_threshold] } {
+    set show_email_p 1
 } else {
-
-    if { $priv_email <= [ad_privacy_threshold] } {
-	set show_email_p 1
-    } else {
-	set show_email_p 0
-	# guy doesn't want his email address shown, but we can still put out 
-	# the home page
-    }
+    set show_email_p 0
+    # guy doesn't want his email address shown, but we can still put out 
+    # the home page
 }
-
-# XXX Make sure to make the following into links and this looks okay
-
-db_multirow user_contributions  user_contributions "select at.pretty_name, at.pretty_plural, a.creation_date, acs_object.name(a.object_id) object_name
-from acs_objects a, acs_object_types at
-where a.object_type = at.object_type
-and a.creation_user = :user_id
-order by object_name, creation_date"
 
 set context [list "Community member"]
 set system_name [ad_system_name]
 set pretty_creation_date [util_AnsiDatetoPrettyDate $creation_date]
 set login_export_vars "return_url=[ns_urlencode [acs_community_member_url -user_id $user_id]]"
+
+set login_url [export_vars -base "/register/." { { return_url [ad_return_url]} }]
 
 ad_return_template
