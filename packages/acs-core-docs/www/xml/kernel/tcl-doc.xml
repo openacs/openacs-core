@@ -124,7 +124,7 @@ ad_page_contract {
 
     @author Jon Salz (jsalz@mit.edu)
     @creation-date 3 Jul 2000
-    @cvs-id $Id$
+    @cvs-id &#x0024;Id$
 }
 
 </programlisting>
@@ -320,7 +320,7 @@ ad_library {
 
     @creation-date 7 Jun 2000
     @author Jon Salz (jsalz@mit.edu)
-    @cvs-id $Id$
+    @cvs-id &#x0024;Id$
 
 }
 
