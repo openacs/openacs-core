@@ -95,14 +95,20 @@ is already registerd to another package."
     version_id {You must provide an integer key for your package version.}
 }
 
+# XXXJCD: this should be in the UI, along with license etc.
+set attributes(maturity) 0
+
 db_transaction {
     # Register the package.
     apm_package_register $package_key $pretty_name $pretty_plural $package_uri \
 	    $package_type $initial_install_p $singleton_p
     # Insert the version
-    set version_id [apm_package_install_version -callback apm_dummy_callback -version_id \
-	    $version_id $package_key $version_name $version_uri $summary $description \
-	    $description_format $vendor $vendor_uri $auto_mount]
+    set version_id [apm_package_install_version \
+                        -callback apm_dummy_callback \
+                        -version_id $version_id \
+                        -array attributes \
+                        $package_key $version_name $version_uri $summary $description \
+                        $description_format $vendor $vendor_uri $auto_mount]
     apm_version_enable -callback apm_dummy_callback $version_id
     apm_package_install_owners -callback apm_dummy_callback \
 	    [apm_package_install_owners_prepare $owner_name $owner_uri] $version_id
