@@ -222,6 +222,15 @@ create table cr_files_to_delete (
   storage_area_key      varchar2(100)
 );
 
+comment on table cr_files_to_delete is '
+  Table to store files to be deleted by a scheduled sweep.
+  Since binaries are stored in filesystem and attributes in database,
+  need a way to delete both atomically.  So any process to delete file-system cr_revisions,
+  copies the file path to this table as part of the delete transaction.  Sweep
+  run later to remove the files from filesystem once database info is successfully deleted.
+';
+
+
 create table cr_child_rels (
   rel_id             integer
                      constraint cr_child_rels_rel_pk

@@ -122,10 +122,10 @@ as
     relation_tag	in cr_child_rels.relation_tag%TYPE default null,
     is_live		in char default 'f',
     publish_date	in cr_revisions.publish_date%TYPE default sysdate,
-    path		in images.path%TYPE,
+    path		in varchar,
     height		in images.height%TYPE default null,
     width		in images.width%TYPE default null,
-    file_size		in images.file_size%TYPE default null
+    file_size		in cr_revisions.content_length%TYPE default null
   ) return cr_items.item_id%TYPE;
 
   --/**
@@ -171,10 +171,10 @@ as
     relation_tag	in cr_child_rels.relation_tag%TYPE default null,
     is_live		in char default 'f',
     publish_date	in cr_revisions.publish_date%TYPE default sysdate,
-    path		in images.path%TYPE,
+    path		in varchar,
     height		in images.height%TYPE default null,
     width		in images.width%TYPE default null,
-    file_size		in images.file_size%TYPE default null
+    file_size		in cr_revisions.content_length%TYPE default null
   ) return cr_items.item_id%TYPE
   is
     v_item_id	      cr_items.item_id%TYPE;
@@ -203,6 +203,7 @@ as
       publish_date  => publish_date,
       mime_type	    => mime_type,
       nls_language  => nls_language,
+      text          => path,
       creation_date => sysdate,
       creation_user => creation_user,
       creation_ip   => creation_ip
@@ -215,8 +216,7 @@ as
 
     -- update revision with image file info
     update cr_revisions
-    set content_length = file_size,
-    content = path
+    set content_length = file_size
     where revision_id = v_revision_id;
 
     -- is_live => 't' not used as part of content_item.new
@@ -236,10 +236,8 @@ as
     revision_id		in cr_revisions.revision_id%TYPE
   )
   is
+	v_content	cr_files_to_delete.path%TYPE default null;
   begin
-    insert into cr_files_to_delete (path)
-    select path from images where image_id = image.delete_revision.revision_id;
-    
     content_revision.delete (
       revision_id => revision_id
     );

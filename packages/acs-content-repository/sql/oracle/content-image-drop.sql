@@ -45,4 +45,4 @@ end;
 show errors
 
 
-
+drop package image;
