@@ -1,3 +1,0 @@
-rp_form_put query_string [string range [ad_conn extra_url] [string length "proc/"] end]
-rp_form_put search_type "Feeling Lucky"
-rp_internal_redirect "/packages/[ad_conn package_key]/www/proc-search"
