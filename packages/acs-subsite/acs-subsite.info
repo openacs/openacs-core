@@ -7,11 +7,10 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>f</singleton-p>
     
-    <version name="5.2.0d3" url="http://openacs.org/repository/download/apm/acs-subsite-5.2.0d2.apm">
+    <version name="5.2.0d2" url="http://openacs.org/repository/download/apm/acs-subsite-5.2.0d2.apm">
         <owner url="http://openacs.org">OpenACS</owner>
         <summary>Subsite</summary>
-        <release-date>2005-01-14</release-date>
-	<maturity>3</maturity>	
+        <release-date>2004-04-29</release-date>
         <vendor url="http://openacs.org">OpenACS</vendor>
         <description format="text/html">Provides for creating subsites within the OpenACS Community System.  Aware of parties, groups, users, portraits.  Can be themed via a per subsite master template.</description>
         <license>GPL</license>
@@ -23,8 +22,9 @@
         <requires url="acs-tcl" version="5.2.0d1"/>
 
         <callbacks>
-            <callback type="after-install"  proc="email_image::create_type_folder_rel"/>
+            <callback type="after-install"  proc="subsite::package_install"/>
             <callback type="after-mount"  proc="subsite::after_mount"/>
+            <callback type="after-upgrade"  proc="subsite::after_upgrade"/>
             <callback type="before-uninstantiate"  proc="subsite::before_uninstantiate"/>
             <callback type="before-upgrade"  proc="subsite::before_upgrade"/>
         </callbacks>
@@ -45,11 +45,15 @@
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="MembersCanInviteMembersP"  default="0" description="Set this to 1 if you want to allow members to invite other members." section_name="user-info"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="NewRegistrationEmailAddress"  default="admin@yourdomain.com" description="Where should we send email about new registrations (defaults to SystemOwner)" section_name="user-login"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="NotifyAdminOfNewRegistrationsP"  default="0" description="Notify someone of new registrations?" section_name="user-login"/>
-            <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="PrivateEmailLevelP"  default="4" description="Defines the level of privacy of the users email. The levels are: 4 - Show user email. 3 - Show user email as an image (require ImageMagick). If ImageMagick not present then the @ symbol is replaced with an image. 2 - Hide email, show a link that allows users to send a message. 1 -  Shows nothing." section_name="user-info"/>
+            <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="PrivateEmailLevelP"  default="4" description="Defines the level of privacy of the users email. The levels are: 
+4 - Show user email.
+3 - Show user email as an image (require ImageMagick). If ImageMagick not present then the @ symbol is replaced with an image.
+2 - Hide email, show a link that allows users to send a message.
+1 -  Shows nothing." section_name="user-info"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="RegistrationProvidesRandomPasswordP"  default="0" description="have the system generate a random password instead of the user" section_name="user-login"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="RegistrationRequiresApprovalP"  default="0" description="set this to 1 if user does not go live immediately" section_name="user-login"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="RegistrationRequiresEmailVerificationP"  default="0" description="set this to 1 if the user has to receive and email and come back to the site" section_name="user-login"/>
-            <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="RestrictEntireServerToRegisteredUsersP"  default="0" description="Do we want to allow only registered users to visit this subsite? (requires Kernel parameter RegisterRestrictEntireServerToRegisteredUsersFilters = 1 and server restart)"/>
+            <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="RestrictEntireServerToRegisteredUsersP"  default="0" description="Do we want to allow only registered users to visit this subsite? (restart required)"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="RestrictToSSL"  default="admin/*" description="URLs we want restricted to SSL. Note that this only takes effect if you have an SSL listener configured on your AOLserver and kernel parameter RegisterRestrictToSSLFilters is set to 1 (its default)."/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="ScreenNameP"  default="0" description="Set this to 1 if you want to show screen names instead of real names." section_name="user-info"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="ShowContextBarP"  default="1" description="Should context bars appear on pages?"/>
