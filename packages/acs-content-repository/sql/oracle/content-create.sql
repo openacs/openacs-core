@@ -753,7 +753,7 @@ for each row
 begin
         insert into cr_files_to_delete (
           path, storage_area_key
-        ) select content.blob_to_string(:old.content), i.storage_area_key
+        ) select :old.filename, i.storage_area_key
             from cr_items i
            where i.item_id = :old.item_id
              and i.storage_type = 'file';
