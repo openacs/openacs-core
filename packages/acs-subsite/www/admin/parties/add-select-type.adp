@@ -4,7 +4,7 @@
 
 <blockquote>
 
-What type of @object_type_pretty_name@ to you want to create?
+What type of @object_type_pretty_name@ do you want to create?
 
 <p>
 
