@@ -62,8 +62,8 @@
   To do so, create the file
         <computeroutput>~/.cvsrc</computeroutput> with the contents:
       </para>
-      <programlisting>cvs -z6
-cvs -q</programlisting>
+      <screen><action>cvs -z6
+cvs -q</action></screen>
       <para><computeroutput>-z6</computeroutput> speeds up cvs access over the network quite a bit by enabling compressed
         connection by default.  <computeroutput>-q</computeroutput> suppresses some verbose output from commands.  For example, it makes the output of <computeroutput>cvs up</computeroutput> much easier to read.</para>
       <sidebar>
@@ -71,17 +71,17 @@ cvs -q</programlisting>
       <orderedlist>
         <listitem>
           <para>Create the user's account.  On openacs.org:</para>
-          <programlisting>sudo bash
-/usr/sbin/useradd -c "<replaceable>Real Name</replaceable>" -G cvs,<replaceable>username</replaceable> -p <replaceable>passwd</replaceable> <replaceable>username</replaceable></programlisting>
+          <screen><action>sudo bash
+/usr/sbin/useradd -c "<replaceable>Real Name</replaceable>" -G cvs,<replaceable>username</replaceable> -p <replaceable>passwd</replaceable> <replaceable>username</replaceable></action></screen>
         </listitem>
         <listitem>
           <para>Grant cvs access to the user account.  On any machine, in a temporary directory:</para>
-          <programlisting>cvs -d :ext:openacs.org:/cvsroot co CVSROOT
+          <screen><action>cvs -d :ext:openacs.org:/cvsroot co CVSROOT
 cd CVSROOT
-emacs avail</programlisting>
+emacs avail</action></screen>
           <para>Add an avail line of the form:</para>
           <programlisting>avail|<replaceable>username</replaceable>|openacs-4</programlisting>
-          <programlisting>cvs commit -m "added commit on X for username" avail</programlisting>
+          <screen><action>cvs commit -m "added commit on X for username" avail</action></screen>
         </listitem>
       </orderedlist>
       </sidebar>
@@ -102,7 +102,7 @@ emacs avail</programlisting>
       is &releasebranch;.  This ensures that you are working on top
       of a stable OpenACS core, but still allows you to commit feature
       changes to non-core packages.  To check out all packages,</para>
-      <programlisting>cvs -d :ext:openacs.org:/cvsroot co -r &releasebranch; openacs-4</programlisting>
+      <screen><action>cvs -d :ext:openacs.org:/cvsroot co -r &releasebranch; openacs-4</action></screen>
       <para>If you work in the directories created with this command, all of your
             cvs updates and commits will be confined to the &releasebranch;
             branch.  Your work will be merged back to HEAD for you
@@ -111,10 +111,10 @@ emacs avail</programlisting>
       <para>Because the entire openacs-4 directory is large, you may
       want to use only acs-core plus some specific modules.  To do
       this, check out core first:</para>
-      <programlisting>cvs -d:ext:openacs.org:/cvsroot -r &releasebranch; checkout acs-core</programlisting>
+      <screen><action>cvs -d:ext:openacs.org:/cvsroot -r &releasebranch; checkout acs-core</action></screen>
       <para>Then add modules as needed:</para>
-      <programlisting>cd /var/lib/aolserver/<replaceable>service0</replaceable>/packages
-cvs up -d <replaceable>packagename</replaceable></programlisting>
+      <screen><action>cd /var/lib/aolserver/<replaceable>service0</replaceable>/packages
+cvs up -d <replaceable>packagename</replaceable></action></screen>
       <para>... where <replaceable>packagename</replaceable> is the name of the
             package you want. Visit the <ulink url="http://openacs.org/packages">
                 Package Inventory</ulink>
@@ -134,9 +134,9 @@ cvs up -d <replaceable>packagename</replaceable></programlisting>
               <computeroutput>-r</computeroutput> tag.</para>
       <para></para>
       <para>To check out HEAD for development, which requires an OpenACS developer account:</para>
-      <programlisting>cvs -d:ext:openacs.org:/cvsroot checkout acs-core</programlisting>
+      <screen><action>cvs -d:ext:openacs.org:/cvsroot checkout acs-core</action></screen>
       <para>To check out HEAD anonymously:</para>
-      <programlisting>cvs -d:pserver:anonymous@openacs.org:/cvsroot checkout acs-core</programlisting>
+      <screen><action>cvs -d:pserver:anonymous@openacs.org:/cvsroot checkout acs-core</action></screen>
     </sect2>
 
     <sect2>
@@ -150,11 +150,11 @@ cvs up -d <replaceable>packagename</replaceable></programlisting>
         moved. To get a development checkout of .LRN in the subdirectory
         <literal>dotlrn</literal>:
       </para>
-      <programlisting>cvs -d :pserver:anonymous@openacs.org:/cvsroot checkout -r &releasebranch; acs-core
+      <screen><action>cvs -d :pserver:anonymous@openacs.org:/cvsroot checkout -r &releasebranch; acs-core
 mv openacs-4 dotlrn
 cd dotlrn/packages
 cvs -d :pserver:anonymous@openacs.org:/cvsroot checkout -r &releasebranch; dotlrn-all
-mv dotlrn/install.xml ..</programlisting>
+mv dotlrn/install.xml ..</action></screen>
     </sect2>
   <sect2 id="working-with-cvs">
     <title>Working with CVS</title>
@@ -299,7 +299,7 @@ ref-timezones search</programlisting>
         <listitem>
           <para>
             Commit that file (or files): </para>
-            <programlisting>cvs commit -m "what I did and why" filename</programlisting>
+            <screen><action>cvs commit -m "what I did and why" filename</action></screen>
           <para>
             Because this occurs in your personal checkout and not an anonymous
             one, this commit automagically moves back upstream to the Mother
@@ -321,23 +321,23 @@ ref-timezones search</programlisting>
             <listitem>
               <para>
                 Check out acs-core on the HEAD branch.  (Weird things happen if you add files to a branch but not to HEAD):</para>
-            <programlisting>cd /tmp
-cvs -d:ext:openacs.org:/cvsroot checkout acs-core</programlisting>
+            <screen><action>cd /tmp
+cvs -d:ext:openacs.org:/cvsroot checkout acs-core</action></screen>
             <para>Copy your package directory from your working directory to this directory.  Make sure not to copy any CVSROOT directories.</para>
-            <programlisting>cp /var/lib/aolserver/<replaceable>service0</replaceable>/packagse/<replaceable>newpackage</replaceable> /tmp/openacs-4/packages</programlisting>
+            <screen><action>cp /var/lib/aolserver/<replaceable>service0</replaceable>/packagse/<replaceable>newpackage</replaceable> /tmp/openacs-4/packages</action></screen>
             <para>Import the package into the OpenACS.org cvs repository:</para>
-            <programlisting>cd /tmp/openacs-4/packages/<replaceable>newpackage</replaceable>
-cvs import -m "Initial import of <replaceable>newpackage</replaceable>" openacs-4/packages/newpackage <replaceable>myname</replaceable> <replaceable>0.1d</replaceable></programlisting>
+            <screen><action>cd /tmp/openacs-4/packages/<replaceable>newpackage</replaceable>
+cvs import -m "Initial import of <replaceable>newpackage</replaceable>" openacs-4/packages/newpackage <replaceable>myname</replaceable> <replaceable>0.1d</replaceable></action></screen>
             </listitem>
             <listitem>
               <para>Add the new package to the modules file. (An administrator has to do this step.)  On any machine, in a temporary directory:</para>
-          <programlisting>cvs -d :ext:openacs.org:/cvsroot co CVSROOT
+          <screen><action>cvs -d :ext:openacs.org:/cvsroot co CVSROOT
 cd CVSROOT
-emacs modules</programlisting>
+emacs modules</action></screen>
           <para>Add a line of the form:</para>
               <programlisting><replaceable>photo-album-portlet</replaceable> openacs-4/packages/<replaceable>photo-album-portlet</replaceable></programlisting>
               <para>Commit the change:</para>
-              <programlisting>cvs commit -m "added alias for package <replaceable>newpackage</replaceable>" modules</programlisting>
+              <screen><action>cvs commit -m "added alias for package <replaceable>newpackage</replaceable>" modules</action></screen>
               <para>This should print something like:</para>
               <literallayout>cvs commit: Examining .
 **** Access allowed: Personal Karma exceeds Environmental Karma.

@@ -74,7 +74,7 @@ done</programlisting>
             <para>Rebuild the Changelog.  I use a tool called cvs2cl.  Run this command from the package root to automatically generate a Changelog file  in the same dir:</para>
         </formalpara>
         <screen>cd /var/lib/aolserver/$OPENACS_SERVICE_NAME
-perl /var/tmp/cvs2cl/cvs2cl.pl -F oacs-5-0 --delta openacs-5-0-0-final:oacs-5-0</screen>
+perl /var/tmp/cvs2cl/cvs2cl.pl -F <replaceable>oacs-5-0</replaceable> --delta <replaceable>openacs-5-0-0-final</replaceable>:<replaceable>oacs-5-0</replaceable></screen>
         <para>
           Commit changes
         </para>
@@ -109,7 +109,7 @@ cvs tag -F <replaceable>openacs-5-0-compat</replaceable>
         <tip>
           <title>Branching</title>
           <para>When we feature-freeze on HEAD as part of the release process, we are blocking new development.  To avoid this, we branch the code at this point, so that new work can continue on HEAD while the branch is stabilized for release. However, branching means that bug fixes have to be synchronized between HEAD and the branch, and bug fixes tend to be more frequent right at this time.  Therefore, our actual branch point is as late as possible - essentially, we do not branch until and unless new feature work is actively blocked by the feature freeze.  Branching is almost the same as tagging, except for the flag and slightly different tag nomenclature.  To see the list of old branches, <computeroutput>cvs status -v somefile</computeroutput>.</para>
-        <screen>cvs tag -b oacs-5-0</screen>
+              <screen>cvs tag -b <replaceable>oacs-5-0</replaceable></screen>
         </tip>
         <para>If doing .LRN: Since the .LRN packages aren't all in one
           module, we iterate through all of the modules.  Log in first
@@ -124,7 +124,16 @@ for dir in *; do ( cd $dir &amp;&amp; cvs tag -F <replaceable>openacs-5-0-compat
           you don't want to inadvertently move a prior release tag.  Also if the tagging goes horribly wrong 
           for some reason you can delete the tag via "<command>cvs tag -d &lt;symbolic_tag&gt;</command>".</para>
       </listitem>
+          <listitem>
+            <para>Apply the <computeroutput>final</computeroutput> tag across the tree.  First, check out the entire OpenACS tree, getting the most recent stable version of each package.  This is most simply done on openacs.org:</para>
+            <screen><action>cd /var/tmp
+cvs -d /cvsroot checkout -r <replaceable>openacs-5-1-compat</replaceable> openacs-4
+cd openacs-4
+cvs tag <replaceable>openacs-5-1-2-final</replaceable></action></screen>
+          </listitem>
+
         </orderedlist>
+
       </listitem>
       <listitem>
         <formalpara>
@@ -221,7 +230,8 @@ tar cz -f <replaceable>dotlrn-2.0.0a1.tar.gz</replaceable> dotlrn-<replaceable>2
           <para>Clean up after yourself.</para>
         </formalpara>
         <screen><action>cd /var/tmp
-rm -rf tarball dotlrn-tarball dotlrn-packages openacs-<replaceable>5.0.0a1</replaceable></action></screen>
+rm -rf tarball dotlrn-tarball dotlrn-packages openacs-<replaceable>5.0.0a1</replaceable>
+rm -rf /var/tmp/openacs-4</action></screen>
       </listitem>
     </orderedlist>
 
