@@ -147,7 +147,7 @@ waiting approval.</msg>
   <msg key="lt_Your_email_is_confirm">Your email is confirmed</msg>
   <msg key="lt_Your_URL_doesnt_have_">Your URL doesn't have the correct form.  A valid URL would be something like &quot;%valid_url_example%&quot;.</msg>
   <msg key="Make_administrator">Make administrator</msg>
-  <msg key="Make_member</msg>
+  <msg key="Make_member">Make member</msg>
   <msg key="Make_yourself_invisible_label">Make yourself invisible</msg>
   <msg key="Make_yourself_visible_label">Make yourself visible</msg>
   <msg key="Manage_your_notifications">Manage your notifications</msg>
