@@ -563,7 +563,7 @@ begin
                             and tree_sortkey 
                                 like (select tree_sortkey || ''%''
                                         from acs_object_types
-                                        where object_type = unregister_content_type__content_type)
+                                        where object_type = unregister_content_type__content_type));
 
   end if;
 
