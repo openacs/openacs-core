@@ -80,7 +80,7 @@ ad_proc -public aa_register_init_class {
 } {
   Registers a initialisation class to be used by one or more testcases.  An
   initialisation class can be assigned to a testcase via the
-  aa_register_testcase API.<p>
+  aa_register_case proc.<p>
   <p>
   An initialisation constructor is called <strong>once</strong> before
   running a set of testcases, and the descructor called <strong>once</strong>
