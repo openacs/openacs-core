@@ -85,20 +85,24 @@ template::list::create \
     -multirow nodes \
     -key node_id \
     -elements {
-	 name {
-            label "Site Map"
+	 name_instance {
+            label "<center>Instance</center>"
             html "align left"
 	    display_template {
-		<a name="@nodes.node_id@">
-		@nodes.tree_indent;noquote@
-		</a>
+		<a name="@nodes.node_id@">@nodes.tree_indent;noquote@</a>
+	        <if @nodes.instance@ eq "">
+		<a href=@nodes.instance_url@>@nodes.name;noquote@</a>
+		</if>
+		<else>
+		    <a href=@nodes.instance_url@>@nodes.instance;noquote@</a>   
+		</else>
 		<if @nodes.expand_mode@ eq 1>
-		(<a href="?@nodes.expand_url@#@nodes.node_id@">+</a>)
+		&nbsp;<a href="?@nodes.expand_url@#@nodes.node_id@"><img border=0 src=/resources/down.gif></a>
 		</if>
 		<if @nodes.expand_mode@ eq 2>
-                (<a href="?@nodes.expand_url@#@nodes.node_id@">-</a>)
+                &nbsp;<a href="?@nodes.expand_url@#@nodes.node_id@"><img border=0 src=/resources/up.gif></a>
                 </if>
-		@nodes.name;noquote@
+
 		<if @nodes.action_type@ eq "new_folder">
 		<a name="add" />
 		<form name=new_parent action=new>
@@ -109,8 +113,8 @@ template::list::create \
 		</form>
 		</if>
 	    }
-        } instance {
-            label "Instance"
+        } instance_url {
+            label "<center>URL</center>"
             html "align left"
 	    display_template {
 		<if @nodes.action_type@ eq "new_app">
@@ -130,7 +134,7 @@ template::list::create \
 		</form>
 		</if>
 		<else>
-		<a href="@nodes.instance_url@">@nodes.instance;noquote@</a>
+		<font size=2>@nodes.instance_url;noquote@</font>
 		</else>
 	    }
         }
@@ -183,9 +187,19 @@ db_foreach nodes_select {} {
     
     # use the indent variable to hold current indent level we'll use it later to indent stuff at the end by the amount of the last node
     set indent ""
-    for {set i 0} {$i < 3*$mylevel} {incr i} {
-	append indent "&nbsp;"
+    if { $mylevel != 1 } {
+	if { $mylevel == 2 } {
+	    append indent "&nbsp;&nbsp;"
+	} else {
+	    for {set i 1} {$i <4*$mylevel} {incr i} {
+		append indent "&nbsp;"
+	    }
+	}
     }
+
+    #for {set i 0} {$i < 3*$mylevel} {incr i} {
+    #append indent "&nbsp;"
+    #}
     
     set expand_mode 0
     if {!$root_p && $n_children > 0} {
