@@ -281,9 +281,9 @@ namespace eval group {
     }
 
     if {$cascade_p} {
-	set cascade 'f'
+	set cascade t
     } else {
-	set cascade 't'
+	set cascade f
     }
     
 
