@@ -292,12 +292,12 @@
                 <orderedlist>
                   <listitem>
                     <para>Set up a clean Oracle database user and
-                    tablespace (<link
+                    tablespace with the same names as the ones exported from (<link
                     linkend="install-openacs-prepare-oracle">more information</link>).</para>
                   </listitem>
                   <listitem>
                     <para>Invoke the import command</para>
-                    <screen><action>imp <replaceable>service0</replaceable>/<replaceable>service0</replaceable> FILE=/var/lib/aolserver/<replaceable>service0</replaceable>/database-backup/nighty_backup.dmp</action></screen>
+                    <screen><action>imp <replaceable>service0</replaceable>/<replaceable>service0</replaceable> FILE=/var/lib/aolserver/<replaceable>service0</replaceable>/database-backup/nighty_backup.dmp FULL=Y</action></screen>
                   </listitem>
                 </orderedlist>
               </listitem>
