@@ -22,3 +22,10 @@ if { $has_test_report_p } {
 
 set page_title "Control Page For $service(name)"
 set context [list $page_title]
+
+set time [ns_time]
+set token_id [sec_get_random_cached_token_id]
+set token [sec_get_token $token_id]
+set hash [ns_sha1 "$time$token_id$token"]
+
+set admin_login_url "[export_vars -base "$service(url)/register" {{email {$service(adminemail)}} {password {$service(adminpassword)}} {__confirmed_p 1} time hash token_id {return_url /admin}}]&form:id=login"
