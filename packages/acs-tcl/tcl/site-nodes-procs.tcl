@@ -569,6 +569,7 @@ ad_proc -public site_node::closest_ancestor_package {
     {-node_id ""}
     {-package_key ""}
     {-include_self:boolean}
+    {-element "object_id"}
 } {
     Starting with the node at with given id, or at given url,
     climb up the site map and return the id of the first not-null
@@ -608,12 +609,12 @@ ad_proc -public site_node::closest_ancestor_package {
         array set node_array [site_node::get -url $url]
 
         if { [lsearch -exact $package_key $node_array(package_key)] != -1 } {
-            return $node_array(object_id)
+            return $node_array($element)
         }
     }
 
-    set object_id ""
-    while { [empty_string_p $object_id] && $url != "/"} {
+    set elm_value {}
+    while { [empty_string_p $elm_value] && $url != "/"} {
         # move up a level
         set url [string trimright $url /]
         set url [string range $url 0 [string last / $url]]
@@ -623,11 +624,11 @@ ad_proc -public site_node::closest_ancestor_package {
         # are we looking for a specific package_key?
         if { [empty_string_p $package_key] || \
                  [lsearch -exact $package_key $node_array(package_key)] != -1 } {
-            set object_id $node_array(object_id)
+            set elm_value $node_array($element)
         }       
     }
 
-    return $object_id
+    return $elm_value
 
 }    
 
