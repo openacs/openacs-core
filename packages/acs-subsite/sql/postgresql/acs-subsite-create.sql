@@ -13,6 +13,7 @@
 \i subsite-callbacks-create.sql
 \i host-node-map-create.sql
 \i user-sc-create.sql
+\i site-node-selection.sql
 
 -- DRB: user profiles are fundamentally broken, which is probably why they
 -- weren't created in the original ACS 4.2 Oracle sources. 
