@@ -1,9 +1,17 @@
+# This is the configuration file for the install.sh script
+# for installing OpenACS services
+#
 #######################################################################
 #
 # Things you will probably want to inspect and change
 #
 #######################################################################
 
+#---------------------------------------------------------------------
+# New Service Configuration
+# Values in this section will be written into the config.tcl of the
+# the new site if do_checkout=yes 
+#---------------------------------------------------------------------
 
 #---------------------------------------------------------------------
 # the name of your service (site).
@@ -44,7 +52,14 @@ set aolserver_user            ${server}
 set aolserver_group           "web"
 
 #---------------------------------------------------------------------
+# End of settings for config.tcl
+#---------------------------------------------------------------------
+
+#---------------------------------------------------------------------
 # OpenACS configuration
+# These settings will be used when the install script walks the
+# installation setup web page
+
 set admin_email               "admin@${server_host}"
 set admin_username            "admin"
 set admin_first_names         "Admin"
@@ -55,18 +70,21 @@ set publisher_name            "An OpenACS Developer"
 
 #---------------------------------------------------------------------
 # Should we automatically grab the OpenACS code from CVS?
-# If not, you must have already unpacked a tar-ball in the server root
-# directory specified above
+# If this is yes, we will build a new server from CVS and also set up 
+# daemontools directories if appropriate
+# If not, you must have already unpacked a tar-ball or done a cvs checkout
+# of acs-core or more (not just the checkout of /install you used to get
+# this file) in the server root# directory specified above
 
 set do_checkout               "yes"
 
 #---------------------------------------------------------------------
-# Which branch or symbolic tag should we use for the checkout
-# For example, say "HEAD" to get the latest code, oacs-5-0-0 to get
-# the 5.0.0 release.
+# Which branch or symbolic tag should we use for the checkout.  Use:
+#  "HEAD" to get the latest code,
+#   openacs-5-0-0-final to get version 5.0.0.
+#   oacs-5-0 to get the 5.0 branch.
 
 set oacs_branch               "HEAD"
-
 
 #---------------------------------------------------------------------
 # Which additional packages should be checked out.
@@ -93,23 +111,15 @@ set install_xml_file          ""
 # example: install simulation during server setup
 #set install_xml_file          "${serverroot}/packages/simulation/install.xml"
 
-#----------------------------------------------------------------------
-# Database configuration
-#----------------------------------------------------------------------
 
 #---------------------------------------------------------------------
 # Choose which database you will use - Say 'oracle' or 'postgres'
+
 set database                  "postgres"
 
-#---------------------------------------------------------------------
-# For PostgreSQL this is the name of the database. For Oracle it is
-# the name of the db user. Note that for Oracle a tablespace must already exist with
-# the same name. Remember that for Oracle, dashes (minus signs) are not allowed here.
-# Will be re-created.
-set db_name                   "${server}"
 
 #----------------------------------------------------------------------
-# PostgreSQL
+# Database configuration - PostgreSQL
 #----------------------------------------------------------------------
 
 #---------------------------------------------------------------------
@@ -120,6 +130,9 @@ set pg_db_admin               postgres
 # Name of the postgres user for web service access
 set pg_db_user                ${server}
 
+#---------------------------------------------------------------------
+# Name of the PostgreSQL database. Will be created.
+set db_name                   ${server}
 
 #---------------------------------------------------------------------
 # The host running PostgreSQL
@@ -135,8 +148,11 @@ set pg_bindir                 "/usr/local/pgsql/bin"
 
 
 #----------------------------------------------------------------------
-# Oracle
+# Database configuration - Oracle
 #----------------------------------------------------------------------
+
+# The name of the Oracle user and tablespace. Will get created.
+set db_name                   ${server}
 
 # Password for the Oracle user
 set oracle_password           ${db_name}
@@ -145,13 +161,11 @@ set oracle_password           ${db_name}
 set system_user               "system"
 set system_user_password      "manager"
 
-
-
-
-
 #######################################################################
+# System settings
 #
-# Things you don't want to change if you're doing a standard install
+# The remaining settings should not change for different servers, but 
+# might be different for different servers
 #
 #######################################################################
 
@@ -193,15 +207,12 @@ set start_server_command "exec /usr/local/aolserver/bin/nsd-postgres -it $server
 set stop_server_command "killall nsd"
 set restart_server_command "${stop_server_command}; ${start_server_command}"
 
-# Number of loops and seconds per loop while waiting for the server to start
-# or restart
-set startup_seconds 10
-set startup_loop_count 30
-set restart_loop_count 50
+# Estimated number of seconds from the startup command is executed until the server is actually up
+set startup_seconds 20
+# Estimated number of seconds from the shutdown command is executed until the server is actually down
+set shutdown_seconds 10
 
-# Number of loops and seconds per loop while waiting for the server to stop
-set shutdown_seconds 5
-set shutdown_loop_count 10
+
 
 #----------------------------------------------------------------------
 # OpenACS configuration options
@@ -259,19 +270,5 @@ set dotlrn_demo_data "no"
 set dotlrn_users_data_file "users-data.csv"
 set demo_users_password "guest"
 
-#----------------------------------------------------------------------
-# Tcl API testing. Not recommended for production servers.
-#----------------------------------------------------------------------
-set do_tclapi_testing "no"
-
-#----------------------------------------------------------------------
-# HTTP level testing and demo data setup with tclwebtest
-#----------------------------------------------------------------------
-# A list of full paths for any additional tclwebtest scripts that should
-# be executed after install
-set tclwebtest_scripts ""
-
-# Should links be crawled to search for broken pages? If so, specify the path
-# to start from here. To crawl the whole site, set this parameter to "/". To
-# not do any crawling, leave empty.
-set crawl_links_start_path ""
+# Should links be crawled to search for broken pages? This doesn't quite work!
+set crawl_links "no"
