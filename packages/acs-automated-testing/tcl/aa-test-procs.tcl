@@ -696,6 +696,11 @@ ad_proc aa_log_result {
   @author Peter Harper
   @creation-date 24 July 2001
 } {
+  if { [aa_in_rollback_block_p] } {
+      aa_add_rollback_test [list aa_log_result $test_result $test_notes]
+      return
+  }
+
   global aa_testcase_id
   global aa_testcase_test_id
   global aa_testcase_fails
@@ -863,10 +868,6 @@ ad_proc -private aa_add_rollback_test {args} {
     @author Peter Marklund
 } {
     global aa_rollback_test_statements
-
-    if { ![info exists aa_rollback_test_statements] } {
-        set aa_rollback_test_statements [list]
-    }
 
     lappend aa_rollback_test_statements $args
 }
