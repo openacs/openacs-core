@@ -10,7 +10,7 @@
 
 # fall back on defaults for title, signatory and header_stuff
 
-if [template::util::is_nil title]     { set title        [ad_system_name]  }
+if [template::util::is_nil title]     { set title        [ad_conn instance_name]  }
 if [template::util::is_nil signatory] { set signatory    [ad_system_owner] }
 if ![template::util::is_nil context] { set context_bar [eval ad_context_bar $context]}
 if [template::util::is_nil context_bar] { set context_bar [ad_context_bar]}
