@@ -30,7 +30,7 @@ prelim:
 	cp -u openacs.css ..
 
 html: prelim
-	cd .. ; $(XSLTPROC) --xinclude xml/openacs.xsl xml/index.xml
+	cd .. ; $(XSLTPROC) --nonet --novalid --xinclude xml/openacs.xsl xml/index.xml
 
 pdf: html
 #	$(HTMLDOC) --batch ../for-everyone.book ../for-admins.book ../for-developers.book
