@@ -14,7 +14,9 @@
 # @author Joel Aufrecht (joel@aufrecht.org)
 
 # If any command fails - exit
-set -e
+# not using this because we don't have a way for postgres database user drop/add to work without
+# failure regardless of whether the user already exists or not.
+#set -e
 # Uncomment following line for debug mode
 #set -x
 

@@ -67,6 +67,16 @@ set do_checkout               "yes"
 
 set oacs_branch               "HEAD"
 
+
+#---------------------------------------------------------------------
+# Optional install.xml file
+# An absolute path to an install.xml file which controls the OpenACS
+# installation
+
+set install_xml_file           ""
+#set install_xml_file          "${serverroot}/packages/foobar/install.xml"
+
+
 #---------------------------------------------------------------------
 # Choose which database you will use - Say 'oracle' or 'postgres'
 
@@ -78,8 +88,12 @@ set database                  "postgres"
 #----------------------------------------------------------------------
 
 #---------------------------------------------------------------------
-# Name of the user to use when connecting to the database
-set pg_db_user                "postgres"
+# Name of the postgres admin user
+set pg_db_admin               postgres
+
+#---------------------------------------------------------------------
+# Name of the postgres user for web service access
+set pg_db_user                ${server}
 
 #---------------------------------------------------------------------
 # Name of the PostgreSQL database. Will be created.
@@ -121,16 +135,16 @@ set system_user_password      "manager"
 #######################################################################
 
 # Path to AOLserver config.tcl file to use. If you don't specify any file here, we will use the default config file.
-set aolserver_config_file ""
+set aolserver_config_file     ""
 
 # The path to the server's error log file, so we can look for errors during installation
-set error_log_file "${serverroot}/log/error.log"
+set error_log_file            "${serverroot}/log/error.log"
 
 # TCLWebTest home directory
-set tclwebtest_dir "/usr/local/tclwebtest"
+set tclwebtest_dir            "/usr/local/tclwebtest"
 
 # AOLserver's home directory
-set aolserver_home "/usr/local/aolserver"
+set aolserver_home            "/usr/local/aolserver"
 
 
 #----------------------------------------------------------------------
