@@ -24,7 +24,7 @@ proc server_responds_p { server_url } {
         file delete -force $wget_file
     }
 
-    catch {exec wget --tries=5 ${server_url}/SYSTEM/dbtest}
+    catch {exec /usr/bin/wget -O $wget_file --tries=5 ${server_url}/SYSTEM/dbtest}
 
     if { [file exists $wget_file] } {
           set wget_file_id [open $wget_file r]
