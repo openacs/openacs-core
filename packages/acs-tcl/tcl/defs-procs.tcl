@@ -9,37 +9,25 @@ ad_library {
 }
 
 ad_proc -public ad_acs_version {} {
-    The OpenACS version of this instance.
+    The OpenACS version of this instance. Uses the version name
+    of the acs-kernel package.
 
-    @return version string (major.minor.release)
+    @author Peter Marklund
 } {
-    set release_tag {}
-    regexp "acs-(\[0-9\]+)-(\[0-9\]+)-(\[0-9\]+)" \
-          $release_tag match major minor release
+    apm_version_get -package_key acs-kernel -array kernel
 
-    if {[info exists major] && [info exists minor] && [info exists release]} {
-      return "$major.$minor.$release"
-    } else {
-      return "development"
-    }
+    return $kernel(version_name)
 }
 
 ad_proc -public ad_acs_release_date {} {
-    The OpenACS release date of this instance.
+    The OpenACS release date of this instance. Uses the release date
+    of the acs-kernel package.
 
-    @return pretty version of the release date
+    @author Peter Marklund
 } {
-    set release_tag {}
-    regexp "R(\[0-9\]+)" $release_tag match release_date
+    apm_version_get -package_key acs-kernel -array kernel
 
-    if {[info exists release_date]} {
-      set year  [string range $release_date 0 3]
-      set month [string range $release_date 4 5]
-      set day   [string range $release_date 6 7]
-      return [lc_time_fmt "$year-$month-$day" "%q"]
-    } else {
-      return "not released"
-    }
+    return $kernel(release_date)
 }
 
 ad_proc -public ad_host_administrator {} {

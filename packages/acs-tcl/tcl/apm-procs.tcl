@@ -903,6 +903,30 @@ ad_proc -public apm_interface_remove {interface_id} {
     }
 }
 
+ad_proc -public apm_version_get { 
+    {-version_id ""}
+    {-package_key ""}
+    {-array:required}
+} {
+    Gets information about a package version. TODO: Cache this proc, put it in
+    a namespace and make sure it's used everywhere.
+
+    @param version_id The id of the package version to get info for
+    @param package_key Can be specified instead of version_id in which case
+                       the live version of the package will be used.
+    @param array      The name of the array variable to upvar the info to
+
+    @author Peter Marklund
+} {
+    upvar $array row
+
+    if { ![empty_string_p $package_key] } {
+        set version_id [apm_version_id_from_package_key $package_key]
+    }
+
+    db_1row select_version_info {} -column_array row
+}
+
 #
 # package_id -> package_key
 #

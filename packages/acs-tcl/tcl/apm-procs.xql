@@ -174,4 +174,34 @@
     </querytext>
   </fullquery>  
 
+  <fullquery name="apm_version_get.select_version_info">      
+    <querytext>
+        select version_id,
+               package_key,
+               version_name,
+               version_uri,
+               summary,
+               description_format,
+               description,
+               to_char(release_date, 'YYYY-MM-DD') as release_date,
+               vendor,
+               vendor_uri,
+               enabled_p,
+               installed_p,
+               tagged_p,
+               imported_p,
+               data_model_loaded_p,
+               cvs_import_results,
+               activation_date,
+               deactivation_date,
+               item_id,
+               content_length,
+               distribution_uri,
+               distribution_date,
+               auto_mount
+        from apm_package_versions
+        where version_id = :version_id
+    </querytext>
+  </fullquery>  
+
 </queryset>
