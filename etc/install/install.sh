@@ -13,26 +13,47 @@
 # @author Lars Pind (lars@collaboraid.biz)
 # @author Joel Aufrecht (joel@aufrecht.org)
 
-# If any command fails - exit
-# not using this because we don't have a way for postgres database user drop/add to work without
-# failure regardless of whether the user already exists or not.
+
+######################################################################
+#
+# Initial setup
+#
+######################################################################
+
+#---------------------------------------------------------------------
+# Uncomment the following line to exit on any failure
+#   However, we are not using this because we don't have a way 
+#   for postgres database user drop/add to work without failure 
+#   regardless of whether the user 
+#   already exists or not.
+#
 #set -e
+#---------------------------------------------------------------------
+
+
+#---------------------------------------------------------------------
 # Uncomment following line for debug mode
 #set -x
+#---------------------------------------------------------------------
 
+
+#---------------------------------------------------------------------
 # Set the script directory to the current dir for convenience
 script_path=$(dirname $(which $0))
 cd $script_path
 
+
+#---------------------------------------------------------------------
 # If you don't say ./, it'll search for functions.sh in your path
 source ./functions.sh
 
+#---------------------------------------------------------------------
 # TODO: create user if necessary
 # we should check for the existence of the specified user
 #   if the user doesn't exist, 
 #     if the user was specified in the command line
 #       TODO - Check if the user exists first
-#       echo "$0: Creating the user $aolserver_user at $(date)"
+#       echo "$0: Creating the user $aolserver_user"
 #       useradd -m -g $aolserver_group $aolserver_user -d /home/$server
 #     fi
 #     interactive prompt to create user or terminate script
@@ -41,7 +62,16 @@ source ./functions.sh
 # Meanwhile, however, we're just going to assume that service user
 # is the same as servername and that the user exists.  Documented
 # in README
+#---------------------------------------------------------------------
 
+
+######################################################################
+# 
+# Parse command-line arguments
+# 
+######################################################################
+
+#---------------------------------------------------------------------
 # Look for two-part command line arguments
 # Also, we need to look for command-line setting for config file
 # before we load the config file
@@ -89,13 +119,13 @@ usage="$0 [OPTIONS]
 
 # Check that script is executed as root
 if [ $(whoami) != "root" ]; then
-    echo "$0: You must execute this script as root; exiting"
+    echo "$(date): You must execute this script as root; exiting"
     exit -1
 fi
 
 # Check that the config file exists
 if [ ! -r ${config_file} ]; then
-    echo "$0: Aborting installation. The config file \"$config_file\" does not exist or is not readable."
+    echo "$(date): Aborting installation. The config file \"$config_file\" does not exist or is not readable."
     exit -1
 fi
 
@@ -137,16 +167,21 @@ while [ -n "$1" ] ; do
         do_install="no"
       ;;
       *)
-        echo "$0: option not recognized: ${i}"
+        echo "$(date): option not recognized: ${i}"
         echo "${usage}"
-        exit 1
+        exit -1
       ;;
    esac
 
    shift
 done
 
+#---------------------------------------------------------------------
+#
 # set the rest of the config file parameters
+#
+#---------------------------------------------------------------------
+
 # some of them may vary based on command-line overrides, so we 
 # do them after checking the command line
 
@@ -188,41 +223,64 @@ if [ -n "$post_checkout_script" ] && [ ! -x $post_checkout_script ]; then
 fi
 
 # Log some important parameters for the installation
-echo "$0: Starting installation with config_file $orig_config_file. Using serverroot=$serverroot, server_url=$server_url, do_checkout=$do_checkout, do_install=${do_install}, dotlrn=$dotlrn, and database=$database., use_daemontools=$use_daemontools"
+echo "$(date): Starting installation with config_file $orig_config_file. Using serverroot=$serverroot, server_url=$server_url, do_checkout=$do_checkout, do_install=${do_install}, dotlrn=$dotlrn, and database=$database., use_daemontools=$use_daemontools"
 
 if parameter_true $use_daemontools; then
-    echo "$0: Daemontools settings: svscanroot=$svscanroot svscan_sourcedir=$svscan_sourcedir"
+    echo "$(date): Daemontools settings: svscanroot=$svscanroot svscan_sourcedir=$svscan_sourcedir"
 fi
 
 # Give the user a chance to abort
 prompt_continue $interactive
 
+######################################################################
+#
 # stop the server
-echo "$0: Taking down $serverroot at $(date)"
+#
+######################################################################
+
+echo "$(date): Taking down $serverroot"
 
 if parameter_true $use_daemontools; then
-    $svc_bindir/svc -d ${svscanroot}
-    echo "$0: supervise status is: $($svc_bindir/svstat ${svscanroot})"
+    echo "$(date): supervise status is: $($svc_bindir/svstat ${svscanroot})"
+    command="$svc_bindir/svc -d ${svscanroot}"
+    echo "$(date): Issuing command $command"
+    $command
+    echo "$(date): supervise status is: $($svc_bindir/svstat ${svscanroot})"
 else
     # non-daemontools stop
+    echo "$(date): Issuing command $stop_server_command"
     $stop_server_command
 fi
 
-# Wait for the server to come down
-# TODO - instead of waiting, do a real check wherever we currently sleep
-echo "$0: Waiting $shutdown_seconds seconds for server to shut down at $(date)"
-sleep $shutdown_seconds
+# Wait in a finite loop for the server to come down
+x=0
+while test "$x" -lt 10 ; do
 
-# Check that it's been shut down
-pid=`grep_for_pid "nsd.*$serverroot"`
+    pid=`grep_for_pid "nsd.*$serverroot"`
+    if [ "$pid" == "" ]; then
+	echo "$(date): Server is down"
+	break
+    fi
+    echo "$(date): Process IDs of running servers: $pid"
+    echo "$(date): Waiting $shutdown_seconds seconds for server to shut down."
+    sleep $shutdown_seconds
+    x=`expr "$x" + 1`
+done
+
+# Verify that the server is down, and abort if not  
+pid=$(grep_for_pid "nsd.*$serverroot")
 if ! [ "$pid" == "" ]; then
-    echo "The server is still running. You must shut down the server first."
-    echo "Process IDs of running servers: $pid"
-    exit
+    echo "$(date): Cannot stop the server. You must shut down the server first."
+    exit -1
 fi
-	
+
+######################################################################
+#
 # Recreate the database user and database
-echo "$0: Recreating database user and database at $(date)"
+#
+######################################################################
+
+echo "$(date): Recreating database user and database."
 if [ $database == "postgres" ]; then
 
     # Postgres
@@ -249,7 +307,16 @@ else
     su - oracle -c "cd ${script_path}/oracle; config_file=$config_file ./recreate-user.sh";
 fi
 
+
+######################################################################
+#
 # Check out new files
+# 
+# If we are doing checkout, checkout files and modify checked out files,
+# including /etc/config.tcl and /etc/daemontools/run
+#
+######################################################################
+
 if parameter_true $do_checkout; then
 
     # The pre_checkout script can move away any files or changes
@@ -259,9 +326,10 @@ if parameter_true $do_checkout; then
         source $pre_checkout_script
     fi  
 
-    if parameter_true $use_daemontools; then
+    #-----------------------------------------------------------------
     # Remove supervise link if it exists
-    # Make sure any existing supervise directory is a symlink
+    if parameter_true $use_daemontools; then
+        # Make sure any existing supervise directory is a symlink
 	if [ -e $svscanroot ]; then
 	    if ! [ -L $svscanroot ]; then
 		echo "You have a supervise directory $svscanroot which is not a symlink and we curently don't support that."
@@ -271,7 +339,7 @@ if parameter_true $do_checkout; then
         fi
         if [ -r "$svscan_sourcedir" ]; then
             $svc_bindir/svc -dx $svscan_sourcedir
-            echo "$0: supervise status is: $($svc_bindir/svstat ${svscanroot})"
+            echo "$(date): supervise status is: $($svc_bindir/svstat ${svscanroot})"
         fi
     fi
 
@@ -283,10 +351,11 @@ if parameter_true $do_checkout; then
         exit
     fi
 	
-    echo "$0: Checking out OpenACS at $(date)"
+    echo "$(date): Checking out OpenACS"
     chmod +x checkout.sh
     config_file=$config_file dotlrn=$dotlrn ./checkout.sh
 
+    #-----------------------------------------------------------------
     # The post_checkout script can copy back any files (AOLServer config files,
     # log files etc.) under the new source tree, and apply any patches
     # that should be applied (see README).
@@ -294,67 +363,101 @@ if parameter_true $do_checkout; then
         source $post_checkout_script
     fi  
     
+    #-----------------------------------------------------------------
     # If we are using daemontools, set up the supervise directory if needed
     if parameter_true $use_daemontools && ! [ -e $svscanroot ]; then
         # Create a daemontools directory
 	# prevent it from autostarting when linked
-	echo "$0: Creating daemontools directory"
+	echo "$(date): Creating daemontools directory"
 	touch $svscan_sourcedir/down
 	ln -s $svscan_sourcedir $svscanroot
         # allow svscan to start
-        echo "$0: Waiting for 10 seconds for svscan to come up at $(date)"
+        echo "$(date): Waiting for 10 seconds for svscan to come up."
         sleep 10
-        echo "$0: supervise status is: $($svc_bindir/svstat ${svscanroot})"	
-        echo "$0: daemontools errors: : $(ps -auxw | grep readproctitle)"
+        echo "$(date): supervise status is: $($svc_bindir/svstat ${svscanroot})"	
+        echo "$(date): daemontools errors: : $(ps -auxw | grep readproctitle)"
         # Check if svgroup is present, and if so, use it
 	if which svgroup &> /dev/null; then
-	    echo "$0: Giving group $aolserver_group control over the server: svgroup web ${svscanroot}"
+	    echo "$(date): Giving group $aolserver_group control over the server: svgroup web ${svscanroot}"
 	    svgroup $aolserver_group ${svscanroot}
 	fi
     fi
+
+    #-----------------------------------------------------------------
+    # Modify the config file
+    if [ -z "$aolserver_config_file" ]; then
+        # No AOLserver config file specified - we are using the standard etc/config.tcl file.
+        # We need to update it with settings in install.tcl since certain parameters 
+        # (such as serverroot) are duplicated between the two files.
+        echo "$(date): Editing AOLserver config file with parameter settings in install.tcl"
+        ./config-replace.sh $config_file
+        chmod +x $svscan_sourcedir/run
+    else
+        # Copy specified config file to the right path
+        echo "$(date): Copying custom AOLserver config file $aolserver_config_file"
+        cp $aolserver_config_file $serverroot/etc/config.tcl
+    fi 
+
+    #-----------------------------------------------------------------
+    # Edit the run script
+    echo "$(date): Editing run script at $svscan_sourcedir/run"
+    ./run-create.sh $config_file
+    chmod +x $svscan_sourcedir/run
+
+    #-----------------------------------------------------------------
+    # Make sure we always have sensible ownership and permissions in the whole source tree
+    echo "$(date): Setting permissions and ownership for files under ${serverroot}"
+    chown -R ${aolserver_user}.${aolserver_group} ${serverroot}
+    chmod -R go+rwX ${serverroot}
 fi
 
-if [ -z "$aolserver_config_file" ]; then
-    # No AOLserver config file specified - we are using the standard etc/config.tcl file.
-    # We need to update it with settings in install.tcl since certain parameters 
-    # (such as serverroot) are duplicated between the two files.
-    echo "$0: Editing AOLserver config file with parameter settings in install.tcl"
-    ./config-replace.sh $config_file
-    chmod +x $svscan_sourcedir/run
-else
-    # Copy specified config file to the right path
-    echo "$0: Copying custom AOLserver config file $aolserver_config_file"
-    cp $aolserver_config_file $serverroot/etc/config.tcl
-fi 
+#
+# Done with checkout
+#
 
-# Edit the run script
-echo "$0: Editing run script at $svscan_sourcedir/run"
-./run-create.sh $config_file
-chmod +x $svscan_sourcedir/run
+######################################################################
+#
+# Start the server
+#
+######################################################################
 
-# Make sure we always have sensible ownership and permissions in the whole source tree
-echo "$0: Setting permissions and ownership for files under ${serverroot}"
-chown -R ${aolserver_user}.${aolserver_group} ${serverroot}
-chmod -R go+rwX ${serverroot}
+echo "$(date): Bringing $serverroot back up"
 
-# Bring up the server again
 if parameter_true $use_daemontools; then
+    echo "$(date): supervise status is: $($svc_bindir/svstat ${svscanroot})"
     if [ -f $svscanroot/down ]; then
+        echo "$(date): removing down file"
 	rm $svscanroot/down
     fi
     command="$svc_bindir/svc -u $svscanroot"
-    echo "$0: Bringing the server $serverroot back up at $(date) with command $command"
+    echo "$(date): Issuing command $command"
     $command
-    echo "$0: supervise status is: $($svc_bindir/svstat ${svscanroot})"	
+    echo "$(date): supervise status is: $($svc_bindir/svstat ${svscanroot})"	
 else
     # non-daemontools command
-    echo "$0: Bringing the server $serverroot back up at $(date) with command $start_server_command"
+    echo "$(date): Issuing command $start_server_command"
     $start_server_command
 fi
 
-# Give the server some time to come up
-echo "$0: Waiting for $startup_seconds seconds for server to come up at $(date)"
-sleep $startup_seconds
+# Wait in a finite loop for the server to become responsive
+wget_test=${server_url}/SYSTEM/success
+if [ -f ${script_path}/success ]; then
+    rm ${script_path}/success
+fi
+x=0
+while test "$x" -lt 50 ; do
+
+    # check for static file
+    echo "$(date): attempting: wget --tries=1 $wget_test"
+    wget --tries=1 $wget_test
+    if [ -r ${script_path}/success ] && [ $(cat ${script_path}/success) = "success" ]; then
+	echo "$(date): Server is up"
+	break
+    fi
+    echo "$(date): Waiting for $restart_seconds seconds for server to respond."
+    sleep $startup_seconds
+    x=`expr "$x" + 1`
+done
 
 if parameter_true $do_install; then
   # Save the time we started installation
@@ -368,41 +471,62 @@ if parameter_true $do_install; then
       cp ${install_xml_file} $serverroot
   fi
 
+  #-------------------------------------------------------------------
   # Install OpenACS
-  echo "$0: Starting installation of OpenACS at $(date)"
+  echo "$(date): Starting installation of OpenACS."
   ${tclwebtest_dir}/tclwebtest -config_file $config_file openacs-install.test
   
+
+  #-------------------------------------------------------------------
   # Restart the server
-  echo "$0: Restarting server at $(date)"
-  
+  echo "$(date): Restarting $serverroot"
   if parameter_true $use_daemontools; then
-      $svc_bindir/svc -t $svscanroot
+      echo "$(date): Daemontools should restart the server automatically"
   else
-      $restart_server_command
+      echo "$(date): Issuing command $start_server_command"
+      $start_server_command
   fi
 
-  echo "$0: Waiting for $restart_seconds seconds for server to come up at $(date)"
-  sleep $restart_seconds
+  # we check for dbtest instead of success here because dbtest is a more thorough test
+  # we would have used dbtest before but it doesn't work on postgresql before openacs
+  # install
+  wget_test=${server_url}/SYSTEM/dbtest
+  if [ -f ${script_path}/dbtest ]; then
+      rm ${script_path}/dbtest
+  fi
+  # Wait in a finite loop for the server to become responsive
+  x=0
+  while test "$x" -lt 50 ; do
+      # check for database responsiveness
+      wget_test=${server_url}/SYSTEM/dbtest
+      echo "$(date): trying to retrieve $wget_test"
+      wget --tries=1 $wget_test
+      if [ -r ${script_path}/dbtest ] && [ $(cat ${script_path}/dbtest) = "success" ]; then
+	  echo "$(date): Server is up"
+	  break
+      fi
+      echo "$(date): Waiting for $restart_seconds seconds for server to respond."
+      sleep $restart_seconds
+      x=`expr "$x" + 1`
+  done
 
-  # Extra wait on first startup
-  extra_seconds_wait=300
-  echo "$0: Waiting an extra $extra_seconds_wait seconds here as much initialization of OpenACS and message catalog usually happens at this point"
-  sleep $extra_seconds_wait
-
+  #-------------------------------------------------------------------
+  # Do .LRN demo data setup
   if parameter_true "$dotlrn_demo_data"; then
-      # Do .LRN demo data setup
-      echo "$0: Starting basic setup of .LRN at $(date)"
+      echo "$(date): Starting basic setup of .LRN."
       cp tcl/eval-command.tcl $serverroot/www/eval-command.tcl
       ${tclwebtest_dir}/tclwebtest -config_file $config_file dotlrn-basic-setup.test
       rm $serverroot/www/eval-command.tcl
   fi
       
+  #---------------------------------------------------------------
+  # Search for broken pages
   if parameter_true $crawl_links; then
-      # Search for broken pages
-      echo "$0: Starting to crawl links to search for broken pages at $(date)"
+      echo "$(date): Starting to crawl links to search for broken pages at."
       ${tclwebtest_dir}/tclwebtest -config_file $config_file dotlrn-links-check.test
   fi
 
+  #-------------------------------------------------------------------
   # Check errors in the log file
   # We do this before the Tcl API tests as these tend to generate errors intentionally
   if [ -r ${error_log_file} ]; then
@@ -413,12 +537,13 @@ if parameter_true $do_install; then
       error_line_count=$(wc -l $install_error_file | awk '{print $1}')
       if expr $error_line_count \> 1 &> /dev/null; then
          alert_keyword=`get_config_param alert_keyword`
-         echo "$0: ${alert_keyword} - There are error messages in the log file, they are stored in $install_error_file"
+         echo "$(date): ${alert_keyword} - There are error messages in the log file, they are stored in $install_error_file"
       fi
   else
-      echo "$0: Log file ${error_log_file} not readable - cannot check for errors"
+      echo "$(date): Log file ${error_log_file} not readable - cannot check for errors"
   fi
-  
+
+  #-------------------------------------------------------------------
   # Run the Tcl API tests
   ${tclwebtest_dir}/tclwebtest -config_file $config_file tcl-api-test.test
 
@@ -426,18 +551,49 @@ if parameter_true $do_install; then
       # Run vacuum analyze
       pg_bindir=`get_config_param pg_bindir`
       db_name=`get_config_param db_name`
-      echo "$0: Beginning 'vacuum analyze' at $(date)"
+      echo "$(date): Beginning 'vacuum analyze'."
       su  `get_config_param pg_db_user` -c "export LD_LIBRARY_PATH=${pg_bindir}/../lib; ${pg_bindir}/vacuumdb -p $pg_port -z $db_name"
   fi
    
+  #-------------------------------------------------------------------
   # Warn about errors in the HTML returned from the server
   ./warn-if-installation-errors.sh `get_config_param install_output_file`
 
+######################################################################
+#
+# Generate an XML report
+#
+######################################################################
+
+xmlreportfile=$script_path/$HOSTNAME-$server-installreport.xml
+echo "<service name=\"$server\">" > $xmlreportfile
+echo "  <info type=\"os\">$(uname -a)</info>" >> $xmlreportfile
+echo "  <info type=\"dbtype\">$database</info>" >> $xmlreportfile
+if [ $database == "postgres" ]; then
+    # Postgres
+    echo "  <info type=\"dbversion\">$(${pg_bindir}/psql --version)</info>"  >> $xmlreportfile
+fi
+    #Oracle
+    #TODO: Oracle version number
+
+echo "  <info type=\"webserver\">$(/usr/local/aolserver/bin/nsd -V)</info>"  >> $xmlreportfile
+echo "  <info type=\"url\">$server_url</info>" >> $xmlreportfile
+echo "  <info type=\"hostname\">$HOSTNAME</info>" >> $xmlreportfile
+echo "  <info type=\"openacs-cvs-flag\">$(get_config_param oacs_branch)</info>" >> $xmlreportfile
+echo "  <info type=\"sitename\">$(get_config_param system_name)</info>" >> $xmlreportfile
+echo "  <info type=\"adminemail\">$admin_email</info>" >> $xmlreportfile
+echo "  <info type=\"adminpassword\">$admin_password</info>" >> $xmlreportfile
+echo "  <info type=\"install-begin-epoch\">$installation_start_time</info>" >> $xmlreportfile
+echo "  <info type=\"install-end-epoch\">$(date +%s)</info>" >> $xmlreportfile
+echo "  <info type=\"install-end-timestamp\">$(date)</info>" >> $xmlreportfile
+echo "</service>"  >> $xmlreportfile
+
   # Report the time at which we were done
-  echo "$0: Finished (re)installing $serverroot at $(date).  
+  echo "$(date): Finished (re)installing $serverroot.
 ######################################################################
   New site URL: $server_url
-admin username: $admin_email
+admin email   : $admin_email
 admin password: $admin_password
 ######################################################################"
 fi
+
