@@ -4188,6 +4188,74 @@ aa_equals &quot;properties -&gt; datetime&quot; \
     return $result
 }
 
+
+ad_proc -public xml_get_child_node_attribute_by_path {
+    node
+    path_list
+    attribute_name
+} {
+
+    Return the attribute of a child node down a give path from the current node.
+
+    <p>
+
+    Example:<pre>
+    set tree [xml_parse -persist "
+&lt;enterprise&gt;
+  &lt;properties&gt;
+    &lt;datasource&gt;University of Durham: SIS&lt;/datasource&gt;
+    &lt;target&gt;University of Durham: LMS&lt;/target&gt;
+    &lt;type&gt;CREATE&lt;/type&gt;
+    &lt;datetime&gt;2001-08-08&lt;/datetime&gt;
+  &lt;/properties&gt;
+  &lt;group recstatus = "1"&gt;
+    &lt;sourcedid&gt;
+      &lt;source&gt;University of Durham&lt;/source&gt;
+      &lt;id&gt;CS1&lt;/id&gt;
+    &lt;/sourcedid&gt;
+    &lt;grouptype&gt;
+      &lt;scheme&gt;University of Durham&lt;/scheme&gt;
+      &lt;typevalue level = "2"/&gt;
+    &lt;/grouptype&gt;
+
+    .....
+
+  &lt;/group&gt;
+&lt;/enterprise&gt;
+
+"]
+    set root_node [xml_doc_get_first_node $tree]
+    set group_node [xml_node_get_children_by_name $root_node "group"] 
+    set typevalue [xml_get_child_node_attribute_by_path $group_node {grouptype typevalue} "level"]
+
+    @param node        The node to start from
+    @param path_list   List of the node to try, e.g. 
+                         { grouptype typevalue }.
+    @param attribute_name   Attribute name at the very end of the very botton of the tree route at path_list.
+
+    @author Rocael Hernandez (roc@viaro.net)
+
+} {
+
+    set attribute {}
+    set current_node $node
+    foreach element_name $path_list {
+	set current_node [xml_node_get_first_child_by_name $current_node $element_name]
+	if { [empty_string_p $current_node] } {
+	    # Try the next path
+	    break
+	}
+    }
+
+    if { ![empty_string_p $current_node] } {
+	set attribute [xml_node_get_attribute $current_node $attribute_name ""]
+    }
+
+    return $attribute
+
+}
+
+
 ad_proc -public ad_generate_random_string {{length 8}} {
     Generates a random string made of numbers and letters
 } {
