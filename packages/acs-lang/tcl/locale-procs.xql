@@ -93,4 +93,13 @@
       </querytext>
    </fullquery>
 
+   <fullquery name="lang::system::get_locale_options_not_cached.select_locales">
+      <querytext>
+       select label, locale
+        from   ad_locales
+        where  enabled_p = 't'
+      </querytext>
+   </fullquery>
+ 
+
 </queryset>
