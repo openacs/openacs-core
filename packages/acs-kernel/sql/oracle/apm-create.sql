@@ -158,9 +158,6 @@ create table apm_packages (
 				references apm_package_types(package_key),
     instance_name		varchar2(300)
 			        constraint apm_packages_inst_name_nn not null,
-    enabled_p			char(1) default 'f' 
-			        constraint apm_packages_enabled_p_ck
-				check (enabled_p in ('t', 'f')),
     -- default system locale for this package
     default_locale              varchar2(30)
 );
@@ -178,12 +175,6 @@ of a human-readable distinction between different package instances.  This is us
 if a site admin wishes to name an instance of an application, e.g. bboard, for a subsite.  The admin
 might create one instance, "Boston Public Bboard" for managing public forums for the Boston subsite,
 and "Boston Private Bboard" for managing private forums for the Boston subsite.
-';
-
-comment on column apm_packages.enabled_p is '
-  This indicates whether a package instance is enabled or not.  Enabling a package instance means that 
-if a user accesses a URL mapped to the object, the package content will display.
-Disabling a package prevents its content from ever being displayed. 
 ';
 
 -----------------------------
@@ -547,42 +538,6 @@ create or replace view apm_enabled_package_versions as
     select * from apm_package_version_info
     where  enabled_p = 't';
 
-create table apm_package_file_types (
-    file_type_key      varchar2(50)
-                       constraint apm_package_file_types_pk primary key,
-    pretty_name        varchar2(200)
-                       constraint apm_package_file_types_name_nn not null
-);
-
-comment on table apm_package_file_types is '
-  A list of all the different kinds of files that can be part of an APM package.
-';
-
-begin
-  insert into apm_package_file_types(file_type_key, pretty_name) values('documentation', 'Documentation');
-  insert into apm_package_file_types(file_type_key, pretty_name) values('tcl_procs', 'Tcl procedure library');
-  insert into apm_package_file_types(file_type_key, pretty_name) values('tcl_init', 'Tcl initialization');
-  insert into apm_package_file_types(file_type_key, pretty_name) values('tcl_util', 'Tcl utility script');
-  insert into apm_package_file_types(file_type_key, pretty_name) values('content_page', 'Content page');
-  insert into apm_package_file_types(file_type_key, pretty_name) values('package_spec', 'Package specification');
-  insert into apm_package_file_types(file_type_key, pretty_name) values('sql_data', 'SQL Data');
-  insert into apm_package_file_types(file_type_key, pretty_name) values('ctl_file', 'SQL data loader control');
-  insert into apm_package_file_types(file_type_key, pretty_name) values('data_model', 'Data model');
-  insert into apm_package_file_types(file_type_key, pretty_name) values('data_model_create', 'Data model installation');
-  insert into apm_package_file_types(file_type_key, pretty_name) values('data_model_drop', 'Data model deinstallation');
-  insert into apm_package_file_types(file_type_key, pretty_name) values('data_model_upgrade', 'Data model upgrade');
-  insert into apm_package_file_types(file_type_key, pretty_name) values('java_code', 'Java code');
-  insert into apm_package_file_types(file_type_key, pretty_name) values('java_archive', 'Java archive');
-  insert into apm_package_file_types(file_type_key, pretty_name) values('query_file', 'Query file');
-  insert into apm_package_file_types(file_type_key, pretty_name) values('template', 'Template file');
-  insert into apm_package_file_types(file_type_key, pretty_name) values('shell', 'Shell utility');
-  insert into apm_package_file_types(file_type_key, pretty_name) values('sqlj_code', 'SQLJ library');
-  insert into apm_package_file_types(file_type_key, pretty_name) values('message_catalog', 'Message Catalog');
-  commit;
-end;
-/
-show errors
-
 create table apm_package_db_types (
     db_type_key      varchar2(50)
                        constraint apm_package_db_types_pk primary key,
@@ -596,59 +551,6 @@ comment on table apm_package_db_types is '
   PL/SQL in order to guarantee that the list of supported database engines is
   consistent between the bootstrap code and the package manager.
 ';
-
--- Which files are contained in a version?
-
--- Files may be constrained to work only with a single database engine.  In practice only
--- datamodel and query files should be so constrained.  If db_type is NULL the
--- file is loaded no matter which supported database engine is installed.
-
-create table apm_package_files (
-    file_id            integer
-                       constraint apm_package_files_id_pk primary key,
-    version_id         constraint apm_package_files_ver_id_fk references apm_package_versions 
-		       on delete cascade
-                       constraint apm_package_files_ver_id_nn not null,
-    path               varchar2(1500)
-                       constraint apm_package_files_path_nn not null,
-    file_type          constraint apm_package_files_type_fk references apm_package_file_types,
-    db_type            constraint apm_package_files_db_type_fk references apm_package_db_types,
-    constraint apm_package_files_un unique(version_id, path)
-);
-
--- create bitmap index apm_pkg_files_file_type_idx on apm_package_files (file_type);
-create index apm_pkg_files_db_type_idx on apm_package_files (db_type);
-
-comment on table apm_package_files is '
-  The files that belong to an APM package.  We store this information in the database
-so that we can identify when a file is missing or added to the filesystem.
-';
-
-comment on column apm_package_files.path is '
-  The relative path of the file underneath the package-root, i.e.,
-  /packages/package-key.  For example, packages/address-book/www/index.tcl would have
-  "www/index.tcl" as a path.
-';
-
-comment on column apm_package_files.file_type is '
-  What kind of file is it?
-';
-
-comment on column apm_package_files.db_type is '
-    If not null, which database engine does this file support?
-';
-
-create index apm_package_files_by_path on apm_package_files(path);
-create index apm_package_files_by_version on apm_package_files(version_id);
-
--- A useful view for combining the package information with the file information.
-
-create or replace view apm_file_info as
-    select f.*, p.package_key, 'packages/' || p.package_key || '/' || f.path full_path
-    from   apm_package_files f, apm_package_versions v, apm_package_types p
-    where  f.version_id = v.version_id
-    and    v.package_key = p.package_key;
-
 
 create table apm_parameters (
 	parameter_id		constraint apm_parameters_fk 
@@ -1217,23 +1119,6 @@ as
 				default 'f'
     ) return apm_package_versions.version_id%TYPE;
 
-  -- Add a file to the indicated version.
-  function add_file(
-    file_id			in apm_package_files.file_id%TYPE
-				default null,
-    version_id			in apm_package_versions.version_id%TYPE,
-    path			in apm_package_files.path%TYPE,
-    file_type			in apm_package_file_types.file_type_key%TYPE,
-    db_type			in apm_package_db_types.db_type_key%TYPE
-                                default null
-  ) return apm_package_files.file_id%TYPE;
-
-  -- Remove a file from the indicated version.
-  procedure remove_file(
-    version_id			in apm_package_versions.version_id%TYPE,
-    path			in apm_package_files.path%TYPE
-  );
-
   -- Add an interface provided by this version.
   function add_interface(
     interface_id		in apm_package_dependencies.dependency_id%TYPE
@@ -1287,7 +1172,7 @@ as
   ) return integer;
 
   function upgrade_p(
-    path			in apm_package_files.path%TYPE,
+    path			in varchar2,
     initial_version_name	in apm_package_versions.version_name%TYPE,
     final_version_name		in apm_package_versions.version_name%TYPE
    ) return integer;
@@ -2116,9 +2001,6 @@ as
       delete from apm_package_owners 
       where version_id = apm_package_version.delete.version_id; 
 
-      delete from apm_package_files
-      where version_id = apm_package_version.delete.version_id;
-
       delete from apm_package_dependencies
       where version_id = apm_package_version.delete.version_id;
 
@@ -2177,11 +2059,6 @@ as
 	    from apm_package_dependencies
 	    where version_id = copy.version_id;
     
-	insert into apm_package_files(file_id, version_id, path, file_type, db_type)
-	    select acs_object_id_seq.nextval, v_version_id, path, file_type, db_type
-	    from apm_package_files
-	    where version_id = copy.version_id;
-
         insert into apm_package_callbacks (version_id, type, proc)
                 select v_version_id, type, proc
                 from apm_package_callbacks
@@ -2248,53 +2125,6 @@ as
 	    where version_id = v_version_id;
 	return v_version_id;
     end edit;
-
-  function add_file(
-    file_id			in apm_package_files.file_id%TYPE
-				default null,
-    version_id			in apm_package_versions.version_id%TYPE,
-    path			in apm_package_files.path%TYPE,
-    file_type			in apm_package_file_types.file_type_key%TYPE,
-    db_type			in apm_package_db_types.db_type_key%TYPE
-                                default null
-  ) return apm_package_files.file_id%TYPE
-  is
-    v_file_id apm_package_files.file_id%TYPE;
-    v_file_exists_p integer;
-  begin
-	select file_id into v_file_id from apm_package_files
-  	where version_id = add_file.version_id 
-	and path = add_file.path;
-        return v_file_id;
-	exception 
-	       when NO_DATA_FOUND
-	       then
-	       	if file_id is null then
-	          select acs_object_id_seq.nextval into v_file_id from dual;
-	        else
-	          v_file_id := file_id;
-	        end if;
-
-  	        insert into apm_package_files 
-		(file_id, version_id, path, file_type, db_type) 
-		values 
-		(v_file_id, add_file.version_id, add_file.path, add_file.file_type,
-                 add_file.db_type);
-	        return v_file_id;
-     end add_file;
-
-  -- Remove a file from the indicated version.
-  procedure remove_file(
-    version_id			in apm_package_versions.version_id%TYPE,
-    path			in apm_package_files.path%TYPE
-  )
-  is
-  begin
-    delete from apm_package_files 
-    where version_id = remove_file.version_id
-    and path = remove_file.path;
-  end remove_file; 
-
 
 -- Add an interface provided by this version.
   function add_interface(
@@ -2486,14 +2316,14 @@ as
     end version_name_greater;
 
   function upgrade_p(
-    path			in apm_package_files.path%TYPE,
+    path			in varchar2,
     initial_version_name	in apm_package_versions.version_name%TYPE,
     final_version_name		in apm_package_versions.version_name%TYPE
    ) return integer
     is
 	v_pos1 integer;
 	v_pos2 integer;
-	v_path apm_package_files.path%TYPE;
+	v_path varchar2(1500);
 	v_version_from apm_package_versions.version_name%TYPE;
 	v_version_to apm_package_versions.version_name%TYPE;
     begin
