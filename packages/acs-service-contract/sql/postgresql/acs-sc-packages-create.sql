@@ -382,7 +382,7 @@ begin
 			       and impl_id = p_impl_id);
 
     if v_count > 0 then
-        raise exception ''Binding of % to % failed.'', v_contract_name, v_impl_name;
+        raise exception ''Binding of % to % failed since certain operations are not implemented.'', v_contract_name, v_impl_name;
     end if;
 
     insert into acs_sc_bindings (
