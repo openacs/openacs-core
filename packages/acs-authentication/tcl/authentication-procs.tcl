@@ -1,5 +1,5 @@
 ad_library {
-    Tcl API for authentication, account management, and password management,
+    Tcl API for authentication, account management, and account registration.
 
     @author Lars Pind (lars@collaobraid.biz)
     @creation-date 2003-05-13
@@ -8,9 +8,7 @@ ad_library {
 
 namespace eval auth {}
 namespace eval auth::authentication {}
-namespace eval auth::password {}
 namespace eval auth::registration {}
-
 
 
 #####
@@ -86,10 +84,18 @@ ad_proc -public auth::authenticate {
     # Concatenate remote account message and local account message into one logical understandable message.
     # Same with account status: only ok if both are ok.
 
-    array set auth_info [auth::authentication::Authenticate \
-                             -username $username \
-                             -authority_id $authority_id \
-                             -password $password]
+    with_catch errmsg {
+        array set auth_info [auth::authentication::Authenticate \
+                                 -username $username \
+                                 -authority_id $authority_id \
+                                 -password $password]
+    } {
+        set auth_info(auth_status) failed_to_connect
+        set auth_info(auth_message) "Error invoking the authentication driver."
+        global errorInfo
+        ns_log Error "Error invoking authentication driver for authority_id = $authority_id: $errorInfo"
+    }
+
     # Returns:
     #   auth_info(auth_status) 
     #   auth_info(auth_message) 
@@ -101,7 +107,7 @@ ad_proc -public auth::authenticate {
     array set default_auth_message {
         no_account {Unknown username}
         bad_password {Bad password}
-        auth_error {Unknown authentication error}
+        auth_error {Invalid username/password}
         failed_to_connect {Error communicating with authentication server}
     }
 
@@ -203,11 +209,14 @@ ad_proc -private auth::issue_login {
 }
 
 ad_proc -public auth::create_user {
-    {-username:required}
-    {-password:required}
+    {-user_id ""}
+    {-username ""}
+    {-email ""}
     {-first_names ""}
     {-last_name ""}
     {-email ""}
+    {-password ""}
+    {-password_confirm ""}
     {-url ""}
     {-secret_question ""}
     {-secret_answer ""}
@@ -218,16 +227,19 @@ ad_proc -public auth::create_user {
     
     @param email_verified_p Whether the local account considers the email to be verified or not.
     @param member_state     Whether the local account has been approved.
-
+                            
     @return Array list containing the following entries:
 
     <ul>
       <li> creation_status:  ok, data_error, reg_error, failed_to_connect. Says whether user creation succeeded.
-      <li> creation_message: Information about the problem, to be relayed to the user. May contain HTML.
+      <li> creation_message: Information about the problem, to be relayed to the user. If creation_status is not ok, then either 
+                             creation_message or element_messages is guaranteed to be non-empty, and both are 
+                             guaranteed to be in the array list.  May contain HTML.
       <li> element_messages: list of (element_name, message, element_name, message, ...) of 
                              errors on the individual elements (username, password, first_names, ...), 
                              to be relayed on to the user. If creation_status is not ok, then either 
-                             creation_message or element_messages is guaranteed to be non-empty. Cannot contain HTML.
+                             creation_message or element_messages is guaranteed to be non-empty, and both are 
+                             guaranteed to be in the array list. Cannot contain HTML.
       <li> account_status:   ok, closed. Only set if creation_status was ok, this says whether the newly created account 
                              is ready for use or not. For example, we may require approval, in which case the account 
                              would be created but closed.
@@ -235,36 +247,199 @@ ad_proc -public auth::create_user {
                              be quoted. Guaranteed to be non-empty if account_status is not ok.
     </ul>
 } {
+    # HACK: Always create in local acconut
+    set authority_id [auth::authority::local]
 
-     set authority_id [auth::authority::local]
+    # This holds element error messages
+    array set element_messages [list]
 
-     array set create_info [auth::registration::Register \
-                          -authority_id $authority_id \
-                          -username $username \
-                          -password $password \
-                          -first_names $first_names \
-                          -last_name $last_name \
-                          -email $email \
-                          -url $url \
-                          -secret_question $secret_question \
-                          -secret_answer $secret_answer]
+    #####
+    #
+    # Check for missing required fields
+    #
+    #####
 
-     return [array get create_info]
+    # We do this first, so that double-click protection works correctly
 
-     # TODO: Check that return codes are correct
+    set missing_elements_p 0
+    array set reg_elms [auth::get_registration_elements]
+    foreach elm $reg_elms(required) {
+        if { [empty_string_p [set $elm]] } {
+            set element_messages($elm) "Required"
+            set missing_elements_p 1
+        }
+    }
+    if { ![empty_string_p "$password$password_confirm"] && ![string equal $password $password_confirm] } {
+        set element_messages(password) "Passwords don't match"
+        set missing_elements_p 1
+    }
+    if { $missing_elements_p } {
+        return [list \
+                    creation_status data_error \
+                    creation_message "Missing required fields" \
+                    element_messages [array get element_messages] \
+                   ]
+    }
+    
 
-     # If we ever create remote users, make sure we concatenate any account messages and local account messages
-     # into one combined message.
-     # Same for account_status (only ok if both are ok)
+
+    #####
+    #
+    # Create local account
+    #
+    #####
+
+    array set creation_info [auth::create_local_account \
+                                 -user_id $user_id \
+                                 -authority_id $authority_id \
+                                 -username $username \
+                                 -first_names $first_names \
+                                 -last_name $last_name \
+                                 -email $email \
+                                 -url $url \
+                                 -member_state $member_state \
+                                 -email_verified_p $email_verified_p]
+
+    # Returns: 
+    #   creation_info(creation_status)
+    #   creation_info(creation_message)  
+    #   creation_info(element_messages)  
+    #   creation_info(account_status)
+    #   creation_info(account_message)  
+    #   creation_info(user_id)
+
+    # We don't do any fancy error checking here, because create_local_account is not a service contract
+    # so we control it 100%
+
+    if { ![string equal $creation_info(creation_status) "ok"] } {
+        # Local account creation error
+        return [array get creation_info]
+    }
+
+    # Save the local account information for later
+    set local_account_status $creation_info(account_status)
+    set local_account_message $creation_info(account_message)
+
+    # Clear out remote creation_info array for reuse
+    array set creation_info {
+        creation_status {}
+        creation_message {}  
+        element_messages {}  
+        account_status {}
+        account_message {}  
+    }
+
+
+    #####
+    #
+    # Create remote account
+    #
+    #####
+
+    with_catch errmsg {
+        array set creation_info [auth::registration::Register \
+                                     -authority_id $authority_id \
+                                     -username $username \
+                                     -password $password \
+                                     -first_names $first_names \
+                                     -last_name $last_name \
+                                     -email $email \
+                                     -url $url \
+                                     -secret_question $secret_question \
+                                     -secret_answer $secret_answer]
+    } {
+        set auth_info(auth_status) failed_to_connect
+        set auth_info(auth_message) "Error invoking the account registration driver."
+        global errorInfo
+         ns_log Error "Error invoking account registratino driver for authority_id = $authority_id: $errorInfo"
+    }
+    
+    
+    # Returns:
+    #   creation_info(creation_status) 
+    #   creation_info(creation_message) 
+    #   creation_info(element_messages) 
+    #   creation_info(account_status) 
+    #   creation_info(account_message) 
+
+    # Verify creation_info/creation_message return codes
+    array set default_creation_message {
+        data_error {Problem with user data}
+        reg_error {Unknown registration error}
+        failed_to_connect {Error communicating with account server}
+    }
+
+    switch $creation_info(creation_status) {
+        ok { 
+            # Continue below
+        }
+        data_error -
+        reg_error -
+        failed_to_connect {
+            if { ![exists_and_not_null creation_info(creation_message)] } {
+                set creation_info(creation_message) $default_creation_message($creation_info(creation_status))
+            }
+            if { ![info exists creation_info(element_messages)] } {
+                set creation_info(element_messages) {}
+            }
+            return [array get creation_info]
+        }
+        default {
+            set creation_info(creation_status) "failed_to_connect"
+            set creation_info(creation_message) "Illegal error code returned from account creation driver"
+            return [array get creation_info]
+        }
+    }
+
+    # Verify remote account_info/account_message return codes
+    switch $creation_info(account_status) {
+        ok { 
+            # Continue below
+            set creation_info(account_message) {}
+        }
+        closed {
+            if { ![exists_and_not_null creation_info(account_message)] } {
+                set creation_info(account_message) "This account is not available at this time"
+            }
+        }
+        default {
+            set creation_info(account_status) "closed"
+            set creation_info(account_message) "Illegal error code returned from creationentication driver"
+        }
+    }
+
+    
+
+    #####
+    # 
+    # Clean up, concat account messages, issue login cookie
+    #
+    #####
+    
+    # If the local account was closed, the whole account is closed, regardless of remote account status
+    if { [string equal $local_account_status "closed"] } {
+        set creation_info(account_status) closed
+    }
+
+    if { [exists_and_not_null local_account_message] } {
+        # Concatenate local and remote account messages
+        set creation_info(account_message) "<p>[auth::authority::get_element -authority_id $authority_id -element pretty_name]: $creation_info(account_message)</p> <p>[ad_system_name]: $local_account_message</p>"
+    }
+        
+    # Issue login cookie if login was successful
+    if { [string equal $creation_info(creation_status) "ok"] && [string equal $creation_info(account_status) "ok"] && [ad_conn user_id] == 0 } {
+        auth::issue_login -user_id $creation_info(user_id)
+    }
+    
+    return [array get creation_info]
 }
 
 ad_proc -public auth::get_registration_elements {
-    {-authority_id ""}
 } {
     Get the list of required/optional elements for user registration.
     
     @return Array-list with two entries, both being a subset of 
-            (username, password_1, password_2, first_names, last_name, email, url, secret_question, secret_answer).
+            (username, password, first_names, last_name, email, url, secret_question, secret_answer).
             
     <ul>
       <li> required: a list of required elements
@@ -272,11 +447,33 @@ ad_proc -public auth::get_registration_elements {
     </ul>
             
 } {
-    if { [empty_string_p $authority_id] } {
-        set authority_id [auth::authority::local]
+    # HACK: Only the local authority for now
+    set authority_id [auth::authority::local]
+
+    array set element_info [auth::registration::GetElements -authority_id $authority_id]
+    
+    if { ![info exists element_info(required)] } {
+        set element_info(required) {}
+    }
+    if { ![info exists element_info(optional)] } {
+        set element_info(optional) {}
     }
 
-    return [auth::registration::GetElements -authority_id $authority_id]
+    # Handle required elements for local account
+    foreach elm { first_names last_name email } {
+        # Add to required
+        if { [lsearch $element_info(required) $elm] == -1 } {
+            lappend element_info(required) $elm
+        }
+            
+        # Remove from optional
+        set index [lsearch $element_info(optional) $elm]
+        if { $index != -1 } {
+            set element_info(optional) [lreplace $element_info(optional) $index $index]
+        }
+    }
+
+    return [array get element_info]
 }
 
 ad_proc -public auth::get_registration_form_elements {
@@ -286,18 +483,14 @@ ad_proc -public auth::get_registration_form_elements {
     All possible elements will always be present, but those that shouldn't be displayed 
     will be hidden and have a hard-coded empty string value.
 } {
-    if { [empty_string_p $authority_id] } {
-        set authority_id [auth::authority::local]
-    }
-
     array set data_types {
         username text
         email text
         first_names text
         last_name text
         url text
-        password_1 text
-        password_2 text
+        password text
+        password_confirm text
         secret_question text
         secret_answer text
     }
@@ -308,8 +501,8 @@ ad_proc -public auth::get_registration_form_elements {
         first_names text
         last_name text
         url text
-        password_1 password
-        password_2 password
+        password password
+        password_confirm password
         secret_question text
         secret_answer text
     }
@@ -320,8 +513,8 @@ ad_proc -public auth::get_registration_form_elements {
                           first_names [_ acs-subsite.First_names] \
                           last_name [_ acs-subsite.Last_name] \
                           url [_ acs-subsite.lt_Personal_Home_Page_UR] \
-                          password_1 [_ acs-subsite.Your_password] \
-                          password_2 [_ acs-subsite.lt_Password_Confirmation] \
+                          password [_ acs-subsite.Your_password] \
+                          password_confirm [_ acs-subsite.lt_Password_Confirmation] \
                           secret_question [_ acs-subsite.Question] \
                           secret_answer [_ acs-subsite.Answer]]
 
@@ -331,34 +524,54 @@ ad_proc -public auth::get_registration_form_elements {
         first_names {size 20}
         last_name {size 25}
         url {size 50 value "http://"}
-        password_1 {size 20}
-        password_2 {size 20}
+        password {size 20}
+        password_confirm {size 20}
         secret_question {size 30}
         secret_answer {size 30}
     }
     
-    array set element_info [auth::get_registration_elements -authority_id $authority_id]
+    array set element_info [auth::get_registration_elements]
+
+    if { [lsearch $element_info(required) password] != -1 } {
+        lappend element_info(required) password_confirm
+    }
+    if { [lsearch $element_info(optional) password] != -1 } {
+        lappend element_info(optional) password_confirm
+    }
+    
+    # required_p will have 1 if required, 0 if optional, and unset if not in the form
+    array set required_p [list]
+    foreach element $element_info(required) {
+        set required_p($element) 1
+    }
+    foreach element $element_info(optional) {
+        set required_p($element) 0
+    }
 
     set form_elements [list]
-    foreach element [concat $element_info(required) $element_info(optional)] {
-        set form_element [list]
+    foreach element { username email first_names last_name password password_confirm url secret_question secret_answer } {
+        if { [info exists required_p($element)] } {
+            set form_element [list]
 
-        # The header with name, datatype, and widget
-        set form_element_header "${element}:$data_types($element)($widgets($element))"
-        set optional_p [expr [lsearch -exact $element_info(optional) $element] != -1]
-        if { $optional_p } {
-            append form_element_header ",optional"
+            # The header with name, datatype, and widget
+            set form_element_header "${element}:$data_types($element)($widgets($element))"
+
+            if { !$required_p($element) } {
+                append form_element_header ",optional"
+            }
+            lappend form_element $form_element_header
+
+            # The label
+            lappend form_element [list label $labels($element)]
+
+            # HTML
+            lappend form_element [list html $html($element)]
+
+            # The form element is finished - add it to the list
+            lappend form_elements $form_element
+        } else {
+            lappend form_elements "${element}:text(hidden),optional [list value {}]"
         }
-        lappend form_element $form_element_header
-
-        # The label
-        lappend form_element [list label $labels($element)]
-
-        # HTML
-        lappend form_element [list html $html($element)]
-
-        # The form element is finished - add it to the list
-        lappend form_elements $form_element
     }
 
     return $form_elements
@@ -366,22 +579,148 @@ ad_proc -public auth::get_registration_form_elements {
 
 ad_proc -public auth::create_local_account {
     {-user_id ""}
-    {-authority_id ""}
-    {-username:required}
-    {-first_names:required}
-    {-last_name:required}
-    {-email:required}
+    {-authority_id:required}
+    {-username ""}
+    {-first_names ""}
+    {-last_name ""}
+    {-email ""}
     {-url ""}
+    {-secret_question ""}
+    {-secret_answer ""}
     {-member_state "approved"}
     {-email_verified_p "t"}
 } {
     Create the local account for a user.
-} {
 
-    # TODO: implement
+    @return Array list containing the following entries:
+
+    <ul>
+      <li> creation_status:  ok, data_error, reg_error, failed_to_connect. Says whether user creation succeeded.
+      <li> creation_message: Information about the problem, to be relayed to the user. If creation_status is not ok, then either 
+                             creation_message or element_messages is guaranteed to be non-empty, and both are 
+                             guaranteed to be in the array list.  May contain HTML.
+      <li> element_messages: list of (element_name, message, element_name, message, ...) of 
+                             errors on the individual elements (username, password, first_names, ...), 
+                             to be relayed on to the user. If creation_status is not ok, then either 
+                             creation_message or element_messages is guaranteed to be non-empty, and both are 
+                             guaranteed to be in the array list. Cannot contain HTML.
+      <li> account_status:   ok, closed. Only set if creation_status was ok, this says whether the newly created account 
+                             is ready for use or not. For example, we may require approval, in which case the account 
+                             would be created but closed.
+      <li> account_message:  A human-readable explanation of why the account was closed. May include HTML, and thus shouldn't
+                             be quoted. Guaranteed to be non-empty if account_status is not ok.
+    </ul>
+
+    All entries are guaranteed to always be set, but may be empty.
+} {
+    array set result {
+        creation_status reg_error
+        creation_message {}
+        element_messages {}
+        account_status ok
+        account_message {}
+    }
+    array set elm_msgs [list]
+
+    # TODO: This needs to be controlled by a parameter, to be added latter
+    if { [empty_string_p $username] } {
+        set username $email
+    }
+
+    # Validate data
+    if { [string first "<" $first_names] != -1 } {
+        set element_messages(first_names) [_ acs-subsite.lt_You_cant_have_a_lt_in]
+    }
+
+    if { [string first "<" $last_name] != -1 } {
+        set element_messages(last_name) [_ acs-subsite.lt_You_cant_have_a_lt_in_1]
+    }
+    
+    if { [empty_string_p $url] || [string equal $url "http://"] } {
+        # The user left the default hint for the url
+        set url {}
+    } elseif { ![util_url_valid_p $url] } {
+        set valid_url_example "http://openacs.org/"
+        set element_messages(url) [_ acs-subsite.lt_Your_URL_doesnt_have_]
+    }
+    if { ![empty_string_p [cc_lookup_email_user $email]] } {
+        set element_messages(email) "We already have a user with this email."
+    }
+    if { ![empty_string_p [acs_user::get_by_username -authority_id $authority_id -username $username]] } {
+        set element_messages(username) "We already have a user with this username."
+    }
+    if { [llength [array names element_messages]] > 0 } {
+        return [list creation_status data_error creation_message {} element_messages [array get element_messages]]
+    }
+
+    # Admin approval
+    if { [parameter::get -parameter RegistrationRequiresApprovalP -default 0] } {
+        set member_state "needs approval"
+        set result(account_status) "closed"
+        set result(account_message) [_ acs-subsite.lt_Your_registration_is_]
+    } else {
+        set member_state "approved"
+    }
+
+    if { [parameter::get -parameter RegistrationRequiresEmailVerificationP -default 0] } {
+        set email_verified_p "f"
+    } else {
+        set email_verified_p "t"
+    }
+    
+    set error_p 0
+    with_catch errmsg {
+        # We create the user without a password
+        # If it's a local account, that'll get set later
+        set user_id [ad_user_new \
+                         $email \
+                         $first_names \
+                         $last_name \
+                         {} \
+                         $secret_question \
+                         $secret_answer \
+                         $url \
+                         $email_verified_p \
+                         $member_state \
+                         $user_id \
+                         $username \
+                         $authority_id]
+    } {
+        set error_p 1
+    } 
+
+    if { $error_p || $user_id == 0 } {
+        set result(creation_status) "failed_to_connect"
+        set result(creation_message) "We experienced an error while trying to register an account for you."
+        if { $error_p } {
+            global errorInfo
+            ns_log Error "Error invoking account registratino driver for authority_id = $authority_id: $errorInfo"
+        }
+        return [array get result]
+    }
+
+    set result(user_id) $user_id
+    
+    # Creation succeeded
+    set result(creation_status) "ok"
+
+    if { [parameter::get -parameter RegistrationRequiresEmailVerificationP -default 0] } {
+        set result(account_status) "closed"
+        set result(account_message) "<p>[_ acs-subsite.lt_Registration_informat_1]</p><p>[_ acs-subsite.lt_Please_read_and_follo]</p>"
+
+        with_catch errmsg {
+            auth::send_email_verification_email -user_id $user_id
+        } {
+            global errorInfo
+            ns_log Error "auth::get_local_account: Error sending out email verification email to email $email:\n$errorInfo"
+            set auth_info(account_message) "We got an error sending out the email for email verification"
+        }
+    }
+
+    return [array get result]
 }
 
-ad_proc -public auth::confirm_email {
+ad_proc -public auth::set_email_verified {
     {-user_id:required}
 } {
     Update an OpenACS record with the fact that the email address on
@@ -389,8 +728,8 @@ ad_proc -public auth::confirm_email {
 } {
     db_dml set_email_verified {
         update users 
-        set email_verified_p = 't'
-        where user_id = :user_id
+        set    email_verified_p = 't'
+        where  user_id = :user_id
     }
 }
 
@@ -449,23 +788,12 @@ ad_proc -private auth::get_local_account {
     # system_name is used in some of the I18N messages
     set system_name [ad_system_name]    
     switch $member_state {
-        "approved" {
+        approved {
             if { $email_verified_p == "f" } {
-
-                # Lars TODO: Refactor with code in authentication-procs.tcl
-
-                set row_id [auth::get_user_secret_token -user_id $user_id]
+                set auth_info(account_message) "<p>[_ acs-subsite.lt_Registration_informat]</p><p>[_ acs-subsite.lt_Please_read_and_follo]</p>"
                 
-                # Send email verification email to user
-                set confirmation_url [export_vars -base "[ad_url]/register/email-confirm" { row_id }]
                 with_catch errmsg {
-                    ns_sendmail \
-                        $email \
-                        $notification_address \
-                        "[_ acs-subsite.lt_Welcome_to_system_nam]" \
-                        "[_ acs-subsite.lt_To_confirm_your_regis]"
-
-                    set auth_info(account_message) "<p>[_ acs-subsite.lt_Registration_informat]</p><p>[_ acs-subsite.lt_Please_read_and_follo]</p>"
+                    auth::send_email_verification_email -user_id $user_id
                 } {
                     global errorInfo
                     ns_log Error "auth::get_local_account: Error sending out email verification email to email $email:\n$errorInfo"
@@ -476,18 +804,21 @@ ad_proc -private auth::get_local_account {
                 set auth_info(account_status) "ok"
             }
         }
-        "banned" { 
+        banned { 
             set auth_info(account_message) [_ acs-subsite.lt_Sorry_but_it_seems_th]
         }
-        "deleted" {  
-            set auth_info(account_message) "[_ acs-subsite.Welcome_Back_1] <a href=\"restore-user?[export_vars { user_id }]\">[_ acs-subsite.to_site_link_1]</a>."
+        deleted {  
+            set auth_info(account_message) \
+                "[_ acs-subsite.Welcome_Back_1] <a href=\"restore-user?[export_vars { user_id }]\">[_ acs-subsite.to_site_link_1]</a>."
         }
-        "rejected" - "needs_approval" {
-            set auth_info(account_message) "<p>[_ acs-subsite.lt_registration_request_submitted]</p><p>[_ acs-subsite.Thank_you]</p>"
+        rejected - needs_approval {
+            set auth_info(account_message) \
+                "<p>[_ acs-subsite.lt_registration_request_submitted]</p><p>[_ acs-subsite.Thank_you]</p>"
         }
         default {
-            set auth_info(account_message) "There was a problem authenticating the account: $user_id. Most likely, the database contains users with no user_state."
-            ns_log Warning "Problem with registration state machine on user-login.tcl"
+            set auth_info(account_message) \
+                "There was a problem authenticating the account: $user_id. Most likely, the database contains users with no member_state."
+            ns_log Error "Problem with registration state machine: user_id $user_id has member_state '$member_state'"
         }
     }
     set auth_info(user_id) $user_id
@@ -503,6 +834,25 @@ ad_proc -private auth::get_user_secret_token {
     return [db_string select_secret_token {}]
 }
 
+ad_proc -private auth::send_email_verification_email {
+    -user_id:required
+} {
+    Sends out an email to the user that lets them verify their email.
+    Throws an error if we couldn't send out the email.
+} {
+    # These are used in the messages below
+    set token [auth::get_user_secret_token -user_id $user_id]
+    set confirmation_url [export_vars -base "[ad_url]/register/email-confirm" { token user_id }]
+    set system_name [ad_system_name]    
+
+    ns_sendmail \
+        $email \
+        [parameter::get -parameter NewRegistrationEmailAddress -default [ad_system_owner]] \
+        [_ acs-subsite.lt_Welcome_to_system_nam] \
+        [_ acs-subsite.lt_To_confirm_your_regis]
+}
+
+
 #####
 #
 # auth::authentication
@@ -510,40 +860,22 @@ ad_proc -private auth::get_user_secret_token {
 #####
 
 ad_proc -private auth::authentication::Authenticate {
-    {-authority_id ""}
+    {-authority_id:required}
     {-username:required}
     {-password:required}
 } {
     Invoke the Authenticate service contract operation for the given authority.
 
-    @param authority_id The ID of the authority to ask to verify the user. Defaults to local authority.
+    @param authority_id The ID of the authority to ask to verify the user. 
     @param username Username of the user.
     @param passowrd The password as the user entered it.    
 } {
-    if { [empty_string_p $authority_id] } {
-        set authority_id [auth::authority::local]
-    } {
-        # Check that the authority exists
-        set authority_exists_p [db_string authority_exists_p {
-            select count(*)
-            from auth_authorities
-            where authority_id = :authority_id
-        }]
-
-        if { ! $authority_exists_p } {
-            set auth_info(auth_status) auth_error
-            set auth_info(auth_message) "Internal error - authority with id $authority_id does not exist"
-
-            return [array get auth_info]
-        }
-    }
-
-    set impl_name [auth::authority::get_element -authority_id $authority_id -element "auth_impl_name"]
     set impl_id [auth::authority::get_element -authority_id $authority_id -element "auth_impl_id"]
 
     if { [empty_string_p $impl_id] } {
-        # Invalid authority
-        return {}
+        # No implementation of authentication
+        set authority_pretty_name [auth::authority::get_element -authority_id $authority_id -element "pretty_name"]
+        error "The authority '$authority_pretty_name' doesn't support authentication"
     }
 
     set parameters [auth::driver::get_parameter_values \
@@ -551,8 +883,8 @@ ad_proc -private auth::authentication::Authenticate {
                         -impl_id $impl_id]
 
     return [acs_sc::invoke \
-                -contract "auth_authentication" \
-                -impl $impl_name \
+                -error \
+                -impl_id $impl_id \
                 -operation Authenticate \
                 -call_args [list $username $password $parameters]]
 }
@@ -564,9 +896,9 @@ ad_proc -private auth::authentication::Authenticate {
 #####
 
 ad_proc -private auth::registration::Register {
-    {-authority_id ""}
-    {-username:required}
-    {-password:required}
+    {-authority_id:required}
+    {-username ""}
+    {-password ""}
     {-first_names ""}
     {-last_name ""}
     {-email ""}
@@ -581,20 +913,21 @@ ad_proc -private auth::registration::Register {
     @secret_question Question to ask on forgotten password
     @secret_answer Answer to forgotten password question
 } {
-    if { [empty_string_p $authority_id] } {
-        set authority_id [auth::authority::local]
-    }
+    set impl_id [auth::authority::get_element -authority_id $authority_id -element "register_impl_id"]
 
-    set impl_name [auth::authority::get_element -authority_id $authority_id -element "pwd_impl_name"]
-    set impl_id [auth::authority::get_element -authority_id $authority_id -element "pwd_impl_id"]
+    if { [empty_string_p $impl_id] } {
+        # No implementation of authentication
+        set authority_pretty_name [auth::authority::get_element -authority_id $authority_id -element "pretty_name"]
+        error "The authority '$authority_pretty_name' doesn't support account registration"
+    }
 
     set parameters [auth::driver::get_parameter_values \
                         -authority_id $authority_id \
                         -impl_id $impl_id]
 
     return [acs_sc::invoke \
-                -contract "auth_registration" \
-                -impl $impl_name \
+                -error \
+                -impl_id $impl_id \
                 -operation Register \
                 -call_args [list $parameters \
                                  $username \
@@ -609,575 +942,27 @@ ad_proc -private auth::registration::Register {
 }
 
 ad_proc -private auth::registration::GetElements {
-    {-authority_id ""}    
+    {-authority_id:required}
 } {
-
     @author Peter Marklund
 } {
-    if { [empty_string_p $authority_id] } {
-        set authority_id [auth::authority::local]
+    set impl_id [auth::authority::get_element -authority_id $authority_id -element "register_impl_id"]
+
+    if { [empty_string_p $impl_id] } {
+        # No implementation of authentication
+        set authority_pretty_name [auth::authority::get_element -authority_id $authority_id -element "pretty_name"]
+        error "The authority '$authority_pretty_name' doesn't support account registration"
     }
-
-    set impl_name [auth::authority::get_element -authority_id $authority_id -element "pwd_impl_name"]
-    set impl_id [auth::authority::get_element -authority_id $authority_id -element "pwd_impl_id"]
-
 
     set parameters [auth::driver::get_parameter_values \
                         -authority_id $authority_id \
                         -impl_id $impl_id]
 
     return [acs_sc::invoke \
-                -contract "auth_registration" \
-                -impl $impl_name \
+                -error \
+                -impl_id $impl_id \
                 -operation GetElements \
                 -call_args [list $parameters]]
 }
 
 
-#####
-#
-# auth::password public procs
-#
-#####
-
-ad_proc -public auth::password::get_change_url {
-    {-user_id:required}
-} {
-    Returns the URL to redirect to for changing passwords. If the
-    user's authority has a "change_pwd_url" set, it'll return that,
-    otherwise it'll return a link to /user/password-update under the
-    nearest subsite.
-
-    @param user_id The ID of the user whose password you want to change.
-
-    @return A URL that can be linked to for changing password.
-} {
-    db_1row select_vars {
-        select aa.change_pwd_url,
-               u.username
-        from auth_authorities aa,
-             users u
-        where aa.authority_id = u.authority_id
-          and u.user_id = :user_id
-    }
-
-    # Interpolate any username variable in URL
-    regsub -all "{username}" $change_pwd_url $username change_pwd_url
-    
-    # Default to the OpenACS change password URL
-    if { [empty_string_p $change_pwd_url] } {
-        set change_pwd_url "[subsite::get_element -element url]user/password-update?[export_vars { user_id }]"
-    } 
-
-    return $change_pwd_url
-}
-
-ad_proc -public auth::password::can_change_p {
-    {-user_id:required}
-} {
-    Returns whether the given user change password. 
-    This depends on the user's authority and the configuration of that authority. 
-    
-    @param user_id The ID of the user whose password you want to change.
-
-    @return 1 if the user can change password, 0 otherwise.
-} {
-    # TODO: Should we use acs_user::get here? Can we cache that proc?
-    set authority_id [db_string authority_id_from_user_id {
-        select authority_id
-        from users
-        where user_id = :user_id
-    }]
-
-    return [auth::password::CanChangePassword -authority_id $authority_id]
-}
-
-ad_proc -public auth::password::change {
-    {-user_id:required}
-    {-old_password:required}
-    {-new_password:required}
-} {
-    Change the user's password.
-
-    @param user_id      The ID of the user whose password you want to change.
-
-    @param old_password The current password of that user. This is required for security purposes.
-    
-    @param new_password The desired new password of the user.
-
-    @return An array list with the following entries:
-
-    <ul>
-
-       <li> password_status: "ok", "no_account", "old_password_bad",
-       "new_password_bad", "change_error", "failed_to_connect" </li>
-
-       <li> password_message: A human-readable description of what
-       went wrong. </li>
-
-   </ul>
-} {
-    # TODO: Should we use acs_user::get here? Can we cache that proc?
-    db_1row user_info {
-        select authority_id,
-               username
-        from users
-        where user_id = :user_id
-    }
-
-    return [auth::password::ChangePassword \
-                -authority_id $authority_id \
-                -username $username \
-                -old_password $old_password \
-                -new_password $new_password]
-}
-
-ad_proc -public auth::password::recover_password {
-    {-authority_id:required}
-    {-username:required}
-} { 
-    Handles forgotten passwords.  Attempts to retrieve a password; if not possibe, 
-    attempts to reset a password.  If it succeeds, it emails the user.  For all 
-    outcomes, it returns a message to be displayed.
-
-    @param authority_id The ID of the authority that the user is trying to log into.
-    @param username The username that the user's trying to log in with.
-
-    @return Array list with the following entries:
-
-    <ul>
-        <li> password_status: ok, no_support, failed_to_connect
-        <li> password_message: Human-readable message to be relayed to the user. May contain HTML.
-    </ul>
-} {
-
-    set forgotten_url [auth::password::get_forgotten_url \
-                           -remote_only \
-                           -authority_id $authority_id \
-                           -username $username]
-
-    if { ![empty_string_p $forgotten_url] } {
-        ad_returnredirect $forgotten_url
-        ad_script_abort
-    }
-
-    set can_retrieve_p [auth::password::can_retrieve_p -authority_id $authority_id]
-    set can_reset_p [auth::password::can_reset_p -authority_id $authority_id]
-    if { $can_retrieve_p } {
-        # Retrive password
-        array set result [auth::password::retrieve \
-                              -authority_id $authority_id \
-                              -username $username]
-
-        # Error handling needed here?
-        # TODO
-
-    } elseif { $can_reset_p } {
-        # Reset password
-        array set result [auth::password::reset \
-                              -authority_id $authority_id \
-                              -username $username]
- 
-        # Error handling needed here?
-        # TODO
-
-    } else {
-        # Can't reset or retrieve - we give up
-        set result(password_status) not_supported
-        set result(password_message) [_ acs-subsite.sorry_forgotten_pwd]
-    }
-
-    if { [exists_and_not_null result(password)] } {
-        # We have retrieved or reset a forgotten password that we should email to the user
-        if { [catch {auth::password::email_password \
-                         -username $username \
-                         -password $result(password)} errmsg] } {
-            
-            # We could not inform the user of his email - we failed
-            set result(password_status) "fail"
-            set result(password_message) [auth::password::get_email_error_msg $errmsg]
-
-        } else {
-            # Successfully informed user of email
-            set result(password_status) ok
-            set result(password_message) [_ acs-subsite.Check_Your_Inbox]
-        }
-    }
-
-    return [array get result]
-}
-
-ad_proc -public auth::password::get_forgotten_url {
-    {-authority_id ""}
-    {-username ""}
-    {-remote_only:boolean}
-} { 
-    Returns the URL to redirect to for forgotten passwords. 
-        
-    @param authority_id The ID of the authority that the user is trying to log into.
-    @param username The username that the user's trying to log in with.
-    @param remote_only If provided, only return any remote URL (not on this server).
-
-    @return A URL that can be linked to when the user has forgotten his/her password, 
-            or the empty string if none can be found.
-} {
-    set have_user_id_p [expr ![empty_string_p $authority_id] && ![empty_string_p username]]
-
-    if { $have_user_id_p } {
-        # We have the user id
-
-        set forgotten_pwd_url [db_string select_forgotten_pwd_url {
-            select forgotten_pwd_url
-            from auth_authorities
-            where authority_id = :authority_id
-        }]
-        regsub -all "{username}" $forgotten_pwd_url $username forgotten_pwd_url
-
-
-        if { [empty_string_p $forgotten_pwd_url] } {            
-            if { ! $remote_only_p } {
-                # If we can retrive or reset passwords we can use the local url
-                # In remote mode we fail
-                set can_retrieve_p [auth::password::can_retrieve_p -authority_id $authority_id]
-                set can_reset_p [auth::password::can_reset_p -authority_id $authority_id]
-                if { $can_retrieve_p || $can_reset_p } {
-                    set forgotten_pwd_url "[subsite::get_element -element url]register/recover-password?[export_vars { authority_id username }]"
-                }
-            }
-        }
-    } else {
-        # We don't have the user id
-
-        if { $remote_only_p } {
-            # Remote recovery requires username and authority so we fail
-            set forgotten_pwd_url ""
-        } else {            
-            set forgotten_pwd_url "[subsite::get_element -element url]register/recover-password"
-        }
-    }
-    
-    return $forgotten_pwd_url
-}
-
-ad_proc -public auth::password::can_retrieve_p {
-    {-authority_id:required}
-} {
-    Returns whether the given authority can retrive forgotten passwords. 
-    
-    @param authority_id The ID of the authority that the user is trying to log into.
-
-    @return 1 if the authority allows retrieving passwords, 0 otherwise.
-} {
-    return [auth::password::CanRetrievePassword -authority_id $authority_id]
-}
-
-ad_proc -public auth::password::retrieve {
-    {-authority_id:required}
-    {-username:required}
-} {
-    Retrieve the user's password.
-
-    @param authority_id The ID of the authority that the user is trying to log into.
-
-    @param username The username that the user's trying to log in with.
-
-    @return An array list with the following entries:
-
-    <ul>
-
-       <li> password_status: ok, no_account, not_supported,
-       retrieve_error, failed_to_connect </li>
-
-       <li> password_message: A human-readable message to be
-       relayed to the user. May be empty if password_status is ok. May
-       include HTML. 
-
-       <li> password: The retrieved password. </li>
-
-    </ul>
-} {
-    return [auth::password::RetrievePassword \
-                -authority_id $authority_id \
-                -username $username]
-}
-
-ad_proc -public auth::password::can_reset_p {
-    {-authority_id:required}
-} {
-    Returns whether the given authority can reset forgotten passwords. 
-    
-    @param authority_id The ID of the authority that the user is trying to log into.
-
-    @return 1 if the authority allows resetting passwords, 0 otherwise.
-} {
-    return [auth::password::CanResetPassword \
-                -authority_id $authority_id]
-}
-
-ad_proc -public auth::password::reset {
-    {-authority_id:required}
-    {-username:required}
-} {
-    Reset the user's password, which means setting it to a new
-    randomly generated password and inform the user of that new
-    password.
-
-    @param user_id      The ID of the user whose password you want to reset.
-
-    @return An array list with the following entries:
-
-    <ul>
-
-       <li> password_status: ok, no_account, not_supported,
-       reset_error, failed_to_connect </li>
-
-       <li> password_message: A human-readable message to be
-       relayed to the user. May be empty if password_status is ok. May
-       include HTML. Could be empty if password_status is ok.
-
-       <li> password: The new, automatically generated password. If no
-       password is included in the return array, that means the new
-       password has already been sent to the user somehow. If it is
-       returned, it means that caller is responsible for informing the
-       user of his/her new password.</li>
-
-    </ul>
-} { 
-    array set result [auth::password::ResetPassword \
-                          -authority_id $authority_id \
-                          -username $username]
-
-    return [array get result]
-}
-
-#####
-#
-# auth::password private procs
-#
-#####
-
-ad_proc -private auth::password::email_password {
-    {-username:required}
-    {-authority_id ""}
-    {-password:required}
-} {
-    Send an email to ther user with given username and authority with the new password.
-
-    @return Does not return anything. Any errors caused by ns_sendmail are propagated
-
-    @author Peter Marklund
-} {
-
-    set system_owner [ad_system_owner]
-    set system_name [ad_system_name]
-    set reset_password_url "[ad_url]/user/password-update?[export_vars {user_id {password_old $password}}]" 
-
-    set subject "[_ acs-subsite.lt_Your_forgotten_passwo]"
-    set body "[_ acs-subsite.Your_password]: $password"
-
-    # TODO: use acs_user::get here?
-    set user_email [db_string email_from_user_id {
-        select email
-        from parties
-        where party_id = (select user_id
-                          from users
-                          where username = :username
-                          )
-    }]
-        
-    # Send email
-    ns_sendmail $user_email $system_owner $subject $body
-}
-
-ad_proc -private auth::password::get_email_error_msg { errmsg } {
-    Reusable message used when email sending fails.
-
-    @author Peter Marklund
-} {
-    return "[_ acs-subsite.Error_sending_mail]
-<blockquote>
-  <pre>
-    $errmsg
-  </pre>
-</blockquote>
-"
-}
-
-ad_proc -private auth::password::CanChangePassword {
-    {-authority_id ""}    
-} {
-    Can users change password for a given authority.
- 
-    @param authority_id The ID of the authority that we are inquiring about. Defaults to local
-   
-    @author Peter Marklund
-} {
-    if { [empty_string_p $authority_id] } {
-        set authority_id [auth::authority::local]
-    }
-
-    set impl_name [auth::authority::get_element -authority_id $authority_id -element "pwd_impl_name"]
-    set impl_id [auth::authority::get_element -authority_id $authority_id -element "pwd_impl_id"]
-
-
-    set parameters [auth::driver::get_parameter_values \
-                        -authority_id $authority_id \
-                        -impl_id $impl_id]
-
-    return [acs_sc::invoke \
-                -contract "auth_password" \
-                -impl $impl_name \
-                -operation CanChangePassword \
-                -call_args [list $parameters]]
-}
-
-ad_proc -private auth::password::CanRetrievePassword {
-    {-authority_id ""}    
-} {
-    Can users retrieve password for a given authority.
-
-    @param authority_id The ID of the authority that we are inquiring about. Defaults to local
-
-    @author Peter Marklund
-} {
-    if { [empty_string_p $authority_id] } {
-        set authority_id [auth::authority::local]
-    }
-
-    set impl_name [auth::authority::get_element -authority_id $authority_id -element "pwd_impl_name"]
-    set impl_id [auth::authority::get_element -authority_id $authority_id -element "pwd_impl_id"]
-
-
-    set parameters [auth::driver::get_parameter_values \
-                        -authority_id $authority_id \
-                        -impl_id $impl_id]
-
-    return [acs_sc::invoke \
-                -contract "auth_password" \
-                -impl $impl_name \
-                -operation CanRetrievePassword \
-                -call_args [list $parameters]]
-}
-
-ad_proc -private auth::password::CanResetPassword {
-    {-authority_id ""}    
-} {
-    Can users reset password for a given authority.
-
-    @param authority_id The ID of the authority that we are inquiring about. Defaults to local
-
-    @author Peter Marklund
-} {
-    if { [empty_string_p $authority_id] } {
-        set authority_id [auth::authority::local]
-    }
-
-    set impl_name [auth::authority::get_element -authority_id $authority_id -element "pwd_impl_name"]
-    set impl_id [auth::authority::get_element -authority_id $authority_id -element "pwd_impl_id"]
-
-    set parameters [auth::driver::get_parameter_values \
-                        -authority_id $authority_id \
-                        -impl_id $impl_id]
-
-    return [acs_sc::invoke \
-                -contract "auth_password" \
-                -impl $impl_name \
-                -operation CanResetPassword \
-                -call_args [list $parameters]]
-}
-
-ad_proc -private auth::password::ChangePassword {
-    {-username:required}
-    {-old_password:required}
-    {-new_password:required}
-    {-authority_id ""}    
-} {
-    Change the password of a user.
-
-    @param username
-    @param old_password
-    @param new_password
-    @param authority_id The ID of the authority the user belongs to. Defaults to local
-
-    @author Peter Marklund
-} {
-    if { [empty_string_p $authority_id] } {
-        set authority_id [auth::authority::local]
-    }
-
-    set impl_name [auth::authority::get_element -authority_id $authority_id -element "pwd_impl_name"]
-    set impl_id [auth::authority::get_element -authority_id $authority_id -element "pwd_impl_id"]
-
-    set parameters [auth::driver::get_parameter_values \
-                        -authority_id $authority_id \
-                        -impl_id $impl_id]
-
-    return [acs_sc::invoke \
-                -contract "auth_password" \
-                -impl $impl_name \
-                -operation ChangePassword \
-                -call_args [list $username \
-                                 $old_password \
-                                 $new_password \
-                                 $parameters]]
-}
-
-ad_proc -private auth::password::RetrievePassword {
-    {-username:required}
-    {-authority_id ""}    
-} {
-    Retrieve the password of a user.
-
-    @param username
-    @param authority_id The ID of the authority the user belongs to. Defaults to local
-
-    @author Peter Marklund
-} {
-    if { [empty_string_p $authority_id] } {
-        set authority_id [auth::authority::local]
-    }
-
-    set impl_name [auth::authority::get_element -authority_id $authority_id -element "pwd_impl_name"]
-    set impl_id [auth::authority::get_element -authority_id $authority_id -element "pwd_impl_id"]
-
-    set parameters [auth::driver::get_parameter_values \
-                        -authority_id $authority_id \
-                        -impl_id $impl_id]
-
-    return [acs_sc::invoke \
-                -contract "auth_password" \
-                -impl $impl_name \
-                -operation RetrievePassword \
-                -call_args [list $username \
-                                 $parameters]]
-}
-
-ad_proc -private auth::password::ResetPassword {
-    {-username:required}
-    {-authority_id ""}    
-} {
-    Reset the password of a user.
-
-    @param username
-    @param authority_id The ID of the authority the user belongs to. Defaults to local
-
-    @author Peter Marklund
-} {
-    if { [empty_string_p $authority_id] } {
-        set authority_id [auth::authority::local]
-    }
-
-    set impl_name [auth::authority::get_element -authority_id $authority_id -element "pwd_impl_name"]
-    set impl_id [auth::authority::get_element -authority_id $authority_id -element "pwd_impl_id"]
-
-    set parameters [auth::driver::get_parameter_values \
-                        -authority_id $authority_id \
-                        -impl_id $impl_id]
-
-    return [acs_sc::invoke \
-                -contract "auth_password" \
-                -impl $impl_name \
-                -operation ResetPassword \
-                -call_args [list $username \
-                                 $parameters]]
-}
