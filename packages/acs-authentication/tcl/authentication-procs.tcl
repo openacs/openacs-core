@@ -1143,11 +1143,12 @@ ad_proc -private auth::send_email_verification_email {
 } {
     # These are used in the messages below
     set token [auth::get_user_secret_token -user_id $user_id]
+    acs_user::get -user_id $user_id -array user
     set confirmation_url [export_vars -base "[ad_url]/register/email-confirm" { token user_id }]
     set system_name [ad_system_name]    
 
     ns_sendmail \
-        $email \
+        $user(email) \
         [parameter::get -parameter NewRegistrationEmailAddress -default [ad_system_owner]] \
         [_ acs-subsite.lt_Welcome_to_system_nam] \
         [_ acs-subsite.lt_To_confirm_your_regis]
