@@ -29,19 +29,32 @@ foreach init_item [nsv_get ad_after_server_initialization .] {
     }
 }
 
-# OpenACS (ben)
 # We need to load query files for the top-level stuff in www and tcl
+# dirs is the list of directories to walk for xql files.  Packages .xql
+# files are parsed elsewhere in the bootstrap process.
+
 set dirs {www tcl}
-set oacs_root [acs_root_dir]
+
+# The __is_xql helper function is used to filter out just the xql files.
+#
+# It should return true for directories it should descend as well
+# If you had a large static tree with no .xql files you could return 0 on 
+# the subdirectory and it would not be searched.
+
+proc __is_xql {arg} { 
+    return [expr {[file isdir $arg] || [string match -nocase {*.xql} $arg]}]
+}
 
 foreach dir $dirs {
-    set files [glob -nocomplain "${oacs_root}/$dir/*.xql"]
+    set files [ad_find_all_files -check_file_func __is_xql [acs_root_dir]/$dir]
     
-    ns_log Notice "QD=Postload files to load: $files"
+    ns_log Debug "QD=Postload files to load: $files"
 
     foreach file $files {
 	db_qd_load_query_file $file
     }
 }
+
+rename __is_xql {}
 
 nsv_unset ad_after_server_initialization .

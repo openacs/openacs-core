@@ -5,7 +5,7 @@
       <version>8.1.6</version>
     </rdbms>
 
-  <fullquery name="dbqd.www.index.site_nodes">
+  <fullquery name="site_nodes">
     <querytext>
   select site_node.url(node_id) as url, acs_object.name(object_id) as name
       from site_nodes
