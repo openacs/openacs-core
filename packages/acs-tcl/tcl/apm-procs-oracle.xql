@@ -167,7 +167,7 @@
   </querytext>
 </fullquery>
 
-<fullquery name="apm_package_url_from_key_mem.apm_package_url_from_key">      
+<fullquery name="apm_package_url_from_id_mem.apm_package_url_from_id">      
       <querytext>
       
 	select site_node.url(node_id) 
