@@ -20,7 +20,9 @@ ad_library {
 #   the random data is used to hinder attack the secure hash. 
 #   currently the random data is ns_time
 
-ad_proc -private sec_random_token {} { Generates a random token. } {
+ad_proc -private sec_random_token {} { 
+    Generates a random token. 
+} {
     # tcl_sec_seed is used to maintain a small subset of the previously
     # generated random token to use as the seed for the next
     # token. this makes finding a pattern in sec_random_token harder
@@ -198,14 +200,21 @@ ad_proc -public ad_user_login {
     sec_setup_session $user_id
 }
 
-ad_proc -public ad_user_logout {} { Logs the user out. } {
+ad_proc -public ad_user_logout {} { 
+    Logs the user out. 
+} {
     ad_set_cookie -replace t -max_age 0 ad_session_id ""
     ad_set_cookie -replace t -max_age 0 ad_secure_token ""
     ad_set_cookie -replace t -max_age 0 ad_user_login ""
     ad_set_cookie -replace t -max_age 0 ad_user_login_secure ""
 }
 
-ad_proc -public ad_check_password { user_id password_from_form } { Returns 1 if the password is correct for the given user ID. } {
+ad_proc -public ad_check_password { 
+    user_id
+    password_from_form
+} { 
+    Returns 1 if the password is correct for the given user ID. 
+} {
 
     if { ![db_0or1row password_select {select password, salt from users where user_id = :user_id}] } {
 	return 0
@@ -238,7 +247,9 @@ ad_proc -public ad_change_password {
     db_dml password_update {}
 }
 
-ad_proc -private sec_setup_session { new_user_id } {
+ad_proc -private sec_setup_session { 
+    new_user_id 
+} {
 
     Set up the session, generating a new one if necessary,
     and generates the cookies necessary for the session
@@ -302,7 +313,9 @@ ad_proc -private sec_setup_session { new_user_id } {
     }
 }
 
-ad_proc -private sec_update_user_session_info { user_id } {
+ad_proc -private sec_update_user_session_info { 
+    user_id 
+} {
     Update the session info in the users table. Should be called when
     the user login either via permanent cookies at session creation
     time or when they login by entering their password.
@@ -316,7 +329,11 @@ ad_proc -private sec_update_user_session_info { user_id } {
     }
 }
 
-ad_proc -private sec_lookup_property { id module name } { 
+ad_proc -private sec_lookup_property { 
+    id
+    module
+    name
+} { 
 
     Used as a helper procedure for util_memoize to look up a
     particular property from the database. Returns
@@ -348,12 +365,10 @@ ad_proc -private sec_lookup_property { id module name } {
 }
 
 ad_proc -public ad_get_client_property {
-    {
-	-cache t
-        -cache_only f
-	-default ""
-        -session_id ""
-    }
+    {-cache t}
+    {-cache_only f}
+    {-default ""}
+    {-session_id ""}
     module
     name
 } { 
@@ -401,8 +416,9 @@ ad_proc -public ad_set_client_property {
     {-secure f}
     {-persistent t}
     {-session_id ""}
-    module name value
-
+    module
+    name
+    value
 } { 
     Sets a client (session-level) property. If $persistent is true,
     the new value will be written through to the database. If
@@ -462,7 +478,9 @@ ad_proc -public ad_set_client_property {
     util_memoize_seed [list sec_lookup_property $session_id $module $name] [list $value $secure]
 }
 
-ad_proc -public ad_secure_conn_p {} { Returns true if the connection [ad_conn] is secure (HTTPS), or false otherwise. } {
+ad_proc -public ad_secure_conn_p {} { 
+    Returns true if the connection [ad_conn] is secure (HTTPS), or false otherwise. 
+} {
     return [string match "https:*" [ad_conn location]]
 }
 
@@ -472,7 +490,9 @@ ad_proc -private sec_generate_secure_token_cookie { } {
     ad_set_signed_cookie -secure t "ad_secure_token" "[ad_conn session_id],[ad_conn user_id],[ns_time]"
 }
 
-ad_proc -private sec_generate_session_id_cookie {} { Sets the ad_session_id cookie based on global variables. } {
+ad_proc -private sec_generate_session_id_cookie {} { 
+    Sets the ad_session_id cookie based on global variables. 
+} {
     set user_id [ad_conn user_id]
     set session_id [ad_conn session_id]
     ns_log Notice "Security: [ns_time] sec_generate_session_id_cookie setting $session_id, $user_id."
@@ -491,7 +511,9 @@ ad_proc -public -deprecated ad_get_user_id {} {
     return [ad_conn user_id]
 }
 
-ad_proc -public -deprecated ad_verify_and_get_user_id { { -secure f } } {
+ad_proc -public -deprecated ad_verify_and_get_user_id { 
+    {-secure f}
+} {
     Returns the current user's ID. 0 indicates user is not logged in
 
     Deprecated since user_id now provided via ad_conn user_id
@@ -501,7 +523,9 @@ ad_proc -public -deprecated ad_verify_and_get_user_id { { -secure f } } {
     return [ad_conn user_id]
 }
 
-ad_proc -public -deprecated ad_verify_and_get_session_id { { -secure f } } {
+ad_proc -public -deprecated ad_verify_and_get_session_id { 
+    {-secure f} 
+} {
     Returns the current session's ID.
 
     Deprecated since session_id now provided via ad_conn session_id
@@ -644,7 +668,11 @@ ad_proc -deprecated ad_maybe_redirect_for_registration {} {
 # JCD 20020915 I think this probably should not be deprecated since it is 
 # far more reliable than permissioning esp for a development server 
 
-ad_proc -public -deprecated ad_restrict_entire_server_to_registered_users {conn args why} {
+ad_proc -public -deprecated ad_restrict_entire_server_to_registered_users {
+    conn 
+    args
+    why
+} {
     A preauth filter that will halt service of any page if the user is
     unregistered, except the site index page and stuff underneath
     [subsite]/register. Use permissions on the site node map to control access.
@@ -679,7 +707,11 @@ proc_doc ad_generate_random_string {{length 8}} {
 # official term for query string (URL) variables and form input
 # variables.
 #
-ad_proc -public -deprecated ad_block_sql_urls {conn args why} {
+ad_proc -public -deprecated ad_block_sql_urls {
+    conn
+    args
+    why
+} {
 
     A filter that detect attempts to smuggle in SQL code through form data
     variables. The use of bind variables and ad_page_contract input 
@@ -787,7 +819,10 @@ ad_proc -public -deprecated ad_block_sql_urls {conn args why} {
     return filter_ok
 }
 
-ad_proc -public -deprecated ad_set_typed_form_variable_filter {url_pattern args} {
+ad_proc -public -deprecated ad_set_typed_form_variable_filter {
+    url_pattern
+    args
+} {
     <pre>
     #
     # Register special rules for form variables.
@@ -1037,11 +1072,9 @@ ad_proc -private ad_login_page {} {
 # signed cookies 
 
 ad_proc -public ad_sign {
-    {
-	-secret ""
-	-token_id ""
-	-max_age ""
-    }
+    {-secret ""}
+    {-token_id ""}
+    {-max_age ""}
     value
 } {
     Returns a digital signature of the value. Negative token_ids are
@@ -1087,10 +1120,9 @@ ad_proc -public ad_sign {
 }
 
 ad_proc -public ad_verify_signature {
-    {
-	-secret ""
-    }
-    value signature
+    {-secret ""}
+    value 
+    signature
 } {
     Verifies a digital signature. Returns 1 for success, and 0 for
     failed validation. Validation can fail due to tampering or
@@ -1108,10 +1140,9 @@ ad_proc -public ad_verify_signature {
 }
 
 ad_proc -public ad_verify_signature_with_expr {
-    {
-	-secret ""
-    }
-    value signature
+    {-secret ""}
+    value 
+    signature
 } {
     Verifies a digital signature. Returns either the expiration time
     or 0 if the validation fails.
@@ -1182,10 +1213,8 @@ ad_proc -private __ad_verify_signature {
 # signed cookies 
 
 ad_proc -public ad_get_signed_cookie {
-    { 
-	-include_set_cookies t 
-	-secret ""
-    }
+    {-include_set_cookies t}
+    {-secret ""}
     name
 } { 
 
@@ -1218,10 +1247,8 @@ ad_proc -public ad_get_signed_cookie {
 }
 
 ad_proc -public ad_get_signed_cookie_with_expr {
-    { 
-	-include_set_cookies t 
-	-secret ""
-    }
+    {-include_set_cookies t}
+    {-secret ""}
     name
 } { 
 
@@ -1258,16 +1285,15 @@ ad_proc -public ad_get_signed_cookie_with_expr {
 }
 
 ad_proc -public ad_set_signed_cookie {
-    {
-	-replace f
-	-secure f
-	-max_age ""
-	-domain ""
-	-path "/"
-	-secret ""
-	-token_id ""
-    }
-    name value
+    {-replace f}
+    {-secure f}
+    {-max_age ""}
+    {-domain ""}
+    {-path "/"}
+    {-secret ""}
+    {-token_id ""}
+    name
+    value
 } {
 
     Sets a signed cookie. Negative token_ids are reserved for secrets
@@ -1313,7 +1339,9 @@ ad_proc -public ad_set_signed_cookie {
 
 
 
-ad_proc -private sec_get_token { token_id } {
+ad_proc -private sec_get_token { 
+    token_id
+} {
 
     Returns the token corresponding to the token_id. This first checks
     the thread-persistent TCL cache, then checks the server
