@@ -488,6 +488,22 @@ ad_proc -private rp_filter { why } {
     # End of patch "hostname-based subsites"
     # -------------------------------------------------------------------------
 
+    # Force the URL to look like [ns_conn location], if desired...
+    set acs_kernel_id [util_memoize ad_acs_kernel_id]
+    if { [ad_parameter -package_id $acs_kernel_id ForceHostP request-processor 0] } {
+	set host_header [ns_set iget [ns_conn headers] "Host"]
+	regexp {^([^:]*)} $host_header "" host_no_port
+	regexp {^https?://([^:]+)} [ns_conn location] "" desired_host_no_port
+	if { $host_header != "" && [string compare $host_no_port $desired_host_no_port] } {
+	    set query [ns_getform]
+	    if { $query != "" } {
+		set query "?[export_entire_form_as_url_vars]"
+	    }
+	    ns_returnredirect "[ns_conn location][ns_conn url]$query"
+	    return "filter_return"
+	}
+    }
+
     # DRB: a bug in ns_conn causes urlc to be set to one and urlv to be set to
     # {} if you hit the site with the host name alone.  This confuses code that
     # expects urlc to be set to zero and the empty list.  This bug is probably due
