@@ -27,8 +27,9 @@ the default</a> ]
 
 <if @source_p@ eq 1>
 <h4>Content File Source</h4>
+
 <pre>
-@file_contents@
+@file_contents;noquote@
 </pre>
 </if>
 
