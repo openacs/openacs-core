@@ -401,7 +401,7 @@ ad_proc -public aa_register_case {
     foreach testcase_body \[list $args\] {
       aa_log \"Running testcase body \$body_count\"
       set catch_val \[catch \"eval \[list \$testcase_body\]\" msg\]
-      if {\$catch_val} {
+      if {\$catch_val != 0 && \$catch_val != 2} {
         global errorInfo
           aa_log_result \"fail\" \"$testcase_id (body \$body_count): Error during execution: \${msg}, stack trace: \n\$errorInfo\"
       }
