@@ -151,11 +151,16 @@ ad_proc -public template_tag_if_interp_expr {} {
     }
 
     nil {
-      # substitute array variables
-      regsub {^"@([a-zA-z0-9_]+)\.([a-zA-z0-9_]+)@"$} $arg1 {\1(\2)} arg1
-      # substitute regular variables
-      regsub {^"@([a-zA-z0-9_:]+)@"$} $arg1 {\1} arg1
-      append condition "\[template::util::is_nil $arg1\]"
+      if { [string first @ $arg1] == -1 } {
+        # We're assuming this is a static string, not a variable
+        append condition "\[empty_string_p $arg1\]"
+      } else {
+        # substitute array variables
+        regsub {^"@([a-zA-z0-9_]+)\.([a-zA-z0-9_]+)@"$} $arg1 {\1(\2)} arg1
+        # substitute regular variables
+        regsub {^"@([a-zA-z0-9_:]+)@"$} $arg1 {\1} arg1
+        append condition "\[template::util::is_nil $arg1\]"
+      }
       set next $i
     }
 
