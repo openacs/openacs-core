@@ -1,11 +1,12 @@
 <master>
-<property name="title">Vacation Information Updated</property>
-<property name="context">Information Updated</property>
+<property name="title">#acs-subsite.Vacation_Info_Updated#</property>
+<property name="context">#acs-subsite.Information_Updated#</property>
  
-<p>Your vacation information at @site_link@ has been updated.</p>
+<p>#acs-subsite.Vacation_information_updated#</p>
 
-<p>You won't get any email until after @pretty_date@.</p>
+<p>#acs-subsite.lt_You_wont_get_any_email#</p>
 
-<p>Please return to @home_link@.</p>
+<p>#acs-subsite.Please_return_to_home#</p>
+
 
 

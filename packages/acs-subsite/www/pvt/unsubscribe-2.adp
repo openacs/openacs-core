@@ -2,9 +2,10 @@
   <property name="title">@page_title;noquote@</property>
   <property name="context">@context;noquote@</property>
 
-<p> Your account at @system_name@ has been closed. </p>
+<p> #acs-subsite.Account_at_system_closed# </p>
 
-<p> You can always re-open it by <a href="@login_url@">logging back in</a> later. </p>
+<p> #acs-subsite.You_can_always_re_open# <a href="@login_url@">#acs-subsite.logging_back_in#</a> #acs-subsite.later# </p>
+
 
 
 
