@@ -6,6 +6,30 @@ ad_library {
   @cvs-id $Id$
 }
 
+ad_proc -public ad_permission_grant {
+    user_id
+    object_id
+    privilege
+} {
+    Grant a permission
+
+    @author ben@openforce
+} {
+    db_exec_plsql grant_permission {}
+}
+
+ad_proc -public ad_permission_revoke {
+    user_id
+    object_id
+    privilege
+} {
+    Revoke a permission
+
+    @author ben@openforce
+} {
+    db_exec_plsql revoke_permission {}
+}
+
 ad_proc -public ad_permission_p {
   {-user_id ""}
   object_id
