@@ -8,25 +8,25 @@
 
 
 ad_library {
-    Procs to support the acs-automated-testing package.
+  Procs to support the acs-automated-testing package.
 
-    NOTE: There's a hack in packages/acs-bootstrap-installer/bootstrap.tcl to load 
-    this file on server startup before other packages' -procs files.
- 
-    @author Peter Harper (peter.harper@open-msg.com)
-    @creation-date 21 June 2001
-    @cvs-id $Id$
+  NOTE: There's a hack in packages/acs-bootstrap-installer/bootstrap.tcl to load 
+  this file on server startup before other packages' -procs files.
+  
+  @author Peter Harper (peter.harper@open-msg.com)
+  @creation-date 21 June 2001
+  @cvs-id $Id$
 }
 
 # LARS: We do this here, because if we do it in the -init file, then we cannot register 
 # test cases in -procs files of packages.
 if { ![nsv_exists aa_test cases] } {
-    nsv_set aa_test cases {}
-    nsv_set aa_test components {}
-    nsv_set aa_test init_classes {}
-    nsv_set aa_test categories {config db script web}
+  nsv_set aa_test cases {}
+  nsv_set aa_test components {}
+  nsv_set aa_test init_classes {}
+  nsv_set aa_test categories {config db script web}
 }
-  
+
 ad_proc -public aa_stub {
   proc_name
   new_body
@@ -113,7 +113,7 @@ ad_proc -public aa_register_init_class {
   #
   set package_root [file join [acs_root_dir] packages]
   set package_rel [string replace [info script] \
-                                  0 [string length $package_root]]
+                       0 [string length $package_root]]
   set package_key [lindex [file split $package_rel] 0]
   #
   # First, search the current list of init_classes. If an old version already
@@ -125,11 +125,11 @@ ad_proc -public aa_register_init_class {
     if {[lindex $init_class 0] == $init_class_id &&
         [lindex $init_class 1] == $package_key} {
       nsv_set aa_test init_classes [lreplace [nsv_get aa_test init_classes] \
-                              $lpos $lpos \
-                              [list $init_class_id $package_key \
-                                    $init_class_desc \
-                                    [info script] \
-                                    $constructor $destructor]]
+                                        $lpos $lpos \
+                                        [list $init_class_id $package_key \
+                                             $init_class_desc \
+                                             [info script] \
+                                             $constructor $destructor]]
       set found_pos $lpos
       break
     }
@@ -182,7 +182,7 @@ ad_proc -public aa_register_component {
   #
   set package_root [file join [acs_root_dir] packages]
   set package_rel [string replace [info script] \
-                                  0 [string length $package_root]]
+                       0 [string length $package_root]]
   set package_key [lindex [file split $package_rel] 0]
   #
   # First, search the current list of components. If an old version already
@@ -194,11 +194,11 @@ ad_proc -public aa_register_component {
     if {[lindex $component 0] == $component_id &&
         [lindex $component 1] == $package_key} {
       nsv_set aa_test components [lreplace [nsv_get aa_test components] \
-                              $lpos $lpos \
-                              [list $component_id $package_key \
-                                    $component_desc \
-                                    [info script] \
-                                    $body]]
+                                      $lpos $lpos \
+                                      [list $component_id $package_key \
+                                           $component_desc \
+                                           [info script] \
+                                           $body]]
       set found_pos $lpos
       break
     }
@@ -210,12 +210,12 @@ ad_proc -public aa_register_component {
   #
   if {$found_pos == -1} {
     nsv_lappend aa_test components [list $component_id $package_key \
-                                         $component_desc \
-                                         [info script] \
-                                         $body]
+                                        $component_desc \
+                                        [info script] \
+                                        $body]
   }
 
-#  set munged_body [subst {uplevel 1 {$body}}]
+  #  set munged_body [subst {uplevel 1 {$body}}]
   ad_proc _${package_key}__c_$component_id {} $body
 }
 
@@ -290,7 +290,7 @@ ad_proc -public aa_register_case {
   #
   set package_root [file join [acs_root_dir] packages]
   set package_rel [string replace [info script] \
-                                  0 [string length $package_root]]
+                       0 [string length $package_root]]
   set package_key [lindex [file split $package_rel] 0]
 
   #
@@ -339,9 +339,9 @@ ad_proc -public aa_register_case {
     if {[lindex $case 0] == $testcase_id &&
         [lindex $case 3] == $package_key} {
       nsv_set aa_test cases [lreplace [nsv_get aa_test cases] $lpos $lpos \
-                              [list $testcase_id $testcase_desc \
-                                    [info script] $package_key \
-                                    $cats $init_classes $on_error $args]]
+                                 [list $testcase_id $testcase_desc \
+                                      [info script] $package_key \
+                                      $cats $init_classes $on_error $args]]
       set found_pos $lpos
       break
     }
@@ -353,8 +353,8 @@ ad_proc -public aa_register_case {
   #
   if {$found_pos == -1} {
     nsv_lappend aa_test cases [list $testcase_id $testcase_desc \
-                                    [info script] $package_key \
-                                    $cats $init_classes $on_error $args]
+                                   [info script] $package_key \
+                                   $cats $init_classes $on_error $args]
   }
 
   if {[llength $init_classes] == 0} {
@@ -444,7 +444,7 @@ ad_proc aa_runseries {
       set categories     [lindex $testcase 4]
       set init_classes   [lindex $testcase 5]
       if {($by_package_key == "" || ($by_package_key == $package_key)) && \
-         ($by_category == "" || ([lsearch $categories $by_category] != -1))} {
+              ($by_category == "" || ([lsearch $categories $by_category] != -1))} {
         lappend testcase_ids $testcase_id
         foreach init_class $init_classes {
           set classes([list $package_key $init_class]) 1
@@ -579,25 +579,21 @@ ad_proc -public aa_equals {
 } {
   Tests that the affirm_actual is equal to affirm_value.<p>
   Call this function within a testcase, stub or component.
+
+  @return True if the affirmation passed, false otherwise.
+
   @author Peter Harper
   @creation-date 24 July 2001
 } {
   global aa_testcase_id
   global aa_package_key
 
-  if { [aa_in_rollback_block_p] } {
-      aa_add_rollback_test [list aa_equals $affirm_name $affirm_actual $affirm_value]
-      return
-  }
-
-  if {$affirm_actual != $affirm_value} {
-    aa_log_result "fail" \
-       "$affirm_name \
-        Affirm FAILED, actual = \"$affirm_actual\", expected = \"$affirm_value\""
+  if { [string equal $affirm_actual $affirm_value] } {
+    aa_log_result "pass" "$affirm_name Affirm PASSED, actual = \"$affirm_actual\""
+    return 1
   } else {
-    aa_log_result "pass" \
-       "$affirm_name \
-        Affirm PASSED, actual = \"$affirm_actual\""
+    aa_log_result "fail" "$affirm_name Affirm FAILED, actual = \"$affirm_actual\", expected = \"$affirm_value\""
+    return 0
   }
 }
 
@@ -607,26 +603,22 @@ ad_proc -public aa_true {
 } {
   Tests that affirm_expr is true.<p>
   Call this function within a testcase, stub or component.
+  
+  @return True if the affirmation passed, false otherwise.
+
   @author Peter Harper
   @creation-date 24 July 2001
 } {
   global aa_testcase_id
   global aa_package_key
-
-  if { [aa_in_rollback_block_p] } {
-      aa_add_rollback_test [list aa_true $affirm_name $affirm_expr]
-      return
-  }
-
+  
   set result [uplevel 1 [list expr $affirm_expr]]
-  if {$result} {
-    aa_log_result "pass" \
-       "$affirm_name \
-        Affirm PASSED, \"$affirm_expr\" true"
+  if { $result } {
+    aa_log_result "pass" "$affirm_name Affirm PASSED, \"$affirm_expr\" true"
+    return 1
   } else {
-    aa_log_result "fail" \
-       "$affirm_name \
-        Affirm FAILED, \"$affirm_expr\" false"
+    aa_log_result "fail" "$affirm_name Affirm FAILED, \"$affirm_expr\" false"
+    return 0
   }
 }
 
@@ -636,26 +628,22 @@ ad_proc -public aa_false {
 } {
   Tests that affirm_expr is false.<br>
   Call this function within a testcase, stub or component.
+  
+  @return True if the affirmation passed, false otherwise.
+  
   @author Peter Harper
   @creation-date 24 July 2001
 } {
   global aa_testcase_id
   global aa_package_key
 
-  if { [aa_in_rollback_block_p] } {
-      aa_add_rollback_test [list aa_false $affirm_name $affirm_expr]
-      return
-  }
-
   set result [uplevel 1 [list expr $affirm_expr]]
   if {!$result} {
-    aa_log_result "pass" \
-       "$affirm_name \
-        Affirm PASSED, \"$affirm_expr\" false"
+    aa_log_result "pass" "$affirm_name Affirm PASSED, \"$affirm_expr\" false"
+    return 1
   } else {
-    aa_log_result "fail" \
-       "$affirm_name \
-        Affirm FAILED, \"$affirm_expr\" true"
+    aa_log_result "fail" "$affirm_name Affirm FAILED, \"$affirm_expr\" true"
+    return 0
   }
 }
 
@@ -697,8 +685,8 @@ ad_proc aa_log_result {
   @creation-date 24 July 2001
 } {
   if { [aa_in_rollback_block_p] } {
-      aa_add_rollback_test [list aa_log_result $test_result $test_notes]
-      return
+    aa_add_rollback_test [list aa_log_result $test_result $test_notes]
+    return
   }
 
   global aa_testcase_id
@@ -716,7 +704,7 @@ ad_proc aa_log_result {
   #
   if {$aa_in_init_class != ""} {
     lappend aa_init_class_logs($aa_in_init_class) \
-                                          [list $test_result $test_notes]
+        [list $test_result $test_notes]
     return
   }
 
@@ -733,7 +721,7 @@ ad_proc aa_log_result {
   }
   # Notes in database can only hold so many characters
   if { [string length $test_notes] > 2000 } {
-      set test_notes "[string range $test_notes 0 1996]..."
+    set test_notes "[string range $test_notes 0 1996]..."
   }
 
   db_dml test_result_insert {}
@@ -758,29 +746,29 @@ ad_proc aa_log_final {
 
   db_dml testcase_result_insert {
     insert into aa_test_final_results
-           (testcase_id, package_key, timestamp, passes, fails)
+    (testcase_id, package_key, timestamp, passes, fails)
     values (:aa_testcase_id, :aa_package_key, sysdate, :test_passes, :test_fails)
   }
 }
 
 ad_proc aa_run_with_teardown {
-    {-test_code:required}
-    {-teardown_code ""}
-    -rollback:boolean
+  {-test_code:required}
+  {-teardown_code ""}
+  -rollback:boolean
 } {
-    Execute code in test_code and guarantee that code in 
-    teardown_code will be executed even if error is thrown. Will catch
-    errors in teardown_code as well and provide stack traces for both code blocks.
+  Execute code in test_code and guarantee that code in 
+  teardown_code will be executed even if error is thrown. Will catch
+  errors in teardown_code as well and provide stack traces for both code blocks.
 
-    @param test_code Tcl code that sets up the test case and executes tests
-    @param teardown_code Tcl code that tears down database data etc. that needs to execute
-                          after testing even if error is thrown.
-    @param rollback If specified, any db transactions in test_code will be rolled back.
+  @param test_code Tcl code that sets up the test case and executes tests
+  @param teardown_code Tcl code that tears down database data etc. that needs to execute
+  after testing even if error is thrown.
+  @param rollback If specified, any db transactions in test_code will be rolled back.
 
-    @author Peter Marklund
+  @author Peter Marklund
 } {
-    if { $rollback_p } {
-        set test_code "
+  if { $rollback_p } {
+    set test_code "
             db_transaction {
                aa_start_rollback_block
  
@@ -800,90 +788,90 @@ ad_proc aa_run_with_teardown {
                     
             aa_execute_rollback_tests
         "
-    }
+  }
 
-    # Testing
-    set setup_error_p [catch {uplevel $test_code} setup_error]
+  # Testing
+  set setup_error_p [catch {uplevel $test_code} setup_error]
+  global errorInfo
+  set setup_error_stack $errorInfo
+
+  # Teardown
+  set teardown_error_p 0
+  if { ![empty_string_p $teardown_code] } {
+    set teardown_error_p [catch {uplevel $teardown_code} teardown_error]
     global errorInfo
-    set setup_error_stack $errorInfo
+    set teardown_error_stack $errorInfo
+  }
 
-    # Teardown
-    set teardown_error_p 0
-    if { ![empty_string_p $teardown_code] } {
-        set teardown_error_p [catch {uplevel $teardown_code} teardown_error]
-        global errorInfo
-        set teardown_error_stack $errorInfo
-    }
-
-    # Provide complete error message and stack trace
-    set error_text ""
-    if { $setup_error_p } {
-        append error_text "Setup failed with error $setup_error\n\n$setup_error_stack"
-    }
-    if { $teardown_error_p } {
-        append error_text "\n\nTeardown failed with error $teardown_error\n\n$teardown_error_stack"
-    }
-    if { ![empty_string_p $error_text] } {
-        error $error_text
-    }
+  # Provide complete error message and stack trace
+  set error_text ""
+  if { $setup_error_p } {
+    append error_text "Setup failed with error $setup_error\n\n$setup_error_stack"
+  }
+  if { $teardown_error_p } {
+    append error_text "\n\nTeardown failed with error $teardown_error\n\n$teardown_error_stack"
+  }
+  if { ![empty_string_p $error_text] } {
+    error $error_text
+  }
 }
 
 ad_proc -private aa_start_rollback_block {} {
-    Start a block of code that is to be rolled back in the db
+  Start a block of code that is to be rolled back in the db
 
-    @author Peter Marklund
+  @author Peter Marklund
 } {
-    global aa_in_rollback_block_p
-    set aa_in_rollback_block_p 1
+  global aa_in_rollback_block_p
+  set aa_in_rollback_block_p 1
 }
 
 ad_proc -private aa_end_rollback_block {} {
-    End a block of code that is to be rolled back in the db
+  End a block of code that is to be rolled back in the db
 
-    @author Peter Marklund
+  @author Peter Marklund
 } {
-    global aa_in_rollback_block_p
-    set aa_in_rollback_block_p 0
+  global aa_in_rollback_block_p
+  set aa_in_rollback_block_p 0
 }
 
 ad_proc -private aa_in_rollback_block_p {} {
-    Return 1 if we are in a block of code that is to be rolled back in the db
-    and 0 otherwise.
+  Return 1 if we are in a block of code that is to be rolled back in the db
+  and 0 otherwise.
 
-    @author Peter Marklund
+  @author Peter Marklund
 } {
-    global aa_in_rollback_block_p
-    if { [info exists aa_in_rollback_block_p] } {
-        return $aa_in_rollback_block_p
-    } else {
-        return 0
-    }
+  global aa_in_rollback_block_p
+  if { [info exists aa_in_rollback_block_p] } {
+    return $aa_in_rollback_block_p
+  } else {
+    return 0
+  }
 }
 
 ad_proc -private aa_add_rollback_test {args} {
-    Add a test statement that is to be executed after a rollback block.
-    If it were to be executed during the rollback block it would be
-    rolled back and this is what we want to avoid.
+  Add a test statement that is to be executed after a rollback block.
+  If it were to be executed during the rollback block it would be
+  rolled back and this is what we want to avoid.
 
-    @author Peter Marklund
+  @author Peter Marklund
 } {
-    global aa_rollback_test_statements
+  global aa_rollback_test_statements
 
-    lappend aa_rollback_test_statements $args
+  lappend aa_rollback_test_statements $args
 }
 
 ad_proc -private aa_execute_rollback_tests {} {
-    Execute all test statements from a rollback block.
+  Execute all test statements from a rollback block.
 
-    @author Peter Marklund
+  @author Peter Marklund
 } {
-    global aa_rollback_test_statements
+  global aa_rollback_test_statements
 
-    if { [info exists aa_rollback_test_statements] } {
-        foreach test_statement $aa_rollback_test_statements {
-            eval [join $test_statement " "]
-        }
+  if { [info exists aa_rollback_test_statements] } {
+    foreach test_statement $aa_rollback_test_statements {
+      eval [join $test_statement " "]
     }
+  }
 
-    unset aa_rollback_test_statements
+  unset aa_rollback_test_statements
 }
