@@ -163,6 +163,7 @@ ad_proc apm_guess_file_type { package_key path } {
 ad_proc -public apm_get_package_files {
    {-all_db_types:boolean}
    {-package_key:required}
+   {-package_path {}}
    {-file_types {}}
 } {
   <p>
@@ -180,8 +181,10 @@ ad_proc -public apm_get_package_files {
   @param package_key    The key of the package to return file paths for
   @param file_types     The type of files to return. If not provided files of all types
                         recognized by the APM are returned.
-  
-  @return The paths, relative to the root dir of the package, of matching files.
+  @param package_path   The full path of the root directory of the package. Defaults to 
+                        acs_package_root_dir.
+
+  @return The paths, relative to the root dir of the package, of matching files.    
 
   @author Peter Marklund
 
@@ -189,7 +192,10 @@ ad_proc -public apm_get_package_files {
   @see apm_guess_file_type
   @see apm_guess_db_type
 } {
-    set package_path [acs_package_root_dir $package_key]
+    if { [empty_string_p $package_path] } {
+        set package_path [acs_package_root_dir $package_key]
+    }
+
     set files [lsort [ad_find_all_files -check_file_func apm_include_file_p $package_path]]
     # We don't assume db_type proc is defined yet
     set system_db_type [nsv_get ad_database_type .]

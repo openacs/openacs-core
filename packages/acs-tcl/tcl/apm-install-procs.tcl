@@ -150,6 +150,16 @@ ad_proc -private pkg_info_spec {pkg_info} {
     return [lindex $pkg_info 1]
 }
 
+ad_proc -private pkg_info_path {pkg_info} {
+    
+
+    @return The full path of the packages dir stored in the package info map.
+            Assumes that the info file is stored in the root
+            dir of the package.
+
+} {
+    return [file dirname [pkg_info_spec $pkg_info]]
+}
 
 ad_proc -private pkg_info_provides {pkg_info} {
 
@@ -386,10 +396,9 @@ ad_proc -private apm_load_catalog_files {
 ad_proc -private apm_package_install { 
     {-enable:boolean}
     {-callback apm_dummy_callback}
-    {-copy_files:boolean}
     {-load_data_model:boolean}
     {-data_model_files 0}
-    {-install_path ""}
+    {-package_path ""}
     {-mount_path ""}
     spec_file_path 
 } {
@@ -410,12 +419,20 @@ ad_proc -private apm_package_install {
     set upgrade_from_version_name [apm_package_upgrade_from $package_key $version(name)]
     set upgrade_p [expr ![empty_string_p $upgrade_from_version_name]]
 
-    if { $copy_files_p } {
-	if { [empty_string_p $install_path] } {
-	    set install_path [apm_workspace_install_dir]/$package_key
-	}
-	ns_log Notice "Copying $install_path to [acs_package_root_dir $package_key]"
-	exec "cp" "-r" -- "$install_path/$package_key" [acs_root_dir]/packages/
+    if { [string match "[apm_workspace_install_dir]*" $package_path] } {
+        # Package is being installed from the apm_workspace dir (expanded from .apm file)
+        set old_package_path [acs_package_root_dir $package_key]
+        if { [file exists $old_package_path] } { 
+            # Backup existing (old) package in packages dir first
+            exec "mv" "$old_package_path" "${old_package_path}.bak"
+        }
+
+        # Move the package into the packages dir        
+        exec "mv" "$package_path" "[acs_root_dir]/packages"
+
+        # We moved the spec file, so update its path
+        set package_path $old_package_path
+        set spec_file_path [apm_package_info_file_path -path [file dirname $package_path] $package_key]
     }
 
     with_catch errmsg {
@@ -731,6 +748,7 @@ ad_proc -private apm_package_install_data_model {
 	set data_model_files [apm_data_model_scripts_find \
 		-upgrade_from_version_name $upgrade_from_version_name \
 		-upgrade_to_version_name $upgrade_to_version_name \
+                -package_path $path \
 		$package_key]
     }
 
@@ -1206,6 +1224,7 @@ ad_proc -private apm_ctl_files_find {
 ad_proc -private apm_data_model_scripts_find {
     {-upgrade_from_version_name ""}
     {-upgrade_to_version_name ""}
+    {-package_path ""}
     package_key
 } {
     @param version_id What version the files belong to.
@@ -1220,20 +1239,16 @@ ad_proc -private apm_data_model_scripts_find {
     }
     set data_model_list [list]
     set upgrade_file_list [list]
-    set file_list [apm_get_package_files -file_types $types_to_retrieve -package_key $package_key]
+    set file_list [apm_get_package_files -file_types $types_to_retrieve -package_path $package_path -package_key $package_key]
+
     foreach path $file_list {
         set file_type [apm_guess_file_type $package_key $path]
         set file_db_type [apm_guess_db_type $package_key $path]
 	apm_log APMDebug "APM: Checking \"$path\" of type \"$file_type\" and db_type \"$file_db_type\"."
 
-        # DRB: we return datamodel files which match the given database type or for which no db_type
-        # is defined.  The latter case is a kludge to simplify support of legacy ACS Oracle-only
-        # modules which haven't had their datamodel files moved to sql/oracle.  Eventually we should
-        # remove the kludge and insist that datamodel files live in the proper directory.
-
-	if {[lsearch -exact $types_to_retrieve $file_type] != -1 && \
-            ([db_compatible_rdbms_p $file_db_type])} {
+	if {[lsearch -exact $types_to_retrieve $file_type] != -1 } {
 	    if { ![string compare $file_type "data_model_upgrade"] } {
+                # Upgrade script
 		if {[apm_upgrade_for_version_p $path $upgrade_from_version_name \
 			$upgrade_to_version_name]} {
 		    # Its a valid upgrade script.
@@ -1241,6 +1256,7 @@ ad_proc -private apm_data_model_scripts_find {
 		    lappend upgrade_file_list [list $path $file_type $package_key]
 		}
 	    } else {
+                # Install script
 		apm_log APMDebug "APM: Adding $path to the list of data model files."
 		lappend data_model_list [list $path $file_type $package_key ]
 	    }

@@ -7,7 +7,6 @@ ad_page_contract {
 
 } {
     {checked_by_default_p:boolean 0}
-    {install_path [apm_workspace_install_dir]}
 }
 
 ad_return_top_of_page "[apm_header "Package Installation"]
@@ -15,17 +14,23 @@ ad_return_top_of_page "[apm_header "Package Installation"]
 
 "
 
-### Selection Phase
-set all_spec_files [apm_scan_packages $install_path]
-# Nothing in the install dir, maybe they just copied the files in under packages.
-if { [empty_string_p $all_spec_files] } {
-    set actual_install_path "[acs_root_dir]/packages"
-    set all_spec_files [apm_scan_packages $actual_install_path]
-    # We don't need to copy any files, because they are already there.
-    ad_set_client_property apm copy_files_p 0 
-} else {
-    ad_set_client_property apm copy_files_p 1 
-    set actual_install_path $install_path
+### Get all the spec files
+# If a package is in the apm_workspace dir then we assume that that is the package that
+# should be installed and we ignore any such package in the packages dir.
+# TODO: make sure that it's a later version than that in the packages dir?
+set packages_root_dir "[acs_root_dir]/packages"
+set packages_spec_files [apm_scan_packages $packages_root_dir]
+set workspace_spec_files [apm_scan_packages [apm_workspace_install_dir]]
+set workspace_filenames [list]
+foreach spec_path $workspace_spec_files {
+    lappend workspace_filenames [file tail $spec_path]
+}
+set all_spec_files $workspace_spec_files
+foreach spec_path $packages_spec_files {
+    set spec_filename [file tail $spec_path]
+    if { [lsearch -exact $workspace_filenames $spec_filename] == -1 } {
+        lappend all_spec_files $spec_path
+    }
 }
 
 # Determine which spec files are new installs; install all of the new items.
@@ -90,8 +95,8 @@ function checkAll() {
     this.href='';
 }
 </script>
-<a href=\"packages-install?checked_by_default_p=0&[export_url_vars install_path]\" onclick=\"javascript:uncheckAll();return false\"><b>uncheck all boxes</b></a> |
-<a href=\"packages-install?checked_by_default_p=1&[export_url_vars install_path]\"  onclick=\"javascript:checkAll(); return false\"><b>check all boxes</b></a>
+<a href=\"packages-install?checked_by_default_p=0\" onclick=\"javascript:uncheckAll();return false\"><b>uncheck all boxes</b></a> |
+<a href=\"packages-install?checked_by_default_p=1\"  onclick=\"javascript:checkAll(); return false\"><b>check all boxes</b></a>
 "
 
     ns_write "<form action=packages-install-2 method=post>"
@@ -100,7 +105,6 @@ function checkAll() {
     # But they are limited to the maximum length of a varchar ...
 
     ad_set_client_property -clob t apm spec_files $spec_files
-    ad_set_client_property apm install_path $actual_install_path
 
     set errors [list]
     set pkg_info_list [list]

@@ -22,10 +22,11 @@ Check all the files you want to be loaded into the database.<p>
 
 set sql_file_list [list]
 set file_count 0
-
 foreach pkg_info $pkg_install_list {
 
     set package_key [pkg_info_key $pkg_info]
+    set package_path [pkg_info_path $pkg_info]
+
     array set version [apm_read_package_info_file [pkg_info_spec $pkg_info]]
     set final_version_name $version(name)
 
@@ -50,6 +51,7 @@ foreach pkg_info $pkg_install_list {
                              [apm_data_model_scripts_find \
                                  -upgrade_from_version_name $initial_version_name \
                                  -upgrade_to_version_name $final_version_name \
+                                 -package_path $package_path \
                                  $package_key] \
                              [apm_ctl_files_find $package_key]]
 
