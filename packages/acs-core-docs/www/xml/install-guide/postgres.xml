@@ -158,9 +158,9 @@ sudo niutil -create / /users/postgres
 sudo niutil -createprop / /users/postgres gid <replaceable>201</replaceable>
 sudo niutil -createprop / /users/postgres uid <replaceable>502</replaceable>
 sudo niutil -createprop / /users/postgres home /usr/local/pgsql
-sudo niutil -create / /users/<replaceable>service0</replaceable>
-sudo niutil -createprop / /users/<replaceable>service0</replaceable> gid  <replaceable>201</replaceable>
-sudo niutil -createprop / /users/<replaceable>service0</replaceable> uid <replaceable>201</replaceable>
+sudo niutil -create / /users/<replaceable>$OPENACS_SERVICE_NAME</replaceable>
+sudo niutil -createprop / /users/<replaceable>$OPENACS_SERVICE_NAME</replaceable> gid  <replaceable>201</replaceable>
+sudo niutil -createprop / /users/<replaceable>$OPENACS_SERVICE_NAME</replaceable> uid <replaceable>201</replaceable>
 mkdir -p /usr/local/pgsql
 chown -R postgres:web /usr/local/pgsql /usr/local/src/postgresql-7.4.1
 chmod 750 /usr/local/pgsql</userinput></screen>
@@ -469,7 +469,7 @@ root:~ # </screen>
             <listitem>
               <para>Install the startup script:</para>
               <screen><userinput>cd /Library/StartupItems/</userinput>
-<userinput>tar xfz /var/lib/aolserver/<replaceable>service0</replaceable>/packages/acs-core-docs/www/files/osx-postgres-startup-item.tgz</userinput>
+<userinput>tar xfz /var/lib/aolserver/<replaceable>$OPENACS_SERVICE_NAME</replaceable>/packages/acs-core-docs/www/files/osx-postgres-startup-item.tgz</userinput>
 </screen>
             </listitem>
           </orderedlist>

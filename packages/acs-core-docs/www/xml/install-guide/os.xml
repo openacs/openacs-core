@@ -36,6 +36,8 @@
           <para>a Mail Transport Agent, such as exim or sendmail (or <link linkend="install-qmail">install qmail from source</link>)</para>
         </listitem>
     </itemizedlist>
+    <para>In order to cut and paste the example code into your shell, you must first do <xref linkend="cut-and-paste-name-var"/>.</para>
+
     <para>To install a machine to the specifications of the Reference Platform, do the 
     <link linkend="install-redhat">walkthrough of the Red Hat 8.0 Install for OpenACS</link>.</para>
     <para><phrase role="cvstag">($Id$)</phrase></para>

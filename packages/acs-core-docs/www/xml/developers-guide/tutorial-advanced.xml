@@ -32,13 +32,13 @@
 	<computeroutput>www/doc</computeroutput> directory.</para>
       <para>For this tutorial, you should instead install the
 	pre-written documentation files for the tutorial app.  Log in
-      as <replaceable>service0</replaceable>, create the standard
+      as <replaceable>$OPENACS_SERVICE_NAME</replaceable>, create the standard
       directories, and copy the prepared documentation:</para>
-      <screen>[service0 service0]$ <userinput>cd /var/lib/aolserver/<replaceable>service0</replaceable>/packages/myfirstpackage/</userinput>
-[service0 myfirstpackage]$ <userinput>mkdir -p www/doc/xml</userinput>
-[service0 myfirstpackage]$ <userinput>cd www/doc/xml</userinput>
-[service0 xml]$ <userinput>cp /var/lib/aolserver/<replaceable>service0</replaceable>/packages/acs-core-docs/www/files/myfirstpackage/* .</userinput>
-[service0 xml]$</screen>
+      <screen>[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <userinput>cd /var/lib/aolserver/<replaceable>$OPENACS_SERVICE_NAME</replaceable>/packages/myfirstpackage/</userinput>
+[$OPENACS_SERVICE_NAME myfirstpackage]$ <userinput>mkdir -p www/doc/xml</userinput>
+[$OPENACS_SERVICE_NAME myfirstpackage]$ <userinput>cd www/doc/xml</userinput>
+[$OPENACS_SERVICE_NAME xml]$ <userinput>cp /var/lib/aolserver/<replaceable>$OPENACS_SERVICE_NAME</replaceable>/packages/acs-core-docs/www/files/myfirstpackage/* .</userinput>
+[$OPENACS_SERVICE_NAME xml]$</screen>
       <para> OpenACS uses DocBook for documentation.  DocBook is
 	an XML standard for semantic markup of documentation.  That
 	means that the tags you use indicate meaning, not intended
@@ -57,7 +57,7 @@
       directory.  A Makefile is provided to generate html from the xml, and copy all of the
       supporting files.  If Docbook is set up correctly, all you need
       to do is:</para>
-      <screen>[service0 xml]$<userinput> make</userinput>
+      <screen>[$OPENACS_SERVICE_NAME xml]$<userinput> make</userinput>
 cd .. ; /usr/bin/xsltproc ../../../acs-core-docs/www/xml/openacs.xsl xml/index.xml
 Writing requirements-introduction.html for chapter(requirements-introduction)
 Writing requirements-overview.html for chapter(requirements-overview)
@@ -73,7 +73,7 @@ Writing user-guide.html for chapter(user-guide)
 Writing admin-guide.html for chapter(admin-guide)
 Writing bi01.html for bibliography
 Writing index.html for book
-[service0 xml]$</screen>
+[$OPENACS_SERVICE_NAME xml]$</screen>
       <para>Verify that the documentation was generated and reflects
       your changes by browsing to <computeroutput>http://<replaceable>yoursite</replaceable>:8000/myfirstpackage/doc</computeroutput></para>
     </sect1>
@@ -85,20 +85,20 @@ Writing index.html for book
       traverse the directory tree manually and add as you go.  (<ulink
       url="http://www.piskorski.com/docs/cvs-conventions.html">More on
       CVS</ulink>)</para>
-      <screen>[service0 xml]$ <userinput>cd ..</userinput>
-[service0 doc]$ <userinput>cd ..</userinput>
-[service0 www]$ <userinput>cd ..</userinput>
-[service0 myfirstpackage]$ <userinput>cd ..</userinput>
-[service0 packages]$ <userinput>cvs add myfirstpackage/</userinput>
-Directory /cvsroot/<replaceable>service0</replaceable>/packages/myfirstpackage added to the repository
-[service0 packages]$ <userinput>cd myfirstpackage/</userinput>
-[service0 myfirstpackage]$ <userinput>cvs add www</userinput>
-Directory /cvsroot/<replaceable>service0</replaceable>/packages/myfirstpackage/www added to the repository
-[service0 myfirstpackage]$ <userinput>cd www</userinput>
-[service0 www]$ <userinput>cvs add doc</userinput>
-Directory /cvsroot/<replaceable>service0</replaceable>/packages/myfirstpackage/www/doc added to the repository
-[service0 www]$ <userinput>cd doc</userinput>
-[service0 doc]$ <userinput>cvs add *</userinput>
+      <screen>[$OPENACS_SERVICE_NAME xml]$ <userinput>cd ..</userinput>
+[$OPENACS_SERVICE_NAME doc]$ <userinput>cd ..</userinput>
+[$OPENACS_SERVICE_NAME www]$ <userinput>cd ..</userinput>
+[$OPENACS_SERVICE_NAME myfirstpackage]$ <userinput>cd ..</userinput>
+[$OPENACS_SERVICE_NAME packages]$ <userinput>cvs add myfirstpackage/</userinput>
+Directory /cvsroot/<replaceable>$OPENACS_SERVICE_NAME</replaceable>/packages/myfirstpackage added to the repository
+[$OPENACS_SERVICE_NAME packages]$ <userinput>cd myfirstpackage/</userinput>
+[$OPENACS_SERVICE_NAME myfirstpackage]$ <userinput>cvs add www</userinput>
+Directory /cvsroot/<replaceable>$OPENACS_SERVICE_NAME</replaceable>/packages/myfirstpackage/www added to the repository
+[$OPENACS_SERVICE_NAME myfirstpackage]$ <userinput>cd www</userinput>
+[$OPENACS_SERVICE_NAME www]$ <userinput>cvs add doc</userinput>
+Directory /cvsroot/<replaceable>$OPENACS_SERVICE_NAME</replaceable>/packages/myfirstpackage/www/doc added to the repository
+[$OPENACS_SERVICE_NAME www]$ <userinput>cd doc</userinput>
+[$OPENACS_SERVICE_NAME doc]$ <userinput>cvs add *</userinput>
 cvs add: cannot add special file `CVS'; skipping
 cvs add: scheduling file `admin-guide.html' for addition
 cvs add: scheduling file `bi01.html' for addition
@@ -121,27 +121,27 @@ cvs add: scheduling file `sample.png' for addition
 cvs add: scheduling file `user-guide.html' for addition
 cvs add: scheduling file `user-interface.dia' for addition
 cvs add: scheduling file `user-interface.png' for addition
-Directory /cvsroot/<replaceable>service0</replaceable>/packages/myfirstpackage/www/doc/xml added to the repository
+Directory /cvsroot/<replaceable>$OPENACS_SERVICE_NAME</replaceable>/packages/myfirstpackage/www/doc/xml added to the repository
 cvs add: use 'cvs commit' to add these files permanently
-[service0 doc]$ <userinput>cd xml</userinput>
-[service0 xml]$ <userinput>cvs add Makefile index.xml</userinput>
+[$OPENACS_SERVICE_NAME doc]$ <userinput>cd xml</userinput>
+[$OPENACS_SERVICE_NAME xml]$ <userinput>cvs add Makefile index.xml</userinput>
 cvs add: scheduling file `Makefile' for addition
 cvs add: scheduling file `index.xml' for addition
 cvs add: use 'cvs commit' to add these files permanently
-[service0 xml]$<userinput> cd ../../..</userinput>
-[service0 myfirstpackage]$ <userinput>cvs commit -m "new package"</userinput>
+[$OPENACS_SERVICE_NAME xml]$<userinput> cd ../../..</userinput>
+[$OPENACS_SERVICE_NAME myfirstpackage]$ <userinput>cvs commit -m "new package"</userinput>
 cvs commit: Examining .
 cvs commit: Examining www
 cvs commit: Examining www/doc
 cvs commit: Examining www/doc/xml
-RCS file: /cvsroot/<replaceable>service0</replaceable>/packages/myfirstpackage/www/doc/admin-guide.html,v
+RCS file: /cvsroot/<replaceable>$OPENACS_SERVICE_NAME</replaceable>/packages/myfirstpackage/www/doc/admin-guide.html,v
 done
 Checking in www/doc/admin-guide.html;
-/cvsroot/<replaceable>service0</replaceable>/packages/myfirstpackage/www/doc/admin-guide.html,v  &lt;--  admin-guide.html
+/cvsroot/<replaceable>$OPENACS_SERVICE_NAME</replaceable>/packages/myfirstpackage/www/doc/admin-guide.html,v  &lt;--  admin-guide.html
 initial revision: 1.1
 done
 <emphasis>(many lines omitted)</emphasis>
-[service0 myfirstpackage]$</screen>
+[$OPENACS_SERVICE_NAME myfirstpackage]$</screen>
         <figure>
           <title>Upgrading a local CVS repository</title>
           <mediaobject>
@@ -200,11 +200,11 @@ done
        access to data that users aren't interested in or aren't allowed
        to see you will need dedicated admin pages.  The conventional
        place to put those dedicated admin pages is in the
- <computeroutput>/var/lib/aolserver/<replaceable>service0</replaceable>/packages/myfirstpackage/www/admin</computeroutput>
+ <computeroutput>/var/lib/aolserver/<replaceable>$OPENACS_SERVICE_NAME</replaceable>/packages/myfirstpackage/www/admin</computeroutput>
  directory.
       </para>
-<screen>[service0 www]$ <userinput>mkdir admin</userinput></screen>
-<screen>[service0 www]$ <userinput>cd admin</userinput></screen>
+<screen>[$OPENACS_SERVICE_NAME www]$ <userinput>mkdir admin</userinput></screen>
+<screen>[$OPENACS_SERVICE_NAME www]$ <userinput>cd admin</userinput></screen>
       <para>
       Even if your application doesn't need any admin pages of its own you will
       usually need at least one simple page with a bunch of links to existing
@@ -213,7 +213,7 @@ done
       categories.  The listing below adds a link to the Parameters UI of our
       package.
       </para>
-<screen>[service0 admin]$ <userinput>vi index.adp</userinput></screen>
+<screen>[$OPENACS_SERVICE_NAME admin]$ <userinput>vi index.adp</userinput></screen>
 <programlisting>
 &lt;master&gt;
 &lt;property name="title"&gt;@title;noquote@&lt;/property&gt;
@@ -223,7 +223,7 @@ done
   &lt;li&gt;&lt;a href="@parameters_url@" title="Set parameters" class="action_link"&gt;Set parameters&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 </programlisting>
-<screen>[service0 admin]$ <userinput>vi index.tcl</userinput></screen>
+<screen>[$OPENACS_SERVICE_NAME admin]$ <userinput>vi index.tcl</userinput></screen>
 <programlisting>
 ad_page_contract {} {
 } -properties {
@@ -259,7 +259,7 @@ page" message.
 <para>
 In order to display the link to the admin page only to users that have admin
 privileges add the following code near the top of
-<computeroutput>/var/lib/aolserver/<replaceable>service0</replaceable>/packages/myfirstpackage/www/admin/index.tcl</computeroutput>:
+<computeroutput>/var/lib/aolserver/<replaceable>$OPENACS_SERVICE_NAME</replaceable>/packages/myfirstpackage/www/admin/index.tcl</computeroutput>:
 </para>
 <programlisting>
 
@@ -275,7 +275,7 @@ if { $admin_p } {
 </programlisting>
 <para>
 In 
-<computeroutput>/var/lib/aolserver/<replaceable>service0</replaceable>/packages/myfirstpackage/www/admin/index.adp</computeroutput> put:
+<computeroutput>/var/lib/aolserver/<replaceable>$OPENACS_SERVICE_NAME</replaceable>/packages/myfirstpackage/www/admin/index.adp</computeroutput> put:
 </para>
 <programlisting>
 &lt;if @admin_p@ ne nil&gt;
@@ -323,7 +323,7 @@ In
           <para>
           The way to achieve this is is to provide a link
           to the Category Management pages.  Add the following snippet to your
-            <computeroutput>/var/lib/aolserver/<replaceable>service0</replaceable>/packages/myfirstpackage/www/admin/index.tcl</computeroutput>
+            <computeroutput>/var/lib/aolserver/<replaceable>$OPENACS_SERVICE_NAME</replaceable>/packages/myfirstpackage/www/admin/index.tcl</computeroutput>
           file:
           </para>
           <programlisting>
@@ -333,7 +333,7 @@ set category_map_url [export_vars -base \
           </programlisting>
           <para>
           and the following snippet to your
-            <computeroutput>/var/lib/aolserver/<replaceable>service0</replaceable>/packages/myfirstpackage/www/admin/index.adp</computeroutput>
+            <computeroutput>/var/lib/aolserver/<replaceable>$OPENACS_SERVICE_NAME</replaceable>/packages/myfirstpackage/www/admin/index.adp</computeroutput>
           file:
           </para>
           <programlisting>
@@ -422,7 +422,7 @@ we delete the record, set redirection back to the index, and abort
 script execution.</para>
 
       <para>The database commands:</para>
-      <screen>[service0@yourserver www]$ <userinput>emacs note-delete.xql</userinput></screen>
+      <screen>[$OPENACS_SERVICE_NAME@yourserver www]$ <userinput>emacs note-delete.xql</userinput></screen>
       <programlisting>&lt;?xml version="1.0"?&gt;
 &lt;queryset&gt;
   &lt;fullquery name="do_delete"&gt;
@@ -437,7 +437,7 @@ script execution.</para>
   &lt;/fullquery&gt;
 &lt;/queryset&gt;</programlisting>
       <para>And the adp page:</para>
-      <screen>[service0@yourserver www]$ <userinput>emacs note-delete.adp</userinput></screen>
+      <screen>[$OPENACS_SERVICE_NAME@yourserver www]$ <userinput>emacs note-delete.adp</userinput></screen>
       <programlisting>&lt;master&gt;
 &lt;property name="title"&gt;@title@&lt;/property&gt;
 &lt;property name="context"&gt;{@title@}&lt;/property&gt;
@@ -830,15 +830,15 @@ drop function inline_0();
   <sect1 id="tutorial-vuh">
     <title>Using .vuh files for pretty urls</title>
     <para>.Vuh files are special cases of .tcl files, used for rewriting incoming urls.  We can use a vuh file to prettify the uri for our notes.  Instead of <computeroutput>note-edit?item_id=495</computeroutput>, we can use <computeroutput>note/495</computeroutput>.  To do this, we will need a new .vuh file for redirection and we will need to change the referring links in note-list.  First, add the vuh:</para>
-      <screen>[service0 service0]$ <userinput>cd /var/lib/aolserver/<replaceable>service0</replaceable>/packages/myfirstpackage/www</userinput>
-[service0 www]$ <userinput>emacs note.vuh</userinput>
+      <screen>[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <userinput>cd /var/lib/aolserver/<replaceable>$OPENACS_SERVICE_NAME</replaceable>/packages/myfirstpackage/www</userinput>
+[$OPENACS_SERVICE_NAME www]$ <userinput>emacs note.vuh</userinput>
 </screen>
     <para>Paste this into the file:</para>
     <programlisting><xi:include href="../../files/tutorial/note.vuh" xi:parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"><xi:fallback>example missing</xi:fallback></xi:include></programlisting>
     <para>We parse the incoming request and treat everything after the final / as the item id.  Note that this simple redirection will lose any additional query parameters passed in.  Many OpenACS objects maintain a pretty-name, which is a unique, human-readable string, usually derived from title, which makes an even better 'pretty url' than a numeric id; this requires that your display page be able to look up an item based on pretty id.</para>
     <para>We use <computeroutput>rp_form_put</computeroutput> to store the item id in the internal register that the next page is expecting, and then redirects the request in process internally (ie, without a browser refresh).</para>
     <para>Next, modify note-list so that its link is of the new form.:</para>
-      <screen>[service0 www]$ <userinput>emacs ../lib/note-edit.tcl</userinput></screen>
+      <screen>[$OPENACS_SERVICE_NAME www]$ <userinput>emacs ../lib/note-edit.tcl</userinput></screen>
     <programlisting>
 db_multirow \
     -extend {
