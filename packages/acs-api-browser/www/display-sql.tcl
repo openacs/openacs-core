@@ -35,7 +35,7 @@ if [exists_and_not_null version_id] {
           from apm_package_version_info
          where version_id = :version_id
     }
-    lappend context_bar_elements [list "package-view?version_id=$version_id&kind=sql_files" "$pretty_name $version_name"]
+    lappend context_bar_elements [list "package-view?version_id=$version_id&amp;kind=sql_files" "$pretty_name $version_name"]
 }
 lappend context_bar_elements [file tail $url]
 
