@@ -408,12 +408,18 @@ ad_proc -private install_do_data_model_install {} {
 ad_proc -private install_do_packages_install {} {
     Installs all packages during OpenACS install.
 } {
+
+    # This magic here forces kernel_id to be cached on install once it is defined.
     proc ad_acs_kernel_id {} {
         if {[db_table_exists apm_packages]} {
-    	return [db_string acs_kernel_id_get {
-    	    select package_id from apm_packages
-    	    where package_key = 'acs-kernel'
-    	} -default 0]
+            set kernel_id [db_string acs_kernel_id_get {
+                select package_id from apm_packages
+                where package_key = 'acs-kernel'
+            } -default 0]
+            if {$kernel_id > 0} {
+                proc ad_acs_kernel_id {} "return $kernel_id"
+            }
+            return $kernel_id
         } else {
             return 0
         }

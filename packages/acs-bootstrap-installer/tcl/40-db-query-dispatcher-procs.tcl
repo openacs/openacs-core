@@ -69,8 +69,8 @@ ad_proc db_rdbms_get_version {rdbms} {
 ad_proc db_rdbms_compatible_p {rdbms_test rdbms_pattern} {
     @return 0 if test incompatible with pattern, 1 if miscible
 } { 
-    db_qd_log QDDebug "The RDBMS_TEST is [db_rdbms_get_type $rdbms_test] - [db_rdbms_get_version $rdbms_test]"
-    db_qd_log QDDebug "The RDBMS_PATTERN is [db_rdbms_get_type $rdbms_pattern] - [db_rdbms_get_version $rdbms_pattern]"
+    # db_qd_log QDDebug "The RDBMS_TEST is [db_rdbms_get_type $rdbms_test] - [db_rdbms_get_version $rdbms_test]"
+    # db_qd_log QDDebug "The RDBMS_PATTERN is [db_rdbms_get_type $rdbms_pattern] - [db_rdbms_get_version $rdbms_pattern]"
 
     # If the pattern is for all RDBMS, then yeah, compatible
     if {[empty_string_p [db_rdbms_get_type $rdbms_test]]} {
@@ -79,7 +79,7 @@ ad_proc db_rdbms_compatible_p {rdbms_test rdbms_pattern} {
 
     # If the RDBMS types are not the same, we have a problem
     if {[db_rdbms_get_type $rdbms_test] != [db_rdbms_get_type $rdbms_pattern]} {
-	db_qd_log QDDebug "compatibility - RDBMS types are different!"
+	# db_qd_log QDDebug "compatibility - RDBMS types are different!"
 	return 0
     }
 
@@ -94,7 +94,7 @@ ad_proc db_rdbms_compatible_p {rdbms_test rdbms_pattern} {
 	return 1
     }
 
-    db_qd_log QDDebug "compatibility - version numbers are bad!"
+    # db_qd_log QDDebug "compatibility - version numbers are bad!"
     return 0
 }
 
@@ -234,7 +234,7 @@ ad_proc db_qd_get_fullname {local_name {added_stack_num 1}} {
 
     # If util_memoize, we have to go back up one in the stack
     if {[lindex $proc_name 0] == "util_memoize"} {
-	db_qd_log QDDebug "util_memoize! going up one level"
+	# db_qd_log QDDebug "util_memoize! going up one level"
 	set proc_name [info level [expr "-2 - $added_stack_num"]]
     }
 
@@ -247,14 +247,14 @@ ad_proc db_qd_get_fullname {local_name {added_stack_num 1}} {
 	# Means we are running inside an URL
 
 	# TEST
-	for {set i 0} {$i < 6} {incr i} {
-	    if {[catch {db_qd_log QDDebug "LEVEL=$i= [info level [expr "-1 - $i"]]"} errmsg]} {}
-	}
+	# for {set i 0} {$i < 6} {incr i} {
+        #   if {[catch {db_qd_log QDDebug "LEVEL=$i= [info level [expr "-1 - $i"]]"} errmsg]} {}
+        # }
 
 	# Check the ad_conn stuff
-	if {[ns_conn isconnected]} {
-	    if {[catch {db_qd_log QDDebug "the ad_conn file is [ad_conn file]"} errmsg]} {}
-	}
+	# if {[ns_conn isconnected]} {
+        #   if {[catch {db_qd_log QDDebug "the ad_conn file is [ad_conn file]"} errmsg]} {}
+        # }
 
 	# Now we do a check to see if this is a directly accessed URL or a 
         # sourced URL
@@ -267,13 +267,13 @@ ad_proc db_qd_get_fullname {local_name {added_stack_num 1}} {
         switch $proc_name {
 
             ns_sourceproc {
-                db_qd_log QDDebug "We are in a WWW page, woohoo!"
+                # db_qd_log QDDebug "We are in a WWW page, woohoo!"
                 set real_url_p 1
                 set url [ns_conn url]
             }
 
             rp_handle_tcl_request {
-                db_qd_log QDDebug "We are in a VUH page sourced by rp_handle_tcl_request, woohoo!"
+                # db_qd_log QDDebug "We are in a VUH page sourced by rp_handle_tcl_request, woohoo!"
                 set real_url_p 0
                 regsub {\.vuh} [ad_conn file] {} url
                 set url [ad_make_relative_path $url]
@@ -281,13 +281,13 @@ ad_proc db_qd_get_fullname {local_name {added_stack_num 1}} {
             }
 
             template::frm_page_handler {
-                db_qd_log QDDebug "We are in the template system's form page debugger!"
+                # db_qd_log QDDebug "We are in the template system's form page debugger!"
                 set real_url_p 1
                 regsub {\.frm} [ad_conn url] {} url
             }
 
             default {
-                db_qd_log QDDebug "We are in a WWW page sourced by apm_source, woohoo!"
+                # db_qd_log QDDebug "We are in a WWW page sourced by apm_source, woohoo!"
                 set real_url_p 0
                 set url [lindex $proc_name 1]
                 set url [ad_make_relative_path $url]
@@ -308,7 +308,7 @@ ad_proc db_qd_get_fullname {local_name {added_stack_num 1}} {
         set rest {}
 	regexp {^([^\.]*)(.*)} $url all package_key rest
 
-	db_qd_log QDDebug "package key is $package_key and rest is $rest"
+	# db_qd_log QDDebug "package key is $package_key and rest is $rest"
 
 	if {$real_url_p} {
 	    set full_name [db_qd_make_absolute_path "${package_key}.www${rest}." $local_name]
@@ -328,14 +328,14 @@ ad_proc db_qd_get_fullname {local_name {added_stack_num 1}} {
         # (Openacs - DanW)
 
         set calling_namespace [string range [uplevel [expr 1 + $added_stack_num] {namespace current}] 2 end]
-        db_qd_log QDDebug "calling namespace = $calling_namespace"
+        # db_qd_log QDDebug "calling namespace = $calling_namespace"
 
         if {![string equal $calling_namespace ""] && 
             ![regexp {::} $proc_name all]} {
 
             set proc_name ${calling_namespace}::${proc_name}
         }
-	db_qd_log QDDebug "proc_name is -$proc_name-"
+	# db_qd_log QDDebug "proc_name is -$proc_name-"
 
 	# We use the ad_proc construct!! 
 	# (woohoo, can't believe that was actually useful!)
@@ -344,14 +344,14 @@ ad_proc db_qd_get_fullname {local_name {added_stack_num 1}} {
 	# probably dealing with one of the bootstrap procs, and so we just
 	# return a bogus proc name
 	if {![nsv_exists api_proc_doc $proc_name]} {
-	    db_qd_log QDDebug "there is no documented proc with name $proc_name -- we used default SQL"
+	    ns_log warning "db_qd_get_fullname: there is no documented proc with name $proc_name returning [db_qd_null_path] (declare proc $proc_name with ad_proc to make it work with the query dispatcher"
 	    return [db_qd_null_path]
 	}
 
 	array set doc_elements [nsv_get api_proc_doc $proc_name]
 	set url $doc_elements(script)
 
-	db_qd_log QDDebug "tcl file is $url"
+	# db_qd_log QDDebug "tcl file is $url"
 
 	regsub {.tcl$} $url {} url
 
@@ -364,14 +364,14 @@ ad_proc db_qd_get_fullname {local_name {added_stack_num 1}} {
         set rest {}
 	regexp {^packages\.(.*)} $url all rest
 
-	db_qd_log QDDebug "TEMP - QD: proc_name is $proc_name"
-	db_qd_log QDDebug "TEMP - QD: local_name is $local_name"
+	# db_qd_log QDDebug "TEMP - QD: proc_name is $proc_name"
+	# db_qd_log QDDebug "TEMP - QD: local_name is $local_name"
 
 	# set full_name "acs.$rest.${proc_name}.${local_name}"
 	set full_name [db_qd_make_absolute_path "${rest}.${proc_name}." $local_name]
     }
 
-    db_qd_log QDDebug "generated fullname of $full_name"
+    # db_qd_log QDDebug "generated fullname of $full_name"
     
     # aks - making debug output actually useable
     if {[llength $proc_name] > 1} {
@@ -387,7 +387,7 @@ ad_proc db_qd_get_fullname {local_name {added_stack_num 1}} {
         set proc_name_with_parameters $proc_name
     }
 
-    db_qd_log QDDebug "db_qd_get_fullname: following query in file: $url proc: $proc_name_with_parameters"
+    # db_qd_log QDDebug "db_qd_get_fullname: following query in file: $url proc: $proc_name_with_parameters"
 
     return $full_name
 }
@@ -430,7 +430,7 @@ ad_proc db_map {snippet_name} {
     set fullquery [db_qd_fetch $fullname]
     set sql [db_fullquery_get_querytext $fullquery]
 
-    db_qd_log QDDebug "PARTIALQUERY FOR $fullname: $sql"
+    # db_qd_log QDDebug "PARTIALQUERY FOR $fullname: $sql"
     return [uplevel 1 [list subst -nobackslashes $sql]]
 }
 
@@ -475,7 +475,7 @@ ad_proc db_qd_internal_load_queries {file_pointer file_tag} {
     # we're going to assume smaller files for now. Plus, this doesn't happen
     # often.
 
-    db_qd_log QDDebug "Loading $file_tag"
+    # db_qd_log QDDebug "Loading $file_tag"
 
     # Read entire contents
     set whole_file [read $file_pointer]
@@ -490,12 +490,12 @@ ad_proc db_qd_internal_load_queries {file_pointer file_tag} {
     set acs_file_path [ad_make_relative_path $file_tag]
     set queryname_root [db_qd_internal_get_queryname_root $acs_file_path]
 
-    db_qd_log QDDebug "db_qd_internal_load_queries: \n file: [lindex $parsing_state 4] \n default_rdbms: [lindex $parsing_state 3] \n queryname_root: $queryname_root"
+    # db_qd_log QDDebug "db_qd_internal_load_queries: \n file: [lindex $parsing_state 4] \n default_rdbms: [lindex $parsing_state 3] \n queryname_root: $queryname_root"
 
     while {1} {
 	set result [db_qd_internal_parse_one_query $parsing_state]
 	
-	db_qd_log QDDebug "one parse result -$result-"
+	# db_qd_log QDDebug "one parse result -$result-"
 
 	# If we get the empty string, we are done parsing
 	if {$result == ""} {
@@ -505,7 +505,7 @@ ad_proc db_qd_internal_load_queries {file_pointer file_tag} {
 	set one_query [lindex $result 0]
 	set parsing_state [lindex $result 1]
 
-	db_qd_log QDDebug "loaded one query - [db_fullquery_get_name $one_query]"
+	# db_qd_log QDDebug "loaded one query - [db_fullquery_get_name $one_query]"
 
 	# Relative Path for the Query
 	if {[db_qd_relative_path_p [db_fullquery_get_name $one_query]]} {
@@ -521,7 +521,7 @@ ad_proc db_qd_internal_load_queries {file_pointer file_tag} {
 
 	    set one_query $new_fullquery
 
-	    db_qd_log QDDebug "relative path, replaced name with $new_name"
+	    # db_qd_log QDDebug "relative path, replaced name with $new_name"
 	}
 
 	# Store the query
@@ -552,7 +552,7 @@ ad_proc db_qd_internal_get_cache {fullquery_name} {
     }
 
     # See if we have the correct location for this query
-    db_qd_log QDDebug "query $fullquery_name from [db_fullquery_get_load_location $fullquery_array]"
+    # db_qd_log QDDebug "query $fullquery_name from [db_fullquery_get_load_location $fullquery_array]"
 
     # reload the fullquery
     set fullquery_array [nsv_get OACS_FULLQUERIES $fullquery_name]
@@ -570,12 +570,12 @@ ad_proc db_qd_internal_store_cache {fullquery} {
     if {![db_rdbms_compatible_p $rdbms [db_current_rdbms]]} {
         # The query isn't compatible, probably because of a too high version
         ns_log Warning "Query [db_fullquery_get_name $fullquery] has rdbms info $rdbms which is not compatible with system rdbms [db_current_rdbms]"
-        return
+        return 
     }
 
     set name [db_fullquery_get_name $fullquery]
 
-    db_qd_log QDDebug "Query $name is compatible! fullquery = $fullquery, name = $name"
+    # db_qd_log QDDebug "Query $name is compatible! fullquery = $fullquery, name = $name"
 
     # If we already have a query for that name, we need to
     # figure out which one is *most* compatible.
@@ -653,7 +653,7 @@ ad_proc db_qd_internal_parse_init {stuff_to_parse file_path} {
 
     # Check that it's a queryset
     if {[xml_node_get_name $root_node] != "queryset"} {
-	db_qd_log Error "OH OH, error, first node is [xml_node_get_name $root_node] and not 'queryset'"
+	# db_qd_log Error "OH OH, error, first node is [xml_node_get_name $root_node] and not 'queryset'"
         return ""
     }
 
@@ -661,13 +661,13 @@ ad_proc db_qd_internal_parse_init {stuff_to_parse file_path} {
     set rdbms_nodes [xml_node_get_children_by_name $root_node rdbms]
     if {[llength $rdbms_nodes] > 0} {
 	set default_rdbms [db_rdbms_parse_from_xml_node [lindex $rdbms_nodes 0]]
-	db_qd_log QDDebug "Detected DEFAULT RDBMS for whole queryset: $default_rdbms"
+	# db_qd_log QDDebug "Detected DEFAULT RDBMS for whole queryset: $default_rdbms"
     } else {
 	set default_rdbms ""
     }
 
     set parsed_stuff [xml_node_get_children_by_name $root_node fullquery]
-    db_qd_log QDDebug "db_qd_internal_parse_init extra info : index: $index; parsed_stuff: $parsed_stuff; parsed_doc: $parsed_doc;"
+    # db_qd_log QDDebug "db_qd_internal_parse_init extra info : index: $index; parsed_stuff: $parsed_stuff; parsed_doc: $parsed_doc;"
 
     return [list $index $parsed_stuff $parsed_doc $default_rdbms $file_path]
 }
@@ -694,7 +694,7 @@ ad_proc db_qd_internal_parse_one_query {parsing_state} {
 	# Clean up
 	xml_doc_free $parsed_doc
 
-	db_qd_log QDDebug "Cleaning up, done parsing"
+	# db_qd_log QDDebug "Cleaning up, done parsing"
 
 	# return nothing
 	return ""
@@ -722,7 +722,7 @@ ad_proc db_qd_internal_parse_one_query {parsing_state} {
 ad_proc db_qd_internal_parse_one_query_from_xml_node {one_query_node {default_rdbms {}} {file_path {}}} {
     Parse one query from an XML node
 } { 
-    db_qd_log QDDebug "parsing one query node in XML with name -[xml_node_get_name $one_query_node]-"
+    # db_qd_log QDDebug "parsing one query node in XML with name -[xml_node_get_name $one_query_node]-"
 
     # Check that this is a fullquery
     if {[xml_node_get_name $one_query_node] != "fullquery"} {
@@ -739,7 +739,7 @@ ad_proc db_qd_internal_parse_one_query_from_xml_node {one_query_node {default_rd
     
     # If we have no RDBMS specified, use the default
     if {[llength $rdbms_nodes] == 0} {
-	db_qd_log QDDebug "Wow, Nelly, no RDBMS for this query, using default rdbms $default_rdbms"
+	# db_qd_log QDDebug "Wow, Nelly, no RDBMS for this query, using default rdbms $default_rdbms"
 	set rdbms $default_rdbms
     } else {
 	set rdbms_node [lindex $rdbms_nodes 0]
@@ -754,15 +754,15 @@ ad_proc db_rdbms_parse_from_xml_node {rdbms_node} {
 } { 
     # Check that it's RDBMS
     if {[xml_node_get_name $rdbms_node] != "rdbms"} {
-	db_qd_log Debug "PARSER = BAD RDBMS NODE!"
-	return ""
+	db_qd_log Debug "db_rdbms_parse_from_xml_node: PARSER = BAD RDBMS NODE!"
+	return {}
     }
 
     # Get the type and version tags
     set type [xml_node_get_content [xml_node_get_first_child_by_name $rdbms_node type]]
     set version [xml_node_get_content [xml_node_get_first_child_by_name $rdbms_node version]]
 
-    db_qd_log QDDebug "PARSER = RDBMS parser - $type - $version"
+    # db_qd_log QDDebug "PARSER = RDBMS parser - $type - $version"
 
     return [db_rdbms_create $type $version]
 }
@@ -851,7 +851,7 @@ ad_proc db_qd_internal_prepare_queryfile_content {file_content} {
 	set rest_of_file_content [string range $rest_of_file_content [expr "$first_querytext_close + $querytext_close_len"] end]
     }
 
-    db_qd_log QDDebug "new massaged file content: \n $new_file_content \n"
+    # db_qd_log QDDebug "new massaged file content: \n $new_file_content \n"
 
     return $new_file_content
 }
@@ -863,8 +863,8 @@ ad_proc db_qd_internal_prepare_queryfile_content {file_content} {
 
 ad_proc db_qd_log {level msg} {
     Centralized DB QD logging
-    If you want to debug the DQ, change QDDebug below to Debug
-} { 
+    If you want to debug the QD, change QDDebug below to Debug
+} {
     if {![string equal "QDDebug" $level]} {
         ns_log $level "$msg"
     }
