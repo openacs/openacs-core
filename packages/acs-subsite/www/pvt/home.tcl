@@ -64,10 +64,10 @@ and attribute_id =
 if { ! $user_exists_p } {
     if {$user_id == 0} {
 	ad_redirect_for_registration
-	return
+        ad_script_abort
     }
     ad_return_error "Account Unavailable" "We can't find you (user #$user_id) in the users table.  Probably your account was deleted for some reason.  You can visit <a href=\"/register/logout\">the log out page</a> and then start over."
-    return
+    ad_script_abort
 }
 
 if { ![empty_string_p $first_names] || ![empty_string_p $last_name] } {
