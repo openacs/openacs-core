@@ -32,7 +32,7 @@ begin
                                      null
         );
 
-end;' language 'plpgsql' immutable;
+end;' language 'plpgsql';
 
 -- function new
 

@@ -1004,7 +1004,7 @@ begin
 
   return v_is_valid_child;
  
-end;' language 'plpgsql';
+end;' language 'plpgsql' stable;
 
 
 /* delete a content item
