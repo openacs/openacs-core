@@ -79,100 +79,157 @@ comment on column subsite_callbacks.sort_order is '
 ';      
 
 
-create or replace package subsite_callback as
+-- create or replace package subsite_callback as
 
-  function new (
-  --/** Registers a new callback. If the same callback exists as
-  --    defined in the unique constraint on the table, does 
-  --    nothing but returns the existing callback_id.
-  -- 
-  --    @author Michael Bryzek (mbryzek@arsdigita.com)
-  --    @creation-date 2001-02-20
-  -- 
-  --*/
-       callback_id         IN subsite_callbacks.callback_id%TYPE default null,
-       event_type          IN subsite_callbacks.event_type%TYPE,
-       object_type         IN subsite_callbacks.object_type%TYPE,
-       callback		   IN subsite_callbacks.callback%TYPE,
-       callback_type       IN subsite_callbacks.callback_type%TYPE,
-       sort_order          IN subsite_callbacks.sort_order%TYPE default null
-  ) return subsite_callbacks.callback_id%TYPE;
+--   function new (
+--   --/** Registers a new callback. If the same callback exists as
+--   --    defined in the unique constraint on the table, does 
+--   --    nothing but returns the existing callback_id.
+--   -- 
+--   --    @author Michael Bryzek (mbryzek@arsdigita.com)
+--   --    @creation-date 2001-02-20
+--   -- 
+--   --*/
+--        callback_id         IN subsite_callbacks.callback_id%TYPE default null,
+--        event_type          IN subsite_callbacks.event_type%TYPE,
+--        object_type         IN subsite_callbacks.object_type%TYPE,
+--        callback		   IN subsite_callbacks.callback%TYPE,
+--        callback_type       IN subsite_callbacks.callback_type%TYPE,
+--        sort_order          IN subsite_callbacks.sort_order%TYPE default null
+--   ) return subsite_callbacks.callback_id%TYPE;
 
-  procedure delete (
-  --/** Deletes the specified callback
-  -- 
-  --    @author Michael Bryzek (mbryzek@arsdigita.com)
-  --    @creation-date 2001-02-20
-  -- 
-  --*/
+--   procedure delete (
+--   --/** Deletes the specified callback
+--   -- 
+--   --    @author Michael Bryzek (mbryzek@arsdigita.com)
+--   --    @creation-date 2001-02-20
+--   -- 
+--   --*/
   
-       callback_id         IN subsite_callbacks.callback_id%TYPE
-  );
+--        callback_id         IN subsite_callbacks.callback_id%TYPE
+--   );
 
-end subsite_callback;
-/
-show errors;
+-- end subsite_callback;
+-- /
+-- show errors;
 
 
 
-create or replace package body subsite_callback as
+-- create or replace package body subsite_callback as
 
-  function new (
-       callback_id         IN subsite_callbacks.callback_id%TYPE default null,
-       event_type          IN subsite_callbacks.event_type%TYPE,
-       object_type         IN subsite_callbacks.object_type%TYPE,
-       callback		   IN subsite_callbacks.callback%TYPE,
-       callback_type       IN subsite_callbacks.callback_type%TYPE,
-       sort_order          IN subsite_callbacks.sort_order%TYPE default null
-  ) return subsite_callbacks.callback_id%TYPE
-  IS
-    v_callback_id  subsite_callbacks.callback_id%TYPE;
-    v_sort_order   subsite_callbacks.sort_order%TYPE;
-  BEGIN
+--   function new (
+--        callback_id         IN subsite_callbacks.callback_id%TYPE default null,
+--        event_type          IN subsite_callbacks.event_type%TYPE,
+--        object_type         IN subsite_callbacks.object_type%TYPE,
+--        callback		   IN subsite_callbacks.callback%TYPE,
+--        callback_type       IN subsite_callbacks.callback_type%TYPE,
+--        sort_order          IN subsite_callbacks.sort_order%TYPE default null
+--   ) return subsite_callbacks.callback_id%TYPE
+--   IS
+--     v_callback_id  subsite_callbacks.callback_id%TYPE;
+--     v_sort_order   subsite_callbacks.sort_order%TYPE;
+--   BEGIN
 
-    if new.callback_id is null then
-       select acs_object_id_seq.nextval into v_callback_id from dual;
+--     if new.callback_id is null then
+--        select acs_object_id_seq.nextval into v_callback_id from dual;
+--     else
+--        v_callback_id := new.callback_id;
+--     end if;
+   
+--     if new.sort_order is null then
+--        -- Make this the next event for this object_type/event_type combination
+--        select nvl(max(sort_order),0) + 1 into v_sort_order
+--          from subsite_callbacks
+--         where object_type = new.object_type
+--           and event_type = new.event_type;
+--     else
+--        v_sort_order := new.sort_order;
+--     end if;
+
+--     begin 
+--       insert into subsite_callbacks
+--       (callback_id, event_type, object_type, callback, callback_type, sort_order)
+--       values
+--       (v_callback_id, new.event_type, new.object_type, new.callback, new.callback_type, v_sort_order);
+--      exception when dup_val_on_index then
+--       select callback_id into v_callback_id
+--         from subsite_callbacks
+--        where event_type = new.event_type
+--          and object_type = new.object_type
+--          and callback_type = new.callback_type
+--          and callback = new.callback;
+--     end;
+--     return v_callback_id;
+
+--   END new;
+
+create function subsite_callback__new(integer,varchar,varchar,varchar,varchar,integer)
+returns integer as '
+declare
+  new__callback_id         alias for $1; -- default null,
+  new__event_type          alias for $2;
+  new__object_type         alias for $3;
+  new__callback		   alias for $4;
+  new__callback_type       alias for $5;
+  new__sort_order          alias for $6; -- default null
+  v_callback_id		   subsite_callbacks.callback_id%TYPE;
+  v_sort_order		   subsite_callbacks.sort_order%TYPE;
+begin
+
+    if new__callback_id is null then
+       select acs_object_id_seq.nextval into v_callback_id;
     else
-       v_callback_id := new.callback_id;
+       v_callback_id := new__callback_id;
     end if;
    
-    if new.sort_order is null then
+    if new__sort_order is null then
        -- Make this the next event for this object_type/event_type combination
-       select nvl(max(sort_order),0) + 1 into v_sort_order
+       select coalesce(max(sort_order),0) + 1 into v_sort_order
          from subsite_callbacks
-        where object_type = new.object_type
-          and event_type = new.event_type;
+        where object_type = new__object_type
+          and event_type = new__event_type;
     else
-       v_sort_order := new.sort_order;
+       v_sort_order := new__sort_order;
     end if;
 
-    begin 
+--    begin 
       insert into subsite_callbacks
       (callback_id, event_type, object_type, callback, callback_type, sort_order)
       values
-      (v_callback_id, new.event_type, new.object_type, new.callback, new.callback_type, v_sort_order);
-     exception when dup_val_on_index then
-      select callback_id into v_callback_id
-        from subsite_callbacks
-       where event_type = new.event_type
-         and object_type = new.object_type
-         and callback_type = new.callback_type
-         and callback = new.callback;
-    end;
+      (v_callback_id, new__event_type, new__object_type, new__callback, new__callback_type, v_sort_order);
+
+-- TODO: Can we do this properly?
+--       If not, could move select before insert
+--      exception when dup_val_on_index then
+--        select callback_id into v_callback_id
+--          from subsite_callbacks
+--         where event_type = new__event_type
+--           and object_type = new__object_type
+--           and callback_type = new__callback_type
+--           and callback = new__callback;
+--    end;
     return v_callback_id;
 
-  END new;
+end;' language 'plpgsql';
 
+--   procedure delete (
+--        callback_id         IN subsite_callbacks.callback_id%TYPE
+--   )
+--   is
+--   begin
+--      delete from subsite_callbacks where callback_id=subsite_callback.delete.callback_id;
+--   end delete;
 
-  procedure delete (
-       callback_id         IN subsite_callbacks.callback_id%TYPE
-  )
-  is
-  begin
-     delete from subsite_callbacks where callback_id=subsite_callback.delete.callback_id;
-  end delete;
+create function subsite_callback__delete(integer)
+returns integer as '
+declare
+  delete__callback_id		alias for $1;
+begin
+      delete from subsite_callbacks where callback_id = delete__callback_id;
+      return 0;
+end;' language 'plpgsql';
 
-end subsite_callback;
-/
-show errors;
+-- end subsite_callback;
+-- /
+-- show errors;
 

@@ -5,8 +5,10 @@
 -- @creation-date  (Sat Aug 26 17:56:07 2000)
 -- @cvs-id $Id$
 
-@@ subsite-group-callbacks-drop
-@@ application-groups-drop
-@@ user-profiles-drop
-@@ attributes-drop
-@@ portraits-drop
+\i subsite-callbacks-drop.sql
+\i user-profiles-drop.sql
+\i application-groups-drop.sql
+\i portraits-drop.sql
+\i attributes-drop.sql
+
+drop view party_names;

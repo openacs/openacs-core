@@ -6,12 +6,15 @@
 -- @cvs-id $Id$
 --
 
-drop table user_profiles;
-drop package user_profile;
+drop view cc_users_of_package_id;
+drop view registered_users_of_package_id;
+drop view application_users;
 
-begin
-  acs_rel_type.drop_type('user_profile');
-end;
-/
-show errors
+select acs_rel_type__drop_type('user_profile', 'f');
+select acs_rel_type__drop_role('application');
+
+select drop_package('user_profile');
+
+drop table user_profiles;
+
 

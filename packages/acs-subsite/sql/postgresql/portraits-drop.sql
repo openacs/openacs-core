@@ -6,11 +6,8 @@
 -- @cvs-id $Id$
 --
 
-drop table user_portraits;
-drop package user_portrait_rel;
+select acs_rel_type__drop_type('user_portrait_rel', 'f');
+select acs_rel_type__drop_role('portrait');
+select acs_rel_type__drop_role('user');
 
-begin
-  acs_rel_type.drop_type('user_portrait_rel');
-end;
-/
-show errors
+drop table user_portraits;

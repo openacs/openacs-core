@@ -12,5 +12,5 @@
 -- License.  Full text of the license is available from the GNU Project:
 -- http://www.fsf.org/copyleft/gpl.html
 
-drop package subsite_callback;
+select drop_package('subsite_callback');
 drop table subsite_callbacks;

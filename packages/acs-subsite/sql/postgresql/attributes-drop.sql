@@ -7,21 +7,4 @@
 --
 --
 
-declare
-  result	varchar2(10);
-begin
-  result := acs_attribute.create_attribute (
-    object_type => 'person',
-    attribute_name => 'bio',
-    datatype => 'string',
-    pretty_name => 'Biography',
-    pretty_plural => 'Biographies',
-    min_n_values => 0,
-    max_n_values => 1,
-    storage => 'generic'
-  );
-
-  commit;
-end;
-/
-show errors
+select acs_attribute__drop_attribute('person','bio');

@@ -128,7 +128,7 @@ create table cr_type_children (
   child_type    varchar(100)
 		constraint cr_type_children_child_fk
 		references acs_object_types,
-  relation_tag  varchar(100) default '' not null,
+  relation_tag  varchar(100),
   min_n         integer,
   max_n         integer,
   constraint cr_type_children_pk
@@ -147,7 +147,7 @@ create table cr_type_relations (
   target_type   varchar(100)
 		constraint cr_type_relations_child_fk
 		references acs_object_types,
-  relation_tag  varchar(100) default '' not null,
+  relation_tag  varchar(100),
   min_n         integer,
   max_n         integer,
   constraint cr_type_relations_pk

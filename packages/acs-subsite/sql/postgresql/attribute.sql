@@ -10,21 +10,37 @@
 -- @cvs-id $Id$
 --
 
-declare
-  result	varchar2(10);
-begin
-  result := acs_attribute.create_attribute (
-    object_type => 'person',
-    attribute_name => 'bio',
-    datatype => 'string',
-    pretty_name => 'Biography',
-    pretty_plural => 'Biographies',
-    min_n_values => 0,
-    max_n_values => 1,
-    storage => 'generic'
-  );
+-- declare
+--   result	varchar2(10);
+-- begin
+--   result := acs_attribute.create_attribute (
+--     object_type => 'person',
+--     attribute_name => 'bio',
+--     datatype => 'string',
+--     pretty_name => 'Biography',
+--     pretty_plural => 'Biographies',
+--     min_n_values => 0,
+--     max_n_values => 1,
+--     storage => 'generic'
+--   );
 
-  commit;
-end;
-/
-show errors
+--   commit;
+-- end;
+-- /
+-- show errors
+
+select acs_attribute__create_attribute (
+    'person',
+    'bio',
+    'string',
+    'Biography',
+    'Biographies',
+    null,
+    null,
+    null,
+    0,
+    1,
+    null,
+    'generic',
+    'f'
+);
