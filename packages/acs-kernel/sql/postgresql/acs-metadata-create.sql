@@ -23,6 +23,12 @@
 -- OBJECT TYPES --
 ------------------
 
+-- DRB: As originally defined two types couldn't share an attribute
+-- table, which seems stupid.  Why in the world should I be forbidden
+-- to define two types inherited from two different parent types (specifically
+-- content_revision and image) and to extend them with the same attributes
+-- table?  
+
 create table acs_object_types (
 	object_type	varchar(100) not null
 			constraint acs_object_types_pk primary key,
@@ -36,7 +42,7 @@ create table acs_object_types (
 			constraint acs_obj_types_pretty_plural_un
 			unique,
 	table_name	varchar(30) not null
-			constraint acs_object_types_tbl_name_un unique,
+                        constraint acs_object_types_table_name_un unique,
 	id_column	varchar(30) not null,
 	package_name	varchar(30) not null
 			constraint acs_object_types_pkg_name_un unique,

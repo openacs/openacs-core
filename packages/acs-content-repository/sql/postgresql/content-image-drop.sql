@@ -14,6 +14,11 @@ drop function image__delete (integer);
 
 drop function image__new (varchar,integer,integer,integer,varchar,integer,varchar,integer,varchar,varchar,boolean,timestamp,varchar,integer,integer,integer);
 
+drop function image__new_revision(integer, integer, varchar, varchar, timestamp, varchar, varchar,
+                                    integer, varchar, integer, integer);
+
+drop function image__new (varchar,integer,integer,integer,varchar,varchar,varchar,varchar,varchar,varchar,varchar,
+                            varchar,timestamp,integer, integer);
 begin;
 
   select content_type__unregister_mime_type(
