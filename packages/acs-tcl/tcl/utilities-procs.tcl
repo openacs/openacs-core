@@ -965,7 +965,15 @@ ad_proc -public export_vars {
     # Prepend with the base URL
     if { [exists_and_not_null base] } {
         if { ![empty_string_p $export_string] } {
-            set export_string "$base?$export_string"
+            if { [regexp {\?} $base] } {
+                # The base already has query vars
+                set export_string "${base}&${export_string}"
+                ns_log Notice "pm debug with query vars base=$base export_string=$export_string"
+            } else { 
+                # The base has no query vars
+                set export_string "$base?$export_string"
+                ns_log Notice "pm debug without query vars base=$base export_string=$export_string"
+            }
         } else {
             set export_string $base
         }
