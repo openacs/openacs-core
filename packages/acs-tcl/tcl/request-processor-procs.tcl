@@ -1110,20 +1110,6 @@ ad_proc -public ad_acs_kernel_id {} {
     return $acs_kernel_id
 }
 
-ad_proc -public -deprecated ad_acs_admin_id {} {
-
-    Returns the package_id of the acs-admin package.
-    You probably want ad_acs_kernel_id, that is what has all the
-    useful parameters.
-
-    @see ad_acs_kernel_id
-} {
-    return [db_string acs_admin_id_get {
-        select package_id from apm_packages
-        where package_key = 'acs-admin'
-    } -default 0]
-}
-
 ad_proc -public ad_conn {args} {
 
   Returns a property about the connection. See the <a

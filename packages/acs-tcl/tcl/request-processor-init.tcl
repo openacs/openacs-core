@@ -10,17 +10,6 @@ ad_library {
 # These procedures are dynamically defined at startup to alleviate
 # lock contention. Thanks to davis@xarg.net.
 
-proc ad_acs_admin_id_mem {} {
-    return [db_string acs_kernel_id_get {
-	select package_id from apm_packages
-	where package_key = 'acs-admin'
-    } -default 0]
-}
-
-proc ad_acs_admin_id {} "
-    return [ad_acs_admin_id_mem]
-"
-
 if { [ad_parameter -package_id [ad_acs_kernel_id] PerformanceModeP request-processor 0] } {
   ad_proc -private rp_performance_mode {} {
     Returns 1 if the request processor is in performance mode, 0 otherwise.
