@@ -68,7 +68,7 @@ set hobbies [list "listening to Ricky Martin 'cuz he's awsome!" \
 	"hanging out with my best buds" \
 	"telling jokes -- my friends say I've got a great sense of humor!"]
 
-template::query get_friends friends multirow "select first_names, last_name, age, gender, address, likes_chocolate_p from best_friends"
+db_multirow friends get_friends ""
 
 #template::multirow create foo_multirow columns1 columns2 columns3
 template::multirow extend friends extra_column

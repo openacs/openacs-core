@@ -113,7 +113,7 @@ if { [form is_valid add_entry] } {
     template::forward form-sample.acs
 }
 
-template::query get_address address multirow "select * from address_book order by last_name"
+db_multirow address get_address ""
 
 set rowcount [set address:rowcount]
 

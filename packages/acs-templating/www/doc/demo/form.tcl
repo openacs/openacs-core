@@ -16,8 +16,7 @@ form create add_user -elements {
 
 if { [form is_request add_user] } {
 
-    set query "select ad_template_sample_users_seq.nextval from dual"
-    template::query get_user_id user_id onevalue $query
+    set user_id [db_string get_user_id ""]
 
     element set_properties add_user user_id -value $user_id
 }
