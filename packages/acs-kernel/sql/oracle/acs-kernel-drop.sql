@@ -16,7 +16,8 @@
 @@ rel-constraints-drop
 @@ rel-segments-drop
 @@ groups-drop
-@@ site-nodes-drop.sql
+@@ site-node-object-map-drop
+@@ site-nodes-drop
 @@ community-core-drop
 @@ acs-relationships-drop
 @@ acs-object-util-remove

@@ -29,6 +29,7 @@
 \i security-create.sql
 \i journal-create.sql
 \i site-nodes-create.sql
+\i site-node-object-map-create.sql
 \i apm-create.sql
 \i acs-create.sql
 
