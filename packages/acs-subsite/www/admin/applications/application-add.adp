@@ -5,4 +5,6 @@
 
 <formtemplate id="application"></formtemplate>
 
-<a href="@multiple_add_url@" class="action">Add multiple applications</a>
+<ul class="action-links">
+  <li><a href="@multiple_add_url@">Add multiple applications</a></li>
+</ul>
