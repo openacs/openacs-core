@@ -6,7 +6,8 @@
    <fullquery name="acs_mail_lite::check_bounces.send_notification_to_bouncing_email">
      <querytext>
 
-       insert into acs_mail_lite_bounce_notif
+       insert into acs_mail_lite_bounce_notif 
+       (user_id, notification_count, notification_time)
        (select user_id, 0 as notification_count,
                trunc(sysdate-1-:notification_interval) as notification_time
         from acs_mail_lite_bounce
