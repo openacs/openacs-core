@@ -47,7 +47,7 @@ ad_proc -public ad_form {
         my_table_key:key(my_table_sequence)
 
         {value:text(textarea)             {{label "Enter text"}
-                                           {html {rows 4 cols 50}}}
+                                           {html {rows 4 cols 50}}}}
     } -select_query {
         select value from my_table where my_table_key = :my_table_key
     } -validate {
@@ -216,7 +216,7 @@ ad_proc -public ad_form {
     <p>
 
     Some form builder datatypes build values that do not directly correspond to database types.  When using
-    the form builder directly these are converted by calls to datatype::get_property and datatype::set_property.
+    the form builder directly these are converted by calls to datatype::get_property and datatype::acquire.
     When using ad_form, "to_html(property)", "to_sql(property)" and "from_sql(property)" declare the appropriate
     properties to be retrieved or set before calling code blocks that require the converted values.  The "to_sql"
     operation is performed before any on_submit, new_data or edit_data block is executed.  The "from_sql" operation
@@ -263,7 +263,7 @@ ad_proc -public ad_form {
     <blockquote><pre>
     {my_key:text(multiselect),multiple       {{label "select some values"}
                                               {options {first second third fourth fifth}}
-                                              {html {size 4}}}
+                                              {html {size 4}}}}
                                   
     </pre><p>
 
@@ -273,7 +273,7 @@ ad_proc -public ad_form {
     </blockquote>
     
     <blockquote><pre>
-    {hide_me:text(hidden)                     {{value 3}}
+    {hide_me:text(hidden)                     {{value 3}}}
     </pre><p>
 
     Define the hidden form element "hide_me" with the value 3
