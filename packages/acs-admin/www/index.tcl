@@ -13,7 +13,7 @@ set page "
 [ad_context_bar]
 <hr>
 
-[ad_conn instance_name] is used to administer the site-wide services of the ArsDigita Community System.
+<h3>Core Services</h3>
 
 <ul>
   <li><a href=apm>ACS Package Manager</a>
@@ -37,7 +37,7 @@ db_foreach subsite_admin_urls {
 
 if {! [exists_and_not_null subsite_admin_widget] } {
     set subsite_admin_widget "
-To administer a particular subsite, please select from the list below.
+<h3>Subsite Administration</h3>
 <ul>"
     foreach url $subsite_admin_list {
 	append subsite_admin_widget "\n    <li>$url</li><p>"
@@ -46,8 +46,29 @@ To administer a particular subsite, please select from the list below.
 </ul>\n"
 }
 
+set package_admin_widget "<h3>Package Administration</h3> <ul>"
+set packages_to_admin_p 0
+db_foreach installed_packages {
+    select package_key,
+           pretty_name as package_pretty_name
+    from apm_package_types
+} {
+    if { [apm_package_installed_p $package_key] && [file exists "[acs_package_root_dir $package_key]/www/sw-admin/"] } {
+        append package_admin_widget "<li><a href=\"package/$package_key/\">$package_pretty_name</a></li>"
+        set packages_to_admin_p 1
+    }
+} 
+if { ! $packages_to_admin_p } {
+    append package_admin_widget "<i>No packages installed with site-wide administration UI</i>"
+}
+append package_admin_widget "</ul>"
+
 append page "
 $subsite_admin_widget
+
+<p>
+$package_admin_widget
+
 <p>
 [ad_admin_footer]
 "
