@@ -27,6 +27,7 @@ db_multirow -extend { parameter_url } applications select_applications {
     where  n.parent_id = :subsite_node_id
     and    p.package_id = n.object_id
     and    pt.package_key = p.package_key
+    order  by lower(p.instance_name)
 } {
     if { $num_parameters > 0 } {
         set parameter_url [export_vars -base ../../shared/parameters { package_id { return_url [ad_return_url] } }]
