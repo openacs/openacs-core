@@ -6,12 +6,15 @@ ad_page_contract {
 } {
     job_id
     page:optional
+    success_p:boolean,optional
 }
 
 auth::sync::job::get -job_id $job_id -array batch_job
 
 set page_title "One batch job"
-set context [list [list "." "Authentication"] [list [export_vars -base authority { {authority_id $batch_job(authority_id)} }] "$batch_job(authority_pretty_name)"] $page_title]
+set context [list \
+                 [list "." "Authentication"] \
+                 [list [export_vars -base authority { {authority_id $batch_job(authority_id)} }] "$batch_job(authority_pretty_name)"] $page_title]
 
 ad_form \
     -name batch_job_form \
@@ -82,19 +85,12 @@ ad_form \
         set document_download "<a href=\"[export_vars -base batch-document-download { job_id }]\">download</a>"
     }
 
-set pagination_sql {
-    select entry_id
-    from   auth_batch_job_entries
-    where  job_id = :job_id
-    order  by entry_id
-}
-
 list::create \
     -name batch_actions \
     -multirow batch_actions \
     -key entry_id \
     -page_size 100 \
-    -page_query $pagination_sql \
+    -page_query_name pagination \
     -elements {
         entry_time_pretty {
             label "Timestamp"
@@ -122,7 +118,20 @@ list::create \
             label "Message"
         }
     } -filters {
-            job_id {}
+        job_id {
+            hide_p 1
+        }
+        success_p {
+            label "Success"
+            values {
+                { Success t }
+                { Failure f }
+            }
+            where_clause {
+                success_p = :success_p
+            }
+            default_value f
+        }
     }
 
 db_multirow -extend { entry_url short_message entry_time_pretty } batch_actions select_batch_actions "
@@ -136,6 +145,7 @@ db_multirow -extend { entry_url short_message entry_time_pretty } batch_actions 
            element_messages
     from   auth_batch_job_entries
     where  [template::list::page_where_clause -name batch_actions]
+    [template::list::filter_where_clauses -and -name batch_actions]
     order  by entry_id
 " {
     set entry_url [export_vars -base batch-action { entry_id }]
@@ -143,10 +153,10 @@ db_multirow -extend { entry_url short_message entry_time_pretty } batch_actions 
     # Use message and element_messages to display one short message in the table
     if { ![empty_string_p $message] } {
         set short_message $message
-    } elseif { [llength $element_messages] == 1} {
+    } elseif { [llength $element_messages] == 2 } {
         # Only one element message - use it
-        set short_message [lindex $element_messages 1]
-    } elseif { [llength $element_messages] > 1 } {
+        set short_message $element_messages
+    } elseif { [llength $element_messages] > 0 } {
         # Several element messages
         set short_message "Problems with elements"
     } else {
