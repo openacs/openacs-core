@@ -3,7 +3,8 @@
 <table border="0" cellpadding="8" cellspacing="0" width="80%">
 
 <tr><td valign="top">
-<a href="http://openacs.org/projects/openacs/doc-project">Errata and Corrections</a>
+<a href="http://openacs.org/projects/openacs/doc-project">Errata and
+Corrections</a>
 <p><strong>Getting Started</strong>
 <ul>
 <li><a href="release-notes.html">Release Notes</a>
@@ -37,6 +38,7 @@
 
 <td valign="top">
 <p><a href="/api-doc/">API Browser</a>
+<p><a href="ix.html">Index</a>
 <% 
 # This block of ADP code ensures that the Installer can still serve this
 # page even without a working templating system.
