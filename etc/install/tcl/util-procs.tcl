@@ -157,7 +157,7 @@ ad_proc ::twt::util::log { message } {
     puts ""
     puts "##############################"
     puts "#"
-    puts "# $script_name - $message"
+    puts "# ${script_name}: $message"
     puts "#"
     puts "##############################"
     puts ""
