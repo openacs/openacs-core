@@ -683,7 +683,7 @@ three (UCS2) or six (UCS4) bytes per character, make sure that
 column size declarations in the schema are large enough to
 accomodate required data (such as email addresses in
 Japanese).  <remark>Since 5.0.0, this is covered in the database
-install instructions for both PostGreSQL and Oracle.</remark></para>
+install instructions for both PostgreSQL and Oracle.</remark></para>
 </blockquote>
 
 </sect2><sect2 id="VI.I_Email_and_Messaging"><title>Email and

@@ -23,7 +23,7 @@
             url="http://openacs.org/projects/openacs/download/">OpenACS &version;</ulink></title>
             <para>The OpenACS tarball comprises the core packages and
             many useful additional packages.  This includes a full set
-            of documentation.  The tarball works with both PostGreSQL
+            of documentation.  The tarball works with both PostgreSQL
             and Oracle.</para>
           </formalpara>
         </listitem>
@@ -273,7 +273,7 @@
               <formalpara>
                 <title><ulink
                url="http://unc.dl.sourceforge.net/sourceforge/openfts/Search-OpenFTS-tcl-0.3.2.tar.gz">OpenFTS TCL 0.3.2</ulink>, OPTIONAL</title>
-                <para>Adds full-text-search to PostGreSQL and includes a
+                <para>Adds full-text-search to PostgreSQL and includes a
                driver for AOLserver.  You need this if you want users
                to be able to search for any text on your site.</para>
               </formalpara>
@@ -298,7 +298,7 @@
         calender entries, and notes) is stored in the database.
         OpenACS seperates the database with an abstraction layer,
         which means that several different databases all function
-        identically.  Currently OpenACS supports PostGreSQL 7.2 and
+        identically.  Currently OpenACS supports PostgreSQL 7.2 and
         Oracle 8.1.7.  While you can run the core OpenACS on any
         supported database, not all contributed packages support all
         databases.</para>
@@ -307,7 +307,7 @@
             <listitem>
               
               <formalpara>
-                <title>Oracle 8.1.7 (Either this or PostGreSQL is REQUIRED)</title>
+                <title>Oracle 8.1.7 (Either this or PostgreSQL is REQUIRED)</title>
                 <para>You can register and download Oracle from <ulink
               url="http://otn.oracle.com/software/content.html">Oracle
               TechNet</ulink>.  You need this if you want to use an
@@ -316,8 +316,8 @@
             </listitem>
             <listitem>
               <formalpara id="source-postgresql">
-                <title><ulink url="http://sourceforge.net/projects/pgsql/">PostGreSQL 7.3.4</ulink> (Either this or Oracle is REQUIRED)</title>
-                <para>You need this if you want to use a PostGreSQL database.</para>
+                <title><ulink url="http://sourceforge.net/projects/pgsql/">PostgreSQL 7.3.4</ulink> (Either this or Oracle is REQUIRED)</title>
+                <para>You need this if you want to use a PostgreSQL database.</para>
               </formalpara>
             </listitem>
           </itemizedlist>

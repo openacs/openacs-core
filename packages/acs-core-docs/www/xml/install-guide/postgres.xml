@@ -6,7 +6,7 @@
 ]>
 
 <sect1 id="postgres">
-  <title>Install PostGreSQL</title>
+  <title>Install PostgreSQL</title>
 
   <authorblurb>
     <para>by <ulink url="mailto:vinod@kurup.com">Vinod Kurup</ulink></para>
@@ -14,7 +14,7 @@
   
   <para>Skip this section if you will run only Oracle.</para>
 
-  <para>OpenACS &version; will run with <link linkend="source-postgresql">PostGreSQL</link> 7.2.x, 7.3.2,
+  <para>OpenACS &version; will run with <link linkend="source-postgresql">PostgreSQL</link> 7.2.x, 7.3.2,
   7.3.3, and 7.3.4.  7.3.4 is the recommended version of PostgreSQL.</para>
 
   <itemizedlist>
@@ -35,7 +35,7 @@ su postgres -c "/usr/lib/postgresql/bin/createlang plpgsql template1"</userinput
     <listitem>
         <formalpara id="install-postgres-rpm">
         <title>Using the Red Hat RPM</title>
-       <para>Red Hat users: If you install PostGreSQL 7.3.2 from the Red Hat 9 RPM, you
+       <para>Red Hat users: If you install PostgreSQL 7.3.2 from the Red Hat 9 RPM, you
   can skip a few steps.  These shell commands add some links for compatibility with the directories from a source-based install; start the service; create a new group for web service
   users, and modify the postgres user's
   environment (<link linkend="install-postgres-env">more
@@ -67,7 +67,7 @@ su - postgres</action></screen>
   <orderedlist>
     <listitem>
       <formalpara>
-        <title>Unpack PostGreSQL.</title>
+        <title>Unpack PostgreSQL.</title>
         <para>If you have not downloaded the postgresql tarball to
         <computeroutput>/tmp/postgresql-7.3.4.tar.gz</computeroutput>,
         <link linkend="source-postgresql">get it</link>.</para>
@@ -128,7 +128,7 @@ PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:/usr/bin/X11:/
 	  Change to the postgres user and run <computeroutput>./configure</computeroutput> to set the compilation options automatically. This is the point at which you can
 	  configure PostgreSQL in various ways. For example, if you want to
 	  enable
-	  Unicode<indexterm><primary>Unicode</primary><secondary>in PostGreSQL</secondary></indexterm> support, add the flags <computeroutput>--enable-locale</computeroutput> and <computeroutput>--enable-multibyte</computeroutput>. If you want to see what the other possibilities are, run <computeroutput>./configure --help</computeroutput>.
+	  Unicode<indexterm><primary>Unicode</primary><secondary>in PostgreSQL</secondary></indexterm> support, add the flags <computeroutput>--enable-locale</computeroutput> and <computeroutput>--enable-multibyte</computeroutput>. If you want to see what the other possibilities are, run <computeroutput>./configure --help</computeroutput>.
 	</para>
       </formalpara>
       <screen>[root@yourserver src]# <userinput>su - postgres</userinput>
@@ -404,7 +404,7 @@ root:~ # </screen>
     <listitem>
       <formalpara id="postgres-tune">
         <title>Tune postgres.  (OPTIONAL)</title>
-        <para>The default values for PostGreSQL are very conservative; we can safely change some of them and improve performance.</para>  
+        <para>The default values for PostgreSQL are very conservative; we can safely change some of them and improve performance.</para>  
       </formalpara>
       <orderedlist>
         <listitem>
@@ -419,7 +419,7 @@ root:~ # </screen>
 kernel.shmmax = 134217728</programlisting>
         </listitem>
         <listitem>
-          <para>Edit the PostGreSQL config file, <computeroutput>/usr/local/pgsql/data/postgresql.conf</computeroutput>, to use more memory.  These values should improve performance in most cases.  (<ulink url="http://openacs.org/forums/message-view?message_id=94071">more information</ulink>)</para>
+          <para>Edit the PostgreSQL config file, <computeroutput>/usr/local/pgsql/data/postgresql.conf</computeroutput>, to use more memory.  These values should improve performance in most cases.  (<ulink url="http://openacs.org/forums/message-view?message_id=94071">more information</ulink>)</para>
           <programlisting>#       Shared Memory Size
 #
 shared_buffers = 15200      # 2*max_connections, min 16

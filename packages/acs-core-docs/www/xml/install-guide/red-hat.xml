@@ -178,7 +178,7 @@ with the database and web server we'll install later.
 <member>uncheck <computeroutput><guilabel>Server Configuration Tools</guilabel></computeroutput>,</member>
 <member>uncheck <computeroutput><guilabel>Web Server</guilabel></computeroutput>,</member>
 <member>uncheck <computeroutput><guilabel>Windows File Server</guilabel></computeroutput>,</member>
-<member>check <computeroutput><guilabel>SQL Database Server</guilabel></computeroutput> (this installs PostGreSQL),</member>
+<member>check <computeroutput><guilabel>SQL Database Server</guilabel></computeroutput> (this installs PostgreSQL),</member>
 <member>check <computeroutput><guilabel>Development Tools</guilabel></computeroutput> (this installs gmake and other build tools),</member>
 <member>uncheck <computeroutput><guilabel>Administration Tools</guilabel></computeroutput>, and</member>
 <member>uncheck <computeroutput><guilabel>Printing Support</guilabel></computeroutput>.</member>
@@ -299,11 +299,11 @@ Password:
          bunch of scripts for starting and stopping programs, and
          directories of symlinks for each system level indicating
          which services should be up and down at any given service
-         level.  We'll use this system for PostGreSQL, but we'll use
-         daemontools to perform a similar function for AOLServer.
+         level.  We'll use this system for PostgreSQL, but we'll use
+         daemontools to perform a similar function for AOLserver.
          (The reason for this discrepencies is that, while daemontools
          is better, it's a pain in the ass to deal with and nobody's
-         had any trouble leaving PostGreSQL the way it is.)
+         had any trouble leaving PostgreSQL the way it is.)
        </para>
 <screen>[root@yourserver root]# <userinput>service pcmcia stop</userinput>
 [root@yourserver root]# <userinput>service netfs stop</userinput>
@@ -314,7 +314,7 @@ Password:
 service netfs stop
 chkconfig --del pcmcia
 chkconfig --del netfs</action></screen>
-        <para>If you installed PostGreSQL, do also
+        <para>If you installed PostgreSQL, do also
 <computeroutput>service postgresql start</computeroutput> and <computeroutput>chkconfig --add postgresql</computeroutput>.</para>
       </listitem>
       <listitem>

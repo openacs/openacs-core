@@ -115,7 +115,7 @@ Done Building Sat Mar  8 10:31:35 PST 2003
 	  sets database environment variables before starting
 	  AOLserver; this allows the AOLserver instance can
 	  communicate with the database.  There is one script each for
-	  Oracle and PostGreSQL.  They don't conflict, so if you plan
+	  Oracle and PostgreSQL.  They don't conflict, so if you plan
 	  to use both databases, install both.</para>
       </formalpara>
       <itemizedlist>
@@ -130,7 +130,7 @@ cp /tmp/&tarballpath;/packages/acs-core-docs/www/files/nsd-oracle.txt ./nsd-orac
 chmod 750 nsd-oracle</action></screen>
             </listitem>
             <listitem>
-              <para>PostGreSQL</para>
+              <para>PostgreSQL</para>
               <screen>[root@yourserver aolserver]# <userinput>cd /usr/local/aolserver/bin</userinput>
 [root@yourserver bin]# <userinput>cp /tmp/&tarballpath;/packages/acs-core-docs/www/files/nsd-postgres.txt ./nsd-postgres</userinput>
 [root@yourserver bin]# <userinput>chmod 755 nsd-postgres</userinput>

@@ -79,7 +79,7 @@ cp: overwrite `/etc/skel/.emacs'? <userinput>y</userinput>
     <sect1 id="install-daemontools">
       <title>Install Daemontools (OPTIONAL)</title>
       <para>Daemontools is a collection of programs for controlling
-      other processes.  We use daemontools to run and monitor AOLServer.  It is
+      other processes.  We use daemontools to run and monitor AOLserver.  It is
       installed in /package.  These commands install daemontools and
       svgroup.  svgroup is a script for granting permissions, to allow
       users other than root to use daemontools for specific
@@ -233,7 +233,7 @@ tcpserver: usage: tcpserver [ -1UXpPhHrRoOdDqQv ] [ -c limit ] [ -x rules.cdb ] 
               <secondary>rcpthosts error message</secondary>
             </indexterm>
 (I'm not sure if this next step is 100% necessary, but when I skip it
-I get problems.  If you get the error <computeroutput>553 sorry, that domain isn't in my list of allowed rcpthosts (#5.7.1)</computeroutput> then you need to do this.)  AOLServer sends outgoing mail via the ns_sendmail
+I get problems.  If you get the error <computeroutput>553 sorry, that domain isn't in my list of allowed rcpthosts (#5.7.1)</computeroutput> then you need to do this.)  AOLserver sends outgoing mail via the ns_sendmail
 command, which pipes a command to the sendmail executable.  Or, in our
 case, the qmail replacement wrapper for the sendmail executable.  In
 some cases, though, the outgoing mail requset is apparently sent
@@ -462,12 +462,12 @@ mv analog-5.32 /usr/share/</action></screen>
           <primary>full text search</primary>
           <secondary>installation</secondary>
         </indexterm>
-      <para>If you want full text search, and you are running PostGreSQL, install this module to support FTS.  Do this step after you have installed both PostGreSQL and
-      Aolserver.  You will need the <link linkend="openfts-download">openfts
+      <para>If you want full text search, and you are running PostgreSQL, install this module to support FTS.  Do this step after you have installed both PostgreSQL and
+      AOLserver.  You will need the <link linkend="openfts-download">openfts
       tarball</link> in <computeroutput>/tmp</computeroutput>.</para>
           <orderedlist>
             <listitem>
-              <para>Install Tsearch.  This is a PostGreSQL module that
+              <para>Install Tsearch.  This is a PostgreSQL module that
 	  OpenFTS requires.</para>
               <screen>[root@yourserver root]# <userinput>su - postgres</userinput>
 [postgres@yourserver pgsql]$ <userinput>cd /usr/local/src/postgresql-7.2.4/contrib/tsearch/</userinput>
@@ -555,7 +555,7 @@ exit</action></screen>
       </sect2>
 
       <sect2 id="install-openfts-postgres">
-        <title>Install OpenFTS prerequisites in PostGreSQL instance</title> 
+        <title>Install OpenFTS prerequisites in PostgreSQL instance</title> 
         <indexterm>
           <primary>full text search</primary>
           <secondary>installation</secondary>
@@ -563,7 +563,7 @@ exit</action></screen>
         <para>If you are installing Full Text Search, add required
         packages to the new database.  (In order for full text search
         to work, you must also <link
-        linkend="install-openfts">install</link> the PostGreSQL
+        linkend="install-openfts">install</link> the PostgreSQL
         OpenFTS module and prerequisites.)</para>
         <screen>[service0@yourserver service0]$ <userinput>/usr/local/pgsql/bin/psql <replaceable>service0</replaceable> -f /usr/local/src/postgresql-7.2.4/contrib/tsearch/tsearch.sql</userinput>
 BEGIN

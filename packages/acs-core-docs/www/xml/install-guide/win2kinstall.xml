@@ -262,7 +262,7 @@ zsh load-site-wide-search foo foopassword ctxsys-password
     </sect2>
 
 <sect2 id="win2kinstall-aolserver">
-<title>Configuring AOLServer</title>
+<title>Configuring AOLserver</title>
 
 
     <para>You will need two configuration files. The first is a Tcl file with

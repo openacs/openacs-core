@@ -174,7 +174,7 @@
           </listitem>
           <listitem>
             <formalpara>
-              <title>PostGreSQL</title>
+              <title>PostgreSQL</title>
               <para>Create a backup file and verify that it was created and has a reasonable size (several megabytes).</para>
             </formalpara>
             <screen>[root@localhost root]# <userinput>su - service0</userinput>

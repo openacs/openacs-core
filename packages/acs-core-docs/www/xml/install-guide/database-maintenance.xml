@@ -6,7 +6,7 @@
     </authorblurb>
 
     <sect2 id="remote-postgres">
-      <title>Running a PostGreSQL database on another server</title>
+      <title>Running a PostgreSQL database on another server</title>
 
       <para>To run a database on a different machine than the
       webserver requires changes to the database configuration file

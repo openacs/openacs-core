@@ -24,7 +24,7 @@
 	<para>
 
 	  This document assumes that you'll be installing Oracle on the same
-	  box as AOLServer. For more details on a remote Oracle installation,
+	  box as AOLserver. For more details on a remote Oracle installation,
 	  see Daryl Biberdorf's <ulink
 	  url="http://openacs.org/new-file-storage/one-file?file_id=273">document</ulink>.
   

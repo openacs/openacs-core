@@ -42,7 +42,7 @@
       <para>NOTE: explain how to add tcl to directly write your own
       log output</para>
     </formalpara>
-    <para>To set up real-time monitoring of the Aolserver error
+    <para>To set up real-time monitoring of the AOLserver error
           log, <emphasis role="bold">type</emphasis> <screen>less /usr/local/aolserver/log/openacs-dev-error.log</screen>
           <literallayout>F to show new log entries in real time (like tail -f)
 C-c to stop and F to start it up again. 

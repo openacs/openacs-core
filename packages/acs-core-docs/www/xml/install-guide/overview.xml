@@ -43,7 +43,7 @@
           <listitem>
             <para>
         The packaged version of
-      PostGreSQL in Debian and Red Hat and FreeBSD ports works fine.</para>
+      PostgreSQL in Debian and Red Hat and FreeBSD ports works fine.</para>
           </listitem>
           <listitem>
             <para>Jonathan Marsden has created RPMs (at
@@ -89,7 +89,7 @@
         <figure id="compatibility-matrix">
           <title>Compatibility Matrix</title>
           <informaltable>
-            <tgroup cols="8">
+            <tgroup cols="9">
               <colspec colname="c1"/>
               <colspec colname="c2"/>
               <colspec colname="3.2.5"/>
@@ -104,51 +104,60 @@
                 <row>
                   <entry spanname="version">OpenACS Version</entry>
                   <entry colname="3.2.5">3.2.5</entry>
-                  <entry colname="4.5">4.5</entry>
-                  <entry colname="4.6">4.6</entry>
+                  <entry colname="4.5"> 4.5 </entry>
+                  <entry colname="4.6"> 4.6 </entry>
                   <entry colname="4.6.1">4.6.1</entry>
                   <entry colname="4.6.2">4.6.2</entry>
                   <entry colname="4.6.3">4.6.3</entry>
                   <entry colname="5.0.0">5.0.0</entry>
                 </row>
                 <row>
-                  <entry morerows="6">AolServer</entry>
+                  <entry morerows="6">AOLserver</entry>
                   <entry>3</entry>
                   <entry namest="3.2.5" nameend="3.2.5" align="center">Verified</entry>
+                  <entry namest="4.5" nameend="5.0.0" align="center">No</entry>
                 </row>
                 <row>
                   <entry>3.3+ad13</entry>
+                  <entry namest="3.2.5" nameend="3.2.5" align="center">Untested</entry>
                   <entry namest="4.5" nameend="5.0.0" align="center">Verified</entry>
                 </row>
                 <row>
                   <entry>3.3oacs1</entry>
-                  <entry namest="4.6.2" nameend="5.0.0" align="center">Verified</entry>
+                  <entry namest="3.2.5" nameend="3.2.5" align="center">Untested</entry>
+                  <entry namest="4.5" nameend="5.0.0" align="center">Verified</entry>
                 </row>  
                 <row>
                   <entry>3.4.2</entry>
-                  <entry namest="4.6.2" align="center">No</entry>
+                  <entry namest="3.2.5" nameend="5.0.0" align="center">No</entry>
                 </row>  
                 <row>
                   <entry>3.4.2oacs1</entry>
-                  <entry namest="4.6.2" align="center">Verified</entry>
+                  <entry namest="3.2.5" nameend="4.6.1" align="center">Untested</entry>
+                  <entry namest="4.6.2" nameend="4.6.3" align="center">Verified</entry>
+                  <entry namest="5.0.0" nameend="5.0.0" align="center">Untested</entry>
                 </row>  
                 <row>
                   <entry>3.5.5</entry>
-                  <entry namest="4.6.2" align="center">Verified</entry>
+                  <entry namest="3.2.5" nameend="4.6.1" align="center">Untested</entry>
+                  <entry namest="4.6.2" nameend="4.6.3" align="center">Verified</entry>
+                  <entry namest="5.0.0" nameend="5.0.0" align="center">No</entry>
                 </row>  
                 <row>
-                  <entry>4</entry>
-                  <entry namest="3.2.5" nameend="4.6.3"
-                    align="center">Verified but not for production</entry>
+                  <entry>4.0</entry>
+                  <entry namest="3.2.5" nameend="4.6.1" align="center">Untested</entry>
+                  <entry namest="4.6.2" nameend="5.0.0" align="center">Verified</entry>
                 </row>
                 <row>
-                  <entry morerows="2">PostGreSQL</entry>
+                  <entry morerows="3">PostgreSQL</entry>
                   <entry>7.0</entry>
                   <entry namest="3.2.5" nameend="3.2.5" align="center">Verified</entry>
+                  <entry namest="4.5" nameend="5.0.0" align="center">No</entry>
                 </row>
                 <row>
                   <entry>7.2.x</entry>
                   <entry namest="4.5" nameend="4.6.3" align="center">Verified</entry>
+                  <entry namest="5.0.0" nameend="5.0.0" align="center">No</entry>
                 </row>
                 <row>
                   <entry>7.3.2 - 7.3.4</entry>
@@ -156,9 +165,15 @@
                   <entry namest="4.6.3" nameend="5.0.0" align="center">Verified</entry>
                 </row>
                 <row>
+                  <entry>7.4</entry>
+                  <entry namest="3.2.5" nameend="4.6.3" align="center">No</entry>
+                  <entry namest="5.0.0" nameend="5.0.0" align="center">Untested</entry>
+                </row>
+
+                <row>
                   <entry morerows="2">Oracle</entry>
                   <entry>8.1.6</entry>
-                  <entry namest="4.5" nameend="4.6.3" align="center">Verified</entry>
+                  <entry namest="4.5" nameend="5.0.0" align="center">Verified</entry>
                 </row>
                 <row>
                   <entry>8.1.7</entry>
@@ -173,6 +188,12 @@
             </tgroup>
           </informaltable>
         </figure>
+
+	<para>
+	At the time of writing AOLserver 4.0 has been tested with OpenACS and works but has not been used in 
+	production.  OpenACS 5.0.0 installs successfully on PostgreSQL 7.4 and Oracle 9i but not all packages 
+	outside core have been tested.
+	</para>
       </sect2>
 
     <sect2 id="how-to-use">
@@ -271,11 +292,11 @@ createdb <replaceable>server1</replaceable></action></screen>
                   <entry>/usr/local/src</entry>
                 </row>
                 <row>
-                  <entry>PostGreSQL directory</entry>
+                  <entry>PostgreSQL directory</entry>
                   <entry>/usr/local/pgsql</entry>
                 </row>
                 <row>
-                  <entry>AOLServer directory</entry>
+                  <entry>AOLserver directory</entry>
                   <entry>/usr/local/aolserver</entry>
                 </row>
               </tbody>

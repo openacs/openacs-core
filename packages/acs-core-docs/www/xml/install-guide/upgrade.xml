@@ -62,13 +62,13 @@
 </indexterm>
 <para>The required platform for OpenACS 4.6 is the same as
     4.5, with the excepion of OpenFTS.  You now need OpenFTS 0.3.2, not 0.2.
-    OpenACS 4.6 does not support PostGreSQL 7.3.</para>
+    OpenACS 4.6 does not support PostgreSQL 7.3.</para>
     <itemizedlist mark="circle">
       <listitem><para>A computer with OpenACS 4.5.</para>
       </listitem>
       <listitem><para><ulink url="http://openacs.org/projects/openacs/download/">OpenACS 4.6 tarball</ulink></para>
       </listitem>
-      <listitem><para>Required for Full Text Search on PostGreSQL: <ulink url="http://openfts.sourceforge.net">OpenFTS 0.3.2</ulink></para>
+      <listitem><para>Required for Full Text Search on PostgreSQL: <ulink url="http://openfts.sourceforge.net">OpenFTS 0.3.2</ulink></para>
       </listitem>
     </itemizedlist>
     <para>Upgrade Sequence</para>

@@ -46,8 +46,8 @@ many people follow links from your site to sites that you recommend</para></list
 basic infrastructure?</title>
 
 <para>To use the Open Architecture Community System, you need a computer with Unix or
-Linux, Oracle or PostgreSQL (currently), AOLServer and the Oracle or
-PostgreSQL driver for AOLServer installed. </para>
+Linux, Oracle or PostgreSQL (currently), AOLserver and the Oracle or
+PostgreSQL driver for AOLserver installed. </para>
 
 <para>We have written an <link linkend="unix-install">installation guide</link> to
 aid you in the process. It takes you through the detailed steps necessary to
@@ -62,7 +62,7 @@ documented platform for OpenACS.</para>
 </sect2>
 
 <sect2 id="acs-faq-architecture-install">
-<title>I have a machine with Unix/Linux, Oracle or PostgreSQL and AOLServer installed. How do
+<title>I have a machine with Unix/Linux, Oracle or PostgreSQL and AOLserver installed. How do
 I install the Open Architecture Community System?</title>
 
 <para>We strongly recommend that you thoroughly examine the <link linkend="unix-install">step-by-step OpenACS
@@ -208,7 +208,7 @@ indexing system)
 </itemizedlist>
 
 <itemizedlist>
-<listitem><para><ulink url="http://www.aolserver.com/">AOLServer
+<listitem><para><ulink url="http://www.aolserver.com/">AOLserver
 Documentation</ulink></para></listitem>
 
 <listitem><para><ulink

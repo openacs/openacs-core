@@ -324,9 +324,9 @@ SQL&gt; exit</programlisting>
             </formalpara>
             <itemizedlist>
               <listitem id="create-service-db-user">
-                <para>PostGreSQL:</para>
+                <para>PostgreSQL:</para>
                 <para>Create a user in the database matching the service
-            name.  With default PostGreSQL authentication, a system user connecting locally automatically authenticates as the postgres user of the same name, if one exists.  We currently use postgres "super-users" for everything, which means that anyone with access to any of the openacs system accounts on a machine has full access to all postgresql databases on that machine.</para>
+            name.  With default PostgreSQL authentication, a system user connecting locally automatically authenticates as the postgres user of the same name, if one exists.  We currently use postgres "super-users" for everything, which means that anyone with access to any of the openacs system accounts on a machine has full access to all postgresql databases on that machine.</para>
                 <screen>[root@yourserver root]# <userinput>su - postgres</userinput>
 [postgres@yourserver pgsql]$ <userinput>createuser -a -d <replaceable>service0</replaceable></userinput>
 CREATE USER
@@ -439,9 +439,9 @@ logout
           </listitem>
           <listitem>
             <para>
-	  AOLServer is very configurable. These settings should get you
+	  AOLserver is very configurable. These settings should get you
 	  started, but for more options, read the <ulink
-	  url="http://aolserver.com/docs/admin/config.html">AOLServer
+	  url="http://aolserver.com/docs/admin/config.html">AOLserver
 	  docs</ulink>.
 	</para>
           </listitem>
@@ -467,10 +467,10 @@ logout
 	  <computeroutput>nsd-postgres</computeroutput> with
 	  <computeroutput>nsd-oracle</computeroutput>).</para>
         <para>If you want to use port 80, there are complications.
-	  First, Aolserver must be root to use system ports such as
+	  First, AOLserver must be root to use system ports such as
 	  80, but refuses to run as root for security reasons.  Thus
 	  you must start as root and specify a non-root user ID and
-	  Group ID which Aolserver will switch to after claiming the
+	  Group ID which AOLserver will switch to after claiming the
 	  port.  To do so, find the UID and GID of the
 	  <replaceable>service0</replaceable> user via
 	  <computeroutput>grep <replaceable>service0</replaceable>
@@ -590,7 +590,7 @@ Loading package .info files ... this will take a few minutes</programlisting>
 		  You&#39;ll see the final Installer page, &quot;OpenACS
 		  Installation: Complete.&quot; It will tell you that the server is
 		  being restarted; note that unless you already set up a way for
-		  AOLServer to restart itself (ie. inittab or daemontools),
+		  AOLserver to restart itself (ie. inittab or daemontools),
 		  you&#39;ll need to manually restart your service.
 		</para>
         <screen>[service0@yourserver service0]$ <userinput>/usr/local/aolserver/bin/nsd-postgres -t /var/lib/aolserver/<replaceable>service0</replaceable>/config.tcl</userinput></screen>
@@ -646,7 +646,7 @@ Loading package .info files ... this will take a few minutes</programlisting>
         <para>Put in the appropriate lines for the database you are running.  If you will use both databases, put in both sets of lines.</para>
         <itemizedlist>
           <listitem>
-            <para>PostGreSQL:</para>
+            <para>PostgreSQL:</para>
             <programlisting>export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/pgsql/lib
 export PATH=$PATH:/usr/local/pgsql/bin</programlisting>
           </listitem>
@@ -675,7 +675,7 @@ logout
 </screen>
         <itemizedlist>
           <listitem>
-            <para>For PostGreSQL, you should see:</para>
+            <para>For PostgreSQL, you should see:</para>
         <screen>
 LD_LIBRARY_PATH=LD_LIBRARY_PATH=:/usr/local/pgsql/lib
 PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:/usr/bin/X11:/usr/X11R6/bin:/root/bin:/usr/local/pgsql/bin:/usr/local/pgsql/bin</screen>
