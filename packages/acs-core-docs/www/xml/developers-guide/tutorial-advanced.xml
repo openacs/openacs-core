@@ -776,7 +776,7 @@ drop function inline_0();
       some_table parent, 
       some_table children
       WHERE 
-      children.tree_sorktey between parent.tree_sortkey and tree_right(parent.tree_sortkey)
+      children.tree_sortkey between parent.tree_sortkey and tree_right(parent.tree_sortkey)
       and parent.tree_sortkey &lt;&gt; children.tree_sortkey
       and parent.key = :the_parent_key;
       </programlisting>
@@ -795,11 +795,11 @@ drop function inline_0();
     <programlisting>
       SELECT
       subtree.*,
-      tree_level(children.tree_sortkey) -
+      tree_level(subtree.tree_sortkey) -
         tree_level(parent.tree_sortkey) as level
       FROM some_table parent, some_table subtree
       WHERE 
-      subtree.tree_sorktey between parent.tree_sortkey and tree_right(parent.tree_sortkey)
+      subtree.tree_sortkey between parent.tree_sortkey and tree_right(parent.tree_sortkey)
       and parent.key = :the_parent_key;
     </programlisting>
 
