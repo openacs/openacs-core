@@ -46,7 +46,7 @@ namespace eval ::f {
 # Lambda
 # --------------------------------------------------------------------------------
 
-ad_proc lambda {args body} {
+ad_proc -public lambda {args body} {
     The lambda function - one of the foundations of functional programming -
     defines an anonymous proc and returns it. This is useful if you quickly
     need an auxiliary function for a small task. 
@@ -109,14 +109,14 @@ ad_proc -public bind2nd {f arg} "binds arg to the 2nd argument of f" {
 # as arguments to other functions. 
 # --------------------------------------------------------------------------------
 
-proc +  {a b} {expr $a +  $b}
-proc -  {a b} {expr $a -  $b}
-proc *  {a b} {expr $a *  $b}
-proc /  {a b} {expr $a /  $b}
-proc && {a b} {expr $a && $b}
-proc || {a b} {expr $a || $b}
-proc >  {a b} {expr $a >  $b}
-proc <  {a b} {expr $a <  $b}
+proc +  {a b} {expr {$a +  $b}}
+proc -  {a b} {expr {$a -  $b}}
+proc *  {a b} {expr {$a *  $b}}
+proc /  {a b} {expr {$a /  $b}}
+proc && {a b} {expr {$a && $b}}
+proc || {a b} {expr {$a || $b}}
+proc >  {a b} {expr {$a >  $b}}
+proc <  {a b} {expr {$a <  $b}}
 
 # Example: 
 # + 5 6 = 11
@@ -125,7 +125,7 @@ proc <  {a b} {expr $a <  $b}
 # map
 # --------------------------------------------------------------------------------
 
-ad_proc map {f xs} {
+ad_proc -public map {f xs} {
     Takes a function f and a list { x1 x2 x3 ...},
     applies the function on each element of the list
     and returns the result, i.e. { f x1, f x2, f x3, ...}.
@@ -235,7 +235,7 @@ ad_proc -public scanl1 {f xs} "takes a binary function f and a list {x1 x2 x3 ..
 # Standard combinators
 # --------------------------------------------------------------------------------
 
-ad_proc id {x} {
+ad_proc -public id {x} {
     Identity function: just returns its argument.
     <p>
     I'm not kidding! An identity function can be useful sometimes, e.g.
@@ -276,14 +276,14 @@ ad_proc -public const {k} {
     lambda {x} [list return $k]
 }
 
-ad_proc curry {f args} {
+ad_proc -public curry {f args} {
     Converts a function that takes one tuple as an argument
     into a function that takes a series of single arguments.
 } {
     uplevel [list $f $args]
 }
 
-ad_proc uncurry {f tuple} {
+ad_proc -public uncurry {f tuple} {
     Converts a function that takes a series of single arguments
     into a function that takes one tuple as an argument.
     <h4>Example</h4>
@@ -355,7 +355,7 @@ ad_proc -public compose {f g x} "function composition: evaluates f (g x)" {
 # --------------------------------------------------------------------------------
 
 ad_proc -public abs {x} "returns the absolute value of x" {
-    expr $x<0 ? -$x : $x
+    expr {$x<0 ? -$x : $x}
 }
 
 ad_proc -public gcd {x y} "returns the greatest common divisor of x and y" {
@@ -364,29 +364,29 @@ ad_proc -public gcd {x y} "returns the greatest common divisor of x and y" {
 
 proc gcd' {x y} {
     if { $y==0 } { return $x }
-    gcd' $y [expr $x%$y]
+    gcd' $y [expr {$x%$y}]
 }
 
 ad_proc -public lcm {x y} "returns the least common multiple of x and y" {
     if { $x==0} { return 0 }
     if { $y==0} { return 0 }
-    abs [expr $x/[gcd $x $y]*$y]
+    abs [expr {$x/[gcd $x $y]*$y}]
 }
 
 ad_proc -public odd_p {n} "returns 1 if n is odd and 0 otherwise" {
-    expr $n%2
+    expr {$n%2}
 }
 
 ad_proc -public even_p {n} "returns 1 if n is even and 0 otherwise" {
-    expr 1-$n%2
+    expr {1-$n%2}
 }
 
 ad_proc -public min {x y} "returns the minimum of x and y" {
-    expr $x<$y ? $x : $y
+    expr {$x<$y ? $x : $y}
 }
 
 ad_proc -public max {x y} "returns the maximum of x and y" {
-    expr $x>$y ? $x : $y
+    expr {$x>$y ? $x : $y}
 }
 
 # --------------------------------------------------------------------------------
@@ -480,14 +480,14 @@ ad_proc -public tail {xs} "all elements of a list but the first" {
 }
 
 ad_proc -public take {n xs} "returns the first n elements of xs" {
-    lrange $xs 0 [expr $n-1]
+    lrange $xs 0 [expr {$n-1}]
 }
 
 ad_proc -public drop {n xs} "returns the remaining elements of xs (without the first n)" {
     lrange $xs $n [expr [llength $xs]-1]
 }
 
-ad_proc filter {pred xs} {
+ad_proc -public filter {pred xs} {
     Returns all elements of the list <em>xs</em> that fulfill the predicate <em>pred</em>.
     <h4>Examples</h4>
     <ul>
@@ -535,11 +535,11 @@ ad_proc -public reverse {xs} "reverses the list xs" {
 }
 
 ad_proc -public elem_p {x xs} "checks if x is contained in s" {
-    expr [lsearch $xs $x]==-1 ? 0 : 1
+    expr {[lsearch $xs $x]==-1 ? 0 : 1}
 }
 
 ad_proc -public not_elem_p {x xs} "checks if x is not contained in s" {
-    expr [lsearch $xs $x]==-1 ? 1 : 0
+    expr {[lsearch $xs $x]==-1 ? 1 : 0}
 }
 
 ad_proc -public nub {xs} "removes duplicates from xs" {
@@ -553,7 +553,7 @@ ad_proc -public nub {xs} "removes duplicates from xs" {
 }
 
 ad_proc -public null_p {xs} "checks if xs is the empty list" {
-    expr [llength $xs]==0
+    expr {[llength $xs]==0}
 }
 
 ad_proc -public enum_from_to {lo hi} "generates {lo lo+1 ... hi-1 hi}" {
@@ -717,7 +717,7 @@ ad_proc -public take_until {p xs} "returns the list of elements upto and includi
 # Tests and Experiments
 # --------------------------------------------------------------------------------
 
-proc factorial {n} {
+ad_proc -public factorial {n} {
     product [enum_from_to 1 $n]
 }
 
@@ -725,7 +725,7 @@ ad_proc -public mul {n fraction} "multiplies n with a fraction (given as a tuple
     set num [fst $fraction]
     set denom [snd $fraction]
     set g [gcd $n $denom]
-    expr ($n/$g)*$num/($denom/$g)
+    expr {($n/$g)*$num/($denom/$g)}
 }
 
 ad_proc -public choose {n k} "Here's how to compute 'n choose k' like a real nerd." {
@@ -738,7 +738,7 @@ ad_proc -public pascal {size} "prints Pascal's triangle" {
     }
 }
 
-proc prime_p {n} {
+ad_proc -public prime_p {n} {
     if { $n<2 } { return 0 }
     if { $n==2 } { return 1 }
     if { [even_p $n] } { return 0 }
