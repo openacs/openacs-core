@@ -5,7 +5,7 @@
 <fullquery name="dbqd.acs-subsite.www.permissions.toggle-inherit.toggle_inherit">
   <querytext>
   update acs_objects
-  set security_inherit_p = case when security_inherit_p = 't' then 'f' else 't' end
+  set security_inherit_p = not security_inherit_p
   where object_id = :object_id
   </querytext>
 </fullquery>
