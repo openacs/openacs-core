@@ -19,6 +19,7 @@ set page "
   <li><a href=apm>ACS Package Manager</a>
   <li><a href=users>Users</a>
   <li><a href=\"/acs-lang/admin\">Internationalization</a></li>
+  <li><a href=\"cache\">Cache Control</a></li>
 </ul>
 <p>
 "
