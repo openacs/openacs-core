@@ -124,7 +124,8 @@ namespace eval lang::user {
     } {
         set user_id [ad_conn user_id]
         if { $user_id == 0 } {
-            return ""
+            # Not logged in, use a session-based client property
+            return [ad_get_client_property -cache t "acs-lang" "user_locale"]
         }
     
         # Pssst! We don't actually use this package thing, 
@@ -160,6 +161,8 @@ namespace eval lang::user {
     } {
         set user_id [ad_conn user_id]
         if { $user_id == 0 } {
+            # Not logged in, use a session-based client property
+            ad_set_client_property -persistent t "acs-lang" "user_locale" $locale
             return
         }
     
@@ -173,9 +176,15 @@ namespace eval lang::user {
 
         set user_locale_exists_p [db_string user_locale_exists_p {}]
         if { $user_locale_exists_p } {
-            db_dml update_user_locale {}
+            if { ![empty_string_p $locale] } {
+                db_dml update_user_locale {}
+            } else {
+                db_dml delete_user_locale {}
+            }
         } else {
-            db_dml insert_user_locale {}
+            if { ![empty_string_p $locale] } {
+                db_dml insert_user_locale {}
+            }
         }
     }
 

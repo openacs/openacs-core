@@ -229,7 +229,20 @@ namespace eval lang::message {
             set return_value $default
 
             if { [string equal $default "TRANSLATION MISSING"] } {
-                append return_value " - " $key                    
+                if { [lang::util::translator_mode_p] } {
+                    set key_split [split $key "."]
+                    set package_key_part [lindex $key_split 0]
+                    set message_key_part [lindex $key_split 1]
+
+                    set return_url [ad_conn url]
+                    if { [ns_getform] != "" } {
+                        append return_url "?[export_entire_form_as_url_vars]"
+                    }
+
+                    set return_value "<a href=\"/acs-lang/admin/edit-localized-message?[export_vars { { message_key $message_key_part } { locales $locale } { package_key $package_key_part } return_url }]\"><span style=\"background-color: yellow\">TRANSLATE NOW</span></a>"
+                } else {
+                    append return_value " - " $key
+                }
             }
         }
 
