@@ -1,3 +1,0 @@
-drop view orphan_implementations;
-drop view invalid_uninstalled_bindings;
-drop view valid_uninstalled_bindings;
