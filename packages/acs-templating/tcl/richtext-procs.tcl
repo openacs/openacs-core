@@ -207,6 +207,26 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
                               -default 0]
       }
 
+      # Check browser's User-Agent header for compatibility with htmlArea
+      if { $htmlarea_p } {
+          set user_agent [string tolower [ns_set get [ns_conn headers] User-Agent]]
+          if { [string first "opera" $user_agent] != -1 } { 
+              # Opera - doesn't work, even though Opera claims to be IE
+              set htmlarea_p 0
+          } elseif { [regexp {msie ([0-9]*)\.([0-9]+)} $user_agent matches major minor] } {
+              # IE, works for browsers > 5.5
+              if { $major < 5 || ($major == 5  && $minor < 5) } {
+                  set htmlarea_p 0
+              }
+          } elseif { [regexp {gecko/0*([1-9][0-9]*)} $user_agent match build] } {
+              if { $build < 20030210 } {
+                  set htmlarea_p 0
+              }
+          } else {
+              set htmlarea_p 0
+          }
+      }
+
       if { $htmlarea_p } {
           # Tell the blank-master to include the special stuff for htmlArea in the page header
           global acs_blank_master__htmlareas
