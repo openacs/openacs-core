@@ -116,11 +116,11 @@ ad_proc -public ::content::folder::register_content_type {
     @error 
 } {
     return [package_exec_plsql \
-		-var_list [list \
-			       folder_id $folder_id \
-			       content_type $content_type \
-			       include_subtypes $include_subtypes ] \
-		content_folder register_content_type]
+                -var_list [list \
+                               [list folder_id $folder_id] \
+                               [list content_type $content_type] \
+                               [list include_subtypes $include_subtypes]] \
+                content_folder register_content_type]
 }
 
 
@@ -146,13 +146,11 @@ ad_proc -public ::content::folder::unregister_content_type {
 } {
 
     return [package_exec_plsql \
-		-var_list [list \
-			       folder_id $folder_id \
-			       content_type $content_type \
-			       include_subtypes $include_subtypes] \
-		"content_folder" "unregister_content_type"
-	   ]
-    
+                -var_list [list \
+                               [list folder_id $folder_id] \
+                               [list content_type $content_type] \
+                               [list include_subtypes $include_subtypes]] \
+                content_folder unregister_content_type]
 }
 
 ad_proc -public ::content::folder::update {
