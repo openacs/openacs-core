@@ -67,14 +67,14 @@ if { ![template::util::is_nil focus] } {
 
 # Header links (stylesheets, javascript)
 multirow create header_links rel type href media
-multirow append header_links "stylesheet" "text/css" "/lists.css" "all"
-multirow append header_links "stylesheet" "text/css" "/default-master.css" "all"
+multirow append header_links "stylesheet" "text/css" "/resources/acs-templating/lists.css" "all"
+multirow append header_links "stylesheet" "text/css" "/resources/acs-subsite/default-master.css" "all"
 
 
 # Developer-support: We include that here, so that master template authors don't have to worry about it
 
 if { [llength [namespace eval :: info procs ds_link]] == 1 } {
-     set ds_link "[ds_link]"
+     set ds_link [ds_link]
 } else {
     set ds_link ""
 }

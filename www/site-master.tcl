@@ -23,15 +23,15 @@ set subsite_node_id $subsite_sitenode(node_id)
 set subsite_name $subsite_sitenode(instance_name)
 
 # Where to find the stylesheet
-set css_url "${subsite_url}site-master.css"
+set css_url "/resources/acs-subsite/site-master.css"
 
 # Get system name
 set system_name [ad_system_name]
 set system_url [ad_url]
 
 # Get user information
-set user_id [ad_conn user_id]
-if { $user_id != 0 } {
+set user_id [ad_conn untrusted_user_id]
+if { [ad_conn untrusted_user_id] != 0 } {
     set user_name [person::name -person_id $user_id]
     set pvt_home_url [ad_pvt_home]
     set pvt_home_name [ad_pvt_home_name]
@@ -42,13 +42,13 @@ if { $user_id != 0 } {
 
 # Site-wide admin link
 set admin_url {}
-if { $user_id != 0 } {
+if { [ad_conn user_id] != 0 } {
     array set swadmin_node [site_node::get -url [apm_package_url_from_key "acs-admin"]]
     set swadmin_object_id $swadmin_node(object_id)
-    set sw_admin_p [permission::permission_p -party_id $user_id -object_id $swadmin_object_id -privilege admin]
+    set sw_admin_p [permission::permission_p -object_id $swadmin_object_id -privilege admin]
     if { $sw_admin_p } {
         set admin_url "/acs-admin/"
-    } elseif { [permission::permission_p -party_id $user_id -object_id [ad_conn subsite_id] -privilege admin] } {
+    } elseif { [permission::permission_p -object_id [ad_conn subsite_id] -privilege admin] } {
         set admin_url "[subsite::get_element -element url]admin/"
     }
 }
