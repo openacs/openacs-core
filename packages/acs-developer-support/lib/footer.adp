@@ -1,15 +1,14 @@
 <if @show_p@ true>
+  <div class="developer-support-footer-off">
     <if @comments:rowcount@ gt 0>
-    <div class="developer-support-footer">
       <multiple name="comments">
         <b>Comment:</b> <pre style="display: inline;">@comments.text@</pre><br />
       </multiple>
-    </div>
-  </if>
-  <if @user_switching_p@ true>
-    <form action="@set_user_url@">
-      @export_vars;noquote@
-      <div class="developer-support-footer">
+      <hr />
+    </if>
+    <if @user_switching_p@ true>
+      <form action="@set_user_url@">
+        @export_vars;noquote@
         Real user: @real_user_name@ (@real_user_email@) [user_id #@real_user_id@]<br />
         <if @real_user_id@ ne @fake_user_id@>      
           Faked user: @fake_user_name@ <if @fake_user_email@ not nil>(@fake_user_email@)</if> [user_id #@fake_user_id@] <a href="@unfake_url@">(Unfake)</a><br />
@@ -23,11 +22,10 @@
           </multiple>
         </select></if><else><input type="text" name="keyword"><input type="hidden" name="target" value="@target@"></else>
         <input type="submit" value="Go">
-      </div>
-    </form>
-  </if>
-  <if @profiling:rowcount@ gt 0>
-    <div class="developer-support-footer">
+      </form>
+      <hr />
+    </if>
+    <if @profiling:rowcount@ gt 0>
       <h3>Profiling Information</h3>
       <table>
         <tr>
@@ -45,6 +43,6 @@
           </tr>
         </multiple>
       </table>
-    </div>
-  </if>
+    </if>
+  </div>
 </if>

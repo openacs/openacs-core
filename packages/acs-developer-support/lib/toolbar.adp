@@ -11,6 +11,7 @@
           <li><a href="@db_toggle_url@" class="@db_on@" title="Database statistics">DB</a></li>
           <li><a href="@translator_toggle_url@" class="@translator_on@" title="Translator mode">TRN</a></li>
           <li><a href="@adp_toggle_url@" class="@adp_on@" title="ADP Reveal mode">ADP</a></li>
+          <li><a href="@foot_toggle_url@" class="@foot_on@" title="Show footer">FOOT</a></li>
         </ul>
       </td>
 

@@ -125,7 +125,7 @@ if { [llength $requests] == 0 } {
 	    }
 
 	    if { [info exists conn(startclicks)] && [info exists conn(endclicks)] } {
-		set duration "[expr { ($conn(endclicks) - $conn(startclicks)) / 1000 }] ms"
+		set duration "[expr { ($conn(endclicks) - $conn(startclicks))}] ms"
 	    } else {
 		set duration ""
 	    }

@@ -1,7 +1,6 @@
 #developer-toolbar {
   background-color: #616093;
   color: white;
-  font-family: tahoma, verdana;
   font-size: 80%;
   padding-left: 8px;
   padding-right: 8px;
@@ -20,11 +19,11 @@
   border: solid 1px #cccccc;
 }
 #developer-toolbar #search {
-  font: 80% tahoma;
+  font-size: 80%;
   color: white;
 }
 #developer-toolbar #search input {
-  font: 100% tahoma;
+  font-size: 100%;
 }
 #developer-toolbar td a.on {
   background-color: #888888;
@@ -45,7 +44,7 @@
   display: inline;
   border: none;
 }
-                
+
 #developer-toolbar .actions ul li {
   margin: 0;
   padding: 0;
@@ -71,7 +70,9 @@ div.developer-support-adp-box-off {
 
 span.developer-support-adp-file-on {
   font-size: 80%;
-  line-height: 1.2em;
+  line-height: 1.3em;
+  margin-left: 1em;
+  font-weight: bold;
 }
 
 span.developer-support-adp-file-off {
@@ -97,11 +98,13 @@ div.developer-support-adp-output-off {
 
 .developer-support-footer {
   clear: both;
-  float: left;
   padding: 6px;
   border: solid 1px gray;
   background-color: #e1e1e1;
-  margin-top: 4px;
-  
+  position: absolute;
+  right: 0px;
 }
 
+.developer-support-footer-off {
+        display: none;
+}
