@@ -1065,6 +1065,23 @@ ad_proc -public -deprecated -warn apm_package_create_instance {
             -context_id $context_id]
 }
 
+ad_proc -public apm_package_rename {
+    {-package_id ""}
+    {-instance_name:required}
+} {
+    Renames a package instance
+} {    
+    if { [empty_string_p $package_id] } {
+        set package_id [ad_conn package_id]
+    }
+    db_dml app_rename {
+        update apm_packages
+        set instance_name = :instance_name
+        where package_id = :package_id
+    }
+    site_nodes_sync
+}
+
 ad_proc -public apm_set_callback_proc {
     {-version_id ""}
     {-package_key ""}
