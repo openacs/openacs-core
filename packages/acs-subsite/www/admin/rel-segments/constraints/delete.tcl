@@ -12,13 +12,13 @@ ad_page_contract {
     constraint_id:naturalnum,notnull
     { return_url "" }
 } -properties {
-    context_bar:onevalue
+    context:onevalue
     constraint_name:onevalue
     segment_name:onevalue
     export_vars:onevalue
 }
 
-set context_bar [list [list one?[ad_export_vars constraint_id] "One constraint"] "Delete constraint"]
+set context [list [list one?[ad_export_vars constraint_id] "One constraint"] "Delete constraint"]
 
 set package_id [ad_conn package_id]
 

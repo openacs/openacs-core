@@ -11,7 +11,7 @@ ad_page_contract {
 } {
     segment_id:naturalnum,notnull
 } -properties {
-    context_bar:onevalue
+    context:onevalue
     props:onerow
     number_elements:onevalue
     admin_p:onevalue
@@ -28,7 +28,7 @@ ad_page_contract {
     }
 }
 
-set context_bar [list [list "./" "Relational segments"] "One segment"]
+set context [list [list "./" "Relational segments"] "One segment"]
 
 if { ![db_0or1row select_segment_properties {
     select s.segment_id, s.segment_name, s.group_id, acs_object.name(s.group_id) as group_name,

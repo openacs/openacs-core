@@ -6,7 +6,7 @@ ad_page_contract {
 } {
     user_id:integer
 } -properties {
-    context_bar:onevalue
+    context:onevalue
     member_state:onevalue
     first_names:onevalue
     last_name:onevalue
@@ -126,7 +126,7 @@ where a.object_type = at.object_type
 and a.creation_user = :user_id
 order by object_name, creation_date"
 
-set context_bar [ad_context_bar_ws_or_index "Community member"]
+set context [list "Community member"]
 set system_name [ad_system_name]
 set pretty_creation_date [util_AnsiDatetoPrettyDate $creation_date]
 set login_export_vars "return_url=[ns_urlencode [acs_community_member_url -user_id $user_id]]"

@@ -12,7 +12,7 @@ ad_page_contract {
     role:notnull
     { return_url "" }
 } -properties {
-    context_bar:onevalue
+    context:onevalue
     
 }
 
@@ -22,7 +22,7 @@ db_1row select_role_props {
      where r.role = :role
 }
 
-set context_bar [list [list "../" "Relationship types"] [list "one?[ad_export_vars role]" "One role"] "Edit"]
+set context [list [list "../" "Relationship types"] [list "one?[ad_export_vars role]" "One role"] "Edit"]
 
 template::form create role_form
 

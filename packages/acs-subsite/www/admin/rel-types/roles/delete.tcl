@@ -12,12 +12,12 @@ ad_page_contract {
     role:notnull
     { return_url "" }
 } -properties {
-    context_bar:onevalue
+    context:onevalue
     pretty_name:onevalue
     export_vars:onevalue
 }
 
-set context_bar [list [list "../" "Relationship types"] [list "" "Roles"] [list one?[ad_export_vars role] "One role"] "Delete role"]
+set context [list [list "../" "Relationship types"] [list "" "Roles"] [list one?[ad_export_vars role] "One role"] "Delete role"]
 
 set export_vars [ad_export_vars -form {role return_url}]
 

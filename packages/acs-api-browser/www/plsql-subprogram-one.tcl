@@ -14,11 +14,11 @@ ad_page_contract {
     type
 } -properties {
     title:onevalue
-    context_bar:onevalue
+    context:onevalue
 }
 
 set title $name
-set context_bar [ad_context_bar {"plsql-subprograms-all" "All PL/SQL Subprograms"} "One PL/SQL Subprogram"]
+set context [list {"plsql-subprograms-all" "All PL/SQL Subprograms"} "One PL/SQL Subprogram"]
 
 set source_text ""
 

@@ -14,14 +14,14 @@ ad_page_contract {
     { attribute_value "" }
     { return_url "" }
 } -properties {
-    context_bar:onevalue
+    context:onevalue
     focus:onevalue
     attribute_pretty_name:onevalue    
 }
 
 ad_require_permission $id_column "write"
 
-set context_bar [list "Edit attribute"]
+set context [list "Edit attribute"]
 
 db_1row attribute_properties {
     select a.pretty_name as attribute_pretty_name, a.datatype, a.attribute_id,

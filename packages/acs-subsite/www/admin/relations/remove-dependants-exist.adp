@@ -1,5 +1,5 @@
-<master src="../master">
-<property name="context_bar">@context_bar@</property>
+<master>
+<property name="context">@context@</property>
 <property name="title">Dependant relations exist</property>
 
 You must remove the following dependant relations before you can

@@ -85,9 +85,9 @@ if { ![empty_string_p $width] && ![empty_string_p $height] } {
 db_release_unused_handles
 
 if {$admin_p} {
-    set context_bar [ad_context_bar_ws "User's Portrait"]
+    set context [list "User's Portrait"]
 } else {
-    set context_bar [ad_context_bar_ws "Your Portrait"]
+    set context [list "Your Portrait"]
 }
 
 set system_name [ad_system_name]

@@ -12,7 +12,7 @@ ad_page_contract {
     { sort_by "file"} 
 } -properties {
     title:onevalue
-    context_bar:onevalue
+    context:onevalue
     dimensional_slider:onevalue
     proc_list:multirow
 }
@@ -31,7 +31,7 @@ set dimensional {
 }
 
 set title "$type Procedures"
-set context_bar [ad_context_bar "Browse Procedures"]
+set context [list "Browse Procedures"]
 set dimensional_slider [ad_dimensional $dimensional]
 
 set matches [list]

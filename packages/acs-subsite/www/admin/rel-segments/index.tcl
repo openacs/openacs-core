@@ -10,11 +10,11 @@ ad_page_contract {
 
 } {
 } -properties {
-    context_bar:onevalue
+    context:onevalue
     seg:multirow
 }
 
-set context_bar [list "Relational segments"]
+set context [list "Relational segments"]
 
 set user_id [ad_conn user_id]
 

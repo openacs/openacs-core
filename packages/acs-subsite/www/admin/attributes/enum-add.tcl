@@ -12,7 +12,7 @@ ad_page_contract {
     attribute_id:integer,notnull
     { return_url "" }
 } -properties {
-    context_bar:onevalue
+    context:onevalue
     export_vars:onevalue
     attribute_pretty_name:onevalue
     attribute_src:multirow
@@ -49,7 +49,7 @@ db_1row select_attr_name {
      where a.attribute_id = :attribute_id
 }
 
-set context_bar [list [list one?[export_url_vars attribute_id] "One attribute"] "Add values"]
+set context [list [list one?[export_url_vars attribute_id] "One attribute"] "Add values"]
 
 set export_vars [ad_export_vars -form {attribute_id return_url}]
 

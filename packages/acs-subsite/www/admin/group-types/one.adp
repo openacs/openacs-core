@@ -1,5 +1,5 @@
-<master src="../master">
-<property name="context_bar">@context_bar@</property>
+<master>
+<property name="context">@context@</property>
 <property name="title">Group Type "@group_type_pretty_name@"</property>
 				   
 <h4>Groups of this type</h4>

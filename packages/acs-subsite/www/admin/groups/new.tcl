@@ -18,7 +18,7 @@ ad_page_contract {
     { return_url "" }
     {group_rel_type_list ""}
 } -properties {
-    context_bar:onevalue
+    context:onevalue
     group_type_pretty_name:onevalue
     attributes:multirow
 } -validate {
@@ -31,7 +31,7 @@ ad_page_contract {
     }
 }
 
-set context_bar [list [list "[ad_conn package_url]admin/groups/" "Groups"] "Add a group"]
+set context [list [list "[ad_conn package_url]admin/groups/" "Groups"] "Add a group"]
 
 if {[empty_string_p $add_to_group_id]} {
     set add_to_group_id [application_group::group_id_from_package_id]

@@ -1,4 +1,4 @@
-<master src="master">
+<master>
 <property name=title>Login Expired</property>
 
 <p>The login page has expired. Please <a href="./index">login</a> again.</p>

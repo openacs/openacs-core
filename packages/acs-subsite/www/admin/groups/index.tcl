@@ -18,7 +18,7 @@ ad_page_contract {
 	}
     }
 } -properties {
-    context_bar:onevalue
+    context:onevalue
     groups:multirow
     subsite_group_id:onevalue
     view_by:onevalue
@@ -26,7 +26,7 @@ ad_page_contract {
 
 subsite::configure_if_necessary
 
-set context_bar [list "Groups"]
+set context [list "Groups"]
 
 set this_url [ad_conn url]
 

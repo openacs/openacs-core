@@ -10,7 +10,7 @@ ad_page_contract {
     user_id
     {referer "/acs-admin/users"}
 } -properties {
-    context_bar:onevalue
+    context:onevalue
     first_names:onevalue
     last_name:onevalue
     export_vars:onevalue
@@ -18,7 +18,7 @@ ad_page_contract {
     
 set admin_user_id [ad_verify_and_get_user_id]
 
-set context_bar [ad_admin_context_bar [list "index.tcl" "Users"] "New user notified"]
+set context [list [list "./" "Users"] "New user notified"]
 set export_vars [export_url_vars user_id]
 
 set admin_email [db_string unused "select email from 
@@ -31,5 +31,3 @@ if [catch {ns_sendmail "$email" "$admin_email" "You have been added as a user to
 </pre></blockquote>"
     return
 }
-
-ad_return_template

@@ -1,4 +1,4 @@
-<master src="master">
+<master>
 <property name="title">Bad Password</property>
 <property name="context_bar">in <a href="/index">@system_name@</a></property>
 

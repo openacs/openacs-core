@@ -13,7 +13,7 @@ ad_page_contract {
     { rel_type:trim "" }
     { return_url "" }
 } -properties {
-    context_bar:onevalue
+    context:onevalue
     export_vars:onevalue
     group_id:onevalue
     primary_rels:multirow
@@ -37,7 +37,7 @@ if { ![empty_string_p $rel_type] } {
 
 ad_require_permission $group_id "read"
 
-set context_bar [list [list "" "Relational segments"] "Add segment"]
+set context [list [list "" "Relational segments"] "Add segment"]
 
 set export_vars [ad_export_vars -form {group_id return_url}]
 # Select out all relationship types

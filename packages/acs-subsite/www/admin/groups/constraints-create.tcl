@@ -14,13 +14,13 @@ ad_page_contract {
     rel_type:notnull
     { return_url "" }
 } -properties {
-    context_bar:onevalue
+    context:onevalue
     export_vars:onevalue
     rel_type_pretty_name:onevalue
     group_name:onevalue
 }
 
-set context_bar [list [list "[ad_conn package_url]admin/groups/" "Groups"] [list one?[ad_export_vars group_id] "One Group"] "Add constraint"]
+set context [list [list "[ad_conn package_url]admin/groups/" "Groups"] [list one?[ad_export_vars group_id] "One Group"] "Add constraint"]
 set export_vars [ad_export_vars -form {group_id rel_type return_url}]
 
 db_1row select_props {

@@ -1,4 +1,4 @@
-<master src="master">
+<master>
 <property name=title>Vacation Information Updated</property>
 
 <p>Your vacation information at @site_link@ has been updated.</p>

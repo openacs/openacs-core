@@ -6,7 +6,7 @@ ad_page_contract {
     {return_url "" }
     {user_id ""}
 } -properties {
-    context_bar:onevalue
+    context:onevalue
     export_vars:onevalue
     admin_p:onevalue
 }
@@ -23,12 +23,10 @@ if [empty_string_p $user_id] {
 ad_require_permission $user_id "write"
 
 if {$admin_p} {
-    set context_bar [ad_context_bar_ws [list "index?user_id=$user_id" "User's Portrait"] "Erase"]
+    set context [list [list "./?user_id=$user_id" "User's Portrait"] "Erase"]
 } else {
-    set context_bar [ad_context_bar_ws [list "index" "Your Portrait"] "Erase"]
+    set context [list_ws [list "./" "Your Portrait"] "Erase"]
 }
 
 set export_vars [export_form_vars user_id return_url]
 
-
-ad_return_template

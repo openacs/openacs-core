@@ -9,7 +9,7 @@ ad_page_contract {
     type
 } -properties {
     title:onevalue
-    contextbar:onevalue
+    context:onevalue
     documentation:onevalue
 }
 
@@ -28,7 +28,7 @@ if [exists_and_not_null version_id] {
     set public_p [api_set_public]
 }
 
-set context_bar_elements [list]
+set context [list]
 
 if { [info exists version_id] } {
     db_1row package_info_from_version_id {
@@ -36,11 +36,10 @@ if { [info exists version_id] } {
           from apm_package_version_info
          where version_id = :version_id
     }
-    lappend context_bar_elements [list "package-view?version_id=$version_id&kind=types" "$package_name $version_name"]
+    lappend context [list "package-view?version_id=$version_id&kind=types" "$package_name $version_name"]
 }
 
-lappend context_bar_elements $type
+lappend context $type
 
 set title $type
-set context_bar [eval ad_context_bar $context_bar_elements]
 set documentation [api_type_documentation $type]

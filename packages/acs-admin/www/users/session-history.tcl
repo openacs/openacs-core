@@ -4,7 +4,7 @@ append whole_page "[ad_admin_header "Session History"]
 
 <h2>Session History</h2>
 
-[ad_admin_context_bar [list "index.tcl" "Users"] "Session History"]
+[ad_context_bar [list "./" "Users"] "Session History"]
 
 <hr>
 

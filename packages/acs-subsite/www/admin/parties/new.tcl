@@ -17,12 +17,12 @@ ad_page_contract {
     {add_with_rel_type "membership_rel"}
     {group_rel_type_list ""}
 } -properties {
-    context_bar:onevalue
+    context:onevalue
     party_type_pretty_name:onevalue
     attributes:multirow
 }
 
-set context_bar [list [list "" "Parties"] "Add a party"]
+set context [list [list "" "Parties"] "Add a party"]
 
 if {[empty_string_p $add_to_group_id]} {
     set add_to_group_id [application_group::group_id_from_package_id]

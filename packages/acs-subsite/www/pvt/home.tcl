@@ -5,7 +5,7 @@ ad_page_contract {
     @cvs-id $Id$
 } -properties {
     system_name:onevalue
-    context_bar:onevalue
+    context:onevalue
     full_name:onevalue
     email:onevalue
     url:onevalue
@@ -108,9 +108,9 @@ if [ad_parameter SolicitPortraitP "user-info" 0] {
 set header [ad_header "$full_name's workspace at $system_name"]
 
 if {[ad_conn package_url] == "/"} {
-  set context_bar [ad_context_bar "[ad_pvt_home_name]"]
+  set context [list "[ad_pvt_home_name]"]
 } else {
-  set context_bar [ad_context_bar "Home"]
+  set context [list "Home"]
 }
 
 #  set site_map [ad_parameter SiteMap content]

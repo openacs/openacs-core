@@ -11,7 +11,7 @@ ad_page_contract {
 } {
     segment_id:integer,notnull
 } -properties {
-    context_bar:onevalue
+    context:onevalue
     segment_id:onevalue
     segment_name:onevalue
     role_pretty_plural:onevalue
@@ -32,7 +32,7 @@ db_1row select_segment_info {
        and s.rel_type = r.rel_type
 }
 
-set context_bar [list [list "[ad_conn package_url]admin/rel-segments/" "Relational segments"] [list one?[ad_export_vars {segment_id}] "One segment"] "Elements"]
+set context [list [list "[ad_conn package_url]admin/rel-segments/" "Relational segments"] [list one?[ad_export_vars {segment_id}] "One segment"] "Elements"]
 
 # Expects segment_id, segment_name, group_id, role to be passed in 
 

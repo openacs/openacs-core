@@ -11,7 +11,7 @@ ad_page_contract {
 } {
     party_id:integer,notnull
 } -properties {
-    context_bar:onevalue
+    context:onevalue
     party_id:onevalue
     party_name:onevalue
     admin_p:onevalue
@@ -62,7 +62,7 @@ set user_id [ad_conn user_id]
 set write_p [ad_permission_p $party_id "write"]
 set admin_p [ad_permission_p $party_id "admin"]
 
-set context_bar [list [list "" "Parties"] "One Party"]
+set context [list [list "" "Parties"] "One Party"]
 
 attribute::multirow \
 	-start_with party \

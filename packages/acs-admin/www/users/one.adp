@@ -1,6 +1,6 @@
-<master src="master">
+<master>
 <property name=title>@first_names@ @last_name@</property>
-<property name="context_bar">@context_bar@</property>
+<property name="context">@context@</property>
 
 <ul>
 <li>Name:  @first_names@ @last_name@ (<a href="/user/basic-info-update?@export_edit_vars@">edit</a>)</li>

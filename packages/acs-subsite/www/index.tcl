@@ -9,13 +9,13 @@ ad_page_contract {
   @cvs-id $Id$
 } {
 } -properties {
-    context_bar:onevalue
+    context:onevalue
     subsite_name:onevalue
     nodes:multirow
     admin_p:onevalue
 }
 
-set context_bar [ad_context_bar]
+set context [list]
 set package_id [ad_conn package_id]
 set admin_p [ad_permission_p $package_id admin]
 

@@ -3,7 +3,7 @@ ad_page_contract {
 } {
 } -properties {
     title:onevalue
-    context_bar:onevalue
+    context:onevalue
     discussion_forum_alert_p:onevalue
     bboard_keyword_p:onevalue
     bboard_rows:multirow
@@ -24,7 +24,7 @@ if { ![empty_string_p $first_names] || ![empty_string_p $last_name] } {
 
 set title "$full_name's alerts in [ad_system_name]"
 
-set context_bar [ad_context_bar "Alerts"]
+set context [list "Alerts"]
 
 
 set discussion_forum_alert_p 0

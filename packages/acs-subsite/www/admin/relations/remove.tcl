@@ -10,7 +10,7 @@ ad_page_contract {
     rel_id:integer,notnull
     { return_url "" }
 } -properties {
-    context_bar:onevalue
+    context:onevalue
     export_vars:onevalue
     rel:onerow
     dependants:multirow
@@ -27,7 +27,7 @@ ad_page_contract {
     }
 }
 
-set context_bar [list "Remove relation"]
+set context [list "Remove relation"]
 
 if { ![db_0or1row select_rel_info {
     select acs_object_type.pretty_name(r.rel_type) as rel_type_pretty_name,

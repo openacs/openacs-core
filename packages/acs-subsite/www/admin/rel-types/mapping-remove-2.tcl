@@ -14,7 +14,7 @@ ad_page_contract {
     { group_type_rel_id "" }
     { return_url "" }
 } -properties {
-    context_bar:onevalue
+    context:onevalue
 }
 
 if { [empty_string_p $group_rel_id] || [empty_string_p $group_type_rel_id] } {

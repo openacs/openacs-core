@@ -1,4 +1,4 @@
-<master src="master">
+<master>
 <property name="title">@title@</property>
 
 <if @email_verified_p@ eq f>

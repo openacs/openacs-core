@@ -7,7 +7,7 @@ append whole_page "[ad_admin_header "Sessions in $pretty_month, $pretty_year"]
 
 <h2>$pretty_month $pretty_year</h2>
 
-[ad_admin_context_bar [list "index.tcl" "Users"] [list "session-history.tcl" "Session History"] "One Month"]
+[ad_context_bar [list "./" "Users"] [list "session-history.tcl" "Session History"] "One Month"]
 
 <hr>
 

@@ -1,4 +1,4 @@
-<master src="master">
+<master>
 <property name="title">Awaiting email verification</property>
 
 <p>Registration information for this service has just been

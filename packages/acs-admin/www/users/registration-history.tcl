@@ -5,11 +5,11 @@ ad_page_contract {
     @creation-date Jan 1999
     @cvs-id $Id$
 } -properties {
-    context_bar:onevalue
+    context:onevalue
     user_rows:multirow
 }
 
-set context_bar [ad_admin_context_bar [list "index.tcl" "Users"] "Registration History"]
+set context [list [list "./" "Users"] "Registration History"]
 
 # we have to query for pretty month and year separately because Oracle pads
 # month with spaces that we need to trim

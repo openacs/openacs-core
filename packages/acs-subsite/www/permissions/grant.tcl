@@ -17,8 +17,7 @@ doc_body_append "[ad_header "Grant Permission on $name"]
 
 <h2>Grant Permission on $name</h2>
 
-[ad_context_bar [list .?[export_url_vars object_id] Permissions for $name] \
-    "Grant Permission on $name"]
+[ad_context_bar [list ./?[export_url_vars object_id] "Permissions for $name"] "Grant"]
 <hr>
 
 <form method=get action=grant-2>

@@ -24,23 +24,22 @@ ad_page_contract {
     { package_key ""}
 } -properties {
     title:onevalue
-    context_bar:onevalue
+    context:onevalue
     sql:onevalue
 }
 
-set context_bar_elements [list]
+set context [list]
 if [exists_and_not_null version_id] {
     db_0or1row package_info_from_package_id {
         select pretty_name, package_key, version_name
           from apm_package_version_info
          where version_id = :version_id
     }
-    lappend context_bar_elements [list "package-view?version_id=$version_id&amp;kind=sql_files" "$pretty_name $version_name"]
+    lappend context [list "package-view?version_id=$version_id&amp;kind=sql_files" "$pretty_name $version_name"]
 }
-lappend context_bar_elements [file tail $url]
+lappend context [file tail $url]
 
 set title "[file tail $url]"
-set context_bar [eval ad_context_bar $context_bar_elements]
 
 # This is normally a password-protected page, but to be safe let's
 # check the incoming URL for ".." to make sure that someone isn't

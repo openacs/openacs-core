@@ -12,7 +12,7 @@ ad_page_contract {
     group_rel_type_id:naturalnum,notnull
     { return_url "" }
 } -properties {
-    context_bar:onevalue
+    context:onevalue
     rel_pretty_name:onevalue
     group_type_pretty_name:onevalue
     export_vars:onevalue
@@ -31,6 +31,6 @@ if { ![db_0or1row select_info {
 }
 
 set export_vars [ad_export_vars -form {group_rel_type_id return_url}]
-set context_bar [list [list "[ad_conn package_url]admin/group-types/" "Group types"] [list one?[ad_export_vars {group_type}] "One type"] "Remove relation type"]
+set context [list [list "[ad_conn package_url]admin/group-types/" "Group types"] [list one?[ad_export_vars {group_type}] "One type"] "Remove relation type"]
 
 ad_return_template

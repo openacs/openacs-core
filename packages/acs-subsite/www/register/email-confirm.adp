@@ -1,4 +1,4 @@
-<master src="master">
+<master>
 <property name=title>Email Confirmation</property>
 
 <if @email_verified_p@ eq "f">

@@ -15,7 +15,7 @@ append whole_page "[ad_admin_header "Registered Sessions"]
 
 <h2>Registered Sessions</h2>
 
-[ad_admin_context_bar [list "index.tcl" "Users"] "Registered Sessions"]
+[ad_context_bar [list "./" "Users"] "Registered Sessions"]
 
 <hr>
 

@@ -11,7 +11,7 @@ ad_page_contract {
     group_type:notnull
     {return_url ""}
 } -properties {
-    context_bar:onevalue
+    context:onevalue
     group_type:onevalue
     QQgroup_type:onevalue
     group_type_pretty_name:onevalue
@@ -21,7 +21,7 @@ ad_page_contract {
     possible_join_policies:onevalue
 }
 
-set context_bar [list \
+set context [list \
         [list "[ad_conn package_url]admin/group-types/" "Group types"] \
 	[list "one?[ad_export_vars group_type]" "One type"] \
 	"Edit default join policy"]

@@ -13,7 +13,7 @@ set title "OpenACS Object Type Administration"
 set page "
 [ad_admin_header $title]
 <h2>$title</h2>
-[ad_admin_context_bar $title]
+[list $title]
 <hr>
 <ul>"
 

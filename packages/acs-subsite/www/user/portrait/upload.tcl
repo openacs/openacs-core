@@ -8,7 +8,7 @@ ad_page_contract {
 } -properties {
     first_names:onevalue
     last_name:onevalue
-    context_bar:onevalue
+    context:onevalue
     export_vars:onevalue
     
 }
@@ -33,9 +33,9 @@ where person_id=:user_id"] {
 }
 
 if {$admin_p} {
-    set context_bar [ad_context_bar_ws [list "index.tcl?user_id=$user_id" "User's Portrait"] "Upload Portrait"]
+    set context [list [list "./?user_id=$user_id" "User's Portrait"] "Upload Portrait"]
 } else {
-    set context_bar [ad_context_bar_ws [list "index.tcl" "Your Portrait"] "Upload Portrait"]
+    set context [list [list "./" "Your Portrait"] "Upload Portrait"]
 }
 
 set export_vars [export_form_vars user_id return_url]

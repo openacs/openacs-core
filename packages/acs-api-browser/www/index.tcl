@@ -8,14 +8,14 @@ ad_page_contract {
 } {
 } -properties {
     title:onevalue
-    context_bar:onevalue
+    context:onevalue
     installed_packages:multirow
     disabled_packages:multirow
     uninstalled_packages:multirow
 }
 
 set title "API Browser"
-set context_bar [ad_context_bar]
+set context [list]
 
 set aolserver_tcl_api_root "http://www.aolserver.com/docs/devel/tcl/api/"
 

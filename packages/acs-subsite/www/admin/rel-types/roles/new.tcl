@@ -14,11 +14,11 @@ ad_page_contract {
     { pretty_plural "" }
     { return_url "" }
 } -properties {
-    context_bar:onevalue
+    context:onevalue
     
 }
 
-set context_bar [list [list "../" "Relationship types"] [list "[ad_conn package_url]admin/rel-types/roles/" "Roles"] "Create role"]
+set context [list [list "../" "Relationship types"] [list "[ad_conn package_url]admin/rel-types/roles/" "Roles"] "Create role"]
 
 template::form create role_form
 

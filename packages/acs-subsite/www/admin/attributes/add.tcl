@@ -12,7 +12,7 @@ ad_page_contract {
     object_type:notnull,trim
     { return_url "" }
 } -properties {
-    context_bar:onevalue
+    context:onevalue
     export_vars:onevalue
     object_pretty_name:onevalue
     datatypes:multirow
@@ -24,7 +24,7 @@ ad_page_contract {
     }
 }
 
-set context_bar [list "Add attribute"]
+set context [list "Add attribute"]
 set export_vars [ad_export_vars -form {object_type return_url}]
 
 set object_pretty_name [db_string object_pretty_name {

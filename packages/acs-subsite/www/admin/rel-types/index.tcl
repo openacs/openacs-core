@@ -11,11 +11,11 @@ ad_page_contract {
 
 } {
 } -properties {
-    context_bar:onevalue
+    context:onevalue
     rel_types:multirow
 }
 
-set context_bar [list "Relationship types"]
+set context [list "Relationship types"]
 
 set package_id [ad_conn package_id]
 

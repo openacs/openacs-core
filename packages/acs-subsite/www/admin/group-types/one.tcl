@@ -11,7 +11,7 @@ ad_page_contract {
 } {
     group_type:notnull
 } -properties {
-    context_bar:onevalue
+    context:onevalue
     group_type:onevalue
     group_type_enc:onevalue
     group_type_pretty_name:onevalue
@@ -31,7 +31,7 @@ set group_type_enc [ad_urlencode $group_type]
 
 set package_id [ad_conn package_id]
 
-set context_bar [list [list "[ad_conn package_url]admin/group-types/" "Group types"] "One type"]
+set context [list [list "[ad_conn package_url]admin/group-types/" "Group types"] "One type"]
 
 if { ![db_0or1row select_pretty_name {
     select t.pretty_name as group_type_pretty_name, t.dynamic_p,

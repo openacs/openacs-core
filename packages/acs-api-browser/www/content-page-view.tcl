@@ -14,10 +14,11 @@ ad_page_contract {
     path
 } -properties {
     title:onevalue
-    context_bar:onevalue
+    context:onevalue
     script_documentation:onevalue
 }
 
+set context [list]
 if { ![info exists version_id] && \
         [regexp {^packages/([^ /]+)/} $path "" package_key] } {
     db_0or1row version_id_from_package_key {
@@ -33,12 +34,11 @@ if { [info exists version_id] } {
           from apm_package_version_info
          where version_id = :version_id
     }
-    lappend context_bar_elements [list "package-view?version_id=$version_id&kind=content" "$pretty_name $version_name"]
+    lappend context [list "package-view?version_id=$version_id&kind=content" "$pretty_name $version_name"]
 }
 
-lappend context_bar_elements [file tail $path]
+lappend context [file tail $path]
 
-set context_bar [eval ad_context_bar $context_bar_elements]
 set title [file tail $path]
 set script_documentation [api_script_documentation $path]
 

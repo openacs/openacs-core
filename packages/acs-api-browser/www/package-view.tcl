@@ -14,7 +14,7 @@ ad_page_contract {
     { kind "procs_files" }
 } -properties {
     title:onevalue
-    context_bar:onevalue
+    context:onevalue
     dimensional_slider:onevalue
     kind:onevalue
     version_id:onevalue
@@ -51,7 +51,7 @@ set dimensional_list {
 }
 
 set title "$pretty_name $version_name"
-set context_bar [ad_context_bar $title]
+set context [list $title]
 set dimensional_slider "[ad_dimensional \
         $dimensional_list \
         "" \

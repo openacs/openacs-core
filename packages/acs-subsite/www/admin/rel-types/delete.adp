@@ -1,5 +1,5 @@
-<master src="../master">
-<property name="context_bar">@context_bar@</property>
+<master>
+<property name="context">@context@</property>
 <property name="title">Delete @rel_type_pretty_name@</property>
 
 Are you sure you want to delete this relationship type? Doing so will:

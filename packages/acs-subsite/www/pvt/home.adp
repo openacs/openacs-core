@@ -1,6 +1,6 @@
-<master src="master">
+<master>
 <property name=title>@full_name@'s workspace at @system_name@</property>
-<property name="context_bar">@context_bar@</property>
+<property name="context">@context@</property>
 
 <ul>
 

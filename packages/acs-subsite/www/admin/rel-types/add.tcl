@@ -12,13 +12,13 @@ ad_page_contract {
     object_type:notnull
     { return_url "" }
 } -properties {
-    context_bar:onevalue
+    context:onevalue
     export_form_vars:onevalue
     export_url_vars:onevalue
     primary_rels:multirow
 }
 
-set context_bar [list "Add relation type"]
+set context [list "Add relation type"]
 set constraint_id [db_nextval "acs_object_id_seq"]
 set export_form_vars [export_form_vars constraint_id object_type return_url]
 set export_url_vars [export_url_vars constraint_id object_type return_url]

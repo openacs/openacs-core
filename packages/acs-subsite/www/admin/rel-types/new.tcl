@@ -11,7 +11,7 @@ ad_page_contract {
 } {
     { return_url "" }
 } -properties {
-    context_bar:onevalue
+    context:onevalue
 }
 
 
@@ -23,7 +23,7 @@ db_multirow supertypes select_supertypes {
      start with t.object_type in ('membership_rel','composition_rel')
 }
 
-set context_bar [list [list "[ad_conn package_url]admin/rel-types/" "Relationship types"] "Add relationship type"]
+set context [list [list "[ad_conn package_url]admin/rel-types/" "Relationship types"] "Add relationship type"]
 
 set export_vars [ad_export_vars -form {return_url}]
 

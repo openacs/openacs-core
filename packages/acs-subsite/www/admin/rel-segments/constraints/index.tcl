@@ -10,7 +10,7 @@ ad_page_contract {
 
 }
 
-set context_bar [list [list ../ "Relational segments"] "Constraints"]
+set context [list [list ../ "Relational segments"] "Constraints"]
 
 set user_id [ad_conn user_id]
 

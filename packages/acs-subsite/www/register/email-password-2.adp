@@ -1,4 +1,4 @@
-<master src="master">
+<master>
 <property name=title>Check Your Inbox</property>
 
 Please check your inbox. Within the next few minutes, you should find

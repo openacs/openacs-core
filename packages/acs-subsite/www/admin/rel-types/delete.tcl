@@ -12,13 +12,13 @@ ad_page_contract {
     rel_type:notnull,rel_type_dynamic_p
     { return_url "" }
 } -properties {
-    context_bar:onevalue
+    context:onevalue
     rel_type_pretty_name:onevalue
     rel_type:onevalue
     counts:onerow
 }
 
-set context_bar [list [list "" "Relationship types"] [list one?[ad_export_vars rel_type] "One type"] "Delete type"]
+set context [list [list "" "Relationship types"] [list one?[ad_export_vars rel_type] "One type"] "Delete type"]
 
 set rel_type_pretty_name [db_string select_pretty_name {
     select t.pretty_name

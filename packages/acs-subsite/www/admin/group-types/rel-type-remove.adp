@@ -1,5 +1,5 @@
-<master src="../master">
-<property name="context_bar">@context_bar@</property>
+<master>
+<property name="context">@context@</property>
 <property name="title">Remove @rel_pretty_name@</property>
 
 Are you sure you want to remove @rel_pretty_name@ from the list of allowable relations for groups of type @group_type_pretty_name@?

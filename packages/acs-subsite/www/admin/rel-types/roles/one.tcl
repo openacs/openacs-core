@@ -11,7 +11,7 @@ ad_page_contract {
 } {
     role:notnull
 } -properties {
-    context_bar:onevalue
+    context:onevalue
     role:onevalue
     role_enc:onevalue
     role_props:onerow
@@ -20,7 +20,7 @@ ad_page_contract {
 }
 
 set role_enc [ad_urlencode $role]
-set context_bar [list [list "../" "Relationship types"] [list "[ad_conn package_url]admin/rel-types/roles/" "Roles"] "One role"]
+set context [list [list "../" "Relationship types"] [list "[ad_conn package_url]admin/rel-types/roles/" "Roles"] "One role"]
 
 if { ![db_0or1row select_role_props {
     select r.pretty_name, r.pretty_plural

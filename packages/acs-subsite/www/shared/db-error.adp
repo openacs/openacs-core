@@ -1,4 +1,4 @@
-<master src="master">
+<master>
 <property name="title">Database error</property>
 
 <p><if @custom_message@ nil>
