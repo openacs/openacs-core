@@ -161,7 +161,8 @@ ad_proc -private acs_messaging_process_queue {
     } {
         # Need to process content to do CRLF conversions?
         set headers [ns_set create]
-        ns_set put $headers Sender "robot@arsdigita.com"
+		
+        ns_set put $headers Sender [ad_parameter "OutgoingSender" "acs-kernel"]
 	if ![string equal $in_reply_to ""] {
 	    ns_set put $headers In-Reply-To "<$in_reply_to>"
 	}
