@@ -9,8 +9,9 @@
 @@language
 @@country
 @@currency
-@@s-and-p-data
-@@timezones
+@@s-and-p
+-- temporarily unavailable
+--@@timezones
 @@us-states
 @@us-counties
 @@us-zipcodes
