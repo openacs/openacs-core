@@ -7,7 +7,7 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>f</singleton-p>
     
-    <version name="5.1.0" url="http://openacs.org/repository/download/apm/acs-automated-testing-5.1.0.apm">
+    <version name="5.1.1" url="http://openacs.org/repository/download/apm/acs-automated-testing-5.1.1.apm">
         <owner url="http://openacs.org">OpenACS</owner>
         <summary>The interface to the automated testing facilities within OpenACS.</summary>
         <release-date>2004-04-29</release-date>
@@ -17,7 +17,7 @@
         OpenACS system.  Also provides a UI for managing
         automatic-rebuild servers as in a test farm.</description>
 
-        <provides url="acs-automated-testing" version="5.1.0"/>
+        <provides url="acs-automated-testing" version="5.1.1"/>
 
         <callbacks>
         </callbacks>

@@ -10,160 +10,65 @@
   <authorblurb>
     <para>By Pete Su and Bryan Quinn</para>
   </authorblurb>
-  
+
   <sect2 id="packages-overview">
     <title>Overview</title>
     <para>
       This document is a guide on how to write a software package for
-      OpenACS. OpenACS packages are installed and maintained
-      with the OpenACS Package Manager (APM).  This document presents reasons
-      for packaging software, conventions for the file system and naming
-      that must be followed, and step by step instructions for creating a
-      new package for the "Notes" example package.
+      OpenACS. OpenACS packages are installed and maintained with the
+      OpenACS Package Manager (APM) which is part of the acs-admin
+      package.  This document presents reasons for packaging software,
+      conventions for the file system and naming that must be
+      followed, and step by step instructions for creating a new
+      package for the "Notes" example package.
     </para>
 
   </sect2>
 
-  <sect2 id="packages-why-package">
-    <title>Why package your software?</title>
 
+  <sect2 id="server-file-layout">
+    <title>Server file layout</title>
     <para>
-      To answer this question, we should examine how OpenACS servers were
-      organized in the past. We will assume throughout this document that
-      the page root for your server is called <computeroutput>ROOT</computeroutput>.  In OpenACS
-      3.2.x and earlier, a typical server might have a file system behind it
-      that looked something like this:
+      Here is how an OpenACS &majorversion; server is laid out
+      starting from the Server root (ROOT):
     </para>
-    
-
-    <programlisting>
-ROOT/
-   bin/
-   parameters/
-        ad.ini
-     tcl/
-        core tcl libraries here
-     www/
-         admin/
-             forums/
-                 site wide admin for forums
-             intranet/
-                 site wide admin for intranet
-
-             ... and so on for all modules ...
-
-         forums/
-             pages for forums
-             admin/
-                 other admin pages for forums
-         intranet/
-             pages for intranet
-             admin/
-                 other admin pages for intranet
-         doc/
-             documentation
-             sql/
-                core and application data models here
-
-         ... and so on for all modules ... 
-</programlisting>
-
-    <para>
-      In previous versions of OpenACS, you wrote a new application like this:
-    </para>
-
-    <orderedlist>
-      <listitem><para>Put all Tcl library procedures under
-      <computeroutput>server-root/tcl</computeroutput>.</para></listitem>
-      <listitem><para>Put all User viewable content under
-      <computeroutput>server-root/www</computeroutput>.</para></listitem>
-      <listitem><para>Put all Admin content under <computeroutput>/admin/package-key/</computeroutput>.
-    </para></listitem>
-    </orderedlist>
-
-    <para>
-      This structure is very simple, and worked well in a world where
-      OpenACS was basically a single monolithic entity. But, this organization
-      made it difficult to distribute modules as independent packages, because
-      the pieces of each module are strewn all over the tree in at least 3
-      or 4 different areas. 
-    </para>
-
-    <para>
-      Here is how an OpenACS &version; server is laid out:
-    </para>
-
-    
-
-    <programlisting>
+    <figure>
+      <title>Server file layout diagram</title>
+      <programlisting>
 ROOT/
     bin/
+        Various executables and scripts for server maintanence.
+    content-repository-content-files/
+        content repository content stored in the filesystem.
+    etc/
+        Installation scripts and configuration files.
     packages/
         acs-admin/
         acs-api-browser/
-        acs-content-repository/
-        acs-core-docs/
-        acs-developer-support/
-        acs-kernel/
-        acs-ldap-authentication/
-        acs-messaging/
-        acs-subsite/
-        acs-templating/
-        acs-test-harness/
-        acs-util/
-        acs-workflow/
-        forums/
-               forums.info
-               catalog/
-                    i18n message catalogs
-               lib/
-		    includable page fragments (.tcl/.adp pairs)
-               sql/
-                    oracle/
-                         oracle data model
-                    postgresql/
-                         postgresql data model
-               tcl/
-                    tcl library code
-               www/
-                    user visible pages
-                    admin/
-                         administration pages
-                    doc/
-                         documentation
-        message-catalog/
-        news/
-        notification/
-        page/
+        ... many many more...
+        workflow/
+    log/
+        Server error and access logs
     tcl/
-            bootstrap code
+        bootstrap code
     www/
-            misc pages
-</programlisting>
+        Pages not in packages (static content, customized pages)</programlisting>
+    </figure>
+  </sect2>
 
+
+  <sect2 id="packages-looks">
+    <title>What a Package Looks Like</title>
 
     <para>
-      Note that a major reorganization has happened here. The diagram only
-      expands the structure of the <computeroutput>forums/</computeroutput> package directory,
-      but all the others are basically the same. Each package encapsulates
-      all of its data model, library code, logic, adminstration pages and
-      user pages in a single part of the file tree. This organization has
-      two major advantages:
+      Each package encapsulates all of its data model, library code,
+      logic, adminstration pages and user pages in a single part of
+      the file tree.  This means developers can track down
+      <emphasis>everything</emphasis> that is related to a particular
+      package without hunting all over the file system.  Encapsulating
+      everything about a package in one place also makes it much
+      easier to distribute packages independently from the OpenACS Core.
     </para>
-
-    <itemizedlist>
-      <listitem><para> 
-          This structure makes it easy for developers to track
-          down <emphasis>everything</emphasis> that is related to a
-          particular package without hunting all over the file system.
-        </para></listitem> 
-
-      <listitem><para> 
-          Encapsulating everything
-          about a package in one place also makes it much easier to
-          distribute packages independently from the OpenACS itself.
-        </para></listitem>
-    </itemizedlist>
 
     <para>
       In order to make this work, we need a system that keeps track of the
@@ -172,81 +77,24 @@ ROOT/
       sends to our server to the right page in the appropriate
       package. While we're at it, this tool should also automate
       package installation, dependency checking, upgrades, and package
-      removal. In OpenACS &version;, this tool is called the APM.
+      removal. In OpenACS &majorversion;, this tool is called the <link linkend="packages-apm">APM</link>.
     </para>
-
-
-  </sect2>
-
-  <sect2 id="packages-apm">
-    <title>The APM</title>
-
-
-    <para>
-      The APM is used to create, maintain, and install packages.  It takes
-      care of copying all of the files and registering the package in the
-      system.  The APM is responsible for:
-    </para>
-
-    <orderedlist>
-      <listitem><para>Package registration</para></listitem>
-      <listitem><para>Automatic installation of packages: loading data models, code
-      libraries, and so on.</para></listitem>
-      <listitem><para>Checking what packages depend on what other packages.</para></listitem>
-      <listitem><para>Storing information on the package including ownership and a file
-      list.</para></listitem>
-    </orderedlist>
-
-    <para>
-      In addition for packages that are applications, the APM is responsible
-      for keeping track of where in the site a user must go in order to use
-      the application. To do this, the APM defines a set of objects that we
-      call <emphasis>package instances</emphasis>. Once a package is loaded, the
-      administrator can create as many instances of the package as she
-      likes, and map these instances to any URL in the site that she
-      wants. If packages are analogous to executable programs in an
-      operating system, then package instances are analgous to multiple
-      running copies of a single program. Each instance can be independently
-      administered and each instance maintains its own set of application
-      parameters and options.
-    </para>
-
-    <para>
-      The following sections will show you how to make a package for the
-      Notes application. In addition, they will discuss some new site
-      management features in OpenACS &version; that take advantage of the APM's package
-      instance model. The two most important of these are <emphasis>subsites</emphasis>,
-      and the <emphasis>site map</emphasis> tool, which can be used to map applications to
-      one or more arbitrary URLs in a running site.
-    </para>
-
-    <para>
-      We will also discuss how to organize your files and queries so
-      they work with the OpenACS Query Dispatcher.
-    </para>
-
-  </sect2>
-
-  <sect2 id="packages-looks">
-    <title>What a Package Looks Like</title>
-
 
     <para>
       <indexterm id="baby"><primary>OpenACS Package</primary></indexterm>
       To illustrate the general structure of a package, let's see what the
-      package for the "notes" application should look like. This is shown in
-      the diagram below:
+      package for the "notes" application should look like.
     </para>
-    
 
-    <programlisting>
-
+    <figure>
+      <title>Package file layout diagram</title>
+      <programlisting>
 ROOT/
   +-- packages/    APM Root
         |
         +-- notes/  Package Root 
         |     |
-        |     |
+        |     +-- notes.info                              Package Specification File
         |     +-- sql/
         |     |     |
         |     |     +-- oracle/
@@ -272,6 +120,10 @@ ROOT/
         |     |     +-- notes-init.tcl                    Tcl Initialization
         |     |     +-- notes-init.xql                    Queries for notes-init.tcl (work in all DBs)      
         |     |     +-- *.tcl                             Tcl Library Files
+        |     +-- lib/
+        |     |     |
+        |     |     +-- *.tcl                             Includable page logic
+        |     |     +-- *.adp                             Includable page templates
         |     +-- www/
         |     |     |
         |     |     +-- admin/                            Administration UI
@@ -282,8 +134,10 @@ ROOT/
         |     |     |     +-- ...                         Administration UI Pages
         |     |     |
         |     |     +-- doc/                              Documentation
-        |     |     |     +-- index.tcl                   Documentation Index Page
+        |     |     |     +-- index.html                  Documentation Index Page
         |     |     |     +-- ...                         Administration Pages
+        |     |     +-- resources/                        Static Content
+        |     |     |     +-- ...                         Static Content files
         |     |     +-- index.tcl                         UI Index Page
         |     |     +-- index.adp                         UI Index Template
         |     |     +-- index.xql                         Queries for UI Index page      
@@ -291,19 +145,30 @@ ROOT/
         |     |     +-- *.adp                             UI Templates
         |     |     +-- *-oracle.xql                      Oracle-specific Queries
         |     |     +-- *-postgresql.xql                  PostgreSQL-specific Queries
-        |     +-- notes.info                              Package Specification File
-        +-- Other package directories.
-
-    </programlisting>
-
+        +-- Other package directories.</programlisting>
+    </figure>
     <para>
       All file locations are relative to the package root, which in this
       case is <computeroutput>ROOT/packages/notes</computeroutput>. The following table
       describes in detail what each of the files up in the diagram contain.
     </para>
 
+    <para> 
+      A special note on the
+      <computeroutput><replaceable>PACKAGE-KEY</replaceable>/www/resources</computeroutput>
+      directory.
+      Files in this directory are available at
+      <computeroutput>http://<replaceable>yourserver</replaceable>/resources/<replaceable>PACKAGE-KEY</replaceable>/...</computeroutput>
+      and are returned without any permissions checking or even checks
+      that the package is installed or mounted.  Files are returned
+      directly, so .tcl or .adp files are not sourced in these
+      directories.  This makes it suitable for storing icons, css
+      files, javascript, and other static content which can be treated
+      this way.
+    </para>
     
-    <informaltable frame="all">
+    <table tocentry="1" frame="all">
+      <title>Package files</title>
       <tgroup cols="3" colsep="5" rowsep="5">
     <thead>
       <row>
@@ -313,6 +178,14 @@ ROOT/
       </row>
         </thead>
         <tbody>
+      <row>
+        <entry>Package Specification File</entry>
+        <entry>The package specification file is an XML file generated and
+          maintained by the OpenACS Package Manager (APM).  It specifies
+          information about the package including its parameters and its
+          files.</entry>
+        <entry><computeroutput>notes.info</computeroutput></entry>
+      </row>
       <row>
         <entry>Data Model Creation Script</entry>
         <entry>
@@ -465,20 +338,20 @@ ROOT/
           displays all of the tests available and provides information
           on how to run them.  This file can have any extension, as long
           as its name is <computeroutput>index</computeroutput>.</entry>
-        <entry><computeroutput>/www/admin/tests/index.html</computeroutput></entry>
+        <entry><computeroutput>www/admin/tests/index.html</computeroutput></entry>
       </row>
       <row>
         <entry>Documentation</entry>
         <entry>Every package must include a full set of documentation that
           includes requirements and design documents, and user-level and
           developer-level documentation where appropriate.</entry>
-        <entry><computeroutput>/www/doc/</computeroutput></entry>
+        <entry><computeroutput>www/doc/</computeroutput></entry>
       </row>
       <row>
         <entry>Documentation Index Page</entry>
         <entry>The documentation directory must include a static HTML file with the name
           of <computeroutput>index.html</computeroutput>.</entry>
-        <entry><computeroutput>/www/doc/index.html</computeroutput></entry>
+        <entry><computeroutput>www/doc/index.html</computeroutput></entry>
       </row>
       <row>
         <entry>UI Logic Scripts</entry>
@@ -486,36 +359,75 @@ ROOT/
           is split into Logic and Templates.  The logic scripts
           perform database queries and prepare variables for
           presentation by the associated templates.</entry>
-        <entry><computeroutput>/www/*.tcl</computeroutput></entry>
+        <entry><computeroutput>www/*.tcl</computeroutput></entry>
       </row>
       <row>
         <entry>UI Templates</entry>
         <entry>Templates are used to control the presentation of the UI.
           Templates receive a set of data sources from the logic scripts
           and prepare them for display to the browser.</entry>
-        <entry><computeroutput>/www/*.adp</computeroutput></entry>
+        <entry><computeroutput>www/*.adp</computeroutput></entry>
       </row>
       <row>
         <entry>UI Index Page</entry>
         <entry>The UI must have an index page composed of a logic script
           called <computeroutput>index.tcl</computeroutput> and a template called
           <computeroutput>index.adp</computeroutput>.</entry>
-        <entry><computeroutput>/www/index.tcl</computeroutput></entry>
+        <entry><computeroutput>www/index.tcl</computeroutput></entry>
       </row>
-      <row>
-        <entry>Package Specification File</entry>
-        <entry>The package specification file is an XML file generated and
-          maintained by the OpenACS Package Manager (APM).  It specifies
-          information about the package including its parameters and its
-          files.</entry>
-        <entry><computeroutput>notes.info</computeroutput></entry>
-      </row>
-    </tbody></tgroup></informaltable>
-
-
-
+    </tbody></tgroup>
+    </table>
 
   </sect2>
+
+  <sect2 id="packages-apm">
+    <title>The APM</title>
+
+    <para>
+      The APM is used to create, maintain, and install packages.  It takes
+      care of copying all of the files and registering the package in the
+      system.  The APM is responsible for:
+    </para>
+
+    <orderedlist>
+      <listitem><para>Package registration</para></listitem>
+      <listitem><para>Automatic installation of packages: loading data models, code
+      libraries, and so on.</para></listitem>
+      <listitem><para>Checking what packages depend on what other packages.</para></listitem>
+      <listitem><para>Storing information on the package including ownership and a file
+      list.</para></listitem>
+    </orderedlist>
+
+    <para>
+      In addition for packages that are applications, the APM is responsible
+      for keeping track of where in the site a user must go in order to use
+      the application. To do this, the APM defines a set of objects that we
+      call <emphasis>package instances</emphasis>. Once a package is loaded, the
+      administrator can create as many instances of the package as she
+      likes, and map these instances to any URL in the site that she
+      wants. If packages are analogous to executable programs in an
+      operating system, then package instances are analgous to multiple
+      running copies of a single program. Each instance can be independently
+      administered and each instance maintains its own set of application
+      parameters and options.
+    </para>
+
+    <para>
+      The following sections will show you how to make a package for the
+      Notes application. In addition, they will discuss some site
+      management features in OpenACS &majorversion; that take advantage of the APM's package
+      instance model. The two most important of these are <emphasis>subsites</emphasis>,
+      and the <emphasis>site map</emphasis> tool, which can be used to map applications to
+      one or more arbitrary URLs in a running site.
+    </para>
+
+    <para>
+      We will also discuss how to organize your files and queries so
+      they work with the OpenACS Query Dispatcher.
+    </para>
+
+  </sect2>
+
 
   <sect2 id="packages-making-a-package" xreflabel="Making a Package">
     <title>Making a Package</title>
@@ -681,8 +593,9 @@ ROOT/
         </para></listitem>
 
       <listitem><para>Now go back to the main management page for the <computeroutput>notes</computeroutput>
-      If your package has parameters, create them using the &quot;Manage
-        Parameter Information&quot; link.</para></listitem>
+          If your package has parameters, create them using the &quot;Manage
+          Parameter Information&quot; link.  Define package callbacks via the "Tcl Callbacks (install,
+        instantiate, mount)" link.</para></listitem>
       
       <listitem><para>The new package has been created and installed in the server. At
       this point, you should add your package files to your CVS repository.
@@ -692,9 +605,7 @@ ROOT/
     </para>
     
 
-    <programlisting>
-
-% cd ROOT/packages
+    <programlisting>% cd ROOT/packages
 % cvs add notes
 % cd notes
 % cvs add notes.info
@@ -703,8 +614,9 @@ ROOT/
 % cvs add *.sql
 % cd ROOT/packages/notes
 % cvs commit -m "add new package for notes"
-
     </programlisting>
+
+
 
       </listitem>
 
@@ -733,22 +645,11 @@ ROOT/
       pages underneath <computeroutput>ROOT/www</computeroutput> they will not appear on their
       own.  What we have to do is <emphasis>mount</emphasis> the application into the site
       map. That is, we have to define the URL from which the application
-      will serve its pages. This process is slightly more complex than in
-      OpenACS 3.x, but also much more flexible.
+      will serve its pages.
     </para>
 
     <para>
-      In OpenACS 3.x, everything in the site was implicitly mounted underneath
-      <computeroutput>ROOT/www</computeroutput>. AOLserver automatically took any URL like
-      <computeroutput>/foo/bar/moo/baz.html</computeroutput> and mapped it to the file
-      <computeroutput>ROOT/www/foo/bar/moo/baz.html</computeroutput>.  This was conveniently
-      simple, but lacked flexibility.  In particular, it was difficult to
-      map content that lived outside the page root into the site, and it was
-      also hard to map mulitiple URLs to the same place in the file system.
-    </para>
-
-    <para>
-      In OpenACS &version;, administrators can define an arbitrary mapping between the
+      In OpenACS &majorversion;, administrators can define an arbitrary mapping between the
       URLs the user types and the actual file in the file system that is
       served. This mapping is called the <emphasis>site map</emphasis> and entries in the
       site map are called <emphasis>site nodes</emphasis>. Each site node maps a URL to an
@@ -779,16 +680,8 @@ ROOT/
     </para>
 
     <para>
-      Then type this URL into your browser:
-
+      Then type this URL into your browser: <computeroutput>http://<replaceable>yourserver</replaceable>/notes/hello.html</computeroutput>
     </para> 
-
-    <programlisting>
-
-http://your-server.your-domain.com/notes/hello.html
-
-    </programlisting>
-
 
     <para>
       Now you should see the contents of the page that you added. What has

@@ -101,18 +101,23 @@
         <para>This is text that you will
           <computeroutput>see</computeroutput> and <userinput>type</userinput> in a command shell, including <replaceable>text you may have to
             change</replaceable>.  It is followed by a list of just the commands,
-          which you can copy and paste. The command prompt varies by system; in the examples we use the form<computeroutput>[service0 aolserver]$</computeroutput>, where <computeroutput>service0</computeroutput> is the current user and <computeroutput>aolserver</computeroutput> is the current directory.  The root prompt is shown ending in # and all other prompts in $.</para>
+          which you can copy and paste. The command prompt varies by system; in the examples we use the form<computeroutput>[$OPENACS_SERVICE_NAME aolserver]$</computeroutput>, where <computeroutput>$OPENACS_SERVICE_NAME</computeroutput> is the current user and <computeroutput>aolserver</computeroutput> is the current directory.  The root prompt is shown ending in # and all other prompts in $.</para>
         <screen>
-[root root]# <userinput>su - service0</userinput>
-[service0 aolserver]$ <userinput>svc -d /service/<replaceable>service0</replaceable></userinput>
-[service0 aolserver]$ <userinput>dropdb <replaceable>service0</replaceable></userinput>
+[root root]# <userinput>su - $OPENACS_SERVICE_NAME</userinput>
+[$OPENACS_SERVICE_NAME aolserver]$ <userinput>svc -d /service/<replaceable>$OPENACS_SERVICE_NAME</replaceable></userinput>
+[$OPENACS_SERVICE_NAME aolserver]$ <userinput>dropdb <replaceable>$OPENACS_SERVICE_NAME</replaceable></userinput>
 DROP DATABASE
-[service0 aolserver]$ <userinput>createdb <replaceable>service0</replaceable></userinput>
+[$OPENACS_SERVICE_NAME aolserver]$ <userinput>createdb <replaceable>$OPENACS_SERVICE_NAME</replaceable></userinput>
 CREATE DATABASE
-<action>su - service0
-svc -d /service/<replaceable>service0</replaceable>
-dropdb <replaceable>service0</replaceable>
-createdb <replaceable>service0</replaceable></action></screen>
+<action>su - $OPENACS_SERVICE_NAME
+svc -d /service/<replaceable>$OPENACS_SERVICE_NAME</replaceable>
+dropdb <replaceable>$OPENACS_SERVICE_NAME</replaceable>
+createdb <replaceable>$OPENACS_SERVICE_NAME</replaceable></action></screen>
+        <formalpara id="cut-and-paste-name-var">
+          <title>Setting a global shell variable for cut and paste</title>
+          <para>In order to cut and paste the instructions into your shell, you must set the environment variable $OPENACS_SERVICE_NAME.  In order to set it globally so that it works for any new users or special service users you may create, edit the file <computeroutput>/etc/profile</computeroutput> and add this line:</para>
+        </formalpara>
+        <programlisting>export OPENACS_SERVICE_NAME=<replaceable>service0</replaceable></programlisting>
       </listitem>
     </itemizedlist>
   </sect2>
@@ -136,21 +141,21 @@ createdb <replaceable>service0</replaceable></action></screen>
             <row>
               <entry>OpenACS service</entry>
               <entry><indexterm>
-                  <primary>service0</primary>
+                  <primary>$OPENACS_SERVICE_NAME</primary>
                 </indexterm>
-                <replaceable>service0</replaceable></entry>
+                <replaceable>$OPENACS_SERVICE_NAME</replaceable> (set to service0 in default install)</entry>
             </row>
             <row>
               <entry>OpenACS service account</entry>
-              <entry><replaceable>service0</replaceable></entry>
+              <entry><replaceable>$OPENACS_SERVICE_NAME</replaceable></entry>
             </row>
             <row>
               <entry>OpenACS database name</entry>
-              <entry><replaceable>service0</replaceable></entry>
+              <entry><replaceable>$OPENACS_SERVICE_NAME</replaceable></entry>
             </row>
             <row>
               <entry>Root of OpenACS service file tree (SERVERROOT)</entry>
-              <entry><replaceable>/var/lib/aolserver/service0</replaceable></entry>
+              <entry><replaceable>/var/lib/aolserver/$OPENACS_SERVICE_NAME</replaceable></entry>
             </row>
             <row>
               <entry>Location of source code tarballs for new software</entry>
@@ -164,15 +169,15 @@ createdb <replaceable>service0</replaceable></action></screen>
             </row>
             <row>
               <entry>Database backup directory</entry>
-              <entry><replaceable>/var/lib/aolserver/service0/database-backup</replaceable></entry>
+              <entry><replaceable>/var/lib/aolserver/$OPENACS_SERVICE_NAME/database-backup</replaceable></entry>
             </row>
             <row>
               <entry>Service config files</entry>
-              <entry><replaceable>/var/lib/aolserver/service0/etc</replaceable></entry>
+              <entry><replaceable>/var/lib/aolserver/$OPENACS_SERVICE_NAME/etc</replaceable></entry>
             </row>
             <row>
               <entry>Service log files</entry>
-              <entry><replaceable>/var/lib/aolserver/service0/log</replaceable></entry>
+              <entry><replaceable>/var/lib/aolserver/$OPENACS_SERVICE_NAME/log</replaceable></entry>
             </row>
             <row>
               <entry>Compile directory</entry>

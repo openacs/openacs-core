@@ -568,18 +568,27 @@ exit</action></screen>
         to work, you must also <link
         linkend="install-openfts">install</link> the PostgreSQL
         OpenFTS module and prerequisites.)</para>
-        <screen>[service0 service0]$ <userinput>/usr/local/pgsql/bin/psql <replaceable>service0</replaceable> -f /usr/local/src/postgresql-7.3.4/contrib/tsearch/tsearch.sql</userinput>
+        <screen>[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <userinput>/usr/local/pgsql/bin/psql <replaceable>$OPENACS_SERVICE_NAME</replaceable> -f /usr/local/src/postgresql-7.3.4/contrib/tsearch/tsearch.sql</userinput>
 BEGIN
 CREATE
 <emphasis>(many lines omitted)</emphasis>
 INSERT 0 1
 COMMIT
-[service0 service0]$ <userinput>/usr/local/pgsql/bin/psql <replaceable>service0</replaceable> -f /usr/local/src/postgresql-7.3.4/contrib/pgsql_contrib_openfts/openfts.sql</userinput>
+[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <userinput>/usr/local/pgsql/bin/psql <replaceable>$OPENACS_SERVICE_NAME</replaceable> -f /usr/local/src/postgresql-7.3.4/contrib/pgsql_contrib_openfts/openfts.sql</userinput>
 CREATE
 CREATE
-[service0 service0]$
-<action>/usr/local/pgsql/bin/psql <replaceable>service0</replaceable> -f /usr/local/src/postgresql-7.3.4/contrib/tsearch/tsearch.sql
-/usr/local/pgsql/bin/psql <replaceable>service0</replaceable> -f /usr/local/src/postgresql-7.3.4/contrib/pgsql_contrib_openfts/openfts.sql</action></screen>
+[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$
+<action>/usr/local/pgsql/bin/psql <replaceable>$OPENACS_SERVICE_NAME</replaceable> -f /usr/local/src/postgresql-7.3.4/contrib/tsearch/tsearch.sql
+/usr/local/pgsql/bin/psql <replaceable>$OPENACS_SERVICE_NAME</replaceable> -f /usr/local/src/postgresql-7.3.4/contrib/pgsql_contrib_openfts/openfts.sql</action></screen>
+      <note>
+        <para>
+          If you get the error 
+          <computeroutput>ERROR: could not access file "$libdir/tsearch": no such file or directory</computeroutput>
+          It is probably because PostgreSQL's libdir configuration variable points to a diffent directory than where tsearch is.
+          You can find out where PostgreSQL expects to find tsearch via
+          <screen><userinput>pg_config --pkglibdir</userinput></screen>
+        </para>
+      </note>
       </sect2>
       
       <sect2 id="enable-openfts">
@@ -607,8 +616,8 @@ new service</guilabel></computeroutput> link.</para>
           </listitem>
 
           <listitem><para>Restart the service.</para>
-<screen>[service0 service0]$ <userinput>svc -t /service/<replaceable>service0</replaceable></userinput>
-[service0 service0]$</screen></listitem>
+<screen>[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <userinput>svc -t /service/<replaceable>$OPENACS_SERVICE_NAME</replaceable></userinput>
+[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$</screen></listitem>
           
           <listitem><para>Wait a minute, then browse back to the home page.</para>
           </listitem>
@@ -660,8 +669,8 @@ drop-down list, and click
           </listitem>
           <listitem>
             <para>Restart the service.</para>
-            <screen>[service0 service0]$ <userinput>svc -t /service/<replaceable>service0</replaceable></userinput>
-[service0 service0]$</screen>
+            <screen>[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <userinput>svc -t /service/<replaceable>$OPENACS_SERVICE_NAME</replaceable></userinput>
+[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$</screen>
           </listitem>
           <listitem><para>Wait a minute, then click on <computeroutput><guilabel>Main Site</guilabel></computeroutput> at the top of the page.</para>
           </listitem>
@@ -684,8 +693,8 @@ line, click
           </listitem>
           <listitem>
             <para>Restart the service.</para>
-            <screen>[service0 service0]$ <userinput>svc -t /service/<replaceable>service0</replaceable></userinput>
-[service0 service0]$</screen>
+            <screen>[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <userinput>svc -t /service/<replaceable>$OPENACS_SERVICE_NAME</replaceable></userinput>
+[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$</screen>
           </listitem>
         </orderedlist>
       </sect2>
@@ -718,14 +727,14 @@ line, click
               </listitem>
               <listitem>
                 <para>Load the service contracts datamodell and enable the service contract</para>
-                <screen>[service0 service0]$ <userinput>cd packages/lars-blogger/sql/postgresql</userinput>
-[service0 postgresql]$ psql <replaceable>service0</replaceable> -f lars-blogger-sc-create.sql</screen>
+                <screen>[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <userinput>cd packages/lars-blogger/sql/postgresql</userinput>
+[$OPENACS_SERVICE_NAME postgresql]$ psql <replaceable>$OPENACS_SERVICE_NAME</replaceable> -f lars-blogger-sc-create.sql</screen>
 <para>Note: Usually this script is called <replaceable>package_name</replaceable>-sc-create.sql</para>
               </listitem>
               <listitem>
                 <para>Restart the service.</para>
-                <screen>[service0 postgresql]$ <userinput>svc -t /service/<replaceable>service0</replaceable></userinput>
-                [service0 postgresl]$</screen>
+                <screen>[$OPENACS_SERVICE_NAME postgresql]$ <userinput>svc -t /service/<replaceable>$OPENACS_SERVICE_NAME</replaceable></userinput>
+                [$OPENACS_SERVICE_NAME postgresl]$</screen>
               </listitem>
             </orderedlist>
             <para>If you are lucky, Full Text Search is enabled now, if not consult <ulink url="http://openacs.org/forums/message-view?message_id=154759">http://openacs.org/forums/message-view?message_id=154759</ulink>. This link also contains some hints on how to make sure it is enabled.</para>
@@ -870,18 +879,18 @@ ln -s /usr/local/tclwebtest/tclwebtest /usr/local/bin
       <para>Once installed you can enable this by configuring your config file. Make sure your config file supports php (it should have a php section with it). Furthermore add <userinput>index.php</userinput> as the last element to your <computeroutput>directoryfile</computeroutput> directive.</para>
     </sect1>
     <sect1 id="install-squirrelmail">
+      <title>Install Squirrelmail for use as a webmail system for OpenACS</title>
       <authorblurb>
         <para>By <ulink url="mailto:openacs@sussdorff.de">Malte Sussdorff</ulink></para>
       </authorblurb>
       
-      <title>Install Squirrelmail for use as a webmail system for OpenACS</title>
       <para>This section is work in progress. It will detail how you can install Squirrelmail as a webmail frontend for OpenACS, thereby neglecting the need to have a seperate webmail package within OpenACS</para>
-      <screen>[service0 service0]# <userinput>cd www</userinput>
-[service0 www]# <userinput>wget http://cesnet.dl.sourceforge.net/sourceforge/squirrelmail/squirrelmail-1.4.2.tar.gz</userinput>
-[service0 www]# <userinput>tar xfz squirrelmail-1.4.2.tar.gz</userinput>
-[service0 www]# <userinput>mv squirrelmail-1.4.2 mail</userinput>
-[service0 www]# <userinput>cd mail/config</userinput>
-[service0 www]# <userinput>./conf.pl</userinput>
+      <screen>[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]# <userinput>cd www</userinput>
+[$OPENACS_SERVICE_NAME www]# <userinput>wget http://cesnet.dl.sourceforge.net/sourceforge/squirrelmail/squirrelmail-1.4.2.tar.gz</userinput>
+[$OPENACS_SERVICE_NAME www]# <userinput>tar xfz squirrelmail-1.4.2.tar.gz</userinput>
+[$OPENACS_SERVICE_NAME www]# <userinput>mv squirrelmail-1.4.2 mail</userinput>
+[$OPENACS_SERVICE_NAME www]# <userinput>cd mail/config</userinput>
+[$OPENACS_SERVICE_NAME www]# <userinput>./conf.pl</userinput>
       </screen>
       <para>Now you are about to configure Squirrelmail. The configuration heavily depends on your setup, so no instructions are given here.</para>
     </sect1>

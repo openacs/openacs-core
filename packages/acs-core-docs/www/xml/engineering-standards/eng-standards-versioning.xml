@@ -1,5 +1,5 @@
 <?xml version='1.0' ?>
-<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+<!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
                "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
 <!ENTITY % myvars SYSTEM "../variables.ent">
 %myvars;
@@ -124,8 +124,42 @@ release?  Or from a production release?  We follow a specific set of
 rules for how OpenACS makes the transition from one state of maturity to
 the next.  These rules are fine-tuned with each release; an example is <ulink url="http://openacs.org/projects/openacs/5.0/milestones">5.0.0 Milestones and Milestone Criteria</ulink></para>
 
-<para><phrase role="cvstag">($Id$)</phrase></para>
+
+
 
 </sect2>
+
+  <sect2 id="naming-upgrade-scripts">
+    <title>Naming Database Upgrade Scripts</title>
+    <para>Database upgrade scripts must be named very precisely in order for the Package Manager to run the correct script at the correct time.</para>
+    <orderedlist>
+      <listitem>
+        <para>Upgrade scripts should be named <computeroutput>/packages/<replaceable>myfirstpackage</replaceable>/sql/<replaceable>postgresql</replaceable>/upgrade/upgrade-<replaceable>OLDVERSION</replaceable>-<replaceable>NEWVERSION</replaceable>.sql</computeroutput></para>
+      </listitem>
+      <listitem>
+        <para>If the version you are working on is a later version than the current released version, OLDVERSION should be the current version.  The current version is package version in the APM and in <computeroutput>/packages/<replaceable>myfirstpackage</replaceable>/<replaceable>myfirstpackage</replaceable>.info</computeroutput>.  So if forums is at 2.0.1, OLDVERSION should be 2.0.1d1.  Note that this means that new version development that includes an upgrade must start at d2, not d1.
+        </para>
+      </listitem>
+      <listitem>
+        <para>If you are working on a pre-release version of a package, use the current package version as OLDVERSION.  Increment the package version as appropriate (see above) and use the new version as NEWVERSION.  For example, if you are working on 2.0.1d3, make it 2.0.1d4 and use <computeroutput>upgrade-2.0.1d3-2.0.1d4.sql</computeroutput>.</para>
+      </listitem>
+      <listitem>
+        <para>Database upgrades should be confined to development releases, not alpha or beta releases.</para>
+      </listitem>
+      <listitem>
+        <para>
+          Never use a final release number as a NEWVERSION.  If you do, then it is impossible to add any more database upgrades without incrementing the overall package version.</para>
+      </listitem>
+      <listitem>
+        <para>Use only the d, a, and b letters in OLDVERSION and NEWVERSION.  rc is not supported by OpenACS APM.</para>
+      </listitem>
+      <listitem>
+        <para>The distance from OLDVERSION to NEWVERSION should never span a release.   For example if we had a bug fix in
+acs-kernel on 5.1.0 you wouldn't want a file upgrade-5.0.4-5.1.0d1.sql since if you subsequently need to provide a 5.0.4-5.0.5 upgrade you will have to rename the 5.0.4-5.1.0 upgrade since you can't have upgrades which overlap like that.  Instead, use <computeroutput>upgrade-5.1.0d1-5.1.0d2.sql</computeroutput>
+</para>
+      </listitem>
+    </orderedlist>
+  </sect2>
+<para><phrase role="cvstag">($Id$)</phrase></para>
 </sect1>
 

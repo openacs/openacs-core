@@ -15,9 +15,10 @@
   </authorblurb>
 
   <sect1 id="i18n-overview">
+    <title>Internationalization and Localization Overview</title>
     <table id="i18n-l10n-process">
-      <title>Internationalization and Localization</title>
-      <tgroup cols="1">
+      <title>Internationalization and Localization Overview</title>
+      <tgroup cols="3">
         <colspec colname="step"/>
         <colspec colname="description"/>
         <colspec colname="who"/>
@@ -107,11 +108,7 @@
       dates must use internationalized functions.  All displayed
       numbers must use internationalized functions.
     </para>
-    <sect2 id="i18n-content">
-      <title>User Content</title>
-      <para>OpenACS does not have a general system for supporting multiple, localized versions of user-input content.  This document currently refers only to internationalizing the text in the package user interface.</para>
-    </sect2>
-    
+
     <para>
       Localizable text must be handled in ADP files, in TCL files, and
       in APM Parameters.  OpenACS provides two approaches, message
@@ -124,6 +121,11 @@
       distinguished by a file naming convention.
     </para>
 
+    <sect2 id="i18n-content">
+      <title>User Content</title>
+      <para>OpenACS does not have a general system for supporting multiple, localized versions of user-input content.  This document currently refers only to internationalizing the text in the package user interface.</para>
+    </sect2>
+    
     <sect2 id="i18n-locale-templates">
 
       <title>Separate Templates for each Locale</title>
@@ -232,7 +234,6 @@
           <listitem>
             <para>
             Dynamic key lookup: <computeroutput>[lang::util::localize $var_with_embedded_message_keys]</computeroutput> - In this case the message keys in the variable <computeroutput>var_with_embedded_message_keys</computeroutput> must appear as string literals <computeroutput>\#package_key.message_key\#</computeroutput> somewhere in the code. Here is an example of a dynamic lookup:
-            </para>
             <computeroutput>set message_key_array {
     dynamic_key_1  \#package_key.message_key1\#
     dynamic_key_2  \#package_key.message_key2\#
@@ -240,6 +241,7 @@
 
               set my_text [lang::util::localize $message_key_array([get_dynamic_key])]
             </computeroutput>
+            </para>
           </listitem>
         </itemizedlist>  
       </para>
@@ -274,35 +276,33 @@
       </para>
 
       <itemizedlist>
-        <listitem>For each message call in the text, decide on a variable name and replace
+        <listitem>
+            <para>
+              For each message call in the text, decide on a variable name and replace
             the procedure call with a variable lookup on the syntax %var_name%. Remember
-            to initialize a tcl variable with the same name on some line above the text.</listitem>
-        <listitem>If the text is in a tcl file you must replace variable lookups 
-            (occurences of $var_name or ${var_name}) with %var_name%</listitem>
-        <listitem>You are now ready to follow the normal procedure and mark up the text using a 
+            to initialize a tcl variable with the same name on some line above the text.</para></listitem>
+        <listitem><para>If the text is in a tcl file you must replace variable lookups 
+            (occurences of $var_name or ${var_name}) with %var_name%</para></listitem>
+        <listitem><para>You are now ready to follow the normal procedure and mark up the text using a 
             tempoarary message tag (&lt;#_ text_with_percentage_vars#&gt;) and run the action 
-            replace tags with keys in the APM.</listitem>
+            replace tags with keys in the APM.</para></listitem>
       </itemizedlist>
 
       <para>
       The variable values in the message are usually fetched with upvar, here is an example from dotlrn:
-      </para>
-
       <computeroutput>
       ad_return_complaint 1 "Error: A [parameter::get -parameter classes_pretty_name] 
                    must have &lt;em&gt;no&lt;/em&gt;[parameter::get -parameter class_instances_pretty_plural] to be deleted"
       </computeroutput>
-
-      <para>
         was replaced by:
-      </para>
-
       <computeroutput>
       set subject [parameter::get -localize -parameter classes_pretty_name] 
       set class_instances [parameter::get -localize -parameter class_instances_pretty_plural]
 
       ad_return_complaint 1 [_ dotlrn.class_may_not_be_deleted]
       </computeroutput>
+      </para>
+
 
       <para>
       This kind of interpolation also works in adp files where adp variable values will be inserted into the message.
@@ -493,81 +493,17 @@ ad_return_complaint 1 [_ dotlrn.class_may_not_be_deleted $msg_subst_list]
         </formalpara>
       <mediaobject>
         <imageobject>
-          <imagedata fileref="images/i18n-1.png" format="png" align="center"/>
+          <imagedata fileref="images/i18n-1.png" format="PNG" align="center"/>
         </imageobject>
       </mediaobject>
 
       <para>You will now be walked through all of the selected adp pages.  The UI shows you the intended changes and lets you edit or cancel them key by key.</para>
       <mediaobject>
         <imageobject>
-          <imagedata fileref="images/i18n-2.png" format="png" align="center"/>
+          <imagedata fileref="images/i18n-2.png" format="PNG" align="center"/>
         </imageobject>
       </mediaobject>
 
-        <itemizedlist>
-          <listitem>
-            <para>The automatic process can easily get confused by tags within message texts, so that it tries to create two or three message keys for one long string with a tag in the middle.  In these cases, uncheck those keys during the conversion and then edit the files directly.  For example, this code:</para>
-<programlisting>  &lt;p class="form-help-text"&gt;&lt;b&gt;Invitations&lt;/b&gt; are sent,
-    when this wizard is completed and casting begins.&lt;/p&gt;</programlisting>
-    <para>has a bold tag which confuses the converter into thinking there are two message keys for the text beginning "Invitations ..." where there should be one:</para>
-      <mediaobject>
-        <imageobject>
-          <imagedata fileref="images/i18n-3.png" format="png" align="center"/>
-        </imageobject>
-      </mediaobject>
-      <para>Instead, we cancel those keys, edit the file manually, and put in a single temporary message tag:</para>
-      <programlisting>  &lt;p class="form-help-text"&gt; &lt;#Invitations_are_sent &lt;b&gt;Invitations&lt;/b&gt; are sent,
-    when this wizard is completed and casting begins.#&gt;
-  &lt;/p&gt;</programlisting>
-          </listitem>
-        <listitem>
-            <para>Complex if statements may produce convoluted message keys that are very hard to localize.  Rewrite these if statements.  For example:</para>
-        <programlisting>
-Select which case &lt;if @simulation.casting_type@ eq "open"&gt;and
-role&lt;/if&gt; to join, or create a new case for yourself.  If you do not
-select a case &lt;if @simulation.casting_type@ eq "open"&gt;and role&lt;/if&gt;
-to join, you will be automatically assigned to a case &lt;if
-@simulation.casting_type@ eq "open"&gt;and role&lt;/if&gt; when the
-simulation begins.</programlisting>
-        <para>... can be rewritten:</para>
-<programlisting>&lt;if @simulation.casting_type@ eq "open"&gt;
-
-Select which case and role to join, or create a new case for
-yourself.  If you do not select a case and role to join, you will
-be automatically assigned to a case and role when the simulation
-begins.
-
-&lt;/if&gt;
-&lt;else&gt;
-
-Select which case to join, or create a new case for
-yourself.  If you do not select a case to join, you will
-be automatically assigned to a case when the simulation
-begins.
-
-&lt;/else&gt;</programlisting>
-          </listitem>
-          <listitem>
-            <para>Check for duplicate keys.  For common words such as
-            Yes and No, you can use a library of keys at <ulink
-            url="/acs-lang/admin/message-list?package%5fkey=acs%2dkernel&amp;locale=en%5fUS">acs-kernel</ulink>.
-            For example, instead of using
-            <computeroutput>myfirstpackage.Yes</computeroutput>, you
-            can use <computeroutput>acs-kernel.Yes</computeroutput>.
-            You can also use the <ulink
-            url="/acs-lang/admin/package-list?locale=en%5fUS">Message Key Search</ulink> facility to find duplicates.
-            Be careful, however, building up sentences from keys
-            because grammar and other elements may not be consistent
-            across different locales.</para>
-            <para>Additional discussion: <ulink
-            url="http://openacs.org/forums/message-view?message_id=164973">Re:
-            Bug 961 ("Control Panel" displayed instead of
-            "Administer")</ulink>, <ulink
-            url="http://openacs.org/forums/message-view?message_id=125235">Translation
-            server upgraded</ulink>, and <ulink url="http://openacs.org/forums/message-view?message_id=158580">Localization questions</ulink>.</para>
-          </listitem>
-
-        </itemizedlist>
       </listitem>
       <listitem>
         <formalpara>
@@ -732,11 +668,12 @@ set foo_date_ansi [lc_time_system_to_conn $foo_date_ansi]</programlisting>
         are always is done with one of the valid lookups described above. The script further assumes
         that you have perl installed and in your path.  Run the script like
         this:
-      </para>
+            <computeroutput>
+              acs-lang/bin/check-catalog.sh package_key
+            </computeroutput>
+          </para>
     </formalpara>
-      <computeroutput>
-      acs-lang/bin/check-catalog.sh package_key
-      </computeroutput>
+
 
       <para>
         where package_key is the key of the package that you want to
@@ -746,6 +683,227 @@ set foo_date_ansi [lc_time_system_to_conn $foo_date_ansi]</programlisting>
       </para>
       </listitem>
     </orderedlist>
+
+    <sect2>
+      <title>Avoiding common i18n mistakes</title>
+      <itemizedlist>
+        <listitem>
+          <formalpara>
+            <title>Replace complicated keys with longer, simpler keys</title>
+            <para>When writing in one language, it is possible to create clever code to make correct text.  In English, for example, you can put an <computeroutput>if</computeroutput> command at the end of a word which adds "s" if a count is anything but 1.  This pluralizes nouns correctly based on the data.  However, it is confusing to read and, when internationalized, may result in message keys that are both confusing and impossible to set correctly in some languages.  While internationalizing, watch out that the automate converter does not create such keys.  Also, refactor compound text as you encounter it.</para>
+          </formalpara>
+          
+          <para>The automated system can easily get confused by tags within message texts, so that it tries to create two or three message keys for one long string with a tag in the middle.  In these cases, uncheck those keys during the conversion and then edit the files directly.  For example, this code:</para>
+          <programlisting>  &lt;p class="form-help-text"&gt;&lt;b&gt;Invitations&lt;/b&gt; are sent,
+          when this wizard is completed and casting begins.&lt;/p&gt;</programlisting>
+          <para>has a bold tag which confuses the converter into thinking there are two message keys for the text beginning "Invitations ..." where there should be one:</para>
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="images/i18n-3.png" format="PNG" align="center"/>
+            </imageobject>
+          </mediaobject>
+          <para>Instead, we cancel those keys, edit the file manually, and put in a single temporary message tag:</para>
+
+          <programlisting>  &lt;p class="form-help-text"&gt; &lt;#Invitations_are_sent &lt;b&gt;Invitations&lt;/b&gt; are sent, 
+when this wizard is completed and casting begins.#&gt;
+  &lt;/p&gt;</programlisting>
+  
+          <para>Complex if statements may produce convoluted message keys that are very hard to localize.  Rewrite these if statements.  For example:</para>
+          <programlisting>Select which case &lt;if @simulation.casting_type@ eq "open"&gt;and
+role&lt;/if&gt; to join, or create a new case for yourself.  If you do not
+select a case &lt;if @simulation.casting_type@ eq "open"&gt;and role&lt;/if&gt;
+to join, you will be automatically assigned to a case &lt;if
+@simulation.casting_type@ eq "open"&gt;and role&lt;/if&gt; when the
+simulation begins.</programlisting>
+          <para>... can be rewritten:</para>
+          <programlisting>&lt;if @simulation.casting_type@ eq "open"&gt;
+
+Select which case and role to join, or create a new case for
+yourself.  If you do not select a case and role to join, you will
+be automatically assigned to a case and role when the simulation
+begins.
+
+&lt;/if&gt;
+&lt;else&gt;
+
+Select which case to join, or create a new case for
+yourself.  If you do not select a case to join, you will
+be automatically assigned to a case when the simulation
+begins.
+
+&lt;/else&gt;</programlisting>
+          <para>Another example, where bugs are concatenated with a number:</para>
+<programlisting>&lt;if @components.view_bugs_url@ not nil&gt;
+  &lt;a href="@components.view_bugs_url@" title="View the @pretty_names.bugs@ for this component"&gt;
+  &lt;/if&gt;
+  @components.num_bugs@ 
+  &lt;if @components.num_bugs@ eq 1&gt;
+    @pretty_names.bug@
+  &lt;/if&gt;
+  &lt;else&gt;
+    @pretty_names.bugs@
+  &lt;/else&gt;
+  &lt;if @components.view_bugs_url@ not nil&gt;
+  &lt;/a&gt;
+  &lt;/if&gt;
+
+&lt;if @components.view_bugs_url@ not nil&gt;
+&lt;a href="@components.view_bugs_url@" title="#bug-tracker.View_the_bug_fo_component#"&gt;
+&lt;/if&gt;
+@components.num_bugs@ 
+&lt;if @components.num_bugs@ eq 1&gt;
+@pretty_names.bug@
+&lt;/if&gt;
+&lt;else&gt;
+@pretty_names.bugs@
+&lt;/else&gt;
+&lt;if @components.view_bugs_url@ not nil&gt;
+&lt;/a&gt;
+&lt;/if&gt;
+</programlisting>
+          <para>It would probably be better to do this as something like:</para>
+<programlisting>&lt;if @components.view_bugs_url@ not nil&gt;
+  &lt;if @components.num_bugs@ eq 1&gt;
+    &lt;a href="@components.view_bugs_url@" title="#bug-tracker.View_the_bug_fo_component#"&gt;#bug-tracker.one_bug#&lt;/a&gt;
+  &lt;/if&gt;&lt;else&gt;
+    &lt;a href="@components.view_bugs_url@" title="#bug-tracker.View_the_bug_fo_component#"&gt;#bug-tracker.N_bugs#&lt;/a&gt;
+  &lt;/else&gt;
+&lt;/if&gt;</programlisting>
+        </listitem>
+
+        <listitem>
+          <formalpara>
+            <title>Don't combine keys in  display text</title>
+            <para>Converting a phrase from one language to another is usually more complicated than simply replacing each word with an equivalent.  When several keys are concatenated, the resulting word order will not be correct for every language.  Different languages may use expressions or idioms that don't match the phrase key-for-key.  Create complete, distinct keys instead of building text from several keys.  For example:</para>
+          </formalpara>
+          <para>Original code:</para>
+          <programlisting>multirow append links "New [bug_tracker::conn Bug]" </programlisting>
+          <para>Problematic conversion:</para>
+          <programlisting>multirow append links "[_ bug-tracker.New] [bug_tracker::conn Bug]"</programlisting>
+          <para>Better conversion:</para>
+          <programlisting>set bug_label [bug_tracker::conn Bug]
+multirow append links "[_ bug-tracker.New_Bug]" "${url_prefix}bug-add"</programlisting>
+          <para>... and include the variable in the key: <computeroutput>"New %bug_label%"</computeroutput>.  This gives translators more control over the phrase.</para>
+
+
+          <para>In this example of bad i18n, full name is created by concatenating first and last name (admittedly this is pervasive in the toolkit):</para>
+          <programlisting>&lt;a href="@past_version.maintainer_url@" title="#bug-tracker.Email# @past_version.maintainer_email@"&gt;
+@past_version.maintainer_first_names@ @past_version.maintainer_last_name@&lt;/a&gt;</programlisting>
+        </listitem>
+        
+        
+        <listitem>
+          <formalpara>
+            <title>Avoid unnecessary duplicate keys.</title>
+          
+            <para>When phrases are exactly the same in several places, use a single key.</para>
+          </formalpara>
+              <para>For common words such as
+            Yes and No, you can use a library of keys at <ulink
+            url="/acs-lang/admin/message-list?package%5fkey=acs%2dkernel&amp;locale=en%5fUS">acs-kernel</ulink>.
+            For example, instead of using
+            <computeroutput>myfirstpackage.Yes</computeroutput>, you
+            can use <computeroutput>acs-kernel.Yes</computeroutput>.
+            You can also use the <ulink
+            url="/acs-lang/admin/package-list?locale=en%5fUS">Message Key Search</ulink> facility to find duplicates.
+            Be careful, however, building up sentences from keys
+            because grammar and other elements may not be consistent
+            across different locales.</para>
+            <para>Additional discussion: <ulink
+            url="http://openacs.org/forums/message-view?message_id=164973">Re:
+            Bug 961 ("Control Panel" displayed instead of
+            "Administer")</ulink>, <ulink
+            url="http://openacs.org/forums/message-view?message_id=125235">Translation
+            server upgraded</ulink>, and <ulink url="http://openacs.org/forums/message-view?message_id=158580">Localization questions</ulink>.</para>
+          </listitem>
+
+
+          <listitem>
+            <formalpara>
+              <title>Don't internationalize internal code words</title>
+              <para>Many packages use code words or key words, such as "open" and "closed", which will never be shown to the user.  They may match key values in the database, or be used in a switch or if statement.  Don't change these.</para>
+            </formalpara>
+            <para>For example, the original code is </para>
+          <programlisting>workflow::case::add_log_data \ 	    
+       -entry_id $entry_id \ 	    
+       -key "resolution" \ 	    
+       -value [db_string select_resolution_code {}]</programlisting>
+          <para>This is incorrectly internationalized to </para>
+          <programlisting>  workflow::case::add_log_data \ 	    
+       -entry_id $entry_id \
+       -key "[_ bug-tracker.resolution]" \
+       -value [db_string select_resolution_code {}]</programlisting>
+       <para>But <computeroutput>resolution</computeroutput> is a keyword in a table and in the code, so this breaks the code.  It should not have been internationalized at all.  Here's another example of text that should not have been internationalized:</para>
+       <programlisting>{show_patch_status "open"}</programlisting>
+       <para>It is broken if changed to</para>
+       <programlisting>{show_patch_status "[_ bug-tracker.open]"}</programlisting>
+          </listitem>
+
+          <listitem>
+          <formalpara>
+            <title>Fix automatic truncated message keys</title>
+            <para>The automatic converter may create unique but crytic message keys.  Watch out for these and replace them with more descriptive keys.  For example:</para>
+          </formalpara>
+          <programlisting>
+&lt;msg key="You"&gt;You can filter by this %component_name% by viisting %filter_url_string%&lt;/msg&gt;
+&lt;msg key="You_1"&gt;You do not have permission to map this patch to a bug. Only the submitter of the patch 
+and users with write permission on this Bug Tracker project (package instance) may do so.&lt;/msg&gt;
+&lt;msg key="You_2"&gt;You do not have permission to edit this patch. Only the submitter of the patch 
+and users with write permission on the Bug Tracker project (package instance) may do so.&lt;/msg&gt;</programlisting>
+          <para>These would be more useful if they were, "you_can_filter", "you_do_not_have_permission_to_map_this_patch", and "you_do_not_have_permission_to_edit_this_patch".  Don't worry about exactly matching the english text, because that might change; instead try to capture the meaning of the phrase.  Ask yourself, if I was a translator and didn't know how this application worked, would this key and text make translation easy for me?
+</para>
+          <para>Sometimes the automatic converter creates keys that don't semantically match their text.  Fix these:</para>
+          <programlisting>&lt;msg key="Fix"&gt;for version&lt;/msg&gt;
+&lt;msg key="Fix_1"&gt;for&lt;/msg&gt;
+&lt;msg key="Fix_2"&gt;for Bugs&lt;/msg&gt;</programlisting>
+
+          <para>Another example: <computeroutput>Bug-tracker component maintainer"</computeroutput> was converted to <computeroutput>"[_ bug-tracker.Bug-tracker]"</computeroutput>.  Instead, it should be <computeroutput>bug_tracker_component_maintainer</computeroutput>.</para>
+        </listitem>
+
+        <listitem>
+          <formalpara>
+            <title>Translations in Avoid "clever" message reuse</title>
+            <para>Translations may need to differ depending on the context in which
+the message appears.
+</para>
+          </formalpara>
+        </listitem>
+
+        <listitem>
+          <formalpara>
+            <title>Avoid plurals</title>
+            <para>Different languages create plurals differently.  Try to avoid keys which will change based on the value of a number.  OpenACS does not currently support internationalization of plurals.  If you use two different keys, a plural and a singular form, your application will not localize properly for locales which use different rules or have more than two forms of plurals.</para>
+          </formalpara>
+        </listitem>
+
+        <listitem>
+          <formalpara>
+            <title>Quoting in the message catalog for tcl</title>
+            <para>Watch out for quoting and escaping when editing text that is also code.  For example, the original string </para>
+          </formalpara>
+          <programlisting>set title "Patch \"$patch_summary\" is nice."</programlisting>
+          <para>breaks if the message text retains all of the escaping that was in the tcl command:</para>
+          <programlisting>&lt;msg&gt;Patch \&quot;$patch_summary\&quot; is nice.&lt;/msg&gt;</programlisting>
+          <para>When it becomes a key, it should be:</para>
+          <programlisting>&lt;msg&gt;Patch &quot;$patch_summary&quot; is nice.&lt;/msg&gt;</programlisting>
+          <para>Also, some keys had %var;noquote%, which is not needed since those
+          variables are not quoted (and in fact the variable won't even be
+          recognized so you get the literal %var;noquote% in the output).</para>
+        </listitem>
+
+        <listitem>
+          <formalpara>
+            <title>Be careful with curly brackets</title>
+            <para>Code within curly brackets isn't evaluated.  TCL uses curly brackets as an alternative way to build lists.  But TCL also uses curly brackets as an alternative to quotation marks for quoting text.  So this original code</para>
+          </formalpara>
+          <programlisting>array set names { key "Pretty" ...} </programlisting>
+          <para>... if converted to </para>
+          <programlisting>array set names { key "[_bug-tracker.Pretty]" ...} </programlisting>
+          <para>... won't work since the _ func will not be called.  Instead, it should be </para>
+          <programlisting>array set names [list key [_bug-tracker.Pretty] ...]</programlisting>
+         </listitem>
+      </itemizedlist>
+    </sect2>
   </sect1>
 
   <sect1 id="i18n-design">
@@ -779,13 +937,13 @@ found, then that locale is offered instead.</para>
         </formalpara>
       <mediaobject>
         <imageobject>
-          <imagedata fileref="images/translator-mode.png" format="png" align="center"/>
+          <imagedata fileref="images/translator-mode.png" format="PNG" align="center"/>
         </imageobject>
       </mediaobject>
         <para>While in Translator mode, a list of all message keys appears at the bottom of each page.</para>
       <mediaobject>
         <imageobject>
-          <imagedata fileref="images/translations.png" format="png" align="center"/>
+          <imagedata fileref="images/translations.png" format="PNG" align="center"/>
         </imageobject>
       </mediaobject>
       </listitem>
@@ -796,11 +954,12 @@ found, then that locale is offered instead.</para>
         </formalpara>
       <mediaobject>
         <imageobject>
-          <imagedata fileref="images/translation-batch-edit.png" format="png" align="center"/>
+          <imagedata fileref="images/translation-batch-edit.png" format="PNG" align="center"/>
         </imageobject>
       </mediaobject>
 
       </listitem>
     </itemizedlist>
+    <para>When creating a new locale based on an existing one, such as creating the Guatamalan version of Spanish, you can copy the existing locale's catalog files using the script <computeroutput>/packages/acs-core-docs/www/files/create-new-catalog.sh</computeroutput>.</para>
   </sect1>
 </chapter>

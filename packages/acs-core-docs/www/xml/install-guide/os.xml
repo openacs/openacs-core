@@ -6,7 +6,6 @@
 ]>
 <sect1 id="unix-installation" xreflabel="Install a Unix-like OS">
   <title>Install a Unix-like system and supporting software</title>
-  
   <authorblurb>
     <para>by <ulink url="mailto:joel@aufrecht.org">Joel Aufrecht</ulink></para>
   </authorblurb>
@@ -16,40 +15,31 @@
     <itemizedlist>
       <listitem><para>tdom</para></listitem>
       <listitem><para>tcl</para></listitem>
-      <listitem><para>gmake and the compile and build
-      environment.</para>
+      <listitem><para>gmake and the compile and build environment.</para>
         <note>
           <title>BSD Note</title>
-          <para>BSD users: in most places in these instructions, gmake
-          will work better than make.  (<ulink
+          <para>BSD users: in most places in these instructions, gmake will work better than make.  (<ulink
           url="http://openacs.org/forums/message-view?message_id=136910">more
           information on FreeBSD installation</ulink>)</para>
         </note>
-</listitem>
+      </listitem>
     </itemizedlist>
     <para>and optionally these programs, which are included in most distributions:</para>
     <itemizedlist>
       <listitem><para>emacs</para></listitem>
-        <listitem><para>cvs (and <link
-        linkend="install-cvs">initialize</link> it)</para></listitem>
-      <listitem><para>ImageMagick</para></listitem>
-        <listitem><para>DocBook and supporting software (and <link
-        linkend="psgml-for-emacs">install</link> emacs keybindings for
-        DocBook SGML)</para></listitem>
-        <listitem><para>daemontools (<link
-        linkend="install-daemontools">install from
-        source</link>)</para></listitem>
+        <listitem><para>cvs (and <link linkend="install-cvs">initialize</link> it)</para></listitem>
+        <listitem><para>ImageMagick (used by some packages for server side image manipulation)</para></listitem>
+        <listitem><para>Aspell (<ulink url="http://openacs.org/forums/message-view?message_id=130549">more information on spell-checking</ulink>)</para></listitem>
+        <listitem><para>DocBook and supporting software (and <link linkend="psgml-for-emacs">install</link> emacs keybindings for DocBook SGML)</para></listitem>
+        <listitem><para>daemontools (<link linkend="install-daemontools">install from source</link>)</para></listitem>
         <listitem>
           <para>a Mail Transport Agent, such as exim or sendmail (or <link linkend="install-qmail">install qmail from source</link>)</para>
         </listitem>
     </itemizedlist>
-    <para>To install a machine to the specifications of the Reference
-    Platform, do the <link linkend="install-redhat">walkthrough of the
-    Red Hat 8.0 Install for OpenACS</link>.</para>
+    <para>In order to cut and paste the example code into your shell, you must first do <xref linkend="cut-and-paste-name-var"/>.</para>
 
+    <para>To install a machine to the specifications of the Reference Platform, do the 
+    <link linkend="install-redhat">walkthrough of the Red Hat 8.0 Install for OpenACS</link>.</para>
     <para><phrase role="cvstag">($Id$)</phrase></para>
   </sect2>
-
-
-  
 </sect1>

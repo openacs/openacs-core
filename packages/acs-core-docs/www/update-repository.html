@@ -13,4 +13,14 @@
           The files will be stored on the server's hard drive in the directory specified by the 'repository_dir' variable in the page script, by default "[acs_root_dir]/www/repository/".
         </p></li></ol></div></li><li><p>
           If you're on openacs.org, everything should now be fine. Otherwise, you need to move the entire directory tree to openacs.org:/web/openacs/www/repository, replacing what was already there.
-        </p></li></ol></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="releasing-openacs-core.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="releasing-package.html">Next</a></td></tr><tr><td width="40%" align="left">OpenACS Core and .LRN </td><td width="20%" align="center"><a accesskey="u" href="releasing-openacs.html">Up</a></td><td width="40%" align="right"> How to package and release an OpenACS Package</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a><center><a href="http://openacs.org/doc/update-repository.html#comments">View comments on this page at openacs.org</a></center></body></html>
+        </p><p>This is automated on OpenACS.org by having a dedicated site just for building the repository, invoked with this shell script.  Since the page circumvents security checks for ease of use, the entire site is limited to local requests.  The script is called daily with a cron job.</p><pre class="programlisting">#!/bin/sh
+#set -x
+
+STATUS=`wget --output-document - http://127.0.0.1:8002/build-repository.tcl | grep DONE | wc -l`
+
+if [ $STATUS -eq "1" ]
+    then
+    rm -rf /web/openacs.org/www/repository.old
+    mv /web/openacs.org/www/repository /web/openacs.org/www/repository.old
+    cp -r /web/repository/www/repository /web/openacs.org/www/repository
+fi</pre></li></ol></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="releasing-openacs-core.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="releasing-package.html">Next</a></td></tr><tr><td width="40%" align="left">OpenACS Core and .LRN </td><td width="20%" align="center"><a accesskey="u" href="releasing-openacs.html">Up</a></td><td width="40%" align="right"> How to package and release an OpenACS Package</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a><center><a href="http://openacs.org/doc/current/update-repository.html#comments">View comments on this page at openacs.org</a></center></body></html>

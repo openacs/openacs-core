@@ -45,7 +45,7 @@
         <title>Upgrading with the APM</title>
         <mediaobject>
           <imageobject>
-            <imagedata fileref="images/upgrade-apm.png" format="png" align="center"/>
+            <imagedata fileref="images/upgrade-apm.png" format="PNG" align="center"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -57,19 +57,19 @@
         <tbody>
           <row>
             <entry>name of OpenACS user</entry>
-            <entry><replaceable>service0</replaceable></entry>
+            <entry><replaceable>$OPENACS_SERVICE_NAME</replaceable></entry>
           </row>
           <row>
             <entry>OpenACS server name</entry>
-            <entry><replaceable>service0</replaceable></entry>
+            <entry><replaceable>$OPENACS_SERVICE_NAME</replaceable></entry>
           </row>
           <row>
             <entry>Root of OpenACS file tree</entry>
-            <entry><replaceable>/var/lib/aolserver/<replaceable>service0</replaceable></replaceable></entry>
+            <entry><replaceable>/var/lib/aolserver/$OPENACS_SERVICE_NAME</replaceable></entry>
           </row>
           <row>
             <entry>Database backup directory</entry>
-            <entry><replaceable>/var/lib/aolserver/<replaceable>service0</replaceable>/database-backup</replaceable></entry>
+            <entry><replaceable>/var/lib/aolserver/$OPENACS_SERVICE_NAME/database-backup</replaceable></entry>
           </row>
         </tbody>
       </tgroup>
@@ -110,7 +110,7 @@
           <para>
             Stop the server
           </para>
-          <screen>[root root]# <userinput>svc -d /service/<replaceable>service0</replaceable></userinput></screen>
+          <screen>[root root]# <userinput>svc -d /service/<replaceable>$OPENACS_SERVICE_NAME</replaceable></userinput></screen>
         </listitem>
         <listitem>
           <formalpara>
@@ -122,7 +122,7 @@
           <para>
             <emphasis role="strong">Start the server</emphasis>
           </para>
-          <screen>[root root]# <userinput>svc -u /service/<replaceable>service0</replaceable></userinput></screen>
+          <screen>[root root]# <userinput>svc -u /service/<replaceable>$OPENACS_SERVICE_NAME</replaceable></userinput></screen>
         </listitem>
         <listitem>
           <formalpara id="upgrade-with-apm">
@@ -149,7 +149,7 @@
             </listitem>
             <listitem>
               <para>When prompted, restart the server:</para>
-              <screen>[root root]# <userinput>restart-aolserver <replaceable>service0</replaceable></userinput></screen>
+              <screen>[root root]# <userinput>restart-aolserver <replaceable>$OPENACS_SERVICE_NAME</replaceable></userinput></screen>
             </listitem>
             <listitem>
               <para>Wait a minute, then browse to the package manager, <computeroutput>http://<replaceable>yourserver</replaceable>/acs-admin/apm</computeroutput>.</para>
@@ -194,42 +194,42 @@
         </listitem>
             <listitem>
               <para>Upgrade the kernel manually. (There is a script to do most of the rest: <ulink url="http://cvs.openacs.org/cvs/openacs-4/contrib/misc/upgrade_4.6_to_5.0.sh?only_with_tag=HEAD">/contrib/misc/upgrade_4.6_to_5.0.sh on HEAD</ulink>).  You'll still have to do a lot of stuff manually, but automated trial and error is much more fun.)</para>
-              <screen>[root root]# <userinput>su - <replaceable>service0</replaceable></userinput>
-[service0 aolserver]$ <userinput>cd /var/lib/aolserver/ <replaceable>service0</replaceable>/packages/acs-kernel/sql/postgresql/upgrade</userinput></screen>
+              <screen>[root root]# <userinput>su - <replaceable>$OPENACS_SERVICE_NAME</replaceable></userinput>
+[$OPENACS_SERVICE_NAME aolserver]$ <userinput>cd /var/lib/aolserver/ <replaceable>$OPENACS_SERVICE_NAME</replaceable>/packages/acs-kernel/sql/postgresql/upgrade</userinput></screen>
               <para>
-                Manually execute each of the upgrade scripts in sequence, either from within psql or from the command line with commands such as <computeroutput><userinput>psql -f upgrade-4.6.3-4.6.4.sql  <replaceable>service0</replaceable></userinput></computeroutput>.  Run the scripts in this order (order is tentative, not verified):
+                Manually execute each of the upgrade scripts in sequence, either from within psql or from the command line with commands such as <computeroutput><userinput>psql -f upgrade-4.6.3-4.6.4.sql  <replaceable>$OPENACS_SERVICE_NAME</replaceable></userinput></computeroutput>.  Run the scripts in this order (order is tentative, not verified):
               </para>
-              <programlisting>psql -f upgrade-4.6.3-4.6.4.sql <replaceable>service0</replaceable>
-psql -f upgrade-4.6.4-4.6.5.sql <replaceable>service0</replaceable>
-psql -f upgrade-4.6.5-4.6.6.sql <replaceable>service0</replaceable>
-psql -f upgrade-4.7d-4.7.2d.sql <replaceable>service0</replaceable>
-psql -f upgrade-4.7.2d-5.0d.sql <replaceable>service0</replaceable>
-psql -f upgrade-5.0d-5.0d2.sql <replaceable>service0</replaceable>
-psql -f upgrade-5.0d2-5.0d3.sql <replaceable>service0</replaceable>
-psql -f upgrade-5.0d6-5.0d7.sql <replaceable>service0</replaceable>
-psql -f upgrade-5.0d7-5.0d9.sql <replaceable>service0</replaceable>
-psql -f upgrade-5.0d11-5.0d12.sql <replaceable>service0</replaceable>
-psql -f upgrade-5.0.0a4-5.0.0a5.sql <replaceable>service0</replaceable>
-psql -f upgrade-5.0.0b1-5.0.0b2.sql <replaceable>service0</replaceable>
-psql -f upgrade-5.0.0b2-5.0.0b3.sql <replaceable>service0</replaceable>
-psql -f upgrade-5.0.0b3-5.0.0b4.sql <replaceable>service0</replaceable></programlisting>
+              <programlisting>psql -f upgrade-4.6.3-4.6.4.sql <replaceable>$OPENACS_SERVICE_NAME</replaceable>
+psql -f upgrade-4.6.4-4.6.5.sql <replaceable>$OPENACS_SERVICE_NAME</replaceable>
+psql -f upgrade-4.6.5-4.6.6.sql <replaceable>$OPENACS_SERVICE_NAME</replaceable>
+psql -f upgrade-4.7d-4.7.2d.sql <replaceable>$OPENACS_SERVICE_NAME</replaceable>
+psql -f upgrade-4.7.2d-5.0d.sql <replaceable>$OPENACS_SERVICE_NAME</replaceable>
+psql -f upgrade-5.0d-5.0d2.sql <replaceable>$OPENACS_SERVICE_NAME</replaceable>
+psql -f upgrade-5.0d2-5.0d3.sql <replaceable>$OPENACS_SERVICE_NAME</replaceable>
+psql -f upgrade-5.0d6-5.0d7.sql <replaceable>$OPENACS_SERVICE_NAME</replaceable>
+psql -f upgrade-5.0d7-5.0d9.sql <replaceable>$OPENACS_SERVICE_NAME</replaceable>
+psql -f upgrade-5.0d11-5.0d12.sql <replaceable>$OPENACS_SERVICE_NAME</replaceable>
+psql -f upgrade-5.0.0a4-5.0.0a5.sql <replaceable>$OPENACS_SERVICE_NAME</replaceable>
+psql -f upgrade-5.0.0b1-5.0.0b2.sql <replaceable>$OPENACS_SERVICE_NAME</replaceable>
+psql -f upgrade-5.0.0b2-5.0.0b3.sql <replaceable>$OPENACS_SERVICE_NAME</replaceable>
+psql -f upgrade-5.0.0b3-5.0.0b4.sql <replaceable>$OPENACS_SERVICE_NAME</replaceable></programlisting>
             </listitem>
             <listitem>
               <para>Upgrade ACS Service Contracts manually:</para>
-              <screen>[service0 aolserver]$ <userinput>cd /var/lib/aolserver/ <replaceable>service0</replaceable>/packages/acs-service-contracts/sql/postgresql/upgrade</userinput>
-psql -f upgrade-4.7d2-4.7d3.sql <replaceable>service0</replaceable>
+              <screen>[$OPENACS_SERVICE_NAME aolserver]$ <userinput>cd /var/lib/aolserver/ <replaceable>$OPENACS_SERVICE_NAME</replaceable>/packages/acs-service-contracts/sql/postgresql/upgrade</userinput>
+psql -f upgrade-4.7d2-4.7d3.sql <replaceable>$OPENACS_SERVICE_NAME</replaceable>
 </screen>
             </listitem>
             <listitem>
               <para>Load acs-authentication data model.</para>
-              <screen><userinput>psql -f /var/lib/aolserver/<replaceable>service0</replaceable>/openacs-5/packages/acs-authentication/sql/postgresql/acs-authentication-create.sql <replaceable>service0</replaceable></userinput></screen>
+              <screen><userinput>psql -f /var/lib/aolserver/<replaceable>$OPENACS_SERVICE_NAME</replaceable>/openacs-5/packages/acs-authentication/sql/postgresql/acs-authentication-create.sql <replaceable>$OPENACS_SERVICE_NAME</replaceable></userinput></screen>
             </listitem>
             <listitem>
               <para>Load acs-lang data model.</para>
-              <screen><userinput>psql -f /var/lib/aolserver/<replaceable>service0</replaceable>/packages/acs-lang/sql/postgresql/acs-lang-create.sql <replaceable>service0</replaceable></userinput></screen>
+              <screen><userinput>psql -f /var/lib/aolserver/<replaceable>$OPENACS_SERVICE_NAME</replaceable>/packages/acs-lang/sql/postgresql/acs-lang-create.sql <replaceable>$OPENACS_SERVICE_NAME</replaceable></userinput></screen>
             </listitem>
             <listitem>
-              <para>(This step may overlap with the two previous steps, but I think it's harmless?) Create a file which will be executed on startup which takes care of a few issues with authentication and internationalization: create <replaceable>service0</replaceable>/tcl/zzz-postload.tcl containing:</para>
+              <para>(This step may overlap with the two previous steps, but I think it's harmless?) Create a file which will be executed on startup which takes care of a few issues with authentication and internationalization: create <replaceable>$OPENACS_SERVICE_NAME</replaceable>/tcl/zzz-postload.tcl containing:</para>
               <programlisting>if {![apm_package_installed_p acs-lang]} {
 apm_package_install -enable -mount_path acs-lang [acs_root_dir]/packages/acs-lang/acs-lang.info
 lang::catalog::import -locales [list "en_US"]
@@ -257,11 +257,20 @@ parameter::set_value -package_id [ad_acs_kernel_id] -parameter UsePasswordWidget
           </orderedlist>
           <para>
           See also these forum posts: <ulink url="http://openacs.org/forums/message-view?message_id=143497">Forum OpenACS Development: 4.6.3 upgrade to 5-HEAD: final results</ulink>, <ulink url="http://openacs.org/forums/message-view?message_id=152200">OpenACS 5.0 Upgrade Experiences</ulink>.</para>
+
+        <para>
+          There are a few things you might want to do once you've
+          upgraded. First, the acs-kernel parameters need to be set to
+          allow HREF and IMG tags, if you want users who can edit HTML
+          to be able to insert HREF and IMG tags. Also, you might need
+          to set the default language for your site. See the above
+          link on OpenACS 5.0 Upgrade Experiences for details.
+        </para>
         </listitem>
       </itemizedlist>
     </sect1>
     <sect1 id="upgrade-5-0-dot">
-      <title>Upgrading 5.0.0 to 5.0.x</title>
+      <title>Upgrading 5.0.0 to 5.0.x or 5.1.x</title>
         <itemizedlist>
           <listitem>
             <formalpara>
@@ -314,23 +323,23 @@ parameter::set_value -package_id [ad_acs_kernel_id] -parameter UsePasswordWidget
   <sect1 id="upgrade-openacs-files">
     <title>Upgrading the OpenACS files</title>
     <para>OpenACS is distributed as a collection of files, available as one big tarball, via CVS, and via automatic download from within the APM.  Upgrades work by first changing the file system (via any of the previous methods), and then using the APM to scan the file system, find upgrade scripts, and execute them.  This section describes how to upgrade the file system.  Starting with OpenACS 5.0, this section can generally be skipped because the OpenACS APM can directly download new files from the openacs.org repository.</para>
-    <para>Many OpenACS site developers operate their own CVS repository to keep track of changes from the release OpenACS code.  This part describes how to import the latest OpenACS version into your own repository.  If you are using CVS, you will unpack the OpenACS 4.6 tarball into a working directory and then import that directory into cvs.  If you have changed files in the core packages, cvs will attempt to merge your changes.  You may have to manually merge some conflicts.  When that's finished, you can update your normal development checkout directory and the new files will appear.  If you aren't using CVS, you can unpack the tarball on top of your existing tree, but any customizations you've made to the kernel or core packages will be erased.</para>
+    <para>Many OpenACS site developers operate their own CVS repository to keep track of changes from the release OpenACS code.  This part describes how to import the latest OpenACS version into your own repository.  If you are using CVS, you will unpack the OpenACS 5.1 tarball into a working directory and then import that directory into cvs.  If you have changed files in the core packages, cvs will attempt to merge your changes.  You may have to manually merge some conflicts.  When that's finished, you can update your normal development checkout directory and the new files will appear.  If you aren't using CVS, you can unpack the tarball on top of your existing tree, but any customizations you've made to the kernel or core packages will be erased.</para>
     <itemizedlist>
       <listitem>
         <formalpara>
           <title>Upgrading files for a site which is not in a CVS repository</title>
           <para>Unpack the tarball into a new directory and copy its contents on top of your working directory.</para>
         </formalpara>
-        <screen>[root root]# <userinput>su - <replaceable>service0</replaceable></userinput>
-[service0 aolserver]$ <userinput>cd /var/lib/aolserver</userinput>
-[service0 web]$ <userinput>tar xzf /tmp/openacs-4-6.tgz</userinput>
-[service0 web]$ <userinput>cp -r openacs-4-6/* openacs-4</userinput>
-[service0 openacs-upgrade]$ <userinput>exit</userinput>
+        <screen>[root root]# <userinput>su - <replaceable>$OPENACS_SERVICE_NAME</replaceable></userinput>
+[$OPENACS_SERVICE_NAME aolserver]$ <userinput>cd /var/lib/aolserver</userinput>
+[$OPENACS_SERVICE_NAME web]$ <userinput>tar xzf /tmp/openacs-5-1.tar.gz</userinput>
+[$OPENACS_SERVICE_NAME web]$ <userinput>cp -r openacs-5-1/* openacs-4</userinput>
+[$OPENACS_SERVICE_NAME openacs-upgrade]$ <userinput>exit</userinput>
 [root root]#
-<action>su - <replaceable>service0</replaceable>
+<action>su - <replaceable>$OPENACS_SERVICE_NAME</replaceable>
 cd /var/lib/aolserver
-tar xzf /tmp/openacs-4-6.tgz
-cp -r openacs-4-6/* openacs-4
+tar xzf /tmp/openacs-5-1.tgz
+cp -r openacs-5-1/* openacs-4
 exit</action></screen>
       </listitem>
       <listitem>
@@ -341,7 +350,7 @@ exit</action></screen>
           <title>Upgrading a local CVS repository</title>
           <mediaobject>
             <imageobject>
-              <imagedata fileref="images/upgrade-cvs.png" format="png" align="center"/>
+              <imagedata fileref="images/upgrade-cvs.png" format="PNG" align="center"/>
             </imageobject>
           </mediaobject>
         </figure>
@@ -357,33 +366,39 @@ exit</action></screen>
                     <title>(a): via tarball</title>
             <para>Download a <ulink url="http://openacs.org/projects/openacs/download">current tarball</ulink> and unpack the new files into a working directory.</para>
                   </formalpara>
-            <screen>[root root]# <userinput>su - <replaceable>service0</replaceable></userinput>
-[service0 aolserver]$ <userinput>cd /tmp</userinput>
-[service0 tmp]$ <userinput>tar xzf openacs-4-6.tgz</userinput>
-[service0 tmp]$ <userinput>cd openacs-4.6</userinput></screen>
+            <screen>[root root]# <userinput>su - <replaceable>$OPENACS_SERVICE_NAME</replaceable></userinput>
+[$OPENACS_SERVICE_NAME aolserver]$ <userinput>cd /tmp</userinput>
+[$OPENACS_SERVICE_NAME tmp]$ <userinput>tar xzf <replaceable>openacs-5-1</replaceable>.tar.gz</userinput>
+[$OPENACS_SERVICE_NAME tmp]$ <userinput>cd <replaceable>openacs-5-1</replaceable></userinput></screen>
                 </listitem>
                 <listitem>
                   <formalpara>
                     <title>(b): via cvs working checkout</title>
-                    <para>Create a CVS checkout from OpenACS.  The first time you do this, you will need to create the checkout directory.  We use one dedicated directory for each branch of OpenACS - if you are using OpenACS 5.0,x, you only need an OpenACS 5.0 branch.  The <replaceable>openacs-5-0-compat</replaceable> tag identifies the latest released version of OpenACS 5.0 (ie, 5.0.3 or 5.0.4) and the latest compatible version of each package, including .LRN.  Each minor release of OpenACS since 5.0 has this tagging structure.  (Ie., OpenACS 5.1.x has <computeroutput>openacs-5-1-compat</computeroutput>.)</para>
+                    <para>Create a CVS checkout from OpenACS.  The first time you do this, you will need to create the checkout directory.  We use one dedicated directory for each branch of OpenACS - if you are using OpenACS 5.0,x, you only need an OpenACS 5.0 branch.  The <replaceable>openacs-5-1-compat</replaceable> tag identifies the latest released version of OpenACS 5.1 (ie, 5.1.3 or 5.1.4) and the latest compatible version of each package, including .LRN.  Each minor release of OpenACS since 5.0 has this tagging structure.  For example, OpenACS 5.1.x has <computeroutput>openacs-5-1-compat</computeroutput>.
+                  You will want to separately check out all the
+                  packages you are using.
+                </para>
                   </formalpara>
-                  <screen>[root root]# <userinput>su - <replaceable>service0</replaceable></userinput>
-[service0 aolserver]$ <userinput>cd /var/lib/aolserver</userinput>
-[service0 aolserver]$ <userinput>cvs -d :pserver:anonymous@openacs.org:/cvsroot checkout -r <replaceable>openacs-5-0-compat</replaceable> openacs-4</userinput>
-[service0 aolserver]$ <userinput>mv openacs-4 <replaceable>openacs-5-0</replaceable></userinput></screen>
+                  <screen>[root root]# <userinput>su - <replaceable>$OPENACS_SERVICE_NAME</replaceable></userinput>
+[$OPENACS_SERVICE_NAME aolserver]$ <userinput>cd /var/lib/aolserver</userinput>
+[$OPENACS_SERVICE_NAME aolserver]$ <userinput>cvs -d :pserver:anonymous@openacs.org:/cvsroot checkout -r <replaceable>openacs-5-1-compat</replaceable> acs-core</userinput>
+[$OPENACS_SERVICE_NAME aolserver]$ <userinput>cd openacs-4/packages</userinput>
+[$OPENACS_SERVICE_NAME aolserver]$ <userinput>cvs -d :pserver:anonymous@openacs.org:/cvsroot checkout -r <replaceable>openacs-5-1-compat</replaceable> <replaceable>packagename packagename2...</replaceable></userinput>
+[$OPENACS_SERVICE_NAME aolserver]$ <userinput>cd ../..</userinput>
+[$OPENACS_SERVICE_NAME aolserver]$ <userinput>mv openacs-4 <replaceable>openacs-5-1</replaceable></userinput></screen>
                   <para>If this checkout already exists, you can simply update it instead of recreating it.</para>
-                  <screen>[root root]# <userinput>su - <replaceable>service0</replaceable></userinput>
-[service0 aolserver]$ <userinput>cd /var/lib/aolserver/<replaceable>openacs-5-0</replaceable></userinput>
-[service0 aolserver]$ <userinput>cvs up -Pd</userinput></screen>
+                  <screen>[root root]# <userinput>su - <replaceable>$OPENACS_SERVICE_NAME</replaceable></userinput>
+[$OPENACS_SERVICE_NAME aolserver]$ <userinput>cd /var/lib/aolserver/<replaceable>openacs-5-1</replaceable></userinput>
+[$OPENACS_SERVICE_NAME aolserver]$ <userinput>cvs up -Pd</userinput></screen>
                 </listitem>
               <listitem>
                 <formalpara>
                   <title>(c) A single package via cvs working checkout</title>
                   <para>You can add or upgrade a single package at a time, if you already have a cvs working directory.</para>
                 </formalpara>
-                <screen>[root root]# <userinput>su - <replaceable>service0</replaceable></userinput>
-[service0 aolserver]$ <userinput>cd /var/lib/aolserver/<replaceable>openacs-5-0</replaceable></userinput>
-[service0 openacs-5-0]$ <userinput>cvs up -d <replaceable>myfirstpackage</replaceable></userinput></screen>
+                <screen>[root root]# <userinput>su - <replaceable>$OPENACS_SERVICE_NAME</replaceable></userinput>
+[$OPENACS_SERVICE_NAME aolserver]$ <userinput>cd /var/lib/aolserver/<replaceable>openacs-5-1</replaceable></userinput>
+[$OPENACS_SERVICE_NAME openacs-5-1]$ <userinput>cvs up -d <replaceable>myfirstpackage</replaceable></userinput></screen>
               <para>In the next section, the import must be tailored to just this package.</para>
               </listitem>
               </itemizedlist>
@@ -394,34 +409,37 @@ exit</action></screen>
                 <para>Now that you have a local copy of the new OpenACS code, you need to import it into your local CVS repository and resolve any conflicts that occur.</para>
               </formalpara>
             <para>Import the new files into your cvs repository; where they match existing files, they will become the new version of the file.</para>
-            <screen>[service0 openacs-4.6]$ <userinput> cvs -d /var/lib/cvs import -m "upgrade to OpenACS 4.6" openacs OpenACS openacs-4-6</userinput></screen>
+
+            <screen>[$OPENACS_SERVICE_NAME openacs-5-1]$ <userinput> cd /var/lib/aolserver/<replaceable>openacs-5-1</replaceable></userinput>
+[$OPENACS_SERVICE_NAME openacs-5-1]$ <userinput> cvs -d /var/lib/cvs import -m "upgrade to OpenACS 5.1" <replaceable>$OPENACS_SERVICE_NAME</replaceable> OpenACS <replaceable>openacs-5-1</replaceable></userinput>
+            </screen>
+
             <tip>
               <para>If adding or upgrading a single package, run the cvs import from within the base directory of that package, and adjust the cvs command accordingly.  In this example, we are adding the <computeroutput>myfirstpackage</computeroutput> package.</para>
-              <screen>[root root]# <userinput>su - <replaceable>service0</replaceable></userinput>
-[service0 aolserver]$ <userinput>cd /var/lib/aolserver/<replaceable>openacs-5-0</replaceable>/packagse/<replaceable>myfirstpackage</replaceable></userinput>
-[service0 myfirstpackage]$ <userinput>cvs -d /var/lib/cvs/ import -m "importing package" <replaceable>service0</replaceable>/packages/<replaceable>myfirstpackage</replaceable></userinput></screen>
+              <screen>[root root]# <userinput>su - <replaceable>$OPENACS_SERVICE_NAME</replaceable></userinput>
+[$OPENACS_SERVICE_NAME aolserver]$ <userinput>cd /var/lib/aolserver/<replaceable>openacs-5-0</replaceable>/package/<replaceable>myfirstpackage</replaceable></userinput>
+[$OPENACS_SERVICE_NAME myfirstpackage]$ <userinput>cvs -d /var/lib/cvs/ import -m "importing package" <replaceable>$OPENACS_SERVICE_NAME</replaceable>/packages/<replaceable>myfirstpackage</replaceable> OpenACS openacs-5-1</userinput></screen>
             </tip>
 
             <para>Create a new directory as temporary working space to reconcile conflicts between the new files and your current work.  The example uses the cvs keyword yesterday, making the assumption that you haven't checked in new code to your local tree in the last day.</para>
-            <screen>[service0 openacs-4.6]$ <userinput> cd /var/lib/aolserver</userinput>
-[service0 tmp]$ <userinput>mkdir <replaceable>service0</replaceable>-upgrade</userinput>
-[service0 tmp]$ <userinput>cvs checkout -d openacs-upgrade -jOpenACS:yesterday -jOpenACS openacs &gt; cvs.txt 2&gt;&amp;1</userinput>
-(CVS feedback here)
-</screen>
-          <para>The file /tmp/openacs-upgrade/cvs.txt contains the results of the upgrade.  If you changed files that are part of the OpenACS tarball and those changes conflict with the 4.5-4.6 upgrade, you'll have to manually reconcile them.  Use the emacs command <computeroutput>M-x sort-lines</computeroutput> and then, for each line that starts with a C, open that file and manually resolve the conflict by deleting the excess lines.  When you're finished, or if there aren't any conflicts, save and exit.</para>
+            <screen>[$OPENACS_SERVICE_NAME openacs-5.1]$ <userinput> cd /var/lib/aolserver</userinput>
+[$OPENACS_SERVICE_NAME tmp]$ <userinput>mkdir <replaceable>$OPENACS_SERVICE_NAME</replaceable>-upgrade</userinput>
+[$OPENACS_SERVICE_NAME tmp]$ <userinput>cvs checkout -d openacs-upgrade -jOpenACS:yesterday -jOpenACS -kk <replaceable>$OPENACS_SERVICE_NAME</replaceable> &gt; cvs.txt 2&gt;&amp;1</userinput>
+(CVS feedback here)</screen>
+          <para>The file /tmp/openacs-upgrade/cvs.txt contains the results of the upgrade.  If you changed files that are part of the OpenACS tarball and those changes conflict, you'll have to manually reconcile them.  Use the emacs command <computeroutput>M-x sort-lines</computeroutput> and then, for each line that starts with a C, open that file and manually resolve the conflict by deleting the excess lines.  When you're finished, or if there aren't any conflicts, save and exit.</para>
             <para>Once you've fixed any conflicts, commit the new code
             to your local tree.  </para>
-            <screen>[service0 tmp]$ <userinput>cd openacs-upgrade</userinput>
-[service0 openacs-upgrade]$ <userinput>cvs commit -m "Upgraded to 4.6"</userinput></screen>          </listitem>
+            <screen>[$OPENACS_SERVICE_NAME tmp]$ <userinput>cd openacs-upgrade</userinput>
+[$OPENACS_SERVICE_NAME openacs-upgrade]$ <userinput>cvs commit -m "Upgraded to 5.1"</userinput></screen>          </listitem>
           <listitem>
               <formalpara>
                 <title>Step 3: Upgrade your local staging site</title>
             <para>Update your working tree with the new files.  The CVS flags ensure that new directories are created and pruned directories destroyed.</para>
               </formalpara>
-<screen>[service0 openacs-upgrade]$ <userinput>cd /var/lib/aolserver/<replaceable>service0</replaceable></userinput>
-[service0 service0]$ <userinput>cvs up -Pd</userinput>
+<screen>[$OPENACS_SERVICE_NAME openacs-upgrade]$ <userinput>cd /var/lib/aolserver/<replaceable>$OPENACS_SERVICE_NAME</replaceable></userinput>
+[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <userinput>cvs up -Pd</userinput>
 (CVS feedback)
-[service0 service0]$ <userinput>exit</userinput>
+[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <userinput>exit</userinput>
 [root root]# </screen>
             </listitem>
           </itemizedlist>
@@ -432,10 +450,10 @@ exit</action></screen>
       </para>
       <orderedlist>
         <listitem>
-          <screen>[service0 ~]$ <userinput>cd /var/lib/aolserver/<replaceable>service0</replaceable></userinput>
-[service0 service0]$ <userinput>cvs up -Pd</userinput>
+          <screen>[$OPENACS_SERVICE_NAME ~]$ <userinput>cd /var/lib/aolserver/<replaceable>$OPENACS_SERVICE_NAME</replaceable></userinput>
+[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <userinput>cvs up -Pd</userinput>
 (CVS feedback)
-[service0 service0]$</screen>
+[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$</screen>
           </listitem>
       </orderedlist>
     <sect2>
@@ -454,10 +472,10 @@ exit</action></screen>
         <listitem>
           <para>Import the new code (for example, OpenACS 5.0.4, openacs-5-0-compat versions of
    ETP, blogger, and other applications) into a "vendor branch" of the
-   <replaceable>service0</replaceable> CVS tree, as described in "Upgrading a local CVS repository", step 1, above. 
+   <replaceable>$OPENACS_SERVICE_NAME</replaceable> CVS tree, as described in "Upgrading a local CVS repository", step 1, above. 
    As soon as we do this, any cvs update command on production might bring new code onto the production site, which
    would be bad.</para>
-          <para>Do step 2 above (merging conflicts in a <replaceable>service0</replaceable>-upgrade working tree).</para>
+          <para>Do step 2 above (merging conflicts in a <replaceable>$OPENACS_SERVICE_NAME</replaceable>-upgrade working tree).</para>
         </listitem>
         <listitem>
           <para>
@@ -466,20 +484,20 @@ exit</action></screen>
         </listitem>
         <listitem>
           <para>Use the upgrade script and a recent backup of the production database, to ake
-  a new upgraded database called <replaceable>service0</replaceable>-upgrade.  Now we
-   have a new website called <replaceable>service0</replaceable>-upgrade.
+  a new upgraded database called <replaceable>$OPENACS_SERVICE_NAME</replaceable>-upgrade.  Now we
+   have a new website called <replaceable>$OPENACS_SERVICE_NAME</replaceable>-upgrade.
           </para>
         </listitem>
         <listitem>
           <para>
-            Test the <replaceable>service0</replaceable>-upgrade site
+            Test the <replaceable>$OPENACS_SERVICE_NAME</replaceable>-upgrade site
           </para>
         </listitem>
         <listitem>
-          <para>If <replaceable>service0</replaceable>-upgrade is fully functional, do the real upgrade.</para>
+          <para>If <replaceable>$OPENACS_SERVICE_NAME</replaceable>-upgrade is fully functional, do the real upgrade.</para>
           <orderedlist>
             <listitem>
-              <para>Take down the <replaceable>service0</replaceable> site and put up a "down for maintenance" page.</para>
+              <para>Take down the <replaceable>$OPENACS_SERVICE_NAME</replaceable> site and put up a "down for maintenance" page.</para>
             </listitem>
             <listitem>
               <para>Repeat the upgrade with the most recent database</para>
@@ -501,7 +519,7 @@ exit</action></screen>
       <para>OpenACS Full Text Search requires several pieces: the OpenFTS code, some database functions, and the OpenFTS Engine.  This section describes how to upgrade OpenFTS from 0.2 to 0.3.2 and upgrade the search engine on an OpenACS site at the same time.</para>
       <orderedlist>
         <listitem>
-          <para>Uninstall the old OpenFTS Engine from the <replaceable>service0</replaceable> database.</para>
+          <para>Uninstall the old OpenFTS Engine from the <replaceable>$OPENACS_SERVICE_NAME</replaceable> database.</para>
           <orderedlist>
             <listitem><para><emphasis role='bold'>Browse to <computeroutput>http://<replaceable>yourserver</replaceable>/openfts</computeroutput>.</emphasis>
             </para>
@@ -538,19 +556,19 @@ exit</action></screen>
           make install
           exit</screen>
           <para>In order for the OpenACS 4.6 OpenFTS Engine to use the OpenFTS 0.3.2 driver, we need some commands added to the database.</para>
-          <screen>[root root]# <userinput>su - <replaceable>service0</replaceable></userinput>
-          [service0 dev]$ <userinput>psql <replaceable>service0</replaceable> -f /usr/local/pgsql/share/contrib/openfts.sql</userinput>
+          <screen>[root root]# <userinput>su - <replaceable>$OPENACS_SERVICE_NAME</replaceable></userinput>
+          [$OPENACS_SERVICE_NAME dev]$ <userinput>psql <replaceable>$OPENACS_SERVICE_NAME</replaceable> -f /usr/local/pgsql/share/contrib/openfts.sql</userinput>
           CREATE
           CREATE
-          [service0 dev]$ <userinput>psql <replaceable>service0</replaceable> -f /usr/local/src/postgresql-7.2.3/contrib/tsearch/tsearch.sql</userinput>
+          [$OPENACS_SERVICE_NAME dev]$ <userinput>psql <replaceable>$OPENACS_SERVICE_NAME</replaceable> -f /usr/local/src/postgresql-7.2.3/contrib/tsearch/tsearch.sql</userinput>
           BEGIN
           CREATE
           (~30 more lines)
-          [service0 dev]$ <userinput>exit</userinput>
+          [$OPENACS_SERVICE_NAME dev]$ <userinput>exit</userinput>
           [root root]# 
-          <action>su - <replaceable>service0</replaceable>
-psql <replaceable>service0</replaceable> -f /usr/local/pgsql/share/contrib/openfts.sql
-psql <replaceable>service0</replaceable> -f /usr/local/src/postgresql-7.2.3/contrib/tsearch/tsearch.sql
+          <action>su - <replaceable>$OPENACS_SERVICE_NAME</replaceable>
+psql <replaceable>$OPENACS_SERVICE_NAME</replaceable> -f /usr/local/pgsql/share/contrib/openfts.sql
+psql <replaceable>$OPENACS_SERVICE_NAME</replaceable> -f /usr/local/src/postgresql-7.2.3/contrib/tsearch/tsearch.sql
 exit</action></screen>
         </listitem>
         <listitem>
@@ -574,7 +592,7 @@ exit</action></screen>
               <para>Click <computeroutput><guibutton>Set Parameters</guibutton></computeroutput></para>
             </listitem>
             <listitem>
-              <screen>[root root]# restart-aolserver <replaceable>service0</replaceable></screen>
+              <screen>[root root]# restart-aolserver <replaceable>$OPENACS_SERVICE_NAME</replaceable></screen>
             </listitem>
             <listitem>
               <para>Browse to <computeroutput>http://<replaceable>yourserver</replaceable>/openfts</computeroutput></para>
@@ -600,19 +618,19 @@ exit</action></screen>
       casting commands that no longer work in 7.3 and these functions
       must be recreated.</para>
       <para>
-      To upgrade an OpenACS site from PostGreSQL 7.2 to 7.3, first upgrade the kernel to 4.6.3.  Then, dump the database, run the upgrade script <computeroutput>/var/lib/aolserver/<replaceable>service0</replaceable>/bin/pg_7.2to7.3_upgrade_helper.pl</computeroutput> on the dump file, and reply the dump.  See <ulink url="http://openacs.org/forums/message-view?message_id=109337">Forum OpenACS Q&amp;A: PG 7.2->7.3 upgrade gotcha?</ulink>.  Example:</para>
+      To upgrade an OpenACS site from PostGreSQL 7.2 to 7.3, first upgrade the kernel to 4.6.3.  Then, dump the database, run the upgrade script <computeroutput>/var/lib/aolserver/<replaceable>$OPENACS_SERVICE_NAME</replaceable>/bin/pg_7.2to7.3_upgrade_helper.pl</computeroutput> on the dump file, and reply the dump.  See <ulink url="http://openacs.org/forums/message-view?message_id=109337">Forum OpenACS Q&amp;A: PG 7.2->7.3 upgrade gotcha?</ulink>.  Example:</para>
       <orderedlist>
         <listitem>
           <para>Back up the database as per <xref linkend="postgres-snapshot-backup"/>.</para>
         </listitem>
         <listitem>
           <para>Run the upgrade script on the backup file.</para>
-          <screen>[root root]# <userinput>su - <replaceable>service0</replaceable></userinput>
-          [service0 <replaceable>service0</replaceable>]# <userinput>cd /var/lib/aolserver/<replaceable>service0</replaceable>/bin</userinput>
-          [service0 bin]$ <userinput>./pg_7.2to7.3_upgrade_helper.pl \
+          <screen>[root root]# <userinput>su - <replaceable>$OPENACS_SERVICE_NAME</replaceable></userinput>
+          [$OPENACS_SERVICE_NAME <replaceable>$OPENACS_SERVICE_NAME</replaceable>]# <userinput>cd /var/lib/aolserver/<replaceable>$OPENACS_SERVICE_NAME</replaceable>/bin</userinput>
+          [$OPENACS_SERVICE_NAME bin]$ <userinput>./pg_7.2to7.3_upgrade_helper.pl \
           ../database-backup/nightly.dmp \
           ../database-backup/upgrade-7.3.dmp \
-          /var/lib/aolserver/<replaceable>service0</replaceable></userinput>
+          /var/lib/aolserver/<replaceable>$OPENACS_SERVICE_NAME</replaceable></userinput>
           ==================================================================
           looking for function acs_object__check_object_ancest in oacs
           grep result: /var/lib/aolserver/aufrecht-dev/packages/acs-kernel/sql/postgresql/acs-objects-create.sql:create function acs_object__check_object_ancestors (integer,integer,integer)
@@ -620,7 +638,7 @@ exit</action></screen>
           replacing acs_object__check_object_ancest with acs_object__check_object_ancestors
 
           <emphasis>(many lines omitted)</emphasis>
-          [service0 bin]$
+          [$OPENACS_SERVICE_NAME bin]$
           </screen>
         </listitem>
         <listitem>
@@ -651,7 +669,7 @@ exit</action></screen>
         </listitem>
         <listitem>
           <para>Change the path in
-          <replaceable>service0</replaceable>'s .bashrc or
+          <replaceable>$OPENACS_SERVICE_NAME</replaceable>'s .bashrc or
           .bash_profile (or both) files to reflect the new postgres73
           user directory. Also add in the PGPORT.</para>
         </listitem>

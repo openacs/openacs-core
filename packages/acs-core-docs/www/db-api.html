@@ -3,166 +3,127 @@
   </p><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="db-api-overview"></a>Overview</h3></div></div><div></div></div><p>
       One of OpenACS's great strengths is that code written for it is
       very close to the database. It is very easy to interact with the
-      database from anywhere within OpenACS. Our goal is to develop a
+      database from anywhere within OpenACS, and we have a
       coherent API for database access which makes this even easier.
     </p><p>
       More detailed information about the DB api is available at
       <a href="db-api-detailed.html">Database Access API</a>.
-    </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="db-api-thenewway"></a>The New Way</h3></div></div><div></div></div><p>
-      Introduced in ACS 3.4, the new Database API is meant to save
-      developers from the above tedium and provide a more structured syntax
-      for specifying database operations, including transactions.
-      Here's an example of the API.
+    </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="db-api-examples"></a>DB API Examples</h3></div></div><div></div></div><p>
+      The OpenACS database API is meant to save developers from making
+      common mistakes and to provide a more structured syntax for
+      specifying database operations, including transactions.  Here's
+      an example of the API.
     </p><pre class="programlisting">
-set count 0 
-
+set count 0
 set tcl_var "foo"
-
 set sql {
-       	select 
-            foo, 
-            bar, 
-            baz 
-        from some_table, some_other_table
-        where some_table.id = some_other_table.id  
-        and some_table.condition_p = :tcl_var
-      	}
-      
-db_transaction {
-        db_foreach my_example_query_name $sql {
-            	...
-            	call_some_proc $foo $bar $baz
-            	incr count
-        }
+      	SELECT foo, bar, baz
+       FROM some_table, some_other_table
+       WHERE some_table.id = some_other_table.id
+         and some_table.condition_p = :tcl_var
 }
-    </pre><p>
+
+db_transaction {
+    db_foreach my_example_query_name $sql {
+        lappend rows [list $foo $bar $baz]
+        incr count
+    }
+    foreach row $rows { 
+        call_some_proc $foo $bar $baz
+    }
+}</pre><p>
       There are several things to note here:
 
       </p><div class="orderedlist"><ol type="1"><li><p>
 	    No explicit code for grabbing and releasing handles. Usage of the
 	    Database API implicitly deals with all handle management issues.
 	  </p></li><li><p>
-	    The new command <tt class="computeroutput">db_transaction</tt>
+	    The <tt class="computeroutput">db_transaction</tt> command
 	    makes the scope of a transaction
-	    clear. <tt class="computeroutput">db_transaction</tt> takes the
+	    clear; <tt class="computeroutput">db_transaction</tt> takes the
 	    code block argument and automatically runs it in the context of a
-	    transaction.
+	    transaction.  If you use something like db_foreach though, you need to 
+            make sure that there are no calls in the code block which would take
+            a second db handle since the transaction is only valid for 
+            one handle (thats why we build up a list of returned values and call 
+            a second proc outside the db_foreach loop).
 	  </p></li><li><p>
-	    The new command <tt class="computeroutput">db_foreach</tt> writes
+	    The command <tt class="computeroutput">db_foreach</tt> writes
 	    our old while loop for us.
 	  </p></li><li><p>
-	    Every SQL query has a name, meant to be unique within the server
-	    instance (though this is not enforced).
+	    Every SQL query has a name, which is used in conjunction with .XQL files
+            to support multiple databases.
 	  </p></li><li><p>
-	    Finally and most importantly, there is a new scheme for passing data
-	    from a Tcl variable to the database, which we'll cover next.
+	    Finally and most importantly, there API implements bind variables, which we will cover next.
 	  </p></li></ol></div><p>
 
     </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="db-api-bindvariables"></a>Bind Variables</h3></div></div><div></div></div><p>
-      Bind variables are placeholders for literal values in an SQL query
-      being sent to the server. Take the example query above: in the old
-      way, data was generally passed to Oracle directly, via Tcl string
-      interpolation. So in the example above, the actual query we send would
-      look like this:
+      Bind variables are placeholders for literal values in an SQL
+      query being sent to the server.  In the old way, data was
+      generally passed to directly to the DB backend, via Tcl string
+      interpolation. In the example above, the query would look like:
     </p><pre class="programlisting">
-select 
-    foo, 
-    bar, 
-    baz 
+select foo, bar, baz 
 from some_table, some_other_table
 where some_table.id=some_other_table.id  
-and some_table.condition_p = 'foo'
-    </pre><p>
+and some_table.condition_p = '$foo'</pre><p>
       There are a few problems with this:
     </p><div class="orderedlist"><ol type="1"><li><p>
-	If the literal value is a
-	huge string, then we waste a lot of time in the database server doing
-	useless parsing.
+          If the value of $foo is a huge string, then we waste a lot
+          of time in the database server doing useless parsing.
 	</p></li><li><p>
-	Second, if the literal value contains characters like
-	single quotes, we have to be careful to double-quote them, because not
-	quoting them will lead to surprising errors.
+          Second, if the literal value contains characters like single
+          quotes, we have to be careful to properly escape them,
+          because not quoting them will lead to surprising errors.
 	</p></li><li><p>
-	   Third, no type checking
-	  occurs on the literal value. Finally, if the Tcl variable is passed in
-	  or between web forms or otherwise subject to external modification,
-	  there is nothing keeping malicious users from setting the Tcl variable
-	  to some string that changes the query textually.
-	</p><p>
+          Third, no type checking occurs on the literal
+	  value. Finally, if the Tcl variable is passed in or between
+	  web forms or otherwise subject to external modification,
+	  there is nothing keeping malicious users from setting the
+	  Tcl variable to some string that changes the query
+	  textually.
 	    This type of attack,
 	  called <span class="emphasis"><em>SQL smuggling</em></span>, can be very
 	  damaging - entire tables can be
-	  exposed or have their contents deleted, for example. Another very
-	  important reason for using bind variables is performance. Oracle caches
-	  all previously parsed queries. If there are values in the where clause,
-	  that is how the query is cached. It also performs bind variable
-	  susbstitution after parsing the SQL statement. This means that SQL
-	  statements that use bind variables will always match (assuming all else is
-	  the same) while SQL statements that do not use bind variables will not
-	  match unless the values in the statement are exactly the same. This will
-	  improve performance considerably.
+	  exposed or have their contents deleted, for example. 
+	</p><p>
+          Another very important reason for using bind variables is
+	  performance. Oracle can cache previously parsed queries. If
+	  there are values in the where clause, that is how the query
+	  is cached. It also performs bind variable susbstitution
+	  after parsing the SQL statement. This means that SQL
+	  statements that use bind variables will always match
+	  (assuming all else is the same) while SQL statements that do
+	  not use bind variables will not match unless the values in
+	  the statement are exactly the same. This will improve the
+	  query cache considerably, which can make the server much
+	  more efficient.
 	</p></li></ol></div><p>
-      To fix all these problems, we replace literal values in the query with
-      a placeholder character, and then send the data along after. So the
-      query looks like this:
-    </p><pre class="programlisting">
-select 
-    foo, 
-    bar, 
-    baz 
-from some_table, some_other_table
-where some_table.id = some_other_table.id
-and some_table.condition_p = ?
-    </pre><p>
-      The '?' character means "This will be filled in later with literal
-      data". In use, you might write code that looks like this:
-    </p><pre class="programlisting">
-set statement [prepare_query "
-    		select 
-        		foo, 
-        		bar, 
-        		baz 
-    		from some_table, some_other_table
-    		where some_table.id = some_other_table.id  
-    		and some_table.condition_p = ?
-	       "]
-
-[bind_param $statement 1 $tcl_var]
-    </pre><p>
-      The above example is meant to be psuedo-Tcl - no API like this
-      actually exists.  What happens is that we first send the SQL statement
-      to the server for parsing, then later we <span class="emphasis"><em>bind</em></span> values to the
-      placeholders, and send those values along seperately. This seperate
-      binding step is where the term <span class="emphasis"><em>bind variable</em></span> comes from.
+      What the DB API (in conjuntion with the database drivers
+      implemented for aolserver) do is send the SQL statement to the
+      server for parsing, then <span class="emphasis"><em>bind</em></span> values to the
+      variables and sends those values along seperately as a second
+      step. This seperate binding step is where the term
+      <span class="emphasis"><em>bind variable</em></span> comes from.
     </p><p>
-      This split has several advantages. First, type checking happens on the
-      literal. If the column we are comparing against holds numbers, and we
-      send a string, we get a nice error. Second, since string literals are
-      no longer in the query, no extra quoting is required. Third,
-      substitution of bind variables cannot change the actual text of the
-      query, only the literal values in the placeholders.
+      This split has several advantages. First, type checking happens
+      on the literal. If the column we are comparing against holds
+      numbers, and we send a string, we get a nice error. Second,
+      since string literals are no longer in the query, no extra
+      quoting is required. Third, substitution of bind variables
+      cannot change the actual text of the query, only the literal
+      values in the placeholders.  The database API makes bind
+      variables easy to use by hooking them smoothly into the Tcl
+      runtime so you simply provide :tclvar and the value of $tclvar 
+      is sent to the backend to actually execute the query.
     </p><p>
-      The database API makes bind variables easy to use by hooking them
-      smoothly into the Tcl runtime. Rather than using a '?' as a generic
-      placeholder, you use a colon followed by the name of the Tcl variable
-      that you wish to pass as a literal. So here's the final, real-life
-      form of the example query:
-    </p><pre class="programlisting">
-select 
-    foo, 
-    bar, 
-    baz 
-from some_table, some_other_table
-where some_table.id = some_other_table.id  
-and some_table.condition_p = :tcl_var
-    </pre><p>
       The database API parses the query and pulls out all the bind variable
       specifications and replaces them with generic placeholders.  It then
       automatically pulls the values of the named Tcl vars out of the
       runtime environment of the script, and passes them to the database.
     </p><p>
       Note that while this looks like a simple syntactic change, it really
-      is very different from how we've written queries in the past.  You use
+      is very different from how interpolated text queries work.  You use
       bind variables to replace what would otherwise be a literal value in a
       query, and Tcl style string interpolation does not happen. So you
       cannot do something like:
@@ -175,7 +136,7 @@ db_foreach my_query { select :table from some_table where :condition }
       SQL will not allow a literal to occur where we've put the bind
       variables, so the query is syntactically incorrect. You have to
       remember that while the bind variable syntax looks similar to variable
-      interpolation in Tcl, it is <span class="emphasis"><em>not the same thing at all</em></span>.
+      interpolation in Tcl, It is <span class="emphasis"><em>not the same thing at all</em></span>.
     </p><p>
       Finally, the DB API has several different styles for passing bind
       variable values to queries. In general, use the style presented here
@@ -286,16 +247,12 @@ db_dml foo_create "insert into foo(bar, baz) values(:bar, :baz)"
       </p><p>Therefore, the Database Access API provides a database-independent way to
 	represent <tt class="computeroutput">null</tt> (instead of the Oracle-specific idiom of the
 	empty string): <tt class="computeroutput">db_null</tt>.</p><p>Use it instead of the empty string whenever you want to set a column value
-	explicitly to <tt class="computeroutput">null</tt>, e.g.:</p><pre class="programlisting">
-
-set bar [db_null]
+	explicitly to <tt class="computeroutput">null</tt>, e.g.:</p><pre class="programlisting">set bar [db_null]
 set baz [db_null]
 
 db_dml foo_create "insert into foo(bar, baz) values(:bar, :baz)"
 #
-# sets the values for both the "bar" and "baz" columns to null
-
-      </pre></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="db-api-pooling"></a>Sequence Pooling</h3></div></div><div></div></div><p>
+# sets the values for both the "bar" and "baz" columns to null</pre></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="db-api-pooling"></a>Sequence Pooling</h3></div></div><div></div></div><p>
       The database library can transparently maintain pools of sequence values, so
       that each request for a new sequence value (using <tt class="computeroutput">db_nextval</tt>)
       does not incur a roundtrip to the server. For instance, this functionality is
@@ -310,7 +267,7 @@ PoolSequence.<span class="emphasis"><em>sequence_name_seq</em></span>=<span clas
 
     </pre><p>
       in <span class="emphasis"><em>any</em></span> configuration section in the <tt class="computeroutput">yourservername.ini</tt>
-      file, e.g., e.g., 
+      file, e.g., 
     </p><pre class="programlisting">
 
 [ns/server/<span class="emphasis"><em>yourservername</em></span>/acs/security]
@@ -391,7 +348,6 @@ db_abort_transaction
     and not include it in the multirow. Or you can call <tt class="computeroutput">break</tt>
     to skip this row and quit looping.
     </p><p>
-
     Notice the nonstandard numbering (everything
     else in Tcl starts at 0); the reason is that the graphics designer, a non
     programmer, may wish to work with row numbers.
@@ -682,4 +638,4 @@ db_dml foo_insert "insert into foo(baz) values(:1)" {[db_nullify_empty_string $b
 
 	  </pre></dd></dl></div><p>
       </p><div class="cvstag">($Id$)</div><p>
-    </p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="request-processor.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="templates.html">Next</a></td></tr><tr><td width="40%" align="left">The Request Processor </td><td width="20%" align="center"><a accesskey="u" href="dev-guide.html">Up</a></td><td width="40%" align="right"> Using Templates in OpenACS</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a><center><a href="http://openacs.org/doc/db-api.html#comments">View comments on this page at openacs.org</a></center></body></html>
+    </p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="request-processor.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="templates.html">Next</a></td></tr><tr><td width="40%" align="left">The Request Processor </td><td width="20%" align="center"><a accesskey="u" href="dev-guide.html">Up</a></td><td width="40%" align="right"> Using Templates in OpenACS</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a><center><a href="http://openacs.org/doc/current/db-api.html#comments">View comments on this page at openacs.org</a></center></body></html>

@@ -1,5 +1,5 @@
 <?xml version='1.0' ?>
-<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+<!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
                "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
 <!ENTITY % myvars SYSTEM "../variables.ent">
 %myvars;
@@ -7,7 +7,7 @@
 
 
   <sect1 id="tutorial-newpackage">
-    <title>Creating a Package</title>
+    <title>Creating an Application Package</title>
     
     <authorblurb>
       <para>by <ulink url="mailto:joel@aufrecht.org">Joel Aufrecht</ulink></para>
@@ -22,21 +22,16 @@
   </mediaobject>
 </sect2>
 
-
     <sect2>
       <title>Overview</title>
-      <para>To start developing new code in OpenACS, we build a new
-    package.  A package is a a discrete collection of web
-    pages, tcl code, and database tables and procedures.  A package
-      with user interface is called an <emphasis
-      role="strong">application</emphasis>; a package which provides
-      functions to other packages and has no direct interface, a
-      <emphasis role="strong">service</emphasis>.  A package
-    can be installed, upgraded, and removed.  It communicates with
-    other packages through an API.  This chapter walks you through the
-    minimum steps to create a useful package, including writing
-      documentation, setting up database tables and procedures,
-      writing web pages, debugging, and automatic regression testing.
+      <para>To start developing new code in OpenACS, we build a new package. A package 
+      is a a discrete collection of web pages, tcl code, and database tables and procedures.
+      A package with user interface is called an <emphasis role="strong">application</emphasis>; 
+      a package which provides functions to other packages and has no direct interface, a
+      <emphasis role="strong">service</emphasis>.  A package can be installed, upgraded, and 
+      removed.  It communicates with other packages through an API.  This chapter walks you through 
+      the minimum steps to create a useful package, including writing documentation, setting up 
+      database tables and procedures, writing web pages, debugging, and automatic regression testing.
       </para>
       
       <para>
@@ -45,7 +40,6 @@
         around the content repository's limitations, including an
         incomplete TCL API.  So the tutorial is messier than we'd like
         right now.  Code that is temporary hackage is clearly marked.
-
       </para>
       
     <para>In this tutorial, we will make an application package for
@@ -79,7 +73,7 @@ standard OpenACS &version; distribution.
 
             <row>
               <entry>Name of development account</entry>
-              <entry><replaceable>service0</replaceable></entry>
+              <entry><replaceable>$OPENACS_SERVICE_NAME</replaceable></entry>
             </row>
             <row>
               <entry>New Package key</entry>
@@ -112,7 +106,7 @@ standard OpenACS &version; distribution.
       </listitem>
       <listitem>
         <para>Click <computeroutput>Create a New Package</computeroutput>.</para>
-        <para>Fill in the fields listed below.  Tab through the rest.
+        <para>Fill in the fields listed below.   <emphasis role="strong">Ignore the rest (and leave the check boxes alone).</emphasis>
         (Some will change automatically.  Don't mess with those.)
 </para>
         <itemizedlist>
@@ -127,6 +121,10 @@ standard OpenACS &version; distribution.
             <listitem><para>
               <computeroutput>Package Plural</computeroutput>:
               <userinput>My First Package</userinput></para></listitem>
+            <listitem><para>
+              <computeroutput>Package Type</computeroutput>:
+              <userinput>Application</userinput>
+            </para></listitem>
             <listitem><para>	  
               <computeroutput>Initial Version</computeroutput>:
               <userinput>0.1d</userinput>
@@ -141,20 +139,19 @@ standard OpenACS &version; distribution.
       </listitem>
     </orderedlist>
       <para>This creates a package rooted at
-          <computeroutput>/var/lib/aolserver/<replaceable>service0</replaceable>/packages/<replaceable>myfirstpackage</replaceable></computeroutput>.
+          <computeroutput>/var/lib/aolserver/<replaceable>$OPENACS_SERVICE_NAME</replaceable>/packages/<replaceable>myfirstpackage</replaceable></computeroutput>.
           This is the "home directory" of our new package, and all
           files in the package will be within this directory.</para>
     </sect2>
     <sect2>
-      <title>Mount the package in the site map</title>
+      <title>Add an Application Instance to the Server</title>
       <para>In order to see your work in progress, you must create a
-      map between the URL space of incoming requests and the package.
-      You do this by mounting the package in the Site Map.  This
-      creates a link between the incoming URL and an
-      <emphasis>instance</emphasis> of the package.  (<ulink
-      url="rp-design.html">More on Site Maps and nodes</ulink>)</para>
-      <para>You can have
-      multiple instances of a package on one site, each with a
+      map between the URL space of incoming requests and the package application instance.
+      You do this by adding the application in the main site administration).  This
+      creates a link between the incoming URL requests and an
+      <emphasis>instance</emphasis> of the application.  (<ulink
+      url="rp-design.html">More on applications and nodes</ulink>)</para>
+      <para>You can have instances of a package on one site, each with a
       different URL and different permissions, all sharing the same
       code and tables.  This requires that a package be developed
       <emphasis>package-aware</emphasis>.  You'll see how to do that
@@ -170,6 +167,19 @@ standard OpenACS &version; distribution.
       </orderedlist>
       <para>By mounting the package, we've caused all requests to
       <computeroutput>http://yourserver.test:8000/my-first-package</computeroutput>
-      to be satisfied from the files at <computeroutput>/var/lib/aolserver/service0/packages/myfirstpackage/www</computeroutput>.</para>
+      to be satisfied from the files at <computeroutput>/var/lib/aolserver/$OPENACS_SERVICE_NAME/packages/myfirstpackage/www</computeroutput>.</para>
     </sect2>
+    <sect2>
+      <title>Quick start</title>
+      <para>The remainder of the tutorial walks you through each file one at a time as you create the package.  You can skip all this, and get a working package, by doing the following:</para>
+    <screen>cd /var/lib/aolserver/<replaceable>$OPENACS_SERVICE_NAME</replaceable>/packages/acs-core-docs/www/files/tutorial
+psql <replaceable>$OPENACS_SERVICE_NAME</replaceable> -f myfirstpackage-create.sql
+cp note-edit.* note-delete.tcl index.* ../../../../myfirstpackage/www/
+mkdir ../../../../myfirstpackage/lib
+cp note-list.* ../../../../myfirstpackage/lib/
+cp myfirstpackage-*sql ../../../../myfirstpackage/sql/postgresql/
+cp myfirstpackage-procs.tcl ../../../../myfirstpackage/tcl/test/
+cp note-procs.tcl ../../../../myfirstpackage/tcl/</screen>
+<para>After restarting the server, the tutorial application will be installed and working at the url you selected in the previous step.</para>
+  </sect2>
   </sect1>

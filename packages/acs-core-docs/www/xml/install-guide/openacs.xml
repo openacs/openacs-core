@@ -44,18 +44,18 @@ chmod 770 /var/lib/aolserver</action></screen>
       for each different service.  A service name should be a single
       word, <emphasis>letters and numbers only</emphasis>. If the name
       of your site is one word, that would be a good choice. For
-      example &quot;<replaceable>service0</replaceable>&quot; might be the service name for the
-      <ulink url="http://service0.net/"><replaceable>service0</replaceable>.net</ulink>
+      example &quot;<replaceable>$OPENACS_SERVICE_NAME</replaceable>&quot; might be the service name for the
+      <ulink url="http://$OPENACS_SERVICE_NAME.net/"><replaceable>$OPENACS_SERVICE_NAME</replaceable>.net</ulink>
       community.</para>
         <para>We'll leave the password blank, which prevents login by
       password, for increased security.  The only way to log in will
       be with ssh certificates.  The only people who should log in are
       developers for that specific instance.  Add this user, and put
-      it in the <computeroutput><replaceable>service0</replaceable></computeroutput> group so that it
+      it in the <computeroutput><replaceable>$OPENACS_SERVICE_NAME</replaceable></computeroutput> group so that it
       can use database and server commands associated with that group.
     </para>
 <screen>
-[root root]# <userinput>useradd <replaceable>service0</replaceable></userinput>
+[root root]# <userinput>useradd <replaceable>$OPENACS_SERVICE_NAME</replaceable></userinput>
 [root root]#</screen>
   </sect2>
   
@@ -68,27 +68,27 @@ chmod 770 /var/lib/aolserver</action></screen>
         service's dedicated user.  We put it there so that it is not
         overwritten when we do the main CVS checkout to the target
         location.</para>
-        <screen>[root root]# <userinput>su - <replaceable>service0</replaceable></userinput>
-[service0 service0]$ <userinput>cvs -d :pserver:anonymous@openacs.org:/cvsroot co -d install openacs-4/etc/install</userinput>
+        <screen>[root root]# <userinput>su - <replaceable>$OPENACS_SERVICE_NAME</replaceable></userinput>
+[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <userinput>cvs -d :pserver:anonymous@openacs.org:/cvsroot co -d install openacs-4/etc/install</userinput>
 cvs server: Updating install
 U install/README
 U install/TODO
   ... many lines omitted ...
 U install/tcl/twt-procs.tcl
 U install/tcl/user-procs.tcl
-[service0 service0]$ <userinput>cd install</userinput>
-[service0 install]$ <userinput>emacs install.tcl</userinput>
+[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <userinput>cd install</userinput>
+[$OPENACS_SERVICE_NAME install]$ <userinput>emacs install.tcl</userinput>
 </screen>
-        <para>Edit the installation configuration file, <computeroutput>/home/<replaceable>service0</replaceable>/install/install.tcl</computeroutput> and update the site-specific values, such as the new service's IP address and name, which will be written into the new service's <computeroutput>config.tcl</computeroutput> file.  If your system is different from the one described in the previous sections, check the file paths as well.  Set <computeroutput>do_checkout=yes</computeroutput> to create a new OpenACS site directly from a CVS checkout, or <computeroutput>=no</computeroutput> if you have a fully configured site and just want to rebuild it (drop and recreate the database and repeat the installation).  If you have followed a stock installation, the default configuration will work without changes and will install an OpenACS site at 127.0.0.1:8000.</para>
+        <para>Edit the installation configuration file, <computeroutput>/home/<replaceable>$OPENACS_SERVICE_NAME</replaceable>/install/install.tcl</computeroutput> and update the site-specific values, such as the new service's IP address and name, which will be written into the new service's <computeroutput>config.tcl</computeroutput> file.  If your system is different from the one described in the previous sections, check the file paths as well.  Set <computeroutput>do_checkout=yes</computeroutput> to create a new OpenACS site directly from a CVS checkout, or <computeroutput>=no</computeroutput> if you have a fully configured site and just want to rebuild it (drop and recreate the database and repeat the installation).  If you have followed a stock installation, the default configuration will work without changes and will install an OpenACS site at 127.0.0.1:8000.</para>
     <para>Run the install script <computeroutput>install.sh</computeroutput> as root:</para>
-        <screen>[service0 service0]$ <userinput>exit</userinput> 
-[root root]# <userinput>sh /home/<replaceable>service0</replaceable>/install/install.sh</userinput>
-/home/service0/install/install.sh: Starting installation with config_file 
-/home/service0/install/install.tcl. Using serverroot=/var/lib/aolserver/
-service0, server_url=http://0.0.0.0:8000, do_checkout=yes, do_install=yes, 
+        <screen>[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <userinput>exit</userinput> 
+[root root]# <userinput>sh /home/<replaceable>$OPENACS_SERVICE_NAME</replaceable>/install/install.sh</userinput>
+/home/$OPENACS_SERVICE_NAME/install/install.sh: Starting installation with config_file 
+/home/$OPENACS_SERVICE_NAME/install/install.tcl. Using serverroot=/var/lib/aolserver/
+$OPENACS_SERVICE_NAME, server_url=http://0.0.0.0:8000, do_checkout=yes, do_install=yes, 
 dotlrn=no, and database=postgres., use_daemontools=true
   <emphasis>... many lines omitted ...</emphasis>
-Tue Jan 27 11:50:59 CET 2004: Finished (re)installing /var/lib/aolserver/service0.
+Tue Jan 27 11:50:59 CET 2004: Finished (re)installing /var/lib/aolserver/$OPENACS_SERVICE_NAME.
 ######################################################################
   New site URL: http://127.0.0.1:8000
 admin email   : admin@yourserver.net
@@ -107,27 +107,27 @@ admin password: xxxx
       <computeroutput>/tmp</computeroutput> and proceed:</para>
     <orderedlist>
       <listitem id="install-openacs-download">
-        <para>Unpack the OpenACS tarball and rename it to <computeroutput>service0</computeroutput>.  Secure the directory so that only the owner can access it.  Check the permissions by listing the directory.</para>       
-        <screen>[root root]# <userinput>su - <replaceable>service0</replaceable></userinput>
-[service0 service0]$ <userinput>cd /var/lib/aolserver</userinput>
-[service0 aolserver]$ <userinput>tar xzf /tmp/&tarballpath;.tgz</userinput>
-[service0 aolserver]$ <userinput>mv &tarballpath; <replaceable>service0</replaceable></userinput>
-[service0 aolserver]$ <userinput>chmod -R 775 <replaceable>service0</replaceable></userinput>
-[service0 aolserver]$ <userinput>chown -R <replaceable>service0</replaceable>.<replaceable>service0</replaceable> <replaceable>service0</replaceable></userinput>
-[service0 aolserver]$ <userinput>ls -al</userinput>
+        <para>Unpack the OpenACS tarball and rename it to <computeroutput>$OPENACS_SERVICE_NAME</computeroutput>.  Secure the directory so that only the owner can access it.  Check the permissions by listing the directory.</para>       
+        <screen>[root root]# <userinput>su - <replaceable>$OPENACS_SERVICE_NAME</replaceable></userinput>
+[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <userinput>cd /var/lib/aolserver</userinput>
+[$OPENACS_SERVICE_NAME aolserver]$ <userinput>tar xzf /tmp/&tarballpath;.tgz</userinput>
+[$OPENACS_SERVICE_NAME aolserver]$ <userinput>mv &tarballpath; <replaceable>$OPENACS_SERVICE_NAME</replaceable></userinput>
+[$OPENACS_SERVICE_NAME aolserver]$ <userinput>chmod -R 775 <replaceable>$OPENACS_SERVICE_NAME</replaceable></userinput>
+[$OPENACS_SERVICE_NAME aolserver]$ <userinput>chown -R <replaceable>$OPENACS_SERVICE_NAME</replaceable>.<replaceable>$OPENACS_SERVICE_NAME</replaceable> <replaceable>$OPENACS_SERVICE_NAME</replaceable></userinput>
+[$OPENACS_SERVICE_NAME aolserver]$ <userinput>ls -al</userinput>
 total 3
 drwxrwx---    3 root     web          1024 Mar 29 16:41 .
 drwxr-xr-x   25 root     root         1024 Mar 29 16:24 ..
-drwx------    7 service0 web          1024 Jan  6 14:36 service0
-[service0 aolserver]$ <userinput>exit</userinput>
+drwx------    7 $OPENACS_SERVICE_NAME web          1024 Jan  6 14:36 $OPENACS_SERVICE_NAME
+[$OPENACS_SERVICE_NAME aolserver]$ <userinput>exit</userinput>
 logout
 [root root]#
-<action>su - service0
+<action>su - $OPENACS_SERVICE_NAME
 cd /var/lib/aolserver
 tar xzf /tmp/&tarballpath;.tgz
-mv &tarballpath; service0
-chmod -R 755 service0
-chgrp -R service0.service0 service0
+mv &tarballpath; $OPENACS_SERVICE_NAME
+chmod -R 755 $OPENACS_SERVICE_NAME
+chgrp -R $OPENACS_SERVICE_NAME.$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME
 exit</action></screen>
       </listitem>
       <listitem>
@@ -144,7 +144,7 @@ exit</action></screen>
             </formalpara>
             <para>
 	  You should be sure that your user account
-	  (e.g. <computeroutput><replaceable>service0</replaceable></computeroutput>) is in the
+	  (e.g. <computeroutput><replaceable>$OPENACS_SERVICE_NAME</replaceable></computeroutput>) is in the
 	  <computeroutput>dba</computeroutput> group.
 	</para>
             <orderedlist>
@@ -152,14 +152,14 @@ exit</action></screen>
 		  Verify membership by typing
 		  <computeroutput>groups</computeroutput> when you login:
 
-		  <programlisting>[service0 ~]$ groups
+		  <programlisting>[$OPENACS_SERVICE_NAME ~]$ groups
 dba web</programlisting>
 
 		  If you do not see these groups, take the following action: 
 
-		  <programlisting>[service0 ~]$ <userinput>su -</userinput>
+		  <programlisting>[$OPENACS_SERVICE_NAME ~]$ <userinput>su -</userinput>
 Password: ************
-[root ~]# <userinput>adduser <replaceable>service0</replaceable> dba</userinput></programlisting>
+[root ~]# <userinput>adduser <replaceable>$OPENACS_SERVICE_NAME</replaceable> dba</userinput></programlisting>
 
 		  If you get an error about an undefined group, then add that group
 		  manually:
@@ -176,7 +176,7 @@ Password: ************
 		  Connect to Oracle using
 		  <computeroutput>svrmgrl</computeroutput> and login:
         
-		  <programlisting>[service0 ~]$ <userinput>svrmgrl</userinput>
+		  <programlisting>[$OPENACS_SERVICE_NAME ~]$ <userinput>svrmgrl</userinput>
 SVRMGR&gt; <userinput>connect internal</userinput>
 Connected.</programlisting>
 		</para></listitem>
@@ -220,13 +220,13 @@ Connected.</programlisting>
 
 		<programlisting>
 SVRMGR&gt; <userinput>exit</userinput>
-[service0 ~]$ <userinput>su -</userinput>
+[$OPENACS_SERVICE_NAME ~]$ <userinput>su -</userinput>
 Password: ************
 [root ~]# <userinput>mkdir -p /ora8/m02/oradata/ora8/</userinput>
-[root ~]# <userinput>chown <replaceable>service0</replaceable>:web /ora8/m02/oradata/ora8</userinput>
+[root ~]# <userinput>chown <replaceable>$OPENACS_SERVICE_NAME</replaceable>:web /ora8/m02/oradata/ora8</userinput>
 [root ~]# <userinput>chmod 775 /ora8/m02/oradata/ora8</userinput>
 [root ~]# <userinput>exit</userinput>
-[service0 ~]$</programlisting>
+[$OPENACS_SERVICE_NAME ~]$</programlisting>
               </listitem>
 
               <listitem><para> 
@@ -241,10 +241,10 @@ Password: ************
 		  tablespace.
 
 		</para>
-		<programlisting>[service0 ~]$ <userinput>svrmgrl</userinput>
+		<programlisting>[$OPENACS_SERVICE_NAME ~]$ <userinput>svrmgrl</userinput>
 SVRMGR&gt; <userinput>connect internal;</userinput>
-SVRMGR&gt; <userinput>create tablespace <replaceable>service0</replaceable>
-      datafile &#39;/ora8/m02/oradata/ora8/<replaceable>service0</replaceable>01.dbf&#39; 
+SVRMGR&gt; <userinput>create tablespace <replaceable>$OPENACS_SERVICE_NAME</replaceable>
+      datafile &#39;/ora8/m02/oradata/ora8/<replaceable>$OPENACS_SERVICE_NAME</replaceable>01.dbf&#39; 
       size 50M 
       autoextend on 
       next 10M
@@ -256,24 +256,24 @@ SVRMGR&gt; <userinput>create tablespace <replaceable>service0</replaceable>
               <listitem><para> 
 		  Create a database user for this service. Give the
 		  user access to the tablespace and rights to connect. We'll use
-		  <computeroutput><replaceable>service0password</replaceable></computeroutput> as our password.</para>
+		  <computeroutput><replaceable>$OPENACS_SERVICE_NAMEpassword</replaceable></computeroutput> as our password.</para>
 
                 <para>
 		  Write down what you specify as
                   <emphasis>service_name</emphasis>
-                  (i.e. <computeroutput><replaceable>service0</replaceable></computeroutput>)
+                  (i.e. <computeroutput><replaceable>$OPENACS_SERVICE_NAME</replaceable></computeroutput>)
                   and <emphasis>database_password</emphasis>
-                  (i.e. <computeroutput><replaceable>service0password</replaceable></computeroutput>). You
+                  (i.e. <computeroutput><replaceable>$OPENACS_SERVICE_NAMEpassword</replaceable></computeroutput>). You
                   will need this information for configuring exports
                   and AOLserver.
 		</para>
 
 		<programlisting>
-SVRMGR&gt; <userinput>create user <replaceable>service0</replaceable> identified by <replaceable>service0password</replaceable> default tablespace <replaceable>service0</replaceable>
-    temporary tablespace temp quota unlimited on <replaceable>service0</replaceable>;</userinput>
-SVRMGR&gt; <userinput>grant connect, resource, ctxapp, javasyspriv, query rewrite to <replaceable>service0</replaceable>;</userinput>
-SVRMGR&gt; <userinput>revoke unlimited tablespace from <replaceable>service0</replaceable>;</userinput>
-SVRMGR&gt; <userinput>alter user <replaceable>service0</replaceable> quota unlimited on <replaceable>service0</replaceable>;</userinput>
+SVRMGR&gt; <userinput>create user <replaceable>$OPENACS_SERVICE_NAME</replaceable> identified by <replaceable>$OPENACS_SERVICE_NAMEpassword</replaceable> default tablespace <replaceable>$OPENACS_SERVICE_NAME</replaceable>
+    temporary tablespace temp quota unlimited on <replaceable>$OPENACS_SERVICE_NAME</replaceable>;</userinput>
+SVRMGR&gt; <userinput>grant connect, resource, ctxapp, javasyspriv, query rewrite to <replaceable>$OPENACS_SERVICE_NAME</replaceable>;</userinput>
+SVRMGR&gt; <userinput>revoke unlimited tablespace from <replaceable>$OPENACS_SERVICE_NAME</replaceable>;</userinput>
+SVRMGR&gt; <userinput>alter user <replaceable>$OPENACS_SERVICE_NAME</replaceable> quota unlimited on <replaceable>$OPENACS_SERVICE_NAME</replaceable>;</userinput>
 SVRMGR&gt; <userinput>exit;</userinput></programlisting>
 
                 <para>
@@ -286,7 +286,7 @@ SVRMGR&gt; <userinput>exit;</userinput></programlisting>
         Make sure that you can login to Oracle using your
         <emphasis>service_name</emphasis> account: </para>
 
-		<programlisting>[service0 ~]$ <userinput>sqlplus <replaceable>service0</replaceable>/<replaceable>service0password</replaceable></userinput>
+		<programlisting>[$OPENACS_SERVICE_NAME ~]$ <userinput>sqlplus <replaceable>$OPENACS_SERVICE_NAME</replaceable>/<replaceable>$OPENACS_SERVICE_NAMEpassword</replaceable></userinput>
 SQL&gt; <userinput>select sysdate from dual;</userinput>
 SYSDATE
 ----------
@@ -313,20 +313,20 @@ SQL&gt; <userinput>exit;</userinput></programlisting>
                 <para>Create a user in the database matching the service
             name.  With default PostgreSQL authentication, a system user connecting locally automatically authenticates as the postgres user of the same name, if one exists.  We currently use postgres "super-users" for everything, which means that anyone with access to any of the openacs system accounts on a machine has full access to all postgresql databases on that machine.</para>
                 <screen>[root root]# <userinput>su - postgres</userinput>
-[postgres pgsql]$ <userinput>createuser -a -d <replaceable>service0</replaceable></userinput>
+[postgres pgsql]$ <userinput>createuser -a -d <replaceable>$OPENACS_SERVICE_NAME</replaceable></userinput>
 CREATE USER
 [postgres pgsql]$ <userinput>exit</userinput>
 logout
 [root root]#</screen>
               </listitem>
               <listitem id="create-database">
-                <para>Create a database with the same name as our service name, <replaceable>service0</replaceable>.</para>
-                <screen>[root root]# <userinput>su - <replaceable>service0</replaceable></userinput>
-[service0 service0]$ <userinput>createdb -E UNICODE <replaceable>service0</replaceable></userinput>
+                <para>Create a database with the same name as our service name, <replaceable>$OPENACS_SERVICE_NAME</replaceable>.</para>
+                <screen>[root root]# <userinput>su - <replaceable>$OPENACS_SERVICE_NAME</replaceable></userinput>
+[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <userinput>createdb -E UNICODE <replaceable>$OPENACS_SERVICE_NAME</replaceable></userinput>
 CREATE DATABASE
-[service0 service0]$
-<action>su - <replaceable>service0</replaceable>
-createdb -E UNICODE <replaceable>service0</replaceable></action></screen>
+[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$
+<action>su - <replaceable>$OPENACS_SERVICE_NAME</replaceable>
+createdb -E UNICODE <replaceable>$OPENACS_SERVICE_NAME</replaceable></action></screen>
               </listitem>
               <listitem>
                 <para>Automate daily database Vacuuming.  This is a process which cleans out discarded data from the database.  A quick way to automate vacuuming is to edit the cron file for the database user.  Recommended: <computeroutput>VACUUM ANALYZE</computeroutput> every hour and <computeroutput>VACUUM FULL ANALYZE</computeroutput> every day.</para>
@@ -334,10 +334,10 @@ createdb -E UNICODE <replaceable>service0</replaceable></action></screen>
                   <primary>Postgres</primary>
                   <secondary>Vacuuming</secondary>
                 </indexterm>
-                <screen>[service0 service0]$ <userinput>export EDITOR=emacs;crontab -e</userinput></screen>
+                <screen>[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <userinput>export EDITOR=emacs;crontab -e</userinput></screen>
                 <para>Add these lines to the file.  The vacuum command cleans up temporary structures within a PostGreSQL database, and can improve performance.  We vacuum gently every hour and completely every day.  The numbers and stars at the beginning are cron columns that specify when the program should be run - in this case, whenever the minute is 0 and the hour is 1, i.e., 1:00 am every day, and every (*) day of month, month, and day of week.  Type <computeroutput>man 5 crontab</computeroutput> for more information.</para>
-                <programlisting>0 1-23 * * * /usr/local/pgsql/bin/vacuumdb --analyze <replaceable>service0</replaceable>
-0 0 * * * /usr/local/pgsql/bin/vacuumdb --full --analyze <replaceable>service0</replaceable></programlisting>
+                <programlisting>0 1-23 * * * /usr/local/pgsql/bin/vacuumdb --analyze <replaceable>$OPENACS_SERVICE_NAME</replaceable>
+0 0 * * * /usr/local/pgsql/bin/vacuumdb --full --analyze <replaceable>$OPENACS_SERVICE_NAME</replaceable></programlisting>
 
                 <para>Depending on your distribution, you may receive
                 email when the crontab items are executed. If you
@@ -370,16 +370,16 @@ createdb -E UNICODE <replaceable>service0</replaceable></action></screen>
 	  specific port, e.g. port 80. In order for OpenACS to work, you
 	  need to configure a virtual server.  The Reference Platform
 	  uses a configuration file included in the OpenACS tarball,
-	  <computeroutput>/var/lib/aolserver/<replaceable>service0</replaceable>/etc/config.tcl</computeroutput>.
+	  <computeroutput>/var/lib/aolserver/<replaceable>$OPENACS_SERVICE_NAME</replaceable>/etc/config.tcl</computeroutput>.
 	   Open it in an editor to adjust the parameters.</para>
             <indexterm>
               <primary>AOLserver</primary>
               <secondary>configuration</secondary>
             </indexterm>
             
-            <screen>[root root]# <userinput>su - <replaceable>service0</replaceable></userinput>
-[service0 service0]$ <userinput>cd /var/lib/aolserver/<replaceable>service0</replaceable>/etc</userinput>
-[service0 etc]$ <userinput>emacs config.tcl</userinput>
+            <screen>[root root]# <userinput>su - <replaceable>$OPENACS_SERVICE_NAME</replaceable></userinput>
+[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <userinput>cd /var/lib/aolserver/<replaceable>$OPENACS_SERVICE_NAME</replaceable>/etc</userinput>
+[$OPENACS_SERVICE_NAME etc]$ <userinput>emacs config.tcl</userinput>
 </screen>
             <para>
 	  You can continue without changing any values in the file.  However, if you don't change <computeroutput>address</computeroutput> to match the computer's ip address, you won't be able to browse to your server from other machines.
@@ -400,7 +400,7 @@ createdb -E UNICODE <replaceable>service0</replaceable></action></screen>
 		  <emphasis>address</emphasis> - The IP address of the server.  If you are hosting multiple IPs on one computer, this is the address specific to the web site.  Each virtual server will ignore any requests directed at other addresses.</para>
               </listitem>
               <listitem>
-                <para><emphasis>server</emphasis> - This is the keyword that, by convention, identifies the service.  It is also used as part of the path for the service root, as the name of the user for running the service, as the name of the database, and in various dependent places.  The Reference Platform uses <replaceable>service0</replaceable>.
+                <para><emphasis>server</emphasis> - This is the keyword that, by convention, identifies the service.  It is also used as part of the path for the service root, as the name of the user for running the service, as the name of the database, and in various dependent places.  The Reference Platform uses <replaceable>$OPENACS_SERVICE_NAME</replaceable>.
       
     </para></listitem>
               
@@ -452,23 +452,23 @@ createdb -E UNICODE <replaceable>service0</replaceable></action></screen>
       <listitem id="start-aolserver">
         <para>
 	  Kill any current running AOLserver processes and start a new
-	  one.  The recommended way to start an AOLserver process is by running the included script, <computeroutput>/var/lib/aolserver/<replaceable>service0</replaceable>/etc/daemontools/run</computeroutput>.  If you are not using the default file paths and names, you will need to edit <computeroutput>run</computeroutput>.</para>
+	  one.  The recommended way to start an AOLserver process is by running the included script, <computeroutput>/var/lib/aolserver/<replaceable>$OPENACS_SERVICE_NAME</replaceable>/etc/daemontools/run</computeroutput>.  If you are not using the default file paths and names, you will need to edit <computeroutput>run</computeroutput>.</para>
             <para>If you want to use port 80, there are complications.  AOLserver must be root to use system ports such as
 	  80, but refuses to run as root for security reasons. So, we call the run script as root and specify a non-root user ID and
 	  Group ID which AOLserver will switch to after claiming the
 	  port.  To do so, find the UID and GID of the
-	  <replaceable>service0</replaceable> user via
-	  <computeroutput>grep <replaceable>service0</replaceable>
+	  <replaceable>$OPENACS_SERVICE_NAME</replaceable> user via
+	  <computeroutput>grep <replaceable>$OPENACS_SERVICE_NAME</replaceable>
 	  /etc/passwd</computeroutput> and then put those numbers into
 	  the command line via <computeroutput>-u
 	  <replaceable>501</replaceable> -g
 	  <replaceable>502</replaceable></computeroutput>.    In AOLserver 4, you must also send a <computeroutput>-b</computeroutput> flag.  Do this by editing the <computeroutput>run</computeroutput> file as indicated in the comments.  </para>
           <para>If you are root then killall will affect all OpenACS services on the machine, so if there's more than one you'll have to do <computeroutput>ps -auxw | grep
 	  nsd</computeroutput> and selectively kill by job number.</para>
-        <screen>[service0 etc]$ <userinput>killall nsd</userinput>
+        <screen>[$OPENACS_SERVICE_NAME etc]$ <userinput>killall nsd</userinput>
 nsd: no process killed
-[service0 service0]$<userinput> /usr/local/aolserver/bin/nsd-postgres -t /var/lib/aolserver/<replaceable>service0</replaceable>/etc/config.tcl</userinput>
-[service0 service0]$ [08/Mar/2003:18:13:29][32131.8192][-main-] Notice: nsd.tcl: starting to read config file...
+[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$<userinput> /usr/local/aolserver/bin/nsd-postgres -t /var/lib/aolserver/<replaceable>$OPENACS_SERVICE_NAME</replaceable>/etc/config.tcl</userinput>
+[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ [08/Mar/2003:18:13:29][32131.8192][-main-] Notice: nsd.tcl: starting to read config file...
 [08/Mar/2003:18:13:29][32131.8192][-main-] Notice: nsd.tcl: finished reading config file.</screen>
       </listitem>
       <listitem id="connect-to-aolserver">
@@ -480,13 +480,13 @@ nsd: no process killed
         url="files/openacs-start.html">this</ulink>.  If you <link
         linkend="cvs-service-import">imported your files into
         cvs</link>, now that you know it worked you can erase the temp
-        directory with <computeroutput>rm -rf /var/lib/aolserver/service0.orig</computeroutput>.
+        directory with <computeroutput>rm -rf /var/lib/aolserver/$OPENACS_SERVICE_NAME.orig</computeroutput>.
 	</para>
 
 	<para>
 
 	  If you don't see the login page, view your error log
-	  (<computeroutput>/var/lib/aolserver/<replaceable>service0</replaceable>/log/<replaceable>service0</replaceable>-error.log</computeroutput>)
+	  (<computeroutput>/var/lib/aolserver/<replaceable>$OPENACS_SERVICE_NAME</replaceable>/log/<replaceable>$OPENACS_SERVICE_NAME</replaceable>-error.log</computeroutput>)
 	  to make sure the service is starting without any
 	  problems. The most common errors here are trying to start a
 	  port 80 server while not root, failing to connect because of
@@ -579,7 +579,7 @@ Loading package .info files ... this will take a few minutes</programlisting>
 		  AOLserver to restart itself (ie. <link linkend="install-openacs-keepalive">inittab or daemontools</link>),
 		  you&#39;ll need to manually restart your service.
 		</para>
-        <screen>[service0 service0]$ <userinput>/usr/local/aolserver/bin/nsd-postgres -t /var/lib/aolserver/<replaceable>service0</replaceable>/config.tcl</userinput></screen>
+        <screen>[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <userinput>/usr/local/aolserver/bin/nsd-postgres -t /var/lib/aolserver/<replaceable>$OPENACS_SERVICE_NAME</replaceable>/config.tcl</userinput></screen>
       </listitem>
 
       <listitem><para> 
@@ -634,8 +634,8 @@ Loading package .info files ... this will take a few minutes</programlisting>
 	database, because those environmental variables are set by the
 	wrapper scripts nsd-postgres and nsd-oracle.</para>
         
-        <screen>[root root]# <userinput>su - <replaceable>service0</replaceable></userinput>
-[service0 service0]$ <userinput>emacs .bashrc</userinput></screen>
+        <screen>[root root]# <userinput>su - <replaceable>$OPENACS_SERVICE_NAME</replaceable></userinput>
+[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <userinput>emacs .bashrc</userinput></screen>
         <para>Put in the appropriate lines for the database you are running.  If you will use both databases, put in both sets of lines.</para>
         <itemizedlist>
           <listitem>
@@ -660,11 +660,11 @@ export ORA_NLS33=$ORACLE_HOME/ocommon/nls/admin/data</programlisting>
         </itemizedlist>
 
         <para>Test this by logging out and back in as
-	<computeroutput><replaceable>service0</replaceable></computeroutput> and checking the paths.</para>
-        <screen>[service0 service0]$ <userinput>exit</userinput>
+	<computeroutput><replaceable>$OPENACS_SERVICE_NAME</replaceable></computeroutput> and checking the paths.</para>
+        <screen>[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <userinput>exit</userinput>
 logout
-[root src]# <userinput>su - <userinput><replaceable>service0</replaceable></userinput></userinput>
-[service0 ~]$ <userinput>env</userinput>
+[root src]# <userinput>su - <userinput><replaceable>$OPENACS_SERVICE_NAME</replaceable></userinput></userinput>
+[$OPENACS_SERVICE_NAME ~]$ <userinput>env</userinput>
 </screen>
         <itemizedlist>
           <listitem>
