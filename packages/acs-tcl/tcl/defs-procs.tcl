@@ -340,7 +340,7 @@ ad_proc -deprecated ad_admin_footer {} {
     if { [llength [info procs ds_link]] == 1 } {
 	set ds_link [ds_link]
     } else {
-	et ds_link ""
+	set ds_link ""
     }
     return "<hr>
 $ds_link
