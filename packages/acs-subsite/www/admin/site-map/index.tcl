@@ -53,6 +53,10 @@ doc_body_append "<html>
 [ad_context_bar "Site Map"]
 <hr>
 
+<p>
+  <b>&raquo;</b> <a href=\"application-new\">Create new application</a>
+</p>
+
 <blockquote>
 
 <table align=center width=90% cellspacing=0 cellpadding=1 border=0>
