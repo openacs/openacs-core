@@ -22,7 +22,7 @@ namespace eval template::list::orderby {}
 
 ad_proc -public template::list::create {
     {-name:required}
-    {-multirow:required}
+    {-multirow ""}
     {-key ""}
     {-pass_properties ""}
     {-actions ""}
@@ -114,7 +114,7 @@ ad_proc -public template::list::create {
 
     @param  name           The name of the list you want to build.
     
-    @param  multirow       The name of the multirow which you want to loop over.
+    @param  multirow       The name of the multirow which you want to loop over. Defaults to name of the list.
 
     @param  key            The name of the column holding the primary key/unique identifier for each row. 
                            Must be a single column, which must be present in the multirow. 
@@ -305,8 +305,16 @@ ad_proc -public template::list::create {
         set list_properties(class) $list_properties(main_class)
     }
 
+    # Default 'multirow' to list name
+    if { [empty_string_p $list_properties(multirow)] } {
+	set list_properties(multirow) $name
+    }
+
     # Set up automatic 'checkbox' element as the first element
-    if { !$has_checkboxes_p && [llength $bulk_actions] > 0 && ![empty_string_p $key] } {
+    if { !$has_checkboxes_p && [llength $bulk_actions] > 0 } {
+	if { [empty_string_p $key] } {
+	    error "You cannot have bulk_actions without providing a key"
+	}
         # Create the checkbox element
         # We only ulevel 1 here, because we want the subst to be done in this namespace
         template::list::element::create \
@@ -314,7 +322,7 @@ ad_proc -public template::list::create {
             -element_name $checkbox_name \
             -spec {
                 label {<input type="checkbox" name="_dummy" onclick="ListCheckAll('$name', this.checked)" title="Check/uncheck all rows">}
-                display_template {<input type="checkbox" name="$key" value="@$multirow.$key@" id="$name,@$multirow.$key@" title="Check/uncheck this row, and select an action to perform below">}
+                display_template {<input type="checkbox" name="$key" value="@$list_properties(multirow).$key@" id="$name,@$list_properties(multirow).$key@" title="Check/uncheck this row, and select an action to perform below">}
                 sub_class {narrow}
                 html { align center }
             }
