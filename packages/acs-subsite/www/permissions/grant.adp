@@ -20,7 +20,8 @@
         <tr>
           <td colspan="@mu_privileges.level@">&nbsp;&nbsp;&nbsp;</td>
           <td colspan="@mu_privileges.inverted_level@">
-            <input type="checkbox" name="privileges" value="@mu_privileges.privilege@" @mu_privileges.selected@>@mu_privileges.privilege@</input>
+            <input type="checkbox" name="privileges" id="@mu_privileges.id@" value="@mu_privileges.privilege@" @mu_privileges.selected@>
+            <label for="@mu_privileges.id@">@mu_privileges.privilege@</label>
           </td>
         </tr>
         </multiple>

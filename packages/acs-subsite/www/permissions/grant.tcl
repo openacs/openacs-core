@@ -108,7 +108,7 @@ if { [db_type] == "oracle" } {
             continue
         } else {
             lappend existing_privs $privilege
-            lappend hierarchy $level $privilege
+            lappend hierarchy [list $level $privilege]
         }
 
         if { $level > $maxlevel } {
@@ -120,17 +120,19 @@ if { [db_type] == "oracle" } {
 }
 
 
-multirow create mu_privileges privilege level inverted_level selected
+multirow create mu_privileges privilege level inverted_level selected id
 
 # Preserve checked value of the privilege checkboxes for re-submitted
 # form status.
-foreach { level privilege } $hierarchy {
+
+foreach elm $hierarchy {
+    foreach { level privilege } $elm {}
     if { [info exists privileges] && [lsearch $privileges $privilege]>-1 } {
         set selected "CHECKED"
     } else {
         set selected ""
     }
-    multirow append mu_privileges $privilege $level [expr $maxlevel - $level] $selected
+    multirow append mu_privileges $privilege [expr $level+1] [expr $maxlevel - $level] $selected $privilege
 }
 
 for { set i 0 } { $i < $maxlevel } { incr i } {
