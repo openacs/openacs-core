@@ -29,6 +29,7 @@
         from lang_messages
         where package_key = :package_key
         and locale = :locale
+        and upgrade_status <> 'deleted'
     </querytext>
   </fullquery>
 
