@@ -34,7 +34,7 @@
  
 <fullquery name="user_new_2_rowid_for_email">      
       <querytext>
-      select rowid from users where user_id = :user_id
+      select oid as rowid from users where user_id = :user_id
       </querytext>
 </fullquery>
 
