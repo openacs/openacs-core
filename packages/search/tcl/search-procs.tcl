@@ -9,19 +9,19 @@ namespace eval search {}
 
 ad_proc -public search::queue {
     -object_id
-    -event 
+    -event
 } {
     Add an object to the search_observer_queue table with
     an event.
 
     You should excercise care that the entry is not being
-    created from a trigger (although search is robust for multiple 
+    created from a trigger (although search is robust for multiple
     entries so it will not insert or update the same object
     more than once per sweep).
 
     @param object_id acs_objects object_id
     @param event INSERT or UPDATE or DELETE
-    
+
     @author Jeff Davis (davis@xarg.net)
 } {
     package_exec_plsql \

@@ -43,28 +43,46 @@ if {[string is space $q] } {
 }
 
 
-
-
 if { $num <= 0} {
     set limit [ad_parameter -package_id $package_id LimitDefault]
 } else {
     set limit $num
 }
 
+
+#
+# Work out the date restriction 
+#
 set df ""
 set dt ""
-if { $dfs == "all" } { set dfs "" }
+
+if { $dfs == "all" } {
+    set dfs ""
+}
+
 array set symbol2interval [ad_parameter -package_id $package_id Symbol2Interval]
-if { $dfs != "" } { set df [db_exec_plsql get_df "select now() + '$symbol2interval($dfs)'::interval"] }
-if { $dts != "" } { set dt [db_exec_plsql get_dt "select now() + '$symbol2interval($dts)'::interval"] }
+if { $dfs != "" } {
+    set df [db_exec_plsql get_df "select now() + '$symbol2interval($dfs)'::interval"]
+}
+if { $dts != "" } {
+    set dt [db_exec_plsql get_dt "select now() + '$symbol2interval($dts)'::interval"]
+}
 
 set q [string tolower $q]
 set urlencoded_query [ad_urlencode $q]
-set qtest [tsearch2::build_query -query $q]
 
 if { $offset < 0 } { set offset 0 }
+set params [list $q $offset $limit $user_id $df]
+if {[ad_parameter -package_id $package_id SubsiteSearchP -default 1]
+    && [subsite::main_site_id] != [ad_conn subsite_id]} {
+    # We are in a subsite and SubsiteSearchP is true
+    lappend params [subsite::util::packages -node_id [ad_conn node_id]]
+} else { 
+    lappend params {}    
+}
+
 set t0 [clock clicks -milliseconds]
-array set result [acs_sc_call FtsEngineDriver search [list $q $offset $limit $user_id $df $dt] $driver]
+array set result [acs_sc_call FtsEngineDriver search $params $driver]
 set tend [clock clicks -milliseconds]
 
 if { $t == "Feeling Lucky" && $result(count) > 0} {
@@ -85,6 +103,7 @@ if { $info(automatic_and_queries_p) && ([lsearch -exact $q and] > 0) } {
 } else {
     set and_queries_notice_p 0
 }
+
 set url_advanced_search ""
 append url_advanced_search "advanced-search?q=${urlencoded_query}"
 if { $num > 0 } { append url_advanced_search "&num=${num}" }

@@ -93,11 +93,10 @@ ad_proc -public tsearch2::search {
     limit
     user_id
     df
-    dt
+    packages
 } {
-    
     ftsenginedriver search operation implementation for tsearch2
-    
+
     @author Dave Bauer (dave@thedesignexperience.org)
     @creation-date 2004-06-05
 
@@ -111,39 +110,67 @@ ad_proc -public tsearch2::search {
 
     @param df
 
-    @param dt
+    @param packages list of packages to search for content in.
 
     @return
 
     @error
 } {
-    # clean up query
-    # turn and into &
-    # turn or into |
-    # turn not into !
+    # JCD: I have done something horrible.  I took out dt and 
+    # made it packages.  when you search there is no way to specify a date range just
+    # last six months, last year etc.  I hijack what was the old dt param and make it 
+    # the package_id list and just empty string for dt.
+    set dt {}
+
+    # clean up query for tsearch2
     set query [tsearch2::build_query -query $query]
 
+    # don't use bind vars since pg7.3 yacks for '1' (which is what comes out of bind vars)
     set limit_clause ""
     set offset_clause ""
+    if {[string is integer -strict $limit]} {
+	set limit_clause " limit $limit "
+    }
+    if {[string is integer -strict $offset]} {
+	set offset_clause " offset $offset "
+    }
 
-    if {[string is integer $limit]} {
-	set limit_clause " limit :limit "
+    set base_query {
+        from txt, acs_objects o
+        where fti @@ to_tsquery('default',:query)
+        and o.object_id = txt.object_id
+        and exists (select 1
+                    from acs_object_party_privilege_map m
+                    where m.object_id = txt.object_id
+                      and m.party_id = :user_id
+                      and m.privilege = 'read')}
+    if {![empty_string_p $df]} {
+        append base_query " and o.creation_date > :df"
     }
-    if {[string is integer $offset]} {
-	set offset_clause " offset :offset "
+    if {![empty_string_p $dt]} {
+        append base_query " and o.creation_date < :dt"
     }
-    set query_text "select object_id from txt where fti @@ to_tsquery('default',:query) and exists (select 1
-                   from acs_object_party_privilege_map m
-                   where m.object_id = txt.object_id
-                     and m.party_id = :user_id
-                     and m.privilege = 'read') order by rank(fti,to_tsquery('default',:query)) desc  ${limit_clause} ${offset_clause}"
-    set results_ids [db_list search $query_text]
-    set count [db_string count "select count(*) from txt where fti @@ to_tsquery('default',:query)  and exists
-                  (select 1 from acs_object_party_privilege_map m
-                   where m.object_id = txt.object_id
-                     and m.party_id = :user_id
-                     and m.privilege = 'read')"]
+
+    # generate the package id restriction.
+    set ids {}
+    foreach id $packages {
+        if {[string is integer -strict $id]} {
+            lappend ids $id
+        }
+    }
+    if {![empty_string_p $ids]} {
+        append base_query " and o.package_id in ([join $ids ,])"
+    }
+
+    set results_ids [db_list search \
+                         "select o.object_id $base_query
+   order by rank(fti,to_tsquery('default',:query)) desc
+   $limit_clause $offset_clause"]
+
+    set count [db_string count "select count(*) $base_query"]
+
     set stop_words [list]
+
     # lovely the search package requires count to be returned but the
     # service contract definition doesn't specify it!
     return [list ids $results_ids stopwords $stop_words count $count]

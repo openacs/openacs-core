@@ -1,6 +1,7 @@
 <master>
   <property name="title">#search.Advanced_Search#</property>
   <property name="context">"advanced search"</property>
+  <property name="robots">noindex,nofollow</property>
 
   <form method="get" action="search">
     <input type="text" name="q" size="41" maxlength="256" value="@q@"/>

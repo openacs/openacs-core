@@ -1,6 +1,7 @@
 <master>
   <property name="title">#search.Search#</property>
   <property name="context">#search.Search#</property>
+  <property name="robots">noindex,nofollow</property>
 
   <if @driver_p@ true> 
     <form method="get" action="search">
