@@ -159,7 +159,7 @@ ad_proc -public template::widget::input { type element_reference tag_attributes 
     switch $type {
       checkbox - radio {
         # There's a 'subst' done on the contents here
-        append output "<img src=\"/shared/${type}\$checked\" width=\"13\" height=\"13\">"
+        append output "<img src=\"/shared/images/${type}\$checked\" width=\"13\" height=\"13\">"
         # This is ugly, but it works: Only export the value when we're on a selected option
         append output "\[ad_decode \$checked \"checked\" \"<input type=\\\"hidden\\\" name=\\\"$element(name)\\\" value=\\\"\$value\\\">\" \"\"\]"
       }
