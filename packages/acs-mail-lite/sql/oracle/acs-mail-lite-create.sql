@@ -21,7 +21,6 @@ create table acs_mail_lite_queue (
     				constraint acs_mail_lite_queue_pck_fk
 				references apm_packages,
     valid_email_p		varchar2(1)
-				-- Malte needs to check whether this needs a default
 				constraint acs_mail_lite_qu_valid_em_p_ck
 				check (valid_email_p in ('t','f'))
 );
@@ -33,7 +32,6 @@ create table acs_mail_lite_mail_log (
                                 on delete cascade
 				constraint acs_mail_lite_log_pk
 				primary key,
--- Dirk: changed from timestamp to date. Malte needs to doublecheck whether this is correct
     last_mail_date		date default sysdate
 );
 
@@ -56,7 +54,6 @@ create table acs_mail_lite_bounce_notif (
                                 on delete cascade
 				constraint acs_mail_lite_notif_pk
 				primary key,
--- Dirk: changed from timestamp to date. Malte needs to doublecheck whether this is correct
     notification_time		date default sysdate,
     notification_count		integer default 0
 );
