@@ -21,7 +21,7 @@ db_transaction {
     }]
   }
 
-  db_dml node_delete {
+  db_exec_plsql node_delete {
     begin
       site_node.delete(:node_id);
     end;
