@@ -305,15 +305,15 @@ is
   
   -- get the publishing workflows associated with this content item
   -- there should only be 1 if CMS exists, otherwise 0
-  cursor c_pub_wf is
-    select
-      case_id, state
-    from
-      wf_cases
-    where
-      workflow_key = 'publishing_wf'
-    and
-      object_id = is_publishable.item_id;
+  --   cursor c_pub_wf is
+  --     select
+  --       case_id, state
+  --     from
+  --       wf_cases
+  --     where
+  --       workflow_key = 'publishing_wf'
+  --     and
+  --       object_id = is_publishable.item_id;
 
 begin
 
@@ -373,11 +373,14 @@ begin
   -- that is a little problematic because more than one workflow may be
   -- open on an item.  In addition, this should be moved to CMS.
 
-  for v_pub_wf in c_pub_wf loop
-    if v_pub_wf.state ^= 'finished' then
-       return 'f';
-    end if;
-  end loop;
+  -- Removed this as having workflow stuff in the CR is just plain wrong.
+  -- DanW, Aug 25th, 2001.
+
+  --   for v_pub_wf in c_pub_wf loop
+  --     if v_pub_wf.state ^= 'finished' then
+  --        return 'f';
+  --     end if;
+  --   end loop;
 
   return 't';
     exception
@@ -451,13 +454,13 @@ procedure delete (
   item_id in cr_items.item_id%TYPE
 ) is
 
-  cursor c_wf_cases_cur is
-    select
-      case_id
-    from
-      wf_cases
-    where
-      object_id = item_id;
+--  cursor c_wf_cases_cur is
+--    select
+--      case_id
+--    from
+--      wf_cases
+--    where
+--      object_id = item_id;
 
   cursor c_symlink_cur is
     select 
@@ -512,11 +515,14 @@ procedure delete (
 
 begin
 
-  dbms_output.put_line('Deleting associated workflows...');
+  -- Removed this as having workflow stuff in the CR is just plain wrong.
+  -- DanW, Aug 25th, 2001.
+
+  -- dbms_output.put_line('Deleting associated workflows...');
   -- 1) delete all workflow cases associated with this item
-  for v_wf_cases_val in c_wf_cases_cur loop
-    workflow_case.delete(v_wf_cases_val.case_id);
-  end loop;
+  -- for v_wf_cases_val in c_wf_cases_cur loop
+  --   workflow_case.delete(v_wf_cases_val.case_id);
+  -- end loop;
 
   dbms_output.put_line('Deleting symlinks...');
   -- 2) delete all symlinks to this item
@@ -610,10 +616,12 @@ begin
   fetch exists_cur into exists_id;
 
   if exists_cur%NOTFOUND then
+    close exists_cur;
     update cr_items
       set name = rename.name
       where item_id = rename.item_id;
   else
+    close exists_cur;
     if exists_id <> rename.item_id then
       raise_application_error(-20000, 
         'An item with the name ' || rename.name || 
@@ -792,6 +800,7 @@ begin
       v_path := v_path || '../';
       fetch c_rel_cur into v_rel_parent_id, v_rel_tree_level;
     end loop;
+    close c_rel_cur;
 
     -- an item relative to itself is '../item'
     if v_resolved_root_id = item_id then
@@ -821,6 +830,7 @@ begin
     v_path := v_path || '/';
 
   end loop;
+  close c_abs_cur;
 
   return v_path;
 
@@ -989,6 +999,7 @@ begin
     and
       m.is_default = 't';
   end if;
+  close item_cur;
 
   return v_template_id;
 
@@ -1358,6 +1369,7 @@ begin
   open c_revision_cur;
   fetch c_revision_cur into v_revision_id;
   if c_revision_cur%NOTFOUND then
+    close c_revision_cur;
     return null;
   end if;
   close c_revision_cur;

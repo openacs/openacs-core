@@ -67,6 +67,7 @@ is
         end if;
       end if;
     end loop;
+    close v_package_cur;
 
     -- Return unfinished result
     return v_result;     
@@ -117,6 +118,7 @@ is
         v_result := v_result || v_text;
       end if;
     end loop;
+    close v_package_cur;
 
     -- Return unfinished result
     return v_result;     
