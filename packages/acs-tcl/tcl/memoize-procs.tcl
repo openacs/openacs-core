@@ -135,3 +135,29 @@ ad_proc util_memoize_cached_p {script {max_age ""}} {
         return [expr {[ns_time] - $cache_time <= $max_age}]
     }
 }
+
+
+ad_proc -public util_memoize_flush_regexp {
+    -log:boolean
+    expr
+} {
+
+    Loop through all cached scripts, flushing all that match the
+    regular expression that was passed in.
+
+    @param expr The regular expression to match.
+    @param log Whether to log keys checked and flushed (useful for debugging).
+
+} {
+    foreach name [ns_cache names util_memoize] {
+       if $log_p {
+           ns_log Notice "flush_regexp: checking $name for $expr"
+       }
+       if [regexp $expr $name] {
+           if $log_p {
+               ns_log Notice "flush_regexp: flushing $name"
+           }
+           util_memoize_flush $name
+       }
+    }
+}
