@@ -28,7 +28,7 @@ proc_doc db_exec_plsql { statement_name sql args } {
     # I'm not happy about having to get the fullname here, but right now
     # I can't figure out a cleaner way to do it. I will have to
     # revisit this ASAP. (ben)
-    set full_statement_name [db_fullquery_get_fullname $statement_name]
+    set full_statement_name [db_qd_get_fullname $statement_name]
 
     if { [info exists bind_output] } {
 	return -code error "the -bind_output switch is not currently supported"
@@ -37,7 +37,7 @@ proc_doc db_exec_plsql { statement_name sql args } {
     db_with_handle db {
         # plsql calls that are simple selects bypass the plpgsql 
         # mechanism for creating anonymous functions (OpenACS - Dan).
-        set test_sql [db_fullquery_replace_sql $full_statement_name $sql]
+        set test_sql [db_qd_replace_sql $full_statement_name $sql]
         if {[regexp -nocase -- {^\s*select} $test_sql match]} {
             ns_log Notice "PLPGSQL: bypassed anon function"
             set selection [db_exec 0or1row $db $full_statement_name $sql]
@@ -72,7 +72,7 @@ ad_proc -private db_exec_plpgsql { db statement_name sql fname } {
     ns_log Notice "PRE-QD: the SQL is $sql"
 
     # Query Dispatcher (OpenACS - ben)
-    set sql [db_fullquery_replace_sql $statement_name $sql]
+    set sql [db_qd_replace_sql $statement_name $sql]
 
     ns_log Notice "POST-QD: the SQL is $sql"
 
@@ -199,7 +199,7 @@ ad_proc -private db_exec { type db statement_name sql args } {
     ns_log Notice "PRE-QD: the SQL is $sql for $statement_name"
 
     # Query Dispatcher (OpenACS - ben)
-    set sql [db_fullquery_replace_sql $statement_name $sql]
+    set sql [db_qd_replace_sql $statement_name $sql]
 
     ns_log Notice "POST-QD: the SQL is $sql"
 
@@ -237,7 +237,7 @@ proc_doc db_dml { statement_name sql args } {
     ad_arg_parser { bind } $args
 
     # Query Dispatcher (OpenACS - ben)
-    set full_statement_name [db_fullquery_get_fullname $statement_name]
+    set full_statement_name [db_qd_get_fullname $statement_name]
 
     db_with_handle db {
 	db_exec dml $db $full_statement_name $sql

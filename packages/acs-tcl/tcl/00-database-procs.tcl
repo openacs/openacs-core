@@ -184,7 +184,7 @@ proc_doc db_string { statement_name sql args } {
 
 } {
     # Query Dispatcher (OpenACS - ben)
-    set full_name [db_fullquery_get_fullname $statement_name]
+    set full_name [db_qd_get_fullname $statement_name]
 
     ad_arg_parser { default bind } $args
 
@@ -259,7 +259,7 @@ proc_doc db_foreach { statement_name sql args } {
 
 } {
     # Query Dispatcher (OpenACS - ben)
-    set full_statement_name [db_fullquery_get_fullname $statement_name]
+    set full_statement_name [db_qd_get_fullname $statement_name]
 
     ad_arg_parser { bind column_array column_set args } $args
 
@@ -463,7 +463,7 @@ ad_proc db_0or1row { statement_name sql args } {
     ad_arg_parser { bind column_array column_set } $args
 
     # Query Dispatcher (OpenACS - ben)
-    set full_statement_name [db_fullquery_get_fullname $statement_name]
+    set full_statement_name [db_qd_get_fullname $statement_name]
 
     if { [info exists column_array] && [info exists column_set] } {
 	return -code error "Can't specify both column_array and column_set"

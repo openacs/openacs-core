@@ -113,7 +113,7 @@ proc db_fullquery_get_load_location {fullquery} {
 
 # For now, we're going to say that versions are numbers and that
 # there is always backwards compatibility.
-proc db_fullquery_pick_most_specific_query {rdbms query_1 query_2} {
+proc db_qd_pick_most_specific_query {rdbms query_1 query_2} {
     set rdbms_1 [db_fullquery_get_rdbms $query_1]
     set rdbms_2 [db_fullquery_get_rdbms $query_2]
 
@@ -143,8 +143,14 @@ proc db_fullquery_pick_most_specific_query {rdbms query_1 query_2} {
 #
 ################################################
 
+# A procedure that is called from the outside world (APM) 
+# to load a particular file
+proc db_qd_load_query_file {file_path} {
+    db_qd_internal_load_cache $file_path
+}
+
 # Find the fully qualified name of the query
-proc db_fullquery_get_fullname {local_name {added_stack_num 1}} {
+proc db_qd_get_fullname {local_name {added_stack_num 1}} {
     # We do a check to see if we already have a fullname.
     # Since the DB procs are a bit incestuous, this might get
     # called more than once. DAMMIT! (ben)
@@ -244,15 +250,15 @@ proc db_fullquery_get_fullname {local_name {added_stack_num 1}} {
 # This procedure returns the latest FullQuery data structure
 # given proper scoping rules for a complete/global query name.
 # This may or may not be cached, the caller need not know.
-proc db_fullquery_fetch {fullquery_name {rdbms {}}} {
+proc db_qd_fetch {fullquery_name {rdbms {}}} {
     # For now we consider that everything is cached
     # from startup time
-    return [db_fullquery_internal_get_cache $fullquery_name]
+    return [db_qd_internal_get_cache $fullquery_name]
 }
 
 # Do the right thing 
-proc db_fullquery_replace_sql {statement_name sql} {
-    set fullquery [db_fullquery_fetch $statement_name]
+proc db_qd_replace_sql {statement_name sql} {
+    set fullquery [db_qd_fetch $statement_name]
 
     if {![empty_string_p $fullquery]} {
 	set sql [db_fullquery_get_querytext $fullquery]
@@ -289,7 +295,7 @@ proc db_fullquery_compatible_p {fullquery {rdbms {}}} {
 #
 # The file_tag parameter is for later flushing of a series
 # of queries when a particular query file has been changed.
-proc db_fullquery_internal_load_queries {file_pointer file_tag} {
+proc db_qd_internal_load_queries {file_pointer file_tag} {
     # While there are surely efficient ways of loading large files,
     # we're going to assume smaller files for now. Plus, this doesn't happen
     # often.
@@ -300,18 +306,18 @@ proc db_fullquery_internal_load_queries {file_pointer file_tag} {
     set whole_file [read $file_pointer]
 
     # Iterate and parse out each query
-    set parsing_state [db_fullquery_internal_parse_init $whole_file]
+    set parsing_state [db_qd_internal_parse_init $whole_file]
     
     ns_log Notice "QD = parsing state - $parsing_state"
 
     # We need this for queries with relative paths
     set acs_file_path [ad_make_relative_path $file_tag]
-    set queryname_root [db_fullquery_internal_get_queryname_root $acs_file_path]
+    set queryname_root [db_qd_internal_get_queryname_root $acs_file_path]
 
     ns_log Notice "QD = queryname root is $queryname_root"
 
     while {1} {
-	set result [db_fullquery_internal_parse_one_query $parsing_state]
+	set result [db_qd_internal_parse_one_query $parsing_state]
 	
 	ns_log Notice "QD = one parse result -$result-"
 
@@ -343,13 +349,13 @@ proc db_fullquery_internal_load_queries {file_pointer file_tag} {
 	}
 
 	# Store the query
-	db_fullquery_internal_store_cache $one_query
+	db_qd_internal_store_cache $one_query
     }
 }
 
 
 # Load from Cache
-proc db_fullquery_internal_get_cache {fullquery_name} {
+proc db_qd_internal_get_cache {fullquery_name} {
 
     # If we have no record
     if {![nsv_exists OACS_FULLQUERIES $fullquery_name]} {
@@ -371,7 +377,7 @@ proc db_fullquery_internal_get_cache {fullquery_name} {
 # Store in Cache
 #
 # The load_location is the file where this query was found
-proc db_fullquery_internal_store_cache {fullquery} {
+proc db_qd_internal_store_cache {fullquery} {
 
     # Check if it's compatible at all!
     if {![db_rdbms_compatible_p [db_fullquery_get_rdbms $fullquery] [db_current_rdbms]]} {
@@ -388,7 +394,7 @@ proc db_fullquery_internal_store_cache {fullquery} {
     if {[nsv_exists OACS_FULLQUERIES $name]} {
 	set old_fullquery [nsv_get OACS_FULLQUERIES $name]
 
-	set fullquery [db_fullquery_pick_most_specific_query [db_current_rdbms] $old_fullquery $fullquery]
+	set fullquery [db_qd_pick_most_specific_query [db_current_rdbms] $old_fullquery $fullquery]
     }
 
 
@@ -396,7 +402,7 @@ proc db_fullquery_internal_store_cache {fullquery} {
 }
 
 # Flush queries for a particular file path, and reload them
-proc db_fullquery_internal_load_cache {file_path} {
+proc db_qd_internal_load_cache {file_path} {
     # First we actually need to flush queries that are associated with that file tag
     # in case they are not all replaced by reloading that file. That is nasty! Oh well.
 
@@ -404,7 +410,7 @@ proc db_fullquery_internal_load_cache {file_path} {
     
     # we just reparse the file
     set stream [open $file_path "r"]
-    db_fullquery_internal_load_queries $stream $file_path
+    db_qd_internal_load_queries $stream $file_path
     close $stream
 }
 
@@ -413,7 +419,7 @@ proc db_fullquery_internal_load_cache {file_path} {
 ## NAMING
 ##
 
-proc db_fullquery_internal_get_queryname_root {relative_path} {
+proc db_qd_internal_get_queryname_root {relative_path} {
     # remove the prepended "/packages/" string
     regsub {^\/?packages\/} $relative_path {} relative_path
 
@@ -438,7 +444,7 @@ proc db_fullquery_internal_get_queryname_root {relative_path} {
 ## in the future. But right now we keep things simple
 
 # Initialize the parsing state
-proc db_fullquery_internal_parse_init {stuff_to_parse} {
+proc db_qd_internal_parse_init {stuff_to_parse} {
     
     # Do initial parse
     set parsed_doc [ns_xml parse -persist $stuff_to_parse]
@@ -470,7 +476,7 @@ proc db_fullquery_internal_parse_init {stuff_to_parse} {
 }
 
 # Parse one query using the query state
-proc db_fullquery_internal_parse_one_query {parsing_state} {
+proc db_qd_internal_parse_one_query {parsing_state} {
     
     # Find the index that we're looking at
     set index [lindex $parsing_state 0]
@@ -510,7 +516,7 @@ proc db_fullquery_internal_parse_one_query {parsing_state} {
     set parsing_state [list $index $node_list [lindex $parsing_state 2] $default_rdbms]
 
     # Parse the actual query from XML
-    set one_query [db_fullquery_internal_parse_one_query_from_xml_node $one_query_xml $default_rdbms]
+    set one_query [db_qd_internal_parse_one_query_from_xml_node $one_query_xml $default_rdbms]
 
     # Return the query and the parsing state
     return [list $one_query $parsing_state]
@@ -519,7 +525,7 @@ proc db_fullquery_internal_parse_one_query {parsing_state} {
 
 
 # Parse one query from an XML node
-proc db_fullquery_internal_parse_one_query_from_xml_node {one_query_node {default_rdbms {}}} {
+proc db_qd_internal_parse_one_query_from_xml_node {one_query_node {default_rdbms {}}} {
     ns_log Notice "QD = parsing one query node in XML with name -[ns_xml node name $one_query_node]-"
 
     # Check that this is a fullquery

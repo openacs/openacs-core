@@ -284,7 +284,7 @@ proc apm_bootstrap_load_queries { package_key } {
 
         if {[string equal $file_type query_file] &&
             ([empty_string_p $file_type] || [string equal $file_db_type $db_type])} {
-	    db_fullquery_internal_load_cache $file
+	    db_qd_load_query_file $file
         } 
     }
 }

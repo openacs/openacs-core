@@ -772,7 +772,7 @@ ad_proc -private apm_package_install_queries {
             set ul_p 1
         }
         apm_callback_and_log $callback "<li>Loading query file $path/$query_file..."
-	db_fullquery_internal_load_cache $path/$query_file
+	db_qd_load_query_file $path/$query_file
     }
     if { $ul_p } {
         apm_callback_and_log $callback "</ul>\n"
