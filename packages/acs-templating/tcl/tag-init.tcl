@@ -611,15 +611,17 @@ template_tag trn { chunk params } {
   # (the ad_conn call is dumped into the code, not executed on the spot)
 
   if { ![info exists locale] } {
-        set locale "\[ad_conn locale\]"
+      # We need this to be executed at template execution time, because the template's
+      # compiled code will be cached and reused for many requests.
+      set locale "\[ad_conn locale\]"
   } else {
       # Check to see if we should register this into the message catalog
       if { [string length $locale] == 2 } {
-          set locale [util_memoize [list ad_locale_locale_from_lang $locale]]
+          set locale [lang::util::default_locale_from_lang $locale]
       }
 
       # Check the cache
-      if { ![nsv_exists lang_message_$locale $key] } { 
+      if { ![lang::message::message_exists_p $locale $key] } {
           lang::message::register $locale $key $chunk
       }
   } 
