@@ -48,6 +48,8 @@ if { $allow_persistent_login_p } {
 }
 if { $allow_persistent_login_p } {
     set default_persistent_login_p [parameter::get -parameter DefaultPersistentLoginP -package_id [ad_acs_kernel_id] -default 1]
+} else {
+    set default_persistent_login_p 0
 }
 
 
