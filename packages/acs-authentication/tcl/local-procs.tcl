@@ -457,15 +457,23 @@ ad_proc -private auth::local::registration::Register {
     # Notify admin on new registration
     if { [parameter::get -parameter  NotifyAdminOfNewRegistrationsP -default 0] } {
 	with_catch errmsg {
+	    set admin_email [parameter::get \
+				 -parameter NewRegistrationEmailAddress \
+				 -package_id [ad_conn subsite_id] \
+				 -default [ad_system_owner]]
+
+	    set admin_locale [lang::user::locale -user_id [party::get_by_email -email $admin_email]]
+	    set system_url [ad_url]
+
             ns_sendmail \
-                [parameter::get -parameter NewRegistrationEmailAddress -package_id [ad_conn subsite_id] -default [ad_system_owner]] \
+		$admin_email \
                 $email \
-                [_ acs-subsite.lt_New_registration_at_s] \
-                [_ acs-subsite.lt_first_names_last_name]
+		[lang::message::lookup $admin_locale acs-subsite.lt_New_registration_at_s] \
+		[lang::message::lookup $admin_locale acs-subsite.lt_first_names_last_name]
 	} {
             # We don't fail hard here, just log an error
             global errorInfo
-	    ns_log Error "Error sending admin notification to $notification_address.\n$errorInfo"
+	    ns_log Error "Error sending admin notification to $admin_email.\n$errorInfo"
 	}
     }
 

@@ -1,5 +1,5 @@
 #/packages/acs-lang/tcl/lang-message-procs.tcl
-ad_library {
+ad_library {  
 
     Routines for displaying web pages in multiple languages
     <p>
@@ -309,7 +309,7 @@ ad_proc -public lang::message::lookup {
     key
     {default "TRANSLATION MISSING"}
     {substitution_list {}}
-    {upvar_level 2}
+    {upvar_level 1}
     {translator_mode_p 1}
 } {
     This proc is normally accessed through the _ procedure.
@@ -353,9 +353,7 @@ ad_proc -public lang::message::lookup {
 
     @param upvar_level        If there are embedded variables and no substitution list provided, this
                               parameter specifies how many levels up to fetch the values of the variables
-                              in the message. The reason the default is 2 is that the lookup proc is
-                              usually invoked by the underscore proc (_). Set upvar level to less than
-                              1 if you don't want variable interpolation to be done.
+                              in the message. The default is 1.
     
     @param translator_mode_p  Set to 0 if you do not want this call to honor translator mode. 
                               Useful if you're not using this message in the page itself, but e.g.
@@ -586,7 +584,7 @@ ad_proc -public _ {
     @see lang::message::lookup
     @see lang::message::format
 } {
-    return [lang::message::lookup "" $key "TRANSLATION MISSING" $substitution_list]
+    return [lang::message::lookup "" $key "TRANSLATION MISSING" $substitution_list 2]
 }
 
 #####
@@ -625,7 +623,7 @@ ad_proc -private -deprecated -warn lang_message_lookup {
 } {    
     @see lang::message::lookup
 } { 
-    return [lang::message::lookup $locale $key $default]
+    return [lang::message::lookup $locale $key $default {} 2]
 }
 
 ad_proc -deprecated -warn lang_babel_translate { 

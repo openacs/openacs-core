@@ -239,12 +239,16 @@ ad_proc -public lang::user::package_level_locale_not_cached {
 }
     
 ad_proc -public lang::user::package_level_locale {
+    {-user_id ""}
     package_id
 } {
     Get the user's preferred package level locale for a package
     given by its package id.
 } {
-    set user_id [ad_conn untrusted_user_id]
+    # default to current user
+    if { [empty_string_p $user_id] } {
+        set user_id [ad_conn untrusted_user_id]
+    }
 
     # If package-level locales are turned off, or the user isn't logged in, return the empty string
     if { ![lang::system::use_package_level_locales_p] || $user_id == 0 } {
@@ -255,11 +259,18 @@ ad_proc -public lang::user::package_level_locale {
     return [util_memoize [list lang::user::package_level_locale_not_cached $user_id $package_id] [sec_session_timeout]]
 }
 
-ad_proc -public lang::user::site_wide_locale {} {
+ad_proc -public lang::user::site_wide_locale {
+    {-user_id ""}
+} {
     Get the user's preferred site wide locale.
 } {
+    # default to current user
+    if { [empty_string_p $user_id] } {
+        set user_id [ad_conn untrusted_user_id]
+    }
+
     # Cache for the lifetime of sessions (7 days)
-    return [util_memoize [list lang::user::site_wide_locale_not_cached [ad_conn user_id]] [sec_session_timeout]]
+    return [util_memoize [list lang::user::site_wide_locale_not_cached $user_id] [sec_session_timeout]]
 }
 
 ad_proc -public lang::user::site_wide_locale_not_cached {
@@ -267,14 +278,13 @@ ad_proc -public lang::user::site_wide_locale_not_cached {
 } {
     Get the user's preferred site wide locale.
 } {
-    if { [ad_conn untrusted_user_id] == 0 } {
+    if { $user_id == 0 } {
 	set locale [ad_get_cookie "ad_locale"]
 	if { [empty_string_p $locale] } {
 	    set locale [lang::system::site_wide_locale]
 	}
 	return $locale
     } else {
-        set user_id [ad_conn untrusted_user_id]
         return [db_string get_user_site_wide_locale {} -default ""]
     }
 }
@@ -282,24 +292,31 @@ ad_proc -public lang::user::site_wide_locale_not_cached {
 ad_proc -public lang::user::locale {
     {-package_id ""}
     {-site_wide:boolean}
+    {-user_id ""}
 } {
     Get user locale preference for a given package instance.
     This preliminary implementation only has one site-wide setting, though.
     
     @param package_id The package for which you want to get the locale preference.
     @param site_wide Set this if you want to get the site-wide locale preference.
+    @param user_id Set this to the user you want to get the locale of, defaults to current user.
 } {
+    # default to current user
+    if { [empty_string_p $user_id] } {
+        set user_id [ad_conn untrusted_user_id]
+    }
+
     # default to current connection package
     if { [empty_string_p $package_id] } {
         set package_id [ad_conn package_id]
     }
 
     # Try package level locale first
-    set locale [package_level_locale $package_id]
+    set locale [package_level_locale -user_id $user_id $package_id]
 
     # If there's no package setting, then use the site-wide setting
     if { [empty_string_p $locale] } {
-        set locale [site_wide_locale]
+        set locale [site_wide_locale -user_id $user_id]
     } 
 
     return $locale
