@@ -248,13 +248,13 @@
             <file type="query_file" db_type="postgresql" path="www/admin/groups/rel-type-remove-postgresql.xql"/>
             <file type="content_page" path="www/admin/groups/rel-type-remove.adp"/>
             <file type="content_page" path="www/admin/groups/rel-type-remove.tcl"/>
-            <file type="tcl_util" path="www/admin/host-node-map/add.tcl"/>
+            <file type="content_page" path="www/admin/host-node-map/add.tcl"/>
             <file type="query_file" path="www/admin/host-node-map/add.xql"/>
-            <file type="tcl_util" path="www/admin/host-node-map/delete.tcl"/>
+            <file type="content_page" path="www/admin/host-node-map/delete.tcl"/>
             <file type="query_file" path="www/admin/host-node-map/delete.xql"/>
             <file type="query_file" db_type="oracle" path="www/admin/host-node-map/index-oracle.xql"/>
             <file type="query_file" db_type="postgresql" path="www/admin/host-node-map/index-postgresql.xql"/>
-            <file type="tcl_util" path="www/admin/host-node-map/index.tcl"/>
+            <file type="content_page" path="www/admin/host-node-map/index.tcl"/>
             <file type="query_file" path="www/admin/host-node-map/index.xql"/>
             <file type="query_file" db_type="oracle" path="www/admin/index-oracle.xql"/>
             <file type="query_file" db_type="postgresql" path="www/admin/index-postgresql.xql"/>
@@ -451,6 +451,7 @@
             <file type="query_file" db_type="oracle" path="www/admin/site-map/parameter-set-oracle.xql"/>
             <file type="query_file" db_type="postgresql" path="www/admin/site-map/parameter-set-postgresql.xql"/>
             <file type="content_page" path="www/admin/site-map/parameter-set.tcl"/>
+            <file type="data_model" db_type="oracle" path="www/admin/site-map/t.sql"/>
             <file type="content_page" path="www/admin/site-map/unmount.tcl"/>
             <file type="query_file" path="www/admin/site-map/unmount.xql"/>
             <file type="query_file" db_type="oracle" path="www/admin/site-map/unmounted-oracle.xql"/>
