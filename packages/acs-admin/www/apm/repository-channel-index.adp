@@ -1,15 +1,17 @@
-<h2>OpenACS Repository Channel @channel@</h2>
+<h2>OpenACS @channel@ Core and compatibile packages</h2>
 
-<table>
+<table border="1" cellpadding="4" cellspacing="0">
   <tr>
     <th>Package</th>
     <th>Description</th>
+    <th>Release</th>
   </tr>
   <multiple name="packages">
     <tr>
-      <td><b>@packages.pretty_name@</b><br>&nbsp;key: @packages.package_key@</td>
-      <td><b>@packages.summary@</b><br>@packages.description@</td>
-    </tr>
+      <td style="border-color:gray; text-align:center" valign="center" ><b>@packages.pretty_name@</b></td>
+      <td style="border-color:gray"><b>@packages.summary@</b><br>@packages.description;noquote@</td>
+      <td style="border-color:gray">@packages.package_key@ @packages.version@
+      <br> released @packages.release_date@ by @packages.vendor@</small></td>
+   </tr>
   </multiple>
 </table>
- 
