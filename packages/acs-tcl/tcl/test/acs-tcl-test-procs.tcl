@@ -464,3 +464,42 @@ aa_register_case export_vars {
         [export_vars -base $base {var1 var2}] \
         "$base?$export_no_base"            
 }
+
+aa_register_case site_node_verify_folder_name {
+    Testing site_node::veriy_folder_name
+} {
+    set main_site_node_id [site_node::get_node_id -url /]
+    
+    # Try a few folder names which we know exist
+    aa_equals "Folder name 'user' is not allowed" \
+        [site_node::verify_folder_name -parent_node_id $main_site_node_id -folder "user"] ""
+    aa_equals "Folder name 'pvt' is not allowed" \
+        [site_node::verify_folder_name -parent_node_id $main_site_node_id -folder "pvt"] ""
+
+    # Try one we believe will be allowed
+    set folder [ad_generate_random_string]
+    aa_equals "Folder name '$folder' is allowed" \
+        [site_node::verify_folder_name -parent_node_id $main_site_node_id -folder $folder] $folder
+    
+    # Try the code that generates a folder name
+    # (We only want to try this if there doesn't happen to be a site-node named user-2)
+    if { ![site_node::exists_p -url "/register-2"] } {
+        aa_equals "Instance name 'Register'" \
+            [site_node::verify_folder_name -parent_node_id $main_site_node_id -instance_name "register"] "register-2"
+    }
+
+    set first_child_node_id [lindex [site_node::get_children -node_id $main_site_node_id -element node_id] 0]
+    set first_child_name [site_node::get_element -node_id $first_child_node_id -element name]
+
+    aa_equals "Renaming folder '$first_child_name' ok" \
+            [site_node::verify_folder_name \
+                 -parent_node_id $main_site_node_id \
+                 -folder $first_child_name \
+                 -current_node_id $first_child_node_id] $first_child_name
+        
+    aa_false "Creating new folder named '$first_child_name' not ok" \
+        [string equal [site_node::verify_folder_name \
+                           -parent_node_id $main_site_node_id \
+                           -folder $first_child_name] $first_child_name]
+        
+}
