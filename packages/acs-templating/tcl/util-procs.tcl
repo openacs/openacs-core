@@ -404,6 +404,32 @@ ad_proc -public template::util::list_to_multirow { name rows { level 1 } } {
   }
 }
 
+ad_proc -public template::util::list_of_ns_sets_to_multirow {
+    {-rows:required}
+    {-var_name:required}
+    {-level "1"}
+} {
+    Transform a list of ns_sets (most likely produced by db_list_of_ns_sets
+    into a multirow datasource.
+
+    @param rows The data to be transformed
+    @param var_name The name of the multirow to create
+    @param level How many levels up the stack to place the new datasource,
+                 defaults to 1 level up.
+} {
+    upvar $level $var_name:rowcount rowcount
+    set rowcount [llength $rows]
+
+    set i 1
+    foreach row_set $rows {
+        ns_set put $row_set rownum $i
+
+        upvar $level $var_name:$i row
+        array set row [util_ns_set_to_list -set $row_set]
+        incr i
+    }
+}
+
 # * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 # * Utility procedures for interacting with the file system *
 # * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
