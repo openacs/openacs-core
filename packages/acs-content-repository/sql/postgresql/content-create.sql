@@ -346,7 +346,7 @@ comment on column cr_revision_attributes.attributes is '
 
 create table cr_content_text (
     revision_id        integer primary key,
-    content            CLOB
+    content            integer
 );
 
 comment on table cr_content_text is '
@@ -683,10 +683,10 @@ insert into cr_text values (NULL);
 create function cr_text_tr () returns opaque as '
 begin
 
-   raise_application_error(-20000,
-        ''Inserts are not allowed into cr_text.''
-      );
-  return new;
+   raise EXCEPTION ''-20000: Inserts are not allowed into cr_text.'';
+
+   return new;
+
 end;' language 'plpgsql';
 
 create trigger cr_text_tr before insert on cr_text
@@ -717,16 +717,16 @@ create table cr_doc_filter (
 \i content-util.sql
 \i content-xml.sql
 
-prompt *** Creating packaged call specs for Java utility methods...
+-- prompt *** Creating packaged call specs for Java utility methods...
 \i content-package.sql
 
-prompt *** Defining and compiling packages...
+-- prompt *** Defining and compiling packages...
 \i packages-create.sql
 
-prompt *** Creating object types...
+-- prompt *** Creating object types...
 \i types-create.sql
 
-prompt *** Preparing search indices...
+-- prompt *** Preparing search indices...
 \i content-search.sql
 
 -- this index requires prefs created in content-search
@@ -741,10 +741,10 @@ comment on table cr_doc_filter is '
 
 
 
-prompt *** Compiling documentation package...
+-- prompt *** Compiling documentation package...
 \i doc-package.sql
 
-prompt *** Creating image content type...
+-- prompt *** Creating image content type...
 \i content-image.sql
 
 -- by default, map all MIME types to 'content_revision'
@@ -755,61 +755,69 @@ declare
   v_id integer;
 begin
 
-  content_type.register_mime_type(
-    content_type => 'content_revision', mime_type => 'text/html');
-  content_type.register_mime_type(
-    content_type => 'content_revision', mime_type => 'text/plain');
+  PERFORM content_type__register_mime_type(''content_revision'', 
+                                           ''text/html'');
+  PERFORM content_type__register_mime_type(''content_revision'', 
+                                           ''text/plain'');
 
-  v_id := content_folder.new (
-    name        => 'pages',
-    label       => 'Pages', 
-    description => 'Site pages go here',
-    parent_id   => 0,
-    folder_id   => content_item.get_root_folder
+  v_id := content_folder__new (
+    ''pages'',
+    ''Pages'', 
+    ''Site pages go here'',
+    0,
+    null,
+    content_item__get_root_folder(),
+    now(),
+    null,
+    null
   );
 
-  content_folder.register_content_type(
-    folder_id        => v_id,
-    content_type     => 'content_revision',
-    include_subtypes => 't'
+  PERFORM content_folder__register_content_type(
+    v_id,
+    ''content_revision'',
+    ''t''
   );
 
-  content_folder.register_content_type(
-    folder_id        => v_id,
-    content_type     => 'content_folder',
-    include_subtypes => 't'
+  PERFORM content_folder__register_content_type(
+    v_id,
+    ''content_folder'',
+    ''t''
   );
 
-  content_folder.register_content_type(
-    folder_id        => v_id,
-    content_type     => 'content_symlink',
-    include_subtypes => 't'
+  PERFORM content_folder__register_content_type(
+    v_id,
+    ''content_symlink'',
+    ''t''
   );
 
-  v_id := content_folder.new (
-    name        => 'templates',
-    label       => 'Templates', 
-    description => 'Templates which render the pages go here',
-    parent_id   => 0,
-    folder_id   => content_template.get_root_folder
+  v_id := content_folder__new (
+    ''templates'',
+    ''Templates'', 
+    ''Templates which render the pages go here'',
+    0,
+    null,
+    content_template__get_root_folder(),
+    now(),
+    null,
+    null
   );
 
-  content_folder.register_content_type(
-    folder_id        => v_id,
-    content_type     => 'content_folder',
-    include_subtypes => 't'
+  PERFORM content_folder__register_content_type(
+    v_id,
+    ''content_folder'',
+    ''t''
   );
 
-  content_folder.register_content_type(
-    folder_id        => v_id,
-    content_type     => 'content_symlink',
-    include_subtypes => 't'
+  PERFORM content_folder__register_content_type(
+    v_id,
+    ''content_symlink'',
+    ''t''
   );
 
-  content_folder.register_content_type(
-    folder_id        => v_id,
-    content_type     => 'content_template',
-    include_subtypes => 't'
+  PERFORM content_folder__register_content_type(
+    v_id,
+    ''content_template'',
+    ''t''
   );
 
   return 0;
