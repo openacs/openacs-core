@@ -34,7 +34,7 @@ ad_proc -public cc_email_from_party { party_id } {
 } {
     return [db_string email_from_party {
         select email from parties where party_id = :party_id
-    } -default 0]
+    } -default ""]
 }
 
 ad_proc cc_email_user { email } {
