@@ -7,7 +7,7 @@
 
   <itemizedlist>
 	<listitem><para>
-		<ulink url="http://openacs.org/doc/openacs4/unix-install.html">OpenACS &version; Installation Guide</ulink>
+		<xref linkend="operating-system">OpenACS &version; Installation Guide</xref>
 	  </para></listitem>
 
 	<listitem><para>
