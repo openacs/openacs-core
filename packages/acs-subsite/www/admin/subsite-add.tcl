@@ -34,6 +34,10 @@ ad_form -name subsite -cancel_url . -form {
         {help_text "Choose the layout and navigation you want for your community."}
         {options [subsite::get_template_options]}
     }
+    {join_policy:text(select)
+        {label "Join policy"}
+        {options [group::get_join_policy_options]}
+    }
 } -on_submit {
     set folder [site_node::verify_folder_name \
                     -parent_node_id [ad_conn node_id] \
@@ -54,6 +58,8 @@ ad_form -name subsite -cancel_url . -form {
                                 -package_key acs-subsite]
         
         parameter::set_value -parameter DefaultMaster -package_id $new_package_id -value $master_template
+        set group(join_policy) $join_policy
+        group::update -group_id [application_group::group_id_from_package_id -package_id $new_package_id] -array group
     } errsmg] } {
         ad_return_error "Problem Creating Application" "We had a problem creating the community."
     }

@@ -191,7 +191,7 @@ ad_proc -public group::permission_p {
 }
 
 ad_proc -public group::join_policy {
-    { -group_id "" }
+    {-group_id:required}
 } {
     Returns a group's join policy ('open', 'closed', or 'needs approval')
 
@@ -199,19 +199,62 @@ ad_proc -public group::join_policy {
     @creation-date 10/2000
 
 } {
-
-    set join_policy [db_string select_join_policy {
+    return [db_string select_join_policy {
         select join_policy from groups where group_id = :group_id
     }]
-
 }
 
-ad_proc -public group::possible_member_states {
+ad_proc -public group::update {
+    {-group_id:required}
+    {-array:required}
+} {
+    Updates a group.
+    
+    @param group_id The ID of the group to update.
+
+    @param array    Name of array containing the columns to update.
+                    Valid columns are group_name, join_policy. 
+                    Valid join_policy values are 'open', 'closed', 'needs approval'.
 
 } {
+    upvar $array row
+    
+    # Construct clauses for the update statement
+    set columns { group_name join_policy }
+    set set_clauses [list]
+    foreach name [array names row] {
+        if { [lsearch -exact $columns $name] == -1 } {
+            error "Attribute '$name' isn't valid for groups."
+        }
+        lappend set_clauses "$name = :$name"
+        set $name $row($name)
+    }
 
+    if { [llength $set_clauses] == 0 } {
+        # No rows to update
+        return
+    }
+
+    db_dml update_group "
+        update groups
+        set    [join $set_clauses ", "]
+        where  group_id = :group_id
+    "
+}
+
+ad_proc -public group::possible_member_states {} {
+    Returns the list of possible member states: approved, needs approval, banned, rejected, deleted.
 } {
     return [list approved "needs approval" banned rejected deleted]
+}
+
+ad_proc -public group::get_join_policy_options {} {
+    Returns a list of valid join policies in a format suitable for a form builder drop-down.
+} {
+    return [list \
+                [list "Open" "open"] \
+                [list "Needs approval" "needs approval"] \
+                [list "Closed" "closed"]]
 }
 
 ad_proc -public group::default_member_state {

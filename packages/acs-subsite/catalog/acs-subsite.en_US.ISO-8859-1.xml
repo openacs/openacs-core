@@ -47,6 +47,8 @@ logging in again. &lt;/p&gt;
   <msg key="Confirm">Confirm</msg>
   <msg key="Current_Password">Current Password</msg>
   <msg key="Current_users">Current users:</msg>
+  <msg key="Currently_invisible_msg">&lt;p&gt; Your online status is currently not visible to other users. &lt;/p&gt;</msg>
+  <msg key="Currently_visible_msg">&lt;p&gt; Your online status is currently visible to other users. &lt;/p&gt;</msg>
   <msg key="Customize_Question">Customize Question</msg>
   <msg key="Direct_Permissions">Direct Permissions</msg>
   <msg key="edit_your_alerts">edit your alerts</msg>
@@ -265,6 +267,8 @@ password:</msg>
   <msg key="lt_Your_email_is_confirm">Your email is confirmed</msg>
   <msg key="lt_Your_forgotten_passwo">Your forgotten password on %system_name%</msg>
   <msg key="lt_Your_URL_doesnt_have_">Your URL doesn't have the correct form.  A valid URL would be something like &quot;%valid_url_example%&quot;.</msg>
+  <msg key="Make_yourself_invisible_label">Make yourself invisible</msg>
+  <msg key="Make_yourself_visible_label">Make yourself visible</msg>
   <msg key="Name">Name:</msg>
   <msg key="New_Password">New Password</msg>
   <msg key="New_users">New users:</msg>
@@ -325,6 +329,8 @@ You can always change your password by doing the following:
   <msg key="User_Creation_Failed">User Creation Failed</msg>
   <msg key="Username">Username</msg>
   <msg key="Welcome_Back">Welcome Back</msg>
+  <msg key="Whos_Online_link_label">Users currently online</msg>
+  <msg key="Whos_Online_title">Who's Online</msg>
   <msg key="Your_email">Your email:</msg>
   <msg key="Your_email_address">Your email address:</msg>
   <msg key="Your_Portrait">Your Portrait</msg>

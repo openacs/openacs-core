@@ -35,6 +35,11 @@
       <include src="/packages/acs-subsite/lib/subsites">
     </td>
   </tr>
+  <tr>
+    <td>
+      <p> <b>&raquo;</b> <a href="members/">Members</a> </p>
+    </td>
+  </tr>
 </table>
   
 
