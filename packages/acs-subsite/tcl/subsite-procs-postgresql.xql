@@ -5,18 +5,18 @@
 
 <fullquery name="subsite::configure.add_constraint">      
       <querytext>
-      FIX ME PLSQL
 
-		    BEGIN
-			:1 := rel_constraint__new(
-			constraint_name => :constraint_name,
-			rel_segment => :segment_id,
-			rel_side => 'two',
-			required_rel_segment => rel_segment__get(:supersite_group_id, 'membership_rel'),
-			creation_user => :user_id,
-			creation_ip => :creation_ip
-			);
-		    END;
+	select rel_constraint__new(
+	  null,
+	  'rel_constraint',
+	  :constraint_name,
+	  :segment_id,
+	  'two',
+	  rel_segment__get(:supersite_group_id, 'membership_rel'),
+	  null,
+	  :user_id,
+	  :creation_ip
+	);
 		
       </querytext>
 </fullquery>
