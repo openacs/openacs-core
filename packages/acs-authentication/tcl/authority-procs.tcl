@@ -145,6 +145,11 @@ ad_proc -public auth::authority::create {
         set authority_id [db_exec_plsql create_authority {}]
     }
 
+    # Flush the cache, so that if we've tried to request this short_name while it didn't exist, we will now find it
+    if { [exists_and_not_null row(short_name)] } {
+        get_id_flush -short_name $row(short_name)
+    }
+
     return $authority_id
 }
 
@@ -185,6 +190,10 @@ ad_proc -public auth::authority::get_element {
     {-element:required}
 } {
     Return a specific element of the auth_authority data table.
+    Does a complete database query each time. Should not be used multiple times in a row. 
+    Use auth::authority::get instead.
+
+    @see auth::authority::get
 } {
     if { [lsearch [get_select_columns] $element] == -1 } {
         error "Column '$element' not found in the auth_authority data source."
@@ -206,10 +215,28 @@ ad_proc -public auth::authority::get_id {
 
     @author Lars Pind (lars@collaboraid.biz)
 } {
-    # TODO: Cache
-    return [db_string select_authority_id { select authority_id from auth_authorities where short_name = :short_name } -default {}]
+    return [util_memoize [list auth::authority::get_id_not_cached -short_name $short_name]]
 }
 
+ad_proc -public auth::authority::get_id_flush {
+    {-short_name ""}
+} {
+    Flush the cache for gett authority_id by short_name.
+} {
+    if { [empty_string_p $short_name] } {
+        util_memoize_flush_regexp [list auth::authority::get_id_not_cached .*]
+    } else {
+        util_memoize_flush [list auth::authority::get_id_not_cached -short_name $short_name]
+    }
+}
+
+ad_proc -private auth::authority::get_id_not_cached {
+    {-short_name:required}
+} {
+    Get authority_id by short_name. Not cached.
+} {
+    return [db_string select_authority_id {} -default {}]
+}
 ad_proc -public auth::authority::local {} {
     Returns the authority_id of the local authority.
 } {
