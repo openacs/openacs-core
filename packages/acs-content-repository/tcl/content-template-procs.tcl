@@ -31,7 +31,6 @@ ad_proc -public content::template::new {
     @param creation_date
     @param creation_user
     @param creation_ip
-    @param package_id
 
     @return template_id of created template
 } {
@@ -60,7 +59,7 @@ ad_proc -public content::template::delete {
 } {
     return [package_exec_plsql -var_list [list \
         [list template_id $template_id ] \
-    ] content_template del]
+    ] content_template delete]
 }
 
 
