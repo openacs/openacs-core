@@ -1,2 +1,2 @@
-set context_bar [ad_context_bar]
+# Nothing to see here...
 ad_return_template

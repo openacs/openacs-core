@@ -1,14 +1,13 @@
 <master>
-<h2>Search</h2>
-@context_bar@
-<hr>
+<property name="title">Search</property>
+<property name="context">Search</property>
 
 <center>
 <form method=GET action=search>
   <small>
   <a href=advanced-search>Advanced Search</a>
   <br>
-  <input type=text name=q size=31 maxlength=256>
+  <input type=text name=q size=80 maxlength=256>
   <br>
   <input type=submit value="Search" name=t>
   <input type=submit value="Feeling Lucky" name=t>
