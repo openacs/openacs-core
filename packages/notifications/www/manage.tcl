@@ -9,6 +9,7 @@ ad_page_contract {
 
 set user_id [ad_conn user_id]
 set return_url [ad_conn url]
+set context [list "Manage Notifications"]
 
 db_multirow notifications select_notifications {}
 

@@ -17,7 +17,6 @@ set user_id [ad_maybe_redirect_for_registration]
 # Check that the object can be subcribed to
 notification::security::require_notify_object -object_id $object_id
 
-
 if {[empty_string_p $pretty_name]} { 
     set page_title "Request Notification"
 } else { 
@@ -26,26 +25,15 @@ if {[empty_string_p $pretty_name]} {
 
 set context [list "Request Notification"]
 
+set intervals [notification::get_intervals -type_id $type_id]
+set delivery_methods [notification::get_delivery_methods -type_id $type_id]
 
-form create subscribe
-
-element create subscribe type_id \
-        -label "Type ID" -datatype integer -widget hidden
-
-element create subscribe object_id \
-        -label "Object ID" -datatype integer -widget hidden
-
-element create subscribe return_url \
-        -label "Return URL" -datatype text -widget hidden
-
-element create subscribe interval_id \
-        -label "Notification Interval" -datatype integer -widget select -options [notification::get_intervals -type_id $type_id]
-
-element create subscribe delivery_method_id \
-        -label "Delivery Method" -datatype integer -widget select -options [notification::get_delivery_methods -type_id $type_id]
-
-if {[form is_valid subscribe]} {
-    template::form get_values subscribe type_id object_id return_url interval_id delivery_method_id
+ad_form -name subscribe -export {type_id object_id return_url} -form {
+    {interval_id:integer(select)           {label "Notification Interval"}
+                                           {options $intervals}}
+    {delivery_method_id:integer(select)    {label "Delivery Method"}
+                                           {options $delivery_methods}}
+} -on_submit {
 
     # Add the subscribe
     notification::request::new \
@@ -58,7 +46,5 @@ if {[form is_valid subscribe]} {
     ad_returnredirect $return_url
     ad_script_abort
 }
-        
-element set_properties subscribe type_id -value $type_id
-element set_properties subscribe object_id -value $object_id
-element set_properties subscribe return_url -value $return_url
+
+ad_return_template
