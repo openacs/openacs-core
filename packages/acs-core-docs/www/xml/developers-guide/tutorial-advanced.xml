@@ -567,6 +567,73 @@ ad_form -extend \
     look at the forums package.</para>
   </sect2>
 
+  <sect2>
+    <title>Hierarchical data</title>
+    <authorblurb>
+      <para>by <ulink url="http://rubick.com:8002">Jade Rubick</ulink>
+      with help from many people in the OpenACS community</para>
+    </authorblurb>
+
+    <para>One of the nice things about using the OpenACS object system
+    is that it has a built-in facility for tracking hierarchical data
+    in an efficient way. The algorithm behind this is called
+    <computeroutput>tree_sortkey.</computeroutput></para>
+
+    <para>Any time your tables are subclasses of the acs_objects
+    table, then you automatically get the ability to structure them
+    hierarchically. The way you do this is currently via the
+    <computeroutput>context_id</computeroutput> column of
+    acs_objects (Note that there is talk of adding in a
+    <computeroutput>parent_id</computeroutput> column instead, because
+    the use of <computeroutput>context_id</computeroutput> has been
+    ambiguous in the past). So when you want to build your hierarchy,
+    simply set the context_id values. Then, when you want to make
+    hierarchical queries, you can do them as follows:</para>
+
+    <programlisting>
+      db_multirow categories blog_categories "
+      SELECT
+      c.*,
+      o.context_id,
+      lpad('.',(tree_level(o.tree_sortkey) - 4), '.') as indent
+      FROM
+      blog_categories c,
+      acs_objects o
+      WHERE
+      c.category_id = o.object_id
+      ORDER BY
+      o.tree_sortkey"
+    </programlisting>
+
+    <para>If you are using the Content Repository, you get a similar
+      facility, but the <computeroutput>parent_id</computeroutput>
+      column is already there. Note you can do joins with
+      <computeroutput>tree_sortkey</computeroutput>:</para>
+      
+    <programlisting>
+      SELECT
+      p.item_id,
+      repeat(:indent_pattern, (tree_level(p.tree_sortkey) - 5)* :indent_factor) as indent,
+      p.parent_id as folder_id,
+      p.project_name
+      FROM pm_projectsx p, cr_items i
+      WHERE p.project_id = i.live_revision
+      ORDER BY i.tree_sortkey
+    </programlisting>
+
+    <para>This rather long thread explains <ulink
+    url="http://openacs.org/forums/message-view?message_id=16799">How
+    tree_sortkeys work</ulink> and this paper <ulink
+    url="http://www.yafla.com/papers/sqlhierarchies/sqlhierarchies2.htm">describes
+    the technique for tree_sortkeys</ulink>, although the <ulink
+    url="http://openacs.org/forums/message-view?message_id=112943">OpenACS
+    implementation has a few differences in the
+    implementation</ulink>, to make it work for many languages and the
+    LIKE construct in Postgres.
+    </para>
+
+  </sect2>
+
   <para>Future Topics:</para>
     <itemizedlist>
       <listitem><para>How to enforce security so that users can't
