@@ -149,6 +149,9 @@ end; ' language 'plpgsql';
 -- change triggers to index only live revisions --DaveB 2002-09-26
 -- triggers queue search interface to modify search index after content
 -- changes.
+
+drop function content_search__itrg() cascade;
+
 create or replace function content_search__itrg ()
 returns opaque as '
 begin
@@ -157,6 +160,8 @@ if (select live_revision from cr_items where item_id=new.item_id) = new.revision
     end if;
     return new;
 end;' language 'plpgsql';
+
+drop function content_search__dtrg() cascade;
 
 create or replace function content_search__dtrg ()
 returns opaque as '
@@ -168,6 +173,8 @@ begin
     end if;
     return old;
 end;' language 'plpgsql';
+
+drop function content_search__utrg() cascade;
 
 create or replace function content_search__utrg ()
 returns opaque as '
@@ -191,6 +198,15 @@ end;' language 'plpgsql';
 -- we need new triggers on cr_items to index when a live revision
 -- changes
 
+
+create trigger content_search__itrg after insert on cr_revisions
+for each row execute procedure content_search__itrg (); 
+
+create trigger content_search__dtrg after delete on cr_revisions
+for each row execute procedure content_search__dtrg (); 
+
+create trigger content_search__utrg after update on cr_revisions
+for each row execute procedure content_search__utrg (); 
 
 -- LARS: REMOVED
 
