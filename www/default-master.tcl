@@ -8,6 +8,20 @@
 # $Id$
 #
 
+
+# Pull out the package_id of the subsite closest to our current node
+set pkg_id [site_node_closest_ancestor_package "acs-subsite"]
+
+# see if we have the parameter in the closest acs-subsite package
+# to override this file in favor of the site-specific master
+set have_site_master_p [ad_parameter -package_id $pkg_id UseSiteSpecificMaster dummy "0"]
+
+if {$have_site_master_p} {
+
+    ad_return_template "/www/site-specific-master"
+}
+
+
 # fall back on defaults for title, signatory and header_stuff
 
 if [template::util::is_nil title]     { set title        [ad_system_name]  }
@@ -18,9 +32,6 @@ if ![info exists header_stuff]        { set header_stuff {}                }
 # Attributes
 
 template::multirow create attribute key value
-
-# Pull out the package_id of the subsite closest to our current node
-set pkg_id [site_node_closest_ancestor_package "acs-subsite"]
 
 template::multirow append \
     attribute bgcolor [ad_parameter -package_id $pkg_id bgcolor   dummy "white"]
