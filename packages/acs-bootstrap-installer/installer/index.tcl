@@ -339,7 +339,7 @@ function updateSystemEmails() {
 
 <tr>
   <th align=right>System URL:</th>
-  <td>[install_input_widget system_url]<br>
+  <td>[install_input_widget -value $system_url system_url]<br>
 The canonical URL of your system as visible from the outside world<br>
 Usually it should include the port if your server is not on port 80<br><br>
 </tr>
