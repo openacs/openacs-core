@@ -324,9 +324,14 @@ aa_register_case auth_password_change {
         -rollback \
         -test_code {
             # create user we'll use for testing
-            set user_id [ad_user_new "test2@user.com" "Test" "User" "changeme" "no_question" "no_answer"]
-
-
+            array set user_info [auth::create_user \
+                    -email "test2@user.com" \
+                    -first_names "Test" \
+                    -last_name "User" \
+                    -password "changeme" \
+                    -secret_question "no_question" \
+                    -secret_answer "no_answer"]
+            set user_id $user_info(user_id)
 
             # password_status "ok"
             set old_password "changeme"
