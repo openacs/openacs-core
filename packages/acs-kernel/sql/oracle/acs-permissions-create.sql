@@ -272,4 +272,3 @@ as
 end acs_permission;
 /
 show errors
-
