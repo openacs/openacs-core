@@ -42,28 +42,26 @@
 
     <td align="right" style="padding-right: 8px;" class="button-bar">
       <if @admin_url@ not nil>
-        &nbsp;
         <a href="@admin_url@" title="#acs-subsite.Site_wide_administration#">#acs-subsite.Admin#</a>
       </if>
       <if @devhome_url@ not nil>
-        &nbsp;
         <a href="@devhome_url@" title="#acs-subsite.Developers_Admin#">#acs-subsite.DevAdmin#</a>
       </if>
       <if @pvt_home_url@ not nil>
-        &nbsp;
         <a href="@pvt_home_url@" title="#acs-subsite.Change_pass_email_por#">@pvt_home_name@</a>
       </if>
       <if @login_url@ not nil>
-        &nbsp;
         <a href="@login_url@" title="#acs-subsite.Log_in_to_system#">#acs-subsite.Log_In#</a>
       </if>
       <if @logout_url@ not nil>
-        &nbsp;
         <a href="@logout_url@" title="#acs-subsite.Logout_from_system#">#acs-subsite.Logout#</a>
       </if>
     </td>
   </tr>
 </table>
+
+<if @sw_admin_p@ true>
+</if>
 
 <slave>
 
