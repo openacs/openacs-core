@@ -61,7 +61,8 @@ namespace eval permission {
             util_memoize_flush "permission::permission_p_not_cached -party_id $party_id -object_id $object_id -privilege $privilege"
             return [permission::permission_p_not_cached -party_id $party_id -object_id $object_id -privilege $privilege]
         } else { 
-            return [util_memoize "permission::permission_p_not_cached -party_id $party_id -object_id $object_id -privilege $privilege"]
+            return [util_memoize "permission::permission_p_not_cached -party_id $party_id -object_id $object_id -privilege $privilege" \
+                        [parameter::get -package_id [ad_acs_kernel_id] -parameter PermissionCacheTimeout -default 300]]
         }
     }
 
