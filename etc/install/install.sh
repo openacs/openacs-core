@@ -13,7 +13,6 @@
 
 # DEBUG: If any command fails - exit
 set -e
-set -x
 
 # Set the script directory to the current dir for convenience
 script_path=$(dirname $(which $0))
@@ -21,11 +20,13 @@ cd $script_path
 
 source functions.sh
 
-# TODO: add config variables for service owner and group
+# TODO: create user if necessary
 # we should check for the existence of the specified user
 #   if the user doesn't exist, 
 #     if the user was specified in the command line
-#       create the user
+#       TODO - Check if the user exists first
+#       echo "$0: Creating the user $aolserver_user at $(date)"
+#       useradd -m -g $aolserver_group $aolserver_user -d /home/$server
 #     fi
 #     interactive prompt to create user or terminate script
 #   fi
@@ -34,23 +35,34 @@ source functions.sh
 # is the same as servername and that the user exists.  Documented
 # in README
 
-# We need to get any config-file path command line setting 
-# before we read the configuration parameters
+# Look for two-part command line arguments
+# Also, we need to look for command-line setting for config file
+# before we load the config file
 config_val_next=0
-for arg in "$@"
-do
-      if [ $config_val_next == "1" ]; then
-          export config_file=$arg
-          config_val_next=0
-      fi
+server_next=0
+export config_file="config.tcl"
+export server="service0"
 
-      if [ $arg == "--config-file" ]; then
-          config_val_next=1
-      fi
+for arg in "$@"
+  do
+  if [ $config_val_next == "1" ]; then
+      export config_file=$arg
+      config_val_next=0
+  fi
+  if [ $server_next == "1" ]; then
+      export server=$arg
+      server_next=0
+  fi
+  if [ $arg == "--config-file" ]; then
+      config_val_next=1
+  fi
+  if [ $arg == "--server" ]; then
+      server_next=1
+  fi
 done
 
-interactive="no"
 usage="$0 [OPTIONS]
+    --server      Server name.  Overrides config file.
     --config-file Sets up information about the server and database used (see config.tcl.in). Defaults to config.tcl
     --no-checkout Do not checkout new source code
     --oacs-only   Do not install .LRN, only OpenACS
@@ -61,7 +73,7 @@ usage="$0 [OPTIONS]
 
 # Check that script is executed as root
 if [ $(whoami) != "root" ]; then
-    echo "$0: You must execute this script as root, exiting"
+    echo "$0: You must execute this script as root; exiting"
     exit -1
 fi
 
@@ -71,32 +83,26 @@ if [ ! -r ${config_file} ]; then
     exit -1
 fi
 
-# Set important configuration parameters
-export server=`get_config_param server`
-serverroot=`get_config_param serverroot`
-use_daemontools=`get_config_param use_daemontools`
-svscanroot=`get_config_param svscanroot`
-svscan_sourcedir=`get_config_param svscan_sourcedir`
-database=`get_config_param database`
-server_url=`get_config_param server_url`
-error_log_file=`get_config_param error_log_file`
-tclwebtest_dir=`get_config_param tclwebtest_dir`
-stop_server_command=`get_config_param stop_server_command`
-start_server_command=`get_config_param start_server_command`
-restart_server_command=`get_config_param restart_server_command`
-startup_seconds=`get_config_param startup_seconds`
-shutdown_seconds=`get_config_param shutdown_seconds`
-restart_seconds=$(expr $startup_seconds + $shutdown_seconds)
-dotlrn_demo_data=`get_config_param dotlrn_demo_data`
-dotlrn=`get_config_param dotlrn`
-crawl_links=`get_config_param crawl_links`
+# Set overridable configuration parameters from config file
 do_checkout=`get_config_param do_checkout`
+dotlrn=`get_config_param dotlrn`
+database=`get_config_param database`
+interactive="no"
 do_install="yes"
+server=`get_config_param server`
 
 # command-line settings override config file settings
+if [ -n $command_line_server ]; then
+    export server="$command_line_server"
+fi
+
 while [ -n "$1" ] ; do
    case "$1" in
       "--config-file")        
+        # We already got this value above so just shift and continue
+        shift
+      ;;
+      "--server")
         # We already got this value above so just shift and continue
         shift
       ;;
@@ -129,7 +135,31 @@ while [ -n "$1" ] ; do
    shift
 done
 
-# If pre/post checkout scripts have been provided - check that they can
+# set the rest of the config file parameters
+# some of them may vary based on command-line overrides, so we 
+# do them after checking the command line
+
+serverroot=`get_config_param serverroot`
+use_daemontools=`get_config_param use_daemontools`
+svscanroot=`get_config_param svscanroot`
+svscan_sourcedir=`get_config_param svscan_sourcedir`
+server_url=`get_config_param server_url`
+error_log_file=`get_config_param error_log_file`
+tclwebtest_dir=`get_config_param tclwebtest_dir`
+stop_server_command=`get_config_param stop_server_command`
+start_server_command=`get_config_param start_server_command`
+restart_server_command=`get_config_param restart_server_command`
+startup_seconds=`get_config_param startup_seconds`
+shutdown_seconds=`get_config_param shutdown_seconds`
+restart_seconds=$(expr $startup_seconds + $shutdown_seconds)
+dotlrn_demo_data=`get_config_param dotlrn_demo_data`
+crawl_links=`get_config_param crawl_links`
+aolserver_user=`get_config_param aolserver_user`
+aolserver_group=`get_config_param aolserver_group`
+admin_email=`get_config_param admin_email`
+admin_password=`get_config_param admin_password`
+
+# If pre/post checkout scripts have been provided, check that they can
 # be executed
 pre_checkout_script=`get_config_param pre_checkout_script`
 post_checkout_script=`get_config_param post_checkout_script`
@@ -142,13 +172,9 @@ if [ -n "$post_checkout_script" ] && [ ! -x $post_checkout_script ]; then
     exit -1
 fi
 
-if [ -e $svscanroot ] && ! [ -L $svscanroot ]; then
-    echo "You have a supervise directory $svscanroot which is not a symlink and we curently don't support that."
-    exit -1    
-fi
-
 # Log some important parameters for the installation
 echo "$0: Starting installation with config_file $config_file. Using serverroot=$serverroot, server_url=$server_url, do_checkout=$do_checkout, do_install=${do_install}, dotlrn=$dotlrn, and database=$database., use_daemontools=$use_daemontools"
+
 if parameter_true $use_daemontools; then
     echo "$0: Daemontools settings: svscanroot=$svscanroot svscan_sourcedir=$svscan_sourcedir"
 fi
@@ -156,25 +182,20 @@ fi
 # Give the user a chance to abort
 prompt_continue $interactive
 
-# Create the user
-# TODO - make this optional.  Check if the user exists first
-#echo "$0: Creating the user $servername at $(date)"
-# Commenting out until this is more robust
-#useradd -m -g web $server -d /home/$server
-
 # stop the server
-echo "$0: Taking down $serverroot at $(date) with command ${stop_server_command}"
-$stop_server_command
+echo "$0: Taking down $serverroot at $(date)"
+
+if parameter_true $use_daemontools; then
+    svc -d ${svscanroot}
+else
+    # non-daemontools stop
+    $stop_server_command
+fi
+
 # Wait for the server to come down
-# TODO - this prints an error message in a default install because the 
-# symlink exists but the target directory won't be created until the
-# cvs checkout later
-# maybe we should do the daemontools check here and not run the stop command
-# if daemontools is true and directory is missing
+# TODO - instead of waiting, do a real check wherever we currently sleep
 echo "$0: Waiting $shutdown_seconds seconds for server to shut down at $(date)"
 sleep $shutdown_seconds
-
-# TODO - instead of waiting, do a real check wherever we currently sleep
 
 # Recreate the database user
 echo "$0: Recreating database user at $(date)"
@@ -183,7 +204,10 @@ if [ $database == "postgres" ]; then
     pg_bindir=`get_config_param pg_bindir`
     pg_port=`get_config_param pg_port`
     pg_db_name=`get_config_param pg_db_name`
-    su  `get_config_param pg_db_user` -c "export LD_LIBRARY_PATH=${pg_bindir}/../lib; ${pg_bindir}/dropdb -p $pg_port $pg_db_name; ${pg_bindir}/createdb -p $pg_port $pg_db_name; ${pg_bindir}/createlang -p $pg_port plpgsql $pg_db_name";
+    su  `get_config_param pg_db_user` -c "export LD_LIBRARY_PATH=${pg_bindir}/../lib; ${pg_bindir}/dropdb -p $pg_port $pg_db_name; ${pg_bindir}/createdb -p $pg_port $pg_db_name;";
+    # createlang was part of this command but is not necessary (and causes an error) for 
+    # newer installs
+    # ${pg_bindir}/createlang -p $pg_port plpgsql $pg_db_name";
 else
     #Oracle
     # Need to su to login shell for sqlplus to be in path. Should maybe make ORA_HOME
@@ -191,71 +215,68 @@ else
     su - oracle -c "cd $script_path; config_file=$config_file ./oracle/recreate-user.sh";
 fi
 
-# Move away the old sources and checkout new ones check do_checkout
+# Check out new files
 if [ $do_checkout == "yes" ]; then
 
-    # Stop supervising serverroot
-    if parameter_true $use_daemontools; then
-    
-        # Remove supervise link it it exists
-        if [ -e $svscanroot ]; then
-          rm $svscanroot
-        fi
-        
-        # Kill supervise process if any
-        supervise_process=$(ps auxw|grep "supervise $server"|grep -v grep | awk '{print $2}')
-        if [ -n "$supervise_process" ]; then
-          kill -9 $supervise_process
-        fi
-    fi  
-
-    # The idea of this script is to move away any files or changes
+    # The pre_checkout script can move away any files or changes
     # to the source tree that we want to keep (for example an
-    # edited AOLServer config file, see README)
+    # edited AOLserver config file, see README)
     if [ -n "$pre_checkout_script" ]; then
         source $pre_checkout_script
     fi  
 
+    if parameter_true $use_daemontools; then
+    # Remove supervise link if it exists
+    # Make sure any existing supervise directory is a symlink
+	if [ -e $svscanroot ]; then
+	    if ! [ -L $svscanroot ]; then
+		echo "You have a supervise directory $svscanroot which is not a symlink and we curently don't support that."
+		exit -1    
+	    fi
+	    rm ${svscanroot}
+	fi
+	svc -xd $svscan_sourcedir
+    fi
+	
     echo "$0: Checking out OpenACS at $(date)"
     config_file=$config_file dotlrn=$dotlrn ./checkout.sh
 
-    # The idea of this script is to copy in any files (AOLServer config files,
+    # The post_checkout script can copy back any files (AOLServer config files,
     # log files etc.) under the new source tree, and apply any patches
     # that should be applied (see README).
     if [ -n "$post_checkout_script" ]; then
         source $post_checkout_script
     fi  
     
-    # If we are using daemontools, set up the supervise directory
-    if parameter_true $use_daemontools; then
-	
-        # Create a daemontools directory if needed
-    	if ! [ -e "${svscanroot}" ] ; then
-            # Supervise dir doesn't exist
-
-	    echo "$0: Creating daemontools directory"
-	    ln -s $svscan_sourcedir $svscanroot
-
-            # allow svscan to start
-	    echo "$0: Waiting for $startup_seconds seconds for svscan to come up at $(date)"
-	    sleep $startup_seconds
-
-	    echo "$0: Giving group 'web' control over the server: svgroup web ${svscanroot}"
-            # svgroup may not be on the system, check the PATH
-	    if which svgroup &> /dev/null; then
-		svgroup web ${svscanroot}
-	    fi
+    # If we are using daemontools, set up the supervise directory if needed
+    if parameter_true $use_daemontools && ! [ -e $svscanroot ]; then
+        # Create a daemontools directory
+	# prevent it from autostarting when linked
+	echo "$0: Creating daemontools directory"
+	touch $svscan_sourcedir/down
+	ln -s $svscan_sourcedir $svscanroot
+        # allow svscan to start
+	echo "$0: Waiting for 10 seconds for svscan to come up at $(date)"
+	sleep 10
+        # Check if svgroup is present, and if so, use it
+	if which svgroup &> /dev/null; then
+	    echo "$0: Giving group $aolserver_group control over the server: svgroup web ${svscanroot}"
+	    svgroup $aolserver_group ${svscanroot}
 	fi
     fi
 fi
 
 # Bring up the server again
 echo "$0: Bringing the server $serverroot back up at $date with command $command"
-# TODO - if we did checkout, we may have created and linked a 
-# daemontools directory, in which case we already started the 
-# server and this next command is redundant.  Should see if there's
-# an easy way to create a disabled supervise directory?
-$start_server_command
+if parameter_true $use_daemontools; then
+    if [ -f $svscanroot/down ]; then
+	rm $svscanroot/down
+    fi
+    svc -u $svscanroot
+else
+    # non-daemontools command
+    $start_server_command
+fi
 
 # Give the server some time to come up
 echo "$0: Waiting for $startup_seconds seconds for server to come up at $(date)"
@@ -276,7 +297,13 @@ if parameter_true $do_install; then
   
   # Restart the server
   echo "$0: Restarting server at $(date)"
-  $restart_server_command
+  
+  if parameter_true $use_daemontools; then
+      svc -t $svscanroot
+  else
+      $restart_server_command
+  fi
+
   echo "$0: Waiting for $restart_seconds seconds for server to come up at $(date)"
   sleep $restart_seconds
 
@@ -307,7 +334,7 @@ if parameter_true $do_install; then
   fi
   
   # Report the time at which we were done
-  echo "$0: Finished (re)installing $serverroot at $(date)"
+  echo "$0: Finished (re)installing $serverroot at $(date).  Access the new site at $server_url with admin username $admin_email and password $admin_password"
   
   # Check errors in the log file
   if [ -r ${error_log_file} ]; then

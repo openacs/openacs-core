@@ -3,6 +3,14 @@ set tclwebtest_dir "/usr/local/tclwebtest"
 
 set server "service0"
 
+# AOLServer configuration
+set serverroot "/var/lib/aolserver/${server}"
+set server_url "http://localhost:8000"
+set error_log_file "${serverroot}/log/error.log"
+# OS user that AOLserver runs as
+set aolserver_user "${server}"
+set aolserver_group "web"
+
 # Choose database - oracle or postgres
 set database "postgres"
 
@@ -20,28 +28,18 @@ set pg_host localhost
 set pg_port 5432
 set pg_bindir "/usr/local/pgsql/bin"
 
-# AOLServer configuration
-set serverroot "/var/lib/aolserver/${server}"
-set server_url "http://localhost:8000"
-set error_log_file "${serverroot}/log/error.log"
-# OS user that AOLserver runs as
-set aolserver_user "${server}"
-
 # the default server control parameters use daemontools
 set use_daemontools "true"
 # Link from this dir. Don't use trailing slash.
 set svscanroot "/var/lib/svscan/${server}"
 # Link to this dir
 set svscan_sourcedir "$serverroot/etc/daemontools"
-set start_server_command "svc -u ${svscanroot}"
-set stop_server_command "svc -d ${svscanroot}"
-set restart_server_command "svc -t ${svscanroot}"
 
 # alternate server startup commands
 # enable these commands to run without daemontools
-# set start_server_command "exec /usr/local/aolserver/bin/nsd-postgres -it /web/service0/etc/config.tcl -u service0 -g web"
-# set stop_server_command "killall nsd"
-# set restart_server_command "${stop_server_command}; ${start_server_command}"
+set start_server_command "exec /usr/local/aolserver/bin/nsd-postgres -it $serverroot/etc/config.tcl -u $aolserver_user -g $aolserver_group"
+set stop_server_command "killall nsd"
+set restart_server_command "${stop_server_command}; ${start_server_command}"
 
 # Time from invocation of startup command until the server is actually up
 set startup_seconds 20
