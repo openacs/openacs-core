@@ -218,6 +218,7 @@ ad_proc -public person::name_flush {
     Flush the person::name cache.
 } {
     util_memoize_flush [list person::name_not_cached -person_id $person_id]
+    acs_user::flush_cache -user_id $person_id
 }
 
 ad_proc -public person::name_not_cached {
@@ -332,6 +333,7 @@ ad_proc -public acs_user::change_state {
     }
 
     membership_rel::change_state -rel_id $rel_id -state $state
+    acs_user::flush_cache -user_id $user_id
 }
 
 ad_proc -public acs_user::approve {
@@ -373,6 +375,7 @@ ad_proc -public acs_user::delete {
     } else {
         db_exec_plsql permanent_delete {}
     }
+    acs_user::flush_cache -user_id $user_id
 }
 
 ad_proc -public acs_user::unapprove {
@@ -646,6 +649,7 @@ ad_proc -public party::update {
         }
     }
     db_dml party_update {}
+    acs_user::flush_cache -user_id $party_id
 }
 
 ad_proc -public party::get_by_email {

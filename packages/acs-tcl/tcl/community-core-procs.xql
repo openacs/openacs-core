@@ -112,7 +112,7 @@
 
             select user_id
             from   users
-            where  username = :username
+            where  upper(username) = upper(:username)
             and    authority_id =:authority_id
 
       </querytext>

@@ -114,7 +114,7 @@
                  trunc(date_part('epoch', age(password_changed_date))/(60*60*24)) as password_age_days
           from   cc_users 
           where  authority_id = :authority_id
-          and    username = :username
+          and    upper(username) = upper(:username)
 
       </querytext>
 </fullquery>
