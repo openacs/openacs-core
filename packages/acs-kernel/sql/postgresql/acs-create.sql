@@ -313,5 +313,24 @@ select inline_3 ();
 
 drop function inline_3 ();
 
+ 
+select acs_group__new (
+    -3,
+    'group',
+    now(),
+    null,
+    null,
+    null,
+    null,
+    'Default Context',
+    null,
+    null
+  );
 
+ insert into acs_magic_objects
+  (name, object_id)
+ values
+  ('default_context', -3);
+                  
+                  
 -- show errors
