@@ -3,7 +3,7 @@
 <queryset>
    <rdbms><type>postgresql</type><version>7.1</version></rdbms>
 
-<fullquery name="contains_party_p.app_group_contains_party_p">      
+<fullquery name="application_group::contains_party_p.app_group_contains_party_p">      
       <querytext>
       
 	    select case when exists (
@@ -23,7 +23,7 @@
 </fullquery>
 
  
-<fullquery name="contains_party_p.app_group_contains_party_p">      
+<fullquery name="application_group::contains_party_p.app_group_contains_party_p">      
       <querytext>
       
 	    select case when exists (
@@ -43,7 +43,7 @@
 </fullquery>
 
  
-<fullquery name="contains_relation_p.app_group_contains_rel_p">      
+<fullquery name="application_group::contains_relation_p.app_group_contains_rel_p">      
       <querytext>
       
 	    select case when exists (
@@ -58,7 +58,7 @@
 </fullquery>
 
  
-<fullquery name="contains_segment_p.app_group_contains_segment_p">      
+<fullquery name="application_group::contains_segment_p.app_group_contains_segment_p">      
       <querytext>
       
 	    select case when exists (
@@ -73,74 +73,69 @@
 </fullquery>
 
  
-<fullquery name="group_id_from_package_id.application_group_from_package_id_query">      
+<fullquery name="application_group::group_id_from_package_id.application_group_from_package_id_query">      
       <querytext>
---      FIX ME PLSQL 
---	    begin
+
 	    select application_group__group_id_from_package_id (
-	        :package_id,            -- package_id
-	        :no_complain_p          -- no_complain_p
-	    );
---	    end;
+	        :package_id,
+	        :no_complain_p
+	    )
 	
       </querytext>
 </fullquery>
 
  
-<fullquery name="new.parent_group_id_query">      
+<fullquery name="application_group::new.parent_group_id_query">      
       <querytext>
---      FIX ME ROWNUM
-		    select ag__group_id as parent_group_id
+
+		    select ag.group_id as parent_group_id
 		    from application_groups ag,
 		         apm_packages,
-		         (select object_id, rownum as tree_rownum
+		         (select object_id, 1 as tree_rownum
 		          from site_nodes
-		          start with node_id = :node_id
-		          connect by node_id = prior parent_id) nodes
-                    where nodes__object_id = apm_packages.package_id
+			  where tree_sortkey like (select tree_sortkey from site_nodes where node_id = :node_id) || '%') nodes
+                    where nodes.object_id = apm_packages.package_id
                       and apm_packages.package_id = ag.package_id
-                      limit 1
-
-      </querytext>
-</fullquery>
-
-
-<fullquery name="new.add_group">
-      <querytext>
---      FIX ME PLSQL
---	begin
-                select application_group_new (
-	            :group_id,          -- group_id
-	            :group_type,        -- object_type
-	            :group_name,        -- group_name
-                    :package_id,        -- package_id
-	            :context_id,        -- context_id
-	            :creation_user,     -- creation_user
-	            :creation_ip,       -- creation_ip
-		    :email,             -- email
-		    :url                -- url
-		);
---	end;
-
+                    limit 1
+		
       </querytext>
 </fullquery>
 
  
-<fullquery name="new.add_composition_rel">      
+<fullquery name="application_group::new.add_group">      
       <querytext>
---      FIX ME PLSQL
---    begin
-        select composition_rel__new (
-		            'composition_rel',          -- rel_type
-		            :parent_group_id,           -- object_id_one
-		            :group_id,                  -- object_id_two
-		            :creation_user,             -- creation_user
-                            :creation_ip                -- creation_ip
-		    );
---    end;
 
+		select application_group__new (
+	            :group_id,
+	            :group_type,
+		    now(),
+	            :creation_user,
+	            :creation_ip,
+		    :email,
+		    :url,
+	            :group_name,
+                    :package_id,
+	            :context_id
+		)
+	    
       </querytext>
 </fullquery>
 
+ 
+<fullquery name="application_group::new.add_composition_rel">      
+      <querytext>
 
+		    select composition_rel__new (
+			    null,
+		            'composition_rel',
+		            :parent_group_id,
+		            :group_id,
+		            :creation_user,
+                            :creation_ip
+		    )
+		
+      </querytext>
+</fullquery>
+
+ 
 </queryset>

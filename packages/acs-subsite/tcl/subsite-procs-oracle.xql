@@ -21,6 +21,18 @@
 </fullquery>
 
  
+<fullquery name="acs_subsite_post_instantiation.select_package_object_names">      
+      <querytext>
+      
+	    select t.pretty_name as package_name, acs_object.name(s.object_id) as object_name
+	      from site_nodes s, apm_package_types t
+	     where s.node_id = :node_id
+	       and t.package_key = :package_key
+	
+      </querytext>
+</fullquery>
+
+ 
 <fullquery name="acs_subsite_post_instantiation.sub_type_exists_p">      
       <querytext>
       
@@ -31,6 +43,18 @@
                  else 0 
                end
         from dual
+    
+      </querytext>
+</fullquery>
+
+ 
+<fullquery name="acs_subsite_post_instantiation.select_object_type_path">      
+      <querytext>
+      
+	select object_type
+	from acs_object_types
+	start with object_type = :object_type
+	connect by object_type = prior supertype
     
       </querytext>
 </fullquery>
