@@ -763,6 +763,21 @@ ad_proc -private apm_package_install_data_model {
 	    apm_callback_and_log $callback "</pre></blockquote>\n"
 	}
     }
+
+    set data_files [apm_ctl_files_find $package_key]
+    foreach item $data_files {
+        set file_path [lindex $item 0]
+        ns_log Debug "APM: Now processing $file_path of type ctl_file"
+        if { !$ul_p } {
+            apm_callback_and_log $callback "<ul>\n"
+            set ul_p 1
+        }
+        apm_callback_and_log $callback "<li>Loading data file $path/$file_path...
+<blockquote><pre>"
+        db_load_sql_data -callback $callback $path/$file_path
+	apm_callback_and_log $callback "</pre></blockquote>\n"
+    }
+
     if {$ul_p} {
 	apm_callback_and_log $callback "</ul><p>"
     }
@@ -1163,6 +1178,39 @@ ad_proc -private apm_upgrade_script_compare {f1 f2} {
 	error "Invalid upgrade script syntax.  Should be \"upgrade-major.minor-major.minor.sql\"."
     }
 }
+
+ad_proc -private apm_ctl_files_find {
+    package_key
+} {
+
+    Return SQL loader control files for a given package.  These will be executed in
+    alphabetical order so will typically have names with embedded sequence numbers
+    like  "00-foo.tcl" etc.
+
+    @package_key the package to search
+    @return A list of files and file types of form [list [list "00-foo.ctl" "ctl_file"] ...] 
+
+} {
+
+    set file_list [apm_get_package_files -file_types [list ctl_file] -package_key $package_key]
+    set files [list]
+
+    foreach path $file_list {
+        set file_type [apm_guess_file_type $package_key $path]
+        set file_db_type [apm_guess_db_type $package_key $path]
+
+	apm_log APMDebug "APM: Checking \"$path\" of type \"$file_type\" and db_type \"$file_db_type\"."
+
+	if { [db_compatible_rdbms_p $file_db_type]} {
+            apm_log APMDebug "APM: Adding $path to the list of data model files."
+            lappend files [list $path $file_type $package_key ]
+	}
+    }
+    apm_log APMDebug "APM: SQL loader control files for $package_key: $files"
+    return $files
+
+}
+
 
 ad_proc -private apm_data_model_scripts_find {
     {-upgrade_from_version_name ""}

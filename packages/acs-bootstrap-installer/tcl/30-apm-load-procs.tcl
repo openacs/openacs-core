@@ -47,6 +47,7 @@ ad_proc apm_guess_file_type { package_key path } {
     <ol>
     <li>Files with extension <code>.sql</code> are considered data-model files,
     <li>Files with extension <code>.csv</code> are considered comma-separated values files.
+    <li>Files with extension <code>.ctl</code> are considered sql data loader control files.
     or if any path contains the substring <code>upgrade</code>, data-model upgrade
     files.
     <li>Files with extension <code>.sqlj</code> are considered sqlj_code files.				       
@@ -112,6 +113,8 @@ ad_proc apm_guess_file_type { package_key path } {
 	}
     } elseif { [string equal $extension ".csv"] } {
 	set type "csv_data"
+    } elseif { [string equal $extension ".ctl"] } {
+	set type "ctl_file"
     } elseif { [string equal $extension ".sqlj"] } {
 	set type "sqlj_code"
     } elseif { [string equal $extension ".info"] } {
