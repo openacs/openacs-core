@@ -13,6 +13,13 @@
 -- @cvs-id $Id$
 --
 
+-- Should have been added earlier, at least now we save the 4.6.3 - 5.0 upgrade
+create view all_users
+as
+select pa.*, pe.*, u.*
+from  parties pa, persons pe, users u
+where  pa.party_id = pe.person_id
+and pe.person_id = u.user_id;
 
 
 create or replace package acs_object
