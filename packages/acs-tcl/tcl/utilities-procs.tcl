@@ -3054,7 +3054,7 @@ ad_proc -deprecated -warn ad_dateentrywidget_default_to_today {column} {
 ad_proc -public util_ns_set_to_list {
     {-set:required}
 } {
-    Convert an ns_set into a TCL array.
+    Convert an ns_set into a list suitable for passing in to the "array set" command (key value key value ...).
 
     @param set The ns_set to convert
 
@@ -3072,9 +3072,9 @@ ad_proc -public util_ns_set_to_list {
 
 
 ad_proc -public util_list_to_ns_set { aList } {
-    Convert an ns_set into a TCL array.
+    Convert a list in the form "key value key value ..." into a ns_set.
 
-    @param set The list to convert
+    @param aList The list to convert
 
     @return The id of a (non-persistent) ns_set
 } {
