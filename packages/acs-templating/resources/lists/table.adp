@@ -72,8 +72,8 @@
         <th class="@elements.class@"@elements.cell_attributes;noquote@>
           <if @elements.orderby_url@ not nil>
             <if @elements.ordering_p@ true>
-              <a href="@elements.orderby_url@">@elements.label;noquote@</a>
-              <a href="@elements.orderby_url@" title="@elements.orderby_html_title@"><if @elements.orderby_direction@ eq "desc"><img src="/resources/acs-templating/sort-descending.png" border="0"></if><else><img src="/resources/acs-templating/sort-ascending.png" border="0"></else></a>
+              <a href="@elements.orderby_url@" title="@elements.orderby_html_title@">@elements.label;noquote@</a>
+              <a href="@elements.orderby_url@" title="@elements.orderby_html_title@"><if @elements.orderby_direction@ eq "desc"><img src="/resources/acs-templating/sort-descending.png" alt="" /></if><else><img src="/resources/acs-templating/sort-ascending.png" alt="" /></else></a>
             </if>
             <else>
               <a href="@elements.orderby_url@" title="@elements.orderby_html_title@">@elements.label;noquote@</a>
@@ -90,7 +90,7 @@
 <noparse>
   <if \@@list_properties.multirow@:rowcount@ eq 0>
     <tr class="list-odd last">
-      <td class="list" colspan="@elements:rowcount@">
+      <td colspan="@elements:rowcount@">
         @list_properties.no_data@
       </td>
     </tr>
