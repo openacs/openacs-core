@@ -527,7 +527,7 @@ as
   delete from acs_attribute_values where object_id = acs_object.delete.object_id;
 
   -- Delete directly assigned permissions
-  delete from acs_permissions where object_id = acs_object.delete.object_id;
+  -- delete from acs_permissions where object_id = acs_object.delete.object_id;
 
   for object_type
   in (select table_name, id_column

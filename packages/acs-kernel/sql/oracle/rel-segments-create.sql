@@ -240,7 +240,7 @@ create index party_member_member_idx on party_approved_member_map(member_id);
 -- Triggers to maintain party_approved_member_map when parties are create or replaced or
 -- destroyed.
 
-create or replace trigger parties_in_tr before insert on parties
+create or replace trigger parties_in_tr after insert on parties
 for each row 
 begin
   insert into party_approved_member_map

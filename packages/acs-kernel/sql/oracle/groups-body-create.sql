@@ -10,36 +10,6 @@
 -- TRIGGERS --
 --------------
 
-create or replace trigger group_element_index_in_tr
-before insert on group_element_index
-for each row
-declare
-  v_member_state membership_rels.member_state%TYPE;
-begin
-
-  select member_state into v_member_state
-  from membership_rels
-  where rel_id = :new.rel_id;
-
-  -- Only membership_rels are tracked in the party_approved_member_map
-
-  if v_member_state = 'approved' then
-    party_approved_member.add(:new.group_id, :new.element_id, :new.rel_type);
-  end if;
-
-end;
-/
-show errors;
-
-create or replace trigger group_element_index_del_tr
-after delete on group_element_index
-for each row
-begin
-  party_approved_member.remove(:old.group_id, :old.element_id, :old.rel_type);
-end;
-/
-show errors;
-
 create or replace trigger membership_rels_up_tr
 before update on membership_rels
 for each row
@@ -93,6 +63,10 @@ begin
    (v_object_id_one, v_object_id_two, :new.rel_id, v_object_id_one, 
     v_rel_type, 'membership_rel');
 
+  if :new.member_state = 'approved' then
+    party_approved_member.add(v_object_id_one, v_object_id_two, v_rel_type);
+  end if;
+
   -- For all groups of which I am a component, insert a
   -- row in the group_member_index.
   for map in (select distinct group_id
@@ -104,10 +78,40 @@ begin
     values
      (map.group_id, v_object_id_two, :new.rel_id, v_object_id_one,
       v_rel_type, 'membership_rel');
+
+    if :new.member_state = 'approved' then
+      party_approved_member.add(map.group_id, v_object_id_two, v_rel_type);
+    end if;
+
   end loop;
 end;
 /
 show errors
+
+create or replace trigger membership_rels_del_tr
+before delete on membership_rels
+for each row
+declare 
+  v_error varchar2(4000);
+begin
+  -- First check if removing this relation would violate any relational constraints
+  v_error := rel_constraint.violation_if_removed(:old.rel_id);
+  if v_error is not null then
+      raise_application_error(-20000,v_error);
+  end if;
+
+  for map in (select group_id, element_id, rel_type
+              from group_element_index
+              where rel_id = :new.rel_id)
+  loop
+    party_approved_member.remove(map.group_id, map.element_id, map.rel_type);
+  end loop;
+
+  delete from group_element_index
+  where rel_id = :old.rel_id;
+end;
+/
+show errors;
 
 create or replace trigger composition_rels_in_tr
 after insert on composition_rels
@@ -186,24 +190,6 @@ begin
 end;
 /
 show errors
-
-create or replace trigger membership_rels_del_tr
-before delete on membership_rels
-for each row
-declare 
-  v_error varchar2(4000);
-begin
-  -- First check if removing this relation would violate any relational constraints
-  v_error := rel_constraint.violation_if_removed(:old.rel_id);
-  if v_error is not null then
-      raise_application_error(-20000,v_error);
-  end if;
-
-  delete from group_element_index
-  where rel_id = :old.rel_id;
-end;
-/
-show errors;
 
 --
 -- TO DO: See if this can be optimized now that the member and component

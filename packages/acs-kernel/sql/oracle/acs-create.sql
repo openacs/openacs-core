@@ -301,3 +301,22 @@ begin
 end;
 /
 show errors;
+
+-- Create the default context.
+declare
+  object_id integer;
+begin
+  object_id := acs_object.new (
+    object_id => -3
+  );
+
+  insert into acs_magic_objects
+   (name, object_id)
+  values
+   ('default_context', object_id);
+
+  commit;
+end;
+/
+show errors;
+

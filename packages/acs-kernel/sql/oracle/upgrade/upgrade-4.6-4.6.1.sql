@@ -911,7 +911,7 @@ group by segment_id, member_id;
 -- Triggers to maintain party_approved_member_map when parties are create or replaced or
 -- destroyed.
 
-create or replace trigger parties_in_tr before insert on parties
+create or replace trigger parties_in_tr after insert on parties
 for each row 
 begin
   insert into party_approved_member_map
@@ -938,7 +938,7 @@ show errors;
 -- group with that rel_type.  This was intentional on the part of the aD folks
 -- who added relational segments to ACS 4.2.
 
-create or replace trigger rel_segments_in_tr before insert on rel_segments
+create or replace trigger rel_segments_in_tr after insert on rel_segments
 for each row
 begin
   insert into party_approved_member_map
@@ -1088,37 +1088,6 @@ end party_approved_member;
 /
 show errors;
 
-create or replace trigger group_element_index_in_tr
-before insert on group_element_index
-for each row
-declare
-  v_member_state membership_rels.member_state%TYPE;
-begin
-
-  select member_state into v_member_state
-  from membership_rels
-  where rel_id = :new.rel_id;
-
-  -- Only membership_rels are tracked in the party_approved_member_map
-
-  if v_member_state = 'approved' then
-    party_approved_member.add(:new.group_id, :new.element_id, :new.rel_type);
-  end if;
-
-end;
-/
-show errors;
-
-create or replace trigger group_element_index_del_tr
-after delete on group_element_index
-for each row
-begin
-  party_approved_member.remove(:old.group_id, :old.element_id, :old.rel_type);
-end;
-/
-show errors;
-
-
 create or replace trigger membership_rels_up_tr
 before update on membership_rels
 for each row
@@ -1142,6 +1111,85 @@ begin
 end;
 /
 show errors
+
+create or replace trigger membership_rels_in_tr
+after insert on membership_rels
+for each row
+declare
+  v_object_id_one acs_rels.object_id_one%TYPE;
+  v_object_id_two acs_rels.object_id_two%TYPE;
+  v_rel_type      acs_rels.rel_type%TYPE;
+  v_error varchar2(4000);
+begin
+  
+  -- First check if added this relation violated any relational constraints
+  v_error := rel_constraint.violation(:new.rel_id);
+  if v_error is not null then
+      raise_application_error(-20000,v_error);
+  end if;
+
+  select object_id_one, object_id_two, rel_type
+  into v_object_id_one, v_object_id_two, v_rel_type
+  from acs_rels
+  where rel_id = :new.rel_id;
+
+  -- Insert a row for me in the group_member_index.
+  insert into group_element_index
+   (group_id, element_id, rel_id, container_id, 
+    rel_type, ancestor_rel_type)
+  values
+   (v_object_id_one, v_object_id_two, :new.rel_id, v_object_id_one, 
+    v_rel_type, 'membership_rel');
+
+  if :new.member_state = 'approved' then
+    party_approved_member.add(v_object_id_one, v_object_id_two, v_rel_type);
+  end if;
+
+  -- For all groups of which I am a component, insert a
+  -- row in the group_member_index.
+  for map in (select distinct group_id
+	      from group_component_map
+	      where component_id = v_object_id_one) loop
+    insert into group_element_index
+     (group_id, element_id, rel_id, container_id,
+      rel_type, ancestor_rel_type)
+    values
+     (map.group_id, v_object_id_two, :new.rel_id, v_object_id_one,
+      v_rel_type, 'membership_rel');
+
+    if :new.member_state = 'approved' then
+      party_approved_member.add(map.group_id, v_object_id_two, v_rel_type);
+    end if;
+
+  end loop;
+end;
+/
+show errors
+
+create or replace trigger membership_rels_del_tr
+before delete on membership_rels
+for each row
+declare 
+  v_error varchar2(4000);
+begin
+  -- First check if removing this relation would violate any relational constraints
+  v_error := rel_constraint.violation_if_removed(:old.rel_id);
+  if v_error is not null then
+      raise_application_error(-20000,v_error);
+  end if;
+
+  for map in (select group_id, element_id, rel_type
+              from group_element_index
+              where rel_id = :new.rel_id)
+  loop
+    party_approved_member.remove(map.group_id, map.element_id, map.rel_type);
+  end loop;
+
+  delete from group_element_index
+  where rel_id = :old.rel_id;
+end;
+/
+show errors;
 
 -- New fast version of acs_object_party_privilege_map
 

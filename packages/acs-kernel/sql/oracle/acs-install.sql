@@ -58,9 +58,10 @@ begin
   set object_type = 'application_group'
   where object_id = -2;
 
-  segment_id := rel_segment__new(
+  segment_id := rel_segment.new(
     segment_name => 'Main Site Members',
-    group_id => -2
+    group_id => -2,
+    rel_type => 'membership_rel'
   );
 
   admin_id := apm_service.new (
