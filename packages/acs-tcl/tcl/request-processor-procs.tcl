@@ -651,7 +651,11 @@ This file has generated an error.
       programmers.
       "
     }
-    ns_log Error "[ns_conn method] $error_url [ns_conn query] $message"
+    set headers [ns_conn headers]
+    ns_log "Error" "[ns_conn method] http://[ns_set iget $headers host][ns_conn url]?[ns_conn query]
+referred by \"[ns_set iget $headers referer]\"
+$message"
+
 }
 
 ad_proc -private rp_path_prefixes {path} {
