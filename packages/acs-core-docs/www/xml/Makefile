@@ -24,9 +24,10 @@ XSL:
 	if [ ! -d XSL -a ! -L XSL ]; then \
 		echo -e "\n\nNo XSL directory here.  I am looking for one...\n"; \
 		for d in \
-			/usr/share/sgml/docbook/stylesheet/xsl/nwalsh \
 			/usr/share/sgml/docbook/xsl-stylesheets-* \
-			/usr/share/sgml/docbook/xsl-stylesheets; do \
+			/usr/share/sgml/docbook/xsl-stylesheets \
+			/usr/share/sgml/docbook/stylesheet/xsl/nwalsh; \
+		do \
 			if [ -d $$d ]; then \
 				echo "Found $$d"; \
 				EXISTS=$$d; \
@@ -57,7 +58,7 @@ prelim:
 
 html: prelim XSL
 # adding --nonet --novalid is much faster but generates a bunch of bogus error messages
-	cd .. ; $(XSLTPROC) --novalid --nonet --xinclude xml/openacs.xsl xml/index.xml
+	cd .. ; $(XSLTPROC) --nonet --novalid --xinclude xml/openacs.xsl xml/index.xml
 
 # I got this to work with FOP 0.20.5 and docbook-xsl 1.62, and Jimi 1.0
 # see README.fop for some notes.
