@@ -1,3 +1,4 @@
+-- @cvs-id $Id$ 
 ------------------------------------------------------------
 -- declare CR as a content provider for search/indexing interface
 ------------------------------------------------------------
@@ -87,6 +88,8 @@ end;' language 'plpgsql';
 
 create function content_search__dtrg ()
 returns opaque as '
+declare
+     v_live_revision integer;
 begin
     select into v_live_revision live_revision from
 	cr_items where item_id=old.item_id;
