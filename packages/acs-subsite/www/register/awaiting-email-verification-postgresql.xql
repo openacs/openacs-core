@@ -6,10 +6,12 @@
 <fullquery name="register_user_state_properties">      
       <querytext>
       
-    select member_state, email, oid as rowid 
-    from cc_users
-    where user_id = :user_id and
-    email_verified_p = 'f' 
+    select mr.member_state, p.email, u.oid as rowid 
+    from users u
+    JOIN parties p on (p.party_id = u.user_id)
+    LEFT JOIN membership_rels mr on (mr.rel_id = u.user_id)
+    where u.user_id = :user_id 
+    and u.email_verified_p = 'f' 
       </querytext>
 </fullquery>
 

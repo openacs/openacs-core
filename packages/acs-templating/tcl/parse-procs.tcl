@@ -501,15 +501,81 @@ ad_proc -public template::adp_tag_init { {tag_name ""} } {
   ns_adp_trunc
 }
 
+ad_proc -private template::tag_attribute { 
+    tag 
+    attribute
+} {
+    Return an attribute from a tag that has already been processed.
+
+    @author Lee Denison (lee@runtime-collective.com)
+    @creation-date 2002-01-30
+
+    @return the value of the tag's attribute
+    @param tag the tag identifier
+    @param attribute the attribute name
+} {
+    return [ns_set get $tag $attribute]
+}
+
+ad_proc -private template::current_tag {} {
+    Return the top level tag from the stack.
+    
+    @author Lee Denison (lee@runtime-collective.com)
+    @creation-date 2002-01-30
+
+    @return the tag from the top of the tag stack.
+} {
+  variable tag_stack
+
+  return [lindex [lindex $tag_stack end] 1]
+}
+    
+ad_proc -private template::enclosing_tag { 
+    tag 
+} {
+    Reach back into the tag stack for the last enclosing instance of a tag.  
+    
+    Typically used where the usage of a tag depends on its context, such
+    as the "group" tag within a "multiple" tag.
+
+    @author Lee Denison (lee@runtime-collective.com)
+    @creation-date 2002-01-30
+
+    @return the tag identifier for the enclosing tag
+    @param tag the type (eg. multiple) of the enclosing tag to look for.
+} {
+  set name ""
+
+  variable tag_stack
+
+  set last [expr [llength $tag_stack] - 1]
+
+  for { set i $last } { $i >= 0 } { incr i -1 } {
+
+    set pair [lindex $tag_stack $i]
+
+    if { [string equal [lindex $pair 0] $tag] } {
+      set name [lindex $pair 1]
+      break
+    }
+  }
+
+  return $name
+}
+
 # @private get_enclosing_tag
 
 # Reach back into the tag stack for the last enclosing instance of a tag.  
 # Typically used where the usage of a tag depends on its context, such
 # as the "group" tag within a "multiple" tag.
+#
+# Deprecated, use:
+#   set tag [template::enclosing_tag <tag-type>]
+#   set attribute [template::tag_attribute tag <attribute>]
 
 # @param tag  The name of the enclosing tag to look for.
 
-ad_proc -public template::get_enclosing_tag { tag } {
+ad_proc -public -deprecated template::get_enclosing_tag { tag } {
 
   set name ""
 
