@@ -3,15 +3,13 @@ ad_page_contract {
     @creation-date September 01, 2001
     @cvs-id $Id$
 } {
-    q:notnull,trim
+    q:trim
     {t:trim ""}
     {offset:integer 0}
     {num:integer 0}
     {dfs:trim ""}
     {dts:trim ""}
-} -errors {
-    q:notnull {[_ search.lt_You_must_specify_some].}
-}
+} 
 
 set page_title "Search Results"
 
@@ -27,18 +25,31 @@ set user_id [ad_conn user_id]
 set driver [ad_parameter -package_id $package_id FtsEngineDriver]
 array set info [acs_sc_call FtsEngineDriver info [list] $driver]
 
+
 if { [array get info] == "" } {
     ReturnHeaders
     ns_write "[_ search.lt_FtsEngineDriver_not_a]"
     ad_script_abort
 }
 
+if {[string is space $q] } {
+    set query {}
+    set empty_p 1
+    set url_advanced_search "advanced-search"
+    ad_return_template 
+    return
+} else { 
+    set empty_p 0
+}
+
+
+
+
 if { $num <= 0} {
     set limit [ad_parameter -package_id $package_id LimitDefault]
 } else {
     set limit $num
 }
-
 
 set df ""
 set dt ""
@@ -47,9 +58,10 @@ array set symbol2interval [ad_parameter -package_id $package_id Symbol2Interval]
 if { $dfs != "" } { set df [db_exec_plsql get_df "select now() + '$symbol2interval($dfs)'::interval"] }
 if { $dts != "" } { set dt [db_exec_plsql get_dt "select now() + '$symbol2interval($dts)'::interval"] }
 
-
 set q [string tolower $q]
 set urlencoded_query [ad_urlencode $q]
+set qtest [tsearch2::build_query -query $q]
+
 if { $offset < 0 } { set offset 0 }
 set t0 [clock clicks -milliseconds]
 array set result [acs_sc_call FtsEngineDriver search [list $q $offset $limit $user_id $df $dt] $driver]
@@ -95,12 +107,12 @@ for { set __i 0 } { $__i < [expr $high - $low +1] } { incr __i } {
     set title_summary [acs_sc_call FtsEngineDriver summary [list $q $datasource(title)] $driver]
     set txt_summary [acs_sc_call FtsEngineDriver summary [list $q $txt] $driver]
     set url_one [acs_sc_call FtsContentProvider url [list $object_id] $object_type]
-    
+
     # Replace the "index" with ETP as this is not needed for accessing the page
     if {[string equal $object_type "etp_page_revision"]} {
 	set url_one [string trimright $url_one "index"]
     }
-	template::multirow append searchresult $title_summary $txt_summary $url_one
+    template::multirow append searchresult $title_summary $txt_summary $url_one
 }
 
 
