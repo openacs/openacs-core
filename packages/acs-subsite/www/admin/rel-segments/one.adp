@@ -5,9 +5,10 @@
 <h4>Properties of this segment</h4>
 
 <ul>
-  <li> Group: <a href=../groups/one?group_id=@props.group_id@>@props.group_name@</a> </li>
-  <li> Relationship type: <a href=../rel-types/one?rel_type=@props.rel_type@>@props.rel_type_pretty_name@</a> </li>
-  <li> Number of @props.role_pretty_plural@: <a href=elements?segment_id=@segment_id@>@number_elements@</a> </li>
+  <li> Name: @props.segment_name@ (<a href="@name_edit_url@">Edit</a>) </li>
+  <li> Group: <a href="../groups/one?group_id=@props.group_id@" title="View this group">@props.group_name@</a> </li>
+  <li> Relationship type: <a href="../rel-types/one?rel_type=@props.rel_type@" title="View this relationship type">@props.rel_type_pretty_name@</a> </li>
+  <li> Number of @props.role_pretty_plural@: <a href="elements?segment_id=@segment_id@" title="View the elements in this relational segment">@number_elements@</a> </li>
 </ul>
 
 <h4>Constraints on this segment</h4>
