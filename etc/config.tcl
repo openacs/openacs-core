@@ -23,7 +23,6 @@ set serverroot          "/web/${server}"
 # if debug is false, all debugging will be turned off
 set debug false
 
-
 # you shouldn't need to adjust much below here
 # for a standard install
 
@@ -72,6 +71,7 @@ ns_param   NoExtension        text/plain
 ns_param   .pcd               image/x-photo-cd
 ns_param   .prc               application/x-pilot
 ns_param   .xls               application/vnd.ms-excel
+ns_param   .doc               application/vnd.ms-word
 
 # 
 # Tcl Configuration 
@@ -111,6 +111,19 @@ ns_param   maxurlstats        1000     ;# Max number of URL's to do stats on
 #ns_param   directoryadp    $pageroot/dirlist.adp ;# Choose one or the other
 #ns_param   directoryproc    _ns_dirlist          ;#  ...but not both!
 #ns_param   directorylisting  fancy               ;# Can be simple or fancy
+
+
+#
+# Special HTTP pages
+#
+
+ns_param   NotFoundResponse     "/global/file-not-found.adp"
+ns_param   ServerBusyResponse   "/global/busy.html"
+ns_param   ServerInternalErrorResponse "/global/error.html"
+ns_param   ForbiddenResponse    "/global/forbidden.html"
+ns_param   UnauthorizedResponse "/global/unauthorized.html"
+
+
 
 # 
 # ADP (AOLserver Dynamic Page) configuration 
@@ -207,10 +220,10 @@ if { $database == "oracle" } {
 }
 
 # 
-# Database Pools: This is how AOLserver ``talks'' to the RDBMS. You
-# need three for OpenACS: pool1, pool2, pool3.  (Traditionally, these
-# three pools were named "main", "log", "subquery", but the specific
-# names no longer matter.)
+# Database Pools: This is how AOLserver  ``talks'' to the RDBMS. You need 
+# three for OpenACS: main, log, subquery. Make sure to replace ``yourdb'' 
+# and ``yourpassword'' with the actual values for your db name and the 
+# password for it.
 
 # AOLserver can have different pools connecting to different databases 
 # and even different different database servers.
@@ -280,25 +293,6 @@ if { $database == "oracle" } {
 ns_section ns/server/${server}/db
 ns_param   pools              "*" 
 ns_param   defaultpool        pool1
-
-
-ns_section ns/server/${server}/acs/database
-
-# Define the mapping between databases and pools, for use by the
-# OpenACS Database API.  For full details, see comments in
-# "packages/acs-tcl/tcl/00-database-procs.tcl".
-
-ns_param database_names [list openacs]
-ns_param pools_openacs [list pool1 pool2 pool3]
-
-# If you have other databases you want to use the OpenACS DB API with,
-# you would instead do something like this here:
-#
-# ns_param database_names [list openacs db2 db3]
-# ns_param pools_openacs [list pool1 pool2 pool3]
-# ns_param pools_db2     [list db2pool1 db2pool2]
-# ns_param pools_db3     [list db3pool1]
-
 
 ns_section ns/server/${server}/redirects
 ns_param   404                "global/file-not-found.html"
