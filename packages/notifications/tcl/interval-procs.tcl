@@ -21,7 +21,7 @@ namespace eval notification::interval {
 
     } {
 
-        return [db_string get_id {}]
+        return [db_string get_interval_id {}]
 
     }
 
