@@ -156,7 +156,6 @@ ad_proc -public auth::password::recover_password {
         <li> password_message: Human-readable message to be relayed to the user. May contain HTML.
     </ul>
 } {
-
     set forgotten_url [auth::password::get_forgotten_url \
                            -remote_only \
                            -authority_id $authority_id \
@@ -186,6 +185,7 @@ ad_proc -public auth::password::recover_password {
             # We have retrieved or reset a forgotten password that we should email to the user
             with_catch errmsg {
                 auth::password::email_password \
+                    -authority_id $authority_id \
                     -username $username \
                     -password $result(password)
 
@@ -194,7 +194,9 @@ ad_proc -public auth::password::recover_password {
             } {
                 # We could not inform the user of his email - we failed
                 set result(password_status) "failed_to_connect"
-                set result(password_message) [auth::password::get_email_error_msg $errmsg]
+                set result(password_message) [_ acs-subsite.Error_sending_mail]
+                global errorInfo
+                ns_log Error "We had an error sending out email with new password to username $username, authority $authority_id:\n$errorInfo"
             }
         }
     }
@@ -433,7 +435,7 @@ ad_proc -public auth::password::reset {
 
 ad_proc -private auth::password::email_password {
     {-username:required}
-    {-authority_id ""}
+    {-authority_id:required}
     {-password:required}
 } {
     Send an email to ther user with given username and authority with the new password.
@@ -444,29 +446,17 @@ ad_proc -private auth::password::email_password {
 } {
     set system_owner [ad_system_owner]
     set system_name [ad_system_name]
-    set reset_password_url [export_vars -base "[ad_url]/user/password-update" {user_id {password_old $password}}]
+
+    set user_id [acs_user::get_by_username -authority_id $authority_id -username $username]
+    acs_user::get -user_id $user_id -array user
+
+    set reset_password_url [export_vars -base "[ad_url]/user/password-update" {user_id {old_password $password}}]
 
     set subject [_ acs-subsite.lt_Your_forgotten_passwo]
-    set body "[_ acs-subsite.Your_password]: $password"
-
-    set user_email [acs_user::get_element -username $username -authority_id $authority_id -element email]
+    set body [_ acs-subsite.Forgotten_password_body]
         
     # Send email
-    ns_sendmail $user_email $system_owner $subject $body
-}
-
-ad_proc -private auth::password::get_email_error_msg { errmsg } {
-    Reusable message used when email sending fails.
-
-    @author Peter Marklund
-} {
-    return "[_ acs-subsite.Error_sending_mail]
-<blockquote>
-  <pre>
-    $errmsg
-  </pre>
-</blockquote>
-"
+    ns_sendmail $user(email) $system_owner $subject $body
 }
 
 ad_proc -private auth::password::CanChangePassword {
