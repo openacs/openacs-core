@@ -220,8 +220,12 @@ ad_proc -public ad_check_password { user_id password_from_form } { Returns 1 if 
     return 1
 }
 
-ad_proc -public ad_change_password { user_id new_password } { Changed the user's password } {
-
+ad_proc -public ad_change_password { 
+    user_id 
+    new_password 
+} { 
+    Change the user's password 
+} {
     # In case someone wants to change the salt from now on, you can do
     # this and still support old users by changing the salt below.
     set salt [sec_random_token]

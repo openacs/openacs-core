@@ -1056,7 +1056,7 @@ ad_proc -public ad_script_abort {} {
 }
 
 
-ad_proc -public ad_acs_kernel_id_mem {} {
+ad_proc -private ad_acs_kernel_id_mem {} {
 
     Returns the package_id of the kernel. (not cached)
 
@@ -1070,7 +1070,7 @@ ad_proc -public ad_acs_kernel_id {} {
 
 } {
     set acs_kernel_id [ad_acs_kernel_id_mem]
-    ad_proc ad_acs_kernel_id {} {Returns the package_id of the kernel.} "return $acs_kernel_id"
+    ad_proc -public ad_acs_kernel_id {} {Returns the package_id of the kernel.} "return $acs_kernel_id"
     return $acs_kernel_id
 }
 
