@@ -1,20 +1,61 @@
+
+/**********************************************************************
+/* Site-Wide/Master Templates
+/**********************************************************************/
+
+/* BODY tag */
+
 body {
   font-family: verdana, helvetica, arial, sans-serif;
   background-color: white;
   margin: 0px;
 }
 
-table.subsite-header {
+
+/* Site Header */
+
+#site-header {
   background-color: #313063; 
   color: white;
-  font-family: tahoma, verdana;
+  font-family: tahoma, verdana, helvetica, sans-serif;
   font-size: 85%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 8px;
+  padding-right: 8px;
+  text-align: center;
 }
-table.subsite-header td {
-  padding-top: 3px;
-  padding-bottom: 3px;
+
+#site-header .system-name {
+  font-size: 120%;
+  font-weight: bold;
+  float: left;
 }
-table.subsite-header td.button-bar a { 
+#site-header .system-name a {
+  color: white;
+  text-decoration: none;
+}
+#site-header .system-name a:hover {
+  color: white;
+  text-decoration: none;
+}
+
+#site-header .users-online {
+  display: inline;
+  float: right;
+  padding-right: 4em;
+}
+
+#site-header .user-greeting {
+  display: inline;
+}
+
+#site-header .permanent-navigation {
+  display: inline;
+  float: right;
+}
+
+#site-header .action-list a { 
   border: solid 1px #313063;
   text-align: center; 
   padding: 1px;
@@ -23,104 +64,98 @@ table.subsite-header td.button-bar a {
   color: white;
   text-decoration: none;
 }
-table.subsite-header td.button-bar a:hover { 
+#site-header .action-list a:hover { 
   text-decoration: none;
   background-color: #666666;
   border: solid 1px #999999;
 }
-table.subsite-header td.system-name {
-  font-size: 120%;
-  font-weight: bold;
-  padding-left: 8px;
-}
-table.subsite-header td.system-name a {
-  color: white;
-  text-decoration: none;
-}
-
-a.refresh {
-  color: white;
-  text-decoration: underline;
-}
-a.refresh:hover {
-  color: red;
-  text-decoration: underline;
-}
 
 
-table.developer-toolbar {
-  background-color: #616093;
-  color: white;
-  font-family: tahoma, verdana;
-  font-size: 80%;
+
+/* User Messages */
+
+#user-message {
+  background-color: #ccff99; 
+  padding: 4px;
+  padding-top: 6px;
+  padding-bottom: 6px;
+  font-size: 85%;
 }
-table.developer-toolbar td {
-  padding-top: 3px;
-  padding-bottom: 3px;
-}
-table.developer-toolbar td a { 
-  border: solid 1px #616093;
-  text-align: center; 
-  padding: 1px;
+
+#user-message ul {
+  margin-left: 0;
+  padding-left: 0;
+  display: inline;
+  border: none;
+} 
+#user-message ul li {
+  margin-left: 0;
   padding-left: 2px;
-  padding-right: 2px;
-  color: white;
-  text-decoration: none;
-}
-table.developer-toolbar td a:hover { 
-  text-decoration: none;
-  background-color: #999999;
-  border: solid 1px #cccccc;
-}
-table.developer-toolbar #search {
-  font: 80% tahoma;
-  color: white;
-}
-table.developer-toolbar #search input {
-  font: 100% tahoma;
-}
-table.developer-toolbar td a.on {
-  background-color: #888888;
-  border: solid 1px #cccccc;
-}
-table.developer-toolbar td a:hover.on {
-  background-color: #666666;
-  border: solid 1px #999999;
+  border: none;
+  list-style: none;
 }
 
 
+/* Boxed User Message */
 
-a.button { 
-  font: 85% arial;
-  border: solid 1px black;
-  background-color: #e1e1e1;
-  text-align: center; 
-  padding: 1px;
+.boxed-user-message {
+  background-color: #ccff99; 
+  padding-left: 12px;
+  padding-right: 12px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  font-size: 85%;
+  border: 1px solid #dd9988;
+}
+
+.boxed-user-message h3 {
+  color: #990000;
+  margin-top: 0px;
+}
+
+.boxed-user-message .body {
+  color: #990000;
+}
+
+
+/* Context Bar */
+
+#context-bar {
+  font-family: Arial, sans-serif;
+  font-size: 11px;
+  margin-bottom: 2px;
   padding-left: 8px;
-  padding-right: 8px;
-  color: black;
-  text-decoration: none;
-  white-space: nowrap;
 }
-a.button:hover { 
-  text-decoration: none;
-  background-color: #ccc;
-  border: solid 1px black;
+#context-bar #breadcrumbs {
+  float: left;
+  padding-top: 3px;
+}
+#context-bar #breadcrumbs ul {
+  margin-left: 0;
+  padding-left: 0;
+  display: inline;
+  border: none;
+} 
+#context-bar #breadcrumbs ul li {
+  margin-left: 0;
+  padding-left: 2px;
+  border: none;
+  list-style: none;
+  display: inline;
+}
+#context-bar #navlinks {
+  float: right;
 }
 
-#body  { 
-  font-family: tahoma, arial, helvetica, sans-serif;
-  padding-left: 0px;
-  padding-right: 0px;
-  padding-top: 0px;
-  padding-bottom: 0px;
-}
+
+
+/* Subsite Name */
 
 #subsite-name { 
   font-weight: bold; 
   font-size: 120%;
   font-family: verdana; 
-  padding-left: 12px;
+  padding-left: 8px;
 }
 a.subsite-name {
   color: black;
@@ -130,6 +165,68 @@ a.subsite-name:hover {
   color: black;
   text-decoration: none;
 }
+
+/* This wraps everything except site-header and site-footer, and is used to ensure proper margins */
+/* Only used on non-tabbed (navbar and subnavbar) pages */
+
+#page-body {
+  margin-left: 8px;
+  margin-right: 8px;
+}
+
+
+
+
+/* Title of page, typically used on an H1 tag */
+
+.page-title {
+}
+
+
+/* Site Footer */
+
+#site-footer {
+  clear: both;
+  border-top: 1px solid #ccc;
+  font-family: tahoma, verdana, helvetica, sans-serif;
+  font-size: 85%;
+  margin-top: 24px;
+  padding-top: 3px;
+  padding-bottom: 3px;
+  padding-left: 8px;
+  padding-right: 8px;
+  text-align: center;
+}
+
+#site-footer ul {
+  display: inline;
+  margin-left: 0;
+  padding-left: 0;
+  border: none;
+}
+
+#site-footer ul li {
+  margin-left: 0;
+  padding-left: 10px;
+  border: none;
+  list-style: none;
+  display: inline;
+}
+
+#site-footer .action-list {
+  float: left;
+}
+
+
+
+
+
+
+/**********************************************************************
+/* General navigation
+/**********************************************************************/
+
+/* First level tabs */
 
 #navbar-div {
   border-bottom: 1px solid #666;
@@ -175,7 +272,6 @@ html>body #navbar { bottom: 0px }
   color: black;
 }
 
-
 #navbar-body { 
   border-bottom: 1px solid #016799;
   background-color: white;
@@ -186,6 +282,8 @@ html>body #navbar { bottom: 0px }
   padding-bottom: 12px;
 }
 
+
+/* Second level tabs */
 
 #subnavbar-div {
   border-bottom: 1px solid #666;
@@ -248,12 +346,119 @@ html>body #subnavbar { bottom: 0px }
 
 
 
+/**********************************************************************
+/* Widgets
+/**********************************************************************/
+
+
+/* Action list */
+
+.action-list { 
+  padding: 0;
+}
+
+.action-list ul { 
+  margin: 0;
+  padding: 0;
+  display: inline;
+  border: none;
+}
+                
+.action-list ul li {
+  margin: 0;
+  padding: 0;
+  border: none;
+  list-style: none;
+  display: inline;
+}
+
+a.refresh {
+  color: white;
+  text-decoration: underline;
+}
+a.refresh:hover {
+  color: red;
+  text-decoration: underline;
+}
+
+a.button { 
+  font: 85% arial;
+  border: solid 1px black;
+  background-color: #e1e1e1;
+  text-align: center; 
+  padding: 1px;
+  padding-left: 8px;
+  padding-right: 8px;
+  color: black;
+  text-decoration: none;
+  white-space: nowrap;
+}
+a.button:link { 
+  text-decoration: none;
+  border: solid 1px black;
+}
+a.button:visited { 
+  text-decoration: none;
+  border: solid 1px black;
+}
+a.button:hover { 
+  text-decoration: none;
+  background-color: #ccc;
+  border: solid 1px black;
+}
+a.button:active { 
+  text-decoration: none;
+  border: solid 1px black;
+}
+
+h1 {
+  font-size: 120%;
+  margin-bottom: 12px;
+}
+h2 {
+  font-size: 115%;
+  margin-bottom: 12px;
+}
+h3 {
+  font-size: 110%;
+  margin-bottom: 12px;
+}
+h4 {
+  font-size: 105%;
+  margin-bottom: 12px;
+}
+
+.small {
+  font-size: 85%;
+}
+
+
+ul.action-links li {
+  list-style: circle url(/resources/acs-subsite/action-link-marker.png);
+  margin: 8px;
+  margin-left: -16px;
+}
+
+.portlet h2 {
+  background: #dddddd; 
+  padding: 2px 8px 2px 8px; 
+  margin: 0;
+}
+
+.portlet .portlet-body {
+  border: 1px dotted #999; 
+  border-top: 0px; 
+  padding: 6px 8px 6px 8px;
+}
 
 
 
 
 
 
+
+
+/* Generally Available Tabs */
 
 #tabs-div {
   border-bottom: 1px solid #666;
@@ -302,7 +507,6 @@ html>body #tabs { bottom: 0px }
   color: black;
 }
 
-
 #tabs-body { 
   border-bottom: 1px solid #016799;
   background-color: #f6f6f6;
@@ -324,185 +528,49 @@ html>body #tabs { bottom: 0px }
 
 
 
-table.subsite-body {
-  width: 100%;
-  height: 100%;
-}
-td.subsite-body {
-  padding: 8px;
-  font-family: tahoma, verdana;
-  height: 100%;
-}
+/**********************************************************************
+/* acs-developer-support Toolbar
+/**********************************************************************/
+/* LARS: This ought to go in the developer-support package, somehow */
 
-td.subsite-subsections {
+#developer-toolbar {
+  background-color: #616093;
+  color: white;
   font-family: tahoma, verdana;
-  background-color: #e6e6e6;
-  width: 150px;
-  height: 100%;
-}
-div.subsite-subsection-header {
-  background-color: #aeb599;
-  padding-left: 40px;
-  padding-right: 4px;
-  padding-top: 1px;
-  padding-bottom: 1px;
-}
-div.subsite-subsection {
-  padding-left: 4px;
-  padding-right: 4px;
+  font-size: 80%;
+  padding-left: 8px;
+  padding-right: 8px;
   padding-top: 2px;
   padding-bottom: 2px;
-  border-bottom: solid 1px #aaaaaa;
 }
-a.subsite-subsection {
-  color: black;
-  text-decoration: none;
-}
-a.subsite-subsection:hover {
-  color: gray;
-  text-decoration: none;
-}
-
-td.subsite-section {
-  background-color: #879266;
-  color: white;
-  text-align: center;
-  font-weight: bold;
-  text-transform: uppercase;
-  font-family: tahoma, verdana;
-  font-size: 75%;
-}
-td.subsite-section-selected {
-  background-color: #879299;
-  color: white;
-  text-align: center;
-  font-weight: bold;
-  text-transform: uppercase;
-  font-family: tahoma, verdana;
-  font-size: 75%;
-}
-
-a.subsite-section {
+#developer-toolbar td a { 
+  border: solid 1px #616093;
+  text-align: center; 
   color: white;
   text-decoration: none;
 }
-a.subsite-section:hover {
-  color: #cccccc;
-  text-decoration: underline;
+#developer-toolbar td a:hover { 
+  text-decoration: none;
+  background-color: #999999;
+  border: solid 1px #cccccc;
+}
+#developer-toolbar #search {
+  font: 80% tahoma;
+  color: white;
+}
+#developer-toolbar #search input {
+  font: 100% tahoma;
+}
+#developer-toolbar td a.on {
+  background-color: #888888;
+  border: solid 1px #cccccc;
+}
+#developer-toolbar td a:hover.on {
+  background-color: #666666;
+  border: solid 1px #999999;
 }
 
-
-#context-bar {
-  font-family: Arial, sans-serif;
-  font-size: 11px;
-  margin-bottom: 2px;
-  padding-left: 12px;
-}
-#context-bar #breadcrumbs {
-  float: left;
-  padding: 3px;
-}
-#context-bar #breadcrumbs ul {
-  margin-left: 0;
-  padding-left: 0;
-  display: inline;
-  border: none;
-} 
-#context-bar #breadcrumbs ul li {
-  margin-left: 0;
-  padding-left: 2px;
-  border: none;
-  list-style: none;
-  display: inline;
-}
-#context-bar #navlinks {
-  float: right;
-}
-
-h1 {
-  font-size: 120%;
-  margin-bottom: 12px;
-}
-h2 {
-  font-size: 115%;
-  margin-bottom: 12px;
-}
-h3 {
-  font-size: 110%;
-  margin-bottom: 12px;
-}
-h4 {
-  font-size: 105%;
-  margin-bottom: 12px;
-}
-
-
-span.form-configuration-help-text { 
-  font-family:verdana, arial, sans-serif; 
-  font-size:10px; 
-  line-height:13px;
-  text-align:justify;
-}
-span.form-configuration-label { 
-  font-family:trebuchet MS, trebuchet, verdana, arial, sans-serif; 
-  font-size: 11px; 
-  line-height:15px;
-}
-
-#general-message {
-  background-color: #ccff99; 
-  padding: 4px;
-  padding-top: 6px;
-  padding-bottom: 6px;
-  font-size: 85%;
-}
-
-#general-message ul {
-  margin-left: 0;
-  padding-left: 0;
-  display: inline;
-  border: none;
-} 
-#general-message ul li {
-  margin-left: 0;
-  padding-left: 2px;
-  border: none;
-  list-style: none;
-}
-
-ul.action-links li {
-  list-style: circle url(/resources/acs-subsite/action-link-marker.png);
-  margin: 8px;
-  margin-left: -16px;
-}
-
-a.action {
-  margin: 8px;
-  margin-left: 24px;
-  display: list-item;
-  list-style: circle url(/resources/acs-subsite/right.gif);
-}
-
-#footer-links {
-  padding: 6px;
-  margin-top: 4px;
-  font-size: 85%;
-}
-
-#footer-links ul {
-  display: inline;
-  margin-left: 0;
-  padding-left: 0;
-  border: none;
-}
-
-#footer-links ul li {
-  margin-left: 0;
-  padding-left: 10px;
-  border: none;
-  list-style: none;
-  display: inline;
-}
+/* Developer-support footer */
 
 #developer-support-footer {
   float: left;
@@ -512,15 +580,26 @@ a.action {
   margin-top: 4px;
 }
 
-.portlet h2 {
-  background: #dddddd; 
-  padding: 2px 8px 2px 8px; 
-  margin: 0;
+
+
+
+
+
+
+
+
+
+
+/**********************************************************************
+/* DEPRECATED CLASSES
+/**********************************************************************/
+
+/* Deprecated, not sure what it's replaced with just yet */
+a.action {
+  margin: 8px;
+  margin-left: 24px;
+  display: list-item;
+  list-style: circle url(/resources/acs-subsite/right.gif);
 }
 
-.portlet .portlet-body {
-  border: 1px dotted #999; 
-  border-top: 0px; 
-  padding: 6px 8px 6px 8px;
-}
 
