@@ -13,7 +13,6 @@ set n_feature_items 3
 set feature_limit [expr $n_feature_items + 1]
 
 
-etp::get_content_items -package_id 4053 -limit $feature_limit \
-                       -result_name feature_items
+etp::get_content_items -package_id 4053 -limit $feature_limit -result_name feature_items
 #etp::get_content_items -package_id 3138 -limit $feature_limit \
                        -result_name feature_items

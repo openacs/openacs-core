@@ -74,7 +74,7 @@ height="1" width="30"></td>
 
 <!-- main text area - MAIN TEXT -->
 <td align="left" valign="top" width="100%">
-<span>@pa.content@</span>
+<span>@pa.content;noquote@</span>
 </td>
 
 <!-- MARGIN -->

@@ -70,14 +70,5 @@ if { ![template::util::is_nil focus] } {
             attribute onload "javascript:document.forms\['${form_name}'\].elements\['${element_name}'\].focus()"
 }
 
-
-# Developer-support
-
-if { [llength [namespace eval :: info procs ds_link]] == 1 } {
-     set ds_link "[ds_link]"
-} else {
-    set ds_link ""
-}
-
-
-
+# Where to find the stylesheet
+set css_url "/resources/acs-subsite/site-master.css"

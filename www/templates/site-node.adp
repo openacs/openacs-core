@@ -3,7 +3,7 @@
 <property name="context">@context@</property>
 
 <if @pa.content@ not nil>
-@pa.content@
+@pa.content;noquote@
 </if>
 
 <if @site_nodes:rowcount@ gt 0>
@@ -17,7 +17,7 @@
     <multiple name="content_items">
 <b><a href="@content_items.url@">@content_items.title@</a></b>
 <if @content_items.description@ not nil>
- - @content_items.description@
+ - @content_items.description;noquote@
 </if>
 <br>
 </multiple>

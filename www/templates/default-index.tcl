@@ -24,6 +24,6 @@ etp::get_content_items
 set etp_link [etp::get_etp_link]
 set package_id [ad_conn package_id]
 
-if {[parameter::get -package_id $package_id -parameter commentable_p -default 0]} {
-etp::get_gc_link 
-}
+#if {[parameter::get -package_id $package_id -parameter commentable_p -default 0]} {
+#etp::get_gc_link 
+#}

@@ -16,12 +16,12 @@ ad_page_contract {
 } -properties {
     pa:onerow
 }
-
-set package_id [ad_conn package_id]
-
+if {![exists_and_not_null package_id]} {
+    set package_id [ad_conn package_id]
+}
 etp::get_page_attributes
 # comment out, we haven't decided how best to use general comments
 # DaveB 2002-12-10, in response to email from Janine Sisk
-if {[parameter::get -package_id $package_id -parameter commentable_p -default 0]} {
-etp::get_gc_link 
-}
+#if {[parameter::get -package_id $package_id -parameter commentable_p -default 0]} {
+#etp::get_gc_link 
+#}
