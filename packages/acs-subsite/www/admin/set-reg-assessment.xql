@@ -10,7 +10,8 @@
     and a.assessment_id = cr.revision_id
     and a.anonymous_p = 't'
     and ci.parent_id = cf.folder_id
-    and cf.package_id in (select object_id from site_nodes)	
+    and cf.package_id in (select object_id from site_nodes) and -1 in (select grantee_id from acs_permissions where 
+    object_id=ci.item_id and  privilege='read')	
     order by cr.title
     
       </querytext>
