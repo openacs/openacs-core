@@ -58,7 +58,7 @@ begin
   if content_folder__is_folder(new__parent_id) = ''t'' and
     content_folder__is_registered(new__parent_id,''content_template'',''f'') = ''f'' then
 
-    raise EXCEPTION ''-20000: ''This folder does not allow templates to be created'';
+    raise EXCEPTION ''-20000: This folder does not allow templates to be created'';
 
   else
     v_template_id := content_item__new (
@@ -122,14 +122,8 @@ declare
   is_template__template_id            alias for $1;  
 begin
   
-  select 1 from cr_templates
+  return count(*) > 0 from cr_templates
     where template_id = is_template__template_id;
-  
-  if NOT FOUND then 
-     return ''f'';
-  else 
-     return ''t'';
-  end if;
  
 end;' language 'plpgsql';
 

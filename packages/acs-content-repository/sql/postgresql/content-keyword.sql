@@ -82,18 +82,12 @@ declare
   is_leaf__keyword_id             alias for $1;  
 begin
 
-  select
-      1
+  return 
+      count(*) = 0
   from 
     cr_keywords k
   where
     k.parent_id = is_leaf__keyword_id;
-
-  if NOT FOUND then 
-     return ''t'';
-  else 
-     return ''f'';
-  end if;
  
 end;' language 'plpgsql';
 
@@ -124,7 +118,7 @@ begin
   insert into cr_keywords 
     (heading, description, keyword_id, parent_id)
   values
-    (new__heading, new__description, v_id, new__parent_id);
+    (new__heading, coalesce(new__description,''''), v_id, new__parent_id);
 
   return v_id;
  
@@ -210,14 +204,9 @@ begin
 
   -- Look for an exact match
   if is_assigned__recurse = ''none'' then
-      select 1 from cr_item_keyword_map
+      return count(*) > 0 from cr_item_keyword_map
        where item_id = is_assigned__item_id
-         and   keyword_id = is_assigned__keyword_id;
-      if NOT FOUND then 
-         return ''f'';
-      else 
-         return ''t'';
-      end if;
+         and keyword_id = is_assigned__keyword_id;
   end if;
 
   -- Look from specific to general
@@ -232,7 +221,7 @@ begin
 --      and
 --	m.item_id = is_assigned__item_id);
 
-      select 1 from dual where exists (select 1 from
+      return count(*) > 0 from dual where exists (select 1 from
 	(select keyword_id from cr_keywords
 	  where tree_sortkey like (select tree_sortkey || ''%''
                                    from cr_keywords
@@ -242,12 +231,6 @@ begin
 	t.keyword_id = m.keyword_id
       and
 	m.item_id = is_assigned__item_id);
-
-      if NOT FOUND then 
-         return ''f'';
-      else 
-         return ''t'';
-      end if;
   end if;
 
   if is_assigned__recurse = ''down'' then
@@ -261,7 +244,7 @@ begin
 --      and
 --	m.item_id = is_assigned__item_id);
 
-      select 1 from dual where exists ( select 1 from
+      return count(*) > 0 from dual where exists ( select 1 from
 	(select 
            k2.keyword_id
          from 
@@ -278,11 +261,6 @@ begin
       and
 	m.item_id = is_assigned__item_id);
 
-      if NOT FOUND then 
-         return ''f'';
-      else 
-         return ''t'';
-      end if;
   end if;  
 
   -- Tried none, up and down - must be an invalid parameter

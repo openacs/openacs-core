@@ -7,13 +7,15 @@
 
 create function inline_0 ()
 returns integer as '
+declare 
+        found_p         boolean;
 begin
 
-  select 1 from dual 
+  select count(*) > 0 into found_p from dual 
    where exists (select 1 from acs_privileges 
                   where privilege = ''cm_root'');
 
-  if NOT FOUND then
+  if NOT found_p then
 
     -- Dummy root privilege
     PERFORM acs_privilege__create_privilege(''cm_root'', ''Root'', ''Root'');
@@ -165,7 +167,7 @@ begin
 --          t.object_id, has_revoke_authority__revokee_id, h.privilege
 --        ) = ''f'';    
 
-    select 1 from 
+    return count(*) > 0 from 
         (select o2.object_id 
            from acs_objects o1, acs_objects o2
           where o1.object_id = has_revoke_authority__object_id
@@ -185,12 +187,6 @@ begin
         content_permission__permission_p(
           t.object_id, has_revoke_authority__revokee_id, h.privilege
         ) = ''f'';    
-
-  if NOT FOUND then
-     return ''f'';
-  else
-     return ''t'';
-  end if;
    
 end;' language 'plpgsql';
 
@@ -387,17 +383,11 @@ end;' language 'plpgsql';
 create function cm_admin_exists () returns boolean as '
 begin
     
-    select 1 from dual 
+    return count(*) > 0 from dual 
      where exists (
        select 1 from acs_permissions 
        where privilege in (''cm_admin'', ''cm_root'')
      );
-
-     if NOT FOUND then
-        return ''f'';
-     else 
-        return ''t'';
-     end if;
 
 end;' language 'plpgsql';
 

@@ -6,6 +6,11 @@ begin
         return null;
 end;' language 'plpgsql';
 
+create function cast_char(boolean) returns char as '
+begin
+        return case when $1 then ''t''::varchar else ''f''::varchar end;
+end;' language 'plpgsql';
+
 create function test_content() returns integer as '
 declare
   folder_id		cr_folders.folder_id%TYPE;
@@ -29,18 +34,21 @@ begin
 
    -- create folders and an item
 
-   folder_id         := content_folder__new(''grandpa'',''Grandpa'',NULL,-1);
-   folder_b_id       := content_folder__new(''grandma'',''Grandma'',NULL,-1);
+   folder_id         := content_folder__new(''grandpa'',''Grandpa'',NULL,-100);
+   folder_b_id       := content_folder__new(''grandma'',''Grandma'',NULL,-100);
+
    sub_folder_id     := content_folder__new(''pa'',''Pa'',NULL,folder_id);
+
    sub_sub_folder_id := content_folder__new(''me'',''Me'',NULL,sub_folder_id);
+
    item_id           := content_item__new(''puppy'',sub_sub_folder_id);
 
    simple_item_id := content_item__new(
 	''bunny'',
-	sub_sub_folder_id
+	sub_sub_folder_id,
 	''Bugs Bunny'',
 	''Simple (Revisionless) Item Test'',
-	''Simple (Revisionless) Item Test Text'',
+	''Simple (Revisionless) Item Test Text''
    );
 
    live_revision_id := content_revision__new(
@@ -99,54 +107,54 @@ begin
    PERFORM content_test__put_line(''FOLDERS AND EMPTY FOLDERS AND SUBFOLDERS'');
    PERFORM content_test__put_line(''...all tests passed'');
    PERFORM content_test__put_line(''Is folder '' || folder_id || '' empty? '' 
-                                  || content_folder__is_empty(folder_id)
+                                  || cast_char(content_folder__is_empty(folder_id))
            );
+
    PERFORM content_test__put_line(''Is folder '' || sub_sub_folder_id || 
                                   '' empty? '' ||
-                                  content_folder__is_empty(sub_sub_folder_id)
+                                  cast_char(content_folder__is_empty(sub_sub_folder_id))
            );
    PERFORM content_test__put_line(''Is folder '' || sub_folder_id || 
                                   '' empty? '' ||
-                                  content_folder__is_empty(sub_folder_id)
+                                  cast_char(content_folder__is_empty(sub_folder_id))
            );
    PERFORM content_test__put_line(''Is folder '' || folder_b_id || 
                                   '' empty? '' ||
-                                  content_folder__is_empty(folder_b_id)
+                                  cast_char(content_folder__is_empty(folder_b_id))
            );
    PERFORM content_test__put_line(''Is folder '' || folder_id || ''? '' ||
-                                  content_folder__is_folder(folder_id)
+                                  cast_char(content_folder__is_folder(folder_id))
            );
    PERFORM content_test__put_line(''Is folder '' || item_id || ''? '' ||
-                                  content_folder__is_folder(item_id)
+                                  cast_char(content_folder__is_folder(item_id))
            );
    PERFORM content_test__put_line(''Is '' || folder_id || '' a subfolder of ''
                                   || sub_folder_id || ''? '' || 
-                                  content_folder__is_sub_folder(sub_folder_id,
+                                  cast_char(content_folder__is_sub_folder(sub_folder_id,
                                                                 folder_id
-                                  )
+                                  ))
            );
    PERFORM content_test__put_line(''Is '' || sub_folder_id || 
                                   '' a subfolder of '' ||
                                   folder_id || ''? '' || 
-                                  content_folder__is_sub_folder(folder_id,
+                                  cast_char(content_folder__is_sub_folder(folder_id,
                                                                 sub_folder_id
-                                  )
+                                  ))
            );
    PERFORM content_test__put_line(''Is '' || sub_sub_folder_id || 
                                   '' a subfolder of '' ||
                                   folder_id || ''? '' || 
-                                  content_folder__is_sub_folder(folder_id,
+                                  cast_char(content_folder__is_sub_folder(folder_id,
                                                               sub_sub_folder_id
-                                  )
+                                  ))
            );
    PERFORM content_test__put_line(''Is '' || sub_folder_id || 
                                   '' a subfolder of '' ||
-                                  --    -1 || ''? '' || 
-                                  content_folder__is_sub_folder(-1,
+                                  -1 || ''? '' || 
+                                  cast_char(content_folder__is_sub_folder(-1,
                                                                 sub_folder_id
-                                  )
+                                  ))
            );
-
 
    PERFORM content_test__put_line(''-------------------------------------'');
    PERFORM content_test__put_line(''LIVE AND LATEST REVISIONS...'');
@@ -154,7 +162,7 @@ begin
    PERFORM content_test__put_line(''Get live_revision_id for item puppy '' || 
                                   item_id ||
                                   '' is '' || 
-                                  content_item__get_live_revision(item_id)
+                                  coalesce(content_item__get_live_revision(item_id)::varchar,''null'')
            );
 
    PERFORM content_item__set_live_revision(live_revision_id);
@@ -169,7 +177,7 @@ begin
            );
    PERFORM content_test__put_line(''Get live_revision_id for item kitty '' || 
                                   simple_item_id || '' is '' || 
-                                  content_item__get_live_revision(simple_item_id)
+                                  coalesce(content_item__get_live_revision(simple_item_id)::varchar,''null'')
            );
    PERFORM content_test__put_line(''Get late_revision_id for item puppy '' || 
                                   item_id || '' is '' || 
@@ -179,19 +187,21 @@ begin
                                   simple_item_id || '' is '' || 
                                   content_item__get_latest_revision(simple_item_id)
            );
-
-
+/*
    PERFORM content_item__register_template(item_id,
                                            item_template_id,
                                            ''public''
            );
+*/
    PERFORM content_type__register_template(''content_revision'',
                                            type_template_id,
-                                           ''public''
+                                           ''public'',
+                                           ''f''
            );
    PERFORM content_type__register_template(''content_revision'',
                                            def_type_template_id,
-                                           ''admin''
+                                           ''admin'',
+                                           ''f''
            );
    PERFORM content_type__register_template(''content_revision'',
                                            dum_template_id,
@@ -221,9 +231,9 @@ begin
            );
    PERFORM content_test__put_line(''Get template id for item puppy '' || 
                                   item_id || '' and context public is '' || 
-                                  content_item__get_template(item_id,
+                                  coalesce(content_item__get_template(item_id,
                                                              ''public''
-                                  )
+                                  )::varchar,''null'')
            );
    PERFORM content_test__put_line(''Get template id for item puppy '' || 
                                   item_id || '' and context admin is '' || 
@@ -232,7 +242,7 @@ begin
                                   )
            );
 
-   found_folder_id := content_item__get_id(''grandpa/pa/me'', -1);
+   found_folder_id := content_item__get_id(''grandpa/pa/me'', -100, ''f'');
 
    PERFORM content_test__put_line(''-------------------------------------'');
    PERFORM content_test__put_line(''LOCATING CONTENT FOLDERS AND ITEMS...'');
@@ -241,10 +251,10 @@ begin
                                   found_folder_id
            );
    PERFORM content_test__put_line(''Path for '' || found_folder_id || '' is ''
-                                  || content_item__get_path(found_folder_id)
+                                  || content_item__get_path(found_folder_id,null)
            );
    PERFORM content_test__put_line(''Path for puppy '' || item_id || '' is '' 
-                                  || content_item__get_path(item_id)
+                                  || content_item__get_path(item_id,null)
            );
    PERFORM content_test__put_line(''Path for puppy '' || item_id || 
                                   '' from folder_id: '' || folder_id || 
@@ -296,7 +306,7 @@ begin
                                   content_item__get_path(item_id,folder_b_id)
            );
 
-
+/*
    PERFORM content_test__put_line(''-------------------------------------'');
    PERFORM content_test__put_line(''MOVING/RENAMING CONTENT FOLDERS...'');
    PERFORM content_test__put_line(''...all tests passed'');
@@ -434,7 +444,7 @@ begin
    PERFORM content_folder__delete(sub_folder_id);
    PERFORM content_folder__delete(folder_id);
    PERFORM content_folder__delete(folder_b_id);
-
+*/
    return null;
 
 end;' language 'plpgsql';

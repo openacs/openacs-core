@@ -51,8 +51,10 @@ begin
     revision_id, title, description, mime_type, publish_date,
     nls_language, lob, item_id, storage_type
   ) values (
-    v_revision_id, new__title, new__description, new__mime_type, 
-    new__publish_date, new__nls_language, new__data, new__item_id, ''lob''     
+    v_revision_id, coalesce(new__title,''''), coalesce(new__description,''''),
+    new__mime_type, 
+    new__publish_date, coalesce(new__nls_language,''''), new__data, 
+    new__item_id, ''lob''     
   );
 
   return v_revision_id;
@@ -63,7 +65,7 @@ create function content_revision__new(varchar,varchar,timestamp,varchar,text,int
 declare
         new__title              alias for $1;
         new__description        alias for $2;
-        new__publish_data       alias for $3;
+        new__publish_date       alias for $3;
         new__mime_type          alias for $4;
         new__text               alias for $5;
         new__item_id            alias for $6;
@@ -119,8 +121,10 @@ begin
     revision_id, title, description, mime_type, publish_date,
     nls_language, content, item_id, storage_type, content_length
   ) values (
-    v_revision_id, new__title, new__description, new__mime_type, 
-    new__publish_date, new__nls_language, new__text, new__item_id, ''text'',
+    v_revision_id, coalesce(new__title,''''), coalesce(new__description,''''),
+     new__mime_type, 
+    new__publish_date, coalesce(new__nls_language,''''), 
+    coalesce(new__text,''''), new__item_id, ''text'',
     length(new__text)
   );
 
@@ -465,14 +469,8 @@ declare
   is_live__revision_id            alias for $1;  
 begin
 
-  select 1 from cr_items
-    where live_revision = is_live__revision_id;
-
-  if NOT FOUND then 
-     return ''f'';
-  else 
-     return ''t'';
-  end if;
+  return count(*) > 0 from cr_items
+   where live_revision = is_live__revision_id;
 
 end;' language 'plpgsql';
 
@@ -484,14 +482,8 @@ declare
   is_latest__revision_id            alias for $1;  
 begin
 
-  select 1 from cr_items
+  return count(*) > 0 from cr_items
     where latest_revision = is_latest__revision_id;
-
-  if NOT FOUND then 
-     return ''f'';
-  else 
-     return ''t'';
-  end if;
  
 end;' language 'plpgsql';
 

@@ -91,7 +91,8 @@ begin
   insert into cr_scheduled_release_log (
     items_released, items_expired, err_num, err_msg
   ) values (
-    exec__items_released, exec__items_expired, exec__err_num, exec__err_msg
+    exec__items_released, exec__items_expired, exec__err_num, 
+    coalesce(exec__err_msg,'''')
   );
 
   -- Reset the last time of execution to start of processing

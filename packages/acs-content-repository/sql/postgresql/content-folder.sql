@@ -11,6 +11,27 @@
 -- http://www.fsf.org/copyleft/gpl.html
 
 -- create or replace package body content_folder
+
+create function content_folder__new(varchar,varchar,varchar,integer) 
+returns integer as '
+declare
+  new__name                   alias for $1;  
+  new__label                  alias for $2;  
+  new__description            alias for $3;  
+  new__parent_id              alias for $4;  
+begin
+        return content_folder__new(new__name,
+                                   new__label,
+                                   new__description,
+                                   new__parent_id,
+                                   null,
+                                   null,
+                                   now(),
+                                   null,
+                                   null
+               );
+
+end;' language 'plpgsql';
 -- function new
 create function content_folder__new (varchar,varchar,varchar,integer,integer,integer,timestamp,integer,varchar)
 returns integer as '
@@ -26,6 +47,7 @@ declare
   new__creation_ip            alias for $9;  
   v_folder_id                 cr_folders.folder_id%TYPE;
   v_context_id                acs_objects.context_id%TYPE;
+  registered_p                boolean;
 begin
 
   -- set the context_id
@@ -34,6 +56,10 @@ begin
   else
     v_context_id := new__context_id;
   end if;
+
+  registered_p := content_folder__is_registered(new__parent_id,''content_folder'',''f'');
+  raise NOTICE ''parent_id = %, registered_p = %'',  
+                           new__parent_id, registered_p;
 
   -- parent_id = 0 means that this is a mount point
   if new__parent_id != 0 and 
@@ -66,7 +92,7 @@ begin
     insert into cr_folders (
       folder_id, label, description
     ) values (
-      v_folder_id, new__label, new__description
+      v_folder_id, coalesce(new__label,''''), coalesce(new__description,'''')
     );
 
     -- inherit the attributes of the parent folder
@@ -361,14 +387,8 @@ declare
   item_id                alias for $1;  
 begin
 
-  select 1 from cr_folders
+  return count(*) > 0 from cr_folders
     where folder_id = item_id;
-
-  if NOT FOUND then 
-     return ''f'';
-  else
-     return ''t'';
-  end if;
 
 end;' language 'plpgsql';
 

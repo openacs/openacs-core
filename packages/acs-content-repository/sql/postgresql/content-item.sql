@@ -193,7 +193,7 @@ begin
     insert into cr_child_rels (
       rel_id, parent_id, child_id, relation_tag, order_n
     ) values (
-      v_rel_id, v_parent_id, v_item_id, v_rel_tag, v_item_id
+      v_rel_id, v_parent_id, v_item_id, coalesce(v_rel_tag,''''), v_item_id
     );
 
   end if;
@@ -244,7 +244,7 @@ begin
 
   end if; end if;
 
-  -- make the revision live if is_live is ''t''
+  -- make the revision live if is_live is true
   if new__is_live = ''t'' then
     PERFORM content_item__set_live_revision(v_revision_id);
   end if;
@@ -769,13 +769,14 @@ declare
   v_rel_parent_id                  integer default 0;        
   v_rel_tree_level                 integer default 0;        
   v_path                           varchar default '''';  
+  v_rec                            record;
 begin
 
   -- check that the item exists
   select count(*) into v_count from cr_items where item_id = get_path__item_id;
 
   if v_count = 0 then
-    raise EXCEPTION ''-20000: Invalid item ID: %'', item_id;
+    raise EXCEPTION ''-20000: Invalid item ID: %'', get_path__item_id;
   end if;
 
   -- begin walking down the path to the item (from the repository root)
@@ -816,32 +817,51 @@ begin
 	v_path := ''../'';
     end if;
 
+    -- loop over the remainder of the absolute path
+
+    loop
+
+      v_path := v_path || v_name;
+
+      fetch c_abs_cur into v_name, v_parent_id, v_tree_level;
+
+      exit when c_abs_cur%NOTFOUND;
+
+      v_path := v_path || ''/'';
+
+    end loop;
+
   else
+
+    -- select name, level as tree_level from cr_items where parent_id <> 0
+    -- connect by prior parent_id = item_id start with 
+    -- item_id = get_path__item_id order by tree_level desc
   
     -- this is an absolute path so prepend a ''/''
-   v_path := ''/'';
+    -- prime the pump to be consistent with relative path execution plan
+    -- loop over the remainder of the absolute path
 
-   -- prime the pump to be consistent with relative path execution plan
-   fetch c_abs_cur into v_name, v_parent_id, v_tree_level;	
+    for v_rec in select
+                   i2.name, tree_level(i2.tree_sortkey) as tree_level
+                 from
+                   cr_items i1, cr_items i2
+                 where 
+                   i2.parent_id <> 0
+                 and
+                   i1.item_id = get_path__item_id
+                 and 
+                   i2.tree_sortkey <= i1.tree_sortkey
+                 and 
+                   i1.tree_sortkey like (i2.tree_sortkey || ''%'')
+                 order by
+                   tree_level desc
+    LOOP
+      v_path := v_path || ''/'' || v_rec.name;
+    end loop;
 
   end if;
 
-  -- loop over the remainder of the absolute path
-
-  loop
-
-    v_path := v_path || v_name;
-
-    fetch c_abs_cur into v_name, v_parent_id, v_tree_level;
-
-    exit when c_abs_cur%NOTFOUND;
-
-    v_path := v_path || ''/'';
-
-  end loop;
-
   return v_path;
-
  
 end;' language 'plpgsql';
 
@@ -1078,11 +1098,11 @@ end;' language 'plpgsql';
 
 
 -- procedure set_live_revision
-create function content_item__set_live_revision (integer,varchar)
+create function content_item__set_live_revision (integer)
 returns integer as '
 declare
-  set_live_revision__revision_id            alias for $1;  
-  set_live_revision__publish_status         alias for $2;  
+  set_live_revision__revision_id    alias for $1;  
+  set_live_revision__publish_status cr_items.publish_status%TYPE default ''ready'';  
 begin
 
   update
@@ -1402,11 +1422,11 @@ returns integer as '
 declare
   get_latest_revision__item_id                alias for $1;  
   v_revision_id                               integer;       
+  v_rec                                       record;
 begin
+  for v_rec in 
   select 
     r.revision_id 
-  into 
-    v_revision_id
   from 
     cr_revisions r, acs_objects o
   where 
@@ -1414,13 +1434,17 @@ begin
   and 
     r.item_id = get_latest_revision__item_id
   order by 
-    o.creation_date desc;
+    o.creation_date desc
+  LOOP
+        v_revision_id := v_rec.revision_id;
+        exit;
+  end LOOP;
 
   if NOT FOUND then
      return null;
   end if;
 
-  return v_revision_id
+  return v_revision_id;
  
 end;' language 'plpgsql';
 
@@ -1654,7 +1678,7 @@ begin
         rel_id, item_id, related_object_id, order_n, relation_tag
       ) values (
         v_rel_id, relate__item_id, relate__object_id, v_order_n, 
-        relate__relation_tag
+        coalesce(relate__relation_tag,'''')
       );
 
     -- if relationship already exists, update it
@@ -1768,7 +1792,7 @@ begin
       item_id, old_revision, new_revision, old_status, new_status, publish_date
     ) values (
       new.item_id, old.live_revision, new.live_revision, 
-      old.publish_status, new.publish_status,
+      coalesce(old.publish_status,''''), coalesce(new.publish_status,''''),
       now()
     );
 
