@@ -68,7 +68,13 @@ ad_proc ds_collection_enabled_p {} {
 ad_proc ds_user_switching_enabled_p {} { 
     Returns whether user-switching is enabled.
 } {
-    return [nsv_get ds_properties user_switching_enabled_p]
+    if { ![nsv_exists ds_properties user_switching_enabled_p] } {
+        # This might happen when the init file setting up the nsv hasn't
+        # been sourced yet
+        return 0
+    } else {
+        return [nsv_get ds_properties user_switching_enabled_p]
+    }
 }
 
 ad_proc ds_database_enabled_p {} { 
