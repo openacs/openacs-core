@@ -309,6 +309,15 @@ ad_proc -public install::xml::object_id::application-group { node } {
     }
 }
 
+ad_proc -public install::xml::object_id::object { node } {
+    Returns a literal object_id for an object.
+    
+    use &lt;object id="-100"&gt; to return the literal id -100.
+} {
+    set id [apm_required_attribute_value $node id]
+    return $id
+}
+
 ad_proc -public install::xml::util::get_id { id } {
     Returns an id from the global ids variable if it exists and attempts to
     find an acs_magic_object if not.
@@ -321,3 +330,4 @@ ad_proc -public install::xml::util::get_id { id } {
         return [acs_magic_object $id]
     }
 }
+
