@@ -240,7 +240,7 @@ insert into ad_locales
 insert into ad_locales 
        (locale, label, language, country, nls_language, nls_territory, 
         nls_charset, mime_charset, default_p, enabled_p)
- values ('zh_TW', 'Chinese (TW)', 'zh', 'TW', 'TRADITIONAL CHINESE', 'TAIWAN', 'ZHT16BIG5', 'Big5', 't', 'f');
+ values ('zh_TW', 'Chinese (TW)', 'zh', 'TW', 'TRADITIONAL CHINESE', 'TAIWAN', 'ZHT16BIG5', 'Big5', 'f', 'f');
 
 insert into ad_locales 
        (locale, label, language, country, nls_language, nls_territory, 
@@ -265,7 +265,7 @@ insert into ad_locales
 insert into ad_locales
        (locale, label, language, country, nls_language, nls_territory,
         nls_charset, mime_charset, default_p, enabled_p)
-values ('es_GT', 'Spanish (GT)', 'es', 'GT', 'SPANISH',  'GUATEMALA', 'WE8DEC', 'ISO-8859-1', 't', 'f');
+values ('es_GT', 'Spanish (GT)', 'es', 'GT', 'SPANISH',  'GUATEMALA', 'WE8DEC', 'ISO-8859-1', 'f', 'f');
 
 insert into ad_locales
        (locale, label, language, country, nls_language, nls_territory,
