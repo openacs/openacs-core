@@ -460,7 +460,7 @@ begin
   delete from acs_object_context_index
   where object_id = old.object_id;
 
-  return new;
+  return old;
 
 end;' language 'plpgsql';
 
@@ -780,10 +780,12 @@ returns text as '
 declare
   object_id_in           alias for $1;  
   attribute_name_in      alias for $2;  
+
 --  these three are the out variables
---  v_column               alias for $3;  
---  v_table_name           alias for $4;  
---  v_key_sql              alias for $5;  
+  v_column               varchar;  
+  v_table_name           varchar;  
+  v_key_sql              text;
+  
   v_object_type          acs_attributes.object_type%TYPE;
   v_static               acs_attributes.static_p%TYPE;
   v_attr_id              acs_attributes.attribute_id%TYPE;
@@ -813,7 +815,7 @@ begin
      v_object_type, v_column, v_id_column
    from 
      acs_attributes a,
-     (select object_type, id_column
+     (select o2.object_type, o2.id_column
        from acs_object_types o1, acs_object_types o2
       where o1.object_type = (select object_type
                                 from acs_objects o
@@ -827,7 +829,7 @@ begin
      a.object_type = t.object_type;
 
    if NOT FOUND then 
-      raise EXCEPTION ''-20000: No such attribute %::% in acs_object.get_attribute_storage.'', v_object_type, attribute_name_in'';
+      raise EXCEPTION ''-20000: No such attribute %::% in acs_object.get_attribute_storage.'', v_object_type, attribute_name_in;
    end if;
 
    -- This should really be done in a trigger on acs_attributes,
@@ -985,7 +987,7 @@ begin
    v_table_name := acs_object__get_attr_storage_table(v_storage);
    v_key_sql    := acs_object__get_attr_storage_sql(v_storage);
 
-   for v_rec in execute ''select '' || quote_ident(v_column) || '' as return from '' || quote_ident(v_table_name) || '' where '' || quote_literal(v_key_sql)
+   for v_rec in execute ''select '' || quote_ident(v_column) || '' as return from '' || quote_ident(v_table_name) || '' where '' || v_key_sql
       LOOP
         v_return := v_rec.return;
         exit;
@@ -1006,8 +1008,8 @@ declare
   object_id_in           alias for $1;  
   attribute_name_in      alias for $2;  
   value_in               alias for $3;  
-  v_table_name           varchar(200);  
-  v_column               varchar(200);  
+  v_table_name           varchar;  
+  v_column               varchar;  
   v_key_sql              text; 
   v_return               text; 
   v_storage              text;
@@ -1019,7 +1021,7 @@ begin
    v_table_name := acs_object__get_attr_storage_table(v_storage);
    v_key_sql    := acs_object__get_attr_storage_sql(v_storage);
 
-   execute ''update '' || quote_ident(v_table_name) || '' set '' || quote_ident(v_column) || '' = '' || quote_literal(value_in) || '' where '' || quote_literal(v_key_sql);
+   execute ''update '' || v_table_name || '' set '' || quote_ident(v_column) || '' = '' || quote_literal(value_in) || '' where '' || v_key_sql;
 
    return 0; 
 end;' language 'plpgsql';
