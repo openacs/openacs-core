@@ -4,10 +4,8 @@
 
 <if @admin_p@>
   <div style="float: right;">
-    <a href="admin" class="button">Administration</a>
+    <a href="admin" class="button">#acs-kernel.common_Administration#</a>
   </div>
 </if>
 
 <include src="/packages/acs-lang/www/change-locale-include" return_url="@return_url;noquote@" return_p="@return_p;noquote@">
-
-	

@@ -57,22 +57,23 @@ set package_level_locales_p [expr [lang::system::use_package_level_locales_p] &&
 
 if { $package_level_locales_p } {
     element create locale site_wide_explain -datatype text -widget inform -label "&nbsp;" \
-        -value "Your locale setting for the whole site."
+        -value "[_ acs-lang.Your_locale_site_wide]"
 }
 
 element create locale site_wide_locale \
     -datatype text \
     -widget select \
     -optional \
-    -label "Your Preferred Locale" \
+    -label "[_ acs-lang.Your_Preferred_Locale]" \
     -options $list_of_locales
 
 if { $package_level_locales_p } {
+    set package_name [apm_instance_name_from_id $package_id]
     element create locale package_level_explain -datatype text -widget inform -label "&nbsp;" \
-            -value "Your locale setting for [apm_instance_name_from_id $package_id]. If set, this will override the site-wide setting in this particular application."
+            -value "[_ acs-lang.Your_locale_for_package]"
     
     element create locale package_level_locale -datatype text -widget select -optional \
-            -label "Locale for [apm_instance_name_from_id $package_id]" \
+            -label "[_ acs-lang.Locale_for]" \
             -options $list_of_package_locales
 }
 
@@ -80,7 +81,7 @@ if { $use_timezone_p } {
     set timezone_options [db_list_of_lists all_timezones {}]
 
     element create locale timezone -datatype text -widget select -optional \
-        -label "Your Timezone" \
+        -label "[_ acs-lang.Your_timezone]" \
         -options $timezone_options
 }
 
