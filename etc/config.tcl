@@ -477,5 +477,29 @@ ns_param   classpath          /usr/local/jdk/jdk118_v1/lib/classes.zip:${bindir}
 ns_section ns/server/${server}/module/nspam
 ns_param   PamDomain          "pam_domain"
 
+#---------------------------------------------------------------------
+#
+# WebDAV Support (optional, requires oacs-dav package to be installed
+#
+#---------------------------------------------------------------------
+
+ns_section ns/server/${server}/tdav
+ns_param propdir /web/${server}/data/dav/properties
+ns_param lockdir /web/${server}/data/dav/locks
+
+ns_section ns/server/${server}/tdav/shares
+ns_param share1 "OpenACS"
+#ns_param share2 "Share 2 description"
+
+ns_section ns/server/${server}/tdav/share/share1
+ns_param uri "/*"
+# all WebDAV options
+ns_param options "OPTIONS COPY GET PUT MOVE DELETE HEAD MKCOL POST PROPFIND PROPPATCH"
+
+#ns_section ns/server/${server}/tdav/share/share2
+#ns_param uri "/share2/path/*"
+# read-only WebDAV options
+#ns_param options "OPTIONS COPY GET HEAD MKCOL POST PROPFIND PROPPATCH"
+
 ns_log notice "nsd.tcl: finished reading config file."
 
