@@ -68,7 +68,7 @@ db_foreach apm_all_files {
 	for { set j 0 } { $j < $i } { incr j } {
 	    doc_body_append "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
 	}
-	if { $installed_p == "f" || [file exists "[acs_package_root_dir $package_key]/$path"] } {
+	if { $installed_p == "f" || [file exists "[acs_package_root_dir $package_key]/$path"] || $i < [llength $components] - 1} { 
 	    # Either we're not looking at an installed package, or the file still exists,
 	    # so don't use <strike> when writing the name.
 	    doc_body_append [lindex $components $i]
