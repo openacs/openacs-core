@@ -466,11 +466,7 @@ ad_proc -private db_exec_lob { type db statement_name pre_sql { file "" } } {
                     switch $storage_type {
                         file {
                             if {[file exists $content]} {
-                                set ifp [open $content r]
-                                set ofp [open $file w]
-                                ns_cpfp $ifp $ofp
-                                close $ifp
-                                close $ofp
+                                file copy -- $content $file
                             } else {
                                 error "file: $content doesn't exist"
                             }
@@ -489,11 +485,7 @@ ad_proc -private db_exec_lob { type db statement_name pre_sql { file "" } } {
                         }
                     }
                 } elseif {[file exists $content]} {
-                    set ifp [open $content r]
-                    set ofp [open $file w]
-                    ns_cpfp $ifp $ofp
-                    close $ifp
-                    close $ofp
+                    file copy -- $content $file
                 } elseif {[regexp {^[0-9]+$} $content match]} {
                     ns_pg blob_select_file $db $content $file
                 } else {
@@ -508,6 +500,7 @@ ad_proc -private db_exec_lob { type db statement_name pre_sql { file "" } } {
                         file {
                             if {[file exists $content]} {
                                 set ofp [open $content r]
+                                fconfigure $ofp -encoding binary
                                 ns_writefp $ofp
                                 close $ofp
                             } else {
@@ -533,6 +526,7 @@ ad_proc -private db_exec_lob { type db statement_name pre_sql { file "" } } {
                     }
                 } elseif {[file exists $content]} {
                     set ofp [open $content r]
+                    fconfigure $ofp -encoding binary
                     ns_writefp $ofp
                     close $ofp
                 } elseif {[regexp {^[0-9]+$} $content match]} {
