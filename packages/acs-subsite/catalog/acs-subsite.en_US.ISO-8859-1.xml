@@ -28,6 +28,7 @@
   <msg key="Basic_Information">Basic Information</msg>
   <msg key="bio">bio:</msg>
   <msg key="cannot_retrieve_password">Retrieving password from local authority is not supported.</msg>
+  <msg key="Change_locale_label">Change language</msg>
   <msg key="Change_my_Password">Change my Password</msg>
   <msg key="Check_Your_Inbox">Check Your Inbox</msg>
   <msg key="Children">Children</msg>
