@@ -86,48 +86,92 @@ namespace eval lang::message {
             }
         }
     }
+
+    ad_proc -private format {
+        localized_message
+        value_list
+    } {
+        Substitute occurencies of %1, %2, %3 etc in the given localized message
+        with the values given in value_list. The place holder %n, where n is
+        an integer, will be replaced (if possible) with the value at index n-1 in
+        the value_list.
+    } {        
+
+        set remaining_message $localized_message
+        set formated_message ""
+        set value_count "0"
+        while { [regexp {^(.*?)(%%|%[0-9]+)(.*)$} $remaining_message match before_percent percent_match remaining_message] } {
+
+            append formated_message $before_percent
+
+            if { [string equal $percent_match "%%"] } {
+                # A quoted percent sign
+                append formated_message "%"
+            } else {
+                set value_index [expr [string range $percent_match 1 end] - 1]
+                if { [llength $value_list] <= $value_index } {
+                    ns_log Error "lang::message::format: Too few items provided in value list. Trying to access item at index $value_index to substibute for $percent_match but there is no such item in the value list"
+                    
+                    # There is no value available to do the substitution with
+                    # so don't substitute at all
+                    append formated_message $percent_match
+                } else {
+                    # Do the substitution
+                    append formated_message [lindex $value_list $value_index]
+                }
+
+                incr value_count
+            }
+        }
+
+        if { [llength $value_list] > $value_count } {
+            ns_log Error "lang::message::format: More items (there were [llength $value_list] items) provided in value list than there were percent substitutions in the localized message: \"$localized_message\""
+        }
+
+        # Append text after the last match
+        append formated_message $remaining_message
+
+        return $formated_message
+    }
     
     ad_proc -public lookup {
         locale
         key
         {default "TRANSLATION MISSING"}
+        {substitution_list {}}
     } {
-        Normally accessed through the _ procedure.
+        This proc is normally accessed through the _ procedure.
     
-        Returns a translated string for the given language and message key.
-    
-        The key of the localized message is stored in the following format,
-        string1.string2 where string1 is a string that contains only alpha
-        characters and '-' concateneted with a '.' and string2 is the 
-        identification of the message.
-        
-        The lookup is tried in this order:
-    
-        1 A check is done by prefixing the key with
-            the package key of the request.
-        2. If there is no match, a lookup is performed with the key
-             prepended with 'generic.' since it doesn't contain a dot.
-        3. If there is no match a check is done with the full key and
-             a warning is issued if a match is found since this means the key is uncategorized.
-             All keys should belong to a package or be generic/site-wide.
-        4. If there is still no match the default message is issued.
+        Returns a translated string for the given locale and message key.
+        If the user is a translator, inserts tags to link to the translator
+        interface. This allows a translator to work from the context of a web page.
+
+        @param locale             Locale (e.g., "en_US") or language (e.g., "en") string.
+        @param key                Unique identifier for this message. Will be the same identifier
+                                  for each locale. Most keys belong to a certain package and should
+                                  be prefixed with the package key of that package on the format
+                                  package_key.message_key (the dot is reserved for separating the
+                                  package key, the rest of the key should contain only alpha-numeric
+                                  characters and under scores). If the key does not belong to 
+                                  any particular package it should not contain a dot. A lookup
+                                  is always attempted with the exact key given to this proc.
+        @param default            Text to return if there is no message in the message catalog for
+                                  the given locale. This argument is optional. If this argument is
+                                  not provided or is the empty string then the text returned will
+                                  be TRANSLATION MISSING - $key.
+        @param substitution_list  A list of values to substitute into the message. This argument should
+                                  only be given for certain messages that contain place holders (on the syntax
+                                  %1, %2 etc) for embedding variable values.
     
         @author Jeff Davis (davis@arsdigita.com), Henry Minsky (hqm@arsdigita.com)
-        @author Bruno Mattarollo <bruno.mattarollo@ams.greenpeace.org>
         @author Peter Marklund (peter@collaboraid.biz)
         @see _
         
-        @param locale  Locale (e.g., "en_US") or language (e.g., "en") string.
-        @param key     Unique identifier for this message. Will be the same identifier
-                       for each language
-        @return        The translated string for the message specified by the key in the language specified.
+        @return A localized piece of text.
     } { 
-        # Peter Marklund: I simplified this proc by removing the check for a dot
-        # We could add that check back later for optimization but there was too much
-        # duplication in the proc and it was too complex
-        # TODO: add translation links
+        # Peter TODO: add translation links
+        # Peter TODO/FIXME: Should we prefix with ad_conn package_key if the lookup fails?
     
-        set full_key $key
         set default_locale [parameter::get -package_id [apm_package_id_from_key acs-lang] -parameter SiteWideLocale]
         
         if { [string length $locale] == 2 } {
@@ -136,79 +180,35 @@ namespace eval lang::message {
             # let's get the default locale for this language
             # The cache is flushed if the default locale for this language is
             # is changed.
-            set locale [util_memoize [list ad_locale_locale_from_lang $locale]]
-    
+            set locale [util_memoize [list ad_locale_locale_from_lang $locale]]    
         } 
     
-        # Since we have for sure the locale (one way or another)
-        set lang [string range $locale 0 1]
-    
-        # Most keys should be prefixed with the package key so try that first
-        if { [catch "set package_key \[ad_conn package_key\].${full_key}" errmsg] } {
-            # This means we have no connection and no package_key to use
-            set package_key $full_key
-        }
-    
-        set generic_key "generic.${full_key}"
-    
-        if { [nsv_exists lang_message_$locale $package_key] } {    
-            # Prefixing with package key
-    
-            return [nsv_get lang_message_$locale $package_key]
-    
-        } elseif { [nsv_exists lang_message_$locale $generic_key] } {                
-            # Prefixing with generic
-    
-            # We found it.
-            return [nsv_get lang_message_$locale $generic_key]
-    
-        } elseif { [nsv_exists lang_message_$locale $full_key] } {
-    
-            if {! [regexp {[\.]} $full_key match] } {
-                ns_log Warning "Warning" "Localized message key \"$full_key\" found but is not categorized (contains no dot)."
-            }
-    
-            return [nsv_get lang_message_$locale $full_key]
+        if { [nsv_exists lang_message_$locale $key] } {
+            # Message catalog lookup succeeded
+            set return_value [nsv_get lang_message_$locale $key]
+
+            ns_log Notice "lang::message::lookup: the key $key exists in the mc"
     
         } else {
-    
-            # Oops. No, not here ... Let's get the translation missing
-            # message out! If we are being queried in the default locale
-            # then we can give the answer right away, if not, requery
-            # ourselves with the default locale (this is the default 
-            # behaviour required).
-    
-            if {[string match $locale $default_locale]} {
-    
-                if {![empty_string_p $default]} {
-    
-                    if { [string equal $default "TRANSLATION MISSING"] } {
-    
-                        append default_answer $default " - " $full_key
-    
-                    } else {
-    
-                        set default_answer $default
-    
-                    }
-    
-                    return $default_answer
-    
-                } else {
-    
-                    return "$key"
-    
-                }
-    
-            } else {
-    
-                # Returning the default (in the default locale)
-                #return "[lang_message_lookup $default_locale $key $default]"
-    
-                # Peter: Just return the default
-                return $default
-            }            
+            # There is no entry in the message catalog for the given locale
+
+            set return_value $default
+
+            if { [string equal $default "TRANSLATION MISSING"] } {
+                append return_value " - " $key                    
+            }
+
+            ns_log Notice "lang::message::lookup: the key $key does not exists in the mc"
         }
+
+        # Do any variable substituions (interpolation of variables)
+        if { [llength $substitution_list] > 0 } {
+            set return_value [lang::message::format $return_value $substitution_list]
+        }
+
+        ns_log Notice "lang::message::lookup returning $return_value"
+
+        return $return_value
     }
 
     ad_proc -private translate { 
@@ -287,24 +287,42 @@ ad_proc -public _mr { locale key message } {
 ad_proc -public _ {
     args
 } {
-    Returns a translated string for the given language and message key.
-    If the user is a translator, inserts tags to link to the translator
-    interface. This allows a translator to work from the context of a web page.
+    Short hand proc with flexible argument handling that invokes the lang::util::lookup proc. 
+    Returns a localized text from the 
+    message catalog for a certain locale.
+    This proc takes the following arguments in the given order (for further
+    details see the lang::util::lookup proc):
 
+    <pre>
+    locale            Locale to use for the message lookup. This argument is optional
+                      and if it's not provided ad_conn locale will be used.
+
+    key               Unique identifier for this message. Will be the same identifier
+                      for each locale.
+
+    default_text      Text to return if there is no message in the message catalog for
+                      the given locale. This argument is optional. 
+
+    substitution_list A list of values to substitute into the message. This argument should
+                      only be given for certain messages that contain place holders (on the syntax
+                      %1, %2 etc) for embedding variable values. If you provide this 
+                      argument you must also provide the default_text argument as well as the
+                      locale argument.
+    </pre>
+
+    @return                  A localized piece of text.
+    
     @author Jeff Davis (davis@arsdigita.com)
-    
-    @param locale  Locale or language of the message. Locale is taken from ad_locales table,
-                   language is taken from language_codes table.
-    @param key     Unique identifier for this message. Will be the same identifier
-                   for each locale
-    @return        The translated string for the message specified by the key in the language specified.
-    
+    @author Peter Marklund (peter@collaboraid.biz)
+    @author Christian Hvid (chvid@collaboraid.biz)
+
     @see lang::message::lookup
 } {
     switch [llength $args] {
         1 { return [lang::message::lookup [ad_conn locale] [lindex $args 0] "TRANSLATION MISSING"] }
         2 { return [lang::message::lookup [lindex $args 0] [lindex $args 1] "TRANSLATION MISSING"] }
         3 { return [lang::message::lookup [lindex $args 0] [lindex $args 1] [lindex $args 2]] }
+        4 { return [lang::message::lookup [lindex $args 0] [lindex $args 1] [lindex $args 2] [lindex $args 3]] }
     }
 }
 
