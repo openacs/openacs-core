@@ -40,5 +40,11 @@ and attribute_id =
       </querytext>
 </fullquery>
 
+<fullquery name="show_email_info">
+  <querytext>
+	select show_email from users where user_id = :user_id
+ </querytext>
+</fullquery>
+
  
 </queryset>
