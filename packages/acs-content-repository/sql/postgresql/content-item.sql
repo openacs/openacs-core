@@ -1074,6 +1074,7 @@ begin
     --        first.  I suspect that it is not functioning correctly.
 
     while v_parent_id = v_rel_parent_id LOOP
+        -- c_abs_cur
         select 
            name, parent_id, tree_level(tree_sortkey)
         into 
@@ -1091,6 +1092,7 @@ begin
           v_item_id := v_parent_id;
         end if;
         
+        -- c_rel_cur
         select 
           parent_id, tree_level(tree_sortkey) as tree_level
         into 
