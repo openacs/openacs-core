@@ -2865,6 +2865,9 @@ ad_proc -public util_text_to_url {
     # them with their ascii counterparts.
     set text [string map { \x00e4 ae \x00f6 oe \x00fc ue \x00df ss \x00f8 o \x00e0 a \x00e1 a \x00e8 e \x00e9 e } $text]
 
+    # here's the Danish ones (hm. the o-slash conflicts with the definition above, which just says 'o')
+    set text [string map { \x00e6 ae \x00f8 oe \x00e5 aa \x00C6 Ae \x00d8 Oe \x00c5 Aa } $text]
+
     # substitute all non-word characters
     regsub -all {([^a-z0-9])+} $text $replacement text
 
