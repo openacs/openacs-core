@@ -130,15 +130,16 @@ ad_proc -public site_node::instantiate_and_mount {
     }
 
     # Default context id to the closest ancestor package_id
-    if {[empty_string_p $context_id]} {
+    if { [empty_string_p $context_id] } {
         set context_id [site_node::closest_ancestor_package -node_id $node_id]
     }
 
     # Instantiate the package
-    set package_id [apm_package_instance_new -package_id $package_id \
-                                             -package_key $package_key \
-                                             -instance_name $package_name \
-                                             -context_id $context_id]
+    set package_id [apm_package_instance_new \
+                        -package_id $package_id \
+                        -package_key $package_key \
+                        -instance_name $package_name \
+                        -context_id $context_id]
 
     # Mount the package
     site_node::mount -node_id $node_id -object_id $package_id
