@@ -27,6 +27,38 @@ ad_proc -public template::data::validate::integer { value_ref message_ref } {
   return $result 
 }
 
+ad_proc -public template::data::validate::boolean { value_ref message_ref } {
+  Validates boolean data types
+  @author Roberto Mello <rmello at fslc.usu.edu>
+} {
+
+  upvar 2 $message_ref message $value_ref value
+
+  set result ""
+  set value [string tolower $value]
+
+  switch $value {
+      0 -
+      1 -
+      f -
+      t -
+      n -
+      y -
+      no -
+      yes -
+      false -
+      true {
+          set result 1
+      }
+      default {
+         set result 0
+         set message "Invalid choice \"$value\""
+      }
+  }
+
+  return $result 
+}
+
 ad_proc -public template::data::validate::text { value_ref message_ref } {
 
   # anything is valid for text
