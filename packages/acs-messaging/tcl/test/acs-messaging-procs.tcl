@@ -17,9 +17,7 @@ aa_register_case acs_messaging_format_as_html {
             set name [ad_generate_random_string]
 
             set formatted_name [acs_messaging_format_as_html text/html $name]
-
             aa_true "Name is formatted" ![string match "<pre>$name<pre>" $formatted_name]
-
         }
 }
 
@@ -30,9 +28,8 @@ aa_register_case acs_messaging_message_p {
     aa_run_with_teardown \
         -rollback \
         -test_code {
-            # initialize random values
-            set message_p [acs_message_p "0"]
 
+            set message_p [acs_message_p "0"]
             aa_true "Integer is not a message_id" !$message_p
 
         }
