@@ -335,7 +335,7 @@ logout
 [$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <userinput>/usr/local/pgsql/bin/createdb -E UNICODE <replaceable>$OPENACS_SERVICE_NAME</replaceable></userinput>
 CREATE DATABASE
 [$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$
-<action>su - $OPENACS_SERVICE_NAME</replaceable>
+<action>su - <replaceable>$OPENACS_SERVICE_NAME</replaceable>
 /usr/local/pgsql/bin/createdb -E UNICODE <replaceable>$OPENACS_SERVICE_NAME</replaceable></action></screen>
               </listitem>
               <listitem>

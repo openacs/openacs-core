@@ -1,3 +1,568 @@
+2005-02-28 01:22  maltes
+
+	* packages/acs-content-repository/tcl/content-revision-procs.tcl:
+	  Changed debugging message to level debug (from notice)
+
+2005-02-27 17:47  joel
+
+	* packages/:
+	  acs-authentication/catalog/acs-authentication.en_AU.ISO-8859-1.xml,
+	  acs-authentication/catalog/acs-authentication.es_CO.ISO-8859-1.xml,
+	  acs-kernel/catalog/acs-kernel.en_AU.ISO-8859-1.xml,
+	  acs-kernel/catalog/acs-kernel.es_CO.ISO-8859-1.xml,
+	  acs-lang/catalog/acs-lang.en_AU.ISO-8859-1.xml,
+	  acs-lang/catalog/acs-lang.es_CO.ISO-8859-1.xml,
+	  acs-lang/catalog/acs-lang.es_GT.ISO-8859-1.xml,
+	  acs-subsite/catalog/acs-subsite.en_AU.ISO-8859-1.xml,
+	  acs-subsite/catalog/acs-subsite.es_CO.ISO-8859-1.xml,
+	  acs-tcl/catalog/acs-tcl.en_AU.ISO-8859-1.xml,
+	  acs-tcl/catalog/acs-tcl.es_CO.ISO-8859-1.xml,
+	  acs-templating/catalog/acs-templating.en_AU.ISO-8859-1.xml,
+	  acs-templating/catalog/acs-templating.es_CO.ISO-8859-1.xml: [no
+	  log message]
+
+2005-02-27 09:41  daveb
+
+	* packages/acs-content-repository/: acs-content-repository.info,
+	  sql/postgresql/upgrade/upgrade-5.1.5d3-5.1.5d4.sql: Fix bug#2298.
+	  Create content_revision__del
+
+2005-02-27 09:38  daveb
+
+	*
+	  packages/acs-content-repository/sql/postgresql/upgrade/upgrade-5.1.5d3-5.1.5d4.sql:
+	  Move file to correct name for upgrade.
+
+2005-02-23 02:51  timoh
+
+	* packages/acs-content-repository/tcl/content-revision-procs.tcl:
+	  bugfix: provide default for variable lob_values
+
+2005-02-23 02:24  timoh
+
+	* packages/acs-content-repository/tcl/:
+	  content-revision-procs-oracle.xql, content-revision-procs.tcl:
+	  bugfix: fixed bug with lob-columns in attributes
+
+2005-02-21 12:25  torbenb
+
+	* etc/config.tcl: adding comment (from jcdldn in irc) about special
+	  case ip 0.0.0.0
+
+2005-02-21 11:53  torbenb
+
+	* packages/acs-core-docs/www/xml/install-guide/other-software.xml:
+	  adding instructions to use both INST=/point/to/aolserver and
+	  AOLSERVER=/point/to/aolserver. By using both, helps prevent any
+	  overwrite of an existing installation of another version during
+	  this period of transition.
+
+2005-02-21 02:57  torbenb
+
+	* etc/config.tcl: adding a security comment to ns_param maxinput
+	  since the default value was recently increased by a factor of 10.
+
+2005-02-18 20:11  torbenb
+
+	* packages/acs-core-docs/www/xml/install-guide/openacs.xml: backing
+	  out a change I made, because it does not work well for the action
+	  copy-paste version. Instead, adding the full pathname for
+	  createdb and an explanation why the instruction uses
+	  fullpathname, when it would not be necessary for user pgsql
+
+2005-02-18 12:41  torbenb
+
+	* packages/acs-core-docs/www/xml/install-guide/other-software.xml:
+	  fixing freebsd note typo, updating some aolserver module builds
+	  that were using INST=  to AOLSERVER=
+
+2005-02-16 07:55  andrewg
+
+	* packages/acs-tcl/tcl/: apm-procs.tcl, apm-procs.xql: Don't call
+	  site_nodes_sync from apm_package_rename.  site_nodes_sync
+	  rebuilds the entire site_nodes cache, which takes large sites,
+	  such as .LRN sites with tens of thousands of site nodes,
+	  completely offline for several minutes.  Instead, update the
+	  cache for the specific node(s) at which the package is mounted.
+
+2005-02-16 02:03  torbenb
+
+	* packages/acs-core-docs/www/xml/install-guide/openacs.xml: I
+	  neglected to change the prompt context to match the adjustments
+	  made a few minutes ago
+
+2005-02-16 02:01  torbenb
+
+	* packages/acs-core-docs/www/openacs.html: making fix here in
+	  addition to the xml, in case the html is not regenerated before
+	  the 5.1.5 release
+
+2005-02-16 00:48  torbenb
+
+	* packages/acs-core-docs/www/xml/install-guide/openacs.xml:
+	  creating database should be from user: postgres, not servicename
+	  to be consistent with rest of the docs
+
+2005-02-15 16:14  victorg
+
+	* packages/acs-content-repository/sql/:
+	  oracle/upgrade/upgrade-5.1.2d6-5.1.2d7.sql,
+	  postgresql/upgrade/upgrade-5.1.2d6-5.1.2d7.sql: Commented the
+	  creation of the index cr_items_name, already existed
+
+2005-02-15 09:12  donb
+
+	* packages/acs-content-repository/tcl/: content-folder-procs.tcl,
+	  test/content-item-test-procs.tcl: Daveb fixed broken 5.1 code and
+	  tests
+
+2005-02-14 11:45  daveb
+
+	*
+	  packages/acs-content-repository/tcl/test/content-revision-test-procs.tcl:
+	  Fix test to work on Oracle with BLOB content.
+
+2005-02-12 07:35  daveb
+
+	* packages/acs-content-repository/tcl/filter-procs.tcl: Fix
+	  erroneous commit that merged in changes. This should effectively
+	  revert to 1.16.2.5 version that was intended with the previous
+	  commit.
+
+2005-02-12 06:38  daveb
+
+	* packages/acs-content-repository/tcl/filter-procs.tcl: Revert
+	  change to content::init. Custom code belongs in file-storage.
+
+2005-02-11 23:26  maltes
+
+	* packages/acs-content-repository/tcl/filter-procs.tcl: Fixing the
+	  problem caused by the upgrade for filestorage that exchanges name
+	  and title. This should neither change behaviour nor decrease
+	  performance, therefore I commit without a TIP
+
+2005-02-11 11:59  daveb
+
+	* packages/acs-core-docs/www/install-full-text-search-openfts.html:
+	  Move openfts to make room for tsearch2.
+
+2005-02-11 11:59  daveb
+
+	*
+	  packages/acs-core-docs/www/install-full-text-search-tsearch2.html:
+	  Add tserach2 docs
+
+2005-02-10 11:06  daveb
+
+	*
+	  packages/acs-content-repository/tcl/content-revision-procs-oracle.xql:
+	  Switch to support oracle 8.1.6
+
+2005-02-09 08:14  daveb
+
+	* packages/acs-content-repository/tcl/:
+	  content-revision-procs-oracle.xql,
+	  content-revision-procs-postgresql.xql,
+	  content-revision-procs.tcl, content-revision-procs.xql,
+	  test/content-item-test-procs.tcl: Remove broken generic query.
+	  Add correct Oracle specific blob compatible query.
+
+2005-02-09 08:00  daveb
+
+	*
+	  packages/acs-content-repository/tcl/test/content-item-test-procs.tcl:
+	  Fix test to work correctly in oracle.
+
+2005-02-09 06:25  daveb
+
+	* packages/acs-content-repository/tcl/: content-revision-procs.tcl,
+	  content-revision-procs.xql: Update content column in a seperate
+	  query to work correctly with Oracle.
+
+2005-02-06 16:35  jader
+
+	* etc/config.tcl: Bump up defaults for many Aolserver configuration
+	  items based on forums conversation:
+	  http://openacs.org/forums/message-view?message_id=260846
+
+2005-02-06 16:26  jader
+
+	* etc/keepalive/: keepalive-cron.sh, keepalive.sh: The keepalive
+	  scripts need the path to the executables, unless the PATH is
+	  included in the script.
+
+2005-02-06 16:18  jader
+
+	* etc/keepalive/keepalive-cron.sh: Added in a note linking to a
+	  forum thread, in case there are problems.
+
+2005-02-04 12:12  daveb
+
+	* packages/acs-service-contract/: acs-service-contract.info,
+	  tcl/implementation-procs.tcl, tcl/implementation-procs.xql: Add
+	  optional contract paraemter to impl::get_id
+
+2005-02-03 15:00  maltes
+
+	* packages/acs-kernel/acs-kernel.info: 5.1.4 was already released,
+	  so the next version for acs-kernel is 5.1.5d1
+
+2005-02-03 12:36  joel
+
+	* packages/acs-admin/www/users/: password-update.adp,
+	  password-update.tcl: fixed breadcrumb in change password page
+
+2005-02-03 12:36  joel
+
+	* packages/acs-lang/www/admin/edit-localized-message.tcl: fix so
+	  that original message is shown when editing english
+
+2005-02-02 07:55  daveb
+
+	* packages/acs-templating/tcl/parse-procs.tcl: Add Don's change
+	  back in since the previous commits fix the other regexps to match
+	  this one.
+
+2005-02-02 07:39  daveb
+
+	* packages/acs-templating/tcl/: tag-init.tcl, tag-procs.tcl,
+	  util-procs.tcl: Merge from HEAD fixed to variable regular
+	  expressions.	add recognizing array variables like @xx.y.z@ as
+	  xx(y.z).  Note that the regexps show up in multiple places so any
+	  changes to the @ var regexps should be made carefully.  In
+	  particular if @x@ defined and if @x@ nil handle variables special
+	  since they can't be derefrenced
+
+2005-02-01 12:50  torbenb
+
+	* packages/acs-core-docs/www/xml/non-xml/release-notes-4-6.html:
+	  removed gremlin A0 characters
+
+2005-02-01 12:46  torbenb
+
+	* packages/acs-core-docs/www/xml/kernel/: apm-design.xml,
+	  ext-auth.xml: temporary fix of doc images from creating urls that
+	  return 404 errors to 302 errors (that work for many browsers and
+	  client services)
+
+2005-02-01 12:44  torbenb
+
+	* packages/acs-core-docs/www/xml/install-guide/: configuring.xml,
+	  maintenance.xml, recovery.xml, upgrade.xml: temporarily fixing
+	  image urls to return 302 errors that work with most clients,
+	  instead of current 404 errors
+
+2005-02-01 12:40  torbenb
+
+	* packages/acs-core-docs/www/xml/developers-guide/: i18n.xml,
+	  tutorial-advanced.xml, tutorial-db.xml, tutorial-pages.xml,
+	  tutorial.xml: temporary fix of doc images from creating urls that
+	  return 404 errors to 302 errors
+
+2005-01-30 23:49  torbenb
+
+	* packages/acs-core-docs/www/xml/install-guide/postgres.xml: added
+	  clarificaton to bison instructions
+
+2005-01-30 23:29  timoh
+
+	* packages/: acs-content-repository/acs-content-repository.info,
+	  acs-content-repository/sql/oracle/content-folder.sql,
+	  acs-content-repository/sql/oracle/content-item.sql,
+	  acs-content-repository/sql/oracle/packages-create.sql,
+	  acs-content-repository/sql/oracle/upgrade/upgrade-5.1.5d2-5.1.5d3.sql,
+	  acs-kernel/acs-kernel.info,
+	  acs-kernel/sql/oracle/acs-objects-create.sql,
+	  acs-kernel/sql/oracle/upgrade/upgrade-5.1.4-5.1.4d1.sql: fixed
+	  some upgrade scripts for oracle
+
+2005-01-30 00:35  torbenb
+
+	* packages/acs-core-docs/www/xml/developers-guide/rp.xml: fixing
+	  image url
+
+2005-01-30 00:31  torbenb
+
+	* packages/acs-core-docs/www/xml/developers-guide/permissions.xml:
+	  fixing image url
+
+2005-01-28 15:39  jeffd
+
+	* packages/acs-tcl/tcl/utilities-procs.tcl: add \r to Host header
+	  in util_httpopen since http says headers hsould be \r\n
+
+2005-01-28 09:10  jader
+
+	* packages/acs-tcl/tcl/utilities-procs.tcl: Fix to httpopen, from
+	  Nis Jorgensen. See:
+	  http://openacs.org/forums/message-view?message_id=32667
+
+2005-01-24 08:44  daveb
+
+	* packages/acs-core-docs/www/xml/install-guide/other-software.xml:
+	  Add tsearch2 install. Deprecate Openfts install and link to
+	  tsearch2 doc.
+
+2005-01-22 13:42  jader
+
+	* packages/acs-templating/tcl/widget-procs.tcl: Apply a patch 602
+	  (slightly modified) to make party_search be optional when it is
+	  declared to be optional. Fixes bug 2122.
+
+2005-01-22 13:23  jader
+
+	* etc/install/install.sh: Apply patch 622, makes install.sh respect
+	  pg_db_user and UNICODE
+
+2005-01-22 13:08  jader
+
+	* www/blank-master.adp: Fixes bug 2238 by adding in css file for
+	  developer support. The fix was made by Lars in March 2004 on
+	  HEAD.
+
+2005-01-21 12:38  daveb
+
+	* packages/acs-content-repository/tcl/filter-procs.tcl: Fix
+	  variable reference.
+
+2005-01-21 12:35  daveb
+
+	* packages/acs-content-repository/tcl/: filter-procs-oracle.xql,
+	  filter-procs-postgresql.xql, filter-procs.tcl: Replace pl/sql
+	  function in where clause with two queries (via Tcl API)
+
+2005-01-20 18:16  donb
+
+	* packages/acs-templating/: resources/lists/table.adp,
+	  tcl/paginator-procs.tcl: Cleaned up display a bit ... if you say
+	  "groupsize is 10" you now see a groupsize of 10 displayed not 11.
+	  If groupsize is 1 you only get next/prev page nav widgets rather
+	  than both page and group nav widgets.
+
+2005-01-19 11:36  maltes
+
+	* packages/acs-subsite/lib/login.adp: Added <div id=register-login>
+	  so we could control the look of the login box via CSS (at least a
+	  little)
+
+2005-01-18 16:46  jader
+
+	* etc/: analog.cfg, config.tcl: Log the request time as well. See:
+	  http://panoptic.com/wiki/aolserver/nslog
+
+2005-01-17 12:57  torbenb
+
+	* packages/acs-core-docs/www/xml/engineering-standards/cvs.xml:
+	  fixed cvs browser link, bug 2267
+
+2005-01-17 06:53  maltes
+
+	* www/site-master.adp: Added / for XHTML compliance
+
+2005-01-17 04:09  maltes
+
+	* www/blank-master.adp: Reverting forced switch to XHTML
+
+2005-01-17 04:01  maltes
+
+	* www/blank-master.adp: Modified to suit XHMTL 1.0 Transitional
+
+2005-01-17 01:23  maltes
+
+	* www/blank-master.adp: Added type to javascript as this was not
+	  valid XHTML
+
+2005-01-15 14:49  vivianh
+
+	* packages/acs-subsite/www/site-map/: index.adp, index.tcl:
+	  Checking if user site-wide-admin to show a link
+
+2005-01-14 10:15  vivianh
+
+	* packages/acs-subsite/www/admin/site-map/site-map.tcl: Context bar
+	  and Allow button modified
+
+2005-01-13 19:14  daveb
+
+	* packages/acs-content-repository/: acs-content-repository.info,
+	  sql/postgresql/content-folder.sql,
+	  sql/postgresql/upgrade/upgrade-5.1.4d4-5.1.4d5.sql,
+	  sql/postgresql/upgrade/upgrade-5.1.5d1-5.1.5d2.sql,
+	  tcl/content-folder-procs.tcl,
+	  tcl/test/content-folder-test-procs.tcl: Fix
+	  content_folder__is_subfolder pl/sql. Also fix tcl proc which was
+	  passing in the wrong list format to package_exec_plsql. Add
+	  upgrade script and tests.
+
+2005-01-13 15:39  daveb
+
+	* packages/acs-content-repository/tcl/: content-item-procs.tcl,
+	  content-revision-procs.tcl, test/content-item-test-procs.tcl:
+	  Revert to package_exec_plsql var_list list style for -attributes
+	  parameters. Fix test and documentation.
+
+2005-01-13 11:01  jader
+
+	* packages/acs-subsite/www/admin/site-map/index.adp: Fix bug #2263.
+	  Link to application new broken in site-map.
+
+2005-01-13 01:32  timoh
+
+	* packages/acs-templating/tcl/parse-procs.tcl: rolled back last
+	  change in template::adp_array_variable_regexp since it broke
+	  existing code
+
+2005-01-12 17:27  daveb
+
+	* packages/acs-content-repository/tcl/: content-revision-procs.tcl,
+	  test/content-item-test-procs.tcl: Fix content::revision::new to
+	  properly create subtypes of content_revision.
+
+2005-01-12 15:55  timoh
+
+	* packages/acs-templating/resources/forms/: blue.adp, coddo.adp,
+	  configuration.adp, grid.adp, plain.adp, plainest.adp,
+	  standard.adp, tiny-plain.adp, wizard.adp: bug in template
+	  operator in (partial string compare) -> use seperate equality
+	  test in template
+
+2005-01-12 05:22  dedsc
+
+	*
+	  packages/acs-content-repository/sql/postgresql/content-folder.sql:
+	  fix to return folder id present in upgrade. just putting it here
+	  as well
+
+2005-01-11 18:14  donb
+
+	* packages/acs-subsite/www/permissions/perm-include-oracle.xql:
+	  Grrr Oracle doesn't like long idents
+
+2005-01-11 17:49  donb
+
+	* packages/acs-subsite/www/permissions/: perm-include-oracle.xql,
+	  perm-include-postgresql.xql: security_context_root is no longer
+	  object 0
+
+2005-01-11 17:38  donb
+
+	* packages/acs-subsite/www/permissions/: perm-include-oracle.xql,
+	  perm-include-postgresql.xql: Got rid of call to permission_p() in
+	  WHERE clause, which Jeff thought he'd already done but which I've
+	  not found in either 5.1 or HEAD.
+
+2005-01-09 17:57  joel
+
+	* packages/: acs-admin/acs-admin.info,
+	  acs-api-browser/acs-api-browser.info,
+	  acs-authentication/acs-authentication.info,
+	  acs-automated-testing/acs-automated-testing.info,
+	  acs-bootstrap-installer/acs-bootstrap-installer.info,
+	  acs-content-repository/acs-content-repository.info,
+	  acs-content-repository/tcl/test/content-item-test-procs.tcl,
+	  acs-core-docs/acs-core-docs.info, acs-kernel/acs-kernel.info,
+	  acs-lang/acs-lang.info, acs-mail/acs-mail.info,
+	  acs-messaging/acs-messaging.info,
+	  acs-reference/acs-reference.info,
+	  acs-service-contract/acs-service-contract.info,
+	  acs-subsite/acs-subsite.info, acs-tcl/acs-tcl.info,
+	  acs-templating/acs-templating.info,
+	  ref-timezones/ref-timezones.info, search/search.info: updates for
+	  5.1.4, including package info files
+
+2005-01-09 17:49  joel
+
+	* ChangeLog, readme.txt: updates for 5.1.4
+
+2005-01-09 17:44  joel
+
+	* packages/acs-core-docs/www/: aolserver.html, aolserver4.html,
+	  automated-testing-best-practices.html, backup-recovery.html,
+	  bootstrap-acs.html, contributing-code.html, credits.html,
+	  cvs-guidelines.html, cvs-resources.html, cvs-tips.html,
+	  db-api-detailed.html, db-api.html, docbook-primer.html,
+	  eng-standards-constraint-naming.html,
+	  eng-standards-filenaming.html, eng-standards-plsql.html,
+	  eng-standards-versioning.html, ext-auth-requirements.html,
+	  filename.html, form-builder.html, i18n-convert.html, index.html,
+	  install-cvs.html, install-daemontools.html,
+	  install-full-text-search.html, install-next-nightly-vacuum.html,
+	  install-nsopenssl.html, install-qmail.html, install-steps.html,
+	  ix01.html, mac-installation.html, maintenance-web.html,
+	  object-identity.html, objects.html, openacs-cvs-concepts.html,
+	  openacs.html, oracle.html, packages.html, parties.html,
+	  permissions-tediously-explained.html, permissions.html,
+	  postgres.html, programming-with-aolserver.html,
+	  psgml-for-emacs.html, psgml-mode.html, release-notes-4-5.html,
+	  release-notes-4-6-2.html, release-notes-4-6-3.html,
+	  release-notes-4-6.html, release-notes.html,
+	  releasing-openacs-core.html, request-processor.html,
+	  requirements-template.html, security-notes.html,
+	  style-guide.html, subsites.html, tcl-doc.html, templates.html,
+	  tutorial-css-layout.html, tutorial-cvs.html,
+	  tutorial-database.html, tutorial-debug.html,
+	  tutorial-distribute.html, tutorial-newpackage.html,
+	  tutorial-pages.html, tutorial-second-database.html,
+	  unix-installation.html, using-cvs-with-openacs.html,
+	  variables.html, win2k-installation.html,
+	  xml/developers-guide/tutorial-advanced.xml,
+	  xml/install-guide/other-software.xml: updates for 5.1.4
+
+2005-01-09 17:21  joel
+
+	* packages/acs-core-docs/www/: acs-admin.html,
+	  acs-package-dev.html, acs-plat-dev.html, aolserver.html,
+	  aolserver4.html, apm-design.html, apm-requirements.html,
+	  automated-testing-best-practices.html, backup-recovery.html,
+	  bootstrap-acs.html, complete-install.html, credits.html,
+	  cvs-tips.html, db-api-detailed.html, db-api.html,
+	  doc-standards.html, docbook-primer.html,
+	  eng-standards-constraint-naming.html,
+	  eng-standards-filenaming.html, eng-standards-plsql.html,
+	  eng-standards-versioning.html, ext-auth-requirements.html,
+	  filename.html, form-builder.html, groups-design.html,
+	  groups-requirements.html, high-avail.html, how-do-I.html,
+	  i18n-convert.html, i18n-design.html, i18n-introduction.html,
+	  i18n-overview.html, i18n-requirements.html,
+	  i18n-translators.html, i18n.html, index.html,
+	  individual-programs.html, install-cvs.html,
+	  install-daemontools.html, install-full-text-search.html,
+	  install-next-add-server.html, install-next-nightly-vacuum.html,
+	  install-openacs-keepalive.html, install-qmail.html,
+	  install-redhat.html, install-steps.html, ix01.html,
+	  kernel-doc.html, kernel-overview.html, mac-installation.html,
+	  maint-performance.html, maintenance-deploy.html,
+	  maintenance-web.html, nxml-mode.html, object-identity.html,
+	  object-system-design.html, object-system-requirements.html,
+	  objects.html, openacs-unpack.html, openacs.html, oracle.html,
+	  packages.html, parties.html, permissions-design.html,
+	  permissions-requirements.html,
+	  permissions-tediously-explained.html, permissions.html,
+	  postgres.html, programming-with-aolserver.html,
+	  psgml-for-emacs.html, psgml-mode.html, release-notes-4-5.html,
+	  release-notes-4-6-2.html, release-notes-4-6-3.html,
+	  release-notes-4-6.html, release-notes.html,
+	  releasing-openacs-core.html, releasing-openacs.html,
+	  releasing-package.html, request-processor.html,
+	  requirements-template.html, rp-design.html, rp-requirements.html,
+	  security-design.html, security-notes.html,
+	  security-requirements.html, style-guide.html,
+	  subsites-design.html, subsites-requirements.html, subsites.html,
+	  tcl-doc.html, templates.html, tutorial-css-layout.html,
+	  tutorial-cvs.html, tutorial-database.html, tutorial-debug.html,
+	  tutorial-distribute.html, tutorial-newpackage.html,
+	  tutorial-pages.html, unix-installation.html,
+	  update-repository.html, update-translations.html,
+	  upgrade-4.5-to-4.6.html, upgrade-openacs-files.html,
+	  upgrade-overview.html, variables.html, win2k-installation.html,
+	  files/create-new-catalog.sh, files/dotlrn-style-1.html,
+	  files/dotlrn-style-2.html, images/dotlrn-style-1.png,
+	  images/dotlrn-style-2.png, images/dotlrn-style-3.png,
+	  xml/index.xml, xml/variables.ent,
+	  xml/engineering-standards/cvs.xml,
+	  xml/for-everyone/release-notes.xml,
+	  xml/install-guide/aolserver4.xml: updating docs for 5.1.4
+
 2005-01-09 16:41  donb
 
 	* packages/acs-templating/tcl/parse-procs.tcl: Daveb made a change
@@ -30,54 +595,10 @@
 	  packages/acs-content-repository/tcl/test/content-item-test-procs.tcl:
 	  extended test case for content items
 
-2005-01-07 17:20  donb
-
-	* packages/forums/sql/oracle/upgrade/upgrade-1.0.6-1.0.7d.sql:
-	  Testing revealed a minor error in my upgrade script
-
 2005-01-07 16:32  daveb
 
 	* packages/acs-content-repository/tcl/content-symlink-procs.tcl:
 	  Make creation_date optional for content::symlink::new
-
-2005-01-07 13:23  donb
-
-	* packages/forums/lib/message/thread-chunk.adp: Oops screwed up
-	  tree nesting!  Fixed now ...
-
-2005-01-07 13:02  donb
-
-	* packages/forums/lib/message/: row.adp, thread-chunk.adp: Got rid
-	  of "reply" link in the message display if the presentation style
-	  is flat.
-
-2005-01-07 12:47  donb
-
-	* packages/forums/lib/message/: thread-chunk.adp, thread-chunk.tcl:
-	  Replaced bloody Tcl-in-Adp code that was uglifying the
-	  thread-chunk template
-
-2005-01-07 08:59  donb
-
-	* packages/forums/sql/: oracle/forums-messages-package-create.sql,
-	  oracle/upgrade/upgrade-1.0.6-1.0.7d.sql,
-	  postgresql/forums-messages-package-create.sql,
-	  postgresql/upgrade/upgrade-1.0.6-1.0.7d.sql: My changes weren't
-	  counting threaded deletes correctly ... this still needs
-	  retesting on Oracle/PG which I'll do in the next day or so by
-	  writing new test cases...
-
-2005-01-07 08:48  donb
-
-	* packages/forums/sql/oracle/upgrade/upgrade-1.0.6-1.0.7d.sql:
-	  Added previous "mutating table" fix to the upgrade script, too
-	  ...
-
-2005-01-07 08:43  donb
-
-	* packages/forums/sql/oracle/forums-messages-package-create.sql:
-	  Fixing "mutating table" problem but on my wrong machine, need to
-	  go test this on the server with Oracle on it ...
 
 2005-01-06 19:03  daveb
 
@@ -135,12 +656,6 @@
 	  is less elegant, but it works correctly. It imposes a database
 	  hit on login, but it is cached, so it only is incurred once.
 
-2005-01-04 11:31  andrewg
-
-	* packages/forums/sql/oracle/: forums-messages-package-create.sql,
-	  upgrade/upgrade-1.0.6-1.0.7d.sql: Oracle 8 doesn't support
-	  current_timestamp, so I've changed it to sysdate
-
 2005-01-03 09:26  daveb
 
 	* packages/acs-templating/tcl/parse-procs.tcl: Roll back change to
@@ -190,8 +705,9 @@
 
 2004-12-30 04:01  maltes
 
-	* packages/search/www/: advanced-search.adp, advanced-search.tcl,
-	  index.adp, search.adp, search.tcl: Internationalization of the
+	* packages/search/: catalog/search.en_US.ISO-8859-1.xml,
+	  www/advanced-search.adp, www/advanced-search.tcl, www/index.adp,
+	  www/search.adp, www/search.tcl: Internationalization of the
 	  Search Package
 
 2004-12-30 03:14  maltes
@@ -253,12 +769,6 @@
 	  affect performance and it will save others (like me) the time to
 	  diagnose and find this fix)
 
-2004-12-25 13:46  donb
-
-	* packages/forums/sql/oracle/: forums-messages-package-create.sql,
-	  upgrade/upgrade-1.0.6-1.0.7d.sql: last_child_post wasn't being
-	  initialized in the "new" function...
-
 2004-12-25 13:33  donb
 
 	* packages/acs-subsite/tcl/: package-procs-oracle.xql,
@@ -266,19 +776,6 @@
 	  package_exec_plsql so it works with Oracle procedures as well as
 	  functions (PG only has functions so was working fine for all
 	  cases)
-
-2004-12-24 17:05  donb
-
-	* packages/forums/sql/oracle/: forums-forums-create.sql,
-	  forums-messages-create.sql, forums-messages-package-create.sql,
-	  upgrade/upgrade-1.0.6-1.0.7d.sql: Added the thread and reply
-	  counting code previously commited for the PG version to the
-	  Oracle version.
-
-2004-12-23 09:58  donb
-
-	* packages/forums/sql/postgresql/upgrade/upgrade-1.0.6-1.0.7d.sql:
-	  Update query for reply counting was slightly in error ...
 
 2004-12-23 01:48  jarkko
 
@@ -290,27 +787,6 @@
 
 	* packages/acs-lang/www/admin/set-system-timezone.tcl: Applied
 	  patch #619.Fixes timezone problem with timeanddate.com format
-
-2004-12-22 18:12  donb
-
-	* packages/forums/: forums.info,
-	  lib/forums/forums-chunk-oracle.xql,
-	  lib/forums/forums-chunk-postgresql.xql,
-	  lib/message/threads-chunk-oracle.xql,
-	  lib/message/threads-chunk-postgresql.xql,
-	  lib/message/threads-chunk.tcl,
-	  sql/postgresql/forums-forums-create.sql,
-	  sql/postgresql/forums-messages-create.sql,
-	  sql/postgresql/forums-messages-package-create.sql,
-	  sql/postgresql/upgrade/upgrade-1.0.6-1.0.7d.sql,
-	  tcl/forums-procs.tcl, tcl/messages-procs-oracle.xql,
-	  tcl/messages-procs-postgresql.xql, tcl/messages-procs.tcl,
-	  tcl/messages-procs.xql, tcl/test/forums-procs.tcl: Added tracking
-	  of threads in a forum and replies to a root post to the
-	  forums-forums and forums-messages datamodel, and fixed the
-	  necessary code.  Also cleaned up some stuff and wrote a test case
-	  for automated testing.  PG only at this point, will add the
-	  Oracle stuff shortly.
 
 2004-12-22 08:13  daveb
 
@@ -401,6 +877,11 @@
 	* packages/acs-subsite/www/admin/site-map/site-map.tcl: adding
 	  bold, images and spaces
 
+2004-12-17 08:35  vivianh
+
+	* packages/acs-subsite/www/site-map/index.tcl: Adding images, urls
+	  and more spaces
+
 2004-12-17 08:31  vivianh
 
 	* packages/acs-subsite/catalog/: acs-subsite.en_US.ISO-8859-1.xml,
@@ -449,16 +930,6 @@
 
 	* packages/acs-subsite/www/resources/xml.gif: Adding.
 
-2004-12-12 16:45  daveb
-
-	* packages/forums/lib/message/post.tcl: Fix preview hidden
-	  variables to support richtext
-
-2004-12-12 16:19  daveb
-
-	* packages/forums/: lib/message/post.tcl, lib/message/row.tcl,
-	  tcl/form-procs.tcl: Use richtext widget
-
 2004-12-12 12:15  daveb
 
 	* packages/acs-templating/tcl/spellcheck-procs.tcl: Skip validation
@@ -467,10 +938,6 @@
 2004-12-12 04:15  maltes
 
 	* etc/backup.sh: Added backing up the database on another server
-
-2004-12-09 12:11  tracya
-
-	* packages/forums/forums.info: upping version numbers for release
 
 2004-12-08 19:58  donb
 
@@ -618,35 +1085,6 @@
 	* packages/acs-core-docs/www/xml/install-guide/maintenance.xml:
 	  adding absolute pathname to svgroup since /usr/local/bin is not
 	  necessarily in the default root pathnames
-
-2004-12-04 12:44  donb
-
-	* packages/forums/lib/message/: post.tcl, threads-chunk.tcl: Got
-	  paginator caching to work, coherently
-
-2004-12-04 09:54  donb
-
-	* packages/forums/lib/message/: threads-chunk-oracle.xql,
-	  threads-chunk-postgresql.xql, threads-chunk.xql: My pagination
-	  queries weren't complete.  Now they are ... but slower, sigh, at
-	  least until I rewrite pagination in the list builder.
-
-2004-12-03 19:27  donb
-
-	* packages/forums/lib/message/threads-chunk.tcl: Argh, gotta flush
-	  the paginator cache because we don't know if there's been a
-	  posting or not ...
-
-2004-12-03 19:19  donb
-
-	* packages/forums/www/: forum-view.adp, forum-view.tcl: Added
-	  pagination ...
-
-2004-12-03 19:06  donb
-
-	* packages/forums/lib/message/: threads-chunk-oracle.xql,
-	  threads-chunk-postgresql.xql, threads-chunk.tcl,
-	  threads-chunk.xql: Add pagination to the forums thread view page.
 
 2004-12-02 15:22  jader
 
@@ -873,6 +1311,12 @@
 
 	* packages/acs-subsite/www/admin/site-map/index.adp: add link for
 	  build site-map
+
+2004-11-23 10:43  vivianh
+
+	* packages/acs-subsite/www/site-map/: index-oracle.xql,
+	  index-postgresql.xql, index.adp, index.tcl: Site map viw
+	  interface
 
 2004-11-23 10:28  vivianh
 
@@ -1112,12 +1556,6 @@
 	  cvs-resources.html, index.html, openacs-cvs-concepts.html,
 	  using-cvs-with-openacs.html, xml/engineering-standards/cvs.xml,
 	  xml/index.xml: changed layout of CVS section
-
-2004-11-02 15:24  giancarlol
-
-	* packages/forums/catalog/forums.it_IT.ISO-8859-1.xml: Replaced
-	  HTML entities for special characters (Latin-1 supplement) with
-	  ISO-8859-1 encoding.
 
 2004-11-02 15:16  giancarlol
 
@@ -1401,11 +1839,6 @@
 	  packages/acs-content-repository/sql/postgresql/upgrade/upgrade-4.5-4.6.sql:
 	  Change needed due to dependecies
 
-2004-10-15 01:48  maltes
-
-	* packages/static-pages/sql/postgresql/: static-page-pb.sql,
-	  upgrade/upgrade-4.2a-4.3.sql: typos in the scripts
-
 2004-10-15 00:46  maltes
 
 	* packages/acs-core-docs/www/: xml/install-guide/aolserver4.xml,
@@ -1595,33 +2028,8 @@
 	  acs-templating/catalog/acs-templating.ro_RO.utf-8.xml,
 	  acs-templating/catalog/acs-templating.sv_SE.ISO-8859-1.xml,
 	  acs-templating/catalog/acs-templating.zh_CN.utf-8.xml,
-	  acs-templating/catalog/acs-templating.zh_TW.utf-8.xml,
-	  forums/catalog/forums.ar_EG.utf-8.xml,
-	  forums/catalog/forums.ar_LB.utf-8.xml,
-	  forums/catalog/forums.ca_ES.ISO-8859-1.xml,
-	  forums/catalog/forums.da_DK.ISO-8859-1.xml,
-	  forums/catalog/forums.de_DE.ISO-8859-1.xml,
-	  forums/catalog/forums.en_US.ISO-8859-1.xml,
-	  forums/catalog/forums.es_ES.ISO-8859-1.xml,
-	  forums/catalog/forums.es_GT.ISO-8859-1.xml,
-	  forums/catalog/forums.fi_FI.utf-8.xml,
-	  forums/catalog/forums.gl_ES.ISO-8859-1.xml,
-	  forums/catalog/forums.hu_HU.utf-8.xml,
-	  forums/catalog/forums.it_IT.ISO-8859-1.xml,
-	  forums/catalog/forums.ja_JP.utf-8.xml,
-	  forums/catalog/forums.ko_KR.utf-8.xml,
-	  forums/catalog/forums.ms_MY.utf-8.xml,
-	  forums/catalog/forums.nl_NL.ISO-8859-1.xml,
-	  forums/catalog/forums.nn_NO.ISO-8859-1.xml,
-	  forums/catalog/forums.no_NO.ISO-8859-1.xml,
-	  forums/catalog/forums.pl_PL.utf-8.xml,
-	  forums/catalog/forums.pt_BR.ISO-8859-1.xml,
-	  forums/catalog/forums.pt_PT.ISO-8859-1.xml,
-	  forums/catalog/forums.ru_RU.utf-8.xml,
-	  forums/catalog/forums.sh_HR.utf-8.xml,
-	  forums/catalog/forums.sv_SE.ISO-8859-1.xml,
-	  forums/catalog/forums.zh_CN.utf-8.xml: updated translations from
-	  translate.openacs.org
+	  acs-templating/catalog/acs-templating.zh_TW.utf-8.xml: updated
+	  translations from translate.openacs.org
 
 2004-10-13 16:09  joel
 
@@ -1652,7 +2060,7 @@
 	  acs-reference/acs-reference.info,
 	  acs-service-contract/acs-service-contract.info,
 	  acs-subsite/acs-subsite.info, acs-tcl/acs-tcl.info,
-	  acs-templating/acs-templating.info, forums/forums.info,
+	  acs-templating/acs-templating.info,
 	  ref-timezones/ref-timezones.info: upping version numbers for
 	  release
 
@@ -1660,13 +2068,6 @@
 
 	* www/site-master.adp: Use label #acs-subsite.Change_lecale_label#
 	  for message 'Change locale' in site-footer
-
-2004-10-12 15:10  tils
-
-	* packages/forums/tcl/form-procs.tcl: Fixing arbitrary HTML user
-	  input vulnerability in message body. Since the revert back from
-	  using the richtext widget a few weeks ago html went unchecked
-	  into the message body.
 
 2004-10-10 23:28  maltes
 
@@ -1909,19 +2310,10 @@
 	  installations with large numbers of classes and clubs, each of
 	  which mount a bunch of packages.
 
-2004-08-27 11:21  tracya
-
-	* packages/forums/forums.info: upgrading info files for the tag
-
 2004-08-26 23:17  tracya
 
 	* packages/acs-lang/tcl/lang-util-procs.tcl: reverting DaveB's
 	  changes because the change in params is breaking things
-
-2004-08-26 17:04  joel
-
-	* packages/static-pages/tcl/static-pages-procs.tcl: handle spaces
-	  in static page titles
 
 2004-08-24 16:28  tracya
 
@@ -1987,29 +2379,6 @@
 	  content-item.sql, upgrade/upgrade-5.1.2d4-5.1.2d5.sql: Fixed a
 	  typo in one of the cr_item__new procs
 
-2004-08-09 14:12  tracya
-
-	* packages/forums/lib/message/row.adp: bug - deleting a post with a
-	  detachment
-
-2004-08-09 12:51  tracya
-
-	* packages/forums/lib/message/post.tcl: formatting the forums
-	  message
-
-2004-08-09 10:49  tracya
-
-	* packages/forums/: lib/message/post-confirm.adp,
-	  lib/message/post.tcl, tcl/form-procs.tcl, www/message-post.tcl:
-	  fixing formating options.  Later, will be upgrading the whole
-	  forum package with Jeff's new Concord code and will have the HTML
-	  widget
-
-2004-08-08 21:49  tracya
-
-	* packages/forums/forums.info: updating info files in prep for .LRN
-	  2.1 alpha
-
 2004-08-06 11:53  joel
 
 	* packages/acs-subsite/acs-subsite.info: added documentation so
@@ -2045,11 +2414,6 @@
 	  infinite loop that makes aolserver die, with (U-S) enabled,
 	  permission_p will always get an party_id and in this way avoiding
 	  calls to ad_conn
-
-2004-07-29 19:06  tracya
-
-	* packages/forums/lib/message/threads-chunk.tcl: bug 1900 - member
-	  can post when posting policy is closed
 
 2004-07-29 16:16  jader
 
@@ -2093,16 +2457,6 @@
 	  password-update-2.tcl, password-update.adp, password-update.tcl,
 	  password-update.xql: Added the changing of the password for the
 	  admin from .LRN to OpenACS
-
-2004-07-26 13:41  tracya
-
-	* packages/forums/lib/message/threads-chunk.tcl:  bug 1900 - member
-	  can post when posting policy is closed
-
-2004-07-26 13:38  tracya
-
-	* packages/forums/lib/message/threads-chunk.tcl:  bug 1900 - member
-	  can post when posting policy is closed
 
 2004-07-26 10:24  rocaelh
 
@@ -2269,18 +2623,6 @@
 	  template::util::date::unpack so it does not require the variabe
 	  to be named date and just work by coincidence. from HEAD,
 	  resolves bug 1824
-
-2004-07-06 08:54  jeffd
-
-	* packages/forums/: forums.info,
-	  sql/postgresql/forums-messages-create.sql,
-	  sql/postgresql/upgrade/upgrade-1.0d4-1.0.1d2.sql,
-	  tcl/forums-email-procs.tcl, tcl/forums-sc-procs-postgresql.xql,
-	  tcl/forums-sc-procs.tcl, tcl/messages-procs.tcl: fixes for the
-	  format field: fix dropping html_p in the upgrade script, remove
-	  references to html_p and use ad_html_text_convert -from $format
-	  for formatting messages, bump version to 1.0.2, bump dependency
-	  on notifications to 5.1.1, retag openacs-5-1-compat.
 
 2004-07-06 08:47  jeffd
 
@@ -2545,20 +2887,10 @@
 	  for $content(mime_type breaks generated templates resolves bug
 	  1952 (from head)
 
-2004-07-03 15:48  skaufman
-
-	* packages/forums/forums.info: added attachments requirement
-
 2004-07-02 16:21  gabrielb
 
 	* www/blank-master.adp: Moved the textarea out of <head> and added
 	  required fields so it validates properly on validator.w3.org.
-
-2004-07-02 11:20  jeffd
-
-	* packages/forums/sql/postgresql/forums-messages-create.sql: fix
-	  format column to be varchar instead of varchar2 for pg bug 1946
-	  patch 550 Stan Kaufman
 
 2004-07-02 09:26  jader
 
@@ -2621,17 +2953,6 @@
 	  for authority_id should be acs_object_id_seq not
 	  auth_authority_id_seq (which does not exist)
 
-2004-06-30 13:43  janine
-
-	* packages/forums/sql/postgresql/upgrade/upgrade-1.0d4-1.0.1d2.sql:
-	  one more time... fix to previous submission
-
-2004-06-30 13:24  janine
-
-	* packages/forums/sql/postgresql/: forums-messages-create.sql,
-	  upgrade/upgrade-1.0d4-1.0.1d2.sql: fixing problems with previous
-	  submission
-
 2004-06-30 13:04  andrewg
 
 	*
@@ -2639,11 +2960,6 @@
 	  Update to apm package body in v1.26.2.1 of apm-create.sql,to
 	  include a bugfix/simplication to the cursor in
 	  apm.register_parameter.
-
-2004-06-30 12:47  janine
-
-	* packages/forums/sql/oracle/forums-messages-create.sql: fixing bug
-	  in previous submission
 
 2004-06-30 11:16  donb
 
@@ -2654,11 +2970,6 @@
 
 	* packages/acs-core-docs/www/tutorial-caching.html: added list
 	  wrapper to caching example
-
-2004-06-29 22:18  jader
-
-	* packages/forums/lib/message/thread-chunk.adp: Fixes bug in forum
-	  view -- else wasn't closed.
 
 2004-06-29 09:38  jader
 
@@ -2763,16 +3074,10 @@
 	  acs-templating/catalog/acs-templating.es_GT.ISO-8859-1.xml,
 	  acs-templating/catalog/acs-templating.nl_NL.ISO-8859-1.xml,
 	  acs-templating/catalog/acs-templating.ro_RO.utf-8.xml,
-	  acs-templating/catalog/acs-templating.zh_CN.utf-8.xml,
-	  forums/catalog/forums.AR_EG.utf-8.xml,
-	  forums/catalog/forums.AR_LB.utf-8.xml,
-	  forums/catalog/forums.ar_EG.utf-8.xml,
-	  forums/catalog/forums.ar_LB.utf-8.xml,
-	  forums/catalog/forums.es_GT.ISO-8859-1.xml,
-	  forums/catalog/forums.zh_CN.utf-8.xml: updated catalog files for
-	  5.1.1; bug fix for 1519 means all catalog files for ar_EG, ar_LB,
-	  zh_CN, th_TH, ro_RO, fa_IR, and hr_HR were renamed to correct
-	  capitalization errors
+	  acs-templating/catalog/acs-templating.zh_CN.utf-8.xml: updated
+	  catalog files for 5.1.1; bug fix for 1519 means all catalog files
+	  for ar_EG, ar_LB, zh_CN, th_TH, ro_RO, fa_IR, and hr_HR were
+	  renamed to correct capitalization errors
 
 2004-06-26 07:04  joela
 
@@ -2790,11 +3095,6 @@
 	  sql/postgresql/upgrade/upgrade-5.1.1d1-5.1.1d2.sql: fixing bug
 	  1519 - misnamed locales
 
-2004-06-25 08:34  janine
-
-	* packages/forums/tcl/messages-procs.tcl: fix from Sloan: make
-	  forums send HTML notifications
-
 2004-06-24 17:16  andrewg
 
 	* packages/acs-kernel/sql/oracle/apm-create.sql: Simplifying the
@@ -2803,8 +3103,10 @@
 
 2004-06-24 03:44  joela
 
-	* packages/acs-core-docs/www/tutorial-css-layout.html: added
-	  tutorial section on css layout
+	* packages/acs-core-docs/www/: tutorial-css-layout.html,
+	  files/dotlrn-style-1.html, files/dotlrn-style-2.html,
+	  images/dotlrn-style-1.png, images/dotlrn-style-2.png,
+	  images/dotlrn-style-3.png: added tutorial section on css layout
 
 2004-06-24 02:42  jeffd
 
@@ -2819,34 +3121,11 @@
 	  an nsv of url keyed by package key. Lars added this back in mars
 	  and I hadn't noticed ...
 
-2004-06-22 09:53  janine
-
-	* packages/forums/: forums.info, lib/message/edit.tcl,
-	  lib/message/post.tcl, lib/message/row.tcl,
-	  lib/message/thread-chunk-oracle.xql,
-	  lib/message/thread-chunk-postgresql.xql,
-	  sql/oracle/forums-messages-create.sql,
-	  sql/oracle/forums-messages-package-create.sql,
-	  sql/oracle/upgrade/upgrade-1.0d4-1.0.1d2.sql,
-	  sql/postgresql/forums-messages-create.sql,
-	  sql/postgresql/forums-messages-package-create.sql,
-	  sql/postgresql/upgrade/upgrade-1.0d4-1.0.1d2.sql,
-	  tcl/form-procs.tcl, tcl/messages-procs.tcl,
-	  tcl/messages-procs.xql, www/message-post.tcl: fix from Sloan: use
-	  richtext widget
-
 2004-06-21 12:17  janine
 
 	* packages/acs-lang/www/admin/message-list.tcl: query didn't work
 	  in oracle (should be in an xql file but at least this will make
 	  it work)
-
-2004-06-21 08:34  maltes
-
-	* packages/forums/lib/message/attachment-list.tcl: Apparently some
-	  logic error. Exists_and_not_null returns true if the file exists.
-	  A negation of this therefore returns true if the variable does
-	  not exists...
 
 2004-06-21 06:18  maltes
 
@@ -2865,12 +3144,6 @@
 	* packages/acs-subsite/www/user/portrait/index.adp: fix from Sloan:
 	  only show 'this is what we show other users' message to admins,
 	  which includes the user looking at their own portrait
-
-2004-06-17 12:57  janine
-
-	* packages/forums/tcl/forums-procs.tcl: fix from Sloan:  to be
-	  honest I don't really know what this change does, but it seems
-	  harmless and might be useful
 
 2004-06-16 01:53  maltes
 
@@ -3071,6 +3344,11 @@
 	* packages/acs-lang/acs-lang.info: Fix for Bug #1834: set
 	  SystemTimezone default="UTC"
 
+2004-05-26 00:56  joela
+
+	* packages/acs-core-docs/www/files/create-new-catalog.sh: added
+	  script from Rocael for cloning locale catalogs; notes on plural
+
 2004-05-21 16:15  lars
 
 	* packages/acs-subsite/tcl/subsite-procs.tcl: Do not require
@@ -3130,24 +3408,17 @@
 	* packages/acs-subsite/www/shared/community-member.adp: Fixed
 	  missing @ sign in the inline_portrait_state if statement
 
-2004-05-13 07:06  lars
-
-	* packages/forums/lib/forums/new.tcl: Fixed the new form so it
-	  again accepts a default name for the new forum -- used by dotlrn
-
-2004-05-13 07:05  lars
-
-	* packages/forums/www/admin/forum-new.tcl: Fixed context bar
-
 2004-05-13 06:29  lars
 
 	* packages/acs-subsite/www/resources/profile-16.png: Added profile
 	  icon
 
-2004-05-13 03:23  lars
+2004-05-09 08:32  joela
 
-	* packages/forums/sql/oracle/: forums-search-create.sql,
-	  forums-search-drop.sql: Paraemterized the Intermedia scripts
+	* packages/search/catalog/search.en_US.ISO-8859-1.xml: added search
+	  includelet; internationalized it.  depends on
+	  acs-kernel.common_search, which is on the translation server and
+	  should be in 5.1.1
 
 2004-05-06 14:25  daveb
 
@@ -3317,12 +3588,8 @@
 	  acs-templating/catalog/acs-templating.no_NO.ISO-8859-1.xml,
 	  acs-templating/catalog/acs-templating.pt_BR.ISO-8859-1.xml,
 	  acs-templating/catalog/acs-templating.sv_SE.ISO-8859-1.xml,
-	  acs-templating/catalog/acs-templating.zh_TW.utf-8.xml,
-	  forums/catalog/forums.es_ES.ISO-8859-1.xml,
-	  forums/catalog/forums.nl_NL.ISO-8859-1.xml,
-	  forums/catalog/forums.nn_NO.ISO-8859-1.xml,
-	  forums/catalog/forums.no_NO.ISO-8859-1.xml: added current
-	  translations
+	  acs-templating/catalog/acs-templating.zh_TW.utf-8.xml: added
+	  current translations
 
 2004-05-04 05:11  jeffd
 
