@@ -42,7 +42,7 @@
     <fullquery name="auth::sync::job::end_get_document.update_doc_end">
         <querytext>
             update auth_batch_jobs
-            set    doc_end_time = sysdate
+            set    doc_end_time = sysdate,
                    doc_status = :doc_status,
                    doc_message = :doc_message,
                    document = empty_clob()

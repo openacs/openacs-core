@@ -31,7 +31,7 @@ create table auth_batch_jobs (
   doc_end_time               date,
   doc_status                 varchar2(4000),
   doc_message                varchar2(4000),
-  documen                    clob
+  document                   clob
 );
 
 create index auth_batch_jobs_user_idx on auth_batch_jobs(creation_user);
