@@ -449,13 +449,29 @@ span.form-configuration-label {
   line-height:15px;
 }
 
-div.general-message {
+#general-message {
   background-color: #ccff99; 
   padding: 4px;
+  padding-top: 6px;
+  padding-bottom: 6px;
+  font-size: 85%;
+}
+
+#general-message ul {
+  margin-left: 0;
+  padding-left: 0;
+  display: inline;
+  border: none;
+} 
+#general-message ul li {
+  margin-left: 0;
+  padding-left: 2px;
+  border: none;
+  list-style: none;
 }
 
 ul.action-links li {
-  list-style: circle url(/resources/acs-subsite/right.gif);
+  list-style: circle url(/resources/acs-subsite/action-link-marker.png);
   margin: 8px;
   margin-left: -16px;
 }
