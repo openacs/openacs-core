@@ -82,6 +82,9 @@ ad_proc -private db_exec_plpgsql { db statement_name sql fname } {
 
     ns_log Notice "PLPGSQL: converted: $sql to: select $function_name ()"
 
+    # insert tcl variable values (Openacs - Dan)
+    set sql [uplevel 2 [list subst -nocommands -nobackslashes $sql]]
+
     # create a function definition statement for the inline code 
     # binding is emulated in tcl. (OpenACS - Dan)
 
@@ -200,6 +203,9 @@ ad_proc -private db_exec { type db statement_name sql args } {
 
     # Query Dispatcher (OpenACS - ben)
     set sql [db_qd_replace_sql $statement_name $sql]
+
+    # insert tcl variable values (Openacs - Dan)
+    set sql [uplevel 2 [list subst -nocommands -nobackslashes $sql]]
 
     ns_log Notice "POST-QD: the SQL is $sql"
 

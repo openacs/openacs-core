@@ -14,6 +14,27 @@
 
 
 -- create or replace package body rel_constraint
+
+create function rel_constraint__new(varchar,integer,varchar,integer) 
+returns integer as '
+declare
+        nam     alias for $1;
+        sid1    alias for $2;
+        side    alias for $3;
+        sid2    alias for $4;
+begin
+        return rel_constraint__new(null,
+                                   ''rel_constraint'',
+                                   nam,
+                                   sid1,
+                                   side,
+                                   sid2,
+                                   null,
+                                   null,
+                                   null
+                                   );                                   
+end;' language 'plpgsql';
+
 -- function new
 create function rel_constraint__new (integer,varchar,varchar,integer,char,integer,integer,integer,varchar)
 returns integer as '

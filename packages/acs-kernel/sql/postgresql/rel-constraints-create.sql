@@ -74,16 +74,31 @@ create function rel_constraints_insert_tr () returns opaque as '
 declare
         v_parent_sk     varchar;
         max_key         varchar;
+        has_parents_p   boolean;
 begin
-        select max(tree_sortkey) into max_key 
-          from rel_constraints 
-         where required_rel_segment = new.required_rel_segment
-           and rel_side = new.rel_side;
-
-        select coalesce(max(tree_sortkey),'''') into v_parent_sk 
+        select count(*) > 0 into has_parents_p
           from rel_constraints 
          where rel_segment = new.required_rel_segment
            and rel_side = new.rel_side;
+       
+        if has_parents_p then 
+           select max(tree_sortkey) into max_key 
+             from rel_constraints 
+            where required_rel_segment = new.required_rel_segment
+              and rel_side = new.rel_side;
+
+           select coalesce(max(tree_sortkey),'''') into v_parent_sk 
+             from rel_constraints 
+            where rel_segment = new.required_rel_segment
+              and rel_side = new.rel_side;
+        else 
+           select max(tree_sortkey) into max_key 
+             from rel_constraints 
+            where rel_side = new.rel_side 
+              and tree_level(tree_sortkey) = 1;
+
+           v_parent_sk := '''';
+        end if;
 
         new.tree_sortkey := v_parent_sk || ''/'' || tree_next_key(max_key);
 
@@ -668,13 +683,15 @@ where rc.rel_side = rc_required.rel_side
 -- It seems correct, but it might be bogus.
 -- DCW 2001-03-14.
 
+-- drop view rc_segment_dependency_levels;
 create view rc_segment_dependency_levels as
              select rc1.rel_segment as segment_id, 
                     max(tree_level(rc1.tree_sortkey)) as dependency_level
                from rel_constraints rc1, rel_constraints rc2
               where ('two' = (select rel_side 
                                 from rel_constraints 
-                               where rel_segment = rc1.required_rel_segment)
+                               where rel_segment = rc1.required_rel_segment
+                                 and rel_side = rc1.rel_side)
                      or rc1.rel_segment = rc2.rel_segment)     
                 and rc1.tree_sortkey like rc2.tree_sortkey || '%'
            group by segment_id;

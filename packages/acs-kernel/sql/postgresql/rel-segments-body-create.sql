@@ -87,6 +87,13 @@ begin
   
 end;' language 'plpgsql';
 
+create function rel_segment__get_or_new(integer,varchar) returns integer as '
+declare
+        gid     alias for $1;
+        typ     alias for $2;
+begin
+        return rel_segment__get_or_new(gid,typ,null);
+end;' language 'plpgsql';
 
 -- function get_or_new
 create function rel_segment__get_or_new (integer,varchar,varchar)
@@ -114,7 +121,6 @@ begin
            and acs_object_types.object_type = get_or_new__rel_type;
 
       end if;
-      raise notice ''segment name = %'', v_segment_name;
 
       v_segment_id := rel_segment__new (
           null,
