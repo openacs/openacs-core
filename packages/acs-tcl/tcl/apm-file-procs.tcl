@@ -282,10 +282,15 @@ ad_proc apm_filelist_update {version_id} {
 	
 	# Now kill "packages" and the package_key from the path.
 	set components [split $relative_path "/"]
-	set relative_path [join [lrange $components 2 [llength $components]] "/"]	
-	set type [apm_guess_file_type $package_key $relative_path]	
-	set db_type [apm_guess_db_type $package_key $relative_path]	
-	apm_file_add $version_id $relative_path $type $db_type
+
+        # DRB: we really don't want to include the CVS directories in the .info
+        # file...
+        if { [lsearch $components "CVS"] == -1 } {
+	    set relative_path [join [lrange $components 2 [llength $components]] "/"]	
+	    set type [apm_guess_file_type $package_key $relative_path]	
+	    set db_type [apm_guess_db_type $package_key $relative_path]	
+	    apm_file_add $version_id $relative_path $type $db_type
+        }
     }
 
     # Remove stale files.
