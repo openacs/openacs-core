@@ -419,10 +419,6 @@ ad_proc -public template::list::create {
             error "When specifying a non-zero page_size, you must also provide either page_query or page_query_name"
         }
 
-        if { [empty_string_p $list_properties(page_query_name)] } {
-            set list_properties(page_query_name) "--default-query-name-for-list-builder-paginators--"
-        }
-
         # We create the selected page as a filter, so we get the filter,page thing out
         template::list::filter::create \
             -list_name $name \
@@ -494,17 +490,40 @@ ad_proc -public template::list::prepare {
     # Create the paginator 
     if { ![empty_string_p $list_properties(page_size)] && $list_properties(page_size) != 0 } {
 
-        # We need to uplevel subst it so we get the filters evaluated
-        set list_properties(page_query_substed) [uplevel $list_properties(ulevel) [list subst -nobackslashes $list_properties(page_query)]]
+        if { [string equal $list_properties(page_query) ""] } {
+            # We need to uplevel db_map it to get the query from the right context
+            set list_properties(page_query_substed) \
+                [uplevel $list_properties(ulevel) [list db_map $list_properties(page_query_name)]]
+        } else {
+            # We need to uplevel subst it so we get the filters evaluated
+            set list_properties(page_query_substed) \
+                [uplevel $list_properties(ulevel) \
+                    [list subst -nobackslashes $list_properties(page_query)]]
+        }
 
-        # Generate a paginator name which includes all the fitler values, 
-        # so the paginator cahing works properly
+        # Use some short variable names to make the expr readable
+        set page $list_properties(filter,page)
+        set groupsize $list_properties(page_groupsize)
+        set page_size $list_properties(page_size)
+        set page_group [expr ($page - 1 - (($page - 1) % $groupsize)) / $groupsize + 1]
+        set first_row [expr ($page_group - 1) * $groupsize * $page_size + 1]
+        set last_row [expr $first_row + ($groupsize + 1) * $page_size - 1]
+        set page_offset [expr ($page_group - 1) * $groupsize]
+
+        # Now wrap the provided query with the limit information
+        set list_properties(page_query_substed) [db_map pagination_query]
+
+        # Generate a paginator name which includes the page group we're in all the
+        # filter values, so the paginator cahing works properly
         set paginator_name $list_properties(name)
+
         foreach filter $list_properties(filters) {
             if { ![string equal $filter "page"] && [info exists list_properties(filter,$filter)] } {
                 append paginator_name ",$filter=$list_properties(filter,$filter)"
             }
         }
+
+        append paginator_name ",page_group=$page_group"
         set list_properties(paginator_name) $paginator_name
 
         set flush_p f
@@ -514,11 +533,12 @@ ad_proc -public template::list::prepare {
 
         # We need this uplevel so that the bind variables in the query will get bound at the caller's level
         uplevel $ulevel [list template::paginator create \
-                             $list_properties(page_query_name) \
+                             --foo--bar-- \
                              $list_properties(paginator_name) \
                              $list_properties(page_query_substed) \
                              -pagesize $list_properties(page_size) \
                              -groupsize $list_properties(page_groupsize) \
+                             -page_offset $page_offset \
                              -flush_p $flush_p \
                              -contextual]
 
@@ -705,10 +725,16 @@ ad_proc -public template::list::page_get_ids {
         return {}
     }
     
+    set ids [template::paginator get_row_ids $list_properties(paginator_name) $list_properties(filter,page)]
+
     if { $tcl_list_p } {
-        return [template::paginator get_row_ids $list_properties(paginator_name) $list_properties(filter,page)]
+        return $ids
     } else {
-        return [template::paginator get_query $list_properties(paginator_name) $list_properties(key) $list_properties(filter,page)]
+	set quoted_ids [list]
+	foreach one_id $ids {
+	    lappend quoted_ids "'[DoubleApos $one_id]'"
+	}
+	return [join $quoted_ids ","]
     }
 }
 
