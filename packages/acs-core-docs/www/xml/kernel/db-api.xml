@@ -2,7 +2,8 @@
 <title>Database Access API</title>
 
 <authorblurb><para>
-by <ulink url="mailto:jsalz@mit.edu">Jon Salz</ulink> 
+by <ulink url="mailto:jsalz@mit.edu">Jon Salz</ulink>. Revised and expanded by 
+Roberto Mello (rmello at fslc dot usu dot edu), July 2002. 
 </para></authorblurb>
 
 <itemizedlist>
@@ -609,52 +610,6 @@ will write something like:
 
 </sect2>
 
-<sect2 id="db-api-detailed-pooling" xreflabel="Sequence Pooling">
-<title>Sequence Pooling</title>
-
-<para>
-The database library can transparently maintain pools of sequence values, so
-that each request for a new sequence value (using <computeroutput>db_nextval</computeroutput>)
-does not incur a roundtrip to the server. For instance, this functionality is
-very useful in the security/sessions library, which very frequently allocates
-values from the <computeroutput>sec_id_seq</computeroutput> sequence. To utilize this
-functionality for a particular sequence, register the sequence to be pooled,
-either using the <computeroutput>db_register_pooled_sequence</computeroutput> procedure at server
-startup time, or by including a configuration parameter of the form 
-</para>
- 
-
-<programlisting>
-
-PoolSequence.<emphasis>sequence_name_seq</emphasis>=<emphasis>count</emphasis>
-
-</programlisting>
-
-<para>
-in <emphasis>any</emphasis> configuration section in the <computeroutput>yourservername.ini</computeroutput>
-file, e.g., e.g., 
-</para>
- 
-
-<programlisting>
-
-[ns/server/<emphasis>yourservername</emphasis>/acs/security]
-PoolSequence.sec_id_seq=20
-
-</programlisting>
-
-<para>
-The database library will allocate this number of sequence values at server
-startup. It will periodically scan pools and allocate new values for
-sequences which are less than half-full. (This normally occurs every 60
-seconds, and is configurable via the
-<computeroutput>PooledSequenceUpdateInterval</computeroutput> parameter in the
-<computeroutput>[ns/server/</computeroutput><emphasis><computeroutput>yourservername</computeroutput></emphasis><computeroutput>/acs/database]</computeroutput> configuration
-section.) 
-</para>
-
-</sect2>
-
 <sect2 id="dp-api-detailed-api">
 <title>API</title>
 
@@ -665,25 +620,7 @@ Note that you never have to use <computeroutput>ns_db</computeroutput> anymore (
 release the database handle. 
 </para>
 
-
-
 <variablelist>
-<varlistentry>
-<term><emphasis role="strong"><computeroutput><anchor id="kernel.dbapi_db_abort_transaction"/>db_abort_transaction</computeroutput></emphasis>
-</term>
-
-<listitem>
-<programlisting>
-<emphasis role="strong">db_abort_transaction</emphasis>
-</programlisting> 
-
-<para>Aborts all levels of a transaction. That is if this is called within
-several nested transactions, all of them are terminated. Use this insetead of
-<computeroutput>db_dml &quot;abort&quot; &quot;abort transaction&quot;</computeroutput>. 
-
-
-</para></listitem>
-</varlistentry>
 
 <varlistentry>
 <term><emphasis role="strong"><computeroutput><anchor id="kernel.dbapi_db_null"/>db_null</computeroutput></emphasis>
@@ -785,37 +722,6 @@ returns 0. If more than one row is returned, throws an error. </para>
 </varlistentry>
 
 <varlistentry>
-<term><emphasis role="strong"><computeroutput><anchor id="kernel.dbapi_db_nextval"/>db_nextval</computeroutput></emphasis> </term>
-
-<listitem>
-<programlisting>
-<emphasis role="strong">db_nextval</emphasis> <emphasis>sequence-name</emphasis>
-</programlisting>
-
-<para>Returns the next value for the sequence <emphasis>sequence-name</emphasis> (using a
-SQL statement like <computeroutput>SELECT</computeroutput> <emphasis><computeroutput>sequence-name</computeroutput></emphasis><computeroutput>.nextval FROM
-DUAL</computeroutput>). If sequence pooling is enabled for the sequence, transparently
-uses a value from the pool if available to save a round-trip to the database
-(see <emphasis><xref linkend="db-api-detailed-pooling"/></emphasis>). 
-
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><emphasis role="strong"><computeroutput><anchor id="kernel.dbapi_db_register_pooled_sequence"/>db_register_pooled_sequence</computeroutput></emphasis> </term>
-
-<listitem>
-<programlisting>
-<emphasis role="strong">db_register_pooled_sequence</emphasis> <emphasis>sequence-name</emphasis> <emphasis>pool-size</emphasis>
-</programlisting>
-
-<para>Registers the sequence <emphasis>sequence-name</emphasis> to be pooled, with a pool
-size of <emphasis>pool-size</emphasis> sequence values (see <emphasis><xref linkend="db-api-detailed-pooling"/></emphasis>). 
-
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
 <term><emphasis role="strong"><computeroutput><anchor id="kernel.dbapi_db_string"/>db_string</computeroutput></emphasis> </term>
 
 <listitem>
@@ -829,6 +735,23 @@ row, returns <emphasis><computeroutput>default</computeroutput></emphasis> (or t
 <emphasis><computeroutput>default</computeroutput></emphasis> is unspecified). Analogous to
 <computeroutput>database_to_tcl_string</computeroutput> and
 <computeroutput>database_to_tcl_string_or_null</computeroutput>. 
+
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><emphasis role="strong"><computeroutput><anchor id="kernel.dbapi_db_nextval"/>db_nextval</computeroutput></emphasis> </term>
+
+<listitem>
+<programlisting>
+<emphasis role="strong">db_nextval</emphasis> <emphasis>sequence-name</emphasis>
+</programlisting>
+
+<para>Returns the next value for the sequence <emphasis>sequence-name</emphasis> (using a
+SQL statement like <computeroutput>SELECT</computeroutput> <emphasis><computeroutput>sequence-name</computeroutput></emphasis><computeroutput>.nextval FROM
+DUAL</computeroutput>). If sequence pooling is enabled for the sequence, transparently
+uses a value from the pool if available to save a round-trip to the database
+(see <emphasis><xref linkend="db-api-detailed-pooling"/></emphasis>). 
 
 </para></listitem>
 </varlistentry>
@@ -863,6 +786,20 @@ in a row of the result of SQL query <emphasis><computeroutput>sql</computeroutpu
 (Analogous to <computeroutput>database_to_tcl_list_list</computeroutput>.) 
 
 </para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><emphasis role="strong"><computeroutput><anchor id="kernel.dbapi_db_list_of_ns_sets"/>db_list_of_ns_sets</computeroutput></emphasis></term>
+
+<listitem>
+<programlisting>
+<emphasis role="strong">db_list_of_ns_sets</emphasis> <emphasis>statement-name</emphasis> <emphasis>sql</emphasis> [ -bind <emphasis>bind_set_id</emphasis> | -bind <emphasis>bind_value_list</emphasis> ]
+</programlisting>
+  <para>
+	Returns a list of ns_sets with the values of each column of each row
+	returned by the <computeroutput>sql</computeroutput> query specified.
+  </para>
+  </listitem>
 </varlistentry>
 
 <varlistentry>
@@ -1003,6 +940,99 @@ print_the_foo ; # Writes out &quot;foo is 8&quot;
 </varlistentry>
 
 <varlistentry>
+<term><emphasis role="strong"><computeroutput><anchor id="kernel.dbapi_db_abort_transaction"/>db_abort_transaction</computeroutput></emphasis>
+</term>
+
+<listitem>
+<programlisting>
+<emphasis role="strong">db_abort_transaction</emphasis>
+</programlisting> 
+
+<para>Aborts all levels of a transaction. That is if this is called within
+several nested transactions, all of them are terminated. Use this insetead of
+<computeroutput>db_dml &quot;abort&quot; &quot;abort transaction&quot;</computeroutput>. 
+
+
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><emphasis role="strong"><computeroutput><anchor id="kernel.dbapi_db_multirow"/>db_multirow</computeroutput></emphasis></term> 
+
+<listitem>
+<programlisting>
+<emphasis role="strong">db_multirow</emphasis> [ -local ] [ -append ] [ -extend <emphasis>column_list</emphasis> ] \
+    <emphasis>var-name</emphasis> <emphasis>statement-name</emphasis> <emphasis>sql</emphasis> \
+    [ -bind <emphasis>bind_set_id</emphasis> | -bind <emphasis>bind_value_list</emphasis> ] \
+    <emphasis>code_block</emphasis> [ if_no_rows <emphasis>if_no_rows_block ]</emphasis>
+</programlisting>
+
+    <para>
+	Performs the SQL query <computeroutput>sql</computeroutput>, saving results in variables
+    of the form
+    <computeroutput><emphasis>var_name</emphasis>:1</computeroutput>, <computeroutput><emphasis>var_name</emphasis>:2</computeroutput>, etc,
+    setting <computeroutput><emphasis>var_name</emphasis>:rowcount</computeroutput> to the total number
+    of rows, and setting <computeroutput><emphasis>var_name</emphasis>:columns</computeroutput> to a
+    list of column names. Each row also has a column, rownum, automatically
+    added and set to the row number, starting with 1. Note that this will
+    override any column in the SQL statement named 'rownum', also if you're
+    using the Oracle rownum pseudo-column.
+    </para>                                                                                                                                           
+    <para>                                                                                                                                        
+
+    You may supply a code block, which will be executed for each row in
+    the loop. This is very useful if you need to make computations that
+    are better done in Tcl than in SQL, for example using ns_urlencode
+    or ad_quotehtml, etc. When the Tcl code is executed, all the columns
+    from the SQL query will be set as local variables in that code. Any
+    changes made to these local variables will be copied back into the
+    multirow.
+    </para>                                                                                                                                           
+
+    <para>
+    You may also add additional, computed columns to the multirow, using the
+    <computeroutput>-extend { <emphasis>col_1</emphasis> <emphasis>col_2</emphasis> ... }</computeroutput> switch. This is
+    useful for things like constructing a URL for the object retrieved by
+    the query.
+    </para>                                                                                                                                           
+
+    <para>
+    If you're constructing your multirow through multiple queries with the
+    same set of columns, but with different rows, you can use the
+    <computeroutput>-append</computeroutput> switch. This causes the rows returned by this query
+    to be appended to the rows already in the multirow, instead of starting
+    a clean multirow, as is the normal behavior. The columns must match the
+    columns in the original multirow, or an error will be thrown.
+    </para>                                                                                                                                           
+
+    <para>
+    Your code block may call <computeroutput>continue</computeroutput> in order to skip a row
+    and not include it in the multirow. Or you can call <computeroutput>break</computeroutput>
+    to skip this row and quit looping.
+    </para>                                                                                                                                           
+
+    <para>
+
+    Notice the nonstandard numbering (everything
+    else in Tcl starts at 0); the reason is that the graphics designer, a non
+    programmer, may wish to work with row numbers.
+    </para>                                                                                                                                           
+
+    <para>
+       Example:
+    </para>
+
+    <programlisting>
+db_multirow -extend { user_url } users users_query {
+    select user_id first_names, last_name, email from cc_users
+} {
+    set user_url [acs_community_member_url -user_id $user_id]
+}
+    </programlisting>
+  </listitem>
+</varlistentry>
+
+<varlistentry>
 <term><emphasis role="strong"><computeroutput><anchor id="kernel.dbapi_db_resultrows"/>db_resultrows</computeroutput></emphasis></term>
 
 
@@ -1059,54 +1089,166 @@ db_with_handle db {
 </varlistentry>
 
 <varlistentry>
-<term><emphasis role="strong"><computeroutput><anchor id="kernel.dbapi_db_nullify_empty_string"/>db_nullify_empty_string</computeroutput></emphasis></term>
-
-
-<listitem>
-<programlisting>
-<emphasis role="strong">db_nullify_empty_string</emphasis> <emphasis>string</emphasis>
-</programlisting>
-
-
-<para>For true SQL purists, we provide the convenience function
-<emphasis role="strong"><computeroutput>db_nullify_empty_string</computeroutput></emphasis>, which returns
-[db_null] if its <emphasis><computeroutput>string</computeroutput></emphasis> argument is the empty string
-and can be used to encapsulate another Oracle quirk: </para>
-
- 
-
-<programlisting>
-
-set baz &quot;&quot;
-
-# Clean out the foo table
-#
-db_dml unused &quot;delete from foo&quot;
-
-db_dml unused &quot;insert into foo(baz) values(&#39;$baz&#39;)&quot;
-
-set n_rows [db_string unused &quot;select count(*) from foo where baz is null&quot;]
-#
-# $n_rows is 1; in effect, the &quot;baz is null&quot; criterion is matching
-# the empty string we just inserted (because of Oracle&#39;s coercion
-# quirk)
-
-</programlisting>
-
-<para>
-To balance out this asymmetry, you can explicitly set <computeroutput>baz</computeroutput> to
-<computeroutput>null</computeroutput> by writing: 
-</para>
- 
-
-<programlisting>
-
-db_dml foo_insert &quot;insert into foo(baz) values(:1)&quot; {[db_nullify_empty_string $baz]}
-
-</programlisting>
-
-</listitem>
+	<term>
+		<emphasis role="strong">
+			<computeroutput>
+				<anchor id="kernel.dbapi_db_name"/>db_name
+			</computeroutput>
+		</emphasis>
+	</term>
+ 	<listitem>
+		<programlisting>
+			<emphasis role="strong">
+				<computeroutput>db_name</computeroutput>
+			</emphasis>
+		</programlisting>
+		<para>
+		 	Returns the name of the database, as returned by the driver.
+		</para>
+	 </listitem>
 </varlistentry>
+
+<varlistentry>
+	<term>
+		<emphasis role="strong">
+			<computeroutput>
+				<anchor id="kernel.dbapi_db_type"/>db_type
+			</computeroutput>
+		</emphasis>
+	</term>
+ 	<listitem>
+		<programlisting>
+			<emphasis role="strong">
+				<computeroutput>db_type</computeroutput>
+			</emphasis>
+		</programlisting>
+		<para>
+			Returns the RDBMS type (i.e. oracle, postgresql) this OpenACS installation is
+			using.  The nsv ad_database_type is set up during the bootstrap process.
+		</para>
+	 </listitem>
+</varlistentry>
+
+<varlistentry>
+	<term>
+		<emphasis role="strong">
+			<computeroutput>
+				<anchor id="kernel.dbapi_db_compatible_rdbms_p"/>db_compatible_rdbms_p
+			</computeroutput>
+		</emphasis>
+	</term>
+ 	<listitem>
+		<programlisting>
+			<emphasis role="strong">db_compatible_rdbms_p</emphasis> db_type
+		</programlisting>
+		<para>
+			Returns 1 if the given db_type is compatible with the current RDBMS.
+		</para>
+	 </listitem>
+</varlistentry>
+
+<varlistentry>
+	<term>
+		<emphasis role="strong">
+			<computeroutput>
+				<anchor id="kernel.dbapi_db_package_supports_rdbms_p"/>db_package_supports_rdbms_p
+			</computeroutput>
+		</emphasis>
+	</term>
+ 	<listitem>
+		<programlisting>
+			<emphasis role="strong">db_package_supports_rdbms_p</emphasis> db_type_list
+		</programlisting>
+		<para>
+			Returns 1 if db_type_list contains the current RDMBS type.  A package
+			intended to run with a given RDBMS must note this in it's package info
+			file regardless of whether or not it actually uses the database. 
+		</para>
+	 </listitem>
+</varlistentry>
+
+<varlistentry>
+	<term>
+		<emphasis role="strong">
+			<computeroutput>
+				<anchor id="kernel.dbapi_db_legacy_package_p"/>db_legacy_package_p
+			</computeroutput>
+		</emphasis>
+	</term>
+ 	<listitem>
+		<programlisting>
+			<emphasis role="strong">db_legacy_package_p</emphasis> db_type_list
+		</programlisting>
+		<para>
+			Returns 1 if the package is a legacy package.  We can only tell for certain if
+			it explicitly supports Oracle 8.1.6 rather than the OpenACS more general oracle.
+		</para>
+	 </listitem>
+</varlistentry>
+
+<varlistentry>
+	<term>
+		<emphasis role="strong">
+			<computeroutput>
+				<anchor id="kernel.dbapi_db_version"/>db_version
+			</computeroutput>
+		</emphasis>
+	</term>
+ 	<listitem>
+		<programlisting>
+			<emphasis role="strong">db_version</emphasis>
+		</programlisting>
+		<para>
+			Returns the RDBMS version (i.e. 8.1.6 is a recent Oracle version; 7.1 a
+			recent PostgreSQL version.
+		</para>
+	 </listitem>
+</varlistentry>
+
+<varlistentry>
+	<term>
+		<emphasis role="strong">
+			<computeroutput>
+				<anchor id="kernel.dbapi_db_current_rdbms"/>db_current_rdbms
+			</computeroutput>
+		</emphasis>
+	</term>
+ 	<listitem>
+		<programlisting>
+			<emphasis role="strong">db_current_rdbms</emphasis>
+		</programlisting>
+		<para>
+			Returns the current rdbms type and version.
+		</para>
+	 </listitem>
+</varlistentry>
+
+<varlistentry>
+	<term>
+		<emphasis role="strong">
+			<computeroutput>
+				<anchor id="kernel.dbapi_db_known_database_types"/>db_known_database_types
+			</computeroutput>
+		</emphasis>
+	</term>
+ 	<listitem>
+		<programlisting>
+			<emphasis role="strong">db_known_database_types</emphasis>
+		</programlisting>
+		<para>
+			Returns a list of three-element lists describing the database engines known
+			to OpenACS.  Each sublist contains the internal database name (used in file
+			paths, etc), the driver name, and a "pretty name" to be used in selection
+			forms displayed to the user.
+		</para>
+		<para>
+			The nsv containing the list is initialized by the bootstrap script and should
+			never be referenced directly by user code.
+			Returns the current rdbms type and version.
+		</para>
+	 </listitem>
+</varlistentry>
+
 </variablelist>
 
 
