@@ -3,7 +3,7 @@
 <queryset>
    <rdbms><type>oracle</type><version>8.1.6</version></rdbms>
 
-<fullquery name="subsite::configure.add_constraint">      
+<fullquery name="subsite::after_mount.add_constraint">      
       <querytext>
       
 		    BEGIN

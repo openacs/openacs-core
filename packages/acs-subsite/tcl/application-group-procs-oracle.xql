@@ -87,24 +87,6 @@
 </fullquery>
 
  
-<fullquery name="application_group::new.parent_group_id_query">      
-      <querytext>
-      
-		    select ag.group_id as parent_group_id
-		    from application_groups ag,
-		         apm_packages,
-		         (select object_id, rownum as tree_rownum
-		          from site_nodes
-		          start with node_id = :parent_node_id
-		          connect by node_id = prior parent_id) nodes
-                    where nodes.object_id = apm_packages.package_id
-                      and apm_packages.package_id = ag.package_id
-                      and tree_rownum=1
-		
-      </querytext>
-</fullquery>
-
- 
 <fullquery name="application_group::new.add_group">      
       <querytext>
       
@@ -114,7 +96,7 @@
 	            object_type    => :group_type,
 	            group_name    => :group_name,
                     package_id    => :package_id,
-	            context_id    => :context_id,
+	            context_id    => :package_id,
 	            creation_user => :creation_user,
 	            creation_ip   => :creation_ip,
 		    email         => :email,
@@ -124,23 +106,17 @@
 	    
       </querytext>
 </fullquery>
-
  
-<fullquery name="application_group::new.add_composition_rel">      
+<fullquery name="application_group::delete.delete">      
       <querytext>
       
-		    begin
-		    :1 := composition_rel.new (
-		            rel_type => 'composition_rel',
-		            object_id_one => :parent_group_id,
-		            object_id_two => :group_id,
-		            creation_user => :creation_user,
-                            creation_ip   => :creation_ip
-		    );
-		    end;
-		
+		begin
+		:1 := application_group.delete (
+	                group_id      => :group_id,
+		);
+		end;
+	    
       </querytext>
 </fullquery>
 
- 
 </queryset>

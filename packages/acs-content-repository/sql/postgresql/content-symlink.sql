@@ -12,7 +12,7 @@
 
 -- create or replace package body content_symlink
 -- function new
-create function content_symlink__new (varchar,varchar,integer,integer,integer,timestamp with time zone,integer,varchar)
+create function content_symlink__new (varchar,varchar,integer,integer,integer,timestamptz,integer,varchar)
 returns integer as '
 declare
   new__name                   alias for $1;  -- default null  

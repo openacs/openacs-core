@@ -4,7 +4,11 @@
 # @column last_name Last name of the user.
 
 
-db_multirow users get_users "" { set full_name "${last_name}, $first_name" }
+db_multirow users get_users {
+    select last_name, first_name, first_name || ' ' || last_name as full_name from ad_template_sample_users
+}  { 
+    set full_name "${last_name}, $first_name" 
+}
 
 # Manually access the datasource 
 

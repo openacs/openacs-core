@@ -13,40 +13,22 @@ ad_page_contract {
 
 set user_id [ad_conn user_id]
 
-doc_body_append "[ad_header "Mount A Package Instance"]
+set page_title "Mount A Package Instance"
 
-Please select one of the following packages to mount on [site_node::get_url -node_id $node_id].
-<p>
-The package instances are not mounted anywhere else:
+set context [list [list . "Site Map"] $page_title]
 
-<ul>
-"
+set site_node_url [site_node::get_url -node_id $node_id]
 
-db_foreach packages_unmounted_select {} {
-  doc_body_append "<li><a href=mount-2?[export_url_vars expand:multiple root_id node_id package_id]>$name</a>"
+db_multirow -extend { url } unmounted packages_unmounted_select {} {
+    set url "mount-2?[export_vars { expand:multiple root_id node_id package_id }]"
 }
 
-doc_body_append "</ul> These instances are already mounted
-elsewhere. Selecting one of them will create an additional location
-for the same application: <ul>"
-
-db_foreach packages_mounted_select {} {
-  doc_body_append "<li><a href=mount-2?[export_url_vars expand:multiple root_id node_id package_id]>$name</a>"
+db_multirow -extend { url } mounted packages_mounted_select {} {
+    set url "mount-2?[export_vars { expand:multiple root_id node_id package_id}]"
 }
 
-doc_body_append "</ul>
-
-The packages are centralized services and are
-probably not meant to be mounted anywhere:
-
-<ul>"
-
-db_foreach packages_singleton_select {} {
-  doc_body_append "<li><a href=mount-2?[export_url_vars expand:multiple root_id node_id package_id]>$name</a>"
+db_multirow -extend { url } singleton packages_singleton_select {} {
+    set url "mount-2?[export_vars { expand:multiple root_id node_id package_id}]"
 }
 
-doc_body_append "
-</ul>
 
-[ad_footer]
-"

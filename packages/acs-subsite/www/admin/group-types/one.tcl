@@ -23,8 +23,6 @@ ad_page_contract {
     more_relation_types_p:onevalue
 }
 
-subsite::configure_if_necessary
-
 set user_id [ad_conn user_id]
 set return_url_enc [ad_urlencode [ad_conn url]?[ad_conn query]]
 set group_type_enc [ad_urlencode $group_type]

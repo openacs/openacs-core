@@ -767,3 +767,11 @@ ad_proc aa_run_with_teardown {
         error $error_text
     }
 }
+
+#
+# Set the valid testcase categories list, and testcase/component lists.
+#
+nsv_set aa_test cases {}
+nsv_set aa_test components {}
+nsv_set aa_test init_classes {}
+nsv_set aa_test categories {config db script web}

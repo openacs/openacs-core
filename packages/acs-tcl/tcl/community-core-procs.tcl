@@ -179,6 +179,22 @@ namespace eval person {
     ad_proc -public name {
         {-person_id:required}
     } {
+        get the name of a person. Cached.
+    } {
+        return [util_memoize [list person::name_not_cached -person_id $person_id]]
+    }
+
+    ad_proc -public name_flush {
+        {-person_id:required}
+    } {
+        Flush the person::name cache.
+    } {
+        util_memoize_flush [list person::name_not_cached -person_id $person_id]
+    }
+
+    ad_proc -public name_not_cached {
+        {-person_id:required}
+    } {
         get the name of a person
     } {
         db_1row get_person_name {}
@@ -193,6 +209,7 @@ namespace eval person {
         update the name of a person
     } {
         db_dml update_person {}
+        name_flush -person_id $person_id
     }
 }
 

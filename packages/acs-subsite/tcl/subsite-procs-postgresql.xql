@@ -3,7 +3,7 @@
 <queryset>
    <rdbms><type>postgresql</type><version>7.1</version></rdbms>
 
-<fullquery name="subsite::configure.add_constraint">      
+<fullquery name="subsite::after_mount.add_constraint">      
       <querytext>
 
 	select rel_constraint__new(

@@ -9,6 +9,7 @@ ad_page_contract {
   object_id:integer,notnull
   party_id:integer,notnull
   privilege
+  {application_url ""}
 }
 
 ad_require_permission $object_id admin
@@ -19,4 +20,4 @@ db_exec_plsql grant {
   end;
 }
 
-ad_returnredirect "one?[export_url_vars object_id]"
+ad_returnredirect "one?[export_vars {object_id application_url}]"

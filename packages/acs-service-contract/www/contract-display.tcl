@@ -17,3 +17,6 @@ db_multirow contract contract {select o.contract_name, o.operation_name, o.opera
     and e.msg_type_id = t.msg_type_id
     and et.msg_type_id = e.element_msg_type_id
     order by o.contract_name, o.operation_name, t.msg_type_name, e.element_pos }
+
+
+db_multirow valid_installed_binding valid_installed_binding ""

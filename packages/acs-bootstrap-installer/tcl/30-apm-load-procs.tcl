@@ -1,6 +1,6 @@
 ad_library {
 
-    Routines needed by the boostrapper to load package code. 
+    Routines needed by the bootstrapper to load package code. 
 
     @creation-date 26 May 2000
     @author Jon Salz [jsalz@arsdigita.com]
@@ -97,10 +97,14 @@ ad_proc apm_guess_file_type { package_key path } {
     # acs-mail-create.sql only).  I've tightened up the regexp below to
     # avoid this problem, along with renaming the file...
 
+    # DRB: I've tightened it up again because forums-forums-create.sql
+    # was being recognized as a datamodel create script for the forums
+    # package.
+
     if { [string equal $extension ".sql"] } {
 	if { [lsearch -glob $components "*upgrade-*-*"] >= 0 } {
 	    set type "data_model_upgrade"
-	} elseif { [regexp -- "^$package_key-(create|drop)\.sql\$" [file tail $path] "" kind] } {
+        } elseif { [regexp -- "^$package_key-(create|drop)\.sql\$" [file tail $path] "" kind] } {
 	    set type "data_model_$kind"
 	} else {
 	    set type "data_model"

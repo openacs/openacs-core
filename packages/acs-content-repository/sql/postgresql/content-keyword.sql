@@ -91,7 +91,7 @@ end;' language 'plpgsql';
 
 
 -- function new
-create function content_keyword__new (varchar,varchar,integer,integer,timestamp with time zone,integer,varchar,varchar)
+create function content_keyword__new (varchar,varchar,integer,integer,timestamptz,integer,varchar,varchar)
 returns integer as '
 declare
   new__heading                alias for $1;  

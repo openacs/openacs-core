@@ -41,7 +41,7 @@ proc db_bootstrap_checks { errors error_p } {
     }
 
     if { [catch { ns_pg_bind 1row $db "select count(*) from pg_class" }] } {
-        append my_errors "<li>Your Postgres driver is too old.  You need to update.\n"
+        append my_errors "<li>Your Postgres driver is either too old or was not compiled with <code>ACS=1</code>.  Please update to a version 2.3 or higher and compile it with <code>ACS=1</code>.\n"
         set my_error_p 1
     }
 

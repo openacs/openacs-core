@@ -5,7 +5,7 @@
       <querytext>
       
 	delete from sec_session_properties
-	where  :current_time - last_hit > :property_life
+	where last_hit < :expires
     
       </querytext>
 </fullquery>

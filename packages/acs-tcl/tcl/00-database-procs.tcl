@@ -689,14 +689,14 @@ ad_proc -public db_exec_plsql {{ -dbn "" } statement_name sql args } {
             # if a table is being created, we need to bypass things, too (OpenACS - Ben).
             set test_sql [db_qd_replace_sql $full_statement_name $sql]
             if {[regexp -nocase -- {^\s*select} $test_sql match]} {
-                db_qd_log QDDebug "PLPGSQL: bypassed anon function"
+                ns_log Debug "PLPGSQL: bypassed anon function"
                 set selection [db_exec 0or1row $db $full_statement_name $sql]
             } elseif {[regexp -nocase -- {^\s*create table} $test_sql match] || [regexp -nocase -- {^\s*drop table} $test_sql match]} {
-                db_qd_log QDDebug "PLPGSQL: bypassed anon function -- create/drop table"
+                ns_log Debug "PLPGSQL: bypassed anon function -- create/drop table"
                 set selection [db_exec dml $db $full_statement_name $sql]
                 return ""
             } else {
-                db_qd_log QDDebug "PLPGSQL: using anonymous function"
+                ns_log Debug "PLPGSQL: using anonymous function"
                 set selection [db_exec_plpgsql $db $full_statement_name $sql \
                                    $statement_name]
             }
@@ -735,12 +735,7 @@ ad_proc -private db_exec_plpgsql { db statement_name pre_sql fname } {
 } {
     set start_time [clock clicks]
 
-    db_qd_log QDDebug "PRE-QD: the SQL is $pre_sql"
-
-    # Query Dispatcher (OpenACS - ben)
     set sql [db_qd_replace_sql $statement_name $pre_sql]
-
-    db_qd_log QDDebug "POST-QD: the SQL is $sql"
 
     set unique_id [db_nextval "anon_func_seq"]
 
@@ -750,7 +745,7 @@ ad_proc -private db_exec_plpgsql { db statement_name pre_sql fname } {
     if {![string equal $sql $pre_sql]} {
         set sql [uplevel 2 [list subst -nobackslashes $sql]]
     }
-    db_qd_log QDDebug "PLPGSQL: converted: $sql to: select $function_name ()"
+    ns_log Debug Debug "PLPGSQL: converted: $sql to: select $function_name ()"
 
     # create a function definition statement for the inline code 
     # binding is emulated in tcl. (OpenACS - Dan)
@@ -926,17 +921,12 @@ ad_proc -private db_exec { type db statement_name pre_sql {ulevel 2} args } {
     # db_driverkey, so db_driverkey MUST support its -handle switch.
     # --atp@piskorski.com, 2003/04/09 12:13 EDT
 
-    db_qd_log QDDebug "PRE-QD: the SQL is $pre_sql for $statement_name"
-
-    # Query Dispatcher (OpenACS - ben)
     set sql [db_qd_replace_sql $statement_name $pre_sql]
 
     # insert tcl variable values (Openacs - Dan)
     if {![string equal $sql $pre_sql]} {
         set sql [uplevel $ulevel [list subst -nobackslashes $sql]]
     }
-
-    db_qd_log QDDebug "POST-QD: the SQL is $sql"
 
     set errno [catch {
         upvar bind bind
@@ -1810,8 +1800,9 @@ ad_proc db_transaction {{ -dbn ""} transaction_code args } {
         # An error was triggered or the transaction has been aborted.  
         db_abort_transaction
         if { [info exists on_error] && ![empty_string_p $on_error] } {
-            # An on_error block exists, so execute it.
+
             if {[string equal postgresql [db_type]]} { 
+
                 # JCD: with postgres we abort the transaction prior to 
                 # executing the on_error block since there is nothing 
                 # you can do to "fix it" and keeping it meant things like 
@@ -1819,12 +1810,30 @@ ad_proc db_transaction {{ -dbn ""} transaction_code args } {
                 # 
                 # Note that the semantics described in the proc doc 
                 # are not possible to support on postresql.
+
+                # DRB: I removed the db_release_unused_handles call that
+                # this patch included because additional aborts further
+                # down triggered an illegal db handle error.  I'm going to
+                # have the code start a new transaction as well.  If we
+                # don't, if a transaction fails and the on_error block
+                # fails, the on_error block DML will have been committed.
+                # Starting a new transaction here means that DML by both
+                # the transaction and on_error clause will be rolled back.
+                # On the other hand, if the on_error clause doesn't fail,
+                # any DML in that block will be committed.  This seems more
+                # useful than simply punting ...
+
                 ns_db dml $dbh "abort transaction"
-                db_release_unused_handles
+                ns_db dml $dbh "begin transaction"
+
             }
+
+            # An on_error block exists, so execute it.
+
             set errno  [catch {
                 uplevel 1 $on_error
             } on_errmsg]
+
             # Determine what do with the error.
             set err_p 0
             switch $errno {
@@ -2186,7 +2195,7 @@ ad_proc db_source_sql_file {{
 
             if { $error_found } {
                 global errorCode
-                return -code error -errorinfo $error_lines -errorcode $errorCode
+                return -code error -errorinfo $error_lines -errorcode $errorCode $error_lines
             }
 
         }
@@ -2601,9 +2610,6 @@ ad_proc -private db_exec_lob_oracle {{
 } {
     set start_time [clock clicks]
 
-    db_qd_log QDDebug "PRE-QD: the SQL is $pre_sql for $statement_name"
-
-    # Query Dispatcher (OpenACS - ben)
     set sql [db_qd_replace_sql $statement_name $pre_sql]
 
     # insert tcl variable values (Openacs - Dan)
@@ -2618,13 +2624,11 @@ ad_proc -private db_exec_lob_oracle {{
         set file_storage_p 1
         set original_type $type
         set qtype 1row
-        ns_log Notice "db_exec_lob: file storage in use"
+        ns_log Debug "db_exec_lob: file storage in use"
     } else {
         set qtype $type
-        ns_log Notice "db_exec_lob: blob storage in use"
+        ns_log Debug "db_exec_lob: blob storage in use"
     }
-
-    db_qd_log QDDebug "POST-QD: the SQL is $sql"
 
     set errno [catch {
 	upvar bind bind

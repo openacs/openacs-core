@@ -123,17 +123,15 @@ ad_proc -public get_template_url {} {
 ad_proc -public get_folder_labels { { varname "folders" } } {
  
   variable item_id
-  set url ""
 
   # this repeats the query used to look up the item in the first place
   # but there does not seem to be a clear way around this
 
   # build the folder URL out as we iterate over the query
   set query [db_map get_url]
-  uplevel 1 "db_multirow $varname ignore_get_url $query { 
-                                                       append url $name/ 
-                                                       set url ${url}index.acs
-                                                        }"
+  db_multirow -extend {url} $varname ignore_get_url $query  { 
+      append url "$name/"
+  }
 }
 
 ad_proc -public get_content_value { revision_id } {

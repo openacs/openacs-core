@@ -132,7 +132,6 @@ ad_proc -private apm_generate_package_spec { version_id } {
     }
     append spec "        </callbacks>"
     append spec "\n        <parameters>\n"
-
     apm_log APMDebug "APM: Writing parameters"
     db_foreach parameter_info {} {
 	append spec "            <parameter datatype=\"[ad_quotehtml $datatype]\" \

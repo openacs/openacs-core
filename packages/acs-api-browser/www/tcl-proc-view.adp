@@ -2,7 +2,7 @@
 <property name=title>@title@</property>
 <property name="context">@context@</property>
 
-Sorry, no Tcl API procedures were found with that name.
+Sorry, no AOLserver Tcl API procedures were found with that name.
 
 <p>
 

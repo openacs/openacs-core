@@ -52,14 +52,10 @@ ad_proc -private sec_session_lifetime {} {
     return [ad_parameter -package_id [ad_acs_kernel_id] SessionLifetime security 604800]
 }
 
-proc sec_sweep_sessions {} {
-    set current_time [ns_time]
-    set property_life [sec_session_lifetime]
+ad_proc -private sec_sweep_sessions {} {
+    set expires [expr {[ns_time] - [sec_session_lifetime]}]
 
-    db_dml sessions_sweep {
-	delete from sec_session_properties
-	where  :current_time - last_hit > :property_life
-    }
+    db_dml sessions_sweep {} 
 }
 
 proc_doc sec_handler {} {
@@ -962,7 +958,9 @@ ad_proc -private ad_login_page {} {
 
     set url [ad_conn url]
     if { [string match "*register/*" $url] || [string match "/index*" $url] || \
-	    [string match "/" $url] } {
+            [string match "/index*" $url] || \
+            [string match "/" $url] || \
+            [string match "*password-update*" $url] } {
 	return 1
     }
 
@@ -990,17 +988,21 @@ ad_proc -public ad_sign {
     @param secret allows the caller to specify a known secret external
     to the random secret management mechanism.
 
-    @param token_id allows the caller to specify a token_id.
+    @param token_id allows the caller to specify a token_id which is then ignored so don't use it.
 
     @param value the value to be signed.
 } {
-    # pick a random token_id
+
     if { [empty_string_p $secret] } {
-	set token_id [sec_get_random_cached_token_id]
+        if {[empty_string_p $token_id]} { 
+            # pick a random token_id
+            set token_id [sec_get_random_cached_token_id]
+        }
 	set secret_token [sec_get_token $token_id]
     } else {
 	set secret_token $secret
     }
+    
 
     ns_log Debug "Security: Getting token_id $token_id, value $secret_token"
 

@@ -18,12 +18,14 @@ ad_proc -public form {command args} {
     template::
 
     @see template::form
+    @see template::element
 } -
 
 ad_proc -public template::form { command args } {
-    template::form command invokes form functions.
-    Please see the individual functions for 
-    their arguments.
+
+    template::form command invokes form functions.  Please see the
+    individual functions for their arguments.  The template::element
+    api is used to manipulate form elements.
     
     @see template::form::create
     @see template::form::get_button
@@ -40,6 +42,7 @@ ad_proc -public template::form { command args } {
     @see template::form::section
     @see template::form::set_values
     @see template::form::size
+    @see template::element
 } {
   eval template::form::$command $args
 }
@@ -47,20 +50,63 @@ ad_proc -public template::form { command args } {
 ad_proc -public template::form::create { id args } {
     Initialize the data structures for a form.
 
-    @param id A keyword identifier for the form, such as "add_user" or
-              "edit_item".  The ID must be unique in the context of a 
-              single page.
+    @param id               A keyword identifier for the form, such as "add_user" or
+                            "edit_item".  The ID must be unique in the context of a 
+                            single page.
 
-    @option method The standard METHOD attribute to specify in the HTML FORM
-                   tag at the beginning of the rendered form. Defaults to POST.
+    @option method          The standard METHOD attribute to specify in the HTML FORM
+                            tag at the beginning of the rendered form. Defaults to POST.
 
-    @option html A list of additional name-value attribute pairs to
-                 include in the HTML FORM tag at the beginning of the 
-                 rendered form. Common attributes include JavaScript 
-                 event handlers and multipart form encoding.  For example, 
-                 "-html { enctype multipart/form-data onSubmit validate() }"
+    @option html            A list of additional name-value attribute pairs to
+                            include in the HTML FORM tag at the beginning of the 
+                            rendered form. Common attributes include JavaScript 
+                            event handlers and multipart form encoding.  For example, 
+                            "-html { enctype multipart/form-data onSubmit validate() }"
+    
+    @option mode            If set to 'display', the form is shown in display-only mode, where 
+                            the user cannot edit the fields. Each widget knows how to display its contents
+                            appropriately, e.g. a select widget will show the label, not the value. If set to
+                            'edit', the form is displayed as normal, for editing. Defaults to 'edit'. Switching
+                            to edit mode when a button is clicked in display mode is handled automatically.
+    
+    @option cancel_url      A url to redirect to when the user hits the Cancel button. 
+                            If you do not supply a cancel_url, there will be no Cancel button.
+    
+    @option cancel_label    The label of the Cancel button, if cancel_url is supplied.
+                            Default is "Cancel".
+    
+    @option display_buttons List of buttons to show when the form is in display mode. 
+                            The value should be a list of lists, with the first element being the form label
+                            and the second element being the name of the name of the form element. Defaults to
+                            { { "Edit" edit } }. The name of the button clicked can be retrieved using 
+                            template::form::get_button. The name of the button clicked while in display mode
+                            is called the 'action', and can be retrieved using template::form::get_action. 
+                            The action is automatically carried forward to the form submission, so that the value
+                            that you get from calling template::form::get_action on the final form submission
+                            is the name of the button which was called when the form changed from display 
+                            mode to edit mode.
 
-    @option elements A block of element specifications.
+    @option edit_buttons    List of buttons to show when the form is in display mode. 
+                            The value should be a list of lists, with the first element being the form label
+                            and the second element being the name of the name of the form element. Defaults to
+                            { { "Ok" ok } }. The name of the button clicked can be retrieved using 
+                            template::form::get_button. 
+    
+    @option actions         A list of actions available on the form. Equivalent to, and 
+                            overrides display_buttons.
+
+    @option has_submit      Set to 1 to suppress the OK or submit button automatically
+                            added by the form builder. Use this if your form already includes its own 
+                            submit button.
+
+    @option has_edit        Set to 1 to suppress the Edit button automatically added by the
+                            form builder. Use this if you include your own.
+
+    @option elements        A block of element specifications.
+
+    @see template::form::get_button
+    @see template::form::get_action
+
 } {
   set level [template::adp_level]
 
@@ -95,8 +141,13 @@ ad_proc -public template::form::create { id args } {
     ad_script_abort
   }
 
-  set formaction [get_action $id]
+  # If the user hit a button named "cancel", redirect and about
+  if { $submission && [string equal $formbutton "cancel"] && [exists_and_not_null opts(cancel_url)]} {
+    ad_returnredirect $opts(cancel_url)
+    ad_script_abort
+  }
 
+  set formaction [get_action $id]
   # If we were in display mode, and a button was clicked, we should be in edit mode now
   if { $submission && [string equal [ns_queryget "form:mode"] "display"] } {
     set opts(mode) "edit"
@@ -175,7 +226,8 @@ ad_proc -public template::form::get_button { id } {
 }
 
 ad_proc -public template::form::get_action { id } {
-    Find out which action is in progress
+    Find out which action is in progress. This is the name of the button
+    which was clicked when the form was in display mode.
 
     @param id  The ID of an ATS form object.
     @return the name of the action in progress
@@ -183,7 +235,7 @@ ad_proc -public template::form::get_action { id } {
   set level [template::adp_level]
 
   # keep form properties and a list of the element items
-  upvar #$level $id:action formaction
+  upvar #$level $id:formaction formaction
     
   # If we've already found the action, just return that
   if { [info exists formaction] } {
@@ -207,8 +259,8 @@ ad_proc -public template::form::get_action { id } {
     return $formaction
   }
 
-  # Otherwise, there should be a form:action variable in the form
-  set formaction [ns_queryget "form:action"]
+  # Otherwise, there should be a form:formaction variable in the form
+  set formaction [ns_queryget "form:formaction"]
 
   return $formaction
 }
@@ -295,7 +347,13 @@ ad_proc -private template::form::template { id { style "" } } {
       set "buttons:${buttons:rowcount}(name)" "formbutton:$name"
   }
   
-  if { [string equal $style {}] } { set style standard }
+  if { [string equal $style {}] } { 
+      set style [parameter::get \
+                     -package_id [apm_package_id_from_key "acs-templating"] \
+                     -parameter DefaultFormStyle \
+                     -default "standard"]
+  }
+
   set file_stub [template::get_resource_path]/forms/$style
 
   # set the asset url for images
@@ -440,10 +498,10 @@ ad_proc -private template::form::render { id tag_attributes } {
   append output [export_vars -form { { form\:id $id } { form\:mode $properties(mode) } }]
   
   # If we're in edit mode, output the action
-  upvar #$level $id:action form_action
-  if { [string equal $properties(mode) "edit"] && [exists_and_not_null form_action] } {
-    upvar #$level $id:action action
-    append output [export_vars -form { { form\:action $form_action } }]
+  upvar #$level $id:formaction formaction
+  if { [string equal $properties(mode) "edit"] && [exists_and_not_null formaction] } {
+    upvar #$level $id:formaction action
+    append output [export_vars -form { { form\:formaction $formaction } }]
   }
 
   return $output

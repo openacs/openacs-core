@@ -7,6 +7,7 @@ ad_page_contract {
   @cvs-id $Id$
 } {
   object_id:integer,notnull
+  {application_url ""}
 }
 
 ad_require_permission $object_id admin
@@ -22,17 +23,13 @@ doc_body_append "[ad_header "[_ acs-subsite.lt_Grant_Permission_on_n]"]
 <hr>
 
 <form method=get action=grant-2>
-[export_form_vars object_id]
+[export_vars -form {application_url object_id}]
 
 <input type=submit value=\"[_ acs-subsite.Grant]\">
 
 <select name=privilege>
 "
-db_foreach privileges {
-  select privilege
-  from acs_privileges
-  order by privilege
-} {
+db_foreach privileges {} {
   doc_body_append "<option value=$privilege>$privilege</option>\n"
 }
 
@@ -42,15 +39,14 @@ doc_body_append "
 <select name=party_id>
 "
 
-db_foreach parties {
-  select party_id, acs_object.name(party_id) as name
-  from parties
-} {
+db_foreach parties {} {
   doc_body_append "<option value=$party_id>$name</option>\n"
 }
 
 doc_body_append "
 </select>
+
+<input type=submit value=\"      OK      \">
 
 </form>
 

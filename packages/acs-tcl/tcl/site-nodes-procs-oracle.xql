@@ -14,6 +14,7 @@
             select site_node.url(site_nodes.node_id) as url,
                    site_nodes.node_id,
                    site_nodes.parent_id,
+                   site_nodes.name,
                    site_nodes.directory_p,
                    site_nodes.pattern_p,
                    site_nodes.object_id,
@@ -34,6 +35,7 @@
             select site_node.url(site_nodes.node_id) as url,
                    site_nodes.node_id,
                    site_nodes.parent_id,
+                   site_nodes.name,
                    site_nodes.directory_p,
                    site_nodes.pattern_p,
                    site_nodes.object_id,
@@ -55,6 +57,7 @@
             select site_node.url(node_id)
             from site_nodes
             where object_id = :object_id
+            order by site_node.url(node_id) desc
         </querytext>
     </fullquery>
 

@@ -98,28 +98,22 @@
 
 </td></tr>
 
-<noparse><if \@buttons:rowcount\@ gt 0></noparse>
-  <tr>
-    <td align=right>
+<tr>
+  <td align="right" colspan="2">
+    <if @buttons:rowcount@ gt 0>
       <multiple name="buttons">
         <input type="submit" name="@buttons.name@" value="@buttons.label@">
       </multiple>
-    </td>
-  </tr>
-<noparse></if></noparse>
-<noparse><else></noparse>
-  <tr><td align=right colspan=2>
-    <table border=0 cellspacing=5 cellpadding=0>
-      <tr>
-      <multiple name=elements>
+    </if>
+    <else>
+      <multiple name="elements">
         <if @elements.widget@ in "submit" "button">
-          <td><noparse><formwidget id=@elements.id@></noparse></td>
+          <noparse><formwidget id=@elements.id@></noparse>
         </if>
       </multiple>
-      </tr>
-    </table>
-  </td></tr>
-<noparse></else></noparse>
+    </else>
+  </td>
+</tr>
  
 </table>
 

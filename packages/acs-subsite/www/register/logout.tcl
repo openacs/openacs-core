@@ -6,11 +6,12 @@ ad_page_contract {
     @cvs-id $Id$
 
 } {
+	{return_url "/"}
     
 }
 
 ad_user_logout 
 db_release_unused_handles
 
-ad_returnredirect "/"
+ad_returnredirect $return_url
 

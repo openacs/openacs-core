@@ -95,6 +95,7 @@ set table_def {
             set format_string [join $file_link_list " | "]
             format $format_string
             
+
 	}]&nbsp;&nbsp;</td>}
     }
 }

@@ -180,10 +180,8 @@ namespace eval application_group {
     ad_proc new {
 	{ -group_id "" } 
 	{ -group_type "application_group"}
-        { -parent_group_id "" }
         { -package_id "" }
 	{ -group_name "" }
-	{ -context_id "" } 
 	{ -creation_user "" }
 	{ -creation_ip "" }
 	{ -email "" }
@@ -191,9 +189,6 @@ namespace eval application_group {
     } {
 	Creates an application group 
 	(i.e., group of "users/parties of this application")
-
-	NOTE: Doesn't deal with specializing membership and composition yet.
-	TO DO: Fix this.
 
 	Returns the group_id of the new application group.
     } {
@@ -210,15 +205,6 @@ namespace eval application_group {
 	    if { [empty_string_p $package_id] } {
 		set package_id [ad_conn package_id]
 	    }
-
-	    if {[empty_string_p $parent_group_id]} {
-		# by default, this application group will be a subgroup
-		# of the first parent application group based on the site map.
-
-		set parent_node_id [db_string parent_node_id ""]
-
-		db_0or1row parent_group_id_query ""
-	    }
 	}
 
 	if {[empty_string_p $package_id]} {
@@ -234,48 +220,23 @@ namespace eval application_group {
 	    append group_name " Parties"
 	}
 
-	if {[empty_string_p $context_id]} {
-	    set context_id $parent_group_id
-	}
-
 	db_transaction {
-
 	    # creating the new group
-	    set group_id [db_exec_plsql add_group {
-		begin
-		:1 := application_group.new (
-	            group_id      => :group_id,
-	            object_type    => :group_type,
-	            group_name    => :group_name,
-                    package_id    => :package_id,
-	            context_id    => :context_id,
-	            creation_user => :creation_user,
-	            creation_ip   => :creation_ip,
-		    email         => :email,
-		    url           => :url
-		);
-		end;
-	    }]
-
-	    if {![empty_string_p $parent_group_id]} {
-
-		set rel_id [db_exec_plsql add_composition_rel {
-		    begin
-		    :1 := composition_rel.new (
-		            rel_type => 'composition_rel',
-		            object_id_one => :parent_group_id,
-		            object_id_two => :group_id,
-		            creation_user => :creation_user,
-                            creation_ip   => :creation_ip
-		    );
-		    end;
-		}]
-
-	    }
+	    set group_id [db_exec_plsql add_group {}]
 	}
 
 	return $group_id
 
     }
+
+    ad_proc delete {
+        -group_id:required
+    } {
+        Delete the given application group and all relational segments and constraints dependent
+        on it (handled by the PL/[pg]SQL API
+    } {
+        db_exec_plsql delete {}
+    }
+
 }
 

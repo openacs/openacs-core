@@ -49,7 +49,7 @@ namespace eval site_node_apm_integration {
                 site_node::update_cache -node_id $site_node(node_id)
             }
             
-            apm_package_delete_instance $package_id
+            apm_package_instance_delete $package_id
         }
     }
 

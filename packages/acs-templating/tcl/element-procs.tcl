@@ -10,11 +10,12 @@
 # License.  Full text of the license is available from the GNU Project:
 # http://www.fsf.org/copyleft/gpl.html
 ad_proc -public element { command form_id element_id args } {
-    form is really template::element although when in 
-    the "template" namespace you may omit the
-    template:: 
+    element is really template::element although when in the
+    "template" namespace you may omit the template:: qualifier.
+    See the template::form api for creating the form element container.
 
     @see template::element
+    @see template::form
 } -    
 
 ad_proc -public template::element { command form_id element_id args } {
@@ -46,57 +47,84 @@ ad_proc -public template::element::create { form_id element_id args } {
     Append an element to a form object.  If a submission is in progress,
     values for the element are prepared and validated.
 
-    @param form_id    The identifier of the form to which the element is to
-                      be added.  The form must have been previously created
-                      with a <tt>form create</tt> statement.
+    @param form_id        The identifier of the form to which the element is to
+                          be added.  The form must have been previously created
+                          with a <tt>form create</tt> statement.
 
+    @param element_id     A keyword identifier for the element that is unique
+                          in the context of the form.
 
-    @param element_id A keyword identifier for the element that is unique
-                      in the context of the form.
+    @option widget        The name of an input widget for the element.  Valid
+                          widgets must have a rendering procedure defined in 
+                          the <tt>template::widget</tt> namespace.
 
+    @option datatype      The name of a datatype for the element values.  Valid
+                          datatypes must have a validation procedure defined in
+                          the <tt>template::data::validate</tt> namespace.
 
-    @option widget    The name of an input widget for the element.  Valid
-                      widgets must have a rendering procedure defined in 
-                      the <tt>template::widget</tt> namespace.
+    @option label         The label for the form element.
+    
+    @option section       The section name for the element.
 
+    @option html          A list of name-value attribute pairs to include in
+                          the HTML tag for widget.  Typically used for additional
+                          formatting options, such as <tt>cols</tt> or 
+                          <tt>rows</tt>, or for JavaScript handlers.
 
-    @option datatype  The name of a datatype for the element values.  Valid
-                      datatypes must have a validation procedure defined in
-                      the <tt>template::data::validate</tt> namespace.
+    @option maxlength     The maximum allowable length in bytes. Will be checked using
+                          'string bytelength'. Will also cause 'input' widgets (text, integer, etc.)
+                          to get a maxlength="..." attribute.
 
+    @option options       A list of options for select lists and button groups 
+                          (check boxes or radio buttons).  The list contains 
+                          two-element lists in the form 
+                          { {label value} {label value} {label value} ...}
 
-    @option html      A list of name-value attribute pairs to include in
-                      the HTML tag for widget.  Typically used for additional
-                      formatting options, such as <tt>cols</tt> or 
-                      <tt>rows</tt>, or for JavaScript handlers.
+    @option value         The default value of the element
 
+    @option values        The default values of the element, where multiple values
+                          are allowed (checkbox groups and multiselect widgets)
 
-    @option options   A list of options for select lists and button groups 
-                      (check boxes or radio buttons).  The list contains 
-                      two-element lists in the form 
-                      { {label value} {label value} {label value} ...}
+    @option validate      A list of custom validation blocks in the form
+                          { name { expression } { message } \
+                            name { expression } { message } ...}
+                          where name is a unique identifier for the validation
+                          step, expression is a block to Tcl code that evaluates to
+                          1 or 0, and message is to be displayed to the user when 
+                          the validation step fails.
 
+    @option sign          specify for a hidden widget that its value should be
+                          signed
 
-    @option value     The default value of the element
+    @option help_text     Text displayed with the element 
 
+    @option help          Display helpful hints (date widget only?)
 
-    @option values    The default values of the element, where multiple values
-                      are allowed (checkbox groups and multiselect widgets)
+    @option optional      A flag indicating that no value is required for this
+                          element.  If a default value is specified, the default
+                          is used instead.
 
+    @option mode          Valid values are 'display', 'edit', and the empty string.
+                          If set to 'display', the element will render as static HTML
+                          which doesn't allow editing of the value, instead of the 
+                          HTML form element (e.g. &lt;input&gt;) which would otherwise
+                          get used. If set to 'edit', the element is as normal, allowing
+                          the user to edit the contents. If set to the empty string or
+                          not specified at all, the form's 'mode' setting is used instead.
 
-    @option validate  A list of custom validation blocks in the form
-                      { name { expression } { message } \
-                        name { expression } { message } ...}
-                      where name is a unique identifier for the validation
-                      step, expression is a block to Tcl code that evaluates to
-                      1 or 0, and message is to be displayed to the user when 
-                      the validation step fails.
+    @option before_html   A chunk of HTML displayed immediately before the rendered element.
 
+    @option after_html    A chunk of HTML displayed immediately after the rendered element.
 
-    @option optional  A flag indicating that no value is required for this
-                      element.  If a default value is specified, the default
-                      is used instead.
+    @option display_value Alternative value used when the element is in display mode.
+                          If specified, this value is used when the mode is set to 'display',
+                          instead of asking the element widget to render itself in display mode.
+
+    @see template::widget
+    @see template::data::validate
+    @see template::form::create
 } {
+
   set level [template::adp_level]
 
   # add the element to the element list
@@ -164,6 +192,22 @@ ad_proc -public template::element::create { form_id element_id args } {
     if { [llength $opts(values)] || ! [info exists opts(value)] } {
       set opts(value) [lindex $opts(values) 0]
     }
+  } 
+
+  if { [string equal $opts(widget) hidden] 
+       && [info exists opts(sign)] 
+       && $opts(sign)
+   } { 
+      if {[info exists opts(value)] } {
+          set val $opts(value)
+      } else { 
+          set val {}
+      }
+      template::element::create $opts(form_id) $opts(id):sig \
+          -datatype text \
+          -widget hidden \
+          -section $opts(section) \
+          -value [ad_sign $val]
   }
 }
 
@@ -183,6 +227,22 @@ ad_proc -public template::element::set_properties { form_id element_id args } {
   upvar 0 element opts
 
   template::util::get_opts $args
+
+    if { [string equal $opts(widget) hidden] 
+         && [info exists opts(sign)] 
+         && $opts(sign) 
+         && [info exists opts(value)] } {
+        if { [template::element::exists $form_id $element_id:sig] } {
+            template::element::set_properties $form_id $element_id:sig \
+                -value [ad_sign $opts(value)]
+
+        } else {
+            template::element::create $form_id $element_id:sig \
+                -datatype text \
+                -widget hidden \
+                -value [ad_sign $opts(value)]
+        }
+    }
 
   copy_value_to_values_if_defined
 }
@@ -308,7 +368,9 @@ ad_proc -private template::element::validate { form_id element_id } {
     set label $element(name)
   }
 
-  set is_inform [string equal $element(widget) inform]
+  # Element shouldn't be validated if it's an inform widget, or the element is not in edit mode.
+  # The element will be in edit mode if its mode is either blank or set to 'edit'.
+  set is_inform [expr [string equal $element(widget) inform] || (![string equal $element(mode) "edit"] && ![string equal $element(mode) ""])]
 
   # Check for required element
   if { ! $is_inform  && ! $is_optional && ! [llength $values] } {
@@ -354,6 +416,16 @@ ad_proc -private template::element::validate { form_id element_id } {
        # This is an optional field and it's empty... skip validation
        # (else things like the integer test will fail)
        continue
+    }
+
+    if { [info exists element(maxlength)] } {
+      set value_bytelength [string bytelength $value]
+      if {  $value_bytelength > $element(maxlength) } {
+        set excess_no_bytes [expr { $value_bytelength - $element(maxlength) }]
+        set message "$label is [ad_decode $excess_no_bytes "1" "one character" "$excess_no_bytes characters"] too long."
+        lappend v_errors $message
+        set formerror($element_id:maxlength) $message
+      }
     }
 
     if { ! [template::data::validate $element(datatype) value message] } {

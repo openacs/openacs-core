@@ -55,7 +55,7 @@ ad_proc -public template::widget::search { element_reference tag_attributes } {
     # include an extra hidden element to indicate that the 
     # value is being selected as opposed to entered
 
-    set output "<input type=\"hidden\" name=\"$element(id):select\" value=\"t\" />"
+    set output "\n<input type=\"hidden\" name=\"$element(id):select\" value=\"t\" />"
     append output [select element $tag_attributes]
 
   }
@@ -130,9 +130,9 @@ ad_proc -public template::widget::inform { element_reference tag_attributes } {
   upvar $element_reference element
 
   if { [info exists element(value)] } {
-    return $element(value)
+      return "$element(value)[input hidden element $tag_attributes]"
   } else {
-    return ""
+      return [input hidden element $tag_attributes]
   }
 }
 
@@ -150,6 +150,29 @@ ad_proc -public template::widget::input { type element_reference tag_attributes 
       # This can be used in the form template in a <label for="id">...</label> tag.
       set attributes(id) "$element(form_id):elements:$element(name):$element(value)"
   }
+  
+  # Handle display mode of visible normal form elements, i.e. not hidden, not submit, not button, not clear
+  if { ![string equal $element(mode) "edit"] && ![string equal $type "hidden"] && \
+      ![string equal $type "submit"] && ![string equal $type "button"] && \
+      ![string equal $type "clear"] } {
+    
+    set output ""
+    switch $type {
+      checkbox - radio {
+        # There's a 'subst' done on the contents here
+        append output "<img src=\"/shared/images/${type}\$checked\" width=\"13\" height=\"13\">"
+        # This is ugly, but it works: Only export the value when we're on a selected option
+        append output "\[ad_decode \$checked \"checked\" \"<input type=\\\"hidden\\\" name=\\\"$element(name)\\\" value=\\\"\$value\\\">\" \"\"\]"
+      }
+      default {
+        if { [info exists element(value)] } {
+          append output [ad_quotehtml $element(value)]
+          append output "<input type=\"hidden\" name=\"$element(name)\" value=\"[ad_quotehtml $element(value)]\">"
+        }
+      }
+    }
+  } else {
+    set output "<input type=\"$type\" name=\"$element(name)\""
 
   if { ![string equal $element(mode) "edit"] && ![string equal $element(widget) "hidden"] && \
       ![string equal $type "submit"] && ![string equal $type "button"] && \
@@ -173,16 +196,8 @@ ad_proc -public template::widget::input { type element_reference tag_attributes 
   } else {
     set output "<input type=\"$type\" name=\"$element(name)\""
 
-    if { [info exists element(value)] } {
-      append output " value=\"[template::util::quote_html $element(value)]\""
-    } 
-
-    foreach name [array names attributes] {
-      if { [string equal $attributes($name) {}] } {
-        append output " $name"
-      } else {
-        append output " $name=\"$attributes($name)\""
-      }
+    if { [info exists element(maxlength)] } {
+        append output " maxlength=\"$element(maxlength)\""
     }
     
     append output " />"
@@ -269,7 +284,7 @@ ad_proc -public template::widget::menu {
   
   # Create an array for easier testing of selected values
   template::util::list_to_lookup $values_list values 
-  
+
   if { ![string equal $mode "edit"] } {
     set selected_list [list]
     set output {}
@@ -300,16 +315,20 @@ ad_proc -public template::widget::menu {
     append output ">\n"
   
     foreach option $options_list {
-  
+
       set label [lindex $option 0]
       set value [lindex $option 1]
-  
-      append output "  <option value=\"[template::util::quote_html $value]\" "
-  
-      if { [info exists values($value)] } {
-        append output "selected=\"selected\""
+
+      if {![string equal $label $value]} {
+        append output " <option value=\"[template::util::quote_html $value]\""
+      } else { 
+        append output " <option"
       }
-  
+        
+      if { [info exists values($value)] } {
+        append output " selected=\"selected\""
+      }
+
       append output ">$label</option>\n"
     }
   
@@ -386,13 +405,8 @@ ad_proc -public template::data::transform::search { element_ref } {
     }
 
     set query $element(search_query)
-    if { [info exists element(search_query_name)] } {
-        set query_name $element(search_query_name)
-    } else {
-        set query_name "get_options"
-    }
 
-    set options [db_list_of_lists $query_name $query]
+    set options [db_list_of_lists get_options $query]
 
     set option_count [llength $options]
 

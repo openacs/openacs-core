@@ -307,6 +307,7 @@ ad_proc db_qd_get_fullname {local_name {added_stack_num 1}} {
 	regsub -all {/} $url {.} url
 
 	# We insert the "www" after the package key
+        set rest {}
 	regexp {^([^\.]*)(.*)} $url all package_key rest
 
 	db_qd_log QDDebug "package key is $package_key and rest is $rest"
@@ -362,6 +363,7 @@ ad_proc db_qd_get_fullname {local_name {added_stack_num 1}} {
 
 	# We get something like packages.acs-tcl.tcl.acs-kernel-procs
 	# We need to remove packages.
+        set rest {}
 	regexp {^packages\.(.*)} $url all rest
 
 	db_qd_log QDDebug "TEMP - QD: proc_name is $proc_name"
@@ -566,9 +568,11 @@ ad_proc db_qd_internal_store_cache {fullquery} {
 } { 
 
     # Check if it's compatible at all!
-    if {![db_rdbms_compatible_p [db_fullquery_get_rdbms $fullquery] [db_current_rdbms]]} {
-	ns_log Error "Query [db_fullquery_get_name $fullquery] has an rdbms of [db_fullquery_get_rdbms $fullquery] which is *NOT* compatible with system rdbms [db_current_rdbms]"
-	return
+    set rdbms [db_fullquery_get_rdbms $fullquery]
+    if {![db_rdbms_compatible_p $rdbms [db_current_rdbms]]} {
+        # The query isn't compatible, probably because of a too high version
+        ns_log Warning "Query [db_fullquery_get_name $fullquery] has rdbms info $rdbms which is not compatible with system rdbms [db_current_rdbms]"
+        return
     }
 
     set name [db_fullquery_get_name $fullquery]

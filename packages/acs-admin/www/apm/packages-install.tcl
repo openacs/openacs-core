@@ -42,8 +42,10 @@ foreach spec_file $all_spec_files {
         if { [apm_package_registered_p $package_key] } {
             # This package is already on the system
             if { [apm_higher_version_installed_p $package_key $version_name] } {
+                ns_log Notice "higher version installed of $package_key $version_name"
                 lappend spec_files $spec_file
             } else {
+                ns_log Notice "need upgrade of package $package_key $version_name"
                 lappend already_installed_list "Package &quot;$package_name&quot; ($package_key) version $version_name or higher is already installed."
             }
         } else {
