@@ -1,3 +1,13 @@
+/* Emulate getElementById on document.all only browsers. Requires
+   that IDs are unique to the page and do not coincide with NAME
+   attributes on other elements:-
+   Source: http://www.litotes.demon.co.uk/js_info/faq_notes/alt_dynwrite.html#getEl
+*/
+if((!document.getElementById) && document.all){
+    document.getElementById = function(id){return document.all[id];};
+}
+
+
 function acs_Focus(form_name, element_name) {
     if (document.forms == null) return;
     if (document.forms[form_name] == null) return;
@@ -6,6 +16,7 @@ function acs_Focus(form_name, element_name) {
 
     document.forms[form_name].elements[element_name].focus();
 }
+
 
 function acs_FormRefresh(form_name) {
     if (document.forms == null) return;
@@ -16,6 +27,8 @@ function acs_FormRefresh(form_name) {
     document.forms[form_name].submit();
 }
 
+
+/* Copy-Paste functionality */
 function acs_CopyText(text) {
     if (document.all) {
         holdtext.innerText = text;
@@ -49,6 +62,9 @@ function acs_CopyText(text) {
         clip.setData(trans, null, clipid. kGlobalClipboard);
     }
 }
+
+
+/* Richtext Widget Support */
 
 function acs_RichText_FormatStr (v) {
     if (!document.selection) return;
@@ -94,3 +110,53 @@ function acs_RichText_Or_File_InputMethodChanged(form_name, richtext_name, radio
     }
 }
 
+/* HTMLArea (part of Richtext Widget) Support */
+
+function acs_initHtmlArea(editor_var, elementid) {
+    editor_var = new HTMLArea(elementid);
+    editor_var.generate();
+    return false;
+}
+
+/* List Builder Support */
+
+function acs_ListFindInput() {
+  if (document.getElementsByTagName) {
+    return document.getElementsByTagName('input');
+  } else if (document.all) {
+    return document.all.tags('input');
+  }
+  return false;
+}
+
+function acs_ListCheckAll(listName, checkP) {
+  var Obj, Type, Name, Id;
+  var Controls = acs_ListFindInput(); if (!Controls) { return; }
+  // Regexp to find name of controls
+  var re = new RegExp('^' + listName + ',.+');
+
+  checkP = checkP ? true : false;
+
+  for (var i = 0; i < Controls.length; i++) {
+    Obj = Controls[i];
+    Type = Obj.type ? Obj.type : false;
+    Name = Obj.name ? Obj.name : false;
+    Id = Obj.id ? Obj.id : false;
+
+    if (!Type || !Name || !Id) { continue; }
+
+    if (Type == "checkbox" && re.exec(Id)) {
+      Obj.checked = checkP;
+    }
+  }
+}
+
+function acs_ListBulkActionClick(formName, url) {
+  if (document.forms == null) return;
+  if (document.forms[formName] == null) return;
+
+  var form = document.forms[formName];
+
+  form.action = url;
+  form.submit();
+}
