@@ -59,7 +59,7 @@ namespace eval permission {
         }
         if { $no_cache_p || ![permission::cache_p] } {
             util_memoize_flush "permission::permission_p_not_cached -party_id $party_id -object_id $object_id -privilege $privilege"
-            permission::permission_p_not_cached -party_id $party_id -object_id $object_id -privilege $privilege
+            return [permission::permission_p_not_cached -party_id $party_id -object_id $object_id -privilege $privilege]
         } else { 
             return [util_memoize "permission::permission_p_not_cached -party_id $party_id -object_id $object_id -privilege $privilege"]
         }
