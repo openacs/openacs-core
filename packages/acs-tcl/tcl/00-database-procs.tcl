@@ -298,7 +298,7 @@ ad_proc -public db_list_of_ns_sets {
 } {
     Usage: <b>db_list_of_ns_sets</b> <i>statement-name sql</i> [ <tt>-bind</tt> <i>bind_set_id</i> | <tt>-bind</tt> <i>bind_value_list</i> ]
 
-    Returns a list of ns_sets with the values of each column of each row
+    <p>Returns a list of ns_sets with the values of each column of each row
     returned by the sql query specified.
 
     @param statement_name The name of the query.
@@ -325,14 +325,14 @@ ad_proc -public db_list_of_ns_sets {
 
 proc_doc db_foreach { statement_name sql args } {
     Usage: 
-    <pre>
-    <b><i>db_foreach</i></b> <em><i>statement-name sql</i></em> [ -bind <em><i>bind_set_id</i></em> | -bind <em><i>bind_value_list</i></em> ] \
+    <blockquote>
+    db_foreach <em><i>statement-name sql</i></em> [ -bind <em><i>bind_set_id</i></em> | -bind <em><i>bind_value_list</i></em> ] \
         [ -column_array <em><i>array_name</i></em> | -column_set <em><i>set_name</i></em> ] \
 	    <em><i>code_block</i></em> [ if_no_rows <em><i>if_no_rows_block ]</i></em>
 
-    </pre>
+    </blockquote>
 
-    Performs the SQL query <em><i><tt>sql</tt></i></em>, executing
+    <p>Performs the SQL query <em><i><tt>sql</tt></i></em>, executing
     <em><i><tt>code_block</tt></i></em> once for each row with variables set to
     column values (or a set or array populated if <tt>-column_array</tt> or
     <tt>column_set</tt> is specified). If the query returns no rows, executes
@@ -447,15 +447,14 @@ ad_proc -public db_multirow {
     args 
 } {
    Usage:
-    <pre>
-    <b><i>
-    db_multirow</i></b> [ -local ] [ -append ] [ -extend <em><i>column_list</i></em> ] \
+    <blockquote>
+    db_multirow [ -local ] [ -append ] [ -extend <em><i>column_list</i></em> ] \
         <em><i>var-name statement-name sql</i></em> [ -bind <em><i>bind_set_id</i></em> | -bind <em><i>bind_value_list</i></em> ] \
 	<em><i>code_block</i></em> [ if_no_rows <em><i>if_no_rows_block ]</i></em>
 
-    </pre>
+    </blockquote>
 
-    Performs the SQL query <code>sql</code>, saving results in variables
+    <p>Performs the SQL query <code>sql</code>, saving results in variables
     of the form
     <code><i>var_name</i>:1</code>, <code><i>var_name</i>:2</code>, etc,
     setting <code><i>var_name</i>:rowcount</code> to the total number
@@ -650,13 +649,13 @@ Columns in this query: [join [lsort -ascii $local_columns] ", "]" "" "ACS_MULTIR
 
 ad_proc db_0or1row { statement_name sql args } { 
     Usage: 
-    <pre>
-    <b><i>
-    db_0or1row</i></b> <i>statement-name sql</i> [ -bind <i>bind_set_id</i> | -bind <i>bind_value_list</i> ] \
+    <blockquote>
+    db_0or1row <i>statement-name sql</i> [ -bind <i>bind_set_id</i> | -bind <i>bind_value_list</i> ] \
         [ -column_array <i>array_name</i> | -column_set <i>set_name</i> ]
 	
-    </pre>
-    Performs the SQL query sql. If a row is returned, sets variables 
+    </blockquote>
+
+    <p>Performs the SQL query sql. If a row is returned, sets variables 
     to column values (or a set or array populated if -column_array 
     or column_set is specified) and returns 1. If no rows are returned, 
     returns 0. If more than one row is returned, throws an error.
@@ -706,13 +705,13 @@ ad_proc db_0or1row { statement_name sql args } {
 
 ad_proc db_1row { args } {
     Usage: 
-    <pre>
-    <b><i>
-    db_1row</i></b> <i>statement-name sql</i> [ -bind <i>bind_set_id</i> | -bind <i>bind_value_list</i> ] \
+    <blockquote>
+    db_1row <i>statement-name sql</i> [ -bind <i>bind_set_id</i> | -bind <i>bind_value_list</i> ] \
         [ -column_array <i>array_name</i> | -column_set <i>set_name</i> ]
 	
-    </pre>
-    Performs the SQL query sql. If a row is returned, sets variables 
+    </blockquote>
+
+    <p>Performs the SQL query sql. If a row is returned, sets variables 
     to column values (or a set or array populated if -column_array 
     or column_set is specified). If no rows are returned, 
     throws an error.
