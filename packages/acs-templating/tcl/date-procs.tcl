@@ -528,8 +528,8 @@ ad_proc -public template::widget::dateFragment {
      # Display text entry for some elements, or if the type is text
      if { [string equal $type t] ||
           [regexp "year|short_year" $fragment] } {
-       return "<input type=text name=$element(name).$fragment size=$size 
-     maxlength=$size value=\"[template::util::leadingPad $value $size]\">\n"
+       return "<input type=\"text\" name=\"$element(name).$fragment\" size=\'$size\"
+     maxlength=\"$size\" value=\"[template::util::leadingPad $value $size]\"/>\n"
      } else {
      # Use a default range for others
        set interval [template::util::date::defaultInterval $fragment]
@@ -628,9 +628,9 @@ ad_proc -public template::widget::date { element_reference tag_attributes } {
 
   # Just remember the format for now - in the future, allow
   # the user to enter a freeform format
-  append output "<input type=hidden name=$element(name).format "
-  append output "value=\"$element(format)\">\n"
-  append output "<table border=0 cellpadding=0 cellspacing=2>\n<tr>"
+  append output "<input type=\"hidden\" name=\"$element(name).format\" "
+  append output "value=\"$element(format)\" />\n"
+  append output "<table border=\"0\" cellpadding=\"0\" cellspacing=\"2\">\n<tr>"
 
   # Prepare the value to set defaults on the form
   if { [info exists element(value)] && 
@@ -659,7 +659,7 @@ ad_proc -public template::widget::date { element_reference tag_attributes } {
     regexp -nocase $template::util::date::token_exp $word \
           match token type
 
-    append output "<td nowrap>"
+    append output "<td nowrap=\"nowrap\">"
     
     lappend tokens $token
 
@@ -690,7 +690,7 @@ ad_proc -public template::widget::date { element_reference tag_attributes } {
     append output "<tr>" 
     foreach token $tokens {
       set fragment_def $template::util::date::fragment_widgets($token)
-      append output "<td nowrap align=center><font size=\"-2\">[lindex $fragment_def 3]</font></td>"
+      append output "<td nowrap=\"nowrap\" align=\"center\"><font size=\"-2\">[lindex $fragment_def 3]</font></td>"
     }
     append output "</tr>\n"
   } 

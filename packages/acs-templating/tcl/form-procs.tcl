@@ -245,7 +245,7 @@ ad_proc -public template::form::render { id tag_attributes } {
     set properties(action) [ns_conn url]
   }
   
-  set output "<form name=\"$id\" method=$properties(method) 
+  set output "<form name=\"$id\" method=\"$properties(method)\" 
                     action=\"$properties(action)\""
 
   # append attributes to form tag
@@ -259,7 +259,7 @@ ad_proc -public template::form::render { id tag_attributes } {
 
   append output ">"
 
-  append output "<input type=hidden name=\"form:id\" value=\"$id\">"
+  append output "<input type=\"hidden\" name=\"form:id\" value=\"$id\" />"
 
   return $output
 }
@@ -474,7 +474,7 @@ ad_proc -public template::form::export {} {
 
     append export_data "
       <input type=\"hidden\" name=\"$key\" 
-             value=\"[template::util::quote_html $value]\">"
+             value=\"[template::util::quote_html $value]\" />"
   }
 
   return $export_data
