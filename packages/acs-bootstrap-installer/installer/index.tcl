@@ -265,13 +265,13 @@ if { ![db_table_exists apm_packages] } {
 
     # Get the default for system_url. First try to get it from the nssock
     # hostname setting - if that is not available then try ns_info
-    # hostname, use yourdomain.com if that fails too.
     if { [catch {
         set system_url "http://[ns_config "ns/server/[ns_info server]/module/nssock" hostname [ns_info hostname]]"
+        set system_port [ns_config "ns/server/[ns_info server]/module/nssock" port [ns_conn port]]
 
         # append port number if non-standard port
-        if { !([ns_conn port] == 0 || [ns_conn port] == 80) } {
-            append system_url ":[ns_conn port]"
+        if { !($system_port == 0 || $system_port == 80) } {
+            append system_url ":$system_port"
         }
 
     }] } {
@@ -339,7 +339,7 @@ function updateSystemEmails() {
 
 <tr>
   <th align=right>System URL:</th>
-  <td>[install_input_widget system_url]<br>
+  <td>[install_input_widget -value $system_url system_url]<br>
 The canonical URL of your system as visible from the outside world<br>
 Usually it should include the port if your server is not on port 80<br><br>
 </tr>

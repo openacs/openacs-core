@@ -16,6 +16,7 @@ ad_proc -private install_input_widget {
     {-type ""}
     {-size 40}
     {-extra_attributes ""}
+    {-value ""}
     param_name 
 } {
     Return an HTML input widget for a parameter with an
@@ -23,6 +24,10 @@ ad_proc -private install_input_widget {
 } {
     set type_attribute [ad_decode $type "" "" "type=\"$type\""]
 
+    if { ![empty_string_p $value] } {
+        append extra_attributes " value=\"[ad_quotehtml $value]\""
+    }
+    
     set input_widget "<input name=\"$param_name\" size=\"$size\" $type_attribute $extra_attributes>"
 
     if { [install_param_mandatory_p $param_name] } {
