@@ -644,8 +644,10 @@ ad_proc -public template::multirow {
     <dd> evaluate code block for each row (like db_foreach)</dd>
     <dt> <b>template::multirow upvar datasource [new_name]</b></dt>
     <dd> upvar the multirow, aliasing to new_name if provided</dd>
+    <dt> <b>template::multirow sort datasource -lsort-switch -lsort-switch col1 col2</b></dt>
+    <dd> Sort the multirow by the column(s) specified. The value sorted by will be the the values of the columns specified, separated by the space character. Any switches specified before the columns will be passed directly to the lsort command. </dd>
     </dl>
-    
+   
     @param local If set, the multirow will be looked for in the scope the number 
            of levels up given by ulevel (normally the caller's scope), 
            instead of the <code>[template::adp_level]</code> scope, which 
@@ -842,6 +844,82 @@ ad_proc -public template::multirow {
           }
         }
       }
+    }
+
+    sort {
+        # args is a list of names of columns to sort by
+        # construct a list which we can lsort
+        
+        upvar $multirow_level_up $name:rowcount rowcount
+        
+        if { ![info exists rowcount] } {
+            error "Multirow $name does not exist"
+        } 
+
+        # Construct list of (rownum,columns appended with a space)
+
+        # Allow for -ascii, -dictionary, -integer, -real, -command <command>, -increasing, -decreasing, unique switches
+
+        set sort_args {}
+
+        set len [llength $args]
+        for { set i 0 } { $i < $len } { incr i } {
+            if { [string equal [string index [lindex $args $i] 0] "-"] } {
+                switch -exact [string range [lindex $args $i] 1 end] { 
+                    command {
+                        # command takes an additional argument
+                        lappend sort_args [lindex $args $i]
+                        incr i
+                        lappend sort_args [lindex $args $i]
+                    }
+                    default {
+                        lappend sort_args [lindex $args $i]
+                    }
+                }
+            } else {
+                break
+            }
+        }
+
+        set sort_cols [lrange $args $i end]
+            
+        set sort_list [list]
+        
+        for { set i 1 } { $i <= $rowcount } { incr i } {
+            upvar $multirow_level_up $name:$i row
+
+            # Make a copy of the row
+            array set copy:$i [array get row]
+
+            # Contruct the list
+            set sortby {}
+            foreach col $sort_cols {
+                append sortby $row($col) " "
+            }
+            
+            lappend sort_list [list $i $sortby]
+        }
+
+        set sort_list [eval lsort $sort_args -index 1 [list $sort_list]]
+
+        
+        # Now we have a list with two elms, (rownum, sort-by-value), sorted by sort-by-value
+        # Rearrange multirow to match the sort order
+        
+        set i 0
+        foreach elm $sort_list {
+            incr i
+            upvar $multirow_level_up $name:$i row
+
+            # which rownum in the original list should fill this space in the sorted multirow?
+            set org_rownum [lindex $elm 0]
+
+            # Replace the row in the multirow with the row from the copy with the rownum according to the sort
+            array set row [array get copy:$org_rownum]
+        }
+        
+        # Multirow length may have changed if you said -unique
+        set rowcount [llength $sort_list]
     }
 
     default {
