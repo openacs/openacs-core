@@ -22,6 +22,6 @@ function check_checkbox () {
 <listtemplate name="nodes"></listtemplate>
 
 <if @site_wide_admin_p@>
-	<a href="admin/site-map/site-map">Edit Site Map</a>
+	<a href="/admin/site-map/site-map">Edit Site Map</a>
 </if>
 
