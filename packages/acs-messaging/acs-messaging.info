@@ -7,12 +7,12 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>t</singleton-p>
     
-    <version name="5.1.4" url="http://openacs.org/repository/download/apm/acs-messaging-5.1.4.apm">
+    <version name="5.1.5" url="http://openacs.org/repository/download/apm/acs-messaging-5.1.5.apm">
         <owner url="mailto:akk+@cs.cmu.edu">Anukul Kapoor</owner>
         <owner url="mailto:prevost@maya.com">John Prevost</owner>
         <owner url="mailto:vinod@kurup.com">Vinod Kurup</owner>
         <summary>General messaging for bboard and general comments.</summary>
-        <release-date>2005-01-09</release-date>
+        <release-date>2004-02-28</release-date>
         <maturity>3</maturity>
         <vendor url="http://openacs.org">OpenACS</vendor>
         <description format="text/html">Provides generic message services, with email sending.  acs-mail-lite and notifications are the 

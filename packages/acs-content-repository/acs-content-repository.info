@@ -7,18 +7,17 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>t</singleton-p>
     
-    <version name="5.1.5d4" url="http://openacs.org/repository/download/apm/acs-content-repository-5.1.5d4.apm">
+    <version name="5.1.5" url="http://openacs.org/repository/download/apm/acs-content-repository-5.1.5.apm">
         <owner url="mailto:dcwickstrom@earthlink.net">Dan Wickstrom</owner>
         <summary>The canonical repository for OpenACS content.</summary>
-        <release-date>2005-01-09</release-date>
-        <maturity>3</maturity>
+        <release-date>2005-02-28</release-date>
         <vendor url="http://openacs.org">OpenACS</vendor>
         <description format="text/html">Provides the API for creating and managing user generated content including 
          full support for versioning, rendering content to the filesystem, folders and composite content items, and
          other CMS backing functionality.  Utilized by Bug Tracker, File Storage, and other packages.
         </description>
 
-        <provides url="acs-content-repository" version="5.1.5d4"/>
+        <provides url="acs-content-repository" version="5.1.5"/>
         <requires url="acs-kernel" version="5.1.0"/>
         <requires url="acs-service-contract" version="5.1.0"/>
         <requires url="search" version="5.1.0"/>
