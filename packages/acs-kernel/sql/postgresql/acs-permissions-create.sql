@@ -84,11 +84,6 @@ create table acs_privilege_descendant_map (
 
 );
 
--- DRB: Empirical testing showed that even with just 61 entries in the new table
--- this index sped things up by roughly 15%
-
-create index acs_priv_desc_map_idx on acs_privilege_descendant_map(descendant);
-
 -- This trigger is used to create a pseudo-tree hierarchy that
 -- can be used to emulate tree queries on the acs_privilege_hierarchy table.
 -- The acs_privilege_hierarchy table maintains the permissions structure, but 
@@ -129,14 +124,13 @@ create index acs_priv_desc_map_idx on acs_privilege_descendant_map(descendant);
 -- This would be better, since the same query could be used for both oracle
 -- and postgresql.
 
-create or replace function acs_priv_hier_ins_del_tr () returns opaque as '
+create function acs_priv_hier_ins_del_tr () returns opaque as '
 declare
         new_value       integer;
         new_key         varbit default null;
         v_rec           record;
         deleted_p       boolean;
 begin
-
         -- if more than one node was deleted the second trigger call
         -- will error out.  This check avoids that problem.
 
@@ -408,18 +402,81 @@ as select a.object_id, a.grantee_id, m.descendant as privilege
    from acs_permissions_all a, acs_privilege_descendant_map m
    where a.privilege = m.privilege;
 
--- New fast version of acs_object_party_privilege_map
+-- The last two unions make sure that the_public gets expaned to all
+-- users plus 0 (the default user_id) we should probably figure out a
+-- better way to handle this eventually since this view is getting
+-- pretty freaking hairy. I'd love to be able to move this stuff into
+-- a Java middle tier.
 
-create view acs_object_party_privilege_map as
-select c.object_id, pdm.descendant as privilege, pamm.member_id as party_id
-from acs_object_context_index c, acs_permissions p, acs_privilege_descendant_map pdm,
-  party_approved_member_map pamm
-where c.ancestor_id = p.object_id
-  and pdm.privilege = p.privilege
-  and pamm.party_id = p.grantee_id;
+create view acs_object_party_privilege_map
+as select ogpm.object_id, gmm.member_id as party_id, ogpm.privilege
+   from acs_object_grantee_priv_map ogpm, group_approved_member_map gmm
+   where ogpm.grantee_id = gmm.group_id
+   union
+   select ogpm.object_id, rsmm.member_id as party_id, ogpm.privilege
+   from acs_object_grantee_priv_map ogpm, rel_seg_approved_member_map rsmm
+   where ogpm.grantee_id = rsmm.segment_id
+   union
+   select object_id, grantee_id as party_id, privilege
+   from acs_object_grantee_priv_map
+   union
+   select object_id, u.user_id as party_id, privilege
+   from acs_object_grantee_priv_map m, users u
+   where m.grantee_id = -1
+   union
+   select object_id, 0 as party_id, privilege
+   from acs_object_grantee_priv_map
+   where grantee_id = -1;
+
+----------------------------------------------------
+-- ALTERNATE VIEW: ALL_OBJECT_PARTY_PRIVILEGE_MAP --
+----------------------------------------------------
+
+-- This view is a helper for all_object_party_privilege_map
+create view acs_grantee_party_map as
+   select -1 as grantee_id, 0 as party_id from dual
+   union all
+   select -1 as grantee_id, user_id as party_id
+   from users
+   union all
+   select party_id as grantee_id, party_id
+   from parties
+   union all
+   select segment_id as grantee_id, member_id
+   from rel_seg_approved_member_map
+   union all
+   select group_id as grantee_id, member_id as party_id
+   from group_approved_member_map;
+
+-- This view is like acs_object_party_privilege_map, but does not 
+-- necessarily return distinct rows.  It may be *much* faster to join
+-- against this view instead of acs_object_party_privilege_map, and is
+-- usually not much slower.  The tradeoff for the performance boost is
+-- increased complexity in your usage of the view.  Example usage that I've
+-- found works well is:
+--
+--    select DISTINCT 
+--           my_table.*
+--    from my_table,
+--         (select object_id
+--          from all_object_party_privilege_map 
+--          where party_id = :user_id and privilege = :privilege) oppm
+--    where oppm.object_id = my_table.my_id;
+--
+
+-- DRB: This view does seem to be quite fast in Postgres as well as Oracle.
 
 create view all_object_party_privilege_map as
-select * from acs_object_party_privilege_map;
+select         op.object_id,
+               pdm.descendant as privilege,
+               gpm.party_id as party_id
+        from acs_object_paths op, 
+             acs_permissions p, 
+             acs_privilege_descendant_map pdm,
+             acs_grantee_party_map gpm
+        where op.ancestor_id = p.object_id 
+          and pdm.privilege = p.privilege
+          and gpm.grantee_id = p.grantee_id;
 
 
 -- This table acts as a mutex for inserts/deletes from acs_permissions.
@@ -499,9 +556,10 @@ begin
     return 0; 
 end;' language 'plpgsql';
 
--- Really speedy version of permission_p written by Don Baccus
+-- Speedy version of permission_p from Matthew Avalos
+-- Further improved to a minor degree by Don Baccus
 
-create or replace function acs_permission__permission_p (integer,integer,varchar)
+create function acs_permission__permission_p (integer,integer,varchar)
 returns boolean as '
 declare
     permission_p__object_id           alias for $1;
@@ -509,13 +567,113 @@ declare
     permission_p__privilege           alias for $3;
     exists_p                          boolean;
 begin
-  return exists (select 1
-                 from acs_permissions p, party_approved_member_map m,
-                   acs_object_context_index c, acs_privilege_descendant_map h
-                 where p.object_id = c.ancestor_id
-                   and h.descendant = permission_p__privilege
-                   and c.object_id = permission_p__object_id
-                   and m.member_id = permission_p__party_id
-                   and p.privilege = h.privilege
-                   and p.grantee_id = m.party_id);
+    --
+    -- Check public-like permissions
+    if (0 = permission_p__party_id or
+        exists (select 1 from users where user_id = permission_p__party_id)) and
+        exists (select 1
+                from acs_object_grantee_priv_map
+                where object_id = permission_p__object_id
+                  and privilege = permission_p__privilege
+                  and grantee_id = -1)
+    --
+    then
+       return ''t'';
+    end if;
+    --
+    -- Check direct permissions
+    if exists (
+        select 1
+          from acs_object_grantee_priv_map
+         where object_id = permission_p__object_id
+           and grantee_id = permission_p__party_id
+           and privilege = permission_p__privilege)
+    then
+        return ''t'';
+    end if;
+    --
+    -- Check group permmissions
+    if exists (
+          select 1
+          from acs_object_grantee_priv_map ogpm,
+               group_approved_member_map gmm
+         where object_id = permission_p__object_id
+           and gmm.member_id = permission_p__party_id
+           and privilege = permission_p__privilege
+           and ogpm.grantee_id = gmm.group_id)
+    then
+        return ''t'';
+    end if;
+    --
+    -- relational segment approved group
+    if exists (
+        select 1
+          from acs_object_grantee_priv_map ogpm,
+               rel_seg_approved_member_map rsmm
+         where object_id = permission_p__object_id
+           and rsmm.member_id = permission_p__party_id
+           and privilege = permission_p__privilege
+           and ogpm.grantee_id = rsmm.segment_id)
+    then
+        return ''t'';
+    end if;
+    return ''f'';
+end;' language 'plpgsql';
+
+-- Returns true if at least one user exists with the given permission.  Used
+-- to avoid some queries on acs_object_party_privilege_map.
+
+create function acs_permission__user_with_perm_exists_p (integer,varchar)
+returns boolean as '
+declare
+    permission_p__object_id           alias for $1;
+    permission_p__privilege           alias for $2;
+begin
+    --
+    -- Check public-like permissions
+    if exists (select 1
+               from acs_object_grantee_priv_map
+                where object_id = permission_p__object_id
+                  and privilege = permission_p__privilege
+                  and grantee_id = -1)
+    --
+    then
+       return ''t'';
+    end if;
+    --
+    -- Check direct user permissions
+    if exists (
+        select 1
+          from acs_object_grantee_priv_map, users
+         where object_id = permission_p__object_id
+           and grantee_id = user_id
+           and privilege = permission_p__privilege)
+    then
+        return ''t'';
+    end if;
+    --
+    -- Check group permmissions
+    if exists (
+          select 1
+          from acs_object_grantee_priv_map ogpm,
+               group_approved_member_map gmm
+         where object_id = permission_p__object_id
+           and privilege = permission_p__privilege
+           and ogpm.grantee_id = gmm.group_id)
+    then
+        return ''t'';
+    end if;
+    --
+    -- relational segment approved group
+    if exists (
+        select 1
+          from acs_object_grantee_priv_map ogpm,
+               rel_seg_approved_member_map rsmm
+         where object_id = permission_p__object_id
+           and privilege = permission_p__privilege
+           and ogpm.grantee_id = rsmm.segment_id)
+    then
+        return ''t'';
+    end if;
+    return ''f'';
 end;' language 'plpgsql';

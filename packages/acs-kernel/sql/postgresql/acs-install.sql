@@ -26,30 +26,8 @@ begin
                     acs__magic_object_id(''default_context'')
 	       );
 
-  insert into application_groups
-    (group_id, package_id)
-  values
-    (-2, main_site_id);
 
-  update acs_objects
-  set object_type = ''application_group''
-  where object_id = -2;
-
-  perform rel_segment__new(
-                   null,
-                   ''rel_segment'',
-                   now(),
-                   null,
-                   null,
-                   null,
-                   null,
-                   ''Main Site Members'',
-                   -2,
-                   ''membership_rel'',
-                   null
-                 );
-
-  perform apm_package__enable (main_site_id); 
+  PERFORM apm_package__enable (main_site_id); 
 
   node_id := site_node__new (
           null,
@@ -62,7 +40,7 @@ begin
           null
   );
 
-  perform acs_permission__grant_permission (
+  PERFORM acs_permission__grant_permission (
         main_site_id,
         acs__magic_object_id(''the_public''),
         ''read''

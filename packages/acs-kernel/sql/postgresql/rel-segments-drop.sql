@@ -19,8 +19,9 @@ begin
 end;' language 'plpgsql';
 select inline_0 ();
 
+drop view party_element_map;
 drop view party_approved_member_map;
-drop table party_member_map;
+drop view party_member_map;
 drop view rel_seg_distinct_member_map;
 drop view rel_seg_approved_member_map;
 drop view rel_segment_member_map;
