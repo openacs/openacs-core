@@ -26,10 +26,20 @@
       </querytext>
 </fullquery>
 
+<fullquery name="acs_user::delete.permanent_delete">
+      <querytext>
+          begin
+              acs_user.delete(
+                  user_id => :user_id
+              );
+          end;
+      </querytext>
+</fullquery>
+
 <fullquery name="person::delete.delete_person">      
       <querytext>
 
-	    select person.delete(:person_id);
+	    select person.delete(:person_id) from dual;
 	
       </querytext>
 </fullquery>
