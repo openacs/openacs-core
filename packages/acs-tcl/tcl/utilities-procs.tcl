@@ -2839,7 +2839,7 @@ ad_proc -public util_wrap_list {
 
 ad_proc -public util_text_to_url { 
     {-existing_urls {}}
-    {-resolve_conflicts_p:boolean 1}
+    {-no_resolve:boolean}
     {-replacement "-"}
     text
 } {
@@ -2852,7 +2852,8 @@ ad_proc -public util_text_to_url {
 
     @param existing_urls a list of URLs that already exist on the same level and would cause a conflict
 
-    @param resolve_conflicts_p automatically generate "foo-bar-2" if "foo-bar" is already in existing_urls. If set to false it throws an error in case of a conflict.
+    @param no_resolve Specify this flag if you do not want util_text_to_url to automatically generate 
+    "foo-bar-2" if "foo-bar" is already in existing_urls, and would rather have an error thrown.
 
     @param replacement the character that is used to replace illegal characters
 
@@ -2881,7 +2882,7 @@ ad_proc -public util_text_to_url {
     # check if the resulting url is already present
     if { [lsearch -exact $existing_urls $text] > -1 } {
         
-        if { !$resolve_conflicts_p } {
+        if { $no_resolve_p } {
             # URL is already present in the existing_urls list and we
             # are asked to not automatically resolve the collision
             error "The url $text is already present"
