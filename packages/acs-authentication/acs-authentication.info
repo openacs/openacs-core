@@ -7,24 +7,27 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>t</singleton-p>
     
-    <version name="5.0d3" url="http://openacs.org/repository/download/apm/acs-authentication-5.0d3.apm">
+    <version name="5.0d4" url="http://openacs.org/repository/download/apm/acs-authentication-5.0d4.apm">
         <owner url="mailto:lars@collaboraid.biz">Lars Pind</owner>
         <summary>Authentication and related functionality.</summary>
         <vendor url="http://www.collaboraid.biz">Collaboraid</vendor>
         <description format="text/html">Implements authentication-related security functions for OpenACS, including authentication, password maangement, account management, session management, etc.</description>
 
-        <provides url="acs-authentication" version="5.0d3"/>
+        <provides url="acs-authentication" version="5.0d4"/>
         <requires url="acs-kernel" version="5.0d10"/>
         <requires url="acs-service-contract" version="4.7d2"/>
 
         <callbacks>
-            <callback type="after-install"  proc="auth::package_install"/>
             <callback type="before-uninstall"  proc="auth::package_uninstall"/>
+            <callback type="after-install"  proc="auth::package_install"/>
         </callbacks>
         <parameters>
-            <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="KeepBatchLogDays"  default="0" description="The number of days to keep the log for a batch user synchronization job around. Say 0 if you want to keep the log forever."/>
+            <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="KeepBatchLogDays"  default="0" description="The number of days to keep the log for a batch user synchronization job around. Say 0 if you want to keep the log forever." section_name="Batch Syncrhonization"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="RegisterAuthority"  default="local" description="The short name of the authority in which users are registered. Is best set in the Authentication admin UI."/>
-            <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="SyncEmailConfirmationP"  default="0" description="Send out email confirmation when batch sync is complete. 1 = Yes, 0 = No."/>
+            <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="SyncDotLrnAccessLevel"  default="1" description=".LRN access level (if .LRN is installed). 1 = Full access user, 0 = Limited access user" section_name="Batch Syncrhonization"/>
+            <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="SyncDotLrnReadPrivateDataP"  default="1" description=".LRN user is guest (if .LRN is installed). 1 = Not a guest , 0 = Guest" section_name="Batch Syncrhonization"/>
+            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="SyncDotLrnUserType"  default="student" description=".LRN user type for new user (if .LRN is installed)" section_name="Batch Syncrhonization"/>
+            <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="SyncEmailConfirmationP"  default="0" description="Send out email confirmation when batch sync is complete. 1 = Yes, 0 = No." section_name="Batch Syncrhonization"/>
         </parameters>
 
     </version>
