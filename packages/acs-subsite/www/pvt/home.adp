@@ -1,70 +1,36 @@
 <master>
-<property name=title>@full_name@'s workspace at @system_name@</property>
-<property name="context">@context@</property>
+  <property name=title>@page_title@</property>
+  <property name="context">@context@</property>
+  <property name="user_info">first_names</property>
 
-<ul>
+<h2>Basic Information</h2>
 
-<p>
+<formtemplate id="user_info"></formtemplate>
 
-<li><a href="../register/logout">Log Out</a>
+<if @form_request_p@ true>
+  <p>
+    <b>&raquo;</b> <a href="../user/password-update">Change Password</a>
+  </p>
 
-<p>
+  <p>
+    <b>&raquo;</b> <a href="@community_member_url@">What other people see when they click your name</a>
+  </p>
 
-<li><a href="../user/password-update">Change my Password</a>
-
-
-</ul>
-
-<h3>What we tell other users about you</h3>
-
-In general we identify content that you've posted by your full name.
-In an attempt to protect you from unsolicited bulk email (spam), we
-keep your email address hidden except from other registered users.
-Total privacy is technically feasible but an important element of an
-online community is that people can learn from each other.  So we try
-to make it possible for users with common interests to contact each
-other.
-
-<p>
-
-If you want to check what other users of this service are shown, visit
-@member_link@
-
-<h4>Basic Information</h4>
-
-<ul>
-<li>Name:  @full_name@</li>
-<li>email address:  @email@</li>
-<li>personal URL:  <a target=new_window href="@url@">@url@</a></li>
-<li>screen name:  @screen_name@</li>
-<li>bio: @bio@</li>
-</ul>
-<p>(<a href="../user/basic-info-update">update</a>)</p>
+  <p>
+    <b>&raquo;</b> <a href="unsubscribe">Unsubscribe from this site</a> (for a period of vacation or permanently)
+  </p>
 
 
-<if @portrait_state@ eq upload>
-
-<h4>Your Portrait</h4>
-Show everyone else at @system_name@ how great looking you are:  <a href="../user/portrait/upload">upload a portrait</a>
-
+  <if @portrait_state@ eq upload>
+    <h2>Portrait</h2>
+    <p>
+      Show everyone else at @system_name@ how great looking you are:  <a href="../user/portrait/upload">upload a portrait</a>
+    </p>
+  </if>
+  <if @portrait_state@ eq show>
+    <h2>Portrait</h2>
+    <p>
+      On @portrait_publish_date@, you uploaded <a href="../user/portrait/">@portrait_title@</a>.
+    </p>
+  </if>
 </if>
-<if @portrait_state@ eq show>
-
-<h4>Your Portrait</h4>
-On @portrait_publish_date@, you uploaded <a href="../user/portrait/">@portrait_title@</a>.
-
-</if>
-
-
-
-<h3>If you're getting too much email from us</h3>
-
-Then you should either 
-
-<ul>
-<li><a href="alerts">edit your alerts</a></li>
-</ul>
-<p>or</p>
-<ul>
-<li><a href="unsubscribe">Unsubscribe</a> (for a period of vacation or permanently)</li>
-</ul>
