@@ -77,4 +77,22 @@ and type_id= :type_id
         </querytext>
     </fullquery>
 
+  <fullquery name="notification::type::new.enable_all_intervals">
+    <querytext>
+        insert into notification_types_intervals
+        (type_id, interval_id)
+        select :type_id, interval_id
+        from   notification_intervals
+    </querytext>
+  </fullquery>
+
+  <fullquery name="notification::type::new.enable_all_delivery_methods">
+    <querytext>
+        insert into notification_types_del_methods
+        (type_id, delivery_method_id)
+        select :type_id, delivery_method_id
+        from   notification_delivery_methods
+    </querytext>
+  </fullquery>
+
 </queryset>
