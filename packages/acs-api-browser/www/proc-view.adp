@@ -3,7 +3,7 @@
 <property name="context">@context;noquote@</property>
 
 <if @error_msg@ ne "">
-@error_msg@
+@error_msg;noquote@
 </if>
 <else>
 <table width="100%">
