@@ -104,7 +104,9 @@ comment on table cr_content_mime_type_map is '
   content type.
 ';
 
-
+-- RI Index 
+-- fairly static, could probably omit this one.
+create index cr_cont_mimetypmap_mimetyp_idx ON cr_content_mime_type_map(mime_type);
 
 --------------------------------------------------------------
 -- LOCALES
@@ -162,6 +164,10 @@ comment on table cr_type_children is '
   contain.
 ';
 
+-- RI Indexes
+create index cr_type_children_chld_type_idx ON cr_type_children(child_type);
+
+
 create table cr_type_relations (
   content_type  varchar(100)
 		constraint cr_type_relations_parent_fk
@@ -180,6 +186,10 @@ comment on table cr_type_relations is '
   Constrains the allowable object types to which a content type may
   relate (see above).
 ';
+
+-- RI Indexes 
+create index cr_type_relations_tgt_typ_idx ON cr_type_relations(target_type);
+
 
 --------------------------------------------------------------
 -- CONTENT ITEMS
@@ -413,6 +423,9 @@ create unique index cr_item_rel_unq on cr_item_rels (
   item_id, related_object_id, relation_tag
 );
 
+-- RI Indexes
+create index cr_item_rels_rel_obj_id_idx ON cr_item_rels(related_object_id);
+
 comment on table cr_item_rels is '
   Describes all relations from one item to any number of other
   objects.
@@ -458,6 +471,10 @@ create table cr_revisions (
   content	  text,
   content_length  integer
 );
+
+-- RI Indexes 
+create index cr_revisions_lob_idx ON cr_revisions(lob);
+create index cr_revisions_item_id_idx ON cr_revisions(item_id);
 
 create trigger cr_revisions_lob_trig before delete or update or insert
 on cr_revisions for each row execute procedure on_lob_ref();
@@ -760,6 +777,8 @@ comment on table cr_folders is '
   repository.
 ';
 
+--RI Indexes
+create index cr_folders_package_id_idx ON cr_folders(package_id);
 
 create function cr_folder_ins_up_ri_trg() returns opaque as '
 declare
@@ -819,8 +838,8 @@ comment on table cr_folder_type_map is '
   thos available for content types.  
 ';
 
-
-
+-- RI Indexes 
+create index cr_folder_typ_map_cont_typ_idx ON cr_folder_type_map(content_type);
 
 --------------------------------------------------------------
 -- CONTENT TEMPLATES
@@ -984,6 +1003,8 @@ create table cr_keywords (
   tree_sortkey           varbit
 );
 
+-- RI Indexes 
+create index cr_keywords_parent_id_idx ON cr_keywords(parent_id);
 
 create function cr_keywords_get_tree_sortkey(integer) returns varbit as '
 declare
@@ -1114,6 +1135,8 @@ create table cr_item_keyword_map (
   primary key (item_id, keyword_id)
 );
 
+-- RI Indexes
+create index cr_item_keyword_map_kw_id_idx ON cr_item_keyword_map(keyword_id);
 
 --------------------------------------------------------------
 -- TEXT SUBMISSION

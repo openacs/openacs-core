@@ -96,6 +96,8 @@ comment on table cr_content_mime_type_map is '
   content type.
 ';
 
+--RI Indexes 
+create index cr_cont_mimetypmap_mimetyp_idx ON cr_content_mime_type_map(mime_type);
 
 
 --------------------------------------------------------------
@@ -149,6 +151,9 @@ create table cr_type_children (
   primary key (parent_type, child_type, relation_tag)
 );
 
+--RI Indexes 
+create index cr_type_children_chld_type_idx ON cr_type_children(child_type);
+
 comment on table cr_type_children is '
   Constrains the allowable content types which a content type may
   contain.
@@ -167,6 +172,9 @@ create table cr_type_relations (
   constraint cr_type_relations_pk
   primary key (content_type, target_type, relation_tag)
 );
+
+-- RI Indexes 
+create index cr_type_relations_tgt_typ_idx ON cr_type_relations(target_type);
 
 comment on table cr_type_relations is '
   Constrains the allowable object types to which a content type may
@@ -298,6 +306,9 @@ create unique index cr_item_rel_unq on cr_item_rels (
   item_id, related_object_id, relation_tag
 );
 
+-- RI Indexes 
+create index cr_item_rels_rel_obj_id_idx ON cr_item_rels(related_object_id);
+
 comment on table cr_item_rels is '
   Describes all relations from one item to any number of other
   objects.
@@ -344,6 +355,8 @@ create table cr_revisions (
 
 create index cr_revisions_by_mime_type on cr_revisions(mime_type);
 create index cr_revisions_title_idx on cr_revisions(title);
+create index cr_revisions_item_id_idx ON cr_revisions(item_id);
+
 -- create index cr_revisions_lower_title_idx on cr_revisions(lower(title));
 -- create index cr_revisions_title_ltr_idx on cr_revisions(substr(lower(title), 1, 1));
 
@@ -478,6 +491,8 @@ comment on table cr_folders is '
   repository.
 ';
 
+--RI Indexes 
+create index cr_folders_package_id_idx ON cr_folders(package_id);
 
 create table cr_folder_type_map (
   folder_id	integer
@@ -497,7 +512,8 @@ comment on table cr_folder_type_map is '
   thos available for content types.  
 ';
 
-
+-- RI Indexes 
+create index cr_folder_typ_map_cont_typ_idx ON cr_folder_type_map(content_type);
 
 
 --------------------------------------------------------------
@@ -666,6 +682,9 @@ create table cr_keywords (
                          check (has_children in ('t', 'f'))
 );
 
+-- RI Indexes 
+create index cr_keywords_parent_id_idx ON cr_keywords(parent_id);
+
 comment on table cr_keywords is '
   Stores a subject taxonomy for classifying content items, analogous
   to the system used by a library.
@@ -698,6 +717,8 @@ create table cr_item_keyword_map (
   primary key (item_id, keyword_id)
 );
 
+-- RI Indexes 
+create index cr_item_keyword_map_kw_id_idx ON cr_item_keyword_map(keyword_id);
 
 --------------------------------------------------------------
 -- TEXT SUBMISSION
