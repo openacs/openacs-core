@@ -683,3 +683,24 @@ begin
   return 0; 
 end;' language 'plpgsql';
 
+create or replace function content_type__is_content_type (varchar)
+returns boolean as '
+declare
+  is_content_type__object_type            alias for $1;  
+  v_is_content_type                       boolean;
+begin
+
+  if is_content_type__object_type = ''content_revision'' then
+
+    v_is_content_type := ''t'';
+
+  else    
+    select count(*) > 0 into v_is_content_type
+    from acs_object_type_supertype_map
+    where object_type = is_content_type__object_type 
+    and ancestor_type = ''content_revision'';
+  end if;
+  
+  return v_is_content_type;
+ 
+end;' language 'plpgsql' stable;
