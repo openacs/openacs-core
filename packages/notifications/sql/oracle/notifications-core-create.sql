@@ -4,7 +4,7 @@
 -- @author Ben Adida (ben@openforce.net)
 -- @version $Id$
 --
--- Copyright OpenForce, 2002.
+-- Copyright (C) 2000 MIT
 --
 -- GNU GPL v2
 --
