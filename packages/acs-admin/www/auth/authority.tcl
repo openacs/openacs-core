@@ -286,6 +286,9 @@ if { $display_batch_history_p } {
 
 set context [list [list "." "Authentication"] $page_title]
 
+set num_users [lc_numeric [db_string num_users_in_auhtority { select count(*) from users where authority_id = :authority_id }]]
+set show_users_url [export_vars -base ../users/complex-search { authority_id { target one } }]
+
 
 # This code should be executed for non-local authorities in the following types of requests:
 # - initial request of the form (display mode)
