@@ -56,6 +56,15 @@ db_transaction {
     apm_package_install_spec $version_id
     if {$upgrade_p} {
 	apm_version_upgrade $version_id
+
+        # The package now provides the new version of itself as interface
+        db_dml update_version_provides {update apm_package_dependencies
+                                    set service_version = :version_name
+                                    where version_id = :version_id
+                                    and service_uri = (select package_key
+                                                       from apm_package_versions
+                                                       where version_id = :version_id)
+                                    and dependency_type = 'provides'}
     }
 } on_error {
     ad_return_error "Error" "
@@ -65,4 +74,4 @@ I was unable to update your version for the following reason:
 "
 }
 
-ad_returnredirect "version-view?version_id=$version_id"
+ad_returnredirect "version-generate-info?version_id=$version_id&write_p=1"
