@@ -477,6 +477,8 @@ aa_register_case auth_authority_api {
 
             aa_true "was the authority added?" $authority_added_p
 
+            aa_log "authority_id = '$authority_id'"
+
             # Edit authority and test that it has actually changed.
             array set columns {
                 short_name "test2"
