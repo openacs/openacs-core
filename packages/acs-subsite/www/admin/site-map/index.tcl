@@ -95,7 +95,11 @@ template::list::create \
 		<if @nodes.expand_mode@ eq 2>
                 (<a href="?@nodes.expand_url@#@nodes.node_id@">-</a>)
                 </if>
+		<if @nodes.instance_url@ ne none>
 		<a href="?@nodes.name_url@">@nodes.name;noquote@</a>
+		</if><else>
+		@nodes.name;noquote@
+		</else>
 		<if @nodes.action_type@ eq "new_folder">
 		<a name="add" />
 		<form name=new_parent action=new>
@@ -284,7 +288,7 @@ set new_app_form_part_1 "<p align=\"top\"><form name=new_application action=pack
 
 set new_app_form_part_2 "<p align=\"top\">[apm_application_new_checkbox]</p>"
 set new_app_form_part_3 "<p align=\"top\"><input type=submit value=\"Mount Package\"></form></p>"
-    multirow append nodes "" "" "" "" $new_app_form_part_1 "" "" "" $new_app_form_part_2 "" "" "" "" "" "" "" "" "" "" $new_app_form_part_3
+    multirow append nodes "" "" "" "" $new_app_form_part_1 "" "" "none" $new_app_form_part_2 "" "" "" "" "" "" "" "" "" "" $new_app_form_part_3
 
 set services ""
 
