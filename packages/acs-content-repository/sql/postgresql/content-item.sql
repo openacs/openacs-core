@@ -931,7 +931,6 @@ begin
   return 0; 
 end;' language 'plpgsql';
 
-
 -- function get_id
 create function content_item__get_id (varchar,integer,boolean)
 returns integer as '
@@ -2216,6 +2215,33 @@ begin
 
   return v_folder_id;
  
+end;' language 'plpgsql';
+
+-- procedure update_last_modified
+create function content_item__update_last_modified (integer, timestamp)
+returns integer as '
+declare
+    update_last_modified__item_id alias for $1;
+    update_last_modified__last_modified alias for $2;
+    v_parent_id cr_items.parent_id%TYPE;
+    v_last_modified acs_objects.last_modified%TYPE default now();
+begin
+    if update_last_modified__last_modified is not null then
+        v_last_modified = update_last_modified__last_modified;
+    end if;
+
+    update acs_objects
+    set acs_objects.last_modified = v_last_modified
+    where acs_objects.object_id = update_last_modified__item_id;
+
+    select cr_items.parent_id
+    into v_parent_id
+    from cr_items
+    where cr_items.item_id = update_last_modified__item_id;
+
+    content_item__update_last_modified(v_parent_id, v_last_modified);
+
+    return 0;
 end;' language 'plpgsql';
 
 -- show errors
