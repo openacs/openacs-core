@@ -236,6 +236,8 @@ ns_section ns/server/${server}/module/nssock
     ns_param   address            $address
     ns_param   hostname           $hostname
     ns_param   port               $httpport
+# setting maxinput higher than practical may leave the server vulnerable to resource DoS attacks
+# see http://www.panoptic.com/wiki/aolserver/166
     ns_param   maxinput           [expr 20 * 1024 * 1024] ;# Maximum File Size for uploads in bytes
     ns_param   recvwait           [expr 5 * 60] ;# Maximum request time in minutes
 
