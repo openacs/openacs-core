@@ -401,8 +401,7 @@ ad_proc -public template::adp_compile { source_type source } {
 
   # Since messages may read the variables of the adp page they go trough
   # expand_percentage_signs which amongst other things does an uplevel subst
-
-  while {[regsub -all {([^\\])\#([-a-zA-Z0-9_:\.]+)\#} $code {\1[template::expand_percentage_signs [_ [ad_conn locale] {\2}]]} code]} {}
+  while {[regsub -all {([^\\])\#([-a-zA-Z0-9_:\.]+)\#} $code {\1[template::expand_percentage_signs [lang::message::lookup [ad_conn locale] {\2} {TRANSLATION MISSING} {} -1]]} code]} {}
 
   # substitute array variable references
   # loop to handle the case of adjacent variable references, like @a@@b@
