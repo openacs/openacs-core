@@ -3,12 +3,6 @@
 <queryset>
    <rdbms><type>postgresql</type><version>7.1</version></rdbms>
 
-<fullquery name="apm_extract_tarball.distribution_tar_ball_select">      
-      <querytext>
-      FIX ME LOB select distribution_tarball from apm_package_versions where version_id = :version_id
-      </querytext>
-</fullquery>
-
  
 <fullquery name="apm_generate_tarball.apm_tarball_insert">      
       <querytext>

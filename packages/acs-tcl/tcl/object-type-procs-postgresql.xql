@@ -3,7 +3,7 @@
 
 <fullquery name="acs_object_type_hierarchy.object_types">      
       <querytext>
-        $sql
+[acs_object_type_hierarchy_pg_sql $object_type $indent_string $indent_width]
       </querytext>
 </fullquery>
 
