@@ -45,7 +45,7 @@ namespace eval notification::display {
              return ""
         }
 
-        return "<font size=-1>\[ $sub_chunk \]</font>"
+        return $sub_chunk
     }
 
     ad_proc -public subscribe_url {
