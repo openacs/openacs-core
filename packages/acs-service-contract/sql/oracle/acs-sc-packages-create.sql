@@ -14,7 +14,7 @@ as
 
    function get_name (
        contract_id	in acs_sc_contracts.contract_id%TYPE
-   ) return acs_sc_contracts.contract_id%TYPE;
+   ) return acs_sc_contracts.contract_name%TYPE;
 
    procedure delete (
        contract_name	in acs_sc_contracts.contract_name%TYPE default null,
@@ -165,7 +165,7 @@ as
 
    function get_name (
        contract_id	in acs_sc_contracts.contract_id%TYPE
-   ) return acs_sc_contracts.contract_id%TYPE
+   ) return acs_sc_contracts.contract_name%TYPE
    is
        v_contract_name	acs_sc_contracts.contract_name%TYPE;
    begin

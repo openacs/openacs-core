@@ -82,14 +82,3 @@ create table acs_sc_bindings (
 			      references acs_sc_impls(impl_id)
 			      on delete cascade
 );
-
-
-
-
-
-
-
-
-
-
-
