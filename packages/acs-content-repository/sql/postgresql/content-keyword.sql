@@ -190,7 +190,7 @@ end;' language 'plpgsql';
 
 
 -- function is_assigned
-create function content_keyword__is_assigned (integer,integer,varchar)
+create or replace function content_keyword__is_assigned (integer,integer,varchar)
 returns boolean as '
 declare
   is_assigned__item_id                alias for $1;  
@@ -208,37 +208,17 @@ begin
 
   -- Look from specific to general
   if is_assigned__recurse = ''up'' then
---      select 1 from dual where exists (select 1 from
---	(select keyword_id from cr_keywords
---	   connect by parent_id = prior keyword_id
---	   start with keyword_id = is_assigned__keyword_id
---	 ) t, cr_item_keyword_map m
---      where
---	t.keyword_id = m.keyword_id
---      and
---	m.item_id = is_assigned__item_id);
-
       return count(*) > 0
       where exists (select 1
                     from (select keyword_id from cr_keywords c, cr_keywords c2
 	                  where c2.keyword_id = is_assigned__keyword_id
-                            and c.tree_sortkey between c2.tree_sortkey and tree_right(c2.tree_sortkey))) t,
+                            and c.tree_sortkey between c2.tree_sortkey and tree_right(c2.tree_sortkey)) t,
                       cr_item_keyword_map m
                     where t.keyword_id = m.keyword_id
                       and m.item_id = is_assigned__item_id);
   end if;
 
   if is_assigned__recurse = ''down'' then
---      select 1 from dual where exists ( select 1 from
---	(select keyword_id from cr_keywords
---	   connect by prior parent_id = keyword_id
---	   start with keyword_id = is_assigned__keyword_id
---	 ) t, cr_item_keyword_map m
---      where
---	t.keyword_id = m.keyword_id
---      and
---	m.item_id = is_assigned__item_id);
-
       return count(*) > 0
       where exists (select 1
                     from (select k2.keyword_id
