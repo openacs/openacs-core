@@ -295,7 +295,7 @@ select get_func_header(proname,proargtypes) as definition,
 --    key comparisons during index scans and increases the number of
 --    keys stored in any given index page.
 
--- 3. 32768 nodes per level are allowed in a given subtree, rather
+-- 3. 2^31 nodes per level are allowed in a given subtree, rather
 --    than the 25K or so supported in the text-based scheme (though
 --    in reality the old scheme supported more than enough nodes
 --    per level)
@@ -536,7 +536,7 @@ declare
   p_potential_child         alias for $2;
 begin
   return position(p_potential_ancestor in p_potential_child) = 1;
-end;' language 'plpgsql';
+end;' language 'plpgsql' with(iscachable);
 
 create function create_tree_ancestor_keys() returns boolean as '
 
@@ -653,8 +653,8 @@ create function tree_ancestor_keys(varbit) returns setof varbit as '
 -- performance.   
 
 -- WARNING: subselects in where clauses that call this function and join on an outer table appear
--- to reliably kill PG 7.1.2, at least if "exists" is involved.   Not tested for PG 7.2.  If it
--- fails there a bug report will be filed.
+-- to reliably kill PG 7.1.2, at least if "exists" is involved.   PG 7.2 doesn't die on my test
+-- case, so it appears to have been fixed.
 
   select tree_ancestor_keys($1, 1)
 
