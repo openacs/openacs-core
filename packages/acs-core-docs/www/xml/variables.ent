@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="iso-8859-1" ?>
-<!ENTITY version "5.0.0rc1">
-<!ENTITY tarballpath "openacs-5.0.0rc1">
-<!ENTITY cvsversiontag "openacs-5-0-0rc1">
+<!ENTITY version "5.0.0rc2">
+<!ENTITY tarballpath "openacs-5.0.0rc2">
+<!ENTITY cvsversiontag "openacs-5-0-0rc2">
 <!ENTITY majorversion "5">
