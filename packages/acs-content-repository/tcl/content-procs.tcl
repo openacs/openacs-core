@@ -73,14 +73,7 @@ ad_proc -public cr_create_content_file {
     if { $move_p } { 
         file rename -- $client_filename [cr_fs_path]$content_file
     } else { 
-        # JCD: not sure why ns_cpfp is used.  tcl file copy is better 
-        # since it is smarter about buffer sizes.
-        set ifp [open $client_filename r]
-        set ofp [open [cr_fs_path]$content_file w]
-        
-        ns_cpfp $ifp $ofp
-        close $ifp
-        close $ofp
+        file copy -- $client_filename [cr_fs_path]$content_file
     }
 
     return $content_file
