@@ -449,7 +449,7 @@ if {$flush_p} {
 
     <p>
     Here's an example with named parameters, and namespaces (notice the preferred way of
-    declaring namespaces and namespaced procedures). Ignore the "\" in "\@param",
+    declaring namespaces and namespaced procedures). Ignore the '\' in '\@param',
     I had to use it so the api-browser wouldn't think the parameter docs were for ad_proc
     itself:
     </p>
@@ -578,7 +578,8 @@ ad_proc -public acs_root_dir {} {
 } -
 
 ad_proc -public acs_package_root_dir { package } { 
-    Returns the path root for a particular package within the OpenACS installation. 
+    Returns the path root for a particular package within the OpenACS installation.
+    For example /web/yourserver/packages/foo, i.e., a full file system path with no ending slash.
 } -
 
 ad_proc -public ad_make_relative_path { path } { 

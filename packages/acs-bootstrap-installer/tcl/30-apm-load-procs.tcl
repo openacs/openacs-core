@@ -258,6 +258,8 @@ ad_proc -private apm_guess_db_type { package_key path } {
 
 ad_proc apm_source { __file } {
     Sources $__file in a clean environment, returning 1 if successful or 0 if not.
+    Records that the file has been sourced and stores its mtime in the nsv array
+    apm_library_mtime
 } {
     if { ![file exists $__file] } {
 		ns_log "Error" "Unable to source $__file: file does not exist."
@@ -271,6 +273,10 @@ ad_proc apm_source { __file } {
 	return 0
     }
 
+    set root_dir_len [string length [acs_root_dir]]
+    set rel_path [string range $__file [expr $root_dir_len + 1] end]
+    nsv_set apm_library_mtime $rel_path [file mtime $__file]    
+
     return 1
 }
 
@@ -282,8 +288,8 @@ ad_proc apm_bootstrap_load_file { root_directory file } {
     set relative_path [string range $file \
         [expr { [string length "$root_directory/packages"] + 1 }] end]
     ns_log "Notice" "Loading packages/$relative_path..."
+
     apm_source $file
-    nsv_set apm_library_mtime packages/$relative_path [file mtime $file]
 }
 
 ad_proc apm_bootstrap_load_libraries {

@@ -28,7 +28,7 @@ Installing the OpenACS kernel data model...
 <blockquote><pre>
 "
 cd [file join [acs_root_dir] packages acs-kernel sql [db_type]]
-db_source_sql_file -callback apm_ns_write_callback "acs-kernel-create.sql"
+db_source_sql_file -callback apm_dummy_callback "acs-kernel-create.sql"
 
 # DRB: Now initialize the APM's table of known database types.  This is
 # butt-ugly.  We could have apm-create.sql do this but that would mean
@@ -60,7 +60,11 @@ Done installing the OpenACS kernel data model.<p>
 
 "
 
-apm_version_enable -callback apm_ns_write_callback [apm_package_install -callback apm_ns_write_callback "[file join [acs_root_dir] packages acs-kernel acs-kernel.info]"]
+# Some APM procedures use util_memoize, so initialize the cache 
+# before starting APM install
+apm_source "[acs_package_root_dir acs-tcl]/tcl/20-memoize-init.tcl"
+
+apm_version_enable -callback apm_dummy_callback [apm_package_install -callback apm_dummy_callback "[file join [acs_root_dir] packages acs-kernel acs-kernel.info]"]
 
 ns_write "<p>
 
