@@ -11,31 +11,22 @@
   #acs-subsite.Account_closed_workspace_msg#
 </if>
 
-<p>
-  <b>&raquo;</b> <a href="../user/password-update">#acs-subsite.Change_my_Password#</a>
-</p>
+<ul class="action-links">
+  <li><a href="../user/password-update">#acs-subsite.Change_my_Password#</a></li>
+  <if @change_locale_url@ not nil>
+    <li><a href="@change_locale_url@">#acs-subsite.Change_locale_label#</a></li>
+  </if>
 
-<if @change_locale_url@ not nil>
-  <p>
-    <b>&raquo;</b> <a href="@change_locale_url@">#acs-subsite.Change_locale_label#</a>
-  </p>
-</if>
+  <if @notifications_url@ not nil>
+    <li><a href="@notifications_url@">#acs-subsite.Manage_your_notifications#</a></li>
+  </if>
 
-<if @notifications_url@ not nil>
-  <p>
-    <b>&raquo;</b> <a href="@notifications_url@">#acs-subsite.Manage_your_notifications#</a>
-  </p>
-</if>
+  <if @account_status@ ne "closed">
+    <li><a href="unsubscribe">#acs-subsite.Close_your_account#</a></li>
+  </if>
 
-<if @account_status@ ne "closed">
-  <p>
-    <b>&raquo;</b> <a href="unsubscribe">#acs-subsite.Close_your_account#</a> 
-  </p>
-</if>
-
-<p>
-  <b>&raquo;</b> <a href="@community_member_url@">#acs-subsite.lt_What_other_people_see#</a>
-</p>
+  <li><a href="@community_member_url@">#acs-subsite.lt_What_other_people_see#</a></li>
+</ul>
 
 <if @portrait_state@ eq upload>
   <h2>#acs-subsite.Your_Portrait#</h2>
@@ -52,19 +43,19 @@
 
 <h2>#acs-subsite.Whos_Online_title#</h2>
 
-<p>
-  <b>&raquo;</b> <a href="@whos_online_url@">#acs-subsite.Whos_Online_link_label#</a>
-</p>
+<ul class="action-links">
+  <li><a href="@whos_online_url@">#acs-subsite.Whos_Online_link_label#</a></li>
+</ul>
 
 <if @invisible_p@ true>
   #acs-subsite.Currently_invisible_msg#
-  <p> 
-    <b>&raquo;</b> <a href="@make_visible_url@">#acs-subsite.Make_yourself_visible_label#</a>
-  </p>
+  <ul class="action-links">
+    <li><a href="@make_visible_url@">#acs-subsite.Make_yourself_visible_label#</a></li>
+  </ul>
 </if>
 <else>
   #acs-subsite.Currently_visible_msg#
-  <p> 
-    <b>&raquo;</b> <a href="@make_invisible_url@">#acs-subsite.Make_yourself_invisible_label#</a>
-  </p>
+  <ul class="action-links">
+    <li><a href="@make_invisible_url@">#acs-subsite.Make_yourself_invisible_label#</a></li>
+  </ul>
 </else>

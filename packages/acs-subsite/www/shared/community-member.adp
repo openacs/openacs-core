@@ -8,9 +8,9 @@
 </if>
 <else>
   <if @inline_portrait_state eq "link">
-    <p>
-      <b>&raquo;</b> <a href="portrait?@portrait_export_vars@">#acs-subsite.Portrait#</a>
-    </p>
+    <ul class="action-links">
+      <li><a href="portrait?@portrait_export_vars@">#acs-subsite.Portrait#</a></li>
+    </ul>
   </if>
 </else>
 
@@ -69,9 +69,9 @@
 
 <if @site_wide_admin_p@>
   <h3>#acs-subsite.lt_For_Site-Wide_Adminis#</h3>
-  <p>
-    <b>&raquo;</b> <a href="@admin_user_url@">#acs-subsite.Administrative_options#</a>
-  </p>
+  <ul class="action-links">
+    <li><a href="@admin_user_url@">#acs-subsite.Administrative_options#</a></li>
+  </ul>
 </if>
 
 
