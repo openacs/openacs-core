@@ -14,14 +14,13 @@ proc_doc db_nextval { sequence } {
     # the following query will return a nextval if the sequnce
     # is of relkind = 'S' (a sequnce).  if it is not of relkind = 'S'
     # we will try querying it as a view
-    db_0or1row nextval_sequence "select nextval('${sequence}') as nextval
+    if {[db_0or1row nextval_sequence "select nextval('${sequence}') as nextval
                                   where (select relkind 
                                            from pg_class 
-                                          where relname = '${sequence}') = 'S'"
-    if {[info exists nextval]} {
+                                          where relname = '${sequence}') = 'S'"]} {
         return $nextval
     } else {
-        ns_log notice "db_nextval: sequence($sequence) is not a real sequence.  perhaps it uses the view hack."
+        ns_log debug "db_nextval: sequence($sequence) is not a real sequence.  perhaps it uses the view hack."
         db_0or1row nextval_view "select ${sequence}.nextval as nextval"
         return $nextval
     }
