@@ -123,7 +123,9 @@ ad_proc -public auth::authenticate {
 
       <li> account_status:  Account status from authentication server. 
                             ok, closed.
-      <li> account_message: Human-readable message about account status. Guaranteed to be set if auth_status is not ok. 
+      <li> account_url:     A URL to redirect the user to. Could e.g. ask the user to update his password.
+      <li> account_message: Human-readable message about account status. Guaranteed to be set if auth_status is not ok
+                            and account_url is empty. 
                             If non-empty, must be relayed to the user regardless of account_status. May contain HTML.
                             This proc is responsible for concatenating any remote and/or local account messages into 
                             one single message which can be displayed to the user.
@@ -239,6 +241,7 @@ ad_proc -public auth::authenticate {
     # Clear out remote account_status and account_message
     array unset result account_status
     array unset result account_message
+    set result(account_url) {}
     
     # Map to row in local users table
     array set result [auth::get_local_account \
@@ -248,6 +251,7 @@ ad_proc -public auth::authenticate {
     # Returns: 
     #   result(account_status)
     #   result(account_message)  
+    #   result(account_url)  
     #   result(user_id)
 
     # Verify local account_info/account_message return codes
@@ -1138,7 +1142,7 @@ ad_proc -private auth::check_local_account_status {
 
     @param no_dialogue If specified, will not send out email or in other ways converse with the user
 
-    @return An array-list with account_status and account_message
+    @return An array-list with account_status, account_url and account_message
 
 } {
     # Initialize to 'closed', because most cases below mean the account is closed
@@ -1165,13 +1169,13 @@ ad_proc -private auth::check_local_account_status {
                     }
                 }
             } elseif { [string equal [acs_user::ScreenName] "require"] && [empty_string_p $screen_name] } {
-                set update_url [export_vars -no_empty -base "[subsite::get_element -element url]user/basic-info-update" { return_url {edit_p 1} }]
-                set result(account_message) "<p>Before we can let you in, you must setup a screen name.</p><p><b>&raquo;</b> <a href=\"$update_url\">Update your profile now</a></p>"
+                set message "Please enter a screen name now."
+                set result(account_url) [export_vars -no_empty -base "[subsite::get_element -element url]user/basic-info-update" { message return_url {edit_p 1} }]
             } elseif { $PasswordExpirationDays > 0 && \
                            ([empty_string_p $password_age_days] || $password_age_days > $PasswordExpirationDays) } {
                 
-                set password_url [export_vars -base "[subsite::get_element -element url]user/password-update" { return_url { expired_p 1 }}]
-                set result(account_message) "<p>Before we can let you in, you must change your password.</p><p><b>&raquo;</b> <a href=\"$password_url\">Change your password now</a></p>"
+                set message "Your password must be changed regularly. Please change your password now."
+                set result(account_url) [export_vars -base "[subsite::get_element -element url]user/password-update" { return_url message }]
             } else {
                 set result(account_status) "ok"
             }
