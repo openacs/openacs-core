@@ -620,7 +620,7 @@ ad_proc -public item::get_element {
 }
 
 ad_proc -public item::get_content { 
-    {-revision_id:required}
+    {-revision_id ""}
     {-array:required}
     {-item_id ""}
 } {
@@ -638,6 +638,8 @@ ad_proc -public item::get_content {
  
   @option item_id The item_id of the
     corresponding item. You can provide this as an optimization.
+    If you don't provide revision_id, you must provide item_id, 
+    and the item must have a live revision.
  
   @return 1 on success (and set the array in the calling frame),
     0 on failure 
@@ -654,6 +656,11 @@ ad_proc -public item::get_content {
             ns_log notice "item::get_content: no such revision: $reivision_id"
             return 0
         }  
+    } elseif { [empty_string_p $revision_id] } {
+        set revision_id [item::get_live_revision $item_id]
+    }
+    if { [empty_string_p $revision_id] } {
+        error "You must supply revision_id, or the item must have a live revision."
     }
     
     return [get_revision_content $revision_id $item_id]
