@@ -20,7 +20,7 @@ declare
   v_folder_id                             cr_folders.folder_id%TYPE;
 begin
 
-  if get_root_folder__item_id is NULL then
+  if get_root_folder__item_id is NULL or get_root_folder__item_id in (0,-100,-200) then
 
     v_folder_id := content_item_globals.c_root_folder_id;
 
@@ -504,7 +504,7 @@ begin
   v_item_id := content_item__new (new__name, new__parent_id, new__item_id, new__locale,
                new__creation_date, new__creation_user, new__context_id, new__creation_ip,
                new__item_subtype, new__content_type, new__title, new__description,
-               new__mime_type, new__nls_language, new__text, new__storage_type, null);
+               new__mime_type, new__nls_language, new__text, new__storage_type, null::integer);
 
   return v_item_id;
  
@@ -631,7 +631,7 @@ begin
       now(),
       null,
       null,
-      v_parent_id
+      v_parent_id,
       ''t'',
       v_rel_tag || '': '' || v_parent_id || '' - '' || v_item_id,
       v_package_id
@@ -708,7 +708,7 @@ begin
   v_item_id := content_item__new (new__name, new__parent_id, new__item_id, new__locale,
                new__creation_date, new__creation_user, new__context_id, new__creation_ip,
                new__item_subtype, new__content_type, new__title, new__description,
-               new__mime_type, new__nls_language, new__data, null);
+               new__mime_type, new__nls_language, new__data, null::integer);
 
   return v_item_id;
  

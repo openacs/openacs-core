@@ -52,6 +52,7 @@ begin
                                    now(),
                                    null,
                                    null,
+                                   ''t'',
                                    null
                );
 
@@ -75,12 +76,12 @@ begin
                                    new__label,
                                    new__description,
                                    new__parent_id,
-                                   new__content_id,
+                                   new__context_id,
                                    new__folder_id,
                                    new__creation_date,
                                    new__creation_user,
                                    new__creation_ip,
-                                   null
+                                   null::integer
                );
 
 end;' language 'plpgsql';
@@ -122,10 +123,10 @@ begin
 
     v_package_id := new__package_id;
 
-    if new__parent_id is not null and new__package_id is null then
+    if new__parent_id is not null and new__parent_id not in (-100,-200) and new__package_id is null then
         v_package_id := acs_object__package_id(content_item__get_root_folder(new__parent_id));
     end if;
-
+                                
     v_folder_id := content_item__new(
         new__name, 
         new__parent_id,
@@ -221,7 +222,7 @@ begin
 
     v_package_id := new__package_id;
 
-    if new__parent_id is not null and new__package_id is null then
+    if new__parent_id is not null and new__parent_id not in (-100,-200) and new__package_id is null then
         v_package_id := acs_object__package_id(content_item__get_root_folder(new__parent_id));
     end if;
 
@@ -298,7 +299,7 @@ begin
                                    new__label,
                                    new__description,
                                    new__parent_id,
-                                   new__content_id,
+                                   new__context_id,
                                    new__folder_id,
                                    new__creation_date,
                                    new__creation_user,
