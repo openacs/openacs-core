@@ -21,11 +21,12 @@ ad_page_contract {
     pvt_home_url:onevalue
 }
 
-ad_maybe_redirect_for_registration
+set user_id [auth::require_login -account_status closed]
 
-set user_id [ad_conn user_id]
+acs_user::get -array user -include_bio -user_id $user_id
 
-acs_user::get -array user -include_bio
+set account_status [ad_conn account_status]
+set login_url [ad_get_login_url]
 
 set page_title [ad_pvt_home_name]
 
@@ -42,9 +43,6 @@ set community_member_url [acs_community_member_url -user_id $user_id]
 set system_name [ad_system_name]
 
 set portrait_upload_url [export_vars -base "../user/portrait/upload" { { return_url [ad_return_url] } }]
-
-# Can't find out whether there's a request or not
-set form_request_p 1
 
 if [ad_parameter SolicitPortraitP "user-info" 0] {
     # we have portraits for some users 
