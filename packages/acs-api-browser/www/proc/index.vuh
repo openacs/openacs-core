@@ -1,3 +1,0 @@
-set query_string [string range [ad_conn extra_url] [string length "proc/"] end]
-set url "[ad_conn package_url]proc-search?[export_vars { query_string { search_type "Feeling Lucky" } }]"
-ad_returnredirect $url

@@ -1,1 +1,0 @@
-@@ ../notifications-package-create.sql
