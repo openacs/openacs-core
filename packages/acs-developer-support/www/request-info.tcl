@@ -197,8 +197,13 @@ if { [info exists property(oheaders)] } {
     append body "</table></blockquote>\n"
 }
 
-if { [info exists property(db)] } {
-    multirow create dbreqs handle command sql duration_ms value
+multirow create dbreqs handle command sql duration_ms value
+
+if { ![info exists property(db)] } {
+    template::list::create \
+        -name dbreqs \
+        -elements { }
+} else {
 
     foreach { handle command statement_name sql start end errno return } $property(db) {
 

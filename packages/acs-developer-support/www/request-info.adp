@@ -4,5 +4,7 @@
 
 @body;noquote@
 
-<listfilters name="dbreqs" style="inline-filters"></listfilters>
-<listtemplate name="dbreqs"></listtemplate>
+<if @dbreqs:rowcount@ gt 0>
+  <listfilters name="dbreqs" style="inline-filters"></listfilters>
+  <listtemplate name="dbreqs"></listtemplate>
+</if>
