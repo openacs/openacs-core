@@ -152,7 +152,20 @@ append body "
 <tr valign=baseline><th align=left>Package Key:</th><td>$package_key</td></th></tr>
 <tr valign=baseline><th align=left>Summary:</th><td>$summary</td></tr>
 <tr valign=baseline><th align=left>Description:</th><td>$description</td></tr>
-<tr valign=baseline><th align=left>Release Date:</th><td>$release_date</td></tr>
+<tr valign=baseline><th align=left>Release Date:</th><td>$release_date</td></tr>"
+
+# Dynamic package version attributes
+array set all_attributes [apm::package_version::attributes::get_spec]
+array set attributes [apm::package_version::attributes::get \
+                          -version_id $version_id \
+                          -array attributes]
+foreach attribute_name [array names attributes] {
+    array set attribute $all_attributes($attribute_name)
+
+    append body "<tr valign=baseline><th align=left>$attribute(pretty_name)</th><td>$attributes($attribute_name)</td></tr>"
+}
+
+append body "
 <tr valign=baseline><th align=left>Vendor:</th><td>[ad_decode $vendor_uri "" $vendor "<a href=\"$vendor_uri\">$vendor</a>"]</td></tr>
 <tr valign=baseline><th align=left>Package URL:</th><td><a href=\"$package_uri\">$package_uri</a></td></th></tr>
 <tr valign=baseline><th align=left>Version URL:</th><td><a href=\"$version_uri\">$version_uri</a></td></th></tr>

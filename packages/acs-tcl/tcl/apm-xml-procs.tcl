@@ -105,6 +105,10 @@ ad_proc -private apm_generate_package_spec { version_id } {
         append spec ">[ad_quotehtml $description]</description>\n"
     }
 
+    append spec [apm::package_version::attributes::generate_xml \
+                     -version_id $version_id \
+                     -indentation "        "]
+
     append spec "\n"
     
     apm_log APMDebug "APM: Writing Dependencies."
@@ -272,6 +276,9 @@ ad_proc -public apm_read_package_info_file { path } {
 	set properties($property_name) [apm_tag_value $version $property_name]
     }
 
+    apm::package_version::attributes::parse_xml \
+        -parent_node $version \
+        -array properties
 
     # Set an entry in the properties array for each of these attributes:
     #

@@ -20,6 +20,25 @@ ad_page_contract {
     { upgrade_p 0 }
 }
 
+# Validate dynamic package version attributes
+# Also put all dynamic attributes in an array
+array set all_attributes [apm::package_version::attributes::get_spec]
+foreach attribute_name [array names all_attributes] {
+    array set attribute $all_attributes($attribute_name)
+
+    set attribute_value [ns_set iget [rp_getform] $attribute_name]
+
+    if { [info exists attribute(validation_proc)] } {
+        set attribute_error [eval $attribute(validation_proc) $attribute_value]
+
+        if { ![empty_string_p $attribute_error] } {
+            ad_return_complaint 1 $attribute_error
+        }
+    }
+        
+    set dynamic_attributes($attribute_name) $attribute_value
+}
+
 if {![regexp {^[0-9]+((\.[0-9]+)+((d|a|b|)[0-9]*)?)$} $version_name match]} {
     ad_return_complaint 1 "The version name has invalid characters"
     ad_script_abort
@@ -48,7 +67,7 @@ if { $upgrade_p && [db_string apm_version_uri_unique_ck {
 }
 
 db_transaction {
-    set version_id [apm_version_update $version_id $version_name $version_uri \
+    set version_id [apm_version_update -array dynamic_attributes $version_id $version_name $version_uri \
 	    $summary $description $description_format $vendor $vendor_uri $auto_mount $release_date]
     apm_package_install_owners [apm_package_install_owners_prepare $owner_name $owner_uri] $version_id
     apm_package_install_spec $version_id

@@ -164,6 +164,7 @@ foreach channel [lsort -decreasing [array names channel_tag]] {
         
             set package_path [eval file join [lrange [file split $spec_file] 0 end-1]]
             set package_key [lindex [file split $spec_file] end-1]
+            set version_id [apm_version_id_from_package_key $package_key]
 
             if { [lsearch -exact $exclude_package_list $package_key] != -1 } {
                 ns_write "Package $package_key is on list of packages to exclude - skipping"
@@ -197,7 +198,11 @@ foreach channel [lsort -decreasing [array names channel_tag]] {
                     append manifest {    } {<release-date>} [ad_quotehtml $version(release-date)] {</release-date>} \n
                     append manifest {    } {<vendor url="} [ad_quotehtml $version(vendor.url)] {">} 
                     append manifest [ad_quotehtml $version(vendor)] {</vendor>} \n
-                    
+
+                    append manifest [apm::package_version::attributes::generate_xml \
+                                         -version_id $version_id \
+                                         -indentation {    }]
+
                     template::multirow append packages \
                         $package_path $package_key $version(name) $version(package-name) \
                         $version(package.type) $version(summary) $version(description) \
@@ -225,7 +230,7 @@ foreach channel [lsort -decreasing [array names channel_tag]] {
                             lappend cmd $package_key/$file
                         }
                         lappend cmd "|" [apm_gzip_cmd] -c ">" $apm_file
-                        ns_log Notice "Executing: [ad_quotehtml $cmd]"
+                        #ns_log Notice "Executing: [ad_quotehtml $cmd]"
                         eval $cmd
                     }
 
@@ -297,5 +302,3 @@ if { [file exists $repository_dirname] } {
 file rename $work_repository_dirname  $repository_dirname
 
 ns_write "</ul> <h2>DONE</h2>\n"
-
-        
