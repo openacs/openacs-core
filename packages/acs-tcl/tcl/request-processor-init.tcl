@@ -8,7 +8,7 @@ ad_library {
 }
 
 # These procedures are dynamically defined at startup to alleviate
-# lock contention. Thanks to davis@arsdigita.com.
+# lock contention. Thanks to davis@xarg.net.
 
 proc ad_acs_admin_id_mem {} {
     return [db_string acs_kernel_id_get {

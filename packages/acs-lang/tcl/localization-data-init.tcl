@@ -6,7 +6,7 @@ ad_library {
     Add new entries to support additional locales.
 
     @creation-date 10 September 2000
-    @author Jeff Davis (davis@arsdigita.com)
+    @author Jeff Davis (davis@xarg.net)
     @cvs-id $Id$
 }
 
