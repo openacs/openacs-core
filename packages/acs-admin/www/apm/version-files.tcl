@@ -8,11 +8,7 @@ ad_page_contract {
     {version_id:integer}
 }
 
-db_1row apm_package_by_version_id {
-	select pretty_name, version_name, package_key, installed_p, distribution_uri,
-	tagged_p
-	from apm_package_version_info where version_id = :version_id
-}
+apm_version_info $version_id
 
 set form ""
 set apm_header_args [list "Files"]
