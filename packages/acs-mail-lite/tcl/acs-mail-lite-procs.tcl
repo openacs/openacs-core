@@ -130,7 +130,7 @@ namespace eval acs_mail_lite {
 	@option email email address to be checked for bouncing
 	@returns boolean 1 or 0
     } {
-	return [db_string can_send_p {}]
+	return [db_string can_send_p {} -default 0]
     }
 
     ad_proc -public bouncing_user_p {
@@ -140,7 +140,7 @@ namespace eval acs_mail_lite {
 	@option user_id user to be checked for bouncing
 	@returns boolean 1 or 0
     } {
-	return [db_string can_send_p {}]
+	return [db_string can_send_p {} -default 0]
     }
 
     ad_proc -private log_mail_sending {
@@ -150,7 +150,6 @@ namespace eval acs_mail_lite {
 	@option user_id user for whom email sending should be logged
     } {
 	db_dml record_mail_sent {}
-
 	if {![db_resultrows]} {
 	    db_dml insert_log_entry {}
 	}
@@ -488,8 +487,6 @@ namespace eval acs_mail_lite {
 		    } else {
 			set pretty_to $rcpt
 		    }
-		    ####  greenpeace does not want to show the username at all
-		    set pretty_to $rcpt
 
 		    set f [open "|$sendmail" "w"]
 		    puts $f "From: $from_addr\nTo: $pretty_to\n$msg"
@@ -500,7 +497,7 @@ namespace eval acs_mail_lite {
 		ns_log Notice "acs-mail-lite: Email bouncing from $rcpt, mail not sent and deleted from queue"
 	    }
 	    # log mail sending time
-	    log_mail_sending -user_id $rcpt_id
+	    if {![empty_string_p $user_id]} { log_mail_sending -user_id $rcpt_id }
 	}
     }
     
@@ -547,8 +544,6 @@ namespace eval acs_mail_lite {
 		} else {
 		    set pretty_to $rcpt
 		}
-		####  greenpeace does not want to show the username at all
-		set pretty_to $rcpt
 
 		set msg "From: $from_addr\r\nTo: $pretty_to\r\n$msg"
 		set mail_from [bounce_address -user_id $rcpt_id -package_id $package_id -message_id $message_id]
@@ -582,14 +577,13 @@ namespace eval acs_mail_lite {
 		ns_log Notice "acs-mail-lite: Email bouncing from $rcpt, mail not sent and deleted from queue"
 	    }
 	    # log mail sending time
-	    log_mail_sending -user_id $rcpt_id
+	    	    if {![empty_string_p $user_id]} { log_mail_sending -user_id $rcpt_id }
 	}
     }
 
     ad_proc -private get_address_array {
 	-addresses:required
-    } {
-	Checks if passed variable is already an array of emails,
+    } {	Checks if passed variable is already an array of emails,
 	user_names and user_ids. If not, get the additional data
 	from the db and return the full array.
 	@option addresses variable to checked for array
@@ -618,18 +612,15 @@ namespace eval acs_mail_lite {
 	    # now get the user_names and user_ids
 	    foreach email $address_list {
 		set email [string tolower $email]
-		db_1row get_user_name_and_id ""
-		lappend address_array(email) $email
-		if {[string equal $user_first_names "first_names"]} {
-		    set user_first_names ""
-		}
-		if {[string equal $user_last_name "last_name"]} {
-		    set user_name $user_first_names
+		if {[db_0or1row get_user_name_and_id ""]} {
+		    lappend address_array(email) $email
+		    lappend address_array(name) $user_name
+		    lappend address_array(user_id) $user_id
 		} else {
-		    set user_name "$user_first_names $user_last_name"
+		    lappend address_array(email) $email
+		    lappend address_array(name) ""
+		    lappend address_array(user_id) ""
 		}
-		lappend address_array(name) $user_name
-		lappend address_array(user_id) $user_id
 	    }
 	}
 	return [array get address_array]
@@ -681,7 +672,11 @@ namespace eval acs_mail_lite {
         lappend eh_list "Message-Id" $message_id
 
 	if {[empty_string_p $package_id]} {
-	    set package_id [ad_conn package_id]
+	    if [ad_conn -connected_p] {
+		set package_id [ad_conn package_id]
+	    } else {
+		set package_id ""
+	    }
 	}
 
         # Subject can not be longer than 200 characters
