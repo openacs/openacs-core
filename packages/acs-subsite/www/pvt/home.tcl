@@ -77,13 +77,6 @@ if [ad_parameter SolicitPortraitP "user-info" 0] {
 }
 
 
-# Check if the ShowEmailP parameter is set to 1 to show the link refered to Hide/Show Email
-set show_email_p [parameter::get_from_package_key -package_key acs-subsite -parameter ShowEmailP -default 1]
-
-# The users table has a field where the user can especify to show his/her email
-# or not. 
-db_1row show_email_info { }
-
 set whos_online_url "[subsite::get_element -element url]shared/whos-online"
 set make_visible_url "[subsite::get_element -element url]shared/make-visible"
 set make_invisible_url "[subsite::get_element -element url]shared/make-invisible"
