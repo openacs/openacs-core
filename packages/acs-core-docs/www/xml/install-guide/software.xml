@@ -144,7 +144,7 @@
           <itemizedlist>
             <listitem>
               <formalpara>
-                <title>Linux</title>
+                <title>GNU/Linux</title>
                 <para>The installation assumes a linux kernel of 2.2.22 or newer, or 2.4.14 or newer.</para>
               </formalpara>
             </listitem>
@@ -185,16 +185,16 @@
           <itemizedlist>
             <listitem>
               <formalpara>
-                <title>glibc 2.1 or newer, REQUIRED</title>
+                <title><ulink url="http://www.gnu.org/software/libc/libc.html">glibc</ulink> 2.2 or newer, REQUIRED</title>
                 <para>You need recent versions of these libraries for
-              Oracle to work properly. If you want Unicode support,
-              you'll need glibc 2.2.  This should be included in your
+              Oracle to work properly. For Unicode support,
+              you need glibc 2.2 or newer.  This should be included in your
               operating system distribution.</para>
               </formalpara>
             </listitem>
             <listitem>
               <formalpara>
-                <title>GNU Make 3.76.1 or newer, REQUIRED</title>
+                <title><ulink url="http://www.gnu.org/software/make/">GNU Make</ulink> 3.76.1 or newer, REQUIRED</title>
                 <para>PostgreSQL and AOLserver require gmake to
 			  compile. Note that on most linux
 			  distributions, GNU Make is simply named
@@ -211,13 +211,13 @@
         </listitem>
         <listitem>
           <formalpara>
-            <title>TCL 8.3</title>
+            <title><ulink url="http://www.tcl.tk/">TCL</ulink> 8.4.x</title>
             <para></para>
           </formalpara>
           <itemizedlist>
             <listitem>
               <formalpara>
-                <title>TCL 8.3, REQUIRED</title>
+                <title><ulink url="http://www.tcl.tk/">TCL</ulink> 8.4.x, REQUIRED</title>
                 <para>OpenACS is written in TCL, an interpreted
               language.  The TCL interpreter must be installed for
               OpenACS to function.  TCL is included in most standard
@@ -226,10 +226,10 @@
             </listitem>
             <listitem>
               <formalpara>
-                <title>TCL 8.3 development headers and libraries, OPTIONAL</title>
+                <title><ulink url="http://www.tcl.tk/">TCL</ulink> 8.4.x development headers and libraries, OPTIONAL</title>
                 <para>  The site-wide-search service, OpenFTS, requires these to
 			  compile. (Debian users: <computeroutput>apt-get install
-			  tcl8.3-dev</computeroutput>).  You need this
+			  tcl8.4-dev</computeroutput>).  You need this
               to install OpenFTS.</para>
               </formalpara>
             </listitem>
@@ -238,21 +238,18 @@
 
         <listitem id="source-tdom">
           <formalpara>
-            <title>tDOM, REQUIRED</title>
+            <title><ulink url="http://www.tdom.org/">tDOM</ulink>, REQUIRED</title>
             <para>OpenACS &version; stores
           queries in XML files, so we use an AOLserver module called
           tDOM to parse these files.  (This replaces libxml2, which
-          was used prior to 4.6.4.)  tDOM is available from <ulink
-          url="http://www.tdom.org">http://www.tdom.org</ulink>).</para>
+          was used prior to 4.6.4.)</para>
           </formalpara>
         </listitem>
 
         <listitem id="source-tclwebtest">
           <formalpara>
-            <title>tclwebtest, OPTIONAL</title>
-            <para>tclwebtest 0.3 is a tool for testing web interfaces
-            via tcl scripts. <ulink
-          url="http://sourceforge.net/project/showfiles.php?group_id=31075">http://sourceforge.net/project/showfiles.php?group_id=31075</ulink>.</para>
+            <title><ulink url="http://sourceforge.net/project/showfiles.php?group_id=31075">tclwebtest</ulink>, OPTIONAL</title>
+            <para>tclwebtest is a tool for testing web interfaces via tcl scripts.</para>
           </formalpara>
     </listitem>
 
@@ -262,18 +259,16 @@
             <para>The web server handles incoming HTTP requests, provides
         a runtime environment for OpenACS's tcl code, connects to the
         database, sends out HTTP responses, and logs requests and
-        errors.  OpenACS uses AOLserver; some people have had success
-        running Apache with mod_nsd - see <ulink
-          url="http://openacs.org/forums/message-view?message_id=21461">this
-        post.</ulink></para>
+        errors.  OpenACS uses AOLserver;
+	<ulink url="http://openacs.org/forums/message-view?message_id=21461">some people have had success running Apache with mod_nsd</ulink>.</para>
           </formalpara>
           
           <itemizedlist>
             
             <listitem id="source-aolserver">
               <formalpara>
-                <title><ulink url="http://aolserver.com">AOLserver 4.x</ulink>, REQUIRED</title>
-                <para>AOLserver 4.x</para>
+                <title><ulink url="http://aolserver.com/">AOLserver</ulink> 4.x, REQUIRED</title>
+                <para>Provides the base HTTP server</para>
               </formalpara>
             </listitem>
 
@@ -286,26 +281,19 @@
 	
             <listitem id="nsopenssl-download">
               <formalpara>
-                <title><ulink
-              url="http://www.scottg.net/download/nsopenssl-2.1a.tar.gz">nsopenssl 2.1a</ulink>, OPTIONAL</title>
+                <title><ulink url="http://www.scottg.net/webtools/aolserver/modules/nsopenssl/">nsopenssl</ulink> 3.0beta17 or newer, OPTIONAL</title>
                 <para>Provides SSL capabilities for AOLserver.  It requires
 	    OpenSSL.  You need this if you want users to make
-	    secure (https) connections to your webserver. (<ulink
-              url="http://www.scottg.net/webtools/aolserver/modules/nsopenssl/">home
-              page</ulink>)</para>
+	    secure (https) connections to your webserver.</para>
               </formalpara>
             </listitem>
             
             <listitem id="nspam-download">
               <formalpara>
-                <title><ulink
-              url="http://braindamage.alal.com/software/ns_pam-0.1.tar.gz">ns_pam
-              0.1</ulink>, OPTIONAL</title>
+                <title><ulink url="http://braindamage.alal.com/software/nspam.html">ns_pam</ulink> 0.1 or newer, OPTIONAL</title>
                 <para>Provides PAM capabilities for AOLserver.  You
               need this if you want OpenACS users to authenticate
-              through a PAM module (such as RADIUS).  (<ulink
-              url="http://braindamage.alal.com/software/nspam.html">home
-              page</ulink>)</para>
+              through a PAM module (such as RADIUS).</para>
               </formalpara>
             </listitem>
             
@@ -322,8 +310,7 @@
             <listitem id="nsldap-download">
               <formalpara>
                 <title><ulink
-              url="http://sourceforge.net/project/showfiles.php?group_id=3152">ns_ldap 0.r8
-              </ulink>, OPTIONAL</title>
+              url="http://sourceforge.net/project/showfiles.php?group_id=3152">ns_ldap 0.r8</ulink>, OPTIONAL</title>
                 <para>Provides LDAP capabilities for AOLserver.  You need
               this if you want to use LDAP authentication in OpenACS.</para>
               </formalpara>
@@ -345,7 +332,7 @@
             <listitem>
               <formalpara id="analog-download">
                 <title><ulink
-	    url="http://www.analog.cx/analog-5.32.tar.gz">Analog 5.32</ulink>, OPTIONAL</title>
+	    url="http://www.analog.cx/">Analog</ulink> 5.32 or newer, OPTIONAL</title>
                 <para>This program examines web server request logs, looks up
 	    DNS values, and produces a report.  You need this if you
 	    want to see how much traffic your site is getting.</para>
@@ -355,7 +342,7 @@
             <listitem>
               <formalpara id="balance-download">
                 <title><ulink
-	    url="http://sourceforge.net/projects/balance/">Balance 3.11</ulink>, OPTIONAL</title>
+	    url="http://sourceforge.net/projects/balance/">Balance</ulink> 3.11 or newer, OPTIONAL</title>
                 <para>"Balance is a simple but powerful generic tcp proxy with round robin load balancing and failover mechanisms."  You need this or something equivalent if you are running a high-availability production site and do not have an external load balancing system.</para>
               </formalpara>
             </listitem>
@@ -386,7 +373,7 @@
             </listitem>
             <listitem>
               <formalpara id="source-postgresql">
-                <title><ulink url="http://sourceforge.net/projects/pgsql/">PostgreSQL 7.3.4</ulink> (Either this or Oracle is REQUIRED)</title>
+                <title><ulink url="http://sourceforge.net/projects/pgsql/">PostgreSQL</ulink> 7.4.x (Either this or Oracle is REQUIRED)</title>
                 <para>You need this if you want to use a PostgreSQL database.</para>
               </formalpara>
             </listitem>
@@ -443,7 +430,7 @@
         </listitem>
         <listitem>
           <formalpara>
-            <title>DocBook, OPTIONAL</title>
+            <title><ulink url="http://www.docbook.org/">DocBook</ulink>, OPTIONAL</title>
             <para>(docbook-xml v4.2, docbook-xsl v1.56, libxslt 1.0.21,
           xsltproc 1.0.21).  You need this to write or edit documentation. 
 </para>
@@ -463,7 +450,7 @@
           <itemizedlist>
             <listitem>
               <formalpara>
-                <title>cvs 1.11.2, OPTIONAL</title>
+                <title><ulink url="https://www.cvshome.org/">cvs</ulink> 1.11.2, OPTIONAL</title>
                 <para>cvs is included in most unix distributions. You
               need this if you want to track old versions of your
               files, do controlled deployment of code from development
