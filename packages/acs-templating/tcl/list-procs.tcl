@@ -321,7 +321,7 @@ ad_proc -public template::list::create {
             -list_name $name \
             -element_name $checkbox_name \
             -spec {
-                label {<input type="checkbox" name="_dummy" onclick="ListCheckAll('$name', this.checked)" title="Check/uncheck all rows">}
+                label {<input type="checkbox" name="_dummy" onclick="acs_ListCheckAll('$name', this.checked)" title="Check/uncheck all rows">}
                 display_template {<input type="checkbox" name="$key" value="@$list_properties(multirow).$key@" id="$name,@$list_properties(multirow).$key@" title="Check/uncheck this row, and select an action to perform below">}
                 sub_class {narrow}
                 html { align center }
@@ -867,7 +867,7 @@ ad_proc -private template::list::template {
     # placed in __adp_output in this stack frame.
    
     template::code::adp::$file_stub
-    
+
     return $__adp_output
 }
 
