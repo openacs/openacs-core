@@ -15,49 +15,61 @@ ad_proc -public template::element { command form_id element_id args } {
   eval template::element::$command $form_id $element_id $args
 }
 
-# @public create
-
-# Append an element to a form object.  If a submission is in progress,
-# values for the element are prepared and validated.
-
-# @param form_id    The identifier of the form to which the element is to
-#                   be added.  The form must have been previously created
-#                   with a <tt>form create</tt> statement.
-# @param element_id A keyword identifier for the element that is unique
-#                   in the context of the form.
-
-# @option widget    The name of an input widget for the element.  Valid
-#                   widgets must have a rendering procedure defined in 
-#                   the <tt>template::widget</tt> namespace.
-# @option datatype  The name of a datatype for the element values.  Valid
-#                   datatypes must have a validation procedure defined in
-#                   the <tt>template::data::validate</tt> namespace.
-# @option html      A list of name-value attribute pairs to include in
-#                   the HTML tag for widget.  Typically used for additional
-#                   formatting options, such as <tt>cols</tt> or <tt>rows</tt>,
-#                   or for JavaScript handlers.
-
-# @option options   A list of options for select lists and button groups 
-#                   (check boxes or radio buttons).  The list contains 
-#                   two-element lists in the form 
-#                   { {label value} {label value} {label value} ...}
-
-# @option value     The default value of the element
-# @option values    The default values of the element, where multiple values
-#                   are allowed (checkbox groups and multiselect widgets)
-# @option validate  A list of custom validation blocks in the form
-#                   { name { expression } { message } \
-#                     name { expression } { message } ...}
-#                   where name is a unique identifier for the validation step,
-#                   expression is a block to Tcl code that evaluates to
-#                   1 or 0, and message is to be displayed to the user when 
-#                   the validation step fails.
-# @option optional  A flag indicating that no value is required for this
-#                   element.  If a default value is specified, the default
-#                   is used instead.
-
 ad_proc -public template::element::create { form_id element_id args } {
+    Append an element to a form object.  If a submission is in progress,
+    values for the element are prepared and validated.
 
+    @param form_id    The identifier of the form to which the element is to
+                      be added.  The form must have been previously created
+                      with a <tt>form create</tt> statement.
+
+
+    @param element_id A keyword identifier for the element that is unique
+                      in the context of the form.
+
+
+    @option widget    The name of an input widget for the element.  Valid
+                      widgets must have a rendering procedure defined in 
+                      the <tt>template::widget</tt> namespace.
+
+
+    @option datatype  The name of a datatype for the element values.  Valid
+                      datatypes must have a validation procedure defined in
+                      the <tt>template::data::validate</tt> namespace.
+
+
+    @option html      A list of name-value attribute pairs to include in
+                      the HTML tag for widget.  Typically used for additional
+                      formatting options, such as <tt>cols</tt> or 
+                      <tt>rows</tt>, or for JavaScript handlers.
+
+
+    @option options   A list of options for select lists and button groups 
+                      (check boxes or radio buttons).  The list contains 
+                      two-element lists in the form 
+                      { {label value} {label value} {label value} ...}
+
+
+    @option value     The default value of the element
+
+
+    @option values    The default values of the element, where multiple values
+                      are allowed (checkbox groups and multiselect widgets)
+
+
+    @option validate  A list of custom validation blocks in the form
+                      { name { expression } { message } \
+                        name { expression } { message } ...}
+                      where name is a unique identifier for the validation
+                      step, expression is a block to Tcl code that evaluates to
+                      1 or 0, and message is to be displayed to the user when 
+                      the validation step fails.
+
+
+    @option optional  A flag indicating that no value is required for this
+                      element.  If a default value is specified, the default
+                      is used instead.
+} {
   set level [template::adp_level]
 
   # add the element to the element list
@@ -116,18 +128,16 @@ ad_proc -public template::element::create { form_id element_id args } {
 
 }
 
-# @public set_properties
-
-# Modify properties of an existing element.  The same options may be
-# used as with the create command.  Most commonly used to set the
-# default value for an element when a form page is initially requested.
-
-# @param form_id     The identifier of the form containing the element.
-# @param element_id  The unique identifier of the element.
-
-# @see create
-
 ad_proc -public template::element::set_properties { form_id element_id args } {
+    Modify properties of an existing element.  The same options may be
+    used as with the create command.  Most commonly used to set the
+    default value for an element when a form page is initially requested.
+
+    @param form_id     The identifier of the form containing the element.
+    @param element_id  The unique identifier of the element.
+
+    @see create
+} {
   get_reference
 
   # create a reference to opts as expected by get_opts
@@ -138,15 +148,13 @@ ad_proc -public template::element::set_properties { form_id element_id args } {
   copy_value_to_values_if_defined
 }
 
-# @public set_value
-
-# Sets the value of an element
-
-# @param form_id     The identifier of the form containing the element.
-# @param element_id  The unique identifier of the element.
-# @param value       The value to apply
-
 ad_proc -public template::element::set_value { form_id element_id value } {
+    Sets the value of an element
+
+    @param form_id     The identifier of the form containing the element.
+    @param element_id  The unique identifier of the element.
+    @param value       The value to apply
+} {
 
   get_reference
 
@@ -154,19 +162,16 @@ ad_proc -public template::element::set_value { form_id element_id value } {
   set element(values) [list $value]
 }
 
-# @public get_value
-
-# Retrieves the current value of an element.  Typically used following
-# a valid form submission to retrieve the submitted value.
-
-# @param form_id     The identifier of the form containing the element.
-# @param element_id  The unique identifier of the element.
-
-# @return The current value of the element.
-# @see get_values
-
 ad_proc -public template::element::get_value { form_id element_id } {
+    Retrieves the current value of an element.  Typically used following
+    a valid form submission to retrieve the submitted value.
 
+    @param form_id     The identifier of the form containing the element.
+    @param element_id  The unique identifier of the element.
+
+    @return The current value of the element.
+    @see get_values
+} {
   get_reference
 
   if { [info exists element(value)] } {
@@ -176,40 +181,34 @@ ad_proc -public template::element::get_value { form_id element_id } {
   }
 }
 
-# @public get_values
-
-# Retrieves the list current values for an element.  Typically used
-# following a valid form submission where multiple values may have
-# been submitted for a single element (i.e. for a checkbox group or
-# multiple select box).
-
-# @param form_id     The identifier of the form containing the element.
-# @param element_id  The unique identifier of the element.
-
-# @return A list of current values for the element.
-# @see get_value
-
 ad_proc -public template::element::get_values { form_id element_id } {
+    Retrieves the list current values for an element.  Typically used
+    following a valid form submission where multiple values may have
+    been submitted for a single element (i.e. for a checkbox group or
+					 multiple select box).
 
+    @param form_id     The identifier of the form containing the element.
+    @param element_id  The unique identifier of the element.
+
+    @return A list of current values for the element.
+    @see get_value
+} {
   get_reference
 
   return $element(values)
 }
 
-# @public get_property
-
-# Retrieves the specified property of the element, such as value,
-# datatype, widget, etc.
-
-# @param form_id     The identifier of the form containing the element.
-# @param element_id  The unique identifier of the element.
-# @param property    The property to be retreived
-
-# @return The value of the property, or "" if the property does not exist
-# @see set_properties
-
 ad_proc -public template::element::get_property { form_id element_id property } {
+    Retrieves the specified property of the element, such as value,
+    datatype, widget, etc.
 
+    @param form_id     The identifier of the form containing the element.
+    @param element_id  The unique identifier of the element.
+    @param property    The property to be retreived
+
+    @return The value of the property, or "" if the property does not exist
+    @see set_properties
+} {
   get_reference
 
   if { ![info exists element($property)] } {
@@ -219,22 +218,23 @@ ad_proc -public template::element::get_property { form_id element_id property } 
   }
 }
 
-# @private validate
+ad_proc -private template::element::validate { form_id element_id } {
+    Validates element values according to 3 criteria: 
+    <ol>
+    <li>required elements must have a not-null value; 
+    <li>values must match the element's declared datatype; 
+    <li>values must pass all special validation filters specified with 
+        the -validate option when the element was created.  
+    </ol>
+    <p>
+    If validation fails for any reason,
+    one or more messages are added to the error list for the form,
+    causing the submission to be invalidated and returned to the user
+    for correction.
 
-# Validates element values according to 3 criteria: (1) required
-# elements must have a not-null value; (2) values must
-# match the element's declared datatype; (3) values must pass
-# all special validation filters specified with the -validate option
-# when the element was created.  If validation fails for any reason,
-# one or more messages is added to the error list for the form,
-# causing the submission to be invalidated and returned to the user
-# for correction.
-
-# @param form_id     The identifier of the form containing the element.
-# @param element_id  The unique identifier of the element.
-
-ad_proc -public template::element::validate { form_id element_id } {
-
+    @param form_id     The identifier of the form containing the element.
+    @param element_id  The unique identifier of the element.
+} {
   set level [template::adp_level]
 
   # use an array to hold error messages for this form
@@ -352,21 +352,18 @@ ad_proc -public template::element::validate { form_id element_id } {
   }
 }
 
-# @public set_error
-
-# Manually set an error message for an element.  This may be used to
-# implement validation filters that involve more than one form element
-# ("Sorry, blue is not available for the model you selected, please
-# choose another color.")
-
-# @param form_id     The identifier of the form containing the element.
-# @param element_id  The unique identifier of the element with which
-#                    the error message should be associated in the form
-#                    template.
-# @param message     The text of the error message.
-
 ad_proc -public template::element::set_error { form_id element_id message } {
+    Manually set an error message for an element.  This may be used to
+    implement validation filters that involve more than one form element
+    ("Sorry, blue is not available for the model you selected, please
+ choose another color.")
 
+    @param form_id     The identifier of the form containing the element.
+    @param element_id  The unique identifier of the element with which
+                       the error message should be associated in the form
+                       template.
+    @param message     The text of the error message.
+} {
   set level [template::adp_level]
 
   upvar #$level $form_id:error formerror
@@ -375,18 +372,15 @@ ad_proc -public template::element::set_error { form_id element_id message } {
   set formerror($element_id) $message
 }
 
-# @public error_p
-
-# Return true if the named element has an error set.  Helpful for client code
-# that wants to avoid overwriting an initial error message.
-
-# @param form_id     The identifier of the form containing the element.
-# @param element_id  The unique identifier of the element with which
-#                    the error message should be associated in the form
-#                    template.
-
 ad_proc -public template::element::error_p { form_id element_id } {
+    Return true if the named element has an error set.  Helpful for client code
+    that wants to avoid overwriting an initial error message.
 
+    @param form_id     The identifier of the form containing the element.
+    @param element_id  The unique identifier of the element with which
+                       the error message should be associated in the form
+                       template.
+} {
   set level [template::adp_level]
 
   upvar #$level $form_id:error formerror
@@ -395,11 +389,10 @@ ad_proc -public template::element::error_p { form_id element_id } {
   return [info exists formerror($element_id)]
 }
 
-# Get all values for an element, performing any transformation defined
-# for the datatype.
-
 ad_proc -public template::element::querygetall { element_ref } {
-
+    Get all values for an element, performing any transformation defined
+    for the datatype.
+} {
   upvar $element_ref element
 
   set datatype $element(datatype)
@@ -420,17 +413,14 @@ ad_proc -public template::element::querygetall { element_ref } {
   return $values
 }
 
-# @public exists
-
-# Determine if an element exists in a specified form
-
-# @param form_id     The identifier of the form containing the element.
-# @param element_id  The unique identifier of the element within the form.
-
-# @return 1 if the element exists in the form, or 0 otherwise
-
 ad_proc -public template::element::exists { form_id element_id } {
+    Determine if an element exists in a specified form
 
+    @param form_id     The identifier of the form containing the element.
+    @param element_id  The unique identifier of the element within the form.
+
+    @return 1 if the element exists in the form, or 0 otherwise
+} {
   set level [template::adp_level]
 
   upvar #$level $form_id:$element_id element_properties
@@ -440,12 +430,12 @@ ad_proc -public template::element::exists { form_id element_id } {
 
 # @private get_reference
 
-# Gets a reference to the array containing the properties of an
-# element, and throws and error if the element does not exist.  Called
-# at the beginning of several of the element commands.
 
 ad_proc -public template::element::get_reference {} {
-
+    Gets a reference to the array containing the properties of an
+    element, and throws and error if the element does not exist.  Called
+    at the beginning of several of the element commands.
+} {
   uplevel {
 
     set level [template::adp_level]
@@ -457,22 +447,19 @@ ad_proc -public template::element::get_reference {} {
   }
 }
 
-# @private render
+ad_proc -private template::element::render { form_id element_id tag_attributes } {
+    Generate the HTML for a particular form widget.
 
-# Generate the HTML for a particular form widget.
+    @param form_id        The identifier of the form containing the element.
+    @param element_id     The unique identifier of the element within the form.
+    @param tag_attributes A name-value list of addditional HTML
+                          attributes to include in the tag, such as JavaScript
+                          handlers or special formatting (i.e. ROWS and COLS
+							  for a TEXTAREA).
 
-# @param form_id        The identifier of the form containing the element.
-# @param element_id     The unique identifier of the element within the form.
-# @param tag_attributes A name-value list of addditional HTML
-#                       attributes to include in the tag, such as JavaScript
-#                       handlers or special formatting (i.e. ROWS and COLS
-#                       for a TEXTAREA).
-
-# @return A string containing the HTML for an INPUT, SELECT or TEXTAREA
-#         form element.
-
-ad_proc -public template::element::render { form_id element_id tag_attributes } {
-
+    @return A string containing the HTML for an INPUT, SELECT or TEXTAREA
+    form element.
+} {
   get_reference
 
   # Remember that the element has been rendered already
@@ -481,34 +468,28 @@ ad_proc -public template::element::render { form_id element_id tag_attributes } 
   return [template::widget::$element(widget) element $tag_attributes]
 }
 
-# @private render_help
+ad_proc -private template::element::render_help { form_id element_id tag_attributes } {
+    Render the -help_text text
 
-# Render the -help_text text
-
-# @param form_id        The identifier of the form containing the element.
-# @param element_id     The unique identifier of the element within the form.
-# @param tag_attributes Reserved for future use.
-
-ad_proc -public template::element::render_help { form_id element_id tag_attributes } {
-
+    @param form_id        The identifier of the form containing the element.
+    @param element_id     The unique identifier of the element within the form.
+    @param tag_attributes Reserved for future use.
+} {
   get_reference
 
   return $element(help_text)
 }
 
-# @private options
+ad_proc -private template::element::options { form_id element_id tag_attributes } {
+    Prepares a multirow data source for use within a formgroup
 
-# Prepares a multirow data source for use within a formgroup
-
-# @param form_id        The identifier of the form containing the element.
-# @param element_id     The unique identifier of the element within the form.
-# @param tag_attributes A name-value list of addditional HTML
-#                       attributes to include in the INPUT tags for each
-#                       radio button or checkbox, such as JavaScript
-#                       handlers or special formatting.
-
-ad_proc -public template::element::options { form_id element_id tag_attributes } {
-
+    @param form_id        The identifier of the form containing the element.
+    @param element_id     The unique identifier of the element within the form.
+    @param tag_attributes A name-value list of addditional HTML
+                          attributes to include in the INPUT tags for each
+                          radio button or checkbox, such as JavaScript
+                          handlers or special formatting.
+} {
   get_reference
 
   if { ! [info exists element(options)] } {
@@ -555,13 +536,9 @@ ad_proc -public template::element::options { form_id element_id tag_attributes }
   }
 }
 
-
-
-# @private copy_value_to_values_if_defined
-
-# define values from value, if the latter is more defined
-
-ad_proc -public template::element::copy_value_to_values_if_defined {} {
+ad_proc -private template::element::copy_value_to_values_if_defined {} {
+    define values from value, if the latter is more defined
+} {
   upvar opts opts
   # values is always defined, init to "" from template::element::defaults
   if { [info exists opts(value)] && [llength $opts(values)] == 0 } {

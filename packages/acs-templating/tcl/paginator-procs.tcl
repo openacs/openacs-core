@@ -14,29 +14,31 @@ ad_proc -public template::paginator { command args } {
   eval paginator::$command $args
 }
 
-# @public create
-
-# Creates a paginator object.  Performs an initial query to get the complete
-# list of rows in the query result and caches the result for subsequent
-# queries.
-
-# @param name 	 A unique name corresponding to the query being paginated,
-#             	 including specific values in the where clause and sorting
-#             	 specified in the order by clause.
-# @param query   The actual query that returns the IDs of all rows in the
-#                results.  Bind variables may be used.
-# @option timeout     The lifetime of a query result in seconds, after which
-#                     the query must be refreshed.
-# @option pagesize    The number of rows to display on a single page.
-# @option groupsize   The number of pages in a group, for UI purposes.
-# @option contextual  Boolean indicating whether the pagination interface
-#                     presented to the user will provide
-#                     some other contextual clue in addition or instead of
-#                     page number,, such as the first few
-#                     letters of a title or date.
-
 ad_proc -public template::paginator::create { statement_name name query args } {
+    Creates a paginator object.  Performs an initial query to get the complete
+    list of rows in the query result and caches the result for subsequent
+    queries.
 
+    @param name         A unique name corresponding to the query being 
+                        paginated, including specific values in the where 
+                        clause and sorting specified in the order by clause.
+
+    @param query        The actual query that returns the IDs of all rows in
+                        the results.  Bind variables may be used.
+
+    @option timeout     The lifetime of a query result in seconds, after which
+                        the query must be refreshed.
+
+    @option pagesize    The number of rows to display on a single page.
+
+    @option groupsize   The number of pages in a group, for UI purposes.
+
+    @option contextual  Boolean indicating whether the pagination interface
+                        presented to the user will provide
+                        some other contextual clue in addition or instead of
+                        page number,, such as the first few
+                        letters of a title or date.
+} {
   set level [template::adp_level]
   variable parse_level
   set parse_level $level
@@ -63,12 +65,9 @@ ad_proc -public template::paginator::create { statement_name name query args } {
   set opts(group_count) [get_group $name $opts(page_count)]
 }
 
-# @private init
-
-# Initialize a paginated query.  Only called by create.
-
-ad_proc -public template::paginator::init { statement_name name query } {
-
+ad_proc -private template::paginator::init { statement_name name query } {
+    Initialize a paginated query.  Only called by create.
+} {
   get_reference
 
   # query for an ordered list of all row identifiers to cache
@@ -117,18 +116,17 @@ ad_proc -public template::paginator::init { statement_name name query } {
   }
 }
 
-# @public get_page
-
-# Calculates the page on which the specified row is located.
-
-# @param name   The reference to the paginator object.
-# @param rownum A number ranging from one to the number of rows in the
-#               query result.
-
-# @return A number ranging from one to the number of pages in the query result.
-
 ad_proc -public template::paginator::get_page { name rownum } {
+    Calculates the page on which the specified row is located.
 
+    @param name   The reference to the paginator object.
+    @param rownum A number ranging from one to the number of rows in the
+                  query result, representing the number of a row therein.
+
+    @return A number ranging from one to the number of pages in 
+            the query result, representing the number of the page
+            the specified row is located in.
+} {
   get_reference
 
   set pagesize $properties(pagesize)
@@ -136,36 +134,35 @@ ad_proc -public template::paginator::get_page { name rownum } {
   return [expr ($rownum - 1 - (($rownum - 1) % $pagesize)) / $pagesize + 1]
 }
 
-# @public get_row 
-
-# Calculates the first row displayed on a page.
-
-# @param name    The reference to the paginator object.
-# @param pagenum A number ranging from one to the number of pages in 
-#                the query result.
-
-# @return A number ranging from one to the number of rows in the query result.
-
 ad_proc -public template::paginator::get_row { name pagenum } {
+    Calculates the first row displayed on a page.
 
+    @param name    The reference to the paginator object.
+    @param pagenum A number ranging from one to the number of pages in 
+                   the query result, representing the number of a page
+                   therein.
+
+    @return A number ranging from one to the number of rows in 
+            the query result, representing the number of the first
+            row on the specified page.
+} {
   get_reference
 
   return [expr ($pagenum - 1) * $properties(pagesize) + 1]
 }
 
-# @public get_group
-
-# Calculates the page group in which the specified page is located.
-
-# @param name    The reference to the paginator object.
-# @param pagenum A number ranging from one to the number of pages in 
-#                the query result.
-
-# @return A number ranging from one to the number of groups in the query 
-#         result, as determined by both the page size and the group size.
-
 ad_proc -public template::paginator::get_group { name pagenum } {
+    Calculates the page group in which the specified page is located.
 
+    @param name    The reference to the paginator object.
+    @param pagenum A number ranging from one to the number of pages in 
+                   the query result.
+
+    @return A number ranging from one to the number of groups in the query 
+            result, as determined by both the page size and the group size.
+            This number represents the page group number that the specified
+            page lies in.
+} {
   get_reference
 
   set groupsize $properties(groupsize)
@@ -173,20 +170,17 @@ ad_proc -public template::paginator::get_group { name pagenum } {
   return [expr ($pagenum - 1 - (($pagenum - 1) % $groupsize)) / $groupsize + 1]
 }
 
-# @public get_row_ids
-
-# Gets a list of IDs in a page, selected from the master ID list
-# generated by the initial query submitted for pagination.  IDs are
-# typically primary key values.
-
-# @param name    The reference to the paginator object.
-# @param pagenum A number ranging from one to the number of pages in 
-#                the query result.
-
-# @return A Tcl list of row identifiers.
-
 ad_proc -public template::paginator::get_row_ids { name pagenum } {
+    Gets a list of IDs in a page, selected from the master ID list
+    generated by the initial query submitted for pagination.  IDs are
+    typically primary key values.
 
+    @param name    The reference to the paginator object.
+    @param pagenum A number ranging from one to the number of pages in 
+                   the query result.
+
+    @return A Tcl list of row identifiers.
+} {
   get_reference
 
   set pagesize $properties(pagesize)
@@ -199,18 +193,15 @@ ad_proc -public template::paginator::get_row_ids { name pagenum } {
   return $ids
 }
 
-# @public get_pages
-
-# Gets a list of pages in a group, truncating if appropriate at the end.
-
-# @param name    The reference to the paginator object.
-# @param group   A number ranging from one to the number of page groups in 
-#                the query result.
-
-# @return A Tcl list of page numbers.
-
 ad_proc -public template::paginator::get_pages { name group } {
+    Gets a list of pages in a group, truncating if appropriate at the end.
 
+    @param name    The reference to the paginator object.
+    @param group   A number ranging from one to the number of page groups in 
+                   the query result.
+
+    @return A Tcl list of page numbers.
+} {
   get_reference
 
   set group_count $properties(group_count)
@@ -238,20 +229,17 @@ ad_proc -public template::paginator::get_pages { name group } {
   return $pages
 }
 
-# @public get_groups
-
-# Determines the set of groups to which a group belongs, and calculates the
-# starting page of each group in that set.
-
-# @param name    The reference to the paginator object.
-# @param group   A number ranging from one to the number of page groups in 
-#                the query result.
-# @param count   The desired size of the group set.
-
-# @return A Tcl list of page numbers.
-
 ad_proc -public template::paginator::get_groups { name group count } {
+    Determines the set of groups to which a group belongs, and calculates the
+    starting page of each group in that set.
 
+    @param name    The reference to the paginator object.
+    @param group   A number ranging from one to the number of page groups in 
+                   the query result.
+    @param count   The desired size of the group set.
+
+    @return A Tcl list of page numbers.
+} {
   get_reference
 
   set group_count $properties(group_count)
@@ -282,22 +270,19 @@ ad_proc -public template::paginator::get_groups { name group count } {
   return $pages
 }
 
-# @public get_context
-
-# Gets the context cues for a set of pages in the form of a multirow
-# data source with 3 columns: rownum (starting with 1); page (number
-# of the page); and context (a short string such as the first few
-# letters of a name or title).  The context cues may be used in the
-# paging interface along with or instead of page numbers.  This
-# command is only valid if the contextual option is specified when
-# creating the paginator.
-
-# @param name        The reference to the paginator object.
-# @param datasource  The name of the multirow datasource to create
-# @param pages       A Tcl list of page numbers.
-
 ad_proc -public template::paginator::get_context { name datasource pages } {
+    Gets the context cues for a set of pages in the form of a multirow
+    data source with 3 columns: rownum (starting with 1); page (number
+    of the page); and context (a short string such as the first few
+    letters of a name or title).  The context cues may be used in the
+    paging interface along with or instead of page numbers.  This
+    command is only valid if the contextual option is specified when
+    creating the paginator.
 
+    @param name        The reference to the paginator object.
+    @param datasource  The name of the multirow datasource to create
+    @param pages       A Tcl list of page numbers.
+} {
   get_reference
 
   if { ! [info exists properties(context_ids)] } {
@@ -320,69 +305,75 @@ ad_proc -public template::paginator::get_context { name datasource pages } {
   }
 }
 
-# @public get_row_count
-
-# Gets the total number of records in the paginated query
-
-# @param name    The reference to the paginator object.
-
-# @return A number representing the row count.
-
 ad_proc -public template::paginator::get_row_count { name } {
+    Gets the total number of records in the paginated query
 
+    @param name    The reference to the paginator object.
+
+    @return A number representing the row count.
+} {
   get_reference
 
   return $properties(row_count)
 }
-
-# @public get_page_count
-
-# Gets the total number of pages in the paginated query
-
-# @param name    The reference to the paginator object.
-
-# @return A number representing the page count.
 
 ad_proc -public template::paginator::get_page_count { name } {
+    Gets the total number of pages in the paginated query
 
+    @param name    The reference to the paginator object.
+
+    @return A number representing the page count.
+} {
   get_reference
 
   return $properties(row_count)
 }
 
-# @public get_group_count
-
-# Gets the total number of groups in the paginated query
-
-# @param name    The reference to the paginator object.
-
-# @return A number represeting the group count.
-
 ad_proc -public template::paginator::get_group_count { name } {
+    Gets the total number of groups in the paginated query
 
+    @param name    The reference to the paginator object.
+
+    @return A number represeting the group count.
+} {
   get_reference
 
   return $properties(group_count)
 }
 
-# @public get_display_info
-
-# Make paginator display properties available as a onerow data source:
-# next_page: 	    following page or empty string if at end
-# previous_page:    preceeding page or empty string if at beginning
-# next_group:	    page that begins the next page group or empty string if 
-#                   at end
-# previous_group:   page the begins the last page group or 
-#            	    empty string if at endl.
-# page_count:       the number of pages
-#
-# @param name        The reference to the paginator object.
-# @param datasource  The name of the onerow datasource to create
-# @param page        A page number representing the reference point from
-#                    which the display properties are calculated.
-
 ad_proc -public template::paginator::get_display_info { name datasource page } {
+    Make paginator display properties available as a onerow data source:
 
+    <table>
+    <tr>
+      <td>next_page:</td>
+                 <td>following page or empty string if at end</td>
+    </tr>
+    <tr>
+      <td>previous_page:</td>
+                 <td>preceeding page or empty string if at beginning</td>
+    </tr>
+    <tr>
+      <td>next_group:</td>
+                 <td>page that begins the next page group or empty string if 
+                     at end</td>
+    </tr>
+    <tr>
+      <td>previous_group:</td>
+                 <td>page that begins the last page group or 
+               	     empty string if at endl.</td>
+    </tr>
+    <tr>
+      <td>page_count:</td>
+                 <td>the number of pages</td>
+    </tr>
+    </table>
+   
+    @param name        The reference to the paginator object.
+    @param datasource  The name of the onerow datasource to create
+    @param page        A page number representing the reference point from
+                       which the display properties are calculated.
+} {
   get_reference
   upvar 2 $datasource info
 
@@ -411,20 +402,17 @@ ad_proc -public template::paginator::get_display_info { name datasource page } {
   }
 }
 
-# @public get_data
-
-# Sets a multirow data source with data for the rows on the current page.
-# The pseudocolumn "all_rownum" is added to each row, indicating the
-# index of the row relative to all rows across all pages.
-
-# @param name    The reference to the paginator object.
-# @param datasource The name of the datasource to create.
-# @param query      The query to execute, containing IN (CURRENT_PAGE_SET).
-# @param id_column  The name of the ID column in the display query (required
-#                   to order rows properly).
-
 ad_proc -public template::paginator::get_data { statement_name name datasource query id_column page } {
+    Sets a multirow data source with data for the rows on the current page.
+    The pseudocolumn "all_rownum" is added to each row, indicating the
+    index of the row relative to all rows across all pages.
 
+    @param name       The reference to the paginator object.
+    @param datasource The name of the datasource to create.
+    @param query      The query to execute, containing IN (CURRENT_PAGE_SET).
+    @param id_column  The name of the ID column in the display query (required
+                      to order rows properly).
+} {
   set ids [get_row_ids $name $page]
 
   # calculate the base row number for the page
@@ -468,12 +456,9 @@ ad_proc -public template::paginator::get_data { statement_name name datasource q
   "
 }
 
-# @private get_reference
-
-# Get a reference to the paginator properties (internal helper)
-
-ad_proc -public template::paginator::get_reference {} {
-  
+ad_proc -private template::paginator::get_reference {} {
+    Get a reference to the paginator properties (internal helper)
+} {
   uplevel {
 
     variable parse_level

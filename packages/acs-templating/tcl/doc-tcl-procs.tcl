@@ -67,22 +67,6 @@ ad_proc -private doc::sort_@see { list_ref directive_comments } {
 
 }
 
-# @private find_marker_indices
-# given a body of text and a text marker, returns a list of position indices
-# for each occurrence of the text marker
-
-# @param text body of text to be searched through
-# @param marker the text-divider mark
-
-# @return list of indices of the position immediately preceding each
-# occurrence of the text marker; if there are no occurrences
-# of the text marker, returns a zero-element list
-
-# @see namespace doc
-# @see proc doc::parse_file
-# @see proc doc::parse_namespace doc.html#doc::parse_namespace
-# @see proc doc::util::text_divider
-
 ad_proc -private doc::util::find_marker_indices { text marker } {
     given a body of text and a text marker, returns a list of position indices
     for each occurrence of the text marker
@@ -193,7 +177,6 @@ $value
 
 
 ad_proc -private template::util::proper_noun { string_ref } {
-    @private proper_noun
     capitalizes the first letter of a string
     @return returns formatted string (UNFINISHED. FIXME.)
 } {
@@ -293,10 +276,6 @@ ad_proc -private template::util::proc_element_compare { element1 element2 } {
     return [string compare -nocase [lindex [lindex [lindex element2 1] 0] 1] [lindex [lindex [lindex element1 1] 0] 1]]
 
 }
-
-# @private set_proc_name_source_txt 
-# called by parse_comment_text
-# @param comment_text this should include the source text
 
 ad_proc -private doc::set_proc_name_source_text_comment_text { proc_block } {
     called by parse_comment_text
@@ -543,34 +522,39 @@ ad_proc -private doc::parse_namespace { text_lines }  {
 ad_proc -private doc::parse_file { path } {
     Parse API documentation from a Tcl page
     API documentation is parsed as follows:
-    Document is scanned until a @namespace directive is encountered.
+    <ul>
+    <li>Document is scanned until a @namespace directive is encountered.
     The remainder of the file is scanned for @private or @public
     directives.
-    When one of these directives is encountered, the file is scanned up
+    <li>When one of these directives is encountered, the file is scanned up
     to a proc declaration and the text in between is parsed as documentation
-    for a single procedure.  The text between the initial @private or @public
+    for a single procedure.  
+    <li>The text between the initial @private or @public
     directive and the next directive is considered a general comment on
     the procedure
+    </ul>
     Valid directives in a procedure doc include:
-    - @author
-    - @param (for hard parameters)
-    - @see (should have the form namespace::procedure.  A reference to an
+    <ul>
+    <li>@author
+    <li>@param (for hard parameters)
+    <li>@see (should have the form namespace::procedure.  A reference to an
 	    entire namespace should be namespace::.  By convention the
 	    API for each namespace should be in a file of the same name, 
 	    so that a link can be generated automatically).
-    - @option (for switches such as -foo)
-    - @return
+    <li>@option (for switches such as -foo)
+    <li>@return
+    </ul>
 
-
+    <p>
     Reads the text for a file and scans for a namespace directive.  When
     one is encountered, reads until the next namespace or EOF and calls
     doc::parse_namespace on the accumulated lines to get procedure
     documentation.
-
+    <p>
     creates a multirow variable in the variable name designated by result_ref
     with columns namespace_name, proc_name, public_private, 
     author, param, option, see, return and source_text
-
+    <p>
     Note that this format is suitable for passing to array set for
     creating a lookup on namespace name.
 } {

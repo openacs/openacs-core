@@ -1,7 +1,8 @@
-# The new file type returns the list { file_name temp_file_name content_mime_type }.
+
 
 ad_proc -public template::data::transform::file { element_ref } {
-
+    @return the list { file_name temp_file_name content_mime_type }.
+} {
     upvar $element_ref element
     set element_id $element(id)
 
@@ -19,9 +20,11 @@ ad_proc -public template::data::transform::file { element_ref } {
 
 }
 
-# Our file widget can't fail 
-
 ad_proc -public template::data::validate::file { value_ref message_ref } {
+    Our file widget can't fail 
+
+    @return true
+} {
     return 1
 }
 

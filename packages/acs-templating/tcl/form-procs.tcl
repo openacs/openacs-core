@@ -19,26 +19,24 @@ ad_proc -public template::form { command args } {
   eval template::form::$command $args
 }
 
-# @public create
-
-# Initialize the data structures for a form.
-
-# @param id A keyword identifier for the form, such as "add_user" or
-# "edit_item".  The ID must be unique in the context of a single page.
-
-# @option method The standard METHOD attribute to specify in the HTML FORM
-# tag at the beginning of the rendered form.  Defaults to POST.
-
-# @option html A list of additional name-value attribute pairs to
-# include in the HTML FORM tag at the beginning of the rendered form.
-# Common attributes include JavaScript event handlers and multipart
-# form encoding.  For example, "-html { enctype multipart/form-data
-# onSubmit validate() }"
-
-# @option elements A block of element specifications.
-
 ad_proc -public template::form::create { id args } {
+    Initialize the data structures for a form.
 
+    @param id A keyword identifier for the form, such as "add_user" or
+              "edit_item".  The ID must be unique in the context of a 
+              single page.
+
+    @option method The standard METHOD attribute to specify in the HTML FORM
+                   tag at the beginning of the rendered form. Defaults to POST.
+
+    @option html A list of additional name-value attribute pairs to
+                 include in the HTML FORM tag at the beginning of the 
+                 rendered form. Common attributes include JavaScript 
+                 event handlers and multipart form encoding.  For example, 
+                 "-html { enctype multipart/form-data onSubmit validate() }"
+
+    @option elements A block of element specifications.
+} {
   set level [template::adp_level]
 
   # keep form properties and a list of the element items
@@ -80,36 +78,30 @@ ad_proc -public template::form::create { id args } {
     }
   }
 }
-
-# @public exists
-
-# Determine whether a form exists by checking for its data structures.
-
-# @param id  The ID of an ATS form object.
-
-# @return 1 if a form with the specified ID exists. 0 if it does not.
  
 ad_proc -public template::form::exists { id } {
+    Determine whether a form exists by checking for its data structures.
 
+    @param id  The ID of an ATS form object.
+
+    @return 1 if a form with the specified ID exists. 0 if it does not.
+} {
   set level [template::adp_level]
   upvar #$level $id:elements elements 
 
   return [info exists elements]
 }
 
-# @private template
+ad_proc -private template::form::template { id { style "" } } {
+    Auto-generate the template for a form
 
-# Auto-generate the template for a form
+    @param id      The form identifier
+    @param style   The style template to use when generating the form.
+                   Form style templates must be placed in the forms
+                   subdirectory of the ATS resources directory.
 
-# @param id      The form identifier
-# @param style   The style template to use when generating the form.
-#                Form style templates must be placed in the forms
-#                subdirectory of the ATS resources directory.
-
-# @return A string containing a template for the body of the form.
-
-ad_proc -public template::form::template { id { style "" } } {
-
+    @return A string containing a template for the body of the form.
+} {
   get_reference 
 
   set elements:rowcount 0
@@ -147,19 +139,16 @@ ad_proc -public template::form::template { id { style "" } } {
   return $__adp_output
 }
 
-# @private generate 
+ad_proc -private template::form::generate { id { style "" } } {
+    Render the finished HTML output for a dynamic form.
 
-# Render the finished HTML output for a dynamic form.
+    @param id      The form identifier
+    @param style   The style template to use when generating the form.
+                   Form style templates must be placed in the forms
+                   subdirectory of the ATS resources directory.
 
-# @param id      The form identifier
-# @param style   The style template to use when generating the form.
-#                Form style templates must be placed in the forms
-#                subdirectory of the ATS resources directory.
-
-# @return A string containing the HTML for the body of the form.
-
-ad_proc -public template::form::generate { id { style "" } } {
-
+    @return A string containing the HTML for the body of the form.
+} {
   set __adp_output [template $id $style]
   
   set level [template::adp_level]
@@ -182,37 +171,31 @@ ad_proc -public template::form::generate { id { style "" } } {
   return [template::adp_eval code]
 }
 
-# @public section
-
-# Set the name of the current section of the form.  A form may be
-# divided into any number of sections for layout purposes.  Elements
-# are tagged with the current section name as they are added to the
-# form.  A form style template may insert a divider in the form
-# whenever the section name changes.
-
-# @param id      The form identifier.
-# @param section The name of the current section.
-
 ad_proc -public template::form::section { id section } {
+    Set the name of the current section of the form.  A form may be
+    divided into any number of sections for layout purposes.  Elements
+    are tagged with the current section name as they are added to the
+    form.  A form style template may insert a divider in the form
+    whenever the section name changes.
 
+    @param id      The form identifier.
+    @param section The name of the current section.
+} {
   get_reference
 
   set properties(section) $section
 }
 
-# @private render
+ad_proc -private template::form::render { id tag_attributes } {
+    Render the HTML FORM tag along with a hidden element that identifies
+    the form object.
 
-# Render the HTML FORM tag along with a hidden element that identifies
-# the form object.
+    @param id               The form identifier
+    @param tag_attributes   A name-value list of special attributes to add
+                            to the FORM tag, such as JavaScript event handlers.
 
-# @param id               The form identifier
-# @param tag_attributes   A name-value list of special attributes to add
-#                         to the FORM tag, such as JavaScript event handlers.
-
-# @return A string containing the rendered tags.
-
-ad_proc -public template::form::render { id tag_attributes } {
-
+    @return A string containing the rendered tags.
+} {
   get_reference
 
   # make a reference to the formerror array with any validation messages
@@ -262,16 +245,13 @@ ad_proc -public template::form::render { id tag_attributes } {
   return $output
 }
 
-# @private check_elements
+ad_proc -private template::form::check_elements { id } {
+    Iterates over all declared elements, checking for hidden widgets and
+    rendering those that have not been rendered yet.  Called after rendering
+    a custom form template as a debugging aid.
 
-# Iterates over all declared elements, checking for hidden widgets and
-# rendering those that have not been rendered yet.  Called after rendering
-# a custom form template as a debugging aid.
-
-# @param id               The form identifier
-
-ad_proc -public template::form::check_elements { id } {
-
+    @param id               The form identifier
+} {
   get_reference
 
   set output ""
@@ -302,35 +282,29 @@ ad_proc -public template::form::check_elements { id } {
   return $output
 }
 
-# @public is_request
-
-# Return true if preparing a form for an initial request (as opposed
-# to repreparing a form that is returned to the user due to validation
-# problems).  This command is used to conditionally set default values 
-# for form elements.
-
-# @param id               The form identifier
-
-# @return 1 if true or 0 if false
-
 ad_proc -public template::form::is_request { id } {
+    Return true if preparing a form for an initial request (as opposed
+    to repreparing a form that is returned to the user due to validation
+    problems).  This command is used to conditionally set default values 
+    for form elements.
 
+    @param id               The form identifier
+
+    @return 1 if preparing a form for an initial request; or 0 if 
+            repreparing a form that is returned to the user due to 
+            validation problems
+} {
   return [expr ! [is_submission $id]]
 }
 
-# Return true if submission in progress
-
-# @public is_submission
-
-# Return true if a submission in progress.  The submission may or may not
-# be valid.
-
-# @param id               The form identifier
-
-# @return 1 if true or 0 if false
-
 ad_proc -public template::form::is_submission { id } {
+    Return true if a submission in progress.  The submission may or may not
+    be valid.
 
+    @param id               The form identifier
+
+    @return 1 if true or 0 if false
+} {
   set level [template::adp_level]
 
   upvar #$level $id:submission submission
@@ -338,19 +312,16 @@ ad_proc -public template::form::is_submission { id } {
   return $submission
 }
 
-# @public is_valid
-
-# Return true if submission in progress and submission was valid.
-# Typically used to conditionally execute DML and redirect to the next
-# page, as opposed to returning the form back to the user to report
-# validation errors.
-
-# @param id               The form identifier
-
-# @return 1 if true or 0 if false
-
 ad_proc -public template::form::is_valid { id } {
+    Return true if submission in progress and submission was valid.
+    Typically used to conditionally execute DML and redirect to the next
+    page, as opposed to returning the form back to the user to report
+    validation errors.
 
+    @param id               The form identifier
+
+    @return 1 if id is the form identifier of a valid submission or 0 otherwise
+} {
   set level [template::adp_level]
 
   upvar #$level $id:submission submission
@@ -370,18 +341,15 @@ ad_proc -public template::form::is_valid { id } {
   }
 }
 
-# @public get_values
-
-# Set local variables for form variables (assume they are all single values).
-# Typically used when processing the form submission to prepare for DML
-# or other type of transaction.
-
-# @param id               The form identifier
-# @param args             A list of element identifiers. If the list is empty,
-#                         retreive all form elements
-
 ad_proc -public template::form::get_values { id args } {
+    Set local variables for form variables (assume they are all single values).
+    Typically used when processing the form submission to prepare for DML
+    or other type of transaction.
 
+    @param id            The form identifier
+    @param args          A list of element identifiers. If the list is empty,
+                         retrieve all form elements
+} {
   if { [llength $args] > 0 } {
     set elements $args
   } else {
@@ -397,20 +365,19 @@ ad_proc -public template::form::get_values { id args } {
   }
 }
 
-# @public get_combined_values
-
-# Return a list which represents the result of getting combined values
-# from multiple form elements
-
-# @param id             The form identifier
-# @param args           A list of element identifiers. Each identifier may be
-#                       a regexp. For example, form get_combined_values "foo.*"
-#                       will combine the values of all elements starting with
-#                       "foo"
-# @param return         The combined list of values
-#
 ad_proc -public template::form::get_combined_values { id args } {
+    Return a list which represents the result of getting combined values
+    from multiple form elements
 
+    @param id             The form identifier
+    @param args           A list of element identifiers. Each identifier may be
+                          a regexp. For example, 
+                          <code>form get_combined_values "foo.*"</code>
+                          will combine the values of all elements starting with
+                          "foo"
+
+    @return               The combined list of values
+} {
   get_reference 
 
   set exp [join $args "|"]
@@ -426,19 +393,16 @@ ad_proc -public template::form::get_combined_values { id args } {
   return $values
 }
 
-# @public set_values
-
-# Convenience procedure to set individual values of a form (useful for
-# simple update forms).  Typical usage is to query a onerow data
-# source from database and pass the resulting array reference to
-# set_values for setting default values in an update form.
-
-# @param id               The form identifier
-# @param array_ref        The name of a local array variable whose
-#                         keys correspond to element identifiers in the form
-
 ad_proc -public template::form::set_values { id array_ref } {
+    Convenience procedure to set individual values of a form (useful for
+    simple update forms).  Typical usage is to query a onerow data
+    source from database and pass the resulting array reference to
+    set_values for setting default values in an update form.
 
+    @param id               The form identifier
+    @param array_ref        The name of a local array variable whose
+                            keys correspond to element identifiers in the form
+} {
   upvar 2 $array_ref values
   
   foreach name [array names values] {
@@ -449,17 +413,14 @@ ad_proc -public template::form::set_values { id array_ref } {
   }
 }
 
-# @public export
-
-# Generates hidden input tags for all values in a form submission.
-# Typically used to create a confirmation page following an initial
-# submission.
-
-# @return A string containing hidden input tags for inclusion in a
-# form.
-
 ad_proc -public template::form::export {} {
+    Generates hidden input tags for all values in a form submission.
+    Typically used to create a confirmation page following an initial
+    submission.
 
+    @return A string containing hidden input tags for inclusion in a
+            form.
+} {
   set form [ns_getform]
   if { $form == "" } { return "" }
 
@@ -478,25 +439,18 @@ ad_proc -public template::form::export {} {
   return $export_data
 }
 
-
-# @public size
-
-# Return the number of elements in a form
-
-# @param id               The form identifier
-
 ad_proc -public template::form::size { id } {
+    @param id               The form identifier
+    @return the number of elements in the form identified by id
+} {
   template::form::get_reference
   return [llength $elements]
 }
 
-# @private get_reference
-
-# Helper procedure used to access the basic data structures of a form object.
-# Called by several of the form commands.
-
-ad_proc -public template::form::get_reference {} {
-
+ad_proc -private template::form::get_reference {} {
+    Helper procedure used to access the basic data structures of a form object.
+    Called by several of the form commands.
+} {
   uplevel {
     set level [template::adp_level]
 
