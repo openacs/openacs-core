@@ -1846,7 +1846,7 @@ end;' language 'plpgsql';
 
 create function apm_package__parent_id (integer) returns integer as '
 declare
-    apm_package__parent_id__package_id alias foreign key $1;
+    apm_package__parent_id__package_id alias for $1;
     v_package_id apm_packages.package_id%TYPE;
 begin
     select sn1.object_id
