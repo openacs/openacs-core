@@ -117,6 +117,10 @@ aa_register_case auth_create_user {
     @author Peter Marklund
 } {
 
+    # create_user returns ok when trying to create a user 
+    # whose email already lives in the db. We should test 
+    # against that
+
     aa_run_with_teardown \
         -rollback \
         -test_code {

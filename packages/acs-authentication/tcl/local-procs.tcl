@@ -349,7 +349,7 @@ ad_proc -private auth::local::registration::GetElements {
     set result(optional) { url }
 
     if { ![parameter::get -parameter RegistrationProvidesRandomPasswordP -default 0] } {
-        lappend result(required) password
+        lappend result(required) password_1 password_2
     }
 
     if { [parameter::get -parameter RequireQuestionForPasswordResetP -default 1] && 
