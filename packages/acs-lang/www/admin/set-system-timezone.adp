@@ -9,15 +9,6 @@
 <table border="1" cellpadding="8">
   <tr>
     <td>
-      Timezone that OpenACS thinks it's in:
-    </td>
-    <td>
-      <b>@system_timezone@</b>
-    </td>
-  </tr>
-
-  <tr>
-    <td>
       Current time, according to the database:
     </td>
     <td>
@@ -27,7 +18,16 @@
 
   <tr>
     <td>
-      Difference between local time and UTC, according to database and system setting above:
+      OpenACS Timezone setting:
+    </td>
+    <td>
+      <b>@system_timezone@</b>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      Difference between database time and UTC according to OpenACS timezone setting above:
     </td>
     <td>
       <b>@system_utc_offset@ hours</b>
@@ -36,7 +36,7 @@
 
   <tr bgcolor="yellow">
     <td>
-      UTC time according to database and system setting:
+      UTC time according to database and the OpenACS timezone setting above:
     </td>
     <td>
       <b>@sysdate_utc@</b>
@@ -59,7 +59,7 @@
     <tr bgcolor="red">
       <td>
         <font color="white">
-          Does the system timezone look like it's set correctly?
+          Does it look like the OpenACS timezone setting above is correct:
         </font>
       </td>
       <td>
