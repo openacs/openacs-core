@@ -39,6 +39,13 @@ template::list::create \
             display_template {Uninstall}
             sub_class narrow
         }
+        display {
+            label {}
+            link_url_eval {[export_vars -base binding-display { {id $contract_id} impl_name }]}
+            link_html { title "View this contracts implementation details" }
+            display_template {view}
+            sub_class narrow
+        }
     }
 
 db_multirow valid_installed_binding valid_installed_binding {}
