@@ -18,7 +18,9 @@ ad_library {
 namespace eval lang::message {}
 
 ad_proc -public lang::message::register { 
-    -upgrade:boolean
+    {-update_sync:boolean}
+    {-upgrade_status "no_upgrade"}
+    {-conflict:boolean}
     {-comment ""}
     locale
     package_key
@@ -34,12 +36,6 @@ ad_proc -public lang::message::register {
     cache with the message.
     </p>
 
-    <p>
-    If we are registering a message as part of an upgrade, appropriate
-    upgrade status for the message key (added) and the message (updated or
-    added) will be set.
-    </p>
-
     @author Jeff Davis
     @author Peter Marklund
     @author Bruno Mattarollo (bruno.mattarollo@ams.greenpeace.org)
@@ -47,15 +43,27 @@ ad_proc -public lang::message::register {
 
     @see _mr
     
-    @param locale        Locale or language of the message. If a language is supplied,
-                         the default locale for the language is looked up. 
+    @param locale           Locale or language of the message. If a language is supplied,
+                            the default locale for the language is looked up. 
 
-    @param package_key   The package key of the package that the message belongs to.
-    @param message_key   The key that identifies the message within the package.
-    @param message       The message text
-    @param upgrade       A boolean switch indicating if this message is registered
-                         as part of a message catalog upgrade or not. The default
-                         (switch not provided) is that we are not upgrading.
+    @param package_key      The package key of the package that the message belongs to.
+
+    @param message_key      The key that identifies the message within the package.
+
+    @param message          The message text
+
+    @param update_sync      If this switch is provided the sync_time
+                            of the message will be set to current time. The sync time for
+                            a message should only be not null when we know that message in
+                            catalog file and db are identical (in sync). This message is then
+                            used as a merge base for message catalog upgrades. For more info,
+                            see the lang::catalog::upgrade proc. 
+
+    @param upgrade_status   Set the upgrade status of the new message to "added", "updated", "deleted". 
+                            Defaults to "no_upgrade".
+    
+    @param conflict         Set this switch if the upgrade represents a conflict between 
+                            changes made in the database and in catalog files.
 
     @see lang::message::lookup
     @see _
@@ -67,10 +75,10 @@ ad_proc -public lang::message::register {
         # We don't do a more throughout check since this is not
         # invoked by users.
         # let's get the default locale for that language
-        set locale [util_memoize [list ad_locale_locale_from_lang $locale]]
+        set locale [lang::util::default_locale_from_lang $locale]
     } 
 
-    # Create a globally unique key for the cache
+    # Create a globally (across packages) unique key for the cache
     set key "${package_key}.${message_key}"
 
     # Insert the message key into the database if it doesn't
@@ -79,10 +87,6 @@ ad_proc -public lang::message::register {
 
     if { ! $key_exists_p } {
         if { [string equal $locale "en_US"] } {
-            set key_upgrade_status [ad_decode $upgrade_p 1 "added" "no_upgrade"]
-            if { $upgrade_p } {
-                ns_log Notice "lang::message::register - Giving message key $message_key an upgrade status of $key_upgrade_status"
-            }
             db_dml insert_message_key {}
         } else {
             # Non-default locale
@@ -107,53 +111,193 @@ ad_proc -public lang::message::register {
             error "Message key '$key' in locale '$locale' has these embedded variables not present in the en_US locale: [join $missing_vars ","]. Message has not been imported."
         }
     }
+    
+    # Build up an array of columns to set
+    array set cols [list]
+    if { $update_sync_p } {
+        set cols(sync_time) [db_map sync_time]
+    } else {
+        set cols(sync_time) "null"
+    } 
+    if { [empty_string_p [string trim $message]] } {
+        set cols(message) "null"
+    } else {
+        set cols(message) [db_map message]
+    }
+    set cols(upgrade_status) :upgrade_status
+
+    set conflict_db_p [db_boolean $conflict_p]
+    set cols(conflict_p) :conflict_db_p
 
     # Different logic for update and insert
     if { [nsv_exists lang_message_$locale $key] } { 
         # Update existing message if the message has changed
 
+        # For use in audit log call
         set old_message [nsv_get lang_message_$locale $key]
+        # Peter TODO: should these attributes be cached?
+        lang::message::get \
+            -package_key $package_key \
+            -message_key $message_key \
+            -locale $locale \
+            -array old_message_array
 
-        lang::audit::changed_message $old_message $package_key $message_key $locale $comment
+        # An updated message is no longer deleted
+        set deleted_p f
+        set cols(deleted_p) :deleted_p
 
-        set message_upgrade_status [ad_decode $upgrade_p 1 "updated" "no_upgrade"]
-        if { $upgrade_p } {
-            ns_log Notice "lang::message::register - Giving message for key $message_key in locale $locale an upgrade status of $message_upgrade_status"
+        # For use in update query
+        set set_clauses [list]
+        foreach col [array names cols] {
+            lappend set_clauses "$col = $cols($col)"
         }
 
-        # Trying to avoid hitting Oracle bug#2011927    
-        if { [empty_string_p [string trim $message]] } {
-            db_dml lang_message_null_update {}
-        } else { 
-            db_dml lang_message_update {} -clobs [list $message]
+        db_transaction {
+        
+            # Update audit log
+            lang::audit::changed_message \
+                $old_message \
+                $package_key \
+                $message_key \
+                $locale \
+                $comment \
+                $old_message_array(deleted_p) \
+                $old_message_array(sync_time) \
+                $old_message_array(conflict_p) \
+                $old_message_array(upgrade_status)
+            
+            # Trying to avoid hitting Oracle bug#2011927    
+            if { [empty_string_p [string trim $message]] } {
+                db_dml lang_message_null_update {}
+            } else { 
+                set cols(message) [db_map message]
+                db_dml lang_message_update {} -clobs [list $message]
+            }
         }
-        nsv_set lang_message_$locale $key $message
-
     } else { 
         # Insert new message
 
-        db_transaction {
-            set message_upgrade_status [ad_decode $upgrade_p 1 "added" "no_upgrade"]
-            if { $upgrade_p } {
-                ns_log Notice "lang::message::register - Giving message for key $message_key in locale $locale an upgrade status of $message_upgrade_status"
-            }
+        set cols(package_key) :package_key
+        set cols(message_key) :message_key
+        set cols(locale) :locale
 
-            if { [catch {set creation_user [ad_conn user_id]}] } {
-                set creation_user [db_null]
-            }
-
-             # avoiding bug#2011927 from Oracle.
-            if { [empty_string_p [string trim $message]] } {
-                db_dml lang_message_insert_null_msg {}
-            } else {
-                # LARS:
-                # We may need to have two different lines here, one for
-                # Oracle w/clobs, one for PG w/o clobs.
-                db_dml lang_message_insert {} -clobs [list $message]
-            }
-            nsv_set lang_message_$locale $key $message
+        # We wrap this in a catch, so that it still works in the bootstrap-installer where ad_conn user_id will fail.
+        # LARS NOTE: Why not make ad_conn user_id return 0 in the bootstrap-installer?
+        catch {
+            set creation_user [ad_conn user_id] 
+            set cols(creation_user) :creation_user
+        }
+        
+        set col_clauses [list]
+        set val_clauses [list]
+        foreach col [array names cols] {
+            lappend col_clauses $col
+            lappend val_clauses $cols($col)
+        }
+        
+        # avoiding bug#2011927 from Oracle.
+        if { [empty_string_p [string trim $message]] } {
+            db_dml lang_message_insert_null_msg {}
+        } else {
+            db_dml lang_message_insert {} -clobs [list $message]
         }
     }
+
+    # Update the message catalog cache
+    nsv_set lang_message_$locale $key $message
+}
+
+ad_proc -public lang::message::delete { 
+    -package_key:required
+    -message_key:required
+    -locale:required
+} {
+    Deletes a message in a particular locale.
+
+    @author Lars Pind (lars@collaboraid.biz)
+} {
+    lang::message::edit \
+        $package_key \
+        $message_key \
+        $locale \
+        [list deleted_p t \
+              upgrade_status no_upgrade \
+              conflict_p f \
+              sync_time [db_null] \
+        ]
+}
+
+ad_proc -public lang::message::get_element {
+    -package_key:required
+    -message_key:required
+    -locale:required
+    -element:required    
+} {
+    Get value of a single attribute of a message.
+
+    @param element The name of the attribute that you want.
+
+    @see lang::message::get
+
+    @author Peter Marklund
+} {
+    lang::message::get \
+        -package_key $package_key \
+        -message_key $message_key \
+        -locale $locale \
+        -array message_array
+
+    return $message_array($element)
+}
+
+ad_proc -public lang::message::get { 
+    -package_key:required
+    -message_key:required
+    -locale:required
+    -array:required
+} {
+    Get all properties of a message in a particular locale.
+    
+    @param array Name of an array in the caller's namespace into 
+                 which you want the message properties delivered.
+
+    @return The array will contain the following entries: 
+               message_key,
+               package_key,
+               locale,
+               message,
+               deleted_p,
+               sync_time,
+               conflict_p,
+               upgrade_status,
+               creation_date_ansi,
+               creation_user,
+               key_description.
+
+    @author Lars Pind (lars@collaboraid.biz)
+} {
+    upvar 1 $array row
+
+    db_1row select_message_props {
+        select m.message_key,
+               m.package_key,
+               m.locale,
+               m.message,
+               m.deleted_p,
+               m.sync_time,
+               m.conflict_p,
+               m.upgrade_status,
+               to_char(m.creation_date, 'YYYY-MM-DD HH24:MI:SS') as creation_date_ansi,
+               m.creation_user,
+               k.description as key_description
+        from   lang_messages m,
+               lang_message_keys k
+        where  m.package_key = :package_key
+        and    m.message_key = :message_key
+        and    m.locale = :locale
+        and    k.package_key = m.package_key
+        and    k.message_key = m.message_key
+    } -column_array row
 }
 
 ad_proc -public lang::message::unregister { 
@@ -161,7 +305,13 @@ ad_proc -public lang::message::unregister {
     message_key
 } {
     Unregisters a message key, i.e. deletes it along with all its messages
-    from the database and deleted entries in the cache.
+    from the database and deleted entries in the cache. This proc is
+    useful when installing a package.
+
+    To delete an individual message, as opposed to the entire key, 
+    use lang::message::delete.
+
+    @see lang::message::delete
 
     @author Peter Marklund
 } {
@@ -173,6 +323,144 @@ ad_proc -public lang::message::unregister {
     }
 
     remove_from_cache $package_key $message_key
+}
+
+ad_proc -private lang::message::edit {
+    {-update_sync:boolean}
+    package_key
+    message_key
+    locale
+    edit_array_list
+} {
+    Edit properties (meta data) of a language catalog message, but not
+    the message text itself. To update or add message catalog text, use
+    the lang::message::register proc.
+
+    <p>
+      Implementation note: some of the dynamic sql edit
+      code of this proc was copied from the auth::authority::edit proc
+      and should probably be broken out into a general API.
+    </p>
+
+    @param package_key      The package_key of the message to update
+
+    @param message_key      The message_key of the message to update
+
+    @param locale           The locale of the message to update
+
+    @param edit_array_list  An array list holding names of columns and
+                            and the values to set them to. Valid keys
+                            in this array list are any column names in the
+                            lang_messages table. 
+
+    @param update_sync      If this switch is provided the sync_time
+                            of the message will be updated to current time. If not
+                            provided no update to sync_time will be made. If sync_time
+                            is contained in the edit_array_list then that value will
+                            override the update_sync flag.
+
+    @author Peter Marklund
+} {
+    array set edit_array $edit_array_list
+
+    if { [info exists edit_array(message)] } {
+        error "The proc lang::message::edit was invoked with the message attribute in the edit array. To edit the message text of a message use the lang::message::register proc instead"
+    }
+
+    if { [info exists edit_array(deleted_p)] } {
+        set edit_array(deleted_p) [db_boolean [template::util::is_true $edit_array(deleted_p)]]
+
+        # If we are deleting we need to preserve the old message in the audit log
+        if { [template::util::is_true $edit_array(deleted_p)] } {
+
+            # Peter TODO: should these attributes be cached?
+            lang::message::get \
+                -package_key $package_key \
+                -message_key $message_key \
+                -locale $locale \
+                -array old_message_array
+
+            lang::audit::changed_message \
+                $old_message_array(message) \
+                $package_key \
+                $message_key \
+                $locale \
+                "deleted" \
+                $old_message_array(deleted_p) \
+                $old_message_array(sync_time) \
+                $old_message_array(conflict_p) \
+                $old_message_array(upgrade_status)            
+
+            # If we are deleting an en_US message we need to mark the message deleted in all locales
+            if { [string equal $locale "en_US"] } {
+                set message_locales [db_list all_message_locales {
+                    select locale
+                    from lang_messages
+                    where package_key = :package_key
+                      and message_key = :message_key
+                      and locale <> 'en_US'
+                }]
+                foreach message_locale $message_locales {
+                    lang::message::delete \
+                        -package_key $package_key \
+                        -message_key $message_key \
+                        -locale $message_locale
+                }
+            }
+        }
+    }
+
+    set set_clauses [list]
+    foreach name [array names edit_array] {
+        lappend set_clauses "$name = :$name"
+        set $name $edit_array($name)
+    }
+    if { $update_sync_p } {
+        if { ![info exists edit_array(sync_time)] } {
+            lappend set_clauses [db_map set_sync_time_now]
+        }
+    }
+
+    if { [llength $set_clauses] > 0 } {
+        
+        set sql "
+            update lang_messages
+            set    [join $set_clauses ", "]
+            where  package_key = :package_key
+            and    message_key = :message_key
+            and    locale = :locale
+        "
+        db_dml edit_message_key $sql
+    }
+}
+
+ad_proc -public lang::message::conflict_count {
+    {-package_key ""}
+    {-locale ""}
+} {
+    Return the number of messages with  conflicts (conflict_p=t) resulting
+    from catalog imports.
+    
+    @param package_key Restrict count to package with this key
+    @param locale      Restrict count to messages of this locale
+
+    @author Peter Marklund
+} {
+    # Build any package and locale where clauses
+    set where_clauses [list]
+    foreach col {package_key locale} {
+        if { ![empty_string_p [set $col]] } {
+            lappend where_clauses "$col = :${col}"
+        }
+    }
+    set where_clause [ad_decode $where_clauses "" "" "and [join $where_clauses " and "]"]
+
+    return [db_string conflict_count "
+        select count(*)
+        from lang_messages
+        where conflict_p = 't'
+        $where_clause
+    "]
 }
 
 ad_proc -private lang::message::remove_from_cache {
@@ -521,7 +809,6 @@ ad_proc -private lang::message::cache {
         
         set i 0 
         db_foreach select_locale_keys {} {
-            ns_log Notice "pm debug ${package_key}.${message_key} $message"
             nsv_set lang_message_$locale "${package_key}.${message_key}" $message
             incr i
         }

@@ -114,6 +114,6 @@ ad_form -extend -name search -form {
 }
 
 
-set import_all_url [export_vars -base import-locale-from-files { { locale $current_locale } }]
+set import_all_url [export_vars -base import-messages { { locale $current_locale } }]
 set export_all_url [export_vars -base export-locale-to-files { { locale $current_locale } }]
 

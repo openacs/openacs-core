@@ -35,9 +35,8 @@ set site_wide_admin_p [permission::permission_p \
                            -object_id [acs_lookup_magic_object security_context_root] \
                            -privilege "admin"]
 
-set version_id [apm_version_id_from_package_key $package_key]
-set export_messages_url [export_vars -base "/acs-admin/apm/version-i18n-export" { version_id { return_url {[ad_return_url]} } }]
-set import_messages_url [export_vars -base "/acs-admin/apm/version-i18n-import" { version_id { return_url {[ad_return_url]} } }]
+set export_messages_url [export_vars -base "export-messages" { package_key locale { return_url {[ad_return_url]} } }]
+set import_messages_url [export_vars -base "import-messages" { package_key locale { return_url {[ad_return_url]} } }]
 
 # We let you create new messages keys if you're in the default locale
 set create_p [string equal $current_locale $default_locale]

@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <queryset>
 
-  <fullquery name="lang::catalog::import.select_uninitialized">
+  <fullquery name="lang::catalog::uninitialized_packages.select_uninitialized">
     <querytext>
       select package_key
       from   apm_package_types
@@ -35,7 +35,7 @@
         and    lm.package_key = lmk.package_key
         and    lm.package_key = :package_key
         and    lm.locale = :locale
-        and    lmk.upgrade_status != 'deleted'
+        and    lm.deleted_p = 'f'
     </querytext>
   </fullquery>
 

@@ -3,7 +3,7 @@ ad_library {
 
     Auditing of lang_messages
 
-    @creation-date 15 October 2000
+    @creation-date 3 December 2002
     @author Peter Marklund (peter@collaboraid.biz)
     @cvs-id $Id$
 }
@@ -16,6 +16,10 @@ namespace eval lang::audit {
         message_key
         locale
         comment
+        deleted_p
+        sync_time
+        conflict_p
+        upgrade_status
     } {
       Save a message that is overwritten.
       @author Peter Marklund

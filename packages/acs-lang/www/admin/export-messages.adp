@@ -1,6 +1,20 @@
 <master>
   <property name="title">@page_title;noquote@</property>
-  <property name="context">@context;noquote@</property>
+
+Export results for
+<if @package_key@ nil>
+  <b>all packages</b>
+</if>
+<else>
+package <b>@package_key@</b>
+</else>
+and
+<if @locale@ nil>
+  <b>all locales</b>
+</if>
+<else>
+locale <b>@locale@</b>
+</else>.
 
 <p>
   Export complete.

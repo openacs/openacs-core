@@ -27,9 +27,6 @@ create table lang_message_keys (
                        on delete cascade
                        constraint lang_message_keys_package_key_nn
                        not null,
-    upgrade_status     varchar(30)
-                       constraint lang_message_keys_us_ck
-                       check (upgrade_status in ('no_upgrade', 'added','deleted')),
     description        text,
     constraint lang_message_keys_pk
     primary key (message_key, package_key)
@@ -48,6 +45,9 @@ create table lang_messages (
                        constraint lang_messages_locale_nn
                        not null,
     message            text,
+    deleted_p          boolean default 'f',
+    sync_time          timestamptz,
+    conflict_p         boolean default 'f',
     upgrade_status     varchar(30)
                        constraint lang_messages_us_ck
                        check (upgrade_status in ('no_upgrade', 'added', 'deleted', 'updated')),
@@ -77,10 +77,15 @@ create table lang_messages_audit (
                        references ad_locales(locale)
                        constraint lang_messages_audit_l_nn
                        not null,
-
     -- The old, overwritten message, not the new message being
     -- entered on this date by this user.
     old_message        text,
+    deleted_p          boolean default 'f',
+    sync_time          timestamptz,
+    conflict_p         boolean default 'f',
+    upgrade_status     varchar(30)
+                       constraint lang_messages_us_ck
+                       check (upgrade_status in ('no_upgrade', 'added', 'deleted', 'updated')),
     comment_text       text,
     overwrite_date     timestamptz 
                        default now() 
@@ -141,5 +146,3 @@ create table lang_translation_registry (
 );
 
 end;
-
-

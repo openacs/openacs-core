@@ -2,6 +2,8 @@
   <property name="title">@page_title@</property>
   <property name="context">@context@</property>
 
+<include src="/packages/acs-lang/lib/conflict-link" />
+
 <p>
   <b>&raquo;</b>
   Toggle translator mode: 
