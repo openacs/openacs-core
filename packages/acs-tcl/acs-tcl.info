@@ -44,7 +44,6 @@
             <file type="tcl_procs" path="tcl/community-core-procs.tcl"/>
             <file type="query_file" db_type="postgresql" path="tcl/community-core-procs-postgresql.xql"/>
             <file type="tcl_init" path="tcl/database-init.tcl"/>
-            <file type="tcl_procs" path="tcl/db-query-dispatcher-procs.tcl"/>
             <file type="tcl_procs" path="tcl/defs-procs.tcl"/>
             <file type="query_file" db_type="postgresql" path="tcl/defs-procs-postgresql.xql"/>
             <file type="tcl_procs" path="tcl/deprecated-utilities-procs.tcl"/>
@@ -58,8 +57,9 @@
             <file type="tcl_init" path="tcl/request-processor-init.tcl"/>
             <file type="tcl_procs" path="tcl/request-processor-procs.tcl"/>
             <file type="tcl_init" path="tcl/security-init.tcl"/>
-            <file type="query_file" db_type="postgresql" path="tcl/security-procs-postgresql.xql"/>
+            <file type="query_file" db_type="postgresql" path="tcl/security-init-postgresql.xql"/>
             <file type="tcl_procs" path="tcl/security-procs.tcl"/>
+            <file type="query_file" db_type="postgresql" path="tcl/security-procs-postgresql.xql"/>
             <file type="tcl_procs" path="tcl/server-cluster-procs.tcl"/>
             <file type="tcl_procs" path="tcl/set-operation-procs.tcl"/>
             <file type="tcl_init" path="tcl/site-nodes-init.tcl"/>

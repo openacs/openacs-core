@@ -164,7 +164,7 @@ proc db_qd_get_fullname {local_name {added_stack_num 1}} {
     # We check if we're running the special ns_ proc that tells us
     # whether this is an URL or a Tcl proc.
     if {[regexp {^ns_sourceproc} $proc_name all] || \
-	    [regexp {^acs_source} $proc_name all]} {
+	    [regexp {^apm_source} $proc_name all]} {
 
 	# Means we are running inside an URL
 
