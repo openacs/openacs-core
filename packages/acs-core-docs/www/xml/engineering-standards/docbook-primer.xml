@@ -40,7 +40,8 @@
 	<emphasis>It does not require extra
 	  effort</emphasis>. Writing in XML is almost identical to
 	SGML, with a couple extra rules. More details in the
-	<ulink url="http://www.linuxdoc.org/LDP/LDP-Author-Guide/docbookxml.html">LDP
+	<ulink
+               url="http://en.tldp.org/LDP/LDP-Author-Guide/docbookxml.html">LDP 
 	  Author Guide</ulink>.
       </listitem>
     </itemizedlist>
@@ -139,7 +140,7 @@
 	mode. We have a <link linkend="psgml-mode">intro to the PSGML
 	Mode in Emacs</link> as part of our documentation. You can
 	read about other editing tools in the <ulink
-	url="http://www.linuxdoc.org/LDP/LDP-Author-Guide/">LDP Author Guide</ulink>.
+	url="http://en.tldp.org/LDP/LDP-Author-Guide/">LDP Author Guide</ulink>.
       </listitem>
     </itemizedlist>
   </sect2>
@@ -698,7 +699,7 @@ bash$  xsltproc /usr/share/sgml/docbook/stylesheet/xsl/nwalsh/html/chunk.xsl fil
 
       <listitem>
 	The <ulink
-	url="http://www.linuxdoc.org/LDP/LDP-Author-Guide/">LDP Author
+	url="http://en.tldp.org/LDP/LDP-Author-Guide/">LDP Author
 	Guide</ulink> has a lot of good information, a table of
 	docbook elements and their "look" in HTML and lots of good links
 	for tools.
