@@ -378,9 +378,27 @@ ad_proc -public ad_register_filter {
 	error "Method passed to ad_register_filter must be one of GET, POST, or HEAD"
     }
 
-    # Append the filter to the list.
+    # Append the filter to the list. The list will be sorted according to priority 
+    # and the filters will be bulk-registered after package-initialization. 
+    # Also, the "Monitoring" package will be able to list the filters in this list.
     nsv_lappend rp_filters . \
-	    [list $priority $kind $method $path $proc $arg $debug $critical $description [info script]]
+	[list $priority $kind $method $path $proc $arg $debug $critical $description [info script]]
+
+    # Register the filter immediately if the call is not from an *-init.tcl script.    
+    if { ![apm_first_time_loading_p] } { 
+	# Figure out how to invoke the filter, based on the number of arguments.
+	if { [llength [info procs $proc]] == 0 } {
+	    # [info procs $proc] returns nothing when the procedure has been
+	    # registered by C code (e.g., ns_returnredirect). Assume that neither
+	    # "conn" nor "why" is present in this case.
+	    set arg_count 1
+	} else {
+	    set arg_count [llength [info args $proc]]
+	}
+	
+	set filter_index {}
+	ns_register_filter $kind $method $path rp_invoke_filter [list $filter_index $debug $arg_count $proc $arg]
+    }
 }
 
 ad_proc -private rp_html_directory_listing { dir } {
