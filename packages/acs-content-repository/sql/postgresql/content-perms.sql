@@ -151,32 +151,25 @@ declare
   has_revoke_authority__privilege              alias for $3;  
   has_revoke_authority__revokee_id             alias for $4;  
 begin
---    select 1 from 
---        (select object_id from acs_objects 
---           connect by prior context_id = object_id
---           start with object_id = has_revoke_authority__object_id) t,
---        (select privilege, child_privilege from acs_privilege_hierarchy
---           connect by prior privilege = child_privilege
---           start with child_privilege = ''cm_perm'') h
---      where
---        content_permission__permission_p(
---          t.object_id, has_revoke_authority__holder_id, h.child_privilege
---        ) = ''t''
---      and
---        content_permission__permission_p(
---          t.object_id, has_revoke_authority__revokee_id, h.privilege
---        ) = ''f'';    
 
-    return count(*) > 0 from 
+    -- DRB: Note that the privilege selection doesn't use the slick tree_ancestor_keys
+    -- trick.  There are two reasons for this.  The first is that we might have a set of
+    -- tree_sortkeys returned from the acs_privilege_hierarchy_index when child_privilege
+    -- is ''cm_perm''.  The second is that this table is relatively small anyway and the
+    -- old style's probably just as efficient as the first as an index scan is only preferred
+    -- by the Postgres optimizer when it will significantly reduce the number of rows scanned.
+
+    return exists (select 1 from 
         (select o2.object_id 
-           from acs_objects o1, acs_objects o2
-          where o1.object_id = has_revoke_authority__object_id
-            and o1.tree_sortkey between o2.tree_sortkey and tree_right(o2.tree_sortkey)) t
+           from (select tree_ancestor_keys(acs_object__get_tree_sortkey(has_revoke_authority__object_id)) as tree_sortkey) parents,
+             acs_objects o2
+          where o2.tree_sortkey = parents.tree_sortkey) t
         (select i2.privilege, i2.child_privilege 
            from acs_privilege_hierarchy_index i1, 
                 acs_privilege_hierarchy_index i2 
           where i1.child_privilege = ''cm_perm''
-            and i1.tree_sortkey between i2.tree_sortkey and tree_right(i2.tree_sortkey)) h
+            and i1.tree_sortkey between i2.tree_sortkey and tree_right(i2.tree_sortkey)
+            and tree_ancestor_p(i2.tree_sortkey, i1.tree_sortkey)) h
       where
         content_permission__permission_p(
           t.object_id, has_revoke_authority__holder_id, h.child_privilege
@@ -184,7 +177,7 @@ begin
       and not
         content_permission__permission_p(
           t.object_id, has_revoke_authority__revokee_id, h.privilege
-        );    
+        ));    
    
 end;' language 'plpgsql';
 

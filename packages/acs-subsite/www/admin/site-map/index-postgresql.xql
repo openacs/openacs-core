@@ -9,9 +9,9 @@
   select s2.node_id, s2.name, s2.directory_p, tree_level(s2.tree_sortkey) as level,
 	 acs_object__name(s2.object_id) as obj_name,
 	 acs_permission__permission_p(s2.object_id, :user_id, 'admin') as admin_p
-    from site_nodes s1, site_nodes s2
-   where s1.node_id = :root_id
-     and s1.tree_sortkey between s2.tree_sortkey and tree_right(s2.tree_sortkey)
+    from (select tree_ancestor_keys(site_node_get_tree_sortkey(:root_id)) as tree_sortkey) parents,
+      site_nodes s2
+   where s2.tree_sortkey = parents.tree_sortkey
    order by level
 
       </querytext>

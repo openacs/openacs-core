@@ -236,6 +236,13 @@ alter table apm_package_versions add
   foreign key (item_id) references cr_items(item_id);
 
 
+create function cr_items_get_tree_sortkey(integer) returns varbit as '
+declare
+  p_item_id    alias for $1;
+begin
+  return tree_sortkey from cr_items where item_id = p_item_id;
+end;' language 'plpgsql';
+
 create function cr_items_tree_insert_tr () returns opaque as '
 declare
         v_parent_sk     varbit default null;
@@ -954,6 +961,13 @@ create table cr_keywords (
   tree_sortkey           varbit
 );
 
+
+create function cr_keywords_get_tree_sortkey(integer) returns varbit as '
+declare
+  p_keyword_id    alias for $1;
+begin
+  return tree_sortkey from cr_keywords where keyword_id = p_keyword_id;
+end;' language 'plpgsql';
 
 create function cr_keywords_tree_insert_tr () returns opaque as '
 declare

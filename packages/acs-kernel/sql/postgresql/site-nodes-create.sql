@@ -61,6 +61,13 @@ create table site_nodes (
 create index site_nodes_object_id_idx on site_nodes (object_id);
 create index site_nodes_tree_skey_idx on site_nodes (tree_sortkey);
 
+create function site_node_get_tree_sortkey(integer) returns varbit as '
+declare
+  p_node_id         alias for $1;
+begin
+  return tree_sortkey from site_nodes where node_id = p_node_id;
+end;' language 'plpgsql';
+
 create function site_node_insert_tr () returns opaque as '
 declare
         v_parent_sk     varbit default null;
@@ -195,8 +202,6 @@ execute procedure site_node_update_tr ();
 
 -- show errors
 
--- create or replace package body site_node
--- function new
 create function site_node__new (integer,integer,varchar,integer,boolean,boolean,integer,varchar)
 returns integer as '
 declare
