@@ -72,7 +72,7 @@ begin
   end if;
 
   -- Select default label if the label is null
-  if new__label is null or new__label = '''' then
+  if new__label is null then
     v_label := ''Symlink to '' || v_name;
   else
     v_label := new__label;
@@ -94,7 +94,7 @@ begin
       ''text/plain'',
       null,
       null,
-      null
+      ''text''
   );
 
   insert into cr_symlinks

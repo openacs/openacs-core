@@ -77,7 +77,7 @@ begin
         ''text/plain'',
         null,
         null,
-        null
+        ''text''
     );
 
     insert into cr_templates ( 

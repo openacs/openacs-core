@@ -29,13 +29,13 @@ declare
   v_name                      cr_items.name%TYPE;
 begin
 
-  if new__label is null or new__label = '''' then
+  if new__label is null then
     v_label := new__url;
   else
     v_label := new__label;
   end if;
 
-  if new__name is null or new__name = '''' then
+  if new__name is null then
     select acs_object_id_seq.nextval into v_extlink_id from dual;
     v_name := ''link'' || v_extlink_id;
   else
@@ -58,7 +58,7 @@ begin
       ''text/plain'',
       null,
       null,
-      null
+      ''text''
   );
 
   insert into cr_extlinks
