@@ -1308,7 +1308,17 @@ ad_proc -public apm_supported_callback_types {} {
 
     @author Peter Marklund
 } {
-    return [list before-install after-install after-instantiate after-mount before-uninstantiate before-uninstall before-unmount before-upgrade after-upgrade]
+    return {
+        before-install
+        after-install 
+        before-upgrade
+        after-upgrade
+        before-uninstall
+        after-instantiate
+        before-uninstantiate
+        after-mount
+        before-unmount
+    }
 }
 
 ad_proc -private apm_callback_has_valid_args {
