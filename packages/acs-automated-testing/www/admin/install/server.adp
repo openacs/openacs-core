@@ -58,7 +58,7 @@
 </if>
 <else>
   <p>
-    Unknown. Server has no test report file at $test_path.
+    Unknown. Missing test report file at path @test_path@
   </p>
 </else>
 
