@@ -596,7 +596,7 @@ ad_proc -private rp_filter { why } {
       ad_try {
 	if {[string match "admin/*" [ad_conn extra_url]]} {
             permission::require_permission -object_id [ad_conn object_id] -privilege admin
-	} elseif {[string match "sw-admin/*" [ad_conn extra_url]]} {
+	} elseif {[string match "sitewide-admin/*" [ad_conn extra_url]]} {
             permission::require_permission -object_id [acs_lookup_magic_object security_context_root] -privilege admin
         } else {
             permission::require_permission -object_id [ad_conn object_id] -privilege read
