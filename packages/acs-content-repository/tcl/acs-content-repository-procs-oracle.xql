@@ -7,7 +7,7 @@
 
 select distinct crftd.path storage_area_key
           from cr_files_to_delete crftd
-           and not exists (select 1 
+           where not exists (select 1 
                              from cr_revisions r 
                             where r.filename = crftd.path) 
       </querytext>
