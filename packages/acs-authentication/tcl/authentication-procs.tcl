@@ -725,9 +725,9 @@ ad_proc -public auth::create_local_account {
     }
 
     # Validate data
-    set user_info(username) $username
-    set user_info(authority_id) $authority_id
-    auth::validate_user_info \
+    auth::validate_account_info \
+        -authority_id $authority_id \
+        -username $username \
         -user_array user_info \
         -message_array element_messages
 
@@ -775,6 +775,13 @@ ad_proc -public auth::create_local_account {
                          $username \
                          $user_info(authority_id) \
                          $user_info(screen_name)]
+
+        # Update person.bio
+        if { [info exists user_info(bio)] } {
+            person::update_bio \
+                -person_id $user_id \
+                -bio $user_info(bio)
+        }
     } {
         set error_p 1
     } 
@@ -844,10 +851,10 @@ ad_proc -public auth::update_local_account {
     }
 
     # Validate data
-    set user_info(username) $username
-    set user_info(authority_id) $authority_id
-    auth::validate_user_info \
+    auth::validate_account_info \
         -update \
+        -authority_id $authority_id \
+        -username $username \
         -user_array user_info \
         -message_array element_messages
 
@@ -860,7 +867,7 @@ ad_proc -public auth::update_local_account {
                    ]
     }
 
-    # We get user_id from validate_user_info above, and set it in the result array so our caller can get it
+    # We get user_id from validate_account_info above, and set it in the result array so our caller can get it
     set user_id $user_info(user_id)
     set result(user_id) $user_id
 
@@ -870,11 +877,18 @@ ad_proc -public auth::update_local_account {
         db_transaction {
             # Update persons: first_names, last_name
             if { [info exists user_info(first_names)] } {
-                # We know that validate_user_info will not let us update only one of the two
+                # We know that validate_account_info will not let us update only one of the two
                 person::update \
                     -person_id $user_id \
                     -first_names $user_info(first_names) \
                     -last_name $user_info(last_name)
+            }
+
+            # Update person.bio
+            if { [info exists user_info(bio)] } {
+                person::update_bio \
+                    -person_id $user_id \
+                    -bio $user_info(bio)
             }
             
             # Update parties: email, url
@@ -901,6 +915,12 @@ ad_proc -public auth::update_local_account {
                 acs_user::update \
                     -user_id $user_id \
                     -screen_name $user_info(screen_name)
+            }
+
+            if { [info exists user_info(username)] } {
+                acs_user::update \
+                    -user_id $user_id \
+                    -username $user_info(username)
             }
 
             # TODO: Portrait
@@ -965,8 +985,10 @@ ad_proc -public auth::delete_local_account {
 }
 
 
-ad_proc -private auth::validate_user_info {
+ad_proc -private auth::validate_account_info {
     {-update:boolean}
+    {-authority_id:required}
+    {-username:required}
     {-user_array:required}
     {-message_array:required}
 } { 
@@ -991,14 +1013,17 @@ ad_proc -private auth::validate_user_info {
         }
     }
 
-    if { $update_p && [exists_and_not_null user(authority_id)] && [exists_and_not_null user(username)] } {
+    if { $update_p } {
         set user(user_id) [acs_user::get_by_username \
-                               -authority_id $user(authority_id) \
-                               -username $user(username)]
+                               -authority_id $authority_id \
+                               -username $username]
         
         if { [empty_string_p $user(user_id)] } {
-            set element_messages(username) "No user with username '$user(username)' found for authority [auth::authority::get_element -authority_id $user(authority_id) -element pretty_name]"
+            set element_messages(username) "No user with username '$username' found for authority [auth::authority::get_element -authority_id $authority_id -element pretty_name]"
         }
+    } else {
+        set user(username) $username
+        set user(authority_id) $authority_id
     }
 
     # TODO: When doing RBM's parameter, make sure that we still require both first_names and last_names, or none of them
@@ -1059,13 +1084,14 @@ ad_proc -private auth::validate_user_info {
         }
     }
         
+    # They're trying to set the username
     if { [exists_and_not_null user(username)] } {
         # Check that username is unique
-        set username_user_id [acs_user::get_by_username -authority_id $user(authority_id) -username $user(username)]
-        
-        if { ![empty_string_p $username_user_id] && (!$update_p || $username_user_id != $user(user_id)) } {
-            # We found a user with this username, and either we're not updating, or it's not the same user_id as the one we're updating
+        set username_user_id [acs_user::get_by_username -authority_id $authority_id -username $user(username)]
 
+        if { ![empty_string_p $username_user_id] && (!$update_p || $username_user_id != $user(user_id)) } {
+            # We already have a user with this username, and either we're not updating, or it's not the same user_id as the one we're updating
+            
             set username_member_state [acs_user::get_element -user_id $username_user_id -element member_state] 
             switch $username_member_state {
                 banned {
