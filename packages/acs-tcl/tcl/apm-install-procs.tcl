@@ -7,6 +7,9 @@ ad_library {
     @cvs-id $Id$
 }
 
+namespace eval apm {}
+namespace eval apm::package_version {}
+namespace eval apm::package_version::attributes {}
 
 ad_proc apm_scan_packages { 
     {-callback apm_dummy_callback}
@@ -733,7 +736,10 @@ ad_proc -private apm_package_install {
             # Load catalog files with upgrade switch before package version is changed in db
             apm_load_catalog_files -upgrade $package_key
 
-	    set version_id [apm_package_install_version -callback $callback $package_key $version_name \
+	    set version_id [apm_package_install_version \
+                                -callback $callback \
+                                -array version \
+                                $package_key $version_name \
 		    $version_uri $summary $description $description_format $vendor $vendor_uri $auto_mount $release_date]
 	    apm_version_upgrade $version_id
 	    apm_package_upgrade_parameters -callback $callback $version(parameters) $package_key
@@ -745,6 +751,7 @@ ad_proc -private apm_package_install {
 
 	    set version_id [apm_package_install_version \
                                 -callback $callback \
+                                -array version \
                                 $package_key $version_name \
 				$version_uri $summary $description $description_format $vendor $vendor_uri $auto_mount $release_date]
 
@@ -850,13 +857,18 @@ ad_proc -private apm_package_install {
 
 ad_proc -private apm_package_install_version {
     {-callback apm_dummy_callback}
+    {-array:required}
     {-version_id ""}
-    package_key version_name version_uri summary description description_format vendor vendor_uri auto_mount {release_date ""} 
+    package_key version_name version_uri summary description description_format vendor vendor_uri auto_mount {release_date ""}
 } {
     Installs a version of a package.
 
+    @param array The name of the array in the callers scope holding package version attributes
+
     @return The assigned version id.
 } {
+    upvar $array local_array
+
     if { [empty_string_p $version_id] } {
 	set version_id [db_null]
     }
@@ -864,11 +876,17 @@ ad_proc -private apm_package_install_version {
 	set release_date [db_null]
     }
 
-    return [db_exec_plsql version_insert {}]
+    set version_id [db_exec_plsql version_insert {}]
 
-   # Every package provides by default the service that is the package itself
-   # This spares the developer from having to visit the dependency page
-   apm_interface_add $version_id $package_key $version_name
+    apm::package_version::attributes::store \
+        -version_id $version_id \
+        -array local_array
+
+    # Every package provides by default the service that is the package itself
+    # This spares the developer from having to visit the dependency page
+    apm_interface_add $version_id $package_key $version_name
+
+    return $version_id
 }
 
 
@@ -1354,19 +1372,26 @@ ad_proc -public apm_package_register {
 }
 
 ad_proc -public apm_version_update {
-    {
-	-callback apm_dummy_callback
-    }
+    {-callback apm_dummy_callback}
+    {-array:required}
     version_id version_name version_uri summary description description_format vendor vendor_uri auto_mount {release_date ""} 
 } {
 
     Update a version in the system to new information.
 } {
+    upvar $array local_array
+
     if { [empty_string_p $release_date] } {
  	set release_date [db_null]
     }
 
-    return [db_exec_plsql apm_version_update {}]
+    set version_id [db_exec_plsql apm_version_update {}]
+
+    apm::package_version::attributes::store \
+        -version_id $version_id \
+        -array local_array
+    
+    return $version_id
 }
 
 
@@ -1769,6 +1794,12 @@ ad_proc -public apm_upgrade_logic {
 }
 
 
+##############
+#
+# Repository procs
+#
+#############
+
 ad_proc -private apm_get_package_repository {
     {-repository_url ""}
     {-array:required}
@@ -1824,6 +1855,10 @@ ad_proc -private apm_get_package_repository {
             set version(package.type) [xml_node_get_content [xml_node_get_first_child_by_name $package_node "package-type"]]
             set version(download_url) [xml_node_get_content [xml_node_get_first_child_by_name $package_node "download-url"]]
             set version(summary)      [xml_node_get_content [xml_node_get_first_child_by_name $package_node "summary"]]
+            
+            apm::package_version::attributes::parse_xml \
+                -parent_node $package_node \
+                -array version            
             
             foreach dependency_type { provides requires } {
                 set version($dependency_type) {}
@@ -1897,9 +1932,190 @@ ad_proc -public apm_get_repository_channel {} {
     return [join [lrange $kernel_versionv 0 1] "-"]
 }
 
+##############
+#
+# Dynamic package version attributes (namespace apm::package_version::attributes)
+#
+#############
 
+ad_proc -private apm::package_version::attributes::get_spec {} {
+    Return dynamic attributes of package versions in
+    an array list. The rationale for introducing the dynamic
+    package version attributes is to make it easy to add
+    new package attributes.
 
+    @return An array list with attribute names as keys and
+            attribute specs as values. The attribute specs
+            are themselves array lists with keys default_value,
+            validation_proc, and pretty_name.
 
+    @author Peter Marklund
+} {
+    return {
+        maturity {
+            pretty_name Maturity
+            default_value 0
+            validation_proc apm::package_version::attributes::validate_maturity
+        }
+        license {
+            pretty_name License
+        }
+        license_url {
+            pretty_name "License URL"
+        }
+    }
+}
+
+ad_proc -private apm::package_version::attributes::validate_maturity { maturity } {
+    set error_message ""
+    if { ![empty_string_p $maturity] } {
+        if { ![regexp {^-?[0-9]+$} $maturity] } {
+            set error_message "Maturity must be integer"
+        } elseif { [expr $maturity < -1 || $maturity > 3] } {
+            set error_message "Matuirity must be integer between -1 and 3"
+        }
+    }
+
+    return $error_message
+}
+
+ad_proc -private apm::package_version::attributes::parse_xml {
+    {-parent_node:required}
+    {-array:required}
+} {
+    Given the parent node in an XML tree parse the package version attributes
+    and set their values with upvar in the array with given name.
+
+    @param parent_node A reference to the parent XML node of the attribute nodes
+    @param array The name of the array in the callers scope to set the attribute
+                 values in.
+
+    @author Peter Marklund
+} {
+    upvar $array attributes
+
+    array set dynamic_attributes [apm::package_version::attributes::get_spec]
+    foreach attribute_name [array names dynamic_attributes] {
+        set attribute_node [xml_node_get_first_child_by_name $parent_node $attribute_name]
+        array set attribute $dynamic_attributes($attribute_name)
+
+        if { ![empty_string_p $attribute_node] } {
+            # There is a tag for the attribute so use the tag contents
+            set attributes($attribute_name) [xml_node_get_content $attribute_node]
+        } else {
+            # No tag for the attribute - use default value
+            set attributes($attribute_name) [apm::package_version::attributes::default_value $attribute_name]
+        }
+    }
+}
+
+ad_proc -private apm::package_version::attributes::default_value { attribute_name } {
+    Return the default value for the given attribute name.
+
+    @author Peter Marklund
+} {
+    array set dynamic_attributes [apm::package_version::attributes::get_spec]
+    array set attribute $dynamic_attributes($attribute_name)
+
+    if { [info exists attribute(default_value)] } {
+        set default_value $attribute(default_value)
+    } else {
+        # No default value so use the empty string (the default default value)
+        set default_value ""
+    }
+
+    return $default_value
+}
+
+ad_proc -private apm::package_version::attributes::store {
+    {-version_id:required}
+    {-array:required}
+} {
+    Store the dynamic attributes of a certain package version in
+    the database.
+
+    @param version_id The id of the package version to store attribute values for
+    @param array The name of the array in the callers scope containing the
+                 attribute values to store
+
+    @author Peter Marklund
+} {
+    upvar $array attributes
+
+    db_transaction {
+        db_dml clear_old_attributes {
+            delete from apm_package_version_attr
+            where version_id = :version_id
+        }
+
+        array set dynamic_attributes [apm::package_version::attributes::get_spec]
+        foreach attribute_name [array names dynamic_attributes] {
+            if { [info exists attributes($attribute_name)] } {
+                set attribute_value $attributes($attribute_name)
+
+                db_dml insert_attribute {
+                    insert into apm_package_version_attr
+                    (attribute_name, attribute_value, version_id)
+                    values (:attribute_name, :attribute_value, :version_id)
+                }
+            }
+        }    
+    }
+}
+
+ad_proc -private apm::package_version::attributes::get {
+    {-version_id:required}
+    {-array:required}
+} {
+    Set an array with the attribute values of a certain package version.    
+
+    @param version_id The id of the package version to return attribute values for
+
+    @param The name of an array in the callers environment in which the attribute values
+           will be set (with attribute names as keys and attribute values as values).
+    
+    @author Peter Marklund
+} {
+    upvar $array attributes
+
+    db_foreach select_attribute_values {
+        select attribute_name,
+               attribute_value
+        from apm_package_version_attr
+        where version_id = :version_id
+    } {
+        set attributes($attribute_name) $attribute_value
+    }
+}
+
+ad_proc -private apm::package_version::attributes::generate_xml {
+    {-version_id:required}
+    {-indentation ""}
+} {
+    Return an XML string with the dynamic package version attributes for
+    a certain package version.
+
+    @param version_id The id of the package version to generate the attribute
+           XML for.
+    @param indentation A string with whitespace to indent each tag with
+
+    @author Peter Marklund
+} {
+    set xml_string ""
+
+    array set attributes [apm::package_version::attributes::get \
+                          -version_id $version_id \
+                          -array attributes]
+
+    foreach attribute_name [array names attributes] {
+        # Only output tag if its value is non-empty
+        if { ![empty_string_p $attributes($attribute_name)] } {
+            append xml_string "${indentation}<${attribute_name}>[ad_quotehtml $attributes($attribute_name)]</${attribute_name}>\n"
+        }
+    }
+
+    return $xml_string
+}
 
 
 ##############
