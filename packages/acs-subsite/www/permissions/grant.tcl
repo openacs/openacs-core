@@ -21,123 +21,115 @@ set title [_ acs-subsite.lt_Grant_Permission_on_n]
 set context [list [list one?[export_url_vars object_id] "[_ acs-subsite.Permissions_for_name]"] [_ acs-subsite.Grant]]
 
 
-set existing_privs [list]
-set hierarchy [list]
+# Compute a hierarchical tree representation of the contents of
+# acs_privileges. Note that nodes can appear more than one time in the
+# tree.
+
+set existing_privs [db_list select_privileges_list { }]
+
+# The maximum level that has been reached within the hierarchy.
 set maxlevel 1
 
-
-# Fill a multirow that contains a hierarchical tree representation of
-# the acs_privileges.
-
-if { [db_type] == "oracle" } {
-    # Unfortunately it is not possible to write a query that returns
-    # all the desired data with the current datamodel consisting of
-    # only the tables acs_privileges and acs_privilege_hierarchy. This
-    # is partly due to the restriction that a JOINed query cannot deal
-    # with CONNECT BY in oracle 8i. See
-    # http://openacs.org/forums/message-view?message_id=125969 for the
-    # gory details. That's why this page resorts to a hack and builds
-    # the tree structure manually in tcl. (-til)
-
-    set existing_privs [db_list select_privileges_list { }]
-    
-    # Initialize the $hierarchy datastructure which is a list of
-    # lists. The inner lists consist of two elements: 1. level,
-    # 2. privilege
-    foreach privilege $existing_privs {
-        lappend hierarchy [list 0 $privilege]
-    }
-
-    # Loop through each row in acs_privilege_hierarchy and shuffle the
-    # $hierarchy list accordingly.
-    db_foreach select_privileges_hierarchy { } {
-
-        if { [set start_pos [lsearch -regexp $hierarchy "\\m$child_privilege\\M"]] == -1 } {
-            # child_privilege of this relation not in privileges - skip.
-            continue
-        }
-        if { [lsearch -regexp $hierarchy "\\m$privilege\\M"] == -1 } {
-            # privilege of this relation not in privileges - skip.
-            continue
-        }
-
-        # the level of the first privilege element that we move
-        set start_pos_level [lindex [lindex $hierarchy $start_pos] 0]
-
-        # find the end position up to where the block extends that we have
-        # to move
-        set end_pos $start_pos
-        for { set i [expr $start_pos + 1] } { $i <= [llength $hierarchy] } { incr i } {
-            set level [lindex [lindex $hierarchy $i] 0]
-            if { $level <= $start_pos_level } {
-                break
-            }
-            incr end_pos
-        }
-
-        # cut out the block
-        set block_to_move [lrange $hierarchy $start_pos $end_pos]
-        set hierarchy [lreplace $hierarchy $start_pos $end_pos]
-
-        if { [set target_pos [lsearch -regexp $hierarchy "\\m$privilege\\M"]] == -1 } {
-            # target not found, something is broken with the
-            # hierarchy. insert the block back to where it was
-            eval "set hierarchy \[linsert \$hierarchy $start_pos $block_to_move\]"
-            continue
-        }
-        set target_level [lindex [lindex $hierarchy $target_pos] 0]
-
-        # insert the block to the new position, looping through the block
-        foreach element $block_to_move {
-            incr target_pos
-            set level_to_move [expr [lindex $element 0] + $target_level + 1]
-            set privilege_to_move [lindex $element 1]
-            set hierarchy [linsert $hierarchy $target_pos [list $level_to_move $privilege_to_move]]
-
-            if { $maxlevel < $level_to_move } { set maxlevel $level_to_move }
-        }
-    }
-
-} else {
-    # We are not on oracle - use the table
-    # acs_privilege_hierarchy_index.
-
-    db_foreach select_privileges_hierarchy { } {
-        if { [lsearch $existing_privs $privilege] > -1 } {
-            # skip double entries
-            continue
-        } else {
-            lappend existing_privs $privilege
-            lappend hierarchy [list $level $privilege]
-        }
-
-        if { $level > $maxlevel } {
-            set maxlevel $level
-        }
-    }
-
-    incr maxlevel
+# Initialize the $hierarchy datastructure which is a list of
+# lists. The inner lists consist of two elements: 1. level,
+# 2. privilege
+set hierarchy [list]
+foreach privilege $existing_privs {
+    lappend hierarchy [list 0 $privilege]
 }
 
+# Loop through each row in acs_privilege_hierarchy and shuffle the
+# $hierarchy list accordingly.
+db_foreach select_privileges_hierarchy { } {
 
-multirow create mu_privileges privilege level inverted_level selected id
+    if { [set start_pos [lsearch -regexp $hierarchy "\\m$child_privilege\\M"]] == -1 } {
+        # child_privilege of this relation not in privileges - skip.
+        continue
+    }
+    if { [lsearch -regexp $hierarchy "\\m$privilege\\M"] == -1 } {
+        # privilege of this relation not in privileges - skip.
+        continue
+    }
 
-# Preserve checked value of the privilege checkboxes for re-submitted
-# form status.
+    # the level of the first privilege element that we move
+    set start_pos_level [lindex [lindex $hierarchy $start_pos] 0]
+
+    # find the end position up to where the block extends that we have
+    # to move
+    set end_pos $start_pos
+    for { set i [expr $start_pos + 1] } { $i <= [llength $hierarchy] } { incr i } {
+        set level [lindex [lindex $hierarchy $i] 0]
+        if { $level <= $start_pos_level } {
+            break
+        }
+        incr end_pos
+    }
+
+    # define the block
+    set block_to_move [lrange $hierarchy $start_pos $end_pos]
+    # Only cut out the block if it is on the toplevel, which means it
+    # hasn't been moved yet. Otherwise the block will appear in two
+    # places intentionally.
+    if { [lindex [lindex $hierarchy $start_pos] 0] == 0 } {
+        set hierarchy [lreplace $hierarchy $start_pos $end_pos]
+    }
+
+    if { [set target_pos [lsearch -regexp $hierarchy "\\m$privilege\\M"]] == -1 } {
+        # target not found, something is broken with the
+        # hierarchy. 
+        continue
+    }
+    set target_level [lindex [lindex $hierarchy $target_pos] 0]
+
+    # remember the starting level in the block
+    set offset [lindex [lindex $block_to_move 0] 0]
+
+    # insert the block to the new position, looping through the block
+    foreach element $block_to_move {
+        incr target_pos
+        set level_to_move [expr [lindex $element 0] + $target_level + 1 - $offset]
+        set privilege_to_move [lindex $element 1]
+        set hierarchy [linsert $hierarchy $target_pos [list $level_to_move $privilege_to_move]]
+
+        if { $maxlevel < $level_to_move } { set maxlevel $level_to_move }
+    }
+}
+
+incr maxlevel
+
+
+# Now the $hierarchy datastructure is ready, use it to build the
+# multirow that will be used for display.
+multirow create mu_privileges privilege level inverted_level selected id standard_priv_p
 
 foreach elm $hierarchy {
     foreach { level privilege } $elm {}
+
+    # Preserve checked value of the privilege checkboxes for
+    # re-submitted form status.
     if { [info exists privileges] && [lsearch $privileges $privilege]>-1 } {
         set selected "CHECKED"
     } else {
         set selected ""
     }
-    multirow append mu_privileges $privilege [expr $level+1] [expr $maxlevel - $level] $selected $privilege
+
+    # set standard_priv_p to emphasize standard privileges in the
+    # layout
+    if { [lsearch {admin create write delete read} $privilege] > -1 } {
+        set standard_priv_p 1
+    } else {
+        set standard_priv_p 0
+    }
+
+    multirow append mu_privileges $privilege [expr $level+1] [expr $maxlevel - $level] $selected $privilege $standard_priv_p
 }
 
+# build an html tr line manually to layout the table
+set first_tr "<tr>"
 for { set i 0 } { $i < $maxlevel } { incr i } {
     append first_tr "<td>&nbsp;&nbsp;&nbsp;</td>"
 }
+append first_tr "</tr>"
 
 form create grant
 
@@ -177,6 +169,7 @@ if { [form is_valid grant] } {
         }
     }
     
-    ad_returnredirect "one?[export_url_vars object_id]"
+    ad_returnredirect "one?[export_vars [list object_id application_url]]"
+    ad_script_abort
 }
 

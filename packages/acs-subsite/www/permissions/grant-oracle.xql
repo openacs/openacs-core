@@ -9,13 +9,6 @@
       </querytext>
 </fullquery>
 
-<fullquery name="select_privileges_hierarchy">      
-      <querytext>
-          select privilege, child_privilege
-          from acs_privilege_hierarchy
-      </querytext>
-</fullquery>
-
 <fullquery name="grant">      
       <querytext>
           select acs_permission.grant_permission(:object_id, :party_id, :privilege)
