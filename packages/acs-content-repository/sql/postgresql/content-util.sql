@@ -10,45 +10,56 @@
 -- License.  Full text of the license is available from the GNU Project:
 -- http://www.fsf.org/copyleft/gpl.html
 
--- or replace  function
 create function table_exists (varchar)
 returns boolean as '
 declare
-  table_exists__table_name             alias for $1;  
-  v_exists                             boolean;       
-                                        
+        table_exists__table_name             alias for $1;  
 begin
 
-  select count(*) > 0 into v_exists 
-    from pg_class 
-   where relname = lower(table_exists__table_name);
-
-  return v_exists;
+        return count(*) > 0
+          from pg_class 
+         where relname = lower(table_exists__table_name);
  
 end;' language 'plpgsql';
 
-
--- show errors
-
--- or replace  function
 create function column_exists (varchar,varchar)
 returns boolean as '
 declare
-  column_exists__table_name             alias for $1;  
-  column_exists__column_name            alias for $2;  
-  v_exists                              boolean;       
+        column_exists__table_name             alias for $1;  
+        column_exists__column_name            alias for $2;  
 begin
 
- select count(*) > 0 into v_exists
-   from pg_class c, pg_attribute a
-  where c.relname = = lower(column_exists__table_name)
-    and c.oid = a.attrelid
-    and a.attname = lower(column_exists__column_name);
-
-  return v_exists;
+        return count(*) > 0
+          from pg_class c, pg_attribute a
+         where c.relname = = lower(column_exists__table_name)
+           and c.oid = a.attrelid
+           and a.attname = lower(column_exists__column_name);
 
 end;' language 'plpgsql';
 
+create function trigger_exists (varchar,varchar) returns boolean as '
+declare 
+        trigger_name    alias for $1;
+        on_table        alias for $2;
+begin
+        return count(*) > 0
+          from pg_class c, pg_trigger t
+         where c.relname = lower(on_table)
+           and c.oid = t.tgrelid
+           and t.tgname = lower(trigger_name);
+
+end;' language 'plpgsql';
+
+create function trigger_func_exists (varchar) returns boolean as '
+declare 
+        trigger_name    alias for $1;
+begin
+        return count(*) = 1
+          from pg_proc
+         where proname = lower(trigger_name)
+           and pronargs = 0;
+
+end;' language 'plpgsql';
 
 -- java stuff, deal with this later.
 

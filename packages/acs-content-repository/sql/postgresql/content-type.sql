@@ -88,8 +88,6 @@ begin
     create_type__name_method
   );
 
-  raise notice ''table = %, col = %, super = %'', create_type__table_name,create_type__id_column, table_exists;
-
   PERFORM content_type__refresh_view(create_type__content_type);
 
   return 0; 
@@ -494,68 +492,53 @@ begin
   select table_name into v_table_name
   from acs_object_types where object_type = refresh_trigger__content_type;
 
-  -- start building trigger code
+  --=================== start building trigger code =====================
 
-  tr_text := ''
+  tr_text := ''create function '' || v_table_name || ''t()  
+  returns opaque as \\\'
+  declare
+    new_revision_id integer;
+  begin
 
-create function '' || v_table_name || ''t()  returns opaque as \\\'
-declare
-  new_revision_id integer;
-  
-begin
+    if new.item_id is null then
+      raise EXCEPTION \\\'\\\'-20000: item_id is required when inserting into %i \\\'\\\', v_table_name;
+    end if;
 
-  if new.item_id is null then
-    raise EXCEPTION \\\'\\\'-20000: item_id is required when inserting into %i \\\'\\\', v_table_name;
-  end if;
+    if new.text is not null then
 
-  if new.text is not null then
+      new_revision_id := content_revision__new(
+                     new.title,
+                     new.description,
+                     now(),
+                     new.mime_type,
+                     new.nls_language,
+                     new.text,
+                     content_symlink__resolve(new.item_id),
+                     new.revision_id,
+                     now(),
+                     new.creation_user, 
+                     new.creation_ip
+      );
 
-    new_revision_id := content_revision__new(
-                   new.title,
-                   new.description,
-                   now(),
-                   new.mime_type,
-                   new.nls_language,
-                   new.data,
-                   content_symlink__resolve(new.item_id),
-                   new.revision_id,
-                   now(),
-                   new.creation_user, 
-                   new.creation_ip
-    );
+    else
 
-  else
+      new_revision_id := content_revision__new(
+                     new.title,
+                     new.description,
+                     now(),
+                     new.mime_type,
+                     new.nls_language,
+                     new.data,
+                     content_symlink__resolve(new.item_id),
+                     new.revision_id,
+                     now(),
+                     new.creation_user, 
+                     new.creation_ip
+      );
 
-    new_revision_id := content_revision__new(
-                   new.title,
-                   new.description,
-                   now(),
-                   new.mime_type,
-                   new.nls_language,
-                   new.data,
-                   content_symlink__resolve(new.item_id),
-                   new.revision_id,
-                   now(),
-                   new.creation_user, 
-                   new.creation_ip
-    );
+    end if;
 
-  end if;'';
-
---                  select                                                
---                    object_type
---                  from                                                
---                    acs_object_types                                  
---                  where                                               
---                    object_type <> ''acs_object''                       
---                  and                                                 
---                    object_type <> ''content_revision''                 
---                  connect by                                          
---                    prior supertype = object_type                     
---                  start with                                          
---                    object_type = refresh_trigger.content_type
---                  order by
---                    level desc
+    '';
 
   -- add an insert statement for each subtype in the hierarchy for this type
 
@@ -576,19 +559,38 @@ begin
                   order by
                     level desc
   LOOP
-    tr_text := tr_text || ''
-'' || content_type__trigger_insert_statement(type_rec.object_type) || '';
+    tr_text := tr_text || '' '' || content_type__trigger_insert_statement(type_rec.object_type) || '';'';
   end loop;
 
   -- end building the trigger code
-  tr_text := tr_text || ''
-end;\\\' language \\\'plpgsql\\\';
-create trigger '' || v_table_name || ''t before insert on '' || v_table_name || ''i for each row execute procedure '' || v_table_name || ''t()'';
 
-  -- (Re)create the trigger
+  tr_text := tr_text || ''
+
+    return new;
+
+  end;\\\' language \\\'plpgsql\\\';'';
+
+  --================== done building trigger code =======================
+
+  -- drop the old trigger
+  if trigger_exists(v_table_name || ''t'', v_table_name || ''i'') then 
+     execute ''drop trigger '' || v_table_name || ''t on '' || v_table_name || ''i'';
+  end if;
+
+  -- drop the old trigger function
+  if trigger_func_exists(v_table_name || ''t'') then
+     execute ''drop function '' || v_table_name || ''t()'';
+  end if;
+
+  -- create the new trigger function
+  raise notice ''trigger text = %'', tr_text;
   execute tr_text;
 
-  return 0; 
+  -- create the new trigger
+  execute ''create trigger '' || v_table_name || ''t before insert on '' || v_table_name || ''i for each row execute procedure '' || v_table_name || ''t();'';
+
+  return null; 
+
 end;' language 'plpgsql';
 
 
@@ -652,7 +654,8 @@ begin
 
   execute ''create view '' || v_table_name ||
     ''i as select acs_objects.*, cr.revision_id, cr.title, cr.item_id,
-    content_revision__get_content(cr.revision_id) as data, cr_text.text_data as text,
+    content_revision__get_content(cr.revision_id) as data, 
+    cr_text.text_data as text,
     cr.description, cr.publish_date, cr.mime_type, cr.nls_language'' || 
     cols || 
     '' from acs_objects, cr_revisions cr, cr_text'' || tabs || '' where 
@@ -673,7 +676,7 @@ begin
     '' where acs_objects.object_id = cr.revision_id 
       and cr.item_id = i.item_id'' || joins;
 
-  -- PERFORM content_type__refresh_trigger(refresh_view__content_type);
+  PERFORM content_type__refresh_trigger(refresh_view__content_type);
 
 -- exception
 --   when others then
