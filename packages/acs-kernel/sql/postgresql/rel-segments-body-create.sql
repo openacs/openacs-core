@@ -14,8 +14,7 @@
 -- PACKAGE BODY --
 ------------------
 
--- create or replace package body rel_segment
--- function new
+-- rel_segment__new -- full version
 create function rel_segment__new (integer,varchar,timestamp,integer,varchar,varchar,varchar,varchar,integer,varchar,integer)
 returns integer as '
 declare
@@ -43,6 +42,18 @@ begin
 
   return v_segment_id;
   
+end;' language 'plpgsql';
+
+-- rel_segment__new -- overloaded version for specifying only non-default values
+create function rel_segment__new (varchar,integer,varchar)
+returns integer as '
+declare
+  new__segment_name      alias for $1;  
+  new__group_id          alias for $2;  
+  new__rel_type          alias for $3; 
+begin
+	return rel_segment__new(null, ''rel_segment'', now(), null, null, null, null new__segment_name, new__group_id, new_rel_type, null);
+
 end;' language 'plpgsql';
 
 
