@@ -1176,8 +1176,8 @@ ad_proc -private auth::check_local_account_status {
             set result(account_message) [_ acs-subsite.lt_Sorry_but_it_seems_th]
         }
         deleted {  
-            set result(account_message) \
-                "[_ acs-subsite.Welcome_Back_1] <a href=\"[export_vars -base "restore-user" { user_id }]\">[_ acs-subsite.to_site_link_1]</a>."
+            set restore_url [export_vars -base "restore-user" { return_url }]
+            set result(account_message) [_ acs-subsite.Account_closed]
         }
         rejected - "needs approval" {
             set result(account_message) \
