@@ -66,17 +66,7 @@ if {[ad_parameter -package_id [ad_acs_kernel_id] DefaultPersistentLoginP securit
     set remember_password ""
 }
 
-db_multirow nodes site_nodes {
-    select site_node.url(node_id) as url, 
-    acs_object.name(object_id) as name
-      from site_nodes
-      where parent_id = site_node.node_id('/')
-      and object_id is not null
-      and acs_permission.permission_p(
-          object_id, 
-          nvl(:user_id, acs.magic_object_id('the_public')), 
-          'read') = 't'
-}
+db_multirow nodes site_nodes {}
 
 if { ![empty_string_p $user_id]} {
     # The user is loged in.
