@@ -52,7 +52,7 @@ table.developer-toolbar {
   background-color: #616093;
   color: white;
   font-family: tahoma, verdana;
-  font-size: 85%;
+  font-size: 80%;
 }
 table.developer-toolbar td {
   padding-top: 3px;
@@ -69,9 +69,25 @@ table.developer-toolbar td a {
 }
 table.developer-toolbar td a:hover { 
   text-decoration: none;
+  background-color: #999999;
+  border: solid 1px #cccccc;
+}
+table.developer-toolbar #search {
+  font: 80% tahoma;
+  color: white;
+}
+table.developer-toolbar #search input {
+  font: 100% tahoma;
+}
+table.developer-toolbar td a.on {
+  background-color: #888888;
+  border: solid 1px #cccccc;
+}
+table.developer-toolbar td a:hover.on {
   background-color: #666666;
   border: solid 1px #999999;
 }
+
 
 
 a.button { 
@@ -427,7 +443,7 @@ a.action {
   list-style: circle url(/resources/acs-subsite/right.gif);
 }
 
-div.developer-support {
+#developer-support-footer {
   float: left;
   padding: 6px;
   border: solid 1px gray;
@@ -446,3 +462,4 @@ div.developer-support {
   border-top: 0px; 
   padding: 6px 8px 6px 8px;
 }
+
