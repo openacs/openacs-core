@@ -1,7 +1,8 @@
 <master>
-<property name="title">Forgotten Password / Enter Your Email</property>
-<property name="context">"email password"</property>
+<property name="title">#acs-subsite.lt_Forgotten_Password__E#</property>
+<property name="context">#acs-subsite.email_password#</property>
 
 <form method="get" action="email-for-password-2">
-  Your email: <input type="text" name="email" /> <input type="submit" value="send" />
+  #acs-subsite.Your_email# <input type="text" name="email" /> <input type="submit" value="send" />
 </form>
+

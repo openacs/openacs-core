@@ -1,6 +1,7 @@
 <master>
-<property name=title>Sorry</property>
+<property name=title>#acs-subsite.Sorry#</property>
 
-Sorry but it seems that you've been banned from @system_name@.
+#acs-subsite.lt_Sorry_but_it_seems_th#
+
 
 

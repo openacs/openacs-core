@@ -1,10 +1,9 @@
 <master>
-<property name="title">Awaiting Approval</property>
+<property name="title">#acs-subsite.Awaiting_Approval#</property>
 
-<p>Your registration request has been submitted 
-to the @system_name@ administrator.   It is still
-waiting approval.</p>
+<p>#acs-subsite.lt_registration_request_submitted#</p>
 
-<p>Thank you.</p>
+<p>#acs-subsite.Thank_you#</p>
+
 
 

@@ -12,7 +12,7 @@ ad_page_contract {
 if {![db_0or1row user_state_info {
     select member_state, email, rel_id from cc_users where user_id = :user_id
 }]} { 
-    ad_return_error "Couldn't find your record" "User id $user_id is not in the database.  This is probably out programming bug."
+    ad_return_error "[_ acs-subsite.lt_Couldnt_find_your_rec]" "[_ acs-subsite.lt_User_id_user_id_is_no_3]"
     return
 }
 
@@ -29,7 +29,7 @@ if { $member_state == "deleted" } {
     }
     
 } else {
-    ad_return_error "Problem with authentication" "There was a problem with authenticating your account"
+    ad_return_error "[_ acs-subsite.lt_Problem_with_authenti]" "[_ acs-subsite.lt_There_was_a_problem_w]"
 }
 
 set site_link [ad_site_home_link]
@@ -45,5 +45,7 @@ set token [sec_get_token $token_id]
 set hash [ns_sha1 "$time$token_id$token"]
 
 set export_vars [export_form_vars return_url time token_id hash email]
+
+set email_password_url "email-password.tcl?user_id=$user_id"
 
 ad_return_template

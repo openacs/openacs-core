@@ -31,7 +31,7 @@ set status [catch {set rowid_check [db_0or1row register_email_user_info_get {
 
 if { $status != 0 || $rowid_check == 0} {
     db_release_unused_handles
-    ad_return_error "Couldn't find your record" "Row id $row_id is not in the database.  Please check your email and verifiy that you have cut and pasted the url correctly."
+    ad_return_error "[_ acs-subsite.lt_Couldnt_find_your_rec]" "[_ acs-subsite.lt_Row_id_row_id_is_not_]"
     return
 }
     

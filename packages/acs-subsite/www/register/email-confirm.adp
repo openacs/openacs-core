@@ -1,45 +1,41 @@
 <master>
-<property name=title>Email Confirmation</property>
+<property name=title>#acs-subsite.Email_Confirmation#</property>
 
 <if @email_verified_p@ eq "f">
 
   <if @member_state@ eq "approved">
 
-    <h2>Your email is confirmed</h2>
-    at @site_link@
+    <h2>#acs-subsite.lt_Your_email_is_confirm#</h2>
+    #acs-subsite.at# @site_link@
     <hr>
-    Your email has been confirmed. You may now log into
-    @system_name@.
+    #acs-subsite.lt_Your_email_has_been_c#
     <p>
     <form action="index" method=post>
     @export_vars@
     <input type=submit value="Continue">
     </form>
     <p>
-    Note: If you've forgotten your password, <a
-    href="email-password?user_id=@user_id@">ask this server to email it
-    to @email@</a>.
+    #acs-subsite.lt_Note_If_youve_forgott_1#</a>.
 
   </if>
   <else>
 
-    <h2>Your email is confirmed</h2>
-    at @site_link@
+    <h2>#acs-subsite.lt_Your_email_is_confirm#</h2>
+    #acs-subsite.at# @site_link@
     <hr>
-    Your email has been confirmed. You are now awaiting approval
-    from the @system_name@ administrator.    
+    #acs-subsite.lt_Your_email_has_been_c_1#    
 
   </else>
 
 </if>
 <else>
 
-  <h2>Email not Requested</h2>
+  <h2>#acs-subsite.Email_not_Requested#</h2>
   <hr>
   
-  <p>We were not awaiting your email.  There must be some mistake.
+  <p>#acs-subsite.lt_We_were_not_awaiting_#
 
-  <p>Please try to <a href="index">log in</a> again
+  <p>#acs-subsite.lt_Please_try_to_a_hrefi#
     
 </else>
 
