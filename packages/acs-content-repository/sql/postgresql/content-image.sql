@@ -104,6 +104,11 @@ end;
 -- The Oracle version does allow a non-image type to be specified, as does my
 -- alternative down below.  This needs a little more straightening out.
 
+-- DRB: BLOB issues make it impractical to use package_instantiate_object to create
+-- new revisions that contain binary data so a higher-level Tcl API is required rather
+-- than the standard package_instantiate_object.  So we don't bother calling define_function_args
+-- here.
+
 create function image__new (varchar,integer,integer,integer,varchar,integer,varchar,varchar,varchar,varchar,boolean,timestamptz,varchar,integer,integer,integer
   ) returns integer as '
   declare
