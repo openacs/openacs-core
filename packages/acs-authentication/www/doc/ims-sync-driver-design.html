@@ -2,11 +2,11 @@
         by <a href="mailto:lars@collaboraid.biz" target="_top">Lars Pind</a><br>
           OpenACS docs are written by the named authors, and may be edited
           by OpenACS documentation staff.
-        </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2816517"></a>TODO</h3></div></div><div></div></div><p> We need examples of how the communication would be done from our
+        </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2816492"></a>TODO</h3></div></div><div></div></div><p> We need examples of how the communication would be done from our
 clients. </p><p> The "GetDocument" communications service contract could be a
 generic system-wide service contract. </p><p> We might need a source/ID column in the users table to identify
 where they're imported from for doing updates, particularly if
-importing from multiple sources (or when some users are local.) </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2816544"></a>Execution Story</h3></div></div><div></div></div><div class="orderedlist"><ol type="1"><li><p> We will parse a document in the <a href="http://www.imsglobal.org/enterprise/index.cfm" target="_top">IMS Enterprise
+importing from multiple sources (or when some users are local.) </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2816519"></a>Execution Story</h3></div></div><div></div></div><div class="orderedlist"><ol type="1"><li><p> We will parse a document in the <a href="http://www.imsglobal.org/enterprise/index.cfm" target="_top">IMS Enterprise
   Specification</a> format (<a href="http://www.imsglobal.org/enterprise/entv1p1/imsent_bestv1p1.html#1404584" target="_top">example
   XML document</a>), and translate it into calls to the batch user
   sync API. </p></li><li><p> The document will contain either the complete user listitemst (IMS:
@@ -135,7 +135,7 @@ without an email address, we will have to throw an error. </p><p> Here's how we 
         &lt;photo imgtype="gif"&gt;&lt;extref&gt;<span class="emphasis"><em>...</em></span>&lt;/extref&gt;&lt;/photo&gt; if present:
         HTTP GET the photo, insert it into the system. (Do we do this,
         then, with all users when doing a snapshot update?)
-      </p></li></ol></div></li></ol></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2815294"></a>        Resources</h3></div></div><div></div></div><div class="itemizedlist"><ul type="disc"><li><p> <a href="http://www.cetis.ac.uk/content/20020524162233" target="_top">Consolidation
+      </p></li></ol></div></li></ol></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2815342"></a>        Resources</h3></div></div><div></div></div><div class="itemizedlist"><ul type="disc"><li><p> <a href="http://www.cetis.ac.uk/content/20020524162233" target="_top">Consolidation
   before the leap; IMS Enterprise 1.1</a>:  This article says that IMS
   Enterprise 1.1 (current version) does not address the communication
   model, which is critically missing for real seamless
