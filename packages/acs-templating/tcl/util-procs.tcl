@@ -266,12 +266,11 @@ ad_proc -public template::util::array_to_vars { arrayname } {
 
     @param arrayname   The name of an array in the calling frame.
 } {
+    upvar $arrayname arr
 
-  upvar $arrayname arr
-
-  foreach { key value } [array get arr] {
-    uplevel "set \{${key}\} \{$value\}"
-  }
+    foreach { key value } [array get arr] {
+        uplevel [list set $key $value]
+    }
 }
 
 ad_proc -public template::util::vars_to_array { arrayname args } {
