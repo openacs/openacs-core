@@ -200,7 +200,10 @@ proc_doc ds_add { name args } { Sets a developer-support property for the curren
 }
 
 proc_doc ds_comment { value } { Adds a comment to the developer-support information for the current request. } {
-    ds_add comment $value
+
+    if { [ds_enabled_p] } { 
+        ds_add comment $value
+    }
 }
 
 proc ds_sweep_data {} {
