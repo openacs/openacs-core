@@ -114,6 +114,7 @@ set matches [lsort -command ad_sort_by_score_proc $matches]
 
 if {$quick_view && ![empty_string_p $matches]} {
     ad_returnredirect [api_proc_url [lindex [lindex $matches 0] 0]]
+    return
 }
 
 set title "Procedure Search for: \"$query_string\""
