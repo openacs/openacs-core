@@ -664,7 +664,7 @@ ad_proc db_source_sql_file { {-callback apm_ns_write_callback} file } {
     # driver's wrong but a lot of non-OpenACS folks use it, and even though I'm the
     # maintainer we shouldn't break existing code over such trivialities...
 
-    if { [string equal [db_get_dbhost] "localhost"] } {
+    if { [string equal [db_get_dbhost] "localhost"] || [string equal [db_get_dbhost] ""] } {
         set pghost ""
     } else {
 	set pghost "-h [db_get_dbhost]"
