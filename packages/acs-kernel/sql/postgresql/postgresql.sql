@@ -653,7 +653,7 @@ create function tree_ancestor_keys(varbit) returns setof varbit as '
 -- performance.   
 
 -- WARNING: subselects in where clauses that call this function and join on an outer table appear
--- to reliably kill PG 7.1.2, at least if "exists" is involved.   PG 7.2 doesn't die on my test
+-- to reliably kill PG 7.1.2, at least if "exists" is involved.   PG 7.2 doesn''t die on my test
 -- case, so it appears to have been fixed.
 
   select tree_ancestor_keys($1, 1)
