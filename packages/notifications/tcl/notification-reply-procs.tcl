@@ -27,7 +27,7 @@ namespace eval notification::reply {
         set extra_vars [ns_set create]
 
         # Truncate subject to 100 chars, which is the limit in the data model (for some obscure reason)
-        set subject [string range $subject 0 100]
+        set subject [string range $subject 0 99]
         
         oacs_util::vars_to_ns_set -ns_set $extra_vars -var_list {reply_id object_id type_id from_user subject content reply_date}
         
