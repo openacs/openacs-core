@@ -44,7 +44,8 @@ foreach package_key [array names repository] {
                      $version(name) \
                      $version(package.type) \
                      $version(install_type) \
-                     $version(summary)]
+                     $version(summary) \
+                     $version(maturity)]
         }
     }
 }
@@ -57,7 +58,7 @@ foreach package_key [array names repository] {
 #####
 
 # Sort the list alphabetically (in case package_name and package_key doesn't sort the same)
-multirow create packages package_key package_name version_name package_type install_type summary
+multirow create packages package_key package_name version_name package_type install_type summary maturity
 foreach name [lsort -ascii [array names package]] {
     set row $package($name)
     multirow append packages \
@@ -66,7 +67,8 @@ foreach name [lsort -ascii [array names package]] {
         [lindex $row 2] \
         [lindex $row 3] \
         [lindex $row 4] \
-        [lindex $row 5]
+        [lindex $row 5] \
+        [apm::package_version::attributes::maturity_int_to_text [lindex $row 6]]
 }
 
 multirow extend packages install_url
@@ -95,6 +97,9 @@ template::list::create \
         summary {
             label "Summary"
         }   
+        maturity {
+            label {[apm::package_version::attributes::get_pretty_name maturity]}
+        }
         version_name {
             label "Version"
         }

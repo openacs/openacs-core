@@ -123,37 +123,6 @@ ad_proc -public apm_dependency_provided_p {
     }
 }
 
-
-ad_proc -private apm_maturity_int_to_text { maturity } {
-    Get the internationalized maturity description
-    corresponding to the given integer package maturity level.
-
-    @author Peter Marklund
-} {
-    if {[exists_and_not_null maturity]} {
-
-        if { ![expr $maturity >= -1 && $maturity <= 3] } {
-            error "Maturity must be between -1 and 3 but is \"$maturity\""
-        }
-
-        set maturity_key(-1) "#acs-tcl.maturity_incompatible#"
-        set maturity_key(0) "#acs-tcl.maturity_new_submission#"
-        set maturity_key(1) "#acs-tcl.maturity_immature#"
-        set maturity_key(2) "#acs-tcl.maturity_mature#"
-        set maturity_key(3) "#acs-tcl.maturity_mature_and_standard#"
-
-        set result [lang::util::localize $maturity_key($maturity)]
-
-    } else {
-
-        set result ""
-
-    }
-
-    return $result
-}
-
-
 ad_proc -private pkg_info_new { package_key spec_file_path provides requires {dependency_p ""} {comment ""}} {
     
     Returns a datastructure that maintains information about a package.
@@ -1997,6 +1966,17 @@ ad_proc -private apm::package_version::attributes::get_spec {} {
     }
 }
 
+ad_proc -private apm::package_version::attributes::get_pretty_name { attribute_name } {
+    Return the pretty name of attribute with given short name.
+
+    @author Peter Marklund
+} {
+    array set attributes [apm::package_version::attributes::get_spec]
+    array set attribute $attributes($attribute_name)
+    
+    return $attribute(pretty_name)
+}
+
 ad_proc -private apm::package_version::attributes::validate_maturity { maturity } {
     set error_message ""
     if { ![empty_string_p $maturity] } {
@@ -2008,6 +1988,35 @@ ad_proc -private apm::package_version::attributes::validate_maturity { maturity 
     }
 
     return $error_message
+}
+
+ad_proc -private apm::package_version::attributes::maturity_int_to_text { maturity } {
+    Get the internationalized maturity description
+    corresponding to the given integer package maturity level.
+
+    @author Peter Marklund
+} {
+    if {[exists_and_not_null maturity]} {
+
+        if { ![expr $maturity >= -1 && $maturity <= 3] } {
+            error "Maturity must be between -1 and 3 but is \"$maturity\""
+        }
+
+        set maturity_key(-1) "#acs-tcl.maturity_incompatible#"
+        set maturity_key(0) "#acs-tcl.maturity_new_submission#"
+        set maturity_key(1) "#acs-tcl.maturity_immature#"
+        set maturity_key(2) "#acs-tcl.maturity_mature#"
+        set maturity_key(3) "#acs-tcl.maturity_mature_and_standard#"
+
+        set result [lang::util::localize $maturity_key($maturity)]
+
+    } else {
+
+        set result ""
+
+    }
+
+    return $result
 }
 
 ad_proc -private apm::package_version::attributes::parse_xml {
