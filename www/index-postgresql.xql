@@ -18,7 +18,7 @@
           'read') = 't'
       and apm_packages.package_id = site_nodes.object_id
       and apm_package_types.package_key = apm_packages.package_key
-    order by initial_install_p, name
+    order by initial_install_p, upper(acs_object__name(object_id))
     </querytext>
   </fullquery>
 
