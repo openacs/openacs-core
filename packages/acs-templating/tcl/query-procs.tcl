@@ -85,7 +85,6 @@ ad_proc -public template::query { statement_name result_name type sql args } {
   set full_statement_name [db_qd_get_fullname $statement_name]
 
   #set beginTime [clock clicks]
-  ns_log Notice "query sql = $sql"
 
   template::util::get_opts $args
   
@@ -134,7 +133,6 @@ ad_proc -private template::query::onevalue { statement_name db result_name sql }
 
 } {
 
-  ns_log Notice "sql = $sql"
   upvar opts opts
 
   upvar $opts(uplevel) $result_name result

@@ -173,9 +173,6 @@ ad_proc -public template::util::write_from_template { template file_name} {
       set output [template::adp_eval code]
   }
   upvar output output
-  ns_log notice "
-  writing $file_name from the template $template
-"
   template::util::write_to_file $file_name "$output"
 
 }
