@@ -2109,9 +2109,13 @@ ad_proc -private util_WriteWithExtraOutputHeaders {headers_so_far {first_part_of
 
 
 ad_proc -public ReturnHeaders {{content_type text/html}} {
-    we use this when we want to send out just the headers 
-    nd then do incremental ns_writes.  This way the user
-    doesn't have to wait like if you used a single ns_return
+    We use this when we want to send out just the headers 
+    and then do incremental writes with ns_write.  This way the user
+    doesn't have to wait for streamed output (useful when doing
+    bulk uploads, installs, etc.).
+
+    It returns status 200 and all headers including 
+    any added to outputheaders.
 } { 
     set all_the_headers "HTTP/1.0 200 OK
 MIME-Version: 1.0
