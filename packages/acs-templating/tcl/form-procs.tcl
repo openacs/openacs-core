@@ -439,19 +439,17 @@ ad_proc -private template::form::render { id tag_attributes } {
   # make a reference to the formerror array with any validation messages
   upvar #$level $id:error $id:error
 
+  # Clear the formerror array if it has
+  # been set by another form on the same page
+  upvar #$level formerror formerror
+  if { [info exists formerror] } { unset formerror }
+
   if { [info exists $id:error] } {
 
     uplevel #$level "upvar 0 $id:error formerror"
     
     # There were errors on the form, force edit mode
     set properties(mode) edit
-
-  } else {
-
-    # no errors on this form.  Clear the formerror array if it has
-    # been set by another form on the same page
-    upvar #$level formerror formerror
-    if { [info exists formerror] } { unset formerror }
   }
 
   # Propagate form mode to all form elements
