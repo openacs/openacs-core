@@ -2,14 +2,17 @@ set pretty_name [_ acs-subsite.subsite]
 set pretty_plural [_ acs-subsite.subsites]
 
 set admin_p [permission::permission_p -object_id [ad_conn package_id] -privilege admin -party_id [ad_conn untrusted_user_id]]
+
+set actions [list]
 if { $admin_p } {
-    set add_url "[subsite::get_element -element url]admin/subsite-add"
+    lappend actions [_ acs-subsite.Create_new_subsite] "[subsite::get_element -element url]admin/subsite-add" {}
 }
 
 
 list::create \
     -name subsites \
     -multirow subsites \
+    -actions $actions \
     -no_data "[_ acs-subsite.No_pretty_plural [list pretty_plural $pretty_plural]]" \
     -elements {
         instance_name {
