@@ -2122,7 +2122,7 @@ begin
     --dbms_output.put_line( ''checking if the items are already related...'');
     
     select
-      rel_id, 1 as v_exists into v_rel_id, v_exists
+      rel_id, 1 into v_rel_id, v_exists
     from
       cr_item_rels
     where
