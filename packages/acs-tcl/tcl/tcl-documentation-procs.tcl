@@ -1584,6 +1584,9 @@ ad_page_contract_filter tmpfile { name value } {
 	}
     }
     
+    # Log details about this filter failing, to make it easier to debug.
+    ns_log Notice "ad_page_contract tmpfile filter on variable '$name' at URL '[ad_conn url]': The tmpfile given was '$value', and the list of valid directories is '$tmpdir_list'."
+
     ad_complain "You specified a path to a file that is not allowed on the system."
     return 0
 }
