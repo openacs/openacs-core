@@ -4,4 +4,25 @@
 
   <msg key="member_role_pretty_name">Member</msg>
   <msg key="member_role_pretty_plural">Members</msg>
+  <msg key="common_yes">Yes</msg>
+  <msg key="common_no">No</msg>
+  <msg key="common_stop">Stop</msg>
+  <msg key="common_discard">Discard</msg>
+  <msg key="common_save">Save</msg>
+  <msg key="common_finish">Finish</msg>
+  <msg key="common_edit">Edit</msg>
+  <msg key="common_view">View</msg>
+  <msg key="common_apply">Apply</msg>
+  <msg key="common_help">Help</msg>
+  <msg key="common_default">Use Default</msg>
+  <msg key="common_reset">Reset</msg>
+  <msg key="common_next">Next</msg>
+  <msg key="common_cancel">Cancel</msg>
+  <msg key="common_close">Close</msg>
+  <msg key="common_previous">Previous</msg>
+  <msg key="common_update">Update</msg>
+  <msg key="common_delete">Delete</msg>
+  <msg key="common_continue">Continue</msg>
+  <msg key="common_login">Log in</msg>
+  <msg key="common_register">Register</msg>
 </message_catalog>
