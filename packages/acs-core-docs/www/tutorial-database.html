@@ -3,12 +3,12 @@
       by <a href="mailto:joel@aufrecht.org" target="_top">Joel Aufrecht</a><br>
           OpenACS docs are written by the named authors, but may be edited
           by OpenACS documentation staff.
-        </p></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="id2852822"></a>Code the data model</h3></div></div><p>We create all database objects with scripts in the
+        </p></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="id2852796"></a>Code the data model</h3></div></div><p>We create all database objects with scripts in the
       <tt>samplenote/sql/</tt> directory.  All
       database scripts are database-specific and are thus in either
       the <tt>samplenote/sql/oracle</tt> or
       <tt>samplenote/sql/postgresql</tt>.
-      Packages can support Oracle, PostgreSQL, or both.  </p><p>The first file is
+      Packages can support Oracle, PostgreSQL, or both.  </p><p>The first file will be
       <tt>samplenote-create.sql</tt>.  The
       package manager requires a file with the name
       <tt><span class="replaceable">packagekey</span>-create.sql</tt>,
@@ -23,16 +23,24 @@
       stored procedures and is fairly complicated even for a simple
       table.  A listing is provided below for you to cut and paste.
       Comments are located within the source code, with each comment
-      preceeding the relevant code.</p><p>First, create the necessary subdirectories and add them
-      cvs as you go.</p><pre class="screen">[service0@yourserver samplenote]$ <b><tt>mkdir sql</tt></b>
+      preceeding the relevant code. (<a href="objects.html" target="_top">More
+      info about ACS Objects</a>)</p><p>First, create the necessary subdirectories and add them
+      cvs as you go.</p><pre class="screen">[service0@yourserver samplenote]$<b><tt> cd /web/service0/packages/samplenote</tt></b>
+[service0@yourserver samplenote]$ <b><tt>mkdir sql</tt></b>
 [service0@yourserver samplenote]$ <b><tt>cvs add sql</tt></b>
 Directory /cvsroot/service0/packages/samplenote/sql added to the repository
 [service0@yourserver samplenote]$ <b><tt>cd sql/</tt></b>
 [service0@yourserver sql]$ <b><tt>mkdir postgresql</tt></b>
 [service0@yourserver sql]$ <b><tt>cvs add postgresql</tt></b>
 Directory /cvsroot/service0/packages/samplenote/sql/postgresql added to the repository
-[service0@yourserver sql]$ <b><tt>cd postgresql/</tt></b>
-[service0@yourserver postgresql]$ <b><tt>emacs samplenote-create.sql</tt></b></pre><p>Paste this into the file and save and close.</p><div class="figure"><p class="title"><b>Figure 8.2. Database Creation Script</b></p><pre class="programlisting">--
+[service0@yourserver sql]$ <b><tt>cd postgresql/</tt></b></pre><p>We break out the sql commands into several files that can
+      be called independently, and then call all of the create files
+      from the master create file.  The top of each sql file has some
+      standard comments, including doc tags such as
+      <tt>@author</tt> which will be picked up
+      by the API browser.  The string
+      <tt>$Id$</tt> will automatically be
+      expanded when the file is checked in to cvs.</p><pre class="screen">[service0@yourserver postgresql]$ <b><tt>emacs samplenote-create.sql</tt></b></pre><p>Paste this into the file and save and close.</p><div class="figure"><p class="title"><b>Figure 8.2. Database Creation Script - master create file</b></p><pre class="programlisting">--
 -- packages/samplenote/sql/postgresql/samplenote-create.sql
 --
 -- @author rhs@mit.edu
@@ -40,38 +48,19 @@ Directory /cvsroot/service0/packages/samplenote/sql/postgresql added to the repo
 -- @cvs-id $Id$
 --
 --
+
+\i samplenote-table-create.sql
+\i samplenote-functions-create.sql</pre></div><p>Create the file to create the database table.</p><pre class="screen">[service0@yourserver postgresql]$ <b><tt>emacs samplenote-table-create.sql</tt></b></pre><p>Paste this into the file and save and close.</p><div class="figure"><p class="title"><b>Figure 8.3. Database Creation Script - table</b></p><pre class="programlisting">--
+-- packages/samplenote/sql/postgresql/samplenote-table-create.sql
+--
+-- @author rhs@mit.edu
+-- @creation-date 2000-10-22
+-- @cvs-id $Id$
+--
 <span class="emphasis"><em>
-/* We create a temporary function 'inline_0' which we use to
-create an ACS Object Type.  Each record in our package is a
-'samplenote', and each samplenote will be an ACS Object.  By making
-our records ACS objects, we gain access to the permissions model and
-other meta-functions.  Each 'samplenote' record will have a matching
-record in acs_objects.  In general, you should make a table an ACS 
-Object Type if you expect to apply permissions directly at that level. */
-</em></span>
-create function inline_0 ()
-returns integer as '
-begin
-    PERFORM acs_object_type__create_type (
-	''samplenote'',			        -- object_type
-	''Sample Note'', 			-- pretty_name
-	''Sample Notes'', 			-- pretty_plural
-	''acs_object'',			        -- supertype
-	''samplenote'', 			-- table_name
-	''note_id'',        			-- id_column
-	null,				        -- package_name
-	''f'',				        -- abstract_p
-	null,				        -- type_extension_table
-	''samplenote__name'' 			-- name_method
-	);
-    return 0;
-end;' language 'plpgsql';
-select inline_0 ();
-drop function inline_0 ();
-<span class="emphasis"><em>
-/* We create the table.  Each constraint is named to make it easier to
+/* Create the table.  Each constraint is named to make it easier to
 identify during debugging.  The note_id is identical to the object
-id.*/
+id. */
 </em></span>
 create table samplenote (
     note_id    integer        constraint samplenote_fk
@@ -83,27 +72,73 @@ create table samplenote (
  			        not null,
     body       varchar(1024)
 );
+
+<span class="emphasis"><em>
+/* Create a temporary function 'inline_0' which we use to create an
+ACS Object Type.  Each record in our package is an 'samplenote', and each
+samplenote is an ACS Object.  That means that each record in the samplenote
+table has a corresponding record in acs_objects.  By making our
+records ACS objects, we gain access to the permissions model and other
+meta-functions.  In general, you should make a table an ACS Object
+Type if you expect to apply permissions directly at that level. */
+</em></span>
+create function inline_0 ()
+returns integer as '
+begin
+    PERFORM acs_object_type__create_type (
+	''samplenote'',			        -- object_type
+	''Sample Note'', 			-- pretty_name
+	''Sample Notes'', 			-- pretty_plural
+	''acs_object'',			        -- supertype
+	''samplenote'', 			        -- table_name
+	''note_id'',        			-- id_column
+	null,				        -- package_name
+	''f'',				        -- abstract_p
+	null,				        -- type_extension_table
+	''samplenote__name'' 			-- name_method
+	);
+    return 0;
+end;' language 'plpgsql';
+select inline_0 ();
+drop function inline_0 ();
+</pre></div><p>Create the file to create the functions used to manipulate records.</p><pre class="screen">[service0@yourserver postgresql]$ <b><tt>emacs samplenote-functions-create.sql</tt></b></pre><p>Paste this into the file and save and close.</p><div class="figure"><p class="title"><b>Figure 8.4. Database Creation Script - functions</b></p><pre class="programlisting">--
+-- packages/samplenote/sql/postgresql/samplenote-functions-create.sql
+--
+-- @author rhs@mit.edu
+-- @creation-date 2000-10-22
+-- @cvs-id $Id$
+--
+--
 <span class="emphasis"><em>
 /* Since each record is also an Object, we make a creation function
 that will create an object and then use the object id to create a
-record in our table.  The function also takes several optional input
-variables.  Creation date will default to now; creation user should be
-the user id that will own the object; creation ip is optional; context
-id should usually be the package id, which will be explained later.*/
+record in our table.  The function also takes several input variables.
+Title is required
+Body is required
+Creation date is optional and defaults to now
+Creation user, required, is the user id owns the object
+Creation ip is optional
+Context id, required, is the id of the package instance.  This allows 
+segregation of records by package, required to make the package 
+&quot;package-aware.&quot; 
+define_function_args prepares the function to be used by a tcl wrapper function. */
 </em></span>
-create function samplenote__new (varchar,varchar,timestamp,integer,varchar,integer)
+select define_function_args(samplenote__new,'note_id,title,creation_date,creation_user,creation_ip,context_id'); 
+
+create or replace function samplenote__new (integer,varchar,varchar,timestamptz,integer,varchar,integer)
 returns integer as '
 declare
-  p_title					alias for $1;
-  p_body					alias for $2;
-  p_creation_date				alias for $3;
-  p_creation_user				alias for $4;
-  p_creation_ip					alias for $5;
-  p_context_id					alias for $6;
+  p_note_id                                     alias for $1;
+  p_title					alias for $2;
+  p_body					alias for $3;
+  p_creation_date				alias for $4;
+  p_creation_user				alias for $5;
+  p_creation_ip					alias for $6;
+  p_context_id					alias for $7;
   v_samplenote_id				int;
 begin
 	v_samplenote_id := acs_object__new (
-		null,
+		p_note_id,
 		''samplenote'',
 		p_creation_date,
 		p_creation_user,
@@ -116,7 +151,7 @@ begin
 	  (v_samplenote_id, p_title, p_body);
 	PERFORM acs_permission__grant_permission(
           v_samplenote_id,
-          p_owner_id,
+          p_creation_user,
           ''admin''
     );
 	return v_samplenote_id;
@@ -124,7 +159,9 @@ end;' language 'plpgsql';
 <span class="emphasis"><em>
 /* The __delete function deletes a record and all related overhead. */
 </em></span>  
-create function samplenote__delete (integer)
+
+select define_function_args('samplenote___delete','note_id');
+create or replace function samplenote__delete (integer)
 returns integer as '
 declare
   p_samplenote_id				alias for $1;
@@ -144,7 +181,9 @@ name of the object.  This is a convention ensuring that all objects
 can be identified.  Now we have to build that function.  In this case,
 we'll return a field called title as the name. */
 </em></span>
-create function samplenote__name (integer)
+select define_function_args('samplenote___name','note_id');
+
+create or replace function samplenote__name (integer)
 returns varchar as '
 declare
     p_samplenote_id      alias for $1;
@@ -152,22 +191,25 @@ declare
 begin
 	select title into v_samplenote_name
 		from samplenote
-		where samplenote_id = p_samplenote_id;
+		where note_id = p_samplenote_id;
     return v_samplenote_name;
 end;
 ' language 'plpgsql';
 </pre></div><p>Create a database file to drop everything if the package
-        is uninstalled.</p><pre class="screen">[service0@yourserver postgresql]$ <b><tt>emacs samplenote-drop.sql</tt></b></pre><div class="figure"><p class="title"><b>Figure 8.3. Database deletion script</b></p><pre class="programlisting">-- packages/samplenote/sql/samplenote-drop.sql
+        is uninstalled.</p><pre class="screen">[service0@yourserver postgresql]$ <b><tt>emacs samplenote-drop.sql</tt></b></pre><div class="figure"><p class="title"><b>Figure 8.5. Database deletion script</b></p><pre class="programlisting">-- packages/samplenote/sql/samplenote-drop.sql
 -- drop script
+--
+-- @author rhs@mit.edu
+-- @creation-date 2000-10-22
+-- @cvs-id $Id$
 --
 <span class="emphasis"><em>
 /* This script removes from the database everything associated with
 our table. */
 </em></span>
---drop functions
-drop function samplenote__new (varchar,varchar,timestamp,integer,varchar,integer);
-drop function samplenote__delete (integer);
-drop function samplenote__name (integer);
+--drop package, which drops all functions created with define_function_args
+
+select drop_package('samplenote');
 
 --drop permissions
 delete from acs_permissions where object_id in (select note_id from samplenote);
@@ -210,8 +252,12 @@ RCS file: /cvsroot/service0/packages/samplenote/sql/postgresql/samplenote-create
 done
 <span class="emphasis"><em>(many lines omitted)</em></span>
 done
-[service0@yourserver samplenote]$</pre><p>Now run the create script manually to add your tables and functions.</p><pre class="screen">[service0@yourserver samplenote]$ <b><tt>cd sql/postgresql/</tt></b>
+[service0@yourserver samplenote]$</pre><p>Run the create script manually to add your tables and functions.</p><pre class="screen">[service0@yourserver samplenote]$ <b><tt>cd sql/postgresql/</tt></b>
 [service0@yourserver postgresql]$ <b><tt>psql -f samplenote-create.sql</tt></b>
+psql:samplenote-table-create.sql:22: NOTICE:  CREATE TABLE / PRIMARY KEY will create implicit index 'samplenote_pk' for table 'samplenote'
+psql:samplenote-table-create.sql:22: NOTICE:  CREATE TABLE will create implicit
+trigger(s) for FOREIGN KEY check(s)
+CREATE
 CREATE
  inline_0
 ----------
@@ -219,16 +265,35 @@ CREATE
 (1 row)
 
 DROP
-psql:samplenote-create.sql:51: NOTICE:  CREATE TABLE / PRIMARY KEY will create implicit index 'samplenote_pk' for table 'samplenote'
-psql:samplenote-create.sql:51: NOTICE:  CREATE TABLE will create implicit trigger(s) for FOREIGN KEY check(s)
+ define_function_args
+----------------------
+                    1
+(1 row)
+
 CREATE
+ define_function_args
+----------------------
+                    1
+(1 row)
+
 CREATE
+ define_function_args
+----------------------
+                    1
+(1 row)
+
 CREATE
-CREATE
-[service0@yourserver postgresql]$</pre><p>If there are errors, use them to debug the sql file and try again.  Once you get the same output as shown above, test the drop script:</p><pre class="screen">[service0@yourserver postgresql]$ <b><tt>psql -f samplenote-drop.sql</tt></b>
-DROP
-DROP
-DROP
+[service0@yourserver postgresql]$</pre><p>If there are errors, use them to debug the sql file and try again.  If there are errors in the database table creation, you may need to run the drop script to drop the table so that you can recreate it.  The drop script will probably have errors since some of the things it's trying to drop may be missing.  They can be ignored.</p><p>If there are errors creating the functions, you can re-run the function creation file directly after fixing it, because all of the functions are created with <tt>create or replace</tt> commands.  This will also make it easier to fix mistakes within the functions that aren't apparent until the functions are used.  And it will make upgrades easier.</p><p>Once you get the same output as shown above, test the drop script:</p><pre class="screen">[service0@yourserver postgresql]$ <b><tt>psql -f samplenote-drop.sql</tt></b>
+psql:samplenote-drop.sql:13: NOTICE:  DROP PACKAGE: samplenote
+psql:samplenote-drop.sql:13: NOTICE:  DROPPING FUNCTION: samplenote__delete
+psql:samplenote-drop.sql:13: NOTICE:  DROPPING FUNCTION: samplenote__name
+psql:samplenote-drop.sql:13: NOTICE:  DROPPING FUNCTION: samplenote__new
+psql:samplenote-drop.sql:13: NOTICE:  PACKAGE: samplenote: DROPPED
+ drop_package
+--------------
+
+(1 row)
+
 DELETE 0
 CREATE
  inline_0
@@ -237,8 +302,8 @@ CREATE
 (1 row)
 
 DROP
-psql:samplenote-drop.sql:33: NOTICE:  DROP TABLE implicitly drops referential integrity trigger from table &quot;acs_objects&quot;
-psql:samplenote-drop.sql:33: NOTICE:  DROP TABLE implicitly drops referential integrity trigger from table &quot;acs_objects&quot;
+psql:samplenote-drop.sql:35: NOTICE:  DROP TABLE implicitly drops referential integrity trigger from table &quot;acs_objects&quot;
+psql:samplenote-drop.sql:35: NOTICE:  DROP TABLE implicitly drops referential integrity trigger from table &quot;acs_objects&quot;
 DROP
  acs_object_type__drop_type
 ----------------------------

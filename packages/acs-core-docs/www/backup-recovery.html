@@ -45,9 +45,9 @@
       OpenACS.  The command excludes the auto-generated
       <tt>supervise</tt> directory, which is
       unneccesary and has complicated permissions.  Make sure that you are using the cron job to back up the database to a file in <tt>/web/<span class="replaceable">service0</span>/database-backup</tt> so that the tar command will include the database.</p><pre class="screen">[root@yourserver root]# <b><tt>su - <span class="replaceable">service0</span></tt></b>
-[service0@yourserver service0]$ <b><tt>tar -cpsj --exclude /web/<span class="replaceable">service0</span>/etc/daemontools/supervise --file /tmp/<span class="replaceable">service0</span>-backup.tar.bz2 /web/<span class="replaceable">service0</span>/ --exclude /web/<span class="replaceable">service0</span>/etc/daemontools/supervise/</tt></b>
+[service0@yourserver service0]$ <b><tt>tar -cpsj --exclude /web/<span class="replaceable">service0</span>/etc/daemontools/supervise --file /tmp/<span class="replaceable">service0</span>-backup.tar.bz2 /web/<span class="replaceable">service0</span>/ </tt></b>
 tar: Removing leading `/' from member names
-[service0@yourserver service0]$</pre></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="id2850480"></a>Testing</h3></div></div><p><span class="emphasis"><em>On a test service</em></span>, make sure that your backup-recovery process work.  After backing up the database and file system, delete the service as detailed below and then recover it.</p><pre class="screen">[root@yourserver root]# <b><tt>svc -d /service/service0</tt></b>
+[service0@yourserver service0]$</pre></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="id2850467"></a>Testing</h3></div></div><p><span class="emphasis"><em>On a test service</em></span>, make sure that your backup-recovery process work.  After backing up the database and file system, delete the service as detailed below and then recover it.</p><pre class="screen">[root@yourserver root]# <b><tt>svc -d /service/service0</tt></b>
 [root@yourserver root]# <b><tt>mv /web/service0/ /web/service0.lost</tt></b>
 [root@yourserver root]#<b><tt> rm /service/service0</tt></b>
 rm: remove symbolic link `/service/service0'? y

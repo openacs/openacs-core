@@ -1,29 +1,11 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html><head><meta content="text/html; charset=ISO-8859-1" http-equiv="Content-Type"><title>Documenting Tcl Files: Page Contracts and Libraries</title><meta name="generator" content="DocBook XSL Stylesheets V1.50.0"><link rel="home" href="index.html" title="OpenACS Documentation"><link rel="up" href="kernel-doc.html" title="Chapter 10. Kernel Documentation"><link rel="previous" href="rp-design.html" title="OpenACS 4 Request Processor Design"><link rel="next" href="bootstrap-acs.html" title="Bootstrapping OpenACS"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="images/alex.jpg" border="0"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="rp-design.html">Prev</a>&nbsp;</td><th width="60%" align="center">Chapter 10. Kernel Documentation</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="bootstrap-acs.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><h2 class="title" style="clear: both"><a name="tcl-doc"></a>Documenting Tcl Files: Page Contracts and Libraries</h2></div></div><div class="authorblurb"><p>
+<html><head><meta content="text/html; charset=ISO-8859-1" http-equiv="Content-Type"><title>Documenting Tcl Files: Page Contracts and Libraries</title><meta name="generator" content="DocBook XSL Stylesheets V1.50.0"><link rel="home" href="index.html" title="OpenACS Documentation"><link rel="up" href="kernel-doc.html" title="Chapter 11. Kernel Documentation"><link rel="previous" href="rp-design.html" title="OpenACS 4 Request Processor Design"><link rel="next" href="bootstrap-acs.html" title="Bootstrapping OpenACS"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="images/alex.jpg" border="0"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="rp-design.html">Prev</a>&nbsp;</td><th width="60%" align="center">Chapter 11. Kernel Documentation</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="bootstrap-acs.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><h2 class="title" style="clear: both"><a name="tcl-doc"></a>Documenting Tcl Files: Page Contracts and Libraries</h2></div></div><div class="authorblurb"><p>
 by <a href="mailto:jsalz@mit.edu" target="_top">Jon Salz</a> on 3 July 2000 
 <br>
           OpenACS docs are written by the named authors, but may be edited
           by OpenACS documentation staff.
-        </p></div><div class="itemizedlist"><ul type="disc"><li><p>Tcl procedures: /packages/acs-kernel/tcl-documentation-procs.tcl</p></li></ul></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="tcl-doc-bigpicture"></a>The Big Picture</h3></div></div><p>In versions of the OpenACS prior to 3.4, <a href="/doc/standards" target="_top">the standard
-place</a> to document Tcl files (both Tcl pages and Tcl library files) was in
-a comment at the top of the file:</p><pre class="programlisting">
-#
-# <span class="emphasis"><em>path from server home</em></span>/<span class="emphasis"><em>filename</em></span>
-#
-# <span class="emphasis"><em>Brief description of the file's purpose</em></span>
-#
-# <span class="emphasis"><em>author's email address</em></span>, <span class="emphasis"><em>file creation date</em></span>
-#
-# <a href="http://www.loria.fr/~molli/cvs/doc/cvs_12.html#SEC93" target="_top">$Id$</a>
-#
-</pre><p>
-In addition, the inputs expected by a Tcl page (i.e., form variables) would
-be enumerated in a call to <tt>ad_page_variables</tt>, in effect,
-documenting the page's argument list. 
-</p><p>The problem with these practices is that the documentation is only
-accessible by reading the source file itself. For this reason, ACS 3.4
-introduces a new API for documenting Tcl files and, on top of that, a
-web-based user interface for browsing the documentation:</p><div class="itemizedlist"><ul type="disc"><li><p><span class="strong"><em><tt><a href="tcl-doc.html#tcl-doc-ad-page-contract" title="ad_page_contract">ad_page_contract</a></tt></em></span>: Every Tcl page
+        </p></div><div class="itemizedlist"><ul type="disc"><li><p>Tcl procedures: /packages/acs-kernel/tcl-documentation-procs.tcl</p></li></ul></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="tcl-doc-bigpicture"></a>The Big Picture</h3></div></div><p>We use functions to document Tcl files and a web-based user
+interface for browsing the documentation:</p><div class="itemizedlist"><ul type="disc"><li><p><span class="strong"><em><tt><a href="tcl-doc.html#tcl-doc-ad-page-contract" title="ad_page_contract">ad_page_contract</a></tt></em></span>: Every Tcl page
 has a <span class="strong"><em>contract</em></span> that explicitly defines what inputs the page
 expects (with more precision than <tt>ad_page_variables</tt>) and
 incorporates metadata about the page (what used to live in the top-of-page
@@ -45,7 +27,7 @@ Currently <tt>ad_page_contract</tt> serves mostly as a replacement for
 with the documents API so that each script's contract will document
 precisely the set of properties available to graphical designers in
 templates. (Document API integration is subject to change, so we don't
-decsribe it here yet; for now, you can just consider
+desrribe it here yet; for now, you can just consider
 <tt>ad_page_contract</tt> a newer, better, documented
 <tt>ad_page_variables</tt>.) 
 </p><p>Let's look at an example usage of <tt>ad_page_contract</tt>:</p><pre class="programlisting">

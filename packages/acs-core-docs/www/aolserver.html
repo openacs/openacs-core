@@ -4,17 +4,17 @@
           OpenACS docs are written by the named authors, but may be edited
           by OpenACS documentation staff.
         </p></div><p>This page assumes you have downloaded aolserver to  to 
-<tt>/tmp/aolserver3.3ad13-oacs1-beta-src.tar.gz</tt>.  If not,
+<tt>/tmp/aolserver3.3oacs1.tar.gz</tt>.  If not,
 <a href="individual-programs.html#source-aolserver">get it</a>.  It also assumes you are following the 4.6.2-P or 4.6.2-O Reference Platform installation, using Red Hat 8.0.  Places where other systems are different are noted.</p><div class="orderedlist"><ol type="1"><li><p>
       As <tt>root</tt>, untar
-      <tt>aolserver3.3ad13-oacs1-beta-src.tar.gz</tt>
+      <tt>aolserver3.3oacs1.tar.gz</tt>
       into <tt>/usr/local/src</tt>.
 
     </p><pre class="screen">[root@yourserver root]# <b><tt>cd /usr/local/src</tt></b>
-[root@yourserver src]# <b><tt>tar xzf /tmp/aolserver3.3ad13-oacs1-beta-src.tar.gz</tt></b>
+[root@yourserver src]# <b><tt>tar xzf /tmp/aolserver3.3oacs1.tar.gz</tt></b>
 [root@yourserver src]#
 <pre class="action">cd /usr/local/src
-tar xzf /tmp/aolserver3.3ad13-oacs1-beta-src.tar.gz</pre></pre></li><li><p><a name="install-aolserver-compile"></a>Compile and install AOLserver.  First, prepare the installation directory and the source code.  The message about BUILD-MODULES can be ignored.</p><pre class="screen">root@yourserver root]# <b><tt>mkdir -p /usr/local/aolserver</tt></b>
+tar xzf /tmp/aolserver3.3oacs1.tar.gz</pre></pre></li><li><p><a name="install-aolserver-compile"></a>Compile and install AOLserver.  First, prepare the installation directory and the source code.  The message about BUILD-MODULES can be ignored.</p><pre class="screen">root@yourserver root]# <b><tt>mkdir -p /usr/local/aolserver</tt></b>
 [root@yourserver root]# <b><tt>cd /usr/local/src/aolserver</tt></b>
 [root@yourserver aolserver]# <b><tt>./conf-clean</tt></b>
 cat: BUILD-MODULES: No such file or directory
@@ -22,17 +22,16 @@ Done.
 [root@yourserver aolserver]#<pre class="action">mkdir -p /usr/local/aolserver
 cd /usr/local/src/aolserver
 ./conf-clean</pre></pre><p>
-          Put the name of the driver(s) that you want into
-          <tt>conf-db</tt>. This can be
-          <tt>postgresql</tt>,
-          <tt>oracle</tt>, or the word
+          If you are using Oracle, edit
+          <tt>conf-db</tt> and change
+          <tt>postgresql</tt> to
+          <tt>oracle</tt>, or to the word
           <tt>both</tt> if you want both drivers
           installed.
-        </p><pre class="screen">[root@yourserver aolserver]# <b><tt>echo &quot;postgresql&quot; &gt; conf-db</tt></b>
-[root@yourserver aolserver]#</pre><p><tt>conf-inst</tt> should contain the
-          location where AOLserver is to be installed. This defaults to
-          <tt>/usr/local/aolserver</tt>, so we
-          don't need to change it.</p><p><tt>conf-make</tt> should contain the
+        </p><p><tt>conf-inst</tt> should contain the
+          location where AOLserver is to be installed.  Overwrite the
+          tarball's default value with our default value, <tt>/usr/local/aolserver</tt>:</p><pre class="screen">[root@yourserver aolserver]# <b><tt>echo &quot;/usr/local/aolserver&quot; &gt; conf-inst</tt></b>
+[root@yourserver aolserver]#</pre><p><tt>conf-make</tt> should contain the
           name of the GNU Make command on your system. It defaults to
           <tt>gmake</tt>.  Verify that gmake is installed:</p><pre class="screen">[root@yourserver aolserver]# <b><tt>gmake -v</tt></b>
 GNU Make version 3.79.1, by Richard Stallman and Roland McGrath.
@@ -45,14 +44,8 @@ PARTICULAR PURPOSE.
 
 Report bugs to &lt;bug-make@gnu.org&gt;.
 
-[root@yourserver aolserver]# </pre><p>If you don't get similar results, including an equal or higher version number to 3.79.1, install gmake or check your aliases.</p><p>
-          If you're going to be installing the Postgresql driver, you'll
-          have to adjust the makefile first. This will hopefully be cleaned
-          up in future versions of this distribution.
-        </p><pre class="screen">[root@yourserver aolserver]# <b><tt>emacs pgdriver/makefile</tt></b></pre><p>
-          Edit the lines containing PGLIB and PGINC so they look like this:
-        </p><pre class="programlisting">PGLIB=/usr/local/pgsql/lib
-PGINC=/usr/local/pgsql/include</pre><p>Run the <tt>conf</tt> program, which compiles AOLserver and the default modules and installs them.</p><pre class="screen">[root@yourserver aolserver]# <b><tt>./conf</tt></b>
+[root@yourserver aolserver]# </pre><p>If you don't get similar results, including an equal or higher version number to 3.79.1, install gmake or check your aliases.</p><p>Set an environment variable that the nspostgres driver
+      Makefile needs to compile correctly and run <tt>conf</tt>, which compiles AOLserver and the default modules and installs them.</p><pre class="screen">[root@yourserver aolserver]# <b><tt>export POSTGRES=/usr/local/pgsql; ./conf</tt></b>
 Building in /usr/local/aolserver
 with the following modules:
 aolserver
@@ -69,7 +62,7 @@ Running gmake in nscache/; output in log/nscache.log
 Running gmake in nsrewrite/; output in log/nsrewrite.log
 Running gmake in nssha1/; output in log/nssha1.log
 Running gmake in nsxml/; output in log/nsxml.log
-Running gmake in pgdriver/; output in log/pgdriver.log
+Running gmake in nspostgres/; output in log/nspostgres.log
 Creating  ...
 ==================================================================
 Done Building Sat Mar  8 10:31:35 PST 2003

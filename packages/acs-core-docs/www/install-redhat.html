@@ -11,7 +11,7 @@
     software (see <a href="individual-programs.html" title="Individual Programs">the section called &#8220;Individual Programs&#8221;</a> for details):</p><div class="itemizedlist"><ul type="disc"><li><p>libxml2</p></li><li><p>tcl</p></li><li><p>gmake and the compile and build environment.</p></li></ul></div><p>and these optional items</p><div class="itemizedlist"><ul type="disc"><li><p>emacs</p></li><li><p>cvs</p></li><li><p>ImageMagick</p></li><li><p>DocBook and supporting software</p></li></ul></div><p>(In my experience, it's almost always a net time savings of several hours to install a new machine from scratch compared to installing each of these packages installed independently.)</p><div class="orderedlist"><ol type="1"><li><p><a name="install-first-step"></a>Unplug the network cable from your
           computer.  We don't want to connect to the network
           until we're sure the computer is secure.  
-<a class="indexterm" name="id2850265"></a>
+<a class="indexterm" name="id2850257"></a>
   (Wherever you see
           the word secure, you should always read it as, &quot;secure
           enough for our purposes, given the amount of work we're
@@ -39,7 +39,7 @@
 <tt><span class="guilabel">Re<u>v</u>iew (and modify if needed) the partitions created</span></tt> and click <tt><span class="guibutton"><u>N</u>ext</span></tt></p></li><li><p>On the pop-up window asking &quot;Are you sure
 	  you want to do this?&quot; click
 	  <tt><span class="guibutton"><u>Y</u>es</span></tt>
-	  IF YOU ARE WIPING YOUR HARD DRIVE.</p></li><li><p>Click <tt><span class="guibutton"><u>N</u>ext</span></tt> on the boot loader screen</p></li></ol></div></li><li><p>Configure Networking.  <a class="indexterm" name="id2851741"></a>
+	  IF YOU ARE WIPING YOUR HARD DRIVE.</p></li><li><p>Click <tt><span class="guibutton"><u>N</u>ext</span></tt> on the boot loader screen</p></li></ol></div></li><li><p>Configure Networking.  <a class="indexterm" name="id2851746"></a>
 Again, if you know what you're doing, do this step
           yourself, being sure to note the firewall holes. Otherwise,
           follow the instructions in this step to set up a computer directly connected to the internet with a dedicated IP address.</p><div class="orderedlist"><ol type="a"><li><p>DHCP is a system by which a computer that
@@ -60,7 +60,7 @@ security level. Check
 <tt><span class="guilabel">Mail (SMTP)</span></tt>.  In the <tt><span class="guilabel">Other <u>p</u>orts</span></tt>
 box, enter <b><tt>443, 8000, 8443</tt></b>.  Click
 <tt><span class="guibutton"><u>N</u>ext</span></tt>.
-Port 443 is for https (http over ssl), and 8000 and 8443 are http and https access to the development server we'll be setting up.</p></li></ol></div></li><li><p><a class="indexterm" name="id2851949"></a>Select any additional languages you want the
+Port 443 is for https (http over ssl), and 8000 and 8443 are http and https access to the development server we'll be setting up.</p></li></ol></div></li><li><p><a class="indexterm" name="id2851954"></a>Select any additional languages you want the
 	  computer to support and then click
 	  <tt><span class="guibutton"><u>N</u>ext</span></tt></p></li><li><p>Choose your time zone and click <tt><span class="guibutton"><u>N</u>ext</span></tt>.</p></li><li><p>Type in a root
 password, twice.  To
@@ -81,9 +81,9 @@ stuff, with relative impunity - at worst, you'll introduce a security
 risk that's still screened by the firewall, or a resource hog.  Just
 don't install a database or web server, because that would conflict
 with the database and web server we'll install later.
-</p><div class="literallayout"><p>check <tt><span class="guilabel">Editors</span></tt> (this installs emacs<a class="indexterm" name="id2852103"></a>),<br>
+</p><div class="literallayout"><p>check <tt><span class="guilabel">Editors</span></tt> (this installs emacs<a class="indexterm" name="id2852108"></a>),<br>
 click <tt><span class="guilabel">Details</span></tt> next to <tt><span class="guilabel">Text-based Internet</span></tt>, check <tt><span class="guilabel">lynx</span></tt>, and click <tt><span class="guibutton"><u>O</u>K</span></tt>;<br>
-check <tt><span class="guilabel">Authoring and Publishing</span></tt> (<a class="indexterm" name="id2852172"></a>this installs docbook),<br>
+check <tt><span class="guilabel">Authoring and Publishing</span></tt> (<a class="indexterm" name="id2852177"></a>this installs docbook),<br>
 uncheck <tt><span class="guilabel">Server Configuration Tools</span></tt>,<br>
 uncheck <tt><span class="guilabel">Web Server</span></tt>,<br>
 uncheck <tt><span class="guilabel">Windows File Server</span></tt>,<br>
@@ -96,7 +96,7 @@ through all the packages in one big list, so select
 <tt><span class="guilabel"><u>F</u>lat
 View</span></tt> and wait. In a minute, a
 list of packages will appear.</p><div class="literallayout"><p>uncheck <tt><span class="guilabel">apmd</span></tt> (monitors power, not very useful for servers), <br>
-check <tt><span class="guilabel">ImageMagick</span></tt> (required for the <a class="indexterm" name="id2852340"></a>photo-album packages, <br>
+check <tt><span class="guilabel">ImageMagick</span></tt> (required for the <a class="indexterm" name="id2852345"></a>photo-album packages, <br>
 uncheck<tt><span class="guilabel">isdn4k-utils</span></tt> (unless you are using isdn, this installs a useless daemon), <br>
 check <tt><span class="guilabel">mutt</span></tt> (a mail program that reads Maildir),<br>
 uncheck <tt><span class="guilabel">nfs-utils</span></tt> (nfs is a major security risk), <br>
@@ -124,7 +124,7 @@ computer reboot.
 </p></li><li><p>After it finishes rebooting and shows the login
 	  prompt, log in:</p><pre class="screen">yourserver login: <b><tt>root</tt></b>
 Password:
-[root@yourserver root]#</pre></li><li><p>Lock down SSH</p><div class="orderedlist"><ol type="a"><li><p><a class="indexterm" name="id2852661"></a>
+[root@yourserver root]#</pre></li><li><p>Lock down SSH</p><div class="orderedlist"><ol type="a"><li><p><a class="indexterm" name="id2852665"></a>
 SSH is the protocol we use to connect
             securely to the computer (replacing telnet, which is
             insecure).  sshd is the daemon that listens for incoming

@@ -3,42 +3,23 @@
                "http://www.oasis-open.org/docbook/xml/4.0/docbookx.dtd">
 
 <book>
-  <title>YourApplication</title>
+  <title>Tutorial Application</title>
   <bookinfo>
     <revhistory>
       <revision>
         <revnumber>1</revnumber>
-        <date>26 Dec 2002</date>
+        <date>27 Dec 2002</date>
         <authorinitials>Joel Aufrecht</authorinitials>
-        <revremark>Consolidated and shortened existing OpenACS
-        documentation; added some ideas from Construx</revremark>
-      </revision>
-      <revision>
-        <revnumber>0.3</revnumber>
-        <date>5 Sep 2000</date>
-        <authorinitials>Kai Wu</authorinitials>
-        <revremark>Edited further, incorporated feedback from Michael Yoon</revremark>
-      </revision>
-      <revision>
-        <revnumber>0.2</revnumber>
-        <date>22 Aug 2000</date>
-        <authorinitials>Kai Wu</authorinitials>
-        <revremark>Edited</revremark>
-      </revision>
-      <revision>
-        <revnumber>0.1</revnumber>
-        <date>21 Aug 2000</date>
-        <authorinitials>Josh Finkler, Audrey McLoghlin</authorinitials>
-        <revremark>Created</revremark>
+        <revremark>First Draft</revremark>
       </revision>
     </revhistory>
     <pubdate role="cvstag">($Id$)</pubdate>
     <authorgroup>
       <author>
-	<firstname>Your</firstname>
-	<surname>Name</surname>
+	<firstname>Joel</firstname>
+	<surname>Aufrecht</surname>
 	<affiliation>
-          <address><email>youremail</email></address>
+          <address><email>joel@aufrecht.org</email></address>
 	</affiliation>
       </author>
     </authorgroup>
@@ -49,8 +30,10 @@
     <sect1 id="requirements-introduction">
       <title>Introduction</title>
       <para>
-        This package does ....  Summarize the rest of this
-        document in one paragraph.
+        This package lets users post blocks of text to the web, which
+        others can then read.  It integrates with full text search.
+        It is intended to show new developers how to accomplish basic
+        tasks with OpenACS.
       </para>
     </sect1>
     <sect1 id="requirements-overview">
@@ -58,39 +41,71 @@
       <para></para>
 
       <para>
-        The components of this package are ...  List the
-        major components and their functions.  
+        This package has a simple data component: text notes, stored
+        in a table in the database.  The other component is the user
+        interface.  It also needs support Full Text Search.  There is
+        no administrative interface.
       </para>
       <para>
-        This package depends on ...  List other packages,
-        other software, and any external processes that the package
-        needs.
+        This package depends on the core OpenACS functionality and on
+        OpenFTS.  It is PostGreSQL-only - it has not been ported to
+        Oracle.
       </para>
       <para>
-        Define any abbreviations or other special terms.
+        OpenFTS is the third-party PostGreSQL full text search engine.
       </para>
     </sect1>
     
     <sect1 id="requirements-cases">
       <title>Use-cases and User-scenarios</title>
-      <para>List some people who would use this package.
-      Describe how they would use it, how it would be better than what
-      they are doing now, and how it compares to alternatives.
-      Include specific, real sample data if possible.</para>
       <itemizedlist>
         <listitem>
           <formalpara>
-            <title>User 1</title>
-            <para>This user will accomplish X with the package.
-            Currently, the user does X with product Y, which takes
-            several hours and costs too much.</para>
+            <title>Author</title>
+            <para>Authors write notes, which comprise titles and
+            bodies, both of plain text.  Currently authors do this by
+            ftping files to a web server, which generates many support
+            calls.</para>
           </formalpara>
           <orderedlist>
             <listitem>
-              <para>User 1 adds and edits stuff ...</para>
+              <para>An Author creates a new note, such as the following:</para>
+              <mediaobject>
+                <imageobject>
+                  <imagedata fileref="sample.png" format="PNG"/>
+                </imageobject>
+                <textobject>
+                  <formalpara>
+                    <title>Hello World</title>
+                    <para>This is my first OpenACS package.</para>
+                  </formalpara>
+                </textobject>
+              </mediaobject>
             </listitem>
             <listitem>
-              <para>User1 Views stuff ... </para>
+              <para>An Author changes a note previously written.
+              Authors can't change other authors' notes.</para>
+            </listitem>
+            <listitem>
+              <para>An Author deletes a note that is no longer
+              needed.  Unless explicitly deleted, notes should never disappear.</para>
+            </listitem>
+          </orderedlist>
+        </listitem>
+        <listitem>
+          <formalpara>
+            <title>Reader</title>
+            <para>Readers can see all of the existing notes.
+            Currently readers browse to a web page and read the
+            notes.  They use the browser search function to find notes
+            of interest.</para>
+          </formalpara>
+          <orderedlist>
+            <listitem>
+              <para>An Reader browses the notes.</para>
+            </listitem>
+            <listitem>
+              <para>An Reader searches for notes.</para>
             </listitem>
           </orderedlist>
         </listitem>
@@ -98,45 +113,22 @@
     </sect1>
 
     <sect1>
-      <title>Sample Data</title>
-      <para>An example of data stored in the package is ...</para>
-    </sect1>
-
-    <sect1>
       <title>Prioritized Requirements</title>
-      <para>A list of requirements, split up into functional
-      areas.  In the ideal requirements document, all requirements are
-      sufficiently specific, detailed, precise, and comprehensive that
-      the package can be designed and built without any other
-      directions, and two different packages built to meet the same
-      requirements will be similar internally and have identical
-      APIs.  Requirements are prioritized relative to a release
-      cycle.  All priority A requirements must be satisfied before the
-      package can be released.  Priority B requirements are
-      desired but should be cut as soon as possible if the schedule is
-      threatened.  Priority X requirements should not be implemented
-      in this cycle; at the beginning of the next cycle, they should
-      be promoted to A or B or removed.
-</para>
+
       <sect2>
         <title>System Interfaces</title>
-        <para>Describe all of the interfaces between the
-        package and other OpenACS packages, the OpenACS API, the host
-        computer, and network clients.  Include sample conversations
-        for any external APIs.  Describe any API the package will
-        provide.   </para>
         <sect3>
-          <title>Interface1</title>
-          <para>General description.</para>
+          <title>Full Text Search</title>
+          <para>All text entered into the package should be searchable
+          via OpenFTS.  The OpenFTS interface is specified at ???.
+</para>
           <segmentedlist>
             <?dbhtml list-presentation="table"?>
             <segtitle>Number</segtitle>
             <segtitle>Priority</segtitle>
             <segtitle>Description</segtitle>
-            <seglistitem><seg>100</seg><seg>A</seg><seg>A critical requirement.</seg></seglistitem>
-            <seglistitem><seg>110</seg><seg>B</seg><seg>An optional requirement.</seg></seglistitem>
-            <seglistitem><seg>120</seg><seg>X</seg><seg>A requirement deferred for
-        this cycle.</seg></seglistitem>
+            <seglistitem><seg>100</seg><seg>A</seg><seg>The Title and
+            Body fields are indexed by Full Text Search.</seg></seglistitem>
           </segmentedlist>
         </sect3>
       </sect2>
@@ -145,39 +137,62 @@
         <title>User Interfaces</title>
         <sect3>
           <title>User 1 Interface</title>
-          <para>Use storyboards and drawings to describe
-          what a typical user will see and how User 1 will use the product.
-          This includes web interfaces, email.</para>
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="user-interface.png" format="PNG"/>
+            </imageobject>
+            <textobject>
+              <para>A picture of the user interface.</para>
+            </textobject>
+          </mediaobject>
+          <para>An Author browses to the home page of the package and
+          sees a list of existing notes.</para>
+          <segmentedlist>
+            <?dbhtml list-presentation="table"?>
+            <seglistitem><seg>200</seg><seg>A</seg><seg>An Author can
+            see all existing notes.</seg></seglistitem>
+            <seglistitem><seg>210</seg><seg>A</seg><seg>An Author can
+            add a new note.</seg></seglistitem>
+            <seglistitem><seg>220</seg><seg>A</seg><seg>If an author
+            wrote a note, the author can edit that note.</seg></seglistitem>
+            <seglistitem><seg>225</seg><seg>A</seg><seg>If an author
+            wrote a note, the author can delete that note.</seg></seglistitem>
+            <seglistitem><seg>230</seg><seg>A</seg><seg>Authors must
+            be OpenACS site members.</seg></seglistitem>
+            <seglistitem><seg>235</seg><seg>A</seg><seg>Authors
+            authenticate themselves via the OpenACS login
+            system.</seg></seglistitem>
+          </segmentedlist>
         </sect3>
         <sect3>
-          <title>Administrator Interface</title>
-        </sect3>
-      </sect2>
-
-
-      <sect2>
-        <title>Instance Customization</title>
-        <sect3>
-          <title>Customization</title>
-          <para>What will have to change in a typical
-          installation?  What are reasonable defaults? </para>
+          <title>Reader Interface</title>
+          <para>An Reader can see all existing notes.</para>
+          <segmentedlist>
+            <?dbhtml list-presentation="table"?>
+            <seglistitem><seg>300</seg><seg>A</seg><seg>A Reader can
+            see all existing notes.</seg></seglistitem>
+          </segmentedlist>
         </sect3>
       </sect2>
 
       <sect2>
         <title>Internationalization</title>
+          <segmentedlist>
+            <?dbhtml list-presentation="table"?>
+            <seglistitem><seg>400</seg><seg>B</seg><seg>Postings can
+            be in any language.</seg></seglistitem>
+          </segmentedlist>
       </sect2>
 
       <sect2>
         <title>Security</title>
-        <para>How sensitive is the data stored?  Can users
-        see or edit each other's data?  What cryptography is required?
-         What logs should be kept, who should monitor them, and how?
-</para>
-      </sect2>
-
-      <sect2>
-        <title>Data Storage</title>
+        <para>The only security need is that authors not be able to
+        change or delete other authors' notes.  This can be enforced
+        with built-in OpenACS security.</para>
+          <segmentedlist>
+            <?dbhtml list-presentation="table"?>
+            <seglistitem><seg>500</seg><seg>A</seg><seg>There is no logging.</seg></seglistitem>
+          </segmentedlist>
       </sect2>
 
     </sect1>
@@ -189,38 +204,21 @@
 
   <sect1 id="design-data-model">
     <title>Data Model</title>
-
-    <itemizedlist>
-      <listitem><para> The data model discussion should address the intended usage
-	  of each entity (table, trigger, view, procedure, etc.) when this
-	  information is not obvious from an inspection of the data model
-	  itself. </para></listitem>
-
-      <listitem><para> If a core service or other subsystem is being used (e.g., the
-	  new parties and groups, permissions, etc.) this should also be
-	  mentioned. </para></listitem>
-
-      <listitem><para> Any default permissions should be identified herein.  </para></listitem>
-
-      <listitem><para> Discuss any data model extensions which tie into other
-	  packages.  </para></listitem>
-
-      <listitem>
-          <formalpara>
-            <title>Transactions</title>
-            <para> Discuss modifications which the database may undergo from
-	  your package. Consider grouping legal transactions according to
-	  the invoking user class, i.e. transactions by an OpenACS-admin, by
-	  subsite-admin, by a user, by a developer, etc.  </para>
-          </formalpara>
-        </listitem>
-      </itemizedlist>
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="data-model.png" format="PNG"/>
+        </imageobject>
+        <textobject>
+          <para>A picture of the data model</para>
+        </textobject>
+      </mediaobject>
 
       <sect2>
-        <title>Table1</title>
-        <para>Description of table.</para>
-        <segmentedlist>
-          <?dbhtml list-presentation="table"?>
+        <title>Tutorialnote</title>
+        <para>This table holds the notes.  Each note is one
+        record.</para>
+          <segmentedlist>
+            <?dbhtml list-presentation="table"?>
           <segtitle>Field</segtitle>
           <segtitle>Description</segtitle>
           <segtitle>Relationships</segtitle>
@@ -228,79 +226,90 @@
           <segtitle>Sample Value</segtitle>
           <segtitle></segtitle>
           <seglistitem>
-            <seg>fieldname</seg>
-            <seg>Indicates ...</seg>
-            <seg>Primary Key... References ...</seg>
-            <seg>int</seg>
+            <seg>tutorialnote_id</seg>
             <seg></seg>
+            <seg>Primary Key. References acs_objects(object_id).</seg>
+          </seglistitem>
+          <seglistitem>
+            <seg>owner_id</seg>
+            <seg>Indicates the owner of
+            the note.</seg>
+            <seg>References users(user_id).</seg>
+          </seglistitem>
+          <seglistitem>
+            <seg>title</seg>
+            <seg>Plain text title of the note</seg>
+            <seg></seg>
+            <seg>varchar(255)</seg>
+            <seg>Hello, world</seg>
+          </seglistitem>
+          <seglistitem>
+            <seg>body</seg>
+            <seg>Body text of the note</seg>
+            <seg></seg>
+            <seg>varchar(2024)</seg>
+            <seg>This is my first package</seg>
           </seglistitem>
 
           </segmentedlist>
-
+        <para>Each note is an acs object.  <emphasis>This means that
+        each record in the note table has a corresponding set of
+        entries in the core acs tables, where security and other
+        things are handled.  This integrates our package with OpenACS
+        to use the existing security stuff.  It complicates our
+        database scripts, because there are extra steps to create and
+        delete records.  It also greatly complicates dropping the
+        package because we have to carefully clean out any matching
+        records - in the correct order to avoid breaking dependent
+        relationships - before dropping our new table.</emphasis></para>
+        <para>Use the standard stored procedures for add, delete, and
+        name.</para>
+        <para>Use ??? for full text search integration.</para>
       </sect2>
       
     </sect1>
     
     <sect1 id="design-ui">
       <title>User Interface</title>
-      <para>
-      In this section, discuss user interface issues and pages to be built;
-      you can organize by the expected classes of users.  These may include:
-    </para>
       
-      <itemizedlist>
-        <listitem><para> Developers</para></listitem>
-        <listitem><para> OpenACS administrators (previously known as site-wide administrators)</para></listitem>
-        <listitem><para> Subsite administrators</para></listitem>
-        <listitem><para> End users</para></listitem>
-      </itemizedlist>
-      
-      <para>
-      You may want to include page mockups, site-maps, or other visual aids.
-      Ideally this section is informed by some prototyping you've done, to
-      establish the package's usability with the client and other interested
-      parties.
-    </para>
-      
-    <para>
-      Note: In order that developer documentation be uniform across
-	different system documents, these users should herein be designated as
-	"the developer," "the OpenACS-admin," "the sub-admin," and "the user,"
-	respectively. 
-    </para>
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="page-map.png" format="PNG"/>
+        </imageobject>
+        <textobject>
+          <para>A picture of the page map.</para>
+        </textobject>
+      </mediaobject>
 
-    <para>
-      Finally, note that as our templating system becomes more entrenched
-      within the OpenACS, this section's details are likely to shift from UI
-      specifics to template interface specifics.
-    </para>
-  </sect1>
+      <sect2>
+        <title>index</title>
+        <para>Fetch all existing notes and display them.  For each
+        note, if the viewer has write permission on the note, show an
+        edit link.  At the bottom of the page, if the viewer has
+        permission to create new notes, show a "new" link.  </para>
+      </sect2>
 
-  <sect1 id="design-config">
-    <title>Configuration/Parameters</title>
-
-
-    <para>
-      Under OpenACS 4.5, parameters are set at two levels: at the global level by
-      the OpenACS-admin, and at the subsite level by a sub-admin.  In this
-      section, list and discuss both levels of parameters.
-    </para>
-  </sect1>
-
-  <sect1 id="design-future">
-    <title>Future Improvements/Areas of Likely Change</title>
-
-
-    <para>
-      If the system presently lacks useful/desirable features, note details
-      here.  You could also comment on non-functional improvements to the
-      package, such as usability.
-    </para>
-
-    <para>
-      Note that a careful treatment of the earlier "competitive analysis"
-      section can greatly facilitate the documenting of this section.
-    </para>
+      <sect2>
+        <title>add-edit</title>
+        <para>This page is used show a form for editing notes, to show
+        a form for creating new notes, and to process both forms after
+        submission.</para>
+        <orderedlist>
+          <listitem>
+            <para>If a note id is passed in, make sure that the
+            current user has permission to edit that note.  If not,
+            make sure that the current user has permission to create
+            new notes.</para>
+          </listitem>
+          <listitem>
+            <para>Use the template system to generate a form for
+            editing/creating a note.  If an existing note id was
+            passed in, populate the form fields wih that note's
+            values.
+</para>
+          </listitem>
+        </orderedlist>
+      </sect2>
   </sect1>
 
   </chapter>
