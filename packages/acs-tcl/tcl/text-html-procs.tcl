@@ -276,7 +276,10 @@ ad_proc -private util_close_html_tags {
 
     set tagptr -1
 
-    # first thing we do is chop off any trailing unclosed tag 
+    # First try to fix up < not part of a tag.
+
+    regsub -all {<([^/[:alpha:]])} $frag {\&lt;\1} frag
+    # no we do is chop off any trailing unclosed tag 
     # since when we substr blobs this sometimes happens
     
     # this should in theory cut any tags which have been cut open.
@@ -1260,7 +1263,7 @@ ad_proc -public ad_html_text_convert {
                     set text [ad_enhanced_text_to_html $text]
 		}
                 text/plain {
-		    set text [ad_enhanced_text_to_plain_text $text]
+		    set text [ad_enhanced_text_to_plain_text -- $text]
 		}
 	    }
         }
