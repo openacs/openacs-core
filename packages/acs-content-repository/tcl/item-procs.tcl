@@ -137,10 +137,10 @@ ad_proc -public item::get_revision_content { revision_id args } {
   # Get the table name
   set table_name [db_string grc_get_table_names ""]
 
+  upvar content content
+
   # Get (all) the content (note this is really dependent on file type)
   db_0or1row grc_get_all_content "" -column_array content
-
-  upvar content content
 
   if { ![array exists content] } { 
     ns_log Notice "No data found for item $item_id, revision $revision_id"
