@@ -18,7 +18,6 @@ ad_page_contract {
     {param_weight:optional 0}
     {source_weight:optional 0}
     {search_type:optional 0}
-    {exact_match_p 0}
     query_string
 } -properties {
     title:onevalue
@@ -34,7 +33,7 @@ ad_page_contract {
 ##########################################################
 ##  Begin Page
 
-set quick_view [string equal $search_type "Feeling Lucky"]
+set quick_view [string equal $search_type "Only best match"]
 
 #########################
 ## Optimizes quick search
@@ -47,6 +46,14 @@ if {$quick_view && [nsv_exists api_proc_doc $query_string]} {
 # No weighting use default:
 if { ($name_weight == 0) && ($doc_weight == 0) && ($param_weight == 0) && ($source_weight ==0) } {
     set name_weight 1
+}
+
+# Exact name search
+if { [string equal $name_weight "exact"] } {
+    set name_weight 5
+    set exact_match_p 1
+} else {
+    set exact_match_p 0
 }
 
 set counter 0
