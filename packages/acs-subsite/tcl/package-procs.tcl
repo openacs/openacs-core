@@ -628,10 +628,49 @@ ad_proc package_object_attribute_list {
                  start with t.object_type=:start_with
                connect by prior t.object_type = t.supertype) t 
          where a.object_type = :object_type
-           and t.object_type = a.ancestor_type $storage_clause
+           and t.object_type = a.object_type $storage_clause
          order by type_level"]
 }
 
+
+ad_proc -private package_plsql_args {
+    { -function_name "NEW" }
+    object_type
+} {
+    Generates a list of parameters expected to a plsql function
+
+    <p>
+
+    This replaces the annoying package_table_columns_for_type proc
+    which combines field names and arguments to PL/SQL, which 
+    makes no sense when you're trying to abstract out the actual fields.
+
+    @author Ben Adida (ben@openforce)
+    @creation-date 11/2001
+
+    @param object_type The object type for which we are generating a list
+
+    @param function_name The function name which we're looking up
+} {
+
+    db_1row select_type_info {
+	select t.package_name
+	  from acs_object_types t 
+	 where t.object_type = :object_type
+    }
+
+    # Get just the args
+    return [db_list select_object_type_param_list {
+	select args.argument_name
+                     from user_arguments args
+                    where args.position > 0
+	              and args.object_name = upper(:function_name)
+	              and args.package_name = upper(:package_name)
+    }]
+
+    
+}
+    
 
 ad_proc -private package_table_columns_for_type {
     object_type
@@ -702,6 +741,7 @@ ad_proc -public package_instantiate_object {
     { -creation_ip "" }
     { -package_name "" }
     { -var_list "" }
+    { -extra_vars "" }
     { -start_with "" }
     { -form_id "" }
     { -variable_prefix "" }
@@ -712,6 +752,7 @@ ad_proc -public package_instantiate_object {
     associated PL/SQL package new function.
 
     @author Michael Bryzek (mbryzek@arsdigita.com)
+    @author Ben Adida (ben@openforce)
     @creation-date 02/01/2001
     
     @param creation_user The current user. Defaults to <code>[ad_conn
@@ -726,6 +767,8 @@ ad_proc -public package_instantiate_object {
     @param var_list A list of pairs of additional attributes and their
     values to pass to the constructor. Each pair is a list of two
     elements: key => value
+
+    @param extra_vars an ns_set of extra vars
 
     @param start_with The object type to start with when gathering
     attributes for this object type
@@ -782,13 +825,27 @@ ad_proc -public package_instantiate_object {
 	    set creation_ip [ad_conn peeraddr]
 	}
     }
+
+    lappend var_list [list creation_user $creation_user]
+    lappend var_list [list creation_ip $creation_ip]
     
     # The first thing we need to do is select out the list of all
     # the parameters that can be passed to this object type's new function.
     # This will prevent us from passing in any parameters that are
     # not defined
-    foreach row [util_memoize "package_table_columns_for_type \"$object_type\""] {
-	set real_params([string toupper [lindex $row 1]]) 1
+    
+    # Change by Ben (OpenACS)
+    # This really should be more PL/SQL driven than table-field driven.
+    # Thus the change
+    
+    #foreach row [util_memoize "package_table_columns_for_type \"$object_type\""] {
+	#set real_params([string toupper [lindex $row 1]]) 1
+  	#ns_log Notice "DOTLRN: package_instantiate_object: real_params([string toupper [lindex $row 1]]) = 1"
+    #}
+
+    foreach arg [util_memoize "package_plsql_args \"$object_type\""] {
+	set real_params([string toupper $arg]) 1
+	ns_log Notice "DOTLRN: package_instantiate_object: real_params([string toupper $arg]) = 1"
     }
     
     # Use pieces to generate the parameter list to the new
@@ -805,25 +862,53 @@ ad_proc -public package_instantiate_object {
 	if { ![info exists real_params([string toupper $key])] } {
 	    # The parameter is not accepted as a parameter to the
 	    # pl/sql function. Ignore it.
+	    ns_log Notice "DOTLRN: package_instantiate_object: [string toupper $key] is ignored"
 	    continue;
 	} 
 	lappend pieces [list $key]
 	set param_array([string toupper $key]) 1
 	# Set the value for binding
 	set $key $value
+	ns_log Notice "DOTLRN: package_instantiate_object: set $key to $value"
     }
 
-    if { ![empty_string_p $form_id] } {
+    # Go through the extra_vars (ben - OpenACS)
+    if {! [empty_string_p $extra_vars] } {
+	for {set i 0} {$i < [ns_set size $extra_vars]} {incr i} {
+	    set key [ns_set key $extra_vars $i]
+	    set value [ns_set value $extra_vars $i]
+
+	    if { ![info exists real_params([string toupper $key])] } {
+		# The parameter is not accepted as a parameter to the
+		# pl/sql function. Ignore it.
+		ns_log Notice "DOTLRN: package_instantiate_object: [string toupper $key] is ignored"
+		continue;
+	    } 
+	    lappend pieces [list $key]
+	    set param_array([string toupper $key]) 1
+	    # Set the value for binding
+	    set $key $value
+	    ns_log Notice "DOTLRN: package_instantiate_object: set $key to $value"
+	}
+    }
+	    
+
+    if { ![empty_string_p $form_id]} {
 	# Append the values from the template form for each attribute
 	foreach row [package_object_attribute_list -start_with $start_with $object_type] {
 	    set attribute [lindex $row 2]
+	    ns_log Notice "DOTLRN: package_instantiate_object: getting attribute $attribute"
 	    if { [info exists real_params([string toupper $attribute])] && ![info exists param_array([string toupper $attribute])] } {
+		ns_log Notice "DOTLRN: package_instantiate_object: $attribute is a real param, and not a param_array"
 		set param_array([string toupper $attribute]) 1
 		set $attribute [template::element::get_value $form_id "$variable_prefix$attribute"]
+
 		lappend pieces [list $attribute]
 	    }
 	}
     }	
+
+    ns_log Notice "DOTLRN: package_instantiate_object: pieces are $pieces"
 
     set object_id [db_exec_plsql create_object "
     BEGIN
