@@ -691,3 +691,43 @@ aa_register_case util__subset_p {
     aa_equals "List is not a subset" [util_get_subset_missing [list a b c d] [list a b c]] [list d]
 }
 
+aa_register_case util__age_pretty {
+    Test the util::age_pretty proc.
+} {
+    aa_log "Forcing locale to en_US for all strings so that tests work in any locale"
+    aa_equals "0 secs"       [util::age_pretty -timestamp_ansi "2004-01-01 12:00:00" -sysdate_ansi "2004-01-01 12:00:00" -locale en_US] "1 minute ago" 
+    aa_equals "1 sec"        [util::age_pretty -timestamp_ansi "2004-01-01 12:00:00" -sysdate_ansi "2004-01-01 12:00:01" -locale en_US] "1 minute ago" 
+    aa_equals "29 secs"      [util::age_pretty -timestamp_ansi "2004-01-01 12:00:00" -sysdate_ansi "2004-01-01 12:00:29" -locale en_US] "1 minute ago" 
+    aa_equals "30 secs"      [util::age_pretty -timestamp_ansi "2004-01-01 12:00:00" -sysdate_ansi "2004-01-01 12:00:30" -locale en_US] "1 minute ago" 
+    aa_equals "31 secs"      [util::age_pretty -timestamp_ansi "2004-01-01 12:00:00" -sysdate_ansi "2004-01-01 12:00:31" -locale en_US] "1 minute ago" 
+    aa_equals "59 secs"      [util::age_pretty -timestamp_ansi "2004-01-01 12:00:00" -sysdate_ansi "2004-01-01 12:00:59" -locale en_US] "1 minute ago" 
+    aa_equals "1 min"        [util::age_pretty -timestamp_ansi "2004-01-01 12:00:00" -sysdate_ansi "2004-01-01 12:01:00" -locale en_US] "1 minute ago" 
+    aa_equals "1 min 1 sec"  [util::age_pretty -timestamp_ansi "2004-01-01 12:00:00" -sysdate_ansi "2004-01-01 12:01:01" -locale en_US] "1 minute ago" 
+
+    aa_equals "1 min 29 sec" [util::age_pretty -timestamp_ansi "2004-01-01 12:00:00" -sysdate_ansi "2004-01-01 12:01:29" -locale en_US] "1 minute ago" 
+    aa_equals "1 min 30 sec" [util::age_pretty -timestamp_ansi "2004-01-01 12:00:00" -sysdate_ansi "2004-01-01 12:01:30" -locale en_US] "2 minutes ago" 
+    aa_equals "1 min 31 sec" [util::age_pretty -timestamp_ansi "2004-01-01 12:00:00" -sysdate_ansi "2004-01-01 12:01:31" -locale en_US] "2 minutes ago" 
+
+    aa_equals "11 hours 59 minutes" [util::age_pretty -timestamp_ansi "2004-01-01 12:00:00" -sysdate_ansi "2004-01-01 23:59:00" -locale en_US] "11 hours 59 minutes ago"
+    aa_equals "15 hours 0 minutes with override" \
+        [util::age_pretty -timestamp_ansi "2004-01-01 12:00:00" -sysdate_ansi "2004-01-02 03:00:00" -hours_limit 16 -locale en_US] "15 hours ago" 
+
+
+    aa_equals "12 hours 0 minutes" [util::age_pretty -timestamp_ansi "2004-01-01 12:00:00" -sysdate_ansi "2004-01-02 00:00:00" -locale en_US] "12:00 PM, Thursday" 
+
+    aa_equals "15 hours 0 minutes" [util::age_pretty -timestamp_ansi "2004-01-01 12:00:00" -sysdate_ansi "2004-01-02 03:00:00" -locale en_US] "12:00 PM, Thursday" 
+
+    aa_equals "4 days 0 hours 0 minutes with override" \
+        [util::age_pretty -timestamp_ansi "2004-01-01 12:00:00" -sysdate_ansi "2004-01-05 12:00:00" -days_limit 5 -locale en_US] "12:00 PM, Thursday" 
+
+    aa_equals "3 days 0 hours 0 minutes" \
+        [util::age_pretty -timestamp_ansi "2004-01-01 12:00:00" -sysdate_ansi "2004-01-04 12:00:00" -locale en_US] "12:00 PM, 01 Jan 2004"
+
+    aa_equals "5 days 0 hours 0 minutes" \
+        [util::age_pretty -timestamp_ansi "2004-01-01 12:00:00" -sysdate_ansi "2004-01-06 12:00:00" -locale en_US] "12:00 PM, 01 Jan 2004"
+
+    aa_equals "10 years" \
+        [util::age_pretty -timestamp_ansi "2004-01-01 12:00:00" -sysdate_ansi "2014-01-01 12:00:00" -locale en_US] "12:00 PM, 01 Jan 2004"
+
+    aa_log "100 years - we know it's wrong because of Tcl library limitations: [util::age_pretty -timestamp_ansi "1904-01-01 12:00:00" -sysdate_ansi "2004-01-01 12:00:00"]"
+}
