@@ -550,3 +550,47 @@ template_tag include-output { params } {
     }
   "
 }
+
+template_tag trn { chunk params } {
+  # DRB: we have to do our own variable substitution as the template framework doesn't handle
+  # it for us ... being able to use page variables here is consistent with the rest
+  # of the templating engine.
+
+  # LARS: Note that this version of the <TRN> tag requires a body, like this:
+  # <trn key="...">default</trn>.
+  # This is the way to give a default value, and is okay, because we now have the #...# 
+  # notation for when there's no default value.
+  # Will register the key in the message catalog if it doesn't exist.
+
+  set size [ns_set size $params] 
+  for { set i 0 } { $i < $size } { incr i } {
+     set [ns_set key $params $i] [ns_set value $params $i]
+     # substitute array variables
+     regsub {@([a-zA-z0-9_]+)\.([a-zA-z0-9_]+)@} [set [ns_set key $params $i]] {${\1(\2)}} [ns_set key $params $i]
+     # substitute regular variables
+     regsub {@([a-zA-z0-9_:]+)@} [set [ns_set key $params $i]] {${\1}} [ns_set key $params $i]
+  }
+
+  # And this needs to be executed at page execution time due to interactions with the
+  # preferences changing code.  This is consistent with what the way #notation# is handled
+  # (the ad_conn call is dumped into the code, not executed on the spot)
+
+  if { ![info exists locale] } {
+        set locale "\[ad_conn locale\]"
+  } else {
+      # Check to see if we should register this into the message catalog
+      if { [string length $locale] == 2 } {
+          set locale [util_memoize [list ad_locale_locale_from_lang $locale]]
+      }
+
+      # Check the cache
+      if { ![nsv_exists lang_message_$locale $key] } { 
+          lang::message::register $locale $key $chunk
+      }
+  } 
+
+  # quote dollar signs, square bracket and quotes
+  regsub -all {[\]\[""\\$]} $chunk {\\&} quoted_chunk
+
+  template::adp_append_code "append __adp_output \[_ $locale $key $quoted_chunk\]"
+}
