@@ -36,6 +36,7 @@ db_multirow subsites select_subsites {
             from   application_groups ag,
                    group_approved_member_map m
             where  ag.package_id = p.package_id
+            and    m.rel_type = 'membership_rel'
             and    m.group_id = ag.group_id) as num_members
     from   site_nodes n,
            apm_packages p

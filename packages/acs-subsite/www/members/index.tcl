@@ -25,8 +25,6 @@ set group_id [application_group::group_id_from_package_id]
 # only to ban/delete them.
 set main_site_p [string equal [site_node::get_url -node_id [ad_conn node_id]] "/"]
 
-set rel_type "membership_rel"
-
 set user_id [ad_conn user_id]
 
 set show_member_list_to [parameter::get -parameter "ShowMembersListTo" -default 2]
@@ -66,21 +64,15 @@ if { $admin_p || [parameter::get -parameter "MembersCanInviteMembersP" -default 
 }
 
 set member_state_options [list]
-db_foreach select_member_states {
-    select mr.member_state as state, 
-           count(mr.rel_id) as num_members
-    from   membership_rels mr,
-           acs_rels r
-    where  r.rel_id = mr.rel_id
-    and    r.object_id_one = :group_id
-    group  by mr.member_state
-} {
+db_foreach select_member_states {} {
     lappend member_state_options \
         [list \
              [group::get_member_state_pretty -member_state $state] \
              $state \
              [lc_numeric $num_members]]
 }
+
+db_1row pretty_roles {}
 
 template::list::create \
     -name "members" \
@@ -175,20 +167,22 @@ db_multirow -extend {
     delete_url
     make_admin_url
     make_member_url
+    rel_role_pretty
 } -unclobber members members_select {} {
-    set rel_role_pretty [lang::util::localize $rel_role_pretty]
+    if { $member_admin_p > 0 } {
+        set rel_role_pretty [lang::util::localize $admin_role_pretty]
+    } else {
+        set rel_role_pretty [lang::util::localize $member_role_pretty]
+    }
     set member_state_pretty [group::get_member_state_pretty -member_state $member_state]
 
     if { $admin_p } {
         switch $member_state {
             approved {
-                switch $rel_role {
-                    member {
-                        set make_admin_url [export_vars -base make-admin { user_id }]
-                    }
-                    admin {
-                        set make_member_url [export_vars -base make-member { user_id }]
-                    }
+                if { $member_admin_p == 0 } {
+                    set make_admin_url [export_vars -base make-admin { user_id }]
+                } else {
+                    set make_member_url [export_vars -base make-member { user_id }]
                 }
                 if { $main_site_p } {
                     set ban_url [export_vars -base member-state-change { rel_id {member_state banned} }]

@@ -13,10 +13,8 @@ permission::require_permission -object_id $group_id -privilege "admin"
 
 db_transaction {
     foreach one_user_id $user_id {
-	group::add_member \
-            -group_id $group_id \
-            -user_id $one_user_id \
-            -rel_type "membership_rel"
+        db_1row get_rel_id {}
+        relation_remove $rel_id
     }
 } on_error {
     ad_return_error "Error creating the relation" "We got the following error message while trying to create this relation: <pre>$errmsg</pre>"

@@ -426,8 +426,6 @@ ad_proc -public group::add_member {
 } {
     Adds a user to a group, checking that the rel_type is permissible given the user's privileges, 
     Can default both the rel_type and the member_state to their relevant values.
-    Deletes any existing membership relation between the same group and the same user, 
-    regardless of the specific rel_type of that membership_relation.
 } {       
     set admin_p [permission::permission_p -object_id $group_id -privilege "admin"]
     
@@ -449,20 +447,6 @@ ad_proc -public group::add_member {
         set member_state [group::default_member_state \
                               -join_policy $group(join_policy) \
                               -create_p $create_p]
-    }
-
-    # Find any existing membership_relations and remove them
-    set existing_rel_ids [db_list select_existing_membership_rel {
-          select r.rel_id 
-          from   acs_rels r,
-                 membership_rels m
-          where  r.object_id_one = :group_id
-          and    r.object_id_two = :user_id
-          and    m.rel_id = r.rel_id
-    }]
-
-    foreach rel_id $existing_rel_ids {
-        relation_remove $rel_id
     }
     
     relation_add -member_state $member_state $rel_type $group_id $user_id
