@@ -5,41 +5,49 @@
 
     <fullquery name="acs_sc::impl::new.impl_new">
         <querytext>
-            select acs_sc_impl.new(
-                       :contract_name, 
+            begin
+                :1 := acs_sc_impl.new(
+                           :contract_name, 
                        :name,
                        :owner
-                   ) from dual
+                   );
+            end;
         </querytext>
     </fullquery>
 
     <fullquery name="acs_sc::impl::alias::new.alias_new">
         <querytext>
-            select acs_sc_impl_alias.new(
+            begin
+                :1 := acs_sc_impl_alias.new(
                        :contract_name, 
                        :impl_name,
                        :operation,
                        :alias,
                        :language
-                   ) from dual
+                   );
+            end;
         </querytext>
     </fullquery>
 
     <fullquery name="acs_sc::impl::binding::new.binding_new">
         <querytext>
-            select acs_sc_binding.alias_new(
-                       :contract_name, 
-                       :impl_name
-                   ) from dual
+            begin
+                acs_sc_binding.new(
+                       contract_name => :contract_name, 
+                       impl_name => :impl_name
+                   );
+            end;
         </querytext>
     </fullquery>
 
     <fullquery name="acs_sc::impl::delete.delete_impl">
         <querytext>
-            select acs_sc_impl.delete(
-                       :contract_name, 
-                       :impl_name
-                   ) from dual 	
+            begin
+                acs_sc_impl.delete(
+                       impl_contract_name => :contract_name, 
+                       impl_name => :impl_name
+                   );
+            end;
         </querytext>
     </fullquery>
 
