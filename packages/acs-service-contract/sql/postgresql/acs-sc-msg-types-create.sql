@@ -1,11 +1,9 @@
--- QUESTION: IS THIS STUFF GENERAL ENOUGH TO MOVE IT INTO A NEW PACKAGE?
---
 select acs_object_type__create_type (
     'acs_sc_msg_type',                  -- object_type
     'ACS SC Message Type',              -- pretty_name
     'ACS SC Message Types',             -- pretty_plural
     'acs_object',                       -- supertype 
-    'acs_sc_msg_type',                  -- table_name
+    'acs_sc_msg_types',                  -- table_name
     'msg_type_id',                      -- id_column
     null,                               -- package_name
     'f',                                -- abstract_p
@@ -15,16 +13,30 @@ select acs_object_type__create_type (
 
 
 
-create table acs_sc_msg_type (
+create table acs_sc_msg_types (
     msg_type_id		     integer
-			     constraint acs_sc_msg_type_id_fk
+			     constraint acs_sc_msg_types_id_fk
 			     references acs_objects(object_id)
 			     on delete cascade
-			     constraint acs_sc_msg_type_pk
+			     constraint acs_sc_msg_types_pk
 			     primary key,
     msg_type_name	     varchar(100)
-			     constraint acs_sc_msg_type_name_un
+			     constraint acs_sc_msg_types_name_un
 			     unique
+);
+
+
+create table acs_sc_msg_type_elements (
+    msg_type_id		     integer
+			     constraint acs_sc_msg_type_el_mtype_id_fk
+			     references acs_sc_msg_types(msg_type_id)
+			     on delete cascade,
+    element_name	     varchar(100),
+    element_msg_type_id	     integer
+			     constraint acs_sc_msg_type_el_emti_id_fk
+			     references acs_sc_msg_types(msg_type_id),
+    element_msg_type_isset_p boolean,
+    element_pos		     integer
 );
 
 
@@ -45,7 +57,7 @@ begin
                 null
             );
 
-    insert into acs_sc_msg_type (
+    insert into acs_sc_msg_types (
         msg_type_id,
         msg_type_name
    ) values (
@@ -53,7 +65,7 @@ begin
         p_msg_type_name
     );
 
-    perform acs_sc_msg_type_spec__parse(p_msg_type_name,p_msg_type_spec);
+    perform acs_sc_msg_type__parse_spec(p_msg_type_name,p_msg_type_spec);
 
     return v_msg_type_id;
 
@@ -68,7 +80,7 @@ declare
 begin
 
     select msg_type_id into v_msg_type_id
-    from acs_sc_msg_type
+    from acs_sc_msg_types
     where msg_type_name = p_msg_type_name;
    
     return v_msg_type_id;
@@ -84,7 +96,7 @@ declare
 begin
 
     select msg_type_name into v_msg_type_name
-    from acs_sc_msg_type
+    from acs_sc_msg_types
     where msg_type_id = p_msg_type_id;
    
     return v_msg_type_name;
@@ -98,7 +110,7 @@ declare
     p_msg_type_id		alias for $1;
 begin
 
-    delete from acs_sc_msg_type
+    delete from acs_sc_msg_types
     where msg_type_id = p_msg_type_id;
 
     return 0;
@@ -123,23 +135,10 @@ end;' language 'plpgsql';
 
 
 
-create table acs_sc_msg_type_element (
-    msg_type_id		     integer
-			     constraint acs_sc_msg_type_el_mtype_id_fk
-			     references acs_sc_msg_type(msg_type_id)
-			     on delete cascade,
-    element_name	     varchar(100),
-    element_msg_type_id	     integer
-			     constraint acs_sc_msg_type_el_mtype_id_fk
-			     references acs_sc_msg_type(msg_type_id),
-    element_msg_type_isset_p boolean,
-    element_pos		     integer
-);
 
 
 
-
-create function acs_sc_msg_type_element__new(varchar,varchar,varchar,boolean,integer)
+create function acs_sc_msg_type__new_element(varchar,varchar,varchar,boolean,integer)
 returns integer as '
 declare
     p_msg_type_name		alias for $1;
@@ -163,7 +162,7 @@ begin
         raise exception ''Unknown Message Type: %'', p_element_msg_type_name;
     end if;
 
-    insert into acs_sc_msg_type_element (
+    insert into acs_sc_msg_type_elements (
         msg_type_id,
 	element_name,
 	element_msg_type_id,
@@ -184,7 +183,7 @@ end;' language 'plpgsql';
 
 
 
-create function acs_sc_msg_type_spec__parse(varchar,varchar)
+create function acs_sc_msg_type__parse_spec(varchar,varchar)
 returns integer as '
 declare
     p_msg_type_name		alias for $1;
@@ -223,7 +222,7 @@ begin
 	    raise exception ''Wrong Format: Message Type Specification'';
         end if;
 
-        perform acs_sc_msg_type_element__new(
+        perform acs_sc_msg_type__new_element(
                    p_msg_type_name,				-- msg_type_id
 		   v_element_name,				-- element_name
 		   v_element_msg_type_name,			-- element_msg_type_id
