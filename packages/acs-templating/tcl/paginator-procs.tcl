@@ -24,9 +24,11 @@ ad_proc -public template::paginator { command args } {
     @see template::paginator::get_page 
     @see template::paginator::get_page_count 
     @see template::paginator::get_pages 
+    @see template::paginator::get_pages_info 
     @see template::paginator::get_row 
     @see template::paginator::get_row_count 
     @see template::paginator::get_row_ids 
+    @see template::paginator::get_row_last
 } {
   eval paginator::$command $args
 }
@@ -48,13 +50,21 @@ ad_proc -public template::paginator::create { statement_name name query args } {
 
     @option pagesize    The number of rows to display on a single page.
 
-    @option groupsize   The number of pages in a group, for UI purposes.
+    @option groupsize   The number of pages in a group, for UI purposes.  This
+                        is useful for result sets which span several pages.  For
+                        example, if you have 1000 results at 10 results per page,
+                        that will leave you with 100 pages and you may not want
+                        to display 1-100 in the UI.  In this case, setting a
+                        groupsize of 10 will allow you to display pages 1-10, then
+                        11-20, and so on.  The default groupsize is 10.
 
     @option contextual  Boolean indicating whether the pagination interface
                         presented to the user will provide
                         some other contextual clue in addition or instead of
-                        page number,, such as the first few
-                        letters of a title or date.
+                        page number, such as the first few
+                        letters of a title or date.  By default, the second
+                        column in the result set returned by query will be used
+                        as the context.
 } {
   set level [template::adp_level]
   variable parse_level
@@ -126,7 +136,7 @@ ad_proc -private template::paginator::init { statement_name name query } {
   } else {
 
       # no extra column specified for paging by contextual cues
-      uplevel 3 "set __paginator_ids [db_list $statement_name  \"$query\"]"
+      uplevel 3 "set __paginator_ids \[db_list $statement_name  \"$query\"\]"
 
       set properties(row_ids) $ids
       cache set $name:$query:row_ids $ids $properties(timeout)
@@ -166,6 +176,29 @@ ad_proc -public template::paginator::get_row { name pagenum } {
   get_reference
 
   return [expr ($pagenum - 1) * $properties(pagesize) + 1]
+}
+
+ad_proc -public template::paginator::get_row_last { name pagenum } {
+    Calculates the last row displayed on a page.
+
+    @param name    The reference to the paginator object.
+    @param pagenum A number ranging from one to the number of pages in 
+                   the query result, representing the number of a page
+                   therein.
+
+    @return A number ranging from one to the number of rows in 
+            the query result, representing the number of the last
+            row on the specified page.
+} {
+  get_reference
+
+  set page_count $properties(page_count)
+
+  if {$page_count == $pagenum} {
+    return $properties(row_count)
+  } else {
+    return [expr $pagenum * $properties(pagesize)]
+  }
 }
 
 ad_proc -public template::paginator::get_group { name pagenum } {
@@ -322,6 +355,37 @@ ad_proc -public template::paginator::get_context { name datasource pages } {
   }
 }
 
+# DEDS: we can get away without this, but i'm throwing it in anyway
+#       as it makes life easier for non-contextual pagination
+ad_proc -public template::paginator::get_pages_info { name datasource pages } {
+    Gets the page information for a set of pages in the form of a multirow
+    data source with 2 columns: rownum (starting with 1); and page (number
+    of the page).  This is a counterpart for get_context when using page
+    objects that are non-contextual.  Using this makes it easier to switch
+    from contextual to non-contextual so that less modification is needed
+    on adp template pages.  Think in terms of taking out the display of
+    one element in a multirow datasource as compared to converting an adp
+    to handle a list datasource instead of a multirow datasource.
+
+    @param name        The reference to the paginator object.
+    @param datasource  The name of the multirow datasource to create
+    @param pages       A Tcl list of page numbers.
+} {
+  get_reference
+
+  upvar 2 $datasource:rowcount rowcount 
+  set rowcount 0
+
+  foreach page $pages {
+
+    incr rowcount
+    upvar 2 $datasource:$rowcount row
+
+    set row(rownum) $rowcount
+    set row(page) $page
+  }
+}
+
 ad_proc -public template::paginator::get_row_count { name } {
     Gets the total number of records in the paginated query
 
@@ -343,7 +407,7 @@ ad_proc -public template::paginator::get_page_count { name } {
 } {
   get_reference
 
-  return $properties(row_count)
+  return $properties(page_count)
 }
 
 ad_proc -public template::paginator::get_group_count { name } {
@@ -442,7 +506,14 @@ ad_proc -public template::paginator::get_data { statement_name name datasource q
 
   # substitute the current page set
   set query [uplevel 2 "db_map ${statement_name}_partial"]
-  set in_list [join $ids ","]
+
+  # DEDS: quote the ids so that we are not
+  #       necessarily limited to integer keys
+  set quoted_ids [list]
+  foreach one_id $ids {
+      lappend quoted_ids "'[DoubleApos $one_id]'"
+  }
+  set in_list [join $quoted_ids ","]
   if { ! [regsub CURRENT_PAGE_SET $query $in_list query] } {
     error "Token CURRENT_PAGE_SET not found in page data query  ${statement_name}_partial: $query"
   }
