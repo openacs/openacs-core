@@ -95,27 +95,27 @@ su - postgres</action></screen>
       <formalpara>
         <title>Unpack PostgreSQL 7.3.4.</title>
         <para>If you have not downloaded the postgresql tarball to
-        <computeroutput>/tmp/postgresql-7.3.4.tar.gz</computeroutput>,
+        <computeroutput>/var/tmp/postgresql-7.3.4.tar.gz</computeroutput>,
         <link linkend="source-postgresql">get it</link>.</para>
       </formalpara>
       <screen>[root root]# <userinput>cd /usr/local/src</userinput>
-[root src]# <userinput>tar xzf /tmp/postgresql-7.3.4.tar.gz</userinput>
+[root src]# <userinput>tar xzf /var/tmp/postgresql-7.3.4.tar.gz</userinput>
 [root src]# 
 <action>cd /usr/local/src
-tar xzf /tmp/postgresql-7.3.4.tar.gz</action></screen>
+tar xzf /var/tmp/postgresql-7.3.4.tar.gz</action></screen>
     </listitem>
     <listitem>
       <formalpara>
         <title>ALTERNATIVE: Unpack PostgreSQL 7.4.5</title>
         <para>If you have not downloaded the postgresql tarball to
-        <computeroutput>/tmp/postgresql-7.4.5.tar.bz2</computeroutput>,
+        <computeroutput>/var/tmp/postgresql-7.4.5.tar.bz2</computeroutput>,
         <link linkend="source-postgresql">get it</link>.</para>
       </formalpara>
       <screen>[root root]# <userinput>cd /usr/local/src</userinput>
-[root src]# <userinput>tar xfj /tmp/postgresql-7.4.5.tar.bz2</userinput>
+[root src]# <userinput>tar xfj /var/tmp/postgresql-7.4.5.tar.bz2</userinput>
 [root src]# 
 <action>cd /usr/local/src
-tar xfj /tmp/postgresql-7.4.5.tar.bz2</action></screen>
+tar xfj /var/tmp/postgresql-7.4.5.tar.bz2</action></screen>
     </listitem>
     <listitem>
       <formalpara>
@@ -336,11 +336,11 @@ logout
         </listitem>
         <listitem><para>Red Hat from source:</para>
           
-          <screen>[root src]# <userinput>cp /tmp/&tarballpath;/packages/acs-core-docs/www/files/postgresql.txt /etc/init.d/postgresql</userinput>
+          <screen>[root src]# <userinput>cp /var/tmp/&tarballpath;/packages/acs-core-docs/www/files/postgresql.txt /etc/init.d/postgresql</userinput>
 [root src]# <userinput>chown root.root /etc/rc.d/init.d/postgresql</userinput>
 [root src]# <userinput>chmod 755 /etc/rc.d/init.d/postgresql</userinput>
 [root src]# 
-<action>cp /tmp/&tarballpath;/packages/acs-core-docs/www/files/postgresql.txt /etc/init.d/postgresql
+<action>cp /var/tmp/&tarballpath;/packages/acs-core-docs/www/files/postgresql.txt /etc/init.d/postgresql
 chown root.root /etc/rc.d/init.d/postgresql
 chmod 755 /etc/rc.d/init.d/postgresql</action></screen>
           
@@ -370,11 +370,11 @@ chkconfig --list postgresql
 service postgresql start</action></screen>
         </listitem>
         <listitem><para>Debian:</para>
-          <screen>[root ~]# <userinput>cp /tmp/packages/acs-core-docs/www/files/postgresql.txt /etc/init.d/postgresql</userinput>
+          <screen>[root ~]# <userinput>cp /var/tmp/packages/acs-core-docs/www/files/postgresql.txt /etc/init.d/postgresql</userinput>
 [root ~]# <userinput>chown root.root /etc/init.d/postgresql</userinput>
 [root ~]# <userinput>chmod 755 /etc/init.d/postgresql</userinput>
 [root ~]# <action>
-cp /tmp/&tarballpath;/packages/acs-core-docs/www/files/postgresql.txt /etc/init.d/postgresql
+cp /var/tmp/&tarballpath;/packages/acs-core-docs/www/files/postgresql.txt /etc/init.d/postgresql
 chown root.root /etc/init.d/postgresql
 chmod 755 /etc/init.d/postgresql</action></screen>
           <para>Test the script</para>
@@ -418,7 +418,7 @@ Starting PostgreSQL: ok
           </para>
           </note>
           
-          <screen>[root ~]# <userinput>cp /tmp/&tarballpath;/packages/acs-core-docs/www/files/postgresql.txt /etc/rc.d/init.d/postgresql</userinput>
+          <screen>[root ~]# <userinput>cp /var/tmp/&tarballpath;/packages/acs-core-docs/www/files/postgresql.txt /etc/rc.d/init.d/postgresql</userinput>
 [root ~]# <userinput>chown root.root /etc/rc.d/init.d/postgresql</userinput>
 [root ~]# <userinput>chmod 755 /etc/rc.d/init.d/postgresql</userinput></screen>
           <para>

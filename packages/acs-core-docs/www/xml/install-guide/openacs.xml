@@ -120,16 +120,16 @@ admin password: xxxx
   <sect2 id="install-from-tarball">
     <title>Installation Option 2: Install from tarball</title>
     <para>You should already have downloaded the OpenACS tarball
-      to the <computeroutput>/tmp</computeroutput> directory.  If
+      to the <computeroutput>/var/tmp</computeroutput> directory.  If
       not, <link linkend="openacs-download">download the OpenACS
       tarball</link> and save it in
-      <computeroutput>/tmp</computeroutput> and proceed:</para>
+      <computeroutput>/var/tmp</computeroutput> and proceed:</para>
     <orderedlist>
       <listitem id="install-openacs-download">
         <para>Unpack the OpenACS tarball and rename it to <computeroutput>$OPENACS_SERVICE_NAME</computeroutput>.  Secure the directory so that only the owner can access it.  Check the permissions by listing the directory.</para>       
         <screen>[root root]# <userinput>su - <replaceable>$OPENACS_SERVICE_NAME</replaceable></userinput>
 [$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <userinput>cd /var/lib/aolserver</userinput>
-[$OPENACS_SERVICE_NAME aolserver]$ <userinput>tar xzf /tmp/&tarballpath;.tgz</userinput>
+[$OPENACS_SERVICE_NAME aolserver]$ <userinput>tar xzf /var/tmp/&tarballpath;.tgz</userinput>
 [$OPENACS_SERVICE_NAME aolserver]$ <userinput>mv &tarballpath; <replaceable>$OPENACS_SERVICE_NAME</replaceable></userinput>
 [$OPENACS_SERVICE_NAME aolserver]$ <userinput>chmod -R 775 <replaceable>$OPENACS_SERVICE_NAME</replaceable></userinput>
 [$OPENACS_SERVICE_NAME aolserver]$ <userinput>chown -R <replaceable>$OPENACS_SERVICE_NAME</replaceable>.<replaceable>$OPENACS_SERVICE_NAME</replaceable> <replaceable>$OPENACS_SERVICE_NAME</replaceable></userinput>
@@ -143,7 +143,7 @@ logout
 [root root]#
 <action>su - $OPENACS_SERVICE_NAME
 cd /var/lib/aolserver
-tar xzf /tmp/&tarballpath;.tgz
+tar xzf /var/tmp/&tarballpath;.tgz
 mv &tarballpath; $OPENACS_SERVICE_NAME
 chmod -R 755 $OPENACS_SERVICE_NAME
 chgrp -R $OPENACS_SERVICE_NAME.$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME
@@ -614,7 +614,7 @@ Loading package .info files ... this will take a few minutes</programlisting>
 
   <sect2 id="install-from-cvs">
     <title>Installation Option 3: Install from CVS</title>
-    <para>If you want to track fresh code developments inbetween releases, or you are an OpenACS core developer, you may want to install from CVS.  This is identical to Option 2 except that you get the files from CVS instead of the tarball: <ulink url="http://openacs.org/4/checkout">CVS Checkout Instructions</ulink>.  So, instead of <computeroutput><userinput>tar xzf /tmp/&tarballpath;.tgz</userinput></computeroutput>, <computeroutput><userinput>cvs -z3 -d :pserver:anonymous@openacs.org:/cvsroot co acs-core</userinput></computeroutput>.</para>
+    <para>If you want to track fresh code developments inbetween releases, or you are an OpenACS core developer, you may want to install from CVS.  This is identical to Option 2 except that you get the files from CVS instead of the tarball: <ulink url="http://openacs.org/4/checkout">CVS Checkout Instructions</ulink>.  So, instead of <computeroutput><userinput>tar xzf /var/tmp/&tarballpath;.tgz</userinput></computeroutput>, <computeroutput><userinput>cvs -z3 -d :pserver:anonymous@openacs.org:/cvsroot co acs-core</userinput></computeroutput>.</para>
   </sect2>
   <sect2 id="install-next-steps">
     <title>Next Steps</title>

@@ -226,7 +226,7 @@ root      5582  0.0  0.2  3276  628 pts/0    S    11:55   0:00 grep nsd
 		<listitem><para> 
 			Copy this <ulink
 			  url="files/restart-aolserver.txt">file</ulink> into
-			<computeroutput>/tmp/restart-aolserver.txt</computeroutput>.
+			<computeroutput>/var/tmp/restart-aolserver.txt</computeroutput>.
 		  </para></listitem>
 
 		<listitem><para> 
@@ -243,7 +243,7 @@ root      5582  0.0  0.2  3276  628 pts/0    S    11:55   0:00 grep nsd
 		<programlisting>
 [joeuser ~]$ su - 
 Password: ***********
-[root ~]# cp /tmp/restart-aolserver.txt /usr/local/bin/restart-aolserver
+[root ~]# cp /var/tmp/restart-aolserver.txt /usr/local/bin/restart-aolserver
 [root ~]# chown root.web /usr/local/bin/restart-aolserver
 [root ~]# chmod 4750 /usr/local/bin/restart-aolserver
 [root ~]# ln -s /usr/bin/perl /usr/local/bin/perl

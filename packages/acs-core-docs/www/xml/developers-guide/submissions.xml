@@ -42,7 +42,7 @@
       </listitem>
       <listitem>
         <para>Get a clean copy of your package - no ~ files or .# files or CVS files.  Assuming you have been developing in a local cvs repository and your local version 1.0.0 is the one you want to contribute, the easy way to do this is:</para>
-        <screen>cd /tmp
+        <screen>cd /var/tmp
 cvs -d /cvsroot openacs-4/packages/myfirstpackage export -r 1-0-0</screen>
       </listitem>
       <listitem>
