@@ -73,15 +73,6 @@
       </querytext>
 </fullquery>
 
- 
-<fullquery name="apm_package_install_files.files_delete">      
-      <querytext>
-      
-	delete from apm_package_files where version_id = :version_id
-    
-      </querytext>
-</fullquery>
-
 <fullquery name="apm_package_install_spec.package_version_info_select">      
       <querytext>
       
@@ -91,20 +82,6 @@
     
       </querytext>
 </fullquery>
-
- 
-<fullquery name="apm_package_install_spec.package_spec_path_select">      
-      <querytext>
-      
-            select path
-            from apm_package_files
-            where version_id = :version_id
-            and file_type = 'package_spec'
-	    and path = :info_file_name
-        
-      </querytext>
-</fullquery>
-
  
 <fullquery name="apm_package_install_spec.apm_spec_file_register">      
       <querytext>

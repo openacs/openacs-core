@@ -232,23 +232,6 @@ ad_proc -private apm_generate_tarball { version_id } {
 }
 
 
-ad_proc -public apm_file_add {
-    {
-	-file_id ""
-    }
-    version_id path file_type db_type
-} {
-
-    Adds one file into the specified version.
-    @return the id of the file.
-
-} { 
-    if { [empty_string_p $file_id] } {
-	set file_id [db_null]
-    }
-    return [db_exec_plsql apm_file_add {}]
-}
-
 ad_proc -private apm_files_load {
     {-force_reload:boolean 0}
     {-callback apm_dummy_callback} 
@@ -319,64 +302,6 @@ ad_proc -private apm_watch_all_files { package_key } {
         }
     }
 }
-
-ad_proc -public apm_file_remove {path version_id} {
-    
-    Removes a files from a version.
-    
-} { 
-    return [db_exec_plsql apm_file_remove {}]
-}
-
-ad_proc -public apm_version_from_file {file_id} {
-
-    @return The version id of the specified file.
-} {
-    return [db_string apm_version_id_from_file {
-	select version_id from apm_package_files
-	where file_id = :file_id
-    } -default 0]
-}
-
-ad_proc apm_filelist_update {version_id} {
-
-    Brings the .info list of files in sync with the directory structure.
-
-} {
-    set package_key [db_string package_key_for_version_id {
-	select package_key from apm_package_versions 
-	where version_id = :version_id
-    }]
-		     
-    # Add any new files.
-    foreach file [lsort [ad_find_all_files [acs_package_root_dir $package_key]]] {
-	set relative_path [ad_make_relative_path $file]
-	
-	# Now kill "packages" and the package_key from the path.
-	set components [split $relative_path "/"]
-
-        # DRB: we really don't want to include the CVS directories in the .info
-        # file...
-        if { [lsearch $components "CVS"] == -1 } {
-	    set relative_path [join [lrange $components 2 [llength $components]] "/"]	
-	    set type [apm_guess_file_type $package_key $relative_path]	
-	    set db_type [apm_guess_db_type $package_key $relative_path]	
-	    apm_file_add $version_id $relative_path $type $db_type
-        }
-    }
-
-    # Remove stale files.
-    db_foreach apm_all_files {
-	select f.file_id, f.path
-	from   apm_package_files f
-	where  f.version_id = :version_id
-	order by path
-    } {
-	if { ![file exists "[acs_package_root_dir $package_key]/$path"] } {
-	    apm_file_remove $path $version_id
-	}
-    }
-} 
 
 ad_proc -public pkg_home {package_key} {
 
