@@ -14,7 +14,7 @@
 
       <p>
       Thank you for using our software. Please write to us at the <a
-      href="http://openacs.org/bboard/q-and-a?topic_id=11">OpenACS bboard</a> to let
+      href="http://openacs.org/forums/forum-view?forum_id=14013">OpenACS bboard</a> to let
       us know of your experience with installing and using OpenACS. 
       </p>
       
@@ -73,8 +73,8 @@
       <p>
       Should you develop an OpenACS package that you want to share with the rest
       of the community, upload it to <a
-      href="http://openacs.org/new-file-storage/"
-      title="OpenACS New File Storage on openacs.org">OpenACS Repository</a> and we will
+      href="http://openacs.org/storage/"
+      title="OpenACS.org File Storage">OpenACS Repository</a> and we will
       evaluate it and publish it.
       </p>      
 
@@ -96,10 +96,10 @@
 
       <p>
       Should you ever <b>get stuck</b>, or if you just want to <b>hang out</b> with other
-      OpenACS users, visit the <a href="http://openacs.org/bboard/"
+      OpenACS users, visit the <a href="http://openacs.org/forums/"
       title="OpenACS Discussion Forums">discussion forums</a> on openacs.org, in
       particular the <a
-      href="http://openacs.org/bboard/q-and-a?topic_id=11"
+      href="http://openacs.org/forums/forum-view?forum_id=14013"
       title="OpenACS discussion forum on openacs.org">OpenACS forum</a>.
       The home of the <b>OpenACS community</b> is
       at <a href="http://openacs.org/" 
@@ -108,10 +108,10 @@
       
       <p>
       If you <b>find bugs</b> or have <b>feature requests</b>, post them in
-      our <a href="http://openacs.org/sdm/" 
-      title="Software Development Manager on openacs.org">Software
-      Development Manager</a> (SDM). If you have bugfixes or patches
-      yourself, post them in the SDM, too. 
+      our <a href="http://openacs.org/bugtracker/openacs/" 
+      title="Software Development Manager on openacs.org">Bug
+      Tracker</a>. If you have bugfixes or patches
+      yourself, post them there as well. 
       </p>
       
       <p> 
