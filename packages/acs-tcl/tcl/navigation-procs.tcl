@@ -95,7 +95,7 @@ ad_proc -public ad_context_bar_multirow {
     
     @see ad_context_bar_html
 } {
-    if {![parameter::get -package_id [ad_conn subsite_id] -parameter ShowContextBarP -default 1]} {
+    if {![parameter::get -package_id [site_node_closest_ancestor_package "acs-subsite"] -parameter ShowContextBarP -default 1]} {
 	return ""
     }
     
@@ -141,7 +141,7 @@ ad_proc -public ad_context_bar {
     
     @see ad_context_bar_html
 } {
-    if {![parameter::get -package_id [ad_conn subsite_id] -parameter ShowContextBarP -default 1]} {
+    if {![parameter::get -package_id [site_node_closest_ancestor_package "acs-subsite"] -parameter ShowContextBarP -default 1]} {
 	return ""
     }
 
