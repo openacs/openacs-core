@@ -1350,7 +1350,13 @@ ad_proc -public security::RestrictLoginToSSLP {} {
     
     @author Peter Marklund
 } {
-    return [parameter::get_from_package_key -boolean -parameter RestrictLoginToSSLP -package_key acs-kernel]
+    if { ![security::https_available_p] } {
+	return 0
+    }
+    return [parameter::get \
+		-boolean \
+		-parameter RestrictLoginToSSLP \
+		-package_id [acs_acs_kernel_id]]
 }
 
 ad_proc -public security::require_secure_conn {} {
