@@ -29,7 +29,7 @@ ad_page_contract {
     }
 
     version_name_ck -requires {version_name} {	
-	if {![regexp {^[0-9]+((\.[0-9]+)+((d|a|b|)[0-9]?)?)$} $version_name match]} {
+	if {![regexp {^[0-9]+((\.[0-9]+)+((d|a|b|)[0-9]*)?)$} $version_name match]} {
 	    ad_complain
 	} 
     }
