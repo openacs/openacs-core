@@ -476,13 +476,21 @@ ad_proc -private sec_generate_session_id_cookie {} { Sets the ad_session_id cook
 }
 
 ad_proc -public -deprecated ad_get_user_id {} {
-    Gets the user ID. 0 indicates the user is not logged in
+    Gets the user ID. 0 indicates the user is not logged in.
+
+    Deprecated since user_id now provided via ad_conn user_id
+
+    @see ad_conn
 } {
     return [ad_conn user_id]
 }
 
 ad_proc -public -deprecated ad_verify_and_get_user_id { { -secure f } } {
     Returns the current user's ID. 0 indicates user is not logged in
+
+    Deprecated since user_id now provided via ad_conn user_id
+
+    @see ad_conn
 } {
     return [ad_conn user_id]
 }
@@ -490,7 +498,11 @@ ad_proc -public -deprecated ad_verify_and_get_user_id { { -secure f } } {
 ad_proc -public -deprecated ad_verify_and_get_session_id { { -secure f } } {
     Returns the current session's ID.
 
+    Deprecated since session_id now provided via ad_conn session_id
+
     @param secure is ignored
+
+    @see ad_conn
 } {
     return [ad_conn session_id]
 }
@@ -501,6 +513,8 @@ ad_proc -public -deprecated ad_privacy_threshold {} {
     Pages that are consider whether to display a user's name or email
     address should test to make sure that a user's priv_ from the
     database is less than or equal to what ad_privacy_threshold returns.
+    
+    Now deprecated.
 } {
     set session_user_id [ad_get_user_id]
     if {$session_user_id == 0} {
@@ -564,6 +578,9 @@ ad_proc -public ad_maybe_redirect_for_registration {} {
     ad_script_abort
 }
 
+# JCD 20020915 I think this probably should not be deprecated since it is 
+# far more reliable than permissioning esp for a development server 
+
 ad_proc -public -deprecated ad_restrict_entire_server_to_registered_users {conn args why} {
     A preauth filter that will halt service of any page if the user is
     unregistered, except the site index page and stuff underneath
@@ -602,9 +619,10 @@ proc_doc ad_generate_random_string {{length 8}} {
 ad_proc -public -deprecated ad_block_sql_urls {conn args why} {
 
     A filter that detect attempts to smuggle in SQL code through form data
-    variables. The use of bind variables to prevent SQL smuggling is
-    preferred.
+    variables. The use of bind variables and ad_page_contract input 
+    validation to prevent SQL smuggling is preferred.
 
+    @see ad_page_contract
 } {
     set form [ns_getform]
     if [empty_string_p $form] { return filter_ok }
@@ -742,6 +760,7 @@ ad_proc -public -deprecated ad_set_typed_form_variable_filter {url_pattern args}
     ad_page_contract is the preferred mechanism to do automated
     validation of form variables.
     </pre>
+    @see ad_page_contract
 } {
     ad_register_filter postauth GET  $url_pattern ad_set_typed_form_variables $args
     ad_register_filter postauth POST $url_pattern ad_set_typed_form_variables $args

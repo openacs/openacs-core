@@ -1076,6 +1076,8 @@ doc_body_append [ad_export_vars -override { order_by $new_order_by } $my_vars]</
 
     @author Lars Pind (lars@pinds.com)
     @creation-date 21 July 2000
+
+    @see export_vars
 } {
 
     ####################
@@ -2894,7 +2896,9 @@ Returns a human-readable explanation if the user has used any of the
 HTML tags marked as naughty in the antispam section of ad.ini, otherwise
 returns an empty string.
 
+@see ad_html_security_check
 } {
+
     set tag_names [list div font]
     # look for a less than sign, zero or more spaces, then the tag
     if { ! [empty_string_p $tag_names]} { 

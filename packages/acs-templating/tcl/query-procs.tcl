@@ -532,6 +532,8 @@ ad_proc -public -deprecated template::query::iterate { statement_name sql body }
 
     @param body Code body to be execute for each result row of the 
                 returned query
+
+    @see db_foreach
 } {
 
     db_with_handle db {

@@ -114,7 +114,9 @@ ad_proc -deprecated ad_permission_grant {
 } {
     Grant a permission
 
-    @author ben@openforce
+    @author ben@openforce.net
+
+    @see permission::grant
 } {
     permission::grant -party_id $user_id -object_id $object_id -privilege $privilege
 }
@@ -126,7 +128,9 @@ ad_proc -deprecated ad_permission_revoke {
 } {
     Revoke a permission
 
-    @author ben@openforce
+    @author ben@openforce.net
+
+    @see permission::revoke
 } {
     permission::revoke -party_id $user_id -object_id $object_id -privilege $privilege
 }
@@ -135,6 +139,8 @@ ad_proc -deprecated ad_permission_p {
     {-user_id ""}
     object_id
     privilege
+} { 
+    @see permission::permission_p
 } {
     return [permission::permission_p -party_id $user_id -object_id $object_id -privilege $privilege]
 }
@@ -143,6 +149,8 @@ ad_proc -deprecated ad_require_permission {
   object_id
   privilege
 } {
+    @see permission::require_permission
+} { 
     permission::require_permission -object_id $object_id -privilege $privilege
 }
 

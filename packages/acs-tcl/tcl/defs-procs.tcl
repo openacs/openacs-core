@@ -167,14 +167,16 @@ ad_proc -deprecated ad_present_user {
     user_id 
     name
 } {
-    @return the HTML link of the community member page of a particular user
-
     This function is an alias to acs_community_member_link 
     and receives identical parameters, but the former finds out the name
     of the user if a blank is passed. That's why it's marked as deprecated.
 
+    @return the HTML link of the community member page of a particular user
+
     @author Unknown
     @author Roberto Mello
+    
+    @see acs_community_member_link
 } {
     return [acs_community_member_link -user_id $user_id -label $name]
 }
@@ -208,15 +210,16 @@ ad_proc -deprecated ad_admin_present_user {
     user_id 
     name
 } {
-    @return the HTML link of the community member page of a particular admin user.
-
     This function is an alias to acs_community_member_admin_link 
     and receives identical parameters, but the former finds out the name
     of the user if a blank is passed. That's why it's marked as deprecated.
 
+    @return the HTML link of the community member page of a particular admin user.
+
     @author Unknown
     @author Roberto Mello
-    
+
+    @see acs_community_member_admin_link
 } {
     return [acs_community_member_admin_link -user_id $user_id -label $name]
 }
