@@ -87,7 +87,7 @@ create function rel_constraint__violation (integer)
 returns varchar as '
 declare
   violation__rel_id                 alias for $1;  
-  v_error                           varchar(4000); 
+  v_error                           text; 
   constraint_violated               record;
 begin
 
@@ -136,7 +136,7 @@ returns varchar as '
 declare
   violation_if_removed__rel_id                 alias for $1;  
   v_count                                      integer;       
-  v_error                                      varchar(4000); 
+  v_error                                      text; 
   constraint_violated                          record;
 begin
     v_error := null;

@@ -727,7 +727,7 @@ begin
   v_join_policy := new__join_policy;
 
   -- if join policy was not specified, select the default based on group type
-  if v_join_policy is null then
+  if v_join_policy is null or v_join_policy = '''' then
       select count(*) into v_group_type_exists_p
       from group_types
       where group_type = new__object_type;

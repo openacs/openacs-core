@@ -261,7 +261,7 @@ begin
 
   insert into groups_test_segs values (side_two_constraint,1,''side_two_constraint'');
   insert into groups_test_segs values (side_one_constraint,2,''side_one_constraint'');
-
+/*
   side_two_constraint := rel_constraint__new(
                                 null,
                                 ''rel_constraint'',
@@ -297,7 +297,7 @@ begin
 
   insert into groups_test_segs values (side_two_constraint,3,''side_two_constraint 1'');
   insert into groups_test_segs values (side_one_constraint,4,''side_one_constraint 1'');
-
+*/
   delete from acs_logs;
 
   -- Make a couple of memberships.

@@ -753,7 +753,7 @@ begin
          and o1.tree_sortkey like (o2.tree_sortkey || ''%'') 
     order by o2.tree_sortkey desc
   loop
-   if obj_type.name_method is not null then
+   if obj_type.name_method != '''' then
 
     -- Execute the first name_method we find (since we''re traversing
     -- up the type hierarchy from the object''s exact type) using
@@ -856,7 +856,7 @@ begin
 
    -- If there is no specific table name for this attribute,
    -- figure it out based on the object type
-   if v_table_name is null then
+   if v_table_name is null or v_table_name = '''' then
 
      -- Determine the appropriate table name
      if v_storage = ''generic'' then
@@ -906,7 +906,7 @@ begin
        end if;
    end if;
 
-   if v_column is null then
+   if v_column is null or v_column = '''' then
 
      if v_storage = ''generic'' then
        v_column := ''attr_value'';
@@ -916,7 +916,7 @@ begin
 
    end if;
 
-   if v_key_sql is null then
+   if v_key_sql is null or v_key_sql = '''' then
      if v_static = ''f'' then   
        v_key_sql := v_id_column || '' = '' || object_id_in ; 
      else

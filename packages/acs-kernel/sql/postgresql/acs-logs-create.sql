@@ -15,9 +15,9 @@ create table acs_logs (
 			constraint acs_logs_pk
 			primary key,
 	log_date	timestamp default now() not null,
-	log_level	varchar(20)
+	log_level	varchar(20) not null
 			constraint acs_logs_log_level_ck
-			check (log_level in ('notice', 'warn', 'error',
+			check (log_level in ('', 'notice', 'warn', 'error',
 					     'debug')),
 	log_key		varchar(100) not null,
 	message		text not null

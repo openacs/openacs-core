@@ -613,7 +613,7 @@ begin
          v_name_method := create_type__name_method;
     end if;
 
-    if create_type__package_name is null then
+    if create_type__package_name is null or create_type__package_name = '''' then
       v_package_name := create_type__object_type;
     else
       v_package_name := create_type__package_name;

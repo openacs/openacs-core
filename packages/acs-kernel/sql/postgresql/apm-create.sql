@@ -27,10 +27,10 @@ create table apm_package_types (
     package_uri			varchar(1500)
 				constraint apm_packages_types_p_uri_nn not null
 				constraint apm_packages_types_p_uri_un unique,
-    package_type		varchar(300)
+    package_type		varchar(300) default '' not null
 				constraint apm_packages_pack_type_ck 
-				check (package_type in ('apm_application', 'apm_service')),
-    spec_file_path		varchar(1500),
+				check (package_type in ('', 'apm_application', 'apm_service')),
+    spec_file_path		varchar(1500) default '' not null,
     spec_file_mtime		integer,
     singleton_p			boolean default 'f' not null
 );
@@ -241,9 +241,9 @@ create table apm_package_versions (
                        constraint apm_package_vers_ver_uri_nn not null
                        constraint apm_package_vers_ver_uri_un unique,
     summary 	       varchar(3000) default '' not null,
-    description_format varchar(100) 
+    description_format varchar(100) default '' not null
 		       constraint apm_package_vers_desc_for_ck
-		         check (description_format in ('text/html', 'text/plain')),
+		         check (description_format in ('', 'text/html', 'text/plain')),
     description        text default '' not null,
     release_date       timestamp,
     vendor             varchar(500) default '' not null,
@@ -1842,7 +1842,7 @@ begin
        from apm_parameters p left outer join apm_parameter_values v 
              using (parameter_id), apm_packages ap
       where p.package_key = ap.package_key
-        and v.attr_value is null
+        and v.attr_value = ''''
         and p.package_key = register_parameter__package_key
       loop
       	PERFORM apm__set_value(
@@ -2106,7 +2106,7 @@ begin
 	  new__creation_ip,
 	  new__context_id
 	 );
-       if new__instance_name is null then 
+       if new__instance_name is null or new__instance_name = '''' then 
 	 v_instance_name := new__package_key || '' '' || v_package_id;
        else
 	 v_instance_name := new__instance_name;
