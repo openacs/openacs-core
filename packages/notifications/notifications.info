@@ -50,6 +50,7 @@
             <file type="query_file" db_type="oracle" path="tcl/notification-reply-procs-oracle.xql"/>
             <file type="query_file" db_type="postgresql" path="tcl/notification-reply-procs-postgresql.xql"/>
             <file type="tcl_procs" path="tcl/notification-reply-procs.tcl"/>
+            <file type="query_file" path="tcl/notification-reply-procs.xql"/>
             <file type="query_file" db_type="oracle" path="tcl/notification-request-procs-oracle.xql"/>
             <file type="query_file" db_type="postgresql" path="tcl/notification-request-procs-postgresql.xql"/>
             <file type="tcl_procs" path="tcl/notification-request-procs.tcl"/>

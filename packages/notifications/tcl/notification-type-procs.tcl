@@ -10,6 +10,12 @@ ad_library {
 
 namespace eval notification::type {
 
+    ad_proc -public get_impl_key {
+        {-type_id:required}
+    } {
+        return [db_string select_impl_key {}]        
+    }
+
     ad_proc -public new {
         {-type_id ""}
         {-sc_impl_id:required}

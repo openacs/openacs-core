@@ -35,12 +35,14 @@ namespace eval notification::reply::sweep {
 
         # Loop through and transactionally process each one
         foreach reply $replies {
-            ns_log Notice "NOTIF- one reply $reply_id of type $type_id"
-
             set reply_id [lindex $reply 0]
             set type_id [lindex $reply 1]
 
+            ns_log Notice "NOTIF- one reply $reply_id of type $type_id"
+
             notification::type::process_reply -type_id $type_id -reply_id $reply_id
+
+            notification::reply::delete -reply_id $reply_id
         }
     }
 

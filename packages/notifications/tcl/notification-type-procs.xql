@@ -2,6 +2,14 @@
 
 <queryset>
 
+<fullquery name="notification::type::get_impl_key.select_impl_key">
+<querytext>
+select impl_name from acs_sc_impls, notification_types
+where acs_sc_impls.impl_id = notification_types.sc_impl_id
+and type_id= :type_id
+</querytext>
+</fullquery>
+
     <fullquery name="notification::type::get_type_id.select_type_id">
         <querytext>
             select type_id

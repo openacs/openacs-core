@@ -26,6 +26,8 @@
                    notif_html,
                    notification_requests.user_id,
                    notification_requests.type_id,
+                   notification_requests.delivery_method_id,
+                   notifications.response_id,
                    acs_object.name(notifications.object_id) as object_name
             from notifications,
                  notification_requests,
