@@ -49,18 +49,13 @@ ad_proc -public ad_verify_install {} {
 	return 0
     }
     set kernel_install_p [apm_package_installed_p acs-kernel] 
-    set admin_node_p [ad_acs_admin_node] 
-    set admin_exists_p [ad_acs_administrator_exists_p]
 
-    ns_log Debug "Verifying Installation: Kernel Installed? $kernel_install_p \
-	    ACS Administration Link Id: $admin_node_p  An Administrator? $admin_exists_p"
+    ns_log Debug "Verifying Installation: Kernel Installed? $kernel_install_p"
 
-    if { $kernel_install_p && $admin_node_p && $admin_exists_p} {
+    if { $kernel_install_p } {
 	return 1 
     } else {
 	ad_proc util_memoize {script {max_age ""}} {no cache} {eval $script}
 	return 0
     }
 }
-
-
