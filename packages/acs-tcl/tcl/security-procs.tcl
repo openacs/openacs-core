@@ -470,7 +470,7 @@ ad_proc -private sec_generate_secure_token_cookie { } {
     ad_set_signed_cookie -secure t "ad_secure_token" "[ad_conn session_id],[ad_conn user_id],[ns_time]"
 }
 
-ad_proc -public -deprecated ad_secure_conn_p {} { 
+ad_proc -public -deprecated -warn ad_secure_conn_p {} { 
     Use security::secure_conn_p instead.
     
     @see security::secure_conn_p
@@ -1265,7 +1265,7 @@ ad_proc -public -deprecated ad_get_user_id {} {
     return [ad_conn user_id]
 }
 
-ad_proc -public -deprecated ad_verify_and_get_user_id { 
+ad_proc -public -deprecated -warn ad_verify_and_get_user_id { 
     {-secure f}
 } {
     Returns the current user's ID. 0 indicates user is not logged in
@@ -1275,20 +1275,6 @@ ad_proc -public -deprecated ad_verify_and_get_user_id {
     @see ad_conn
 } {
     return [ad_conn user_id]
-}
-
-ad_proc -public -deprecated ad_verify_and_get_session_id { 
-    {-secure f} 
-} {
-    Returns the current session's ID.
-
-    Deprecated since session_id now provided via ad_conn session_id
-
-    @param secure is ignored
-
-    @see ad_conn
-} {
-    return [ad_conn session_id]
 }
 
 # handling privacy

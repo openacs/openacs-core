@@ -9,7 +9,7 @@ ad_page_contract {
     admin_email:onevalue
 }
 
-set admin_user_id [ad_verify_and_get_user_id]
+set admin_user_id [ad_conn user_id]
 set admin_email [db_string unused "select email from 
 parties where party_id = :admin_user_id"]
 set administration_name [db_string admin_name "select

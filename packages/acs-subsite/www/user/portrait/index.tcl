@@ -24,7 +24,7 @@ ad_page_contract {
     return_code:onevalue
 }
    
-set current_user_id [ad_verify_and_get_user_id]
+set current_user_id [ad_conn user_id]
 set subsite_url     [subsite::get_element -element url]
 set return_url      "[subsite::get_element -element url]user/portrait/"
 

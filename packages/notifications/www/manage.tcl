@@ -7,7 +7,7 @@ ad_page_contract {
     @cvs-id $Id$
 } {}
 
-ad_maybe_redirect_for_registration
+auth::require_login
 set user_id [ad_conn user_id]
 set return_url [ad_conn url]
 

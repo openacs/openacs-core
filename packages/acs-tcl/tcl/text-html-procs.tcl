@@ -1627,7 +1627,7 @@ ad_proc -deprecated util_maybe_convert_to_html {raw_string html_p} {
     }
 }
 
-ad_proc -deprecated util_quotehtml { arg } {
+ad_proc -deprecated -warn util_quotehtml { arg } {
     This proc does exactly the same as <a href="/api-doc/proc-view?proc=ad_quotehtml"><code>ad_quotehtml</code></a>. 
     Use that instead. This one will be deleted eventually.
 

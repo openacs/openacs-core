@@ -33,7 +33,7 @@ ad_proc -public -deprecated cr::keyword::new {
     return $keyword_id
 }
 
-ad_proc -public -deprecated cr::keyword::delete {
+ad_proc -public -deprecated content::keyword::delete {
     {-keyword_id:required}
 } {
     Delete a keyword.

@@ -92,7 +92,7 @@ if {[catch {
     <pre>$errmsg</pre>"
 }
 
-set admin_user_id [ad_verify_and_get_user_id]
+set admin_user_id [ad_conn user_id]
 set email_from [db_string admin_email "select email from parties where party_id = :admin_user_id"]
 set subject "$action"
 set message $email_message

@@ -195,7 +195,7 @@ ad_proc -private apm_generate_tarball { version_id } {
     # the database.
 
     set creation_ip [ad_conn peeraddr]
-    set user_id     [ad_verify_and_get_user_id]
+    set user_id     [ad_conn user_id]
     set name        "tarball-for-package-version-${version_id}"
     set title       "${package_key}-tarball"
 

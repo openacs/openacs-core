@@ -16,7 +16,7 @@ ad_page_contract {
     export_vars:onevalue
 }
     
-set admin_user_id [ad_verify_and_get_user_id]
+set admin_user_id [ad_conn user_id]
 
 set context [list [list "./" "Users"] "New user notified"]
 set export_vars [export_url_vars user_id]

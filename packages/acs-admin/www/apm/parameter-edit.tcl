@@ -9,7 +9,7 @@ ad_page_contract {
 }
 
 
-set user_id [ad_verify_and_get_user_id]
+set user_id [ad_conn user_id]
 
 db_1row param_info { 
     select parameter_name, datatype, description, default_value, min_n_values, max_n_values, parameter_id, 

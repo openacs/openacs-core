@@ -10,10 +10,10 @@ ad_page_contract {
     {user_id ""}
 }
 
-ad_maybe_redirect_for_registration
+auth::require_login
 
 
-set current_user_id [ad_verify_and_get_user_id]
+set current_user_id [ad_conn user_id]
 
 if [empty_string_p $user_id] {
     set user_id $current_user_id

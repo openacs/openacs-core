@@ -29,13 +29,13 @@ aa_register_case -cats {smoke api} acs_content_repository_trivial_smoke_test {
             set children [cr::keyword::get_children -parent_id $new_keyword_id ]
             aa_true "child is returned" [string match "*$new_keyword_id_2*" $children]
 
-            set delete_result [cr::keyword::delete -keyword_id $new_keyword_id_2]
+            set delete_result [content::keyword::delete -keyword_id $new_keyword_id_2]
 
             set children_after_delete [cr::keyword::get_children -parent_id $new_keyword_id ]
             aa_true "child is not returned after deletion" ![string match "*$new_keyword_id_2*" $children_after_delete]
 
             # teardown doesn't seem to eliminate this:
-            set delete_result [cr::keyword::delete -keyword_id $new_keyword_id]
+            set delete_result [content::keyword::delete -keyword_id $new_keyword_id]
 
             # would test that delete works but there's no relevant function in the API 
         }

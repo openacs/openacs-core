@@ -12,7 +12,7 @@ ad_page_contract {
     gc_system_name:onevalue
 }
 
-set user_id [ad_verify_and_get_user_id]
+set user_id [ad_conn user_id]
 
 db_1row name_get "select first_names, last_name, email, url from persons, parties where persons.person_id = parties.party_id and party_id =:user_id" -bind [ad_tcl_vars_to_ns_set user_id]
 
