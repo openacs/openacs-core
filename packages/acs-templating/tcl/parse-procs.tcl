@@ -325,29 +325,32 @@ ad_proc -public template::expand_percentage_signs { message } {
 } {
   set remaining_message $message
   set formatted_message ""
-  while { [regexp {^(.*?)(%[a-zA-Z_\.]+%)(.*)$} $remaining_message match before_percent percent_match remaining_message] } {
+  while { [regexp [lang::message::embedded_vars_regexp] $remaining_message match before_percent percent_match remaining_message] } {
     append formatted_message $before_percent 
 
-    # Convert syntax to TCL syntax:
-
-    #   array variables
-
-    regsub {%([a-zA-Z0-9_]+)\.([a-zA-Z0-9_]+)%} $percent_match {$\1(\2)} substitution
-
-    #   ordinary variables
-
-    regsub {%([a-zA-Z0-9_]+)%} $substitution {$\1} substitution
-
-    # Create command to execute in caller's scope
-
-    set command "subst -nocommands \"$substitution\""
+    if { [string equal $percent_match "%%"] } {
+      # A quoted percentage sing
+      set substitution "%"
+    } else {
+      # An embedded variable
     
-    # and execute that
+      # Convert syntax to TCL syntax:
+      # It's either an array variable or a tcl variable
+      #   array variables
+      regsub {^%([a-zA-Z0-9_]+)\.([a-zA-Z0-9_]+)%$} $percent_match {$\1(\2)} substitution
+      #   ordinary variables
+      regsub {^%([a-zA-Z0-9_:]+)%$} $substitution {$\1} substitution
 
-    set substitution [uplevel $command]
+      # Create command to execute in caller's scope
+      set command "subst -nocommands \"$substitution\""
+    
+      # and execute that
+      set substitution [uplevel $command]
+    }
 
     append formatted_message $substitution
   }
+
   append formatted_message $remaining_message
 
   return $formatted_message
