@@ -425,19 +425,11 @@ ad_proc -public template::adp_compile { source_type source } {
   # variable references.
 
    # substitute array variable references
-  if { [lsearch -exact {new-portals foobar} [ad_conn package_key]] == -1 } {
-    while {[regsub -all [template::adp_array_variable_regexp] $code {\1[ad_quotehtml $\2(\3)]} code]} {}
-  } else {
-    while {[regsub -all [template::adp_array_variable_regexp] $code {\1${\2(\3)}} code]} {}
-  }
+  while {[regsub -all [template::adp_array_variable_regexp] $code {\1[ad_quotehtml $\2(\3)]} code]} {}
   while {[regsub -all [template::adp_array_variable_regexp_noquote] $code {\1$\2(\3)} code]} {}
 
   # substitute simple variable references
-  if { [lsearch -exact {new-portals} [ad_conn package_key]] == -1 } {
-    while {[regsub -all [template::adp_variable_regexp] $code {\1[ad_quotehtml ${\2}]} code]} {}
-  } else {
-    while {[regsub -all [template::adp_variable_regexp] $code {\1${\2}} code]} {}
-  }
+  while {[regsub -all [template::adp_variable_regexp] $code {\1[ad_quotehtml ${\2}]} code]} {}
   while {[regsub -all [template::adp_variable_regexp_noquote] $code {\1${\2}} code]} {}
 
   # unescape protected @ references
