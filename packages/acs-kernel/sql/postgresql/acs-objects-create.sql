@@ -1083,10 +1083,10 @@ declare
   check_object_ancestors__ancestor_id            alias for $2;  
   check_object_ancestors__n_generations          alias for $3;  
   context_id                                     acs_objects.context_id%TYPE;
-  security_inherit_p                     acs_objects.security_inherit_p%TYPE;
+  security_inherit_p                  acs_objects.security_inherit_p%TYPE;
   n_rows                                         integer;       
   n_gens                                         integer;       
-  res                                         boolean;       
+  result                                         boolean;       
 begin
    -- OBJECT_ID is the object we are verifying
    -- ANCESTOR_ID is the current ancestor we are tracking
@@ -1098,7 +1098,7 @@ begin
    -- OBJECT_ID''''s children are contained in the index. That is
    -- verified by seperate functions.
 
-   res := ''t'';
+   result := ''t'';
 
    -- Grab the context and security_inherit_p flag of the current
    -- ancestor''''s parent.
@@ -1108,12 +1108,12 @@ begin
 
    if check_object_ancestors__ancestor_id = 0 then
      if context_id is null then
-       res := ''t'';
+       result := ''t'';
      else
        -- This can be a constraint, can''''t it?
        PERFORM acs_log__error(''acs_object.check_representation'',
                      ''Object 0 doesn''''t have a null context_id'');
-       res := ''f'';
+       result := ''f'';
      end if;
    else
      if context_id is null or security_inherit_p = ''f'' then
@@ -1121,16 +1121,16 @@ begin
      end if;
 
      if acs_object__check_context_index(check_object_ancestors__object_id, check_object_ancestors__ancestor_id, check_object_ancestors__n_generations) = ''f'' then
-       res := ''f'';
+       result := ''f'';
      end if;
 
      if acs_object__check_object_ancestors(check_object_ancestors__object_id, context_id,
 	                      check_object_ancestors__n_generations + 1) = ''f'' then
-       res := ''f'';
+       result := ''f'';
      end if;
    end if;
 
-   return res;
+   return result;
   
 end;' language 'plpgsql';
 
@@ -1142,7 +1142,7 @@ declare
   object_id              alias for $1;  
   descendant_id          alias for $2;  
   n_generations          alias for $3;  
-  res                    boolean;     
+  result                 boolean;     
   obj                    record;  
 begin
    -- OBJECT_ID is the object we are verifying.
@@ -1155,12 +1155,12 @@ begin
    -- there aren''t extraneous rows or that the ancestors of OBJECT_ID
    -- are maintained correctly.
 
-   res := ''t'';
+   result := ''t'';
 
    -- First verify that OBJECT_ID and DESCENDANT_ID are actually in
    -- the index.
    if acs_object__check_context_index(descendant_id, object_id, n_generations) = ''f'' then
-     res := ''f'';
+     result := ''f'';
    end if;
 
    -- For every child that reports inheriting from OBJECT_ID we need to call
@@ -1171,11 +1171,11 @@ begin
 	       and security_inherit_p = ''t'' loop
      if acs_object__check_object_descendants(object_id, obj.object_id,
        n_generations + 1) = ''f'' then
-       res := ''f'';
+       result := ''f'';
      end if;
    end loop;
 
-   return res;
+   return result;
   
 end;' language 'plpgsql';
 
@@ -1223,7 +1223,7 @@ declare
   v_rec                                        record;  
   row                                          record; 
 begin
-   res := ''t'';
+   result := ''t'';
    PERFORM acs_log__notice(''acs_object.check_representation'',
                   ''Running acs_object.check_representation on object_id = '' ||
 		  check_representation__object_id || ''.'');
@@ -1252,7 +1252,7 @@ begin
         end LOOP;
 
         if n_rows = 0 then
-           res := ''f'';
+           result := ''f'';
            PERFORM acs_log__error(''acs_object.check_representation'',
                      ''Table '' || v_rec.table_name || 
                      '' (primary storage for '' ||
@@ -1268,11 +1268,11 @@ begin
                   ''OBJECT CONTEXT INTEGRITY TEST'');
 
    if acs_object__check_object_ancestors(check_representation__object_id, check_representation__object_id, 0) = ''f'' then
-     res := ''f'';
+     result := ''f'';
    end if;
 
    if acs_object__check_object_descendants(check_representation__object_id, check_representation__object_id, 0) = ''f'' then
-     res := ''f'';
+     result := ''f'';
    end if;
    for row in  select object_id, ancestor_id, n_generations
 	       from acs_object_context_index
@@ -1285,7 +1285,7 @@ begin
                      || ''object_id = '' || row.object_id || 
                      '', ancestor_id = '' || row.ancestor_id || 
                      '', n_generations = '' || row.n_generations || ''.'');
-       res := ''f'';
+       result := ''f'';
      end if;
    end loop;
 
@@ -1293,7 +1293,7 @@ begin
 		  ''Done running acs_object.check_representation '' || 
 		  ''on object_id = '' || check_representation__object_id || ''.'');
 
-   return res;
+   return result;
   
 end;' language 'plpgsql';
 
