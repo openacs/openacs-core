@@ -890,7 +890,7 @@ ad_proc -private publish::foreach_publish_path { url code {root_path ""} } {
 
 } {
   if { ![template::util::is_nil root_path] } {
-    set paths [list $root_path]
+    set paths $root_path
   } else {
     # set paths [get_publish_roots]
     set paths "./"
