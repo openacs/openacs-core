@@ -14,22 +14,6 @@ ad_library {
 }
 
 
-ad_proc -private ad_locale_escape_vars_if_not_null {
-    list
-} {
-    Processes a list of variables before they are passed into
-    a regexp command.
-
-    @param list   List of variable names
-} {
-    foreach lm $list {
-	upvar $lm foreign_var
-	if { [exists_and_not_null foreign_var] } {
-	    set foreign_var "\[$foreign_var\]"
-	}
-    }
-}
-
 ad_proc -public lc_parse_number { 
     num 
     locale 
@@ -64,7 +48,7 @@ ad_proc -public lc_parse_number {
     set neg [lc_get -locale $locale "negative_sign"]
     set pos [lc_get -locale $locale "positive_sign"]
 
-    ad_locale_escape_vars_if_not_null {dec thou neg pos}
+    lang::util::escape_vars_if_not_null {dec thou neg pos}
 
     # Pattern actually looks like this (separators notwithstanding):
     # {^\ *([-]|[+])?\ *([0-9]+|[1-9][0-9]{1,2}([,][0-9]{3})+)([.][0-9]*)?\ *$}

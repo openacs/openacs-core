@@ -85,7 +85,7 @@ db_transaction {
 	    }
 	    # Some five-char aspell dicts (locales) are missing in ad_locales so we
 	    # need to catch those cases and use the locale as the pretty name, ugh ...
-	    if { [catch { lappend wanted_dicts [list [string totitle [ad_locale_get_label $dict]] $dict] }] } {
+	    if { [catch { lappend wanted_dicts [list [string totitle [lang::util::get_label $dict]] $dict] }] } {
 		lappend wanted_dicts [list "Locale $dict" $dict]
 	    }
 	}

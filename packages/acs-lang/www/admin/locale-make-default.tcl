@@ -23,9 +23,6 @@ db_transaction {
 
     db_dml make_locale_default "update ad_locales set default_p = 't'
         where locale = :locale"
-
-    util_memoize_flush [list ad_locale_locale_from_lang $locale]
-
 }
 
 # Flush caches

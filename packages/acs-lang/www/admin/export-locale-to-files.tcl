@@ -7,7 +7,7 @@ ad_page_contract {
     locale
 }
 
-set locale_label [ad_locale_get_label $locale]
+set locale_label [lang::util::get_label $locale]
 set page_title "Export all messages for locale $locale"
 set return_url [export_vars -base package-list { locale }]
 set context [list [list $return_url $locale_label] $page_title]

@@ -937,57 +937,6 @@ ad_proc -public _ {
 #
 #####
 
-ad_proc -private -deprecated -warn lang_message_register { locale key message } { 
-
-    Normally accessed through the _mr procedure.
-    Registers a message in a given locale or language.
-    Inserts the message into the table lang_messages
-    if it does not exist and updates if it does.
-
-    @author Jeff Davis (davis@arsdigita.com)
-    @author Bruno Mattarollo (bruno.mattarollo@ams.greenpeace.org)
-    @see _mr
-    
-    @param locale  Locale or language of the message. If a language is supplied,
-                   the default locale for the language is looked up. 
-                   Taken from ad_locales table.
-    @param key     Unique identifier for this message. Will be the same identifier
-                   for each language
-    @param message Text of the message
-    
-    @see lang::message::register
-} { 
-    return [lang::message::register $locale $key $message]
-}
-
-ad_proc -private -deprecated -warn lang_message_lookup {
-    locale
-    key
-    {default "TRANSLATION MISSING"}
-} {    
-    @see lang::message::lookup
-} { 
-    return [lang::message::lookup $locale $key $default {} 2]
-}
-
-ad_proc -deprecated -warn lang_babel_translate { 
-    msg
-    lang
-} {
-    Translates an English string into a different language
-    using Babelfish.
-
-    @author            Henry Minsky (hqm@mit.edu)
-
-    @param msg         String to translate
-    @param lang        Abbreviation for lang in which to translate string
-    @return            Translated string
-
-    @see lang::message::translate
-} {
-    return [lang::message::translate $msg $lang]
-}     
-
 
 ad_proc -public lang::message::update_description {
     {-package_key:required}

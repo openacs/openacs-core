@@ -12,7 +12,7 @@ ad_page_contract {
 
 # We rename to avoid conflict in queries
 set system_locale [lang::system::locale -site_wide]
-set system_locale_label [ad_locale_get_label $system_locale]
+set system_locale_label [lang::util::get_label $system_locale]
 
 set page_title "Administration of Localization"
 set context [list]

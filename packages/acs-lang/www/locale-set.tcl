@@ -12,7 +12,7 @@ ad_page_contract {
 }
 
 # set the locale property
-ad_locale_set locale $locale
+lang::user::set_locale $locale
 
 ad_returnredirect $redirect_url
 
