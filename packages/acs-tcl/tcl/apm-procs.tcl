@@ -596,6 +596,28 @@ ad_proc -public apm_package_parameters {package_key} {
     }]
 }
 
+ad_proc -public apm_package_supported_databases {
+    package_key 
+} {
+    Return a list of db types (i.e. oracle, postgresql) 
+    supported by the package with given key.
+
+    @author Peter Marklund
+    
+    @see db_known_database_types
+    @see apm_package_supoorts_rdbms_p
+} {
+    set supported_databases_list [list]
+    foreach db_type_info [db_known_database_types] {
+        set db_type [lindex $db_type_info 0]
+        if { [apm_package_supports_rdbms_p -package_key $package_key] } {
+            lappend supported_databases_list $db_type
+        }
+    }
+
+    return $supported_databases_list
+}
+
 ad_proc -public apm_package_registered_p {
     package_key
 } {
