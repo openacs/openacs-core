@@ -124,8 +124,8 @@ ad_proc -public item::get_revision_content { revision_id args } {
   # Get the mime type, decide if we want the text
   get_mime_info $revision_id
 
-  if { [string equal \
-           [lindex [split $mime_info(mime_type) "/"] 0] "text"] } {
+  if { [exists_and_not_null mime_info(mime_type)] && \
+           [string equal [lindex [split $mime_info(mime_type) "/"] 0] "text"] } {
       set text_sql [db_map grc_get_all_content_1]
   } else {
       set text_sql ""
