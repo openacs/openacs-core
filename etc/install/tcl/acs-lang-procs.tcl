@@ -34,7 +34,16 @@ ad_proc ::twt::acs_lang::set_locale { locale } {
 
     ::twt::do_request /acs-lang
     form find locale
-    field find ~n site_wide_locale
-    ::twt::multiple_select_value $locale
+    ::twt::multiple_select_value site_wide_locale $locale
     form submit
+}
+
+ad_proc ::twt::acs_lang::check_no_keys { } {
+    Check in the current request body for occurences of #package_key.message_key#
+    which might be message keys that a developer forgot to let go through a lang::util::localize
+    call to be converted into text.
+} {
+    if { [regexp {#[a-zA-Z0-9_.-]+\.[a-zA-Z0-9_.-]+#} [response body] message_key] } {
+        ::twt::log_warning "Found \"$message_key\" on page [response url] and might be a message key that needs a lang::util::localize call"
+    }
 }

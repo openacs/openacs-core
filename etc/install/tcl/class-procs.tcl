@@ -66,34 +66,34 @@ ad_proc ::twt::class::setup_memberships { server_url } {
 
         # Member management for the class
         follow_members_link
-
+    
         # Add all students
-        add_members [::twt::user::get_users student] "Student"
+        add_members [::twt::user::get_users student] dotlrn_student_rel
 
         # Add a random professor
-        add_member [::twt::user::get_random_users professor 1] "Professor"
+        add_member [::twt::user::get_random_users professor 1] dotlrn_instructor_rel
 
-        # Add two random staff
+        # Add two staff in random roles (one of Teaching Assistant, Course Admin, or Course Assistant)
         set admin_users [::twt::user::get_random_users staff 2]
-        set admin_labels [list "Course Assistant" "Teaching Assistant"]
+        set admin_rels [list dotlrn_ta_rel dotlrn_cadmin_rel dotlrn_ca_rel]
         set admin_counter 0
         for { set admin_counter 0 } \
             { [expr $admin_counter < 2 && $admin_counter < [llength $admin_users]] } \
             { incr admin_counter } {
 
-            set admin_label [::twt::get_random_items_from_list $admin_labels 1]
-            add_member [lindex $admin_users $admin_counter] $admin_label
+            set admin_rel [::twt::get_random_items_from_list $admin_rels 1]
+            add_member [lindex $admin_users $admin_counter] $admin_rel
         }
     }
 }
 
-ad_proc ::twt::class::add_members { email_list role } {
+ad_proc ::twt::class::add_members { email_list rel_type } {
     foreach email $email_list {
-        add_member $email $role
+        add_member $email $rel_type
     }
 }
 
-ad_proc ::twt::class::add_member { email role } {
+ad_proc ::twt::class::add_member { email rel_type } {
 
     if { [empty_string_p $email] } {
         return
@@ -108,11 +108,9 @@ ad_proc ::twt::class::add_member { email role } {
     # Pick the user (there should be only one)
     link follow ~u member-add-2
 
-    # add as student (default)
+    # pick relationship type to class (role)
     form find ~a "member-add-3"
-
-    field find ~n rel_type
-    field select $role
+    ::twt::multiple_select_value rel_type $rel_type
     form submit
 }
 
@@ -131,8 +129,7 @@ ad_proc ::twt::class::setup_subgroups { server_url } {
             form find ~n add_subcomm
             field fill $name ~n pretty_name
             field fill $description ~n description
-            field find ~n join_policy
-            field select $policy
+            ::twt::multiple_select_value join_policy $policy
             form submit
         }
     }    
@@ -146,7 +143,8 @@ ad_proc ::twt::class::subcommunity_properties_list {} {
         set pretty_name "Project Group $letter"
         lappend property_list $pretty_name
         lappend property_list "Workspace for people working in $pretty_name"
-        lappend property_list "Needs Approval"    
+        # Other possible values: open, closed
+        lappend property_list "needs approval"    
     }
 
     return $property_list

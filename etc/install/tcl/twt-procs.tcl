@@ -22,6 +22,11 @@ ad_proc ::twt::log { message } {
     puts "${script_name}: $message"
 }
 
+ad_proc ::twt::log_warning { message } {
+    set script_name [file tail [info script]]
+    puts "${script_name}: WARNING - $message"
+}
+
 ad_proc ::twt::do_request { page_url } {
     Takes a a url and invokes tclwebtest::do_request. Will retry
     the request a number of times if it fails because of a socket
@@ -60,6 +65,8 @@ ad_proc ::twt::do_request { page_url } {
         # $retry_max times. Propagate the error while retaining the stack trace
         error "::tclwebtest::do_request threw error $errmsg with errorInfo $errorInfo"
     }
+
+    ::twt::acs_lang::check_no_keys
 }
 
 ad_proc ::twt::get_url_list { page_url link_url_pattern } {
@@ -209,11 +216,13 @@ ad_proc ::twt::crawl_links {} {
    }
 }
 
-ad_proc ::twt::multiple_select_value { value } {
+ad_proc ::twt::multiple_select_value { name value } {
     Selects the option with the given value in the current
     form widget (workaround since I can only get tclwebtest
     to select based on label).
 } {
+    field find ~n $name
+
     array set current_field [field current]
     set field_choices $current_field(choices)
     set index 0
@@ -223,6 +232,6 @@ ad_proc ::twt::multiple_select_value { value } {
         }
         incr index
     }
-    
+
     ::tclwebtest::field_select -index $index
 }

@@ -92,12 +92,9 @@ ad_proc ::twt::user::add {
     form submit
 
     form find ~n add_user
-    field find ~n type
-    ::twt::multiple_select_value $type
-    field find ~n can_browse_p
-    ::twt::multiple_select_value $full_access
-    field find ~n read_private_data_p
-    ::twt::multiple_select_value $guest
+    ::twt::multiple_select_value type $type
+    ::twt::multiple_select_value can_browse_p $full_access
+    ::twt::multiple_select_value read_private_data_p $guest
     form submit    
 }
 
