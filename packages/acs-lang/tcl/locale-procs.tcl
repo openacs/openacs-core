@@ -175,47 +175,6 @@ ad_proc -public lang::system::timezone_utc_offset { } {
     return [db_string system_utc_offset {}]
 }
 
-
-ad_proc -public lang::system::default_locale {
-    {-language:required}
-} {
-    Get the default locale for language. Cached.
-
-    @author Simon Carstensen
-    @author Peter Marklund
-    @creation-date 2003-08-13
-    @return the default locale or the empty string if there is no default enabled locale.
-} {
-    return [util_memoize [list lang::system::default_locale_not_cached \
-                              -language $language]]
-}
-
-ad_proc -private lang::system::default_locale_not_cached {
-    {-language:required}
-} {
-    Get the default locale for language.
-
-    @author Simon Carstensen
-    @author Peter Marklund
-    @creation-date 2003-08-13
-    @return the default locale or the empty string if there is no default enabled locale.
-} {
-    # Using a bind variable for language doens't work
-    # with Oracle since the language column is a char, not a varchar
-    # We'd have to pad the language with spaces for bind vars to work
-    return [db_string select_default_locale "
-              select locale
-              from   ad_locales
-              where  language = '$language'
-              and    enabled_p = 't'
-              and    (default_p = 't' or
-                      (select count(*)
-                      from ad_locales
-                      where language = '$language') = 1
-                     )
-    " -default ""]
-}
-
 ad_proc -public lang::system::get_locales {} {
     Return all enabled locales in the system. Cached
 
@@ -510,8 +469,7 @@ ad_proc -private lang::conn::browser_locale {} {
                 # we have a different locale with matching language, 
                 # i.e. a tentative match
                 if { ![info exists tentative_match] } {
-                    set default_locale [lang::system::default_locale \
-                                            -language $language]
+                    set default_locale [lang::util::default_locale_for_lang $language]
                     if { ![empty_string_p $default_locale] } {
                         set tentative_match $default_locale
                     }                    
@@ -523,8 +481,7 @@ ad_proc -private lang::conn::browser_locale {} {
             }
         } else {
             # We have just a language, e.g. en
-            set default_locale [lang::system::default_locale \
-                                    -language $locale]
+            set default_locale [lang::util::default_locale_for_lang $locale]
             if { ![empty_string_p $default_locale] } {
                 set perfect_match $default_locale
                 break
