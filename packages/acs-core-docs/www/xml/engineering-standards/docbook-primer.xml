@@ -731,16 +731,38 @@
             package_name and type_extension_table
           </para></listitem>
           <listitem><para>
-            adding optional services, including search, general comments, attachments, notifications, workflow, CR and the new CR Tcl API
+            adding optional services, including search, general
+            comments, attachments, notifications, workflow, CR and
+            the new CR Tcl API
           </para></listitem>
         </itemizedlist>
       </para><listitem>
       <listitem><para>
-        Document kernel coding requirements, strategy and guidelines to help code changers make decisions that meet kernel designers' criteria
+        Document kernel coding requirements, strategy and guidelines
+        to help code changers make decisions that meet kernel
+        designers' criteria
       </para></listitem>
     </itemizedlist>
   </sect2>
 
+  <sect2 id="doc-strategy" xreflabel="Documenting strategy">
+    <title>OpenACS Documentation Strategy</title>
+    <para>
+      OpenACS documentation development is subject to the
+      constraints of the software project development and release
+      methods and cycles (<xref linkend="using-cvs-with-openacs"/>).
+      Essentially, all phases of work may be active to accommodate
+      the asynchronous nature of multiple subprojects evolving by
+      the efforts of a global base of participants with culturally
+      diverse time references and scheduling idiosyncrasies.
+    </para>
+    <para>
+      The documentation strategy is to use project methods to
+      involve others by collaborating or obtaining guidance or
+      feedback (peer review) to distribute the workload and increase
+      the overall value of output for the OpenACS project. 
+    </para>
+  </sect2>
 
   <sect2 id="dbprimer-why" xreflabel="Why DocBook?">
     <title>OpenACS Documentation Strategy: Why DocBook?</title>
