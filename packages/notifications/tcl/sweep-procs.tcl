@@ -28,9 +28,11 @@ namespace eval notification::sweep {
         # Get email
         set email [cc_email_from_party $user_id]
 
-        acs_mail_lite::send -to_addr $email -from_addr "notifications@openforce.biz" \
-                -subject $subject \
-                -body $content
+        acs_mail_lite::send \
+            -to_addr $email \
+            -from_addr "notifications@openforce.biz" \
+            -subject $subject \
+            -body $content
     }
 
     ad_proc -public cleanup_notifications {} {
@@ -63,14 +65,15 @@ namespace eval notification::sweep {
                 db_transaction {
                     # Send it
                     send_one -user_id [ns_set get $notif user_id] \
-                            -subject "\[[ad_system_name] - [ns_set get $notif object_name]\]: [ns_set get $notif notif_subject]" \
-                            -content [ns_set get $notif notif_text] \
-                            -response_id [ns_set get $notif response_id] \
-                            -delivery_method_id [ns_set get $notif delivery_method_id]
+                        -subject "\[[ad_system_name] - [ns_set get $notif object_name]\] [ns_set get $notif notif_subject]" \
+                        -content [ns_set get $notif notif_text] \
+                        -response_id [ns_set get $notif response_id] \
+                        -delivery_method_id [ns_set get $notif delivery_method_id]
 
                     # Markt it as sent
-                    notification::mark_sent -notification_id [ns_set get $notif notification_id] \
-                            -user_id [ns_set get $notif user_id]
+                    notification::mark_sent \
+                        -notification_id [ns_set get $notif notification_id] \
+                        -user_id [ns_set get $notif user_id]
                 }
             } else {
                 # It's batched, we're not handling this one yet
