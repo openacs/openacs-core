@@ -325,7 +325,8 @@ proc db_qd_replace_sql {statement_name sql} {
     return $sql
 }
 
-# fetch a query snippet
+# fetch a query snippet.  used to provide db-specific query snippets when 
+# porting highly dynamic queries.  (OpenACS - DanW)
 proc db_map {snippet_name} {
     set fullname [db_qd_get_fullname $snippet_name]
     set fullquery [db_qd_fetch $fullname]
@@ -678,8 +679,14 @@ proc db_qd_make_absolute_path {relative_root suffix} {
 proc db_qd_internal_prepare_queryfile_content {file_content} {
     
     set new_file_content ""
-    #set rest_of_file_content $file_content
+
+    # The lazy way to do it.  partialquery was added for clarification of 
+    # the query files, but in fact a partialquery and a fullquery are parsed 
+    # exactly the same.  Doing this saves the bother of having to tweak the 
+    # rest of the parsing code to handle partialquery.  (OpenACS - DanW)
+
     regsub -all {(</?)partialquery([ >])} $file_content {\1fullquery\2} rest_of_file_content
+
     set querytext_open "<querytext>"
     set querytext_close "</querytext>"
 
