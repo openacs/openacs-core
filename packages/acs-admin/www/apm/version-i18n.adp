@@ -45,6 +45,14 @@
   </p>
 </ol>
 
+<p>
+  An <b>important piece of advice</b> when doing message catalog conversion is to
+  replace phrases rather than words with message catalog lookups.
+  The reason for this is that different languages have very
+  different grammar. An example of this is that some languages don't have
+  prepositions.
+</p>
+
 <h3>Actions to take on adp files</h3>
 
 <p>
@@ -175,17 +183,24 @@ find -iname '*.tcl'|xargs egrep -i '(ad_complain|ad_return_error)'|egrep -v '<#'
   You may mark up translatable text in tcl library files and tcl pages
   with temporary tags (on the <#key text#> syntax mentioned
   previously). If you have a sentence or paragraph of text with
-  variables in it you may choose to turn the whole text into one
-  message in the catalog. If you choose this option you cannot use the
-  message tag syntax but rather you must manually replace the text
-  with an invocation of the message lookup procedure (the underscore
-  procedure) as well as manually insert the message into the catalog
-  file (you should check that your message key is unique when you do
-  this). Here is an example from dotlrn:
+  variables and or procedure calls in it you should in most cases 
+  try to turn the whole text into one
+  message in the catalog. In those cases, follow these steps:
 </p>
 
+<ul>
+  <li>For each message call in the text, decide on a variable name and replace
+      the procedure call with a variable lookup on the syntax %var_name%. Remember
+      to initialize a tcl variable with the same name on some line above the text.</li>
+  <li>If the text is in a tcl file you must replace variable lookups 
+      (occurences of $var_name or ${var_name}) with %var_name%</li>
+  <li>You are now ready to follow the normal procedure and mark up the text using a 
+      tempoarary message tag (<#_ text_with_percentage_vars#>) and run the action 
+      replace tags with keys in the APM.</li>
+</ul>
+
 <p>
-  The code
+The variable values in the message are usually fetched with upvar, here is an example from dotlrn:
 </p>
 
 <pre>
@@ -194,27 +209,7 @@ ad_return_complaint 1 "Error: A [parameter::get -parameter classes_pretty_name]
 </pre>
 
 <p>
-  was replaced manually by:
-</p>
-
-<pre>
-set msg_subst_list [list subject [parameter::get -localize -parameter classes_pretty_name] 
-                         class_instances [parameter::get -localize -parameter class_instances_pretty_plural]]
-
-ad_return_complaint 1 [_ dotlrn.class_may_not_be_deleted $msg_subst_list]
-</pre>
-
-<p>
-  and the following line was added to the catalog file:
-</p>
-
-<pre>
-_mr en_US dotlrn.class_may_not_be_deleted {Error: A %subject% must have <em>no</em> %class_instances% to be deleted}
-</pre>
-
-<p>
-Alternatively, the variable values in the message can be fetched with upvar, so that in the tcl file in the example above,
-we would have simply:
+  was replaced by:
 </p>
 
 <pre>
@@ -227,6 +222,19 @@ ad_return_complaint 1 [_ dotlrn.class_may_not_be_deleted]
 <p>
 This kind of interpolation also works in adp files where adp variable values will be inserted into the message.
 </p>
+
+<p>
+Alternatively, you may pass in an array list of the variable values to be interpolated into the message so that
+our example becomes:
+</p>
+
+<pre>
+set msg_subst_list [list subject [parameter::get -localize -parameter classes_pretty_name] 
+                         class_instances [parameter::get -localize -parameter class_instances_pretty_plural]]
+
+ad_return_complaint 1 [_ dotlrn.class_may_not_be_deleted $msg_subst_list]
+</pre>
+
 
 <p>
   When we were done going through the tcl files we ran the following
