@@ -39,7 +39,7 @@ set quick_view [string equal $search_type "Feeling Lucky"]
 ## Optimizes quick search
 if {$quick_view && [nsv_exists api_proc_doc $query_string]} {
     ad_returnredirect [api_proc_url $query_string]
-    return
+    ad_script_abort
 }
 
 ###########################
@@ -114,7 +114,7 @@ set matches [lsort -command ad_sort_by_score_proc $matches]
 
 if {$quick_view && ![empty_string_p $matches]} {
     ad_returnredirect [api_proc_url [lindex [lindex $matches 0] 0]]
-    return
+    ad_script_abort
 }
 
 set title "Procedure Search for: \"$query_string\""

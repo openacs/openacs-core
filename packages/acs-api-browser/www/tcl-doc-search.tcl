@@ -23,11 +23,9 @@ for { set i [expr { $len-1 }] } { $i >= 0 } { incr i -1 } {
     set search_for [string range $tcl_proc 0 $i]
     if { [regexp "<a href=\"(\[^>\]+)\">$search_for</a>" $tcl_docs_index_page match relative_url] } {
         ad_returnredirect "$tcl_docs_root$relative_url"
-        return
+        ad_script_abort
     } 
 }
 
 set title "Tcl API Procedure Search for: \"$tcl_proc\""
 set context [list "TCL API Search: $tcl_proc"]
-
-ad_return_template
