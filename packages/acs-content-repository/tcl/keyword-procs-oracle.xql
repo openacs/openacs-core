@@ -20,6 +20,14 @@
         </querytext>
     </fullquery>
 
+    <fullquery name="cr::keyword::delete.delete_keyword">
+        <querytext>
+            begin
+                content_keyword.delete(:keyword_id);
+            end;
+        </querytext>
+    </fullquery>
+
     <fullquery name="cr::keyword::set_heading.set_heading">
         <querytext>
             begin
