@@ -252,7 +252,7 @@ ad_proc -private rp_invoke_filter { conn filter_info why } {
     if { $errno } {
       # Uh-oh - an error occurred.
       global errorInfo
-      ad_call_proc_if_exists ds_add rp [list filter [list $why [ns_conn method] [ns_conn url] $proc $arg] $startclicks [clock clicks -milliseconds] "error" $errorInfo]
+      ds_add rp [list filter [list $why [ns_conn method] [ns_conn url] $proc $arg] $startclicks [clock clicks -milliseconds] "error" $errorInfo]
       # make sure you report catching the error!
       rp_debug "error in filter $proc for [ns_conn method] [ns_conn url]?[ns_conn query] errno is $errno message is $errorInfo"
       rp_report_error
@@ -260,13 +260,13 @@ ad_proc -private rp_invoke_filter { conn filter_info why } {
     } elseif { [string compare $result "filter_ok"] && [string compare $result "filter_break"] && \
 	    [string compare $result "filter_return"] } {
        set error_msg "error in filter $proc for [ns_conn method] [ns_conn url]?[ns_conn query].  Filter returned invalid result \"$result\""
-       ad_call_proc_if_exists ds_add rp [list filter [list $why [ns_conn method] [ns_conn url] $proc $arg] $startclicks [clock clicks -milliseconds] "error" $error_msg]
+       ds_add rp [list filter [list $why [ns_conn method] [ns_conn url] $proc $arg] $startclicks [clock clicks -milliseconds] "error" $error_msg]
        # report the bad filter_return message
        rp_debug -debug t -ns_log_level error $error_msg
        rp_report_error -message $error_msg
        set result "filter_return"
     } else {
-       ad_call_proc_if_exists ds_add rp [list filter [list $why [ns_conn method] [ns_conn url] $proc $arg] $startclicks [clock clicks -milliseconds] $result]
+       ds_add rp [list filter [list $why [ns_conn method] [ns_conn url] $proc $arg] $startclicks [clock clicks -milliseconds] $result]
     }
 
     rp_debug -debug $debug_p "Done invoking $why filter $proc (returning $result)"
@@ -307,11 +307,11 @@ ad_proc -private rp_invoke_proc { conn argv } {
     if { $errno } {
       # Uh-oh - an error occurred.
       global errorInfo
-      ad_call_proc_if_exists ds_add rp [list registered_proc [list $proc $arg] $startclicks [clock clicks -milliseconds] "error" $errorInfo]
+      ds_add rp [list registered_proc [list $proc $arg] $startclicks [clock clicks -milliseconds] "error" $errorInfo]
       rp_debug "error in $proc for [ns_conn method] [ns_conn url]?[ns_conn query] errno is $errno message is $errorInfo"
       rp_report_error
     } else {
-      ad_call_proc_if_exists ds_add rp [list registered_proc [list $proc $arg] $startclicks [clock clicks -milliseconds]]
+      ds_add rp [list registered_proc [list $proc $arg] $startclicks [clock clicks -milliseconds]]
     }
 
     rp_debug -debug $debug_p "Done Invoking registered procedure $proc"
@@ -515,7 +515,7 @@ ad_proc -private rp_filter { why } {
     ad_conn -set user_id 0
     ad_conn -set start_clicks [clock clicks -milliseconds]
 
-    ad_call_proc_if_exists ds_collect_connection_info
+    ds_collect_connection_info
 
     # -------------------------------------------------------------------------
     # Start of patch "hostname-based subsites"
@@ -696,7 +696,7 @@ ad_proc -private rp_debug { { -debug f } { -ns_log_level notice } string } {
     if { [ad_parameter -package_id [ad_acs_kernel_id] DebugP request-processor 0] } { 
 	global ad_conn
 	set clicks [clock clicks -milliseconds]
-        ad_call_proc_if_exists ds_add rp [list debug $string $clicks $clicks]
+        ds_add rp [list debug $string $clicks $clicks]
     }
     if { [ad_parameter -package_id [ad_acs_kernel_id] LogDebugP request-processor 0]
          || [string equal $debug t] 
@@ -737,7 +737,7 @@ ad_proc rp_report_error {
     set error_info $message
     set vars_to_export [export_vars -form { error_url error_info user_id prev_url error_file feedback_id bug_package_id }]
     
-    ad_call_proc_if_exists ds_add conn error $message
+    ds_add conn error $message
     
     set params [list]
     
@@ -827,22 +827,22 @@ ad_proc -private rp_handler {} {
     }
 
     foreach {root path} $paths {
-        ad_call_proc_if_exists ds_add rp [list notice "Trying rp_serve_abstract_file $root/$path" $startclicks [clock clicks -milliseconds]]
+        ds_add rp [list notice "Trying rp_serve_abstract_file $root/$path" $startclicks [clock clicks -milliseconds]]
         ad_try {
             rp_serve_abstract_file "$root/$path"
             set tcl_url2file([ad_conn url]) [ad_conn file]
             set tcl_url2path_info([ad_conn url]) [ad_conn path_info]
         } notfound val {
-            ad_call_proc_if_exists ds_add rp [list notice "File $root/$path: Not found" $startclicks [clock clicks -milliseconds]]
-            ad_call_proc_if_exists ds_add rp [list transformation [list notfound "$root / $path" $val] $startclicks [clock clicks -milliseconds]]
+            ds_add rp [list notice "File $root/$path: Not found" $startclicks [clock clicks -milliseconds]]
+            ds_add rp [list transformation [list notfound "$root / $path" $val] $startclicks [clock clicks -milliseconds]]
             continue
         } redirect url {
-            ad_call_proc_if_exists ds_add rp [list notice "File $root/$path: Redirect" $startclicks [clock clicks -milliseconds]]
-            ad_call_proc_if_exists ds_add rp [list transformation [list redirect $root/$path $url] $startclicks [clock clicks -milliseconds]]
+            ds_add rp [list notice "File $root/$path: Redirect" $startclicks [clock clicks -milliseconds]]
+            ds_add rp [list transformation [list redirect $root/$path $url] $startclicks [clock clicks -milliseconds]]
             ad_returnredirect $url
         } directory dir_index {
-            ad_call_proc_if_exists ds_add rp [list notice "File $root/$path: Directory index" $startclicks [clock clicks -milliseconds]]
-            ad_call_proc_if_exists ds_add rp [list transformation [list directory $root/$path $dir_index] $startclicks [clock clicks -milliseconds]]
+            ds_add rp [list notice "File $root/$path: Directory index" $startclicks [clock clicks -milliseconds]]
+            ds_add rp [list transformation [list directory $root/$path $dir_index] $startclicks [clock clicks -milliseconds]]
             continue
         }
         
@@ -896,13 +896,13 @@ ad_proc -private rp_handler {} {
 	  set tcl_url2file([ad_conn url]) [ad_conn file]
 	  set tcl_url2path_info([ad_conn url]) [ad_conn path_info]
 	} notfound val {
-          ad_call_proc_if_exists ds_add rp [list transformation [list notfound $root/$path $val] $startclicks [clock clicks -milliseconds]]
+          ds_add rp [list transformation [list notfound $root/$path $val] $startclicks [clock clicks -milliseconds]]
 	  continue
 	} redirect url {
-          ad_call_proc_if_exists ds_add rp [list transformation [list redirect $root/$path $url] $startclicks [clock clicks -milliseconds]]
+          ds_add rp [list transformation [list redirect $root/$path $url] $startclicks [clock clicks -milliseconds]]
 	  ad_returnredirect $url
 	} directory dir_index {
-          ad_call_proc_if_exists ds_add rp [list transformation [list directory $root/$path $dir_index] $startclicks [clock clicks -milliseconds]]
+          ds_add rp [list transformation [list directory $root/$path $dir_index] $startclicks [clock clicks -milliseconds]]
 	  continue
 	}
 
@@ -910,7 +910,7 @@ ad_proc -private rp_handler {} {
       }
     }
 
-    ad_call_proc_if_exists ds_add rp [list transformation [list notfound $root/$path notfound] $startclicks [clock clicks -milliseconds]]
+    ds_add rp [list transformation [list notfound $root/$path notfound] $startclicks [clock clicks -milliseconds]]
     ns_returnnotfound
   } errmsg]] } {
     if {$code == 1} {
@@ -1020,10 +1020,10 @@ ad_proc -public rp_serve_concrete_file {file} {
                 # do nothing
             }
             rp_finish_serving_page
-            ad_call_proc_if_exists ds_add rp [list serve_file [list $file $handler] $startclicks [clock clicks -milliseconds]]
+            ds_add rp [list serve_file [list $file $handler] $startclicks [clock clicks -milliseconds]]
         } error]] } {
             global errorCode errorInfo
-            ad_call_proc_if_exists ds_add rp [list serve_file [list $file $handler] $startclicks [clock clicks -milliseconds] error "$errorCode: $errorInfo"]
+            ds_add rp [list serve_file [list $file $handler] $startclicks [clock clicks -milliseconds] error "$errorCode: $errorInfo"]
             return -code $errno -errorcode $errorCode -errorinfo $errorInfo $error
         }
     } else {
@@ -1040,7 +1040,7 @@ ad_proc -public rp_serve_concrete_file {file} {
                 ad_raise notfound
         } else { 
             set type [ns_guesstype $file]
-            ad_call_proc_if_exists ds_add rp [list serve_file [list $file $type] $startclicks [clock clicks -milliseconds]]
+            ds_add rp [list serve_file [list $file $type] $startclicks [clock clicks -milliseconds]]
             ns_returnfile 200 $type $file
         } 
     }

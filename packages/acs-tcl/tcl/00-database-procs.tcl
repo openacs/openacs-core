@@ -414,7 +414,7 @@ ad_proc -public db_with_handle {{ -dbn "" } db code_block } {
         set errno [catch {
             set db [ns_db gethandle $pool]
         } error]
-        ad_call_proc_if_exists ds_collect_db_call $db gethandle "" $pool $start_time $errno $error
+        ds_collect_db_call $db gethandle "" $pool $start_time $errno $error
         lappend db_state(handles) $db
         if { $errno } {
             global errorInfo errorCode
@@ -738,7 +738,7 @@ ad_proc -private db_exec_plpgsql { db statement_name pre_sql fname } {
     set errinfo $errorInfo
     set errcode $errorCode
 
-    ad_call_proc_if_exists ds_collect_db_call $db 0or1row $statement_name $sql $start_time $errno $error
+    ds_collect_db_call $db 0or1row $statement_name $sql $start_time $errno $error
 
     if { $errno == 2 } {
 	return $error
@@ -871,7 +871,7 @@ ad_proc -public db_release_unused_handles {{ -dbn "" }} {
 
             set start_time [clock clicks -milliseconds]
             ns_db releasehandle $db
-            ad_call_proc_if_exists ds_collect_db_call $db releasehandle "" "" $start_time 0 ""
+            ds_collect_db_call $db releasehandle "" "" $start_time 0 ""
             incr index_to_examine -1
         }
         set db_state(handles) [lrange $db_state(handles) 0 $index_to_examine]
@@ -887,7 +887,7 @@ ad_proc -private db_getrow { db selection } {
 } {
     set start_time [clock clicks -milliseconds]
     set errno [catch { return [ns_db getrow $db $selection] } error]
-    ad_call_proc_if_exists ds_collect_db_call $db getrow "" "" $start_time $errno $error
+    ds_collect_db_call $db getrow "" "" $start_time $errno $error
     if { $errno == 2 } {
         return $error
     }
@@ -1005,7 +1005,7 @@ ad_proc -private db_exec { type db statement_name pre_sql {ulevel 2} args } {
         ns_log Debug "db_exec: timing [expr [clock clicks] - $start_time_fine] $db $type $statement_name"
     }
 
-    ad_call_proc_if_exists ds_collect_db_call $db $type $statement_name $sql $start_time $errno $error
+    ds_collect_db_call $db $type $statement_name $sql $start_time $errno $error
     if { $errno == 2 } {
         return $error
     }
@@ -3026,7 +3026,7 @@ ad_proc -private db_exec_lob_oracle {{
 
     } error]
 
-    ad_call_proc_if_exists ds_collect_db_call $db $type $statement_name $sql $start_time $errno $error
+    ds_collect_db_call $db $type $statement_name $sql $start_time $errno $error
     if { $errno == 2 } {
 	return $error
     }
@@ -3237,7 +3237,7 @@ ad_proc -private db_exec_lob_postgresql {{
     set errinfo $errorInfo
     set errcode $errorCode
 
-    ad_call_proc_if_exists ds_collect_db_call $db 0or1row $statement_name $sql $start_time $errno $error
+    ds_collect_db_call $db 0or1row $statement_name $sql $start_time $errno $error
 
     if { $errno == 2 } {
 	return $error
