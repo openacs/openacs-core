@@ -276,7 +276,7 @@ ns_param ServerCertFile            certfile.pem
 ns_param ServerKeyFile             keyfile.pem
 ns_param ServerProtocols           "SSLv2, SSLv3, TLSv1"
 ns_param ServerCipherSuite         "ALL:!ADH:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv2:+EXP"
-ns_param ServerSessionCache        false
+ns_param ServerSessionCache        true
 ns_param ServerSessionCacheID      1
 ns_param ServerSessionCacheSize    512
 ns_param ServerSessionCacheTimeout 300
@@ -291,7 +291,7 @@ ns_param SockServerCertFile              certfile.pem
 ns_param SockServerKeyFile               keyfile.pem
 ns_param SockServerProtocols             "SSLv2, SSLv3, TLSv1"
 ns_param SockServerCipherSuite           "ALL:!ADH:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv2:+EXP"
-ns_param SockServerSessionCache          false
+ns_param SockServerSessionCache          true
 ns_param SockServerSessionCacheID        2
 ns_param SockServerSessionCacheSize      512
 ns_param SockServerSessionCacheTimeout   300
