@@ -263,7 +263,7 @@ ad_proc ::twt::crawl_links {
 
     # Return if given start URL is external
     set server_url [::twt::config::server_url]    
-    #::twt::log "pm debug about to generate absolute_url start_url=$start_url"
+    #::twt::log "pm debug about to generate absolute_url start_url=$start_url previous_url=$previous_url"
     set start_url_absolute [tclwebtest::absolute_link $start_url]
     #::twt::log "pm debug after generating absolute_url start_url_absolute=$start_url_absolute"
     if { [string first $server_url $start_url_absolute] == -1 } {
@@ -295,7 +295,9 @@ ad_proc ::twt::crawl_links {
     lappend __url_history $start_url_absolute
     # Request the page
     #::twt::log "pm debug about to invoke \"do_request $start_url_absolute\" start_url=$start_url previous_url=$previous_url"
-    if { [catch {::twt::do_request $start_url_absolute} errmsg] } {
+    # Note that we are re-initializing start_url_absolute here since a trailing slash will be added if the URL is a directory
+    # and we need that to resolve relative URLs
+    if { [catch {set start_url_absolute [::twt::do_request $start_url_absolute]} errmsg] } {
         if { ![string equal "$previous_url" ""] } {
             set previous_page_message " (link found on page $previous_url)"
         } else {
@@ -303,6 +305,8 @@ ad_proc ::twt::crawl_links {
         }
         ::twt::log "[::twt::config::alert_keyword] - requesting url $start_url_absolute failed${previous_page_message}. Response status is [response status] and error is $errmsg"
         return
+    } else {
+        #::twt::log "pm debug after do_request ::tclwebtest::url=$::tclwebtest::url"
     }
 
     # Get all links on the page
