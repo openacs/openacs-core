@@ -4653,6 +4653,27 @@ ad_proc -public util::subst_safe { string } {
     return $string
 }
 
+ad_proc -public util::array_list_spec_pretty { 
+    list 
+    {indent 0} 
+} {
+    Pretty-format an array-list spec with proper indentation.
+} {
+    set output {}
+    foreach { elm val } $list {
+        if { [llength $val] > 1 && [expr [llength $val] % 2] == 0  } {
+            append output [string repeat " " $indent] "$elm \{" \n
+
+            append output [util::array_list_spec_pretty $val [expr $indent + 4]]
+
+            append output [string repeat " " $indent] \} \n
+        } else {
+            append output [string repeat " " $indent] [list $elm] " " [list $val] \n
+        }
+    }
+    return $output
+}
+
 ad_proc -public util::interval_pretty {
     {-seconds 0}
 } { 
@@ -4669,3 +4690,4 @@ ad_proc -public util::interval_pretty {
     }
     return $result
 }
+
