@@ -1,5 +1,5 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Overview</title><meta name="generator" content="DocBook XSL Stylesheets V1.58.1"><link rel="home" href="index.html" title="OpenACS Documentation"><link rel="up" href="unix-install.html" title="Chapter 3. Installing on Unix/Linux"><link rel="previous" href="unix-install.html" title="Chapter 3. Installing on Unix/Linux"><link rel="next" href="linux-installation.html" title="Install Linux and supporting software"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="images/alex.jpg" border="0"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="unix-install.html">Prev</a>&amp;nbsp;</td><th width="60%" align="center">Chapter 3. Installing on Unix/Linux</th><td width="20%" align="right">&amp;nbsp;<a accesskey="n" href="linux-installation.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><h2 class="title" style="clear: both"><a name="install-overview"></a>Overview</h2></div></div><div class="authorblurb"><p>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Overview</title><meta name="generator" content="DocBook XSL Stylesheets V1.58.1"><link rel="home" href="index.html" title="OpenACS Documentation"><link rel="up" href="unix-install.html" title="Chapter 3. Installing on Unix/Linux"><link rel="previous" href="unix-install.html" title="Chapter 3. Installing on Unix/Linux"><link rel="next" href="linux-installation.html" title="Install Linux and supporting software"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="images/alex.jpg" border="0"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="unix-install.html">Prev</a> </td><th width="60%" align="center">Chapter 3. Installing on Unix/Linux</th><td width="20%" align="right"> <a accesskey="n" href="linux-installation.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><h2 class="title" style="clear: both"><a name="install-overview"></a>Overview</h2></div></div><div class="authorblurb"><p>
 	by <a href="mailto:vinod@kurup.com" target="_top">Vinod Kurup</a><br>
           OpenACS docs are written by the named authors, but may be edited
           by OpenACS documentation staff.
@@ -74,7 +74,7 @@
 	  The basic steps to getting OpenACS up and running are: 
 	</p><div class="orderedlist"><ol type="1"><li><p>Install an OS</p></li><li><p>Install a webserver (AOLServer)</p></li><li><p>Install a database (Oracle or
 	  PostgreSQL)</p></li><li><p> Install a database driver (allows the webserver to talk to the database)
-	  </p></li><li><p>Start the OpenACS installer, which will configure a database instance..</p></li></ol></div></div><div class="sect2" lang="en"><div class="titlepage"><div><h3 class="title"><a name="id2874716"></a>How to use this guide</h3></div></div><div class="itemizedlist"><ul type="disc"><li><p><tt>This</tt> is text you will see on
+	  </p></li><li><p>Start the OpenACS installer, which will configure a database instance..</p></li></ol></div></div><div class="sect2" lang="en"><div class="titlepage"><div><h3 class="title"><a name="id2874726"></a>How to use this guide</h3></div></div><div class="itemizedlist"><ul type="disc"><li><p><tt>This</tt> is text you will see on
             screen, such as a <tt><span class="guibutton"><u>B</u>utton</span></tt> or <tt><span class="guilabel"><u>link</u></span></tt>
             in a radio button list or menu.</p></li><li><p><b><tt>This is text that you will type.</tt></b></p></li><li><p>This is text from a program or file which you may need to
 examine or edit:</p><pre class="programlisting">if {$database == &quot;oracle&quot;} {
@@ -124,10 +124,9 @@ createdb <span class="replaceable">server1</span></pre></pre></li></ul></div></d
 		  Post a question on the <a href="http://openacs.org/bboard/" target="_top">bboards</a>. Make sure
 		  you've done a search first. When you do post, be sure to include
 		  your setup information (OS, etc) as well as the exact commands
-		  that are failing with the accompanying error. If you want to post
-		  stuff from your logs (please do!), be sure to enclose them in
-		  &lt;PRE&gt;&lt;/PRE&gt; tags so that they don't get all jumbled
-		  together.
+		  that are failing with the accompanying error.  If
+		  there's a SQL error in the TCL error or in the log,
+		  post that too.
 		</p></li><li><p>
 		  If you find errors in this document or if you have ideas about
 		  making it better, please post them in our
@@ -146,7 +145,7 @@ createdb <span class="replaceable">server1</span></pre></pre></li></ul></div></d
       just plagiarism from a number of documents that came before it. If
       I've used something that you've written without proper credit, let me
       know and I'll fix it right away.
-    </p><p>Version 4.6.x was edited by <a href="mailto:joel@aufrecht.org" target="_top">Joel Aufrecht</a>.
+    </p><p>Version 4.6.2 was edited by <a href="mailto:joel@aufrecht.org" target="_top">Joel Aufrecht</a>.
 </p><p>These are a few of my sources:</p><div class="itemizedlist"><ul type="disc"><li><p> 
           <a href="http://developer.arsdigita.com/doc/unix-install.html" target="_top">ArsDigita installation guide</a>
         </p></li><li><p>
@@ -155,7 +154,7 @@ createdb <span class="replaceable">server1</span></pre></pre></li></ul></div></d
           <a href="http://www.orchardlabs.com/freebsd/" target="_top">Gilbert Wong's FreeBSD
           installation guide</a>
         </p></li><li><p> 
-          <a href="http://kurup.com/acs/openacs-4.html" target="_top">My own Brief OpenACS4
+          <a href="http://kurup.com/acs/openacs-4.html" target="_top">Vinod Kurup's Brief OpenACS4
           installation guide</a>
         </p></li><li><p> 
           <a href="http://www.aufrecht.org/openacs-4.5-quick-guide/" target="_top">Joel
@@ -260,4 +259,4 @@ createdb <span class="replaceable">server1</span></pre></pre></li></ul></div></d
             IBM developerworks on basic and intermediate Linux skills
             (requires registration)
 
-            </p></li></ul></div></div></div><div class="cvstag">($Id$)</div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="unix-install.html">Prev</a>&amp;nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right">&amp;nbsp;<a accesskey="n" href="linux-installation.html">Next</a></td></tr><tr><td width="40%" align="left">Chapter 3. Installing on Unix/Linux&amp;nbsp;</td><td width="20%" align="center"><a accesskey="u" href="unix-install.html">Up</a></td><td width="40%" align="right">&amp;nbsp;Install Linux and supporting software</td></tr></table><hr><address>rmello at fslc.usu.edu</address><address><a href="mailto:vinod@kurup.com">vinod@kurup.com</a></address></div><a name="comments"></a><center><a href="http://openacs.org/doc/openacs-4/install-overview.html#comments">View comments on this page at openacs.org</a></center></body></html>
+            </p></li></ul></div></div></div><div class="cvstag">($Id$)</div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="unix-install.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="linux-installation.html">Next</a></td></tr><tr><td width="40%" align="left">Chapter 3. Installing on Unix/Linux </td><td width="20%" align="center"><a accesskey="u" href="unix-install.html">Up</a></td><td width="40%" align="right"> Install Linux and supporting software</td></tr></table><hr><address>rmello at fslc.usu.edu</address><address><a href="mailto:vinod@kurup.com">vinod@kurup.com</a></address></div><a name="comments"></a><center><a href="http://openacs.org/doc/openacs-4/install-overview.html#comments">View comments on this page at openacs.org</a></center></body></html>

@@ -47,7 +47,7 @@
                 <entry>The OpenACS tarball contains some files which
                 are useful while setting up other software.  Those
                 files are located at:</entry>
-                <entry>/tmp/openacs-4-6/packages/acs-core-docs/www/files</entry>
+                <entry>/tmp/openacs-4.6.2/packages/acs-core-docs/www/files</entry>
               </row>
               <row>
                 <entry>Database backup directory</entry>
@@ -130,9 +130,9 @@
       for some of the packages listed below.  In order to access those
       files, unpack the tarball now.</para>
       <screen>[root@yourserver root]# <userinput>cd /tmp</userinput>
-[root@yourserver tmp]# <userinput>tar xzf openacs-4-6.tgz</userinput>
+[root@yourserver tmp]# <userinput>tar xzf openacs-4.6.2.tgz</userinput>
 <action>cd /tmp
-tar xzf openacs-4-6.tgz</action></screen>
+tar xzf openacs-4.6.2.tgz</action></screen>
     </sect3>
 
     <sect3 id="install-cvs">
@@ -162,7 +162,7 @@ If you plan to write or edit any documentation with emacs, install a
       fixes the backspace -> help mis-mapping that often occurs in
       terminals.</para>
 
-      <screen>[root@yourserver tmp]# <userinput>cp /tmp/openacs-4-6/packages/acs-core-docs/www/files/emacs.txt /etc/skel/.emacs</userinput>
+      <screen>[root@yourserver tmp]# <userinput>cp /tmp/openacs-4.6.2/packages/acs-core-docs/www/files/emacs.txt /etc/skel/.emacs</userinput>
 [root@yourserver tmp]# </screen>
     </sect3>
 
@@ -227,9 +227,9 @@ root     13295  0.0  0.0  1304  208 ?        S    09:51   0:00 readproctitle ser
         <listitem>
           <para>Install a script to grant non-root users permission to
         control daemontools services.</para>
-          <screen>[root@yourserver root]# <userinput>cp /tmp/openacs-4-6/packages/acs-core-docs/www/files/svgroup.txt /usr/local/bin/svgroup</userinput>
+          <screen>[root@yourserver root]# <userinput>cp /tmp/openacs-4.6.2/packages/acs-core-docs/www/files/svgroup.txt /usr/local/bin/svgroup</userinput>
 [root@yourserver root]# <userinput>chmod 755 /usr/local/bin/svgroup</userinput>
-<action>cp /tmp/openacs-4-6/packages/acs-core-docs/www/files/svgroup.txt /usr/local/bin/svgroup 
+<action>cp /tmp/openacs-4.6.2/packages/acs-core-docs/www/files/svgroup.txt /usr/local/bin/svgroup 
 chmod 755 /usr/local/bin/svgroup</action></screen>
         </listitem>
       </orderedlist>
@@ -283,9 +283,9 @@ Unless this mail is addressed to the same machine, qmail thinks that
 it's an attempt to relay mail, and rejects it.  So these two commands
 set up an exception so that any mail sent from 127.0.0.1 is allowed to
 send outgoing mail.</para>
-          <screen>[root@yourserver ucspi-tcp-0.88]# <userinput>cp /tmp/openacs-4-6/packages/acs-core-docs/www/files/tcp.smtp.txt /etc/tcp.smtp</userinput>
+          <screen>[root@yourserver ucspi-tcp-0.88]# <userinput>cp /tmp/openacs-4.6.2/packages/acs-core-docs/www/files/tcp.smtp.txt /etc/tcp.smtp</userinput>
 [root@yourserver ucspi-tcp-0.88]# <userinput>tcprules /etc/tcp.smtp.cdb /etc/tcp.smtp.tmp &lt; /etc/tcp.smtp</userinput>
-<action>cp /tmp/openacs-4-6/packages/acs-core-docs/www/files/tcp.smtp.txt /etc/tcp.smtp 
+<action>cp /tmp/openacs-4.6.2/packages/acs-core-docs/www/files/tcp.smtp.txt /etc/tcp.smtp 
 tcprules /etc/tcp.smtp.cdb /etc/tcp.smtp.tmp &lt; /etc/tcp.smtp </action></screen>
           </listitem>
           <listitem>
@@ -371,11 +371,11 @@ chown -R alias.nofiles /var/qmail/alias/Maildir</action></screen>
             <para>Configure qmail to use the Maildir delivery format
           (instead of mbox), and install a version of the qmail startup script modified to use Maildir.</para>
             <screen>[root@yourserver alias]# <userinput>echo "./Maildir" > /var/qmail/bin/.qmail</userinput>
-[root@yourserver alias]# <userinput>cp /tmp/openacs-4-6/packages/acs-core-docs/www/files/qmail.rc.txt /var/qmail/rc</userinput>
+[root@yourserver alias]# <userinput>cp /tmp/openacs-4.6.2/packages/acs-core-docs/www/files/qmail.rc.txt /var/qmail/rc</userinput>
 [root@yourserver alias]# <userinput>chmod 755 /var/qmail/rc</userinput>
 [root@yourserver alias]# 
 <action>echo "./Maildir" &gt; /var/qmail/bin/.qmail 
-cp /tmp/openacs-4-6/packages/acs-core-docs/www/files/qmail.rc.txt /var/qmail/rc 
+cp /tmp/openacs-4.6.2/packages/acs-core-docs/www/files/qmail.rc.txt /var/qmail/rc 
 chmod 755 /var/qmail/rc 
 </action></screen>
             <para>Set up the skeleton directory so that new users will

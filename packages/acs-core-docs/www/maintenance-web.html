@@ -1,10 +1,10 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html><head><meta content="text/html; charset=ISO-8859-1" http-equiv="Content-Type"><title>Hosting Web Sites</title><meta name="generator" content="DocBook XSL Stylesheets V1.50.0"><link rel="home" href="index.html" title="OpenACS Documentation"><link rel="up" href="maintenance.html" title="Chapter 7. Maintenance"><link rel="previous" href="maintenance.html" title="Chapter 7. Maintenance"><link rel="next" href="database-management.html" title="Database Management"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="images/alex.jpg" border="0"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="maintenance.html">Prev</a>&nbsp;</td><th width="60%" align="center">Chapter 7. Maintenance</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="database-management.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><h2 class="title" style="clear: both"><a name="maintenance-web"></a>Hosting Web Sites</h2></div></div><div class="authorblurb"><p>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Hosting Web Sites</title><meta name="generator" content="DocBook XSL Stylesheets V1.58.1"><link rel="home" href="index.html" title="OpenACS Documentation"><link rel="up" href="maintenance.html" title="Chapter 7. Maintenance"><link rel="previous" href="maintenance.html" title="Chapter 7. Maintenance"><link rel="next" href="database-management.html" title="Database Management"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="images/alex.jpg" border="0"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="maintenance.html">Prev</a> </td><th width="60%" align="center">Chapter 7. Maintenance</th><td width="20%" align="right"> <a accesskey="n" href="database-management.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><h2 class="title" style="clear: both"><a name="maintenance-web"></a>Hosting Web Sites</h2></div></div><div class="authorblurb"><p>
     by <a href="mailto:joel@aufrecht.org" target="_top">Joel Aufrecht</a><br>
           OpenACS docs are written by the named authors, but may be edited
           by OpenACS documentation staff.
         </p></div><p>This section collection of maintenance
-    tasks and alternate configurations for AOLserver.  This section has not yet been updated for 4.6.2</p><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="install-openacs-inittab"></a>AOLserver keepalive with inittab</h3></div></div><p>This is an alternative method for keeping the AOLserver
+    tasks and alternate configurations for AOLserver.  This section has not yet been updated for 4.6.2</p><div class="sect2" lang="en"><div class="titlepage"><div><h3 class="title"><a name="install-openacs-inittab"></a>AOLserver keepalive with inittab</h3></div></div><p>This is an alternative method for keeping the AOLserver
 		process running.  The recommended method is to <a href="openacs.html#install-openacs-keepalive">run AOLserver
 		supervised</a>.</p><p>
 		This step should be completed as root. This can break every service
@@ -61,7 +61,7 @@ Killing 23727
 joeuser:~$ killall nsd
 nsd: no process killed</pre><p>
             The number 23727 indicates the process id(s) (PIDs) of the
-            processes being killed. It is important that <span class="strong"><em>no processes are killed</em></span> by the second
+            processes being killed. It is important that <span class="strong">no processes are killed</span> by the second
             call to <tt>killall</tt>. If there are
             processes being killed, it means that the script is not
             working.</p></li><li><p> 
@@ -77,7 +77,7 @@ root:~# emacs -nw /etc/inittab</pre></li><li><p>
             <tt>nss1</tt> is unique.
           </p><pre class="programlisting">
 nss1:345:respawn:/usr/local/aolserver/bin/nsd-postgres -i -u nobody -g web -t /home/<span class="emphasis"><em>joeuser</em></span>/web/<span class="emphasis"><em>birdnotes</em></span>/nsd.tcl</pre></li><li><p>
-            <span class="strong"><em>Important:</em></span> Make sure there is a
+            <span class="strong">Important:</span> Make sure there is a
             newline at the end of the file. If there is not a newline at
             the end of the file, the system may suffer catastrophic
             failures.  
@@ -94,7 +94,7 @@ root:~# restart-aolserver <span class="emphasis"><em>birdnotes</em></span>
 Killing 23750</pre></li></ul></div><p>
         If processes were killed, congratulations, your server is now
         automated for startup and shutdown. 
-      </p></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="install-openacs-port80"></a>Running AOLserver on Port 80</h3></div></div><p>If you want your webserver to be <tt>http://yourserver.com</tt>, it must run on port 80, the default HTTP port.  You set this in the <tt>config.tcl</tt> file.  You will need to start the service as
+      </p></div><div class="sect2" lang="en"><div class="titlepage"><div><h3 class="title"><a name="install-openacs-port80"></a>Running AOLserver on Port 80</h3></div></div><p>If you want your webserver to be <tt>http://yourserver.com</tt>, it must run on port 80, the default HTTP port.  You set this in the <tt>config.tcl</tt> file.  You will need to start the service as
       <tt>root</tt>. If you follow the instructions
       above for <a href="openacs.html#install-openacs-keepalive">automating
       startup</a>, this will be taken care of, but if you ever start the
@@ -109,21 +109,21 @@ Killing 23750</pre></li></ul></div><p>
       <tt>root</tt>. This mean that if someone was
       able to exploit your web server to execute a command on your server,
       they would not be able to gain <tt>root</tt>
-      access.</p></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="install-next-add-server"></a>Running multiple services on one machine</h3></div></div><p><b>Services on different ports. </b>To run a different service on another port but the same
+      access.</p></div><div class="sect2" lang="en"><div class="titlepage"><div><h3 class="title"><a name="install-next-add-server"></a>Running multiple services on one machine</h3></div></div><p><b>Services on different ports. </b>To run a different service on another port but the same
         ip, simply repeat <a href="openacs.html">Install OpenACS 4.6.2</a> replacing
         <span class="replaceable">service0</span>, and change the
-<pre class="programlisting">set httpport              8000
-set httpsport             8443 </pre>
+</p><pre class="programlisting">set httpport              8000
+set httpsport             8443 </pre><p>
  to different values.</p><p><b>Services on different host names. </b>For example, suppose you want to support
 <tt>http://foo.com</tt> and
     <tt>http://bar.com</tt> on the same
     machine.  The easiest way is to assign each one a different ip
     address.  Then you can install two services as above, but with
         different values for
-<pre class="programlisting">set hostname               [ns_info hostname]
-set address                127.0.0.1 </pre>
+</p><pre class="programlisting">set hostname               [ns_info hostname]
+set address                127.0.0.1 </pre><p>
 If you want to install two services with different host
     names sharing the same ip, you'll need nsvhr to redirect requests
     based on the contents of the tcp headers.  See <a href="http://borkware.com/rants/aolserver-vhosting/" target="_top">AOLserver
     Virtual Hosting with TCP</a> by <a href="mailto:markd@borkware.com" target="_top">markd</a>.
-</p></div><p><div class="cvstag">($Id$)</div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="maintenance.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="database-management.html">Next</a></td></tr><tr><td width="40%" align="left">Chapter 7. Maintenance&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="maintenance.html">Up</a></td><td width="40%" align="right">&nbsp;Database Management</td></tr></table><hr><address>rmello at fslc.usu.edu</address><address><a href="mailto:vinod@kurup.com">vinod@kurup.com</a></address></div><a name="comments"></a><center><a href="http://openacs.org/doc/openacs-4/maintenance-web.html#comments">View comments on this page at openacs.org</a></center></body></html>
+</p></div><div class="cvstag">($Id$)</div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="maintenance.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="database-management.html">Next</a></td></tr><tr><td width="40%" align="left">Chapter 7. Maintenance </td><td width="20%" align="center"><a accesskey="u" href="maintenance.html">Up</a></td><td width="40%" align="right"> Database Management</td></tr></table><hr><address>rmello at fslc.usu.edu</address><address><a href="mailto:vinod@kurup.com">vinod@kurup.com</a></address></div><a name="comments"></a><center><a href="http://openacs.org/doc/openacs-4/maintenance-web.html#comments">View comments on this page at openacs.org</a></center></body></html>

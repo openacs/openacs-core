@@ -110,21 +110,21 @@ Done Building Sat Mar  8 10:31:35 PST 2003
             <listitem>
               <para>Oracle</para>
               <screen>[root@yourserver aolserver]# <userinput>cd /usr/local/aolserver/bin</userinput>
-[root@yourserver bin]# <userinput>cp /tmp/openacs-4-6/packages/acs-core-docs/www/files/nsd-oracle.txt ./nsd-oracle</userinput>
+[root@yourserver bin]# <userinput>cp /tmp/openacs-4.6.2/packages/acs-core-docs/www/files/nsd-oracle.txt ./nsd-oracle</userinput>
 [root@yourserver bin]# <userinput>chmod 750 nsd-oracle</userinput>
 [root@yourserver bin]#
 <action>cd /usr/local/aolserver/bin
-cp /tmp/openacs-4-6/packages/acs-core-docs/www/files/nsd-oracle.txt ./nsd-oracle
+cp /tmp/openacs-4.6.2/packages/acs-core-docs/www/files/nsd-oracle.txt ./nsd-oracle
 chmod 750 nsd-oracle</action></screen>
             </listitem>
             <listitem>
               <para>PostGreSQL</para>
               <screen>[root@yourserver aolserver]# <userinput>cd /usr/local/aolserver/bin</userinput>
-[root@yourserver bin]# <userinput>cp /tmp/openacs-4-6/packages/acs-core-docs/www/files/nsd-postgres.txt ./nsd-postgres</userinput>
+[root@yourserver bin]# <userinput>cp /tmp/openacs-4.6.2/packages/acs-core-docs/www/files/nsd-postgres.txt ./nsd-postgres</userinput>
 [root@yourserver bin]# <userinput>chmod 755 nsd-postgres</userinput>
 [root@yourserver bin]#
 <action>cd /usr/local/aolserver/bin
-cp /tmp/openacs-4-6/packages/acs-core-docs/www/files/nsd-postgres.txt ./nsd-postgres
+cp /tmp/openacs-4.6.2/packages/acs-core-docs/www/files/nsd-postgres.txt ./nsd-postgres
 chmod 755 nsd-postgres</action></screen>
             </listitem>
           </itemizedlist>

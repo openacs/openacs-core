@@ -246,10 +246,9 @@ createdb <replaceable>server1</replaceable></action></screen>
 		  url="http://openacs.org/bboard/">bboards</ulink>. Make sure
 		  you've done a search first. When you do post, be sure to include
 		  your setup information (OS, etc) as well as the exact commands
-		  that are failing with the accompanying error. If you want to post
-		  stuff from your logs (please do!), be sure to enclose them in
-		  &lt;PRE&gt;&lt;/PRE&gt; tags so that they don't get all jumbled
-		  together.
+		  that are failing with the accompanying error.  If
+		  there's a SQL error in the TCL error or in the log,
+		  post that too.
 		</para>
 	  </listitem>
 
@@ -288,7 +287,7 @@ createdb <replaceable>server1</replaceable></action></screen>
       I've used something that you've written without proper credit, let me
       know and I'll fix it right away.
     </para>
-    <para>Version 4.6.x was edited by <ulink
+    <para>Version &version; was edited by <ulink
     url="mailto:joel@aufrecht.org">Joel Aufrecht</ulink>.
 </para>
     
@@ -309,7 +308,7 @@ createdb <replaceable>server1</replaceable></action></screen>
         </para></listitem> 
 
       <listitem><para> 
-          <ulink url="http://kurup.com/acs/openacs-4.html">My own Brief OpenACS4
+          <ulink url="http://kurup.com/acs/openacs-4.html">Vinod Kurup's Brief OpenACS4
           installation guide</ulink>
         </para></listitem>
 

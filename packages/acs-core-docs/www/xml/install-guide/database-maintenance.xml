@@ -22,7 +22,7 @@
         the user owns.</para>
 
       <programlisting>
-SVRMGR&gt; drop user <emphasis>server0</emphasis> cascade;</programlisting>
+SVRMGR&gt; drop user <emphasis>service0</emphasis> cascade;</programlisting>
 
       <para>
         If this does not work because svrmgrl &quot;cannot drop a user that
@@ -30,7 +30,7 @@ SVRMGR&gt; drop user <emphasis>server0</emphasis> cascade;</programlisting>
         this user. If it still does not work, do:</para>
 
       <programlisting>
-SVRMGR&gt; select username, sid, serial# from v$session where lower(username)=&#39;<emphasis>server0</emphasis>&#39;;</programlisting>
+SVRMGR&gt; select username, sid, serial# from v$session where lower(username)=&#39;<emphasis>service0</emphasis>&#39;;</programlisting>
 
       <para>and then</para>
       <programlisting>
@@ -46,7 +46,7 @@ SVRMGR&gt; alter system kill session &#39;<emphasis>sid</emphasis>,<emphasis>ser
         If you feel the need to delete <emphasis>everything</emphasis>
         related to the service, you can also issue the following:</para>
       <programlisting>
-SVRMGR&gt; drop tablespace <emphasis>server0</emphasis> including contents cascade constraints;</programlisting>   
+SVRMGR&gt; drop tablespace <emphasis>service0</emphasis> including contents cascade constraints;</programlisting>   
     </sect3>
 
     <sect3 id="install-openacs-delete-postgres-tablespace" xreflabel="Deleting a PostgreSQL tablespace">
@@ -60,11 +60,11 @@ SVRMGR&gt; drop tablespace <emphasis>server0</emphasis> including contents casca
         your server in <computeroutput>/etc/inittab</computeroutput>,
         reread the inittab with <computeroutput>/sbin/init
         q</computeroutput>, and then <computeroutput>restart-aolserver
-        <emphasis>server0</emphasis></computeroutput>.</para>
+        <emphasis>service0</emphasis></computeroutput>.</para>
     
       <para>Then, to drop the db, just do:</para>
       <programlisting>
-server0:~$ dropdb <emphasis>server0</emphasis>
+service0:~$ dropdb <emphasis>service0</emphasis>
 DROP DATABASE</programlisting>
     </sect3>
   </sect2>

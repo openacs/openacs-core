@@ -216,7 +216,7 @@ ad_form -name note -form {
         {label "Body"}
     }
 } -select_query_name note_query -new_data {
-samplenote::new db_1row do_insert { *SQL* }
+db_1row do_insert { *SQL* }
 } -edit_data {
 db_dml do_update { *SQL* }
 } -after_submit {
@@ -280,7 +280,7 @@ ad_returnredirect "index"
       wrap it in curly brackets for context so that the spaces aren't
       interpreted separators.  The formtemplate tag outputs the form
       html with the matching name.</para>
-      <para>Go to the APM as before and scan for new files and add your new work.  Then test all this by going to the package home page and adding and editing a few records.</para>
+      <para>Go to the APM as before and reload.  Then test all this by going to the package home page and adding and editing a few records.</para>
     </sect2>
     <sect2>
       <title>Adding files to cvs</title>

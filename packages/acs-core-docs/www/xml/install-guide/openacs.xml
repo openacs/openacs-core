@@ -121,8 +121,8 @@ logout
         <para>Unpack the OpenACS tarball and rename it to <computeroutput>service0</computeroutput>.  Secure the directory so that only the owner can access it.  Check the permissions by listing the directory.</para>       
         <screen>[root@yourserver root]# <userinput>su - <replaceable>service0</replaceable></userinput>
 [service0@yourserver service0]$ <userinput>cd /web</userinput>
-[service0@yourserver web]$ <userinput>tar xzf /tmp/openacs-4-6.tgz</userinput>
-[service0@yourserver web]$ <userinput>mv openacs-4-6 <replaceable>service0</replaceable></userinput>
+[service0@yourserver web]$ <userinput>tar xzf /tmp/openacs-4.6.2.tgz</userinput>
+[service0@yourserver web]$ <userinput>mv openacs-4.6.2 <replaceable>service0</replaceable></userinput>
 [service0@yourserver web]$ <userinput>chmod -R 700 <replaceable>service0</replaceable></userinput>
 [service0@yourserver web]$ ls -al
 total 3
@@ -135,8 +135,8 @@ logout
 [root@yourserver root]#
 <action>su - service0
 cd /web
-tar xzf /tmp/openacs-4-6.tgz
-mv openacs-4-6 service0
+tar xzf /tmp/openacs-4.6.2.tgz
+mv openacs-4.6.2 service0
 chmod -R 700 service0/
 ls -al
 exit</action></screen>
@@ -181,12 +181,12 @@ logout
             plus this string,
             i.e.
             <computeroutput>/cvsroot/<replaceable>service0</replaceable></computeroutput>.
-            "OpenACS" is the vendor tag, and "openacs-4-6" is the
+            "OpenACS" is the vendor tag, and "openacs-4-6-2" is the
             release tag.  These tags will be useful in upgrading and
             branching.  -m sets the version comment.</para>
             <screen>[root@yourserver root]# <userinput>su - <replaceable>service0</replaceable></userinput>
 [service0@yourserver service0]$ <userinput>cd /web/<replaceable>service0</replaceable></userinput>
-[service0@yourserver service0]$ <userinput>cvs import -m "initial install" <replaceable>service0</replaceable> OpenACS openacs-4-6</userinput>
+[service0@yourserver service0]$ <userinput>cvs import -m "initial install" <replaceable>service0</replaceable> OpenACS openacs-4-6-2</userinput>
 N <replaceable>service0</replaceable>/license.txt
 N <replaceable>service0</replaceable>/readme.txt
 <emphasis>(many lines omitted)</emphasis>
@@ -197,7 +197,7 @@ No conflicts created by this import
 [service0@yourserver service0]$
 <action>su - <replaceable>service0</replaceable>
 cd /web/<replaceable>service0</replaceable>
-cvs import -m "initial install" <replaceable>service0</replaceable> OpenACS openacs-4-6</action></screen>
+cvs import -m "initial install" <replaceable>service0</replaceable> OpenACS openacs-4-6-2</action></screen>
             <para>Move the original directory to a temporary location, and check out the cvs repository in its place.  If the service starts correctly, come back and remove the temporary copy of the uploaded files.</para>
             <screen>[service0@yourserver service0]$ <userinput>cd ..</userinput>
 [service0@yourserver web]$<userinput> mv <replaceable>service0</replaceable> <replaceable>service0</replaceable>.orig</userinput>
@@ -649,7 +649,7 @@ nsd: no process killed
         
         <para>Assuming AOLserver started cleanly in the previous step, we'll set it up so that it's always running, and automatically restarts whenever it dies or is stopped.  This step is strongly recommended, even for development sites, because it makes install and maintenance much simpler.  </para>
 
-        <para>The Reference Platform uses Daemontools to control AOLserver.  An earlier method using <computeroutput>init</computeroutput>, less flexible and reliable, is <link linkend="install-openacs-inittab">here</link>.</para>
+        <para>The Reference Platform uses Daemontools to control AOLserver.  A simpler method, using <computeroutput>init</computeroutput>, is <link linkend="install-openacs-inittab">here</link>.</para>
         <orderedlist>
           <listitem>
             <para>Daemontools must already be installed.  If not, <link linkend="install-daemontools">install it</link>.</para>
