@@ -1151,13 +1151,29 @@ ad_proc -private template::list::prepare_filters {
         }
 
         # Does the filter have a current value?
-        if { [exists_and_not_null current_filter_value] } {
+        if { [info exists current_filter_value] } {
 
             # Get the where clause
-            if { ![empty_string_p $filter_properties(where_clause)] } {
-                lappend list_properties(filter_where_clauses) $filter_properties(where_clause)
-            } elseif { ![empty_string_p $filter_properties(where_clause_eval)] } {
-                lappend list_properties(filter_where_clauses) [uplevel $list_properties(ulevel) $filter_properties(where_clause_eval)]
+            if { [empty_string_p $current_filter_value] } {
+                set search_order { null_where_clause_eval null_where_clause where_clause_eval where_clause }
+            } else {
+                set search_order { where_clause_eval where_clause }
+            }
+
+            foreach property $search_order {
+                if { ![empty_string_p $filter_properties($property)] } {
+                    # We've found a where_clause to include
+
+                    if { [string match *_eval $property] } {
+                        # It's an _eval, subst it now
+                        lappend list_properties(filter_where_clauses) \
+                            [uplevel $list_properties(ulevel) $filter_properties($property)]
+                    } else {
+                        # Not an eval, just add it straight
+                        lappend list_properties(filter_where_clauses) $filter_properties($property)
+                    }
+                    break
+                }
             }
 
             # Get the clear_url
@@ -1182,6 +1198,10 @@ ad_proc -private template::list::prepare_filters {
             # in case someone accidentally supplies a list with too many elements, 
             # because then the foreach loop would run more than once
             foreach { label value count } [lrange $elm 0 2] {}
+
+            if { [empty_string_p $label] } {
+                set label $filter_properties(null_label)
+            }
 
             switch $filter_properties(type) {
                 singleval {
@@ -1218,8 +1238,8 @@ ad_proc -private template::list::prepare_filters {
             switch $filter_properties(type) {
                 singleval - multival {
                     lappend filter_properties(urls) [get_url \
-                                                         -name $name \
-                                                         -override [list [list $filter_properties(var_spec) $value]]]
+                                 -name $name \
+                                 -override [list [list $filter_properties(var_spec) $value]]]
                 }
                 multivar {
                     # We just use the value-list directly
@@ -1293,6 +1313,10 @@ ad_proc -private template::list::render_filters {
                 # because then the foreach loop would run more than once
                 foreach { label value count } [lrange $elm 0 2] {}
                 
+                if { [empty_string_p $label] } {
+                    set label $filter_properties(null_label)
+                }
+
                 template::multirow -local append filters \
                     $filter_properties(name) \
                     $filter_properties(label) \
@@ -1830,7 +1854,10 @@ ad_proc -public template::list::filter::create {
         default_value {}
         where_clause {}
         where_clause_eval {}
+        null_where_clause {}
+        null_where_clause_eval {}
         other_label {}
+        null_label {}
     }
 
     # Prepopulate some automatically generated values
