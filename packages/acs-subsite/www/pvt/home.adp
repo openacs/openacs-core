@@ -5,7 +5,7 @@
 
 <h2>#acs-subsite.Basic_Information#</h2>
 
-<formtemplate id="user_info"></formtemplate>
+<include src="/packages/acs-subsite/lib/user-info">
 
 <if @form_request_p@ true>
   <p>
