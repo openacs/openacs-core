@@ -297,6 +297,10 @@ ad_proc -public apm_file_watch {path} {
     it will be reloaded prior to the next page load.
 
 } {
+    if { [string equal $path "packages/acs-bootstrap-installer/tcl/30-apm-load-procs.tcl"] } {
+        ns_log Warning "apm_file_watch: Skipping file $path as it cannot be watched. You have to restart the server instead"
+    }
+
     nsv_set apm_reload_watch $path 1
 }
 
