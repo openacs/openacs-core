@@ -45,12 +45,15 @@
     </td>
     </tr>
   </table>
-  <p>
-  <ul>
-    <li> <a href="rerun?package_key=@by_package_key@&category=@by_category@&view_by=@view_by@&quiet=@quiet@"> Re-run </a> displayed test cases </a> </li>
-    <li> <a href="clear?package_key=@by_package_key@&category=@by_category@&view_by=@view_by@&quiet=@quiet@"> Clear </a> test result data</a> </li>
-  </ul>
-  <p>
+
+  <blockquote>
+    <b>&raquo;</b>
+    <a href="rerun?package_key=@by_package_key@&category=@by_category@&view_by=@view_by@&quiet=@quiet@"> Rerun displayed test cases</a>
+    <br>
+    <b>&raquo;</b>
+    <a href="clear?package_key=@by_package_key@&category=@by_category@&view_by=@view_by@&quiet=@quiet@"> Clear test result data</a> </li>
+  </blockquote>
+
   <if @view_by@ eq "package">
     <table width="100%">
     <tr>
@@ -125,11 +128,14 @@
     </multiple>
     </table>
   </else>
-  <p>
-  <ul>
-    <li> <a href="rerun?package_key=@by_package_key@&category=@by_category@&view_by=@view_by@&quiet=@quiet@"> Re-run </a> displayed test cases </a> </li>
-    <li> <a href="clear?package_key=@by_package_key@&category=@by_category@&view_by=@view_by@&quiet=@quiet@"> Clear </a> test result data</a> </li>
-  </ul>
+
+  <blockquote>
+    <b>&raquo;</b>
+    <a href="rerun?package_key=@by_package_key@&category=@by_category@&view_by=@view_by@&quiet=@quiet@"> Rerun displayed test cases</a>
+    <br>
+    <b>&raquo;</b>
+    <a href="clear?package_key=@by_package_key@&category=@by_category@&view_by=@view_by@&quiet=@quiet@"> Clear test result data</a> </li>
+  </blockquote>
 
   </body>
 </html>
