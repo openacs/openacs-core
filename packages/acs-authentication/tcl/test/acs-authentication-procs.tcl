@@ -1,10 +1,9 @@
 ad_library {
-  Register acs-automated-testing test cases for the workflow
-  package on server startup.
+    Automated tests.
 
-  @author Peter Marklund
-  @creation-date 21 August 2003
-  @cvs-id $Id$
+    @author Peter Marklund
+    @creation-date 21 August 2003
+    @cvs-id $Id$
 }
 
 aa_register_case auth_authenticate {
