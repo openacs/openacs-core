@@ -14,7 +14,7 @@
     <div id="subnavbar-body">
       <div id="subsite-name">
         <if @title@ not nil>
-          <h1 class="subsite-page-title">@title@</h1>
+          <h1 class="subsite-page-title">@title;noquote@</h1>
         </if>
       </div>
       <slave>
