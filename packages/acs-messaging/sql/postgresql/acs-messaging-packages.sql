@@ -114,8 +114,8 @@ declare
         -- this needs to be fixed up, but Oracle doesn''t give us a way
         -- to get the FQDN
 
-		-- vk: get SystemURL parameter and use it to extract domain name
-		select apm__get_value(package_id, ''SystemURL'') into v_system_url
+	-- vk: get SystemURL parameter and use it to extract domain name
+         select apm__get_value(package_id, ''SystemURL'') into v_system_url
           from apm_packages where package_key=''acs-kernel'';
 		v_idx := position(''http://'' in v_system_url);
 		v_domain_name := trim (substr(v_system_url, v_idx + 7));
@@ -531,6 +531,7 @@ end;' language 'plpgsql';
 
 create function acs_message__name (integer)
 returns varchar as '
+declare
     p_message_id   alias for $1;
     v_message_name   acs_messages_all.title%TYPE;
 begin
