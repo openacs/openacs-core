@@ -252,6 +252,9 @@
       <xi:include href="developers-guide/programming-with-aolserver.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
         <xi:fallback>Section missing</xi:fallback>
       </xi:include>
+      <xi:include href="developers-guide/form-builder.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
+        <xi:fallback>Section missing</xi:fallback>
+      </xi:include>
     </chapter>
 
     <chapter id="eng-standards">
