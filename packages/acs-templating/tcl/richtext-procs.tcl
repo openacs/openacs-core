@@ -102,13 +102,16 @@ ad_proc -public template::util::richtext::set_property { what richtext_list valu
     set format   [lindex $richtext_list 1]
 
     switch $what {
-        contents {
+        contents - content - text {
             # Replace contents with value
             return [list $value $format]
         }
-        format {
+        format - mime_type {
             # Replace format with value
             return [list $contents $value]
+        }
+        default {
+            error "Invalid property $what, valid properties are text (synonyms content, contents), mime_type (synonym format)."
         }
     }
 }
@@ -121,10 +124,10 @@ ad_proc -public template::util::richtext::get_property { what richtext_list } {
     set format    [lindex $richtext_list 1]
 
     switch $what {
-        contents {
+        content - contents - text {
             return $contents
         }
-        format {
+        format - mime_type {
             return $format
         }
         html_value {
@@ -133,6 +136,9 @@ ad_proc -public template::util::richtext::get_property { what richtext_list } {
             } else {
                 return {}
             }
+        }
+        default {
+            error "Invalid property $what, valid properties are text (synonyms content, contents), mime_type (synonym format), html_value"
         }
     }
 }
