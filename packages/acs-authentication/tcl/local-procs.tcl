@@ -313,7 +313,7 @@ ad_proc -private auth::local::password::ResetPassword {
     }
 
     # Reset the password
-    if [empty_string_p $new_password] {
+    if [exists_and_not_null new_password] {
 	set password $new_password
     } else {
 	set password [ad_generate_random_string]
@@ -323,7 +323,6 @@ ad_proc -private auth::local::password::ResetPassword {
 
     # We return the new passowrd here and let the OpenACS framework send the email with the new password
     set result(password) $password
-
     return [array get result]
 }
 
