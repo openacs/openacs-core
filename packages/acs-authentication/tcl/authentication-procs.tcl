@@ -372,7 +372,7 @@ ad_proc -public auth::create_user {
         set auth_info(auth_status) failed_to_connect
         set auth_info(auth_message) "Error invoking the account registration driver."
         global errorInfo
-         ns_log Error "Error invoking account registratino driver for authority_id = $authority_id: $errorInfo"
+        ns_log Error "Error invoking account registratino driver for authority_id = $authority_id: $errorInfo"
     }
     
     
