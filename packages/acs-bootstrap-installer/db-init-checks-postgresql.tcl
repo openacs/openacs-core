@@ -45,6 +45,10 @@ proc db_bootstrap_checks { errors error_p } {
         set my_error_p 1
     }
 
+
+    ## Make sure the function is dropped
+    catch { ns_db dml $db "drop function __test__();" }
+
     if { [catch { ns_db dml $db "create function __test__() returns integer as 'begin end;' language 'plpgsql'" } errmsg] } {
         append my_errors "<li>PL/pgSQL has not been created in your database.  Execute the following command while logged in as a PostgreSQL \"superuser\": <blockquote><pre>createlang plpgsql your_database_name</pre></blockquote>\n"  
         set my_error_p 1
