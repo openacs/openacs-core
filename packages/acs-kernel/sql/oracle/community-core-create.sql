@@ -533,6 +533,8 @@ create table users (
 	password_answer		varchar2(1000)
 );
 
+create index users_email_verified_idx on users (email_verified_p);
+
 create table user_preferences (
 	user_id			constraint user_prefs_user_id_fk
 				references users (user_id)
