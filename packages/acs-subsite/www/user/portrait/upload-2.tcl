@@ -102,8 +102,6 @@ set revision_id [cr_import_content \
 
 cr_set_imported_content_live $guessed_file_type $revision_id
 
-}
-
 if { [exists_and_not_null return_url] } {
     ad_returnredirect $return_url
 } else {
