@@ -129,6 +129,11 @@
           <entry namest="3.2.5" nameend="4.6.3" align="center"><?dbhtml bgcolor="red" ?><?dbfo bgcolor="red" ?>No</entry>
           <entry namest="5.0" nameend="5.2" align="center"><?dbhtml bgcolor="lightgreen" ?><?dbfo bgcolor="lightgreen" ?>Yes</entry>
         </row>
+        <row>
+          <entry>10g</entry>
+          <entry namest="3.2.5" nameend="5.1" align="center"><?dbhtml bgcolor="red" ?><?dbfo bgcolor="red" ?>No</entry>
+          <entry namest="5.2" nameend="5.2" align="center"><?dbhtml bgcolor="yellow" ?><?dbfo bgcolor="yellow" ?>Maybe</entry>
+        </row>
       </tbody>
     </tgroup>
   </table>
