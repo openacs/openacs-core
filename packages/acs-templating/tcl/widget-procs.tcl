@@ -390,13 +390,8 @@ ad_proc -public template::data::transform::search { element_ref } {
     }
 
     set query $element(search_query)
-    if { [info exists element(search_query_name)] } {
-        set query_name $element(search_query_name)
-    } else {
-        set query_name "get_options"
-    }
 
-    set options [db_list_of_lists $query_name $query]
+    set options [db_list_of_lists get_options $query]
 
     set option_count [llength $options]
 
