@@ -356,8 +356,7 @@ ad_proc -public auth::authority::batch_sync {
             # If this is a snapshot, we need to delete all the users belonging to this authority
             # that weren't included in the snapshot.
             auth::sync::job::snapshot_delete_remaining \
-                -job_id $job_id \
-                -authority_id $authority_id
+                -job_id $job_id
         }
     }
 
