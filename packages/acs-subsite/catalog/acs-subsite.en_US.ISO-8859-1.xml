@@ -130,9 +130,9 @@ waiting approval.</msg>
   <msg key="lt_Saving_email_address_">Saving email address and password</msg>
   <msg key="lt_Show_everyone_else_at">Show everyone else at %system_name% how great looking you are:</msg>
   <msg key="lt_Sorry_but_it_seems_th">Sorry but it seems that you've been banned from %system_name%.</msg>
-  <msg key="lt_Thank_you_for_visitin">Thank you for visiting %system_name%&quot; &quot;&lt;#_ Here's how you can log in at %system_url%:
+  <msg key="lt_Thank_you_for_visitin">Thank you for visiting %system_name%. Here's how you can log in at %system_url%:
 	    
-Username:  %email%
+Username:  %username%
 Password:  %password%
 </msg>
   <msg key="lt_The_full_name_given_d">The full name given didn't match. There must be something wrong.</msg>

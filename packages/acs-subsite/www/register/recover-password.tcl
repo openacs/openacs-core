@@ -73,4 +73,4 @@ if { [exists_and_not_null username] && !$form_submitted_p } {
                                 -username $username]
 }
 
-
+set login_url [ad_get_login_url -authority_id $authority_id -username $username]

@@ -2,42 +2,47 @@ ad_page_contract {
     Page for users to register themselves on the site.
 
     @cvs-id $Id$
-} -validate {
-    password_1 {
-	if {![string equal $password_1 $password_2]} {
-	    ad_complain "[_ acs-subsite.lt_The_passwords_youve_e]"
-	}
-    }
 }
+
+# TODO: Move to includeable chunk
+
+
+# TODO: log user out if currently logged in, if specified in the includeable chunk's parameters, e.g. not when creating accounts for other users
+ad_user_logout 
+
 
 ad_form -name register -form [auth::get_registration_form_elements] -on_submit {
 
     array set creation_info [auth::create_user \
-                            -first_names $first_names \
-                            -last_name $last_name \
-                            -email $email \
-                            -url $url \
-                            -username $username \
-                            -password $password_1 \
-                            -secret_question $secret_question \
-                            -secret_answer $secret_answer]
+                                 -first_names $first_names \
+                                 -last_name $last_name \
+                                 -email $email \
+                                 -url $url \
+                                 -username $username \
+                                 -password $password \
+                                 -password_confirm $password_confirm \
+                                 -secret_question $secret_question \
+                                 -secret_answer $secret_answer]
 
     # Handle registration problems
-
+    
     switch $creation_info(creation_status) {
         ok {
             # Continue below
         }
         default {
-            # Adding the error to just some element, not sure where it makes sense
-            # AFAIK, we can't add errors to the form in general ...
-            ad_form_complain -element first_names -error creation_info(auth_message)
-            
+            # Adding the error to the first element, but only if there are no element messages
+            if { [llength $creation_info(element_messages)] == 0 } {
+                array set reg_elms [auth::get_registration_elements]
+                set first_elm [lindex [concat $reg_elms(required) $reg_elms(optional)] 0]
+                form set_error register $first_elm $creation_info(creation_message)
+            }
+                
             # Element messages
             foreach { elm_name elm_error } $creation_info(element_messages) {
-                ad_form_complain -element $elm_name -error $elm_error
+                form set_error register $elm_name $elm_error
             }
-            continue
+            break
         }
     }
 
