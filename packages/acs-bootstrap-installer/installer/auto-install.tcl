@@ -124,7 +124,7 @@ db_foreach all_unmounted_package_key {
     where t.package_key = p.package_key(+) 
     and p.package_id is null
 } {
-    apm_package_instantiate_and_mount -callback apm_ns_write_callback $package_key
+    site_node::instantiate_and_mount -package_key $package_key
 }
 
 ns_write "</blockquote></pre>.
