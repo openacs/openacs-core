@@ -12,7 +12,7 @@ Currently, the system is able to handle the following types of relationships:
   <else>
   
   <multiple name="rel_types">
-    <li> @rel_types.indent@<a href="one?rel_type=@rel_types.rel_type@">@rel_types.pretty_name@</a> (number of relationships defined: @rel_types.number_relationships@)
+    <li> @rel_types.indent;noquote@<a href="one?rel_type=@rel_types.rel_type@">@rel_types.pretty_name@</a> (number of relationships defined: @rel_types.number_relationships@)
     </li>
   </multiple>
 

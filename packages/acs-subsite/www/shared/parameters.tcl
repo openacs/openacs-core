@@ -19,9 +19,13 @@ db_1row select_instance_name {
 
 set package_url [site_node::get_url_from_object_id -object_id $package_id]
 
-set page_title "$instance_name Parameters"
+set page_title "Parameters"
 
-set context [list $page_title]
+if { [string equal $package_url [subsite::get_element -element url]] } {
+    set context [list $page_title]
+} else {
+    set context [list [list $package_url $instance_name] $page_title]
+}
 
 ad_require_permission $package_id admin
 

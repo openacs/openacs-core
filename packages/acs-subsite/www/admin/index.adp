@@ -17,10 +17,12 @@
   </li> 
 </ul>
 
-<h3>Core Services</h3>
-<ul>
-  <li>
-    <a href="@acs_admin_url@">@acs_admin_name@</a>
-    <include src="/packages/acs-admin/lib/site-wide-services">
-  </li>
-</ul>
+<if @sw_admin_p@ true>
+  <h3>Core Services</h3>
+  <ul>
+    <li>
+      <a href="@acs_admin_url@">@acs_admin_name@</a>
+      <include src="/packages/acs-admin/lib/site-wide-services">
+    </li>
+  </ul>
+</if>

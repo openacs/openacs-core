@@ -38,9 +38,9 @@
     </td>
 
     <td align="right" class="subsite-header" style="padding-right: 8px;" width="33%">
-      <if @sw_admin_url@ not nil>
+      <if @admin_url@ not nil>
         &nbsp;
-        <span class="button-header"><a href="@sw_admin_url@" title="Site-wide administration" class="button">Admin</a></span>
+        <span class="button-header"><a href="@admin_url@" title="Site-wide administration" class="button">Admin</a></span>
       </if>
       <if @pvt_home_url@ not nil>
         &nbsp;
