@@ -594,3 +594,99 @@ template_tag trn { chunk params } {
 
   template::adp_append_code "append __adp_output \[_ $locale $key $quoted_chunk\]"
 }
+
+
+# DanW: implements a switch statement just like in tcl
+# use as follows:
+#
+# <switch flag=regexp @some_var@>
+#     <case value="a.+">
+#         A was selected
+#     </case>
+#     <case value="b.+">
+#         B was selected
+#     </case>
+#     <case value="c.+">
+#         C was selected
+#     </case>
+#     <default>
+#         Not a valid selection
+#     </default>
+# </switch>
+#
+# The flag switch is optional and it defaults to exact if not specified.
+# Valid values are exact, regexp, and glob
+
+template_tag switch { chunk params } {
+
+    set sw ""
+    set arg ""
+    set size [ns_set size $params]
+
+    # get the switch flags and the switch var
+
+    for { set i 0 } { $i < $size } { incr i } {
+        set key [ns_set key $params $i]
+        set value [ns_set value $params $i]
+
+        if { [string equal $key $value] } {
+            set arg $key
+        } elseif [string equal $key flag] {
+            append sw " -$value "            
+        }
+    }
+
+    # append the switch statement and eval tags in between
+
+    template::adp_append_code "switch $sw -- $arg {"
+
+    template::adp_compile_chunk $chunk
+
+    template::adp_append_code "}"
+}
+
+
+# case statements as part of switch statement as shown above
+# 
+
+template_tag case { chunk params } {
+
+    # get the case value
+
+    set value [ns_set iget $params value]
+
+    # Scan the parameter stack backward, looking for the tag name
+
+    set tag_id [template::enclosing_tag switch]
+    if { [string equal $tag_id {}] } {
+        error "No enclosing SWITCH tag for CASE tag on value $value"
+    }    
+
+    # insert the case statement and eval the chunk in between
+
+    template::adp_append_code "$value {" -nobreak
+
+    template::adp_compile_chunk $chunk
+
+    template::adp_append_code "}"
+}
+
+# default value for case statement which is a sub-tag in switch tag
+
+template_tag default { chunk params } {
+
+    # Scan the parameter stack backward, looking for the tag name
+
+    set tag_id [template::enclosing_tag switch]
+    if { [string equal $tag_id {}] } {
+        error "No enclosing SWITCH tag for DEFAULT tag"
+    }    
+
+    # insert the default value and evaluate the chunk
+
+    template::adp_append_code "default {" -nobreak
+
+    template::adp_compile_chunk $chunk
+
+    template::adp_append_code "}"
+}
