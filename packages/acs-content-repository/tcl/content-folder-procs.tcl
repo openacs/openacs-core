@@ -310,8 +310,8 @@ ad_proc -public content::folder::is_sub_folder {
 } {
     return [package_exec_plsql \
 		-var_list [list \
-			       folder_id $folder_id \
-			       target_folder_id $target_folder_id \
+			       [list folder_id $folder_id] \
+			       [list target_folder_id $target_folder_id] \
 			      ] \
 		content_folder is_sub_folder]
 }

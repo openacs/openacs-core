@@ -174,6 +174,7 @@ begin
   return 0; 
 end;' language 'plpgsql';
 
+-- item
 select define_function_args('content_item__del','item_id');
 create or replace function content_item__del (integer)
 returns integer as '
@@ -299,6 +300,7 @@ begin
   return 0; 
 end;' language 'plpgsql';
 
+
 select define_function_args('content_item__delete','item_id');
 create or replace function content_item__delete (integer)
 returns integer as '
@@ -306,5 +308,40 @@ declare
   delete__item_id                alias for $1;  
 begin
         PERFORM content_item__del (delete__item_id);
+  return 0; 
+end;' language 'plpgsql';
+
+
+-- template
+select define_function_args('content_template__del','template_id');
+create or replace function content_template__del (integer)
+returns integer as '
+declare
+  delete__template_id            alias for $1;  
+begin
+
+  delete from cr_type_template_map
+    where template_id = delete__template_id;
+
+  delete from cr_item_template_map
+    where template_id = delete__template_id;
+ 
+  delete from cr_templates
+    where template_id = delete__template_id;
+
+  PERFORM content_item__delete(delete__template_id);
+
+  return 0; 
+end;' language 'plpgsql';
+
+select define_function_args('content_template__delete','template_id');
+
+create or replace function content_template__delete (integer)
+returns integer as '
+declare
+  delete__template_id            alias for $1;  
+begin
+  PERFORM content_template__delete(delete__template_id);
+
   return 0; 
 end;' language 'plpgsql';
