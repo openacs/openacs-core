@@ -28,4 +28,14 @@
       </querytext>
 </partialquery>
 
+<fullquery name="acs_object_type::supertype.supertypes">      
+      <querytext>
+          select object_type
+            from acs_object_types
+           start with object_type = :subtype
+      connect by prior supertype = object_type
+        order by level desc
+      </querytext>
+</fullquery>
+
 </queryset>
