@@ -3528,7 +3528,7 @@ ad_proc -public util_http_file_upload { -file -data -binary:boolean -filename
         }
     }
 
-    set boundary [ns_sha1 [list [clock clicks] [clock seconds]]]
+    set boundary [ns_sha1 [list [clock clicks -milliseconds] [clock seconds]]]
     set payload {}
 
     if {[info exists data] && [string length $data]} {

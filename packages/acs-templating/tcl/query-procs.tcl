@@ -79,7 +79,7 @@ ad_proc -public template::query { statement_name result_name type sql args } {
   set sql [string trim $sql]
   set full_statement_name [db_qd_get_fullname $statement_name]
 
-  #set beginTime [clock clicks]
+  #set beginTime [clock clicks -milliseconds]
 
   template::util::get_opts $args
   
@@ -110,7 +110,7 @@ ad_proc -public template::query { statement_name result_name type sql args } {
     set_cached_result
   }
 
-  #set timeElapsed [expr ([clock clicks] - $beginTime) / 1000]
+  #set timeElapsed [expr ([clock clicks -milliseconds] - $beginTime)]
   #ns_log Notice "Query performed in: $timeElapsed ms"
   
   return $ret_code

@@ -127,7 +127,7 @@ ad_proc ds_link {} {
 		}
 	    }
 	    if { $counter > 0 } {
-		append out "<tr><td align=\"right\">$counter database command[ad_decode $counter 1 " taking" "s totalling"] [format "%.f" [expr { $total / 1000 }]] ms</td></tr>"
+		append out "<tr><td align=\"right\">$counter database command[ad_decode $counter 1 " taking" "s totalling"] [format "%.f" [expr { $total }]] ms</td></tr>"
 	    }
 	}
 	
@@ -135,7 +135,7 @@ ad_proc ds_link {} {
 	    array set conn [nsv_get ds_request "$ad_conn(request).conn"]
 	    if { [info exists conn(startclicks)] } {
 		append out "<tr><td align=\"right\">page served in
-		[format "%.f" [expr { ([clock clicks] - $conn(startclicks)) / 1000 }]] ms</td></tr>\n"
+		[format "%.f" [expr { ([clock clicks -milliseconds] - $conn(startclicks)) }]] ms</td></tr>\n"
 	    }
 	}
 	
@@ -214,7 +214,7 @@ ad_proc -private ds_collect_db_call { db command statement_name sql start_time e
             }
         }
         
-        ds_add db $db $command $statement_name $bound_sql $start_time [clock clicks] $errno $error
+        ds_add db $db $command $statement_name $bound_sql $start_time [clock clicks -milliseconds] $errno $error
     }
 }
 
@@ -277,7 +277,7 @@ ad_proc -private ds_sweep_data {} {
 
 ad_proc -private ds_trace_filter { conn args why } { Adds developer-support information about the end of sessions.} {
     if { [ds_enabled_p] && [ds_collection_enabled_p] } {
-	ds_add conn end [ns_time] endclicks [clock clicks]
+	ds_add conn end [ns_time] endclicks [clock clicks -milliseconds]
 
 	for { set i 0 } { $i < [ns_set size [ad_conn outputheaders]] } { incr i } {
 	    ds_add oheaders [ns_set key [ad_conn outputheaders] $i] [ns_set value [ad_conn outputheaders] $i]
