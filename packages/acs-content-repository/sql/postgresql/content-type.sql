@@ -310,7 +310,7 @@ begin
   -- Drop the column if neccessary
   if drop_attribute__drop_column then
       execute ''alter table '' || v_table || '' drop column '' ||
-	drop_attribute__attribute_name || '' '' || ''cascade'';
+	drop_attribute__attribute_name || '' cascade'';
 
 --    exception when others then
 --      raise_application_error(-20000, ''Unable to drop column '' || 

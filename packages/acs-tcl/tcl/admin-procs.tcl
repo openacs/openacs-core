@@ -25,7 +25,7 @@ ad_proc -public ad_restrict_to_https {conn args why} {
     if { [security::secure_conn_p] } {
         return "filter_ok"
     }
-    
+
     ad_returnredirect [security::get_secure_qualified_url [ad_return_url]]
     # No abort since in filter
     

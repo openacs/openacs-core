@@ -16,6 +16,7 @@ ad_page_contract {
 set current_user_id [ad_verify_and_get_user_id]
 
 if [empty_string_p $user_id] {
+    subsite::upload_allowed
     set user_id $current_user_id
     set admin_p 0
 } else {
