@@ -832,13 +832,15 @@ ad_proc -private rp_handler {} {
       return
     }
 
-    if {[info exists dir_index]} {
-      if { [nsv_get rp_directory_listing_p .] } {
-	ns_returnnotice 200 "Directory listing of $dir_index" \
-	    [rp_html_directory_listing $dir_index]
-	return
+    if {[info exists dir_index]
+        && ![string match */CVS/* $dir_index]
+    } {
+        if { [nsv_get rp_directory_listing_p .] } {
+            ns_returnnotice 200 "Directory listing of $dir_index" \
+                [rp_html_directory_listing $dir_index]
+              return
+          }
       }
-    }
 
     # Ok, we didn't find a normal file. Let's look for a path info style
     # thingy.
@@ -986,33 +988,45 @@ ad_proc -private rp_serve_abstract_file {
 }
 
 ad_proc -public rp_serve_concrete_file {file} {
-  Serves a file.
+    Serves a file.
 } {
-  set extension [file extension $file]
-  set startclicks [clock clicks]
+    set extension [file extension $file]
+    set startclicks [clock clicks]
 
-  if { [nsv_exists rp_extension_handlers $extension] } {
-    set handler [nsv_get rp_extension_handlers $extension]
+    if { [nsv_exists rp_extension_handlers $extension] } {
+        set handler [nsv_get rp_extension_handlers $extension]
 
-    if { [set errno [catch {
-      ad_try {
-	$handler
-      } ad_script_abort val {
-	# do nothing
-      }
-      rp_finish_serving_page
-      ad_call_proc_if_exists ds_add rp [list serve_file [list $file $handler] $startclicks [clock clicks]]
-    } error]] } {
-      global errorCode errorInfo
-      ad_call_proc_if_exists ds_add rp [list serve_file [list $file $handler] $startclicks [clock clicks] error "$errorCode: $errorInfo"]
-      return -code $errno -errorcode $errorCode -errorinfo $errorInfo $error
+        if { [set errno [catch {
+            ad_try {
+                $handler
+            } ad_script_abort val {
+                # do nothing
+            }
+            rp_finish_serving_page
+            ad_call_proc_if_exists ds_add rp [list serve_file [list $file $handler] $startclicks [clock clicks]]
+        } error]] } {
+            global errorCode errorInfo
+            ad_call_proc_if_exists ds_add rp [list serve_file [list $file $handler] $startclicks [clock clicks] error "$errorCode: $errorInfo"]
+            return -code $errno -errorcode $errorCode -errorinfo $errorInfo $error
+        }
+    } else {
+        # Some other random kind of file - guess the type and return it.
+
+        #  first check that we are not serving a forbidden file like a .xql, a backup or CVS file
+        foreach match [parameter::get -parameter ExcludedFiles -package_id [ad_acs_kernel_id] -default {}] {
+            if {[string match $match $file]} { 
+                ad_raise notfound
+            } 
+        } 
+        if {[string equal $extension ".xql"]
+            && ![parameter::get -parameter ServeXQLFiles -package_id [ad_acs_kernel_id] -default 0] } { 
+                ad_raise notfound
+        } else { 
+            set type [ns_guesstype $file]
+            ad_call_proc_if_exists ds_add rp [list serve_file [list $file $type] $startclicks [clock clicks]]
+            ns_returnfile 200 $type $file
+        } 
     }
-  } else {
-    # Some other random kind of file - guess the type and return it.
-    set type [ns_guesstype $file]
-    ad_call_proc_if_exists ds_add rp [list serve_file [list $file $type] $startclicks [clock clicks]]
-    ns_returnfile 200 $type $file
-  }
 }
 
 ad_proc -private rp_concrete_file {
@@ -1399,8 +1413,6 @@ ad_proc -public request_denied_filter { why } {
     ad_return_forbidden \
         "Forbidden URL" \
         "<blockquote>No, we're not going to show you this file</blockquote>"
-
-    ns_return 200 text/html $output
 
     return filter_return
 }
