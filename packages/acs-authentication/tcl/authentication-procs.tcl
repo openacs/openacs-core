@@ -9,6 +9,7 @@ ad_library {
 namespace eval auth {}
 namespace eval auth::authentication {}
 namespace eval auth::registration {}
+namespace eval auth::user_info {}
 
 
 #####
@@ -248,6 +249,9 @@ ad_proc -public auth::authenticate {
                           -return_url $return_url \
                           -username $username \
                           -authority_id $authority_id]
+
+    ns_log Notice "LARS: [array get result]"
+
     # Returns: 
     #   result(account_status)
     #   result(account_message)  
@@ -290,7 +294,7 @@ ad_proc -public auth::authenticate {
     }
         
     # Issue login cookie if login was successful
-    if { [string equal $result(auth_status) "ok"] && !$no_cookie_p } {
+    if { [string equal $result(auth_status) "ok"] && !$no_cookie_p && [exists_and_not_null result(user_id)] } {
         auth::issue_login \
             -user_id $result(user_id) \
             -persistent=$persistent_p \
@@ -660,7 +664,7 @@ ad_proc -public auth::get_registration_form_elements {
 
     array set labels [list \
                           username [_ acs-subsite.Username] \
-                          email [_ acs-subsite.Your_email_address] \
+                          email [_ acs-subsite.Email] \
                           first_names [_ acs-subsite.First_names] \
                           last_name [_ acs-subsite.Last_name] \
                           screen_name [_ acs-subsite.Screen_name] \
@@ -1148,21 +1152,40 @@ ad_proc -private auth::get_local_account {
     }
 
     if { !$account_found_p } {
-        # Local user account doesn't exist
-        set auth_info(account_status) "closed"
-        auth::authority::get -authority_id $authority_id -array authority
 
-        set auth_info(account_message) "You have successfully authenticated, but you do not have an account on [ad_system_name] yet.<p>"
+        # Try for an on-demand sync
+        array set info_result [auth::user_info::GetUserInfo \
+                                   -authority_id $authority_id \
+                                   -username $username]
 
-        if { ![empty_string_p $authority(help_contact_text)] } {
-            append auth_info(account_message) "<h3>Help Information</h3>"
-            append auth_info(account_message) [ad_html_text_convert \
-                                                   -from $authority(help_contact_text_format) \
-                                                   -to "text/html" -- $authority(help_contact_text)]
-        }
+        if { [string equal $info_result(info_status) "ok"] } {
 
+            array set user $info_result(user_info)
+            set user(user_id) [auth::create_local_account \
+                                   -authority_id $authority_id \
+                                   -username $username \
+                                   -array user]
+            acs_user::get -authority_id $authority_id -username $username -array user
+
+        } else {
         
-        return [array get auth_info]
+            # Local user account doesn't exist
+            set auth_info(account_status) "closed"
+            
+            # Used to get help contact info
+            auth::authority::get -authority_id $authority_id -array authority
+            set system_name [ad_system_name]
+            set auth_info(account_message) "You have successfully authenticated, but you do not have an account on $system_name yet."
+            
+            if { ![empty_string_p $authority(help_contact_text)] } {
+                append auth_info(account_message) "<p><h3>Help Information</h3>"
+                append auth_info(account_message) [ad_html_text_convert \
+                                                       -from $authority(help_contact_text_format) \
+                                                       -to "text/html" -- $authority(help_contact_text)]
+            }
+            
+            return [array get auth_info]
+        }
     }
 
     # Check local account status
@@ -1514,10 +1537,7 @@ ad_proc -private auth::registration::Register {
 } {
     Invoke the Register service contract operation for the given authority.
 
-    @authority_id Id of the authority. Defaults to local authority.
-    @url Any URL (homepage) associated with the new user
-    @secret_question Question to ask on forgotten password
-    @secret_answer Answer to forgotten password question
+    @authority_id Id of the authority. 
 } {
     set impl_id [auth::authority::get_element -authority_id $authority_id -element "register_impl_id"]
 
@@ -1573,3 +1593,37 @@ ad_proc -private auth::registration::GetElements {
 }
 
 
+
+#####
+#
+# auth::user_info
+#
+#####
+
+ad_proc -private auth::user_info::GetUserInfo {
+    {-authority_id:required}
+    {-username:required}
+} {
+    Invoke the Register service contract operation for the given authority.
+
+    @authority_id Id of the authority. 
+} {
+    set impl_id [auth::authority::get_element -authority_id $authority_id -element "user_info_impl_id"]
+
+    if { [empty_string_p $impl_id] } {
+        # No implementation of authentication
+        return { 
+            info_status no_account
+        }
+    }
+
+    set parameters [auth::driver::get_parameter_values \
+                        -authority_id $authority_id \
+                        -impl_id $impl_id]
+
+    return [acs_sc::invoke \
+                -error \
+                -impl_id $impl_id \
+                -operation GetUserInfo \
+                -call_args [list $username $parameters]]
+}

@@ -30,35 +30,38 @@ ad_proc -public auth::authority::create {
 
     <ul>
 
-      <li> short_name         Short name for authority. Used as a key by applications to identify this authority.
+      <li> short_name          Short name for authority. Used as a key by applications to identify this authority.
 
-      <li> pretty_name        Label for the authority to be shown in a list to users picking a authority.
+      <li> pretty_name         Label for the authority to be shown in a list to users picking a authority.
 
-      <li> enabled_p           't' if this authority available, 'f' if it's disabled. Defaults to 't'.
+      <li> enabled_p            't' if this authority available, 'f' if it's disabled. Defaults to 't'.
 
-      <li> sort_order         Sort ordering determines the order in which authorities are listed in the user interface.
-                              Defaults to the currently highest sort order plus one.
+      <li> sort_order          Sort ordering determines the order in which authorities are listed in the user interface.
+                               Defaults to the currently highest sort order plus one.
 
-      <li> auth_impl_id       The ID of the implementation of the 'auth_authentication' service contract.
-                              Defaults to none.
+      <li> auth_impl_id        The ID of the implementation of the 'auth_authentication' service contract.
+                               Defaults to none.
 
-      <li> pwd_impl_id        The ID of the implementation of the 'auth_password' service contract. Defaults to none.
+      <li> pwd_impl_id         The ID of the implementation of the 'auth_password' service contract. Defaults to none.
 
-      <li> forgotten_pwd_url  An alternative URL to redirect to when the user has forgotten his/her password.
-                              Defaults to none.
+      <li> forgotten_pwd_url   An alternative URL to redirect to when the user has forgotten his/her password.
+                               Defaults to none.
                            
-      <li> change_pwd_url     An alternative URL to redirect to when the user wants to change his/her password.
-                              Defaults to none.
+      <li> change_pwd_url      An alternative URL to redirect to when the user wants to change his/her password.
+                               Defaults to none.
 
-      <li> register_impl_id   The ID of the implementation of the 'auth_register' service contract.
-                              Defaults to none.
+      <li> register_impl_id    The ID of the implementation of the 'auth_registration' service contract.
+                               Defaults to none.
 
-      <li> register_url       An alternative URL to redirect to when the user wants to register for an account.
-                              Defaults to none.
+      <li> register_url        An alternative URL to redirect to when the user wants to register for an account.
+                               Defaults to none.
 
-      <li> get_doc_impl_id     Id of the batch sync GetDocument service contract implementation
+      <li> user_info_impl_id   The ID of the implementation of the 'auth_user_info' service contract.
+                               Defaults to none.
 
-      <li> process_doc_impl_id Id of the batch sync ProcessDocument service contract implementation
+      <li> get_doc_impl_id     Id of the 'auth_sync_retrieve' service contract implementation
+
+      <li> process_doc_impl_id Id of the 'auth_sync_process' service contract implementation
 
       <li> batch_sync_enabled_p Is batch sync enabled for the authority?
     </ul>
@@ -131,7 +134,15 @@ ad_proc -public auth::authority::create {
             set authority_id [db_exec_plsql create_authority {}]
 
             # Set the arguments not taken by the new function with an update statement
-            foreach column {get_doc_impl_id process_doc_impl_id batch_sync_enabled_p help_contact_text_format} {
+            # LARS: Great, we had a nice abstraction going, so you only had to add a new column in 
+            # one place, now that abstraction is broken, because you have to add it here as well
+            foreach column { 
+                user_info_impl_id
+                get_doc_impl_id
+                process_doc_impl_id
+                batch_sync_enabled_p
+                help_contact_text_format 
+            } {
                 set edit_columns($column) [set $column]
             }        
             
@@ -407,6 +418,7 @@ ad_proc -private auth::authority::get_column_defaults {} {
         change_pwd_url ""
         register_impl_id ""
         register_url ""
+        user_info_impl_id ""
         get_doc_impl_id ""
         process_doc_impl_id ""
         batch_sync_enabled_p "f"
@@ -431,7 +443,7 @@ ad_proc -private auth::authority::get_sc_impl_columns {} {
 
     @author Peter Marklund 
 } {
-    return {auth_impl_id pwd_impl_id register_impl_id get_doc_impl_id process_doc_impl_id}
+    return {auth_impl_id pwd_impl_id register_impl_id user_info_impl_id get_doc_impl_id process_doc_impl_id}
 }
 
 ad_proc -private auth::authority::get_select_columns {} {
@@ -439,7 +451,7 @@ ad_proc -private auth::authority::get_select_columns {} {
     
     @author Lars Pind (lars@collaboraid.biz)
 } {
-    return [concat [get_columns] auth_impl_name pwd_impl_name register_impl_name]
+    return [concat [get_columns] auth_impl_name pwd_impl_name register_impl_name user_info_impl_name get_doc_impl_name process_doc_impl_name]
 }
 
 
@@ -466,9 +478,12 @@ ad_proc -private auth::authority::get_not_cached {
 } {
     set columns [get_columns]
 
-    lappend columns "(select impl_name from acs_sc_impls where impl_id = auth_impl_id) as auth_impl_name"
-    lappend columns "(select impl_name from acs_sc_impls where impl_id = pwd_impl_id) as pwd_impl_name"
-    lappend columns "(select impl_name from acs_sc_impls where impl_id = register_impl_id) as register_impl_name"
+    lappend columns "(select impl_pretty_name from acs_sc_impls where impl_id = auth_impl_id) as auth_impl_name"
+    lappend columns "(select impl_pretty_name from acs_sc_impls where impl_id = pwd_impl_id) as pwd_impl_name"
+    lappend columns "(select impl_pretty_name from acs_sc_impls where impl_id = register_impl_id) as register_impl_name"
+    lappend columns "(select impl_pretty_name from acs_sc_impls where impl_id = user_info_impl_id) as user_info_impl_name"
+    lappend columns "(select impl_pretty_name from acs_sc_impls where impl_id = get_doc_impl_id) as get_doc_impl_name"
+    lappend columns "(select impl_pretty_name from acs_sc_impls where impl_id = process_doc_impl_id) as process_doc_impl_name"
 
     db_1row select_authority "
         select     [join $columns ",\n                   "]
