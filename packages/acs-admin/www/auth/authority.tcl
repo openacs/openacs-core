@@ -213,12 +213,9 @@ list::create \
         end_time_pretty {
             label "End time"
         }            
-        run_time_seconds {
+        run_time {
             label "Run time"
             html { align right }
-            display_template { 
-                <if @batch_jobs.run_time_seconds@ gt 0>@batch_jobs.run_time_seconds@ secs</if>
-            }
         }
         num_actions {
             label "Actions"
@@ -251,6 +248,7 @@ if { $display_batch_history_p } {
         interactive_pretty 
         short_message 
         actions_per_minute
+        run_time
     } batch_jobs select_batch_jobs {} {
         set job_url [export_vars -base batch-job { job_id }]
 
@@ -264,6 +262,16 @@ if { $display_batch_history_p } {
         set actions_per_minute {}
         if { $run_time_seconds > 0 && $num_actions > 0 } {
             set actions_per_minute [expr round(60.0 * $num_actions / $run_time_seconds)]
+        }
+        
+        set run_time {}
+        if { $run_time_seconds > 0 } {
+            set hrs [expr $run_time_seconds / (60*60)]
+            set mins [expr ($run_time_seconds / 60) % 60]
+            set secs [expr $run_time_seconds % 60]
+            if { $hrs > 0 } { append run_time "${hrs}h " }
+            if { $hrs > 0 || $mins > 0 } { append run_time "${mins}m " }
+            append run_time "${secs}s"
         }
     }
     if { [exists_and_not_null get_doc_impl_id] && [exists_and_not_null process_doc_impl_id] } {
