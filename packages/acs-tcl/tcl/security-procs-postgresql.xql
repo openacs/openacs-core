@@ -2,6 +2,19 @@
 
 <queryset>
    <rdbms><type>postgresql</type><version>7.1</version></rdbms>
+ 
+<fullquery name="ad_set_client_property.prop_update_dml">      
+      <querytext>
+        update sec_session_properties
+        set property_value = :value,
+          secure_p = :secure,
+          last_hit = :last_hit 
+        where session_id = :session_id and
+          module = :module and
+          property_name = :name
+      </querytext>
+</fullquery>
+ 
 
 <fullquery name="sec_update_user_session_info.update_last_visit">      
       <querytext>

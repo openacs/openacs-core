@@ -395,19 +395,19 @@ ad_proc -public ad_set_client_property {
             # was discovered on a page built of frames, where the two requests from
             # the browser spawned two AOLserver threads to service them.
 
-            # This code's a bit crude in that we assume the only error we get will
-            # be due to a unique violation, so be careful if you edit the queries!
+            # Oracle doesn't allow a RETURNING clause on an insert with a
+            # subselect, so this code first inserts a dummy value if none exists
+            # (ensuring it does exist afterwards) then updates it with the real
+            # value.  Ugh.  
 
-            set clob_insert_dml [db_map prop_insert_dml_clob]
+            set clob_update_dml [db_map prop_update_dml_clob]
 
-            if { $clob == "t" && ![empty_string_p $clob_insert_dml] } {
-                if { [catch {db_dml dummy $clob_insert_dml -clobs [list $value]} errmsg] } {
-                    db_dml prop_update_dml_clob "" -clobs [list $value]
-                }
+            db_dml prop_insert_dml ""
+
+            if { $clob == "t" && ![empty_string_p $clob_update_dml] } {
+                db_dml prop_update_dml_clob "" -clobs [list $value]
             } else {
-                if { [catch {db_dml prop_insert_dml ""} ] } {
-                    db_dml prop_update_dml ""
-                }
+                db_dml prop_update_dml ""
 	    }
 	}
     }
