@@ -1749,28 +1749,6 @@ begin
 
 end;' language 'plpgsql';
 
-create function apm_package__enable (integer) returns integer as '
-declare
-       enable__package_id       alias for $1;
-begin
-      update apm_packages 
-      set enabled_p = ''t''
-      where package_id = enable__package_id;	
-
-      return 0;
-end;' language 'plpgsql';
-    
-create function apm_package__disable (integer) returns integer as '
-declare
-       disable__package_id           alias for $1;
-begin
-      update apm_packages 
-      set enabled_p = ''f''
-      where package_id = disable__package_id;
-
-      returns 0;	
-end;' language 'plpgsql';
-	
 create function apm_package__highest_version (varchar) returns integer as '
 declare
      highest_version__package_key    alias for $1;

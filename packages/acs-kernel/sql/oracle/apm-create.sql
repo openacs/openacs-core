@@ -1044,15 +1044,6 @@ function new (
     package_id		in apm_packages.package_id%TYPE
   ) return varchar2;
 
- -- Enable a package to be utilized by a subsite.
-  procedure enable (
-   package_id		in apm_packages.package_id%TYPE
-  );
-  
-  procedure disable (
-   package_id		in apm_packages.package_id%TYPE
-  );
-
   function highest_version (
    package_key		in apm_package_types.package_key%TYPE
   ) return apm_package_versions.version_id%TYPE;
@@ -1884,26 +1875,6 @@ end new;
     return v_result;
   end name;
 
-    procedure enable (
-       package_id			in apm_packages.package_id%TYPE
-    )
-    is
-    begin
-      update apm_packages 
-      set enabled_p = 't'
-      where package_id = enable.package_id;	
-    end enable;
-    
-    procedure disable (
-       package_id			in apm_packages.package_id%TYPE
-    )
-    is
-    begin
-      update apm_packages 
-      set enabled_p = 'f'
-      where package_id = disable.package_id;	
-    end disable;
-	
    function highest_version (
      package_key		in apm_package_types.package_key%TYPE
    ) return apm_package_versions.version_id%TYPE
@@ -2029,7 +2000,6 @@ as
       set enabled_p = 'f'
       where version_id = disable.version_id;	
     end disable;
-
 
   function copy(
 	version_id in apm_package_versions.version_id%TYPE,
