@@ -55,6 +55,4 @@ foreach dir $dirs {
     }
 }
 
-rename __is_xql {}
-
 nsv_unset ad_after_server_initialization .
