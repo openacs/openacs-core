@@ -7,7 +7,7 @@
 </if>
 <else>
 <table width="100%">
-  <tr><td bgcolor="#e4e4e4">@documentation@</td></tr>
+  <tr><td bgcolor="#eeeeee">@documentation@</td></tr>
 </table>
 
 <if @source_p@ eq 0>

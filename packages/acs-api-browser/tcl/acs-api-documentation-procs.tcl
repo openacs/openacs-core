@@ -549,9 +549,15 @@ ad_proc -public api_proc_documentation {
 	append out [api_format_common_elements doc_elements]
 	
 	if { $source_p } {
+		if {[ad_parameter FancySourceFormattingP "" 1]} {
+			append out "<dt><b>Source code:</b></dt><dd>
+<pre>[api_tcl_to_html $proc_name]<pre>
+</dd><p>\n"
+		} else {
 		append out "<dt><b>Source code:</b></dt><dd>
 <pre>[ns_quotehtml [info body $proc_name]]<pre>
 </dd><p>\n"
+	}
 	}
 	
 	# No "see also" yet.
@@ -684,6 +690,288 @@ ad_proc -public api_describe_function {
     }
     return $matches
 }
+
+ad_proc -private api_tcl_to_html {proc_name} {
+
+    Given a proc name, formats it as HTML, including highlighting syntax in
+    various colors and creating hyperlinks to other proc definitions.<BR>
+    The inspiration for this proc was the tcl2html script created by Jeff Hobbs.
+<P>
+    Known Issues:
+<OL>
+<LI> This proc will mistakenly highlight switch strings that look like commands as commands, etc.
+<LI> There are many undocumented AOLserver commands including all of the commands added by modules.
+<LI> When a proc inside a string has explicitly quoted arguments, they are not formatted.
+<LI> regexp and regsub are hard to parse properly.  E.g. If we use the start option, and we quote its argument,
+     and we have an ugly regexp, then this code might highlight it incorrectly.
+</OL>
+
+    @author Jamie Rasmussen (jrasmuss@mle.ie)
+
+    @param proc_name procedure to format in HTML
+
+} {
+
+    # Returns length of a variable name
+    proc length_var {data} {
+        if {[regexp -indices {^\$\{[^\}]+\}} $data found]} {
+            return [lindex $found 1]           
+        } elseif {[regexp -indices {^\$[A-Za-z0-9_]+(\([\$A-Za-z0-9_\-/]+\))?} $data found]} {
+            return [lindex $found 1]
+        }
+        return 0
+    }
+
+    # Returns length of a command name
+    proc length_proc {data} {
+        if {[regexp -indices {^(::)?[A-Za-z][:A-Za-z0-9_@]+} $data found]} {
+            return [lindex $found 1]
+        }
+        return 0
+    }
+
+    # Returns length of subexpression, from open to close quote inclusive
+    proc length_string {data} {
+        regexp -indices {[^\\]"} $data match
+        return [expr [lindex $match 1]+1]
+    }
+
+    # Returns length of subexpression, from open to close brace inclusive
+    # Doesn't deal with unescaped braces in substrings
+    proc length_braces {data} {
+        set i 1
+        for {set count 1} {1} {incr i} {
+            if {[string index $data $i] == "\\"} {
+                incr i
+            } elseif {[string index $data $i] == "\{"} {
+                incr count            
+            } elseif {[string index $data $i] == "\}"} {
+                incr count -1
+            }
+            if {!$count} { break }
+        }
+        return [expr $i+1]
+    }
+
+    # Returns number of spaces until next subexpression
+    proc length_spaces {data} {
+        regexp -indices {\s+} $data match
+        return [expr [lindex $match 1]+1]
+    }
+
+    # Returns length of a generic subexpression
+    proc length_exp {data} {
+        if {[string index $data 0] == "\""} {
+            return [length_string $data]
+        } elseif {[string index $data 0] == "\{"} {
+            return [length_braces $data]
+        } elseif {[string index $data 0] == " "} {
+            return [length_spaces $data]
+        }
+        regexp -indices { } $data match
+        return [lindex $match 1]
+    }
+
+    # Calculate how much text we should ignore
+    proc length_regexp {data} {
+        set i 0
+        set found_regexp 0
+        set curchar [string index $data $i]
+        while {$curchar != "\$" && $curchar != "\[" &&
+               ($curchar != "\{" || !$found_regexp)} {
+            if {$curchar == "\{"} {set found_regexp 1}
+            if {[string match "-start" [string range $data $i [expr $i+5]]]} {
+                incr i [length_exp [string range $data $i end]] ;# -start
+                incr i [length_exp [string range $data $i end]] ;# spaces
+                incr i [length_exp [string range $data $i end]] ;# expression - it could be a var
+            }
+            incr i [length_exp [string range $data $i end]]
+            set curchar [string index $data $i]
+        }
+        return [expr $i -1]
+    }
+
+    array set HTML {
+        comment   {<EM><FONT color=#006600>}
+        /comment  {</FONT></EM>}
+        procs     {<FONT color=#0000CC>}
+        /procs    {</FONT>}
+        str       {<FONT color=#990000>}
+        /str      {</FONT>}
+        var       {<FONT color=#660066>}
+        /var      {</FONT>}
+    }
+
+    # Keywords will be colored as other procs, but not hyperlinked
+    # to api-doc pages.  Perhaps we should hyperlink them to the TCL man pages?
+    # else and elseif are be treated as special cases later
+
+    set KEYWORDS [concat \
+        {if while foreach for switch default} \
+        {after break continue return error catch} \
+        {upvar uplevel eval exec source variable namespace package load} \
+        {set unset trace append global vwait split join} \
+        {concat list lappend lset lindex linsert llength lrange lreplace lsearch lsort} \
+        {info incr expr regexp regsub binary} \
+        {string array open close read cd pwd glob seek pid} \
+        {file fblocked fcopy fconfigure fileevent filename flush eof} \
+        {clock encoding proc rename subst update} \
+        {gets puts socket tell format scan} \
+        ]
+
+    # Returns a list of the commands from all namespaces.
+    proc list_all_procs {{parentns ::}} {
+        set result [info commands ${parentns}::*]
+        foreach ns [namespace children $parentns] {
+            set result [concat $result [list_all_procs $ns]]
+        }
+        return $result
+    }
+    set COMMANDS [list_all_procs]
+
+
+    set proc_namespace ""
+    regexp {^(::)?(.*)::[^:]+$} $proc_name match colons proc_namespace
+
+    set data "\n[info body $proc_name]"
+    regsub -all {&} $data {\&amp;} data
+    regsub -all {<} $data {\&lt;} data
+    regsub -all {>} $data {\&gt;} data
+
+    set in_comment 0
+    set in_quotes 0
+    set proc_ok 1
+    set l [string length $data]
+    for {set i 0} {$i < $l} {incr i} {
+        set char [string index $data $i]
+        switch -- $char {
+
+        "\\" {
+            append html [string range $data $i [incr i]]
+            # This might have been a backslash added to escape &, <, or >.
+            if {[regexp {^(amp;|lt;|gt;)} [string range $data $i end] match esc]} {
+                append html $esc
+                incr i [string length $esc]
+            }
+        }
+
+        "\$" {
+            if {$in_comment || ([string index $data [expr $i + 1]] == " ")} {
+                append html "\$"
+            } else {
+                set varl [length_var [string range $data $i end]]
+                append html "$HTML(var)[string range $data $i [expr $i + $varl]]$HTML(/var)"
+                incr i $varl
+            }
+        }
+
+        "\"" {
+            if {$in_comment} {
+                append html "\""
+            } elseif {$in_quotes} {
+                append html \"$HTML(/str)
+                set in_quotes 0
+            } else {
+                append html $HTML(str)\"
+                set in_quotes 1
+                set proc_ok 0
+            }
+        }
+
+        "\#" {
+            set prevchar [string index $data [expr $i-1]]
+            if {$proc_ok && !$in_comment && [regexp {[\s;]} $prevchar]} {
+                set in_comment 1
+                set proc_ok 0
+                append html $HTML(comment)
+            }
+            append html "#"
+        }
+
+        "\n" {
+            set proc_ok 1
+            if {$in_quotes} {
+                set proc_ok 0
+            }
+            if {$in_comment} {
+                append html $HTML(/comment)
+            }
+            append html "\n"
+            set in_comment 0
+        }
+
+        "\{" -
+        ";" {
+            if {!$in_quotes} {
+                set proc_ok 1
+            }
+            append html $char
+        }
+
+        "\}" {
+            append html "\}"
+            # Special case else and elseif
+            if {[regexp {^\}(\s*)(else|elseif)(\s*\{)} [string range $data $i end] match pre els post]} {
+                append html "${pre}$HTML(procs)${els}$HTML(/procs)${post}"
+                set proc_ok 1
+                incr i [expr [string length $pre] + \
+                             [string length $els] + \
+                             [string length $post]]
+            }
+        }
+
+        "\[" {
+            if {!$in_comment} {
+                set proc_ok 1
+            }
+            append html "\["
+        }
+
+        " " {
+            append html " "
+        }
+        
+        default {
+            if {$proc_ok} {
+                set proc_ok 0
+                set procl [length_proc [string range $data $i end]]
+                set proc_name [string range $data $i [expr $i + $procl]]
+
+                if {[lsearch -exact $KEYWORDS $proc_name] != -1 ||
+                    ([regexp {^::(.*)} $proc_name match had_colons] && [lsearch -exact $KEYWORDS $had_colons] != -1)} {
+                    append html "$HTML(procs)${proc_name}$HTML(/procs)"
+                } elseif {[string match "ns*" $proc_name]} {
+                    append html "<A style=\"text-decoration:none\" href=\"tcl-proc-view?tcl_proc=$proc_name\">$HTML(procs)${proc_name}$HTML(/procs)</A>"
+                } elseif {[string match "*__arg_parser" $proc_name]} {
+                   append html "$HTML(procs)${proc_name}$HTML(/procs)"
+                } elseif {[lsearch -exact $COMMANDS ::${proc_namespace}::${proc_name}] != -1}  {
+                    append html "<A style=\"text-decoration:none\" href=\"[api_proc_url ${proc_namespace}::${proc_name}]\">$HTML(procs)${proc_name}$HTML(/procs)</A>"
+                } elseif {[lsearch -exact $COMMANDS ::$proc_name] != -1}  {
+                    append html "<A style=\"text-decoration:none\" href=\"[api_proc_url $proc_name]\">$HTML(procs)${proc_name}$HTML(/procs)</A>"
+                } else {
+                    append html ${proc_name}
+                    set proc_ok 1
+                }
+                incr i $procl
+
+                # Hack for nasty regexp stuff
+                if {[string match $proc_name "regexp"] || [string match $proc_name "regsub"]} {
+                    set regexpl [length_regexp [string range $data $i end]]
+                    append html [string range $data [expr $i+1] [expr $i + $regexpl]]
+                    incr i $regexpl
+                }
+            } else {
+                append html $char
+                set proc_ok 0
+            }
+        }
+        }
+    }
+
+    # We added a linefeed at the beginning to simplify processing
+    return [string range $html 1 end]
+}
+
 
 ####################
 #
