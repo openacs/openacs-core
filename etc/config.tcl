@@ -143,9 +143,9 @@ ns_param   maxkeepalive       0
 ns_param   logroll            on
 ns_param   maxbackup          5
 ns_param   debug              $debug
-#ns_param  OutputCharset  utf-8    ;# Default output charset.  When none specified,
+ns_param  OutputCharset  utf-8    ;# Default output charset.  When none specified,
                                    # no character encoding of output is performed.
-#ns_param  URLCharset     utf-8    ;# Default Charset for Url Encode/Decode.
+ns_param  URLCharset     utf-8    ;# Default Charset for Url Encode/Decode.
 
 #---------------------------------------------------------------------
 # Thread library (nsthread) parameters 
