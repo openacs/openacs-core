@@ -78,8 +78,6 @@ if { ![db_0or1row get_item_id {}]} {
     db_transaction {
         set var_list [list \
             [list content_type image] \
-            [list creation_user $user_id] \
-            [list creation_ip [ad_conn peeraddr]] \
             [list name portrait-of-user-$user_id]]
         set item_id [package_instantiate_object -var_list $var_list content_item]
 
