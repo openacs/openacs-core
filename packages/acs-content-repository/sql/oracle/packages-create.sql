@@ -636,7 +636,8 @@ procedure move (
   --    @see {content_item.new}, {content_folder.new}, {content_item.copy}
   --*/
   item_id		in cr_items.item_id%TYPE,
-  target_folder_id	in cr_folders.folder_id%TYPE
+  target_folder_id	in cr_folders.folder_id%TYPE,
+  name                  in cr_items.name%TYPE default NULL
 );
 
 procedure copy (
@@ -654,7 +655,8 @@ procedure copy (
   item_id		in cr_items.item_id%TYPE,
   target_folder_id	in cr_folders.folder_id%TYPE,
   creation_user		in acs_objects.creation_user%TYPE,
-  creation_ip		in acs_objects.creation_ip%TYPE default null
+  creation_ip		in acs_objects.creation_ip%TYPE default null,
+  name                  in cr_items.name%TYPE default NULL
 );
 
 function copy2 (
@@ -673,7 +675,8 @@ function copy2 (
   item_id		in cr_items.item_id%TYPE,
   target_folder_id	in cr_folders.folder_id%TYPE,
   creation_user		in acs_objects.creation_user%TYPE,
-  creation_ip		in acs_objects.creation_ip%TYPE default null
+  creation_ip		in acs_objects.creation_ip%TYPE default null,
+  name                  in cr_items.name%TYPE default NULL
 ) return cr_items.item_id%TYPE;
 
 -- get the latest revision for an item
@@ -1053,7 +1056,8 @@ procedure copy (
   symlink_id		in cr_symlinks.symlink_id%TYPE,
   target_folder_id	in cr_folders.folder_id%TYPE,
   creation_user		in acs_objects.creation_user%TYPE,
-  creation_ip		in acs_objects.creation_ip%TYPE default null
+  creation_ip		in acs_objects.creation_ip%TYPE default null,
+  name                  in cr_items.name%TYPE default NULL
 );
 
 function is_symlink (
@@ -1153,7 +1157,8 @@ procedure copy (
   extlink_id		in cr_extlinks.extlink_id%TYPE,
   target_folder_id	in cr_folders.folder_id%TYPE,
   creation_user		in acs_objects.creation_user%TYPE,
-  creation_ip		in acs_objects.creation_ip%TYPE default null
+  creation_ip		in acs_objects.creation_ip%TYPE default null,
+  name                  in cr_items.name%TYPE default NULL
 );
 
 end content_extlink;
@@ -1194,7 +1199,8 @@ procedure del (
   --    @param folder_id    The id of the folder to delete
   --    @see {acs_object.delete}, {content_item.delete}
   --*/
-  folder_id	in cr_folders.folder_id%TYPE
+  folder_id	in cr_folders.folder_id%TYPE,
+  cascade_p     in varchar(2) default 'f' 
 );
 
 procedure rename (
@@ -1245,7 +1251,8 @@ procedure copy (
   folder_id		in cr_folders.folder_id%TYPE,
   target_folder_id	in cr_folders.folder_id%TYPE,
   creation_user		in acs_objects.creation_user%TYPE,
-  creation_ip		in acs_objects.creation_ip%TYPE default null
+  creation_ip		in acs_objects.creation_ip%TYPE default null,
+  name                  in cr_items.name%TYPE default NULL
 );
 
 function is_folder (
