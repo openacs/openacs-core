@@ -115,5 +115,12 @@
 	
       </querytext>
 </fullquery>
+
+<fullquery name="apm_package_install_callbacks.delete_all_callbacks">
+      <querytext>
+        delete from apm_package_callbacks
+        where version_id = :version_id
+      </querytext>
+</fullquery>
  
 </queryset>
