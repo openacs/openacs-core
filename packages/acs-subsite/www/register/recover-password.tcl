@@ -29,9 +29,11 @@ if { [parameter::get -parameter UsePasswordWidgetForUsername -package_id [ad_acs
     set username_widget password
 }
 
+set focus {}
 if { [auth::UseEmailForLoginP] } {
     ad_form -extend -name recover -form [list [list email:text($username_widget) [list label "Email"]]]
     set user_id_widget_name email
+    set focus "email"
 } else {
     if { [llength $authority_options] > 1 } {
         ad_form -extend -name recover -form {
@@ -50,7 +52,9 @@ if { [auth::UseEmailForLoginP] } {
     }
 
     set user_id_widget_name username
+    set focus "username"
 }
+set focus "recover.$focus"
 
 
 
