@@ -761,7 +761,7 @@ begin
   where o.object_id = default_name__object_id
   and o.object_type = ot.object_type;
 
-  return object_type_pretty_name || '' '' || object_id;
+  return object_type_pretty_name || '' '' || default_name__object_id;
   
 end;' language 'plpgsql';
 
@@ -1050,20 +1050,25 @@ begin
      where object_id = check_context_index__object_id
      and ancestor_id = check_context_index__ancestor_id;
 
-     if n_gens != n_generations then
-       PERFORM acs_log__error(''acs_object.check_representation'', ''Ancestor '' ||
-                     ancestor_id || '' of object '' || object_id ||
+     if n_gens != check_context_index__n_generations then
+       PERFORM acs_log__error(''acs_object.check_representation'', 
+                              ''Ancestor '' ||
+                     check_context_index__ancestor_id || '' of object '' || 
+                     check_context_index__object_id ||
 		     '' reports being generation '' || n_gens ||
-		     '' when it is actually generation '' || n_generations ||
+		     '' when it is actually generation '' || 
+                     check_context_index__n_generations ||
 		     ''.'');
        return ''f'';
      else
        return ''t'';
      end if;
    else
-     PERFORM acs_log__error(''acs_object.check_representation'', ''Ancestor '' ||
-                   ancestor_id || '' of object '' || object_id ||
-		   '' is missing an entry in acs_object_context_index.'');
+     PERFORM acs_log__error(''acs_object.check_representation'', 
+                            ''Ancestor '' ||
+                            check_context_index__ancestor_id || 
+                            '' of object '' || check_context_index__object_id 
+                            || '' is missing an entry in acs_object_context_index.'');
      return ''f'';
    end if;
   
@@ -1209,7 +1214,7 @@ declare
   result                                       boolean;       
   check_representation__object_type            acs_objects.object_type%TYPE;
   n_rows                                       integer;    
-  t                                            record;  
+  v_rec                                        record;  
   row                                          record; 
 begin
    result := ''t'';
@@ -1217,8 +1222,6 @@ begin
                   ''Running acs_object.check_representation on object_id = '' ||
 		  check_representation__object_id || ''.'');
 
-   -- If this fails then there isn''''t even an object associated with
-   -- this id. I''m going to let that error propogate as an exception.
    select object_type into check_representation__object_type
    from acs_objects
    where object_id = check_representation__object_id;
@@ -1226,10 +1229,7 @@ begin
    PERFORM acs_log__notice(''acs_object.check_representation'',
                   ''OBJECT STORAGE INTEGRITY TEST'');
 
-   -- Let''s look through every primary storage table associated with
-   -- this object type and all of its supertypes and make sure there
-   -- is a row with OBJECT_ID as theh primary key.
-   for t in  select t.object_type, t.table_name, t.id_column
+   for v_rec in  select t.object_type, t.table_name, t.id_column
              from acs_object_type_supertype_map m, acs_object_types t
 	     where m.ancestor_type = t.object_type
 	     and m.object_type = check_representation__object_type
@@ -1238,7 +1238,8 @@ begin
 	     from acs_object_types
 	     where object_type = check_representation__object_type 
      LOOP
-        for row in execute ''select case when count(*) = 0 then 0 else 1 end as n_rows from '' || quote_identifier(t.table_name) || '' where '' || quote_identifier(t.id_column) || '' = '' || check_representation__object_id
+
+        for row in execute ''select case when count(*) = 0 then 0 else 1 end as n_rows from '' || quote_ident(v_rec.table_name) || '' where '' || quote_ident(v_rec.id_column) || '' = '' || check_representation__object_id
         LOOP
             n_rows := row.n_rows;
             exit;
@@ -1247,33 +1248,28 @@ begin
         if n_rows = 0 then
            result := ''f'';
            PERFORM acs_log__error(''acs_object.check_representation'',
-                     ''Table '' || t.table_name || '' (primary storage for '' ||
-		     t.object_type || '') doesn''''t have a row for object '' ||
-		     check_representation__object_id || '' of type '' || check_representation__object_type || ''.'');
+                     ''Table '' || v_rec.table_name || 
+                     '' (primary storage for '' ||
+		     v_rec.object_type || 
+                     '') doesn''''t have a row for object '' ||
+		     check_representation__object_id || '' of type '' || 
+                     check_representation__object_type || ''.'');
         end if;
+
    end loop;
 
    PERFORM acs_log__notice(''acs_object.check_representation'',
                   ''OBJECT CONTEXT INTEGRITY TEST'');
 
-   -- Do a bunch of dirt simple sanity checks.
-
-   -- First let''s check that all of our ancestors appear in
-   -- acs_object_context_index with the correct generation listed.
    if acs_object__check_object_ancestors(check_representation__object_id, check_representation__object_id, 0) = ''f'' then
      result := ''f'';
    end if;
 
-   -- Now let''s check that all of our descendants appear in
-   -- acs_object_context_index with the correct generation listed.
    if acs_object__check_object_descendants(check_representation__object_id, check_representation__object_id, 0) = ''f'' then
      result := ''f'';
    end if;
 
-   -- Ok, we know that the index contains every entry that it is
-   -- supposed to have. Now let''s make sure it doesn''t contain any
-   -- extraneous entries.
-   for row in  select *
+   for row in  select object_id, ancestor_id, n_generations
 	       from acs_object_context_index
 	       where object_id = check_representation__object_id
 	       or ancestor_id = check_representation__object_id loop

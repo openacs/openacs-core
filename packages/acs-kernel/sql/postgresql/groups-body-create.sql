@@ -667,6 +667,7 @@ begin
     result := ''t'';
 
     if acs_object__check_representation(check_representation__rel_id) = ''f'' then
+      raise notice ''acs_object rep failed'';
       result := ''f'';
     end if;
 
@@ -677,6 +678,7 @@ begin
     and m.rel_id = check_representation__rel_id;
 
     if membership_rel__check_index(group_id, member_id, group_id) = ''f'' then
+      raise notice ''check index failed'';
       result := ''f'';
     end if;
 
@@ -687,6 +689,7 @@ begin
       if composition_rel__check_path_exists_p(row.container_id,
                                              row.group_id) = ''f'' then
         result := ''f'';
+        raise notice ''path exists failed'';
         PERFORM acs_log__error(''membership_rel.check_representation'',
                       ''Extra row in group_member_index: '' ||
                       ''group_id = '' || row.group_id || '', '' ||
@@ -843,39 +846,43 @@ returns boolean as '
 declare
   group_id               alias for $1;  
   result                 boolean; 
-  c                      record;
-  m                      record;      
+  comp                   record;
+  memb                   record;      
 begin
    result := ''t'';
    PERFORM acs_log__notice(''acs_group.check_representation'',
                   ''Running check_representation on group '' || group_id);
 
    if acs_object__check_representation(group_id) = ''f'' then
+     raise notice ''failed 1'';
      result := ''f'';
    end if;
 
-   for c in select c.rel_id
+   for comp in select c.rel_id
              from acs_rels r, composition_rels c
              where r.rel_id = c.rel_id
              and r.object_id_one = group_id 
    LOOP
-     if composition_rel__check_representation(c.rel_id) = ''f'' then
+     if composition_rel__check_representation(comp.rel_id) = ''f'' then
+     raise notice ''failed 2'';
        result := ''f'';
      end if;
    end loop;
 
-   for m in  select m.rel_id
+   for memb in  select m.rel_id
              from acs_rels r, membership_rels m
              where r.rel_id = m.rel_id
              and r.object_id_one = group_id 
    LOOP
-     if membership_rel__check_representation(m.rel_id) = ''f'' then
+     if membership_rel__check_representation(memb.rel_id) = ''f'' then
+     raise notice ''failed 3'';
        result := ''f'';
      end if;
    end loop;
 
    PERFORM acs_log__notice(''acs_group.check_representation'',
                   ''Done running check_representation on group '' || group_id);
+
    return result;
   
 end;' language 'plpgsql';

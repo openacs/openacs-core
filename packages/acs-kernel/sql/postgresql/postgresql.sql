@@ -1,3 +1,5 @@
+
+
 create function instr(varchar,char,integer,integer) returns integer as '
 declare
         str             alias for $1;
