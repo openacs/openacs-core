@@ -44,6 +44,11 @@ set system_name [ad_system_name]
 
 set portrait_upload_url [export_vars -base "../user/portrait/upload" { { return_url [ad_return_url] } }]
 
+if { [llength [lang::system::get_locales]] > 1 } { 
+    set change_locale_url [apm_package_url_from_key "acs-lang"]
+}
+
+
 if [ad_parameter SolicitPortraitP "user-info" 0] {
     # we have portraits for some users 
     if ![db_0or1row get_portrait_info "

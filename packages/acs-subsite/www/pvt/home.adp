@@ -15,6 +15,12 @@
   <b>&raquo;</b> <a href="../user/password-update">#acs-subsite.Change_my_Password#</a>
 </p>
 
+<if @change_locale_url@ not nil>
+  <p>
+    <b>&raquo;</b> <a href="@change_locale_url@">Change language</a>
+  </p>
+</if>
+
 <p>
   <b>&raquo;</b> <a href="@community_member_url@">#acs-subsite.lt_What_other_people_see#</a>
 </p>
