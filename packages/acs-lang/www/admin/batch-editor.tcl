@@ -129,7 +129,7 @@ if { ![string equal $show "untranslated"] && $page_start > 0 } {
 
 lappend edit_buttons { "Update" "ok" }
 
-if { ![string equal $show "untranslated"] && $page_end < [expr $total-10] } { 
+if { ![string equal $show "untranslated"] && $page_end < [expr $total] } { 
     lappend edit_buttons { "Update and next >" "next" }
 }
 
