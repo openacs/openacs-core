@@ -59,22 +59,19 @@ before proceeding to better understand what is contained in this release.
 
 "
 
-if { [file exists [acs_root_dir]/install.xml] } {
+if { [file exists [apm_install_xml_file_path]] } {
 
     # Parse the xml document
-    set file [open "[acs_root_dir]/install.xml"]
-    set root_node [xml_doc_get_first_node [xml_parse -persist [read $file]]]
-    close $file
+    set root_node [apm_load_install_xml_file]
 
     if { ![string equal [xml_node_get_name $root_node] application] } {
         error "Installer: Could not find root node application in install.xml file"
     }
 
-    nsv_set acs_application node $root_node
-    nsv_set acs_application name [apm_required_attribute_value [nsv_get acs_application node] name]
+    nsv_set acs_application name [apm_required_attribute_value $root_node name]
     nsv_set acs_application pretty_name \
-        [apm_attribute_value -default [nsv_get acs_application name] [nsv_get acs_application node] pretty-name]
-    nsv_set acs_application home [apm_attribute_value -default "" [nsv_get acs_application node] home]
+        [apm_attribute_value -default [nsv_get acs_application name] $root_node pretty-name]
+    nsv_set acs_application home [apm_attribute_value -default "" $root_node home]
 
     append body "<p>
 The installer will automatically install the [nsv_get acs_application pretty_name]

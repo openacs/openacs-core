@@ -62,11 +62,12 @@ if { ![ad_acs_admin_node] } {
 
     # Now process the application bundle if an install.xml file was found.
 
-    if { [nsv_exists acs_application node] } {
+    if { [file exists [apm_install_xml_file_path]] } {
+        set root_node [apm_load_install_xml_file]
 
         ns_write "<p>Loading packages for the [nsv_get acs_application pretty_name] application.</p>"
 
-        set actions [xml_node_get_children_by_name [nsv_get acs_application node] actions]
+        set actions [xml_node_get_children_by_name $root_node actions]
         if { [llength $actions] > 1 } {
             ns_log Error "Error in \"install.xml\": only one action node is allowed"
             ns_write "<p>Error in \"install.xml\": only one action node is allowed<p>"
