@@ -465,7 +465,7 @@ ad_proc -public lang::catalog::import_messages_from_file {
         # want that to trigger an upgrade.
         set upgrade_p [ad_decode $higher_version_p 1 1 0]
     }
-    ns_log Notice "lang::catalog::import_messages_from_file - Loading messages in file $file_path, [ad_decode $upgrade_p 0 "not upgrading" "upgrading"]"
+    ns_log Notice "lang::catalog::import_messages_from_file - Loading messages in file $file_path [ad_decode $upgrade_p 0 "" ", upgrading"]"
 
     # Get the messages array, and the list of message keys to iterate over
     array set messages_array [lindex [array get catalog_array messages] 1]
