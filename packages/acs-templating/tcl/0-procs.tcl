@@ -53,7 +53,7 @@ namespace eval template {
     
     # default settings
     variable defaults
-    set defaults [list method post section {}]
+    set defaults [list method post section {} mode edit buttons { { "OK" ok } }]
   }
 
   namespace eval wizard {

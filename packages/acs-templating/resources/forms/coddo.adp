@@ -49,7 +49,7 @@
   	                 <formgroup id=@elements.id@>
   		           <tr bgcolor="#5F6090">
                              <td>\@formgroup.widget@</td>
-                             <td class="textstyls1">\@formgroup.label@</td>
+                             <td class="textstyls1"><label for="@elements.form_id@:elements:@elements.id@:\@formgroup.option@">\@formgroup.label@</label></td>
                            </tr>
   	                 </formgroup>
   	               </table>
@@ -97,7 +97,21 @@
   </tr>
   <if @form_properties.has_submit@ nil>
     <tr>
-      <td align="center"><br /><input type="submit" value="Submit" /></td>
+      <td align="center">
+        <if @form_properties.mode@ not nil and @form_properties.mode@ ne "edit">
+          <input type=submit name="__edit" value="     Edit     ">
+        </if>
+        <else>
+          <multiple name="buttons">
+            <if @buttons.name@ eq "ok">
+              <input type="submit" name="@buttons.name@" value="      @buttons.label@      ">
+            </if>
+            <else>
+              <input type="submit" name="@buttons.name@" value="@buttons.label@">
+            </else>
+          </multiple>
+        </else>
+      </td>
     </tr>
   </if>
 </table>

@@ -1,20 +1,19 @@
 
-<!-- Dark blue frame -->
-<table bgcolor=white cellspacing="1" cellpadding="0" border="0">
+<table cellspacing="1" cellpadding="0" border="0">
   <tr>
     <td>
 
-      <table bgcolor=white cellspacing=0 cellpadding=6 border=0 width="100%">
+      <table cellspacing="0" cellpadding="6" border="0" width="100%">
         <tr>
           <td>
 
             <!-- Form elements -->
-            <table cellspacing=2 cellpadding=2 border=0 width="100%">
+            <table cellspacing="2" cellpadding="2" border="0" width="100%">
 
   <multiple name=elements>
 
     <if @elements.section@ not nil>
-      <tr bgcolor=white><td colspan=2 bgcolor=#eeeeee><b>@elements.section@</b></td></tr>
+      <tr bgcolor="#ccccff"><th colspan="2">@elements.section@</th></tr>
     </if>
 
     <group column="section">
@@ -103,18 +102,27 @@
         </tr>
 
 <if @form_properties.has_submit@ nil>
-  <tr bgcolor=white>
+  <tr>
     <td>
-      <input type=submit name="ok" value="     OK     ">
-      <input type=submit name="cancel" value="Cancel">
+      <if @form_properties.mode@ not nil and @form_properties.mode@ ne "edit">
+        <input type=submit name="__edit" value="     Edit     ">
+      </if>
+      <else>
+        <multiple name="buttons">
+          <if @buttons.name@ eq "ok">
+            <input type="submit" name="@buttons.name@" value="      @buttons.label@      ">
+          </if>
+          <else>
+            <input type="submit" name="@buttons.name@" value="@buttons.label@">
+          </else>
+        </multiple>
+      </else>
     </td>
   </tr>
 </if>
 
-        <!-- End of light blue pad -->
       </table>
 
-      <!-- Dark blue frame -->
     </td>
   </tr>
 </table>

@@ -408,7 +408,7 @@ ad_proc -public template::adp_compile { source_type source } {
 
   # substitute array variable references
   # loop to handle the case of adjacent variable references, like @a@@b@
-  while {[regsub -all [template::adp_array_variable_regexp] $code {\1$\2(\3)} code]} {}
+  while {[regsub -all [template::adp_array_variable_regexp] $code {\1${\2(\3)}} code]} {}
 
   # substitute simple variable references
   while {[regsub -all [template::adp_variable_regexp] $code {\1${\2}} code]} {}
@@ -430,7 +430,7 @@ ad_proc -public template::adp_array_variable_regexp {} {
   @author Peter Marklund (peter@collaboraid.biz)
   @creation-date 25 October 2002
 } {
-  return {(^|[^\\])@([a-zA-Z0-9_]+)\.([a-zA-Z0-9_]+)@}
+  return {(^|[^\\])@([a-zA-Z0-9_:]+)\.([a-zA-Z0-9_:]+)@}
 }
 
 ad_proc -public template::adp_variable_regexp {} {
