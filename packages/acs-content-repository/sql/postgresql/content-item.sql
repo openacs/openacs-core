@@ -1739,6 +1739,17 @@ begin
 end;' language 'plpgsql';
 
 
+create function content_item__get_title (integer)
+returns varchar as '
+declare
+  get_title__item_id                alias for $1;  
+begin
+  
+  return content_item__get_title(get_title__item_id, ''f'');
+
+end;' language 'plpgsql';
+
+
 -- function get_publish_date
 create function content_item__get_publish_date (integer,boolean)
 returns timestamp as '
