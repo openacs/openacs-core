@@ -38,7 +38,7 @@ ad_form -name application -cancel_url . -form {
     }
     {folder:text,optional
         {label "URL folder name"}
-        {help_text "The partial URL of the new application.  This should be a short string, all lowercase, with hyphens instead of spaces. If blank, the package name is used (e.g. '/forum')."}
+        {help_text "The partial URL of the new application.  This should be a short string, all lowercase, with hyphens instead of spaces. If blank, the package name is used (e.g. 'forum')."}
         {html {size 30}}
     }
 } -new_request {
