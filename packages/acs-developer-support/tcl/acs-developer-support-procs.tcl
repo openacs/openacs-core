@@ -19,15 +19,14 @@ ad_proc -private ds_instance_id {} {
 ad_proc -public ds_permission_p {} {
     Do we have permission to view developer support stuff.
 } {
-    return [ad_permission_p -user_id [ds_get_real_user_id] [ds_instance_id] "admin"]
+    return [permission::permission_p -party_id [ds_ad_conn user_id] -object_id [ds_instance_id] -privilege "admin"]
 }
 
 ad_proc -public ds_require_permission {
   object_id
   privilege
 } {
-  set user_id [ds_get_real_user_id]
-  if {![ad_permission_p -user_id $user_id $object_id $privilege]} {
+    if {![permission::permission_p -party_id [ds_ad_conn user_id] -object_id $object_id -privilege $privilege]} {
     if {$user_id == 0} {
       ad_maybe_redirect_for_registration
     } else {
@@ -102,16 +101,13 @@ ad_proc ds_link {} {
         return ""
     }
     
-    set out "<table align=\"right\" cellspacing=\"0\" cellpadding=\"0\">"
+    set out "<div class=\"developer-support\">"
     if { [ds_enabled_p] && [ds_collection_enabled_p] } {
 	global ad_conn
 	
 	set ds_url [ds_support_url]
 	if {![empty_string_p $ds_url]} {
-	    append out "<tr><td align=\"right\">
-	    <a href=\"${ds_url}request-info?request=$ad_conn(request)\">Developer Information</a>
-	</td></tr>
-	"
+	    append out "<a href=\"${ds_url}request-info?request=$ad_conn(request)\">Developer Information</a><br />"
 	} else {
 	    ns_log Error "ACS-Developer-Support: Unable to offer link to Developer Support \
 		    because it is not mounted anywhere."
@@ -127,34 +123,33 @@ ad_proc ds_link {} {
 		}
 	    }
 	    if { $counter > 0 } {
-		append out "<tr><td align=\"right\">$counter database command[ad_decode $counter 1 " taking" "s totalling"] [format "%.f" [expr { $total }]] ms</td></tr>"
+		append out "$counter database command[ad_decode $counter 1 " taking" "s totalling"] [format "%.f" [expr { $total }]] ms<br />"
 	    }
 	}
 	
 	if { [nsv_exists ds_request "$ad_conn(request).conn"] } {
 	    array set conn [nsv_get ds_request "$ad_conn(request).conn"]
 	    if { [info exists conn(startclicks)] } {
-		append out "<tr><td align=\"right\">page served in
-		[format "%.f" [expr { ([clock clicks -milliseconds] - $conn(startclicks)) }]] ms</td></tr>\n"
+		append out "Page served in [format "%.f" [expr { ([clock clicks -milliseconds] - $conn(startclicks)) }]] ms<br />\n"
 	    }
 	}
 	
         if { [ad_parameter -package_id [ds_instance_id] ShowCommentsInlineP acs-developer-support 0] } {
+            append out "Comments: <b>On</b> | <a href=\"[export_vars -base "${ds_url}comments-toggle" { { return_url [ad_return_url] } }]\">Off</a><br />"
             if { [nsv_exists ds_request "$ad_conn(request).comment"] } {
-                append out "<tr><td><br />"
                 foreach comment [nsv_get ds_request "$ad_conn(request).comment"] {
                     append out "<b>Comment:</b> $comment<br />\n"
                 }
-                append out "</td></tr>"
             }
+        } else {
+            append out "Comments: <a href=\"[export_vars -base "${ds_url}comments-toggle" { { return_url [ad_return_url] } }]\">On</a> | <b>Off</b><br />"
         }
     }
     
     if { [ds_user_switching_enabled_p] } {
-	append out "<tr><td align=\"right\">[ds_user_select_widget]</td></tr>"
+	append out "[ds_user_select_widget]<br />"
     }
     
-    append out "</table>\n"
     return $out
 
 }
@@ -352,10 +347,16 @@ ad_proc -public ds_user_select_widget {}  {
 ad_proc -private ds_get_real_user_id {} { 
     Get the "real" user id.
 } {
+    return [ds_ad_conn user_id]
+}
+
+ad_proc -private ds_ad_conn { args } { 
+    Get the "real" user id.
+} {
     if { [llength [info proc orig_ad_conn]] == 1 } {
-        return [orig_ad_conn user_id]
+        return [eval orig_ad_conn $args]
     } else {
-        return [ad_conn user_id]
+        return [eval ad_conn $args]
     }
 }
 
