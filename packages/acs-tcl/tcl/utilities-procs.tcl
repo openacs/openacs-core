@@ -612,9 +612,10 @@ ad_proc -public export_vars {
     -form:boolean
     -url:boolean
     -quotehtml:boolean
+    -entire_form:boolean
     {-exclude {}}
     {-override {}}
-    vars
+    {vars {}}
 } {
     Exports variables either in URL or hidden form variable format. It should replace 
     <a
@@ -735,6 +736,11 @@ ad_proc -public export_vars {
     
     @param form Export in form format. You can't specify both URL and form format.
 
+    @param quotehtml HTML quote the entire resulting string. This is an interim solution 
+    while we're waiting for the templating system to do the quoting for us.
+
+    @param entire_form Export the entire form from the GET query string or the POST.
+
     @author Lars Pind (lars@pinds.com)
     @creation-date December 7, 2000
 } {
@@ -746,6 +752,21 @@ ad_proc -public export_vars {
     # default to URL format
     if { !$form_p && !$url_p } {
 	set url_p 1
+    }
+
+    if { $entire_form_p } {
+        set the_form [ns_getform]
+        if { ![empty_string_p $the_form] } {
+            set form_var_list [list]
+            for {set i 0} {$i<[ns_set size $the_form]} {incr i} {
+                set varname [ns_set key $the_form $i]
+                set varvalue [ns_set value $the_form $i]
+                lappend form_var_list [list $varname $varvalue]
+            }
+            # We simply prepend this to the existing vars list. 
+            # That way, the -exclude and -override arguments will still work
+            set vars [concat $form_var_list $vars]
+        }
     }
 
     #####
