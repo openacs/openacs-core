@@ -256,6 +256,10 @@ as
   party_id	in parties.party_id%TYPE
  ) return varchar2;
 
+ function email (
+  party_id	in parties.party_id%TYPE
+ ) return varchar2;
+
 end party;
 /
 show errors
@@ -314,6 +318,22 @@ as
   end if;
  end name;
 
+ function email (
+  party_id	in parties.party_id%TYPE
+ )
+ return varchar2
+ is
+  v_email parties.email%TYPE;
+ begin
+  select email
+  into v_email
+  from parties
+  where party_id = email.party_id;
+
+  return v_email;
+
+ end email;
+
 end party;
 /
 show errors
@@ -364,6 +384,14 @@ as
  );
 
  function name (
+  person_id	in persons.person_id%TYPE
+ ) return varchar2;
+
+ function first_names (
+  person_id	in persons.person_id%TYPE
+ ) return varchar2;
+
+ function last_name (
   person_id	in persons.person_id%TYPE
  ) return varchar2;
 
@@ -431,6 +459,36 @@ as
 
   return person_name;
  end name;
+
+ function first_names (
+  person_id	in persons.person_id%TYPE
+ )
+ return varchar2
+ is
+  person_first_names varchar2(200);
+ begin
+  select first_names
+  into person_first_names
+  from persons
+  where person_id = first_names.person_id;
+
+  return person_first_names;
+ end first_names;
+
+function last_name (
+  person_id	in persons.person_id%TYPE
+ )
+ return varchar2
+ is
+  person_last_name varchar2(200);
+ begin
+  select last_name
+  into person_last_name
+  from persons
+  where person_id = last_name.person_id;
+
+  return person_last_name;
+ end last_name;
 
 end person;
 /
