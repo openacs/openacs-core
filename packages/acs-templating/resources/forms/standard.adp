@@ -54,7 +54,7 @@
                 </else>
               </noparse>
 
-              <if @elements.widget@ in radio checkbox>
+              <if @elements.widget@ eq radio or @elements.widget@ eq checkbox>
                 <noparse>
                   <table class="formgroup">
                     <formgroup id="@elements.id@">
