@@ -997,7 +997,9 @@ declare
         clr_keys_p      boolean default ''t'';
 begin
         if new.keyword_id = old.keyword_id and 
-           new.parent_id = old.parent_id then
+           ((new.parent_id = old.parent_id) or
+            (new.parent_id is null and old.parent_id is null)) 
+        THEN
 
            return new;
 
