@@ -48,24 +48,37 @@ aa_register_case job_start_end {
                 -user_id [ad_conn user_id] \
                 -message "A problem" \
                 -element_messages ""
-
-
+            
+            
             # End job
             array set job [auth::sync::job::end -job_id $job_id]
             
             aa_true "Elapsed time less than 30 seconds" [expr $job(run_time_seconds) < 30]
-
+            
             aa_log "Elapsed time: $job(run_time_seconds) seconds"
-
+            
             aa_false "Not interactive" [template::util::is_true $job(interactive_p)]
-
+            
             aa_equals "Number of actions" $job(num_actions) 2
-
+            
             aa_equals "Number of problems" $job(num_problems) 1
             
             aa_false "Log URL non-empty" [empty_string_p $job(log_url)]
             
+            # Purge not deleting the job
+            auth::sync::purge_jobs \
+                -num_days 1
             
+            aa_equals "Job still exists" [db_string job_exists_p { select count(*) from auth_batch_job_entries where job_id = :job_id }] 2
+            
+            # Tricking it into deleting the job
+            aa_log "Updating the job end time"
+            db_dml update_job { update auth_batch_jobs set job_end_time = to_date('1974-03-27', 'YYYY-MM-DD') where job_id = :job_id }
+            auth::sync::purge_jobs \
+                -num_days 1
+            
+            aa_equals "Job has been purged" [db_string job_exists_p { select count(*) from auth_batch_job_entries where job_id = :job_id }] 0
+
         }
 }
 
