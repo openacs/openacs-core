@@ -1,4 +1,5 @@
 
+
 ad_library {
 
     Tcl API for cr_items in the content repository
@@ -20,9 +21,8 @@ ad_proc -public ::content::item::new {
     {-creation_user ""}
     {-context_id ""}
     {-creation_ip ""}
-    {-item_subtype ""}
+    {-item_subtype "content_item"}
     {-content_type "content_revision"}
-    {-object_type "content_item"}
     {-title ""}
     {-description ""}
     {-mime_type ""}
@@ -31,7 +31,7 @@ ad_proc -public ::content::item::new {
     {-data ""}
     {-relation_tag ""}
     {-is_live ""}
-    {-storage_type ""}
+    {-storage_type "file"}
     {-attributes ""}
 } {
     @author Dave Bauer (dave@thedesignexperience.org)
@@ -48,7 +48,7 @@ ad_proc -public ::content::item::new {
     @param item_id - item_id of this content_item. If this is not
     specified an item_id will be generated automatically
     @param parent_id - parent object of this content_item
-    @param object_type - content_item or subtype of content_item
+    @param item_subtype
     @param content_type - content_revision or subtype of content_revision
     @param context_id -
     @param creation_user -
@@ -63,45 +63,40 @@ ad_proc -public ::content::item::new {
 
     @see content::symlink::new content::extlink::new content::folder::new
 } {
-    if {![string equal "" $attributes]} {
-	set var_list $attributes
-    } else {
-	set var_list [list]
-    }
-    
+    set var_list [list]
     lappend var_list \
-	name $name \
-        parent_id $parent_id \
-        item_id $item_id \
-        locale $locale \
-        creation_date $creation_date \
-        creation_user $creation_user \
-        context_id $context_id \
-        creation_ip $creation_ip \
-        item_subtype $item_subtype \
-        content_type $content_type \
-        title $title \
-        description $description \
-        mime_type $mime_type \
-        nls_language $nls_language \
-        text $text \
-        data $data \
-        relation_tag $relation_tag \
-        is_live $is_live \
-        storage_type $storage_type
-	
-    foreach var [list item_id name parent_id content_type context_id creation_date] {
-	lappend var_list [list $var [set $var]]
-    }
+	[list name $name ] \
+        [list parent_id $parent_id ] \
+        [list item_id $item_id ] \
+        [list locale $locale ] \
+        [list creation_date $creation_date ] \
+        [list creation_user $creation_user ] \
+        [list context_id $context_id ] \
+        [list creation_ip $creation_ip ] \
+        [list item_subtype $item_subtype ] \
+        [list content_type $content_type ] \
+        [list title $title ] \
+        [list description $description ] \
+        [list mime_type $mime_type ] \
+        [list nls_language $nls_language ] \
+        [list text $text ] \
+        [list data $data ] \
+        [list relation_tag $relation_tag ] \
+        [list is_live $is_live ] \
+        [list storage_type $storage_type]
 
     # the content type is not the object type of the cr_item so we pass in
-    # the cr_item subtype here and content_type as part of var_list
-
-    set item_id [package_instantiate_object \
-		     -creation_user $creation_user \
-		     -creation_ip $creation_ip \
+    # the cr_item subtype here and content_type as part of
+    # var_list
+    ns_log notice "
+DB --------------------------------------------------------------------------------
+DB DAVE debugging /var/lib/aolserver/ctk/packages/acs-content-repository/tcl/content-item-procs.tcl
+DB --------------------------------------------------------------------------------
+DB var_list = '${var_list}'
+DB --------------------------------------------------------------------------------"
+    set item_id [package_exec_plsql \
 		     -var_list $var_list \
-		     $object_type]
+		     content_item new]
     return $item_id
 }
 
@@ -254,7 +249,7 @@ ad_proc -public content::item::get_best_revision {
     @return NUMBER(38)
 } {
     return [package_exec_plsql -var_list [list \
-        item_id $item_id \
+        [list item_id $item_id ] \
     ] content_item get_best_revision]
 }
 
@@ -267,7 +262,7 @@ ad_proc -public content::item::get_content_type {
     @return VARCHAR2(100)
 } {
     return [package_exec_plsql -var_list [list \
-        item_id $item_id \
+        [list item_id $item_id ] \
     ] content_item get_content_type]
 }
 
@@ -280,7 +275,7 @@ ad_proc -public content::item::get_context {
     @return NUMBER(38)
 } {
     return [package_exec_plsql -var_list [list \
-        item_id $item_id \
+        [list item_id $item_id ] \
     ] content_item get_context]
 }
 
@@ -297,9 +292,9 @@ ad_proc -public content::item::get_id {
     @return NUMBER(38)
 } {
     return [package_exec_plsql -var_list [list \
-        item_path $item_path \
-        root_folder_id $root_folder_id \
-        resolve_index $resolve_index \
+        [list item_path $item_path ] \
+        [list root_folder_id $root_folder_id ] \
+        [list resolve_index $resolve_index ] \
     ] content_item get_id]
 }
 
@@ -312,7 +307,7 @@ ad_proc -public content::item::get_latest_revision {
     @return NUMBER(38)
 } {
     return [package_exec_plsql -var_list [list \
-        item_id $item_id \
+        [list item_id $item_id ] \
     ] content_item get_latest_revision]
 }
 
@@ -325,7 +320,7 @@ ad_proc -public content::item::get_live_revision {
     @return NUMBER(38)
 } {
     return [package_exec_plsql -var_list [list \
-        item_id $item_id \
+        [list item_id $item_id ] \
     ] content_item get_live_revision]
 }
 
@@ -338,7 +333,7 @@ ad_proc -public content::item::get_parent_folder {
     @return NUMBER(38)
 } {
     return [package_exec_plsql -var_list [list \
-        item_id $item_id \
+        [list item_id $item_id ] \
     ] content_item get_parent_folder]
 }
 
@@ -353,8 +348,8 @@ ad_proc -public content::item::get_path {
     @return VARCHAR2
 } {
     return [package_exec_plsql -var_list [list \
-        item_id $item_id \
-        root_folder_id $root_folder_id \
+        [list item_id $item_id ] \
+        [list root_folder_id $root_folder_id ] \
     ] content_item get_path]
 }
 
@@ -369,8 +364,8 @@ ad_proc -public content::item::get_publish_date {
     @return DATE
 } {
     return [package_exec_plsql -var_list [list \
-        item_id $item_id \
-        is_live $is_live \
+        [list item_id $item_id ] \
+        [list is_live $is_live ] \
     ] content_item get_publish_date]
 }
 
@@ -383,7 +378,7 @@ ad_proc -public content::item::get_revision_count {
     @return NUMBER
 } {
     return [package_exec_plsql -var_list [list \
-        item_id $item_id \
+        [list item_id $item_id ] \
     ] content_item get_revision_count]
 }
 
@@ -396,7 +391,7 @@ ad_proc -public content::item::get_root_folder {
     @return NUMBER(38)
 } {
     return [package_exec_plsql -var_list [list \
-        item_id $item_id \
+        [list item_id $item_id ] \
     ] content_item get_root_folder]
 }
 
@@ -411,8 +406,8 @@ ad_proc -public content::item::get_template {
     @return NUMBER(38)
 } {
     return [package_exec_plsql -var_list [list \
-        item_id $item_id \
-        use_context $use_context \
+        [list item_id $item_id ] \
+        [list use_context $use_context ] \
     ] content_item get_template]
 }
 
@@ -427,8 +422,8 @@ ad_proc -public content::item::get_title {
     @return VARCHAR2(1000)
 } {
     return [package_exec_plsql -var_list [list \
-        item_id $item_id \
-        is_live $is_live \
+        [list item_id $item_id ] \
+        [list is_live $is_live ] \
     ] content_item get_title]
 }
 
@@ -443,8 +438,8 @@ ad_proc -public content::item::get_virtual_path {
     @return VARCHAR2
 } {
     return [package_exec_plsql -var_list [list \
-        item_id $item_id \
-        root_folder_id $root_folder_id \
+        [list item_id $item_id ] \
+        [list root_folder_id $root_folder_id ] \
     ] content_item get_virtual_path]
 }
 
@@ -459,8 +454,8 @@ ad_proc -public content::item::is_index_page {
     @return VARCHAR2
 } {
     return [package_exec_plsql -var_list [list \
-        item_id $item_id \
-        folder_id $folder_id \
+        [list item_id $item_id ] \
+        [list folder_id $folder_id ] \
     ] content_item is_index_page]
 }
 
@@ -473,7 +468,7 @@ ad_proc -public content::item::is_publishable {
     @return CHAR
 } {
     return [package_exec_plsql -var_list [list \
-        item_id $item_id \
+        [list item_id $item_id ] \
     ] content_item is_publishable]
 }
 
@@ -486,7 +481,7 @@ ad_proc -public content::item::is_published {
     @return CHAR
 } {
     return [package_exec_plsql -var_list [list \
-        item_id $item_id \
+        [list item_id $item_id ] \
     ] content_item is_published]
 }
 
@@ -501,8 +496,8 @@ ad_proc -public content::item::is_subclass {
     @return CHAR
 } {
     return [package_exec_plsql -var_list [list \
-        object_type $object_type \
-        supertype $supertype \
+        [list object_type $object_type ] \
+        [list supertype $supertype ] \
     ] content_item is_subclass]
 }
 
@@ -519,9 +514,9 @@ ad_proc -public content::item::is_valid_child {
     @return CHAR
 } {
     return [package_exec_plsql -var_list [list \
-        item_id $item_id \
-        content_type $content_type \
-        relation_tag $relation_tag \
+        [list item_id $item_id ] \
+        [list content_type $content_type ] \
+        [list relation_tag $relation_tag ] \
     ] content_item is_valid_child]
 }
 
@@ -536,9 +531,9 @@ ad_proc -public content::item::register_template {
     @param use_context
 } {
     return [package_exec_plsql -var_list [list \
-        item_id $item_id \
-        template_id $template_id \
-        use_context $use_context \
+        [list item_id $item_id ] \
+        [list template_id $template_id ] \
+        [list use_context $use_context ] \
     ] content_item register_template]
 }
 
@@ -559,11 +554,11 @@ ad_proc -public content::item::relate {
     @return NUMBER(38)
 } {
     return [package_exec_plsql -var_list [list \
-        item_id $item_id \
-        object_id $object_id \
-        relation_tag $relation_tag \
-        order_n $order_n \
-        relation_type $relation_type \
+        [list item_id $item_id ] \
+        [list object_id $object_id ] \
+        [list relation_tag $relation_tag ] \
+        [list order_n $order_n ] \
+        [list relation_type $relation_type ] \
     ] content_item relate]
 }
 
@@ -576,8 +571,8 @@ ad_proc -public content::item::set_live_revision {
     @param publish_status
 } {
     return [package_exec_plsql -var_list [list \
-        revision_id $revision_id \
-        publish_status $publish_status \
+        [list revision_id $revision_id ] \
+        [list publish_status $publish_status ] \
     ] content_item set_live_revision]
 }
 
@@ -592,9 +587,9 @@ ad_proc -public content::item::set_release_period {
     @param end_when
 } {
     return [package_exec_plsql -var_list [list \
-        item_id $item_id \
-        start_when $start_when \
-        end_when $end_when \
+        [list item_id $item_id ] \
+        [list start_when $start_when ] \
+        [list end_when $end_when ] \
     ] content_item set_release_period]
 }
 
@@ -609,9 +604,9 @@ ad_proc -public content::item::unregister_template {
     @param use_context
 } {
     return [package_exec_plsql -var_list [list \
-        item_id $item_id \
-        template_id $template_id \
-        use_context $use_context \
+        [list item_id $item_id ] \
+        [list template_id $template_id ] \
+        [list use_context $use_context ] \
     ] content_item unregister_template]
 }
 
@@ -622,7 +617,7 @@ ad_proc -public content::item::unrelate {
     @param rel_id
 } {
     return [package_exec_plsql -var_list [list \
-        rel_id $rel_id \
+        [list rel_id $rel_id ] \
     ] content_item unrelate]
 }
 
@@ -633,7 +628,7 @@ ad_proc -public content::item::unset_live_revision {
     @param item_id
 } {
     return [package_exec_plsql -var_list [list \
-        item_id $item_id \
+        [list item_id $item_id ] \
     ] content_item unset_live_revision]
 }
 

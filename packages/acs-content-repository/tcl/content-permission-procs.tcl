@@ -39,12 +39,12 @@ ad_proc -public content::permission::grant_permission {
     @param object_type
 } {
     return [package_exec_plsql -var_list [list \
-        object_id $object_id \
-        holder_id $holder_id \
-        privilege $privilege \
-        recepient_id $recepient_id \
-        is_recursive $is_recursive \
-        object_type $object_type \
+        [list object_id $object_id ] \
+        [list holder_id $holder_id ] \
+        [list privilege $privilege ] \
+        [list recepient_id $recepient_id ] \
+        [list is_recursive $is_recursive ] \
+        [list object_type $object_type ] \
     ] content_permission grant_permission]
 }
 
@@ -59,9 +59,9 @@ ad_proc -public content::permission::grant_permission_h {
     @param privilege
 } {
     return [package_exec_plsql -var_list [list \
-        object_id $object_id \
-        grantee_id $grantee_id \
-        privilege $privilege \
+        [list object_id $object_id ] \
+        [list grantee_id $grantee_id ] \
+        [list privilege $privilege ] \
     ] content_permission grant_permission_h]
 }
 
@@ -78,9 +78,9 @@ ad_proc -public content::permission::has_grant_authority {
     @return VARCHAR2
 } {
     return [package_exec_plsql -var_list [list \
-        object_id $object_id \
-        holder_id $holder_id \
-        privilege $privilege \
+        [list object_id $object_id ] \
+        [list holder_id $holder_id ] \
+        [list privilege $privilege ] \
     ] content_permission has_grant_authority]
 }
 
@@ -99,10 +99,10 @@ ad_proc -public content::permission::has_revoke_authority {
     @return VARCHAR2
 } {
     return [package_exec_plsql -var_list [list \
-        object_id $object_id \
-        holder_id $holder_id \
-        privilege $privilege \
-        revokee_id $revokee_id \
+        [list object_id $object_id ] \
+        [list holder_id $holder_id ] \
+        [list privilege $privilege ] \
+        [list revokee_id $revokee_id ] \
     ] content_permission has_revoke_authority]
 }
 
@@ -117,9 +117,9 @@ ad_proc -public content::permission::inherit_permissions {
     @param child_creator_id
 } {
     return [package_exec_plsql -var_list [list \
-        parent_object_id $parent_object_id \
-        child_object_id $child_object_id \
-        child_creator_id $child_creator_id \
+        [list parent_object_id $parent_object_id ] \
+        [list child_object_id $child_object_id ] \
+        [list child_creator_id $child_creator_id ] \
     ] content_permission inherit_permissions]
 }
 
@@ -136,9 +136,9 @@ ad_proc -public content::permission::permission_p {
     @return VARCHAR2
 } {
     return [package_exec_plsql -var_list [list \
-        object_id $object_id \
-        holder_id $holder_id \
-        privilege $privilege \
+        [list object_id $object_id ] \
+        [list holder_id $holder_id ] \
+        [list privilege $privilege ] \
     ] content_permission permission_p]
 }
 
@@ -159,12 +159,12 @@ ad_proc -public content::permission::revoke_permission {
     @param object_type
 } {
     return [package_exec_plsql -var_list [list \
-        object_id $object_id \
-        holder_id $holder_id \
-        privilege $privilege \
-        revokee_id $revokee_id \
-        is_recursive $is_recursive \
-        object_type $object_type \
+        [list object_id $object_id ] \
+        [list holder_id $holder_id ] \
+        [list privilege $privilege ] \
+        [list revokee_id $revokee_id ] \
+        [list is_recursive $is_recursive ] \
+        [list object_type $object_type ] \
     ] content_permission revoke_permission]
 }
 
@@ -179,8 +179,8 @@ ad_proc -public content::revision::revoke_permission_h {
     @param privilege
 } {
     return [package_exec_plsql -var_list [list \
-        object_id $object_id \
-        revokee_id $revokee_id \
-        privilege $privilege \
+        [list object_id $object_id ] \
+        [list revokee_id $revokee_id ] \
+        [list privilege $privilege ] \
     ] content_premission revoke_permission_h]
 }

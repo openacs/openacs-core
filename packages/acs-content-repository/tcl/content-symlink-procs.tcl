@@ -24,10 +24,10 @@ ad_proc -public content::symlink::copy {
     @param creation_ip
 } {
     return [package_exec_plsql -var_list [list \
-        symlink_id $symlink_id \
-        target_folder_id $target_folder_id \
-        creation_user $creation_user \
-        creation_ip $creation_ip \
+        [list symlink_id $symlink_id ] \
+        [list target_folder_id $target_folder_id ] \
+        [list creation_user $creation_user ] \
+        [list creation_ip $creation_ip ] \
     ] content_symlink copy]
 }
 
@@ -38,7 +38,7 @@ ad_proc -public content::symlink::del {
     @param symlink_id
 } {
     return [package_exec_plsql -var_list [list \
-        symlink_id $symlink_id \
+        [list symlink_id $symlink_id ] \
     ] content_symlink del]
 }
 
@@ -51,7 +51,7 @@ ad_proc -public content::symlink::is_symlink {
     @return CHAR
 } {
     return [package_exec_plsql -var_list [list \
-        item_id $item_id \
+        [list item_id $item_id ] \
     ] content_symlink is_symlink]
 }
 
@@ -78,14 +78,14 @@ ad_proc -public content::symlink::new {
     @return NUMBER(38)
 } {
     return [package_exec_plsql -var_list [list \
-        name $name \
-        label $label \
-        target_id $target_id \
-        parent_id $parent_id \
-        symlink_id $symlink_id \
-        creation_date $creation_date \
-        creation_user $creation_user \
-        creation_ip $creation_ip \
+        [list name $name ] \
+        [list label $label ] \
+        [list target_id $target_id ] \
+        [list parent_id $parent_id ] \
+        [list symlink_id $symlink_id ] \
+        [list creation_date $creation_date ] \
+        [list creation_user $creation_user ] \
+        [list creation_ip $creation_ip ] \
     ] content_symlink new]
 }
 
@@ -98,7 +98,7 @@ ad_proc -public content::symlink::resolve {
     @return NUMBER(38)
 } {
     return [package_exec_plsql -var_list [list \
-        item_id $item_id \
+        [list item_id $item_id ] \
     ] content_symlink resolve]
 }
 
@@ -111,6 +111,6 @@ ad_proc -public content::symlink::resolve_content_type {
     @return VARCHAR2(100)
 } {
     return [package_exec_plsql -var_list [list \
-        item_id $item_id \
+        [list item_id $item_id ] \
     ] content_symlink resolve_content_type]
 }

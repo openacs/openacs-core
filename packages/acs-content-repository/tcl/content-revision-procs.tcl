@@ -81,25 +81,28 @@ ad_proc -public ::content::revision::new {
     set attribute_values ""
 
     if { [exists_and_not_null attributes] } {
-	set type_attributes [package_object_attribute_list $object_type]
+	set type_attributes [package_object_attribute_list $content_type]
 	set valid_attributes [list]
 	# add in extended attributes for this type, ingore
 	# content_revision as those are already captured as named
 	# parameters to this procedure
 	
-	foreach e $type_attributes {
-	    if {![string equal "cr_revisions" [lindex $e 1]]} {
-		lappend $valid_attributes [lindex $e 2]
+	foreach type_attribute $type_attributes {
+	    if {![string equal "cr_revisions" [lindex $type_attribute 1]]} {
+		lappend valid_attributes [lindex $type_attribute 2]
 	    }
 	}
+	foreach attribute_pair $attributes {
+	    set attribute_name [lindex $attribute_pair 0]
+	    set attribute_value [lindex $attribute_pair 1]
+	    if {[lsearch $valid_attributes $attribute_name] > -1}  {
 
-	if {[lsearch $valid_attributes $attribute] > -1}  {
-
-	    # create local variable to use for binding
-	    
-	    set $attribute $value
-	    append attribute_names  ", ${attribute}"
-	    append attribute_values ", :${attribute}"
+		# create local variable to use for binding
+		
+		set $attribute_name $attribute_value
+		append attribute_names  ", ${attribute_name}"
+		append attribute_values ", :${attribute_name}"
+	    }
 	}
     }
     
@@ -128,8 +131,8 @@ ad_proc -public content::revision::content_copy {
     @param revision_id_dest
 } {
     return [package_exec_plsql -var_list [list \
-        revision_id $revision_id \
-        revision_id_dest $revision_id_dest \
+        [list revision_id $revision_id ] \
+        [list revision_id_dest $revision_id_dest ] \
     ] content_revision content_copy]
 }
 
@@ -150,11 +153,11 @@ ad_proc -public content::revision::copy {
     @return NUMBER(38)
 } {
     return [package_exec_plsql -var_list [list \
-        revision_id $revision_id \
-        copy_id $copy_id \
-        target_item_id $target_item_id \
-        creation_user $creation_user \
-        creation_ip $creation_ip \
+        [list revision_id $revision_id ] \
+        [list copy_id $copy_id ] \
+        [list target_item_id $target_item_id ] \
+        [list creation_user $creation_user ] \
+        [list creation_ip $creation_ip ] \
     ] content_revision copy]
 }
 
@@ -165,7 +168,7 @@ ad_proc -public content::revision::del {
     @param revision_id
 } {
     return [package_exec_plsql -var_list [list \
-        revision_id $revision_id \
+        [list revision_id $revision_id ] \
     ] content_revision del]
 }
 
@@ -178,7 +181,7 @@ ad_proc -public content::revision::export_xml {
     @return NUMBER(38)
 } {
     return [package_exec_plsql -var_list [list \
-        revision_id $revision_id \
+        [list revision_id $revision_id ] \
     ] content_revision export_xml]
 }
 
@@ -191,7 +194,7 @@ ad_proc -public content::revision::get_number {
     @return NUMBER
 } {
     return [package_exec_plsql -var_list [list \
-        revision_id $revision_id \
+        [list revision_id $revision_id ] \
     ] content_revision get_number]
 }
 
@@ -208,9 +211,9 @@ ad_proc -public content::revision::import_xml {
     @return NUMBER(38)
 } {
     return [package_exec_plsql -var_list [list \
-        item_id $item_id \
-        revision_id $revision_id \
-        doc_id $doc_id \
+        [list item_id $item_id ] \
+        [list revision_id $revision_id ] \
+        [list doc_id $doc_id ] \
     ] content_revision import_xml]
 }
 
@@ -221,7 +224,7 @@ ad_proc -public content::revision::index_attributes {
     @param revision_id
 } {
     return [package_exec_plsql -var_list [list \
-        revision_id $revision_id \
+        [list revision_id $revision_id ] \
     ] content_revision index_attributes]
 }
 
@@ -234,7 +237,7 @@ ad_proc -public content::revision::is_latest {
     @return VARCHAR2
 } {
     return [package_exec_plsql -var_list [list \
-        revision_id $revision_id \
+        [list revision_id $revision_id ] \
     ] content_revision is_latest]
 }
 
@@ -247,7 +250,7 @@ ad_proc -public content::revision::is_live {
     @return VARCHAR2
 } {
     return [package_exec_plsql -var_list [list \
-        revision_id $revision_id \
+        [list revision_id $revision_id ] \
     ] content_revision is_live]
 }
 
@@ -264,9 +267,9 @@ ad_proc -public content::revision::read_xml {
     @return NUMBER
 } {
     return [package_exec_plsql -var_list [list \
-        item_id $item_id \
-        revision_id $revision_id \
-        clob_loc $clob_loc \
+        [list item_id $item_id ] \
+        [list revision_id $revision_id ] \
+        [list clob_loc $clob_loc ] \
     ] content_revision read_xml]
 }
 
@@ -281,9 +284,9 @@ ad_proc -public content::revision::replace {
     @param replace
 } {
     return [package_exec_plsql -var_list [list \
-        revision_id $revision_id \
-        search $search \
-        replace $replace \
+        [list revision_id $revision_id ] \
+        [list search $search ] \
+        [list replace $replace ] \
     ] content_revision replace]
 }
 
@@ -296,7 +299,7 @@ ad_proc -public content::revision::revision_name {
     @return VARCHAR2
 } {
     return [package_exec_plsql -var_list [list \
-        revision_id $revision_id \
+        [list revision_id $revision_id ] \
     ] content_revision revision_name]
 }
 
@@ -307,7 +310,7 @@ ad_proc -public content::revision::to_html {
     @param revision_id
 } {
     return [package_exec_plsql -var_list [list \
-        revision_id $revision_id \
+        [list revision_id $revision_id ] \
     ] content_revision to_html]
 }
 
@@ -318,7 +321,7 @@ ad_proc -public content::revision::to_temporary_clob {
     @param revision_id
 } {
     return [package_exec_plsql -var_list [list \
-        revision_id $revision_id \
+        [list revision_id $revision_id ] \
     ] content_revision to_temporary_clob]
 }
 
@@ -333,8 +336,8 @@ ad_proc -public content::revision::write_xml {
     @return NUMBER
 } {
     return [package_exec_plsql -var_list [list \
-        revision_id $revision_id \
-        clob_loc $clob_loc \
+        [list revision_id $revision_id ] \
+        [list clob_loc $clob_loc ] \
     ] content_revision write_xml]
 }
 
@@ -342,7 +345,6 @@ ad_proc -public content::revision::write_xml {
 ad_proc -public content::revision::update_attribute_index {
 } {
 } {
-    return [package_exec_plsql -var_list [list \
-    ] content_revision update_attribute_index]
+    return [package_exec_plsql content_revision update_attribute_index]
 }
 
