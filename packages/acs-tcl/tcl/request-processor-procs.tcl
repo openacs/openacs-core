@@ -1219,7 +1219,7 @@ ad_proc -public ad_conn {args} {
                     subsite_node_id {
                         set ad_conn(subsite_node_id) [site_node::closest_ancestor_package \
                                                      -node_id [ad_conn node_id] \
-                                                     -package_key "acs-subsite" \
+                                                     -package_key [subsite::package_keys] \
                                                      -include_self \
                                                      -element "node_id"]
                         return $ad_conn(subsite_node_id)

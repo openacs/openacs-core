@@ -12,6 +12,7 @@ ad_library {
 
 namespace eval subsite {
     namespace eval util {}
+    namespace eval default {}
 }
 
 ad_proc -public subsite::after_mount { 
@@ -21,70 +22,14 @@ ad_proc -public subsite::after_mount {
     This is the TCL proc that is called automatically by the APM
     whenever a new instance of the subsites application is mounted.
 
-    We do three things:
-
-    <ul>
-      <li> Create application group
-      <li> Create segment "Subsite Users"
-      <li> Create relational constraint to make subsite registration 
-           require supersite registration.
-    </ul>
-
     @author Don Baccus (dhogaza@pacifier.com)
     @creation-date 2003-03-05
 
 } {
-
-    if { [empty_string_p [application_group::group_id_from_package_id -no_complain -package_id $package_id]] } {
-
-        set subsite_name [db_string subsite_name_query {}]
-
-        set truncated_subsite_name [string range $subsite_name 0 89]
-
-        db_transaction {
-
-            # Create subsite application group
-            set group_name "$truncated_subsite_name Parties"
-            set subsite_group_id [application_group::new \
-                                      -package_id $package_id \
-                                      -group_name $group_name]
-
-            # Create segment of registered users
-            set segment_name "$truncated_subsite_name Members"
-            set segment_id [rel_segments_new $subsite_group_id membership_rel $segment_name]
-
-            # Create a constraint that says "to be a member of this
-            # subsite you must be a member of the parent subsite".
-	    set subsite_id [site_node_closest_ancestor_package acs-subsite]
-
-            db_1row parent_subsite_query {}
-
-            set constraint_name "Members of [string range $subsite_name 0 30] must be members of [string range $supersite_name 0 30]"
-            set user_id [ad_conn user_id]
-            set creation_ip [ad_conn peeraddr]
-            db_exec_plsql add_constraint {}
-
-            # Create segment of registered users for administrators
-            set segment_name "$truncated_subsite_name Administrators"
-            set admin_segment_id [rel_segments_new $subsite_group_id admin_rel $segment_name]
-
-            # Grant admin privileges to the admin segment
-            permission::grant \
-                -party_id $admin_segment_id \
-                -object_id $package_id \
-                -privilege admin
-
-            # Grant read/write/create privileges to the member segment
-            foreach privilege { read create write } {
-                permission::grant \
-                    -party_id $segment_id \
-                    -object_id $package_id \
-                    -privilege $privilege
-            }
-            
-        }
-    }
+    subsite::default::create_app_group -package_id $package_id
 }
+
+
 
 ad_proc -public subsite::before_uninstantiate { 
     {-package_id:required}
@@ -93,7 +38,7 @@ ad_proc -public subsite::before_uninstantiate {
     Delete the application group associated with this subsite.
 
 } {
-    application_group::delete -group_id [application_group::group_id_from_package_id -package_id $package_id]
+    subsite::default::delete_app_group -package_id $package_id
 }
 
 ad_proc -public subsite::before_upgrade { 
@@ -142,7 +87,113 @@ ad_proc -public subsite::before_upgrade {
         }
 }
 
+ad_proc -public subsite::pivot_root {
+    -node_id
+} {
 
+    Pivot the package associated with node_id onto the root.  Mounting
+    the current root package under node_id.
+
+} {
+    array set node [site_node::get -node_id $node_id]
+    array set root [site_node::get -url "/"]
+
+    db_transaction {
+        site_node::unmount -node_id $node(node_id)
+        site_node::unmount -node_id $root(node_id)
+
+        site_node::mount -node_id $root(node_id) -object_id $node(package_id)
+        site_node::mount -node_id $node(node_id) -object_id $root(package_id)
+
+        #TODO: swap the application groups for the subsites so that
+        #TODO: registered users is always the application group of the root
+        #TODO: subsite.
+    }
+}
+
+ad_proc -public subsite::default::create_app_group {
+    -package_id
+    {-name {}}
+} {
+
+    Create the default application group for a subsite.
+
+    <ul>
+      <li> Create application group
+      <li> Create segment "Subsite Users"
+      <li> Create relational constraint to make subsite registration 
+           require supersite registration.
+    </ul>
+
+} {
+    if { [empty_string_p [application_group::group_id_from_package_id -no_complain -package_id $package_id]] } {
+        array set node [site_node::get_from_object_id -object_id $package_id]
+        set node_id $node(node_id)
+
+        if { [empty_string_p $name] } {
+            set subsite_name [db_string subsite_name_query {}]
+        } else {
+            set subsite_name $name
+        }
+
+        set truncated_subsite_name [string range $subsite_name 0 89]
+
+        db_transaction {
+
+            # Create subsite application group
+            set group_name "$truncated_subsite_name"
+            set subsite_group_id [application_group::new \
+                                      -package_id $package_id \
+                                      -group_name $group_name]
+
+            # Create segment of registered users
+            set segment_name "$truncated_subsite_name Members"
+            set segment_id [rel_segments_new $subsite_group_id membership_rel $segment_name]
+
+            # Create a constraint that says "to be a member of this subsite you must be a member
+            # of the parent subsite.
+	    set subsite_id [site_node::closest_ancestor_package \
+                                -node_id $node_id \
+                                -package_key [subsite::package_keys]]
+
+            db_1row parent_subsite_query {}
+            set constraint_name "Members of [string range $subsite_name 0 30] must be members of [string range $supersite_name 0 30]"
+            set user_id [ad_conn user_id]
+            set creation_ip [ad_conn peeraddr]
+            db_exec_plsql add_constraint {}
+
+            # Create segment of registered users for administrators
+            set segment_name "$truncated_subsite_name Administrators"
+            set admin_segment_id [rel_segments_new $subsite_group_id admin_rel $segment_name]
+
+            # Grant admin privileges to the admin segment
+            permission::grant \
+                -party_id $admin_segment_id \
+                -object_id $package_id \
+                -privilege admin
+
+            # Grant read/write/create privileges to the member segment
+            foreach privilege { read create write } {
+                permission::grant \
+                    -party_id $segment_id \
+                    -object_id $package_id \
+                    -privilege $privilege
+            }
+            
+        }
+    }
+
+}
+
+ad_proc -public subsite::default::delete_app_group {
+    -package_id
+} {
+
+    Delete the default application group for a subsite.
+
+} {
+    application_group::delete -group_id [application_group::group_id_from_package_id -package_id $package_id]
+}
 
 ad_proc -private subsite::instance_name_exists_p {
     node_id
@@ -231,6 +282,27 @@ ad_proc -public subsite::auto_mount_application {
 }
 
 
+ad_proc -public subsite::package_keys {
+    {-no_cache:boolean}
+} {
+    Get the list of packages which can be subsites.
+
+    We return acs-subsite, and catch the query since when upgrading an existing 
+    site we still need to know acs-subsite is a subsite.
+
+    @return the packages keys of all installed packages acting as subsites.
+} {
+    if {$no_cache_p} {
+        if {[catch {set keys [db_list get_keys {}]} errMsg]
+            || [empty_string_p $keys]} {
+            return {acs-subsite}
+        }
+        return $keys
+    } else {
+        return [util_memoize "subsite::package_keys -no_cache"]
+    }
+}
+
 ad_proc -public subsite::get {
     {-subsite_id {}}
     {-array:required}
@@ -249,6 +321,12 @@ ad_proc -public subsite::get {
 
     if { [empty_string_p $subsite_id] } {
 	set subsite_id [ad_conn subsite_id]
+    }
+
+    if { ![ad_conn isconnected] } {
+        set package_id ""
+    } else {
+        set package_id [ad_conn package_id]
     }
 
     array unset subsite_info
@@ -480,7 +558,10 @@ ad_proc -public subsite::add_section_row {
         set info(url) "[string range $info(url) 0 [string last / $info(url)]]."
     }
     
-    if { [ad_conn node_id] == [site_node_closest_ancestor_package "acs-subsite"] } {
+    if { [ad_conn node_id] == 
+         [site_node::closest_ancestor_package -include_self \
+            -package_key [subsite::package_keys] \
+            -url [ad_conn url]] } {
         set current_url [ad_conn extra_url]
     } else {
         # Need to prepend the path from the subsite to this package
@@ -596,7 +677,9 @@ ad_proc -public subsite::get_pageflow_struct {} {
 
     set user_id [ad_conn user_id]
     set admin_p [permission::permission_p \
-                     -object_id [site_node_closest_ancestor_package "acs-subsite"] \
+                     -object_id [site_node::closest_ancestor_package -include_self \
+                                     -package_key [subsite::package_keys] \
+                                     -url [ad_conn url]] \
                      -privilege admin \
                      -party_id [ad_conn untrusted_user_id]]
     set show_member_list_to [parameter::get -parameter "ShowMembersListTo" -package_id $subsite_id -default 2]
@@ -925,10 +1008,11 @@ ad_proc -public subsite::util::packages {
     @see subsite::util::packages_no_mem
 } {
     set subsite_node_id [site_node::closest_ancestor_package \
-                             -package_key acs-subsite \
+                             -package_key [subsite::package_keys] \
                              -node_id $node_id \
                              -include_self \
                              -element node_id]
 
     return [util_memoize [list subsite::util::packages_no_mem -node_id $subsite_node_id] 1200]
 }
+
