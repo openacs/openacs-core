@@ -327,7 +327,7 @@ ad_proc -public install::xml::action::set-parameter { node } {
 ad_proc -public install::xml::action::set-parameter-default { node } {
     Sets a package parameter default value
 
-    <code>&lt;set-parameter-default name=&quot;<em>parameter</em>&quot; package-key=&quot;<em>package-key</em>&quot;</code>
+    <code>&lt;set-parameter-default name=&quot;<em>parameter</em>&quot; package-key=&quot;<em>package-key</em>&quot; value=&quot;val&quot;&gt;</code>
 } {
     set name [apm_required_attribute_value $node name]
     set package_key [apm_required_attribute_value $node package-key]
