@@ -1,543 +1,633 @@
-2004-04-18 00:24  lars
+2004-07-03 01:21  gabrielb
 
-	* packages/acs-subsite/www/resources/site-master.css: Changed from
-	  #developer-support-footer to .developer-support-footer
+	* www/blank-master.adp: Moved the textarea out of <head> and added
+	  required fields so it validates properly on validator.w3.org.
 
-2004-04-18 00:12  lars
+2004-07-02 18:26  jader
 
-	* packages/acs-tcl/tcl/community-core-procs.tcl: Fixed bug #1425:
-	  person::update and party::update assume object is a user
+	* packages/acs-admin/www/developer.adp: Bug 1944: spelling mistake
 
-2004-04-18 00:06  lars
+2004-07-02 14:37  jeffd
 
-	* packages/acs-tcl/tcl/text-html-procs.tcl: Fixed bug #1450: Don't
-	  dress img src URLs as links
+	* packages/acs-subsite/www/user/portrait/upload-2-postgresql.xql:
+	  somehow had a oacs-5-0 version of this file, fix for n_bytes on
+	  portrait upload
 
-2004-04-17 23:38  lars
+2004-07-02 13:40  jeffd
 
-	* packages/acs-admin/www/install/install.tcl: Made the package name
-	  be a link to install the package, instead of having a separate
-	  link at the far right side
+	* packages/acs-subsite/www/user/portrait/: upload-2-oracle.xql,
+	  upload-2.tcl: remove inline sql from upload-2.tcl, clean up code,
+	  set content_length on new upload
 
-2004-04-17 23:32  lars
-
-	* packages/acs-admin/www/install/: index.adp, index.tcl,
-	  install.adp, install.tcl: Implemented first step towards merging
-	  the six different install options - now there are just 4
-
-2004-04-17 23:31  lars
-
-	* packages/acs-tcl/tcl/00-database-procs.tcl: Added doc for
-	  -unclobber switch to db_mutlirow
-
-2004-04-17 23:31  lars
-
-	* packages/acs-templating/tcl/query-procs.tcl: - Added -unclobber
-	  switch to template::multirow - Added local emacs code to set
-	  indent level to 2
-
-2004-04-17 16:11  jeffd
-
-	* packages/acs-core-docs/www/: files/groups.dia, files/openacs.txt,
-	  files/tutorial/myfirstpackage-procs.tcl,
-	  images/group-initial.png, images/group-model.png,
-	  images/i18n-1.png, images/i18n-2.png, images/i18n-3.png,
-	  images/production.dia, images/upgrade-cvs.png, xml/index.xml,
-	  xml/developers-guide/i18n.xml,
-	  xml/developers-guide/permissions.xml,
-	  xml/developers-guide/tutorial-advanced.xml,
-	  xml/developers-guide/tutorial-debug.xml,
-	  xml/install-guide/aolserver4.xml,
-	  xml/install-guide/maintenance.xml,
-	  xml/install-guide/other-software.xml,
-	  xml/install-guide/upgrade.xml: merge docbook docs from HEAD to
-	  oacs-5-1 branch
-
-2004-04-16 19:30  lars
-
-	* packages/acs-subsite/tcl/application-group-procs-oracle.xql:
-	  Fixed bug #1526
-
-2004-04-16 19:21  lars
-
-	* packages/acs-templating/www/doc/tagref/include.html: Applied
-	  patch #446 to fix bug #1594
-
-2004-04-16 18:56  lars
-
-	* packages/acs-templating/tcl/list-procs.tcl: Applied patch #476 to
-	  fix bug #1687: listbuilder paginator doesn't cache all pages
-
-2004-04-16 18:14  lars
-
-	* packages/acs-templating/tcl/list-procs.tcl: Fix list-builder to
-	  allow using a variable for the list name instead of having to put
-	  a hard value there
-
-2004-04-16 16:40  lars
-
-	* packages/acs-service-contract/tcl/:
-	  acs-service-contract-init.tcl, acs-service-contract-procs.tcl:
-	  Pass in impl_alias and impl_pl directly to acs_sc_proc, which
-	  avoids calling the expensive acs_sc_get_alias proc
-
-2004-04-16 16:38  lars
-
-	* packages/acs-service-contract/tcl/implementation-procs.tcl:
-	  Clarified unfinished nature of proc through clear comment
-
-2004-04-08 04:42  daveb
+2004-07-01 22:18  donb
 
 	*
-	  packages/acs-content-repository/sql/postgresql/upgrade/upgrade-5.0.0-5.1.0d1.sql:
-	  Fix typos in content_item__move, add missing content_folder__move
-	  function with name parameter, and cr_items_tree_update_tr along
-	  with upgrade script.
+	  packages/acs-kernel/sql/postgresql/upgrade/upgrade-5.1.1d1-5.1.1d2.sql:
+	  Wouldn't let me tag after adding to HEAD so am committing
+	  directly...
 
-2004-04-07 21:40  daveb
-
-	* packages/acs-content-repository/tcl/revision-procs.xql:
-	  Add content-length to get_revision_info query.
-
-2004-04-05 03:13  daveb
-
-	* packages/acs-content-repository/sql/oracle/content-revision.sql:
-	  Copy content_length when copying a content_revision, otherwise
-	  copied revisions end up with NULL content length.
-
-2004-04-04 14:29  joela
-
-	* etc/analog.cfg: added LOGFORMAT for bug 1359
-
-2004-04-02 23:00  andrewg
-
-	* packages/acs-tcl/tcl/defs-procs.tcl: Fixed a simple bug in
-	  deprecated proc ad_admin_footer.
-
-2004-04-01 03:50  daveb
-
-	* packages/acs-content-repository/tcl/revision-procs.tcl: Add
-	  support for Content-Length header and HEAD method to
-	  cr_write_content for lob storage method.  Include Jeff's trick to
-	  output a correct content-length for file storage items from
-	  ns_returnfile.
-
-2004-04-01 03:34  daveb
-
-	* packages/acs-kernel/acs-kernel.info: Add href to allowed
-	  attributes and remove *. Fix bug#1310
-
-2004-04-01 03:20  daveb
-
-	* packages/acs-content-repository/tcl/: revision-procs-oracle.xql,
-	  revision-procs-postgresql.xql, revision-procs.tcl: Fix
-	  content-length support to use proper header name and actually
-	  check in the queries that grab content length from cr_revisions.
-
-2004-03-31 05:14  daveb
-
-	* packages/acs-content-repository/tcl/revision-procs.tcl: Fix
-	  reference to outputheaders, it should have been all lowercase.
-
-2004-03-30 17:36  jeffd
-
-	* etc/config.tcl: add LOCK and UNLOCK to the tDAV options
-
-2004-03-29 12:05  joela
-
-	* packages/acs-lang/acs-lang.info: retagged packages to 5.1.0b1
-
-2004-03-27 14:31  daveb
-
-	* packages/acs-content-repository/tcl/item-procs-postgresql.xql:
-	  set_live should be set_live_revision. bug#1686
-
-2004-03-26 17:02  peterm
-
-	* packages/acs-lang/catalog/acs-lang.fi_FI.utf-8.xml: adding
-	  missing space in the localization-abmon message
-
-2004-03-26 15:43  gyang
-
-	* packages/acs-subsite/www/admin/applications/application-add.tcl:
-	  Fixed Bug #1563 by applying Patch #443
-
-2004-03-26 15:38  gyang
-
-	* packages/: acs-tcl/tcl/apm-install-procs.tcl,
-	  acs-admin/www/install/install.tcl: Fixed Bug #1646 by applying
-	  Patch #1646 with modifications for a typo
-
-2004-03-26 14:46  gyang
-
-	* packages/: acs-authentication/tcl/local-procs.tcl,
-	  acs-subsite/lib/user-new.tcl: Partial fix of Bug #1424 by
-	  applying Patch #474
-
-2004-03-26 14:33  peterm
-
-	* packages/acs-lang/www/admin/message-list.tcl: making sure the
-	  message counts are correct. Not displaying deleted messages
-	  except when you chooose deleted in the filter
-
-2004-03-26 12:15  peterm
-
-	* packages/acs-subsite/www/permissions/one.tcl: The check on the
-	  permissions/one page to prevent the admin from revoking read
-	  permission for the public on the main site package was broken.
-	  Fixes bug 1680
-
-2004-03-26 10:55  bdolicki
-
-	* packages/acs-templating/tcl/date-procs.tcl: This was accidentally
-	  commited on HEAD instead of on oacs-5-1
-
-2004-03-26 10:05  bdolicki
-
-	* packages/: acs-tcl/tcl/apm-procs.tcl,
-	  acs-templating/tcl/date-init.tcl: Part of this commit is fixing
-	  #1176 (just a few acs-lang strings and properly splitting the
-	  file into *-proc.tcl and *-init.tcl part).  Part of this fix
-	  (catalog file) was accidentally commited before by Joel
-
-	  The bigger part is changing load order of library files so that
-	  acs-lang-init.tcl gets loaded before all other *-init.tcl files.
-
-	  This is necessary because acs-lang is so fundamental and it is
-	  quite possible (as we have seen with the example of
-	  date-init.tcl) that there are *-init.tcl files that need
-	  translated strings.
-
-2004-03-26 09:20  joela
-
-	* etc/backup.sh: fixed typo in backup.sh - bug 1658
-
-2004-03-26 09:11  joela
-
-	* packages/acs-tcl/tcl/utilities-init.tcl: adding error log rolling
-	  scheduled proc
-
-2004-03-25 19:36  jeffd
-
-	* packages/: acs-authentication/tcl/authority-procs.tcl,
-	  acs-tcl/tcl/site-nodes-procs.tcl,
-	  acs-templating/tcl/list-procs.tcl,
-	  acs-templating/tcl/widget-procs.tcl: fix the very common error of
-	  calling empty_string_p with var instead of $var
-
-2004-03-25 19:19  peterm
-
-	* packages/acs-subsite/www/register/user-join.tcl: removing abort
-	  switch from call to ad_returnredirect (switch no longer
-	  supported)
-
-2004-03-25 18:46  gyang
-
-	* packages/acs-subsite/tcl/group-type-procs.tcl: Fixed Bug #1187 by
-	  applying Patch #472
-
-2004-03-25 18:42  peterm
-
-	* packages/acs-templating/resources/lists/table.adp: making sure
-	  elements.label is always noquoted for consistency. Fixing bug
-	  1184
-
-2004-03-25 18:40  joela
-
-	* packages/acs-subsite/: catalog/acs-subsite.en_US.ISO-8859-1.xml,
-	  lib/user-info.adp, www/user/basic-info-update.tcl: added two keys
-	  for bug #962
-
-2004-03-25 18:39  joela
-
-	* packages/acs-core-docs/www/index.adp: changed formatting so that
-	  lists are not centered in IE
-
-2004-03-25 17:36  peterm
-
-	* packages/acs-admin/www/apm/: version-edit-2.tcl,
-	  version-edit-2.xql: Making sure you can keep the version of a
-	  package unchanged while editing it. Even if you keep the upgrade
-	  checkbox selected it will now not attempt an upgrade if you
-	  didn't change the version_name. fixing bug 1106
-
-2004-03-25 17:30  peterm
-
-	* packages/acs-tcl/tcl/defs-procs.tcl: changing the
-	  ad_return_complaint proc to use the ad-return-complain template.
-	  It was broken with the complain template as it didn't create a
-	  multirow
-
-2004-03-25 17:09  lars
-
-	* packages/acs-templating/tcl/list-procs.tcl: Internationalized
-	  list-builder formats and sort order labels
-
-2004-03-25 17:09  lars
+2004-07-01 22:12  donb
 
 	*
-	  packages/acs-templating/catalog/acs-templating.en_US.ISO-8859-1.xml:
-	  Added message keys for sort order and formats
+	  packages/acs-kernel/sql/postgresql/upgrade/upgrade-5.1.1d1-5.1.1d2.sql:
+	  Oops did this wrong ... want to do exactly what Andrew did for
+	  consistency
 
-2004-03-25 16:59  joela
+2004-07-01 22:09  donb
 
-	* packages/acs-tcl/tcl/utilities-procs.tcl: added roll_server_log
-	  procedure
+	*
+	  packages/acs-kernel/sql/postgresql/upgrade/upgrade-5.1.1d1-5.1.1d2.sql:
+	  Upgrade to apply previous register parameter bug fix
 
-2004-03-25 16:22  jlaine
+2004-07-01 15:01  jeffd
 
-	* packages/acs-subsite/tcl/group-procs.tcl: Fixed bug #1392:
-	  Documented the behaviour of group::member_p
+	* packages/acs-authentication/tcl/authority-procs.tcl: the sequence
+	  for authority_id should be acs_object_id_seq not
+	  auth_authority_id_seq (which does not exist)
 
-2004-03-25 15:40  joela
+2004-06-30 22:04  andrewg
 
-	* packages/acs-templating/:
-	  catalog/acs-templating.en_US.ISO-8859-1.xml, tcl/date-procs.tcl,
-	  tcl/element-procs.tcl: applied Guan's patch adding some new
-	  message keys and corresponding catalog entries to some date procs
+	*
+	  packages/acs-kernel/sql/oracle/upgrade/upgrade-5.1.1d1-5.1.1d2.sql:
+	  Update to apm package body in v1.26.2.1 of apm-create.sql,to
+	  include a bugfix/simplication to the cursor in
+	  apm.register_parameter.
 
-2004-03-25 15:28  peterm
+2004-06-30 20:16  donb
 
-	* packages/acs-tcl/tcl/membership-rel-procs.tcl: deleted user is
-	  put in public group so that he has public privileges. fixing bug
-	  1468
+	* packages/acs-kernel/sql/postgresql/apm-create.sql: Ported
+	  Andrew's Oracle register parameter patch.
 
-2004-03-25 15:27  peterm
+2004-06-29 18:38  jader
 
-	* packages/acs-tcl/tcl/00-database-procs.tcl: fixing some variable
-	  name misakes in my previous bind var/quoting fix
+	* www/site-master.adp: Changed wording from users to members. See
+	  http://openacs.org/forums/message-view?message_id=192598
 
-2004-03-25 14:53  joela
+2004-06-27 13:30  joela
 
-	* packages/: acs-templating/tcl/util-procs.tcl,
-	  acs-tcl/tcl/utilities-procs.tcl: fixing bug 1318
+	* packages/acs-authentication/catalog/:
+	  acs-authentication.da_DK.ISO-8859-1.xml,
+	  acs-authentication.es_ES.ISO-8859-1.xml,
+	  acs-authentication.nl_NL.ISO-8859-1.xml,
+	  acs-authentication.pl_PL.utf-8.xml: adding new translation
+	  catalogs
 
-2004-03-25 13:52  peterm
+2004-06-27 13:25  joela
 
-	* packages/acs-tcl/tcl/: 00-database-procs.tcl,
-	  test/acs-tcl-test-procs.tcl: Changing proc
-	  db_bind_var_substitution (used only for db_exec_plsql) so that it
-	  doesn't do bind var substitution for bind variables that are in
-	  quotes. fixing bug 1113
+	* packages/:
+	  acs-authentication/catalog/acs-authentication.ar_LB.utf-8.xml,
+	  acs-authentication/catalog/acs-authentication.es_GT.ISO-8859-1.xml,
+	  acs-authentication/catalog/acs-authentication.fa_IR.utf-8.xml,
+	  acs-authentication/catalog/acs-authentication.zh_CN.utf-8.xml,
+	  acs-kernel/catalog/acs-kernel.AR_EG.utf-8.xml,
+	  acs-kernel/catalog/acs-kernel.AR_LB.utf-8.xml,
+	  acs-kernel/catalog/acs-kernel.RO_RO.utf-8.xml,
+	  acs-kernel/catalog/acs-kernel.ar_EG.utf-8.xml,
+	  acs-kernel/catalog/acs-kernel.ar_LB.utf-8.xml,
+	  acs-kernel/catalog/acs-kernel.da_DK.ISO-8859-1.xml,
+	  acs-kernel/catalog/acs-kernel.en_US.ISO-8859-1.xml,
+	  acs-kernel/catalog/acs-kernel.es_ES.ISO-8859-1.xml,
+	  acs-kernel/catalog/acs-kernel.es_GT.ISO-8859-1.xml,
+	  acs-kernel/catalog/acs-kernel.nl_NL.ISO-8859-1.xml,
+	  acs-kernel/catalog/acs-kernel.pl_PL.utf-8.xml,
+	  acs-kernel/catalog/acs-kernel.ro_RO.utf-8.xml,
+	  acs-kernel/catalog/acs-kernel.zh_CN.utf-8.xml,
+	  acs-lang/catalog/acs-lang.AR_EG.utf-8.xml,
+	  acs-lang/catalog/acs-lang.AR_LB.utf-8.xml,
+	  acs-lang/catalog/acs-lang.RO_RO.utf-8.xml,
+	  acs-lang/catalog/acs-lang.TH_TH.utf-8.xml,
+	  acs-lang/catalog/acs-lang.ar_EG.utf-8.xml,
+	  acs-lang/catalog/acs-lang.ar_LB.utf-8.xml,
+	  acs-lang/catalog/acs-lang.da_DK.ISO-8859-1.xml,
+	  acs-lang/catalog/acs-lang.de_DE.ISO-8859-1.xml,
+	  acs-lang/catalog/acs-lang.en_US.ISO-8859-1.xml,
+	  acs-lang/catalog/acs-lang.es_GT.ISO-8859-1.xml,
+	  acs-lang/catalog/acs-lang.fa_IR.utf-8.xml,
+	  acs-lang/catalog/acs-lang.fi_FI.utf-8.xml,
+	  acs-lang/catalog/acs-lang.nl_NL.ISO-8859-1.xml,
+	  acs-lang/catalog/acs-lang.ro_RO.utf-8.xml,
+	  acs-lang/catalog/acs-lang.th_TH.utf-8.xml,
+	  acs-lang/catalog/acs-lang.zh_CN.utf-8.xml,
+	  acs-subsite/catalog/acs-subsite.AR_EG.utf-8.xml,
+	  acs-subsite/catalog/acs-subsite.AR_LB.utf-8.xml,
+	  acs-subsite/catalog/acs-subsite.RO_RO.utf-8.xml,
+	  acs-subsite/catalog/acs-subsite.ar_EG.utf-8.xml,
+	  acs-subsite/catalog/acs-subsite.ar_LB.utf-8.xml,
+	  acs-subsite/catalog/acs-subsite.da_DK.ISO-8859-1.xml,
+	  acs-subsite/catalog/acs-subsite.es_ES.ISO-8859-1.xml,
+	  acs-subsite/catalog/acs-subsite.es_GT.ISO-8859-1.xml,
+	  acs-subsite/catalog/acs-subsite.nl_NL.ISO-8859-1.xml,
+	  acs-subsite/catalog/acs-subsite.ro_RO.utf-8.xml,
+	  acs-subsite/catalog/acs-subsite.zh_CN.utf-8.xml,
+	  acs-tcl/catalog/acs-tcl.AR_EG.utf-8.xml,
+	  acs-tcl/catalog/acs-tcl.AR_LB.utf-8.xml,
+	  acs-tcl/catalog/acs-tcl.FA_IR.utf-8.xml,
+	  acs-tcl/catalog/acs-tcl.RO_RO.utf-8.xml,
+	  acs-tcl/catalog/acs-tcl.ar_EG.utf-8.xml,
+	  acs-tcl/catalog/acs-tcl.ar_LB.utf-8.xml,
+	  acs-tcl/catalog/acs-tcl.es_GT.ISO-8859-1.xml,
+	  acs-tcl/catalog/acs-tcl.fa_IR.utf-8.xml,
+	  acs-tcl/catalog/acs-tcl.ro_RO.utf-8.xml,
+	  acs-tcl/catalog/acs-tcl.zh_CN.utf-8.xml,
+	  acs-templating/catalog/acs-templating.RO_RO.utf-8.xml,
+	  acs-templating/catalog/acs-templating.ar_LB.utf-8.xml,
+	  acs-templating/catalog/acs-templating.da_DK.ISO-8859-1.xml,
+	  acs-templating/catalog/acs-templating.es_ES.ISO-8859-1.xml,
+	  acs-templating/catalog/acs-templating.es_GT.ISO-8859-1.xml,
+	  acs-templating/catalog/acs-templating.nl_NL.ISO-8859-1.xml,
+	  acs-templating/catalog/acs-templating.ro_RO.utf-8.xml,
+	  acs-templating/catalog/acs-templating.zh_CN.utf-8.xml: updated
+	  catalog files for 5.1.1; bug fix for 1519 means all catalog files
+	  for ar_EG, ar_LB, zh_CN, th_TH, ro_RO, fa_IR, and hr_HR were
+	  renamed to correct capitalization errors
 
-2004-03-25 12:43  joela
+2004-06-26 16:04  joela
 
-	* packages/acs-tcl/tcl/test/acs-tcl-test-procs.tcl: added test case
-	  for 1450
+	* packages/acs-lang/sql/:
+	  oracle/upgrade/upgrade-5.1.1d1-5.1.1d2.sql,
+	  postgresql/upgrade/upgrade-5.1.1d1-5.1.1d2.sql: typo in fa_IR
+	  upgrade
 
-2004-03-25 10:58  jlaine
+2004-06-26 15:52  joela
 
-	* packages/acs-subsite/www/admin/rel-types/new.adp:
-	  Fixed bug #1299: added noquote to supertypes.name
+	* packages/acs-lang/: catalog/acs-lang.es_ES.ISO-8859-1.xml,
+	  sql/oracle/ad-locales.sql,
+	  sql/oracle/upgrade/upgrade-5.1.1d1-5.1.1d2.sql,
+	  sql/postgresql/ad-locales.sql,
+	  sql/postgresql/upgrade/upgrade-5.1.1d1-5.1.1d2.sql: fixing bug
+	  1519 - misnamed locales
 
-2004-03-25 10:50  peterm
+2004-06-25 02:16  andrewg
 
-	* etc/config.tcl: changing ServerSessionCache to default to true.
-	  Fixinb bug 1336
+	* packages/acs-kernel/sql/oracle/apm-create.sql: Simplifying the
+	  cursor in apm.register_parameter to fix a bug, and make it
+	  simpler.  Don's doing the PG version.
 
-2004-03-25 04:25  donb
+2004-06-23 20:37  olah
 
-	* packages/acs-api-browser/tcl/acs-api-documentation-procs.tcl:
-	  Moved my previous fix to 5.1
+	* www/site-master.tcl: Using site_node::get_package_url to check
+	  for mounted curriculum instances, now that it is implemented with
+	  an nsv of url keyed by package key. Lars added this back in mars
+	  and I hadn't noticed ...
 
-2004-03-25 03:41  daveb
+2004-06-21 21:17  janine
 
-	* packages/acs-api-browser/tcl/acs-api-documentation-procs.tcl: Fix
-	  bug#1562.
+	* packages/acs-lang/www/admin/message-list.tcl: query didn't work
+	  in oracle (should be in an xql file but at least this will make
+	  it work)
 
-2004-03-24 20:26  andrewg
+2004-06-21 15:18  maltes
 
-	* packages/acs-authentication/tcl/authentication-procs.tcl: Added
-	  -nologin flag to disable automatic login of a new user.  This is
-	  part of an initial foray into allowing certain kinds of
-	  'low-barrier' registration, such as on a weblog comments system.
+	* etc/keepalive/: keepalive-config.tcl, keepalive-cron.sh,
+	  keepalive.sh: Added cron support for keepalive
 
-2004-03-24 16:34  joela
+2004-06-19 23:06  janine
 
-	* packages/: acs-admin/acs-admin.info,
-	  acs-api-browser/acs-api-browser.info,
-	  acs-authentication/acs-authentication.info,
-	  acs-automated-testing/acs-automated-testing.info,
-	  acs-bootstrap-installer/acs-bootstrap-installer.info,
-	  acs-content-repository/acs-content-repository.info,
-	  acs-core-docs/acs-core-docs.info, acs-kernel/acs-kernel.info,
-	  acs-lang/acs-lang.info, acs-mail/acs-mail.info,
-	  acs-messaging/acs-messaging.info,
-	  acs-reference/acs-reference.info,
-	  acs-service-contract/acs-service-contract.info,
-	  acs-subsite/acs-subsite.info, acs-tcl/acs-tcl.info,
-	  acs-templating/acs-templating.info,
-	  ref-timezones/ref-timezones.info, search/search.info: increased
-	  core version numbers to alpha 2
+	* packages/: acs-kernel/acs-kernel.info,
+	  acs-subsite/acs-subsite.info, acs-tcl/tcl/admin-init.tcl: fix
+	  from Sloan: allow admin to restrict to registered users on a
+	  per-subsite basis
 
-2004-03-23 16:30  peterm
+2004-06-19 22:54  janine
 
-	* packages/acs-subsite/www/admin/relations/: add-oracle.xql,
-	  add-postgresql.xql, add.tcl: When adding a user to a group we
-	  were checking read permission on the users offered for selection.
-	  Since all OpenACS users have a null context_id only the
-	  site-wide-admin would have read privilege on them. To also allow
-	  subsite admins to add users to groups I removed the read
-	  privilege check on the users. See
-	  http://openacs.org/forums/message-view?message_id=171339
+	* packages/acs-subsite/www/user/portrait/index.adp: fix from Sloan:
+	  only show 'this is what we show other users' message to admins,
+	  which includes the user looking at their own portrait
 
-2004-03-23 12:32  jeffd
+2004-06-16 10:53  maltes
 
-	* packages/: acs-admin/acs-admin.info,
-	  acs-api-browser/acs-api-browser.info,
-	  acs-authentication/acs-authentication.info,
-	  acs-bootstrap-installer/acs-bootstrap-installer.info,
-	  acs-core-docs/acs-core-docs.info, acs-kernel/acs-kernel.info,
-	  acs-lang/acs-lang.info, acs-mail/acs-mail.info,
-	  acs-messaging/acs-messaging.info,
-	  acs-service-contract/acs-service-contract.info,
-	  acs-subsite/acs-subsite.info, acs-tcl/acs-tcl.info,
-	  acs-templating/acs-templating.info,
-	  ref-timezones/ref-timezones.info, search/search.info: repair the
-	  borkulated provides lines for core packages may fix bug 1669
+	* packages/acs-service-contract/www/index.tcl: Page broken due to
+	  Orphans not having an owner. I took the owner out, if someone
+	  disagrees, please fix ...
 
-2004-03-22 07:17  maltes
+2004-06-15 17:52  andrewg
 
-	* etc/config.tcl: Some parameters where still using the /web
-	  directory instead of . Found in
-	  http://openacs.org/forums/message-view?message_id=171712.
+	* packages/acs-tcl/tcl/site-nodes-procs.tcl: Fixed a scalability
+	  problem in site_node::update_cache
 
-2004-03-22 03:52  lars
+2004-06-15 17:48  andrewg
 
-	* packages/acs-tcl/tcl/site-nodes-procs.tcl: Fixed
-	  site_node::get_url_from_object_id slowness bug, plus added a
-	  similar mechanism to find URL by package_key.
+	*
+	  packages/acs-kernel/sql/oracle/upgrade/upgrade-5.0.0b4-5.0.0b5.sql:
+	  Applied Dave's bugfix for \#1419 here to fix the same bug
 
-2004-03-22 03:46  lars
+2004-06-14 19:55  janine
 
-	* packages/acs-tcl/tcl/utilities-procs.tcl: Added proc to use with
-	  lsort to compare strings based on their length
+	* packages/acs-tcl/tcl/text-html-procs.tcl: fix from Sloan - 100
+	  iterations was not enough in some cases
 
-2004-03-19 14:09  peterm
+2004-06-14 19:49  janine
 
-	* packages/: acs-admin/www/users/index.adp,
-	  acs-admin/www/users/user-batch-add-2.adp,
-	  acs-admin/www/users/user-batch-add-2.tcl,
-	  acs-admin/www/users/user-batch-add.adp,
-	  acs-admin/www/users/user-batch-add.tcl,
-	  acs-subsite/tcl/subsite-procs.tcl,
-	  acs-subsite/www/members/member-invite.adp,
-	  acs-subsite/www/members/member-invite.tcl,
-	  acs-subsite/www/members/user-batch-add-2.adp,
-	  acs-subsite/www/members/user-batch-add-2.tcl,
-	  acs-subsite/www/members/user-batch-add.adp,
-	  acs-subsite/www/members/user-batch-add.tcl,
-	  acs-subsite/www/members/user-new.tcl: moving bulk user add pages
-	  from /acs-admin to subsite admin
+	* packages/acs-tcl/tcl/: rollout-email-init.tcl,
+	  rollout-email-procs.tcl: update from Sloan
 
-2004-03-19 14:06  peterm
+2004-06-12 16:27  maltes
 
-	* packages/acs-kernel/sql/: oracle/acs-install.sql,
-	  postgresql/acs-install.sql: setting context_id of registered
-	  users group to be the main site package so that admin privilege
-	  on that package entitles you to add users. See
-	  http://openacs.org/forums/message-view?message_id=171339
+	* etc/keepalive/keepalive-cron.sh: Added keepalive-cron.sh to be
+	  used in a cron environment, where root does not get an email
+	  every two minutes
 
-2004-03-19 11:57  peterm
+2004-06-12 13:00  maltes
 
-	* packages/acs-admin/www/users/: user-batch-add-2.adp,
-	  user-batch-add-2.tcl, user-batch-add.adp: bringing over changes
-	  by bdolicki from head
+	* packages/acs-core-docs/www/: xml/install-guide/aolserver4.xml,
+	  aolserver4.html: Changed to use latest AOLserver (40r5). Fixed
+	  small inconsistency.
 
-2004-03-19 10:24  peterm
+2004-06-11 22:43  janine
 
-	* packages/acs-subsite/lib/: user-info.adp, user-info.tcl: Applying
-	  the groups your member of patch by Branimir from head: cvs update
-	  -j1.4 -j1.5 packages/acs-subsite/lib/user-info.adp cvs update
-	  -j1.11 -j1.12 packages/acs-subsite/lib/user-info.tcl
+	*
+	  packages/acs-content-repository/sql/oracle/upgrade/upgrade-4.6.2-4.6.3.sql:
+	  list columns to insert into (fix from Sloan)
 
-2004-03-18 17:51  jeffd
+2004-06-11 22:42  janine
 
-	* packages/acs-tcl/tcl/00-database-procs.tcl: use db_get_dbhost to
-	  get host for windows remote connections to work bug 1258 fix by
-	  John Sequeira
+	*
+	  packages/acs-content-repository/sql/oracle/upgrade/upgrade-4.6.1-4.6.2.sql:
+	  merge fix from head
 
-2004-03-18 17:15  peterm
+2004-06-10 08:41  maltes
 
-	* packages/acs-lang/tcl/: lang-util-procs.tcl,
-	  test/acs-lang-test-procs.tcl: stripping off trailing space in the
-	  text of temporary tags on syntax <# key text #>. Checked new
-	  functionality with test case.
+	* etc/config.tcl: Changed the maxinput to 5MB with 1024*1024
+	  syntax. Added recvwait parameter.
 
-2004-03-18 16:59  peterm
+2004-06-08 10:52  maltes
 
-	* packages/acs-lang/www/admin/: edit-localized-message.adp,
-	  edit-localized-message.tcl: on the message edit page - adding
-	  info about who did the first translation and when
+	* etc/config.tcl: Added maxinput parameter. Set it to 5MB, which
+	  allows OpenACS parameter to kick in more effectively. See
+	  http://openacs.org/forums/message-view?message_id=161698
 
-2004-03-18 16:14  jeffd
+2004-06-07 18:56  jeffd
 
-	* packages/acs-tcl/tcl/acs-permissions-procs.tcl: fix for bug 1433,
-	  PermissionCacheP used memoize on non list thing which would break
-	  with empty object_id etc
+	*
+	  packages/acs-kernel/sql/postgresql/upgrade/upgrade-5.0d2-5.0d3.sql:
+	  do not create the cc_users_of_package_id view since we dont
+	  create application_users view anymore so its not used
 
-2004-03-18 11:12  peterm
+2004-06-02 18:26  lars
 
-	* packages/acs-lang/tcl/: lang-message-procs.tcl,
-	  test/acs-lang-test-procs.tcl: Proc lang::message::format (used by
-	  lang::message::lookup) - implementing ability to have embedded
-	  array variables in I18N messages on syntax %var_name.key_name%.
-	  Adding corresponding test case.
+	* packages/acs-tcl/tcl/: acs-permissions-procs.tcl,
+	  security-procs.tcl: Fixed bug when bumping to login page from
+	  within permission_p, but permission_p was called form within
+	  ad_get_login_url, which is the proc that determines which login
+	  page to use
 
-2004-03-18 10:50  peterm
+2004-06-02 01:24  donb
 
-	* packages/acs-admin/www/apm/version-i18n.tcl: cosmetic change of
-	  file filter
+	* packages/acs-content-repository/: acs-content-repository.info,
+	  sql/oracle/upgrade/upgrade-4.7d6-5.0d1.sql,
+	  sql/oracle/upgrade/upgrade-5.1.0-5.1.1.sql,
+	  sql/oracle/upgrade/upgrade-5.1.1-5.1.2.sql,
+	  sql/postgresql/upgrade/upgrade-5.1.1-5.1.2.sql: I'd accidently
+	  changed some old upgrade files to use edit_name rather than
+	  rename (for Oracle 9.2) and had not added the needed upgrade
+	  files for 5.1.
 
-2004-03-18 10:07  peterm
+2004-06-01 17:35  peterm
 
-	* packages/: acs-templating/tcl/parse-procs.tcl,
-	  acs-lang/tcl/lang-message-procs.tcl,
-	  acs-lang/tcl/lang-util-procs.tcl,
-	  acs-lang/tcl/test/acs-lang-test-procs.tcl: adding support for
-	  variables embedded in I18N messages to have the noquote
-	  instruction (from the corresponding adp variable). TODO: make
-	  sure we do ad_quotehtml and lang::util::localize on the embedded
-	  variables. Adding the proc
-	  convert_percentage_signs_to_adp_variables that we don't currently
-	  need, but I'm leaving it in in case it would be useful later on.
+	* packages/acs-subsite/www/admin/: parties/new.tcl, users/new.tcl:
+	  Making call to relation_add (on pages parties/new and users/new)
+	  not use the form_id and variable_prefix switches as doing so
+	  would make package_instantiate_object look for a rel_id in the
+	  form which wasn't there. This is analogous to fix in version 1.5
+	  of groups/new.
 
-2004-03-16 19:33  rocaelh
+2004-05-31 20:51  gabrielb
+
+	* packages/acs-lang/tcl/: lang-util-procs-oracle.xql,
+	  lang-util-procs-postgresql.xql, locale-procs.tcl: - There's no
+	  consistent use of upper/lower case in the locale and language
+	  columns of the ad_locales table so we need to do case insensitive
+	  searches.  - ad_locales defines the language column as char(3).
+	  Searches for 2-letter   language codes fail because (at least on
+	  PG) all 2-letter entries have a   trailing space in the database.
+
+2004-05-31 19:28  gabrielb
+
+	* packages/acs-templating/tcl/spellcheck-init.tcl: Handle instances
+	  where ad_locales does not contain the 2-letter language being
+	  sought.
+
+2004-05-28 19:08  jader
+
+	* packages/acs-kernel/acs-kernel.info: Removed a security hole in
+	  new installations: see:
+	  http://openacs.org/forums/message-view?message_id=187394
+
+2004-05-26 22:51  tils
+
+	* packages/acs-lang/www/admin/message-usage-include.tcl: The 'Show
+	  files that use this message' functionality used to also find keys
+	  like acs-kernel.foo_bar when searching for acs-kernel.foo, fixed.
+	  Not touching the acs-lang.localization-* lookups because I don't
+	  know how to test this.
+
+2004-05-26 21:10  donb
+
+	* packages/acs-content-repository/sql/postgresql/:
+	  content-folder.sql, content-item.sql: Minor cosmetic change vs.
+	  1858
+
+2004-05-26 21:01  daveb
+
+	* packages/acs-content-repository/tcl/revision-procs.tcl: Return
+	  content as string when string_p is true for file storage type.
+	  Fixed bug#1823
+
+2004-05-26 20:50  donb
 
 	* packages/acs-content-repository/sql/oracle/: content-folder.sql,
-	  content-item.sql: fixing bug 1598
+	  content-item.sql, packages-create.sql,
+	  upgrade/upgrade-5.1.0-5.1.1.sql: Further fixing of bug #1858
 
-2004-03-16 11:52  joela
+2004-05-26 20:43  daveb
 
-	* packages/: acs-admin/acs-admin.info,
-	  acs-api-browser/acs-api-browser.info,
-	  acs-authentication/acs-authentication.info,
-	  acs-bootstrap-installer/acs-bootstrap-installer.info,
-	  acs-core-docs/acs-core-docs.info, acs-kernel/acs-kernel.info,
-	  acs-lang/acs-lang.info, acs-mail/acs-mail.info,
-	  acs-messaging/acs-messaging.info,
-	  acs-service-contract/acs-service-contract.info,
-	  acs-subsite/acs-subsite.info, acs-tcl/acs-tcl.info,
-	  acs-templating/acs-templating.info,
-	  ref-timezones/ref-timezones.info, search/search.info: changed
-	  package version numbers to 5.1.0a1
+	* packages/acs-content-repository/tcl/filter-procs.tcl:
+	  Check for html before processing content through
+	  ad_html_text_convert.
 
-2004-03-14 15:39  gyang
+2004-05-26 20:12  donb
 
-	* packages/acs-authentication/:
-	  catalog/acs-authentication.en_US.ISO-8859-1.xml,
-	  tcl/local-procs.tcl: Fixed Bug #1506 in oacs-5-1 by adding the
-	  message
+	* packages/acs-content-repository/: sql/oracle/content-folder.sql,
+	  sql/oracle/content-test.sql,
+	  sql/oracle/upgrade/upgrade-4.7d6-5.0d1.sql,
+	  sql/postgresql/content-folder.sql,
+	  sql/postgresql/content-item.sql, sql/postgresql/content-test.sql,
+	  www/doc/api/folder.html, www/doc/api/item.html: Fixed Bug #1858:
+	  qualifying "rename" works in 8i bug chokes in 9i causing the
+	  reported error on installation.   Fixed by changing the name to
+	  "edit_name" and implemented it for PG as well (to keep names
+	  similar)
 
-2004-03-14 14:17  gyang
+2004-05-26 18:05  eduardop
 
-	* packages/acs-subsite/www/admin/applications/application-add.tcl:
-	  Oops. Wanted to fix Bug #1563 but realized after looking in
-	  bugtracker that I'm not supposed to commit these things myself in
-	  other peoples' packages.
+	* packages/acs-lang/acs-lang.info: Fix for Bug #1834: set
+	  SystemTimezone default="UTC"
 
-2004-03-14 14:12  gyang
+2004-05-22 01:15  lars
 
-	* packages/acs-subsite/www/admin/applications/application-add.tcl:
-	  Fixed Bug #1563 by changing help_text in the application-add form
+	* packages/acs-subsite/tcl/subsite-procs.tcl: Do not require
+	  subsite_id to subsite::get_element
+
+2004-05-22 01:11  lars
+
+	* packages/acs-lang/www/admin/message-list.adp: Clearer explanation
+	  on the import/export links
+
+2004-05-20 19:50  lars
+
+	* packages/acs-tcl/tcl/acs-permissions-procs.tcl: Formatting
+	  change: && at beginning of lines, instead of end
+
+2004-05-20 19:31  lars
+
+	* packages/acs-tcl/tcl/acs-permissions-procs.tcl: Make the
+	  automatic detection of expired logins work when you explicitly
+	  supply party_id 0 as well
+
+2004-05-20 18:38  tilmanns
+
+	* packages/acs-templating/tcl/date-procs.tcl: Trim leading zeros
+	  since month_data is keyed by month number without leading zero,
+	  and I have seen at least once getting it a month value with
+	  leading zero from somewhere.
+
+2004-05-18 18:23  rocaelh
+
+	* packages/acs-tcl/tcl/utilities-procs.tcl: attribute of a child
+	  node function
+
+2004-05-18 18:15  rocaelh
+
+	* packages/acs-tcl/tcl/30-xml-utils-procs.tcl: xpath wrapper
+	  function
+
+2004-05-14 15:12  jeffd
+
+	* packages/acs-templating/: resources/lists/list.adp,
+	  resources/lists/table.adp, tcl/list-procs.tcl: parameterize the
+	  method for bulk actions, default is get since that used to be the
+	  hard coded value
+
+2004-05-13 18:43  lars
+
+	* packages/acs-subsite/www/resources/http.png: Added http link icon
+
+2004-05-13 17:16  lars
+
+	* packages/acs-subsite/catalog/acs-subsite.en_US.ISO-8859-1.xml:
+	  Show bio/portrait icon for members portlet
+
+2004-05-13 17:05  lars
+
+	* packages/acs-subsite/www/shared/community-member.adp: Fixed
+	  missing @ sign in the inline_portrait_state if statement
+
+2004-05-13 15:29  lars
+
+	* packages/acs-subsite/www/resources/profile-16.png: Added profile
+	  icon
+
+2004-05-06 23:25  daveb
+
+	* packages/acs-content-repository/tcl/revision-procs.tcl: Make sure
+	  content_length is returned as 0 if its set to NULL in
+	  cr_revisions.
+
+2004-05-06 02:35  daveb
+
+	* packages/acs-content-repository/sql/postgresql/:
+	  content-item.sql, upgrade/upgrade-5.1.1d1-5.1.1d2.sql: Fix typo
+	  in parameter name, reference to non-existant parameter.  Fixes
+	  bug#1793
+
+2004-05-06 02:24  daveb
+
+	* packages/acs-content-repository/acs-content-repository.info: Bump
+	  up version number to match upgrade script.
+
+2004-05-06 02:12  daveb
+
+	* packages/acs-content-repository/sql/postgresql/:
+	  content-create.sql, upgrade/upgrade-5.1.1d1-5.1.1d2.sql: Fix
+	  reference to chid instead of child in cr_items_update_tr. Upgrade
+	  script included. Fixes bug#1791
+
+2004-05-05 11:40  maltes
+
+	* packages/acs-subsite/www/members/user-batch-add-2.tcl: Adding
+	  users in a subsite per batch did not add them to the subsite as
+	  members.
+
+2004-05-04 15:42  joela
+
+	* packages/:
+	  acs-authentication/catalog/acs-authentication.en_US.ISO-8859-1.xml,
+	  acs-kernel/catalog/acs-kernel.AR_EG.utf-8.xml,
+	  acs-kernel/catalog/acs-kernel.AR_LB.utf-8.xml,
+	  acs-kernel/catalog/acs-kernel.RO_RO.utf-8.xml,
+	  acs-kernel/catalog/acs-kernel.ast_ES.ISO-8859-1.xml,
+	  acs-kernel/catalog/acs-kernel.ch_zh.utf-8.xml,
+	  acs-kernel/catalog/acs-kernel.da_DK.ISO-8859-1.xml,
+	  acs-kernel/catalog/acs-kernel.de_DE.ISO-8859-1.xml,
+	  acs-kernel/catalog/acs-kernel.en_US.ISO-8859-1.xml,
+	  acs-kernel/catalog/acs-kernel.es_ES.ISO-8859-1.xml,
+	  acs-kernel/catalog/acs-kernel.fi_FI.utf-8.xml,
+	  acs-kernel/catalog/acs-kernel.fr_FR.ISO-8859-1.xml,
+	  acs-kernel/catalog/acs-kernel.gl_ES.ISO-8859-1.xml,
+	  acs-kernel/catalog/acs-kernel.hu_HU.utf-8.xml,
+	  acs-kernel/catalog/acs-kernel.it_IT.ISO-8859-1.xml,
+	  acs-kernel/catalog/acs-kernel.ja_JP.utf-8.xml,
+	  acs-kernel/catalog/acs-kernel.ko_KR.utf-8.xml,
+	  acs-kernel/catalog/acs-kernel.ms_my.utf-8.xml,
+	  acs-kernel/catalog/acs-kernel.nl_NL.ISO-8859-1.xml,
+	  acs-kernel/catalog/acs-kernel.nn_NO.ISO-8859-1.xml,
+	  acs-kernel/catalog/acs-kernel.no_NO.ISO-8859-1.xml,
+	  acs-kernel/catalog/acs-kernel.pl_PL.utf-8.xml,
+	  acs-kernel/catalog/acs-kernel.pt_BR.ISO-8859-1.xml,
+	  acs-kernel/catalog/acs-kernel.pt_PT.ISO-8859-1.xml,
+	  acs-kernel/catalog/acs-kernel.ru_RU.utf-8.xml,
+	  acs-kernel/catalog/acs-kernel.sv_SE.ISO-8859-1.xml,
+	  acs-kernel/catalog/acs-kernel.tr_TR.utf-8.xml,
+	  acs-kernel/catalog/acs-kernel.zh_TW.utf-8.xml,
+	  acs-lang/catalog/acs-lang.AR_EG.utf-8.xml,
+	  acs-lang/catalog/acs-lang.AR_LB.utf-8.xml,
+	  acs-lang/catalog/acs-lang.RO_RO.utf-8.xml,
+	  acs-lang/catalog/acs-lang.TH_TH.utf-8.xml,
+	  acs-lang/catalog/acs-lang.ast_ES.ISO-8859-1.xml,
+	  acs-lang/catalog/acs-lang.ch_zh.utf-8.xml,
+	  acs-lang/catalog/acs-lang.da_DK.ISO-8859-1.xml,
+	  acs-lang/catalog/acs-lang.de_DE.ISO-8859-1.xml,
+	  acs-lang/catalog/acs-lang.el_GR.utf-8.xml,
+	  acs-lang/catalog/acs-lang.en_GB.ISO-8859-1.xml,
+	  acs-lang/catalog/acs-lang.en_US.ISO-8859-1.xml,
+	  acs-lang/catalog/acs-lang.es_ES.ISO-8859-1.xml,
+	  acs-lang/catalog/acs-lang.fi_FI.utf-8.xml,
+	  acs-lang/catalog/acs-lang.fr_FR.ISO-8859-1.xml,
+	  acs-lang/catalog/acs-lang.gl_ES.ISO-8859-1.xml,
+	  acs-lang/catalog/acs-lang.hu_HU.utf-8.xml,
+	  acs-lang/catalog/acs-lang.it_IT.ISO-8859-1.xml,
+	  acs-lang/catalog/acs-lang.ja_JP.utf-8.xml,
+	  acs-lang/catalog/acs-lang.ko_KR.utf-8.xml,
+	  acs-lang/catalog/acs-lang.ms_my.utf-8.xml,
+	  acs-lang/catalog/acs-lang.nl_NL.ISO-8859-1.xml,
+	  acs-lang/catalog/acs-lang.nn_NO.ISO-8859-1.xml,
+	  acs-lang/catalog/acs-lang.no_NO.ISO-8859-1.xml,
+	  acs-lang/catalog/acs-lang.pl_PL.utf-8.xml,
+	  acs-lang/catalog/acs-lang.pt_BR.ISO-8859-1.xml,
+	  acs-lang/catalog/acs-lang.pt_PT.ISO-8859-1.xml,
+	  acs-lang/catalog/acs-lang.ru_RU.utf-8.xml,
+	  acs-lang/catalog/acs-lang.sh_HR.utf-8.xml,
+	  acs-lang/catalog/acs-lang.sv_SE.ISO-8859-1.xml,
+	  acs-lang/catalog/acs-lang.tr_TR.utf-8.xml,
+	  acs-lang/catalog/acs-lang.zh_TW.utf-8.xml,
+	  acs-subsite/catalog/acs-subsite.AR_EG.utf-8.xml,
+	  acs-subsite/catalog/acs-subsite.AR_LB.utf-8.xml,
+	  acs-subsite/catalog/acs-subsite.RO_RO.utf-8.xml,
+	  acs-subsite/catalog/acs-subsite.ast_ES.ISO-8859-1.xml,
+	  acs-subsite/catalog/acs-subsite.ch_zh.utf-8.xml,
+	  acs-subsite/catalog/acs-subsite.da_DK.ISO-8859-1.xml,
+	  acs-subsite/catalog/acs-subsite.de_DE.ISO-8859-1.xml,
+	  acs-subsite/catalog/acs-subsite.el_GR.utf-8.xml,
+	  acs-subsite/catalog/acs-subsite.en_US.ISO-8859-1.xml,
+	  acs-subsite/catalog/acs-subsite.es_ES.ISO-8859-1.xml,
+	  acs-subsite/catalog/acs-subsite.fi_FI.utf-8.xml,
+	  acs-subsite/catalog/acs-subsite.fr_FR.ISO-8859-1.xml,
+	  acs-subsite/catalog/acs-subsite.gl_ES.ISO-8859-1.xml,
+	  acs-subsite/catalog/acs-subsite.hu_HU.utf-8.xml,
+	  acs-subsite/catalog/acs-subsite.it_IT.ISO-8859-1.xml,
+	  acs-subsite/catalog/acs-subsite.ja_JP.utf-8.xml,
+	  acs-subsite/catalog/acs-subsite.ko_KR.utf-8.xml,
+	  acs-subsite/catalog/acs-subsite.ms_my.utf-8.xml,
+	  acs-subsite/catalog/acs-subsite.nl_NL.ISO-8859-1.xml,
+	  acs-subsite/catalog/acs-subsite.nn_NO.ISO-8859-1.xml,
+	  acs-subsite/catalog/acs-subsite.no_NO.ISO-8859-1.xml,
+	  acs-subsite/catalog/acs-subsite.pl_PL.utf-8.xml,
+	  acs-subsite/catalog/acs-subsite.pt_BR.ISO-8859-1.xml,
+	  acs-subsite/catalog/acs-subsite.pt_PT.ISO-8859-1.xml,
+	  acs-subsite/catalog/acs-subsite.ru_RU.utf-8.xml,
+	  acs-subsite/catalog/acs-subsite.sh_HR.utf-8.xml,
+	  acs-subsite/catalog/acs-subsite.sv_SE.ISO-8859-1.xml,
+	  acs-subsite/catalog/acs-subsite.tr_TR.utf-8.xml,
+	  acs-subsite/catalog/acs-subsite.zh_TW.utf-8.xml,
+	  acs-tcl/catalog/acs-tcl.AR_EG.utf-8.xml,
+	  acs-tcl/catalog/acs-tcl.AR_LB.utf-8.xml,
+	  acs-tcl/catalog/acs-tcl.FA_IR.utf-8.xml,
+	  acs-tcl/catalog/acs-tcl.RO_RO.utf-8.xml,
+	  acs-tcl/catalog/acs-tcl.ast_ES.ISO-8859-1.xml,
+	  acs-tcl/catalog/acs-tcl.ch_zh.utf-8.xml,
+	  acs-tcl/catalog/acs-tcl.da_DK.ISO-8859-1.xml,
+	  acs-tcl/catalog/acs-tcl.de_DE.ISO-8859-1.xml,
+	  acs-tcl/catalog/acs-tcl.en_US.ISO-8859-1.xml,
+	  acs-tcl/catalog/acs-tcl.es_ES.ISO-8859-1.xml,
+	  acs-tcl/catalog/acs-tcl.fi_FI.utf-8.xml,
+	  acs-tcl/catalog/acs-tcl.fr_FR.ISO-8859-1.xml,
+	  acs-tcl/catalog/acs-tcl.gl_ES.ISO-8859-1.xml,
+	  acs-tcl/catalog/acs-tcl.hu_HU.utf-8.xml,
+	  acs-tcl/catalog/acs-tcl.it_IT.ISO-8859-1.xml,
+	  acs-tcl/catalog/acs-tcl.ja_JP.utf-8.xml,
+	  acs-tcl/catalog/acs-tcl.ko_KR.utf-8.xml,
+	  acs-tcl/catalog/acs-tcl.ms_my.utf-8.xml,
+	  acs-tcl/catalog/acs-tcl.nl_NL.ISO-8859-1.xml,
+	  acs-tcl/catalog/acs-tcl.nn_NO.ISO-8859-1.xml,
+	  acs-tcl/catalog/acs-tcl.no_NO.ISO-8859-1.xml,
+	  acs-tcl/catalog/acs-tcl.pl_PL.utf-8.xml,
+	  acs-tcl/catalog/acs-tcl.pt_BR.ISO-8859-1.xml,
+	  acs-tcl/catalog/acs-tcl.pt_PT.ISO-8859-1.xml,
+	  acs-tcl/catalog/acs-tcl.ru_RU.utf-8.xml,
+	  acs-tcl/catalog/acs-tcl.sh_HR.utf-8.xml,
+	  acs-tcl/catalog/acs-tcl.sv_SE.ISO-8859-1.xml,
+	  acs-tcl/catalog/acs-tcl.tr_TR.utf-8.xml,
+	  acs-tcl/catalog/acs-tcl.zh_TW.utf-8.xml,
+	  acs-templating/catalog/acs-templating.RO_RO.utf-8.xml,
+	  acs-templating/catalog/acs-templating.ch_zh.utf-8.xml,
+	  acs-templating/catalog/acs-templating.da_DK.ISO-8859-1.xml,
+	  acs-templating/catalog/acs-templating.de_DE.ISO-8859-1.xml,
+	  acs-templating/catalog/acs-templating.en_US.ISO-8859-1.xml,
+	  acs-templating/catalog/acs-templating.es_ES.ISO-8859-1.xml,
+	  acs-templating/catalog/acs-templating.fi_FI.utf-8.xml,
+	  acs-templating/catalog/acs-templating.fr_FR.ISO-8859-1.xml,
+	  acs-templating/catalog/acs-templating.hu_HU.utf-8.xml,
+	  acs-templating/catalog/acs-templating.it_IT.ISO-8859-1.xml,
+	  acs-templating/catalog/acs-templating.ko_KR.utf-8.xml,
+	  acs-templating/catalog/acs-templating.ms_my.utf-8.xml,
+	  acs-templating/catalog/acs-templating.nl_NL.ISO-8859-1.xml,
+	  acs-templating/catalog/acs-templating.nn_NO.ISO-8859-1.xml,
+	  acs-templating/catalog/acs-templating.no_NO.ISO-8859-1.xml,
+	  acs-templating/catalog/acs-templating.pt_BR.ISO-8859-1.xml,
+	  acs-templating/catalog/acs-templating.sv_SE.ISO-8859-1.xml,
+	  acs-templating/catalog/acs-templating.zh_TW.utf-8.xml: added
+	  current translations
+
+2004-05-04 14:11  jeffd
+
+	* packages/acs-subsite/www/user/portrait/upload-2-oracle.xql: set
+	  content_length field in cr_revisions for uploaded portrait
+
+2004-05-04 14:06  jeffd
+
+	* packages/acs-subsite/www/user/portrait/upload-2-postgresql.xql:
+	  set content_length field in cr_revisions for uploaded portrait
+
+2004-05-02 21:13  daveb
+
+	*
+	  packages/acs-content-repository/sql/oracle/upgrade/upgrade-5.1.0-5.1.1.sql:
+	  Fix content_folder.rename.
+
+2004-05-01 10:32  jeffd
+
+	* packages/acs-content-repository/sql/postgresql/content-type.sql:
+	  content_type__drop_type doesn't work on OS X (7.2 was matching
+	  sp[uriously) bug 1738 patch 498 Jarkko Laine
+
+2004-04-30 10:59  lars
+
+	* packages/acs-lang/www/admin/edit-localized-message.tcl:
+	  export_vars -base instead of ?[export_vars]
+
+2004-04-30 04:49  daveb
+
+	* packages/acs-content-repository/sql/oracle/content-folder.sql:
+	  Fix content_folder.rename to actually change the label or
+	  description if that parameter is specified.
 
