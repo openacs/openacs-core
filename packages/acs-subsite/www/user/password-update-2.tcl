@@ -27,15 +27,13 @@ ad_page_contract {
             ad_complain "Your passwords don't match! Presumably, you made a typo while entering one of them."
         }
     }
-} -properties {
 }
 
 if {[empty_string_p $user_id]} {
     set user_id [ad_verify_and_get_user_id]
-    permission::require_permission -party_id $user_id -object_id $user_id -privilege "write"
-} else {
-    permission::require_permission -object_id $user_id -privilege "admin"
 }
+
+permission::require_permission -party_id $user_id -object_id $user_id -privilege "write"
 
 if {[catch {ad_change_password $user_id $password_1} errmsg]} {
     ad_return_error "Wasn't able to change your password. Please contact the system administrator."
