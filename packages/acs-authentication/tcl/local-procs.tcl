@@ -431,12 +431,12 @@ ad_proc -private auth::local::registration::Register {
         set result(account_status) "closed"
         set result(account_message) "<p>[_ acs-subsite.lt_Registration_informat_1]</p><p>[_ acs-subsite.lt_Please_read_and_follo]</p>"
 
-	set row_id [db_string rowid_for_email {
-            select rowid from users where user_id = :user_id
-        }]
+	set row_id [auth::get_user_secret_token -user_id $user_id]
 
+        # Lars TODO: Refactor with code in authentication-procs.tcl
+        
         # Send email verification email to user
-        set confirmation_url "[ad_url]/register/email-confirm?[export_vars { row_id }]"
+        set confirmation_url [export_vars -base "[ad_url]/register/email-confirm" { row_id }]
 	with_catch errmsg {
             ns_sendmail \
                 $email \
@@ -444,8 +444,9 @@ ad_proc -private auth::local::registration::Register {
                 "[_ acs-subsite.lt_Welcome_to_system_nam]" \
                 "[_ acs-subsite.lt_To_confirm_your_regis]"
         } {
-	    #ns_returnerror "500" "$errmsg"
-	    ns_log Warning "Error sending email verification email to $email. Error: $errmsg"
+            global errorInfo
+            ns_log Error "auth::get_local_account: Error sending out email verification email to email $email:\n$errorInfo"
+            set auth_info(account_message) "We got an error sending out the email for email verification"
 	}
 
     } else {
