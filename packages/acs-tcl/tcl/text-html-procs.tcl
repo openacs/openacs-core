@@ -1549,6 +1549,11 @@ ad_proc -public string_truncate {
                 }
             }
             
+            # If that laves us with an empty string, then ignore whitespace and just truncate mid-word
+            if { $end_index == -1 } {
+                set end_index [expr $len-[string length $ellipsis]-1]
+            }
+            
             # Chop off extra whitespace at the end
             while { $end_index >= 0 && [string is space [string index $string $end_index]] } {
                 incr end_index -1
