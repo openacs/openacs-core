@@ -28,7 +28,7 @@ set css_url "/resources/acs-subsite/group-master.css"
 # Context bar
 if { [template::util::is_nil no_context_p] } {
     if { ![template::util::is_nil context] } {
-        set cmd [list ad_context_bar -from_node $subsite_node_id --]
+        set cmd [list ad_context_bar --]
         foreach elem $context {
             lappend cmd $elem
         }
@@ -36,7 +36,7 @@ if { [template::util::is_nil no_context_p] } {
     }
 
     if [template::util::is_nil context_bar] { 
-        set context_bar [ad_context_bar -from_node $subsite_node_id]
+        set context_bar [ad_context_bar]
     }
 } else {
     set context_bar {}
