@@ -25,6 +25,8 @@ ad_proc -public acs_sc::invoke {
     A wrapper for the acs_sc_call procedure, with explicitly named
     parameters so it's easier to figure out how to use it.
     You must supply either contract and impl, or just impl_id.
+    If you supply impl_id and contract, we throw an error if the impl_id's contract doesn't match
+    the contract you passed in. If you supply both impl_id and impl, we throw an error.
     
     @param contract_name The name of the contract you wish to use.
     @param operation_name The name of the operation in the contract you wish to call.
@@ -37,8 +39,14 @@ ad_proc -public acs_sc::invoke {
     @see acs_sc_call
 } {
     if { [exists_and_not_null impl_id] } {
+        if { [exists_and_not_null impl] } {
+            error "Cannot supply both impl and impl_id"
+        }
         acs_sc::impl::get -impl_id $impl_id -array impl_info
         set impl $impl_info(impl_name)
+        if { ![string equal $contract $impl_info(impl_contract_name)] } {
+            error "The cotnract of implementation with id $impl_id does not match contract passed in. Expected contract to be '$contract', but contract of impl_id was '$impl_info(impl_contract_name)'"
+        }
         set contract $impl_info(impl_contract_name)
     }
     if { ![exists_and_not_null impl] || ![exists_and_not_null contract] } {
