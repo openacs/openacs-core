@@ -238,7 +238,7 @@
           queries in XML files, so we use an AOLserver module called
           tDOM to parse these files.  (This replaces libxml2, which
           was used prior to 4.6.4.)  tDOM is available from <ulink
-          url="http://xmlsoft.org">http://tdom.org</ulink>).</para>
+          url="http://tdom.org">http://tdom.org</ulink>).</para>
           </formalpara>
         </listitem>
         <listitem>
