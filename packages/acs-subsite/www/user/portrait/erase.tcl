@@ -25,7 +25,7 @@ ad_require_permission $user_id "write"
 if {$admin_p} {
     set context [list [list "./?user_id=$user_id" "User's Portrait"] "Erase"]
 } else {
-    set context [list_ws [list "./" "Your Portrait"] "Erase"]
+    set context [list [list "./" "Your Portrait"] "Erase"]
 }
 
 set export_vars [export_form_vars user_id return_url]
