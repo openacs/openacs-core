@@ -1,6 +1,7 @@
 @doc_type;noquote@
 <html>
   <head>
+    <meta name="generator" content="OpenACS version @openacs_version@">
     <title>@title;noquote@</title>
     @header_stuff;noquote@
     <multiple name="header_links">
