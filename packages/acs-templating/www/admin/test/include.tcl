@@ -2,7 +2,7 @@ if [llength $l] {
     set car		[lindex $l 0]
     set cdr		[lrange $l 1 end]
   
-    regsub -all {%([a-zA-z0-9.:_]+)%} $car {@\1@}     condition
+    regsub -all {%([a-zA-Z0-9.:_]+)%} $car {@\1@}     condition
     foreach {name rules} {
 	true  {"TRUE " ""      FALSE   not                 }
 	false { TRUE   not    "FALSE " ""   and %AND%   or and   %AND% or}
