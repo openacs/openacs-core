@@ -6,23 +6,29 @@ ad_page_contract {
     @cvs-id $Id$
 }
 
+auth::require_login
+
 set group_id [application_group::group_id_from_package_id]
 
 set admin_p [ad_permission_p -user_id [ad_conn user_id] $group_id "admin"]
 
-if { !$admin_p && ![parameter::get -parameter "MembersCanInviteMembersP" -default 0] } {
-    ad_return_forbidden "Cannot invite members" "I'm sorry, but you're not allowed to invite members to this group"
-    ad_script_abort
+if { !$admin_p } {
+    # If not admin, user must be member of group, and members must be allowed to invite other members
+    if { ![parameter::get -parameter "MembersCanInviteMembersP" -default 0] || \
+             ![group::member_p -group_id $group_id] } {
+        
+        ad_return_forbidden "Cannot invite members" "I'm sorry, but you're not allowed to invite members to this group"
+        ad_script_abort
+    }
 }
+
 
 set page_title "Inivite Member to [ad_conn instance_name]"
 set context [list [list "." "Members"] "Invite"]
 
-db_1row group_info {
-    select group_name, join_policy
-    from groups
-    where group_id = :group_id
-}
+group::get \
+    -group_id $group_id \
+    -array group_info
 
 ad_form -name user_search -cancel_url . -form {
     {user_id:search
@@ -46,7 +52,7 @@ if { $admin_p } {
 ad_form -extend -name user_search -on_submit {
     set create_p [group::permission_p -privilege create $group_id]
     
-    if { [string equal $join_policy "closed"] && !$create_p} {
+    if { [string equal $group_info(join_policy) "closed"] && !$create_p} {
         ad_return_forbidden "Cannot invite members" "I'm sorry, but you're not allowed to invite members to this group"
         ad_script_abort
     }
@@ -56,29 +62,20 @@ ad_form -extend -name user_search -on_submit {
         set rel_type "membership_rel"
     }
 
-    set rel_exists_p [db_0or1row select_existing_rel { 
-        select r.rel_id as existing_rel_id,
-               r.rel_type as existing_rel_type
-        from   acs_rels r
-        where  object_id_one = :group_id
-        and    object_id_two = :user_id
-    }]
-    
-    if { $rel_exists_p } {
-        # This relationship already exists. You shouldn't change user type here
-        # Ignore, we're done
-        ad_returnredirect .
-        ad_script_abort
+    if { ![group::member_p -user_id $user_id -group_id $group_id] } {
+        with_catch errmsg {
+            group::add_member \
+                -group_id $group_id \
+                -user_id $user_id \
+                -rel_type $rel_type
+        } {
+            form set_error user_serach user_id "Error adding user to community: $errmsg"
+            global errorInfo
+            ns_log Error "Error adding user $user_id to community group $group_id: $errmsg\n$errorInfo"
+            break
+        }
     }
-
-    set member_state [group::default_member_state -join_policy $join_policy -create_p $create_p]
-
-    db_transaction {
-	set rel_id [relation_add -member_state $member_state $rel_type $group_id $user_id]
-    } on_error {
-	ad_return_error "Error creating the relation" "We got the following error message while trying to create this relation: <pre>$errmsg</pre>"
-	ad_script_abort
-    }
+} -after_submit {
     ad_returnredirect .
     ad_script_abort
 }
