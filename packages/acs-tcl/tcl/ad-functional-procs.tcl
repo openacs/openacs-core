@@ -37,7 +37,7 @@ namespace eval ::f {
 # (callable) function objects. The auxiliary functions 
 # eval_unary and eval_binary are gone.
 
-# Special thanks go to Sarah Arnold and Carsten Clasohms for extensive
+# Special thanks go to Sarah Arnold and Carsten Clasohm for extensive
 # testing of this library and using it in the Sharenet project.
 # Also many thanks to Branimir Dolicki for inventing the lambda function
 # and to Archit Shah for finding a simple way to eliminate its memory leak.
