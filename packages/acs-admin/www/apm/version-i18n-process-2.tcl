@@ -91,6 +91,13 @@ if { [llength $files] > 0 } {
     # so present a link back to the page for choosing keys for the next adp file
     set proceed_url "version-i18n?${proceed_url_export_vars}"
     set proceed_label "Return to the I18N page for this package"
+
+    # If we are done with message tag replacement, that means we have added new messages
+    # so reload the cache
+    if { $replace_tags_p } {
+        lang::message::cache
+    }
 }
 
 ad_return_template
+
