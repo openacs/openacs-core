@@ -2597,6 +2597,8 @@ ad_proc -public ad_returnredirect {
     @see util_user_message
     @see ad_script_abort
 } {
+    util_user_message -message $message
+
     if { [util_complete_url_p $target_url] } {
         # http://myserver.com/foo/bar.tcl style - just pass to ns_returnredirect
         set url $target_url
@@ -2625,8 +2627,6 @@ ad_proc -public ad_returnredirect {
     } else {
         ns_returnredirect $url
     }
-    
-    util_user_message -message $message
 }
 
 ad_proc -public util_user_message { 
