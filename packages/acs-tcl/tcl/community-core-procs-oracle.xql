@@ -9,15 +9,18 @@
 	begin
 	    :1 := acs.add_user(
                 user_id => :user_id,
-		email => :email,
-		url => :url,
-		first_names => :first_names,
-		last_name => :last_name,
-		password => :hashed_password,
-	        salt => :salt,
-	        creation_ip => :peeraddr,
-	        email_verified_p => :email_verified_p,
-	        member_state => :member_state
+                object_type => 'user',
+                creation_user => :creation_user,
+                creation_ip => :peeraddr,
+                username => :username,
+                email => :email,
+                url => :url,
+                first_names => :first_names,
+                last_name => :last_name,
+                password => :password,
+                salt => :salt,
+                email_verified_p => :email_verified_p,
+                member_state => :member_state
             );
 	end;
 	
