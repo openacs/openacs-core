@@ -14,6 +14,53 @@ ad_library {
 #
 #####
 
+ad_proc -public rp_internal_redirect { path } {
+
+    Tell the request processor to return some other page.
+
+    The path can either be relative to the current directory (e.g. "some-template") 
+    or absolute from the server root (e.g. "/packages/my-package/www/some-template"). 
+    When there is no extension then the request processor will choose the 
+    matching file according to the extension preferences.
+
+    Parameters will stay the same as in the initial request.
+
+    @param path path to the file to serve
+
+} {
+
+    # protect from circular redirects
+    global __rp_internal_redirect_recursion_counter
+    if { ![info exists __rp_internal_redirect_recursion_counter] } {
+        set __rp_internal_redirect_recursion_counter 0
+    } elseif { $__rp_internal_redirect_recursion_counter > 10 } {
+        error "rp_internal_redirect: Recursion limit exceeded."
+    } else {
+        incr __rp_internal_redirect_recursion_counter
+    }
+
+    if { [string index $path 0] != "/" } {
+        # it's a relative path, prepend the current location
+        set path "[file dirname [ad_conn file]]/$path"
+    } else {
+        set path "[acs_root_dir]$path"
+    }
+
+    # save the current file setting
+    set saved_file [ad_conn file]
+
+    rp_serve_abstract_file $path
+
+    # restore the file setting. we need to do this because
+    # rp_serve_abstract_file sets it to the path we internally
+    # redirected to, and rp_handler will cache the file setting
+    # internally in the tcl_url2file variable when PerformanceModeP is
+    # switched on. This way it caches the location that was originally
+    # requested, not the path that we redirected to.
+    ad_conn -set file $saved_file
+}
+
+
 ad_proc ad_return { args } {
 
   Works like the "return" Tcl command, with one difference. Where
