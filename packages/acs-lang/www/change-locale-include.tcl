@@ -13,6 +13,8 @@ if { $return_url == "" } {
     set return_url [ns_set iget [ns_conn headers] referer]
 }
 
+set use_timezone_p [expr [lang::system::timezone_support_p] && [ad_conn user_id]]
+
 #
 # LARS:
 # I'm thinking the UI here needs to be different.
@@ -63,7 +65,7 @@ if { $package_level_locales_p } {
             -options $list_of_locales
 }
 
-if { [lang::system::timezone_support_p] } {
+if { $use_timezone_p } {
     set timezone_options [db_list_of_lists all_timezones {}]
 
     element create locale timezone -datatype text -widget select -optional \
@@ -78,7 +80,7 @@ if { [form is_request locale] } {
     element set_properties locale site_wide_locale -value [lang::user::site_wide_locale]
     element set_properties locale return_url_info -value $return_url
     element set_properties locale package_id_info -value $package_id
-    if { [lang::system::timezone_support_p] } {
+    if { $use_timezone_p } {
         element set_properties locale timezone -value [lang::user::timezone]
     }
 }
@@ -91,7 +93,7 @@ if { [form is_valid locale] } {
         lang::user::set_locale -package_id $package_id $package_level_locale
     }
     
-    if { [lang::system::timezone_support_p] } {
+    if { $use_timezone_p } {
         lang::user::set_timezone [element get_value locale timezone]
     }
 
