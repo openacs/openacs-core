@@ -49,9 +49,10 @@ added (see above) or because these groups are components of the groups
 above.
 </p>
 
-<ul><li><strong><multiple name="all_group_membership"> @all_group_membership.group_name@<if @all_group_membership.rownum@ lt @all_group_membership:rowcount@>, </if> </multiple>
-  </strong>
-  </li>
+<ul>
+  <multiple name="all_group_membership">
+    <li>@all_group_membership.group_name@</li>
+  </multiple>
 </ul>
 
 <multiple name="user_contributions">
