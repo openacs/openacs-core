@@ -17,5 +17,7 @@
   <include src="/packages/acs-lang/lib/messages-to-translate">
 </if>
 
+<if @lang_admin_p@ true><a href="@toggle_translator_mode_url@">Toggle translator mode</a></if>
+
 </body>
 </html>
