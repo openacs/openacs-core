@@ -22,26 +22,20 @@
   <fullquery name="lang::message::register.insert_message_key">
     <querytext> 
         insert into lang_message_keys
-            (message_key, package_key)
+            (message_key, package_key, upgrade_status)
           values
-            (:message_key, :package_key)
+            (:message_key, :package_key, :key_upgrade_status)
     </querytext>
   </fullquery>
 
   <fullquery name="lang::message::register.lang_message_null_update">
     <querytext>
       update lang_messages 
-      set    message = null
+      set    message = null,
+             upgrade_status = :message_upgrade_status
       where  locale = :locale 
       and    package_key = :package_key
       and    message_key = :message_key
-    </querytext>
-  </fullquery>
-
-  <fullquery name="lang::message::register.lang_message_insert">      
-    <querytext>
-      insert into lang_messages (package_key, message_key, locale, message)
-      values (:package_key, :message_key, :locale, null)
     </querytext>
   </fullquery>
 
