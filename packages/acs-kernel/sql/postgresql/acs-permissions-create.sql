@@ -74,7 +74,7 @@ acs_privilege_hierarchy_index (tree_sortkey);
 -- can be used to emulate tree queries on the acs_privilege_hierarchy table.
 -- The acs_privilege_hierarchy table maintains the permissions structure, but 
 -- it has a complication in that the same privileges can exist in more than one
--- paths in the tree.  As such, tree queries cannot be represented by the 
+-- path in the tree.  As such, tree queries cannot be represented by the 
 -- usual tree query methods used for openacs.  
 
 -- FIXME: simplify this if possible.  There's got to be a better way.
@@ -444,7 +444,8 @@ create table acs_permissions (
 	grantee_id		integer not null
 				constraint acs_permissions_grantee_id_fk
 				references parties (party_id),
-	privilege		varchar(100) not null constraint acs_permissions_priv_fk
+	privilege		varchar(100) not null 
+                                constraint acs_permissions_priv_fk
 				references acs_privileges (privilege),
 	constraint acs_permissions_pk
 	primary key (object_id, grantee_id, privilege)
@@ -465,13 +466,14 @@ create index acs_permissions_privilege_idx on acs_permissions (privilege);
 create view acs_privilege_descendant_map
 as select p1.privilege, p2.privilege as descendant
    from acs_privileges p1, acs_privileges p2
-   where p2.privilege in (select distinct h2.child_privilege
-                            from
-                              acs_privilege_hierarchy_index h1,
-                              acs_privilege_hierarchy_index h2
-                            where
-                              h1.privilege = p1.privilege
-                              and h2.tree_sortkey like h1.tree_sortkey || '%');
+   where exists (select h2.child_privilege
+                   from
+                     acs_privilege_hierarchy_index h1,
+                     acs_privilege_hierarchy_index h2
+                   where
+                     h1.privilege = p1.privilege
+                     and h2.privilege = p2.privilege
+                     and h2.tree_sortkey like h1.tree_sortkey || '%');
 
 create view acs_permissions_all
 as select op.object_id, p.grantee_id, p.privilege
@@ -614,7 +616,8 @@ begin
     insert into acs_permissions
       (object_id, grantee_id, privilege)
     values
-      (grant_permission__object_id, grant_permission__grantee_id, grant_permission__privilege);
+      (grant_permission__object_id, grant_permission__grantee_id, 
+       grant_permission__privilege);
 
   -- FIXME: find out what this means?
   -- exception
