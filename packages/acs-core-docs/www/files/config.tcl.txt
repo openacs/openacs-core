@@ -1,12 +1,6 @@
 ns_log notice "nsd.tcl: starting to read config file..."
 
-# which database do you want? postgres or oracle
-set database              postgres 
-
-if {$database == "oracle"} {
-    set db_password        "mysitepassword"
-}
-
+# For production servers, http should be 80 and https 443
 set httpport              8000
 set httpsport             8443 
 
@@ -18,13 +12,21 @@ set server              "service0"
 set db_name             $server
 set servername          "New OpenACS Installation - Development"
 
+# which database do you want? postgres or oracle
+set database              postgres 
+
+if {$database == "oracle"} {
+    set db_password        "mysitepassword"
+}
+
+#################################################################
+# For a basic install, nothing below here needs to be changed
+#################################################################
+
 set serverroot          "/web/${server}"
 
 # if debug is false, all debugging will be turned off
 set debug false
-
-# you shouldn't need to adjust much below here
-# for a standard install
 
 # 
 # AOLserver's home and binary directories. Autoconfigurable. 
