@@ -11,13 +11,8 @@ ad_page_variables {
 
 ds_require_permission [ad_conn package_id] "admin"
 
-doc_body_append "[ad_admin_header "Request Information"]
-
-<h2>Request Information</h2>
-
-[ad_context_bar "Request Information"]
-<hr>
-"
+set page_title "Request Information"
+set context [list $page_title]
 
 foreach name [nsv_array names ds_request] {
     ns_log Debug "DS: Checking request $request, $name."
@@ -27,14 +22,14 @@ foreach name [nsv_array names ds_request] {
 }
 
 if { [info exists property(start)] } {
-    doc_body_append "
+    append body "
 <h3>Parameters</h3>
 
 <blockquote>
 <table cellspacing=0 cellpadding=0>
 <tr><th align=left>Request Start Time:&nbsp;</th><td>[clock format [lindex $property(start) 0] -format "%Y-%m-%d %H:%M:%S"]\n"
 } else {
-    doc_body_append "The information for this request is gone - either the server has been restarted, or
+    append body "The information for this request is gone - either the server has been restarted, or
 the request is more than [ad_parameter DeveloperSupportLifetime "" 900] seconds old.
 [ad_admin_footer]"
     return
@@ -87,15 +82,15 @@ $first_names $last_name (<a href=\"mailto:$email\">mailto:$email</a>)
 		}
 	    }
 
-	    doc_body_append "<tr valign=top><th align=left nowrap>$name:&nbsp;</th><td>[ad_decode $value "" "(empty)" $value]</td></tr>\n"
+	    append body "<tr valign=top><th align=left nowrap>$name:&nbsp;</th><td>[ad_decode $value "" "(empty)" $value]</td></tr>\n"
 	}
     }
 }
 
-doc_body_append "</table></blockquote>"
+append body "</table></blockquote>"
 
 if { [info exists property(rp)] } {
-    doc_body_append "
+    append body "
 <h3>Request Processor</h3>
 <ul>
 "
@@ -114,9 +109,9 @@ if { [info exists property(rp)] } {
 	}
 
 	if { [info exists conn(startclicks)] } {
-	    doc_body_append "<li>[format "%+.1f" [expr { ($startclicks - $conn(startclicks)) / 1000.0 }]] ms: "
+	    append body "<li>[format "%+.1f" [expr { ($startclicks - $conn(startclicks)) / 1000.0 }]] ms: "
 	} else {
-	    doc_body_append "<li>"
+	    append body "<li>"
 	}
 
 	switch $kind {
@@ -128,7 +123,7 @@ if { [info exists property(rp)] } {
 		if { [empty_string_p $to] } {
 		    set to "?"
 		}
-		doc_body_append "Applied transformation from <b>$from -> $to</b> - $duration\n"
+		append body "Applied transformation from <b>$from -> $to</b> - $duration\n"
 	    }
 	    filter {
 		set kind [lindex $info 1]
@@ -137,68 +132,68 @@ if { [info exists property(rp)] } {
 		set proc [lindex $info 4]
 		set args [lindex $info 5]
 
-		doc_body_append "Applied $kind filter: <b>$proc</b> [ns_quotehtml $args] (for $method $path) - $duration\n"
+		append body "Applied $kind filter: <b>$proc</b> [ns_quotehtml $args] (for $method $path) - $duration\n"
 		if { [string equal $action "error"] } {
-		    doc_body_append "<ul><li>returned error: <pre>[ns_quotehtml $error]</pre></ul>\n"
+		    append body "<ul><li>returned error: <pre>[ns_quotehtml $error]</pre></ul>\n"
 		} elseif { ![empty_string_p $action] } {
-		    doc_body_append "<ul><li>returned $action</ul>\n"
+		    append body "<ul><li>returned $action</ul>\n"
 		}
 	    }
 	    registered_proc {
 		set proc [lindex $info 2]
 		set args [lindex $info 3]
-		doc_body_append "Called registered procedure: <b>$proc</b> [ns_quotehtml $args] for ($method $path) - $duration\n"
+		append body "Called registered procedure: <b>$proc</b> [ns_quotehtml $args] for ($method $path) - $duration\n"
 		if { [string equal $action "error"] } {
-		    doc_body_append "<ul><li>returned error: <pre>[ns_quotehtml $error]</pre></ul>\n"
+		    append body "<ul><li>returned error: <pre>[ns_quotehtml $error]</pre></ul>\n"
 		}
 	    }
 	    serve_file {
 		set file [lindex $info 0]
 		set handler [lindex $info 1]
-		doc_body_append "Served file <b>$file</b> with <b>$handler</b> - $duration\n"
+		append body "Served file <b>$file</b> with <b>$handler</b> - $duration\n"
 		if { [string equal $action "error"] } {
-		    doc_body_append "<ul><li>returned error: <pre>[ns_quotehtml $error]</pre></ul>\n"
+		    append body "<ul><li>returned error: <pre>[ns_quotehtml $error]</pre></ul>\n"
 		}
 	    }
 	    debug {
-		doc_body_append "<i>$info</i>\n"
+		append body "<i>$info</i>\n"
 	    }
 	}
     }
     if { !$rp_show_debug_p } {
-	doc_body_append "<p><a href=\"request-info?[export_ns_set_vars url]&rp_show_debug_p=1\">show RP debugging information</a>"
+	append body "<p><a href=\"request-info?[export_ns_set_vars url]&rp_show_debug_p=1\">show RP debugging information</a>"
     }
-    doc_body_append "</ul>\n"
+    append body "</ul>\n"
 }
 
 if { [info exists property(comment)] } {
-    doc_body_append "<h3>Comments</h3><ul>\n"
+    append body "<h3>Comments</h3><ul>\n"
     foreach comment $property(comment) {
-	doc_body_append "<li>$comment\n"
+	append body "<li>$comment\n"
     }
-    doc_body_append "</ul>\n"
+    append body "</ul>\n"
 }
 
 if { [info exists property(headers)] } {
-    doc_body_append "<h3>Headers</h3>
+    append body "<h3>Headers</h3>
 <blockquote><table cellspacing=0 cellpadding=0>\n"
     foreach { name value } $property(headers) {
-	doc_body_append "<tr valign=top><th align=left>$name:&nbsp;</td><td>[ns_quotehtml $value]</td></tr>\n"
+	append body "<tr valign=top><th align=left>$name:&nbsp;</td><td>[ns_quotehtml $value]</td></tr>\n"
     }
-    doc_body_append "</table></blockquote>\n"
+    append body "</table></blockquote>\n"
 }
 
 if { [info exists property(oheaders)] } {
-    doc_body_append "<h3>Output Headers</h3>
+    append body "<h3>Output Headers</h3>
 <blockquote><table cellspacing=0 cellpadding=0>\n"
     foreach { name value } $property(oheaders) {
-	doc_body_append "<tr valign=top><th align=left>$name:&nbsp;</td><td>[ns_quotehtml $value]</td></tr>\n"
+	append body "<tr valign=top><th align=left>$name:&nbsp;</td><td>[ns_quotehtml $value]</td></tr>\n"
     }
-    doc_body_append "</table></blockquote>\n"
+    append body "</table></blockquote>\n"
 }
 
 if { [info exists property(db)] } {
-    doc_body_append "<h3>Database Requests</h3>
+    append body "<h3>Database Requests</h3>
 <blockquote><table cellspacing=0 cellpadding=0>
 <tr><th bgcolor=black><font color=white>&nbsp;&nbsp;Duration&nbsp;&nbsp;</th><th bgcolor=black><font color=white>&nbsp;&nbsp;Pool&nbsp;&nbsp;</th><th bgcolor=black><font color=white>Command</th></tr>
 \n"
@@ -233,16 +228,12 @@ if { [info exists property(db)] } {
 	    append value "$command $handle<blockquote><pre>[ns_quotehtml $sql]</pre></blockquote>\n"
 	}
 
-	doc_body_append "<tr valign=top><td align=right bgcolor=$bgcolor nowrap>&nbsp;&nbsp;[format "%.f" [expr { ($end - $start) / 1000 }]]&nbsp;ms&nbsp;&nbsp;</td><td bgcolor=$bgcolor>&nbsp;&nbsp;$statement_pool&nbsp;&nbsp;</td><td bgcolor=$bgcolor>$value</td></tr>\n"
+	append body "<tr valign=top><td align=right bgcolor=$bgcolor nowrap>&nbsp;&nbsp;[format "%.f" [expr { ($end - $start) / 1000 }]]&nbsp;ms&nbsp;&nbsp;</td><td bgcolor=$bgcolor>&nbsp;&nbsp;$statement_pool&nbsp;&nbsp;</td><td bgcolor=$bgcolor>$value</td></tr>\n"
 	incr counter
 
 	incr total [expr { $end - $start }]
     }
-    doc_body_append "<tr><td bgcolor=black align=right><font color=white><b>&nbsp;&nbsp;[format "%.f" [expr { $total / 1000 }]]&nbsp;ms&nbsp;&nbsp;</td><th align=left>(total)</th></tr>\n"
-    doc_body_append "</table></blockquote>\n"
+    append body "<tr><td bgcolor=black align=right><font color=white><b>&nbsp;&nbsp;[format "%.f" [expr { $total / 1000 }]]&nbsp;ms&nbsp;&nbsp;</td><th align=left>(total)</th></tr>\n"
+    append body "</table></blockquote>\n"
 }
     
-
-doc_body_append "
-[ad_admin_footer]
-"

@@ -18,12 +18,10 @@ set database_enabled_p [nsv_get ds_properties database_enabled_p]
 
 set package_id [ad_conn package_id]
 
-doc_body_append "[ad_header "ACS Developer Support"]
+set page_title "Developer Support"
+set context {}
 
-<h3>ACS Developer Support</h3>
-[ad_context_bar "Request Index"]
-<hr>
-
+append body "
 <ul>
 <li><a href=\"shell\">OpenACS Shell</a>
 <li>Developer support information is currently
@@ -39,26 +37,26 @@ restricted to the following IP addresses:
 set enabled_ips [nsv_get ds_properties enabled_ips]
 set includes_this_ip_p 0
 if { [llength $enabled_ips] == 0 } {
-    doc_body_append "<li><i>(none)</i>\n"
+    append body "<li><i>(none)</i>\n"
 } else {
     foreach ip $enabled_ips {
 	if { [string match $ip [ad_conn peeraddr]] } {
 	    set includes_this_ip_p 1
 	}
 	if { [regexp {[\*\?\[\]]} $ip] } {
-	    doc_body_append "<li>IPs matching the pattern \"<code>$ip</code>\"\n"
+	    append body "<li>IPs matching the pattern \"<code>$ip</code>\"\n"
 	} else {
-	    doc_body_append "<li>$ip\n"
+	    append body "<li>$ip\n"
 	}
     }
 }
 if { !$includes_this_ip_p } {
-    doc_body_append "<li><a href=\"add-ip?ip=[ad_conn peeraddr]\">add your IP, [ad_conn peeraddr]</a>\n"
+    append body "<li><a href=\"add-ip?ip=[ad_conn peeraddr]\">add your IP, [ad_conn peeraddr]</a>\n"
 }
 
 set requests [nsv_array names ds_request]
 
-doc_body_append "
+append body "
 </ul>
 
 <li>Information is being swept every [ad_parameter DataSweepInterval "developer-support" 900] sec
@@ -85,9 +83,9 @@ and has a lifetime of [ad_parameter DataLifetime "developer-support" 900] sec
 "
 
 if { [llength $requests] == 0 } {
-    doc_body_append "There is no request information available."
+    append body "There is no request information available."
 } else {
-    doc_body_append "
+    append body "
 <table cellspacing=0 cellpadding=0>
 <tr bgcolor=#AAAAAA>
 <th>Time</th>
@@ -157,7 +155,7 @@ if { [llength $requests] == 0 } {
 		set query ""
 	    }
 
-	    doc_body_append "
+	    append body "
 <tr bgcolor=[lindex $colors [expr { $counter % [llength $colors] }]]>
 <td align=center>&nbsp;$start&nbsp;</td>
 <td align=right>&nbsp;$duration&nbsp;</td>
@@ -169,15 +167,10 @@ if { [llength $requests] == 0 } {
         }
     }
     if { $show_more > 0 } {
-	doc_body_append "<tr><td colspan=4 align=right><a href=\"index?request_limit=0\"><i>show $show_more more requests</i></td></tr>\n"
+	append body "<tr><td colspan=4 align=right><a href=\"index?request_limit=0\"><i>show $show_more more requests</i></td></tr>\n"
     }
 
-    doc_body_append "</table>\n"
+    append body "</table>\n"
 }
 
-doc_body_append "
-
-</blockquote>
-[ad_footer]
-"
-
+append body "</blockquote>"
