@@ -86,6 +86,7 @@ insert into cr_mime_types(label, mime_type, file_extension) values ('Audio Voice
 insert into cr_mime_types(label, mime_type, file_extension) values ('Audio Wave', 'audio/wave', 'wav');
 insert into cr_mime_types(label, mime_type, file_extension) values ('Archive Zip', 'application/zip', 'zip');
 insert into cr_mime_types(label, mime_type, file_extension) values ('Archive Tar', 'application/z-tar', 'tar');
+insert into cr_mime_types(label, mime_type, file_extension) values ('Unknown', '*/*', '');
 
 create table cr_content_mime_type_map (
   content_type  varchar(100)
