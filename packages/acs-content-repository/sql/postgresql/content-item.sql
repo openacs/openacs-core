@@ -2028,7 +2028,7 @@ begin
 
     PERFORM content_folder__move(move__item_id, move__target_folder_id,move__name);
 
-  elseif content_folder__is_folder(move__target_folder_id) = ''t'' then
+  elsif content_folder__is_folder(move__target_folder_id) = ''t'' then
    
 
     if content_folder__is_registered(move__target_folder_id,
@@ -2044,7 +2044,7 @@ begin
       where item_id = move__item_id;
     end if;
 
-  end if; end if;
+  end if;
 
   return 0; 
 end;' language 'plpgsql';
