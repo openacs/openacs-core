@@ -523,10 +523,12 @@ ad_proc -private apm_load_apm_file {
         if { [catch {
             # Open a destination file.
             set file_path [ns_tmpnam].apm
-            set fileChan [open $file_path w+ 0600]
+            set fileChan [open $file_path w 0640]
             # Open the channel to the server.
             set httpChan [lindex [ns_httpopen GET $url] 0]
             ns_log Debug "APM: Copying data from $url"
+            fconfigure $httpChan -encoding binary
+            fconfigure $fileChan -encoding binary
             # Copy the data
             fcopy $httpChan $fileChan
             # Clean up.
