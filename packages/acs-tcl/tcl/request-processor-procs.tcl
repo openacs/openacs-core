@@ -1211,6 +1211,83 @@ if { [apm_first_time_loading_p] } {
 }
 
 
+ad_proc -private ad_http_cache_control { } {
+
+    This adds specific headers to the http output headers for the current 
+    request in order to prevent user agents and proxies from caching 
+    the page.
+
+    <p>
+
+    It should be called only when the method to return the data to the 
+    client is going to be ns_return. In other cases, e.g. ns_returnfile,
+    one can assume that the returned content is not dynamic and can in
+    fact be cached. Besides that, aolserver implements its own handling
+    of Last-Modified headers with ns_returnfile. Also it should be
+    called as late as possible - shortly before ns_return, so that 
+    other code has the chance to set no_cache_control_p to 1 before
+    it runs.
+    
+    <p>
+
+    This proc can be disabled per request by calling
+    "ad_conn -set no_http_cache_control_p 1" before this proc is reached. 
+    It will not modify any headers if this variable is set to 1.
+    
+    <p>
+
+    If the acs-kernel parameter CacheControlP is set to 0 then
+    it's fully disabled.
+
+    @author Tilmann Singer (tils-oacs@tils.net)
+
+} {
+
+    if { ![parameter::get -package_id [ad_acs_kernel_id] -parameter HttpCacheControlP -default 0]} {
+	return
+    }
+
+    global ad_conn
+    if { [info exists ad_conn(no_http_cache_control_p)] && $ad_conn(no_http_cache_control_p) } {
+	return
+    }
+
+    set headers [ad_conn outputheaders]
+
+    # Check if any relevant header is already present - in this case
+    # don't touch anything. 
+    set modify_p 1
+
+    if { ([ns_set ifind $headers  "cache-control"] > -1 ||
+         [ns_set ifind $headers  "expires"] > -1) } {
+        set modify_p 0
+    } else {
+        for { set i 0 } { $i < [ns_set size $headers] } { incr i } {
+            if { [string tolower [ns_set key $headers $i]] == "pragma" &&
+                 [string tolower [ns_set value $headers $i]] == "no-cache" } {
+                set modify_p 0
+                break
+            }
+        }
+    }
+
+    # Set three headers, to be sure it won't get cached. If you are in
+    # doubt, check the spec:
+    # http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html
+
+    if { $modify_p } {
+        # actually add the headers
+        ns_setexpires 0
+        ns_set put $headers "Pragma" "no-cache"
+        ns_set put $headers "Cache-Control" "no-cache"
+    }
+    
+    # Prevent subsequent calls of this proc from adding the same
+    # headers again.
+    ad_conn -set no_http_cache_control_p 1
+}
+
+
 # -------------------------------------------------------------------------
 # procs for hostname-based subsites
 # -------------------------------------------------------------------------
@@ -1262,3 +1339,4 @@ ad_proc root_of_host {host} {
 ad_proc -private rp_lookup_node_from_host { host } {
     return [db_string  node_id { *SQL* } -default ""]
 } 
+

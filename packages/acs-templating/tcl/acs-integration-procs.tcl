@@ -85,12 +85,12 @@ ad_proc adp_parse_ad_conn_file {} {
     ad_conn -set subsite_id [site_node_closest_ancestor_package "acs-subsite"]
 
     set parsed_template [template::adp_parse [file root [ad_conn file]] {}]
-    db_release_unused_handles
 
     if {![empty_string_p $parsed_template]} {
         set mime_type [template::get_mime_type]
         set header_preamble [template::get_mime_header_preamble $mime_type]
-
-	ns_return 200 $mime_type "$header_preamble $parsed_template"
+	doc_return 200 $mime_type "$header_preamble $parsed_template"
+    } else {
+        db_release_unused_handles
     }
 }
