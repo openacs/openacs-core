@@ -4,7 +4,7 @@
 
 <fullquery name="valid_uninstalled_binding">      
    <querytext>
-     select contract_id, contract_name, impl_name,impl_id 
+     select contract_id, contract_name, impl_name, impl_owner_name, impl_id 
      from   valid_uninstalled_bindings
      order  by upper(contract_name), contract_name, upper(impl_name), impl_name
    </querytext>
@@ -12,7 +12,7 @@
 
 <fullquery name="invalid_uninstalled_binding">      
    <querytext>
-      select contract_id, contract_name, impl_name,impl_id 
+      select contract_id, contract_name, impl_name, impl_owner_name, impl_id 
       from   invalid_uninstalled_bindings
       order  by upper(contract_name), contract_name, upper(impl_name), impl_name
    </querytext>

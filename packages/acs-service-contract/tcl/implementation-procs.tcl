@@ -162,11 +162,17 @@ ad_proc -public acs_sc::impl::get_options {
     @author Peter Marklund
 } {
     set full_list [db_list_of_lists select_impl_options {
-        select impl_name,
+        select case when impl_pretty_name != '' then impl_pretty_name else impl_name end as impl_name,
                impl_id
         from acs_sc_impls
         where impl_contract_name = :contract_name
     }]
+
+    set impl_list [list]
+
+    if { ![empty_string_p $empty_label] } {
+        lappend impl_list [list $empty_label ""]
+    }
 
     if { [llength $exclude_names] > 0 } {
         # There are exclude names
@@ -179,11 +185,7 @@ ad_proc -public acs_sc::impl::get_options {
         }
     } else {
         # No exclude names, use all options
-        set impl_list $full_list
-    }
-
-    if { ![empty_string_p $empty_label] } {
-        lappend impl_list [list $empty_label ""]
+        set impl_list [concat $impl_list $full_list]
     }
 
     return $impl_list

@@ -1,6 +1,6 @@
   <master>
-    <property name="title">contract @contract_name;noquote@</property>
-    <property name="context">"one contract"</property>
+    <property name="title">Contract @contract_name;noquote@</property>
+    <property name="context">{@contract_name;noquote@}</property>
 
     <ul>
       <multiple name=contract>
@@ -17,17 +17,6 @@
 
     <h3>Valid Installed Bindings</h3>
 
-    <ul>
-      <if @valid_installed_binding:rowcount@ eq 0>
-        <li><i>None</i></li>
-      </if>
-      <else>
-        <multiple name=valid_installed_binding>
-          <li>@valid_installed_binding.impl_id@
-          @valid_installed_binding.impl_name@
-          (@valid_installed_binding.impl_owner_name@)
-          [<a href="binding-uninstall?contract_id=@valid_installed_binding.contract_id@&impl_id=@valid_installed_binding.impl_id@">Uninstall</a>]</li>
-        </multiple>
-      </else>
-    </ul>
+    <p><listtemplate name="bindings"></listtemplate></p>
+
 

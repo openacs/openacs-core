@@ -19,4 +19,26 @@ db_multirow contract contract {select o.contract_name, o.operation_name, o.opera
     order by o.contract_name, o.operation_name, t.msg_type_name, e.element_pos }
 
 
-db_multirow valid_installed_binding valid_installed_binding ""
+template::list::create \
+    -name bindings \
+    -multirow valid_installed_binding \
+    -elements {
+        impl_name {
+            label "Implementation Name"
+        }
+        impl_pretty_name {
+            label "Label"
+        }
+        impl_owner_name {
+            label "Owner"
+        }
+        uninstall {
+            label {}
+            link_url_eval {[export_vars -base binding-uninstall { contract_id impl_id }]}
+            link_html { title "Uninstall binding" }
+            display_template {Uninstall}
+            sub_class narrow
+        }
+    }
+
+db_multirow valid_installed_binding valid_installed_binding {}
