@@ -338,7 +338,8 @@ aa_register_case set_get_timezone {
         set desired_user_timezone [lindex [lindex $timezones [randomRange [expr [llength $timezones]-1]]] 0]
         set desired_system_timezone [lindex [lindex $timezones [randomRange [expr [llength $timezones]-1]]] 0]
         
-        with_catch catched_error {
+        set error_p 0
+        with_catch errmsg {
             # User timezone
             lang::user::set_timezone $desired_user_timezone
             aa_equals "User timezone retrieved is the same as the one set" [lang::user::timezone] $desired_user_timezone
@@ -360,7 +361,7 @@ aa_register_case set_get_timezone {
             aa_equals "Fallback to system timezone" [lang::conn::timezone] $desired_system_timezone
 
         } {
-            #
+            set error_p 1
         }
         
         # Clean up
@@ -368,10 +369,10 @@ aa_register_case set_get_timezone {
         lang::user::set_timezone $user_timezone
         ad_conn -set user_id $org_user_id
 
-        if { ![empty_string_p $catched_error] } {
+        if { $error_p } {
             # rethrow the error
             global errorInfo
-            error $catched_error $errorInfo
+            error $errmsg $errorInfo
         }
     }
 }
@@ -413,6 +414,7 @@ aa_register_case locale_language_fallback {
     set us_message [ad_generate_random_string]
     set gb_message [ad_generate_random_string]
     
+    set error_p 0
     with_catch saved_error {
         lang::message::register "en_US" $package_key $message_key $us_message
         
@@ -426,6 +428,7 @@ aa_register_case locale_language_fallback {
             [lang::message::lookup "en_GB" "$package_key.$message_key" "NOT FOUND"] \
             $gb_message
     } {
+        set error_p 1
         global errorInfo
         set saved_errorInfo $errorInfo
     }
@@ -434,8 +437,7 @@ aa_register_case locale_language_fallback {
     db_dml delete_msg { delete from lang_messages where package_key = :package_key and message_key = :message_key }
     db_dml delete_key { delete from lang_message_keys where package_key = :package_key and message_key = :message_key }
 
-    if { ![empty_string_p $saved_error] } {
-        # rethrow the error
+    if { $error_p } {
         error $saved_error $saved_errorInfo
     }
 }
