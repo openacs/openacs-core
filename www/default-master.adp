@@ -2,7 +2,7 @@
   <property name="title">@title;noquote@</property>
   <if @header_stuff@ not nil><property name="header_stuff">@header_stuff;noquote@</property></if>
   <if @focus@ not nil><property name="focus">@focus;noquote@</property></if>
-  <if @doc_type@ not nil><property name="focus">@doc_type;noquote@</property></if>
+  <if @doc_type@ not nil><property name="doc_type">@doc_type;noquote@</property></if>
 
 <div id="body">
   <div id="subsite-name">
