@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="acs-kernel" package_version="5.0.0a2" locale="en_US" charset="ISO-8859-1">
+<message_catalog package_key="acs-kernel" package_version="5.0.0b4" locale="en_US" charset="ISO-8859-1">
 
   <msg key="authentication_authority">Authority</msg>
   <description key="authentication_authority">The identifying label for an authentication server, such as an  LDAP or RADIUS server.</description>
 
   <msg key="common_add">Add</msg>
+  <msg key="common_Administration">Administration</msg>
   <msg key="common_apply">Apply</msg>
   <msg key="common_cancel">Cancel</msg>
   <msg key="common_close">Close</msg>
