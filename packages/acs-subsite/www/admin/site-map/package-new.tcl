@@ -30,16 +30,18 @@ if { [empty_string_p $instance_name] } {
 }
 
 db_transaction {
-    set context_id [db_string context_id {
-        select parent.object_id as context_id
-        from   site_nodes parent, site_nodes child
-        where  child.node_id = :node_id
-        and    parent.node_id = child.parent_id
-    }]
+
+    # Set the context_id to the object_id of the parent node
     # If the parent node didn't have anything mounted, use the current package_id as context_id
-    if { [empty_string_p $context_id] } {
-        set context_id [ad_conn package_id]
-    }    
+    set context_id [ad_conn package_id]
+    array set node [site_node::get -node_id $node_id]
+    if { ![empty_string_p $node(parent_id)] } {
+        array set parent_node [site_node::get -node_id $node(parent_id)]        
+
+        if { ![empty_string_p $parent_node(object_id)] } {
+            set context_id $parent_node(object_id)
+        }
+    }
 
     if { $new_node_p } {
         # Create a new node under node_id and mount the package there
