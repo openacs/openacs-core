@@ -15,9 +15,9 @@ set footer [ad_footer]
 
 # Test 3 checks that the timezone tables are installed
 # Need this data to check that test 4 works
-set cat_sql "SELECT key, lang, message, registered_p
+set cat_sql "SELECT key, locale, message, registered_p
                FROM lang_messages
-              ORDER BY key, lang"
+              ORDER BY key, locale"
 
 db_multirow catalog catalog_data $cat_sql
 

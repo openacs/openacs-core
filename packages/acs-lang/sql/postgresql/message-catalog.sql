@@ -9,11 +9,16 @@
 begin;
 
 create table lang_messages (    
-        key     	varchar(200),
-	lang		char(2) not null,
-        message         text,
-        registered_p	boolean,
-        constraint lang_messages_pk primary key (key, lang)
+  key                     varchar(200),
+  locale                  varchar(30) 
+                          constraint lang_messages_locale_fk
+                          references ad_locales(locale)
+                          constraint lang_messages_locale_nn
+                          not null,
+  message                 text,
+  registered_p            boolean,
+  constraint lang_messages_pk 
+  primary key (key, locale)
 );
 
 

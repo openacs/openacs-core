@@ -16,7 +16,7 @@ Message Catalog
 <group column=key>
 <tr>
 <td width=20></td>
-<td> @catalog.lang@</td>
+<td> @catalog.locale@</td>
 <td> @catalog.message@</td>
 </tr>
 </group>

@@ -14,23 +14,9 @@ ad_library {
 }
 
 
-ad_proc -private ad_locale_repeat {str k} {
-
-    Repeats a string.
-    
-    @param str    String to repeat
-    @param k      Number of times to repeat
-    @return       Repeated string
+ad_proc -private ad_locale_escape_vars_if_not_null {
+    list
 } {
-    set out {}
-    for {set i 0} {$i < $k} {incr i} {
-       append out $str
-    }
-    return $out
-}
-
-ad_proc -private ad_locale_escape_vars_if_not_null {list} {
-
     Processes a list of variables before they are passed into
     a regexp command.
 
@@ -38,7 +24,7 @@ ad_proc -private ad_locale_escape_vars_if_not_null {list} {
 } {
     foreach lm $list {
 	upvar $lm foreign_var
-	if {[exists_and_not_null foreign_var]} {
+	if { [exists_and_not_null foreign_var] } {
 	    set foreign_var "\[$foreign_var\]"
 	}
     }
@@ -52,7 +38,7 @@ ad_proc -public lc_parse_number {
     Converts a number to its canonical 
     representation by stripping everything but the 
     decimal seperator and triming left 0's so it 
-    wont be octal. It can process the following types of numbers:
+    won't be octal. It can process the following types of numbers:
     <ul>
     <li>Just digits (allows leading zeros).
     <li>Digits with a valid thousands separator, used consistently (leading zeros not allowed)
@@ -167,7 +153,7 @@ ad_proc -private lc_sepfmt {
     set group [lindex $grouping 0]
     
     while { 1 && $group > 0} { 
-        set re "$match[ad_locale_repeat $num_re $group])"
+        set re "$match[string repeat $num_re $group])"
         if { ![regsub -- $re $num "\\1$sep\\2" num] } { 
             break 
         } 
@@ -228,19 +214,15 @@ ad_proc -public lc_monetary_currency {
     @return            Formatted monetary amount
 } {
 
-    set row_returned [db_0or1row lc_currency_select {
-	SELECT fractional_digits
-               ,html_entity 
-          FROM currency_codes 
-         WHERE iso = :currency
-    }]
-    if {! $row_returned} {
+    set row_returned [db_0or1row lc_currency_select {}]
+
+    if { !$row_returned } {
 	ns_log Notice "Unsupported monetary currency, defaulting digits to 2"
 	set fractional_digits 2
 	set html_entity ""
     }
     
-    if {$label_p} {
+    if { $label_p } {
 	if {[string compare $style int] == 0} {
 	    set use_as_label $currency
 	} else {
@@ -522,11 +504,7 @@ ad_proc -public lc_time_utc_to_local {
 
     set local_time $time_value
     if {[catch {
-	set local_time [db_exec_plsql utc_to_local {
-	    begin
-	    :1 := to_char(timezone.utc_to_local(:tz, to_date(:time_value, 'YYYY-MM-DD HH24:MI:SS')), 'YYYY-MM-DD HH24:MI:SS');
-	    end;
-	}]
+	set local_time [db_exec_plsql utc_to_local {}]
     } errmsg]
     } {
 	ns_log Notice "Query exploded on time conversion from UTC, probably just an invalid date, $time_value: $errmsg"
@@ -552,11 +530,7 @@ ad_proc -public lc_time_local_to_utc {
 } {
     set utc_time $time_value
     if {[catch {
-	set utc_time [db_exec_plsql local_to_utc {
-	    begin
-	    :1 := to_char(timezone.local_to_utc(:tz, to_date(:time_value, 'YYYY-MM-DD HH24:MI:SS')), 'YYYY-MM-DD HH24:MI:SS');
-	    end;
-	}]
+	set utc_time [db_exec_plsql local_to_utc {}]
     } errmsg]
     } {
 	ns_log Notice "Query exploded on time conversion to UTC, probably just an invalid date, $time_value: $errmsg"
@@ -568,14 +542,13 @@ ad_proc -public lc_time_local_to_utc {
     }
 
     return $utc_time
-
 }
 
 ad_proc -public lc_list_all_timezones { } {
     @return list of pairs containing all  timezone names and offsets.
     Data drawn from acs-reference package timezones table
 } {
-    return [db_list_of_lists all_timezones {select unique tz, gmt_offset from timezones order by tz}]
+    return [db_list_of_lists all_timezones {}]
 }
 
 
@@ -631,4 +604,3 @@ ad_proc -private lc_leading_zeros {
 } {
     return [format "%0${n_desired_digits}d" $the_integer]
 }
-

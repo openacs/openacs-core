@@ -1,39 +1,35 @@
 <?xml version="1.0"?>
 <queryset>
 
-<fullquery name="ad_locale_charset_for_locale.charset_for_locale">      
+   <fullquery name="lang::user::locale.get_user_locale">      
       <querytext>
-      
-	select mime_charset
-	  from ad_locales 
-	 where locale = :locale
-    
+        select locale 
+        from   ad_locale_user_prefs 
+        where  user_id = :user_id
       </querytext>
-</fullquery>
+   </fullquery>
 
- 
-<fullquery name="ad_locale_locale_from_lang.default_locale">      
+
+   <fullquery name="lang::user::set_locale.user_locale_exists_p">
       <querytext>
-      
-	select locale 
-	  from ad_locales 
-	 where language = :language
-               and default_p = 't'
-    
+        select count(*) 
+        from   ad_locale_user_prefs 
+        where  user_id = :user_id
       </querytext>
-</fullquery>
+   </fullquery>
 
- 
-<fullquery name="ad_locale_locale_from_lang.default_locale">      
+
+   <fullquery name="lang::user::set_locale.update_user_locale">
       <querytext>
-      
-	select locale 
-	  from ad_locales 
-	 where language = :language
-               and default_p = 't'
-    
+        update ad_locale_user_prefs set locale = :locale where user_id = :user_id
       </querytext>
-</fullquery>
+   </fullquery>
 
- 
+
+   <fullquery name="lang::user::set_locale.insert_user_locale">
+      <querytext>
+         insert into ad_locale_user_prefs (user_id, locale) values (:user_id, :locale)
+      </querytext>
+   </fullquery>
+
 </queryset>
