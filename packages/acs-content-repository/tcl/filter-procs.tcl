@@ -171,7 +171,7 @@ ad_proc -public init { urlvar rootvar {content_root ""} {template_root ""} {cont
 
   # No item found, so do not handle this request
   if { ![info exists item_info] } { 
-      db_1row get_template_info "" -column_array item_info
+      db_0or1row get_template_info "" -column_array item_info
     
       if { ![info exists item_info] } { 
           ns_log Notice "No content found for url $url"
