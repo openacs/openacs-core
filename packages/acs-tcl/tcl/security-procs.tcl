@@ -1504,7 +1504,7 @@ ad_proc -private security::get_secure_location {} {
         regsub {^(?:http://)?} $secure_location {https://} secure_location
 
 	# remove port number if using nonstandard port
-        regexp {^(.*):(.*)?} $secure_location match secure_location port
+        regexp {^([^:]+):([0-9]+)} $secure_location match secure_location port
 
         # Add port number if non-standard
         set https_port [get_https_port]
