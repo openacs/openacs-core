@@ -39,4 +39,4 @@ set main_site_id [db_string main_site_id_select {
 
 ad_parameter -set "acs-admin/*" -package_id $main_site_id RestrictToSSL
 
-ns_returnredirect "/?done_p=1"
+ad_returnredirect "/?done_p=1"
