@@ -233,6 +233,7 @@ create table apm_package_versions (
     content_length     integer,
     distribution_uri   varchar2(1500),
     distribution_date  date,
+    auto_mount         varchar(50),
     constraint apm_package_vers_id_name_un unique(package_key, version_name)
 );
 
@@ -350,6 +351,12 @@ comment on column apm_package_versions.distribution_uri is '
 
 comment on column apm_package_versions.distribution_date is '
  When was the distribution tarball downloaded.
+';
+
+comment on column apm_package_versions.auto_mount is '
+ A dir under the main site site node where an instance of the package will be mounted
+ automatically upon installation. Useful for site-wide services that need mounting
+ such as general-comments and notifications.
 ';
 
 -- Metadata for the apm_package_versions object.
@@ -492,6 +499,31 @@ comment on table apm_package_owners is '
  manages the order of the authors.
 ';
 
+create table apm_package_callbacks (
+    version_id         integer 
+                       constraint apm_package_callbacks_vid_fk 
+                       references apm_package_versions(version_id)
+                       on delete cascade,
+    type               varchar(40),
+    proc               varchar(300),
+    constraint apm_package_callbacks_vt_un
+    unique (version_id, type)
+);
+
+comment on table apm_package_callbacks is '
+  This table holds names of Tcl procedures to invoke at the time (before or after) the package is
+  installed, instantiated, or mounted.        
+';
+
+comment on column apm_package_callbacks.proc is '
+  Name of the Tcl proc.
+';
+
+comment on column apm_package_callbacks.type is '
+  Indicates when the callback proc should be invoked, for example after-install. Valid
+  values are given by the Tcl proc apm_supported_callback_types.
+';
+
 -- Ths view faciliates accessing information about package versions by joining
 -- the apm_package_types information and acs_object_types information (which is
 -- invariant across versions) with the specific version information.
@@ -501,7 +533,7 @@ create or replace view apm_package_version_info as
     select v.package_key, t.package_uri, t.pretty_name, t.singleton_p, t.initial_install_p,
            v.version_id, v.version_name,
            v.version_uri, v.summary, v.description_format, v.description, v.release_date,
-           v.vendor, v.vendor_uri, v.enabled_p, v.installed_p, v.tagged_p, v.imported_p, v.data_model_loaded_p,
+           v.vendor, v.vendor_uri, v.auto_mount, v.enabled_p, v.installed_p, v.tagged_p, v.imported_p, v.data_model_loaded_p,
            v.activation_date, v.deactivation_date,
            nvl(v.content_length,0) as tarball_length,
            distribution_uri, distribution_date
@@ -1141,6 +1173,7 @@ as
     release_date		in apm_package_versions.release_date%TYPE,
     vendor			in apm_package_versions.vendor%TYPE,
     vendor_uri			in apm_package_versions.vendor_uri%TYPE,
+    auto_mount                  in apm_package_versions.auto_mount%TYPE,
     installed_p			in apm_package_versions.installed_p%TYPE
 					default 'f',
     data_model_loaded_p		in apm_package_versions.data_model_loaded_p%TYPE
@@ -1172,6 +1205,7 @@ as
       release_date		in apm_package_versions.release_date%TYPE,
       vendor			in apm_package_versions.vendor%TYPE,
       vendor_uri		in apm_package_versions.vendor_uri%TYPE,
+      auto_mount                in apm_package_versions.auto_mount%TYPE,
       installed_p		in apm_package_versions.installed_p%TYPE
 				default 'f',
       data_model_loaded_p	in apm_package_versions.data_model_loaded_p%TYPE
@@ -2038,6 +2072,7 @@ as
       release_date		in apm_package_versions.release_date%TYPE,
       vendor			in apm_package_versions.vendor%TYPE,
       vendor_uri		in apm_package_versions.vendor_uri%TYPE,
+      auto_mount                in apm_package_versions.auto_mount%TYPE,
       installed_p		in apm_package_versions.installed_p%TYPE
 				default 'f',
       data_model_loaded_p	in apm_package_versions.data_model_loaded_p%TYPE
@@ -2059,11 +2094,11 @@ as
         );
       insert into apm_package_versions
       (version_id, package_key, version_name, version_uri, summary, description_format, description,
-      release_date, vendor, vendor_uri, installed_p, data_model_loaded_p)
+      release_date, vendor, vendor_uri, auto_mount, installed_p, data_model_loaded_p)
       values
       (v_version_id, package_key, version_name, version_uri,
        summary, description_format, description,
-       release_date, vendor, vendor_uri,
+       release_date, vendor, vendor_uri, auto_mount,
        installed_p, data_model_loaded_p);
       return v_version_id;		
     end new;
@@ -2125,10 +2160,10 @@ as
 
 	insert into apm_package_versions(version_id, package_key, version_name,
 					version_uri, summary, description_format, description,
-					release_date, vendor, vendor_uri)
+					release_date, vendor, vendor_uri, auto_mount)
 	    select v_version_id, package_key, copy.new_version_name,
 		   copy.new_version_uri, summary, description_format, description,
-		   release_date, vendor, vendor_uri
+		   release_date, vendor, vendor_uri, auto_mount
 	    from apm_package_versions
 	    where version_id = copy.version_id;
     
@@ -2141,6 +2176,11 @@ as
 	    select acs_object_id_seq.nextval, v_version_id, path, file_type, db_type
 	    from apm_package_files
 	    where version_id = copy.version_id;
+
+        insert into apm_package_callbacks (version_id, type, proc)
+                select v_version_id, type, proc
+                from apm_package_callbacks
+                where version_id = copy.version_id;
     
 	insert into apm_package_owners(version_id, owner_uri, owner_name, sort_key)
 	    select v_version_id, owner_uri, owner_name, sort_key
@@ -2163,6 +2203,7 @@ as
       release_date		in apm_package_versions.release_date%TYPE,
       vendor			in apm_package_versions.vendor%TYPE,
       vendor_uri		in apm_package_versions.vendor_uri%TYPE,
+      auto_mount                in apm_package_versions.auto_mount%TYPE,
       installed_p		in apm_package_versions.installed_p%TYPE
 				default 'f',
       data_model_loaded_p	in apm_package_versions.data_model_loaded_p%TYPE
@@ -2196,6 +2237,7 @@ as
 		release_date = trunc(sysdate),
 		vendor = edit.vendor,
 		vendor_uri = edit.vendor_uri,
+                auto_mount = edit.auto_mount,
 		installed_p = edit.installed_p,
 		data_model_loaded_p = edit.data_model_loaded_p
 	    where version_id = v_version_id;

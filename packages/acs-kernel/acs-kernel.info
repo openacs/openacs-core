@@ -7,7 +7,7 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>t</singleton-p>
 
-    <version name="4.6.1" url="http://openacs.org/repository/download/apm/acs-kernel-4.6.1.apm">
+    <version name="4.6.2" url="http://openacs.org/repository/download/apm/acs-kernel-4.6.2.apm">
     <database-support>
         <database>oracle</database>
         <database>postgresql</database>
@@ -17,7 +17,7 @@
         <release-date>2002-10-27</release-date>
         <vendor url="http://openacs.org/">OpenACS</vendor>
 
-        <provides url="acs-kernel" version="4.6"/>
+        <provides url="acs-kernel" version="4.6.2"/>          
 
         <files>
             <file type="package_spec" path="acs-kernel.info"/>
