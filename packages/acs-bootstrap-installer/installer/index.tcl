@@ -59,6 +59,30 @@ before proceeding to better understand what is contained in this release.
 
 "
 
+if { [file exists [acs_root_dir]/install.xml] } {
+
+    set file [open "[acs_root_dir]/install.xml"]
+    nsv_set acs_application node [xml_doc_get_first_node_by_name [xml_parse -persist [xml_prepare_data [read $file]]] application]
+    close $file
+
+    nsv_set acs_application name [apm_required_attribute_value [nsv_get acs_application node] name]
+    nsv_set acs_application pretty_name \
+        [apm_attribute_value -default [nsv_get acs_application name] [nsv_get acs_application node] pretty-name]
+    nsv_set acs_application home [apm_attribute_value -default "" [nsv_get acs_application node] home]
+
+    append body "<p>
+The installer will automatically install the [nsv_get acs_application pretty_name]
+application after the basic OpenACS tookit has been installed.
+"
+
+    if { ![string equal [nsv_get acs_application home] ""] } {
+        append body "<p>
+For more information about the [nsv_get acs_application pretty_name] application visit the
+<a href=\"[nsv_get acs_application home]\">[nsv_get acs_application pretty_name] home page</a>
+"
+    }
+}
+
 set error_p 0
 
 # do some error checking.

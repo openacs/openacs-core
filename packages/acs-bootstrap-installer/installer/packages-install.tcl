@@ -42,7 +42,7 @@ apm_packages_full_install -callback apm_ns_write_callback $pkg_list
 # Complete the initial install.
 
 if { ![ad_acs_admin_node] } {
-    ns_write "  <p><li> Completing Install sequence by mounting the main site and other core packages.<p>
+    ns_write "  <p><li>Mounting the main site and other core packages.<p>
     <blockquote><pre>"
 
     # Mount the main site
@@ -59,6 +59,96 @@ if { ![ad_acs_admin_node] } {
     apm_mount_core_packages
 
     ns_write "</pre></blockquote>"
+
+    # Now mount the application bundle if the install.xml file was found.
+
+    if { [nsv_exists acs_application node] } {
+
+        ns_write "<p>Loading packages for the [nsv_get acs_application pretty_name] application.</p>"
+
+        set actions [xml_node_get_children_by_name [nsv_get acs_application node] actions]
+        if { [llength $actions] > 1 } {
+            ns_log Error "Error in \"install.xml\": only one action node is allowed"
+            ns_write "<p>Error in \"install.xml\": only one action node is allowed<p>"
+            return
+        }
+        set actions [xml_node_get_children [lindex $actions 0]]
+
+        foreach action $actions {
+
+            switch -exact [xml_node_get_name $action] {
+
+                text {}
+
+                install {
+
+                    set install_spec_files [glob -nocomplain "[acs_root_dir]/packages/[apm_required_attribute_value $action package]/*.info"]
+
+                    set pkg_info_list [list]
+                    foreach spec_file [glob -nocomplain "[acs_root_dir]/packages/*/*.info"] {
+                        # Get package info, and find out if this is a package we should install
+                        if { [catch { array set package [apm_read_package_info_file $spec_file] } errmsg] } {
+                            # Unable to parse specification file.
+                            ns_log Error "$spec_file could not be parsed correctly.  The error: $errmsg"	
+                        }
+        
+                        # Save the package info, we may need it for dependency satisfaction later
+                        lappend pkg_info_list [pkg_info_new $package(package.key) $spec_file \
+                            $package(provides) $package(requires) ""]
+                    }
+
+                    set dependency_results [apm_dependency_check -pkg_info_all $pkg_info_list $install_spec_files]
+
+                    if { [lindex $dependency_results 0] == 1 } {
+                        apm_packages_full_install -callback apm_ns_write_callback [lindex $dependency_results 1]
+                    }
+                }
+
+                mount {
+
+                    set package_key [apm_required_attribute_value $action package]
+                    set instance_name [apm_required_attribute_value $action instance-name]
+                    set mount_point [apm_required_attribute_value $action mount-point]
+
+                    set parent_id [site_node::get_node_id -url "/"]
+
+                    if { [catch {
+                        db_transaction {            
+                            set node_id [site_node::new -name $mount_point -parent_id $parent_id]
+                        }
+                    } error] } {
+                        # There is already a node with that path, check if there is a package mounted there
+                        array set node [site_node::get -url "/$mount_point"]
+                        if { [empty_string_p $node(object_id)] } {
+                            # There is no package mounted there so go ahead and mount the new package
+                            set node_id $node(node_id)
+                        } else {
+                            # Don't unmount already mounted packages
+                            set node_id ""
+                        }
+                    }
+
+                    if { ![empty_string_p $node_id] } {
+
+                        ns_write "<p>Mounting new instance of package $package_key at /$mount_point<p>"
+                        site_node::instantiate_and_mount \
+                            -node_id $node_id \
+                            -node_name $mount_point \
+                            -package_name $instance_name \
+                            -package_key $package_key
+
+                    }
+
+                 }
+
+                 default {
+                     ns_log Error "Error in \"install.xml\": got bad node \"[xml_node_get_name $action]\""
+                 }
+
+            }
+
+        }
+    }
 }
 
 ns_write "All Packages Installed."
