@@ -52,7 +52,7 @@
 		  <if \@formgroup.col@ eq 1><tr></if>
 
 		  <if \@formgroup.rownum@ le \@formgroup:rowcount@>
-		    <td align=right>&nbsp;\@formgroup.widget@</td>      
+		    <td align=right>&nbsp;\@formgroup.widget;noquote@</td>      
 		    <td align=left><label for="@elements.form_id@:elements:@elements.id@:\@formgroup.option@">\@formgroup.label@</label></td> 
 		  </if><else><td>&nbsp;</td><td>&nbsp;</td></else>
 
