@@ -1563,7 +1563,15 @@ proc_doc util_httpopen {method url {rqset ""} {timeout 30} {http_referer ""}} "L
 
 # in the event of an error or timeout, -1 is returned
 
-proc_doc util_httppost {url formvars {timeout 30} {depth 0} {http_referer ""}} "Returns the result of POSTing to another Web server or -1 if there is an error or timeout.  formvars should be in the form \"arg1=value1&arg2=value2\"" {
+proc_doc util_httppost {url formvars {timeout 30} {depth 0} {http_referer ""}} {
+    Returns the result of POSTing to another Web server or -1 if there is an error or timeout.  
+    formvars should be in the form \"arg1=value1&arg2=value2\".  
+    <p> 
+    post is encoded as application/x-www-form-urlencoded.  See util_http_file_upload
+    for file uploads via post (encoded multipart/form-data).
+    <p> 
+    @see util_http_file_upload
+} {
     if [catch {
 	if {[incr depth] > 10} {
 		return -code error "util_httppost:  Recursive redirection:  $url"
@@ -2960,3 +2968,598 @@ ad_proc -public util_list_to_ns_set { aList } {
 
     return $setid
 }
+
+
+ad_proc util_http_file_upload {-file -data -binary:boolean -filename 
+                               -name {-mime_type */*} {-mode formvars} 
+                               {-rqset ""} url {formvars {}} {timeout 30} 
+                               {depth 10} {http_referer ""}} {
+    Implement client-side HTTP file uploads as multipart/form-data as per 
+    RFC 1867.
+    <p>
+
+    Similar to <a href="proc-view?proc=util_httppost">util_httppost</a>, 
+    but enhanced to be able to upload a file as <tt>multipart/form-data</tt>.  
+    Also useful for posting to forms that require their input to be encoded 
+    as <tt>multipart/form-data</tt> instead of as 
+    <tt>application/x-www-form-urlencoded</tt>.
+
+    <p>
+
+    The switches <tt>-file /path/to/file</tt> and <tt>-data $raw_data</tt>
+    are mutually exclusive.  You can specify one or the other, but not
+    both.  NOTE: it is perfectly valid to not specify either, in which
+    case no file is uploaded, but form variables are encoded using
+    <tt>multipart/form-data</tt> instead of the usual encoding (as
+    noted aboved).
+
+    <p>
+
+    If you specify either <tt>-file</tt> or <tt>-data</tt> you 
+    <strong>must</strong> supply a value for <tt>-name</tt>, which is
+    the name of the <tt>&lt;INPUT TYPE="file" NAME="..."&gt;</tt> form
+    tag.
+
+    <p>
+
+    Specify the <tt>-binary</tt> switch if the file (or data) needs
+    to be base-64 encoded.  Not all servers seem to be able to handle
+    this.  (For example, http://mol-stage.usps.com/mml.adp, which
+    expects to receive an XML file doesn't seem to grok any kind of
+    Content-Transfer-Encoding.)
+
+    <p>
+
+    If you specify <tt>-file</tt> then <tt>-filename</tt> is optional
+    (it can be infered from the name of the file).  However, if you
+    specify <tt>-data</tt> then it is mandatory.
+
+    <p>
+
+    If <tt>-mime_type</tt> is not specified then <tt>ns_guesstype</tt>
+    is used to try and find a mime type based on the <i>filename</i>.  
+    If <tt>ns_guesstype</tt> returns <tt>*/*</tt> the generic value
+    of <tt>application/octet-stream</tt> will be used.
+   
+    <p>
+
+    Any form variables may be specified in one of four formats:
+    <ul>
+    <li><tt>array</tt> (list of key value pairs like what [array get] returns)
+    <li><tt>formvars</tt> (list of url encoded formvars, i.e. foo=bar&x=1)
+    <li><tt>ns_set</tt> (an ns_set containing key/value pairs)
+    <li><tt>vars</tt> (a list of tcl vars to grab from the calling enviroment)
+    </ul>
+
+    <p>
+
+    <tt>-rqset</tt> specifies an ns_set of extra headers to send to
+    the server when doing the POST.
+
+    <p>
+
+    timeout, depth, and http_referer are optional, and are included
+    as optional positional variables in the same order they are used
+    in <tt>util_httppost</tt>.  NOTE: <tt>util_http_file_upload</tt> does
+    not (currently) follow any redirects, so depth is superfulous.
+
+    @author Michael A. Cleverly (michael@cleverly.com)
+    @creation-date 3 September 2002
+} {
+
+    # sanity checks on switches given
+    if {[lsearch -exact {formvars array ns_set vars} $mode] == -1} {
+        error "Invalid mode \"$mode\"; should be one of: formvars,\
+            array, ns_set, vars"
+    }
+ 
+    if {[info exists file] && [info exists data]} {
+        error "Both -file and -data are mutually exclusive; can't use both"
+    }
+
+    if {[info exists file]} {
+        if {![file exists $file]} {
+            error "Error reading file: $file not found"
+        }
+
+        if {![file readable $file]} {
+            error "Error reading file: $file permission denied"
+        }
+
+        set fp [open $file]
+        fconfigure $fp -translation binary
+        set data [read $fp]
+        close $fp
+
+        if {![info exists filename]} {
+            set filename [file tail $file]
+        }
+
+        if {[string equal */* $mime_type] || [empty_string_p $mime_type]} {
+            set mime_type [ns_guesstype $file]
+        }
+    }
+
+    set boundary [ns_sha1 [list [clock clicks] [clock seconds]]]
+    set payload {}
+
+    if {[info exists data] && [string length $data]} {
+        if {![info exists name]} {
+            error "Cannot upload file without specifing form variable -name"
+        }
+    
+        if {![info exists filename]} {
+            error "Cannot upload file without specifing -filename"
+        }
+    
+        if {[string equal $mime_type */*] || [empty_string_p $mime_type]} {
+            set mime_type [ns_guesstype $filename]
+    
+            if {[string equal $mime_type */*] || [empty_string_p $mime_type]} {
+                set mime_type application/octet-stream
+            }
+        }
+
+        if {$binary_p} {
+            set data [base64::encode base64]
+            set transfer_encoding base64
+        } else {
+            set transfer_encoding binary
+        }
+
+        append payload --$boundary \
+                       \r\n \
+                       "Content-Disposition: form-data; " \
+                       "name=\"$name\"; filename=\"$filename\"" \
+                       \r\n \
+                       "Content-Type: $mime_type" \
+                       \r\n \
+                       "Content-transfer-encoding: $transfer_encoding" \
+                       \r\n \
+                       \r\n \
+                       $data \
+                       \r\n
+    }
+
+
+    set variables [list]
+    switch -- $mode {
+        array {
+            set variables $formvars 
+        }
+
+        formvars {
+            foreach formvar [split $formvars &] {
+                set formvar [split $formvar  =]
+                set key [lindex $formvar 0]
+                set val [join [lrange $formvar 1 end] =]
+                lappend variables $key $val
+            }
+        }
+
+        ns_set {
+            for {set i 0} {$i < [ns_set size $formvars]} {incr i} {
+                set key [ns_set key $formvars $i]
+                set val [ns_set value $formvars $i]
+                lappend variables $key $val
+            }
+        }
+
+        vars {
+            foreach key $formvars {
+                upvar 1 $key val
+                lappend variables $key $val
+            }
+        }
+    }
+
+    foreach {key val} $variables {
+        append payload --$boundary \
+                       \r\n \
+                       "Content-Disposition: form-data; name=\"$key\"" \
+                       \r\n \
+                       \r\n \
+                       $val \
+                       \r\n
+    }
+
+    append payload --$boundary-- \r\n
+
+    if [catch {
+        if {[incr depth -1] <= 0} {
+            return -code error "util_http_file_upload:\
+                Recursive redirection: $url"
+        }
+
+        set http [util_httpopen POST $url $rqset $timeout $http_referer]
+        set rfd  [lindex $http 0]
+        set wfd  [lindex $http 1]
+
+        _ns_http_puts $timeout $wfd \
+            "Content-type: multipart/form-data; boundary=$boundary\r"
+        _ns_http_puts $timeout $wfd "Content-length: [string length $payload]\r"
+        _ns_http_puts $timeout $wfd \r
+        _ns_http_puts $timeout $wfd "$payload\r"
+        flush $wfd
+        close $wfd
+        
+        set rpset [ns_set new [_ns_http_gets $timeout $rfd]]
+        while 1 {
+            set line [_ns_http_gets $timeout $rfd]
+            if ![string length $line] break
+            ns_parseheader $rpset $line
+        }
+
+        set headers $rpset
+        set response [ns_set name $headers]
+        set status [lindex $response 1]
+        set length [ns_set iget $headers content-length]
+        if [string match "" $length] { set length -1 }
+        set err [catch {
+            while 1 {
+                set buf [_ns_http_read $timeout $rfd $length]
+                append page $buf
+                if [string match "" $buf] break
+                if {$length > 0} {
+                    incr length -[string length $buf]
+                    if {$length <= 0} break
+                }
+            }
+        } errMsg]
+
+        ns_set free $headers
+        close $rfd
+
+        if $err {
+            global errorInfo
+            return -code error -errorinfo $errorInfo $errMsg
+        }
+    } errmsg] {return -1}
+    
+    return $page
+}
+
+    
+# base64.tcl --
+#
+# Encode/Decode base64 for a string
+# Stephen Uhler / Brent Welch (c) 1997 Sun Microsystems
+# The decoder was done for exmh by Chris Garrigues
+#
+# Copyright (c) 1998-2000 by Ajuba Solutions.
+# See the file "license.terms" for information on usage and redistribution
+# of this file, and for a DISCLAIMER OF ALL WARRANTIES.
+# 
+# RCS: @(#) $Id$
+
+# Version 1.0 implemented Base64_Encode, Bae64_Decode
+# Version 2.0 uses the base64 namespace
+# Version 2.1 fixes various decode bugs and adds options to encode
+# Version 2.2 is much faster, Tcl8.0 compatible
+
+package require Tcl 8
+namespace eval base64 {
+    namespace export encode decode
+}
+
+if {![catch {package require Trf 2.0}]} {
+    # Trf is available, so implement the functionality provided here
+    # in terms of calls to Trf for speed.
+
+    # base64::encode --
+    #
+    #	Base64 encode a given string.
+    #
+    # Arguments:
+    #	args	?-maxlen maxlen? ?-wrapchar wrapchar? string
+    #	
+    #		If maxlen is 0, the output is not wrapped.
+    #
+    # Results:
+    #	A Base64 encoded version of $string, wrapped at $maxlen characters
+    #	by $wrapchar.
+    
+    ad_proc ::base64::encode {args} {
+        Tcl implementation of base64::encode from tcllib 1.1.  
+        (Tcllib is distributed under the same terms as the Tcl core, i.e., 
+        the BSD license).  See http://tcllib.sourceforge.net for the latest.
+
+        <p>
+
+        This version uses the Trf extension for speed.
+    } {
+	# Set the default wrapchar and maximum line length to match the output
+	# of GNU uuencode 4.2.  Various RFC's allow for different wrapping 
+	# characters and wraplengths, so these may be overridden by command line
+	# options.
+	set wrapchar "\n"
+	set maxlen 60
+
+	if { [llength $args] == 0 } {
+	    error "wrong # args: should be \"[lindex [info level 0] 0]\
+		    ?-maxlen maxlen? ?-wrapchar wrapchar? string\""
+	}
+
+	set optionStrings [list "-maxlen" "-wrapchar"]
+	for {set i 0} {$i < [llength $args] - 1} {incr i} {
+	    set arg [lindex $args $i]
+	    set index [lsearch -glob $optionStrings "${arg}*"]
+	    if { $index == -1 } {
+		error "unknown option \"$arg\": must be -maxlen or -wrapchar"
+	    }
+	    incr i
+	    if { $i >= [llength $args] - 1 } {
+		error "value for \"$arg\" missing"
+	    }
+	    set val [lindex $args $i]
+
+	    # The name of the variable to assign the value to is extracted
+	    # from the list of known options, all of which have an
+	    # associated variable of the same name as the option without
+	    # a leading "-". The [string range] command is used to strip
+	    # of the leading "-" from the name of the option.
+	    #
+	    # FRINK: nocheck
+	    set [string range [lindex $optionStrings $index] 1 end] $val
+	}
+    
+	# [string is] requires Tcl8.2; this works with 8.0 too
+	if {[catch {expr {$maxlen % 2}}]} {
+	    error "expected integer but got \"$maxlen\""
+	}
+
+	set string [lindex $args end]
+	set result [::base64 -mode encode -- $string]
+	regsub -all -- \n $result {} result
+
+	if {$maxlen > 0} {
+	    set res ""
+	    set edge [expr {$maxlen - 1}]
+	    while {[string length $result] > $maxlen} {
+		append res [string range $result 0 $edge]$wrapchar
+		set result [string range $result $maxlen end]
+	    }
+	    if {[string length $result] > 0} {
+		append res $result
+	    }
+	    set result $res
+	}
+
+	return $result
+    }
+
+    # base64::decode --
+    #
+    #	Base64 decode a given string.
+    #
+    # Arguments:
+    #	string	The string to decode.  Characters not in the base64
+    #		alphabet are ignored (e.g., newlines)
+    #
+    # Results:
+    #	The decoded value.
+
+    ad_proc ::base64::decode {string} {
+        Tcl implementation of base64::encode from tcllib 1.1.  
+        (Tcllib is distributed under the same terms as the Tcl core, i.e., 
+        the BSD license).  See http://tcllib.sourceforge.net for the latest.
+
+        <p>
+
+        This version uses the Trf extension for speed.
+    } {
+	::base64 -mode decode -- $string
+    }
+
+} else {
+    # Without Trf use a pure tcl implementation
+
+    namespace eval base64 {
+	variable base64 {}
+	variable base64_en {}
+
+	# We create the auxiliary array base64_tmp, it will be unset later.
+
+	set i 0
+	foreach char {A B C D E F G H I J K L M N O P Q R S T U V W X Y Z \
+		a b c d e f g h i j k l m n o p q r s t u v w x y z \
+		0 1 2 3 4 5 6 7 8 9 + /} {
+	    set base64_tmp($char) $i
+	    lappend base64_en $char
+	    incr i
+	}
+
+	#
+	# Create base64 as list: to code for instance C<->3, specify
+	# that [lindex $base64 67] be 3 (C is 67 in ascii); non-coded
+	# ascii chars get a {}. we later use the fact that lindex on a
+	# non-existing index returns {}, and that [expr {} < 0] is true
+	#
+
+	# the last ascii char is 'z'
+	scan z %c len
+	for {set i 0} {$i <= $len} {incr i} {
+	    set char [format %c $i]
+	    set val {}
+	    if {[info exists base64_tmp($char)]} {
+		set val $base64_tmp($char)
+	    } else {
+		set val {}
+	    }
+	    lappend base64 $val
+	}
+
+	# code the character "=" as -1; used to signal end of message
+	scan = %c i
+	set base64 [lreplace $base64 $i $i -1]
+
+	# remove unneeded variables
+	unset base64_tmp i char len val
+
+	namespace export encode decode
+    }
+
+    # base64::encode --
+    #
+    #	Base64 encode a given string.
+    #
+    # Arguments:
+    #	args	?-maxlen maxlen? ?-wrapchar wrapchar? string
+    #	
+    #		If maxlen is 0, the output is not wrapped.
+    #
+    # Results:
+    #	A Base64 encoded version of $string, wrapped at $maxlen characters
+    #	by $wrapchar.
+    
+    ad_proc ::base64::encode {args} {
+        Tcl implementation of base64::encode from tcllib 1.1.  
+        (Tcllib is distributed under the same terms as the Tcl core, i.e., 
+        the BSD license).  See http://tcllib.sourceforge.net for the latest.
+    } {
+	set base64_en $::base64::base64_en
+	
+	# Set the default wrapchar and maximum line length to match the output
+	# of GNU uuencode 4.2.  Various RFC's allow for different wrapping 
+	# characters and wraplengths, so these may be overridden by command line
+	# options.
+	set wrapchar "\n"
+	set maxlen 60
+
+	if { [llength $args] == 0 } {
+	    error "wrong # args: should be \"[lindex [info level 0] 0]\
+		    ?-maxlen maxlen? ?-wrapchar wrapchar? string\""
+	}
+
+	set optionStrings [list "-maxlen" "-wrapchar"]
+	for {set i 0} {$i < [llength $args] - 1} {incr i} {
+	    set arg [lindex $args $i]
+	    set index [lsearch -glob $optionStrings "${arg}*"]
+	    if { $index == -1 } {
+		error "unknown option \"$arg\": must be -maxlen or -wrapchar"
+	    }
+	    incr i
+	    if { $i >= [llength $args] - 1 } {
+		error "value for \"$arg\" missing"
+	    }
+	    set val [lindex $args $i]
+
+	    # The name of the variable to assign the value to is extracted
+	    # from the list of known options, all of which have an
+	    # associated variable of the same name as the option without
+	    # a leading "-". The [string range] command is used to strip
+	    # of the leading "-" from the name of the option.
+	    #
+	    # FRINK: nocheck
+	    set [string range [lindex $optionStrings $index] 1 end] $val
+	}
+    
+	# [string is] requires Tcl8.2; this works with 8.0 too
+	if {[catch {expr {$maxlen % 2}}]} {
+	    error "expected integer but got \"$maxlen\""
+	}
+
+	set string [lindex $args end]
+
+	set result {}
+	set state 0
+	set length 0
+
+
+	# Process the input bytes 3-by-3
+
+	binary scan $string c* X
+	foreach {x y z} $X {
+	    # Do the line length check before appending so that we don't get an
+	    # extra newline if the output is a multiple of $maxlen chars long.
+	    if {$maxlen && $length >= $maxlen} {
+		append result $wrapchar
+		set length 0
+	    }
+	
+	    append result [lindex $base64_en [expr {($x >>2) & 0x3F}]] 
+	    if {$y != {}} {
+		append result [lindex $base64_en [expr {(($x << 4) & 0x30) | (($y >> 4) & 0xF)}]] 
+		if {$z != {}} {
+		    append result \
+			    [lindex $base64_en [expr {(($y << 2) & 0x3C) | (($z >> 6) & 0x3)}]]
+		    append result [lindex $base64_en [expr {($z & 0x3F)}]]
+		} else {
+		    set state 2
+		    break
+		}
+	    } else {
+		set state 1
+		break
+	    }
+	    incr length 4
+	}
+	if {$state == 1} {
+	    append result [lindex $base64_en [expr {(($x << 4) & 0x30)}]]== 
+	} elseif {$state == 2} {
+	    append result [lindex $base64_en [expr {(($y << 2) & 0x3C)}]]=  
+	}
+	return $result
+    }
+
+    # base64::decode --
+    #
+    #	Base64 decode a given string.
+    #
+    # Arguments:
+    #	string	The string to decode.  Characters not in the base64
+    #		alphabet are ignored (e.g., newlines)
+    #
+    # Results:
+    #	The decoded value.
+
+    ad_proc ::base64::decode {string} {
+        Tcl implementation of base64::encode from tcllib 1.1.  
+        (Tcllib is distributed under the same terms as the Tcl core, i.e., 
+        the BSD license).  See http://tcllib.sourceforge.net for the latest.
+    } {
+	set base64 $::base64::base64
+
+	binary scan $string c* X
+	foreach x $X {
+	    set bits [lindex $base64 $x]
+	    if {$bits >= 0} {
+		if {[llength [lappend nums $bits]] == 4} {
+		    foreach {v w z y} $nums break
+		    set a [expr {($v << 2) | ($w >> 4)}]
+		    set b [expr {(($w & 0xF) << 4) | ($z >> 2)}]
+		    set c [expr {(($z & 0x3) << 6) | $y}]
+		    append output [binary format ccc $a $b $c]
+		    set nums {}
+		}		
+	    } elseif {$bits == -1} {
+		# = indicates end of data.  Output whatever chars are left.
+		# The encoding algorithm dictates that we can only have 1 or 2
+		# padding characters.  If x=={}, we have 12 bits of input 
+		# (enough for 1 8-bit output).  If x!={}, we have 18 bits of
+		# input (enough for 2 8-bit outputs).
+		
+		foreach {v w z} $nums break
+		set a [expr {($v << 2) | (($w & 0x30) >> 4)}]
+		
+		if {$z == {}} {
+		    append output [binary format c $a ]
+		} else {
+		    set b [expr {(($w & 0xF) << 4) | (($z & 0x3C) >> 2)}]
+		    append output [binary format cc $a $b]
+		}		
+		break
+	    } else {
+		# RFC 2045 says that line breaks and other characters not part
+		# of the Base64 alphabet must be ignored, and that the decoder
+		# can optionally emit a warning or reject the message.  We opt
+		# not to do so, but to just ignore the character. 
+		continue
+	    }
+	}
+	return $output
+    }
+}
+
+# don't want to barf if, per chance, a newer version is already available
+catch { package provide base64 2.2 }
