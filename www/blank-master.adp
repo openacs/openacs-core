@@ -3,6 +3,9 @@
   <head>
     <meta name="generator" content="OpenACS version @openacs_version@" />
     <title>@title;noquote@</title>
+    <if @developer_support_p@ true>
+      <link rel="stylesheet" type="text/css" href="/resources/acs-developer-support/acs-developer-support.css" media="all">
+    </if>
     <multiple name="header_links">
       <link rel="@header_links.rel@" type="@header_links.type@" href="@header_links.href@" media="@header_links.media@" />
     </multiple>
