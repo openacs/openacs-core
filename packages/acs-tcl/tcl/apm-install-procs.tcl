@@ -372,7 +372,7 @@ ad_proc -private apm_load_catalog_files {
     loading the files. During installation of OpenACS when the acs-lang package
     hasn't been installed yet this procedure won't do anything.
     That's not a problem since catalog files will be loaded upon next server
-    restart.
+    restart. Also caches the messages it loads.
 
     @author Peter Marklund
 } {
@@ -389,7 +389,10 @@ ad_proc -private apm_load_catalog_files {
     # Load message catalog files
     foreach catalog_rel_path $message_catalog_files {
         lang::catalog::import_messages_from_file "[acs_package_root_dir $package_key]/${catalog_rel_path}"
-    }	    
+    }
+
+    # Cache the messages
+    lang::message::cache -package_key $package_key
 }
 
 
@@ -521,6 +524,10 @@ ad_proc -private apm_package_install {
 	    apm_callback_and_log $callback "[string totitle $package_key] instantiated as $package_key.<p>"
 	}
     }
+
+    # Load Tcl libraries and xql queries so that restart is not necessary
+    apm_load_package -force_reload_p 1 $package_key
+
     return $version_id
 }
 
