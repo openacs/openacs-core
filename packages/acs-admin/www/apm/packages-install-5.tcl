@@ -22,7 +22,7 @@ ns_write "[apm_header  "Server Restart"]
 </p>
 
 <p>
-  <b>&raquo;</b> <a href=\"/acs-admin/apm\">Return to the APM index page</a>
+  <b>&raquo;</b> <a href=\"/acs-admin/apm/\">Return to the APM index page</a>
 </p>
 
 <p>
