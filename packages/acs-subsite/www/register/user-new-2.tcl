@@ -88,6 +88,9 @@ if { [db_string user_exists "select count(*) from registered_users where user_id
 	ad_return_error "User Creation Failed" "We were unable to create your user record in the database."
         ad_script_abort
     }
+
+    # Carry over the user's locale preference
+    lang::user::set_locale [lang::user::locale]
 }
 
 set script_abort 0
