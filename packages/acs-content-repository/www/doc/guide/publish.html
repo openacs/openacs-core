@@ -52,9 +52,12 @@ set template_root \
   [db_string template_root "select content_template.get_root_folder from dual"]
 
 # Serve the page
+# DRB: Note that content::init modifies the local variable the_root, which is treated
+# as though it's been passed by reference.   This requires that the redirect treat the
+# path as an absolute path within the filesystem.
 if { [content::init the_url the_root $content_root $template_root] } {
   set file "$the_root/$the_url"
-  rp_serve_abstract_file $file
+  rp_internal_redirect -absolute_path $file
 } else {
   ns_returnnotfound
 }
