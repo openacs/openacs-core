@@ -61,6 +61,74 @@ begin
    
 end;' language 'plpgsql';
 
+create or replace function apm_package_version__delete (integer)
+returns integer as '
+declare
+  delete__version_id             alias for $1;  
+begin
+      delete from apm_package_owners 
+      where version_id = delete__version_id; 
+
+      delete from apm_package_dependencies
+      where version_id = delete__version_id;
+
+      delete from apm_package_versions 
+	where version_id = delete__version_id;
+
+      PERFORM acs_object__delete(delete__version_id);
+
+      return 0; 
+end;' language 'plpgsql';
+
+create or replace function apm_package_version__copy (integer,integer,varchar,varchar,boolean)
+returns integer as '
+declare
+  copy__version_id             alias for $1;  
+  copy__new_version_id         alias for $2;  -- default null  
+  copy__new_version_name       alias for $3;  
+  copy__new_version_uri        alias for $4;  
+  copy__copy_owners_p          alias for $5;
+  v_version_id                 integer;       
+begin
+	v_version_id := acs_object__new(
+		copy__new_version_id,
+		''apm_package_version'',
+                now(),
+                null,
+                null,
+                null
+        );    
+
+	insert into apm_package_versions(version_id, package_key, version_name,
+					version_uri, summary, description_format, description,
+					release_date, vendor, vendor_uri, auto_mount)
+	    select v_version_id, package_key, copy__new_version_name,
+		   copy__new_version_uri, summary, description_format, description,
+		   release_date, vendor, vendor_uri, auto_mount
+	    from apm_package_versions
+	    where version_id = copy__version_id;
+    
+	insert into apm_package_dependencies(dependency_id, version_id, dependency_type, service_uri, service_version)
+	    select nextval(''t_acs_object_id_seq''), v_version_id, dependency_type, service_uri, service_version
+	    from apm_package_dependencies
+	    where version_id = copy__version_id;
+    
+        insert into apm_package_callbacks (version_id, type, proc)
+                select v_version_id, type, proc
+                from apm_package_callbacks
+                where version_id = copy__version_id;
+    
+        if copy__copy_owners_p then
+            insert into apm_package_owners(version_id, owner_uri, owner_name, sort_key)
+                select v_version_id, owner_uri, owner_name, sort_key
+                from apm_package_owners
+                where version_id = copy__version_id;
+        end if;
+    
+	return v_version_id;
+   
+end;' language 'plpgsql';
+
 -- *** Get rid of file-related data no longer used
 drop table apm_package_file_types;
 drop table apm_package_files;
