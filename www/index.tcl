@@ -60,7 +60,7 @@ set return_url "/"
 set form_vars [export_form_vars return_url time token_id hash]
 
 set allow_persistent_login_p [ad_parameter -package_id [ad_acs_kernel_id] AllowPersistentLoginP security 1]
-if {[ad_parameter -package_id [ad_acs_kernel_id] PersistentLoginDefaultP security 1]} {
+if {[ad_parameter -package_id [ad_acs_kernel_id] DefaultPersistentLoginP security 0]} {
     set remember_password "checked=\"checked\""
 } else {
     set remember_password ""
