@@ -167,9 +167,13 @@ foreach channel [lsort -decreasing [array names channel_tag]] {
                         ns_write "No files in package"
                     } else {
                         set cmd [list exec [apm_tar_cmd] cf -  2>/dev/null]
-                        lappend cmd -C $package_path
+
+                        # The path to the 'packages' directory in the checkout
+                        set packages_root_path [eval file join [lrange [file split $spec_file] 0 end-2]]
+                        
+                        lappend cmd -C $packages_root_path
                         foreach file $files {
-                            lappend cmd $file
+                            lappend cmd $package_key/$file
                         }
                         lappend cmd "|" [apm_gzip_cmd] -c ">" $apm_file
                         ns_log Notice "Executing: [ad_quotehtml $cmd]"
