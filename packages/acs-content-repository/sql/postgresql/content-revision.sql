@@ -330,7 +330,7 @@ end;' language 'plpgsql';
 
 -- procedure delete
 select define_function_args('content_revision__del','revision_id');
-create or replace function content_revision__delete (integer)
+create or replace function content_revision__del (integer)
 returns integer as '
 declare
   delete__revision_id    alias for $1;  
