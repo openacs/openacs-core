@@ -26,7 +26,6 @@ source functions.sh
 # Fetch config parameters
 serverroot=`get_config_param serverroot`
 aolserver_user=`get_config_param aolserver_user`
-use_timesaver_files=`get_config_param use_timesaver_files`
 
 echo "$0: Starting checkout for server path $serverroot with config_file $config_file and dotlrn=$dotlrn"
 
@@ -49,12 +48,14 @@ fi
 mkdir -p ${serverroot}-tmp
 cd ${serverroot}-tmp
 oacs_branch=`get_config_param oacs_branch`
-if [ -z "$oacs_branch" ]; then
-    oacs_branch="HEAD"
+if [ "$oacs_branch" == "HEAD"]; then
+    oacs_branch_switch=""
+else
+    oacs_branch_switch="-r $oacs_branch"
 fi
 echo "$0: Checking out acs-core from branch $oacs_branch"
 cvs -q -d :pserver:anonymous:@openacs.org:/cvsroot login
-cvs -q -z3 -d :pserver:anonymous@openacs.org:/cvsroot checkout -r $oacs_branch acs-core
+cvs -q -z3 -d :pserver:anonymous@openacs.org:/cvsroot checkout $oacs_branch_switch acs-core
 mv ${serverroot}-tmp/openacs-4 ${serverroot}
 rmdir ${serverroot}-tmp
 
@@ -62,26 +63,19 @@ if [ $dotlrn == "yes" ]; then
     # Checkout needed packages
     echo "$0: Checking out packages from branch $oacs_branch"
     cd ${serverroot}/packages
-    cvs -q -z3 -d :pserver:anonymous@openacs.org:/cvsroot co -r $oacs_branch dotlrn-prereq
-
-    # Copy short reference files to save time when installing datamodel
-    if parameter_true "$use_timesaver_files"; then
-	echo "$0: Copying timesaver files"
-	cp ${script_path}/ref-timezones-rules.sql \
-	    ${serverroot}/packages/ref-timezones/sql/common
-	cp ${script_path}/ref-timezones-data.sql \
-	    ${serverroot}/packages/ref-timezones/sql/common
-    fi
+    cvs -q -z3 -d :pserver:anonymous@openacs.org:/cvsroot co $oacs_branch_switch dotlrn-prereq
 
     # Checkout .LRN
     dotlrn_branch=`get_config_param dotlrn_branch`
-    if [ -z "$dotlrn_branch" ]; then
-        dotlrn_branch="HEAD"
-    fi
+    if [ "$dotlrn_branch" == "HEAD"]; then
+        dotlrn_branch_switch=""
+    else
+        dotlrn_branch_switch="-r $dotlrn_branch"
+    fi  
     echo "$0: Checking out .LRN from branch $dotlrn_branch"
     cvs -q -d :pserver:anonymous:@dotlrn.openacs.org:/dotlrn-cvsroot login
     cvs -q -z3 -d :pserver:anonymous@dotlrn.openacs.org:/dotlrn-cvsroot \
-        co -r $dotlrn_branch dotlrn-core
+        co $dotlrn_branch_switch dotlrn-core
 fi
 
 echo $(date) > ${serverroot}/www/SYSTEM/checkout-date
