@@ -37,7 +37,7 @@
             <tr>
               <noparse>
                 <formgroup id=@elements.id@>
-                  <td>\@formgroup.widget\@</td><td><label for="@elements.form_id@:elements:@elements.id@:\@formgroup.option\@">\@formgroup.label\@</label></td>
+                  <td>\@formgroup.widget;noquote\@</td><td><label for="@elements.form_id@:elements:@elements.id@:\@formgroup.option\@">\@formgroup.label\@</label></td>
                 </formgroup>
               </noparse>
             </tr>

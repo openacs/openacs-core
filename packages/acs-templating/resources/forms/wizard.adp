@@ -11,7 +11,7 @@
   <multiple name=elements>
   
     <if @elements.section@ not nil>
-      <tr><td colspan=2 bgcolor=#eeeeee><b>@elements.section@</b></td></tr>
+      <tr><td colspan=2 bgcolor=#eeeeee><b>@elements.section;noquote@</b></td></tr>
     </if>
 
     <group column="section">
@@ -27,14 +27,14 @@
       <else>
         <!-- If the widget is wide, display it in its own section -->
         <if @elements.wide@ not nil>
-          <tr><td colspan=2 bgcolor=#eeeeee><b>@elements.label@</b></td></tr>
+          <tr><td colspan=2 bgcolor=#eeeeee><b>@elements.label;noquote@</b></td></tr>
           <tr><td colspan=2>
         </if>
         <else>
           <tr><td><b>@elements.label@</b>&nbsp;&nbsp;
           <if @elements.help_text@ not nil>
             <br>&nbsp;&nbsp;
-            <font size=-1><noparse><formhelp id=@elements.id@></noparse></font><br>
+            <font size=-1><noparse><formhelp id=@elements.id;noquote@></noparse></font><br>
           </if></td>
         </else>
 
@@ -42,7 +42,7 @@
             <if @elements.wide@ not nil>
               <if @elements.help_text@ not nil>
                 &nbsp;&nbsp;
-                <font size=-1><noparse><formhelp id=@elements.id@></noparse></font><br>
+                <font size=-1><noparse><formhelp id=@elements.id;noquote@></noparse></font><br>
               </if>
             </if><else><td></else>
               <noparse>
@@ -61,7 +61,7 @@
 		</formgroup>
 
 		</table>
-		<formerror id=@elements.id@><br>
+		<formerror id=@elements.id;noquote@><br>
 		  <font color="red"><b>\@formerror.@elements.id@;noquote\@</b></font>
 		</formerror>
               </noparse>
@@ -71,12 +71,12 @@
 	    <if @elements.widget@ eq inform>
 	      <if @elements.wide@ not nil>
                 <noparse>
-                  <formerror  id=@elements.id@><br>
+                  <formerror  id=@elements.id;noquote@><br>
                     <font color="red"><b>\@formerror.@elements.id@;noquote\@</b></font><br>
                   </formerror>
                 </noparse>
               </if><else><td bgcolor=#EEEEEE></else>
-		<noparse><formwidget id=@elements.id@></noparse>
+		<noparse><formwidget id=@elements.id;noquote@></noparse>
 	      </td>
 	    </if>
 	    <else>
@@ -102,7 +102,7 @@
   <td align="right" colspan="2">
     <multiple name="elements">
       <if @elements.widget@ in "submit" "button">
-        <noparse><formwidget id=@elements.id@></noparse>
+        <noparse><formwidget id=@elements.id;noquote@></noparse>
       </if>
     </multiple>
   </td>
