@@ -3,15 +3,6 @@
 <queryset>
    <rdbms><type>oracle</type><version>8.1.6</version></rdbms>
 
-<fullquery name="name">      
-      <querytext>
-      
-    select acs_object.name(:package_id) from dual
-
-      </querytext>
-</fullquery>
-
- 
 <fullquery name="site_nodes">      
       <querytext>
       

@@ -10,6 +10,7 @@
     from   apm_package_types
     where  not (apm_package__singleton_p(package_key) = 1 and
                 apm_package__num_instances(package_key) >= 1)
+    and    package_key != 'acs-subsite'
     order  by upper(pretty_name)
 
         </querytext>
