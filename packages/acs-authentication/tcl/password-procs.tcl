@@ -481,8 +481,25 @@ ad_proc -private auth::password::email_password {
     {-username:required}
     {-authority_id:required}
     {-password:required}
+    {-message_type "Forgotten"}
+    {-subject_msg_key ""}
+    {-body_msg_key ""}
+    {-from ""}
 } {
     Send an email to ther user with given username and authority with the new password.
+
+    @param from             The email's from address. Can be in email@foo.com <Your Name> format.
+                            Defaults to ad_system_owner.
+    
+    @param message_type     Forgotten, Registration, or Admin_creation. Will be expanded into full message keys
+                            such as "acs-subsite.email_subject_Forgotten_password" and 
+                            "acs-subsite.email_body_Forgotten_password".
+
+    @param subject_msg_key  For even more control over the message going out, you can set this to the message key
+                            you wish to use for the subject. Overrides message_type.
+
+    @param body_msg_key     For even more control over the message going out, you can set this to the message key
+                            you wish to use for the body. Overrides message_type.
 
     @return Does not return anything. Any errors caused by ns_sendmail are propagated
 
@@ -491,9 +508,11 @@ ad_proc -private auth::password::email_password {
     set user_id [acs_user::get_by_username -authority_id $authority_id -username $username]
     acs_user::get -user_id $user_id -array user
 
+    # Set up variables for use in message key
     set reset_password_url [export_vars -base "[ad_url]/user/password-update" {user_id {old_password $password}}]
     set system_owner [ad_system_owner]
     set system_name [ad_system_name]
+    set system_url [ad_url]
     if { [auth::UseEmailForLoginP] } {
         set account_id_label [_ acs-subsite.Email]
         set account_id $user(email)
@@ -510,10 +529,33 @@ ad_proc -private auth::password::email_password {
     }
     set account_id_label [string range "$account_id_label[string repeat " " $length]" 0 [expr $length-1]]
     set password_label [string range "$password_label[string repeat " " $length]" 0 [expr $length-1]]
-    
-    set subject [_ acs-subsite.lt_Your_forgotten_passwo]
-    set body [_ acs-subsite.Forgotten_password_body]
+
+    set first_names $user(first_names)
+    set last_name $user(last_name)
+
+    if { [ad_conn untrusted_user_id] != 0 } {
+        acs_user::get -user_id [ad_conn untrusted_user_id] -array admin_user
+        set admin_first_names $admin_user(first_names)
+        set admin_last_name $admin_user(last_name)
+    } else {
+        set admin_first_names {}
+        set admin_last_name {}
+    }
         
+    if { [empty_string_p $subject_msg_key] } {
+        set subject_msg_key "acs-subsite.email_subject_${message_type}_password"
+    }
+    if { [empty_string_p $body_msg_key] } {
+        set body_msg_key "acs-subsite.email_body_${message_type}_password"
+    }
+
+    set subject [_ $subject_msg_key]
+    set body [_ $body_msg_key]
+        
+    if { [empty_string_p $from] } {
+          set from [ad_system_owner]
+      }
+
     # Send email
     ns_sendmail $user(email) $system_owner $subject $body
 }
