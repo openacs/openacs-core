@@ -351,7 +351,7 @@ html>body #subnavbar { bottom: 0px }
 /**********************************************************************/
 
 
-/* Action list */
+/* Various forms of links */
 
 .action-list { 
   padding: 0;
@@ -411,6 +411,29 @@ a.button:active {
   border: solid 1px black;
 }
 
+a.admin:link, a.admin:visited {
+  color: #f00;
+  font-family: verdana;
+  font-size: 11px;
+  font-weight: normal;
+}
+
+a.admin:hover { 
+  color: #fff; 
+  background: #f00;
+}
+
+
+ul.action-links li {
+  list-style: circle url(/resources/acs-subsite/action-link-marker.png);
+  margin: 8px;
+  margin-left: -16px;
+}
+
+
+
+/* Text Styles */
+
 h1 {
   font-size: 120%;
   margin-bottom: 12px;
@@ -432,12 +455,12 @@ h4 {
   font-size: 85%;
 }
 
-
-ul.action-links li {
-  list-style: circle url(/resources/acs-subsite/action-link-marker.png);
-  margin: 8px;
-  margin-left: -16px;
+.highlight { 
+  background-color: #ffc; 
 }
+
+
+/* Portlets */
 
 .portlet h2 {
   background: #dddddd; 
