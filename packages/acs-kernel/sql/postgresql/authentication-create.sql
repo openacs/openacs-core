@@ -49,9 +49,13 @@ create table auth_authorities (
                              references acs_objects(object_id),
     -- batch sync
     -- auth_sync_retrieve implementation
-    get_doc_impl_id          integer references acs_objects(object_id),
+    get_doc_impl_id          integer 
+                             constraint auth_authority_getdoc_impl_fk
+                             references acs_objects(object_id),
     -- auth_sync_process implementation
-    process_doc_impl_id      integer references acs_objects(object_id),
+    process_doc_impl_id      integer 
+                             constraint auth_authority_procdoc_impl_fk
+                             references acs_objects(object_id),
     batch_sync_enabled_p     boolean default 'f'
                              constraint auth_authority_bs_enabled_p_nn
                              not null
