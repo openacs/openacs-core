@@ -1,8 +1,8 @@
 <master>
 <property name="context">@context@</property>
-<property name="title">Dependant relations exist</property>
+<property name="title">Dependent relations exist</property>
 
-You must remove the following dependant relations before you can
+You must remove the following dependent relations before you can
 remove the @rel.rel_type_pretty_name@ between @rel.object_id_one_name@
 and @rel.object_id_two_name@.
 

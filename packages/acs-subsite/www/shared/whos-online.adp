@@ -3,7 +3,7 @@
 <property name="context">@context@</property>
 
 <if @chat_system_name@ not nil>
-  This page is mostly useful in conjuction with 
+  This page is mostly useful in conjunction with 
   <a href="/chat">@chat_system_name@</a>.
 </if>
 

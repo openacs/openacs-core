@@ -4,7 +4,7 @@
 
 <form method="post" action="comment-edit-2.tcl">
 @export_vars@
-Story Behing Photo:<br />
+Story Behind Photo:<br />
 <textarea rows="6" cols="50" wrap="soft" name="description">
 @description@
 </textarea>
