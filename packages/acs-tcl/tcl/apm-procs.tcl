@@ -1131,24 +1131,6 @@ ad_proc -private apm_post_instantiation_tcl_proc_from_key { package_key } {
 }
 
 
-ad_proc -public -deprecated -warn apm_package_create_instance {
-    {-package_id 0}
-    instance_name 
-    context_id 
-    package_key
-} {
-    Creates a new instance of a package. Deprecated - please use
-    apm_package_instance_new instead.
-
-    @see apm_package_instance_new
-} {    
-    return [apm_package_instance_new \
-            -package_key $package_key \
-            -instance_name $instance_name \
-            -package_id $package_id \
-            -context_id $context_id]
-}
-
 ad_proc -public apm_package_rename {
     {-package_id ""}
     {-instance_name:required}

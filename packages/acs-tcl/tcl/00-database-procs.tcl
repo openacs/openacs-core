@@ -1047,7 +1047,7 @@ ad_proc -public db_list {{ -dbn "" } statement_name sql args } {
     Usage: <b>db_list</b> <i>statement-name sql</i> [ <tt>-bind</tt> <i>bind_set_id</i> | <tt>-bind</tt> <i>bind_value_list</i> ]
     
     @return a Tcl list of the values in the first column of the result of SQL query <tt>sql</tt>. 
-    If <tt>sql</tt> doesn't return any rows, returns an empty list. Analogous to <tt>database_to_tcl_list</tt>.
+    If <tt>sql</tt> doesn't return any rows, returns an empty list.
 
     @param dbn The database name to use.  If empty_string, uses the default database.
 } {
@@ -1075,7 +1075,7 @@ ad_proc -public db_list_of_lists {{ -dbn "" } statement_name sql args } {
     @return a Tcl list, each element of which is a list of all column 
     values in a row of the result of the SQL query<tt>sql</tt>. If 
     <tt>sql</tt> doesn't return any rows, returns an empty list. 
-    Analogous to <tt>database_to_tcl_list_list</tt>.
+
 
     @param dbn The database name to use.  If empty_string, uses the default database.
 } {

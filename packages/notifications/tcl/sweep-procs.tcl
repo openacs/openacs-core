@@ -10,12 +10,6 @@ ad_library {
 
 namespace eval notification::sweep {
 
-    ad_proc -deprecated -warn -public schedule_all {} {
-        This schedules all the notification procs.
-	DEPRECATED.
-    } {
-    }
-
     ad_proc -public cleanup_notifications {} {
         Clean up the notifications that have been sent out (DRB: inefficiently...).
     } {

@@ -864,48 +864,6 @@ ad_proc -public site_node::verify_folder_name {
 #
 #############
 
-ad_proc -deprecated -warn site_node_create {
-    {-new_node_id ""}
-    {-directory_p "t"}
-    {-pattern_p "t"}
-    parent_node_id
-    name
-} {
-    Create a new site node.  Returns the node_id
-
-    @see site_node::new
-} {
-    return [site_node::new \
-        -name $name \
-        -parent_id $parent_node_id \
-        -directory_p $directory_p \
-        -pattern_p $pattern_p \
-    ]
-}
-
-ad_proc -deprecated -warn site_node_create_package_instance {
-    { -package_id 0 }
-    { -sync_p "t" }
-    node_id
-    instance_name
-    context_id
-    package_key
-} {
-    Creates a new instance of the specified package and flushes the
-    in-memory site map (if sync_p is t). This proc is deprecated, please use
-    site_node::instantiate_and_mount instead.
-
-    @author Michael Bryzek (mbryzek@arsdigita.com)
-    @see site_node::instantiate_and_mount
-    @creation-date 2001-02-05
-
-    @return The package_id of the newly mounted package
-} {
-    return [site_node::instantiate_and_mount -node_id $node_id \
-                                             -package_name $instance_name \
-                                             -context_id $context_id \
-                                             -package_key $package_key]
-}
 
 ad_proc -public site_node_delete_package_instance {
     {-node_id:required}
@@ -920,42 +878,6 @@ ad_proc -public site_node_delete_package_instance {
         site_node::unmount -node_id $node_id
         apm_package_instance_delete $package_id
     }
-}
-
-ad_proc -public -deprecated -warn site_node_mount_application {
-    {-sync_p "t"}
-    {-return "package_id"}
-    parent_node_id
-    url_path_component
-    package_key
-    instance_name
-} {
-    Creates a new instance of the specified package and mounts it
-    beneath parent_node_id. Deprecated - please use the proc
-    site_node::instantiate_and_mount instead.
-
-    @author Michael Bryzek (mbryzek@arsdigita.com)
-    @creation-date 2001-02-05
-
-    @param sync_p Obsolete. If "t", we flush the in-memory site map
-    @param return (now ignored, always return package_id)
-    @param parent_node_id The node under which we are mounting this
-           application
-    @param url_path_component the url for the mounted instance (appended to the parent_node 
-           url)
-    @param package_key The type of package we are mounting
-    @param instance_name The name we want to give the package we are
-           mounting (used for the context bar string etc).
-
-    @see site_node::instantiate_and_mount
-
-    @return The package id of the newly mounted package
-} {
-    return [site_node::instantiate_and_mount \
-                -parent_node_id $parent_node_id \
-                -node_name $url_path_component \
-                -package_name $instance_name \
-                -package_key $package_key]
 }
 
 ad_proc -public site_map_unmount_application {
@@ -981,16 +903,6 @@ ad_proc -public site_map_unmount_application {
             site_node::delete -node_id $node_id
         }
     }
-}
-
-ad_proc -deprecated -warn site_node {url} {
-    Returns an array in the form of a list. This array contains
-    url, node_id, directory_p, pattern_p, and object_id for the
-    given url. If no node is found then this will throw an error.
-    
-    @see site_node::get 
-} {
-    return [site_node::get -url $url]
 }
 
 ad_proc -public site_node_id {url} {

@@ -1,13 +1,11 @@
-# File:        index.tcl
-# Package:     developer-support
-# Author:      jsalz@mit.edu
-# Date:        22 June 2000
-# Description: Index page for developer support.
-#
-# $Id$
+ad_page_contract {
+    Index page for developer support.
 
-ad_page_variables {
-    { request_limit 25 }
+    @author  jsalz@mit.edu
+    @creation-date        22 June 2000
+    @cvs-id $Id$
+} {
+    {request_limit:integer 25}
 }
 
 ds_require_permission [ad_conn package_id] "admin"

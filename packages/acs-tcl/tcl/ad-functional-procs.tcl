@@ -315,7 +315,7 @@ ad_proc -public thd {xs} "returns the third element of a list" {
 }
 
 # Example:
-# set people [database_to_tcl_list_list $db "select first_name, last_name, email ..."]
+# set people [db_list_of_lists get "select first_name, last_name, email ..."]
 # set first_names [map fst $people]
 # set last_names  [map snd $people]
 # set emails      [map thd $people]

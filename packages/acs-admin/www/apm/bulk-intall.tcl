@@ -33,7 +33,7 @@ foreach version_id $install {
 
     set ul_p 0
 
-    foreach file [apm_version_file_list -type data_model_create $version_id] {
+    foreach file [apm_get_package_files -package_key $package_key -file_type data_model_create] {
 	if { [string match *-drop.sql [file tail $file]] } {
 	    continue
 	}
@@ -50,7 +50,7 @@ foreach version_id $install {
         ns_write "</pre></blockquote>\n"
     }
 
-    foreach file [apm_version_file_list -type java_code $version_id] {
+    foreach file [apm_get_package_files -package_key $package_key -file_type java_code] {
 	if { !$ul_p } {
 	    ns_write "<ul>\n"
 	    set ul_p 1

@@ -139,16 +139,6 @@ ad_proc -deprecated ad_user_new {
     return $user_id
 }
 
-ad_proc -deprecated -warn ad_user_remove {
-    -user_id:required
-} {
-    completely remove a user from the system.
-    Use <code>acs_user::delete -permanent</code> instead
-    @see acs_user::delete
-} {
-    acs_user::delete -user_id $user_id -permanent
-}
-
     
 ad_proc -public person::new {
     {-first_names:required}

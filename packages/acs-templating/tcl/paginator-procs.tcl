@@ -100,7 +100,7 @@ ad_proc -public template::paginator::create { statement_name name query args } {
 
     if { ([string equal $row_ids {}] && ![nsv_exists __template_cache_timeout $cache_key]) || ([info exists opts(flush_p)] && [string equal $opts(flush_p) "t"]) } {
       if { [info exists opts(printing_prefs)] && ![empty_string_p $opts(printing_prefs)] } {
-	  ReturnHeadersNoCache "text/html"
+	  ReturnHeaders "text/html"
 	  ns_write "
 <html>
 <head>"

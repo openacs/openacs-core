@@ -79,7 +79,7 @@ switch $kind {
     procs {
         array set procs [list]
 
-        foreach path [apm_version_file_list -type tcl_procs $version_id] {
+        foreach path [apm_get_package_files -package_key $package_key -file_types tcl_procs] {
             if { [nsv_exists api_proc_doc_scripts "packages/$package_key/$path"] } {
                 foreach proc [nsv_get api_proc_doc_scripts "packages/$package_key/$path"] {
                     set procs($proc) 1
@@ -114,7 +114,7 @@ switch $kind {
     content {
         multirow create content_pages indentation full_path content_type name type first_sentence
         set last_components [list]
-        foreach path [apm_version_file_list -type content_page $version_id] {
+        foreach path [apm_get_package_files -package_key $package_key -file_types content_page] {
             set components [split $path "/"]
             if { [info exists doc_elements] } {
                 unset doc_elements
