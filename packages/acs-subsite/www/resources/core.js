@@ -113,9 +113,6 @@ function acs_RichText_Or_File_InputMethodChanged(form_name, richtext_name, radio
 /* HTMLArea (part of Richtext Widget) Support */
 
 function acs_initHtmlArea(editor_var, elementid) {
-    var config         = new HTMLArea.Config();
-    config.editorURL   = "/resources/acs-templating/htmlarea/";
-    editor_var = new HTMLArea(elementid, config);
     editor_var.generate();
     return false;
 }

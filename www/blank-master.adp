@@ -11,9 +11,12 @@
     </multiple>
 
     <if @acs_blank_master__htmlareas@ not nil>
+      <script type="text/javascript">
+      _editor_url = "/resources/acs-templating/htmlarea/";
+      _editor_lang = "en";
+      </script>
       <script type="text/javascript" src="/resources/acs-templating/htmlarea/htmlarea.js"></script>
-      <script type="text/javascript" src="/resources/acs-templating/htmlarea/lang/en.js"></script>
-      <script type="text/javascript" src="/resources/acs-templating/htmlarea/dialog.js"></script>
+      <script type="text/javascript">HTMLArea.init();</script>
 
       <style type="text/css">
       @import url(/resources/acs-templating/htmlarea/htmlarea.css);
