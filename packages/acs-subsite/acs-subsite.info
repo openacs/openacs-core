@@ -7,15 +7,16 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>f</singleton-p>
 
-    <version name="5.1.3" url="http://openacs.org/repository/download/apm/acs-subsite-5.1.3.apm">
+    <version name="5.1.4" url="http://openacs.org/repository/download/apm/acs-subsite-5.1.4.apm">
         <owner url="http://openacs.org">OpenACS</owner>
         <summary>Subsite</summary>
-        <release-date>2004-11-26</release-date>
+        <release-date>2005-01-09</release-date>
+        <maturity>3</maturity>
         <vendor url="http://openacs.org">OpenACS</vendor>
         <description format="text/html">Provides for creating subsites within the OpenACS Community System.  Aware of parties, groups, users, portraits.  Can be themed via a per subsite master template.</description>
 
 
-        <provides url="acs-subsite" version="5.1.3"/>
+        <provides url="acs-subsite" version="5.1.4"/>
         <requires url="acs-content-repository" version="5.0.0"/>
         <requires url="acs-kernel" version="5.0.0"/>
         <requires url="acs-tcl" version="5.0.0"/>

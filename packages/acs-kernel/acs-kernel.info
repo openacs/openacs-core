@@ -7,18 +7,14 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>t</singleton-p>
     
-    <version name="5.1.3" url="http://openacs.org/repository/download/apm/acs-kernel-5.1.3.apm">
+    <version name="5.1.4" url="http://openacs.org/repository/download/apm/acs-kernel-5.1.4.apm">
         <owner url="mailto:dhogaza@pacifier.com">Don Baccus</owner>
         <summary>Routines and data models providing the foundation for OpenACS-based Web services.</summary>
-        <release-date>2004-11-26</release-date>
+        <release-date>2005-01-09</release-date>
         <vendor url="http://openacs.org">OpenACS</vendor>
         <description format="text/html">The OpenACS kernel contains the core datamodel create and drop scripts for such things as objects, groups, partiies and the supporting PL/SQL and PL/pgSQL procedures.</description>
-        <maturity>
-          <platform id="openacs-core">
-            <level descr="Mature">2</level>
-          </platform>
-        </maturity>
-        <provides url="acs-kernel" version="5.1.3"/>
+        <maturity>3</maturity>
+        <provides url="acs-kernel" version="5.1.4"/>
         <callbacks>
         </callbacks>
         <parameters>

@@ -7,15 +7,16 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>f</singleton-p>
     
-    <version name="5.1.3" url="http://openacs.org/repository/download/apm/search-5.1.3.apm">
+    <version name="5.1.4" url="http://openacs.org/repository/download/apm/search-5.1.4.apm">
         <owner url="http://openacs.org">OpenACS</owner>
-        <release-date>2004-11-26</release-date>
+        <release-date>2005-01-09</release-date>
+        <maturity>3</maturity>
         <summary>Site wide search</summary>
         <vendor url="http://openacs.org">OpenACS</vendor>
         <description format="text/html">Site wide search implemented with service contracts, currently 
         only supports postgres via the OpenFTS driver.</description>
 
-        <provides url="search" version="5.1.3"/>
+        <provides url="search" version="5.1.4"/>
 
         <callbacks>
         </callbacks>

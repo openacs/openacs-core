@@ -60,11 +60,9 @@ aa_register_case content_item {
                                        ]
 
             aa_true "First item created" [expr $first_item_id == $returned_first_item_id]
-            # should be using content::item::get here, but it's not implemented
-            aa_true "First item exists" [expr $first_item_id == \
-                                         [db_string get_item \
-                                              "select item_id from
-                                               cr_items where item_id=:first_item_id and name='$test_name'"]]
+
+            aa_true "first item exists" [expr [content::item::get -item_id $first_item_id] == 1]
+
             aa_true "First item's revision exists" \
                 [expr \
                      {![string equal "" \
@@ -157,16 +155,6 @@ aa_register_case content_item {
                                                       -item_id $new_type_item_id \
                                                       -revision "latest" \
                                                       -array_name new_type_item] == 1]
-
-            #########################################################
-            # check that the extended attributes and the revision
-            # exist
-            #########################################################
-            # this test is obselete since content::item::get uses
-            # the content type view to retreive the latest revision
-            
-            
-
 
             #########################################################
             # copy it
