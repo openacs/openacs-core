@@ -305,9 +305,7 @@
 </xsl:template>
 
 <xsl:template match="action">
-  <pre class="action">
-    <xsl:call-template name="inline.charseq"/>
-  </pre>	
+    <span class="action"><xsl:call-template name="inline.charseq"/></span>
 </xsl:template>
 
 <xsl:template match="replaceable">
