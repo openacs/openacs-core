@@ -244,10 +244,10 @@ proc ad_proc args {
 
             if { [lsearch $arg_flags "boolean"] >= 0 } {
                 set default_values(${arg}_p) 0
-		append switch_code "            -$arg - -$arg=1 {
+		append switch_code "            -$arg - -$arg=1 - -$arg=t - -$arg=true {
                 ::uplevel ::set ${arg}_p 1
             }
-            -$arg=0 {
+            -$arg=0 - -$arg=f - -$arg=false {
                 ::uplevel ::set ${arg}_p 0
             }
 "
@@ -313,7 +313,7 @@ proc ad_proc args {
     nsv_set proc_doc $proc_name [lindex $doc_elements(main) 0]
     if { [nsv_exists proc_source_file $proc_name] \
 	    && [string compare [nsv_get proc_source_file $proc_name] [info script]] != 0 } {
-        ns_log Notice "Multiple definition of $proc_name in [nsv_get proc_source_file $proc_name] and [info script]"
+        ns_log Warning "Multiple definition of $proc_name in [nsv_get proc_source_file $proc_name] and [info script]"
     }
     nsv_set proc_source_file $proc_name [info script]
 
@@ -451,10 +451,11 @@ if {$flush_p} {
     </pre>
 
     <p>
-      However, you could invoke the procedure as <tt>foobar -foo=$some_boolean_value</tt>,
+      However, you could invoke the procedure as <tt>foobar -foo=$some_boolean_value</tt>
+      (where some_boolean_value can be 0, 1, t, f, true, false),
       which could make your procedure cleaner because you could write instead: 
       <tt>some_proc -flush=$foo_p $key</tt>.
-      
+    </p>
     <p>
       With named parameters, the same rule as the Tcl <tt>switch</tt> statement apply,
       meaning that <tt>--</tt> marks the end of the parameters. This is important if

@@ -208,7 +208,7 @@ ad_proc db_bootstrap_set_db_type { errors } {
     set long_error 0
     foreach pool $pools {
         if { [catch { set db [ns_db gethandle -timeout 15 $pool]}] || ![string compare $db ""] } {
-            ns_log Notice "Couldn't allocate a handle from database pool \"$pool\"."
+            ns_log Warning "$proc_name: couldn't allocate a handle from database pool \"$pool\"."
             lappend bad_pools "<li>OpenACS could not allocate a handle from database pool \"$pool\"."
             set long_error 1
             break
@@ -216,7 +216,7 @@ ad_proc db_bootstrap_set_db_type { errors } {
             set this_suffix ""
             if { [catch { set driver [ns_db dbtype $db] } errmsg] } {
                 set database_problem "RDBMS type could not be determined: $errmsg"
-                ns_log Error "RDBMS type could not be determined: $errmsg"
+                ns_log Error "$proc_name: RDBMS type could not be determined: $errmsg"
             } else {
                 foreach known_database_type [nsv_get ad_known_database_types .] {
                     if { ![string compare $driver [lindex $known_database_type 1]] } {
@@ -227,14 +227,14 @@ ad_proc db_bootstrap_set_db_type { errors } {
             }
             ns_db releasehandle $db
             if { [string length $this_suffix] == 0 } {
-                ns_log Notice "Couldn't determine RDBMS type of database pool \"$pool\"."
+                ns_log Notice "$proc_name: couldn't determine RDBMS type of database pool \"$pool\"."
                 lappend bad_pools "<li>OpenACS could not determine the RDBMS type associated with
     pool \"$pool\"."
                 set long_error 1
             } elseif { [string length [nsv_get ad_database_type .]] == 0 } {
                 nsv_set ad_database_type . $this_suffix
             } elseif { ![string match $this_suffix [nsv_get ad_database_type .]] } {
-                ns_log Notice "Database pool \"$pool\" type \"$this_suffix\" differs from
+                ns_log Notice "$proc_name: Database pool \"$pool\" type \"$this_suffix\" differs from
     \"[nsv_get ad_database_type .]\"."
                 lappend bad_pools "<li>Database pool \"$pool\" is of type \"$this_suffix\".  The
     first database pool available to OpenACS was of type \"[nsv_get ad_database_type .]\".  All database
@@ -245,7 +245,7 @@ ad_proc db_bootstrap_set_db_type { errors } {
 
     if { [string length [nsv_get ad_database_type .]] == 0 } {
         set database_problem "RDBMS type could not be determined for any pool."
-        ns_log Error "RDBMS type could not be determined for any pool."
+        ns_log Error "$proc_name: RDBMS type could not be determined for any pool."
     }
 
     if { [llength $bad_pools] > 0 } {
