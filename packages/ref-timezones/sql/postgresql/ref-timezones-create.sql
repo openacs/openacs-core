@@ -176,7 +176,7 @@ begin
     return "timestamp" (p_local_varchar || ''+00'');
   end if;
 
-  return "timestamp" (p_local_varchar || ''+00'') - interval (gmt_offset || ''seconds'')
+  return "timestamp" (p_local_varchar || ''+00'') - "interval" (gmt_offset || ''seconds'')
   from   timezone_rules
   where  tz_id = p_tz_id and v_base_time between utc_start and utc_end;
 
@@ -194,7 +194,7 @@ begin
   from timezone_rules
   where  tz_id = p_tz_id and p_time between utc_start and utc_end;
 
-  return interval (v_offset || ''seconds'');
+  return "interval" (v_offset || ''seconds'');
 end;' language 'plpgsql';
     
 create function timezone__get_rawoffset (integer, timestamp) returns interval as '
@@ -207,8 +207,8 @@ begin
 
   select
     case isdst_p
-    when ''t'' then interval (gmt_offset || ''seconds'') - ''3600 seconds''
-    else interval (gmt_offset || ''seconds'')
+    when ''t'' then "interval" (gmt_offset || ''seconds'') - ''3600 seconds''
+    else "interval" (gmt_offset || ''seconds'')
     end
   into v_offset
   from   timezone_rules
@@ -252,14 +252,15 @@ begin
     where  tz_id = p_tz_id and p_timestamp between utc_start and utc_end;
   end if;
 
-  select to_char(p_timestamp + interval (extract(tz from p_timestamp) || ''seconds'') +
-         interval (gmt_offset || ''seconds''), p_format) || '' '' || v_abbrev
+  select to_char(p_timestamp + "interval" (
+     (extract(timezone_hour from p_timestamp) * 3600 + extract(timezone_minute from p_timestamp) * 60) || ''seconds'') +
+         "interval" (gmt_offset || ''seconds''), p_format) || '' '' || v_abbrev
     into v_date 
   from   timezone_rules
   where  tz_id = p_tz_id and p_timestamp between utc_start and utc_end;
 
   if not found then
-    select to_char(p_timestamp + interval (extract (tz from p_timestamp) || ''seconds''), p_format)
+    select to_char(p_timestamp + "interval" ((extract(timezone_hour from p_timestamp) * 3600 + extract(timezone_minute from p_timestamp) * 60) || ''seconds''), p_format)
       into v_date;
   end if;
 
