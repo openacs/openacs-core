@@ -61,11 +61,22 @@ template_tag master { params } {
 
 template_tag slave { params } {
 
+  #Start developer support frame around subordinate template.
+  if { [llength [info procs ::ds_enabled_p]] && [llength [info procs ::ds_adp_start_box]] } {
+      ::ds_adp_start_box
+  }
+
   template::adp_append_code "
     if { \[info exists __adp_slave\] } {
       append __adp_output \$__adp_slave
     }
   "
+
+  #End developer support frame around subordinate template.
+  if { [llength [info procs ::ds_enabled_p]] && [llength [info procs ::ds_adp_end_box]] } {
+      ::ds_adp_end_box
+  }
+
 }
 
 # Include another template in the current template
@@ -73,6 +84,11 @@ template_tag slave { params } {
 template_tag include { params } {
 
   set src [ns_set iget $params src]
+
+  #Start developer support frame around subordinate template.
+  if { [llength [info procs ::ds_enabled_p]] && [llength [info procs ::ds_adp_start_box]] } {
+      ::ds_adp_start_box -stub "\[template::util::url_to_file \"$src\" \"\$__adp_stub\"\]"
+  }
 
   # pass additional arguments as key-value pairs
 
@@ -102,6 +118,12 @@ template_tag include { params } {
   template::adp_append_code "        ns_log Error \"Error in include template \\\"\[template::util::url_to_file \"$src\" \"\$__adp_stub\"\]\\\": \$errmsg\n\$errorInfo\""
   template::adp_append_code "    }"
   template::adp_append_code "}"
+
+  #End developer support frame around subordinate template.
+  if { [llength [info procs ::ds_enabled_p]] && [llength [info procs ::ds_adp_end_box]] } {
+      ::ds_adp_end_box -stub "\[template::util::url_to_file \"$src\" \"\$__adp_stub\"\]"
+  }
+
 }
 
 # Repeat a template chunk for each row of a multirow data source
@@ -570,6 +592,11 @@ template_tag include-optional { chunk params } {
 
   set src [ns_set iget $params src]
 
+  #Start developer support frame around subordinate template.
+  if { [llength [info procs ::ds_enabled_p]] && [llength [info procs ::ds_adp_start_box]] } {
+      ::ds_adp_start_box -stub "\[template::util::url_to_file \"$src\" \"\$__adp_stub\"\]"
+  }
+
   # pass additional arguments as key-value pairs
 
   set command "template::adp_parse"
@@ -606,6 +633,12 @@ template_tag include-optional { chunk params } {
     template::util::lpop __adp_include_optional_output
   }
   "
+
+  #End developer support frame around subordinate template.
+  if { [llength [info procs ::ds_enabled_p]] && [llength [info procs ::ds_adp_end_box]] } {
+      ::ds_adp_end_box -stub "\[template::util::url_to_file \"$src\" \"\$__adp_stub\"\]"
+  }
+
 }
 
 # Insert the output from the include-optional tag
