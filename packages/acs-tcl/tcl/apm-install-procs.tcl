@@ -306,8 +306,8 @@ ad_proc -private apm_dependency_check {
                     set counter 0
                     foreach pkg_info_add $pkg_info_all {
                         # Will this package do anything to change whether this requirement has been satisfied?
-                        if { [apm_dependency_provided_p [lindex $req 0] [lindex $req 1]] == 0 && \
-                                [apm_dependency_provided_p -dependency_list [pkg_info_provides $pkg_info_add] \
+                        if { [string equal [pkg_info_key $pkg_info_add] [lindex $req 0]] &&
+                             [apm_dependency_provided_p -dependency_list [pkg_info_provides $pkg_info_add] \
                                 [lindex $req 0] [lindex $req 1]] == 1 } {
 
                             # It sure does. Add it to list of packages to install
