@@ -53,7 +53,7 @@ namespace eval template {
     
     # default settings
     variable defaults
-    set defaults [list method post section {} mode edit edit_buttons { { "OK" ok } } display_buttons { { "Edit" edit } }]
+    set defaults [list method post section {} mode edit edit_buttons { { "OK" ok } } display_buttons { { "Edit" edit } } show_required_p t]
   }
 
   namespace eval wizard {

@@ -103,6 +103,9 @@ ad_proc -public template::form::create { id args } {
 
     @option elements        A block of element specifications.
 
+    @option show_required_p Should the form template show which elements are required. 
+                            Use 1 or t for true, 0 or f for false. Defaults to true.
+
     @see template::form::get_button
     @see template::form::get_action
 
@@ -343,9 +346,12 @@ ad_proc -private template::form::template { id { style "" } } {
   
   if { [string equal $style {}] } { 
       set style [parameter::get \
-                     -package_id [apm_package_id_from_key "acs-templating"] \
+                     -package_id [ad_conn subsite_id] \
                      -parameter DefaultFormStyle \
-                     -default "standard"]
+                     -default [parameter::get \
+                                   -package_id [apm_package_id_from_key "acs-templating"] \
+                                   -parameter DefaultFormStyle \
+                                   -default "standard-lars"]]
   }
   set file_stub [template::get_resource_path]/forms/$style
 

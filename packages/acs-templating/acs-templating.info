@@ -7,7 +7,7 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>t</singleton-p>
     
-    <version name="4.6.2" url="http://www.openacs.org/repository/download/apm/acs-templating-4.6.2.apm">
+    <version name="4.6.4" url="http://www.openacs.org/repository/download/apm/acs-templating-4.6.4.apm">
     <database-support>
     </database-support>
         <owner>Karl Goldstein</owner>
@@ -19,13 +19,14 @@
 template system provides a way to use a single layout
 specification for many physical pages, so the overall layout of a site can be more easily administered.</description>
 
-        <provides url="acs-templating" version="4.6.2"/>
+        <provides url="acs-templating" version="4.6.4"/>
         <requires url="acs-kernel" version="4.6.2"/>
 
         <callbacks>
         </callbacks>
         <parameters>
-            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="DefaultFormStyle"  default="standard" description="The default form template to use if none is defined"/>
+            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="DefaultFormStyle"  default="standard-lars" description="The default form template to use if a particular form does not explicitly specify the form style to use."/>
+            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="DefaultListStyle"  default="table" description="The default list template to use if a particular list does not explicitly specify the list style to use."/>
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="ShowDataDictionariesP"  default="0" description="Offer data dictionaries on .dat/.fmt URL."/>
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="ShowCompiledTemplatesP"  default="0" description="Show thecompiled template (for debugging) at .cmp URL"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="RefreshCache"  default="as needed" description="When to re-translate templates.  Speical values: "/>
