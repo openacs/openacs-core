@@ -131,7 +131,6 @@ if { $allow_persistent_login_p } {
     }
 }
 
-set expired_message [list [list message [_ acs-subsite.Login_has_expired]]]
 ad_form -extend -name login -on_request {
     # Populate fields from local vars
 
@@ -155,7 +154,8 @@ ad_form -extend -name login -on_request {
     
     if { [string compare $hash $computed_hash] != 0 || \
              $time < [ns_time] - [ad_parameter -package_id [ad_acs_kernel_id] LoginExpirationTime security 600] } {
-        ad_returnredirect [export_vars -base [ad_conn url] $expired_message]
+        set message [_ acs-subsite.Login_has_expired]
+        ad_returnredirect [export_vars -base [ad_conn url] { message return_url }]
         ad_script_abort
     }
 
