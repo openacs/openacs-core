@@ -19,8 +19,3 @@ create table txt (
 create index fti_idx on txt using gist(fti);
 create index object_id_idx on txt (object_id);
 
--- set to default configuration
--- user may set up additional dictionaries and change the config
--- there will be a parameter to select the config name
-
-select set_curcrg('default');
