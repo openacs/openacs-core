@@ -27,15 +27,14 @@ ad_proc -private auth::authority::get_columns {} {
         authority_id
         short_name
         pretty_name
-        active_p
+        help_contact_text
+        enabled_p
         sort_order
         auth_impl_id
-        auth_p
         pwd_impl_id
         forgotten_pwd_url
         change_pwd_url
         register_impl_id
-        register_p
         register_url
     }
 }
@@ -78,15 +77,13 @@ ad_proc -public auth::authority::create {
 
       <li> pretty_name        Label for the authority to be shown in a list to users picking a authority.
 
-      <li> active_p           't' if this authority available, 'f' if it's disabled. Defaults to 't'.
+      <li> enabled_p           't' if this authority available, 'f' if it's disabled. Defaults to 't'.
 
       <li> sort_order         Sort ordering determines the order in which authoritys are listed in the user interface.
                               Defaults to 1.
 
       <li> auth_impl_id       The ID of the implementation of the 'auth_authentication' service contract.
                               Defaults to none.
-
-      <li> auth_p             Say 't' to enable authentication in this authority, 'f' to disable. Defaults ot 't'.
 
       <li> pwd_impl_id        The ID of the implementation of the 'auth_password' service contract. Defaults to none.
 
@@ -98,8 +95,6 @@ ad_proc -public auth::authority::create {
 
       <li> register_impl_id   The ID of the implementation of the 'auth_register' service contract.
                               Defaults to none.
-
-      <li> register_p         Say 't' to enable registration in this authority, 'f' to disable. Defaults to 't'.
 
       <li> register_url       An alternative URL to redirect to when the user wants to register for an account.
                               Defaults to none.
