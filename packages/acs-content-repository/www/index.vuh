@@ -1,10 +1,17 @@
 ################## KLUDGE BY STAS ###############
 # Try and look up the item in the content repository
 #################################################
+ad_page_contract {
+   
 
+    @author Unknown
+    @creation-date Unknown
+    @cvs-id $Id$
+} {    
+    { revision_id "" }
+}
 
 # Get the paths
-
 set the_url [ad_conn path_info]
 set package_key [ad_conn package_key]
 set the_root [ns_info pageroot]
@@ -18,7 +25,7 @@ set template_root \
 # Serve the page
 
 ns_log notice "RESOLVING URL: $the_root $the_url"
-if { [content::init the_url the_root $content_root $template_root] } {
+if { [content::init_all the_url the_root $content_root $template_root $revision_id] } {
   set file "$the_root/$the_url"
   ns_log notice "RESOLVED URL: $file"
   rp_serve_abstract_file $file

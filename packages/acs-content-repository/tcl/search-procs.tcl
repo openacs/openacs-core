@@ -53,7 +53,7 @@ ad_proc content_search__url {
          where n.object_id = :package_id        
     "
     
-    return "[string trimright $root_url /]$url"
+    return "[string trimright $root_url /]$url?revision_id=$object_id"
 }
 
 ad_proc content_search__search_ids { 
