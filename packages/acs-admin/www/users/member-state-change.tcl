@@ -98,6 +98,9 @@ set message $email_message
 
 if [empty_string_p $return_url] {
     set return_url "/acs-admin/users/one?[export_url_vars user_id]"
+} else {
+    ad_returnredirect $return_url
+    ad_script_abort
 }
 
 set context_bar [ad_admin_context_bar [list "index.tcl" "Users"] "$action"]
