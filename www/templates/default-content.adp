@@ -6,8 +6,10 @@
 <!-- <b>@pa.description;noquote@</b>
 <br>
 -->
-@pa.content;noquote@
 </span>
+<div id="page-body">
+@pa.content;noquote@
+</div>
 <br clear="left">
 
 <if @comments_link@ not nil>

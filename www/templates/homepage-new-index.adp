@@ -41,19 +41,8 @@
 </center>
 </div>
 <!-- END DOWNLOAD -->
-
-<!-- START ABOUT -->
-<div class="about">
 <include src="widgets/about" title="About OpenACS">
-</div>
-<!-- END ABOUT -->
-
-<!-- START FEATURES -->
-<div class="features">
-<include src="widgets/features" title="Featured Articles">
-</div>
-<!-- END FEATURES -->
-
+<include src="widgets/features" title="Features Articles">
 </div>
 <!-- END RIGHT PANEL -->
 

@@ -25,7 +25,7 @@ Questions and Answers:</span>
 <b>Q: <i>@content_items.title@</i></b>
 <br>
 <b>A:</b> 
-@content_items.content@
+@content_items.content;noquote@
 <br><br></span>
 </li>
 </multiple>

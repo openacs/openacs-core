@@ -1,6 +1,11 @@
 
 set n_users [util_memoize {db_string select_n_users "select count(user_id) from users" -default "unknown"} 300]
 
+# Who's Online
+set num_users_online [lc_numeric [whos_online::num_users]]
+
+set whos_online_url "[subsite::get_element -element url]shared/whos-online"
+
 
 # we seed with the no. of downloads on the old site.
 # LARS 2003-08-18: I've taken this out because it makes us look stupid
