@@ -115,7 +115,7 @@ ad_form -extend -name update -form {
     # Should we change the password management API to optionally check and return account_status?
     # In which case we'd have to also check local account status
 
-    if { [ad_conn user_id] } {
+    if { ![ad_conn user_id] } {
         ad_user_login $user_id
     }
     
