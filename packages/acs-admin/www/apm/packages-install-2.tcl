@@ -14,6 +14,9 @@ ad_page_contract {
 # Install and enable are sets of keys; need to turn them back into spec files.
 set spec_files [ad_get_client_property apm spec_files]
 
+# LARS HACK: I got rid of the separate install/enable checkboxes
+set install $enable
+
 # Clear out previous client properties.
 ad_set_client_property -clob t apm pkg_install_list ""
 ad_set_client_property -clob t apm pkg_enable_list ""

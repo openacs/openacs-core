@@ -11,7 +11,7 @@ ad_page_contract {
 }
 
 ad_return_top_of_page "[apm_header "Package Installation"]
-<p>Please wait while the installer loads ........<p>
+<p>Please wait while the installer searches your system for packages to install ...<p>
 
 "
 
@@ -74,31 +74,18 @@ if { [empty_string_p $spec_files] } {
     
     ns_write "
     <h2>Select Packages to Install</h2><p>
-    Please select the set of packages you'd like to install
-    and enable.
-
-    <ul>
-    <li>To <b>install</b> a package is to load its data model.
-    <li>To <b>enable</b> a package is to make it available to users.
-    </ul>
-    
-    If you think you might want to use a package later (but not right away),
-    install it but don't enable it.<p>"
-
-    if { [llength $not_compatible_list] > 0 } {
-        ns_write "<p>If there's a package that you can't find in the list below, it may be because it's <a href=\"#incompatible\">incompatible</a> with your system. </p>"
-    }
+    <p>Please select the set of packages you'd like to install.</p>"
 
     ns_write "
 
 <script language=javascript>
 function uncheckAll() {
-    for (var i = 0; i < [expr [llength $spec_files] * 2]; ++i)
+    for (var i = 0; i < [expr [llength $spec_files] ]; ++i)
         document.forms\[0\].elements\[i\].checked = false;
     this.href='';
 }
 function checkAll() {
-    for (var i = 0; i < [expr [llength $spec_files] * 2]; ++i)
+    for (var i = 0; i < [expr [llength $spec_files] ]; ++i)
         document.forms\[0\].elements\[i\].checked = true;
     this.href='';
 }
@@ -163,12 +150,13 @@ function checkAll() {
 }
 
 if { [llength $not_compatible_list] > 0 } {
-    ns_write "<h3><a name=\"incompatible\">Incompatible Packages</a></h3><ul><li>[join $not_compatible_list "<li>"]</ul>"
+    ns_log Notice "APM packages-install: Incompatible Packages\n- [join $not_compatible_list "\n- "]"
 }
 
 if { [llength $already_installed_list] > 0 } {
-    ns_write "<h3>Already Installed Packages</h3><ul><li>[join $already_installed_list "<li>"]</ul>"
+    ns_log Notice "APM packages-install: Already Installed Packages\n- [join $already_installed_list "\n- "]"
 }
+
 
 
 ns_write "

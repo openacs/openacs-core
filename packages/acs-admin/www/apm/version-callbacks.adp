@@ -35,7 +35,7 @@
 <h3>Help</h3>
 
 <p>
-  Here's the list of available callbacks and the parameters they will be called with.
+  Below is the list of available callbacks and the parameters they will be called with. Note that the parameters are sent as named parameters.
 </p>
 
 <p>
@@ -80,8 +80,8 @@
       before-upgrade
     </td>
     <td>
-      from_version_name
-      to_version_name
+      -from_version_name
+      -to_version_name
     </td>
   </tr>
 
@@ -90,8 +90,8 @@
       after-upgrade
     </td>
     <td>
-      from_version_name
-      to_version_name
+      -from_version_name
+      -to_version_name
     </td>
   </tr>
 
@@ -109,7 +109,7 @@
       after-instantiate
     </td>
     <td>
-      package_id      
+      -package_id      
     </td>
   </tr>
 
@@ -118,7 +118,7 @@
       before-uninstantiate
     </td>
     <td>
-      package_id
+      -package_id
     </td>
   </tr>
 
@@ -127,8 +127,8 @@
       after-mount
     </td>
     <td>
-      package_id
-      node_id
+      -package_id
+      -node_id
     </td>
   </tr>
 
@@ -137,8 +137,8 @@
       before-unmount
     </td>
     <td>
-      package_id 
-      node_id
+      -package_id 
+      -node_id
     </td>
   </tr>
 
