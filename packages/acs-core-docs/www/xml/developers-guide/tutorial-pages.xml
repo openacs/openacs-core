@@ -96,13 +96,13 @@ db_multirow \
     notes.  Edit
     <computeroutput>note-edit.tcl</computeroutput>:</para>
     <programlisting>ad_page_contract {
-    This is the main page for the package.  It displays all of the Notes and provides links to edit them and to create new Notes.
+    This is the view-edit page for notes.
 
     @author Your Name (you@example.com)
-    @cvs-id $Id$
- 
+    @cvs-id &#x0024;Id$
+
     @param item_id If present, assume we are editing that note.  Otherwise, we are creating a new note.
-} {
+} { 
     item_id:integer,optional
 }
 
@@ -116,8 +116,8 @@ ad_form -name note -form {
 } -edit_request {
     permission::require_write_permission -object_id $item_id
     mfp::note::get \
-	-item_id $item_id \
-	-array note_array 
+    -item_id $item_id \
+    -array note_array
 
     set title $note_array(title)
 
@@ -125,15 +125,18 @@ ad_form -name note -form {
     set context [list $page_title]
 } -new_data {
     mfp::note::add \
-	-title $title
+    -title $title \
+    -item_id $item_id
+    set message "Note $title added"
 } -edit_data {
     mfp::note::edit \
-	-item_id $item_id \
-	-title $title
+    -item_id $item_id \
+    -title $title
+     set message "Note $title changed"
 } -after_submit {
-    ad_returnredirect "."
+    ad_returnredirect -message $message "."
     ad_script_abort
-}</programlisting>
+} </programlisting>
     <para>And <computeroutput>note-edit.adp</computeroutput>:</para>
     <programlisting>&lt;master&gt;
   &lt;property name="title"&gt;@page_title;noquote@&lt;/property&gt;
@@ -148,7 +151,7 @@ ad_form -name note -form {
     This deletes a note
 
     @author Your Name (you@example.com)
-    @cvs-id $Id$
+    @cvs-id &#x0024;Id$
  
     @param item_id The item_id of the note to delete
 } {
