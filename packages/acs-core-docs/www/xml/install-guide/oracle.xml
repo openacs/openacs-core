@@ -16,6 +16,10 @@
 	Skip this section if you're not interested in Oracle.
 	</para>
 
+    <para>
+      Oracle is a very complex system ....to be continued by Joel
+    </para>
+       
 
 	<para>
         OpenACS &version; will install with Oracle 9i but has not been extensively tested so may still have bugs or tuning issues.
@@ -29,88 +33,118 @@
 	  url="http://openacs.org/new-file-storage/one-file?file_id=273">document</ulink>.
   
 	</para>
-  </note>
-
-  <sect2 id="install-oracle-getit" xreflabel="Acquire Oracle">
-	<title>Acquire Oracle 8.1.7 Enterprise Edition</title>
 
 	<para>
 
-	  You can obtain the software through a variety of methods (You'll need
-	  to become a member of <ulink
-	  url="http://technet.oracle.com">technet.oracle.com</ulink>, which is
-	  free):
+	  Useful links to find help on how to set up Oracle under Linux are:
+
+<ulink url="http://dizwell.com/html/oracle_on_linux.html">Dizwell - Howard
+        Roger's company - on Oracle on Linux</ulink>
+
+<ulink url="http://puschitz.com/">Werner Puschitz - Oracle on Red Hat Linux</ulink>
+  
+<ulink url="http://www.suse.com/us/business/certifications/certified_software/oracle/">SuSE/Oracle Support matrix</ulink>
 
 	</para>
 
-	<orderedlist>
-	  <listitem><para>
+  </note>
 
-          Order a CD from the <ulink
-            url="http://oraclestore.oracle.com">Oracle
-            Store</ulink>.  The cost is currently $39.95 for a 30-day
-            evaluation copy with delivery estimated between 3-4 business
-            days.  
+  <sect2 id="install-oracle-getit" xreflabel="Acquire Oracle">
+	<title>Acquire Oracle</title>
 
-        </para></listitem>
+    <para>
+      If you plan to use Oracle or you are already using alredy, you need to
+      decide on the operating system platform which you are going to
+      use. Follow the <a
+      href="http://metalink.oracle.com/metalink/plsql/ml2_documents.showDocument?p_database_id=NOT&p_id=223718.1">metalink
+      note 223718.1</a>to find certified platforms. You need an support
+      contract to have a metalink account - the bottom line of the
+      certification matrix is that free or inexpensive Linuxes are not
+      certified.
+    </para>
 
-      <listitem><para> 
+    <para>
+      If you don't have an account at <a href="http://otn.oracle.com">OTN</a>
+      get one: you can download the Oracle software from the <ulink
+      url="http://otn.oracle.com/software/products/database/oracle10g/index.html">
+      Oracle Downloads</ulink> page. It is also get the CDs shipped to you for
+      a nominal fee from the <a
+      href="http://oraclestore.oracle.com/OA_HTML/ibeCCtdMinisites.jsp?language=US">Oracle
+      Store</a>.
+    </para>
 
-          Download the software from the <ulink
-          url="http://otn.oracle.com/software/content.html">
-          Oracle Downloads</ulink> page. 
 
-        </para>
+    <para>
+      Each Oracle release comes with extensive and usually quite well-written
+    documentation. Your first step should be to thoroughly read the release
+    notes for your operating system and your Oracle version. Find the docs
+    here:
 
         <itemizedlist>
-          <listitem><para> 
-
-              Oracle 8.1.7 now comes with a Java RunTime
-              Environment built-in to the distribution, so you no longer
-              have to download and install it separately.
-
-            </para></listitem>
-
-          <listitem><para>
-
-              See <ulink
-              url="http://openacs.org/forums/message-view?message_id=33004">these
-              instructions</ulink> to download the 8.1.7.4 patchset. Note
-              that you can't back out of an Oracle patchset once it's
-              installed. You have to reinstall the whole thing from scratch.
-
-            </para>
+          <listitem>
+          <ulink
+          url="http://otn.oracle.com/documentation/oracle8i.html">Oracle 8i
+          Release Documentation</ulink>
           </listitem>
 
-          <listitem><para> 
+          <listitem>
+          <ulink
+          url="http://otn.oracle.com/documentation/oracle9i.html">Oracle 9i Release Documentation</ulink>
+          </listitem>
+          <listitem>
 
-              After the download is complete, untar the file
-              to a convenient location.  To do this, you will need to login
-              and cd to the directory where the archive is. 
-
-            </para>
-            <programlisting>
-$ cd /directory/where/oracle/is
-$ tar xvf oracle81701.tar</programlisting>
+          <ulink
+          url="http://otn.oracle.com/documentation/database10g.html">Oracle
+          10g Release Documentation</ulink>
           </listitem>
         </itemizedlist>
-      </listitem>
 
-      <listitem><para> 
+ <para> It is generally useful to run a particular Oracle version with its
+    latest patchset. At the time of writing these were 8.1.7.4 and 9.2.0.5,
+    both of which are considered to be very stable.
+    </para>
 
-          It used to be possible to get a free CD by mail, but
-          I can no longer find the link for that option.
+    <para> 
+      To be able to download a patchset, you need a (to-pay-for) account on <a
+      href="metalink.oracle.com">Metalink</a>. You may find the appropriate
+      patchset by following <a
+      href="http://openacs.org/forums/message-view?message_id=33004">Andrew's
+      suggestion</a>.
+    </para>
 
-        </para></listitem>
 
-    </orderedlist>
+
 </sect2>
 
   <sect2 id="install-oracle-keepinmind">
     <title>Things to Keep in Mind</title>
 
     <para>
+      Oracle is very well-documented software, the <a
+      href="http://tahiti.oracle.com">online documentation</a> comes with
+      printable PDFs and full-text search. Altogether there is more than
+      20.000 pages of documentation, so do not expect to understand Oracle
+      within in a few hours. The best starting pointing into Oracle is the
+      Concepts book. Here's the <a
+      href="http://otn.oracle.com/pls/tahiti/tahiti.to_toc?pathname=server.817%2Fa76965%2Ftoc.htm&remark=docindex">8i
+      version</a> and the <a
+      href="http://otn.oracle.com/pls/db92/db92.to_toc?pathname=server.920%2Fa96524%2Ftoc.htm&remark=docindex">9.2
+      version</a>.
+    </para>
 
+
+    <para>
+      To give you an idea of how configurable Oracle is and how much thought
+      you may need to put into buying the proper hardware and creating a sane
+      setup, you should thoroughly read Cary Millsap's <a
+      href="http://www.miracleas.dk/BAARF/0.Millsap1996.08.21-VLDB.pdf">Configuring
+      Oracle Server for VLDB</a> and the <a
+      href="http://download-west.oracle.com/docs/html/A97297_01/appg_ofa.htm#sthref787">Optimal
+      Flexible Architecture</a> standard.
+    </para>
+
+
+    <para>
       Throughout these instructions, we will refer to a number of
       configurable settings and advise certain defaults. With the exception
       of passwords, we advise you to follow these defaults unless you know
@@ -120,6 +154,28 @@ $ tar xvf oracle81701.tar</programlisting>
       linkend="install-oracle-defaults"/>.
 
     </para>
+
+<para>
+      In order for OpenACS to work properly you need to set the environment
+      appropriately.
+
+            <programlisting>
+export ORACLE_BASE=/ora8/m01/app/oracle
+export ORACLE_HOME=$ORACLE_BASE/product/8.1.7
+export PATH=$PATH:$ORACLE_HOME/bin
+export LD_LIBRARY_PATH=$ORACLE_HOME/lib:/lib:/usr/lib
+export ORACLE_SID=ora8
+export ORACLE_TERM=vt100
+export ORA_NLS33=$ORACLE_HOME/ocommon/nls/admin/data
+
+umask 022</programlisting>
+
+        <programlisting>
+open_cursors = 500</programlisting>
+      </listitem>
+        <programlisting>
+nls_date_format = &quot;YYYY-MM-DD&quot;</programlisting>
+
 
     <para>
 
@@ -131,6 +187,47 @@ $ tar xvf oracle81701.tar</programlisting>
 
     </para>
 
+  </sect2>
+  <sect2 id="install-oracle-monitoring">
+    <title>Creating an appropriate tuning and monitoring environment</title>
+    <para>
+      The first task is to create an appropriate environment for finding out
+      what is going on inside Oracle. Oracle provides Statspack, a package to
+      monitor and save the state of the v$ performance views. These reports
+      help finding severe problems by exposing summary data about the Oracle
+      wait interface, executed queries. You'll find the installation
+      instructions in $ORACLE_HOME/rdbms/admin/spdoc.txt. Follow the
+      instructions carefully and take periodic snapshots, this way you'll be
+      able to look at historical performance data.
+    </para>
+
+    <para>
+      Also turn on the timed_statistics in your init.ora file, so that
+      Statspack reports (and all other Oracle reports) are timed, which makes
+      them a lot more meaningful. The overhead of timing data is about 1% per
+      Oracle Support information.
+    </para>
+
+
+    <para>
+      To be able to get a overview of how Oracle executes a particular query,
+      install "autotrace". I usually follow the instructions here <ulink
+      url="http://asktom.oracle.com/~tkyte/article1/autotrace.html">http://asktom.oracle.com/~tkyte/article1/autotrace.html</ulink>.
+    </para>
+    
+    
+  <title>Make sure, that the Oracle CBO works with adequate statistics</title>
+  
+  <para>
+    The Oracle Cost Based optimizer is a piece of software that tries to find
+    the "optimal" execution plan for a given SQL statement. For that it
+    estimates the costs of running a SQL query in a particular way (by default
+    up to 80.000 permutations are being tested in a Oracle 8i). To get an
+    adequate cost estimate, the CBO needs to have adequate statistics. For
+    that Oracle supplies the <a
+    href="http://download-west.oracle.com/docs/cd/B10501_01/appdev.920/a96612/d_stats.htm#999107">dbms_stats
+    package</a>.
+  </para>
   </sect2>
 
   <sect2 id="install-oracle-preinstall">
