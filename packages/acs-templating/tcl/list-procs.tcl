@@ -2265,6 +2265,8 @@ ad_proc -public template::list::orderby::create {
                          is 'subst'ed in the caller's namespace, except for *_eval properties, which are 'subst'ed inside the multirow.
     
     @param  ulevel       Where we should uplevel to when doing the subst's. Defaults to '1', meaning the caller's scope.
+
+    @see template::list::orderby_clause
 } {
     # Get an upvar'd reference to list_properties
     template::list::get_reference -name $list_name
