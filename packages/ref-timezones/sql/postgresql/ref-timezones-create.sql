@@ -27,7 +27,8 @@
 --   information embedded) and converts it to a timestamptz, shifting it
 --   to UTC using the timezone information.   In other words, input_string
 --   is a date/time local to the given timezone while the returned timestamptz
---   is the same date/time shifted to UTC.
+--   is the same date/time shifted to UTC *if* you ignore the timezone information
+--   by for instance extracting the information with to_char().
 
 -- timezone__get_date(timezone, timestamptz, format string) returns varchar
 --   Converts the timestamptz to a pretty date in the given timezone using "to_char"
@@ -108,14 +109,14 @@ create index timezone_rules_idx2 on timezone_rules(tz_id, local_start, local_end
 -- TimeZone package
 -------------------------------------------------------------------------------
 
-create function rdbms_date(varchar) returns timestamptz as '
+create or replace function rdbms_date(varchar) returns timestamptz as '
 declare
   p_raw_date alias for $1;
 begin
   return "timestamptz" (p_raw_date || ''+00'');
 end;' language 'plpgsql';
 
-create function timezone__new (varchar, varchar) returns integer as '
+create or replace function timezone__new (varchar, varchar) returns integer as '
 declare
   p_tz alias for $1;
   p_gmt_offset alias for $2;
@@ -127,7 +128,7 @@ begin
   return 0;
 end;' language 'plpgsql';
 	 
-create function timezone__delete (integer) returns integer as '
+create or replace function timezone__delete (integer) returns integer as '
 declare
   p_tz_id alias for $1;
 begin
@@ -138,7 +139,7 @@ end;' language 'plpgsql';
 
 -- private function for looking up timezone id's
 
-create function timezone__get_id (varchar) returns integer as '
+create or replace function timezone__get_id (varchar) returns integer as '
 declare
   p_tz alias for $1;
   v_tz_id integer;
@@ -149,7 +150,7 @@ begin
   return v_tz_id;
 end;' language 'plpgsql';
 
-create function timezone__add_rule (varchar, varchar, integer, varchar, varchar, varchar, varchar, varchar) returns integer as '
+create or replace function timezone__add_rule (varchar, varchar, integer, varchar, varchar, varchar, varchar, varchar) returns integer as '
 declare
   p_tz alias for $1;
   p_abbrev alias for $2;
@@ -169,12 +170,11 @@ begin
     case isdst_p isdst_p when 0 then ''f'' else ''t''end;
 end;' language 'plpgsql';
 
-create function timezone__convert_to_utc (integer, varchar) returns timestamptz as '
+create or replace function timezone__convert_to_utc (integer, varchar) returns timestamptz as '
 declare
   p_tz_id alias for $1;
   p_local_varchar alias for $2;
   v_base_time timestamptz;
-foo varchar;
 begin
 
   select "timestamptz" (p_local_varchar || substr(gmt_offset,1,5)) into v_base_time
@@ -185,13 +185,14 @@ begin
     return "timestamptz" (p_local_varchar || ''+00'');
   end if;
 
-  return "timestamptz" (p_local_varchar || ''+00'') - "interval" (gmt_offset || ''seconds'')
+  return "timestamptz" (p_local_varchar) - "interval" (gmt_offset || ''seconds'')
   from   timezone_rules
   where  tz_id = p_tz_id and v_base_time between utc_start and utc_end;
 
 end;' language 'plpgsql';
 
-create function timezone__get_offset (integer, timestamptz) returns interval as '
+
+create or replace function timezone__get_offset (integer, timestamptz) returns interval as '
 declare
   p_tz_id alias for $1;
   p_time alias for $2;
@@ -206,7 +207,7 @@ begin
   return "interval" (v_offset || ''seconds'');
 end;' language 'plpgsql';
     
-create function timezone__get_rawoffset (integer, timestamptz) returns interval as '
+create or replace function timezone__get_rawoffset (integer, timestamptz) returns interval as '
 declare
   p_tz_id alias for $1;
   p_time alias for $2;
@@ -226,7 +227,7 @@ begin
   return v_offset;
 end;' language 'plpgsql';
 
-create function timezone__get_abbrev (integer, timestamptz) returns varchar as '
+create or replace function timezone__get_abbrev (integer, timestamptz) returns varchar as '
 declare
   p_tz_id alias for $1;
   p_time for $2;
@@ -243,7 +244,7 @@ end;' language 'plpgsql';
 
 -- Returns a formatted date with timezone info appended  
 
-create function timezone__get_date (integer, timestamptz, varchar, boolean) returns varchar as '
+create or replace function timezone__get_date (integer, timestamptz, varchar, boolean) returns varchar as '
 declare
   p_tz_id alias for $1;
   p_timestamp alias for $2;
@@ -278,7 +279,7 @@ begin
 end;' language 'plpgsql';
 
 -- Returns 't' if timezone is currently using DST
-create function timezone__isdst_p (integer, timestamptz) returns boolean as '
+create or replace function timezone__isdst_p (integer, timestamptz) returns boolean as '
 declare
   p_tz_id alias for $1;
   p_time alias for $2;
@@ -291,16 +292,6 @@ begin
   where  tz_id = p_tz_id and p_time between local_start and local_end;
 
   return v_isdst_p;
-end;' language 'plpgsql';
-
-create function timezone__get_zone_offset (integer, integer, timestamptz) returns interval as '
-declare
-  p_tz_this alias for $1;
-  p_tz_other alias for $2;
-  p_time alias for $3;
-begin
-  return timezone__get_offset(p_tz_this, timezone__utc_to_local(p_tz_this, p_time)) -
-	 timezone__get_offset(p_tz_other, timezone__utc_to_local(p_tz_other, p_time));
 end;' language 'plpgsql';
     
 -------------------------------------------------------------------------------

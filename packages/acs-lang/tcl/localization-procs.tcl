@@ -575,7 +575,7 @@ ad_proc -public lc_list_all_timezones { } {
     @return list of pairs containing all  timezone names and offsets.
     Data drawn from acs-reference package timezones table
 } {
-    return [db_list_of_lists all_timezones {select unique tz, gmt_offset from timezones order by tz}]
+    return [db_list_of_lists all_timezones {}]
 }
 
 

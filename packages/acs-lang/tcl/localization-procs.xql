@@ -15,7 +15,7 @@
  
 <fullquery name="lc_list_all_timezones.all_timezones">      
       <querytext>
-      select unique tz, gmt_offset from timezones order by tz
+      select distinct tz, gmt_offset from timezones order by tz
       </querytext>
 </fullquery>
 
