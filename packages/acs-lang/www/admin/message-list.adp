@@ -36,6 +36,9 @@
             <if @default_locale@ ne @current_locale@>
               <th>@locale_label@ Message</th>
             </if>
+            <if @create_p@ true>
+              <th></th>
+            </if>
           </tr>
           <multiple name="messages">
             <tr style="background: #EEEEEE">
@@ -50,6 +53,11 @@
                 <td>
                   <if @messages.translated_message@ not nil>@messages.translated_message@</if>
                   <else><span style="color: gray; font-style: italic;">Not translated</span></else>
+                </td>
+              </if>
+              <if @create_p@ true>
+                <td>
+                  <a href="@messages.delete_url@" title="Delete this messages"><img src="/shared/images/Delete16.gif" border="0" width="16" height="16"></a>
                 </td>
               </if>
             </tr>

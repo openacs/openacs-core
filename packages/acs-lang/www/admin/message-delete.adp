@@ -4,9 +4,11 @@
 
 <p />
 
-<p>Deleting locale <strong>@locale_label@</strong> [ <tt>@locale@</tt> ]</p>
+<p>
+  Deleting message <strong>@package_key@.@message_key@</strong>
+</p>
 
-<form action="locale-delete">
+<form action="message-delete">
 @form_export_vars;noquote@
 <input type="submit" value="Confirm delete">
 </form>

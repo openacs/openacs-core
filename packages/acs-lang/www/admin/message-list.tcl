@@ -87,9 +87,11 @@ if { [llength $where_clauses] == 0 } {
 
 db_multirow -extend { 
     edit_url
+    delete_url
     message_key_pretty
 } messages select_messages {} {
     set edit_url "edit-localized-message?[export_vars { locale package_key message_key show {return_url {[ad_return_url]}} }]"
+    set delete_url "message-delete?[export_vars { locale package_key message_key show {return_url {[ad_return_url]}} }]"
     set message_key_pretty "$package_key.$message_key"
 }
 

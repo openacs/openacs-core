@@ -4,7 +4,7 @@
   <property name="focus">search.q</property>
 
 <formtemplate id="search">
-Search <formwidget id="search_locale"> for <formwidget id="q"> <input type="submit" value="#acs-kernel.SearchButtonLabel#">
+Search <formwidget id="search_locale"> for <formwidget id="q"> <input type="submit" value="Search">
 </formtemplate>
 
 <if @submit_p@ true>
