@@ -3,7 +3,7 @@
 
 <fullquery name="user_info">      
       <querytext>
-      select first_names, last_name, email,
+      select first_names, last_name, username, email,
           coalesce(screen_name,'&lt; none set up &gt;') as screen_name,
           creation_date, creation_ip, last_visit, member_state,
           email_verified_p, url
