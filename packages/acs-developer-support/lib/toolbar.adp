@@ -31,6 +31,10 @@
           <span style="color: #cccccc;">|</span></li>
           <li><a href="/acs-lang/admin/" title="Add/edit message keys">I18n</a>
           <span style="color: #cccccc;">|</span></li>
+          <if @lang_admin_p@ true>
+                <li><a href="@toggle_translator_mode_url@">Translate</a>
+                <span style="color: #cccccc;">|</span></li>
+          </if>
           <li><a href="/doc/" title="View system documentation">Docs</a>
           <span style="color: #cccccc;">|</span></li>
           <li><a href="/api-doc/" title="View/search OpenACS Tcl API documentation">API doc</a></li>
