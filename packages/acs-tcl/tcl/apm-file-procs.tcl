@@ -402,7 +402,8 @@ ad_proc -public apm_version_file_list {
     $type is not specified) which support a given database (if specified) in a version.
     @param type Optionally specifiy what type of files to check, for instance "tcl_procs"
     @param db_type Optionally specifiy what type of database support to check, for instance
-    "postgresql"
+    "postgresql".  All files of the given type that are used by the given database version are
+    returned (i.e. all database-agnostic as well as the proper database-specific files).
     @param version_id The version to retrieve the file list from.
 
 } {
@@ -412,7 +413,7 @@ ad_proc -public apm_version_file_list {
 	set type_sql ""
     }
     if { ![empty_string_p $db_type] } {
-	set db_type_sql "and db_type = :db_type"
+	set db_type_sql "and (db_type = :db_type or db_type is null)"
     } else {
 	set db_type_sql ""
     }

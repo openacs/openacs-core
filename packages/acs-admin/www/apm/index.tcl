@@ -120,9 +120,9 @@ are present in the filesystem.
 It is <b>enabled</b> if it is scheduled to run at server startup
 and deliverable by the request processor.
 
-<p>If a Tcl library file (<tt>*-procs.tcl</tt>) is being <b>watched</b>,
-the request processor monitors it, reloading it into running interpreters
-whenever it is changed. This is useful while developing library code
+<p>If a Tcl library file (<tt>*-procs.tcl</tt>) or query file (<tt>*.xql</tt>) is being
+<b>watched</b>, the request processor monitors it, reloading it into running interpreters
+whenever it is changed. This is useful during development
 (so you don't have to restart the server for your changes to take
 effect). To watch a file, click its package key above, click <i>Manage file
 information</i> on the next screen, and click <i>watch</i> next to

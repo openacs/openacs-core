@@ -4,7 +4,7 @@
 <fullquery name="apm_package_version_enabled_p.apm_package_version_installed_p">
       <querytext>
 
-	select case when count(*) > 0 then 0 else 1 end from apm_package_versions
+	select case when count(*) = 0 then 0 else 1 end from apm_package_versions
 	where version_id = :version_id
 	and enabled_p = 't'
       </querytext>
@@ -23,7 +23,8 @@
         select file_id, path
         from   apm_package_files
         where  version_id = :version_id
-        and    file_type = 'tcl_procs'
+        and    file_type in ('tcl_procs', 'query_file')
+        and    (db_type is null or db_type = '[db_type]')
         order by path
     
       </querytext>

@@ -30,7 +30,7 @@ ad_library {
 #
 #     apm_library_mtime($path)
 #
-#         The modification time of $file (a *-procs.tcl or *-init.tcl file) the
+#         The modification time of $file (a *-procs.tcl, *-init.tcl or .xql file)
 #         when it was last loaded.
 #
 #     apm_version_procs_loaded_p($version_id)
@@ -162,7 +162,6 @@ ad_proc -private apm_mark_version_for_reload { version_id { file_info_var "" } }
     if { ![empty_string_p $file_info_var] } {
 	upvar $file_info_var file_info
     }
-    set files [apm_version_file_list -type "tcl_procs" $version_id]
 
     db_1row package_key_select "select package_key from apm_package_version_info where version_id = :version_id"
 
@@ -173,7 +172,8 @@ ad_proc -private apm_mark_version_for_reload { version_id { file_info_var "" } }
         select file_id, path
         from   apm_package_files
         where  version_id = :version_id
-        and    file_type = 'tcl_procs'
+        and    file_type in ('tcl_procs', 'query_file')
+        and    (db_type is null or db_type = '[db_type]')
         order by path
     } {
 	set full_path "[acs_package_root_dir $package_key]/$path"
@@ -183,6 +183,7 @@ ad_proc -private apm_mark_version_for_reload { version_id { file_info_var "" } }
 	# which differs the mtime it had when last loaded, mark to be loaded.
 	if { [file isfile $full_path] } {
 	    set mtime [file mtime $full_path]
+
 	    if { ![nsv_exists apm_library_mtime $relative_path] || \
 		    [nsv_get apm_library_mtime $relative_path] != $mtime } {
 		lappend changed_files $relative_path
@@ -217,7 +218,23 @@ ad_proc -private apm_version_load_status { version_id } {
         where version_id = :version_id
     }
 
-    foreach file [apm_version_file_list -type "tcl_procs" $version_id] {
+    foreach file [apm_version_file_list -type "tcl_procs" -db_type [db_type] $version_id] {
+	# If $file has never been loaded, i.e., it has been added to the version
+	# since the version was initially loaded, return needs_reload.
+	if { ![nsv_exists apm_library_mtime "packages/$package_key/$file"] } {
+	    return "needs_reload"
+	}
+
+	set full_path "[acs_package_root_dir $package_key]/$file"
+	# If $file had a different mtime when it was last loaded, return
+	# needs_reload. (If the file should exist but doesn't, just skip it.)
+	if { [file exists $full_path] && 
+	[file mtime $full_path] != [nsv_get apm_library_mtime "packages/$package_key/$file"] } {
+	    return "needs_reload"
+	}
+    }
+
+    foreach file [apm_version_file_list -type "query_file" -db_type [db_type] $version_id] {
 	# If $file has never been loaded, i.e., it has been added to the version
 	# since the version was initially loaded, return needs_reload.
 	if { ![nsv_exists apm_library_mtime "packages/$package_key/$file"] } {
@@ -429,7 +446,11 @@ ad_proc -public apm_load_any_changed_libraries {} {
 		ns_log "Notice" "APM: Reloading $file..."
 		# File is usually of form packages/package_key
 		set file_path "[acs_root_dir]/$file"
-		apm_source [acs_root_dir]/$file
+                switch [apm_guess_file_type "" $file] {
+                    tcl_procs { apm_source [acs_root_dir]/$file }
+                    query_file { db_qd_load_query_file [acs_root_dir]/$file }
+                }
+
 		nsv_set apm_library_mtime $file [file mtime $file_path]
 		set reloaded_files($file) 1
 	    }

@@ -104,19 +104,6 @@
       </querytext>
 </fullquery>
 
- 
-<fullquery name="apm_package_version_installed_p.apm_package_version_installed_p">      
-      <querytext>
-
-	select case when count(*) = 0 then 0 else 1 end 
-        from apm_package_versions
-	where package_key = :package_key
-	and version_name = :version_name
-    
-      </querytext>
-</fullquery>
-
- 
 <fullquery name="apm_package_instance_new.apm_package_instance_new">      
       <querytext>
 
