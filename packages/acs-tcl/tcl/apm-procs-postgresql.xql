@@ -14,6 +14,18 @@
 </fullquery>
 
  
+<fullquery name="apm_highest_version_name.apm_highest_version_name">      
+      <querytext>
+      
+        select version_name 
+        from   apm_package_versions
+        where  package_key = :package_key
+        and    version_id = apm_package__highest_version(:package_key)
+    
+      </querytext>
+</fullquery>
+
+
 <fullquery name="apm_num_instances.apm_num_instances">      
       <querytext>
 
