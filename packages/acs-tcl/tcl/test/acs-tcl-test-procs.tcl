@@ -371,3 +371,43 @@ anybody have any ideas?
         aa_log "Text version: $text_version"
     }
 }
+
+aa_register_case ad_page_contract_filters {
+    Test ad_page_contract_filters 
+} {
+    set filter integer
+    foreach { value result } { "1" 1 "a" 0 "1.2" 0 "'" 0 } {
+        if { $result } {
+            aa_true "$value is $filter" [ad_page_contract_filter_invoke $filter dummy value]
+        } else {
+            aa_false "$value is NOT $filter" [ad_page_contract_filter_invoke $filter dummy value]
+        }
+    }
+
+    set filter naturalnum
+    foreach { value result } { "1" 1 "-1" 0 "a" 0 "1.2" 0 "'" 0 } {
+        if { $result } {
+            aa_true "$value is $filter" [ad_page_contract_filter_invoke $filter dummy value]
+        } else {
+            aa_false "$value is NOT $filter" [ad_page_contract_filter_invoke $filter dummy value]
+        }
+    }
+
+    set filter html
+    foreach { value result } { "'" 1 "<p>" 1 } {
+        if { $result } {
+            aa_true "$value is $filter" [ad_page_contract_filter_invoke $filter dummy value]
+        } else {
+            aa_false "$value is NOT $filter" [ad_page_contract_filter_invoke $filter dummy value]
+        }
+    }
+
+    set filter nohtml
+    foreach { value result } { "a" 1 "<p>" 0 } {
+        if { $result } {
+            aa_true "$value is $filter" [ad_page_contract_filter_invoke $filter dummy value]
+        } else {
+            aa_false "$value is NOT $filter" [ad_page_contract_filter_invoke $filter dummy value]
+        }
+    }
+}
