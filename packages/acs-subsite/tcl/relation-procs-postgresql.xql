@@ -14,7 +14,7 @@
  
 <fullquery name="relation_remove.relation_delete">      
       <querytext>
-      begin ${package_name}.delete(:rel_id); end;
+      select ${package_name}__delete(:rel_id)
       </querytext>
 </fullquery>
 
@@ -46,36 +46,30 @@
 
  
 <fullquery name="relation_types_valid_to_group_multirow.select_sub_rel_types">      
-      <querytext>
-      FIX ME OUTER JOIN
-FIX ME CONNECT BY
-FIX ME ROWNUM
-
-	select 
-	    pretty_name, object_type, level, indent,
-	    case when valid_types.rel_type = null then 0 else 1 end as valid_p
+      <querytext>    
+	select
+		pretty_name, object_type, level, indent,
+		case when valid_types.rel_type = null then 0 else 1 end as valid_p
 	from 
-	    (select
-	        t.pretty_name, t.object_type, level,
-	        replace(lpad(' ', (level - 1) * 4), 
-	                ' ', '&nbsp;') as indent,
-	        rownum as tree_rownum
-	     from 
-	        acs_object_types t
-	     connect by 
-	        prior t.object_type = t.supertype
-	     start with 
-	        t.object_type = :start_with ) types,
-	    (select 
-	        rel_type 
-	     from 
-	        rc_valid_rel_types
-	     where 
-	        group_id = :group_id ) valid_types
-	where 
-	    types.object_type = valid_types.rel_type(+)
-	order by tree_rownum
-    
+		(select
+			t.pretty_name, t.object_type, tree_level(t.tree_sortkey) as level,
+		        lpad('&nbsp;', (tree_level(t.tree_sortkey) - 1) * 4) as indent,
+	        	t.tree_sortkey as sortkey
+		from
+			acs_object_types t
+		where tree_sortkey like (select tree_sortkey || '%' 
+					from acs_object_types where object_type = :start_with)) types left join
+		(select
+			rel_type
+		from
+			rc_valid_rel_types
+		where
+			group_id= :group_id) valid_types
+	on (types.object_type = valid_types.rel_type)
+	order by sortkey
+		
+
+	
       </querytext>
 </fullquery>
 

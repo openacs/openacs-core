@@ -5,13 +5,12 @@
 
 <fullquery name="select_object_types">      
       <querytext>
-      FIX ME CONNECT BY
 
-    select replace(lpad(' ', (level - 1) * 4), ' ', '&nbsp;') || t.pretty_name, 
+    select lpad('&nbsp;', (level - 1) * 4) || t.pretty_name, 
            t.object_type as rel_type
       from acs_object_types t
-   connect by prior t.object_type = t.supertype
-     start with t.object_type=:max_object_type_one
+     where tree_sortkey like (select tree_sortkey || '%' from acs_object_types
+				where object_type= :max_object_type_one)
 
       </querytext>
 </fullquery>
@@ -19,13 +18,12 @@
  
 <fullquery name="select_object_types">      
       <querytext>
-      FIX ME CONNECT BY
 
-    select replace(lpad(' ', (level - 1) * 4), ' ', '&nbsp;') || t.pretty_name, 
+    select lpad('&nbsp;', (level - 1) * 4) || t.pretty_name, 
            t.object_type as rel_type
       from acs_object_types t
-   connect by prior t.object_type = t.supertype
-     start with t.object_type=:max_object_type_one
+     where tree_sortkey like (select tree_sortkey || '%' from acs_object_types
+				where object_type = :max_object_type_one)
 
       </querytext>
 </fullquery>

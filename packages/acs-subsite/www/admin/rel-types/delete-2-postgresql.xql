@@ -17,7 +17,6 @@
  
 <fullquery name="drop_type_table">      
       <querytext>
-      FIX ME PLSQL
 drop table $table_name
       </querytext>
 </fullquery>

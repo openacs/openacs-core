@@ -67,4 +67,56 @@
 </fullquery>
 
  
+<fullquery name="attribute::add.drop_attribute">
+<querytext>
+select acs_attribute__drop_attribute(:object_type, :attribute_name)
+</querytext>
+</fullquery>
+
+<fullquery name="attribute::add.create_attribute">
+<querytext>
+select acs_attribute__create_attribute (	
+	'$object_type',
+	'$attribute_name',
+	'$datatype',
+	'$pretty_name',
+	'$pretty_plural',
+	NULL,
+	NULL,
+	'$default_value',
+	'$min_n_values',
+	'$max_n_values',
+	NULL,
+	'type_specific',
+	'f'
+);
+</querytext>
+</fullquery>
+
+<fullquery name="attribute::add.drop_attr_column">
+<querytext>
+alter table $table_name drop column $attribute_name
+</querytext>
+</fullquery>
+
+<fullquery name="attribute::add.add_column">
+<querytext>
+alter table $table_name add $attribute_name $sql_type
+</querytext>
+</fullquery>
+
+<fullquery name="attribute::delete.drop_attribute">
+<querytext>
+select acs_attribute__drop_attribute(:object_type, :attribute_name)
+</querytext>
+</fullquery>
+
+
+<!-- Cannot remove a column in PG -->
+<fullquery name="attribute::delete.drop_attr_column">
+<querytext>
+alter table $table_name rename column $column_name to __DELETED__$column_name
+</querytext>
+</fullquery>
+
 </queryset>

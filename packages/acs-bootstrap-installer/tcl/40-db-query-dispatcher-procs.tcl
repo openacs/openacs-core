@@ -754,6 +754,6 @@ proc db_qd_internal_prepare_queryfile_content {file_content} {
 proc db_qd_log {level msg} {
     # Centralized DB QD logging
     # We switch everything to debug for now
-    ns_log Notice "QD_LOGGER = $msg"
+    ns_log Debug "QD_LOGGER = $msg"
 }
 

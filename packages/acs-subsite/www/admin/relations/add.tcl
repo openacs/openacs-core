@@ -198,10 +198,7 @@ if {![empty_string_p $party_id]} {
     # of type $rel_type.
     
     if {[string equal $allow_out_of_scope_p "f"]} {
-	set scope_query ",
-                 (select element_id 
-                  from application_group_element_map
-                  where package_id = :package_id) app_elements"
+	set scope_query [db_map select_parties_scope_query]
 
 	set scope_clause "
               and p.party_id = app_elements.element_id"

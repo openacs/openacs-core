@@ -2,7 +2,7 @@
 
 ad_page_contract {
 
-    Add a permissable relation type to a group type
+    Add a permissible relation type to a group type
 
     @author mbryzek@arsdigita.com
     @creation-date Sun Nov 12 17:50:04 2000

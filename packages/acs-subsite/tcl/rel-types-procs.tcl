@@ -42,7 +42,7 @@ namespace eval rel_types {
     } {
 	Returns 1 if there is a relationship type not being used by
 	the specified group_id or group_type. Useful for deciding when
-	to offer the user a link to create a add a new permissable
+	to offer the user a link to create a add a new permissible
 	relationship type
 
 	@author Michael Bryzek (mbryzek@arsdigita.com)

@@ -901,7 +901,7 @@ is
    (v_group_id, group_name, v_join_policy);
 
 
-  -- setup the permissable relationship types for this group
+  -- setup the permissible relationship types for this group
   insert into group_rels
   (group_rel_id, group_id, rel_type)
   select acs_object_id_seq.nextval, v_group_id, g.rel_type

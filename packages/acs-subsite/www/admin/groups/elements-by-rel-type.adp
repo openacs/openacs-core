@@ -45,5 +45,5 @@
  </multiple>
 </else>
 
-  <p><li> <a href="rel-type-add?group_id=@group_id@">Add a permissable relationship type</a> </li>
+  <p><li> <a href="rel-type-add?group_id=@group_id@">Add a permissible relationship type</a> </li>
 </ul>

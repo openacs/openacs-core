@@ -5,13 +5,14 @@
 
 <fullquery name="select_supertypes">      
       <querytext>
-      FIX ME CONNECT BY
 
-    select replace(lpad(' ', (level - 1) * 4), ' ', '&nbsp;') || t.pretty_name as name,
+    select lpad('&nbsp;', (level - 1) * 4) || t.pretty_name as name,
            t.object_type
       from acs_object_types t
-   connect by prior t.object_type = t.supertype
-     start with t.object_type in ('membership_rel','composition_rel')
+     where (t.tree_sortkey like (select tree_sortkey || '%' from acs_object_types
+				where object_type= 'membership_rel')
+	or t.tree_sortkey like (select tree_sortkey || '%' from acs_object_types
+				where object_type= 'composition_rel'))
 
       </querytext>
 </fullquery>

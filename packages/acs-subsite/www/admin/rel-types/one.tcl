@@ -28,7 +28,7 @@ set rel_type_enc [ad_urlencode $rel_type]
 
 set package_id [ad_conn package_id]
 
-set context_bar [list [list "" "Relationship types"] "One type"]
+set context_bar [list [list "./" "Relationship types"] "One type"]
 
 if { ![db_0or1row select_pretty_name {
     select t.pretty_name as rel_type_pretty_name, t.table_name, t.id_column, t.dynamic_p
