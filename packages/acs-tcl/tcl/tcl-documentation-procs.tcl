@@ -279,8 +279,8 @@ ad_proc -public ad_page_contract {
     An argspec takes one of two forms, depending on whether there's a default value or not:
 
     <ol>
-    <li><blockquote><code>{<i>name</i>[:<i>flag</i>,<i>flag</i>,<i>flag</i>] <i>default</i>}</code></blockquote>
-    <li><blockquote><code><i>name</i>[:<i>flag</i>,<i>flag</i>,<i>flag</i>]</code></blockquote>
+    <li><blockquote><code>{<i>name</i>[:<i>flag</i>,<i>flag</i>,<i>flag</i>] <i>default</i>}</code></blockquote></li>
+    <li><blockquote><code><i>name</i>[:<i>flag</i>,<i>flag</i>,<i>flag</i>]</code></blockquote></li>
     </ol>
 
     <p>
@@ -1082,7 +1082,7 @@ ad_proc -public ad_page_contract {
 	    upvar 1 $return_errors error_list
 	    set error_list [ad_complaints_get_list]
 	} else {
-	    ad_return_complaint [ad_complaints_count] "<li>[join [ad_complaints_get_list] "\n<li>"]"
+	    ad_return_complaint [ad_complaints_count] "<li>[join [ad_complaints_get_list] "</li>\n<li>"]</li>\n"
 	    ad_script_abort
 	}
     }

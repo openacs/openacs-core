@@ -632,11 +632,11 @@ ad_proc rp_report_error {
 	    } else {
 		set auto_report 1
 		ns_returnerror 200 "</table></table></table></h1></b></i>
-               <form method=POST action='$report_url'>
+               <form method=\"post\" action=\"$report_url\">
 [export_form_vars error_url error_info]
 This file has generated an error.  
-<input type=submit value='Report this error'>
-</form><hr>
+<input type=\"submit\" value='Report this error' />
+</form><hr />
 	<blockquote><pre>[ns_quotehtml $error_info]</pre></blockquote>[ad_footer]"
 	    }
 	} else {

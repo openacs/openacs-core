@@ -32,27 +32,27 @@ proc_doc util_report_library_entry {{extra_message ""}} "Should be called at beg
     ns_log Notice $message
 }
 
-# stuff to process the data that comes 
-# back from the users
-
-# if the form looked like
-# <input type=text name=yow> and <input type=text name=bar> 
-# then after you run this function you'll have Tcl vars 
-# $foo and $bar set to whatever the user typed in the form
-
-# this uses the initially nauseating but ultimately delicious
-# Tcl system function "uplevel" that lets a subroutine bash
-# the environment and local vars of its caller.  It ain't Common Lisp...
-
-# This is an ad-hoc check to make sure users aren't trying to pass in
-# "naughty" form variables in an effort to hack the database by passing
-# in SQL. It is called in all instances where a Tcl variable
-# is set from a form variable.
-
 proc_doc check_for_form_variable_naughtiness { 
     name 
     value 
 } {
+    stuff to process the data that comes 
+    back from the users
+
+    if the form looked like
+    <input type=text name=yow> and <input type=text name=bar> 
+    then after you run this function you'll have Tcl vars 
+    $foo and $bar set to whatever the user typed in the form
+
+    this uses the initially nauseating but ultimately delicious
+    tcl system function "uplevel" that lets a subroutine bash
+    the environment and local vars of its caller.  It ain't Common Lisp...
+
+    This is an ad-hoc check to make sure users aren't trying to pass in
+    "naughty" form variables in an effort to hack the database by passing
+    in SQL. It is called in all instances where a Tcl variable
+    is set from a form variable.
+
     Checks the given variable for against known form variable exploits.
     If it finds anything objectionable, it throws an error.
 } {
@@ -385,7 +385,8 @@ ad_proc ad_dbclick_check_dml {
 	<pre>
 	$errmsg
 	</pre>
-	</blockquote>"
+	</blockquote>
+        </p>"
 	return
     }
 
@@ -672,9 +673,9 @@ ad_proc -public db_html_select_options {
 
     foreach option $options {
 	if { [string compare $option $select_option] == 0 } {
-	    append select_options "<option selected>$option\n"
+	    append select_options "<option selected=\"selected\">$option</option>\n"
 	} else {
-	    append select_options "<option>$option\n"
+	    append select_options "<option>$option</option>\n"
 	}
     }
     return $select_options
@@ -707,9 +708,9 @@ ad_proc -public db_html_select_value_options {
 
     foreach option $options {
 	if { [string compare $select_option [lindex $option $value_index]] == 0 } {
-	    append select_options "<option value=\"[util_quote_double_quotes [lindex $option $value_index]]\" selected>[lindex $option $option_index]\n"
+	    append select_options "<option value=\"[util_quote_double_quotes [lindex $option $value_index]]\" selected=\"selected\">[lindex $option $option_index]</option>\n"
 	} else {
-	    append select_options "<option value=\"[util_quote_double_quotes [lindex $option $value_index]]\">[lindex $option $option_index]\n"
+	    append select_options "<option value=\"[util_quote_double_quotes [lindex $option $value_index]]\">[lindex $option $option_index]</option>\n"
 	}
     }
     return $select_options
@@ -997,7 +998,7 @@ ad_proc -public export_vars {
 	set export_string [join $export_list "&"]
     } else {
 	for { set i 0 } { $i < $export_size } { incr i } {
-	    append export_string "<input type=\"hidden\" name=\"[ad_quotehtml [ns_set key $export_set $i]]\" value=\"[ad_quotehtml "[ns_set value $export_set $i]"]\">\n"
+	    append export_string "<input type=\"hidden\" name=\"[ad_quotehtml [ns_set key $export_set $i]]\" value=\"[ad_quotehtml "[ns_set value $export_set $i]"]\" />\n"
 	}
     }
 
@@ -1148,8 +1149,8 @@ doc_body_append [ad_export_vars -override { order_by $new_order_by } $my_vars]</
     } else {
 	set export_list [list]
 	foreach varname [array names export] {
-	    lappend export_list "<input type=hidden name=\"[ad_quotehtml $varname]\"\
-		    value=\"[ad_quotehtml $export($varname)]\">"
+	    lappend export_list "<input type=\"hidden\" name=\"[ad_quotehtml $varname]\"\
+		    value=\"[ad_quotehtml $export($varname)]\" />"
 	}
 	return [join $export_list \n]
     }
@@ -1193,15 +1194,15 @@ ad_proc export_form_vars {
 	    switch $type {
 		multiple {
 		    foreach item $value {
-			append hidden "<input type=\"hidden\" name=\"[ad_quotehtml $var]\" value=\"[ad_quotehtml $item]\">\n"
+			append hidden "<input type=\"hidden\" name=\"[ad_quotehtml $var]\" value=\"[ad_quotehtml $item]\" />\n"
 		    }
 		}
 		default {
-		    append hidden "<input type=\"hidden\" name=\"[ad_quotehtml $var]\" value=\"[ad_quotehtml $value]\">\n"
+		    append hidden "<input type=\"hidden\" name=\"[ad_quotehtml $var]\" value=\"[ad_quotehtml $value]\" />\n"
 		}
 	    }
 	    if { $sign_p } {
-		append hidden "<input type=\"hidden\" name=\"[ad_quotehtml "$var:sig"]\" value=\"[ad_quotehtml [ad_sign $value]]\">\n"
+		append hidden "<input type=\"hidden\" name=\"[ad_quotehtml "$var:sig"]\" value=\"[ad_quotehtml [ad_sign $value]]\" />\n"
 	    }
 	}
     }
@@ -1219,7 +1220,7 @@ ad_proc export_entire_form {} {
 	for {set i 0} {$i<[ns_set size $the_form]} {incr i} {
 	    set varname [ns_set key $the_form $i]
 	    set varvalue [ns_set value $the_form $i]
-	    append hidden "<input type=\"hidden\" name=\"[ad_quotehtml $varname]\" value=\"[ad_quotehtml $varvalue]\">\n"
+	    append hidden "<input type=\"hidden\" name=\"[ad_quotehtml $varname]\" value=\"[ad_quotehtml $varvalue]\" />\n"
 	}
     }
     return $hidden
@@ -1256,7 +1257,7 @@ ad_proc export_ns_set_vars {{format "url"} {exclusion_list ""}  {setid ""}} {
     if {$format == "url"} {
         return [join $return_list "&"]
     } else {
-        return "<input type=\"hidden\" [join $return_list ">\n <input type=\"hidden\" "] >"
+        return "<input type=\"hidden\" [join $return_list " />\n <input type=\"hidden\" "] />"
     }
 }
 
@@ -1871,7 +1872,7 @@ ad_page_variables {
 	ns_returnerror 500 [lindex $exception_list 0]
 	return -code return
     } elseif { $n_exceptions > 1 } {
-	ns_returnerror 500 "<li>[join $exception_list "\n<li>"]\n"
+	ns_returnerror 500 "<li>[join $exception_list "</li>\n<li>"]</li>\n"
 	return -code return
     }
 }
@@ -1916,7 +1917,7 @@ proc_doc page_validation {args} {
 	if { $n_exceptions == 1 } {
 	    $complain_proc $n_exceptions [lindex $exception_list 0]
 	} else {
-	    $complain_proc $n_exceptions "<li>[join $exception_list "\n<li>"]\n"
+	    $complain_proc $n_exceptions "<li>[join $exception_list "</li>\n<li>"]</li>\n"
 	}
 	return -code return
     }
@@ -2365,10 +2366,10 @@ proc util_ReturnMetaRefresh { url { seconds_delay 0 }} {
     ReturnHeaders
     ns_write "
     <head>
-    <META HTTP-EQUIV=\"REFRESH\" CONTENT=\"$seconds_delay;URL=$url\">
+    <meta http-equiv=\"refresh\" content=\"$seconds_delay;URL=$url\">
     </head>
     <body>
-    If your browser does not automatically redirect you, please go <a href=$url>here</a>.
+    If your browser does not automatically redirect you, please go <a href=\"$url\">here</a>.
     </body>"
 }
 
@@ -2909,15 +2910,13 @@ returns an empty string.
 proc ad_dateentrywidget {column {default_date "1940-11-03"}} {
     ns_share NS
 
-    set output "<SELECT name=$column.month>\n"
+    set output "<select name=\"$column.month\">\n"
     for {set i 0} {$i < 12} {incr i} {
-	append output "<OPTION> [lindex $NS(months) $i]\n"
+	append output "<option> [lindex $NS(months) $i]</option>\n"
     }
 
-    append output \
-"</SELECT>&nbsp;<INPUT NAME=$column.day\
-TYPE=text SIZE=3 MAXLENGTH=2>&nbsp;<INPUT NAME=$column.year\
-TYPE=text SIZE=5 MAXLENGTH=4>"
+    append output "</select>&nbsp;<input name=\"$column.day\" type=\"text\" size=\"3\" maxlength=\"2\">&nbsp;<input name=\"$column.year\" type=\"text\" size=\"5\" maxlength=\"4\">"
+
 
     return [ns_dbformvalueput $output $column date $default_date]
 }
