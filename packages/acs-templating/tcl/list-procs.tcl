@@ -35,6 +35,7 @@ ad_proc -public template::list::create {
     {-main_class "list"}
     {-sub_class ""}
     {-class ""}
+    {-html ""}
     {-page_size ""}
     {-page_groupsize 10}
     {-page_query ""}
@@ -164,6 +165,9 @@ ad_proc -public template::list::create {
 
     @param  class          Alternatively, you can specify the CSS class directly. If specified, this overrides main_class/sub_class.
 
+    @param  html           HTML attributes to be output for the table tag, e.g. { align right style "background-color: yellow;" }. 
+                           Value should be a Tcl list with { name value name value }
+
     @param  page_size      The number of rows to display on each page. If specified, the list will be paginated.
 
     @param  page_groupsize The page group size for the paginator. See template::paginator::create for more details.
@@ -230,6 +234,7 @@ ad_proc -public template::list::create {
         main_class {list}
         sub_class {}
         class {}
+        html {}
         actions {}
         bulk_actions {}
         bulk_action_export_vars {}
@@ -277,6 +282,7 @@ ad_proc -public template::list::create {
         main_class
         sub_class
         class
+        html
         page_size
         page_groupsize
         page_query
@@ -761,6 +767,9 @@ ad_proc -private template::list::template {
             set "elements:${elements:rowcount}(rownum)" ${elements:rowcount}
         }
     }
+
+    # Table tag HTML attributes
+    set list_properties(table_attributes) [template::list::util_html_to_attributes_string $list_properties(html)]
 
     #
     # Find the list template
