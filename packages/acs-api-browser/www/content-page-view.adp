@@ -2,8 +2,7 @@
 <property name=title>@title;noquote@</property>
 <property name="context">@context;noquote@</property>
 
-@script_documentation@
-
+@script_documentation;noquote@
 
 <if @xql_links:rowcount@ gt 0>
 <h4>Related Files</h4>
