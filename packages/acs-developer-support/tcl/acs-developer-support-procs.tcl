@@ -33,9 +33,8 @@ ad_proc -public ds_require_permission {
     } else {
       ns_log Notice "$user_id doesn't have $privilege on object $object_id"
       ad_return_forbidden "Security Violation" "<blockquote>
-      You don't have permission to $privilege [db_string name {select acs_object.name(:object_id) from dual}].
-      <p>
-      This incident has been logged.
+      <p>You don't have permission to $privilege [db_string name {select acs_object.name(:object_id) from dual}].</p>
+      <p>This incident has been logged.</p>
       </blockquote>"
     }
     ad_script_abort
@@ -107,13 +106,13 @@ proc_doc ds_link {} { Returns the "Developer Information" link in a right-aligne
         return ""
     }
     
-    set out "<table align=right cellspacing=0 cellpadding=0>"
+    set out "<table align=\"right\" cellspacing=\"0\" cellpadding=\"0\">"
     if { [ds_enabled_p] && [ds_collection_enabled_p] } {
 	global ad_conn
 	
 	set ds_url [ds_support_url]
 	if {![empty_string_p $ds_url]} {
-	    append out "<tr><td align=right>
+	    append out "<tr><td align=\"right\">
 	    <a href=\"${ds_url}request-info?request=$ad_conn(request)\">Developer Information</a>
 	</td></tr>
 	"
@@ -132,14 +131,14 @@ proc_doc ds_link {} { Returns the "Developer Information" link in a right-aligne
 		}
 	    }
 	    if { $counter > 0 } {
-		append out "<tr><td align=right>$counter database command[ad_decode $counter 1 " taking" "s totalling"] [format "%.f" [expr { $total / 1000 }]] ms</td></tr>"
+		append out "<tr><td align=\"right\">$counter database command[ad_decode $counter 1 " taking" "s totalling"] [format "%.f" [expr { $total / 1000 }]] ms</td></tr>"
 	    }
 	}
 	
 	if { [nsv_exists ds_request "$ad_conn(request).conn"] } {
 	    array set conn [nsv_get ds_request "$ad_conn(request).conn"]
 	    if { [info exists conn(startclicks)] } {
-		append out "<tr><td align=right>page served in
+		append out "<tr><td align=\"right\">page served in
 		[format "%.f" [expr { ([clock clicks] - $conn(startclicks)) / 1000 }]] ms</td></tr>\n"
 	    }
 	}
@@ -156,7 +155,7 @@ proc_doc ds_link {} { Returns the "Developer Information" link in a right-aligne
     }
     
     if { [ds_user_switching_enabled_p] } {
-	append out "<tr><td align=right>[ds_user_select_widget]</td>"
+	append out "<tr><td align=\"right\">[ds_user_select_widget]</td>"
     }
     
     append out "</table>\n"
@@ -262,12 +261,12 @@ ad_proc ds_user_select_widget {}  {
 
     if { $user_id == 0 } {
 	set selected " selected"
-	set you_are "<small>You are currently <strong>not logged in</strong></small><br>"
-	set you_are_really "<small>You are really <strong>not logged in</strong></small><br>"
+	set you_are "<small>You are currently <strong>not logged in</strong></small><br />"
+	set you_are_really "<small>You are really <strong>not logged in</strong></small><br />"
     } else {
 	set selected {}
     }
-    set options "<option value=0$selected>--Logged out--</option>"
+    set options "<option value=\"0\"$selected>--Logged out--</option>"
 
     db_foreach users { 
 	select u.user_id as user_id_from_db, 
@@ -279,24 +278,24 @@ ad_proc ds_user_select_widget {}  {
     } {
 	if { $user_id == $user_id_from_db } {
 	    set selected " selected"
-	    set you_are "<small>You are testing as <strong>$name ($email)</strong></small><br>"
+	    set you_are "<small>You are testing as <strong>$name ($email)</strong></small><br />"
 	} else {
 	    set selected {}
 	}
         if { $real_user_id == $user_id_from_db } {
-	    set you_are_really "<small>You are really <strong>$name ($email)</strong></small><br>"
+	    set you_are_really "<small>You are really <strong>$name ($email)</strong></small><br />"
 	}
-	append options "<option value=$user_id_from_db$selected>$name ($email)</option>"
+	append options "<option value=\"$user_id_from_db\"$selected>$name ($email)</option>"
     }
 
     set ds_url [ds_support_url]
     if {![empty_string_p $ds_url]} {
-	return "<form action=${ds_url}/set-user method=get>
+	return "<form action=\"${ds_url}/set-user\" method=\"get\">
 	$you_are
 	$you_are_really
-	Change user: <select name=user_id>
+	Change user: <select name=\"user_id\">
 	$options
-	</select>[export_form_vars return_url]<input type=submit value=\"Go\"></form>"
+	</select>[export_form_vars return_url]<input type=submit value=\"Go\" /></form>"
     } else {
 	ns_log Error "ACS-Developer-Support: Unable to offer link to Developer Support \
 		because it is not mounted anywhere."
