@@ -1260,9 +1260,5 @@ ad_proc root_of_host {host} {
 }
 
 ad_proc -private rp_lookup_node_from_host { host } {
-    return [db_string  node_id {
-	select node_id 
-	from host_node_map
-	where host = :host
-    } -default ""]
+    return [db_string  node_id { *SQL* } -default ""]
 } 

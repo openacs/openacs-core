@@ -20,7 +20,7 @@
       </querytext>
 </fullquery>
 
-<fullquery name="root_of_host.node_id">
+<fullquery name="rp_lookup_node_from_host.node_id">
       <querytext>
 
         select node_id 
