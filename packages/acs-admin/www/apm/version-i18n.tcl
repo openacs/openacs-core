@@ -85,7 +85,7 @@ if { [string equal $file_type adp] } {
         -widget checkbox \
         -label $action_label \
         -options {{{Replace text with tags} replace_text} {{Replace tags with keys and insert into catalog} replace_tags}} \
-        -values {replace_text replace_tags} \
+        -values {replace_text} \
         -section action_section
 } else {
     # TCL files

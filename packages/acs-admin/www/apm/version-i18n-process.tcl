@@ -32,6 +32,8 @@ if { ! $replace_text_p } {
 # Process one adp at a time interactively
 set file [lindex $files 0]
 
+set full_file_name "[acs_root_dir]/$file"
+
 set adp_report_list [lang::util::replace_adp_text_with_message_tags "[acs_root_dir]/$file" report]
 set adp_replace_list [lindex $adp_report_list 0]
 set adp_no_replace_list [lindex $adp_report_list 1]

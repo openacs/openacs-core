@@ -38,7 +38,7 @@ if { $replace_text_p } {
     set text_replacement_list [lindex $adp_text_result_list 0]
     set text_untouched_list [lindex $adp_text_result_list 1]
 
-    append processing_html_result "Replaced [llength $text_replacement_list] texts: <br />"
+    append processing_html_result "<b>Replaced [llength $text_replacement_list] texts</b>: <br />"
     foreach text_replacement $text_replacement_list {
         append processing_html_result "replaced text \"[lindex $text_replacement 1]\" using key [lindex $text_replacement 0] <br />"
     }
@@ -84,7 +84,7 @@ set proceed_url_export_vars [export_vars -url {version_id files:multiple file_ac
 if { [llength $files] > 0 } {
     # There are no more files to process so present a link back to the i18n page for this version
     set proceed_url "version-i18n-process?${proceed_url_export_vars}"
-    set proceed_label "Process next adp file"
+    set proceed_label "<b>Process next adp file</b>"
 
 } else {
     # There are more files to process. This means we are doing text replacements

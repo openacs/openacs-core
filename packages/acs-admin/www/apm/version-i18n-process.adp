@@ -2,9 +2,9 @@
 <property name="title">@page_title@</property>
 <property name="context_bar">@context_bar@</property>
 
-Choose which message keys to use for file @file@. If you leave a message key blank no replacement will be done
-and the corresponding text in the adp will be left untouched. The text that is actually replaced is bold and highlighted
-with a yellow background in the "Text to Replace" column.
+<p>
+  <b>Current File:</b> @file@
+</p>
 
 <blockquote>
 
@@ -31,3 +31,14 @@ with a yellow background in the "Text to Replace" column.
 </form>
 
 </blockquote>
+
+<h3>Instructions</h3>
+
+<p>
+  Choose which message keys to use for this file. If you leave a
+  message key blank no replacement will be done and the corresponding
+  text in the adp will be left untouched. The text that is actually
+  replaced is bold and highlighted with a yellow background in the
+  "Text to Replace" column.
+</p>
+
