@@ -7,7 +7,8 @@
         <querytext>
             select notification_id
             from notifications
-            where not exists (select notifications.notification_id
+            where now() - notif_date > 2
+              and not exists (select notifications.notification_id
                               from notifications
                                   inner join notification_requests
                                       on (
@@ -29,8 +30,7 @@
                    notification_requests.user_id,
                    notification_requests.type_id,
                    notification_requests.delivery_method_id,
-                   notifications.response_id,
-                   acs_object__name(notifications.object_id) as object_name
+                   notifications.response_id
             from notifications
                      inner join notification_requests
                          on (

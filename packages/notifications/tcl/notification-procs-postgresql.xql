@@ -14,8 +14,9 @@
             insert
             into notification_user_map
             (notification_id, user_id, sent_date)
-            values
-            (:notification_id, :user_id, now())
+            select :notification_id, :user_id, now()
+            from dual where exists (select 1 from notifications
+                                    where notification_id = :notification_id)
         </querytext>
     </fullquery>
 

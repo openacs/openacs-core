@@ -25,6 +25,10 @@ namespace eval notification::email {
         return [get_parameter -name "EmailDomain"]
     }
 
+    ad_proc -public manage_notifications_url {} {
+        return "[ad_url]/[apm_package_url_from_key [notification::package_key]]manage"
+    }
+
     ad_proc -public reply_address_prefix {} {
         return [get_parameter -name "EmailReplyAddressPrefix"]
     }
@@ -48,7 +52,7 @@ namespace eval notification::email {
         if {[empty_string_p $object_id] || [empty_string_p $type_id]} {
             return [reply_address_prefix]
         } else {
-            return "[reply_address_prefix]-$object_id-$type_id@[address_domain]"
+            return "[address_domain] mailer <[reply_address_prefix]-$object_id-$type_id@[address_domain]>"
         }
     }
 
@@ -79,6 +83,8 @@ namespace eval notification::email {
     } {
         # Get email
         set email [cc_email_from_party $to_user_id]
+
+       append content "\nGetting too much email? Manage your notifications at: [manage_notifications_url]"
 
         acs_mail_lite::send \
             -to_addr $email \

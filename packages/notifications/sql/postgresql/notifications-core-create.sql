@@ -164,7 +164,7 @@ create table notifications (
     response_id                     integer
                                     constraint notif_reponse_id_fk
                                     references acs_objects (object_id),
-    notif_subject                   varchar(100),
+    notif_subject                   varchar(1000),
     notif_text                      text,
     notif_html                      text
 );
