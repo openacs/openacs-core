@@ -104,7 +104,7 @@
               </noparse>
 
               <if @elements.help_text@ not nil>
-                <p>
+                <p style="margin-top: 4px; margin-bottom: 2px;">
                   <font face="tahoma,verdana,arial,helvetica,sans-serif" size="-1">
                     <noparse>
                       <i><formhelp id="@elements.id@"></i>
