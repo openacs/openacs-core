@@ -57,7 +57,7 @@ foreach priv $privs {
 # Remove all
 lappend elements remove_all {
     html { align center } 
-    label "[_ acs-subsite.Remove]"
+    label "[_ acs-subsite.Remove_All]"
     display_template {<input type="checkbox" name="perm" value="@permissions.grantee_id@,remove">}
 }
 
