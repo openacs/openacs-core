@@ -787,6 +787,23 @@ proc apm_package_key_from_id_mem {package_id} {
 }
 
 #
+# package_id -> instance_name
+#
+
+ad_proc -public apm_instance_name_from_id {package_id} {
+    @return The name of the instance.
+} {
+    return [util_memoize "apm_instance_name_from_id_mem $package_id"]
+}
+
+proc apm_instance_name_from_id_mem {package_id} {
+    return [db_string apm_package_key_from_id {
+	select instance_name from apm_packages where package_id = :package_id
+    } -default ""]
+}
+
+
+#
 # package_key -> package_id
 #
 
