@@ -66,3 +66,10 @@
   </blockquote>
 </if>
 
+<if @site_wide_admin_p@>
+  <h3>For Site-Wide Administrators</h3>
+  <p>
+    <b>&raquo;</b> <a href="@admin_user_url@">Administrative options for this user</a>
+  </p>
+</if>
+
