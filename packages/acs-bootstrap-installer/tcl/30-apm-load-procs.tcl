@@ -312,7 +312,7 @@ ad_proc -private apm_guess_db_type { package_key path } {
     set file_type [apm_guess_file_type $package_key $path]]
 
     if { [string match "data_model*" $file_type] ||
-         [string mtach "ctl_file" $file_type] } {
+         [string match "ctl_file" $file_type] } {
         set sql_index [lsearch $components "sql"]
         if { $sql_index >= 0 } {
             set db_dir [lindex $components [expr $sql_index + 1]]
