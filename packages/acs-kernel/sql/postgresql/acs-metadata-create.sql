@@ -202,13 +202,13 @@ comment on column acs_object_types.type_extension_table is '
  Object types (and their subtypes) that require more type-specific
  data than the fields already existing in acs_object_types may name
  a table in which that data is stored.  The table should be keyed
- by the associated object_type.  For example, a row in the user_group_types
+ by the associated object_type.  For example, a row in the group_types
  table stores a default approval policy for every user group of that type.
- In this example, the user_group_types table has a primary key named
- group_type that references acs_object_types.  If a subtype of user_groups
+ In this example, the group_types table has a primary key named
+ group_type that references acs_object_types.  If a subtype of groups
  for example, lab_courses, has its own type-specific data, it could be
  maintained in a table called lab_course_types, with a primary key named
- lab_course_type that references user_group_types.  This provides the same
+ lab_course_type that references group_types.  This provides the same
  functionality as static class fields in an object-oriented programming language.
 ';
 
