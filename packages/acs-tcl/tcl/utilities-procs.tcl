@@ -4839,3 +4839,120 @@ ad_proc -public util::age_pretty {
 
     }
 }
+
+
+ad_proc -public util::word_diff {
+	{-old:required}
+	{-new:required}
+	{-split_by {}}
+	{-filter_proc {ad_quotehtml}}
+	{-start_old {<strike><i><font color="blue">}}
+	{-end_old {</font></i></strike>}}
+	{-start_new {<u><b><font color="red">}}
+	{-end_new {</font></b></u>}}
+} {
+	Does a word (or character) diff on two lines of text and indicates text
+	that has been deleted/changed or added by enclosing it in
+	start/end_old/new.
+	
+	@param	old	The original text.
+	@param	new	The modified text.
+	
+	@param	split_by	If split_by is a space, the diff will be made
+	on a word-by-word basis. If it is the empty string, it will be made on
+	a char-by-char basis.
+
+	@param	filter_proc	A filter to run the old/new text through before
+	doing the diff and inserting the HTML fragments below. Keep in mind
+	that if the input text is HTML, and the start_old, etc... fragments are
+	inserted at arbitrary locations depending on where the diffs are, you
+	might end up with invalid HTML unless the original HTML is quoted.
+
+	@param	start_old	HTML fragment to place before text that has been removed.
+	@param	end_old		HTML fragment to place after text that has been removed.
+	@param	start_new	HTML fragment to place before new text.
+	@param	end_new		HTML fragment to place after new text.
+
+	@see ad_quotehtml
+	@author Gabriel Burca
+} {
+
+	if {$filter_proc != ""} {
+		set old [$filter_proc $old]
+		set new [$filter_proc $new]
+	}
+
+	set old_f [ns_tmpnam]
+	set new_f [ns_tmpnam]
+	set old_fd [open $old_f "w"]
+	set new_fd [open $new_f "w"]
+	puts $old_fd [join [split $old $split_by] "\n"]
+	puts $new_fd [join [split $new $split_by] "\n"]
+	close $old_fd
+	close $new_fd
+
+	# Diff output is 1 based, our lists are 0 based, so insert a dummy
+	# element to start the list with.
+	set old_w [linsert [split $old $split_by] 0 {}]
+	set sv 1
+
+#	For debugging purposes:
+#	set diff_pipe [open "| diff -f $old_f $new_f" "r"]
+#	while {![eof $diff_pipe]} {
+#		append res "[gets $diff_pipe]<br>"
+#	}
+
+	set diff_pipe [open "| diff -f $old_f $new_f" "r"]
+	while {![eof $diff_pipe]} {
+		gets $diff_pipe diff
+		if {[regexp {^d(\d+)(\s+(\d+))?$} $diff full m1 m2]} {
+			if {$m2 != ""} {set d_end $m2} else {set d_end $m1}
+			for {set i $sv} {$i < $m1} {incr i} {
+				append res "${split_by}[lindex $old_w $i]"
+			}
+			for {set i $m1} {$i <= $d_end} {incr i} {
+				append res "${split_by}${start_old}[lindex $old_w $i]${end_old}"
+			}
+			set sv [expr $d_end + 1]
+		} elseif {[regexp {^c(\d+)(\s+(\d+))?$} $diff full m1 m2]} {
+			if {$m2 != ""} {set d_end $m2} else {set d_end $m1}
+			for {set i $sv} {$i < $m1} {incr i} {
+				append res "${split_by}[lindex $old_w $i]"
+			}
+			for {set i $m1} {$i <= $d_end} {incr i} {
+				append res "${split_by}${start_old}[lindex $old_w $i]${end_old}"
+			}
+			while {![eof $diff_pipe]} {
+				gets $diff_pipe diff
+				if {$diff == "."} {
+					break
+				} else {
+					append res "${split_by}${start_new}${diff}${end_new}"
+				}
+			}
+			set sv [expr $d_end + 1]
+		} elseif {[regexp {^a(\d+)$} $diff full m1]} {
+			set d_end $m1
+			for {set i $sv} {$i < $m1} {incr i} {
+				append res "${split_by}[lindex $old_w $i]"
+			}
+			while {![eof $diff_pipe]} {
+				gets $diff_pipe diff
+				if {$diff == "."} {
+					break
+				} else {
+					append res "${split_by}${start_new}${diff}${end_new}"
+				}
+			}
+			set sv [expr $d_end + 1]
+		}
+	}
+	
+	for {set i $sv} {$i < [llength $old_w]} {incr i} {
+		append res "${split_by}[lindex $old_w $i]"
+	}
+
+	file delete -- $old_f $new_f
+
+	return $res
+}
