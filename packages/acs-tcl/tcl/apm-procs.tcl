@@ -742,6 +742,10 @@ ad_proc -public apm_interface_remove {interface_id} {
     }
 }
 
+#
+# package_id -> package_key
+#
+
 ad_proc -public apm_package_key_from_id {package_id} {
     @return The package key of the instance.
 } {
@@ -753,6 +757,10 @@ proc apm_package_key_from_id_mem {package_id} {
 	select package_key from apm_packages where package_id = :package_id
     } -default ""]
 }
+
+#
+# package_key -> package_id
+#
 
 ad_proc -public apm_package_id_from_key {package_key} {
     @return The package id of the instance of the package.
@@ -767,6 +775,29 @@ proc apm_package_id_from_key_mem {package_key} {
     } -default 0]
 }
 
+#
+# package_id -> package_url
+#
+
+ad_proc -public apm_package_url_from_id {package_id} {
+    @return The package url of the instance of the package.
+    only valid for singleton packages.
+} {
+    return [util_memoize "apm_package_url_from_id_mem $package_id"]
+}
+
+ad_proc -public apm_package_url_from_id_mem {package_id} {
+    return [db_string apm_package_url_from_id {
+	select site_node.url(node_id) 
+          from site_nodes 
+         where object_id = :package_id
+    } -default ""]
+}
+
+#
+# package_key -> package_url
+#
+
 ad_proc -public apm_package_url_from_key {package_key} {
     @return The package url of the instance of the package.
     only valid for singleton packages.
@@ -776,11 +807,7 @@ ad_proc -public apm_package_url_from_key {package_key} {
 
 ad_proc -public apm_package_url_from_key_mem {package_key} {
     set package_id [apm_package_id_from_key $package_key]
-    return [db_string apm_package_url_from_key {
-	select site_node.url(node_id) 
-          from site_nodes 
-         where object_id = :package_id
-    } -default ""]
+    return [apm_package_url_from_id $package_id]
 }
 
 ad_proc -public apm_version_info {version_id} {
