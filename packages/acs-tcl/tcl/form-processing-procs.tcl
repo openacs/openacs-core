@@ -51,8 +51,8 @@ ad_proc -public ad_form_prototype {
         return -code error "No \"form\" argument to ad_form"
     }
 
-    if { [info exists on_submit] && ([info exists add_data] || [info exists edit_data]) } {
-        return -code Error "\"on_submit\" not allowed in form with \"add_data\" or \"edit_data\""
+    if { [info exists on_submit] && ([info exists new_data] || [info exists edit_data]) } {
+        return -code Error "\"on_submit\" not allowed in form with \"new_data\" or \"edit_data\""
     }
 
     # Set the form name, defaulting to the name of the template that called us
@@ -407,7 +407,7 @@ ad_proc -public ad_form_prototype {
         # We have three possible ways to handle the form
 
         # 1. an on_submit block (useful for forms that don't touch the database)
-        # 2. an add_data block (when form_name:add_p is true)
+        # 2. an new_data block (when form_name:add_p is true)
         # 3. an edit_data block (when form_name:add_p is false)
 
         # These three are mutually exclusive, which was checked above
@@ -417,7 +417,7 @@ ad_proc -public ad_form_prototype {
         } else {
 
             # Execute our to_sql filters, if any, before passing control to the caller's
-            # add_data or edit_data blocks
+            # new_data or edit_data blocks
 
             foreach element_name $af_element_names {
                 if { [llength $element_name] == 1 } {
@@ -432,8 +432,8 @@ ad_proc -public ad_form_prototype {
 
             upvar __add_p __add_p
 
-            if { [info exists add_data] && $__add_p } {
-                ad_page_contract_eval uplevel 1 $add_data
+            if { [info exists new_data] && $__add_p } {
+                ad_page_contract_eval uplevel 1 $new_data
                 template::element::set_value $form_name __add_p 0
             } elseif { [info exists edit_data] && !$__add_p } {
                 ad_page_contract_eval uplevel 1 $edit_data
