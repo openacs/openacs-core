@@ -5,9 +5,10 @@
 <fullquery name="output_portrait">
         <querytext>
 
-        select lob, storage_type
-        from cr_revisions
-        where revision_id = :revision_id
+        select r.lob, i.storage_type
+        from cr_revisions r, cr_items i
+        where r.item_id = i.item_id 
+          and r.revision_id = :revision_id
 
         </querytext>
 </fullquery>

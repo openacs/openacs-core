@@ -53,12 +53,12 @@ begin
 
   insert into cr_revisions (
     revision_id, title, description, mime_type, publish_date,
-    nls_language, lob, item_id, storage_type, content_length
+    nls_language, lob, item_id, content_length
   ) values (
     v_revision_id, new__title, new__description,
     new__mime_type, 
     new__publish_date, new__nls_language, new__data, 
-    new__item_id, ''lob'', 0
+    new__item_id, 0
   );
 
   return v_revision_id;
@@ -166,13 +166,12 @@ begin
 
   insert into cr_revisions (
     revision_id, title, description, mime_type, publish_date,
-    nls_language, content, item_id, storage_type, content_length
+    nls_language, content, item_id, content_length
   ) values (
     v_revision_id, new__title, new__description,
      new__mime_type, 
     new__publish_date, new__nls_language, 
-    new__text, new__item_id, v_storage_type,
-    v_length
+    new__text, new__item_id, v_length
   );
 
   return v_revision_id;
@@ -613,20 +612,21 @@ begin
        the same table or in a different table, the actual LOB value is
        copied, not just the LOB locator. */
 
-    select content, content_length, lob, storage_type 
+    select r.content, r.content_length, r.lob, i.storage_type 
       into v_content, v_content_length, v_lob, v_storage_type
-      from cr_revisions where revision_id = content_copy__revision_id;
+      from cr_revisions r, cr_items i 
+     where r.item_id = i.item_id 
+       and r.revision_id = content_copy__revision_id
 
     if v_storage_type = ''lob'' then
-       v_new_lob := empty_lob();
-       PERFORM lob_copy(v_lob, v_new_lob);
+        v_new_lob := empty_lob();
 
         update cr_revisions
            set content = null,
                content_length = v_content_length,
-               storage_type = ''lob''
                lob = v_new_lob
          where revision_id = v_revision_id_dest;
+        PERFORM lob_copy(v_lob, v_new_lob);
     else 
         -- this will work for both file and text types... well sort of.
         -- this really just creates a reference to the first file which is
@@ -644,7 +644,6 @@ begin
         update cr_revisions
            set content = v_content,
                content_length = v_content_length,
-               storage_type = v_storage_type,
                lob = null
          where revision_id = v_revision_id_dest;
     end if;
@@ -664,19 +663,18 @@ declare
   v_lob_id                            integer;
   v_data                              text;
 begin
-       select storage_type, lob, 
+       select i.storage_type, r.lob, 
          into v_storage_type, v_lob_id
-         from cr_revisions
-        where revision_id = get_content__revision_id;
+         from cr_items i, cr_revisions r
+        where i.item_id = r.item_id 
+          and r.revision_id = get_content__revision_id;
         
         if v_storage_type = ''lob'' then
-           return lob_get_data (v_lob_id);
+           return v_lob_id::text;
         else 
-           select content into v_data
+           return content
              from cr_revisions
             where revision_id = get_content_revision_id;
-
-           return v_data;
         end if;
 
 end;' language 'plpgsql';

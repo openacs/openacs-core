@@ -346,6 +346,8 @@ function new (
   --    @param context_id    Security context id, as in <tt>acs_object.new</tt>
   --                         If null, defaults to parent_id, and copies permissions
   --                         from the parent into the current item
+  --    @param storage_type  in ('lob','file').  Indicates how content is to be stored.
+  --                         'file' content is stored externally in the file system.
   --    @param <i>others</i> As in acs_object.new
   --    @return The id of the newly created item
   --    @see {acs_object.new}

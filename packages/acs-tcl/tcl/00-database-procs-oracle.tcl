@@ -176,7 +176,7 @@ ad_proc db_write_blob { statement_name sql args } {
     set full_statement_name [db_qd_get_fullname $statement_name]
 
     db_with_handle db { 
-	db_exec write_blob_lob $db $full_statement_name $sql
+	db_exec write_blob $db $full_statement_name $sql
     }
 }
 

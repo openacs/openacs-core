@@ -68,7 +68,7 @@
 	    publish_date = sysdate,
 	    mime_type = :guessed_file_type,
 	    title = :title
-	where revision_id = :revision_id"
+	where revision_id = :revision_id
  
         </querytext>
 </fullquery>

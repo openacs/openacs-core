@@ -30,7 +30,6 @@ function new (
 
   v_revision_id integer;
   v_content_type acs_object_types.object_type%TYPE;
-  v_storage_type cr_items.storage_type%TYPE;
 
 begin
 
@@ -45,16 +44,12 @@ begin
       context_id    => item_id
   );
 
-  select storage_type into v_storage_type
-    from cr_items
-   where item_id = new.item_id;
-
   insert into cr_revisions (
     revision_id, title, description, mime_type, publish_date,
-    nls_language, content, item_id, storage_type
+    nls_language, content, item_id
   ) values (
     v_revision_id, title, description, mime_type, publish_date,
-    nls_language, data, item_id, v_storage_type
+    nls_language, data, item_id
   );
 
   return v_revision_id;
@@ -76,7 +71,6 @@ function new (
 ) return cr_revisions.revision_id%TYPE is
 
   v_revision_id integer;
-  v_storage_type cr_items.storage_type%TYPE;
   blob_loc cr_revisions.content%TYPE;
 
 begin
@@ -472,13 +466,12 @@ procedure content_copy (
   v_item_id             cr_items.item_id%TYPE;
   v_content_length	integer;
   v_revision_id_dest	cr_revisions.revision_id%TYPE;
-  v_storage_type        cr_revisions.storage_type%TYPE;
   v_filename            cr_revisions.filename%TYPE;
   v_content             blob;
 begin
 
   select
-    dbms_lob.getlength( content ), item_id
+    content_length, item_id
   into
     v_content_length, v_item_id
   from
@@ -509,9 +502,9 @@ begin
        copied, not just the LOB locator. */
 
     select 
-      storage_type, filename, content_length
+      filename, content_length
     into 
-      v_storage_type, v_filename, v_content_length
+      v_filename, v_content_length
     from 
       cr_revisions
     where
@@ -524,7 +517,6 @@ begin
 
     update cr_revisions       
       set content = (select content from cr_revisions where revision_id = content_copy.revision_id),
-          storage_type = v_storage_type,
           filename = v_filename,
           content_length = v_content_length
       where revision_id = v_revision_id_dest;
