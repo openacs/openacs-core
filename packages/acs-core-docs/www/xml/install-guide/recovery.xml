@@ -177,12 +177,12 @@
               <title>PostgreSQL</title>
               <para>Create a backup file and verify that it was created and has a reasonable size (several megabytes).</para>
             </formalpara>
-            <screen>[root@localhost root]# <userinput>su - service0</userinput>
-            [service0@localhost service0]$ <userinput>pg_dump -f /var/lib/aolserver/<replaceable>service0</replaceable>/database-backup/before_upgrade_to_4.6.dmp <replaceable>service0</replaceable></userinput>
-            [service0@localhost service0]$ <userinput>ls -al /var/lib/aolserver/<replaceable>service0</replaceable>/database-backup/before_upgrade_to_4.6.dmp </userinput>
+            <screen>[root root]# <userinput>su - service0</userinput>
+            [service0 service0]$ <userinput>pg_dump -f /var/lib/aolserver/<replaceable>service0</replaceable>/database-backup/before_upgrade_to_4.6.dmp <replaceable>service0</replaceable></userinput>
+            [service0 service0]$ <userinput>ls -al /var/lib/aolserver/<replaceable>service0</replaceable>/database-backup/before_upgrade_to_4.6.dmp </userinput>
             -rw-rw-r-x    1 service0  service0   4005995 Feb 21 18:28 /var/lib/aolserver/service0/database-backup/before_upgrade_to_4.6.dmp
-            [service0@localhost service0]$ <userinput>exit</userinput>
-            [root@localhost root]#
+            [service0 service0]$ <userinput>exit</userinput>
+            [root root]#
             <action>su - service0
             pg_dump -f /var/lib/aolserver/<replaceable>service0</replaceable>/database-backup/before_upgrade_to_4.6.dmp <replaceable>openacs-dev</replaceable>
             ls -al /var/lib/aolserver/<replaceable>service0</replaceable>/database-backup/before_upgrade_to_4.6.dmp
@@ -231,32 +231,32 @@
             recursive backup.</para>
           </listitem>
         </itemizedlist>
-        <screen>[root@yourserver root]# <userinput>su - <replaceable>service0</replaceable></userinput>
-        [service0@yourserver service0]$ <userinput>tar -cpsj --exclude /var/lib/aolserver/<replaceable>service0</replaceable>/etc/daemontools/supervise --file /tmp/<replaceable>service0</replaceable>-backup.tar.bz2 /var/lib/aolserver/<replaceable>service0</replaceable>/ </userinput>
+        <screen>[root root]# <userinput>su - <replaceable>service0</replaceable></userinput>
+        [service0 service0]$ <userinput>tar -cpsj --exclude /var/lib/aolserver/<replaceable>service0</replaceable>/etc/daemontools/supervise --file /tmp/<replaceable>service0</replaceable>-backup.tar.bz2 /var/lib/aolserver/<replaceable>service0</replaceable>/ </userinput>
         tar: Removing leading `/' from member names
-        [service0@yourserver service0]$</screen>
+        [service0 service0]$</screen>
       </listitem>
       <listitem>
         <formalpara>
           <title>Suffer a catastrophic failure on your production system</title>
           <para>(We'll simulate this step)</para>
         </formalpara>
-        <screen>[root@yourserver root]# <userinput>svc -d /service/service0</userinput>
-        [root@yourserver root]# <userinput>mv /var/lib/aolserver/service0/ /var/lib/aolserver/service0.lost</userinput>
-        [root@yourserver root]#<userinput> rm /service/service0</userinput>
+        <screen>[root root]# <userinput>svc -d /service/service0</userinput>
+        [root root]# <userinput>mv /var/lib/aolserver/service0/ /var/lib/aolserver/service0.lost</userinput>
+        [root root]#<userinput> rm /service/service0</userinput>
         rm: remove symbolic link `/service/service0'? y
-        [root@yourserver root]# <userinput>ps -auxw | grep service0</userinput>
+        [root root]# <userinput>ps -auxw | grep service0</userinput>
         root      1496  0.0  0.0  1312  252 ?        S    16:58   0:00 supervise service0
-        [root@yourserver root]#<userinput> kill<replaceable> 1496</replaceable></userinput>
-        [root@yourserver root]# <userinput>ps -auxw | grep service0</userinput>
-        [root@yourserver root]# <userinput>su - postgres</userinput>
-        [postgres@yourserver pgsql]$ <userinput>dropdb service0</userinput>
+        [root root]#<userinput> kill<replaceable> 1496</replaceable></userinput>
+        [root root]# <userinput>ps -auxw | grep service0</userinput>
+        [root root]# <userinput>su - postgres</userinput>
+        [postgres pgsql]$ <userinput>dropdb service0</userinput>
         DROP DATABASE
-        [postgres@yourserver pgsql]$ <userinput>dropuser service0</userinput>
+        [postgres pgsql]$ <userinput>dropuser service0</userinput>
         DROP USER
-        [postgres@yourserver pgsql]$ <userinput>exit</userinput>
+        [postgres pgsql]$ <userinput>exit</userinput>
         logout
-        [root@yourserver root]#</screen>
+        [root root]#</screen>
       </listitem>
       <listitem>
         <formalpara id="recovery">
@@ -273,11 +273,11 @@
           </listitem>
           <listitem>
             <para>Restore the OpenACS files and database backup file.</para>
-            <screen>[root@yourserver root]# <userinput>su - <replaceable>service0</replaceable></userinput>
-            [service0@yourserver service0]$ <userinput>cd /var/lib/aolserver</userinput>
-            [service0@yourserver aolserver]$<userinput> tar xjf /tmp/service0-backup.tar.bz2</userinput>
-            [service0@yourserver aolserver]$ <userinput>chmod -R 775 <replaceable>service0</replaceable></userinput>
-            [service0@yourserver aolserver]$ <userinput>chown -R <replaceable>service0.web</replaceable> <replaceable>service0</replaceable></userinput>
+            <screen>[root root]# <userinput>su - <replaceable>service0</replaceable></userinput>
+            [service0 service0]$ <userinput>cd /var/lib/aolserver</userinput>
+            [service0 aolserver]$<userinput> tar xjf /tmp/service0-backup.tar.bz2</userinput>
+            [service0 aolserver]$ <userinput>chmod -R 775 <replaceable>service0</replaceable></userinput>
+            [service0 aolserver]$ <userinput>chown -R <replaceable>service0.web</replaceable> <replaceable>service0</replaceable></userinput>
 
             </screen>
           </listitem>
@@ -307,19 +307,19 @@
                   <para></para>
                 </formalpara>
                 <para>Because of a bug in Postgres backup-recovery, database objects are not guaranteed to be created in the right order.  To compensate, we pre-creating some critical items first, which leads to some harmless errors.</para>
-                <screen>[root@yourserver root]# <userinput>su - postgres</userinput>
-                [postgres@yourserver pgsql]$ <userinput>createuser <replaceable>service0</replaceable></userinput>
+                <screen>[root root]# <userinput>su - postgres</userinput>
+                [postgres pgsql]$ <userinput>createuser <replaceable>service0</replaceable></userinput>
                 Shall the new user be allowed to create databases? (y/n) <userinput>y</userinput>
                 Shall the new user be allowed to create more new users? (y/n) <userinput>y</userinput>
                 CREATE USER
-                [service0@yourserver web]$ <userinput>createdb <replaceable>service0</replaceable></userinput>
+                [service0 web]$ <userinput>createdb <replaceable>service0</replaceable></userinput>
                 CREATE DATABASE
-                [service0@yourserver web]$<userinput> psql -f /var/lib/aolserver/<replaceable>service0</replaceable>/packages/acs-kernel/sql/postgresql/postgresql.sql <replaceable>service0</replaceable></userinput>
+                [service0 web]$<userinput> psql -f /var/lib/aolserver/<replaceable>service0</replaceable>/packages/acs-kernel/sql/postgresql/postgresql.sql <replaceable>service0</replaceable></userinput>
                 <emphasis>(many lines omitted)</emphasis>
-                [service0@yourserver web]$ <userinput>psql <replaceable>service0</replaceable> &lt; /var/lib/aolserver/<replaceable>service0</replaceable>/database-backup/<replaceable>database-backup.dmp</replaceable></userinput>
+                [service0 web]$ <userinput>psql <replaceable>service0</replaceable> &lt; /var/lib/aolserver/<replaceable>service0</replaceable>/database-backup/<replaceable>database-backup.dmp</replaceable></userinput>
                 <emphasis>(many lines omitted)</emphasis>
-                [service0@yourserver web]$ <userinput>exit</userinput>
-                [postgres@yourserver pgsql]$ <userinput>exit</userinput>
+                [service0 web]$ <userinput>exit</userinput>
+                [postgres pgsql]$ <userinput>exit</userinput>
                 logout
                 </screen>
               </listitem>
@@ -327,10 +327,10 @@
           </listitem>
           <listitem>
             <para>Activate the service</para>
-            <screen>[root@yourserver root]# <userinput>ln -s /var/lib/aolserver/<replaceable>service0</replaceable>/etc/daemontools /service/<replaceable>service0</replaceable></userinput>
-            [root@yourserver root]# <userinput>sleep 10</userinput>
-            [root@yourserver root]# <userinput>svgroup web /service/<replaceable>service0</replaceable></userinput>
-            [root@yourserver root]#</screen>
+            <screen>[root root]# <userinput>ln -s /var/lib/aolserver/<replaceable>service0</replaceable>/etc/daemontools /service/<replaceable>service0</replaceable></userinput>
+            [root root]# <userinput>sleep 10</userinput>
+            [root root]# <userinput>svgroup web /service/<replaceable>service0</replaceable></userinput>
+            [root root]#</screen>
           </listitem>
         </orderedlist>
       </listitem>
@@ -370,29 +370,29 @@
     safety, you can apply a tag to your current
     files.  You will still need to back up your database.</para>
     <para>  Note that, if you did the CVS options in this document, the <computeroutput>/var/lib/aolserver/service0/etc</computeroutput> directory is not included in cvs and you may want to add it.</para>
-    <screen>[root@localhost root]# <userinput>su - service0</userinput>
-    [service0@localhost service0]$ <userinput>cd /var/lib/aolserver/<replaceable>service0</replaceable></userinput>
-    [service0@localhost service0]$ <userinput>cvs commit -m "last-minute commits before upgrade to 4.6"</userinput>
+    <screen>[root root]# <userinput>su - service0</userinput>
+    [service0 service0]$ <userinput>cd /var/lib/aolserver/<replaceable>service0</replaceable></userinput>
+    [service0 service0]$ <userinput>cvs commit -m "last-minute commits before upgrade to 4.6"</userinput>
     cvs commit: Examining .
     cvs commit: Examining bin
     (many lines omitted)
-    [service0@localhost service0]$ <userinput>cvs tag before_upgrade_to_4_6</userinput>
+    [service0 service0]$ <userinput>cvs tag before_upgrade_to_4_6</userinput>
     cvs server: Tagging bin
     T bin/acs-4-0-publish.sh
     T bin/ad-context-server.pl
     (many lines omitted)
-    [service0@localhost service0]$ <userinput>exit</userinput>
-    [root@localhost root]# 
+    [service0 service0]$ <userinput>exit</userinput>
+    [root root]# 
     <action>su - service0
     cd /var/lib/aolserver/<replaceable>service0</replaceable>
     cvs commit -m "last-minute commits before upgrade to 4.6"
     cvs tag before_upgrade_to_4_6
     exit</action></screen>
     <para>To restore files from a cvs tag such as the one used above:</para>
-    <screen>[root@localhost root]# <userinput>su - service0</userinput>
-    [service0@localhost service0]$ <userinput>cd /var/lib/aolserver/<replaceable>service0</replaceable></userinput>
-    [service0@localhost service0]$ <userinput>cvs up -r current</userinput>
-    [service0@localhost service0]$ <userinput>exit</userinput>
+    <screen>[root root]# <userinput>su - service0</userinput>
+    [service0 service0]$ <userinput>cd /var/lib/aolserver/<replaceable>service0</replaceable></userinput>
+    [service0 service0]$ <userinput>cvs up -r current</userinput>
+    [service0 service0]$ <userinput>exit</userinput>
     <action><userinput>su - service0</userinput>
     cd /var/lib/aolserver/<replaceable>service0</replaceable>
     cvs up -r current</action></screen>

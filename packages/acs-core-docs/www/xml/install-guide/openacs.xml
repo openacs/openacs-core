@@ -19,10 +19,10 @@
       <computeroutput>/var/lib/aolserver</computeroutput>, one
       subdirectory per site.  The first time you install an OpenACS
       site on a server, you must create the parent directory and set its permissions:</para>
-    <screen>[root@yourserver root]# <userinput>mkdir /var/lib/aolserver</userinput>
-[root@yourserver root]# <userinput>chgrp web /var/lib/aolserver</userinput>
-[root@yourserver root]# <userinput>chmod 770 /var/lib/aolserver</userinput>
-[root@yourserver root]#
+    <screen>[root root]# <userinput>mkdir /var/lib/aolserver</userinput>
+[root root]# <userinput>chgrp web /var/lib/aolserver</userinput>
+[root root]# <userinput>chmod 770 /var/lib/aolserver</userinput>
+[root root]#
 <action>mkdir /var/lib/aolserver
 chgrp web /var/lib/aolserver
 chmod 770 /var/lib/aolserver</action></screen>
@@ -55,9 +55,9 @@ chmod 770 /var/lib/aolserver</action></screen>
       can use database and server commands associated with that group.
     </para>
 
-        <screen>[root@yourserver root]# <userinput>groupadd <replaceable>web</replaceable></userinput>
-[root@yourserver root]# <userinput>useradd -g <replaceable>service0</replaceable> -G web <replaceable>service0</replaceable> -d /home/<replaceable>service0</replaceable></userinput>
-[root@yourserver root]#</screen>
+        <screen>[root root]# <userinput>groupadd <replaceable>web</replaceable></userinput>
+[root root]# <userinput>useradd -g <replaceable>service0</replaceable> -G web <replaceable>service0</replaceable> -d /home/<replaceable>service0</replaceable></userinput>
+[root root]#</screen>
   </sect2>
   
   <sect2 id="install-with-script">
@@ -72,24 +72,24 @@ chmod 770 /var/lib/aolserver</action></screen>
         service's dedicated user.  We put it there so that it is not
         overwritten when we do the main CVS checkout to the target
         location.</para>
-        <screen>[root@yourserver root]# <userinput>su - <replaceable>service0</replaceable></userinput>
-[service0@yourserver service0]$ <userinput>cvs -d :pserver:anonymous@openacs.org:/cvsroot co -d install openacs-4/etc/install</userinput>
+        <screen>[root root]# <userinput>su - <replaceable>service0</replaceable></userinput>
+[service0 service0]$ <userinput>cvs -d :pserver:anonymous@openacs.org:/cvsroot co -d install openacs-4/etc/install</userinput>
 cvs server: Updating install
 U install/README
 U install/TODO
   ... many lines omitted ...
 U install/tcl/twt-procs.tcl
 U install/tcl/user-procs.tcl
-[service0@yourserver service0]$ <userinput>cd install</userinput>
-[service0@yourserver install]$ 
+[service0 service0]$ <userinput>cd install</userinput>
+[service0 install]$ 
 </screen>
         <para>Edit
         <computeroutput>/home/<replaceable>service0</replaceable>/install/install.tcl</computeroutput>
         and change the values as documented in the file.  It will work
         unchanged at 127.0.0.1:8000.</para>
         <para>Run the file as root.</para>
-        <screen>[service0@yourserver service0]$ <userinput>exit</userinput> 
-[root@yourserver root]# <userinput>sh /home/<replaceable>service0</replaceable>/install/install.sh</userinput>
+        <screen>[service0 service0]$ <userinput>exit</userinput> 
+[root root]# <userinput>sh /home/<replaceable>service0</replaceable>/install/install.sh</userinput>
 /home/service0/install/install.sh: Starting installation with config_file 
 /home/service0/install/install.tcl. Using serverroot=/var/lib/aolserver/
 service0, server_url=http://0.0.0.0:8000, do_checkout=yes, do_install=yes, 
@@ -98,7 +98,7 @@ dotlrn=no, and database=postgres., use_daemontools=true
 ./install.sh: Finished (re)installing /var/lib/aolserver/service0 at Wed Nov  
 5 13:27:17 CET 2003.  Access the new site at http://127.0.0.1:8000 with admin 
 username admin@yourserver.test and password 1
-[root@yourserver root]#</screen>
+[root root]#</screen>
     <para>You can proceed to <xref linkend="install-next-steps"/>.</para>
   </sect2>
 
@@ -112,20 +112,20 @@ username admin@yourserver.test and password 1
     <orderedlist>
       <listitem id="install-openacs-download">
         <para>Unpack the OpenACS tarball and rename it to <computeroutput>service0</computeroutput>.  Secure the directory so that only the owner can access it.  Check the permissions by listing the directory.</para>       
-        <screen>[root@yourserver root]# <userinput>su - <replaceable>service0</replaceable></userinput>
-[service0@yourserver service0]$ <userinput>cd /var/lib/aolserver</userinput>
-[service0@yourserver aolserver]$ <userinput>tar xzf /tmp/&tarballpath;.tgz</userinput>
-[service0@yourserver aolserver]$ <userinput>mv &tarballpath; <replaceable>service0</replaceable></userinput>
-[service0@yourserver aolserver]$ <userinput>chmod -R 700 <replaceable>service0</replaceable></userinput>
-[service0@yourserver aolserver]$ <userinput>ls -al</userinput>
+        <screen>[root root]# <userinput>su - <replaceable>service0</replaceable></userinput>
+[service0 service0]$ <userinput>cd /var/lib/aolserver</userinput>
+[service0 aolserver]$ <userinput>tar xzf /tmp/&tarballpath;.tgz</userinput>
+[service0 aolserver]$ <userinput>mv &tarballpath; <replaceable>service0</replaceable></userinput>
+[service0 aolserver]$ <userinput>chmod -R 700 <replaceable>service0</replaceable></userinput>
+[service0 aolserver]$ <userinput>ls -al</userinput>
 total 3
 drwxrwx---    3 root     web          1024 Mar 29 16:41 .
 drwxr-xr-x   25 root     root         1024 Mar 29 16:24 ..
 drwx------    7 service0 web          1024 Jan  6 14:36 service0
-[service0@yourserver aolserver]$ <userinput>exit</userinput>
+[service0 aolserver]$ <userinput>exit</userinput>
 logout
 
-[root@yourserver root]#
+[root root]#
 <action>su - service0
 cd /var/lib/aolserver
 tar xzf /tmp/&tarballpath;.tgz
@@ -327,20 +327,20 @@ SQL&gt; exit</programlisting>
                 <para>PostgreSQL:</para>
                 <para>Create a user in the database matching the service
             name.  With default PostgreSQL authentication, a system user connecting locally automatically authenticates as the postgres user of the same name, if one exists.  We currently use postgres "super-users" for everything, which means that anyone with access to any of the openacs system accounts on a machine has full access to all postgresql databases on that machine.</para>
-                <screen>[root@yourserver root]# <userinput>su - postgres</userinput>
-[postgres@yourserver pgsql]$ <userinput>createuser -a -d <replaceable>service0</replaceable></userinput>
+                <screen>[root root]# <userinput>su - postgres</userinput>
+[postgres pgsql]$ <userinput>createuser -a -d <replaceable>service0</replaceable></userinput>
 CREATE USER
-[postgres@yourserver pgsql]$ <userinput>exit</userinput>
+[postgres pgsql]$ <userinput>exit</userinput>
 logout
 
-[root@yourserver root]#</screen>
+[root root]#</screen>
               </listitem>
               <listitem id="create-database">
                 <para>Create a database with the same name as our service name, <replaceable>service0</replaceable>.</para>
-                <screen>[root@yourserver root]# <userinput>su - <replaceable>service0</replaceable></userinput>
-[service0@yourserver service0]$ <userinput>createdb -E UNICODE <replaceable>service0</replaceable></userinput>
+                <screen>[root root]# <userinput>su - <replaceable>service0</replaceable></userinput>
+[service0 service0]$ <userinput>createdb -E UNICODE <replaceable>service0</replaceable></userinput>
 CREATE DATABASE
-[service0@yourserver service0]$
+[service0 service0]$
 <action>su - <replaceable>service0</replaceable>
 createdb -E UNICODE <replaceable>service0</replaceable></action></screen>
               </listitem>
@@ -350,7 +350,7 @@ createdb -E UNICODE <replaceable>service0</replaceable></action></screen>
                   <primary>Postgres</primary>
                   <secondary>Vacuuming</secondary>
                 </indexterm>
-                <screen>[service0@yourserver service0]$ <userinput>export EDITOR=emacs;crontab -e</userinput></screen>
+                <screen>[service0 service0]$ <userinput>export EDITOR=emacs;crontab -e</userinput></screen>
                 <para>Add this line to the file.  The numbers and stars at the beginning are cron columns that specify when the program should be run - in this case, whenever the minute is 0 and the hour is 1, i.e., 1:00 am every day.</para>
                 <programlisting>0 1-23 * * * /usr/local/pgsql/bin/vacuumdb --full --analyze <replaceable>service0</replaceable>
 0 0 * * * /usr/local/pgsql/bin/vacuumdb --full --analyze <replaceable>service0</replaceable></programlisting>
@@ -359,10 +359,10 @@ createdb -E UNICODE <replaceable>service0</replaceable></action></screen>
                 <para><link linkend="install-openfts-postgres">Add Full Text Search Support</link> (OPTIONAL)</para>
               </listitem>
               <listitem id="db-setup-exit">
-                <screen>[service0@yourserver service0]$ <userinput>exit</userinput>
+                <screen>[service0 service0]$ <userinput>exit</userinput>
 logout
 
-[root@yourserver root]# </screen>
+[root root]# </screen>
               </listitem>
             </itemizedlist>
           </listitem>
@@ -388,9 +388,9 @@ logout
               <secondary>configuration</secondary>
             </indexterm>
             
-            <screen>[root@yourserver root]# <userinput>su - <replaceable>service0</replaceable></userinput>
-[service0@yourserver service0]$ <userinput>cd /var/lib/aolserver/<replaceable>service0</replaceable>/etc</userinput>
-[service0@yourserver etc]# <userinput>emacs config.tcl</userinput>
+            <screen>[root root]# <userinput>su - <replaceable>service0</replaceable></userinput>
+[service0 service0]$ <userinput>cd /var/lib/aolserver/<replaceable>service0</replaceable>/etc</userinput>
+[service0 etc]$ <userinput>emacs config.tcl</userinput>
 </screen>
             <para>
 	  You can continue without changing any values in the file.  However, if you don't change <computeroutput>address</computeroutput> to match the computer's ip address, you won't be able to browse to your server from other machines.
@@ -479,10 +479,10 @@ logout
 	  <replaceable>501</replaceable> -g
 	  <replaceable>502</replaceable></computeroutput>.  Second, if you are root then killall will affect all OpenACS services on the machine, so if there's more than one you'll have to do <computeroutput>ps -auxw | grep
 	  nsd</computeroutput> and selectively kill by job number.</para>
-        <screen>[service0@yourserver etc]$ <userinput>killall nsd</userinput>
+        <screen>[service0 etc]$ <userinput>killall nsd</userinput>
 nsd: no process killed
-[service0@yourserver service0]$<userinput> /usr/local/aolserver/bin/nsd-postgres -t /var/lib/aolserver/<replaceable>service0</replaceable>/etc/config.tcl</userinput>
-[service0@yourserver service0]$ [08/Mar/2003:18:13:29][32131.8192][-main-] Notice: nsd.tcl: starting to read config file...
+[service0 service0]$<userinput> /usr/local/aolserver/bin/nsd-postgres -t /var/lib/aolserver/<replaceable>service0</replaceable>/etc/config.tcl</userinput>
+[service0 service0]$ [08/Mar/2003:18:13:29][32131.8192][-main-] Notice: nsd.tcl: starting to read config file...
 [08/Mar/2003:18:13:29][32131.8192][-main-] Notice: nsd.tcl: finished reading config file.</screen>
       </listitem>
       <listitem id="connect-to-aolserver">
@@ -593,7 +593,7 @@ Loading package .info files ... this will take a few minutes</programlisting>
 		  AOLserver to restart itself (ie. inittab or daemontools),
 		  you&#39;ll need to manually restart your service.
 		</para>
-        <screen>[service0@yourserver service0]$ <userinput>/usr/local/aolserver/bin/nsd-postgres -t /var/lib/aolserver/<replaceable>service0</replaceable>/config.tcl</userinput></screen>
+        <screen>[service0 service0]$ <userinput>/usr/local/aolserver/bin/nsd-postgres -t /var/lib/aolserver/<replaceable>service0</replaceable>/config.tcl</userinput></screen>
       </listitem>
 
       <listitem><para> 
@@ -641,8 +641,8 @@ Loading package .info files ... this will take a few minutes</programlisting>
 	database, because those environmental variables are set by the
 	wrapper scripts nsd-postgres and nsd-oracle.</para>
         
-        <screen>[root@yourserver root]# <userinput>su - <replaceable>service0</replaceable></userinput>
-[service0@yourserver service0]$ <userinput>emacs .bashrc</userinput></screen>
+        <screen>[root root]# <userinput>su - <replaceable>service0</replaceable></userinput>
+[service0 service0]$ <userinput>emacs .bashrc</userinput></screen>
         <para>Put in the appropriate lines for the database you are running.  If you will use both databases, put in both sets of lines.</para>
         <itemizedlist>
           <listitem>
@@ -668,10 +668,10 @@ export ORA_NLS33=$ORACLE_HOME/ocommon/nls/admin/data</programlisting>
 
         <para>Test this by logging out and back in as
 	<computeroutput><replaceable>service0</replaceable></computeroutput> and checking the paths.</para>
-        <screen>[service0@yourserver service0]$ <userinput>exit</userinput>
+        <screen>[service0 service0]$ <userinput>exit</userinput>
 logout
-[root@yourserver src]# <userinput>su - <userinput><replaceable>service0</replaceable></userinput></userinput>
-[postgres@yourserver pgsql]$ <userinput>env | grep PATH</userinput>
+[root src]# <userinput>su - <userinput><replaceable>service0</replaceable></userinput></userinput>
+[postgres pgsql]$ <userinput>env | grep PATH</userinput>
 </screen>
         <itemizedlist>
           <listitem>
@@ -691,10 +691,10 @@ ORACLE_TERM=vt100
 ORA_NLS33=$ORACLE_HOME/ocommon/nls/admin/data</screen>
           </listitem>
         </itemizedlist>
-        <screen>[service0@yourserver service0]$ <userinput>exit</userinput>
+        <screen>[service0 service0]$ <userinput>exit</userinput>
 logout
 
-[root@yourserver root]#</screen>
+[root root]#</screen>
       </listitem>
       <listitem><para>Test your <link linkend="backup-recovery">backup and recovery</link> procedure.</para>
       </listitem>

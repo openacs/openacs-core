@@ -33,16 +33,16 @@
         tarball at
         <computeroutput>/var/lib/aolserver/<replaceable>service0</replaceable>/etc/daemontools</computeroutput>.  To use it, first ill any existing AOLserver instances.  As root, link the <computeroutput>daemontools</computeroutput> directory into the <computeroutput>/service</computeroutput> directory.  Daemontools' <computeroutput>svscan</computeroutput> process checks this directory every five seconds, and will quickly execute <computeroutput>run</computeroutput>.</para>
             
-            <screen>[service0@yourserver etc]$ <userinput>killall nsd</userinput>
+            <screen>[service0 etc]$ <userinput>killall nsd</userinput>
 nsd: no process killed
-[service0@yourserver etc]$ <userinput>exit</userinput>
+[service0 etc]$ <userinput>exit</userinput>
 
-[root@yourserver root]# <userinput>ln -s /var/lib/aolserver/<replaceable>service0</replaceable>/etc/daemontools/ /service/<replaceable>service0</replaceable></userinput></screen>
+[root root]# <userinput>ln -s /var/lib/aolserver/<replaceable>service0</replaceable>/etc/daemontools/ /service/<replaceable>service0</replaceable></userinput></screen>
             <para>Verify that AOLserver is running.</para>
-            <screen>[root@yourserver root]#<userinput> ps -auxw | grep nsd</userinput>
+            <screen>[root root]#<userinput> ps -auxw | grep nsd</userinput>
 <replaceable>service0</replaceable>   5562 14.2  6.2 22436 15952 ?       S    11:55   0:04 /usr/local/aolserver/bin/nsd -it /var/lib/aolserver/<replaceable>service0</replaceable>/etc/config.tcl -u serve
 root      5582  0.0  0.2  3276  628 pts/0    S    11:55   0:00 grep nsd
-[root@yourserver root]#</screen>
+[root root]#</screen>
           </listitem>
           <listitem>
             <para>The user <replaceable>service0</replaceable> can now control the service <replaceable>service0</replaceable> with these commands:</para>
@@ -89,16 +89,16 @@ root      5582  0.0  0.2  3276  628 pts/0    S    11:55   0:00 grep nsd
         <listitem>
           <para>Install a script to automate the stopping and starting
           of AOLserver services via daemontools.  You can then restart a service via <computeroutput>restart-aolserver <replaceable>service0</replaceable></computeroutput></para>
-          <screen>[root@yourserver root]# <userinput>cp /var/lib/aolserver/<replaceable>service0</replaceable>/packages/acs-core-docs/www/files/restart-aolserver-daemontools.txt /usr/local/bin/restart-aolserver</userinput>
-[root@yourserver root]# <userinput>chmod 755 /usr/local/bin/restart-aolserver</userinput>
-[root@yourserver root]#</screen>
+          <screen>[root root]# <userinput>cp /var/lib/aolserver/<replaceable>service0</replaceable>/packages/acs-core-docs/www/files/restart-aolserver-daemontools.txt /usr/local/bin/restart-aolserver</userinput>
+[root root]# <userinput>chmod 755 /usr/local/bin/restart-aolserver</userinput>
+[root root]#</screen>
         </listitem>
       <listitem>
         <para>
         At this point, these commands will work only for the
         <computeroutput>root</computeroutput> user.  Grant permission for the <computeroutput>web</computeroutput> group to use <computeroutput>svc</computeroutput> commands on the <emphasis><replaceable>service0</replaceable></emphasis> server.</para>
-            <screen>[root@yourserver root]# <userinput>svgroup web /service/<replaceable>service0</replaceable></userinput>
-[root@yourserver root]#</screen>
+            <screen>[root root]# <userinput>svgroup web /service/<replaceable>service0</replaceable></userinput>
+[root root]#</screen>
           </listitem>
           <listitem>
             <para>Verify that the controls work.  You may want to <computeroutput>tail -f /var/lib/aolserver/<replaceable>service0</replaceable>/log/<replaceable>service0</replaceable>-error.log</computeroutput> in another window, so you can see what happens when you type these commands.
@@ -328,17 +328,17 @@ set address                127.0.0.1 </programlisting>
           </listitem>
           <listitem id="ssl-certificates" xreflabel="Generate ssl certificates">
             <para>Prepare a certificate directory for the service.</para>
-            <screen>[service0@yourserver etc]$ <userinput>mkdir /var/lib/aolserver/<replaceable>service0</replaceable>/etc/certs</userinput>
-[service0@yourserver etc]$ <userinput>chmod 700 /var/lib/aolserver/<replaceable>service0</replaceable>/etc/certs</userinput>
-[service0@yourserver etc]$ 
+            <screen>[service0 etc]$ <userinput>mkdir /var/lib/aolserver/<replaceable>service0</replaceable>/etc/certs</userinput>
+[service0 etc]$ <userinput>chmod 700 /var/lib/aolserver/<replaceable>service0</replaceable>/etc/certs</userinput>
+[service0 etc]$ 
 <action>mkdir /var/lib/aolserver/<replaceable>service0</replaceable>/etc/certs
 chmod 700 /var/lib/aolserver/<replaceable>service0</replaceable>/etc/certs</action></screen>            
           </listitem>
           <listitem>
             <para>It takes two files to support an SSL connection.  The certificate is the public half of the key pair - the server sends the certificate to browser requesting ssl.  The key is the private half of the key pair.  In addition, the certificate must be signed by Certificate Authority or browsers will protest.  Each web browser ships with a built-in list of acceptable Certificate Authorities (CAs) and their keys.  Only a site certificate signed by a known and approved CA will work smoothly.  Any other certificate will cause browsers to produce some messages or block the site.  Unfortunately, getting a site certificate signed by a CA costs money.  In this section, we'll generate an unsigned certificate which will work in most browsers, albeit with pop-up messages.</para>
             <para>Use an OpenSSL perl script to generate a certificate and key.</para>
-            <screen>[service0@yourserver service0]$ <userinput>cd /var/lib/aolserver/service0/etc/certs</userinput>
-[service0@yourserver certs]$ <userinput>perl /usr/share/ssl/misc/CA -newcert</userinput>
+            <screen>[service0 service0]$ <userinput>cd /var/lib/aolserver/service0/etc/certs</userinput>
+[service0 certs]$ <userinput>perl /usr/share/ssl/misc/CA -newcert</userinput>
 Using configuration from /usr/share/ssl/openssl.cnf
 Generating a 1024 bit RSA private key
 ...++++++
@@ -347,16 +347,16 @@ writing new private key to 'newreq.pem'
 Enter PEM pass phrase:</screen>
             <para>Enter a pass phrase for the CA certificate.  Then, answer the rest of the questions.  At the end you should see this:</para>
         <screen>Certificate (and private key) is in newreq.pem
-[service0@yourserver certs]$</screen>
+[service0 certs]$</screen>
         <para><computeroutput>newreq.pem</computeroutput> contains our certificate and private key.  The key is protected by a passphrase, which means that we'll have to enter the pass phrase each time the server starts.  This is impractical and unnecessary, so we create an unprotected version of the key.  <emphasis>Security implication</emphasis>: if anyone gets access to the file keyfile.pem, they effectively own the key as much as you do.  Mitigation: don't use this key/cert combo for anything besides providing ssl for the web site.</para>
-            <screen>[root@yourserver misc]# <userinput>openssl rsa -in newreq.pem -out keyfile.pem</userinput>
+            <screen>[root misc]# <userinput>openssl rsa -in newreq.pem -out keyfile.pem</userinput>
 read RSA key
 Enter PEM pass phrase:
 writing RSA key
-[service0@yourserver certs]$ </screen>
+[service0 certs]$ </screen>
         <para>To create the certificate file, we take the combined file, copy it, and strip out the key.</para>
-        <screen>[service0@yourserver certs]$ <userinput>cp newreq.pem certfile.pem</userinput>
-[root@yourserver misc]# <userinput>emacs certfile.pem</userinput></screen>
+        <screen>[service0 certs]$ <userinput>cp newreq.pem certfile.pem</userinput>
+[root misc]# <userinput>emacs certfile.pem</userinput></screen>
         <para>Strip out the section that looks like</para>
         <programlisting>-----BEGIN RSA PRIVATE KEY-----
 Proc-Type: 4,ENCRYPTED
@@ -379,12 +379,12 @@ S/Sd2MYA0JVmQuIt5bYowXR1KYKDka1d3DUgtoVTiFepIRUrMkZlCli08mWVjE6T
       the OpenACS tarball.</para>
     <orderedlist>
       <listitem>
-        <screen>[root@yourserver src]# <userinput>su - service0</userinput>
-[service0@yourserver service0]$ <userinput>cd /var/lib/aolserver/service0</userinput>
-[service0@yourserver service0]$ <userinput>cp /var/lib/aolserver/service0/packages/acs-core-docs/www/files/analog.cfg.txt etc/analog.cfg</userinput>
-[service0@yourserver service0]$ <userinput>mkdir www/log</userinput>
-[service0@yourserver service0]$ <userinput>cp -r /usr/share/analog-5.31/images www/log/</userinput>
-[service0@yourserver service0]$ <action>
+        <screen>[root src]# <userinput>su - service0</userinput>
+[service0 service0]$ <userinput>cd /var/lib/aolserver/service0</userinput>
+[service0 service0]$ <userinput>cp /var/lib/aolserver/service0/packages/acs-core-docs/www/files/analog.cfg.txt etc/analog.cfg</userinput>
+[service0 service0]$ <userinput>mkdir www/log</userinput>
+[service0 service0]$ <userinput>cp -r /usr/share/analog-5.31/images www/log/</userinput>
+[service0 service0]$ <action>
 su - service0
 cd /var/lib/aolserver/service0
 cp /var/lib/aolserver/service0/packages/acs-core-docs/www/files/analog.cfg.txt etc/analog.cfg
@@ -399,29 +399,29 @@ directory.</para>
       </listitem>
       <listitem>
         <para>Run it.</para>
-        <screen>[service0@yourserver service0]$ <userinput>/usr/share/analog-5.31/analog -G -g/var/lib/aolserver/service0/etc/analog.cfg</userinput>
+        <screen>[service0 service0]$ <userinput>/usr/share/analog-5.31/analog -G -g/var/lib/aolserver/service0/etc/analog.cfg</userinput>
 /usr/share/analog-5.31/analog: analog version 5.31/Unix
 /usr/share/analog-5.31/analog: Warning F: Failed to open DNS input file
   /home/service0/dnscache: ignoring it
   (For help on all errors and warnings, see docs/errors.html)
 /usr/share/analog-5.31/analog: Warning R: Turning off empty Search Word Report
-[service0@yourserver service0]$</screen>
+[service0 service0]$</screen>
         <para>Verify that it works by browing to <computeroutput>http://yourserver.test:8000/log/traffic.html</computeroutput></para>
       </listitem>
       <listitem>
         <para>Automate this by creating a file in
           <computeroutput>/etc/cron.daily</computeroutput>.</para>
-          <screen>[service0@yourserver service0]$ <userinput>exit</userinput>
+          <screen>[service0 service0]$ <userinput>exit</userinput>
 logout
 
-[root@yourserver root]# <userinput>emacs /etc/cron.daily/analog</userinput></screen>
+[root root]# <userinput>emacs /etc/cron.daily/analog</userinput></screen>
         <para>Put this into the file:</para>
         <programlisting>#!/bin/sh
 
 /usr/share/analog-5.31/analog -G -g/var/lib/aolserver/<replaceable>service0</replaceable>/etc/analog.cfg</programlisting>
-        <screen>[root@yourserver root]# <userinput>chmod 755 /etc/cron.daily/analog</userinput></screen>
+        <screen>[root root]# <userinput>chmod 755 /etc/cron.daily/analog</userinput></screen>
         <para>Test it by running the script.</para>
-        <screen>[root@yourserver root]# <userinput>sh /etc/cron.daily/analog</userinput></screen>
+        <screen>[root root]# <userinput>sh /etc/cron.daily/analog</userinput></screen>
         <para>Browse to <computeroutput>http://<replaceable>yourserver.test</replaceable>/log/traffic.html</computeroutput></para>
       </listitem>
     </orderedlist>

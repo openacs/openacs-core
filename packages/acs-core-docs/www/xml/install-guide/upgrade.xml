@@ -125,16 +125,16 @@ make
 make install
 exit</screen>
             <para>In order for the OpenACS 4.6 OpenFTS Engine to use the OpenFTS 0.3.2 driver, we need some commands added to the database.</para>
-            <screen>[root@localhost root]# <userinput>su - nsadmin</userinput>
-[nsadmin@localhost dev]$ <userinput>psql <replaceable>openacs-dev</replaceable> -f /usr/local/pgsql/share/contrib/openfts.sql</userinput>
+            <screen>[root root]# <userinput>su - nsadmin</userinput>
+[nsadmin dev]$ <userinput>psql <replaceable>openacs-dev</replaceable> -f /usr/local/pgsql/share/contrib/openfts.sql</userinput>
 CREATE
 CREATE
-[nsadmin@localhost dev]$ <userinput>psql <replaceable>openacs-dev</replaceable> -f /usr/local/src/postgresql-7.2.3/contrib/tsearch/tsearch.sql</userinput>
+[nsadmin dev]$ <userinput>psql <replaceable>openacs-dev</replaceable> -f /usr/local/src/postgresql-7.2.3/contrib/tsearch/tsearch.sql</userinput>
 BEGIN
 CREATE
 (~30 more lines)
-[nsadmin@localhost dev]$ <userinput>exit</userinput>
-[root@localhost root]# 
+[nsadmin dev]$ <userinput>exit</userinput>
+[root root]# 
 <action>su - nsadmin
 psql <replaceable>openacs-dev</replaceable> -f /usr/local/pgsql/share/contrib/openfts.sql
 psql <replaceable>openacs-dev</replaceable> -f /usr/local/src/postgresql-7.2.3/contrib/tsearch/tsearch.sql
@@ -146,7 +146,7 @@ exit</action></screen>
         <para>
          Stop the server
         </para>
-        <screen>[root@localhost root]# <userinput>svc -d /service/<replaceable>openacs-dev</replaceable></userinput></screen>
+        <screen>[root root]# <userinput>svc -d /service/<replaceable>openacs-dev</replaceable></userinput></screen>
       </listitem>
       <listitem>
         <formalpara>
@@ -159,12 +159,12 @@ exit</action></screen>
               <title>Upgrading files without CVS</title>
               <para>Unpack the tarball into a new directory and copy its contents on top of your working directory.</para>
             </formalpara>
-            <screen>[root@localhost root]# <userinput>su - nsadmin</userinput>
-[nsadmin@localhost aolserver]$ <userinput>cd /web</userinput>
-[nsadmin@localhost web]$ <userinput>tar xzf /tmp/openacs-4-6.tgz</userinput>
-[nsadmin@localhost web]$ <userinput>cp -r openacs-4-6/* openacs-4</userinput>
-[nsadmin@localhost openacs-upgrade]$ <userinput>exit</userinput>
-[root@localhost root]#
+            <screen>[root root]# <userinput>su - nsadmin</userinput>
+[nsadmin aolserver]$ <userinput>cd /web</userinput>
+[nsadmin web]$ <userinput>tar xzf /tmp/openacs-4-6.tgz</userinput>
+[nsadmin web]$ <userinput>cp -r openacs-4-6/* openacs-4</userinput>
+[nsadmin openacs-upgrade]$ <userinput>exit</userinput>
+[root root]#
 <action>su - nsadmin
 cd /web
 tar xzf /tmp/openacs-4-6.tgz
@@ -179,18 +179,18 @@ exit</action></screen>
               
               <listitem>
                 <para>Unpack the new files into a working directory.</para>
-                <screen>[root@localhost root]# <userinput>su - nsadmin</userinput>
-[nsadmin@localhost aolserver]$ <userinput>cd /tmp</userinput>
-[nsadmin@localhost tmp]$ <userinput>tar xzv openacs-4-6.tgz</userinput>
-[nsadmin@localhost tmp]$ <userinput>cd openacs-4.6</userinput>
+                <screen>[root root]# <userinput>su - nsadmin</userinput>
+[nsadmin aolserver]$ <userinput>cd /tmp</userinput>
+[nsadmin tmp]$ <userinput>tar xzv openacs-4-6.tgz</userinput>
+[nsadmin tmp]$ <userinput>cd openacs-4.6</userinput>
 </screen>
                 <para>Import the new files into your cvs repository; where they match existing files, they will become the new version of the file.</para>
-                <screen>[nsadmin@localhost openacs-4.6]$ <userinput> cvs import -m "upgrade to OpenACS 4.6" openacs 
+                <screen>[nsadmin openacs-4.6]$ <userinput> cvs import -m "upgrade to OpenACS 4.6" openacs 
 OpenACS openacs-4-6</userinput></screen>
                 <para>Create a new directory as temporary working space to reconcile conflicts between the new files and your current work.  The example uses the cvs keyword yesterday, making the assumption that you haven't checked in new code to your local tree in the last day.</para>
-<screen>[nsadmin@localhost openacs-4.6]$ <userinput> cd /web</userinput>
-[nsadmin@localhost tmp]$ <userinput>mkdir openacs-upgrade</userinput>
-[nsadmin@localhost tmp]$ <userinput>cvs checkout -d openacs-upgrade -jOpenACS:yesterday -jOpenACS openacs &gt; cvs.txt 2&gt;&amp;1</userinput>
+<screen>[nsadmin openacs-4.6]$ <userinput> cd /web</userinput>
+[nsadmin tmp]$ <userinput>mkdir openacs-upgrade</userinput>
+[nsadmin tmp]$ <userinput>cvs checkout -d openacs-upgrade -jOpenACS:yesterday -jOpenACS openacs &gt; cvs.txt 2&gt;&amp;1</userinput>
 (CVS feedback here)
 <action>su - nsadmin
 cd /tmp
@@ -208,8 +208,8 @@ cvs checkout -d openacs-upgrade -jOpenACS:yesterday -jOpenACS openacs &gt; cvs.t
               <listitem>
                 <para>Once you've fixed any conflicts, commit the new code
         to your local tree.  </para>
-            <screen>[nsadmin@localhost tmp]$ <userinput>cd openacs-upgrade</userinput>
-[nsadmin@localhost openacs-upgrade]$ <userinput>cvs commit -m "Upgraded to 4.6"</userinput>
+            <screen>[nsadmin tmp]$ <userinput>cd openacs-upgrade</userinput>
+[nsadmin openacs-upgrade]$ <userinput>cvs commit -m "Upgraded to 4.6"</userinput>
 <action>cd openacs-upgrade
 cvs commit -m "Upgraded to 4.6"</action></screen>
               </listitem>
@@ -217,11 +217,11 @@ cvs commit -m "Upgraded to 4.6"</action></screen>
                 <para>Update your working tree with the new
                 files.  The CVS flags ensure that new directories are created and pruned directories destroyed.</para>
                 <screen>
-[nsadmin@localhost openacs-upgrade]$ <userinput>cd /web/<replaceable>openacs-dev</replaceable></userinput>
-[nsadmin@localhost openacs-dev]$ <userinput>cvs up -Pd</userinput>
+[nsadmin openacs-upgrade]$ <userinput>cd /web/<replaceable>openacs-dev</replaceable></userinput>
+[nsadmin openacs-dev]$ <userinput>cvs up -Pd</userinput>
 (CVS feedback)
-[nsadmin@localhost openacs-dev]$ <userinput>exit</userinput>
-[root@localhost root]#
+[nsadmin openacs-dev]$ <userinput>exit</userinput>
+[root root]#
 <action>cd /web/<replaceable>openacs-dev</replaceable>
 cvs up -Pd
 exit</action></screen>
@@ -234,7 +234,7 @@ exit</action></screen>
         <para>
           <emphasis role="strong">Start the server</emphasis>
         </para>
-        <screen>[root@localhost root]# <userinput>svc -u /service/<replaceable>openacs-dev</replaceable></userinput></screen>
+        <screen>[root root]# <userinput>svc -u /service/<replaceable>openacs-dev</replaceable></userinput></screen>
       </listitem>
       <listitem>
         <formalpara>
@@ -261,7 +261,7 @@ exit</action></screen>
           </listitem>
           <listitem>
             <para>When prompted, restart the server:</para>
-            <screen>[root@localhost root]# <userinput>restart-aolserver <replaceable>openacs-dev</replaceable></userinput></screen>
+            <screen>[root root]# <userinput>restart-aolserver <replaceable>openacs-dev</replaceable></userinput></screen>
           </listitem>
           <listitem>
             <para>Wait a minute, then browse to the package manager, <computeroutput>http://<replaceable>yourserver</replaceable>/acs-admin/apm</computeroutput>.</para>
@@ -292,7 +292,7 @@ exit</action></screen>
             <para>Click <computeroutput><guibutton>Set Parameters</guibutton></computeroutput></para>
           </listitem>
           <listitem>
-            <screen>[root@localhost root]# restart-aolserver <replaceable>openacs-dev</replaceable></screen>
+            <screen>[root root]# restart-aolserver <replaceable>openacs-dev</replaceable></screen>
           </listitem>
           <listitem>
             <para>Browse to <computeroutput>http://<replaceable>yourserver</replaceable>/openfts</computeroutput></para>

@@ -31,13 +31,13 @@
       database-specific SQL.  The default page in any directory is
       <computeroutput>index</computeroutput>, so we'll build that
       first, starting with the tcl file:</para>
-      <screen>[service0@yourserver postgresql]$<userinput> cd /var/lib/aolserver/service0/myfirstpackages/www</userinput>
+      <screen>[service0 postgresql]$<userinput> cd /var/lib/aolserver/service0/myfirstpackages/www</userinput>
 [service0@yourserver www <userinput>emacs index.tcl</userinput></screen>
       <para>Paste this into the file.</para>      
       <programlisting>ad_page_contract {
     This is the main page for the package.  It displays all of the Notes and provides links to edit them and to create new Notes.
 
-    @author Your Name (you@yourserver.test)
+    @author Your Name (you@example.com)
     @cvs-id $Id$
 }
 
@@ -98,7 +98,7 @@ db_multirow \
     <programlisting>ad_page_contract {
     This is the main page for the package.  It displays all of the Notes and provides links to edit them and to create new Notes.
 
-    @author Your Name (you@yourserver.test)
+    @author Your Name (you@example.com)
     @cvs-id $Id$
  
     @param item_id If present, assume we are editing that note.  Otherwise, we are creating a new note.
@@ -147,7 +147,7 @@ ad_form -name note -form {
     <programlisting>ad_page_contract {
     This deletes a note
 
-    @author Your Name (you@yourserver.test)
+    @author Your Name (you@example.com)
     @cvs-id $Id$
  
     @param item_id The item_id of the note to delete

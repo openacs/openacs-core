@@ -23,20 +23,20 @@
         <para>The OpenACS tarball contains sample configuration files
       for some of the packages listed below.  In order to access those
       files, unpack the tarball now.</para>
-        <screen>[root@yourserver root]# <userinput>cd /tmp</userinput>
-[root@yourserver tmp]# <userinput>tar xzf &tarballpath;.tgz</userinput>
+        <screen>[root root]# <userinput>cd /tmp</userinput>
+[root tmp]# <userinput>tar xzf &tarballpath;.tgz</userinput>
 <action>cd /tmp
 tar xzf &tarballpath;.tgz</action></screen>
       <para>If you are installing from a different method and just need the configuration files, you can instead get them from CVS:</para>
-<screen>[root@yourserver root]# <userinput>cd /tmp</userinput>
-[root@yourserver tmp]# <userinput>cvs -d :pserver:anonymous@openacs.org:/cvsroot co openacs-4/packages/acs-core-docs/www/files/</userinput>
+<screen>[root root]# <userinput>cd /tmp</userinput>
+[root tmp]# <userinput>cvs -d :pserver:anonymous@openacs.org:/cvsroot co openacs-4/packages/acs-core-docs/www/files/</userinput>
 cvs checkout: warning: failed to open /root/.cvspass for reading: No such file or directory
 cvs server: Updating openacs-4/packages/acs-core-docs/www/files
 U openacs-4/packages/acs-core-docs/www/files/README.TXT
 <emphasis>(many lines omitted)</emphasis>
 U openacs-4/packages/acs-core-docs/www/files/template-ini.ini
 U openacs-4/packages/acs-core-docs/www/files/winnsd.txt
-[root@yourserver tmp]# <userinput>mv openacs-4 &tarballpath;</userinput>
+[root tmp]# <userinput>mv openacs-4 &tarballpath;</userinput>
 <action>cd /tmp
 cvs -d :pserver:anonymous@openacs.org:/cvsroot co openacs-4/packages/acs-core-docs/www/files/
 mv openacs-4 openacs-5.0.0a4</action></screen>
@@ -49,9 +49,9 @@ mv openacs-4 openacs-5.0.0a4</action></screen>
       </indexterm>
       <para>CVS is a source control system.  Create and initialize a
       directory for a local cvs repository.</para>
-      <screen>[root@yourserver tmp]# <userinput>mkdir /cvsroot</userinput>
-[root@yourserver tmp]#<userinput> cvs -d /cvsroot init</userinput>
-[root@yourserver tmp]#
+      <screen>[root tmp]# <userinput>mkdir /cvsroot</userinput>
+[root tmp]#<userinput> cvs -d /cvsroot init</userinput>
+[root tmp]#
 <action>mkdir /cvsroot
 cvs -d /cvsroot init</action></screen>
     </sect1>
@@ -68,9 +68,9 @@ If you plan to write or edit any documentation with emacs, install a
       fixes the backspace -> help mis-mapping that often occurs in
       terminals.</para>
 
-      <screen>[root@yourserver tmp]# <userinput>cp /tmp/&tarballpath;/packages/acs-core-docs/www/files/emacs.txt /etc/skel/.emacs</userinput>
+      <screen>[root tmp]# <userinput>cp /tmp/&tarballpath;/packages/acs-core-docs/www/files/emacs.txt /etc/skel/.emacs</userinput>
 cp: overwrite `/etc/skel/.emacs'? <userinput>y</userinput>
-[root@yourserver tmp]# </screen>
+[root tmp]# </screen>
       <para>Debian users:</para>
       <screen><action>apt-get install psgml</action></screen>
       <para>Note: The new nxml mode for emacs, when used in combination with psgml, provides a pretty good set of functionality that makes DocBook editing much less painless.  In particular, nxml does syntax testing in real-time so that you can see syntax errors immediately instead of in the output of the xsltproc hours or days later.  For debian, <computeroutput>apt-get install nxml</computeroutput>.</para>
@@ -95,18 +95,18 @@ cp: overwrite `/etc/skel/.emacs'? <userinput>y</userinput>
          <itemizedlist>
             <listitem>
               <para>Red Hat 8</para>
-              <screen>[root@yourserver root]# <userinput>mkdir -p /package</userinput>
-[root@yourserver root]# <userinput>chmod 1755 /package/</userinput>
-[root@yourserver root]# <userinput>cd /package/</userinput>
-[root@yourserver package]# <userinput>tar xzf /tmp/daemontools-0.76.tar.gz</userinput>
-[root@yourserver package]# <userinput>cd admin/daemontools-0.76/</userinput>
-[root@yourserver daemontools-0.76]# <userinput>package/install</userinput>
+              <screen>[root root]# <userinput>mkdir -p /package</userinput>
+[root root]# <userinput>chmod 1755 /package/</userinput>
+[root root]# <userinput>cd /package/</userinput>
+[root package]# <userinput>tar xzf /tmp/daemontools-0.76.tar.gz</userinput>
+[root package]# <userinput>cd admin/daemontools-0.76/</userinput>
+[root daemontools-0.76]# <userinput>package/install</userinput>
 Linking ./src/* into ./compile...
 
 Creating /service...
 Adding svscanboot to inittab...
 init should start svscan now.
-[root@yourserver root]#
+[root root]#
 <action>mkdir -p /package 
 chmod 1755 /package 
 cd /package 
@@ -120,12 +120,12 @@ package/install</action></screen>
           <computeroutput>/tmp</computeroutput>, or <link
           linkend="daemontools-download">download it</link>.
 </para>
-              <screen>[root@yourserver root]# <userinput>mkdir -p /package</userinput>
-[root@yourserver root]# <userinput>chmod 1755 /package/</userinput>
-[root@yourserver root]# <userinput>cd /package/</userinput>
-[root@yourserver package]# <userinput>tar xzf /tmp/daemontools-0.76.tar.gz</userinput>
-[root@yourserver package]# <userinput>cd admin</userinput>
-[root@yourserver admin]# <userinput>wget http://moni.csi.hu/pub/glibc-2.3.1/daemontools-0.76.errno.patch</userinput>
+              <screen>[root root]# <userinput>mkdir -p /package</userinput>
+[root root]# <userinput>chmod 1755 /package/</userinput>
+[root root]# <userinput>cd /package/</userinput>
+[root package]# <userinput>tar xzf /tmp/daemontools-0.76.tar.gz</userinput>
+[root package]# <userinput>cd admin</userinput>
+[root admin]# <userinput>wget http://moni.csi.hu/pub/glibc-2.3.1/daemontools-0.76.errno.patch</userinput>
 --14:19:24--  http://moni.csi.hu/pub/glibc-2.3.1/daemontools-0.76.errno.patch
            => `daemontools-0.76.errno.patch'
 Resolving moni.csi.hu... done.
@@ -137,14 +137,14 @@ Length: 355 [text/plain]
 
 14:19:24 (346.68 KB/s) - `daemontools-0.76.errno.patch' saved [355/355]
 
-[root@yourserver admin]# <userinput>cd daemontools-0.76</userinput>
-[root@yourserver daemontools-0.76]# <userinput>patch -p1 &lt; ../daemontools-0.76.errno.patch</userinput>
-[root@yourserver daemontools-0.76]# <userinput>package/install</userinput>
+[root admin]# <userinput>cd daemontools-0.76</userinput>
+[root daemontools-0.76]# <userinput>patch -p1 &lt; ../daemontools-0.76.errno.patch</userinput>
+[root daemontools-0.76]# <userinput>package/install</userinput>
 Linking ./src/* into ./compile...<emphasis>(many lines omitted)</emphasis>
 Creating /service...
 Adding svscanboot to inittab...
 init should start svscan now.
-[root@yourserver root]#
+[root root]#
 <action>mkdir -p /package 
 chmod 1755 /package 
 cd /package 
@@ -165,16 +165,16 @@ root:~# <userinput>build-daemontools</userinput></screen>
         <listitem>
       <para>Verify that svscan is running.  If it is, you should see
       these two processes running:</para>
-      <screen>[root@yourserver root]# <userinput>ps -auxw | grep service</userinput>
+      <screen>[root root]# <userinput>ps -auxw | grep service</userinput>
 root     13294  0.0  0.1  1352  272 ?        S    09:51   0:00 svscan /service
 root     13295  0.0  0.0  1304  208 ?        S    09:51   0:00 readproctitle service errors: .......................................
-[root@yourserver root]#</screen>
+[root root]#</screen>
         </listitem>
         <listitem>
           <para>Install a script to grant non-root users permission to
         control daemontools services.</para>
-          <screen>[root@yourserver root]# <userinput>cp /tmp/&tarballpath;/packages/acs-core-docs/www/files/svgroup.txt /usr/local/bin/svgroup</userinput>
-[root@yourserver root]# <userinput>chmod 755 /usr/local/bin/svgroup</userinput>
+          <screen>[root root]# <userinput>cp /tmp/&tarballpath;/packages/acs-core-docs/www/files/svgroup.txt /usr/local/bin/svgroup</userinput>
+[root root]# <userinput>chmod 755 /usr/local/bin/svgroup</userinput>
 <action>cp /tmp/&tarballpath;/packages/acs-core-docs/www/files/svgroup.txt /usr/local/bin/svgroup 
 chmod 755 /usr/local/bin/svgroup</action></screen>
         </listitem>
@@ -195,9 +195,9 @@ chmod 755 /usr/local/bin/svgroup</action></screen>
               <para>This program handles incoming tcp connections.
             <link linkend="ucspi-download">Download ucspi</link> and install it.</para>
           </formalpara>
-          <screen>[root@yourserver root]# <userinput>cd /usr/local/src</userinput>
-[root@yourserver src]# <userinput>wget http://cr.yp.to/ucspi-tcp/ucspi-tcp-0.88.tar.gz</userinput>
-[root@yourserver src]# <userinput>tar xzf ucspi-tcp-0.88.tar.gz</userinput>
+          <screen>[root root]# <userinput>cd /usr/local/src</userinput>
+[root src]# <userinput>wget http://cr.yp.to/ucspi-tcp/ucspi-tcp-0.88.tar.gz</userinput>
+[root src]# <userinput>tar xzf ucspi-tcp-0.88.tar.gz</userinput>
 <action>cd /usr/local/src 
 wget http://cr.yp.to/ucspi-tcp/ucspi-tcp-0.88.tar.gz
 tar xzf ucspi-tcp-0.88.tar.gz </action></screen>
@@ -207,26 +207,26 @@ cd ucspi-tcp-0.88
 patch -p1 &lt;../ucspi-tcp-0.88.errno.patch
 cd ..</action></screen>
           <para>All platforms continue:</para>
-<screen>[root@yourserver src]# <userinput>cd ucspi-tcp-0.88</userinput>
-[root@yourserver ucspi-tcp-0.88]#<userinput> make</userinput>
+<screen>[root src]# <userinput>cd ucspi-tcp-0.88</userinput>
+[root ucspi-tcp-0.88]#<userinput> make</userinput>
 ( cat warn-auto.sh; \
 echo 'main="$1"; shift'; \<emphasis>(many lines omitted)</emphasis>
 ./compile instcheck.c
 ./load instcheck hier.o auto_home.o unix.a byte.a
-[root@yourserver ucspi-tcp-0.88]# <userinput>make setup check</userinput>
+[root ucspi-tcp-0.88]# <userinput>make setup check</userinput>
 ./install
 ./instcheck
-[root@yourserver ucspi-tcp-0.88]#
+[root ucspi-tcp-0.88]#
 <action>
 cd ucspi-tcp-0.88 
 make 
 make setup check</action></screen>
           <para>Verify that ucspi-tcp was installed successfully by
 running the tcpserver program which is part of ucspi-tcp:</para>
-          <screen>[root@yourserver ucspi-tcp-0.88]# <userinput>tcpserver</userinput>
+          <screen>[root ucspi-tcp-0.88]# <userinput>tcpserver</userinput>
 tcpserver: usage: tcpserver [ -1UXpPhHrRoOdDqQv ] [ -c limit ] [ -x rules.cdb ] [ -B banner ] [ -g gid ] [ -u uid
 ] [ -b backlog ] [ -l localname ] [ -t timeout ] host port program
-[root@yourserver ucspi-tcp-0.88]#
+[root ucspi-tcp-0.88]#
 </screen>
           <para><indexterm>
               <primary>qmail</primary>
@@ -243,8 +243,8 @@ Unless this mail is addressed to the same machine, qmail thinks that
 it's an attempt to relay mail, and rejects it.  So these two commands
 set up an exception so that any mail sent from 127.0.0.1 is allowed to
 send outgoing mail.</para>
-          <screen>[root@yourserver ucspi-tcp-0.88]# <userinput>cp /tmp/&tarballpath;/packages/acs-core-docs/www/files/tcp.smtp.txt /etc/tcp.smtp</userinput>
-[root@yourserver ucspi-tcp-0.88]# <userinput>tcprules /etc/tcp.smtp.cdb /etc/tcp.smtp.tmp &lt; /etc/tcp.smtp</userinput>
+          <screen>[root ucspi-tcp-0.88]# <userinput>cp /tmp/&tarballpath;/packages/acs-core-docs/www/files/tcp.smtp.txt /etc/tcp.smtp</userinput>
+[root ucspi-tcp-0.88]# <userinput>tcprules /etc/tcp.smtp.cdb /etc/tcp.smtp.tmp &lt; /etc/tcp.smtp</userinput>
 <action>cp /tmp/&tarballpath;/packages/acs-core-docs/www/files/tcp.smtp.txt /etc/tcp.smtp 
 tcprules /etc/tcp.smtp.cdb /etc/tcp.smtp.tmp &lt; /etc/tcp.smtp </action></screen>
           </listitem>
@@ -259,9 +259,9 @@ tcprules /etc/tcp.smtp.cdb /etc/tcp.smtp.tmp &lt; /etc/tcp.smtp </action></scree
             </formalpara>
             <para><link linkend="ucspi-download">Download qmail</link>,
             set up the standard supporting users and build the binaries:</para>
-            <screen>[root@yourserver root]# <userinput>cd /usr/local/src</userinput>
-[root@yourserver src]# <userinput>wget http://www.qmail.org/netqmail-1.04.tar.gz</userinput>
-[root@yourserver src]# <userinput>tar xzf netqmail-1.04.tar.gz</userinput>
+            <screen>[root root]# <userinput>cd /usr/local/src</userinput>
+[root src]# <userinput>wget http://www.qmail.org/netqmail-1.04.tar.gz</userinput>
+[root src]# <userinput>tar xzf netqmail-1.04.tar.gz</userinput>
 --15:04:11--  http://www.qmail.org/netqmail-1.04.tar.gz
            => `netqmail-1.04.tar.gz'
 Resolving www.qmail.org... done.
@@ -273,18 +273,18 @@ Length: 242,310 [application/x-gunzip]
 
 15:04:21 (24.04 KB/s) - `netqmail-1.04.tar.gz' saved [242310/242310]
 
-[root@yourserver src]# <userinput>mkdir /var/qmail</userinput>
-[root@yourserver src]#<userinput> groupadd nofiles</userinput>
-[root@yourserver src]# <userinput>useradd -g nofiles -d /var/qmail/alias alias</userinput>
-[root@yourserver src]# <userinput>useradd -g nofiles -d /var/qmail qmaild</userinput>
-[root@yourserver src]# <userinput>useradd -g nofiles -d /var/qmail qmaill</userinput>
-[root@yourserver src]# <userinput>useradd -g nofiles -d /var/qmail qmailp</userinput>
-[root@yourserver src]# <userinput>groupadd qmail</userinput>
-[root@yourserver src]# <userinput>useradd -g qmail -d /var/qmail qmailq</userinput>
-[root@yourserver src]# <userinput>useradd -g qmail -d /var/qmail qmailr</userinput>
-[root@yourserver src]# <userinput>useradd -g qmail -d /var/qmail qmails</userinput>
-[root@yourserver src]# <userinput>cd netqmail-1.04</userinput>
-[root@yourserver netqmail-1.04]# <userinput>./collate.sh</userinput>
+[root src]# <userinput>mkdir /var/qmail</userinput>
+[root src]#<userinput> groupadd nofiles</userinput>
+[root src]# <userinput>useradd -g nofiles -d /var/qmail/alias alias</userinput>
+[root src]# <userinput>useradd -g nofiles -d /var/qmail qmaild</userinput>
+[root src]# <userinput>useradd -g nofiles -d /var/qmail qmaill</userinput>
+[root src]# <userinput>useradd -g nofiles -d /var/qmail qmailp</userinput>
+[root src]# <userinput>groupadd qmail</userinput>
+[root src]# <userinput>useradd -g qmail -d /var/qmail qmailq</userinput>
+[root src]# <userinput>useradd -g qmail -d /var/qmail qmailr</userinput>
+[root src]# <userinput>useradd -g qmail -d /var/qmail qmails</userinput>
+[root src]# <userinput>cd netqmail-1.04</userinput>
+[root netqmail-1.04]# <userinput>./collate.sh</userinput>
 
 You should see 7 lines of text below.  If you see anything
 else, then something might be wrong.
@@ -295,8 +295,8 @@ else, then something might be wrong.
 [5] Renaming qmail-1.03 to netqmail-1.04...
 [6] Continue installing qmail using the instructions found at:
 [7] http://www.lifewithqmail.org/lwq.html#installation
-[root@yourserver netqmail-1.04]# <userinput>cd netqmail-1.04</userinput>
-[root@yourserver netqmail-1.04]# <userinput>make setup check</userinput>
+[root netqmail-1.04]# <userinput>cd netqmail-1.04</userinput>
+[root netqmail-1.04]# <userinput>make setup check</userinput>
 ( cat warn-auto.sh; \
 echo CC=\'`head -1 conf-cc`\'; \<emphasis>(many lines omitted)</emphasis>
 ./install
@@ -323,13 +323,13 @@ make setup check</action></screen>
             <primary>sendmail</primary>
             <secondary>removing</secondary>
           </indexterm>
-          <screen>[root@yourserver qmail-1.03]# <userinput>rm -f /usr/bin/sendmail /usr/sbin/sendmail</userinput>
-[root@yourserver qmail-1.03]# <userinput>ln -s /var/qmail/bin/sendmail /usr/sbin/sendmail</userinput>
-[root@yourserver qmail-1.03]#
+          <screen>[root qmail-1.03]# <userinput>rm -f /usr/bin/sendmail /usr/sbin/sendmail</userinput>
+[root qmail-1.03]# <userinput>ln -s /var/qmail/bin/sendmail /usr/sbin/sendmail</userinput>
+[root qmail-1.03]#
 <action>rm -f /usr/bin/sendmail /usr/sbin/sendmail
 ln -s /var/qmail/bin/sendmail /usr/sbin/sendmail</action></screen>
           <para>Configure qmail - specifically, run the config script to set up files in <computeroutput>/var/qmail/control</computeroutput> specifying the computer's identity and which addresses it should accept mail for.  This command will automatically set up qmail correctly if you have correctly set a valid host nome.  If not, you'll want to read <computeroutput>/var/qmail/doc/INSTALL.ctl</computeroutput> to find out how to configure qmail.</para>
-            <screen>[root@yourserver qmail-1.03]# <userinput>./config-fast <replaceable>yourserver.test</replaceable></userinput>
+            <screen>[root qmail-1.03]# <userinput>./config-fast <replaceable>yourserver.test</replaceable></userinput>
 Your fully qualified host name is yourserver.test.
 Putting yourserver.test into control/me...
 Putting yourserver.test into control/defaultdomain...
@@ -338,14 +338,14 @@ Putting yourserver.test into control/locals...
 Putting yourserver.test into control/rcpthosts...
 Now qmail will refuse to accept SMTP messages except to yourserver.test.
 Make sure to change rcpthosts if you add hosts to locals or virtualdomains!
-[root@yourserver qmail-1.03]#
+[root qmail-1.03]#
 <action>./config-fast <replaceable>yourserver.test</replaceable></action></screen>
           <para>All incoming mail that isn't for a specific user is handled by the <computeroutput>alias</computeroutput> user.  This includes all root mail.  These commands prepare the alias user to receive mail.</para>
-          <screen>[root@yourserver qmail-1.03]# <userinput>cd ~alias; touch .qmail-postmaster .qmail-mailer-daemon .qmail-root</userinput>
-[root@yourserver alias]# <userinput>chmod 644 ~alias/.qmail*</userinput>
-[root@yourserver alias]# <userinput>/var/qmail/bin/maildirmake ~alias/Maildir/</userinput>
-[root@yourserver alias]# <userinput>chown -R alias.nofiles /var/qmail/alias/Maildir</userinput>
-[root@yourserver alias]#
+          <screen>[root qmail-1.03]# <userinput>cd ~alias; touch .qmail-postmaster .qmail-mailer-daemon .qmail-root</userinput>
+[root alias]# <userinput>chmod 644 ~alias/.qmail*</userinput>
+[root alias]# <userinput>/var/qmail/bin/maildirmake ~alias/Maildir/</userinput>
+[root alias]# <userinput>chown -R alias.nofiles /var/qmail/alias/Maildir</userinput>
+[root alias]#
 <action>cd ~alias; touch .qmail-postmaster .qmail-mailer-daemon .qmail-root 
 chmod 644 ~alias/.qmail* 
 /var/qmail/bin/maildirmake ~alias/Maildir/ 
@@ -356,41 +356,41 @@ chown -R alias.nofiles /var/qmail/alias/Maildir</action></screen>
             </indexterm>
             <para>Configure qmail to use the Maildir delivery format
           (instead of mbox), and install a version of the qmail startup script modified to use Maildir.</para>
-            <screen>[root@yourserver alias]# <userinput>echo "./Maildir" > /var/qmail/bin/.qmail</userinput>
-[root@yourserver alias]# <userinput>cp /tmp/&tarballpath;/packages/acs-core-docs/www/files/qmail.rc.txt /var/qmail/rc</userinput>
-[root@yourserver alias]# <userinput>chmod 755 /var/qmail/rc</userinput>
-[root@yourserver alias]# 
+            <screen>[root alias]# <userinput>echo "./Maildir" > /var/qmail/bin/.qmail</userinput>
+[root alias]# <userinput>cp /tmp/&tarballpath;/packages/acs-core-docs/www/files/qmail.rc.txt /var/qmail/rc</userinput>
+[root alias]# <userinput>chmod 755 /var/qmail/rc</userinput>
+[root alias]# 
 <action>echo "./Maildir" &gt; /var/qmail/bin/.qmail 
 cp /tmp/&tarballpath;/packages/acs-core-docs/www/files/qmail.rc.txt /var/qmail/rc 
 chmod 755 /var/qmail/rc 
 </action></screen>
             <para>Set up the skeleton directory so that new users will
           be configured for qmail.</para>
-            <screen>[root@yourserver root]# <userinput>/var/qmail/bin/maildirmake /etc/skel/Maildir</userinput>
-[root@yourserver root]# <userinput>echo "./Maildir/" > /etc/skel/.qmail</userinput>
-[root@yourserver root]# 
+            <screen>[root root]# <userinput>/var/qmail/bin/maildirmake /etc/skel/Maildir</userinput>
+[root root]# <userinput>echo "./Maildir/" > /etc/skel/.qmail</userinput>
+[root root]# 
 <action>/var/qmail/bin/maildirmake /etc/skel/Maildir
 echo "./Maildir/" > /etc/skel/.qmail</action></screen>
 
           <para>As recommended, we will run qmail with daemontools
           control files.  Create daemontools control directories, set up a daemontools control script, copy the supervise control files, and set permissions.  The last line links the control directories to /service, which will cause supervise to detect them and execute the run files, causing qmail to start.</para>
-          <screen>[root@yourserver root]# <userinput>mkdir -p /var/qmail/supervise/qmail-send/log</userinput>
-[root@yourserver root]# <userinput>mkdir -p /var/qmail/supervise/qmail-smtpd/log</userinput>
-[root@yourserver root]# <userinput>mkdir /var/log/qmail</userinput>
-[root@yourserver root]# <userinput>chown qmaill /var/log/qmail</userinput>
-[root@yourserver root]# <userinput>cp /tmp/&tarballpath;/packages/acs-core-docs/www/files/qmailctl.txt /var/qmail/bin/qmailctl</userinput>
-[root@yourserver root]# <userinput>chmod 755 /var/qmail/bin/qmailctl</userinput>
-[root@yourserver root]# <userinput>ln -s /var/qmail/bin/qmailctl /usr/bin</userinput>
-[root@yourserver root]# <userinput>cp /tmp/&tarballpath;/packages/acs-core-docs/www/files/qmail-send-run.txt /var/qmail/supervise/qmail-send/run </userinput>
-[root@yourserver root]# <userinput>cp /tmp/&tarballpath;/packages/acs-core-docs/www/files/qmail-send-log-run.txt /var/qmail/supervise/qmail-send/log/run</userinput>
-[root@yourserver root]# <userinput>cp /tmp/&tarballpath;/packages/acs-core-docs/www/files/qmail-smtpd-run.txt /var/qmail/supervise/qmail-smtpd/run</userinput>
-[root@yourserver root]# <userinput>cp /tmp/&tarballpath;/packages/acs-core-docs/www/files/qmail-smtpd-log-run.txt /var/qmail/supervise/qmail-smtpd/log/run</userinput>
-[root@yourserver root]# <userinput>chmod 755 /var/qmail/supervise/qmail-send/run</userinput>
-[root@yourserver root]# <userinput>chmod 755 /var/qmail/supervise/qmail-send/log/run</userinput>
-[root@yourserver root]# <userinput>chmod 755 /var/qmail/supervise/qmail-smtpd/run</userinput>
-[root@yourserver root]# <userinput>chmod 755 /var/qmail/supervise/qmail-smtpd/log/run</userinput>
-[root@yourserver root]# <userinput>ln -s /var/qmail/supervise/qmail-send /var/qmail/supervise/qmail-smtpd /service</userinput>
-[root@yourserver root]# <userinput>ln -s /var/qmail/supervise/qmail-send /var/qmail/supervise/qmail-smtpd /service</userinput>
+          <screen>[root root]# <userinput>mkdir -p /var/qmail/supervise/qmail-send/log</userinput>
+[root root]# <userinput>mkdir -p /var/qmail/supervise/qmail-smtpd/log</userinput>
+[root root]# <userinput>mkdir /var/log/qmail</userinput>
+[root root]# <userinput>chown qmaill /var/log/qmail</userinput>
+[root root]# <userinput>cp /tmp/&tarballpath;/packages/acs-core-docs/www/files/qmailctl.txt /var/qmail/bin/qmailctl</userinput>
+[root root]# <userinput>chmod 755 /var/qmail/bin/qmailctl</userinput>
+[root root]# <userinput>ln -s /var/qmail/bin/qmailctl /usr/bin</userinput>
+[root root]# <userinput>cp /tmp/&tarballpath;/packages/acs-core-docs/www/files/qmail-send-run.txt /var/qmail/supervise/qmail-send/run </userinput>
+[root root]# <userinput>cp /tmp/&tarballpath;/packages/acs-core-docs/www/files/qmail-send-log-run.txt /var/qmail/supervise/qmail-send/log/run</userinput>
+[root root]# <userinput>cp /tmp/&tarballpath;/packages/acs-core-docs/www/files/qmail-smtpd-run.txt /var/qmail/supervise/qmail-smtpd/run</userinput>
+[root root]# <userinput>cp /tmp/&tarballpath;/packages/acs-core-docs/www/files/qmail-smtpd-log-run.txt /var/qmail/supervise/qmail-smtpd/log/run</userinput>
+[root root]# <userinput>chmod 755 /var/qmail/supervise/qmail-send/run</userinput>
+[root root]# <userinput>chmod 755 /var/qmail/supervise/qmail-send/log/run</userinput>
+[root root]# <userinput>chmod 755 /var/qmail/supervise/qmail-smtpd/run</userinput>
+[root root]# <userinput>chmod 755 /var/qmail/supervise/qmail-smtpd/log/run</userinput>
+[root root]# <userinput>ln -s /var/qmail/supervise/qmail-send /var/qmail/supervise/qmail-smtpd /service</userinput>
+[root root]# <userinput>ln -s /var/qmail/supervise/qmail-send /var/qmail/supervise/qmail-smtpd /service</userinput>
 <action>mkdir -p /var/qmail/supervise/qmail-send/log
 mkdir -p /var/qmail/supervise/qmail-smtpd/log
 mkdir /var/log/qmail
@@ -409,14 +409,14 @@ chmod 755 /var/qmail/supervise/qmail-smtpd/log/run
 ln -s /var/qmail/supervise/qmail-send /var/qmail/supervise/qmail-smtpd /service
 </action></screen>
           <para>Wait ten seconds or so, and then verify that that the four qmail processes are running.  If uptimes don't rise above 1 second, this may indicate broken scripts that are continuously restarting.  In that case, start debugging by checking permissions.</para>
-          <screen>[root@yourserver root]# <userinput>qmailctl stat</userinput>
+          <screen>[root root]# <userinput>qmailctl stat</userinput>
 /service/qmail-send: up (pid 32700) 430 seconds
 /service/qmail-send/log: up (pid 32701) 430 seconds
 /service/qmail-smtpd: up (pid 32704) 430 seconds
 /service/qmail-smtpd/log: up (pid 32705) 430 seconds
 messages in queue: 0
 messages in queue but not yet preprocessed: 0
-[root@yourserver root]#</screen>
+[root root]#</screen>
           <para>Further verify by sending and receiving email.  Incoming mail for root is stored in <computeroutput>/var/qmail/alias/Maildir</computeroutput>. </para>
           </listitem>
       </orderedlist>
@@ -425,19 +425,19 @@ messages in queue but not yet preprocessed: 0
       <title>Install Analog web file analyzer</title>
             <para>Download the Analog <link linkend="analog-download">source tarball</link> in
 <computeroutput>/tmp</computeroutput>.  Unpack, compile, and install analog.</para>
-            <screen>[root@yourserver aolserver]# <userinput>cd /usr/local/src</userinput>
-[root@yourserver src]# <userinput>tar xzf /tmp/analog-5.32.tar.gz</userinput>
-[root@yourserver src]# <userinput>cd analog-5.32</userinput>
-[root@yourserver analog-5.32]# <userinput>make</userinput>
+            <screen>[root aolserver]# <userinput>cd /usr/local/src</userinput>
+[root src]# <userinput>tar xzf /tmp/analog-5.32.tar.gz</userinput>
+[root src]# <userinput>cd analog-5.32</userinput>
+[root analog-5.32]# <userinput>make</userinput>
 cd src &amp;&amp; make
 make[1]: Entering directory `/usr/local/src/analog-5.32/src'
 <emphasis>(many lines omitted)</emphasis>
 ***IMPORTANT: You must read the licence before using analog
 ***
 make[1]: Leaving directory `/usr/local/src/analog-5.32/src'
-[root@yourserver analog-5.32]# <userinput>cd ..</userinput>
-[root@yourserver src]#<userinput> mv analog-5.32 /usr/share/</userinput>
-[root@yourserver src]#
+[root analog-5.32]# <userinput>cd ..</userinput>
+[root src]#<userinput> mv analog-5.32 /usr/share/</userinput>
+[root src]#
 <action>cd /usr/local/src
 tar xzf /tmp/analog-5.32.tar.gz
 cd analog-5.32
@@ -469,22 +469,22 @@ mv analog-5.32 /usr/share/</action></screen>
             <listitem>
               <para>Install Tsearch.  This is a PostgreSQL module that
 	  OpenFTS requires.</para>
-              <screen>[root@yourserver root]# <userinput>su - postgres</userinput>
-[postgres@yourserver pgsql]$ <userinput>cd /usr/local/src/postgresql-7.2.4/contrib/tsearch/</userinput>
-[postgres@yourserver tsearch]$ <userinput>make</userinput>
+              <screen>[root root]# <userinput>su - postgres</userinput>
+[postgres pgsql]$ <userinput>cd /usr/local/src/postgresql-7.2.4/contrib/tsearch/</userinput>
+[postgres tsearch]$ <userinput>make</userinput>
 sed 's,MODULE_PATHNAME,$libdir/tsearch,g' tsearch.sql.in >tsearch.sql
 /usr/bin/flex  -8 -Ptsearch_yy -o'parser.c' parser.l<emphasis>(many lines omitted)</emphasis>
 rm -f libtsearch.so
 ln -s libtsearch.so.0.0 libtsearch.so
-[postgres@yourserver tsearch]$ <userinput>make install</userinput>
+[postgres tsearch]$ <userinput>make install</userinput>
 mkdir /usr/local/pgsql/share/contrib
 mkdir /usr/local/pgsql/doc/contrib
 (2 lines omitted)
 /bin/sh ../../config/install-sh -c -m 755 libtsearch.so.0.0 /usr/local/pgsql/lib/tsearch.so
-[postgres@yourserver tsearch]$ <userinput>exit</userinput>
+[postgres tsearch]$ <userinput>exit</userinput>
 logout
 
-[root@yourserver root]#
+[root root]#
 <action>su - postgres
 cd /usr/local/src/postgresql-7.2.4/contrib/tsearch
 make
@@ -494,28 +494,28 @@ exit</action></screen>
             <listitem>
               <para>Unpack the OpenFTS tarball and compile and install
               the driver.</para>
-              <screen>[root@yourserver root]# <userinput>cd /usr/local/src</userinput>
-[root@yourserver src]# <userinput>tar xzf /tmp/Search-OpenFTS-tcl-0.3.2.tar.gz</userinput>
-[root@yourserver src]# <userinput>cd /usr/local/src/Search-OpenFTS-tcl-0.3.2/</userinput>
-[root@yourserver Search-OpenFTS-tcl-0.3.2]# <userinput>./configure --with-aolserver-src=/usr/local/src/aolserver/aolserver --with-tcl=/usr/lib/</userinput>
+              <screen>[root root]# <userinput>cd /usr/local/src</userinput>
+[root src]# <userinput>tar xzf /tmp/Search-OpenFTS-tcl-0.3.2.tar.gz</userinput>
+[root src]# <userinput>cd /usr/local/src/Search-OpenFTS-tcl-0.3.2/</userinput>
+[root Search-OpenFTS-tcl-0.3.2]# <userinput>./configure --with-aolserver-src=/usr/local/src/aolserver/aolserver --with-tcl=/usr/lib/</userinput>
 checking prefix... /usr/local
 checking for gcc... gcc
 <emphasis>(many lines omitted)</emphasis>
 configure: creating ./config.status
 config.status: creating Makefile.global
-[root@yourserver Search-OpenFTS-tcl-0.3.2]#<userinput> make</userinput>
+[root Search-OpenFTS-tcl-0.3.2]#<userinput> make</userinput>
 (cd parser; make all)
 make[1]: Entering directory `/usr/local/src/Search-OpenFTS-tcl-0.3.2/parser'
 <emphasis>(many lines omitted)</emphasis>
 packages provided were {Lingua::Stem::Snowball 0.3.2}
 processed fts_base_snowball.tcl
-[root@yourserver Search-OpenFTS-tcl-0.3.2]# <userinput>cd aolserver</userinput>
-[root@yourserver aolserver]# <userinput>make</userinput>
+[root Search-OpenFTS-tcl-0.3.2]# <userinput>cd aolserver</userinput>
+[root aolserver]# <userinput>make</userinput>
 gcc -c -fPIC  -DPACKAGE=\"OPENFTS\" -DVERSION=\"0.3.2\" -DHAVE_UNISTD_H=1 -DSTDC_HEADERS=1 -DHAVE_SYS_TYPES_H=1 -DHAVE_SYS_STAT_H=1 -DHAVE_STDLIB_H=1 -DHAVE_STR
 <emphasis>(many lines omitted)</emphasis>
 n_stem.o italian_stem.o norwegian_stem.o portuguese_stem.o russian_stem.o nsfts.o  -o nsfts.so
-[root@yourserver aolserver]# <userinput>cp nsfts.so /usr/local/aolserver/bin/</userinput>
-[root@yourserver aolserver]#
+[root aolserver]# <userinput>cp nsfts.so /usr/local/aolserver/bin/</userinput>
+[root aolserver]#
 <action>cd /usr/local/src 
 tar xzf /tmp/Search-OpenFTS-tcl-0.3.2.tar.gz
 cd /usr/local/src/Search-OpenFTS-tcl-0.3.2/
@@ -528,21 +528,21 @@ cp nsfts.so /usr/local/aolserver/bin
         </listitem>
         <listitem>
           <para>Build some supplemental modules.</para>
-          <screen>[root@yourserver aolserver]# <userinput>cd /usr/local/src/Search-OpenFTS-tcl-0.3.2</userinput>
-[root@yourserver Search-OpenFTS-tcl-0.3.2]# <userinput>cp -r pgsql_contrib_openfts /usr/local/src/postgresql-7.2.4/contrib</userinput>
-[root@yourserver Search-OpenFTS-tcl-0.3.2]# <userinput>cd /usr/local/src/postgresql-7.2.4/contrib/pgsql_contrib_openfts</userinput>
-[root@yourserver pgsql_contrib_openfts]#<userinput> make</userinput>
+          <screen>[root aolserver]# <userinput>cd /usr/local/src/Search-OpenFTS-tcl-0.3.2</userinput>
+[root Search-OpenFTS-tcl-0.3.2]# <userinput>cp -r pgsql_contrib_openfts /usr/local/src/postgresql-7.2.4/contrib</userinput>
+[root Search-OpenFTS-tcl-0.3.2]# <userinput>cd /usr/local/src/postgresql-7.2.4/contrib/pgsql_contrib_openfts</userinput>
+[root pgsql_contrib_openfts]#<userinput> make</userinput>
 sed 's,MODULE_PATHNAME,$libdir/openfts,g' openfts.sql.in >openfts.sql
 gcc -O2 -Wall -Wmissing-prototypes -Wmissing-declarations -fpic -I. -I../../src/include   -c -o openfts.o openfts.c
 gcc -shared -o openfts.so openfts.o
 rm openfts.o
-[root@yourserver pgsql_contrib_openfts]# <userinput>su postgres</userinput>
-[postgres@yourserver pgsql_contrib_openfts]$ <userinput>make install</userinput>
+[root pgsql_contrib_openfts]# <userinput>su postgres</userinput>
+[postgres pgsql_contrib_openfts]$ <userinput>make install</userinput>
 /bin/sh ../../config/install-sh -c -m 644 openfts.sql /usr/local/pgsql/share/contrib
 /bin/sh ../../config/install-sh -c -m 755 openfts.so /usr/local/pgsql/lib
 /bin/sh ../../config/install-sh -c -m 644 ./README.openfts /usr/local/pgsql/doc/contrib
-[postgres@yourserver pgsql_contrib_openfts]$<userinput> exit</userinput>
-[root@yourserver pgsql_contrib_openfts]#
+[postgres pgsql_contrib_openfts]$<userinput> exit</userinput>
+[root pgsql_contrib_openfts]#
 <action>cd /usr/local/src/Search-OpenFTS-tcl-0.3.2
 cp -r pgsql_contrib_openfts /usr/local/src/postgresql-7.2.4/contrib
 cd /usr/local/src/postgresql-7.2.4/contrib/pgsql_contrib_openfts
@@ -565,16 +565,16 @@ exit</action></screen>
         to work, you must also <link
         linkend="install-openfts">install</link> the PostgreSQL
         OpenFTS module and prerequisites.)</para>
-        <screen>[service0@yourserver service0]$ <userinput>/usr/local/pgsql/bin/psql <replaceable>service0</replaceable> -f /usr/local/src/postgresql-7.2.4/contrib/tsearch/tsearch.sql</userinput>
+        <screen>[service0 service0]$ <userinput>/usr/local/pgsql/bin/psql <replaceable>service0</replaceable> -f /usr/local/src/postgresql-7.2.4/contrib/tsearch/tsearch.sql</userinput>
 BEGIN
 CREATE
 <emphasis>(many lines omitted)</emphasis>
 INSERT 0 1
 COMMIT
-[service0@yourserver service0]$ <userinput>/usr/local/pgsql/bin/psql <replaceable>service0</replaceable> -f /usr/local/src/postgresql-7.2.4/contrib/pgsql_contrib_openfts/openfts.sql</userinput>
+[service0 service0]$ <userinput>/usr/local/pgsql/bin/psql <replaceable>service0</replaceable> -f /usr/local/src/postgresql-7.2.4/contrib/pgsql_contrib_openfts/openfts.sql</userinput>
 CREATE
 CREATE
-[service0@yourserver service0]$
+[service0 service0]$
 <action>/usr/local/pgsql/bin/psql <replaceable>service0</replaceable> -f /usr/local/src/postgresql-7.2.4/contrib/tsearch/tsearch.sql
 /usr/local/pgsql/bin/psql <replaceable>service0</replaceable> -f /usr/local/src/postgresql-7.2.4/contrib/pgsql_contrib_openfts/openfts.sql</action></screen>
       </sect2>
@@ -601,8 +601,8 @@ packages</guilabel></computeroutput> link.</para>
           <listitem><para>Click <computeroutput><guibutton>Install Packages</guibutton></computeroutput></para></listitem>
           
           <listitem><para>Restart the service.</para>
-<screen>[service0@yourserver service0]$ <userinput>svc -t /service/<replaceable>service0</replaceable></userinput>
-[service0@yourserver service0]$</screen></listitem>
+<screen>[service0 service0]$ <userinput>svc -t /service/<replaceable>service0</replaceable></userinput>
+[service0 service0]$</screen></listitem>
           
           <listitem><para>Wait a minute, then browse back to the home page.</para>
           </listitem>
@@ -648,8 +648,8 @@ drop-down list, and click
           </listitem>
           <listitem>
             <para>Restart the service.</para>
-            <screen>[service0@yourserver service0]$ <userinput>svc -t /service/<replaceable>service0</replaceable></userinput>
-[service0@yourserver service0]$</screen>
+            <screen>[service0 service0]$ <userinput>svc -t /service/<replaceable>service0</replaceable></userinput>
+[service0 service0]$</screen>
           </listitem>
           <listitem><para>Wait a minute, then click on <computeroutput><guilabel>Main Site</guilabel></computeroutput> at the top of the page.</para>
           </listitem>
@@ -674,8 +674,8 @@ line, click
           </listitem>
           <listitem>
             <para>Restart the service.</para>
-            <screen>[service0@yourserver service0]$ <userinput>svc -t /service/<replaceable>service0</replaceable></userinput>
-[service0@yourserver service0]$</screen>
+            <screen>[service0 service0]$ <userinput>svc -t /service/<replaceable>service0</replaceable></userinput>
+[service0 service0]$</screen>
           </listitem>
           <listitem>
             <para>Test FTS.  (INCOMPLETE).  Add a package that supports search,like "note," add some content, and search for it.</para>
@@ -702,17 +702,17 @@ line, click
           url="http://openacs.org/forums/message-view?message_id=92882">this
           thread</ulink> for details on compiling nsopenssl.)</para>
 
-      <screen>[root@yourserver bin]#<userinput> cd /usr/local/src/aolserver</userinput>
-[root@yourserver aolserver]# <userinput>wget --passive http://www.scottg.net/download/nsopenssl-2.1.tar.gz</userinput>
-[root@yourserver aolserver]# <userinput>tar xzf nsopenssl-2.1.tar.gz </userinput>
-[root@yourserver aolserver]# <userinput>cd nsopenssl-2.1</userinput>
-[root@yourserver nsopenssl-2.1]# <userinput>make OPENSSL=/usr/local/ssl</userinput>
+      <screen>[root bin]#<userinput> cd /usr/local/src/aolserver</userinput>
+[root aolserver]# <userinput>wget --passive http://www.scottg.net/download/nsopenssl-2.1.tar.gz</userinput>
+[root aolserver]# <userinput>tar xzf nsopenssl-2.1.tar.gz </userinput>
+[root aolserver]# <userinput>cd nsopenssl-2.1</userinput>
+[root nsopenssl-2.1]# <userinput>make OPENSSL=/usr/local/ssl</userinput>
 gcc -I/usr/local/ssl/include -I../aolserver/include -D_REENTRANT=1 -DNDEBUG=1 -g -fPIC -Wall -Wno-unused -mcpu=i686 -DHAVE_CMMSG=1 -DUSE_FIONREAD=1 -DHAVE_COND_EINTR=1   -c -o nsopenssl.o nsopenssl.c
 <emphasis>(many lines omitted)</emphasis>
 gcc -shared -nostartfiles -o nsopenssl.so nsopenssl.o config.o init.o ssl.o thread.o tclcmds.o -L/usr/local/ssl/lib -lssl -lcrypto
-[root@yourserver nsopenssl-2.1]# <userinput>cp nsopenssl.so /usr/local/aolserver/bin</userinput>
-[root@yourserver nsopenssl-2.1]# <userinput>cp https.tcl /usr/local/aolserver/modules/tcl/</userinput>
-[root@yourserver nsopenssl-2.1]#
+[root nsopenssl-2.1]# <userinput>cp nsopenssl.so /usr/local/aolserver/bin</userinput>
+[root nsopenssl-2.1]# <userinput>cp https.tcl /usr/local/aolserver/modules/tcl/</userinput>
+[root nsopenssl-2.1]#
 <action>cd /usr/local/src/aolserver
 wget --passive http://www.scottg.net/download/nsopenssl-2.1.tar.gz
 tar xzf nsopenssl-2.1.tar.gz 
