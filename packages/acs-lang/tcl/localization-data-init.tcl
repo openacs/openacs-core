@@ -11,6 +11,29 @@ ad_library {
 }
 
 # Monetary amounts
+# number after money: is interpreted like this:
+# 
+#   first digit: currency symbol position: 
+#      0 = currency symbol after amount
+#      1 = currency symbol before amount
+#
+#   second digit: position of sign
+#      0 = wrap number in parenthesis, no sign symbol
+#      1 = sign symbol precedes number and currency symbol
+#      2 = sign symbol follows number and currency symbol
+#      3 = sign comes before the currency symbol
+#      4 = sign comes after the currency symbol
+#
+#   third digit: space separation
+#      0 = no space
+#      1 = there's a space somewhere
+#      2 = there's a space somewhere
+#
+#      TODO: Ask Jeff
+#      It looks like the logic *should* be that 1 means a space in the first position,
+#      2 is a space in the second position, but that's not what the table below does
+#
+
 nsv_set locale money:000  {($num$sym)}
 nsv_set locale money:001  {($num $sym)}
 nsv_set locale money:002  {($num$sym)} 
