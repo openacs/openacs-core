@@ -5,6 +5,7 @@ ad_page_contract {
     @cvs-id $Id$
 } {
     version_id:naturalnum,notnull
+    {section_name ""}
 }
 
 set user_id [ad_get_user_id]
@@ -54,7 +55,7 @@ to indicate which parameters pertain to security.
 
 <tr valign=top>
   <th align=right><br>Section Name:</th>
-  <td><input name=section_name size=50><br>
+<td><input name=section_name size=50 value=\"[ad_quotehtml $section_name]\"><br>
 </td>
 </tr>
 

@@ -49,4 +49,13 @@ db_transaction {
     }
 }
 
-ad_returnredirect version-parameters?[export_url_vars version_id]
+# LARS hack
+set sections [lindex [lindex [apm_parameter_section_slider $package_key] 0] 3]
+foreach section $sections {
+    if { [string equal $section_name [lindex $section 1]] } {
+        set section_name [lindex $section 0]
+        break
+    }
+}
+
+ad_returnredirect version-parameters?[export_url_vars version_id section_name]
