@@ -14,7 +14,7 @@
 
       <p>
       Thank you for using our software. Please write to us at the <a
-      href="http://openacs.org/forums/forum-view?forum_id=14013">OpenACS bboard</a> to let
+      href="http://openacs.org/forums">OpenACS forums</a> to let
       us know of your experience with installing and using OpenACS. 
       </p>
       
@@ -35,11 +35,14 @@
       system:
       </p>
 
-      <ul>
-        <multiple name=nodes>
-          <li><a href="@nodes.url@">@nodes.name@</a></li>
-        </multiple>
-      </ul>
+      <multiple name=nodes>
+        <if @nodes.initial_install_p@ eq "t"> <h3> System Services </h3></if><else><h3>Installed Packages</h3></else>
+        <ul>
+          <group column="initial_install_p">
+            <li><a href="@nodes.url@">@nodes.name@</a></li>
+          </group>
+        </ul>
+      </multiple>
       
       <if @name@ not nil>
         If you like, you can go directly to <a href="@home_url@">@name@'s
