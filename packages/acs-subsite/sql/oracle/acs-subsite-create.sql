@@ -7,8 +7,15 @@
 -- @cvs-id $Id$
 --
 
+-- create table email_image_rel_ext (
+--	rel_id 		integer constraint email_image_rel_ext_fk references acs_rels(rel_id)
+--			constraint email_image_rel_ext primary key 
+-- );
+
+
 @@ attribute
 @@ portraits
+@@ email-image
 @@ application-groups-create
 @@ subsite-callbacks-create
 @@ host-node-map-create
@@ -30,3 +37,4 @@ from parties p,
      persons
 where p.party_id = groups.group_id(+)
   and p.party_id = persons.person_id(+);
+

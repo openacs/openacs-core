@@ -10,5 +10,6 @@
 @@ user-profiles-drop
 @@ attributes-drop
 @@ portraits-drop
+@@ email-image-drop
 @@ host-node-map-drop
 @@ site-node-selection-drop
