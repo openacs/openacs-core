@@ -829,7 +829,6 @@ end;' language 'plpgsql';
 
 -- procedure register_relation_type
 select define_function_args('content_type__register_relation_type','content_type,target_type,relation_tag;generic,min_n;0,max_n');
-
 create or replace function content_type__register_relation_type (varchar,varchar,varchar,integer,integer)
 returns integer as '
 declare
@@ -883,7 +882,6 @@ end;' language 'plpgsql';
 
 -- procedure unregister_relation_type
 select define_function_args('content_type__unregister_relation_type','content_type,target_type,relation_tag;generic');
-
 create or replace function content_type__unregister_relation_type (varchar,varchar,varchar)
 returns integer as '
 declare
@@ -962,8 +960,7 @@ end;' language 'plpgsql';
 
 
 -- function is_content_type
-select define_function_args('content_type__is_content_type','content_type');
-
+select define_function_args('content_type__is_content_type','content_type'); 
 create or replace function content_type__is_content_type (varchar)
 returns boolean as '
 declare
@@ -989,7 +986,6 @@ end;' language 'plpgsql' stable;
 
 -- procedure rotate_template
 select define_function_args('content_type__rotate_template','template_id,content_type,use_context');
-
 create or replace function content_type__rotate_template (integer,varchar,varchar)
 returns integer as '
 declare

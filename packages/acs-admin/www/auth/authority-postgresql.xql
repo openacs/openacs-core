@@ -21,7 +21,7 @@
                trunc(extract(epoch from (coalesce(job_end_time, current_timestamp) - job_start_time))) as run_time_seconds
         from   auth_batch_jobs
         where  authority_id = :authority_id
-	
+		order by start_time_ansi
       </querytext>
 </fullquery>
 

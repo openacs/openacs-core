@@ -29,7 +29,7 @@
         <if @show_members_page_link_p@>
           <a href="members/" class="button">#acs-subsite.Members#</a>
         </if>
-
+	  <a href="site-map/" class="button">#acs-subsite.UserSiteMap#</a>
         <if @untrusted_user_id@ ne 0>
           <if @main_site_p@ false>  
             <if @group_member_p@ true>

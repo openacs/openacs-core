@@ -5,7 +5,19 @@ ad_page_contract {
 set page_title "Active Connections"
 set context [list $page_title]
 
-set connections [ns_server active]
+#AG: removed the call to ns_server.  It's not thread safe!  We think
+#it is crashing our server.  See NOTES section of this page for more info:
+#  http://panoptic.com/wiki/aolserver/ns_server
+#Happily, the same information can be derived from ns_info threads, which
+#gets the information in a different way.
+
+set threads [ns_info threads]
+set connections [list]
+foreach thread $threads {
+    if { [string equal [lindex $thread 5] "ns:connthread"] && [llength [lindex $thread 6]] > 0 } {
+	lappend connections [lindex $thread 6]
+    }
+}
 
 array set ip_p [list]
 

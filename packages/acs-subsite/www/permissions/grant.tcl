@@ -9,6 +9,7 @@ ad_page_contract {
     object_id:integer,notnull
     privileges:multiple,optional
     {application_url ""}
+    {return_url ""}
 }
 
 ad_require_permission $object_id admin
@@ -107,11 +108,11 @@ foreach element $hierarchy {
     lappend select_list [list "[string repeat "&nbsp;&nbsp;&nbsp;" $level] $privilege" $privilege]
 }
 
-form create grant
-
-element create grant object_id \
-    -widget hidden \
-    -value $object_id
+ad_form -name grant -export {return_url} -form {
+    {object_id:text(hidden)
+        {value $object_id}
+    }
+}
 
 element create grant application_url \
     -widget hidden \
@@ -160,6 +161,11 @@ if { [form is_valid grant] } {
         }
     }
     
-    ad_returnredirect "one?[export_vars [list object_id application_url]]"
+    if {[exists_and_not_null return_url]} {
+        ad_returnredirect "$return_url"
+    } else {
+        ad_returnredirect "one?[export_vars [list object_id application_url]]"
+    }
+
     ad_script_abort
 }

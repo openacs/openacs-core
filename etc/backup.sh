@@ -14,6 +14,7 @@
 #
 
 COMPUTER=yourserver.net              # name of this computer
+DBHOST=localhost                     # name of the computer running the database
 BACKUPUSER=backup                    # username to own the files
 BACKUPDIR=/backup/thisserver         # where to store the backups
 BACKUPPART=/dev/hda1                 # which partition are we backing up to
@@ -47,6 +48,7 @@ ORACLE8I_DBS="service0"              # space-separated list of Oracle8i database
 
                                      # space-separated list of directories to be backed up
 
+KEEP_DAYS=7                          # Number of days to keep backups in $BACKUPDIR
 #---------------------------------------------------------------------
 # a space-delimited list of directories to back up
 # A minimal backup  
@@ -153,7 +155,7 @@ for dbname in $POSTGRES_DBS
 do
     dmp_file=$WEBDIR/$dbname/database-backup/$dbname-nightly-backup.dmp
     echo -n "-> Dumping $dbname to $dmp_file ... "
-    time $PG_BINDIR/pg_dump -f $dmp_file -Fp $dbname
+    time $PG_BINDIR/pg_dump -f $dmp_file -Fp $dbname -h $DBHOST
     /bin/ls -lh $dmp_file | awk '{print $5}'
     gzip -f $dmp_file
 done
@@ -194,7 +196,7 @@ for directory in $DIRECTORIES
       scp_success=`$SCP -q $FULLNAME $OTHERUSER@$OTHERHOST:$BACKUPDIR`
       
      # if scp returns success, see if we should wipe
-      if [[ scp_success -eq 0 && $WIPE_OLD_AFTER_SCP_FULL == "true" && $TYPE = "full" ]];
+      if [[ scp_success -eq 0 && $WIPE_OLD_AFTER_SCP_FULL == "true" && $TYPE == "full" ]];
 	  then
 
           # wipe out all similar backups except for the just-copied one
@@ -221,5 +223,8 @@ if [ $TYPE == "full" ];
     NOW=`date +%Y-%m-%d`
     echo $NOW> $TIMEDIR/$COMPUTER-full-date;
 fi
+
+# Delete old files
+/usr/bin/find $BACKUPDIR -atime +$KEEP_DAYS -exec /bin/rm -f {} \;
 
 echo "Done."

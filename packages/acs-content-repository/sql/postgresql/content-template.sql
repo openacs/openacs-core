@@ -112,8 +112,8 @@ begin
 
 end;' language 'plpgsql';
 
-select define_function_args('content_template__new','name,parent_id,template_id,creation_date,creation_user,creation_ip,text,is_live;f');
-select define_function_args('content_template__new','name,parent_id,template_id,creation_date,creation_user,creation_ip,text,is_live');
+select define_function_args('content_template__new','name,parent_id,template_id,creation_date;now,creation_user,creation_ip,text,is_live;f');
+
 create or replace function content_template__new (varchar,integer,integer,timestamptz,integer,varchar,text,bool)
 returns integer as '
 declare
@@ -196,17 +196,17 @@ begin
   return 0; 
 end;' language 'plpgsql';
 
+select define_function_args('content_template__delete','template_id');
+
 create or replace function content_template__delete (integer)
 returns integer as '
 declare
   delete__template_id            alias for $1;  
 begin
-
   PERFORM content_template__delete(delete__template_id);
 
   return 0; 
 end;' language 'plpgsql';
-
 
 -- function is_template
 create or replace function content_template__is_template (integer)

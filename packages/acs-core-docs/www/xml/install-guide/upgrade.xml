@@ -431,9 +431,9 @@ exit</action></screen>
 
                   <screen>[root root]# <userinput>su - <replaceable>$OPENACS_SERVICE_NAME</replaceable></userinput>
 [$OPENACS_SERVICE_NAME aolserver]$ <userinput>cd /var/lib/aolserver</userinput>
-[$OPENACS_SERVICE_NAME aolserver]$ <userinput>cvs -d :pserver:anonymous@openacs.org:/cvsroot checkout -r <replaceable>openacs-5-1-compat</replaceable> acs-core</userinput>
+[$OPENACS_SERVICE_NAME aolserver]$ <userinput>cvs -d :pserver:anonymous@cvs.openacs.org:/cvsroot checkout -r <replaceable>openacs-5-1-compat</replaceable> acs-core</userinput>
 [$OPENACS_SERVICE_NAME aolserver]$ <userinput>cd openacs-4/packages</userinput>
-[$OPENACS_SERVICE_NAME aolserver]$ <userinput>cvs -d :pserver:anonymous@openacs.org:/cvsroot checkout -r <replaceable>openacs-5-1-compat</replaceable> <replaceable>packagename packagename2...</replaceable></userinput>
+[$OPENACS_SERVICE_NAME aolserver]$ <userinput>cvs -d :pserver:anonymous@cvs.openacs.org:/cvsroot checkout -r <replaceable>openacs-5-1-compat</replaceable> <replaceable>packagename packagename2...</replaceable></userinput>
 [$OPENACS_SERVICE_NAME aolserver]$ <userinput>cd ../..</userinput>
 [$OPENACS_SERVICE_NAME aolserver]$ <userinput>mv openacs-4 <replaceable>openacs-5-1</replaceable></userinput></screen>
 
@@ -528,7 +528,7 @@ exit</action></screen>
         </listitem>
       </itemizedlist>
       <para>
-        <emphasis role="strong">Upgrading files for a site using the OpenACS.org CVS repository</emphasis>
+        <emphasis role="strong">Upgrading files for a site using the OpenACS CVS repository (cvs.openacs.org)</emphasis>
       </para>
       <orderedlist>
         <listitem>

@@ -452,6 +452,13 @@ ad_proc -public template::util::date::set_property { what date value } {
         return $date
       } else { 
         set hours [lindex $date 3]
+
+        # robustness check: make sure we handle form of 08:00am  --jfr
+        regexp {0([0-9])} $hours match trimmed_hours
+        if {[exists_and_not_null trimmed_hours]} {
+            set hours $trimmed_hours
+        }
+
         if { [string equal $value pm] && $hours < 12 } {
           return [lreplace $date 3 3 [expr $hours + 12]]
         } elseif { [string equal $value am] } {

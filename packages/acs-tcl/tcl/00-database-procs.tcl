@@ -12,7 +12,7 @@ ad_library {
 # define any number of different database drivers and pools in
 # AOLserver, but could only use ONE database here.
 #
-# I have eliminated this restriction.  Now, in OpenACS 4.7 and later,
+# I have eliminated this restriction.  Now, in OpenACS 5.0 and later,
 # to access a non-default database, simply pass the optional -dbn
 # (Database Name) switch to any of the DB API procs which support it.
 #
@@ -50,32 +50,12 @@ ad_library {
 # database!  Thus I chose to preserve this "binning" by specifying
 # databases via the -dbn switch rather than database pools via a -pool
 # switch.
+
+# (JoelA, 27 Dec 2004 - replaced example config.tcl with link)
 #
-# To define what databases exist, and what pools belong to what
-# databases, you need to put something like this in your nsd.tcl
-# AOLserver config file:
-#
-#   ns_section ns/server/${server}/acs/database
-#
-#     ns_param database_names [list ora pg foo]
-#     ns_param pools_ora  [list main subquery log]
-#     ns_param pools_pg   [list pg-main pg-subquery pg-log]
-#     ns_param pools_foo  [list foo1 foo2]
-#
-#     ## Optional, see comments:
-#     #ns_param driverkey_ora  {oracle}
-#     #ns_param driverkey_pg   {postgresql}
-#     #ns_param driverkey_foo  {bar}
-#
-# Note that the FIRST database listed in the databases parameter - in
-# this case 'ora' - becomes the default database, used for all normal
-# OpenACS transactions!
-#
-# Note also that since each database is just a logical bucket for
-# holding database pools, you are free to do weird stuff like assign
-# the same pool to more than one database, or define more than one
-# logical database for a single real, physical database.
-#
+# see http://openacs.org/doc/openacs-5-1/tutorial-second-database.html
+# for config and usage examples
+
 # TODO: The "driverkey_" overrides in the config file are NOT
 # implemented yet!
 #
@@ -146,44 +126,6 @@ ad_library {
 # variables are below:
 #
 # --atp@piskorski.com, 2003/03/16 21:30 EST
-
-
-# Old comments, from before adding the above multi-db support:
-# --atp@piskorski.com, 2003/03/16 21:31 EST
-
-# NSV db_pooled_sequences($sequence) is the number of sequence values for the
-#     sequence named $sequence that should be pooled.
-# NSV db_pooled_nextvals($sequence) is a list of available sequence values for
-#     the sequence named $sequence. It is a ring buffer (values are added to the
-#     end and popped from the beginning).
-# NSV db_pooled_nextvals(.mutex) is a mutex guarding the db_pooled_nextvals.
-
-# global db_state(handles) is a list of handles that have been allocated.
-#
-# global db_state(n_handles_used) is the number of handles in this list that are
-# presently in use.
-#
-# E.g.:
-#
-#        db_foreach statement_name "select ..." {
-#            # $db_state(handles) is "nsdb1"; $db_state(n_handles_used) is 1
-#            db_foreach statement_name "select ..." {
-#                # $db_state(handles) is "nsdb1 nsdb2"; $db_state(n_handles_used) is 2
-#            }
-#            # $db_state(handles) is "nsdb1 nsdb2"; $db_state(n_handles_used) is 1
-#            db_release_unused_handles
-#            # $db_state(handles) is "nsdb1"; $db_state(n_handles_used) is 1
-#        }
-#        # $db_state(handles) is "nsdb1"; $db_state(n_handles_used) is 0
-#        db_release_unused_handles
-#        # $db_state(handles) is ""; $db_state(n_handles_used) is 0
-#
-# The list of available pools are stored in the nsv db_available_pools(.) = { pool1 pool2 pool3 }
-#
-# This list is defined in the [ns/server/yourserver/acs/database] section using the key
-# AvailablePool=foo (one line per pool).
-#
-# If none are specified, it defaults to all the pools available to AOLserver.
 
 
 ad_proc -private db_state_array_name_is {{ -dbn "" }} {
@@ -2374,7 +2316,7 @@ ad_proc db_source_sql_file {{
             }
 
             cd [file dirname $file]
-            
+            ns_log notice "\n DAVEB pghost = '${pghost}' pgport = '${pgport}' pguser = '${pguser}' \n"
             if { $tcl_platform(platform) == "windows" } {
                 set fp [open "|[file join [db_get_pgbin] psql] $pghost $pgport $pguser -f $file_name [db_get_database]" "r"]
             } else {

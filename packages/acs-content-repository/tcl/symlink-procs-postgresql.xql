@@ -67,7 +67,7 @@
        
           select content_symlink__resolve_content_type (
 	     :item_id
-	  };
+	  );
       </querytext>
    </fullquery>
 

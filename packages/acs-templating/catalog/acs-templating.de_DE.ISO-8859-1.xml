@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="acs-templating" package_version="5.1.0" locale="de_DE" charset="ISO-8859-1">
+<message_catalog package_key="acs-templating" package_version="5.1.2" locale="de_DE" charset="ISO-8859-1">
 
+  <msg key="12-Hour">12-stündig</msg>
+  <msg key="24-Hour">24-stündig</msg>
+  <msg key="Day">Tag</msg>
+  <msg key="Element_is_required">%label% muss ausgefüllt werden</msg>
+  <msg key="Element_is_too_long_Plural">%label% ist um %excess_no_bytes% Zeichen zu lang.</msg>
+  <msg key="Element_is_too_long_Singular">%label% ist um 1 Zeichen zu lang.</msg>
+  <msg key="Formats">Formate</msg>
   <msg key="Invalid_choice">Ungültige Auswahl</msg>
   <msg key="Invalid_currency">Ungültige Währung</msg>
   <msg key="Invalid_decimal_number">Ungültige Dezimalzahl</msg>
@@ -10,11 +17,17 @@
   <msg key="Invalid_keyword">Ungültiges Schlüsselwort</msg>
   <msg key="Invalid_natural_number">Ungültiger natürlicher Zahlenwert</msg>
   <msg key="Invalid_url">Ungültige URL</msg>
+  <msg key="Meridian">Längengrad</msg>
+  <msg key="Minutes">Minuten</msg>
+  <msg key="Month">Monat</msg>
   <msg key="Next_with_arrow">Weiter &gt;&gt;</msg>
   <msg key="No_row_pretty_plural">Keine %row_pretty_plural% vorhanden</msg>
   <msg key="Previous_with_arrow">&lt;&lt; Zurück</msg>
   <msg key="required">Angabe erforderlich</msg>
+  <msg key="Seconds">Sekunden</msg>
+  <msg key="Sort_order">Sortierreihenfolge</msg>
   <msg key="Spellcheck">Rechtschreibprüfung</msg>
   <msg key="Tag_handler_invalid_number_of_args">Ungültige Anzahl von Argumenten für das Tag-Steuerungsprogramm</msg>
   <msg key="Template_parser_error_in_parameter_list">Fehler in der Liste der Parameter</msg>
+  <msg key="Year">Jahr</msg>
 </message_catalog>

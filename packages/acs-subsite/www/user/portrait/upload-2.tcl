@@ -44,6 +44,11 @@ if {![info exists upload_file]
 
     # check to see if this is one of the favored MIME types,
     # e.g., image/gif or image/jpeg
+
+    # DRB: the code actually depends on our having either gif or jpeg and this was true
+    # before I switched this routine to use cr_import_content (i.e. don't believe the
+    # generality implicit in the following if statement)
+
     if { ![empty_string_p [ad_parameter AcceptablePortraitMIMETypes "user-info"]]
          && [lsearch [ad_parameter AcceptablePortraitMIMETypes "user-info"] $guessed_file_type] == -1 } {
 	incr exception_count
@@ -63,70 +68,39 @@ if {![info exists upload_file]
     }
 }
 
-
 if { $exception_count > 0 } {
     ad_return_complaint $exception_count $exception_text
     ad_script_abort
 }
 
-set what_aolserver_told_us ""
-if { $file_extension == "jpeg" || $file_extension == "jpg" } {
-    catch { set what_aolserver_told_us [ns_jpegsize $tmp_filename] }
-} elseif { $file_extension == "gif" } {
-    catch { set what_aolserver_told_us [ns_gifsize $tmp_filename] }
-}
-
-# the AOLserver jpegsize command has some bugs where the height comes 
-# through as 1 or 2 
-if { ![empty_string_p $what_aolserver_told_us] 
-     && [lindex $what_aolserver_told_us 0] > 10
-     && [lindex $what_aolserver_told_us 1] > 10 } {
-    set original_width [lindex $what_aolserver_told_us 0]
-    set original_height [lindex $what_aolserver_told_us 1]
-} else {
-    set original_width ""
-    set original_height ""
-}
-
-## The portrait is ready. Let's now figure out how to insert into the system
-
-set creation_ip [ad_conn peeraddr]
-set name "portrait-of-user-$user_id"
-
-# let's figure out if this person has a portrait yet
-
 if { ![db_0or1row get_item_id {}]} { 
     # The user doesn't have a portrait relation yet
     db_transaction {
-        set item_id [db_exec_plsql create_item {}]
-        set revision_id [db_exec_plsql create_revision {}]
-        set rel_id [db_exec_plsql create_rel {}]
-        db_dml update_photo {} -blob_files [list $tmp_filename]
-        db_dml upload_image_info {}
-    }
-} else {
-    #already has a portrait, so all we have to do is to make a new revision for it
+        set var_list [list \
+            [list content_type image] \
+            [list name portrait-of-user-$user_id]]
+        set item_id [package_instantiate_object -var_list $var_list content_item]
 
-    # Let's check if a current revision exists:
-    if {![db_0or1row get_revision_id {}]
-        || [empty_string_p $revision_id]
-    } {
-	# It's an insert rather than an update
-	db_transaction {
-	    set revision_id [db_exec_plsql create_revision {}]
-	    db_dml update_photo {} -blob_files [list $tmp_filename]
-	    db_dml upload_image_info {}
-	}
-    } else {
-	# it's merely an update
-        db_transaction {
-	    db_dml update_photo {} -blob_files [list $tmp_filename]
-	    db_dml update_image_info {}
-	    db_dml update_photo_info {}
-	    db_dml update_object_title {}
-        }
+        # DRB: this is done via manual SQL because acs rel types are a bit messed
+        # up on the PostgreSQL side, which should be fixed someday.
+
+	db_exec_plsql create_rel {}
     }
 }
+
+set revision_id [cr_import_content \
+                    -image_only \
+                    -item_id $item_id \
+                    -storage_type lob \
+                    -creation_user [ad_conn user_id] \
+                    -creation_ip [ad_conn peeraddr] \
+                    [ad_conn package_id] \
+                    $tmp_filename \
+                    $n_bytes \
+                    $guessed_file_type \
+                    portrait-of-user-$user_id]
+
+cr_set_imported_content_live $guessed_file_type $revision_id
 
 if { [exists_and_not_null return_url] } {
     ad_returnredirect $return_url

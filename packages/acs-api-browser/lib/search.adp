@@ -85,4 +85,11 @@
   </form>
  </if>
 
+  <tr bgcolor="#DDDDDD">
+   <td colspan="2">
+    <h4>OpenACS and Package Documentation</h4>
+    <a href="/doc">Browse OpenACS documentation</a>
+   </td>
+  </tr>
+
 </table>

@@ -13,10 +13,28 @@
   </authorblurb>
 
   <orderedlist>
-    <listitem id="tcl-download">
+    <listitem>
       <formalpara>
+        <title>Check suitability of previously installed TCL</title>
+        <para>Start tcl (type <userinput>tclsh</userinput> or find it using <userinput>which tclsh</userinput>).
+        </para>
+      </formalpara>
+      <screen>[root root]% <userinput>info exists tcl_platform(threaded)</userinput>
+1
+[root root]% <userinput>info patchlevel</userinput>
+8.4.7
+[root root]%
+<action>tclsh
+info exists tcl_platform(threaded)
+info patchlevel
+</action></screen>
+      <para>If the first command returns anything other than <computeroutput>1</computeroutput>, 
+        then tcl is not threaded. If tcl is threaded and the version is 8.4 or higher, then installing
+        tcl from source is optional.
+      </para>
+      <formalpara id="tcl-download">
         <title>Retrieve TCL 8.4 (or higher)</title>
-        <para>Download and install TCL 8.4</para>
+        <para>Download and install TCL 8.4 from source</para>
       </formalpara>
         <para>Note for Debian users: you can apt-get install
       tcl8.4-dev if you have the right version (stable users will need
@@ -26,8 +44,14 @@
       try to find the tcl libraries, however.</para>
 
       <para>If you have not installed TCL already, download the latest TCL version from Sourceforge</para>
+      <para><emphasis role="bold">Debian:</emphasis>
+        <computeroutput><action>apt-get install
+            tcl8.4 tcl8.4-dev</action></computeroutput> and proceed to
+        the next step.  In that step, replace
+      <computeroutput>--with-tcl=/usr/local/lib/</computeroutput> with
+        <computeroutput>--with-tcl=/usr/lib/tcl8.4</computeroutput>.</para>
       <para>Remember that you have to be root if you want to follow these instructions. On Mac OS X type <userinput>sudo su -</userinput> to become root.</para>
-<para>Alternatively use <userinput>curl -L -O</userinput> instead of <userinput>wget</userinput> (especially on Mac OS X.</para>
+      <para>Alternatively use <userinput>curl -L -O</userinput> instead of <userinput>wget</userinput> (especially on Mac OS X).</para>
       <screen>[root root]# <userinput>cd /usr/local/src</userinput>
 [root src]# <userinput>wget http://heanet.dl.sourceforge.net/sourceforge/tcl/tcl8.4.7-src.tar.gz</userinput>
 [root src]# <userinput>tar xfz tcl8.4.7-src.tar.gz</userinput>
@@ -116,10 +140,16 @@ make install
 nspostgres.c:679: warning: passing arg 3 of `Tcl_DStringAppend' as signed due to prototype</programlisting>
               <para>then PostGreSQL is probably not in the standard location.  The location of PostGreSQL is very dependent on which method was used to install it.  To correct the problem, replace <computeroutput>LSB</computeroutput> with the path to the path to your PostGreSQL installation.  Often this is <computeroutput>/usr/local/pgsql</computeroutput>.</para>
 
+              <para>Another possibility is that you may need to set
+              the LD_LIBRARY_PATH environmental variable. You may
+              still get warnings, but sometimes this will fix things
+              enough to work.</para>
+              <screen>[root nspostgres]# <userinput>export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/pgsql/lib</userinput>
+              </screen>
               <para>You can use the
               <computeroutput>ldd</computeroutput> command to verify
               that all libraries are linked in: 
-                <userinput>ldd nspostgres.so</userinput>
+                <userinput>ldd /usr/local/src/aolserver40r8/nspostgres/nspostgres.so</userinput>
               </para>
 
               <para>If you run into problems with libpq.a do the following (and repeat the step above)</para>
@@ -173,8 +203,8 @@ nspostgres.c:679: warning: passing arg 3 of `Tcl_DStringAppend' as signed due to
       <itemizedlist>
             <listitem>
               <para>Oracle</para>
-              <screen>[root aolserver]# <userinput>cd /usr/local/aolserver40r9/bin</userinput>
-[root bin]# <userinput>cp /var/tmp/&tarballpath;/packages/acs-core-docs/www/files/nsd-oracle.txt ./nsd-oracle</userinput>
+              <screen>[root aolserver]# <userinput>cd /usr/local/aolserver40r8/bin</userinput>
+[root bin]# <userinput>cp /tmp/&tarballpath;/packages/acs-core-docs/www/files/nsd-oracle.txt ./nsd-oracle</userinput>
 [root bin]# <userinput>chmod 750 nsd-oracle</userinput>
 [root bin]#
 <action>cd /usr/local/aolserver40r9/bin

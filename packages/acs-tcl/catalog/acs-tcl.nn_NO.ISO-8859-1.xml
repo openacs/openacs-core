@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="acs-tcl" package_version="5.1.0" locale="nn_NO" charset="ISO-8859-1">
+<message_catalog package_key="acs-tcl" package_version="5.1.2" locale="nn_NO" charset="ISO-8859-1">
 
   <msg key="approve">godkjenn</msg>
   <msg key="approve_email">godkjenn e-post</msg>

@@ -11,5 +11,6 @@
 \i portraits-drop.sql
 \i attributes-drop.sql
 \i host-node-map-drop.sql
+\i site-node-selection-dro.sql
 
 drop view party_names;

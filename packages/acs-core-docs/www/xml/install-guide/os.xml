@@ -14,17 +14,19 @@
     <para>You will need a computer running a unix-like system with the following software installed:</para>
     <itemizedlist>
       <listitem><para>tdom</para></listitem>
-      <listitem><para>tcl</para></listitem>
+      <listitem><para>tcl --if you plan to use the OpenACS installation script</para></listitem>
       <listitem><para>gmake and the compile and build environment.</para>
         <note>
           <title>BSD Note</title>
           <para>BSD users: in most places in these instructions, gmake will work better than make.  (<ulink
           url="http://openacs.org/forums/message-view?message_id=136910">more
-          information on FreeBSD installation</ulink>)</para>
+          information on FreeBSD installation</ulink>). Also, fetch is a native replacement for wget.</para>
         </note>
       </listitem>
     </itemizedlist>
-    <para>and optionally these programs, which are included in most distributions:</para>
+    <para>Note: Instructions for installing tDOM and threaded tcl are included with the AOLserver4 installation instructions, 
+    if these are not yet installed.</para>
+    <para>The following programs may be useful or required for some configurations. They are included in most distributions:</para>
     <itemizedlist>
       <listitem><para>emacs</para></listitem>
         <listitem><para>cvs (and <link linkend="install-cvs">initialize</link> it)</para></listitem>

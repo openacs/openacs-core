@@ -85,8 +85,8 @@ ad_proc -public permission::permission_p {
 
     if { 
         !$no_login_p
-        && [ad_conn user_id] == 0 
         && $party_id == 0 
+        && [ad_conn user_id] == 0 
         && [ad_conn untrusted_user_id] != 0 
         && ![template::util::is_true $permission_p] 
     } {

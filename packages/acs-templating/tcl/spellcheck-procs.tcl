@@ -28,6 +28,7 @@ ad_proc -public template::util::spellcheck::merge_text { element_id } {
     ns_set delkey $__form__ $element_id.merge_text
 
     if { [empty_string_p $merge_text] } {
+
 	return {}
     } 
 
@@ -41,7 +42,6 @@ ad_proc -public template::util::spellcheck::merge_text { element_id } {
 
     ns_set cput $__form__ $element_id $merge_text
     ns_set cput $__form__ $element_id.spellcheck ":nospell:"
-
     return $merge_text
 }
 
@@ -49,6 +49,7 @@ ad_proc -public template::data::transform::spellcheck {
     -element_ref:required
     -values:required
 } {
+
     upvar $element_ref element
 
     # case 1, initial submission of non-checked text: returns {}.
@@ -65,7 +66,7 @@ ad_proc -public template::data::transform::spellcheck {
     	set contents [template::util::richtext::get_property contents [lindex $values 0]]
     } else {
 	if { ![empty_string_p $merge_text] } {
-	    return [list $merge_text]
+            return [list $merge_text]
 	} 
 	set contents [lindex $values 0]
     }
@@ -73,8 +74,8 @@ ad_proc -public template::data::transform::spellcheck {
     if { [empty_string_p $contents] } {
 	return $values
     } 
-
-    set spellcheck_p [ad_decode [set language [ns_queryget $element(id).spellcheck]] ":nospell:" 0 1]
+    # if language is empty string don't spellcheck
+    set spellcheck_p [ad_decode [set language [ns_queryget $element(id).spellcheck]] ":nospell:" 0 "" 0 1]
 
     # perform spellchecking or not?
     if { $spellcheck_p } { 
@@ -89,7 +90,12 @@ ad_proc -public template::data::transform::spellcheck {
 	    -html
 	
 	if { $error_num > 0 } {
+
 	    # there was at least one error.
+
+            # disable element validation since that will conflict with
+            # the spellchecking DAVEB
+            template::element::set_properties $element(form_id) $element(id) -validate [list]
 
 	    template::element::set_error $element(form_id) $element(id) "
           [ad_decode $error_num 1 "Found one error." "Found $error_num errors."] Please correct, if necessary."
@@ -98,6 +104,9 @@ ad_proc -public template::data::transform::spellcheck {
 	    template::element::set_properties $element(form_id) $element(id) mode display
 
 	    if { $richtext_p } {
+                # mutate datatype to prevent validation of spellcheck
+                # form data by richtext validation DAVEB
+                template::element::set_properties $element(form_id) $element(id) -datatype text
 		append formtext_to_display "
 <input type=\"hidden\" name=\"$element(id).format\" value=\"$format\" />"
 	    }
@@ -126,7 +135,6 @@ ad_proc -public template::util::spellcheck::get_sorted_list_with_unique_elements
     @param the_list The list of possibly duplicate elements.
     
 } {
-    
     set sorted_list [lsort -dictionary $the_list]
     set new_list [list]
     
@@ -349,7 +357,6 @@ ad_proc -public template::util::spellcheck::spellcheck_properties {
 		 || [empty_string_p [nsv_get spellchecker path]] } {
 
 	    set spellcheck_p 0
-
 	} else {
 
 

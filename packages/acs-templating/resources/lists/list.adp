@@ -46,7 +46,7 @@
     <div class="list-button-bar">
       <multiple name="bulk_actions">
         <span class="list-button-header"><a href="#" class="list-button" title="@bulk_actions.title@" 
-        onclick="ListBulkActionClick('@list_properties.name@', '@bulk_actions.url@')">@bulk_actions.label@</a></span>
+        onclick="ListBulkActionClick('@list_properties.name@', '@bulk_actions.url@'); return false;">@bulk_actions.label@</a></span>
       </multiple>
     </div>
     </form>

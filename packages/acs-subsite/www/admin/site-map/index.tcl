@@ -1,10 +1,10 @@
 ad_page_contract {
-
+    
     @author rhs@mit.edu
     @author bquinn@arsidigta.com
     @creation-date 2000-09-09
     @cvs-id $Id$
-
+    
 } {
     {expand:integer,multiple ""}
     {new_parent:integer ""}
@@ -47,52 +47,28 @@ set parent_link ".?[export_url_vars expand:multiple root_id=$parent_id]"
 set page_title "Site Map"
 set context [list $page_title]
 
-append body "
-<p>
-<b>&raquo;</b> <a href=\"application-new\">Create new application</a>
-</p>
-
-
-<table cellspacing=0 cellpadding=2 border=0>
-<tr>
-<td><font face=courier><b>"
-
 set user_id [ad_conn user_id]
 
 db_foreach path_select {} {
     if {$node_id != $root_id && $admin_p == "t"} {
-	append body "<a href=.?[export_url_vars expand:multiple root_id=$node_id]>"
+	append head "<a href=.?[export_url_vars expand:multiple root_id=$node_id]>"
     }
     if {[empty_string_p $name]} {
-	append body "$obj_name:"
+	append head "$obj_name:"
     } else {
-	append body $name
+	append head $name
     }
-
+    
     if {$node_id != $root_id && $admin_p == "t"} {
-	append body "</a>"
+	append head "</a>"
     }
-
+    
     if {$directory_p == "t"} {
-	append body "/"
+	append head "/"
     }
 } if_no_rows {
-    append body "&nbsp;"
+    append head "&nbsp;"
 }
-
-append body "</b></font>
-    </td>
-  </tr>
-  <tr bgcolor=#aaaaaa>
-    <td>
-<table align=center width=100% bgcolor=#eeeeee cellspacing=1 border=0>
-  <tr bgcolor=#cccccc>
-    <th>URL</th>
-    <th>Instance Name</th>
-    <th>Package Type</th>
-    <th>&nbsp;</th>
-  </tr>
-"
 
 if {[llength $expand] == 0} {
     lappend expand $root_id 
@@ -101,240 +77,230 @@ if {[llength $expand] == 0} {
     }
 }
 
-# You might wonder why level is aliased as mylevel here.  Well, for some
-# reason, Oracle does not allow level to be selected from an on-the-fly view
-# containing connect by.  However, if you rename the column, Oracle is happy to give
-# it to you.  We could tell you how we figured this out, but then we would have to kill you.
-set open_nodes [list]
-db_foreach nodes_select {} {
-    if { [lsearch -exact $open_nodes $parent_id] == -1 && $parent_id != "" && $mylevel > 2 } { continue } 
-
-    # set up commands to put in the various columns
-    set controls [list]
-    set dir_controls [list]  
-    set name_controls [list]  
-
-    if {$directory_p == "t"} {
-	lappend controls "<a href=.?[export_url_vars expand:multiple root_id node_id new_parent=$node_id new_type=folder]>add folder</a>"
-	if {[empty_string_p $object_id]} {
-	    lappend controls "<a href=mount?[export_url_vars expand:multiple root_id node_id]>mount</a>"
-	    lappend controls "<a href=.?[export_url_vars expand:multiple root_id new_application=$node_id]>new application</a>"
-	} else {
-	    # This makes sure you can't unmount the thing that is serving
-	    # the page you're looking at.
-	    if {[ad_conn node_id] != $node_id} {
-		lappend controls "<a href=unmount?[export_url_vars expand:multiple root_id node_id]>unmount</a>"
+template::list::create \
+    -name nodes \
+    -multirow nodes \
+    -key node_id \
+    -elements {
+	name {
+            label "URL"
+            html "align left"
+	    display_template {
+		<if @nodes.node_id@ ne -99999>
+		<a name="@nodes.node_id@">
+		@nodes.tree_indent;noquote@
+		</a>
+		<if @nodes.expand_mode@ eq 1>
+		(<a href="?@nodes.expand_url@#@nodes.node_id@">+</a>)
+		</if>
+		<if @nodes.expand_mode@ eq 2>
+                (<a href="?@nodes.expand_url@#@nodes.node_id@">-</a>)
+                </if>
+		<if @nodes.instance_url@ ne none>
+		<a href="?@nodes.name_url@">@nodes.name;noquote@</a>
+		</if><else>
+		@nodes.name;noquote@
+		</else>
+		<if @nodes.action_type@ eq "new_folder">
+		<a name="add" />
+		<form name=new_parent action=new>
+		@nodes.tree_indent;noquote@
+		@nodes.action_form_part;noquote@
+		<input name=name type=text size=8 value=Untitled>
+		<input type=submit value=New>
+		</form>
+		</if>
+		</if>
+		<else>
+		@nodes.name;noquote@
+		</else>
 	    }
-	    
-	    # Is the object a package?
-	    if {![empty_string_p $package_id]} {
-		if {$object_admin_p && ($parameter_count > 0)} {
-		    lappend controls "<a href=\"[export_vars -base "/shared/parameters" { package_id {return_url {[ad_return_url]} } }]\">parameters</a>"
-		}
+        } instance {
+            label "Instance"
+            html "align left"
+	    display_template {
+		<if @nodes.action_type@ eq "new_app">
+		<a name="new" />
+		<form name=new_application action=package-new>
+		<input name=instance_name type=text size=8 value="">
+		@nodes.action_form_part;noquote@
+		<input type=submit value=New>
+		</form>
+		</if>
+		<if @nodes.action_type@ eq "rename_app">
+		<a name="rename" />
+		<form name=rename_application action=rename>
+		<input name=instance_name type=text value="@nodes.instance@">
+		@nodes.action_form_part;noquote@
+		<input type=submit value=Rename>
+		</form>
+		</if>
+		<else>
+		<a href="@nodes.instance_url@">@nodes.instance;noquote@</a>
+		</else>
+	    }
+        } type {
+            label "Package Type"
+            html "align left"
+	    display_template {
+		@nodes.type;noquote@
+	    }
+        } actions {
+            label "Action"
+            html "align left"
+	    display_template {
+		<if @nodes.add_folder_url@ ne "">
+		  <a href="@nodes.add_folder_url@#add">add folder</a>
+		</if>
+		<if @nodes.new_app_url@ ne "">
+		  <a href="@nodes.new_app_url@#new">new application</a>
+		</if>
+		<if @nodes.unmount_url@ ne "">
+		  <a href="@nodes.unmount_url@">unmount</a>
+		</if>
+		<if @nodes.mount_url@ ne "">
+		  <a href="@nodes.mount_url@">mount</a>
+		</if>
+		<if @nodes.rename_url@ ne "">
+		  <a href="@nodes.rename_url@#rename">rename</a>
+		</if>
+		<if @nodes.delete_url@ ne "">
+		  <a href="@nodes.delete_url@" onclick="return confirm('Are you sure you want to delete node @nodes.name@ and any package mounted there?');">delete</a>
+		</if>
+		<if @nodes.parameters_url@ ne "">
+		  <a href="@nodes.parameters_url@">parameters</a>
+		</if>
+		<if @nodes.permissions_url@ ne "">
+		  <a href="@nodes.permissions_url@">permissions</a>
+		</if>
+		<if @nodes.extra_form_part@ ne "">
+		  @nodes.extra_form_part;noquote@
+		</if>
+	    }
+	}
+    }
+
+multirow create nodes node_id expand_mode expand_url tree_indent name name_url instance instance_url type action_type action_form_part add_folder_url new_app_url unmount_url mount_url rename_url delete_url parameters_url permissions_url extra_form_part
+
+set open_nodes [list]
+
+db_foreach nodes_select {} {
+    set add_folder_url ""
+    set new_app_url ""
+    set unmount_url ""
+    set mount_url ""
+    set rename_url ""
+    set delete_url ""
+    set parameters_url ""
+    set permissions_url ""
+
+    if { [lsearch -exact $open_nodes $parent_id] == -1 && $parent_id != "" && $mylevel > 2 } { continue } 
+        
+    if {$directory_p == "t"} {
+	set add_folder_url "?[export_url_vars expand:multiple root_id node_id new_parent=$node_id new_type=folder]"
+	if {[empty_string_p $object_id]} {
+	    set mount_url "mount?[export_url_vars expand:multiple root_id node_id]"
+	    set new_app_url "?[export_url_vars expand:multiple root_id new_application=$node_id]"
+	} else {
+	    # This makes sure you can't unmount the thing that is serving the page you're looking at.
+	    if {[ad_conn node_id] != $node_id} {
+		set unmount_url "unmount?[export_url_vars expand:multiple root_id node_id]"
 	    }
 	    
 	    # Add a link to control permissioning
 	    if {$object_admin_p} {
-		lappend controls "<a href=\"../../permissions/one?[export_url_vars object_id]\">permissions</a>"
-		lappend controls "<a href=\"?[export_url_vars expand:multiple root_id rename_application=$node_id]\">rename</a>"
-		lappend controls "<a href=\"instance-delete?package_id=$object_id&root_id=$root_id\" onclick=\"return confirm('Are you sure you want to delete node $name and any package mounted there?');\">delete</a>"
+		set permissions_url "../../permissions/one?[export_url_vars object_id]"
+		set rename_url "?[export_url_vars expand:multiple root_id rename_application=$node_id]"
+		set delete_url "instance-delete?package_id=$object_id&root_id=$root_id"
+	    }
+	    # Is the object a package?
+	    if {![empty_string_p $package_id]} {
+		if {$object_admin_p && ($parameter_count > 0)} {
+		    set parameters_url "[export_vars -base "/shared/parameters" { package_id {return_url {[ad_return_url]} } }]"
+		}
 	    }
 	}
     }
     
-  if {[ad_conn node_id] != $node_id && $n_children == 0 && [empty_string_p $object_id]} {
-    lappend controls "<a href=delete?[export_url_vars expand:multiple root_id node_id]>delete</a>"
-  }
-
-    append body "<tr><td><nobr><font face=courier size=-1>"
-
-    # use the indent variable to hold current indent level
-    # we'll use it later to indent stuff at the end by the amount
-    # of the last node
+    if {[ad_conn node_id] != $node_id && $n_children == 0 && [empty_string_p $object_id]} {
+	set delete_url "delete?[export_url_vars expand:multiple root_id node_id]"
+    }
+    
+    # use the indent variable to hold current indent level we'll use it later to indent stuff at the end by the amount of the last node
     set indent ""
     for {set i 0} {$i < 3*$mylevel} {incr i} {
 	append indent "&nbsp;"
     }
-        append body $indent
-
+    
+    set expand_mode 0
     if {!$root_p && $n_children > 0} {
-	set link "+"
+	set expand_mode 1
 	set urlvars [list]
 	foreach n $expand {
 	    if {$n == $node_id} {
-		set link "-"
+		set expand_mode 2
 		lappend open_nodes "$node_id"
 	    } else {
 		lappend urlvars "expand=$n"
 	    }
 	}
-
-	if {[string equal $link "+"]} {
+	
+	if { $expand_mode == 1} {
 	    lappend urlvars "expand=$node_id"
 	}
-
+	
 	lappend urlvars "root_id=$root_id"
-
-	append body "(<a href=.?[join $urlvars "&"]>$link</a>)</font> "
+	
+	set expand_url "[join $urlvars "&"]"
     } else {
-	append body "&nbsp;&nbsp;&nbsp;</font> "
+	set expand_url ""
+    }
+    
+    set name_url [export_url_vars expand:multiple root_id=$node_id]
+        
+    set action_type 0
+    set action_form_part ""
+    
+    if {[empty_string_p $object_id]} {
+	if {$new_application == $node_id} {
+	    
+	    set action_type "new_app"
+	    set action_form_part "[export_form_vars expand:multiple root_id node_id new_package_id] [apm_application_new_checkbox]"
+	    
+	    #Generate a package_id for double click protection
+	    set new_package_id [db_nextval acs_object_id_seq]
+	} else {
+	    set action_form_part "(none)"
+	}
+    } elseif {$rename_application == $node_id} {
+	set action_type "rename_app"
+	set action_form_part "[export_form_vars expand:multiple root_id node_id rename_package_id]"
+	
+    } else {}
+    
+    if {$node_id == $new_parent} {
+	set parent_id $new_parent
+	set node_type $new_type	
+	set action_type "new_folder"
+	set action_form_part "[export_form_vars expand:multiple parent_id node_type root_id]"
     }
 
-    append body "<font face=courier><b>"
-    if {!$root_p && $root_id != $node_id} {
-	append body "<a href=.?[export_url_vars expand:multiple root_id=$node_id]>"
-    }
-    append body "$name"
-    if {!$root_p && $root_id != $node_id} {
-	append body "</a>"
-    }
+    multirow append nodes $node_id $expand_mode $expand_url $indent $name $name_url $object_name $url $package_pretty_name $action_type $action_form_part $add_folder_url $new_app_url $unmount_url $mount_url $rename_url $delete_url $parameters_url $permissions_url ""
 
-    append body [ad_decode $directory_p t / f ""]
-
-    append body "</b></font></nobr><font size=-1> [join $dir_controls " | "] </font></td>"
-
-
-
-  append body "<td>"
-
-  if {[empty_string_p $object_id]} {
-    if {$new_application == $node_id} {
-	#Generate a package_id for double click protection
-	set new_package_id [db_nextval acs_object_id_seq]
-      append body "<form name=new_application action=package-new>
-        [export_form_vars expand:multiple root_id node_id new_package_id]
-        <font size=-1>
-        <input name=instance_name type=text size=8 value=\"\">
-        </td><td>
-        [apm_application_new_checkbox]
-        </td>
-        <td>
-        <input type=submit value=New>
-        </font>
-      </form>
-      "
-    } else {
-      append body "(none)"
-    }
-  } elseif {$rename_application == $node_id} {
-      append body "<form name=rename_application action=rename>
-        [export_form_vars expand:multiple root_id node_id rename_package_id]
-        <font size=-1>
-        <input name=instance_name type=text size=\"[string length $object_name]\" value=\"$object_name\">
-        <input type=submit value=Rename>
-        </font>
-        </form>
-      "
-  } else {
-      append body "<a href=\"$url\">[lang::util::localize $object_name]</a>"
-  }
-
-  if {![empty_string_p $object_id] || $new_application != $node_id } {
-      append body "</td><td>$package_pretty_name</td><td><font size=-1>\[ [join $controls " | "] \]</font></td>"
-  } 
-  append body "</tr>\n"
-
-  if {$node_id == $new_parent} {
-    set parent_id $new_parent
-    set node_type $new_type
-    append body "<tr><td><form name=new_parent action=new><nobr><font face=courier size=-1>"
-    for {set i 0} {$i < (3*($mylevel + 1) + 3)} {incr i} {
-      append body "&nbsp;"
-    }
-    # Generate a node_id for doubleclick protection.
-    append body "
-        [export_form_vars expand:multiple parent_id node_type root_id]
-        <b><input name=name type=text size=8 value=Untitled>
-        <input type=submit value=New></b>
-      </font></nobr>
-      </form>
-    </td>
-    <td>&nbsp;</td>
-    <td>&nbsp;</td>\n</tr>"
-  }
 }
 
-append body "
-  </tr>
-  <tr>
-<form name=new_application action=package-new>
-  <input type=hidden name=node_id value=$node(node_id) />
-  <input type=hidden name=root_id value=$node(node_id) />
-  <input type=hidden name=new_node_p value=t />
-  [export_form_vars expand:multiple]
-  <td>$indent<input name=node_name type=text size=8>
-  </td>
-  <td colspan=\"2\">
-    [apm_application_new_checkbox]
-  </td>
-  <td>
-    <input type=submit value=\"Mount Package\">
-  </td>
-</form>
+set new_app_form_part_1 "<p align=\"top\"><form name=new_application action=package-new><input type=hidden name=node_id value=$node(node_id) /><input type=hidden name=root_id value=$node(node_id) /><input type=hidden name=new_node_p value=t />[export_form_vars expand:multiple]<input name=node_name type=text size=8>"
 
-    </tr>
-</table>
-</table>
+set new_app_form_part_2 "[apm_application_new_checkbox]"
+set new_app_form_part_3 "<input type=submit value=\"Mount Package\"></form></p>"
+    multirow append nodes -99999 "" "" "" $new_app_form_part_1 "" "" "" $new_app_form_part_2 "" "" "" "" "" "" "" "" "" "" $new_app_form_part_3
 
-          </ul>
-    </tr>
-    <tr>
-"
-
-append body "
-<p>
-<a href=\"unmounted\">Manage unmounted applications</a>
-</p>
-
-<h2>Services</h2>
-       <ul>
-"
-
+set services ""
 
 db_foreach services_select {} {
     if {$parameter_count > 0} {
-        append body "  <li><a href=\"[export_vars -base "/shared/parameters" { package_id { return_url {[ad_return_url]} } }]\">$instance_name</a>"
+        append services "<li><a href=\"[export_vars -base "/shared/parameters" { package_id { return_url {[ad_return_url]} } }]\">$instance_name</a>"
     }
-    append body "\n"
 } if_no_rows {
-  append body "  <li>(none)\n"
+    append services "  <li>(none)\n"
 }
-
-
-append body "
-</ul>
-"
-
-append body "<p />
-<center><strong>Site Map Instructions</strong></center><p /> 
-
-To <strong>add an application</strong> to this site, use <em>new sub
-folder</em> to create a new site node beneath under the selected
-folder.  Then choose <em>new application</em> to select an installed
-application package for instantiation.  The application will then be
-available at the displayed URL.<p />
-
-To <strong>configure</strong> an application select <em>set
-parameters</em> to view and edit application specific options.
-<em>set permissions</em> allows one to grant privileges to users and
-groups to specific application instances or other application data.
-For more info on parameters and permissions, see the package specific
-documentation.  <p />
-
-To <strong>copy</strong> an application instance to another URL,
-create a new folder as above, then select <em>mount</em>.  Select
-the application to be copied from the list of available packages.<p />
-
-To <strong>move</strong> an application,
-copy it as above to the new location, then select
-<em>unmount</em> at the old location.  Selecting <em>delete</em> on
-the empty folder will remove it from the site node.<p />
-
-To <strong>remove</strong> an application and all of its data, select
-<em>unmount</em> from all the site nodes it is mounted from, then
-<em>delete</em> it from the <em>Unmounted Applications</em> link below
-the site map.
-
-</font>
-
-"

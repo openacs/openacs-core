@@ -1400,7 +1400,7 @@ ad_proc -public security::redirect_to_insecure {
 
     @author Peter Marklund
 } {
-    set_insecure_url [get_insecure_qualified_url $url]
+    set insecure_url [get_insecure_qualified_url $url]
     
     ad_returnredirect $insecure_url
     ad_script_abort
@@ -1504,13 +1504,14 @@ ad_proc -private security::get_secure_location {} {
         regsub {^(?:http://)?} $secure_location {https://} secure_location
 
 	# remove port number if using nonstandard port
-        regexp {^(.*):(.*)?} $secure_location match secure_location port
+        regexp {^(.*:.*):([0-9]+)} $secure_location match secure_location port
 
         # Add port number if non-standard
         set https_port [get_https_port]
         if { ![string equal $https_port 443] } {
             set secure_location ${secure_location}:$https_port
         }
+
     }
 
     return $secure_location
@@ -1530,6 +1531,7 @@ ad_proc -private security::get_insecure_location {} {
     } else {
         # Current location is secure - use location from config file
         set insecure_location [ad_conn location]
+        regsub -all {https://} $insecure_location "" insecure_location
         if { ![regexp $http_prefix $insecure_location] } {
             # Prepend http://
             set insecure_location ${http_prefix}${insecure_location}

@@ -264,3 +264,300 @@ ad_proc -private apm_higher_version_installed_p {
     return [db_string apm_higher_version_installed_p {} -default 1]
 }
 
+
+
+ad_proc -private apm_build_repository {
+    {debug_p 0} 
+    {head_channel 5-2} 
+} {    
+
+    Rebuild the repository on the local machine.  Only useful for the openacs.org site.   Adapted from Lars' build-repository.tcl page.
+    @param debug_p Set to 1 to test with only a small subset of packages instead of the whole cvs tree.
+    @param head_channel The artificial branch label to apply to HEAD.  Should be one minor version past the current release.
+    @author Lars Pind (lars@collaboraid.biz)
+    @return 0 for success.   Also outputs debug strings to log.
+
+} {
+
+    #----------------------------------------------------------------------
+    # Configuration Settings
+    #----------------------------------------------------------------------
+
+    set cvs_command "cvs"
+    set cvs_root ":pserver:anonymous@cvs.openacs.org:/cvsroot"
+
+    set work_dir "[acs_root_dir]/repository-builder/"
+
+    set repository_dir "[acs_root_dir]/www/repository/"
+    set repository_url "http://openacs.org/repository/"
+
+    set channel_index_template "/packages/acs-admin/www/apm/repository-channel-index"
+    set index_template "/packages/acs-admin/www/apm/repository-index"
+
+    set exclude_package_list {}
+
+    #----------------------------------------------------------------------
+    # Prepare output
+    #----------------------------------------------------------------------
+
+    ReturnHeaders
+    ns_log Debug [ad_header "Building repository"]
+    ns_log Debug "Repository: Building Package Repository"
+
+    #----------------------------------------------------------------------
+    # Find available channels
+    #----------------------------------------------------------------------
+
+    # Prepare work dir
+    file mkdir $work_dir
+
+    cd $work_dir
+    catch { exec $cvs_command -d $cvs_root -z3 co openacs-4/readme.txt }
+
+    catch { exec $cvs_command -d $cvs_root -z3 log -h openacs-4/readme.txt } output
+
+    set lines [split $output \n]
+    for { set i 0 } { $i < [llength $lines] } { incr i } {
+	if { [string equal [string trim [lindex $lines $i]] "symbolic names:"] } {
+	    incr i
+	    break
+	}
+    }
+
+    array set channel_tag [list]
+    array set channel_bugfix_version [list]
+
+    for { } { $i < [llength $lines] } { incr i } {
+	# Tag lines have the form   tag: cvs-version
+	#     openacs-5-0-0-final: 1.25.2.5
+
+	if { ![regexp {^\s+([^:]+):\s+([0-9.]+)} [lindex $lines $i] match tag_name version_name] } {
+	    break
+	}
+	
+	# Look for tags named 'openacs-x-y-compat'
+	if { [regexp {^openacs-([1-9][0-9]*-[0-9]+)-compat$} $tag_name match oacs_version] } {
+	    
+	    set major_version [lindex [split $oacs_version "-"] 0]
+	    set minor_version [lindex [split $oacs_version "-"] 1]
+
+	    if { $major_version >= 5 } {
+		set channel "${major_version}-${minor_version}"
+		
+		ns_log Debug "Repository: Found channel $channel using tag $tag_name"
+
+		set channel_tag($channel) $tag_name
+	    }
+	}
+    }
+
+    set channel_tag($head_channel) HEAD
+
+    ns_log Debug "Repository: Channels are: [array get channel_tag]</ul>"
+
+
+    #----------------------------------------------------------------------
+    # Read all package .info files, building manifest file
+    #----------------------------------------------------------------------
+
+    # Wipe and re-create the working directory
+    file delete -force $work_dir
+    file mkdir ${work_dir}
+    cd $work_dir
+    
+    foreach channel [lsort -decreasing [array names channel_tag]] {
+	ns_log Debug "Repository: <h2>Channel $channel using tag $channel_tag($channel)</h2><ul>"
+	
+	# Wipe and re-create the checkout directory
+	file delete -force "${work_dir}openacs-4"
+	file delete -force "${work_dir}dotlrn"
+	file mkdir -force "${work_dir}dotlrn/packages"
+	
+	# Prepare channel directory
+	set channel_dir "${work_dir}repository/${channel}/"
+	file mkdir $channel_dir
+
+	# Store the list of packages we've seen for this channel, so we don't include the same package twice
+	# Seems odd, but we have to do this given the forked packages sitting in /contrib
+	set packages [list]
+	
+	# Checkout from the tag given by channel_tag($channel)
+	if { $debug_p } {
+	    # Smaller list for debugging purposes
+	    set checkout_list [list \
+				   $work_dir $cvs_root openacs-4/packages/acs-core-docs
+			      ]
+	} else {
+	    # Full list for real use
+	    set checkout_list [list \
+				   $work_dir $cvs_root openacs-4/packages \
+				   $work_dir $cvs_root openacs-4/contrib/packages]
+	}
+	
+	foreach { cur_work_dir cur_cvs_root cur_module } $checkout_list {
+	    cd $cur_work_dir
+	    if { ![string equal $channel_tag($channel) HEAD] } {
+		ns_log Debug "Repository: Checking out $cur_module from CVS:"
+		catch { exec $cvs_command -d $cur_cvs_root -z3 co -r $channel_tag($channel) $cur_module } output
+		ns_log Debug "Repository:  [llength $output] files"
+	    } else {
+		ns_log Debug "Repository: Checking out $cur_module from CVS:"
+		catch { exec $cvs_command -d $cur_cvs_root -z3 co $cur_module } output
+		ns_log Debug "Repository:  [llength $output] files"
+	    }
+	}
+	cd $work_dir
+
+	set manifest {<manifest>}
+	append manifest \n
+
+	template::multirow create packages \
+	    package_path package_key version pretty_name \
+	    package_type summary description \
+	    release_date vendor_url vendor
+	
+	foreach packages_dir \
+	    [list "${work_dir}openacs-4/packages" \
+		 "${work_dir}openacs-4/contrib/packages" ] {
+		     
+		     foreach spec_file [lsort [apm_scan_packages $packages_dir]] {
+			 
+			 set package_path [eval file join [lrange [file split $spec_file] 0 end-1]]
+			 set package_key [lindex [file split $spec_file] end-1]
+			 
+			 if { [lsearch -exact $exclude_package_list $package_key] != -1 } {
+			     ns_log Debug "Repository: Package $package_key is on list of packages to exclude - skipping"
+			     continue
+			 }
+
+			 if { [array exists version] } {
+			     array unset version
+			 }
+			 if { [info exists version] } {
+			     unset version
+			 }
+
+			 with_catch errmsg {
+			     array set version [apm_read_package_info_file $spec_file]
+			     
+			     if { [lsearch -exact $packages $version(package.key)] != -1 } {
+				 ns_log Debug "Repository: Skipping package $package_key, because we already have another version of it"
+			     } else {
+				 lappend packages $version(package.key)
+				 
+				 append manifest {  } {<package>} \n
+				 
+				 append manifest {    } {<package-key>} [ad_quotehtml $version(package.key)] {</package-key>} \n
+				 append manifest {    } {<version>} [ad_quotehtml $version(name)] {</version>} \n
+				 append manifest {    } {<pretty-name>} [ad_quotehtml $version(package-name)] {</pretty-name>} \n
+				 append manifest {    } {<package-type>} [ad_quotehtml $version(package.type)] {</package-type>} \n
+				 append manifest {    } {<summary>} [ad_quotehtml $version(summary)] {</summary>} \n
+				 append manifest {    } {<description format="} [ad_quotehtml $version(description.format)] {">} 
+				 append manifest [ad_quotehtml $version(description)] {</description>} \n
+				 append manifest {    } {<release-date>} [ad_quotehtml $version(release-date)] {</release-date>} \n
+				 append manifest {    } {<vendor url="} [ad_quotehtml $version(vendor.url)] {">} 
+				 append manifest [ad_quotehtml $version(vendor)] {</vendor>} \n
+				 
+				 template::multirow append packages \
+				     $package_path $package_key $version(name) $version(package-name) \
+				     $version(package.type) $version(summary) $version(description) \
+				     $version(release-date) $version(vendor.url) $version(vendor)
+
+				 set apm_file "${channel_dir}${version(package.key)}-${version(name)}.apm"
+
+				 ns_log Debug "Repository: Building package $package_key for channel $channel"
+				 
+				 set files [apm_get_package_files \
+						-all_db_types \
+						-package_key $version(package.key) \
+						-package_path $package_path]
+				 
+				 if { [llength $files] == 0 } {
+				     ns_log Debug "Repository: No files in package"
+				 } else {
+				     set cmd [list exec [apm_tar_cmd] cf -  2>/dev/null]
+
+				     # The path to the 'packages' directory in the checkout
+				     set packages_root_path [eval file join [lrange [file split $spec_file] 0 end-2]]
+				     
+				     lappend cmd -C $packages_root_path
+				     foreach file $files {
+					 lappend cmd $package_key/$file
+				     }
+				     lappend cmd "|" [apm_gzip_cmd] -c ">" $apm_file
+				     ns_log Notice "Executing: [ad_quotehtml $cmd]"
+				     eval $cmd
+				 }
+
+
+				 set apm_url "${repository_url}${channel}/${version(package.key)}-${version(name)}.apm"
+
+				 append manifest {    } {<download-url>} $apm_url {</download-url>} \n
+				 foreach elm $version(provides) {
+				     append manifest {    } "<provides url=\"[ad_quotehtml [lindex $elm 0]]\" version=\"[ad_quotehtml [lindex $elm 1]]\" />" \n
+				 }
+				 
+				 foreach elm $version(requires) {
+				     append manifest {    } "<requires url=\"[ad_quotehtml [lindex $elm 0]]\" version=\"[ad_quotehtml [lindex $elm 1]]\" />" \n
+				 }
+				 
+				 append manifest {  } {</package>} \n
+			     } 
+			 } {
+			     global errorInfo
+			     ns_log Debug "Repository:  Error on spec_file $spec_file: [ad_quotehtml $errmsg]<br>[ad_quotehtml $errorInfo]\n"
+			 }
+		     }
+		 }
+	append manifest {</manifest>} \n
+	
+	ns_log Debug "Repository: Writing $channel manifest to ${channel_dir}manifest.xml"
+	set fw [open "${channel_dir}manifest.xml" w]
+	puts $fw $manifest
+	close $fw
+
+	ns_log Debug "Repository: Writing $channel index page to ${channel_dir}index.html"
+	set fw [open "${channel_dir}index.html" w]
+
+	# sort by package name
+	set packages [lsort $packages]
+	puts $fw [ad_parse_template -params [list channel packages] -- $channel_index_template]
+	close $fw
+
+	ns_log Debug "Repository:  Channel $channel complete."
+	
+    }
+
+    ns_log Debug "Repository: Finishing Repository"
+
+    # Write the index page
+    ns_log Debug "Repository: Writing repository index page to ${work_dir}repository/index.html"
+    template::multirow create channels name
+    foreach channel [lsort -decreasing [array names channel_tag]] {
+	template::multirow append channels $channel
+    }
+    set fw [open "${work_dir}repository/index.html" w]
+    puts $fw [ad_parse_template -params [list channels] -- $index_template]
+    close $fw
+
+
+    # Without the trailing slash
+    set work_repository_dirname "${work_dir}repository"
+    set repository_dirname [string range $repository_dir 0 end-1]
+    set repository_bak "[string range $repository_dir 0 end-1].bak"
+
+    ns_log Debug "Repository: Moving work repository $work_repository_dirname to live repository dir at <a href=\"/repository\/>$repository_dir</a>\n"
+
+    if { [file exists $repository_bak] } {
+	file delete -force $repository_bak
+    }
+    if { [file exists $repository_dirname] } {
+	file rename $repository_dirname $repository_bak
+    }
+    file rename $work_repository_dirname  $repository_dirname
+
+    ns_log Debug "Repository: DONE"
+
+    return 0
+}
+    

@@ -553,7 +553,6 @@ begin
  
 end;' language 'plpgsql' stable strict;
 
-
 select define_function_args('content_revision__revision_name','revision_id');
 create or replace function content_revision__revision_name(integer)
 returns text as '

@@ -13,6 +13,7 @@
 @@ subsite-callbacks-create
 @@ host-node-map-create
 @@ user-sc-create
+@@ site-node-delection
 
 -- This view lets us avoid using acs_object.name to get party_names.
 -- 

@@ -231,6 +231,7 @@ create unique index cr_items_unique_name on cr_items(parent_id, name);
 create unique index cr_items_unique_id on cr_items(parent_id, item_id);
 create index cr_items_by_parent_id on cr_items(parent_id);
 create index cr_sortkey_idx on cr_items(tree_sortkey);
+create index cr_items_name on cr_items(name);
 
 -- content-create.sql patch
 --
@@ -288,7 +289,7 @@ begin
 
         select max(tree_leaf_key_to_int(child.tree_sortkey)) into v_max_value 
           from cr_items child
-         where child.parent_id not in (select item_id from cr_items);
+         where not exists (select 1 from cr_items where child.parent_id = item_id);
     else 
         select max(tree_leaf_key_to_int(tree_sortkey)) into v_max_value 
           from cr_items 
@@ -350,7 +351,7 @@ begin
 
                 select max(tree_leaf_key_to_int(tree_sortkey)) into v_max_value
                   from cr_items child
-                 where child.parent_id not in (select item_id from cr_items);
+                 where not exists (select 1 from cr_items where child.parent_id = item_id);
             else 
                 select max(tree_leaf_key_to_int(tree_sortkey)) into v_max_value
                   from cr_items 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="acs-subsite" package_version="5.1.0" locale="es_GT" charset="ISO-8859-1">
+<message_catalog package_key="acs-subsite" package_version="5.1.2" locale="es_GT" charset="ISO-8859-1">
 
   <msg key="_or">, o</msg>
   <msg key="_Update_Basic_Information">Actualizar Información Básica</msg>
@@ -173,7 +173,7 @@ Para cambiar su contraseña, visite %reset_password_url%</msg>
   <msg key="lt_To_confirm_your_regis">Para confirmar su registro, por favor, acuda a %confirmation_url%</msg>
   <msg key="lt_Upload_your_favorite">Sube tu foto favorita, un archivo escaneado en formato JPEG o GIF, de tu computadora(nota que no puedes hacer referencia a una imagen en algún lado de internet; tiene que estar en tu disco duro).</msg>
   <msg key="lt_Uploaded_pretty_date">Subido: %pretty_date%</msg>
-  <msg key="lt_Uploaded_publish_date">Subido: %pretty_date%</msg>
+  <msg key="lt_Uploaded_publish_date">Subido: %publish_date%</msg>
   <msg key="lt_Use_the_Browse_button">Utiliza el botón de &quot;Examinar...&quot; para localizar tu archivo, luego selecciona el botón de &quot;Abrir&quot;.</msg>
   <msg key="lt_We_cant_find_you">No te pudimos encontrar (usuario %user_id%) en la tabla de usuarios. Probablemente tu cuenta fue borrada por alguna razón.</msg>
   <msg key="lt_We_had_a_problem_proc">Tuvimos un problema procesando tu entrada.</msg>

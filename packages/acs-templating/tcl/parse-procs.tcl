@@ -481,7 +481,7 @@ ad_proc -public template::adp_compile { source_type source } {
   regsub -all {([^0-9])%>} $chunk {\1</tcl>} chunk
   # warn about the first ambiguity in the source
   if [regexp {[0-9]+%>} $chunk match] {
-    ns_log warning "ambiguous '$match'; write tcl ecapes with a space like\
+    ns_log warning "ambiguous '$match'; write tcl escapes with a space like\
       <% set x 50 %> and HTML tags with proper quoting, like <hr width=\"50%\">\
       when compiling ADP source: template::adp_compile $source_type {$source}"
   }
@@ -530,7 +530,7 @@ ad_proc -public template::adp_array_variable_regexp {} {
   @author Peter Marklund (peter@collaboraid.biz)
   @creation-date 25 October 2002
 } {
-  return {(^|[^\\])@([a-zA-Z0-9_:]+)\.([a-zA-Z0-9_:]+)@}
+  return {(^|[^\\])@([a-zA-Z0-9_:]+)\.([a-zA-Z0-9_:\.]+)@}
 }
 
 ad_proc -public template::adp_array_variable_regexp_noquote {} {

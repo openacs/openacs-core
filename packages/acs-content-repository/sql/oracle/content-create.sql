@@ -219,6 +219,7 @@ create unique index cr_items_by_latest_revision on cr_items(latest_revision);
 create unique index cr_items_unique_name on cr_items(parent_id, name);
 create unique index cr_items_unique_id on cr_items(parent_id, item_id);
 create index cr_items_by_parent_id on cr_items(parent_id);
+create index cr_items_name on cr_items(name);
 
 comment on table cr_items is '
   Each content item has a row in this table, as well as a row in

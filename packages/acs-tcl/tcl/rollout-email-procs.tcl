@@ -106,13 +106,20 @@ was instead redirected to you.
 	@author Andrew Grumet <aegrumet@alum.mit.edu>
 	@date 29 July 2002
 
-
     } {
 	set allowed [ns_config ns/server/[ns_info server]/acs/acs-rollout-support EmailAllow]
-	if { [lsearch [split $allowed ,] $to] >= 0 } {
-	    return [_old_ns_sendmail $to $from $subject $body $extraheaders $bcc]
+
+        # make sure we are comparing just the email address portion
+        # not a@b.com and a@b.com (Abc Def)
+        # note this takes out the name part as a side effect. -jfr
+        regexp {([a-zA-Z0-9][^ @]*)@([a-zA-Z0-9_.-]+\.[a-zA-Z]{2,6})} $to match beginning end
+        set to_for_comparison "${beginning}@${end}"
+
+	if { [lsearch [split $allowed ,] $to_for_comparison] >= 0 } {
+
+	    return [_old_ns_sendmail $to_for_comparison $from $subject $body $extraheaders $bcc]
 	} else {
-	    return [ro::email::sendmail_log $to $from $subject $body $extraheaders $bcc]
+	    return [ro::email::sendmail_log $to_for_comparison $from $subject $body $extraheaders $bcc]
 	}
     }
 

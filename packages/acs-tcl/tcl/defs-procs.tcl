@@ -125,13 +125,19 @@ ad_proc -public ad_url {} {
     return [ad_parameter -package_id [ad_acs_kernel_id] SystemURL]
 }
 
+ad_proc -public acs_community_member_page {} {
+    @return the url for the community member page
+} {
+    return "[subsite::get_element -element url -notrailing][ad_parameter \
+	    -package_id [ad_acs_kernel_id] CommunityMemberURL]"
+}
+
 ad_proc -public acs_community_member_url {
     {-user_id:required}
 } {
     @return the url for the community member page of a particular user
 } {
-    return "[subsite::get_element -element url -notrailing][ad_parameter \
-	    -package_id [ad_acs_kernel_id] CommunityMemberURL]?[export_vars user_id]"
+    return "[acs_community_member_page]?[export_vars user_id]"
 }
 
 ad_proc -public acs_community_member_link {
@@ -457,6 +463,9 @@ ad_proc ad_return_if_another_copy_is_running {
     The call_adp_break_p argument is essential 
     if you are calling this from an ADP page and want to avoid the 
     performance hit of continuing to parse and run.
+
+    This proc is dangerous, and needs to be rewritten. See:
+    http://openacs.org/forums/message-view?message_id=203381
 } {
     # first let's figure out how many are running and queued
     set this_connection_url [ad_conn url]
