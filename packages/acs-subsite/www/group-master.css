@@ -269,3 +269,15 @@ h4 {
 }
 
 
+span.form-configuration-help-text { 
+  font-family:verdana, arial, sans-serif; 
+  font-size:10px; 
+  line-height:13px;
+  text-align:justify;
+}
+span.form-configuration-label { 
+  font-family:trebuchet MS, trebuchet, verdana, arial, sans-serif; 
+  font-size: 11px; 
+  line-height:15px;
+}
+
