@@ -772,7 +772,7 @@ end;' language 'plpgsql' stable strict;
 
 ---- DRB: fixes bug 1144
 
-drop view registered_users;
+drop view registered_users CASCADE;
 create view registered_users
 as
   select p.email, p.url, pe.first_names, pe.last_name, u.*, mr.member_state
@@ -788,8 +788,13 @@ as
   and mr.member_state = 'approved'
   and u.email_verified_p = 't';
 
+create view registered_users_of_package_id
+as
+SELECT u.*, au.package_id
+FROM application_users au, registered_users u
+WHERE (au.user_id = u.user_id);
 
-drop view cc_users;
+drop view cc_users CASCADE;
 create view cc_users
 as
 select o.*, pa.*, pe.*, u.*, mr.member_state, mr.rel_id
@@ -803,6 +808,12 @@ where o.object_id = pa.party_id
   and m.rel_id = mr.rel_id
   and m.container_id = m.group_id
   and m.rel_type = 'membership_rel';
+
+create view cc_users_of_package_id
+as
+SELECT u.*, au.package_id
+FROM application_users au, cc_users u
+WHERE (au.user_id = u.user_id);
 
 drop function acs__add_user(int4,varchar,timestamptz,int4,varchar,varchar,varchar,varchar,varchar,bpchar,bpchar,varchar,varchar,varchar,bool,varchar);
 

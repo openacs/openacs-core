@@ -237,7 +237,7 @@ alter table users alter column username set not null;
 alter table users add constraint users_authority_username_un
                       unique (authority_id, username);
 
-drop view cc_users;
+drop view cc_users CASCADE;
 create view cc_users
 as
 select o.*, pa.*, pe.*, u.*, mr.member_state, mr.rel_id
@@ -250,3 +250,9 @@ where o.object_id = pa.party_id
   and m.group_id = amo.object_id
   and m.rel_id = mr.rel_id
   and m.container_id = m.group_id;
+
+create view cc_users_of_package_id
+as
+SELECT u.*, au.package_id
+FROM application_users au, cc_users u
+WHERE (au.user_id = u.user_id);
