@@ -1,5 +1,5 @@
 -- Drop the ACS Reference Language data
---
+-- Postgres version
 -- @author jon@jongriffin.com
 -- @cvs-id $Id$
 
