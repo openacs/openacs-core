@@ -13,6 +13,7 @@
   <msg key="Next_with_arrow">Næste &gt;&gt;</msg>
   <msg key="No_row_pretty_plural">Ingen %row_pretty_plural%.</msg>
   <msg key="Previous_with_arrow">&lt;&lt; Forrige</msg>
+  <msg key="required">skal udfyldes</msg>
   <msg key="Spellcheck">Stavekontrol</msg>
   <msg key="Tag_handler_invalid_number_of_args">Ugyldigt antal argumenter til tag handler.</msg>
   <msg key="Template_parser_error_in_parameter_list">Fejl i parameter liste</msg>
