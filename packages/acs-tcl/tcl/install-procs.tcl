@@ -134,10 +134,10 @@ ad_proc -public install::xml::action::mount { node } {
             # There is already a node with that path, check if there is a 
             # package mounted there
             array set site_node [site_node::get -url "/$mount_point"]
-            if { [empty_string_p $node(object_id)] } {
+            if { [empty_string_p $site_node(object_id)] } {
                 # There is no package mounted there so go ahead and mount the 
                 # new package
-                set node_id $node(node_id)
+                set node_id $site_node(node_id)
             } else {
                 ns_log Error "A package is already mounted at \"$mount_point\""
                 ns_write "<br>mount: A package is already mounted at \"$mount_point\", ignoring mount command."
