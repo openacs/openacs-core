@@ -655,3 +655,9 @@ ad_proc -public subsite::get_template_options {} {
     }
     return $master_template_options
 }
+
+ad_proc -public subsite::get_application_options {} {
+    Gets options list for applications to install
+} {
+    return [db_list_of_lists package_types {}]
+}
