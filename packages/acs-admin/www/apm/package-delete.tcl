@@ -38,7 +38,7 @@ $file_list
 </table>"
 } 
 
-set body "[apm_header -form "action=\"package-delete-2.tcl\" method=\"post\"" [list "version-view?version_id=$version_id" "$pretty_name $version_name"] "Delete"]
+set body "[apm_header -form "action=\"package-delete-2\" method=\"post\"" [list "version-view?version_id=$version_id" "$pretty_name $version_name"] "Delete"]
 
 Deleting a package removes it from the filesystem and removes all record of it from the APM's
 database.
