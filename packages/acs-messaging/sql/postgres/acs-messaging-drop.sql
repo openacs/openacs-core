@@ -7,16 +7,14 @@
 --
 
 begin
-  acs_object_type.drop_type('acs_message');
+  acs_object_type__drop_type('acs_message');
 end;
-/
-show errors
 
-drop package acs_message;
+--drop package acs_message;
 
-drop table acs_messages_outgoing;
+--drop table acs_messages_outgoing;
 
-drop view acs_messages_all;
+--drop view acs_messages_all;
 
-drop table acs_messages;
+--drop table acs_messages;
 
