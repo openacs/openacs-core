@@ -97,6 +97,7 @@ if { $member_state == "approved" && $email_verified_p == "t"} {
     }
 
     ad_returnredirect $return_url
+    ad_script_abort
 
 } elseif { $email_verified_p == "f" }  { 
 
