@@ -39,7 +39,7 @@ ORACLE8I_DBS="service0"              # space-separated list of Oracle8i database
                                      # to be backed up to file system
 
                                      # space-separated list of directories to be backed up
-DIRECTORIES="/etc /home /root /cvsroot /var/qmail/alias /usr/local/aolserver /var/lib/aolserver"
+DIRECTORIES="/etc /home /root /cvsroot /var/qmail/alias /usr/local/aolserver $WEBDIR"
 
 #######################################################################
 #
@@ -89,8 +89,6 @@ fi
 if $TYPE == "full";
     then
     NEWER=""
-    NOW=`date +%Y-%m-%d`
-    echo $NOW> $TIMEDIR/$COMPUTER-full-date;
 else
     TYPE="incremental"
     NEWER="--newer-mtime `cat $TIMEDIR/$COMPUTER-full-date`";
@@ -113,7 +111,7 @@ do
     echo -n "-> Dumping $dbname to $dmp_file ... "
     time $PG_BINDIR/pg_dump -f $dmp_file -Fp $dbname
     /bin/ls -lh $dmp_file | awk '{print $5}'
-    gzip $dmp_file
+    gzip -f $dmp_file
 done
 
 #---------------------------------------------------------------------
@@ -124,27 +122,41 @@ do
     echo -n "-> Dumping $dbname to $dmp_file ... "
     time /usr/sbin/export-oracle $dbname $dmp_file
     /bin/ls -lh $dmp_file | awk '{print $5}'
-    gzip $dmp_file
+    gzip -f $dmp_file
 done
 
 #---------------------------------------------------------------------
 # Make backup files from file system and transfer to remote site
 # TODO: This could be parallelized
 #---------------------------------------------------------------------
+# we switched from bzip2 back to gzip because bzip2 takes 10 times longer
+# for a 10% size advantage
 
 for directory in $DIRECTORIES
 
   do
 
   # strip directory of slashes when using it in the backup file name
-  FULLNAME=$BACKUPDIR/$DATE-$COMPUTER-${directory//\//-}-backup-$TYPE.tar.bz2
-  echo tar -jcpsh $NEWER --file $FULLNAME $directory
+  FULLNAME=$BACKUPDIR/$DATE-$COMPUTER-${directory//\//-}-backup-$TYPE.tar.gz
+  # to use bzip2 instead of gzip, change z to j in the tar flags
+  cd $NEWER
+  tar -zcpsh . --file $FULLNAME $directory
   $CHOWN $BACKUPUSER $FULLNAME
   $CHMOD 660 $FULLNAME
   if [[ -n $OTHERHOST ]]
-      then echo $SCP $FULLNAME $OTHERUSER@$OTHERHOST:$BACKUPDIR
+      then $SCP -q $FULLNAME $OTHERUSER@$OTHERHOST:$BACKUPDIR
   fi
 done
 
-echo "Done."
+# If full backup completed successfully, record the date so that
+# incremental backups are relative to the last successful full
+# backup
 
+if $TYPE == "full";
+    then
+    NEWER=""
+    NOW=`date +%Y-%m-%d`
+    echo $NOW> $TIMEDIR/$COMPUTER-full-date;
+fi
+
+echo "Done."
