@@ -126,6 +126,18 @@ aa_register_case content_item {
                 -table_name "__test_type" \
                 -id_column "test_id"]
 
+
+            #########################################################
+            # create an attribute
+            #########################################################
+            content::type::attribute::new \
+                -content_type "__test_type" \
+                -attribute_name "attribute_name" \
+                -datatype "text" \
+                -pretty_name "Attribute Name" \
+                -pretty_plural "Attribute Names" \
+                -column_spec "text"
+            
             # todo test that new item is NOT allowed to be created
             # unless registered by catching error when creating new
             # item
@@ -144,7 +156,7 @@ aa_register_case content_item {
                                             -item_id $new_type_item_id \
                                             -parent_id $first_folder_id \
                                             -content_type  "__test_type" \
-                                               -attributes [list title "Title"]]
+                                            -attributes [list title "Title" attribute_name "attribute_value"]]
 
             #########################################################
             # check that the item exists
@@ -156,6 +168,11 @@ aa_register_case content_item {
                                                       -revision "latest" \
                                                       -array_name new_type_item] == 1]
 
+            #########################################################
+            # check that extended attribute exists
+            #########################################################
+            aa_true "Extended attribute set" [expr [string equal "attribute_value" \
+                               $new_type_item(attribute_name)]]
             #########################################################
             # copy it
             #########################################################
