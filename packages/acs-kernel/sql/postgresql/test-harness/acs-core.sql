@@ -58,22 +58,11 @@ begin
 
 end;' language 'plpgsql';
 
-begin;
+
 select test_acs_core ();
 select test_del_user ();
-end;
+
 drop function test_acs_core ();
 drop function test_del_user ();
 
 
--- select acs_user__delete(1);
-
-/*
-delete from user_preferences
-where user_id = 1;
-
-delete from users
-where user_id = 1;
-
-select person__delete(1);
-*/

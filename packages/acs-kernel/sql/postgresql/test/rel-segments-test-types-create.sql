@@ -22,13 +22,13 @@ begin
 
 
 	PERFORM acs_rel_type__create_type (
-		''yippe_member_rel'',
-		''Yippe Membership Relationship'',
-		''Yippe Membership Relationships'',
+		''yippie_member_rel'',
+		''Yippie Membership Relationship'',
+		''Yippie Membership Relationships'',
 		''membership_rel'',
-		''yippe_member_rels'',
+		''yippie_member_rels'',
 		''rel_id'',
-		''yippe_member_rel'',
+		''yippie_member_rel'',
 		''group'',
 		null,
 		0,
@@ -57,10 +57,10 @@ create table blah_member_rels (
 				primary key
 );
 
-create table yippe_member_rels (
-	rel_id			integer constraint yippe_member_rel_id_fk
+create table yippie_member_rels (
+	rel_id			integer constraint yippie_member_rel_id_fk
 				references membership_rels (rel_id)
-				constraint yippe_member_rel_pk
+				constraint yippie_member_rel_pk
 				primary key
 );
 
@@ -135,34 +135,34 @@ end;' language 'plpgsql';
 
 
 
--- create or replace package yippe_member_rel
+-- create or replace package yippie_member_rel
 -- is
 --   function new (
--- 	rel_id		in yippe_member_rels.rel_id%TYPE 
+-- 	rel_id		in yippie_member_rels.rel_id%TYPE 
 -- 				default null,
 -- 	rel_type	in acs_rels.rel_type%TYPE 
--- 				default 'yippe_member_rel',
+-- 				default 'yippie_member_rel',
 -- 	object_id_one	in groups.group_id%TYPE,
 -- 	object_id_two	in parties.party_id%TYPE
---   ) return yippe_member_rels.rel_id%TYPE;
+--   ) return yippie_member_rels.rel_id%TYPE;
 -- 
 --   procedure delete (
--- 	rel_id		in yippe_member_rels.rel_id%TYPE
+-- 	rel_id		in yippie_member_rels.rel_id%TYPE
 --   );
--- end yippe_member_rel;
+-- end yippie_member_rel;
 
 -- show errors
 
--- create or replace package body yippe_member_rel
+-- create or replace package body yippie_member_rel
 -- function new
-create function yippe_member_rel__new (integer,varchar,integer,integer)
+create function yippie_member_rel__new (integer,varchar,integer,integer)
 returns integer as '
 declare
   new__rel_id                 alias for $1;  
   new__rel_type               alias for $2;  
   new__object_id_one          alias for $3;  
   new__object_id_two          alias for $4;  
-  v_rel_id                    yippe_member_rels.rel_id%TYPE;
+  v_rel_id                    yippie_member_rels.rel_id%TYPE;
 begin
 
 	v_rel_id := membership_rel__new(
@@ -175,8 +175,7 @@ begin
                 null
 	);
 
-
-	insert into yippe_member_rels
+	insert into yippie_member_rels
 	(rel_id)
 	values
 	(v_rel_id);
@@ -187,13 +186,13 @@ end;' language 'plpgsql';
 
 
 -- procedure delete
-create function yippe_member_rel__delete (yippe_member_rels)
+create function yippie_member_rel__delete (integer)
 returns integer as '
 declare
   delete__rel_id                 alias for $1;  
 begin
 
-	delete from yippe_member_rels where rel_id = delete__rel_id;
+	delete from yippie_member_rels where rel_id = delete__rel_id;
 
 	PERFORM membership_rel__delete(delete__rel_id);
 

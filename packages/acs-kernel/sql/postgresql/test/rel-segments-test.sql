@@ -26,7 +26,7 @@ create table groups_test_segs (
        sname       varchar(100)
 );
 
--- creates blah_member_rel and yippe_member_rel relationships
+-- creates blah_member_rel and yippie_member_rel relationships
 
 \i rel-segments-test-types-create.sql
 
@@ -50,16 +50,19 @@ begin
   if NOT v_pass_p then
 
       str := ''Row missing from rel_segment_party_map for'' ||
-                    '' segment '''''' || acs_object.name(segment_id) ||
-                    '''''' ('' || segment_id || '')'' ||
-                    '', party '''''' || acs_object.name(party_id) || 
-                    '''''' ('' || party_id || '')'' ||
-                    '', container '''''' || acs_object.name(container_id) || 
-                    '''''' ('' ||container_id || '')'';
+                    '' segment '' || 
+                    acs_object__name(test_check__segment_id) ||
+                    '' ('' || test_check__segment_id || '')'' ||
+                    '', party '' || 
+                    acs_object__name(test_check__party_id) || 
+                    '' ('' || test_check__party_id || '')'' ||
+                    '', container '' || 
+                    acs_object__name(test_check__container_id) || 
+                    '' ('' || test_check__container_id || '')'';
 
       raise NOTICE ''%'', str;
 
-      acs_log.error(''rel_segment_test_check'', str);
+      PERFORM acs_log__error(''rel_segment_test_check'', str);
   end if;
 
 
@@ -87,8 +90,9 @@ declare
   sven	 integer;
   stacy	 integer;
 
-  seg_G_blahs   integer;
-  seg_E_yippes  integer;
+  seg_G_blahs    integer;
+  seg_E_yippies  integer;
+  seg_F          integer;
 
   rel_id integer;
 begin
@@ -150,11 +154,11 @@ begin
   -- Make a couple of memberships.
 
   rel_id := blah_member_rel__new(null, ''blah_member_rel'', B, joe);
-  rel_id := yippe_member_rel__new(null, ''yippie_member_rel'', B, jane);
+  rel_id := yippie_member_rel__new(null, ''yippie_member_rel'', B, jane);
   rel_id := blah_member_rel__new(null, ''blah_member_rel'', B, betty);
-  rel_id := yippe_member_rel__new(null, ''yippie_member_rel'', A, bob);
+  rel_id := yippie_member_rel__new(null, ''yippie_member_rel'', A, bob);
   rel_id := blah_member_rel__new(null, ''blah_member_rel'', A, betty);
-  rel_id := yippe_member_rel__new(null, ''yippie_member_rel'', E, betty);
+  rel_id := yippie_member_rel__new(null, ''yippie_member_rel'', E, betty);
 
   -- define a few segments.
 
@@ -172,22 +176,25 @@ begin
                                   null
                  );
 
-  -- the segment of all parties that are yippe members of E
-  seg_E_yippes := rel_segment__new(null,
+  -- the segment of all parties that are yippie members of E
+  seg_E_yippies := rel_segment__new(null,
                                   ''rel_segment'',
                                   now(),
                                   null,
                                   null,
                                   null,
                                   null,
-                                  ''Yippes of Group E'',
+                                  ''Yippies of Group E'',
                                   E, 
-                                  ''yippe_member_rel'',
+                                  ''yippie_member_rel'',
                                   null
                   );
 
+  seg_F := rel_segment__get_or_new(F,''membership_rel'',null);
+
   insert into groups_test_segs values (seg_G_blahs,1,''seg_G_blahs'');
-  insert into groups_test_segs values (seg_E_yippes,2,''seg_E_yippes'');
+  insert into groups_test_segs values (seg_E_yippies,2,''seg_E_yippies'');
+  insert into groups_test_segs values (seg_F,3,''seg_F'');
 
   delete from acs_logs;
 
@@ -214,8 +221,9 @@ declare
   sven	 integer;
   stacy	 integer;
 
-  seg_G_blahs   integer;
-  seg_E_yippes  integer;
+  seg_G_blahs    integer;
+  seg_E_yippies  integer;
+  seg_F          integer;
 
   rel_id integer;
   r      record;
@@ -230,22 +238,26 @@ begin
   select group_id into F from groups_test_groups where gname = ''F'';
   select group_id into G from groups_test_groups where gname = ''G'';
 
-  select user_id into joe   from groups_test_users where gname = ''joe'';
-  select user_id into jane  from groups_test_users where gname = ''jane'';
-  select user_id into bob   from groups_test_users where gname = ''bob'';
-  select user_id into betty from groups_test_users where gname = ''betty'';
-  select user_id into jack  from groups_test_users where gname = ''jack'';
-  select user_id into jill  from groups_test_users where gname = ''jill'';
-  select user_id into sven  from groups_test_users where gname = ''sven'';
-  select user_id into stacy from groups_test_users where gname = ''stacy'';
+  select user_id into joe   from groups_test_users where uname = ''joe'';
+  select user_id into jane  from groups_test_users where uname = ''jane'';
+  select user_id into bob   from groups_test_users where uname = ''bob'';
+  select user_id into betty from groups_test_users where uname = ''betty'';
+  select user_id into jack  from groups_test_users where uname = ''jack'';
+  select user_id into jill  from groups_test_users where uname = ''jill'';
+  select user_id into sven  from groups_test_users where uname = ''sven'';
+  select user_id into stacy from groups_test_users where uname = ''stacy'';
 
   select seg_id into seg_G_blahs  
     from groups_test_segs 
    where sname = ''seg_G_blahs'';
 
-  select seg_id into seg_E_yippes 
+  select seg_id into seg_E_yippies 
     from groups_test_segs 
-   where sname = ''seg_G_blahs'';
+   where sname = ''seg_E_yippies'';
+
+  select seg_id into seg_F 
+    from groups_test_segs 
+   where sname = ''seg_F'';
 
 --  group_element_index_dump;
 --  rel_segment_party_map_dump;
@@ -253,7 +265,7 @@ begin
 
   -- Expectations:
   --   1. seg_G_blahs should include joe and betty
-  --   2. seg_E_yippes should include bob, and jane, betty
+  --   2. seg_E_yippies should include bob, and jane, betty
 
   -- check: seg_G_blahs contains joe with container B
   if rel_segment_test_check(seg_G_blahs, joe, B) = ''f'' then
@@ -279,26 +291,26 @@ begin
     raise NOTICE ''%'', str; 
   end if;
 
-  -- check: seg_E_yippes contains jane with container B
-  if rel_segment_test_check(seg_E_yippes, jane, B) = ''f'' then
-    str := ''Segment '' || acs_object__name(seg_E_yippes) || 
-                         ''('' || seg_E_yippes || '') failed.  Group_id = '' 
+  -- check: seg_E_yippies contains jane with container B
+  if rel_segment_test_check(seg_E_yippies, jane, B) = ''f'' then
+    str := ''Segment '' || acs_object__name(seg_E_yippies) || 
+                         ''('' || seg_E_yippies || '') failed.  Group_id = '' 
                          || E;
     raise NOTICE ''%'', str; 
   end if;
 
-  -- check: seg_E_yippes contains bob with container A
-  if rel_segment_test_check(seg_E_yippes, bob, A) = ''f'' then
-    str := ''Segment '' || acs_object__name(seg_E_yippes) || 
-                         ''('' || seg_E_yippes || '') failed. Group_id = '' 
+  -- check: seg_E_yippies contains bob with container A
+  if rel_segment_test_check(seg_E_yippies, bob, A) = ''f'' then
+    str := ''Segment '' || acs_object__name(seg_E_yippies) || 
+                         ''('' || seg_E_yippies || '') failed. Group_id = '' 
                          || E;
     raise NOTICE ''%'', str; 
   end if;
 
-  -- check: seg_E_yippes contains betty with container E
-  if rel_segment_test_check(seg_E_yippes, betty, E) = ''f'' then
-    str := ''Segment '' || acs_object__name(seg_E_yippes) || 
-                         ''('' || seg_E_yippes || '') failed. Group_id = '' 
+  -- check: seg_E_yippies contains betty with container E
+  if rel_segment_test_check(seg_E_yippies, betty, E) = ''f'' then
+    str := ''Segment '' || acs_object__name(seg_E_yippies) || 
+                         ''('' || seg_E_yippies || '') failed. Group_id = '' 
                          || E;
     raise NOTICE ''%'', str; 
   end if;
@@ -307,8 +319,7 @@ begin
   -- function:
 
   -- The segment of all memers of F should contain jane through group B
-  if rel_segment_test_check(
-          rel_segment__get_or_new(F,''membership_rel''), jane, B) = ''f'' then
+  if rel_segment_test_check(seg_F, jane, B) = ''f'' then
     str := ''Segment '' || 
                  acs_object__name(rel_segment__get(F,''membership_rel'')) || 
                  ''('' || rel_segment__get(F,''membership_rel'') 
@@ -317,8 +328,7 @@ begin
   end if;
 
   -- The segment of all memers of F should contain betty through group A
-  if rel_segment_test_check(
-          rel_segment__get_or_new(F,''membership_rel''), betty, A) = ''f'' then
+  if rel_segment_test_check(seg_F, betty, A) = ''f'' then
     str := ''Segment '' || 
                  acs_object__name(rel_segment__get(F,''membership_rel'')) || 
                  ''('' || rel_segment__get(F,''membership_rel'') 
@@ -328,7 +338,7 @@ begin
 
   -- Remove the test segments.
   PERFORM rel_segment__delete(seg_G_blahs);
-  PERFORM rel_segment__delete(seg_E_yippes);
+  PERFORM rel_segment__delete(seg_E_yippies);
   PERFORM rel_segment__delete(rel_segment__get(F,''membership_rel''));
 
   -- Remove the test memebership relations
@@ -336,8 +346,8 @@ begin
     PERFORM blah_member_rel__delete(r.rel_id);
   end loop;
 
-  for r in select * from yippe_member_rels LOOP
-    PERFORM yippe_member_rel__delete(r.rel_id);
+  for r in select * from yippie_member_rels LOOP
+    PERFORM yippie_member_rel__delete(r.rel_id);
   end loop;
 
   -- Remove the test groups.
@@ -350,14 +360,14 @@ begin
   PERFORM acs_group__delete(A);
 
   -- Remove the test members.
-  PERFROM acs_user__delete(joe);
-  PERFROM acs_user__delete(jane);
-  PERFROM acs_user__delete(bob);
-  PERFROM acs_user__delete(betty);
-  PERFROM acs_user__delete(jack);
-  PERFROM acs_user__delete(jill);
-  PERFROM acs_user__delete(sven);
-  PERFROM acs_user__delete(stacy);
+  PERFORM acs_user__delete(joe);
+  PERFORM acs_user__delete(jane);
+  PERFORM acs_user__delete(bob);
+  PERFORM acs_user__delete(betty);
+  PERFORM acs_user__delete(jack);
+  PERFORM acs_user__delete(jill);
+  PERFORM acs_user__delete(sven);
+  PERFORM acs_user__delete(stacy);
 
   return null;
 
@@ -369,6 +379,9 @@ select check_segs();
 drop function rel_segment_test_check(integer, integer, integer);
 drop function test_segs();
 drop function check_segs();
+drop table groups_test_groups;
+drop table groups_test_users;
+drop table groups_test_segs;
 
 \i rel-segments-test-types-drop.sql
 

@@ -321,12 +321,10 @@ begin
            pos := length(skey);
            LOOP               
                ch := substr(skey,pos,1);
-               if carry = ''t'' then 
+               if carry then 
                    select code::varchar || nkey,
-                          case when code = ''0'' 
-                                 then ''t'' 
-                                 else ''f'' 
-                               end into nkey, carry
+                          code = ''0'' 
+                     into nkey, carry
                      from tree_encodings 
                     where deci = (select (deci + 1) % base
                                     from tree_encodings
@@ -335,15 +333,12 @@ begin
                    nkey := ch::varchar || nkey;
                end if;
                pos := pos - 1;               
-               select case when substr(skey,pos - 1,1) = ''/'' 
-                               then ''t'' 
-                               else ''f'' 
-                           end into stop;
+               select substr(skey,pos - 1,1) = ''/'' into stop;
 
-               exit when stop = ''t'';
+               exit when stop;
 
            END LOOP;
-           if carry = ''t'' then 
+           if carry then 
               nkey := ''0'' || nkey;
            end if;
         end if;

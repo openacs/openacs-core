@@ -100,7 +100,8 @@ begin
        LIMIT 1 
     LOOP
 
-	  v_error := v_error || ''Relational Constraint Violation: '' ||
+	  v_error := coalesce(v_error,'''') || 
+                     ''Relational Constraint Violation: '' ||
                      constraint_violated.constraint_name || 
                      '' (constraint_id='' ||
                      constraint_violated.constraint_id || ''). '';
@@ -115,10 +116,11 @@ begin
       LIMIT 1 
     LOOP
 
-           v_error := v_error || ''Relational Constraint Violation: '' ||
-                     constraint_violated.constraint_name || 
-                     '' (constraint_id='' ||
-                     constraint_violated.constraint_id || ''). '';
+           v_error := coalesce(v_error,'''') || 
+                      ''Relational Constraint Violation: '' ||
+                      constraint_violated.constraint_name || 
+                      '' (constraint_id='' ||
+                      constraint_violated.constraint_id || ''). '';
 
            return v_error;
     end loop;

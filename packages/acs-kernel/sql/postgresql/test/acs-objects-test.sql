@@ -72,7 +72,6 @@
 -- create or replace package body ut#acs_object
 -- as
 
-drop function ut_acs_object__setup();
 create function ut_acs_object__setup() returns integer as '
 declare
         attr_id acs_attributes.attribute_id%TYPE;
@@ -120,7 +119,6 @@ begin
 
 end;' language 'plpgsql';
 
-drop function ut_acs_object__teardown();
 create function ut_acs_object__teardown() returns integer as '
 begin
         raise NOTICE ''Tearing down...'';
@@ -142,7 +140,6 @@ begin
 
 end;' language 'plpgsql';
 
-drop function ut_acs_object__new();
 create function ut_acs_object__new() returns integer as '
 declare
         result  boolean;
@@ -189,7 +186,6 @@ begin
 	
 end;' language 'plpgsql';
 
-drop function ut_acs_object__delete();
 create function ut_acs_object__delete() returns integer as '
 declare
         v_rec   record;
@@ -212,7 +208,6 @@ begin
 
 end;' language 'plpgsql'; 
 
-drop function ut_acs_object__name();
 create function ut_acs_object__name() returns integer as '
 begin
 	raise NOTICE ''Testing name...'';
@@ -225,7 +220,6 @@ begin
 
 end;' language 'plpgsql'; 
 
-drop function ut_acs_object__default_name();
 create function ut_acs_object__default_name() returns integer as '
 begin
 	raise NOTICE ''Testing default_name...'';
@@ -238,7 +232,6 @@ begin
 
 end;' language 'plpgsql'; 
 
-drop function ut_acs_object__set_attribute();
 create function ut_acs_object__set_attribute() returns integer as '
 declare
         v_sql_result test_objects.data%TYPE;
@@ -267,7 +260,6 @@ begin
 
 end;' language 'plpgsql';
 
-drop function ut_acs_object__get_attribute();
 create function ut_acs_object__get_attribute() returns integer as '
 declare
         v_attr_value varchar(4000);
@@ -309,3 +301,12 @@ select ut_acs_object__set_attribute();
 select ut_acs_object__get_attribute();
 
 select ut_acs_object__teardown();
+
+drop function ut_acs_object__setup();
+drop function ut_acs_object__teardown();
+drop function ut_acs_object__new();
+drop function ut_acs_object__delete();
+drop function ut_acs_object__name();
+drop function ut_acs_object__default_name();
+drop function ut_acs_object__set_attribute();
+drop function ut_acs_object__get_attribute();

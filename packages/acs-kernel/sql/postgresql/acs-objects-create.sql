@@ -228,19 +228,27 @@ end;' language 'plpgsql';
 create trigger acs_objects_last_mod_update_tr before update on acs_objects
 for each row execute procedure acs_objects_last_mod_update_tr ();
 
-
 create function acs_objects_insert_tr () returns opaque as '
 declare
         v_parent_sk     varchar;
         max_key         varchar;
 begin
-        select max(tree_sortkey) into max_key 
-          from acs_objects 
-         where context_id = new.context_id;
+        if new.context_id is null then 
+            select max(tree_sortkey) into max_key 
+              from acs_objects 
+             where context_id is null;
 
-        select coalesce(max(tree_sortkey),'''') into v_parent_sk 
-          from acs_objects 
-         where object_id = new.context_id;
+            v_parent_sk := '''';
+        else 
+            select max(tree_sortkey) into max_key 
+              from acs_objects 
+             where context_id = new.context_id;
+
+            select coalesce(max(tree_sortkey),'''') into v_parent_sk 
+              from acs_objects 
+             where object_id = new.context_id;
+        end if;
+
 
         new.tree_sortkey := v_parent_sk || ''/'' || tree_next_key(max_key);
 
@@ -256,6 +264,7 @@ create function acs_objects_update_tr () returns opaque as '
 declare
         v_parent_sk     varchar;
         max_key         varchar;
+        ctx_id          integer;
         v_rec           record;
         clr_keys_p      boolean default ''t'';
 begin
@@ -277,17 +286,25 @@ begin
                clr_keys_p := ''f'';
             end if;
             
-            select max(tree_sortkey) into max_key
+            select context_id into ctx_id
               from acs_objects 
-              where context_id = (select context_id 
-                                    from acs_objects 
-                                   where object_id = v_rec.object_id);
+             where object_id = v_rec.object_id;
 
-            select coalesce(max(tree_sortkey),'''') into v_parent_sk 
-              from acs_objects 
-             where object_id = (select context_id 
-                                  from acs_objects 
-                                 where object_id = v_rec.object_id);
+            if ctx_id is null then 
+                select max(tree_sortkey) into max_key
+                  from acs_objects 
+                 where context_id is null;
+
+                v_parent_sk := '''';
+            else 
+                select max(tree_sortkey) into max_key
+                  from acs_objects 
+                 where context_id = ctx_id;
+
+                select coalesce(max(tree_sortkey),'''') into v_parent_sk 
+                  from acs_objects 
+                 where object_id = ctx_id;
+            end if;
 
             update acs_objects 
                set tree_sortkey = v_parent_sk || ''/'' || tree_next_key(max_key)
@@ -708,7 +725,7 @@ create function acs_object__name (integer)
 returns varchar as '
 declare
   name__object_id        alias for $1;  
-  object_name            varchar(500);  
+  object_name            varchar;  
   v_object_id            integer;
   obj_type               record;  
   obj                    record;      
@@ -742,7 +759,8 @@ begin
     -- Native Dynamic SQL, to ascertain the name of this object.
     --
     --execute ''select '' || object_type.name_method || ''(:1) from dual''
-    for obj in execute ''select '' || obj_type.name_method || ''('' || name__object_id || '') as object_name'' loop
+
+    for obj in execute ''select '' || obj_type.name_method || ''('' || name__object_id || '')::varchar as object_name'' loop
         object_name := obj.object_name;
         exit;
     end loop;
