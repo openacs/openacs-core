@@ -3,7 +3,7 @@
 
 <fullquery name="first_last_names">      
       <querytext>
-      select first_names db_first_names, last_name db_last_name, password_question from cc_users where user_id = :user_id
+      select first_names as db_first_names, last_name as db_last_name, password_question from cc_users where user_id = :user_id
       </querytext>
 </fullquery>
 
