@@ -17,54 +17,62 @@ aa_register_case content_item {
 } {
 
     aa_run_with_teardown \
-	-rollback \
-	-test_code {
-	    # create a cr_folder
-	    set first_folder_id [db_nextval "acs_object_id_seq"]
-	    set returned_first_folder_id [content::folder::new \
-					      -folder_id $first_folder_id \
-					      -name "test_folder_${first_folder_id}"]
-	    content::folder::register_content_type \
-		-folder_id $first_folder_id \
-		-content_type "content_revision" \
-		
-	    aa_true "Folder created" [expr $first_folder_id == $returned_first_folder_id]
-	    # create another
-	    set second_folder_id [db_nextval  "acs_object_id_seq"]
-	    set returned_second_folder_id [content::folder::new \
-					       -folder_id $second_folder_id \
-					       -name "test_folder_${second_folder_id}"]
-	    aa_true "Folder 2 created" [expr $second_folder_id == $returned_second_folder_id]
-	    # create a cr_item
-	    set first_item_id [db_nextval  "acs_object_id_seq"]
-	    set returned_first_item_id [content::item::new \
-					    -name "test_item_one" \
-					    -item_id $first_item_id \
- 					    -parent_id $first_folder_id]
+        -rollback \
+        -test_code {
+            # create a cr_folder
+            set first_folder_id [db_nextval "acs_object_id_seq"]
+            set returned_first_folder_id [content::folder::new \
+                                              -folder_id $first_folder_id \
+                                              -name "test_folder_${first_folder_id}"]
 
-	    aa_true "First item created" [expr $first_item_id == $returned_first_item_id]
-	    # copy it
+            content::folder::register_content_type \
+                -folder_id $first_folder_id \
+                -content_type "content_revision" 
 
-	    # move the copy
+            aa_true "Folder created" [expr $first_folder_id == $returned_first_folder_id]
 
-	    # delete the copy
+            set is_empty [content::folder::is_empty -folder_id $first_folder_id]
+            aa_true "Folder is empty" [string is true $is_empty]
 
-	    # rename it
+            # create another
+            set second_folder_id [db_nextval  "acs_object_id_seq"]
+            set returned_second_folder_id [content::folder::new \
+                                               -folder_id $second_folder_id \
+                                               -name "test_folder_${second_folder_id}"]
+            aa_true "Folder 2 created" [expr $second_folder_id == $returned_second_folder_id]
+            # create a cr_item
+            set first_item_id [db_nextval  "acs_object_id_seq"]
+            set returned_first_item_id [content::item::new \
+                                            -name "test_item_one" \
+                                            -item_id $first_item_id \
+                                            -parent_id $first_folder_id]
 
-	    # publish it
+            aa_true "First item created" [expr $first_item_id == $returned_first_item_id]
 
-	    # unpublish it
+            # check the folder is not empty now.
+            set is_empty [content::folder::is_empty -folder_id $first_folder_id]
+            aa_true "Folder 1 is not empty" [string is false $is_empty]
 
-	    # delete first folder and everything in it to clean up
-	    content::folder::delete \
-		-folder_id $second_folder_id
+            # copy it
 
-	    content::folder::delete \
-		-folder_id $first_folder_id \
-		-cascade_p "t"
-		
-		
-	}
+            # move the copy
+
+            # delete the copy
+
+            # rename it
+
+            # publish it
+
+            # unpublish it
+
+            # delete first folder and everything in it to clean up
+            content::folder::delete \
+                -folder_id $second_folder_id
+
+            content::folder::delete \
+                -folder_id $first_folder_id \
+                -cascade_p "t"
+        }
 
 }
 
