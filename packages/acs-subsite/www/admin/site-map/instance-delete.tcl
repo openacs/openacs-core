@@ -14,7 +14,15 @@ ad_page_contract {
 }
 
 db_transaction {
-    if { ![catch {set node_id [site_node::get_node_id_from_object_id -object_id $package_id]} errmsg] } {
+    # The catch{} below may be overkill, as it seems
+    # site_node::get_node_id_from_object_id always returns something,
+    # even if it is only an empty string. Not sure what would happen
+    # if we had a db error due to attempting to delete an object instance
+    # twice even though we are in a db_transaction{}, so I opted to keep
+    # the catch{}.
+    # Frank Nikolajsen, 2003-10-09.
+    set return_code [catch {set node_id [site_node::get_node_id_from_object_id -object_id $package_id]} errmsg]
+    if { ![empty_string_p $node_id] && [expr $return_code == 0] } {
         # The package is mounted
         site_node::unmount -node_id $node_id
         site_node::delete -node_id $node_id
