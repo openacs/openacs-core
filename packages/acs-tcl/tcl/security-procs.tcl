@@ -179,7 +179,6 @@ ad_proc -private sec_login_handler {} {
         set auth_token [lindex $login_list 2]
         
         set auth_level expired
-        set account_status closed
         
         # Check authentication cookie
         # First, check expiration 
@@ -197,8 +196,14 @@ ad_proc -private sec_login_handler {} {
         }
     
         # Check account status
-        if { [auth::local_account_ok_p -user_id $untrusted_user_id] } {
-            set account_status ok
+        set account_status [auth::get_local_account_status -user_id $untrusted_user_id]
+
+        ns_log Notice "LARS: account_status for user_id $untrusted_user_id is $account_status"
+
+        if { [string equal $account_status "no_account"] } {
+            set untrusted_user_id 0
+            set auth_level none
+            set account_status "closed"
         }
     }
     

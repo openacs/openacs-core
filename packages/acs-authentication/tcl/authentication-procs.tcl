@@ -1240,24 +1240,24 @@ ad_proc -private auth::check_local_account_status {
     return [array get result]
 }
 
-ad_proc -public auth::local_account_ok_p {
+ad_proc -public auth::get_local_account_status {
     {-user_id:required}
 } {
-    Return true or false (1 or 0) to whether the given user's account is ok.
+    Return 'ok', 'closed', or 'no_account'
 } {
-    set ok_p 0
+    set result no_account
     catch {
         acs_user::get -user_id $user_id -array user
-        array set result [auth::check_local_account_status \
+        array set check_result [auth::check_local_account_status \
                               -user_id $user_id \
                               -member_state $user(member_state) \
                               -email_verified_p $user(email_verified_p) \
                               -screen_name $user(screen_name) \
                               -password_age_days $user(password_age_days)]
         
-        set ok_p [expr [string equal $result(account_status) "ok"]]
+        set result $check_result(account_status)
     }
-    return $ok_p
+    return $result
 }
 
 ad_proc -private auth::get_user_secret_token {
