@@ -432,39 +432,6 @@ ad_proc -public -deprecated -warn apm_version_file_list {
     return [apm_get_package_files -package_key $package_key -file_types $type]
 }
 
-ad_proc -private apm_ignore_file_p { path } {
-
-    Return 1 if $path should, in general, be ignored for package operations.
-    Currently, a file is ignored if it is a backup file or a CVS directory.
-
-} {
-    set tail [file tail $path]
-    if { [apm_backup_file_p $tail] } {
-	return 1
-    }
-    if { [string equal $tail "CVS"] } {
-	return 1
-    }
-    return 0
-}
-
-ad_proc -private apm_backup_file_p { path } {
-
-    Returns 1 if $path is a backup file, or 0 if not. We consider it a backup file if
-    any of the following apply:
-
-    <ul>
-    <li>its name begins with <code>#</code>
-    <li>its name is <code>bak</code>
-    <li>its name begins with <code>bak</code> and one or more non-alphanumeric characters
-    <li>its name ends with <code>.old</code>, <code>.bak</code>, or <code>~</code>
-    </ul>
-
-} {
-    return [regexp {(\.old|\.bak|~)$|^#|^bak([^a-zA-Z]|$)} [file tail $path]]
-}
-
-
 ad_proc -private apm_system_paths {} {
 
     @return a list of acceptable system paths to search for executables in.
@@ -603,12 +570,4 @@ ad_proc -private apm_load_apm_file {
 	}
 	exec sh -c "cd $install_path ; [apm_gunzip_cmd] -q -c $file_path | [apm_tar_cmd] xf -" 2>/dev/null
     }
-}
-
-ad_proc -private apm_include_file_p { filename } {    
-    Check if the APM should consider a file found by ad_find_all_files.
-    Files for which apm_ignore_file_p returns true will be ignored.
-    Backup files are ignored.
-} {
-    return [expr ![apm_ignore_file_p $filename]]
 }
