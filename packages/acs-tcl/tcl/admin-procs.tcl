@@ -68,10 +68,10 @@ proc_doc ad_restrict_to_https {conn args why} {
 	    set redir "https://$host:$ssl_port$url"
 	}
 	ad_returnredirect $redir
-        ad_script_abort
+        # continue here since in filter
     } else {
 	ad_return_forbidden "Please use HTTPS" "Sorry, you must use HTTPS to access this page."
-        ad_script_abort
+        # continue here since in filter
     }
     
     return "filter_return"
