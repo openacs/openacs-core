@@ -10,8 +10,14 @@
     <dt><b>Description:</b></dt><dd>@testcase_desc@</dd>
     <dt><b>Defined in file:</b></dt><dd>@testcase_file@</dd>
     <dt><b>Categories:</b></dt><dd>@testcase_cats@</dd>
-    <dt><b>Bugs:</b></dt><dd>This test case covers OpenACS bug number(s):
-    @bug_blurb;noquote@</dd>
+    <if @bug_blurb@ not nil>
+      <dt><b>Bugs:</b></dt><dd>This test case covers OpenACS bug number(s):
+      @bug_blurb;noquote@</dd>
+    </if>
+    <if @proc_blurb@ not nil>  
+      <dt><b>Procs:</b></dt><dd>This test case covers OpenACS proc(s):
+      @proc_blurb;noquote@</dd>
+    </if>
     <if @testcase_inits@ ne "">
       <dt><b>Initialisation Classes:</b></dt><dd>@testcase_inits@</dd>
     </if>
@@ -51,7 +57,18 @@
     <a href="@return_url@">Back to testcase list</a>
   </blockquote>
 
-<b>Results</b>
+<p>
+<b>Results</b> 
+[<if @quiet@ eq "1">
+   <strong> quiet </strong> | 
+   <a href="@verbose_url@">verbose</a>
+</if><else>
+   <a href="@quiet_url@">quiet</a>
+   | <strong> verbose </strong>
+</else>]
+</p>
+
+<if @quiet@ false>
   <table>
   <tr><th bgcolor=#c0c0c0>Time</th>
       <th bgcolor=#c0c0c0>Result</th>
@@ -62,37 +79,53 @@
   </if>
   <else>
     <multiple name="tests">
-      <if @tests.rownum@ odd>
-        <tr>
-      </if>
-      <else>
-        <tr bgcolor="#e9e9e9">
-      </else>
-          
-        <td> @tests.timestamp@ </td>
-        <td>
-          <if @tests.result@ eq "fail">
-             <span style="background-color: red; color: white; font-weight: bold; padding: 4px;">FAILED
-          </if>
-          <if @tests.result@ eq "log">
-            <span style="color: #10b010">log
-          </if>
-          <if @tests.result@ eq "pass">
-            <span style="color: green">passed
-          </if>
-          <if @tests.result@ eq "fail" or @tests.result@ eq "log" or @tests.result@ eq "pass">
-            </span>
-          </if>
-          <else>
-            @tests.result@
-          </else>
-        </td>
-        <td> <pre>@tests.notes@</pre> </td>
+        <if @tests.rownum@ odd>
+          <tr>
+        </if>
+        <else>
+          <tr bgcolor="#e9e9e9">
+        </else>
+            
+          <td> @tests.timestamp@ </td>
+          <td>
+            <if @tests.result@ eq "fail">
+               <span style="background-color: red; color: white; font-weight: bold; padding: 4px;">FAILED
+            </if>
+            <if @tests.result@ eq "log">
+              <span style="color: #10b010">log
+            </if>
+            <if @tests.result@ eq "pass">
+              <span style="color: green">passed
+            </if>
+            <if @tests.result@ eq "fail" or @tests.result@ eq "log" or @tests.result@ eq "pass">
+              </span>
+            </if>
+            <else>
+              @tests.result@
+            </else>
+          </td>
+          <td> <pre>@tests.notes@</pre> </td>
   
-      </tr>
+        </tr>
     </multiple>
   </else>
   </table>
+</if>
+<else>
+  <table>
+    <tr>
+      <th>Result</th>
+      <th>Count</th>
+    </tr>
+    <multiple name="tests_quiet">
+    <tr>
+      <td>@tests_quiet.result@</td>
+      <td>@tests_quiet.count@</td>
+    </tr>
+    </multiple>
+  </table>
+</else>
+
   <blockquote>
     <b>&raquo;</b>
     <a href="rerun?testcase_id=@testcase_id@&package_key=@package_key@&quiet=@quiet@">Rerun this test case</a>
