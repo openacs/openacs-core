@@ -16,7 +16,7 @@ ad_proc -private ds_instance_id {} {
     } -default 0]]
 }
 
-ad_proc ds_permission_p {} {
+ad_proc -public ds_permission_p {} {
     Do we have permission to view developer support stuff.
 } {
     return [ad_permission_p -user_id [ds_get_real_user_id] [ds_instance_id] "admin"]
@@ -40,7 +40,7 @@ ad_proc -public ds_require_permission {
   }
 }
 
-ad_proc ds_enabled_p {} { 
+ad_proc -public ds_enabled_p {} { 
     Returns true if developer-support facilities are enabled.
 } {
     if { ![nsv_exists ds_properties enabled_p] || ![nsv_get ds_properties enabled_p] } {
@@ -49,7 +49,7 @@ ad_proc ds_enabled_p {} {
     return 1
 }
 
-ad_proc ds_collection_enabled_p {} {
+ad_proc -public ds_collection_enabled_p {} {
     Returns whether we're collecting information about this request
 } {
     global ad_conn
@@ -64,21 +64,21 @@ ad_proc ds_collection_enabled_p {} {
     return 0
 }
 
-ad_proc ds_user_switching_enabled_p {} { 
+ad_proc -public ds_user_switching_enabled_p {} { 
     Returns whether user-switching is enabled.
 } {
     return [expr {[nsv_exists ds_properties user_switching_enabled_p] &&
                   [nsv_get ds_properties user_switching_enabled_p]}]
 }
 
-ad_proc ds_database_enabled_p {} { 
+ad_proc -public ds_database_enabled_p {} { 
     Returns true if developer-support database facilities are enabled. 
 } {
     return [nsv_get ds_properties database_enabled_p]
 }
 
 
-proc_doc ds_lookup_administrator_p { user_id } { } {
+ad_proc -public ds_lookup_administrator_p { user_id } { } {
     return 1
 }
 
@@ -90,7 +90,9 @@ ad_proc -private ds_support_url {} {
     return [apm_package_url_from_key "acs-developer-support"]
 }
 
-proc_doc ds_link {} { Returns the "Developer Information" link in a right-aligned table, if enabled. } {
+ad_proc ds_link {} { 
+    Returns the "Developer Information" link in a right-aligned table, if enabled. 
+} {
 
     if { ![ds_enabled_p] && ![ds_user_switching_enabled_p] } {
 	return ""
@@ -157,7 +159,10 @@ proc_doc ds_link {} { Returns the "Developer Information" link in a right-aligne
 
 }
 
-proc_doc ds_collect_connection_info {} { Collects information about the current connection. Should be called only at the very beginning of the request processor handler. } {
+ad_proc -private ds_collect_connection_info {} { 
+    Collects information about the current connection. 
+    Should be called only at the very beginning of the request processor handler. 
+} {
     # JCD: check recursion_count to ensure adding headers only one time.
     if { [ds_enabled_p] && [ds_collection_enabled_p] && ![ad_conn recursion_count]} {
         ##This is expensive, but easy.  Otherwise we need to do it in every interpreter
@@ -174,7 +179,7 @@ proc_doc ds_collect_connection_info {} { Collects information about the current 
     }
 }    
 
-proc_doc ds_collect_db_call { db command statement_name sql start_time errno error } {
+ad_proc -private ds_collect_db_call { db command statement_name sql start_time errno error } {
     if { [ds_enabled_p] && [ds_collection_enabled_p] && [ds_database_enabled_p] } {
          set bound_sql $sql
 
@@ -210,7 +215,10 @@ proc_doc ds_collect_db_call { db command statement_name sql start_time errno err
     }
 }
 
-proc_doc ds_add { name args } { Sets a developer-support property for the current request. Should never be used except by elements of the request processor (e.g., security filters or abstract URLs). } {
+ad_proc -private ds_add { name args } { 
+    Sets a developer-support property for the current request. 
+    Should never be used except by elements of the request processor (e.g., security filters or abstract URLs). 
+} {
     
     if { [ds_enabled_p] && [ds_collection_enabled_p] } { 
         if { [catch { nsv_exists ds_request . }] } {
@@ -226,14 +234,14 @@ proc_doc ds_add { name args } { Sets a developer-support property for the curren
     }
 }
 
-proc_doc ds_comment { value } { Adds a comment to the developer-support information for the current request. } {
+ad_proc -public ds_comment { value } { Adds a comment to the developer-support information for the current request. } {
 
      if { [ds_enabled_p] } {
          ds_add comment $value
      }
 }
 
-proc ds_sweep_data {} {
+ad_proc -private ds_sweep_data {} {
     set now [ns_time]
     set lifetime [ad_parameter -package_id [ds_instance_id] DataLifetime acs-developer-support 900]
 
@@ -264,7 +272,7 @@ proc ds_sweep_data {} {
     ns_log "Notice" "Swept developer support information for [array size kill_requests] requests ($kill_count nsv elements)"
 }
 
-proc_doc ds_trace_filter { conn args why } { Adds developer-support information about the end of sessions.} {
+ad_proc -private ds_trace_filter { conn args why } { Adds developer-support information about the end of sessions.} {
     if { [ds_enabled_p] && [ds_collection_enabled_p] } {
 	ds_add conn end [ns_time] endclicks [clock clicks]
 
@@ -283,7 +291,7 @@ proc_doc ds_trace_filter { conn args why } { Adds developer-support information 
     return "filter_ok"
 }
 
-ad_proc ds_user_select_widget {}  {
+ad_proc -public ds_user_select_widget {}  {
     set user_id [ad_get_user_id]
     set real_user_id [ds_get_real_user_id]
 
@@ -348,7 +356,7 @@ ad_proc -private ds_get_real_user_id {} {
     }
 }
 
-ad_proc ds_get_user_id {{original 0}} {
+ad_proc -public ds_get_user_id {{original 0}} {
     Developer support version of ad_get_user_id, used for debugging sites.
 } {
     set orig_user_id [ds_get_real_user_id]
@@ -360,7 +368,7 @@ ad_proc ds_get_user_id {{original 0}} {
     }
 }
 
-ad_proc ds_conn { args } {
+ad_proc -public ds_conn { args } {
     Developer support version of ad_conn. Overloads "ad_conn user_id",
     delegates to ad_conn in all other cases.
 } {
@@ -372,7 +380,7 @@ ad_proc ds_conn { args } {
     }
 }
 
-ad_proc ds_set_user_switching_enabled { enabled_p } {
+ad_proc -public ds_set_user_switching_enabled { enabled_p } {
     Enables/disables user-switching in a safe manner.
 
     @author Lars Pind (lars@pinds.com)
@@ -380,6 +388,16 @@ ad_proc ds_set_user_switching_enabled { enabled_p } {
 } {
     ns_log Warning "Developer-support user-switching [ad_decode $enabled_p 1 "enabled" "disabled"]"
     nsv_set ds_properties user_switching_enabled_p $enabled_p
+}
+
+ad_proc -public ds_set_database_enabled { enabled_p } {
+    Enables/disables database statistics in a safe manner.
+
+    @author Lars Pind (lars@pinds.com)
+    @creation-date 31 August 2000
+} {
+    ns_log Warning "Developer-support database stats [ad_decode $enabled_p 1 "enabled" "disabled"]"
+    nsv_set ds_properties database_enabled_p $enabled_p
 }
 
 ad_proc -private ds_replace_get_user_procs { enabled_p } {
