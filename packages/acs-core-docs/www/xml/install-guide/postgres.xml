@@ -38,6 +38,14 @@
       unstable users: the following process has been known to work
       (but you should double-check that the version of PostGreSQL is
       7.3 or above):</para>
+      
+      <para>For Debian stable users, you can use backports, by adding
+      this line to the /etc/apt/sources.list</para>
+
+      <screen>
+        <userinput>deb http://www.backports.org/debian stable bison postgresql openssl openssh tcl8.4 courier debconf spamassassin tla diff patch neon chkrootkit
+        </userinput>
+      </screen>
 
       <screen><userinput>apt-get install postgresql postgresql-dev postgresql-doc
 ln -s /usr/include/postgresql/ /usr/include/pgsql
