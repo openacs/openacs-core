@@ -447,9 +447,8 @@ create table cr_folders (
                      default 'f'
                      constraint cr_folder_symlink_chk
                      check (has_child_symlinks in ('t', 'f')),
-  package_id integer 
-  constraint cr_fldr_pkg_id_fk
-  references apm_packages
+  package_id        integer 
+                    constraint cr_fldr_pkg_id_fk references apm_packages
 );  
 
 comment on table cr_folders is '
