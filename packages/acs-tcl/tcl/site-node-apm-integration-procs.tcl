@@ -48,7 +48,7 @@ namespace eval site_node_apm_integration {
                 site_node::delete -node_id $site_node(node_id)
                 site_node::update_cache -node_id $site_node(node_id)
             }
-            
+
             apm_package_instance_delete $package_id
         }
     }
@@ -61,7 +61,11 @@ namespace eval site_node_apm_integration {
         package_id. returns empty string if not found.
     } {
         if {[empty_string_p $package_id]} {
-            set package_id [ad_conn package_id]
+            if {[ad_conn isconnected]} { 
+                set package_id [ad_conn package_id]
+            } else { 
+                error "Not in a connection and no package_id provided"
+            } 
         }
 
         return [db_string select_child_package_id {} -default ""]
