@@ -113,6 +113,93 @@ aa_register_case auth_authenticate {
         }
 }
 
+aa_register_case auth_create_user {
+    Test the auth::create_user proc.
+
+    @author Peter Marklund
+} {
+    db_transaction {
+
+        # Successful creation
+         array set user_info [auth::create_user \
+                                  -username "auth_create_user1@test_user.com" \
+                                  -first_names "Test" \
+                                  -last_name "User" \
+                                  -password "changeme" \
+                                  -secret_question "no_question" \
+                                  -secret_answer "no_answer"]
+         set successful_result(user_id) $user_info(user_id)
+         set successful_result(creation_status) $user_info(creation_status)
+         set successful_result(creation_message) $user_info(creation_message)
+
+         # Missing first_names
+         array set user_info [auth::create_user \
+                                  -username "auth_create_user2@test_user.com" \
+                                  -first_names "" \
+                                  -last_name "User" \
+                                  -password "changeme" \
+                                  -secret_question "no_question" \
+                                  -secret_answer "no_answer"]
+
+         set first_names_result(creation_status) $user_info(creation_status)
+         
+         error "rollback tests"
+
+    } on_error {
+        if { ![string equal $errmsg "rollback tests"] } {
+            global errorInfo
+            
+            error "Tests threw error $errmsg \n\n $errorInfo"
+        }
+    }
+
+    aa_true "returns integer user_id ([array get user_info])" [regexp {[1-9][0-9]*} $successful_result(user_id)]
+    aa_equals "creation_status for successful creation" $successful_result(creation_status) "ok"
+    aa_true "creation_message for successful creation" [empty_string_p $successful_result(creation_message)]
+
+    aa_equals "creation_status for missing first names" $first_names_result(creation_status) "fail"
+}
+
+aa_register_case auth_confirm_email {
+    Test the auth::confirm_email proc.
+
+    @author Peter Marklund
+} {
+    set user_id [ad_conn user_id]
+
+    auth::confirm_email -user_id $user_id
+
+    # Check that update was made in db
+    set email_verified_p [db_string select_email_verified_p {
+        select email_verified_p
+        from cc_users
+        where user_id = :user_id
+    }]
+
+    aa_equals "email should be verified" $email_verified_p "t"
+}
+
+aa_register_case auth_get_registration_elements {
+    Test the auth::get_registration_elements proc
+
+    @author Peter Marklund
+} {
+    array set element_array [auth::get_registration_elements]
+
+    aa_true "there is more than one required element: ($element_array(required))" [expr [llength $element_array(required)] > 0]
+    aa_true "there is more than one optional element: ($element_array(optional))" [expr [llength $element_array(optional)] > 0]
+}
+
+aa_register_case auth_get_registration_form_elements {
+    Test the auth::get_registration_form_elements proc
+
+    @auth Peter Marklund
+} {
+    set form_elements [auth::get_registration_form_elements]
+
+    aa_true "Form elements are not empty: $form_elements" [expr ![empty_string_p $form_elements]]
+}
+
 aa_register_case auth_password_get_change_url {
     Test the auth::password::get_change_url proc.
 
@@ -247,10 +334,12 @@ aa_register_case auth_password_reset {
 #
 ####
 
-# ad_proc -private auth::test::get_admin_user_id {} {
-#     Return the user id of a site-wide-admin on the system
-# } {
-#     set context_root_id [acs_lookup_magic_object security_context_root]
+namespace eval auth::test {}
 
-#     return [db_string select_user_id {}]
-# }
+ad_proc -private auth::test::get_admin_user_id {} {
+    Return the user id of a site-wide-admin on the system
+} {
+    set context_root_id [acs_lookup_magic_object security_context_root]
+
+    return [db_string select_user_id {}]
+}

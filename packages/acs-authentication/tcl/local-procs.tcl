@@ -376,26 +376,29 @@ ad_proc -private auth::local::registration::Register {
     }
 
     # TODO: email = username
+    if { [empty_string_p $email] } {
+        set email $username
+    }
     # TODO: Add catch
-
-    set user_id [ad_user_new \
+    if {[catch {set user_id [ad_user_new \
                      $email \
                      $first_names \
                      $last_name \
                      $password \
-                     $question \
-                     $answer \
+                     $secret_question \
+                     $secret_answer \
                      $url \
-                     $email_verified_p \
-                     $member_state \
+                     "t" \
+                     "approved" \
                      "" \
                      $username \
-                     $authority_id]
+                                 $authority_id]} errmsg] || ! $user_id } {
 
-    if { !$user_id } {
         set result(creation_status) "fail"
         set result(creation_message) "We experienced an error while trying to register an account for you."
         return [array get result]
+    } else {
+        set result(user_id) $user_id
     }
     
     # Creation succeeded
@@ -441,7 +444,7 @@ ad_proc -private auth::local::registration::Register {
         set email_verified_p "t"
     }
 
-    # Send password/confirmail email to user
+    # Send password confirmation email to user
     if { [parameter::get -parameter RegistrationProvidesRandomPasswordP -default 0] || \
              [parameter::get -parameter EmailRegistrationConfirmationToUserP -default 0] } {
 	with_catch errmsg {

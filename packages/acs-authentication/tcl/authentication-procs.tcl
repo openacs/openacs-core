@@ -125,8 +125,7 @@ ad_proc -private auth::issue_login {
     ad_user_login -forever=$persistent_p $user_id
 }
 
-ad_proc -public auth::register_user {
-    {-authority_id ""}
+ad_proc -public auth::create_user {
     {-username:required}
     {-password:required}
     {-first_names ""}
@@ -135,54 +134,183 @@ ad_proc -public auth::register_user {
     {-url ""}
     {-secret_question ""}
     {-secret_answer ""}
+    {-email_verified_p "t"} 
+    {-member_state "approved"}
 } {
-
-    @param authority_id The id of the authority to create the user in. Defaults to
-                        the authority with lowest sort_order that has register_p set to true.
-} {
-    set authorities_list [list]
+    Create a user, and return creation status and account status.
     
-    # Always register the user locally
-    lappend authorities_list [auth::authority::local]
+    @param email_verified_p Whether the local account considers the email to be verified or not.
+    @param member_state     Whether the local account has been approved.
 
-    # Default authority_id if none was provided
-    if { [empty_string_p $authority_id] } {
-        # Pick the first authority that can create users
-        set authority_id [db_string first_registering_authority {
-            select authority_id
-            from auth_authorities
-            where register_p = 't'
-            and sort_order = (select max(sort_order)
-                              from auth_authorities
-                              where register_p = 't'
-                             )
-        } -default ""]
+    @return Array list containing the following entries:
 
-        if { [empty_string_p $authority_id] } {
-            error "No authority_id provided and could not find an authority that can create users"
-        }    
+    <ul>
+      <li> creation_status:  ok, data_error, reg_error, failed_to_connect. Says whether user creation succeeded.
+      <li> creation_message: Information about the problem, to be relayed to the user. May contain HTML.
+      <li> element_messages: list of (element_name, message, element_name, message, ...) of 
+                             errors on the individual elements (username, password, first_names, ...), 
+                             to be relayed on to the user. If creation_status is not ok, then either 
+                             creation_message or element_messages is guaranteed to be non-empty. Cannot contain HTML.
+      <li> account_status:   ok, closed. Only set if creation_status was ok, this says whether the newly created account 
+                             is ready for use or not. For example, we may require approval, in which case the account 
+                             would be created but closed.
+      <li> account_message:  A human-readable explanation of why the account was closed. May include HTML, and thus shouldn't
+                             be quoted. Guaranteed to be non-empty if account_status is not ok.
+    </ul>
+} {
+     # Implementation note:
+     # just call auth::local::registration::Register for now
 
-        lappend authorities_list $authority_id
-    }    
+     # If we ever create remote users, make sure we concatenate any account messages and local account messages
+     # into one combined message.
+     # Same for account_status (only ok if both are ok)
 
-    # Register the user both with the local authority and the external one
-    db_transaction {
-        foreach authority_id $authorities_list {
-            auth::registration::Register \
-                -authority_id $authority_id \
-                -username $user_name \
-                -password $password \
-                -first_names $first_names \
-                -last_name $last_name \
-                -email $email \
-                -url $url \
-                -secret_question $secret_question \
-                -secret_answer $secret_answer
-        }
-    }
+     set authority_id [auth::authority::local]
+
+     auth::registration::Register \
+         -authority_id $authority_id \
+         -username $username \
+         -password $password \
+         -first_names $first_names \
+         -last_name $last_name \
+         -email $email \
+         -url $url \
+         -secret_question $secret_question \
+         -secret_answer $secret_answer
 }
 
+ad_proc -public auth::get_registration_elements {
+    {-authority_id ""}
+} {
+    Get the list of required/optional elements for user registration.
+    
+    @return Array-list with two entries, both being a subset of 
+            (username, password, first_names, last_name, email, url, secret_question, secret_answer).
+            
+    <ul>
+      <li> required: a list of required elements
+      <li> optional: a list of optional elements
+    </ul>
+            
+} {
+    if { [empty_string_p $authority_id] } {
+        set authority_id [auth::authority::local]
+    }
 
+    return [auth::registration::GetElements -authority_id $authority_id]
+}
+
+ad_proc -public auth::get_registration_form_elements {
+    {-authority_id ""}
+} {
+    Returns a list of elements to be included in the -form chunk of an ad_form form.
+    All possible elements will always be present, but those that shouldn't be displayed 
+    will be hidden and have a hard-coded empty string value.
+} {
+    if { [empty_string_p $authority_id] } {
+        set authority_id [auth::authority::local]
+    }
+
+    array set data_types {
+        username text
+        email text
+        first_names text
+        last_name text
+        url text
+        password text
+        secret_question text
+        secret_answer text
+    }
+
+    array set widgets {
+        username text 
+        email test
+        first_names text
+        last_name text
+        url text
+        password text 
+        secret_question text
+        secret_answer text
+    }
+    
+    array set labels [list \
+        username [_ acs-subsite.Username] \
+        email [_ acs-subsite.Your_email_address] \
+        first_names [_ acs-subsite.First_names] \
+        last_name [_ acs-subsite.Last_name] \
+        url [_ acs-subsite.lt_Personal_Home_Page_UR] \
+        password [_ acs-subsite.Your_password] \
+        secret_question [_ acs-subsite.Question] \
+        secret_answer [_ acs-subsite.Answer] \
+    ]
+
+    array set html {
+        username {size 30}
+        email {size 30}
+        first_names {size 20}
+        last_name {size 25}
+        url {size 50 value "http://"}
+        password {size 20}
+        secret_question {size 30}
+        secret_answer {size 30}
+    }
+    
+    array set element_info [auth::get_registration_elements -authority_id $authority_id]
+
+    set form_elements [list]
+    foreach element [concat $element_info(required) $element_info(optional)] {
+        set form_element [list]
+
+        # The header with name, datatype, and widget
+        set form_element_header "${element}:$data_types($element)($widgets($element))"
+        set optional_p [expr [lsearch -exact $element_info(optional) $element] != -1]
+        if { $optional_p } {
+            append form_element_header ",optional"
+        }
+        lappend form_element $form_element_header
+
+        # The label
+        lappend form_element [list label $labels($element)]
+
+        # HTML
+        lappend form_element [list html $html($element)]
+
+        # The form element is finished - add it to the list
+        lappend form_elements $form_element
+    }
+
+    return $form_elements
+}
+
+ad_proc -public auth::create_local_account {
+    {-user_id ""}
+    {-authority_id ""}
+    {-username:required}
+    {-first_names:required}
+    {-last_name:required}
+    {-email:required}
+    {-url ""}
+    {-member_state "approved"}
+    {-email_verified_p "t"}
+} {
+    Create the local account for a user.
+} {
+
+    # TODO: implement
+}
+
+ad_proc -public auth::confirm_email {
+    {-user_id:required}
+} {
+    Update an OpenACS record with the fact that the email address on
+    record was verified.
+} {
+    db_dml set_email_verified {
+        update users 
+        set email_verified_p = 't'
+        where user_id = :user_id
+    }
+}
 
 #####
 #
@@ -276,8 +404,6 @@ ad_proc -private auth::get_local_account {
 
    return [array get auth_info]    
 }
-
-
 
 #####
 #
@@ -375,4 +501,24 @@ ad_proc -private auth::registration::Register {
                                  $password \
                                  $secret_question \
                                  $secret_answer]]
+}
+
+ad_proc -private auth::registration::GetElements {
+    {-authority_id:required}    
+} {
+
+    @author Peter Marklund
+} {
+    if { [empty_string_p $authority_id] } {
+        set authority_id [auth::authority::local]
+    }
+
+    # TODO:
+    # Implement parameters
+
+    return [acs_sc::invoke \
+                -contract "auth_registration" \
+                -impl [auth::authority::get_element -authority_id $authority_id -element "auth_impl_name"] \
+                -operation GetElements \
+                -call_args [list [list]]]
 }
