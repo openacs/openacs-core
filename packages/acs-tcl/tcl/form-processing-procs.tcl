@@ -149,6 +149,10 @@ ad_proc -public ad_form {
         being served.  
     </dd>
 
+    <p><dt><b>-cancel_url</b></dt><p>
+    <dd>The URL the cancel button should take you to. If this is specified, a cancel button will show up.  
+    </dd>
+
     <p><dt><b>-html</b></dt><p>
     <dd>The given html will be added to the "form" tag when page is rendered.  This is commonly used to
         define multipart file handling forms.
