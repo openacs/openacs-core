@@ -2059,7 +2059,7 @@ ad_proc -private apm::package_version::attributes::store {
                     values (:attribute_name, :attribute_value, :version_id)
                 }
             }
-        }    
+        } 
     }
 }
 
@@ -2107,7 +2107,9 @@ ad_proc -private apm::package_version::attributes::generate_xml {
                           -version_id $version_id \
                           -array attributes]
 
-    foreach attribute_name [array names attributes] {
+    # sort the array so that the xml is always in the same order so 
+    # its stable for CVS.
+    foreach attribute_name [lsort [array names attributes]] {
         # Only output tag if its value is non-empty
         if { ![empty_string_p $attributes($attribute_name)] } {
             append xml_string "${indentation}<${attribute_name}>[ad_quotehtml $attributes($attribute_name)]</${attribute_name}>\n"
