@@ -82,7 +82,7 @@ begin
 
 end;' language 'plpgsql';
 
-create trigger membership_rels_in_tr after insert  on membership_rels
+create trigger membership_rels_in_tr after insert on membership_rels
 for each row execute procedure membership_rels_in_tr ();
 
 create or replace function membership_rels_up_tr () returns opaque as '
@@ -220,7 +220,10 @@ begin
 
   return new;
 
-end;' language 'plpgsql';
+end;' language 'plpgsql';  
+
+create trigger composition_rels_in_tr after insert on composition_rels
+for each row execute procedure composition_rels_in_tr ();
 
 --
 -- TO DO: See if this can be optimized now that the member and component
