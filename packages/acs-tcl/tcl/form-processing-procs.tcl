@@ -680,7 +680,6 @@ ad_proc -public ad_form {
                     after_html -
                     result_datatype -
                     search_query -
-                    search_query_name -
                     maxlength {
                         if { [llength $extra_arg] > 2 || [llength $extra_arg] == 1 } {
                             return -code error "element $element_name: \"$extra_arg\" requires exactly one argument"
