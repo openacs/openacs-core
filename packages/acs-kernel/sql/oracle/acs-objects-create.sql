@@ -496,6 +496,8 @@ as
   object_id	in acs_objects.object_id%TYPE
  )
  is
+ declare
+   v_exists_p char;
  begin
   
   -- Delete dynamic/generic attributes
@@ -509,11 +511,19 @@ as
                                 where o.object_id = acs_object.delete.object_id)
       connect by object_type = prior supertype)
   loop
-    -- Delete from the table.
-    execute immediate 'delete from ' || object_type.table_name ||
+    -- Delete from the table if it exists.
+    select case when count(*) = 0 then 'f' else 't' end into v_exists_p
+    from user_tables
+    where table_name = upper(object_type.table_name);
+
+    if v_exists_p = 't' then
+      execute immediate 'delete from ' || object_type.table_name ||
         ' where ' || object_type.id_column || ' = :object_id'
-    using in object_id;
+      using in object_id;
+    end if;
+
   end loop;
+
  end delete;
 
  function name (
