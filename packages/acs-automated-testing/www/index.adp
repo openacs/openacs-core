@@ -16,9 +16,9 @@
           <td colspan="4">Could not parse XML file at @servers.path@: @servers.parse_errors@</td>
         </if>
         <else>
-          <td><a href="@servers.url@">@servers.name@</a></td>
+          <td><a href="@servers.remote_url@">@servers.name@</a></td>
           <td>@servers.description@</td>
-          <td style="white-space:nowrap">@servers.install_date@</td>
+          <td style="white-space:nowrap"><a href="@servers.local_url@">@servers.install_date@</a></td>
 	  <if @servers.error_total_count@ eq 0>
             <td style="background-color:green">@servers.error_total_count@</td>
 	  </if>

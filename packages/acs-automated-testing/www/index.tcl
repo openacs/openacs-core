@@ -11,7 +11,7 @@ if { ![parameter::get -boolean -parameter IsInstallReportServer] } {
 
 set page_title "Test Servers Control Page"
 set context [list]
-multirow create servers path url name description install_date error_total_count parse_errors
+multirow create servers path local_url remote_url name description install_date error_total_count parse_errors
 
 set xml_report_dir [aa_test::xml_report_dir]
 if { ![empty_string_p $xml_report_dir] } {
@@ -28,6 +28,7 @@ if { ![empty_string_p $xml_report_dir] } {
         multirow append servers \
             $service(path) \
             [export_vars -base server { path }] \
+	    $service(url) \
             $service(name) \
             $service(description) \
             $service(install_end_timestamp) \
