@@ -15,7 +15,7 @@ set count 0
 foreach path $paths {
     incr count
 
-    apm_file_watch $path
+    apm_file_watch "packages/$package_key/$path"
 
     lappend path_list $path
 }
