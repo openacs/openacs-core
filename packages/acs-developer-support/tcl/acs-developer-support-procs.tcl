@@ -144,7 +144,7 @@ proc_doc ds_link {} { Returns the "Developer Information" link in a right-aligne
 	    }
 	}
 	
-        if { [ad_parameter ShowCommentsInlineP "developer-support" 0] } {
+        if { [ad_parameter -package_id [ds_instance_id] ShowCommentsInlineP "developer-support" 0] } {
             if { [nsv_exists ds_request "$ad_conn(request).comment"] } {
                 append out "<tr><td><br>"
                 foreach comment [nsv_get ds_request "$ad_conn(request).comment"] {
@@ -205,7 +205,7 @@ proc_doc ds_comment { value } { Adds a comment to the developer-support informat
 
 proc ds_sweep_data {} {
     set now [ns_time]
-    set lifetime [ad_parameter DataLifetime "developer-support" 900]
+    set lifetime [ad_parameter -package_id [ds_instance_id] DataLifetime "developer-support" 900]
 
     # kill_requests is an array of request numbers to kill
     array set kill_requests [list]
