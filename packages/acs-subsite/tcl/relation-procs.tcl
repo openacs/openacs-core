@@ -76,6 +76,9 @@ ad_proc -public relation_add {
 	lappend var_list [list member_state $member_state]
     }
 
+    # We initialize rel_id, so it's set if there's a problem
+    set rel_id {}
+
     # We use db_transaction inside this proc to roll back the insert
     # in case of a violation
 
@@ -109,7 +112,6 @@ ad_proc -public relation_add {
     }
 
     return $rel_id
-
 }
 
 
