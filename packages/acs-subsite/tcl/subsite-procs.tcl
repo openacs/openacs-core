@@ -888,3 +888,43 @@ ad_proc -public subsite::get_url {
 
     return $result
 }
+
+ad_proc -private subsite::util::packages_no_mem {
+    -node_id
+} {
+    return a list of package_id's for children of the passed node_id
+
+    @author Jeff Davis davis@xarg.net
+    @creation-date 2004-05-07
+    @see subsite::util::packages
+} {
+    # need to strip nodes which have no mounted package...
+    set packages [list]
+    foreach package [site_node::get_children -all -node_id $node_id -element package_id] {
+        if {![empty_string_p $package]} {
+            lappend packages $package
+        }
+    }
+
+    return $packages
+}
+
+ad_proc -public subsite::util::packages {
+    -node_id
+} {
+    Return a list of package_id's for the subsite containing node_id
+
+    This is a memoized function which caches for 20 minutes.
+
+    @author Jeff Davis davis@xarg.net
+    @creation-date 2004-05-07
+    @see subsite::util::packages_no_mem
+} {
+    set subsite_node_id [site_node::closest_ancestor_package \
+                             -package_key acs-subsite \
+                             -node_id $node_id \
+                             -include_self \
+                             -element node_id]
+
+    return [util_memoize [list subsite::util::packages_no_mem -node_id $subsite_node_id] 1200]
+}
