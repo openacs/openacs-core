@@ -12,7 +12,7 @@ set full_key "$package_key.$message_key"
 if { [string match "acs-lang.localization-*" $full_key] } {
     set grepfor "${full_key}|lc_get \[\"\{\]?[string range $message_key [string length "localization-"] end]\[\"\}\]?"
 } else {
-    set grepfor ${full_key}
+    set grepfor "\\W${full_key}\\W"
 }
 
 multirow create message_usage file code
