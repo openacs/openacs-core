@@ -1,6 +1,10 @@
 <master>
   <property name="title">@page_title@</property>
 
+<div style="float: right;">
+  <a href="developer" class="button">Developer's Admin</a>
+</div>
+
 <h3>Core Administration</h3>
 
 <include src="/packages/acs-admin/lib/site-wide-services">
@@ -27,6 +31,3 @@
 
 <include src="/packages/acs-admin/lib/service-parameters">
 
-<p>
-  <b>&raquo;</b> <a href="developer">Developer's Admin</a>
-</p>
