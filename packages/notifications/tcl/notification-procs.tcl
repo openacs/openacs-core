@@ -290,6 +290,9 @@ namespace eval notification {
                   set object_id $action_id
                 }
 
+                # Truncate notif_subject to the max len of 100
+                set notif_subject [string_truncate -len 100 $notif_subject]
+
                 # Set up the vars
                 set extra_vars [ns_set create]
                 oacs_util::vars_to_ns_set -ns_set $extra_vars -var_list {notification_id type_id object_id response_id notif_subject notif_text notif_html}
