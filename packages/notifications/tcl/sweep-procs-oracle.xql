@@ -9,14 +9,16 @@
             from notifications
             minus
             select nnr.notification_id
-            from (select notification_id, user_id
-                  from notifications, notification_requests
+	    from (select notification_id, user_id
+                  from notifications, notification_requests, acs_objects
                   where notifications.type_id = notification_requests.type_id
-                    and notifications.object_id = notification_requests.object_id) nnr,
+		    and notifications.object_id = notification_requests.object_id
+		    and notification_requests.request_id = acs_objects.object_id
+		    and acs_objects.creation_date <= notifications.notif_date) nnr,
               notification_user_map
             where nnr.notification_id = notification_user_map.notification_id(+)
               and nnr.user_id = notification_user_map.user_id(+)
-              and notification_user_map.sent_date is null
+	      and notification_user_map.sent_date is null
         </querytext>
     </fullquery>
 
@@ -32,7 +34,8 @@
                     notification_requests.delivery_method_id,
                     notification_requests.request_id,
                     notifications.response_id,
-                    notifications.notif_date
+                    notifications.notif_date,
+                    notifications.notif_user
                   from notifications, notification_requests
                   where notifications.type_id = notification_requests.type_id
                     and notifications.object_id = notification_requests.object_id
@@ -43,7 +46,7 @@
               and notification_user_map.sent_date is null
               and acs_objects.object_id = nnr.request_id
               and acs_objects.creation_date <= nnr.notif_date
-            order by nnr.user_id, nnr.type_id
+            order by nnr.user_id, nnr.type_id, nnr.notif_date
         </querytext>
     </fullquery>
 
