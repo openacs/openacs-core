@@ -12,18 +12,10 @@
     pages, tcl code, and database tables and procedures.  A package
     can be installed, upgraded, and removed.  It communicates with
     other packages through an API.  This chapter walks you through the
-    minimum steps to create a useful package, including:</para>
-      
-      <itemizedlist>
-      <listitem><para>How to use the APM to start a new package</para></listitem>
-      <listitem><para>How to write documentation, including self-documenting code</para></listitem>
-      <listitem><para>How to set up the database tables and procedures.</para>
-      </listitem>
-      <listitem><para>How to write web pages.</para>
-      </listitem>
-      <listitem><para>How to add automated regression testing to your packages</para></listitem>
-      <listitem><para>How to debug your package</para></listitem>
-    </itemizedlist>
+    minimum steps to create a useful package, including writing
+      documentation, setting up database tables and procedures,
+      writing web pages, debugging, and automatic regression testing.
+</para>
 
   </sect2>
 
@@ -65,12 +57,17 @@ standard OpenACS &version; distribution.
     </figure>
   </sect2>
 
-
   <sect2>
-    <title>Use the APM to start a new package</title>
-    <para>Tee ACS Package Manager initializes new packages.  This sets
-    up the initial directories, meta-information files, and
-    database entries for a new package.
+    <title>Use the APM to initialize a new package</title>
+    <para>We use the <ulink url="packages.html">ACS Package Manager</ulink> (APM) to add, remove, and
+    upgrade packages.  It handles package meta-data, such as lists of
+    files that belong in the package.  Each package is uniquely
+    identified by a package key.  To start developing a new
+    package, use the APM to create an empty package with our new
+    package key, <replaceable>samplenote</replaceable>.  This will create
+    the initial directories, meta-information files, and database
+    entries for a new package.  (<ulink
+    url="apm-requirements.html">More info on APM</ulink>)
 </para>
     <orderedlist>
       <listitem>
@@ -89,11 +86,11 @@ standard OpenACS &version; distribution.
             </listitem>
             <listitem><para>
               <computeroutput>Package Name</computeroutput>:
-              <userinput>Notes (Sample Application)</userinput>
+              <userinput>Notes</userinput>
             </para></listitem>
             <listitem><para>
               <computeroutput>Package Plural</computeroutput>:
-              <userinput>Notes (Sample Applications)</userinput></para></listitem>
+              <userinput>Notes</userinput></para></listitem>
             <listitem><para>	  
               <computeroutput>Initial Version</computeroutput>:
               <userinput>0.1d</userinput>
@@ -102,72 +99,84 @@ standard OpenACS &version; distribution.
               <userinput>This is my first package.</userinput>
             </para></listitem>
           </itemizedlist>
-        <para>At the bottom, <emphasis role='bold'>click
-        <computeroutput><guibutton>Create Package</guibutton></computeroutput></emphasis>.
+          <para>At the bottom, click
+        <computeroutput><guibutton>Create Package</guibutton></computeroutput>.
         </para>
       </listitem>
     </orderedlist>
+      <para>This creates a package rooted at
+          <computeroutput>/web/<replaceable>service0</replaceable>/packages/<replaceable>samplenote</replaceable></computeroutput>.
+          This is the "home directory" of our new package, and all
+          files in the package will be within this directory.</para>
     </sect2>
     <sect2>
       <title>Mount the package in the site map</title>
       <para>In order to see your work in progress, you must create a
       map between the URL space of incoming requests and the package.
-      You do this by mounting the package in the Site Map.</para>
+      You do this by mounting the package in the Site Map.  This
+      creates a link between the incoming URL and an
+      <emphasis>instance</emphasis> of the package.  (<ulink
+      url="rp-design.html">More on Site Maps and nodes</ulink>)</para>
+      <para>You can have
+      multiple instances of a package on one site, each with a
+      different URL and different permissions, all sharing the same
+      code and tables.  This requires that a package be developed
+      <emphasis>package-aware</emphasis>.  You'll see how to do that
+      in this tutorial.</para>
       <orderedlist>
         <listitem><para>Browse to
-<computeroutput>http://yourserver:8000/admin/site-map/</computeroutput>.</para>
+<computeroutput>http://yourserver.test:8000/admin/site-map/</computeroutput>.</para>
         </listitem>
         <listitem>
           <para>Click the <computeroutput><guilabel>new sub
-        folder</guilabel></computeroutput> link on the Main Site
-        line. </para>
+        folder</guilabel></computeroutput> link on the top row in the
+        Site Map table.</para>
         </listitem>
-        <listitem><para>Type <userinput>samplenote</userinput>
+        <listitem><para>Type <userinput>note</userinput>
 and click <computeroutput><guibutton>New</guibutton></computeroutput>. </para></listitem>
-        <listitem><para>Click the <computeroutput><guilabel>new
-application</guilabel></computeroutput> link on the <computeroutput><guilabel>samplenote</guilabel></computeroutput> line. </para></listitem>
-        <listitem><para>Type <userinput>Sample Note</userinput>
-where it says
+        <listitem><para>This creates a new row called
+<computeroutput>note</computeroutput>.  In the new row, click the <computeroutput><guilabel>new
+application</guilabel></computeroutput> link</para></listitem>
+        <listitem><para>Type <userinput>Sample Note</userinput> where
+it says
 <computeroutput><guilabel>untitled</guilabel></computeroutput>, choose
-<computeroutput><guilabel>Notes (Sample Application)</guilabel></computeroutput> from the
-drop-down list, and click
-<computeroutput><guibutton>New</guibutton></computeroutput>.
+<computeroutput><guilabel>Notes</guilabel></computeroutput> from the drop-down list, and
+click <computeroutput><guibutton>New</guibutton></computeroutput>.
 </para></listitem>
       </orderedlist>
       <para>By mounting the package, we've caused all requests to
-      <computeroutput>http://yourserver.test/samplenote</computeroutput>
+      <computeroutput>http://yourserver.test:8000/note</computeroutput>
       to be satisfied from the files at <computeroutput>/web/service0/packages/samplenote/www</computeroutput>.</para>
     </sect2>
     <sect2>
       <title>Write the Requirements and Design Specs</title>
-      <para>It's time to document.  For a new package you should
-	start by copying the documentation template from
+      <para>It's time to document.  For the tutorial we'll use
+      pre-written documentation.  When creating a package
+      from scratch, start by copying the documentation template from
 	<computeroutput>/web/openacs-dev/packages/acs-core-docs/xml/docs/xml/package-documentation-template.xml</computeroutput>
 	to
-	<computeroutput>yourpackage/www/docs/xml/package-documentation.xml</computeroutput>.</para>
-	<para>You then open that file with emacs, write the
-	requirements and design section, generate html, and start
-	coding.  For this tutorial, you should instead install the
-	pre-written documentation files for the tutorial app, examine
-	them, generate html, read it, and then proceed to build the
-	package.  Store any diagrams in native format in the
-	<computeroutput>www/doc/xml</computeroutput> directory, and
-	store png or jpg versions of the diagrams in the
-	<computeroutput>www/doc</computeroutput> direcory.</para>
-	<para>Pre-written documentation is available for this
-      tutorial, so we'll copy that documentation and edit it.  Log in
+	<computeroutput>yourpackage/www/docs/xml/index.xml</computeroutput>.</para>
+      <para>You then edit that file with emacs to write the 
+	requirements and design sections, generate the html, and start
+	coding.  Store any supporting files, like page maps or schema
+      diagrams, in the <computeroutput>www/doc/xml</computeroutput>
+      directory, and store png or jpg versions of supporting files in the
+	<computeroutput>www/doc</computeroutput> directory.</para>
+      <para>For this tutorial, you should instead install the
+	pre-written documentation files for the tutorial app.  Log in
       as <replaceable>service0</replaceable>, create the standard
       directories, and copy the prepared documentation:</para>
       <screen>[service0@anthrax service0]$ <userinput>cd /web/service0/packages/samplenote/</userinput>
 [service0@anthrax samplenote]$ <userinput>mkdir -p www/doc/xml</userinput>
-[service0@anthrax samplenote]$ <userinput>cp /web/service0/packages/acs-core-docs/www/files/samplenote/* www/doc/xml/</userinput>
-[service0@anthrax samplenote]$ <userinput>mv www/doc/xml/*.dia www/doc/</userinput>
-[service0@anthrax samplenote]$ <userinput>mv www/doc/xml/*.png www/doc/</userinput>
-[service0@anthrax samplenote]$</screen>
+[service0@anthrax samplenote]$ <userinput>cd www/doc/xml</userinput>
+[service0@anthrax xml]$ <userinput>cp /web/service0/packages/acs-core-docs/www/files/samplenote/* .</userinput>
+[service0@anthrax xml]$</screen>
       <para> OpenACS uses DocBook for documentation.  DocBook is
 	an XML standard for semantic markup of documentation.  That
 	means that the tags you use indicate meaning, not intended
-	appearance.  The style sheet will determine appearance.</para>
+	appearance.  The style sheet will determine appearance.  You
+      will edit the text in an xml file, and then process the file
+      into html for reading.</para>
       <para>Open the file <computeroutput>index.xml</computeroutput>
       in emacs.  Examine the file.  Find the version history (look for the tag
         <computeroutput>&lt;revhistory&gt;</computeroutput>).  Add a
@@ -182,13 +191,11 @@ drop-down list, and click
       directory.  A Makefile is provided to generate html from the xml, and copy all of the
       supporting files.  If Docbook is set up correctly, all you need
       to do is:</para>
-      <screen>[service0@anthrax samplenote]$ <userinput>cd www/doc/xml</userinput>
-[service0@anthrax xml]$<userinput> make</userinput>
+      <screen>[service0@anthrax xml]$<userinput> make</userinput>
 cd .. ; /usr/bin/xsltproc ../../../acs-core-docs/www/xml/openacs.xsl xml/index.xml
 Writing requirements-introduction.html for sect1(requirements-introduction)
 Writing requirements-overview.html for sect1(requirements-overview)
 Writing requirements-cases.html for sect1(requirements-cases)
-Writing sample-data.html for sect1(sample-data)
 Writing sample-data.html for sect1(sample-data)
 Writing requirements.html for chapter(requirements)
 Writing design-data-model.html for sect1(design-data-model)
@@ -202,14 +209,16 @@ Writing bi01.html for bibliography
 Writing index.html for book
 [service0@yourserver xml]$</screen>
       <para>Verify that the documentation was generated and reflects
-      your changes in the xml by browsing to <computeroutput>http://<replaceable>yoursite</replaceable>:8000/samplenote/doc</computeroutput></para>
+      your changes by browsing to <computeroutput>http://<replaceable>yoursite</replaceable>:8000/samplenote/doc</computeroutput></para>
     </sect2>
     <sect2>
       <title>Add the new package to CVS</title>
       <para>Before you do any more work, make sure that your work is
       protected by putting it all into cvs.  The <computeroutput>cvs
       add</computeroutput> command is not recursive, so you'll have to
-      traverse the directory tree manually and add as you go.</para>
+      traverse the directory tree manually and add as you go.  (<ulink
+      url="http://www.piskorski.com/docs/cvs-conventions.html">More on
+      CVS</ulink>)</para>
       <screen>[service0@yourserver xml]$ <userinput>cd ..</userinput>
 [service0@yourserver doc]$ <userinput>cd ..</userinput>
 [service0@yourserver www]$ <userinput>cd ..</userinput>
