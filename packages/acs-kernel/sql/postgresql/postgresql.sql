@@ -541,6 +541,11 @@ create function create_tree_ancestor_keys() returns boolean as '
 -- Rather than use the general solution I have just hacked up a PL/pgSQL function to
 -- create the one recursive function we need: tree_ancestor_keys(varbit, integer).
 
+-- PG 7.2 still does not allow recursive SQL functions during CREATE, but you can
+-- fool it easily with CREATE OR REPLACE, a new feature in this version.  Perhaps
+-- someday the PG development group will see the light and just let us CREATE such
+-- functions.
+
 -- tree_ancestor_keys(varbit, integer) returns the set of ancestor keys starting at
 -- the level passed in as the second parameter down to the key passed in as the first
 
@@ -554,27 +559,42 @@ begin
 
   execute ''create function tree_ancestor_keys(varbit, integer) returns setof varbit as ''''
              select $1
-           '''' language ''''sql'''' '';
+          '''' language ''''sql'''' '';
 
-  -- create another function with the body we want
+  if version() like ''%7.1%'' then
 
-  execute ''create function __tree_ancestor_keys(varbit, integer) returns setof varbit as ''''
-              select tree_ancestor_key($1, $2)
-              union
-              select tree_ancestor_keys($1, $2 + 1)
-              where $2 < tree_level($1)
-           '''' language ''''sql'''' with (isstrict) '';
+    -- create another function with the body we want
 
-  -- replace the body for tree_ancestor_keys with the body we want.  Slick, eh?
+    execute ''create function __tree_ancestor_keys(varbit, integer) returns setof varbit as ''''
+                select tree_ancestor_key($1, $2)
+                union
+                select tree_ancestor_keys($1, $2 + 1)
+                where $2 < tree_level($1)
+            '''' language ''''sql'''' with (isstrict) '';
 
-  update pg_proc
-  set prosrc = hack.prosrc, probin = hack.probin
-  from (select prosrc, probin
-        from pg_proc
-        where proname = ''__tree_ancestor_keys'') hack
-  where proname = ''tree_ancestor_keys'';
+    -- replace the body for tree_ancestor_keys with the body we want.  Slick, eh?
 
-  execute ''drop function __tree_ancestor_keys(varbit, integer)'';
+    update pg_proc
+    set prosrc = hack.prosrc, probin = hack.probin
+    from (select prosrc, probin
+          from pg_proc
+          where proname = ''__tree_ancestor_keys'') hack
+    where proname = ''tree_ancestor_keys'';
+
+    execute ''drop function __tree_ancestor_keys(varbit, integer)'';
+
+  else
+
+    -- The bootstrap installer has made certain that we are running a version >= 7.1 so it is safe
+    -- at this point to assume create or replace is supported.
+
+    execute ''create or replace function tree_ancestor_keys(varbit, integer) returns setof varbit as ''''
+                select tree_ancestor_key($1, $2)
+                union
+                select tree_ancestor_keys($1, $2 + 1)
+                where $2 < tree_level($1)
+            '''' language ''''sql'''' with (isstrict) '';
+  end if;
 
   return true;
 end;' language 'plpgsql';
