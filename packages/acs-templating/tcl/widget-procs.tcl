@@ -93,10 +93,15 @@ ad_proc -public template::data::transform::party_search { element_ref } {
     set element_id $element(id)
 
     set value [string trim [ns_queryget $element_id]]
+    set is_optional [info exists element(optional)]
 
     if { [empty_string_p $value] } {
-        template::element::set_error $element(form_id) $element_id "Please enter a search string."
-        return [list]
+        if { [string is true $is_optional] } {
+	    return ""
+	} else {
+	    template::element::set_error $element(form_id) $element_id "Please enter a search string."
+	    return [list]
+	}
     }
 
     if { [string equal $value ":search:"] } {

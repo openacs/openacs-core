@@ -24,7 +24,7 @@
 
 <listitem><para><xref linkend="packages"/></para></listitem>
 
-<listitem><para><ulink url="images/apm.pdf">ER diagram</ulink></para></listitem>
+<listitem><para><ulink url="../images/apm.pdf">ER diagram</ulink></para></listitem>
 
 <listitem><para>Tcl API </para>
 
@@ -206,7 +206,7 @@ installation that uses only two of the thirty-odd modules available circa ACS
 
 <mediaobject>
   <imageobject>
-    <imagedata fileref="images/acs-without-apm-vs-with-apm.png" format="PNG" align="center"/>
+    <imagedata fileref="../images/acs-without-apm-vs-with-apm.png" format="PNG" align="center"/>
   </imageobject>
 </mediaobject>
 

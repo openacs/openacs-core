@@ -1,415 +1,3 @@
---
--- acs-kernel/sql/acs-objects-create.sql
---
--- A base object type that provides auditing columns, permissioning,
--- attributes, and relationships to any subtypes.
---
--- @author Michael Yoon (michael@arsdigita.com)
--- @author Rafael Schloming (rhs@mit.edu)
--- @author Jon Salz (jsalz@mit.edu)
---
--- @creation-date 2000-05-18
---
--- @cvs-id $Id$
---
-
------------------------------
--- PREDEFINED OBJECT TYPES --
------------------------------
-
-declare
- attr_id acs_attributes.attribute_id%TYPE;
-begin
- --
- -- The ultimate supertype: object
- --
- acs_object_type.create_type (
-   supertype => null,
-   object_type => 'acs_object',
-   pretty_name => 'Object',
-   pretty_plural => 'Objects',
-   table_name => 'acs_objects',
-   id_column => 'object_id',
-   package_name => 'acs_object',
-   name_method => 'acs_object.default_name'
- );
-
- attr_id := acs_attribute.create_attribute (
-   object_type => 'acs_object',
-   attribute_name => 'object_type',
-   datatype => 'string',
-   pretty_name => 'Object Type',
-   pretty_plural => 'Object Types'
- );
-
- attr_id := acs_attribute.create_attribute (
-   object_type => 'acs_object',
-   attribute_name => 'creation_date',
-   datatype => 'date',
-   pretty_name => 'Created Date'
- );
-
- attr_id := acs_attribute.create_attribute (
-   object_type => 'acs_object',
-   attribute_name => 'creation_ip',
-   datatype => 'string',
-   pretty_name => 'Creation IP Address'
- );
-
- attr_id := acs_attribute.create_attribute (
-   object_type => 'acs_object',
-   attribute_name => 'last_modified',
-   datatype => 'date',
-   pretty_name => 'Last Modified On'
- );
-
- attr_id := acs_attribute.create_attribute (
-   object_type => 'acs_object',
-   attribute_name => 'modifying_ip',
-   datatype => 'string',
-   pretty_name => 'Modifying IP Address'
- );
-
- attr_id := acs_attribute.create_attribute (
-        object_type => 'acs_object',
-        attribute_name => 'creation_user',
-        datatype => 'integer',
-        pretty_name => 'Creation user',
-        pretty_plural => 'Creation users',
-	min_n_values => 0,
-	max_n_values => 1
-      );
-
- attr_id := acs_attribute.create_attribute (
-        object_type => 'acs_object',
-        attribute_name => 'context_id',
-        datatype => 'integer',
-        pretty_name => 'Context ID',
-        pretty_plural => 'Context IDs',
-	min_n_values => 0,
-	max_n_values => 1
-      );
-
- attr_id := acs_attribute.create_attribute (
-        object_type => 'acs_object',
-        attribute_name => 'package_id',
-        datatype => 'integer',
-        pretty_name => 'Package ID',
-        pretty_plural => 'Package IDs',
-	min_n_values => 0,
-	max_n_values => 1
-      );
-
- attr_id := acs_attribute.create_attribute (
-        object_type => 'acs_object',
-        attribute_name => 'title',
-        datatype => 'string',
-        pretty_name => 'Title',
-        pretty_plural => 'Titles',
-	min_n_values => 0,
-	max_n_values => 1
-      );
-
- commit;
-end;
-/
-show errors
-
--- ******************************************************************
--- * OPERATIONAL LEVEL
--- ******************************************************************
-
--------------
--- OBJECTS --
--------------
-
-create sequence acs_object_id_seq cache 1000;
-
-create table acs_objects (
-	object_id		integer not null
-				constraint acs_objects_pk primary key,
-	object_type		not null
-				constraint acs_objects_object_type_fk
-				references acs_object_types (object_type),
-        title			varchar2(1000) default null,
-        package_id		integer default null,
-        context_id		constraint acs_objects_context_id_fk
-				references acs_objects(object_id),
-	security_inherit_p	char(1) default 't' not null,
-				constraint acs_objects_sec_inherit_p_ck
-				check (security_inherit_p in ('t', 'f')),
-	creation_user		integer,
-	creation_date		date default sysdate not null,
-	creation_ip		varchar2(50),
-	last_modified		date default sysdate not null,
-	modifying_user		integer,
-	modifying_ip		varchar2(50),
-        constraint acs_objects_context_object_un
-	unique (context_id, object_id) disable
-);
-
-create index acs_objects_context_object_idx on
-       acs_objects (context_id, object_id);
-
-alter table acs_objects modify constraint acs_objects_context_object_un enable;
-
-create index acs_objects_creation_user_idx on acs_objects (creation_user);
-create index acs_objects_modify_user_idx on acs_objects (modifying_user);
-
-create index acs_objects_package_object_idx on acs_objects (package_id, object_id);
-create index acs_objects_title_idx on acs_objects(title);
-
--- create bitmap index acs_objects_object_type_idx on acs_objects (object_type);
-create index acs_objects_object_type_idx on acs_objects (object_type);
-
-create or replace trigger acs_objects_mod_ip_insert_tr
-before insert on acs_objects
-for each row
-begin
- :new.modifying_ip := :new.creation_ip;
-end acs_objects_mod_ip_insert_tr;
-/
-show errors
-
-create or replace trigger acs_objects_last_mod_update_tr
-before update on acs_objects
-for each row
-begin
-  if :new.last_modified is null then
-     :new.last_modified := :old.last_modified;
-  elsif :new.last_modified = :old.last_modified then
-     :new.last_modified := sysdate;
-  end if;
-end acs_objects_last_mod_update_tr;
-/
-show errors
-
-
-comment on table acs_objects is '
-';
-
-comment on column acs_objects.context_id is '
- The context_id column points to an object that provides a context for
- this object. Often this will reflect an observed hierarchy in a site,
- for example a bboard message would probably list a bboard topic as
- it''s context, and a bboard topic might list a sub-site as it''s
- context. Whenever we ask a question of the form "can user X perform
- action Y on object Z", the acs security model will defer to an
- object''s context if there is no information about user X''s
- permission to perform action Y on object Z.
-';
-
-comment on column acs_objects.creation_user is '
- Who created the object; may be null since objects can be created by
- automated processes
-';
-
-comment on column acs_objects.modifying_user is '
- Who last modified the object
-';
-
-comment on column acs_objects.package_id is '
- Which package instance this object belongs to.
- Please note that in mid-term this column will replace all
- package_ids of package specific tables.
-';
-
-comment on column acs_objects.title is '
- Title of the object if applicable.
- Please note that in mid-term this column will replace all
- titles or object_names of package specific tables.
-';
-
------------------------
--- CONTEXT HIERARCHY --
------------------------
-
-create table acs_object_context_index (
-	object_id	not null
-                        constraint acs_obj_context_idx_obj_id_fk
-			references acs_objects(object_id),
-	ancestor_id	not null
-                        constraint acs_obj_context_idx_anc_id_fk
-			references acs_objects(object_id),
-	n_generations	integer not null
-			constraint acs_obj_context_idx_n_gen_ck
-			check (n_generations >= 0),
-        constraint acs_object_context_index_pk
-	primary key (object_id, ancestor_id)
-) organization index;
-
-create index acs_obj_ctx_idx_ancestor_idx on acs_object_context_index (ancestor_id);
-
-create or replace view acs_object_paths
-as select object_id, ancestor_id, n_generations
-   from acs_object_context_index;
-
-create or replace view acs_object_contexts
-as select object_id, ancestor_id, n_generations
-   from acs_object_context_index
-   where object_id != ancestor_id;
-
-create or replace trigger acs_objects_context_id_in_tr
-after insert on acs_objects
-for each row
-declare
-  security_context_root acs_objects.object_id%TYPE;
-begin
-
-  -- Hate the hardwiring but magic objects aren't defined yet (PG doesn't
-  -- mind because function bodies aren't compiled until first called)
-
-  security_context_root := -4;
-
-  insert into acs_object_context_index
-   (object_id, ancestor_id, n_generations)
-  values
-   (:new.object_id, :new.object_id, 0);
-
-  if :new.context_id is not null and :new.security_inherit_p = 't' then
-    insert into acs_object_context_index
-     (object_id, ancestor_id,
-      n_generations)
-    select
-     :new.object_id as object_id, ancestor_id,
-     n_generations + 1 as n_generations
-    from acs_object_context_index
-    where object_id = :new.context_id;
-  else
-    if :new.object_id != security_context_root then
-      insert into acs_object_context_index
-        (object_id, ancestor_id, n_generations)
-      values
-        (:new.object_id, security_context_root, 1);
-    end if;
-  end if;
-end;
-/
-show errors
-
-create or replace trigger acs_objects_context_id_up_tr
-after update on acs_objects
-for each row
-declare
-  security_context_root acs_objects.object_id%TYPE;
-begin
-  if :new.object_id = :old.object_id
-     and (:new.context_id = :old.context_id
-	  or (:new.context_id is null and :old.context_id is null))
-     and :new.security_inherit_p = :old.security_inherit_p then
-    return;
-  end if;
-
-  -- Hate the hardwiring but magic objects aren't defined yet (PG doesn't
-  -- mind because function bodies aren't compiled until first called)
-
-  security_context_root := -4;
-
-  -- Remove my old ancestors from my descendants.
-  for pair in ( select object_id from acs_object_contexts where
-                ancestor_id = :old.object_id) loop
-    delete from acs_object_context_index
-    where object_id = pair.object_id
-      and ancestor_id in ( select ancestor_id from acs_object_contexts
-                           where object_id = :old.object_id );
-  end loop;
-
-  -- Kill all my old ancestors.
-  delete from acs_object_context_index
-  where object_id = :old.object_id;
-
-  insert into acs_object_context_index
-   (object_id, ancestor_id, n_generations)
-  values
-   (:new.object_id, :new.object_id, 0);
-
-  if :new.context_id is not null and :new.security_inherit_p = 't' then
-     -- Now insert my new ancestors for my descendants.
-    for pair in (select *
-		 from acs_object_context_index
-		 where ancestor_id = :new.object_id) loop
-      insert into acs_object_context_index
-       (object_id, ancestor_id, n_generations)
-      select
-       pair.object_id, ancestor_id,
-       n_generations + pair.n_generations + 1 as n_generations
-      from acs_object_context_index
-      where object_id = :new.context_id;
-    end loop;
-  else
-    if :new.object_id != 0 then
-      -- We need to make sure that :NEW.OBJECT_ID and all of its
-      -- children have security_context_root as an ancestor.
-      for pair in (select *
-		   from acs_object_context_index
-		   where ancestor_id = :new.object_id)
-      loop
-        insert into acs_object_context_index
-          (object_id, ancestor_id, n_generations)
-        values
-          (pair.object_id, security_context_root, pair.n_generations + 1);
-      end loop;
-    end if;
-  end if;
-end;
-/
-show errors
-
-create or replace trigger acs_objects_context_id_del_tr
-before delete on acs_objects
-for each row
-begin
-  delete from acs_object_context_index
-  where object_id = :old.object_id;
-end;
-/
-show errors
-
-----------------------
--- ATTRIBUTE VALUES --
-----------------------
-
-create sequence acs_attribute_value_id_seq;
-
-create table acs_attribute_values (
-	object_id	not null
-			constraint acs_attr_values_obj_id_fk
-			references acs_objects (object_id) on delete cascade,
-	attribute_id	not null
-			constraint acs_attr_values_attr_id_fk
-			references acs_attributes (attribute_id),
-	attr_value	varchar2(4000),
-	constraint acs_attribute_values_pk primary key
-	(object_id, attribute_id)
-);
-
-create index acs_attr_values_attr_id_idx on acs_attribute_values (attribute_id);
-
-comment on table acs_attribute_values is '
-  Instead of coercing everything into a big string, we could use
-  a "union", i.e, a string column, a number column, a date column,
-  and a discriminator.
-';
-
-create table acs_static_attr_values (
-	object_type	not null
-			constraint acs_static_a_v_obj_id_fk
-			references acs_object_types (object_type) on delete cascade,
-	attribute_id	not null
-			constraint acs_static_a_v_attr_id_fk
-			references acs_attributes (attribute_id),
-	attr_value	varchar2(4000),
-	constraint acs_static_a_v_pk primary key
-	(object_type, attribute_id)
-);
-
-create index acs_stat_attrs_attr_id_idx on acs_static_attr_values (attribute_id);
-
-comment on table acs_static_attr_values is '
-  Stores static values for the object attributes. One row per object
-  type.
-';
-
 ------------------------
 -- ACS_OBJECT PACKAGE --
 ------------------------
@@ -427,9 +15,7 @@ as
 			   default null,
   creation_ip	in acs_objects.creation_ip%TYPE default null,
   context_id    in acs_objects.context_id%TYPE default null,
-  security_inherit_p in acs_objects.security_inherit_p%TYPE default 't',
-  title		in acs_objects.title%TYPE default null,
-  package_id    in acs_objects.package_id%TYPE default null
+  security_inherit_p in acs_objects.security_inherit_p%TYPE default 't'
  ) return acs_objects.object_id%TYPE;
 
  procedure del (
@@ -445,10 +31,6 @@ as
  function default_name (
   object_id	in acs_objects.object_id%TYPE
  ) return varchar2;
-
- function package_id (
-  object_id	in acs_objects.object_id%TYPE
- ) return acs_objects.package_id%TYPE;
 
  -- Determine where the attribute is stored and what sql needs to be
  -- in the where clause to retreive it
@@ -543,15 +125,11 @@ as
 		   default null,
   creation_ip	in acs_objects.creation_ip%TYPE default null,
   context_id    in acs_objects.context_id%TYPE default null,
-  security_inherit_p in acs_objects.security_inherit_p%TYPE default 't',
-  title		in acs_objects.title%TYPE default null,
-  package_id    in acs_objects.package_id%TYPE default null
+  security_inherit_p in acs_objects.security_inherit_p%TYPE default 't'
  )
  return acs_objects.object_id%TYPE
  is
   v_object_id acs_objects.object_id%TYPE;
-  v_title acs_objects.title%TYPE;
-  v_object_type_pretty_name acs_object_types.pretty_name%TYPE;
   v_creation_date acs_objects.creation_date%TYPE;
  begin
   if object_id is null then
@@ -562,29 +140,18 @@ as
     v_object_id := object_id;
   end if;
 
-  if title is null then
-   select pretty_name
-   into v_object_type_pretty_name
-   from acs_object_types
-   where object_type = new.object_type;
-
-   v_title := v_object_type_pretty_name || ' ' || v_object_id;
-  else
-    v_title := title;
-  end if;
-
   if creation_date is null then
-    select sysdate into v_creation_date from dual;
+   select sysdate into v_creation_date from dual;
   else
-    v_creation_date := creation_date;
+   v_creation_date := creation_date;
   end if;
 
   insert into acs_objects
    (object_id, object_type, context_id, creation_date,
-    creation_user, creation_ip, security_inherit_p, title, package_id)
+    creation_user, creation_ip, security_inherit_p)
   values
    (v_object_id, object_type, context_id, v_creation_date,
-    creation_user, creation_ip, security_inherit_p, v_title, package_id);
+    creation_user, creation_ip, security_inherit_p);
 
   acs_object.initialize_attributes(v_object_id);
 
@@ -642,7 +209,7 @@ as
  )
  return varchar2
  is
-  object_name acs_objects.title%TYPE;
+  object_name varchar2(500);
   v_object_id integer := object_id;
  begin
   -- Find the name function for this object, which is stored in the
@@ -650,14 +217,6 @@ as
   -- object's actual type, traverse the type hierarchy upwards until
   -- a non-null name_method value is found.
   --
-  select title into object_name
-  from acs_objects
-  where object_id = name.object_id;
-
-  if (object_name is not null) then
-    return object_name;
-  end if;
-
   for object_type
   in (select name_method
       from acs_object_types
@@ -698,23 +257,6 @@ as
 
   return object_type_pretty_name || ' ' || object_id;
  end default_name;
-
- function package_id (
-  object_id	in acs_objects.object_id%TYPE
- ) return acs_objects.package_id%TYPE
- is
-  v_package_id acs_objects.package_id%TYPE;
- begin
-  if object_id is null then
-    return null;
-  end if;
-
-  select package_id into v_package_id
-  from acs_objects
-  where object_id = package_id.object_id;
-
-  return v_package_id;
- end package_id;
 
  procedure get_attribute_storage ( 
    object_id_in      in  acs_objects.object_id%TYPE,
@@ -1170,24 +712,3 @@ as
 end acs_object;
 /
 show errors
-
--------------------
--- MISCELLANEOUS --
--------------------
-
-create table general_objects (
-	object_id		not null
-				constraint general_objects_object_id_fk
-				references acs_objects (object_id)
-				constraint general_objects_pk
-				primary key,
-	on_which_table		varchar2(30) not null,
-	on_what_id		integer not null,
-	constraint general_objects_un
-		unique (on_which_table, on_what_id)
-);
-
-comment on table general_objects is '
- This table can be used to treat non-acs_objects as acs_objects for
- purposes of access control, categorization, etc.
-';

@@ -142,7 +142,7 @@ declare
   v_context_id                acs_objects.context_id%TYPE;
 begin
 
-        perform content_folder__new (
+        return content_folder__new (
                 new__name,
                 new__label,
                 new__description,
@@ -156,7 +156,6 @@ begin
                 null
         );
 
-  return null; 
 end;' language 'plpgsql';
 
 select define_function_args('content_folder__new','name,label,description,parent_id,context_id,folder_id,creation_date;now,creation_user,creation_ip,security_inherit_p;t,package_id');
@@ -254,7 +253,7 @@ where
 
   end if;
 
-  return null; 
+  return v_folder_id; 
 end;' language 'plpgsql';
 
 create or replace function content_folder__new (varchar,varchar,varchar,integer,integer,integer,timestamptz,integer,varchar,boolean)
@@ -287,9 +286,8 @@ begin
 end;' language 'plpgsql';
 
 -- procedure delete
-select define_function_args('content_folder__delete','folder_id,cascade_p;f');
-
-create or replace function content_folder__delete (integer, boolean)
+select define_function_args('content_folder__del','folder_id,cascade_p;f');
+create or replace function content_folder__del (integer, boolean)
 returns integer as '
 declare
   delete__folder_id              alias for $1;  
@@ -352,6 +350,18 @@ begin
   return 0; 
 end;' language 'plpgsql';
 
+select define_function_args('content_folder__delete','folder_id,cascade_p;f');
+
+create or replace function content_folder__delete (integer, boolean)
+returns integer as '
+declare
+  delete__folder_id              alias for $1;  
+  p_cascade_p                    alias for $2;
+begin
+        PERFORM content_folder__del(delete__folder_id,p_cascade_p);
+  return 0; 
+end;' language 'plpgsql';
+
 
 create or replace function content_folder__delete (integer)
 returns integer as '
@@ -361,7 +371,7 @@ declare
   v_parent_id                    integer;  
   v_path                         varchar;     
 begin
-	return content_folder__delete(
+	return content_folder__del(
 		delete__folder_id,
 		''f''
 		);
@@ -673,6 +683,8 @@ begin
   LOOP
     v_parent_id := v_rec.parent_id;
     exit when v_parent_id = is_sub_folder__folder_id;
+    -- we did not find the folder, reset v_parent_id
+    v_parent_id := 0;
   end LOOP;
 
   if v_parent_id != 0 then 

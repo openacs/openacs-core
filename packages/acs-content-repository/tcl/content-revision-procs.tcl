@@ -119,8 +119,7 @@ DB -----------------------------------------------------------------------------
 		append attribute_names  ", ${attribute_name}"		
 		# create local variable to use for binding
 		set $attribute_name $attribute_value
-	ns_log notice "DAVEB CR REVISION NEW setting $attribute_name '${attribute_value}'"
-	append attribute_values ", :${attribute_name}"
+		append attribute_values ", :${attribute_name}"
 	    }
 	}
     }
@@ -140,12 +139,6 @@ DB -----------------------------------------------------------------------------
             -revision_id $revision_id \
             -content $content
     }
-ns_log notice "
-DB --------------------------------------------------------------------------------
-DB DAVE debugging /var/lib/aolserver/openacs-5-1/packages/acs-content-repository/tcl/content-revision-procs.tcl
-DB --------------------------------------------------------------------------------
-DB is_live = '${is_live}' \n
-DB revision_id = '${revision_id}'"
     if {[string is true $is_live]} {
         content::item::set_live_revision -revision_id $revision_id
     }

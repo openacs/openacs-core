@@ -547,7 +547,7 @@ ad_proc -public template::adp_array_variable_regexp {} {
   @author Peter Marklund (peter@collaboraid.biz)
   @creation-date 25 October 2002
 } {
-  return {(^|[^\\])@([a-zA-Z0-9_:]+)\.([a-zA-Z0-9_:\.]+)@}
+  return {(^|[^\\])@([a-zA-Z0-9_:]+)\.([a-zA-Z0-9_\.:]+)@}
 }
 
 ad_proc -public template::adp_array_variable_regexp_noquote {} {

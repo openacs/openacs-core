@@ -10,7 +10,7 @@
 # @author Peter Marklund
 
 # the next line restarts using tclsh, the trailing slash is intentional \
-exec tclsh "$0" "$@"
+exec /usr/bin/tclsh "$0" "$@"
 
 set script_dir [file dirname [info script]]
 

@@ -176,7 +176,7 @@ ad_proc -public template_tag_if_interp_expr {} {
                || [regsub {^"@([a-zA-Z0-9_:]+)@"$} $arg1 {\1} arg1] )} { 
         error "IF tag defined test uses string not variable for $arg1"
       }
-           
+
       append condition "\[info exists $arg1\]"
       set next $i
     }

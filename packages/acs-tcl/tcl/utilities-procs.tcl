@@ -1529,6 +1529,7 @@ ad_proc -public util_httpopen {
     set wfd [lindex $fds 1]
     if { [catch {
         _ns_http_puts $timeout $wfd "$method $uri HTTP/1.0\r"
+        _ns_http_puts $timeout $wfd "Host: $host\r"
         if {$rqset != ""} {
             for {set i 0} {$i < [ns_set size $rqset]} {incr i} {
                 _ns_http_puts $timeout $wfd \
