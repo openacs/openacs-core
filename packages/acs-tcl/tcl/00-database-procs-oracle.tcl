@@ -316,6 +316,7 @@ ad_proc db_source_sql_file { {-callback apm_ns_write_callback} file } {
     
     global env
     set user_pass [db_get_sql_user]
+    cd [file dirname $file]
     set fp [open "|[file join $env(ORACLE_HOME) bin sqlplus] $user_pass @$file" "r"]
 
     while { [gets $fp line] >= 0 } {
