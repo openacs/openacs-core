@@ -14,6 +14,7 @@ ad_page_contract {
 }
 
 ns_startcontent -type "text/html"
+
 set this_dir [file dirname [ad_conn file]]
 set template_top_file "$this_dir/search-results-top"
 set template_one_file "$this_dir/search-results-one"
@@ -96,6 +97,7 @@ set template_top [template::adp_parse $template_top_file [list \
 	elapsed $elapsed \
 	url_advanced_search $url_advanced_search]]
 
+ReturnHeaders "text/html"
 ns_write $template_top
 
     for { set __i 0 } { $__i < [expr $high - $low +1] } { incr __i } {
