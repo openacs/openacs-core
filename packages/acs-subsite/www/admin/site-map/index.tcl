@@ -337,6 +337,4 @@ the site map.
 
 </font>
 
-
-[ad_footer]
 "
