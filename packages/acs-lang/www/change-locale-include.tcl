@@ -29,7 +29,14 @@ set use_timezone_p [expr [lang::system::timezone_support_p] && [ad_conn user_id]
 
 # Create a list of lists containing the possible locale choiches
 
-set list_of_locales [db_list_of_lists locale_loop { select label, locale from enabled_locales order by label }]
+set list_of_locales [list]
+
+db_foreach locale_loop {} {
+    if { [lang::message::message_exists_p $locale acs-lang.this-language] } {
+        set label "[lang::message::lookup $locale  acs-lang.this-language]"
+    }
+    lappend list_of_locales [list ${label} $locale]
+}
 
 set list_of_package_locales [linsert $list_of_locales 0 [list (default) ""]]
 
