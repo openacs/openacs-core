@@ -89,7 +89,7 @@ db_transaction {
 
 } on_error {
     # Just add the default locale.
-    lappend wanted_dicts [list "Yes, please" $default_lang]
+    lappend wanted_dicts [list "Yes" $default_lang]
 }
 
 
