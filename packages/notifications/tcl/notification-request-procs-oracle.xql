@@ -19,4 +19,12 @@
         </querytext>
     </fullquery>
 
+    <fullquery name="notification::request::delete_all_for_user.delete_all_for_user">
+        <querytext>
+            declare begin
+                notification_request.delete_all_for_user(user_id => :user_id);
+            end;
+        </querytext>
+    </fullquery>
+
 </queryset>
