@@ -10,7 +10,7 @@
 -- License.  Full text of the license is available from the GNU Project:
 -- http://www.fsf.org/copyleft/gpl.html
 
-select define_function_args('content_extlink__new','name,url,label,description,parent_id,extlink_id,creation_date;now,creation_user,creation_ip');
+select define_function_args('content_extlink__new','name,url,label,description,parent_id,extlink_id,creation_date;now,creation_user,creation_ip,package_id');
 
 create or replace function content_extlink__new (varchar,varchar,varchar,varchar,integer,integer,timestamptz,integer,varchar,integer)
 returns integer as '
@@ -110,6 +110,8 @@ begin
 
 end;' language 'plpgsql';
 
+select define_function_args('content_extlink__delete','extlink_id');
+
 create or replace function content_extlink__delete (integer)
 returns integer as '
 declare
@@ -124,7 +126,7 @@ begin
 return 0; 
 end;' language 'plpgsql';
 
-
+select define_function_args('content_extlink__is_extlink','item_id');
 create or replace function content_extlink__is_extlink (integer)
 returns boolean as '
 declare
@@ -166,6 +168,8 @@ begin
 	return 0;
 end;' language 'plpgsql' stable;
 
+
+select define_function_args('content_extlink__copy','extlink_id,target_folder_id,creation_user,creation_ip,name');
 create or replace function content_extlink__copy (
 	integer,
 	integer,

@@ -88,7 +88,7 @@ ad_proc -public ::content::item::new {
     # the content type is not the object type of the cr_item so we pass in
     # the cr_item subtype here and content_type as part of
     # var_list
-    ns_log notice "
+    ns_log Debug "
 DB --------------------------------------------------------------------------------
 DB DAVE debugging /var/lib/aolserver/ctk/packages/acs-content-repository/tcl/content-item-procs.tcl
 DB --------------------------------------------------------------------------------
@@ -109,10 +109,9 @@ ad_proc -public ::content::item::delete {
     Delete a content item
     @param item_id
 } {
-    set var_list [list [list item_id $item_id]]
     package_exec_plsql \
-        -var_list $var_list \
-        "content_item" "delete"
+        -var_list [list [list item_id $item_id]] \
+        content_item delete
 }
 
 ad_proc -public ::content::item::rename {

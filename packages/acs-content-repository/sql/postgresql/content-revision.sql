@@ -301,6 +301,7 @@ end;' language 'plpgsql';
 
 
 -- procedure copy_attributes
+select define_function_args('content_revision__copy_attributes','content_type,revision_id,copy_id');
 create or replace function content_revision__copy_attributes (varchar,integer,integer)
 returns integer as '
 declare
@@ -340,6 +341,7 @@ end;' language 'plpgsql';
 
 
 -- function copy
+select define_function_args('content_revision__copy','revision_id,copy_id,target_item_id,creation_user,creation_ip');
 create or replace function content_revision__copy (integer,integer,integer,integer,varchar)
 returns integer as '
 declare
@@ -444,6 +446,7 @@ end;' language 'plpgsql';
 
 
 -- procedure delete
+select define_function_args('content_revision__delete','revision_id');
 create or replace function content_revision__delete (integer)
 returns integer as '
 declare
@@ -508,6 +511,7 @@ end;' language 'plpgsql';
 
 
 -- function get_number
+select define_function_args('content_revision__get_number','revision_id');
 create or replace function content_revision__get_number (integer)
 returns integer as '
 declare
@@ -539,6 +543,8 @@ begin
  
 end;' language 'plpgsql' stable strict;
 
+
+select define_function_args('content_revision__revision_name','revision_id');
 create or replace function content_revision__revision_name(integer)
 returns text as '
 declare
@@ -596,6 +602,7 @@ end;' language 'plpgsql';
 
 
 -- procedure to_html
+select define_function_args('content_revision__to_html','revision_id');
 create or replace function content_revision__to_html (integer)
 returns integer as '
 declare
@@ -624,6 +631,7 @@ end;' language 'plpgsql';
 
 
 -- function is_live
+select define_function_args('content_revision__is_live','revision_id');
 create or replace function content_revision__is_live (integer)
 returns boolean as '
 declare
@@ -637,6 +645,7 @@ end;' language 'plpgsql' strict;
 
 
 -- function is_latest
+select define_function_args('content_revision__is_latest','revision_id');
 create or replace function content_revision__is_latest (integer)
 returns boolean as '
 declare
@@ -679,6 +688,7 @@ end;' language 'plpgsql';
 
 
 -- procedure content_copy
+select define_function_args('content_revision__content_copy','revision_id,revision_id_dest');
 create or replace function content_revision__content_copy (integer,integer)
 returns integer as '
 declare
@@ -770,6 +780,7 @@ end;' language 'plpgsql';
 
 
 -- procedure content__get_content
+select define_function_args('content_revision__get_content','revision_id');
 create or replace function content_revision__get_content (integer)
 returns text as '
 declare

@@ -12,6 +12,7 @@
 
 -- create or replace package body content_folder
 
+
 create or replace function content_folder__new(varchar,varchar,varchar,integer,integer) 
 returns integer as '
 declare
@@ -81,6 +82,7 @@ begin
                                    new__creation_date,
                                    new__creation_user,
                                    new__creation_ip,
+                                   't',
                                    null::integer
                );
 
@@ -104,85 +106,21 @@ declare
   v_context_id                acs_objects.context_id%TYPE;
   v_package_id                acs_objects.package_id%TYPE;
 begin
-
-  -- set the context_id
-  if new__context_id is null then
-    v_context_id := new__parent_id;
-  else
-    v_context_id := new__context_id;
-  end if;
-
-  -- parent_id = 0 means that this is a mount point
-  if new__parent_id != 0 and 
-     content_folder__is_registered(new__parent_id,''content_folder'',''f'') = ''f'' then
-
-    raise EXCEPTION ''-20000: This folder does not allow subfolders to be created'';
-    return null;
-
-  else
-
-    v_package_id := new__package_id;
-
-    if new__parent_id is not null and new__parent_id not in (-100,-200) and new__package_id is null then
-        v_package_id := acs_object__package_id(content_item__get_root_folder(new__parent_id));
-    end if;
-                                
-    v_folder_id := content_item__new(
-        new__name, 
-        new__parent_id,
-        new__folder_id,
-        null,
-        new__creation_date, 
-        new__creation_user, 
-	v_context_id,
-        new__creation_ip, 
-        ''content_folder'',
-        ''content_folder'',
-        null,
-        null,
-        ''text/plain'',
-        null,
-        null,
-        ''text'',
-        v_package_id
-    );
-
-    insert into cr_folders (
-      folder_id, label, description, package_id
-    ) values (
-      v_folder_id, new__label, new__description, v_package_id
-    );
-
-    -- set the correct object title
-    update acs_objects
-    set title = new__label
-    where object_id = v_folder_id;
-
-    -- inherit the attributes of the parent folder
-    if new__parent_id is not null then
-    
-      insert into cr_folder_type_map
-        select
-          v_folder_id as folder_id, content_type
-        from
-          cr_folder_type_map
-        where
-          folder_id = new__parent_id;
-    end if;
-
-    -- update the child flag on the parent
-    update cr_folders set has_child_folders = ''t''
-      where folder_id = new__parent_id;
-
-    return v_folder_id;
-
-  end if;
-
-  return null; 
+        return content_folder__new(new__name,
+                                   new__label,
+                                   new__description,
+                                   new__parent_id,
+                                   new__context_id,
+                                   new__folder_id,
+                                   new__creation_date,
+                                   new__creation_user,
+                                   new__creation_ip,
+                                   't',
+                                   new__package_id
+               );
 end;' language 'plpgsql';
 
 -- function new -- accepts security_inherit_p DaveB
-
 select define_function_args('content_folder__new','name,label,description,parent_id,context_id,folder_id,creation_date;now,creation_user,creation_ip,security_inherit_p;t,package_id');
 
 create or replace function content_folder__new (varchar,varchar,varchar,integer,integer,integer,timestamptz,integer,varchar,boolean,integer)
@@ -305,12 +243,13 @@ begin
                                    new__creation_user,
                                    new__creation_ip,
                                    new__security_inherit_p,
-                                   null
+                                   null::integer
                );
 
 end;' language 'plpgsql';
 
 -- procedure delete
+select define_function_args('content_folder__delete','folder_id,cascade_p;f');
 
 create or replace function content_folder__delete (integer, boolean)
 returns integer as '
@@ -392,6 +331,7 @@ end;' language 'plpgsql';
 
 
 -- procedure rename
+select define_function_args('content_folder__edit_name','folder_id,name,label,description');
 create or replace function content_folder__edit_name (integer,varchar,varchar,varchar)
 returns integer as '
 declare
@@ -440,6 +380,8 @@ end;' language 'plpgsql';
 -- 3) update the parent_id for the folder
 
 -- procedure move
+select define_function_args('content_folder__move','folder_id,target_folder_id');
+
 create or replace function content_folder__move (integer,integer)
 returns integer as '
 declare
@@ -645,6 +587,7 @@ end;' language 'plpgsql';
 
 
 -- function is_folder
+select define_function_args('content_folder__is_folder','folder_id');
 create or replace function content_folder__is_folder (integer)
 returns boolean as '
 declare
@@ -658,6 +601,7 @@ end;' language 'plpgsql' stable;
 
 
 -- function is_sub_folder
+select define_function_args('content_folder__is_sub_folder','folder_id,target_folder_id');
 create or replace function content_folder__is_sub_folder (integer,integer)
 returns boolean as '
 declare
@@ -703,6 +647,7 @@ end;' language 'plpgsql';
 
 
 -- function is_empty
+select define_function_args('content_folder__is_empty','folder_id');
 create or replace function content_folder__is_empty (integer)
 returns boolean as '
 declare
@@ -723,6 +668,8 @@ end;' language 'plpgsql' stable;
 
 
 -- procedure register_content_type
+select define_function_args('content_folder__register_content_type','folder_id,content_type,include_subtypes;f');
+
 create or replace function content_folder__register_content_type (integer,varchar,boolean)
 returns integer as '
 declare
@@ -788,6 +735,7 @@ end;' language 'plpgsql';
 
 
 -- procedure unregister_content_type
+select define_function_args('content_folder__unregister_content_type','folder_id,content_type,include_subtypes;f');
 create or replace function content_folder__unregister_content_type (integer,varchar,boolean)
 returns integer as '
 declare
@@ -826,6 +774,7 @@ end;' language 'plpgsql';
 
 
 -- function is_registered
+select define_function_args('content_folder__is_registered','folder_id,content_type,include_subtypes;f');
 create or replace function content_folder__is_registered (integer,varchar,boolean)
 returns boolean as '
 declare
@@ -885,6 +834,7 @@ end;' language 'plpgsql' stable;
 
 
 -- function get_label
+select define_function_args('content_folder__get_label','folder_id');
 create or replace function content_folder__get_label (integer)
 returns varchar as '
 declare
@@ -905,6 +855,7 @@ end;' language 'plpgsql' stable strict;
 
 
 -- function get_index_page
+select define_function_args('content_folder__get_index_page','folder_id');
 create or replace function content_folder__get_index_page (integer)
 returns integer as '
 declare
@@ -947,6 +898,7 @@ end;' language 'plpgsql' stable strict;
 
 
 -- function is_root
+select define_function_args('content_folder__is_root','folder_id');
 create or replace function content_folder__is_root (integer)
 returns boolean as '
 declare

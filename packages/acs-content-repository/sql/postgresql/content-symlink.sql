@@ -12,7 +12,7 @@
 -- create or replace package body content_symlink
 -- function new
 
-select define_function_args('content_symlink__new','name,label,target_id,parent_id,symlink_id,creation_date;now,creation_user,creation_ip');
+select define_function_args('content_symlink__new','name,label,target_id,parent_id,symlink_id,creation_date;now,creation_user,creation_ip,package_id');
 
 create or replace function content_symlink__new (varchar,varchar,integer,integer,integer,timestamptz,integer,varchar,integer)
 returns integer as '
@@ -148,6 +148,7 @@ begin
 end;' language 'plpgsql';
 
 -- procedure delete
+select define_function_args('content_symlink__delete','symlink_id');
 create or replace function content_symlink__delete (integer)
 returns integer as '
 declare
@@ -164,6 +165,7 @@ end;' language 'plpgsql';
 
 
 -- function is_symlink
+select define_function_args('content_symlink__is_symlink','item_id');
 create or replace function content_symlink__is_symlink (integer)
 returns boolean as '
 declare
@@ -184,6 +186,7 @@ end;' language 'plpgsql' stable;
 
 
 -- procedure copy
+select define_function_args('content_symlink__copy','symlink_id,target_folder_id,creation_user,creation_ip,name');
 create or replace function content_symlink__copy (
 	integer,
 	integer,
@@ -284,6 +287,7 @@ begin
 end;' language 'plpgsql';
 
 -- function resolve
+select define_function_args('content_symlink__resolve','item_id');
 create or replace function content_symlink__resolve (integer)
 returns integer as '
 declare
@@ -308,6 +312,7 @@ end;' language 'plpgsql' stable strict;
 
 
 -- function resolve_content_type
+select define_function_args('content_symlink__resolve_content_type','item_id');
 create or replace function content_symlink__resolve_content_type (integer)
 returns varchar as '
 declare
