@@ -8,17 +8,14 @@
 
   <if @display_warning_p@ true>
     <span style="color: red; font-weight: bold;">(*)</span>
-    Note text in red below the parameter entry fields indicates the value of this
-    parameter is being overridden by an entry in the OpenACS parameter file.  The
-    use of the parameter file is discouraged but some sites need it to provide
-    instance-specific values for parameters independent of the apm_parameter
-    tables.
+    #acs-subsite.lt_Note_text_in_red_below#
   </if>
 
 </if>
 <else>
-  <p> This package does not have any parameters. </p>
+  <p> #acs-subsite.No_package_parameters# </p>
   <if @return_url@ not nil>
-    <p> <b>&raquo;</b> <a href="@return_url@">Go back</a> </p>
+    <p> <b>&raquo;</b> <a href="@return_url@">#acs-subsite.Go_back#</a> </p>
   </if>
 </else>
+

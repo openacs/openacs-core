@@ -1,30 +1,28 @@
 <master>
-<property name=title>Upload Portrait</property>
+<property name=title>#acs-subsite.Upload_Portrait#</property>
 <property name="context">@context;noquote@</property>
 
-How would you like the world to see @first_names@ @last_name@?
+#acs-subsite.lt_How_would_you_like_the#
 
 <p>
 
-Upload your favorite file, a scanned JPEG or GIF, from your desktop
-computer system (note that you can't refer to an image elsewhere on
-the Internet; this image must be on your computer's hard drive).
+#acs-subsite.lt_Upload_your_favorite#
 
 <blockquote>
 <form enctype=multipart/form-data method=POST action="upload-2">
 @export_vars;noquote@
 <table>
 <tr>
-<td valign=top align=right>Filename: </td>
+<td valign=top align=right>#acs-subsite.Filename#: </td>
 <td>
 <input type=file name=upload_file size=20><br>
-<font size=-1>Use the "Browse..." button to locate your file, then click "Open".</font>
+<font size=-1>#acs-subsite.lt_Use_the_Browse_button#</font>
 </td>
 </tr>
 <tr>
-<td valign=top align=right>Story Behind Photo
+<td valign=top align=right>#acs-subsite.Story_Behind_Photo#
 <br>
-<font size=-1>(optional)</font>
+<font size=-1>#acs-subsite.optional#</font>
 </td>
 <td><textarea rows=6 cols=50 wrap=soft name=portrait_comment>
 </textarea>
@@ -38,4 +36,5 @@ the Internet; this image must be on your computer's hard drive).
 </center>
 </blockquote>
 </form>
+
 

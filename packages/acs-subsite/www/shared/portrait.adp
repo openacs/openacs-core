@@ -1,5 +1,5 @@
 <master>
-<property name="title">Portrait of @first_names@ @last_name@</property>
+<property name="title">#acs-subsite.lt_Portrait_of_first_last#</property>
 <property name="context">@context;noquote@</property>
 
 <p><center>
@@ -9,10 +9,11 @@ alt="Portrait of @first_names@ @last_name@">
 </p>
 
 <p><ul>
-<li>Comment:  
+<li>#acs-subsite.Comment#:
 <blockquote>
 @description@
 </blockquote>
-<li>Uploaded: @publish_date@
+<li>#acs-subsite.lt_Uploaded_publish_date#
 </ul>
 </p>
+

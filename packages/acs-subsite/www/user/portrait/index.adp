@@ -1,11 +1,11 @@
 <master>
-<property name="title">Portrait of @first_names@ @last_name@</property>
+<property name="title">#acs-subsite.lt_Portrait_of_first_last#</property>
 <property name="context">@context;noquote@</property>
 
 <switch @return_code@>
 
 <case value="no_error">
-<p>This is the image that we show to other users at @system_name@:</p>
+<p>#acs-subsite.lt_This_is_the_image_that#:</p>
 </if>
 
 <center>
@@ -14,8 +14,8 @@ alt="Portrait of @first_names@ @last_name@">
 </center>
 
 <ul>
-<li>Uploaded:  @pretty_date@</li>
-<li>Comment: 
+<li>#acs-subsite.lt_Uploaded_pretty_date#</li>
+<li>#acs-subsite.Comment#: 
 <blockquote>
 @description@
 </blockquote>
@@ -23,40 +23,40 @@ alt="Portrait of @first_names@ @last_name@">
 </ul>
 
 <if @admin_p@ eq 1>
-Options:
+#acs-subsite.Options#:
 
 <ul>
-<li><a href="comment-edit?@export_edit_vars@">edit comment</a></li>
-<li><a href="upload?return_url=@return_url@">upload a replacement portrait</a></li>
+<li><a href="comment-edit?@export_edit_vars@">#acs-subsite.edit_comment#</a></li>
+<li><a href="upload?return_url=@return_url@">#acs-subsite.upload_a_replacement_por#</a></li>
 
-<li><a href="erase?@export_edit_vars@">erase portrait</a></li>
+<li><a href="erase?@export_edit_vars@">#acs-subsite.erase_portrait#</a></li>
 
 </ul>
 </if>
 </case>
 
 <case value="no_user">
-We can't find you (user @user_id@) in the users table.  Probably your
-account was deleted for some reason.
+#acs-subsite.lt_We_cant_find_you#
 </case>
 
 <case value="no_portrait_info">
-The picture of you in the system is invalid. Please
-<a href="upload?return_url=@return_url@">upload</a> another picture.
+#acs-subsite.lt_The_picture_of_you_in#
+<a href="upload?return_url=@return_url@">#acs-subsite.upload#</a> #acs-subsite.another_picture#
 </case>
 
 <case value="no_portrait">
 <if @admin_p@ eq "0">
-This user doesn't have a portrait yet. You can
-<a href="upload?@export_edit_vars@">go upload the user's portrait</a>.
+#acs-subsite.lt_This_user_doesnt_have#
+<a href="upload?@export_edit_vars@">#acs-subsite.go_upload_the_users_por#</a>.
 </if>
 <else>
-You don't have a portrait yet. You can
-<a href="upload?return_url=@return_url@">go upload your portrait</a>.
+#acs-subsite.You_dont_have_a_portrait#
+<a href="upload?return_url=@return_url@">#acs-subsite.go_upload_your_portrait#</a>.
 </else>
 </case>
  
 </switch>
+
 
 
 

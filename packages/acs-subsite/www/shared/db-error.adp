@@ -1,16 +1,17 @@
 <master>
-<property name="title">Database Error</property>
-<property name="context">Database Error</property>
+<property name="title">#acs-subsite.Database_Error#</property>
+<property name="context">#acs-subsite.Database_Error#</property>
 
 <p><if @custom_message@ nil>
-We had a problem processing your entry.
+#acs-subsite.lt_We_had_a_problem_proc#
 </if>
 <else>
 @custom_message@
 </else>
 </p>
-<p>Here's what the database reported:
+<p>#acs-subsite.lt_Heres_what_the_databa#
 <blockquote>
 @errmsg@
 </blockquote>
 </p>
+
