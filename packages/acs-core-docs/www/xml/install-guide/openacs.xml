@@ -60,11 +60,8 @@ chmod 770 /var/lib/aolserver</action></screen>
   </sect2>
   
   <sect2 id="install-with-script">
-    <title>Install with automated script (EXPERIMENTAL)</title>
-    <para>Starting with OpenACS 5.0, an experimental script is
-    available to automate all of the steps for the rest of this
-    section.  Requires <link linkend="install-tclwebtest">tclwebtest</link>.  If you are not feeling lucky, skip to <xref
-        linkend="install-from-tarball"/>.</para>
+    <title>Install with automated script</title>
+    <para>A bash script is available to automate all of the steps for the rest of this section.  It requires <link linkend="install-tclwebtest">tclwebtest</link>.  The automated script can greatly accelerate the install process, but is very sensitive to the install environment.  We recommend that you run the automated install and, if it does not work the first time, consider switching to a <link linkend="install-from-tarball">manual installation</link>.</para>
         <para>Get the install script from CVS.  It is located within
         the main cvs tree, at /etc/install.  Use anonymous CVS
         checkout to get that directory in the home directory of the
@@ -80,23 +77,23 @@ U install/TODO
 U install/tcl/twt-procs.tcl
 U install/tcl/user-procs.tcl
 [service0 service0]$ <userinput>cd install</userinput>
-[service0 install]$ 
+[service0 install]$ <userinput>emacs install.tcl</userinput>
 </screen>
-        <para>Edit
-        <computeroutput>/home/<replaceable>service0</replaceable>/install/install.tcl</computeroutput>
-        and change the values as documented in the file.  It will work
-        unchanged at 127.0.0.1:8000.</para>
-        <para>Run the file as root.</para>
+        <para>Edit the installation configuration file, <computeroutput>/home/<replaceable>service0</replaceable>/install/install.tcl</computeroutput> and update the site-specific values, such as the new service's IP address and name, which will be written into the new service's <computeroutput>config.tcl</computeroutput> file.  If your system is different from the one described in the previous sections, check the file paths as well.  Set <computeroutput>do_checkout=yes</computeroutput> to create a new OpenACS site directly from a CVS checkout, or <computeroutput>=no</computeroutput> if you have a fully configured site and just want to rebuild it (drop and recreate the database and repeat the installation).  If you have followed a stock installation, the default configuration will work without changes and will install an OpenACS site at 127.0.0.1:8000.</para>
+    <para>Run the install script <computeroutput>install.sh</computeroutput> as root:</para>
         <screen>[service0 service0]$ <userinput>exit</userinput> 
 [root root]# <userinput>sh /home/<replaceable>service0</replaceable>/install/install.sh</userinput>
 /home/service0/install/install.sh: Starting installation with config_file 
 /home/service0/install/install.tcl. Using serverroot=/var/lib/aolserver/
 service0, server_url=http://0.0.0.0:8000, do_checkout=yes, do_install=yes, 
 dotlrn=no, and database=postgres., use_daemontools=true
-  ... many lines omitted ...
-./install.sh: Finished (re)installing /var/lib/aolserver/service0 at Wed Nov  
-5 13:27:17 CET 2003.  Access the new site at http://127.0.0.1:8000 with admin 
-username admin@yourserver.test and password 1
+  <emphasis>... many lines omitted ...</emphasis>
+Tue Jan 27 11:50:59 CET 2004: Finished (re)installing /var/lib/aolserver/service0.
+######################################################################
+  New site URL: http://127.0.0.1:8000
+admin email   : admin@yourserver.net
+admin password: xxxx
+######################################################################
 [root root]#</screen>
     <para>You can proceed to <xref linkend="install-next-steps"/>.</para>
   </sect2>
@@ -572,7 +569,7 @@ Loading package .info files ... this will take a few minutes</programlisting>
 		  You&#39;ll see the final Installer page, &quot;OpenACS
 		  Installation: Complete.&quot; It will tell you that the server is
 		  being restarted; note that unless you already set up a way for
-		  AOLserver to restart itself (ie. inittab or daemontools),
+		  AOLserver to restart itself (ie. <link linkend="install-openacs-keepalive">inittab or daemontools</link>),
 		  you&#39;ll need to manually restart your service.
 		</para>
         <screen>[service0 service0]$ <userinput>/usr/local/aolserver/bin/nsd-postgres -t /var/lib/aolserver/<replaceable>service0</replaceable>/config.tcl</userinput></screen>
@@ -592,6 +589,9 @@ Loading package .info files ... this will take a few minutes</programlisting>
   <sect2 id="install-next-steps">
     <title>Next Steps</title>
     <itemizedlist>
+      <listitem>
+        <para>Use daemontools <computeroutput>supervice</computeroutput> and <computeroutput>svc</computeroutput>, or <computeroutput>inittab</computeroutput>, to <link linkend="install-openacs-inittab">automate server startup and shutdown.</link></para>
+      </listitem>
       <listitem>
         <para>Install Full Text Search (OPTIONAL).  If you have <link
         linkend="install-openfts">installed OpenFTS</link> and enabled
