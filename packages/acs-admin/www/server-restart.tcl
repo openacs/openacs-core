@@ -9,7 +9,7 @@ ad_page_contract {
 
 set page_title "Restart Server"
 
-set context [list [list "." "Package Manager"] $page_title]
+set context [list $page_title]
 
 
 # We do this as a schedule proc, so the server will have time to serve the page
