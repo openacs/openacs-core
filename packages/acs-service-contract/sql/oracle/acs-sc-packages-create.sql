@@ -83,9 +83,9 @@ as
        impl_contract_name	acs_sc_contracts.contract_name%TYPE,
        impl_name		acs_sc_impls.impl_name%TYPE,
        impl_operation_name	acs_sc_operations.operation_name%TYPE,
-       impl_alias		acs_sc_impl_alias.impl_alias%TYPE,
-       impl_pl			acs_sc_impl_alias.impl_pl%TYPE
-   ) return acs_sc_impl_alias.impl_id%TYPE;
+       impl_alias		acs_sc_impl_aliases.impl_alias%TYPE,
+       impl_pl			acs_sc_impl_aliases.impl_pl%TYPE
+   ) return acs_sc_impl_aliases.impl_id%TYPE;
 
    -- fix by Ben from delete_aliases to delete_alias
    function delete_alias (
@@ -393,16 +393,16 @@ as
        impl_contract_name	acs_sc_contracts.contract_name%TYPE,
        impl_name		acs_sc_impls.impl_name%TYPE,
        impl_operation_name	acs_sc_operations.operation_name%TYPE,
-       impl_alias		acs_sc_impl_alias.impl_alias%TYPE,
-       impl_pl			acs_sc_impl_alias.impl_pl%TYPE
-   ) return acs_sc_impl_alias.impl_id%TYPE
+       impl_alias		acs_sc_impl_aliases.impl_alias%TYPE,
+       impl_pl			acs_sc_impl_aliases.impl_pl%TYPE
+   ) return acs_sc_impl_aliases.impl_id%TYPE
    is
        v_impl_id		acs_sc_impls.impl_id%TYPE;
    begin
 
        v_impl_id := acs_sc_impl.get_id(impl_contract_name,impl_name);
 
-       insert into acs_sc_impl_alias (
+       insert into acs_sc_impl_aliases (
         impl_id,
 	impl_name,
 	impl_contract_name,
@@ -432,7 +432,7 @@ as
    begin
        v_impl_id := acs_sc_impl.get_id(impl_contract_name,impl_name);
 
-       delete from acs_sc_impl_alias 
+       delete from acs_sc_impl_aliases 
        where impl_contract_name = delete_alias.impl_contract_name 
        and impl_name = delete_alias.impl_name
        and impl_operation_name = delete_alias.impl_operation_name;
@@ -488,7 +488,7 @@ as
          from acs_sc_operations
 	 where contract_id = new.contract_id
 	   and operation_name not in (select impl_operation_name
-				      from acs_sc_impl_alias
+				      from acs_sc_impl_aliases
 				      where impl_contract_name = v_contract_name
 				      and impl_id = v_impl_id);
 
