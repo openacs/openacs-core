@@ -275,15 +275,18 @@ ad_proc -public subsite::get_element {
     @author Frank Nikolajsen (frank@warpspace.com)
     @creation-date 2003-03-08
 } {
-    subsite::get -subsite_id $subsite_id -array subsite_info
-
-    if { $notrailing_p && [string match $element "url"]} {
-        set returnval [string trimright $subsite_info($element) "/"]
-    } else {
-	set returnval $subsite_info($element)
+    if { [empty_string_p $subsite_id] } {
+	set subsite_id [ad_conn subsite_id]
     }
 
-    return $returnval
+    subsite::get -subsite_id $subsite_id -array subsite_info
+    set result $subsite_info($element)
+
+    if { $notrailing_p && [string match $element "url"]} {
+        set result [string trimright $result "/"]
+    }
+
+    return $result
 }
 
 
