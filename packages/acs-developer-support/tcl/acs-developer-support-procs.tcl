@@ -386,7 +386,7 @@ ad_proc -public ds_set_user_switching_enabled { enabled_p } {
     @author Lars Pind (lars@pinds.com)
     @creation-date 31 August 2000
 } {
-    ns_log Warning "Developer-support user-switching [ad_decode $enabled_p 1 "enabled" "disabled"]"
+    ns_log Notice "Developer-support user-switching [ad_decode $enabled_p 1 "enabled" "disabled"]"
     nsv_set ds_properties user_switching_enabled_p $enabled_p
 }
 
@@ -396,7 +396,7 @@ ad_proc -public ds_set_database_enabled { enabled_p } {
     @author Lars Pind (lars@pinds.com)
     @creation-date 31 August 2000
 } {
-    ns_log Warning "Developer-support database stats [ad_decode $enabled_p 1 "enabled" "disabled"]"
+    ns_log Notice "Developer-support database stats [ad_decode $enabled_p 1 "enabled" "disabled"]"
     nsv_set ds_properties database_enabled_p $enabled_p
 }
 

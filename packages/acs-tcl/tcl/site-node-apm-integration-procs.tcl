@@ -40,7 +40,7 @@ namespace eval site_node_apm_integration {
             # should here be a pre-destruction proc like the post instantiation proc?
             foreach site_node_info_list [site_node::get_all_from_object_id -object_id $package_id] {
 
-                ns_log notice "aks1: $site_node_info_list"
+                ns_log debug "delete_site_nodes_and_package: $site_node_info_list"
                 
                 array set site_node $site_node_info_list
 

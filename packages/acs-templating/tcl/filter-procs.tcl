@@ -85,7 +85,7 @@ ad_proc -public cmp_page_filter { why } {
       [template::adp_compile -file $file_stub.adp]]</pre>"
 
     set timeElapsed [expr ([clock clicks] - $beginTime) / 1000]
-    ns_log Notice "Time elapsed: $timeElapsed"
+    ns_log debug "cmp_page_filter: Time elapsed: $timeElapsed"
 
   } errMsg] } {
     global errorInfo
@@ -113,7 +113,7 @@ ad_proc -public dat_page_filter { why } {
     set output [template::adp_parse $file_stub [list code_stub $code_stub]]
 
     set timeElapsed [expr ([clock clicks] - $beginTime) / 1000]
-    ns_log Notice "Time elapsed: $timeElapsed"
+    ns_log debug " dat_page_filter: Time elapsed: $timeElapsed"
 
   } errMsg] } {
     global errorInfo
@@ -160,7 +160,7 @@ ad_proc -public frm_page_filter { why } {
       set output [template::frm_page_handler]
 
       set timeElapsed [expr ([clock clicks] - $beginTime) / 1000.]
-      ns_log Notice "Time elapsed: $timeElapsed"
+      ns_log debug "frm_page_filter: Time elapsed: $timeElapsed"
 
     } errMsg] } {
       global errorInfo

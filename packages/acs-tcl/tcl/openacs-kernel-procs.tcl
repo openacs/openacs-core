@@ -53,7 +53,7 @@ namespace eval oacs_util {
                     set varvalue [lindex $one_line $i]
                     
                     # Set the value
-                    ns_log Notice "OACS-CSV-UPLOAD - setting $varname to $varvalue"
+                    ns_log debug "oacs_util::process_objects_csv: setting $varname to $varvalue"
                     ns_set put $extra_vars $varname $varvalue
                 }
                 

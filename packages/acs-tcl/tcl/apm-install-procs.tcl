@@ -25,7 +25,7 @@ ad_proc apm_scan_packages {
 
     ### Scan for all unregistered .info files.
     
-    ns_log "Notice" "Scanning for new unregistered packages..."
+    ns_log Notice "apm_scan_packages: Scanning for new unregistered packages..."
     set new_spec_files [list]
     # Loop through all directories in the /packages directory, searching each for a
     # .info file.
@@ -56,7 +56,7 @@ ad_proc apm_scan_packages {
     }
         
     if { [llength $new_spec_files] == 0 } {
-	ns_log "Notice" "No new packages found."
+	ns_log Notice "apm_scan_packages: No new packages found."
     }   
     return $new_spec_files
 }
@@ -79,10 +79,10 @@ ad_proc -public apm_dependency_provided_p {
 } {
     set old_version_p 0
     set found_p 0
-    ns_log Debug "Scanning for $dependency_uri version $dependency_version"
+    ns_log Debug "apm_dependency_provided_p: Scanning for $dependency_uri version $dependency_version"
     db_foreach apm_dependency_check {} {
 	if { $version_p >= 0 } {
-	    ns_log Debug "Dependency satisfied by previously installed package"
+	    ns_log Debug "apm_dependency_provided_p: Dependency satisfied by previously installed package"
 	    set found_p 1
 	} elseif { $version_p == -1 } {
 	    set old_version_p 1
@@ -103,7 +103,7 @@ ad_proc -public apm_dependency_provided_p {
                 set provided_p [db_string version_greater_p {}]
 
                 if { $provided_p >= 0 } {
-		    ns_log Debug "Dependency satisfied in list of provisions."
+		    ns_log Debug "apm_dependency_provided_p: Dependency satisfied in list of provisions."
                     return 1
                 } else { 
                     set old_version_p 1
@@ -437,7 +437,7 @@ ad_proc -private apm_dependency_check_new {
     # Just to get us started
     set updated_p 1
 
-    ns_log Debug "STARTING DEPENDENCY CHECK"
+    ns_log Debug "apm_dependency_check_new: STARTING DEPENDENCY CHECK"
 
     # Outer loop tries to find a package from the repository to add if 
     # we're stuck because of unsatisfied dependencies
@@ -462,7 +462,7 @@ ad_proc -private apm_dependency_check_new {
                     if { ![info exists provided($req_uri)] || \
                              [apm_version_names_compare $provided($req_uri) $req_version]== -1 } {
 
-                        ns_log Debug "$package_key requires $req_uri $req_version => failed"
+                        ns_log Debug "apm_dependency_check_new: $package_key requires $req_uri $req_version => failed"
 
                         set satisfied_p 0
 
@@ -472,7 +472,7 @@ ad_proc -private apm_dependency_check_new {
                             set required($req_uri) $req_version
                         }
                     } else {
-                        ns_log Debug "$package_key requires $req_uri $req_version => OK"
+                        ns_log Debug "apm_dependency_check_new: $package_key requires $req_uri $req_version => OK"
                     }
                 }
                 
@@ -534,7 +534,7 @@ ad_proc -private apm_dependency_check_new {
                 array unset version
                 array set version $repository($package_key)
 
-                ns_log Debug "Considering $package_key: [array get version]"
+                ns_log Debug "apm_dependency_check_new: Considering $package_key: [array get version]"
 
                 # Let's see if this package provides anything we need
                 foreach prov $version(provides) {
@@ -544,7 +544,7 @@ ad_proc -private apm_dependency_check_new {
                     if { [info exists required($prov_uri)] && \
                              [apm_version_names_compare $required($prov_uri) $prov_version] <= 0 } {
 
-                        ns_log Debug "Adding $package_key, as it provides $prov_uri $prov_version"
+                        ns_log Debug "apm_dependency_check_new: Adding $package_key, as it provides $prov_uri $prov_version"
 
                         # If this package provides something that's required in a version high enough
                         # add it to the pending list
@@ -591,9 +591,9 @@ ad_proc -private apm_dependency_check_new {
                          [apm_version_names_compare $provided($req_uri) $req_version] == -1 } {
                     lappend failed($package_key) [list $req_uri $req_version]
                     if { [info exists provided($req_uri)] } {
-                        ns_log Debug "Failed dependency: $package_key requires $req_uri $req_version, but we only provide $provided($req_uri)"
+                        ns_log Debug "apm_dependency_check_new: Failed dependency: $package_key requires $req_uri $req_version, but we only provide $provided($req_uri)"
                     } else {
-                        ns_log Debug "Failed dependency: $package_key requires $req_uri $req_version, but we don't have it"
+                        ns_log Debug "apm_dependency_check_new: Failed dependency: $package_key requires $req_uri $req_version, but we don't have it"
                     }
                 }
             }
@@ -754,7 +754,7 @@ ad_proc -private apm_package_install {
 
 	    if { !$version_id } {
 		# There was an error.
-                ns_log Error "Package $package_key could not be installed. Received version_id $version_id"
+                ns_log Error "apm_package_install: Package $package_key could not be installed. Received version_id $version_id"
 		apm_callback_and_log $callback "The package version could not be created."
 	    }
 	    # Install the parameters for the version.
@@ -769,7 +769,7 @@ ad_proc -private apm_package_install {
 	apm_callback_and_log $callback "<p>Installed $version(package-name), version $version(name).</p>"
     } {
         global errorInfo
-        ns_log Error "Error installing $version(package-name) version $version(name): $errmsg\n$errorInfo"
+        ns_log Error "apm_package_install: Error installing $version(package-name) version $version(name): $errmsg\n$errorInfo"
 
 	apm_callback_and_log -severity Error $callback "<p>Failed to install $version(package-name), version $version(name).  The following error was generated:
 <pre><blockquote>
@@ -830,7 +830,7 @@ ad_proc -private apm_package_install {
                 # Another package is mounted at the path so we cannot mount
                 global errorInfo
                 set error_text "Package $version(package-name) could not be mounted at /$version(auto-mount) , there may already be a package mounted there, the error is: $error"
-                ns_log Error "$error_text \n\n$errorInfo"
+                ns_log Error "apm_package_install: $error_text \n\n$errorInfo"
                 apm_callback_and_log $callback "<p> $error_text </p>"
             } 
 
@@ -1010,7 +1010,7 @@ ad_proc -private apm_package_install_data_model {
     foreach item $data_model_files {
 	set file_path [lindex $item 0]
 	set file_type [lindex $item 1]
-	ns_log Debug "APM: Now processing $file_path of type $file_type"
+	ns_log Debug "apm_package_install_data_model: Now processing $file_path of type $file_type"
 	if {![string compare $file_type "data_model_create"] || \
 		![string compare $file_type "data_model_upgrade"] } {
 	    if { !$ul_p } {
@@ -1033,7 +1033,7 @@ ad_proc -private apm_package_install_data_model {
 	    db_source_sqlj_file -callback $callback "$path/$file_path"
 	    apm_callback_and_log $callback "</pre></blockquote>\n"
 	} elseif { [string equal $file_type "ctl_file"] } {
-            ns_log Debug "APM: Now processing $file_path of type ctl_file"
+            ns_log Debug "apm_package_install_data_model: Now processing $file_path of type ctl_file"
             if { !$ul_p } {
                 apm_callback_and_log $callback "<ul>\n"
                 set ul_p 1
@@ -1072,16 +1072,16 @@ ad_proc -private apm_package_upgrade_parameters {
 	    where parameter_name = :parameter_name
 	    and package_key = :package_key
 	}]} {
-	    ns_log Debug "APM: Updating parameter, $parameter_name:$parameter_id"
+	    ns_log Debug "apm_package_upgrade_parameters: Updating parameter, $parameter_name:$parameter_id"
 	    apm_parameter_update $parameter_id $package_key $parameter_name $description \
 		    $default_value $datatype $section_name $min_n_values $max_n_values
 	} else {
-	    ns_log Debug "APM: Registering parameter, $parameter_name."
+	    ns_log Debug "apm_package_upgrade_parameters: Registering parameter, $parameter_name."
 	    apm_parameter_register $parameter_name $description $package_key $default_value \
 		    $datatype $section_name $min_n_values $max_n_values
 	}	
     }
-    ns_log Debug "APM: Parameter Upgrade Complete."
+    ns_log Debug "apm_package_upgrade_parameters: Parameter Upgrade Complete."
 }
 
 ad_proc -private apm_package_install_parameters { {-callback apm_dummy_callback} parameters package_key } {
@@ -1107,7 +1107,7 @@ ad_proc -private apm_package_install_dependencies { {-callback apm_dummy_callbac
     Install all package dependencies.
 
 } {
-    ns_log Debug "APM: Installing dependencies."
+    ns_log Debug "apm_package_install_dependencies: Installing dependencies."
     # Delete any dependencies register for this version.
     db_foreach all_dependencies_for_version {
 	select dependency_id from apm_package_dependencies
@@ -1121,14 +1121,14 @@ ad_proc -private apm_package_install_dependencies { {-callback apm_dummy_callbac
     foreach item $provides {
 	set interface_uri [lindex $item 0]
 	set interface_version [lindex $item 1]
-	ns_log Debug "Registering dependency $interface_uri, $interface_version for $version_id"
+	ns_log Debug "apm_package_install_dependencies: Registering dependency $interface_uri, $interface_version for $version_id"
 	apm_interface_add $version_id $interface_uri $interface_version
     }
 
     foreach item $requires {
 	set dependency_uri [lindex $item 0]
 	set dependency_version [lindex $item 1]
-	ns_log Debug "Registering dependency $dependency_uri, $dependency_version for $version_id"
+	ns_log Debug "apm_package_install_dependencies: Registering dependency $dependency_uri, $dependency_version for $version_id"
 	apm_dependency_add $version_id $dependency_uri $dependency_version
     }
 }
@@ -1204,7 +1204,7 @@ ad_proc -private apm_package_install_spec { version_id } {
 	where version_id = :version_id
     }
 
-    ns_log Debug "APM: Checking existence of package directory."
+    ns_log Debug "apm_package_install_spec: Checking existence of package directory."
     set root [acs_package_root_dir $package_key]
     if { ![file exists $root] } {
 	file mkdir $root
@@ -1213,12 +1213,12 @@ ad_proc -private apm_package_install_spec { version_id } {
     }
 
     db_transaction {
-	ns_log Debug "APM: Determining path of .info file."
+	ns_log Debug "apm_package_install_spec: Determining path of .info file."
 	set path "[acs_package_root_dir $package_key]/$package_key.info"
 
-	ns_log Debug "APM: Writing APM .info file to the database."
+	ns_log Debug "apm_package_install_spec: Writing APM .info file to the database."
 	db_dml apm_spec_file_register {}
-	ns_log Debug "APM: Writing .info file."
+	ns_log Debug "apm_package_install_spec: Writing .info file."
 
 	set file [open $path "w"]
 	puts -nonewline $file $spec
@@ -1239,7 +1239,7 @@ ad_proc -private apm_package_install_spec { version_id } {
             where  package_key = :package_key
         }
     }
-    ns_log Debug "APM: Done updating .info file."
+    ns_log Debug "apm_package_install_spec: Done updating .info file."
 }
 
 
@@ -1398,7 +1398,7 @@ ad_proc -private apm_upgrade_for_version_p {path initial_version_name final_vers
     to final_version_name
 
 } {
-    ns_log Debug "upgrade_p $path, $initial_version_name $final_version_name"
+    ns_log Debug "apm_upgrade_for_version_p: upgrade_p $path, $initial_version_name $final_version_name"
     return [db_exec_plsql apm_upgrade_for_version_p {
 	begin
 	    :1 := apm_package_version.upgrade_p(
@@ -1470,7 +1470,7 @@ ad_proc -private apm_data_model_scripts_find {
     foreach path $file_list {
         set file_type [apm_guess_file_type $package_key $path]
         set file_db_type [apm_guess_db_type $package_key $path]
-	apm_log APMDebug "APM: Checking \"$path\" of type \"$file_type\" and db_type \"$file_db_type\"."
+	apm_log APMDebug "apm_data_model_scripts_find: Checking \"$path\" of type \"$file_type\" and db_type \"$file_db_type\"."
 
 	if {[lsearch -exact $types_to_retrieve $file_type] != -1 } {
             set list_item [list $path $file_type $package_key]
@@ -1479,14 +1479,14 @@ ad_proc -private apm_data_model_scripts_find {
 		if {[apm_upgrade_for_version_p $path $upgrade_from_version_name \
 			$upgrade_to_version_name]} {
 		    # Its a valid upgrade script.
-		    ns_log Debug "APM: Adding $path to the list of upgrade files."
+		    ns_log Debug "apm_data_model_scripts_find: Adding $path to the list of upgrade files."
 		    lappend upgrade_file_list $list_item
 		}
 	    } elseif { [string equal $file_type "ctl_file"] } {
                 lappend ctl_file_list $list_item
             } else {
                 # Install script
-		apm_log APMDebug "APM: Adding $path to the list of data model files."
+		apm_log APMDebug "apm_data_model_scripts_find: Adding $path to the list of data model files."
 		lappend data_model_list $list_item
 	    }
 	}
@@ -1495,7 +1495,7 @@ ad_proc -private apm_data_model_scripts_find {
     set file_list [concat [apm_order_upgrade_scripts $upgrade_file_list] \
                           $data_model_list \
                           $ctl_file_list]
-    apm_log APMDebug "APM: Data model scripts for $package_key: $file_list"
+    apm_log APMDebug "apm_data_model_scripts_find: Data model scripts for $package_key: $file_list"
 
     return $file_list
 }
@@ -1513,7 +1513,7 @@ ad_proc -private apm_query_files_find {
 	set path [lindex $file 0]
 	set file_type [lindex $file 1]
         set file_db_type [lindex $file 2]
-	ns_log Debug "APM/QD: Checking \"$path\" of type \"$file_type\" and db_type \"$file_db_type\"."
+	ns_log Debug "apm_query_files_find: Checking \"$path\" of type \"$file_type\" and db_type \"$file_db_type\"."
 
         # DRB: we return query files which match the given database type or for which no db_type
         # is defined, which we interpret to mean a file containing queries that work with all of our
@@ -1521,11 +1521,11 @@ ad_proc -private apm_query_files_find {
 
 	if {[lsearch -exact "query_file" $file_type] != -1 && \
             ([empty_string_p $file_db_type] || ![string compare [db_type] $file_db_type])} {
-            ns_log Debug "APM: Adding $path to the list of query files."
+            ns_log Debug "apm_query_files_find: Adding $path to the list of query files."
             lappend query_file_list $path
 	}
     }
-    ns_log Notice "APM: Query files for $package_key: $query_file_list"
+    ns_log Notice "apm_query_files_find: Query files for $package_key: $query_file_list"
     return $query_file_list
 }
 
@@ -1549,34 +1549,34 @@ ad_proc -private apm_mount_core_packages {} {
 
     @author Peter Marklund
 } {
-    ns_log Notice "Starting mounting of core packages"
+    ns_log Notice "apm_mount_core_packages: Starting mounting of core packages"
 
     # Mount acs-lang
-    ns_log Notice "Mounting acs-lang"    
+    ns_log Notice "apm_mount_core_packages: Mounting acs-lang"    
     set acs_lang_id [site_node::instantiate_and_mount -package_key acs-lang]
     permission::grant -party_id [acs_magic_object the_public] \
                       -object_id $acs_lang_id \
                       -privilege read
 
     # Mount acs-admin
-    ns_log Notice "Mounting acs-admin"
+    ns_log Notice "apm_mount_core_packages: Mounting acs-admin"
     site_node::instantiate_and_mount -package_key acs-admin
 
     # Mount acs-service-contract
-    ns_log Notice "Mounting acs-service-contract"    
+    ns_log Notice "apm_mount_core_packages: Mounting acs-service-contract"    
     site_node::instantiate_and_mount -package_key acs-service-contract
 
     # Mount the acs-content-repository
-    ns_log Notice "Mounting acs-content-repository"    
+    ns_log Notice "apm_mount_core_packages: Mounting acs-content-repository"    
     site_node::instantiate_and_mount -package_key acs-content-repository
 
     # Mount acs-core-docs
-    ns_log Notice "Mounting acs-core-docs"    
+    ns_log Notice "apm_mount_core_packages: Mounting acs-core-docs"    
     site_node::instantiate_and_mount -node_name doc \
                                      -package_key acs-core-docs
 
     # Mount the acs-api-browser
-    ns_log Notice "Mounting acs-api-browser"    
+    ns_log Notice "apm_mount_core_packages: Mounting acs-api-browser"    
     set api_browser_id \
         [site_node::instantiate_and_mount -node_name api-doc \
                                           -package_key acs-api-browser]
@@ -1588,11 +1588,11 @@ ad_proc -private apm_mount_core_packages {} {
     permission::set_not_inherit -object_id $api_browser_id
 
     # Mount acs-automated-testing
-    ns_log Notice "Mounting acs-automated-testing"    
+    ns_log Notice "apm_mount_core_packages: Mounting acs-automated-testing"    
     site_node::instantiate_and_mount -node_name test \
                                      -package_key acs-automated-testing
 
-    ns_log Notice "Finished mounting of core packages"
+    ns_log Notice "apm_mount_core_packages: Finished mounting of core packages"
 }
 
 ad_proc -public apm_version_names_compare {
@@ -1798,7 +1798,7 @@ ad_proc -private apm_get_package_repository {
                 set version(install_type) upgrade
             }
 
-            ns_log Debug "$version(package.key) = $version(install_type) -- [array get installed_version]"
+            ns_log Debug "apm_get_package_repository: $version(package.key) = $version(install_type) -- [array get installed_version]"
             
             if { ![string equal $version(install_type) already_installed] } {
                 set repository($version(package.key)) [array get version]
@@ -1834,7 +1834,7 @@ ad_proc -private apm_get_package_repository {
                 # We don't error hard here, because we don't want the whole process to fail if there's just one
                 # package with a bad .info file
                 global errorInfo
-                ns_log Error "Error while checking package info file $spec_file: $errmsg\n$errorInfo"
+                ns_log Error "apm_get_package_repository: Error while checking package info file $spec_file: $errmsg\n$errorInfo"
             }
         }
     }

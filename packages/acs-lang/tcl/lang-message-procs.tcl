@@ -509,8 +509,6 @@ ad_proc -private lang::message::cache {
     if { ![nsv_exists lang_message_cache executed_p] } {            
         nsv_set lang_message_cache executed_p 1
 
-        ns_log Notice "lang::message::cache - Initializing message cache ..."
-
         if { [empty_string_p $package_key] } {
             set package_where_clause ""
         } else {

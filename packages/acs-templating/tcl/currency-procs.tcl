@@ -121,7 +121,7 @@ ad_proc -public template::data::transform::currency { element_ref } {
 
     lappend the_amount [ns_queryget $element_id.format]
 
-    ns_log Notice "The amount: $the_amount length: [llength $the_amount]"
+    ns_log debug "template::data::transform::currency: the_amount: $the_amount length: [llength $the_amount]"
 
     if { $have_values } {
 	return [list $the_amount]

@@ -181,7 +181,7 @@ ad_proc -public auth::authenticate {
         set result(auth_status) failed_to_connect
         set result(auth_message) $errmsg
         global errorInfo
-        ns_log Error "Error invoking authentication driver for authority_id = $authority_id: $errorInfo"
+        ns_log Error "auth::authenticate: error invoking authentication driver for authority_id = $authority_id: $errorInfo"
     }
 
     # Returns:
@@ -211,7 +211,7 @@ ad_proc -public auth::authenticate {
             return [array get result]
         }
         default {
-            ns_log Error "Illegal auth_status code '$result(auth_status)' returned from authentication driver for authority_id $authority_id ([auth::authority::get_element -authority_id $authority_id -element pretty_name])"
+            ns_log Error "auth::authenticate: Illegal auth_status code '$result(auth_status)' returned from authentication driver for authority_id $authority_id ([auth::authority::get_element -authority_id $authority_id -element pretty_name])"
 
             set result(auth_status) "failed_to_connect"
             set result(auth_message) "Internal error during authentication"
@@ -233,7 +233,7 @@ ad_proc -public auth::authenticate {
             }
         }
         default {
-            ns_log Error "Illegal account_status code '$result(account_status)' returned from authentication driver for authority_id $authority_id ([auth::authority::get_element -authority_id $authority_id -element pretty_name])"
+            ns_log Error "auth::authenticate: Illegal account_status code '$result(account_status)' returned from authentication driver for authority_id $authority_id ([auth::authority::get_element -authority_id $authority_id -element pretty_name])"
 
             set result(account_status) "closed"
             set result(account_message) "Internal error during authentication"
@@ -275,7 +275,7 @@ ad_proc -public auth::authenticate {
             }
         }
         default {
-            ns_log Error "Illegal account_status code '$result(account_status)' returned from auth::get_local_account for authority_id $authority_id ([auth::authority::get_element -authority_id $authority_id -element pretty_name])"
+            ns_log Error "auth::authenticate: Illegal account_status code '$result(account_status)' returned from auth::get_local_account for authority_id $authority_id ([auth::authority::get_element -authority_id $authority_id -element pretty_name])"
 
             set result(account_status) "closed"
             set result(account_message) "Internal error during authentication"
@@ -336,12 +336,12 @@ ad_proc -private auth::get_register_authority {
         auth::authority::get -authority_id $authority_id -array authority
         
         if { [empty_string_p $authority(register_impl_id)] } {
-            ns_log Error "parameter value for RegisterAuthority is an authority without registration driver, defaulting to local authority"
+            ns_log Error "auth::get_register_authority: parameter value for RegisterAuthority is an authority without registration driver, defaulting to local authority"
             set authority_id [auth::authority::local]
         }
     } else {
         # The authority doesn't exist - use the local authority
-        ns_log Error "parameter RegisterAuthority has the invalid value $parameter_value. Defaulting to local authority"
+        ns_log Error "auth::get_register_authority: parameter RegisterAuthority has the invalid value $parameter_value. Defaulting to local authority"
         set authority_id [auth::authority::local]
     }
     
@@ -535,7 +535,7 @@ ad_proc -public auth::create_user {
         set creation_info(creation_status) failed_to_connect
         set creation_info(creation_message) $errmsg
         global errorInfo
-        ns_log Error "Error invoking account registration driver for authority_id = $authority_id: $errorInfo"
+        ns_log Error "auth::create_user: Error invoking account registration driver for authority_id = $authority_id: $errorInfo"
         db_abort_transaction
     }
 
@@ -862,7 +862,7 @@ ad_proc -public auth::create_local_account {
                 }
             }
             set username "$username-$number"
-            ns_log Notice "User's email was already used as someone else's username, setting username to $username"
+            ns_log Notice "auth::create_local_account: user's email was already used as someone else's username, setting username to $username"
         }
     }
 
@@ -899,7 +899,7 @@ ad_proc -public auth::create_local_account {
         set result(creation_status) "failed_to_connect"
         set result(creation_message) "We experienced an error while trying to register an account for you."
         global errorInfo
-        ns_log Error "Error creating local account.\n$errorInfo"
+        ns_log Error "auth::create_local_account: Error creating local account.\n$errorInfo"
         return [array get result]
     }
 
@@ -922,7 +922,7 @@ ad_proc -public auth::create_local_account {
             auth::send_email_verification_email -user_id $user_id
         } {
             global errorInfo
-            ns_log Error "auth::get_local_account: Error sending out email verification email to email $email:\n$errorInfo"
+            ns_log Error "auth::create_local_account: Error sending out email verification email to email $email:\n$errorInfo"
             set auth_info(account_message) "We got an error sending out the email for email verification"
         }
     }
@@ -1251,7 +1251,7 @@ ad_proc -private auth::check_local_account_status {
                         auth::send_email_verification_email -user_id $user_id
                     } {
                         global errorInfo
-                        ns_log Error "auth::get_local_account: Error sending out email verification email to email $email:\n$errorInfo"
+                        ns_log Error "auth::check_local_account_status: Error sending out email verification email to email $email:\n$errorInfo"
                         set result(account_message) "We got an error sending out the email for email verification"
                     }
                 }
@@ -1281,7 +1281,7 @@ ad_proc -private auth::check_local_account_status {
         default {
             set result(account_message) \
                 "There was a problem authenticating the account. Most likely, the database contains users with no member_state."
-            ns_log Error "Problem with registration state machine: user_id $user_id has member_state '$member_state'"
+            ns_log Error "auth::check_local_account_status: problem with registration state machine: user_id $user_id has member_state '$member_state'"
         }
     }
     

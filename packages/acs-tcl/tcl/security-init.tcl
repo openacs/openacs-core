@@ -20,9 +20,9 @@ if { $secret_tokens_exists == 0 } {
     populate_secret_tokens_db
 }
 
-ns_log Notice "Creating secret_tokens ns_cache..."
+ns_log Notice "security-init.tcl: Creating secret_tokens ns_cache..."
 ns_cache create secret_tokens -size 32768
-ns_log Notice "Populating secret_tokens ns_cache..."
+ns_log Notice "security-init.tcl: Populating secret_tokens ns_cache..."
 populate_secret_tokens_cache
 
 # These procedures are dynamically defined so that ad_parameter

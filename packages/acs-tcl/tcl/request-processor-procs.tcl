@@ -604,7 +604,7 @@ ad_proc -private rp_filter { why } {
       # cause the request to fail.
       if { [catch { apm_load_any_changed_libraries } error] } {
         global errorInfo
-        ns_log "Error" $errorInfo
+        ns_log Error "rp_filter: error apm_load_any_changed_libraries: $errorInfo"
       }
     }
 
@@ -719,7 +719,7 @@ ad_proc rp_report_error {
 	    set error_info $message
 	    set report_url [ad_parameter -package_id [ad_acs_kernel_id] "ErrorReportURL" "rp" ""]
 	    if { [empty_string_p $report_url] } {
-		ns_log "Automatic Error Reporting Misconfigured.  Please add a field in the acs/rp section of form ErrorReportURL=http://your.errors/here."
+		ns_log Error "Automatic Error Reporting Misconfigured.  Please add a field in the acs/rp section of form ErrorReportURL=http://your.errors/here."
 	    } else {
 		set auto_report 1
 		ns_returnerror 500 "</table></table></table></h1></b></i>
@@ -743,7 +743,7 @@ This file has generated an error.
       "
     }
     set headers [ns_conn headers]
-    ns_log "Error" "[ns_conn method] http://[ns_set iget $headers host][ns_conn url]?[ns_conn query]
+    ns_log Error "[ns_conn method] http://[ns_set iget $headers host][ns_conn url]?[ns_conn query]
 referred by \"[ns_set iget $headers referer]\"
 $message"
 
@@ -1217,7 +1217,7 @@ ad_proc -private rp_register_extension_handler { extension args } {
     if { [llength $args] == 0 } {
 	error "Must specify a procedure name"
     }
-    ns_log "Notice" "Registering [join $args " "] to handle files with extension $extension"
+    ns_log Debug "rp_register_extension_handler: Registering [join $args " "] to handle $extension files"
     nsv_set rp_extension_handlers ".$extension" $args
 }
 

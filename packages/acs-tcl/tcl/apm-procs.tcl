@@ -454,7 +454,7 @@ ad_proc -private apm_load_queries {
             } 
         }
     }
-    ns_log Notice "APM/QD = DONE looping through files from which to load queries"
+    ns_log debug "apm_load_queries: DONE looping through files from which to load queries"
 }
 
 ad_proc -private apm_subdirs { path } {
@@ -531,7 +531,7 @@ ad_proc -public apm_load_any_changed_libraries {} {
     # If there are any changed watched files, stick another entry on the
     # reload queue.
     if { [llength $files_to_reload] > 0 } {
-	ns_log "Notice" "Watched file[ad_decode [llength $files_to_reload] 1 "" "s"] [join $files_to_reload ", "] [ad_decode [llength $files_to_reload] 1 "has" "have"] changed: reloading."
+	ns_log Notice "apm_load_any_changed_libraries: Watched file[ad_decode [llength $files_to_reload] 1 "" "s"] [join $files_to_reload ", "] [ad_decode [llength $files_to_reload] 1 "has" "have"] changed: reloading."
 	set new_level [nsv_incr apm_properties reload_level]
 	nsv_set apm_reload $new_level $files_to_reload
     }
@@ -554,7 +554,7 @@ ad_proc -public apm_load_any_changed_libraries {} {
 	    if { ![info exists reloaded_files($file)] } {
 		if { [array size reloaded_files] == 0 } {
 		    # Perform this ns_log only during the first iteration of this loop.
-		    ns_log "Notice" "APM: Reloading *-procs.tcl files in this interpreter..."
+		    ns_log Notice "apm_load_any_changed_libraries: Reloading *-procs.tcl files in this interpreter..."
 		}
 		# File is usually of form packages/package_key
 		set file_path "[acs_root_dir]/$file"
@@ -564,16 +564,16 @@ ad_proc -public apm_load_any_changed_libraries {} {
                     .tcl { 
                         # Make sure this is not a -init.tcl file as those should only be sourced on server startup
                         if { ![regexp {\-init\.tcl$} $file_path] } {
-                            ns_log Notice "APM: Reloading $file..."
+                            ns_log Notice "apm_load_any_changed_libraries: Reloading $file..."
                             apm_source $file_path
                         }
                     }
                     .xql { 
-                        ns_log Notice "APM: Reloading $file..."
+                        ns_log Notice "apm_load_any_changed_libraries: Reloading $file..."
                         db_qd_load_query_file $file_path
                     }
                     default {
-                        ns_log Notice "APM: File $file_path has unknown extension. Not reloading."
+                        ns_log Notice "apm_load_any_changed_libraries: File $file_path has unknown extension. Not reloading."
                     }
                 }
 
@@ -769,7 +769,7 @@ ad_proc -public apm_parameter_register {
 	set section_name [db_null]
     }
 
-    ns_log Notice "Registering $parameter_name, $section_name, $default_value"
+    ns_log debug "apm_parameter_register: Registering $parameter_name, $section_name, $default_value"
 
     set parameter_id [db_exec_plsql parameter_register {
 	    begin
@@ -816,7 +816,7 @@ ad_proc -public apm_parameter_unregister {
         }]
     }
 
-    ns_log Debug "APM Unregistering parameter $parameter_id."
+    ns_log Debug "apm_parameter_unregister: Unregistering parameter $parameter_id."
     db_foreach all_parameters_packages {
 	select package_id, parameter_id, parameter_name 
 	from apm_packages p, apm_parameters ap
@@ -1302,7 +1302,7 @@ ad_proc -public apm_invoke_callback_proc {
     set command "${proc_name} [apm_callback_format_args -type $type -arg_list $arg_list]"
 
     # We are ready for invocation
-    ns_log Notice "Invoking callback $type with command $command"
+    ns_log Notice "apm_invoke_callback_proc: invoking callback $type with command $command"
     eval $command
 
     return 1
@@ -1585,7 +1585,7 @@ ad_proc -public apm_log {
     APMDebug to Debug and restart the server.  
 } {
     if {![string equal "APMDebug" $level]} {
-        ns_log $level "$msg"
+        ns_log $level $msg
     }
 }
 

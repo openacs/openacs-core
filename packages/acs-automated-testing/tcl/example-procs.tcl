@@ -22,7 +22,7 @@ ad_proc aa_example_write_audit_entry {
   @author Peter Harper
   @creation-date 24 July 2001
 } {
-  ns_log notice "Auditing: $name, $value"
+  ns_log debug "aa_example_write_audit_entry: Auditing: $name, $value"
   return 1
 }
  

@@ -557,7 +557,7 @@ ad_proc -private template::form::check_elements { id } {
 
       } else {
 
-        ns_log notice "MISSING FORMWIDGET: $id\:$element_ref"
+        ns_log Warning "template::form::check_elements: MISSING FORMWIDGET: $id\:$element_ref"
         # Throw an error ?
       }
     }

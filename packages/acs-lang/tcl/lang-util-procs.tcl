@@ -144,15 +144,14 @@ ad_proc lang::util::replace_temporary_tags_with_lookups {
 } {
     # Return if there are no files to process
     if { [llength $file_list] == 0 } {
-        ns_log Warning "lang::util::replace_temporary_tags_with_lookups - \
-                        Invoked with no files to process, returning"
+        ns_log Warning "lang::util::replace_temporary_tags_with_lookups: Invoked with no files to process, returning"
         return
     }
 
     # Get package_key
     set first_file [lindex $file_list 0]    
     if { ![regexp {/?packages/([^/]+)/} $first_file match package_key] } {
-        error "lang::util::replace_temporary_tags_with_lookups - Could not extract package_key from file $first_file"
+        error "lang::util::replace_temporary_tags_with_lookups: Could not extract package_key from file $first_file"
     }
 
     # Always create new keys in en_US
@@ -175,14 +174,14 @@ ad_proc lang::util::replace_temporary_tags_with_lookups {
 
     # Loop over and process each file
     foreach file $file_list {                
-        ns_log Notice "lang::util::replace_temporary_tags_with_lookups - processing file $file"
+        ns_log debug "lang::util::replace_temporary_tags_with_lookups: processing file $file"
 
         set full_file_path "[acs_root_dir]/$file"
         regexp {\.([^.]+)$} $file match file_ending
 
         # Attempt a backup of the file first. Do not overwrite an old backup file.
         if { [catch "file -- copy $full_file_path \"${full_file_path}.orig\"" errmsg] } {
-            ns_log Warning [list lang::util::replace_temporary_tags_with_lookups - The file $full_file_path \
+            ns_log Warning [list lang::util::replace_temporary_tags_with_lookups: The file $full_file_path
                             could not be backed up before message key extraction since backup file \
                             ${full_file_path}.orig already exists]
         }
@@ -252,7 +251,8 @@ ad_proc lang::util::replace_temporary_tags_with_lookups {
 
                     if { ![string equal $message_key $unique_key] } {
                         # The message key had to be changed to be made unique
-                        ns_log Warning [list The message key $message_key was changed to $unique_key \
+                        ns_log Warning [list lang::util::replace_temporary_tags_with_lookups - \
+                                            The message key $message_key was changed to $unique_key \
                                         to be made unique. If the value was mistyped and should have been \
                                         the same as previously then you must manually remove the entry for \
                                         $unique_key from the catalog file and change the key in \
