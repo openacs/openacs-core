@@ -260,7 +260,7 @@ fi
 x=0
 while test "$x" -lt $shutdown_loop_count ; do
 
-    pid=`grep_for_pid "nsd.*$aolserver_config_file"`
+    pid=`grep_for_pid "nsd.*${serverroot}/etc/config.tcl"`
     if [ "$pid" == "" ]; then
 	echo "$(date): Server is down"
 	break
@@ -272,7 +272,7 @@ while test "$x" -lt $shutdown_loop_count ; do
 done
 
 # Verify that the server is down, and abort if not  
-pid=$(grep_for_pid "nsd.*$aolserver_config_file")
+pid=$(grep_for_pid "nsd.*${serverroot}/etc/config.tcl")
 if ! [ "$pid" == "" ]; then
     echo "$(date): Cannot stop the server. You must shut down the server first."
     exit -1
