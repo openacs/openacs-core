@@ -85,7 +85,6 @@ db_foreach select_member_states {
 template::list::create \
     -name "members" \
     -multirow "members" \
-    -key rel_id \
     -row_pretty_plural "members" \
     -page_size 50 \
     -page_flush_p t \
@@ -185,10 +184,10 @@ db_multirow -extend {
             approved {
                 switch $rel_role {
                     member {
-                        set make_admin_url [export_vars -base make-admin { rel_id }]
+                        set make_admin_url [export_vars -base make-admin { user_id }]
                     }
                     admin {
-                        set make_member_url [export_vars -base make-member { rel_id }]
+                        set make_member_url [export_vars -base make-member { user_id }]
                     }
                 }
                 if { $main_site_p } {
