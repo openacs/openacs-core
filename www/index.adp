@@ -147,9 +147,9 @@
                     Log in
                   </th>
                 </tr>
+                <form method="post" action="register/user-login" name="login">
                   <tr bgcolor="#eeeeee">
                     <td>
-                    <form method="post" action="register/user-login" name="login">
                       @form_vars@
                       <table>
                       <tr><td>Email:</td><td><input type="text" name="email" value="@email@" /></td></tr>
@@ -163,14 +163,16 @@
                       
                       <tr><td colspan="2" align="center"><input type="submit" value="Log in" /></td></tr>
                       </table>
-                    </form>
                     </td>
                   </tr>
+                </form>
               </table>
             </td>
           </tr>
         </table>
       </else>
+
+      <p></p>
 
       <table bgcolor="#cccccc" cellpadding="0" cellspacing="0" border="0" align="right">
         <tr>
