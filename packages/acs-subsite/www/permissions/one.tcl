@@ -10,6 +10,7 @@ ad_page_contract {
 } {
     object_id:integer,notnull
     {children_p "f"}
+    {return_url ""}
 }
 
 set user_id [ad_maybe_redirect_for_registration]
