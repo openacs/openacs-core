@@ -179,9 +179,9 @@ template_tag list { chunk params } {
   
   template::adp_append_code "
 
-  for { set __ats_i 0 } { \$__ats_i < \${$name:rowcount} } { incr __ats_i } {
-    set $name:item \[lindex \${$name} \$__ats_i\]
-    set $name:rownum \[expr \$__ats_i + 1\]
+  for { set __ats_${name}_i 0 } { \$__ats_${name}_i < \${$name:rowcount} } { incr __ats_${name}_i } {
+    set $name:item \[lindex \${$name} \$__ats_${name}_i\]
+    set $name:rownum \[expr \$__ats_${name}_i + 1\]
   "
   template::adp_compile_chunk $chunk
 
