@@ -14,9 +14,9 @@
 <div class="navheader">
 <a href="http://openacs.org"><img src="images/alex.jpg" border="0"></a><table width="100%" summary="Navigation header" border="0"><tr>
 <td width="20%" align="left">
-<a accesskey="p" href="postgres.html">Prev</a> </td>
+<a accesskey="p" href="postgres.html">Prev</a>&nbsp;</td>
 <th width="60%" align="center">Chapter 2. Installing on Unix/Linux</th>
-<td width="20%" align="right"> <a accesskey="n" href="openacs.html">Next</a>
+<td width="20%" align="right">&nbsp;<a accesskey="n" href="openacs.html">Next</a>
 </td>
 </tr></table>
 <hr>
@@ -208,9 +208,10 @@ Done.</pre>
 
 		  Put the name of the driver(s) that you want into
 		  <tt>conf-db</tt>. This can be
-		  <tt>postgresql</tt>,
-		  <tt>oracle</tt>, or
-		  <tt>both</tt>.
+		  <tt>&quot;postgresql&quot;</tt>,
+		  <tt>&quot;oracle&quot;</tt>, or the word
+		  <tt>&quot;both&quot;</tt> if you want both drivers
+		  installed.
 		</p>
 <pre class="programlisting">
 nsadmin:/usr/local/src/aolserver$ echo &quot;postgresql&quot; &gt; conf-db</pre>
@@ -233,6 +234,22 @@ nsadmin:/usr/local/src/aolserver$ echo &quot;postgresql&quot; &gt; conf-db</pre>
 		</p>
 <pre class="programlisting">
 nsadmin:/usr/local/src/aolserver$ echo &quot;make&quot; &gt; conf-make</pre>
+</li>
+<li>
+<p>
+		  If you're going to be installing the Postgresql driver, you'll
+		  have to adjust the makefile first. This will hopefully be cleaned
+		  up in future versions of this distribution.
+		</p>
+<pre class="programlisting">
+nsadmin:/usr/local/src/aolserver$ emacs pgdriver/makefile</pre>
+<p>
+		  Edit the lines containing PGLIB and PGINC so they look like this:
+		</p>
+<pre class="programlisting">
+PGINC=/usr/local/pgsql/include
+
+PGLIB=/usr/local/pgsql/lib</pre>
 </li>
 <li>
 <p>Compile and install AOLserver and modules</p>
@@ -350,15 +367,15 @@ set address 127.0.0.1</pre>
 <table width="100%" summary="Navigation footer">
 <tr>
 <td width="40%" align="left">
-<a accesskey="p" href="postgres.html">Prev</a> </td>
+<a accesskey="p" href="postgres.html">Prev</a>&nbsp;</td>
 <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
-<td width="40%" align="right"> <a accesskey="n" href="openacs.html">Next</a>
+<td width="40%" align="right">&nbsp;<a accesskey="n" href="openacs.html">Next</a>
 </td>
 </tr>
 <tr>
-<td width="40%" align="left">Install PostgreSQL 7.1.3 </td>
+<td width="40%" align="left">Install PostgreSQL 7.1.3&nbsp;</td>
 <td width="20%" align="center"><a accesskey="u" href="unix-install.html">Up</a></td>
-<td width="40%" align="right"> Install OpenACS 4.5</td>
+<td width="40%" align="right">&nbsp;Install OpenACS 4.5</td>
 </tr>
 </table>
 <hr>

@@ -359,7 +359,7 @@ http://<emphasis>ip_name</emphasis>:<emphasis>ip_port</emphasis>/</programlistin
 
 	<para>
 	  If you don&#39;t see the login page, view your error log
-        (<computeroutput>/usr/local/aolserver/logs/<emphasis>birdnotes</emphasis>-error.log</computeroutput>)
+        (<computeroutput>/usr/local/aolserver/log/<emphasis>birdnotes</emphasis>-error.log</computeroutput>)
 	  to make sure the service is starting without any problems. If you
 	  need to make changes, don&#39;t forget to kill any running
 	  servers.
@@ -624,8 +624,7 @@ Killing 23750</programlisting>
 		<variablelist>
 		  <varlistentry>
 			<term>Debian</term>
-			<listitem><para>
-				<programlisting>
+			<listitem><para><programlisting>
 root:~# apt-get install daemontools-installer
 root:~# build-daemontools
 root:~# # answer 'yes' when asked to create symlink from /service to /var/lib/svscan</programlisting>
