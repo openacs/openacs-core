@@ -133,7 +133,7 @@ ad_proc -public ad_admin_context_bar args {
 
     @see ad_context_bar
 } {
-    if {![llength $args]} { 
+    if {[llength $args]} { 
         set choices [list [list [ad_pvt_home] [ad_pvt_home_name]] \
                          [list /acs-admin/ "ACS System Wide Administration"]]
     } else { 
