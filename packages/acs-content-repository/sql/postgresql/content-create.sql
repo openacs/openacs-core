@@ -192,7 +192,7 @@ create table cr_items (
                   constraint cr_items_rev_type_fk
                   references acs_object_types,
   storage_type    varchar(10) default 'text' not null
-                  constraint cr_revisions_storage_type
+                  constraint cr_items_storage_type
                   check (storage_type in ('lob','text','file')),
   tree_sortkey    varchar(4000)
 );  
@@ -402,7 +402,6 @@ create table cr_revisions (
 		  constraint cr_revisions_mime_type_ref
 		  references cr_mime_types,
   nls_language    varchar(50),
-  storage_type    varchar(10) not null,
   -- lob_id if storage_type = lob.
   lob             integer references lobs,
   -- content holds the file name if storage type = file
@@ -413,28 +412,6 @@ create table cr_revisions (
 
 create trigger cr_revisions_lob_trig before delete or update or insert
 on cr_revisions for each row execute procedure on_lob_ref();
-
-create function cr_check_revision_storage_tr () returns opaque as ' 
-declare
-        v_storage_type  cr_items.storage_type%TYPE;
-begin
-        select storage_type into v_storage_type
-        from cr_items
-        where item_id = new.item_id;
-
-        if v_storage_type <> new.storage_type then
-
-           raise EXCEPTION ''Invalid storage type: % for revision_id = %'', new.storage_type, new.revision_id;
-           
-        end if;
-
-        return new;
-
-end;' language 'plpgsql';
-
-create trigger cr_check_revision_storage_tr before update or insert
-on cr_revisions for each row execute procedure cr_check_revision_storage_tr ();
-
 
 create index cr_revisions_by_mime_type on cr_revisions(mime_type);
 create index cr_revisions_title_idx on cr_revisions(title);

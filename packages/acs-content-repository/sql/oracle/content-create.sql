@@ -291,29 +291,11 @@ create table cr_revisions (
 		  constraint cr_revisions_mime_type_ref
 		  references cr_mime_types,
   nls_language    varchar2(50),
-  storage_type    varchar2(10) default 'lob' not null,
   filename        varchar2(4000),
   content	  BLOB,
   content_length  integer
 );
 
-
-create or replace trigger cr_check_revision_storage_tr
-before insert or update on cr_revisions
-for each row
-declare
-        v_storage_type  cr_items.storage_type%TYPE;
-begin
-        select storage_type into v_storage_type
-        from cr_items
-        where item_id = :new.item_id;
-
-        if v_storage_type <> :new.storage_type then
-           raise_application_error(-20000, 'Invalid storage type: ' || :new.storage_type || ' for revisions_id = ' || :new.revision_id);
-        end if;
-end;
-/
-show errors
 
 create index cr_revisions_by_mime_type on cr_revisions(mime_type);
 create index cr_revisions_title_idx on cr_revisions(title);
