@@ -32,7 +32,7 @@ if { $direction == "up" } {
         db_dml move_authority_up {
             update auth_authorities 
             set sort_order = :sort_order - 1
-            where authority_id = :authority_id;
+            where authority_id = :authority_id
         }
     }
 
