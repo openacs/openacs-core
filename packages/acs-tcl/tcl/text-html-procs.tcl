@@ -1435,7 +1435,7 @@ ad_proc -public string_truncate {
         set string [util_close_html_tags $string]
     } else {
        if { $no_format_p } {
-           set string [ad_html_to_text -no_format $string]
+           set string [ad_html_to_text -no_format -- $string]
        } else {
            set string [ad_html_to_text -- $string]
        }
