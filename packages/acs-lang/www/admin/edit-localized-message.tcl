@@ -87,7 +87,8 @@ if { [form is_request message_editing] } {
     db_0or1row select_translated_message $sql_select_translated_message
 
     if { [exists_and_not_null translated_message] } {
-        element set_properties message_editing message -value [ad_quotehtml $translated_message]
+        # No need to quote the message here - the form builder does it for us
+        element set_properties message_editing message -value $translated_message
     } else {
         element set_properties message_editing message -value "No Translation Available"
     }
