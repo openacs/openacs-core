@@ -185,9 +185,9 @@ if {![empty_string_p $party_id]} {
 	#              but the system creates party -1 which users 
 	#              shouldn't see.
 	
-	set start_with "object_type = 'group' or object_type = 'person'"
+	set start_with "ot.object_type = 'group' or ot.object_type = 'person'"
     } else {
-	set start_with "object_type = :object_type_two"
+	set start_with "ot.object_type = :object_type_two"
     }
     
     # The $allow_out_of_scope_p flag controls whether or not we limit

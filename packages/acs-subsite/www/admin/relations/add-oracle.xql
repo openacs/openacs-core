@@ -41,9 +41,9 @@
                    p.party_id
             from (select o.object_id as party_id
                   from acs_objects o,
-                       (select object_type from acs_object_types
+                       (select object_type from acs_object_types ot
                         start with $start_with
-                        connect by prior object_type = supertype) t
+                        connect by prior ot.object_type = ot.supertype) t
                   where o.object_type = t.object_type) p,
                  (select element_id
                   from group_element_map

@@ -58,7 +58,7 @@
 		from
 			acs_object_types t1,
 			acs_object_types t2
-		where	t2.tree_sortkey like (t1.tree_sortkey || '%')
+		where	t2.tree_sortkey between t1.tree_sortkey and tree_right(t1.tree_sortkey)
 		  and   t1.object_type = :start_with) types left join
 		(select
 			rel_type

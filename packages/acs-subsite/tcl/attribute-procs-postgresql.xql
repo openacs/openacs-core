@@ -43,11 +43,10 @@
                v.enum_value, v.pretty_name as value_pretty_name
 	from acs_object_type_attributes a left outer join
                acs_enum_values v using (attribute_id),
-               (select t.object_type,
-		       tree_level(tree_sortkey) -
-		         (select tree_level(tree_sortkey) from acs_object_types where object_type = :start_with) as type_level
-                  from acs_object_types t
-		 where tree_sortkey like (select tree_sortkey from acs_object_types where object_type = :start_with) || '%') t
+               (select t.object_type, tree_level(t.tree_sortkey) - tree_level(t2.tree_sortkey) as type_level
+                from acs_object_types t, acs_object_types t2
+		where t2.object_type = :start_with
+                  and t.tree_sortkey between t2.tree_sortkey and tree_right(t2.tree_sortkey)) t
          where a.object_type = :object_type
            and t.object_type = a.ancestor_type $storage_clause
         order by type_level, a.sort_order

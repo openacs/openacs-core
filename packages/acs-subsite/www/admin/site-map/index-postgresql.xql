@@ -11,8 +11,7 @@
 	 acs_permission__permission_p(s2.object_id, :user_id, 'admin') as admin_p
     from site_nodes s1, site_nodes s2
    where s1.node_id = :root_id
-     and s2.tree_sortkey <= s1.tree_sortkey
-     and s1.tree_sortkey like (s2.tree_sortkey || '%')
+     and s1.tree_sortkey between s2.tree_sortkey and tree_right(s2.tree_sortkey)
    order by level
 
       </querytext>
@@ -35,25 +34,25 @@ select package_id,
        object_name, directory_p, parent_id, n_children,
        (select case when acs_permission__permission_p(object_id, :user_id, 'admin') = 't' then 1 else 0 end) as object_admin_p
 from apm_packages p right outer join (
-  select node_id, site_node__url(node_id) as url,
-         site_node__url(parent_id) as parent_url,
-         name,
+  select n.node_id, site_node__url(n.node_id) as url,
+         site_node__url(n.parent_id) as parent_url,
+         n.name,
          (select count(*)
           from site_nodes
           where parent_id = n.node_id) as n_children,
-         case when node_id = site_node__node_id('/', null) then 1 else 0 end as root_p,
+         case when n.node_id = site_node__node_id('/', null) then 1 else 0 end as root_p,
          (select tree_level(n.tree_sortkey) - tree_level(n2.tree_sortkey)
             from site_nodes n2
            where n2.node_id = coalesce(:root_id, site_node__node_id('/', null))) as mylevel,
-         object_id,
-         acs_object__name(object_id) as object_name,
-         directory_p,
-         parent_id
-  from site_nodes n
-  where (object_id is null or
-         acs_permission__permission_p(object_id, :user_id, 'read') = 't') and
-	tree_sortkey like (select tree_sortkey from site_nodes where node_id = coalesce(:root_id, site_node__node_id('/', null))) || '%' and
-	(parent_id is null or parent_id in ([join $expand ", "]))) site_map
+         n.object_id,
+         acs_object__name(n.object_id) as object_name,
+         n.directory_p,
+         n.parent_id
+  from site_nodes n, site_nodes n2
+  where (n.object_id is null or acs_permission__permission_p(n.object_id, :user_id, 'read'))
+    and n2.node_id = coalesce(:root_id, site_node__node_id('/', null))
+    and n.tree_sortkey between n2.tree_sortkey and tree_right(n2.tree_sortkey)
+    and (n.parent_id is null or n.parent_id in ([join $expand ", "]))) site_map
  on site_map.object_id = p.package_id
  order by url
 
