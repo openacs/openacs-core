@@ -166,35 +166,36 @@ comment on table cr_type_relations is '
 -- Define the cr_items table
 
 create table cr_items (
-  item_id	  integer 
-                  constraint cr_items_item_id_fk references
-		  acs_objects on delete cascade
-		  constraint cr_items_pk primary key,
-  parent_id	  integer 
-                  constraint cr_items_parent_id_nil 
-                  not null
-                  constraint cr_items_parent_id_fk references
-		  acs_objects on delete cascade,
-  name		  varchar(400)
-		  constraint cr_items_name_nil
-                  not null,
-  locale	  varchar(4)
-		  constraint cr_items_locale_fk references
-		  cr_locales,
-  live_revision   integer,
-  latest_revision integer,
-  publish_status  varchar(40) 
-                  constraint cr_items_pub_status_chk
-                  check (publish_status in 
-                    ('production', 'ready', 'live', 'expired')
-                  ),
-  content_type    varchar(100)
-                  constraint cr_items_rev_type_fk
-                  references acs_object_types,
-  storage_type    varchar(10) default 'text' not null
-                  constraint cr_items_storage_type
-                  check (storage_type in ('lob','text','file')),
-  tree_sortkey    varchar(4000)
+  item_id             integer 
+                      constraint cr_items_item_id_fk references
+                      acs_objects on delete cascade
+                      constraint cr_items_pk primary key,
+  parent_id           integer 
+                      constraint cr_items_parent_id_nil 
+                      not null
+                      constraint cr_items_parent_id_fk references
+                      acs_objects on delete cascade,
+  name                varchar(400)
+                      constraint cr_items_name_nil
+                      not null,
+  locale              varchar(4)
+                      constraint cr_items_locale_fk references
+                      cr_locales,
+  live_revision       integer,
+  latest_revision     integer,
+  publish_status      varchar(40) 
+                      constraint cr_items_pub_status_chk
+                      check (publish_status in 
+                            ('production', 'ready', 'live', 'expired')
+                            ),
+  content_type        varchar(100)
+                      constraint cr_items_rev_type_fk
+                      references acs_object_types,
+  storage_type        varchar(10) default 'text' not null
+                      constraint cr_items_storage_type
+                      check (storage_type in ('lob','text','file')),
+  storage_area_key    varchar(100) default 'CR_FILES' not null,
+  tree_sortkey        varchar(4000)
 );  
 
 create index cr_items_by_locale on cr_items(locale);
@@ -204,6 +205,28 @@ create unique index cr_items_by_latest_revision on cr_items(latest_revision);
 create unique index cr_items_unique_name on cr_items(parent_id, name);
 create unique index cr_items_unique_id on cr_items(parent_id, item_id);
 create index cr_items_by_parent_id on cr_items(parent_id);
+
+-- content-create.sql patch
+--
+-- adds standard mechanism for deleting revisions from the file-system
+--
+-- Walter McGinnis (wtem@olywa.net), 2001-09-23
+-- based on original photo-album package code by Tom Baginski
+--
+
+create table cr_files_to_delete (
+  path                  varchar(250),
+  storage_area_key      varchar(100)
+);
+
+comment on table cr_files_to_delete is '
+  Table to store files to be deleted by a scheduled sweep.
+  Since binaries are stored in filesystem and attributes in database,
+  need a way to delete both atomically.  So any process to delete file-system cr_revisions,
+  copies the file path to this table as part of the delete transaction.  Sweep
+  run later to remove the files from filesystem once database info is successfully deleted.
+';
+
 
 -- DCW, this can't be defined in the apm_package_versions table defintion,
 -- because cr_items is created afterwards.
@@ -574,6 +597,27 @@ for each row execute procedure cr_revision_ins_ri_trg();
 create trigger cr_revision_del_rev_ri_trg 
 after delete on cr_revisions
 for each row execute procedure cr_revision_del_rev_ri_trg();
+
+-- (DanW - OpenACS) Added cleanup trigger to log file items that need 
+-- to be cleaned up from the CR.
+
+create function cr_cleanup_cr_files_del_trg() returns opaque as '
+declare
+        
+begin
+        insert into cr_files_to_delete
+        select r.content as path, i.storage_area_key
+          from cr_items i, cr_revisions r
+         where i.item_id = r.item_id
+           and r.revision_id = old.revision_id
+           and i.storage_type = ''file'';
+
+        return old;
+end;' language 'plpgsql';
+
+create trigger cr_cleanup_cr_files_del_trg
+before delete on cr_revisions
+for each row execute procedure cr_cleanup_cr_files_del_trg();
 
 
 create table cr_revision_attributes (

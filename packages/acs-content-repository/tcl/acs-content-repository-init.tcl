@@ -1,5 +1,14 @@
 template::filter add content::init
 
+# a patch to the cr for handling the deleting revision's files
+# when the revision has been deleted from the database
+# schedules the sweep
+#
+# Walter McGinnis (wtem@olywa.net), 2001-09-23
+# based on original photo-album package code by Tom Baginski
+
+ad_schedule_proc -thread t 86400 cr_delete_scheduled_files
+
 ad_proc -public acs_cr_scheduled_release_exec {} {
 
     This was handled by oracle, but since other dbs, such as postgresql don't 

@@ -173,6 +173,7 @@ drop table cr_release_periods;
 drop table cr_item_publish_audit;
 
 -- content revisions
+drop table cr_files_to_delete;
 drop table cr_content_text;
 drop table cr_revision_attributes;
 drop table cr_revisions cascade constraints;
