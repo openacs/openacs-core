@@ -174,9 +174,8 @@
           </informaltable>
         </figure>
       </sect2>
-    </sect1>
     
-    <sect1 id="how-to-use">
+    <sect2 id="how-to-use">
       <title>How to use this guide</title>
       <itemizedlist>
         <listitem>
@@ -214,7 +213,7 @@ createdb <replaceable>server1</replaceable></action></screen>
         <title>Paths and Users</title>
         
         <figure>
-          <title>Assumptions in this section</title>
+          <title>Assumptions in this Chapter</title>
           <informaltable>
             <tgroup cols="2">
               <tbody>

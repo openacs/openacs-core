@@ -4,6 +4,8 @@
 <!ENTITY % myvars SYSTEM "../variables.ent">
 %myvars;
 ]>
+
+
   <sect1 id="tutorial-newpackage">
     <title>Creating a Package</title>
     
@@ -11,6 +13,14 @@
       by <ulink url="mailto:joel@aufrecht.org">Joel Aufrecht</ulink>
     </authorblurb>
     
+<sect2 id="tutorial-picture">
+  <title>The basic coding model</title>
+<para>...</para>
+<imageobject>
+          <imagedata fileref="images/code-model.png" format="png"/>
+  </imageobject>
+</sect2>
+
     <sect2>
       <title>Overview</title>
       <para>To start developing new code in OpenACS, we build a new
