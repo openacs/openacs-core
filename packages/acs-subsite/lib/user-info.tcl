@@ -3,6 +3,7 @@
 #  user_id:optional
 #  return_url:optional
 #  edit_p:optional
+#  message:optional
 #
 
 auth::require_login -account_status closed
@@ -10,7 +11,7 @@ auth::require_login -account_status closed
 if { ![exists_and_not_null user_id] } {
     set user_id [ad_conn untrusted_user_id]
 } else {
-    permission::require_permission -object_id $user_id -privilege admin -party_id $user_id
+    permission::require_permission -object_id $user_id -privilege admin
 }
 
 if { ![exists_and_not_null return_url] } {
@@ -33,7 +34,7 @@ foreach elm $read_only_elements {
 }
 set first_element {}
 foreach elm $form_elms {
-    if { [empty_string_p $elm_mode($elm)] } {
+    if { [empty_string_p $elm_mode($elm)] && (![string equal $elm "username"] && [auth::UseEmailForLoginP]) } {
         set first_element $elm
         break
     }
@@ -49,7 +50,8 @@ if { [exists_and_equal edit_p 1] } {
 
 ad_form -name user_info -cancel_url $return_url -action $action_url -mode $form_mode -form {
     {user_id:integer(hidden),optional}
-    {return_url:text(hidden),optional {value $return_url}}
+    {return_url:text(hidden),optional}
+    {message:text(hidden),optional}
 }
 
 if { [llength [auth::authority::get_authority_options]] > 1 } {

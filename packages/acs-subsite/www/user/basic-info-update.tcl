@@ -9,6 +9,7 @@ ad_page_contract {
     {return_url ""}
     {user_id ""}
     {edit_p 0}
+    {message ""}
 }
 
 set page_title "Update Basic Information"

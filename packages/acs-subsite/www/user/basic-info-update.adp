@@ -4,5 +4,9 @@
 
 <h2>#acs-subsite.Basic_Information#</h2>
 
-<include src="/packages/acs-subsite/lib/user-info" user_id="@user_id@" return_url="@return_url@" &="__adp_properties" edit_p="@edit_p@">
+<if @message@ not nil>
+  <div class="general-message">@message@</div>
+</if>
+
+<include src="/packages/acs-subsite/lib/user-info" user_id="@user_id@" return_url="@return_url@" &="__adp_properties" edit_p="@edit_p@" message="@message@">
 

@@ -84,7 +84,7 @@ a.subsite-name:hover {
 
 #navbar { 
   padding-top: 4px; 
-  font-size: 80%;
+  font-size: 85%;
 }
 #navbar-body { 
   border-top: 1px solid #016799;
@@ -123,8 +123,8 @@ a.navbar-selected:hover {
 
 
 #subnavbar { 
-  padding-top: 0px; 
-  font-size: 80%;
+  padding-top: 6px; 
+  font-size: 85%;
 }
 #subnavbar-body { 
   border-top: 1px solid #016799;
@@ -233,7 +233,7 @@ a.subsite-section:hover {
 
 
 div.subsite-context-bar {
-  font-size: 75%;
+  font-size: 85%;
   margin-bottom: 4px;
 }
 
@@ -271,3 +271,7 @@ span.form-configuration-label {
   line-height:15px;
 }
 
+div.general-message {
+  background-color: #ccff99; 
+  padding: 4px;
+}

@@ -187,6 +187,10 @@ ad_form -extend -name login -on_request {
         }
     }
 
+    if { [exists_and_not_null auth_info(account_url)] } {
+        ad_returnredirect $auth_info(account_url)
+        ad_script_abort
+    }
 
     # Handle account status
     switch $auth_info(account_status) {
