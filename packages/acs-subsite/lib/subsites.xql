@@ -37,7 +37,7 @@
                    and    perm.party_id = :untrusted_user_id) or g.join_policy != 'closed')
     order  by lower(instance_name)
 
-      <querytext>
+      </querytext>
   </fullquery>
 </queryset>
 
