@@ -184,7 +184,7 @@
       <center>
         <a>
           <xsl:attribute name="href">
-            <xsl:text>http://openacs.org/doc/</xsl:text>
+            <xsl:text>http://openacs.org/doc/current/</xsl:text>
                     <xsl:call-template name="href.target">
                       <xsl:with-param name="object" select="."/>
                     </xsl:call-template>
