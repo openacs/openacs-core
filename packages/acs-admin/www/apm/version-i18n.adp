@@ -106,16 +106,71 @@ message key to make it unique before insertion into the catalog file is done.
 
 <h3>Dealing with tcl files</h3>
 <p>
-It seems translatable text in tcl files often appers in double quotes, so we used the following
-somewhat crude regexp to highlight such texts for us:
+When internationalizing the tcl files in the dotlrn package we noticed that translatable texts
+are often found in page titles, context bars, and form labels and options. Many times the texts are enclosed in
+double quotes. We used the following grep commands
+on Linux to highlight translatable text in tcl files for us:
 </p>
 
 <pre>
+# Find text in double quotes
 find -iname '*.tcl'|xargs egrep -i '"[a-z]'
+# Find untranslated text in form labels, options and values
+find -iname '*.tcl'|xargs egrep -i '\-(options|label|value)'|egrep -v '<#'|egrep -v '\-(value|label|options)[[:space:]]+\$[a-zA-Z_]+[[:space:]]*\\?[[:space:]]*$'
+# Find text in page titles and context bars
+find -iname '*.tcl'|xargs egrep -i 'set (title|page_title|context_bar) '|egrep -v '<#'
+# Find text in error messages
+find -iname '*.tcl'|xargs egrep -i '(ad_complain|ad_return_error)'|egrep -v '<#'
 </pre>
 
 <p>
 You may mark up translatable text in tcl library files and tcl pages with temporary tags 
-(on the <#key text#> syntax mentioned previously) and then run the 
-"Replace tags with keys and insert into catalog" action on these files.
+(on the <#key text#> syntax mentioned previously). If you have a sentence or paragraph of
+text with variables in it you may choose to turn the whole text into one message in the
+catalog. If you choose this option you cannot use the message tag syntax but rather you must
+manually replace the text with an invocation of the message lookup procedure (the underscore
+procedure) as well as manually insert the message into the catalog file (you should
+check that your message key is unique when you do this). Here is an example from dotlrn:
+</p>
+
+The code
+<pre>
+ad_return_complaint 1 "Error: A [parameter::get -parameter classes_pretty_name] 
+             must have <em>no</em>[parameter::get -parameter class_instances_pretty_plural] to be deleted"
+</pre>
+
+was replaced manually by:
+
+<pre>
+set msg_subst_list [list subject [parameter::get -localize -parameter classes_pretty_name] 
+                         class_instances [parameter::get -localize -parameter class_instances_pretty_plural]]
+
+ad_return_complaint 1 [_ [ad_conn locale] dotlrn.class_may_not_be_deleted "" $msg_subst_list]
+</pre>
+
+and the following line was added to the catalog file:
+
+<pre>
+_mr en_US dotlrn.class_may_not_be_deleted {Error: A %subject% must have <em>no</em> %class_instances% to be deleted}
+</pre>
+
+<p>
+When we were done going through the tcl files we ran the
+following commands to check for mistakes:
+</p>
+
+<pre>
+# Message tags should usually not be in curly braces since then the message lookup may not be
+# executed then (you can usually replace curly braces with the list command). Find message tags 
+# in curly braces (should return nothing, or possibly a few lines for inspection)
+find -iname '*.tcl'|xargs egrep -i '\{.*<#'
+# Check if you've forgotten space between default key and text in message tags (should return nothing)
+find -iname '*.tcl'|xargs egrep -i '<#_[^ ]'
+# Review the list of tcl files with no message lookups
+for tcl_file in $(find -iname '*.tcl'); do egrep -L '(<#|\[_)' $tcl_file; done
+</pre>
+
+<p>
+When you feel ready you may run the action "Replace tags with keys and insert into catalog" on the tcl
+files that you've edited to replace the temporary tags with calls to the message lookup procedure.
 </p>
