@@ -32,7 +32,7 @@ email then you might want to
 
 <if @parameter_enabled_p@ eq 1>
 
-  <if @dont_spam_me_p@ eq "t">
+  <if @dont_spam_me_p@ eq "f">
     <li>The system is currently set to send you email notifications. Click here to  <a href="toggle-dont-spam-me-p">tell the system not to send you any email notifications</a>.
   </if>
   <else>
