@@ -364,7 +364,7 @@
         description, current version, implementation status,
         author/maintainers, link(s) to more info.  Current version
         available at the <ulink
-        url="http://openacs.org/repository/5-2/">repository</ulink>.
+        url="http://openacs.org/projects/openacs/packages/">Package status</ulink> page.
        </para></listitem>
       <listitem><para>
         Include dependencies/requirements, known conflicts, and
