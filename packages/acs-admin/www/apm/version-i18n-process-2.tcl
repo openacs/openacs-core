@@ -11,7 +11,17 @@ ad_page_contract {
     {number_of_keys:integer,notnull ""}
     {replace_p:array ""}
     {message_keys:array ""}
+    skip_button:optional
 }
+
+if { [info exists skip_button] } {
+    # The user wants to skip the file so remove it from the file and redirect
+    # to processing the next one
+    ad_returnredirect "version-i18n-process?[export_vars -url {version_id {files:multiple {[lrange $files 1 end]}} file_action:multiple}]"    
+    ad_script_abort
+}
+
+error hej
 
 # Create the message key list
 # The list is needed since replace_adp_tags_with_message_tags proc below takes a list of

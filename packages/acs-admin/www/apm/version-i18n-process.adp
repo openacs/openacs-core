@@ -29,7 +29,8 @@
   </table>
 
   <p>
-  <input type="submit" value="Process ADP" />
+  <input type="submit" name="process_button" value="Process ADP" />
+  <input type="submit" name="skip_button" value="Skip ADP" />
   </p>
 </form>
 

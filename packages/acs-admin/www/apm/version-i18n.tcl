@@ -9,6 +9,7 @@ ad_page_contract {
     version_id:integer,notnull    
     {pre_select_files_p "1"}
     {show_status_p "0"}
+    {only_text_p "0"}
     {file_type adp}
 }
 
@@ -28,7 +29,7 @@ foreach file [lsort [ad_find_all_files [acs_package_root_dir $package_key]]] {
         set relative_path [ad_make_relative_path $file]
 
         # Get statistics on number of message tags
-        if { $show_status_p } {
+        if { $show_status_p || $only_text_p } {
 
             set file_id [open $file r]
             set file_contents [read $file_id]
@@ -58,8 +59,21 @@ foreach file [lsort [ad_find_all_files [acs_package_root_dir $package_key]]] {
             set status_string ""
         }
 
+        set add_file_p 1
+        # If we are showing adp:s and we are only showing adp:s with texts to translate, check if
+        # this file has any texts
+        if { [string equal $file_type "adp"] && $only_text_p } {
+            if { $number_of_text_snippets == "0" } {
+                set add_file_p 0
+            }
+
+            ns_log Notice "pm debug $relative_path add_file_p=$add_file_p only_text_p=$only_text_p number_of_text_snippets=$number_of_text_snippets"
+        }
+
         # Checkbox label in first element and value in second
-        lappend file_option_list [list "$relative_path $status_string" $relative_path]
+        if { $add_file_p } {
+            lappend file_option_list [list "$relative_path $status_string" $relative_path]
+        }
 
         if { $pre_select_files_p } {
             lappend adp_preselect_list $relative_path
@@ -107,26 +121,32 @@ if { [string equal $file_type adp] } {
 }
 
 if { $pre_select_files_p } {
-    set pre_select_filter "<a href=\"version-i18n?[export_vars -url -override {{pre_select_files_p 0}} {version_id file_type show_status_p}]\">Unselect all files</a>"
+    set pre_select_filter "<a href=\"version-i18n?[export_vars -url -override {{pre_select_files_p 0}} {version_id file_type show_status_p only_text_p}]\">Unselect all checkboxes</a>"
 } else {
-    set pre_select_filter "<a href=\"version-i18n?[export_vars -url -override {{pre_select_files_p 1}} {version_id file_type show_status_p}]\">Select all files</a>"
+    set pre_select_filter "<a href=\"version-i18n?[export_vars -url -override {{pre_select_files_p 1}} {version_id file_type show_status_p only_text_p}]\">Select all checkboxes</a>"
 }
 
 if { $show_status_p } {
-    set status_filter "<a href=\"version-i18n?[export_vars -url -override {{show_status_p 0}} {version_id file_type pre_select_files_p}]\">Hide I18N status of files</a>"
+    set status_filter "<a href=\"version-i18n?[export_vars -url -override {{show_status_p 0}} {version_id file_type pre_select_files_p only_text_p}]\">Hide I18N status of files</a>"
 } else {
-    set status_filter "<a href=\"version-i18n?[export_vars -url -override {{show_status_p 1}} {version_id file_type pre_select_files_p}]\">Show I18N status of files</a>"
+    set status_filter "<a href=\"version-i18n?[export_vars -url -override {{show_status_p 1}} {version_id file_type pre_select_files_p only_text_p}]\">Show I18N status of files</a>"
 }
 
 switch -- $file_type {
     adp {
-        set file_type_filter "<b>Show adp files</b> | <a href=\"version-i18n?[export_vars -url -override {{file_type tcl}} {version_id pre_select_files_p show_status_p}]\">Show tcl files</a> | <a href=\"version-i18n?[export_vars -url -override {{file_type sql}} {version_id pre_select_files_p show_status_p}]\">Show sql files</a>"
+        if { $only_text_p } {
+            set text_only_filter "<a href=\"version-i18n?[export_vars -url -override {{only_text_p 0}} {pre_select_files_p version_id file_type show_status_p}]\">all adp files</a> / only apd files with translatable text"
+        } else {
+            set text_only_filter "<b>all adp files</b> / <a href=\"version-i18n?[export_vars -url -override {{only_text_p 1}} {pre_select_files_p version_id file_type show_status_p}]\">only apd files with translatable text</a>"
+        }    
+
+        set file_type_filter "<b>Show adp files</b>: $text_only_filter | <a href=\"version-i18n?[export_vars -url -override {{file_type tcl}} {version_id pre_select_files_p show_status_p only_text_p}]\">Show tcl files</a> | <a href=\"version-i18n?[export_vars -url -override {{file_type sql}} {version_id pre_select_files_p show_status_p only_text_p}]\">Show sql files</a>"
     }
     tcl {
-        set file_type_filter "<a href=\"version-i18n?[export_vars -url -override {{file_type adp}} {version_id pre_select_files_p show_status_p}]\">Show adp files</a> | <b>Show tcl files</b> | <a href=\"version-i18n?[export_vars -url -override {{file_type sql}} {version_id pre_select_files_p show_status_p}]\">Show sql files</a>"
+        set file_type_filter "<a href=\"version-i18n?[export_vars -url -override {{file_type adp}} {version_id pre_select_files_p show_status_p only_text_p}]\">Show adp files</a> | <b>Show tcl files</b> | <a href=\"version-i18n?[export_vars -url -override {{file_type sql}} {version_id pre_select_files_p show_status_p only_text_p}]\">Show sql files</a>"
     }
     sql {
-        set file_type_filter "<a href=\"version-i18n?[export_vars -url -override {{file_type adp}} {version_id pre_select_files_p show_status_p}]\">Show adp files</a> | <a href=\"version-i18n?[export_vars -url -override {{file_type tcl}} {version_id pre_select_files_p show_status_p}]\">Show tcl files</a> | <b>Show sql files</b>"
+        set file_type_filter "<a href=\"version-i18n?[export_vars -url -override {{file_type adp}} {version_id pre_select_files_p show_status_p only_text_p}]\">Show adp files</a> | <a href=\"version-i18n?[export_vars -url -override {{file_type tcl}} {version_id pre_select_files_p show_status_p only_text_p}]\">Show tcl files</a> | <b>Show sql files</b>"
     }
 }
 
