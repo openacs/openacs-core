@@ -10,7 +10,7 @@
 	from   users u, 
 	       parties p 
 	where  u.user_id = p.party_id 
-    
+	order by name    
       </querytext>
 </fullquery>
 

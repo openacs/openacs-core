@@ -427,6 +427,7 @@ ad_proc -public ds_user_select_widget {}  {
 	from   users u, 
 	       parties p 
 	where  u.user_id = p.party_id 
+        order by name
     } {
 	if { $user_id == $user_id_from_db } {
 	    set selected " selected"
