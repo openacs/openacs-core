@@ -619,6 +619,47 @@ ad_proc -public item::get_element {
     return $row($element)
 }
 
+ad_proc -public item::get_content { 
+    {-revision_id:required}
+    {-array:required}
+    {-item_id ""}
+} {
+
+  @public get_revision_content
+ 
+  Create a onerow datasource called content in the calling frame
+  which contains all attributes for the revision (including inherited
+  ones).<p>
+  The datasource will contain a column called "text", representing the
+  main content (blob) of the revision, but only if the revision has a
+  textual mime-type.
+ 
+  @param revision_id The revision whose attributes are to be retrieved
+ 
+  @option item_id The item_id of the
+    corresponding item. You can provide this as an optimization.
+ 
+  @return 1 on success (and set the array in the calling frame),
+    0 on failure 
+ 
+  @see proc item::get_mime_info 
+  @see proc item::get_content_type
+
+} {
+    upvar 1 $array content
+
+    if { [empty_string_p $item_id] } {
+        set item_id [get_item_from_revision $revision_id]
+        if { [empty_string_p $item_id] } {
+            ns_log notice "No such revision: $reivision_id"
+            return 0
+        }  
+    }
+    
+    return [get_revision_content $revision_id $item_id]
+}
+
+  
 ad_proc -public item::publish {
     {-item_id:required}
     {-revision_id ""}
