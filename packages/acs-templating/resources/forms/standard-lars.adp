@@ -46,7 +46,7 @@
               </noparse>
                 <b>
                   <font face="tahoma,verdana,arial,helvetica,sans-serif" size="-1">
-                    @elements.label@
+                    @elements.label;noquote@
                   </font>
                 </b>
                 &nbsp;&nbsp;
