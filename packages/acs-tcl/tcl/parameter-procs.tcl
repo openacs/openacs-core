@@ -83,7 +83,8 @@ namespace eval parameter {
            set value [lang::util::localize $value]
         }
 
-        return $value
+        # Trimming the value as people may have accidentally put in trailing spaces
+        return [string trim $value]
     }
 
     ad_proc -public set_from_package_key {
