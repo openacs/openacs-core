@@ -74,4 +74,18 @@
         </querytext>
     </fullquery>
  
+    <partialquery name="subsite::get_url.orderby">
+        <querytext>
+        order by case when host = :search_vhost then 1
+                 else 0 end desc
+        limit 1
+        </querytext>
+    </partialquery>
+ 
+    <partialquery name="subsite::get_url.simple_search">
+        <querytext>
+        limit 1
+        </querytext>
+    </partialquery>
+ 
 </queryset>

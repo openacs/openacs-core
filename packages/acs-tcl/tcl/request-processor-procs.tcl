@@ -600,6 +600,7 @@ ad_proc -private rp_filter { why } {
 	}
 
 	ad_conn -set node_id $node(node_id)
+	ad_conn -set node_name $node(name)
 	ad_conn -set object_id $node(object_id)
 	ad_conn -set object_url $node(url)
 	ad_conn -set object_type $node(object_type)
@@ -1219,13 +1220,31 @@ ad_proc -public ad_conn {args} {
                                                  -default {en_US}]
                         return $ad_conn(locale)
                     }
-                    subsite_id {
-                        set ad_conn(subsite_id) [site_node::closest_ancestor_package \
+                    subsite_node_id {
+                        set ad_conn(subsite_node_id) [site_node::closest_ancestor_package \
                                                      -node_id [ad_conn node_id] \
                                                      -package_key "acs-subsite" \
                                                      -include_self \
-                                                     -element "package_id"]
+                                                     -element "node_id"]
+                        return $ad_conn(subsite_node_id)
+                    }
+                    subsite_id {
+                        set ad_conn(subsite_id) [site_node::get_object_id \
+                                                     -node_id [ad_conn subsite_node_id]]
                         return $ad_conn(subsite_id)
+                    }
+                    subsite_url {
+                        set ad_conn(subsite_url) [site_node::get_url \
+                                                     -node_id [ad_conn subsite_node_id]]
+                        return $ad_conn(node_id)
+                    }
+                    vhost_subsite_url {
+                        set ad_conn(vhost_subsite_url) [subsite::get_url]
+                        return $ad_conn(vhost_subsite_url)
+                    }
+                    vhost_package_url {
+                        set ad_conn(vhost_package_url) "[subsite::get_url][ad_conn node_name]"
+                        return $ad_conn(vhost_package_url)
                     }
                     default {
                         return [ns_conn $var]

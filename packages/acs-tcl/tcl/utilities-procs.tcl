@@ -2716,6 +2716,46 @@ ad_proc -public util_absolute_path_p {{} path} {
    }
 }
 
+ad_proc -public util_driver_info {
+  {-array:required} 
+  {-driver ""}
+} {
+  Returns the protocol and port for the specified driver.
+
+  @param driver the driver to query (defaults to [ad_conn driver])
+  @param array the array to populate with proto and port
+} {
+    upvar $array result
+
+    if {[string equal $driver ""]} {
+        set driver [ad_conn driver]
+    }
+
+    switch $driver {
+        nssock {
+            set result(proto) http
+            set result(port) [ns_config -int "ns/server/[ns_info server]/module/nssock" Port]
+        }
+        nsunix {
+            set result(proto) http
+            set result(port) {}
+        }
+        nsssl - nsssle {
+            set result(port) [ns_config -int "ns/server/[ns_info server]/module/[ad_conn driver]" Port]
+            set result(proto) https
+        }
+        nsopenssl {
+            set result(port) [ns_config -int "ns/server/[ns_info server]/module/[ad_conn driver]" ServerPort]
+            set result(proto) https
+        }
+        default {
+            ns_log Error "Unknown driver: [ad_conn driver]. Only know nssock, nsunix, nsssl, nsssle, nsopenssl"
+            set result(port) [ns_config -int "ns/server/[ns_info server]/module/nssock" Port]
+            set result(proto) http
+        }
+    }
+}
+
 ad_proc -public util_current_location {{}} {
    Like ad_conn location - Returns the location string of the current
    request in the form protocol://hostname[:port] but it looks at the
@@ -2736,29 +2776,9 @@ ad_proc -public util_current_location {{}} {
     set default_port(http) 80
     set default_port(https) 443
     
-    switch [ad_conn driver] {
-        nssock {
-            set proto http
-            set port [ns_config -int "ns/server/[ns_info server]/module/nssock" Port]
-        }
-        nsunix {
-            set proto http
-            set port {}
-        }
-        nsssl - nsssle {
-            set port [ns_config -int "ns/server/[ns_info server]/module/[ad_conn driver]" Port]
-            set proto https
-        }
-        nsopenssl {
-            set port [ns_config -int "ns/server/[ns_info server]/module/[ad_conn driver]" ServerPort]
-            set proto https
-        }
-        default {
-            ns_log Error "Unknown driver: [ad_conn driver]. Only know nssock, nsunix, nsssl, nsssle, nsopenssl"
-            set port [ns_config -int "ns/server/[ns_info server]/module/nssock" Port]
-            set proto http
-        }
-    }
+    util_driver_info -array driver
+    set proto $driver(proto)
+    set port $driver(port)
 
     # This is the host from the browser's HTTP request
     set Host [ns_set iget [ad_conn headers] Host]
