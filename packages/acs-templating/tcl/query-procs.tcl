@@ -509,34 +509,35 @@ ad_proc -private set_cached_result {} {
 
 # Deprecated!
 
-ad_proc -private template::query::iterate { statement_name db sql body } {
+ad_proc -public template::query::iterate { statement_name sql body } {
     @param statement_name Standard db_api statement name used to hook into query dispatcher
-    @param db Database handle
     @param sql Query to use when processing this command
     @param body Code body to be execute for each result row of the returned query
 } {
 
-  set result [db_exec select $db $statement_name $sql 3]
+    db_with_handle db {
+        set result [db_exec select $db $statement_name $sql 2]
 
-  set rowcount 0
+        set rowcount 0
 
-  while { [ns_db getrow $db $result] } {
+        while { [ns_db getrow $db $result] } {
 
-    upvar __query_iterate_row row
+            upvar __query_iterate_row row
 
-    set row(rownum) [incr rowcount]
+            set row(rownum) [incr rowcount]
 
-    set size [ns_set size $result]
+            set size [ns_set size $result]
 
-    for { set i 0 } { $i < $size } { incr i } {
+            for { set i 0 } { $i < $size } { incr i } {
 
-      set column [ns_set key $result $i]
-      set row($column) [ns_set value $result $i]
+                set column [ns_set key $result $i]
+                set row($column) [ns_set value $result $i]
+            }
+
+            # Execute custom code for each row
+            uplevel "upvar 0 __query_iterate_row row; $body"
+        }
     }
-
-    # Execute custom code for each row
-    uplevel "upvar 0 __query_iterate_row row; $body"
-  }
 }
 
 # Flush the cached queries where the query name matches the
