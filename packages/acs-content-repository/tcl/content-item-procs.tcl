@@ -134,7 +134,7 @@ ad_proc -public ::content::item::delete {
 } {
     return [package_exec_plsql \
                 -var_list [list [list item_id $item_id]] \
-                content_item delete]
+                content_item del]
 }
 
 ad_proc -public ::content::item::rename {
