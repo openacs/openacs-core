@@ -242,8 +242,8 @@ aa_register_case auth_password_change {
         }
 }
 
-aa_register_case auth_password_forgotten {
-    Test the auth::password::forgotten proc.
+aa_register_case auth_password_recovver {
+    Test the auth::password::recover_password proc.
 
     @author Simon Carstensen
 } {
@@ -262,7 +262,7 @@ aa_register_case auth_password_forgotten {
     aa_run_with_teardown \
         -rollback \
         -test_code {
-            array set password_result [auth::password::forgotten \
+            array set password_result [auth::password::recover_password \
                                            -authority_id $test_vars(authority_id) \
                                            -username $test_vars(username)]
 
@@ -280,8 +280,8 @@ aa_register_case auth_password_get_forgotten_url {
 
     # With user info
     set url [auth::password::get_forgotten_url -authority_id $test_vars(authority_id) -username $test_vars(username)]
-    aa_true "there is a local forgotten-password page with user info" [regexp {forgotten-password} $url]
-    
+    aa_true "there is a local forgotten-password page with user info" [regexp {recover-password} $url]
+
     set url [auth::password::get_forgotten_url -authority_id $test_vars(authority_id) -username $test_vars(username) -remote_only]
     aa_equals "cannot get remote url with missing forgotten_pwd_url" $url ""
 
