@@ -44,7 +44,7 @@ if { $replace_text_p } {
     }
 
     if { [llength $text_untouched_list] > 0 } {
-        append processing_html_result "<br /> [llength $text_untouched_list] pieces of text were left untouched. Please take note of these texts and do any necessary translations by manually inserting <#message_key text#> tags in the adp file (the message keys should contain only letters and underscores, the text in the tag must have greater than and lesser than signs HTML quoted). At a later stage you can then run the action \"Replace tags with text and insert into catalog\" on the file. The texts to consider for translation are: <br />"
+        append processing_html_result "<br /> [llength $text_untouched_list] pieces of text were left untouched. Please take note of these texts and do any necessary translations by manually inserting <#message_key text#> tags in the adp file (the message keys should contain only letters and underscores). At a later stage you can then run the action \"Replace tags with text and insert into catalog\" on the file. The texts to consider for translation are: <br />"
     } else {
         append processing_html_result "<br /> [llength $text_untouched_list] pieces of text were left untouched."
     }
