@@ -570,22 +570,13 @@ begin
 
   -- add an insert statement for each subtype in the hierarchy for this type
 
-  for type_rec in select                                                
-                    ot2.object_type, tree_level(ot2.tree_sortkey) as level
-                  from                                                
-                    acs_object_types ot1, acs_object_types ot2
-                  where                                               
-                    ot2.object_type <> ''acs_object''                       
-                  and                                                 
-                    ot2.object_type <> ''content_revision''
-                  and 
-                    ot1.object_type = refresh_trigger__content_type
-                  and 
-                    ot2.tree_sortkey <= ot1.tree_sortkey
-                  and 
-                    ot1.tree_sortkey like (ot2.tree_sortkey || ''%'')
-                  order by
-                    level desc
+  for type_rec in select ot2.object_type, tree_level(ot2.tree_sortkey) as level
+                  from acs_object_types ot1, acs_object_types ot2
+                  where ot2.object_type <> ''acs_object''                       
+                    and ot2.object_type <> ''content_revision''
+                    and ot1.object_type = refresh_trigger__content_type
+                    and ot1.tree_sortkey between ot2.tree_sortkey and tree_right(ot2.tree_sortkey)
+                  order by level desc
   LOOP
     rule_text := rule_text || '' '' || content_type__trigger_insert_statement(type_rec.object_type) || '';'';
   end loop;
@@ -633,24 +624,13 @@ begin
 --                  connect by
 --                    object_type = prior supertype 
 
-  for join_rec in select
-                    ot2.table_name, 
-                    ot2.id_column, 
-                    tree_level(ot2.tree_sortkey) as level
-                  from                                                
-                    acs_object_types ot1, acs_object_types ot2
-                  where                                               
-                    ot2.object_type <> ''acs_object''                       
-                  and                                                 
-                    ot2.object_type <> ''content_revision''
-                  and 
-                    ot1.object_type = refresh_view__content_type
-                  and 
-                    ot2.tree_sortkey <= ot1.tree_sortkey
-                  and 
-                    ot1.tree_sortkey like (ot2.tree_sortkey || ''%'')
-                  order by
-                    ot2.tree_sortkey desc
+  for join_rec in select ot2.table_name, ot2.id_column, tree_level(ot2.tree_sortkey) as level
+                  from acs_object_types ot1, acs_object_types ot2
+                  where ot2.object_type <> ''acs_object''                       
+                    and ot2.object_type <> ''content_revision''
+                    and ot1.object_type = refresh_view__content_type
+                    and ot1.tree_sortkey between ot2.tree_sortkey and tree_right(ot2.tree_sortkey)
+                  order by ot2.tree_sortkey desc
   LOOP
     cols := cols || '', '' || join_rec.table_name || ''.*'';
     tabs := tabs || '', '' || join_rec.table_name;
@@ -1012,12 +992,10 @@ begin
 --                   start with object_type = ''content_revision''
 
   for type_rec in select ot.object_type 
-                    from acs_object_types ot
-                   where ot.tree_sortkey 
-                         like (select tree_sortkey || ''%''
-                                 from acs_object_types 
-                                where object_type = ''content_revision'')
-                   order by ot.tree_sortkey
+                  from acs_object_types ot, acs_object_types ot2
+                  where ot2.object_type = ''content_revision''
+                    and ot.tree_sortkey between ot2.tree_sortkey and tree_right(ot2.tree_sortkey)
+                  order by ot.tree_sortkey
   LOOP
     PERFORM content_type__refresh_view (type_rec.object_type);
   end LOOP;

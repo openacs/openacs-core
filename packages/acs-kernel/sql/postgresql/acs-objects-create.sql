@@ -187,7 +187,7 @@ create table acs_objects (
 	last_modified		timestamp default now() not null,
 	modifying_user		integer,
 	modifying_ip		varchar(50),
-        tree_sortkey            varchar(4000),
+        tree_sortkey            varbit,
         constraint acs_objects_context_object_un
 	unique (context_id, object_id)
 );
@@ -230,27 +230,25 @@ for each row execute procedure acs_objects_last_mod_update_tr ();
 
 create function acs_objects_insert_tr () returns opaque as '
 declare
-        v_parent_sk     varchar;
-        max_key         varchar;
+        v_parent_sk     varbit default null;
+        v_max_value     integer;
 begin
         if new.context_id is null then 
-            select max(tree_sortkey) into max_key 
+            select max(tree_leaf_key_to_int(tree_sortkey)) into v_max_value 
               from acs_objects 
              where context_id is null;
-
-            v_parent_sk := '''';
         else 
-            select max(tree_sortkey) into max_key 
+            select max(tree_leaf_key_to_int(tree_sortkey)) into v_max_value 
               from acs_objects 
              where context_id = new.context_id;
 
-            select coalesce(max(tree_sortkey),'''') into v_parent_sk 
+            select tree_sortkey into v_parent_sk 
               from acs_objects 
              where object_id = new.context_id;
         end if;
 
 
-        new.tree_sortkey := v_parent_sk || ''/'' || tree_next_key(max_key);
+        new.tree_sortkey := tree_next_key(v_parent_sk, v_max_value);
 
         return new;
 
@@ -262,8 +260,8 @@ execute procedure acs_objects_insert_tr ();
 
 create function acs_objects_update_tr () returns opaque as '
 declare
-        v_parent_sk     varchar;
-        max_key         varchar;
+        v_parent_sk     varbit default null;
+        v_max_value     integer;
         ctx_id          integer;
         v_rec           record;
         clr_keys_p      boolean default ''t'';
@@ -292,23 +290,21 @@ begin
              where object_id = v_rec.object_id;
 
             if ctx_id is null then 
-                select max(tree_sortkey) into max_key
+                select max(tree_leaf_key_to_int(tree_sortkey)) into v_max_value
                   from acs_objects 
                  where context_id is null;
-
-                v_parent_sk := '''';
             else 
-                select max(tree_sortkey) into max_key
+                select max(tree_leaf_key_to_int(tree_sortkey)) into v_max_value
                   from acs_objects 
                  where context_id = ctx_id;
 
-                select coalesce(max(tree_sortkey),'''') into v_parent_sk 
+                select tree_sortkey into v_parent_sk 
                   from acs_objects 
                  where object_id = ctx_id;
             end if;
 
             update acs_objects 
-               set tree_sortkey = v_parent_sk || ''/'' || tree_next_key(max_key)
+               set tree_sortkey = tree_next_key(v_parent_sk, v_max_value)
              where object_id = v_rec.object_id;
 
         end LOOP;
@@ -754,10 +750,10 @@ begin
 
   for obj_type
   in select o2.table_name, o2.id_column
-        from acs_object_types o1, acs_object_types o2
+        from acs_object_types o1, acs_object_types o2, acs_objects o
        where o1.object_type = (select object_type
-                                 from acs_objects o
-                                where o.object_id = delete__object_id)
+                               from acs_objects o
+                               where o.object_id = delete__object_id)
          and o1.tree_sortkey between o2.tree_sortkey and tree_right(o2.tree_sortkey)
     order by o2.tree_sortkey desc
   loop

@@ -49,7 +49,7 @@ create table acs_object_types (
 	name_method	varchar(100),
 	type_extension_table varchar(30),
         dynamic_p       boolean default 'f',
-        tree_sortkey    varchar(4000)
+        tree_sortkey    varbit
 );
 
 create index acs_obj_types_supertype_idx on acs_object_types (supertype);
@@ -59,18 +59,18 @@ create index acs_obj_types_tree_skey_idx on acs_object_types (tree_sortkey);
 
 create function acs_object_type_insert_tr () returns opaque as '
 declare
-        v_parent_sk     varchar;
-        max_key         varchar;
+        v_parent_sk     varbit default null;
+        v_max_value     integer;
 begin
-        select max(tree_sortkey) into max_key 
+        select max(tree_leaf_key_to_int(tree_sortkey)) into v_max_value 
           from acs_object_types 
          where supertype = new.supertype;
 
-        select coalesce(max(tree_sortkey),'''') into v_parent_sk 
+        select tree_sortkey into v_parent_sk 
           from acs_object_types 
          where object_type = new.supertype;
 
-        new.tree_sortkey := v_parent_sk || ''/'' || tree_next_key(max_key);
+        new.tree_sortkey := tree_next_key(v_parent_sk ,v_max_value);
 
         return new;
 
@@ -82,8 +82,8 @@ execute procedure acs_object_type_insert_tr ();
 
 create function acs_object_type_update_tr () returns opaque as '
 declare
-        v_parent_sk     varchar;
-        max_key         varchar;
+        v_parent_sk     varbit default null;
+        v_max_value     integer;
         v_rec           record;
         clr_keys_p      boolean default ''t'';
 begin
@@ -95,7 +95,7 @@ begin
 
         end if;
 
-        for v_rec in select object_type
+        for v_rec in select object_type, supertype
                        from acs_object_types 
                       where tree_sortkey between new.tree_sortkey and tree_right(new.tree_sortkey)
                    order by tree_sortkey
@@ -106,20 +106,16 @@ begin
                clr_keys_p := ''f'';
             end if;
             
-            select max(tree_sortkey) into max_key
+            select max(tree_leaf_key_to_int(tree_sortkey)) into v_max_value
               from acs_object_types 
-              where supertype = (select supertype 
-                                   from acs_object_types 
-                                  where object_type = v_rec.object_type);
+              where supertype = v_rec.supertype;
 
-            select coalesce(max(tree_sortkey),'''') into v_parent_sk 
+            select tree_sortkey into v_parent_sk 
               from acs_object_types 
-             where object_type = (select supertype 
-                                   from acs_object_types 
-                                  where object_type = v_rec.object_type);
+             where object_type = v_rec.supertype;
 
             update acs_object_types 
-               set tree_sortkey = v_parent_sk || ''/'' || tree_next_key(max_key)
+               set tree_sortkey = tree_next_key(v_parent_sk, v_max_value)
              where object_type = v_rec.object_type;
 
         end LOOP;

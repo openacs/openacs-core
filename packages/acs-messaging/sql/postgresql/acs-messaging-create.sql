@@ -61,7 +61,7 @@ create table acs_messages (     -- extends cr_items
             not null
         constraint acs_messages_rfc822_id_un
             unique,
-    tree_sortkey varchar(4000)
+    tree_sortkey varbit
 );
 
 create index acs_messages_tree_skey_idx on acs_messages (tree_sortkey);
@@ -95,26 +95,24 @@ comment on column acs_messages.rfc822_id is '
 
 create function acs_message_insert_tr () returns opaque as '
 declare
-        v_parent_sk     varchar;
-        max_key         varchar;
+        v_parent_sk     varbit  default null;
+        v_max_value     integer;
 begin
 	if new.reply_to is null then
-	    select max(tree_sortkey) into max_key
+	    select max(tree_leaf_key_to_int(tree_sortkey)) into v_max_value
               from acs_messages
              where reply_to is null;
-
-            v_parent_sk := '''';
         else
-            select max(tree_sortkey) into max_key 
+	    select max(tree_leaf_key_to_int(tree_sortkey)) into v_max_value
               from acs_messages
              where reply_to = new.reply_to;
 
-            select coalesce(max(tree_sortkey),'''') into v_parent_sk 
+            select tree_sortkey into v_parent_sk 
               from acs_messages
              where message_id = new.reply_to;
         end if;
 
-        new.tree_sortkey := v_parent_sk || ''/'' || tree_next_key(max_key);
+        new.tree_sortkey := tree_next_key(v_parent_sk, v_max_value);
 
         return new;
 
@@ -127,8 +125,8 @@ execute procedure acs_message_insert_tr ();
 
 create function acs_message_update_tr () returns opaque as '
 declare
-        v_parent_sk     varchar;
-        max_key         varchar;
+        v_parent_sk     varbit default null;
+        v_max_value     integer;
         v_rec           record;
         clr_keys_p      boolean default ''t'';
 begin
@@ -140,31 +138,27 @@ begin
 
         end if;
 
-        for v_rec in select message_id
-                       from acs_messages
-                      where tree_sortkey like new.tree_sortkey || ''%''
-                   order by tree_sortkey
+        for v_rec in select message_id, reply_to
+                     from acs_messages
+                     where tree_sortkey between new.tree_sortkey and tree_right(new.tree_sortkey)
+                     order by tree_sortkey
         LOOP
             if clr_keys_p then
                update acs_messages set tree_sortkey = null
-               where tree_sortkey like new.tree_sortkey || ''%'';
+               where tree_sortkey between new.tree_sortkey and tree_right(new.tree_sortkey);
                clr_keys_p := ''f'';
             end if;
             
-            select max(tree_sortkey) into max_key
+            select max(tree_leaf_key_to_int(tree_sortkey)) into v_max_value
               from acs_messages
-              where reply_to = (select reply_to 
-                                   from acs_messages
-                                  where message_id = v_rec.message_id);
+              where reply_to = v_rec.reply_to;
 
-            select coalesce(max(tree_sortkey),'''') into v_parent_sk 
+            select tree_sortkey into v_parent_sk 
               from acs_messages 
-             where message_id = (select reply_to 
-                                   from acs_messages
-                                  where message_id = v_rec.message_id);
+             where message_id = v_rec.reply_to;
 
             update acs_messages
-               set tree_sortkey = v_parent_sk || ''/'' || tree_next_key(max_key)
+               set tree_sortkey = tree_next_key(v_parent_sk, v_max_value)
              where message_id = v_rec.message_id;
 
         end LOOP;

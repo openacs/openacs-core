@@ -675,7 +675,6 @@ ad_proc db_source_sql_file { {-callback apm_ns_write_callback} file } {
     if { $tcl_platform(platform) == "windows" } {
         set fp [open "|[file join [db_get_pgbin] psql] -h [ns_info hostname] $pgport $pguser -f $file_name [db_get_database]" "r"]
     } else {
-ns_log Notice "Huh? |[file join [db_get_pgbin] psql] $pghost $pgport $pguser -f $file_name [db_get_database] $pgpass"
         set fp [open "|[file join [db_get_pgbin] psql] $pghost $pgport $pguser -f $file_name [db_get_database] $pgpass" "r"]
     }
 

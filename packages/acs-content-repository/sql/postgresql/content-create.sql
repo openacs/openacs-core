@@ -195,7 +195,7 @@ create table cr_items (
                       constraint cr_items_storage_type
                       check (storage_type in ('lob','text','file')),
   storage_area_key    varchar(100) default 'CR_FILES' not null,
-  tree_sortkey        varchar(4000)
+  tree_sortkey        varbit
 );  
 
 create index cr_items_by_locale on cr_items(locale);
@@ -238,27 +238,25 @@ alter table apm_package_versions add
 
 create function cr_items_tree_insert_tr () returns opaque as '
 declare
-        v_parent_sk     varchar;
-        max_key         varchar;
+        v_parent_sk     varbit default null;
+        v_max_value     integer;
 begin
         if new.parent_id is null then 
-            select max(tree_sortkey) into max_key 
+            select max(tree_leaf_key_to_int(tree_sortkey)) into v_max_value 
               from cr_items 
              where parent_id is null;
-
-            v_parent_sk := '''';
         else 
-            select max(tree_sortkey) into max_key 
+            select max(tree_leaf_key_to_int(tree_sortkey)) into v_max_value 
               from cr_items 
              where parent_id = new.parent_id;
 
-            select coalesce(max(tree_sortkey),'''') into v_parent_sk 
+            select tree_sortkey into v_parent_sk 
               from cr_items 
              where item_id = new.parent_id;
         end if;
 
 
-        new.tree_sortkey := v_parent_sk || ''/'' || tree_next_key(max_key);
+        new.tree_sortkey := tree_next_key(v_parent_sk, v_max_value);
 
         return new;
 
@@ -270,8 +268,8 @@ execute procedure cr_items_tree_insert_tr ();
 
 create function cr_items_tree_update_tr () returns opaque as '
 declare
-        v_parent_sk     varchar;
-        max_key         varchar;
+        v_parent_sk     varbit default null;
+        v_max_value     integer;
         p_id            integer;
         v_rec           record;
         clr_keys_p      boolean default ''t'';
@@ -286,12 +284,12 @@ begin
 
         for v_rec in select item_id
                        from cr_items 
-                      where tree_sortkey like new.tree_sortkey || ''%''
+                      where tree_sortkey between new.tree_sortkey and tree_right(new.tree_sortkey)
                    order by tree_sortkey
         LOOP
             if clr_keys_p then
                update cr_items set tree_sortkey = null
-               where tree_sortkey like new.tree_sortkey || ''%'';
+               where tree_sortkey between new.tree_sortkey and tree_right(new.tree_sortkey);
                clr_keys_p := ''f'';
             end if;
             
@@ -300,23 +298,21 @@ begin
              where item_id = v_rec.item_id;
 
             if p_id is null then 
-                select max(tree_sortkey) into max_key
+                select max(tree_leaf_key_to_int(tree_sortkey)) into v_max_value
                   from cr_items 
                  where parent_id is null;
-
-                v_parent_sk := '''';
             else 
-                select max(tree_sortkey) into max_key
+                select max(tree_leaf_key_to_int(tree_sortkey)) into v_max_value
                   from cr_items 
                  where parent_id = p_id;
 
-                select coalesce(max(tree_sortkey),'''') into v_parent_sk 
+                select tree_sortkey into v_parent_sk 
                   from cr_items 
                  where item_id = p_id;
             end if;
 
             update cr_items 
-               set tree_sortkey = v_parent_sk || ''/'' || tree_next_key(max_key)
+               set tree_sortkey = tree_next_key(v_parent_sk, v_max_value)
              where item_id = v_rec.item_id;
 
         end LOOP;
@@ -955,33 +951,30 @@ create table cr_keywords (
 			 not null,
   description            text,
   has_children           boolean,
-  tree_sortkey           varchar(4000)
+  tree_sortkey           varbit
 );
 
 
 create function cr_keywords_tree_insert_tr () returns opaque as '
 declare
-        v_parent_sk     varchar;
-        max_key         varchar;
+        v_parent_sk      varbit default null;
+        v_max_value      integer;
 begin
         if new.parent_id is null then 
-            select max(tree_sortkey) into max_key 
+            select max(tree_leaf_key_to_int(tree_sortkey)) into v_max_value 
               from cr_keywords 
              where parent_id is null;
-
-            v_parent_sk := '''';
         else 
-            select max(tree_sortkey) into max_key 
+            select max(tree_leaf_key_to_int(tree_sortkey)) into v_max_value 
               from cr_keywords 
              where parent_id = new.parent_id;
 
-            select coalesce(max(tree_sortkey),'''') into v_parent_sk 
+            select tree_sortkey into v_parent_sk 
               from cr_keywords 
              where keyword_id = new.parent_id;
         end if;
 
-
-        new.tree_sortkey := v_parent_sk || ''/'' || tree_next_key(max_key);
+        new.tree_sortkey := tree_next_key(v_parent_sk, v_max_value);
 
         return new;
 
@@ -993,8 +986,8 @@ execute procedure cr_keywords_tree_insert_tr ();
 
 create function cr_keywords_tree_update_tr () returns opaque as '
 declare
-        v_parent_sk     varchar;
-        max_key         varchar;
+        v_parent_sk     varbit default null;
+        v_max_value     integer;
         p_id            integer;
         v_rec           record;
         clr_keys_p      boolean default ''t'';
@@ -1010,12 +1003,12 @@ begin
 
         for v_rec in select keyword_id
                        from cr_keywords 
-                      where tree_sortkey like new.tree_sortkey || ''%''
+                      where tree_sortkey between new.tree_sortkey and tree_right(new.tree_sortkey)
                    order by tree_sortkey
         LOOP
             if clr_keys_p then
                update cr_keywords set tree_sortkey = null
-               where tree_sortkey like new.tree_sortkey || ''%'';
+               where tree_sortkey between new.tree_sortkey and tree_right(new.tree_sortkey);
                clr_keys_p := ''f'';
             end if;
             
@@ -1024,23 +1017,21 @@ begin
              where keyword_id = v_rec.keyword_id;
 
             if p_id is null then 
-                select max(tree_sortkey) into max_key
+                select max(tree_leaf_key_to_int(tree_sortkey)) into v_max_value
                   from cr_keywords 
                  where parent_id is null;
-
-                v_parent_sk := '''';
             else 
-                select max(tree_sortkey) into max_key
+                select max(tree_leaf_key_to_int(tree_sortkey)) into v_max_value
                   from cr_keywords 
                  where parent_id = p_id;
 
-                select coalesce(max(tree_sortkey),'''') into v_parent_sk 
+                select tree_sortkey into v_parent_sk 
                   from cr_keywords 
                  where keyword_id = p_id;
             end if;
 
             update cr_keywords 
-               set tree_sortkey = v_parent_sk || ''/'' || tree_next_key(max_key)
+               set tree_sortkey = tree_next_key(v_parent_sk, v_max_value)
              where keyword_id = v_rec.keyword_id;
 
         end LOOP;
