@@ -36,39 +36,26 @@
 	
       </querytext>
 </fullquery>
- 
-<fullquery name="ad_set_client_property.prop_insert_dml">      
-      <querytext>
-      
-		insert into sec_session_properties
-		(session_id, module, property_name, property_value, secure_p, last_hit)
-		values ( :session_id, :module, :name, :value, :secure, :last_hit )
-	    
-      </querytext>
-</fullquery>
 
- 
-<fullquery name="ad_set_client_property.prop_update_dml">      
-      <querytext>
-      
-                update sec_session_properties
-                set property_value = :value,
-                  property_clob = null,
-                  secure_p = :secure,
-                  last_hit = :last_hit 
-                where session_id = :session_id and
-                  module = :module and
-                  property_name = :name
-	    
-      </querytext>
-</fullquery>
- 
 <fullquery name="sec_get_token.get_token">      
       <querytext>
       select token from secret_tokens
                        	                 where token_id = :token_id
       </querytext>
 </fullquery>
-
  
+<fullquery name="ad_set_client_property.prop_insert_dml">      
+      <querytext>
+	insert into sec_session_properties
+	  (session_id, module, property_name, secure_p, last_hit)
+	select :session_id, :module, :name, :secure, :last_hit
+        from dual
+        where not exists (select 1
+                          from sec_session_properties
+                          where session_id = :session_id and
+                          module = :module and
+                          property_name = :name)
+      </querytext>
+</fullquery>
+
 </queryset>

@@ -52,30 +52,30 @@
       </querytext>
 </fullquery>
 
-<fullquery name="ad_set_client_property.prop_insert_dml_clob">      
+<fullquery name="ad_set_client_property.prop_update_dml_clob">      
       <querytext>
-      
-		insert into sec_session_properties
-		(session_id, module, property_name, property_value, property_clob, secure_p, last_hit)
-		values ( :session_id, :module, :name, null, empty_clob(), :secure, :last_hit )
-                returning property_clob into :1
-	    
+         update sec_session_properties
+         set property_value = null,
+           property_clob = empty_clob(),
+           secure_p = :secure,
+           last_hit = :last_hit 
+         where session_id = :session_id and
+           module = :module and
+           property_name = :name
+         returning property_clob into :1
       </querytext>
 </fullquery>
  
-
-<fullquery name="ad_set_client_property.prop_update_dml_clob">      
+<fullquery name="ad_set_client_property.prop_update_dml">      
       <querytext>
-                update sec_session_properties
-                set property_value = null,
-                  property_clob = empty_clob(),
-                  secure_p = :secure,
-                  last_hit = :last_hit 
-                where session_id = :session_id and
-                  module = :module and
-                  property_name = :name
-                returning property_clob into :1
-
+         update sec_session_properties
+         set property_value = :value,
+           property_clob = null,
+           secure_p = :secure,
+           last_hit = :last_hit 
+         where session_id = :session_id and
+           module = :module and
+           property_name = :name
       </querytext>
 </fullquery>
  
