@@ -9,6 +9,7 @@ ad_library {
     @author Jeff Davis (davis@xarg.net)
     @cvs-id $Id$
 }
+# Belgium, Greece, Germany, Spain, France, Ireland, Italy, Luxembourg, The Netherlands, Austria, Portugal and Finland are using Euro's since 1-1-2001
 
 
 # UK
@@ -83,7 +84,7 @@ nsv_set locale en_US,formbuilder_time_format "HH12:MI AM"
 nsv_set locale fr_FR,abday {{dim} {lun} {mar} {mer} {jeu} {ven} {sam}}
 nsv_set locale fr_FR,abmon {{jan} {fév} {mar} {avr} {mai} {jun} {jui} {aoû} {sep} {oct} {nov} {déc}}
 nsv_set locale fr_FR,am_str ""
-nsv_set locale fr_FR,currency_symbol "F"
+nsv_set locale fr_FR,currency_symbol "€"
 nsv_set locale fr_FR,day {{dimanche} {lundi} {mardi} {mercredi} {jeudi} {vendredi} {samedi}}
 nsv_set locale fr_FR,firstdayofweek 1
 nsv_set locale fr_FR,decimal_point ","
@@ -93,7 +94,7 @@ nsv_set locale fr_FR,dlong_fmt "%d %B %Y"
 nsv_set locale fr_FR,dlongweekday_fmt "%A %d %B %Y"
 nsv_set locale fr_FR,frac_digits 2
 nsv_set locale fr_FR,grouping {-1 -1 }
-nsv_set locale fr_FR,int_curr_symbol "FRF "
+nsv_set locale fr_FR,int_curr_symbol "EUR "
 nsv_set locale fr_FR,int_frac_digits 2
 nsv_set locale fr_FR,mon_decimal_point ","
 nsv_set locale fr_FR,mon_grouping {3 3 }
@@ -117,7 +118,7 @@ nsv_set locale fr_FR,formbuilder_time_format "HH24:MI"
 nsv_set locale de_DE,abday {{Son} {Mon} {Die} {Mit} {Don} {Fre} {Sam}}
 nsv_set locale de_DE,abmon {{Jan} {Feb} {Mär} {Apr} {Mai} {Jun} {Jul} {Aug} {Sep} {Okt} {Nov} {Dez}}
 nsv_set locale de_DE,am_str ""
-nsv_set locale de_DE,currency_symbol "DM"
+nsv_set locale de_DE,currency_symbol "€"
 nsv_set locale de_DE,day {{Sonntag} {Montag} {Dienstag} {Mittwoch} {Donnerstag} {Freitag} {Samstag}}
 nsv_set locale de_DE,firstdayofweek 1
 nsv_set locale de_DE,decimal_point ","
@@ -127,7 +128,7 @@ nsv_set locale de_DE,dlong_fmt "%d %B %Y"
 nsv_set locale de_DE,dlongweekday_fmt "%A %d %B %Y"
 nsv_set locale de_DE,frac_digits 2
 nsv_set locale de_DE,grouping {3 3 }
-nsv_set locale de_DE,int_curr_symbol "DEM "
+nsv_set locale de_DE,int_curr_symbol "EUR "
 nsv_set locale de_DE,int_frac_digits 2
 nsv_set locale de_DE,mon_decimal_point ","
 nsv_set locale de_DE,mon_grouping {3 3 }
@@ -151,7 +152,7 @@ nsv_set locale de_DE,formbuilder_time_format "HH24:MI"
 nsv_set locale es_ES,abday {{dom} {lun} {mar} {mié} {jue} {vie} {sáb}}
 nsv_set locale es_ES,abmon {{ene} {feb} {mar} {abr} {may} {jun} {jul} {ago} {sep} {oct} {nov} {dic}}
 nsv_set locale es_ES,am_str ""
-nsv_set locale es_ES,currency_symbol "Pts"
+nsv_set locale es_ES,currency_symbol "€"
 nsv_set locale es_ES,day {{domingo} {lunes} {martes} {miércoles} {jueves} {viernes} {sábado}}
 nsv_set locale es_ES,firstdayofweek 1
 nsv_set locale es_ES,decimal_point ","
@@ -161,7 +162,7 @@ nsv_set locale es_ES,dlong_fmt "%d %B %Y"
 nsv_set locale es_ES,dlongweekday_fmt "%A %d %B %Y"
 nsv_set locale es_ES,frac_digits 0
 nsv_set locale es_ES,grouping {-1 -1 }
-nsv_set locale es_ES,int_curr_symbol "ESP "
+nsv_set locale es_ES,int_curr_symbol "EUR "
 nsv_set locale es_ES,int_frac_digits 0
 nsv_set locale es_ES,mon_decimal_point ","
 nsv_set locale es_ES,mon {{enero} {febrero} {marzo} {abril} {mayo} {junio} {julio} {agosto} {septiembre} {octubre} {noviembre} {diciembre}}
@@ -219,7 +220,7 @@ nsv_set locale da_DK,formbuilder_time_format "HH24:MI"
 nsv_set locale fi_FI,abday {{su} {ma} {ti} {ke} {to} {pe} {la}}
 nsv_set locale fi_FI,abmon {{tammi} {helmi} {maalis} {huhti} {touko} {kesä}{heinä} {elo} {syys} {loka} {marras} {joulu}}
 nsv_set locale fi_FI,am_str ""
-nsv_set locale fi_FI,currency_symbol "E"
+nsv_set locale fi_FI,currency_symbol "€"
 nsv_set locale fi_FI,day {{sunnuntai} {maanantai} {tiistai} {keskiviikko} {torstai} {perjantai} {lauantai}}
 nsv_set locale fi_FI,firstdayofweek 1
 nsv_set locale fi_FI,decimal_point ","
@@ -310,6 +311,39 @@ nsv_set locale ru_RU,t_fmt_ampm ""
 nsv_set locale ru_RU,t_fmt "%H:%M"
 nsv_set locale ru_RU,thousands_sep " "
 
+# The Netherlands (dutch)
+nsv_set locale nl_NL,abday {{Zon} {Maan} {Dins} {Woens} {Donder} {Vrij} {Zater}}
+nsv_set locale nl_NL,abmon {{Jan} {Feb} {Mrt} {Apr} {Mei} {Jun} {Jul} {Aug} {Sep} {Okt} {Nov} {Dec}}
+nsv_set locale nl_NL,am_str ""
+nsv_set locale nl_NL,currency_symbol "€"
+nsv_set locale nl_NL,day {{Zondag} {Maandag} {Dinsdag} {Woensdag} {Donderdag} {Vrijdag} {Zaterdag}}
+nsv_set locale nl_NL,firstdayofweek 1
+nsv_set locale nl_NL,decimal_point ","
+nsv_set locale nl_NL,d_fmt "%d.%m.%Y"
+nsv_set locale nl_NL,d_t_fmt "%a %d %B %Y %H:%M %Z"
+nsv_set locale nl_NL,dlong_fmt "%d %B %Y"
+nsv_set locale nl_NL,dlongweekday_fmt "%A %d %B %Y"
+nsv_set locale nl_NL,frac_digits 2
+nsv_set locale nl_NL,grouping {3 3 }
+nsv_set locale nl_NL,int_curr_symbol "EUR "
+nsv_set locale nl_NL,int_frac_digits 2
+nsv_set locale nl_NL,mon_decimal_point ","
+nsv_set locale nl_NL,mon_grouping {3 3 }
+nsv_set locale nl_NL,mon {{Januari} {Februari} {Maart} {April} {Mei} {Juni} {Juli} {Augustus} {September} {Oktober} {November} {December}}
+nsv_set locale nl_NL,mon_thousands_sep "."
+nsv_set locale nl_NL,n_cs_precedes 1
+nsv_set locale nl_NL,negative_sign "-"
+nsv_set locale nl_NL,n_sep_by_space 0
+nsv_set locale nl_NL,n_sign_posn 1
+nsv_set locale nl_NL,p_cs_precedes 1
+nsv_set locale nl_NL,pm_str ""
+nsv_set locale nl_NL,positive_sign ""
+nsv_set locale nl_NL,p_sep_by_space 0
+nsv_set locale nl_NL,p_sign_posn 1
+nsv_set locale nl_NL,t_fmt_ampm ""
+nsv_set locale nl_NL,t_fmt "%H:%M"
+nsv_set locale nl_NL,thousands_sep "."
+nsv_set locale nl_NL,formbuilder_time_format "HH24:MI"
 
 
 # Monetary amounts
