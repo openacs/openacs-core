@@ -311,6 +311,48 @@ ad_proc -private template::adp_init { type file_stub } {
   }
 }
 
+ad_proc -public template::expand_percentage_signs { message } {
+  Expand variables marked with percentage signs in caller's scope.
+
+  Some examples - if example and array(variable) has the values Erik
+  and Oluf in the caller's scope - the following expansion will occur:
+
+    Here is an %example% variable. -> Here is an Erik variable.
+    Here is an %array.variable% for you -> Here is an Oluf for you
+
+  author Christian Hvid
+
+} {
+  set remaining_message $message
+  set formatted_message ""
+  while { [regexp {^(.*?)(%[a-zA-Z_\.]+%)(.*)$} $remaining_message match before_percent percent_match remaining_message] } {
+    append formatted_message $before_percent 
+
+    # Convert syntax to TCL syntax:
+
+    #   array variables
+
+    regsub {%([a-zA-Z0-9_]+)\.([a-zA-Z0-9_]+)%} $percent_match {$\1(\2)} substitution
+
+    #   ordinary variables
+
+    regsub {%([a-zA-Z0-9_]+)%} $substitution {$\1} substitution
+
+    # Create command to execute in caller's scope
+
+    set command "subst -nocommands \"$substitution\""
+    
+    # and execute that
+
+    set substitution [uplevel $command]
+
+    append formatted_message $substitution
+  }
+  append formatted_message $remaining_message
+
+  return $formatted_message
+}
+
 ad_proc -public template::adp_compile { source_type source } {
     Converts an ADP template into a chunk of Tcl code.  Caching this code
     avoids the need to reparse the ADP template with each request.
@@ -356,15 +398,18 @@ ad_proc -public template::adp_compile { source_type source } {
   set code [join $parse_list "\n"]
 
   # Substitute #foo# message keys with values from the message catalog
-  while {[regsub -all {([^\\])\#([-a-zA-Z0-9_:\.]+)\#} $code {\1[_ [ad_conn locale] {\2}]} code]} {}
+
+  # Since messages may read the variables of the adp page they go trough
+  # expand_percentage_signs which amongst other things does an uplevel subst
+
+  while {[regsub -all {([^\\])\#([-a-zA-Z0-9_:\.]+)\#} $code {\1[template::expand_percentage_signs [_ [ad_conn locale] {\2}]]} code]} {}
 
   # substitute array variable references
-  set pattern {([^\\])@([a-zA-Z0-9_]+)\.([a-zA-Z0-9_]+)@}
   # loop to handle the case of adjacent variable references, like @a@@b@
-  while {[regsub -all $pattern $code {\1$\2(\3)} code]} {}
+  while {[regsub -all [template::adp_array_variable_regexp] $code {\1$\2(\3)} code]} {}
 
   # substitute simple variable references
-  while {[regsub -all {([^\\])@([a-zA-Z0-9_:]+)@} $code {\1${\2}} code]} {}
+  while {[regsub -all [template::adp_variable_regexp] $code {\1${\2}} code]} {}
 
   # unescape protected @ references
   set code [string map { \\@ @ } $code]
@@ -373,6 +418,29 @@ ad_proc -public template::adp_compile { source_type source } {
   set code [string map { \\# # } $code]
 
   return $code
+}
+
+ad_proc -public template::adp_array_variable_regexp {} {
+  The regexp pattern used to find adp array variables in 
+  a piece of text (i.e. @array_name.variable_name@). Captures the character preceeding
+  the first @ in \1, the array_name in \2, and variable_name in \3
+
+  @author Peter Marklund (peter@collaboraid.biz)
+  @creation-date 25 October 2002
+} {
+  return {(^|[^\\])@([a-zA-Z0-9_]+)\.([a-zA-Z0-9_]+)@}
+}
+
+ad_proc -public template::adp_variable_regexp {} {
+  The regexp pattern used to find adp variables in
+  a piece of text, i.e. occurenceis of @variable_name@. 
+  Captures the character preceeding the first @ in \1 and
+  the variable_name in \2.
+
+  @author Peter Marklund (peter@collaboraid.biz)
+  @creation-date 25 October 2002
+} {
+  return {(^|[^\\])@([a-zA-Z0-9_:]+)@}
 }
 
 ad_proc -private template::adp_compile_chunk { chunk } {
