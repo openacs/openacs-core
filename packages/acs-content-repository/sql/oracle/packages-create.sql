@@ -375,7 +375,8 @@ function new (
   data	        in cr_revisions.content%TYPE default null,
   relation_tag  in cr_child_rels.relation_tag%TYPE default null,
   is_live       in char default 'f',
-  storage_type  in cr_items.storage_type%TYPE default 'lob'
+  storage_type  in cr_items.storage_type%TYPE default 'lob',
+  security_inherit_p in acs_objects.security_inherit_p%TYPE default 't'
 ) return cr_items.item_id%TYPE;
 
 
@@ -1192,7 +1193,9 @@ function new (
   folder_id	in cr_folders.folder_id%TYPE default null,
   creation_date	in acs_objects.creation_date%TYPE default sysdate,
   creation_user	in acs_objects.creation_user%TYPE default null,
-  creation_ip	in acs_objects.creation_ip%TYPE default null
+  creation_ip	in acs_objects.creation_ip%TYPE default null,
+  security_inherit_p in acs_objects.security_inherit_p%TYPE default 't',
+  package_id	in cr_folders.package_id%TYPE default null
 ) return cr_folders.folder_id%TYPE;
 
 procedure del (
