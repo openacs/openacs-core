@@ -645,7 +645,8 @@ begin
   select decode(count(*),0,0,1) into v_exists 
     from cr_type_children
     where parent_type = register_child_type.parent_type
-    and child_type = register_child_type.child_type;
+    and child_type = register_child_type.child_type
+    and relation_tag = register_child_type.relation_tag;
 
   if v_exists = 0 then
 
@@ -914,5 +915,3 @@ begin
 
 end;
 /
-
-

@@ -721,7 +721,7 @@ begin
 
   -- first check if content_type is a registered child_type
   select
-    max_n into v_max_children
+    sum(max_n) into v_max_children
   from
     cr_type_children
   where

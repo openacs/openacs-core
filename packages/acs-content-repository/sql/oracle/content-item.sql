@@ -396,7 +396,6 @@ begin
         return 'f';
 end is_publishable;
 
-
 function is_valid_child (
   item_id		in cr_items.item_id%TYPE,
   content_type		in acs_object_types.object_type%TYPE
@@ -412,7 +411,7 @@ begin
   -- first check if content_type is a registered child_type
   begin
     select
-      max_n into v_max_children
+      sum(max_n) into v_max_children
     from
       cr_type_children
     where

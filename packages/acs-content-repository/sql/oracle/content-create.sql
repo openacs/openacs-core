@@ -379,8 +379,8 @@ create table cr_revision_attributes (
   attributes     clob
 );
 
-comment on column cr_revision_attributes.attributes is '
-  An XML document representing the compiled attributes for a revision
+comment on table cr_revision_attributes is '
+  Table contains an XML document representing the compiled attributes for a revision.
 ';
 
 create global temporary table cr_content_text (
