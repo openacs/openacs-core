@@ -197,16 +197,6 @@ insert into ad_locales
 insert into ad_locales 
        (locale, label, language, country, nls_language, nls_territory, 
         nls_charset, mime_charset, default_p)
- values ('gl_ES', 'Galizan-Portuguese (gl_ES)', 'gl ', 'ES', 'SPANISH', 'SPAIN', 'WE8ISO8859P1', 'ISO-8859-1', 't');
-
-insert into ad_locales 
-       (locale, label, language, country, nls_language, nls_territory, 
-        nls_charset, mime_charset, default_p)
- values ('ast_ES', 'Asturian (ast_ES)', 'as ', 'ES', 'SPANISH', 'SPAIN', 'WE8ISO8859P1', 'ISO-8859-1', 't');
-
-insert into ad_locales 
-       (locale, label, language, country, nls_language, nls_territory, 
-        nls_charset, mime_charset, default_p)
  values ('AR_EG', 'Arabic (AR_EG)', 'AR ', 'EG', 'ARABIC', 'EGYPT', 'AR8ISO8859P6', 'ISO8859-6', 't');
 
 insert into ad_locales 
