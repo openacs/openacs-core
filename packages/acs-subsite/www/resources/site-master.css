@@ -1,53 +1,69 @@
+body {
+  font-family: verdana, helvetica, arial, sans-serif;
+  background-color: white;
+  margin: 0px;
+}
+
 table.subsite-header {
-  background-color: #016799; 
+  background-color: #313063; 
   color: white;
   font-family: tahoma, verdana;
   font-size: 85%;
 }
-tr.subsite-header {
-
+table.subsite-header td {
+  padding-top: 3px;
+  padding-bottom: 3px;
 }
-td.subsite-header {
-  padding-top: 6px;
-  padding-bottom: 6px;
+table.subsite-header td.button-bar a { 
+  border: solid 1px #313063;
+  text-align: center; 
+  padding: 1px;
+  padding-left: 4px;
+  padding-right: 4px;
+  color: white;
+  text-decoration: none;
 }
-
-td.system-name {
+table.subsite-header td.button-bar a:hover { 
+  text-decoration: none;
+  background-color: #666666;
+  border: solid 1px #999999;
+}
+table.subsite-header td.system-name {
   font-size: 120%;
   font-weight: bold;
   padding-left: 8px;
 }
-a.system-name {
+table.subsite-header td.system-name a {
   color: white;
   text-decoration: none;
 }
-a.system-name:hover {
+
+a.refresh {
   color: white;
-  text-decoration: none;
+  text-decoration: underline;
+}
+a.refresh:hover {
+  color: red;
+  text-decoration: underline;
 }
 
 
 a.button { 
-  border-width: 1px; 
-  border-style: solid; 
+  font: 85% arial;
+  border: solid 1px black;
+  background-color: #e1e1e1;
   text-align: center; 
-  border-color: #999999; 
-  background-color: #107AAE;
   padding: 1px;
-  padding-left: 4px;
-  padding-right: 4px;
-}
-a.button:link { 
-  color: white;
+  padding-left: 8px;
+  padding-right: 8px;
+  color: black;
   text-decoration: none;
-}
-a.button:visited { 
-  color: white;
-  text-decoration: none;
+  white-space: nowrap;
 }
 a.button:hover { 
-  color: #cccccc;
   text-decoration: none;
+  background-color: #ccc;
+  border: solid 1px black;
 }
 
 #body  { 
@@ -62,6 +78,7 @@ a.button:hover {
   font-weight: bold; 
   font-size: 120%;
   font-family: verdana; 
+  padding-left: 12px;
 }
 a.subsite-name {
   color: black;
@@ -72,12 +89,52 @@ a.subsite-name:hover {
   text-decoration: none;
 }
 
-#navbar { 
-  padding-top: 4px; 
-  font-size: 85%;
+#navbar-div {
+  border-bottom: 1px solid #666;
 }
+#navbar-container {
+  height: 35px;
+  position: relative;
+}
+#navbar { 
+  position: absolute;
+  height: 21px;
+  margin: 0px;
+  padding: 0px 0px 0px 0px;
+  left: 10px;
+  bottom: -2px;
+  margin-top: 10px;
+  font-family: Arial, sans-serif;
+  font-size: 80%;
+  font-weight: bold;
+}
+html>body #navbar { bottom: 0px }
+
+#navbar .tab { 
+  height: 16px;
+  float: left; 
+  background-color: #eeeeee; 
+  border: 1px solid #666;
+  padding: 2px 5px 2px 5px;
+  margin: 0px 2px 0px 2px;
+}
+#navbar a {
+  text-decoration: none;
+  color: black;
+}
+#navbar a:hover {
+  text-decoration: underline;
+}
+#navbar #navbar-here { 
+  border-bottom-color: #dddddd;
+  background-color: #dddddd;
+}
+#navbar #navbar-here a {
+  color: black;
+}
+
+
 #navbar-body { 
-  border-top: 1px solid #016799;
   border-bottom: 1px solid #016799;
   background-color: #dddddd;
   clear: both;
@@ -86,38 +143,56 @@ a.subsite-name:hover {
   padding-left: 4px;
   padding-right: 4px;
 }
-div.navbar-selected { 
-  background-color: #016799; 
-  color: white; 
-  float: left; 
-  padding-left: 6px; 
-  padding-right: 6px; 
-  padding-top: 2px; 
-  padding-bottom: 2px;
+
+
+#subnavbar-div {
+  border-bottom: 1px solid #666;
 }
-div.navbar-unselected { 
-  float: left; 
-  padding-left: 6px; 
-  padding-right: 6px; 
-  padding-top: 2px; 
-  padding-bottom: 2px; 
+#subnavbar-container {
+  height: 35px;
+  width: 742px;
+  position: relative;
 }
-a.navbar-selected {
-  color: white;
+#subnavbar {
+  position: absolute;
+  width: 720px;
+  height: 21px;
+  margin: 0px;
+  padding: 0px 0px 0px 0px;
+  right: 0px;
+  bottom: -2px;
+  margin-top: 10px;
+  font-family: Arial, sans-serif;
+  font-size: 80%;
+  font-weight: bold;
+}
+html>body #subnavbar { bottom: 0px }
+
+#subnavbar .tab { 
+  height: 16px;
+  float: left; 
+  background-color: #eeeeee; 
+  border: 1px solid #666;
+  padding: 2px 5px 2px 5px;
+  margin: 0px 2px 0px 2px;
+}
+#subnavbar a {
   text-decoration: none;
+  color: black;
 }
-a.navbar-selected:hover {
-  color: white;
+#subnavbar a:hover {
   text-decoration: underline;
 }
-
-
-#subnavbar { 
-  padding-top: 12px; 
-  font-size: 85%;
+#subnavbar #subnavbar-here { 
+  border-bottom-color: white;
+  background-color: white;
 }
+#subnavbar #subnavbar-here a {
+  color: black;
+}
+
+
 #subnavbar-body { 
-  border-top: 1px solid #016799;
   border-bottom: 1px solid #016799;
   background-color: white;
   clear: both;
@@ -126,33 +201,6 @@ a.navbar-selected:hover {
   padding-left: 6px;
   padding-right: 6px;
 }
-div.subnavbar-selected { 
-  background-color: #016799; 
-  color: white; 
-  float: left; 
-  padding-left: 8px; 
-  padding-right: 8px; 
-  padding-top: 2px; 
-  padding-bottom: 2px;
-}
-div.subnavbar-unselected { 
-  float: left; 
-  padding-left: 8px; 
-  padding-right: 8px; 
-  padding-top: 2px; 
-  padding-bottom: 2px; 
-}
-a.subnavbar-selected {
-  color: white;
-  text-decoration: none;
-}
-a.subnavbar-selected:hover {
-  color: white;
-  text-decoration: underline;
-}
-
-
-
 
 table.subsite-body {
   width: 100%;
@@ -223,8 +271,10 @@ a.subsite-section:hover {
 
 
 div.subsite-context-bar {
-  font-size: 85%;
-  margin-bottom: 4px;
+  font-family: Arial, sans-serif;
+  font-size: 11px;
+  margin-bottom: 2px;
+  padding-left: 12px;
 }
 
 h1 {
@@ -271,4 +321,24 @@ a.action {
   margin-left: 24px;
   display: list-item;
   list-style: circle url(/resources/acs-subsite/right.gif);
+}
+
+div.developer-support {
+  float: left;
+  padding: 6px;
+  border: solid 1px gray;
+  background-color: #e1e1e1;
+  margin-top: 4px;
+}
+
+.portlet h2 {
+  background: #dddddd; 
+  padding: 2px 8px 2px 8px; 
+  margin: 0;
+}
+
+.portlet .portlet-body {
+  border: 1px dotted #999; 
+  border-top: 0px; 
+  padding: 6px 8px 6px 8px;
 }
