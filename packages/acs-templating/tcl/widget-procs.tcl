@@ -212,7 +212,7 @@ ad_proc -public template::widget::textarea { element_reference tag_attributes } 
   # Spell-checker
   array set spellcheck [template::util::spellcheck::spellcheck_properties -element_ref element]
   
-  if { $spellcheck(render_p) } {
+  if { [string equal $element(mode) "edit"] && $spellcheck(render_p) } {
       append output "<br>Spellcheck: 
 [menu "$element(id).spellcheck" [nsv_get spellchecker lang_options] $spellcheck(selected_option) {}]"
   }   
