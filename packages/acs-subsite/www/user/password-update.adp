@@ -7,12 +7,15 @@ for @first_names@ @last_name@ in @site_link@
 
 <hr>
 
+<p>@locals@</p>
+
 <form method="post" action="password-update-2">
-@export_vars@
+  <input type="hidden" name="user_id" value="@user_id@">
+  <input type="hidden" name="return_url" value="@return_url@">
 
 <table>
 
-<if @password_old@ eq "">
+<if @admin_p@ false and @password_old@ eq "">
   <tr>
     <th>Current Password:</th>
     <td><input type="password" name="password_old" size="15"></td>
