@@ -1261,7 +1261,7 @@ ad_proc -public export_entire_form_as_url_vars {
 		lappend params "[ns_urlencode $varname]=[ns_urlencode $varvalue]" 
 	    }
 	}
-	return [join $params "&amp;"]
+	return [join $params "&"]
     }
 }
 
