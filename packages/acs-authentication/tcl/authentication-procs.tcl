@@ -208,6 +208,14 @@ ad_proc -private auth::issue_login {
     ad_user_login -forever=$persistent_p $user_id
 }
 
+ad_proc -private auth::get_register_authority {
+} {
+    Get the ID of the authority in which accounts get created.
+} {
+    # HACK while waiting for real account creation
+    return [auth::authority::local]
+}
+
 ad_proc -public auth::create_user {
     {-verify_password_confirm:boolean}
     {-user_id ""}
@@ -252,8 +260,7 @@ ad_proc -public auth::create_user {
                              be quoted. Guaranteed to be non-empty if account_status is not ok.
     </ul>
 } {
-    # HACK: Always create in local acconut
-    set authority_id [auth::authority::local]
+    set authority_id [auth::get_register_authority]
 
     # This holds element error messages
     array set element_messages [list]
@@ -454,8 +461,7 @@ ad_proc -public auth::get_registration_elements {
     </ul>
             
 } {
-    # HACK: Only the local authority for now
-    set authority_id [auth::authority::local]
+    set authority_id [auth::get_register_authority]
 
     array set element_info [auth::registration::GetElements -authority_id $authority_id]
     

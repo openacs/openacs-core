@@ -2,6 +2,15 @@ ad_page_contract {
     Page for users to register themselves on the site.
 
     @cvs-id $Id$
+} {
+    username:optional
+    email:optional
+    first_names:optional
+    last_name:optional
+    password:optional
+    url:optional
+    secret_question:optional
+    secret_answer:optional
 }
 
 # TODO: Move to includeable chunk
@@ -11,7 +20,9 @@ ad_page_contract {
 ad_user_logout 
 
 
-ad_form -name register -form [auth::get_registration_form_elements] -on_submit {
+ad_form -name register -form [auth::get_registration_form_elements] -on_request {
+    # Populate elements from local variables
+} -on_submit {
 
     array set creation_info [auth::create_user \
                                  -first_names $first_names \

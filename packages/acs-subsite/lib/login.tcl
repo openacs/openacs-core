@@ -12,8 +12,8 @@ if { ![exists_and_not_null package_id] } {
     set subsite_id [subsite::get_element -element object_id]
 }
 
-if { ![info exists authority_id] } {
-    set authority_id {}
+if { ![exists_and_not_null authority_id] } {
+    set authority_id [auth::authority::local]
 }
 
 if { ![info exists username] } {
@@ -56,6 +56,9 @@ set authority_options [auth::authority::get_authority_options]
 set forgotten_pwd_url [auth::password::get_forgotten_url -authority_id $authority_id -username $username]
 
 set register_url "[subsite::get_element -element url]register/user-new"
+if { [string equal $authority_id [auth::get_register_authority]] } {
+    set register_url [export_vars -no_empty -base $register_url { username }]
+}
 
 ad_form -name login -html { style "margin: 0px;" } -show_required_p 0 -edit_buttons { { "Login" ok } } -form {
     {return_url:text(hidden)}
