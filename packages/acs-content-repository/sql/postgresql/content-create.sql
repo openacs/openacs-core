@@ -62,10 +62,12 @@ comment on table cr_mime_types is '
 
 -- Common mime types (administered from admin pages)
 
+insert into cr_mime_types(label, mime_type, file_extension) values ('Enhanced text', 'text/enhanced', 'etxt');
 insert into cr_mime_types(label, mime_type, file_extension) values ('Plain text', 'text/plain', 'txt');
 insert into cr_mime_types(label, mime_type, file_extension) values ('HTML text', 'text/html', 'html');
-insert into cr_mime_types(label, mime_type, file_extension) values ('Rich Text Format (RTF)', 'text/richtext', 'rtf');
+insert into cr_mime_types(label, mime_type, file_extension) values ('Fixed-width text', 'text/fixed-width', 'ftxt');
 
+insert into cr_mime_types(label, mime_type, file_extension) values ('Rich Text Format (RTF)', 'text/richtext', 'rtf');
 insert into cr_mime_types(label, mime_type, file_extension) values ('Binary', 'application/octet-stream', 'bin');
 insert into cr_mime_types(label, mime_type, file_extension) values ('Microsoft Word', 'application/msword', 'doc');
 insert into cr_mime_types(label, mime_type, file_extension) values ('Microsoft Excel', 'application/msexcel', 'xls');
