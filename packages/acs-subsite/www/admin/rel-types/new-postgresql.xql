@@ -6,13 +6,12 @@
 <fullquery name="select_supertypes">      
       <querytext>
 
-    select lpad('&nbsp;', (tree_level(tree_sortkey) - 1) * 4) || t.pretty_name as name,
-           t.object_type
-      from acs_object_types t
-     where (t.tree_sortkey like (select tree_sortkey || '%' from acs_object_types
-				where object_type= 'membership_rel')
-	or t.tree_sortkey like (select tree_sortkey || '%' from acs_object_types
-				where object_type= 'composition_rel'))
+    select repeat('&nbsp;', (tree_level(t2.tree_sortkey) - tree_level(t1.tree_sortkey)) * 4) || t2.pretty_name as name,
+           t2.object_type
+      from acs_object_types t1,
+	   acs_object_types t2
+     where t2.tree_sortkey like (t1.tree_sortkey || '%')
+       and t1.object_type in ('membership_rel', 'composition_rel')
 
       </querytext>
 </fullquery>

@@ -6,16 +6,17 @@
 <fullquery name="select_primary_relations">      
       <querytext>
 
-    select lpad('&nbsp;', (t.type_level - 1) * 4) as indent,
+    select repeat('&nbsp;', (t.type_level - 1) * 4) as indent,
            t.pretty_name, t.rel_type
-      from (select t.pretty_name, t.object_type as rel_type, tree_level(tree_sortkey) as type_level
-              from acs_object_types t
-             where t.object_type not in (select g.rel_type 
-                                           from group_rels g 
-                                          where g.group_id = :group_id)
-	 and (t.tree_sortkey like (select tree_sortkey || '%' from acs_object_types where object_type = 'membership_rel')
-		or t.tree_sortkey like (select tree_sortkey || '%' from acs_object_types where object_type = 'composition_rel'))) t, acs_rel_types rel_type
-
+      from (select t2.pretty_name, t2.object_type as rel_type, tree_level(t2.tree_sortkey) - tree_level(t1.tree_sortkey) + 1  as type_level
+              from acs_object_types t1,
+		   acs_object_types t2
+             where t2.tree_sortkey like (t1.tree_sortkey || '%')
+	       and t2.object_type not in (select g.rel_type 
+                                            from group_rels g 
+                                           where g.group_id = :group_id)
+	       and t1.object_type in ('membership_rel', 'composition_rel')) t,
+	    acs_rel_types rel_type
        where t.rel_type = rel_type.rel_type
        and (rel_type.object_type_one = :group_type 
             or acs_object_type__is_subtype_p(rel_type.object_type_one, :group_type) = 't')
