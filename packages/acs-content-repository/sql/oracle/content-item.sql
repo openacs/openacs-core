@@ -79,7 +79,7 @@ function new (
   relation_tag  in cr_child_rels.relation_tag%TYPE default null,
   is_live       in char default 'f',
   storage_type  in cr_items.storage_type%TYPE default 'lob',
-  security_inherit_p in acs_objects.security_inherit_p%TYPE default 't'
+  security_inherit_p in acs_objects.security_inherit_p%TYPE default 't',
   package_id    in acs_objects.package_id%TYPE default null
 ) return cr_items.item_id%TYPE
 is
