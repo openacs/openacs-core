@@ -13,7 +13,7 @@
 </fullquery>
 
 
-<fullquery name="host_node_pair">      
+<fullquery name="select_host_node_pairs">      
       <querytext>
 
     select host, node_id, site_node__url(node_id) as url 
