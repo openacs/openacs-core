@@ -227,23 +227,25 @@ namespace eval lang::message {
         } else {
             # There is no entry in the message catalog for the given locale
 
-            set return_value $default
+            # is there any thing under this message key in the default locale
 
-            if { [string equal $default "TRANSLATION MISSING"] } {
-                if { [lang::util::translator_mode_p] } {
-                    set key_split [split $key "."]
-                    set package_key_part [lindex $key_split 0]
-                    set message_key_part [lindex $key_split 1]
+            if { [nsv_exists lang_message_en_US $key] != 0 } {
+                set return_value "$default: $key"
+            } {
+                set return_value "NO KEY: $key"
+            }
 
-                    set return_url [ad_conn url]
-                    if { [ns_getform] != "" } {
-                        append return_url "?[export_entire_form_as_url_vars]"
-                    }
-
-                    set return_value "&nbsp;<a href=\"/acs-lang/admin/edit-localized-message?[export_vars { { message_key $message_key_part } { locales $locale } { package_key $package_key_part } return_url }]\"><span style=\"background-color: yellow\"><font size=\"-2\">$message_key_part - TRANSLATE</font></span></a>&nbsp;"
-                } else {
-                    append return_value " - " $key
+            if { [lang::util::translator_mode_p] } {
+                set key_split [split $key "."]
+                set package_key_part [lindex $key_split 0]
+                set message_key_part [lindex $key_split 1]
+                
+                set return_url [ad_conn url]
+                if { [ns_getform] != "" } {
+                    append return_url "?[export_entire_form_as_url_vars]"
                 }
+                
+                set return_value "&nbsp;<a href=\"/acs-lang/admin/edit-localized-message?[export_vars { { message_key $message_key_part } { locales $locale } { package_key $package_key_part } return_url }]\"><span style=\"background-color: yellow\"><font size=\"-2\">$message_key_part - TRANSLATE</font></span></a>&nbsp;"
             }
         }
 
