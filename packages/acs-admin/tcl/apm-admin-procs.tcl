@@ -105,10 +105,13 @@ ad_proc -private apm_package_selection_widget {
     set widget "<blockquote><table cellpadding=5 cellspacing=5>
 <tr bgcolor=\"\#f8f8f8\"><th>Install</th>[ad_decode $install_enable_p 1 "<th>Enable</th>" ""]<th>Package</th><th>Directory</th><th>Comment</th></tr>
     "
+
     foreach pkg_info $pkg_info_list {
         
         incr counter
         set package_key [pkg_info_key $pkg_info]
+        set package_path [pkg_info_path $pkg_info]
+        set package_rel_path [string range $package_path [string length [acs_root_dir]] end]
         set spec_file [pkg_info_spec $pkg_info]
         array set package [apm_read_package_info_file $spec_file]
         set version_name $package(name)
@@ -148,7 +151,7 @@ ad_proc -private apm_package_selection_widget {
 
             append widget "></td>
             <td>$package(package-name) $package(name)</td>
-            <td>/packages/$package(package.key)/</td>
+            <td>$package_rel_path</td>
             <td><font color=green>Dependencies satisfied.</font></td>
             </tr> "
         } elseif { ![string compare [pkg_info_dependency_p $pkg_info] "f"] } {
@@ -166,7 +169,7 @@ ad_proc -private apm_package_selection_widget {
 
             append widget "></td>
             <td>$package(package-name) $package(name)</td>
-            <td>/packages/$package(package.key)/</td>
+            <td>$package_rel_path</td>
     <td><font color=red>
             "
             foreach comment [pkg_info_comment $pkg_info] {
@@ -219,7 +222,7 @@ ad_proc -private apm_package_selection_widget {
 
             append widget "
            <td>$package(package-name) $package(name)</td>
-    <td>/packages/$package(package.key)/</td>
+    <td>$package_rel_path</td>
             <td>$comment</td>
            </tr>"
         }

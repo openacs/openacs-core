@@ -123,7 +123,6 @@ ad_proc -public apm_package_info_file_path {
     } else {
 	set path "$path/$package_key/$package_key.info"
     }
-    ns_log Notice "$path"
     if { [file exists $path] } {
 	return $path
     }
@@ -163,7 +162,8 @@ ad_proc -private apm_generate_tarball { version_id } {
     DCW - 2001-05-03, change to use the content repository for tarball storage.
     
 } {
-    set files   [apm_version_file_list $version_id]    
+    set package_key [apm_package_key_from_version_id $version_id]
+    set files [apm_get_package_files -all_db_types -package_key $package_key]
     set tmpfile [ns_tmpnam]
     
     db_1row package_key_select {
