@@ -1,6 +1,7 @@
 <master>
-  <property name="title">@page_title@</property>
+  <property name="title">@page_title;noquote@</property>
   <property name="context">@context;noquote@</property>
+  <property name="displayed_object_id">@user_id;noquote@</property>
 
 <if @inline_portrait_state@ eq "inline">
   <a href="portrait?@portrait_export_vars@"><img src="portrait-bits?@portrait_export_vars@"
