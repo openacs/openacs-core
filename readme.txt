@@ -1,10 +1,11 @@
-This is the OpenACS Community System.
+This is the OpenACS - the Open Architecture Community System.
 
-OpenACS (Open ArsDigita Community System) is an advanced toolkit for
-building scalable, community-oriented web applications.
+OpenACS is an advanced toolkit for building scalable,
+community-oriented web applications.
 
-The original ACS, which formed the foundation of OpenACS is described
-in http://philip.greenspun.com/panda/community
+The original ACS - the Arsdigita Community System, which formed the
+foundation of OpenACS is described in 
+http://philip.greenspun.com/panda/community
 
 The original ACS was Copyright (C) 1995-2000 ArsDigita Corporation
 and, in some cases, individual authors.
@@ -38,10 +39,10 @@ Documentation for this system is at viewable via your favorite browser
 at http://openacs.org/doc
 
 Once your service is up and running, this same documenation is
-available at http://yourservicename/doc/
+available at http://YOURSERVICENAME/doc/
 
 The release notes for this release are available at
 packages/acs-core-docs/www/release-notes.html
 
-Please report bugs via http://openacs.org/sdm
-and any questions and feedback at http://openacs.org/bboard/
+Please report bugs via http://openacs.org/bugtracker/openacs/
+and any questions and feedback at http://openacs.org/forums/
