@@ -2,7 +2,7 @@
 #
 # Check consistency of the en_US message catalog of the given package.
 # Checks that the set of keys in the message catalog is identical to the
-# set of keys in the adp, info, and tcl files in the package.
+# set of keys in the adp, info, sql, and tcl files in the package.
 # Also checks that the info in the catalog filename matches info in
 # its xml content (package_key, locale and charset).
 #
@@ -23,10 +23,10 @@ check_catalog_keys_have_lookups() {
         find -iname '*.tcl' | xargs ${script_path}/mygrep \
            "(?ms)\[_\s+(?:\[ad_conn locale\]\s+)?\"?${package_key}\.$catalog_key\"?" \
          || \
-        find -regex '.*\.\(info\|adp\)' | xargs ${script_path}/mygrep \
+        find -regex '.*\.\(info\|adp\|sql\|tcl\)' | xargs ${script_path}/mygrep \
            "#${package_key}\.$catalog_key#" \
          || \
-        echo "Warning key $catalog_key in catalog file not found in any adp or tcl file"
+        echo "Warning key $catalog_key in catalog file not found in any adp, info, sql, or tcl file"
     done
 }
 
