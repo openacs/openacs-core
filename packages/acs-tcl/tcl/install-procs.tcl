@@ -20,6 +20,66 @@ ad_proc -public install::xml::action::text { node } {
     return {}
 }
 
+ad_proc -private ::install::xml::action::source { node } {
+    Source an install.xml file, sql file or tcl script during execution of 
+    the current install.xml.
+
+    If no type attribute is specified then this tag will attempt to guess 
+    type of the sourced script from the file extension, otherwise it defaults 
+    to install.xml.
+
+    The type of the sourced script may be explicitly declared as 'tcl', 
+    'sql' or 'install.xml' using the type attribute.
+
+    @author Lee Denison lee@xarg.co.uk
+    @creation-date 2005-02-04
+
+} {
+    set src [apm_required_attribute_value $node src]
+    set type [apm_attribute_value -default {} $node type]
+
+    if {[string equal $type ""]} {
+        switch -glob $src {
+            *.tcl { set type tcl }
+            *.sql { set type sql }
+            default { set type install.xml }
+        }
+    }
+
+    set params [xml_node_get_children [lindex $node 0]]
+
+    foreach param $params {
+        if {![string equal [xml_node_get_name $param] param]} {
+            error "Unknown xml element \"[xml_node_get_name $param]\""
+        }
+
+        set name [apm_required_attribute_value $param name]
+        set value [apm_required_attribute_value $param value]
+
+        set parameters($name) $value
+    }
+
+    switch -exact $type {
+        tcl {
+            set code [template::util::read_file [acs_root_dir]$src]
+            set out [eval $code]
+        }
+        sql {
+            db_source_sql_file [acs_root_dir]$src
+            set out "$src completed"
+        }
+        install.xml {
+            set binds [array get parameters]
+            set out [apm::process_install_xml -nested $src $binds]
+        }
+        default {
+            error "Unknown script type $type"
+        }
+    }
+
+    return $out 
+}
+
 ad_proc -public install::xml::action::install { node } {
     Installs a package including dependencies.
 
@@ -300,6 +360,63 @@ ad_proc -public install::xml::action::set-join-policy { node } {
     }
 }
 
+ad_proc -public install::xml::action::create-user { node } {
+    Create a new user.
+} {
+    set email [apm_required_attribute_value $node email]
+    set first_names [apm_required_attribute_value $node first-names]
+    set last_name [apm_required_attribute_value $node last-name]
+    set password [apm_required_attribute_value $node password]
+    set username [apm_attribute_value -default "" $node username]
+    set screen_name [apm_attribute_value -default "" $node screen-name]
+    set url [apm_attribute_value -default "" $node url]
+    set secret_question [apm_attribute_value -default "" $node secret-question]
+    set secret_answer [apm_attribute_value -default "" $node secret-answer]
+    set id [apm_attribute_value -default "" $node id]
+
+    array set result [auth::create_user -email $email \
+        -first_names $first_names \
+        -last_name $last_name \
+        -password $password \
+        -username $username \
+        -screen_name $screen_name \
+        -url $url \
+        -secret_question $secret_question \
+        -secret_answer $secret_answer \
+        -email_verified_p 1]
+
+    if {[string equal $result(creation_status) "ok"] &&
+        ![string equal $id ""]} {
+        set ::install::xml::ids($id) $result(user_id)
+    }
+  
+    return [list $result(creation_message)]
+}
+
+ad_proc -public install::xml::action::add-subsite-member { node } {
+    Add a member to a subsites application group.
+} {
+    set member_state [apm_attribute_value -default "" $node member-state]
+
+    set group_id [::install::xml::object_id::application-group $node]
+
+    set user_nodes [xml_node_get_children [lindex $node 0]]
+
+    foreach node $user_nodes {
+        if {![string equal [xml_node_get_name $node] user]} {
+            error "Unknown xml element \"[xml_node_get_name $node]\""
+        }
+
+        set user_id [::install::xml::object_id::object $node]
+
+        group::add -user_id $user_id \
+            -group_id $group_id \
+            -member_state $member_state
+    }
+
+    return {}
+}
+
 ad_proc -public install::xml::object_id::package { node } {
     Returns an object_id for a package specified in node.
 
@@ -309,15 +426,18 @@ ad_proc -public install::xml::object_id::package { node } {
     <p>&lt;package [ id=&quot;<em>id</em>&quot; | key=&quot;<em>package-key</em>&quot; | url=&quot;<em>package-url</em>&quot; ] /&gt;</p>
 } {
     set id [apm_attribute_value -default "" $node package-id]
-    set package_key [apm_attribute_value -default "" $node key]
+    set package_key [apm_attribute_value -default "" $node package-key]
     set url [apm_attribute_value -default "" $node url]
 
     if { ![string equal $package_key ""] && ![string equal $url ""] } {
         error "set-parameter: Can't specify both package and url for $url and $package_key"
 
     } elseif { ![string equal $id ""] } {
-        return [install::xml::util::get_id $id]
-
+        if {[string is integer $id]} {
+            return $id
+        } else {
+            return [install::xml::util::get_id $id]
+        }
     } elseif { ![string equal $package_key ""] } {
         return [apm_package_id_from_key $package_key]
 
@@ -382,7 +502,12 @@ ad_proc -public install::xml::object_id::object { node } {
     use &lt;object id="-100"&gt; to return the literal id -100.
 } {
     set id [apm_required_attribute_value $node id]
-    return $id
+
+    if {[string is integer $id]} {
+        return $id
+    } else {
+        return [install::xml::util::get_id $id]
+    }
 }
 
 ad_proc -public install::xml::util::get_id { id } {
