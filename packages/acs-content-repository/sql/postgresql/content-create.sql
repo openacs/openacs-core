@@ -1099,9 +1099,8 @@ create table cr_doc_filter (
 -- prompt *** Creating object types...
 \i types-create.sql
 
--- DC@: oracle-specific code that can't be directly ported to postgresql.
 -- prompt *** Preparing search indices...
--- \i content-search.sql
+\i content-search.sql
 
 -- this index requires prefs created in content-search
 -- create index cr_doc_filter_index on cr_doc_filter ( content )

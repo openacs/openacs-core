@@ -139,7 +139,6 @@
         </files>
         <parameters>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="TemplateRoot"  default="templates" description="The directory to which templates are published and from where they are retrieved when a page is served. If the value does not start with a '/', it is taken to be relative to [acs_root_dir]. Packages that use the content-repository can override this setting by defining their own TemplateRoot parameter." section_name="templates"/>
-            <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="FtsEngineDriver"  default="openfts-driver" description="Which search engine driver to use? You should enter the name of the related binding (e.g. openfts-driver, swish-driver,...)"/>
         </parameters>
     </version>
 </package>

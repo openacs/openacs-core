@@ -5,13 +5,13 @@
 
 select acs_sc_impl__new(
 	   'FtsContentProvider',		-- impl_contract_name
-           'acs-content-repository',            -- impl_name
-	   'acs-content-repositorys'            -- impl_owner_name
+           'content_revision',                  -- impl_name
+	   'acs-content-repository'             -- impl_owner_name
 );
 
 select acs_sc_impl_alias__new(
            'FtsContentProvider',		-- impl_contract_name
-           'acs-content-repository',            -- impl_name
+           'content_revision',                  -- impl_name
 	   'datasource',			-- impl_operation_name
 	   'content_search__datasource',        -- impl_alias
 	   'TCL'				-- impl_pl
@@ -19,7 +19,7 @@ select acs_sc_impl_alias__new(
 
 select acs_sc_impl_alias__new(
            'FtsContentProvider',		-- impl_contract_name
-           'acs-content-repository',            -- impl_name
+           'content_revision',                  -- impl_name
 	   'url',				-- impl_operation_name
 	   'content_search__url',               -- impl_alias
 	   'TCL'				-- impl_pl
