@@ -27,6 +27,11 @@ create table notification_replies (
        reply_date                 timestamp
 );
 
+-- RI indexes
+create index notif_repl_from_user_idx ON notification_replies(from_user);
+create index notif_repl_type_id_idx ON notification_replies(type_id);
+create index notif_repl_object_id_idx ON notification_replies(object_id);
+
 
 select acs_object_type__create_type (
             'notification_reply',

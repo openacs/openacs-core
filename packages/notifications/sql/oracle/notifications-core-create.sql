@@ -151,6 +151,12 @@ create table notifications (
     notif_html                      clob
 );
 
+-- RI indexes 
+create index notifications_type_id_idx ON notifications(type_id);
+create index notifications_response_id_idx ON notifications(response_id);
+create index notifications_object_id_idx ON notifications(object_id);
+
+
 -- who has received this notification?
 create table notification_user_map (
     notification_id                 constraint notif_user_map_notif_id_fk
@@ -163,6 +169,9 @@ create table notification_user_map (
     primary key (notification_id, user_id),
     sent_date                       date
 );
+
+-- RI Indexes 
+create index notification_user_map_user_idx ON notification_user_map(user_id);
 
 --
 -- Object Types

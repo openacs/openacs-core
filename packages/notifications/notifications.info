@@ -7,7 +7,7 @@
     <initial-install-p>f</initial-install-p>
     <singleton-p>t</singleton-p>
 
-    <version name="0.3d" url="http://openacs.org/repository/download/apm/notifications-0.3d.apm">
+    <version name="0.4d" url="http://openacs.org/repository/download/apm/notifications-0.4d.apm">
     <database-support>
         <database>oracle</database>
         <database>postgresql</database>
@@ -16,7 +16,7 @@
         <summary>Notification Management</summary>
         <release-date>2002-08-19</release-date>
 
-        <provides url="notifications" version="0.3d"/>
+        <provides url="notifications" version="0.4d"/>
         <requires url="acs-mail-lite" version="0.1d"/>
 
         <files>
@@ -33,6 +33,8 @@
             <file type="data_model" db_type="oracle" path="sql/oracle/notifications-replies-create.sql"/>
             <file type="data_model" db_type="oracle" path="sql/oracle/notifications-replies-package-create.sql"/>
             <file type="data_model_upgrade" db_type="oracle" path="sql/oracle/upgrade/upgrade-0.1d-0.2d.sql"/>
+            <file type="data_model_upgrade" db_type="oracle" path="sql/oracle/upgrade/upgrade-0.2d-0.3d.sql"/>
+            <file type="data_model_upgrade" db_type="oracle" path="sql/oracle/upgrade/upgrade-0.3d-0.4d.sql"/>
             <file type="data_model" db_type="postgresql" path="sql/postgresql/delivery-method-sc-create.sql"/>
             <file type="data_model" db_type="postgresql" path="sql/postgresql/email-sc-impl-create.sql"/>
             <file type="data_model" db_type="postgresql" path="sql/postgresql/notification-type-sc-create.sql"/>
@@ -46,6 +48,8 @@
             <file type="data_model" db_type="postgresql" path="sql/postgresql/notifications-replies-create.sql"/>
             <file type="data_model" db_type="postgresql" path="sql/postgresql/notifications-replies-package-create.sql"/>
             <file type="data_model_upgrade" db_type="postgresql" path="sql/postgresql/upgrade/upgrade-0.1d-0.2d.sql"/>
+            <file type="data_model_upgrade" db_type="postgresql" path="sql/postgresql/upgrade/upgrade-0.2d-0.3d.sql"/>
+            <file type="data_model_upgrade" db_type="postgresql" path="sql/postgresql/upgrade/upgrade-0.3d-0.4d.sql"/>
             <file type="tcl_procs" path="tcl/delivery-method-procs.tcl"/>
             <file type="query_file" path="tcl/delivery-method-procs.xql"/>
             <file type="tcl_procs" path="tcl/interval-procs.tcl"/>
