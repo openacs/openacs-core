@@ -108,7 +108,7 @@ if [[ $DOM = "01" || $DOW = "Sun" ]];
     TYPE="full";
 fi
 
-if [ $TYPE -eq "full" ];
+if [ $TYPE == "full" ];
     then
     NEW_FLAG=""
 else
@@ -187,14 +187,16 @@ for directory in $DIRECTORIES
   tar -zcpsh . --file $FULLNAME $NEW_FLAG
   $CHOWN $BACKUPUSER $FULLNAME
   $CHMOD 660 $FULLNAME
-  if [ -n $OTHERHOST ]
+  if [ -n "$OTHERHOST" ]
       then 
       
       scp_success=1
       sc_success=`$SCP -q $FULLNAME $OTHERUSER@$OTHERHOST:$BACKUPDIR`
       
      # if scp returns success, see if we should wipe
-      if [[ scp_success -eq 0 && $WIPE_OLD_AFTER_SCP_FULL -eq "true" && $TYPE = "full" ]];
+      if [[ scp_success -eq 0 && $WIPE_OLD_AFTER_SCP_FULL == "true" && $TYPE = "full" ]];
+	  then
+
           # wipe out all similar backups except for the just-copied one
           for file in `ls $BACKUPDIR/*-$COMPUTER-${directory//\//-}-backup-*.tgz`
             do
@@ -213,7 +215,7 @@ done
 # incremental backups are relative to the last successful full
 # backup
 
-if [ $TYPE -eq "full" ];
+if [ $TYPE == "full" ];
     then
     NEWER=""
     NOW=`date +%Y-%m-%d`
