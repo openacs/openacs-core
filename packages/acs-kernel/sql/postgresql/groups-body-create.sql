@@ -833,10 +833,6 @@ begin
       end if;
   end if;
 
-  update acs_objects
-  set title = new__group_name
-  where object_id = v_group_id;
-
   insert into groups
    (group_id, group_name, join_policy)
   values

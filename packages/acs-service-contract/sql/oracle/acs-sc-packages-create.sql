@@ -152,10 +152,7 @@ as
    is
        v_contract_id	acs_sc_contracts.contract_id%TYPE;
    begin
-       v_contract_id := acs_object.new(
-		object_type => 'acs_sc_contract',
-		title => contract_name
-	);
+       v_contract_id := acs_object.new( object_type=>'acs_sc_contract');
 
        insert into acs_sc_contracts (
 	      contract_id,
@@ -253,10 +250,7 @@ as
    begin
 
        v_contract_id := acs_sc_contract.get_id(contract_name);
-       v_operation_id := acs_object.new (
-		object_type => 'acs_sc_operation',
-		title => operation_name
-	);
+       v_operation_id := acs_object.new (object_type=>'acs_sc_operation');
        v_operation_inputtype_id := acs_sc_msg_type.get_id(operation_inputtype);
        v_operation_outputtype_id := acs_sc_msg_type.get_id(operation_outputtype);
 
@@ -347,10 +341,7 @@ as
    is
        v_impl_id		acs_sc_impls.impl_id%TYPE;
    begin
-       v_impl_id := acs_object.new (
-		object_type => 'acs_sc_implementation',
-		title => impl_pretty_name
-	);
+       v_impl_id := acs_object.new (object_type => 'acs_sc_implementation');
 
        insert into acs_sc_impls (
 	      impl_id,

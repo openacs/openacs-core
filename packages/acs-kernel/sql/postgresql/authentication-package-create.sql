@@ -66,9 +66,7 @@ begin
         p_creation_user,
         p_creation_ip,
         p_context_id,
-        ''t'',
-        p_short_name,
-        null
+        ''t''
     );
 
     insert into auth_authorities (authority_id, short_name, pretty_name, enabled_p, 

@@ -434,7 +434,6 @@ as
     v_rel_id := acs_object.new (
       object_id => rel_id,
       object_type => rel_type,
-      title => rel_type || ': ' || object_id_one || ' - ' || object_id_two,
       context_id => context_id,
       creation_user => creation_user,
       creation_ip => creation_ip

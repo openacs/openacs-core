@@ -235,10 +235,7 @@ begin
       now(),
       new__creation_user,
       new__creation_ip,
-      null,
-      ''t'',
-      new__name,
-      new__object_id
+      null
     );
 
     insert into site_nodes

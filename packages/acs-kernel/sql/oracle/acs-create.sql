@@ -261,9 +261,9 @@ begin
   -- LARS: Make object_id 0 be a user, not a person
 
   insert into acs_objects
-    (object_id, object_type, title)
+    (object_id, object_type)
   values
-    (0, 'user', 'Unregistered Visitor');
+    (0, 'user');
 
   insert into parties
     (party_id)
@@ -338,8 +338,7 @@ declare
   object_id integer;
 begin
   object_id := acs_object.new (
-    object_id => -3,
-    title => 'Default Context'
+    object_id => -3
   );
 
   insert into acs_magic_objects

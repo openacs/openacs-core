@@ -12,9 +12,6 @@ begin
                 now(),
                 null,
                 null,
-                null,
-                ''t'',
-                p_contract_name,
                 null
             );
 
@@ -124,9 +121,6 @@ begin
                          now(),
                          null,
                          null,
-                         null,
-                         ''t'',
-                         p_operation_name,
                          null
                      );
 
@@ -230,9 +224,6 @@ begin
                 now(),
                 null,
                 null,
-                null,
-                ''t'',
-                p_impl_pretty_name,
                 null
             );
 

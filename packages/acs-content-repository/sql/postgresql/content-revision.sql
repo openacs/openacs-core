@@ -19,7 +19,7 @@
 -- than the standard package_instantiate_object.  So we don't bother calling define_function_args
 -- here.
 
-create or replace function content_revision__new (varchar,varchar,timestamptz,varchar,varchar,integer,integer,integer,timestamptz,integer,varchar,integer)
+create or replace function content_revision__new (varchar,varchar,timestamptz,varchar,varchar,integer,integer,integer,timestamptz,integer,varchar)
 returns integer as '
 declare
   new__title                  alias for $1;  
@@ -34,19 +34,11 @@ declare
   new__creation_date          alias for $9;  -- default now()
   new__creation_user          alias for $10; -- default null
   new__creation_ip            alias for $11; -- default null
-  new__package_id             alias for $12; -- default null  
   v_revision_id               integer;       
-  v_package_id                acs_objects.package_id%TYPE;
   v_content_type              acs_object_types.object_type%TYPE;
 begin
 
   v_content_type := content_item__get_content_type(new__item_id);
-
-  if new__package_id is null then
-    v_package_id := acs_object__package_id(new__item_id);
-  else
-    v_package_id := new__package_id;
-  end if;
 
   v_revision_id := acs_object__new(
       new__revision_id,
@@ -54,10 +46,7 @@ begin
       new__creation_date, 
       new__creation_user, 
       new__creation_ip, 
-      new__item_id,
-      ''t'',
-      new__title,
-      v_package_id
+      new__item_id
   );
 
   -- binary data is stored in cr_revisions using Dons lob hack.
@@ -82,64 +71,6 @@ begin
 
 end;' language 'plpgsql';
 
-create or replace function content_revision__new (varchar,varchar,timestamptz,varchar,varchar,integer,integer,integer,timestamptz,integer,varchar)
-returns integer as '
-declare
-  new__title                  alias for $1;  
-  new__description            alias for $2;  -- default null 
-  new__publish_date           alias for $3;  -- default now()
-  new__mime_type              alias for $4;  -- default ''text/plain''
-  new__nls_language           alias for $5;  -- default null
-  -- lob id 
-  new__data                   alias for $6;  
-  new__item_id                alias for $7;  
-  new__revision_id            alias for $8;  -- default null
-  new__creation_date          alias for $9;  -- default now()
-  new__creation_user          alias for $10; -- default null
-  new__creation_ip            alias for $11; -- default null
-begin
-        return content_revision__new(new__title,
-                                     new__description,
-                                     new__publish_date,
-                                     new__mime_type,
-                                     new__nls_language,
-                                     new__data,
-                                     new__item_id,
-                                     new__revision_id,
-                                     new__creation_date,
-                                     new__creation_user,
-                                     new__creation_ip,
-                                     null
-               );
-end;' language 'plpgsql';
-
-create or replace function content_revision__new(varchar,varchar,timestamptz,varchar,text,integer,integer) returns integer as '
-declare
-        new__title              alias for $1;
-        new__description        alias for $2;  -- default null
-        new__publish_date       alias for $3;  -- default now()
-        new__mime_type          alias for $4;  -- default ''text/plain''
-        new__text               alias for $5;  -- default '' ''
-        new__item_id            alias for $6;
-        new__package_id         alias for $7;  -- default null
-begin
-        return content_revision__new(new__title,
-                                     new__description,
-                                     new__publish_date,
-                                     new__mime_type,
-                                     null,
-                                     new__text,
-                                     new__item_id,
-                                     null,
-                                     now(),
-                                     null,
-                                     null,
-                                     null,
-                                     new__package_id
-               );
-
-end;' language 'plpgsql';
-
 create or replace function content_revision__new(varchar,varchar,timestamptz,varchar,text,integer) returns integer as '
 declare
         new__title              alias for $1;
@@ -158,8 +89,6 @@ begin
                                      new__item_id,
                                      null,
                                      now(),
-                                     null,
-                                     null,
                                      null,
                                      null
                );
@@ -192,11 +121,11 @@ begin
                                      new__creation_date,
                                      new__creation_user,
                                      new__creation_ip,
-                                     null,
                                      null
                                      );
 end;' language 'plpgsql';
 
+-- function new
 create or replace function content_revision__new (varchar,varchar,timestamptz,varchar,varchar,text,integer,integer,timestamptz,integer,varchar,integer)
 returns integer as '
 declare
@@ -212,42 +141,7 @@ declare
   new__creation_user          alias for $10; -- default null
   new__creation_ip            alias for $11; -- default null
   new__content_length         alias for $12; -- default null
-begin
-        return content_revision__new(new__title,
-                                     new__description,
-                                     new__publish_date,
-                                     new__mime_type,
-                                     new__nls_language,
-                                     new__text,
-                                     new__item_id,
-                                     new__revision_id,
-                                     new__creation_date,
-                                     new__creation_user,
-                                     new__creation_ip,
-                                     new__content_length,
-                                     null
-                                     );
-end;' language 'plpgsql';
-
--- function new
-create or replace function content_revision__new (varchar,varchar,timestamptz,varchar,varchar,text,integer,integer,timestamptz,integer,varchar,integer,integer)
-returns integer as '
-declare
-  new__title                  alias for $1;  
-  new__description            alias for $2;  -- default null  
-  new__publish_date           alias for $3;  -- default now()
-  new__mime_type              alias for $4;  -- default ''text/plain''
-  new__nls_language           alias for $5;  -- default null
-  new__text                   alias for $6;  -- default '' ''
-  new__item_id                alias for $7;  
-  new__revision_id            alias for $8;  -- default null
-  new__creation_date          alias for $9;  -- default now()
-  new__creation_user          alias for $10; -- default null
-  new__creation_ip            alias for $11; -- default null
-  new__content_length         alias for $12; -- default null
-  new__package_id             alias for $13; -- default null  
   v_revision_id               integer;       
-  v_package_id                acs_objects.package_id%TYPE;
   v_content_type              acs_object_types.object_type%TYPE;
   v_storage_type              cr_items.storage_type%TYPE;
   v_length                    cr_revisions.content_length%TYPE;
@@ -255,22 +149,13 @@ begin
 
   v_content_type := content_item__get_content_type(new__item_id);
 
-  if new__package_id is null then
-    v_package_id := acs_object__package_id(new__item_id);
-  else
-    v_package_id := new__package_id;
-  end if;
-
   v_revision_id := acs_object__new(
       new__revision_id,
       v_content_type, 
       new__creation_date, 
       new__creation_user, 
       new__creation_ip, 
-      new__item_id,
-      ''t'',
-      v_package_id,
-      new__title
+      new__item_id
   );
 
   select storage_type into v_storage_type
@@ -381,9 +266,7 @@ begin
          copy__creation_ip as creation_ip,
          now() as last_modified, 
          copy__creation_user as modifying_user, 
-         copy__creation_ip as modifying_ip,
-         title,
-         package_id
+         copy__creation_ip as modifying_ip 
        from
          acs_objects 
        where 

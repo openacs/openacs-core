@@ -107,10 +107,7 @@ begin
 	  new__creation_date,
 	  new__creation_user,
 	  new__creation_ip,
-	  new__object_id,
-          ''t'',
-          new__action,
-          null
+	  new__object_id
 	);
 
         insert into journal_entries (

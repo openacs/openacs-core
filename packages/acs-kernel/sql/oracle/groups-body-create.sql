@@ -777,10 +777,6 @@ is
   values
    (v_group_id, group_name, v_join_policy);
 
-  update acs_objects
-  set title = group_name
-  where object_id = v_group_id;
-
 
   -- setup the permissible relationship types for this group
   insert into group_rels

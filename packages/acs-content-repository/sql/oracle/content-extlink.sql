@@ -24,12 +24,10 @@ function new (
 			   default sysdate,
   creation_user	in acs_objects.creation_user%TYPE
 			   default null,
-  creation_ip	in acs_objects.creation_ip%TYPE default null,
-  package_id    in acs_objects.package_id%TYPE
+  creation_ip	in acs_objects.creation_ip%TYPE default null
 ) return cr_extlinks.extlink_id%TYPE is
 
   v_extlink_id		cr_extlinks.extlink_id%TYPE;
-  v_package_id		acs_objects.package_id%TYPE;
   v_label		cr_extlinks.label%TYPE;
   v_name                cr_items.name%TYPE;
 
@@ -48,16 +46,9 @@ begin
     v_name := name;
   end if;
 
-  if package_id is null then
-    v_package_id := acs_object.package_id(new.parent_id);
-  else
-    v_package_id := package_id;
-  end if;
-
   v_extlink_id := content_item.new(
       item_id       => content_extlink.new.extlink_id,
-      name          => v_name,
-      package_id    => v_package_id,
+      name          => v_name, 
       content_type  => 'content_extlink', 
       creation_date => content_extlink.new.creation_date, 
       creation_user => content_extlink.new.creation_user, 
@@ -70,10 +61,6 @@ begin
   values
     (v_extlink_id, content_extlink.new.url, v_label, 
      content_extlink.new.description);
-
-  update acs_objects
-  set title = v_label
-  where object_id = v_extlink_id;
 
   return v_extlink_id;
 

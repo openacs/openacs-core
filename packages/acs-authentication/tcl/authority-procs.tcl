@@ -265,12 +265,6 @@ ad_proc -public auth::authority::edit {
 
     get_flush -authority_id $authority_id
     get_id_flush -short_name $old_short_name
-
-    # check if we need to update the object title
-    set new_short_name [get_element -authority_id $authority_id -element short_name]
-    if {![string equal $old_short_name $new_short_name]} {
-	db_dml update_object_title {}
-    }
 }
 
 ad_proc -public auth::authority::delete {

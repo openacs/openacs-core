@@ -14,7 +14,7 @@
 
 select define_function_args('content_symlink__new','name,label,target_id,parent_id,symlink_id,creation_date;now,creation_user,creation_ip');
 
-create or replace function content_symlink__new (varchar,varchar,integer,integer,integer,timestamptz,integer,varchar,integer)
+create or replace function content_symlink__new (varchar,varchar,integer,integer,integer,timestamptz,integer,varchar)
 returns integer as '
 declare
   new__name                   alias for $1;  -- default null  
@@ -25,9 +25,7 @@ declare
   new__creation_date          alias for $6;  -- default now()
   new__creation_user          alias for $7;  -- default null
   new__creation_ip            alias for $8;  -- default null
-  new__package_id             alias for $9;  -- default null
   v_symlink_id                cr_symlinks.symlink_id%TYPE;
-  v_package_id                acs_objects.package_id%TYPE;
   v_name                      cr_items.name%TYPE;
   v_label                     cr_symlinks.label%TYPE;
   v_ctype                     varchar;
@@ -82,12 +80,6 @@ begin
     v_label := new__label;
   end if;
 
-  if new__package_id is null then
-    v_package_id := acs_object__package_id(new__parent_id);
-  else
-    v_package_id := new__package_id;
-  end if;
-
   v_symlink_id := content_item__new(
       v_name, 
       new__parent_id,
@@ -104,8 +96,7 @@ begin
       ''text/plain'',
       null,
       null,
-      ''text'',
-      v_package_id
+      ''text''
   );
 
   insert into cr_symlinks
@@ -113,39 +104,10 @@ begin
   values
     (v_symlink_id, new__target_id, v_label);
 
-  update acs_objects
-  set title = v_label
-  where object_id = v_symlink_id;
-
   return v_symlink_id;
 
 end;' language 'plpgsql';
 
-
-create or replace function content_symlink__new (varchar,varchar,integer,integer,integer,timestamptz,integer,varchar)
-returns integer as '
-declare
-  new__name                   alias for $1;  -- default null  
-  new__label                  alias for $2;  -- default null
-  new__target_id              alias for $3;  
-  new__parent_id              alias for $4;  
-  new__symlink_id             alias for $5;  -- default null
-  new__creation_date          alias for $6;  -- default now()
-  new__creation_user          alias for $7;  -- default null
-  new__creation_ip            alias for $8;  -- default null
-begin
-  return content_extlink__new(new__name,
-                              new__label,
-                              new__target_id,
-                              new__parent_id,
-                              new__symlink_id,
-                              new__creation_date,
-                              new__creation_user,
-                              new__creation_ip,
-                              null
-  );
-
-end;' language 'plpgsql';
 
 -- procedure delete
 create or replace function content_symlink__delete (integer)
@@ -243,8 +205,7 @@ begin
               null,
               now(),
 	      copy__creation_user,
-	      copy__creation_ip,
-              null
+	      copy__creation_ip
           );
 
 
@@ -256,7 +217,7 @@ begin
   return v_symlink_id; 
 end;' language 'plpgsql';
 
-create or replace function content_symlink__copy (
+create function content_symlink__copy (
 	integer,
 	integer,
 	integer,

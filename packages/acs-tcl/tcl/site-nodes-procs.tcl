@@ -48,7 +48,6 @@ ad_proc -public site_node::mount {
     mount object at site node
 } {
     db_dml mount_object {}
-    db_dml update_object_package_id {}
     update_cache -node_id $node_id
 
     apm_invoke_callback_proc -package_key [apm_package_key_from_id $object_id] -type "after-mount" -arg_list [list node_id $node_id package_id $object_id]
@@ -65,7 +64,6 @@ ad_proc -public site_node::rename {
     set child_node_ids [get_children -all -node_id $node_id -element node_id]
 
     db_dml rename_node {}
-    db_dml update_object_title {}
 
     update_cache -sync_children -node_id $node_id
 }
@@ -153,7 +151,6 @@ ad_proc -public site_node::unmount {
     apm_invoke_callback_proc -package_key [apm_package_key_from_id $package_id] -type before-unmount -arg_list [list package_id $package_id node_id $node_id]
 
     db_dml unmount_object {}
-    db_dml update_object_package_id {}
     update_cache -node_id $node_id
 }
 

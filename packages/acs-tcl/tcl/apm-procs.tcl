@@ -746,12 +746,6 @@ ad_proc -public apm_parameter_update {
             max_n_values   = :max_n_values
       where parameter_id = :parameter_id
     }
-
-    db_dml object_title_update {
-	update acs_objects
-	set title = :parameter_name
-	where object_id = :parameter_id
-    }
     
     return $parameter_id
 }

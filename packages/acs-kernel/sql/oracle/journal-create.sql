@@ -93,7 +93,6 @@ as
 	v_journal_id := acs_object.new (
 	  object_id => journal_id,
 	  object_type => 'journal_entry',
-          title => action,
 	  creation_date => creation_date,
 	  creation_user => creation_user,
 	  creation_ip => creation_ip,

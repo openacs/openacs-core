@@ -162,9 +162,6 @@ create table apm_packages (
     default_locale              varchar2(30)
 );
 
-alter table acs_objects add constraint acs_objects_package_id_fk
-foreign key (package_id) references apm_packages(package_id);
-
 -- create bitmap index apm_packages_package_key_idx on apm_packages (package_key);
 create index apm_packages_package_key_idx on apm_packages (package_key);
 
@@ -1499,8 +1496,7 @@ as
     -- Create the new parameter.    
     v_parameter_id := acs_object.new(
        object_id => parameter_id,
-       object_type => 'apm_parameter',
-       title => register_parameter.package_key || ': Parameter ' || register_parameter.parameter_name
+       object_type => 'apm_parameter'
     );
     
     insert into apm_parameters 
@@ -1551,13 +1547,6 @@ as
             min_n_values   = nvl(update_parameter.min_n_values, min_n_values),
             max_n_values   = nvl(update_parameter.max_n_values, max_n_values)
       where parameter_id = update_parameter.parameter_id;
-
-    update acs_objects
-       set title = (select package_key || ': Parameter ' || parameter_name
-                    from apm_parameters
-                    where parameter_id = update_parameter.parameter_id)
-     where object_id = update_parameter.parameter_id;
-
     return parameter_id;
   end;
 
@@ -1756,17 +1745,11 @@ as
 	  creation_ip => creation_ip,
 	  context_id => context_id
 	 );
-
        if instance_name is null then 
 	 v_instance_name := package_key || ' ' || v_package_id;
        else
 	 v_instance_name := instance_name;
        end if;
-
-       update acs_objects
-       set title = v_instance_name,
-           package_id = v_package_id
-       where object_id = v_package_id;
 
        select package_type into v_package_type
        from apm_package_types
@@ -1968,8 +1951,7 @@ as
       end if;
 	v_version_id := acs_object.new(
 		object_id => v_version_id,
-		object_type => 'apm_package_version',
-                title => package_key || ', Version ' || version_name
+		object_type => 'apm_package_version'
         );
       insert into apm_package_versions
       (version_id, package_key, version_name, version_uri, summary, description_format, description,
@@ -2041,12 +2023,6 @@ as
 		   release_date, vendor, vendor_uri, auto_mount
 	    from apm_package_versions
 	    where version_id = copy.version_id;
-
-        update acs_objects
-        set title = (select v.package_key || ', Version ' || v.version_name
-                     from apm_package_versions v
-                     where v.version_id = copy.version_id)
-        where object_id = copy.version_id;
     
 	insert into apm_package_dependencies(dependency_id, version_id, dependency_type, service_uri, service_version)
 	    select acs_object_id_seq.nextval, v_version_id, dependency_type, service_uri, service_version
@@ -2104,7 +2080,7 @@ as
          else 
 	   v_version_id := edit.version_id;			
        end if;
-
+       
        update apm_package_versions 
 		set version_uri = edit.version_uri,
 		summary = edit.summary,

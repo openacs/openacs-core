@@ -61,8 +61,7 @@
             /* nls_language  => */ null,
             /* publish_date  => */ current_timestamp,
             /* height        => */ :original_height,
-            /* width         => */ :original_width,
-            /* package_id    => */ :package_id
+            /* width         => */ :original_width
          );
       </querytext>
 </fullquery>
@@ -80,8 +79,7 @@
             /* creation_user => */ :creation_user,
             /* creation_ip   => */ :creation_ip,
             /* height        => */ :original_height,
-            /* width         => */ :original_width,
-            /* package_id    => */ :package_id
+            /* width         => */ :original_width
     );
       </querytext>
 </fullquery>
@@ -104,8 +102,7 @@
             /* mime_type     => */ null,
             /* nls_language  => */ null,
             /* text          => */ null,
-            /* storage_type  => */ :storage_type,
-            /* package_id    => */ :package_id
+            /* storage_type  => */ :storage_type
     );
       </querytext>
 </fullquery>
@@ -123,8 +120,7 @@
             /* revision_id   => */ :revision_id,
             /* creation_date => */ current_timestamp,
             /* creation_user => */ :creation_user,
-            /* creation_ip   => */ :creation_ip,
-            /* package_id    => */ :package_id
+            /* creation_ip   => */ :creation_ip
     );
       </querytext>
 </fullquery>

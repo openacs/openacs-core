@@ -16,16 +16,11 @@ ad_proc -public cr::keyword::new {
     {-parent_id ""}
     {-keyword_id ""}
     {-object_type "content_keyword"}
-    {-package_id ""}
 } {
     Create a new keyword
 } {
     set user_id [ad_conn user_id]
     set creation_ip [ad_conn peeraddr]
-
-    if {[empty_string_p $package_id]} {
-	set package_id [ad_conn package_id]
-    }
 
     set keyword_id [db_exec_plsql content_keyword_new {}]
     
