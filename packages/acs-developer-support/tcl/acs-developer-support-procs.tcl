@@ -189,7 +189,7 @@ ad_proc -private ds_collect_db_call { db command statement_name sql start_time e
 
         # JCD: don't bind if there was an error since this can potentially mess up the traceback 
         # making bugs much harder to track down 
-        if { !$errno && [string equal [db_type] "postgresql"] } {
+        if { ($errno == 0 || $errno == 2) && [string equal [db_type] "postgresql"] } {
             upvar bind bind
             set errno [catch {
                 if { [info exists bind] && [llength $bind] != 0 } {
