@@ -79,7 +79,10 @@ ad_form -extend -name message -form {
         {label "     Update     "}
     }
 } -on_request {
-    db_1row select_original_message {
+    set original_message {}
+    set description {}
+
+    db_0or1row select_original_message {
         select lm.message as original_message,
                lmk.description
         from   lang_messages lm,
