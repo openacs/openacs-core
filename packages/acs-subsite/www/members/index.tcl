@@ -71,6 +71,7 @@ list::create \
             link_url_eval {mailto:$email}
             link_html { title "Send email to this user" }
             orderby "u.email"
+            hide_p {[ad_decode [ad_conn user_id] 0 1 0]}
         }
         rel_role {
             label "Role"
