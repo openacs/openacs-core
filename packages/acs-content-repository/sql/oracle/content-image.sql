@@ -57,21 +57,6 @@ end;
 show errors
 
 
--- insert new MIME types
-insert into cr_mime_types (
-  label, mime_type, file_extension
-) values (
-  'Image - Jpeg', 'image/jpeg','jpg'
-);
-
-insert into cr_mime_types (
-  label, mime_type, file_extension
-) values (
-  'Image - Gif', 'image/gif','gif'
-);
-
-
-
 -- register MIME types to this content type
 begin
 

@@ -280,3 +280,90 @@ ad_proc cr_registered_type_for_mime_type {
 } {
     return [db_string registered_type_for_mime_type "" -default ""]
 }
+
+
+ad_proc -public cr_filename_to_mime_type { 
+    -create:boolean
+    filename
+} { 
+    given a filename, returns the mime type.  If the -create flag is
+    given the mime type will be created; this assumes there is some
+    other way such as ns_guesstype to find the filename
+
+    @param create flag whether to create the mime type the routine picks for filename
+    @param filename the filename to try to guess a mime type for (the file need not 
+           exist, the routine does not attempt to access the file in any way)
+
+    @return mimetype (or */* of unknown)
+
+    @author Jeff Davis (davis@xarg.net)
+} { 
+    set extension [string tolower [string trimleft [file extension $filename] "."]]
+    
+    if {[empty_string_p $extension]} { 
+        return "*/*"
+    } 
+    
+    if {[db_0or1row lookup_mimetype { select mime_type from cr_extension_mime_type_map where extension = :extension }]} { 
+        return $mime_type
+    } else { 
+        set mime_type [string tolower [ns_guesstype $filename]]
+        ns_log Debug "guessed mime \"$mime_type\" create_p $create_p" 
+        if {(!$create_p) || [string equal $mime_type "*/*"] || [empty_string_p $mime_type]} {
+            # we don't have anything meaningful for this mimetype 
+            # so just */* it.
+
+            return "*/*"
+        } 
+
+        # We guessed a type but there was no mapping
+        # create it and map it.  We know the extension 
+        cr_create_mime_type -extension $extension -mime_type $mime_type -description {}
+        
+        return $mime_type
+    }
+}
+
+ad_proc -public cr_create_mime_type { 
+    -extension
+    -mime_type
+    -description
+} { 
+
+    Creates a mime type if it does not exist.  Also maps extension to
+    mime_type (unless the extension is already mapped to another mime
+    type).
+
+    @param extension the default extension for the given mime type
+    @param mime_type the mime_type to create
+    @param a plain text description of the mime type (< 200 characters)
+
+    @author Jeff Davis (davis@xarg.net)
+} { 
+    # make both lower since that is the convention.
+    # should never pass in anything that is not lower cased
+    # already but just be safe.
+
+    set mime_type [string tolower $mime_type]
+    set extension [string tolower $extension]
+
+    db_dml maybe_create_mime {
+        insert into cr_mime_types (label, mime_type, file_extension) 
+        select :description, :mime_type, :extension 
+        from dual 
+        where not exists (select 1 
+                          from cr_mime_types 
+                          where mime_type = :mime_type)
+    }
+    
+    db_dml maybe_map_extension { 
+        insert into cr_extension_mime_type_map (extension, mime_type) 
+        select :extension, :mime_type 
+        from dual 
+        where not exists (select 1 
+                          from cr_extension_mime_type_map 
+                          where extension = :extension)
+    }
+}
+
+                               

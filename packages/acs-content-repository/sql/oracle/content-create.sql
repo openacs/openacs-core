@@ -52,33 +52,25 @@ comment on table cr_mime_types is '
   a file extension to the file after its MIME type is specified.
 ';
 
--- Common mime types (administered from admin pages)
+-- Currently file_extension is the pk although it seems likely someone
+-- will want to support multiple mime types with the same extension.
+-- Would need UI work however
 
-insert into cr_mime_types(label, mime_type, file_extension) values ('Plain text', 'text/plain', 'txt');
-insert into cr_mime_types(label, mime_type, file_extension) values ('HTML text', 'text/html', 'html');
-insert into cr_mime_types(label, mime_type, file_extension) values ('Rich Text Format (RTF)', 'text/richtext', 'rtf');
+create table cr_extension_mime_type_map (
+   extension            varchar(200) 
+                        constraint cr_mime_type_extension_map_pk
+                        primary key,
+   mime_type            varchar(200) 
+                        constraint cr_mime_ext_map_mime_type_ref
+                        references cr_mime_types
+); 
+create index cr_extension_mime_type_map_idx on cr_extension_mime_type_map(mime_type);
 
-insert into cr_mime_types(label, mime_type, file_extension) values ('Binary', 'application/octet-stream', 'bin');
-insert into cr_mime_types(label, mime_type, file_extension) values ('Microsoft Word', 'application/msword', 'doc');
-insert into cr_mime_types(label, mime_type, file_extension) values ('Microsoft Excel', 'application/msexcel', 'xls');
-insert into cr_mime_types(label, mime_type, file_extension) values ('Microsoft PowerPoint', 'application/powerpoint', 'ppt');
-insert into cr_mime_types(label, mime_type, file_extension) values ('Microsoft Project', 'application/msproject', 'mpp');
-insert into cr_mime_types(label, mime_type, file_extension) values ('PostScript', 'application/postscript', 'ps');
-insert into cr_mime_types(label, mime_type, file_extension) values ('Adobe Illustrator', 'application/x-illustrator', 'ai');
-insert into cr_mime_types(label, mime_type, file_extension) values ('Adobe PageMaker', 'application/x-pagemaker', 'p65');
-insert into cr_mime_types(label, mime_type, file_extension) values ('Filemaker Pro', 'application/filemaker', 'fm');
-insert into cr_mime_types(label, mime_type, file_extension) values ('Image Pict', 'image/x-pict', 'pic');
-insert into cr_mime_types(label, mime_type, file_extension) values ('Photoshop', 'application/x-photoshop', 'psd');
-insert into cr_mime_types(label, mime_type, file_extension) values ('Acrobat', 'application/pdf', 'pdf');
-insert into cr_mime_types(label, mime_type, file_extension) values ('Video Quicktime', 'video/quicktime', 'mov');
-insert into cr_mime_types(label, mime_type, file_extension) values ('Video MPEG', 'video/mpeg', 'mpg');
-insert into cr_mime_types(label, mime_type, file_extension) values ('Audio AIFF',  'audio/aiff', 'aif');
-insert into cr_mime_types(label, mime_type, file_extension) values ('Audio Basic', 'audio/basic',      'au');
-insert into cr_mime_types(label, mime_type, file_extension) values ('Audio Voice', 'audio/voice',      'voc');
-insert into cr_mime_types(label, mime_type, file_extension) values ('Audio Wave', 'audio/wave', 'wav');
-insert into cr_mime_types(label, mime_type, file_extension) values ('Archive Zip', 'application/zip', 'zip');
-insert into cr_mime_types(label, mime_type, file_extension) values ('Archive Tar', 'application/z-tar', 'tar');
-insert into cr_mime_types(label, mime_type, file_extension) values ('Unknown', '*/*', '');
+comment on table cr_extension_mime_type_map is '
+  a mapping table for extension to mime_type in db version of ns_guesstype data
+';
+
+-- Mime types and mappings defined in ../common/mime-type-data.sql
 
 create table cr_content_mime_type_map (
   content_type  varchar2(100)
@@ -811,10 +803,13 @@ show errors
 prompt *** Compiling documentation package...
 @@ doc-package
 
+prompt *** Loading mime type data ...
+@ '../common/mime-type-data.sql'
+
 prompt *** Creating image content type...
 @@ content-image
 
--- by default, map all MIME types to 'content_revision'
+-- map some MIME types to 'content_revision'
 
 begin
   content_type.register_mime_type(
@@ -822,7 +817,7 @@ begin
   content_type.register_mime_type(
     content_type => 'content_revision', mime_type => 'text/plain');
   content_type.register_mime_type(
-    content_type => 'content_revision', mime_type => 'text/richtext');
+    content_type => 'content_revision', mime_type => 'application/rtf');
 end;
 /
 show errors

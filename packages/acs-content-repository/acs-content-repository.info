@@ -7,7 +7,7 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>t</singleton-p>
 
-    <version name="4.6.2" url="http://openacs.org/repository/download/apm/acs-content-repository-4.6.2.apm">
+    <version name="4.6.3" url="http://openacs.org/repository/download/apm/acs-content-repository-4.6.3.apm">
     <database-support>
         <database>oracle</database>
         <database>postgresql</database>
@@ -18,7 +18,7 @@
         <release-date>2002-10-27</release-date>
         <vendor url="http://openacs.org/">OpenACS</vendor>
 
-        <provides url="acs-content-repository" version="4.6.2"/>
+        <provides url="acs-content-repository" version="4.6.3"/>
         <requires url="acs-kernel" version="4.0"/>
         <requires url="acs-service-contract" version="4.2"/>
         <requires url="search" version="4.2"/>
@@ -60,6 +60,7 @@
             <file type="data_model_upgrade" db_type="oracle" path="sql/oracle/upgrade/upgrade-4.5-4.6.sql"/>
             <file type="data_model_upgrade" db_type="oracle" path="sql/oracle/upgrade/upgrade-4.6-4.6.1.sql"/>
             <file type="data_model_upgrade" db_type="oracle" path="sql/oracle/upgrade/upgrade-4.6.1-4.6.2.sql"/>
+            <file type="data_model_upgrade" db_type="oracle" path="sql/oracle/upgrade/upgrade-4.6.2-4.6.3.sql"/>
             <file type="data_model_create" db_type="postgresql" path="sql/postgresql/acs-content-repository-create.sql"/>
             <file type="data_model" db_type="postgresql" path="sql/postgresql/content-create.sql"/>
             <file type="data_model" db_type="postgresql" path="sql/postgresql/content-drop.sql"/>
@@ -91,6 +92,7 @@
             <file type="data_model_upgrade" db_type="postgresql" path="sql/postgresql/upgrade/upgrade-4.5-4.6.sql"/>
             <file type="data_model_upgrade" db_type="postgresql" path="sql/postgresql/upgrade/upgrade-4.6-4.6.1.sql"/>
             <file type="data_model_upgrade" db_type="postgresql" path="sql/postgresql/upgrade/upgrade-4.6.1-4.6.2.sql"/>
+            <file type="data_model_upgrade" db_type="postgresql" path="sql/postgresql/upgrade/upgrade-4.6.2-4.6.3.sql"/>
             <file type="query_file" db_type="oracle" path="tcl/acs-content-repository-init-oracle.xql"/>
             <file type="query_file" db_type="postgresql" path="tcl/acs-content-repository-init-postgresql.xql"/>
             <file type="tcl_init" path="tcl/acs-content-repository-init.tcl"/>
