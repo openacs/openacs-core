@@ -326,6 +326,54 @@ namespace eval site_node {
         return $node(object_id)
     }
 
+    ad_proc -public get_children {
+        {-all:boolean}
+        {-package_type {}}
+        {-node_id:required}
+    } {
+        @param node_id       The node for which you want to find the children.
+
+        @option all          Set this if you want all children, not just direct children
+        
+        @option package_type If specified, this will limit the returned nodes to those with an
+                             package of the specified package type (normally apm_service or 
+                             apm_application) mounted
+        
+        @return A list of URLs of the site_nodes immediately under this site node, or all children, 
+        if the -all switch is specified.
+        
+        @author Lars Pind (lars@collaboraid.biz)
+    } {
+        set node_url [get_url -node_id $node_id]
+        
+        set child_urls [nsv_array names site_nodes "${node_url}*"]
+
+        if { !$all_p } {
+            set org_child_urls $child_urls
+            set child_urls [list]
+            foreach child_url $org_child_urls {
+                if { [regexp "^${node_url}\[^/\]*/\$" $child_url] } {
+                    lappend child_urls $child_url
+                }
+            }
+        }
+
+        if { ![empty_string_p $package_type] } {
+            set org_child_urls $child_urls
+            set child_urls [list]
+            foreach child_url $org_child_urls {
+                array unset site_node
+                array set site_node [get_from_url -exact -url $child_url]
+
+                if { [string equal $site_node(package_type) $package_type] } {
+                    lappend child_urls $child_url
+                }
+            }
+        }
+
+        return $child_urls
+    }
+
     ad_proc -public closest_ancestor_package {
         {-url ""}
         {-node_id ""}
