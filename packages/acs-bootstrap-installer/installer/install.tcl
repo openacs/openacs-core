@@ -48,8 +48,7 @@ The passwords you've entered don't match. Please <a href=\"javascript:history.ba
 #
 #############
 
-ns_write "[install_header 200 "Installing Kernel Data Model"]
-"
+ns_write [install_header 200 ""]
 
 if { ![install_good_data_model_p] } {
     install_do_data_model_install
