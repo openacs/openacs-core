@@ -72,13 +72,10 @@ create table lang_messages_audit (
                        constraint lang_messages_audit_l_nn
                        not null,
 
-    -- LARS: This is really the old, overwritten message, not the new message being
+    -- The old, overwritten message, not the new message being
     -- entered on this date by this user.
-    -- The column should either be renamed 'old_message', or change
-    -- semantics to be the message being inserted on this date.
-
     old_message        text,
-    comment            text,
+    comment_text       text,
     overwrite_date     timestamptz 
                        default now() 
                        not null,
