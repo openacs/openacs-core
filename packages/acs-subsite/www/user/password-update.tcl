@@ -6,6 +6,7 @@ ad_page_contract {
 } {
     {user_id ""}
     {return_url ""}
+    {password_old ""}
 } -properties {
     first_names:onevalue
     last_name:onevalue
@@ -27,8 +28,7 @@ if [empty_string_p $user_id] {
 
 set bind_vars [ad_tcl_vars_to_ns_set user_id]
 
-db_1row user_information "select first_names,
-last_name, email, url from cc_users where user_id=:user_id" -bind $bind_vars
+db_1row user_information {}
 
 if {$admin_enabled_p} {
     set export_vars [export_form_vars return_url user_id]

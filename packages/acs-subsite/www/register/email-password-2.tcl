@@ -50,8 +50,9 @@ if {!$validated_p} {
 }
 
 if {!$validated_p} {
-    # Unauthorized Access
-    ad_return_error "Unauthorized Access" "The validation didn't match what we had.  Either press back on the browser and retype it in, or <a href=\"/register\">go back to the login page</a>."
+    ad_return_error \
+        "Unauthorized Access" \
+        "The validation didn't match what we had. Either press back on the browser and retype it in, or <a href=\"/register\">go back to the login page</a>."
     return
 }
 
@@ -64,17 +65,29 @@ ad_change_password $user_id $password
 set system_owner [ad_system_owner]
 set system_name [ad_system_name]
 
+set subject "Your forgotten password on $system_name"
+set body "Please follow the following link to reset your password:
+
+[ad_url]/user/password-update?[export_vars {{password_old $password}}]
+
+"
+
 # Send email
-if [catch {ns_sendmail $email $system_owner "Your forgotten password on $system_name" "Here's how you can log in at [ad_url]:
-
-Username:  $email
-Password:  $password
-
-"} errmsg] {
-    ad_return_error "Error sending mail" "Now we're really in trouble because we got an error trying to send you email:
+if [catch {ns_sendmail $email $system_owner $subject $body} errmsg] {
+    ad_return_error \
+        "Error sending mail" \
+        "Now we're really in trouble because we got this error:
 <blockquote>
   <pre>
     $errmsg
+  </pre>
+</blockquote>
+when trying to send you the following email:
+<blockquote>
+  <pre>
+Subject: $subject
+
+$body
   </pre>
 </blockquote>
 "

@@ -5,7 +5,7 @@ ad_page_contract {
     <li>password_1 matches password_2
 
     @cvs-id $Id$
-} {
+} -query {
     password_1
     password_2
     {password_old ""}
