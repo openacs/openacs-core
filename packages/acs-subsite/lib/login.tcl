@@ -50,7 +50,7 @@ set hash [ns_sha1 "$time$token_id$token"]
 set authority_options [auth::authority::get_authority_options]
 
 if { ![exists_and_not_null authority_id] } {
-    set authority_id [lindex $authority_options 0]
+    set authority_id [lindex [lindex $authority_options 0] 1]
 }
 
 set forgotten_pwd_url [auth::password::get_forgotten_url -authority_id $authority_id -username $username]
