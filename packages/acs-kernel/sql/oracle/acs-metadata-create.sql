@@ -49,7 +49,8 @@ create table acs_object_types (
                         check (dynamic_p in ('t', 'f'))
 );
 
-create bitmap index acs_obj_types_supertype_idx on acs_object_types (supertype);
+-- create bitmap index acs_obj_types_supertype_idx on acs_object_types (supertype);
+create index acs_obj_types_supertype_idx on acs_object_types (supertype);
 
 comment on table acs_object_types is '
  Each row in the acs_object_types table represents a distinct class
@@ -155,7 +156,8 @@ create table acs_object_type_tables (
 	primary key (object_type, table_name)
 );
 
-create bitmap index acs_objtype_tbls_objtype_idx on acs_object_type_tables (object_type);
+-- create bitmap index acs_objtype_tbls_objtype_idx on acs_object_type_tables (object_type);
+create index acs_objtype_tbls_objtype_idx on acs_object_type_tables (object_type);
 
 comment on table acs_object_type_tables is '
  This table is used for objects that want to vertically partition
@@ -297,9 +299,11 @@ create table acs_attributes (
 -- constraint acs_attrs_pretty_plural_un
 -- unique (pretty_plural, object_type),
 
-create bitmap index acs_attrs_obj_type_idx on acs_attributes (object_type);
+-- create bitmap index acs_attrs_obj_type_idx on acs_attributes (object_type);
+create index acs_attrs_obj_type_idx on acs_attributes (object_type);
 create index acs_attrs_tbl_name_idx on acs_attributes (table_name);
-create bitmap index acs_attrs_datatype_idx on acs_attributes (datatype);
+-- create bitmap index acs_attrs_datatype_idx on acs_attributes (datatype);
+create index acs_attrs_datatype_idx on acs_attributes (datatype);
 
 comment on table acs_attributes is '
  Each row in the <code>acs_attributes</code> table defines an
@@ -368,7 +372,8 @@ create table acs_attribute_descriptions (
 	description	clob not null
 );
 
-create bitmap index acs_attr_desc_obj_type_idx on acs_attribute_descriptions (object_type);
+-- create bitmap index acs_attr_desc_obj_type_idx on acs_attribute_descriptions (object_type);
+create index acs_attr_desc_obj_type_idx on acs_attribute_descriptions (object_type);
 create index acs_attr_desc_attr_name_idx on acs_attribute_descriptions (attribute_name);
 
 

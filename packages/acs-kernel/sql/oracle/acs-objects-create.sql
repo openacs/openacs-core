@@ -134,7 +134,8 @@ alter table acs_objects modify constraint acs_objects_context_object_un enable;
 create index acs_objects_creation_user_idx on acs_objects (creation_user);
 create index acs_objects_modify_user_idx on acs_objects (modifying_user);
 
-create bitmap index acs_objects_object_type_idx on acs_objects (object_type);
+-- create bitmap index acs_objects_object_type_idx on acs_objects (object_type);
+create index acs_objects_object_type_idx on acs_objects (object_type);
 
 create or replace trigger acs_objects_mod_ip_insert_tr
 before insert on acs_objects
