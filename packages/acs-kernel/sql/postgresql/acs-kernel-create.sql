@@ -31,6 +31,8 @@
 \i site-nodes-create.sql
 \i apm-create.sql
 \i acs-create.sql
+
+\i acs-create-2.sql
 --
 
 -- set feedback on
