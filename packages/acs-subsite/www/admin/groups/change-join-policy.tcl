@@ -33,8 +33,8 @@ ad_page_contract {
 
 
 set context_bar [list \
-	[list "" "Groups"] \
-	[list "one?group_id=@group_id@" "One Group" ] \
+        [list "[ad_conn package_url]admin/groups/" "Groups"] \
+	[list "one?group_id=$group_id" "One Group" ] \
         "Edit Join Policy"]
 
 db_1row group_info {

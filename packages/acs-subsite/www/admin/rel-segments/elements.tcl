@@ -32,7 +32,7 @@ db_1row select_segment_info {
        and s.rel_type = r.rel_type
 }
 
-set context_bar [list [list "" "Relational segments"] [list one?[ad_export_vars {segment_id}] "One segment"] "Elements"]
+set context_bar [list [list "[ad_conn package_url]admin/rel-segments/" "Relational segments"] [list one?[ad_export_vars {segment_id}] "One segment"] "Elements"]
 
 # Expects segment_id, segment_name, group_id, role to be passed in 
 

@@ -28,7 +28,10 @@ ad_page_contract {
     }
 }
 
-set context_bar [list [list one?[export_url_vars group_type] "One group type"] "Delete group type"]
+set context_bar [list \
+         [list "[ad_conn package_url]admin/group-types/" "Group types"] \
+         [list one?[export_url_vars group_type] "One group type"] \
+         "Delete group type"]
 
 if { ![db_0or1row select_pretty_name {
     select t.pretty_name as group_type_pretty_name

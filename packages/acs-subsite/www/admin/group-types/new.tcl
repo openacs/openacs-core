@@ -16,7 +16,7 @@ ad_page_contract {
     context_bar:onevalue
 }
 
-set context_bar [list [list "" "Group types"] "Add type"]
+set context_bar [list [list "[ad_conn package_url]admin/group-types/" "Group types"] "Add type"]
 
 template::form create group_type
 
