@@ -1,12 +1,8 @@
 <master>
+<property name="title">ACS Service Contract</property>
+<property name="context_bar">@context_bar@</property>
 
-<h2>ACS Service Contract</h2>
-
-@context_bar@
-
-<hr>
-
-<h3>Installed Bindings</h3>
+<h2>Installed Bindings</h2>
 <ul>
 <if @valid_installed_binding:rowcount@ eq 0>
   <li><i>None</i></li>
@@ -17,7 +13,7 @@
 @valid_installed_binding.contract_name@,
 @valid_installed_binding.impl_id@
 @valid_installed_binding.impl_name@
-[<a href=binding-uninstall?contract_id=@valid_installed_binding.contract_id@&impl_id=@valid_installed_binding.impl_id@>Uninstall</a>]
+[<a href="binding-uninstall?contract_id=@valid_installed_binding.contract_id@&impl_id=@valid_installed_binding.impl_id@">Uninstall</a>]</li>
 </multiple>
 </else>
 </ul>
@@ -35,7 +31,7 @@
 @valid_uninstalled_binding.contract_name@,
 @valid_uninstalled_binding.impl_id@
 @valid_uninstalled_binding.impl_name@
-[<a href=binding-install?contract_id=@valid_uninstalled_binding.contract_id@&impl_id=@valid_uninstalled_binding.impl_id@>Install</a>]
+[<a href="binding-install?contract_id=@valid_uninstalled_binding.contract_id@&impl_id=@valid_uninstalled_binding.impl_id@">Install</a>]</li>
 </multiple>
 </else>
 </ul>
