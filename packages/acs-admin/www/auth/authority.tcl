@@ -297,7 +297,11 @@ if { $display_batch_history_p } {
 
 set context [list [list "." "Authentication"] $page_title]
 
-set num_users [lc_numeric [db_string num_users_in_auhtority { select count(*) from users where authority_id = :authority_id }]]
+if { [exists_and_not_null authority_id] } {
+    set num_users [lc_numeric [db_string num_users_in_auhtority { select count(*) from users where authority_id = :authority_id }]]
+} else {
+    set num_users 0
+}
 set show_users_url [export_vars -base ../users/complex-search { authority_id { target one } }]
 
 
