@@ -1,4 +1,4 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Installing PAM support</title><meta name="generator" content="DocBook XSL Stylesheets V1.60.1"><link rel="home" href="index.html" title="External Authentication"><link rel="up" href="ext-auth-install.html" title="Installation"><link rel="previous" href="ext-auth-install.html" title="Installation"><link rel="next" href="ext-auth-ldap-install.html" title="Installing LDAP support"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="ext-auth-install.html">Prev</a> </td><th width="60%" align="center">Installation</th><td width="20%" align="right"> <a accesskey="n" href="ext-auth-ldap-install.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="ext-auth-pam-install"></a>Installing PAM support</h2></div></div><div></div></div><p>OpenACS supports PAM authetication via the ns_pam module in AOLserver.</p><div class="orderedlist"><ol type="1"><li><p><b>Add PAM support to AOLserver. </b>OpenACS supports PAM support via the PAM AOLserver
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Installing PAM support</title><meta name="generator" content="DocBook XSL Stylesheets V1.64.1"><link rel="home" href="index.html" title="External Authentication"><link rel="up" href="ext-auth-install.html" title="Installation"><link rel="previous" href="ext-auth-install.html" title="Installation"><link rel="next" href="ext-auth-ldap-install.html" title="Installing LDAP support"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="ext-auth-install.html">Prev</a> </td><th width="60%" align="center">Installation</th><td width="20%" align="right"> <a accesskey="n" href="ext-auth-ldap-install.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="ext-auth-pam-install"></a>Installing PAM support</h2></div></div><div></div></div><p>OpenACS supports PAM authetication via the ns_pam module in AOLserver.</p><div class="orderedlist"><ol type="1"><li><p><b>Add PAM support to AOLserver. </b>OpenACS supports PAM support via the PAM AOLserver
         module.  PAM is system of modular support, and can provide
         local (unix password), RADIUS, LDAP (<a href="http://www.tldp.org/HOWTO/LDAP-Implementation-HOWTO/pamnss.html" target="_top">more
         information</a>), and other forms of
@@ -22,11 +22,11 @@ gcc -I/usr/include/pam -I/usr/local/aolserver/include -D_REENTRANT=1
 gcc -shared -nostartfiles -o nspam.so nspam.o pam_support.o -lpam
 [root@yourserver nspam]# <b class="userinput"><tt>make install</tt></b>
 [root@yourserver nspam]#
-<pre class="action"><span class="action">cd /usr/local/src/aolserver
+<span class="action"><span class="action">cd /usr/local/src/aolserver
 tar xzf /tmp/ns_pam-0.1.tar.gz
 cd nspam
 make
-make install</span></pre></pre></li><li><p><b>Set up a PAM domain. </b>A PAM domain is a set of rules for granting
+make install</span></span></pre></li><li><p><b>Set up a PAM domain. </b>A PAM domain is a set of rules for granting
             privileges based on other programs.  Each instance of
               AOLserver uses a domain; different aolserver instances
               can use the same domain but one AOLserver instance
@@ -45,11 +45,11 @@ cc -Wall -fPIC   -c -o md5.o md5.c
 ld -Bshareable pam_radius_auth.o md5.o -lpam -o pam_radius_auth.so
 [root@yourserver pam_radius-1.3.16]# <b class="userinput"><tt>cp pam_radius_auth.so /lib/security/pam_radius_auth.so</tt></b>
 [root@yourserver pam_radius-1.3.16]#
-<pre class="action"><span class="action">cd /usr/local/src/
+<span class="action"><span class="action">cd /usr/local/src/
 tar xf /tmp/pam_radius-1.3.16.tar
 cd pam_radius-1.3.16
 make
-cp pam_radius_auth.so /lib/security/pam_radius_auth.so</span></pre></pre><p>Debian users: <b class="userinput"><tt>apt-get install libpam-radius-auth</tt></b></p></li><li><p>Set up the PAM domain.  Recent PAM
+cp pam_radius_auth.so /lib/security/pam_radius_auth.so</span></span></pre><p>Debian users: <b class="userinput"><tt>apt-get install libpam-radius-auth</tt></b></p></li><li><p>Set up the PAM domain.  Recent PAM
                 distributions have a different file for each domain,
                 all in <tt class="computeroutput">/etc/pam.d</tt>.
                 Previous PAM setups put all domain configuration lines
