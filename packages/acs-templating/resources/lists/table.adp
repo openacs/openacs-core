@@ -43,7 +43,7 @@
   </script>
 </if>
 
-  <table class="@list_properties.class@" cellpadding="3" cellspacing="1">
+  <table class="@list_properties.class@" cellpadding="3" cellspacing="1"@list_properties.table_attributes@>
 
   <if @list_properties.bulk_actions@ not nil>
     <form name="@list_properties.name@" method="get">
