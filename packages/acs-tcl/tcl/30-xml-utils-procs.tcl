@@ -149,7 +149,6 @@ proc xml_node_get_name {node_id} {
 
 # Get Node Attribute
 proc xml_node_get_attribute {node_id attribute_name} {
-
     if { [_nsxml_version_2_p] } {
         return [ns_xml node get attr $node_id $attribute_name]
     } else {

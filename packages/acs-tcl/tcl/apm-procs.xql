@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <queryset>
 
-  <fullquery name="apm_package_version_enabled_p.apm_package_version_installed_p">
+  <fullquery name="apm_package_version_enabled_p.apm_package_version_enabled_p">
     <querytext>
       select case when count(*) = 0 then 0 else 1 end from apm_package_versions
       where version_id = :version_id
@@ -9,14 +9,6 @@
     </querytext>
   </fullquery>
 
-  <fullquery name="apm_mark_version_for_reload.package_key_select">      
-    <querytext>
-      select package_key 
-      from apm_package_version_info
-      where version_id = :version_id
-    </querytext>
-  </fullquery>
-  
   <fullquery name="apm_mark_version_for_reload.file_info">      
     <querytext>
       select file_id, path
@@ -25,22 +17,6 @@
       and    file_type in ('tcl_procs', 'query_file')
       and    (db_type is null or db_type = '[db_type]')
       order by path
-    </querytext>
-  </fullquery>
-
-  <fullquery name="apm_mark_version_for_reload.package_key_select">      
-    <querytext>
-      select package_key
-      from apm_package_version_info
-      where version_id = :version_id
-    </querytext>
-  </fullquery>
-
-  <fullquery name="apm_version_load_status.package_key_select">      
-    <querytext>
-      select package_key 
-      from apm_package_version_info
-      where version_id = :version_id
     </querytext>
   </fullquery>
 
@@ -54,23 +30,7 @@
     </querytext>
   </fullquery>
 
-  <fullquery name="apm_load_libraries.apm_enabled_packages">      
-    <querytext>
-      select distinct package_key
-      from apm_package_versions
-      where enabled_p='t'
-    </querytext>
-  </fullquery>
-  
-  <fullquery name="apm_load_libraries.apm_enabled_packages">      
-    <querytext>
-      select distinct package_key
-      from apm_package_versions
-      where enabled_p='t'
-    </querytext>
-  </fullquery>
-  
-  <fullquery name="apm_load_queries.apm_enabled_packages">      
+  <fullquery name="apm_enabled_packages.enabled_packages">      
     <querytext>
       select distinct package_key
       from apm_package_versions
@@ -108,11 +68,19 @@
     </querytext>
   </fullquery>
   
-  <fullquery name="apm_package_installed_p.apm_package_installed_p">      
+  <fullquery name="apm_package_installed_p_not_cached.apm_package_installed_p">      
     <querytext>
       select 1 from apm_package_versions
       where package_key = :package_key
       and installed_p = 't'
+    </querytext>
+  </fullquery>
+
+  <fullquery name="apm_package_enabled_p.apm_package_enabled_p">      
+    <querytext>
+      select 1 from apm_package_versions
+      where package_key = :package_key
+      and enabled_p = 't'
     </querytext>
   </fullquery>
   
@@ -154,6 +122,14 @@
       where package_id = :package_id
     </querytext>
   </fullquery>
+
+  <fullquery name="apm_version_id_from_package_key.get_id">      
+    <querytext>
+        select version_id 
+        from apm_enabled_package_versions 
+        where package_key = :package_key
+    </querytext>
+  </fullquery>
   
   <fullquery name="apm_package_id_from_key_mem.apm_package_id_from_key">      
     <querytext>
@@ -180,5 +156,41 @@
       and a.package_id = :package_id
     </querytext>
   </fullquery>
-  
+
+  <fullquery name="apm_get_callback_proc.select_proc">      
+    <querytext>
+        select proc
+        from apm_package_callbacks
+        where version_id = :version_id
+        and   type = :type
+    </querytext>
+  </fullquery>
+
+  <fullquery name="apm_set_callback_proc.insert_proc">      
+    <querytext>
+        insert into apm_package_callbacks
+          (version_id, type, proc)
+        values (:version_id, :type, :proc)
+    </querytext>
+  </fullquery>  
+
+  <fullquery name="apm_set_callback_proc.update_proc">      
+    <querytext>
+        update apm_package_callbacks
+                set proc = :proc
+        where version_id = :version_id
+          and type = :type
+    </querytext>
+  </fullquery>  
+
+  <fullquery name="apm_remove_callback_proc.delete_proc">      
+    <querytext>
+        delete from apm_package_callbacks
+        where version_id = (select version_id 
+                            from apm_enabled_package_versions 
+                            where package_key = :package_key)
+        and   type = :type
+    </querytext>
+  </fullquery>  
+
 </queryset>

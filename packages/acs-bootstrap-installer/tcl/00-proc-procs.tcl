@@ -366,8 +366,13 @@ $switch_code
             ns_write "PARSER CODE:\n\n$parser_code\n\n"
         }
 
+        set log_code ""
+        if { $warn_p } {
+            set log_code "ns_log Debug \"Deprecated proc $proc_name used\"\n"
+        }
+
         uplevel [::list proc ${proc_name_as_passed}__arg_parser {} $parser_code]
-        uplevel [::list proc $proc_name_as_passed args "    ${proc_name_as_passed}__arg_parser\n$code_block"]
+        uplevel [::list proc $proc_name_as_passed args "    ${proc_name_as_passed}__arg_parser\n${log_code}$code_block"]
     }
 }
 
@@ -573,7 +578,8 @@ ad_proc -public acs_root_dir {} {
 } -
 
 ad_proc -public acs_package_root_dir { package } { 
-    Returns the path root for a particular package within the OpenACS installation. 
+    Returns the path root for a particular package within the OpenACS installation.
+    For example /web/yourserver/packages/foo, i.e., a full file system path with no ending slash.
 } -
 
 ad_proc -public ad_make_relative_path { path } { 

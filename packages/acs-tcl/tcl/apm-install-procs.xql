@@ -82,7 +82,6 @@
       </querytext>
 </fullquery>
 
- 
 <fullquery name="apm_package_install_spec.package_version_info_select">      
       <querytext>
       

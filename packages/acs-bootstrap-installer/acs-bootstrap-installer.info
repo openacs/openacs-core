@@ -7,7 +7,7 @@
     <singleton-p>t</singleton-p>
     <initial-install-p>t</initial-install-p>
 
-    <version name="4.5" url="http://www.openacs.org/repository/download/apm/acs-bootstrap-installer-4.5.apm">
+    <version name="4.6.2" url="http://www.openacs.org/repository/download/apm/acs-bootstrap-installer-4.6.2.apm">
     <database-support>
         <database>oracle</database>
         <database>postgresql</database>
@@ -19,7 +19,7 @@
         <description format="text/html">This package bootstraps OpenACS.  If the core packages have not yet been installed, it calls the installer which leads the user through the steps necessary to do so.
 </description>
 
-        <provides url="acs-bootstrap-installer" version="4.5"/>
+        <provides url="acs-bootstrap-installer" version="4.6.2"/>
 
         <files>
             <file type="package_spec" path="acs-bootstrap-installer.info"/>

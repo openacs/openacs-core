@@ -246,31 +246,19 @@ ad_proc -public apm_file_add {
     if { [empty_string_p $file_id] } {
 	set file_id [db_null]
     }
-    return [db_exec_plsql apm_file_add {
-	begin
-	:1 := apm_package_version.add_file(
-		file_id => :file_id,
-		version_id => :version_id,
-		path => :path,
-		file_type => :file_type,
-                db_type => :db_type
-		);
-	end;
-    }]
+    return [db_exec_plsql apm_file_add {}]
 }
 
 ad_proc -private apm_files_load {
-    {
-	-callback apm_dummy_callback
-	-force_reload:boolean
-    } files
+    {-force_reload:boolean 0}
+    {-callback apm_dummy_callback} 
+    files
 } {
 
     Load the set of files into the currently running Tcl interpreter.
     @param -force_reload Indicates if the file should be loaded even if it \
 	    is already loaded in the interpreter.
 } {
-    
     # This will be the first time loading for each of these files (since if a
     # file has already been loaded, we just skip it in the loop below).
     global apm_first_time_loading_p
@@ -285,9 +273,8 @@ ad_proc -private apm_files_load {
 	    if { [file exists "[acs_root_dir]/packages/$package_key/$path"] } {
 		apm_callback_and_log $callback "Loading packages/$package_key/$path..."
 		set apm_current_package_key $package_key
-		# Remember that we've loaded the file.
+
 		apm_source "[acs_root_dir]/packages/$package_key/$path"
-		nsv_set apm_library_mtime packages/$package_key/$path [file mtime "[acs_root_dir]/packages/$package_key/$path"]
 
 		# Release outstanding database handles (in case this file
 		# used the db_* database API and a subsequent one uses
@@ -313,19 +300,32 @@ ad_proc -public apm_file_watch {path} {
     nsv_set apm_reload_watch $path 1
 }
 
+ad_proc -private apm_watch_all_files { package_key } {
+    Watch all Tcl procs and xql query files in the given
+    package
+
+    @author Peter Marklund
+} {        
+    set files [ad_find_all_files [acs_root_dir]/packages/$package_key]
+    foreach file [lsort $files] {
+        set file_db_type [apm_guess_db_type $package_key $file]
+        set file_type [apm_guess_file_type $package_key $file]
+
+        set right_db_type [expr [empty_string_p $file_db_type] || \
+                               [string equal $file_db_type [db_type]]]
+
+        if { $right_db_type && [expr [string equal $file_type tcl_procs] || [string equal $file_type query_file]] } {
+            apm_file_watch [ad_make_relative_path $file]
+        }
+    }
+}
+
 ad_proc -public apm_file_remove {path version_id} {
     
     Removes a files from a version.
     
 } { 
-    return [db_exec_plsql apm_file_remove {
-	begin
-	apm_package_version.remove_file(
-				path => :path,
-				version_id => :version_id
-				);
-	end;
-    }]
+    return [db_exec_plsql apm_file_remove {}]
 }
 
 ad_proc -public apm_version_from_file {file_id} {
@@ -386,35 +386,27 @@ ad_proc -public pkg_home {package_key} {
     return "/packages/$package_key"
 }
 
-ad_proc -public apm_version_file_list { 
-    { 
-	-type "" -db_type ""
-    } version_id } {
-
+ad_proc -public -deprecated -warn apm_version_file_list { 
+    {-type ""} 
+    {-db_type ""}
+    version_id 
+} {
     Returns a list of paths to files of a given type (or all files, if
     $type is not specified) which support a given database (if specified) in a version.
-    @param type Optionally specifiy what type of files to check, for instance "tcl_procs"
-    @param db_type Optionally specifiy what type of database support to check, for instance
-    "postgresql".  All files of the given type that are used by the given database version are
-    returned (i.e. all database-agnostic as well as the proper database-specific files).
-    @param version_id The version to retrieve the file list from.
+    Use the proc apm_get_package_files instead.
 
+    @param type Optionally specifiy what type of files to check, for instance "tcl_procs"
+    @param db_type This argument is ignored for now.
+    @param version_id The version to retrieve the file list from.
+    @param path_prefix A prefix that will be used for all the returned paths. By default
+                       the prefix will be the empty string which means that the returned paths
+                       will be relative to the package root.
+
+    @see apm_get_package_files
 } {
-    if { ![empty_string_p $type] } {
-	set type_sql "and file_type = :type"
-    } else {
-	set type_sql ""
-    }
-    if { ![empty_string_p $db_type] } {
-	set db_type_sql "and (db_type = :db_type or db_type is null)"
-    } else {
-	set db_type_sql ""
-    }
-    return [db_list path_select "
-        select path from apm_package_files
-        where  version_id = :version_id
-        $type_sql $db_type_sql order by path
-    "]
+    set package_key [apm_package_key_from_version_id $version_id]
+
+    return [apm_get_package_files -package_key $package_key -file_types $type]
 }
 
 ad_proc -private apm_ignore_file_p { path } {
@@ -595,8 +587,5 @@ ad_proc -private apm_include_file_p { filename } {
     Files for which apm_ignore_file_p returns true will be ignored.
     Backup files are ignored.
 } {
-    if { [apm_ignore_file_p $filename] || [apm_backup_file_p $filename] } {
-  	return 0
-    }
-    return 1
+    return [expr ![apm_ignore_file_p $filename]]
 }

@@ -124,19 +124,13 @@ set errno [catch {
     # Load the Tcl package init files.
     apm_bootstrap_load_libraries -init acs-tcl
 
-    foreach package_key [db_list package_keys_select {
-	select package_key from apm_enabled_package_versions
-    }] {
-	nsv_set apm_enabled_package $package_key 1
-    }
+    # Load libraries, queries etc. for remaining packages
+    apm_load_packages
 
-    # Load *-procs.tcl and *-init.tcl files for enabled packages.
-    apm_load_libraries -procs
-
-    # Load up the Queries (OpenACS, ben@mit.edu)
-    apm_load_queries
-
-    apm_load_libraries -init
+    # The acs-tcl package is a special case. Its Tcl libraries need to be loaded
+    # before all the other packages. However, its tests need to be loaded after all
+    # packages have had their Tcl libraries loaded.
+    apm_load_packages -load_libraries_p 0 -load_queries_p 0 -packages acs-tcl
 
     if { ![nsv_exists rp_properties request_count] } {
 	# security-init.tcl has not been invoked, so it's safe to say that the

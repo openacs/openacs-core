@@ -415,6 +415,7 @@ ad_proc db_qd_replace_sql {statement_name sql} {
     } else {
 	db_qd_log Debug "NO FULLQUERY FOR $statement_name --> using default SQL"
         if { [empty_string_p $sql] } {
+            # The default SQL is empty, that implies a bug somewhere in the code.
             error "No fullquery for $statement_name and default SQL empty - query for statement missing"
         }
     }
@@ -567,7 +568,7 @@ ad_proc db_qd_internal_store_cache {fullquery} {
 
     # Check if it's compatible at all!
     if {![db_rdbms_compatible_p [db_fullquery_get_rdbms $fullquery] [db_current_rdbms]]} {
-	db_qd_log Debug "Query [db_fullquery_get_name $fullquery] is *NOT* compatible"
+	ns_log Error "Query [db_fullquery_get_name $fullquery] is *NOT* compatible"
 	return
     }
 

@@ -60,9 +60,25 @@ Done installing the OpenACS kernel data model.<p>
 
 "
 
+# Some APM procedures use util_memoize, so initialize the cache 
+# before starting APM install
+apm_source "[acs_package_root_dir acs-tcl]/tcl/20-memoize-init.tcl"
+
 apm_version_enable -callback apm_ns_write_callback [apm_package_install -callback apm_ns_write_callback "[file join [acs_root_dir] packages acs-kernel acs-kernel.info]"]
 
-ns_write "<p>Loading package .info files ... this will take a few minutes<p>"
+ns_write "<p>
+
+Loading package .info files - this will take a few minutes.
+
+<p>
+
+This might <b>really take a few minutes</b>, depending on your machine. Have a cup of coffee or beer or whatever and be patient. Thanks.
+
+<p>
+
+...
+
+"
 
 # Preload all the .info files so the next page is snappy.
 apm_dependency_check -initial_install [apm_scan_packages -new [file join [acs_root_dir] packages]]

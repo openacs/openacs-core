@@ -612,9 +612,10 @@ ad_proc -public export_vars {
     -form:boolean
     -url:boolean
     -quotehtml:boolean
+    -entire_form:boolean
     {-exclude {}}
     {-override {}}
-    vars
+    {vars {}}
 } {
     Exports variables either in URL or hidden form variable format. It should replace 
     <a
@@ -728,12 +729,22 @@ ad_proc -public export_vars {
     Similarly, if you want to change the sort order, you can say 
     <code>[export_vars -override { { sort_by $column } } $my_vars]</code>, and sorting will be done according to
     the new value of <code>column</code>.
+
+    <p>
+  
+    If the variable name contains a colon (:), that colon must be escaped with a backslash, 
+    so for example "form:id" becomes "form\:id". Sorry.
     
     @param sign Sign all variables.
 
     @param url Export in URL format. This is the default.
     
     @param form Export in form format. You can't specify both URL and form format.
+
+    @param quotehtml HTML quote the entire resulting string. This is an interim solution 
+    while we're waiting for the templating system to do the quoting for us.
+
+    @param entire_form Export the entire form from the GET query string or the POST.
 
     @author Lars Pind (lars@pinds.com)
     @creation-date December 7, 2000
@@ -746,6 +757,21 @@ ad_proc -public export_vars {
     # default to URL format
     if { !$form_p && !$url_p } {
 	set url_p 1
+    }
+
+    if { $entire_form_p } {
+        set the_form [ns_getform]
+        if { ![empty_string_p $the_form] } {
+            set form_var_list [list]
+            for {set i 0} {$i<[ns_set size $the_form]} {incr i} {
+                set varname [ns_set key $the_form $i]
+                set varvalue [ns_set value $the_form $i]
+                lappend form_var_list [list $varname $varvalue]
+            }
+            # We simply prepend this to the existing vars list. 
+            # That way, the -exclude and -override arguments will still work
+            set vars [concat $form_var_list $vars]
+        }
     }
 
     #####
@@ -771,7 +797,15 @@ ad_proc -public export_vars {
 	    if { [llength $var_spec] > 2 } {
 		return -code error "A varspec must have either one or two elements."
 	    }
+
+            # Hide escaped colons for below split
+            regsub -all {\\:} $var_spec "!!cOlOn!!" var_spec
+
 	    set name_spec [split [lindex $var_spec 0] ":"]
+
+            # Replace escaped colons with single colon
+            regsub -all {!!cOlOn!!} $name_spec ":" name_spec
+
 	    set name [lindex $name_spec 0]
 
 	    # If we've already encountered this varname, ignore it
@@ -1267,8 +1301,24 @@ ad_proc -public export_entire_form_as_url_vars {
 
 
 
+ad_proc -public util_get_current_url {} {
+    Returns a URL for re-issuing the current request, with query variables.
+    If a form submission is present, that is converted into query vars as well.
 
+    @return URL for the current page
 
+    @author Lars Pind (lars@pinds.com)
+    @creation-date February 11, 2003
+} {
+    set url [ad_conn url]
+
+    set query [ns_getform]
+    if { $query != "" } {
+        append url "?[export_entire_form_as_url_vars]"
+    }
+
+    return $url
+}
 
 proc with_catch {error_var body on_error} { 
     upvar 1 $error_var $error_var 
@@ -1519,6 +1569,19 @@ ad_proc -public exists_and_not_null { varname } {
     upvar 1 $varname var 
     return [expr { [info exists var] && ![empty_string_p $var] }] 
 } 
+
+ad_proc -public exists_and_equal { varname value } {
+    Returns 1 if the variable name exists in the caller's envirnoment
+    and is equal to the given value.
+
+    @see exists_and_not_null
+
+    @author Peter Marklund    
+} {
+    upvar 1 $varname var
+    
+    return [expr { [info exists var] && [string equal $var $value] } ]
+}
 
 ad_proc -public ad_httpget {
     -url 

@@ -11,29 +11,23 @@ ad_library {
 
 namespace eval site_node_apm_integration {
 
-    ad_proc -public new_site_node_and_package {
+    ad_proc -public -deprecated -warn new_site_node_and_package {
         {-name:required}
         {-parent_id:required}
         {-package_key:required}
         {-instance_name:required}
         {-context_id:required}
     } {
-        create site node, instantiate package, mount package at new site node
+        Create site node, instantiate package, mount package at new site node. Deprecated - 
+        please use site_node::instantiate_and_mount instead.
+
+        @see site_node::instantiate_and_mount
     } {
-        db_transaction {
-            set node_id [site_node::new -name $name -parent_id $parent_id]
-
-            set package_id [apm_package_create_instance $instance_name $context_id $package_key]
-
-            site_node::mount -node_id $node_id -object_id $package_id
-
-            site_node::update_cache -node_id $node_id
-            
-            # call post instantiation proc for the package
-            apm_package_call_post_instantiation_proc $package_id $package_key
-        }
-
-        return $package_id
+        return [site_node::instantiate_and_mount -parent_node_id $parent_id \
+                                                 -node_name $name \
+                                                 -package_name $instance_name \
+                                                 -context_id $context_id \
+                                                 -package_key $package_key]
     }
 
     ad_proc -public delete_site_nodes_and_package {

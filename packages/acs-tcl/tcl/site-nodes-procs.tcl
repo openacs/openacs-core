@@ -49,6 +49,71 @@ namespace eval site_node {
     } {
         db_dml mount_object {}
         update_cache -node_id $node_id
+
+        apm_invoke_callback_proc -package_key [apm_package_key_from_id $object_id] -type "after-mount" -arg_list [list node_id $node_id package_id $object_id]
+    }
+
+    ad_proc -public instantiate_and_mount {
+        {-node_id ""}
+        {-parent_node_id ""}
+        {-node_name ""}
+        {-package_name ""}
+        {-context_id ""}
+        {-package_key:required}
+    } {
+        Instantiate and mount a package of given type.
+
+        @param node_id        The id of the node in the site map where the package should be mounted.
+                              If not specified a new node under the main site will be created.
+        @param parent_node_id If no node_id is specified this will be the parent node under which the
+                              new node is created. Defaults to the main site node id.
+        @param node_name      If node_id is not specified then this will be the name of the
+                              new site node that is created. Defaults to package_key.
+        @param package_name The name of the new package instance. Defaults to pretty name of package type.
+        @param context_id     The context_id of the package. Defaults to the package_id at the parent
+                              node in the site map. If there is no such package then context_id will be the
+                              id of the parent node itself.
+        @param package_key    The key of the package type to instantiate.
+
+        @return The id of the instantiated package
+                          
+        @author Peter Marklund
+    } {
+        # Create a new node if none was provided
+        if { [empty_string_p $node_id] } {
+            if { [empty_string_p $parent_node_id ] } {
+                set parent_node_id [site_node::get_node_id -url "/"]
+            }
+
+            # Default node_name to package_key
+            set node_name [ad_decode $node_name "" $package_key $node_name]
+
+            set node_id [site_node::new -name $node_name -parent_id $parent_node_id]
+        }
+
+        # Get the context_id of the new package
+        if {[empty_string_p $context_id]} {
+            # Attempt to use the package_id at the parent node
+            if { [empty_string_p $parent_node_id] } {
+                set parent_node_id [site_node::get_parent_id -node_id $node_id]
+            }
+            array set node [site_node::get -node_id $parent_node_id]
+            set context_id $node(object_id)
+
+            if {[empty_string_p $context_id]} {
+                # No package at parent node, so use the id of the node itself instead
+                # Should we use default_context here instead?
+                set context_id $parent_node_id
+            }
+        }
+
+        # Instantiate the package
+        set package_id [apm_package_instance_new $package_name $context_id $package_key]
+
+        # Mount the package
+        site_node::mount -node_id $node_id -object_id $package_id
+
+        return $package_id
     }
 
     ad_proc -public unmount {
@@ -56,6 +121,9 @@ namespace eval site_node {
     } {
         unmount an object from the site node
     } {
+        set package_id [get_object_id -node_id $node_id]
+        apm_invoke_callback_proc -package_key [apm_package_key_from_id $package_id] -type before-unmount -arg_list [list package_id $package_id node_id $node_id]
+
         db_dml unmount_object {}
         update_cache -node_id $node_id
     }
@@ -114,7 +182,7 @@ namespace eval site_node {
         either url or node_id is required, if both are passed url is ignored
 
         The array elements are: package_id, package_key, object_type, directory_p, 
-        instance_namem, pattern_p, parent_id, node_id, object_id, url.
+        instance_name, pattern_p, parent_id, node_id, object_id, url.
     } {
         if {[empty_string_p $url] && [empty_string_p $node_id]} {
             error "site_node::get \"must pass in either url or node_id\""
@@ -276,9 +344,16 @@ namespace eval site_node {
         return $node(object_id)
     }
 
+    
 }
 
-ad_proc -deprecated site_node_create {
+##############
+#
+# Deprecated Procedures
+#
+#############
+
+ad_proc -deprecated -warn site_node_create {
     {-new_node_id ""}
     {-directory_p "t"}
     {-pattern_p "t"}
@@ -297,7 +372,7 @@ ad_proc -deprecated site_node_create {
     ]
 }
 
-ad_proc -deprecated site_node_create_package_instance {
+ad_proc -deprecated -warn site_node_create_package_instance {
     { -package_id 0 }
     { -sync_p "t" }
     node_id
@@ -306,26 +381,19 @@ ad_proc -deprecated site_node_create_package_instance {
     package_key
 } {
     Creates a new instance of the specified package and flushes the
-    in-memory site map (if sync_p is t).
-
-    DRB: I've modified this so it doesn't call the package's post instantiation proc until
-    after the site node map is updated.   Delaying the call in this way allows the package to
-    find itself in the map.   The code that mounts a subsite, in particular, needs to be able
-    to do this so it can find the nearest parent node that defines an application group (the
-    code in aD ACS 4.2 was flat-out broken).
+    in-memory site map (if sync_p is t). This proc is deprecated, please use
+    site_node::instantiate_and_mount instead.
 
     @author Michael Bryzek (mbryzek@arsdigita.com)
+    @see site_node::instantiate_and_mount
     @creation-date 2001-02-05
 
     @return The package_id of the newly mounted package
 } {
-    set package_id [apm_package_create_instance $instance_name $context_id $package_key]
-
-    site_node::mount -node_id $node_id -object_id $package_id
-
-    apm_package_call_post_instantiation_proc $package_id $package_key
-
-    return $package_id
+    return [site_node::instantiate_and_mount -node_id $node_id \
+                                             -package_name $instance_name \
+                                             -context_id $context_id \
+                                             -package_key $package_key]
 }
 
 ad_proc -public site_node_delete_package_instance {
@@ -343,7 +411,7 @@ ad_proc -public site_node_delete_package_instance {
     }
 }
 
-ad_proc -public site_node_mount_application {
+ad_proc -public -deprecated -warn site_node_mount_application {
     {-sync_p "t"}
     {-return "package_id"}
     parent_node_id
@@ -352,7 +420,8 @@ ad_proc -public site_node_mount_application {
     instance_name
 } {
     Creates a new instance of the specified package and mounts it
-    beneath parent_node_id.
+    beneath parent_node_id. Deprecated - please use the proc
+    site_node::instantiate_and_mount instead.
 
     @author Michael Bryzek (mbryzek@arsdigita.com)
     @creation-date 2001-02-05
@@ -367,24 +436,14 @@ ad_proc -public site_node_mount_application {
     @param instance_name The name we want to give the package we are
            mounting (used for the context bar string etc).
 
+    @see site_node::instantiate_and_mount
+
     @return The package id of the newly mounted package
 } {
-    # if there is an object mounted at the parent_node_id then use that
-    # object_id, instead of the parent_node_id, as the context_id
-    array set node [site_node::get -node_id $parent_node_id]
-    set context_id $node(object_id)
-
-    if {[empty_string_p $context_id]} {
-        set context_id $parent_node_id
-    }
-
-    return [site_node_apm_integration::new_site_node_and_package \
-                -name $url_path_component \
-                -parent_id $parent_node_id \
-                -package_key $package_key \
-                -instance_name $instance_name \
-                -context_id $context_id \
-    ]
+    return [site_node::instantiate_and_mount -parent_node_id $parent_node_id \
+                                             -node_name $url_path_component
+                                             -package_name $instance_name \
+                                             -package_key $package_key]
 }
 
 ad_proc -public site_map_unmount_application {
@@ -412,7 +471,7 @@ ad_proc -public site_map_unmount_application {
     }
 }
 
-ad_proc -deprecated site_node {url} {
+ad_proc -deprecated -warn site_node {url} {
     Returns an array in the form of a list. This array contains
     url, node_id, directory_p, pattern_p, and object_id for the
     given url. If no node is found then this will throw an error.

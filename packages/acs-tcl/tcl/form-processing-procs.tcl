@@ -149,6 +149,10 @@ ad_proc -public ad_form {
         being served.  
     </dd>
 
+    <p><dt><b>-cancel_url</b></dt><p>
+    <dd>The URL the cancel button should take you to. If this is specified, a cancel button will show up.  
+    </dd>
+
     <p><dt><b>-html</b></dt><p>
     <dd>The given html will be added to the "form" tag when page is rendered.  This is commonly used to
         define multipart file handling forms.
@@ -179,7 +183,14 @@ ad_proc -public ad_form {
 
     <p><dt><b>-edit_request</b></dt><p>
     <dd>A code block which sets the values for each element of the form meant to be modifiable by the user.  Use
-        this when a single query to grab database values is insufficient.
+        this when a single query to grab database values is insufficient. You just need to set the values as local
+        variables in the code block, and they'll get fetched and used as element values for you.
+    </dd>
+
+    <p><dt><b>-new_request</b></dt><p>
+    <dd>A code block which initializes elements for a new row. Use this to set default values. 
+        You just need to set the values as local
+        variables in the code block, and they'll get fetched and used as element values for you.
     </dd>
 
     <p><dt><b>-confirm_template</b></dt><p>
@@ -320,11 +331,11 @@ ad_proc -public ad_form {
     </blockquote>
     
     <blockquote><pre>
-    start_date:date,to_sql(sql_date),from_html(sql_date),optional
+    start_date:date,to_sql(sql_date),to_html(sql_date),optional
     </pre><p>
 
     Define the optional element "start_date" of type "date", get the sql_date property before executing
-    any new_date, edit_date or on_submit block, set the sql_date property after performing any
+    any new_data, edit_data or on_submit block, set the sql_date property after performing any
     select_query. 
 
     <p>
@@ -349,9 +360,9 @@ ad_proc -public ad_form {
         return -code error "No arguments to ad_form"
     } 
 
-    set valid_args { form method action html name select_query select_query_name new_data on_refresh
+    set valid_args { form method action mode html name select_query select_query_name new_data on_refresh
                      edit_data validate on_submit after_submit confirm_template new_request edit_request
-                     export};
+                     export cancel_url cancel_label has_edit actions };
 
     ad_arg_parser $valid_args $args
 
@@ -389,7 +400,7 @@ ad_proc -public ad_form {
             # and validation block to be extended, for now at least until I get more experience
             # with this ...
 
-            if { [lsearch { name form method action html validate export } $valid_arg ] == -1 } {
+            if { [lsearch { name form method action html validate export mode cancel_url has_edit actions } $valid_arg ] == -1 } {
                 set af_parts(${form_name}__extend) ""
             }
         }
@@ -425,6 +436,10 @@ ad_proc -public ad_form {
     array set af_element_parameters [list] 
 
     if { [info exists form] } {
+
+        # Remove comment lines in form section (DanW)
+        regsub -all -line -- {^\s*\#.*$} $form "" form
+
         foreach element $form {
             set element_name_part [lindex $element 0]
 
@@ -470,16 +485,20 @@ ad_proc -public ad_form {
     set af_validate_elements($form_name) [list]
 
     if { [info exists validate] } {
+
+        # Remove comment lines in validate section (DanW)
+        regsub -all -line -- {^\s*\#.*$} $validate "" validate
+
         foreach validate_element $validate {
             if { [llength $validate_element] != 3 } {
                 return -code error "Validate block must have three arguments: element name, expression, error message"
             }
 
-	    if { [lsearch $af_element_names($form_name) [lindex $validate_element 0]] == -1 } {
-	        return -code error "Element \"[lindex $validate_element 0]\" is not a form element"
+            if { [lsearch $af_element_names($form_name) [lindex $validate_element 0]] == -1 } {
+                return -code error "Element \"[lindex $validate_element 0]\" is not a form element"
             }
             lappend af_validate_elements($form_name) $validate_element
-	}
+        }
     }
 
     if { !$extend_p } {
@@ -493,8 +512,28 @@ ad_proc -public ad_form {
             lappend create_command "-method" $method
         }
 
+        if { [info exists mode] } {
+            lappend create_command "-mode" $mode
+        }
+
+        if { [info exists cancel_url] } {
+            lappend create_command "-cancel_url" $cancel_url
+        }
+
+        if { [info exists cancel_label] } {
+            lappend create_command "-cancel_label" $cancel_label
+        }
+
         if { [info exists html] } {
             lappend create_command "-html" $html
+        }
+
+        if { [info exists has_edit] } {
+            lappend create_command "-has_edit" $has_edit
+        }
+
+        if { [info exists actions] } {
+            lappend create_command "-actions" $actions
         }
 
         # Create the form
@@ -624,9 +663,14 @@ ad_proc -public ad_form {
                     help_text -
                     label -
                     format -
+                    mode -
                     value -
+		    section -
                     before_html -
-                    after_html {
+                    after_html -
+                    result_datatype -
+                    search_query -
+                    search_query_name {
                         if { [llength $extra_arg] > 2 || [llength $extra_arg] == 1 } {
                             return -code error "element $element_name: \"$extra_arg\" requires exactly one argument"
                         }
@@ -692,16 +736,16 @@ ad_proc -public ad_form {
                     return -code error "Edit request block conflicts with select query"
                 }
                 ad_page_contract_eval uplevel #$level $edit_request
-		
-		# set form vars from edit_request block
 
+		# set form vars from edit_request block
                 foreach element_name $af_element_names($form_name) {
                     if { [llength $element_name] == 1 } {
                         if { [uplevel \#$level [list info exists $element_name]] } {
                             set values($element_name) [uplevel \#$level [list set $element_name]]
                         }
                     }
-                }
+                }            
+
             } else {
 
                 # The key exists, grab the existing values if we have an select_query clause
@@ -752,6 +796,14 @@ ad_proc -public ad_form {
 
             if { [info exists new_request] } {
                 ad_page_contract_eval uplevel #$level $new_request
+                # LARS: Set form values based on local vars in the new_request block
+                foreach element_name $af_element_names($form_name) {
+                    if { [llength $element_name] == 1 } {
+                        if { [uplevel \#$level [list info exists $element_name]] } {
+                            set values($element_name) [uplevel \#$level [list set $element_name]]
+                        }
+                    }
+                }            
             }
         }
 

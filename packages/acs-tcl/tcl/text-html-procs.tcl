@@ -16,12 +16,17 @@ ad_library {
 
 ad_proc -public ad_text_to_html {
     -no_links:boolean
+    -no_lines:boolean
+    -no_quote:boolean
     text 
 } {
     Converts plaintext to html. Also translates any recognized 
     email addresses or URLs into a hyperlink.
 
     @param no_links will prevent it from highlighting 
+    @param no_quote will prevent it from HTML-quoting output, so this can be run on 
+    semi-HTML input and preserve that formatting. This will also cause spaces/tabs to not be
+    replaced with nbsp's, because this can too easily mess up HTML tags.
 
     @author Branimir Dolicki (branimir@arsdigita.com)
     @author Lars Pind (lars@pinds.com)
@@ -39,11 +44,14 @@ ad_proc -public ad_text_to_html {
 	# (bd) The only purpose of thiese sTaRtUrL and
 	# eNdUrL markers is to get rid of trailing dots,
 	# commas and things like that.  Note that there
-	# is a TAB before and after each marker.
+	# is a \x001 special char before and after each marker.
 	
-	regsub -nocase -all {([^a-zA-Z0-9]+)(http://[^\(\)"<>\s]+)} $text "\\1\tsTaRtUrL\\2eNdUrL\t" text
-	regsub -nocase -all {([^a-zA-Z0-9]+)(https://[^\(\)"<>\s]+)} $text "\\1\tsTaRtUrL\\2eNdUrL\t" text
-	regsub -nocase -all {([^a-zA-Z0-9]+)(ftp://[^\(\)"<>\s]+)} $text "\\1\tsTaRtUrL\\2eNdUrL\t" text
+        regsub -nocase -all {([^a-zA-Z0-9]+)(http://[^\(\)"<>\s]+)} $text "\\1\x001sTaRtUrL\\2eNdUrL\x001" text
+        regsub -nocase -all {([^a-zA-Z0-9]+)(https://[^\(\)"<>\s]+)} $text "\\1\x001sTaRtUrL\\2eNdUrL\x001" text
+        regsub -nocase -all {([^a-zA-Z0-9]+)(ftp://[^\(\)"<>\s]+)} $text "\\1\x001sTaRtUrL\\2eNdUrL\x001" text
+
+        # Don't dress URLs that are already links
+        regsub -nocase -all {(href\s*=\s*['"]?)\x001sTaRtUrL([^\x001]*)eNdUrL\x001} $text {\1\2} text
 	
 	# email links have the form xxx@xxx.xxx
         # JCD: don't treat things =xxx@xxx.xxx as email since most
@@ -52,49 +60,80 @@ ad_proc -public ad_text_to_html {
         # work correctly).  It's all quite ugly.
  
         regsub -nocase -all {([^a-zA-Z0-9=]+)(mailto:)?([^=\(\)\s:;,@<>]+@[^\(\)\s.:;,@<>]+[.][^\(\)\s:;,@<>]+)} $text \
-                "\\1\tsTaRtEmAiL\\3eNdEmAiL\t" text
-
-
+                "\\1\x001sTaRtEmAiL\\3eNdEmAiL\x001" text
     }    
 
     # At this point, before inserting some of our own <, >, and "'s
     # we quote the ones entered by the user:
-    set text [ad_quotehtml $text]
-
-    # Convert _single_ CRLF's to <br>'s to preserve line breaks
-    regsub -all {\r*\n} $text "<br>\n" text
-
-    # Convert every two spaces to an nbsp
-    regsub -all {  } $text "\\\&nbsp; " text
-
-    # turn CRLFCRLF into <P>
-    if { [regsub -all {\r\n\s*\r\n} $text "<p>" text] == 0 } {
-	# try LFLF
-	if { [regsub -all {\n\s*\n} $text "<p>" text] == 0 } {
-		# try CRCR
-	    regsub -all {\r\s*\r} $text "<p>" text
-	}
+    if { !$no_quote_p } {
+        set text [ad_quotehtml $text]
     }
-    
+
+    # Convert line breaks
+    if { !$no_lines_p } {
+        set text [util_convert_line_breaks_to_html $text]
+    }
+
+    if { !$no_quote_p } {
+        # Convert every two spaces to an nbsp
+        regsub -all {  } $text "\\\&nbsp; " text
+        
+        # Convert tabs to four nbsp's
+        regsub -all {\t} $text {\&nbsp;\&nbsp;\&nbsp;\&nbsp;} text
+    }
+
     if { !$no_links_p } {
+        # Move the end of the link before any punctuation marks at the end of the URL
+	regsub -all {([]!?.:;,<>\(\)\}"'-]+)(eNdUrL\x001)} $text {\2\1} text
+	regsub -all {([]!?.:;,<>\(\)\}"'-]+)(eNdEmAiL\x001)} $text {\2\1} text
+
 	# Dress the links and emails with A HREF
-	regsub -all {([]!?.:;,<>\(\)\}"'-]+)(eNdUrL\t)} $text {\2\1} text
-	regsub -all {([]!?.:;,<>\(\)\}"'-]+)(eNdEmAiL\t)} $text {\2\1} text
-	regsub -all {\tsTaRtUrL([^\t]*)eNdUrL\t} $text {<a href="\1">\1</a>} text
-	regsub -all {\tsTaRtEmAiL([^\t]*)eNdEmAiL\t} $text {<a href="mailto:\1">\1</a>} text
+	regsub -all {\x001sTaRtUrL([^\x001]*)eNdUrL\x001} $text {<a href="\1">\1</a>} text
+	regsub -all {\x001sTaRtEmAiL([^\x001]*)eNdEmAiL\x001} $text {<a href="mailto:\1">\1</a>} text
 	set text [string trimleft $text]
     }
 
-    # Convert every tab to 4 nbsp's
-    regsub -all {\t} $text {\&nbsp;\&nbsp;\&nbsp;\&nbsp;} text
-    
     # JCD: Remove all the eNd sTaRt stuff and warn if we do it since its bad
     # to have these left (means something is broken in our regexps above)
-    if {[regsub -all {(sTaRtUrL|eNdUrL|sTaRtEmAiL|eNdEmAiL)} $text {} text]} {
+    if {[regsub -all {(\x001sTaRtUrL|eNdUrL\x001|\x001sTaRtEmAiL|eNdEmAiL\x001)} $text {} text]} {
         ns_log warning "Replaced sTaRt/eNd magic tags in ad_text_to_html"
     }
+
     return $text
 }
+
+ad_proc -public util_convert_line_breaks_to_html {
+    text
+} {
+    Convert line breaks to <p> and <br> tags, respectively.
+} {
+    # Remove any leading or trailing whitespace
+    regsub {^[\s]*} $text {} text
+    regsub {[\s]*$} $text {} text
+
+    # Make sure all line breaks are single \n's
+    regsub -all {\r\n} $text "\n" text
+    regsub -all {\r} $text "\n" text
+    
+    # Remove whitespace around \n's
+    regsub -all {\s+\n\s+} $text "\n" text
+    
+    # Wrap P's around paragraphs
+    set text "<p>$text</p>"
+    regsub -all {([^\n\s])\n\n([^\n\s])} $text {\1</p><p>\2} text
+
+    # Convert _single_ CRLF's to <br>'s to preserve line breaks
+    # Lars: This must be done after we've made P tags, because otherwise the line
+    # breaks will already have been converted into BR's.
+    regsub -all {\n} $text "<br />\n" text
+
+    # Add line breaks to P tags
+    regsub -all {</p>} $text "</p>\n" text
+
+    return $text
+}
+
+
 
 ad_proc -public ad_quotehtml { arg } {
 
@@ -1156,8 +1195,9 @@ ad_proc wrap_string {input {threshold 80}} {
 ####################
 
 ad_proc -public ad_html_text_convert {
-    {-from text}
-    {-to html}
+    {-from text/plain}
+    {-to text/html}
+    {-maxlen 70}
     text
 } {
     Converts a chunk of text from text/html to text/html.
@@ -1174,45 +1214,90 @@ ad_proc -public ad_html_text_convert {
     @author Lars Pind (lars@pinds.com)
     @creation-date 19 July 2000
 } {
-    switch $from {
-        text/html -
-	html {
-	    switch $to {
-                text/html -
-		html {
-		    ad_html_security_check $text
-		    return [util_close_html_tags $text]
-		}
-                text/plain -
-		text {
-		    return [ad_html_to_text -- $text]
-		}
-		default {
-		    return -code error "Can only convert to text or html"
-		}
-	    }
-	} 
-        text/plain -
-	text {
-	    switch $to {
-                text/html -
-		html {
-		    return [ad_text_to_html -- $text]
-		}
-                text/plain -
-		text {
-		    return [wrap_string $text 70]
-		}
-		default {
-		    return -code error "Can only convert to text or html"
-		}
-	    }
-	} 
-	default {
-	    return -code error "Can only convert from text or html"
-	}
+    set valid_froms { text/enhanced text/plain text/fixed-width text/html }
+    set valid_tos { text/plain text/html }
+    
+    # Validate procedure input
+    set from [ad_decode $from "html" "text/html" "text" "text/plain" "plain" "text/plain" $from]
+    if { [lsearch $valid_froms $from] == -1 } {
+        error "Unknown text input format, '$from'. Valid formats are $valid_froms."
     }
+    
+    set to [ad_decode $to "html" "text/html" "text" "text/plain" "plain" "text/plain" $to]
+    if { [lsearch $valid_tos $to] == -1 } {
+        error "Unknown text input format, '$to'. Valid formats are $valid_tos."
+    }
+    
+    # Do the conversion
+    switch $from {
+        text/enhanced {
+	    switch $to {
+                text/html {
+                    set text [ad_enhanced_text_to_html $text]
+		}
+                text/plain {
+		    set text [ad_enhanced_text_to_plain_text $text]
+		}
+	    }
+        }
+        text/plain {
+	    switch $to {
+                text/html {
+		    set text [ad_text_to_html -- $text]
+		}
+                text/plain {
+		    set text [wrap_string $text $maxlen]
+		}
+	    }
+        }
+        text/fixed-width {
+	    switch $to {
+                text/html {
+		    set text "<pre>[ad_text_to_html -no_lines -- $text]</pre>"
+		}
+                text/plain {
+		    set text [wrap_string $text $maxlen]
+		}
+	    }
+	} 
+        text/html {
+	    switch $to {
+                text/html {
+                    set text [util_close_html_tags $text]
+		}
+                text/plain {
+		    set text [ad_html_to_text -maxlen $maxlen -- $text]
+		}
+	    }
+	} 
+    }
+
+    return $text
 }
+
+ad_proc -public ad_enhanced_text_to_html {
+    text
+} {
+    Converts enhanced text format to normal HTML.
+    @author Lars Pind (lars@pinds.com)
+    @creation-date 2003-01-27
+} {
+    return [ad_text_to_html -no_quote -- [util_close_html_tags $text]]
+}
+
+ad_proc -public ad_enhanced_text_to_plain_text {
+    {-maxlen 70}
+    text
+} {
+    Converts enhanced text format to normal plaintext format.
+    @author Lars Pind (lars@pinds.com)
+    @creation-date 2003-01-27
+} {
+    # Convert the HTML version to plaintext.
+    return [ad_html_to_text -maxlen $maxlen -- [ad_enhanced_text_to_html $text]]
+}
+
+
 
 ad_proc -public ad_convert_to_html {
     {-html_p f}

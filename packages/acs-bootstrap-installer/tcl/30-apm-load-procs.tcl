@@ -64,6 +64,10 @@ ad_proc apm_guess_file_type { package_key path } {
     Tcl procedure or Tcl initialization files, respectively.
     <li>File ending in <code>.tcl</code> are considered Tcl utility script files (normally
     found only in the bootstrap installer).
+    <li>Files with extension <code>.xml</code> in the directory catalog are
+        considered message catalog files.
+    <li>Tcl procs or init files in a test directory are of type test_procs and test_init
+        respectively.
     </ol>
 
     Rules are applied in this order (stopping with the first match).
@@ -125,16 +129,67 @@ ad_proc apm_guess_file_type { package_key path } {
 
     } elseif { [lsearch $components_lesser "www"] >= 0 || [lsearch $components_lesser "admin-www"] >= 0 } {
 	set type "content_page"
-    } else {
-	if { [string equal $extension ".tcl"] } {
-            if { [regexp -- {-(procs|init)(-[0-9a-zA-Z]*)?\.tcl$} [file tail $path] "" kind] } {
-	        set type "tcl_$kind"
+    } elseif { [string equal $extension ".tcl"] } {
+        if { [regexp -- {-(procs|init)(-[0-9a-zA-Z]*)?\.tcl$} [file tail $path] "" kind] } {
+            if { [string equal [lindex $components end-1] test] } {
+                set type "test_$kind"
             } else {
-                set type "tcl_util"
-	    }
-	}
-    }
+                set type "tcl_$kind"
+            }
+        } else {
+            set type "tcl_util"
+        }
+    } 
+    
     return $type
+}
+
+ad_proc -public apm_get_package_files {
+   {-package_key:required}
+   {-file_types {}}
+} {
+  <p>
+  Returns all files, or files of a certain types, belonging to an APM
+  package. Ignores files based on proc apm_include_file_p and determines file type
+  of files with proc apm_guess_file_type. Only returns file with no db type or a
+  db type matching that of the system.
+  </p>
+
+  <p>
+  Goes directly to the filesystem to find
+  files instead of using a file listing in the package info file or the database.
+  </p>
+
+  @param package_key    The key of the package to return file paths for
+  @param file_types     The type of files to return. If not provided files of all types
+                        recognized by the APM are returned.
+  
+  @return The paths, relative to the root dir of the package, of matching files.
+
+  @author Peter Marklund
+
+  @see apm_include_file_p
+  @see apm_guess_file_type
+  @see apm_guess_db_type
+} {
+    set package_path [acs_package_root_dir $package_key]
+    set files [lsort [ad_find_all_files -check_file_func apm_include_file_p $package_path]]
+
+    set matching_files [list]
+    foreach file $files {
+        set rel_path [string range $file [expr [string length $package_path] + 1] end]
+        set file_type [apm_guess_file_type $package_key $rel_path]
+        set file_db_type [apm_guess_db_type $package_key $rel_path]
+
+        set type_match_p [expr [empty_string_p $file_types] || [lsearch $file_types $file_type] != -1]
+        set db_match_p [expr [empty_string_p $file_db_type] || [string equal $file_db_type [db_type]]]
+
+        if { $type_match_p && $db_match_p } {
+            lappend matching_files $rel_path
+        }
+    }
+
+    return $matching_files
 }
 
 ad_proc -private apm_guess_db_type { package_key path } {
@@ -194,9 +249,33 @@ ad_proc -private apm_guess_db_type { package_key path } {
 
     return ""
 }
+ 
+ad_proc apm_package_supports_rdbms_p {
+    {-package_key:required}
+} {
+    Returns 1 if the given package supports the rdbms of the system and 0 otherwise.
+    The package is considedered to support the given rdbms if there is at least one
+    file in the package of matching db_type. FIXME: this check will fail if a package
+    doesn't have any db files (no sql create scripts and no db specific xql files).
+
+    @author Peter Marklund
+} {    
+    set system_db_type [db_type]
+
+    return 1
+    foreach file [apm_get_package_files -all_db_types -package_key $package_key] {
+         if { [string equal $system_db_type [apm_guess_db_type $package_key $file]] } {
+             return 1
+         }
+     }
+
+     return 0
+}
 
 ad_proc apm_source { __file } {
     Sources $__file in a clean environment, returning 1 if successful or 0 if not.
+    Records that the file has been sourced and stores its mtime in the nsv array
+    apm_library_mtime
 } {
     if { ![file exists $__file] } {
 		ns_log "Error" "Unable to source $__file: file does not exist."
@@ -210,6 +289,8 @@ ad_proc apm_source { __file } {
 	return 0
     }
 
+    nsv_set apm_library_mtime [ad_make_relative_path $__file] [file mtime $__file]    
+
     return 1
 }
 
@@ -221,11 +302,12 @@ ad_proc apm_bootstrap_load_file { root_directory file } {
     set relative_path [string range $file \
         [expr { [string length "$root_directory/packages"] + 1 }] end]
     ns_log "Notice" "Loading packages/$relative_path..."
+
     apm_source $file
-    nsv_set apm_library_mtime packages/$relative_path [file mtime $file]
 }
 
 ad_proc apm_bootstrap_load_libraries {
+    {-load_tests:boolean 0}
     {-init:boolean}
     {-procs:boolean}
     package_key
@@ -268,7 +350,13 @@ ad_proc apm_bootstrap_load_libraries {
             ([string equal $file_type tcl_procs] && $procs_p ||
              [string equal $file_type tcl_init] && $init_p)} {
 
-		    apm_bootstrap_load_file $root_directory $file
+                 # Don't source acs-automated-testing tests before that package has been
+                 # loaded
+                 if { ! $load_tests_p && [regexp {tcl/test/[^/]+$} $file match] } {
+                     continue
+                 } 
+
+		 apm_bootstrap_load_file $root_directory $file
 
             # Call db_release_unused_handles, only if the library defining it
             # (10-database-procs.tcl) has been sourced yet.
