@@ -23,7 +23,7 @@ proc_doc db_exec_plsql { statement_name sql args } {
     stuff otherwise because of calling environments. (ben)
 
 } {
-    ad_arg_parser { bind_output } $args
+    ad_arg_parser { bind_output bind } $args
 
     # I'm not happy about having to get the fullname here, but right now
     # I can't figure out a cleaner way to do it. I will have to
