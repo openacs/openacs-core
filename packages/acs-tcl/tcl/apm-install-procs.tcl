@@ -1353,6 +1353,11 @@ ad_proc -private apm_mount_core_packages {} {
                       -privilege read
     permission::set_not_inherit -object_id $api_browser_id
 
+    # Mount acs-automated-testing
+    ns_log Notice "Mounting acs-automated-testing"    
+    site_node::instantiate_and_mount -node_name doc \
+                                     -package_key acs-automated-testing
+
     ns_log Notice "Core packages instantiated and mounted"
 }
 
