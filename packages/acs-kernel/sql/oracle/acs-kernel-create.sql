@@ -17,6 +17,7 @@
 @@ acs-object-util
 @@ acs-relationships-create
 @@ utilities-create
+@@ authentication-create
 @@ community-core-create
 @@ groups-create
 @@ rel-segments-create

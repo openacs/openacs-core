@@ -490,25 +490,35 @@ end;' language 'plpgsql';
 -- show errors
 
 create table users (
-	user_id			integer not null
-				constraint users_user_id_fk
-				references persons (person_id)
-				constraint users_pk primary key,
-	password		char(40),
-	salt			char(40),
-	screen_name		varchar(100)
-				constraint users_screen_name_un
-				unique,
-	priv_name		integer default 0 not null,
-	priv_email		integer default 5 not null,
-	email_verified_p	boolean default 't',
-	email_bouncing_p	boolean default 'f' not null,
-	no_alerts_until		timestamptz,
-	last_visit		timestamptz,
-	second_to_last_visit	timestamptz,
-	n_sessions		integer default 1 not null,
-	password_question	varchar(1000),
-	password_answer		varchar(1000)
+        user_id                 integer not null
+                                constraint users_user_id_fk
+                                references persons (person_id)
+                                constraint users_pk primary key,
+        authority_id            integer
+                                constraint users_auth_authorities_fk
+                                references auth_authorities(authority_id),
+        username                varchar(100) 
+                                constraint users_username_nn 
+                                not null,
+        screen_name             varchar(100)
+                                constraint users_screen_name_un
+                                unique,
+        priv_name               integer default 0 not null,
+        priv_email              integer default 5 not null,
+        email_verified_p        boolean default 't',
+        email_bouncing_p        boolean default 'f' not null,
+        no_alerts_until         timestamptz,
+        last_visit              timestamptz,
+        second_to_last_visit    timestamptz,
+        n_sessions              integer default 1 not null,
+        -- local authentication information
+        password                char(40),
+        salt                    char(40),
+        password_question       varchar(1000),
+        password_answer         varchar(1000),
+        -- table constraints
+        constraint users_authority_username_un
+        unique (authority_id, username)
 );
 
 create table user_preferences (
