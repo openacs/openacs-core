@@ -1,4 +1,4 @@
-ad_library {
+zad_library {
     Contains procs used to manipulate chunks of text and html,
     most notably converting between them.
     
@@ -697,6 +697,7 @@ ad_proc ad_html_security_check { html } {
 ad_proc -public ad_html_to_text {
     {-maxlen 70}
     {-showtags:boolean}
+    {-no_format:boolean}
     html 
 } {
     Returns a best-guess plain text version of an HTML fragment.
@@ -706,7 +707,8 @@ ad_proc -public ad_html_to_text {
     
     @param maxlen the line length you want your output wrapped to.
     @param showtags causes any unknown (and uninterpreted) tags to get shown in the output.
-    
+    @param no_format causes hyperlink tags not to get listed at the end of the output.
+
     @author Lars Pind (lars@pinds.com)
     @author Aaron Swartz (aaron@swartzfam.com)
     @creation-date 19 July 2000
@@ -827,8 +829,8 @@ ad_proc -public ad_html_to_text {
 		    ad_html_to_text_put_text output "_"
 		}
 		a {
-		    if { [empty_string_p $slash] } {
-			if { [info exists attribute_array(href)] } {
+                    if { [empty_string_p $slash] && !$no_format_p} {
+ 			if { [info exists attribute_array(href)] } {
 			    if { [info exists attribute_array(title)] } {
 				set title ": '$attribute_array(title)'"
 			    } else {
@@ -1389,6 +1391,7 @@ ad_proc util_remove_html_tags { html } {
 ad_proc string_truncate { 
     {-len 200}
     {-format html}
+    {-no_format:boolean}
     string 
 } {
     Truncates a string to len characters (defaults to the
@@ -1399,6 +1402,7 @@ ad_proc string_truncate {
 
     @param len The lenght to truncate to. Defaults to parameter TruncateDescriptionLength.
     @param format html or text.
+    @param no_format causes hyperlink tags not to get listed at the end of the output.
     @param string The string to truncate.
     @return The truncated string, with HTML tags cloosed or
             converted to text, depending on format.
@@ -1410,10 +1414,14 @@ ad_proc string_truncate {
         set string "[string range $string 0 $len]..."
     } 
     
-    if { [string equal $format "html"] } {
+    if { [string equal $format "html"] && !$no_format_p } {
         set string [util_close_html_tags $string]
     } else {
-        set string [ad_html_to_text -- $string]
+       if { $no_format_p } {
+           set string [ad_html_to_text -no_format $string]
+       } else {
+           set string [ad_html_to_text -- $string]
+       }
     }
     return $string
 }
