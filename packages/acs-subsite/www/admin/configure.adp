@@ -6,11 +6,3 @@
   TODO: Edit subsite name
 </p>
 
-<p>
-  TODO: Upload subsite image
-</p>
-
-<p>
-  TODO: Group owner, and owner's URL
-</p>
-
