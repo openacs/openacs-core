@@ -9,7 +9,7 @@
   <body bgcolor="#FFFFCC">
   <h1>Customize a Sandwich</h1>
 <hr>
-  <formtemplate id="sandwich" style="wizard" cols=2></formtemplate>
+  <formtemplate id="sandwich"></formtemplate>
 <hr>
 </body>
 </html>
