@@ -63,6 +63,40 @@ begin
 end;' language 'plpgsql';
 
 
+-- Splits string on requested character. Returns requested element
+-- (1-based)
+
+create function split(varchar,char,integer)
+returns varchar as '
+declare
+  p_string		alias for $1;
+  p_split_char		alias for $2;
+  p_element		alias for $3;
+
+  v_left_split		integer;
+  v_right_split		integer;
+  v_len			integer;
+begin
+  v_len = length(p_string);
+  if v_len = 0 or p_string is null or p_element <= 0 then
+    return NULL;
+  end if;
+  if p_element = 1 then
+    v_left_split := 0;
+  else
+    v_left_split := instr(p_string, p_split_char, 1, p_element-1);
+  end if;
+  v_right_split := instr(p_string, p_split_char, 1, p_element);
+  if v_right_split = 0 then
+    v_right_split = v_len + 1;
+  end if;
+  if v_left_split = 0 and v_right_split = v_len+1 and p_element <> 1 then
+    return null;
+  end if;
+  return substr(p_string, v_left_split+1, (v_right_split - v_left_split - 1));
+end;' language 'plpgsql';
+
+
 create function get_func_drop_command (varchar) returns varchar as '
 declare
         fname           alias for $1;
@@ -479,4 +513,68 @@ begin
 
 end;' language 'plpgsql';
 
+
+-- PG substitute for Oracle user_tab_columns view
+
+create view user_tab_columns as
+  select upper(c.relname) as table_name,
+	 upper(a.attname) as column_name,
+	 upper(t.typname) as data_type
+    from pg_class c, pg_attribute a, pg_type t
+   where c.oid = a.attrelid
+     and a.atttypid = t.oid
+     and a.attnum > 0;
+
+-- Table for storing PL/PGSQL function arguments
+
+create table acs_function_args (
+       function              varchar(100) not null,
+       arg_seq		     integer not null,
+       arg_name		     varchar(100),
+       arg_default	     varchar(100),
+       constraint acs_function_args_pk
+       primary key (function, arg_seq),
+       constraint acs_function_args_un
+       unique (function, arg_name)
+);
+
+
+-- Add entries to acs_function_args for one function
+-- Usage: select define_function_args('function_name','arg1,arg2:default,arg3,arg4:default')
+
+create function define_function_args(varchar,varchar)
+returns integer as '
+declare
+  p_function		alias for $1;
+  p_arg_list		alias for $2;
+
+  v_arg_seq		integer default 1;
+  v_arg_name		varchar;
+  v_arg_default		varchar;
+  v_elem		varchar;
+  v_pos			integer;
+begin
+  delete from acs_function_args where function = p_function;
+
+  v_elem = split(p_arg_list, '','', v_arg_seq);
+  while v_elem is not null loop
+    
+    v_pos = instr(v_elem, '':'', 1, 1);
+    if v_pos > 0 then
+      v_arg_name := substr(v_elem, 1, v_pos-1);
+      v_arg_default := substr(v_elem, v_pos+1, length(v_elem) - v_pos);
+    else
+      v_arg_name := v_elem;
+      v_arg_default := NULL;
+    end if;
+
+    insert into acs_function_args (function, arg_seq, arg_name, arg_default)
+	   values (upper(p_function), v_arg_seq, upper(v_arg_name), v_arg_default);
+
+    v_arg_seq := v_arg_seq + 1;
+    v_elem = split(p_arg_list, '','', v_arg_seq);
+  end loop;
+    
+  return 1;
+end;' language 'plpgsql';
 

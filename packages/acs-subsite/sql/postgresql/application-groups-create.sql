@@ -126,6 +126,8 @@ create table application_groups (
 --   return v_group_id;
 --  end new;
 
+select define_function_args('application_group__new','group_id,object_type:application_group,creation_date:now(),creation_user,creation_ip,email,url,group_name,package_id,context_id');
+
 create function application_group__new(integer,varchar,timestamp,integer,varchar,varchar,varchar,varchar,integer,integer)
 returns integer as '
 declare
