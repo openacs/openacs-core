@@ -80,7 +80,7 @@ above.
 
 <li><a href="/user/portrait/index.tcl?@export_edit_vars@">Manage this user's portrait</a></li>
 
-<li><a href="become?user_id=@user_id@">Become this user!</a></li>
+<li><a href="become?user_id=@user_id@">Login as this user</a></li>
 </ul>
 
 
