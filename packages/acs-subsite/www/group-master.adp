@@ -48,7 +48,7 @@
       </if>
       <if @logout_url@ not nil>
         &nbsp;
-        <span class="button-header"><a href="@logout_url@" title="Logout from @system_name@" class="button">Logout</a></span>
+        <span class="button-header"><a href="@logout_url@?return_url=@subsite_url@" title="Logout from @system_name@" class="button">Logout</a></span>
       </if>
       <if @login_url@ not nil>
         &nbsp;
