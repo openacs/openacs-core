@@ -326,10 +326,15 @@ aa_register_case auth_password_change {
             # create user we'll use for testing
             set user_id [ad_user_new "test2@user.com" "Test" "User" "changeme" "no_question" "no_answer"]
 
+
+
             # password_status "ok"
             set old_password "changeme"
             set new_password "changedyou"
-            array set auth_info [auth::password::change -user_id $user_id -old_password $old_password -new_password $new_password]
+            array set auth_info [auth::password::change \
+                                     -user_id $user_id \
+                                     -old_password $old_password \
+                                     -new_password $new_password]
             aa_equals "Should return 'ok'" \
                 $auth_info(password_status) \
                 "ok"
