@@ -1,11 +1,53 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="acs-tcl" package_version="5.1.0" locale="en_US" charset="ISO-8859-1">
+<message_catalog package_key="acs-tcl" package_version="5.2.0d2" locale="en_US" charset="ISO-8859-1">
 
   <msg key="approve">approve</msg>
   <msg key="approve_email">approve email</msg>
   <msg key="ban">ban</msg>
   <msg key="delete">delete</msg>
   <msg key="lt_require_email_verific">require email verification</msg>
+  <msg key="maturity_immature">Immature</msg>
+  <description key="maturity_immature">Maturity level is visible in the Installer and when browsing the repository
+
+Level 1: Immature. 
+Meets Level 0 Criterion 
+Current release has no open priority 1 or priority 2 bugs. 
+Has been available in a final major-minor release for at least one month and major-minor-dot release for one week. 
+All API functions have documentation 
+Source code is available at published location. 
+
+http://openacs.org/forums/message-view?message%5fid=161393</description>
+
+  <msg key="maturity_incompatible">Compatibility problems</msg>
+  <msg key="maturity_mature">Mature</msg>
+  <description key="maturity_mature">Maturity level is visible in the Installer and when browsing the repository. 
+
+Level 2: Mature. 
+Meets all Level 1 criteia 
+Has installation guide and user documentation 
+OCT member verifies no serious deviations from general coding practices 
+Has no namespace conflicts with existing level 2 packages. 
+
+http://openacs.org/forums/message-view?message%5fid=161393</description>
+
+  <msg key="maturity_mature_and_standard">Mature and Standard</msg>
+  <description key="maturity_mature_and_standard">Maturity level is visible in the Installer and when browsing the repository. 
+
+Level 3: Mature and Standard. 
+Meets all Level 2 Criteria 
+OCT member verifies code meets published coding standards 
+Contains no non-internationalized text 
+Available on all supported databases.
+
+http://openacs.org/forums/message-view?message%5fid=161393</description>
+
+  <msg key="maturity_new_submission">New Submission or Maturity Unknown</msg>
+  <description key="maturity_new_submission">Maturity level is visible in the Installer and when browsing the repository.
+
+Level 0: New Submission. This is the default for packages that don't have it set explicitly, and for new contributions. The only criterion for level 0 is that at package is uploaded into the repository.
+
+http://openacs.org/forums/message-view?message%5fid=161393 </description>
+
   <msg key="reject">reject</msg>
   <msg key="undelete">undelete</msg>
 </message_catalog>
