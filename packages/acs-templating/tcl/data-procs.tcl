@@ -40,6 +40,23 @@ ad_proc -public template::data::validate::integer { value_ref message_ref } {
   return $result 
 }
 
+ad_proc -public template::data::validate::naturalnum { value_ref message_ref } {
+  Validates natural numbers data types
+  Will trim leading 0 in order to avoid TCL interpreting it as octal in the future
+  (code borrowed from ad_page_contract_filter_proc_naturalnum)
+  @author Rocael Hernandez <roc@viaro.net>
+} {
+  upvar 2 $message_ref message $value_ref value
+
+    set result [regexp {^(0*)(([1-9][0-9]*|0))$} $value match zeros value]
+
+    if { ! $result } {
+    set message "Invalid natural number \"$value\""
+    }
+
+  return $result
+}
+
 ad_proc -public template::data::validate::float { value_ref message_ref } {
 
   upvar 2 $message_ref message $value_ref value
