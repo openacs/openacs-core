@@ -448,6 +448,11 @@ parameter::set_value -package_id [ad_acs_kernel_id] -parameter UsePasswordWidget
           find . -type f -name "*sql" | xargs perl -p -i.tmp -e "s/\\wtimestamp[^t]/ timestamptz/g"</programlisting>
         </listitem>
         <listitem>
+          <para>Install PostgreSQL 7.3.x. Note that you PostgreSQL
+          must listen on a different port in order to work
+          correctly.</para> 
+        </listitem>
+        <listitem>
           <para>Restore the database from dump as per the <link linkend="restore-postgres">recovery instructions</link>.</para>
         </listitem>
       </orderedlist>
