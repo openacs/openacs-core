@@ -1,4 +1,16 @@
 -- set serveroutput on
+drop function content_test__create();
+drop function content_test__check1();
+drop function content_test__check2();
+drop function content_test__check3();
+drop function content_test__check4();
+drop function content_test__check5();
+drop function content_test__put_line(text);
+drop function cast_char(boolean);
+drop function content_test__dump();
+drop function content_test__get_val(varchar);
+drop function content_test__save_val(integer,varchar);
+drop table tst_ids;
 create table tst_ids (
        id    integer,
        name  varchar(400)
@@ -663,16 +675,16 @@ begin
 
    -- symlinks/revisions should be deleted automatically
 
-   PERFORM content_item__delete(simple_item_id);
    PERFORM content_template__delete(item_template_id);
-   PERFORM content_item__delete(item_id);
    PERFORM content_template__delete(type_template_id);
    PERFORM content_template__delete(def_type_template_id);
    PERFORM content_template__delete(dum_template_id);
+   PERFORM content_item__delete(simple_item_id);
+   PERFORM content_item__delete(item_id);
+   PERFORM content_folder__delete(folder_b_id);
    PERFORM content_folder__delete(sub_sub_folder_id);
    PERFORM content_folder__delete(sub_folder_id);
    PERFORM content_folder__delete(folder_id);
-   PERFORM content_folder__delete(folder_b_id);
 
    return null;
 
@@ -688,17 +700,4 @@ select content_test__check3();
 select content_test__check4();
 select content_test__check5();
 \t
-drop function content_test__create();
-drop function content_test__check1();
-drop function content_test__check2();
-drop function content_test__check3();
-drop function content_test__check4();
-drop function content_test__check5();
-drop function content_test__put_line(text);
-drop function cast_char(boolean);
-drop function content_test__dump();
-drop function content_test__get_val(varchar);
-drop function content_test__save_val(integer,varchar);
-
-drop table tst_ids;
 
