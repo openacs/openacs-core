@@ -6,11 +6,11 @@
 
 <p>
 
-<li><a href="/register/logout">Log Out</a>
+<li><a href="../register/logout">Log Out</a>
 
 <p>
 
-<li><a href="/user/password-update">Change my Password</a>
+<li><a href="../user/password-update">Change my Password</a>
 
 
 </ul>
@@ -39,19 +39,19 @@ If you want to check what other users of this service are shown, visit
 <li>screen name:  @screen_name@</li>
 <li>bio: @bio@</li>
 </ul>
-<p>(<a href="/user/basic-info-update">update</a>)</p>
+<p>(<a href="../user/basic-info-update">update</a>)</p>
 
 
 <if @portrait_state@ eq upload>
 
 <h4>Your Portrait</h4>
-Show everyone else at @system_name@ how great looking you are:  <a href="/user/portrait/upload">upload a portrait</a>
+Show everyone else at @system_name@ how great looking you are:  <a href="../user/portrait/upload">upload a portrait</a>
 
 </if>
 <if @portrait_state@ eq show>
 
 <h4>Your Portrait</h4>
-On @portrait_publish_date@, you uploaded <a href="/user/portrait/">@portrait_title@</a>.
+On @portrait_publish_date@, you uploaded <a href="../user/portrait/">@portrait_title@</a>.
 
 </if>
 
