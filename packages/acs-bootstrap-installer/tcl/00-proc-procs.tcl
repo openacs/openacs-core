@@ -8,6 +8,20 @@ nsv_array set proc_source_file [list]
 
 proc number_p { str } {
   return [regexp {^[-+]?[0-9]*(.[0-9]+)?$} $str]
+
+  # Note that this will return true for empty string!
+  # TODO: Presumably this is by design?  Probably better to use
+  # ad_var_type_check_number_p anyway.
+  #
+  # Note that ACS 3.2 defined number_p like this:
+  #
+  #   if { [empty_string_p $var] } {
+  #       return 0
+  #   } else {
+  #       return [regexp {^-?[0-9]*\.?[0-9]*$} $var match]
+  #   }
+  #
+  # --atp@piskorski.com, 2003/03/16 21:09 EST
 }
 
 proc empty_string_p { query_string } {
