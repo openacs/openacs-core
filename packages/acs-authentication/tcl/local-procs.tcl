@@ -214,8 +214,8 @@ ad_proc -private auth::local::password::CanResetPassword {
 
 ad_proc -private auth::local::password::ChangePassword {
     username
-    old_password
     new_password
+    {old_password ""}
     {parameters {}}
     {authority_id {}}
 } {
@@ -232,11 +232,14 @@ ad_proc -private auth::local::password::ChangePassword {
         set result(password_status) "no_account"
         return [array get result]
     }
-    
-    if { ![ad_check_password $user_id $old_password] } {
-        set result(password_status) "old_password_bad"
-        return [array get result]
+
+    if { ![empty_string_p $old_password] } {
+	if { ![ad_check_password $user_id $old_password] } {
+	    set result(password_status) "old_password_bad"
+	    return [array get result]
+	}
     }
+
     if { [catch { ad_change_password $user_id $new_password } errmsg] } {
         set result(password_status) "change_error"
         global errorInfo
