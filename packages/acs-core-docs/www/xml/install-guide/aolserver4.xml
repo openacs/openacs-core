@@ -107,7 +107,7 @@ tar xvfz tDOM-0.8.0.tar.gz</action></screen>
 ./configure --prefix=/usr/local/aolserver40r10 --with-tcl=/usr/local/lib/
 make install
 </action></screen>
-      <para>If this is the only version of AOLserver in use, or is the default version, create a symlink.  If not, then be sure to use <computeroutput>/usr/local/aolserver40r10</computeroutput> instead of <computeroutput>/usr/local/aolserver</computeroutput> in future steps and check any scripts and makefiles you run to ensure they use the correct path.</para>
+      <para>If this is the only version of AOLserver in use, or is the default version, create a symlink.  If not, then be sure to use <computeroutput>/usr/local/aolserver40r10</computeroutput> instead of <computeroutput>/usr/local/aolserver</computeroutput> in the steps below and check both scripts and makefiles to ensure they use the correct path.</para>
       <screen>[root aolserver]# <userinput>ln -s /usr/local/aolserver40r10 /usr/local/aolserver</userinput></screen>
     </listitem>
     <listitem id="aolserver4-modules-install">
@@ -118,12 +118,12 @@ make install
             <listitem id="aolserver4-nscache-install">
               <para>Install nscache</para>
               <screen>[root aolserver]# <userinput>cd /usr/local/src/aolserver40r10/nscache</userinput>
-[root nscache]# <userinput>make install AOLSERVER=/usr/local/aolserver40r10</userinput></screen>
+[root nscache]# <userinput>make install AOLSERVER=/usr/local/aolserver</userinput></screen>
             </listitem>
             <listitem id="aolserver4-nsoracle-install">
               <para>Install nsoracle (if you want to use Oracle)</para>
               <screen>[root nscache]# <userinput>cd ../nsoracle</userinput>
-[root nsoracle]# <userinput>make install AOLSERVER=/usr/local/aolserver40r10</userinput></screen>
+[root nsoracle]# <userinput>make install AOLSERVER=/usr/local/aolserver</userinput></screen>
             </listitem>
             <para>OpenACS looks for the Oracle driver at
             /usr/local/aolserver/bin/ora8.so, but some versions of
@@ -133,23 +133,18 @@ make install
             <listitem id="aolserver4-nspostgres-install">
               <para>Install nspostgres (if you want to use Postgres)</para>
               <screen>[root nscache]# <userinput>cd ../nspostgres</userinput>
-[root nspostgres]# <userinput>export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/pgsql/lib</userinput>[root nspostgres]# <userinput>make install POSTGRES=LSB ACS=1 INST=/usr/local/aolserver40r10  AOLSERVER=/usr/local/aolserver40r10</userinput>
+[root nspostgres]# <userinput>export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/pgsql/lib:/usr/local/aolserver/lib</userinput>
+[root nspostgres]# <userinput>make install POSTGRES=LSB ACS=1 INST=/usr/local/aolserver  AOLSERVER=/usr/local/aolserver</userinput>
               </screen>
               <para>If you get errors like:</para>
               <programlisting>nspostgres.c: In function `Ns_PgTableList':
 nspostgres.c:679: warning: passing arg 3 of `Tcl_DStringAppend' as signed due to prototype</programlisting>
               <para>then PostGreSQL is probably not in the standard location.  The location of PostGreSQL is very dependent on which method was used to install it.  To correct the problem, replace <computeroutput>LSB</computeroutput> with the path to the path to your PostGreSQL installation.  Often this is <computeroutput>/usr/local/pgsql</computeroutput>.</para>
 
-              <para>Another possibility is that you may need to set
-              the LD_LIBRARY_PATH environmental variable. You may
-              still get warnings, but sometimes this will fix things
-              enough to work.</para>
-              <screen>[root nspostgres]# <userinput>export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/pgsql/lib</userinput>
-              </screen>
               <para>You can use the
               <computeroutput>ldd</computeroutput> command to verify
               that all libraries are linked in: 
-                <userinput>ldd /usr/local/src/aolserver40r8/nspostgres/nspostgres.so</userinput>
+                <userinput>ldd /usr/local/src/aolserver40r10/nspostgres/nspostgres.so</userinput>
               </para>
 
               <para>If you run into problems with libpq.a do the following (and repeat the step above)</para>
@@ -161,7 +156,7 @@ nspostgres.c:679: warning: passing arg 3 of `Tcl_DStringAppend' as signed due to
               <para>Install nssha1</para>
               <screen>[root nspostgres]# <userinput>cd ../nssha1</userinput></screen>
               <para>Now install nssha1:</para>
-              <screen>[root nssha1]# <userinput>make install AOLSERVER=/usr/local/aolserver40r10</userinput></screen>
+              <screen>[root nssha1]# <userinput>make install AOLSERVER=/usr/local/aolserver</userinput></screen>
               <para>If the make fails you will have to edit nssha1.c. Comment out the following 2 lines (lines 139-140):        </para>
               <programlisting><emphasis role="bold">//</emphasis> typedef unsigned int u_int32_t;
 <emphasis role="bold">//</emphasis> typedef unsigned char u_int8_t;</programlisting>
@@ -171,7 +166,8 @@ nspostgres.c:679: warning: passing arg 3 of `Tcl_DStringAppend' as signed due to
               <screen>[root nssha1]# <userinput>cd ../tDOM-0.7.8/unix</userinput></screen>
               <para>Edit the <computeroutput>CONFIG</computeroutput> file. Uncomment the instructions meant for AOLserver 4, but edit it to look like this:</para>
               <screen>../configure --enable-threads --disable-tdomalloc
-          --prefix=/usr/local/aolserver40r10 --with-tcl=/usr/local/lib</screen>
+          --prefix=/usr/local/aolserver --with-tcl=/usr/local/lib</screen>
+              <para>Note that the location of the Tcl library may vary on differnt platforms (e.g. for Debian 3.0: --with-tcl=/usr/lib/tcl8.4)</para>
               <para>Now you can compile and configure tDOM</para>
               <screen>[root unix]# <userinput>sh CONFIG</userinput>
 [root unix]# <userinput>make install</userinput></screen>
@@ -202,21 +198,21 @@ nspostgres.c:679: warning: passing arg 3 of `Tcl_DStringAppend' as signed due to
       <itemizedlist>
             <listitem>
               <para>Oracle</para>
-              <screen>[root aolserver]# <userinput>cd /usr/local/aolserver40r8/bin</userinput>
+              <screen>[root aolserver]# <userinput>cd /usr/local/aolserver/bin</userinput>
 [root bin]# <userinput>cp /tmp/&tarballpath;/packages/acs-core-docs/www/files/nsd-oracle.txt ./nsd-oracle</userinput>
 [root bin]# <userinput>chmod 750 nsd-oracle</userinput>
 [root bin]#
-<action>cd /usr/local/aolserver40r10/bin
+<action>cd /usr/local/aolserver/bin
 cp /var/tmp/&tarballpath;/packages/acs-core-docs/www/files/nsd-oracle.txt ./nsd-oracle
 chmod 750 nsd-oracle</action></screen>
             </listitem>
             <listitem>
               <para>PostgreSQL</para>
-              <screen>[root aolserver]# <userinput>cd /usr/local/aolserver40r10/bin</userinput>
+              <screen>[root aolserver]# <userinput>cd /usr/local/aolserver/bin</userinput>
 [root bin]# <userinput>cp /var/tmp/&tarballpath;/packages/acs-core-docs/www/files/nsd-postgres.txt ./nsd-postgres</userinput>
 [root bin]# <userinput>chmod 755 nsd-postgres</userinput>
 [root bin]#
-<action>cd /usr/local/aolserver40r10/bin
+<action>cd /usr/local/aolserver/bin
 cp /var/tmp/&tarballpath;/packages/acs-core-docs/www/files/nsd-postgres.txt ./nsd-postgres
 chmod 755 nsd-postgres</action></screen>
         </listitem>
