@@ -9,12 +9,15 @@
                    job_start_time,
                    job_end_time,
                    interactive_p,
+                   snapshot_p,
+                   authority_id,
+                   message,
                    creation_user,
                    doc_start_time,
                    doc_end_time,
                    doc_status,
                    doc_message,
-                   document_id,
+                   document,
                    (j.job_end_time - j.job_start_time) * 24*60*60 as run_time_seconds,
                    (select count(e1.entry_id)
                     from   auth_batch_job_entries e1
@@ -42,8 +45,9 @@
             set    doc_end_time = sysdate
                    doc_status = :doc_status,
                    doc_message = :doc_message,
-                   document_id = :document_id
+                   document = empty_clob()
             where  job_id = :job_id
+            returning document into :1
         </querytext>
     </fullquery>
 

@@ -9,12 +9,16 @@
                    job_start_time,
                    job_end_time,
                    interactive_p,
+                   snapshot_p,
+                   authority_id,
+                   (select aa.pretty_name from auth_authorities aa where aa.authority_id = j.authority_id) as authority_pretty_name,
+                   message,
                    creation_user,
                    doc_start_time,
                    doc_end_time,
                    doc_status,
                    doc_message,
-                   document_id,
+                   document,
                    trunc(extract(epoch from (j.job_end_time - j.job_start_time))) as run_time_seconds,
                    (select count(e1.entry_id)
                     from   auth_batch_job_entries e1
@@ -42,7 +46,7 @@
             set    doc_end_time = current_timestamp,
                    doc_status = :doc_status,
                    doc_message = :doc_message,
-                   document_id = :document_id
+                   document = :document
             where  job_id = :job_id
         </querytext>
     </fullquery>

@@ -245,6 +245,87 @@ ad_proc -public auth::authority::get_authority_options {} {
 
 
 
+ad_proc -public auth::authority::batch_sync {
+    -authority_id:required
+    -snapshot:boolean
+} {
+    Execute batch synchronization for this authority now.
+
+    @param authority_id
+    @param snapshot     If set, we will delete all authority's users 
+                        not touched by the process document proc.
+
+    @return job_id
+} {
+    set job_id [auth::sync::job::start \
+                   -authority_id $authority_id \
+                   -snapshot=$snapshot_p]
+
+    get -authority_id $authority_id -array authority
+    
+    set message {}
+
+    # Verify that we have implementations
+    if { [empty_string_p $authority(get_doc_impl_id)] } {
+        set message "No Get Document implementation"
+    } elseif { [empty_string_p $authority(process_doc_impl_id)] } { 
+        set message "No Process Document implementation"
+    } else {
+        auth::sync::job::start_get_document -job_id $job_id
+
+        array set doc_result {
+            doc_status failed_to_connect
+            doc_message {}
+            document {}
+        }
+        with_catch errmsg {
+            array set doc_result [auth::sync::GetDocument -authority_id $authority_id]
+        } {
+            global errorInfo
+            ns_log Error "Error getting sync document:\n$errorInfo"
+        }
+        
+        auth::sync::end_get_document \
+            -job_id $job_id \
+            -doc_status $doc_result(doc_status) \
+            -doc_message $doc_result(doc_message) \
+            -document $doc_result(document)
+
+        if { [string equal $doc_status "ok"] && ![empty_string_p $doc_result(document)] } {
+            with_catch errmsg {
+                auth::sync::ProcessDocument \
+                    -authority_id $authority_id \
+                    -job_id $job_id \
+                    -document $doc_result(document)
+            } {
+                global errorInfo
+                ns_log Error "Error processing sync document:\n$errorInfo"
+                set message "Error processing sync document: $errmsg"
+            }
+        }
+        
+        if { $snapshot_p } {
+            # If this is a snapshot, we need to delete all the users belonging to this authority
+            # that weren't included in the snapshot.
+            auth::sync::job::snapshot_delete_remaining \
+                -job_id $job_id \
+                -authority_id $authority_id
+        }
+    }
+
+    auth::sync::job::end \
+        -job_id $job_id \
+        -message $message
+
+    return $job_id
+}
+
+
+
+
+
+
+
 #####
 #
 # Private
