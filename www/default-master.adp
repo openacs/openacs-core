@@ -7,9 +7,7 @@
 <div id="body">
   <div id="navbar-body">
     <div class="subsite-context-bar">
-      <div style="float: left">@context_bar;noquote@</div>
-      <div style="float: right">@subnavbar_link;noquote@</div>
-      <div style="clear: both;"></div>
+      @context_bar;noquote@
     </div>
     <div id="subnavbar-body">
       <div id="subsite-name">
