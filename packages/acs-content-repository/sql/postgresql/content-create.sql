@@ -475,7 +475,9 @@ create table cr_revisions (
 		  references cr_mime_types,
   nls_language    varchar(50),
   -- lob_id if storage_type = lob.
-  lob             integer references lobs,
+  lob             integer
+                  constraint cr_revisions_lob_fk
+                  references lobs,
   -- content holds the file name if storage type = file
   -- otherwise it holds the text data if storage_type = text.
   content	  text,
