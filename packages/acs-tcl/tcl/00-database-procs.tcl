@@ -2008,7 +2008,6 @@ ad_proc db_get_sql_user {{ -dbn "" }} {
     }
 }
 
-
 ad_proc db_get_pgbin {{ -dbn "" }} {
     <strong>PostgreSQL only.</strong>
 
@@ -2092,7 +2091,6 @@ ad_proc db_get_dbhost {{ -dbn "" }} {
     }
     return [string range $datasource 0 [expr $first_colon_pos - 1]]
 }
-
 
 ad_proc db_source_sql_file {{
     -dbn ""
@@ -2209,6 +2207,131 @@ ad_proc db_source_sql_file {{
     }
 }
 
+ad_proc db_load_sql_data {{
+    -dbn ""
+    -callback apm_ns_write_callback
+} file } {
+
+    Loads a CSV formatted file into a table using PostgreSQL's COPY command or
+    Oracle's SQL*Loader utility.  The file name format consists of a sequence
+    number used to control the order in which tables are loaded, and the table
+    name with "-" replacing "_".  This is a bit of a kludge but greatly speeds
+    the loading of large amounts of data, such as is done when various "ref-*"
+    packages are installed.
+
+    @param dbn The database name to use.  If empty_string, uses the default database.
+    @file Filename in the format dd-table-name.csv where 'dd' is a sequence number
+          used to control the order in which data is loaded, and 'table-name' is 
+          the name of the SQL table to be loaded with '-' replacing '_'.
+
+} {
+
+    switch [db_driverkey $dbn] {
+
+        oracle {
+            global env
+
+            set user_pass [db_get_sql_user -dbn $dbn]
+            set tmpnam [ns_tmpnam]
+
+            set fd [open $file r]
+            set fd1 [open $tmpnam w]
+            write $fd1 [subst [read $fd]]
+            close $fd1
+            close $fd
+
+            cd [file dirname $file]
+            set fd [open "|[file join $env(ORACLE_HOME) bin sqlldr] userid=$user_pass control=$tmpnam" "r"]
+
+            while { [gets $fd line] >= 0 } {
+                # Don't bother writing out lines which are purely whitespace.
+                if { ![string is space $line] } {
+                    apm_callback_and_log $callback "[ad_quotehtml $line]\n"
+                }
+            }
+            close $fd
+        }
+
+        postgresql {
+            global tcl_platform 
+
+            set pguser [db_get_username]
+            if { ![string equal $pguser ""] } {
+                set pguser "-U $pguser"
+            }
+
+            set pgport [db_get_port]
+            if { ![string equal $pgport ""] } {
+                set pgport "-p $pgport"
+            }
+
+            set pgpass [db_get_password]
+            if { ![string equal $pgpass ""] } {
+                set pgpass "<<$pgpass"
+            }
+
+            if { [string equal [db_get_dbhost] "localhost"] || [string equal [db_get_dbhost] ""] } {
+                set pghost ""
+            } else {
+                set pghost "-h [db_get_dbhost]"
+            }
+            
+            set fd [open $file r]
+            set copy_command [subst [read $fd]]
+            close $fd
+
+            if { $tcl_platform(platform) == "windows" } {
+                set fp [open "|[file join [db_get_pgbin] psql] -c \"$copy_command\" -h [ns_info hostname] $pgport $pguser  [db_get_database]" "r"]
+            } else {
+                set fp [open "|[file join [db_get_pgbin] psql] -c \"$copy_command\" $pghost $pgport $pguser [db_get_database] $pgpass" "r"]
+            }
+
+            while { [gets $fp line] >= 0 } {
+                # Don't bother writing out lines which are purely whitespace.
+                if { ![string is space $line] } {
+                    apm_callback_and_log $callback "[ad_quotehtml $line]\n"
+                }
+            }
+
+            # PSQL dumps errors and notice information on stderr, and has no option to turn
+            # this off.  So we have to chug through the "error" lines looking for those that
+            # really signal an error.
+
+            set errno [ catch {
+                close $fp
+            } error]
+
+            if { $errno == 2 } {
+                return $error
+            }
+
+            # Just filter out the "NOTICE" lines, so we get the stack dump along with real
+            # ERRORs.  This could be done with a couple of opaque-looking regexps...
+
+            set error_found 0
+            foreach line [split $error "\n"] {
+                if { [string first NOTICE $line] == -1 } {
+                    append error_lines "$line\n"
+                    set error_found [expr { $error_found || [string first ERROR $line] != -1 || \
+                                                [string first FATAL $line] != -1 } ]
+                }
+            }
+
+            if { $error_found } {
+                global errorCode
+                return -code error -errorinfo $error_lines -errorcode $errorCode $error_lines
+            }
+
+        }
+
+        nsodbc {
+            error "db_load_sql_data is not supported for this database."
+        }
+        default {
+            error "db_load_sql_data is not supported for this database."
+        }
+    }
+}
 
 ad_proc db_source_sqlj_file {{
     -dbn ""

@@ -46,16 +46,19 @@ foreach pkg_info $pkg_install_list {
     # Find out which script is appropriate to be run.
     set data_model_in_package 0
     set table_rows ""
-    set data_model_files [apm_data_model_scripts_find \
-                              -upgrade_from_version_name $initial_version_name \
-                              -upgrade_to_version_name $final_version_name \
-                              $package_key]
+    set data_model_files [concat \
+                             [apm_data_model_scripts_find \
+                                 -upgrade_from_version_name $initial_version_name \
+                                 -upgrade_to_version_name $final_version_name \
+                                 $package_key] \
+                             [apm_ctl_files_find $package_key]]
+
     set sql_file_list [concat $sql_file_list $data_model_files]
+
     if {![empty_string_p $data_model_files]} {
 	foreach file $data_model_files {
 	    set path [lindex $file 0]
 	    set file_type [lindex $file 1]
-            set db_type [lindex $file 2]
 	    append table_rows "  <tr>
     <td><input type=checkbox checked name=\"sql_file\" value=\"$file_count\"></td>
     <td>$path</td>
@@ -75,8 +78,8 @@ foreach pkg_info $pkg_install_list {
 	<table cellpadding=3 cellspacing=3>
 	  <tr>
             <th>Load</th>
-	    <th>File Type</th>
 	    <th>File Name</th>
+	    <th>File Type</th>
           </tr>
 	$table_rows
 	</table>
