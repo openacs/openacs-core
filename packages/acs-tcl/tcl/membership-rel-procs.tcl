@@ -36,6 +36,7 @@ namespace eval membership_rel {
             }
             db_dml update_modifying_user {}
         }
+        acs_user::flush_cache -user_id $user_id
     }
 
     ad_proc -public approve {

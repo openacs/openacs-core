@@ -333,7 +333,6 @@ ad_proc -public acs_user::change_state {
     }
 
     membership_rel::change_state -rel_id $rel_id -state $state
-    acs_user::flush_cache -user_id $user_id
 }
 
 ad_proc -public acs_user::approve {
