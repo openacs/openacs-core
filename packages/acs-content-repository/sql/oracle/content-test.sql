@@ -214,13 +214,13 @@ content_item.move(sub_sub_folder_id, folder_id);
 --dbms_output.put_line('Path for ' || item_id || ' is ' || 
 --  content_item.get_path(item_id));
 --dbms_output.put_line('Renaming puppy to kitty...');
-content_item.rename(item_id, 'kitty');
+content_item.edit_name(item_id, 'kitty');
 --dbms_output.put_line('Renaming me to aunty...');
-content_folder.rename(sub_sub_folder_id, 'aunty');
+content_folder.edit_name(sub_sub_folder_id, 'aunty');
 --dbms_output.put_line('Path for ' || item_id || ' is ' || 
 --  content_item.get_path(item_id));
 --dbms_output.put_line('Renaming kitty to pa -- this should work');
---content_item.rename(item_id, 'pa');
+--content_item.edit_name(item_id, 'pa');
 --dbms_output.put_line('Path for ' || item_id || ' is ' || 
 --content_item.get_path(item_id));
 
