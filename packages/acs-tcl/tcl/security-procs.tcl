@@ -321,13 +321,13 @@ ad_proc -public ad_get_client_property {
     module
     name
 } { 
-    @param session_id controls which session is used
-
     Looks up a property for a session. If $cache is true, will use the
     cached value if available. If $cache_only is true, will never
     incur a database hit (i.e., will only return a value if
     cached). If the property is secure, we must be on a validated session
     over SSL.
+
+    @param session_id controls which session is used
 
 } {
     if { [empty_string_p $session_id] } {
@@ -368,9 +368,6 @@ ad_proc -public ad_set_client_property {
     module name value
 
 } { 
-    @param session_id controls which session is used
-    @param clob tells us to use a large object to store the value
-
     Sets a client (session-level) property. If $persistent is true,
     the new value will be written through to the database. If
     $deferred is true, the database write will be delayed until
@@ -378,6 +375,9 @@ ad_proc -public ad_set_client_property {
     still return the correct value immediately). If $secure is true,
     the property will not be retrievable except via a validated,
     secure (HTTPS) connection.
+
+    @param session_id controls which session is used
+    @param clob tells us to use a large object to store the value
 
 } {
 
