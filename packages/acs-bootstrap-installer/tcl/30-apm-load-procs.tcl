@@ -302,7 +302,6 @@ ad_proc apm_package_supports_rdbms_p {
 
     foreach file [apm_get_package_files -all_db_types -package_key $package_key] {
         set db_type [apm_guess_db_type $package_key $file]
-        ns_log Notice "pm debug $file db type $db_type"
        if { ![empty_string_p $db_type] } {
             set has_db_types_p 1
         }

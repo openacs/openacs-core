@@ -33,7 +33,6 @@ set spec_files [list]
 set already_installed_list [list]
 set not_compatible_list [list]
 
-ns_log Notice "pm debug spec_files $all_spec_files"
 foreach spec_file $all_spec_files {
     array set version [apm_read_package_info_file $spec_file]
     set version_name $version(name)

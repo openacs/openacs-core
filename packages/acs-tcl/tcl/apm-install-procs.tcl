@@ -1227,7 +1227,6 @@ ad_proc -private apm_data_model_scripts_find {
     }
     set file_list [concat [apm_order_upgrade_scripts $upgrade_file_list] $data_model_list]
     apm_log APMDebug "APM: Data model scripts for $package_key: $file_list"
-    ns_log Notice "pm debug APM: Data model scripts for $package_key: $file_list"
     return $file_list
 }
 
