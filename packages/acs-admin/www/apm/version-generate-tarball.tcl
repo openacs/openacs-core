@@ -11,7 +11,7 @@ ad_page_contract {
 db_transaction {
     apm_generate_tarball $version_id
 } on_error {
-    ad_return_complaint "APM Generation Error" "The database returned the following error message:
+    ad_return_complaint 1 "APM Generation Error: The database returned the following error message:
 <pre>
 <blockquote>
 [ad_quotehtml $errmsg]
