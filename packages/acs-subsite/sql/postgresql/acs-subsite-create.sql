@@ -12,6 +12,7 @@
 \i application-groups-create.sql
 \i user-profiles-create.sql
 \i subsite-callbacks-create.sql
+\i host-node-map-create.sql
 
 -- This view lets us avoid using acs_object.name to get party_names.
 -- 
