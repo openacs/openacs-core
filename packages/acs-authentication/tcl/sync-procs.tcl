@@ -470,11 +470,6 @@ ad_proc -private auth::sync::get_sync_elements {
         set elms [auth::sync::GetElements -authority_id $authority_id]
     } {}
 
-    # If it's not a local account, we never allow editing of usernames, because it's not clear what the implications are
-    if { $authority_id != [auth::authority::local] && [lsearch $elms "username"] == -1 } {
-        lappend elms username
-    }
-    
     return $elms
 }
 
