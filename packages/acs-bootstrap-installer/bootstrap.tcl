@@ -139,11 +139,6 @@ set errno [catch {
 	bootstrap_fatal_error "The request processor routines have not been loaded."
     }
 
-    # Instantiate and mount core packages if not already done
-    if { ![ad_acs_admin_node] } {
-        apm_mount_core_packages
-    }
- 
     ns_log "Notice" "Done loading OpenACS."
 }]
 
