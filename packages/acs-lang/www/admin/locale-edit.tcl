@@ -16,7 +16,7 @@ ad_page_contract {
 # Get the locale for the user so that we 'spit' the content back in the
 # proper locale
 
-set locale_user [ad_locale_locale_from_lang [ad_locale user language]]
+set locale_user [ad_conn locale]
 
 #  AS - doesn't work
 #  set encoding_charset [ad_locale charset $locale_user]
