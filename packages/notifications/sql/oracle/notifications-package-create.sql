@@ -1,0 +1,366 @@
+
+--
+-- The Notifications Package
+--
+-- ben@openforce.net
+-- Copyright OpenForce, 2002.
+--
+-- GNU GPL v2
+--
+
+
+-- The Notification Interval Package
+
+create or replace package notification_interval
+as
+   function new (
+      interval_id                       in notification_intervals.interval_id%TYPE default null,
+      name                              in notification_intervals.name%TYPE,
+      n_seconds                         in notification_intervals.n_seconds%TYPE,
+      creation_date                     in acs_objects.creation_date%TYPE default sysdate,
+      creation_user                     in acs_objects.creation_user%TYPE,
+      creation_ip                       in acs_objects.creation_ip%TYPE,
+      context_id                        in acs_objects.context_id%TYPE default null
+   ) return notification_intervals.interval_id%TYPE;
+
+   procedure delete (
+      interval_id                       in notification_intervals.interval_id%TYPE
+   );
+
+end notification_interval;
+/
+show errors
+
+
+
+create or replace package body notification_interval
+as
+   function new (
+      interval_id                       in notification_intervals.interval_id%TYPE default null,
+      name                              in notification_intervals.name%TYPE,
+      n_seconds                         in notification_intervals.n_seconds%TYPE,
+      creation_date                     in acs_objects.creation_date%TYPE default sysdate,
+      creation_user                     in acs_objects.creation_user%TYPE,
+      creation_ip                       in acs_objects.creation_ip%TYPE,
+      context_id                        in acs_objects.context_id%TYPE default null
+   ) return notification_intervals.interval_id%TYPE
+   is
+      v_interval_id                     acs_objects.object_id%TYPE;
+   begin
+      v_interval_id:= acs_object.new (
+                                      object_id => interval_id,
+                                      object_type => 'notification_interval',
+                                      creation_date => creation_date,
+                                      creation_user => creation_user,
+                                      creation_ip => creation_ip,
+                                      context_id => context_id
+                                      );
+
+      insert into notification_intervals
+      (interval_id, name, n_seconds) values
+      (v_interval_id, name, n_seconds);
+
+      return v_interval_id;
+   end new;
+
+   procedure delete (
+      interval_id                       in notification_intervals.interval_id%TYPE
+   )
+   is 
+   begin
+      acs_object.delete(interval_id);
+   end delete;
+
+end notification_interval;
+/
+show errors
+
+
+-- The notification delivery methods package
+
+create or replace package notification_delivery_method
+as
+   function new (
+      delivery_method_id                in notification_delivery_methods.delivery_method_id%TYPE default null,
+      short_name                        in notification_delivery_methods.short_name%TYPE,
+      pretty_name                       in notification_delivery_methods.pretty_name%TYPE,
+      creation_date                     in acs_objects.creation_date%TYPE default sysdate,
+      creation_user                     in acs_objects.creation_user%TYPE,
+      creation_ip                       in acs_objects.creation_ip%TYPE,
+      context_id                        in acs_objects.context_id%TYPE default null
+   ) return notification_delivery_methods.delivery_method_id%TYPE;
+
+   procedure delete (
+      delivery_method_id                in notification_delivery_methods.delivery_method_id%TYPE
+   );
+
+end notification_delivery_method;
+/
+show errors
+
+
+
+create or replace package body notification_delivery_method
+as
+   function new (
+      delivery_method_id                in notification_delivery_methods.delivery_method_id%TYPE default null,
+      short_name                        in notification_delivery_methods.short_name%TYPE,
+      pretty_name                       in notification_delivery_methods.pretty_name%TYPE,
+      creation_date                     in acs_objects.creation_date%TYPE default sysdate,
+      creation_user                     in acs_objects.creation_user%TYPE,
+      creation_ip                       in acs_objects.creation_ip%TYPE,
+      context_id                        in acs_objects.context_id%TYPE default null
+   ) return notification_delivery_methods.delivery_method_id%TYPE
+   is
+      v_delivery_method_id              acs_objects.object_id%TYPE;
+   begin
+      v_delivery_method_id := acs_object.new (
+                                  object_id => delivery_method_id,
+                                  object_type => 'notification_delivery_method',
+                                  creation_date => creation_date,
+                                  creation_user => creation_user,
+                                  creation_ip => creation_ip,
+                                  context_id => context_id
+                              );
+
+      insert into notification_delivery_methods
+      (delivery_method_id, short_name, pretty_name) values
+      (v_delivery_method_id, short_name, pretty_name);
+
+      return v_delivery_method_id;
+   end new;
+
+   procedure delete (
+      delivery_method_id                in notification_delivery_methods.delivery_method_id%TYPE
+   )
+   is
+   begin
+      acs_object.delete (delivery_method_id);
+   end delete;
+
+end notification_delivery_method;
+/
+show errors
+
+
+
+-- Notification Types Package
+create or replace package notification_type
+as
+   function new (
+      type_id                           in notification_types.type_id%TYPE default null,
+      short_name                        in notification_types.short_name%TYPE,
+      pretty_name                       in notification_types.pretty_name%TYPE,
+      description                       in notification_types.description%TYPE,
+      creation_date                     in acs_objects.creation_date%TYPE default sysdate,
+      creation_user                     in acs_objects.creation_user%TYPE,
+      creation_ip                       in acs_objects.creation_ip%TYPE,
+      context_id                        in acs_objects.context_id%TYPE default null
+   ) return notification_types.type_id%TYPE;
+
+   procedure delete (
+      type_id                           in notification_types.type_id%TYPE default null
+   );
+
+end notification_type;
+/
+show errors
+
+
+
+create or replace package body notification_type
+as
+   function new (
+      type_id                           in notification_types.type_id%TYPE default null,
+      short_name                        in notification_types.short_name%TYPE,
+      pretty_name                       in notification_types.pretty_name%TYPE,
+      description                       in notification_types.description%TYPE,
+      creation_date                     in acs_objects.creation_date%TYPE default sysdate,
+      creation_user                     in acs_objects.creation_user%TYPE,
+      creation_ip                       in acs_objects.creation_ip%TYPE,
+      context_id                        in acs_objects.context_id%TYPE default null
+   ) return notification_types.type_id%TYPE
+   is
+      v_type_id                         acs_objects.object_id%TYPE;
+   begin
+      v_type_id := acs_object.new (
+                       object_id => type_id,
+                       object_type => 'notification_type',
+                       creation_date => creation_date,
+                       creation_user => creation_user,
+                       creation_ip => creation_ip,
+                       context_id => context_id
+                   );
+      
+      insert into notification_types
+      (type_id, short_name, pretty_name, description) values
+      (v_type_id, short_name, pretty_name, description);
+      
+      return v_type_id;
+   end new;
+
+   procedure delete (
+      type_id                           in notification_types.type_id%TYPE default null
+   )
+   is
+   begin
+      acs_object.delete(type_id);
+   end delete;
+
+end notification_type;
+/
+show errors
+
+
+
+-- the notification request package
+
+create or replace package notification_request
+as
+   function new (
+      request_id                        in notification_requests.request_id%TYPE default null,
+      object_type                       in acs_objects.object_type%TYPE default 'notification_request',
+      type_id                           in notification_requests.type_id%TYPE,
+      user_id                           in notification_requests.user_id%TYPE,
+      object_id                         in notification_requests.object_id%TYPE,
+      interval_id                       in notification_requests.interval_id%TYPE,
+      delivery_method_id                in notification_requests.delivery_method_id%TYPE,
+      format                            in notification_requests.format%TYPE,
+      creation_date                     in acs_objects.creation_date%TYPE default sysdate,
+      creation_user                     in acs_objects.creation_user%TYPE,
+      creation_ip                       in acs_objects.creation_ip%TYPE,
+      context_id                        in acs_objects.context_id%TYPE default null
+   ) return notification_requests.request_id%TYPE;
+
+   procedure delete (
+      request_id                        in notification_requests.request_id%TYPE default null
+   );
+end notification_request;
+/
+show errors
+
+
+create or replace package body notification_request
+as
+   function new (
+      request_id                        in notification_requests.request_id%TYPE default null,
+      object_type                       in acs_objects.object_type%TYPE default 'notification_request',
+      type_id                           in notification_requests.type_id%TYPE,
+      user_id                           in notification_requests.user_id%TYPE,
+      object_id                         in notification_requests.object_id%TYPE,
+      interval_id                       in notification_requests.interval_id%TYPE,
+      delivery_method_id                in notification_requests.delivery_method_id%TYPE,
+      format                            in notification_requests.format%TYPE,
+      creation_date                     in acs_objects.creation_date%TYPE default sysdate,
+      creation_user                     in acs_objects.creation_user%TYPE,
+      creation_ip                       in acs_objects.creation_ip%TYPE,
+      context_id                        in acs_objects.context_id%TYPE default null
+   ) return notification_requests.request_id%TYPE
+   is
+      v_request_id                      acs_objects.object_id%TYPE;
+   begin
+      v_request_id := acs_object.new (
+                          object_id => request_id,
+                          object_type => object_type,
+                          creation_date => creation_date,
+                          creation_user => creation_user,
+                          creation_ip => creation_ip,
+                          context_id => context_id
+                      );
+
+      insert into notification_requests
+      (request_id, type_id, user_id, object_id, interval_id, delivery_method_id, format) values
+      (v_request_id, type_id, user_id, object_id, interval_id, delivery_method_id, format);
+
+      return v_request_id;                          
+   end new;
+
+   procedure delete (
+      request_id                        in notification_requests.request_id%TYPE default null
+   )
+   is
+   begin
+      acs_object.delete(request_id);
+   end delete;
+
+end notification_request;
+/
+show errors
+
+
+
+-- the notifications package
+create or replace package notification
+as
+
+   function new (
+      notification_id                   in notifications.notification_id%TYPE default null,
+      type_id                           in notifications.type_id%TYPE,
+      object_id                         in notifications.object_id%TYPE,
+      notif_date                        in notifications.notif_date%TYPE default sysdate,
+      response_id                       in notifications.response_id%TYPE default null,
+      notif_text                        in notifications.notif_text%TYPE default null,
+      notif_html                        in notifications.notif_html%TYPE default null,
+      creation_date                     in acs_objects.creation_date%TYPE default sysdate,
+      creation_user                     in acs_objects.creation_user%TYPE,
+      creation_ip                       in acs_objects.creation_ip%TYPE,
+      context_id                        in acs_objects.context_id%TYPE default null
+   ) return notifications.notification_id%TYPE;
+
+   procedure delete (
+      notification_id                   in notifications.notification_id%TYPE default null
+   );
+
+end notification;
+/
+show errors
+
+
+
+create or replace package body notification
+as
+
+   function new (
+      notification_id                   in notifications.notification_id%TYPE default null,
+      type_id                           in notifications.type_id%TYPE,
+      object_id                         in notifications.object_id%TYPE,
+      notif_date                        in notifications.notif_date%TYPE default sysdate,
+      response_id                       in notifications.response_id%TYPE default null,
+      notif_text                        in notifications.notif_text%TYPE default null,
+      notif_html                        in notifications.notif_html%TYPE default null,
+      creation_date                     in acs_objects.creation_date%TYPE default sysdate,
+      creation_user                     in acs_objects.creation_user%TYPE,
+      creation_ip                       in acs_objects.creation_ip%TYPE,
+      context_id                        in acs_objects.context_id%TYPE default null
+   ) return notifications.notification_id%TYPE
+   is
+      v_notification_id                 acs_objects.object_id%TYPE;
+   begin
+      v_notification_id := acs_object.new (
+                               object_id => notification_id,
+                               object_type => 'notification',
+                               creation_date => creation_date,
+                               creation_user => creation_user,
+                               creation_ip => creation_ip,
+                               context_id => context_id
+                           );
+
+      insert into notifications
+      (notification_id, type_id, object_id, notif_date, response_id, notif_text, notif_html)
+      values
+      (v_notification_id, type_id, object_id, notif_date, response_id, notif_text, notif_html);
+
+      return v_notification_id;
+   end new;
+
+   procedure delete (
+      notification_id                   in notifications.notification_id%TYPE default null
+   )
+   is
+   begin
+      acs_object.delete (notification_id);
+   end delete;
+
+end notification;
+/
+show errors
