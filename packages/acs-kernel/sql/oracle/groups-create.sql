@@ -34,6 +34,8 @@ create table membership_rels (
                                               'banned', 'rejected', 'deleted'))
 );
 
+create index member_rels_member_state_idx on membership_rels (member_state);
+
 declare
   attr_id acs_attributes.attribute_id%TYPE;
 begin
