@@ -77,7 +77,7 @@ ad_proc -public acs_sc_binding_exists_p {
     @author Neophytos Demetriou
 } {
 
-    return [db_string binding_exists_p {select acs_sc_binding__exists_p(:contract,:impl)}]
+    return [db_string binding_exists_p {*SQL*}]
 
 }
 
@@ -107,18 +107,12 @@ ad_proc -private acs_sc_get_alias {
 } {
     # LARS
     set exists_p [acs_sc_binding_exists_p $contract $impl]
-    
+
     #set exists_p [util_memoize "acs_sc_binding_exists_p $contract $impl"]
-    
+
     if ![set exists_p] {return ""}
     
-    db_0or1row get_alias {
-	select impl_alias, impl_pl
-	from   acs_sc_impl_aliases
-	where  impl_contract_name = :contract
-	and    impl_operation_name = :operation
-	and    impl_name = :impl
-    }
+    db_0or1row get_alias {*SQL*}
 
     return [list $impl_alias $impl_pl]
 
@@ -151,33 +145,14 @@ ad_proc -private acs_sc_proc {
 	error "ACS-SC: Cannot find alias for $proc_name"
     }
 
-    if {![db_0or1row get_operation_definition {
-	select 
-	    operation_desc,
-	    operation_iscachable_p,
-	    operation_nargs,
-	    operation_inputtype_id,
-	    operation_outputtype_id
-	from acs_sc_operations
-	where contract_name = :contract
-	and operation_name = :operation
-    }]} { 
+    if {![db_0or1row get_operation_definition {*SQL*}]} { 
         ns_log warning "ACS-SC: operation definition not found for contract $contract operation $operation"
         return 0
     }
 
     append docblock "\n<b>acs-service-contract operation.  Call via acs_sc_call.</b>\n\n$operation_desc\n\n"
 
-    db_foreach operation_inputtype_element {
-	select 
-	    element_name, 
-	    acs_sc_msg_type__get_name(element_msg_type_id) as element_msg_type_name,
-	    element_msg_type_isset_p,
-	    element_pos
-	from acs_sc_msg_type_elements
-	where msg_type_id = :operation_inputtype_id
-	order by element_pos asc
-    } {
+    db_foreach operation_inputtype_element {*SQL*} {
 	lappend arguments "$element_name"
 	append docblock "\n@param $element_name $element_msg_type_name"
 	if { $element_msg_type_isset_p } {
@@ -185,16 +160,7 @@ ad_proc -private acs_sc_proc {
 	}
     }
 
-    db_foreach operation_outputtype_element {
-	select 
-	    element_name, 
-	    acs_sc_msg_type__get_name(element_msg_type_id) as element_msg_type_name,
-	    element_msg_type_isset_p,
-	    element_pos
-	from acs_sc_msg_type_elements
-	where msg_type_id = :operation_outputtype_id
-	order by element_pos asc
-    } {
+    db_foreach operation_outputtype_element {*SQL*} {
 	append docblock "\n@return <b>$element_name</b> - $element_msg_type_name"
 	if { $element_msg_type_isset_p } {
 	    append docblock " \[\]"

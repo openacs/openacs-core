@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-
+<!-- used in elements-display.adp ... ugh -->
 <queryset>
    <rdbms><type>postgresql</type><version>7.1</version></rdbms>
 

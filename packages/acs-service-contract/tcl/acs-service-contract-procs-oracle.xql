@@ -10,6 +10,35 @@ select acs_sc_binding.exists_p(:contract,:impl) from dual
 </querytext>
 </fullquery>
 
+<fullquery name="acs_sc_get_alias.get_alias">
+<querytext>
+	select 
+	    element_name, 
+	    acs_sc_msg_type.get_name(element_msg_type_id) as element_msg_type_name,
+	    element_msg_type_isset_p,
+	    element_pos
+	from acs_sc_msg_type_elements
+	where msg_type_id = :operation_outputtype_id
+	order by element_pos asc
+</querytext>
+</fullquery>
+
+
+<fullquery name="acs_sc_proc.get_operation_definition">
+<querytext>
+	select 
+	    operation_desc,
+	    operation_iscachable_p,
+	    operation_nargs,
+	    operation_inputtype_id,
+	    operation_outputtype_id
+	from acs_sc_operations
+	where contract_name = :contract
+	and operation_name = :operation
+</querytext>
+</fullquery>
+
+
 <fullquery name="acs_sc_proc.operation_inputtype_element">
 <querytext>
 	select 
