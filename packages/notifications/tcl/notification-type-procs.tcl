@@ -23,6 +23,8 @@ namespace eval notification::type {
     }
 
     ad_proc -public new {
+        {-all_intervals:boolean 0}
+        {-all_delivery_methods:boolean 0}
         {-type_id ""}
         {-sc_impl_id:required}
         {-short_name:required}
@@ -36,6 +38,14 @@ namespace eval notification::type {
 
         set type_id [package_instantiate_object -extra_vars $extra_vars notification_type]
 
+        if { $all_intervals_p } {
+            db_dml enable_all_intervals {}
+        }
+
+        if { $all_delivery_methods_p } {
+            db_dml enable_all_delivery_methods {}
+        }
+        
         return $type_id
     }
 
