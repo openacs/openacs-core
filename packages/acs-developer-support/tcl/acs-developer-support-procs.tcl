@@ -151,7 +151,7 @@ ad_proc ds_link {} {
     }
     
     if { [ds_user_switching_enabled_p] } {
-	append out "<tr><td align=\"right\">[ds_user_select_widget]</td>"
+	append out "<tr><td align=\"right\">[ds_user_select_widget]</td></tr>"
     }
     
     append out "</table>\n"
