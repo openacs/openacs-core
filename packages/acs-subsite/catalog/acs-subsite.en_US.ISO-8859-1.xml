@@ -356,6 +356,7 @@ You can always change your password by doing the following:
   <msg key="upload_a_replacement_por">upload a replacement portrait</msg>
   <msg key="Upload_Portrait">Upload Portrait</msg>
   <msg key="Username">Username</msg>
+  <msg key="UserSiteMap">User's Site Map</msg>
   <msg key="Vacation_Info_Updated">Vacation Information Updated</msg>
   <msg key="Vacation_information_updated">Your vacation information at %site_link% has been updated.</msg>
   <msg key="Welcome_user">Welcome, %user_name%</msg>

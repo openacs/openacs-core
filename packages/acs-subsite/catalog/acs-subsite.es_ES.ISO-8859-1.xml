@@ -273,6 +273,7 @@ Para cambiar su contraseña, visite %reset_password_url%</msg>
   <msg key="upload_a_replacement_por">Subir nueva foto</msg>
   <msg key="Upload_Portrait">Subir una foto</msg>
   <msg key="Username">Nombre de usuario</msg>
+  <msg key="UserSiteMap">Mapa del Sitio para Usuarios</msg>
   <msg key="Vacation_Info_Updated">Información de Vacaciones Actualizada </msg>
   <msg key="Vacation_information_updated">La información de sus vacaciones en %site_link% ha sido actualizada.</msg>
   <msg key="Welcome_user">Bienvenido/a, %user_name%</msg>
