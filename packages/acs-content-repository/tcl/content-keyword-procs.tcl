@@ -26,10 +26,11 @@ ad_proc -public content::keyword::write_to_file {
 }
 
 
-ad_proc -public content::keyword::del {
+ad_proc -public content::keyword::delete {
     -keyword_id:required
 } {
     @param keyword_id
+    @return 0 
 } {
     return [package_exec_plsql -var_list [list \
         [list keyword_id $keyword_id ] \
@@ -42,7 +43,7 @@ ad_proc -public content::keyword::get_description {
 } {
     @param keyword_id
 
-    @return VARCHAR2
+    @return string with description 
 } {
     return [package_exec_plsql -var_list [list \
         [list keyword_id $keyword_id ] \
@@ -55,7 +56,7 @@ ad_proc -public content::keyword::get_heading {
 } {
     @param keyword_id
 
-    @return VARCHAR2
+    @return string with heading
 } {
     return [package_exec_plsql -var_list [list \
         [list keyword_id $keyword_id ] \
@@ -68,7 +69,7 @@ ad_proc -public content::keyword::get_path {
 } {
     @param keyword_id
 
-    @return VARCHAR2
+    @return "/" delimited path in the keyword tree to the supplied keyword
 } {
     return [package_exec_plsql -var_list [list \
         [list keyword_id $keyword_id ] \
@@ -85,7 +86,7 @@ ad_proc -public content::keyword::is_assigned {
     @param keyword_id
     @param recurse
 
-    @return VARCHAR2
+    @return t or f
 } {
     return [package_exec_plsql -var_list [list \
         [list item_id $item_id ] \
@@ -100,7 +101,7 @@ ad_proc -public content::keyword::is_leaf {
 } {
     @param keyword_id
 
-    @return VARCHAR2
+    @return t or f
 } {
     return [package_exec_plsql -var_list [list \
         [list keyword_id $keyword_id ] \
@@ -120,6 +121,10 @@ ad_proc -public content::keyword::item_assign {
     @param context_id
     @param creation_user
     @param creation_ip
+
+    Associate a keyword with a CR item.
+
+    @return 0
 } {
     return [package_exec_plsql -var_list [list \
         [list item_id $item_id ] \
@@ -137,6 +142,8 @@ ad_proc -public content::keyword::item_unassign {
 } {
     @param item_id
     @param keyword_id
+
+    @return 0
 } {
     return [package_exec_plsql -var_list [list \
         [list item_id $item_id ] \
@@ -164,7 +171,7 @@ ad_proc -public content::keyword::new {
     @param creation_ip
     @param object_type
 
-    @return NUMBER(38)
+    @return keyword_id of created keyword
 } {
     return [package_exec_plsql -var_list [list \
         [list heading $heading ] \
@@ -185,6 +192,7 @@ ad_proc -public content::keyword::set_description {
 } {
     @param keyword_id
     @param description
+    @return 0
 } {
     return [package_exec_plsql -var_list [list \
         [list keyword_id $keyword_id ] \
@@ -199,6 +207,7 @@ ad_proc -public content::keyword::set_heading {
 } {
     @param keyword_id
     @param heading
+    @return 0
 } {
     return [package_exec_plsql -var_list [list \
         [list keyword_id $keyword_id ] \
