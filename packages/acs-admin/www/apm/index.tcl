@@ -110,7 +110,8 @@ $table
 # Build the list of files we're watching.
 set watch_files [nsv_array names apm_reload_watch]
 if { [llength $watch_files] > 0 } {
-    doc_body_append "<h3>Watches</h3><ul>\n"
+    doc_body_append "<h3>Watches</h3><ul>
+<li><a href=\"file-watch-cancel\">Stop watching all files</a></li><br />"
     foreach file [lsort $watch_files] {
 	if { [string compare $file "."] } {
 	    doc_body_append "<li>$file (<a href=\"file-watch-cancel?watch_file=[ns_urlencode $file]\">stop watching this file</a>)\n"

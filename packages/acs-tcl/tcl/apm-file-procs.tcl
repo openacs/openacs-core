@@ -300,6 +300,22 @@ ad_proc -public apm_file_watch {path} {
     nsv_set apm_reload_watch $path 1
 }
 
+ad_proc -public apm_file_watch_cancel {
+    {-path ""}
+} {
+    Stop watching a certain file, or all watched files if path
+    is not specified. If the file is not watched
+    this procedure does nothing.
+
+    @author Peter Marklund
+} {
+    if { ![empty_string_p $path] } {
+        catch { nsv_unset apm_reload_watch $path }
+    } else {
+        catch {nsv_unset apm_reload_watch}
+    }
+}
+
 ad_proc -private apm_watch_all_files { package_key } {
     Watch all Tcl procs and xql query files in the given
     package
