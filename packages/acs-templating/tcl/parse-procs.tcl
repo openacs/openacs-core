@@ -124,29 +124,46 @@ ad_proc -private template::adp_parse { __adp_stub __args } {
   set template_extension [get_mime_template_extension $mime_type]
 
   # generate ADP output if a template exists (otherwise assume plain Tcl page)
-  
-  
+
   set templated_p 0
-  if { ![empty_string_p [ad_conn locale]] && \
-           [file exists "$__adp_stub.[ad_conn locale].$template_extension"]} { 
+  if { ![empty_string_p [ad_conn locale]]
+       && [file exists "$__adp_stub.[ad_conn locale].$template_extension"]} {
     # it's a localized version of a templated page
     set templated_p 1
     append __adp_stub ".[ad_conn locale]"
-  } elseif {[file exists "$__adp_stub.$template_extension"]} { 
+  } elseif {[file exists "$__adp_stub.$template_extension"]} {
     # it's a regular templated page
     set templated_p 1
   }
-  
-  if { $templated_p } { # it's a templated page
-    
+
+  if { [llength [info procs ::ds_page_fragment_cache_enabled_p]]
+       && [::ds_enabled_p]
+       && [::ds_page_fragment_cache_enabled_p]
+       && [::ds_collection_enabled_p] } {
+    ns_cache get ds_page_bits [ad_conn request] template_list
+    lappend template_list $__adp_stub.$template_extension
+    ns_cache set ds_page_bits [ad_conn request] $template_list
+  }
+
+  if { $templated_p } {
+
     # ensure that template output procedure exists and is up-to-date
     template::adp_init $template_extension $__adp_stub
-    
+
     # get result of template output procedure into __adp_output, and properties into __adp_properties
     template::code::${template_extension}::$__adp_stub
+
+    # JCD: Lets keep a copy of all the page fragments!  WooHoo.
+    if { [llength [info procs ::ds_page_fragment_cache_enabled_p]]
+         && [::ds_enabled_p]
+         && [::ds_page_fragment_cache_enabled_p]
+         && [::ds_collection_enabled_p] } {
+      ns_cache set ds_page_bits "[ad_conn request]:$__adp_stub.$template_extension" $__adp_output
+    }
+
     # call the master template if one has been defined
     if { [info exists __adp_master] } {
-      
+
       # pass properties on to master template
       set __adp_output [template::adp_parse $__adp_master \
         [concat [list __adp_slave $__adp_output] [array get __adp_properties]]]
@@ -156,20 +173,20 @@ ad_proc -private template::adp_parse { __adp_stub __args } {
     if { !$errMsg } {
       # No template. Perhaps there is an html file.
       if { [file exists $__adp_stub.html] } {
-	ns_log notice "getting output from .html file"
+	ns_log debug "getting output from ${__adp_stub}.html"
 	set __adp_output [template::util::read_file "${__adp_stub}.html"]
       } elseif  { [file exists $__adp_stub.htm] } {
-	ns_log notice "getting output from .htm file"
+	ns_log debug "getting output from ${__adp_stub}.htm"
 	set __adp_output [template::util::read_file "${__adp_stub}.htm"]
       } else {
 	error "No script or template found for page '$__adp_stub'"
       }
     }
   }
-  
+
   # pop off parse level
   template::util::lpop parse_level
-  
+
   return $__adp_output				; # empty in non-templated page
 }
 
@@ -181,7 +198,7 @@ ad_proc -private template::adp_set_vars {} {
   uplevel {
     set __adp_level [adp_level 2]
     foreach {__adp_key __adp_value} $args {
-      
+
       set __adp_expr {^@([A-Za-z0-9_]+)\.\*@$}
       if { [regexp  $__adp_expr $__adp_value __adp_x __adp_name] } {
 
@@ -189,7 +206,7 @@ ad_proc -private template::adp_set_vars {} {
 	if { ! [array exists $__adp_key] } { 
 
 	  upvar #$__adp_level $__adp_name:rowcount $__adp_key:rowcount
-	
+
 	  if { [info exists $__adp_key:rowcount] } { 
 
 	    set size [set $__adp_key:rowcount]
