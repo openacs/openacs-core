@@ -24,11 +24,16 @@ ad_proc -public search::queue {
 
     @author Jeff Davis (davis@xarg.net)
 } {
-    package_exec_plsql \
-        -var_list [list \
-                       [list object_id $object_id] \
-                       [list event $event] ] \
-        search_observer enqueue
+    if {![empty_string_p $object_id] 
+        && ![empty_string_p $event]} { 
+        package_exec_plsql \
+            -var_list [list \
+                           [list object_id $object_id] \
+                           [list event $event] ] \
+            search_observer enqueue
+    } else {
+        ns_log warning "search::queue: invalid: called with object_id=$object_id event=$event\n[ad_print_stack_trace]\n"
+    }
 }
 
 ad_proc -public search::dequeue {
@@ -44,12 +49,19 @@ ad_proc -public search::dequeue {
 
     @author Jeff Davis (davis@xarg.net)
 } {
-    package_exec_plsql \
-        -var_list [list [list object_id $object_id] \
-                       [list event_date $event_date] \
-                       [list event $event] ] \
-        search_observer dequeue
+    if {![empty_string_p $object_id] 
+        && ![empty_string_p $event_date]
+        && ![empty_string_p $event]} {
+            package_exec_plsql \
+                -var_list [list [list object_id $object_id] \
+                               [list event_date $event_date] \
+                               [list event $event] ] \
+                search_observer dequeue
+    } else {
+        ns_log warning "search::dequeue: invalid: called with object_id=$object_id event_date=$event_date event=$event\n[ad_print_stack_trace]\n"
+    }
 }
+
 
 ad_proc -private search::indexer {} {
     Search indexer loops over the existing entries in the search_observer_queue 
