@@ -19,6 +19,7 @@
 @@ site-nodes-drop.sql
 @@ community-core-drop
 @@ acs-relationships-drop
+@@ acs-object-util-remove
 @@ acs-objects-drop
 @@ acs-metadata-drop
 @@ apm-drop

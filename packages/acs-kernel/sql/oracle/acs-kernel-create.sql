@@ -13,6 +13,7 @@ set feedback off
 @@ acs-logs-create
 @@ acs-metadata-create
 @@ acs-objects-create
+@@ acs-object-util
 @@ acs-relationships-create
 @@ utilities-create
 @@ community-core-create
