@@ -640,7 +640,7 @@ ad_proc -public subsite::get_template_options {} {
     set master_template_options [list]
     lappend master_template_options [list "Default" "/www/default-master"]
     lappend master_template_options [list "Community" "/packages/acs-subsite/www/group-master"]
-    set current_master [parameter::get -parameter DefaultTemplate -package_id [ad_conn subsite_id]]
+    set current_master [parameter::get -parameter DefaultMaster -package_id [ad_conn subsite_id]]
     set found_p 0
     foreach elm $master_template_options {
         if { [string equal $current_master [lindex $elm 1]] } {
@@ -649,7 +649,7 @@ ad_proc -public subsite::get_template_options {} {
         }
     }
     if { !$found_p } {
-        lappend master_template [list $current_master $current_master]
+        lappend master_template_options [list $current_master $current_master]
     }
     return $master_template_options
 }
