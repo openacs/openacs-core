@@ -449,8 +449,18 @@ ad_proc -public template::list::prepare {
     # Split the current ordering info into name and direction
     # name is the string before the comma, order (asc/desc) is what's after
     if { [info exists list_properties(filter,$list_properties(orderby_name))] } {
-        foreach { orderby_name orderby_direction } [lrange [split $list_properties(filter,$list_properties(orderby_name)) ","] 0 1] {}
+        foreach { orderby_name orderby_direction } \
+            [lrange [split $list_properties(filter,$list_properties(orderby_name)) ","] 0 1] {}
+
         set list_properties(orderby_selected_name) $orderby_name
+
+        if { [empty_string_p $orderby_direction] } {
+            template::list::orderby::get_reference \
+                -list_name $name \
+                -orderby_name $orderby_name
+    
+            set orderby_direction $orderby_properties(default_direction)
+        }
         set list_properties(orderby_selected_direction) $orderby_direction
     }
 
