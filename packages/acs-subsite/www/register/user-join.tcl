@@ -132,10 +132,18 @@ if { $just_do_it_p || [template::form is_valid join] } {
             }
         }
     
-        if {[string equal $join_policy "needs approval"]} {
-            set member_state "needs approval"
-        } else {
+        if { [permission::permission_p -object_id $group_id -privilege "admin"] } {
             set member_state "approved"
+            if { [string equal $rel_type "membership_rel"] } {
+                # If they already have admin, bump them to an admin_rel
+                set rel_type "admin_rel"
+            }
+        } else {
+            if { [string equal $join_policy "needs approval"]  } {
+                set member_state "needs approval"
+            } else {
+                set member_state "approved"
+            }
         }
 
         set rel_id [relation_add -form_id join -member_state $member_state $rel_type $group_id $party_id]
