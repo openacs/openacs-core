@@ -47,7 +47,7 @@
                 <entry>The OpenACS tarball contains some files which
                 are useful while setting up other software.  Those
                 files are located at:</entry>
-                <entry>/tmp/openacs-4.6.2/packages/acs-core-docs/www/files</entry>
+                <entry>/tmp/&tarballpath;/packages/acs-core-docs/www/files</entry>
               </row>
               <row>
                 <entry>Database backup directory</entry>
@@ -130,9 +130,9 @@
       for some of the packages listed below.  In order to access those
       files, unpack the tarball now.</para>
       <screen>[root@yourserver root]# <userinput>cd /tmp</userinput>
-[root@yourserver tmp]# <userinput>tar xzf openacs-4.6.2.tgz</userinput>
+[root@yourserver tmp]# <userinput>tar xzf &tarballpath;.tgz</userinput>
 <action>cd /tmp
-tar xzf openacs-4.6.2.tgz</action></screen>
+tar xzf &tarballpath;.tgz</action></screen>
     </sect3>
 
     <sect3 id="install-cvs">
@@ -141,7 +141,7 @@ tar xzf openacs-4.6.2.tgz</action></screen>
         <primary>cvs</primary>
         <secondary>initializing</secondary>
       </indexterm>
-      <para>CVS is a source control system.  Create and prepare a
+      <para>CVS is a source control system.  Create and initialize a
       directory for a local cvs repository.</para>
       <screen>[root@yourserver tmp]# <userinput>mkdir /cvsroot</userinput>
 [root@yourserver tmp]#<userinput> cvs -d /cvsroot init</userinput>
@@ -162,10 +162,10 @@ If you plan to write or edit any documentation with emacs, install a
       fixes the backspace -> help mis-mapping that often occurs in
       terminals.</para>
 
-      <screen>[root@yourserver tmp]# <userinput>cp /tmp/openacs-4.6.2/packages/acs-core-docs/www/files/emacs.txt /etc/skel/.emacs</userinput>
+      <screen>[root@yourserver tmp]# <userinput>cp /tmp/&tarballpath;/packages/acs-core-docs/www/files/emacs.txt /etc/skel/.emacs</userinput>
+cp: overwrite `/etc/skel/.emacs'? <userinput>y</userinput>
 [root@yourserver tmp]# </screen>
     </sect3>
-
 
     <sect3 id="install-daemontools">
       <title>Install Daemontools (OPTIONAL)</title>
@@ -190,6 +190,7 @@ If you plan to write or edit any documentation with emacs, install a
           linkend="daemontools-download">download it</link>.  (The -p
               flag in mkdir causes all implied directories in the path
               to be made as well.)</para>
+            <para>(If you are using Red Hat 9.0, you need to put <computeroutput>#include &lt;errno.h&gt;</computeroutput> as the first line of <computeroutput>/package/admin/daemontools-0.76/src/error.h</computeroutput>.  <ulink url="http://www.riverside.org/archive/html/djbdns/2003-01/msg00307.html">More information</ulink>)</para>
               <screen>[root@yourserver root]# <userinput>mkdir -p /package</userinput>
 [root@yourserver root]# <userinput>chmod 1755 /package/</userinput>
 [root@yourserver root]# <userinput>cd /package/</userinput>
@@ -227,9 +228,9 @@ root     13295  0.0  0.0  1304  208 ?        S    09:51   0:00 readproctitle ser
         <listitem>
           <para>Install a script to grant non-root users permission to
         control daemontools services.</para>
-          <screen>[root@yourserver root]# <userinput>cp /tmp/openacs-4.6.2/packages/acs-core-docs/www/files/svgroup.txt /usr/local/bin/svgroup</userinput>
+          <screen>[root@yourserver root]# <userinput>cp /tmp/&tarballpath;/packages/acs-core-docs/www/files/svgroup.txt /usr/local/bin/svgroup</userinput>
 [root@yourserver root]# <userinput>chmod 755 /usr/local/bin/svgroup</userinput>
-<action>cp /tmp/openacs-4.6.2/packages/acs-core-docs/www/files/svgroup.txt /usr/local/bin/svgroup 
+<action>cp /tmp/&tarballpath;/packages/acs-core-docs/www/files/svgroup.txt /usr/local/bin/svgroup 
 chmod 755 /usr/local/bin/svgroup</action></screen>
         </listitem>
       </orderedlist>
@@ -241,7 +242,8 @@ chmod 755 /usr/local/bin/svgroup</action></screen>
         <listitem>
           <formalpara>
             <title>Install ucspi</title>
-            <para>This program handles incoming tcp connections.</para>
+              <para>This program handles incoming tcp connections.
+              <link linkend="ucspi-download">Download ucspi</link> and install it.</para>
           </formalpara>
           <screen>[root@yourserver root]# <userinput>cd /usr/local/src</userinput>
 [root@yourserver src]# <userinput>tar xzf /tmp/ucspi-tcp-0.88.tar.gz</userinput>
@@ -283,9 +285,9 @@ Unless this mail is addressed to the same machine, qmail thinks that
 it's an attempt to relay mail, and rejects it.  So these two commands
 set up an exception so that any mail sent from 127.0.0.1 is allowed to
 send outgoing mail.</para>
-          <screen>[root@yourserver ucspi-tcp-0.88]# <userinput>cp /tmp/openacs-4.6.2/packages/acs-core-docs/www/files/tcp.smtp.txt /etc/tcp.smtp</userinput>
+          <screen>[root@yourserver ucspi-tcp-0.88]# <userinput>cp /tmp/&tarballpath;/packages/acs-core-docs/www/files/tcp.smtp.txt /etc/tcp.smtp</userinput>
 [root@yourserver ucspi-tcp-0.88]# <userinput>tcprules /etc/tcp.smtp.cdb /etc/tcp.smtp.tmp &lt; /etc/tcp.smtp</userinput>
-<action>cp /tmp/openacs-4.6.2/packages/acs-core-docs/www/files/tcp.smtp.txt /etc/tcp.smtp 
+<action>cp /tmp/&tarballpath;/packages/acs-core-docs/www/files/tcp.smtp.txt /etc/tcp.smtp 
 tcprules /etc/tcp.smtp.cdb /etc/tcp.smtp.tmp &lt; /etc/tcp.smtp </action></screen>
           </listitem>
           <listitem>
@@ -297,7 +299,9 @@ tcprules /etc/tcp.smtp.cdb /etc/tcp.smtp.tmp &lt; /etc/tcp.smtp </action></scree
               </indexterm>
               <para></para>
             </formalpara>
-            <para>First, set up the standard supporting users and build the binaries:</para>
+            <para><link linkend="ucspi-download">Download qmail</link>,
+            set up the standard supporting users and build the binaries:</para>
+            <para>(If you are using Red Hat 9.0, you need to put <computeroutput>#include &lt;errno.h&gt;</computeroutput> as the first line of <computeroutput>/usr/local/src/qmail-1.03/error.h</computeroutput>.  <ulink url="http://www.riverside.org/archive/html/djbdns/2003-01/msg00307.html">More information</ulink>)</para>
             <screen>[root@yourserver root]# <userinput>cd /usr/local/src</userinput>
 [root@yourserver src]# <userinput>tar xzf /tmp/qmail-1.03.tar.gz</userinput>
 [root@yourserver src]# <userinput>mkdir /var/qmail</userinput>
@@ -371,11 +375,11 @@ chown -R alias.nofiles /var/qmail/alias/Maildir</action></screen>
             <para>Configure qmail to use the Maildir delivery format
           (instead of mbox), and install a version of the qmail startup script modified to use Maildir.</para>
             <screen>[root@yourserver alias]# <userinput>echo "./Maildir" > /var/qmail/bin/.qmail</userinput>
-[root@yourserver alias]# <userinput>cp /tmp/openacs-4.6.2/packages/acs-core-docs/www/files/qmail.rc.txt /var/qmail/rc</userinput>
+[root@yourserver alias]# <userinput>cp /tmp/&tarballpath;/packages/acs-core-docs/www/files/qmail.rc.txt /var/qmail/rc</userinput>
 [root@yourserver alias]# <userinput>chmod 755 /var/qmail/rc</userinput>
 [root@yourserver alias]# 
 <action>echo "./Maildir" &gt; /var/qmail/bin/.qmail 
-cp /tmp/openacs-4.6.2/packages/acs-core-docs/www/files/qmail.rc.txt /var/qmail/rc 
+cp /tmp/&tarballpath;/packages/acs-core-docs/www/files/qmail.rc.txt /var/qmail/rc 
 chmod 755 /var/qmail/rc 
 </action></screen>
             <para>Set up the skeleton directory so that new users will
@@ -397,14 +401,16 @@ echo "./Maildir/" > /etc/skel/.qmail</action></screen>
 <action>/usr/local/bin/tcpserver -x /etc/tcp.smtp.cdb -v -u <replaceable>502</replaceable> -g <replaceable>501</replaceable> 0 smtp /var/qmail/bin/qmail-smtpd 2&gt;&amp;1 | /var/qmail/bin/splogger smtpd 3 &amp; 
 csh -cf '/var/qmail/rc &amp;'</action></screen>
           <para>Verify that seven different qmail threads are running:</para>
-          <screen>[root@yourserver alias]# <userinput>ps -auxw | grep qmail</userinput>
-qmaild   15862  0.0  0.1  1380  452 pts/1    S    10:26   0:00 /usr/local/bin/tcpserver -x /etc/tcp.smtp.cdb -v -u 502 -g 501 0 smtp
-root     15863  0.0  0.1  1332  412 pts/1    S    10:26   0:00 /var/qmail/bin/splogger smtpd 3
-qmails   15865  0.0  0.1  1360  316 pts/1    S    10:26   0:00 qmail-send
-qmaill   15866  0.0  0.1  1328  408 pts/1    S    10:26   0:00 splogger qmail
-root     15867  0.0  0.1  1328  268 pts/1    S    10:26   0:00 qmail-lspawn ./Maildir/
-qmailr   15868  0.0  0.1  1324  268 pts/1    S    10:26   0:00 qmail-rspawn
-qmailq   15869  0.0  0.1  1320  276 pts/1    S    10:26   0:00 qmail-clean
+          <screen>[root@yourserver alias]# <userinput>ps -auxw | grep
+          qmail</userinput>
+qmaild    4269  0.0  0.3  1384  452 pts/0    S    21:21   0:00 [tcpserver]
+root      4270  0.0  0.3  1340  412 pts/0    S    21:21   0:00 /var/qmail/bin/splogger smtpd 3
+qmails    4272  0.1  0.2  1364  320 pts/0    S    21:21   0:00 [qmail-send]
+qmaill    4273  0.0  0.3  1332  408 pts/0    S    21:21   0:00 [splogger]
+root      4274  0.0  0.2  1332  272 pts/0    S    21:21   0:00 qmail-lspawn ./Maildir/
+qmailr    4275  0.0  0.2  1328  272 pts/0    S    21:21   0:00 [qmail-rspawn]
+qmailq    4276  0.0  0.2  1324  280 pts/0    S    21:21   0:00 [qmail-clean]
+root      4278  0.0  0.5  3280  632 pts/0    S    21:21   0:00 grep qmail
 [root@yourserver alias]#</screen>
           <para>Further verify by sending and receiving email.  Incoming mail for root is stored in <computeroutput>/var/qmail/alias/Maildir</computeroutput>.  If it worked, make it permanent by putting the same commands in your startup scripts.  (These instructions put the commands in rc.local, which means that they'll be run once, on boot.  There will be no monitoring and no interface to start and stop and check status.  We ought instead to either use full init scripts or daemontools.)</para>
           <screen>[root@yourserver alias]# <userinput>echo "/usr/local/bin/tcpserver -x /etc/tcp.smtp.cdb -v -u <replaceable>502</replaceable> -g <replaceable>501</replaceable> 0 smtp /var/qmail/bin/qmail-smtpd \ " &gt;&gt; /etc/rc.local</userinput>
