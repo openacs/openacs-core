@@ -11,23 +11,23 @@
 
       <td align="center">
         <a href="@request_info_url@" title="View request information">@request_info_label@</a>
-        |
+        <span style="color: #cccccc;">|</span>
         <a href="@oacs_shell_url@" title="Execute commands and see the result">Shell</a>
-        |
+        <span style="color: #cccccc;">|</span>
         <a href="/acs-admin/apm/" title="Modify/reload packages">APM</a>
-        |
+        <span style="color: #cccccc;">|</span>
         <a href="/acs-admin/apm/?reload_links_p=1" title="Scan for changed library files">Changed</a>
-        |
+        <span style="color: #cccccc;">|</span>
         <a href="@flush_url@" title="Flush entire util_memoize cache">Flush</a>
-        |
+        <span style="color: #cccccc;">|</span>
         <a href="@auto_test_url@" title="Automated Testing Home">Test</a>
-        |
+        <span style="color: #cccccc;">|</span>
         <a href="/acs-admin/users/" title="Add/edit/become users">Users</a>
-        |
+        <span style="color: #cccccc;">|</span>
         <a href="/acs-lang/admin/" title="Add/edit message keys">I18n</a>
-        |
+        <span style="color: #cccccc;">|</span>
         <a href="/doc/" title="View system documentation">Docs</a>
-        |
+        <span style="color: #cccccc;">|</span>
         <a href="/api-doc/" title="View/search OpenACS Tcl API documentation">API doc</a>
       </td>
 
