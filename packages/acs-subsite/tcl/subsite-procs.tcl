@@ -613,3 +613,14 @@ ad_proc subsite::get_pageflow_struct {} {
     return $pageflow
 }
 
+ad_proc subsite::main_site_id {} {
+    Get the package_id of the Main Site. The Main Site is the subsite
+    that is always mounted at '/' and that has a number
+    of site-wide parameter settings.
+
+    @author Peter Marklund
+} {
+    array set main_node [site_node::get_from_url -url "/"]
+    
+    return $main_node(object_id)
+}
