@@ -3,12 +3,18 @@
   <property name="context">@context@</property>
 
 <if @servers:rowcount@ gt 0>
-  <table border="1" cellspacing="0" cellpadding="2">
+  <table border="1" cellspacing="0" cellpadding="3">
     <tr>
       <th>Server</th>
+      <th>Login</th>
       <th>Description</th>
       <th>Last built</th>
       <th>Errors</th>
+      <th>Details</th>
+    </tr>
+    <tr>
+      <td><b>This server</b></td>
+      <td colspan="4" align="center"><a href="admin/">Automated Test Admin</a></td>
     </tr>
     <multiple name="servers">
       <tr>
@@ -17,8 +23,9 @@
         </if>
         <else>
           <td><a href="@servers.remote_url@">@servers.name@</a></td>
-          <td>@servers.description@</td>
-          <td style="white-space:nowrap"><a href="@servers.local_url@">@servers.install_date@</a></td>
+	  <td><a href="@servers.admin_login_url@">Admin</a></td>
+          <td>@servers.description;noquote@</td>
+          <td style="white-space:nowrap">@servers.install_date@</td>
 	  <if @servers.error_total_count@ eq 0>
             <td style="background-color:green">@servers.error_total_count@</td>
 	  </if>
@@ -30,14 +37,16 @@
             <td style="background-color:red"><b>@servers.error_total_count@</b></td>
             </else>
           </else>
+          <td style="white-space:nowrap"><a href="@servers.local_url@">More info</a></td>
         </else>
       </tr>
     </multiple>
   </table>
 </if>
 
-<p>Errors cannot be automatically reported for versions of OpenACS prior to 5.1d2.
-
+<p>Error reporting is not available for versions of OpenACS prior to 5.1d2.
+<p><a href="doc/">Documentation</a>
 <if @xml_report_dir@ nil>
   The XMLReportDir parameter is empty so a server listing cannot be generated.
 </if>
+

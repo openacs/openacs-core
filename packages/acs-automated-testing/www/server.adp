@@ -10,14 +10,9 @@
       <li>URL: <a href="@service.url@">@service.url@</a>
     </ul>
   </li>
-  <li>Login:
+  <li>Login as:
     <ul>
-      <if @admin_p@>
-        <li><a href="@admin_login_url@">Admin user</a> (pwd: @service.adminpassword@)
-      </if>
-      <else>
-        <li>You need to login as admin on this server to access admin password of remote server.</li>
-      </else>
+      <li><a href="@admin_login_url@">Admin user</a> (pwd: @service.adminpassword@)
     </ul>
   </li>
   </li>
@@ -61,20 +56,11 @@
       </p>
     </else>
   </li>
-</ul>
-
-<h3>Rebuild</h3>
-
-<ul
   <li>
-    To rebuild this server:
-    <ol>
-      <li>
-        SSH to @service.hostname@
-      </li>
-      <li>
-        Execute @service.rebuild_cmd@
-      </li>
-    </ol>
+    <a href="@rebuild_url@" onclick="return confirm('Are you sure you want to wipe and rebuild this server?');">Rebuild this server now</a>
+  </li>
+  <li>
+    <a href="@rebuild_log_url@">Rebuild log</a>
   </li>
 </ul>
+

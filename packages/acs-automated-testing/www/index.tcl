@@ -11,7 +11,7 @@ if { ![parameter::get -boolean -parameter IsInstallReportServer] } {
 
 set page_title "Test Servers Control Page"
 set context [list]
-multirow create servers path local_url remote_url name description install_date error_total_count parse_errors
+multirow create servers path admin_login_url local_url remote_url name description install_date error_total_count parse_errors
 
 set xml_report_dir [aa_test::xml_report_dir]
 if { ![empty_string_p $xml_report_dir] } {
@@ -24,9 +24,12 @@ if { ![empty_string_p $xml_report_dir] } {
             array set testcase_failure $test(testcase_failure)
             set service(num_errors) [llength [array names testcase_failure]]
         } 
+	
+	set admin_login_url [export_vars -base "$service(url)/register/auto-login" {{email {$service(adminemail)}} {password {$service(adminpassword)}}}]
 
         multirow append servers \
             $service(path) \
+	    $admin_login_url \
             [export_vars -base server { path }] \
 	    $service(url) \
             $service(name) \
