@@ -25,7 +25,7 @@ ad_proc -private ::install::xml::action::enable-locale { node } {
     lang::system::locale_set_enabled -locale $locale -enabled_p t
 }
 
-ad_proc -private ::install::xml::action::disble-locale { node } {
+ad_proc -private ::install::xml::action::disable-locale { node } {
     Disable a locale
 
     <code>&lt;disable-locale locale="en_US"&gt;</code>
