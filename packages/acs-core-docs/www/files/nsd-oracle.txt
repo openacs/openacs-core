@@ -8,4 +8,4 @@ export ORACLE_SID='ora8'
 export ORACLE_TERM='vt100'
 export ORAENV_ASK=NO
 export NLS_DATE_FORMAT="YYYY-MM-DD"
-exec /home/aol30/bin/nsd $*
+exec /usr/local/aolserver/bin/nsd $*
