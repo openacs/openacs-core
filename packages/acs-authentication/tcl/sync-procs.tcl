@@ -450,6 +450,29 @@ ad_proc -public auth::sync::purge_jobs {
     }
 }
 
+ad_proc -private auth::sync::get_sync_elements {
+    {-user_id ""}
+    {-authority_id ""}
+} {
+    Get a Tcl list of the user profile elements controlled by the batch synchronization. 
+    These should not be editable by the user. Supply either user_id or authority_id. 
+    Authority_id is the most efficient.
+} {
+    if { [empty_string_p $authority_id] } {
+        if { [empty_string_p $user_id] } {
+            error "You must supply either user_id or authority_id"
+        }
+        set authority_id [acs_user::get_element -user_id $user_id -element authority_id]
+    }
+
+    set elms [list]
+    with_catch errmsg {
+        set elms [auth::sync::GetElements -authority_id $authority_id]
+    } {}
+    
+    return $elms
+}
+
 ad_proc -private auth::sync::sweeper {} {
     db_foreach select_authorities {
         select authority_id
