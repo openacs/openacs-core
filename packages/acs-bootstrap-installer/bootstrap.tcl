@@ -31,12 +31,13 @@ proc bootstrap_fatal_error { message { throw_error_p 1 } } {
     # routines to do nothing, to circumvent the request processor.
     proc rp_invoke_filter { conn arg why } { return "filter_ok" }
     proc rp_invoke_procs { conn arg why } {}
+    set proc_name {Bootstrap}
 
     global errorInfo
     # Save the error message.
     nsv_set bootstrap_fatal_error . "$message<blockquote><pre>[ns_quotehtml $errorInfo]</pre></blockquote>"
     # Log the error message.
-    ns_log "Error" "Server startup failed: $message\n$errorInfo"
+    ns_log Error "$proc_name: Server startup failed: $message\n$errorInfo"
 
     # Define a filter procedure which displays the appropriate error message.
     proc bootstrap_write_error { conn arg why } {
@@ -55,6 +56,8 @@ proc bootstrap_fatal_error { message { throw_error_p 1 } } {
 }
 
 set errno [catch {
+    # Used for ns_logs:
+    set proc_name {Bootstrap}
 
     # Load the special bootstrap tcl library.
 
@@ -64,7 +67,7 @@ set errno [catch {
     }
 
     foreach file [lsort $files] {
-	ns_log Notice "Bootstrap: sourcing $file"
+	ns_log Notice "$proc_name: sourcing $file"
 	source $file
     }
 
@@ -90,15 +93,15 @@ set errno [catch {
         db_bootstrap_checks database_problem error_p
     }
 
-    ns_log notice "Loading acs-tcl"
+    ns_log Notice "$proc_name: Loading acs-tcl"
     apm_bootstrap_load_libraries -procs acs-tcl
 
     if { [info exists database_problem] } {
 	# Yikes - database problems. Remember what the problem is, and run the
 	# installer.
-	ns_log "Error" $database_problem
+	ns_log Error "$proc_name: $database_problem"
 	nsv_set acs_properties database_problem $database_problem
-	ns_log "Notice" "database problem found; Sourcing the installer."
+	ns_log Notice "$proc_name: database problem found; Sourcing the installer."
 	source "$root_directory/packages/acs-bootstrap-installer/installer.tcl"
 	source "$root_directory/packages/acs-bootstrap-installer/installer-init.tcl"
 	return
@@ -112,7 +115,7 @@ set errno [catch {
 
     # Is OpenACS installation complete? If not, source the installer and bail.
     if { ![ad_verify_install] } {
-	ns_log "Notice" "Installation is not complete - sourcing the installer."
+	ns_log Notice "$proc_name: Installation is not complete - sourcing the installer."
 	source "$root_directory/packages/acs-bootstrap-installer/installer.tcl"
 	source "$root_directory/packages/acs-bootstrap-installer/installer-init.tcl"
 	return
@@ -139,7 +142,7 @@ set errno [catch {
 	bootstrap_fatal_error "The request processor routines have not been loaded."
     }
 
-    ns_log "Notice" "Done loading OpenACS."
+    ns_log Notice "$proc_name: Done loading OpenACS."
 }]
 
 if { $errno && $errno != 2 } {
