@@ -24,7 +24,7 @@ fi
 # before we load the config file
 config_val_next=0
 server_next=0
-export config_file="config.tcl"
+export config_file="install.tcl"
 server_overridden="no"
 for arg in "$@"
   do

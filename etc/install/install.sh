@@ -10,6 +10,8 @@
 #   .LRN over HTTP that is normally done manually in a browser.
 #
 # @author Peter Marklund (peter@collaboraid.biz)
+# @author Lars Pind (lars@collaboraid.biz)
+# @author Joel Aufrecht (joel@aufrecht.org)
 
 # DEBUG: If any command fails - exit
 set -e
@@ -40,7 +42,7 @@ source functions.sh
 # before we load the config file
 config_val_next=0
 server_next=0
-export config_file="config.tcl"
+export config_file="install.tcl"
 server_overridden="no"
 for arg in "$@"
   do
@@ -72,7 +74,7 @@ fi
 
 usage="$0 [OPTIONS]
     --server      Server name.  Overrides config file.
-    --config-file Sets up information about the server and database used (see config.tcl.in). Defaults to config.tcl
+    --config-file Sets up information about the server and database used (see install.tcl.in). Defaults to install.tcl
     --no-checkout Do not checkout new source code
     --oacs-only   Do not install .LRN, only OpenACS
     --no-install  Do not install .LRN or OpenACS. Useful if you only want to recreate the db user and then install manually
@@ -164,6 +166,7 @@ aolserver_user=`get_config_param aolserver_user`
 aolserver_group=`get_config_param aolserver_group`
 admin_email=`get_config_param admin_email`
 admin_password=`get_config_param admin_password`
+aolserver_config_file=`get_config_param aolserver_config_file`
 
 # If pre/post checkout scripts have been provided, check that they can
 # be executed
@@ -247,6 +250,13 @@ if [ $do_checkout == "yes" ]; then
     echo "$0: Checking out OpenACS at $(date)"
     chmod +x checkout.sh
     config_file=$config_file dotlrn=$dotlrn ./checkout.sh
+
+    if [ -z "$aolserver_config_file" ]; then
+        # No AOLserver config file specified - we are using the standard etc/config.tcl file.
+        # We need to update it with settings in install.tcl since certain parameters 
+        # (such as serverroot) are duplicated between the two files.
+        ./config-replace.sh $config_file
+    fi 
 
     # The post_checkout script can copy back any files (AOLServer config files,
     # log files etc.) under the new source tree, and apply any patches

@@ -12,8 +12,12 @@ set server "service0"
 # Some people like this to be at /web/${server}, but we recommend the below standard setting.
 set serverroot "/var/lib/aolserver/${server}"
 
+# The port number where the server will serve up pages
+set server_port 8000
+
 # The URL where your server will be accessible. This is used by the installation scripts to complete the installation.
-set server_url "http://localhost:8000"
+# Don't forget to include the port number above
+set server_url "http://localhost:${server_port}"
 
 # OS user and group that AOLserver runs as. We recommend that you create a new user for your server.
 # If you do not want to do that, change the user name below
@@ -48,7 +52,7 @@ set database "postgres"
 set pg_db_user "postgres"
 
 # Name of the PostgreSQL database. Will be created.
-set pg_db_name ${server}
+set db_name ${server}
 
 # The host running PostgreSQL
 set pg_host localhost
@@ -66,10 +70,10 @@ set pg_bindir "/usr/local/pgsql/bin"
 #----------------------------------------------------------------------
 
 # The name of the Oracle user and tablespace. Will get created.
-set oracle_user "${server}"
+set db_name ${server}
 
 # Password for the Oracle user
-set oracle_password "${oracle_user}"
+set oracle_password ${oracle_user}
 
 # The system user account and password. We need this to create the tablespace and user above.
 set system_user "system"
@@ -88,11 +92,17 @@ set system_user_password "manager"
 #
 #######################################################################
 
+# Path to AOLserver config.tcl file to use. If you don't specify any file here, we will use the default config file.
+set aolserver_config_file ""
+
 # The path to the server's error log file, so we can look for errors during installation
 set error_log_file "${serverroot}/log/error.log"
 
 # TCLWebTest home directory
 set tclwebtest_dir "/usr/local/tclwebtest"
+
+# AOLserver's home directory
+set aolserver_home "/usr/local/aolserver"
 
 
 #----------------------------------------------------------------------

@@ -13,7 +13,7 @@ about installing OpenACS and its prerequisites
 
 *** Quick Guide
 
-edit config.tcl
+edit install.tcl
 su -
 ./install.sh
 
@@ -52,9 +52,9 @@ are not connected to the database user that the server uses
 so that that user can be dropped (i.e. log out of any sqlplus or
 psql sessions you might have).
 
-3) Use the config template config.tcl to create
+3) Use the config template install.tcl to create
    a server specific installation config file. Per default install.sh
-   will use the file config.tcl in the same directory but you can specify
+   will use the file install.tcl in the same directory but you can specify
    any config file on the command line with the switch --config-file.
 
 4) Make sure an AOLServer config file is prepared.  You can use
@@ -68,8 +68,7 @@ as root.
 
 7) Fetch a fresh checkout from CVS of TclWebTest (see
 http://tclwebtest.sourceforge.net) and specify the directory the
-tclwebtest executable resides in in your config file (the default
-config file is config.tcl).
+tclwebtest executable resides in in your install.tcl file.
 
 *** FAQ
 
