@@ -204,21 +204,30 @@ ad_proc -private pkg_info_comment {pkg_info} {
 ad_proc -private apm_dependency_check {
     {-callback apm_dummy_callback}
     {-initial_install:boolean}
+    {-pkg_info_all}
     spec_files
 } {
     Check dependencies of all the packages provided.
     @param spec_files A list of spec files to be processed.
     @param initial_install Only process spec files with the initial install attribute.
+    @param pkg_info_all If you supply this argument, when a
+    requirement goes unsatisfied, instead of failing, this proc will
+    try to add whatever other packages are needed to the install set. The list of package keys to
+    add will be the third element in the list returned.
     @return A list whose first element indicates whether dependencies were satisfied (1 if so, 0 otherwise).\
     The second element is the package info list with the packages ordered according to dependencies.\
-    Packages that can be installed come first.  Any packages that failed the dependency check come last. 
+    Packages that can be installed come first.  Any packages that failed the dependency check come last.
+    The third element is a list of package keys on additional packages to install, in order to satisfy dependencies.
 } {
     #### Iterate over the list of info files.
     ## Every time we satisfy another package, remove it from install_pend, and loop again.
     ## If we don't satisfy at least one more package, halt.
-    ## install_in - Packages that can be installed in a satisfactory order.
-    ## install_pend - Stores packages that might have their dependencies satisfied 
+    ## install_in - Package info structures for packages that can be installed in a satisfactory order.
+    ## install_pend - Stores package info structures fro packages that might have their dependencies satisfied 
     ##		      by packages in the install set.
+    ## extra_package_keys - package keys of extra packages to install to satisfy all requirements.
+
+    set extra_package_keys [list]
 
     set updated_p 1
     set install_in [list]
@@ -226,8 +235,19 @@ ad_proc -private apm_dependency_check {
 	if { [catch {
 	    array set package [apm_read_package_info_file $spec_file]
 	    if { ([string equal $package(initial-install-p) "t"] || !$initial_install_p) && \
-                 [db_package_supports_rdbms_p $package(database_support)] } {
-	        lappend install_pend [pkg_info_new $package(package.key) $spec_file $package(provides) $package(requires) ""]
+                    [db_package_supports_rdbms_p $package(database_support)] } {
+                lappend install_pend [pkg_info_new $package(package.key) $spec_file $package(provides) $package(requires) ""]
+            }
+
+            # Remove this package from the pkg_info_all list ...
+            # either we're already installing it, or it can't be installed
+            set counter 0
+            foreach pkg_info $pkg_info_all {
+                if { [string equal [pkg_info_key $pkg_info] $package(package.key)] } {
+                    set pkg_info_all [lreplace $pkg_info_all $counter $counter]
+                    break
+                }
+                incr counter
             }
 	} errmsg]} {
 	    # Failed to parse the specificaton file.
@@ -236,45 +256,97 @@ ad_proc -private apm_dependency_check {
 	}
     }
 
-    while { $updated_p && [exists_and_not_null install_pend]} {
-	set install_in_provides [list]
-	set new_install_pend [list]
-	set updated_p 0
-	# Generate the list of dependencies currently provided by the install set.
-	foreach pkg_info $install_in {
-	    foreach prov [pkg_info_provides $pkg_info] {
-		lappend install_in_provides $prov
-	    }
-	}	
-	# Now determine if we can add another package to the install set.
-	foreach pkg_info $install_pend {
-	    set satisfied_p 1
-	    foreach req [pkg_info_requires $pkg_info] {
-		if {[apm_dependency_provided_p -dependency_list $install_in_provides \
-			 [lindex $req 0] [lindex $req 1]] != 1} {
-		    # Unsatisfied dependency.
-		    set satisfied_p 0
-		    # Check to see if we've recorded it already
-		    set errmsg "Requires [lindex $req 0] of version >= [lindex $req 1]."
-		    if { ![info exists install_error([pkg_info_key $pkg_info])] || \
-			     [lsearch -exact $install_error([pkg_info_key $pkg_info]) $errmsg] == -1} {
-			lappend install_error([pkg_info_key $pkg_info]) $errmsg
-		    }
-		    lappend new_install_pend $pkg_info
-		    break
-		}
-	    }
-	    if { $satisfied_p } {
-		# At least one more package was added to the list that can be installed, so repeat.
-		lappend install_in [pkg_info_new [pkg_info_key $pkg_info] [pkg_info_spec $pkg_info] \
-					 [pkg_info_provides $pkg_info] [pkg_info_requires $pkg_info] \
-					 "t" "Package satisfies dependencies."]
-		set updated_p 1
-	    }
-	}
-	set install_pend $new_install_pend
-    }
+    # Outer loop tries to find a package from the pkg_info_all list to add if 
+    # we're stuck because of unsatisfied dependencies
+    while { $updated_p && [exists_and_not_null pkg_info_all] } {
 
+        # Inner loop tries to add another package from the install_pend list
+        while { $updated_p && [exists_and_not_null install_pend]} {
+            set install_in_provides [list]
+            set new_install_pend [list]
+            set updated_p 0
+            # Generate the list of dependencies currently provided by the install set.
+            foreach pkg_info $install_in {
+                foreach prov [pkg_info_provides $pkg_info] {
+                    lappend install_in_provides $prov
+                }
+            }	
+            # Now determine if we can add another package to the install set.
+            foreach pkg_info $install_pend {
+                set satisfied_p 1
+                foreach req [pkg_info_requires $pkg_info] {
+                    if {[apm_dependency_provided_p -dependency_list $install_in_provides \
+                            [lindex $req 0] [lindex $req 1]] != 1} {
+                        # Unsatisfied dependency.
+                        set satisfied_p 0
+                        # Check to see if we've recorded it already
+                        set errmsg "Requires [lindex $req 0] of version >= [lindex $req 1]."
+                        if { ![info exists install_error([pkg_info_key $pkg_info])] || \
+                                [lsearch -exact $install_error([pkg_info_key $pkg_info]) $errmsg] == -1} {
+                            lappend install_error([pkg_info_key $pkg_info]) $errmsg
+                        }
+                        lappend new_install_pend $pkg_info
+                        break
+                    }
+                }
+                if { $satisfied_p } {
+                    # At least one more package was added to the list that can be installed, so repeat.
+                    lappend install_in [pkg_info_new [pkg_info_key $pkg_info] [pkg_info_spec $pkg_info] \
+                            [pkg_info_provides $pkg_info] [pkg_info_requires $pkg_info] \
+                            "t" "Package satisfies dependencies."]
+                    set updated_p 1
+                }
+            }
+            set install_pend $new_install_pend
+        }
+
+        set updated_p 0
+        
+        if { [exists_and_not_null install_pend] } {
+            # Okay, there are some packages that could be installed
+            
+            # Let's find a package, which
+            # - have unsatisfied requirements
+            # - and we have a package in pkg_info_all which provides what this package requires
+
+            foreach pkg_info $install_pend {
+                set satisfied_p 1
+                foreach req [pkg_info_requires $pkg_info] {
+                    set counter 0
+                    foreach pkg_info_add $pkg_info_all {
+                        # Will this package do anything to change whether this requirement has been satisfied?
+                        if { [apm_dependency_provided_p [lindex $req 0] [lindex $req 1]] == 0 && \
+                                [apm_dependency_provided_p -dependency_list [pkg_info_provides $pkg_info_add] \
+                                [lindex $req 0] [lindex $req 1]] == 1 } {
+
+                            # It sure does. Add it to list of packages to install
+                            lappend install_pend $pkg_info_add
+
+                            # Add it to list of extra package keys
+                            lappend extra_package_keys [pkg_info_key $pkg_info_add]
+                            
+                            # Remove it from list of packages that we can possibly install
+                            set pkg_info_all [lreplace $pkg_info_all $counter $counter]
+
+                            # Note that we've made changes
+                            set updated_p 1
+
+                            # Now break out of pkg_info_all loop
+                            break
+                        }
+                        incr counter
+                    }
+                    if { $updated_p } {
+                        break
+                    }
+                }
+                if { $updated_p } {
+                    break
+                }
+            }
+        }
+    }
+        
     set install_order(order) $install_in
     # Update all of the packages that cannot be installed.
     if { [exists_and_not_null install_pend] } {
@@ -285,7 +357,8 @@ ad_proc -private apm_dependency_check {
 	}
 	return [list 0 $install_in]
     }
-    return [list 1 $install_in]
+
+    return [list 1 $install_in $extra_package_keys]
 }
 
 ad_proc -private apm_load_catalog_files {

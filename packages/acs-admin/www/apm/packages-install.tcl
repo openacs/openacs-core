@@ -6,7 +6,7 @@ ad_page_contract {
     @cvs-id $Id$
 
 } {
-    {checked_by_default_p:boolean 1}
+    {checked_by_default_p:boolean 0}
     {install_path [apm_workspace_install_dir]}
 }
 
@@ -40,6 +40,7 @@ foreach spec_file $all_spec_files {
     set package_key $version(package.key)
     if { [db_package_supports_rdbms_p $version(database_support)] } {
         if { [apm_package_registered_p $package_key] } {
+            # This package is already on the system
             if { [apm_higher_version_installed_p $package_key $version_name] } {
                 lappend spec_files $spec_file
             } else {
