@@ -8,6 +8,7 @@ ad_page_contract {
     date_entry_widget:onevalue
     parameter_enabled_p:onevalue
     dont_spam_me_p:onevalue
+    context:onevalue
 }
 
 set user_id [ad_maybe_redirect_for_registration]
@@ -17,6 +18,8 @@ from users
 where user_id = :user_id"
 
 set site_link [ad_site_home_link]
+
+set context [list [list [ad_pvt_home] "Your Account"] "Confirm Unsubscribe"]
 
 set pretty_no_alerts_until_date [lc_time_fmt $no_alerts_until "%q"]
 set date_entry_widget [ad_dateentrywidget_default_to_today on_vacation_until]

@@ -18,10 +18,21 @@ ad_page_contract {
     description:onevalue
     export_edit_vars:onevalue
     subsite_url:onevalue
+    return_url:onevalue
+    admin_p:onevalue
+    user_id:onevalue
+    return_code:onevalue
 }
    
 set current_user_id [ad_verify_and_get_user_id]
 set subsite_url     [subsite::get_element -element url]
+set return_url      "[subsite::get_element -element url]user/portrait/"
+
+set return_code "no_error"
+# Other possibilities:
+# no_user          : Unknown user_id, not in DB.
+# no_portrait      : No portrait uploaded yet for this user.
+# no_portrait_info : Unable to retrieve information on portrait.
 
 if [empty_string_p $user_id] {
     set user_id $current_user_id
@@ -34,13 +45,17 @@ if { $current_user_id == $user_id } {
     set admin_p 0
 }
 
+set export_vars      [export_url_vars user_id]
+set export_edit_vars [export_url_vars user_id return_url]
 
 if ![db_0or1row user_info "select 
   first_names, 
   last_name 
 from persons 
 where person_id=:user_id"] {
-    ad_return_error "Account Unavailable" "We can't find you (user #$user_id) in the users table.  Probably your account was deleted for some reason."
+    set return_code "no_user"
+    set context [list "Account Unavailable"]
+    ad_return_template
     return
 }
 
@@ -51,13 +66,21 @@ where a.object_id_two = c.item_id
 and a.object_id_one = :user_id
 and a.rel_type = 'user_portrait_rel'"] || [empty_string_p $revision_id]} {
     # The user doesn't have a portrait yet
-    if {$admin_p} {
-	set message "This user doesn't have a portrait yet.  You can <a href=\"upload?[export_url_vars user_id return_url]\">go upload the user's portrait</a>."
-    } else {
-	set message "You don't have a portrait yet. You can <a href=\"upload?[export_url_vars return_url]\">go upload your portrait</a>"
-    }
+    set portrait_p 0
+} else {
+    set portrait_p 1
+}
     
-    ad_return_error "No Portrait" "$message"
+if {$portrait_p} {
+     if {$admin_p} {
+	 set context [list [list [ad_pvt_home] "Your Account"] "Your Portrait"]
+     } else {
+	 set context [list [list [ad_pvt_home] "User's Account"] "User's Portrait"]
+     }
+} else {
+    set context [list "No Portrait"]
+    set return_code "no_portrait"
+    ad_return_template
     return
 }
 
@@ -71,8 +94,9 @@ where i.image_id = cr.revision_id
 and image_id = :revision_id
 "} errmsg] {
     # There was an error obtaining the picture information
-
-    ad_return_error "Invalid Picture" "The picture of you in the system is invalid. Please <a href=\"upload\">upload</a> another picture."
+    set context [list "Invalid Picture"]
+    set return_code "no_portrait_info"
+    ad_return_template
     return
 }
 
@@ -89,15 +113,7 @@ if { ![empty_string_p $width] && ![empty_string_p $height] } {
 
 db_release_unused_handles
 
-if {$admin_p} {
-    set context [list "User's Portrait"]
-} else {
-    set context [list "Your Portrait"]
-}
-
 set system_name [ad_system_name]
-set export_vars [export_url_vars user_id]
 set pretty_date [lc_time_fmt $publish_date "%q"]
-set export_edit_vars [export_url_vars user_id return_url]
 
 ad_return_template
