@@ -8,6 +8,8 @@ ad_library {
 
 }
 
+namespace eval acs_object {}
+
 ad_proc -private acs_lookup_magic_object { name } {
 
     Returns the object ID of a magic object (performing no memoization).
@@ -52,3 +54,29 @@ ad_proc acs_object_type { object_id } {
         where object_id = :object_id
     } -default ""]
 }
+
+ad_proc acs_object::get { 
+    {-object_id:required}
+    {-array:required}
+} {
+    Gets information about an acs_object.
+
+    @array The name of an array in the caller's namespace where the info should be delivered.
+} {
+    upvar 1 $array row
+    db_1row select_object {} -column_array row
+}
+
+
+ad_proc acs_object::get_element { 
+    {-object_id:required}
+    {-element:required}
+} {
+    Gets a specific element from the info returned by acs_object::get.
+
+    @see acs_object::get
+} {
+    acs_object::get -object_id $object_id -array row
+    return $row($element)
+}
+
