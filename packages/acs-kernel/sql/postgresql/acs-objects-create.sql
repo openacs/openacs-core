@@ -1357,7 +1357,7 @@ begin
     where acs_objects.object_id = acs_object__update_last_modified__object_id;
 
     if v_parent_id is not null and v_parent_id != 0 then
-        select acs_object__update_last_modified(v_parent_id);
+        select acs_object__update_last_modified(v_parent_id, v_last_modified);
     end if;
 
     return acs_object__update_last_modified__object_id;
