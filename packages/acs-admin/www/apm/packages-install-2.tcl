@@ -53,7 +53,7 @@ if { ([lindex $dependency_results 0] == 1) || ![string compare $force_p "t"]} {
     ad_set_client_property -clob t apm pkg_install_list [lindex $dependency_results 1]
     ad_set_client_property -clob t apm pkg_enable_list $enable
 
-    ad_returnredirect packages-install-3.tcl
+    ad_returnredirect packages-install-3
     return
 } else {
     ### Check failed.  Offer user an explanation and an ability to select unselect packages.
