@@ -17,7 +17,7 @@ and sent_date is NULL)
 
 <fullquery name="notification::sweep::sweep_notifications.select_notifications">
 <querytext>
-select notifications.notification_id, notif_subject, notif_text, notif_html, notification_requests.user_id
+select notifications.notification_id, notif_subject, notif_text, notif_html, notification_requests.user_id, acs_object.name(object_id) as object_name
 from notifications, notification_requests, notification_user_map
 where notifications.type_id = notification_requests.type_id
 and interval_id = :interval_id
