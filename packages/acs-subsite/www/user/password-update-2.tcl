@@ -62,6 +62,7 @@ if { $exception_count > 0 } {
 }
 
 if [empty_string_p $return_url] {
+    set return_url [ad_parameter -package_id [ad_acs_kernel_id] "HomeURL"]
     set return_link "return to [ad_pvt_home_link]"
 } else {
     set return_link "<a href=\"$return_url\">return</a>"
@@ -75,6 +76,4 @@ system administrator."
 
 set site_link [ad_site_home_link]
 
-ad_return_template
-
-
+ad_returnredirect $return_url
