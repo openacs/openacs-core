@@ -12,7 +12,7 @@
 
 	<para>
 	  Members of the OpenACS community use a variety of UNIX, Linux, BSD
-	  and even (shudder!) Windows systems. The remainder of this guide will
+	  and even Windows systems. The remainder of this guide will
 	  be specific to Linux. Users of other OS's may find some helpful
 	  information here, but we recommend that you instead use one of these
 	  OS specific guides to install OpenACS &version;.
@@ -35,10 +35,10 @@
 		</para></listitem>
 
 	  <listitem><para>
-		  <xref linkend="win-install" />
+		  <xref linkend="win2k-installation" />
 		</para>
 		<para>
-		  This was written for ACS and has not yet been updated for
+		  This was written for ACS and has <emphasis>not</emphasis> yet been updated for
 		  OpenACS. (Note: AOLServer is no longer supporting Windows 
 		  - it may be possible to run AOLServer under 
 		  <ulink url="http://www.cygwin.com">Cygwin</ulink>, but I 
