@@ -42,7 +42,8 @@ db_release_unused_handles
 
 set system_name [ad_system_name]
 set export_vars [export_form_vars email return_url user_id]
-set no_require_password_p [ad_parameter RegistrationProvidesRandomPasswordP security 0]
-set require_question_p [ad_parameter RequireQuestionForPasswordResetP security 1]
+set no_require_password_p [ad_parameter RegistrationProvidesRandomPasswordP user-login 0]
+set custom_question_p [ad_parameter UseCustomQuestionForPasswordReset user-login 1]
+set require_question_p [ad_parameter RequireQuestionForPasswordResetP user-login 1]
 
 ad_return_template
