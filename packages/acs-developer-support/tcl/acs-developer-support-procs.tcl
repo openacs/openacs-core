@@ -641,7 +641,8 @@ ad_proc -public ds_profile { command {tag {}} } {
             set ds_profile__iterations($tag) 0
         }
         stop {
-            if { ![empty_string_p $ds_profile__start_clock($tag)] } {
+            if { [info exists ds_profile__start_clock($tag)] 
+                 && ![empty_string_p $ds_profile__start_clock($tag)] } {
                 set num_ms [expr [clock clicks -milliseconds] - $ds_profile__start_clock($tag)]
                 unset ds_profile__start_clock($tag)
                 
