@@ -6,6 +6,41 @@ ad_library {
     @cvs-id $Id$
 }
 
+namespace eval acs_sc {}
+
+#####
+#
+# Invoke
+#
+#####
+
+ad_proc -public acs_sc::invoke {
+    {-contract:required}
+    {-operation:required}
+    {-impl:required}
+    {-call_args {}}
+} {
+    A wrapper for the acs_sc_call procedure, with explicitly named
+    parameters so it's easier to figure out how to use it.
+    
+    @param contract_name The name of the contract you wish to use.
+    @param operation_name The name of the operation in the contract you wish to call.
+    @param impl_name The name of the implementation you wish to use.
+    @param args The arguments you want to pass to the proc.
+    
+    @author Lars Pind (lars@collaboraid.biz)
+    @see acs_sc_call
+} {
+    return [acs_sc_call $contract $operation $call_args $impl]
+}
+
+
+#####
+#
+# All the rest that used to be there
+#
+#####
+
 ad_proc -public acs_sc_binding_exists_p {
     contract
     impl
@@ -29,7 +64,6 @@ ad_proc -private acs_sc_generate_name {
     contract
     impl
     operation
-
 } {
     generate the internal proc name.
 
@@ -50,8 +84,10 @@ ad_proc -private acs_sc_get_alias {
     
     @author Neophytos Demetriou
 } {
-
-    set exists_p [util_memoize "acs_sc_binding_exists_p $contract $impl"]
+     # LARS
+     set exists_p [acs_sc_binding_exists_p $contract $impl]
+     
+     #set exists_p [util_memoize "acs_sc_binding_exists_p $contract $impl"]
 
     if ![set exists_p] {return ""}
 
@@ -219,7 +255,6 @@ ad_proc -public acs_sc_call {
 
     @author Neophytos Demetriou
 } {
-
     set proc_name [acs_sc_generate_name $contract $impl $operation]
 
     if { [llength [info procs $proc_name]] == 1 } {
@@ -239,6 +274,7 @@ ad_proc -public acs_sc_call {
 ## Logging
 ##
 
+# Private logging proc
 proc acs_sc_log {level msg} {
     # If you want to debug the SC, uncomment the Debug log below
     if {![string equal "SCDebug" $level]} {
@@ -247,16 +283,3 @@ proc acs_sc_log {level msg} {
         # ns_log Debug "$msg"
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-

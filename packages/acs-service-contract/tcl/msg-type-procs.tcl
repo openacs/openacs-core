@@ -86,10 +86,10 @@ ad_proc -public acs_sc::msg_type::parse_spec {
                 # Remove the 'multiple' flag
                 set flagsv [lreplace $flagsv $idx $idx]
                 set element_type "[lindex $flagsv 0]"
-                set isset_p "t"
+                set isset_p t
             } else {
                 set element_type [lindex $flagsv 0]
-                set isset_p "f"
+                set isset_p f
             }
     
             acs_sc::msg_type::element::new \

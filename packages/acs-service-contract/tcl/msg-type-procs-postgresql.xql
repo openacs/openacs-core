@@ -11,6 +11,14 @@
     </querytext>
   </fullquery>
 
+  <fullquery name="acs_sc::msg_type::delete.select_name">
+    <querytext>
+        select msg_type_name as name
+        from   acs_sc_msg_types 
+        where  msg_type_id = :msg_type_id
+    </querytext>
+  </fullquery>
+  
   <fullquery name="acs_sc::msg_type::delete.delete_by_name">
     <querytext>
         select acs_sc_msg_type__delete(:name); 	
@@ -31,3 +39,6 @@
 
 
 </queryset>
+
+
+
