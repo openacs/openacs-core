@@ -208,7 +208,7 @@ ad_proc ad_db_select_widget {
             set value [lindex $opt 0]
             if { (!$multiple && [string compare $value $default] == 0) 
                  || ($multiple && [lsearch -exact $default $value] > -1)} {
-                append retval "<option selected=\"selected\" value=\"$value\">$item</option>\n"
+                append retval "<option selected value=\"$value\">$item</option>\n"
             } else {
                 append retval "<option value=\"$value\">$item</option>\n"
             }
