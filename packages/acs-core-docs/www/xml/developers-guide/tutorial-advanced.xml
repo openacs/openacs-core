@@ -655,7 +655,7 @@ set category_map_url [export_vars -base \
     This is the view-edit page for notes.
 
     @author Your Name (you@example.com)
-    @cvs-id $Id$
+    @cvs-id &#x0024;Id$
 
     @param item_id If present, assume we are editing that note.  Otherwise, we
     are creating a new note.
