@@ -10,6 +10,22 @@ ad_library {
 
 namespace eval parameter {}
 
+ad_proc -public parameter::set_default {
+    -package_key:required
+    -parameter:required
+    -value:required
+} {
+    Set the default for the package parameter to the provided value.
+    The new default will be used for new installs of the package
+    but does not change existing package instances values.
+
+    @param package_key what package to set the parameter for
+    @param parameter which parameter's value to set
+    @param value what value to set said parameter to
+} {
+    db_dml set {}
+}
+
 ad_proc -public parameter::set_value {
     {-package_id ""}
     {-parameter:required}
