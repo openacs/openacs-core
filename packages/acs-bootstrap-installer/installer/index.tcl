@@ -260,10 +260,132 @@ $errors
 # thing to be installed is the apm_packages table - does that exist?
 if { ![db_table_exists apm_packages] } {
     # Nope. Need to install the data model.
-    append body "<p>The next step is to install the OpenACS kernel data model. Click the <i>Next</i>
-    button to proceed.
+
+    # Get the default for system_url. First try to get it from the nssock
+    # hostname setting - if that is not available then try ns_info
+    # hostname, use yourdomain.com if that fails too.
+    if { [catch {
+        set system_url "http://[ns_config "ns/server/[ns_info server]/module/nssock" hostname [ns_info hostname]]"
+
+        # append port number if non-standard port
+        if { !([ns_conn port] == 0 || [ns_conn port] == 80) } {
+            append system_url ":[ns_conn port]"
+        }
+
+    }] } {
+        set system_url "http://yourdomain.com"
+    }
+
+    append body "
+
+<h2>System Configuration</h2>
+
+We'll need to create a site-wide administrator for your server (like the root
+user in UNIX). Please type in the email address, first and last name, and password
+for this user.
+
+<script language=\"javascript\">
+function updateSystemEmails() {
+    var form = document.forms\[0\];
     
-    [install_next_button "install-data-model"]
+    form.system_owner.value = form.email.value;
+    form.admin_owner.value = form.email.value;
+    form.host_administrator.value = form.email.value;
+    form.outgoing_sender.value = form.email.value;
+    form.new_registrations.value = form.email.value;
+}
+</script>
+
+<form action=\"installer/install\">
+
+<table>
+<tr>
+  <th span=3>System Administrator</th>
+</tr>
+
+<tr>
+  <th align=right>Email:</th>
+  <td><input name=email size=40 onChange=\"updateSystemEmails()\"></td>
+</tr>
+<tr>
+  <th align=right>Username:</th>
+  <td><input name=username size=40> <span style=\"color: red;\">\[*\]</span></td>
+</tr>
+<tr>
+  <th align=right>First Name:</th>
+  <td><input name=first_names size=40></td>
+</tr>
+<tr>
+  <th align=right>Last Name:</th>
+  <td><input name=last_name size=40></td>
+</tr>
+<tr>
+  <th align=right>Password:</th>
+  <td><input type=password name=password size=12></td>
+</tr>
+<tr>
+  <th align=right>Password (again):</th>
+  <td><input type=password name=password_confirmation size=12></td>
+</tr>
+
+<tr>
+  <th span=3>&nbsp;</th>
+</tr>
+
+<tr>
+  <th align=right>System URL:</th>
+  <td><input name=system_url size=40 value=\"$system_url\"><br>
+The canonical URL of your system.<br><br>
+</tr>
+<tr>
+  <th align=right>System Name:</th>
+  <td><input name=system_name size=40 value=\"yourdomain Network\"><br>
+The name of your system.<br><br>
+</tr>
+<tr>
+  <th align=right>Publisher Name:</th>
+  <td><input name=publisher_name size=40 value=\"Yourdomain Network, Inc.\"><br>
+The legal name of the person or corporate entity responsible for the site.<br><br>
+</tr>
+<tr>
+  <th align=right>System Owner:</th>
+  <td><input name=system_owner size=40 value=\"\"><br>
+The email address signed at the bottom of user-visible pages.<br><br>
+</tr>
+<tr>
+  <th align=right>Admin Owner:</th>
+  <td><input name=admin_owner size=40 value=\"\"><br>
+The email address signed on administrative pages.<br><br>
+</tr>
+<tr>
+  <th align=right>Host Administrator:</th>
+  <td><input name=host_administrator size=40 value=\"\"><br>
+A person whom people can contact if they experience technical problems.<br><br>
+</tr>
+<tr>
+  <th align=right>Outgoing Email Sender:</th>
+  <td><input name=outgoing_sender size=40 value=\"\"><br>
+The email address that will sign outgoing alerts.
+</tr>
+<tr>
+  <th align=right>New Registration Email:</th>
+  <td><input name=new_registrations size=40 value=\"\"><br>
+The email address to send New registration notifications.<br><br>
+</tr>
+</table>
+
+<center>
+<input type=submit value=\"Start installation ->\">
+</center>
+</form>
+
+<h4>\[*\] About username</h4>
+
+<p>
+  Once your server is installed, you can choose to have users login with username instead of email.
+  This is particularly useful if you're authenticating against other services, such as LDAP or the 
+  local operating system, which may not use email as the basis of authentication.
+</p>
     "
 } else {
     # OK, apm_packages is installed - let's check out some other stuff too:
