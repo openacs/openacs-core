@@ -279,7 +279,7 @@ ad_proc -public template::element::set_values { form_id element_id values } {
 
   get_reference
 
-  set element(values) [list $values]
+  set element(values) $values
 }
 
 ad_proc -public template::element::get_value { form_id element_id } {
