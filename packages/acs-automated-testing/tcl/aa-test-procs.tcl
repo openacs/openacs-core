@@ -778,7 +778,7 @@ ad_proc aa_log_final {
   }
 }
 
-ad_proc aa_run_with_teardown {
+ad_proc -public aa_run_with_teardown {
   {-test_code:required}
   {-teardown_code ""}
   -rollback:boolean
