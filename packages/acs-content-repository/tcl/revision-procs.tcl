@@ -5,13 +5,6 @@ ad_proc -public cr_write_content {
     -item_id
     -revision_id
 } {
-
-    @param string specifies whether the content should be returned as a string
-           or (the default) be written to the HTML connection (ola@polyxena.net)
-    @param item_id the item to write
-    @param revision_id revision to write
-    @author Don Baccus (dhogaza@pacifier.com)
-
     Write out the specified content to the current HTML connection or return
     it to the caller by using the -string flag.  Only one of 
     item_id and revision_id should be passed to this procedure.  If item_id is
@@ -27,6 +20,12 @@ ad_proc -public cr_write_content {
     item's storage type, typically those stored as text aren't simply dumped
     to the user in raw form, but rather ran through the templating system
     in order to surround the content with decorative HTML.
+
+    @param string specifies whether the content should be returned as a string
+           or (the default) be written to the HTML connection (ola@polyxena.net)
+    @param item_id the item to write
+    @param revision_id revision to write
+    @author Don Baccus (dhogaza@pacifier.com)
 
 } {
 
