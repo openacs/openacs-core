@@ -66,8 +66,6 @@ foreach file [lsort [ad_find_all_files [acs_package_root_dir $package_key]]] {
             if { $number_of_text_snippets == "0" } {
                 set add_file_p 0
             }
-
-            ns_log Notice "pm debug $relative_path add_file_p=$add_file_p only_text_p=$only_text_p number_of_text_snippets=$number_of_text_snippets"
         }
 
         # Checkbox label in first element and value in second

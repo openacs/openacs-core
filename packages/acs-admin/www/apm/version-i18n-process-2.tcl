@@ -21,8 +21,6 @@ if { [info exists skip_button] } {
     ad_script_abort
 }
 
-error hej
-
 # Create the message key list
 # The list is needed since replace_adp_tags_with_message_tags proc below takes a list of
 # keys to do replacements with where an empty key  means no replacement.
