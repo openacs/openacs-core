@@ -283,5 +283,3 @@ ad_proc item::copy {
 
 }
 
-} {
-
