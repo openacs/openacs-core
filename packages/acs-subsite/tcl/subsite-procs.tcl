@@ -558,7 +558,7 @@ ad_proc subsite::get_pageflow_struct {} {
     array set subsite_sitenode [site_node::get -url $subsite_url]
     set subsite_node_id $subsite_sitenode(node_id)
 
-    set child_urls [site_node::get_children -node_id $subsite_node_id -package_type apm_application]
+    set child_urls [lsort -ascii [site_node::get_children -node_id $subsite_node_id -package_type apm_application]]
 
     foreach child_url $child_urls {
         array set child_node [site_node::get_from_url -exact -url $child_url]
