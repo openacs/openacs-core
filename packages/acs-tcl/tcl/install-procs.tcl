@@ -324,6 +324,21 @@ ad_proc -public install::xml::action::set-parameter { node } {
         -value $value
 }
 
+ad_proc -public install::xml::action::set-parameter-default { node } {
+    Sets a package parameter default value
+
+    <code>&lt;set-parameter-default name=&quot;<em>parameter</em>&quot; package-key=&quot;<em>package-key</em>&quot;</code>
+} {
+    set name [apm_required_attribute_value $node name]
+    set package_key [apm_required_attribute_value $node package-key]
+    set value [apm_attribute_value -default {} $node value]
+
+    parameter::set_default \
+        -package_key $package_key \
+        -parameter $name \
+        -value $value
+}
+
 ad_proc -public install::xml::action::set-permission { node } {
     Sets permissions on an object.
 
