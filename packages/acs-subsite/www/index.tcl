@@ -32,7 +32,7 @@ if { ![empty_string_p $redirect_url] } {
 
 set context [list]
 set package_id [ad_conn package_id]
-set admin_p [ad_permission_p $package_id admin]
+set admin_p [permission::permission_p -object_id $package_id -party_id [ad_conn untrusted_user_id] -privilege admin]
 
 set user_id [ad_conn user_id]
 
