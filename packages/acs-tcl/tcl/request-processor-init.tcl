@@ -4,7 +4,7 @@ ad_library {
 
     @creation-date 30 May 2000
     @author Jon Salz [jsalz@arsdigita.com]
-    @cvs-id $Id$
+    @cvs-id request-processor-init.tcl,v 1.3 2002/09/20 21:46:34 jeffd Exp
 }
 
 # These procedures are dynamically defined at startup to alleviate
@@ -32,7 +32,7 @@ proc ad_acs_admin_id {} "
     return [ad_acs_admin_id_mem]
 "
 
-if [ad_parameter -package_id [ad_acs_kernel_id] PerformanceModeP request-processor 0] {
+if { [ad_parameter -package_id [ad_acs_kernel_id] PerformanceModeP request-processor 0] } {
   ad_proc -private rp_performance_mode {} {
     Returns 1 if the request processor is in performance mode, 0 otherwise.
   } {

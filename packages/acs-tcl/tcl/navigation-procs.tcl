@@ -1,7 +1,7 @@
 ad_library {
     Provides procedures to spit out the navigational parts of the site.
 
-    @cvs-id $Id$
+    @cvs-id navigation-procs.tcl,v 1.7.2.7 2003/04/23 06:04:13 peterm Exp
     @author philg@mit.edu
     @creation-date 11/5/98 (adapted originally from the Cognet server)     
 }
@@ -311,7 +311,7 @@ proc ad_menu_header {{section ""} {uplink ""}} {
    
 
     foreach naked_pattern [ad_naked_html_patterns] {
-	if [string match $naked_pattern $url_stub] {
+	if { [string match $naked_pattern $url_stub] } {
 	    # want the global admins with no menu, but not the domain admin
 	    return ""
         }
@@ -463,7 +463,7 @@ proc ad_menu_header {{section ""} {uplink ""}} {
     set uplevel_string  "<TD align=right><A href=\"[menu_uplevel $section $uplink]\" onMouseOver=\"hiLite(\'up_one_level\')\" onMouseOut=\"unhiLite(\'up_one_level\')\"><img name=\"up_one_level\" src=\"/graphics/36_up_one_level.gif\" border=0 width=120 height=36 \" alt=\"Up\"></A></TD></TR>"
 
     foreach url_pattern [ad_no_uplevel_patterns] {
-	if [regexp $url_pattern $url_stub match] {
+	if { [regexp $url_pattern $url_stub match] } {
 	    set uplevel_string ""
 	}
     }
@@ -514,7 +514,7 @@ proc ad_menu_footer {{section ""}} {
     set full_filename "[ns_info pageroot]$url_stub"
    
     foreach naked_pattern [ad_naked_html_patterns] {
-	if [string match $naked_pattern $url_stub] {
+	if { [string match $naked_pattern $url_stub] } {
 	    return ""
 	}
     }

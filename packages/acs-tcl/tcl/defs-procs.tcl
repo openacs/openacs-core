@@ -5,7 +5,7 @@ ad_library {
 
     @author Many others at ArsDigita and in the OpenACS community.
     @creation-date 2 April 1998
-    @cvs-id $Id$
+    @cvs-id defs-procs.tcl,v 1.19.2.2 2003/03/28 13:43:28 lars Exp
 }
 
 ad_proc ad_acs_version {} {
@@ -288,7 +288,7 @@ ad_proc ad_footer {
     and then closes the BODY and HTML tags
 } {
     global sidegraphic_displayed_p
-    if [empty_string_p $signatory] {
+    if { [empty_string_p $signatory] } {
 	set signatory [ad_system_owner]
     } 
     if { [info exists sidegraphic_displayed_p] && $sidegraphic_displayed_p } {
@@ -559,9 +559,9 @@ ad_proc ad_pretty_mailing_address_from_args {
     @author Roberto Mello
 } {
     set lines [list]
-    if [empty_string_p $line2] {
+    if { [empty_string_p $line2] } {
 	lappend lines $line1
-    } elseif [empty_string_p $line1] {
+    } elseif { [empty_string_p $line1] } {
 	lappend lines $line2
     } else {
 	lappend lines $line1
@@ -585,14 +585,14 @@ ad_proc ad_get_user_info {} {
 } {
     uplevel {
 	set user_id [ad_conn user_id]
-	if [catch {
+	if { [catch {
 	    db_1row user_name_select {
 		select first_names, last_name, email
 		from persons, parties
 		where person_id = :user_id
 		and person_id = party_id
 	    }
-	} errmsg] {
+	} errmsg] } {
 	    ad_return_error "Couldn't find user info" "Couldn't find user info."
 	    return
 	}
@@ -610,7 +610,7 @@ ad_proc ad_decorate_top {
     string, ad_decorate_top will make a one-row table for the 
     top of the page
 } {
-    if [empty_string_p $potential_decoration] {
+    if { [empty_string_p $potential_decoration] } {
 	return $simple_headline
     } else {
 	return "<table cellspacing=10><tr><td>$potential_decoration<td>$simple_headline</tr></table>"
