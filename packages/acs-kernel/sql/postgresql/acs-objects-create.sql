@@ -1217,7 +1217,7 @@ create function acs_object__check_representation (integer)
 returns boolean as '
 declare
   check_representation__object_id              alias for $1;  
-  res                                          boolean;       
+  result                                       boolean;       
   check_representation__object_type            acs_objects.object_type%TYPE;
   n_rows                                       integer;    
   v_rec                                        record;  
