@@ -35,19 +35,7 @@
         
       </li>
     </p>
-    <p>
-      <li>
-        <a href="load-catalog-files">Load all Catalog Files</a>. This
-        will overwrite any values in the database (the catalog files
-        take precedence).
-      </li>
-    </p>
 
-    <p>
-      <li>
-        <a href="reload-cache">Reload the message cache</a>. 
-      </li>
-    </p>
   </ul>
 </if>
 
