@@ -270,6 +270,8 @@ ad_proc -deprecated acs_sc_call {
     {arguments ""}
     {impl ""}
 } {
+    Additional documentation and commentary at http://openacs.org/forums/message-view?message_id=108614.
+
     @param contract the contract name 
     @param operation the method to invoke
     @param arguments list of arguments to pass to the method
