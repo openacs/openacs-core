@@ -263,7 +263,7 @@ END ${package_name};
       <querytext>
       
     BEGIN
-      :1 := ${package_name}.${plsql_name}([plsql_utility::generate_attribute_parameter_call \
+      :1 := ${package_name}.${function_name}([plsql_utility::generate_attribute_parameter_call \
 	      -prepend ":" \
 	      -indent [expr [string length $package_name] + 29] \
 	      $pieces]

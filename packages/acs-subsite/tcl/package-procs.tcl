@@ -830,34 +830,34 @@ ad_proc -public package_instantiate_object {
     set pieces [list]
     
     foreach pair $var_list {
-	set key [lindex $pair 0]
-	set value [lindex $pair 1]
-	if { ![info exists real_params([string toupper $key])] } {
+	set __key [lindex $pair 0]
+	set __value [lindex $pair 1]
+	if { ![info exists real_params([string toupper $__key])] } {
 	    # The parameter is not accepted as a parameter to the
 	    # pl/sql function. Ignore it.
 	    continue;
 	} 
-	lappend pieces [list $key]
-	set param_array([string toupper $key]) 1
+	lappend pieces [list $__key]
+	set param_array([string toupper $__key]) 1
 	# Set the value for binding
-	set $key $value
+	set $__key $__value
     }
 
     # Go through the extra_vars (ben - OpenACS)
     if {! [empty_string_p $extra_vars] } {
 	for {set i 0} {$i < [ns_set size $extra_vars]} {incr i} {
-	    set key [ns_set key $extra_vars $i]
-	    set value [ns_set value $extra_vars $i]
+	    set __key [ns_set key $extra_vars $i]
+	    set __value [ns_set value $extra_vars $i]
 
-	    if { ![info exists real_params([string toupper $key])] } {
+	    if { ![info exists real_params([string toupper $__key])] } {
 		# The parameter is not accepted as a parameter to the
 		# pl/sql function. Ignore it.
 		continue;
 	    } 
-	    lappend pieces [list $key]
-	    set param_array([string toupper $key]) 1
+	    lappend pieces [list $__key]
+	    set param_array([string toupper $__key]) 1
 	    # Set the value for binding
-	    set $key $value
+	    set $__key $__value
 	}
     }
 	    
@@ -865,25 +865,17 @@ ad_proc -public package_instantiate_object {
     if { ![empty_string_p $form_id]} {
 	# Append the values from the template form for each attribute
 	foreach row [package_object_attribute_list -start_with $start_with $object_type] {
-	    set attribute [lindex $row 2]
-	    if { [info exists real_params([string toupper $attribute])] && ![info exists param_array([string toupper $attribute])] } {
-		set param_array([string toupper $attribute]) 1
-		set $attribute [template::element::get_value $form_id "$variable_prefix$attribute"]
+	    set __attribute [lindex $row 2]
+	    if { [info exists real_params([string toupper $__attribute])] && ![info exists param_array([string toupper $__attribute])] } {
+		set param_array([string toupper $__attribute]) 1
+		set $__attribute [template::element::get_value $form_id "$variable_prefix$__attribute"]
 
-		lappend pieces [list $attribute]
+		lappend pieces [list $__attribute]
 	    }
 	}
     }	
 
-    set object_id [db_exec_plsql create_object "
-    BEGIN
-      :1 := ${package_name}.new([plsql_utility::generate_attribute_parameter_call \
-	      -prepend ":" \
-	      -indent [expr [string length $package_name] + 29] \
-	      $pieces]
-      );
-    END; 
-    "]
+    set object_id [db_exec_plsql create_object {}]
 
     if { [ad_conn isconnected] } {
 	subsite_callback -object_type $object_type "insert" $object_id
@@ -896,7 +888,7 @@ ad_proc -public package_instantiate_object {
 ad_proc -public package_exec_plsql {
     { -var_list "" }
     package_name 
-    plsql_name 
+    function_name 
 } {
 
     Calls a pl/[pg]sql proc/func defined within the object type's package.  Use of
@@ -906,7 +898,8 @@ ad_proc -public package_exec_plsql {
     @author Don Baccus (dhogaza@pacifier.com)
     @creation-date 12/31/2003
 
-    @param package_name The PL/SQL package 
+    @param package_name The PL/[pg]SQL package 
+    @param function_name The PL/[pg]SQL function within the package 
 
     @param var_list A list of pairs of additional attributes and their
     values to pass to the constructor. Each pair is a list of two
@@ -926,7 +919,7 @@ ad_proc -public package_exec_plsql {
     
 } {
     
-    foreach arg [util_memoize "package_plsql_args \"$package_name\""] {
+    foreach arg [util_memoize "package_plsql_args -function_name $function_name \"$package_name\""] {
 	set real_params([string toupper $arg]) 1
     }
     
@@ -939,17 +932,17 @@ ad_proc -public package_exec_plsql {
     set pieces [list]
     
     foreach pair $var_list {
-	set key [lindex $pair 0]
-	set value [lindex $pair 1]
-	if { ![info exists real_params([string toupper $key])] } {
+	set __key [lindex $pair 0]
+	set __value [lindex $pair 1]
+	if { ![info exists real_params([string toupper $__key])] } {
 	    # The parameter is not accepted as a parameter to the
 	    # pl/sql function. Ignore it.
 	    continue;
 	} 
-	lappend pieces [list $key]
-	set param_array([string toupper $key]) 1
+	lappend pieces [list $__key]
+	set param_array([string toupper $__key]) 1
 	# Set the value for binding
-	set $key $value
+	set $__key $__value
     }
 
     return [db_exec_plsql exec_plsql {}]
