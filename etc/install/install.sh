@@ -201,7 +201,6 @@ prompt_continue $interactive
 echo "$0: Taking down $serverroot at $(date)"
 
 if parameter_true $use_daemontools; then
-    echo "$0: supervise status is: $(svstat ${svscanroot})"
     $svc_bindir/svc -d ${svscanroot}
     echo "$0: supervise status is: $(svstat ${svscanroot})"
 else
@@ -231,11 +230,11 @@ if [ $database == "postgres" ]; then
     pg_port=`get_config_param pg_port`
     db_name=`get_config_param db_name`
     su  `get_config_param pg_db_admin` -c "export LD_LIBRARY_PATH=${pg_bindir}/../lib; ${pg_bindir}/dropuser -p $pg_port $db_name"
-    su  `get_config_param pg_db_admin` -c "export LD_LIBRARY_PATH=${pg_bindir}/../lib; ${pg_bindir}/createuser -d -a -p $pg_port $db_name"
-
     # dropdb may be redundant becasue dropping the user should drop the db, 
     # but only if our assumption that db_user owns db_name is true
     su  `get_config_param pg_db_admin` -c "export LD_LIBRARY_PATH=${pg_bindir}/../lib; ${pg_bindir}/dropdb -p $pg_port $db_name"
+
+    su  `get_config_param pg_db_admin` -c "export LD_LIBRARY_PATH=${pg_bindir}/../lib; ${pg_bindir}/createuser -d -a -p $pg_port $db_name"
     su  `get_config_param pg_db_admin` -c "export LD_LIBRARY_PATH=${pg_bindir}/../lib; ${pg_bindir}/createdb -p $pg_port $db_name"
 
     # createlang was part of this command but is not necessary 
@@ -271,7 +270,6 @@ if parameter_true $do_checkout; then
 	    rm ${svscanroot}
         fi
         if [ -r "$svscan_sourcedir" ]; then
-            echo "$0: supervise status is: $(svstat ${svscanroot})"
             $svc_bindir/svc -dx $svscan_sourcedir
             echo "$0: supervise status is: $(svstat ${svscanroot})"
         fi
@@ -315,6 +313,7 @@ if parameter_true $do_checkout; then
         echo "$0: Waiting for 10 seconds for svscan to come up at $(date)"
         sleep 10
         echo "$0: supervise status is: $(svstat ${svscanroot})"	
+        echo "$0: daemontools errors: : $(ps -auxw | grep readproctitle)"
         # Check if svgroup is present, and if so, use it
 	if which svgroup &> /dev/null; then
 	    echo "$0: Giving group $aolserver_group control over the server: svgroup web ${svscanroot}"
@@ -329,7 +328,6 @@ if parameter_true $use_daemontools; then
     if [ -f $svscanroot/down ]; then
 	rm $svscanroot/down
     fi
-    echo "$0: supervise status is: $(svstat ${svscanroot})"	
         $svc_bindir/svc -u $svscanroot
     echo "$0: supervise status is: $(svstat ${svscanroot})"	
 else
