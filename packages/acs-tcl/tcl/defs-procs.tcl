@@ -1,13 +1,17 @@
 ad_library {
     ACS-specific general utility routines.
+
     @author Philip Greenspun (philg@arsdigita.com)
-    @author Many others at ArsDigita and at the OpenACS community.
+
+    @author Many others at ArsDigita and in the OpenACS community.
     @creation-date 2 April 1998
     @cvs-id $Id$
 }
 
 ad_proc ad_acs_version {} {
-    @return the OpenACS version of this instance.
+    The OpenACS version of this instance.
+
+    @return version string (major.minor.release)
 } {
     set release_tag {}
     regexp "acs-(\[0-9\]+)-(\[0-9\]+)-(\[0-9\]+)" \
@@ -21,7 +25,9 @@ ad_proc ad_acs_version {} {
 }
 
 ad_proc ad_acs_release_date {} {
-    @return The OpenACS release date of this instance.
+    The OpenACS release date of this instance.
+
+    @return pretty version of the release date
 } {
     set release_tag {}
     regexp "R(\[0-9\]+)" $release_tag match release_date
@@ -38,6 +44,7 @@ ad_proc ad_acs_release_date {} {
 
 ad_proc ad_host_administrator {} {
     As defined in the HostAdministrator kernel parameter.
+
     @return The e-mail address of a technical person who can fix problems
 } {
     return [ad_parameter -package_id [ad_acs_kernel_id]  HostAdministrator]
@@ -634,7 +641,7 @@ ad_proc -deprecated ad_parameter {
     parameter on server startup or access an arbitrary parameter (e.g., you are writing bboard code, but
     want to know an acs-kernel parameter), specifiy the package_id parameter to the object id of the package
     you want.
-
+    <p>
     Note: <strong>The parameters/ad.ini file is deprecated.</strong>
 
     @see parameter::set_value
