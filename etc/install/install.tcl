@@ -93,15 +93,23 @@ set install_xml_file          ""
 # example: install simulation during server setup
 #set install_xml_file          "${serverroot}/packages/simulation/install.xml"
 
+#----------------------------------------------------------------------
+# Database configuration
+#----------------------------------------------------------------------
 
 #---------------------------------------------------------------------
 # Choose which database you will use - Say 'oracle' or 'postgres'
-
 set database                  "postgres"
 
+#---------------------------------------------------------------------
+# For PostgreSQL this is the name of the database. For Oracle it is
+# the name of the db user. Note that for Oracle a tablespace must already exist with
+# the same name. Remember that for Oracle, dashes (minus signs) are not allowed here.
+# Will be re-created.
+set db_name                   "${server}"
 
 #----------------------------------------------------------------------
-# Database configuration - PostgreSQL
+# PostgreSQL
 #----------------------------------------------------------------------
 
 #---------------------------------------------------------------------
@@ -112,9 +120,6 @@ set pg_db_admin               postgres
 # Name of the postgres user for web service access
 set pg_db_user                ${server}
 
-#---------------------------------------------------------------------
-# Name of the PostgreSQL database. Will be created.
-set db_name                   ${server}
 
 #---------------------------------------------------------------------
 # The host running PostgreSQL
@@ -130,11 +135,8 @@ set pg_bindir                 "/usr/local/pgsql/bin"
 
 
 #----------------------------------------------------------------------
-# Database configuration - Oracle
+# Oracle
 #----------------------------------------------------------------------
-
-# The name of the Oracle user and tablespace. Will get created.
-set oracle_user               ${server}
 
 # Password for the Oracle user
 set oracle_password           ${db_name}
@@ -142,6 +144,8 @@ set oracle_password           ${db_name}
 # The system user account and password. We need this to create the tablespace and user above.
 set system_user               "system"
 set system_user_password      "manager"
+
+
 
 
 
