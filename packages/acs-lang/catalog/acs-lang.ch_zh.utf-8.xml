@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<message_catalog package_key="acs-lang" package_version="5.0.1" locale="ch_zh" charset="utf-8">
+<message_catalog package_key="acs-lang" package_version="5.0.3" locale="ch_zh" charset="utf-8">
 
+  <msg key="available-in-this-language">中文版</msg>
   <msg key="English">英语</msg>
   <msg key="French">法语</msg>
   <msg key="German">德语</msg>

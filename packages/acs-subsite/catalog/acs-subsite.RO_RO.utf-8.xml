@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<message_catalog package_key="acs-subsite" package_version="5.0d6" locale="RO_RO" charset="utf-8">
+<message_catalog package_key="acs-subsite" package_version="5.0.3" locale="RO_RO" charset="utf-8">
 
   <msg key="_or">, sau</msg>
   <msg key="A_member_of_the_system">Membru al comunităţii %system_name% din</msg>
@@ -37,6 +37,7 @@
   <msg key="Children">Copii</msg>
   <msg key="Close_account_explanation">&lt;p&gt; Vă rugăm să confirmaţi ca doriţi sa vă inchideţi contul pe %system_name%.&lt;/p&gt;&lt;p&gt; Dacă închideţi acest cont nu vă vom putea trimite notificări prin email şi nici nu veţi mai apare în lista membrilor pe %system_name%. Pe de altă parte, contribuţiile dumneavoastră vor fi păstrate, ele făcând parte din istoria comunităţii.&lt;/p&gt;&lt;p&gt;Reţineţi că puteţi să vă redeschideţi contul oricând - aceasta se face prin simpla reintrare în sistem folosind detaliile de autentificare ale acestui cont.</msg>
   <msg key="Close_your_account">Închide contul</msg>
+  <msg key="Closed_group">Grup Inchis</msg>
   <msg key="Comment">Comentează</msg>
   <msg key="Communities">Comunităţi</msg>
   <msg key="communities">comunităţi</msg>
@@ -45,6 +46,7 @@
   <msg key="Continue">Continuă</msg>
   <msg key="Country_Name">Numele Ţării</msg>
   <msg key="Create_new_community">Creează un nou %pretty_name%</msg>
+  <msg key="Create_new_subsite">Creează un subsite nou</msg>
   <msg key="Current_Password">Parola curentă</msg>
   <msg key="Currently_invisible_msg">&lt;p&gt;Starea dumneavoastră online nu este momentan vizibilă celorlalţi utilizatori&lt;/p&gt;</msg>
   <msg key="Currently_visible_msg">&lt;p&gt; Starea dumneavoastră online este momentan vizibilă celorlalţi utilizatori&lt;/p&gt;</msg>
@@ -95,12 +97,16 @@
   <msg key="ISO_Codes_not_loaded">Codurile ISO nu au fost încărcate</msg>
   <msg key="Join_community">Înscrie-te în comunitate</msg>
   <msg key="Join_group_name">Înscrie-te în %group_name% </msg>
+  <msg key="Join_subsite">Înscrie-te în subsite</msg>
   <msg key="Join_this_community">Înscrie-te în această comunitate</msg>
+  <msg key="Join_this_subsite">Înscrie-te în acest subsite</msg>
   <msg key="Keyword">Cuvănt cheie</msg>
   <msg key="Last_name">Nume de familie</msg>
   <msg key="later">mai târziu.</msg>
   <msg key="Leave_community">Părăseşte comunitatea</msg>
+  <msg key="Leave_subsite">Ieşi din subsite</msg>
   <msg key="Leave_this_community">Părăseşte această comunitate</msg>
+  <msg key="Leave_this_subsite">Ieşi din acest subsite</msg>
   <msg key="lGo_back_without_adding">Înapoi fără a mai adăuga utilizatori</msg>
   <msg key="Log_In">Intră</msg>
   <msg key="log_in">intră</msg>
@@ -207,12 +213,14 @@
   <msg key="Question">Întrebare</msg>
   <msg key="Re_enable">Re-activează</msg>
   <msg key="Recover_Password">Recuperaţi Parola</msg>
+  <msg key="Refresh_login">Reactualizează acest login</msg>
   <msg key="Register">Înregistraţi-vă</msg>
   <msg key="Registration_Approval_Notice">&lt;p&gt; Vă mulţumim pentru înregistrarea pentru for %system_name%. Unul dintre administratori a fost anunţat de cererea dumneavoastră. &lt;/p&gt; &lt;p&gt; De îndată ce veţi fi aprobat, veţi primi un mesaj prin email şi vă veţi putea întoarce să folosiţi sistemul %system_name%. &lt;/p&gt;   </msg>
   <msg key="Reject">Respinge</msg>
   <msg key="Remember_my_login">Aminteşte-ţi de autentificare mea pe acest calculator</msg>
   <msg key="Remove">Elimină</msg>
   <msg key="Req_membership_comm">Cere să fii membru în această comunitate</msg>
+  <msg key="Req_membership_subs">Inscrie-te ca membru in acest subsite</msg>
   <msg key="Request_membership">Cere calitate de membru</msg>
   <msg key="return_to_application">întoarce-te la formularul de cerere</msg>
   <msg key="Revoke_Checked">Anularea este Selectată</msg>
@@ -232,8 +240,12 @@
   <msg key="Subcommunities">Subcomunităţi</msg>
   <msg key="subcommunities">subcomunităţi</msg>
   <msg key="subcommunity">subcomunitate</msg>
+  <msg key="subsite">subsite</msg>
+  <msg key="Subsites">Subsite-uri</msg>
+  <msg key="subsites">subsite-uri</msg>
   <msg key="Thank_you">Mulţumim</msg>
   <msg key="The_ISO_codes_were_not">Codurile ISO nu au fost încărcate pe acest server</msg>
+  <msg key="This_group_is_closed">Acest grup este inchis. Noi membri au acces numai cu invitatie</msg>
   <msg key="this_subsite">acest subsite</msg>
   <msg key="This_user_has_left_the">Acest utilizator a părăsit comunitatea</msg>
   <msg key="To_log_in_visit_the">Pentru autentificare, vizitaţi</msg>

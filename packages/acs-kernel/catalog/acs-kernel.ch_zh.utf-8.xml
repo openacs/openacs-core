@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<message_catalog package_key="acs-kernel" package_version="5.0.0" locale="ch_zh" charset="utf-8">
+<message_catalog package_key="acs-kernel" package_version="5.0.3" locale="ch_zh" charset="utf-8">
 
   <msg key="authentication_authority">权限</msg>
   <msg key="common_add">增加</msg>
+  <msg key="common_Administration">管理</msg>
   <msg key="common_apply">申请</msg>
   <msg key="common_cancel">取消</msg>
   <msg key="common_close">关闭</msg>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="acs-templating" package_version="5.0d3" locale="nl_NL" charset="ISO-8859-1">
+<message_catalog package_key="acs-templating" package_version="5.0.3" locale="nl_NL" charset="ISO-8859-1">
 
   <msg key="Invalid_choice">Ongeldige keuze</msg>
   <msg key="Invalid_currency">Ongeldige valuta</msg>
@@ -9,12 +9,12 @@
   <msg key="Invalid_integer">Ongeldige integer</msg>
   <msg key="Invalid_keyword">Ongeldig sleutelwoord</msg>
   <msg key="Invalid_natural_number">Ongeldig natuurlijk getal</msg>
-  <msg key="Invalid_url">Ongeldig url</msg>
+  <msg key="Invalid_url">Ongeldige url</msg>
   <msg key="Next_with_arrow">Volgende &gt;&gt;</msg>
-  <msg key="No_row_pretty_plural">Geen %row_pretty_plural%</msg>
+  <msg key="No_row_pretty_plural">Geen %row_pretty_plural% beschikbaar</msg>
   <msg key="Previous_with_arrow">&lt;&lt; Vorige</msg>
   <msg key="required">vereist</msg>
   <msg key="Spellcheck">Spellingscontrole</msg>
   <msg key="Tag_handler_invalid_number_of_args">Een ongeldige aantal argumenten is meegegeven aan de afhandlingsroutine voor deze tag.</msg>
-  <msg key="Template_parser_error_in_parameter_list">Fout in paramterlijst</msg>
+  <msg key="Template_parser_error_in_parameter_list">Fout in parameterlijst</msg>
 </message_catalog>
