@@ -1654,6 +1654,10 @@ ad_proc -public db_multirow_group_last_row_p {
 ad_proc -public db_dml {{ -dbn "" } statement_name sql args } {
     Do a DML statement.
 
+    <p>
+
+    args can be one of: -clobs, -blobs, -clob_files or -blob_files. See the db-api doc referenced below for more information.
+
     @param dbn The database name to use.  If empty_string, uses the default database.
 
     @see <a href="/doc/db-api-detailed.html">/doc/db-api-detailed.html</a>
