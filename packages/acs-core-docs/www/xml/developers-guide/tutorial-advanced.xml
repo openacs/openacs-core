@@ -691,7 +691,7 @@ ad_form -extend -name note \ </userinput>
     set context [list $page_title]
 <userinput>} -on_submit {
     set category_ids [category::ad_form::get_categories \
-      -object_id [ad_conn package_id]]</userinput>
+      -container_object_id [ad_conn package_id]]</userinput>
 } -new_data {
     mfp::note::add \
     -title $title \
