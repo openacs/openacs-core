@@ -441,7 +441,6 @@ ad_proc -public db_multirow {
     -local:boolean
     -append:boolean
     {-extend {}}
-    {-upvar_level 1}
     var_name
     statement_name
     sql
@@ -472,9 +471,8 @@ ad_proc -public db_multirow {
     <p>
     If the <code>-local</code> is passed, the variables defined                                                            
     by db_multirow will be set locally (useful if you're compiling dynamic templates                                                           
-    in a function or similar situations). By default the multirow will be set
-    one level up but you can specify the number of levels up you want it set with the
-    upvar_level switch.
+    in a function or similar situations).
+
     <p>
 
     You may supply a code block, which will be executed for each row in 
@@ -528,7 +526,7 @@ ad_proc -public db_multirow {
     set full_statement_name [db_qd_get_fullname $statement_name]
 
     if { $local_p } {
-        set level_up $upvar_level
+        set level_up 1
     } else {
         set level_up \#[template::adp_level]
     }
@@ -736,7 +734,7 @@ ad_proc db_1row { args } {
 
 
 ad_proc db_transaction { transaction_code args } {
-    Usage: <b><i>db_transaction</i></b> <i>code_block</i> [ on_error { <i>error_code_block</i> } ]
+    Usage: <b><i>db_transaction</i></b> <i>transaction_code</i> [ on_error { <i>error_code_block</i> } ]
     
     Executes transaction_code with transactional semantics.  This means that either all of the database commands
     within transaction_code are committed to the database or none of them are.  Multiple <code>db_transaction</code>s may be
@@ -755,7 +753,7 @@ ad_proc db_transaction { transaction_code args } {
     db_transaction {
 	db_dml test "nonsense"
     } on_error {
-	ad_return_complaint "The DML failed."
+        ad_return_error "Error in blah/foo/bar" "The error was: $errmsg"
     }
     </pre>
 
