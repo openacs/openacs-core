@@ -158,10 +158,13 @@ proc_doc db_string { statement_name sql args } {
     If the query doesn't return a row, returns $default (or raises an error if no $default is provided).
 
 } {
+    # Query Dispatcher (OpenACS - ben)
+    set full_name [db_fullquery_get_fullname $statement_name]
+
     ad_arg_parser { default bind } $args
 
     db_with_handle db {
-	set selection [db_exec 0or1row $db $statement_name $sql]
+	set selection [db_exec 0or1row $db $full_name $sql]
     }
 
     if { [empty_string_p $selection] } {

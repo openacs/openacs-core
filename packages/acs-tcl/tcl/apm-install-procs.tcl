@@ -729,6 +729,29 @@ ad_proc -private apm_package_install_files { {-callback apm_dummy_callback} file
     }
 }
 
+# This is for the OpenACS system
+# We need the APM augmented to install the queries for a package
+# when the package is installed
+# (ben)
+ad_proc -private apm_package_install_queries {package_key} {
+    Loads up queries for one package
+} {
+    set path "[acs_package_root_dir $package_key]"
+
+    # Traverse path for www/*.sql files
+    set files [glob -nocomplain ${path}/www/*.sql]
+    set files [concat $files [glob -nocomplain ${path}/tcl/*.sql]]
+
+    ns_log Notice "APM/QD = loading up package query files"
+
+    foreach file $files {
+	ns_log Notice "APM/QD = one file $file"
+	db_fullquery_internal_load_cache $file
+    }
+
+    ns_log Notice "APM/QD = DONE loading package query files"
+}
+
 ad_proc -private apm_package_install_spec { version_id } {
 
     Writes the XML-formatted specification for a package to disk,

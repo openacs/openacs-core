@@ -7,6 +7,10 @@ ad_library {
     @cvs-id $Id$
 }
 
+proc db_current_rdbms {} {
+    return [db_rdbms_create postgresql "7.1"]
+}
+
 proc_doc db_nextval { sequence } { Returns the next value for a sequence. This can utilize a pool of sequence values to save hits to the database. } {
     return [db_string nextval "select nextval('$sequence')"]
 }
@@ -38,6 +42,13 @@ ad_proc -private db_exec { type db statement_name sql args } {
 
 } {
     set start_time [clock clicks]
+
+    ns_log Notice "PRE-QD: the SQL is $sql"
+
+    # Query Dispatcher (OpenACS - ben)
+    set sql [db_fullquery_replace_sql $statement_name $sql]
+
+    ns_log Notice "POST-QD: the SQL is $sql"
 
     set errno [catch {
 	upvar bind bind

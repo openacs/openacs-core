@@ -287,6 +287,48 @@ ad_proc -private apm_load_libraries {
     apm_files_load -callback $callback $files
 }
 
+# OpenACS query loading (ben@mit.edu)
+# Load up the queries for all packages
+#
+# This follows the pattern of the load_libraries proc,
+# but is only loading query information
+ad_proc -private apm_load_queries {
+    {-callback apm_dummy_callback}
+} {
+    set packages [db_list apm_enabled_packages {
+	select distinct package_key
+	from apm_package_versions
+	where enabled_p='t'
+    }]
+
+    # Scan the package directory for files to source.    
+    set files [list]    
+    foreach package $packages {
+	set base "[acs_root_dir]/packages/$package/"
+	set base_len [string length $base]
+
+	# For now we expect the SQL files to be in parallel with the Tcl files
+	set dirs [list ${base}www]
+	set paths [list]
+      
+	foreach dir $dirs {
+	    set paths [concat $paths [glob -nocomplain "$dir/*.tcl"]]
+	}
+	
+	foreach path [lsort $paths] {
+	    set rel_path [string range $path $base_len end]
+	    lappend files [list $package $rel_path]
+	}
+    }
+      
+    # Load up each file
+    ns_log Notice "APM/QD = looping through files to load queries from"
+    foreach file $files {
+	db_fullquery_internal_load_cache $file
+    }
+    ns_log Notice "APM/QD = DONE looping through files to load queries from"
+}
+
 ad_proc -private apm_pretty_name_for_file_type { type } {
 
     Returns the pretty name corresponding to a particular file type key

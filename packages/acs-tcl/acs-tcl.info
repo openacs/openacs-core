@@ -47,6 +47,7 @@
             <file type="tcl_procs" path="tcl/community-core-procs.tcl"/>
             <file type="tcl_init" path="tcl/database-init.tcl"/>
             <file type="tcl_procs" path="tcl/database-util-procs.tcl"/>
+	    <file type="tcl_procs" path="tcl/db-query-dispatcher.tcl"/>
             <file type="tcl_procs" path="tcl/defs-procs.tcl"/>
             <file type="tcl_procs" path="tcl/deprecated-utilities-procs.tcl"/>
             <file type="tcl_init" path="tcl/document-init.tcl"/>
