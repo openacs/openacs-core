@@ -27,6 +27,9 @@
 
   <if @site_wide_admin_p@>
     <p>
+      <b>&raquo;</b> <a href="@import_messages_url@">Import messages from catalog files</a>
+    </p>
+    <p>
       <b>&raquo;</b> <a href="@export_messages_url@">Export messages to catalog files</a>
     </p>
   </if>
