@@ -38,6 +38,7 @@ ad_proc -public auth::authenticate {
     {-authority_id ""}
     {-username:required}
     {-password:required}
+    {-persistent:boolean}
 } {
     Try to authenticate and login the user forever by validating the username/password combination, 
     and return authentication and account status codes.    
@@ -45,6 +46,7 @@ ad_proc -public auth::authenticate {
     @param authority_id The ID of the authority to ask to verify the user. Defaults to local authority.
     @param username Authority specific username of the user.
     @param passowrd The password as the user entered it.
+    @param persistent Set this if you want a permanent login cookie
     
     @return Array list with the following entries:
     
@@ -109,7 +111,7 @@ ad_proc -public auth::authenticate {
         # These are appended to the existing entries in auth_info
         
         if { [string equal $auth_info(account_status) "ok"] } {
-            auth::issue_login -user_id $auth_info(user_id)
+            auth::issue_login -user_id $auth_info(user_id) -persistent=$persistent_p
         }
     }
     
@@ -362,26 +364,34 @@ ad_proc -private auth::get_local_account {
     # Initialize to 'closed', because most cases below mean the account is closed
     set auth_info(account_status) "closed"
 
+    set notification_address [parameter::get -parameter NewRegistrationEmailAddress -default [ad_system_owner]]
+
     # system_name is used in some of the I18N messages
     set system_name [ad_system_name]    
     switch $member_state {
         "approved" {
             if { $email_verified_p == "f" } {
-                set row_id [db_string rowid_for_email {
-                    select rowid from users where user_id = :user_id
-                }]
+
+                # Lars TODO: Refactor with code in authentication-procs.tcl
+
+                set row_id [auth::get_user_secret_token -user_id $user_id]
                 
                 # Send email verification email to user
-                set confirmation_url "[ad_url]/register/email-confirm?[export_vars { row_id }]"
+                set confirmation_url [export_vars -base "[ad_url]/register/email-confirm" { row_id }]
                 with_catch errmsg {
                     ns_sendmail \
                         $email \
                         $notification_address \
                         "[_ acs-subsite.lt_Welcome_to_system_nam]" \
                         "[_ acs-subsite.lt_To_confirm_your_regis]"
+
+                    set auth_info(account_message) "<p>[_ acs-subsite.lt_Registration_informat]</p><p>[_ acs-subsite.lt_Please_read_and_follo]</p>"
+                } {
+                    global errorInfo
+                    ns_log Error "auth::get_local_account: Error sending out email verification email to email $email:\n$errorInfo"
+                    set auth_info(account_message) "We got an error sending out the email for email verification"
                 }
                 
-                set auth_info(account_message) "<p>[_ acs-subsite.lt_Registration_informat]</p><p>[_ acs-subsite.lt_Please_read_and_follo]</p>"
             } else {
                 set auth_info(account_status) "ok"
             }
@@ -403,6 +413,14 @@ ad_proc -private auth::get_local_account {
     set auth_info(user_id) $user_id
 
    return [array get auth_info]    
+}
+
+ad_proc -private auth::get_user_secret_token {
+    -user_id:required
+} {
+    Get a secret token for the user. Can be used for email verification purposes. 
+} {
+    return [db_string select_secret_token {}]
 }
 
 #####
