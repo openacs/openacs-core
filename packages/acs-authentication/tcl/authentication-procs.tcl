@@ -90,7 +90,7 @@ ad_proc -public auth::UseEmailForLoginP {} {
     Do we use email address for login? code wrapped in a catch, so the 
     proc will not break regardless of what the parameter value is.
 } {
-    return [parameter::get -boolean -parameter UseEmailForLoginP -package_id [ad_acs_kernel_id]]
+    return [parameter::get -boolean -parameter UseEmailForLoginP -package_id [ad_acs_kernel_id] -default 1]
 }
 
 ad_proc -public auth::authenticate {
