@@ -44,15 +44,10 @@ if {![empty_string_p $new_parent]} {
 
 set parent_link ".?[export_url_vars expand:multiple root_id=$parent_id]"
 
-doc_body_append "<html>
-<head><title>Site Map</title></head>
-<body bgcolor=#ffffff link=#0000ff vlink=#000ff $javascript>
+set page_title "Site Map"
+set context [list $page_title]
 
-<h2>Site Map</h2>
-
-[ad_context_bar "Site Map"]
-<hr>
-
+append body "
 <p>
 <b>&raquo;</b> <a href=\"application-new\">Create new application</a>
 </p>
@@ -66,26 +61,26 @@ set user_id [ad_conn user_id]
 
 db_foreach path_select {} {
     if {$node_id != $root_id && $admin_p == "t"} {
-	doc_body_append "<a href=.?[export_url_vars expand:multiple root_id=$node_id]>"
+	append body "<a href=.?[export_url_vars expand:multiple root_id=$node_id]>"
     }
     if {[empty_string_p $name]} {
-	doc_body_append "$obj_name:"
+	append body "$obj_name:"
     } else {
-	doc_body_append $name
+	append body $name
     }
 
     if {$node_id != $root_id && $admin_p == "t"} {
-	doc_body_append "</a>"
+	append body "</a>"
     }
 
     if {$directory_p == "t"} {
-	doc_body_append "/"
+	append body "/"
     }
 } if_no_rows {
-    doc_body_append "&nbsp;"
+    append body "&nbsp;"
 }
 
-doc_body_append "</b></font>
+append body "</b></font>
     </td>
   </tr>
   <tr bgcolor=#aaaaaa>
@@ -151,7 +146,7 @@ db_foreach nodes_select {} {
     lappend controls "<a href=delete?[export_url_vars expand:multiple root_id node_id]>delete</a>"
   }
 
-    doc_body_append "<tr><td><nobr><font face=courier size=-1>"
+    append body "<tr><td><nobr><font face=courier size=-1>"
 
     # use the indent variable to hold current indent level
     # we'll use it later to indent stuff at the end by the amount
@@ -160,7 +155,7 @@ db_foreach nodes_select {} {
     for {set i 0} {$i < 3*$mylevel} {incr i} {
 	append indent "&nbsp;"
     }
-        doc_body_append $indent
+        append body $indent
 
     if {!$root_p && $n_children > 0} {
 	set link "+"
@@ -180,33 +175,33 @@ db_foreach nodes_select {} {
 
 	lappend urlvars "root_id=$root_id"
 
-	doc_body_append "(<a href=.?[join $urlvars "&"]>$link</a>)</font> "
+	append body "(<a href=.?[join $urlvars "&"]>$link</a>)</font> "
     } else {
-	doc_body_append "&nbsp;&nbsp;&nbsp;</font> "
+	append body "&nbsp;&nbsp;&nbsp;</font> "
     }
 
-    doc_body_append "<font face=courier><b>"
+    append body "<font face=courier><b>"
     if {!$root_p && $root_id != $node_id} {
-	doc_body_append "<a href=.?[export_url_vars expand:multiple root_id=$node_id]>"
+	append body "<a href=.?[export_url_vars expand:multiple root_id=$node_id]>"
     }
-    doc_body_append "$name"
+    append body "$name"
     if {!$root_p && $root_id != $node_id} {
-	doc_body_append "</a>"
+	append body "</a>"
     }
 
-    doc_body_append [ad_decode $directory_p t / f ""]
+    append body [ad_decode $directory_p t / f ""]
 
-    doc_body_append "</b></font></nobr><font size=-1> [join $dir_controls " | "] </font></td>"
+    append body "</b></font></nobr><font size=-1> [join $dir_controls " | "] </font></td>"
 
 
 
-  doc_body_append "<td>"
+  append body "<td>"
 
   if {[empty_string_p $object_id]} {
     if {$new_application == $node_id} {
 	#Generate a package_id for double click protection
 	set new_package_id [db_nextval acs_object_id_seq]
-      doc_body_append "<form name=new_application action=package-new>
+      append body "<form name=new_application action=package-new>
         [export_form_vars expand:multiple root_id node_id new_package_id]
         <font size=-1>
         <input name=instance_name type=text size=8 value=\"\">
@@ -219,10 +214,10 @@ db_foreach nodes_select {} {
       </form>
       "
     } else {
-      doc_body_append "(none)"
+      append body "(none)"
     }
   } elseif {$rename_application == $node_id} {
-      doc_body_append "<form name=rename_application action=rename>
+      append body "<form name=rename_application action=rename>
         [export_form_vars expand:multiple root_id node_id rename_package_id]
         <font size=-1>
         <input name=instance_name type=text size=\"[string length $object_name]\" value=\"$object_name\">
@@ -231,23 +226,23 @@ db_foreach nodes_select {} {
         </form>
       "
   } else {
-      doc_body_append "<a href=\"$url\">[lang::util::localize $object_name]</a>"
+      append body "<a href=\"$url\">[lang::util::localize $object_name]</a>"
   }
 
   if {![empty_string_p $object_id] || $new_application != $node_id } {
-      doc_body_append "</td><td>$package_pretty_name</td><td><font size=-1>\[ [join $controls " | "] \]</font></td>"
+      append body "</td><td>$package_pretty_name</td><td><font size=-1>\[ [join $controls " | "] \]</font></td>"
   } 
-  doc_body_append "</tr>\n"
+  append body "</tr>\n"
 
   if {$node_id == $new_parent} {
     set parent_id $new_parent
     set node_type $new_type
-    doc_body_append "<tr><td><form name=new_parent action=new><nobr><font face=courier size=-1>"
+    append body "<tr><td><form name=new_parent action=new><nobr><font face=courier size=-1>"
     for {set i 0} {$i < (3*($mylevel + 1) + 3)} {incr i} {
-      doc_body_append "&nbsp;"
+      append body "&nbsp;"
     }
     # Generate a node_id for doubleclick protection.
-    doc_body_append "
+    append body "
         [export_form_vars expand:multiple parent_id node_type root_id]
         <b><input name=name type=text size=8 value=Untitled>
         <input type=submit value=New></b>
@@ -259,7 +254,7 @@ db_foreach nodes_select {} {
   }
 }
 
-doc_body_append "
+append body "
   </tr>
   <tr>
 <form name=new_application action=package-new>
@@ -286,7 +281,7 @@ doc_body_append "
     <tr>
 "
 
-doc_body_append "
+append body "
 <p>
 <a href=\"unmounted\">Manage unmounted applications</a>
 </p>
@@ -298,19 +293,19 @@ doc_body_append "
 
 db_foreach services_select {} {
     if {$parameter_count > 0} {
-        doc_body_append "  <li><a href=\"[export_vars -base "/shared/parameters" { package_id { return_url {[ad_return_url]} } }]\">$instance_name</a>"
+        append body "  <li><a href=\"[export_vars -base "/shared/parameters" { package_id { return_url {[ad_return_url]} } }]\">$instance_name</a>"
     }
-    doc_body_append "\n"
+    append body "\n"
 } if_no_rows {
-  doc_body_append "  <li>(none)\n"
+  append body "  <li>(none)\n"
 }
 
 
-doc_body_append "
+append body "
 </ul>
 "
 
-doc_body_append "<p />
+append body "<p />
 <center><strong>Site Map Instructions</strong></center><p /> 
 
 To <strong>add an application</strong> to this site, use <em>new sub
