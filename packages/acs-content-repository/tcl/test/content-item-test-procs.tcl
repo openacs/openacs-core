@@ -122,11 +122,13 @@ aa_register_case content_item {
             #########################################################
             # create a new content type
             #########################################################
-            set new_type_id [content::type::new \
-               -content_type "__test_type" \
-                -pretty_name "__test_type" \
-                -pretty_plural "__test_type" \
-                -table_name "__test_type" \
+
+	    catch {content::type::delete -content_type "test_type"} errmsg
+	    set new_type_id [content::type::new \
+               -content_type "test_type" \
+                -pretty_name "test_type" \
+                -pretty_plural "test_type" \
+                -table_name "test_type" \
                 -id_column "test_id"]
 
 
@@ -134,7 +136,7 @@ aa_register_case content_item {
             # create an attribute
             #########################################################
             content::type::attribute::new \
-                -content_type "__test_type" \
+                -content_type "test_type" \
                 -attribute_name "attribute_name" \
                 -datatype "text" \
                 -pretty_name "Attribute Name" \
@@ -151,14 +153,14 @@ aa_register_case content_item {
 
             content::folder::register_content_type \
                 -folder_id $first_folder_id \
-                -content_type "__test_type"
+                -content_type "test_type"
             # create an item of that type
             set new_type_item_id [db_nextval  "acs_object_id_seq"]
             set returned_new_type_item_id [content::item::new \
                                             -name "test_item_${new_type_item_id}" \
                                             -item_id $new_type_item_id \
                                             -parent_id $first_folder_id \
-                                            -content_type  "__test_type" \
+                                            -content_type  "test_type" \
                                                -attributes [list [list title "Title"] [list attribute_name "attribute_value"]]]
 
             #########################################################

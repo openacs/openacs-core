@@ -93,7 +93,7 @@ ad_proc -public ::content::folder::delete {
 		-var_list [list \
 			       [list folder_id $folder_id ] \
 			       [list cascade_p $cascade_p] ] \
-		content_folder delete ]
+		content_folder del]
 }
 
 ad_proc -public ::content::folder::register_content_type {
