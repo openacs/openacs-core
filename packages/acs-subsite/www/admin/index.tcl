@@ -15,25 +15,12 @@ ad_page_contract {
     instance_name:onevalue
 }
 
-set package_id [ad_conn object_id]
-set subsite_name [db_string subsite_name {
-    select p.instance_name 
-      from apm_packages p
-     where p.package_id = :package_id
-} -default "Subsite"]
+array set this_node [site_node::get -url [ad_conn url]]
+set subsite_name $this_node(instance_name)
 
-# Return the first available link to the Site-Wide Admin page.
-if {[db_0or1row acs_admin_url_get {
-    select site_node.url(node_id) acs_admin_url, instance_name
-    from site_nodes s, apm_packages p
-    where s.object_id = p.package_id
-    and p.package_key = 'acs-admin'
-    and rownum = 1
-}]} {
-    set acs_admin_available_p "t"
-} else {
-    set acs_admin_available_p "f"
-}
+set acs_admin_url "/acs-admin"
+array set acs_admin_node [site_node::get -url $acs_admin_url]
+set acs_admin_name $acs_admin_node(instance_name)
 
 set context {}
 
