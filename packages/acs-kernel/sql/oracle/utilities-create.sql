@@ -15,14 +15,6 @@ as
 	v_count in integer)
         return varchar2;
 
-    function computehash_raw(
-	v_value IN varchar2 )
-	return raw;
-
-    function computehash(
-	v_value IN varchar2)
-	return varchar2;
-
     function logical_negation (
         true_or_false IN varchar2)
 	return varchar2;
@@ -54,27 +46,6 @@ as
 	' using in v_count, in out a_sequence_values;
 	return substr(a_sequence_values, 2);
     end;
-
-    -- This is for Password Hashing.
-    -- Make sure to run: 'loadjava -user username/password Security.class'
-    -- before running this.
-    -- Make sure you have javasyspriv and javauserpriv granted for the user.
-
-    function computehash_raw( v_value IN varchar2 )
-    return raw
-    as language java
-    name 'Security.computeSHA(java.lang.String) returns java.lang.byte[]';
-
-    -- The hashing function can be changed to MD5 by using computeMD5.
-
-    function computehash (v_value IN varchar2)
-    return varchar2
-    as
-	v_hashed	char(40);
-    begin
-	select RAWTOHEX(computehash_raw(v_value)) into v_hashed from dual;
-	return v_hashed;
-    end computehash;
 
     function logical_negation (
         true_or_false IN varchar2)
