@@ -409,13 +409,18 @@ ad_proc -public acs_user::get_by_username {
 
 ad_proc -public acs_user::get {
     {-user_id {}}
+    {-authority_id {}}
+    {-username {}}
     {-array:required}
     {-include_bio:boolean}
 } {
     Get basic information about a user.
+    You may supply either user_id, or  username. 
+    If you supply username, you may also supply authority_id, or you may leave it out, in which case it defaults to the local authority.
+    If you supply neither user_id nor username, and we have a connection, the currently logged in user will be assumed.
 
     @option user_id     The user_id of the user to get the bio for. Leave blank for current user.
-
+    
     @option include_bio Whether to include the bio in the user information
 
     @param  array       The name of an array into which you want the information put. 
@@ -451,11 +456,22 @@ ad_proc -public acs_user::get {
     @author Lars Pind (lars@collaboraid.biz)
 } {
     if { [empty_string_p $user_id] } {
-        set user_id [ad_conn user_id]
+        if { [empty_string_p $username] } {
+            set user_id [ad_conn user_id]
+        } else {
+            if { [empty_string_p $authority_id] } {
+                set authority_id [auth::authority::local]
+            }
+        }
     }
 
     upvar $array row
-    db_1row select_user_info {} -column_array row
+    if { ![empty_string_p $user_id] } {
+        db_1row select_user_info_from_user_id {} -column_array row
+    } else {
+        db_1row select_user_info_from_username {} -column_array row
+        set user_id $row(user_id)
+    }
 
     if { $include_bio_p } {
         set row(bio) [person::get_bio -person_id $user_id]
