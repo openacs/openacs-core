@@ -30,6 +30,10 @@ ad_proc -public rp_internal_redirect {
 
     Parameters will stay the same as in the initial request.
 
+    Keep in mind that if you do an internal redirect to something other than
+    the current directory that relative links returned to the clients
+    browser may be broken (since the client will have the original URL).
+
     @param absolute_path If set the path is an absolute path within the host filesystem
     @param path path to the file to serve
 
