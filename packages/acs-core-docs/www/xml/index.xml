@@ -83,6 +83,10 @@
 
     <chapter id="general-documents" xreflabel="High level information: What is OpenACS?">
       <title>High level information: What is OpenACS?</title>
+      <sect1 id="openacs-overview" xreflabel="OpenACS Overview">
+        <title>Overview</title>
+          <para>The place to start if you want a soft, high level introduction to OpenACS</para>
+      </sect1>
 
       &release-notes;
 
@@ -114,6 +118,11 @@
     <chapter id="win-install">
       <title>Installing on Windows</title>
 
+      <sect1 id="win-overview" xreflabel="Windows Installation Overview">
+        <title>Overview</title>
+        <para>This walks you through an OpenACS installation under Windows.</para>
+      </sect1>
+
       &win2k;
 
     </chapter>
@@ -130,6 +139,11 @@
     <chapter id="dev-guide">
       <title>OpenACS Developer's Guide</title>
 
+      <sect1 id="developers-overview" xreflabel="OpenACS Developer's Guide">
+        <title>Overview</title>
+        <para>A tour of what you need to know in order to extend OpenACS.</para>
+      </sect1>
+
       &objects;
       &packages;
       &rp;
@@ -138,12 +152,15 @@
       &permissions;
       &subsites;
 
-      
-      
     </chapter>
 
     <chapter id="more-developer-info">
       <title>Other Developer Resources</title>
+
+      <sect1 id="other-developer-overview" xreflabel="Other Developer Resources">
+        <title>Overview</title>
+        <para>Developer information that doesn't really fit anywhere else.</para>
+      </sect1>
 
       &parties;
       &object-identity;
