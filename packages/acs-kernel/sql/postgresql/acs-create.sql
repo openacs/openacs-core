@@ -20,40 +20,70 @@ comment on table acs_magic_objects is '
  objects like the site-wide organization, and the all users party.
 ';
 
-create function acs__add_user (integer,varchar,timestamptz,integer,varchar,varchar,varchar,varchar,varchar,char,char,varchar,varchar,varchar,boolean,varchar)
+create or replace function acs__add_user (
+    integer,      -- user_id
+    varchar,      -- object_type
+    timestamptz,  -- creation_date
+    integer,      -- creation_user
+    varchar,      -- cretion_ip
+    integer,      -- authority_id; default 'local'
+    varchar,      -- username
+    varchar,      -- email
+    varchar,      -- url
+    varchar,      -- first_names
+    varchar,      -- last_name
+    char,         -- password
+    char,         -- salt
+    varchar,      -- screen_name
+    boolean,      -- email_verified_p
+    varchar       -- member_state
+)
 returns integer as '
 declare
-  user_id                alias for $1;  -- default null    
-  object_type            alias for $2;  -- default ''user''
-  creation_date          alias for $3;  -- default now()
-  creation_user          alias for $4;  -- default null
-  creation_ip            alias for $5;  -- default null
-  email                  alias for $6;  
-  url                    alias for $7;  -- default null
-  first_names            alias for $8;  
-  last_name              alias for $9;  
-  password               alias for $10; 
-  salt                   alias for $11; 
-  password_question      alias for $12; -- default null
-  password_answer        alias for $13; -- default null
-  screen_name            alias for $14; -- default null
-  email_verified_p       alias for $15; -- default ''t''
-  member_state           alias for $16; -- default ''approved''
-  v_user_id              users.user_id%TYPE;
-  v_rel_id               membership_rels.rel_id%TYPE;
+    p_user_id              alias for $1;  -- default null    
+    p_object_type          alias for $2;  -- default ''user''
+    p_creation_date        alias for $3;  -- default now()
+    p_creation_user        alias for $4;  -- default null
+    p_creation_ip          alias for $5;  -- default null
+    p_authority_id         alias for $6;  -- defaults to local authority
+    p_username             alias for $7;  --
+    p_email                alias for $8;  
+    p_url                  alias for $9;  -- default null
+    p_first_names          alias for $10;  
+    p_last_name            alias for $11;  
+    p_password             alias for $12; 
+    p_salt                 alias for $13; 
+    p_screen_name          alias for $14; -- default null
+    p_email_verified_p     alias for $15; -- default ''t''
+    p_member_state         alias for $16; -- default ''approved''
+    v_user_id              users.user_id%TYPE;
+    v_rel_id               membership_rels.rel_id%TYPE;
 begin
-    v_user_id := acs_user__new (user_id, object_type, creation_date,
-				creation_user, creation_ip, email,
-				url, first_names, last_name, password,
-				salt, password_question, password_answer,
-				screen_name, email_verified_p,null);
+    v_user_id := acs_user__new (
+        p_user_id, 
+        p_object_type, 
+        p_creation_date,
+        p_creation_user, 
+        p_creation_ip, 
+        p_authority_id,
+        p_username,
+        p_email,
+        p_url, 
+        p_first_names, 
+        p_last_name, 
+        p_password,
+	p_salt, 
+        p_screen_name, 
+        p_email_verified_p,
+        null                  -- context_id
+    );
    
     v_rel_id := membership_rel__new (
       null,
       ''membership_rel'',
       acs__magic_object_id(''registered_users''),      
       v_user_id,
-      member_state,
+      p_member_state,
       null,
       null);
 

@@ -620,14 +620,14 @@ as
   creation_user	in acs_objects.creation_user%TYPE
 		   default null,
   creation_ip	in acs_objects.creation_ip%TYPE default null,
+  authority_id  in auth_authorities.authority_id%TYPE default null,
+  username      in users.username%TYPE,
   email		in parties.email%TYPE,
   url		in parties.url%TYPE default null,
   first_names	in persons.first_names%TYPE,
   last_name	in persons.last_name%TYPE,
   password	in users.password%TYPE,
   salt		in users.salt%TYPE,
-  password_question     in users.password_question%TYPE default null,
-  password_answer	in users.password_answer%TYPE default null,
   screen_name	in users.screen_name%TYPE default null,
   email_verified_p in users.email_verified_p%TYPE default 't',
   context_id	in acs_objects.context_id%TYPE default null
@@ -667,20 +667,21 @@ as
   creation_user	in acs_objects.creation_user%TYPE
 		   default null,
   creation_ip	in acs_objects.creation_ip%TYPE default null,
+  authority_id  in auth_authorities.authority_id%TYPE default null,
+  username      in users.username%TYPE,
   email		in parties.email%TYPE,
   url		in parties.url%TYPE default null,
   first_names	in persons.first_names%TYPE,
   last_name	in persons.last_name%TYPE,
   password	in users.password%TYPE,
   salt		in users.salt%TYPE,
-  password_question     in users.password_question%TYPE default null,
-  password_answer	in users.password_answer%TYPE default null,
   screen_name	in users.screen_name%TYPE default null,
   email_verified_p in users.email_verified_p%TYPE default 't',
   context_id	in acs_objects.context_id%TYPE default null
  )
  return users.user_id%TYPE
  is
+  v_authority_id auth_authorities.authority_id%TYPE;
   v_user_id users.user_id%TYPE;
  begin
   v_user_id :=
@@ -689,12 +690,20 @@ as
               email, url,
               first_names, last_name, context_id);
 
+  -- default to local authority
+  if authority_id is null then
+    select authority_id
+    into   v_authority_id
+    from   auth_authorities
+    where  short_name = 'local';
+  else
+        v_authority_id := authority_id;
+  end if;
+
   insert into users
-   (user_id, password, salt, password_question, password_answer, screen_name,
-    email_verified_p)
+   (user_id, authority_id, username, password, salt, screen_name, email_verified_p)
   values
-   (v_user_id, password, salt, password_question, password_answer, screen_name,
-    email_verified_p);
+   (v_user_id, v_authority_id, username, password, salt, screen_name, email_verified_p);
 
   insert into user_preferences
     (user_id)
