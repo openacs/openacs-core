@@ -17,6 +17,20 @@ if { ![exists_and_not_null authority_id] } {
     set authority_id [auth::authority::local]
 }
 
+# display error if the subsite doesn't allow recovery of passwords
+set subsite_id [subsite::get_element -element object_id]
+
+set email_forgotten_password_p [parameter::get \
+                                    -parameter EmailForgottenPasswordP \
+                                    -package_id $subsite_id \
+                                    -default 1]
+
+if {[string is false $email_forgotten_password_p]} {
+    ad_return_forbidden Forbidden "Emailing passwords is not allowed"
+    ad_script_abort
+}
+
+
 # Display form to collect username and authority
 set authority_options [auth::authority::get_authority_options]
 

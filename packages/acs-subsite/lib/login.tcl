@@ -23,6 +23,11 @@ if { ![exists_and_not_null package_id] } {
     set subsite_id [subsite::get_element -element object_id]
 }
 
+set email_forgotten_password_p [parameter::get \
+                                    -parameter EmailForgottenPasswordP \
+                                    -package_id $subsite_id \
+                                    -default 1]
+
 if { ![info exists username] } {
     set username {}
 }
