@@ -23,7 +23,7 @@ set subsite_node_id $subsite_sitenode(node_id)
 set subsite_name $subsite_sitenode(instance_name)
 
 # Where to find the stylesheet
-set css_url "${subsite_url}group-master.css"
+set css_url "${subsite_url}site-master.css"
 
 # Get system name
 set system_name [ad_system_name]
