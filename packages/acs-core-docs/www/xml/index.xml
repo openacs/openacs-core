@@ -387,9 +387,6 @@
       <xi:include href="kernel/i18n-requirements.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
         <xi:fallback>Section missing</xi:fallback>
       </xi:include>
-      <xi:include href="developers-guide/i18n.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
-        <xi:fallback>Section missing</xi:fallback>
-      </xi:include>
       <xi:include href="kernel/security-requirements.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
         <xi:fallback>Section missing</xi:fallback>
       </xi:include>
@@ -415,6 +412,9 @@
         <xi:fallback>Section missing</xi:fallback>
       </xi:include>
     </chapter>
+      <xi:include href="developers-guide/i18n.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
+        <xi:fallback>Section missing</xi:fallback>
+      </xi:include>
 
   </part>
 <index/>

@@ -380,7 +380,7 @@ set address                127.0.0.1 </programlisting>
     <authorblurb>
       <para>By <ulink url="mailto:joel@aufrecht.org">Joel Aufrecht</ulink></para>
     </authorblurb>
-  <para>This section describes minimal-risk methods for deploying changes on a production network.  The important characteristics of a safe change deployment include:</para>
+  <para>This section describes minimal-risk methods for deploying changes on a production network.  The important characteristics of a safe change deployment include:  (THIS SECTION IN DEVELOPMENT)</para>
   <itemizedlist>
     <listitem>
       <para>Control: You know for sure that the change you are making is the change that you intend to make and is the change that you tested.</para>
@@ -389,12 +389,37 @@ set address                127.0.0.1 </programlisting>
       <para>Rollback: If anything goes wrong, you can return to the previous working configuration safely and quickly.</para>
     </listitem>
   </itemizedlist>
+
+    <sect2>
+      <title>Deployment with CVS</title>
+      <para>With this method, we control the files on a site via CVS.  In this example, there is one development site and one production site.  The only way files should move between the two is via cvs.  The production site could run "HEAD" from cvs (raw example from chat log:)</para>
+<programlisting>
+1) change the file on dev as desired
+2) test the new file
+3) commit the file: 
+if the file is /web/foo-dev/www/index.adp, do: 
+
+cd /web/foo-dev/www
+cvs diff index.adp (this is optional; it's just a
+reality check)
+the lines starting &gt; will be added and the lines
+starting &lt; will be removed, when you commit
+if that looks okay, commit with: 
+cvs -m "changing text on front page for February conference" index.adp
+the stuff in -m "foo" is a comment visible only from within cvs commands
+4) update the file on production:
+cd /web/foo-prod/www
+cvs up index.adp</programlisting>
+<para>The drawback to using HEAD as the live code is that you cannot commit new work on the development server without erasing the definition of 'working production code.'  So a better method is to use a tag.  This guarantees that, at any time in the future, you can retrieve exactly the same set of code.  This is useful for both of the characteristics of safe change deployment.  For control, you can use tags to define a body of code, test that code, and then know that what you are deploying is exactly that code.  For rollback, you can use return to the last working tag if the new tag (or new, untagged changes) cause problems.  .... example of using tags to follow ...</para>
+    </sect2>
+    <sect2>
+      <title>A/B Deployment</title>
   <para>The approach taken in this section is to always create a new service with the desired changes, running in parallel with the existing site.  This guarantees control, at least at the final step of the process: you know what changes you are about to make because you can see them directly.  It does not, by itself, guarantee the entire control chain.  You need additional measures to make sure that the change you are making is exactly and completely the change you intended to make and tested previously, and nothing more.  Those additional measures typically take the form of source control tags and system version numbers.  The parallel-server approach also guarantees rollback because the original working service is not touched; it is merely set aside.</para>
   <para>This approach can has limitations.  If the database or file system regularly receiving new data, you must interrupt this function or risk losing data in the shuffle.  It also requires extra steps if the database will be affected.</para>
-  <sect2>
-    <title>Simple Deployment: Database is not changed</title>
+  <sect3>
+    <title>Simple A/B Deployment: Database is not changed</title>
     <figure>
-      <title>Simple Deployment - Step 1</title>
+      <title>Simple A/B Deployment - Step 1</title>
       <mediaobject>
         <imageobject>
           <imagedata fileref="images/simple-deploy-1.png" format="png" align="center"/>
@@ -402,7 +427,7 @@ set address                127.0.0.1 </programlisting>
       </mediaobject>
     </figure>
      <figure>
-      <title>Simple Deployment - Step 2</title>
+      <title>Simple A/B Deployment - Step 2</title>
       <mediaobject>
         <imageobject>
           <imagedata fileref="images/simple-deploy-2.png" format="png" align="center"/>
@@ -410,18 +435,18 @@ set address                127.0.0.1 </programlisting>
       </mediaobject>
     </figure>
      <figure>
-      <title>Simple Deployment - Step 3</title>
+      <title>Simple A/B Deployment - Step 3</title>
       <mediaobject>
         <imageobject>
           <imagedata fileref="images/simple-deploy-3.png" format="png" align="center"/>
         </imageobject>
       </mediaobject>
     </figure>
-  </sect2>
-  <sect2>
-    <title>Complex Deployment: Database is changed</title>
+  </sect3>
+  <sect3>
+    <title>Complex A/B Deployment: Database is changed</title>
     <figure>
-      <title>Complex Deployment - Step 1</title>
+      <title>Complex A/B Deployment - Step 1</title>
       <mediaobject>
         <imageobject>
           <imagedata fileref="images/complex-deploy-1.png" format="png" align="center"/>
@@ -429,7 +454,7 @@ set address                127.0.0.1 </programlisting>
       </mediaobject>
     </figure>
      <figure>
-      <title>Complex Deployment - Step 2</title>
+      <title>Complex A/B Deployment - Step 2</title>
       <mediaobject>
         <imageobject>
           <imagedata fileref="images/complex-deploy-2.png" format="png" align="center"/>
@@ -437,13 +462,14 @@ set address                127.0.0.1 </programlisting>
       </mediaobject>
     </figure>
      <figure>
-      <title>Complex Deployment - Step 3</title>
+      <title>Complex A/B Deployment - Step 3</title>
       <mediaobject>
         <imageobject>
           <imagedata fileref="images/complex-deploy-3.png" format="png" align="center"/>
         </imageobject>
       </mediaobject>
     </figure>
+  </sect3>
   </sect2>
 </sect1>
     <sect1 id="install-ssl">
@@ -661,3 +687,4 @@ Password:</screen>
 
     <para><phrase role="cvstag">($Id$)</phrase></para>
 </chapter>
+   
