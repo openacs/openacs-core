@@ -868,6 +868,12 @@ the message appears.
           </formalpara>
         </listitem>
 
+        <listitem>
+          <formalpara>
+            <title>Avoid plurals</title>
+            <para>Different languages create plurals differently.  Try to avoid keys which will change based on the value of a number.  OpenACS does not currently support internationalization of plurals.  If you use two different keys, a plural and a singular form, your application will not localize properly for locales which use different rules or have more than two forms of plurals.</para>
+          </formalpara>
+        </listitem>
 
         <listitem>
           <formalpara>
@@ -953,5 +959,6 @@ found, then that locale is offered instead.</para>
 
       </listitem>
     </itemizedlist>
+    <para>When creating a new locale based on an existing one, such as creating the Guatamalan version of Spanish, you can copy the existing locale's catalog files using the script <computeroutput>/packages/acs-core-docs/www/files/create-new-catalog.sh</computeroutput>.</para>
   </sect1>
 </chapter>
