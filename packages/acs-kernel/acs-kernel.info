@@ -7,14 +7,14 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>t</singleton-p>
 
-    <version name="4.5.1" url="http://openacs.org/repository/download/apm/acs-kernel-4.5.1.apm">
+    <version name="4.5.2" url="http://openacs.org/repository/download/apm/acs-kernel-4.5.2.apm">
     <database-support>
         <database>oracle</database>
         <database>postgresql</database>
     </database-support>
         <owner url="mailto:dhogaza@pacifier.com">Don Baccus</owner>
         <summary>Routines and data models providing the foundation for OpenACS-based Web services.</summary>
-        <release-date>2002-08-17</release-date>
+        <release-date>2002-10-24</release-date>
         <vendor url="http://openacs.org/">OpenACS</vendor>
 
         <provides url="acs-kernel" version="4.5.1"/>

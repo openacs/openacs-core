@@ -1881,7 +1881,7 @@ declare
       v_version_id                      apm_package_versions.version_id%TYPE;
 begin
       if apm_pkg_ver__version_id = '''' or apm_pkg_ver__version_id is null then
-         select acs_object_id_seq.nextval
+         select nextval(''t_acs_object_id_seq'')
 	 into v_version_id
 	 from dual;
       else
@@ -1993,12 +1993,12 @@ begin
 	    where version_id = copy__version_id;
     
 	insert into apm_package_dependencies(dependency_id, version_id, dependency_type, service_uri, service_version)
-	    select acs_object_id_seq.nextval, v_version_id, dependency_type, service_uri, service_version
+	    select nextval(''t_acs_object_id_seq''), v_version_id, dependency_type, service_uri, service_version
 	    from apm_package_dependencies
 	    where version_id = copy__version_id;
     
 	insert into apm_package_files(file_id, version_id, path, file_type, db_type)
-	    select acs_object_id_seq.nextval, v_version_id, path, file_type, db_type
+	    select nextval(''t_acs_object_id_seq''), v_version_id, path, file_type, db_type
 	    from apm_package_files
 	    where version_id = copy__version_id;
     
@@ -2086,7 +2086,7 @@ begin
 	if NOT FOUND 
 	       then
 	       	if add_file__file_id is null then
-	          select acs_object_id_seq.nextval into v_file_id from dual;
+	          select nextval(''t_acs_object_id_seq'') into v_file_id from dual;
 	        else
 	          v_file_id := add_file__file_id;
 	        end if;
@@ -2128,7 +2128,7 @@ declare
   v_dep_id                            apm_package_dependencies.dependency_id%TYPE;
 begin
       if add_interface__interface_id is null then
-          select acs_object_id_seq.nextval into v_dep_id from dual;
+          select nextval(''t_acs_object_id_seq'') into v_dep_id from dual;
       else
           v_dep_id := add_interface__interface_id;
       end if;
@@ -2186,7 +2186,7 @@ declare
   v_dep_id                            apm_package_dependencies.dependency_id%TYPE;
 begin
       if add_dependency__dependency_id is null then
-          select acs_object_id_seq.nextval into v_dep_id from dual;
+          select nextval(''t_acs_object_id_seq'') into v_dep_id from dual;
       else
           v_dep_id := add_dependency__dependency_id;
       end if;
