@@ -1774,6 +1774,11 @@ as
 	 v_instance_name := instance_name;
        end if;
 
+       insert into apm_packages
+       (package_id, package_key, instance_name)
+       values
+       (v_package_id, package_key, v_instance_name);
+
        update acs_objects
        set title = v_instance_name,
            package_id = v_package_id
@@ -1782,11 +1787,6 @@ as
        select package_type into v_package_type
        from apm_package_types
        where package_key = apm_package.new.package_key;
-
-       insert into apm_packages
-       (package_id, package_key, instance_name)
-       values
-       (v_package_id, package_key, v_instance_name);
 
        if v_package_type = 'apm_application' then
 	   insert into apm_applications
