@@ -898,6 +898,18 @@ ad_proc -public package_instantiate_object {
     return $object_id
 
 }
+
+ad_proc -public package_function_p {
+  package_name
+  function_name
+} {
+    Returns 0 if the given function is a procedure, 1 if a function.  Always
+    returns 1 in the Postgres version.  Broken out into its own function so we
+    can util_memoize it.
+} {
+    return [db_string function_p {}]
+}
+
 ad_proc -public package_exec_plsql {
     { -var_list "" }
     package_name 
@@ -958,7 +970,11 @@ ad_proc -public package_exec_plsql {
 	set $__key $__value
     }
 
-    return [db_exec_plsql exec_plsql {}]
+    if { [util_memoize "package_function_p $package_name $function_name"] } {
+         return [db_exec_plsql exec_plsql_func {}]
+    } else {
+         db_exec_plsql exec_plsql_proc {}
+    }
 
 }
 

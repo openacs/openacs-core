@@ -260,7 +260,13 @@ select 1;
       <querytext>now()</querytext>
 </partialquery>
 
-<fullquery name="package_exec_plsql.exec_plsql">      
+<fullquery name="package_function_p.function_p">      
+      <querytext>
+	select 1 from dual
+      </querytext>
+</fullquery>
+
+<fullquery name="package_exec_plsql.exec_plsql_func">      
       <querytext>
 
 	select ${package_name}__${function_name}([plpgsql_utility::generate_attribute_parameter_call \
