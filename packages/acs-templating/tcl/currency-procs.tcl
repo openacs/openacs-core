@@ -49,7 +49,11 @@ ad_proc -public template::data::validate::currency { value_ref message_ref } {
     set format_fractional_part [lindex $format 3]
 
     set whole_part_valid_p [template::data::validate integer whole_part message]
-    set fractional_part_valid_p [template::data::validate integer fractional_part message]
+    if { ![empty_string_p $fractional_part] } {
+        set fractional_part_valid_p [template::data::validate integer fractional_part message]
+    } else {
+        set fractional_part_valid_p 1
+    }
 
     if { ! $whole_part_valid_p || ! $fractional_part_valid_p } {
 	set message "Invalid currency [join [lrange $value 0 4] ""]"
