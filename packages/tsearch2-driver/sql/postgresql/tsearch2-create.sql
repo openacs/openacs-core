@@ -9,12 +9,12 @@
 
 -- FIXME need to load tsearch2.sql from postgresql/share/contrib
 -- (on debian /usr/share/postgresql/contrib)
---create table txt (
---	object_id integer
---		  constraint txt_object_id_fk
---	          references acs_objects,
---	fti	  tsvector
---);
+create table txt (
+	object_id integer
+		  constraint txt_object_id_fk
+	          references acs_objects,
+	fti	  tsvector
+);
 
---create index fti_idx on txt using gist(fti);
+create index fti_idx on txt using gist(fti);
 
