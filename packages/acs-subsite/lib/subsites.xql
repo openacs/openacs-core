@@ -27,7 +27,7 @@
            groups g
     where  n.parent_id = :subsite_node_id
       and    p.package_id = n.object_id
-      and    p.package_key  in ('[join [subsite::package_keys] {','}]]')
+      and    p.package_key  in ('[join [subsite::package_keys] {','}]')
       and    ag.package_id = p.package_id
       and    g.group_id = ag.group_id
       and    (exists (select 1 
