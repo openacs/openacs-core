@@ -411,7 +411,7 @@ ad_proc -public acs_user::get {
     {-array:required}
     {-include_bio:boolean}
 } {
-    Get basic information about a user.
+    Get basic information about a user. Uses util_memoize to cache info from the database.
     You may supply either user_id, or  username. 
     If you supply username, you may also supply authority_id, or you may leave it out, in which case it defaults to the local authority.
     If you supply neither user_id nor username, and we have a connection, the currently logged in user will be assumed.
@@ -464,8 +464,9 @@ ad_proc -public acs_user::get {
 
     upvar $array row
     if { ![empty_string_p $user_id] } {
-        db_1row select_user_info_from_user_id {} -column_array row
+        array set row [util_memoize [list acs_user::get_from_user_id_not_cached $user_id] [cache_timeout]]
     } else {
+        array set row [util_memoize [list acs_user::get_from_username_not_cached $username $authority_id] [cache_timeout]]
         db_1row select_user_info_from_username {} -column_array row
         set user_id $row(user_id)
     }
@@ -473,6 +474,49 @@ ad_proc -public acs_user::get {
     if { $include_bio_p } {
         set row(bio) [person::get_bio -person_id $user_id]
     }
+}
+
+ad_proc -private acs_user::get_from_user_id_not_cached { user_id } {
+    Returns an array list with user info from the database. Should
+    never be called from application code. Use acs_user::get instead.
+
+    @author Peter Marklund
+} {
+    db_1row select_user_info {} -column_array row
+    
+    return [array get row]
+}
+
+ad_proc -private acs_user::get_from_username_not_cached { username authority_id } {
+    Returns an array list with user info from the database. Should
+    never be called from application code. Use acs_user::get instead.
+
+    @author Peter Marklund
+} {
+    db_1row select_user_info {} -column_array row
+}
+
+ad_proc -private acs_user::cache_timeout {} {
+    Returns the number of seconds the user info cache is kept.
+
+    @author Peter Marklund
+} {
+    # TODO: This should maybe be an APM parameter
+    return 3600
+}
+
+ad_proc -public acs_user::flush_cache { 
+    {-user_id:required}
+} {
+    Flush the acs_user::get cache for the given user_id.
+
+    @author Peter Marklund
+} {
+    # First get username and authority_id so we can flush the get_from_username_not_cached proc
+    acs_user::get -user_id $user_id -array user
+
+    util_memoize_flush [list acs_user::get_from_user_id_not_cached $user_id]
+    util_memoize_flush [list acs_user::get_from_username_not_cached $user(username) $user(authority_id)]
 }
 
 ad_proc -public acs_user::get_element {
@@ -531,6 +575,8 @@ ad_proc -public acs_user::update {
         }
     }
     db_dml user_update {}
+
+    flush_cache -user_id $user_id
 }
 
 ad_proc -public acs_user::get_user_id_by_screen_name {

@@ -58,7 +58,7 @@
   </querytext>
 </fullquery>
  
-<fullquery name="acs_user::get.select_user_info_from_user_id">      
+<fullquery name="acs_user::get_from_user_id_not_cached.select_user_info">      
       <querytext>
 
           select user_id, 
@@ -90,7 +90,7 @@
       </querytext>
 </fullquery>
  
-<fullquery name="acs_user::get.select_user_info_from_username">
+<fullquery name="acs_user::get_from_username_not_cached.select_user_info">
       <querytext>
 
           select user_id, 
