@@ -39,11 +39,11 @@ ad_proc -public notification::display::request_widget {
     set request_id [notification::request::get_request_id -type_id $type_id -object_id $object_id -user_id $user_id]
     
     if {![empty_string_p $request_id]} {
-        set sub_url [unsubscribe_url -request_id $request_id -url $url]
+        set sub_url [ad_quotehtml [unsubscribe_url -request_id $request_id -url $url]]
         set pretty_name [ad_quotehtml $pretty_name]
         set sub_chunk "[_ notifications.lt_You_have_requested_no]"
     } else {
-        set sub_url [subscribe_url -type $type -object_id $object_id -url $url -user_id $user_id -pretty_name $pretty_name]
+        set sub_url [ad_quotehtml [subscribe_url -type $type -object_id $object_id -url $url -user_id $user_id -pretty_name $pretty_name]]
         set pretty_name [ad_quotehtml $pretty_name]
         set sub_chunk "[_ notifications.lt_You_may_a_hrefsub_url]"
     }
