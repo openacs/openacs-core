@@ -1,34 +1,46 @@
 #developer-toolbar {
+  font-size: 85%;
   background-color: #616093;
   color: white;
-  font-size: 80%;
-  padding-left: 8px;
-  padding-right: 8px;
-  padding-top: 2px;
-  padding-bottom: 2px;
+  padding:  2px 8px;
 }
+
+#developer-toolbar form {
+        margin: -3px 0 0 0;
+        padding: 0;
+}
+
+#developer-toolbar tr { 
+       border-top: 4px solid #616093;
+}
+
 #developer-toolbar td a { 
-  border: solid 1px #616093;
+  border: solid 1px grey;
+  padding: 0 2px;
   text-align: center; 
   color: white;
   text-decoration: none;
 }
+
 #developer-toolbar td a:hover { 
   text-decoration: none;
   background-color: #999999;
   border: solid 1px #cccccc;
 }
-#developer-toolbar #search {
-  font-size: 80%;
+#developer-toolbar #developer-search {
   color: white;
 }
-#developer-toolbar #search input {
-  font-size: 100%;
+
+#developer-toolbar #developer-search input {
+  padding: 0;
+  font-size: 85%;
 }
+
 #developer-toolbar td a.on {
   background-color: #888888;
   border: solid 1px #cccccc;
 }
+
 #developer-toolbar td a:hover.on {
   background-color: #666666;
   border: solid 1px #999999;
@@ -36,6 +48,7 @@
 
 #developer-toolbar .actions { 
   padding: 0;
+  margin: 0;
 }
 
 #developer-toolbar .actions ul { 
@@ -59,8 +72,7 @@ div.developer-support-adp-box-on {
   background-color: #fcc;
   border-style: solid;
   border-color: #f33;
-  border-width: 1px 1px 1px 1px;
-  line-height: 1.2em;
+  border-width: 1px;
 }
 
 div.developer-support-adp-box-off {
@@ -105,4 +117,14 @@ div.developer-support-adp-output-off {
 
 .developer-support-footer-off {
         display: none;
+}
+
+/* Debug tags normally display: none */ 
+div.developer-support-debug {
+        display: block;
+        border: 1px solid red;
+}
+span.developer-support-debug {
+        display: inline;
+        color: red;
 }

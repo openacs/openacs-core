@@ -31,7 +31,7 @@
     <if @profiling:rowcount@ gt 0>
       <h3>Profiling Information</h3>
       <table>
-        <tr>
+        <tr align="center">
           <th>Ops</th>
           <th>Tag</th>
           <th># Iterations</th>
