@@ -16,7 +16,7 @@
       <querytext>
       select privilege
       from acs_permissions
-      where object_id = 0
+      where object_id = :sec_context_root
             and grantee_id = :user_id
             and privilege = 'admin'
       </querytext>
