@@ -496,7 +496,7 @@ ad_proc -public template::list::prepare {
         # so the paginator cahing works properly
         set paginator_name $list_properties(name)
         foreach filter $list_properties(filters) {
-            if { $filter ne "page" && [info exists list_properties(filter,$filter)] } {
+            if { ![string equal $filter "page"] && [info exists list_properties(filter,$filter)] } {
                 append paginator_name ",$filter=$list_properties(filter,$filter)"
             }
         }
