@@ -1,11 +1,14 @@
 ad_library {
     ACS-specific general utility routines.
     @author Philip Greenspun (philg@arsdigita.com)
+    @author Many others at ArsDigita and at the OpenACS community.
     @date 2 April 1998
     @cvs-id $Id$
 }
 
-proc ad_acs_version {} {
+ad_proc ad_acs_version {} {
+    @return the OpenACS version of this instance.
+} {
     set release_tag {}
     regexp "acs-(\[0-9\]+)-(\[0-9\]+)-(\[0-9\]+)" \
           $release_tag match major minor release
@@ -17,7 +20,9 @@ proc ad_acs_version {} {
     }
 }
 
-proc ad_acs_release_date {} {
+ad_proc ad_acs_release_date {} {
+    @return The OpenACS release date of this instance.
+} {
     set release_tag {}
     regexp "R(\[0-9\]+)" $release_tag match release_date
 
@@ -31,45 +36,61 @@ proc ad_acs_release_date {} {
     }
 }
 
-# this is a technical person who can fix problems
-proc ad_host_administrator {} {
+ad_proc ad_host_administrator {} {
+    As defined in the HostAdministrator kernel parameter.
+    @return The e-mail address of a technical person who can fix problems
+} {
     return [ad_parameter -package_id [ad_acs_kernel_id]  HostAdministrator]
 }
 
-# The email address that will sign outgoing alerts
-proc ad_outgoing_sender {} {
+ad_proc ad_outgoing_sender {} {
+    @return The email address that will sign outgoing alerts
+} {
     return [ad_parameter -package_id [ad_acs_kernel_id]  OutgoingSender]
 }
 
-# set to return 1 if there is a graphics site
 
-proc ad_graphics_site_available_p {} {
+ad_proc ad_graphics_site_available_p {} {
+    As defined in the GraphicsSiteAvailableP kernel parameter.
+    @return 1 if there is a graphics site
+} {
     return [ad_parameter -package_id [ad_acs_kernel_id]  GraphicsSiteAvailableP]
 }
 
-# this is the main name of the Web service that you're offering
-# on top of the Arsdigita Web Publishing System
-
-proc ad_system_name {} {
+ad_proc ad_system_name {} {
+    This is the main name of the Web service that you're offering
+    on top of the OpenACS Web Publishing System.
+} {
     return [ad_parameter -package_id [ad_acs_kernel_id] SystemName]
 }
 
-# This is the URL of a user's private workspace on the system, usually
-# /pvt/home.tcl
 
-proc ad_pvt_home {} {
+ad_proc ad_pvt_home {} {
+    This is the URL of a user's private workspace on the system, usually
+    /pvt/home.tcl
+} {
     return [ad_parameter -package_id [ad_acs_kernel_id] HomeURL]
 }
 
-proc ad_admin_home {} {
+ad_proc ad_admin_home {} {
+   Returns the directory for the admin home. Currently hard-coded to /admin
+   (should this be changed?). 
+} {
     return "/admin"
 }
 
-proc ad_package_admin_home { package_key } {
+# is this accurate? (rbm, aug 2002)
+
+ad_proc ad_package_admin_home { package_key } {
+    @return directory for the especified package's admin home.
+} {
     return "[ad_admin_home]/$package_key"
 }
 
-proc ad_pvt_home_name {} {
+ad_proc ad_pvt_home_name {} {
+    This is the name that will be used for the user's workspace (usually "Your Workspace").
+    @return the name especified for the user's workspace in the HomeName kernel parameter.
+} {
     return [ad_parameter -package_id [ad_acs_kernel_id] HomeName]
 }
 
@@ -77,7 +98,9 @@ proc ad_pvt_home_link {} {
     return "<a href=\"[ad_pvt_home]\">[ad_pvt_home_name]</a>"
 }
 
-proc ad_site_home_link {} {
+ad_proc ad_site_home_link {} {
+    @return a link to the user's workspace if the user is logged in. Otherwise, a link to the page root.
+} {
     if { [ad_get_user_id] != 0 } {
 	return "<a href=\"[ad_pvt_home]\">[ad_system_name]</a>"
     } else {
@@ -86,29 +109,32 @@ proc ad_site_home_link {} {
     }
 }
 
-# person who owns the service 
-# this person would be interested in user feedback, etc.
-
-proc ad_system_owner {} {
+ad_proc ad_system_owner {} {
+    Person who owns the service 
+    this person would be interested in user feedback, etc.
+} {
     return [ad_parameter -package_id [ad_acs_kernel_id]  SystemOwner]
 }
 
-# a human-readable name of the publisher, suitable for
-# legal blather
 
-proc ad_publisher_name {} {
+ad_proc ad_publisher_name {} {
+    A human-readable name of the publisher, suitable for
+    legal blather.
+} {
     return [ad_parameter -package_id [ad_acs_kernel_id]  PublisherName]
 }
 
-proc ad_url {} {
-    # this will be called by email alerts. Do not use ad_conn location
+ad_proc ad_url {} {
+    This will be called by email alerts. Do not use ad_conn location
+    @return the system url as defined in the kernel parameter SystemURL.
+} {
     return [ad_parameter -package_id [ad_acs_kernel_id] SystemURL]
 }
 
 ad_proc -public acs_community_member_url {
     {-user_id:required}
 } {
-    return the url for the community member page of a particular user
+    @return the url for the community member page of a particular user
 } {
     return "[ad_parameter -package_id [ad_acs_kernel_id] CommunityMemberURL]?[export_vars user_id]"
 }
@@ -117,7 +143,7 @@ ad_proc -public acs_community_member_link {
     {-user_id:required}
     {-label ""}
 } {
-    return the link of the community member page of a particular user
+    @return the link of the community member page of a particular user
 } {
     if {[empty_string_p $label]} {
         set label [db_string select_community_member_link_label {
@@ -130,14 +156,27 @@ ad_proc -public acs_community_member_link {
     return "<a href=\"[acs_community_member_url -user_id $user_id]\">$label</a>"
 }
 
-proc ad_present_user {user_id name} {
+ad_proc -deprecated ad_present_user {
+    user_id 
+    name
+} {
+    @return the HTML link of the community member page of a particular user
+
+    This function is an alias to acs_community_member_link 
+    and receives identical parameters, but the former finds out the name
+    of the user if a blank is passed. That's why it's marked as deprecated.
+
+    @author Unknown
+    @author Revised by Roberto Mello, Aug 2002
+    
+} {
     return [acs_community_member_link -user_id $user_id -label $name]
 }
 
 ad_proc -public acs_community_member_admin_url {
     {-user_id:required}
 } {
-    return the url for the community member admin page of a particular user
+    @return the url for the community member admin page of a particular user
 } {
     return "[ad_parameter -package_id [ad_acs_kernel_id] CommunityMemberAdminURL]?[export_vars user_id]"
 }
@@ -146,7 +185,7 @@ ad_proc -public acs_community_member_admin_link {
     {-user_id:required}
     {-label ""}
 } {
-    return the link of the community member page of a particular user
+    @return the HTML link of the community member page of a particular admin user.
 } {
     if {[empty_string_p $label]} {
         set label [db_string select_community_member_link_label {
@@ -159,7 +198,20 @@ ad_proc -public acs_community_member_admin_link {
     return "<a href=\"[acs_community_member_admin_url -user_id $user_id]\">$label</a>"
 }
 
-proc ad_admin_present_user {user_id name} {
+ad_proc -deprecated ad_admin_present_user {
+    user_id 
+    name
+} {
+    @return the HTML link of the community member page of a particular admin user.
+
+    This function is an alias to acs_community_member_admin_link 
+    and receives identical parameters, but the former finds out the name
+    of the user if a blank is passed. That's why it's marked as deprecated.
+
+    @author Unknown
+    @author Revised by Roberto Mello, Aug 2002
+    
+} {
     return [acs_community_member_admin_link -user_id $user_id -label $name]
 }
 
@@ -218,7 +270,14 @@ $extra_stuff_for_document_head
     return $html
 }
 
-proc_doc ad_footer {{signatory ""} {suppress_curriculum_bar_p 0}} "writes a horizontal rule, a mailto address box (ad_system_owner if not specified as an argument), and then closes the BODY and HTML tags"  {
+ad_proc ad_footer {
+    {signatory ""} 
+    {suppress_curriculum_bar_p 0}
+} {
+    Writes a horizontal rule, a mailto address box 
+    (ad_system_owner if not specified as an argument), 
+    and then closes the BODY and HTML tags
+} {
     global sidegraphic_displayed_p
     if [empty_string_p $signatory] {
 	set signatory [ad_system_owner]
@@ -258,7 +317,9 @@ $ds_link
 # the way a page works, they should see a link to the
 # email address of the programmer who can fix the page).
 
-proc ad_admin_owner {} {
+ad_proc ad_admin_owner {} {
+    @return E-mail address of the Administrator of this site.
+} {
     return [ad_parameter -package_id [ad_acs_kernel_id]  AdminOwner]
 }
 
@@ -276,7 +337,10 @@ ad_proc ad_admin_header {
 	return [ad_header_with_extra_stuff -focus $focus $page_title]
 }
 
-proc_doc ad_admin_footer {} "Signs pages with ad_admin_owner (usually a programmer who can fix bugs) rather than the signatory of the user pages" {
+ad_proc ad_admin_footer {} {
+    Signs pages with ad_admin_owner (usually a programmer who can fix 
+    bugs) rather than the signatory of the user pages
+} {
     if { [llength [info procs ds_link]] == 1 } {
 	set ds_link [ds_link]
     } else {
@@ -289,7 +353,14 @@ $ds_link
 </html>"
 }
 
-proc_doc ad_return_complaint {exception_count exception_text} "Return a page complaining about the user's input (as opposed to an error in our software, for which ad_return_error is more appropriate)" {
+ad_proc ad_return_complaint {
+    exception_count 
+    exception_text
+} {
+    Return a page complaining about the user's input 
+    (as opposed to an error in our software, for which ad_return_error 
+    is more appropriate)
+} {
     # there was an error in the user input 
     if { $exception_count == 1 } {
 	set problem_string "a problem"
@@ -330,7 +401,18 @@ Thank you.
 }
 
 
-proc ad_return_exception_page {status title explanation} {
+ad_proc ad_return_exception_page {
+    status 
+    title 
+    explanation
+} {
+    Returns an exception page.
+
+    @author Unknown
+    @param status HTTP status to be returned (e.g. 500, 404)
+    @param title Title to be used for the error (will be shown to user)
+    @param explanation Explanation for the exception.
+} {
     ns_return $status text/html "[ad_header_with_extra_stuff $title "" ""]
 <h2>$title</h2>
 <hr>
@@ -342,19 +424,57 @@ $explanation
 }
 
 
-proc_doc ad_return_error {title explanation} "Returns a page with the HTTP 500 (Error) code, along with the given title and explanation.  Should be used when an unexpected error is detected while processing a page." {
+ad_proc ad_return_error {
+    title 
+    explanation
+} {
+    Returns a page with the HTTP 500 (Error) code, 
+    along with the given title and explanation.  Should be used 
+    when an unexpected error is detected while processing a page.
+} {
     ad_return_exception_page 500 $title $explanation
 }
 
-proc_doc ad_return_warning {title explanation} "Returns a page with the HTTP 200 (Success) code, along with the given title and explanation.  Should be used when an exceptional condition arises while processing a page which the user should be warned about, but which does not qualify as an error." {
+ad_proc ad_return_warning {
+    title 
+    explanation
+} {
+    Returns a page with the HTTP 200 (Success) code, along with 
+    the given title and explanation.  Should be used when an 
+    exceptional condition arises while processing a page which 
+    the user should be warned about, but which does not qualify 
+    as an error.
+} {
     ad_return_exception_page 200 $title $explanation
 }
 
-proc_doc ad_return_forbidden {title explanation} "Returns a page with the HTTP 403 (Forbidden) code, along with the given title and explanation.  Should be used by access-control filters that determine whether a user has permission to request a particular page." {
+ad_proc ad_return_forbidden {
+    title 
+    explanation
+} {
+    Returns a page with the HTTP 403 (Forbidden) code, along with 
+    the given title and explanation.  Should be used by 
+    access-control filters that determine whether a user has 
+    permission to request a particular page.
+} {
     ad_return_exception_page 403 $title $explanation
 }
 
-proc_doc ad_return_if_another_copy_is_running {{max_simultaneous_copies 1} {call_adp_break_p 0}} {Returns a page to the user about how this server is busy if another copy of the same script is running.  Then terminates execution of the thread.  Useful for expensive pages that do sequential searches through Oracle tables, etc.  You don't want to tie up all of your Oracle handles and deny service to everyone else.  The call_adp_break_p argument is essential if you are calling this from an ADP page and want to avoid the performance hit of continuing to parse and run.} {
+ad_proc ad_return_if_another_copy_is_running {
+    {max_simultaneous_copies 1} 
+    {call_adp_break_p 0}
+} {
+    Returns a page to the user about how this server is busy if 
+    another copy of the same script is running.  Then terminates 
+    execution of the thread.  Useful for expensive pages that do 
+    sequential searches through database tables, etc.  You don't 
+    want to tie up all of your database handles and deny service 
+    to everyone else.  
+    
+    The call_adp_break_p argument is essential 
+    if you are calling this from an ADP page and want to avoid the 
+    performance hit of continuing to parse and run.
+} {
     # first let's figure out how many are running and queued
     set this_connection_url [ad_conn url]
     set n_matches 0
@@ -379,7 +499,18 @@ proc_doc ad_return_if_another_copy_is_running {{max_simultaneous_copies 1} {call
     return 1
 }
 
-proc ad_record_query_string {query_string subsection n_results {user_id [db_null]}} {  
+ad_proc ad_record_query_string {
+    query_string 
+    subsection 
+    n_results 
+    {user_id 0}
+} {
+    Records the query string and other params in the "query_string_record" table.
+    I'm not sure what's that's for.
+
+    @author Unknown
+    @author Revised by Roberto Mello, Aug 2002
+} {  
 
     if { $user_id == 0 } {
 	set user_id [db_null]
@@ -392,7 +523,20 @@ proc ad_record_query_string {query_string subsection n_results {user_id [db_null
     }
 }
 
-proc ad_pretty_mailing_address_from_args {line1 line2 city state postal_code country_code} {
+ad_proc ad_pretty_mailing_address_from_args {
+    line1 
+    line2
+    city 
+    state 
+    postal_code 
+    country_code
+} {
+    Returns a prettily formatted address with country name, given
+    an address.
+
+    @author Unknown
+    @author Revised by Roberto Mello, Aug 2002
+} {
     set lines [list]
     if [empty_string_p $line2] {
 	lappend lines $line1
@@ -411,7 +555,13 @@ proc ad_pretty_mailing_address_from_args {line1 line2 city state postal_code cou
 
 
 
-proc_doc ad_get_user_info {} {Sets first_name, last_name, email in the environment of its caller.} {
+ad_proc ad_get_user_info {} { 
+    Sets first_names, last_name, email in the environment of its caller.
+    @return ad_return_error if user_id can't be found.
+
+    @author Unknown
+    @author Revised by Roberto Mello, Aug 2002
+} {
     uplevel {
 	set user_id [ad_conn user_id]
 	if [catch {
@@ -430,7 +580,15 @@ proc_doc ad_get_user_info {} {Sets first_name, last_name, email in the environme
 
 # for pages that have optional decoration
 
-proc_doc ad_decorate_top {simple_headline potential_decoration} "Use this for pages that might or might not have an image defined in ad.ini; if the second argument isn't the empty string, ad_decorate_top will make a one-row table for the top of the page" {
+ad_proc ad_decorate_top {
+    simple_headline 
+    potential_decoration
+} {
+    Use this for pages that might or might not have an image 
+    defined in ad.ini; if the second argument isn't the empty 
+    string, ad_decorate_top will make a one-row table for the 
+    top of the page
+} {
     if [empty_string_p $potential_decoration] {
 	return $simple_headline
     } else {
