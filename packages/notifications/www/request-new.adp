@@ -1,5 +1,8 @@
 <master src="master">
-<property name="title">New Notification Request for @pretty_name@</property>
-<property name="context_bar"></property>
+<property name="title">@page_title@</property>
 
-<formtemplate id="request"></formtemplate>
+<h2>@page_title@</h2>
+@context_bar@
+<hr>
+
+<formtemplate id="subscribe"></formtemplate>
