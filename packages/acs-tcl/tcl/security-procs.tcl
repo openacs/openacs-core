@@ -143,12 +143,11 @@ ad_proc -private sec_handler {} {
 	# $session_expr = PreviousSessionIssue + SessionTimeout
 	if { $session_expr - [sec_session_renew] < [ns_time] } {
             
-            # LARS: We use sec_login_handler here instead, so that we check the authentication status again
-            # This prevents people from being logged in indefinitely just because they keep the session open
-	    #sec_generate_session_id_cookie
-
-	    ns_log Debug "OACS: sec_handler: Invoking sec_login_handler to reissue session cookie."
-            sec_login_handler
+            # LARS: We abandoned the use of sec_login_handler here. This lets people stay logged in forever
+	    # if only the keep requesting pages frequently enough, but the alternative was that 
+	    # the situation where LoginTimeout = 0 (infinte) and the user unchecks the "Remember me" checkbox
+	    # would cause users' sessions to expire as soon as the session needed to be renewed
+	    sec_generate_session_id_cookie
 	}
     }
 }
@@ -228,6 +227,7 @@ ad_proc -public ad_user_login {
     if { $forever_p } {
         set max_age inf
     } else {
+	# ad_user_login cookie will live for as long as the maximum login time
         set max_age [sec_login_timeout]
     }
 
@@ -249,6 +249,7 @@ ad_proc -public ad_user_login {
         ad_set_cookie -max_age 0 ad_user_login_secure ""
     }
     
+    ns_log Debug "ad_user_login: Setting new ad_user_login cookie with max_age $max_age"
     ad_set_signed_cookie \
         -max_age $max_age \
         -secure f \
@@ -778,6 +779,7 @@ ad_proc -private __ad_verify_signature {
 
     if { [empty_string_p $secret] } {
 	if { [empty_string_p $token_id] } {
+	    ns_log Debug "__ad_verify_signature: Neither secret, nor token_id supplied"
 	    return 0
 	}
 	set secret_token [sec_get_token $token_id]
@@ -785,30 +787,47 @@ ad_proc -private __ad_verify_signature {
 	set secret_token $secret
     }
 
-    ns_log Debug "Security: Getting token_id $token_id, value $secret_token"
-    ns_log Debug "Security: Expire_Time is $expire_time (compare to [ns_time]), hash is $hash"
+    ns_log Debug "__ad_verify_signature: Getting token_id $token_id, value $secret_token ; "
+    ns_log Debug "__ad_verify_signature: Expire_Time is $expire_time (compare to [ns_time]), hash is $hash"
 
     # validate cookie: verify hash and expire_time
 
     set computed_hash [ns_sha1 "$value$token_id$expire_time$secret_token"]
 
-    if { [string compare $computed_hash $hash] == 0 && ($expire_time > [ns_time] || $expire_time == 0) } {
-	return 1
+    # Need to verify both hash and expiration
+    set hash_ok_p 0
+    set expiration_ok_p 0
+    
+    if { [string equal $computed_hash $hash] } {
+	ns_log Debug "__ad_verify_signature: Hash matches - Hash check OK"
+	set hash_ok_p 1
+    } else {
+	# check to see if IE is lame (and buggy!) and is expanding \n to \r\n
+	# See: http://www.arsdigita.com/bboard/q-and-a-fetch-msg?msg_id=000bfF
+	set value [string map [list \r ""] $value]
+	set org_computed_hash $computed_hash
+	set computed_hash [ns_sha1 "$value$token_id$expire_time$secret_token"]
+
+	if { [string equal $computed_hash $hash] } {
+	    ns_log Debug "__ad_verify_signature: Hash matches after correcting for IE bug - Hash check OK"
+	    set hash_ok_p 1
+	} else {
+	    ns_log Debug "__ad_verify_signature: Hash ($hash) doesn't match what we expected ($org_computed_hash) - Hash check FAILED"
+	}
+    }
+    
+    if { $expire_time == 0 } {
+	ns_log Debug "__ad_verify_signature: No expiration time - Expiration OK"
+	set expiration_ok_p 1
+    } elseif { $expire_time > [ns_time] } {
+	ns_log Debug "__ad_verify_signature: Expiration time ($expire_time) greater than current time ([ns_time]) - Expiration check OK"
+	set expiration_ok_p 1
+    } else {
+	ns_log Debug "__ad_verify_signature: Expiration time ($expire_time) less than or equal to current time ([ns_time]) - Expiration check FAILED"
     }
 
-    # check to see if IE is lame (and buggy!) and is expanding \n to \r\n
-    # See: http://www.arsdigita.com/bboard/q-and-a-fetch-msg?msg_id=000bfF
-    set value [string map [list \r ""] $value]
-    set computed_hash [ns_sha1 "$value$token_id$expire_time$secret_token"]
-
-    if { [string compare $computed_hash $hash] == 0 && ($expire_time > [ns_time] || $expire_time == 0) } {
-	return 1
-    }
-
-
-    ns_log Debug "Security: The string compare is [string compare $computed_hash $hash]."
-    # signature could not be authenticated
-    return 0
+    # Return validation result
+    return [expr $hash_ok_p && $expiration_ok_p]
 
 }
 
@@ -834,15 +853,17 @@ ad_proc -public ad_get_signed_cookie {
 	error "Cookie does not exist."
     }
 
-    ns_log Debug "Security: Done calling get_cookie $cookie_value for $name."
-
     set value [lindex $cookie_value 0]
     set signature [lindex $cookie_value 1]
 
+    ns_log Debug "ad_get_signed_cookie: Got signed cookie $name with value $value, signature $signature."
+
     if { [ad_verify_signature $value $signature] } {
+	ns_log Debug "ad_get_signed_cookie: Verification of cookie $name OK"
 	return $value
     }
 
+    ns_log Debug "ad_get_signed_cookie: Verification of cookie $name FAILED"
     error "Cookie could not be authenticated."
 }
 
