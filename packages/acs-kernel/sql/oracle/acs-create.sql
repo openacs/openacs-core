@@ -215,7 +215,8 @@ declare
   root_id integer;
 begin
   root_id := acs_object.new (
-    object_id => -4
+    object_id => -4,
+    title => 'Security context root'
   );
 
   insert into acs_magic_objects

@@ -187,13 +187,16 @@ returns integer as '
 declare
   root_id integer;
 begin
-  
+
   root_id := acs_object__new (
     -4,
     ''acs_object'',
     now(),
     null,
     null,
+    null,
+    ''t'',
+    ''Security context root'',
     null
     );
 

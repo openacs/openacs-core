@@ -30,7 +30,7 @@ alter table acs_objects add (
         title			varchar2(1000) default null,
         package_id		integer default null
 				constraint acs_objects_package_id_fk
-				references apm_packages(package_id)
+				references apm_packages(package_id) on delete set null
 );
 
 create index acs_objects_package_object_idx on acs_objects (package_id, object_id);
