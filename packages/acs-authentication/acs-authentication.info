@@ -7,13 +7,13 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>t</singleton-p>
     
-    <version name="5.0d2" url="http://openacs.org/repository/download/apm/acs-authentication-5.0d2.apm">
+    <version name="5.0d3" url="http://openacs.org/repository/download/apm/acs-authentication-5.0d3.apm">
         <owner url="mailto:lars@collaboraid.biz">Lars Pind</owner>
         <summary>Authentication and related functionality.</summary>
         <vendor url="http://www.collaboraid.biz">Collaboraid</vendor>
         <description format="text/html">Implements authentication-related security functions for OpenACS, including authentication, password maangement, account management, session management, etc.</description>
 
-        <provides url="acs-authentication" version="5.0d2"/>
+        <provides url="acs-authentication" version="5.0d3"/>
         <requires url="acs-service-contract" version="4.7d2"/>
 
         <callbacks>
@@ -21,7 +21,7 @@
             <callback type="before-uninstall"  proc="auth::package_uninstall"/>
         </callbacks>
         <parameters>
-        <!-- No version parameters -->
+          <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="KeepBatchLogDays"  default="0" description="The number of days to keep the log for a batch user synchronization job around. Say 0 if you want to keep the log forever." section_name=""/>
         </parameters>
 
     </version>
