@@ -84,16 +84,17 @@ ad_form \
 
 set pagination_sql {
     select entry_id
-    from auth_batch_job_entries
-    where job_id = :job_id    
+    from   auth_batch_job_entries
+    where  job_id = :job_id
+    order  by entry_id
 }
 
 list::create \
     -name batch_actions \
     -multirow batch_actions \
     -key entry_id \
-    -page_query $pagination_sql \
     -page_size 100 \
+    -page_query $pagination_sql \
     -elements {
         entry_time_pretty {
             label "Timestamp"
@@ -133,8 +134,9 @@ db_multirow -extend { entry_url short_message entry_time_pretty } batch_actions 
            success_p,
            message,
            element_messages
-    from auth_batch_job_entries
-    where job_id = :job_id
+    from   auth_batch_job_entries
+    where  [template::list::page_where_clause -name batch_actions]
+    order  by entry_id
 } {
     set entry_url [export_vars -base batch-action { entry_id }]
     
