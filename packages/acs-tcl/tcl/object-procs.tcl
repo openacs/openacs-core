@@ -38,9 +38,7 @@ ad_proc acs_object_name { object_id } {
     Returns the name of an object.
 
 } {
-    return [db_exec_plsql object_name_get {
-	begin :1 := acs_object.name(:object_id); end;
-    }]
+    return [db_string object_name_get {}]
 }
 
 ad_proc acs_object_type { object_id } {
