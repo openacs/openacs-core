@@ -142,6 +142,22 @@ be grouped correctly:
     &lt;td bgcolor=#0000ff>
   &lt;/if></pre>
 
+<li><p>The <tt>elseif</tt> tag may be used following an <tt>if</tt> block
+to specify an alternate conditional template section.
+</p>
+
+<pre>
+  &lt;if @datasource.variable@ eq "blue">
+    &lt;td bgcolor=#0000ff>
+  &lt;/if>
+  &lt;elseif @datasource.variable@ eq "red">
+    &lt;td bgcolor=red>
+  &lt;/elseif>
+  &lt;else>
+    &lt;td bgcolor=#ffffff>
+  &lt;/else></pre>
+
+
 <li><p>The <tt>else</tt> tag may be used following an <tt>if</tt> block
 to specify an alternate template section when a condition is not true:
 </p>
