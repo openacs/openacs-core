@@ -140,3 +140,6 @@ db_multirow -extend {
         set registration_status "cannot_select"
     }    
 }
+
+set auth_package_id [apm_package_id_from_key "acs-authentication"]
+set parameter_url [export_vars -base /shared/parameters { { package_id $auth_package_id } { return_url [ad_return_url] } }]
