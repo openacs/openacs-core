@@ -18,7 +18,7 @@
             <level descr="Mature">2</level>
           </platform>
         </maturity>
-        <="5.1.0a1"/>
+        <provides url="acs-kernel" version="5.1.0a1"/>
         <callbacks>
         </callbacks>
         <parameters>
