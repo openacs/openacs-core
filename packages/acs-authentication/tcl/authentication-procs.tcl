@@ -439,7 +439,6 @@ ad_proc -public auth::create_user {
 
         # Local account creation ok?
         if { [string equal $creation_info(creation_status) "ok"] } {
-
             # Need to find out which username was set
             set username $creation_info(username)
 
@@ -530,13 +529,10 @@ ad_proc -public auth::create_user {
         }
 
     } on_error {
-        
-        ns_log Notice "LARS: here again!"
         set creation_info(creation_status) failed_to_connect
         set creation_info(creation_message) $errmsg
         global errorInfo
         ns_log Error "auth::create_user: Error invoking account registration driver for authority_id = $authority_id: $errorInfo"
-        db_abort_transaction
     } 
 
     if { ![string equal $creation_info(creation_status) "ok"] } { 
