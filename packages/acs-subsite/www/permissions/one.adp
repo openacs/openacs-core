@@ -53,4 +53,15 @@
         <em>No children</em>
       </else>
     </if>
-    <if @context_id@ not nil><p>[<a href="one?object_id=@context_id@">up to @context_name@</a>]</p></if>      
+    <if @return_url@ not nil>
+      <p>
+        [<a href="@return_url@">return to application</a>]
+      </p>
+    </if>
+    <else>
+      <if @context_id@ not nil>
+        <p>
+          [<a href="one?object_id=@context_id@">up to @context_name@</a>]
+        </p>
+      </if>
+    </else>      
