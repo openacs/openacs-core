@@ -10,7 +10,7 @@
                 from (select version_name
 		      from apm_package_versions
                       where version_id = apm_package__highest_version(:package_key)
-                     ) as highest
+                     ) highest
     
       </querytext>
 </fullquery>
