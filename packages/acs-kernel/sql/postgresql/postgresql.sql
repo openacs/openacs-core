@@ -568,9 +568,9 @@ declare
   key      alias for $1;
 begin
   if key is null then
-    return ''X00'';
+    return ''X00''::varbit;
   else
-    return key || ''X00'';
+    return key || ''X00''::varbit;
   end if;
 end;' language 'plpgsql' with(iscachable);
 
@@ -584,9 +584,9 @@ declare
   key      alias for $1;
 begin
   if key is null then
-    return ''XFFFFFFFF'';
+    return ''XFFFFFFFF''::varbit;
   else
-    return key || ''XFFFFFFFF'';
+    return key || ''XFFFFFFFF''::varbit;
   end if;
 end;' language 'plpgsql' with(iscachable);
 
