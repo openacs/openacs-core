@@ -10,7 +10,7 @@
 # License.  Full text of the license is available from the GNU Project:
 # http://www.fsf.org/copyleft/gpl.html
 
-proc template::widget::search { element_reference tag_attributes } {
+ad_proc -public template::widget::search { element_reference tag_attributes } {
 
   upvar $element_reference element
 
@@ -32,7 +32,7 @@ proc template::widget::search { element_reference tag_attributes } {
   return $output
 }
 
-proc template::widget::textarea { element_reference tag_attributes } {
+ad_proc -public template::widget::textarea { element_reference tag_attributes } {
 
   upvar $element_reference element
 
@@ -66,14 +66,14 @@ proc template::widget::textarea { element_reference tag_attributes } {
 
 # A static information widget that does not submit any data
 
-proc template::widget::inform { element_reference tag_attributes } {
+ad_proc -public template::widget::inform { element_reference tag_attributes } {
 
   upvar $element_reference element
 
   return $element(value)
 }
 
-proc template::widget::input { type element_reference tag_attributes } {
+ad_proc -public template::widget::input { type element_reference tag_attributes } {
 
   upvar $element_reference element
 
@@ -104,7 +104,7 @@ proc template::widget::input { type element_reference tag_attributes } {
 
 
 
-proc template::widget::text { element_reference tag_attributes } {
+ad_proc -public template::widget::text { element_reference tag_attributes } {
 
   upvar $element_reference element
 
@@ -113,7 +113,7 @@ proc template::widget::text { element_reference tag_attributes } {
 
 
 
-proc template::widget::file { element_reference tag_attributes } {
+ad_proc -public template::widget::file { element_reference tag_attributes } {
 
   upvar $element_reference element
 
@@ -122,7 +122,7 @@ proc template::widget::file { element_reference tag_attributes } {
 
 
 
-proc template::widget::password { element_reference tag_attributes } {
+ad_proc -public template::widget::password { element_reference tag_attributes } {
 
   upvar $element_reference element
 
@@ -130,14 +130,14 @@ proc template::widget::password { element_reference tag_attributes } {
 }
 
 
-proc template::widget::hidden { element_reference tag_attributes } {
+ad_proc -public template::widget::hidden { element_reference tag_attributes } {
 
   upvar $element_reference element
 
   return [input hidden element $tag_attributes]
 }
 
-proc template::widget::submit { element_reference tag_attributes } {
+ad_proc -public template::widget::submit { element_reference tag_attributes } {
 
   upvar $element_reference element
 
@@ -147,28 +147,28 @@ proc template::widget::submit { element_reference tag_attributes } {
   return [input submit element $tag_attributes]
 }
 
-proc template::widget::checkbox { element_reference tag_attributes } {
+ad_proc -public template::widget::checkbox { element_reference tag_attributes } {
 
   upvar $element_reference element
 
   return [input checkbox element $tag_attributes]
 }
 
-proc template::widget::radio { element_reference tag_attributes } {
+ad_proc -public template::widget::radio { element_reference tag_attributes } {
 
   upvar $element_reference element
 
   return [input radio element $tag_attributes]
 }
 
-proc template::widget::button { element_reference tag_attributes } {
+ad_proc -public template::widget::button { element_reference tag_attributes } {
 
   upvar $element_reference element
 
   return [input button element $tag_attributes]
 }
 
-proc template::widget::menu { widget_name options_list values_list \
+ad_proc -public template::widget::menu { widget_name options_list values_list \
                               attribute_reference } {
 
   upvar $attribute_reference attributes
@@ -207,7 +207,7 @@ proc template::widget::menu { widget_name options_list values_list \
   return $output
 }
 
-proc template::widget::select { element_reference tag_attributes } {
+ad_proc -public template::widget::select { element_reference tag_attributes } {
 
   upvar $element_reference element
 
@@ -221,7 +221,7 @@ proc template::widget::select { element_reference tag_attributes } {
     $element(name) $element(options) $element(values) attributes]
 }
 
-proc template::widget::multiselect { element_reference tag_attributes } {
+ad_proc -public template::widget::multiselect { element_reference tag_attributes } {
 
   upvar $element_reference element
 
@@ -247,7 +247,7 @@ proc template::widget::multiselect { element_reference tag_attributes } {
     $element(name) $element(options) $element(values) attributes]
 }
 
-proc template::widget::currency { element_reference tag_attributes } {
+ad_proc -public template::widget::currency { element_reference tag_attributes } {
 
     upvar $element_reference element
     
@@ -296,7 +296,7 @@ proc template::widget::currency { element_reference tag_attributes } {
     return $output
 }
 
-proc template::data::transform::currency { element_ref } {
+ad_proc -public template::data::transform::currency { element_ref } {
 
   upvar $element_ref element
   set element_id $element(id)
@@ -346,7 +346,7 @@ proc template::data::transform::currency { element_ref } {
     }
 }
 
-proc template::data::transform::search { element_ref } {
+ad_proc -public template::data::transform::search { element_ref } {
 
   upvar $element_ref element
   set element_id $element(id)
@@ -407,7 +407,7 @@ proc template::data::transform::search { element_ref } {
 
 
 
-proc template::widget::textarea { element_reference tag_attributes } {
+ad_proc -public template::widget::textarea { element_reference tag_attributes } {
 
   upvar $element_reference element
 

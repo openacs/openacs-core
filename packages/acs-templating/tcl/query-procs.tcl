@@ -81,7 +81,11 @@ ad_proc -public template::query { statement_name result_name type sql args } {
     @param args Optional args: uplevel, cache, maxrows
 } {
 
+  set sql [string trim $sql]
+  set full_statement_name [db_qd_get_fullname $statement_name]
+
   #set beginTime [clock clicks]
+  ns_log Notice "query sql = $sql"
 
   template::util::get_opts $args
   
@@ -103,8 +107,7 @@ ad_proc -public template::query { statement_name result_name type sql args } {
   }
 
   db_with_handle db { 
-      set ret_code [template::query::$type $statement_name $db $result_name \ 
-                    $sql] 
+      set ret_code [template::query::$type $full_statement_name $db $result_name $sql] 
   }
 
   if { [info exists opts(cache)] } {
@@ -131,15 +134,13 @@ ad_proc -private template::query::onevalue { statement_name db result_name sql }
 
 } {
 
-  set full_statement_name [db_qd_get_fullname $statement_name]
-
+  ns_log Notice "sql = $sql"
   upvar opts opts
 
   upvar $opts(uplevel) $result_name result
   set result ""
 
-  uplevel "set __row \[db_exec 0or1row $db $full_statement_name $sql\]"
-  upvar __row row
+  set row [db_exec 0or1row $db $statement_name $sql 3]
 
   if { $row != "" } {
 
@@ -163,12 +164,9 @@ ad_proc -private template::query::onerow { statement_name db result_name sql } {
     @param sql Query to use when processing this command
 } {
 
-  set full_statement_name [db_qd_get_fullname $statement_name]
-
   upvar opts opts
 
-  uplevel "set __row \[db_exec 0or1row $db $full_statement_name $sql\]"
-  upvar __row row
+  set row [db_exec 0or1row $db $statement_name $sql 3]
 
   if { $row != "" } {
 
@@ -208,15 +206,11 @@ ad_proc -private template::query::multirow { statement_name db result_name sql }
     @param sql Query to use when processing this command
 } {
 
-  set full_statement_name [db_qd_get_fullname $statement_name]
-
   upvar opts opts
 
-  uplevel "set __row \[db_exec select $db $full_statement_name $sql\]"
-  upvar __row row
+  set row [db_exec select $db $statement_name $sql 3]
 
-  upvar $opts(uplevel) $result_name:rowcount rowcount \ 
-                       $result_name:columns column_list
+  upvar $opts(uplevel) $result_name:rowcount rowcount $result_name:columns column_list
 
   # set a local variable as to whether we are cacheing or not
   if { [info exists opts(cache)] } {
@@ -240,14 +234,14 @@ ad_proc -private template::query::multirow { statement_name db result_name sql }
     # break if maxrows has been reached
     if { $rowcount > $opts(maxrows) } {
       ns_db flush $db
-      upvar $opts(uplevel) $name:has_more_rows has_more_rows
+      upvar $opts(uplevel) ${result_name}:has_more_rows has_more_rows
       set has_more_rows 1
       incr rowcount -1
       break
     }
 
     # set the results in the calling frame
-    upvar $opts(uplevel) ${name}:$rowcount result
+    upvar $opts(uplevel) ${result_name}:$rowcount result
 
     set result(rownum) $rowcount
 
@@ -266,7 +260,7 @@ ad_proc -private template::query::multirow { statement_name db result_name sql }
     # Execute custom code for each row
     if { [info exists opts(eval)] } {
       uplevel $opts(uplevel) "
-        upvar 0 ${name}:$rowcount row; $opts(eval)
+        upvar 0 ${result_name}:$rowcount row; $opts(eval)
       "
     }
 
@@ -287,12 +281,9 @@ ad_proc -private template::query::multilist { statement_name db result_name sql 
     @param sql Query to use when processing this command
 } {
 
-  set full_statement_name [db_qd_get_fullname $statement_name]
-
   upvar opts opts
 
-  uplevel "set __row \[db_exec select $db $full_statement_name $sql\]"
-  upvar __row row
+  set row [db_exec select $db $statement_name $sql 3]
 
   upvar $opts(uplevel) $result_name rows
 
@@ -330,12 +321,9 @@ ad_proc -private template::query::nestedlist { statement_name db result_name sql
     @param sql Query to use when processing this command
 } {
 
-  set full_statement_name [db_qd_get_fullname $statement_name]
-
   upvar opts opts
 
-  uplevel "set __row \[db_exec select $db $full_statement_name $sql\]"
-  upvar __row row
+  set row [db_exec select $db $statement_name $sql 3]
 
   upvar $opts(uplevel) $result_name rows
   
@@ -376,12 +364,9 @@ ad_proc -private template::query::onelist { statement_name db result_name sql } 
     @param sql Query to use when processing this command
 } {
 
-  set full_statement_name [db_qd_get_fullname $statement_name]
-
   upvar opts opts
 
-  uplevel "set __row \[db_exec select $db $full_statement_name $sql\]"
-  upvar __row row
+  set row [db_exec select $db $statement_name $sql 3]
 
   upvar $opts(uplevel) $result_name rows
 
@@ -405,11 +390,9 @@ ad_proc -private template::query::dml { statement_name db name sql } {
     @param sql Query to use when processing this command
 } {
 
-  set full_statement_name [db_qd_get_fullname $statement_name]
-
   upvar opts opts
 
-  uplevel "db_exec dml $db $full_statement_name \"$sql\""
+  db_exec dml $db $statement_name "$sql" 3
 }
 
 # @private get_cached_result
@@ -533,10 +516,7 @@ ad_proc -private template::query::iterate { statement_name db sql body } {
     @param body Code body to be execute for each result row of the returned query
 } {
 
-  set full_statement_name [db_qd_get_fullname $statement_name]
-
-  uplevel "set __result \[db_exec select $db $full_statement_name $sql\]"
-  upvar __result result
+  set result [db_exec select $db $statement_name $sql 3]
 
   set rowcount 0
 

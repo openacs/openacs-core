@@ -9,14 +9,14 @@
 # License.  Full text of the license is available from the GNU Project:
 # http://www.fsf.org/copyleft/gpl.html
 
-proc template::wizard { command args } {
+ad_proc -public template::wizard { command args } {
 
   eval wizard::$command $args
 }
 
 # create a wizard from a set of steps
 
-proc template::wizard::create { args } {
+ad_proc -public template::wizard::create { args } {
 
   set level [template::adp_level]
 
@@ -49,7 +49,7 @@ proc template::wizard::create { args } {
 }
 
 # Set a wizard's param for passthrough
-proc template::wizard::set_param { name value } {
+ad_proc -public template::wizard::set_param { name value } {
 
   set level [template::adp_level]
 
@@ -60,7 +60,7 @@ proc template::wizard::set_param { name value } {
 
 # Append a step to a wizard
 
-proc template::wizard::add { step_id args } {
+ad_proc -public template::wizard::add { step_id args } {
 
   get_reference
 
@@ -85,7 +85,7 @@ proc template::wizard::add { step_id args } {
 # determined by the wizard_step parameter.  If not set, the first step
 # is used.
 
-proc template::wizard::get_current_step {} {
+ad_proc -public template::wizard::get_current_step {} {
 
   get_reference
 
@@ -109,7 +109,7 @@ proc template::wizard::get_current_step {} {
   }
 }
 
-proc template::wizard::current_step {} {
+ad_proc -public template::wizard::current_step {} {
 
   get_reference
 
@@ -121,7 +121,7 @@ proc template::wizard::current_step {} {
 # The optional -buttons parameter is a list of name-value pairs,
 # in form {name label} {name label...}
 # The valid button names are back, next, repeat, finish
-proc template::wizard::submit { form_id args } {
+ad_proc -public template::wizard::submit { form_id args } {
 
   variable default_button_labels
 
@@ -192,7 +192,7 @@ proc template::wizard::submit { form_id args } {
 
 # Get a reference to the wizard steps (internal helper)
 
-proc template::wizard::get_reference {} {
+ad_proc -public template::wizard::get_reference {} {
   
   uplevel {
 
@@ -208,7 +208,7 @@ proc template::wizard::get_reference {} {
 
 # Return 1 if a wizard is currently defined
 
-proc template::wizard::exists {} {
+ad_proc -public template::wizard::exists {} {
 
   variable parse_level 
 
@@ -224,7 +224,7 @@ proc template::wizard::exists {} {
 # call when a step has been validated and completed.
 # checks which submit button was pressed and proceeds accordingly.
 
-proc template::wizard::forward {} {
+ad_proc -public template::wizard::forward {} {
 
   get_reference
 
@@ -255,7 +255,7 @@ proc template::wizard::forward {} {
 
 # Build the redirect URL for the next step
 
-proc template::wizard::get_forward_url { step_id } {
+ad_proc -public template::wizard::get_forward_url { step_id } {
 
   variable parse_level
   get_reference
@@ -284,7 +284,7 @@ proc template::wizard::get_forward_url { step_id } {
 }
 
 # Retreive the URL to the action
-proc template::wizard::get_action_url {} {
+ad_proc -public template::wizard::get_action_url {} {
   
   get_reference
 

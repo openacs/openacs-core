@@ -7,7 +7,7 @@
 
 # A tab is just a formwidget
 
-proc template::widget::tab { element_reference tag_attributes } {
+ad_proc -public template::widget::tab { element_reference tag_attributes } {
 
   upvar $element_reference element
 
@@ -41,14 +41,14 @@ proc template::widget::tab { element_reference tag_attributes } {
 namespace eval template::tabstrip {}
 
 # Dispatch proc
-proc template::tabstrip { command args } {
+ad_proc -public template::tabstrip { command args } {
   eval template::tabstrip::$command $args
 }
 
 # Create a new tabbed page
 # accepts the -base_url tag
 
-proc template::tabstrip::create { dlg_name args } {
+ad_proc -public template::tabstrip::create { dlg_name args } {
 
   template::util::get_opts $args
 
@@ -99,7 +99,7 @@ proc template::tabstrip::create { dlg_name args } {
 # -base_url base_url
 # any element::create options 
 
-proc template::tabstrip::add_tab { 
+ad_proc -public template::tabstrip::add_tab { 
   dlg_name name label template args
 } {
   # Determine the current tab
@@ -143,7 +143,7 @@ proc template::tabstrip::add_tab {
 
 }
 
-proc template::tabstrip::set_current_tab { dlg_name tab_name {rel_level 2}} {
+ad_proc -public template::tabstrip::set_current_tab { dlg_name tab_name {rel_level 2}} {
   
   set level [template::adp_level]
   upvar #$level $dlg_name:properties properties 

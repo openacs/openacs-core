@@ -108,7 +108,7 @@ namespace eval template {
 
 # Generic wrapper for registered tag handlers.
 
-proc template_tag { name arglist body } {
+ad_proc -public template_tag { name arglist body } {
 
   switch [llength $arglist] {
 

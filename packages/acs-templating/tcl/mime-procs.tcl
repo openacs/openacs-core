@@ -9,7 +9,7 @@ client browser, as
     @cvs-id $Id$
 }  
 
-proc template::register_mime_type { mime_type file_extension
+ad_proc -public template::register_mime_type { mime_type file_extension
 header_preamble } {
   if { [info exists template_extension($mime_type)] } {
     nsv_unset template_extension($mime_type)
@@ -22,7 +22,7 @@ header_preamble } {
   nsv_set template_header_preamble $mime_type $header_preamble
 }
 
-proc template::get_mime_template_extension { mime_type } {
+ad_proc -public template::get_mime_template_extension { mime_type } {
   if { [nsv_exists template_extension $mime_type] } {
     return [nsv_get template_extension $mime_type]
   } else {
@@ -30,7 +30,7 @@ proc template::get_mime_template_extension { mime_type } {
   }
 }
 
-proc template::get_mime_header_preamble { mime_type } {
+ad_proc -public template::get_mime_header_preamble { mime_type } {
   if { [nsv_exists template_header_preamble $mime_type] } {
     return [nsv_get template_header_preamble $mime_type]
   } else {
@@ -38,7 +38,7 @@ proc template::get_mime_header_preamble { mime_type } {
   }
 }
 
-proc template::get_mime_type {} {
+ad_proc -public template::get_mime_type {} {
   set mime_type [ns_set iget [ns_conn outputheaders] "content-type"]
   if { [empty_string_p $mime_type] } {
     set mime_type "text/html"

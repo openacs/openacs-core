@@ -19,7 +19,7 @@
 # @param id 
 # The ID of the foo passed with the request.
 
-proc template::parse_directives { code } {
+ad_proc -public template::parse_directives { code } {
 
   # remove carriage returns if present
   regsub -all {\r|\r\n} $code {\n} code
@@ -75,7 +75,7 @@ proc template::parse_directives { code } {
 
 # Assemble directives into data source(s) for presentation.
 
-proc template::get_datasources { code } {
+ad_proc -public template::get_datasources { code } {
 
   upvar datasources:rowcount rowcount
   set rowcount 0
@@ -157,7 +157,7 @@ proc template::get_datasources { code } {
   }
 }
 
-proc template::verify_datasources {} {
+ad_proc -public template::verify_datasources {} {
   return 1
 }
 

@@ -15,7 +15,7 @@ namespace eval doc::util {}
 
 # @private doc::util::dbl_colon_fix 
 
-proc doc::util::dbl_colon_fix { text } {
+ad_proc -public doc::util::dbl_colon_fix { text } {
 
   regsub -all {::} $text {__} text
   return $text
@@ -27,7 +27,7 @@ proc doc::util::dbl_colon_fix { text } {
 # @param element2 {default actually, no default value for this because it is required} the 
 # second of the two elements to be compared
 
-proc doc::util::sort_see { element1 element2 } {
+ad_proc -public doc::util::sort_see { element1 element2 } {
   
     if { [lindex $element1 3 ] < [lindex $element2 3] } {
 	return -1 
@@ -43,7 +43,7 @@ proc doc::util::sort_see { element1 element2 } {
 # @private sort_@see
 # procedure to deal with @see comments
 
-proc doc::sort_@see { list_ref directive_comments } {
+ad_proc -public doc::sort_@see { list_ref directive_comments } {
   upvar $list_ref see_list
   set type [lindex $directive_comments 0]
   set see_name [lindex $directive_comments 1]
@@ -89,7 +89,7 @@ proc doc::sort_@see { list_ref directive_comments } {
 # @see proc doc::parse_namespace doc.html#doc::parse_namespace
 # @see proc doc::util::text_divider
 
-proc doc::util::find_marker_indices { text marker } {
+ad_proc -public doc::util::find_marker_indices { text marker } {
 
   set indices_list [list]
   set last_index -1
@@ -117,7 +117,7 @@ proc doc::util::find_marker_indices { text marker } {
 
 # @see proc doc::util::find_marker_indices
 
-proc doc::util::text_divider { text_ref marker } {
+ad_proc -public doc::util::text_divider { text_ref marker } {
     upvar $text_ref text
     
     set indices_list [doc::util::find_marker_indices $text $marker]
@@ -149,7 +149,7 @@ proc doc::util::text_divider { text_ref marker } {
 # because it essentially asks for the tcl library path and
 # strips off the last /tcl directory
 
-proc template::util::server_root {} {
+ad_proc -public template::util::server_root {} {
 
   set path_length [expr [llength [file split [ns_library private]]] - 1]
   set svr_root "/[join [lreplace [file split [ns_library private]] $path_length $path_le\ngth] / ]"
@@ -163,7 +163,7 @@ proc template::util::server_root {} {
 # @param template the name of the template to be used in making the file
 # @param file_name the name of the file to be created
 
-proc template::util::write_from_template { template file_name} {
+ad_proc -public template::util::write_from_template { template file_name} {
 
   upvar template_name template_name
   set template_name $template
@@ -183,7 +183,7 @@ proc template::util::write_from_template { template file_name} {
 # @private display_value
 # a proc used for debugging, just prints out a value to the error log
 
-proc template::util::display_value { ref } {
+ad_proc -public template::util::display_value { ref } {
     upvar $ref value
     ns_log notice "
 $ref:
@@ -195,13 +195,13 @@ $value
 # capitalizes the first letter of a string
 # @return returns formatted string
 
-proc template::util::proper_noun { string_ref } {
+ad_proc -public template::util::proper_noun { string_ref } {
 
 }
 
 
 # @private string_range
-proc template::util::string_range { string indices } {
+ad_proc -public template::util::string_range { string indices } {
     return [string range $string [lindex $indices 0] [lindex $indices 1]]
 }
 
@@ -216,7 +216,7 @@ proc template::util::string_range { string indices } {
 # @return same text but with a space behind each quote; double quotes
 # that are already trailed by a space are unaffected
 
-proc template::util::quote_space {text} {
+ad_proc -public template::util::quote_space {text} {
     regsub -all {"} $text {" } text
     regsub -all {"  } $text {" } text
     return $text
@@ -227,14 +227,14 @@ proc template::util::quote_space {text} {
 # @private bracket_space puts a space after all closing curly brackets, does not
 # add a space when brackets are already followed by a space
 
-proc doc::util::bracket_space {text} {
+ad_proc -public doc::util::bracket_space {text} {
     regsub -all {(\})} $text {\1 } text
     regsub -all {(\})  } $text {\1 } text
     return $text
 }
 
 # @private escape_square_brackets escapes out all square brackets
-proc doc::util::escape_square_brackets {text} {
+ad_proc -public doc::util::escape_square_brackets {text} {
     regsub -all {(\[)} $text {\\\1} text
     regsub -all {(\])} $text {\\\1} text
     return $text
@@ -243,7 +243,7 @@ proc doc::util::escape_square_brackets {text} {
 
 # @private make_text_listable 
 
-proc doc::util::make_text_listable {text_ref} {
+ad_proc -public doc::util::make_text_listable {text_ref} {
     upvar $text_ref text
     set text [doc::util::bracket_space $text]
     set text [template::util::quote_space $text]
@@ -257,7 +257,7 @@ proc doc::util::make_text_listable {text_ref} {
 # @param text
 # @return text
 
-proc template::util::comment_text_normalize {text} { 
+ad_proc -public template::util::comment_text_normalize {text} { 
     regsub -all {"} $text {\"} text
     regsub -all {(\n)\s*#\s*} $text {\1 } text
     regsub {(\A)\s*#\s*} $text {\1 } text
@@ -273,7 +273,7 @@ proc template::util::comment_text_normalize {text} {
 # @return either the proper list index for an alphabetized insertion or -1 if the entry is
 # already in the list
 
-proc template::util::alphabetized_index {list entry} {
+ad_proc -public template::util::alphabetized_index {list entry} {
 
     set result [lsearch -exact $list $entry]
     if { $result != -1 } {
@@ -294,7 +294,7 @@ proc template::util::alphabetized_index {list entry} {
 # @private proc_element_compare
 # used to compare two different elements in a list of parsed data for public or private procs
 
-proc template::util::proc_element_compare { element1 element2 } {
+ad_proc -public template::util::proc_element_compare { element1 element2 } {
 
     return [string compare -nocase [lindex [lindex [lindex element2 1] 0] 1] [lindex [lindex [lindex element1 1] 0] 1]]
 
@@ -305,7 +305,7 @@ proc template::util::proc_element_compare { element1 element2 } {
 # @private set_proc_name_source_txt called by parse_comment_text
 # @param comment_text this should include the source text
 
-proc doc::set_proc_name_source_text_comment_text { proc_block } {
+ad_proc -public doc::set_proc_name_source_text_comment_text { proc_block } {
     upvar source_txt source_txt
     upvar proc_name proc_name
     upvar comment_text comment_text
@@ -324,7 +324,7 @@ proc doc::set_proc_name_source_text_comment_text { proc_block } {
 # @param comment_text body of comment text to be parsed through
 # @param source_text source text of the procedure
 
-proc doc::parse_comment_text { proc_block } {
+ad_proc -public doc::parse_comment_text { proc_block } {
 
     doc::set_proc_name_source_text_comment_text $proc_block
 
@@ -416,7 +416,7 @@ proc doc::parse_comment_text { proc_block } {
 
 # @param text_lines namespace text body
 
-proc doc::parse_namespace { text_lines }  {
+ad_proc -public doc::parse_namespace { text_lines }  {
 
     # total_result_listing will contain our complete data set,
     # namespace_list is just a temp variable used for easy bookkeeping;
@@ -579,7 +579,7 @@ proc doc::parse_namespace { text_lines }  {
 # creating a lookup on namespace name.
 
 
-proc doc::parse_file { path } {
+ad_proc -public doc::parse_file { path } {
 
   set text [template::util::read_file $path]
 
@@ -612,7 +612,7 @@ proc doc::parse_file { path } {
 # @return a long lists of lists of lists, each list element contains a three-element list of 
 # the format { {info} {public procedures listing } {private procedures listing}}
 
-proc doc::parse_tcl_library { dir_list } {
+ad_proc -public doc::parse_tcl_library { dir_list } {
 
   # namespace_list will be a list containing namespace names only, and should be ordered
   # with respect to namespaces in the same order as the list result

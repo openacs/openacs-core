@@ -22,7 +22,7 @@
 #                     to an included template from its container.  All
 #                     data sources may be passed by reference.
 
-proc template::adp_parse { __adp_stub __args } {
+ad_proc -public template::adp_parse { __adp_stub __args } {
 
   # declare any variables passed in to an include or master
   # TODO: call adp_set_vars instead.
@@ -107,7 +107,7 @@ proc template::adp_parse { __adp_stub __args } {
 # multirow data sources.  This code must be executed in the same stack frame
 # as adp_parse, but is in a separate proc to improve code readability.
 
-proc template::adp_set_vars {} {
+ad_proc -public template::adp_set_vars {} {
 
   uplevel {
     set __adp_level [adp_level 2]
@@ -141,7 +141,7 @@ proc template::adp_set_vars {} {
 
 # Terminates processing of a template and throws away all output.
 
-proc template::adp_abort {} { error ADP_ABORT }
+ad_proc -public template::adp_abort {} { error ADP_ABORT }
 
 # @public adp_eval
 
@@ -151,7 +151,7 @@ proc template::adp_abort {} { error ADP_ABORT }
 
 # @return The output produced by the compiled template code.
 
-proc template::adp_eval { coderef } {
+ad_proc -public template::adp_eval { coderef } {
 
   upvar $coderef code
 
@@ -185,7 +185,7 @@ proc template::adp_eval { coderef } {
 # @return A number, as returned by [info level], representing the stack frame
 #         in which a template is being parsed.
 
-proc template::adp_level { { up "" } } {
+ad_proc -public template::adp_level { { up "" } } {
 
   set result ""
 
@@ -207,7 +207,7 @@ proc template::adp_level { { up "" } } {
 # @public adp_levels
 # Get all stack frame levels
 
-proc template::adp_levels {} {
+ad_proc -public template::adp_levels {} {
   variable parse_level
   if { [info exists parse_level] } {return $parse_level}
   return ""
@@ -225,7 +225,7 @@ proc template::adp_levels {} {
 
 # @return boolean (0 or 1): whether the (ultimate) script was found.
 
-proc template::adp_prepare {} {
+ad_proc -public template::adp_prepare {} {
 
   uplevel {
 
@@ -271,7 +271,7 @@ proc template::adp_prepare {} {
 # @param path The root (sans file extension) of the absolute path to the 
 #             next template to parse.
 
-proc template::set_file { path } {
+ad_proc -public template::set_file { path } {
   
   set level [adp_level]
 
@@ -292,7 +292,7 @@ proc template::set_file { path } {
 # @param file_stub  The root (sans file extension) of the absolute path
 #                   to the .adp or .tcl file to source.
 
-proc template::adp_init { type file_stub } {
+ad_proc -public template::adp_init { type file_stub } {
  
   # this will return the name of the proc if it exists
   set proc_name [info procs ::template::mtimes::${type}::$file_stub]
@@ -345,7 +345,7 @@ proc template::adp_init { type file_stub } {
 
 # @return The compiled code.
 
-proc template::adp_compile { source_type source } {
+ad_proc -public template::adp_compile { source_type source } {
 
   variable parse_list
   # initialize the compiled code
@@ -403,7 +403,7 @@ proc template::adp_compile { source_type source } {
 # @param chunk   A string containing markup, potentially with embedded
 #                ATS tags.
 
-proc template::adp_compile_chunk { chunk } {
+ad_proc -public template::adp_compile_chunk { chunk } {
 
   # parse the template chunk inside the tag
   set remaining [ns_adp_parse -string $chunk]
@@ -428,7 +428,7 @@ proc template::adp_compile_chunk { chunk } {
 #            ATS tags.  Variable references and procedure calls are
 #            interpreted as for any double-quoted string in Tcl.
 
-proc template::adp_append_string { s } {
+ad_proc -public template::adp_append_string { s } {
 
   adp_append_code "append __adp_output \"$s\""
 }
@@ -444,7 +444,7 @@ proc template::adp_append_string { s } {
 #                   cases where code must continue on the same line, such 
 #                   as the else tag
 
-proc template::adp_append_code { code { nobreak "" } } {
+ad_proc -public template::adp_append_code { code { nobreak "" } } {
 
   if { [string is space $code] } { return }
 
@@ -469,7 +469,7 @@ proc template::adp_append_code { code { nobreak "" } } {
 
 # @param text A string containing text or markup.
 
-proc template::adp_puts { text } {
+ad_proc -public template::adp_puts { text } {
 
   upvar __adp_output __adp_output
 
@@ -483,7 +483,7 @@ proc template::adp_puts { text } {
 
 # @param tag_name  The name of the tag.  Used for debugging purposes only.
 
-proc template::adp_tag_init { {tag_name ""} } {
+ad_proc -public template::adp_tag_init { {tag_name ""} } {
 
   # add everything either from the beginning of the template or from
   # the last balanced tag up to the current point in the template
@@ -510,7 +510,7 @@ proc template::adp_tag_init { {tag_name ""} } {
 
 # @param tag  The name of the enclosing tag to look for.
 
-proc template::get_enclosing_tag { tag } {
+ad_proc -public template::get_enclosing_tag { tag } {
 
   set name ""
 
@@ -545,7 +545,7 @@ proc template::get_enclosing_tag { tag } {
 
 # @return The value of the attribute.
 
-proc template::get_attribute { tag params name { default "" } } {
+ad_proc -public template::get_attribute { tag params name { default "" } } {
 
   set value [ns_set iget $params $name]
 

@@ -38,7 +38,7 @@
       <querytext>
 
         select 
-          proname as line_header
+          'function ' || proname as line_header
         from 
           pg_proc 
         where 
@@ -53,7 +53,7 @@
       <querytext>
 
         select 
-          proname as line_header
+          'function ' || proname as line_header
         from 
           pg_proc 
         where 

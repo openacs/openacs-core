@@ -1,6 +1,6 @@
 # upload an item revision from a file
 
-proc cr_revision_upload { title item_id path } {
+ad_proc -public cr_revision_upload { title item_id path } {
 
     set revision_id [db_exec_plsql get_revision_id "begin
     :1 := content_revision.new(title     => :title, 

@@ -11,7 +11,7 @@
 # License.  Full text of the license is available from the GNU Project:
 # http://www.fsf.org/copyleft/gpl.html
 
-ad_proc ad_return_template {
+ad_proc -public ad_return_template {
      -string:boolean
     {template ""}
 } {
@@ -31,14 +31,14 @@ ad_proc ad_return_template {
 }
 
 
-proc ad_template_return {{file_stub ""}} {
+ad_proc -public ad_template_return {{file_stub ""}} {
     uplevel 1 "ad_return_template $file_stub"
 }
 
 
 
 # Get the server root directory (supposing we run under ACS)
-proc get_server_root {} {
+ad_proc -public get_server_root {} {
     file dir [ns_info tcllib]
 }
 

@@ -12,7 +12,7 @@
 
 # Sample filter for handling pages with the ADP to Tcl compiler
 
-proc acs_page_filter { why } {
+ad_proc -public acs_page_filter { why } {
 
   # Check for updates to Tcl library files
   # watch_files
@@ -65,7 +65,7 @@ proc acs_page_filter { why } {
 
 # Redirect and abort processing
 
-proc template::forward { url } {
+ad_proc -public template::forward { url } {
 
   if { ! [string match http://* $url] } {
     
@@ -88,7 +88,7 @@ proc template::forward { url } {
 # a reference (not the value) to a variable containing the URL of
 # the template to parse.  The filter procedure may modify this.
 
-proc template::filter { command args } {
+ad_proc -public template::filter { command args } {
 
   variable filter_list
 
@@ -110,7 +110,7 @@ proc template::filter { command args } {
 
 # Show the compiled template (for debugging)
 
-proc cmp_page_filter { why } {
+ad_proc -public cmp_page_filter { why } {
 
   if { [catch {
     set url [ad_conn url]
@@ -137,7 +137,7 @@ proc cmp_page_filter { why } {
 
 # Show the comments for the template (for designer)
 
-proc dat_page_filter { why } {
+ad_proc -public dat_page_filter { why } {
 
   if { [catch {
     set url [ad_conn url]
@@ -165,7 +165,7 @@ proc dat_page_filter { why } {
 
 # Return the auto-generated template for a form
 
-proc frm_page_filter { why } {
+ad_proc -public frm_page_filter { why } {
 
   namespace eval template {
 
