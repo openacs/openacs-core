@@ -34,7 +34,7 @@ set dimensional_list {
 	}
     }
     {
-	status "Status:" all {
+	status "Status:" latest {
 	    {
 		latest "Latest" {where "[db_map latest]" }
 	    }
