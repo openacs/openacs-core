@@ -53,13 +53,9 @@ ad_proc -private sec_session_lifetime {} {
 }
 
 proc sec_sweep_sessions {} {
-    set current_time [ns_time]
-    set property_life [sec_session_lifetime]
+    set expires [expr {[ns_time] - [sec_session_lifetime]}]
 
-    db_dml sessions_sweep {
-	delete from sec_session_properties
-	where  :current_time - last_hit > :property_life
-    }
+    db_dml sessions_sweep {} 
 }
 
 proc_doc sec_handler {} {
