@@ -208,9 +208,6 @@ installation that uses only two of the thirty-odd modules available circa ACS
   <imageobject>
     <imagedata fileref="images/acs-without-apm-vs-with-apm.png" format="PNG" align="center"/>
   </imageobject>
-  <textobject>
-    <para><emphasis role="strong">OpenACS without APM vs. with APM</emphasis></para>
-  </textobject>
 </mediaobject>
 
 
