@@ -53,8 +53,8 @@
                  apm_packages,
                  apm_package_types
             where site_nodes.node_id = :node_id
-            and site_nodes.object_id = apm_packages.package_id(+)
-            and apm_package_types.package_key = apm_packages.package_key
+            and site_nodes.object_id = apm_packages.package_id (+)
+            and apm_package_types.package_key (+) = apm_packages.package_key
         </querytext>
     </fullquery>
 
