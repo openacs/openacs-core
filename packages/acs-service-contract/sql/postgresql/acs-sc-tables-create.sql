@@ -39,10 +39,10 @@ create table acs_sc_operation (
     operation_nargs	      integer,
     operation_inputtype_id    integer
 			      constraint acs_sc_operation_intype_fk
-			      references acs_sc_msg_type(msg_type_id),
+			      references acs_sc_msg_types(msg_type_id),
     operation_outputtype_id   integer
 			      constraint acs_sc_operation_outtype_fk
-			      references acs_sc_msg_type(msg_type_id)
+			      references acs_sc_msg_types(msg_type_id)
 );
 
 
