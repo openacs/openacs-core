@@ -1,5 +1,5 @@
 
-create view registered_users
+create or replace view registered_users
 as
   select p.email, p.url, pe.first_names, pe.last_name, u.*, mr.member_state
   from parties p, persons pe, users u, group_member_map m, membership_rels mr
@@ -13,7 +13,7 @@ as
   and mr.member_state = 'approved'
   and u.email_verified_p = 't';
 
-create view cc_users
+create or replace view cc_users
 as
 select o.*, pa.*, pe.*, u.*, mr.member_state, mr.rel_id
 from acs_objects o, parties pa, persons pe, users u, group_member_map m, membership_rels mr
