@@ -557,8 +557,12 @@ ad_proc -private template::list::get_url {
 ad_proc -public template::list::page_where_clause {
     -name:required
     -and:boolean
+    {-key}
 } {
     @param  and     Set this flag if you want the result to start with an 'and' if the list of where clauses returned is non-empty.
+    
+    @param key      Specify the name of the primary key to be used in the query's where clause, 
+                    if different from the list builder's key.
 } {
     # Get an upvar'd reference to list_properties
     get_reference -name $name
@@ -572,8 +576,12 @@ ad_proc -public template::list::page_where_clause {
     if { $and_p } {
         append result "and "
     }
+
+    if { ![exists_and_not_null key] } {
+        set key $list_properties(key)
+    }
     
-    append result "$list_properties(key) in ([page_get_ids -name $name])"
+    append result "$key in ([page_get_ids -name $name])"
 
     return $result
 }
