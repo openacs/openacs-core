@@ -23,6 +23,7 @@ create table lang_message_keys (
     package_key        varchar2(100)
                        constraint lang_message_keys_fk
                        references apm_package_types(package_key)
+                       on delete cascade
                        constraint lang_message_keys_p_key_nn
                        not null,
     upgrade_status     varchar2(30)
