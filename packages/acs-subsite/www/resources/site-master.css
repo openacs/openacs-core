@@ -468,6 +468,15 @@ h4 {
   margin: 0;
 }
 
+.portlet-header {
+  background: #dddddd; 
+}
+
+.portlet-header h2 {
+  padding: 2px 8px 2px 8px; 
+  margin: 0;
+}
+
 .portlet .portlet-body {
   border: 1px dotted #999; 
   border-top: 0px; 
