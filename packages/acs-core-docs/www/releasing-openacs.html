@@ -1,17 +1,39 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Chapter 16. How to package and release OpenACS</title><meta name="generator" content="DocBook XSL Stylesheets V1.64.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="acs-plat-dev.html" title="Part IV. For OpenACS Platform Developers"><link rel="previous" href="ext-auth-requirements.html" title="External Authentication Requirements"><link rel="next" href="update-repository.html" title="How to Update the OpenACS.org repository"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="ext-auth-requirements.html">Prev</a> </td><th width="60%" align="center">Part IV. For OpenACS Platform Developers</th><td width="20%" align="right"> <a accesskey="n" href="update-repository.html">Next</a></td></tr></table><hr></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="releasing-openacs"></a>Chapter 16. How to package and release OpenACS</h2></div></div><div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="update-repository.html">How to Update the OpenACS.org repository</a></span></dt><dt><span class="section"><a href="update-translations.html">How to Update the translations</a></span></dt></dl></div><div class="orderedlist"><ol type="1"><li><p>Update documentation version numbers:</p><div class="orderedlist"><ol type="a"><li><p>Update /packages/acs-core-docs/www/xml/variables.ent with the new version number and regenerate all HTML docs
-            </p></li><li><p>Update /readme.txt with the new version number</p></li><li><p>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Chapter 16. How to package and release OpenACS</title><meta name="generator" content="DocBook XSL Stylesheets V1.64.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="acs-plat-dev.html" title="Part IV. For OpenACS Platform Developers"><link rel="previous" href="ext-auth-requirements.html" title="External Authentication Requirements"><link rel="next" href="update-repository.html" title="How to Update the OpenACS.org repository"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="ext-auth-requirements.html">Prev</a> </td><th width="60%" align="center">Part IV. For OpenACS Platform Developers</th><td width="20%" align="right"> <a accesskey="n" href="update-repository.html">Next</a></td></tr></table><hr></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="releasing-openacs"></a>Chapter 16. How to package and release OpenACS</h2></div></div><div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="update-repository.html">How to Update the OpenACS.org repository</a></span></dt><dt><span class="section"><a href="update-translations.html">How to Update the translations</a></span></dt></dl></div><div class="orderedlist"><ol type="1"><li><p>Update version numbers:</p><div class="orderedlist"><ol type="a"><li><p>Update /packages/acs-core-docs/www/xml/variables.ent with the new version number.
+            </p></li><li><p>Add new section in /packages/acs-core-docs/www/xml/for-everyone/release-notes.xml
+</p></li><li><p>Regenerate all HTML docs</p></li><li><p>Update /readme.txt with the new version number</p></li><li><p>Update version number in all of the core packages.  Here's a bash/perl script which works but could be made easier to use.  Run it from the tarball root:</p><pre class="programlisting">#!/bin/sh
+# run this file from ../packages to renumber all .info version numbers
+
+#---------------------------------------------------------------------
+# here's what we're looking for
+#---------------------------------------------------------------------
+#   &lt;version name="5.1.0d1" url="http:blahblah/acs-kernel-5.1.0d1.apm"&gt;
+#      &lt;provides url="acs-kernel" version="5.1.0d1"/&gt;
+#---------------------------------------------------------------------
+# here's what we don't want to touch
+#---------------------------------------------------------------------
+#      &lt;requires url="acs-kernel" version="5.0.0b4"/&gt;
+#---------------------------------------------------------------------
+
+for dir in `find -name *.info`
+  do
+  perl -p -i -e 's/name="5\.0\.0"/name="5\.1\.0d1"/' $dir
+  perl -p -i -e 's/-5\.0\.0.apm"/-5\.1\.0d1.apm"/' $dir
+  perl -p -i -e 's/(provides.*version)="5\.0\.0"/\1="5\.1\.0d1"/' $dir
+done</pre></li><li><p>Rebuild the Changelog.  I use a tool called cvs2cl.  Run this command from the package root to automatically generate a Changelog file  in the same dir:</p><pre class="screen">cd /var/log/aolserver/service0
+perl /var/tmp/cvs2cl/cvs2cl.pl -F oacs-5-0 --delta openacs-5-0-0-final:oacs-5-0</pre></li><li><p>
               Commit changes
-            </p></li></ol></div></li><li><p>Check out the whole cvs tree.  The files must be checked
+            </p></li></ol></div></li><li><p>Check out OpenACS Core.  The files must be checked
           out through a cvs account with write access and should be a
           checkout from the release branch.  In this example, we are assuming
           this is being done as a local user on openacs.org (which make the 
           checkout and tagging operations much faster).</p><pre class="screen"><span class="action"><span class="action">cd /var/tmp
-cvs -d /cvsroot checkout -r <span class="replaceable"><span class="replaceable">oacs-5-0</span></span> openacs-4</span></span></pre><p>Repeat with the dotlrn cvs tree.</p><pre class="screen"><span class="action"><span class="action">cd /var/tmp
+cvs -d /cvsroot checkout -r <span class="replaceable"><span class="replaceable">oacs-5-0</span></span> acs-core</span></span></pre><p>Repeat with the dotlrn cvs tree.</p><pre class="screen"><span class="action"><span class="action">cd /var/tmp
 mkdir dotlrn-packages
 cd dotlrn-packages
 cvs -d /dotlrn-cvsroot checkout -r <span class="replaceable"><span class="replaceable">dotlrn-2-0</span></span> dotlrn-all
-</span></span></pre></li><li><p>Tag the tree.</p><pre class="screen"><span class="action"><span class="action">cd /var/tmp/openacs-4
+</span></span></pre></li><li><p>Tag the tree.  If it's a final release of core, move or create the appropriate openacs-major-minor-compat tag.  (Ie, if releasing 5.0.3 final, move the openacs-5-0-compat flag.)</p><pre class="screen"><span class="action"><span class="action">cd /var/tmp/openacs-4
 cvs tag -F <span class="replaceable"><span class="replaceable">openacs-5-0-0a1</span></span>
+cvs tag -F <span class="replaceable"><span class="replaceable">openacs-5-0-compat</span></span>
 </span></span></pre><div class="tip" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Branching</h3><p>When we feature-freeze on HEAD as part of the release process, we are blocking new development.  To avoid this, we branch the code at this point, so that new work can continue on HEAD while the branch is stabilized for release. However, branching means that bug fixes have to be synchronized between HEAD and the branch, and bug fixes tend to be more frequent right at this time.  Therefore, our actual branch point is as late as possible - essentially, we do not branch until and unless new feature work is actively blocked by the feature freeze.  Branching is almost the same as tagging, except for the flag and slightly different tag nomenclature.  To see the list of old branches, <tt class="computeroutput">cvs status -v somefile</tt>.</p><pre class="screen">cvs tag -b oacs-5-0</pre></div><p>Tag dotLRN.  Since the dotLRN packages aren't all in one
           module, we iterate through all of the modules.  Log in first
           (cvs login) so that you don't have to log in for each
@@ -22,8 +44,7 @@ for dir in *; do ( cd $dir &amp;&amp; cvs tag -F <span class="replaceable"><span
           you don't want to inadvertently move a prior release tag.  Also if the tagging goes horribly wrong 
           for some reason you can delete the tag via "<span><b class="command">cvs tag -d &lt;symbolic_tag&gt;</b></span>".</p></li><li><p>Make the tarball</p><div class="itemizedlist"><ul type="disc"><li><p><b>openacs-core. </b></p><div class="orderedlist"><ol type="a"><li><p>Go to a new working space and export the tagged files.</p><pre class="screen"><span class="action"><span class="action">mkdir /var/tmp/tarball
 cd /var/tmp/tarball
-cvs -d :pserver:anonymous@openacs.org:/cvsroot export -r <span class="replaceable"><span class="replaceable">openacs-5-0-0a1</span></span> acs-core
-mv openacs-4 openacs</span></span></pre></li><li><p>Generate the tarball.</p><pre class="screen"><span class="action"><span class="action">cd /var/tmp/tarball
+cvs -d /cvsroot export -r <span class="replaceable"><span class="replaceable">openacs-5-0-0a1</span></span> acs-core</span></span></pre></li><li><p>Generate the tarball.</p><pre class="screen"><span class="action"><span class="action">cd /var/tmp/tarball
 mv openacs-4 openacs-<span class="replaceable"><span class="replaceable">5.0.0a1</span></span>
 tar cz -f <span class="replaceable"><span class="replaceable">openacs-5.0.0a1.tar.gz</span></span> openacs-<span class="replaceable"><span class="replaceable">5.0.0a1</span></span>
 </span></span></pre></li></ol></div></li><li><p><b>dotlrn. </b></p><div class="orderedlist"><ol type="a"><li><p>Go to a new working space and export the tagged

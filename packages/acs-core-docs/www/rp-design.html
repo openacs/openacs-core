@@ -15,13 +15,13 @@ provides to the browser.</p></div><div class="sect2" lang="en"><div class="title
 <span class="strong">pageroot</span> -- Any directory that contains scripts and/or
 static files intended to be served in response to HTTP requests. A typical
 OpenACS installation is required to serve files from multiple pageroots.</p></li><li><p><span class="strong">global pageroot</span>
-(<span class="strong">/web/<span class="emphasis"><em>servicename</em></span>/www</span>) -- Files appearing under
+(<span class="strong">/var/lib/aolserver/<span class="emphasis"><em>servicename</em></span>/www</span>) -- Files appearing under
 this pageroot will be served directly off the base url
 http://www.<span class="emphasis"><em>servicename</em></span>.com/</p></li><li><p><span class="strong">package root</span>
-(<span class="strong">/web/<span class="emphasis"><em>servicename</em></span>/packages</span>) -- Each subdirectory of
+(<span class="strong">/var/lib/aolserver/<span class="emphasis"><em>servicename</em></span>/packages</span>) -- Each subdirectory of
 the package root is a package. A typical OpenACS installation will have several
 packages.</p></li><li><p><span class="strong">package pageroot</span>
-(<span class="strong">/web/<span class="emphasis"><em>servicename</em></span>/packages/<span class="emphasis"><em>package_key</em></span>/www</span>)
+(<span class="strong">/var/lib/aolserver/<span class="emphasis"><em>servicename</em></span>/packages/<span class="emphasis"><em>package_key</em></span>/www</span>)
 -- This is the pageroot for the <span class="emphasis"><em>package_key</em></span> package.</p></li><li><p><span class="strong">request environment</span> (<span class="strong">ad_conn</span>) -- This is
 a global namespace containing variables associated with the current
 request.</p></li><li><p><span class="strong">abstract URL</span> -- A URL with no extension that doesn't

@@ -27,7 +27,7 @@
             <para>Update /readme.txt with the new version number</para>
           </listitem>
           <listitem>
-            <para>Update version number in all of the core packages.  Here's a bash/perl script which works but could be made easier to use:</para>
+            <para>Update version number in all of the core packages.  Here's a bash/perl script which works but could be made easier to use.  Run it from the tarball root:</para>
           <programlisting>#!/bin/sh
 # run this file from ../packages to renumber all .info version numbers
 
@@ -50,8 +50,9 @@ for dir in `find -name *.info`
 done</programlisting>
         </listitem>
           <listitem>
-            <para>Rebuild the Changelog.  Using cvs2cl:</para>
-            <screen>perl /var/tmp/cvs2cl/cvs2cl.pl -F oacs-5-0 --delta openacs-5-0-0-final:oacs-5-0</screen>
+            <para>Rebuild the Changelog.  I use a tool called cvs2cl.  Run this command from the package root to automatically generate a Changelog file  in the same dir:</para>
+            <screen>cd /var/log/aolserver/service0
+perl /var/tmp/cvs2cl/cvs2cl.pl -F oacs-5-0 --delta openacs-5-0-0-final:oacs-5-0</screen>
           </listitem>
           <listitem>
             <para>
