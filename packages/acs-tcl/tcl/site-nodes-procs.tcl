@@ -440,10 +440,11 @@ ad_proc -public -deprecated -warn site_node_mount_application {
 
     @return The package id of the newly mounted package
 } {
-    return [site_node::instantiate_and_mount -parent_node_id $parent_node_id \
-                                             -node_name $url_path_component
-                                             -package_name $instance_name \
-                                             -package_key $package_key]
+    return [site_node::instantiate_and_mount \
+                -parent_node_id $parent_node_id \
+                -node_name $url_path_component \
+                -package_name $instance_name \
+                -package_key $package_key]
 }
 
 ad_proc -public site_map_unmount_application {
