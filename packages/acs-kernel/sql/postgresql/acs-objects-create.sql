@@ -1333,6 +1333,14 @@ begin
   
 end;' language 'plpgsql';
 
+create function acs_object__update_last_modified (integer)
+returns integer as '
+declare
+    acs_object__update_last_modified__object_id     alias for $1;
+begin
+    return acs_object__update_last_modified(acs_object__update_last_modified__object_id, now());
+end;' language 'plpgsql';
+
 create function acs_object__update_last_modified (integer, timestamp)
 returns integer as '
 declare
