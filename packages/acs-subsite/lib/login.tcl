@@ -67,7 +67,7 @@ if { ![exists_and_not_null authority_id] } {
 set forgotten_pwd_url [auth::password::get_forgotten_url -authority_id $authority_id -username $username -email $email]
 
 set register_url "[subsite::get_element -element url]register/user-new"
-if { [string equal $authority_id [auth::get_register_authority]] } {
+if { [string equal $authority_id [auth::get_register_authority]] || [auth::UseEmailForLoginP] } {
     set register_url [export_vars -no_empty -base $register_url { username email }]
 }
 
