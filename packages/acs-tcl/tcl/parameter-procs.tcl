@@ -33,6 +33,7 @@ namespace eval parameter {
 
     ad_proc -public get {
         -localize:boolean
+        -boolean:boolean
         {-package_id ""}
         {-parameter:required}
         {-default ""}
@@ -86,7 +87,25 @@ namespace eval parameter {
         }
 
         # Trimming the value as people may have accidentally put in trailing spaces
-        return [string trim $value]
+        set value [string trim $value]
+
+        # Special parsing for boolean parameters, true and false can be written
+        # in many different ways
+        if { $boolean_p } {
+            if { [catch { 
+                if { [template::util::is_true $value] } {
+                    set value 1
+                } else {
+                    set value 0
+                }
+            } errmsg] } {
+                global errorInfo
+                ns_log Error "Parameter $parameter not a boolean:\n$errorInfo"
+                set value $default
+            }
+        }
+
+        return $value
     }
 
     ad_proc -public set_from_package_key {
@@ -102,6 +121,7 @@ namespace eval parameter {
 
     ad_proc -public get_from_package_key {
         -localize:boolean
+        -boolean:boolean
         {-package_key:required}
         {-parameter:required}
         {-default ""}
@@ -125,6 +145,7 @@ namespace eval parameter {
             with_catch errmsg {
                 ::set value [get \
                     -localize=$localize_p \
+                    -boolean=$boolean_p \
                     -package_id [apm_package_id_from_key $package_key] \
                     -parameter $parameter \
                     -default $default \
