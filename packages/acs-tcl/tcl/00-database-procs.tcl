@@ -2327,7 +2327,7 @@ ad_proc db_source_sql_file {{
             cd [file dirname $file]
             
             if { $tcl_platform(platform) == "windows" } {
-                set fp [open "|[file join [db_get_pgbin] psql] -h [ns_info hostname] $pgport $pguser -f $file_name [db_get_database]" "r"]
+                set fp [open "|[file join [db_get_pgbin] psql] $pghost $pgport $pguser -f $file_name [db_get_database]" "r"]
             } else {
                 set fp [open "|[file join [db_get_pgbin] psql] $pghost $pgport $pguser -f $file_name [db_get_database] $pgpass" "r"]
             }
@@ -2462,7 +2462,7 @@ ad_proc db_load_sql_data {{
             close $fd
             
             if { $tcl_platform(platform) == "windows" } {
-                set fp [open "|[file join [db_get_pgbin] psql] -f $copy_file -h [ns_info hostname] $pgport $pguser  [db_get_database]" "r"]
+                set fp [open "|[file join [db_get_pgbin] psql] -f $copy_file $pghost $pgport $pguser  [db_get_database]" "r"]
             } else {
                 set fp [open "|[file join [db_get_pgbin] psql] -f $copy_file $pghost $pgport $pguser [db_get_database] $pgpass" "r"]
             }
