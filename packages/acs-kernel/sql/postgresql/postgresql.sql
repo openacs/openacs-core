@@ -513,21 +513,26 @@ begin
 
 end;' language 'plpgsql' with (iscachable);
 
--- DRB: Use tree_left() and tree_right() to do selects against
--- tree_sortkey.
-
--- To find a node's children in "t":
--- tree_sortkey between tree_left(t.tree_sortkey) and tree_right(t.tree_sortkey)
+-- DRB: Use tree_right() to do selects against tree_sortkey.  LIKE with
+-- a non-constant right-hand operand never uses an index.  The following
+-- queries will use an index and run much faster.
 
 -- To get the children and the node (i.e. the subtree starting with the node):
+
 -- tree_sortkey between t.tree_sortkey and tree_right(t.tree_sortkey)
 
-create function tree_left(varchar) returns varchar as '
-declare
-  p_tree_sortkey alias for $1;
-begin
-  return p_tree_sortkey;
-end;' language 'plpgsql' with (iscachable);
+-- To find a node's children in "t":
+
+-- tree_sortkey between t.tree_sortkey and tree_right(t.tree_sortkey) and
+-- tree_sortkey <> t.tree_sortkey
+
+-- A directly executed query like this
+
+-- tree_sortkey between t.tree_sortkey || chr(0) and tree_right(t.tree_sortkey)
+
+-- works but the trailing chr(0) disappears if you put the concat in a 
+-- PL/pgSQL function.  In fact the inline expression might well be considered a
+-- bug and fixed by the PG team in the future so we shouldn't depend on it.
 
 create function tree_right(varchar) returns varchar as '
 declare
