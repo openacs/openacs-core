@@ -7,3 +7,6 @@ ad_library {
     @cvs-id $Id$
 }
 
+# initialize the random number generator
+randomInit [ns_time]
+
