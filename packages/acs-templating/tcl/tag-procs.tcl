@@ -81,6 +81,11 @@ ad_proc -public template_tag_if_concat_params { params } {
      }
   }
 
+  # LARS: The 'eval' statement here breaks if any key or value above contains a semicolon,
+  # since this causes eval to treat whatever comes after the semicolon as a new command.
+  # I'm not sure why we need to eval here at all, there ought to be another solution,
+  # but it's not clear what the intention of below statement is.
+
   set tokens [eval [concat list [join $tokens " "]]]
 
   return $tokens
