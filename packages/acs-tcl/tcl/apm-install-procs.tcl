@@ -1102,16 +1102,8 @@ ad_proc -private apm_upgrade_script_compare {f1 f2} {
     [regexp {\-(.*)-.*.sql} $f2 match f2_version_from]} {
 	# At this point we should have something like 2.0 and 3.1d which Tcl string
 	# comparison can handle. 
-	set f1_version_from [db_exec_plsql test "
-	    begin
-	    :1 := apm_package_version.sortable_version_name('$f1_version_from');
-	    end;
-	"]
-	set f2_version_from [db_exec_plsql test "
-	    begin
-	    :1 := apm_package_version.sortable_version_name('$f2_version_from');
-	    end;
-	"]
+	set f1_version_from [db_exec_plsql test_f1 {}]
+	set f2_version_from [db_exec_plsql test_f2 {}]
 	return [string compare $f1_version_from $f2_version_from]
     } else {
 	error "Invalid upgrade script syntax.  Should be \"upgrade-major.minor-major.minor.sql\"."

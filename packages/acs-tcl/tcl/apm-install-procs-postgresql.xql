@@ -203,7 +203,7 @@
 </fullquery>
 
  
-<fullquery name="apm_upgrade_script_compare.test">      
+<fullquery name="apm_upgrade_script_compare.test_f1">      
       <querytext>
 
 	    select apm_package_version__sortable_version_name('$f1_version_from');
@@ -212,10 +212,10 @@
 </fullquery>
 
  
-<fullquery name="apm_upgrade_script_compare.test">      
+<fullquery name="apm_upgrade_script_compare.test_f2">      
       <querytext>
 
-	    select apm_package_version__sortable_version_name('$f1_version_from');
+	    select apm_package_version__sortable_version_name('$f2_version_from');
 	
       </querytext>
 </fullquery>
