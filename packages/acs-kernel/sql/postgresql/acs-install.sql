@@ -15,7 +15,6 @@ declare
     main_site_id        site_nodes.node_id%TYPE;
 begin   
 
-<<<<<<< acs-install.sql
   kernel_id := apm_service__new (
                     null,
                     ''ACS Kernel'',
@@ -29,8 +28,6 @@ begin
 
   perform apm_package__enable (kernel_id);
 
-=======
->>>>>>> 1.15
   main_site_id := apm_service__new(
                     null,
 		    ''Main Site'',
