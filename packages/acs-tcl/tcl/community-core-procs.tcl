@@ -87,6 +87,7 @@ ad_proc ad_user_new {email first_names last_name password password_question pass
     set hashed_password [ns_sha1 "$password$salt"]
     
     db_transaction {
+
 	db_exec_plsql user_insert {
 	begin
 	    :1 := acs.add_user(user_id => :user_id,
@@ -103,6 +104,7 @@ ad_proc ad_user_new {email first_names last_name password password_question pass
 	                 member_state => :member_state);
 	    end;
 	} 
+
     } on_error {
 	# we got an error.  log it and signal failure.
 	ns_log Error "Problem creating a new user: $errmsg"

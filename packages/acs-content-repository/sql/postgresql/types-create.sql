@@ -318,7 +318,7 @@ begin;
    'Basic Items',
    'cr_revisions',
    'revision_id',
-   null
+   'content_revision.revision_name'
  );
 
  select content_type__create_attribute (

@@ -40,7 +40,7 @@ create table acs_object_types (
 	id_column	varchar(30) not null,
 	package_name	varchar(30) not null
 			constraint acs_object_types_pkg_name_un unique,
-	name_method	varchar(30),
+	name_method	varchar(100),
 	type_extension_table varchar(30),
         dynamic_p       boolean default 'f',
         tree_sortkey    varchar(4000)
