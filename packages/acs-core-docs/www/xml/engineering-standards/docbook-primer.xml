@@ -712,7 +712,7 @@ bash$  xsltproc /usr/share/sgml/docbook/stylesheet/xsl/nwalsh/html/chunk.xsl fil
 
     <para> 
 	You could also look at the <ulink url="http://cvs.openacs.org/cvs/openacs-4/packages/acs-core-docs/www/xml/Makefile?view=markup">acs-core-docs Makefile</ulink> 
-	for examples of how these documents are generated.`
+	for examples of how these documents are generated.
     </para>
 
   </sect2>
