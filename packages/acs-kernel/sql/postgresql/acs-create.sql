@@ -228,6 +228,7 @@ begin;
  select acs_privilege__create_privilege('create', null, null);
  select acs_privilege__create_privilege('delete', null, null);
  select acs_privilege__create_privilege('admin', null, null);
+ select acs_privilege__create_privilege('annotate', null, null);
 
  ---------------------------------------------------------
  -- Administrators can read, write, create, and delete. -- 
