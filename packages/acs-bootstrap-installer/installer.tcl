@@ -62,7 +62,7 @@ proc install_good_data_model_p {} {
 
 # Returns a simple next button.
 proc install_next_button { url } {
-    return "<form action=$url method=get><center><input type=submit value=\"Next ->\"></center>"
+    return "<form action=$url method=get><center><input type=submit value=\"Next ->\"></center></form>"
 }
 
 
