@@ -23,17 +23,14 @@ ad_proc -public template::request { command args } {
   eval request::$command $args
 }
 
-# @public create
-
-# Create the request data structure.  Typically called at the beginning
-# of the code for any page that accepts query parameters.
-
-# @option params A block of parameter declarations, separated by newlines.
-#                Equivalent to calling set_param for each parameter, but
-#                requiring slightly less typing.
-
 ad_proc -public template::request::create { args } {
+    Create the request data structure.  Typically called at the beginning
+    of the code for any page that accepts query parameters.
 
+    @option params A block of parameter declarations, separated by newlines.
+                   Equivalent to calling set_param for each parameter, but
+                   requiring slightly less typing.
+} {
   eval template::form::create request $args
 
   set level [template::adp_level]
@@ -56,36 +53,33 @@ ad_proc -public template::request::create { args } {
   }
 }
 
-# @public set_param
-
-# Declares a query parameter as part of the page request.  Validates
-# the values associated with the parameter, in the same fashion as for
-# form elements.
-
-# @param  name      The name of the parameter to declare.
-
-# @option name      The name of parameter in the query (may be different
-#                   from the reference name).
-# @option multiple  A flag indicating that multiple values may be specified
-#                   for this parameter.
-# @option datatype  The name of a datatype for the element values.  Valid
-#                   datatypes must have a validation procedure defined in
-#                   the <tt>template::data::validate</tt> namespace.
-# @option optional  A flag indicating that no value is required for this
-#                   element.  If a default value is specified, the default
-#                   is used instead.
-# @option validate  A list of custom validation blocks in the form
-#                   { name { expression } { message } \
-#                     name { expression } { message } ...}
-#                   where name is a unique identifier for the validation step,
-#                   expression is a block to Tcl code that evaluates to
-#                   1 or 0, and message is to be displayed to the user when 
-#                   the validation step fails.
-
-# @see element::create
-
 ad_proc -public template::request::set_param { name args } {
+    Declares a query parameter as part of the page request.  Validates
+    the values associated with the parameter, in the same fashion as for
+    form elements.
 
+    @param  name      The name of the parameter to declare.
+
+    @option name      The name of parameter in the query (may be different
+                      from the reference name).
+    @option multiple  A flag indicating that multiple values may be specified
+                      for this parameter.
+    @option datatype  The name of a datatype for the element values.  Valid
+                      datatypes must have a validation procedure defined in
+                      the <tt>template::data::validate</tt> namespace.
+    @option optional  A flag indicating that no value is required for this
+                      element.  If a default value is specified, the default
+                      is used instead.
+    @option validate  A list of custom validation blocks in the form
+                      { name { expression } { message } \
+                        name { expression } { message } ...}
+                      where name is a unique identifier for the validation
+                      step, expression is a block to Tcl code that evaluates
+                      to 1 or 0, and message is to be displayed to the user 
+                      when the validation step fails.
+
+    @see element::create
+} {
   set level [template::adp_level]
   eval template::element::create request $name $args
 
@@ -100,16 +94,14 @@ ad_proc -public template::request::set_param { name args } {
 }
 # "
 
-# @public get_param
-
-# Retrieves the value(s) of the specified parameter.
-
-# @param name The name of the parameter.
-
-# @return The value of the specified parameter.
 
 ad_proc -public template::request::get_param { name } {
+    Retrieves the value(s) of the specified parameter.
 
+    @param name The name of the parameter.
+
+    @return The value of the specified parameter.
+} {
   set level [template::adp_level]
   upvar #$level request:$name param
 
@@ -126,19 +118,16 @@ ad_proc -public template::request::get_param { name } {
   return $value
 }
 
-# @public error
-
-# Manually report request error(s) by setting error messages and then
-# calling is_valid to handle display.  Useful for conditions not tied
-# to a single query parameter.  The arguments to the procedure may be
-# any number of name-message combinations.
-
-# @param name A unique identifier for the error condition, which may
-#             be used for layout purposes.
-# @param msg  The message text associated with the condition.
-
 ad_proc -public template::request::error { args } {
+    Manually report request error(s) by setting error messages and then
+    calling is_valid to handle display.  Useful for conditions not tied
+    to a single query parameter.  The arguments to the procedure may be
+    any number of name-message combinations.
 
+    @param name A unique identifier for the error condition, which may
+                be used for layout purposes.
+    @param msg  The message text associated with the condition.
+} {
   set level [template::adp_level]
   upvar #$level request:error requesterror
   foreach { name msg } $args {
@@ -148,21 +137,18 @@ ad_proc -public template::request::error { args } {
   is_valid
 }
 
-# @public is_valid
-
-# Checks for any param errors.  If errors are found, sets the display
-# template to the specified URL (a system-wide request error page by
-# default).
-
-# @param url The URL of the template to use to display error messages.
-# 	     The special value "self" may be used to indicate that the template
-# 	     for the requested page itself will handle reporting error
-#            conditions.
-
-# @return 1 if no error conditions exist, 0 otherwise.
-
 ad_proc -public template::request::is_valid { { url "" } } {
+    Checks for any param errors.  If errors are found, sets the display
+    template to the specified URL (a system-wide request error page by
+    default).
 
+    @param url The URL of the template to use to display error messages.
+    	     The special value "self" may be used to indicate that the template
+    	     for the requested page itself will handle reporting error
+               conditions.
+
+    @return 1 if no error conditions exist, 0 otherwise.
+} {
   set level [template::adp_level]
   upvar #$level request:error requesterror
 

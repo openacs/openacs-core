@@ -14,9 +14,10 @@ ad_proc -public template::wizard { command args } {
   eval wizard::$command $args
 }
 
-# create a wizard from a set of steps
 
 ad_proc -public template::wizard::create { args } {
+    create a wizard from a set of steps
+} {
 
   set level [template::adp_level]
 
@@ -48,8 +49,9 @@ ad_proc -public template::wizard::create { args } {
   }
 }
 
-# Set a wizard's param for passthrough
 ad_proc -public template::wizard::set_param { name value } {
+    Set a wizard's param for passthrough
+} {
 
   set level [template::adp_level]
 
@@ -58,9 +60,10 @@ ad_proc -public template::wizard::set_param { name value } {
   set params($name) $value
 }
 
-# Append a step to a wizard
 
 ad_proc -public template::wizard::add { step_id args } {
+    Append a step to a wizard
+} {
 
   get_reference
 
@@ -81,11 +84,12 @@ ad_proc -public template::wizard::add { step_id args } {
   array set props [array get opts]
 }
 
-# Set the step to display for this particular request This is
-# determined by the wizard_step parameter.  If not set, the first step
-# is used.
 
 ad_proc -public template::wizard::get_current_step {} {
+    Set the step to display for this particular request This is
+    determined by the wizard_step parameter.  If not set, the first step
+    is used.
+} {
 
   get_reference
 
@@ -116,12 +120,13 @@ ad_proc -public template::wizard::current_step {} {
   return [ns_queryget wizard_step [lindex $steps 0]]
 }
 
-# Add the appropriate buttons to the submit wizard
-# Also create a list of all the buttons
-# The optional -buttons parameter is a list of name-value pairs,
-# in form {name label} {name label...}
-# The valid button names are back, next, repeat, finish
 ad_proc -public template::wizard::submit { form_id args } {
+    Add the appropriate buttons to the submit wizard
+    Also create a list of all the buttons
+    The optional -buttons parameter is a list of name-value pairs,
+    in form {name label} {name label...}
+    The valid button names are back, next, repeat, finish
+} {
 
   variable default_button_labels
 
@@ -190,10 +195,11 @@ ad_proc -public template::wizard::submit { form_id args } {
   }
 }
 
-# Get a reference to the wizard steps (internal helper)
 
 ad_proc -public template::wizard::get_reference {} {
-  
+    Get a reference to the wizard steps (internal helper)
+} {
+
   uplevel {
 
     variable parse_level
@@ -206,9 +212,9 @@ ad_proc -public template::wizard::get_reference {} {
   }
 }
 
-# Return 1 if a wizard is currently defined
-
 ad_proc -public template::wizard::exists {} {
+    @return 1 if a wizard is currently defined
+} {
 
   variable parse_level 
 
@@ -221,10 +227,11 @@ ad_proc -public template::wizard::exists {} {
   return [info exists steps]
 }
 
-# call when a step has been validated and completed.
-# checks which submit button was pressed and proceeds accordingly.
 
 ad_proc -public template::wizard::forward {} {
+    call when a step has been validated and completed.
+    checks which submit button was pressed and proceeds accordingly.
+} {
 
   get_reference
 
@@ -253,9 +260,10 @@ ad_proc -public template::wizard::forward {} {
   }
 }
 
-# Build the redirect URL for the next step
 
 ad_proc -public template::wizard::get_forward_url { step_id } {
+    Build the redirect URL for the next step
+} {
 
   variable parse_level
   get_reference
@@ -283,9 +291,10 @@ ad_proc -public template::wizard::get_forward_url { step_id } {
   return $url
 }
 
-# Retreive the URL to the action
 ad_proc -public template::wizard::get_action_url {} {
-  
+    Retreive the URL to the action
+} {
+
   get_reference
 
   return $properties(action)

@@ -64,10 +64,10 @@ ad_proc -public template_tag_if_condition { chunk params condition_type } {
   template::adp_append_code "\}"
 }
 
-# append all the tags together and then eval as a list to restore
-# quotes
-
 ad_proc -public template_tag_if_concat_params { params } {
+  append all the tags together and then eval as a list to restore
+  quotes
+} {
 
   set size [ns_set size $params]
 
@@ -86,9 +86,9 @@ ad_proc -public template_tag_if_concat_params { params } {
   return $tokens
 }
 
-# Interpret an expression as part of the simplified IF syntax
-
 ad_proc -public template_tag_if_interp_expr {} {
+  Interpret an expression as part of the simplified IF syntax
+} {
 
   upvar args args condition condition
 
