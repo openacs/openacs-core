@@ -24,7 +24,8 @@ function new (
   revision_id   in cr_revisions.revision_id%TYPE default null,
   creation_date	in acs_objects.creation_date%TYPE default sysdate,
   creation_user	in acs_objects.creation_user%TYPE default null,
-  creation_ip	in acs_objects.creation_ip%TYPE default null
+  creation_ip	in acs_objects.creation_ip%TYPE default null,
+  filename	in cr_revisions.filename%TYPE default null
 
 ) return cr_revisions.revision_id%TYPE is
 
@@ -46,10 +47,10 @@ begin
 
   insert into cr_revisions (
     revision_id, title, description, mime_type, publish_date,
-    nls_language, content, item_id
+    nls_language, content, item_id, filename
   ) values (
     v_revision_id, title, description, mime_type, publish_date,
-    nls_language, data, item_id
+    nls_language, data, item_id, filename
   );
 
   return v_revision_id;

@@ -1178,6 +1178,8 @@ begin
                                            ''text/html'');
   PERFORM content_type__register_mime_type(''content_revision'', 
                                            ''text/plain'');
+  PERFORM content_type__register_mime_type(''content_revision'', 
+                                           ''text/richtext'');
 
   v_id := content_folder__new (
     ''pages'',

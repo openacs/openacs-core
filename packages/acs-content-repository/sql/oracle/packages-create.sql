@@ -836,7 +836,8 @@ function new (
 			   default sysdate,
   creation_user	in acs_objects.creation_user%TYPE
 			   default null,
-  creation_ip	in acs_objects.creation_ip%TYPE default null
+  creation_ip	in acs_objects.creation_ip%TYPE default null,
+  filename	in cr_revisions.filename%TYPE default null
 ) return cr_revisions.revision_id%TYPE;
 
 function new (

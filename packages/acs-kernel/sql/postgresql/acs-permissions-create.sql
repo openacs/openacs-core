@@ -361,7 +361,8 @@ as select p1.privilege, p2.privilege as descendant
                    where
                      h1.privilege = p1.privilege
                      and h2.privilege = p2.privilege
-                     and h2.tree_sortkey like h1.tree_sortkey || '%');
+                     and h2.tree_sortkey like h1.tree_sortkey || '%') or
+     p1.privilege = p2.privilege;
 
 create view acs_permissions_all
 as select op.object_id, p.grantee_id, p.privilege

@@ -120,7 +120,7 @@ begin
       content_folder__is_registered(
         v_parent_id, new__content_type, ''f'') = ''f'' then
 
-      raise EXCEPTION ''-20000: This item\\\'s content type % is not registered to this folder %'', new__content_type, v_parent_id;
+      raise EXCEPTION ''-20000: This items content type % is not registered to this folder %'', new__content_type, v_parent_id;
     end if;
 
   else if v_parent_id != 0 then
@@ -135,7 +135,7 @@ begin
      if content_item__is_subclass(v_parent_type, ''content_item'') = ''t'' and
 	content_item__is_valid_child(v_parent_id, new__content_type) = ''f'' then
 
-       raise EXCEPTION ''-20000: This item\\\'s content type % is not allowed in this container %'', new__content_type, v_parent_id;
+       raise EXCEPTION ''-20000: This items content type % is not allowed in this container %'', new__content_type, v_parent_id;
      end if;
 
   end if; end if;
@@ -278,7 +278,7 @@ begin
       content_folder__is_registered(
         v_parent_id, new__content_type, ''f'') = ''f'' then
 
-      raise EXCEPTION ''-20000: This item\\\'s content type % is not registered to this folder %'', new__content_type, v_parent_id;
+      raise EXCEPTION ''-20000: This items content type % is not registered to this folder %'', new__content_type, v_parent_id;
     end if;
 
   else if v_parent_id != 0 then
@@ -293,7 +293,7 @@ begin
      if content_item__is_subclass(v_parent_type, ''content_item'') = ''t'' and
 	content_item__is_valid_child(v_parent_id, new__content_type) = ''f'' then
 
-       raise EXCEPTION ''-20000: This item\\\'s content type % is not allowed in this container %'', new__content_type, v_parent_id;
+       raise EXCEPTION ''-20000: This items content type % is not allowed in this container %'', new__content_type, v_parent_id;
      end if;
 
   end if; end if;
@@ -481,7 +481,7 @@ begin
       content_folder__is_registered(
         v_parent_id, new__content_type, ''f'') = ''f'' then
 
-      raise EXCEPTION ''-20000: This item\\\'s content type % is not registered to this folder %'', new__content_type, v_parent_id;
+      raise EXCEPTION ''-20000: This items content type % is not registered to this folder %'', new__content_type, v_parent_id;
     end if;
 
   else if v_parent_id != 0 then
@@ -496,7 +496,7 @@ begin
      if content_item__is_subclass(v_parent_type, ''content_item'') = ''t'' and
 	content_item__is_valid_child(v_parent_id, new__content_type) = ''f'' then
 
-       raise EXCEPTION ''-20000: This item\\\'s content type % is not allowed in this container %'', new__content_type, v_parent_id;
+       raise EXCEPTION ''-20000: This items content type % is not allowed in this container %'', new__content_type, v_parent_id;
      end if;
 
   end if; end if;

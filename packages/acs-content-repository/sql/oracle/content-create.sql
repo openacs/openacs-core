@@ -779,6 +779,8 @@ begin
     content_type => 'content_revision', mime_type => 'text/html');
   content_type.register_mime_type(
     content_type => 'content_revision', mime_type => 'text/plain');
+  content_type.register_mime_type(
+    content_type => 'content_revision', mime_type => 'text/richtext');
 end;
 /
 show errors

@@ -122,11 +122,32 @@ as
     relation_tag	in cr_child_rels.relation_tag%TYPE default null,
     is_live		in char default 'f',
     publish_date	in cr_revisions.publish_date%TYPE default sysdate,
-    path		in varchar,
+    data		in cr_revisions.content%TYPE default null,
+    filename		in cr_revisions.filename%TYPE default null,
+    height		in images.height%TYPE default null,
+    width		in images.width%TYPE default null,
+    file_size		in cr_revisions.content_length%TYPE default null,
+    storage_type        in cr_items.storage_type%TYPE default 'file'
+  ) return cr_items.item_id%TYPE;
+
+  function new_revision (
+    item_id		in acs_objects.object_id%TYPE default null,
+    revision_id		in acs_objects.object_id%TYPE default null,
+    creation_date	in acs_objects.creation_date%TYPE default sysdate, 
+    creation_user	in acs_objects.creation_user%TYPE default null, 
+    creation_ip		in acs_objects.creation_ip%TYPE default null, 
+    title		in cr_revisions.title%TYPE default null,
+    description		in cr_revisions.description%TYPE default null,
+    mime_type		in cr_revisions.mime_type%TYPE default null,
+    nls_language	in cr_revisions.nls_language%TYPE default null,
+    is_live		in char default 'f',
+    publish_date	in cr_revisions.publish_date%TYPE default sysdate,
+    data                in cr_revisions.content%TYPE default null,
+    filename		in cr_revisions.filename%TYPE default null,
     height		in images.height%TYPE default null,
     width		in images.width%TYPE default null,
     file_size		in cr_revisions.content_length%TYPE default null
-  ) return cr_items.item_id%TYPE;
+  ) return cr_revisions.revision_id%TYPE;
 
   --/**
   -- Deletes a single revision of image
@@ -171,10 +192,12 @@ as
     relation_tag	in cr_child_rels.relation_tag%TYPE default null,
     is_live		in char default 'f',
     publish_date	in cr_revisions.publish_date%TYPE default sysdate,
-    path		in varchar,
+    data                in cr_revisions.content%TYPE default null,
+    filename		in cr_revisions.filename%TYPE default null,
     height		in images.height%TYPE default null,
     width		in images.width%TYPE default null,
-    file_size		in cr_revisions.content_length%TYPE default null
+    file_size		in cr_revisions.content_length%TYPE default null,
+    storage_type        in cr_items.storage_type%TYPE default 'file'
   ) return cr_items.item_id%TYPE
   is
     v_item_id	      cr_items.item_id%TYPE;
@@ -187,23 +210,24 @@ as
       parent_id	     => parent_id,
       relation_tag   => relation_tag,
       content_type   => content_type,
-      creation_date  => sysdate,
+      creation_date  => creation_date,
       creation_user  => creation_user,
       creation_ip    => creation_ip,
       locale	     => locale,
       context_id     => context_id,
-      storage_type   => 'file'
+      storage_type   => storage_type
     );
 
     v_revision_id := content_revision.new (
-      title => title,
+      title         => title,
       description   => description,
       item_id	    => v_item_id,
       revision_id   => revision_id,
       publish_date  => publish_date,
       mime_type	    => mime_type,
       nls_language  => nls_language,
-      text          => path,
+      data          => data,
+      filename      => filename,
       creation_date => sysdate,
       creation_user => creation_user,
       creation_ip   => creation_ip
@@ -231,6 +255,66 @@ as
 
     return v_item_id;
   end new;
+
+  function new_revision (
+    item_id		in acs_objects.object_id%TYPE default null,
+    revision_id		in acs_objects.object_id%TYPE default null,
+    creation_date	in acs_objects.creation_date%TYPE default sysdate, 
+    creation_user	in acs_objects.creation_user%TYPE default null, 
+    creation_ip		in acs_objects.creation_ip%TYPE default null, 
+    title		in cr_revisions.title%TYPE default null,
+    description		in cr_revisions.description%TYPE default null,
+    mime_type		in cr_revisions.mime_type%TYPE default null,
+    nls_language	in cr_revisions.nls_language%TYPE default null,
+    is_live		in char default 'f',
+    publish_date	in cr_revisions.publish_date%TYPE default sysdate,
+    data                in cr_revisions.content%TYPE default null,
+    filename		in cr_revisions.filename%TYPE default null,
+    height		in images.height%TYPE default null,
+    width		in images.width%TYPE default null,
+    file_size		in cr_revisions.content_length%TYPE default null
+  ) return cr_revisions.revision_id%TYPE
+  is
+    v_revision_id     cr_revisions.revision_id%TYPE;
+
+  begin
+    v_revision_id := content_revision.new (
+      title => title,
+      description   => description,
+      item_id	    => item_id,
+      revision_id   => revision_id,
+      publish_date  => publish_date,
+      mime_type	    => mime_type,
+      nls_language  => nls_language,
+      data          => data,
+      filename      => filename,
+      creation_date => creation_date,
+      creation_user => creation_user,
+      creation_ip   => creation_ip
+    );
+
+    insert into images
+    (image_id, height, width)
+    values
+    (v_revision_id, height, width);
+
+    -- update revision with image file info
+    update cr_revisions
+    set content_length = file_size
+    where revision_id = v_revision_id;
+
+    -- is_live => 't' not used as part of content_item.new
+    -- because content_item.new does not let developer specify revision_id,
+    -- revision_id is determined in advance 
+
+    if is_live = 't' then
+       content_item.set_live_revision (
+         revision_id => v_revision_id
+       );
+    end if;
+
+    return v_revision_id;
+  end new_revision;
 
   procedure delete_revision (
     revision_id		in cr_revisions.revision_id%TYPE
