@@ -2,8 +2,9 @@
 -- TODO: Migrate this to use acs_attributes instead?
 create table apm_package_version_attr (
     version_id         integer
-		       constraint apm_package_vers_attr_vid_fk	
-		       references apm_package_versions(version_id)
+                       constraint apm_package_vers_attr_vid_fk
+                       references apm_package_versions(version_id)
+                       on delete cascade
                        constraint apm_package_vers_attr_vid_nn
                        not null,
     attribute_name     varchar(100)

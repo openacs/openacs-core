@@ -416,10 +416,11 @@ comment on column apm_package_versions.auto_mount is '
 
 -- Use this table to make it easy to change the attribute set of package versions
 -- TODO: Migrate this to use acs_attributes instead?
-create table apm_package_version_attr (
+create table apm_package_version_attrx (
     version_id         integer
-		       constraint apm_package_vers_attr_vid_fk	
-		       references apm_package_versions(version_id)
+                       constraint apm_package_vers_attr_vid_fk	
+                       references apm_package_versions(version_id) 
+                       on delete cascade
                        constraint apm_package_vers_attr_vid_nn
                        not null,
     attribute_name     varchar(100)
