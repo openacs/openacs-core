@@ -4,7 +4,7 @@ if { [catch {
 
     # Test Execution START
 
-    ::twt::log "Login the site wide admin"
+    ::twt::log_section "Login the site wide admin"
     ::twt::user::login_site_wide_admin
 
     # Run all tests
