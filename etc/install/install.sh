@@ -489,6 +489,11 @@ if parameter_true $do_install; then
       $start_server_command
   fi
 
+  # Peter: it seems nsunix will trigger a restart of the server after we request
+  # the SYSTEM/dbtest page, so give the server some extra time here to potentially restart
+  # again before we proceed
+  sleep 30
+
   # we check for dbtest instead of success here because dbtest is a more thorough test
   # we would have used dbtest before but it doesn't work on postgresql before openacs
   # install
@@ -547,6 +552,7 @@ if parameter_true $do_install; then
 
   #-------------------------------------------------------------------
   # Run the Tcl API tests
+  echo "$(date): Running tclwebtest tests"
   ${tclwebtest_dir}/tclwebtest -config_file $config_file tcl-api-test.test
 
   if [ $database == "postgres" ]; then
