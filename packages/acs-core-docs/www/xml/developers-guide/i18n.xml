@@ -189,16 +189,18 @@
           </listitem>
 
           <listitem>
-            Dynamic key lookup: <computeroutput>[lang::util::localize $var_with_embedded_message_keys]</computeroutput> - In this case the message keys in the variable <computeroutput>var_with_embedded_message_keys</computeroutput> must appear as string literals <computeroutput>\#package_key.message_key\#</computeroutput> somewhere in the code. Here is an example of a dynamic lookup:
-            
-            <computeroutput>
-              set message_key_array {
-                 dynamic_key_1  \#package_key.message_key1\#
-                 dynamic_key_2  \#package_key.message_key2\#
-              }
+            Dynamic key lookup: 
+<screen>
+<userinput>[lang::util::localize $var_with_embedded_message_keys]</userinput>
+- In this case the message keys in the variable <computeroutput>var_with_embedded_message_keys</computeroutput> must appear as string literals <computeroutput>\#package_key.message_key\#</computeroutput> somewhere in the code. Here is an example of a dynamic lookup:           
+<userinput>set message_key_array {
+  dynamic_key_1  \#package_key.message_key1\#
+  dynamic_key_2  \#package_key.message_key2\#
+}
 
-              set my_text [lang::util::localize $message_key_array([get_dynamic_key])]
-            </computeroutput>
+set my_text [lang::util::localize $message_key_array([get_dynamic_key])]
+</userinput>
+</screen>
 
           </listitem>
         </itemizedlist>  
@@ -210,18 +212,20 @@
         enclosed in double quotes. The following is an example of grep commands 
         that can be used on Linux to highlight translatable text in TCL files:
       </para>
+      <screen>
+# Find text in double quotes
+<userinput>find -iname '*.tcl'|xargs egrep -i '"[a-z]'</userinput>
 
-      <computeroutput>
-      # Find text in double quotes
-      find -iname '*.tcl'|xargs egrep -i '"[a-z]'
-      # Find untranslated text in form labels, options and values
-      find -iname '*.tcl'|xargs egrep -i '\-(options|label|value)'|egrep -v '&lt;#'|egrep -v '\-(value|label|options)[[:space:]]+\$[a-zA-Z_]+[[:space:]]*\\?[[:space:]]*$'
-      # Find text in page titles and context bars
-      find -iname '*.tcl'|xargs egrep -i 'set (title|page_title|context_bar) '|egrep -v '&lt;#'
-      # Find text in error messages
-      find -iname '*.tcl'|xargs egrep -i '(ad_complain|ad_return_error)'|egrep -v '&lt;#'
-      </computeroutput>
+# Find untranslated text in form labels, options and values
+<userinput>find -iname '*.tcl'|xargs egrep -i '\-(options|label|value)'|egrep -v '&lt;#'|egrep -v '\-(value|label|options)[[:space:]]+\$[a-zA-Z_]+[[:space:]]*\\?[[:space:]]*$'</userinput>
 
+# Find text in page titles and context bars
+<userinput>find -iname '*.tcl'|xargs egrep -i 'set (title|page_title|context_bar) '|egrep -v '&lt;#'</userinput>
+
+# Find text in error messages
+<userinput>find -iname '*.tcl'|xargs egrep -i '(ad_complain|ad_return_error)'|egrep -v '&lt;#'</userinput>
+
+      </screen>
       <para>
         You may mark up translatable text in TCL library files and TCL pages
         with temporary tags on the &lt;#key text#&gt; syntax. 
@@ -271,28 +275,30 @@
       our example becomes:
       </para>
 
-      <computeroutput>
-      set msg_subst_list [list subject [parameter::get -localize -parameter classes_pretty_name] 
-                               class_instances [parameter::get -localize -parameter class_instances_pretty_plural]]
+<screen>
+<userinput>set msg_subst_list [list subject [parameter::get -localize -parameter classes_pretty_name] class_instances [parameter::get -localize -parameter class_instances_pretty_plural]]
 
-      ad_return_complaint 1 [_ dotlrn.class_may_not_be_deleted $msg_subst_list]
-      </computeroutput>
+ad_return_complaint 1 [_ dotlrn.class_may_not_be_deleted $msg_subst_list]
+</userinput>
+</screen>
 
       <para>
         When we were done going through the tcl files we ran the following
         commands to check for mistakes:
       </para>
 
-      <computeroutput>
-      # Message tags should usually not be in curly braces since then the message lookup may not be
-      # executed then (you can usually replace curly braces with the list command). Find message tags 
-      # in curly braces (should return nothing, or possibly a few lines for inspection)
-      find -iname '*.tcl'|xargs egrep -i '\{.*&lt;#'
-      # Check if you've forgotten space between default key and text in message tags (should return nothing)
-      find -iname '*.tcl'|xargs egrep -i '&lt;#_[^ ]'
-      # Review the list of tcl files with no message lookups
-      for tcl_file in $(find -iname '*.tcl'); do egrep -L '(&lt;#|\[_)' $tcl_file; done
-      </computeroutput>
+<screen>
+# Message tags should usually not be in curly braces since then the message lookup may not be
+# executed then (you can usually replace curly braces with the list command). Find message tags 
+# in curly braces (should return nothing, or possibly a few lines for inspection)
+<userinput>find -iname '*.tcl'|xargs egrep -i '\{.*&lt;#'</userinput>
+
+# Check if you've forgotten space between default key and text in message tags (should return nothing)
+<userinput>find -iname '*.tcl'|xargs egrep -i '&lt;#_[^ ]'</userinput>
+
+# Review the list of tcl files with no message lookups
+<userinput>for tcl_file in $(find -iname '*.tcl'); do egrep -L '(&lt;#|\[_)' $tcl_file; done</userinput>
+</screen>
 
       <para>
         When you feel ready you may vist your package in the
