@@ -344,6 +344,13 @@ ad_proc -public auth::sync::job::action {
                     # Updating/deleting a user that doesn't exist
                     set success_p 0
                     set result(message) "A user with username '$username' does not exist"
+                } else {
+                    acs_user::get -user_id $user_id -array existing_user_info
+                    if { [string equal $existing_user_info(member_state) "banned"] } {
+                        # Updating/deleting a user that's already deleted
+                        set success_p 0
+                        set result(message) "The user with username '$username' has been deleted (banned)"
+                    }
                 }
             }
             insert {
