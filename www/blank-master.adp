@@ -1,8 +1,8 @@
 @doc_type;noquote@
 <html>
   <head>
-    <meta name="generator" content="OpenACS version @openacs_version@">
     <title>@title;noquote@</title>
+    <meta name="generator" content="OpenACS version @openacs_version@">
     <if @developer_support_p@ true>
       <link rel="stylesheet" type="text/css" href="/resources/acs-developer-support/acs-developer-support.css" media="all">
     </if>
@@ -20,10 +20,8 @@
       </style>
     </if>
 
-    <script src="/resources/acs-subsite/core.js" language="javascript"></script>
-
+    <script type="text/javascript" src="/resources/acs-subsite/core.js" language="javascript"></script>
     <textarea id="holdtext" style="display: none;"></textarea>
-
     @header_stuff;noquote@
   </head>
   <body<multiple name="attribute"> @attribute.key@="@attribute.value@"</multiple>>

@@ -13,7 +13,6 @@
     @header_stuff;noquote@
   </property>
 
-
 <!-- Header -->
 
 <div id="site-header">
@@ -92,20 +91,22 @@
 
 <slave>
 
-<div id="site-footer">
-  <div class="action-list">
-    <ul>
-      <if @num_of_locales@ gt 1>
-        <li><a href="@change_locale_url@">Change locale</a></li>
+    <div id="site-footer">
+      <if @num_of_locales@ gt 1 or @locale_admin_url@ not nil>
+        <div class="action-list">
+          <ul>
+            <if @num_of_locales@ gt 1>
+              <li><a href="@change_locale_url@">Change locale</a></li>
+            </if>
+            <else>
+              <if @locale_admin_url@ not nil>
+                <li><a href="@locale_admin_url@">Install locales</a></li>
+              </if>
+            </else>
+          </ul>
+        </div>
       </if>
-      <else>
-        <if @locale_admin_url@ not nil>
-          <li><a href="@locale_admin_url@">Install locales</a></li>
-        </if>
-      </else>
-    </ul>
-  </div>
-</div>
+    </div>
 
 <if @curriculum_bar_p@ true>
   <p><include src="/packages/curriculum/lib/bar" />
