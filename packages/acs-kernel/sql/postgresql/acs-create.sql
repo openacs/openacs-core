@@ -93,7 +93,7 @@ begin
       ''membership_rel'',
       acs__magic_object_id(''registered_users''),      
       v_user_id,
-      member_state
+      member_state,
       null,
       null);
 
