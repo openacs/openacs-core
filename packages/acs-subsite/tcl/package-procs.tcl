@@ -633,7 +633,7 @@ ad_proc package_object_attribute_list {
 
 
 ad_proc -private package_plsql_args {
-    { -function_name "NEW" }
+    { -object_name "NEW" }
     package_name
 } {
     Generates a list of parameters expected to a plsql function defined within
@@ -646,13 +646,20 @@ ad_proc -private package_plsql_args {
 
     @param package_name The package which owns the function
 
-    @param function_name The function name which we're looking up
+    @param object_name The function name which we're looking up
 } {
     # Get just the args
     return [db_list select_package_func_param_list {}]
 }
-    
 
+ad_proc -private package_function_p {
+    -object_name:required
+    package_name
+} {
+    Returns true if the package's object is a function.
+} {
+    return [db_0or1row function_p ""]
+}
 ad_proc -private package_table_columns_for_type {
     object_type
 } {
@@ -831,6 +838,7 @@ ad_proc -public package_instantiate_object {
     set pieces [list]
     
     foreach pair $var_list {
+
 	set __key [lindex $pair 0]
 	set __value [lindex $pair 1]
 	if { ![info exists real_params([string toupper $__key])] } {
@@ -902,7 +910,7 @@ ad_proc -public package_instantiate_object {
 ad_proc -public package_exec_plsql {
     { -var_list "" }
     package_name 
-    function_name 
+    object_name 
 } {
 
     Calls a pl/[pg]sql proc/func defined within the object type's package.  Use of
@@ -913,7 +921,7 @@ ad_proc -public package_exec_plsql {
     @creation-date 12/31/2003
 
     @param package_name The PL/[pg]SQL package 
-    @param function_name The PL/[pg]SQL function within the package 
+    @param object_name The PL/[pg]SQL function within the package 
 
     @param var_list A list of pairs of additional attributes and their
     values to pass to the constructor. Each pair is a list of two
@@ -931,7 +939,7 @@ ad_proc -public package_exec_plsql {
 
     </pre>
 } {
-    foreach arg [util_memoize [list package_plsql_args -function_name $function_name $package_name]] {
+    foreach arg [util_memoize [list package_plsql_args -object_name $object_name $package_name]] {
 	set real_params([string toupper $arg]) 1
     }
 
@@ -949,7 +957,7 @@ ad_proc -public package_exec_plsql {
 	if { ![info exists real_params([string toupper $__key])] } {
 	    # The parameter is not accepted as a parameter to the
 	    # pl/sql function. Ignore it.
-            ns_log Warning "package_exec_plsql: skipping $__key not found in params for $package_name $function_name"
+            ns_log Warning "package_exec_plsql: skipping $__key not found in params for $package_name $object_name"
 	    continue;
 	} 
 	lappend pieces [list $__key]
@@ -958,7 +966,11 @@ ad_proc -public package_exec_plsql {
 	set $__key $__value
     }
 
-    return [db_exec_plsql exec_plsql {}]
+    if { [util_memoize [list package_function_p -object_name $object_name $package_name]] } {
+        return [db_exec_plsql exec_func_plsql {}]
+    } else {
+        db_exec_plsql exec_proc_plsql {}
+    }
 
 }
 

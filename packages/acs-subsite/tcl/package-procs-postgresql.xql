@@ -157,7 +157,13 @@
       <querytext>
 	select args.arg_name
         from acs_function_args args
-        where args.function = upper(:package_name) || '__' || upper(:function_name)
+        where args.function = upper(:package_name) || '__' || upper(:object_name)
+      </querytext>
+</fullquery>
+
+<fullquery name="package_function_p.function_p">      
+      <querytext>
+	 select 1
       </querytext>
 </fullquery>
  
@@ -260,12 +266,12 @@ select 1;
       <querytext>now()</querytext>
 </partialquery>
 
-<fullquery name="package_exec_plsql.exec_plsql">      
+<fullquery name="package_exec_plsql.exec_func_plsql">      
       <querytext>
 
-	select ${package_name}__${function_name}([plpgsql_utility::generate_attribute_parameter_call \
+	select ${package_name}__${object_name}([plpgsql_utility::generate_attribute_parameter_call \
 		-prepend ":" \
-		${package_name}__${function_name} \
+		${package_name}__${object_name} \
 		$pieces])
 
       </querytext>
