@@ -610,6 +610,12 @@ ad_proc -public template::list::write_output {
     }
 }
 
+ad_proc -public template::list::csv_quote {
+    string
+} {
+    regsub -all {\"} $string {""} result
+    return $result
+}
 
 ad_proc -public template::list::write_csv {
     -name:required
@@ -624,6 +630,15 @@ ad_proc -public template::list::write_csv {
     set __list_name $name
     set __output {}
 
+    # Output header row
+    set __cols [list]
+    foreach __element_name $list_properties(display_elements) {
+        lappend __cols [csv_quote $__element_name]
+    }
+    append __output "\"[join $__cols "\",\""]\"\n"
+
+
+    # Output rows
     template::multirow foreach $list_properties(multirow) {
 
         set __cols [list]
@@ -635,7 +650,7 @@ ad_proc -public template::list::write_csv {
                 -local_name __element_properties
 
             if { [info exists $__element_properties(csv_col)] } {
-                lappend __cols [set $__element_properties(csv_col)]
+                lappend __cols [csv_quote [set $__element_properties(csv_col)]]
             }
         }
         append __output "\"[join $__cols "\",\""]\"\n"
