@@ -555,7 +555,8 @@ ad_proc subsite::get_pageflow_struct {} {
         # See if the redirect-url to a package inside this subsite
         for { set i 0 } { $i < [llength $child_urls] } { incr i } {
             array set child_node [site_node::get_from_url -exact -url [lindex $child_urls $i]]
-            if { [string equal $index_redirect_url "$child_node(name)/"] } {
+            if { [string equal $index_redirect_url $child_node(url)] ||
+                 [string equal ${index_redirect_url}/ $child_node(url)]} {
                 lappend pageflow $child_node(name) [list \
                                                         label "Home" \
                                                         folder $child_node(name) \
