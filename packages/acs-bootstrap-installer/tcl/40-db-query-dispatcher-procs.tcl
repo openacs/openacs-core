@@ -485,7 +485,7 @@ ad_proc db_qd_internal_load_queries {file_pointer file_tag} {
     set acs_file_path [ad_make_relative_path $file_tag]
     set queryname_root [db_qd_internal_get_queryname_root $acs_file_path]
 
-    db_qd_log Debug "db_qd_internal_load_queries: \n file: [lindex $parsing_state 4] \n default_rdbms: [lindex parsing_state 3] \n queryname_root: $queryname_root"
+    db_qd_log Debug "db_qd_internal_load_queries: \n file: [lindex $parsing_state 4] \n default_rdbms: [lindex $parsing_state 3] \n queryname_root: $queryname_root"
 
     while {1} {
 	set result [db_qd_internal_parse_one_query $parsing_state]

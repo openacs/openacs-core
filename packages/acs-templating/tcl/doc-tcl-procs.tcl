@@ -273,7 +273,7 @@ ad_proc -private template::util::proc_element_compare { element1 element2 } {
     used to compare two different elements in a list of parsed data for public or private procs
 } {
 
-    return [string compare -nocase [lindex [lindex [lindex element2 1] 0] 1] [lindex [lindex [lindex element1 1] 0] 1]]
+    return [string compare -nocase [lindex [lindex [lindex $element2 1] 0] 1] [lindex [lindex [lindex $element1 1] 0] 1]]
 
 }
 
