@@ -36,8 +36,8 @@ ad_proc -public auth::authority::create {
 
       <li> enabled_p           't' if this authority available, 'f' if it's disabled. Defaults to 't'.
 
-      <li> sort_order         Sort ordering determines the order in which authoritys are listed in the user interface.
-                              Defaults to 1.
+      <li> sort_order         Sort ordering determines the order in which authorities are listed in the user interface.
+                              Defaults to the currently highest sort order plus one.
 
       <li> auth_impl_id       The ID of the implementation of the 'auth_authentication' service contract.
                               Defaults to none.
@@ -77,12 +77,13 @@ ad_proc -public auth::authority::create {
 
         set names [array names row]
 
-        set columns [get_columns]
+        array set column_defaults [get_column_defaults]        
+        set all_columns [array names column_defaults]
 
         # Check that the columns provided in the array are all valid 
         # Set array entries as local variables
         foreach name $names {
-            if { [lsearch -exact $columns $name] == -1 } {
+            if { [lsearch -exact $all_columns $name] == -1 } {
                 error "Attribute '$name' isn't valid for auth_authorities."
             }
             set $name $row($name)
@@ -92,6 +93,13 @@ ad_proc -public auth::authority::create {
         foreach name [get_required_columns] {
             if { ![info exists $name] } {
                 error "Required column '$name' missing for auth_authorities."
+            }
+        }
+
+        # Set default values for columns not provided
+        foreach column $all_columns {
+            if { [lsearch $names $column] == -1 } {
+                set $column $column_defaults($column)
             }
         }
 
@@ -108,6 +116,12 @@ ad_proc -public auth::authority::create {
         }
 
         set authority_id [db_exec_plsql create_authority {}]
+
+        # Set the arguments not taken by the new function with an update statement
+        foreach column {get_doc_impl_id process_doc_impl_id snapshot_p batch_sync_enabled_p} {
+            set edit_columns($column) [set $column]
+        }
+        edit -authority_id $authority_id -array edit_columns
     }
 
     # Flush the cache, so that if we've tried to request this short_name while it didn't exist, we will now find it
@@ -337,26 +351,35 @@ ad_proc -private auth::authority::get_columns {} {
     
     @author Lars Pind (lars@collaboraid.biz)
 } {
-    return { 
-        authority_id
-        short_name
-        pretty_name
-        help_contact_text
-        enabled_p
-        sort_order
-        auth_impl_id
-        pwd_impl_id
-        forgotten_pwd_url
-        change_pwd_url
-        register_impl_id
-        register_url
-        get_doc_impl_id
-        process_doc_impl_id
-        snapshot_p
-        batch_sync_enabled_p
-    }
+    array set column_defaults [get_column_defaults]
+    return [array names column_defaults]
 }
 
+ad_proc -private auth::authority::get_column_defaults {} {
+    Get an array list with column names as keys and their default
+    value as values. Note however that required columns are not defaulted.
+
+    @author Peter Marklund
+} {
+    return { 
+        authority_id ""
+        short_name ""
+        pretty_name ""
+        help_contact_text ""
+        enabled_p "f"
+        sort_order ""
+        auth_impl_id ""
+        pwd_impl_id ""
+        forgotten_pwd_url ""
+        change_pwd_url ""
+        register_impl_id ""
+        register_url ""
+        get_doc_impl_id ""
+        process_doc_impl_id ""
+        snapshot_p "f"
+        batch_sync_enabled_p "f"
+    }
+}
 
 ad_proc -private auth::authority::get_required_columns {} {
     Get a list of the required columns in the auth_authorities table.

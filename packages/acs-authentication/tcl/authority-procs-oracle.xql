@@ -19,10 +19,6 @@
                 register_impl_id => :register_impl_id,
                 register_url => :register_url,
                 help_contact_text => :help_contact_text,
-                get_doc_impl_id => :get_doc_impl_id,
-                process_doc_impl_id => :process_doc_impl_id,
-                snapshot_p => :snapshot_p,
-                batch_sync_enabled_p => :batch_sync_enabled_p,
                 creation_user => :creation_user,
                 creation_ip => :creation_ip,
                 context_id => :context_id
