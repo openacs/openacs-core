@@ -60,7 +60,7 @@ ad_proc -private search::indexer {} {
 } {
 
     set driver [ad_parameter -package_id [apm_package_id_from_key search] FtsEngineDriver]
-    set driver [ad_parameter -package_id [apm_package_id_from_key search] Syndicate -default 0]
+    set syndicate [ad_parameter -package_id [apm_package_id_from_key search] Syndicate -default 0]
 
     if {[empty_string_p $driver]
         || ! [acs_sc_binding_exists_p FtsEngineDriver $driver]} {
