@@ -151,8 +151,6 @@ if { [template::form is_valid constraint_new] } {
 	set return_url "../one?segment_id=$rel_segment"
     }
     ad_returnredirect $return_url
-    return
+    ad_script_abort
 }
-
-ad_return_template
 

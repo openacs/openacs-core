@@ -60,8 +60,5 @@ if { [template::form is_valid role_form] } {
 	set return_url "one?[ad_export_vars role]"
     }
     ad_returnredirect $return_url
-    return
+    ad_script_abort
 }
-
-
-ad_return_template

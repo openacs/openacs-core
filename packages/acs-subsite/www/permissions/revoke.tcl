@@ -13,8 +13,8 @@ ad_page_contract {
 ad_require_permission $object_id admin
 
 if {[llength $revoke_list] == 0} {
-  ad_returnredirect ".?[export_url_vars object_id]"
-  return
+  ad_returnredirect "./?[export_url_vars object_id]"
+  ad_script_abort
 }
 
 doc_body_append "[ad_header "Revoke Confirm"]

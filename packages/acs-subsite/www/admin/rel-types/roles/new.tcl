@@ -57,8 +57,5 @@ if { [template::form is_valid role_form] } {
 	}
     }
     ad_returnredirect $return_url
-    return
+    ad_script_abort
 }
-
-
-ad_return_template

@@ -94,7 +94,5 @@ if { [template::form is_valid edit_attribute] } {
               where $type_column = :id_column"
 
     ad_returnredirect $return_url
-    return
+    ad_script_abort
 }
-
-ad_return_template

@@ -183,5 +183,5 @@ and rel_type = 'user_portrait_rel'"] {
 if { [exists_and_not_null return_url] } {
     ad_returnredirect $return_url
 } else {
-    ad_returnredirect "index.tcl"
+    ad_returnredirect {}
 }

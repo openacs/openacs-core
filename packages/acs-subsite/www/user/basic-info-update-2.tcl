@@ -88,7 +88,7 @@ if { [string length $bio] >= 4000 } {
 
 if { $exception_count > 0 } {
     ad_return_complaint $exception_count $exception_text
-    return
+    ad_script_abort
 }
 
 if { [db_string email_unique_count "select count(party_id) from parties where email = lower(:email) and party_id <> :user_id"] > 0 } {
@@ -97,7 +97,7 @@ if { [db_string email_unique_count "select count(party_id) from parties where em
     perhaps you're trying to combine two accounts?  If so, please email <a
     href=\"mailto:[ad_system_owner]\">[ad_system_owner]</a> with your
     request."
-    return
+    ad_script_abort
 }
 
 # bio_change_to = 0 -> insert
@@ -167,7 +167,7 @@ db_transaction {
 if { [exists_and_not_null return_url] } {
     ad_returnredirect $return_url
 } else {
-    ad_returnredirect "/pvt/home.tcl"
+    ad_returnredirect "/pvt/home"
 }
 
 

@@ -6,4 +6,4 @@ ad_page_contract {
     @cvs-id $Id$
 } {}
 
-ns_returnredirect "home"
+ad_returnredirect "home"
