@@ -1085,16 +1085,12 @@ ad_proc -private auth::get_local_account {
         set authority_id [auth::authority::local]
     }
 
-    set account_found_p [db_0or1row select_user_info { 
-        select user_id,
-               email,
-               member_state,
-               email_verified_p,
-               screen_name
-        from   cc_users 
-        where  username = :username
-        and    authority_id = :authority_id
-    }]
+    with_catch errmsg {
+        acs_user::get -authority_id $authority_id -username $username -array user
+        set account_found_p 1
+    } {
+        set account_found_p 0
+    }
 
     if { !$account_found_p } {
         # Local user account doesn't exist
@@ -1116,14 +1112,15 @@ ad_proc -private auth::get_local_account {
 
     # Check local account status
     array set auth_info [auth::check_local_account_status \
-                             -user_id $user_id \
+                             -user_id $user(user_id) \
                              -return_url $return_url \
-                             -member_state $member_state \
-                             -email_verified_p $email_verified_p \
-                             -screen_name $screen_name]
+                             -member_state $user(member_state) \
+                             -email_verified_p $user(email_verified_p) \
+                             -screen_name $user(screen_name) \
+                             -password_age_days $user(password_age_days)]
 
     # Return user_id
-    set auth_info(user_id) $user_id
+    set auth_info(user_id) $user(user_id)
 
    return [array get auth_info]    
 }
@@ -1135,6 +1132,7 @@ ad_proc -private auth::check_local_account_status {
     {-member_state:required}
     {-email_verified_p:required}
     {-screen_name:required}
+    {-password_age_days:required}
 } {
     Check the account status of a user with the given parameters.
 
@@ -1151,6 +1149,9 @@ ad_proc -private auth::check_local_account_status {
 
     switch $member_state {
         approved {
+            set PasswordExpirationDays [parameter::get -parameter PasswordExpirationDays -package_id [ad_acs_kernel_id] -default 0]
+            
+
             if { $email_verified_p == "f" } {
                 if { !$no_dialogue_p } {
                     set result(account_message) "<p>[_ acs-subsite.lt_Registration_informat]</p><p>[_ acs-subsite.lt_Please_read_and_follo]</p>"
@@ -1163,13 +1164,16 @@ ad_proc -private auth::check_local_account_status {
                         set result(account_message) "We got an error sending out the email for email verification"
                     }
                 }
+            } elseif { [string equal [acs_user::ScreenName] "require"] && [empty_string_p $screen_name] } {
+                set update_url [export_vars -no_empty -base "[subsite::get_element -element url]user/basic-info-update" { return_url {edit_p 1} }]
+                set result(account_message) "<p>Before we can let you in, you must setup a screen name.</p><p><b>&raquo;</b> <a href=\"$update_url\">Update your profile now</a></p>"
+            } elseif { $PasswordExpirationDays > 0 && \
+                           ([empty_string_p $password_age_days] || $password_age_days > $PasswordExpirationDays) } {
+                
+                set password_url [export_vars -base "[subsite::get_element -element url]user/password-update" { return_url { expired_p 1 }}]
+                set result(account_message) "<p>Before we can let you in, you must change your password.</p><p><b>&raquo;</b> <a href=\"$password_url\">Change your password now</a></p>"
             } else {
-                if { [string equal [acs_user::ScreenName] "require"] && [empty_string_p $screen_name] } {
-                    set update_url [export_vars -no_empty -base "[subsite::get_element -element url]user/basic-info-update" { return_url {edit_p 1} }]
-                    set result(account_message) "<p>Before we can let you in, you must setup a screen name.</p><p><b>&raquo;</b><a href=\"$update_url\">Update your profile now</a></p>"
-                } else {
-                    set result(account_status) "ok"
-                }
+                set result(account_status) "ok"
             }
         }
         banned { 
@@ -1205,7 +1209,8 @@ ad_proc -public auth::local_account_ok_p {
                               -user_id $user_id \
                               -member_state $user(member_state) \
                               -email_verified_p $user(email_verified_p) \
-                              -screen_name $user(screen_name)]
+                              -screen_name $user(screen_name) \
+                              -password_age_days $user(password_age_days)]
         
         set ok_p [expr [string equal $result(account_status) "ok"]]
     }

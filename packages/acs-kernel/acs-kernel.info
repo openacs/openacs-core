@@ -7,13 +7,13 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>t</singleton-p>
     
-    <version name="5.0d7" url="http://openacs.org/repository/download/apm/acs-kernel-5.0d7.apm">
+    <version name="5.0d8" url="http://openacs.org/repository/download/apm/acs-kernel-5.0d8.apm">
         <owner url="mailto:dhogaza@pacifier.com">Don Baccus</owner>
         <summary>Routines and data models providing the foundation for OpenACS-based Web services.</summary>
         <release-date>2003-02-18</release-date>
         <vendor url="http://openacs.org/">OpenACS</vendor>
 
-        <provides url="acs-kernel" version="5.0d7"/>
+        <provides url="acs-kernel" version="5.0d8"/>
 
         <callbacks>
         </callbacks>
@@ -67,6 +67,8 @@
 
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="EmailAccountOwnerOnPasswordChangeP"  default="1" description="Say 1 if you want us to send an email to the account owner when changing password for local accounts." section_name="Local Accounts"/>
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="ScreenName"  default="solicit" description="Can be 'none', 'solicit', or 'require'. If you say none, we will not ask users to provide a screen_name. If you say 'solicit', we will ask for one, but not require it. If you say 'require', we will not let users register or login without setting up a screen_name." section_name="Local Accounts"/>
+            <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="ApprovalExpirationDays"  default="0" description="The number of days after which registration approval expires, which will cause the user to change state to 'needs_approval'. Set to 0 to disable expiration of approval." section_name="security"/>
+            <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="PasswordExpirationDays"  default="0" description="How long can a password be used before it expires and must be changed. Specify 0 to disable password expiration." section_name="security"/>
         </parameters>
 
     </version>

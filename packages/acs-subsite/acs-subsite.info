@@ -7,28 +7,28 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>f</singleton-p>
     
-    <version name="5.0d3" url="http://www.openacs.org/repository/download/apm/acs-subsite-5.0d3.apm">
+    <version name="5.0d4" url="http://www.openacs.org/repository/download/apm/acs-subsite-5.0d4.apm">
         <owner url="http://openacs.org">OpenACS</owner>
         <summary>Provides the ability to create subsite within the OpenACS Community System.</summary>
         <release-date>2003-09-12</release-date>
         <vendor url="http://www.openacs.org/">OpenACS</vendor>
         <description format="text/html">Aware of parties, groups, users, portraits, ...</description>
 
-        <provides url="acs-subsite" version="5.0d3"/>
+        <provides url="acs-subsite" version="5.0d4"/>
         <requires url="acs-content-repository" version="4.1"/>
-        <requires url="acs-kernel" version="4.6.4"/>
+        <requires url="acs-kernel" version="5.0d8"/>
         <requires url="acs-tcl" version="4.1"/>
 
         <callbacks>
             <callback type="after-mount"  proc="subsite::after_mount"/>
             <callback type="before-uninstantiate"  proc="subsite::before_uninstantiate"/>
+            <callback type="before-upgrade"  proc="subsite::before_upgrade"/>
         </callbacks>
         <parameters>
             <parameter datatype="string" min_n_values="1" max_n_values="1" name="ScreenNameP" default="0" description="Set this to 1 if you want to show screen names instead of real names." section_name="user-info" />
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="AcceptablePortraitMIMETypes"  default="image/gif image/jpeg" description="Enter a set of acceptable MIME types for portrait submissions." section_name="user-info"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="AllowPersistentLoginP"  default="1" description="do we allow persistent logins?" section_name="user-login"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="application"  default="default" description="Name of the ETP application to use (default, faq, wiki, or create your own with the etp::define_applicaton procedure)" section_name="EditThisPage"/>
-            <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="ApprovalExpirationDays"  default="0" description="The number of days after which registration approval expires, which will cause the user to change state to 'needs_approval'. Set to 0 to disable expiration of approval." section_name="user-login"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="bgcolor"  default="white" description="this setting sets the background color for the default-master template that all HTML content is returned in."/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="DefaultFormStyle"  description="The default form template to use if a particular form doesn't have something more specific defined already."/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="DefaultListStyle"  default="table" description="The default list template to use if a particular list does not explicitly specify the list style to use."/>
@@ -43,7 +43,6 @@
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="MaxPortraitBytes"  default="200000" description="Maximum portrait size in bytes. Leave empty for no limitation." section_name="user-info"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="NewRegistrationEmailAddress"  default="admin@yourdomain.com" description="where to send those notes (defaults to SystemOwner)" section_name="user-login"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="NotifyAdminOfNewRegistrationsP"  default="0" description="Notify someone of new registrations?" section_name="user-login"/>
-            <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="PasswordExpirationDays"  default="0" description="How long can a password be used before it expires and must be changed. Specify 0 to disable password expiration." section_name="user-login"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="RegistrationProvidesRandomPasswordP"  default="0" description="have the system generate a random password instead of the user" section_name="user-login"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="RegistrationRequiresApprovalP"  default="0" description="set this to 1 if user does not go live immediately" section_name="user-login"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="RegistrationRequiresEmailVerificationP"  default="0" description="set this to 1 if the user has to receive and email and come back to the site" section_name="user-login"/>
