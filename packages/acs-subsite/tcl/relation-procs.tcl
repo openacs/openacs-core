@@ -318,3 +318,21 @@ ad_proc -public relation::get_id {
 } {
     return [db_string select_rel_id {} -default {}]
 }
+
+ad_proc -public relation::get_object_one {
+    {-object_id_two:required}
+    {-rel_type "membership_rel"}
+} {
+    Return the object_id of object one if a relation of rel_type exists between the supplied object_id_two and it.
+} {
+    return [db_string select_object_one {} -default {}]
+}
+
+ad_proc -public relation::get_object_two {
+    {-object_id_one:required}
+    {-rel_type "membership_rel"}
+} {
+    Return the object_id of object two if a relation of rel_type exists between the supplied object_id_one and it.
+} {
+    return [db_string select_object_two {} -default {}]
+}
