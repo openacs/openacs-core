@@ -77,7 +77,7 @@ This variable must be set in order for the Oracle software to work properly (eve
     # First we look for the overall presence of interMedia
     db_1row check_role "SELECT (SELECT COUNT(*) FROM USER_ROLE_PRIVS WHERE GRANTED_ROLE = 'CTXAPP') ctxrole,
        (SELECT COUNT(*) FROM ALL_USERS WHERE USERNAME = 'CTXSYS') ctxuser,
-       USER FROM DUAL"
+       USER thisuser FROM DUAL"
     if {$ctxuser < 1} {
         append my_errors "<li><p><strong>The CTXSYS user does not exist in your database. This means 
 that interMedia is probably not installed. interMedia is needed for full-text searching. 
