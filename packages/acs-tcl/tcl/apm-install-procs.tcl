@@ -623,12 +623,7 @@ ad_proc -private apm_load_catalog_files {
         return
     }
 
-    if { $upgrade_p } {
-        # Reset the upgrade status of message catalog keys before we load the catalog files
-        lang::catalog::reset_upgrade_status_message_keys $package_key
-    }
-
-    # Load and cache I18N messages
+    # Load and cache I18N messages for all enabled locales
     lang::catalog::import -cache -package_key $package_key
 }
 
@@ -969,7 +964,7 @@ ad_proc -private apm_package_delete {
     "
         foreach path $sql_drop_scripts {
     	apm_callback_and_log $callback "<li><pre>"
-    	db_source_sql_file -callback apm_doc_body_callback "[acs_package_root_dir $package_key]/$path"
+    	db_source_sql_file -callback $callback "[acs_package_root_dir $package_key]/$path"
     	apm_callback_and_log $callback "</pre>"
         }
     }    
