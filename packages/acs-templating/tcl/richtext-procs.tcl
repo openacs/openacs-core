@@ -6,7 +6,13 @@ ad_library {
     @cvs-id $Id$
 }
 
+namespace eval template {}
+namespace eval template::data {}
+namespace eval template::data::transform {}
+namespace eval template::data::validate {}
+namespace eval template::util {}
 namespace eval template::util::richtext {}
+namespace eval template::widget {}
 
 ad_proc -public template::util::richtext { command args } {
     Dispatch procedure for the richtext object

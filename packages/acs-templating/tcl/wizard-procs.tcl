@@ -10,6 +10,9 @@
 # License.  Full text of the license is available from the GNU Project:
 # http://www.fsf.org/copyleft/gpl.html
 
+namespace eval template {}
+namespace eval template::wizard {}
+
 ad_proc -public template::wizard { command args } {
     alias proc to call the real template::wizard::proc
 } {

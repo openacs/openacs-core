@@ -9,6 +9,9 @@ ad_library {
 
 }
 
+namespace eval template {}
+namespace eval template::query {}
+
 
 # Database Query API for the ArsDigita Templating System
 

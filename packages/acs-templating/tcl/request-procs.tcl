@@ -19,6 +19,9 @@
 
 # @see form element
 
+namespace eval template {}
+namespace eval template::request {}
+
 ad_proc -public template::request { command args } {
   eval request::$command $args
 }

@@ -19,6 +19,8 @@
 # @param id 
 # The ID of the foo passed with the request.
 
+namespace eval template {}
+
 ad_proc -public template::parse_directives { code } {
 
   # remove carriage returns if present

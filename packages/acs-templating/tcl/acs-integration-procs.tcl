@@ -59,7 +59,7 @@ ad_proc -public ad_parse_template {
             2 { lappend template_params [lindex $param 0]
                 lappend template_params [lindex $param 1]
               }
-            default { return -code error "Error in parameter list" }
+            default { return -code error [_ acs-templating.Template_parser_error_in_parameter_list] }
         }
     }
     return [uplevel [list template::adp_parse [template::util::url_to_file $template [ad_conn file]] $template_params]]
