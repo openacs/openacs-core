@@ -53,7 +53,7 @@
       </if>
       <if @logout_url@ not nil>
         &nbsp;
-        <a href="@logout_url@?return_url=@subsite_url@" title="#acs-subsite.Logout_from_system#"
+        <a href="@logout_url@" title="#acs-subsite.Logout_from_system#"
           class="button">#acs-subsite.Logout#</a>
       </if>
       <if @login_url@ not nil>
