@@ -554,14 +554,15 @@ ad_proc -private rp_filter { why } {
 	}
     }
 
-    # DRB: a bug in ns_conn causes urlc to be set to one and urlv to be set to
+    # DRB: a bug in ns_conn causes urlc to be set to one greater than the number of URL
+    # directory elements and the trailing element of urlv to be set to
     # {} if you hit the site with the host name alone.  This confuses code that
-    # expects urlc to be set to zero and the empty list.  This bug is probably due
-    # to changes in list handling in Tcl 8x vs. Tcl 7x.
+    # expects urlc to be set to the length of urlv and urlv to have a non-null
+    # trailing element except in the case where urlc is 0 and urlv the empty list.
 
-    if { [ad_conn urlc] == 1 && [lindex [ad_conn urlv] 0] == "" } {
-        ad_conn -set urlc 0
-        ad_conn -set urlv [list]
+    if { [lindex [ad_conn urlv] end] == "" } {
+        ad_conn -set urlc [expr [ad_conn urlc] - 1]
+        ad_conn -set urlv [lrange [ad_conn urlv] 0 [expr {[llength [ad_conn urlv]] - 2}] ]
     }
 
     rp_debug -ns_log_level debug -debug t "rp_filter: setting up request: [ns_conn method] [ns_conn url] [ns_conn query]"
