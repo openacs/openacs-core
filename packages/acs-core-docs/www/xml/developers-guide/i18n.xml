@@ -493,14 +493,14 @@ ad_return_complaint 1 [_ dotlrn.class_may_not_be_deleted $msg_subst_list]
         </formalpara>
       <mediaobject>
         <imageobject>
-          <imagedata fileref="images/i18n-1.png" format="PNG" align="center"/>
+          <imagedata fileref="../images/i18n-1.png" format="PNG" align="center"/>
         </imageobject>
       </mediaobject>
 
       <para>You will now be walked through all of the selected adp pages.  The UI shows you the intended changes and lets you edit or cancel them key by key.</para>
       <mediaobject>
         <imageobject>
-          <imagedata fileref="images/i18n-2.png" format="PNG" align="center"/>
+          <imagedata fileref="../images/i18n-2.png" format="PNG" align="center"/>
         </imageobject>
       </mediaobject>
 
@@ -699,7 +699,7 @@ set foo_date_ansi [lc_time_system_to_conn $foo_date_ansi]</programlisting>
           <para>has a bold tag which confuses the converter into thinking there are two message keys for the text beginning "Invitations ..." where there should be one:</para>
           <mediaobject>
             <imageobject>
-              <imagedata fileref="images/i18n-3.png" format="PNG" align="center"/>
+              <imagedata fileref="../images/i18n-3.png" format="PNG" align="center"/>
             </imageobject>
           </mediaobject>
           <para>Instead, we cancel those keys, edit the file manually, and put in a single temporary message tag:</para>
@@ -937,13 +937,13 @@ found, then that locale is offered instead.</para>
         </formalpara>
       <mediaobject>
         <imageobject>
-          <imagedata fileref="images/translator-mode.png" format="PNG" align="center"/>
+          <imagedata fileref="../images/translator-mode.png" format="PNG" align="center"/>
         </imageobject>
       </mediaobject>
         <para>While in Translator mode, a list of all message keys appears at the bottom of each page.</para>
       <mediaobject>
         <imageobject>
-          <imagedata fileref="images/translations.png" format="PNG" align="center"/>
+          <imagedata fileref="../images/translations.png" format="PNG" align="center"/>
         </imageobject>
       </mediaobject>
       </listitem>
@@ -954,7 +954,7 @@ found, then that locale is offered instead.</para>
         </formalpara>
       <mediaobject>
         <imageobject>
-          <imagedata fileref="images/translation-batch-edit.png" format="PNG" align="center"/>
+          <imagedata fileref="../images/translation-batch-edit.png" format="PNG" align="center"/>
         </imageobject>
       </mediaobject>
 
