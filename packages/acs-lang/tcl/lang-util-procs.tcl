@@ -181,9 +181,7 @@ ad_proc lang::util::replace_temporary_tags_with_lookups {
 
         # Attempt a backup of the file first. Do not overwrite an old backup file.
         if { [catch "file -- copy $full_file_path \"${full_file_path}.orig\"" errmsg] } {
-            ns_log Warning [list lang::util::replace_temporary_tags_with_lookups: The file $full_file_path
-                            could not be backed up before message key extraction since backup file \
-                            ${full_file_path}.orig already exists]
+            ns_log Warning "The file $full_file_path could not be backed up before message key extraction since backup file ${full_file_path}.orig already exists"
         }
 
         # Read the contents of the file
