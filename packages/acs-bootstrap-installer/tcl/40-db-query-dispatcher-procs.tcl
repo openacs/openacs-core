@@ -209,7 +209,7 @@ ad_proc db_qd_load_query_file {file_path} {
 } { 
     if { [catch {db_qd_internal_load_cache $file_path} errmsg] } {
         global errorInfo
-        db_qd_log Error "Error parsing queryfile $file_path:\n\n$errmsg\n\n$errorInfo"
+        ns_log Error "Error parsing queryfile $file_path:\n\n$errmsg\n\n$errorInfo"
     }
 }
 
