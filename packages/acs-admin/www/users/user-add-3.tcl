@@ -2,12 +2,13 @@ ad_page_contract {
     Sends email confirmation to user after they've been created
 
     @cvs-id $Id$
-} {
+} -query {
     email
     message
     first_names
     last_name
     user_id
+    {referer "/acs-admin/users"}
 } -properties {
     context_bar:onevalue
     first_names:onevalue

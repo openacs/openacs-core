@@ -1,13 +1,14 @@
 ad_page_contract {
     Processes a new user created by an admin
     @cvs-id $Id$
-} {
+} -query {
     user_id
     email
     first_names
     last_name
     password
     password_confirmation
+    {referer "/acs-admin/users"}
 } -properties {
     context_bar:onevalue
     export_vars:onevalue

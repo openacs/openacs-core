@@ -2,7 +2,9 @@ ad_page_contract {
     Adding a user by an administrator
 
     @cvs-id $Id$
-} {} -properties {
+} -query {
+    {referer "/acs-admin/users"}
+} -properties {
     context_bar:onevalue
     export_vars:onevalue
 }
