@@ -201,7 +201,9 @@ ad_proc -public ::content::item::update {
 
     set update_text ""
 
-    foreach {attribute value} $attributes {
+    foreach {attribute_list} $attributes {
+	set attribute [lindex $attribute_list 0]
+	set value [lindex $attribute_list 1]	
 	if {[lsearch $valid_attributes $attribute] > -1}  {
 
 	    # create local variable to use for binding
