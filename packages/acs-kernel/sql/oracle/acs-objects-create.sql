@@ -696,6 +696,9 @@ as
    end if;
 
  exception when no_data_found then
+   if c_attribute%ISOPEN then
+      close c_attribute;
+   end if;
    raise_application_error(-20000, 'No data found for attribute ' || 
      v_object_type || '::' || attribute_name_in || 
      ' in acs_object.get_attribute_storage');

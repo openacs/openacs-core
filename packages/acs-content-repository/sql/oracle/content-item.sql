@@ -1013,6 +1013,9 @@ begin
 
 exception
   when NO_DATA_FOUND then 
+    if item_cur%ISOPEN then 
+       close item_cur;
+    end if;
     return null;
 end get_template;
 
@@ -1385,6 +1388,9 @@ begin
 
 exception
   when NO_DATA_FOUND then 
+    if c_revision_cur%ISOPEN then
+       close c_revision_cur;
+    end if;
     return null;
 end get_latest_revision;
 
