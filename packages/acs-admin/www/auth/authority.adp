@@ -11,6 +11,12 @@
 
 <formtemplate id="authority"></formtemplate>
 
+<if @configure_url@ not nil>
+  <p>
+    <b>&raquo;</b> <a href="@configure_url@">Configure drivers for this authority</a>
+  </p>
+</if>
+
 <if @display_batch_history_p@ true>
   <h2>Batch Jobs</h2>
 
