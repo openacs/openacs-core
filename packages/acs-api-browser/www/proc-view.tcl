@@ -41,7 +41,7 @@ proc $proc {[info args $proc]} {
 } else {
 
     if { $source_p } {
-	set documentation [api_proc_documentation -script -source $proc]
+	set documentation [api_proc_documentation -script -xql -source $proc]
     } else {
 	set documentation [api_proc_documentation -script $proc]
     }
