@@ -3,7 +3,7 @@
 <queryset>
     <rdbms><type>oracle</type><version>8.1.6</version></rdbms>
 
-    <fullquery name="search_indexer.search_observer_dequeue_entry">
+    <fullquery name="search::indexer.search_observer_dequeue_entry">
         <querytext>
             declare
             begin
