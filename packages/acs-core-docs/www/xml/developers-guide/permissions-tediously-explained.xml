@@ -599,113 +599,38 @@ security_inherit_p = 'f'
     <title>Privilege Hierarchy</title>
 
     <para>
-      Privileges are also organized hierarchically.  In addition to the five main system privileges
-      defined in the ACS Kernel data model, application developers may define their own. For instance,
-      the Bboard package defines the following privileges: 
+      Privileges are also organized hierarchically.  In addition to
+      the five main system privileges defined in the ACS Kernel data
+      model, application developers may define their own. Note,
+      however, that this is no longer recommended practice. 
     </para>
-
-    <informaltable frame="all">
-      <tgroup cols="1" align="center" colsep="1" rowsep="1">
-        <colspec colname="c1"/>
-	<thead>
-	  <row>
-	    <entry>privilege</entry>
-	  </row>
-	</thead>
-        <tbody>
-          <row>
-	    <entry>create_category</entry>
-	  </row>
-          <row>
-	    <entry>create_forum</entry>
-	  </row>
-          <row>
-	    <entry>create_message</entry>
-	  </row>
-          <row>
-	    <entry>delete_category</entry>
-	  </row>
-          <row>
-	    <entry>delete_forum</entry>
-	  </row>
-          <row>
-	    <entry>delete_message</entry>
-	  </row>
-          <row>
-	    <entry>moderate_forum</entry>
-	  </row>
-          <row>
-	    <entry>read_category</entry>
-	  </row>
-          <row>
-	    <entry>read_forum</entry>
-	  </row>
-          <row>
-	    <entry>read_message</entry>
-	  </row>
-          <row>
-	    <entry>write_category</entry>
-	  </row>
-          <row>
-	    <entry>write_forum</entry>
-	  </row>
-          <row>
-	    <entry>write_message</entry>
-	  </row>
-        </tbody>
-      </tgroup>
-    </informaltable>
 
     <para>
-      By defining parent-child relationship between privileges, the OpenACS data model
-      makes it easier for developers to manage permissions.  Instead of granting
-      a user explicit <emphasis>read</emphasis>, <emphasis>write</emphasis>, <emphasis>delete</emphasis>, 
-      and <emphasis>create</emphasis>
-      privileges on an object, it is sufficient to grant the user the <emphasis>admin</emphasis>
-      privilege to which the first four privileges are tied. To give
-      a more detailed example, the Bboard privileges are structured
-      as follows.
+      By defining parent-child relationship between privileges, the
+      OpenACS data model makes it easier for developers to manage
+      permissions.  Instead of granting a user explicit
+      <emphasis>read</emphasis>, <emphasis>write</emphasis>,
+      <emphasis>delete</emphasis>, and <emphasis>create</emphasis>
+      privileges on an object, it is sufficient to grant the user the
+      <emphasis>admin</emphasis> privilege to which the first four
+      privileges are tied. Privileges are structured as follows.
     </para>
 
     <informaltable frame="all">
-      <tgroup cols="13" align="center" colsep="1" rowsep="1">
+      <tgroup cols="4" align="center" colsep="1" rowsep="1">
         <colspec colname="c1"/>
         <colspec colname="c2"/>
         <colspec colname="c3"/>
         <colspec colname="c4"/>
-        <colspec colname="c5"/>
-        <colspec colname="c6"/>
-        <colspec colname="c7"/>
-        <colspec colname="c8"/>
-        <colspec colname="c9"/>
-        <colspec colname="c10"/>
-        <colspec colname="c11"/>
-        <colspec colname="c12"/>
-        <colspec colname="c13"/>
         <tbody>
 	  <row>
-            <entry namest="c1" nameend="c13">admin</entry>
+            <entry namest="c1" nameend="c4">admin</entry>
 	  </row>
 	  <row>
-            <entry namest="c1" nameend="c3">create</entry>
-            <entry namest="c4" nameend="c6">delete</entry>
-            <entry namest="c7" nameend="c9">read</entry>
-            <entry namest="c10" nameend="c12">write</entry>
-            <entry morerows="1" valign="middle">moderate forum</entry>
-	  </row>
-	  <row>
-	    <entry>create category</entry>
-	    <entry>create forum</entry>
-	    <entry>create message</entry>
-	    <entry>delete category</entry>
-	    <entry>delete forum</entry>
-	    <entry>delete message</entry>
-	    <entry>read category</entry>
-	    <entry>read forum</entry>
-	    <entry>read message</entry>
-	    <entry>write category</entry>
-	    <entry>write forum</entry>
-	    <entry>write message</entry>
+            <entry namest="c1" nameend="c1">create</entry>
+            <entry namest="c2" nameend="c2">delete</entry>
+            <entry namest="c3" nameend="c3">read</entry>
+            <entry namest="c4" nameend="c4">write</entry>
 	  </row>
 	</tbody>
        </tgroup>
@@ -1172,7 +1097,8 @@ from
 
     <para>
       Security information is queried by calling the <computeroutput>acs_permission.permission_p</computeroutput>
-      function in OpenACS 4.x. 
+      function in OpenACS 4.x+. This is accessible from Tcl via the
+      <computeroutput>permission::permission_p</computeroutput> procedure. 
     </para>
 
     <programlisting>  
