@@ -733,7 +733,9 @@ ad_proc -public template::widget::numericRange { name interval_def size {value "
 
   if {$interval_size > 1} {
     # round minutes or seconds to nearest interval
-    set value [expr $value-$value%$interval_size]
+    if { ![empty_string_p $value] } {
+      set value [expr $value-$value%$interval_size]
+    }
   }
 
   return [template::widget::menu $name $options [list $value] attributes]
