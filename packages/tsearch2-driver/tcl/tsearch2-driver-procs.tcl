@@ -127,13 +127,21 @@ ad_proc -public tsearch2::search {
     set query [tsearch2::build_query -query $query]
     # FIXME actually write the regsub to do that, string map will
     # probably be too tricky to use
-    
-    set results_ids [db_list search "select object_id from txt where fti @@ ts2_to_tsquery('default',:query) order by rank(fti,ts2_to_tsquery('default',:query));"]
-    
+    set limit_clause ""
+    set offset_clause ""
+    if {[string is integer $limit]} {
+	set limit_clause " limit :limit "
+    }
+    if {[string is integer $offset]} {
+	set offset_clause " offset :offset "
+    }
+    set query_text "select object_id from txt where fti @@ ts2_to_tsquery('default',:query) order by rank(fti,ts2_to_tsquery('default',:query))  ${limit_clause} ${offset_clause}"
+    set results_ids [db_list search $query_text]
+    set count [db_string count "select count(*) from txt where fti @@ ts2_to_tsquery('default',:query)"]
     set stop_words [list]
     # lovely the search package requires count to be returned but the
     # service contract definition doesn't specify it! 
-    return [list ids $results_ids stopwords $stop_words count [llength $results_ids]]
+    return [list ids $results_ids stopwords $stop_words count $count]
 }
 
 ad_proc -public tsearch2::summary {
