@@ -402,6 +402,18 @@ ad_form -extend \
     </orderedlist>
     </sect2>
 
+    <sect2>
+      <title>Profile your code</title>
+      <para>There are several facilities for profiling your code in
+      OpenACS. The first thing to do is to install the
+      developer-support package and play around with it. But there
+      is also support in the API for profiling your code:
+      <ulink
+      url="http://openacs.org/forums/message-view?message_id=161324">profiling
+      your code using ds_profile</ulink>
+      </para>
+    </sect2>
+
       <sect2>
         <title>Prepare the package for distribution.</title>
         <para>Browse to the package manager.  Click on
@@ -409,7 +421,7 @@ ad_form -extend \
         <para>Click on <computeroutput><guilabel>Generate a distribution file
         for this package from the
         filesystem</guilabel></computeroutput>.
-</para>
+        </para>
         <para>Click on the file size
         (<computeroutput><guilabel>37.1KB</guilabel></computeroutput>)
         after the label <computeroutput><guilabel>Distribution
