@@ -13,7 +13,7 @@ as
    function new (
        impl_contract_name	acs_sc_impls.impl_contract_name%TYPE,
        impl_name		acs_sc_impls.impl_name%TYPE,
-       impl_pretty_name		acs_sc_impls.impl_pretty_name%TYPE,
+       impl_pretty_name		acs_sc_impls.impl_pretty_name%TYPE default null,
        impl_owner_name		acs_sc_impls.impl_owner_name%TYPE
    ) return acs_sc_impls.impl_id%TYPE;
 
@@ -52,14 +52,13 @@ end acs_sc_impl;
 /
 show error
 
-
 create or replace package body acs_sc_impl
 as
 
    function new (
        impl_contract_name	acs_sc_impls.impl_contract_name%TYPE,
        impl_name		acs_sc_impls.impl_name%TYPE,
-       impl_pretty_name		acs_sc_impls.impl_pretty_name%TYPE,
+       impl_pretty_name		acs_sc_impls.impl_pretty_name%TYPE default null,
        impl_owner_name		acs_sc_impls.impl_owner_name%TYPE
    ) return acs_sc_impls.impl_id%TYPE
    is
