@@ -45,7 +45,7 @@ ad_proc content_search__url {
 
     set package_id [apm_package_id_from_key acs-content-repository]
     db_1row get_url_stub "
-        select site_node__url(node_id) || 
+        select site_node__url(node_id) as root_url,
                (select content_item__get_path(item_id,null) 
                   from cr_revisions
                  where revision_id = :object_id) as url
@@ -53,7 +53,7 @@ ad_proc content_search__url {
          where n.object_id = :package_id        
     "
     
-    return $url
+    return "[string trimright $root_url /]$url"
 }
 
 ad_proc content_search__search_ids { 
