@@ -94,6 +94,7 @@
 	set description = :portrait_comment,
 	    publish_date = now(),
 	    mime_type = :guessed_file_type,
+            content_length = :n_bytes,
 	    title = :title
 	where revision_id = :revision_id
  
