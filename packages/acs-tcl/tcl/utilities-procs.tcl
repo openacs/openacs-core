@@ -2567,6 +2567,7 @@ ad_proc -public ad_cache_returnredirect { url { persistent "f" } { excluded_vars
 
 ad_proc -public ad_returnredirect {
     {-message {}}
+    {-html:boolean}
     target_url
 } {
     Write the HTTP response required to get the browser to redirect to a different page, 
@@ -2589,6 +2590,8 @@ ad_proc -public ad_returnredirect {
     </ul>
 
     @param message A message to display to the user. See util_user_message.
+    @param html Set this flag if your message contains HTML. If specified, you're responsible for proper quoting 
+    of everything in your message. Otherwise, we quote it for you.
     
     @see util_user_message
     @see ad_script_abort
@@ -2622,7 +2625,11 @@ ad_proc -public ad_returnredirect {
         ns_returnredirect $url
     }
     
-    util_user_message -message $message
+    if { [string is false $html_p] } {
+	util_user_message -message $message
+    } else {
+	util_user_message -message $message -html
+    }
 }
 
 ad_proc -public util_user_message { 
@@ -2642,9 +2649,10 @@ ad_proc -public util_user_message {
     @see util_get_user_messages
 } {
     if { ![empty_string_p $message] } {
-        if { !$html_p } {
+        if { [string is false $html_p] } {
             set message [ad_quotehtml $message]
         }
+
         if { !$replace_p } {
             set new_messages [ad_get_client_property -default {} -cache_only t "acs-kernel" "general_messages"]
             lappend new_messages $message
