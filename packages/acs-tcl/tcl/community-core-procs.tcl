@@ -153,6 +153,7 @@ ad_proc -deprecated -warn ad_user_remove {
 ad_proc -public person::new {
     {-first_names:required}
     {-last_name:required}
+    {-email {}}
 } {
     create a new person
 } {
@@ -160,6 +161,7 @@ ad_proc -public person::new {
     set extra_vars [ns_set create]
     ns_set put $extra_vars first_names $first_names
     ns_set put $extra_vars last_name $last_name
+    ns_set put $extra_vars email $email
 
     set object_type "person"
     return [package_instantiate_object -extra_vars $extra_vars $object_type]
