@@ -64,6 +64,19 @@ ad_proc -public relation_add {
     @return The <code>rel_id</code> of the new relation
 
 } {
+    # First check if the relation already exists, and if so, just return that
+    set existing_rel_id [db_string rel_exists { 
+        select rel_id
+        from   acs_rels 
+        where  rel_type = :rel_type 
+        and    object_id_one = :object_id_one
+        and    object_id_two = :object_id_two
+    } -default {}]
+    
+    if { ![empty_string_p $existing_rel_id] } {
+        return $existing_rel_id
+    }
+
     set var_list [list \
 	    [list object_id_one $object_id_one] \
 	    [list object_id_two $object_id_two]]
