@@ -217,7 +217,7 @@ db_foreach user_search_admin $query {
     set user_search:[set rowcount](member_state) $member_state
     
     if { $member_state != "approved" } {
-	set user_search:[set rowcount](user_finite_state_links) [join [ad_registration_finite_state_machine_admin_links $member_state $email_verified_p $user_id_from_search "search?[export_url_vars email last_name keyword target passthrough limit_users_in_group_id only_authorized_p]"] " | "]
+	set user_search:[set rowcount](user_finite_state_links) [join [ad_registration_finite_state_machine_admin_links $member_state $email_verified_p $user_id_from_search "complex-search?[export_url_vars email last_name keyword target passthrough limit_users_in_group_id only_authorized_p]"] " | "]
     } else {
 	set user_search:[set rowcount](user_finite_state_links) ""
     }
