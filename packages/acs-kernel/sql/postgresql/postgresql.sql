@@ -540,7 +540,7 @@ create table acs_function_args (
 
 
 -- Add entries to acs_function_args for one function
--- Usage: select define_function_args('function_name','arg1,arg2:default,arg3,arg4:default')
+-- Usage: select define_function_args('function_name','arg1,arg2;default,arg3,arg4;default')
 
 create function define_function_args(varchar,varchar)
 returns integer as '
@@ -559,7 +559,7 @@ begin
   v_elem = split(p_arg_list, '','', v_arg_seq);
   while v_elem is not null loop
     
-    v_pos = instr(v_elem, '':'', 1, 1);
+    v_pos = instr(v_elem, '';'', 1, 1);
     if v_pos > 0 then
       v_arg_name := substr(v_elem, 1, v_pos-1);
       v_arg_default := substr(v_elem, v_pos+1, length(v_elem) - v_pos);
