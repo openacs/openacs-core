@@ -891,7 +891,7 @@ ad_proc -public ad_html_to_text {
 		    ad_html_to_text_put_text output \"
 		}
 		img {
-		    if { [empty_string_p $slash] } {
+		    if { [empty_string_p $slash] && !$no_format_p } {
 			set img_info {}
 			if { [info exists attribute_array(alt)] } {
 			    lappend img_info "'$attribute_array(alt)'"
