@@ -4,7 +4,7 @@ OpenACS (Open ArsDigita Community System) is an advanced toolkit for
 building scalable, community-oriented web applications.
 
 The original ACS, which formed the foundation of OpenACS is described
-in http://photo.net/wtr/thebook/community.html
+in http://philip.greenspun.com/panda/community
 
 The original ACS was Copyright (C) 1995-2000 ArsDigita Corporation
 and, in some cases, individual authors.
@@ -45,7 +45,6 @@ http://yourservicename/www/doc/
 The release notes for this release are available at
 packages/acs-core-docs/www/release-notes/.
 
-This is an early development version of OpenACS 4.x.  Production use
-is NOT recommended.  Please report bugs via http://openacs.org/sdm
+Please report bugs via http://openacs.org/sdm
 
 
