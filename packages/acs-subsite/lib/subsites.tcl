@@ -1,9 +1,9 @@
 if { [string equal [ad_conn package_url] "/"] } {
-    set pretty_name "community"
-    set pretty_plural "communities"
+    set pretty_name [_ acs-subsite.community]
+    set pretty_plural [_ acs-subsite.communities]
 } else {
-    set pretty_name "subcommunity"
-    set pretty_plural "subcommunities"
+    set pretty_name [_ acs-subsite.subcommunity]
+    set pretty_plural [_ acs-subsite.subcommunities]
 }
 
 set admin_p [permission::permission_p -object_id [ad_conn package_id] -privilege admin]
@@ -15,14 +15,14 @@ if { $admin_p } {
 list::create \
     -name subsites \
     -multirow subsites \
-    -no_data "No $pretty_plural" \
+    -no_data "[_ acs-subsite.No_pretty_plural [list pretty_plural $pretty_plural]]" \
     -elements {
         instance_name {
-            label "Name"
+            label "[_ acs-subsite.Name]"
             link_url_col url
         }
         num_members {
-            label "\# Members"
+            label "\# [_ acs-subsite.Members]"
             html { align right }
         }
     }

@@ -6,10 +6,10 @@ if { $admin_p } {
 list::create \
     -name applications \
     -multirow applications \
-    -no_data "No applications" \
+    -no_data "[_ acs-subsite.No_applications]" \
     -elements {
         instance_name {
-            label "Name"
+            label "[_ acs-subsite.Name]"
             link_url_eval {$name/}
         }
     }
