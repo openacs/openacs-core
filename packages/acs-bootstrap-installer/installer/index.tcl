@@ -39,7 +39,7 @@ this page to access the running web server.
     install_return 200 "Error" "
 The installation program has encounted an error.  Please drop your OpenACS tablespace
 and the OpenACS username, recreate them, and try again.  You can log this as a bug
-using the <a href=\"http://openacs.org/sdm/\">SDM</a>. 
+using the <a href=\"http://openacs.org/bugtracker/openacs\">OpenACS Bug Tracker</a>. 
 "
     return
   }

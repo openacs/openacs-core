@@ -31,13 +31,12 @@ apm_packages_full_install -callback apm_ns_write_callback $pkg_list
 
 # Complete the initial install.
 
-if { ![ad_acs_admin_node] } {
-    ns_write "  <p><li> Completing Install sequence.<p>
+ns_write "  <p><li> Completing Install sequence by instantiating acs-kernel and mounting the main site.<p>
     <blockquote><pre>"
-    cd [file join [acs_root_dir] packages acs-kernel sql [db_type]]
-    db_source_sql_file -callback apm_ns_write_callback acs-install.sql
-    ns_write "</pre></blockquote>"
-} 
+
+cd [file join [acs_root_dir] packages acs-kernel sql [db_type]]
+db_source_sql_file -callback apm_ns_write_callback acs-install.sql
+ns_write "</pre></blockquote>"
 
 ns_write "All Packages Installed."
 

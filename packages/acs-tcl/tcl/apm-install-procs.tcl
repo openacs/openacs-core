@@ -1292,6 +1292,65 @@ ad_proc -private apm_query_files_find {
     return $query_file_list
 }
 
+ad_proc -private apm_mount_core_packages {} {
+    <p>
+      On first startup (bootstrap) of OpenACS - instantiate, mount,
+      and grant appropriate permissions to packages part of all
+      OpenACS installations.
+    </p>
+
+    <p>
+      The reason this proc is not invoked from the installer is that
+      we don't currently have the full Tcl environment set up there (for
+      example ad_conn).
+      The reason acs-kernel and the main site are not set up in this
+      proc is that they are needed during the installation. They are
+      set up in acs-kernel/sql/postgresql/acs-install.sql.
+    </p>
+    
+    @author Peter Marklund
+} {
+    ns_log Notice "Starting instantiation and mounting of core packages"
+
+    # Mount acs-lang
+    ns_log Notice "Mounting acs-lang"    
+    set acs_lang_id [site_node::instantiate_and_mount -package_key acs-lang]
+    permission::grant -party_id [acs_magic_object the_public] \
+                      -object_id $acs_lang_id \
+                      -privilege read
+
+    # Mount acs-admin
+    ns_log Notice "Mounting acs-admin"    
+    site_node::instantiate_and_mount -package_key acs-admin
+
+    # Mount acs-service-contract
+    ns_log Notice "Mounting acs-service-contract"    
+    site_node::instantiate_and_mount -package_key acs-service-contract
+
+    # Mount the acs-content-repository
+    ns_log Notice "Mounting acs-content-repository"    
+    site_node::instantiate_and_mount -package_key acs-content-repository
+
+    # Mount acs-core-docs
+    ns_log Notice "Mounting acs-core-docs"    
+    site_node::instantiate_and_mount -node_name doc \
+                                     -package_key acs-core-docs
+
+    # Mount the acs-api-browser
+    ns_log Notice "Mounting acs-api-browser"    
+    set api_browser_id \
+        [site_node::instantiate_and_mount -node_name api-doc \
+                                          -package_key acs-api-browser]
+    # Only registered users should have permission to access the
+    # api-browser
+    permission::grant -party_id [acs_magic_object registered_users] \
+                      -object_id $api_browser_id \
+                      -privilege read
+    permission::set_not_inherit -object_id $api_browser_id
+
+    ns_log Notice "Core packages instantiated and mounted"
+}
+
 ##############
 #
 # Deprecated Procedures
