@@ -1,4 +1,4 @@
-set admin_p [permission::permission_p -object_id [ad_conn package_id] -privilege admin]
+set admin_p [permission::permission_p -object_id [ad_conn package_id] -privilege admin -party_id [ad_conn untrusted_user_id]]
 if { $admin_p } {
     set add_url [export_vars -base "[subsite::get_element -element url]admin/applications/application-add" { { return_url [ad_return_url] } }]
 }

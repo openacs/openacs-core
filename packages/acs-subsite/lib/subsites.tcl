@@ -6,7 +6,7 @@ if { [string equal [ad_conn package_url] "/"] } {
     set pretty_plural [_ acs-subsite.subcommunities]
 }
 
-set admin_p [permission::permission_p -object_id [ad_conn package_id] -privilege admin]
+set admin_p [permission::permission_p -object_id [ad_conn package_id] -privilege admin -party_id [ad_conn untrusted_user_id]]
 if { $admin_p } {
     set add_url "[subsite::get_element -element url]admin/subsite-add"
 }
@@ -35,7 +35,7 @@ foreach url [site_node::get_children -package_key acs-subsite -node_id [subsite:
     array unset node 
     array set node [site_node::get_from_url -url $url -exact]
 
-    if { [permission::permission_p -object_id $node(object_id) -privilege read] } {
+    if { [permission::permission_p -object_id $node(object_id) -privilege read -party_id [ad_conn untrusted_user_id]] } {
         # TODO
         set edit_url {}
         if { [permission::permission_p -object_id $node(object_id) -privilege admin] } {
