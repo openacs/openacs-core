@@ -2,7 +2,7 @@
   <if @comments:rowcount@ gt 0>
     <div id="developer-support-footer">
       <multiple name="comments">
-        <b>Comment:</b> @comments.text@<br />
+        <b>Comment:</b> <pre style="display: inline;">@comments.text@</pre><br />
       </multiple>
     </div>
   </if>
