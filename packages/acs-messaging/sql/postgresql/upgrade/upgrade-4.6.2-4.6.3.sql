@@ -2,10 +2,6 @@
 -- errors on calls from query files using bindvar emulation, where
 -- all the parameters are quoted and therefore of unknown type.
 
-drop function acs_message__new (integer,integer,timestamptz,integer,
-varchar,varchar,varchar,varchar,varchar,text,integer,integer,integer,
-varchar,varchar,boolean);
-
 create or replace function acs_message__new (integer,integer,timestamptz,integer,
 varchar,varchar,varchar,varchar,text,integer,integer,integer,integer,
 varchar,varchar,boolean)
