@@ -339,9 +339,9 @@ ad_proc -public site_node_mount_application {
     {-sync_p "t"}
     {-return "package_id"}
     parent_node_id
-    instance_name
+    url_path_component
     package_key
-    package_name
+    instance_name
 } {
     Creates a new instance of the specified package and mounts it
     beneath parent_node_id.
@@ -350,17 +350,16 @@ ad_proc -public site_node_mount_application {
     @creation-date 2001-02-05
 
     @param sync_p If "t", we flush the in-memory site map
-    @param return You can specify what is returned: the package_id or node_id
-           (now ignored, always return package_id)
+    @param return (now ignored, always return package_id)
     @param parent_node_id The node under which we are mounting this
            application
-    @param instance_name The instance name for the new site node
+    @param url_path_component the url for the mounted instance (appended to the parent_node 
+           url)
     @param package_key The type of package we are mounting
-    @param package_name The name we want to give the package we are
-           mounting.
-    @return The package id of the newly mounted package or the new
-           node id, based on the value of $return
+    @param instance_name The name we want to give the package we are
+           mounting (used for the context bar string etc).
 
+    @return The package id of the newly mounted package
 } {
     # if there is an object mounted at the parent_node_id then use that
     # object_id, instead of the parent_node_id, as the context_id
@@ -372,11 +371,11 @@ ad_proc -public site_node_mount_application {
     }
 
     return [site_node_apm_integration::new_site_node_and_package \
-        -name $instance_name \
-        -parent_id $parent_node_id \
-        -package_key $package_key \
-        -instance_name $package_name \
-        -context_id $context_id \
+                -name $url_path_component \
+                -parent_id $parent_node_id \
+                -package_key $package_key \
+                -instance_name $instance_name \
+                -context_id $context_id \
     ]
 }
 
