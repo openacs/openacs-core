@@ -2235,12 +2235,17 @@ ad_proc db_load_sql_data {{
             set tmpnam [ns_tmpnam]
 
             set fd [open $file r]
-            set fd1 [open $tmpnam w]
-            write $fd1 [subst [read $fd]]
-            close $fd1
+            set file_contents [read $fd]
             close $fd
 
+            set file_contents [subst $file_contents]
+            
+            set fd1 [open "${tmpnam}.ctl" w]
+            puts $fd1 $file_contents
+            close $fd1
+
             cd [file dirname $file]
+
             set fd [open "|[file join $env(ORACLE_HOME) bin sqlldr] userid=$user_pass control=$tmpnam" "r"]
 
             while { [gets $fd line] >= 0 } {
