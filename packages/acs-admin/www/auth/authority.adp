@@ -17,6 +17,10 @@
   </p>
 </if>
 
+<p>
+  <b>&raquo;</b> <a href="@show_users_url@">Show users in this authority</a> (@num_users@ users)
+</p>
+
 <if @display_batch_history_p@ true>
   <h2>Batch Jobs</h2>
 
