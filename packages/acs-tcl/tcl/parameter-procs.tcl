@@ -41,7 +41,7 @@ namespace eval parameter {
         @param package_id what package to get the parameter from. defaults to
                           [ad_conn package_id]
         @param parameter which parameter's value to get
-        @param default what to return if we don't find a value
+        @param default what to return if we don't find a value. Defaults to returning the empty string.
     } {
 
         if {[empty_string_p $package_id]} {
