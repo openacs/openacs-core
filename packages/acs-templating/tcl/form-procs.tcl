@@ -36,6 +36,7 @@ ad_proc -public template::form { command args } {
     @see template::form::get_combined_values
     @see template::form::get_values
     @see template::form::get_errors
+    @see template::form::set_error
     @see template::form::is_request
     @see template::form::is_submission
     @see template::form::is_valid
@@ -86,9 +87,9 @@ ad_proc -public template::form::create { id args } {
                             is the name of the button which was called when the form changed from display 
                             mode to edit mode.
 
-    @option edit_buttons    List of buttons to show when the form is in display mode. 
-                            The value should be a list of lists, with the first element being the form label
-                            and the second element being the name of the name of the form element. Defaults to
+    @option edit_buttons    List of buttons to show when the form is in edit mode. 
+                            The value should be a list of lists, with the first element being the button label
+                            and the second element being the name. Defaults to
                             { { "Ok" ok } }. The name of the button clicked can be retrieved using 
                             template::form::get_button. 
     
@@ -742,3 +743,31 @@ ad_proc -private template::form::get_reference {} {
     }
   }
 }
+
+ad_proc -public template::form::set_error {
+    id
+    element
+    error
+} {
+
+    Set an error on a form element. Can be called from the -on_submit or 
+    -after_submit block of an ad_form. Will cause the form to no longer 
+    be considered valid, and thus the form will be redisplayed with the 
+    error message embedded, provided that 'break' is also called, so any 
+    code that redirects away from the form (e.g. in the after_submit block)
+    isn't called either.
+
+    @param id      The ID of the form
+
+    @param element The element that contains the error.
+
+    @param error   The error message.
+} {
+    set level [template::adp_level]
+
+    # use an array to hold error messages for this form
+    upvar #$level $id:error formerror
+    
+    set formerror($element) $error
+}
+
