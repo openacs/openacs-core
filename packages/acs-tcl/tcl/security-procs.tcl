@@ -7,7 +7,7 @@ ad_library {
     @author Jon Salz (jsalz@arsdigita.com)
     @author Richard Li (richardl@arsdigita.com)
     @author Archit Shah (ashah@arsdigita.com)
-    @cvs-id $Id$
+    @cvs-id security-procs.tcl,v 1.13.2.5 2003/06/06 08:48:50 lars Exp
 }
 
 # cookies (all are signed cookies):
@@ -226,8 +226,7 @@ ad_proc -public ad_change_password { user_id new_password } { Changed the user's
     # this and still support old users by changing the salt below.
     set salt [sec_random_token]
     set new_password [ns_sha1 "$new_password$salt"]
-    db_dml password_update "update users set password = :new_password, salt = :salt where user_id = :user_id"
-    
+    db_dml password_update {}
 }
 
 ad_proc -private sec_setup_session { new_user_id } {
@@ -532,28 +531,75 @@ ad_proc -public ad_redirect_for_registration {} {
     to the current location.  All variables in ns_getform (both posts and
     gets) will be maintained.
 
+    <p>
+
+    It's up to the caller to issue an ad_script_abort, if that's what you want.
+
+    @see ad_get_login_url
 } {
-    set form [ns_getform] 
-    set url_args ""
+    ad_returnredirect [ad_get_login_url -return]
+}
+
+ad_proc -public ad_get_login_url {
+    -return:boolean
+} {
     
-    # note that there is no built-in function that will change
-    # posted variables to url variables, so we write our own
+    Returns a URL to the login page of the closest subsite, or the main site, if there's no current connection.
     
-    if ![empty_string_p $form] {
-	set form_size [ns_set size $form]
-	set form_counter_i 0
-	while { $form_counter_i<$form_size } {
-	    if {[string compare $form_counter_i "0"] == 0} {
-		append url_args "?"
-	    } else {
-		append url_args "&"
-	    }
-	    append url_args "[ns_set key $form $form_counter_i]=[ns_urlencode [ns_set value $form $form_counter_i]]"
-	    incr form_counter_i
-	}
+    @option return      If set, will export the current form, so when the registration is complete, 
+                        the user will be returned to the current location.  All variables in 
+                        ns_getform (both posts and gets) will be maintained.
+
+    @author Lars Pind (lars@collaboraid.biz)
+} {
+    if { [ad_conn isconnected] } {
+        set url [site_node_closest_ancestor_package_url]
+
+        # Check to see that the user (most likely "The Public" party, since there's probably no user logged in)
+        # actually have permission to view that subsite, otherwise we'll get into an infinite redirect loop
+        array set site_node [site_node::get_from_url -url $url]
+        set package_id $site_node(object_id)
+        if { ![permission::permission_p -object_id $site_node(object_id) -privilege read] } {
+            set url /
+        }
+    } else {
+        set url /
     }
-    ad_returnredirect "[subsite::get_element -element url]register/?return_url=[ns_urlencode [ad_conn url]$url_args]"
-    return
+
+    append url "register/"
+
+    if { $return_p } {
+        set url [export_vars -base $url { { return_url [ad_return_url] } }]
+    }
+
+    return $url
+}
+
+ad_proc -public ad_get_logout_url {
+    -return:boolean
+} {
+    
+    Returns a URL to the logout page of the closest subsite, or the main site, if there's no current connection.
+    
+    @option return      If set, will export the current form, so when the logout is complete
+                        the user will be returned to the current location.  All variables in 
+                        ns_getform (both posts and gets) will be maintained.
+
+    @author Lars Pind (lars@collaboraid.biz)
+} {
+    if { [ad_conn isconnected] } {
+        set url [subsite::get_element -element url]
+    } else {
+        set url /
+    }
+
+    append url "register/logout"
+
+    if { $return_p } {
+        set url [export_vars -base $url { { return_url [ad_return_url] } }]
+    }
+
+    return $url
 }
 
 ad_proc -public ad_maybe_redirect_for_registration {} {
@@ -566,6 +612,7 @@ ad_proc -public ad_maybe_redirect_for_registration {} {
     the caller need not explicitly call "return". Returns the user id
     if login was succesful.
 
+    @see ad_redirect_for_registration
 } {
     set user_id [ad_conn user_id]
     if { $user_id != 0 } {
@@ -623,7 +670,7 @@ ad_proc -public -deprecated ad_block_sql_urls {conn args why} {
     @see ad_page_contract
 } {
     set form [ns_getform]
-    if [empty_string_p $form] { return filter_ok }
+    if { [empty_string_p $form] } { return filter_ok }
 
     # Check each form data variable to see if it contains malicious
     # user input that we don't want to interpolate into our SQL
@@ -786,7 +833,7 @@ proc_doc ad_var_type_check_integer_p {value} {
     <pre>
 } {
 
-    if [regexp {[^0-9]} $value] {
+    if { [regexp {[^0-9]} $value] } {
         return 0
     } else {
         return 1
@@ -801,7 +848,7 @@ proc_doc ad_var_type_check_safefilename_p {value} {
     <pre>
 } {
 
-    if [string match *..* $value] {
+    if { [string match *..* $value] } {
         return 0
     } else {
         return 1
@@ -816,7 +863,7 @@ proc_doc ad_var_type_check_dirname_p {value} {
     <pre>
 } {
 
-    if [regexp {[/\\]} $value] {
+    if { [regexp {[/\\]} $value] } {
         return 0
     } else {
         return 1
@@ -830,7 +877,7 @@ proc_doc ad_var_type_check_number_p {value} {
     #
     <pre>
 } {
-    if [catch {expr 1.0 * $value}] {
+    if { [catch {expr 1.0 * $value}] } {
         return 0
     } else {
         return 1
@@ -846,7 +893,7 @@ proc_doc ad_var_type_check_word_p {value} {
     </pre>
 } {
 
-    if [regexp {[^-A-Za-z0-9_]} $value] {
+    if { [regexp {[^-A-Za-z0-9_]} $value] } {
         return 0
     } else {
         return 1
@@ -877,7 +924,7 @@ proc_doc ad_var_type_check_noquote_p {value} {
     <pre>
 } {
 
-    if [string match *'* $value] {
+    if { [string match *'* $value] } {
         return 0
     } else {
         return 1
@@ -896,7 +943,7 @@ proc_doc ad_var_type_check_integerlist_p {value} {
     <pre>
 } {
 
-    if [regexp {[^ 0-9,]} $value] {
+    if { [regexp {[^ 0-9,]} $value] } {
         return 0
     } else {
         return 1
@@ -924,7 +971,7 @@ proc_doc ad_var_type_check_third_urlv_integer_p {{args ""}} {
 
     set third_url_element [lindex [ad_conn urlv] 3]
 
-    if [regexp {[^0-9]} $third_url_element] {
+    if { [regexp {[^0-9]} $third_url_element] } {
         return 0
     } else {
         return 1

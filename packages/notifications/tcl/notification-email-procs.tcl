@@ -81,13 +81,16 @@ namespace eval notification::email {
     }
 
     ad_proc -public send {
+        from_user_id
         to_user_id
         reply_object_id
         notification_type_id
         subject
         content
     } {
-        Send the actual email
+        Send the actual email.
+
+        @param from_user_id The user_id of the user that the email should be sent as. Leave empty for the standard mailer from address.
     } {
         # Get email
         set email [cc_email_from_party $to_user_id]
@@ -96,11 +99,31 @@ namespace eval notification::email {
        set manage_notifications_url [manage_notifications_url]
        append content "\n[_ notifications.lt_Getting_too_much_emai]"
 
+        # Use this to build up extra mail headers        
+        set extra_headers [ns_set new]
+
+        # This should disable most auto-replies.
+        ns_set put $extra_headers Precedence list
+        
+        set reply_to [reply_address -object_id $reply_object_id -type_id $notification_type_id]
+
+        if { ![empty_string_p $from_user_id] && [db_0or1row get_person {}]} {
+            set from_email "\"$first_names $last_name\" <[cc_email_from_party $from_user_id]>"
+
+            # Set the Reply-To and Mail-Followup-To addresses to the
+            # address of the notifications handler.
+            ns_set put $extra_headers Reply-To $reply_to
+            ns_set put $extra_headers Mail-Followup-To $reply_to
+        } else {
+            set from_email $reply_to
+        }
+
         acs_mail_lite::send \
             -to_addr $email \
-            -from_addr [reply_address -object_id $reply_object_id -type_id $notification_type_id] \
+            -from_addr $from_email \
             -subject $subject \
-            -body $content
+            -body $content \
+            -extraheaders $extra_headers
     }
 
     ad_proc -private load_qmail_mail_queue {
@@ -131,9 +154,9 @@ namespace eval notification::email {
             if [catch {set f [open $msg r]}] {
                 continue
             }
-            set file [read $f]
+            set orig_file [read $f]
             close $f
-            set file [split $file "\n"]
+            set file [split $orig_file "\n"]
 
             set new_messages 1
             set end_of_headers_p 0
@@ -142,34 +165,62 @@ namespace eval notification::email {
             set headers [list]
 
             # walk through the headers and extract each one
+            set is_auto_reply_p 0
             while ![empty_string_p $line] {
                 set next_line [lindex $file [expr $i + 1]]
                 if {[regexp {^[ ]*$} $next_line match] && $i > 0} {
                     set end_of_headers_p 1
                 }
+                set multiline_header_p 0
                 if {[regexp {^([^:]+):[ ]+(.+)$} $line match name value]} {
                     # join headers that span more than one line (e.g. Received)
                     if { ![regexp {^([^:]+):[ ]+(.+)$} $next_line match] && !$end_of_headers_p} {
-                append line $next_line
-                incr i
+                    set multiline_header_p 1
+                } else {
+                    # we only want messages a person typed in themselves - nothing
+                    # from any sort of auto-responder.
+                    if { [string compare -nocase $name "Auto-Submitted"] == 0 } {
+                        set is_auto_reply_p 1
+                        break
+                    } elseif { [string compare -nocase $name "Subject"] == 0 && [string first "Out of Office AutoReply:" $value] == 0 } {
+                        # added for BP
+                        set is_auto_reply_p 1
+                        break
+                    } else {
+                        lappend headers [string tolower $name] $value
                     }
-                    lappend headers [string tolower $name] $value
+                }
 
                     if {$end_of_headers_p} {
-                incr i
-                break
+                        incr i
+                        break
                     }
                 } else {
                     # The headers and the body are delimited by a null line as specified by RFC822
                     if {[regexp {^[ ]*$} $line match]} {
-                incr i
-                break
+                        incr i
+                        break
                     }
                 }
                 incr i
-                set line [lindex $file $i]
+                if { $multiline_header_p } {
+                    append line [lindex $file $i]
+                } else {
+                    set line [lindex $file $i]
+                }
             }
-            set body "\n[join [lrange $file $i end] "\n"]"
+
+            # a break above just exited the while loop;  now we need to skip
+            # the rest of the foreach as well
+            if { $is_auto_reply_p } {
+                ns_log Notice "NOTIF-INCOMING-EMAIL: message is from an auto-responder, skipping"
+                if {[catch {ns_unlink $msg} errmsg]} {
+                    ns_log Notice "NOTIF-INCOMING-EMAIL: couldn't remove message $msg:  $errmsg"
+                }
+                continue
+            }
+
+            set body [parse_incoming_email $orig_file]
 
             # okay now we have a list of headers and the body, let's
             # put it into notifications stuff
@@ -192,7 +243,7 @@ namespace eval notification::email {
             if {[empty_string_p $from_user]} {
                 ns_log Notice "NOTIF-INCOMING-EMAIL: no user $from"
                 if {[catch {ns_unlink $msg} errmsg]} {
-                    ns_log Notice "NOTIF-INCOMING-EMAIL: couldn't remove message"
+                    ns_log Notice "NOTIF-INCOMING-EMAIL: couldn't remove message $msg:  $errmsg"
                 }
                 continue
             }
@@ -203,7 +254,7 @@ namespace eval notification::email {
             if {[empty_string_p $to_stuff]} {
                 ns_log Notice "NOTIF-INCOMING-EMAIL: bad to address $to"
                 if {[catch {ns_unlink $msg} errmsg]} {
-                    ns_log Notice "NOTIF-INCOMING-EMAIL: couldn't remove message"
+                    ns_log Notice "NOTIF-INCOMING-EMAIL: couldn't remove message $msg:  $errmsg"
                 }
                 continue
             }

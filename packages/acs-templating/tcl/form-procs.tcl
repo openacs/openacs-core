@@ -105,6 +105,9 @@ ad_proc -public template::form::create { id args } {
 
     @option elements        A block of element specifications.
 
+    @option show_required_p Should the form template show which elements are required. 
+                            Use 1 or t for true, 0 or f for false. Defaults to true.
+
     @see template::form::get_button
     @see template::form::get_action
 
@@ -350,9 +353,12 @@ ad_proc -private template::form::template { id { style "" } } {
   
   if { [string equal $style {}] } { 
       set style [parameter::get \
-                     -package_id [apm_package_id_from_key "acs-templating"] \
+                     -package_id [ad_conn subsite_id] \
                      -parameter DefaultFormStyle \
-                     -default "standard"]
+                     -default [parameter::get \
+                                   -package_id [apm_package_id_from_key "acs-templating"] \
+                                   -parameter DefaultFormStyle \
+                                   -default "standard-lars"]]
   }
 
   set file_stub [template::get_resource_path]/forms/$style
@@ -440,19 +446,17 @@ ad_proc -private template::form::render { id tag_attributes } {
   # make a reference to the formerror array with any validation messages
   upvar #$level $id:error $id:error
 
+  # Clear the formerror array if it has
+  # been set by another form on the same page
+  upvar #$level formerror formerror
+  if { [info exists formerror] } { unset formerror }
+
   if { [info exists $id:error] } {
 
     uplevel #$level "upvar 0 $id:error formerror"
     
     # There were errors on the form, force edit mode
     set properties(mode) edit
-
-  } else {
-
-    # no errors on this form.  Clear the formerror array if it has
-    # been set by another form on the same page
-    upvar #$level formerror formerror
-    if { [info exists formerror] } { unset formerror }
   }
 
   # Propagate form mode to all form elements
@@ -465,6 +469,17 @@ ad_proc -private template::form::render { id tag_attributes } {
     # that case, set to form mode
     if { [string equal $element(mode) {}] } {
       set element(mode) $properties(mode)
+    }
+  }
+
+  # Check for errors in hidden elements
+  foreach element_ref $elements { 
+ 
+    # get a reference by element ID 
+    upvar #$level $element_ref element
+   
+    if { [string equal $element(widget) "hidden"] && [exists_and_not_null $id:error($element(id))] } {
+      error "Validation error in hidden form element: '[set $id:error($element(id))]' on element '$element(id)'."
     }
   }
 

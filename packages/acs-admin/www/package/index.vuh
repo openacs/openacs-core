@@ -1,0 +1,7 @@
+set urlv [split [ad_conn extra_url] "/"]
+set package_key [lindex $urlv 1]
+set rest [join [lrange $urlv 2 end] "/"]
+
+set file "[acs_package_root_dir $package_key]/www/sitewide-admin/$rest"
+
+rp_internal_redirect -absolute_path $file

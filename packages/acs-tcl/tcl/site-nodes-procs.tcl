@@ -53,6 +53,28 @@ namespace eval site_node {
         apm_invoke_callback_proc -package_key [apm_package_key_from_id $object_id] -type "after-mount" -arg_list [list node_id $node_id package_id $object_id]
     }
 
+    ad_proc -public rename {
+        {-node_id:required}
+        {-name:required}
+    } {
+        Rename the site node.
+    } {
+        # We need to update the cache for all the child nodes as well
+        set node_url [get_url -node_id $node_id]
+        set child_node_ids [get_children -all -node_id $node_id -element node_id]
+
+        db_dml rename_node {}
+
+        # Unset all cache entries under the old path
+        foreach name [nsv_array names site_nodes "${node_url}*"] {
+            nsv_unset site_nodes $name
+        }
+
+        foreach node_id [concat $node_id $child_node_ids] {
+            update_cache -node_id $node_id
+        }
+    }
+
     ad_proc -public instantiate_and_mount {
         {-node_id ""}
         {-parent_node_id ""}
@@ -329,6 +351,70 @@ namespace eval site_node {
     } {
         array set node [get -node_id $node_id]
         return $node(object_id)
+    }
+
+    ad_proc -public get_children {
+        {-all:boolean}
+        {-package_type {}}
+        {-element {}}
+        {-node_id:required}
+    } {
+        @param node_id       The node for which you want to find the children.
+
+        @option all          Set this if you want all children, not just direct children
+        
+        @option package_type If specified, this will limit the returned nodes to those with an
+                             package of the specified package type (normally apm_service or 
+                             apm_application) mounted
+        
+        @param element       The element of the site node you wish returned. Defaults to url, but you 
+                             can say 'node_id' instead.
+        
+        @return A list of URLs of the site_nodes immediately under this site node, or all children, 
+        if the -all switch is specified.
+        
+        @author Lars Pind (lars@collaboraid.biz)
+    } {
+        set node_url [get_url -node_id $node_id]
+        
+        set child_urls [nsv_array names site_nodes "${node_url}*"]
+
+        if { !$all_p } {
+            set org_child_urls $child_urls
+            set child_urls [list]
+            foreach child_url $org_child_urls {
+                if { [regexp "^${node_url}\[^/\]*/\$" $child_url] } {
+                    lappend child_urls $child_url
+                }
+            }
+        }
+
+        if { ![empty_string_p $package_type] } {
+            set org_child_urls $child_urls
+            set child_urls [list]
+            foreach child_url $org_child_urls {
+                array unset site_node
+                array set site_node [get_from_url -exact -url $child_url]
+
+                if { [string equal $site_node(package_type) $package_type] } {
+                    lappend child_urls $child_url
+                }
+            }
+        }
+
+        if { ![empty_string_p $element] } {
+            # We need to update the cache for all the child nodes as well
+            set return_val [list]
+            foreach child_url $child_urls {
+                array unset site_node
+                array set site_node [site_node::get_from_url -url $child_url]
+
+                lappend return_val $site_node($element)
+            }
+            return $return_val
+        } else {
+            return $child_urls
+        }
     }
 
     ad_proc -public closest_ancestor_package {

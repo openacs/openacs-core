@@ -538,6 +538,7 @@ create table users (
 	salt			char(40),
 	password_question	varchar2(1000),
 	password_answer		varchar2(1000),
+	password_changed_date	date,
         -- table constraints
         constraint users_authority_username_un
         unique (authority_id, username)

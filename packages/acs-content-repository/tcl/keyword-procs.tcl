@@ -27,6 +27,16 @@ ad_proc -public cr::keyword::new {
     return $keyword_id
 }
 
+ad_proc -public cr::keyword::delete {
+    {-keyword_id:required}
+} {
+    Delete a keyword.
+
+    @author Peter Marklund
+} {
+    db_exec_plsql delete_keyword {}
+}
+
 ad_proc -public cr::keyword::set_heading {
     {-keyword_id:required}
     {-heading:required}
@@ -113,4 +123,26 @@ ad_proc -public cr::keyword::item_get_assigned {
     return $keyword_list
 }
 
+ad_proc -public cr::keyword::get_options_flat {
+    {-parent_id ""}
+} {
+    Returns a flat options list of the keywords with the given parent_id.
+} {
+    return [db_list_of_lists select_keyword_options {}]
+}
 
+ad_proc -public cr::keyword::get_children {
+    {-parent_id ""}
+} {
+    Returns the ids of the keywords having the given parent_id. Returns
+    an empty list if there are no children.
+
+    @author Peter Marklund
+} {
+    return [db_list select_child_keywords {
+        select keyword_id
+        from cr_keywords
+        where parent_id = :parent_id
+    }]
+}
+    

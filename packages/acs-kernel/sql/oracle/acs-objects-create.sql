@@ -430,6 +430,8 @@ as
 
     procedure update_last_modified (
         object_id in acs_objects.object_id%TYPE,
+        modifying_user in acs_objects.modifying_user%TYPE,
+        modifying_ip in acs_objects.modifying_ip%TYPE,
         last_modified in acs_objects.last_modified%TYPE default sysdate
     );
 
@@ -1047,13 +1049,15 @@ as
 
     procedure update_last_modified (
         object_id in acs_objects.object_id%TYPE,
+        modifying_user in acs_objects.modifying_user%TYPE,
+        modifying_ip in acs_objects.modifying_ip%TYPE,
         last_modified in acs_objects.last_modified%TYPE default sysdate
     )
     is
         v_parent_id acs_objects.context_id%TYPE;
     begin
         update acs_objects
-        set acs_objects.last_modified = acs_object.update_last_modified.last_modified
+        set acs_objects.last_modified = acs_object.update_last_modified.last_modified, acs_objects.modifying_user = acs_object.update_last_modified.modifying_user, acs_objects.modifying_ip = acs_object.update_last_modified.modifying_ip
         where acs_objects.object_id in (select ao.object_id
                                         from acs_objects ao
                                         connect by prior ao.context_id = ao.object_id

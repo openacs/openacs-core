@@ -34,4 +34,21 @@
 </fullquery>
 
  
+<fullquery name="group::get_rel_types_options.select_rel_types">      
+      <querytext>
+    select role.pretty_name,
+           gr.rel_type
+    from   group_rels gr,
+           acs_rel_types rt,
+           acs_rel_roles role
+    where  gr.group_id = :group_id
+    and    rt.rel_type = gr.rel_type
+    and    role.role = rt.role_two
+    and    rt.object_type_two = :object_type
+    order  by decode(gr.rel_type, 'membership_rel', 0, 1)||role.pretty_name
+
+      </querytext>
+</fullquery>
+
+
 </queryset>

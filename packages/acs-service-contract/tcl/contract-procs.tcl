@@ -39,8 +39,80 @@ ad_proc -public acs_sc::contract::new {
 ad_proc -public acs_sc::contract::new_from_spec {
     {-spec:required}
 } {
-    Takes a complete notification spec and parses the 
-    name, description and operations
+    Takes a complete service contract specification and creates the new service contract.
+
+    <p>
+    
+    The spec looks like this:
+
+    <blockquote><pre>
+    set spec {
+        name "Action_SideEffect"
+        description "Get the name of the side effect to create action"
+        operations {
+            GetObjectTypes {
+                description "Get the object types for which this implementation is valid."
+                output { object_types:string,multiple }
+                iscachable_p "t"
+            }
+            GetPrettyName { 
+                description "Get the pretty name of this implementation."
+                output { pretty_name:string }
+                iscachable_p "t"
+            }
+            DoSideEffect {
+                description "Do the side effect"
+                input {
+                    case_id:integer
+                    object_id:integer
+                    action_id:integer
+                    entry_id:integer
+                }
+            }
+        } 
+    }  
+    
+    acs_sc::contract::new_from_spec -spec $spec
+    </pre></blockquote>
+
+    Here's the detailed explanation:
+
+    <p>
+
+    The spec should be an array-list with 3 entries: 
+
+    <ul>
+      <li>name: The name of the service contract. 
+      <li>description: A human-readable descirption.
+      <li>operations: An array-list of operations in this service contract.
+    </ul>
+  
+    The operations array-list has the operation name as key, and 
+    another array-list containing the specification for the operation as the value.
+    That array-list has the following entries:
+
+    <ul>
+      <li>description: Human-readable description of the operation.
+      <li>input: Specification of the input to this operation.
+      <li>output: Specification of the output of this operation.
+      <li>iscachable_p: A 't' or 'f' for whether output from this service contract implementation
+    should automatically be cached using util_memoize.
+    </ul>
+
+    <p>
+
+    The format of the 'input' and 'output' specs is a Tcl list of parameter specs, 
+    each of which consist of name, colon (:), 
+    datatype plus an optional comma (,) and the flag 'multiple'.
+
+
+    @param spec The service contract specification as described above.
+
+    @return The contract_id of the newly created service contract.
+
+    @see util_memoize
+    @see acs_sc::invoke
+
 } {
 
     # Default values

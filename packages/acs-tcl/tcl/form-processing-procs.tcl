@@ -18,10 +18,12 @@ ad_proc -public ad_form {
 
     <p>
 
-    We use the standard ATS form builder's form and element create procedures to generate forms,
-    and its state-tracking code to determine when to execute various code blocks.  Because of
-    this, you can use any form builder datatype or widget with this procedure, and extending its
-    functionality is a simple matter of implementing new ones.
+    We use the standard OpenACS Templating System (ATS) form builder's form and element create 
+    procedures to generate forms, and its state-tracking code to determine when to execute 
+    various code blocks.  Because of this, you can use any form builder datatype or widget 
+    with this procedure, and extending its functionality is a simple matter of implementing 
+    new ones. Because ad_form is just a wrapper for the ATS, you <b>must</b> familiarize
+    yourself with it to be able to use ad_form effectively.
 
     <p>
 
@@ -55,6 +57,7 @@ ad_proc -public ad_form {
     <blockquote><pre>
 
     ad_page_contract {
+
 
         Simple add/edit form
 
@@ -151,8 +154,47 @@ ad_proc -public ad_form {
         being served.  
     </dd>
 
+    <p><dt><b>-actions</b></dt><p>
+    <dd>A list of lists of actions (e.g. {{"  Delete  " delete} {"  Resolve " resolve}} ), which gets 
+        translated to buttons at the bottom of the form. You can find out what button was pressed 
+	with [template::form get_action form_id], usually in the -edit_request block to perform whatever
+	actions you deem appropriate. When the form is loaded the action will be empty.
+    </dd>
+    
+    <p><dt><b>-mode { display | edit }</b></dt><p>
+    <dd>If set to 'display', the form is shown in display-only mode, where the user cannot edit the fields. 
+        Each widget knows how to display its contents appropriately, e.g. a select widget will show 
+	the label, not the value. If set to 'edit', the form is displayed as normal, for editing. 
+	Defaults to 'edit'. Switching to edit mode when a button is clicked in display mode is handled 
+	automatically
+    </dd>
+    
+    <p><dt><b>-has_edit { 0 | 1 }</b></dt><p>
+    <dd>Set to 1 to suppress the Edit button automatically added by the form builder. Use this if you 
+        include your own.
+    </dd>
+
+    <p><dt><b>-has_submit { 0 | 1 }</b></dt><p>
+    <dd>Set to 1 to suppress the OK button automatically added by the form builder. Use this if you 
+        include your own.
+    </dd>
+
+    <p><dt><b>-method</b></dt><p>
+    <dd>The standard METHOD attribute to specify in the HTML FORM tag at the beginning of the rendered 
+        form. Defaults to POST.
+    </dd>
+
+    <p><dt><b>-form</b></dt><p>
+    <dd>Declare form elements (described in detail below)
+    </dd>
+
     <p><dt><b>-cancel_url</b></dt><p>
-    <dd>The URL the cancel button should take you to. If this is specified, a cancel button will show up.  
+    <dd>The URL the cancel button should take you to. If this is specified, a cancel button will show up
+        during the edit phase.
+    </dd>
+
+    <p><dt><b>-cancel_label</b></dt><p>
+    <dd>The label for the cancel button.
     </dd>
 
     <p><dt><b>-html</b></dt><p>
@@ -167,17 +209,6 @@ ad_proc -public ad_form {
         similar flags are not allowed though it would be good to do so in the future.
     </dd>
         
-    <p><dt><b>-form</b></dt><p>
-    <dd>Declare form elements (described in detail below)
-    </dd>
-
-    <p><dt><b>-on_request</b></dt><p>
-    <dd>A code block which sets the values for each element of the form meant to be modifiable by
-        the user when the built-in key management feature is being used or to define options for
-        select lists etc. You just need to set the values as local
-        variables in the code block, and they'll get fetched and used as element values for you.
-    </dd>
-
     <p><dt><b>-select_query</b></dt><p>
     <dd>Defines a query that returns a single row containing values for each element of the form meant to be
         modifiable by the user.  Can only be used if an element of type key has been declared.
@@ -191,11 +222,25 @@ ad_proc -public ad_form {
         declared
     </dd>
 
+    <p><dt><b>-show_required_p { 0 | 1 }</b></dt><p>
+    <dd>Should the form template show which elements are required. Use 1 or t for true, 0 or f for false. 
+       Defaults to true.
+    </dd>
+
+    <p><dt><b>-on_request</b></dt><p>
+    <dd>A code block which sets the values for each element of the form meant to be modifiable by
+        the user when the built-in key management feature is being used or to define options for
+        select lists etc. Set the values as local variables in the code block, and they'll get 
+	fetched and used as element values for you. This block is executed <i>everytime</i> the
+	form is loaded <i>except</i> when the form is being submitted (in which case the -on_submit
+	block is executed.)
+    </dd>
+
     <p><dt><b>-edit_request</b></dt><p>
     <dd>A code block which sets the values for each element of the form meant to be modifiable by the user.  Use
         this when a single query to grab database values is insufficient.  Can only be used if an element of
         type key is defined.  This block is only executed if the page is called with a valid key, i.e. a
-        self-submit form to add or edit an item called to edit the data. You just need to set the values as local
+        self-submit form to add or edit an item called to edit the data. Set the values as local
         variables in the code block, and they'll get fetched and used as element values for you.
     </dd>
 
@@ -250,6 +295,18 @@ ad_proc -public ad_form {
     <p><dt><b>-after_submit</b></dt><p>
     <dd>This code block will be executed after the three blocks on_submit, new_data or edit_data have been
     executed. It is useful for putting in stuff like ad_returnredirect that is the same for new and edit.
+    </dd>
+
+    <p><dt><b>-validate</b></dt><p>
+    <dd>A code block that validates the elements in the form. The elements are set as local values.
+        The block has the following form:
+       <pre>
+{element_name
+    {tcl code that returns 1 or 0}
+    "Message to be shown by that element in case of error"
+}
+{...}
+       </pre>
     </dd>
 
     </dl>
@@ -367,6 +424,10 @@ ad_proc -public ad_form {
     <p>
     </blockquote>
 
+    @see ad_form_new_p
+    @see ad_set_element_value
+    @see ad_set_form_values
+
 } {
 
     set level [template::adp_level]
@@ -388,7 +449,7 @@ ad_proc -public ad_form {
 
     set valid_args { form method action mode html name select_query select_query_name new_data on_refresh
                      edit_data validate on_submit after_submit confirm_template on_request new_request edit_request
-                     export cancel_url cancel_label has_edit actions edit_buttons };
+                     export cancel_url cancel_label has_submit has_edit actions edit_buttons show_required_p };
 
     ad_arg_parser $valid_args $args
 
@@ -426,7 +487,7 @@ ad_proc -public ad_form {
             # and validation block to be extended, for now at least until I get more experience
             # with this ...
 
-            if { [lsearch { name form method action html validate export mode cancel_url has_edit actions edit_buttons } $valid_arg ] == -1 } {
+            if { [lsearch { name form method action html validate export mode cancel_url has_edit has_submit actions edit_buttons } $valid_arg ] == -1 } {
                 set af_parts(${form_name}__extend) ""
             }
         }
@@ -558,12 +619,20 @@ ad_proc -public ad_form {
             lappend create_command "-has_edit" $has_edit
         }
 
+        if { [info exists has_submit] } {
+            lappend create_command "-has_submit" $has_submit
+        }
+
         if { [info exists actions] } {
             lappend create_command "-actions" $actions
         }
 
         if { [info exists edit_buttons] } {
             lappend create_command "-edit_buttons" $edit_buttons
+        }
+
+        if { [info exists show_required_p] } {
+            lappend create_command "-show_required_p" $show_required_p
         }
 
         # Create the form
@@ -683,34 +752,7 @@ ad_proc -public ad_form {
               
             foreach extra_arg $af_extra_args($element_name) {
                 lappend form_command "-[lindex $extra_arg 0]"
-                switch [lindex $extra_arg 0] {
-                    html -
-                    values -
-                    validate -
-                    options {
-                        lappend form_command [uplevel [list subst [lindex $extra_arg 1]]]
-                    }
-                    help_text -
-                    label -
-                    format -
-                    mode -
-                    value -
-		    section -
-                    before_html -
-                    after_html -
-                    result_datatype -
-                    search_query -
-                    search_query_name -
-                    maxlength {
-                        if { [llength $extra_arg] > 2 || [llength $extra_arg] == 1 } {
-                            return -code error "element $element_name: \"$extra_arg\" requires exactly one argument"
-                        }
-                        lappend form_command [uplevel [list subst [lindex $extra_arg 1]]]
-                    }
-                    default {
-                        ns_log Error "Unknown switch '[lindex $extra_arg 0]' to ad_form on url [ad_return_url]"
-                    }
-                }
+                lappend form_command [uplevel [list subst [lindex $extra_arg 1]]]
             }
             eval $form_command
 
@@ -912,9 +954,13 @@ ad_proc -public ad_form {
     }
 
     if { [template::form is_submission $form_name] &&
-         [uplevel #$level {set __refreshing_p}] &&
-         [info exists on_refresh] } {
-        ad_page_contract_eval uplevel #$level $on_refresh
+         [uplevel #$level {set __refreshing_p}] } {
+          
+        uplevel array unset ${form_name}:error
+
+        if { [info exists on_refresh] } {
+            ad_page_contract_eval uplevel #$level $on_refresh
+        }
     }
 
     if { [template::form is_valid $form_name] && ![uplevel #$level {set __refreshing_p}] } {

@@ -30,6 +30,7 @@ ad_proc -public template::widget {} {
     @see template::widget::numericRange
     @see template::widget::password
     @see template::widget::radio
+    @see template::util::richtext
     @see template::widget::search
     @see template::widget::select
     @see template::widget::submit
@@ -239,6 +240,21 @@ ad_proc -public template::widget::submit { element_reference tag_attributes } {
   return [input submit element $tag_attributes]
 }
 
+ad_proc -public template::widget::attachment { element_reference tag_attributes } {
+
+    upvar $element_reference element
+
+    set output [input file element $tag_attributes]
+
+    set element(name) $element(attach_name)
+    set element(label) $element(attach_label)
+    set element(html) $element(attach_html)
+
+    append output [submit element $tag_attributes]
+
+    return $output
+}
+
 ad_proc -public template::widget::checkbox { element_reference tag_attributes } {
 
   upvar $element_reference element
@@ -378,7 +394,9 @@ ad_proc -public template::data::transform::search { element_ref } {
   if { [string equal $value {}] } { return [list] } 
 
   if { [string equal $value ":search:"] } { 
-      unset element(options)
+      if { [info exists element(options)] } {
+          unset element(options)
+      }
       template::element::set_error $element(form_id) $element_id "
         Please enter a search string."
       return [list]
@@ -402,7 +420,9 @@ ad_proc -public template::data::transform::search { element_ref } {
 
       # no search results so return text entry back to the user
 
-      unset element(options)
+      if { [info exists element(options)] } {
+          unset element(options)
+      }
 
       template::element::set_error $element(form_id) $element_id "
         No matches were found for \"$value\".<br>Please

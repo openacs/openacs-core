@@ -4,7 +4,7 @@ ad_library {
 
     @creation-date 19 January 2001
     @author Eric Lorenzo (elorenzo@arsdigita.com)
-    @cvs-id $Id$
+    @cvs-id set-operation-procs.tcl,v 1.1.1.1 2001/03/13 22:59:26 ben Exp
 }
 
 
@@ -31,7 +31,7 @@ ad_proc set_append! { s-name v } {
 } {
     upvar $s-name s
     
-    if ![set_member? $s $v] {
+    if { ![set_member? $s $v] } {
 	lappend s $v
     }
 }
@@ -44,7 +44,7 @@ ad_proc set_union { u v } {
     set result $u
 
     foreach ve $v {
-	if ![set_member? $result $ve] {
+	if { ![set_member? $result $ve] } {
 	    lappend result $ve
 	}
     }
@@ -61,7 +61,7 @@ ad_proc set_union! { u-name v } {
     upvar $u-name u
 
     foreach ve $v {
-	if ![set_member? $u $ve] {
+	if { ![set_member? $u $ve] } {
 	    lappend u $ve
 	}
     }
@@ -78,7 +78,7 @@ ad_proc set_intersection { u v } {
     set result [list]
     
     foreach ue $u {
-	if [set_member? $v $ue] {
+	if { [set_member? $v $ue] } {
 	    lappend result $ue
 	}
     }
@@ -96,7 +96,7 @@ ad_proc set_intersection! { u-name v } {
     set result [list]
     
     foreach ue $u {
-	if [set_member? $v $ue] {
+	if { [set_member? $v $ue] } {
 	    lappend result $ue
 	}
     }
@@ -116,7 +116,7 @@ ad_proc set_difference { u v } {
     set result [list]
 
     foreach ue $u {
-	if ![set_member? $v $ue] {
+	if { ![set_member? $v $ue] } {
 	    lappend result $ue
 	}
     }
@@ -134,7 +134,7 @@ ad_proc set_difference! { u-name v } {
     set result [list]
 
     foreach ue $u {
-	if ![set_member? $v $ue] {
+	if { ![set_member? $v $ue] } {
 	    lappend result $ue
 	}
     }

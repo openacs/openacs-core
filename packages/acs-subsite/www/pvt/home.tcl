@@ -21,48 +21,89 @@ ad_page_contract {
     pvt_home_url:onevalue
 }
 
-set user_id [ad_verify_and_get_user_id]
+ad_maybe_redirect_for_registration
 
-set subsite_url  [subsite::get_element -element url]
-set pvt_home_url [ad_pvt_home]
+set user_id [ad_conn user_id]
 
-set user_exists_p [db_0or1row pvt_home_user_info {
-    select first_names, last_name, email, url,
-    nvl(screen_name,'&lt none set up &gt') as screen_name
-    from cc_users 
-    where user_id=:user_id
-}]
+acs_user::get -array user -include_bio
 
-if { $user_exists_p && [empty_string_p $screen_name] } {
-    set screen_name "[_ acs-subsite.no_screen_name_message]"
-}
+set page_title [ad_pvt_home_name]
 
-set bio [db_string biography "
-select attr_value
-from acs_attribute_values
-where object_id = :user_id
-and attribute_id =
-   (select attribute_id
-    from acs_attributes
-    where object_type = 'person'
-    and attribute_name = 'bio')" -default ""]
+set context [list $page_title]
 
-if { ! $user_exists_p } {
-    if {$user_id == 0} {
-	ad_redirect_for_registration
-        ad_script_abort
+set ad_url [ad_url]
+
+set community_member_url [acs_community_member_url -user_id $user_id]
+
+set system_name [ad_system_name]
+
+set portrait_upload_url [export_vars -base "../user/portrait/upload" { { return_url [ad_return_url] } }]
+
+ad_form -name user_info -cancel_url [ad_conn url] -mode display -form {
+    {first_names:text
+        {label "First names"}
+        {html {size 50}}
     }
-    ad_return_error "Account Unavailable" "We can't find you (user #$user_id) in the users table.  Probably your account was deleted for some reason.  You can visit <a href=\"/register/logout\">the log out page</a> and then start over."
+    {last_name:text
+        {label "Last Name"}
+        {html {size 50}}
+    }
+    {email:text
+        {label "Email"}
+        {html {size 50}}
+    }
+    {screen_name:text,optional
+        {label "Screen name"}
+        {html {size 50}}
+    }
+    {url:text,optional
+        {label "Home Page"}
+        {html {size 80}}
+    }
+    {bio:text(textarea),optional
+        {label "About yourself"}
+        {html {rows 8 cols 60}}
+    }
+} -on_request {
+    foreach var { first_names last_name email screen_name url bio } {
+        set $var $user($var)
+    }
+} -on_submit {
+    db_transaction {
+        person::update \
+            -person_id $user_id \
+            -first_names $first_names \
+            -last_name $last_name
+        
+        party::update \
+            -party_id $user_id \
+            -email $email \
+            -url $url
+        
+        acs_user::update \
+            -user_id $user_id \
+            -screen_name $screen_name
+
+        person::update_bio \
+            -person_id $user_id \
+            -bio $bio
+    }
+} -after_submit {
+    ad_returnredirect [ad_conn url]
     ad_script_abort
 }
 
-if { ![empty_string_p $first_names] || ![empty_string_p $last_name] } {
-    set full_name "$first_names $last_name"
-} else {
-    set full_name "name unknown"
+# TODO: Validate email: [util_email_valid_p $email]
+# TODO: Validate email unique
+
+# LARS HACK: Make the URL and email elements real links
+if { ![form is_valid user_info] } {
+    element set_properties user_info email -display_value "<a href=\"mailto:[element get_value user_info email]\">[element get_value user_info email]</a>"
+    element set_properties user_info url -display_value "<a href=\"[element get_value user_info url]\">[element get_value user_info url]</a>"
 }
 
-set system_name [ad_system_name]
+# The template needs to know if this is a request
+set form_request_p [expr [form is_request user_info] && [empty_string_p [form get_action user_info]]]
 
 if [ad_parameter SolicitPortraitP "user-info" 0] {
     # we have portraits for some users 
@@ -86,17 +127,4 @@ if [ad_parameter SolicitPortraitP "user-info" 0] {
 } else {
     set portrait_state "none"
 }
-
-set header [ad_header "$full_name's workspace at $system_name"]
-
-set context [list "[ad_pvt_home_name]"]
-
-set export_user_id [export_url_vars user_id]
-set ad_url [ad_url]
-
-set member_link [acs_community_member_link -user_id $user_id -label "${ad_url}[acs_community_member_url -user_id $user_id]"]
-
-set interest_items ""
-
-ad_return_template
 

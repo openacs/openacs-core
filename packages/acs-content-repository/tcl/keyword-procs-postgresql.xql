@@ -17,6 +17,12 @@
         </querytext>
     </fullquery>
 
+    <fullquery name="cr::keyword::delete.delete_keyword">
+        <querytext>
+                select content_keyword__delete (:keyword_id)
+        </querytext>
+    </fullquery>
+
     <fullquery name="cr::keyword::set_heading.set_heading">
         <querytext>
             select content_keyword__set_heading(:keyword_id, :heading)

@@ -321,6 +321,25 @@ begin
 
 end get_number;
 
+function revision_name(
+  revision_id IN cr_revisions.revision_id%TYPE
+) return varchar2 is
+
+  v_text varchar2(500);
+  v_sql  varchar2(500);
+
+begin
+
+  v_sql := 'select ''Revision '' || content_revision.get_number(r.revision_id) || '' of '' || (select count(*) from cr_revisions where item_id = r.item_id) || '' for item: '' || content_item.get_title(item_id)
+  from cr_revisions r
+  where r.revision_id = ' || revision_name.revision_id;
+
+  execute immediate v_sql into v_text;
+
+  return v_text;
+
+end revision_name;
+
 procedure index_attributes(
   revision_id IN cr_revisions.revision_id%TYPE
 ) is

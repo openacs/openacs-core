@@ -2,7 +2,6 @@ ad_library {
     Provides procedures to spit out the navigational parts of the site.
 
     @cvs-id $Id$
-
     @author philg@mit.edu
     @creation-date 11/5/98 (adapted originally from the Cognet server)     
 }
@@ -42,23 +41,20 @@ ad_proc -public ad_context_bar_html {
 }
 
 ad_proc ad_context_node_list {
-   -from_node    
+    {-from_node ""}
     node_id
 } {
     Starting with the given node_id, return a list of
     [list url instance_name] items for parent nodes.
 
-    Do not include links to from_node and above, if provided.
-   
+    @option from_node The top-most node_id for which we'll show context bar. This can be used with 
+    the node_id of the nearest subsite to get the context-bar only up to the nearest subsite.
+
     @author Peter Marklund
 } {
     set context [list]
 
-    if { ![info exists from_node] } {
-        set from_node ""
-    }
-
-    while { ![empty_string_p $node_id] && ![string match $node_id $from_node] } {
+    while { ![empty_string_p $node_id] } {
         array set node [site_node::get -node_id $node_id]
         
         # JCD: Provide something for the name if the instance name is
@@ -71,6 +67,11 @@ ad_proc ad_context_node_list {
 
         set context [concat [list [list $node(url) $node(instance_name)]] $context]
 
+        # We have the break here, so that 'from_node' itself is included
+        if { [string equal $node_id $from_node] } {
+            break
+        }
+        
         set node_id $node(parent_id)
     }
 
@@ -78,8 +79,8 @@ ad_proc ad_context_node_list {
 }
 
 ad_proc -public ad_context_bar { 
+    {-from_node ""}
     -node_id
-    -from_node
     -separator
     args
 } {
@@ -101,15 +102,7 @@ ad_proc -public ad_context_bar {
         set node_id [ad_conn node_id]
     }
 
-    set context [list]
-
-    if { [info exists from_node] } {
-	set context [concat $context \
-		[ad_context_node_list -from_node $from_node $node_id]]
-    } else {
-	set context [concat $context [ad_context_node_list $node_id]]
-    }
-
+    set context [ad_context_node_list -from_node $from_node $node_id]
 
     if { [string match admin/* [ad_conn extra_url]] } {
         lappend context [list "[ad_conn package_url]admin/" \
@@ -334,7 +327,7 @@ proc ad_menu_header {{section ""} {uplink ""}} {
    
 
     foreach naked_pattern [ad_naked_html_patterns] {
-	if [string match $naked_pattern $url_stub] {
+	if { [string match $naked_pattern $url_stub] } {
 	    # want the global admins with no menu, but not the domain admin
 	    return ""
         }
@@ -486,7 +479,7 @@ proc ad_menu_header {{section ""} {uplink ""}} {
     set uplevel_string  "<TD align=right><A href=\"[menu_uplevel $section $uplink]\" onMouseOver=\"hiLite(\'up_one_level\')\" onMouseOut=\"unhiLite(\'up_one_level\')\"><img name=\"up_one_level\" src=\"/graphics/36_up_one_level.gif\" border=0 width=120 height=36 \" alt=\"Up\"></A></TD></TR>"
 
     foreach url_pattern [ad_no_uplevel_patterns] {
-	if [regexp $url_pattern $url_stub match] {
+	if { [regexp $url_pattern $url_stub match] } {
 	    set uplevel_string ""
 	}
     }
@@ -537,7 +530,7 @@ proc ad_menu_footer {{section ""}} {
     set full_filename "[ns_info pageroot]$url_stub"
    
     foreach naked_pattern [ad_naked_html_patterns] {
-	if [string match $naked_pattern $url_stub] {
+	if { [string match $naked_pattern $url_stub] } {
 	    return ""
 	}
     }

@@ -32,7 +32,7 @@
     </p>
 </if>
 
-Member state: @member_state@ @user_finite_state_links@
+Member state: @member_state@ @user_finite_state_links;noquote@
 
 <h2>This user is a member of the following groups:</h2>
 <p>Note: These are the groups to which the user has been granted 
