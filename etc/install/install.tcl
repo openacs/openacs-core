@@ -10,55 +10,55 @@
 # It will be used as the name of directories, the name of database
 # users and/or tablespaces, etc.
 
-set server                    "peter"
+set server                    "service0"
 
 #---------------------------------------------------------------------
 # Server root directory. This is where all of the files for your server 
 # will live.
 
-set serverroot                "/web/${server}"
+set serverroot                "/var/lib/aolserver/${server}"
 
 #---------------------------------------------------------------------
 # The host name (DNS) the server will be listening on
-set server_host               peter.cph02.collaboraid.net
+set server_host               yourserver.test
 
 #---------------------------------------------------------------------
 # The IP address the server will be listening on
-set server_ip                 213.150.51.65
+set server_ip                 127.0.0.1
 
 #---------------------------------------------------------------------
 # The port number the server will be listening on
-set server_port               8017
+set server_port               8000
 
 #---------------------------------------------------------------------
 # The URL where your server will be accessible. 
 # This is used by the installation scripts to complete the installation.
 # Don't forget to include the port number above
-#set server_url                "http://${server_ip}:${server_port}"
-set server_url                 "http://$server_host"
+set server_url                "http://${server_ip}:${server_port}"
 
 #---------------------------------------------------------------------
 # OS user and group that AOLserver runs as. We recommend that you
 # create a new user for your server.
 # If you do not want to do that, change the user name below
-set aolserver_user            nsadmin
+set aolserver_user            ${server}
 set aolserver_group           "web"
+
 #---------------------------------------------------------------------
 # OpenACS configuration
-set admin_email               "peter@collaboraid.biz"
-set admin_username            "peter"
-set admin_first_names         "Peter"
-set admin_last_name           "Marklund"
+set admin_email               "admin@${server_host}"
+set admin_username            "admin"
+set admin_first_names         "Admin"
+set admin_last_name           "User"
 set admin_password            "1"
-set system_name               "Peter Dev Server"
-set publisher_name            "Collaboraid"
+set system_name               "An OpenACS Development Server"
+set publisher_name            "An OpenACS Developer"
 
 #---------------------------------------------------------------------
 # Should we automatically grab the OpenACS code from CVS?
 # If not, you must have already unpacked a tar-ball in the server root
 # directory specified above
 
-set do_checkout               "no"
+set do_checkout               "yes"
 
 #---------------------------------------------------------------------
 # Which branch or symbolic tag should we use for the checkout
@@ -152,7 +152,7 @@ set system_user_password      "manager"
 #######################################################################
 
 # Path to AOLserver config.tcl file to use. If you don't specify any file here, we will use the default config file.
-set aolserver_config_file     "/web/$server/log/error/current"
+set aolserver_config_file     ""
 
 # The path to the server's error log file, so we can look for errors during installation
 set error_log_file            "${serverroot}/log/error.log"
