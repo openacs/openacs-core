@@ -226,13 +226,20 @@ namespace eval lang::conn {
         {-site_wide:boolean}
     } {
         Get the locale for this request, perhaps for a given package instance.
+        This procedure will never return an error. Everything that could fail is 
+        wrapped in a catch.
         
         @param package_id The package for which you want to get the locale.
         @param site_wide Set this if you want to get the site-wide locale.
     } {
-        set locale [lang::user::locale -package_id $package_id -site_wide=$site_wide_p]
+        set locale {}
+        catch {
+            set locale [lang::user::locale -package_id $package_id -site_wide=$site_wide_p]
+        }
         if { [empty_string_p $locale] } {
-            set locale [lang::system::locale -package_id $package_id -site_wide=$site_wide_p]
+            catch {
+                set locale [lang::system::locale -package_id $package_id -site_wide=$site_wide_p]
+            }
         }
         return $locale
     }
