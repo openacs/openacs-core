@@ -16,6 +16,7 @@
 <!ENTITY objects SYSTEM "developers-guide/objects.xml">
 <!ENTITY subsites SYSTEM "developers-guide/subsites.xml">
 <!ENTITY permissions SYSTEM "developers-guide/permissions.xml">
+<!ENTITY permissions-tedious SYSTEM "developers-guide/permissions-tediously-explained.xml">
 <!ENTITY packages SYSTEM "developers-guide/packages.xml">
 <!ENTITY templates SYSTEM "developers-guide/templates.xml">
 <!ENTITY object-identity SYSTEM "developers-guide/object-identity.xml">
@@ -85,7 +86,41 @@
       <title>High level information: What is OpenACS?</title>
       <sect1 id="openacs-overview" xreflabel="OpenACS Overview">
         <title>Overview</title>
-          <para>The place to start if you want a soft, high level introduction to OpenACS</para>
+	  <para>
+	    OpenACS (Open Architecture Community System) is an advanced
+	    toolkit for building scalable, community-oriented web applications. 
+	    If you're thinking of building an enterprise-level web application, 
+	    OpenACS is a solid, proven foundation that will give you a 3-6 month headstart.
+	  </para>
+
+	  <para>
+	    OpenACS is also a collection of pre-built applications and services that
+	    you can use to build your web site/application. Through a modular architecture,
+	    OpenACS has packages for user/groups management, content management, e-commerce,
+	    news, FAQ, calendar, forums, bug tracking, full-text searching, and 
+	    <ulink url="http://dev.openacs.org/packages/package-list">much more</ulink>.
+	  </para>
+
+	  <para>
+	    OpenACS relies on <ulink url="http://www.aolserver.com/">AOLserver</ulink>, 
+	    the free, multithreaded, scalable, Tcl-enabled, web/application server used by 
+	    America On-Line for most of its web sites, and a true acid-compliant 
+	    Relational Database Management System (RDBMS). Currently OpenACS supports 
+	    PostgreSQL, an open source RDBMS, and Oracle. (<ulink url="http://openacs.org/about/what-is-openacs">read more</ulink>)
+	  </para>
+
+          <para>
+	    The OpenACS toolkit is based on the ArsDigita Community System. ArsDigita 
+	    (now part of Red Hat, Inc.) kindly made their work available under the
+	    <ulink url="http://dev.openacs.org/about/licensing/">GPL</ulink>, 
+	    making all of this possible. 
+	  </para>
+
+	  <para>
+	    The OpenACS community would like to hear your comments and help you
+	    in your endeavors with the system. Stop by our <ulink url="http://openacs.org">web site</ulink> 
+	    and feel free to ask a question, post ideas or whatever.
+	  </para>
       </sect1>
 
       &release-notes;
@@ -163,6 +198,7 @@
       </sect1>
 
       &parties;
+      &permissions-tedious;
       &object-identity;
       &programming-aolserver;
 
