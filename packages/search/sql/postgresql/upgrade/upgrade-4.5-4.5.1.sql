@@ -7,7 +7,7 @@
 
 -- search-packages-create.sql
 
-drop function search_observer__dequeue(integer,timestamp,varchar);
+drop function search_observer__dequeue(integer,timestamp with time zone,varchar);
 
 create function search_observer__dequeue(integer,timestamp with time zone,varchar)
 returns integer as '
