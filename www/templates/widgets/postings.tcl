@@ -13,30 +13,24 @@ set forum_limit [expr $n_posts + 1]
 set max_post_age_days 7
 
 db_multirow forum_posts messages_select "
-
-select fm.message_id,
-       fm.forum_id,
-       ff.name as forum_name,
-       fm.subject
-
-from (select message_id,
-             forum_id,
-             subject,
-             parent_id,
-             posting_date,
-             last_child_post
-      from forums_messages_approved
-      order by last_child_post desc)  fm, forums_forums ff
-
-where fm.forum_id = ff.forum_id
-and fm.parent_id is null
-and ff.package_id = 3061 
-and ff.forum_id <> 46408
---and ff.package_id = 3928 
-and ff.enabled_p='t'
--- and last_child_post > (current_timestamp - $max_post_age_days)
---order by forum_name
-limit $forum_limit
+select * from (
+  select fm.message_id,
+         fm.forum_id,
+         ff.name as forum_name,
+         fm.subject,
+         fm.last_child_post
+  from forums_messages fm
+       , forums_forums ff
+  where fm.forum_id = ff.forum_id
+  and fm.parent_id is null
+  and last_child_post > ( now() - '7 days' :: interval )
+  and ff.package_id = 3061
+  and ff.forum_id <> 46408
+  and ff.enabled_p='t'
+  and fm.state='approved'
+  order by last_child_post desc
+  limit $forum_limit) as messages
+order by messages.forum_name,messages.last_child_post desc
 " {
     # insert spaces into words that are longer than 20 characters. otherwise
     # the layout would barf (box becomes too wide because of non-breaking text).
