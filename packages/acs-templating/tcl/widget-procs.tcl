@@ -341,3 +341,45 @@ ad_proc -public template::widget::textarea { element_reference tag_attributes } 
   append output "</textarea>"
   return $output
 }
+
+ad_proc -public template::widget::comment { element_reference tag_attributes } {
+
+  upvar $element_reference element
+
+  if { [info exists element(html)] } {
+    array set attributes $element(html)
+  }
+
+  array set attributes $tag_attributes
+
+  set output {}
+
+  if { [info exists element(history)] } {
+      append output "$element(history)"
+  }
+
+  if { [info exists element(header)] } {
+      append output "<p><b>$element(header)</b></p>"
+  }
+
+  append output "<textarea name=\"$element(name)\""
+
+  foreach name [array names attributes] {
+    if { [string equal $attributes($name) {}] } {
+      append output " $name"
+    } else {
+      append output " $name=\"$attributes($name)\""
+    }
+  }
+
+  append output ">"
+
+  if { [info exists element(value)] } {
+    # As per scottwseago's request
+    append output [ad_quotehtml $element(value)]
+  } 
+
+  append output "</textarea>"
+
+  return $output
+}
