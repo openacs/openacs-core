@@ -654,7 +654,7 @@ ad_proc -private rp_handler {} {
     ns_returnnotfound
   } errmsg]] {
     if {$code == 1} {
-        if {[string equal query ""]} {
+        if {![string equal [ns_conn query] ""]} {
             set q ?
         } else {
             set q ""
