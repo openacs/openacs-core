@@ -10,9 +10,6 @@
 -- TRIGGERS --
 --------------
 
-drop trigger membership_rels_in_tr on membership_rels;
-drop function membership_rels_in_tr ();
-
 -- The insert trigger was dummied up in groups-create.sql, so we just need
 -- to replace the trigger function, not create the trigger.
 
@@ -26,7 +23,10 @@ drop function membership_rels_in_tr ();
 -- this will be the right thing to do if the PG folks fix this problem or when
 -- we drop support of PG 7.2 and no longer need to declare these as type "opaque"
 
-create function membership_rels_in_tr () returns opaque as '
+drop trigger membership_rels_in_tr on membership_rels;
+drop function membership_rels_in_tr ();
+
+create or replace function membership_rels_in_tr () returns opaque as '
 declare
   v_object_id_one acs_rels.object_id_one%TYPE;
   v_object_id_two acs_rels.object_id_two%TYPE;
@@ -139,6 +139,9 @@ end;' language 'plpgsql';
 
 create trigger membership_rels_del_tr before delete on membership_rels
 for each row execute procedure membership_rels_del_tr ();
+
+drop trigger composition_rels_in_tr on composition_rels;
+drop function composition_rels_in_tr ();
 
 create or replace function composition_rels_in_tr () returns opaque as '
 declare
@@ -755,7 +758,7 @@ end;' language 'plpgsql';
 -- function new
 select define_function_args('acs_group__new','group_id,object_type;group,creation_date;now(),creation_user,creation_ip,email,url,group_name,join_policy,context_id');
 
-create or replace function acs_group__new (integer,varchar,timestamp with time zone,integer,varchar,varchar,varchar,varchar,varchar,integer)
+create or replace function acs_group__new (integer,varchar,timestamptz,integer,varchar,varchar,varchar,varchar,varchar,integer)
 returns integer as '
 declare
   new__group_id              alias for $1;  -- default null  
