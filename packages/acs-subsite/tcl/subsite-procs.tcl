@@ -473,45 +473,33 @@ ad_proc -public subsite::get_section_info {
 
 ad_proc subsite::get_pageflow_struct {} {
     # This is where the page flow structure is defined
-    set pageflow {
-        home {
-            label "Home"
-            folder ""
-            url ""
-            selected_patterns {
-                ""
-                "groups"
-            }
-            subsections {
-                home {
-                    label "Home"
-                    url ""
-                }
-                groups {
-                    label "Groups"
-                    url "groups"
-                }
-            }
-        }
-        members {
-            label "Members"
-            default_section members
-            folder "members"
-            url ""
-            selected_patterns {
-                *
-            }
-            subsections {
-                members {
-                    label "Members"
-                    url ""
-                    selected_patterns {
-                        *
-                    }
-                }
-            }
+    set subsections [list]
+    lappend subsections home {
+        label "Home"
+        url ""
+    }
+    lappend subsections members {
+        label "Members"
+        folder "members"
+        selected_patterns {*}
+    }
+
+    lappend subsections groups [list \
+                                    label [ad_decode [ad_conn package_url] "/" "Communities" "Subcommunities"] \
+                                    url "subsites"]
+    
+    set home {
+        label "Home"
+        folder ""
+        url ""
+        selected_patterns {
+            ""
+            "subsites"
+            "members/*"
         }
     }
+    lappend home subsections $subsections
+    set pageflow [list home $home]
 
     set subsite_url [subsite::get_element -element url]
     array set subsite_sitenode [site_node::get -url $subsite_url]
