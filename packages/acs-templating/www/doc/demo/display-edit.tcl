@@ -2,7 +2,6 @@ ad_page_contract {
   @cvs-id $Id$
 } {
   {grid ""}
-  cancel:optional
 } -properties {}
 
 if { [info exists cancel] } {
@@ -10,7 +9,7 @@ if { [info exists cancel] } {
   ad_script_abort
 }
 
-form create sandwich -mode display
+form create sandwich -mode display -cancel_url [ad_conn url]
 
 element create sandwich grid \
   -label "grid" -optional \
