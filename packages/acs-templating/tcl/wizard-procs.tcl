@@ -467,10 +467,13 @@ ad_proc -public template::wizard::exists {} {
 }
 
 
-ad_proc -public template::wizard::forward { {cache_p "f"} {persistent_p "f"} {excluded_vars ""} } {
+ad_proc -public template::wizard::forward { } {
     call when a step has been validated and completed.
     checks which submit button was pressed and proceeds accordingly.
 } {
+    set cache_p "f"
+    set persistent_p "f"
+    set excluded_vars ""
 
     get_reference
 
@@ -514,7 +517,13 @@ ad_proc -public template::wizard::get_forward_url { step_id } {
 
     upvar #$level wizard:params params
 
-    set url [ns_conn url]?wizard_step=$step_id
+    set url [ns_conn url]?wizard_step${wizard_name}=$step_id&wizard_name=$wizard_name
+  
+    # create the wizards and keep track of their steps too
+    foreach one_wizard $wizards {
+        append url "&wizard_step${one_wizard}=[ns_queryget wizard_step${one_wizard}]"
+        append url "&wizard_visitedstep${one_wizard}=[ns_queryget wizard_visitedstep${one_wizard}]"
+    }
 
     set multiple_listed [list]
 
