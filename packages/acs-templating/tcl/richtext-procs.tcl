@@ -1,5 +1,5 @@
 ad_library {
-    Rich text input widget and datatype for OpenACS templating system.
+    Rich text input widgetand datatype for OpenACS templating system.
 
     @author Lars Pind (lars@pinds.com)
     @creation-date 2003-01-27
@@ -137,6 +137,14 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
 
   array set attributes $tag_attributes
 
+  if { [info exists element(value)] } {
+      set contents [template::util::richtext::get_property contents $element(value)]
+      set format   [template::util::richtext::get_property format $element(value)]
+  } else {
+      set contents {}
+      set format {}
+  }
+  
   set output {}
 
   if { [string equal $element(mode) "edit"] } {
@@ -172,21 +180,16 @@ if (document.selection) {
 </script>
       }
 
-      if { [info exists element(value)] } {
-          set contents [template::util::richtext::get_property contents $element(value)]
-          set format   [template::util::richtext::get_property format $element(value)]
-      } else {
-          set contents {}
-          set format {}
-      }
-
       append output [textarea_internal "$element(id)" attributes $contents]
       append output "<br>Format: [menu "$element(id).format" [template::util::richtext::format_options] $format {}]"
 
   } else {
       # Display mode
       if { [info exists element(value)] } {
-          append output [template::util::richtext::get_property html_value $element(value)] $element(mode)]
+
+          append output [template::util::richtext::get_property html_value $element(value)]
+          append output "<input type=\"hidden\" name=\"$element(id)\" value=\"$contents\">"
+          append output "<input type=\"hidden\" name=\"$element(id).format\" value=\"$format\">"
       }
   }
       
