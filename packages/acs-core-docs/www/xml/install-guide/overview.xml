@@ -353,7 +353,7 @@ createdb <replaceable>server1</replaceable></action></screen>
 
 	  <listitem>
             <para>
-		  Ask questions at the irc channel on openprojects.net
+		  Ask questions at the irc channel on <ulink url="http://freenode.net">freenode.net</ulink>
 		  (#openacs). They're knowledgeable and quite friendly
 		  if you can keep them on topic.
 		</para>
