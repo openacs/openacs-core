@@ -8,16 +8,10 @@ ad_library {
 
 }
 
-proc_doc ad_ssl_available_p {} {
+ad_proc -deprecated -warn ad_ssl_available_p {} {
     Returns 1 if this AOLserver has the SSL module installed.
 } {
-    if { [ns_config ns/server/[ns_info server]/modules nsssl] != "" ||
-         [ns_config ns/server/[ns_info server]/modules nsssle] != "" ||
-         [ns_config ns/server/[ns_info server]/modules nsopenssl] != "" } {
-	return 1
-    } else {
-	return 0
-    }
+    return [security::https_available_p]
 }
 
 proc_doc ad_restrict_to_https {conn args why} {

@@ -1288,6 +1288,14 @@ ad_proc -deprecated ad_maybe_redirect_for_registration {} {
 #
 #####
 
+ad_proc -public security::https_available_p {} {
+    Return 1 if AOLserver is configured to support HTTPS and 0 otherwise.
+
+    @author Peter Marklund
+} {
+    return [expr ![empty_string_p [get_https_port]]]
+}
+
 ad_proc -public security::secure_conn_p {} { 
     Returns true if the connection [ad_conn] is secure (HTTPS), or false otherwise. 
 } {
@@ -1307,9 +1315,14 @@ ad_proc -public security::RestrictLoginToSSLP {} {
 ad_proc -public security::require_secure_conn {} {
     Redirect back to the current page in secure mode (HTTPS) if
     we are not already in secure mode.
+    Does nothing if the server is not configured for HTTPS support.
 
     @author Peter Marklund
 } {
+    if { ![https_available_p] } {
+        return
+    } 
+
     if { ![security::secure_conn_p] } {
         security::redirect_to_secure [ad_return_url -qualified]
     }
@@ -1319,9 +1332,14 @@ ad_proc -public security::redirect_to_secure {
     url 
 } {
     Redirect to the given URL and enter secure (HTTPS) mode.    
+    Does nothing if the server is not configured for HTTPS support.
 
     @author Peter Marklund
 } {
+    if { ![https_available_p] } {
+        return
+    } 
+
     set secure_url [get_secure_qualified_url $url]
 
     ad_returnredirect $secure_url
