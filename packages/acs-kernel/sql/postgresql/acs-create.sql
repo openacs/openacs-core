@@ -154,6 +154,7 @@ as
   and m.rel_id = mr.rel_id
   and amo.name = 'registered_users'
   and m.group_id = amo.object_id
+  and m.container_id = m.group_id
   and mr.member_state = 'approved'
   and u.email_verified_p = 't';
 
