@@ -25,6 +25,9 @@ ad_proc -private ad_try {code args} {
   any matching exception handlers.
 
   If you use this I will kill you.
+
+  @see with_finally 
+  @see with_catch
 } {
   global errorInfo errorCode
 
