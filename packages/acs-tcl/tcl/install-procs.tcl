@@ -355,6 +355,37 @@ ad_proc -public install::xml::action::set-permission { node } {
     }
 }
 
+ad_proc -public install::xml::action::unset-permission { node } {
+    Revokes a permissions on an object - has no effect if the permission is not granted directly (ie does not act as negative permissions).
+
+    <p>&lt;unset-permissions grantee=&quot;<em>party</em>&quot; privilege=&quot;<em>package-key</em> /&gt;</p>
+} { 
+    set privileges [apm_required_attribute_value $node privilege]
+
+    set privilege_list [split $privileges ","]
+
+    set grantees_node [xml_node_get_children_by_name [lindex $node 0] grantee]
+    set grantees [xml_node_get_children [lindex $grantees_node 0]]
+
+    foreach grantee $grantees {
+        set party_id [apm_invoke_install_proc -type object_id -node $grantee]
+         
+        set objects_node [xml_node_get_children_by_name [lindex $node 0] object]
+        set objects [xml_node_get_children [lindex $objects_node 0]]
+
+        foreach object $objects {
+            set object_id [apm_invoke_install_proc -type object_id \
+                -node $object]
+
+            foreach privilege $privilege_list {
+                permission::revoke -object_id $object_id \
+                    -party_id $party_id \
+                    -privilege $privilege
+            }
+        }
+    }
+}
+
 ad_proc -public install::xml::action::set-join-policy { node } {
     Set the join policy of a group.
 } {
