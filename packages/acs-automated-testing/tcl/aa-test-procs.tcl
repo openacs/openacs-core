@@ -730,6 +730,43 @@ ad_proc aa_log_final {
   }
 }
 
+ad_proc aa_run_with_teardown {
+    {-test_code:required}
+    {-teardown_code:required}
+} {
+    Execute code in test_code and guarantee that code in 
+    teardown_code will be executed even if error is thrown. Will catch
+    errors in teardown_code as well and provide stack traces for both code blocks.
+
+    @param test_code Tcl code that sets up the test case and executes tests
+    @param teardown_code Tcl code that tears down database data etc. that needs to execute
+                          after testing even if error is thrown.
+
+    @author Peter Marklund
+} {
+    # Testing
+    set setup_error_p [catch $test_code setup_error]
+    global errorInfo
+    set setup_error_stack $errorInfo
+
+    # Teardown
+    set teardown_error_p [catch $teardown_code teardown_error]
+    global errorInfo
+    set teardown_error_stack $errorInfo
+
+    # Provide meaningful error messages and stack traces
+    set error_text ""
+    if { $setup_error_p } {
+        append error_text "Setup failed with error $setup_error\n\n$setup_error_stack"
+    }
+    if { $teardown_error_p } {
+        append error_text "\n\nTeardown failed with error $teardown_error\n\n$teardown_error_stack"
+    }
+    if { ![empty_string_p $error_text] } {
+        error $error_text
+    }
+}
+
 #
 # Set the valid testcase categories list, and testcase/component lists.
 #
