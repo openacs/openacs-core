@@ -8,6 +8,7 @@
 # and modified by Gerhard Mourani <gmourani@videotron.ca>
 # modified more by Joel Aufrecht in 2002
 # merged with Collaboraid database backups Dec 2003
+# 2004-02-10: Joel Aufrecht: added rolling delete and space check
 #
 # Change the variables below to fit your computer/backup
 #
@@ -15,16 +16,23 @@
 COMPUTER=yourserver.net              # name of this computer
 BACKUPUSER=backup                    # username to own the files
 BACKUPDIR=/backup/thisserver         # where to store the backups
+BACKUPPART=/dev/hda1                 # which partition are we backing up to
+                                     # (would be nice to figure this out automatically)
 WEBDIR=/var/lib/aolserver            # path to OpenACS service root
-PG_BINDIR=/usr/local/pgsql/bin       # path to PostGreSQL binaries
-TIMEDIR=$BACKUPDIR/last-full         # where to store time of full backup
-TAR=/bin/tar                         # name and location of tar
-CHOWN=/bin/chown
-CHMOD=/bin/chmod
-SCP="/usr/bin/scp -oProtocol=2"
-OTHERHOST=otherserver.net            # another server, to receive backup
+FULL_SPACE_FREE=5                    # must be this many GB free to run full backup
+                                     # if not, try incremental
+INCR_SPACE_FREE=1                    # must be this many GB free to run incremental
+                                     # if not, don't back up
+OTHERHOST=                           # another server, to receive backup
                                      # files
                                      # leave blank to skip scp exchange
+
+WIPE_OLD_AFTER_SCP_FULL=false        # if true, then whenever a full backup file is
+                                     # sucessfully scp'ed to OTHERHOST, wipe out all
+                                     # similar backups except for the full backup file
+                                     # rationale is, keep last good full + incrementals
+                                     # on this box, keep everything on other box
+                                     # UNTESTED!
 
 OTHERUSER=backup                     # the user on the recipient server
                                      # must have silent authentication, ie,
@@ -40,6 +48,14 @@ ORACLE8I_DBS="service0"              # space-separated list of Oracle8i database
 
                                      # space-separated list of directories to be backed up
 DIRECTORIES="/etc /home /root /cvsroot /var/qmail/alias /usr/local/aolserver $WEBDIR"
+
+# System Program Paths
+PG_BINDIR=/usr/local/pgsql/bin       # path to PostGreSQL binaries
+TIMEDIR=$BACKUPDIR/last-full         # where to store time of full backup
+TAR=/bin/tar                         # name and location of tar
+CHOWN=/bin/chown
+CHMOD=/bin/chmod
+SCP="/usr/bin/scp -oProtocol=2"
 
 #######################################################################
 #
@@ -81,18 +97,40 @@ if [ ! -s $TIMEDIR/$COMPUTER-full-date ];
     TYPE="full";
 fi
 
-if [[ $DOM = "01" || $DOW = "Sun" ]];
+if [[ $DOM -eq "01" || $DOW -eq "Sun" ]];
     then
     TYPE="full";
 fi
 
-if [ $TYPE == "full" ];
+if [ $TYPE -eq "full" ];
     then
     NEWER=""
 else
     TYPE="incremental"
     NEWER="--newer-mtime `cat $TIMEDIR/$COMPUTER-full-date`";
 fi
+
+
+#---------------------------------------------------------------------
+# Check for free space
+#---------------------------------------------------------------------
+# get free byte count
+free=`df | grep $BACKUPPART | awk '{print $4}'`
+
+# force to incremental if there isn't room for full
+if [ $free -lt `expr $FULL_SPACE_FREE \* 1024 \* 1024` ];
+    then
+    TYPE="incremental"
+    echo "Not enough free space for full backup; trying incremental"
+fi
+
+# abort if there isn't room for incremental
+if [ $free -lt `expr $INCR_SPACE_FREE \* 1024 \* 1024` ];
+    then
+    echo "Not enough free space for backup; aborting"
+    exit -1
+fi
+
 
 mkdir -p $BACKUPDIR
 mkdir -p $TIMEDIR
@@ -144,15 +182,32 @@ for directory in $DIRECTORIES
   $CHOWN $BACKUPUSER $FULLNAME
   $CHMOD 660 $FULLNAME
   if [[ -n $OTHERHOST ]]
-      then $SCP -q $FULLNAME $OTHERUSER@$OTHERHOST:$BACKUPDIR
+      then 
+      
+      scp_success=1
+      sc_success=`$SCP -q $FULLNAME $OTHERUSER@$OTHERHOST:$BACKUPDIR`
+      
+     # if scp returns success, see if we should wipe
+      if [ scp_success -eq 0 && $WIPE_OLD_AFTER_SCP_FULL -eq "true"];
+          # wipe out all similar backups except for the just-copied one
+          for file in `ls $BACKUPDIR/*-$COMPUTER-${directory//\//-}-backup-*.tgz`
+            do
+            if [ $file -ne $FULLNAME]
+                then
+                rm $file
+            fi
+          done
+          
+      fi
   fi
+  
 done
 
 # If full backup completed successfully, record the date so that
 # incremental backups are relative to the last successful full
 # backup
 
-if [ $TYPE == "full" ];
+if [ $TYPE -eq "full" ];
     then
     NEWER=""
     NOW=`date +%Y-%m-%d`
