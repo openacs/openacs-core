@@ -63,6 +63,28 @@ if { [exists_and_not_null rel_group_id] } {
     }
 }
 
+ad_form -extend -name register -form {
+    {organization:text
+        {label "Organization"}
+        {html "size 30"}
+    }
+    {institution_short_name:text,optional
+        {label "Short Name"}
+        {html {size 30}}
+    }
+    {position:text
+        {label "Position"}
+        {html {size 50}}
+    }
+    {responsibilities:text,optional
+        {label "Responsibilities"}
+        {html {size 50}}
+    }
+    {role:text(select)
+        {label "Role"}
+        {options {{Academic academic} {Corporate corporate} {Student student} {Staff staff} {Other other}}}
+    }
+}
 
 ad_form -extend -name register -on_request {
     # Populate elements from local variables
@@ -91,6 +113,9 @@ ad_form -extend -name register -on_request {
                 -rel_type $rel_type
         }
     }
+
+    # Insert eabis user information
+    db_dml eabis_user_info "insert into eabis_user_info (organization, position,user_id,institution_short_name,responsibilities,role) values (:organization,:position,:user_id,:institution_short_name,:responsibilities,:role)"
 
 
     # Handle registration problems
@@ -130,10 +155,6 @@ ad_form -extend -name register -on_request {
 
     if { ![empty_string_p $next_url] } {
         # Add user_id and account_message to the URL
-        
-        if { $creation_info(generated_pwd_p) } {
-            set password $creation_info(password)
-        }
         
         ad_returnredirect [export_vars -base $next_url {user_id password {account_message $creation_info(account_message)}}]
         ad_script_abort

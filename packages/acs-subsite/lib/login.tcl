@@ -16,7 +16,8 @@ if { [security::RestrictLoginToSSLP] } {
 
 set self_registration [parameter::get_from_package_key \
                                   -package_key acs-authentication \
-			          -parameter AllowSelfRegister]   
+			          -parameter AllowSelfRegister \
+			          -default 1]   
 
 if { ![exists_and_not_null package_id] } {
     set subsite_id [subsite::get_element -element object_id]
