@@ -54,7 +54,7 @@ list::create \
           }
         }
         registration {
-            label "Account Registration"
+            label "Registration"
             html { align center }
             display_template {
                 <switch @authorities.registration_status@>
@@ -65,23 +65,23 @@ list::create \
                     <a href="@authorities.registration_url@" 
                        title="Make this the authority for registering new users"
                        onclick="return confirm('You are changing all user registrations to be in authority @authorities.pretty_name@');">
-                      <img src="/resources/acs-subsite/radio.gif" height="13" width="13" border="0">
+                      <img src="/resources/acs-subsite/radio.gif" height="13" width="13" border="0" style="background-color: white;">
                     </a> 
                   </case>
                   <case value="cannot_select">
-                    no driver 
+                    <span style="color: gray;">N/A</span>
                   </case>
                 </switch>
             }
         }
         auth_impl {
-            label "Authentication Driver"
+            label "Authentication"
         }
         pwd_impl {
-            label "Password Driver"
+            label "Password"
         }
         reg_impl {
-            label "Registration Driver"
+            label "Registration"
         }
         delete {
             label ""

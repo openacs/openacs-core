@@ -128,9 +128,10 @@ if { $local_authority_p } {
 }
 
 ad_form -name authority \
-        -mode $ad_form_mode \
-        -form $form_widgets \
-        -edit_request {
+    -mode $ad_form_mode \
+    -form $form_widgets \
+    -cancel_url "." \
+    -edit_request {
             
     auth::authority::get -authority_id $authority_id -array element_array
 
