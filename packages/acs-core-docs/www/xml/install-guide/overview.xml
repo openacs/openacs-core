@@ -53,9 +53,9 @@
       &version;.  </para>
           </listitem>
           <listitem>
-            <para>An experimental script automating OpenACS checkout
-      and installation is in the openacs cvs tree at
-      <computeroutput>/etc/install.sh</computeroutput>.
+        <para>An experimental script <link
+      linkend="install-with-script">automates OpenACS checkout and
+      installation</link>. 
 </para>
           </listitem>
 <!--          <listitem>

@@ -65,9 +65,12 @@ chmod 770 /var/lib/aolserver</action></screen>
     <para>Starting with OpenACS 5.0, an experimental script is
     available to automate all of the steps for the rest of this section.  Requires tclwebtest.  If you are not feeling lucky, skip to <xref
         linkend="install-from-tarball"/>.</para>
-    <orderedlist>
-      <listitem>
-        <para>Get the install script from CVS:</para>
+        <para>Get the install script from CVS.  It is located within
+        the main cvs tree, at /etc/install.  Use anonymous CVS
+        checkout to get that directory in the home directory of the
+        service's dedicated user.  We put it there so that it is not
+        overwritten when we do the main CVS checkout to the target
+        location.</para>
         <screen>[root@yourserver root]# <userinput>su - <replaceable>service0</replaceable></userinput>
 [service0@yourserver service0]$ <userinput>cvs -d :pserver:anonymous@openacs.org:/cvsroot co -d install openacs-4/etc/install</userinput>
 cvs server: Updating install
@@ -77,13 +80,15 @@ U install/TODO
 U install/tcl/twt-procs.tcl
 U install/tcl/user-procs.tcl
 [service0@yourserver service0]$ <userinput>cd install</userinput>
+[service0@yourserver install]$ 
 </screen>
         <para>Edit
-        <computeroutput>/home/<replaceable>service0/install/install.tcl</replaceable></computeroutput>install.tcl
-        file and change the values as documented in the file.</para>
+        <computeroutput>/home/<replaceable>service0</replaceable>/install/install.tcl</computeroutput>
+        and change the values as documented in the file.  It will work
+        unchanged at 127.0.0.1:8000.</para>
         <para>Run the file as root.</para>
         <screen>[service0@yourserver service0]$ <userinput>exit</userinput> 
-[root@yourserver root]# <userinput>./home/service0/install/install.sh</userinput>
+[root@yourserver root]# <userinput>./home/<replaceable>service0</replaceable>/install/install.sh</userinput>
 /home/service0/install/install.sh: Starting installation with config_file 
 /home/service0/install/install.tcl. Using serverroot=/var/lib/aolserver/
 service0, server_url=http://0.0.0.0:8000, do_checkout=yes, do_install=yes, 
@@ -92,11 +97,7 @@ dotlrn=no, and database=postgres., use_daemontools=true
 ./install.sh: Finished (re)installing /var/lib/aolserver/service0 at Wed Nov  
 5 13:27:17 CET 2003.  Access the new site at http://127.0.0.1:8000 with admin 
 username admin@yourserver.test and password 1
-[root@yourserver root]#
-<action>exit
-./home/<replaceable>service0</replaceable>/install/install.sh</action></screen>
-      </listitem>
-    </orderedlist>
+[root@yourserver root]#</screen>
     <para>You can proceed to <xref linkend="install-next-steps"/>.</para>
   </sect2>
 

@@ -27,7 +27,7 @@
 	</p><div class="orderedlist"><ol type="1"><li><p><a name="install-first-step"></a>Unplug the network cable from your
           computer.  We don't want to connect to the network
           until we're sure the computer is secure.  
-<a class="indexterm" name="id2834320"></a>
+<a class="indexterm" name="id2834317"></a>
   (Wherever you see
           the word secure, you should always read it as, "secure
           enough for our purposes, given the amount of work we're
@@ -55,7 +55,7 @@
 <tt class="computeroutput"><span class="guilabel"><span class="guilabel">Re<u><span class="accel">v</span></u>iew (and modify if needed) the partitions created</span></span></tt> and click <tt class="computeroutput"><span class="guibutton"><span class="guibutton"><u><span class="accel">N</span></u>ext</span></span></tt></p></li><li><p>On the pop-up window asking "Are you sure
 	  you want to do this?" click
 	  <tt class="computeroutput"><span class="guibutton"><span class="guibutton"><u><span class="accel">Y</span></u>es</span></span></tt>
-	  IF YOU ARE WIPING YOUR HARD DRIVE.</p></li><li><p>Click <tt class="computeroutput"><span class="guibutton"><span class="guibutton"><u><span class="accel">N</span></u>ext</span></span></tt> on the boot loader screen</p></li></ol></div></li><li><p>Configure Networking.  <a class="indexterm" name="id2833971"></a>
+	  IF YOU ARE WIPING YOUR HARD DRIVE.</p></li><li><p>Click <tt class="computeroutput"><span class="guibutton"><span class="guibutton"><u><span class="accel">N</span></u>ext</span></span></tt> on the boot loader screen</p></li></ol></div></li><li><p>Configure Networking.  <a class="indexterm" name="id2833967"></a>
 Again, if you know what you're doing, do this step
           yourself, being sure to note the firewall holes. Otherwise,
           follow the instructions in this step to set up a computer directly connected to the internet with a dedicated IP address.</p><div class="orderedlist"><ol type="a"><li><p>DHCP is a system by which a computer that
@@ -76,7 +76,7 @@ security level. Check
 <tt class="computeroutput"><span class="guilabel"><span class="guilabel">Mail (SMTP)</span></span></tt>.  In the <tt class="computeroutput"><span class="guilabel"><span class="guilabel">Other <u><span class="accel">p</span></u>orts</span></span></tt>
 box, enter <b class="userinput"><tt>443, 8000, 8443</tt></b>.  Click
 <tt class="computeroutput"><span class="guibutton"><span class="guibutton"><u><span class="accel">N</span></u>ext</span></span></tt>.
-Port 443 is for https (http over ssl), and 8000 and 8443 are http and https access to the development server we'll be setting up.</p></li></ol></div></li><li><p><a class="indexterm" name="id2834112"></a>Select any additional languages you want the
+Port 443 is for https (http over ssl), and 8000 and 8443 are http and https access to the development server we'll be setting up.</p></li></ol></div></li><li><p><a class="indexterm" name="id2834111"></a>Select any additional languages you want the
 	  computer to support and then click
 	  <tt class="computeroutput"><span class="guibutton"><span class="guibutton"><u><span class="accel">N</span></u>ext</span></span></tt></p></li><li><p>Choose your time zone and click <tt class="computeroutput"><span class="guibutton"><span class="guibutton"><u><span class="accel">N</span></u>ext</span></span></tt>.</p></li><li><p>Type in a root
 password, twice.</p></li><li><p>On the Package selection page, we're going to
@@ -88,9 +88,9 @@ stuff, with relative impunity - at worst, you'll introduce a security
 risk that's still screened by the firewall, or a resource hog.  Just
 don't install a database or web server, because that would conflict
 with the database and web server we'll install later.
-</p><div class="literallayout"><p>check <tt class="computeroutput"><span class="guilabel"><span class="guilabel">Editors</span></span></tt> (this installs emacs<a class="indexterm" name="id2834180"></a>),<br>
+</p><div class="literallayout"><p>check <tt class="computeroutput"><span class="guilabel"><span class="guilabel">Editors</span></span></tt> (this installs emacs<a class="indexterm" name="id2834179"></a>),<br>
 click <tt class="computeroutput"><span class="guilabel"><span class="guilabel">Details</span></span></tt> next to <tt class="computeroutput"><span class="guilabel"><span class="guilabel">Text-based Internet</span></span></tt>, check <tt class="computeroutput"><span class="guilabel"><span class="guilabel">lynx</span></span></tt>, and click <tt class="computeroutput"><span class="guibutton"><span class="guibutton"><u><span class="accel">O</span></u>K</span></span></tt>;<br>
-check <tt class="computeroutput"><span class="guilabel"><span class="guilabel">Authoring and Publishing</span></span></tt> (<a class="indexterm" name="id2834665"></a>this installs docbook),<br>
+check <tt class="computeroutput"><span class="guilabel"><span class="guilabel">Authoring and Publishing</span></span></tt> (<a class="indexterm" name="id2834664"></a>this installs docbook),<br>
 uncheck <tt class="computeroutput"><span class="guilabel"><span class="guilabel">Server Configuration Tools</span></span></tt>,<br>
 uncheck <tt class="computeroutput"><span class="guilabel"><span class="guilabel">Web Server</span></span></tt>,<br>
 uncheck <tt class="computeroutput"><span class="guilabel"><span class="guilabel">Windows File Server</span></span></tt>,<br>
@@ -143,7 +143,7 @@ Password:
         kernel and openssl/openssh root exploits, so you should be
         upgrading all of that.  Since you are upgrading the kernel,
         reboot after this step.
-</p></li><li><p>Lock down SSH</p><div class="orderedlist"><ol type="a"><li><p><a class="indexterm" name="id2835025"></a>
+</p></li><li><p>Lock down SSH</p><div class="orderedlist"><ol type="a"><li><p><a class="indexterm" name="id2835024"></a>
 SSH is the protocol we use to connect
             securely to the computer (replacing telnet, which is
             insecure).  sshd is the daemon that listens for incoming

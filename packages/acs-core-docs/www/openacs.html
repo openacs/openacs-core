@@ -37,7 +37,12 @@ chmod 770 /var/lib/aolserver</span></pre></pre></div><div class="sect2" lang="en
     </p><pre class="screen">[root@yourserver root]# <b class="userinput"><tt>groupadd <span class="replaceable"><span class="replaceable">web</span></span></tt></b>
 [root@yourserver root]# <b class="userinput"><tt>useradd -g <span class="replaceable"><span class="replaceable">service0</span></span> -G web <span class="replaceable"><span class="replaceable">service0</span></span> -d /home/<span class="replaceable"><span class="replaceable">service0</span></span></tt></b>
 [root@yourserver root]#</pre></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="install-with-script"></a>Install with automated script (EXPERIMENTAL)</h3></div></div><div></div></div><p>Starting with OpenACS 5.0, an experimental script is
-    available to automate all of the steps for the rest of this section.  Requires tclwebtest.  If you are not feeling lucky, skip to <a href="openacs.html#install-from-tarball" title="Install from tarball">Section , &#8220;Install from tarball&#8221;</a>.</p><div class="orderedlist"><ol type="1"><li><p>Get the install script from CVS:</p><pre class="screen">[root@yourserver root]# <b class="userinput"><tt>su - <span class="replaceable"><span class="replaceable">service0</span></span></tt></b>
+    available to automate all of the steps for the rest of this section.  Requires tclwebtest.  If you are not feeling lucky, skip to <a href="openacs.html#install-from-tarball" title="Install from tarball">Section , &#8220;Install from tarball&#8221;</a>.</p><p>Get the install script from CVS.  It is located within
+        the main cvs tree, at /etc/install.  Use anonymous CVS
+        checkout to get that directory in the home directory of the
+        service's dedicated user.  We put it there so that it is not
+        overwritten when we do the main CVS checkout to the target
+        location.</p><pre class="screen">[root@yourserver root]# <b class="userinput"><tt>su - <span class="replaceable"><span class="replaceable">service0</span></span></tt></b>
 [service0@yourserver service0]$ <b class="userinput"><tt>cvs -d :pserver:anonymous@openacs.org:/cvsroot co -d install openacs-4/etc/install</tt></b>
 cvs server: Updating install
 U install/README
@@ -46,10 +51,12 @@ U install/TODO
 U install/tcl/twt-procs.tcl
 U install/tcl/user-procs.tcl
 [service0@yourserver service0]$ <b class="userinput"><tt>cd install</tt></b>
+[service0@yourserver install]$ 
 </pre><p>Edit
-        <tt class="computeroutput">/home/<span class="replaceable"><span class="replaceable">service0/install/install.tcl</span></span></tt>install.tcl
-        file and change the values as documented in the file.</p><p>Run the file as root.</p><pre class="screen">[service0@yourserver service0]$ <b class="userinput"><tt>exit</tt></b> 
-[root@yourserver root]# <b class="userinput"><tt>./home/service0/install/install.sh</tt></b>
+        <tt class="computeroutput">/home/<span class="replaceable"><span class="replaceable">service0</span></span>/install/install.tcl</tt>
+        and change the values as documented in the file.  It will work
+        unchanged at 127.0.0.1:8000.</p><p>Run the file as root.</p><pre class="screen">[service0@yourserver service0]$ <b class="userinput"><tt>exit</tt></b> 
+[root@yourserver root]# <b class="userinput"><tt>./home/<span class="replaceable"><span class="replaceable">service0</span></span>/install/install.sh</tt></b>
 /home/service0/install/install.sh: Starting installation with config_file 
 /home/service0/install/install.tcl. Using serverroot=/var/lib/aolserver/
 service0, server_url=http://0.0.0.0:8000, do_checkout=yes, do_install=yes, 
@@ -58,9 +65,7 @@ dotlrn=no, and database=postgres., use_daemontools=true
 ./install.sh: Finished (re)installing /var/lib/aolserver/service0 at Wed Nov  
 5 13:27:17 CET 2003.  Access the new site at http://127.0.0.1:8000 with admin 
 username admin@yourserver.test and password 1
-[root@yourserver root]#
-<pre class="action"><span class="action">exit
-./home/<span class="replaceable"><span class="replaceable">service0</span></span>/install/install.sh</span></pre></pre></li></ol></div><p>You can proceed to <a href="openacs.html#install-next-steps" title="Next Steps">Section , &#8220;Next Steps&#8221;</a>.</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="install-from-tarball"></a>Install from tarball</h3></div></div><div></div></div><p>You should already have downloaded the OpenACS tarball
+[root@yourserver root]#</pre><p>You can proceed to <a href="openacs.html#install-next-steps" title="Next Steps">Section , &#8220;Next Steps&#8221;</a>.</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="install-from-tarball"></a>Install from tarball</h3></div></div><div></div></div><p>You should already have downloaded the OpenACS tarball
       to the <tt class="computeroutput">/tmp</tt> directory.  If
       not, <a href="individual-programs.html#openacs-download">download the OpenACS
       tarball</a> and save it in
@@ -233,7 +238,7 @@ logout
 CREATE DATABASE
 [service0@yourserver service0]$
 <pre class="action"><span class="action">su - <span class="replaceable"><span class="replaceable">service0</span></span>
-createdb -E UNICODE <span class="replaceable"><span class="replaceable">service0</span></span></span></pre></pre></li><li><p>Automate daily database Vacuuming.  This is a process which cleans out discarded data from the database.  A quick way to automate vacuuming is to edit the cron file for the database user.</p><a class="indexterm" name="id2826718"></a><pre class="screen">[service0@yourserver service0]$ <b class="userinput"><tt>export EDITOR=emacs;crontab -e</tt></b></pre><p>Add this line to the file.  The numbers and stars at the beginning are cron columns that specify when the program should be run - in this case, whenever the minute is 0 and the hour is 1, i.e., 1:00 am every day.</p><pre class="programlisting">0 1 * * * /usr/local/pgsql/bin/vacuumdb --analyze <span class="replaceable"><span class="replaceable">service0</span></span></pre></li><li><p><a href="install-full-text-search.html#install-openfts-postgres" title="Install OpenFTS prerequisites in PostGreSQL instance">Add Full Text Search Support</a> (OPTIONAL)</p></li><li><a name="db-setup-exit"></a><pre class="screen">[service0@yourserver service0]$ <b class="userinput"><tt>exit</tt></b>
+createdb -E UNICODE <span class="replaceable"><span class="replaceable">service0</span></span></span></pre></pre></li><li><p>Automate daily database Vacuuming.  This is a process which cleans out discarded data from the database.  A quick way to automate vacuuming is to edit the cron file for the database user.</p><a class="indexterm" name="id2826729"></a><pre class="screen">[service0@yourserver service0]$ <b class="userinput"><tt>export EDITOR=emacs;crontab -e</tt></b></pre><p>Add this line to the file.  The numbers and stars at the beginning are cron columns that specify when the program should be run - in this case, whenever the minute is 0 and the hour is 1, i.e., 1:00 am every day.</p><pre class="programlisting">0 1 * * * /usr/local/pgsql/bin/vacuumdb --analyze <span class="replaceable"><span class="replaceable">service0</span></span></pre></li><li><p><a href="install-full-text-search.html#install-openfts-postgres" title="Install OpenFTS prerequisites in PostGreSQL instance">Add Full Text Search Support</a> (OPTIONAL)</p></li><li><a name="db-setup-exit"></a><pre class="screen">[service0@yourserver service0]$ <b class="userinput"><tt>exit</tt></b>
 logout
 
 [root@yourserver root]# </pre></li></ul></div></li></ul></div></li><li><a name="install-openacs-configure-aol"></a><p><b>Configure an AOLserver Service for OpenACS. </b></p><div class="orderedlist"><ol type="a"><li><p><a name="configure-config-tcl"></a>
@@ -243,7 +248,7 @@ logout
 	  need to configure a virtual server.  The Reference Platform
 	  uses a configuration file included in the OpenACS tarball,
 	  <tt class="computeroutput">/var/lib/aolserver/<span class="replaceable"><span class="replaceable">service0</span></span>/etc/config.tcl</tt>.
-	   Open it in an editor to adjust the parameters.</p><a class="indexterm" name="id2826840"></a><pre class="screen">[root@yourserver root]# <b class="userinput"><tt>su - <span class="replaceable"><span class="replaceable">service0</span></span></tt></b>
+	   Open it in an editor to adjust the parameters.</p><a class="indexterm" name="id2826851"></a><pre class="screen">[root@yourserver root]# <b class="userinput"><tt>su - <span class="replaceable"><span class="replaceable">service0</span></span></tt></b>
 [service0@yourserver service0]$ <b class="userinput"><tt>cd /var/lib/aolserver/<span class="replaceable"><span class="replaceable">service0</span></span>/etc</tt></b>
 [service0@yourserver etc]# <b class="userinput"><tt>emacs config.tcl</tt></b>
 </pre><p>
