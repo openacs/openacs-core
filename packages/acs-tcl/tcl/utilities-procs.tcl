@@ -2603,66 +2603,67 @@ ad_proc -public util_current_location {{}} {
    util_current_location falls back to ad_conn location.
 
    cro@ncacasi.org 2002-06-07
-   Patch this to support hosts on non-standard ports and IE.  IE
-    fouls up the Host header if a server is on a non-standard port; it
+   Note: IE fouls up the Host header if a server is on a non-standard port; it
     does not change the port number when redirecting to https.  So
     we would get redirects from http://some-host:8000 to
     https://some-host:8000
+
+    @author Lars Pind (lars@collaboraid.biz)
+    @author Peter Marklund
 } {
+    set default_port(http) 80
+    set default_port(https) 443
+    
+    switch [ad_conn driver] {
+        nssock {
+            set proto http
+            set port [ns_config -int "ns/server/[ns_info server]/module/nssock" Port]
+        }
+        nsunix {
+            set proto http
+            set port {}
+        }
+        nsssl - nsssle {
+            set port [ns_config -int "ns/server/[ns_info server]/module/[ad_conn driver]" Port]
+            set proto https
+        }
+        nsopenssl {
+            set port [ns_config -int "ns/server/[ns_info server]/module/[ad_conn driver]" ServerPort]
+            set proto https
+        }
+        default {
+            ns_log Error "Unknown driver: [ad_conn driver]. Only know nssock, nsunix, nsssl, nsssle, nsopenssl"
+            set port [ns_config -int "ns/server/[ns_info server]/module/nssock" Port]
+            set proto http
+        }
+    }
 
-   set useragent [ns_set iget [ad_conn headers] User-Agent]
-   set host_from_header [ns_set iget [ad_conn headers] Host]
-   # host_from_header now hopefully contains hostname[:port]
+    # This is the host from the browser's HTTP request
+    set Host [ns_set iget [ad_conn headers] Host]
+    set Hostv [split $Host ":"]
+    set Host_hostname [lindex $Hostv 0]
+    set Host_port [lindex $Hostv 1]
+    
+    # Server config location
+    if { ![regexp {^([a-z]+://)?([^:]+)(:[0-9]*)?$} [ad_conn location] match location_proto location_hostname location_port] } {
+        ns_log Error "util_current_location couldn't regexp '[ad_conn location]'"
+    }
 
-   # Is this server running on a non-standard port?
-   set nonstandard 0
-   if { [ad_conn driver] == "nssock" } {
-       if { [ns_config -int "ns/server/[ns_info server]/module/nssock" Port 80] != 80 } {
-	   set nonstandard 1
-	   set port [ns_config -int "ns/server/[ns_info server]/module/nssock" Port 80]
-	   set proto http
-       }
+    if { [empty_string_p $Host] } {
+        # No Host header, return protocol from driver, hostname from [ad_conn location], and port from driver
+        set hostname $location_hostname
+    } else {
+        set hostname $Host_hostname
+        if { ![empty_string_p $Host_port] } {
+            set port $Host_port
+        }
+    }
 
-   }
-
-   if { [ad_conn driver] == "nsssl" || [ad_conn driver] == "nsssle" } {
-       if { [ns_config -int "ns/server/[ns_info server]/module/[ad_conn driver]" Port 443] != 443 } {
-	   set nonstandard 1
-	   set port [ns_config -int "ns/server/[ns_info server]/module/[ad_conn driver]" Port 443]
-	   set proto https
-       }
-   }
-
-   if { [ad_conn driver] == "nsopenssl" } {
-
-       if { [ns_config -int "ns/server/[ns_info server]/module/[ad_conn driver]" ServerPort 443] != 443 } {
-	   set nonstandard 1
-	   set port [ns_config -int "ns/server/[ns_info server]/module/[ad_conn driver]" ServerPort 443]
-	   set proto https
-       }
-   }
-
-#   ns_log notice "driver: [ad_conn driver], nonstandard: $nonstandard"
-
-   set location_from_config_file [ad_conn location]
-   if { [empty_string_p $host_from_header] } {
-      # Hmm, there is no Host header.  This must be
-      # an old browser such as MSIE 3.  All we can do is:
-      return $location_from_config_file
-  } elseif { [regexp -nocase {MSIE } $useragent]  && $nonstandard } {
-      # construct redirect here
-      set location_from_host_header ""
-      regsub -nocase {(.*):.*} $host_from_header "$proto://\\1:$port" location_from_host_header
-
-#      ns_log notice "util_current_location: Creating loc from scratch: $location_from_host_header"
-      return $location_from_host_header
-  } else {
-      set location_from_host_header ""
-      # Replace the hostname[:port] part of $location_from_config_file with $host_from_header:
-      regsub -nocase {(^[a-z]+://).*} \
-                $location_from_config_file \\1$host_from_header location_from_host_header
-      return $location_from_host_header
-   }
+    if { ![empty_string_p $port] && ![string equal $port $default_port($proto)] } {
+        return "$proto://$hostname:$port"
+    } else {
+        return "$proto://$hostname"
+    }
 }
 
 ad_proc -public util_current_directory {{}} {
