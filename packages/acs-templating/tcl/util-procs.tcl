@@ -688,7 +688,7 @@ ad_proc -public template::util::number_list { last_number {start_at 0} } {
 } {
 
   set ret [list]
-  for {set i $start_at} { $i <= $ret } {incr i} {
+  for {set i $start_at} { $i <= $last_number } {incr i} {
     lappend ret $i
   }
   return $ret
