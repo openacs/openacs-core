@@ -1986,7 +1986,7 @@ ad_proc -private apm_load_install_xml {filename binds} {
     set __the_body__ [read $file]
     close $file
     # Interpolate the vars.
-    if {![empty_string_p binds]} { 
+    if {![empty_string_p $binds]} { 
         foreach {var val} $binds {
             set $var [ad_quotehtml $val]
         }
