@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="acs-subsite" package_version="5.1.2" locale="de_DE" charset="ISO-8859-1">
+<message_catalog package_key="acs-subsite" package_version="5.2.0d2" locale="de_DE" charset="ISO-8859-1">
 
   <msg key="_or"> oder</msg>
   <msg key="_Update_Basic_Information">Die Allgemeinen Informationen aktualisieren</msg>
@@ -9,7 +9,8 @@
   <msg key="Account_close_confirm_no_label">Nein, zurück zu %pvt_home_name%</msg>
   <msg key="Account_close_confirm_yes_label">Ja, Benutzerkonto deaktivieren</msg>
   <msg key="Account_closed">&lt;p&gt;Ihr Benutzerkonto ist derzeit deaktiviert.&lt;/p&gt; &lt;p&gt;Sie können es &lt;a href=&quot;%restore_url%&quot;&gt;wieder aktivieren lassen&lt;/a&gt;.&lt;/p&gt;</msg>
-  <msg key="Account_closed_workspace_msg">&lt;p&gt; &lt;font color=&quot;red&quot;&gt; &lt;b&gt; Ihr Benutzerkonto ist derzeit geschlossen. &lt;/b&gt; &lt;/font&gt; &lt;a href=&quot;%login_url%&quot;&gt;Melden Sie sich wieder an&lt;/a&gt;, um weitere Informationen zu erhalten.  &lt;/p&amp;;gt;  </msg>
+  <msg key="Account_closed_workspace_msg">&lt;p&gt; &lt;font color=&quot;red&quot;&gt; &lt;b&gt; Ihr Benutzerkonto ist derzeit geschlossen. &lt;/b&gt; &lt;/font&gt; &lt;a href=&quot;%login_url%&quot;&gt;Melden Sie sich wieder an&lt;/a&gt;, um weitere Informationen zu erhalten.  &lt;/p&gt;</msg>
+  <msg key="Account_not_avail_now">Dieses Benutzerkonto ist derzeit nicht verfügbar.</msg>
   <msg key="Account_reopened_message">Ihr Benutzerkonto wurde wieder aktiviert. Willkommen bei %system_name%.</msg>
   <msg key="Account_reopened_title">Benutzerkonto wieder aktiviert</msg>
   <msg key="Action">Aktion</msg>
@@ -24,6 +25,7 @@
   <msg key="Applications">Anwendungen</msg>
   <msg key="Approve">Freischalten</msg>
   <msg key="at">unter</msg>
+  <msg key="Auth_internal_error">Interner Fehler bei Authentifizierung</msg>
   <msg key="Authority">Authentifizierungsstelle</msg>
   <msg key="Bad_Password">Falsches Passwort</msg>
   <msg key="Ban">Deaktivieren</msg>
@@ -72,6 +74,7 @@
   <msg key="email_body_Registration_password">Vielen Dank für Ihre Registrierung bei %system_name%. Mit folgenden Daten können Sie sich bei %system_url% anmelden: %account_id_label%: %account_id% %password_label%: %password% Bitte ändern Sie Ihr Passwort unter folgendem Link: %reset_password_url%</msg>
   <msg key="Email_Confirmation">E-Mail-Adresse bestätigen:</msg>
   <msg key="Email_not_Requested">E-Mail nicht angefordert</msg>
+  <msg key="Email_required">Email-Adresse muss angegeben werden</msg>
   <msg key="email_subject_Forgotten_password">Ihr vergessenes Passwort für %system_name%</msg>
   <msg key="email_subject_Registration_password">Willkommen bei %system_name%.</msg>
   <msg key="Enabled">Aktiviert</msg>
@@ -80,6 +83,7 @@
   <msg key="erase_portrait">Bild löschen</msg>
   <msg key="Error">Fehler</msg>
   <msg key="Error_sending_mail">Fehler beim Senden der E-Mail</msg>
+  <msg key="Error_sending_verification_mail">Die Email-Nachricht zur Überprüfung der Adresse konte nicht gesendet werden</msg>
   <msg key="Expires">Ablaufdatum</msg>
   <msg key="Filename">Dateiname</msg>
   <msg key="First_names">Vorname(n)</msg>
@@ -90,6 +94,10 @@
   <msg key="go_upload_your_portrait">ein Bild hochladen.</msg>
   <msg key="Grant">Erteilen</msg>
   <msg key="Grant_Permission">Berechtigungen erteilen</msg>
+  <msg key="Have_group_mail">Eine Gruppe mit dieser Email-Adresse existiert bereits.</msg>
+  <msg key="Have_user_mail">Ein Benutzer mit dieser Email-Adresse existiert bereits.</msg>
+  <msg key="Have_user_name">Eine Gruppe mit diesem Benutzernamen existiert bereits.</msg>
+  <msg key="Help_information">&lt;p&gt;&lt;h3&gt;Hilfe Info&lt;/h3&gt;</msg>
   <msg key="Hide">Verbergen</msg>
   <msg key="Home_page">Homepage</msg>
   <msg key="If_you_were_to">Wenn Sie sich anmelden </msg>
@@ -190,6 +198,7 @@
   <msg key="Make_yourself_visible_label">Onlinestatus anzeigen</msg>
   <msg key="Manage_your_notifications">Benachrichtigungsoptionen verwalten</msg>
   <msg key="Mem_list_not_allowed">Sie sind nicht berechtigt, die Liste der Teilnehmer zu sehen.</msg>
+  <msg key="Member">Teilnehmer</msg>
   <msg key="Member_State">Teilnehmerstatus</msg>
   <msg key="Members">Teilnehmer</msg>
   <msg key="Name">Name:</msg>
@@ -200,8 +209,10 @@
   <msg key="no_portrait_title_message">Ihr Bild</msg>
   <msg key="No_pretty_plural">Keine %pretty_plural% vorhanden</msg>
   <msg key="No_services">Keine Dienste verfügbar</msg>
+  <msg key="No_user_with_this_username">Benutzername konnte nicht gefunden werden</msg>
   <msg key="none">Keine</msg>
   <msg key="Not_logged_in">Nicht angemeldet</msg>
+  <msg key="Not_valid_email_addr">Keine gültige Email-Adresse</msg>
   <msg key="Notes">Hinweise:</msg>
   <msg key="Notice">Hinweis:</msg>
   <msg key="on_name_to">für %name% an:</msg>
@@ -212,6 +223,8 @@
   <msg key="Password">Passwort</msg>
   <msg key="Password_changed_body">Das Passwort Ihres Benutzerkontos (%account_id_label%: %account_id%) bei %system_name% wurde kürzlich geändert. Es sind keine weiteren Schritte nötig, diese Mitteilung dient lediglich Ihrer Sicherheit. --------------- Sie können Ihr Passwort jederzeit mit folgenden Schritten ändern: 1. Melden Sie sich bei %system_name% an. 2. Klicken Sie auf den Link '%pvt_home_name%'. 3. Wählen Sie die Option '%password_update_link_text%'.</msg>
   <msg key="Password_changed_subject">Passwort geändert</msg>
+  <msg key="Password_regular_change_now">Ihr Passwort muss rgelmässig geändert werden.  Bitte Ändern Sie jetzt ihr Passwort.</msg>
+  <msg key="Passwords_dont_match">Passwörter stimmen nicht Überein</msg>
   <msg key="Permissions">Berechtigungen</msg>
   <msg key="permissions">Berechtigungen</msg>
   <msg key="Permissions_for_name">Zugriffsberechtigungen für %name%</msg>
@@ -236,6 +249,7 @@
   <msg key="Role">Rolle</msg>
   <msg key="Save_comment">Kommentar speichern</msg>
   <msg key="Screen_name">Aliasname</msg>
+  <msg key="Screen_name_already_taken">Dieser Aliasname ist bereits vergeben.  Wählen Sie bitte einen anderen Namen.</msg>
   <msg key="Search_For_Exist_User">Nach vorhandenem Benutzer suchen</msg>
   <msg key="Security_context_root">Wurzelverzeichnis des Sicherheitskontexts</msg>
   <msg key="Select_an_Object_by_Id">Wählen Sie mit Hilfe der ID ein Objekt aus:</msg>
@@ -252,6 +266,7 @@
   <msg key="subsite">Subsite</msg>
   <msg key="Subsites">Subsites</msg>
   <msg key="subsites">Subsites</msg>
+  <msg key="Success_but_no_account_yet">Sie haben sich erfolgreich angemeldet, aber Sie haben noch kein Benutzerkonto bei %system_name%.</msg>
   <msg key="Thank_you">Vielen Dank.</msg>
   <msg key="The_ISO_codes_were_not">Die ISO-Codes sind auf diesem Server nicht geladen.</msg>
   <msg key="This_group_is_closed">Dies ist eine geschlossene Gruppe. Neue Teilnehmer können nur durch Einladung Zugang erhalten.</msg>
@@ -260,6 +275,7 @@
   <msg key="To_log_in_visit_the">Um sich anzumelden, gehen Sie auf die</msg>
   <msg key="Topic">Thema</msg>
   <msg key="type_specific_info">Typspezifische Informationen:</msg>
+  <msg key="Unknown_email">Email-Adresse unbekannt</msg>
   <msg key="UP">Eine Ebene nach oben</msg>
   <msg key="up_to_context_name">Eine Ebene höher zu &quot;%context_name%&quot;</msg>
   <msg key="Update">Aktualisieren</msg>
@@ -269,6 +285,8 @@
   <msg key="upload_a_replacement_por">Ein anderes Bild hochladen</msg>
   <msg key="Upload_Portrait">Bild hochladen</msg>
   <msg key="Username">Benutzeridentifikation</msg>
+  <msg key="Username_not_found_for_authority">Benutzer mit Namen '%username%' konnte in %this_authority% nicht gefunden werden</msg>
+  <msg key="Username_required">Benutzername muss angegeben werden</msg>
   <msg key="Vacation_Info_Updated">Die Informationen zu Ihrer Abwesenheit wurden aktualisiert.</msg>
   <msg key="Vacation_information_updated">Die Informationen zu Ihrer Abwesenheit unter %site_link% wurden aktualisiert.</msg>
   <msg key="Welcome_user">Willkommen, %user_name%!</msg>
