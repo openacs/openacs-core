@@ -197,9 +197,13 @@ ad_proc -public template::list::create {
     @param  filters        Filters for the list. Typically used to slice the data, for example to see only rows by a particular user. 
                            Array-list of (filter-name, spec) pairs, like elements. Each spec, in turn, is an array-list of property-name/value pairs, 
                            where the value is 'subst'ed in the caller's environment, except for the *_eval properties, which are 'subst'ed in the multirow context.
-                           In order for filters to work, you have to specify them in your page's ad_page_contract, typically as filter_name:optional. The list builder will find them from there,
+                           In order for filters to work, you have to specify them in your page's ad_page_contract, typically as filter_name:optional.
+                           The list builder will find them from there,
                            by grabbing them from your page's local variables.
                            See <a href="/api-doc/proc-view?proc=template::list::filter::create">template::list::filter::create</a> for details.
+
+                           filters are also the mechanism to export state variables which need to be preserved.  If for example you needed user_id to be 
+                           maintained for the filter and sorting links you would add -filters {user_id {}}
 
     @param  groupby        Things you can group by, e.g. day, week, user, etc. Automatically creates a filter called 'groupby'. 
                            Single array-list of property-name/value pairs, where the value is 'subst'ed in the caller's environment.
