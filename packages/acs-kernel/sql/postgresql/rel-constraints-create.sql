@@ -200,20 +200,21 @@ comment on column rel_constraints.required_rel_segment is '
 --   and rspm.party_id(+) = constrained_rels.container_id
 --   and rspm.party_id is null;
 
-
+create view constrained_rels1 as 
+select rel.constraint_id, rel.constraint_name, 
+       r.rel_id, r.container_id, r.party_id, r.rel_type, 
+       rel.rel_segment,
+       rel.rel_side, 
+       rel.required_rel_segment
+  from rel_constraints rel, rel_segment_party_map r
+ where rel.rel_side = 'one'
+   and rel.rel_segment = r.segment_id;
+     
 create view rel_constraints_violated_one as
-select constrained_rels.*
-from (select rel_constraints.constraint_id, rel_constraints.constraint_name, 
-             r.rel_id, r.container_id, r.party_id, r.rel_type, 
-             rel_constraints.rel_segment,
-             rel_constraints.rel_side, 
-             rel_constraints.required_rel_segment
-      from rel_constraints, rel_segment_party_map r
-      where rel_constraints.rel_side = 'one'
-        and rel_constraints.rel_segment = r.segment_id
-     ) constrained_rels left outer join rel_segment_party_map rspm 
-       on (rspm.segment_id = constrained_rels.required_rel_segment and 
-           rspm.party_id = constrained_rels.container_id)
+select c.*
+from   constrained_rels1 c left outer join rel_segment_party_map rspm 
+       on (rspm.segment_id = c.required_rel_segment and 
+           rspm.party_id = c.container_id)
 where rspm.party_id is null;
 
 
@@ -263,19 +264,22 @@ where rspm.party_id is null;
 --   and rspm.party_id(+) = constrained_rels.party_id
 --   and rspm.party_id is null;
 
+create view constrained_rels2 as 
+select rel.constraint_id, rel.constraint_name, 
+       r.rel_id, r.container_id, r.party_id, r.rel_type, 
+       rel.rel_segment,
+       rel.rel_side, 
+       rel.required_rel_segment
+  from rel_constraints rel, rel_segment_party_map r
+ where rel.rel_side = 'two'
+   and rel.rel_segment = r.segment_id;
+     
+
 create view rel_constraints_violated_two as
-select constrained_rels.*
-from (select rel_constraints.constraint_id, rel_constraints.constraint_name, 
-             r.rel_id, r.container_id, r.party_id, r.rel_type, 
-             rel_constraints.rel_segment,
-             rel_constraints.rel_side, 
-             rel_constraints.required_rel_segment
-      from rel_constraints, rel_segment_party_map r
-      where rel_constraints.rel_side = 'two'
-        and rel_constraints.rel_segment = r.segment_id
-     ) constrained_rels left outer join rel_segment_party_map rspm 
-       on (rspm.segment_id = constrained_rels.required_rel_segment and
-           rspm.party_id = constrained_rels.party_id)
+select c.*
+from  constrained_rels2 c left outer join rel_segment_party_map rspm 
+       on (rspm.segment_id = c.required_rel_segment and
+           rspm.party_id = c.party_id)
 where rspm.party_id is null;
 
 -- Originally, we tried this view.  It was slow.  The one above is much
@@ -424,15 +428,23 @@ where rel_side = 'two';
 --   and rc_required_rel_segments.rel_type(+) = group_rel_type_combos.rel_type
 --   and rc_required_rel_segments.group_id is null;
 
+create view comp_or_member_rel_types as 
+select object_type as rel_type 
+  from acs_object_types
+ where tree_sortkey like (select o.tree_sortkey || '%' 
+                            from acs_object_types o
+                           where o.object_type = 'composition_rel')
+    or tree_sortkey like (select o.tree_sortkey || '%' 
+                            from acs_object_types o
+                           where o.object_type = 'membership_rel');
+
+create view group_rel_type_combos as 
+select groups.group_id, comp_or_member_rel_types.rel_type
+       from groups, comp_or_member_rel_types;
 
 
-
-create view rc_parties_in_required_segs as
-select parties_in_required_segs.group_id,
-       parties_in_required_segs.rel_type,
-       parties_in_required_segs.party_id
-from
-   (select required_segs.group_id, 
+create view parties_in_required_segs as 
+select required_segs.group_id, 
            required_segs.rel_type, 
            seg_parties.party_id,
            count(*) as num_matching_segs
@@ -441,10 +453,20 @@ from
     where required_segs.required_rel_segment = seg_parties.segment_id
     group by required_segs.group_id, 
              required_segs.rel_type, 
-             seg_parties.party_id) parties_in_required_segs,
-   (select group_id, rel_type, count(*) as total
-    from rc_required_rel_segments
-    group by group_id, rel_type) total_num_required_segs
+             seg_parties.party_id;
+
+create view total_num_required_segs as 
+select group_id, rel_type, count(*) as total
+  from rc_required_rel_segments
+ group by group_id, rel_type;
+
+create view rc_parties_in_required_segs as
+select parties_in_required_segs.group_id,
+       parties_in_required_segs.rel_type,
+       parties_in_required_segs.party_id
+from
+    parties_in_required_segs,
+    total_num_required_segs
 where
       parties_in_required_segs.group_id = total_num_required_segs.group_id
   and parties_in_required_segs.rel_type = total_num_required_segs.rel_type
@@ -453,18 +475,9 @@ UNION ALL
 select group_rel_type_combos.group_id,
        group_rel_type_combos.rel_type,
        parties.party_id
-from (rc_required_rel_segments right outer join  
-      (select groups.group_id, comp_or_member_rel_types.rel_type
-       from groups,
-            (select object_type as rel_type 
-               from acs_object_types
-              where tree_sortkey like (select o.tree_sortkey || '%' 
-                                         from acs_object_types o
-                                        where o.object_type = 'composition_rel')
-                 or tree_sortkey like (select o.tree_sortkey || '%' 
-                                         from acs_object_types o
-                                        where o.object_type = 'membership_rel')) comp_or_member_rel_types
-      ) group_rel_type_combos on (rc_required_rel_segments.group_id = group_rel_type_combos.group_id and rc_required_rel_segments.rel_type = group_rel_type_combos.rel_type)), parties
+from (rc_required_rel_segments right outer join group_rel_type_combos 
+      on (rc_required_rel_segments.group_id = group_rel_type_combos.group_id and 
+          rc_required_rel_segments.rel_type = group_rel_type_combos.rel_type)), parties
 where rc_required_rel_segments.group_id is null;
 
 
@@ -517,12 +530,8 @@ where rc_required_rel_segments.group_id is null;
 --   and rc_all_constraints.rel_type(+) = group_rel_type_combos.rel_type
 --   and rc_all_constraints.group_id is null;
 
-
-
-create view rc_valid_rel_types as
-select side_one_constraints.group_id, 
-       side_one_constraints.rel_type
-  from (select required_segs.group_id, 
+create view side_one_constraints as 
+select required_segs.group_id, 
                required_segs.rel_type, 
                count(*) as num_satisfied
           from rc_all_constraints required_segs,
@@ -531,33 +540,34 @@ select side_one_constraints.group_id,
            and required_segs.required_rel_segment = map.segment_id
            and required_segs.group_id = map.party_id
         group by required_segs.group_id, 
-                 required_segs.rel_type) side_one_constraints,
-       (select group_id, rel_type, count(*) as total
-          from rc_all_constraints
-         where rel_side = 'one'
-        group by group_id, rel_type) total_side_one_constraints
+                 required_segs.rel_type;
+
+create view total_side_one_constraints as 
+select group_id, rel_type, count(*) as total
+  from rc_all_constraints
+ where rel_side = 'one'
+ group by group_id, rel_type;
+
+create view rc_all_constraints_view as 
+select * from rc_all_constraints where rel_side='one';
+
+create view rc_valid_rel_types as
+select side_one_constraints.group_id, 
+       side_one_constraints.rel_type
+  from side_one_constraints,
+       total_side_one_constraints
  where side_one_constraints.group_id = total_side_one_constraints.group_id
    and side_one_constraints.rel_type = total_side_one_constraints.rel_type
    and side_one_constraints.num_satisfied = total_side_one_constraints.total
 UNION ALL
 select group_rel_type_combos.group_id,
        group_rel_type_combos.rel_type
-from (select * from rc_all_constraints where rel_side='one') rc_all_constraints
-     right outer join 
-     (select groups.group_id, comp_or_member_rel_types.rel_type
-      from groups, 
-           (select object_type as rel_type 
-               from acs_object_types
-              where tree_sortkey like (select o.tree_sortkey || '%' 
-                                         from acs_object_types o
-                                        where o.object_type = 'composition_rel')
-                 or tree_sortkey like (select o.tree_sortkey || '%' 
-                                         from acs_object_types o
-                                        where o.object_type = 'membership_rel')) comp_or_member_rel_types
-     ) group_rel_type_combos on 
-       (rc_all_constraints.group_id = group_rel_type_combos.group_id and 
-        rc_all_constraints.rel_type = group_rel_type_combos.rel_type)
-where rc_all_constraints.group_id is null;
+from rc_all_constraints_view right outer join group_rel_type_combos
+      on 
+     (rc_all_constraints_view.group_id = group_rel_type_combos.group_id and 
+      rc_all_constraints_view.rel_type = group_rel_type_combos.rel_type)
+where rc_all_constraints_view.group_id is null;
+
 
 -- View: rc_violations_by_removing_rel
 --
@@ -626,14 +636,17 @@ create view rc_segment_required_seg_map as
 select rc.rel_segment, rc.rel_side, rc_required.required_rel_segment
 from rel_constraints rc, rel_constraints rc_required 
 where rc.rel_segment in (
-          select rel_segment
-            from rel_constraints
-           where tree_sortkey 
+          select c.rel_segment
+            from rel_constraints c
+           where ('two' = (select rel_side 
+                             from rel_constraints 
+                            where rel_segment = c.required_rel_segment)
+                  or c.rel_segment = rc_required.rel_segment)         
+             and c.tree_sortkey 
                  like 
                  (select tree_sortkey || '%'
                     from rel_constraints
-                   where rel_segment = rc_required.rel_segment 
-                     and rel_side = 'two'));
+                   where rel_segment = rc_required.rel_segment));
 
 -- View: rc_segment_dependency_levels
 --
@@ -678,13 +691,15 @@ where rc.rel_segment in (
 -- DCW 2001-03-14.
 
 create view rc_segment_dependency_levels as
-      select rc.rel_segment as segment_id,
-             max(rc.tree_level) as dependency_level
-       from (select rc1.rel_segment, tree_level(rc1.tree_sortkey) as tree_level
+             select rc1.rel_segment as segment_id, 
+                    max(tree_level(rc1.tree_sortkey)) as dependency_level
                from rel_constraints rc1, rel_constraints rc2
-              where rc1.tree_sortkey like rc2.tree_sortkey || '%'
-                and rc2.rel_side = 'two') rc
-   group by segment_id;
+              where ('two' = (select rel_side 
+                                from rel_constraints 
+                               where rel_segment = rc1.required_rel_segment)
+                     or rc1.rel_segment = rc2.rel_segment)     
+                and rc1.tree_sortkey like rc2.tree_sortkey || '%'
+           group by segment_id;
 
 --------------
 -- PACKAGES --

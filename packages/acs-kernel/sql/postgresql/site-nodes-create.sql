@@ -54,10 +54,88 @@ create table site_nodes (
         -- mapped to this node?
         pattern_p       boolean default 'f' not null,
         object_id       integer constraint site_nodes_object_id_fk
-                        references acs_objects (object_id)
+                        references acs_objects (object_id),
+        tree_sortkey    varchar(4000)
 );
 
 create index site_nodes_object_id_idx on site_nodes (object_id);
+create index site_nodes_tree_skey_idx on site_nodes (tree_sortkey);
+
+create function site_node_insert_tr () returns opaque as '
+declare
+        v_parent_sk     varchar;
+        max_key         varchar;
+begin
+        select max(tree_sortkey) into max_key 
+          from site_nodes 
+         where parent_id = new.parent_id;
+
+        select coalesce(max(tree_sortkey),'''') into v_parent_sk 
+          from site_nodes 
+         where node_id = new.parent_id;
+
+        new.tree_sortkey := v_parent_sk || ''/'' || tree_next_key(max_key);
+
+        return new;
+
+end;' language 'plpgsql';
+
+create trigger site_node_insert_tr before insert 
+on site_nodes for each row 
+execute procedure site_node_insert_tr ();
+
+create function site_node_update_tr () returns opaque as '
+declare
+        v_parent_sk     varchar;
+        max_key         varchar;
+        v_rec           record;
+        clr_keys_p      boolean default ''t'';
+begin
+        if new.node_id = old.node_id and 
+           new.parent_id = old.parent_id then
+
+           return new;
+
+        end if;
+
+        for v_rec in select node_id
+                       from site_nodes 
+                      where tree_sortkey like new.tree_sortkey || ''%''
+                   order by tree_sortkey
+        LOOP
+            if clr_keys_p then
+               update site_nodes set tree_sortkey = null
+               where tree_sortkey like new.tree_sortkey || ''%'';
+               clr_keys_p := ''f'';
+            end if;
+            
+            select max(tree_sortkey) into max_key
+              from site_nodes 
+              where parent_id = (select parent_id 
+                                   from site_nodes 
+                                  where node_id = v_rec.node_id);
+
+            select coalesce(max(tree_sortkey),'''') into v_parent_sk 
+              from site_nodes 
+             where node_id = (select parent_id 
+                                from site_nodes 
+                               where node_id = v_rec.node_id);
+
+            update site_nodes 
+               set tree_sortkey = v_parent_sk || ''/'' || tree_next_key(max_key)
+             where node_id = v_rec.node_id;
+
+        end LOOP;
+
+        return new;
+
+end;' language 'plpgsql';
+
+create trigger site_node_update_tr after update 
+on site_nodes
+for each row 
+execute procedure site_node_update_tr ();
+
 
 -- create or replace package site_node
 -- as

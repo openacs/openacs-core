@@ -187,12 +187,15 @@ create table acs_objects (
 	last_modified		timestamp default now() not null,
 	modifying_user		integer,
 	modifying_ip		varchar(50) default '' not null,
+        tree_sortkey            varchar(4000),
         constraint acs_objects_context_object_un
 	unique (context_id, object_id)
 );
 
 create index acs_objects_context_object_idx on
        acs_objects (context_id, object_id);
+
+create index acs_objs_tree_skey_idx on acs_objects (tree_sortkey);
 
 -- alter table acs_objects modify constraint acs_objects_context_object_un enable;
 
@@ -224,6 +227,82 @@ end;' language 'plpgsql';
 
 create trigger acs_objects_last_mod_update_tr before update on acs_objects
 for each row execute procedure acs_objects_last_mod_update_tr ();
+
+
+create function acs_objects_insert_tr () returns opaque as '
+declare
+        v_parent_sk     varchar;
+        max_key         varchar;
+begin
+        select max(tree_sortkey) into max_key 
+          from acs_objects 
+         where context_id = new.context_id;
+
+        select coalesce(max(tree_sortkey),'''') into v_parent_sk 
+          from acs_objects 
+         where object_id = new.context_id;
+
+        new.tree_sortkey := v_parent_sk || ''/'' || tree_next_key(max_key);
+
+        return new;
+
+end;' language 'plpgsql';
+
+create trigger acs_objects_insert_tr before insert 
+on acs_objects for each row 
+execute procedure acs_objects_insert_tr ();
+
+create function acs_objects_update_tr () returns opaque as '
+declare
+        v_parent_sk     varchar;
+        max_key         varchar;
+        v_rec           record;
+        clr_keys_p      boolean default ''t'';
+begin
+        if new.object_id = old.object_id and 
+           new.context_id = old.context_id then
+
+           return new;
+
+        end if;
+
+        for v_rec in select object_id
+                       from acs_objects 
+                      where tree_sortkey like new.tree_sortkey || ''%''
+                   order by tree_sortkey
+        LOOP
+            if clr_keys_p then
+               update acs_objects set tree_sortkey = null
+               where tree_sortkey like new.tree_sortkey || ''%'';
+               clr_keys_p := ''f'';
+            end if;
+            
+            select max(tree_sortkey) into max_key
+              from acs_objects 
+              where context_id = (select context_id 
+                                    from acs_objects 
+                                   where object_id = v_rec.object_id);
+
+            select coalesce(max(tree_sortkey),'''') into v_parent_sk 
+              from acs_objects 
+             where object_id = (select context_id 
+                                  from acs_objects 
+                                 where object_id = v_rec.object_id);
+
+            update acs_objects 
+               set tree_sortkey = v_parent_sk || ''/'' || tree_next_key(max_key)
+             where object_id = v_rec.object_id;
+
+        end LOOP;
+
+        return new;
+
+end;' language 'plpgsql';
+
+create trigger acs_objects_update_tr after update 
+on acs_objects
+for each row 
+execute procedure acs_objects_update_tr ();
 
 -- show errors
 
@@ -908,12 +987,12 @@ begin
 
    for v_rec in execute ''select '' || quote_ident(v_column) || '' as return from '' || quote_ident(v_table_name) || '' where '' || quote_literal(v_key_sql)
       LOOP
-        if not FOUND then 
-           return null;
-        end if;
         v_return := v_rec.return;
         exit;
    end loop;
+   if not FOUND then 
+       return null;
+   end if;
 
    return v_return;
 

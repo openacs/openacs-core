@@ -44,9 +44,11 @@ create table acs_privileges (
 );
 
 create table acs_privilege_hierarchy (
-	privilege	varchar(100) not null constraint acs_priv_hier_priv_fk
+	privilege	varchar(100) not null 
+                        constraint acs_priv_hier_priv_fk
 			references acs_privileges (privilege),
-    child_privilege	varchar(100) not null constraint acs_priv_hier_child_priv_fk
+        child_privilege	varchar(100) not null 
+                        constraint acs_priv_hier_child_priv_fk
 			references acs_privileges (privilege),
 	constraint acs_privilege_hierarchy_pk
 	primary key (privilege, child_privilege)
@@ -299,20 +301,20 @@ create view acs_grantee_party_map as
 --          where party_id = :user_id and privilege = :privilege) oppm
 --    where oppm.object_id = my_table.my_id;
 --
-/*
-create view all_object_party_privilege_map as
-select /*+ ORDERED */ 
-               op.object_id,
-               pdm.descendant as privilege,
-               gpm.party_id as party_id
-        from acs_object_paths op, 
-             acs_permissions p, 
-             acs_privilege_descendant_map pdm,
-             acs_grantee_party_map gpm
-        where op.ancestor_id = p.object_id 
-          and pdm.privilege = p.privilege
-          and gpm.grantee_id = p.grantee_id;
-*/
+
+-- create view all_object_party_privilege_map as
+-- select /*+ ORDERED */ 
+--                op.object_id,
+--                pdm.descendant as privilege,
+--                gpm.party_id as party_id
+--         from acs_object_paths op, 
+--              acs_permissions p, 
+--              acs_privilege_descendant_map pdm,
+--              acs_grantee_party_map gpm
+--         where op.ancestor_id = p.object_id 
+--          and pdm.privilege = p.privilege
+--           and gpm.grantee_id = p.grantee_id;
+
 
 create view all_object_party_privilege_map as
 select         op.object_id,
