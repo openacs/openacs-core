@@ -234,7 +234,9 @@ ad_proc -public template::util::currency::get_property { what currency_list } {
     }
 }
 
-ad_proc -public template::widget::currency { element_reference tag_attributes } {
+ad_proc -public template::widget::currency {
+    element_reference tag_attributes {mode edit}
+} {
 
     upvar $element_reference element
     
@@ -259,13 +261,19 @@ ad_proc -public template::widget::currency { element_reference tag_attributes } 
     set i 0
     foreach format_property $format {
         set value [lindex $values 0]
-	set values [lrange $values 1 end]
-	if { $i == 0 || $i == 2 || $i == 4 } {
-	    append output "$format_property <input type=\"hidden\" name=\"$element(name).$i\" value=\"$format_property\" />\n"
-	} elseif { $i == 1 || $i == 3 } {
-	    append output "<input type=\"text\" name=\"$element(name).$i\" maxlength=\"$format_property\" size=\"$format_property\" value=\"$value\" />\n"
-	}
-	incr i
+        set values [lrange $values 1 end]
+        set trailing_zero ""
+        if { $i == 3 } {
+            set trailing_zero [string range [string repeat "0" $format_property] [string length $value] end]
+        }
+        if { $i == 0 || $i == 2 || $i == 4 } {
+            append output "$format_property<input type=\"hidden\" name=\"$element(name).$i\" value=\"$format_property\" />"
+        } elseif { [string equal $element(mode) "edit"] && ($i == 1 || $i == 3) } {
+            append output "<input type=\"text\" name=\"$element(name).$i\" maxlength=\"$format_property\" size=\"$format_property\" value=\"$value$trailing_zero\" />\n"
+        } else {
+            append output "$value$trailing_zero<input type=\"hidden\" name=\"$element(name).$i\" maxlength=\"$format_property\" size=\"$format_property\" value=\"$value\" />"
+        }
+        incr i
     }
     append output "<input type=\"hidden\" name=\"$element(name).format\" value=\"$element(format)\" />\n"
 

@@ -129,7 +129,7 @@ the next.  These rules are fine-tuned with each release; an example is <ulink ur
 
 </sect2>
 
-  <sect2>
+  <sect2 id="naming-upgrade-scripts">
     <title>Naming Database Upgrade Scripts</title>
     <para>Database upgrade scripts must be named very precisely in order for the Package Manager to run the correct script at the correct time.</para>
     <orderedlist>

@@ -6,6 +6,6 @@ ad_page_contract {
     {message:allhtml ""}
 }
 
-set page_title $message
+set page_title [ad_convert_to_text -html_p t -- $message]
 set context [list $page_title]
 

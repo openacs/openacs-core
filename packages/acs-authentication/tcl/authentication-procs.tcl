@@ -1576,7 +1576,7 @@ ad_proc -private auth::authentication::Authenticate {
                 -error \
                 -impl_id $impl_id \
                 -operation Authenticate \
-                -call_args [list $username $password $parameters]]
+                -call_args [list $username $password $parameters $authority_id]]
 }
 
 #####

@@ -8,7 +8,13 @@
   <else>
 </noparse>
   <if @bulk_actions:rowcount@ gt 0>
-    <form name="@list_properties.name@" method="@list_properties.bulk_action_method@">
+  <if @list_properties.bulk_action_method@ not nil>
+  <form name="@list_properties.name@" method="@list_properties.bulk_action_method@">
+  </if>
+  <else>
+  <form name="@list_properties.name@" method="GET">
+  </else>
+    <noparse>
     @list_properties.bulk_action_export_chunk;noquote@
   </if>
 

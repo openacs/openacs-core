@@ -116,6 +116,7 @@ ad_proc -public content::get_content { { content_type {} } } {
 
 }
 
+
 ad_proc -public content::get_template_url {} {
 
     variable template_url
