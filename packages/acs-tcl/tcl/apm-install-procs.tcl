@@ -559,6 +559,10 @@ ad_proc -private apm_package_install_version {
 	              );
 		end;
 	    }]
+
+   # Every package provides by default the service that is the package itself
+   # This spares the developer from having to visit the dependency page
+   apm_interface_add $version_id $package_key $version_name
 }
 
 
