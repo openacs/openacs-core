@@ -1,5 +1,5 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Backup and Recovery</title><meta name="generator" content="DocBook XSL Stylesheets V1.58.1"><link rel="home" href="index.html" title="OpenACS Documentation"><link rel="up" href="maintenance.html" title="Chapter 8. Maintenance"><link rel="previous" href="database-management.html" title="Database Management"><link rel="next" href="install-redhat.html" title="Appendix A. Install Red Hat 8.0"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="images/alex.jpg" border="0"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="database-management.html">Prev</a> </td><th width="60%" align="center">Chapter 8. Maintenance</th><td width="20%" align="right"> <a accesskey="n" href="install-redhat.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><h2 class="title" style="clear: both"><a name="backup-recovery"></a>Backup and Recovery</h2></div></div><div class="authorblurb"><p>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Backup and Recovery</title><meta name="generator" content="DocBook XSL Stylesheets V1.58.1"><link rel="home" href="index.html" title="OpenACS Documentation"><link rel="up" href="maintenance.html" title="Chapter 9. Maintenance"><link rel="previous" href="database-management.html" title="Database Management"><link rel="next" href="install-redhat.html" title="Appendix A. Install Red Hat 8.0"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="images/alex.jpg" border="0"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="database-management.html">Prev</a> </td><th width="60%" align="center">Chapter 9. Maintenance</th><td width="20%" align="right"> <a accesskey="n" href="install-redhat.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><h2 class="title" style="clear: both"><a name="backup-recovery"></a>Backup and Recovery</h2></div></div><div class="authorblurb"><p>
     by <a href="mailto:dhogaza@pacifier.com" target="_top">Don Baccus</a>
 
       with additions by <a href="mailto:joel@aufrecht.org" target="_top">Joel Aufrecht</a><br>
@@ -42,7 +42,7 @@
 </p></div><div class="sect2" lang="en"><div class="titlepage"><div><h3 class="title"><a name="snapshot-backup"></a>Snapshot backup and recovery</h3></div></div><p>This section describes how to make a one-time backup of
       the files and database.  This is useful for rolling back to
       known-good versions of a service, such as at initial
-      installation and just before a backup.</p><div class="itemizedlist"><ul type="disc"><li><p><b>PostGreSQL. </b>Create a backup file and verify that it was created and has a reasonable size (several megabytes).</p><pre class="screen">[root@localhost root]# <b><tt>su - service0</tt></b>
+      installation and just before an upgrade.</p><div class="itemizedlist"><ul type="disc"><li><p><b>PostGreSQL. </b>Create a backup file and verify that it was created and has a reasonable size (several megabytes).</p><pre class="screen">[root@localhost root]# <b><tt>su - service0</tt></b>
 [service0@localhost service0]$ <b><tt>pg_dump -f /web/<span class="replaceable">service0</span>/database-backup/before_upgrade_to_4.6.dmp <span class="replaceable">service0</span></tt></b>
 [service0@localhost service0]$ <b><tt>ls -al /web/<span class="replaceable">service0</span>/database-backup/before_upgrade_to_4.6.dmp </tt></b>
 -rw-rw-r-x    1 service0  service0   4005995 Feb 21 18:28 /web/service0/database-backup/before_upgrade_to_4.6.dmp
@@ -54,7 +54,7 @@ ls -al /web/<span class="replaceable">service0</span>/database-backup/before_upg
 exit</pre></pre></li><li><p><b>File tree with CVS. </b>If you are already using CVS, you probably don't
               need to do anything to back up your data.  Just make
               sure that your current work is checked into the system.
-              You can then roll back based on date - just note the
+              You can then roll back based on date - note the
               current system time, down to the minute.  For maximum
               safety, you can apply a tag to your current
               files.  Note that, if you did the CVS options in this document, the <tt>/web/service0/etc</tt> directory is not included in cvs and you may want to add it.</p><pre class="screen">[root@localhost root]# <b><tt>su - service0</tt></b>
@@ -112,9 +112,7 @@ createdb <span class="replaceable">service0</span>
 psql -f /web/<span class="replaceable">service0</span>/packages/acs-kernel/sql/postgresql/postgresql.sql <span class="replaceable">service0</span>
 psql <span class="replaceable">service0</span> &lt; /web/<span class="replaceable">service0</span>/database-backup/before_upgrade_to_4.6.dmp
 svc -u /service/<span class="replaceable">service0</span>
-exit</pre></pre></li></ul></div></div><div class="sect2" lang="en"><div class="titlepage"><div><h3 class="title"><a name="automated-backup"></a>Set up Automated Backup - OPTIONAL</h3></div></div><p>Backup can encompass all files in <tt>/web/service0</tt>.  For a development server, putting the files in cvs is sufficient.  (It's important then to back up the cvs repository!)</p><p>A quick way to automate database backup is a cron job.  This is not recommended for production and is not part of the Reference Platform, because it is not cross-platform and can fail silently.  More thorough methods are documented in <a href="backup-recovery.html#install-next-backups" title="Backup Strategy">the section called &#8220;Backup Strategy&#8221;</a></p><pre class="screen">[service0@yourserver service0]$ <b><tt>export EDITOR=emacs;crontab -e</tt></b></pre><p>Add this line to the file.  The numbers and stars at the beginning are cron columns that specify when the program should be run - in this case, whenever the minute is 0 and the hour is 1, i.e., 1:00 am every day.</p><pre class="programlisting">0 1 * * * /usr/local/pgsql/bin/pg_dump -f /web/service0/database-backup/service0_$(date +%Y-%m-%d).dmp service0</pre><p>If you plan to back up the whole <tt>/web/<span class="replaceable">service0</span></tt> directory, then it would be redundant to keep a history of database backups.  In that case, set up the cron job to overwrite the previous backup each time:</p><pre class="programlisting">0 1 * * * /usr/local/pgsql/bin/pg_dump -f /web/service0/database-backup/service0_nightly.dmp service0</pre></div><div class="sect2" lang="en"><div class="titlepage"><div><h3 class="title"><a name="postgres-quick-backup"></a>Set up Nightly Postgres Exports</h3></div></div><p>A quick way to automate database backup is a cron job.
-      (This should moved into OpenACS's scheduled task project so that
-      it's integrated with OpenACS's alerts and such.)</p><pre class="screen">[service0@yourserver service0]$ export EDITOR=emacs;crontab -e</pre><p>Add this line to the file.  The numbers and stars at the beginning are cron columns that specify when the program should be run - in this case, whenever the minute is 0 and the hour is 1, i.e., 1:00 am every day.</p><pre class="programlisting">0 1 * * * /usr/local/pgsql/bin/pg_dump -f /web/<span class="replaceable">service0</span>/database-backup/<span class="replaceable">service0</span>_$(date +%Y-%m-%d).dmp <span class="replaceable">service0</span></pre></div><div class="sect2" lang="en"><div class="titlepage"><div><h3 class="title"><a name="backup-file-system"></a>Back up the file system</h3></div></div><p>Here's a quick manual way to back up a reference install -
+exit</pre></pre></li></ul></div></div><div class="sect2" lang="en"><div class="titlepage"><div><h3 class="title"><a name="backup-file-system"></a>Back up the file system</h3></div></div><p>Here's a quick manual way to back up a reference install -
       it should be replaced by an automated script within
       OpenACS.  The command excludes the auto-generated
       <tt>supervise</tt> directory, which is
@@ -133,7 +131,20 @@ exit</pre></pre></li></ul></div></div><div class="sect2" lang="en"><div class="t
           recursive backup.</p></li></ul></div><pre class="screen">[root@yourserver root]# <b><tt>su - <span class="replaceable">service0</span></tt></b>
 [service0@yourserver service0]$ <b><tt>tar -cpsj --exclude /web/<span class="replaceable">service0</span>/etc/daemontools/supervise --file /tmp/<span class="replaceable">service0</span>-backup.tar.bz2 /web/<span class="replaceable">service0</span>/ </tt></b>
 tar: Removing leading `/' from member names
-[service0@yourserver service0]$</pre></div><div class="sect2" lang="en"><div class="titlepage"><div><h3 class="title"><a name="id2904316"></a>Testing</h3></div></div><p><span class="emphasis"><em>On a test service</em></span>, make sure that your backup-recovery process work.  After backing up the database and file system, delete the service as detailed below and then recover it.</p><pre class="screen">[root@yourserver root]# <b><tt>svc -d /service/service0</tt></b>
+[service0@yourserver service0]$</pre></div><div class="sect2" lang="en"><div class="titlepage"><div><h3 class="title"><a name="automated-backup"></a>Automated Backup (OPTIONAL)</h3></div></div><p>Backup can encompass all files in
+    <tt>/web/service0</tt>.  For a development
+    server, putting the files in cvs, and backing up the database nightly, is sufficient.  (It's important then to back up the cvs repository!)</p><div class="sect3" lang="en"><div class="titlepage"><div><h4 class="title"><a name="postgres-quick-backup"></a>Postgres automatic backup</h4></div></div><p>Backing up the database consists of creating a file
+        which is a picture of the database at a particular moment.
+        Postgres can be backed up while running.  A quick way to automate database backup is a cron job.  This
+    is not recommended for production and is not part of the Reference
+    Platform, because it is not cross-platform and can fail silently.
+    A more thorough solution using the cronjob OpenACS package is
+        planned.</p><p>Depending on your overall backup strategy, you can
+        create a series of database backup files, or you can create a
+        single nightly backup file which is then collected into a
+        bigger backup file that includes the other parts of the
+        service (web pages, content, code).  To make a new file every
+        night, edit the crontab file for <span class="replaceable">service0</span>:</p><pre class="screen">[service0@yourserver service0]$ <b><tt>export EDITOR=emacs;crontab -e</tt></b></pre><p>Add this line to the file.  The numbers and stars at the beginning are cron columns that specify when the program should be run - in this case, whenever the minute is 0 and the hour is 1, i.e., 1:00 am every day.</p><pre class="programlisting">0 1 * * * /usr/local/pgsql/bin/pg_dump -f /web/service0/database-backup/service0_$(date +%Y-%m-%d).dmp service0</pre><p>If you plan to back up the whole <tt>/web/<span class="replaceable">service0</span></tt> directory, then it would be redundant to keep a history of database backups.  In that case, set up the cron job to overwrite the previous backup each time:</p><pre class="programlisting">0 1 * * * /usr/local/pgsql/bin/pg_dump -f /web/service0/database-backup/service0_nightly.dmp service0</pre></div></div><div class="sect2" lang="en"><div class="titlepage"><div><h3 class="title"><a name="id2905821"></a>A full Backup/Recovery cycle</h3></div></div><p><span class="emphasis"><em>On a test service</em></span>, make sure that your backup-recovery process work.  After backing up the database and file system, delete the service as detailed below and then recover it.</p><div class="sect3" lang="en"><div class="titlepage"><div><h4 class="title"><a name="id2905839"></a>Delete the Service</h4></div></div><pre class="screen">[root@yourserver root]# <b><tt>svc -d /service/service0</tt></b>
 [root@yourserver root]# <b><tt>mv /web/service0/ /web/service0.lost</tt></b>
 [root@yourserver root]#<b><tt> rm /service/service0</tt></b>
 rm: remove symbolic link `/service/service0'? y
@@ -148,7 +159,7 @@ DROP DATABASE
 DROP USER
 [postgres@yourserver pgsql]$ <b><tt>exit</tt></b>
 logout
-[root@yourserver root]#</pre></div><div class="sect2" lang="en"><div class="titlepage"><div><h3 class="title"><a name="Recovery"></a>Recovery</h3></div></div><div class="orderedlist"><ol type="1"><li><p>Restore the operating system and required software.
+[root@yourserver root]#</pre></div><div class="sect3" lang="en"><div class="titlepage"><div><h4 class="title"><a name="Recovery"></a>Recovery</h4></div></div><div class="orderedlist"><ol type="1"><li><p>Restore the operating system and required software.
           You can do this with standard backup processes or by
           keeping copies of the install material (OS CDs, OpenACS
           tarball and supporting software) and repeating the install guide.</p></li><li><p>Restore the OpenACS service.  Assuming the user already exists, restore the database and files from backup and restore the daemontools link.  (Because of a bug in Postgres backup-recovery, not all database objects are created in the correct order.  To compensate, pre-creating some objects usually work.)</p><pre class="screen">[root@yourserver root]# <b><tt>su - postgres</tt></b>
@@ -173,7 +184,7 @@ CREATE DATABASE
 [root@yourserver root]# <b><tt>ln -s /web/<span class="replaceable">service0</span>/etc/daemontools /service/<span class="replaceable">service0</span></tt></b>
 [root@yourserver root]# <b><tt>sleep 10</tt></b>
 [root@yourserver root]# <b><tt>svgroup web /service/<span class="replaceable">service0</span></tt></b>
-[root@yourserver root]#</pre></li></ol></div></div><div class="sect2" lang="en"><div class="titlepage"><div><h3 class="title"><a name="other-backup-strategies"></a>Other Backup Strategies</h3></div></div><p>Earlier strategies, included here because this section
+[root@yourserver root]#</pre></li></ol></div></div></div><div class="sect2" lang="en"><div class="titlepage"><div><h3 class="title"><a name="other-backup-strategies"></a>Other Backup Strategies</h3></div></div><p>Earlier strategies, included here because this section
         hasn't been fully updated yet.</p><div class="sect3" lang="en"><div class="titlepage"><div><h4 class="title"><a name="install-export-oracle"></a>Set Up Nightly Oracle Exports</h4></div></div><p>
       (This has not yet been updated to fit with the Reference
       install.  To do so, edit the backup script to save the backup
@@ -265,8 +276,7 @@ root:~# crontab -e</pre><p>Now add the following line on a line by itself </p><p
 root:~# crontab -l | grep export-oracle
 0 23 * * * /usr/sbin/export-oracle
 root:~# exit
-; Logout</pre><p>If you see the line, go ahead and log out.</p></li></ul></div></div><div class="sect3" lang="en"><div class="titlepage"><div><h4 class="title"><a name="install-export-postgres"></a>Set up nightly Postgres exports</h4></div></div><p>
-      (This is not required for the Reference install.)
+; Logout</pre><p>If you see the line, go ahead and log out.</p></li></ul></div></div><div class="sect3" lang="en"><div class="titlepage"><div><h4 class="title"><a name="install-export-postgres"></a>Set up nightly Postgres exports</h4></div></div><p>This is an alternate method to the crontab backup.
       Dowload <a href="files/acs-pgbackup-init.txt" target="_top">this script</a>
       to <tt>/tmp</tt>. At the top of the script
       are several variables that you'll need to customize:

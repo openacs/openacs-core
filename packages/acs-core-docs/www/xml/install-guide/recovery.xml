@@ -66,7 +66,7 @@
       <para>This section describes how to make a one-time backup of
       the files and database.  This is useful for rolling back to
       known-good versions of a service, such as at initial
-      installation and just before a backup.</para>
+      installation and just before an upgrade.</para>
       <itemizedlist>
         <listitem>
           <formalpara>
@@ -90,7 +90,7 @@ exit</action></screen>
             <para>If you are already using CVS, you probably don't
               need to do anything to back up your data.  Just make
               sure that your current work is checked into the system.
-              You can then roll back based on date - just note the
+              You can then roll back based on date - note the
               current system time, down to the minute.  For maximum
               safety, you can apply a tag to your current
               files.</para>
@@ -177,29 +177,6 @@ exit</action></screen>
       </itemizedlist>
     </sect2>
 
-  <sect2 id="automated-backup">
-    <title>Set up Automated Backup - OPTIONAL</title>
-    <para>Backup can encompass all files in <computeroutput>/web/service0</computeroutput>.  For a development server, putting the files in cvs is sufficient.  (It's important then to back up the cvs repository!)</para>
-    
-    <para>A quick way to automate database backup is a cron job.  This is not recommended for production and is not part of the Reference Platform, because it is not cross-platform and can fail silently.  More thorough methods are documented in <xref linkend="install-next-backups"/></para>
-    <screen>[service0@yourserver service0]$ <userinput>export EDITOR=emacs;crontab -e</userinput></screen>
-    <para>Add this line to the file.  The numbers and stars at the beginning are cron columns that specify when the program should be run - in this case, whenever the minute is 0 and the hour is 1, i.e., 1:00 am every day.</para>
-    <programlisting>0 1 * * * /usr/local/pgsql/bin/pg_dump -f /web/service0/database-backup/service0_$(date +%Y-%m-%d).dmp service0</programlisting>
-    <para>If you plan to back up the whole <computeroutput>/web/<replaceable>service0</replaceable></computeroutput> directory, then it would be redundant to keep a history of database backups.  In that case, set up the cron job to overwrite the previous backup each time:</para>
-    <programlisting>0 1 * * * /usr/local/pgsql/bin/pg_dump -f /web/service0/database-backup/service0_nightly.dmp service0</programlisting>
-  </sect2>
-
-
-    <sect2 id="postgres-quick-backup">
-      <title>Set up Nightly Postgres Exports</title>
-      <para>A quick way to automate database backup is a cron job.
-      (This should moved into OpenACS's scheduled task project so that
-      it's integrated with OpenACS's alerts and such.)</para>
-
-    <screen>[service0@yourserver service0]$ export EDITOR=emacs;crontab -e</screen>
-    <para>Add this line to the file.  The numbers and stars at the beginning are cron columns that specify when the program should be run - in this case, whenever the minute is 0 and the hour is 1, i.e., 1:00 am every day.</para>
-      <programlisting>0 1 * * * /usr/local/pgsql/bin/pg_dump -f /web/<replaceable>service0</replaceable>/database-backup/<replaceable>service0</replaceable>_$(date +%Y-%m-%d).dmp <replaceable>service0</replaceable></programlisting>
-    </sect2>
     <sect2 id="backup-file-system">
       <title>Back up the file system</title>
       <para>Here's a quick manual way to back up a reference install -
@@ -248,9 +225,39 @@ exit</action></screen>
 tar: Removing leading `/' from member names
 [service0@yourserver service0]$</screen>
     </sect2>
+
+  <sect2 id="automated-backup">
+    <title>Automated Backup (OPTIONAL)</title>
+    <para>Backup can encompass all files in
+    <computeroutput>/web/service0</computeroutput>.  For a development
+    server, putting the files in cvs, and backing up the database nightly, is sufficient.  (It's important then to back up the cvs repository!)</para>
+      <sect3 id="postgres-quick-backup">
+        <title>Postgres automatic backup</title>
+        <para>Backing up the database consists of creating a file
+        which is a picture of the database at a particular moment.
+        Postgres can be backed up while running.  A quick way to automate database backup is a cron job.  This
+    is not recommended for production and is not part of the Reference
+    Platform, because it is not cross-platform and can fail silently.
+    A more thorough solution using the cronjob OpenACS package is
+        planned.</para>
+        <para>Depending on your overall backup strategy, you can
+        create a series of database backup files, or you can create a
+        single nightly backup file which is then collected into a
+        bigger backup file that includes the other parts of the
+        service (web pages, content, code).  To make a new file every
+        night, edit the crontab file for <replaceable>service0</replaceable>:</para>
+    <screen>[service0@yourserver service0]$ <userinput>export EDITOR=emacs;crontab -e</userinput></screen>
+    <para>Add this line to the file.  The numbers and stars at the beginning are cron columns that specify when the program should be run - in this case, whenever the minute is 0 and the hour is 1, i.e., 1:00 am every day.</para>
+    <programlisting>0 1 * * * /usr/local/pgsql/bin/pg_dump -f /web/service0/database-backup/service0_$(date +%Y-%m-%d).dmp service0</programlisting>
+    <para>If you plan to back up the whole <computeroutput>/web/<replaceable>service0</replaceable></computeroutput> directory, then it would be redundant to keep a history of database backups.  In that case, set up the cron job to overwrite the previous backup each time:</para>
+    <programlisting>0 1 * * * /usr/local/pgsql/bin/pg_dump -f /web/service0/database-backup/service0_nightly.dmp service0</programlisting>
+      </sect3>
+    </sect2>
     <sect2>
-      <title>Testing</title>
+      <title>A full Backup/Recovery cycle</title>
       <para><emphasis>On a test service</emphasis>, make sure that your backup-recovery process work.  After backing up the database and file system, delete the service as detailed below and then recover it.</para>
+      <sect3>
+        <title>Delete the Service</title>
       <screen>[root@yourserver root]# <userinput>svc -d /service/service0</userinput>
 [root@yourserver root]# <userinput>mv /web/service0/ /web/service0.lost</userinput>
 [root@yourserver root]#<userinput> rm /service/service0</userinput>
@@ -267,9 +274,9 @@ DROP USER
 [postgres@yourserver pgsql]$ <userinput>exit</userinput>
 logout
 [root@yourserver root]#</screen>
-    </sect2>
+      </sect3>
     
-    <sect2 id="Recovery">
+    <sect3 id="Recovery">
       <title>Recovery</title>
       <orderedlist>
         <listitem>
@@ -305,6 +312,7 @@ CREATE DATABASE
 [root@yourserver root]#</screen>
         </listitem>
       </orderedlist>
+      </sect3>
     </sect2>
 
     <sect2 id="other-backup-strategies">
@@ -449,8 +457,7 @@ root:~# exit
   <sect3 id="install-export-postgres">
     <title>Set up nightly Postgres exports</title>
 
-    <para>
-      (This is not required for the Reference install.)
+    <para>This is an alternate method to the crontab backup.
       Dowload <ulink url="files/acs-pgbackup-init.txt">this script</ulink>
       to <computeroutput>/tmp</computeroutput>. At the top of the script
       are several variables that you'll need to customize:

@@ -8,10 +8,10 @@
      In documents, use  &version;  
 -->
 
-<!ENTITY version "5.0.0">
-<!ENTITY tarballpath "openacs-5.0.0">
-<!ENTITY cvsversiontag "openacs-5-0-0">
-<!ENTITY majorversion "5">
+<!ENTITY version "4.7.0d">
+<!ENTITY tarballpath "openacs-4.7.0d">
+<!ENTITY cvsversiontag "openacs-4-7-0d">
+<!ENTITY majorversion "4">
 
 <!-- For Developers -->
 <!ENTITY api SYSTEM "developers-guide/db-api.xml">
@@ -25,6 +25,8 @@
 <!ENTITY object-identity SYSTEM "developers-guide/object-identity.xml">
 <!ENTITY parties SYSTEM "developers-guide/parties.xml">
 <!ENTITY cvs SYSTEM "developers-guide/cvs.xml">
+
+<!-- temporarily commenting this out for faster compile -->
 
 <!ENTITY submissions SYSTEM "developers-guide/submissions.xml">
 <!ENTITY i18n-devel SYSTEM "developers-guide/i18n.xml">
@@ -48,13 +50,8 @@
 <!ENTITY bootstrap-acs SYSTEM "kernel/bootstrap-acs.xml">
 <!ENTITY programming-aolserver SYSTEM "developers-guide/programming-with-aolserver.xml">
 
-<!ENTITY tutorial-newpackage SYSTEM "developers-guide/tutorial.xml">
-<!ENTITY tutorial-database SYSTEM "developers-guide/tutorial-db.xml">
-<!ENTITY tutorial-pages SYSTEM "developers-guide/tutorial-pages.xml">
-<!ENTITY tutorial-debug SYSTEM "developers-guide/tutorial-debug.xml">
-<!ENTITY tutorial-advanced SYSTEM "developers-guide/tutorial-advanced.xml">
-
 <!-- Engineering Standards -->
+
 <!ENTITY dbprimer SYSTEM "engineering-standards/docbook-primer.xml">
 <!ENTITY psgml-mode SYSTEM "engineering-standards/psgml-mode.xml">
 <!ENTITY design-template SYSTEM "engineering-standards/design-template.xml">
@@ -64,8 +61,15 @@
 <!ENTITY filenaming SYSTEM "engineering-standards/filenaming.xml">
 <!ENTITY plsql-standards SYSTEM "engineering-standards/plsql.xml">
 
+<!ENTITY tutorial-newpackage SYSTEM "developers-guide/tutorial.xml">
+<!ENTITY tutorial-database SYSTEM "developers-guide/tutorial-db.xml">
+<!ENTITY tutorial-pages SYSTEM "developers-guide/tutorial-pages.xml">
+<!ENTITY tutorial-debug SYSTEM "developers-guide/tutorial-debug.xml">
+<!ENTITY tutorial-advanced SYSTEM "developers-guide/tutorial-advanced.xml">
+
 <!-- Installation Guide -->
 <!ENTITY install-overview SYSTEM "install-guide/overview.xml">
+<!ENTITY quick-install SYSTEM "install-guide/quick.xml">
 <!ENTITY software SYSTEM "install-guide/software.xml">
 <!ENTITY operating-system SYSTEM "install-guide/os.xml">
 <!ENTITY oracle SYSTEM "install-guide/oracle.xml">
@@ -178,6 +182,7 @@
   
   <part id="acs-admin">
     <title>Administrator's Guide</title>
+    &quick-install;
     &software;
     <chapter id="unix-install">
       <title>Installing on Unix/Linux</title>

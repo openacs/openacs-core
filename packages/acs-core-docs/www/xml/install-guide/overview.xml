@@ -15,7 +15,7 @@
 	  in this chapter are part of the OpenACS &version;-P or
 	  OpenACS &version;-O Reference Platform, which use Red
 	  Hat 8.0.  Differences between the Reference Platform
-	  and common alternate platforms are noted where known.
+	  and common alternate platforms (Red Hat 9, Debian) are noted where known.
 	</para>
   </sect2>
 
@@ -31,8 +31,8 @@
 		  (much more if you want Oracle)</para></listitem> 
       <listitem><para>4 GB hard drive</para></listitem>
     </itemizedlist>
-    <para>You will need all of the <xref
-    linkend="individual-programs">software</xref> marked REQUIRED.</para>
+    <para>You will need all everthing marked REQUIRED in <xref
+    linkend="individual-programs">software</xref>.</para>
     
     <para>
 	  If you want to serve pages to people outside of your machine, you'll
@@ -86,15 +86,15 @@
 	  The basic steps to getting OpenACS up and running are: 
 	</para>
 	
-	<orderedlist>
-	  <listitem><para>Install an OS</para></listitem>
-	  
-	  <listitem>
+    <orderedlist>
+      <listitem><para>Install an OS</para></listitem>
+      
+      <listitem><para>Install a database (Oracle or
+	  PostgreSQL)</para></listitem> 
+      
+      <listitem>
 		<para>Install a webserver (AOLServer)</para>
 	  </listitem>
-	  
-	  <listitem><para>Install a database (Oracle or
-	  PostgreSQL)</para></listitem> 
       
       <listitem><para>Copy the OpenACS files into place and start the OpenACS installer, which will configure a database instance.</para></listitem>
 	</orderedlist>

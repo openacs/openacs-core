@@ -1,5 +1,5 @@
-<sect1 id="postgres" xreflabel="Installing PostgreSQL">
-  <title>Install PostGreSQL 7.2.4</title>
+<sect1 id="postgres">
+  <title>Install PostGreSQL</title>
 
   <authorblurb>
 	by <ulink url="mailto:vinod@kurup.com">Vinod Kurup</ulink>
@@ -11,15 +11,47 @@
   has not been fully tested with 7.3.2; 7.2.4 is the recommended
   version of PostgreSQL to use.</para>
 
-  <para>This page assumes you have downloaded postgresql to 
-<computeroutput>/tmp/postgresql-7.2.4.tar.gz</computeroutput>.  If not,
-<link linkend="source-postgresql">get it</link>.
-</para>
-
+  <itemizedlist>
+    <listitem>
+      <formalpara id="install-postgres-rpm">
+        <title>Using the Red Hat RPM</title>
+  <para>Red Hat users: If you install PostGreSQL 7.3.2 from the Red Hat 9 RPM, you
+  can skip a few steps.  These shell commands add a link so that the
+  data directory appears to be in the same place as in a source
+  install; start the service; create a new group for web service
+  users, and modify the postgres user's
+  environment (<link id="install-postgres-env">more
+  information</link>):</para>
+      </formalpara>
+  <screen>[root@yourserver root]# <userinput>ln -s /var/lib/pgsql/data /usr/local/pgsql/data</userinput>
+[root@yourserver root]# <userinput>service postgresql start</userinput>
+Initializing database:
+                                                           [  OK  ]
+Starting postgresql service:                               [  OK  ]
+[root@yourserver root]# <userinput>echo "export LD_LIBRARY_PATH=/usr/local/pgsql/lib" >> ~postgres/.bash_profile</userinput>
+[root@yourserver root]# <userinput>echo "export PATH=$PATH:/usr/local/pgsql/bin" >> ~postgres/.bash_profile</userinput>
+[root@yourserver root]# <userinput>groupadd web</userinput>
+[root@yourserver root]# <userinput>su - postgres</userinput>
+-bash-2.05b$
+<action>
+ln -s /var/lib/pgsql/data /usr/local/pgsql/data
+service postgresql start
+echo "export LD_LIBRARY_PATH=/usr/local/pgsql/lib" >> ~postgres/.bash_profile
+echo "export PATH=$PATH:/usr/local/pgsql/bin" >> ~postgres/.bash_profile
+groupadd web
+su - postgres</action></screen>
+  <para>... and then skip to <xref linkend="install-plpgsql"/>.  Something similar may work for other binary packages as well.</para>
+    </listitem>
+  </itemizedlist>
   <orderedlist>
     <listitem>
-      <para>Unpack PostGreSQL.</para>
-<screen>[root@yourserver root]# <userinput>cd /usr/local/src</userinput>
+      <formalpara>
+        <title>Unpack PostGreSQL.</title>
+        <para>If you have not downloaded the postgresql tarball to
+        <computeroutput>/tmp/postgresql-7.2.4.tar.gz</computeroutput>,
+        <link linkend="source-postgresql">get it</link>.</para>
+      </formalpara>
+      <screen>[root@yourserver root]# <userinput>cd /usr/local/src</userinput>
 [root@yourserver src]# <userinput>tar xzf /tmp/postgresql-7.2.4.tar.gz</userinput>
 [root@yourserver src]# 
 <action>cd /usr/local/src
@@ -48,26 +80,28 @@ chown -R postgres.web /usr/local/pgsql /usr/local/src/postgresql-7.2.4
 chmod 750 /usr/local/pgsql</action></screen>
     </listitem>
     <listitem id="install-postgres-env">
-	<para>Set up postgres's environment variables.  They are
-	necessary for the executable to find its supporting
+      <formalpara>
+        <title>Set up postgres's environment variables</title>
+      <para>They are necessary for the executable to find its supporting
 	libraries.  For convenience, we'll simply append the necessary
 	lines to the postgres shell config file.</para>
+      </formalpara>
       <screen>[root@yourserver src]# <userinput>echo "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/pgsql/lib" &gt;&gt; ~postgres/.bashrc</userinput>
 [root@yourserver src]# <userinput>echo "export PATH=$PATH:/usr/local/pgsql/bin" &gt;&gt; ~postgres/.bashrc</userinput>
-<action>echo "export LD_LIBRARY_PATH=LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/pgsql/lib" &gt;&gt; ~postgres/.bashrc
+<action>echo "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/pgsql/lib" &gt;&gt; ~postgres/.bashrc
 echo "export PATH=$PATH:/usr/local/pgsql/bin" &gt;&gt; ~postgres/.bashrc</action></screen>
       <para>Test this by logging in as
 	<computeroutput>postgres</computeroutput> and checking the
 	paths; you should see <computeroutput>/usr/local/pgsql/bin</computeroutput></para>
       <screen>[root@yourserver src]# <userinput>su - postgres</userinput>
 [postgres@yourserver pgsql]$ <userinput>env | grep PATH</userinput>
-LD_LIBRARY_PATH=LD_LIBRARY_PATH=:/usr/local/pgsql/lib
+LD_LIBRARY_PATH=:/usr/local/pgsql/lib
 PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:/usr/bin/X11:/usr/X11R6/bin:/root/bin:/usr/local/pgsql/bin:/usr/local/pgsql/bin
 [postgres@yourserver pgsql]$ <userinput>exit</userinput>
 </screen>
     </listitem>
-    <listitem>
-      <formalpara id="install-postgres-compile" xreflabel="Compile PostgreSQL">
+    <listitem id="install-postgres-compile">
+      <formalpara>
 	<title>Compile and install PostgreSQL</title>
 	<para>
 	  Change to the postgres user and run <computeroutput>./configure</computeroutput> to set the compilation options automatically. This is the point at which you can
@@ -102,8 +136,8 @@ cd /usr/local/src/postgresql-7.2.4
 make all
 make install</action></screen>
     </listitem>
-    <listitem>
-      <formalpara id="install-postgres-startup">
+    <listitem id="install-postgres-startup">
+      <formalpara>
 	<title>Start PostgreSQL</title>
 	<para>
 	  The <computeroutput>initdb</computeroutput> command initializes the
@@ -127,12 +161,15 @@ postmaster successfully started
 	  <computeroutput>/usr/local/pgsql/data/server.log</computeroutput>
 	</para>
     </listitem>
-    <listitem id="install-postgres-plpgsql">
-      <para>Set up plpgsql and allow your user to have
+    <listitem id="install-plpgsql">
+      <formalpara>
+        <title>Install Pl/pgSQL</title>
+      <para>Set up plpgsq and allow your user to have
 	  access. Plpgsql is a PL/SQL-like language.  We add it to
 	  template1, which is the template from which all new
 	  databases are created.  We can verify that it was created
 	  with the createlang command in list mode.</para>
+      </formalpara>
       <screen>[postgres@yourserver pgsql]$ <userinput>createlang plpgsql template1</userinput>
 [postgres@yourserver pgsql]$ <userinput>createlang -l template1</userinput>
 Procedural languages
@@ -146,8 +183,11 @@ Procedural languages
 createlang -l template1</action></screen>
     </listitem>
     <listitem id="install-postgres-test">
-      <para>Test PostgreSQL.  Create a database and try some simple commands. The output should be as shown.
+      <formalpara>
+        <title>Test PostgreSQL (OPTIONAL).</title>
+        <para>Create a database and try some simple commands. The output should be as shown.
 	</para>
+      </formalpara>
       <screen>[postgres@yourserver pgsql]$ <userinput>createdb mytestdb</userinput>
 CREATE DATABASE
 [postgres@yourserver pgsql]$ <userinput>psql mytestdb</userinput>
@@ -180,19 +220,24 @@ DROP DATABASE
 logout
 
 [root@yourserver src]#</screen>
-    </listitem>
-    <listitem id="install-postgres-startonboot">
-	<para>Set PostgreSQL to start on boot.  First, we copy the
+  </listitem>
+  <listitem id="install-postgres-startonboot">
+    <para>Set PostgreSQL to start on boot.  First, we copy the
         postgresql.txt init script, which automates startup and
         shutdown, to the distribution-specific init.d directory.  Then
         we verify that it works.  Then we automate it by setting up a
         bunch of symlinks that ensure that, when the operating system
         changes runlevels, postgresql goes to the appropriate
         state. Red Hat and Debian and SuSE each work a little
-        differently so three sets of instructions are provided.
+        differently.
 	</para>
       <itemizedlist>
-        <listitem><para>Red Hat:</para>
+        <listitem><para>Red Hat RPM:</para>
+          <para>The init script is already installed; just turn it on for the appropriate run levels.</para>
+          <screen>[root@yourserver root]# <userinput>chkconfig --level 345 postgresql on</userinput>
+[root@yourserver root]# </screen>
+        </listitem>
+        <listitem><para>Red Hat from source:</para>
           
           <screen>[root@yourserver src]# <userinput>cp /tmp/&tarballpath;/packages/acs-core-docs/www/files/postgresql.txt /etc/init.d/postgresql</userinput>
 [root@yourserver src]# <userinput>chown root.root /etc/rc.d/init.d/postgresql</userinput>
@@ -216,12 +261,14 @@ Stopping PostgreSQL: ok
 		</para>
           
 		<screen>[root@yourserver root]# <userinput>chkconfig --add postgresql</userinput>
+[root@yourserver root]# <userinput>chkconfig --level 345 postgresql on</userinput>
 [root@yourserver root]# <userinput>chkconfig --list postgresql</userinput>
 postgresql      0:off   1:off   2:on    3:on    4:on    5:on    6:off
 [root@yourserver root]# <userinput>service postgresql start</userinput>
 Starting PostgreSQL: ok
 [root@yourserver root]#
 <action>chkconfig --add postgresql
+chkconfig --level 345 postgresql on
 chkconfig --list postgresql
 service postgresql start</action></screen>
         </listitem>
@@ -351,7 +398,7 @@ root:~ # </screen>
 kernel.shmmax = 134217728</programlisting>
         </listitem>
         <listitem>
-          <para>Edit the PostGreSQL config file, <computeroutput>/usr/local/pgsql/data/postgresql.conf</computeroutput>, to use more memory.  These values should improve performance in most cases.  (<ulink url="http://openacs.org/forums/message-view?message_id=94071">More information</ulink>)</para>
+          <para>Edit the PostGreSQL config file, <computeroutput>/usr/local/pgsql/data/postgresql.conf</computeroutput>, to use more memory.  These values should improve performance in most cases.  (<ulink url="http://openacs.org/forums/message-view?message_id=94071">more information</ulink>)</para>
           <programlisting>#       Shared Memory Size
 #
 shared_buffers = 15200      # 2*max_connections, min 16
@@ -374,7 +421,7 @@ checkpoint_segments = 3     # in logfile segments (16MB each), min 1
   </orderedlist>
   
   <sect2 id="install-postgres-moreinfo">
-    <title>Learn more about PostgreSQL</title>
+    <title>more information about PostgreSQL</title>
     
     <itemizedlist>
       <listitem><para>

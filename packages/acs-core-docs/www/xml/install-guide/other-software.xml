@@ -77,7 +77,8 @@ cp: overwrite `/etc/skel/.emacs'? <userinput>y</userinput>
           linkend="daemontools-download">download it</link>.  (The -p
               flag in mkdir causes all implied directories in the path
               to be made as well.)</para>
-            <para>(If you are using Red Hat 9.0, you need to put <computeroutput>#include &lt;errno.h&gt;</computeroutput> as the first line of <computeroutput>/package/admin/daemontools-0.76/src/error.h</computeroutput>.  <ulink url="http://www.riverside.org/archive/html/djbdns/2003-01/msg00307.html">More information</ulink>)</para>
+            <para>(Red Hat 9.0: put 
+<programlisting>#include &lt;errno.h&gt;</programlisting> as the first line of <computeroutput>/package/admin/daemontools-0.76/src/error.h</computeroutput>.  <ulink url="http://www.riverside.org/archive/html/djbdns/2003-01/msg00307.html">More information</ulink>)</para>
               <screen>[root@yourserver root]# <userinput>mkdir -p /package</userinput>
 [root@yourserver root]# <userinput>chmod 1755 /package/</userinput>
 [root@yourserver root]# <userinput>cd /package/</userinput>
@@ -99,8 +100,8 @@ package/install</action></screen>
             </listitem>
             <listitem>
               <para>Debian</para>
-              <screen>root:~# apt-get install daemontools-installer
-root:~# build-daemontools</screen>
+              <screen>root:~# <userinput>apt-get install daemontools-installer</userinput>
+root:~# <userinput>build-daemontools</userinput></screen>
             </listitem>
           </itemizedlist>
         </listitem>
@@ -132,6 +133,7 @@ chmod 755 /usr/local/bin/svgroup</action></screen>
               <para>This program handles incoming tcp connections.
               <link linkend="ucspi-download">Download ucspi</link> and install it.</para>
           </formalpara>
+          <para>Red Hat 9.0: put <programlisting>#include &lt;errno.h&gt;</programlisting> as the first line of <computeroutput>error.h</computeroutput>.  <ulink url="http://www.riverside.org/archive/html/djbdns/2003-01/msg00307.html">More information</ulink>)</para>
           <screen>[root@yourserver root]# <userinput>cd /usr/local/src</userinput>
 [root@yourserver src]# <userinput>tar xzf /tmp/ucspi-tcp-0.88.tar.gz</userinput>
 [root@yourserver src]# <userinput>cd ucspi-tcp-0.88</userinput>
@@ -188,7 +190,13 @@ tcprules /etc/tcp.smtp.cdb /etc/tcp.smtp.tmp &lt; /etc/tcp.smtp </action></scree
             </formalpara>
             <para><link linkend="ucspi-download">Download qmail</link>,
             set up the standard supporting users and build the binaries:</para>
-            <para>(If you are using Red Hat 9.0, you need to put <computeroutput>#include &lt;errno.h&gt;</computeroutput> as the first line of <computeroutput>/usr/local/src/qmail-1.03/error.h</computeroutput>.  <ulink url="http://www.riverside.org/archive/html/djbdns/2003-01/msg00307.html">More information</ulink>)</para>
+            <para>Red Hat 9.0: Put 
+<programlisting>#include &lt;errno.h&gt;</programlisting>
+as the first line of
+            <computeroutput>/usr/local/src/qmail-1.03/error.h</computeroutput>.
+            <ulink
+            url="http://www.riverside.org/archive/html/djbdns/2003-01/msg00307.html">More
+            information</ulink></para>
             <screen>[root@yourserver root]# <userinput>cd /usr/local/src</userinput>
 [root@yourserver src]# <userinput>tar xzf /tmp/qmail-1.03.tar.gz</userinput>
 [root@yourserver src]# <userinput>mkdir /var/qmail</userinput>
@@ -228,10 +236,10 @@ make setup check</action></screen>
             <primary>sendmail</primary>
             <secondary>removing</secondary>
           </indexterm>
-          <screen>[root@yourserver qmail-1.03]# <userinput>rm -f /usr/bin/sendmail</userinput>
+          <screen>[root@yourserver qmail-1.03]# <userinput>rm -f /usr/bin/sendmail /usr/sbin/sendmail</userinput>
 [root@yourserver qmail-1.03]# <userinput>ln -s /var/qmail/bin/sendmail /usr/sbin/sendmail</userinput>
 [root@yourserver qmail-1.03]#
-<action>rm -f /usr/bin/sendmail 
+<action>rm -f /usr/bin/sendmail /usr/sbin/sendmail
 ln -s /var/qmail/bin/sendmail /usr/sbin/sendmail</action></screen>
           <para>Configure qmail - specifically, run the config script to set up files in <computeroutput>/var/qmail/control</computeroutput> specifying the computer's identity and which addresses it should accept mail for.  This command will automatically set up qmail correctly if you have correctly set a valid host nome.  If not, you'll want to read <computeroutput>/var/qmail/doc/INSTALL.ctl</computeroutput> to find out how to configure qmail.</para>
             <screen>[root@yourserver qmail-1.03]# <userinput>./config-fast <replaceable>yourserver.test</replaceable></userinput>
@@ -271,46 +279,64 @@ chmod 755 /var/qmail/rc
 </action></screen>
             <para>Set up the skeleton directory so that new users will
           be configured for qmail.</para>
-            <screen>[root@localhost root]# <userinput>/var/qmail/bin/maildirmake /etc/skel/Maildir</userinput>
-[root@localhost root]# <userinput>echo "./Maildir/" > /etc/skel/.qmail</userinput>
-[root@localhost root]# 
+            <screen>[root@yourserver root]# <userinput>/var/qmail/bin/maildirmake /etc/skel/Maildir</userinput>
+[root@yourserver root]# <userinput>echo "./Maildir/" > /etc/skel/.qmail</userinput>
+[root@yourserver root]# 
 <action>/var/qmail/bin/maildirmake /etc/skel/Maildir
 echo "./Maildir/" > /etc/skel/.qmail</action></screen>
 
-            <para>Qmail runs in two parts.  First, several different
-          qmail daemons are started by the qmail rc file.  Second, a
-          process is started in within tcpserver to listen for incoming smtp traffic.  Run both of these commands to start qmail.  Be very careful about line breaks - there should be a total of two commands here.  Note also that the tcpserver command takes the uid and guid of <computeroutput>qmaild</computeroutput>, which will only be 502 and 501 if you have followed all of these instructions exactly and in order.  Otherwise, <userinput>grep qmaild /etc/passwd</userinput> to find uid and guid, in that order.</para>
-          <screen>[root@yourserver alias]# <userinput>/usr/local/bin/tcpserver -x /etc/tcp.smtp.cdb -v -u <replaceable>502</replaceable> -g <replaceable>501</replaceable> 0 smtp /var/qmail/bin/qmail-smtpd 2>&amp;1 | /var/qmail/bin/splogger smtpd 3 &amp;</userinput>
-[1] 15863
-[root@yourserver alias]# <userinput>csh -cf '/var/qmail/rc &amp;'</userinput>
-[1] 15865
-[root@yourserver alias]#
-<action>/usr/local/bin/tcpserver -x /etc/tcp.smtp.cdb -v -u <replaceable>502</replaceable> -g <replaceable>501</replaceable> 0 smtp /var/qmail/bin/qmail-smtpd 2&gt;&amp;1 | /var/qmail/bin/splogger smtpd 3 &amp; 
-csh -cf '/var/qmail/rc &amp;'</action></screen>
-          <para>Verify that seven different qmail threads are running:</para>
-          <screen>[root@yourserver alias]# <userinput>ps -auxw | grep
-          qmail</userinput>
-qmaild    4269  0.0  0.3  1384  452 pts/0    S    21:21   0:00 [tcpserver]
-root      4270  0.0  0.3  1340  412 pts/0    S    21:21   0:00 /var/qmail/bin/splogger smtpd 3
-qmails    4272  0.1  0.2  1364  320 pts/0    S    21:21   0:00 [qmail-send]
-qmaill    4273  0.0  0.3  1332  408 pts/0    S    21:21   0:00 [splogger]
-root      4274  0.0  0.2  1332  272 pts/0    S    21:21   0:00 qmail-lspawn ./Maildir/
-qmailr    4275  0.0  0.2  1328  272 pts/0    S    21:21   0:00 [qmail-rspawn]
-qmailq    4276  0.0  0.2  1324  280 pts/0    S    21:21   0:00 [qmail-clean]
-root      4278  0.0  0.5  3280  632 pts/0    S    21:21   0:00 grep qmail
-[root@yourserver alias]#</screen>
-          <para>Further verify by sending and receiving email.  Incoming mail for root is stored in <computeroutput>/var/qmail/alias/Maildir</computeroutput>.  If it worked, make it permanent by putting the same commands in your startup scripts.  (These instructions put the commands in rc.local, which means that they'll be run once, on boot.  There will be no monitoring and no interface to start and stop and check status.  We ought instead to either use full init scripts or daemontools.)</para>
-          <screen>[root@yourserver alias]# <userinput>echo "/usr/local/bin/tcpserver -x /etc/tcp.smtp.cdb -v -u <replaceable>502</replaceable> -g <replaceable>501</replaceable> 0 smtp /var/qmail/bin/qmail-smtpd \ " &gt;&gt; /etc/rc.local</userinput>
-[root@yourserver alias]# <userinput>echo "2&gt;&amp;1 | /var/qmail/bin/splogger smtpd 3 &amp;  " &gt;&gt; /etc/rc.local</userinput>
-[root@yourserver alias]# <userinput>echo "csh -cf '/var/qmail/rc &amp;' " &gt;&gt; /etc/rc.local</userinput>
-[root@yourserver alias]# 
-<action>echo "/usr/local/bin/tcpserver -x /etc/tcp.smtp.cdb -v -u <replaceable>502</replaceable> -g <replaceable>501</replaceable> 0 smtp /var/qmail/bin/qmail-smtpd \ " &gt;&gt; /etc/rc.local
-echo "2&gt;&amp;1 | /var/qmail/bin/splogger smtpd 3 &amp;  " &gt;&gt; /etc/rc.local
-echo "csh -cf '/var/qmail/rc &amp;' " &gt;&gt; /etc/rc.local</action></screen>
+          <para>As recommended, we will run qmail with daemontools
+          control files.  Create daemontools control directories, set up a daemontools control script, copy the supervise control files, and set permissions.  The last line links the control directories to /service, which will cause supervise to detect them and execute the run files, causing qmail to start.</para>
+          <screen>[root@yourserver root]# <userinput>mkdir -p /var/qmail/supervise/qmail-send/log</userinput>
+[root@yourserver root]# <userinput>mkdir -p /var/qmail/supervise/qmail-smtpd/log</userinput>
+[root@yourserver root]# <userinput>mkdir /var/log/qmail</userinput>
+[root@yourserver root]# <userinput>chown qmaill /var/log/qmail</userinput>
+[root@yourserver root]# <userinput>cp /tmp/&tarballpath;/packages/acs-core-docs/www/files/qmailctl.txt /var/qmail/bin/qmailctl</userinput>
+[root@yourserver root]# <userinput>chmod 755 /var/qmail/bin/qmailctl</userinput>
+[root@yourserver root]# <userinput>ln -s /var/qmail/bin/qmailctl /usr/bin</userinput>
+[root@yourserver root]# <userinput>cp /tmp/&tarballpath;/packages/acs-core-docs/www/files/qmail-send-run.txt /var/qmail/supervise/qmail-send/run </userinput>
+[root@yourserver root]# <userinput>cp /tmp/&tarballpath;/packages/acs-core-docs/www/files/qmail-send-log-run.txt /var/qmail/supervise/qmail-send/log/run</userinput>
+[root@yourserver root]# <userinput>cp /tmp/&tarballpath;/packages/acs-core-docs/www/files/qmail-smtpd-run.txt /var/qmail/supervise/qmail-smtpd/run</userinput>
+[root@yourserver root]# <userinput>cp /tmp/&tarballpath;/packages/acs-core-docs/www/files/qmail-smtpd-log-run.txt /var/qmail/supervise/qmail-smtpd/log/run</userinput>
+[root@yourserver root]# <userinput>chmod 755 /var/qmail/supervise/qmail-send/run</userinput>
+[root@yourserver root]# <userinput>chmod 755 /var/qmail/supervise/qmail-send/log/run</userinput>
+[root@yourserver root]# <userinput>chmod 755 /var/qmail/supervise/qmail-smtpd/run</userinput>
+[root@yourserver root]# <userinput>chmod 755 /var/qmail/supervise/qmail-smtpd/log/run</userinput>
+[root@yourserver root]# <userinput>ln -s /var/qmail/supervise/qmail-send /var/qmail/supervise/qmail-smtpd /service</userinput>
+[root@yourserver root]# <userinput>ln -s /var/qmail/supervise/qmail-send /var/qmail/supervise/qmail-smtpd /service</userinput>
+<action>mkdir -p /var/qmail/supervise/qmail-send/log
+mkdir -p /var/qmail/supervise/qmail-smtpd/log
+mkdir /var/log/qmail
+chown qmaill /var/log/qmail
+cp /tmp/&tarballpath;/packages/acs-core-docs/www/files/qmailctl.txt /var/qmail/bin/qmailctl
+chmod 755 /var/qmail/bin/qmailctl
+ln -s /var/qmail/bin/qmailctl /usr/bin
+cp /tmp/&tarballpath;/packages/acs-core-docs/www/files/qmail-send-run.txt /var/qmail/supervise/qmail-send/run
+cp /tmp/&tarballpath;/packages/acs-core-docs/www/files/qmail-send-log-run.txt /var/qmail/supervise/qmail-send/log/run
+cp /tmp/&tarballpath;/packages/acs-core-docs/www/files/qmail-smtpd-run.txt /var/qmail/supervise/qmail-smtpd/run
+cp /tmp/&tarballpath;/packages/acs-core-docs/www/files/qmail-smtpd-log-run.txt /var/qmail/supervise/qmail-smtpd/log/run
+chmod 755 /var/qmail/supervise/qmail-send/run
+chmod 755 /var/qmail/supervise/qmail-send/log/run
+chmod 755 /var/qmail/supervise/qmail-smtpd/run
+chmod 755 /var/qmail/supervise/qmail-smtpd/log/run
+ln -s /var/qmail/supervise/qmail-send /var/qmail/supervise/qmail-smtpd /service
+</action></screen>
+          <para>Wait ten seconds or so, and then verify that that the four qmail processes are running.  If uptimes are 1 second, this may indicate broken scripts that are continuously restarting.  In that case, start debugging by checking permissions.</para>
+          <screen>[root@yourserver root]# <userinput>qmailctl stat</userinput>
+/service/qmail-send: up (pid 32700) 430 seconds
+/service/qmail-send/log: up (pid 32701) 430 seconds
+/service/qmail-smtpd: up (pid 32704) 430 seconds
+/service/qmail-smtpd/log: up (pid 32705) 430 seconds
+messages in queue: 0
+messages in queue but not yet preprocessed: 0
+[root@yourserver root]#</screen>
+          <para>Further verify by sending and receiving email.  Incoming mail for root is stored in <computeroutput>/var/qmail/alias/Maildir</computeroutput>. </para>
           </listitem>
-          <listitem id="analog-install">
-            <para>Analog web file analyser.  You should
-have the <link linkend="analog-download">source tarball</link> in
+      </orderedlist>
+    </sect1>
+    <sect1 id="analog-install">
+      <title>Install Analog web file analyzer</title>
+            <para>Download the Analog <link linkend="analog-download">source tarball</link> in
 <computeroutput>/tmp</computeroutput>.  Unpack, compile, and install analog.</para>
             <screen>[root@yourserver aolserver]# <userinput>cd /usr/local/src</userinput>
 [root@yourserver src]# <userinput>tar xzf /tmp/analog-5.31.tar.gz</userinput>
@@ -331,12 +357,9 @@ cd analog-5.31
 make
 cd ..
 mv analog-5.31 /usr/share/</action></screen>
-          <para>See also <xref linkend="analog-setup"/></para>
-        </listitem>
-        
-      </orderedlist>
+      <para>See also <xref linkend="analog-setup"/></para>
     </sect1>
-    
+
     <sect1 id="install-full-text-search">
       <title></title>
       <sect2 id="install-openfts">
@@ -583,7 +606,7 @@ line, click
       the <link
           linkend="nsopenssl-download">nsopenssl tarball</link> in
           <computeroutput>/tmp</computeroutput>.</para>
-      <para>(Red Hat 9 note: see <ulink
+      <para>Red Hat 9 note: see <ulink
           url="http://openacs.org/forums/message-view?message_id=92882">this
           thread</ulink> for details on compiling nsopenssl.)</para>
 
@@ -607,7 +630,12 @@ cp https.tcl /usr/local/aolserver/modules/tcl/</action></screen>
       url="http://openacs.org/forums/message-view?message_id=93854">more
       information</ulink>):</para>
 <screen><action>apt-get install libssl-dev
-make OPENSSL=/usr/lib/ssl</action></screen>
+cd /usr/local/src/aolserver
+tar xzf /tmp/nsopenssl-2.1.tar.gz
+cd nsopenssl-2.1
+make OPENSSL=/usr/lib/ssl
+cp nsopenssl.so /usr/local/aolserver/bin
+cp https.tcl /usr/local/aolserver/modules/tcl/</action></screen>
     </sect1>
   </appendix>
 

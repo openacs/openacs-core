@@ -1,5 +1,5 @@
   <appendix id="cvs-tips">
-    <title>Install Red Hat 8.0</title>
+    <title>Using CVS with an OpenACS Site</title>
     
     <authorblurb>
       by <ulink url="mailto:joel@aufrecht.org">Joel Aufrecht</ulink>

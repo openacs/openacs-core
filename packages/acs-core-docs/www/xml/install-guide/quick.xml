@@ -1,0 +1,57 @@
+<chapter id="quick">
+  <title>Quick Install</title>
+
+  <authorblurb>
+	by <ulink url="mailto:docs@openacs.org">Joel Aufrecht</ulink>
+  </authorblurb>
+
+  <sect2 id="install-purpose" xreflabel="Purpose of this document">
+	<title>Purpose of this document</title>
+	<para>
+	  This page describes a minimal installation of OpenACS with
+	  PostGreSQL (not Oracle).  It will produce a working OpenACS
+	  installation in under an hour.  It excludes source control,
+	  full text search, ssl, managed services (daemontools),
+	  DocBook, and qmail.  
+	</para>
+  </sect2>
+  <sect2>
+    <title>For Red Hat 9</title>
+    <orderedlist>
+      <listitem>
+        <para>Install PostGreSQL 7.3.2 from RPM.  Select
+        <computeroutput>Menu &gt; System Settings &gt; Add/Remove
+        Applications</computeroutput> and select <computeroutput>Database Server</computeroutput>.</para>
+      </listitem>
+      <listitem><para>On the PostGreSQL page, do the <xref
+      linkend="install-postgres-rpm"/> bullet point and step <xref linkend="install-plpgsql"/></para></listitem>
+      <listitem><para>On the Aolserver page, do steps <xref
+      linkend="aolserver-tarball"/>, <xref
+      linkend="install-aolserver-compile"/>, and <xref linkend="aolserver-db-wrapper"/></para></listitem>
+      <listitem>
+        <para>In <xref linkend="openacs-setup"/> on the OpenACS page, do steps <xref linkend="make-web-directory"/>, <xref linkend="install-openacs-download"/>, <xref linkend="install-aolserver-user-accounts"/>, and <xref linkend="unpack-openacs"/></para>
+      </listitem>
+      <listitem>
+        <para>In <xref linkend="install-openacs-prepare-postgres"/>, do steps <xref linkend="create-service-db-user"/>, <xref linkend="create-database"/>, and <xref linkend="db-setup-exit"/></para>
+      </listitem>
+      <listitem>
+        <para>In <xref linkend="install-openacs-configure-aol"/>, do <xref linkend="start-aolserver"/></para>
+      </listitem>
+      <listitem>
+        <para>Browse to <ulink url="http://localhost:8000"/>.  If you see a page like <ulink
+        url="files/openacs-start.html">this</ulink>, proceed with <xref linkend="install-openacs-using-installer"/>.  If not, look at <xref linkend="connect-to-aolserver"/> for troubleshooting information.</para>
+      </listitem>
+    </orderedlist>
+  </sect2>
+  <sect2 id="quick-next-steps">  
+    <para>After completing installation and restarting the server, go to <ulink url="http://localhost:8000"/> for configuration and customization instructions.  You can upgrade a Quick Install with source control, full text search, backup/recovery, and other production features by walking through the <ulink url="unix-install">Installation documentation</ulink> and doing the steps marked OPTIONAL.</para>
+  </sect2>
+  <para><phrase role="cvstag">($Id$)</phrase></para>
+
+</chapter>
+<!--
+   Local Variables:
+   sgml-parent-document: ("../index.xml" "book" "chapter")
+   End:
+-->
+

@@ -1,10 +1,12 @@
-<sect1 id="compatibility">
+<chapter id="compatibility">
   <title>Compatibility for required software</title>
   <authorblurb>
     by <ulink url="mailto:joel@aufrecht.org">Joel Aufrecht</ulink>
   </authorblurb>
+  <para>For more information see <ulink
+  url="http://openacs.org/forums/message-view?message_id=99610">this thread</ulink></para>
   <figure>
-    <title>Assumptions in this section</title>
+    <title>Software version compatibility matrix</title>
     <informaltable>
       <tgroup cols="8">
         <colspec colname="c1"/>
@@ -27,9 +29,7 @@
             <entry colname="4.6.3">4.6.3</entry>
           </row>
           <row>
-            <entry morerows="3">AolServer</entry>
-          </row>
-          <row>
+            <entry morerows="5">AolServer</entry>
             <entry>3</entry>
             <entry namest="3.2.5" nameend="3.2.5" align="center">Verified</entry>
           </row>
@@ -42,9 +42,19 @@
             <entry namest="4.6.2" nameend="4.6.3" align="center">Verified</entry>
           </row>  
           <row>
-            <entry morerows="3">PostGreSQL</entry>
+            <entry>3.4.2oacs1</entry>
+            <entry namest="4.6.2" align="center">Verified</entry>
+          </row>  
+          <row>
+            <entry>3.5.5</entry>
+            <entry namest="4.6.2" align="center">Verified</entry>
+          </row>  
+          <row>
+            <entry>4</entry>
+            <entry namest="3.2.5" nameend="4.6.3" align="center">No</entry>
           </row>
           <row>
+            <entry morerows="2">PostGreSQL</entry>
             <entry>7.0</entry>
             <entry namest="3.2.5" nameend="3.2.5" align="center">Verified</entry>
           </row>
@@ -54,18 +64,19 @@
           </row>
           <row>
             <entry>7.3.2</entry>
-            <entry namest="3.2.5" nameend="4.6.2" align="center">Not compatible</entry>
+            <entry namest="3.2.5" nameend="4.6.2" align="center">Incompatible</entry>
             <entry namest="4.6.3" nameend="4.6.3" align="center">Untested</entry>
           </row>
+
         </tbody>
       </tgroup>
     </informaltable>
   </figure>
   <para><phrase role="cvstag">($Id$)</phrase></para>
 
-</sect1>
+</chapter>
 <!--
    Local Variables:
-   sgml-parent-document: ("../index.xml" "book" "sect1")
+   sgml-parent-document: ("../index.xml" "part" "chapter")
    End:
 -->

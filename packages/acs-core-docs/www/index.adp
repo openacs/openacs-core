@@ -54,7 +54,7 @@
         - <a href="http://openacs.org/projects/openacs/doc-project/">Help improve OpenACS documentation</a>
 
 <strong>Archive</strong>
-        - <a href="http://openacs.org/doc/oldversions">Documentation for Earlier Versions of OpenACS</a>
+        - <a href="http://openacs.org/projects/openacs/doc-project/olddocs">Documentation for Earlier Versions of OpenACS</a>
 </pre></td>
 
 <td valign="top">

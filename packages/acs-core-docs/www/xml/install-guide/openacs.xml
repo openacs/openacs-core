@@ -5,11 +5,11 @@
 	by <ulink url="mailto:vinod@kurup.com">Vinod Kurup</ulink>
   </authorblurb>
 
-  <sect2>
+  <sect2 id="openacs-setup">
     <title>Set up the file system for an OpenACS Service</title>
     <orderedlist>
       
-      <listitem>
+      <listitem id="make-web-directory">
         <para>The reference install stores all OpenACS services in
       <computeroutput>/web</computeroutput>, with one subdirectory per
       service.  The first time you install a service, you must create
@@ -62,7 +62,7 @@ chmod 770 /web</action></screen>
       can use database commands associated with that group.
     </para>
 
-      <screen>[root@yourserver root]# <userinput>useradd -g web <replaceable>service0</replaceable></userinput>
+        <screen>[root@yourserver root]# <userinput>useradd -g web <replaceable>service0</replaceable> -d /home/<replaceable>service0</replaceable></userinput>
 [root@yourserver root]#</screen>
         
       <para>Set up database environment variables.  They are
@@ -117,7 +117,7 @@ logout
 
 [root@yourserver root]#</screen>
       </listitem>
-      <listitem>
+      <listitem id="unpack-openacs">
         <para>Unpack the OpenACS tarball and rename it to <computeroutput>service0</computeroutput>.  Secure the directory so that only the owner can access it.  Check the permissions by listing the directory.</para>       
         <screen>[root@yourserver root]# <userinput>su - <replaceable>service0</replaceable></userinput>
 [service0@yourserver service0]$ <userinput>cd /web</userinput>
@@ -145,7 +145,8 @@ exit</action></screen>
       </listitem>
 
       <listitem>
-        <para>Set up several additional directories in the service root:
+        <para>(This step should be obsoleted by the 5.0.0 tarball, as
+      these directories will be included in the tarball)Set up several additional directories in the service root:
       <computeroutput>etc</computeroutput> is for configuration and control files, <computeroutput>log</computeroutput> is for error and request (web page hit) log files, and <computeroutput>database-backup</computeroutput> is for database backup files.  If you did the CVS step, note that these new directories are excluded from that step so that you can decide whether or not you want your logs and config files in source control.</para>
         <screen>[root@yourserver root]# <userinput>su - <replaceable>service0</replaceable></userinput>
 [service0@yourserver service0]$ <userinput>mkdir /web/<replaceable>service0</replaceable>/etc /web/<replaceable>service0</replaceable>/log /web/<replaceable>service0</replaceable>/database-backup</userinput>
@@ -338,10 +339,10 @@ SQL&gt; exit</programlisting>
     </orderedlist>
   </sect2>
 
-  <sect2 id="install-openacs-prepare-postgres" xreflabel="Prepare PostgreSQL for OpenACS">
+  <sect2 id="install-openacs-prepare-postgres">
     <title>Prepare PostgreSQL for an OpenACS Service</title>
     <orderedlist>
-      <listitem>
+      <listitem id="create-service-db-user">
         <para>Create a user in the database matching the service name.</para>
         <screen>[root@yourserver root]# <userinput>su - postgres</userinput>
 [postgres@yourserver pgsql]$ <userinput>createuser <replaceable>service0</replaceable></userinput>
@@ -353,7 +354,7 @@ logout
 
 [root@yourserver root]#</screen>
       </listitem>
-      <listitem>
+      <listitem id="create-database">
 	<para>Create a database with the same name as our service name, <replaceable>service0</replaceable>.</para>
     <screen>[root@yourserver root]# <userinput>su - <replaceable>service0</replaceable></userinput>
 [service0@yourserver service0]$ <userinput>createdb <replaceable>service0</replaceable></userinput>
@@ -375,7 +376,7 @@ createdb <replaceable>service0</replaceable></action></screen>
       <listitem>
         <para><link linkend="install-openfts-postgres">Add Full Text Search Support</link> (OPTIONAL)</para>
       </listitem>
-      <listitem>
+      <listitem id="db-setup-exit">
         <screen>[service0@yourserver service0]$ <userinput>exit</userinput>
 logout
 
@@ -387,12 +388,15 @@ logout
   <sect2 id="install-openacs-configure-aol">
     <title>Configure an AOLserver Service for OpenACS</title>
     <orderedlist>
-      <listitem>
+      <listitem id="configure-config-tcl">
         <para>
 	  The AOLserver architecture lets you run an arbitrary number of
 	  virtual servers. A virtual server is an HTTP service running on a
 	  specific port, e.g. port 80. In order for OpenACS to work, you
-	  need to configure a virtual server.  The Reference Platform uses a configuration file included in the OpenACS tarball.  Copy it to the <computeroutput>/web/<replaceable>service0</replaceable>/etc</computeroutput> directory and open it in an editor to adjust the parameters.</para>
+	  need to configure a virtual server.  The Reference Platform
+	  uses a configuration file included in the OpenACS tarball,
+	  <computeroutput>/web/<replaceable>service0</replaceable>/etc/config.tcl</computeroutput>.
+	   Open it in an editor to adjust the parameters.</para>
         <indexterm>
           <primary>AOLserver</primary>
           <secondary>configuration</secondary>
@@ -400,12 +404,10 @@ logout
     
         <screen>[root@yourserver root]# <userinput>su - <replaceable>service0</replaceable></userinput>
 [service0@yourserver service0]$ <userinput>cd /web/<replaceable>service0</replaceable>/etc</userinput>
-[service0@yourserver etc]# <userinput>cp /web/<replaceable>service0</replaceable>/packages/acs-core-docs/www/files/config.tcl.txt config.tcl</userinput>
 [service0@yourserver etc]# <userinput>emacs config.tcl</userinput>
 </screen>
-    
-    <para>
-	   You can continue without changing any values in the file.  However, if you don't change <computeroutput>address</computeroutput> to match the computer's ip address, you won't be able to browse to your server from other machines.
+        <para>
+	  You can continue without changing any values in the file.  However, if you don't change <computeroutput>address</computeroutput> to match the computer's ip address, you won't be able to browse to your server from other machines.
 	</para>
     
     <itemizedlist>
@@ -453,7 +455,7 @@ logout
         <para>
 	  AOLServer is very configurable. These settings should get you
 	  started, but for more options, read the <ulink
-	  url="http://aolserver.com/docs/admin/config.adp">AOLServer
+	  url="http://aolserver.com/docs/admin/config.html">AOLServer
 	  docs</ulink>.
 	</para>
       </listitem>
@@ -467,10 +469,10 @@ logout
     </orderedlist>
   </sect2>
 
-  <sect2>
+  <sect2 id="verify-aolserver-startup">
     <title>Verify AOLserver startup</title>
     <orderedlist>
-      <listitem>
+      <listitem id="start-aolserver">
         <para>
 	  Kill any current running AOLserver processes and start a new
 	  one.  If you are using Oracle, rather than PostgreSQL, replace
@@ -495,7 +497,7 @@ nsd: no process killed
 [service0@yourserver service0]$ [08/Mar/2003:18:13:29][32131.8192][-main-] Notice: nsd.tcl: starting to read config file...
 [08/Mar/2003:18:13:29][32131.8192][-main-] Notice: nsd.tcl: finished reading config file.</screen>
       </listitem>
-      <listitem>
+      <listitem id="connect-to-aolserver">
         <para>
 	  Attempt to connect to the service from a web browser.  You should specify a URL like:
 	</para>

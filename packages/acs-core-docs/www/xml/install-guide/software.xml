@@ -78,7 +78,7 @@
                 <entry namest="4.6.2" nameend="4.6.3" align="center">Verified</entry>
               </row>  
               <row>
-                <entry morerows="3">PostGreSQL</entry>
+                <entry morerows="2">PostGreSQL</entry>
                 <entry>7.0</entry>
                 <entry namest="3.2.5" nameend="3.2.5" align="center">Verified</entry>
               </row>
@@ -94,12 +94,15 @@
               <row>
                 <entry morerows="2">Oracle</entry>
                 <entry>8.1.6</entry>
+                <entry namest="4.5" nameend="4.6.3" align="center">Verified</entry>
               </row>
               <row>
                 <entry>8.1.7</entry>
+                <entry namest="4.5" nameend="4.6.3" align="center">Verified</entry>
               </row>
               <row>
                 <entry>9i</entry>
+                <entry namest="3.2.5" nameend="4.6.3" align="center">No</entry>
               </row>
             </tbody>
           </tgroup>
@@ -222,18 +225,14 @@
           </itemizedlist>
         </listitem>
 
-        <listitem>
+        <listitem id="source-tdom">
           <formalpara>
-            <title>libxml2 and libxml2-devel, REQUIRED</title>
-          <para>			  OpenACS &version; stores
+            <title>tDOM, REQUIRED</title>
+          <para>OpenACS &version; stores
           queries in XML files, so we use an AOLserver module called
-          nsxml to parse these files.  libxml2-devel is required to
-          compile nsxml.  Libxml2 is available from <ulink
-          url="http://xmlsoft.org">http://xmlsoft.org</ulink>). On Debian,
-      this can be installed by doing <computeroutput>apt-get install
-        libxml2-dev</computeroutput>. Users of other distributions can
-      download rpms from <ulink
-          url="http://rpmfind.net/linux/rpm2html/search.php?query=libxml2">rpmfind.net</ulink>.</para>
+          tDOM to parse these files.  (This replaces libxml2, which
+          was used prior to 4.6.4.)  tDOM is available from <ulink
+          url="http://xmlsoft.org">http://tdom.org</ulink>).</para>
           </formalpara>
         </listitem>
         <listitem>
@@ -266,23 +265,23 @@
       url="http://uptime.openacs.org/aolserver-openacs/">uptime.openacs.org</ulink>.
     </para>
 
-    <para>
+              <para>
       It's also possible to download all the pieces and patches yourself:
     </para>
-
-    <itemizedlist>
-      <listitem><para>
+              
+              <itemizedlist>
+                <listitem><para>
           AOLserver is available at <ulink url="http://aolserver.com">aolserver.com</ulink> 
         </para></listitem>
-
-      <listitem><para> 
+                
+                <listitem><para> 
           ArsDigita's AOLserver distribution (including
           internationalization patches, nscache, nsrewrite, nssha1 and the
           oracle driver) is available at <ulink
           url="http://www.arsdigita.com/acs-repository/download-verify?version_id=2081">arsdigita.com</ulink>
           </para></listitem>
-
-      <listitem><para>
+                
+                <listitem><para>
 
           The OpenACS PostgreSQL driver (nspostgres.so) is available from
           <ulink
@@ -295,31 +294,26 @@
         </para></listitem>
 
       <listitem><para>
-          nsxml is available at <ulink
-          url="http://acs-misc.sourceforge.net/dl/nsxml.tgz">http://acs-misc.sourceforge.net</ulink>. 
-        </para></listitem>
-
-      <listitem><para>
           The patch that makes <computeroutput>exec</computeroutput> work
           on BSD is available at <ulink
           url="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=415475&amp;group_id=3152&amp;atid=303152">sourceforge.net</ulink>
         </para></listitem>
-
-      <listitem><para>
+                
+                <listitem><para>
           The patch that makes <computeroutput>ns_uuencode</computeroutput>
           work for binary files is available at <ulink
           url="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=474259&amp;group_id=3152&amp;atid=303152">sourceforge.net</ulink>
         </para></listitem> 
-
-      <listitem><para>
+                
+                <listitem><para>
           The patch that makes AOLserver respect the
           <computeroutput>-g</computeroutput> flag is available at
           <ulink
           url="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=509413&amp;group_id=3152&amp;atid=303152">sourceforge.net</ulink>
         </para></listitem>
-
-    </itemizedlist>
-
+                
+              </itemizedlist>
+              
 
           </listitem>
           <listitem id="nsopenssl-download">
@@ -365,18 +359,18 @@
           </formalpara>
           <itemizedlist>
             <listitem>
-
-            <formalpara>
-              <title>Oracle 8.1.7 (Either this or PostGreSQL is REQUIRED)</title>
-              <para>You can register and download Oracle from <ulink
+              
+              <formalpara>
+                <title>Oracle 8.1.7 (Either this or PostGreSQL is REQUIRED)</title>
+                <para>You can register and download Oracle from <ulink
               url="http://otn.oracle.com/software/content.html">Oracle
               TechNet</ulink>.  You need this if you want to use an
               Oracle database.</para>
-            </formalpara>
+              </formalpara>
             </listitem>
             <listitem>
-            <formalpara id="source-postgresql">
-              <title><ulink
+              <formalpara id="source-postgresql">
+                <title><ulink
               url="http://www.ca.postgresql.org/ftpsite/source/v7.2.4/postgresql-7.2.4.tar.gz">PostGreSQL 7.2.4</ulink> (Either this or Oracle is REQUIRED)</title>
               <para>You need this if you want to use a PostGreSQL database.
               PostGreSQL 7.3 is not backwards-compatible, and OpenACS
@@ -384,12 +378,12 @@
               not in the United States, select a closer <ulink
               url="http://www.postgresql.org">mirror</ulink></para>
             </formalpara>
-          </listitem>
-        </itemizedlist>
-      </listitem>
-      <listitem>
-        <formalpara>
-          <title>Process Controller</title>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+        <listitem>
+          <formalpara>
+            <title>Process Controller</title>
           <para>This is software that initiates other software, and
           restarts that software if it fails.  On Linux, we recommend
           using Daemontools to control AOLserver and qmail.</para>
@@ -422,49 +416,49 @@
               <para>You need this (or a different Mail Transport
               Agent) if you want your webserver to send and
               receive email.</para>
-            </formalpara>
-          </listitem>
-          <listitem>
-            <formalpara id="ucspi-download">
-              <title><ulink
+                  </formalpara>
+                </listitem>
+                <listitem>
+                  <formalpara id="ucspi-download">
+                    <title><ulink
               url="http://cr.yp.to/ucspi-tcp/ucspi-tcp-0.88.tar.gz">ucspi-tcp 0.88</ulink>, OPTIONAL</title>
-              <para>This program listens for incoming TCP connections and
+                    <para>This program listens for incoming TCP connections and
               hands them to a program.  We use it instead of inetd,
               which is insecure.  You need this if you are running qmail.</para>
-            </formalpara>
-          </listitem>
-        </itemizedlist>
-      </listitem>
-      <listitem>
-        <formalpara>
-          <title>DocBook, OPTIONAL</title>
-          <para>(docbook-xml v4.2, docbook-xsl v1.56, libxslt 1.0.21,
+                  </formalpara>
+                </listitem>
+              </itemizedlist>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+        <listitem>
+          <formalpara>
+            <title>DocBook, OPTIONAL</title>
+            <para>(docbook-xml v4.2, docbook-xsl v1.56, libxslt 1.0.21,
           xsltproc 1.0.21).  You need this to write or edit documentation. 
 </para>
-        </formalpara>
-      </listitem>
-
-      <listitem>
-        <formalpara>
-          <title>Source Control</title>
-          <para>A Source Control system keeps track of all of the old
+          </formalpara>
+        </listitem>
+        
+        <listitem>
+          <formalpara>
+            <title>Source Control</title>
+            <para>A Source Control system keeps track of all of the old
           versions of your files.  It lets you recover old files,
           compare versions of file, and identify specific versions of
           files.  You can use any source control system; the Reference
           Platform and the OpenACS.org repository (where you can
           get patched and development code in between releases) use cvs.</para>
-              </formalpara>
-              <itemizedlist>
-                <listitem>
-                  <formalpara>
-                    <title>cvs 1.11.2, OPTIONAL</title>
-                    <para>cvs is included in most unix distributions. You
+          </formalpara>
+          <itemizedlist>
+            <listitem>
+              <formalpara>
+                <title>cvs 1.11.2, OPTIONAL</title>
+                <para>cvs is included in most unix distributions. You
               need this if you want to track old versions of your
               files, do controlled deployment of code from development
               to production, or get or contribute development code from openacs.org.</para>
-                  </formalpara>
-                </listitem>
-              </itemizedlist>
+              </formalpara>
             </listitem>
           </itemizedlist>
         </listitem>
