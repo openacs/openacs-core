@@ -78,8 +78,10 @@ namespace eval notification::email {
         @param queue_dir The location of the qmail mail queue in
         the file-system.
     } {
-        if [catch {set messages [glob "$queue_dir/new/*"]} ] {
-            ns_log Notice "queue dir = [glob $queue_dir/new/*]"
+        if {[catch {
+            set messages [glob "$queue_dir/new/*"]
+        } errmsg]} {
+            ns_log Notice "queue dir = $queue_dir/new/*, no messages"
             return [list]
         }
 
@@ -143,7 +145,8 @@ namespace eval notification::email {
             }
 
             set from [parse_email_address $from]
-            
+            set to [parse_email_address $to]
+
             # Find the from user
             set from_user [cc_lookup_email_user $from]
 

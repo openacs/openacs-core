@@ -29,6 +29,17 @@ namespace eval notification::reply {
         return $reply_id
     }
 
+    ad_proc -public get {
+        {-reply_id:required}
+        {-array:required}
+    } {
+        Get the information for the reply
+    } {
+        # Select the info into the upvar'ed Tcl Array
+        upvar $array row
+        db_1row select_reply {} -column_array row
+    }
+
     ad_proc -public delete {
         {-reply_id:required}
     } {
