@@ -588,9 +588,9 @@ ad_proc -private rp_filter { why } {
     if { ![empty_string_p [ad_conn object_id]]} {
       ad_try {
 	if {[string match "admin/*" [ad_conn extra_url]]} {
-	  ad_require_permission [ad_conn object_id] admin
+            permission::require_permission -object_id [ad_conn object_id] -privilege admin
 	} else {
-	  ad_require_permission [ad_conn object_id] read
+            permission::require_permission -object_id [ad_conn object_id] -privilege read
 	}
       } ad_script_abort val {
 	rp_finish_serving_page
@@ -646,7 +646,7 @@ ad_proc rp_report_error {
     }
 
     if {![ad_parameter -package_id [ad_acs_kernel_id] "RestrictErrorsToAdminsP" dummy 0] || \
-	[ad_permission_p [ad_conn package_id] admin] } {
+	[permission::permission_p -object_id [ad_conn package_id] -privilege admin] } {
 	if { [ad_parameter -package_id [ad_acs_kernel_id] "AutomaticErrorReportingP" "rp" 0] } { 
 	    set error_info $message
 	    set report_url [ad_parameter -package_id [ad_acs_kernel_id] "ErrorReportURL" "rp" ""]
