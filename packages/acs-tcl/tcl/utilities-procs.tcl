@@ -4404,6 +4404,47 @@ proc_doc ad_var_type_check_third_urlv_integer_p {{args ""}} {
 
 ####################
 #
+# Procs in the util namespace
+#
+####################
+
+ad_proc -public util::backup_file {
+    {-file_path:required}
+    {-backup_suffix ".bak"}
+} {
+    Backs up (move) the file or directory with given path to a file/directory with a backup suffix.
+    Will avoid overwriting old backup files by adding a number to the filename to make it unique.
+    For example, suppose you are backing up /web/my-server/packages/my-package/file.txt and
+    the file has already been backed up to /web/my-server/packages/my-package/file.txt.bak. Invoking
+    this proc will then generate the backup file /web/my-server/packages/my-package/file.txt.bak.2
+
+    @param backup_suffix The suffix to add to the backup file.
+
+    @author Peter Marklund
+} {
+    # Keep generating backup paths until we find one that doesn't already exist
+    set backup_counter 1
+    while 1 {
+        if { $backup_counter == "1" } {
+            set backup_path "${file_path}${backup_suffix}"
+        } else {
+            set backup_path "${file_path}${backup_suffix}.${backup_counter}"
+        }
+        
+        if { ![file exists $backup_path] } {
+            # We found a non-existing backup path
+            break
+        }
+
+        incr backup_counter
+    }
+
+    exec "mv" "$file_path" "$backup_path"
+}
+
+
+####################
+#
 # Procs in the util::whos_online namespace
 #
 ####################
