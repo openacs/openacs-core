@@ -46,6 +46,16 @@
   <a href="@aolserver_tcl_api_root@">Browse AOLserver Tcl API</a>
   </form>
 
+  <p>
+
+  <form action=tcl-doc-search method=get>
+  <b>Tcl Documentation Search:</b><br>
+  <input type=text name=tcl_proc>
+  <input type=submit value=Go><br>
+  (enter <em>exact</em> procedure name)<br>
+  <a href="@tcl_docs_root@">Browse the Tcl documentation</a>
+  </form>
+
 </td>
 </tr>
 </form>
