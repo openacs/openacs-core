@@ -436,20 +436,23 @@ namespace eval acs_mail_lite {
         # ----------------------------------------------------
         # Rollout support
         # ----------------------------------------------------
-        # if set in /etc/config.tcl, then
-        # /packages/acs-tcl/tcl/rollout-email-procs.tcl will rename a
+        # if set in etc/config.tcl, then
+        # packages/acs-tcl/tcl/rollout-email-procs.tcl will rename a
         # proc to ns_sendmail. So we simply call ns_sendmail instead
         # of the sendmail bin if the EmailDeliveryMode parameter is
-        # set - JFR
+        # set to anything other than default - JFR
         #-----------------------------------------------------
         set delivery_mode [ns_config ns/server/[ns_info server]/acs/acs-rollout-support EmailDeliveryMode] 
 
-        if {![empty_string_p $delivery_mode]} {
+        if {![empty_string_p $delivery_mode]
+            && ![string equal $delivery_mode default]
+        } {
             # The to_addr has been put in an array, and returned. Now
             # it is of the form: email email_address name namefromdb
             # user_id user_id_if_present_or_empty_string
             set to_address "[lindex $to_addr 1] ([lindex $to_addr 3])"
-            ns_sendmail "$to_address" "$from_addr" "$subject" "$body" "$extraheaders" "$bcc"
+            set eh [util_list_to_ns_set $extraheaders]
+            ns_sendmail $to_address $from_addr $subject $body $eh $bcc
         } else {
 
             if { [string equal [bounce_sendmail] "SMTP"] } {
