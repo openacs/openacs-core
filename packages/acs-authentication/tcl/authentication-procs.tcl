@@ -845,7 +845,7 @@ ad_proc -public auth::create_local_account {
 
         # If so, add -2 or -3 or ... to make it unique
         if { ![empty_string_p $existing_user_id] } {
-            set match "$user_info(username)-%"
+            set match "${username}-%"
             set existing_usernames [db_list select_existing_usernames { 
                 select username 
                 from   users
