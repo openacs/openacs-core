@@ -605,7 +605,7 @@ ns_param share1 "OpenACS"
 #ns_param share2 "Share 2 description"
 
 ns_section ns/server/${server}/tdav/share/share1
-ns_param uri "/*"
+ns_param uri "/dav/*"
 # all WebDAV options
 ns_param options "OPTIONS COPY GET PUT MOVE DELETE HEAD MKCOL POST PROPFIND PROPPATCH LOCK UNLOCK"
 
