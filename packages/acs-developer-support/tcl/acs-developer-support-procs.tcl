@@ -115,7 +115,7 @@ ad_proc -public ds_adp_start_box {
     {-stub \$__adp_stub} 
 } {
     template::adp_append_code "if { \[::ds_show_p\] } {"
-    template::adp_append_code "    set __apidoc_path \[string range $stub \[string length \[::acs_root_dir\]\] end\].\$template_extension"
+    template::adp_append_code "    set __apidoc_path \[string range $stub \[string length \[::acs_root_dir\]\] end\].adp"
     template::adp_append_code "    set __stub_path \[join \[split $stub /\] \" / \"\]"
     template::adp_append_code "    append __adp_output \"<div class=\\\"\[::ds_adp_box_class\]\\\"><span class=\\\"\[::ds_adp_file_class\]\\\"><a href=\\\"/api-doc/content-page-view?source_p=1&path=\$__apidoc_path\\\" style=\\\"text-decoration: none;\\\">\$__stub_path</a></span><div class=\\\"\[::ds_adp_output_class\]\\\">\""
     template::adp_append_code "}"
