@@ -2852,3 +2852,22 @@ proc ad_dateentrywidget_default_to_today {column} {
     set today [lindex [split [ns_localsqltimestamp] " "] 0]
     return [ad_dateentrywidget $column $today]
 }
+
+ad_proc -public util_ns_set_to_list {
+    {-set:required}
+} {
+    Convert an ns_set into a TCL array.
+
+    @param set The ns_set to convert
+
+    @return An array of equivalent keys and values as the ns_set specified.
+} {
+    set result [list]
+
+    for {set i 0} {$i < [ns_set size $set]} {incr i} {
+        lappend result [ns_set key $set $i]
+        lappend result [ns_set value $set $i]
+    }
+
+    return $result
+}
