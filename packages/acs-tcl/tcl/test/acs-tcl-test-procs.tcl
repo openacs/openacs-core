@@ -26,10 +26,11 @@ aa_stub apm_arg_names_for_callback_type {
     return [list arg1 arg2]
 }
 
-aa_register_case apm__test_callback_xml {
-    Test that the procs apm_generate_package_spec and 
-    apm_read_package_info_file handle the newly added
-    callback tags properly.
+aa_register_case apm__test_info_file {
+    Test that the procs for interfacing with package info files - 
+    apm_generate_package_spec and 
+    apm_read_package_info_file - handle the newly added
+    callback and auto-mount tags properly.
 
     @creation-date 22 January 2003
     @author Peter Marklund
@@ -41,6 +42,16 @@ aa_register_case apm__test_callback_xml {
     set version_id [db_string aa_version_id {select version_id 
                                             from apm_enabled_package_versions 
                                             where package_key = 'acs-automated-testing'}]
+    set auto_mount_orig [db_string aa_auto_mount {select auto_mount
+                                             from apm_package_versions
+                                             where version_id = :version_id}]
+    set auto_mount $auto_mount_orig
+    if { [empty_string_p $auto_mount] } {
+        set auto_mount "test_auto_mount_dir"
+        db_dml set_test_mount {update apm_package_versions
+                               set auto_mount = :auto_mount
+                               where version_id = :version_id}
+                               ail    } 
 
     set error_p [catch {         
         # Add a few test callbacks
@@ -69,6 +80,8 @@ aa_register_case apm__test_callback_xml {
     
         aa_equals "Checking name of callback of allowed type $allowed_type" \
                 $parsed_callback_array($allowed_type) $callback_array($allowed_type)
+
+        aa_equals "Checking that auto-callback is correct" $spec_array(auto-mount) $auto_mount
             
     } error]
 
@@ -79,6 +92,10 @@ aa_register_case apm__test_callback_xml {
                               where version_id = :version_id
                               and type = :type }
     }
+    db_dml reset_auto_mount {update apm_package_versions
+                             set auto_mount = :auto_mount_orig
+                             where version_id = :version_id}
+
 
     if { $error_p } {
         global errorInfo
