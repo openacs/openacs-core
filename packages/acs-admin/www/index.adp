@@ -22,7 +22,7 @@
   <h3>Subsite Administration</h3>
   <ul>
     <multiple name="subsites">
-      <li><a href="@subsites.admin_url@">@subsites.instance_name@ Administration</a></li>
+      <li><a href="@subsites.admin_url@">@subsites.path_pretty@</a></li>
     </multiple>
   </ul>
 </if>
