@@ -329,3 +329,18 @@ ad_proc -public group::get_rel_types_options {
     return $rel_types
 }
 
+ad_proc -public group::admin_p {
+    {-group_id:required}
+    {-user_id:required}
+} {
+    set admin_rel_id [relation::get_id \
+                          -object_id_one $group_id \
+                          -object_id_two $user_id \
+                          -rel_type "admin_rel"]
+
+    # The party is an admin if the call above returned something non-empty
+    return [expr ![empty_string_p $admin_rel_id]]
+}
+
+
+
