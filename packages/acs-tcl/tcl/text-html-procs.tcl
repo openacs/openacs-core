@@ -278,7 +278,7 @@ ad_proc -private util_close_html_tags {
 
     # First try to fix up < not part of a tag.
 
-    regsub -all {<([^/[:alpha:]])} $frag {\&lt;\1} frag
+    regsub -all {<([^/[:alpha:]!])} $frag {\&lt;\1} frag
     # no we do is chop off any trailing unclosed tag 
     # since when we substr blobs this sometimes happens
     
