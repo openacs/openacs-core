@@ -275,7 +275,11 @@ ad_proc apm_bootstrap_load_libraries {
             if { [llength [info procs db_release_unused_handles]] != 0 } {
                 db_release_unused_handles
             }
-        }
+        } elseif { ( [empty_string_p $file_db_type] ||
+	             [string equal $file_db_type $db_type] ) &&
+	           ( [string equal $file_type tcl_util] ) } {
+	    ns_log warning "apm_boostrap_load_file skipping $file because it isn't either a -procs.tcl or -init.tcl file"
+	}
     }
 
     unset apm_first_time_loading_p
