@@ -87,6 +87,11 @@ ad_proc -public template::widget::input { type element_reference tag_attributes 
 
   array set attributes $tag_attributes
 
+  if { ( [string equal $type "checkbox"] || [string equal $type "radio"] ) && [info exists element(value)] } {
+      # This can be used in the form template in a <label for="id">...</label> tag.
+      set attributes(id) "$element(form_id):elements:$element(name):$element(value)"
+  }
+
   set output "<input type=\"$type\" name=\"$element(name)\""
 
   if { [info exists element(value)] } {
