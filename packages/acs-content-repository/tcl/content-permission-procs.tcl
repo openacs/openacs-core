@@ -169,7 +169,7 @@ ad_proc -public content::permission::revoke_permission {
 }
 
 
-ad_proc -public content::revision::revoke_permission_h {
+ad_proc -public content::permission::revoke_permission_h {
     -object_id:required
     -revokee_id:required
     -privilege:required
@@ -182,5 +182,5 @@ ad_proc -public content::revision::revoke_permission_h {
         [list object_id $object_id ] \
         [list revokee_id $revokee_id ] \
         [list privilege $privilege ] \
-    ] content_premission revoke_permission_h]
+    ] content_permission revoke_permission_h]
 }
