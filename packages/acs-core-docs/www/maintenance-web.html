@@ -1,5 +1,5 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html><head><meta content="text/html; charset=ISO-8859-1" http-equiv="Content-Type"><title>Hosting Web Sites</title><meta name="generator" content="DocBook XSL Stylesheets V1.50.0"><link rel="home" href="index.html" title="OpenACS Documentation"><link rel="up" href="maintenance.html" title="Chapter 7. Maintenance"><link rel="previous" href="maintenance.html" title="Chapter 7. Maintenance"><link rel="next" href="database-management.html" title="Database Management"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="images/alex.jpg" border="0"></a><center>4.6.x DRAFT IN PROGRESS</center><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="maintenance.html">Prev</a>&nbsp;</td><th width="60%" align="center">Chapter 7. Maintenance</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="database-management.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><h2 class="title" style="clear: both"><a name="maintenance-web"></a>Hosting Web Sites</h2></div></div><div class="authorblurb"><p>
+<html><head><meta content="text/html; charset=ISO-8859-1" http-equiv="Content-Type"><title>Hosting Web Sites</title><meta name="generator" content="DocBook XSL Stylesheets V1.50.0"><link rel="home" href="index.html" title="OpenACS Documentation"><link rel="up" href="maintenance.html" title="Chapter 7. Maintenance"><link rel="previous" href="maintenance.html" title="Chapter 7. Maintenance"><link rel="next" href="database-management.html" title="Database Management"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="images/alex.jpg" border="0"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="maintenance.html">Prev</a>&nbsp;</td><th width="60%" align="center">Chapter 7. Maintenance</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="database-management.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><h2 class="title" style="clear: both"><a name="maintenance-web"></a>Hosting Web Sites</h2></div></div><div class="authorblurb"><p>
     by <a href="mailto:joel@aufrecht.org" target="_top">Joel Aufrecht</a><br>
           OpenACS docs are written by the named authors, but may be edited
           by OpenACS documentation staff.
@@ -109,40 +109,21 @@ Killing 23750</pre></li></ul></div><p>
       <tt>root</tt>. This mean that if someone was
       able to exploit your web server to execute a command on your server,
       they would not be able to gain <tt>root</tt>
-      access.</p></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="install-next-add-server"></a>How to add a second server on a different port</h3></div></div><p>Starting another server is simply a matter of configuring another
-    aolserver instance, creating another database and pointing this
-    aolserver instance at a fresh copy of the OpenACS-4 code. We'll call
-    our new server <span class="emphasis"><em>birdnotes-dev</em></span></p><div class="orderedlist"><ol type="1"><li><p>
-          You can either copy your current OpenACS installation:
-        </p><pre class="programlisting">
-joeuser:~$ cp -r web/birdnotes web/birdnotes-dev</pre><p>
-          Or Download the <a href="http://www.openacs.org/software" target="_top">OpenACS
-          4 software</a> into <tt>/tmp</tt> again.
-        </p><pre class="programlisting">
-joeuser:~$ cd web
-joeuser:~/web$ tar xzvf /tmp/openacs-4-5-release.tgz
-joeuser:~/web$ mv openacs-4 birdnotes-dev</pre></li><li><p>
-          Download another copy of <a href="files/openacs4.tcl.txt" target="_top"><tt>openacs4.tcl.txt</tt></a>
-          into <tt>/tmp</tt>.  </p><pre class="programlisting">
-joeuser:~/web$ cp /tmp/openacs4.tcl.txt ./<span class="emphasis"><em>birdnotes-dev</em></span>/nsd.tcl
-joeuser:~/web$ chmod 600 <span class="emphasis"><em>birdnotes-dev</em></span>/nsd.tcl
-joeuser:~/web$ emacs <span class="emphasis"><em>birdnotes-dev</em></span>/nsd.tcl</pre><p>Just like in <a href="openacs.html#install-openacs-configure-aol" title="Configure an AOLserver Service for OpenACS">the section called &#8220;Configure an AOLserver Service for OpenACS&#8221;</a>,
-        you'll need to set the server parameters appropriately. Be sure to
-        choose a different port than your original server and to set
-        <tt>server</tt> to
-        <span class="emphasis"><em>birdnotes-dev</em></span>.</p></li><li><p>
-
-          Create a new database instance called
-          <span class="emphasis"><em>birdnotes-dev</em></span>. Follow the instructions in
-          <a href="openacs.html#install-openacs-prepare-oracle">Prepare Oracle for OpenACS</a> or <a href="openacs.html#install-openacs-prepare-postgres">Prepare PostgreSQL for OpenACS</a>.
-
-        </p></li><li><p>
-          Start your new server!
-        </p><pre class="programlisting">
-joeuser:~/web$ cd
-joeuser:~/web$ /usr/local/aolserver/bin/nsd-postgres -t /home/joeuser/web/<span class="emphasis"><em>birdnotes-dev</em></span>/nsd.tcl</pre><p>
-          Visit the site with a web browser (using the port that you set
-          above). You should see the OpenACS installer. Once you install
-          the OpenACS datamodel, you'll also need to add your new aolserver
-          instance to <tt>/etc/inittab</tt> (or
-          daemontools) so it restarts automatically.</p></li></ol></div></div><p><div class="cvstag">($Id$)</div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="maintenance.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="database-management.html">Next</a></td></tr><tr><td width="40%" align="left">Chapter 7. Maintenance&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="maintenance.html">Up</a></td><td width="40%" align="right">&nbsp;Database Management</td></tr></table><hr><address>rmello at fslc.usu.edu</address><address><a href="mailto:vinod@kurup.com">vinod@kurup.com</a></address></div><a name="comments"></a><center><a href="http://openacs.org/doc/openacs-4/maintenance-web.html#comments">View comments on this page at openacs.org</a></center></body></html>
+      access.</p></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="install-next-add-server"></a>Running multiple services on one machine</h3></div></div><p><b>Services on different ports. </b>To run a different service on another port but the same
+        ip, simply repeat <a href="openacs.html">Install OpenACS 4.6.2</a> replacing
+        <span class="replaceable">service0</span>, and change the
+<pre class="programlisting">set httpport              8000
+set httpsport             8443 </pre>
+ to different values.</p><p><b>Services on different host names. </b>For example, suppose you want to support
+<tt>http://foo.com</tt> and
+    <tt>http://bar.com</tt> on the same
+    machine.  The easiest way is to assign each one a different ip
+    address.  Then you can install two services as above, but with
+        different values for
+<pre class="programlisting">set hostname               [ns_info hostname]
+set address                127.0.0.1 </pre>
+If you want to install two services with different host
+    names sharing the same ip, you'll need nsvhr to redirect requests
+    based on the contents of the tcp headers.  See <a href="http://borkware.com/rants/aolserver-vhosting/" target="_top">AOLserver
+    Virtual Hosting with TCP</a> by <a href="mailto:markd@borkware.com" target="_top">markd</a>.
+</p></div><p><div class="cvstag">($Id$)</div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="maintenance.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="database-management.html">Next</a></td></tr><tr><td width="40%" align="left">Chapter 7. Maintenance&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="maintenance.html">Up</a></td><td width="40%" align="right">&nbsp;Database Management</td></tr></table><hr><address>rmello at fslc.usu.edu</address><address><a href="mailto:vinod@kurup.com">vinod@kurup.com</a></address></div><a name="comments"></a><center><a href="http://openacs.org/doc/openacs-4/maintenance-web.html#comments">View comments on this page at openacs.org</a></center></body></html>
