@@ -184,6 +184,31 @@ END OF TEMPLATE -->
 
   </itemizedlist>
 
+
+  <para>
+        Potential incompatibilities:
+  </para>
+
+  <itemizedlist>
+      <listitem>
+        <para>
+	   The undocumented special handling of ~ and +variable+ in formtemplates has been removed in favor of 
+	   using &lt;noparse&gt; and \@variable\@ (the standard templating mechanisms).  Locally 
+	   provided formtemplate styles still using these mechanisms will break.
+        </para>
+      </listitem>
+
+      <listitem>
+        <para>
+	   Serving backup files and files from the CVS directories is turned off by default via the acs-kernel parameter
+     	   ExcludedFiles in section request-processor (The variable provides a string match glob list of files and is defaulted to "*/CVS/* *~")
+	</para>
+      </listitem>
+
+  </itemizedlist>
+
+
+
   <para><phrase role="cvstag">($Id$)</phrase></para>
   </sect2>
 
