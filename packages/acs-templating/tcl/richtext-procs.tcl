@@ -122,7 +122,11 @@ ad_proc -public template::util::richtext::get_property { what richtext_list } {
             return $format
         }
         html_value {
-            return [ad_html_text_convert -from $format -to "text/html" -- $contents]
+            if { ![empty_string_p $contents] } {
+                return [ad_html_text_convert -from $format -to "text/html" -- $contents]
+            } else {
+                return {}
+            }
         }
     }
 }
