@@ -78,42 +78,42 @@ ad_proc -public template::paginator::init { statement_name name query } {
 
   if { [info exists properties(contextual)] } {
 
-    # query contains two columns, one for ID and one for context cue
-    uplevel 3 "template::query $statement_name __paginator_ids multilist \"$query\""
+      # query contains two columns, one for ID and one for context cue
+      uplevel 3 "set__paginator_ids [db_list_of_lists $statement_name \"$query\"]"
 
-    set i 0
-    set page_size $properties(pagesize)
-    set context_ids [list]
-    
-    foreach row $ids {
+      set i 0
+      set page_size $properties(pagesize)
+      set context_ids [list]
+      
+      foreach row $ids {
 
-      lappend row_ids [lindex $row 0]
+          lappend row_ids [lindex $row 0]
 
-      if { [expr $i % $page_size] == 0 } {
-	lappend context_ids [lindex $row 1]
+          if { [expr $i % $page_size] == 0 } {
+              lappend context_ids [lindex $row 1]
+          }
+          incr i
       }
-      incr i
-    }
-    
-    set properties(context_ids) $context_ids
-    cache set $name:$query:context_ids $context_ids $properties(timeout)
+      
+      set properties(context_ids) $context_ids
+      cache set $name:$query:context_ids $context_ids $properties(timeout)
 
 
-    if { [template::util::is_nil row_ids] } {
-	set row_ids ""
-    }
+      if { [template::util::is_nil row_ids] } {
+          set row_ids ""
+      }
 
-    set properties(row_ids) $row_ids
-    cache set $name:$query:row_ids $row_ids $properties(timeout)
+      set properties(row_ids) $row_ids
+      cache set $name:$query:row_ids $row_ids $properties(timeout)
 
 
   } else {
 
-    # no extra column specified for paging by contextual cues
-    uplevel 3 "template::query $statement_name __paginator_ids onelist \"$query\""
+      # no extra column specified for paging by contextual cues
+      uplevel 3 "set __paginator_ids [db_list $statement_name  \"$query\"]"
 
-    set properties(row_ids) $ids
-    cache set $name:$query:row_ids $ids $properties(timeout)
+      set properties(row_ids) $ids
+      cache set $name:$query:row_ids $ids $properties(timeout)
   }
 }
 
@@ -457,7 +457,7 @@ ad_proc -public template::paginator::get_data { statement_name name datasource q
 
   uplevel 2 "
 
-    template::query $statement_name __page_data multirow \"$query\" -eval {
+    db_multirow __page_data $statement_name \"$query\" {
       set i \$__page_order(\$row($id_column))
       upvar 0 $datasource:\$i __page_sorted_row
       array set __page_sorted_row \[array get row\]

@@ -143,10 +143,9 @@ ad_proc -public template::widget::table::prepare { statement_name name {level 1}
     if { ![template::util::is_nil widget(eval)] } {
       append eval_code $widget(eval)
     }
- 
     uplevel $level "
-      template::query $statement_name tw_${name}_rows multirow \{$sql_query\} \\
-        -eval \{$eval_code\}
+      db_multirow tw_${name}_rows $statement_name \{$sql_query\} \\
+        \{$eval_code\}
     "
   
     # Get the column definition if it does not exist

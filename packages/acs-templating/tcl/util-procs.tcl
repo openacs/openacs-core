@@ -128,7 +128,7 @@ ad_proc -public template::util::is_unique { table columns values } {
 
   append query [join $conditions " and "]
 
-  template::query get_count count onevalue $query
+  set count [db_string get_count $query]
 
   return [expr $count == 0]
 }
