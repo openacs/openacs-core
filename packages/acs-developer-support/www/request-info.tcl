@@ -16,14 +16,19 @@ ds_require_permission [ad_conn package_id] "admin"
 set page_title "Request Information"
 set context [list $page_title]
 
+if { [ns_cache get ds_page_bits $request dummy] } { 
+    set page_fragment_cache_p 1
+} else { 
+    set page_fragment_cache_p 0
+}
+
+
 foreach name [nsv_array names ds_request] {
     ns_log Debug "DS: Checking request $request, $name."
     if { [regexp {^([0-9]+)\.([a-z]+)$} $name "" m_request key] && $m_request == $request } {
 	set property($key) [nsv_get ds_request $name]
     }
 }
-
-set page_fragment_cache_p [ds_page_fragment_cache_enabled_p]
 
 if { [info exists property(start)] } {
     append body "

@@ -27,8 +27,8 @@ append body "
 <li><a href=\"shell.tcl\">OpenACS Shell</a>
 <li>Developer support toolbar is currently
 [ad_decode $enabled_p 1 \
-    "on (<a href=\"set-enabled?enabled_p=0\">turn it off</a>)" \
-    "off (<a href=\"set-enabled?enabled_p=1\">turn it on</a>)"]
+     "on (<a href=\"set?field=ds&amp;enabled_p=0\">turn it off</a>)" \
+     "off (<a href=\"set?field=ds&amp;enabled_p=1\">turn it on</a>)"]
 
 <li>Developer support information is currently
 restricted to the following IP addresses:
@@ -69,18 +69,18 @@ and has a lifetime of [ad_parameter DataLifetime "developer-support" 900] sec
 
 <li>User-switching is currently
 [ad_decode $user_switching_enabled_p 1 \
-    "on (<a href=\"set-user-switching-enabled?enabled_p=0\">turn it off</a>)" \
-    "off (<a href=\"set-user-switching-enabled?enabled_p=1\">turn it on</a>)"]
+     "on (<a href=\"set?field=user&amp;enabled_p=0\">turn it off</a>)" \
+     "off (<a href=\"set?field=user&amp;enabled_p=1\">turn it on</a>)"]
 
 <li>Database statistics is currently
 [ad_decode $database_enabled_p 1 \
-    "on (<a href=\"set-database-enabled?enabled_p=0\">turn it off</a>)" \
-    "off (<a href=\"set-database-enabled?enabled_p=1\">turn it on</a>)"]
+     "on (<a href=\"set?field=db&amp;enabled_p=0\">turn it off</a>)" \
+     "off (<a href=\"set?field=db&amp;enabled_p=1\">turn it on</a>)"]
 
 <li>ADP reveal is currently
 [ad_decode $adp_reveal_enabled_p 1 \
-    "on (<a href=\"set-adp-reveal-enabled?enabled_p=0\">turn it off</a>)" \
-    "off (<a href=\"set-adp-reveal-enabled?enabled_p=1\">turn it on</a>)"]
+     "on (<a href=\"set?field=adp&amp;enabled_p=0\">turn it off</a>)" \
+     "off (<a href=\"set?field=adp&amp;enabled_p=1\">turn it on</a>)"]
 
 <p>
 <li> Help on <a href=\"doc/editlocal\">edit and code links</a>.

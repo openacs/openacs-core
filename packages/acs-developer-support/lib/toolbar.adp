@@ -7,11 +7,9 @@
 
       <td class="actions">
         <ul>
-          <li><a href="@user_switching_toggle_url@" class="@user_switching_on@" title="User switching">USR</a></li>
-          <li><a href="@db_toggle_url@" class="@db_on@" title="Database statistics">DB</a></li>
-          <li><a href="@translator_toggle_url@" class="@translator_on@" title="Translator mode">TRN</a></li>
-          <li><a href="@adp_toggle_url@" class="@adp_on@" title="ADP Reveal mode">ADP</a></li>
-          <li><a href="@foot_toggle_url@" class="@foot_on@" title="Show footer">FOOT</a></li>
+          <multiple name="ds_buttons">
+            <li><a href="@ds_buttons.toggle_url@" class="@ds_buttons.state@" title="@ds_buttons.title@">@ds_buttons.label@</a></li>
+          </multiple>
         </ul>
       </td>
 

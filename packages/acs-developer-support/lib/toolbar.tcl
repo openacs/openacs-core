@@ -7,32 +7,45 @@ set show_p [ds_show_p]
 if { $show_p } {
     set ds_url [ds_support_url]
 
-    set comments_p [ds_comments_p]
-    set comments_toggle_url [export_vars -base "${ds_url}comments-toggle" { { return_url [ad_return_url] } }]
-    set comments_on [ad_decode $comments_p 1 "on" "off"]
-
     set num_comments [llength [ds_get_comments]]
 
-    set user_switching_p [ds_user_switching_enabled_p]
-    set user_switching_toggle_url [export_vars -base "${ds_url}set-user-switching-enabled" { { enabled_p {[expr !$user_switching_p]} } { return_url [ad_return_url] } }]
-    set user_switching_on [ad_decode $user_switching_p 1 "on" "off"]
+    multirow create ds_buttons label title toggle_url state
 
-    set db_p [ds_database_enabled_p]
-    set db_toggle_url [export_vars -base "${ds_url}set-database-enabled" { { enabled_p {[expr !$db_p]} } { return_url [ad_return_url] } }]
-    set db_on [ad_decode $db_p 1 "on" "off"]
+    # multirow append ds_buttons COM \
+        "Display comments inline" \
+        [export_vars -base "${ds_url}comments-toggle" { { return_url [ad_return_url] } }] \
+        [ad_decode [ds_comments_p]  1 "on" "off"]
 
-    set translator_p [lang::util::translator_mode_p]
-    set translator_toggle_url [export_vars -base "/acs-lang/admin/translator-mode-toggle" { { return_url [ad_return_url] } }]
-    set translator_on [ad_decode $translator_p 1 "on" "off"]
+    multirow append ds_buttons USR \
+        "Toggle user switching" \
+        [export_vars -base "${ds_url}set" { {field user} {enabled_p {[expr ![ds_user_switching_enabled_p]]}} {return_url [ad_return_url]} }] \
+        [ad_decode [ds_user_switching_enabled_p] 1 "on" "off"] 
 
-    set adp_p [ds_adp_reveal_enabled_p]
-    set adp_toggle_url {javascript:void(d=document);void(el=d.getElementsByTagName('span'));for(i=0;i<el.length;i++){if(el[i].className=='developer-support-adp-file-on'){void(el[i].className='developer-support-adp-file-off')}else{if(el[i].className=='developer-support-adp-file-off'){void(el[i].className='developer-support-adp-file-on')}}};void(el=d.getElementsByTagName('div'));for(i=0;i<el.length;i++){if(el[i].className=='developer-support-adp-box-on'){void(el[i].className='developer-support-adp-box-off')}else{if(el[i].className=='developer-support-adp-box-off'){void(el[i].className='developer-support-adp-box-on')}};if(el[i].className=='developer-support-adp-output-on'){void(el[i].className='developer-support-adp-output-off')}else{if(el[i].className=='developer-support-adp-output-off'){void(el[i].className='developer-support-adp-output-on')}};}}
+    multirow append ds_buttons DB \
+        "Toggle DB data collection" \
+        [export_vars -base "${ds_url}set" { {field db} {enabled_p {[expr ![ds_database_enabled_p]]}} {return_url [ad_return_url]} }] \
+        [ad_decode [ds_database_enabled_p] 1 "on" "off"]
 
-    set foot_toggle_url {javascript:void(d=document);void(el=d.getElementsByTagName('div'));for(i=0;i<el.length;i++){if(el[i].className=='developer-support-footer'){void(el[i].className='developer-support-footer-off')}else{if(el[i].className=='developer-support-footer-off'){void(el[i].className='developer-support-footer')}}};}
+    multirow append ds_buttons FRG \
+        "Toggle caching page fragments" \
+        [export_vars -base "${ds_url}set" { {field frag} {enabled_p {[expr ![ds_page_fragment_cache_enabled_p]]}} {return_url [ad_return_url]} }] \
+        [ad_decode [ds_page_fragment_cache_enabled_p] 1 "on" "off"]
 
-    set foot_on off
+    multirow append ds_buttons TRN \
+        "Toggle translation mode" \
+        [export_vars -base "/acs-lang/admin/translator-mode-toggle" { { return_url [ad_return_url] } }] \
+        [ad_decode [lang::util::translator_mode_p] 1 "on" "off"]
 
-    set adp_on [ad_decode $adp_p 1 "on" "off"]
+    multirow append ds_buttons ADP \
+        "Toggle ADP reveal" \
+        {javascript:void(d=document);void(el=d.getElementsByTagName('span'));for(i=0;i<el.length;i++){if(el[i].className=='developer-support-adp-file-on'){void(el[i].className='developer-support-adp-file-off')}else{if(el[i].className=='developer-support-adp-file-off'){void(el[i].className='developer-support-adp-file-on')}}};void(el=d.getElementsByTagName('div'));for(i=0;i<el.length;i++){if(el[i].className=='developer-support-adp-box-on'){void(el[i].className='developer-support-adp-box-off')}else{if(el[i].className=='developer-support-adp-box-off'){void(el[i].className='developer-support-adp-box-on')}};if(el[i].className=='developer-support-adp-output-on'){void(el[i].className='developer-support-adp-output-off')}else{if(el[i].className=='developer-support-adp-output-off'){void(el[i].className='developer-support-adp-output-on')}};}} \
+        [ad_decode [ds_adp_reveal_enabled_p] 1 "on" "off"]
+
+    multirow append ds_buttons FOT \
+        "Toggle Footer display" \
+        {javascript:void(d=document);void(el=d.getElementsByTagName('div'));for(i=0;i<el.length;i++){if(el[i].className=='developer-support-footer'){void(el[i].className='developer-support-footer-off')}else{if(el[i].className=='developer-support-footer-off'){void(el[i].className='developer-support-footer')}}};} \
+        off
+
 
     set oacs_shell_url "${ds_url}shell"
 

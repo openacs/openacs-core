@@ -7,7 +7,7 @@
   <if @gone_p@ false> 
     <if @matches:rowcount@ gt 0>
       <multiple name="matches">
-        <div style="border-bottom: 1px solid black;"><p>@matches.file_links;noquote@ <b>@matches.page@</b> @matches.size@ bytes</p><pre>@matches.excerpt@</pre></div>
+        <div style="border-bottom: 1px solid black;"><p>@matches.file_links;noquote@ <b>@matches.page@</b> @matches.size@ bytes</p><pre>@matches.excerpt;noquote@</pre></div>
       </multiple>
     </if>
     <else> 
