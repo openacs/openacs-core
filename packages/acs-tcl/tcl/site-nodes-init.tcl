@@ -2,7 +2,8 @@ ad_library {
 
   @author rhs@mit.edu
   @creation-date 2000-09-07
-  @cvs-id $Id$
+  @version $Id$
+
 }
 
-site_nodes_sync
+site_node::init_cache
