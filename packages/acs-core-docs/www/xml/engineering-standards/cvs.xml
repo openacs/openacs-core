@@ -326,8 +326,8 @@ ref-timezones search</programlisting>
                 Check out acs-core on the HEAD branch.  (Weird things happen if you add files to a branch but not to HEAD):</para>
             <screen><action>cd /tmp
 cvs -d:ext:cvs.openacs.org:/cvsroot checkout acs-core</action></screen>
-            <para>Copy your package directory from your working directory to this directory.  Make sure not to copy any CVSROOT directories.</para>
-            <screen><action>cp /var/lib/aolserver/<replaceable>service0</replaceable>/packagse/<replaceable>newpackage</replaceable> /tmp/openacs-4/packages</action></screen>
+            <para>Copy your package directory from your working directory to this directory.  Make sure not to copy any CVS directories.</para>
+            <screen><action>cp -r /var/lib/aolserver/<replaceable>service0</replaceable>/packages/<replaceable>newpackage</replaceable> /tmp/openacs-4/packages</action></screen>
             <para>Import the package into the cvs.openacs.org cvs repository:</para>
             <screen><action>cd /tmp/openacs-4/packages/<replaceable>newpackage</replaceable>
 cvs import -m "Initial import of <replaceable>newpackage</replaceable>" openacs-4/packages/newpackage <replaceable>myname</replaceable> <replaceable>0.1d</replaceable></action></screen>
@@ -354,7 +354,20 @@ cvs commit: Rebuilding administrative file database</literallayout>
             <para>See <xref linkend="releasing-package"/></para>
           </listitem>
           </orderedlist>
-          
+        <note>
+          <para>Some packages are already in cvs at <computeroutput>openacs-4/contrib/packages</computeroutput>.  Starting with OpenACS 5.1, we have a Maturity mechanism in the APM which makes the <computeroutput>contrib</computeroutput> directory un-necessary.  If you are working on a <computeroutput>contrib</computeroutput> package, you should move it to <computeroutput>/packages</computeroutput>.  This must be done by an OpenACS administrator.  On cvs.openacs.org:</para>
+          <orderedlist>
+            <listitem>
+              <programlisting>cp -r /cvsroot/openacs-4/contrib/packages/<replaceable>package0</replaceable> /cvsroot/openacs-4/packages</programlisting>
+            </listitem>
+            <listitem>
+              <para>Update the modules file as described above.</para>
+            </listitem>
+            <listitem>
+              <para>Remove the directory from cvs in the old location using <computeroutput>cvs remove</computeroutput>.</para>
+            </listitem>
+          </orderedlist>
+        </note>
       </listitem>
     </orderedlist>
 
