@@ -21,7 +21,6 @@ set content_root \
   [db_string content_root "select content_item.get_root_folder from dual"]
 set template_root \
   [db_string template_root "select content_template.get_root_folder from dual"]
-
 # Serve the page
 
 ns_log notice "RESOLVING URL: $the_root $the_url"

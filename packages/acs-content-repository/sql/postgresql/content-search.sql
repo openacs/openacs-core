@@ -25,6 +25,52 @@ select acs_sc_impl_alias__new(
 	   'TCL'				-- impl_pl
 );
 
+select acs_sc_impl__new(
+	   'FtsContentProvider',		-- impl_contract_name
+           'image',                             -- impl_name
+	   'acs-content-repository'             -- impl_owner_name
+);
+
+select acs_sc_impl_alias__new(
+           'FtsContentProvider',		-- impl_contract_name
+           'image',                             -- impl_name
+	   'datasource',			-- impl_operation_name
+	   'image_search__datasource',          -- impl_alias
+	   'TCL'				-- impl_pl
+);
+
+select acs_sc_impl_alias__new(
+           'FtsContentProvider',		-- impl_contract_name
+           'image',                             -- impl_name
+	   'url',				-- impl_operation_name
+	   'image_search__url',                 -- impl_alias
+	   'TCL'				-- impl_pl
+);
+
+
+select acs_sc_impl__new(
+	   'FtsContentProvider',		-- impl_contract_name
+           'content_template',                  -- impl_name
+	   'acs-content-repository'             -- impl_owner_name
+);
+
+select acs_sc_impl_alias__new(
+           'FtsContentProvider',		-- impl_contract_name
+           'content_template',                  -- impl_name
+	   'datasource',			-- impl_operation_name
+	   'template_search__datasource',       -- impl_alias
+	   'TCL'				-- impl_pl
+);
+
+select acs_sc_impl_alias__new(
+           'FtsContentProvider',		-- impl_contract_name
+           'content_template',                  -- impl_name
+	   'url',				-- impl_operation_name
+	   'template_search__url',              -- impl_alias
+	   'TCL'				-- impl_pl
+);
+
+
 -- triggers queue search interface to modify search index after content
 -- changes.
 
