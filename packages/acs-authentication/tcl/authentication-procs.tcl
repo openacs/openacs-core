@@ -638,7 +638,7 @@ ad_proc -public auth::password::recover_password {
     {-authority_id:required}
     {-username:required}
 } { 
-    Handles forgotten passwords.
+    Handles forgotten passwords.  Attempts to retrieve a password; if not possibe, attempts to reset a password.  If it succeeds, it emails the user.  For all outcomes, it returns a message to be displayed.
 
     @param authority_id The ID of the authority that the user is trying to log into.
 
