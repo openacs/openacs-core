@@ -28,7 +28,9 @@ namespace eval notification::email {
             # This may not find anything, but at least it's worth a try
             if { ![regexp {^(https?://)?(www\.)?([^/]*)} [ad_url] match ignore ignore domain] } {
                 ns_log Warning "notification::email::address_domain: Couldn't find an email domain for notifications."
-            }
+            } else {
+		regsub -nocase {(.*):.*} $domain "\\1" domain
+	    }
         }
         return $domain
     }
