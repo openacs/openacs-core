@@ -2,7 +2,7 @@
 <queryset>
 <rdbms><type>postgresql</type><version>7.1</version></rdbms>
 
-<fullquery name=".community-core-procs.ad_user_new.user_insert">
+<fullquery name="ad_user_new.user_insert">
 <querytext>
 select acs__add_user(
 	:user_id,

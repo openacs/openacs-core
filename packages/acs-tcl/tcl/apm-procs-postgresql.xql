@@ -2,7 +2,7 @@
 <queryset>
 <rdbms><type>postgresql</type><version>7.1</version></rdbms>
 
-<fullquery name="acs.acs-tcl.tcl.apm-procs.apm_parameter_register.parameter_register">
+<fullquery name="apm_parameter_register.parameter_register">
 <querytext>
 select apm__register_parameter (
        NULL,
@@ -17,7 +17,7 @@ select apm__register_parameter (
 </querytext>
 </fullquery>
 
-<fullquery name="acs.acs-tcl.tcl.apm-procs.apm_parameter_register.apm_parameter_cache_update">
+<fullquery name="apm_parameter_register.apm_parameter_cache_update">
 <querytext>
 select v.package_id, p.parameter_name, coalesce(p.default_value, v.attr_value) as attr_value
 from apm_parameters p LEFT JOIN apm_parameter_values v using (parameter_id)
@@ -25,7 +25,7 @@ where p.package_key = :package_key
 </querytext>
 </fullquery>
 
-<fullquery name="acs.acs-tcl.tcl.apm-procs.apm_interface_add.interface_add">
+<fullquery name="apm_interface_add.interface_add">
 <querytext>
 select apm_package_version__add_interface(
     :interface_id,
@@ -36,7 +36,7 @@ select apm_package_version__add_interface(
 </querytext>
 </fullquery>
 
-<fullquery name="acs.acs-tcl.tcl.apm-procs.apm_interface_remove.interface_remove">
+<fullquery name="apm_interface_remove.interface_remove">
 <querytext>
 select apm_package_version__remove_interface(
              :interface_id
@@ -44,7 +44,7 @@ select apm_package_version__remove_interface(
 </querytext>
 </fullquery>
 
-<fullquery name="acs.acs-tcl.tcl.apm-procs.apm_dependency_add.dependency_add">
+<fullquery name="apm_dependency_add.dependency_add">
 <querytext>
 select apm_package_version__add_dependency(
     :dependency_id,

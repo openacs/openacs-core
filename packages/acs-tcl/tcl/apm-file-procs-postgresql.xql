@@ -2,7 +2,7 @@
 <queryset>
 <rdbms><type>postgresql</type><version>7.1</version></rdbms>
 
-<fullquery name="acs.acs-tcl.tcl.apm-file-procs.apm_file_add.apm_file_add">
+<fullquery name="apm_file_add.apm_file_add">
 <querytext>
 select apm_package_version__add_file(
 	NULL,
@@ -14,7 +14,7 @@ select apm_package_version__add_file(
 </querytext>
 </fullquery>
 
-<fullquery name="acs.acs-tcl.tcl.apm-file-procs.apm_file_remove.apm_file_remove">
+<fullquery name="apm_file_remove.apm_file_remove">
 <querytext>
 select apm_package_version__remove_file (
       :path,

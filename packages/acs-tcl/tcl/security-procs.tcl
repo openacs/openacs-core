@@ -86,7 +86,9 @@ proc_doc sec_handler {} {
                 set new_user_id [lindex [split [ad_get_signed_cookie "ad_user_login_secure"] {,}] 0]
             }
 	}
+	# ns_log Notice "OACS= setting up session"
 	sec_setup_session $new_user_id
+	# ns_log Notice "OACS= done setting up session"
     } else {
 	# The session already exists and is valid.
 	set cookie_data [split [lindex $cookie_list 0] {,}]
@@ -210,11 +212,19 @@ ad_proc -private sec_setup_session { new_user_id } {
 
     # figure out the session id, if we don't already have it
     if { [empty_string_p $session_id]} {
+
+	# ns_log Notice "OACS= empty session_id"
+
 	set session_id [sec_allocate_session]
         # if we have a user on an newly allocated session, update
         # users table
+
+	# ns_log Notice "OACS= newly allocated session $session_id"
+
         if { $new_user_id != 0 } {
+	    # ns_log Notice "OACS= about to update user session info, user_id NONZERO"
             sec_update_user_session_info $new_user_id
+	    # ns_log Notice "OACS= done updating user session info, user_id NONZERO"
         }
     } else {
         # $session_id is an active verified session
@@ -242,8 +252,12 @@ ad_proc -private sec_setup_session { new_user_id } {
     # su, set the session_id global var, and then generate the cookie
     ad_conn -set user_id $new_user_id
     ad_conn -set session_id $session_id
+    
+    # ns_log Notice "OACS= about to generate session id cookie"
 
     sec_generate_session_id_cookie
+
+    # ns_log Notice "OACS= done generating session id cookie"
 
     if { [ad_secure_conn_p] } {
         # this is a secure session, so the browser needs
@@ -403,6 +417,7 @@ ad_proc -private sec_generate_secure_token_cookie { } {
 ad_proc -private sec_generate_session_id_cookie {} { Sets the ad_session_id cookie based on global variables. } {
     set user_id [ad_conn user_id]
     set session_id [ad_conn session_id]
+    ns_log Notice "Security: [ns_time] sec_generate_session_id_cookie setting $session_id, $user_id."
     ns_log Debug "Security: [ns_time] sec_generate_session_id_cookie setting $session_id, $user_id."
     ad_set_signed_cookie -replace t -max_age [sec_session_timeout] \
 	    "ad_session_id" "$session_id,$user_id"

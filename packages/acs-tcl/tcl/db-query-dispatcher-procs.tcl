@@ -154,15 +154,8 @@ proc db_qd_get_fullname {local_name {added_stack_num 1}} {
     # We do a check to see if we already have a fullname.
     # Since the DB procs are a bit incestuous, this might get
     # called more than once. DAMMIT! (ben)
-    if {[regexp {^acs\.} $local_name all]} {
+    if {![db_qd_relative_path_p $local_name]} {
 	return $local_name
-    }
-
-    # Test stuff (ben)
-    for {set i 0} {$i < 5} {incr i} {
-	if {[catch {ns_log Notice "QD = LEVEL $i = [info level [expr "0 - $i"]]"} errmsg]} {
-	    break
-	}
     }
 
     # Get the proc name being executed.
@@ -200,9 +193,11 @@ proc db_qd_get_fullname {local_name {added_stack_num 1}} {
 	ns_log Notice "QD = package key is $package_key and rest is $rest"
 
 	if {$real_url_p} {
-	    set full_name "acs.${package_key}.www${rest}.${local_name}"
+	    set full_name [db_qd_make_absolute_path "${package_key}.www${rest}." $local_name]
+	    # set full_name "acs.${package_key}.www${rest}.${local_name}"
 	} else {
-	    set full_name "acs.${package_key}${rest}.${local_name}"
+	    set full_name [db_qd_make_absolute_path "${package_key}${rest}." $local_name]
+	    # set full_name "acs.${package_key}${rest}.${local_name}"
 	}
     } else {
 	# Let's find out where this Tcl proc is defined!!
@@ -218,7 +213,7 @@ proc db_qd_get_fullname {local_name {added_stack_num 1}} {
 	# return a bogus proc name
 	if {![nsv_exists api_proc_doc $proc_name]} {
 	    ns_log Notice "QD: there is no documented proc with name $proc_name -- we used default SQL"
-	    return "acs.NULL"
+	    return [db_qd_null_path]
 	}
 
 	array set doc_elements [nsv_get api_proc_doc $proc_name]
@@ -239,9 +234,11 @@ proc db_qd_get_fullname {local_name {added_stack_num 1}} {
 	ns_log Notice "TEMP - QD: proc_name is $proc_name"
 	ns_log Notice "TEMP - QD: local_name is $local_name"
 
-	set full_name "acs.$rest.${proc_name}.${local_name}"
+	# set full_name "acs.$rest.${proc_name}.${local_name}"
+	set full_name [db_qd_make_absolute_path "${rest}.${proc_name}." $local_name]
     }
 
+    ns_log Notice "QD= generated fullname of $full_name"
     return $full_name
 }
 
@@ -332,8 +329,8 @@ proc db_qd_internal_load_queries {file_pointer file_tag} {
 	ns_log Notice "QD = loaded one query - [db_fullquery_get_name $one_query]"
 
 	# Relative Path for the Query
-	if {[string range [db_fullquery_get_name $one_query] 0 0] == "."} {
-	    set new_name "acs.${queryname_root}[db_fullquery_get_name $one_query]"
+	if {[db_qd_relative_path_p [db_fullquery_get_name $one_query]]} {
+	    set new_name [db_qd_make_absolute_path $queryname_root [db_fullquery_get_name $one_query]]
 
 	    set new_fullquery [db_fullquery_create \
 		    $new_name \
@@ -423,8 +420,10 @@ proc db_qd_internal_get_queryname_root {relative_path} {
     # remove the prepended "/packages/" string
     regsub {^\/?packages\/} $relative_path {} relative_path
 
-    # remove the last component, the file name, since we're just looking for the root path
-    regsub {/[^/]*$} $relative_path {} relative_path
+    # remove the last chunk of the file name, since we're just looking for the root path
+    # NOTE: THIS MAY NEED BETTER ABSTRACTION, since this assumes a naming scheme
+    # of -rdbms.XXX (ben)
+    regsub {\-[^/-]*$} $relative_path {} relative_path
 
     # Change all . to :
     regsub -all {\.} $relative_path {:} relative_path    
@@ -432,7 +431,8 @@ proc db_qd_internal_get_queryname_root {relative_path} {
     # Change all / to . (hah, no reference to News for Nerds)
     regsub -all {/} $relative_path {.} relative_path
 
-    return $relative_path
+    # We append a "." at the end, since we want easy concatenation
+    return "${relative_path}."
 }
 
 ##
@@ -568,4 +568,36 @@ proc db_rdbms_parse_from_xml_node {rdbms_node} {
     ns_log Notice "QD/PARSER = RDBMS parser - $type - $version"
 
     return [db_rdbms_create $type $version]
+}
+
+
+##
+## RELATIVE AND ABSOLUTE QUERY PATHS
+##
+
+# The token that indicates the root of all queries
+proc db_qd_root_path {} {
+    return "dbqd."
+}
+
+proc db_qd_null_path {} {
+    return "[db_qd_root_path].NULL"
+}
+
+# Check if the path is relative
+proc db_qd_relative_path_p {path} {
+    set root_path [db_qd_root_path]
+    set root_path_length [string length $root_path]
+
+    # Check if the path starts with the root
+    if {[string range $path 0 [expr "$root_path_length - 1"]] == $root_path} {
+	return 0
+    } else {
+	return 1
+    }
+}
+
+# Make a path absolute
+proc db_qd_make_absolute_path {relative_root suffix} {
+    return "[db_qd_root_path]${relative_root}$suffix"
 }

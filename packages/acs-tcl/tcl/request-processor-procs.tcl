@@ -408,7 +408,9 @@ ad_proc -private rp_filter { why } {
     # session-level variables such as user_id, session_id, etc. we can
     # call sec_handler at this point because the previous return
     # statements are all error-throwing cases or redirects.
+    # ns_log Notice "OACS= RP start"
     sec_handler
+    # ns_log Notice "OACS= RP end"
 
     #####
     #

@@ -2,7 +2,7 @@
 <queryset>
 <rdbms><type>postgresql</type><version>7.1</version></rdbms>
 
-<fullquery name="acs.acs-tcl.tcl.apm-install-procs.apm_dependency_provided_p.apm_dependency_check">
+<fullquery name="apm_dependency_provided_p.apm_dependency_check">
 <querytext>
 select apm_package_version__version_name_greater(service_version, :dependency_version) as version_p
 	from apm_package_dependencies d, apm_package_types a, apm_package_versions v
@@ -14,13 +14,13 @@ select apm_package_version__version_name_greater(service_version, :dependency_ve
 </querytext>
 </fullquery>
 
-<fullquery name="acs.acs-tcl.tcl.apm-install-procs.apm_version_enable.apm_package_version_enable">
+<fullquery name="apm_version_enable.apm_package_version_enable">
 <querytext>
 SELECT apm_package_version__enable(:version_id);
 </querytext>
 </fullquery>
 
-<fullquery name="acs.acs-tcl.tcl.apm-install-procs.apm_package_register.application_register">
+<fullquery name="apm_package_register.application_register">
 <querytext>
 SELECT apm__register_application (
        :package_key,
@@ -33,7 +33,7 @@ SELECT apm__register_application (
 </querytext>
 </fullquery>
 
-<fullquery name="acs.acs-tcl.tcl.apm-install-procs.apm_package_register.service_register">
+<fullquery name="apm_package_register.service_register">
 <querytext>
 SELECT apm__register_service (
        :package_key,
@@ -46,7 +46,7 @@ SELECT apm__register_service (
 </querytext>
 </fullquery>
 
-<fullquery name="acs.acs-tcl.tcl.apm-install-procs.apm_package_install.version_exists_p">
+<fullquery name="apm_package_install.version_exists_p">
 <querytext>
 select version_id 
 from apm_package_versions 
@@ -55,7 +55,7 @@ and version_id = apm_package__highest_version(:package_key)
 </querytext>
 </fullquery>
 
-<fullquery name="acs.acs-tcl.tcl.apm-install-procs.apm_package_install_version.version_insert">
+<fullquery name="apm_package_install_version.version_insert">
 <querytext>
 select apm_package_version__new(
        :version_id,
@@ -73,7 +73,7 @@ select apm_package_version__new(
 </querytext>
 </fullquery>
 
-<fullquery name="acs.acs-tcl.tcl.apm-install-procs.apm_package_install.package_instantiate_mount">
+<fullquery name="apm_package_install.package_instantiate_mount">
 <querytext>
 select apm_package__new(
 	  NULL,
