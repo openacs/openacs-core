@@ -487,7 +487,9 @@ ad_proc -private apm_package_deinstall {
 ad_proc -private apm_package_delete {
     { 
 	-callback apm_dummy_callback
+
     }
+    {-remove_files:boolean}
     package_key
 } {
     
@@ -504,12 +506,13 @@ ad_proc -private apm_package_delete {
 	end;
     }
     # Remove the files from the filesystem
-    if { [catch { 
-	file delete -force [acs_package_root_dir $package_key] 
-    } error] } {
-	apm_callback_and_log $callback "<li>Unable to delete [acs_package_root_dir $package_key]:<font color=red>$error</font>"
+    if {$remove_files_p == 1} {
+	if { [catch { 
+	    file delete -force [acs_package_root_dir $package_key] 
+	} error] } {
+	    apm_callback_and_log $callback "<li>Unable to delete [acs_package_root_dir $package_key]:<font color=red>$error</font>"
+	}
     }
-
     apm_callback_and_log $callback "<p>Done."
 }
 
