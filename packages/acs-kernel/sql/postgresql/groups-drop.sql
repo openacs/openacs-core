@@ -3,7 +3,7 @@
 --
 -- @author rhs@mit.edu
 -- @creation-date 2000-08-22
--- @cvs-id groups-drop.sql,v 1.5.2.1 2001/01/12 23:01:01 mbryzek Exp
+-- @cvs-id $Id$
 --
 \t
 select drop_package('acs_group');

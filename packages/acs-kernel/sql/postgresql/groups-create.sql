@@ -3,7 +3,7 @@
 --
 -- @author rhs@mit.edu
 -- @creation-date 2000-08-22
--- @cvs-id groups-create.sql,v 1.16.2.3 2001/01/19 00:50:37 mbryzek Exp
+-- @cvs-id $Id$
 --
 
 ----------------------------

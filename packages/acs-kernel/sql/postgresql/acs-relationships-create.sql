@@ -7,7 +7,7 @@
 --
 -- @author rhs@mit.edu
 --
--- @cvs-id acs-relationships-create.sql,v 1.7.2.2 2001/01/12 23:03:26 mbryzek Exp
+-- @cvs-id $Id$
 --
 
 ----------------------------------------------------------------

@@ -3,7 +3,7 @@
 --
 -- @author Lars Pind (lars@pinds.com)
 -- @creation-date 2000-22-18
--- @cvs-id journal-create.sql,v 1.7.2.1 2000/12/08 00:38:24 yon Exp
+-- @cvs-id $Id$
 --
 -- Copyright (C) 1999-2000 ArsDigita Corporation
 --

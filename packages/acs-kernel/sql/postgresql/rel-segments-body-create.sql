@@ -3,7 +3,7 @@
 --
 -- @author Oumi Mehrotra oumi@arsdigita.com
 -- @creation-date 2000-11-22
--- @cvs-id rel-segments-body-create.sql,v 1.1.4.1 2001/01/12 22:58:33 mbryzek Exp
+-- @cvs-id $Id$
 
 -- Copyright (C) 1999-2000 ArsDigita Corporation
 -- This is free software distributed under the terms of the GNU Public

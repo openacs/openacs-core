@@ -10,7 +10,7 @@
 --
 -- @creation-date 2000-05-18
 --
--- @cvs-id acs-objects-create.sql,v 1.15.2.2 2001/01/12 22:54:24 oumi Exp
+-- @cvs-id $Id$
 --
 
 -----------------------------

@@ -5,7 +5,7 @@
 --
 -- @author Michael Yoon (michael@arsdigita.com)
 -- @creation-date 2000-07-27
--- @cvs-id security-drop.sql,v 1.9.2.1 2000/12/07 15:02:15 richardl Exp
+-- @cvs-id $Id$
 --
 
 drop view sec_id_seq;
