@@ -33,7 +33,10 @@ ad_proc -public ad_text_to_html {
     @author Lars Pind (lars@pinds.com)
     @creation-date 19 July 2000
 } {
-
+    if { [empty_string_p $text] } {
+        return {}
+    }
+    
     if { !$no_links_p } {
 	# We start by putting a space in front so our URL/email highlighting will work
 	# for URLs/emails right in the beginning of the text.
@@ -121,7 +124,7 @@ ad_proc -public util_convert_line_breaks_to_html {
     regsub -all {[ \t]*\n} $text "\n" text
     
     # Wrap P's around paragraphs
-    set text "<p>$text</p>"
+    set text "<p style=\"margin-top: 0px;\">$text</p>"
     regsub -all {([^\n\s])\n\n([^\n\s])} $text {\1</p><p>\2} text
 
     # Convert _single_ CRLF's to <br>'s to preserve line breaks
