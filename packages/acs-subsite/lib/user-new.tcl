@@ -4,6 +4,7 @@
 #                   for administrators who create other users (0)?
 # next_url        - Any url to redirect to after the form has been submitted. The
 #                   variables user_id, password, and account_messages will be added to the URL. Optional.
+# email           - Prepopulate the register form with given email. Optional.
 
 # Set default parameter values
 array set parameter_defaults {
