@@ -1,44 +1,44 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Install AOLserver 3.3oacs1</title><meta name="generator" content="DocBook XSL Stylesheets V1.58.1"><link rel="home" href="index.html" title="OpenACS Documentation"><link rel="up" href="unix-install.html" title="Chapter 3. Installing on Unix/Linux"><link rel="previous" href="postgres.html" title="Install PostGreSQL 7.2.4"><link rel="next" href="openacs.html" title="Install OpenACS 4.6.3"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="images/alex.jpg" border="0"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="postgres.html">Prev</a> </td><th width="60%" align="center">Chapter 3. Installing on Unix/Linux</th><td width="20%" align="right"> <a accesskey="n" href="openacs.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><h2 class="title" style="clear: both"><a name="aolserver"></a>Install AOLserver 3.3oacs1</h2></div></div><div class="authorblurb"><p>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Install AOLserver 3.3oacs1</title><meta name="generator" content="DocBook XSL Stylesheets V1.60.1"><link rel="home" href="index.html" title="OpenACS Documentation"><link rel="up" href="unix-install.html" title="Chapter 3. Installing on Unix/Linux"><link rel="previous" href="postgres.html" title="Install PostGreSQL 7.2.4"><link rel="next" href="openacs.html" title="Install OpenACS 4.6.3"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="images/alex.jpg" border="0"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="postgres.html">Prev</a> </td><th width="60%" align="center">Chapter 3. Installing on Unix/Linux</th><td width="20%" align="right"> <a accesskey="n" href="openacs.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="aolserver"></a>Install AOLserver 3.3oacs1</h2></div></div><div></div></div><div class="authorblurb"><p>
     by <a href="mailto:vinod@kurup.com" target="_top">Vinod Kurup</a><br>
           OpenACS docs are written by the named authors, and may be edited
           by OpenACS documentation staff.
         </p></div><p>This page assumes you have downloaded aolserver to  to 
-<tt>/tmp/aolserver3.3oacs1.tar.gz</tt>.  If not,
+<tt class="computeroutput">/tmp/aolserver3.3oacs1.tar.gz</tt>.  If not,
 <a href="individual-programs.html#source-aolserver">get it</a>.  It also assumes you are following the 4.6.3-P or 4.6.3-O Reference Platform installation, using Red Hat 8.0.  Places where other systems are different are noted.</p><div class="orderedlist"><ol type="1"><li><p>
-      As <tt>root</tt>, untar
-      <tt>aolserver3.3oacs1.tar.gz</tt>
-      into <tt>/usr/local/src</tt>.
+      As <tt class="computeroutput">root</tt>, untar
+      <tt class="computeroutput">aolserver3.3oacs1.tar.gz</tt>
+      into <tt class="computeroutput">/usr/local/src</tt>.
 
-    </p><pre class="screen">[root@yourserver root]# <b><tt>cd /usr/local/src</tt></b>
-[root@yourserver src]# <b><tt>tar xzf /tmp/aolserver3.3oacs1.tar.gz</tt></b>
+    </p><pre class="screen">[root@yourserver root]# <b class="userinput"><tt>cd /usr/local/src</tt></b>
+[root@yourserver src]# <b class="userinput"><tt>tar xzf /tmp/aolserver3.3oacs1.tar.gz</tt></b>
 [root@yourserver src]#
-<pre class="action">cd /usr/local/src
-tar xzf /tmp/aolserver3.3oacs1.tar.gz</pre></pre></li><li><p><a name="install-aolserver-compile"></a>Compile and install AOLserver.  First, prepare the installation directory and the source code.  The message about BUILD-MODULES can be ignored.</p><pre class="screen">root@yourserver root]# <b><tt>mkdir -p /usr/local/aolserver</tt></b>
-[root@yourserver root]# <b><tt>cd /usr/local/src/aolserver</tt></b>
-[root@yourserver aolserver]# <b><tt>./conf-clean</tt></b>
+<pre class="action"><span class="action">cd /usr/local/src
+tar xzf /tmp/aolserver3.3oacs1.tar.gz</span></pre></pre></li><li><p><a name="install-aolserver-compile"></a>Compile and install AOLserver.  First, prepare the installation directory and the source code.  The message about BUILD-MODULES can be ignored.</p><pre class="screen">root@yourserver root]# <b class="userinput"><tt>mkdir -p /usr/local/aolserver</tt></b>
+[root@yourserver root]# <b class="userinput"><tt>cd /usr/local/src/aolserver</tt></b>
+[root@yourserver aolserver]# <b class="userinput"><tt>./conf-clean</tt></b>
 cat: BUILD-MODULES: No such file or directory
 Done.
-[root@yourserver aolserver]#<pre class="action">mkdir -p /usr/local/aolserver
+[root@yourserver aolserver]#<pre class="action"><span class="action">mkdir -p /usr/local/aolserver
 cd /usr/local/src/aolserver
-./conf-clean</pre></pre><p>
+./conf-clean</span></pre></pre><p>
           If you are using Oracle, edit
-          <tt>conf-db</tt> and change
-          <tt>postgresql</tt> to
-          <tt>oracle</tt>, or to the word
-          <tt>both</tt> if you want both drivers
+          <tt class="computeroutput">conf-db</tt> and change
+          <tt class="computeroutput">postgresql</tt> to
+          <tt class="computeroutput">oracle</tt>, or to the word
+          <tt class="computeroutput">both</tt> if you want both drivers
           installed.  In order to get nsoracle to compile, you may
           need to su - oracle, and then su (without the -) root to set
           the environment variables properly.
-        </p><p><tt>conf-inst</tt> should contain the
+        </p><p><tt class="computeroutput">conf-inst</tt> should contain the
           location where AOLserver is to be installed.  Overwrite the
-          tarball's default value with our default value, <tt>/usr/local/aolserver</tt>:</p><pre class="screen">[root@yourserver aolserver]# <b><tt>echo &quot;/usr/local/aolserver&quot; &gt; conf-inst</tt></b>
-[root@yourserver aolserver]#</pre><p><tt>conf-make</tt> should contain the
+          tarball's default value with our default value, <tt class="computeroutput">/usr/local/aolserver</tt>:</p><pre class="screen">[root@yourserver aolserver]# <b class="userinput"><tt>echo &quot;/usr/local/aolserver&quot; &gt; conf-inst</tt></b>
+[root@yourserver aolserver]#</pre><p><tt class="computeroutput">conf-make</tt> should contain the
           name of the GNU Make command on your system. It defaults to
-          <tt>gmake</tt>.</p><p>Set an environment variable that the nspostgres driver
+          <tt class="computeroutput">gmake</tt>.</p><p>Set an environment variable that the nspostgres driver
       Makefile needs to compile correctly and run
-          <tt>conf</tt>, which compiles
-          AOLserver, the default modules, and the database driver, and installs them.</p><pre class="screen">[root@yourserver aolserver]# <b><tt>export POSTGRES=/usr/local/pgsql; ./conf</tt></b>
+          <tt class="computeroutput">conf</tt>, which compiles
+          AOLserver, the default modules, and the database driver, and installs them.</p><pre class="screen">[root@yourserver aolserver]# <b class="userinput"><tt>export POSTGRES=/usr/local/pgsql; ./conf</tt></b>
 Building in /usr/local/aolserver
 with the following modules:
 aolserver
@@ -60,55 +60,55 @@ Creating  ...
 ==================================================================
 Done Building Sat Mar  8 10:31:35 PST 2003
 [root@yourserver aolserver]# </pre><p>
-          This takes about 5 minutes. It builds aolserver, several modules, and the database driver.  (Upgraders, note that the postgres database driver has changed from postgres.so to nspostgres.so).  All of the results are logged to files in <tt>/usr/local/src/aolserver/log</tt>.  If you run into problems running AOLserver, check these files for build errors.</p></li><li><p>Add a database-specific wrapper script.  This script
+          This takes about 5 minutes. It builds aolserver, several modules, and the database driver.  (Upgraders, note that the postgres database driver has changed from postgres.so to nspostgres.so).  All of the results are logged to files in <tt class="computeroutput">/usr/local/src/aolserver/log</tt>.  If you run into problems running AOLserver, check these files for build errors.</p></li><li><p>Add a database-specific wrapper script.  This script
 	  sets database environment variables before starting
 	  AOLserver; this allows the AOLserver instance can
 	  communicate with the database.  There is one script each for
 	  Oracle and PostGreSQL.  They don't conflict, so if you plan
-	  to use both databases, install both.</p><div class="itemizedlist"><ul type="disc"><li><p>Oracle</p><pre class="screen">[root@yourserver aolserver]# <b><tt>cd /usr/local/aolserver/bin</tt></b>
-[root@yourserver bin]# <b><tt>cp /tmp/openacs-4.6.3/packages/acs-core-docs/www/files/nsd-oracle.txt ./nsd-oracle</tt></b>
-[root@yourserver bin]# <b><tt>chmod 750 nsd-oracle</tt></b>
+	  to use both databases, install both.</p><div class="itemizedlist"><ul type="disc"><li><p>Oracle</p><pre class="screen">[root@yourserver aolserver]# <b class="userinput"><tt>cd /usr/local/aolserver/bin</tt></b>
+[root@yourserver bin]# <b class="userinput"><tt>cp /tmp/openacs-4.6.3/packages/acs-core-docs/www/files/nsd-oracle.txt ./nsd-oracle</tt></b>
+[root@yourserver bin]# <b class="userinput"><tt>chmod 750 nsd-oracle</tt></b>
 [root@yourserver bin]#
-<pre class="action">cd /usr/local/aolserver/bin
+<pre class="action"><span class="action">cd /usr/local/aolserver/bin
 cp /tmp/openacs-4.6.3/packages/acs-core-docs/www/files/nsd-oracle.txt ./nsd-oracle
-chmod 750 nsd-oracle</pre></pre></li><li><p>PostGreSQL</p><pre class="screen">[root@yourserver aolserver]# <b><tt>cd /usr/local/aolserver/bin</tt></b>
-[root@yourserver bin]# <b><tt>cp /tmp/openacs-4.6.3/packages/acs-core-docs/www/files/nsd-postgres.txt ./nsd-postgres</tt></b>
-[root@yourserver bin]# <b><tt>chmod 755 nsd-postgres</tt></b>
+chmod 750 nsd-oracle</span></pre></pre></li><li><p>PostGreSQL</p><pre class="screen">[root@yourserver aolserver]# <b class="userinput"><tt>cd /usr/local/aolserver/bin</tt></b>
+[root@yourserver bin]# <b class="userinput"><tt>cp /tmp/openacs-4.6.3/packages/acs-core-docs/www/files/nsd-postgres.txt ./nsd-postgres</tt></b>
+[root@yourserver bin]# <b class="userinput"><tt>chmod 755 nsd-postgres</tt></b>
 [root@yourserver bin]#
-<pre class="action">cd /usr/local/aolserver/bin
+<pre class="action"><span class="action">cd /usr/local/aolserver/bin
 cp /tmp/openacs-4.6.3/packages/acs-core-docs/www/files/nsd-postgres.txt ./nsd-postgres
-chmod 755 nsd-postgres</pre></pre></li></ul></div></li><li><p>OPTIONAL - install nsopenssl.  This AOLserver module
+chmod 755 nsd-postgres</span></pre></pre></li></ul></div></li><li><p>OPTIONAL - install nsopenssl.  This AOLserver module
           is required if you want people to connect to your site via
           https.  These commands compile nsopenssl and install it,
           along with a tcl helper script to handle https connections.
           You will also need ssl certificates.  Because those should
           be different for each server service, you won't need <a href="openacs.html#ssl-certificates">those instructions</a> until
           later.  You will need the <a href="individual-programs.html#nsopenssl-download">nsopenssl tarball</a> in
-          <tt>/tmp</tt>.</p><p>(Red Hat 9 note: see <a href="http://openacs.org/forums/message-view?message_id=92882" target="_top">this
-          thread</a> for details on compiling nsopenssl.)</p><pre class="screen">[root@yourserver bin]#<b><tt> cd /usr/local/src/aolserver</tt></b>
-[root@yourserver aolserver]# <b><tt>tar xzf /tmp/nsopenssl-2.1.tar.gz</tt></b>
-[root@yourserver aolserver]# <b><tt>cd nsopenssl-2.1</tt></b>
-[root@yourserver nsopenssl-2.1]# <b><tt>make OPENSSL=/usr/local/ssl</tt></b>
+          <tt class="computeroutput">/tmp</tt>.</p><p>(Red Hat 9 note: see <a href="http://openacs.org/forums/message-view?message_id=92882" target="_top">this
+          thread</a> for details on compiling nsopenssl.)</p><pre class="screen">[root@yourserver bin]#<b class="userinput"><tt> cd /usr/local/src/aolserver</tt></b>
+[root@yourserver aolserver]# <b class="userinput"><tt>tar xzf /tmp/nsopenssl-2.1.tar.gz</tt></b>
+[root@yourserver aolserver]# <b class="userinput"><tt>cd nsopenssl-2.1</tt></b>
+[root@yourserver nsopenssl-2.1]# <b class="userinput"><tt>make OPENSSL=/usr/local/ssl</tt></b>
 gcc -I/usr/local/ssl/include -I../aolserver/include -D_REENTRANT=1 -DNDEBUG=1 -g -fPIC -Wall -Wno-unused -mcpu=i686 -DHAVE_CMMSG=1 -DUSE_FIONREAD=1 -DHAVE_COND_EINTR=1   -c -o nsopenssl.o nsopenssl.c
 <span class="emphasis"><em>(many lines omitted)</em></span>
 gcc -shared -nostartfiles -o nsopenssl.so nsopenssl.o config.o init.o ssl.o thread.o tclcmds.o -L/usr/local/ssl/lib -lssl -lcrypto
-[root@yourserver nsopenssl-2.1]# <b><tt>cp nsopenssl.so /usr/local/aolserver/bin</tt></b>
-[root@yourserver nsopenssl-2.1]# <b><tt>cp https.tcl /usr/local/aolserver/modules/tcl/</tt></b>
+[root@yourserver nsopenssl-2.1]# <b class="userinput"><tt>cp nsopenssl.so /usr/local/aolserver/bin</tt></b>
+[root@yourserver nsopenssl-2.1]# <b class="userinput"><tt>cp https.tcl /usr/local/aolserver/modules/tcl/</tt></b>
 [root@yourserver nsopenssl-2.1]#
-<pre class="action">cd /usr/local/src/aolserver
+<pre class="action"><span class="action">cd /usr/local/src/aolserver
 tar xzf /tmp/nsopenssl-2.1.tar.gz 
 cd nsopenssl-2.1 
 make OPENSSL=/usr/local/ssl 
 cp nsopenssl.so /usr/local/aolserver/bin 
-cp https.tcl /usr/local/aolserver/modules/tcl/</pre></pre><p>For Debian (<a href="http://openacs.org/forums/message-view?message_id=93854" target="_top">more
-      information</a>):</p><pre class="screen"><pre class="action">apt-get install libssl-dev
-make OPENSSL=/usr/lib/ssl</pre></pre></li><li><p><a name="install-openfts"></a>OPTIONAL - install OpenFTS.  If you want full text search,
+cp https.tcl /usr/local/aolserver/modules/tcl/</span></pre></pre><p>For Debian (<a href="http://openacs.org/forums/message-view?message_id=93854" target="_top">more
+      information</a>):</p><pre class="screen"><pre class="action"><span class="action">apt-get install libssl-dev
+make OPENSSL=/usr/lib/ssl</span></pre></pre></li><li><p><a name="install-openfts"></a>OPTIONAL - install OpenFTS.  If you want full text search,
       and you are running PostGreSQL, install this module to support
       FTS.  You will need the <a href="individual-programs.html#openfts-download">openfts
-      tarball</a> in <tt>/tmp</tt>.</p><div class="orderedlist"><ol type="a"><li><p>Install Tsearch.  This is a PostGreSQL module that
-	  OpenFTS requires.</p><pre class="screen">[root@yourserver root]# <b><tt>su - postgres</tt></b>
-[postgres@yourserver pgsql]$ <b><tt>cd /usr/local/src/postgresql-7.2.4/contrib/tsearch/</tt></b>
-[postgres@yourserver tsearch]$ <b><tt>make</tt></b>
+      tarball</a> in <tt class="computeroutput">/tmp</tt>.</p><div class="orderedlist"><ol type="a"><li><p>Install Tsearch.  This is a PostGreSQL module that
+	  OpenFTS requires.</p><pre class="screen">[root@yourserver root]# <b class="userinput"><tt>su - postgres</tt></b>
+[postgres@yourserver pgsql]$ <b class="userinput"><tt>cd /usr/local/src/postgresql-7.2.4/contrib/tsearch/</tt></b>
+[postgres@yourserver tsearch]$ <b class="userinput"><tt>make</tt></b>
 sed 's,MODULE_PATHNAME,$libdir/tsearch,g' tsearch.sql.in &gt;tsearch.sql
 /usr/bin/flex  -8 -Ptsearch_yy -o'parser.c' parser.l
 (many lines omitted)
@@ -123,34 +123,34 @@ mkdir /usr/local/pgsql/doc/contrib
 logout
 
 [root@yourserver root]#
-<pre class="action">su - postgres
+<pre class="action"><span class="action">su - postgres
 cd /usr/local/src/postgresql-7.2.4/contrib/tsearch
 make
 make install
-exit</pre></pre></li><li><p>Unpack the OpenFTS tarball and compile and install
-              the driver.</p><pre class="screen">[root@yourserver root]# <b><tt>cd /usr/local/src</tt></b>
-[root@yourserver src]# <b><tt>tar xzf /tmp/Search-OpenFTS-tcl-0.3.2.tar.gz</tt></b>
-[root@yourserver src]# <b><tt>cd /usr/local/src/Search-OpenFTS-tcl-0.3.2/</tt></b>
-[root@yourserver Search-OpenFTS-tcl-0.3.2]# <b><tt>./configure --with-aolserver-src=/usr/local/src/aolserver/aolserver --with-tcl=/usr/lib/</tt></b>
+exit</span></pre></pre></li><li><p>Unpack the OpenFTS tarball and compile and install
+              the driver.</p><pre class="screen">[root@yourserver root]# <b class="userinput"><tt>cd /usr/local/src</tt></b>
+[root@yourserver src]# <b class="userinput"><tt>tar xzf /tmp/Search-OpenFTS-tcl-0.3.2.tar.gz</tt></b>
+[root@yourserver src]# <b class="userinput"><tt>cd /usr/local/src/Search-OpenFTS-tcl-0.3.2/</tt></b>
+[root@yourserver Search-OpenFTS-tcl-0.3.2]# <b class="userinput"><tt>./configure --with-aolserver-src=/usr/local/src/aolserver/aolserver --with-tcl=/usr/lib/</tt></b>
 checking prefix... /usr/local
 checking for gcc... gcc
 <span class="emphasis"><em>(many lines omitted)</em></span>
 configure: creating ./config.status
 config.status: creating Makefile.global
-[root@yourserver Search-OpenFTS-tcl-0.3.2]#<b><tt> make</tt></b>
+[root@yourserver Search-OpenFTS-tcl-0.3.2]#<b class="userinput"><tt> make</tt></b>
 (cd parser; make all)
 make[1]: Entering directory `/usr/local/src/Search-OpenFTS-tcl-0.3.2/parser'
 <span class="emphasis"><em>(many lines omitted)</em></span>
 packages provided were {Lingua::Stem::Snowball 0.3.2}
 processed fts_base_snowball.tcl
-[root@yourserver Search-OpenFTS-tcl-0.3.2]# <b><tt>cd aolserver</tt></b>
-[root@yourserver aolserver]# <b><tt>make</tt></b>
+[root@yourserver Search-OpenFTS-tcl-0.3.2]# <b class="userinput"><tt>cd aolserver</tt></b>
+[root@yourserver aolserver]# <b class="userinput"><tt>make</tt></b>
 gcc -c -fPIC  -DPACKAGE=\&quot;OPENFTS\&quot; -DVERSION=\&quot;0.3.2\&quot; -DHAVE_UNISTD_H=1 -DSTDC_HEADERS=1 -DHAVE_SYS_TYPES_H=1 -DHAVE_SYS_STAT_H=1 -DHAVE_STDLIB_H=1 -DHAVE_STR
 <span class="emphasis"><em>(many lines omitted)</em></span>
 n_stem.o italian_stem.o norwegian_stem.o portuguese_stem.o russian_stem.o nsfts.o  -o nsfts.so
-[root@yourserver aolserver]# <b><tt>cp nsfts.so /usr/local/aolserver/bin/</tt></b>
+[root@yourserver aolserver]# <b class="userinput"><tt>cp nsfts.so /usr/local/aolserver/bin/</tt></b>
 [root@yourserver aolserver]#
-<pre class="action">cd /usr/local/src 
+<pre class="action"><span class="action">cd /usr/local/src 
 tar xzf /tmp/Search-OpenFTS-tcl-0.3.2.tar.gz
 cd /usr/local/src/Search-OpenFTS-tcl-0.3.2/
 ./configure --with-aolserver-src=/usr/local/src/aolserver/aolserver --with-tcl=/usr/lib/
@@ -158,39 +158,39 @@ make
 cd aolserver
 make
 cp nsfts.so /usr/local/aolserver/bin
-</pre></pre></li><li><p>Build some supplemental modules.</p><pre class="screen">[root@yourserver aolserver]# <b><tt>cd ..</tt></b>
-[root@yourserver Search-OpenFTS-tcl-0.3.2]# <b><tt>cp -r pgsql_contrib_openfts /usr/local/src/postgresql-7.2.4/contrib</tt></b>
-[root@yourserver Search-OpenFTS-tcl-0.3.2]# <b><tt>cd /usr/local/src/postgresql-7.2.4/contrib/pgsql_contrib_openfts</tt></b>
-[root@yourserver pgsql_contrib_openfts]#<b><tt> make</tt></b>
+</span></pre></pre></li><li><p>Build some supplemental modules.</p><pre class="screen">[root@yourserver aolserver]# <b class="userinput"><tt>cd ..</tt></b>
+[root@yourserver Search-OpenFTS-tcl-0.3.2]# <b class="userinput"><tt>cp -r pgsql_contrib_openfts /usr/local/src/postgresql-7.2.4/contrib</tt></b>
+[root@yourserver Search-OpenFTS-tcl-0.3.2]# <b class="userinput"><tt>cd /usr/local/src/postgresql-7.2.4/contrib/pgsql_contrib_openfts</tt></b>
+[root@yourserver pgsql_contrib_openfts]#<b class="userinput"><tt> make</tt></b>
 sed 's,MODULE_PATHNAME,$libdir/openfts,g' openfts.sql.in &gt;openfts.sql
 gcc -O2 -Wall -Wmissing-prototypes -Wmissing-declarations -fpic -I. -I../../src/include   -c -o openfts.o openfts.c
 gcc -shared -o openfts.so openfts.o
 rm openfts.o
-[root@yourserver pgsql_contrib_openfts]# <b><tt>su postgres</tt></b>
-[postgres@yourserver pgsql_contrib_openfts]$ <b><tt>make install</tt></b>
+[root@yourserver pgsql_contrib_openfts]# <b class="userinput"><tt>su postgres</tt></b>
+[postgres@yourserver pgsql_contrib_openfts]$ <b class="userinput"><tt>make install</tt></b>
 /bin/sh ../../config/install-sh -c -m 644 openfts.sql /usr/local/pgsql/share/contrib
 /bin/sh ../../config/install-sh -c -m 755 openfts.so /usr/local/pgsql/lib
 /bin/sh ../../config/install-sh -c -m 644 ./README.openfts /usr/local/pgsql/doc/contrib
-[postgres@yourserver pgsql_contrib_openfts]$<b><tt> exit</tt></b>
+[postgres@yourserver pgsql_contrib_openfts]$<b class="userinput"><tt> exit</tt></b>
 [root@yourserver pgsql_contrib_openfts]#
-<pre class="action">cd ..
+<pre class="action"><span class="action">cd ..
 cp -r pgsql_contrib_openfts /usr/local/src/postgresql-7.2.4/contrib
 cd /usr/local/src/postgresql-7.2.4/contrib/pgsql_contrib_openfts
 make
 su postgres
 make install
-exit</pre></pre></li></ol></div></li><li><p><a name="install-aolserver-permissions"></a>In order to test AOLserver, we'll run it using the
+exit</span></pre></pre></li></ol></div></li><li><p><a name="install-aolserver-permissions"></a>In order to test AOLserver, we'll run it using the
       sample-config.tcl file provided in the AOLserver distribution,
-      under the nobody user and <tt>web</tt>
+      under the nobody user and <tt class="computeroutput">web</tt>
       group.  The sample-config.tcl configuration writes to the
       default log locations, so we need to give it permission to do so
-      or it will fail.  Grant the <tt>web</tt>
+      or it will fail.  Grant the <tt class="computeroutput">web</tt>
       group permission to write to
-      <tt>/usr/local/aolserver/log</tt> and
-      <tt>/usr/local/aolserver/servers</tt>.</p><pre class="screen">[root@yourserver root]# <b><tt>cd /usr/local/aolserver</tt></b>
-[root@yourserver aolserver]# <b><tt>chown -R root.web log servers</tt></b>
-[root@yourserver aolserver]# <b><tt>chmod -R g+w log servers</tt></b>
-[root@yourserver aolserver]# <b><tt>ls -l</tt></b>
+      <tt class="computeroutput">/usr/local/aolserver/log</tt> and
+      <tt class="computeroutput">/usr/local/aolserver/servers</tt>.</p><pre class="screen">[root@yourserver root]# <b class="userinput"><tt>cd /usr/local/aolserver</tt></b>
+[root@yourserver aolserver]# <b class="userinput"><tt>chown -R root.web log servers</tt></b>
+[root@yourserver aolserver]# <b class="userinput"><tt>chmod -R g+w log servers</tt></b>
+[root@yourserver aolserver]# <b class="userinput"><tt>ls -l</tt></b>
 total 32
 drwxr-sr-x    2 root     root         4096 Mar  8 12:57 bin
 drwxr-xr-x    3 root     root         4096 Mar  8 10:34 include
@@ -200,15 +200,15 @@ drwxr-sr-x    3 root     root         4096 Mar  8 10:31 modules
 -rw-r--r--    1 root     root         7320 Mar 31  2001 sample-config.tcl
 drwxrwsr-x    3 root     web          4096 Mar  8 10:31 servers
 [root@yourserver aolserver]#
-<pre class="action">
+<pre class="action"><span class="action">
 cd /usr/local/aolserver
 chown -R root.web log servers
 chmod -R g+w log servers
-ls -l</pre></pre><p>Now, we'll run a quick test to ensure AOLserver is running
+ls -l</span></pre></pre><p>Now, we'll run a quick test to ensure AOLserver is running
           correctly. We'll use the sample config file provided with
           AOLserver. This file will attempt to guess your IP address and
           hostname. It will then start up the server at port 8000 of that
-          IP address.</p><pre class="screen">[root@yourserver aolserver]# <b><tt>./bin/nsd -t sample-config.tcl -u nobody -g web</tt></b>
+          IP address.</p><pre class="screen">[root@yourserver aolserver]# <b class="userinput"><tt>./bin/nsd -t sample-config.tcl -u nobody -g web</tt></b>
 [root@yourserver aolserver]# [08/Mar/2003:15:07:18][31175.8192][-main-] Notice: config.tcl: starting to read config file...
 [08/Mar/2003:15:07:18][31175.8192][-main-] Warning: config.tcl: nsssl not loaded -- key/cert files do not exist.
 [08/Mar/2003:15:07:18][31175.8192][-main-] Warning: config.tcl: nscp not loaded
@@ -217,32 +217,32 @@ ls -l</pre></pre><p>Now, we'll run a quick test to ensure AOLserver is running
 config file.</pre><p>The first warning, about nsssl, can be ignored.  We won't be using nsssl; we'll be using nsopenssl instead, and we haven't fully configured it yet.  The nscp warning refers to the fact that, without a user and password in the config file, the administrative panel of AOLserver won't load.  We don't plan to use it and can ignore that error as well.  Any other warning or error is unexpected and probably a problem.</p><p>
 
           Test to see if AOLserver is working by starting
-          <tt>Mozilla</tt> or
-          <tt>Lynx</tt> <span class="emphasis"><em>on the same
+          <tt class="computeroutput">Mozilla</tt> or
+          <tt class="computeroutput">Lynx</tt> <span class="emphasis"><em>on the same
           computer</em></span> and surfing over to your web page.  If
           you browse from another computer and the sample config file
           didn't guess your hostname or ip correctly, you'll get a
           false negative test.
 
-        </p><pre class="screen">[root@yourserver aolserver]# <b><tt>lynx localhost:8000</tt></b></pre><p>
+        </p><pre class="screen">[root@yourserver aolserver]# <b class="userinput"><tt>lynx localhost:8000</tt></b></pre><p>
 
           You should see a &quot;Welcome to AOLserver&quot; page. If this
           doesn't work, try going to
-          <tt>http://127.0.0.1:8000/</tt>. If this
+          <tt class="computeroutput">http://127.0.0.1:8000/</tt>. If this
           still doesn't work, check out the <a href="aolserver.html#install-aolserver-troubleshooting">Troubleshooting AOLserver</a> section below.  Note that you will not be able to browse to the web page from another machine, because AOLserver is only listening to the local address.
 
-        </p><p>Shutdown the test server:</p><pre class="screen">[root@yourserver aolserver]# <b><tt>killall nsd</tt></b>
+        </p><p>Shutdown the test server:</p><pre class="screen">[root@yourserver aolserver]# <b class="userinput"><tt>killall nsd</tt></b>
 [root@yourserver aolserver]#</pre><p>
 
-          The <tt>killall</tt> command will kill
-          all processes with the name <tt>nsd</tt>,
+          The <tt class="computeroutput">killall</tt> command will kill
+          all processes with the name <tt class="computeroutput">nsd</tt>,
           but clearly this is not a good tool to use for managing your
           services in general. We cover this topic in the <a href="openacs.html#install-openacs-keepalive">Keep AOLServer alive</a> section.
 
         </p></li><li><p><a name="install-aolserver-troubleshooting"></a>Troubleshooting.</p><p>If you can't view the welcome page, it's likely there's a
       problem with your server configuration. Start by viewing your
       AOLserver log, which is in
-      <tt>/usr/local/aolserver/log/server.log</tt>.
+      <tt class="computeroutput">/usr/local/aolserver/log/server.log</tt>.
       You should also try to find lines of the form:
 
     </p><pre class="screen">
@@ -252,12 +252,12 @@ config file.</pre><p>The first warning, about nsssl, can be ignored.  We won't b
       If you can find these lines, try entering the URL the server is
       listening on. If you cannot find these lines, there must be an error
       somewhere in the file. Search for lines beginning with the word
-      <tt>Error</tt> instead of
-      <tt>Notice</tt>.
+      <tt class="computeroutput">Error</tt> instead of
+      <tt class="computeroutput">Notice</tt>.
 
     </p><p>
 
-      The <tt>sample-config.tcl</tt> file grabs
+      The <tt class="computeroutput">sample-config.tcl</tt> file grabs
       your address and hostname from your OS settings.
 
     </p><pre class="screen">
@@ -267,7 +267,7 @@ set address         [ns_info address]</pre><p>
       If you get an error that nssock can't get the requested address, you
       can set these manually. If you type 0.0.0.0, AOLserver will try to
       listen on all available addresses.  <span class="emphasis"><em>Note</em></span>:
-      <tt>ns_info address</tt> doesn't appear
+      <tt class="computeroutput">ns_info address</tt> doesn't appear
       to be supported in current versions of AOLserver.
 
     </p><pre class="screen">
@@ -275,22 +275,22 @@ set hostname        [ns_info hostname]
 #set address         [ns_info address]
 set address 0.0.0.0</pre></li><li><p><a name="analog-install"></a>OPTIONAL - install Analog web file analyser.  You should
 have the <a href="individual-programs.html#analog-download">source tarball</a> in
-<tt>/tmp</tt>.  Unpack, compile, and install analog.</p><pre class="screen">[root@yourserver aolserver]# <b><tt>cd /usr/local/src</tt></b>
-[root@yourserver src]# <b><tt>tar xzf /tmp/analog-5.31.tar.gz</tt></b>
-[root@yourserver src]# <b><tt>cd analog-5.31</tt></b>
-[root@yourserver analog-5.31]# <b><tt>make</tt></b>
+<tt class="computeroutput">/tmp</tt>.  Unpack, compile, and install analog.</p><pre class="screen">[root@yourserver aolserver]# <b class="userinput"><tt>cd /usr/local/src</tt></b>
+[root@yourserver src]# <b class="userinput"><tt>tar xzf /tmp/analog-5.31.tar.gz</tt></b>
+[root@yourserver src]# <b class="userinput"><tt>cd analog-5.31</tt></b>
+[root@yourserver analog-5.31]# <b class="userinput"><tt>make</tt></b>
 cd src &amp;&amp; make
 make[1]: Entering directory `/usr/local/src/analog-5.31/src'
 <span class="emphasis"><em>(many lines omitted)</em></span>
 ***IMPORTANT: You must read the licence before using analog
 ***
 make[1]: Leaving directory `/usr/local/src/analog-5.31/src'
-[root@yourserver analog-5.31]# <b><tt>cd ..</tt></b>
-[root@yourserver src]#<b><tt> mv analog-5.31 /usr/share/</tt></b>
+[root@yourserver analog-5.31]# <b class="userinput"><tt>cd ..</tt></b>
+[root@yourserver src]#<b class="userinput"><tt> mv analog-5.31 /usr/share/</tt></b>
 [root@yourserver src]#
-<pre class="action">cd /usr/local/src
+<pre class="action"><span class="action">cd /usr/local/src
 tar xzf /tmp/analog-5.31.tar.gz
 cd analog-5.31
 make
 cd ..
-mv analog-5.31 /usr/share/</pre></pre></li></ol></div><div class="cvstag">($Id$)</div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="postgres.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="openacs.html">Next</a></td></tr><tr><td width="40%" align="left">Install PostGreSQL 7.2.4 </td><td width="20%" align="center"><a accesskey="u" href="unix-install.html">Up</a></td><td width="40%" align="right"> Install OpenACS 4.6.3</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a><center><a href="http://openacs.org/doc/openacs-4-6-3/aolserver.html#comments">View comments on this page at openacs.org</a></center></body></html>
+mv analog-5.31 /usr/share/</span></pre></pre></li></ol></div><div class="cvstag">($Id$)</div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="postgres.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="openacs.html">Next</a></td></tr><tr><td width="40%" align="left">Install PostGreSQL 7.2.4 </td><td width="20%" align="center"><a accesskey="u" href="unix-install.html">Up</a></td><td width="40%" align="right"> Install OpenACS 4.6.3</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a><center><a href="http://openacs.org/doc/openacs-4-6-3/aolserver.html#comments">View comments on this page at openacs.org</a></center></body></html>
