@@ -15,11 +15,7 @@ where group_id = acs__magic_object_id('registered_users')
  
 <fullquery name="unused">      
       <querytext>
-      FIX ME PLSQL
-
-begin
-  membership_rel__deleted( rel_id => :rel_id );
-end;
+        begin return membership_rel__deleted(:rel_id); end;
       </querytext>
 </fullquery>
 
