@@ -4,7 +4,7 @@
       <td style="padding-left: 8px;" >
         <a href="@ds_url@">Developer Support</a>
 
-        <a href="@comments_toggle_url@" class="@comments_on@" title="Comments at page footer">CMT</a>
+        <a href="@comments_toggle_url@" class="@comments_on@" title="Comments at page footer">CMT<if @num_comments@ gt 0>(@num_comments@)</if></a>
         
         <a href="@user_switching_toggle_url@" class="@user_switching_on@" title="User switching">USR</a>
         
@@ -21,9 +21,11 @@
         |
         <a href="/acs-admin/apm/" title="Modify/reload packages">APM</a>
         |
-        <a href="/acs-admin/apm/?reload_links_p=1" title="Scan for changed library files">Changed files</a>
+        <a href="/acs-admin/apm/?reload_links_p=1" title="Scan for changed library files">Changed</a>
         |
         <a href="@flush_url@" title="Flush entire util_memoize cache">Flush</a>
+        |
+        <a href="@auto_test_url@" title="Automated Testing Home">Test</a>
         |
         <a href="/acs-admin/users/" title="Add/edit/become users">Users</a>
         |

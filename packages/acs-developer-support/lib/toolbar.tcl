@@ -1,9 +1,6 @@
 
 # TODO: Handle the case when developer-support is not mounted
 
-# TODO: Flag the "CMT" (comments) button if there are comments and it's turned off (after we get rid of the always-there default 3 rp_handler comments)
-
-
 
 set show_p [ds_show_p]
 
@@ -13,6 +10,8 @@ if { $show_p } {
     set comments_p [ds_comments_p]
     set comments_toggle_url [export_vars -base "${ds_url}comments-toggle" { { return_url [ad_return_url] } }]
     set comments_on [ad_decode $comments_p 1 "on" "off"]
+
+    set num_comments [llength [ds_get_comments]]
 
     set user_switching_p [ds_user_switching_enabled_p]
     set user_switching_toggle_url [export_vars -base "${ds_url}set-user-switching-enabled" { { enabled_p {[expr !$user_switching_p]} } { return_url [ad_return_url] } }]
@@ -27,6 +26,8 @@ if { $show_p } {
     set translator_on [ad_decode $translator_p 1 "on" "off"]
 
     set oacs_shell_url "${ds_url}shell"
+
+    set auto_test_url [site_node::get_package_url -package_key acs-automated-testing]
 
     set request_info_url [export_vars -base "${ds_url}request-info" { { request {[ad_conn request]} } }]
 
