@@ -4890,19 +4890,28 @@ ad_proc -public util::age_pretty {
         set age_seconds 60
     }
 
-    if { $age_seconds < [expr $hours_limit * 60 * 60] } {
+   if { $age_seconds < [expr $hours_limit * 60 * 60] } {
         set hours [expr abs($age_seconds / 3600)]
         set minutes [expr round(($age_seconds% 3600)/60.0)]
-        switch $hours {
-            0 { set result "" }
-            1 { set result "One hour " }
-            default { set result "$hours hours "}
+        if {[expr $hours < 24]} {
+            switch $hours {
+                0 { set result "" }
+                1 { set result "One hour " }
+                default { set result "$hours hours "}
+            }
+            switch $minutes {
+                0 {}
+                1 { append result "$minutes minute " }
+                default { append result "$minutes minutes " }
+            }
+        } else {
+            set days [expr abs($hours / 24)]
+            switch $days {
+                1 { set result "One day " }
+                default { set result "$days days "}
+            }
         }
-        switch $minutes {
-            0 {}
-            1 { append result "$minutes minute " }
-            default { append result "$minutes minutes " }
-        }
+
         append result "ago"
     } elseif { $age_seconds < [expr $days_limit * 60 * 60 * 24] } {
         set result [lc_time_fmt $timestamp_ansi $mode_2_fmt $locale]
