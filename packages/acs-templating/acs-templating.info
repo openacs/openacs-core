@@ -12,8 +12,8 @@
         <database>oracle</database>
         <database>postgresql</database>
     </database-support>
-        <owner">Christian Brechb</owner>
-        <owner">Karl Goldstein</owner>
+        <owner>Christian Brechb</owner>
+        <owner>Karl Goldstein</owner>
         <summary>Separate page layout and implementation.</summary>
         <release-date>2002-05-15</release-date>
         <vendor url="http://www.arsdigita.com/">ArsDigita Corporation</vendor>
