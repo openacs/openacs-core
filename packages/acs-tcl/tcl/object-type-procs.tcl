@@ -8,6 +8,8 @@ ad_library {
 
 }
 
+namespace eval acs_object_type {}
+
 ad_proc -public acs_object_type_hierarchy {
 
     -object_type
@@ -55,3 +57,40 @@ ad_proc -public acs_object_type_hierarchy {
 
 }
 
+ad_proc -public acs_object_type::get {
+    -object_type:required
+    -array:required
+} {
+    Get info about an object type. Returns columns 
+
+    <ul>
+      <li>object_type,
+      <li>supertype,
+      <li>abstract_p,
+      <li>pretty_name,
+      <li>pretty_plural,
+      <li>table_name,
+      <li>id_column,
+      <li>package_name,
+      <li>name_method,
+      <li>type_extension_table,
+      <li>dynamic_p
+    </ul>
+} {
+    upvar 1 $array row
+    db_1row select_object_type_info {
+        select object_type,
+               supertype,
+               abstract_p,
+               pretty_name,
+               pretty_plural,
+               table_name,
+               id_column,
+               package_name,
+               name_method,
+               type_extension_table,
+               dynamic_p
+        from   acs_object_types
+        where  object_type = :object_type
+    } -column_array row
+}
