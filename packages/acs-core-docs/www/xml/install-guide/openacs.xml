@@ -77,7 +77,7 @@ pw useradd -n <replaceable>$OPENACS_SERVICE_NAME</replaceable> -g web -d /home/<
         overwritten when we do the main CVS checkout to the target
         location.</para>
         <screen>[root root]# <userinput>su - <replaceable>$OPENACS_SERVICE_NAME</replaceable></userinput>
-[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <userinput>cvs -d :pserver:anonymous@openacs.org:/cvsroot co -d install openacs-4/etc/install</userinput>
+[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <userinput>cvs -d :pserver:anonymous@cvs.openacs.org:/cvsroot co -d install openacs-4/etc/install</userinput>
 cvs server: Updating install
 U install/README
 U install/TODO
@@ -605,7 +605,7 @@ Loading package .info files ... this will take a few minutes</programlisting>
 
   <sect2 id="install-from-cvs">
     <title>Installation Option 3: Install from CVS</title>
-    <para>If you want to track fresh code developments inbetween releases, or you are an OpenACS core developer, you may want to install from CVS.  This is identical to Option 2 except that you get the files from CVS instead of the tarball: <ulink url="http://openacs.org/4/checkout">CVS Checkout Instructions</ulink>.  So, instead of <computeroutput><userinput>tar xzf /tmp/&tarballpath;.tgz</userinput></computeroutput>, <computeroutput><userinput>cvs -z3 -d :pserver:anonymous@openacs.org:/cvsroot co acs-core</userinput></computeroutput>.</para>
+    <para>If you want to track fresh code developments inbetween releases, or you are an OpenACS core developer, you may want to install from CVS.  This is identical to Option 2 except that you get the files from CVS instead of the tarball: <ulink url="http://openacs.org/4/checkout">CVS Checkout Instructions</ulink>.  So, instead of <computeroutput><userinput>tar xzf /tmp/&tarballpath;.tgz</userinput></computeroutput>, <computeroutput><userinput>cvs -z3 -d :pserver:anonymous@cvs.openacs.org:/cvsroot co acs-core</userinput></computeroutput>.</para>
   </sect2>
   <sect2 id="install-next-steps">
     <title>Next Steps</title>

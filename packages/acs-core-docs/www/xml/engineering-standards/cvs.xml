@@ -20,20 +20,20 @@
       <para>
         All OpenACS code is available anonymously.  To get code
       anonymously, use the parameter
-      <computeroutput>-d:pserver:anonymous@openacs.org:/cvsroot</computeroutput> immediately after <computeroutput>cvs</computeroutput> in a cvs command to check out or export code.
+      <computeroutput>-d:pserver:anonymous@cvs.openacs.org:/cvsroot</computeroutput> immediately after <computeroutput>cvs</computeroutput> in a cvs command to check out or export code.
       </para>
       <para>
         If you are an OpenACS developer, you should check out code so
         that you or any other developer can commit it.  To do this, use
         the parameter
-        <computeroutput>-d:ext:openacs.org:/cvsroot</computeroutput>
+        <computeroutput>-d:ext:cvs.openacs.org:/cvsroot</computeroutput>
         immediately after <computeroutput>cvs</computeroutput> in
         checkout commands.  This will create a local checkout directory
-        that uses openacs.org but does not specify the user.  By
+        that uses cvs.openacs.org but does not specify the user.  By
         default, it will use your local account name as the user, so if
         you are logged in as "foobar" it will try to check out and
         commit as if you had specified
-        <computeroutput>:ext:foobar@openacs.org:/cvsroot</computeroutput>.  The advantage of not specifying a user in the checkout command is that other users can work in the directory using their own accounts.
+        <computeroutput>:ext:foobar@cvs.openacs.org:/cvsroot</computeroutput>.  The advantage of not specifying a user in the checkout command is that other users can work in the directory using their own accounts.
       </para>
       
       <para>
@@ -42,11 +42,11 @@
         environment.  (Typically this is accomplished by putting
         <computeroutput>export CVS_RSH=ssh</computeroutput> into
         <computeroutput>~/.bash_profile</computeroutput>.).  If your local
-        account name does not match your openacs.org account name, create a
+        account name does not match your cvs.openacs.org account name, create a
         file <computeroutput>~/.ssh/config</computeroutput> with an entry
         like:
       </para>
-      <programlisting>Host openacs.org
+      <programlisting>Host cvs.openacs.org
     User joel
 </programlisting>
       <para>
@@ -70,13 +70,13 @@ cvs -q</action></screen>
         <para>Administrator Note: These are the steps to grant CVS commit rights to a user:</para>
       <orderedlist>
         <listitem>
-          <para>Create the user's account.  On openacs.org:</para>
+          <para>Create the user's account.  On cvs.openacs.org:</para>
           <screen><action>sudo bash
 /usr/sbin/useradd -c "<replaceable>Real Name</replaceable>" -G cvs,<replaceable>username</replaceable> -p <replaceable>passwd</replaceable> <replaceable>username</replaceable></action></screen>
         </listitem>
         <listitem>
           <para>Grant cvs access to the user account.  On any machine, in a temporary directory:</para>
-          <screen><action>cvs -d :ext:openacs.org:/cvsroot co CVSROOT
+          <screen><action>cvs -d :ext:cvs.openacs.org:/cvsroot co CVSROOT
 cd CVSROOT
 emacs avail</action></screen>
           <para>Add an avail line of the form:</para>
@@ -88,9 +88,9 @@ emacs avail</action></screen>
       <sidebar>
         <para>Branimir suggests an additional level of abstraction.  If you put</para>
         <programlisting>Host cvs-server
-      HostName openacs.org
+      HostName cvs.openacs.org
       User <replaceable>yournamehere</replaceable></programlisting>
-        <para>into your <computeroutput>~/.ssh/config</computeroutput> file, then you can use <computeroutput>-d :ext:cvs-server:/cvsroot</computeroutput> instead of <computeroutput>-d :ext:openacs.org:/cvsroot</computeroutput>.  You can then change the definition of <computeroutput>cvs-server</computeroutput> by changing one file instead of editing hundreds of <computeroutput>CVSROOT/Repository</computeroutput> files.</para>
+        <para>into your <computeroutput>~/.ssh/config</computeroutput> file, then you can use <computeroutput>-d :ext:cvs-server:/cvsroot</computeroutput> instead of <computeroutput>-d :ext:cvs.openacs.org:/cvsroot</computeroutput>.  You can then change the definition of <computeroutput>cvs-server</computeroutput> by changing one file instead of editing hundreds of <computeroutput>CVSROOT/Repository</computeroutput> files.</para>
       </sidebar>
 
     </sect2>
@@ -102,7 +102,7 @@ emacs avail</action></screen>
       is &releasebranch;.  This ensures that you are working on top
       of a stable OpenACS core, but still allows you to commit feature
       changes to non-core packages.  To check out all packages,</para>
-      <screen><action>cvs -d :ext:openacs.org:/cvsroot co -r &releasebranch; openacs-4</action></screen>
+      <screen><action>cvs -d :ext:cvs.openacs.org:/cvsroot co -r &releasebranch; openacs-4</action></screen>
       <para>If you work in the directories created with this command, all of your
             cvs updates and commits will be confined to the &releasebranch;
             branch.  Your work will be merged back to HEAD for you
@@ -111,15 +111,18 @@ emacs avail</action></screen>
       <para>Because the entire openacs-4 directory is large, you may
       want to use only acs-core plus some specific modules.  To do
       this, check out core first:</para>
-      <screen><action>cvs -d:ext:openacs.org:/cvsroot -r &releasebranch; checkout acs-core</action></screen>
+      <screen><action>cvs -d:ext:cvs.openacs.org:/cvsroot -r &releasebranch; checkout acs-core</action></screen>
       <para>Then add modules as needed:</para>
       <screen><action>cd /var/lib/aolserver/<replaceable>service0</replaceable>/packages
 cvs up -d <replaceable>packagename</replaceable></action></screen>
-      <para>... where <replaceable>packagename</replaceable> is the name of the
-            package you want. Visit the <ulink url="http://openacs.org/packages">
-                Package Inventory</ulink>
-            for a list of available packages and their
-            current state.  
+
+      <para>... where <replaceable>packagename</replaceable> is the
+            name of the package you want. Visit the <ulink
+            url="http://openacs.org/packages"> Package
+            Inventory</ulink> and <ulink
+            url="http://openacs.org/projects/openacs/packages/">Package
+            maintainers and status</ulink> for a list of available
+            packages and their current state.
       </para>
     </sect2>
 
@@ -134,9 +137,9 @@ cvs up -d <replaceable>packagename</replaceable></action></screen>
               <computeroutput>-r</computeroutput> tag.</para>
       <para></para>
       <para>To check out HEAD for development, which requires an OpenACS developer account:</para>
-      <screen><action>cvs -d:ext:openacs.org:/cvsroot checkout acs-core</action></screen>
+      <screen><action>cvs -d:ext:cvs.openacs.org:/cvsroot checkout acs-core</action></screen>
       <para>To check out HEAD anonymously:</para>
-      <screen><action>cvs -d:pserver:anonymous@openacs.org:/cvsroot checkout acs-core</action></screen>
+      <screen><action>cvs -d:pserver:anonymous@cvs.openacs.org:/cvsroot checkout acs-core</action></screen>
     </sect2>
 
     <sect2>
@@ -150,10 +153,10 @@ cvs up -d <replaceable>packagename</replaceable></action></screen>
         moved. To get a development checkout of .LRN in the subdirectory
         <literal>dotlrn</literal>:
       </para>
-      <screen><action>cvs -d :pserver:anonymous@openacs.org:/cvsroot checkout -r &releasebranch; acs-core
+      <screen><action>cvs -d :pserver:anonymous@cvs.openacs.org:/cvsroot checkout -r &releasebranch; acs-core
 mv openacs-4 dotlrn
 cd dotlrn/packages
-cvs -d :pserver:anonymous@openacs.org:/cvsroot checkout -r &releasebranch; dotlrn-all
+cvs -d :pserver:anonymous@cvs.openacs.org:/cvsroot checkout -r &releasebranch; dotlrn-all
 mv dotlrn/install.xml ..</action></screen>
     </sect2>
   <sect2 id="working-with-cvs">
@@ -162,7 +165,7 @@ mv dotlrn/install.xml ..</action></screen>
       Once you have a checkout you can use some commands to track
       what has changed since you checked out your copy.  <computeroutput>cvs -n update</computeroutput> does not change any files, but reports which changes have been updated or locally modified, or are not present in CVS.
     </para>
-    <para>To update your files, use <computeroutput>cvs update</computeroutput>.  This will merge changes from the repository with your local files.  It has no effect on the openacs.org repository.</para>
+    <para>To update your files, use <computeroutput>cvs update</computeroutput>.  This will merge changes from the repository with your local files.  It has no effect on the cvs.openacs.org repository.</para>
     </sect2>
   </sect1>
 
@@ -303,7 +306,7 @@ ref-timezones search</programlisting>
           <para>
             Because this occurs in your personal checkout and not an anonymous
             one, this commit automagically moves back upstream to the Mother
-            Ship repository at openacs.org.  The names of the changed files, and your comments, are sent to a mailing list for OpenACS developers.  A Core Team developer may review or roll back your changes if necessary.
+            Ship repository at cvs.openacs.org.  The names of the changed files, and your comments, are sent to a mailing list for OpenACS developers.  A Core Team developer may review or roll back your changes if necessary.
           </para>
         </listitem>
               <listitem>
@@ -322,16 +325,16 @@ ref-timezones search</programlisting>
               <para>
                 Check out acs-core on the HEAD branch.  (Weird things happen if you add files to a branch but not to HEAD):</para>
             <screen><action>cd /tmp
-cvs -d:ext:openacs.org:/cvsroot checkout acs-core</action></screen>
+cvs -d:ext:cvs.openacs.org:/cvsroot checkout acs-core</action></screen>
             <para>Copy your package directory from your working directory to this directory.  Make sure not to copy any CVSROOT directories.</para>
             <screen><action>cp /var/lib/aolserver/<replaceable>service0</replaceable>/packagse/<replaceable>newpackage</replaceable> /tmp/openacs-4/packages</action></screen>
-            <para>Import the package into the OpenACS.org cvs repository:</para>
+            <para>Import the package into the cvs.openacs.org cvs repository:</para>
             <screen><action>cd /tmp/openacs-4/packages/<replaceable>newpackage</replaceable>
 cvs import -m "Initial import of <replaceable>newpackage</replaceable>" openacs-4/packages/newpackage <replaceable>myname</replaceable> <replaceable>0.1d</replaceable></action></screen>
             </listitem>
             <listitem>
               <para>Add the new package to the modules file. (An administrator has to do this step.)  On any machine, in a temporary directory:</para>
-          <screen><action>cvs -d :ext:openacs.org:/cvsroot co CVSROOT
+          <screen><action>cvs -d :ext:cvs.openacs.org:/cvsroot co CVSROOT
 cd CVSROOT
 emacs modules</action></screen>
           <para>Add a line of the form:</para>
@@ -357,7 +360,7 @@ cvs commit: Rebuilding administrative file database</literallayout>
 
   <sect2 id="Commit_Rules">
     <title>
-      Rules for Committing Code to the OpenACS.org repository
+      Rules for Committing Code to the OpenACS repository
     </title>
     <para>
       CVS commit procedures are governed by 
@@ -428,7 +431,7 @@ cvs commit: Rebuilding administrative file database</literallayout>
           <listitem>
             <para>
               Only GPL code and material should be committed to the
-              openacs.org CVS repository
+              OpenACS CVS repository (cvs.openacs.org)
             </para>
           </listitem>
           <listitem>
