@@ -658,7 +658,7 @@ ad_proc rp_report_error {
     set error_url [ad_conn url]
 
     if { [llength [info procs ds_collection_enabled_p]] == 1 && [ds_collection_enabled_p] } {
-	ds_add conn error $message
+	ad_call_proc_if_exists ds_add conn error $message
     }
 
     if {![ad_parameter -package_id [ad_acs_kernel_id] "RestrictErrorsToAdminsP" dummy 0] || \
