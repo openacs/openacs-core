@@ -87,6 +87,16 @@
       
     </querytext>
   </fullquery>
+  
+  <fullquery name="package_instantiate_object.get_id_column">      
+    <querytext>
+      
+      select id_column
+      from acs_object_types
+      where object_type = :object_type
+      
+    </querytext>
+  </fullquery>
 
   
   <fullquery name="package_object_view_helper.select_type_info">      

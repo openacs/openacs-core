@@ -750,7 +750,7 @@ ad_proc -public package_instantiate_object {
     @param extra_vars an ns_set of extra vars
 
     @param start_with The object type to start with when gathering
-    attributes for this object type
+    attributes for this object type.  Defaults to the object type.
 
     @param form_id The form id from templating form system if we're
     using the forms API to specify attributes
@@ -863,6 +863,19 @@ ad_proc -public package_instantiate_object {
 	    
 
     if { ![empty_string_p $form_id]} {
+
+        #DRB: This needs to be cached!
+        set __id_column [db_string get_id_column {}]
+	if { [info exists real_params([string toupper $__id_column])] && ![info exists param_array([string toupper $__id_column])] } {
+            set param_array([string toupper $__id_column]) 1
+            set $__id_column [template::element::get_value $form_id "$variable_prefix$__id_column"]
+      	    lappend pieces [list $__id_column]
+	}
+
+        if { [string equal $start_with ""] } {
+            set start_with $object_type
+        }
+
 	# Append the values from the template form for each attribute
 	foreach row [package_object_attribute_list -start_with $start_with $object_type] {
 	    set __attribute [lindex $row 2]
