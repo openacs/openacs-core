@@ -155,33 +155,7 @@ namespace eval acs_user {
             return
         }
 
-        switch -exact $state {
-            "approved" {
-                db_exec_plsql member_approve {
-                    begin membership_rel.approve(rel_id => :rel_id); end;
-                }
-            }
-            "banned" {
-                db_exec_plsql member_ban {
-                    begin membership_rel.ban(rel_id => :rel_id); end;
-                }
-            }
-            "rejected" {
-                db_exec_plsql member_reject {
-                    begin membership_rel.reject(rel_id => :rel_id); end;
-                }
-            }
-            "deleted" {
-                db_exec_plsql member_delete {
-                    begin membership_rel.delete(rel_id => :rel_id); end;
-                }
-            }
-            "needs approval" {
-                db_exec_plsql member_unapprove {
-                    begin membership_rel.unapprove(rel_id => :rel_id); end;
-                }
-            }
-        }
+        membership_rel::change_state -rel_id $rel_id -state $state
     }
 
     ad_proc -public approve {
@@ -191,7 +165,7 @@ namespace eval acs_user {
     } {
         change_state -user_id $user_id -state "approved"
     }
-        
+
     ad_proc -public ban {
         {-user_id:required}
     } {
@@ -199,7 +173,7 @@ namespace eval acs_user {
     } {
         change_state -user_id $user_id -state "banned"
     }
-        
+
     ad_proc -public reject {
         {-user_id:required}
     } {
@@ -207,7 +181,7 @@ namespace eval acs_user {
     } {
         change_state -user_id $user_id -state "rejected"
     }
-        
+
     ad_proc -public delete {
         {-user_id:required}
     } {
@@ -215,7 +189,7 @@ namespace eval acs_user {
     } {
         change_state -user_id $user_id -state "deleted"
     }
-        
+
     ad_proc -public unapprove {
         {-user_id:required}
     } {
@@ -223,5 +197,5 @@ namespace eval acs_user {
     } {
         change_state -user_id $user_id -state "needs approval"
     }
-        
+
 }
