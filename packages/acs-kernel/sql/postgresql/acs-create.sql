@@ -186,22 +186,9 @@ begin;
  -- Administrators can read, write, create, and delete. -- 
  ---------------------------------------------------------
 
- -- temporarily drop this trigger to avoid a data-change violation 
- -- on acs_privilege_hierarchy_index while updating the child privileges.
-
- drop trigger acs_priv_hier_ins_del_tr on acs_privilege_hierarchy;
-
  select acs_privilege__add_child('admin', 'read');
  select acs_privilege__add_child('admin', 'write');
  select acs_privilege__add_child('admin', 'create');
-
- -- re-enable the trigger before the last insert to force the 
- -- acs_privilege_hierarchy_index table to be updated.
-
- create trigger acs_priv_hier_ins_del_tr after insert or delete
- on acs_privilege_hierarchy for each row
- execute procedure acs_priv_hier_ins_del_tr ();
-
  select acs_privilege__add_child('admin', 'delete');
 
 end;

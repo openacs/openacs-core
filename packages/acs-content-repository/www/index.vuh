@@ -21,16 +21,13 @@ set content_root \
   [db_string content_root "select content_item.get_root_folder from dual"]
 set template_root \
   [db_string template_root "select content_template.get_root_folder from dual"]
-
 # Serve the page
 
-# DRB: Note that content::init modifies the local variable the_root, which is treated
-# as though it's been passed by reference.   This requires that the redirect treat the
-# path as an absolute path within the filesystem.
-
+ns_log notice "RESOLVING URL: $the_root $the_url"
 if { [content::init the_url the_root $content_root $template_root public $revision_id] } {
   set file "$the_root/$the_url"
-  rp_internal_redirect -absolute_path $file
+  ns_log notice "RESOLVED URL: $file"
+  rp_serve_abstract_file $file
 } else {
   # ns_returnnotfound
   set page "[ad_header {Content Item Not Found}]"
