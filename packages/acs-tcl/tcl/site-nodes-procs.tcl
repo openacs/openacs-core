@@ -374,7 +374,7 @@ ad_proc -public site_node::get_node_id_from_object_id {
 } {
     set url  [lindex [get_url_from_object_id -object_id $object_id] 0]
     if { ![empty_string_p $url] } {
-        return [get_node_id -url]
+        return [get_node_id -url $url]
     } else {
         return {}
     }
