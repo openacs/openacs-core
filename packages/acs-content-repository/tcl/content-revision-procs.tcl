@@ -26,6 +26,7 @@ ad_proc -public ::content::revision::new {
     {-creation_user}
     {-creation_ip}
     {-attributes}
+    {-is_live "f"}
 } {
     Adds a new revision of a content item. If content_type is not
     passed in, we determine it from the content item. This is needed
@@ -75,7 +76,7 @@ ad_proc -public ::content::revision::new {
     }
 
     if {![exists_and_not_null content_type]} {
-	set content_type [item::get_content_type $item_id]
+	set content_type [::content::item::content_type $item_id]
     }
     set attribute_names ""
     set attribute_values ""
@@ -118,7 +119,15 @@ ad_proc -public ::content::revision::new {
 	}
         db_dml insert_revision $query_text
     }
-
+ns_log notice "
+DB --------------------------------------------------------------------------------
+DB DAVE debugging /var/lib/aolserver/openacs-5-1/packages/acs-content-repository/tcl/content-revision-procs.tcl
+DB --------------------------------------------------------------------------------
+DB is_live = '${is_live}' \n
+DB revision_id = '${revision_id}'"
+    if {[string is true $is_live]} {
+        content::item::set_live_revision -revision_id $revision_id
+    }
     return $revision_id
 }
 

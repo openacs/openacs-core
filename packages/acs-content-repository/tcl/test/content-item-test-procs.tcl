@@ -92,17 +92,15 @@ aa_register_case content_item {
                                        ]
 
             aa_true "Evil_name item created" [expr $evil_item_id == $returned_evil_item_id]
-            # should be using content::item::get here, but it's not implemented
-            aa_true "Evil_name item exists" [expr $evil_item_id == \
-                                         [db_string get_item \
-                                              "select item_id from
-                                               cr_items where item_id=:evil_item_id and name=:evil_test_name"]]
+
+            aa_true "Evil_name item exists" [expr \
+                                                 [content::item::get \
+                                                      -item_id $evil_item_id \
+                                                      -revision latest \
+                                                      -array_name evil_name] == 1]
             aa_true "Evil_name item's revision exists" \
                 [expr \
-                     {![string equal "" \
-                            [db_string get_revision "select
-                                                     latest_revision
- from cr_items, cr_revisions where latest_revision=revision_id and cr_items.item_id=:evil_item_id" -default ""]]}]
+                     {![string equal "" $evil_name(latest_revision)]}]
 
             #########################################################
             # delete the evil_name item
@@ -110,20 +108,14 @@ aa_register_case content_item {
             
 
             aa_true "evil_name item deleted" [expr [content::item::delete -item_id $evil_item_id] == 0]
-
-            # should be using content::item::get here, but it's not implemented
-            aa_true "evil_name item no longer exists" [string equal \
-              [db_string get_item "select item_id 
-                                     from cr_items 
-                                    where item_id=:evil_item_id 
-                                      and name='$evil_test_name'" -default "no"] "no"]
-
-            set evil_item_revision [db_string get_revision "select latest_revision
-                                                             from cr_items, 
-                                                                  cr_revisions 
-                                                            where latest_revision=revision_id 
-                                                              and cr_items.item_id=:evil_item_id" -default "no"]
-            aa_true "evil_name item revision does not exist" [string equal $evil_item_revision "no"]
+            array unset evil_name
+            aa_true "evil_name item no longer exists" [expr \
+                [content::item::get \
+                     -item_id $evil_item_id \
+                     -revision "latest" \
+                     -array_name evil_name] == 0]
+            aa_true "evil_name item revision does not exist" [expr \
+                                                              ![info exists evil(latest_revision)]]
 
 
             #########################################################
@@ -161,21 +153,17 @@ aa_register_case content_item {
             #########################################################
 
             aa_true "New Type item created" [expr $new_type_item_id == $returned_new_type_item_id]
-            aa_true "New Type item exists" [expr $new_type_item_id == \
-                                         [db_string get_item \
-                                              "select item_id from
-                                               cr_items where item_id=:new_type_item_id and name='test_item_${new_type_item_id}'" -default ""]]
+            aa_true "New Type item exists" [expr [content::item::get \
+                                                      -item_id $new_type_item_id \
+                                                      -revision "latest" \
+                                                      -array_name new_type_item] == 1]
 
             #########################################################
             # check that the extended attributes and the revision
             # exist
             #########################################################
-            aa_true "First item's revision exists" \
-                [expr \
-                     {![string equal "" \
-                            [db_string get_revision "select
-                                                     latest_revision
- from cr_items, __test_typex where latest_revision=test_id and cr_items.item_id=:new_type_item_id" -default ""]]}]
+            # this test is obselete since content::item::get uses
+            # the content type view to retreive the latest revision
             
             
 
