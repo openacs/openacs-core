@@ -17,11 +17,11 @@
         <else>
           Faked user: <i>Not faking.</i><br />
         </else>
-        Change faked user: <select name="user_id">
+        Change faked user: <if @search_p@ eq "0"><select name="user_id">
           <multiple name="users">
             <option value="@users.user_id@" <if @users.selected_p@>selected</if>>@users.name@ <if @users.email@ not nil>(@users.email@)</if></option>
           </multiple>
-        </select>
+        </select></if><else><input type="text" name="keyword"><input type="hidden" name="target" value="@target@"></else>
         <input type="submit" value="Go">
       </div>
     </form>

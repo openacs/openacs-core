@@ -39,7 +39,26 @@ if { $show_p } {
         set fake_user_email {}
         set real_user_email {}
 
-        db_multirow -unclobber -extend { selected_p } users select_users { 
+        set set_user_url "${ds_url}set-user"
+        set export_vars [export_vars -form { { return_url [ad_return_url] } }]
+
+        set unfake_url [export_vars -base $set_user_url { { user_id $real_user_id } { return_url [ad_return_url] } }]
+
+        #Decide what to do based on how many users there are.
+        set n_users [util_memoize {db_string select_n_users "select count(user_id) from users" -default "unknown"} 300]
+
+        if { $n_users > 100 } {
+            set search_p 1
+            set size_restriction "and u.user_id in (:real_user_id, :fake_user_id)"
+            #Remap the set_user_url to the users search page
+            set target $set_user_url
+            set set_user_url /acs-admin/users/search
+        } else {
+            set search_p 0
+            set size_restriction ""
+        }
+
+        db_multirow -unclobber -extend { selected_p } users select_users "
             select u.user_id, 
                    pe.first_names || ' ' || pe.last_name as name,
                    pa.email 
@@ -48,8 +67,9 @@ if { $show_p } {
                    parties pa
             where  pa.party_id = u.user_id
             and    pe.person_id = u.user_id
+            $size_restriction
             order  by lower(pe.first_names), lower(pe.last_name)
-        } {
+        " {
             if { $fake_user_id == $user_id } {
                 set selected_p 1
                 set fake_user_name $name
@@ -63,10 +83,6 @@ if { $show_p } {
             }
         }
         
-        set set_user_url "${ds_url}/set-user"
-        set export_vars [export_vars -form { { return_url [ad_return_url] } }]
-
-        set unfake_url [export_vars -base $set_user_url { { user_id $real_user_id } { return_url [ad_return_url] } }]
     }
 
     # Profiling information
