@@ -873,5 +873,7 @@ ad_proc -private aa_execute_rollback_tests {} {
     }
   }
 
-  unset aa_rollback_test_statements
+  if { [info exists aa_rollback_test_statements] } {
+    unset aa_rollback_test_statements
+  }
 }
