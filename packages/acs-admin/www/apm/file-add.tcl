@@ -6,6 +6,7 @@ ad_page_contract {
     @cvs-id file-add.tcl,v 1.4 2000/10/12 00:48:48 bquinn Exp    
 } {
     {version_id:integer}
+    {verbose:integer 0}
 }
 
 apm_version_info $version_id
@@ -34,6 +35,7 @@ db_release_unused_handles
 # the path of a file and its file type.
 set processed_files [list]
 set counter 0
+set registered 0
 
 foreach file [lsort [ad_find_all_files -check_file_func apm_include_file_p [acs_package_root_dir $package_key]]] {
     set relative_path [ad_make_relative_path $file]
@@ -43,7 +45,10 @@ foreach file [lsort [ad_find_all_files -check_file_func apm_include_file_p [acs_
     set relative_path [join [lrange $components 2 [llength $components]] "/"]
 
     if { [info exists registered_files($relative_path)] } {
-	doc_body_append "<tr><td></td><td>$relative_path (already registered to this package)</td></tr>\n"
+        incr registered 
+        if { $verbose } { 
+            doc_body_append "<tr><td></td><td>$relative_path (already registered to this package)</td></tr>\n"
+        }
     } else {
 	set type [apm_guess_file_type $package_key $relative_path]
 	set db_type [apm_guess_db_type $package_key $relative_path]
@@ -58,7 +63,6 @@ foreach file [lsort [ad_find_all_files -check_file_func apm_include_file_p [acs_
 }
 
 db_release_unused_handles
-
 # Transport the list of files to the next page.
 doc_body_append [export_form_vars processed_files]
 
@@ -88,5 +92,15 @@ function checkAll() {
     doc_body_append "<tr><td colspan=2><br>There are no additional files to add to the package.</td></tr></table></blockquote>"
 }
 
+if { $registered < 1 } {
+        doc_body_append "<p>No registered files exist"
+} else { 
+    if { $verbose } { 
+        doc_body_append "<p>$registered registered files <a href=\"file-add?version_id=$version_id&verbose=0\">hide them</a>"
+    } else { 
+        doc_body_append "<p>$registered registered files hidden <a href=\"file-add?version_id=$version_id&verbose=1\">display them</a>"
+    }
+}
+        
 doc_body_append "</center>\n[ad_footer]\n"
 
