@@ -70,6 +70,18 @@ values ('es_ES', 'Spanish (ES)', 'es', 'ES', 'SPANISH',
 
 insert into ad_locales 
        (locale, label, language, country, nls_language, nls_territory, 
+        nls_charset, mime_charset, default_p) 
+values ('ast_ES', 'Asturian (ES)', 'es', 'ES', 'SPANISH', 
+       'SPAIN', 'WE8DEC', 'ISO-8859-1', 't');
+
+insert into ad_locales 
+       (locale, label, language, country, nls_language, nls_territory, 
+        nls_charset, mime_charset, default_p) 
+values ('gl_ES', 'Galician-Portugese (ES)', 'es', 'ES', 'SPANISH', 
+       'SPAIN', 'WE8DEC', 'ISO-8859-1', 't');
+
+insert into ad_locales 
+       (locale, label, language, country, nls_language, nls_territory, 
         nls_charset, mime_charset, default_p)
  values ('fr_FR', 'French (FR)', 'fr', 'FR', 'FRENCH', 
         'FRANCE', 'WE8ISO8859P1', 'ISO-8859-1', 't');
