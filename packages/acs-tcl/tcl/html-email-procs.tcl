@@ -120,13 +120,29 @@ ad_proc parse_incoming_email {
         set parts [list $mime]
     }
 
+    # Expand any first-level multipart/alternative children.
+    set expanded_parts [list]
     foreach part $parts {
+        if { [string equal [mime::getproperty $part content] "multipart/alternative" ] } {
+            foreach child_part [mime::getproperty $part parts] {
+                lappend expanded_parts $child_part
+            }
+        } else {
+            lappend expanded_parts $part
+        }
+    }
+
+    foreach part $expanded_parts {
         switch [mime::getproperty $part content] {
             "text/plain" {
-                set plain [mime::getbody $part]
+                if { ![info exists plain] } {
+                    set plain [mime::getbody $part]
+                }
             }
             "text/html" {
-                set html [mime::getbody $part]
+                if { ![info exists html] } {
+                    set html [mime::getbody $part]
+                }
             }
         }
     }
