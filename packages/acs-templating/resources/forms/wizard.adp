@@ -3,10 +3,10 @@
 <tr><td>
 
 <!-- Light blue pad -->
-<table bgcolor=#99CCFF cellspacing=0 cellpadding=6 border=0 width=100%>
+<table bgcolor=#99CCFF cellspacing=0 cellpadding=6 border=0 width="100%">
 <tr><td>
 
-<table bgcolor=#99CCFF cellspacing=0 cellpadding=2 border=0 width=100%>
+<table bgcolor=#99CCFF cellspacing=0 cellpadding=2 border=0 width="100%">
 
   <multiple name=elements>
   

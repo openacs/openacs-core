@@ -3,7 +3,7 @@
 <property name="context_bar">@context_bar@</property>
 <html>
   <body>
-  <table border=0 cellspacing=0 cellpadding=3 width=100%>
+  <table border=0 cellspacing=0 cellpadding=3 width="100%">
     <tr>
       <th bgcolor="#ECECEC">Category</th>
       <th bgcolor="#ECECEC">Mode</th>
@@ -52,7 +52,7 @@
   </ul>
   <p>
   <if @view_by@ eq "package">
-    <table width=100%>
+    <table width="100%">
     <tr>
         <th bgcolor=#c0c0c0>Package key</th>
         <th bgcolor=#c0c0c0>Total run testcases</th>
@@ -84,7 +84,7 @@
     </multiple>
     </table>
   </if><else>
-    <table width=100%>
+    <table width="100%">
     <tr>
         <th bgcolor=#c0c0c0>Package key</th>
         <th bgcolor=#c0c0c0>Testcase id</th>

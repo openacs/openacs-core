@@ -11,7 +11,7 @@
 @error_msg@
 </if>
 <else>
-<table width=100%>
+<table width="100%">
   <tr><td bgcolor=#e4e4e4>@documentation@</td></tr>
 </table>
 
