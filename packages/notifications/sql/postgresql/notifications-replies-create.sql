@@ -24,8 +24,13 @@ create table notification_replies (
                                   constraint notif_repl_from_fk references users(user_id),
        subject                    varchar(100),
        content                    text,
-       reply_date                 timestamp
+       reply_date                 timestamptz
 );
+
+-- RI indexes
+create index notif_repl_from_user_idx ON notification_replies(from_user);
+create index notif_repl_type_id_idx ON notification_replies(type_id);
+create index notif_repl_object_id_idx ON notification_replies(object_id);
 
 
 select acs_object_type__create_type (

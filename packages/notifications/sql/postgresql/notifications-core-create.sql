@@ -160,7 +160,7 @@ create table notifications (
                                     constraint notif_object_id_fk
                                     references acs_objects(object_id)
                                     on delete cascade,
-    notif_date                      timestamp
+    notif_date                      timestamptz
                                     constraint notif_notif_date_nn
                                     not null,
     -- this is to allow responses to notifications
@@ -171,6 +171,11 @@ create table notifications (
     notif_text                      text,
     notif_html                      text
 );
+
+-- RI indexes 
+create index notifications_type_id_idx ON notifications(type_id);
+create index notifications_response_id_idx ON notifications(response_id);
+create index notifications_object_id_idx ON notifications(object_id);
 
 -- who has received this notification?
 create table notification_user_map (
@@ -184,8 +189,12 @@ create table notification_user_map (
                                     on delete cascade,
     constraint notif_user_map_pk
     primary key (notification_id, user_id),
-    sent_date                       timestamp
+    sent_date                       timestamptz
 );
+
+-- RI Indexes 
+create index notification_user_map_user_idx ON notification_user_map(user_id);
+
 
 --
 -- Object Types

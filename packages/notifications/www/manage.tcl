@@ -7,6 +7,7 @@ ad_page_contract {
     @cvs-id $Id$
 } {}
 
+ad_maybe_redirect_for_registration
 set user_id [ad_conn user_id]
 set return_url [ad_conn url]
 set context [list "Manage Notifications"]

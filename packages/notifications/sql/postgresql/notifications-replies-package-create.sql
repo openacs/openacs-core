@@ -16,7 +16,7 @@ select define_function_args ('notification_reply__new','reply_id,object_id,type_
 select define_function_args ('notification_reply__delete','reply_id');
 
 
-create function notification_reply__new (integer,integer,integer,integer,varchar,text,timestamp with time zone,timestamp with time zone,integer,varchar,integer)
+create function notification_reply__new (integer,integer,integer,integer,varchar,text,timestamptz,timestamptz,integer,varchar,integer)
 returns integer as '
 DECLARE
         p_reply_id                      alias for $1;
