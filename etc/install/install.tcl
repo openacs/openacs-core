@@ -12,12 +12,18 @@ set server "service0"
 # Some people like this to be at /web/${server}, but we recommend the below standard setting.
 set serverroot "/var/lib/aolserver/${server}"
 
-# The port number where the server will serve up pages
+# The host name (DNS) the server will be listening on
+set server_host localhost
+
+# The IP address the server will be listening on
+set server_ip 127.0.0.1
+
+# The port number the server will be listening on
 set server_port 8000
 
 # The URL where your server will be accessible. This is used by the installation scripts to complete the installation.
 # Don't forget to include the port number above
-set server_url "http://localhost:${server_port}"
+set server_url "http://${server_host}:${server_port}"
 
 # OS user and group that AOLserver runs as. We recommend that you create a new user for your server.
 # If you do not want to do that, change the user name below
@@ -73,7 +79,7 @@ set pg_bindir "/usr/local/pgsql/bin"
 set db_name ${server}
 
 # Password for the Oracle user
-set oracle_password ${oracle_user}
+set oracle_password ${db_name}
 
 # The system user account and password. We need this to create the tablespace and user above.
 set system_user "system"
