@@ -41,7 +41,7 @@ namespace eval permission {
             set party_id [ad_conn user_id]
         }
 
-        return [db_string select_permission_p {}]
+        return [db_0or1row select_permission_p {}]
     }
 
     ad_proc -public require_permission {

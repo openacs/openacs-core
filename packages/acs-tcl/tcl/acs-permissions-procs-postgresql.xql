@@ -24,8 +24,7 @@
 
     <fullquery name="permission::permission_p.select_permission_p">
         <querytext>
-            select count(*)
-            from dual
+            select 1
             where 't' = acs_permission__permission_p(:object_id, :party_id, :privilege)
         </querytext>
     </fullquery>
