@@ -10,7 +10,7 @@
     <version name="5.1.2" url="http://openacs.org/repository/download/apm/acs-reference-5.1.2.apm">
         <owner url="mailto:jon@jongriffin.com">Jon Griffin</owner>
         <summary>Tools and API for managing refrence data.</summary>
-        <release-date>2004-04-29</release-date>
+        <release-date>2004-10-21</release-date>
         <vendor url="http://www.mayuli.com">Mayuli Enterprises, LLC</vendor>
         <description format="text/html">Reference Data provides an API to support:
 &lt;ul&gt;

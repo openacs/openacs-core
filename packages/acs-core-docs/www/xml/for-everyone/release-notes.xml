@@ -33,6 +33,21 @@ BEGINNING OF TEMPLATE
   </sect2>
 END OF TEMPLATE -->
 
+  <sect2 id="release-notes-5-1-2">
+    <title>Release 5.1.2</title>
+    <itemizedlist>
+      <listitem>
+        <para>Translations syncronized with the translation server.
+        Basque and Catalan added.
+        </para>
+      </listitem>
+      <listitem>
+        <para>For a complete change list, see the  Change list since
+          5.1.0 in <link linkend="changelog">Changelog</link>.</para>
+      </listitem>
+    </itemizedlist>
+   </sect2>
+
   <sect2 id="release-notes-5-1-1">
     <title>Release 5.1.1</title>
     <itemizedlist>

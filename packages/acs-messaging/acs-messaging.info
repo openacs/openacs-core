@@ -12,7 +12,7 @@
         <owner url="mailto:prevost@maya.com">John Prevost</owner>
         <owner url="mailto:vinod@kurup.com">Vinod Kurup</owner>
         <summary>General messaging for bboard and general comments.</summary>
-        <release-date>2004-04-29</release-date>
+        <release-date>2004-10-21</release-date>
         <vendor url="http://openacs.org">OpenACS</vendor>
         <description format="text/html">Provides generic message services, with email sending.  acs-mail-lite and notifications are the 
         prefered packages for delivering this functionality and it is anticipated that this package will ultimately be deprecated.</description>
