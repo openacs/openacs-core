@@ -10,7 +10,7 @@ ad_page_contract {
 }
 
 if {![db_0or1row register_user_state_properties {
-    select member_state, email, rowid 
+    select member_state, email, row_id 
     from cc_users
     where user_id = :user_id and
     email_verified_p = 'f' }]} { 
@@ -45,5 +45,5 @@ db_release_unused_handles
 ad_return_template
 
 # the user has to come back and activate their account
-ns_sendmail  "$email" "[ad_parameter NewRegistrationEmailAddress "security"]" "Welcome to [ad_system_name]" "To confirm your registration, please go to [ad_parameter -package_id [ad_acs_kernel_id] SystemURL]/register/email-confirm.tcl?[export_url_vars rowid]"
+ns_sendmail  "$email" "[ad_parameter NewRegistrationEmailAddress "security"]" "Welcome to [ad_system_name]" "To confirm your registration, please go to [ad_parameter -package_id [ad_acs_kernel_id] SystemURL]/register/email-confirm.tcl?[export_url_vars row_id]"
 
