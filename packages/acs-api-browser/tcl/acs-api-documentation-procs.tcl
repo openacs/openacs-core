@@ -177,7 +177,10 @@ ad_proc -public api_script_documentation {
 
     # If it's not a Tcl file, we can't do a heck of a lot yet. Eventually
     # we'll be able to handle ADPs, at least.
-    if { ![string equal [file extension $path] ".tcl"] } {
+    if { [string equal [file extension $path] ".xql"] } {
+	append out "<blockquote>DB Query file</blockquote>\n"
+	return $out
+    } elseif { ![string equal [file extension $path] ".tcl"] } {
 	append out "<blockquote><i>Delivered as [ns_guesstype $path]</i></blockquote>\n"
 	return $out
     }
@@ -711,4 +714,36 @@ ad_proc api_proc_link { proc } {
     @creation-date 14 July 2000
 } {
     return "<a href=\"[api_proc_url $proc]\">$proc</a>"
+}
+
+ad_proc -private api_xql_links_list { path } {
+    
+    Returns list of xql files related to tcl script file
+    @param path path and filename from [acs_root_dir]
+    
+    
+} {
+    
+    set linkList [list]
+    set filename "[acs_root_dir]/$path"
+    set path_dirname [file dirname $path]
+    set file_dirname [file dirname $filename]
+    set file_rootname [file rootname [file tail $filename]]
+    regsub {(-oracle|-postgresql)$} $file_rootname {} file_rootname
+    set files \
+        [lsort -decreasing \
+             [glob -nocomplain \
+                  -directory $file_dirname \
+                  "${file_rootname}{,-}{,oracle,postgresql}.{adp,tcl,xql}" ]]
+    
+    foreach file $files {
+        lappend linkList [list \
+                              filename $file \
+                              link "content-page-view?source_p=1&path=[ns_urlencode "$path_dirname/[file tail $file]"]" \
+                              ]
+                          
+    }
+
+    return $linkList
+    
 }

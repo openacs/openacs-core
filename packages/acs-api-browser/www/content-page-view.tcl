@@ -11,6 +11,7 @@ ad_page_contract {
     @cvs-id $Id$
 } {
     version_id:integer,optional
+    source_p:integer,optional,trim
     path
 } -properties {
     title:onevalue
@@ -19,6 +20,14 @@ ad_page_contract {
 }
 
 set context [list]
+set url_vars [export_url_vars path version_id]
+set return_url [ns_urlencode [ad_conn url]?][ns_urlencode $url_vars]
+set default_source_p [ad_get_client_property -default 0 acs-api-browser api_doc_source_p]
+
+if { ![info exists source_p] } {
+    set source_p $default_source_p
+}
+
 if { ![info exists version_id] && \
         [regexp {^packages/([^ /]+)/} $path "" package_key] } {
     db_0or1row version_id_from_package_key {
@@ -38,6 +47,29 @@ if { [info exists version_id] } {
 }
 
 lappend context [file tail $path]
+
+set filename "[acs_root_dir]/$path"
+
+if {![file exists $filename] || [file isdirectory $filename]} {
+    set file_contents "file '$filename' not found"
+} else {
+    if { $source_p } {
+        if {[catch {
+        
+            set fd [open $filename r]
+            set file_contents [read $fd]
+            close $fd
+        
+        } err ]} {
+            set file_contents "error opening '$filename'\n$err"
+        } else {
+            set file_contents [ad_quotehtml $file_contents]
+        }
+    }
+
+    template::util::list_to_multirow xql_links [api_xql_links_list $path]
+}
+
 
 set title [file tail $path]
 set script_documentation [api_script_documentation $path]
