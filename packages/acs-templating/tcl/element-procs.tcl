@@ -1,14 +1,15 @@
-# Form element procedures for the ArsDigita Templating System
-
+# Form element procedures for the OpenACS Templating System
+#
 # Copyright (C) 1999-2000 ArsDigita Corporation
 # Authors: Karl Goldstein    (karlg@arsdigita.com)
 #          Stanislav Freidin (sfreidin@arsdigita.com)
-
+#
 # $Id$
-
+#
 # This is free software distributed under the terms of the GNU Public
 # License.  Full text of the license is available from the GNU Project:
 # http://www.fsf.org/copyleft/gpl.html
+
 ad_proc -public element { command form_id element_id args } {
     element is really template::element although when in the
     "template" namespace you may omit the template:: qualifier.
@@ -91,7 +92,9 @@ ad_proc -public template::element::create { form_id element_id args } {
                           where name is a unique identifier for the validation
                           step, expression is a block to Tcl code that evaluates to
                           1 or 0, and message is to be displayed to the user when 
-                          the validation step fails.
+                          the validation step fails, that is, if the expression 
+                          evaluates to 0. Use the special variable <tt>$value</tt> 
+			  to refer to the value entered by the user in that field.
 
     @option sign          specify for a hidden widget that its value should be
                           signed
@@ -124,7 +127,6 @@ ad_proc -public template::element::create { form_id element_id args } {
     @see template::data::validate
     @see template::form::create
 } {
-
   set level [template::adp_level]
 
   # add the element to the element list
