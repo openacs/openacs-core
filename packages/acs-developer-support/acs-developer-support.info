@@ -6,6 +6,7 @@
     <pretty-plural>Developer Support</pretty-plural>
     <initial-install-p>f</initial-install-p>
     <singleton-p>t</singleton-p>
+    <auto-mount>ds</auto-mount>
 
     <version name="5.0d1" url="http://www.arsdigita.com/acs-repository/download/apm/acs-developer-support-5.0d1.apm">
     <database-support>
