@@ -154,7 +154,7 @@
             <file type="documentation" path="www/doc/uninstall.html"/>
             <file type="query_file" db_type="oracle" path="www/index-oracle.xql"/>
             <file type="query_file" db_type="postgresql" path="www/index-postgresql.xql"/>
-            <file path="www/index.vuh"/>
+            <file type="content_page" path="www/index.vuh"/>
             <file type="query_file" path="www/index.xql"/>
         </files>
         <parameters>

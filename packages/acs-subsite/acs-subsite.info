@@ -59,6 +59,7 @@
             <file type="data_model" db_type="postgresql" path="sql/postgresql/subsite-callbacks-create.sql"/>
             <file type="data_model" db_type="postgresql" path="sql/postgresql/subsite-callbacks-drop.sql"/>
             <file type="data_model_upgrade" db_type="postgresql" path="sql/postgresql/upgrade/upgrade-4.1.1-4.2.sql"/>
+            <file type="data_model_upgrade" db_type="postgresql" path="sql/postgresql/upgrade/upgrade-4.5-4.5.1.sql"/>
             <file type="data_model" db_type="postgresql" path="sql/postgresql/user-profiles-create.sql"/>
             <file type="data_model" db_type="postgresql" path="sql/postgresql/user-profiles-drop.sql"/>
             <file type="data_model" db_type="postgresql" path="sql/postgresql/user-sc-create.sql"/>
