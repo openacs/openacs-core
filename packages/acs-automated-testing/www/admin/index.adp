@@ -27,7 +27,8 @@
       </multiple> ]
  <div class="form-help-text">
                   <img src="/shared/images/info.gif" width="12" height="9" alt="[i]" title="Help text" border="0">
-                  View and run only tests in this category (<a
+                  View and run only tests in this category.  Tests can
+      have more than one category.  (<a
       href="/api-doc/proc-view?proc=aa%5fregister%5fcase">more info</a>)
                 </div>
 
