@@ -3,6 +3,12 @@
   <property name="title">@page_title;noquote@</property>
   <property name="focus">authority.pretty_name</property>
 
+<if @configure_url@ not nil>
+  <p>
+    <b>&raquo;</b> <a href="@configure_url@">Configure drivers for this authority</a>
+  </p>
+</if>
+
 <formtemplate id="authority"></formtemplate>
 
 <if @display_batch_history_p@ true>
@@ -14,5 +20,5 @@
     </p>
   </if>
 
-  <listtemplate name="batch_jobs"></listtemplate>
+  <p><listtemplate name="batch_jobs"></listtemplate></p>
 </if>
