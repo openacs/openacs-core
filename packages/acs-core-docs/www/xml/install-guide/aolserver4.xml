@@ -49,7 +49,7 @@ make install</action>
 [root aolserver]# <userinput>cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co nscache</userinput>
 [root aolserver]# <userinput>cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co nspostgres</userinput>
 [root aolserver]# <userinput>cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co nssha1</userinput>
-[root aolserver]# <userinput>cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co nsoracle</userinput>
+[root aolserver]# <userinput>cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co -r v2_7 nsoracle</userinput>
 [root aolserver]# <userinput>cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co nsxml</userinput>
 [root aolserver]# <userinput>wget http://www.tdom.org/tDOM-0.7.8.tar.gz</userinput>
 [root aolserver]# <userinput>tar xvfz tDOM-0.7.8.tar.gz</userinput>
@@ -61,7 +61,7 @@ cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co -r aolser
 cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co nscache
 cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co nspostgres
 cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co nssha1
-cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co nsoracle
+cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co -r v2_7 nsoracle
 cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co nsxml
 wget http://www.tdom.org/tDOM-0.7.8.tar.gz
 tar xvfz tDOM-0.7.8.tar.gz</action></screen>
