@@ -10,11 +10,11 @@
   <msg key="lt_Notification_Interval">Notifieringsintervall</msg>
   <msg key="lt_Request_Notification_">Begär notifiering om %pretty_name%</msg>
   <msg key="lt_system_name_-_Batched">[%system_name% - Buntnotifiering]</msg>
-  <msg key="lt_You_have_no_notificat">Du har inga upplysningar.</msg>
+  <msg key="lt_You_have_no_notificat">Du har inga notifieringar.</msg>
   <msg key="lt_You_have_requested_no">Du har begärt notifiering om %pretty_name%. Om du vill, &lt;a href=&quot;%sub_url%&quot;&gt;säg upp prenumerationen&lt;/a&gt;.</msg>
   <msg key="lt_You_may_a_hrefsub_url">Om du vill, &lt;a href=&quot;%sub_url%&quot;&gt;begär notifiering&lt;/a&gt; om %pretty_name%.</msg>
-  <msg key="Manage_Notifications">Handha notifieringar</msg>
-  <msg key="Notification_type">Typ av upplysning</msg>
+  <msg key="Manage_Notifications">Hantera notifieringar</msg>
+  <msg key="Notification_type">Typ av notifiering</msg>
   <msg key="Request_Notification">Begär notifiering</msg>
   <msg key="SUBJECT">ÄMNE:</msg>
   <msg key="Unsubscribe">Säg upp prenumerationen</msg>
