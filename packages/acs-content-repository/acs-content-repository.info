@@ -19,9 +19,7 @@
         <requires url="acs-service-contract" version="4.2"/>
         <requires url="search" version="4.2"/>
 
-        <files>
             <!-- No files -->
-        </files>
         <callbacks>
         </callbacks>
         <parameters>

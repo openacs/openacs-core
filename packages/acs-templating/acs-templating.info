@@ -22,9 +22,6 @@ specification for many physical pages, so the overall layout of a site can be mo
         <provides url="acs-templating" version="4.6.2"/>
         <requires url="acs-kernel" version="4.6.2"/>
 
-        <files>
-            <file type="package_spec" path="acs-templating.info"/>
-        </files>
         <callbacks>
         </callbacks>
         <parameters>
