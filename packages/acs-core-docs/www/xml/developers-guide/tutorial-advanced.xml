@@ -13,6 +13,7 @@
     creating a minimal working package.  Each section can be used
     independently of all of the others; all sections assume that
     you've completed the basic tutorial.</para>
+
     <sect1 id="tutorial-specs">
       <title>Write the Requirements and Design Specs</title>
       <para>Before you get started you should make yourself familiar with
@@ -151,7 +152,188 @@ done
           </mediaobject>
         </figure>
     </sect1>
-   <sect1 id="tutorial-comments">
+
+  <sect1 id="tutorial-etp-templates" xreflabel="OpenACS ETP Templates">
+    <title>OpenACS Edit This Page Templates</title>
+
+    <authorblurb>
+      <para>by <ulink url="mailto:ncarroll@ee.usyd.edu.au">Nick Carroll</ulink></para>
+    </authorblurb>
+    
+    <sect2 id="goals">
+      <title>Goals</title>
+      <itemizedlist>
+        <listitem>
+          <para>Learn about the OpenACS templating system.</para>
+        </listitem>
+        <listitem>
+          <para>Learn about subsites and site-map administration.</para>
+        </listitem>
+      </itemizedlist>
+    </sect2>
+    
+    <sect2 id="introduction">
+      <title>Introduction</title>
+      <para>
+        The OpenACS templating system allows you to give your site a consistent look and feel. It also promotes code maintainability in the presentation layer, by allowing presentation components to be reused across multiple pages. If you need to change the layout for some reason, then you only need to make that change in one location, instead of across many files.
+      </para>
+      <para>
+        In this problem set you will familiarise yourself with the templating system in openacs. This will be achieved through customising an existing edit-this-page application template.
+      </para>
+      <para>
+        Before proceeding, it is strongly advised to read the templating documentation on your openacs installation (http://localhost:8000/doc/acs-templating). The documentation lists the special tags available for ADP files.
+      </para>
+    </sect2>
+    
+    <sect2 id="exercise1">
+      <title>Exercise 1: Create a Subsite</title>
+      <itemizedlist>
+        <listitem>
+          <para>Create a subsite called pset3.</para>
+        </listitem>
+        <listitem>
+          <para>A subsite is simply a directory or subdirectory mounted at the end of your domain name. This can be done in one of two places:</para>
+          <itemizedlist>
+            <listitem>
+              <para>http://localhost:8000/admin/site-map</para>
+            </listitem>
+            <listitem>
+              <para>or the subsite admin form on the main site, which is available when you login to your OpenACS installation.</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </itemizedlist>
+    </sect2>
+    
+    <sect2 id="exercise2">
+      <title>Exercise 2: Checkout and Install edit-this-page (ETP)</title>
+      <itemizedlist>
+        <listitem>
+          <para>Checkout ETP from CVS:</para>
+          <screen>cd ~/openacs/packages
+            cvs -d:pserver:anonymous@openacs.org:/cvsroot login
+            cvs -d:pserver:anonymous@openacs.org:/cvsroot co edit-this-page</screen>
+        </listitem>
+        <listitem>
+          <para>Go to the package manager at http://yoursite/acs-admin/apm. And install  the new package: edit-this-page.</para>
+        </listitem>
+        <listitem>
+          <para>Or use the "Add Application" form available on the Main site.</para>
+        </listitem>
+      </itemizedlist>
+    </sect2>
+    
+    <sect2 id="exercise3">
+      <title>Change ETP Application</title>
+      <itemizedlist>
+        <listitem>
+          <para>Work out how to change the ETP application.</para>
+        </listitem>
+        <listitem>
+          <para>Investigate each of the available ETP templates:</para>
+          <itemizedlist>
+            <listitem>Default</listitem>
+            <listitem>News</listitem>
+            <listitem>FAQ</listitem>
+          </itemizedlist>
+        </listitem>
+      </itemizedlist>
+    </sect2>
+    
+    <sect2 id="exercise4">
+      <title>Exercise 4: Create a New ETP Template</title>
+      <itemizedlist>
+        <listitem>
+          <para>Browse the files for each of the above ETP templates at:</para>
+          <screen>cd ~/openacs/packages/edit-this-page/templates</screen>
+        </listitem>
+        <listitem>
+          <para>Use the article template as the basis of our new col2 template.</para>
+          <screen>cp article-content.adp col2-content.adp
+            cp article-content.tcl col2-content.tcl
+            cp article-index.adp col2-index.adp
+            cp article-index.tcl col2-index.tcl</screen>
+        </listitem>
+        <listitem>
+          <para>The template should provide us with the following ETP layout:</para>
+          <informaltable frame="all" border="1" cellpadding="5" cellspacing="0">
+            <?dbhtml table-width="250" ?>
+            <?dbfo table-width="250" ?>
+            <tgroup cols="2" align="left" colsep="1" rowsep="1">
+              <colspec colname="c1"/>
+              <colspec colname="c2" colwidth="2"/>
+              <tbody>
+                <row>
+                  <entry namest="c1" nameend="c2" align="center">Header</entry>
+                </row>
+                <row>
+                  <?dbhtml row-height="200"?>
+                  <?dbfo row-height="200"?>
+                  <entry>Sidebar</entry>
+                  <entry>Main Content Pane</entry>
+                </row>
+              </tbody>
+            </tgroup>
+          </informaltable>
+        </listitem>
+        <listitem>
+          <para>The "Main Content" pane should contain the editable content that ETP provides.</para>
+        </listitem>
+        <listitem>
+          <para>The "Header" should display the title of the page that you set in ETP.</para>
+        </listitem>
+        <listitem>
+          <para>The "Sidebar" should display the extlinks that you add as a content item in ETP.</para>
+        </listitem>
+      </itemizedlist>
+    </sect2>
+    
+    <sect2 id="exercise5">
+      <title>Exercise 5: Register the col2 Template with ETP</title>
+      <itemizedlist>
+        <listitem>
+          <para>Need to register your template with ETP so that it appears in the drop-down menu that you would have seen in Exercise 3.</para>
+          <screen>cd ~/openacs/packages/edit-this-page/tcl
+            emacs etp-custom-init.tcl</screen>
+        </listitem>
+        <listitem>
+          <para>Use the function etp::define_application to register your template with ETP</para>
+          <itemizedlist>
+            <listitem>Uncomment the "asc" definition</listitem>
+            <listitem>Set allow_extlinks to true, the rest should be false.</listitem>
+          </itemizedlist>
+        </listitem>
+        <listitem>
+          <para>Restart your server for the changes to take effect.</para>
+        </listitem>
+      </itemizedlist>
+    </sect2>
+    
+    <sect2 id="exercise6">
+      <title>Exercise 6: Configure ETP to use the col2 Template</title>
+      <itemizedlist>
+        <listitem>
+          <para>Configure your ETP instance at /lab4/index to use the col2 template.</para>
+        </listitem>
+        <listitem>
+          <para>Create external links to link to other mounted ETP instances.</para>
+        </listitem>
+        <listitem>
+          <para>Check that your external links show up in the sidebar when you view your ETP application using the col2 template.</para>
+        </listitem>
+      </itemizedlist>
+    </sect2>
+    
+    <sect2 id="end">
+      <title>Who Wrote This and When</title>
+      <para>This problem set was originally written by <ulink url="http://www.weg.ee.usyd.edu.au/people/ncarroll">Nick Carroll</ulink> in August 2004 for the <ulink url="http://www.usyd.edu.au">University of Sydney</ulink> Course <ulink url="http://www.weg.ee.usyd.edu.au/courses/ebus5002">EBUS5002</ulink>.</para>
+      <para>This material is copyright 2004 by Nick Carroll.  It may be copied, reused, and modified, provided credit is given to the original author.</para>
+      <para><phrase role="cvstag">($Id$)</phrase></para>
+    </sect2>
+    
+  </sect1>
+
+  <sect1 id="tutorial-comments">
      <title>Adding Comments</title>
      <para>You can track comments for any ACS Object.  Here we'll track
      comments for notes.  On the note-edit.tcl/adp pair, which is used to
