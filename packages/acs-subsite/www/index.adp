@@ -29,28 +29,26 @@
           <a href="members/" class="button">#acs-subsite.Members#</a>
         </if>
 
-        <if @user_id@ ne 0>
-            <if @main_site_p@ false>  
-              <if @group_member_p@ true>
-                <a href="group-leave" class="button" title="#acs-subsite.Leave_this_subsite#">#acs-subsite.Leave_subsite#</a>
-              </if>
-              <else>
-                <if @can_join_p@ true>
-                  <if @group_join_policy@ eq "open">
-                    <a href="register/user-join" class="button" title="#acs-subsite.Join_this_subsite">#acs-subsite.Join_subsite#</a>
-                  </if>
-                  <else>
-                    <a href="register/user-join" class="button" title="#acs-subsite.Req_membership_subs#">#acs-subsite.Request_membership#</a>
-                  </else>
+        <if @untrusted_user_id@ ne 0>
+          <if @main_site_p@ false>  
+            <if @group_member_p@ true>
+              <a href="group-leave" class="button" title="#acs-subsite.Leave_this_subsite#">#acs-subsite.Leave_subsite#</a>
+            </if>
+            <else>
+              <if @can_join_p@ true>
+                <if @group_join_policy@ eq "open">
+                  <a href="register/user-join" class="button" title="#acs-subsite.Join_this_subsite">#acs-subsite.Join_subsite#</a>
                 </if>
-              </else>
-            </if>
-            <if @admin_p@ true> 
-              <a href="admin/" class="button" title="#acs-subsite.Administer_subsite#">#acs-kernel.common_Administration#</a>
-            </if>
-          </div>
+                <else>
+                  <a href="register/user-join" class="button" title="#acs-subsite.Req_membership_subs#">#acs-subsite.Request_membership#</a>
+                </else>
+              </if>
+            </else>
+          </if>
         </if>
-
+        <if @admin_p@ true> 
+          <a href="admin/" class="button" title="#acs-subsite.Administer_subsite#">#acs-kernel.common_Administration#</a>
+        </if>
       </div>
     </td>
   </tr>
