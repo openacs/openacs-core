@@ -31,11 +31,10 @@
 #
 # @author Peter Marklund (peter@collaboraid.biz)
 
+export script_path=$(dirname $(which $0))
+
 ### Functions start
-get_catalog_keys() {
-    file_name=$1
-    echo $(${script_path}/mygrep '<msg key="([^"]+)"' $file_name)
-}
+source ${script_path}/functions.sh
 
 get_date_time_key() {
     message_key=$1
@@ -54,9 +53,9 @@ check_one_key_in_catalog_file() {
         echo "$0: $package_key - Warning: key $message_key not in $catalog_package_key catalog file. Please inspect key usage:" 
         # This may be a false alarm, so show key usage for manual inspection
         key_usage=$(find $find_dirs -type f | xargs grep "${package_key}.${message_key}")
-        echo ""
-        echo $key_usage
-        echo ""
+        echo "$0: $package_key - Warning:"
+        echo "$0: $package_key - Warning: $key_usage"
+        echo "$0: $package_key - Warning:"
     fi
 
 }
@@ -148,7 +147,6 @@ check_adp_file_lookups_are_in_catalog() {
 }
 ### Functions end
 
-script_path=$(dirname $(which $0))
 packages_dir="${script_path}/../../"
 
 find_dirs="$packages_dir ${packages_dir}../www"
