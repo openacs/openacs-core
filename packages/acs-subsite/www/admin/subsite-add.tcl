@@ -31,19 +31,15 @@ ad_form -name subsite -cancel_url . -form {
         {html {size 30}}
     }
 } -on_submit {
-    if { ![empty_string_p $folder] } {
-        set existing_node(node_id) {}
-        set errno [catch { array set existing_node [site_node::get_from_url -exact -url "[ad_conn package_url]$folder"] }]
-        if { ([ad_form_new_p -key node_id] && !$errno) || (![ad_form_new_p -key node_id] && !$errno && $existing_node(node_id) != $node_id)} {
-            form set_error application folder "This folder name is already used"
-            break
-        }
-    } else {
-        # Autogenerate folder name
-        set parent_node_id [ad_conn node_id]
-        set existing_urls [site_node::get_children -node_id $parent_node_id -element name]
+    set folder [site_node::verify_folder_name \
+                    -parent_node_id [ad_conn node_id] \
+                    -current_node_id $node_id \
+                    -folder $folder \
+                    -instance_name $instance_name]
 
-        set folder [util_text_to_url -existing_urls $existing_urls -text $instance_name]
+    if { [empty_string_p $folder] } {
+        form set_error subsite folder "This folder name is already used"
+        break
     }
 } -new_data {
     if { [catch {
