@@ -29,13 +29,13 @@ begin
     and
       use_context = new.use_context
     and 
-      template_id ^= new.template_id
+      template_id <> new.template_id
     and
       is_default = ''t'';
   end if;
 
-  return;
   return new;
+
 end;' language 'plpgsql';
 
 create trigger cr_type_template_map_tr before insert on cr_type_template_map
@@ -88,7 +88,7 @@ begin
     create_type__name_method
   );
 
-  PERFORM refresh_view(create_type__content_type);
+  PERFORM content_type__refresh_view(create_type__content_type);
 
   return 0; 
 end;' language 'plpgsql';
@@ -270,6 +270,7 @@ begin
   PERFORM acs_attribute__drop_attribute(drop_attribute__content_type, 
                                         drop_attribute__attribute_name);
 
+  -- FIXME: postgresql does not support drop column.
   -- Drop the column if neccessary
   if drop_attribute__drop_column then
       execute ''alter table '' || v_table || '' drop column '' ||
@@ -280,7 +281,7 @@ begin
 --       v_table || ''.'' || attribute_name || '' in content_type.drop_attribute'');  
   end if;  
 
-  PERFORM content_type__refresh_view(content_type);
+  PERFORM content_type__refresh_view(drop_attribute__content_type);
 
   return 0; 
 end;' language 'plpgsql';
@@ -358,7 +359,7 @@ begin
   --   any given content_type/use_context pair
   update cr_type_template_map
     set is_default = ''f''
-    where template_id ^= set_default_template__template_id
+    where template_id <> set_default_template__template_id
     and content_type = set_default_template__content_type
     and use_context = set_default_template__use_context
     and is_default = ''t'';
@@ -472,6 +473,10 @@ end;' language 'plpgsql';
 
 -- FIXME: need to look at this in more detail.  This probably can't be made 
 -- to work reliably in postgresql.
+
+-- Create or replace a trigger on insert for simplifying addition of
+-- revisions for any content type
+
 -- procedure refresh_trigger
 create function content_type__refresh_trigger (varchar)
 returns integer as '
@@ -491,13 +496,13 @@ begin
 
   tr_text := ''
 
-create function '' || v_table_name || ''t()  returns opaque as \\\\'
+create function '' || v_table_name || ''t()  returns opaque as \\\'
 declare
   new_revision_id integer;
 begin
 
   if new.item_id is null then
-    raise EXCEPTION \\\\'\\\\'-20000: item_id is required when inserting into %i \\\\'\\\\', v_table_name;
+    raise EXCEPTION \\\'\\\'-20000: item_id is required when inserting into %i \\\'\\\', v_table_name;
   end if;
 
   if new.text is not null then
@@ -541,9 +546,9 @@ begin
                   from                                                
                     acs_object_types                                  
                   where                                               
-                    object_type ^= ''acs_object''                       
+                    object_type <> ''acs_object''                       
                   and                                                 
-                    object_type ^= ''content_revision''                 
+                    object_type <> ''content_revision''                 
                   connect by                                          
                     prior supertype = object_type                     
                   start with                                          
@@ -557,7 +562,7 @@ begin
 
   -- end building the trigger code
   tr_text := tr_text || ''
-end;\\\\' language \\\\'plpgsql\\\\';
+end;\\\' language \\\'plpgsql\\\';
 create trigger '' || v_table_name || ''t before insert on '' || v_table_name || ''i for each row execute procedure '' || v_table_name || ''t()'';
 
   -- (Re)create the trigger
@@ -833,11 +838,11 @@ end;' language 'plpgsql';
 create function content_type__is_content_type (varchar)
 returns boolean as '
 declare
-  object_type            alias for $1;  
-  v_is_content_type      boolean       
+  is_content_type__object_type            alias for $1;  
+  v_is_content_type                       boolean       
 begin
 
-  if object_type = ''content_revision'' then
+  if is_content_type__object_type = ''content_revision'' then
 
     v_is_content_type := ''t'';
 
@@ -866,7 +871,7 @@ begin
 
   -- get the default template
   select
-    template_id into rotate_template__v_template_id
+    template_id into v_template_id
   from
     cr_type_template_map
   where
@@ -907,7 +912,7 @@ begin
   end if;
 
   -- register the new template as the default template of the content type
-  if v_template_id ^= rotate_template__template_id then
+  if v_template_id != rotate_template__template_id then
     content_type__register_template(
         rotate_template__v_content_type,
         rotate_template__template_id,

@@ -13,7 +13,7 @@
 -- http://www.fsf.org/copyleft/gpl.html
 
 --set serveroutput on
-
+-- FIXME: drop constraint doesn't work on postgresql
 create function inline_0 ()
 returns integer as '
 begin
@@ -76,7 +76,7 @@ begin
     execute ''create view cr_resolved_items as
        select
          i.parent_id, i.item_id, i.name, 
-         case s.target_id is NULL then \\\\'\\\\'f\\\\'\\\\' else \\\\'\\\\'t\\\\'\\\\' is_symlink,
+         case s.target_id is NULL then \\\'\\\'f\\\'\\\' else \\\'\\\'t\\\'\\\'  end as is_symlink,
          coalesce(s.target_id, i.item_id) resolved_id, s.label
        from
          cr_items i left outer join cr_symlinks s
@@ -84,15 +84,15 @@ begin
 
     execute ''alter table cr_folders add
       has_child_folders char(1)
-			default \\\\'\\\\'f\\\\'\\\\'
+			default \\\'\\\'f\\\'\\\'
 			constraint cr_folder_child_chk
-			check (has_child_folders in (\\\\'\\\\'t\\\\'\\\\',\\\\'\\\\'f\\\\'\\\\'))'';
+			check (has_child_folders in (\\\'\\\'t\\\'\\\',\\\'\\\'f\\\'\\\'))'';
 
     execute ''update cr_folders f set has_child_folders =
-      coalesce((select \\\\'\\\\'t\\\\'\\\\' from dual where exists
+      coalesce((select \\\'\\\'t\\\'\\\' from dual where exists
 	    (select 1 from cr_folders f_child, cr_resolved_items r_child
 	       where r_child.parent_id = f.folder_id
-		 and f_child.folder_id = r_child.resolved_id)), \\\\'\\\\'f\\\\'\\\\')'';
+		 and f_child.folder_id = r_child.resolved_id)), \\\'\\\'f\\\'\\\')'';
   end if;
 
 
@@ -131,14 +131,14 @@ begin
       publish_status varchar(40) 
                      constraint cr_items_pub_status_chk
                      check (publish_status in 
-                       (\\\\'\\\\'production\\\\'\\\\', \\\\'\\\\'ready\\\\'\\\\', \\\\'\\\\'live\\\\'\\\\', \\\\'\\\\'expired\\\\'\\\\'))'';
+                       (\\\'\\\'production\\\'\\\', \\\'\\\'ready\\\'\\\', \\\'\\\'live\\\'\\\', \\\'\\\'expired\\\'\\\'))'';
 
-    execute ''update cr_items set publish_status = \\\\'\\\\'live\\\\'\\\\'
+    execute ''update cr_items set publish_status = \\\'\\\'live\\\'\\\'
                          where live_revision is not null'';
 
-    execute ''alter table cr_item_publish_audit add
+    execute ''alter table cr_item_publish_audit add column 
       old_status varchar(40)'';
-    execute ''alter table cr_item_publish_audit add
+    execute ''alter table cr_item_publish_audit add column
       new_status varchar(40)'';
 
   end if;

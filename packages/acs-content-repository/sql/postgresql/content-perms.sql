@@ -84,22 +84,30 @@ begin
 
     if inherit_permissions__child_creator_id is not null then
       -- Grant cm_write and cm_perm to the child creator
-      if content_permission.permission_p (
-	   child_object_id, child_creator_id, ''cm_perm''
+      if content_permission__permission_p (
+	   inherit_permissions__child_object_id, 
+           inherit_permissions__child_creator_id, 
+           ''cm_perm''
 	 ) != ''t'' then
         -- Turn off inheritance and grant permission
         update acs_objects set security_inherit_p = ''f''
           where object_id = inherit_permissions__child_object_id;
 	PERFORM acs_permission__grant_permission (
-	   child_object_id, child_creator_id, ''cm_perm''
+	   inherit_permissions__child_object_id, 
+           inherit_permissions__child_creator_id, 
+           ''cm_perm''
 	);
       end if;
 
       if content_permission__permission_p (
-	   child_object_id, child_creator_id, ''cm_write''
+	   inherit_permissions__child_object_id, 
+           inherit_permissions__child_creator_id, 
+           ''cm_write''
 	 ) != ''t'' then
 	PERFORM acs_permission__grant_permission (
-	   child_object_id, child_creator_id, ''cm_write''
+	   inherit_permissions__child_object_id, 
+           inherit_permissions__child_creator_id, 
+           ''cm_write''
 	);
       end if;
     end if;
@@ -179,7 +187,9 @@ begin
   
     -- If the permission is already granted, do nothing
     if content_permission__permission_p (
-         object_id, grantee_id, privilege
+         grant_permission_h__object_id, 
+         grant_permission_h__grantee_id, 
+         grant_permission_h__privilege
        ) = ''t'' then
       return null;
     end if;
@@ -188,7 +198,9 @@ begin
     update acs_objects set security_inherit_p = ''f''
       where object_id = grant_permission_h__object_id;
 
-    PERFORM acs_permission__grant_permission(object_id, grantee_id, privilege);
+    PERFORM acs_permission__grant_permission(grant_permission_h__object_id, 
+                                             grant_permission_h__grantee_id, 
+                                             grant_permission_h__privilege);
     
     -- Revoke the children - they are no longer relevant
     
@@ -196,9 +208,11 @@ begin
       where privilege = grant_permission_h__privilege
       and descendant <> grant_permission_h__privilege;
     LOOP
-        PERFORM acs_permission__revoke_permission(grant_permission_h__object_id, 
-                                                  grant_permission_h__grantee_id, 
-                                                  v_rec.descendant);
+        PERFORM acs_permission__revoke_permission(
+                                                grant_permission_h__object_id, 
+                                                grant_permission_h__grantee_id,
+                                                v_rec.descendant
+        );
     end LOOP;
 
     return 0; 
@@ -231,10 +245,12 @@ begin
       and
         content_item__is_subclass (o.object_type, grant_permission__object_type) = ''t''
     LOOP   
-      -- Grant the parent and revoke the children, since we don''t need them
+      -- Grant the parent and revoke the children, since we do not need them
       -- anymore
       PERFORM content_permission__grant_permission_h (
-        v_rec.object_id, recepient_id, privilege
+        v_rec.object_id, 
+        grant_permission__recepient_id, 
+        grant_permission__privilege
       );      
       exit when grant_permission__is_recursive = ''f'';    
     end loop;
@@ -300,13 +316,15 @@ begin
                    content_item__is_subclass(o.object_type, revoke_permission__object_type) = ''t''
     LOOP   
       PERFORM content_permission__revoke_permission_h (
-        v_rec.object_id, revoke_permission__revokee_id, revoke_permission__privilege
+        v_rec.object_id, 
+        revoke_permission__revokee_id, 
+        revoke_permission__privilege
       );
       
       exit when revoke_permission__is_recursive = ''f'';    
     end loop;
 
-  return 0; 
+    return 0; 
 end;' language 'plpgsql';
 
 

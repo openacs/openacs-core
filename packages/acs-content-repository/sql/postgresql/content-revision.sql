@@ -131,10 +131,10 @@ begin
     cols := cols || '', '' || attr_rec.attribute_name;
   end loop;
 
-  execute ''insert into '' || v_table_name || 
-    '' ( '' || v_id_column || cols || '' ) ( select '' || copy_id || cols ||
-    '' from '' || v_table_name || '' where '' || v_id_column || '' = '' || 
-    copy_attributes__revision_id || '')'';
+  execute ''insert into '' || v_table_name || '' select '' || copy_id || 
+          '' as '' || v_id_column || cols || '' from '' || 
+          v_table_name || '' where '' || v_id_column || '' = '' || 
+          copy_attributes__revision_id;
   
   return 0; 
 end;' language 'plpgsql';
@@ -205,9 +205,9 @@ begin
                   from                                                
                     acs_object_types                                  
                   where                                               
-                    object_type ^= 'acs_object'                       
+                    object_type <> ''acs_object''                       
                   and                                                 
-                    object_type ^= 'content_revision'                 
+                    object_type <> ''content_revision''                 
                   connect by                                          
                     prior supertype = object_type                     
                   start with                                          
@@ -252,20 +252,26 @@ begin
 
   -- Recalculate latest revision
   if v_latest_revision = delete__revision_id then
-        select r.revision_id into v_latest_revision 
-          from cr_revisions r, acs_objects o
-         where o.object_id = r.revision_id
-           and r.item_id = v_item_id
-           and r.revision_id <> delete__revision_id
-      order by o.creation_date desc;
+      for v_rec in 
+          select r.revision_id into v_latest_revision 
+            from cr_revisions r, acs_objects o
+           where o.object_id = r.revision_id
+             and r.item_id = v_item_id
+             and r.revision_id <> delete__revision_id
+        order by o.creation_date desc 
+      LOOP
 
-      if NOT FOUND then
-        v_latest_revision := null;        
-      end if;
-    
-      update cr_items set latest_revision = v_latest_revision
-        where item_id = v_item_id;
+          v_latest_revision := v_rec.revision_id;
+          exit;
+      end LOOP;
   end if; 
+
+  if NOT FOUND then
+     v_latest_revision := null;        
+  end if;
+
+  update cr_items set latest_revision = v_latest_revision
+  where item_id = v_item_id;
  
   -- Clear live revision
   if v_live_revision = delete__revision_id then
@@ -289,10 +295,10 @@ end;' language 'plpgsql';
 create function content_revision__get_number (integer)
 returns number as '
 declare
-  revision_id            alias for $1;  
-  v_number               integer;       
-  v_revision             cr_revisions.revision_id%TYPE;
-  row_count              integer default 0;
+  get_number__revision_id            alias for $1;  
+  v_number                           integer;       
+  v_revision                         cr_revisions.revision_id%TYPE;
+  row_count                          integer default 0;
 begin
   for rev_cur in select
                    revision_id
@@ -308,7 +314,7 @@ begin
   LOOP
     row_count := row_count + 1;
     if v_revision = get_number__revision_id then 
-       v_number := rowcount;
+       v_number := row_count;
        exit;
     end if;
   end LOOP;
@@ -322,13 +328,14 @@ end;' language 'plpgsql';
 create function content_revision__index_attributes (integer)
 returns integer as '
 declare
-  content_revision__revision_id            alias for $1;  
+  index_attributes__revision_id            alias for $1;  
   clob_loc                                 text;          
   v_revision_id                            cr_revisions.revision_id%TYPE;
 begin
 
   insert into cr_revision_attributes 
-    select revision_id
+    select index_attributes__revision_id as revision_id, 
+           clob_loc as attributes 
 
   -- FIXME: need to find a way to deal with these xml calls
   v_revision_id := write_xml(revision_id, clob_loc);  
@@ -359,7 +366,7 @@ end;' language 'plpgsql';
 
 -- function export_xml
 create function content_revision__export_xml (integer)
-returns  as '
+returns integer as '
 declare
   revision_id            alias for $1;  
   clob_loc               clob;          
@@ -367,9 +374,11 @@ declare
   v_revision_id          cr_revisions.revision_id%TYPE;
 begin
 
+  v_doc_id := cr_xml_doc_seq.nextval;
+
   insert into cr_xml_docs (doc_id, doc) 
-    values (cr_xml_doc_seq.nextval, empty_clob())
-    returning doc_id, doc into v_doc_id, clob_loc;
+    values (v_doc_id, empty_clob());
+
   -- FIXME: need a way to deal with this xml call.
   v_revision_id := write_xml(revision_id, clob_loc);  
 
@@ -382,9 +391,9 @@ end;' language 'plpgsql';
 create function content_revision__to_html (integer)
 returns integer as '
 declare
-  revision_id            alias for $1;  
-  tmp_clob               text;          
-  blob_loc               integer;          
+  to_html__revision_id            alias for $1;  
+  tmp_clob                        text;          
+  blob_loc                        integer;          
 begin
 
   -- what is this? FIXME
@@ -400,7 +409,7 @@ begin
 
  PERFORM clob_to_blob(tmp_clob, blob_loc);
 
- PERFORM dbms_lob.freetemporary(tmp_clob);
+ PERFORM dbms_lob__freetemporary(tmp_clob);
 
  return 0; 
 end;' language 'plpgsql';

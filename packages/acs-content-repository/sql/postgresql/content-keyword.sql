@@ -258,7 +258,7 @@ begin
   end if;  
 
   -- Tried none, up and down - must be an invalid parameter
-  raise EXCEPTION ''-20000: The recurse parameter to content_keyword.is_assigned should be \\\\'none\\\\', \\\\'up\\\\' or \\\\'down\\\\''';
+  raise EXCEPTION ''-20000: The recurse parameter to content_keyword.is_assigned should be \\\'none\\\', \\\'up\\\' or \\\'down\\\''';
   
   return null;
 end;' language 'plpgsql';

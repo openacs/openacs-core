@@ -21,7 +21,7 @@ begin
 
   select count(*) > 0 into v_exists 
     from pg_class 
-   where upper(relname) = upper(table_exists__table_name);
+   where relname = lower(table_exists__table_name);
 
   return v_exists;
  
@@ -43,9 +43,9 @@ begin
 
  select count(*) > 0 into v_exists
    from pg_class c, pg_attribute a
-  where upper(c.relname) = = upper(column_exists__table_name)
+  where c.relname = = lower(column_exists__table_name)
     and c.oid = a.attrelid
-    and upper(a.attname) = upper(column_exists__column_name);
+    and a.attname = lower(column_exists__column_name);
 
   return v_exists;
 

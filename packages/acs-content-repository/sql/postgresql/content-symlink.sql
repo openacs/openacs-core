@@ -55,19 +55,19 @@ begin
   -- PASSED ALL CHECKS --
 
   -- Select default name if the name is null
-  if name is null then
+  if  new__name is null then
     select 
-      ''symlink_to_'' || name into v_name
+      ''symlink_to_'' ||  new__name into v_name
     from 
       cr_items
     where
-       item_id = target_id;
+       item_id =  new__target_id;
   
     if NOT FOUND then 
        v_name := null;
     end if;
   else
-    v_name := name;
+    v_name :=  new__name;
   end if;
 
   -- Select default label if the label is null
@@ -146,15 +146,15 @@ end;' language 'plpgsql';
 create function content_symlink__copy (integer,integer,integer,varchar)
 returns integer as '
 declare
-  copy_symlink_id             alias for $1;  
-  copy_target_folder_id       alias for $2;  
-  copy_creation_user          alias for $3;  
-  copy_creation_ip            alias for $4;  
-  v_current_folder_id         cr_folders.folder_id%TYPE;
-  v_name                      cr_items.name%TYPE;
-  v_target_id                 cr_items.item_id%TYPE;
-  v_label                     cr_symlinks.label%TYPE;
-  v_symlink_id                cr_symlinks.symlink_id%TYPE;
+  copy__symlink_id             alias for $1;  
+  copy__target_folder_id       alias for $2;  
+  copy__creation_user          alias for $3;  
+  copy__creation_ip            alias for $4;  
+  v_current_folder_id          cr_folders.folder_id%TYPE;
+  v_name                       cr_items.name%TYPE;
+  v_target_id                  cr_items.item_id%TYPE;
+  v_label                      cr_symlinks.label%TYPE;
+  v_symlink_id                 cr_symlinks.symlink_id%TYPE;
 begin
 
   if content_folder__is_folder(copy__target_folder_id) = ''t'' then
@@ -168,7 +168,7 @@ begin
       item_id = copy__symlink_id;
 
     -- can''t copy to the same folder
-    if copy__target_folder_id ^= v_current_folder_id then
+    if copy__target_folder_id != v_current_folder_id then
 
       select
         i.name, content_symlink__resolve(i.item_id), s.label
@@ -267,6 +267,4 @@ create view cr_resolved_items as
     case when s.target_id is NULL then 'f' else 't' end as is_symlink,
     coalesce(s.target_id, i.item_id) as resolved_id, s.label
   from
-    cr_items i left outer join cr_symlinks s
-  where
-    i.item_id = s.symlink_id;
+    cr_items i left outer join cr_symlinks s on (i.item_id = s.symlink_id);

@@ -43,16 +43,16 @@ begin
   end if;
 
   v_extlink_id := content_item__new(
-      name          => v_name, 
-      parent_id     => content_extlink.new__parent_id,
-      item_id       => content_extlink.new__extlink_id,
+      v_name, 
+      new__parent_id,
+      new__extlink_id,
       null,
-      creation_date => content_extlink.new__creation_date, 
-      creation_user => content_extlink.new__creation_user, 
+      new__creation_date, 
+      new__creation_user, 
       null,
-      creation_ip   => content_extlink.new__creation_ip, 
+      new__creation_ip, 
       ''content_item'',
-      content_type  => ''content_extlink'', 
+      ''content_extlink'', 
       null,
       null,
       ''text/plain'',

@@ -38,10 +38,10 @@ declare
   exec__items_expired         integer default 0;
   exec__err_num               integer;  -- sqlcode
   exec__err_msg               varchar;  -- substr(sqlerrm, 1, 500);
-  exec__item_rec              record;
+  item_rec                    record;
 begin
 
-    select exec__last_exec into last_exec from cr_scheduled_release_job;
+    select last_exec into exec__last_exec from cr_scheduled_release_job;
 
     for item_rec in select 
                       p.item_id, live_revision
@@ -100,9 +100,6 @@ begin
   return 0;
 end;' language 'plpgsql';
 
-select inline_0 ();
-
-drop function inline_0 ();
 
 
 -- show errors
@@ -117,27 +114,27 @@ declare
 begin
 
   select job into v_job_id from user_jobs 
-   where what = 'cr_scheduled_release_exec;
+   where what = ''cr_scheduled_release_exec;'';
 
   if NOT FOUND then
-    dbms_output.put_line('
-      Submitting job to process scheduled updates to live content...');
+    raise NOTICE ''
+      Submitting job to process scheduled updates to live content...'';
 
-    dbms_job.submit(
+    dbms_job__submit(
       job        =>  v_job_id, 
-      what       =>  'cr_scheduled_release_exec;',
-      next_date  =>  sysdate,
-      interval   =>  'sysdate + ' || (interval/24/60)
+      what       =>  ''cr_scheduled_release_exec;'',
+      next_date  =>  now(),
+      interval   =>  ''now() + '' || (interval/24/60)
     ); 
 
     update cr_scheduled_release_job set job_id = v_job_id;
   else
 
-    dbms_job.change(
+    dbms_job__change(
       job        =>  v_job_id, 
-      what       =>  'cr_scheduled_release_exec;',
-      next_date  =>  sysdate,
-      interval   =>  'sysdate + ' || (interval/24/60)
+      what       =>  ''cr_scheduled_release_exec;'',
+      next_date  =>  now(),
+      interval   =>  ''now() + '' || (interval/24/60)
     );
 
   end if;

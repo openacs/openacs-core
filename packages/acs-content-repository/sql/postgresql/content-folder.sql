@@ -36,7 +36,7 @@ begin
   end if;
 
   -- parent_id = 0 means that this is a mount point
-  if new__parent_id ^= 0 and 
+  if new__parent_id != 0 and 
      content_folder__is_registered(new__parent_id,''content_folder'') = ''f'' then
 
     raise EXCEPTION ''-20000: This folder does not allow subfolders to be created'';
@@ -101,14 +101,15 @@ begin
 
   -- check if the folder contains any items
 
-  select count(*) into v_count from cr_items where parent_id = folder_id;
+  select count(*) into v_count from cr_items 
+   where parent_id = delete__folder_id;
 
   if v_count > 0 then
-    raise EXCEPTION ''-20000: Folder ID % (%) cannot be deleted because it is not empty.'', folder_id, content_item__get_path(delete__folder_id);
+    raise EXCEPTION ''-20000: Folder ID % (%) cannot be deleted because it is not empty.'', delete__folder_id, content_item__get_path(delete__folder_id);
   end if;  
 
   PERFORM content_folder__unregister_content_type(
-      content_folder.delete__folder_id,
+      delete__folder_id,
       ''content_revision'',
       ''t'' 
   );
@@ -193,7 +194,7 @@ begin
   or 
     folder_id = move__folder_id;
 
-  if v_valid_folders_p ^= 2 then
+  if v_valid_folders_p != 2 then
     raise ''-20000: content_folder.move - Not valid folder(s)'';
   end if;
 
@@ -210,7 +211,7 @@ begin
     raise EXCEPTION ''-20000: content_folder.move - Destination folder is subfolder'';
   end if;
 
-  if content_folder__is_registered(move__target_folder_id,''content_folder'') ^= ''t'' then
+  if content_folder__is_registered(move__target_folder_id,''content_folder'') != ''t'' then
     raise EXCEPTION ''-20000: content_folder.move - Destination folder does not allow subfolders'';
   end if;
 
@@ -280,11 +281,12 @@ begin
      or copy__folder_id = content_template__get_root_folder() 
      or copy__target_folder_id = copy__folder_id 
      or v_current_folder_id = copy__target_folder_id then
+
     v_valid_folders_p := 0;
   end if;
 
   if v_valid_folders_p = 2 then 
-    if content_folder__is_sub_folder(copy__folder_id, copy__target_folder_id) ^= ''t'' then
+    if content_folder__is_sub_folder(copy__folder_id, copy__target_folder_id) != ''t'' then
 
       -- get the source folder info
       select
@@ -351,10 +353,9 @@ end;' language 'plpgsql';
 
 -- function is_folder
 create function content_folder__is_folder (integer)
-returns char as '
+returns boolean as '
 declare
   item_id                alias for $1;  
-  v_folder_p             varchar(1)     
 begin
 
   select 1 from cr_folders
@@ -382,6 +383,7 @@ begin
 
   if is_sub_folder__folder_id = content_item__get_root_folder() or
     is_sub_folder__folder_id = content_template__get_root_folder() then
+
     v_sub_folder_p := ''t'';
   end if;
 
@@ -398,7 +400,7 @@ begin
     exit when v_parent_id = is_sub_folder__folder_id;
   end LOOP;
 
-  if v_parent_id ^= 0 then 
+  if v_parent_id != 0 then 
     v_sub_folder_p := ''t'';
   end if;
 
@@ -428,13 +430,13 @@ end;' language 'plpgsql';
 
 
 -- procedure register_content_type
-create function content_folder__register_content_type (integer,varchar,varchar)
+create function content_folder__register_content_type (integer,varchar,boolean)
 returns integer as '
 declare
   register_content_type__folder_id              alias for $1;  
   register_content_type__content_type           alias for $2;  
   register_content_type__include_subtypes       alias for $3;  
-  v_is_registered        varchar(100);  
+  v_is_registered                               varchar(100);  
 begin
 
   if register_content_type__include_subtypes = ''f'' then
@@ -465,7 +467,7 @@ begin
       from
         acs_object_types
       where
-        object_type ^= ''acs_object''
+        object_type <> ''acs_object''
       and
         not exists (select 1 from cr_folder_type_map
                     where folder_id = register_content_type__folder_id
@@ -482,7 +484,7 @@ end;' language 'plpgsql';
 
 
 -- procedure unregister_content_type
-create function content_folder__unregister_content_type (integer,varchar,varchar)
+create function content_folder__unregister_content_type (integer,varchar,boolean)
 returns integer as '
 declare
   unregister_content_type__folder_id              alias for $1;  
@@ -499,7 +501,7 @@ begin
     where folder_id = unregister_content_type__folder_id
     and content_type in (select object_type
            from acs_object_types    
-	   where object_type ^= ''acs_object''
+	   where object_type <> ''acs_object''
 	   connect by prior object_type = supertype
 	   start with 
              object_type = unregister_content_type__content_type);
@@ -541,7 +543,7 @@ begin
                          from 
                            acs_object_types
                          where 
-                           object_type ^= 'acs_object'
+                           object_type <> 'acs_object'
                          connect by 
                            prior object_type = supertype
                          start with 
@@ -594,7 +596,7 @@ begin
 
   -- if the folder is a symlink, resolve it
   if content_symlink__is_symlink(get_index_page__folder_id) = ''t'' then
-    v_folder_id := content_symlink.resolve(get_index_page__folder_id);
+    v_folder_id := content_symlink__resolve(get_index_page__folder_id);
   else
     v_folder_id := get_index_page__folder_id;
   end if;
@@ -613,7 +615,7 @@ begin
     ''content_folder'') = ''f''
   and
     content_item__is_subclass(
-      content_item__get_content_type(content_symlink.resolve(item_id)),
+      content_item__get_content_type(content_symlink__resolve(item_id)),
     ''content_template'') = ''f'';
 
   if NOT FOUND then 

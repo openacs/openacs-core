@@ -39,7 +39,7 @@ begin
       item_id = get_root_folder__item_id;    
 
     if NOT FOUND then
-    raise EXCEPTION '' -20000: Could not find a root folder for item ID %. Either the item does not exist or its parent value is corrupted.'', item_id;
+       raise EXCEPTION '' -20000: Could not find a root folder for item ID %. Either the item does not exist or its parent value is corrupted.'', get_root_folder__item_id;
     end if;
   end if;    
 
@@ -92,14 +92,14 @@ begin
   -- place the item in the context of the pages folder if no
   -- context specified 
 
-  if parent_id is null then
+  if new__parent_id is null then
     v_parent_id := content_item_globals.c_root_folder_id;
   else
     v_parent_id := new__parent_id;
   end if;
 
   -- Determine context_id
-  if context_id is null then
+  if new__context_id is null then
     v_context_id := v_parent_id;
   else
     v_context_id := new__context_id;
@@ -108,14 +108,14 @@ begin
   if v_parent_id = 0 or 
     content_folder__is_folder(v_parent_id) = ''t'' then
 
-    if v_parent_id ^= 0 and 
+    if v_parent_id != 0 and 
       content_folder__is_registered(
         v_parent_id, new__content_type, ''f'') = ''f'' then
 
       raise EXCEPTION ''-20000: This item\\\\'s content type % is not registered to this folder %'', new__content_type, v_parent_id;
     end if;
 
-  else if v_parent_id ^= 0 then
+  else if v_parent_id != 0 then
 
      select object_type into v_parent_type from acs_objects
        where object_id = v_parent_id;
@@ -124,8 +124,8 @@ begin
        raise EXCEPTION ''-20000: Invalid parent ID % specified in content_item.new'',  v_parent_id;
      end if;
 
-     if is_subclass(v_parent_type, ''content_item'') = ''t'' and
-	is_valid_child(v_parent_id, new__content_type) = ''f'' then
+     if content_item__is_subclass(v_parent_type, ''content_item'') = ''t'' and
+	content_item__is_valid_child(v_parent_id, new__content_type) = ''f'' then
 
        raise EXCEPTION ''-20000: This item\\\\'s content type % is not allowed in this container %'', new__content_type, v_parent_id);
      end if;
@@ -156,7 +156,7 @@ begin
   );
 
   -- if the parent is not a folder, insert into cr_child_rels
-  if v_parent_id ^= 0 and
+  if v_parent_id != 0 and
     content_folder__is_folder(v_parent_id) = ''f'' and 
     content_item__is_valid_child(v_parent_id, new__content_type) = ''t'' then
 
@@ -208,11 +208,11 @@ begin
         null,
         new__creation_date, 
         new__creation_user, 
-        content_item.new__creation_ip,
+        new__creation_ip,
     );
 
-  else if content_item.new__title is not null or 
-      content_item.new__text is not null then
+  else if new__title is not null or 
+      new__text is not null then
 
     v_revision_id := content_revision__new(
 	v_title,
@@ -277,7 +277,7 @@ end;' language 'plpgsql';
 
 -- function is_publishable
 create function content_item__is_publishable (integer)
-returns char as '
+returns boolean as '
 declare
   is_publishable__item_id                alias for $1;  
   v_child_count                          integer;       
@@ -371,10 +371,10 @@ begin
                    where
                      workflow_key = ''publishing_wf''
                    and
-                     object_id = is_publishable.item_id;
+                     object_id = is_publishable__item_id;
 
   LOOP
-    if v_pub_wf.state ^= ''finished'' then
+    if v_pub_wf.state != ''finished'' then
        return ''f'';
     end if;
   end loop;
@@ -390,7 +390,7 @@ end;' language 'plpgsql';
 
 -- function is_valid_child
 create function content_item__is_valid_child (integer,varchar)
-returns char as '
+returns boolean as '
 declare
   is_valid_child__item_id                alias for $1;  
   is_valid_child__content_type           alias for $2;  
@@ -620,7 +620,7 @@ declare
   get_id__resolve_index          alias for $3;  
   v_item_path                    varchar; 
   v_root_folder_id               cr_items.item_id%TYPE;
-  parent_id                      integer;       
+  get_id__parent_id              integer;       
   child_id                       integer;       
   start_pos                      integer default 1;        
   end_pos                        integer;       
@@ -639,10 +639,10 @@ begin
   -- Remove leading, trailing spaces, leading slashes
   v_item_path := rtrim(ltrim(trim(get_id__item_path), ''/''), ''/'');
 
-  parent_id := v_root_folder_id;
+  get_id__parent_id := v_root_folder_id;
 
   -- if parent_id is a symlink, resolve it
-  parent_id := content_symlink__resolve(parent_id);
+  get_id__parent_id := content_symlink__resolve(get_id__parent_id);
 
   LOOP
     -- FIXME: this use of instr in oracle code seems incorrect.
@@ -664,12 +664,16 @@ begin
     and
       name = item_name;
 
+    if NOT FOUND then 
+       return null;
+    end if;
+
     exit when end_pos = 0;
 
-    parent_id := child_id;
+    get_id__parent_id := child_id;
 
     -- if parent_id is a symlink, resolve it
-    parent_id := content_symlink__resolve(parent_id);
+    get_id__parent_id := content_symlink__resolve(get_id__parent_id);
 
     start_pos := end_pos + 1;
     v_item_path := substr(v_item_path, start_pos);
@@ -792,8 +796,8 @@ end;' language 'plpgsql';
 create function content_item__get_virtual_path (integer,integer)
 returns varchar as '
 declare
-  get_virtual_path_item_id                alias for $1;  
-  get_virtual_path_root_folder_id         alias for $2;  
+  get_virtual_path__item_id               alias for $1;  
+  get_virtual_path__root_folder_id        alias for $2;  
   v_path                                  varchar; 
   v_item_id                               cr_items.item_id%TYPE;
   v_is_folder                             boolean;       
@@ -835,10 +839,12 @@ begin
 
   select content into blob_loc from cr_revisions 
     where revision_id = v_revision;
+
+  if NOT FOUND then 
+    raise EXCEPTION ''-20000: No live revision for content item % in content_item.write_to_file.'', item_id;    
+  end if;
   
   PERFORM blob_to_file(root_path || content_item__get_path(item_id), blob_loc);
-
-  raise EXCEPTION ''-20000: No live revision for content item% in content_item.write_to_file.'', item_id;    
 
   return 0; 
 end;' language 'plpgsql';
@@ -855,12 +861,11 @@ declare
 begin
 
  -- register template if it is not already registered
-  insert into cr_item_template_map (
-    template_id, item_id, use_context
-  ) select
-    register_template__template_id,
-    register_template__item_id,
-    register_template__use_context
+  insert into cr_item_template_map
+  select
+    register_template__template_id as template_id,
+    register_template__item_id as item_id,
+    register_template__use_context as use_context
   from
     dual
   where
@@ -888,18 +893,19 @@ declare
                                         
 begin
 
-  if use_context is null and template_id is null then
+  if unregister_template__use_context is null and 
+     unregister_template__template_id is null then
 
     delete from cr_item_template_map
       where item_id = unregister_template__item_id;
 
-  else if use_context is null then
+  else if unregister_template__use_context is null then
 
     delete from cr_item_template_map
       where template_id = unregister_template__template_id
       and item_id = unregister_template__item_id;
 
-  else if template_id is null then
+  else if unregister_template__template_id is null then
 
     delete from cr_item_template_map
       where item_id = unregister_template__item_id
@@ -1404,11 +1410,11 @@ begin
   if v_content_type = ''content_folder'' then
     select label into v_title from cr_folders 
       where folder_id = get_title__item_id;
-  elsif v_content_type = ''content_symlink'' then
+  else if v_content_type = ''content_symlink'' then
     select label into v_title from cr_symlinks 
       where symlink_id = get_title__item_id;
   else
-    if is_live then
+    if get_title__is_live then
       select
 	title into v_title
       from
@@ -1427,7 +1433,7 @@ begin
       and
         r.revision_id = i.latest_revision;
     end if;
-  end if;
+  end if; end if;
 
   return v_title;
 
@@ -1475,7 +1481,7 @@ end;' language 'plpgsql';
 
 -- function is_subclass
 create function content_item__is_subclass (varchar,varchar)
-returns char as '
+returns boolean as '
 declare
   is_subclass__object_type            alias for $1;  
   is_subclass__supertype              alias for $2;  
@@ -1538,7 +1544,7 @@ begin
     raise EXCEPTION ''-20000: There is no registered relation type matching this item relation.'';
   end if;
 
-  if relate__item_id ^= relate__object_id then
+  if relate__item_id != relate__object_id then
     -- check that these two items are not related already
     --dbms_output.put_line( ''checking if the items are already related...'');
     
@@ -1569,8 +1575,12 @@ begin
     if v_exists <> 1 then
       --dbms_output.put_line( ''creating new relationship...'');
       v_rel_id := acs_object__new(
-        object_type     => relation_type,
-        context_id      => item_id
+        null,
+        relate__relation_type,
+        now(),
+        null,
+        null,
+        relate__item_id
       );
       insert into cr_item_rels (
         rel_id, item_id, related_object_id, order_n, relation_tag
