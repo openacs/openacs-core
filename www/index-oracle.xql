@@ -15,6 +15,7 @@
           object_id, 
           nvl(:user_id, acs.magic_object_id('the_public')), 
           'read') = 't'
+        order by upper(name)
     </querytext>
   </fullquery>
 

@@ -15,6 +15,7 @@
           object_id, 
           coalesce(:user_id, acs__magic_object_id('the_public')), 
           'read') = 't'
+        order by upper(name)
     </querytext>
   </fullquery>
 
