@@ -78,12 +78,17 @@ foreach pkg_info $pkg_install_list {
 	    file delete -force $install_path/$package_key
 	}
     } else {
-	set version_id [apm_package_install -install_path $install_path \
-		-callback apm_ns_write_callback -load_data_model \
-		-data_model_files $data_model_files -message_catalog_files $message_catalog_files \
+	set version_id [apm_package_install \
+                -install_path $install_path \
+		-callback apm_ns_write_callback \
+                -load_data_model \
+		-data_model_files $data_model_files \
+                -message_catalog_files $message_catalog_files \
                 $spec_file]
     }
     if { ($version_id != 0) && ([lsearch -exact $pkg_enable_list $package_key] != -1) } {
+        nsv_set apm_enabled_package $package_key 1    
+
 	apm_version_enable -callback apm_ns_write_callback $version_id
     }
     incr installed_count
@@ -99,9 +104,8 @@ if {$installed_count < 1} {
 
 ns_write "</ul><p>
 Done installing packages.
-<p>
-You must restart your server for the newly installed package(s) to be available.<p>
-Return to the <a href=\"index\">APM</a>.<p>
+<p>The packages are available immediately. Enjoy!</p>
+<p>Return to the <a href=\"index\">APM</a>.</p>
 [ad_footer]
 "
 }
