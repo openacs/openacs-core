@@ -414,6 +414,10 @@ ad_proc -public lc_time_fmt {
                            (or have an 'on this day in history' style page that goes back a good few hundred years).
     @return                A date formatted for a locale
 } {
+    if { [empty_string_p $datetime] } {
+        return ""
+    }
+
     if { ![exists_and_not_null locale] } {
         set locale [ad_conn locale]
     }
