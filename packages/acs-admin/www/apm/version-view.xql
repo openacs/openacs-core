@@ -19,15 +19,6 @@
 </fullquery>
 
  
-<fullquery name="apm_file_count">      
-      <querytext>
-      
-	select count(*) as n_files from apm_package_files where version_id = :version_id
-
-      </querytext>
-</fullquery>
-
- 
 <fullquery name="supported_databases">      
       <querytext>
       
