@@ -212,16 +212,17 @@ aa_register_case auth_confirm_email {
 } {
     set user_id [ad_conn user_id]
 
-    auth::set_email_verified -user_id $user_id
-
-    # Check that update was made in db
-    set email_verified_p [db_string select_email_verified_p {
-        select email_verified_p
-        from   cc_users
-        where  user_id = :user_id
-    }]
-
-    aa_equals "email should be verified" $email_verified_p "t"
+    aa_run_with_teardown \
+        -rollback \
+        -test_code {
+            db_dml update { update users set email_verified_p = 'f' where user_id = :user_id }
+   
+            aa_equals "email should be not verified" [acs_user::get_element -user_id $user_id -element email_verified_p] "f"
+            
+            auth::set_email_verified -user_id $user_id
+            
+            aa_equals "email should be verified" [acs_user::get_element -user_id $user_id -element email_verified_p] "t"
+        }
 }
 
 aa_register_case auth_get_registration_elements {
