@@ -31,6 +31,5 @@
   <msg key="localization-pm_str"></msg>
   <msg key="localization-positive_sign"></msg>
   <msg key="localization-t_fmt">%H:%M</msg>
-  <msg key="localization-t_fmt_ampm"></msg>
   <msg key="localization-thousands_sep">,</msg>
 </message_catalog>

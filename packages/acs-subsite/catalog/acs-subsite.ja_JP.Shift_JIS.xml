@@ -2,71 +2,29 @@
 <message_catalog package_key="acs-subsite" package_version="5.0d4" locale="ja_JP" charset="Shift_JIS">
 
   <msg key="About_You">あなたについて</msg>
-  <msg key="again">もう一度</msg>
   <msg key="Answer">回答:</msg>
-  <msg key="answer">回答:</msg>
   <msg key="at">at</msg>
-  <msg key="Awaiting_Approval">承認待ち</msg>
   <msg key="Bad_Password">パスワードエラー</msg>
   <msg key="Basic_Information">基本情報</msg>
-  <msg key="bio">略歴:</msg>
   <msg key="Change_my_Password">パスワードの変更</msg>
   <msg key="Check_Your_Inbox">受信箱の確認</msg>
   <msg key="Children">子供</msg>
   <msg key="Confirm">確認:</msg>
   <msg key="Current_Password">現在のパスワード:</msg>
-  <msg key="Current_users">現在のユーザ:</msg>
   <msg key="Customize_Question">質問のカスタマイズ</msg>
   <msg key="Direct_Permissions">直接権限</msg>
-  <msg key="edit_your_alerts">通知設定の編集</msg>
-  <msg key="email_address">メールアドレス:</msg>
   <msg key="Email_Confirmation">メールの確認</msg>
   <msg key="Email_not_Requested">メールは未登録です</msg>
-  <msg key="Email_Password">メールパスワード</msg>
-  <msg key="email_password">&quot;メールパスワード&quot;</msg>
   <msg key="Error_sending_mail">メール送信エラー</msg>
-  <msg key="Feature_disabled">機能無効</msg>
-  <msg key="Full_Name">氏名</msg>
   <msg key="Grant">付与</msg>
   <msg key="Grant_Permission">権限の付与</msg>
-  <msg key="help">ヘルプ</msg>
-  <msg key="in">in</msg>
   <msg key="Join_group_name">%group_name% に参加</msg>
   <msg key="Log_In">ログイン</msg>
-  <msg key="Log_Out">ログアウト</msg>
-  <msg key="Login">ログイン</msg>
-  <msg key="login">ログイン</msg>
-  <msg key="Login_Expired">ログイン期限切れ</msg>
-  <msg key="Login_Expired_1">ログインページの期限が切れました。</msg>
-  <msg key="lt_Awaiting_email_verifi">メール検証待ち</msg>
   <msg key="lt_Cannot_join_this_grou">このグループに参加できません。</msg>
-  <msg key="lt_Couldnt_find_user_use">ユーザ %user_id% が見つかりません</msg>
-  <msg key="lt_Couldnt_find_user_use_1">ユーザ %user_id% が見つかりません。おそらくプログラムが原因と思われます。</msg>
-  <msg key="lt_Couldnt_find_your_rec">あなたのレコードが見つかりません。</msg>
-  <msg key="lt_Couldnt_find_your_rec_1">あなたのレコードが見つかりません&quot; &quot;ユーザID %user_id% はデータベースにありません。おそらくプログラムが原因と思われます。</msg>
-  <msg key="lt_Customized_question_a">カスタマイズ済みの質問が既にあります</msg>
-  <msg key="lt_Customized_question_i">カスタマイズ済みの質問は既に入力されています</msg>
-  <msg key="lt_Customized_QuestionAn">入力済みの質問/回答のカスタマイズ</msg>
-  <msg key="lt_enable_cookies">Netscape 4.0 では、編集 -&amp;gt; 設定 -&amp;gt; 詳細 でクッキーを有効にできます。Microsoft Internet Exploerer 4.0 では、表示 -&amp;gt; インターネットオプション -&amp;gt; 詳細 -&amp;gt; セキュリティ でクッキーを有効にできます。</msg>
-  <msg key="lt_Error_creating_the_re">リレーション作成エラー</msg>
   <msg key="lt_first_names_last_name">%first_names% %last_name% (%email%) は %system_url% のユーザとして登録されました</msg>
-  <msg key="lt_for_a_period_of_vacat">一定期間、または永続的に</msg>
-  <msg key="lt_for_first_names_last_">%site_link% の %first_names% %last_name%</msg>
-  <msg key="lt_for_future_reference_">今後承認のために使用するので、質問と回答を入力して下さい。</msg>
-  <msg key="lt_For_security_reasons_">セキュリティ上の理由により、以前が入力したパスワードを使用する悪質な攻撃者から防ぐため、ログインページは一定時間で期限が切れます。</msg>
-  <msg key="lt_Forgotten_Password__E">パスワードの紛失 / メールの入力</msg>
   <msg key="lt_Grant_Permission_on_n">%name% への権限の付与</msg>
-  <msg key="lt_Have_you_a_hrefemail-">&lt;a href=&quot;email-for-password&quot;&gt;パスワードを忘れましたか?&lt;/a&gt;</msg>
-  <msg key="lt_If_you_have_a_Web_sit">Webサイトを持っているなら、そこに誘導することができます。</msg>
-  <msg key="lt_If_you_want_to_check_">他のユーザからどのように見えるのか確認したい場合はこちらです %member_link%</msg>
-  <msg key="lt_If_youre_getting_too_">もし私たちからのメールが多すぎるなら</msg>
-  <msg key="lt_If_youve_forgotten_yo">パスワードを忘れた場合、&lt;a href=&quot;%email_password_url%&quot;&gt;パスワードをリセットしてランダムなパスワードをメールで問い合わせ&lt;/a&gt; ができます。</msg>
-  <msg key="lt_In_general_we_identif">一般的に、投稿された内容はあなたの氏名によって識別されます。望まない大量のメール(spam)を送られるのを防ぐために、登録ユーザ以外にはあなたのメールアドレスは表示されません。完全なプライバシーの実現は技術的には可能ですが、オンラインコミュニティにおいて重要な要素は、人々がお互いに知り合うことができることです。そのため、ユーザがお互いに共通の話題で連絡できるようにしています。</msg>
   <msg key="lt_Inherited_Permissions">権限の継承</msg>
   <msg key="lt_It_would_be_a_very_ba">図書館や学校などで共有のコンピュータを使用している場合は、このオプションにはチェックしないことをお勧めします。このコンピュータのこれ以降のユーザは誰でも、このサイトであなたになりすますことができてしまいます。</msg>
-  <msg key="lt_Leading_or_trailing_s">前後の空白はサーバによって削除されます。なお、パスワードの選択にはあまり心配しないで下さい。忘れた場合には、メールで知らせることができます。</msg>
   <msg key="lt_New_registration_at_s">%system_url% への新規登録</msg>
-  <msg key="lt_Note_If_youve_forgott">お知らせ: パスワードを忘れたときは、&lt;a href=&quot;@email_password_url@&quot;&gt;サーバから @email@ にメール送信</msg>
-  <msg key="lt_Note_If_youve_forgott_1">お知らせ: パスワードを忘れたときは、&lt;a href=&quot;email-password?user_id=%user_id%&quot;&gt;サーバから @email@ にメール送信</msg>
   <msg key="lt_Note_that_you_can_era">保存したメールアドレスとパスワードは、ワークスペースの&quot;ログアウト&quot;オプションを選択することで削除することができます。</msg>
 </message_catalog>

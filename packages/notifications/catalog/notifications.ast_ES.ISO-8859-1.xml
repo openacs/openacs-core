@@ -14,7 +14,6 @@
   <msg key="lt_You_have_requested_no">Pidisti avisu pa &quot;%pretty_name%&quot;. Puedes &lt;a href=&quot;%sub_url%&quot;&gt;date de baxa&lt;/a&gt;</msg>
   <msg key="lt_You_may_a_hrefsub_url">Puedes &lt;a href=&quot;%sub_url%&quot;&gt;pidir avisu&lt;/a&gt; pa &quot;%pretty_name%&quot;.</msg>
   <msg key="Manage_Notifications">Xestionar Avisos</msg>
-  <msg key="manage_notifications">&quot;xestionar avisos&quot;</msg>
   <msg key="Notification_type">Tipu d'Avisu</msg>
   <msg key="Request_Notification">Pidir Avisu</msg>
   <msg key="SUBJECT">ASUNTU:</msg>

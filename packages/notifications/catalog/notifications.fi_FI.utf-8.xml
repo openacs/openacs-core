@@ -14,7 +14,6 @@
   <msg key="lt_You_have_requested_no">Olet pyytänyt saada ilmoituksen uusista viesteistä ryhmässä %pretty_name%. Halutessasi voit &lt;a href=&quot;%sub_url%&quot;&gt;peruuttaa ilmoituspalvelun&lt;/a&gt;.</msg>
   <msg key="lt_You_may_a_hrefsub_url">Voit &lt;a href=&quot;%sub_url%&quot;&gt;tilata ilmoituksen uudesta sisällöstä&lt;/a&gt; %pretty_name% -sivulla.                </msg>
   <msg key="Manage_Notifications">Muokkaa ilmoituksia</msg>
-  <msg key="manage_notifications">&quot;muokkaa ilmoituksiasi&quot;</msg>
   <msg key="Notification_type">Ilmoituksen tyyppi</msg>
   <msg key="Request_Notification">Tilaa ilmoitus</msg>
   <msg key="SUBJECT">AIHE:</msg>

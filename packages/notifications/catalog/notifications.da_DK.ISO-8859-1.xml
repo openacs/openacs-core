@@ -14,7 +14,6 @@
   <msg key="lt_You_have_requested_no">Du har ønsket Beskeder i forbindelse med %pretty_name%. Du kan &lt;a href=&quot;%sub_url%&quot;&gt;afmelde dig her&lt;/a&gt;.</msg>
   <msg key="lt_You_may_a_hrefsub_url">Du kan &amp;lt;a href=&amp;quot;%sub_url%&amp;quot;&amp;gt;Få Besked&amp;lt;/a&amp;gt; i forbindelse med %pretty_name%.</msg>
   <msg key="Manage_Notifications">Administrér Beskeder</msg>
-  <msg key="manage_notifications">&quot;administrér Beskeder&quot;</msg>
   <msg key="Notification_type">Beskedtype</msg>
   <msg key="Request_Notification">Giv Mig Besked</msg>
   <msg key="SUBJECT">EMNE:</msg>

@@ -14,7 +14,6 @@
   <msg key="lt_You_have_requested_no">Du har bedt om meldinger for %pretty_name%. Du kan &lt;a href=&quot;%sub_url%&quot;&gt;kansellere&lt;/a&gt;.</msg>
   <msg key="lt_You_may_a_hrefsub_url">Du kan &lt;a href=&quot;%sub_url%&quot;&gt;be om meldinger&lt;/a&gt; for %pretty_name%. </msg>
   <msg key="Manage_Notifications">Organiser meldinger</msg>
-  <msg key="manage_notifications">&quot;organiser meldinger&quot;</msg>
   <msg key="Notification_type">Meldingstype</msg>
   <msg key="Request_Notification">Be om melding</msg>
   <msg key="SUBJECT">EMNE:</msg>

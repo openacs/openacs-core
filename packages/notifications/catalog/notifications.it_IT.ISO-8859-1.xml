@@ -14,7 +14,6 @@
   <msg key="lt_You_have_requested_no">Hai richiesto la notifica per %pretty_name%. Clicca &lt;a href=&quot;%sub_url%&quot;&gt;qui&lt;/a&gt; per cancellarla.</msg>
   <msg key="lt_You_may_a_hrefsub_url">Puoi &lt;a href=&quot;%sub_url%&quot;&gt;richiedere la notifica via email&lt;/a&gt; per i nuovi messaggi sul %pretty_name%</msg>
   <msg key="Manage_Notifications">Regola le notifiche</msg>
-  <msg key="manage_notifications">&quot;regola le tue notifiche&quot;</msg>
   <msg key="Notification_type">Tipo di notifica</msg>
   <msg key="Request_Notification">Richiesta di notifica</msg>
   <msg key="SUBJECT">OGGETTO:</msg>

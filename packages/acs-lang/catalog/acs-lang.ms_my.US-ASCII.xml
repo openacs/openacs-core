@@ -1,7 +1,6 @@
 <?xml version="1.0"?>
 <message_catalog package_key="acs-lang" package_version="5.0d3" locale="ms_my" charset="US-ASCII">
 
-  <msg key="Auto_Key">Kunci Automatik</msg>
   <msg key="English">Inggeris</msg>
   <msg key="French">Perancis</msg>
   <msg key="German">Jerman</msg>

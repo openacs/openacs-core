@@ -30,7 +30,6 @@
   <msg key="localization-pm_str"></msg>
   <msg key="localization-positive_sign"></msg>
   <msg key="localization-t_fmt">%T</msg>
-  <msg key="localization-t_fmt_ampm">%H:%M:%S </msg>
   <msg key="localization-thousands_sep"></msg>
   <msg key="Spanish">Hiszpañski</msg>
 </message_catalog>

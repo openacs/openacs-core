@@ -1,14 +1,9 @@
 <?xml version="1.0"?>
 <message_catalog package_key="acs-lang" package_version="5.0d3" locale="fr_FR" charset="ISO-8859-1">
 
-  <msg key="Auto_Key">Clé automatique</msg>
   <msg key="English">Anglais</msg>
   <msg key="French">Français</msg>
   <msg key="German">Allemand</msg>
-  <msg key="key_1">texte_1</msg>
-  <msg key="key_1_1">texte_1_différent</msg>
-  <msg key="key_2">texte_2</msg>
-  <msg key="key_3">texte_3</msg>
   <msg key="localization-abday">{dim} {lun} {mar} {mer} {jeu} {ven} {sam}</msg>
   <msg key="localization-abmon">{jan} {fév} {mar} {avr} {mai} {jun} {jui} {aoû} {sep} {oct} {nov} {déc}</msg>
   <msg key="localization-am_str"></msg>
@@ -39,7 +34,6 @@
   <msg key="localization-pm_str"></msg>
   <msg key="localization-positive_sign"></msg>
   <msg key="localization-t_fmt">%H:%M</msg>
-  <msg key="localization-t_fmt_ampm"></msg>
   <msg key="localization-thousands_sep">.</msg>
   <msg key="Spanish">Espagnol</msg>
 </message_catalog>

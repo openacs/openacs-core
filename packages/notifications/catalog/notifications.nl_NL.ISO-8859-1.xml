@@ -14,7 +14,6 @@
   <msg key="lt_You_have_requested_no">U heeft om kennisgeving verzocht voor %pretty_name%. Afmelden kan &lt;a href=&quot;%sub_url%&quot;&gt;hier&lt;/a&gt;.</msg>
   <msg key="lt_You_may_a_hrefsub_url">U kunt om &lt;a href=&quot;%sub_url%&quot;&gt;kennisgevingen verzoeken&lt;/a&gt; voor %pretty_name%.</msg>
   <msg key="Manage_Notifications">Beheer Kennisgevingen</msg>
-  <msg key="manage_notifications">&quot;beheer kennisgevingen&quot;</msg>
   <msg key="Notification_type">Type Kennisgeving</msg>
   <msg key="Request_Notification">Verzoek om Kennisgeving</msg>
   <msg key="SUBJECT">ONDERWERP:</msg>
