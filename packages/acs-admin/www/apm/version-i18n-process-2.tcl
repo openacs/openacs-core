@@ -46,7 +46,7 @@ if { $replace_text_p } {
     }
 
     if { [llength $text_untouched_list] > 0 } {
-        append processing_html_result "<br /> [llength $text_untouched_list] pieces of text were left untouched. Please take note of these texts and do any necessary translations by manually inserting <#message_key text#> tags in the adp file (the message keys should contain only letters and underscores). You may then reload this page. The texts to consider for translation are: <br />"
+        append processing_html_result "<br /> [llength $text_untouched_list] pieces of text were left untouched. Please take note of these texts and do any necessary translations by manually inserting <#message_key text#> tags in the adp file (the message keys should contain only letters and underscores, the text in the tag must have greater than and lesser than signs HTML quoted). At a later stage you can then run the action \"Replace tags with text and insert into catalog\" on the file. The texts to consider for translation are: <br />"
     } else {
         append processing_html_result "<br /> [llength $text_untouched_list] pieces of text were left untouched."
     }
@@ -71,7 +71,7 @@ if { $replace_tags_p } {
         ns_log Notice "Replacing tags in file $adp_file with keys and doing insertion into message catalog"
         append processing_html_result "<h3>Message tag replacements for $adp_file</h3>"
 
-        set number_of_replacements [lang::util::extract_keys_from_adps $adp_file]
+        set number_of_replacements [lang::util::replace_adp_message_tags_with_lookups $adp_file]
 
         append processing_html_result "Did $number_of_replacements replacements, any further details are in the log file"
     }
