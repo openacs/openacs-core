@@ -3,7 +3,7 @@
 
 <fullquery name="cr_delete_scheduled_files.fetch_paths">      
       <querytext>
- SELECT distinct crftd.path as storage_area_key
+ SELECT distinct crftd.path, crftd.storage_area_key
    FROM cr_files_to_delete crftd
   WHERE not exists (SELECT 1
                       FROM cr_revisions r
