@@ -1,0 +1,1 @@
+create index cr_revisions_publish_date_idx on cr_revisions(publish_date);
