@@ -6,9 +6,7 @@ ad_library {
     @cvs-id $Id$
 }
 
-aa_register_case \ 
-    -cats {api db} \
-    sync_start_end {
+aa_register_case -cats {api db} sync_start_end {
     Test batch job basics: Starting, getting document, adding entries, ending.
 } {    
     aa_run_with_teardown \
