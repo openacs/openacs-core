@@ -24,4 +24,4 @@ drop table lang_user_timezone;
 -- This might fail if the data model includes other multilingual tables
 -- that reference ad_locales. Really need to cascade here to ensure
 -- it goes away, but that is dangerous.
-drop table ad_locales;
+-- drop table ad_locales;
