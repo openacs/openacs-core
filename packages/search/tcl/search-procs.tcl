@@ -24,8 +24,8 @@ ad_proc -public search::queue {
 
     @author Jeff Davis (davis@xarg.net)
 } {
-    if {![empty_string_p $object_id] 
-        && ![empty_string_p $event]} { 
+    if {![empty_string_p $object_id]
+        && ![empty_string_p $event]} {
         package_exec_plsql \
             -var_list [list \
                            [list object_id $object_id] \
@@ -39,7 +39,7 @@ ad_proc -public search::queue {
 ad_proc -public search::dequeue {
     -object_id
     -event_date
-    -event 
+    -event
 } {
     Remove an object from the search queue
 
@@ -49,7 +49,7 @@ ad_proc -public search::dequeue {
 
     @author Jeff Davis (davis@xarg.net)
 } {
-    if {![empty_string_p $object_id] 
+    if {![empty_string_p $object_id]
         && ![empty_string_p $event_date]
         && ![empty_string_p $event]} {
             package_exec_plsql \
@@ -63,17 +63,34 @@ ad_proc -public search::dequeue {
 }
 
 
+ad_proc -public -callback search::action {
+    -action
+    -object_id
+    -datasource
+    -object_type
+} {
+    Do something with a search datasource Called by the indexer
+    after having created the datasource.
+
+    @param action UPDATE INSERT DELETE
+    @param datasource name of the datasource array
+
+    @return ignored
+
+    @author Jeff Davis (davis@xarg.net)
+} -
+
+
 ad_proc -private search::indexer {} {
     Search indexer loops over the existing entries in the search_observer_queue 
     table and calls the appropriate driver functions to index, update, or 
     delete the entry.
 
     @author Neophytos Demetriou
-    @author Jeff Davis <davis@xarg.net>
+    @author Jeff Davis (davis@xarg.net)
 } {
 
     set driver [ad_parameter -package_id [apm_package_id_from_key search] FtsEngineDriver]
-    set syndicate [ad_parameter -package_id [apm_package_id_from_key search] Syndicate -default 0]
 
     if {[empty_string_p $driver]
         || ! [acs_sc_binding_exists_p FtsEngineDriver $driver]} {
@@ -97,10 +114,6 @@ ad_proc -private search::indexer {} {
                         array set datasource {mime {} storage_type {} keywords {}}
                         if {[catch {
                             array set datasource  [acs_sc_call FtsContentProvider datasource [list $object_id] $object_type]
-                            if {$syndicate} {
-                                search::syndicate -datasource datasource
-                            }
-
                             search::content_get txt $datasource(content) $datasource(mime) $datasource(storage_type)
 
                             acs_sc_call FtsEngineDriver \
@@ -109,21 +122,36 @@ ad_proc -private search::indexer {} {
                         } errMsg]} {
                             ns_log Error "search::indexer: error getting datasource for $object_id $object_type: $errMsg\n[ad_print_stack_trace]\n"
                         } else {
-                            search::dequeue -object_id $object_id -event_date $event_date -event $event
+                            # call the action so other people who do indexey things have a hook
+                            callback -catch search::action \
+                                -action $event \
+                                -object_id $object_id \
+                                -datasource datasource \
+                                -object_type $object_type
+
+                            # Remember seeing this object so we can avoid reindexing it later
                             set seen($object_id) 1
+
+                            search::dequeue -object_id $object_id -event_date $event_date -event $event
                         }
                     }
-                    # Remember seeing this object so we can avoid reindexing it later
                 }
             }
             DELETE {
                 if {[catch {
                     acs_sc_call FtsEngineDriver unindex [list $object_id] $driver
-                    db_dml nuke_syn {delete from syndication where object_id = :object_id}
                 } errMsg]} {
-                    ns_log Error "search::indexer: error getting datasource for $object_id $object_type: $errMsg\n[ad_print_stack_trace]\n"
+                    ns_log Error "search::indexer: error unindexing $object_id $object_type: $errMsg\n[ad_print_stack_trace]\n"
                 } else {
+                    # call the search action callbacks.
+                    callback -catch search::action \
+                        -action $event \
+                        -object_id $object_id \
+                        -datasource NONE \
+                        -object_type $object_type
+
                     search::dequeue -object_id $object_id -event_date $event_date -event $event
+
                 }
 
                 # unset seen since you could conceivably delete one but then subsequently
@@ -147,7 +175,8 @@ ad_proc -private search::content_get {
 } {
     @author Neophytos Demetriou
 
-    @param content    
+    @param content
+
     holds the filename if storage_type=file
     holds the text data if storage_type=text
     holds the lob_id if storage_type=lob
@@ -216,54 +245,5 @@ ad_proc -private search::choice_bar {
     } else {
         return ""
     }
-
-}
-
-ad_proc -private search::syndicate {
-    -datasource 
-} { 
-    create or replace the record in the syndication table for 
-    a given item id.
-
-    called by the search::indexer.  See photo-album-search-procs for an example of 
-    what you need to provide to make something syndicable.
-
-    JCD: to fix: should not just glue together XML this way, also assumes rss 2.0, no provision for 
-    alternate formats, assumes content:encoded will be defined in the wrapper.
-
-} {
-    upvar $datasource d
-
-    if {![info exists d(syndication)]} {
-        return
-    }
-
-    array set syn {
-        category {}
-        author {}
-        guid {}
-    }
-
-    array set syn $d(syndication)
-
-    set object_id $d(object_id)
-    set url $syn(link)
-    set body $d(content)
-
-    set published [lc_time_fmt $syn(pubDate) "%a, %d %b %Y %H:%M:%S GMT"]
-
-    set rss_xml_frag " <item>
-  <title>$d(title)</title>
-  <link>$url</link>
-  <guid isPermaLink=\"true\">$syn(guid)</guid>
-  <description>$syn(description)</description>
-  <author>$syn(author)</author>
-  <content:encoded><!\[CDATA\[$body]]></content:encoded>
-  <category>$syn(category)</category>
-  <pubDate>$published</pubDate>
- </item>"
-
-    db_dml nuke {delete from syndication where object_id = :object_id}
-    db_dml ins {insert into syndication(object_id, rss_xml_frag, body, url) values (:object_id, :rss_xml_frag, :body, :url)}
 
 }
