@@ -61,4 +61,12 @@
       </querytext>
 </fullquery>
 
+<fullquery name="content::init_all.get_live_revision">      
+      <querytext>
+
+    select live_revision from cr_items where item_id = :item_id
+
+      </querytext>
+</fullquery>
+
 </queryset>

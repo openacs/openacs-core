@@ -68,6 +68,7 @@ ad_proc acs_sc_proc {
 
     set proc_name [acs_sc_generate_name $contract $impl $operation]
 
+    ns_log Notice "ACS_SC_PROC: proc_name = $proc_name"
     foreach {impl_alias impl_pl} [acs_sc_get_alias $contract $operation $impl] break 
 
     if ![info exists impl_alias] {

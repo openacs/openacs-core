@@ -58,4 +58,29 @@
       </querytext>
 </fullquery>
 
+<fullquery name="content::init_all.get_item_info">      
+      <querytext>
+
+    select 
+      item_id, content_type
+    from 
+      cr_items
+    where
+      item_id = content_item__get_id(:url, :content_root, 'f')
+
+      </querytext>
+</fullquery>
+
+<fullquery name="content::init_all.get_template_url">      
+      <querytext>
+
+        select 
+          content_template__get_path(
+          content_item__get_template(:item_id, :context),:template_root) as template_url 
+        from 
+          dual
+
+      </querytext>
+</fullquery>
+
 </queryset>
