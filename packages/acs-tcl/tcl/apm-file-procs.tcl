@@ -279,6 +279,7 @@ ad_proc -public apm_file_watch {path} {
     Marks the file of the indicated path to be watched.  If the file changes,
     it will be reloaded prior to the next page load.
 
+    @param path The path of the file relative to server root
 } {
     nsv_set apm_reload_watch $path 1
 }
@@ -290,6 +291,8 @@ ad_proc -public apm_file_watch_cancel {
     is not specified. If the file is not watched
     this procedure does nothing.
 
+    @param path The path relative to server root of the file to stop watching.
+
     @author Peter Marklund
 } {
     if { ![empty_string_p $path] } {
@@ -297,6 +300,44 @@ ad_proc -public apm_file_watch_cancel {
     } else {
         catch {nsv_unset apm_reload_watch}
     }
+}
+
+ad_proc -public apm_file_watchable_p { path } {
+    Given the path of a file determine if it is
+    appropriate to be watched for reload. The file should
+    should be db compatible with system and be of right 
+    type (for example contain tcl procs).
+
+    @param The path of the file relative to server root
+
+    @return 1 If file is watchable and 0 otherwise. The proc will return 0 if the
+              file doesn't exist.
+
+    @see apm_guess_file_type
+    @see apm_guess_db_type
+
+    @author Peter Marklund
+} {        
+    # The apm_guess procs need package_key and a path relative to package root
+    # I'm letting the regexp be forgiving so the proc will work with absolute paths
+    regexp {packages/([^/]+)/(.*)$} $path match package_key package_rel_path
+
+    # Check the db type
+    set file_db_type [apm_guess_db_type $package_key $package_rel_path]
+    set right_db_type_p [expr [empty_string_p $file_db_type] || \
+                            [string equal $file_db_type [db_type]]]
+
+    # Check the file type
+    set file_type [apm_guess_file_type $package_key $package_rel_path]
+    # I would like to add test_procs to the list but currently test_procs files are used to register test cases
+    # and we don't want to resource these files in every interpreter. Test procs should be defined in test_init files.
+    set watchable_file_types [list tcl_procs query_file]
+    set right_file_type_p [expr [lsearch -exact $watchable_file_types $file_type] != -1]
+
+    # Both db type and file type must be right
+    set watchable_p [expr $right_db_type_p && $right_file_type_p]
+
+    return $watchable_p
 }
 
 ad_proc -private apm_watch_all_files { package_key } {
@@ -307,14 +348,9 @@ ad_proc -private apm_watch_all_files { package_key } {
 } {        
     set files [ad_find_all_files [acs_root_dir]/packages/$package_key]
     foreach file [lsort $files] {
-        set file_db_type [apm_guess_db_type $package_key $file]
-        set file_type [apm_guess_file_type $package_key $file]
-
-        set right_db_type [expr [empty_string_p $file_db_type] || \
-                               [string equal $file_db_type [db_type]]]
-
-        if { $right_db_type && [expr [string equal $file_type tcl_procs] || [string equal $file_type query_file]] } {
-            apm_file_watch [ad_make_relative_path $file]
+        set rel_path [ad_make_relative_path $file]
+        if { [apm_file_watchable_p $rel_path] } {
+            apm_file_watch $rel_path
         }
     }
 }
