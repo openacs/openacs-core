@@ -19,6 +19,8 @@
         <para>Download and install TCL 8.4</para>
       </formalpara>
       <para>If you have not installed TCL already, download the latest TCL version from Sourceforge</para>
+      <para>Remember that you have to be root if you want to follow these instructions. On Mac OS X type <userinput>sudo su -</userinput> to become root.</para>
+<para>Alternatively use <userinput>curl -L -O</userinput> instead of <userinput>wget</userinput> (especially on Mac OS X.</para>
       <screen>[root root]# <userinput>cd /usr/local/src</userinput>
 [root src]# <userinput>wget http://heanet.dl.sourceforge.net/sourceforge/tcl/tcl8.4.5-src.tar.gz</userinput>
 [root src]# <userinput>tar xfz tcl8.4.5-src.tar.gz</userinput>
@@ -43,6 +45,7 @@ make install
       <screen>[root root]# <userinput>cd /usr/local/src</userinput>
 [root src]# <userinput>mkdir aolserver</userinput>
 [root src]# <userinput>cd aolserver</userinput>
+[root aolserver]# <userinput>cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver login</userinput>
 [root aolserver]# <userinput>cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co  -r aolserver_v40_r2 aolserver</userinput>
 [root aolserver]# <userinput>cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co nscache</userinput>
 [root aolserver]# <userinput>cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co nsrewrite</userinput>
@@ -108,9 +111,9 @@ make install</action></screen>
             <listitem id="aolserver4-nspostgres-install">
               <para>Install nspostgres (if you want to use Postgres)</para>
               <screen>[root nsrewrite]# <userinput>cd ../nspostgres</userinput>
-[root nspostgres]# <userinput>sudo make install POSTGRES=/usr/local/pgsql ACS=1 INST=/usr/local/aolserver </userinput></screen>
+[root nspostgres]# <userinput>make install POSTGRES=/usr/local/pgsql ACS=1 INST=/usr/local/aolserver </userinput></screen>
               <para>If you run into problems with libpq.a do the following (and repeat the step above)</para>
-              <screen>[root nspostgres]# <userinput>sudo ranlib /usr/local/pgsql/lib/libpq.a</userinput></screen>
+              <screen>[root nspostgres]# <userinput>ranlib /usr/local/pgsql/lib/libpq.a</userinput></screen>
               <para>If you run into problems with the linker, edit the Makefile. Add <computeroutput>-lnsdb</computeroutput> to the <computeroutput>MODLIBS</computeroutput> var.</para>
               <programlisting>MODLIBS = -L$(PGLIB) -lpq <emphasis role="bold">-lnsdb</emphasis></programlisting>
             </listitem>
