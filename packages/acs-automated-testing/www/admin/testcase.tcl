@@ -43,12 +43,22 @@ foreach testcase [nsv_get aa_test cases] {
     set testcase_desc     [lindex $testcase 1]
     set testcase_file     [lindex $testcase 2]
     set package_key       [lindex $testcase 3]
-    set testcase_cats     [string map {" " ", "} [lindex $testcase 4]]
-    set testcase_inits    [string map {" " ", "} [lindex $testcase 5]]
+    set testcase_cats     [join [lindex $testcase 4] ", "]
+    set testcase_inits    [join [lindex $testcase 5] ", "]
     set testcase_on_error [lindex $testcase 6]
     set testcase_bodys    [lindex $testcase 7]
+    set testcase_error_level [lindex $testcase 8]
+    set testcase_bugs     [lindex $testcase 9]
   }
 }
+
+set bug_list [list]
+foreach bug $testcase_bugs {
+    lappend bug_list "<a href=\"[export_vars -base "http://openacs.org/bugtracker/openacs/bug" [list [list bug_number $bug]]]\">$bug</a>"
+}
+
+set bug_blurb [join $bug_list ", "]
+
 
 template::multirow create bodys body_number body
 if {[llength $testcase_bodys] == 0} {
