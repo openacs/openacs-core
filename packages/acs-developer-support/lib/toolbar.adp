@@ -1,34 +1,40 @@
 <if @show_p@ true>
-  <table cellspacing="0" cellpadding="0" width="100%" class="developer-toolbar" border="0">
+  <table cellspacing="0" cellpadding="0" width="100%" border="0" id="developer-toolbar">
     <tr>
-      <td style="padding-left: 4px;" >
+      <td>
         <a href="@ds_url@">Developer Support</a>
-        <!--<a href="@comments_toggle_url@" class="@comments_on@" title="Comments at page footer">CMT<if @num_comments@ gt 0>(@num_comments@)</if></a>-->
-        <a href="@user_switching_toggle_url@" class="@user_switching_on@" title="User switching">USR</a>
-        <a href="@db_toggle_url@" class="@db_on@" title="Database statistics">DB</a>
-        <a href="@translator_toggle_url@" class="@translator_on@" title="Translator mode">TRN</a>
       </td>
 
-      <td align="center">
-        <a href="@request_info_url@" title="View request information">@request_info_label@</a>
-        <span style="color: #cccccc;">|</span>
-        <a href="@oacs_shell_url@" title="Execute commands and see the result">Shell</a>
-        <span style="color: #cccccc;">|</span>
-        <a href="/acs-admin/apm/" title="Modify/reload packages">APM</a>
-        <span style="color: #cccccc;">|</span>
-        <a href="/acs-admin/apm/?reload_links_p=1" title="Scan for changed library files">Changed</a>
-        <span style="color: #cccccc;">|</span>
-        <a href="@flush_url@" title="Flush entire util_memoize cache">Flush</a>
-        <span style="color: #cccccc;">|</span>
-        <a href="@auto_test_url@" title="Automated Testing Home">Test</a>
-        <span style="color: #cccccc;">|</span>
-        <a href="/acs-admin/users/" title="Add/edit/become users">Users</a>
-        <span style="color: #cccccc;">|</span>
-        <a href="/acs-lang/admin/" title="Add/edit message keys">I18n</a>
-        <span style="color: #cccccc;">|</span>
-        <a href="/doc/" title="View system documentation">Docs</a>
-        <span style="color: #cccccc;">|</span>
-        <a href="/api-doc/" title="View/search OpenACS Tcl API documentation">API doc</a>
+      <td class="action-list">
+        <ul>
+          <li><a href="@user_switching_toggle_url@" class="@user_switching_on@" title="User switching">USR</a></li>
+          <li><a href="@db_toggle_url@" class="@db_on@" title="Database statistics">DB</a></li>
+          <li><a href="@translator_toggle_url@" class="@translator_on@" title="Translator mode">TRN</a></li>
+        </ul>
+      </td>
+
+      <td align="center" class="action-list">
+        <ul>
+          <li><a href="@request_info_url@" title="View request information">@request_info_label@</a>
+          <span style="color: #cccccc;">|</span></li>
+          <li><a href="@oacs_shell_url@" title="Execute commands and see the result">Shell</a>
+          <span style="color: #cccccc;">|</span></li>
+          <li><a href="/acs-admin/apm/" title="Modify/reload packages">APM</a>
+          <span style="color: #cccccc;">|</span></li>
+          <li><a href="/acs-admin/apm/?reload_links_p=1" title="Scan for changed library files">Changed</a>
+          <span style="color: #cccccc;">|</span></li>
+          <li><a href="@flush_url@" title="Flush entire util_memoize cache">Flush</a>
+          <span style="color: #cccccc;">|</span></li>
+          <li><a href="@auto_test_url@" title="Automated Testing Home">Test</a>
+          <span style="color: #cccccc;">|</span></li>
+          <li><a href="/acs-admin/users/" title="Add/edit/become users">Users</a>
+          <span style="color: #cccccc;">|</span></li>
+          <li><a href="/acs-lang/admin/" title="Add/edit message keys">I18n</a>
+          <span style="color: #cccccc;">|</span></li>
+          <li><a href="/doc/" title="View system documentation">Docs</a>
+          <span style="color: #cccccc;">|</span></li>
+          <li><a href="/api-doc/" title="View/search OpenACS Tcl API documentation">API doc</a></li>
+        </ul>
       </td>
 
       <form action="/api-doc/proc-search">
