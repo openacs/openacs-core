@@ -1,6 +1,8 @@
 select acs_sc_contract__delete('FtsContentProvider');
 select acs_sc_msg_type__delete ('FtsContentProvider.Datasource.InputType');
 select acs_sc_msg_type__delete ('FtsContentProvider.Datasource.OutputType');
+select acs_sc_msg_type__delete ('FtsContentProvider.Url.InputType');
+select acs_sc_msg_type__delete ('FtsContentProvider.Url.OutputType');
 
 
 
