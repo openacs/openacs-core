@@ -87,6 +87,14 @@
     </querytext>
   </fullquery>
   
+  <fullquery name="apm_parameter_update.object_title_update">      
+    <querytext>
+	update acs_objects
+	set title = :parameter_name
+	where object_id = :parameter_id
+    </querytext>
+  </fullquery>
+  
   <fullquery name="apm_parameter_unregister.all_parameters_packages">      
     <querytext>
       select package_id, parameter_id, parameter_name 

@@ -13,7 +13,8 @@
           :symlink_id,
           current_timestamp,
           :creation_user,
-          :creation_ip
+          :creation_ip,
+          :package_id
         );
 
       </querytext>
@@ -25,7 +26,8 @@
         update acs_objects
         set last_modified = current_timestamp,
           modifying_user = :modifying_user,
-          modifying_ip = :modifying_ip
+          modifying_ip = :modifying_ip,
+          title = :label
         where object_id = :symlink_id
 
       </querytext>

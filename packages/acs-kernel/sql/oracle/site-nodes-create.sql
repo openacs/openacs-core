@@ -126,6 +126,8 @@ as
     v_node_id := acs_object.new (
       object_id => node_id,
       object_type => 'site_node',
+      title => name,
+      package_id => object_id,
       creation_user => creation_user,
       creation_ip => creation_ip
     );

@@ -88,6 +88,7 @@ ad_proc -public cr_import_content {
     {-other_type "content_revision"}
     {-title ""}
     {-description ""}
+    {-package_id ""}
     -item_id
     parent_id
     tmp_filename
@@ -107,6 +108,7 @@ ad_proc -public cr_import_content {
     @param other_type The type of content item to create for a non-image file
     @param title The title given the new revision
     @param description The description of the new revision
+    @param package_id Package Id of the package that created the item
     @param item_id If present, make a new revision of this item, otherwise, make a new
            item
     @param parent_id The parent of the content item we create
@@ -145,6 +147,10 @@ ad_proc -public cr_import_content {
 
     if {[string equal $mime_type "*/*"]} {
         set mime_type "application/octet-stream"
+    }
+
+    if {[empty_string_p $package_id]} {
+	set package_id [ad_conn package_id]
     }
 
     set old_item_p [info exists item_id]

@@ -22,10 +22,12 @@ function new (
   folder_id	in cr_folders.folder_id%TYPE default null,
   creation_date	in acs_objects.creation_date%TYPE default sysdate,
   creation_user	in acs_objects.creation_user%TYPE default null,
-  creation_ip	in acs_objects.creation_ip%TYPE default null
+  creation_ip	in acs_objects.creation_ip%TYPE default null,
+  package_id	in acs_objects.package_id%TYPE default null,
 ) return cr_folders.folder_id%TYPE is
   v_folder_id	cr_folders.folder_id%TYPE;
   v_context_id	acs_objects.context_id%TYPE;
+  v_package_id	acs_objects.package_id%TYPE;
 begin
 
   -- set the context_id
@@ -43,6 +45,12 @@ begin
         'This folder does not allow subfolders to be created');
   else
 
+    v_package_id := package_id;
+
+    if parent_id is not null and package_id is null then
+        v_package_id := acs_object.package_id(content_item.get_root_folder(parent_id));
+    end if;
+
     v_folder_id := content_item.new(
         item_id       => folder_id,
         name          => name, 
@@ -52,14 +60,20 @@ begin
         creation_date => creation_date, 
         creation_user => creation_user, 
         creation_ip   => creation_ip, 
-        parent_id     => parent_id 
+        parent_id     => parent_id,
+        package_id    => v_package_id
     );
 
     insert into cr_folders (
-      folder_id, label, description
+      folder_id, label, description, package_id
     ) values (
-      v_folder_id, label, description
+      v_folder_id, label, description, v_package_id
     );
+
+    -- set the correct object title
+    update acs_objects
+    set title = new.label
+    where object_id = v_folder_id;
 
     -- inherit the attributes of the parent folder
     if content_folder.new.parent_id is not null then
@@ -161,6 +175,12 @@ begin
 
   if name is not null then
     content_item.rename(folder_id, name);
+  end if;
+
+  if label is not null then
+    update acs_objects
+    set title = rename.label
+    where object_id = rename.folder_id;
   end if;
 
   if label is not null and description is not null then 

@@ -134,7 +134,8 @@ as
              creation_date => creation_date,
              creation_user => creation_user,
              creation_ip   => creation_ip,
-             object_type   => object_type
+             object_type   => object_type,
+             title         => source
         );
 
 	if first_names is not null and last_name is not null then

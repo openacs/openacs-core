@@ -54,6 +54,9 @@ begin
                 now(),
                 null,
                 null,
+                null,
+                ''t'',
+                p_msg_type_name,
                 null
             );
 
