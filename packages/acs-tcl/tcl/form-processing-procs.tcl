@@ -700,6 +700,14 @@ ad_proc -public ad_form {
                     return -code error "Edit request block conflicts with select query"
                 }
                 ad_page_contract_eval uplevel #$level $edit_request
+                foreach element_name $af_element_names($form_name) {
+                    if { [llength $element_name] == 1 } {
+                        if { [uplevel \#$level [list info exists $element_name]] } {
+                            set values($element_name) [uplevel \#$level [list set $element_name]]
+                        }
+                    }
+                }            
+
             } else {
 
                 # The key exists, grab the existing values if we have an select_query clause
