@@ -440,6 +440,7 @@ proc_doc db_foreach { statement_name sql args } {
 ad_proc -public db_multirow {
     -local:boolean
     -append:boolean
+    {-upvar_level 1}
     {-extend {}}
     var_name
     statement_name
@@ -448,7 +449,7 @@ ad_proc -public db_multirow {
 } {
    Usage:
     <blockquote>
-    db_multirow [ -local ] [ -append ] [ -extend <em><i>column_list</i></em> ] \
+    db_multirow [ -local ] [ -upvar_level <em><i>n_levels_up</i></em> ] [ -append ] [ -extend <em><i>column_list</i></em> ] \
         <em><i>var-name statement-name sql</i></em> [ -bind <em><i>bind_set_id</i></em> | -bind <em><i>bind_value_list</i></em> ] \
 	<em><i>code_block</i></em> [ if_no_rows <em><i>if_no_rows_block</i> ]</em>
 
@@ -471,7 +472,8 @@ ad_proc -public db_multirow {
     <p>
     If the <code>-local</code> is passed, the variables defined                                                            
     by db_multirow will be set locally (useful if you're compiling dynamic templates                                                           
-    in a function or similar situations).
+    in a function or similar situations). Use the <code>-upvar_level</code>
+    switch to specify how many levels up the variable should be set.
 
     <p>
 
@@ -526,7 +528,7 @@ ad_proc -public db_multirow {
     set full_statement_name [db_qd_get_fullname $statement_name]
 
     if { $local_p } {
-        set level_up 1
+        set level_up $upvar_level
     } else {
         set level_up \#[template::adp_level]
     }
