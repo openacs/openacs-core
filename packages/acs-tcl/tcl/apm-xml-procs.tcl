@@ -123,7 +123,7 @@ ad_proc -private apm_generate_package_spec { version_id } {
         append spec "        <summary>[ad_quotehtml $summary]</summary>\n"
     }
     if { ![empty_string_p $release_date] } {
-        append spec "        <release-date>[ad_quotehtml $release_date]</release-date>\n"
+        append spec "        <release-date>[ad_quotehtml [string range $release_date 0 9]]</release-date>\n"
     }
     if { ![empty_string_p $vendor] || ![empty_string_p $vendor_uri] } {
         append spec "        <vendor"
