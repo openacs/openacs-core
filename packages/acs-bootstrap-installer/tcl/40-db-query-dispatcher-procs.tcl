@@ -306,6 +306,7 @@ ad_proc db_qd_get_fullname {local_name {added_stack_num 1}} {
 	regsub -all {/} $url {.} url
 
 	# We insert the "www" after the package key
+        set rest {}
 	regexp {^([^\.]*)(.*)} $url all package_key rest
 
 	db_qd_log QDDebug "package key is $package_key and rest is $rest"
@@ -361,6 +362,7 @@ ad_proc db_qd_get_fullname {local_name {added_stack_num 1}} {
 
 	# We get something like packages.acs-tcl.tcl.acs-kernel-procs
 	# We need to remove packages.
+        set rest {}
 	regexp {^packages\.(.*)} $url all rest
 
 	db_qd_log QDDebug "TEMP - QD: proc_name is $proc_name"
