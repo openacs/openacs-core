@@ -25,14 +25,22 @@
     <else>@subsite_name@</else>
   </div>
 
+<!-- Context bar -->
+
+    <div class="subsite-context-bar">
+      @context_bar;noquote@&nbsp;
+    </div>
+
 <!-- Top level navigation -->
 
+  <div id="navbar-div">
+  <div id="navbar-container">
   <div id="navbar"> 
     <multiple name="sections">
       <if @sections.selected_p@ true>
-        <div class="navbar-selected">
+        <div class="tab" id="navbar-here">
           <if @sections.link_p@ true>
-            <a href="@sections.url@" title="@sections.title@" class="navbar-selected">@sections.label@</a>
+            <a href="@sections.url@" title="@sections.title@">@sections.label@</a>
           </if>
           <else>        
             @sections.label@
@@ -40,9 +48,9 @@
         </div>
       </if>
       <else>
-        <div class="navbar-unselected">
+        <div class="tab">
           <if @sections.link_p@ true>
-            <a href="@sections.url@" title="@sections.title@" class="navbar-unselected">@sections.label@</a>
+            <a href="@sections.url@" title="@sections.title@">@sections.label@</a>
           </if>
           <else>        
             @sections.label@
@@ -51,23 +59,22 @@
       </else>
     </multiple>
   </div>
+  </div>
+  </div>
   <div id="navbar-body">
-
-<!-- Context bar -->
-
-    <div class="subsite-context-bar">
-      @context_bar;noquote@&nbsp;
-    </div>
 
 <!-- Second level navigation -->
   
     <if @subsections:rowcount@ gt 0>
+
+      <div id="subnavbar-div">
+      <div id="subnavbar-container">
       <div id="subnavbar">
         <multiple name="subsections">
           <if @subsections.selected_p@ true>
-            <div class="subnavbar-selected">
+            <div class="tab" id="subnavbar-here">
               <if @subsections.link_p@ true>
-                <a href="@subsections.url@" title="@subsections.title@" class="subnavbar-selected">@subsections.label@</a>
+                <a href="@subsections.url@" title="@subsections.title@">@subsections.label@</a>
               </if>
               <else>        
                 @subsections.label@
@@ -75,9 +82,9 @@
             </div>
           </if>
           <else>
-            <div class="subnavbar-unselected">
+            <div class="tab">
               <if @subsections.link_p@ true>
-                <a href="@subsections.url@" title="@subsections.title@" class="subnavbar-unselected">@subsections.label@</a>
+                <a href="@subsections.url@" title="@subsections.title@">@subsections.label@</a>
               </if>
               <else>        
                 @subsections.label@
@@ -86,7 +93,12 @@
           </else>
         </multiple>
       </div>
+      </div>
+      </div>
     </if>
+    <else>
+      <div id="subnavbar-div"></div>
+    </else>
     <div id="subnavbar-body">
 
 <!-- Page Title -->
