@@ -17,8 +17,8 @@ set user_id [auth::require_login -account_status closed]
 ad_form -name private-email -form {
     {level:integer(select)
 	{label "\#acs-subsite.Change_my_email_P\#:"}
-	{options {{"[_ acs-subsite.email_as_text] (4)" 4} {"[_ acs-subsite.email_as_image](3)" 3} \
-		      {"[_ acs-subsite.email_as_a_form] (2)" 2} {"[_ acs-subsite.email_dont_show] (1)" 1}}}
+	{options {{"[_ acs-subsite.email_as_text_admin]" 4} {"[_ acs-subsite.email_as_image_admin]" 3} \
+		      {"[_ acs-subsite.email_as_a_form_admin]" 2} {"[_ acs-subsite.email_dont_show_admin]" 1}}}
     }
 } -on_request {
     set level [parameter::get_from_package_key -package_key "acs-subsite" \
