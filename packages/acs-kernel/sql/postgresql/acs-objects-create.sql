@@ -819,7 +819,7 @@ begin
      a.object_type = t.object_type;
 
    if NOT FOUND then 
-      raise EXCEPTION ''%: %'', -20000,
+      raise EXCEPTION ''-20000: %'',
      ''No such attribute '' || v_object_type || ''::'' || 
      attribute_name_in || '' in acs_object.get_attribute_storage.'';
    end if;
@@ -860,13 +860,13 @@ begin
          where 
            object_type = v_object_type;
          if NOT FOUND then 
-            raise EXCEPTION ''%: %'', -20000, 
+            raise EXCEPTION ''-20000: %'', 
                             ''No data found for attribute '' || 
                             v_object_type || ''::'' || attribute_name_in || 
                             '' in acs_object.get_attribute_storage'';
          end if;
        else
-         raise EXCEPTION ''%: %'', -20000, 
+         raise EXCEPTION ''-20000: %'', 
           ''No table name specified for storage specific static attribute '' 
           || v_object_type || ''::'' || attribute_name_in || 
           '' in acs_object.get_attribute_storage.'';
@@ -881,7 +881,7 @@ begin
        where object_type = v_object_type 
        and table_name = v_table_name;
        if NOT FOUND then 
-          raise EXCEPTION ''%: %'', -20000, ''No data found for attribute '' 
+          raise EXCEPTION ''-20000: %'', ''No data found for attribute '' 
                           || v_object_type || ''::'' || attribute_name_in || 
                           '' in acs_object.get_attribute_storage'';
        end if;
@@ -1219,7 +1219,7 @@ begin
 
    -- If this fails then there isn''''t even an object associated with
    -- this id. I''m going to let that error propogate as an exception.
-   select object_type into object_type
+   select object_type into check_representation__object_type
    from acs_objects
    where object_id = check_representation__object_id;
 
@@ -1249,7 +1249,7 @@ begin
            PERFORM acs_log__error(''acs_object.check_representation'',
                      ''Table '' || t.table_name || '' (primary storage for '' ||
 		     t.object_type || '') doesn''''t have a row for object '' ||
-		     check_representation__object_id || '' of type '' || object_type || ''.'');
+		     check_representation__object_id || '' of type '' || check_representation__object_type || ''.'');
         end if;
    end loop;
 

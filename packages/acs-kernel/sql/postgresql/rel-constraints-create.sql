@@ -217,28 +217,6 @@ from   constrained_rels1 c left outer join rel_segment_party_map rspm
            rspm.party_id = c.container_id)
 where rspm.party_id is null;
 
-
--- Originally, we tried this view.  It was slow.  The one above is much
--- less slow.  It moves the "not exists" query to an outer join, checking
--- for null rows in the outer join table.  This turns out to be much faster
--- than "not exists".
---
--- create or replace view rel_constraints_violated_one as
--- select rel_constraints.constraint_id, rel_constraints.constraint_name, 
---        r.rel_id, r.container_id, r.party_id, r.rel_type, 
---        rel_constraints.rel_segment,
---        rel_constraints.rel_side, 
---        rel_constraints.required_rel_segment
--- from rel_constraints, rel_segment_party_map r
--- where rel_constraints.rel_side = 'one'
---   and rel_constraints.rel_segment = r.segment_id
---   and not exists (
---         select 1 from rel_segment_party_map rspm
---         where rspm.segment_id = rel_constraints.required_rel_segment
---           and rspm.party_id = r.container_id
---  );
-
-
 -- View rel_constraints_violated_two
 --
 -- pseudo sql:
@@ -281,27 +259,6 @@ from  constrained_rels2 c left outer join rel_segment_party_map rspm
        on (rspm.segment_id = c.required_rel_segment and
            rspm.party_id = c.party_id)
 where rspm.party_id is null;
-
--- Originally, we tried this view.  It was slow.  The one above is much
--- less slow.  It moves the "not exists" query to an outer join, checking
--- for null rows in the outer join table.  This turns out to be much faster
--- than "not exists".
---
--- create or replace view rel_constraints_violated_two as
--- select rel_constraints.constraint_id, rel_constraints.constraint_name, 
---        r.rel_id, r.container_id, r.party_id, r.rel_type, 
---        rel_constraints.rel_segment,
---        rel_constraints.rel_side, 
---        rel_constraints.required_rel_segment
--- from rel_constraints, rel_segment_party_map r
--- where rel_constraints.rel_side = 'two'
---   and rel_constraints.rel_segment = r.segment_id
---   and not exists (
---         select 1 from rel_segment_party_map rspm
---         where rspm.segment_id = rel_constraints.required_rel_segment
---           and rspm.party_id = r.party_id
---   );
-
 
 
 -- View: rc_all_constraints
@@ -476,8 +433,11 @@ select group_rel_type_combos.group_id,
        group_rel_type_combos.rel_type,
        parties.party_id
 from (rc_required_rel_segments right outer join group_rel_type_combos 
-      on (rc_required_rel_segments.group_id = group_rel_type_combos.group_id and 
-          rc_required_rel_segments.rel_type = group_rel_type_combos.rel_type)), parties
+      on 
+        (rc_required_rel_segments.group_id = group_rel_type_combos.group_id 
+         and 
+         rc_required_rel_segments.rel_type = group_rel_type_combos.rel_type)),
+         parties
 where rc_required_rel_segments.group_id is null;
 
 

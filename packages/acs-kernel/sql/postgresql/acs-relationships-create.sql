@@ -411,26 +411,7 @@ declare
   actual_object_type_two acs_object_types.object_type%TYPE;
 begin
 
-    -- validate that the relation being added is between objects of the
-    -- correct object_type.  If no rows are returned by this query,
-    -- then the types are wrong and we should return an error.
-    -- select 1 into dummy
-    -- from acs_rel_types rt,
-    --     acs_objects o1, 
-    --     acs_objects o2
-    -- where exists (select 1 
-    --                from acs_object_types t
-    --               where t.object_type = o1.object_type
-    --             connect by prior t.object_type = t.supertype
-    --               start with t.object_type = rt.object_type_one)
-    --   and exists (select 1 
-    --                from acs_object_types t
-    --               where t.object_type = o2.object_type
-    --             connect by prior t.object_type = t.supertype
-    --               start with t.object_type = rt.object_type_two)
-    --   and rt.rel_type = new.rel_type
-    --   and o1.object_id = new.object_id_one
-    --   and o2.object_id = new.object_id_two;
+/*
 
     select 1 into dummy
     from acs_rel_types rt,
@@ -453,7 +434,6 @@ begin
       and rt.rel_type = new.rel_type
       and o1.object_id = new.object_id_one
       and o2.object_id = new.object_id_two;
-
     if NOT FOUND then
 
       -- At least one of the object types must have been wrong.
@@ -467,8 +447,7 @@ begin
         and o1.object_id = new.object_id_one
         and o2.object_id = new.object_id_two;
 
-      raise EXCEPTION ''%: %'', -20001,
-          new.rel_type || '' violation: Invalid object types.  '' ||
+      raise EXCEPTION ''-20001: %'', new.rel_type || '' violation: Invalid object types.  '' ||
           ''Object '' || new.object_id_one || 
           '' ('' || actual_object_type_one || '') '' || 
           ''must be of type '' || target_object_type_one || ''. '' ||
@@ -476,7 +455,7 @@ begin
           '' ('' || actual_object_type_two || '') '' || 
           ''must be of type '' || target_object_type_two || ''.'';
     end if;
-
+*/
     return new;
 
 end;' language 'plpgsql';

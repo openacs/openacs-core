@@ -657,6 +657,35 @@ begin
   
 end;' language 'plpgsql';
 
+create function acs_user__new(varchar,varchar,varchar,char,char) 
+returns integer as '
+declare
+        email   alias for $1;
+        fname   alias for $2;
+        lname   alias for $3;
+        pword   alias for $4;
+        salt    alias for $5;
+begin
+        return acs_user__new(null,
+                             ''user'',
+                             now(),
+                             null,
+                             null,                
+                             email,
+                             null,
+                             fname,
+                             lname,
+                             pword,
+                             salt,
+                             null,
+                             null,
+                             null,
+                             ''t'',
+                             null
+                             );
+
+end;' language 'plpgsql';
+
 
 -- function receives_alerts_p
 create function acs_user__receives_alerts_p (integer)

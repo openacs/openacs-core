@@ -2002,7 +2002,7 @@ begin
 
     if NOT FOUND
       then
-      	raise EXCEPTION ''%: %'', -20000, ''The specified package '' 
+      	raise EXCEPTION ''-20000: %'', ''The specified package '' 
         || set_value__package_id || '' does not exist in the system.'';
     end if;
 

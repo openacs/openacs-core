@@ -24,7 +24,7 @@ begin
   -- First check if added this relation violated any relational constraints
   v_error := rel_constraint__violation(new.rel_id);
   if v_error is not null then
-      raise EXCEPTION ''%: %'', -20000,v_error;
+      raise EXCEPTION ''-20000: %'', v_error;
   end if;
 
   select object_id_one, object_id_two, rel_type
@@ -77,8 +77,9 @@ begin
   
   -- First check if added this relation violated any relational constraints
   v_error := rel_constraint__violation(new.rel_id);
+
   if v_error is not null then
-      raise EXCEPTION ''%: %'', -20000, v_error;
+      raise EXCEPTION ''-20000: %'', v_error;
   end if;
 
   select object_id_one, object_id_two, rel_type
@@ -156,7 +157,7 @@ begin
   -- First check if removing this relation would violate any relational constraints
   v_error := rel_constraint__violation_if_removed(old.rel_id);
   if v_error is not null then
-      raise EXCEPTION ''%: %'', -20000, v_error;
+      raise EXCEPTION ''-20000: %'', v_error;
   end if;
 
   delete from group_element_index
@@ -186,7 +187,7 @@ begin
   -- First check if removing this relation would violate any relational constraints
   v_error := rel_constraint__violation_if_removed(old.rel_id);
   if v_error is not null then
-      raise EXCEPTION ''%: %'', -20000, v_error;
+      raise EXCEPTION ''-20000: %'', v_error;
   end if;
 
   select object_id_one, object_id_two into v_object_id_one, v_object_id_two
@@ -298,6 +299,20 @@ begin
    
 end;' language 'plpgsql';
 
+-- function new
+create function composition_rel__new (integer,integer)
+returns integer as '
+declare
+  object_id_one          alias for $1;  
+  object_id_two          alias for $2;  
+begin
+        return composition_rel__new(null,
+                                    ''composition_rel'',
+                                    object_id_one,
+                                    object_id_two,
+                                    null,
+                                    null);
+end;' language 'plpgsql';
 
 -- procedure delete
 create function composition_rel__delete (integer)
@@ -466,9 +481,6 @@ end;' language 'plpgsql';
 
 -- show errors
 
-
-
-
 -- create or replace package body membership_rel
 -- function new
 create function membership_rel__new (integer,varchar,integer,integer,varchar,integer,varchar)
@@ -502,6 +514,21 @@ begin
    
 end;' language 'plpgsql';
 
+-- function new
+create function membership_rel__new (integer,integer)
+returns integer as '
+declare
+  object_id_one          alias for $1;  
+  object_id_two          alias for $2;  
+begin
+        return membership_rel__new(null,
+                                   ''membership_rel'',
+                                   object_id_one,
+                                   object_id_two,
+                                   ''approved'',
+                                   null,
+                                   null);
+end;' language 'plpgsql';
 
 -- procedure ban
 create function membership_rel__ban (integer)

@@ -22,12 +22,12 @@
 \i rel-constraints-create.sql
 \i groups-body-create.sql
 \i rel-segments-body-create.sql
+\i rel-constraints-body-create.sql
 \i acs-permissions-create.sql
 \i security-create.sql
 \i journal-create.sql
 \i site-nodes-create.sql
 \i apm-create.sql
-
 \i acs-create.sql
 --
 
