@@ -29,6 +29,7 @@ ad_proc -public template::widget {} {
     @see template::widget::multiselect
     @see template::widget::numericRange
     @see template::widget::password
+    @see template::widget::party_search
     @see template::widget::radio
     @see template::util::richtext
     @see template::widget::search
@@ -39,6 +40,125 @@ ad_proc -public template::widget {} {
 
     @see template::element::create
 } -
+
+
+ad_proc -public template::widget::party_search { element_reference tag_attributes } {
+
+    A widget that searches for parties (persons, groups and relational_segments) and lets
+    the user select one from the search results.
+
+    <p>
+
+    It only searches in all parties from the system currently. It should propably be extended to
+    allow to restrict the search to a specific subsite, as well as searching only 
+    for groups or persons.
+
+    @author Tilmann Singer
+} {
+
+    upvar $element_reference element
+
+    if { ![info exists element(options)] } {
+        
+        # initial submission or no data (no options): a text box
+        set output [input text element $tag_attributes]
+
+    } else {
+
+        set output "<input type=\"hidden\" name=\"$element(id):select\" value=\"t\" />"
+        append output "<input type=\"hidden\" name=\"$element(id):search_string\" value=\"$element(search_string)\" />"
+
+        if { ![info exists element(confirmed_p)] } {
+            append output "<input type=\"hidden\" name=\"$element(id):confirmed_p\" value=\"t\" />"
+        }
+            
+        append output [select $element_reference $tag_attributes]
+    }
+    return $output
+}
+
+ad_proc -public template::data::validate::party_search { value_ref message_ref } {
+    return 1
+}
+
+ad_proc -public template::data::transform::party_search { element_ref } {
+
+    upvar $element_ref element
+    set element_id $element(id)
+
+    set value [string trim [ns_queryget $element_id]]
+
+    if { [empty_string_p $value] } {
+        template::element::set_error $element(form_id) $element_id "Please enter a search string."
+        return [list]
+    }
+
+    if { [string equal $value ":search:"] } {
+        # user has selected 'search again' previously
+        template::element::set_error $element(form_id) $element_id "Please enter a search string."
+        return [list]
+    }
+     
+    if { [ns_queryexists $element_id:search_string] } {
+        # request comes from a page with a select widget and the
+        # search string has been passed as hidden value
+        set search_string [ns_queryget $element_id:search_string]
+        set element(search_string) $search_string
+
+        # the value to be returned
+        set value [ns_queryget $element_id]
+    } else {
+        # request is an initial search
+        set search_string $value
+        set element(search_string) $value
+    }
+
+    # search in persons
+    set persons [db_list_of_lists search_persons {}]
+
+    # search in groups and relsegs
+    set groups_relsegs [db_list_of_lists search_groups_relsegs {}]
+
+    if { [llength $persons] == 0 && [llength $groups_relsegs] == 0 } {
+        # no search results so return text entry back to the user
+
+        catch { unset element(options) }
+
+        template::element::set_error $element(form_id) $element_id "
+        No matches were found for \"$search_string\".<br>Please
+        try again."
+
+    } else {
+        # we need to return a select list
+
+        set options [list]
+
+        if { [llength $persons] > 0 } {
+            set options $persons
+            set options [concat $options [list [list "---" ""]]]
+        }
+        if { [llength $groups_relsegs] > 0 } {
+            set options [concat $options $groups_relsegs]
+            set options [concat $options [list [list "---" ""]]]
+        }
+        set element(options) [concat $options { { "Search again..." ":search:" } }]
+        if { ![info exists value] } {
+            # set value to first item
+            set value [lindex [lindex $options 0] 1]
+        }
+
+        if { ![ns_queryexists $element_id:confirmed_p] } {
+            template::element::set_error $element(form_id) $element_id "Please choose an entry."
+        }
+    }
+
+    if { [info exists element(result_datatype)] &&
+         [ns_queryexists $element_id:select] } {
+        set element(datatype) $element(result_datatype)
+    }
+
+    return $value
+}
 
 
 ad_proc -public template::widget::search { element_reference tag_attributes } {
