@@ -75,7 +75,7 @@ foreach pkg_info $pkg_install_list {
     }
 }
 
-ad_set_client_property apm sql_file_paths $file_list
+ad_set_client_property -clob t apm sql_file_paths $file_list
 
 if {[empty_string_p $file_list]} {
     ad_returnredirect packages-install-4
