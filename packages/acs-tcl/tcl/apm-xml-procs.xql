@@ -13,18 +13,6 @@
       </querytext>
 </fullquery>
 
- 
-<fullquery name="apm_generate_package_spec.supported_databases">      
-      <querytext>
-      
-        select distinct db_type
-        from apm_package_files
-        where db_type is not null
-    
-      </querytext>
-</fullquery>
-
-  
 <fullquery name="apm_generate_package_spec.owner_info">      
       <querytext>
       
