@@ -698,6 +698,13 @@ ad_proc -public apm_highest_version {package_key} {
     }]
 }
 
+ad_proc -public apm_highest_version_name {package_key} {
+    Return the highest version of the indicated package.
+    @return the version_name of the highest installed version of a package.
+} {
+    return [db_string apm_highest_version_name {} -default ""]
+}
+
 ad_proc -public apm_num_instances {package_key} {
 
     @return The number of instances of the indicated package.

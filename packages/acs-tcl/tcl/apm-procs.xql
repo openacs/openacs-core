@@ -123,8 +123,8 @@
   <fullquery name="apm_version_info.apm_package_by_version_id">      
     <querytext>
       select pretty_name, version_name, package_key, installed_p, distribution_uri, tagged_p
-      apm_package_version_info
-      where version_id = :version_id
+      from   apm_package_version_info
+      where  version_id = :version_id
     </querytext>
   </fullquery>
   
@@ -176,31 +176,35 @@
 
   <fullquery name="apm_version_get.select_version_info">      
     <querytext>
-        select version_id,
-               package_key,
-               version_name,
-               version_uri,
-               summary,
-               description_format,
-               description,
-               to_char(release_date, 'YYYY-MM-DD') as release_date,
-               vendor,
-               vendor_uri,
-               enabled_p,
-               installed_p,
-               tagged_p,
-               imported_p,
-               data_model_loaded_p,
-               cvs_import_results,
-               activation_date,
-               deactivation_date,
-               item_id,
-               content_length,
-               distribution_uri,
-               distribution_date,
-               auto_mount
-        from apm_package_versions
-        where version_id = :version_id
+        select v.version_id,
+               v.package_key,
+               v.version_name,
+               v.version_uri,
+               v.summary,
+               v.description_format,
+               v.description,
+               v.to_char(release_date, 'YYYY-MM-DD') as release_date,
+               v.vendor,
+               v.vendor_uri,
+               v.enabled_p,
+               v.installed_p,
+               v.tagged_p,
+               v.imported_p,
+               v.data_model_loaded_p,
+               v.cvs_import_results,
+               v.activation_date,
+               v.deactivation_date,
+               v.item_id,
+               v.content_length,
+               v.distribution_uri,
+               v.distribution_date,
+               v.auto_mount,
+               t.pretty_name,
+               t.pretty_plural
+        from   apm_package_versions v,
+               apm_package_types t
+        where  v.version_id = :version_id
+        and    t.package_key = v.package_key
     </querytext>
   </fullquery>  
 
