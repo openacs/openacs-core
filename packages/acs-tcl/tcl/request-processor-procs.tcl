@@ -1243,6 +1243,14 @@ ad_proc -public ad_conn {args} {
                         set ad_conn(vhost_package_url) "[ad_conn vhost_subsite_url]$subsite_package_url"
                         return $ad_conn(vhost_package_url)
                     }
+                    recursion_count {
+                        # sometimes recusion_count will be uninitialized and 
+                        # something will call ad_conn recursion_count - return 0 
+                        # in that instance.  This is filters ahead of rp_filter which throw
+                        # an ns_returnnotfound or something like that.
+                        set ad_conn(recursion_count) 0
+                        return 0
+                    }
                     default {
                         return [ns_conn $var]
                     }
