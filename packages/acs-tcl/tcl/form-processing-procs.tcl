@@ -81,13 +81,12 @@ ad_proc -public ad_form {
               (my_table_key, value)
             values
               (:key, :value)"
-        ad_returnredirect "somewhere"
-        ad_script_abort
     } -edit_data {
         db_dml do_update "
             update my_table
             set value = :value
             where my_table_key = :key"
+    } -after_submit {
         ad_returnredirect "somewhere"
         ad_script_abort
     }
@@ -205,11 +204,17 @@ ad_proc -public ad_form {
         the data.
     </dd>
 
-    <p><dt><b>-new_data</b></dt><p>
+    <p><dt><b>-edit_data</b></dt><p>
     <dd>This code block will be executed when a form for an existing database row is submitted.  This block should
         update the database or create a new content revision for the exisiting item if the data's stored in the
         content repository.
     </dd>
+
+    <p><dt><b>-after_submit</b></dt><p>
+    <dd>This code block will be executed after the three blocks on_submit, new_data or edit_data have been
+    executed. It is useful for putting in stuff like ad_returnredirect that is the same for new and edit.
+    </dd>
+
     </dl>
 
     Two hidden values of interest are available to the caller of ad_form when processing a submit:
@@ -259,7 +264,7 @@ ad_proc -public ad_form {
 
     <p>
 
-    Currently only the date and currency datatypes require conversion these conversion operations.
+    Currently only the date and currency datatypes require these conversion operations.
 
     <p>
 
@@ -345,7 +350,8 @@ ad_proc -public ad_form {
     } 
 
     set valid_args { form method action html name select_query select_query_name new_data on_refresh
-                     edit_data validate on_submit confirm_template new_request edit_request export}; 
+                     edit_data validate on_submit after_submit confirm_template new_request edit_request
+                     export};
 
     ad_arg_parser $valid_args $args
 
@@ -829,12 +835,13 @@ ad_proc -public ad_form {
         #    for both add and edit forms)
         # 2. an new_data block (when __new_p is true)
         # 3. an edit_data block (when __new_p is false)
+        # 4. an after_submit block (for ad_returnredirect and the like that is the same for new and edit)
 
         # We don't need to interrogate the af_parts structure because we know we're in the last call to
         # to ad_form at this point and that this call contained the "action blocks".
 
         # Execute our to_sql filters, if any, before passing control to the caller's
-        # on_submit, new_data or edit_data blocks
+        # on_submit, new_data, edit_data or after_submit blocks
 
         foreach element_name $af_element_names($form_name) {
             if { [llength $element_name] == 1 } {
@@ -858,6 +865,10 @@ ad_proc -public ad_form {
             template::element::set_value $form_name __new_p 0
         } elseif { [info exists edit_data] && !$__new_p } {
             ad_page_contract_eval uplevel #$level $edit_data
+        }
+
+        if { [info exists after_submit] } {
+            ad_page_contract_eval uplevel #$level $after_submit
         }
     }
 
@@ -906,3 +917,80 @@ ad_proc -public ad_set_form_values {
     }
 }
 
+ad_proc -public ad_form_new_p {
+    -key
+} {
+
+    This is for pages built with ad_form that handle edit and add requests in one file.
+    It determines wether the current request is for editing an existing item, 
+    in which case it returns 0, or adding a new one, which will return 1.
+    
+    <p>
+
+    For this to work there needs to be an element defined in the form that is of
+    the ad_form pseudo datatype "key". If you don't specify -key then this proc
+    will try to guess it from the existing variables - if there is exactly one that 
+    ends on _id then it takes that one, otherwise you have to specify it manually.
+
+    <p>
+
+    It does not make sense to use this in pages that don't use ad_form.
+
+    <p>
+
+    Example usage:
+    <pre>
+    if { [ad_form_new_p] } {
+        ad_require_permission $package_id create
+        set page_title "New Item"
+    } else {
+        ad_require_permission $item_id write
+        set page_title "Edit Item"
+    }
+
+    </pre>
+
+    @param key the name of the key element. In the above example: <code>ad_form_new_p -key item_id</code>
+} {
+
+    set form [ns_getform]
+    if { [empty_string_p $form] } {
+        # no form. assume new
+        return 1
+    }
+    
+    if { ![info exists key] } {
+        # no key name given. loop through form and try to guess one
+
+        for { set i 0 } { $i < [ns_set size $form] } { incr i } {
+            
+            if { [regexp {_id$} [ns_set key $form $i]] } {
+                # this could be a key
+                
+                if { [info exists key] } {
+                    # we found one before already, bad. throw an error
+                    unset key
+                    break
+                }
+                set key [ns_set key $form $i]
+            }
+        }
+        if { ![info exists key] } {
+            ad_return_error "ad_form_new_p failed" "Could not guess key element. Please specify it by using \"ad_form_new_p -key your_key_id\"."
+            ad_script_abort
+        }
+    }
+
+    if { [ns_set find $form $key] == -1 } {
+        # no key
+        return 1
+    }
+
+    if { [ns_set get $form __new_p] == 1 } {
+        # there is a key, but __new_p is also set
+        return 1
+    }
+    
+    # not new
+    return 0
+}
