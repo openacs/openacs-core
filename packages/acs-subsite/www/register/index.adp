@@ -47,7 +47,10 @@ complete your registration.</p>
 </FORM>
 
 <p>
-
+<if @email_forgotten_password_p@ eq 1>
+Have you <a href=email-for-password>forgotten your password?</a>
+<p>
+</if>
 If you keep getting thrown back here, it is probably because your
 browser does not accept cookies.  We're sorry for the inconvenience
 but it really is impossible to program a system like this without
