@@ -218,7 +218,7 @@ namespace eval site_node {
         returns a list of urls for site_nodes that have the given object
         mounted or the empty list if there are none
     } {
-        return [db_list select_url_from_object_id {} -default [list]]
+        return [db_list select_url_from_object_id {}]
     }
 
     ad_proc -public get_node_id {
