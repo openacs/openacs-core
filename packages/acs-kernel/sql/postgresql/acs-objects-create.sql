@@ -420,9 +420,10 @@ begin
 
   if new.context_id is not null and new.security_inherit_p = ''t'' then
      -- Now insert my new ancestors for my descendants.
-    for pair in (select *
+    for pair in select *
 		 from acs_object_context_index
-		 where ancestor_id = new.object_id) loop
+		 where ancestor_id = new.object_id 
+    LOOP
       insert into acs_object_context_index
        (object_id, ancestor_id, n_generations)
       select
@@ -434,9 +435,10 @@ begin
   else if new.object_id != 0 then
     -- We need to make sure that new.OBJECT_ID and all of its
     -- children have 0 as an ancestor.
-    for pair in (select *
+    for pair in  select *
 		 from acs_object_context_index
-		 where ancestor_id = new.object_id) loop
+		 where ancestor_id = new.object_id 
+    LOOP
       insert into acs_object_context_index
        (object_id, ancestor_id, n_generations)
       values
@@ -675,14 +677,14 @@ begin
   --  connect by object_type = prior supertype
 
   for obj_type
-  in (select table_name, id_column
+  in select o2.table_name, o2.id_column
         from acs_object_types o1, acs_object_types o2
        where o1.object_type = (select object_type
                                  from acs_objects o
                                 where o.object_id = delete__object_id)
          and o2.tree_sortkey <= o1.tree_sortkey
          and o1.tree_sortkey like (o2.tree_sortkey || ''%'') 
-    order by tree_sortkey desc)
+    order by o2.tree_sortkey desc
   loop
     -- Delete from the table.
     execute ''delete from '' || quote_ident(obj_type.table_name) ||
@@ -716,14 +718,14 @@ begin
   -- connect by object_type = prior supertype
 
   for obj_type
-  in (select name_method
+  in select o2.name_method
         from acs_object_types o1, acs_object_types o2
        where o1.object_type = (select object_type
                                  from acs_objects o
                                 where o.object_id = name__object_id)
          and o2.tree_sortkey <= o1.tree_sortkey
          and o1.tree_sortkey like (o2.tree_sortkey || ''%'') 
-    order by tree_sortkey desc)
+    order by o2.tree_sortkey desc
   loop
    if obj_type.name_method is not null then
 
@@ -1158,10 +1160,10 @@ begin
 
    -- For every child that reports inheriting from OBJECT_ID we need to call
    -- ourselves recursively.
-   for obj in (select *
+   for obj in  select *
 	       from acs_objects
 	       where context_id = descendant_id
-	       and security_inherit_p = ''t'') loop
+	       and security_inherit_p = ''t'' loop
      if acs_object__check_object_descendants(object_id, obj.object_id,
        n_generations + 1) = ''f'' then
        result := ''f'';
@@ -1227,14 +1229,14 @@ begin
    -- Let''s look through every primary storage table associated with
    -- this object type and all of its supertypes and make sure there
    -- is a row with OBJECT_ID as theh primary key.
-   for t in (select t.object_type, t.table_name, t.id_column
+   for t in  select t.object_type, t.table_name, t.id_column
              from acs_object_type_supertype_map m, acs_object_types t
 	     where m.ancestor_type = t.object_type
 	     and m.object_type = check_representation__object_type
 	     union
 	     select object_type, table_name, id_column
 	     from acs_object_types
-	     where object_type = check_representation__object_type) 
+	     where object_type = check_representation__object_type 
      LOOP
         for row in execute ''select case when count(*) = 0 then 0 else 1 end as n_rows from '' || quote_identifier(t.table_name) || '' where '' || quote_identifier(t.id_column) || '' = '' || check_representation__object_id
         LOOP
@@ -1271,10 +1273,10 @@ begin
    -- Ok, we know that the index contains every entry that it is
    -- supposed to have. Now let''s make sure it doesn''t contain any
    -- extraneous entries.
-   for row in (select *
+   for row in  select *
 	       from acs_object_context_index
 	       where object_id = check_representation__object_id
-	       or ancestor_id = check_representation__object_id) loop
+	       or ancestor_id = check_representation__object_id loop
      if acs_object__check_path(row.object_id, row.ancestor_id) = ''f'' then
        PERFORM acs_log__error(''acs_object.check_representation'',
 		     ''acs_object_context_index contains an extraneous row: '' ||
