@@ -9,12 +9,12 @@ ad_library {
 } 
 
 # The location for files
-ad_proc -public cr_fs_path {} {
+ad_proc -public cr_fs_path { { location CR_FILES } } {
 
     Root path of content repository files.
 
 } {
-    return "[file dirname [string trimright [ns_info tcllib] "/"]]/content-repository-content-files"
+    return [nsv_get CR_LOCATIONS $location]
 }
 
 ad_proc -private cr_create_content_file_path {item_id revision_id} {
