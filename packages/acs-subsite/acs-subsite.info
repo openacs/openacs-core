@@ -7,9 +7,10 @@
     <singleton-p>f</singleton-p>
 
     <version name="4.2" url="http://www.arsdigita.com/acs-repository/download/apm/acs-subsite-4.2.apm">
-        <database-support>
-             <database>oracle-8.1.6</database>
-        </database-support>
+    <database-support>
+        <database>oracle</database>
+        <database>postgresql</database>
+    </database-support>
         <owner url="mailto:michael@arsdigita.com">Michael Yoon</owner>
         <owner url="mailto:rhs@arsdigita.com">Rafael Schloming</owner>
         <owner url="mailto:oumi@arsdigita.com">Oumi Mehrotra</owner>
@@ -26,21 +27,21 @@
 
         <files>
             <file type="package_spec" path="acs-subsite.info"/>
-            <file type="data_model_create" path="sql/acs-subsite-create.sql"/>
-            <file type="data_model_drop" path="sql/acs-subsite-drop.sql"/>
-            <file type="data_model" path="sql/application-groups-create.sql"/>
-            <file type="data_model" path="sql/application-groups-drop.sql"/>
-            <file type="data_model" path="sql/attribute.sql"/>
-            <file type="data_model" path="sql/attributes-drop.sql"/>
-            <file type="data_model" path="sql/portraits-drop.sql"/>
-            <file type="data_model" path="sql/portraits.sql"/>
-            <file type="data_model" path="sql/subsite-callbacks-create.sql"/>
-            <file type="data_model" path="sql/subsite-callbacks-drop.sql"/>
-            <file type="data_model" path="sql/tests/acs-subsite-test-harness.sql"/>
-            <file type="data_model" path="sql/tests/subsite-callbacks-test.sql"/>
-            <file type="data_model_upgrade" path="sql/upgrade/upgrade-4.1.1-4.2.sql"/>
-            <file type="data_model" path="sql/user-profiles-create.sql"/>
-            <file type="data_model" path="sql/user-profiles-drop.sql"/>
+            <file type="data_model_create" db_type="oracle" path="sql/oracle/acs-subsite-create.sql"/>
+            <file type="data_model_drop" db_type="oracle" path="sql/oracle/acs-subsite-drop.sql"/>
+            <file type="data_model" db_type="oracle" path="sql/oracle/application-groups-create.sql"/>
+            <file type="data_model" db_type="oracle" path="sql/oracle/application-groups-drop.sql"/>
+            <file type="data_model" db_type="oracle" path="sql/oracle/attribute.sql"/>
+            <file type="data_model" db_type="oracle" path="sql/oracle/attributes-drop.sql"/>
+            <file type="data_model" db_type="oracle" path="sql/oracle/portraits-drop.sql"/>
+            <file type="data_model" db_type="oracle" path="sql/oracle/portraits.sql"/>
+            <file type="data_model" db_type="oracle" path="sql/oracle/subsite-callbacks-create.sql"/>
+            <file type="data_model" db_type="oracle" path="sql/oracle/subsite-callbacks-drop.sql"/>
+            <file type="data_model" db_type="oracle" path="sql/oracle/tests/acs-subsite-test-harness.sql"/>
+            <file type="data_model" db_type="oracle" path="sql/oracle/tests/subsite-callbacks-test.sql"/>
+            <file type="data_model_upgrade" db_type="oracle" path="sql/oracle/upgrade/upgrade-4.1.1-4.2.sql"/>
+            <file type="data_model" db_type="oracle" path="sql/oracle/user-profiles-create.sql"/>
+            <file type="data_model" db_type="oracle" path="sql/oracle/user-profiles-drop.sql"/>
             <file type="tcl_init" path="tcl/acs-subsite-init.tcl"/>
             <file type="tcl_procs" path="tcl/application-group-procs.tcl"/>
             <file type="tcl_procs" path="tcl/attribute-procs.tcl"/>

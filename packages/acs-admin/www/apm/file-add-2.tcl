@@ -18,13 +18,15 @@ db_transaction {
 	set info [lindex $processed_files $index]
 	set index_path [lindex $info 0]
 	set file_type [lindex $info 1]
+        set db_type [lindex $info 2]
+ns_log Notice "Huh? db_type: $db_type"
 	# Do a doubleclick protection check.
 	if { ![db_string apm_file_add_doubleclick_ck {
 	    select count(*) from apm_package_files
 	    where version_id = :version_id
 	    and path = :index_path
 	} -default 0] } {
-	    apm_file_add $version_id $index_path $file_type
+	    apm_file_add $version_id $index_path $file_type $db_type
 	}
     }
     apm_package_install_spec $version_id

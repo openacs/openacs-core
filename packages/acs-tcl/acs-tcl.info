@@ -7,9 +7,10 @@
     <singleton-p>t</singleton-p>
 
     <version name="4.1.2" url="http://www.arsdigita.com/acs-repository/download/apm/acs-tcl-4.1.2.apm">
-        <database-support>
-             <database>oracle-8.1.6</database>
-        </database-support>
+    <database-support>
+        <database>oracle</database>
+        <database>postgresql</database>
+    </database-support>
         <owner url="mailto:acs@arsdigita.com">ACS Core Team</owner>
         <summary>The Tcl library procedures that comprise the ACS Kernel.</summary>
         <release-date>2001-03-06</release-date>
@@ -20,41 +21,48 @@
 
         <files>
             <file type="package_spec" path="acs-tcl.info"/>
-            <file path="installer/auto-install.tcl"/>
-            <file path="installer/create-administrator-2.tcl"/>
-            <file path="installer/create-administrator.tcl"/>
-            <file path="installer/index.tcl"/>
-            <file path="installer/install-data-model.tcl"/>
-            <file path="installer/packages-install.tcl"/>
-            <file path="installer/site-info-2.tcl"/>
-            <file path="installer/site-info.tcl"/>
+            <file type="tcl_util" path="bootstrap/bootstrap.tcl"/>
+            <file type="tcl_util" db_type="oracle" path="bootstrap/db-init-checks-oracle.tcl"/>
+            <file type="tcl_util" db_type="postgresql" path="bootstrap/db-init-checks-postgresql.tcl"/>
+            <file type="tcl_init" path="bootstrap/installer-init.tcl"/>
+            <file type="tcl_util" path="bootstrap/installer.tcl"/>
+            <file type="tcl_util" path="installer/auto-install.tcl"/>
+            <file type="tcl_util" path="installer/create-administrator-2.tcl"/>
+            <file type="tcl_util" path="installer/create-administrator.tcl"/>
+            <file type="tcl_util" path="installer/index.tcl"/>
+            <file type="tcl_util" path="installer/install-data-model.tcl"/>
+            <file type="tcl_util" path="installer/packages-install.tcl"/>
+            <file type="tcl_util" path="installer/site-info-2.tcl"/>
+            <file type="tcl_util" path="installer/site-info.tcl"/>
             <file type="tcl_procs" path="tcl/00-proc-procs.tcl"/>
+            <file type="tcl_procs" db_type="oracle" path="tcl/10-database-procs-oracle.tcl"/>
+            <file type="tcl_procs" db_type="postgresql" path="tcl/10-database-procs-postgresql.tcl"/>
             <file type="tcl_procs" path="tcl/10-database-procs.tcl"/>
             <file type="tcl_procs" path="tcl/20-apm-load-procs.tcl"/>
             <file type="tcl_procs" path="tcl/30-charset-compat-procs.tcl"/>
             <file type="tcl_init" path="tcl/40-memoize-init.tcl"/>
+            <file type="tcl_procs" path="tcl/50-xml-utils-procs.tcl"/>
             <file type="tcl_procs" path="tcl/acs-kernel-procs.tcl"/>
             <file type="tcl_procs" path="tcl/acs-permissions-procs.tcl"/>
             <file type="tcl_init" path="tcl/admin-init.tcl"/>
             <file type="tcl_procs" path="tcl/admin-procs.tcl"/>
             <file type="tcl_procs" path="tcl/adp-parser-procs.tcl"/>
             <file type="tcl_procs" path="tcl/aolserver-3-procs.tcl"/>
+            <file type="query_file" db_type="postgresql" path="tcl/apm-file-procs-postgresql.xql"/>
             <file type="tcl_procs" path="tcl/apm-file-procs.tcl"/>
+            <file type="query_file" db_type="postgresql" path="tcl/apm-install-procs-postgresql.xql"/>
             <file type="tcl_procs" path="tcl/apm-install-procs.tcl"/>
+            <file type="query_file" db_type="postgresql" path="tcl/apm-procs-postgresql.xql"/>
             <file type="tcl_procs" path="tcl/apm-procs.tcl"/>
             <file type="tcl_procs" path="tcl/apm-xml-procs.tcl"/>
-            <file path="tcl/bootstrap.tcl"/>
             <file type="tcl_procs" path="tcl/community-core-procs.tcl"/>
             <file type="tcl_init" path="tcl/database-init.tcl"/>
-            <file type="tcl_procs" path="tcl/database-util-procs.tcl"/>
-	    <file type="tcl_procs" path="tcl/db-query-dispatcher.tcl"/>
+            <file type="tcl_procs" path="tcl/db-query-dispatcher-procs.tcl"/>
             <file type="tcl_procs" path="tcl/defs-procs.tcl"/>
             <file type="tcl_procs" path="tcl/deprecated-utilities-procs.tcl"/>
             <file type="tcl_init" path="tcl/document-init.tcl"/>
             <file type="tcl_procs" path="tcl/document-procs.tcl"/>
             <file type="tcl_procs" path="tcl/exception-procs.tcl"/>
-            <file type="tcl_init" path="tcl/installer-init.tcl"/>
-            <file path="tcl/installer.tcl"/>
             <file type="tcl_procs" path="tcl/memoize-procs.tcl"/>
             <file type="tcl_procs" path="tcl/navigation-procs.tcl"/>
             <file type="tcl_procs" path="tcl/object-procs.tcl"/>

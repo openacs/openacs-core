@@ -46,8 +46,13 @@ foreach file [lsort [ad_find_all_files -check_file_func apm_include_file_p [acs_
 	doc_body_append "<tr><td></td><td>$relative_path (already registered to this package)</td></tr>\n"
     } else {
 	set type [apm_guess_file_type $package_key $relative_path]
-	doc_body_append "<tr><td><input type=checkbox name=file_index value=[llength $processed_files] checked>&nbsp;</td><td><b>$relative_path</b>: [apm_pretty_name_for_file_type $type]</td></tr>\n"
-	lappend processed_files [list $relative_path $type]
+	set db_type [apm_guess_db_type $package_key $relative_path]
+	doc_body_append "<tr><td><input type=checkbox name=file_index value=[llength $processed_files] checked>&nbsp;</td><td><b>$relative_path</b>: [apm_pretty_name_for_file_type $type]"
+        if { ![empty_string_p $db_type] } {
+            doc_body_append " ([apm_pretty_name_for_db_type $db_type])"
+        }
+        doc_body_append "</td></tr>\n"
+	lappend processed_files [list $relative_path $type $db_type]
     }
     incr counter
 }

@@ -7,9 +7,10 @@
     <singleton-p>t</singleton-p>
 
     <version name="4.1.1" url="http://www.arsdigita.com/acs-repository/download/apm/acs-api-browser-4.1.1.apm">
-        <database-support>
-             <database>oracle-8.1.6</database>
-        </database-support>
+    <database-support>
+        <database>oracle</database>
+        <database>postgresql</database>
+    </database-support>
         <owner url="mailto:dennis@arsdigita.com">Dennis Gregorovic</owner>
         <summary>A browser for Tcl and SQL APIs.</summary>
         <release-date>2001-03-06</release-date>

@@ -7,10 +7,6 @@ ad_library {
     @cvs-id $Id$
 }
 
-proc db_current_rdbms {} {
-    return [db_rdbms_create postgresql "7.1"]
-}
-
 proc_doc db_nextval { sequence } { Returns the next value for a sequence. This can utilize a pool of sequence values to save hits to the database. } {
     return [db_string nextval "select nextval('$sequence')"]
 }
@@ -208,7 +204,8 @@ ad_proc db_source_sql_file { {-callback apm_ns_write_callback} file } {
     foreach line [split $error "\n"] {
         if { [string first NOTICE $line] == -1 } {
             append error_lines "$line\n"
-            set error_found [expr { $error_found || [string first ERROR $line] != -1 } ]
+            set error_found [expr { $error_found || [string first ERROR $line] != -1 || \
+                                    [string first FATAL $line] != -1 } ]
         }
     }
 

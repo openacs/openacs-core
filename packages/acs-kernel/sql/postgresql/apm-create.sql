@@ -677,16 +677,19 @@ begin
   insert into apm_package_file_types(file_type_key, pretty_name) values(''documentation'', ''Documentation'');
   insert into apm_package_file_types(file_type_key, pretty_name) values(''tcl_procs'', ''Tcl procedure library'');
   insert into apm_package_file_types(file_type_key, pretty_name) values(''tcl_init'', ''Tcl initialization'');
+  insert into apm_package_file_types(file_type_key, pretty_name) values(''tcl_util'', ''Tcl utility script'');
   insert into apm_package_file_types(file_type_key, pretty_name) values(''content_page'', ''Content page'');
   insert into apm_package_file_types(file_type_key, pretty_name) values(''package_spec'', ''Package specification'');
   insert into apm_package_file_types(file_type_key, pretty_name) values(''data_model'', ''Data model'');
   insert into apm_package_file_types(file_type_key, pretty_name) values(''data_model_create'', ''Data model installation'');
   insert into apm_package_file_types(file_type_key, pretty_name) values(''data_model_drop'', ''Data model deinstallation'');
   insert into apm_package_file_types(file_type_key, pretty_name) values(''data_model_upgrade'', ''Data model upgrade'');
-  insert into apm_package_file_types(file_type_key, pretty_name) values(''java_code'', ''Java Code'');
+  insert into apm_package_file_types(file_type_key, pretty_name) values(''java_code'', ''Java code'');
+  insert into apm_package_file_types(file_type_key, pretty_name) values(''java_archive'', ''Java archive'');
+  insert into apm_package_file_types(file_type_key, pretty_name) values(''query_file'', ''Query file'');
   insert into apm_package_file_types(file_type_key, pretty_name) values(''template'', ''Template file'');
   insert into apm_package_file_types(file_type_key, pretty_name) values(''shell'', ''Shell utility'');
-  insert into apm_package_file_types(file_type_key, pretty_name) values(''sqlj_code'', ''SQLJ Library'');
+  insert into apm_package_file_types(file_type_key, pretty_name) values(''sqlj_code'', ''SQLJ library'');
 
   return 0;
 end;' language 'plpgsql';
@@ -695,10 +698,26 @@ select inline_3 ();
 
 drop function inline_3 ();
 
+create table apm_package_db_types (
+    db_type_key      varchar(50)
+                       constraint apm_package_db_types_pk primary key,
+    pretty_db_name   varchar(200)
+                       constraint apm_package_db_types_name_nn not null
+);
 
--- show errors
+comment on table apm_package_db_types is '
+  A list of all the different kinds of database engines that an APM package can
+  support.  This table is initialized in acs-tcl/tcl/apm-init.tcl rather than in
+  PL/SQL in order to guarantee that the list of supported database engines is
+  consistent between the bootstrap code and the package manager.
+';
 
 -- Which files are contained in a version?
+
+-- Files may be constrained to work only with a single database engine.  In practice only
+-- datamodel and query files should be so constrained.  If file_database_type is NULL the
+-- file is loaded no matter which supported database engine is installed.
+
 create table apm_package_files (
     file_id            integer
                        constraint apm_package_files_id_pk primary key,
@@ -708,10 +727,12 @@ create table apm_package_files (
     path               varchar(1500)
                        constraint apm_package_files_path_nn not null,
     file_type          varchar(50) constraint apm_package_files_type_fk references apm_package_file_types,
+    db_type            varchar(50) constraint apm_package_files_db_type_fk references apm_package_db_types,
     constraint apm_package_files_un unique(version_id, path)
 );
 
 create index apm_pkg_files_file_type_idx on apm_package_files (file_type);
+create index apm_pkg_files_db_type_idx on apm_package_files (db_type);
 
 comment on table apm_package_files is '
   The files that belong to an APM package.  We store this information in the database
@@ -728,9 +749,9 @@ comment on column apm_package_files.file_type is '
   What kind of file is it?
 ';
 
-
-create index apm_package_files_by_path on apm_package_files(path);
-create index apm_package_files_by_version on apm_package_files(version_id);
+comment on column apm_package_files.db_type is '
+    If not null, which database engine does this file support?
+';
 
 -- A useful view for combining the package information with the file information.
 
@@ -2439,13 +2460,14 @@ end;' language 'plpgsql';
 
 
 -- function add_file
-create function apm_package_version__add_file (integer,integer,varchar,varchar)
+create function apm_package_version__add_file (integer,integer,varchar,varchar, varchar)
 returns integer as '
 declare
   add_file__file_id                alias for $1;  
   add_file__version_id             alias for $2;  
   add_file__path                   alias for $3;  
   add_file__file_type              alias for $4;  
+  add_file__db_type                alias for $5;
   v_file_id                        apm_package_files.file_id%TYPE;
   v_file_exists_p                  integer;       
 begin
@@ -2462,9 +2484,9 @@ begin
 	        end if;
 
   	        insert into apm_package_files 
-		(file_id, version_id, path, file_type) 
+		(file_id, version_id, path, file_type, db_type) 
 		values 
-		(v_file_id, add_file__version_id, add_file__path, add_file__file_type);
+		(v_file_id, add_file__version_id, add_file__path, add_file__file_type, add_file__db_type);
         end if;
 
         return v_file_id;

@@ -308,16 +308,21 @@ ad_proc -private apm_load_queries {
 	set base_len [string length $base]
 
 	# For now we expect the SQL files to be in parallel with the Tcl files
-	set dirs [list ${base}www]
+
+        # DRB: without the quotes ${base}www turns into the two element list
+        # {${base} www}, not what was wanted...
+	set dirs [list "${base}www"]
 	set paths [list]
-      
+
+        # DRB: For now just slurp all .sql files
 	foreach dir $dirs {
-	    set paths [concat $paths [glob -nocomplain "$dir/*.tcl"]]
+	    set paths [concat $paths [glob -nocomplain "$dir/*.sql"]]
 	}
 	
 	foreach path [lsort $paths] {
 	    set rel_path [string range $path $base_len end]
-	    lappend files [list $package $rel_path]
+            # DRB: db_fullquery_internal_load_cache expects the full pathname...
+	    lappend files "$base/$rel_path"
 	}
     }
       
@@ -340,6 +345,19 @@ ad_proc -private apm_pretty_name_for_file_type { type } {
         from apm_package_file_types
         where file_type_key = :type
     " -default "Unknown" -bind [list type $type]]]
+}
+
+ad_proc -private apm_pretty_name_for_db_type { db_type } {
+
+    Returns the pretty name corresponding to a particular file type key
+    (memoizing to save a database hit here and there).
+
+} {
+    return [util_memoize [list db_string pretty_db_name_select "
+        select pretty_db_name
+        from apm_package_db_types
+        where db_type_key = :db_type
+    " -default "all" -bind [list db_type $db_type]]]
 }
 
 ad_proc -public apm_load_any_changed_libraries {} {

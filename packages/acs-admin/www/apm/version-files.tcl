@@ -38,11 +38,17 @@ doc_body_flush
 
 set last_components [list]
 set counter 0
+
+doc_body_append "<tr><th align=left>Path</th><th width=40></th><th align=left>File type</th><th width=40></th>
+                 <th align=left>Database support</th><th width=40></th><th align=left>Actions</th></tr>\n"
+
 db_foreach apm_all_files {
-    select f.file_id, f.path, f.file_type, nvl(t.pretty_name, 'Unknown type') pretty_name
-    from   apm_package_files f, apm_package_file_types t
+    select f.file_id, f.path, f.file_type, nvl(t.pretty_name, 'Unknown type') file_pretty_name,
+           f.db_type, nvl(d.pretty_db_name, 'All') as db_pretty_name
+    from   apm_package_files f, apm_package_file_types t, apm_package_db_types d
     where  f.version_id = :version_id
     and    f.file_type = t.file_type_key(+)
+    and    f.db_type = d.db_type_key(+)
     order by path
 } {
     incr counter
@@ -78,7 +84,8 @@ db_foreach apm_all_files {
 	    doc_body_append "/</td>"
 	} else {
 	    doc_body_append "</td>"
-	    doc_body_append "<td width=40>&nbsp;</td><td>$pretty_name</td><td width=40>&nbsp;</td>"
+	    doc_body_append "<td width=40>&nbsp;</td><td>$file_pretty_name</td><td width=40>&nbsp</td><td>$db_pretty_name</td>
+                             <td width=40>&nbsp;</td>"
 	    if { $remove_files_p == 1 } {
 		# Display a checkbox which the user can check to delete the file.
 		doc_body_append "<td><input type=checkbox name=file_id value=$file_id></td>"

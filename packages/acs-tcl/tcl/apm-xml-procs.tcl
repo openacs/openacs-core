@@ -94,10 +94,17 @@ ad_proc -private apm_generate_package_spec { version_id } {
     <singleton-p>$singleton_p</singleton-p>
 
     <version name=\"$version_name\" url=\"[ad_quotehtml $version_uri]\">
-        <database-support>
-             <database>oracle-8.1.6</database>
-        </database-support>
-"
+    <database-support>\n"
+
+    db_foreach supported_databases {
+        select unique db_type
+        from apm_package_files
+        where db_type is not null
+    } {
+        append spec "        <database>$db_type</database>\n"
+    }
+    append spec "    </database-support>\n"
+
     db_foreach owner_info {
         select owner_uri, owner_name
         from   apm_package_owners
@@ -150,10 +157,13 @@ ad_proc -private apm_generate_package_spec { version_id } {
 
     append spec "\n        <files>\n"
     ns_log Debug "APM: Writing Files." 
-    db_foreach version_path "select path, file_type from apm_package_files where version_id = :version_id order by path" {
+    db_foreach version_path "select path, file_type, db_type from apm_package_files where version_id = :version_id order by path" {
         append spec "            <file"
         if { ![empty_string_p $file_type] } {
-    	append spec " type=\"$file_type\""
+            append spec " type=\"$file_type\""
+        }
+        if { ![empty_string_p $db_type] } {
+            append spec " db_type=\"$db_type\""
         }
         append spec " path=\"[ad_quotehtml $path]\"/>\n"
     } else {
@@ -339,12 +349,18 @@ ad_proc -public apm_read_package_info_file { path } {
 	foreach file_node [dom::element getElementsByTagName $node "file"] {
 	    set file_path [apm_required_attribute_value $file_node path]
 	    set type [dom::element getAttribute $file_node type]
+	    set db_type [dom::element getAttribute $file_node db_type]
 	    # Validate the file type: it must be null (unknown type) or
 	    # some value in [apm_file_type_keys].
 	    if { ![empty_string_p $type] && [lsearch -exact [apm_file_type_keys] $type] < 0 } {
 		error "Invalid file type \"$type\""
 	    }
-	    lappend properties(files) [list $file_path $type]
+	    # Validate the database type: it must be null (unknown type) or
+	    # some value in [apm_db_type_keys].
+	    if { ![empty_string_p $db_type] && [lsearch -exact [apm_db_type_keys] $db_type] < 0 } {
+		error "Invalid database type \"$db_type\""
+	    }
+	    lappend properties(files) [list $file_path $type $db_type]
 	}
     }
 

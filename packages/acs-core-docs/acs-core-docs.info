@@ -7,9 +7,10 @@
     <singleton-p>t</singleton-p>
 
     <version name="4.1.1" url="http://www.arsdigita.com/acs-repository/download/apm/acs-core-docs-4.1.1.apm">
-        <database-support>
-             <database>oracle-8.1.6</database>
-        </database-support>
+    <database-support>
+        <database>oracle</database>
+        <database>postgresql</database>
+    </database-support>
         <owner url="mailto:richardl@mit.edu">Richard Li</owner>
         <summary>Documentation for the ACS Core.</summary>
         <release-date>2001-03-06</release-date>

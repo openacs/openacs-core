@@ -7,9 +7,10 @@
     <singleton-p>t</singleton-p>
 
     <version name="4.2" url="http://www.arsdigita.com/acs-repository/download/apm/acs-kernel-4.2.apm">
-        <database-support>
-             <database>oracle-8.1.6</database>
-        </database-support>
+    <database-support>
+        <database>oracle</database>
+        <database>postgresql</database>
+    </database-support>
         <summary>Routines and data models providing the foundation for ACS-based Web services.</summary>
         <release-date>2001-03-06</release-date>
         <vendor url="http://www.arsdigita.com/">ArsDigita Corporation</vendor>
@@ -18,60 +19,108 @@
 
         <files>
             <file type="package_spec" path="acs-kernel.info"/>
-            <file path="java/src/com/arsdigita/acs/acsKernel/test/ACSCommon.java"/>
-            <file path="java/src/com/arsdigita/acs/acsKernel/test/SessionsTest.java"/>
-            <file type="data_model_create" path="sql/acs-create.sql"/>
-            <file type="data_model_drop" path="sql/acs-drop.sql"/>
-            <file type="data_model" path="sql/acs-install.sql"/>
-            <file type="data_model_create" path="sql/acs-kernel-create.sql"/>
-            <file type="data_model_drop" path="sql/acs-kernel-drop.sql"/>
-            <file type="data_model" path="sql/acs-logs-create.sql"/>
-            <file type="data_model" path="sql/acs-logs-drop.sql"/>
-            <file type="data_model_create" path="sql/acs-metadata-create.sql"/>
-            <file type="data_model_drop" path="sql/acs-metadata-drop.sql"/>
-            <file type="data_model_create" path="sql/acs-objects-create.sql"/>
-            <file type="data_model_drop" path="sql/acs-objects-drop.sql"/>
-            <file type="data_model_create" path="sql/acs-permissions-create.sql"/>
-            <file type="data_model_drop" path="sql/acs-permissions-drop.sql"/>
-            <file type="data_model_create" path="sql/acs-relationships-create.sql"/>
-            <file type="data_model_drop" path="sql/acs-relationships-drop.sql"/>
-            <file type="data_model_create" path="sql/apm-create.sql"/>
-            <file type="data_model_drop" path="sql/apm-drop.sql"/>
-            <file type="data_model" path="sql/community-core-create.sql"/>
-            <file type="data_model_drop" path="sql/community-core-drop.sql"/>
-            <file type="data_model" path="sql/groups-body-create.sql"/>
-            <file type="data_model_create" path="sql/groups-create.sql"/>
-            <file type="data_model_drop" path="sql/groups-drop.sql"/>
-            <file type="data_model_create" path="sql/journal-create.sql"/>
-            <file type="data_model_drop" path="sql/journal-drop.sql"/>
-            <file type="data_model" path="sql/rel-constraints-body-create.sql"/>
-            <file type="data_model" path="sql/rel-constraints-create.sql"/>
-            <file type="data_model" path="sql/rel-constraints-drop.sql"/>
-            <file type="data_model" path="sql/rel-segments-body-create.sql"/>
-            <file type="data_model" path="sql/rel-segments-create.sql"/>
-            <file type="data_model" path="sql/rel-segments-drop.sql"/>
-            <file type="data_model_create" path="sql/security-create.sql"/>
-            <file type="data_model_drop" path="sql/security-drop.sql"/>
-            <file type="data_model" path="sql/site-nodes-create.sql"/>
-            <file type="data_model" path="sql/site-nodes-drop.sql"/>
-            <file type="data_model" path="sql/test-harness/acs-core.sql"/>
-            <file type="data_model" path="sql/test-harness/acs-permissions.sql"/>
-            <file type="data_model" path="sql/test/acs-objects-test.sql"/>
-            <file type="data_model" path="sql/test/groups-test.sql"/>
-            <file type="data_model" path="sql/test/rel-constraints-test.sql"/>
-            <file type="data_model" path="sql/test/rel-segments-test-types-create.sql"/>
-            <file type="data_model" path="sql/test/rel-segments-test-types-drop.sql"/>
-            <file type="data_model" path="sql/test/rel-segments-test.sql"/>
-            <file type="data_model_upgrade" path="sql/upgrade/upgrade-4.0-4.0.1.sql"/>
-            <file type="data_model_upgrade" path="sql/upgrade/upgrade-4.0.1-4.1b.sql"/>
-            <file type="data_model_upgrade" path="sql/upgrade/upgrade-4.0b2-4.0rc0.sql"/>
-            <file type="data_model_upgrade" path="sql/upgrade/upgrade-4.0rc0-4.0.sql"/>
-            <file type="data_model_upgrade" path="sql/upgrade/upgrade-4.1-4.1.1.sql"/>
-            <file type="data_model_upgrade" path="sql/upgrade/upgrade-4.1.1-4.2.sql"/>
-            <file type="data_model_upgrade" path="sql/upgrade/upgrade-4.1b-4.1.sql"/>
-            <file type="data_model_upgrade" path="sql/upgrade/upgrade-beta-1-beta-2.sql"/>
-            <file type="data_model" path="sql/utilities-create.sql"/>
-            <file type="data_model" path="sql/utilities-drop.sql"/>
+            <file type="java_code" path="java/src/com/arsdigita/acs/acsKernel/test/ACSCommon.java"/>
+            <file type="java_code" path="java/src/com/arsdigita/acs/acsKernel/test/SessionsTest.java"/>
+            <file type="data_model" db_type="oracle" path="sql/oracle/acs-create.sql"/>
+            <file type="data_model" db_type="oracle" path="sql/oracle/acs-drop.sql"/>
+            <file type="data_model" db_type="oracle" path="sql/oracle/acs-install.sql"/>
+            <file type="data_model_create" db_type="oracle" path="sql/oracle/acs-kernel-create.sql"/>
+            <file type="data_model_drop" db_type="oracle" path="sql/oracle/acs-kernel-drop.sql"/>
+            <file type="data_model" db_type="oracle" path="sql/oracle/acs-logs-create.sql"/>
+            <file type="data_model" db_type="oracle" path="sql/oracle/acs-logs-drop.sql"/>
+            <file type="data_model" db_type="oracle" path="sql/oracle/acs-metadata-create.sql"/>
+            <file type="data_model" db_type="oracle" path="sql/oracle/acs-metadata-drop.sql"/>
+            <file type="data_model" db_type="oracle" path="sql/oracle/acs-objects-create.sql"/>
+            <file type="data_model" db_type="oracle" path="sql/oracle/acs-objects-drop.sql"/>
+            <file type="data_model" db_type="oracle" path="sql/oracle/acs-permissions-create.sql"/>
+            <file type="data_model" db_type="oracle" path="sql/oracle/acs-permissions-drop.sql"/>
+            <file type="data_model" db_type="oracle" path="sql/oracle/acs-relationships-create.sql"/>
+            <file type="data_model" db_type="oracle" path="sql/oracle/acs-relationships-drop.sql"/>
+            <file type="data_model" db_type="oracle" path="sql/oracle/apm-create.sql"/>
+            <file type="data_model" db_type="oracle" path="sql/oracle/apm-drop.sql"/>
+            <file type="data_model" db_type="oracle" path="sql/oracle/community-core-create.sql"/>
+            <file type="data_model" db_type="oracle" path="sql/oracle/community-core-drop.sql"/>
+            <file type="data_model" db_type="oracle" path="sql/oracle/groups-body-create.sql"/>
+            <file type="data_model" db_type="oracle" path="sql/oracle/groups-create.sql"/>
+            <file type="data_model" db_type="oracle" path="sql/oracle/groups-drop.sql"/>
+            <file type="data_model" db_type="oracle" path="sql/oracle/journal-create.sql"/>
+            <file type="data_model" db_type="oracle" path="sql/oracle/journal-drop.sql"/>
+            <file type="data_model" db_type="oracle" path="sql/oracle/rel-constraints-body-create.sql"/>
+            <file type="data_model" db_type="oracle" path="sql/oracle/rel-constraints-create.sql"/>
+            <file type="data_model" db_type="oracle" path="sql/oracle/rel-constraints-drop.sql"/>
+            <file type="data_model" db_type="oracle" path="sql/oracle/rel-segments-body-create.sql"/>
+            <file type="data_model" db_type="oracle" path="sql/oracle/rel-segments-create.sql"/>
+            <file type="data_model" db_type="oracle" path="sql/oracle/rel-segments-drop.sql"/>
+            <file type="data_model" db_type="oracle" path="sql/oracle/security-create.sql"/>
+            <file type="data_model" db_type="oracle" path="sql/oracle/security-drop.sql"/>
+            <file type="data_model" db_type="oracle" path="sql/oracle/site-nodes-create.sql"/>
+            <file type="data_model" db_type="oracle" path="sql/oracle/site-nodes-drop.sql"/>
+            <file type="data_model" db_type="oracle" path="sql/oracle/test-harness/acs-core.sql"/>
+            <file type="data_model" db_type="oracle" path="sql/oracle/test-harness/acs-permissions.sql"/>
+            <file type="data_model" db_type="oracle" path="sql/oracle/test/acs-objects-test.sql"/>
+            <file type="data_model" db_type="oracle" path="sql/oracle/test/groups-test.sql"/>
+            <file type="data_model" db_type="oracle" path="sql/oracle/test/rel-constraints-test.sql"/>
+            <file type="data_model" db_type="oracle" path="sql/oracle/test/rel-segments-test-types-create.sql"/>
+            <file type="data_model" db_type="oracle" path="sql/oracle/test/rel-segments-test-types-drop.sql"/>
+            <file type="data_model" db_type="oracle" path="sql/oracle/test/rel-segments-test.sql"/>
+            <file type="data_model_upgrade" db_type="oracle" path="sql/oracle/upgrade/upgrade-4.0-4.0.1.sql"/>
+            <file type="data_model_upgrade" db_type="oracle" path="sql/oracle/upgrade/upgrade-4.0.1-4.1b.sql"/>
+            <file type="data_model_upgrade" db_type="oracle" path="sql/oracle/upgrade/upgrade-4.0b2-4.0rc0.sql"/>
+            <file type="data_model_upgrade" db_type="oracle" path="sql/oracle/upgrade/upgrade-4.0rc0-4.0.sql"/>
+            <file type="data_model_upgrade" db_type="oracle" path="sql/oracle/upgrade/upgrade-4.1-4.1.1.sql"/>
+            <file type="data_model_upgrade" db_type="oracle" path="sql/oracle/upgrade/upgrade-4.1.1-4.2.sql"/>
+            <file type="data_model_upgrade" db_type="oracle" path="sql/oracle/upgrade/upgrade-4.1b-4.1.sql"/>
+            <file type="data_model_upgrade" db_type="oracle" path="sql/oracle/upgrade/upgrade-4.2-4.2.1.sql"/>
+            <file type="data_model_upgrade" db_type="oracle" path="sql/oracle/upgrade/upgrade-beta-1-beta-2.sql"/>
+            <file type="data_model" db_type="oracle" path="sql/oracle/utilities-create.sql"/>
+            <file type="data_model" db_type="oracle" path="sql/oracle/utilities-drop.sql"/>
+            <file type="data_model" db_type="postgresql" path="sql/postgresql/acs-create.sql"/>
+            <file type="data_model" db_type="postgresql" path="sql/postgresql/acs-drop.sql"/>
+            <file type="data_model" db_type="postgresql" path="sql/postgresql/acs-install.sql"/>
+            <file type="data_model_create" db_type="postgresql" path="sql/postgresql/acs-kernel-create.sql"/>
+            <file type="data_model_drop" db_type="postgresql" path="sql/postgresql/acs-kernel-drop.sql"/>
+            <file type="data_model" db_type="postgresql" path="sql/postgresql/acs-logs-create.sql"/>
+            <file type="data_model" db_type="postgresql" path="sql/postgresql/acs-logs-drop.sql"/>
+            <file type="data_model" db_type="postgresql" path="sql/postgresql/acs-metadata-create.sql"/>
+            <file type="data_model" db_type="postgresql" path="sql/postgresql/acs-metadata-drop.sql"/>
+            <file type="data_model" db_type="postgresql" path="sql/postgresql/acs-objects-create.sql"/>
+            <file type="data_model" db_type="postgresql" path="sql/postgresql/acs-objects-drop.sql"/>
+            <file type="data_model" db_type="postgresql" path="sql/postgresql/acs-permissions-create.sql"/>
+            <file type="data_model" db_type="postgresql" path="sql/postgresql/acs-permissions-drop.sql"/>
+            <file type="data_model" db_type="postgresql" path="sql/postgresql/acs-relationships-create.sql"/>
+            <file type="data_model" db_type="postgresql" path="sql/postgresql/acs-relationships-drop.sql"/>
+            <file type="data_model" db_type="postgresql" path="sql/postgresql/apm-create.sql"/>
+            <file type="data_model" db_type="postgresql" path="sql/postgresql/apm-drop.sql"/>
+            <file type="data_model" db_type="postgresql" path="sql/postgresql/community-core-create.sql"/>
+            <file type="data_model" db_type="postgresql" path="sql/postgresql/community-core-drop.sql"/>
+            <file type="data_model" db_type="postgresql" path="sql/postgresql/groups-body-create.sql"/>
+            <file type="data_model" db_type="postgresql" path="sql/postgresql/groups-create.sql"/>
+            <file type="data_model" db_type="postgresql" path="sql/postgresql/groups-drop.sql"/>
+            <file type="data_model" db_type="postgresql" path="sql/postgresql/journal-create.sql"/>
+            <file type="data_model" db_type="postgresql" path="sql/postgresql/journal-drop.sql"/>
+            <file type="data_model" db_type="postgresql" path="sql/postgresql/load-data1.sql"/>
+            <file type="data_model" db_type="postgresql" path="sql/postgresql/lob.sql"/>
+            <file type="data_model" db_type="postgresql" path="sql/postgresql/postgresql.sql"/>
+            <file type="data_model" db_type="postgresql" path="sql/postgresql/rel-constraints-body-create.sql"/>
+            <file type="data_model" db_type="postgresql" path="sql/postgresql/rel-constraints-create.sql"/>
+            <file type="data_model" db_type="postgresql" path="sql/postgresql/rel-constraints-drop.sql"/>
+            <file type="data_model" db_type="postgresql" path="sql/postgresql/rel-segments-body-create.sql"/>
+            <file type="data_model" db_type="postgresql" path="sql/postgresql/rel-segments-create.sql"/>
+            <file type="data_model" db_type="postgresql" path="sql/postgresql/rel-segments-drop.sql"/>
+            <file type="data_model" db_type="postgresql" path="sql/postgresql/security-create.sql"/>
+            <file type="data_model" db_type="postgresql" path="sql/postgresql/security-drop.sql"/>
+            <file type="data_model" db_type="postgresql" path="sql/postgresql/site-nodes-create.sql"/>
+            <file type="data_model" db_type="postgresql" path="sql/postgresql/site-nodes-drop.sql"/>
+            <file type="data_model" db_type="postgresql" path="sql/postgresql/test-harness/acs-core.sql"/>
+            <file type="data_model" db_type="postgresql" path="sql/postgresql/test-harness/acs-permissions.sql"/>
+            <file type="data_model" db_type="postgresql" path="sql/postgresql/test/acs-objects-test.sql"/>
+            <file type="data_model" db_type="postgresql" path="sql/postgresql/test/groups-test.sql"/>
+            <file type="data_model" db_type="postgresql" path="sql/postgresql/test/rel-constraints-test.sql"/>
+            <file type="data_model" db_type="postgresql" path="sql/postgresql/test/rel-segments-test-types-create.sql"/>
+            <file type="data_model" db_type="postgresql" path="sql/postgresql/test/rel-segments-test-types-drop.sql"/>
+            <file type="data_model" db_type="postgresql" path="sql/postgresql/test/rel-segments-test.sql"/>
+            <file type="data_model" db_type="postgresql" path="sql/postgresql/utilities-create.sql"/>
+            <file type="data_model" db_type="postgresql" path="sql/postgresql/utilities-drop.sql"/>
             <file type="data_model_upgrade" path="upgrade-3.4-4.0/core-migrate.sql"/>
             <file type="data_model_upgrade" path="upgrade-3.4-4.0/resequence.sql"/>
             <file path="upgrade-3.4-4.0/upgrade.html"/>

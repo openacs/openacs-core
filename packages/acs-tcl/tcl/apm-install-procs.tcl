@@ -43,7 +43,11 @@ ad_proc apm_scan_packages {
 	if { [apm_package_installed_p $package_key] } {
 
 	    # Load up the queries (OpenACS Query Dispatcher - ben)
-	    apm_package_install_queries $package_key
+            # DRB: shouldn't be done here ... this routine just scans for uninstalled
+            # packages and shouldn't have any side effects of this sort.  Bootstrap.tcl
+            # already loads queries for installed packages and the APM installer should
+            # be doing this when the user asks to install a package ...
+	    # apm_package_install_queries $package_key
 
 	    if {$new_p} {
 		continue
@@ -734,7 +738,8 @@ ad_proc -private apm_package_install_files { {-callback apm_dummy_callback} file
 	
 	set path [lindex $item 0]
 	set file_type [lindex $item 1]
-	apm_file_add $version_id $path $file_type
+        set db_type [lindex $item 2]
+	apm_file_add $version_id $path $file_type $db_type
     }
 }
 
@@ -747,9 +752,9 @@ ad_proc -private apm_package_install_queries {package_key} {
 } {
     set path "[acs_package_root_dir $package_key]"
 
-    # Traverse path for www/*.sql files
+    # Traverse path for www/*.xql files
     set files [glob -nocomplain ${path}/www/*.sql]
-    set files [concat $files [glob -nocomplain ${path}/tcl/*.sql]]
+    set files [concat $files [glob -nocomplain ${path}/tcl/*.xql]]
 
     ns_log Notice "APM/QD = loading up package query files for $package_key"
 
@@ -802,7 +807,7 @@ ad_proc -private apm_package_install_spec { version_id } {
 	} else {
 	    # Nothing there! We need to add a .info file.
 	    set path "$package_key.info"
-	    apm_file_add $version_id $path package_spec
+	    apm_file_add $version_id $path package_spec ""
 	}
 	ns_log Debug "APM: Writing APM .info file to the database."
 	db_dml apm_spec_file_register {
@@ -1111,8 +1116,16 @@ ad_proc -private apm_data_model_scripts_find {
     foreach file $file_list {
 	set path [lindex $file 0]
 	set file_type [lindex $file 1]
-	ns_log Debug "APM: Checking $path of type $file_type."
-	if {[lsearch -exact $types_to_retrieve $file_type] != -1} {
+        set file_db_type [lindex $file 2]
+	ns_log Debug "APM: Checking \"$path\" of type \"$file_type\" and db_type \"$file_db_type\"."
+
+        # DRB: we return datamodel files which match the given database type or for which no db_type
+        # is defined.  The latter case is a kludge to simplify support of legacy ACS Oracle-only
+        # modules which haven't had their datamodel files moved to sql/oracle.  Eventually we should
+        # remove the kludge and insist that datamodel files live in the proper directory.
+
+	if {[lsearch -exact $types_to_retrieve $file_type] != -1 && \
+            ([empty_string_p $file_db_type] || ![string compare [db_type] $file_db_type])} {
 	    if { ![string compare $file_type "data_model_upgrade"] } {
 		if {[apm_upgrade_for_version_p $path $upgrade_from_version_name \
 			$upgrade_to_version_name]} {

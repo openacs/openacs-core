@@ -53,6 +53,7 @@ foreach pkg_info $pkg_install_list {
 	foreach file $data_model_files {
 	    set path [lindex $file 0]
 	    set file_type [lindex $file 1]
+            set db_type [lindex $file 2]
 	    append table_rows "  <tr>
     <td><input type=checkbox checked name=\"sql_file\" value=\"$file_count\"></td>
     <td>$path</td>

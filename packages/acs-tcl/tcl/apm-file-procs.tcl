@@ -60,7 +60,16 @@ ad_proc -public apm_file_type_keys {} {
     Returns a list of valid file type keys.
 
 } {
-    return [util_memoize [list db_list unused "select file_type_key from apm_package_file_types"]]
+    return [util_memoize [list db_list file_type_keys "select file_type_key from apm_package_file_types"]]
+}
+
+
+ad_proc -public apm_db_type_keys {} {
+
+    Returns a list of valid database type keys.
+
+} {
+    return [util_memoize [list db_list db_type_keys "select db_type_key from apm_package_db_types"]]
 }
 
 
@@ -156,7 +165,7 @@ ad_proc -public apm_file_add {
     {
 	-file_id ""
     }
-    version_id path file_type
+    version_id path file_type db_type
 } {
 
     Adds one file into the specified version.
@@ -172,7 +181,8 @@ ad_proc -public apm_file_add {
 		file_id => :file_id,
 		version_id => :version_id,
 		path => :path,
-		file_type => :file_type
+		file_type => :file_type,
+                db_type => :db_type
 		);
 	end;
     }]
@@ -278,7 +288,8 @@ ad_proc apm_filelist_update {version_id} {
 	set components [split $relative_path "/"]
 	set relative_path [join [lrange $components 2 [llength $components]] "/"]	
 	set type [apm_guess_file_type $package_key $relative_path]	
-	apm_file_add $version_id $relative_path $type
+	set db_type [apm_guess_db_type $package_key $relative_path]	
+	apm_file_add $version_id $relative_path $type $db_type
     }
 
     # Remove stale files.
@@ -312,12 +323,14 @@ ad_proc -public pkg_widgets {package_key} {
 
 ad_proc -public apm_version_file_list { 
     { 
-	-type "" 
+	-type "" -db_type ""
     } version_id } {
 
     Returns a list of paths to files of a given type (or all files, if
-    $type is not specified) in a version.
+    $type is not specified) which support a given database (if specified) in a version.
     @param type Optionally specifiy what type of files to check, for instance "tcl_procs"
+    @param db_type Optionally specifiy what type of database support to check, for instance
+    "postgresql"
     @param version_id The version to retrieve the file list from.
 
 } {
@@ -326,10 +339,15 @@ ad_proc -public apm_version_file_list {
     } else {
 	set type_sql ""
     }
+    if { ![empty_string_p $db_type] } {
+	set db_type_sql "and db_type = :db_type"
+    } else {
+	set db_type_sql ""
+    }
     return [db_list path_select "
         select path from apm_package_files
         where  version_id = :version_id
-        $type_sql order by path
+        $type_sql $db_type_sql order by path
     "]
 }
 
@@ -347,6 +365,9 @@ ad_proc -private apm_guess_file_type { package_key path } {
     files.
     <li>Files with extension <code>.sqlj</code> are considered sqlj_code files.				       
     <li>Files with extension <code>.info</code> are considered package specification files.
+    <li>Files with extension <code>.xql</code> are considered query files.
+    <li>Files with extension <code>.java</code> are considered java code files.
+    <li>Files with extension <code>.jar</code> are considered java archive files.
     <li>Files with a path component named <code>doc</code> are considered
     documentation files.
     <li>Files with extension <code>.pl</code> or <code>.sh</code> or
@@ -358,8 +379,10 @@ ad_proc -private apm_guess_file_type { package_key path } {
     level of the package, are considered documentation files.
     <li>Files with a path component named <code>www</code> or <code>admin-www</code>
     are considered content-page files.
-    <li>Files ending in <code>-procs.tcl</code> or <code>-init.tcl</code> are considered
+    <li>Files ending in <code>-procs(-)+()*.tcl)</code> or <code>-init.tcl</code> are considered
     Tcl procedure or Tcl initialization files, respectively.
+    <li>File ending in <code>.tcl</code> are considered Tcl utility script files (normally
+    found only in the bootstrap installer).
     </ol>
 
     Rules are applied in this order (stopping with the first match).
@@ -369,10 +392,17 @@ ad_proc -private apm_guess_file_type { package_key path } {
     set extension [file extension $path]
     set type ""
 
+    # DRB: someone named a file "acs-mail-create-packages.sql" rather than
+    # the conventional "acs-mail-packages-create.sql", causing it to be
+    # recognized as a data_model_create file, causing it to be explicitly
+    # run by the installer (the author intended it to be included by
+    # acs-mail-create.sql only).  I've tightened up the regexp below to
+    # avoid this problem, along with renaming the file...
+
     if { [string equal $extension ".sql"] } {
 	if { [lsearch -glob $components "*upgrade-*-*"] >= 0 } {
 	    set type "data_model_upgrade"
-	} elseif { [regexp -- "$package_key-(create|drop)" [file tail $path] "" kind] } {
+	} elseif { [regexp -- "$package_key-(create|drop)\.sql" [file tail $path] "" kind] } {
 	    set type "data_model_$kind"
 	} else {
 	    set type "data_model"
@@ -381,6 +411,12 @@ ad_proc -private apm_guess_file_type { package_key path } {
 	set type "sqlj_code"
     } elseif { [string equal $extension ".info"] } {
 	set type "package_spec"
+    } elseif { [string equal $extension ".xql"] } {
+	set type "query_file"
+    } elseif { [string equal $extension ".java"] } {
+	set type "java_code"
+    } elseif { [string equal $extension ".jar"] } {
+	set type "java_archive"
     } elseif { [lsearch $components "doc"] >= 0 } {
 	set type "documentation"
     } elseif { [string equal $extension ".pl"] || \
@@ -396,12 +432,67 @@ ad_proc -private apm_guess_file_type { package_key path } {
     } elseif { [lsearch $components "www"] >= 0 || [lsearch $components "admin-www"] >= 0 } {
 	set type "content_page"
     } else {
-	if { [string equal $extension ".tcl"] && \
-		[regexp -- {-(procs|init)\.tcl$} [file tail $path] "" kind] } {
-	    set type "tcl_$kind"
+	if { [string equal $extension ".tcl"] } {
+            if { [regexp -- {-(procs|init)(-[0-9a-zA-Z]*)?\.tcl$} [file tail $path] "" kind] } {
+	        set type "tcl_$kind"
+            } else {
+                set type "tcl_util"
+            }
 	}
     }
     return $type
+}
+
+
+ad_proc -private apm_guess_db_type { package_key path } {
+
+    Guesses and returns the database type key corresponding to a particular path
+    (or an empty string if none is known). <code>$path</code> should be
+    relative to the package directory (e.g., <code>www/index.tcl</code>
+    for <code>/packages/bboard/admin-www/index.tcl</code>.  
+
+    We consider two cases:
+
+    1. Data model files.
+    
+       If the path contains a string matching "sql/" followed by a database type known
+       to this version of OpenACS, the file is assumed to be specific to that database type.
+       The empty string is returned for all other data model files.
+
+       Example: "sql/postgresql/apm-create.sql" is assumed to be the PostgreSQL-specific
+       file used to create the APM datamodel.
+
+    2. Other files.
+
+       If the file name contains a dash and database type, the file is assumed to be
+       specific to that database type.
+
+       Example: "tcl/10-database-postgresql-proc.tcl" is asusmed to be the file that
+       defines the PostgreSQL-specific portions of the database API.
+
+} {
+    set components [split $path "/"]
+  
+    if { [string match "data_model*" [apm_guess_file_type $package_key $path]] } {
+        set sql_index [lsearch $components "sql"]
+        if { $sql_index >= 0 } {
+            set db_dir [lindex $components [expr $sql_index + 1]]
+            foreach known_database_type [db_known_database_types] {
+                if { [string match [lindex $known_database_type 0] $db_dir] } {
+                    return $db_dir
+                }
+            }
+        }
+        return ""
+    }
+
+    set file_name [file tail $path]
+    foreach known_database_type [db_known_database_types] {
+        if { [string match "*-[lindex $known_database_type 0]\.*" $file_name] } {
+            return [lindex $known_database_type 0]
+        }
+    }
+    return ""
 }
 
 ad_proc -private apm_ignore_file_p { path } {

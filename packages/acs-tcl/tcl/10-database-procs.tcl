@@ -14,6 +14,31 @@ proc_doc db_type { } {
     return [nsv_get ad_database_type .]
 }
 
+proc_doc db_version { } {
+    Returns the RDBMS version (i.e. 8.1.6 is a recent Oracle version; 7.1 a
+    recent PostgreSQL version.
+} {
+    return [nsv_get ad_database_version .]
+}
+
+proc_doc db_current_rdbms { } {
+    Returns the current rdbms type and version.
+} {
+    return [db_rdbms_create [db_type] [db_version]]
+}
+
+proc_doc db_known_database_types { } {
+    Returns a list of three-element lists describing the database engines known
+    to OpenACS.  Each sublist contains the internal database name (used in file
+    paths, etc), the driver name, and a "pretty name" to be used in selection
+    forms displayed to the user.
+
+    The nsv containing the list is initialized by the bootstrap script and should
+    never be referenced directly by user code.
+} {
+    return [nsv_get ad_known_database_types .]
+}
+
 proc_doc db_null { } {
     Returns an empty string, which Oracle thinks is null.  This routine was
     invented to provide an RDBMS-specific null value but doesn't actually

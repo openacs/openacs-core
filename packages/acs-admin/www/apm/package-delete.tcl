@@ -12,11 +12,14 @@ ad_page_contract {
 apm_version_info $version_id
 # Find the drop scripts.
 
+set db_type [db_type]
+
 db_foreach apm_package_drop_scripts {
     select file_id, path 
     from apm_package_files
     where version_id = :version_id
     and file_type = 'data_model_drop'
+    and (db_type is null or db_type = :db_type)
 } {
     append file_list "  <tr>
     <td><input type=checkbox name=\"sql_drop_scripts\" value=$file_id></td>
