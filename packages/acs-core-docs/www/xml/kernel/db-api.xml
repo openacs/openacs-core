@@ -973,13 +973,23 @@ several nested transactions, all of them are terminated. Use this insetead of
     <computeroutput><emphasis>var_name</emphasis>:1</computeroutput>, <computeroutput><emphasis>var_name</emphasis>:2</computeroutput>, etc,
     setting <computeroutput><emphasis>var_name</emphasis>:rowcount</computeroutput> to the total number
     of rows, and setting <computeroutput><emphasis>var_name</emphasis>:columns</computeroutput> to a
-    list of column names. Each row also has a column, rownum, automatically
+    list of column names. 
+    </para>
+
+    <para>
+    Each row also has a column, rownum, automatically
     added and set to the row number, starting with 1. Note that this will
     override any column in the SQL statement named 'rownum', also if you're
     using the Oracle rownum pseudo-column.
     </para>                                                                                                                                           
-    <para>                                                                                                                                        
 
+    <para>
+    If the <computeroutput>-local</computeroutput> is passed, the variables defined
+    by db_multirow will be set locally (useful if you're compiling dynamic templates
+    in a function or similar situations).
+    </para>
+    
+    <para>                                                                                                                                        
     You may supply a code block, which will be executed for each row in
     the loop. This is very useful if you need to make computations that
     are better done in Tcl than in SQL, for example using ns_urlencode
