@@ -24,7 +24,7 @@ ns_write "
 <head>
 <link rel=\"stylesheet\" type=\"text/css\" href=\"/resources/acs-subsite/site-master.css\" media=\"all\">
 </head>
-<body">
+<body>
 
 <div id=\"body\">
   <div id=\"subsite-name\">
