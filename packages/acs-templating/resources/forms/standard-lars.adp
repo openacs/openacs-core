@@ -13,7 +13,7 @@
   <multiple name=elements>
 
     <if @elements.section@ not nil>
-      <tr bgcolor="#ccccff"><th colspan="2">@elements.section@</th></tr>
+      <tr class="form-section"><th colspan="2">@elements.section@</th></tr>
     </if>
 
     <group column="section">
@@ -24,7 +24,7 @@
       <else>
 
         <if @elements.widget@ eq "submit">
-          <tr bgcolor="white">
+          <tr class="form-element">
             <td align="center" colspan="2">
               <noparse>
                 <formwidget id="@elements.id@">
@@ -34,37 +34,35 @@
         </if>
 
         <else>
-          <tr bgcolor=white>
+          <tr class="form-element">
 
             <if @elements.label@ not nil>
               <noparse>
                 <if \@formerror.@elements.id@\@ not nil>
-                  <td bgcolor="#ffaaaa" width="120" align="right" style="padding-left: 4px; padding-right: 12px;">
+                  <td class="form-label-error">
                 </if>
                 <else>
-                  <td bgcolor="#e0e0f9" width="120" align="right" style="padding-left: 4px; padding-right: 12px;">
+                  <td class="form-label">
                 </else>
               </noparse>
-                <font face="tahoma,verdana,arial,helvetica,sans-serif" size="-1">
-                  @elements.label;noquote@
-                  <if @form_properties.show_required_p@ true>
-                    <if @elements.optional@ nil and @elements.mode@ ne "display" and @elements.widget@ ne "inform" and @elements.widget@ ne "select"><font color="red">*</font></if>
-                  </if>
-                </font>
-              </td>
+                @elements.label;noquote@
+                <if @form_properties.show_required_p@ true>
+                  <if @elements.optional@ nil and @elements.mode@ ne "display" and @elements.widget@ ne "inform" and @elements.widget@ ne "select"><span class="form-required-mark">*</span></if>
+                </if>
+               </td>
             </if>
             <else>
-              <td bgcolor="#ddddff" width="120">
+              <td class="form-label">
                 &nbsp;
               </td>
             </else>
 
               <noparse>
                 <if \@formerror.@elements.id@\@ not nil>
-                  <td style="border: 1px dotted red;">
+                  <td class="form-widget-error">
                 </if>
                 <else>
-                  <td>
+                  <td class="form-widget">
                 </else>
               </noparse>
 
@@ -74,12 +72,10 @@
                     <formgroup id="@elements.id@">
                       <tr>
                         <td>\@formgroup.widget;noquote@</td>
-                        <td>
-                          <font face="tahoma,verdana,arial,helvetica,sans-serif" size="-1">
-                            <label for="@elements.form_id@:elements:@elements.id@:\@formgroup.option@">
-                              \@formgroup.label;noquote@
-                            </label>
-                          </font>
+                        <td class="form-widget">
+                          <label for="@elements.form_id@:elements:@elements.id@:\@formgroup.option@">
+                            \@formgroup.label;noquote@
+                          </label>
                         </td>
                       </tr>
                     </formgroup>
@@ -97,18 +93,17 @@
 
               <noparse>
                 <formerror id="@elements.id@">
-                  <br>
-                  <span style="font-family: tahoma,verdana,arial,helvetica,sans-serif; color: red; font-size: 100%;">
+                  <div class="form-error">
                     \@formerror.@elements.id@;noquote\@
-                  </span>
+                  </div>
                 </formerror>
               </noparse>
 
               <if @elements.help_text@ not nil and @elements.mode@ ne "display">
-                <p style="margin-top: 4px; margin-bottom: 2px; color: #666666; font-family: tahoma,verdana,arial,helvetica,sans-serif; font-size: 75%;">
+                <div class="form-help-text">
                   <img src="/shared/images/info.gif" width="12" height="9" alt="[i]" title="Help text" border="0">
                   <noparse><formhelp id="@elements.id@"></noparse>
-                </p>
+                </div>
               </if>
 
             </td>
