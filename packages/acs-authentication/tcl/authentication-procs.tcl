@@ -533,7 +533,7 @@ ad_proc -public auth::get_registration_form_elements {
                           first_names [_ acs-subsite.First_names] \
                           last_name [_ acs-subsite.Last_name] \
                           url [_ acs-subsite.lt_Personal_Home_Page_UR] \
-                          password [_ acs-subsite.Your_password] \
+                          password [_ acs-subsite.Password] \
                           password_confirm [_ acs-subsite.lt_Password_Confirmation] \
                           secret_question [_ acs-subsite.Question] \
                           secret_answer [_ acs-subsite.Answer]]
