@@ -360,7 +360,4 @@ if parameter_true $do_install; then
   # Warn about errors in the HTML returned from the server
   ./warn-if-installation-errors.sh `get_config_param openacs_output_file`
   ./warn-if-installation-errors.sh `get_config_param openacs_packages_output_file`
-  if [ $dotlrn == "yes" ]; then
-      ./warn-if-installation-errors.sh `get_config_param apm_output_file`
-  fi
 fi
