@@ -5,7 +5,7 @@
 <fullquery name="notification::interval::get_id_from_name.get_interval_id">
   <querytext>
      select interval_id
-     from notification_intervals where name = 'instant'
+     from notification_intervals where name = :name
   </querytext>
 </fullquery>
 
