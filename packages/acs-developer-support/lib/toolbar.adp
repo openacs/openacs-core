@@ -5,7 +5,7 @@
         <a href="@ds_url@">Developer Support</a>
       </td>
 
-      <td class="action-list">
+      <td class="actions">
         <ul>
           <li><a href="@user_switching_toggle_url@" class="@user_switching_on@" title="User switching">USR</a></li>
           <li><a href="@db_toggle_url@" class="@db_on@" title="Database statistics">DB</a></li>
@@ -13,7 +13,7 @@
         </ul>
       </td>
 
-      <td align="center" class="action-list">
+      <td align="center" class="actions">
         <ul>
           <li><a href="@request_info_url@" title="View request information">@request_info_label@</a>
           <span style="color: #cccccc;">|</span></li>
