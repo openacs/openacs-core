@@ -30,7 +30,7 @@ if { [string equal $package_url [subsite::get_element -element url]] } {
 
 ad_require_permission $package_id admin
 
-set form {
+ad_form -name parameters -export {section} -cancel_url $return_url -form {
     {return_url:text(hidden),optional}
     {package_id:integer(hidden),optional}
 }
@@ -57,9 +57,9 @@ db_foreach select_params {} {
     }
 
     set elm [list ${parameter_name}:text,optional,nospell \
-                 [list label [util::subst_safe $parameter_name]] \
-                 [list help_text [util::subst_safe $description]] \
-                 [list section [util::subst_safe $section_name]] \
+                 {label {$parameter_name}} \
+                 {help_text {$description}} \
+                 {section {$section_name}} \
                  {html {size 50}}]
 
     set file_val [ad_parameter_from_file $parameter_name $package_key]
@@ -68,7 +68,8 @@ db_foreach select_params {} {
         lappend elm [list after_html "<br><span style=\"color: red; font-weight: bold;\">$file_val (*)</span>"]
     } 
     
-    lappend form $elm
+    ad_form -extend -name parameters -form [list $elm]
+
     set param($parameter_name) $attr_value
     
     incr counter
@@ -77,7 +78,7 @@ db_foreach select_params {} {
 set focus "parameters.$focus_elm"
 
 if { $counter > 0 } {
-    ad_form -name parameters -export {section} -cancel_url $return_url -form $form -on_request {
+    ad_form -extend -name parameters -on_request {
         foreach name [array names param] {
             set $name $param($name)
         }
