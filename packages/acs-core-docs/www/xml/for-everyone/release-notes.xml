@@ -49,11 +49,11 @@ BEGINNING OF TEMPLATE
 END OF TEMPLATE -->
 
   <sect2 id="release-notes-5-0-0b1">
-    <title>Version 5.0.0 beta1</title>
+    <title>Version 5.0.0 beta</title>
 
     <para>
-	This is the first beta release of OpenACS 5.0.0.  This
-	release has a number of serious bugs, and is not suitable for
+	This is the second beta release of OpenACS 5.0.0 (tagged as oacs-5-0-0b4).  This
+	release may still have a number of serious bugs, and is not suitable for
 	production systems.  It has passed several release criteria,
 	including that it installs successfully, that all automated
 	tests succeed, and that there are no known severity 1
