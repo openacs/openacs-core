@@ -7,7 +7,7 @@ ad_library {
     @cvs-id $Id$
 }
 
-proc_doc db_type { } {
+ad_proc db_type { } {
     Returns the RDBMS type (i.e. oracle, postgresql) this OpenACS installation is
     using.  The nsv ad_database_type is set up during the bootstrap process.
 } {
@@ -51,20 +51,20 @@ ad_proc db_legacy_package_p { db_type_list } {
     return 0
 }
 
-proc_doc db_version { } {
+ad_proc db_version { } {
     Returns the RDBMS version (i.e. 8.1.6 is a recent Oracle version; 7.1 a
     recent PostgreSQL version.
 } {
     return [nsv_get ad_database_version .]
 }
 
-proc_doc db_current_rdbms { } {
+ad_proc db_current_rdbms { } {
     Returns the current rdbms type and version.
 } {
     return [db_rdbms_create [db_type] [db_version]]
 }
 
-proc_doc db_known_database_types { } {
+ad_proc db_known_database_types { } {
     Returns a list of three-element lists describing the database engines known
     to OpenACS.  Each sublist contains the internal database name (used in file
     paths, etc), the driver name, and a "pretty name" to be used in selection
@@ -76,7 +76,7 @@ proc_doc db_known_database_types { } {
     return [nsv_get ad_known_database_types .]
 }
 
-proc_doc db_null { } {
+ad_proc db_null { } {
     Returns an empty string, which Oracle thinks is null.  This routine was
     invented to provide an RDBMS-specific null value but doesn't actually
     work.  I (DRB) left it in to speed porting - we should really clean up
@@ -85,12 +85,12 @@ proc_doc db_null { } {
     return ""
 }
 
-proc_doc db_quote { string } { Quotes a string value to be placed in a SQL statement. } {
+ad_proc db_quote { string } { Quotes a string value to be placed in a SQL statement. } {
     regsub -all {'} "$string" {''} result
     return $result
 }
 
-proc_doc db_nth_pool_name { n } { 
+ad_proc db_nth_pool_name { n } { 
     Returns the name of the pool used for the nth-nested selection (0-relative). 
 } {
     set available_pools [nsv_get db_available_pools .]
@@ -102,7 +102,7 @@ proc_doc db_nth_pool_name { n } {
     return $pool
 }
 
-proc_doc db_with_handle { db code_block } {
+ad_proc db_with_handle { db code_block } {
 
 Places a usable database handle in $db and executes $code_block.
 
@@ -168,7 +168,7 @@ Places a usable database handle in $db and executes $code_block.
     }
 }
 
-proc_doc db_release_unused_handles {} {
+ad_proc db_release_unused_handles {} {
 
     Releases any database handles that are presently unused.
 
@@ -214,7 +214,7 @@ ad_proc -private db_getrow { db selection } {
     return -code $errno -errorinfo $errorInfo -errorcode $errorCode $error
 }
 
-proc_doc db_string { statement_name sql args } {
+ad_proc db_string { statement_name sql args } {
     Usage: <b>db_string</b> <i>statement-name sql</i> [ <tt>-default</tt> <i>default</i> ] [ <tt>-bind</tt> <i>bind_set_id</i> | <tt>-bind</tt> <i>bind_value_list</i> ]
   
     <p>Returns the first column of the result of the SQL query $sql.
@@ -239,7 +239,7 @@ proc_doc db_string { statement_name sql args } {
     return [ns_set value $selection 0]
 }
 
-proc_doc db_list { statement_name sql args } {
+ad_proc db_list { statement_name sql args } {
     Usage: <b>db_list</b> <i>statement-name sql</i> [ <tt>-bind</tt> <i>bind_set_id</i> | <tt>-bind</tt> <i>bind_value_list</i> ]
     
     <p>Returns a Tcl list of the values in the first column of the result of SQL query <tt>sql</tt>. 
@@ -262,7 +262,7 @@ proc_doc db_list { statement_name sql args } {
     return $result
 }
 
-proc_doc db_list_of_lists { statement_name sql args } {
+ad_proc db_list_of_lists { statement_name sql args } {
     Usage: <b>db_list_of_lists</b> <i>statement-name sql</i> [ <tt>-bind</tt> <i>bind_set_id</i> | <tt>-bind</tt> <i>bind_value_list</i> ]
 
     <p>Returns a Tcl list, each element of which is a list of all column 
@@ -325,7 +325,7 @@ ad_proc -public db_list_of_ns_sets {
     return $result
 }
 
-proc_doc db_foreach { statement_name sql args } {
+ad_proc db_foreach { statement_name sql args } {
     Usage: 
     <blockquote>
     db_foreach <em><i>statement-name sql</i></em> [ -bind <em><i>bind_set_id</i></em> | -bind <em><i>bind_value_list</i></em> ] \
