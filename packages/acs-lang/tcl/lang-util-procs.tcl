@@ -475,12 +475,13 @@ namespace eval lang::util {
                 regsub -all {@[a-zA-Z0-9_\.]+@} $text "" text_wo_variables
     
                 # make sure the string is not empty, doesn't contain all spaces, is at least one character long,
-                # contains alphabetical characters, doesn't contain all &nbsp; 
+                # contains alphabetical characters, doesn't contain all &nbsp;, and isn't an adp message lookup 
                 if {![empty_string_p $text] 
                     && ![string is space $text_wo_variables] 
                     && [string length $text] > 1
                     && [string match -nocase {*[A-Z]*} $text]
                     && ![regexp {(?:\s*&nbsp;\s*)+} $text_wo_variables match]
+                    && ![regexp {^\s*#[a-zA-Z\._-]+#\s*$} $text_wo_variables match]
                 } {
                     # Peter: texts with a hash or curly brace used to be excluded, my thinking
                     # is it's better to include those texts and let the user say if they should
