@@ -144,8 +144,8 @@ Username:  $email
 Password:  $password
 "
 	} {
-	    ns_returnerror "error" "$error"
-	    ns_log Warning "Error sending registration confirmation to $email in user-new-2"
+	    ns_returnerror "500" "$error"
+	    ns_log Warning "Error sending registration confirmation to $email in user-new-2. Error: $errmsg"
 	}
     }
 

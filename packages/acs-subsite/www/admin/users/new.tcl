@@ -260,8 +260,8 @@ Username:  [template::element::get_value add_user email]
 Password:  $password
 "
             } {
-		ns_returnerror "error" "$error"
-		ns_log Warning "Error sending registration confirmation to $email in acs-subsite/www/admin/users/new.tcl"
+		ns_returnerror "500" "$error"
+		ns_log Warning "Error sending registration confirmation to $email in acs-subsite/www/admin/users/new Error: $errmsg"
 	    }
 	}
 
