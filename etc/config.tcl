@@ -17,7 +17,7 @@ set httpsport                 8443
 set hostname                  [ns_info hostname]
 set address                   [ns_info address]
 
-set server                    "oacs-5-0" 
+set server                    "service0" 
 set servername                "New OpenACS Installation - Development"
 
 set serverroot                "/var/lib/aolserver/${server}"
