@@ -12,6 +12,8 @@ ad_library {
 
 namespace eval ::content::type {}
 
+namespace eval ::content::type::attribute {}
+
 ad_proc -public content::type::new {
     -content_type:required
     {-supertype "content_revision"}
