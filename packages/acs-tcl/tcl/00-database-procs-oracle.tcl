@@ -26,7 +26,7 @@ proc_doc db_exec_plsql { statement_name sql args } {
     Executes a PL/SQL statement, returning the variable of bind variable <code>:1</code>.
 
 } {
-    ad_arg_parser { bind_output } $args
+    ad_arg_parser { bind_output bind } $args
 
     # Query Dispatcher (OpenACS - ben)
     set full_statement_name [db_qd_get_fullname $statement_name]
