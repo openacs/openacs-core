@@ -237,6 +237,7 @@ begin
  acs_privilege.create_privilege('create');
  acs_privilege.create_privilege('delete');
  acs_privilege.create_privilege('admin');
+ acs_privilege.create_privilege('annotate');
 
  ---------------------------------------------------------
  -- Administrators can read, write, create, and delete. -- 
