@@ -105,6 +105,5 @@ create table auth_driver_params(
     primary key (authority_id, impl_id, key)
 );
 
-
 -- Create PLSQL package
 \i authentication-package-create.sql
