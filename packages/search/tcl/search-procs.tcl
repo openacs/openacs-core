@@ -14,7 +14,7 @@ ad_proc search_indexer {} {
 	    INSERT {
 		set object_type [db_exec_plsql get_object_type "select acs_object_util__get_object_type($object_id)"]
 		array set datasource [acs_sc_call FtsContentProvider datasource [list $object_id] $object_type]
-		set txt [search_content_filter $datasource(content) $datasource(mime) $datasource(storage)]
+		search_content_get txt $datasource(content) $datasource(mime) $datasource(storage_type)
 		acs_sc_call FtsEngineDriver index [list $datasource(object_id) $txt $datasource(title) $datasource(keywords)] $driver
 	    } 
 	    DELETE {
@@ -23,10 +23,8 @@ ad_proc search_indexer {} {
 	    UPDATE {
 		set object_type [db_exec_plsql get_object_type "select acs_object_util__get_object_type($object_id)"]
 		array set datasource [acs_sc_call FtsContentProvider datasource [list $object_id] $object_type] 
-		set txt [search_content_filter $datasource(content) $datasource(mime) $datasource(storage)]
-		if { $txt != "" } {
-		    acs_sc_call FtsEngineDriver update_index [list $datasource(object_id) $txt $datasource(title) $datasource(keywords)] $driver
-		}
+		search_content_get txt $datasource(content) $datasource(mime) $datasource(storage_type)
+		acs_sc_call FtsEngineDriver update_index [list $datasource(object_id) $txt $datasource(title) $datasource(keywords)] $driver
 	    }
 	}
 
@@ -41,58 +39,60 @@ ad_proc search_indexer {} {
 }
 
 
-
-ad_proc search_content_filter {
-    content
-    mime
-    storage
-} {
-    @author Neophytos Demetriou
-} {
-    switch $mime {
-	{text/plain} {
-	    return $content 
-	}
-	{text/html} {
-	    return $content
-	}
-    }
-    return
-}
-
-
 ad_proc search_content_get {
+    _txt
     content
     mime
-    storage
+    storage_type
 } {
     @author Neophytos Demetriou
 
     @param content 
-    holds the filename if storage=file
-    holds the text data if storage=text
-    holds the lob_id if storage=lob
+    holds the filename if storage_type=file
+    holds the text data if storage_type=text
+    holds the lob_id if storage_type=lob
 } {
-    switch $storage {
+    upvar $_txt txt
+
+    switch $storage_type {
 	text {
-	    return $content
+	    set data $content
 	}
 	file {
-	    if {[file exists $content]} {
-		set ofp [open $content r]
-		set txt [read $ofp]
-		close $ofp
-	    } else {
-		error "file: $content doesn't exist"
-	    }
-	    return [DoubleApos $txt]
+	    set data [db_blob_get data "select $content, 'file' as storage_type"]
 	}
 	lob {
-	    return $txt
+	    set data [db_blob_get data "select $content, 'lob' as storage_type"]
 	}
     }
-    return
+
+    search_content_filter txt data $mime
+
 }
+
+
+
+ad_proc search_content_filter {
+    _txt
+    _data
+    mime
+} {
+    @author Neophytos Demetriou
+} {
+    upvar $_txt txt
+    upvar $_data data
+
+    switch $mime {
+	{text/plain} {
+	    set txt $data 
+	}
+	{text/html} {
+	    set txt $data
+	}
+    }
+}
+
+
 
 
 
