@@ -5,8 +5,8 @@
 #
 # Ben Adida (ben@mit.edu)
 #
-# STATE OF THIS FILE (3/29/2001) - BMA:
-# This is starting to work, but isn't yet ready for actual dev work
+# STATE OF THIS FILE (4/2/2001) - BMA:
+# This is working correctly now for loading up FullQueries and dispatching!
 #
 
 # The Query Dispatcher is documented at http://openacs.org/
@@ -388,9 +388,17 @@ proc db_fullquery_internal_parse_init {stuff_to_parse} {
 	return ""
     }
 
-    set parsed_stuff [ns_xml node children $root_node]
+    # Extract the default RDBMS if there is one
+    set rdbms_nodes [xml_find_child_nodes $root_node rdbms]
+    if {[llength $rdbms_nodes] > 0} {
+	set default_rdbms [db_rdbms_parse_from_xml_node [lindex $rdbms_nodes 0]]
+    } else {
+	set default_rdbms ""
+    }
 
-    return [list $index $parsed_stuff $parsed_doc]
+    set parsed_stuff [xml_find_child_nodes $root_node fullquery]
+
+    return [list $index $parsed_stuff $parsed_doc $default_rdbms]
 }
 
 # Parse one query using the query state
@@ -402,12 +410,20 @@ proc db_fullquery_internal_parse_one_query {parsing_state} {
     # Find the list of nodes
     set node_list [lindex $parsing_state 1]
 
+    # Parsed Doc Pointer
+    set parsed_doc [lindex $parsing_state 2]
+
+    # Default RDBMS
+    set default_rdbms [lindex $parsing_state 3]
+
+    ns_log Notice "QD = default_rdbms is $default_rdbms"
+
     ns_log Notice "QD = node_list is $node_list with length [llength $node_list] and index $index"
 
     # BASE CASE
     if {[llength $node_list] <= $index} {
 	# Clean up
-	ns_xml doc free [lindex $parsing_state 2]
+	ns_xml doc free $parsed_doc
 
 	ns_log Notice "QD = Cleaning up, done parsing"
 
@@ -426,7 +442,7 @@ proc db_fullquery_internal_parse_one_query {parsing_state} {
     set parsing_state [list $index $node_list [lindex $parsing_state 2]]
 
     # Parse the actual query from XML
-    set one_query [db_fullquery_internal_parse_one_query_from_xml_node $one_query_xml]
+    set one_query [db_fullquery_internal_parse_one_query_from_xml_node $one_query_xml $default_rdbms]
 
     # Return the query and the parsing state
     return [list $one_query $parsing_state]
@@ -435,7 +451,7 @@ proc db_fullquery_internal_parse_one_query {parsing_state} {
 
 
 # Parse one query from an XML node
-proc db_fullquery_internal_parse_one_query_from_xml_node {one_query_node} {
+proc db_fullquery_internal_parse_one_query_from_xml_node {one_query_node {default_rdbms {}}} {
     ns_log Notice "QD = parsing one query node in XML with name -[ns_xml node name $one_query_node]-"
 
     # Check that this is a fullquery
@@ -449,8 +465,15 @@ proc db_fullquery_internal_parse_one_query_from_xml_node {one_query_node} {
     set querytext [ns_xml node getcontent [lindex [xml_find_child_nodes $one_query_node querytext] 0]]
 
     # Get the RDBMS
-    set rdbms_node [lindex [xml_find_child_nodes $one_query_node rdbms] 0]
-    set rdbms [db_rdbms_parse_from_xml_node $rdbms_node]
+    set rdbms_nodes [xml_find_child_nodes $one_query_node rdbms]
+    
+    # If we have no RDBMS specified, use the default
+    if {[llength $rdbms_nodes] == 0} {
+	set rdbms $default_rdbms
+    } else {
+	set rdbms_node [lindex $rdbms_nodes 0]
+	set rdbms [db_rdbms_parse_from_xml_node $rdbms_node]
+    }
 
     return [db_fullquery_create $queryname $querytext [list] "" $rdbms ""]
 }
