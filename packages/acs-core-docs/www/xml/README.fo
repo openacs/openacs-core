@@ -9,7 +9,12 @@ I was able to generate PDFs using:
 * Jimi 1.0 from Sun
 * docbook/xsl-stylesheets-1.62.0/
 
-(all this except Jimi was installed unchanged via emerge on gentoo)
+All this except Jimi was installed unchanged via emerge on gentoo.
+
+It works on OS X 10.3 as well but you have to change the fink build file 
+to add jimi when building FOP (and it's only on 10.3 unstable I think).
+
+
 
 I did have to change the fop executable script to increase the JVM
 memory.  On the last line of /usr/bin/fop (or whereever yours ends
@@ -33,6 +38,9 @@ FOP generates a number of non-intuitive errors for docbook problems...
 * If you try to generate a list-of-tables or figures it barfs.  (see
   <xsl:param name="generate.toc"> in fo.xsl for how to turn this off).
 
+* Versions 1.62.4 and 1.64.0 of docbook-xsl generate .fo code that sends
+  FOP into an infinite loop.  I may investigate but probably not.
+
 All in all it's pretty unforgiving of validation errors and it's output
 is not great (and it's table handling is iffy).
 
@@ -43,4 +51,4 @@ I would be interested in seeing the output produced by PassiveTeX and
 XEP.
 
 
-Jeff Davis davis@xarg.ne
+Jeff Davis davis@xarg.net

@@ -697,18 +697,17 @@ procedure membership_rel.delete (
 <sect2 id="groups-design-rev-history">
 <title>Revision History</title>
 
-
- 
 <informaltable>
 <tgroup cols="4">
-<tbody>
+<thead>
 <row>
 <entry><emphasis role="strong">Document Revision #</emphasis></entry>
 <entry><emphasis role="strong">Action Taken, Notes</emphasis></entry>
 <entry><emphasis role="strong">When?</emphasis></entry>
 <entry><emphasis role="strong">By Whom?</emphasis></entry>
 </row>
-
+</thead>
+<tbody>
 <row>
 <entry>0.1</entry>
 <entry>Creation</entry>
