@@ -55,6 +55,9 @@ ad_proc -public ad_text_to_html {
     # we quote the ones entered by the user:
     set text [ad_quotehtml $text]
 
+    # Convert _single_ CRLF's to <br>'s to preserve line breaks
+    regsub -all {\r*\n} $text "<br>" text
+    
     # turn CRLFCRLF into <P>
     if { [regsub -all {\r\n\s*\r\n} $text "<p>" text] == 0 } {
 	# try LFLF
