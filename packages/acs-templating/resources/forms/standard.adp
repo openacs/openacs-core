@@ -40,9 +40,15 @@
                </td>
             </if>
             <else>
-              <td class="form-label">
-                &nbsp;
-              </td>
+              <noparse>
+                <if \@formerror.@elements.id@\@ not nil>
+                  <td class="form-label-error">
+                </if>
+                <else>
+                  <td class="form-label">
+                </else>
+              </noparse>
+              &nbsp;<if @elements.optional@ nil and @elements.mode@ ne "display" and @elements.widget@ ne "inform" and @elements.widget@ ne "select"><span class="form-required-mark">*</span></if></td>
             </else>
 
               <noparse>
