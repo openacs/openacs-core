@@ -566,7 +566,7 @@ ad_proc db_qd_internal_store_cache {fullquery} {
 
     # Check if it's compatible at all!
     if {![db_rdbms_compatible_p [db_fullquery_get_rdbms $fullquery] [db_current_rdbms]]} {
-	db_qd_log Debug "Query [db_fullquery_get_name $fullquery] is *NOT* compatible"
+	ns_log Error "Query [db_fullquery_get_name $fullquery] is *NOT* compatible"
 	return
     }
 
