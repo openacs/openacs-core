@@ -638,7 +638,7 @@ ad_proc -public template::multirow {
     <dd> returns the columns in the datasource</dd>
     <dt> <b>template::multirow get datasourcename rownum [column]</b></dt>
     <dd> returns the row of of data (or the particular row/column if column is provided)</dd>
-    <dt> <b>template::multirow get datasourcename rownum column value</b></dt>
+    <dt> <b>template::multirow set datasourcename rownum column value</b></dt>
     <dd> set an element value</dd>
     <dt> <b>template::multirow foreach datasource code </b></dt>
     <dd> evaluate code block for each row (like db_foreach)</dd>
