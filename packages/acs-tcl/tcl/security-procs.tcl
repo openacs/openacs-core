@@ -1195,13 +1195,18 @@ ad_proc -private sec_get_token { token_id } {
 	return $tcl_secret_tokens($token_id)
     } else {
 	set token [ns_cache eval secret_tokens $token_id {
-	    return [db_string get_token {select token from secret_tokens
+	    set token [db_string get_token {select token from secret_tokens
                        	                 where token_id = :token_id} -default 0]
-	}]
 
-        if { $token == 0 } {
-	    error "Invalid token ID"
-	}
+	    # Very important to throw the error here if $token == 0
+	    # see: http://www.arsdigita.com/sdm/one-ticket?ticket_id=10760
+
+            if { $token == 0 } {
+	        error "Invalid token ID"
+	    }
+
+	    return $token
+	}]
 
 	set tcl_secret_tokens($token_id) $token
 	return $token
