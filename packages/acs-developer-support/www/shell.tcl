@@ -12,7 +12,8 @@ set page_title "OpenACS Shell"
 set context $page_title
 
 if { ![acs_user::site_wide_admin_p] } {
-  ad_script_abort
+    ad_return_warning "Error" "Sorry, only site-wide admins may use this."
+    ad_script_abort
 }
 
 set result ""
