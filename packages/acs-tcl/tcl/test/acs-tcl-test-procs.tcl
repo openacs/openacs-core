@@ -250,8 +250,8 @@ aa_register_case -cats {
     script
 } -on_error {
     site_node::get_children returns root node!
-} test_for_root_node_inclusion {
-    Shows bug in site_node::get_children - reurns passed node
+} site_node_get_children {
+    Test site_node::get_children
 } {
     # Start with a known site-map entry
     set node_id [site_node::get_node_id -url "/"]
@@ -262,7 +262,31 @@ aa_register_case -cats {
 			    -node_id $node_id]
 
     # lsearch returns '-1' if not found
-    aa_equals "site_node::get_children" [lsearch -exact $child_node_ids $node_id] -1
-}
+    aa_equals "site_node::get_children does not return root node" [lsearch -exact $child_node_ids $node_id] -1
 
+
+    # -package_key
+    set nodes [site_node::get_children -all -element node_id -node_id $node_id -filter_element package_key -filter_value "acs-admin"]
+
+    aa_equals "package_key arg. identical to filter_element package_key" \
+        [site_node::get_children -all -element node_id -node_id $node_id -package_key "acs-admin"] \
+        $nodes
+    
+    aa_equals "Found exactly one acs-admin node" [llength $nodes] 1
+
+
+    # -package_type
+    set nodes [site_node::get_children -all -element node_id -node_id $node_id -filter_element package_type -filter_value "apm_service"]
+    aa_equals "package_type arg. identical to filter_element package_type" \
+        [site_node::get_children -all -element node_id -node_id $node_id -package_type "apm_service"] \
+        $nodes
+    
+    aa_true "Found at least one apm_service node" [expr [llength $nodes] > 0]
+
+    # nonexistent package_type
+    aa_true "No nodes with package type 'foo'" \
+        [expr [llength [site_node::get_children -all -element node_id -node_id $node_id -package_type "foo"]] == 0]
+
+    
+}
 
