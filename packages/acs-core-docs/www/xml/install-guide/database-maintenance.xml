@@ -29,7 +29,7 @@
         <listitem>
           <para>Change the OpenACS service's configuration file to
           point to the remote database.  Edit
-          <computeroutput>/web/<replaceable>service0</replaceable>/etc/config.tcl</computeroutput>
+          <computeroutput>/var/lib/aolserver/<replaceable>service0</replaceable>/etc/config.tcl</computeroutput>
           and change</para>
           <programlisting></programlisting>
           <para>to </para>
@@ -54,20 +54,17 @@
         option. This command will drop the user and every database object
         the user owns.</para>
 
-      <programlisting>
-SVRMGR&gt; drop user <emphasis>service0</emphasis> cascade;</programlisting>
+      <programlisting>SVRMGR&gt; <userinput>drop user <replaceable>service0</replaceable> cascade;</userinput></programlisting>
 
       <para>
         If this does not work because svrmgrl &quot;cannot drop a user that
         is currently connected&quot;, make sure to kill the AOLserver using
         this user. If it still does not work, do:</para>
 
-      <programlisting>
-SVRMGR&gt; select username, sid, serial# from v$session where lower(username)=&#39;<emphasis>service0</emphasis>&#39;;</programlisting>
+      <programlisting>SVRMGR&gt; <userinput>select username, sid, serial# from v$session where lower(username)=&#39;<replaceable>service0</replaceable>&#39;;</userinput></programlisting>
 
       <para>and then</para>
-      <programlisting>
-SVRMGR&gt; alter system kill session &#39;<emphasis>sid</emphasis>,<emphasis>serial#</emphasis>&#39;;</programlisting>
+      <programlisting>SVRMGR&gt; <userinput>alter system kill session &#39;<replaceable>sid, serial#</replaceable>&#39;;</userinput></programlisting>
 
       <para>
         where <emphasis>sid</emphasis> and <emphasis>serial#</emphasis> are
@@ -78,8 +75,7 @@ SVRMGR&gt; alter system kill session &#39;<emphasis>sid</emphasis>,<emphasis>ser
       <para>
         If you feel the need to delete <emphasis>everything</emphasis>
         related to the service, you can also issue the following:</para>
-      <programlisting>
-SVRMGR&gt; drop tablespace <emphasis>service0</emphasis> including contents cascade constraints;</programlisting>   
+      <programlisting>SVRMGR&gt; <userinput>drop tablespace <replaceable>service0</replaceable> including contents cascade constraints;</userinput></programlisting>   
     </sect3>
 
     <sect3 id="install-openacs-delete-postgres-tablespace" xreflabel="Deleting a PostgreSQL tablespace">
@@ -97,7 +93,7 @@ SVRMGR&gt; drop tablespace <emphasis>service0</emphasis> including contents casc
     
       <para>Then, to drop the db, just do:</para>
       <programlisting>
-service0:~$ dropdb <emphasis>service0</emphasis>
+[service0 ~]$ <userinput>dropdb <replaceable>service0</replaceable></userinput>
 DROP DATABASE</programlisting>
     </sect3>
   </sect2>
@@ -119,13 +115,12 @@ DROP DATABASE</programlisting>
     </para>
 
     <para>Edit your crontab:</para>
-    <programlisting>
-joeuser:~$ crontab -e</programlisting>
+    <programlisting>[joeuser ~]$ <userinput>crontab -e</userinput></programlisting>
 
     <para>We'll set vacuum up to run nightly at 1 AM. Add the following
     line:</para>
     <programlisting>
-0 1 * * * /usr/local/pgsql/bin/vacuumdb birdnotes</programlisting>
+0 1 * * * /usr/local/pgsql/bin/vacuumdb <replaceable>service0</replaceable></programlisting>
     <para><phrase role="cvstag">($Id$)</phrase></para>
 
   </sect2>

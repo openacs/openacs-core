@@ -32,7 +32,7 @@ if [ $TAG -eq 1 ]; then
     # Checkout and tag the release 
     cvs -d $OACS_CVSROOT checkout -r $OACS_BRANCH openacs-4
     cd openacs-4 
-    cvs tag -F oacs-$OACS_VERSION 
+    cvs tag -F openacs-$OACS_VERSION 
     cd ../
 
 
@@ -58,7 +58,7 @@ fi
 #
 mkdir tarball
 cd tarball
-cvs -d $OACS_CVSROOT export -r oacs-$OACS_VERSION acs-core
+cvs -d $OACS_CVSROOT export -r openacs-$OACS_VERSION acs-core
 mv opeancs-4 openacs-${OACS_VERSION//-/.}
 tar -czf ../openacs-${OACS_VERSION//-/.}.tar.gz openacs-${OACS_VERSION//-/.}
 cd ..
@@ -67,9 +67,9 @@ cd ..
 #
 mkdir dotlrn-tarball
 cd dotlrn-tarball
-cvs -d $OACS_CVSROOT export -r oacs-$OACS_VERSION acs-core
+cvs -d $OACS_CVSROOT export -r openacs-$OACS_VERSION acs-core
 cd  openacs-4/packages
-cvs -d $OACS_CVSROOT export -r oacs-$OACS_VERSION dotlrn-prereq
+cvs -d $OACS_CVSROOT export -r openacs-$OACS_VERSION dotlrn-prereq
 cvs -d $DOTLRN_CVSROOT export -r dotlrn-$DOTLRN_VERSION dotlrn-core
 cd ../..
 cp -f openacs-4/packages/dotlrn/install.xml openacs-4

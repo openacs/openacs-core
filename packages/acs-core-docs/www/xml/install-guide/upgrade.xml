@@ -1,17 +1,17 @@
 <?xml version='1.0' ?>
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
-               "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
+"http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
 <!ENTITY % myvars SYSTEM "../variables.ent">
 %myvars;
 ]>
-<sect1 id="upgrade-detail">
-    <title>Upgrading</title>
+<chapter id="upgrade">
+  <title>Upgrading</title>
   <authorblurb>
     <para>by <ulink url="mailto:joel@aufrecht.org">Joel Aufrecht</ulink></para>
   </authorblurb>
-  <sect2 id="upgrade-overview">
+  <sect1 id="upgrade-overview">
     <title>Overview</title>
-  <para>Starting with Version 4.5, all OpenACS core packages support
+    <para>Starting with Version 4.5, all OpenACS core packages support
     automatic upgrade.  That means that, if you have OpenACS 4.5
     or better, you should always be able to upgrade all of your core
     packages automatically.  If you haven't changed anything, no
@@ -22,296 +22,412 @@
     in a new tarball include database upgrade scripts.  To start the
     upgrade, replace your existing files with the new files and then browse to the APM, which will detect the new packages and offer to run the appropriate database upgrade scripts.  After restarting the server again, the upgrade is
     complete.</para>
-    <figure>
+    <table>
       <title>Assumptions in this section</title>
-      <informaltable>
-        <tgroup cols="2">
-          <tbody>
-            <row>
-              <entry>name of OpenACS user</entry>
-              <entry><replaceable>nsadmin</replaceable></entry>
-            </row>
-            <row>
-              <entry>OpenACS server name</entry>
-              <entry><replaceable>openacs-dev</replaceable></entry>
-            </row>
-            <row>
-              <entry>Root of OpenACS file tree</entry>
-              <entry><replaceable>/web/openacs-dev</replaceable></entry>
-            </row>
-            <row>
-              <entry>Database backup directory</entry>
-              <entry><replaceable>/backup/openacs/</replaceable></entry>
-            </row>
-          </tbody>
-        </tgroup>
-      </informaltable>
-    </figure>
-  </sect2>
-  <sect2 id="upgrade-4.6.3-to-5">
-    <title>Upgrading 4.6.3 to 5.0</title>
-    <para>Current working notes in <ulink url="http://openacs.org/forums/message-view?message_id=143497">Forum OpenACS Development: 4.6.3 upgrade to 5-HEAD: final results</ulink>.</para>
-  </sect2>
-
-  <sect2 id="upgrade-4.5-to-4.6">
-    <title>Upgrading 4.5 to 4.6</title>
-    <indexterm>
-      <primary>upgrade</primary>
-        <secondary>OpenACS 4.5 to 4.6</secondary>
+      <tgroup cols="2">
+        <tbody>
+          <row>
+            <entry>name of OpenACS user</entry>
+            <entry><replaceable>service0</replaceable></entry>
+          </row>
+          <row>
+            <entry>OpenACS server name</entry>
+            <entry><replaceable>service0</replaceable></entry>
+          </row>
+          <row>
+            <entry>Root of OpenACS file tree</entry>
+            <entry><replaceable>/var/lib/aolserver/<replaceable>service0</replaceable></replaceable></entry>
+          </row>
+          <row>
+            <entry>Database backup directory</entry>
+            <entry><replaceable>/var/lib/aolserver/<replaceable>service0</replaceable>/database-backup</replaceable></entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table>
+  </sect1>
+  <sect1 id="upgrade-openacs">
+    <title>Upgrading OpenACS</title>
+    <sect2 id="upgrade-4.5-to-4.6">
+      <title>Upgrading 4.5 to 4.6.x</title>
+      <indexterm>
+        <primary>upgrade</primary>
+        <secondary>OpenACS 4.5 to 4.6.x</secondary>
         <tertiary>Linux/Unix</tertiary>
-</indexterm>
-<para>The required platform for OpenACS 4.6 is the same as
-    4.5, with the excepion of OpenFTS.  You now need OpenFTS 0.3.2, not 0.2.
-    OpenACS 4.6 does not support PostgreSQL 7.3.</para>
-    <itemizedlist mark="circle">
-      <listitem><para>A computer with OpenACS 4.5.</para>
+      </indexterm>
+      <para>The required platform for OpenACS 4.6 is the same as
+      4.5, with the exception of OpenFTS.  OpenACS 4.6 and later require OpenFTS 0.3.2 for full text search on PostGreSQL.  If you have OpenFTS 0.2, you'll need to upgrade.  </para>
+      <itemizedlist mark="circle">
+        <listitem><para>A computer with OpenACS 4.5.</para>
+        </listitem>
+        <listitem><para><ulink url="http://openacs.org/projects/openacs/download/">OpenACS 4.6 tarball</ulink> or CVS checkout/export.</para>
+        </listitem>
+        <listitem><para>Required for Full Text Search on PostgreSQL: <ulink url="http://openfts.sourceforge.net">OpenFTS 0.3.2</ulink></para>
+        </listitem>
+      </itemizedlist>
+      <orderedlist>
+        <listitem>
+          <formalpara>
+            <title>Make a Backup</title>
+            <para>Back up the database and file system (see <xref linkend="snapshot-backup"/>).</para>
+          </formalpara>
+        </listitem>
+        <listitem>
+          <formalpara>
+            <title>OPTIONAL: Upgrade OpenFTS</title>
+            <para><xref linkend="upgrade-openfts-0.2-to-0.3.2"/></para>
+          </formalpara>
+        </listitem>
+        <listitem>
+          <para>
+            Stop the server
+          </para>
+          <screen>[root root]# <userinput>svc -d /service/<replaceable>service0</replaceable></userinput></screen>
+        </listitem>
+        <listitem>
+          <formalpara>
+            <title>Upgrade the file system</title>
+            <para><xref linkend="upgrade-openacs-files"/></para>
+          </formalpara>
+        </listitem>
+        <listitem>
+          <para>
+            <emphasis role="strong">Start the server</emphasis>
+          </para>
+          <screen>[root root]# <userinput>svc -u /service/<replaceable>service0</replaceable></userinput></screen>
+        </listitem>
+        <listitem>
+          <formalpara id="upgrade-with-apm">
+            <title>Use APM to upgrade the database</title>
+            <para></para>
+          </formalpara>
+          <orderedlist>
+            <listitem>
+              <para>Browse to the package manager, <computeroutput>http://<replaceable>yourserver</replaceable>/acs-admin/apm</computeroutput>.</para>
+            </listitem>
+            <listitem>
+              <para>Click <computeroutput><guilabel>Install packages.</guilabel></computeroutput></para>
+            </listitem>
+            <listitem>
+              <para>Select the packages you want to install.  This should
+              be everything that says
+              <computeroutput>upgrade</computeroutput>, plus any new
+              packages you want.  It's safest to upgrade the kernel by
+              itself, and then come back and upgrade the rest of the
+              desired packages in a second pass.</para>
+            </listitem>
+            <listitem>
+              <para>On the next screen, click <computeroutput><guibutton>Install Packages</guibutton></computeroutput></para>
+            </listitem>
+            <listitem>
+              <para>When prompted, restart the server:</para>
+              <screen>[root root]# <userinput>restart-aolserver <replaceable>service0</replaceable></userinput></screen>
+            </listitem>
+            <listitem>
+              <para>Wait a minute, then browse to the package manager, <computeroutput>http://<replaceable>yourserver</replaceable>/acs-admin/apm</computeroutput>.</para>
+            </listitem>
+            <listitem>
+              <para>Check that the kernel upgrade worked by clicking <computeroutput><guilabel>All</guilabel></computeroutput> and making sure that <computeroutput>acs-kernel</computeroutput> version is &version;.</para>
+            </listitem>
+          </orderedlist>
+        </listitem>
+        <listitem>
+          <formalpara>
+            <title>Rollback</title>
+            <para>If anything goes wrong, <link linkend="recovery">roll back</link> to the backup snapshot.</para>
+          </formalpara>
+        </listitem>
+      </orderedlist>
+    </sect2>
+    <sect2 id="upgrade-4.6.3-to-5">
+      <title>Upgrading OpenACS 4.6.3 to 5.0</title>
+      <itemizedlist>
+        <listitem>
+          <formalpara>
+            <title>Oracle</title>
+            <para>Not yet documented.  It should be possible to upgrade via the APM just as when upgrading to 4.6.3.</para>
+          </formalpara>
+        </listitem>
+        <listitem>
+          <formalpara>
+            <title>PostGreSQL</title>
+            <para>
+              You must use PostGreSQL 7.3.x or newer, or Oracle, to upgrade OpenACS beyond 4.6.3.  (OpenACS 5.0 requires PostGreSQL 7.3; OpenACS versions prior to 4.6.3 do not support PostGreSQL 7.3; only OpenACS 4.6.3 supports both 7.2 and 7.3.  <link linkend="upgrade-postgres-7.2-to-7.3">Upgrade PostGreSQL to 7.3</link>)
+            </para>
+          </formalpara>
+          <orderedlist>
+            <listitem>
+              <para><link linkend="snapshot-backup">Back up the database and file system.</link></para>
+            </listitem>
+            <listitem>
+              <para>Upgrade the kernel manually:</para>
+              <screen>[root root]# <userinput>su - <replaceable>service0</replaceable></userinput>
+[service0 aolserver]$ <userinput>cd /var/lib/aolserver/ <replaceable>service0</replaceable>/packages/acs-kernel/sql/postgresql/upgrade</userinput></screen>
+              <para>
+                Manually execute each of the upgrade scripts in sequence, either from within psql or from the command line with commands such as <computeroutput><userinput>psql -f upgrade-4.6.3-4.6.4.sql  <replaceable>service0</replaceable></userinput></computeroutput>.  Run the scripts in this order (order is tentative, not verified):
+              </para>
+              <programlisting>psql -f upgrade-4.6.3-4.6.4.sql <replaceable>service0</replaceable>
+psql -f upgrade-4.6.4-4.6.5.sql <replaceable>service0</replaceable>
+psql -f upgrade-4.6.5-4.6.6.sql <replaceable>service0</replaceable>
+psql -f upgrade-4.7d-4.7.2d.sql <replaceable>service0</replaceable>
+psql -f upgrade-4.7.2d-5.0d.sql <replaceable>service0</replaceable>
+psql -f upgrade-5.0d-5.0d2.sql <replaceable>service0</replaceable>
+psql -f upgrade-5.0d2-5.0d3.sql <replaceable>service0</replaceable>
+psql -f upgrade-5.0d6-5.0d7.sql <replaceable>service0</replaceable>
+psql -f upgrade-5.0d7-5.0d9.sql <replaceable>service0</replaceable>
+psql -f upgrade-5.0d11-5.0d12.sql <replaceable>service0</replaceable>
+psql -f upgrade-5.0.0a4-5.0.0a5.sql <replaceable>service0</replaceable>
+psql -f upgrade-5.0.0b1-5.0.0b2.sql <replaceable>service0</replaceable>
+psql -f upgrade-5.0.0b2-5.0.0b3.sql <replaceable>service0</replaceable>
+psql -f upgrade-5.0.0b3-5.0.0b4.sql <replaceable>service0</replaceable></programlisting>
+            </listitem>
+            <listitem>
+              <para>Load acs-authentication data model.</para>
+              <screen><userinput>psql -f /var/lib/aolserver/<replaceable>service0</replaceable>/openacs-5/packages/acs-authentication/sql/postgresql/acs-authentication-create.sql <replaceable>service0</replaceable></userinput></screen>
+            </listitem>
+            <listitem>
+              <para>Load acs-lang data model.</para>
+              <screen><userinput>psql -f /var/lib/aolserver/<replaceable>service0</replaceable>/packages/acs-lang/sql/postgresql/acs-lang-create.sql <replaceable>service0</replaceable></userinput></screen>
+            </listitem>
+            <listitem>
+              <para>Create a file which will be executed on startup which takes care of a few issues with authentication and internationalization: create <replaceable>service0</replaceable>/tcl/zzz-postload.tcl containing:</para>
+              <programlisting>if {![apm_package_installed_p acs-lang]} {
+apm_package_install -enable -mount_path acs-lang [acs_root_dir]/packages/acs-lang/acs-lang.info
+lang::catalog::import -locales [list "en_US"]
+}
+
+if {![apm_package_installed_p acs-authentication]} {
+apm_package_install -enable [acs_root_dir]/packages/acs-authentication/acs-authentication.info
+apm_parameter_register "UsePasswordWidgetForUsername" \
+"Should we hide what the user types in the username
+field, the way we do with the password field? Set
+this to 1 if you are using sensitive information
+such as social security number for username." \
+acs-kernel 0 number \
+security 1 1
+parameter::set_value -package_id [ad_acs_kernel_id] -parameter UsePasswordWidgetForUsername -value 0
+}</programlisting>
+            </listitem>
+            <listitem>
+              <para>If you can login, visit /acs-admin/apm and upgrade acs-kernel and acs-service-contract and uncheck the data model scripts. Restart. If everything is still working, make another backup of the database.
+              </para>
+            </listitem>
+            <listitem>
+              <para>Upgrade other packages <link linkend="upgrade-with-apm">via the APM</link></para>
+            </listitem>
+          </orderedlist>
+          <para>
+          See also this forum post: <ulink url="http://openacs.org/forums/message-view?message_id=143497">Forum OpenACS Development: 4.6.3 upgrade to 5-HEAD: final results</ulink>.</para>
+        </listitem>
+      </itemizedlist>
+    </sect2>
+  </sect1>
+  <sect1 id="upgrade-openacs-files">
+    <title>Upgrading the OpenACS files</title>
+    <para>OpenACS is distributed as a collection of files, available as one big tarball, via CVS, and via automatic download from within the APM.  Upgrades work by first changing the file system (via any of the previous methods), and then using the APM to scan the file system, find upgrade scripts, and execute them.  This section describes how to upgrade the file system.  Starting with OpenACS 5.0, this section can generally be skipped because the OpenACS APM can directly download new files from the openacs.org repository.</para>
+    <para>Many OpenACS site developers operate their own CVS repository to keep track of changes from the release OpenACS code.  This part describes how to import the latest OpenACS version into your own repository.  If you are using CVS, you will unpack the OpenACS 4.6 tarball into a working directory and then import that directory into cvs.  If you have changed files in the core packages, cvs will attempt to merge your changes.  You may have to manually merge some conflicts.  When that's finished, you can update your normal development checkout directory and the new files will appear.  If you aren't using CVS, you can unpack the tarball on top of your existing tree, but any customizations you've made to the kernel or core packages will be erased.</para>
+    <itemizedlist>
+      <listitem>
+        <formalpara>
+          <title>Upgrading files for a site which is not in a CVS repository</title>
+          <para>Unpack the tarball into a new directory and copy its contents on top of your working directory.</para>
+        </formalpara>
+        <screen>[root root]# <userinput>su - <replaceable>service0</replaceable></userinput>
+        [service0 aolserver]$ <userinput>cd /var/lib/aolserver</userinput>
+        [service0 web]$ <userinput>tar xzf /tmp/openacs-4-6.tgz</userinput>
+        [service0 web]$ <userinput>cp -r openacs-4-6/* openacs-4</userinput>
+        [service0 openacs-upgrade]$ <userinput>exit</userinput>
+        [root root]#
+        <action>su - <replaceable>service0</replaceable>
+        cd /var/lib/aolserver
+        tar xzf /tmp/openacs-4-6.tgz
+        cp -r openacs-4-6/* openacs-4
+        exit</action></screen>
       </listitem>
-      <listitem><para><ulink url="http://openacs.org/projects/openacs/download/">OpenACS 4.6 tarball</ulink></para>
-      </listitem>
-      <listitem><para>Required for Full Text Search on PostgreSQL: <ulink url="http://openfts.sourceforge.net">OpenFTS 0.3.2</ulink></para>
+      <listitem>
+        <para>
+          <emphasis role="strong">Upgrading files for a site which is in a CVS repository</emphasis>
+        </para>
+        <orderedlist>
+          <listitem>
+            <para>Unpack the new files into a working directory.</para>
+            <screen>[root root]# <userinput>su - <replaceable>service0</replaceable></userinput>
+            [service0 aolserver]$ <userinput>cd /tmp</userinput>
+            [service0 tmp]$ <userinput>tar xzf openacs-4-6.tgz</userinput>
+            [service0 tmp]$ <userinput>cd openacs-4.6</userinput></screen>
+            <para>Import the new files into your cvs repository; where they match existing files, they will become the new version of the file.</para>
+            <screen>[service0 openacs-4.6]$ <userinput> cvs import -m "upgrade to OpenACS 4.6" openacs 
+            OpenACS openacs-4-6</userinput></screen>
+            <para>Create a new directory as temporary working space to reconcile conflicts between the new files and your current work.  The example uses the cvs keyword yesterday, making the assumption that you haven't checked in new code to your local tree in the last day.</para>
+            <screen>[service0 openacs-4.6]$ <userinput> cd /var/lib/aolserver</userinput>
+            [service0 tmp]$ <userinput>mkdir openacs-upgrade</userinput>
+            [service0 tmp]$ <userinput>cvs checkout -d openacs-upgrade -jOpenACS:yesterday -jOpenACS openacs &gt; cvs.txt 2&gt;&amp;1</userinput>
+            (CVS feedback here)
+            <action>su - <replaceable>service0</replaceable>
+            cd /tmp
+            tar xzv openacs-4-6.tgz
+            cd openacs-4.6
+            cvs import -m "upgrade to OpenACS 4.6" openacs OpenACS openacs-4-6
+            cd /tmp
+            mkdir openacs-upgrade
+            cvs checkout -d openacs-upgrade -jOpenACS:yesterday -jOpenACS openacs &gt; cvs.txt 2&gt;&amp;1</action></screen>
+          </listitem>
+          <listitem>
+            <para>The file /tmp/openacs-upgrade/cvs.txt contains the results of the upgrade.  If you changed files that are part of the OpenACS tarball and those changes conflict with the 4.5-4.6 upgrade, you'll have to manually reconcile them.  Use the emacs command <computeroutput>M-x sort-lines</computeroutput> and then, for each line that starts with a C, open that file and manually resolve the conflict by deleting the excess lines.  When you're finished, or if there aren't any conflicts, save and exit.</para>
+          </listitem>
+          <listitem>
+            <para>Once you've fixed any conflicts, commit the new code
+            to your local tree.  </para>
+            <screen>[service0 tmp]$ <userinput>cd openacs-upgrade</userinput>
+            [service0 openacs-upgrade]$ <userinput>cvs commit -m "Upgraded to 4.6"</userinput>
+            <action>cd openacs-upgrade
+            cvs commit -m "Upgraded to 4.6"</action></screen>
+          </listitem>
+          <listitem>
+            <para>Update your working tree with the new files.  The CVS flags ensure that new directories are created and pruned directories destroyed.</para>
+            <screen>[service0 openacs-upgrade]$ <userinput>cd /var/lib/aolserver/<replaceable>service0</replaceable></userinput>
+            [service0 service0]$ <userinput>cvs up -Pd</userinput>
+            (CVS feedback)
+            [service0 service0]$ <userinput>exit</userinput>
+            [root root]#
+            <action>cd /var/lib/aolserver/<replaceable>service0</replaceable>
+            cvs up -Pd
+            exit</action></screen>
+          </listitem>
+        </orderedlist>
       </listitem>
     </itemizedlist>
-    <para>Upgrade Sequence</para>
-    <orderedlist>
-      <listitem>
-        <formalpara>
-          <title>Make a Backup</title>
-          <para>Back up the database and file system (see <xref linkend="snapshot-backup"/>).</para>
-        </formalpara>
-      </listitem>
-      <listitem>
-        <formalpara>
-          <title>OPTIONAL: Upgrade OpenFTS</title>
-        <para>OpenACS Full Text Search requires several pieces: the OpenFTS code, some database functions, and the OpenFTS Engine.  If you have OpenFTS 0.2, you'll need to upgrade to to OpenFTS 0.3.2.  This is backwards-compatible -
-        completing this step will not break a working OpenFTS Engine from 4.5.
-</para>
-        </formalpara>
-        <orderedlist>
-          <listitem>
-            <para>Uninstall the old OpenFTS Engine</para>
-            <orderedlist>
-              <listitem><para><emphasis role='bold'>Browse to <computeroutput>http://<replaceable>yourserver</replaceable>/openfts</computeroutput>.</emphasis>
-</para>
-              </listitem>
-              <listitem><para><emphasis role='bold'>Click <computeroutput><guilabel>Administration</guilabel></computeroutput>.</emphasis></para>
-              </listitem>
-              <listitem><para><emphasis role='bold'>Click <computeroutput><guibutton>Drop OpenFTS Engine</guibutton></computeroutput></emphasis></para>
-              </listitem>
-            </orderedlist>
-          </listitem>
-          <listitem>
-            <para>Build and install the new OpenFTS driver and supporting tcl procedures.  (This section of shell code is not fully documented; please exercise care.)</para>
-            <screen>cd /usr/local/src/
-tar xzf /tmp/Search-OpenFTS-tcl-0.3.2.tar.gz
-chown -R root.root Search-OpenFTS-tcl-0.3.2/
-cd Search-OpenFTS-tcl-0.3.2/
-./configure --with-aolserver-src=/usr/local/src/aolserver/aolserver --with-tcl=/usr/lib/
-cd aolserver/
-make
-</screen>
-            <para>
-Back up the old fts driver as a precaution and install the newly
-compiled one</para>
-<screen>mv /usr/local/aolserver/bin/nsfts.so /usr/local/aolserver/bin/nsfts-0.2.so 
-cp nsfts.so /usr/local/aolserver/bin
-</screen>
-            <para>Build and install the postgres code</para>
-<screen>cd /usr/local/src/Search-OpenFTS-tcl-0.3.2/
-cp -r pgsql_contrib_openfts /usr/local/src/postgresql-7.2.3/contrib /usr/local/src/postgresql-7.2.3/contrib/pgsql_contrib_openfts
-make
-su - postgres
-cd tsearch/
-make
-make install
-exit</screen>
-            <para>In order for the OpenACS 4.6 OpenFTS Engine to use the OpenFTS 0.3.2 driver, we need some commands added to the database.</para>
-            <screen>[root@localhost root]# <userinput>su - nsadmin</userinput>
-[nsadmin@localhost dev]$ <userinput>psql <replaceable>openacs-dev</replaceable> -f /usr/local/pgsql/share/contrib/openfts.sql</userinput>
-CREATE
-CREATE
-[nsadmin@localhost dev]$ <userinput>psql <replaceable>openacs-dev</replaceable> -f /usr/local/src/postgresql-7.2.3/contrib/tsearch/tsearch.sql</userinput>
-BEGIN
-CREATE
-(~30 more lines)
-[nsadmin@localhost dev]$ <userinput>exit</userinput>
-[root@localhost root]# 
-<action>su - nsadmin
-psql <replaceable>openacs-dev</replaceable> -f /usr/local/pgsql/share/contrib/openfts.sql
-psql <replaceable>openacs-dev</replaceable> -f /usr/local/src/postgresql-7.2.3/contrib/tsearch/tsearch.sql
-exit</action></screen>
-          </listitem>
-        </orderedlist>
-      </listitem>
-      <listitem>
-        <para>
-         Stop the server
-        </para>
-        <screen>[root@localhost root]# <userinput>svc -d /service/<replaceable>openacs-dev</replaceable></userinput></screen>
-      </listitem>
-      <listitem>
-        <formalpara>
-          <title>Upgrade the file tree</title>
-          <para>If you are using CVS, you will unpack the OpenACS 4.6 tarball into a working directory and then import that directory into cvs.  If you have changed files in the core packages, cvs will attempt to merge your changes.  You may have to manually merge some conflicts.  When that's finished, you can update your normal development checkout directory and the new files will appear.  If you aren't using CVS, you can unpack the tarball on top of your existing tree, but any customizations you've made to the kernel or core packages will be erased.</para>
-        </formalpara>
-        <itemizedlist>
-          <listitem>
-            <formalpara>
-              <title>Upgrading files without CVS</title>
-              <para>Unpack the tarball into a new directory and copy its contents on top of your working directory.</para>
-            </formalpara>
-            <screen>[root@localhost root]# <userinput>su - nsadmin</userinput>
-[nsadmin@localhost aolserver]$ <userinput>cd /web</userinput>
-[nsadmin@localhost web]$ <userinput>tar xzf /tmp/openacs-4-6.tgz</userinput>
-[nsadmin@localhost web]$ <userinput>cp -r openacs-4-6/* openacs-4</userinput>
-[nsadmin@localhost openacs-upgrade]$ <userinput>exit</userinput>
-[root@localhost root]#
-<action>su - nsadmin
-cd /web
-tar xzf /tmp/openacs-4-6.tgz
-cp -r openacs-4-6/* openacs-4
-exit</action></screen>
-          </listitem>
-          <listitem>
-            <para>
-              <emphasis role="strong">Upgrading files with CVS</emphasis>
-	    </para>
-            <orderedlist>
-              
-              <listitem>
-                <para>Unpack the new files into a working directory.</para>
-                <screen>[root@localhost root]# <userinput>su - nsadmin</userinput>
-[nsadmin@localhost aolserver]$ <userinput>cd /tmp</userinput>
-[nsadmin@localhost tmp]$ <userinput>tar xzv openacs-4-6.tgz</userinput>
-[nsadmin@localhost tmp]$ <userinput>cd openacs-4.6</userinput>
-</screen>
-                <para>Import the new files into your cvs repository; where they match existing files, they will become the new version of the file.</para>
-                <screen>[nsadmin@localhost openacs-4.6]$ <userinput> cvs import -m "upgrade to OpenACS 4.6" openacs 
-OpenACS openacs-4-6</userinput></screen>
-                <para>Create a new directory as temporary working space to reconcile conflicts between the new files and your current work.  The example uses the cvs keyword yesterday, making the assumption that you haven't checked in new code to your local tree in the last day.</para>
-<screen>[nsadmin@localhost openacs-4.6]$ <userinput> cd /web</userinput>
-[nsadmin@localhost tmp]$ <userinput>mkdir openacs-upgrade</userinput>
-[nsadmin@localhost tmp]$ <userinput>cvs checkout -d openacs-upgrade -jOpenACS:yesterday -jOpenACS openacs &gt; cvs.txt 2&gt;&amp;1</userinput>
-(CVS feedback here)
-<action>su - nsadmin
-cd /tmp
-tar xzv openacs-4-6.tgz
-cd openacs-4.6
-cvs import -m "upgrade to OpenACS 4.6" openacs OpenACS openacs-4-6
-cd /tmp
-mkdir openacs-upgrade
-cvs checkout -d openacs-upgrade -jOpenACS:yesterday -jOpenACS openacs &gt; cvs.txt 2&gt;&amp;1
-</action></screen>
-              </listitem>
-              <listitem>
-                <para>The file /tmp/openacs-upgrade/cvs.txt contains the results of the upgrade.  If you changed files that are part of the OpenACS tarball and those changes conflict with the 4.5-4.6 upgrade, you'll have to manually reconcile them.  Use the emacs command <computeroutput>M-x sort-lines</computeroutput> and then, for each line that starts with a C, open that file and manually resolve the conflict by deleting the excess lines.  When you're finished, or if there aren't any conflicts, save and exit.</para>
-              </listitem>
-              <listitem>
-                <para>Once you've fixed any conflicts, commit the new code
-        to your local tree.  </para>
-            <screen>[nsadmin@localhost tmp]$ <userinput>cd openacs-upgrade</userinput>
-[nsadmin@localhost openacs-upgrade]$ <userinput>cvs commit -m "Upgraded to 4.6"</userinput>
-<action>cd openacs-upgrade
-cvs commit -m "Upgraded to 4.6"</action></screen>
-              </listitem>
-              <listitem>
-                <para>Update your working tree with the new
-                files.  The CVS flags ensure that new directories are created and pruned directories destroyed.</para>
-                <screen>
-[nsadmin@localhost openacs-upgrade]$ <userinput>cd /web/<replaceable>openacs-dev</replaceable></userinput>
-[nsadmin@localhost openacs-dev]$ <userinput>cvs up -Pd</userinput>
-(CVS feedback)
-[nsadmin@localhost openacs-dev]$ <userinput>exit</userinput>
-[root@localhost root]#
-<action>cd /web/<replaceable>openacs-dev</replaceable>
-cvs up -Pd
-exit</action></screen>
-              </listitem>
-            </orderedlist>
-          </listitem>
-        </itemizedlist>
-      </listitem>
-      <listitem>
-        <para>
-          <emphasis role="strong">Start the server</emphasis>
-        </para>
-        <screen>[root@localhost root]# <userinput>svc -u /service/<replaceable>openacs-dev</replaceable></userinput></screen>
-      </listitem>
-      <listitem>
-        <formalpara>
-          <title>Use APM to upgrade the database</title>
-          <para></para>
-        </formalpara>
-        <orderedlist>
-          <listitem>
-          <para>Browse to the package manager, <computeroutput>http://<replaceable>yourserver</replaceable>/acs-admin/apm</computeroutput>.</para>
-          </listitem>
-          <listitem>
-          <para>Click <computeroutput><guilabel>Install packages.</guilabel></computeroutput></para>
-          </listitem>
-          <listitem>
-          <para>Select the packages you want to install.  This should
-          be everything that says
-          <computeroutput>upgrade</computeroutput>, plus any new
-          packages you want.  It's safest to upgrade the kernel by
-          itself, and then come back and upgrade the rest of the
-          desired packages in a second pass.</para>
-          </listitem>
-          <listitem>
-            <para>On the next screen, click <computeroutput><guibutton>Install Packages</guibutton></computeroutput></para>
-          </listitem>
-          <listitem>
-            <para>When prompted, restart the server:</para>
-            <screen>[root@localhost root]# <userinput>restart-aolserver <replaceable>openacs-dev</replaceable></userinput></screen>
-          </listitem>
-          <listitem>
-            <para>Wait a minute, then browse to the package manager, <computeroutput>http://<replaceable>yourserver</replaceable>/acs-admin/apm</computeroutput>.</para>
-          </listitem>
-          <listitem>
-            <para>Check that the kernel upgrade worked by clicking <computeroutput><guilabel>All</guilabel></computeroutput> and making sure that <computeroutput>acs-kernel</computeroutput> version is &version;.</para>
-          </listitem>
-        </orderedlist>
-      </listitem>
-      <listitem>
-        <formalpara>
-          <title>OPTIONAL: Install the new OpenFTS Engine.</title>
-          <para>If you want to upgrade the OpenFTS Engine, do these
-          steps.  (You must have already upgraded the OpenFTS driver to
-          0.3.2.)</para>
-        </formalpara>
-        <orderedlist>
-          <listitem>
-            <para>Browse to <computeroutput>http://<replaceable>yourserver</replaceable>/admin/site-map</computeroutput></para>
-          </listitem>
-          <listitem>
-            <para>On the <computeroutput>openfts</computeroutput> line, click on <computeroutput><guilabel>set parameters</guilabel></computeroutput>.</para>
-          </listitem>
-          <listitem>
-            <para>Change the value of <computeroutput>openfts_tcl_src_path</computeroutput> from <computeroutput>/usr/local/src/Search-OpenFTS-tcl-0.2/</computeroutput> to <computeroutput>/usr/local/src/Search-OpenFTS-tcl-0.3.2/</computeroutput></para>
-          </listitem>
-          <listitem>
-            <para>Click <computeroutput><guibutton>Set Parameters</guibutton></computeroutput></para>
-          </listitem>
-          <listitem>
-            <screen>[root@localhost root]# restart-aolserver <replaceable>openacs-dev</replaceable></screen>
-          </listitem>
-          <listitem>
-            <para>Browse to <computeroutput>http://<replaceable>yourserver</replaceable>/openfts</computeroutput></para>
-          </listitem>
-          <listitem><para><emphasis role='bold'>Click <computeroutput><guilabel>Administration</guilabel></computeroutput>.</emphasis></para>
-          </listitem>
-          <listitem><para><emphasis role='bold'>Click <computeroutput><guibutton>Initialize OpenFTS Engine</guibutton></computeroutput></emphasis></para>
-          </listitem>
-        </orderedlist>
-      </listitem>
-      <listitem>
-        <formalpara>
-          <title>Rollback</title>
-          <para>If anything goes wrong, <link linkend="recovery">roll back</link> to the backup snapshot.</para>
-        </formalpara>
-      </listitem>
-    </orderedlist>
-    <para><phrase role="cvstag">($Id$)</phrase></para>
-  </sect2>
-</sect1>
+  </sect1>
+  <sect1 id="upgrade-supporting">
+    <title>Upgrading Platform components</title>
+    <sect2 id="upgrade-openfts-0.2-to-0.3.2">
+      <title>Upgrading OpenFTS from 0.2 to 0.3.2</title>
+      <para>OpenACS Full Text Search requires several pieces: the OpenFTS code, some database functions, and the OpenFTS Engine.  This section describes how to upgrade OpenFTS from 0.2 to 0.3.2 and upgrade the search engine on an OpenACS site at the same time.</para>
+      <orderedlist>
+        <listitem>
+          <para>Uninstall the old OpenFTS Engine from the <replaceable>service0</replaceable> database.</para>
+          <orderedlist>
+            <listitem><para><emphasis role='bold'>Browse to <computeroutput>http://<replaceable>yourserver</replaceable>/openfts</computeroutput>.</emphasis>
+            </para>
+            </listitem>
+            <listitem><para><emphasis role='bold'>Click <computeroutput><guilabel>Administration</guilabel></computeroutput>.</emphasis></para>
+            </listitem>
+            <listitem><para><emphasis role='bold'>Click <computeroutput><guibutton>Drop OpenFTS Engine</guibutton></computeroutput></emphasis></para>
+            </listitem>
+          </orderedlist>
+        </listitem>
+        <listitem>
+          <para>Build and install the new OpenFTS driver and supporting tcl procedures.  (This section of shell code is not fully documented; please exercise care.)</para>
+          <screen>cd /usr/local/src/
+          tar xzf /tmp/Search-OpenFTS-tcl-0.3.2.tar.gz
+          chown -R root.root Search-OpenFTS-tcl-0.3.2/
+          cd Search-OpenFTS-tcl-0.3.2/
+          ./configure --with-aolserver-src=/usr/local/src/aolserver/aolserver --with-tcl=/usr/lib/
+          cd aolserver/
+          make
+          </screen>
+          <para>
+            Back up the old fts driver as a precaution and install the newly
+          compiled one</para>
+          <screen>mv /usr/local/aolserver/bin/nsfts.so /usr/local/aolserver/bin/nsfts-0.2.so 
+          cp nsfts.so /usr/local/aolserver/bin
+          </screen>
+          <para>Build and install the OpenFTS code for PostGresSQL</para>
+          <screen>cd /usr/local/src/Search-OpenFTS-tcl-0.3.2/
+          cp -r pgsql_contrib_openfts /usr/local/src/postgresql-7.2.3/contrib /usr/local/src/postgresql-7.2.3/contrib/pgsql_contrib_openfts
+          make
+          su - postgres
+          cd tsearch/
+          make
+          make install
+          exit</screen>
+          <para>In order for the OpenACS 4.6 OpenFTS Engine to use the OpenFTS 0.3.2 driver, we need some commands added to the database.</para>
+          <screen>[root root]# <userinput>su - <replaceable>service0</replaceable></userinput>
+          [service0 dev]$ <userinput>psql <replaceable>service0</replaceable> -f /usr/local/pgsql/share/contrib/openfts.sql</userinput>
+          CREATE
+          CREATE
+          [service0 dev]$ <userinput>psql <replaceable>service0</replaceable> -f /usr/local/src/postgresql-7.2.3/contrib/tsearch/tsearch.sql</userinput>
+          BEGIN
+          CREATE
+          (~30 more lines)
+          [service0 dev]$ <userinput>exit</userinput>
+          [root root]# 
+          <action>su - <replaceable>service0</replaceable>
+          psql <replaceable>service0</replaceable> -f /usr/local/pgsql/share/contrib/openfts.sql
+          psql <replaceable>service0</replaceable> -f /usr/local/src/postgresql-7.2.3/contrib/tsearch/tsearch.sql
+          exit</action></screen>
+        </listitem>
+        <listitem>
+          <formalpara>
+            <title>OPTIONAL: Install the new OpenFTS Engine.</title>
+            <para>If you want to upgrade the OpenFTS Engine, do these
+            steps.  (You must have already upgraded the OpenFTS driver to
+            0.3.2.)</para>
+          </formalpara>
+          <orderedlist>
+            <listitem>
+              <para>Browse to <computeroutput>http://<replaceable>yourserver</replaceable>/admin/site-map</computeroutput></para>
+            </listitem>
+            <listitem>
+              <para>On the <computeroutput>openfts</computeroutput> line, click on <computeroutput><guilabel>set parameters</guilabel></computeroutput>.</para>
+            </listitem>
+            <listitem>
+              <para>Change the value of <computeroutput>openfts_tcl_src_path</computeroutput> from <computeroutput>/usr/local/src/Search-OpenFTS-tcl-0.2/</computeroutput> to <computeroutput>/usr/local/src/Search-OpenFTS-tcl-0.3.2/</computeroutput></para>
+            </listitem>
+            <listitem>
+              <para>Click <computeroutput><guibutton>Set Parameters</guibutton></computeroutput></para>
+            </listitem>
+            <listitem>
+              <screen>[root root]# restart-aolserver <replaceable>service0</replaceable></screen>
+            </listitem>
+            <listitem>
+              <para>Browse to <computeroutput>http://<replaceable>yourserver</replaceable>/openfts</computeroutput></para>
+            </listitem>
+            <listitem><para><emphasis role='bold'>Click <computeroutput><guilabel>Administration</guilabel></computeroutput>.</emphasis></para>
+            </listitem>
+            <listitem><para><emphasis role='bold'>Click <computeroutput><guibutton>Initialize OpenFTS Engine</guibutton></computeroutput></emphasis></para>
+            </listitem>
+          </orderedlist>
+        </listitem>
+      </orderedlist>
+    </sect2>
+    <sect2 id="upgrade-postgres-7.2-to-7.3">
+      <title>Upgrading from PostGreSQL 7.2 to 7.3</title>
+      <para>An OpenACS database created in PostGreSQL 7.2 will not work correctly in PostGreSQL 7.3.  This is because 7.2 truncates function names to 31 characters, but 7.3 does not.  This does not cause problems in 7.2, because truncation occurs both at function creation and at function calling, so they still match.  But if you use a database created in 7.2 in 7.3, the function names in the database remain truncated but the function calls are not, and so they don't match.  Also some functions use casting commands that no longer work in 7.3 and these functions must be recreated.</para>
+      <para>
+      To upgrade an OpenACS site from PostGreSQL 7.2 to 7.3, first upgrade the kernel to 4.6.3.  Then, dump the database, run the upgrade script <computeroutput>/var/lib/aolserver/<replaceable>service0</replaceable>/bin/pg_7.2to7.3_upgrade_helper.pl</computeroutput> on the dump file, and reply the dump.  See <ulink url="http://openacs.org/forums/message-view?message_id=109337">Forum OpenACS Q&amp;A: PG 7.2->7.3 upgrade gotcha?</ulink>.  Example:</para>
+      <orderedlist>
+        <listitem>
+          <para>Back up the database as per <xref linkend="postgres-snapshot-backup"/>.</para>
+        </listitem>
+        <listitem>
+          <para>Run the upgrade script on the backup file.</para>
+          <screen>[root root]# <userinput>su - <replaceable>service0</replaceable></userinput>
+          [service0 <replaceable>service0</replaceable>]# <userinput>cd /var/lib/aolserver/<replaceable>service0</replaceable>/bin</userinput>
+          [service0 bin]$ <userinput>./pg_7.2to7.3_upgrade_helper.pl \
+          ../database-backup/nightly.dmp \
+          ../database-backup/upgrade-7.3.dmp \
+          /var/lib/aolserver/<replaceable>service0</replaceable></userinput>
+          ==================================================================
+          looking for function acs_object__check_object_ancest in oacs
+          grep result: /var/lib/aolserver/aufrecht-dev/packages/acs-kernel/sql/postgresql/acs-objects-create.sql:create function acs_object__check_object_ancestors (integer,integer,integer)
 
+          replacing acs_object__check_object_ancest with acs_object__check_object_ancestors
+
+          <emphasis>(many lines omitted)</emphasis>
+          [service0 bin]$
+          </screen>
+        </listitem>
+        <listitem>
+          <para>Use perl to replace <computeroutput>timestamp</computeroutput> with <computeroutput>timestamptz</computeroutput> in the dump file.</para>
+          <programlisting>find . -type f -name "*sql" | xargs perl -p -i.tmp -e "s/timestamp with time zone/timestamptz/g"
+          find . -type f -name "*sql" | xargs perl -p -i.tmp -e "s/\\wtimestamp[^t]/ timestamptz/g"</programlisting>
+        </listitem>
+        <listitem>
+          <para>Restore the database from dump as per the <link linkend="restore-postgres">recovery instructions</link>.</para>
+        </listitem>
+      </orderedlist>
+    </sect2>
+  </sect1>
+</chapter>
 

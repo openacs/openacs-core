@@ -406,6 +406,7 @@ ad_proc -public auth::password::can_reset_p {
 }
 
 ad_proc -public auth::password::reset {
+    {-admin:boolean}
     {-authority_id:required}
     {-username:required}
 } {
@@ -413,7 +414,11 @@ ad_proc -public auth::password::reset {
     randomly generated password and inform the user of that new
     password.
 
-    @param user_id      The ID of the user whose password you want to reset.
+    @param admin             Specify this flag if this call represents an admin changing a user's password.
+
+    @param authority_id      The authority of the user
+
+    @param username          The username of the user
 
     @return An array list with the following entries:
 
@@ -435,9 +440,9 @@ ad_proc -public auth::password::reset {
     </ul>
 } { 
     with_catch errmsg {
-    array set result [auth::password::ResetPassword \
-                          -authority_id $authority_id \
-                          -username $username]
+        array set result [auth::password::ResetPassword \
+                              -authority_id $authority_id \
+                              -username $username]
         
         # We do this so that if there aren't even a password_status in the array, that gets caught below
         set dummy $result(password_status)
@@ -451,7 +456,11 @@ ad_proc -public auth::password::reset {
     # Check the result code and provide canned responses
     switch $result(password_status) {
         ok {
-            if { [exists_and_not_null result(password)] } {
+            if { [exists_and_not_null result(password)] && \
+                     (!$admin_p || [parameter::get \
+                                        -parameter EmailChangedPasswordP \
+                                        -package_id [ad_conn subsite_id] \
+                                        -default 1]) } {
                 # We have retrieved or reset a forgotten password that we should email to the user
                 with_catch errmsg {
                     auth::password::email_password \
@@ -467,7 +476,7 @@ ad_proc -public auth::password::reset {
                     global errorInfo
                     ns_log Error "We had an error sending out email with new password to username $username, authority $authority_id:\n$errorInfo"
                 }
-            } 
+            }
             if { ![exists_and_not_null result(password_message)] } {
                 set result(password_message) [_ acs-subsite.Check_Your_Inbox]
             }

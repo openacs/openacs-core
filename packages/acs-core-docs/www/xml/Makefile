@@ -2,9 +2,12 @@
 # @author Vinod Kurup (vinod@kurup.com)
 # @author Modified by Roberto Mello (rmello@fslc.usu.edu) to have PDF generation
 #         plus refactored it a bit to have rules and dependencies.
+# @author davis@xarg.net Added automatic creation of an XSL link so we don't edit openacs.xsl, 
+#	  added a lint target which runs xmllint, changed pdf generation to use FOP.  Made it 
+#	  work on the mac.  OSX note: xmllint from fink does not work, use /usr/bin/xmllint 
 #
 # @creation-date 2002-08-10
-# @modified-date 2002-09-21
+# @modified-date 2003-12-06
 #
 # This simply copys all the 'files' and 'images'
 #   to the appropriate directory in www so that they are accessible
@@ -15,8 +18,8 @@
 # I'm a Makefile newbie, so feel free to comment/slash/change.
 
 # Paths
-XSLTPROC=/usr/bin/xsltproc
-HTMLDOC=/usr/bin/htmldoc
+XSLTPROC=xsltproc
+HTMLDOC=htmldoc
 
 all: html 
 
@@ -24,6 +27,7 @@ XSL:
 	if [ ! -d XSL -a ! -L XSL ]; then \
 		echo -e "\n\nNo XSL directory here.  I am looking for one...\n"; \
 		for d in \
+	 		/sw/share/xml/docbook-xsl \
 			/usr/share/sgml/docbook/xsl-stylesheets-* \
 			/usr/share/sgml/docbook/xsl-stylesheets \
 			/usr/share/sgml/docbook/stylesheet/xsl/nwalsh; \
@@ -48,17 +52,17 @@ see http://sourceforge.net/projects/docbook/ for the docbook-xsl stylesheets\n";
 
 
 prelim:
-	cp -u images/*.{pdf,png,gif,jpg} ../images/
+	cp images/*.{pdf,png,gif,jpg} ../images/
 
 # put all non-regenerated html in a sub-dir so that we can delete html
 # in the main directory and regenerate
-	cp -u non-xml/*.html ../
+	cp non-xml/*.html ../
 
-	cp -u openacs.css ..
+	cp openacs.css ..
 
 html: prelim XSL
 # adding --nonet --novalid is much faster but generates a bunch of bogus error messages
-	cd .. ; $(XSLTPROC) --nonet --novalid --xinclude xml/openacs.xsl xml/index.xml
+	cd .. ; $(XSLTPROC) --xinclude xml/openacs.xsl xml/index.xml
 
 # I got this to work with FOP 0.20.5 and docbook-xsl 1.62, and Jimi 1.0
 # see README.fop for some notes.
@@ -70,4 +74,4 @@ pdf: XSL
 # In emacs do M-x compile then make lint; then C-x ` to walk through the resulting errors.
 #
 lint: XSL
-	xmllint --xinclude --noout -postvalid index.xml 2>&1 | grep -v 'No declaration for attribute base of element'
+	xmllint --xinclude --noout --postvalid index.xml 2>&1 | grep -v 'No declaration for attribute base of element'

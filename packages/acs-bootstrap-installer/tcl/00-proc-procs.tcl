@@ -393,7 +393,8 @@ $switch_code
 ad_proc -public -deprecated proc_doc { args } {
 
     A synonym for <code>ad_proc</code> (to support legacy code).
-    
+
+    @see ad_proc
 } {
     eval ad_proc $args
 }
@@ -409,7 +410,7 @@ ad_proc -public ad_proc {
 } {
     <p>
     Declare a procedure with the following enhancements
-    over regular Tcl "<tt>proc</tt>":
+    over regular Tcl "<code>proc</code>":
     </p>
     
     <p>
@@ -464,7 +465,7 @@ if {$flush_p} {
 
     <p>
     Here's an example with named parameters, and namespaces (notice the preferred way of
-    declaring namespaces and namespaced procedures). Ignore the "\" in "\@param",
+    declaring namespaces and namespaced procedures). Ignore the \ in "\@param",
     I had to use it so the api-browser wouldn't think the parameter docs were for ad_proc
     itself:
     </p>
@@ -602,7 +603,7 @@ ad_proc -public ad_make_relative_path { path } {
 } -
 
 # procedures for doing type based dispatch
-ad_proc ad_method {
+ad_proc -public ad_method {
     method_name
     type
     argblock
@@ -623,7 +624,7 @@ ad_proc ad_method {
     ad_proc ${method_name}__$type $argblock $docblock $body
 }
 
-ad_proc ad_call_method {
+ad_proc -public ad_call_method {
     method_name
     object_id
     args 
@@ -641,7 +642,7 @@ ad_proc ad_call_method {
     return [apply ${method_name}__[util_memoize "acs_object_type $object_id"] [concat $object_id $args]]
 }
 
-ad_proc ad_dispatch {
+ad_proc -public ad_dispatch {
     method_name
     type
     args 

@@ -18,7 +18,7 @@
 
 
 	<para>
-        OpenACS &version; does not yet work with Oracle 9i
+        OpenACS &version; will install with Oracle 9i but has not been extensively tested so may still have bugs or tuning issues.
 	</para>
 
 	<para>
@@ -155,7 +155,7 @@ $ tar xvf oracle81701.tar</programlisting>
           <computeroutput>startx</computeroutput>
           
           <programlisting>
-joeuser:~$ startx</programlisting>
+[joeuser ~]$ startx</programlisting>
 
         </para></listitem>
 
@@ -164,9 +164,9 @@ joeuser:~$ startx</programlisting>
           Open a terminal window type and login as root 
 
           <programlisting>
-joeuser:~$ su -
+[joeuser ~]$ su -
 Password: ***********
-root:~#</programlisting>
+[root ~]#</programlisting>
 
         </para></listitem>
 
@@ -186,11 +186,11 @@ root:~#</programlisting>
         </para>
 
         <programlisting>
-root:~# groupadd dba
-root:~# groupadd oinstall
-root:~# groupadd oracle
-root:~# useradd -g dba -G oinstall,oracle -m oracle
-root:~# passwd oracle</programlisting>
+[root ~]# groupadd dba
+[root ~]# groupadd oinstall
+[root ~]# groupadd oracle
+[root ~]# useradd -g dba -G oinstall,oracle -m oracle
+[root ~]# passwd oracle</programlisting>
 
         <para>
 
@@ -218,7 +218,7 @@ root:~# passwd oracle</programlisting>
         </para>
 
         <programlisting>
-root:~# mkdir /ora8
+[root ~]# mkdir /ora8
 root:/ora8# cd /ora8
 root:/ora8# mkdir -p m01 m02 m03/oradata/ora8
 root:/ora8# chown -R oracle.dba /ora8
@@ -242,7 +242,7 @@ root:/ora8# exit</programlisting>
             </para>
 
             <programlisting>
-joeuser:~$ su - oracle
+[joeuser ~]$ su - oracle
 Password: ********</programlisting>
           </listitem>
 
@@ -256,7 +256,7 @@ Password: ********</programlisting>
             </para>
 
             <programlisting>
-oracle:~$ emacs .bash_profile</programlisting>
+[oracle ~]$ emacs .bash_profile</programlisting>
 
             <para>
 
@@ -279,7 +279,7 @@ connections from your machine.</programlisting>
             </para>
 
             <programlisting>
-joeuser:~$ xhost +localhost</programlisting>
+[joeuser ~]$ xhost +localhost</programlisting>
 
             <para>
 
@@ -288,8 +288,8 @@ joeuser:~$ xhost +localhost</programlisting>
             </para>
 
             <programlisting>
-oracle:~$ export DISPLAY=localhost:0.0
-oracle:~$ emacs .bash_profile</programlisting>
+[oracle ~]$ export DISPLAY=localhost:0.0
+[oracle ~]$ emacs .bash_profile</programlisting>
 
             <para>            
 
@@ -355,7 +355,7 @@ umask 022</programlisting>
         </para>
         
         <programlisting>
-oracle:~$ exit</programlisting>
+[oracle ~]$ exit</programlisting>
       </listitem>
 
       <listitem><para> 
@@ -370,8 +370,8 @@ oracle:~$ exit</programlisting>
         </para>
 
         <programlisting>
-joeuser:~$ su - oracle
-oracle:~$ env | grep ORA</programlisting>
+[joeuser ~]$ su - oracle
+[oracle ~]$ env | grep ORA</programlisting>
 
         <para>
 
@@ -411,7 +411,7 @@ ORA_NLS33=/ora8/m01/app/oracle/product/8.1.7/ocommon/nls/admin/data</programlist
         </para>
 
         <programlisting>
-oracle:~$ echo $PATH
+[oracle ~]$ echo $PATH
 /bin:/usr/bin:/usr/local/bin:/usr/bin/X11:/usr/X11R6/bin:/home/oracle/bin:/ora8/m01/app/oracle/product/8.1.7/bin</programlisting>
 
         <para>
@@ -437,10 +437,10 @@ oracle:~$ echo $PATH
         </para>
 
         <programlisting>
-joeuser:~$ xhost +localhost
-joeuser:~$ su - oracle
+[joeuser ~]$ xhost +localhost
+[joeuser ~]$ su - oracle
 Password: **********
-oracle:~$ export DISPLAY=localhost:0.0</programlisting>
+[oracle ~]$ export DISPLAY=localhost:0.0</programlisting>
       </listitem>
 
       <listitem><para>
@@ -459,10 +459,10 @@ oracle:~$ export DISPLAY=localhost:0.0</programlisting>
             </para>
 
             <programlisting>
-oracle:~$ su - root
-root:~# mount -t iso9660 /dev/cdrom /mnt/cdrom
-root:~# exit
-oracle:~$ cd /mnt/cdrom</programlisting>
+[oracle ~]$ su - root
+[root ~]# mount -t iso9660 /dev/cdrom /mnt/cdrom
+[root ~]# exit
+[oracle ~]$ cd /mnt/cdrom</programlisting>
           </listitem>
 
           <listitem><para>
@@ -474,7 +474,7 @@ oracle:~$ cd /mnt/cdrom</programlisting>
             </para>
 
             <programlisting>
-oracle:~$ cd /where/oracle/Disk1</programlisting>
+[oracle ~]$ cd /where/oracle/Disk1</programlisting>
           </listitem>
         </itemizedlist>
 
@@ -622,8 +622,8 @@ oracle:/where/oracle/Disk1$ ./runInstaller</programlisting>
                 running the script below
               </para>
             <programlisting>
-joueser:~$ su -
-root:~# ln -s /usr/bin/awk /bin/awk</programlisting>
+[joueser ~]$ su -
+[root ~]# ln -s /usr/bin/awk /bin/awk</programlisting>
           </listitem>
         </itemizedlist>
       </listitem>
@@ -632,15 +632,15 @@ root:~# ln -s /usr/bin/awk /bin/awk</programlisting>
           Open a new terminal window, then type:
         </para>
 
-        <programlisting>joeuser:~$ su -
-root:~# cd /ora8/m01/app/oracle/product/8.1.7
-root:~# ./orainstRoot.sh  
+        <programlisting>[joeuser ~]$ su -
+[root ~]# cd /ora8/m01/app/oracle/product/8.1.7
+[root ~]# ./orainstRoot.sh  
 ; You should see:
 Creating Oracle Inventory pointer file (/etc/oraInst.loc)
 Changing groupname of /ora8/m01/app/oracle/oraInventory to oinstall.
-root:~# mkdir -p /usr/local/java
-root:~# exit
-joeuser:~$ exit</programlisting>
+[root ~]# mkdir -p /usr/local/java
+[root ~]# exit
+[joeuser ~]$ exit</programlisting>
 
       </listitem>
 
@@ -869,11 +869,11 @@ joeuser:~$ exit</programlisting>
             </para>
 
             <programlisting>
-joeuser:~$ su - oracle
+[joeuser ~]$ su - oracle
 Password: *********
-oracle:~$ su
+[oracle ~]$ su
 Password: *********
-root:~# /ora8/m01/app/oracle/product/8.1.7/root.sh
+[root ~]# /ora8/m01/app/oracle/product/8.1.7/root.sh
 ; You should see the following.   
 
 Creating Oracle Inventory pointer file (/etc/oraInst.loc)
@@ -909,8 +909,8 @@ IMPORTANT NOTE: Please delete any log and trace files previously
         </itemizedlist>
 
         <programlisting>
-root:~# exit
-joeuser:~$ exit</programlisting>
+[root ~]# exit
+[joeuser ~]$ exit</programlisting>
       </listitem>
 
       <listitem><para>
@@ -1129,11 +1129,11 @@ joeuser:~$ exit</programlisting>
         </para>
 
         <programlisting>
-joeuser:~$ xhost +localhost
-joeuser:~$ su - oracle
+[joeuser ~]$ xhost +localhost
+[joeuser ~]$ su - oracle
 Password: *********
-oracle:~$ export DISPLAY=localhost:0.0
-oracle:~$ dbassist</programlisting>
+[oracle ~]$ export DISPLAY=localhost:0.0
+[oracle ~]$ dbassist</programlisting>
 
       </listitem>
 
@@ -1298,7 +1298,7 @@ oracle:~$ dbassist</programlisting>
         </para>
 
         <programlisting>
-oracle:~$ emacs /ora8/m01/app/oracle/product/8.1.7/dbs/initora8.ora</programlisting>
+[oracle ~]$ emacs /ora8/m01/app/oracle/product/8.1.7/dbs/initora8.ora</programlisting>
       </listitem>
 
       <listitem><para>
@@ -1348,7 +1348,7 @@ open_cursors = 500</programlisting>
         </para>
 
         <programlisting>
-oracle:~$ cd /ora8/m01/app/oracle/product/8.1.7/assistants/dbca/jlib
+[oracle ~]$ cd /ora8/m01/app/oracle/product/8.1.7/assistants/dbca/jlib
 oracle:/ora8/m01/app/oracle/product/8.1.7/assistants/dbca/jlib$ ./sqlora8.sh</programlisting>
 
         <para>
@@ -1397,7 +1397,7 @@ oracle:/ora8/m01/app/oracle/product/8.1.7/assistants/dbca/jlib$ ./sqlora8.sh</pr
         </para>
 
         <programlisting>
-oracle:~$ cp /tmp/acceptance-sql.txt /tmp/acceptance.sql</programlisting>
+[oracle ~]$ cp /tmp/acceptance-sql.txt /tmp/acceptance.sql</programlisting>
       </listitem>
 
       <listitem><para>        
@@ -1406,7 +1406,7 @@ oracle:~$ cp /tmp/acceptance-sql.txt /tmp/acceptance.sql</programlisting>
         </para>
 
         <programlisting>
-oracle:~$ sqlplus system/manager</programlisting>
+[oracle ~]$ sqlplus system/manager</programlisting>
 
         <para>
           SQL*Plus should startup. If you get an <computeroutput>ORA-01034:
@@ -1415,7 +1415,7 @@ oracle:~$ sqlplus system/manager</programlisting>
           the <computeroutput>oracle</computeroutput> user.</para>
 
         <programlisting>
-oracle:~$ svrmgrl
+[oracle ~]$ svrmgrl
 SVRMGR&gt; connect internal
 SVRMGR&gt; startup</programlisting>
       </listitem>
@@ -1514,8 +1514,8 @@ ORA-01450: maximum key length (758) exceeded</programlisting>
         </para>
 
         <programlisting>
-oracle:~$ cp /tmp/dbstart.txt /ora8/m01/app/oracle/product/8.1.7/bin/dbstart 
-oracle:~$ chmod 755 /ora8/m01/app/oracle/product/8.1.7/bin/dbstart</programlisting>
+[oracle ~]$ cp /tmp/dbstart.txt /ora8/m01/app/oracle/product/8.1.7/bin/dbstart 
+[oracle ~]$ chmod 755 /ora8/m01/app/oracle/product/8.1.7/bin/dbstart</programlisting>
       </listitem>
 
       <listitem><para>
@@ -1573,10 +1573,10 @@ ora8:/ora8/m01/app/oracle/product/8.1.7:Y</programlisting>
         </para>
 
         <programlisting>
-oracle:~$ su -
-root:~# cp /tmp/oracle8i.txt /etc/rc.d/init.d/oracle8i
-root:~# chown root.root /etc/rc.d/init.d/oracle8i
-root:~# chmod 755 /etc/rc.d/init.d/oracle8i</programlisting>
+[oracle ~]$ su -
+[root ~]# cp /tmp/oracle8i.txt /etc/rc.d/init.d/oracle8i
+[root ~]# chown root.root /etc/rc.d/init.d/oracle8i
+[root ~]# chmod 755 /etc/rc.d/init.d/oracle8i</programlisting>
       </listitem>
 
       <listitem><para> 
@@ -1586,7 +1586,7 @@ root:~# chmod 755 /etc/rc.d/init.d/oracle8i</programlisting>
         </para>
 
 <programlisting>
-root:~# /etc/rc.d/init.d/oracle8i stop
+[root ~]# /etc/rc.d/init.d/oracle8i stop
 Oracle 8i auto start/stop
 Shutting Oracle8i:
 Oracle Server Manager Release 3.1.7.0.0 - Production
@@ -1607,7 +1607,7 @@ SVRMGR>
 Server Manager complete.
 Database &quot;ora8&quot; shut down.
       
-root:~# /etc/rc.d/init.d/oracle8i start
+[root ~]# /etc/rc.d/init.d/oracle8i start
 Oracle 8i auto start/stop
 Starting Oracle8i: 
 SQL*Plus: Release 8.1.7.0.0 - Production on Wed Mar 6 17:56:02 2002
@@ -1639,16 +1639,16 @@ Database &quot;ora8&quot; warm started.</programlisting>
         <itemizedlist>
           <listitem><para>Red Hat users:</para>
             <programlisting>
-root:~# cd /etc/rc.d/init.d/                      
-root:~# chkconfig --add oracle8i
-root:~# chkconfig --list oracle8i
+[root ~]# cd /etc/rc.d/init.d/                      
+[root ~]# chkconfig --add oracle8i
+[root ~]# chkconfig --list oracle8i
 ; You should see:
 oracle8i        0:off   1:off   2:off   3:on    4:on    5:on    6:off</programlisting>
           </listitem>
 
           <listitem><para>Debian users:</para>
             <programlisting>
-root:~# update-rc.d oracle8i defaults
+[root ~]# update-rc.d oracle8i defaults
  Adding system startup for /etc/init.d/oracle8i ...
    /etc/rc0.d/K20oracle8i -> ../init.d/oracle8i
    /etc/rc1.d/K20oracle8i -> ../init.d/oracle8i
@@ -1661,7 +1661,7 @@ root:~# update-rc.d oracle8i defaults
 
           <listitem><para>SuSE users:</para>
             <programlisting>
-root:~# cd /etc/rc.d/init.d
+[root ~]# cd /etc/rc.d/init.d
 root:/etc/rc.d/init.d# ln -s /etc/rc.d/init.d/oracle8i K20oracle8i
 root:/etc/rc.d/init.d# ln -s /etc/rc.d/init.d/oracle8i S20oracle8i
 root:/etc/rc.d/init.d# cp K20oracle8i rc0.d
@@ -1681,7 +1681,7 @@ root:/etc/rc.d/init.d# cp S20oracle8i rc5.d
 root:/etc/rc.d/init.d# rm K20oracle8i
 root:/etc/rc.d/init.d# rm S20oracle8i
 root:/etc/rc.d/init.d# cd
-root:~# SuSEconfig
+[root ~]# SuSEconfig
 Started the SuSE-Configuration Tool.
 Running in full featured mode.
 Reading /etc/rc.config and updating the system...
@@ -1739,14 +1739,14 @@ Finished.</programlisting>
         </para>
 
         <programlisting>
-root:~# su - oracle
-oracle:~$ cp /tmp/startlsnr.txt /ora8/m01/app/oracle/product/8.1.7/bin/startlsnr
-oracle:~$ cp /tmp/stoplsnr.txt /ora8/m01/app/oracle/product/8.1.7/bin/stoplsnr    
-oracle:~$ chmod 755 /ora8/m01/app/oracle/product/8.1.7/bin/startlsnr
-oracle:~$ chmod 755 /ora8/m01/app/oracle/product/8.1.7/bin/stoplsnr
-oracle:~$ exit
-root:~# cp /tmp/listener8i.txt /etc/rc.d/init.d/listener8i
-root:~# cd /etc/rc.d/init.d
+[root ~]# su - oracle
+[oracle ~]$ cp /tmp/startlsnr.txt /ora8/m01/app/oracle/product/8.1.7/bin/startlsnr
+[oracle ~]$ cp /tmp/stoplsnr.txt /ora8/m01/app/oracle/product/8.1.7/bin/stoplsnr    
+[oracle ~]$ chmod 755 /ora8/m01/app/oracle/product/8.1.7/bin/startlsnr
+[oracle ~]$ chmod 755 /ora8/m01/app/oracle/product/8.1.7/bin/stoplsnr
+[oracle ~]$ exit
+[root ~]# cp /tmp/listener8i.txt /etc/rc.d/init.d/listener8i
+[root ~]# cd /etc/rc.d/init.d
 root:/etc/rc.d/init.d# chmod 755 listener8i</programlisting>
 
         <para>
@@ -1810,8 +1810,8 @@ The command completed successfully</programlisting>
         </para>
 
         <programlisting>
-root:~# su - oracle
-oracle:~$ sqlplus system/alexisahunk@ora8
+[root ~]# su - oracle
+[oracle ~]$ sqlplus system/alexisahunk@ora8
 
 SQL&gt; select sysdate from dual;
 
@@ -1820,8 +1820,8 @@ SYSDATE
 2002-02-22
 
 SQL&gt; exit
-oracle:~$ exit
-root:~#</programlisting>
+[oracle ~]$ exit
+[root ~]#</programlisting>
 
         <itemizedlist>
           <listitem><para>RedHat users:</para>
@@ -1830,7 +1830,7 @@ root:~#</programlisting>
               <computeroutput>listener8i</computeroutput> script.
             </para>
             <programlisting>
-root:~# cd /etc/rc.d/init.d/
+[root ~]# cd /etc/rc.d/init.d/
 root:/etc/rc.d/init.d# chkconfig --add listener8i
 root:/etc/rc.d/init.d# chkconfig --list listener8i
 listener8i      0:off   1:off   2:off   3:on    4:on    5:on    6:off</programlisting>
@@ -1842,7 +1842,7 @@ listener8i      0:off   1:off   2:off   3:on    4:on    5:on    6:off</programli
               <computeroutput>listener8i</computeroutput> script.
             </para>
             <programlisting>
-root:~# update-rc.d listener8i defaults 21 19
+[root ~]# update-rc.d listener8i defaults 21 19
  Adding system startup for /etc/init.d/listener8i ...
    /etc/rc0.d/K19listener8i -> ../init.d/listener8i
    /etc/rc1.d/K19listener8i -> ../init.d/listener8i
@@ -1865,15 +1865,15 @@ root:~# update-rc.d listener8i defaults 21 19
         </para>
 
         <programlisting>
-root:~# /sbin/shutdown -r -t 0 now</programlisting>
+[root ~]# /sbin/shutdown -r -t 0 now</programlisting>
 
         <para>
           Log back in and ensure that Oracle started automatically. 
         </para>
 
         <programlisting>
-joeuser:~$ su - oracle
-oracle:~$ sqlplus system/alexisahunk@ora8
+[joeuser ~]$ su - oracle
+[oracle ~]$ sqlplus system/alexisahunk@ora8
 
 SQL&gt; exit</programlisting>
       </listitem>
@@ -1937,7 +1937,7 @@ SQL&gt; select sysdate from dual;</programlisting>
     </para>
 
     <programlisting>
-joeuser:~$ svrmgrl
+[joeuser ~]$ svrmgrl
 SVRMGR> connect internal
 Connected.
 SVRMGR> shutdown
@@ -1988,7 +1988,7 @@ export nls_date_format = &#39;YYYY-MM-DD&#39;</programlisting>
             </para>
 
             <programlisting>
-oracle:~$ sqlplus system/changeme</programlisting>
+[oracle ~]$ sqlplus system/changeme</programlisting>
           </listitem>
 
           <listitem><para>            

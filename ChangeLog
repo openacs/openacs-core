@@ -1,0 +1,211 @@
+2004-01-18 18:07  joela
+
+	* packages/acs-core-docs/www/: acs-admin.html,
+	  acs-package-dev.html, aolserver.html, aolserver4.html,
+	  automated-testing-best-practices.html, backup-recovery.html,
+	  bootstrap-acs.html, complete-install.html, credits.html,
+	  cvs-tips.html, database-management.html, db-api-detailed.html,
+	  db-api.html, docbook-primer.html,
+	  eng-standards-constraint-naming.html,
+	  eng-standards-filenaming.html, eng-standards-plsql.html,
+	  eng-standards-versioning.html, ext-auth-requirements.html,
+	  filename.html, form-builder.html, i18n.html, index.html,
+	  individual-programs.html, install-cvs.html,
+	  install-daemontools.html, install-full-text-search.html,
+	  install-php.html, install-qmail.html, install-redhat.html,
+	  install-squirrelmail.html, install-steps.html, ix01.html,
+	  mac-installation.html, maintenance-web.html,
+	  object-identity.html, objects.html, openacs-unpack.html,
+	  openacs.html, oracle.html, packages.html, parties.html,
+	  permissions-tediously-explained.html, permissions.html,
+	  postgres.html, programming-with-aolserver.html,
+	  psgml-for-emacs.html, psgml-mode.html, release-notes-4-5.html,
+	  release-notes-4-6-2.html, release-notes-4-6-3.html,
+	  release-notes-4-6.html, release-notes.html,
+	  releasing-openacs.html, request-processor.html,
+	  requirements-template.html, security-notes.html,
+	  style-guide.html, subsites.html, tcl-doc.html, templates.html,
+	  tutorial-advanced.html, tutorial-database.html,
+	  tutorial-debug.html, tutorial-newpackage.html,
+	  tutorial-pages.html, unix-installation.html,
+	  upgrade-openacs.html, upgrade-overview.html, variables.html,
+	  win2k-installation.html,
+	  files/tutorial/myfirstpackage-create.sql,
+	  files/tutorial/myfirstpackage-create.sql~,
+	  files/tutorial/myfirstpackage-drop.sql,
+	  files/tutorial/myfirstpackage-drop.sql~,
+	  xml/developers-guide/tutorial-db.xml,
+	  xml/developers-guide/tutorial-pages.xml,
+	  xml/engineering-standards/docbook-primer.xml,
+	  xml/install-guide/openacs.xml, xml/install-guide/postgres.xml:
+	  fixed some typos in tutorial, changed tutorial to include some
+	  files in files/tutorial, fixed/simplified service0 unix user
+	  creation; added html versions of squirrelmail and php
+
+2004-01-18 11:36  rmello
+
+	* contrib/packages/classified-ads/: tcl/ads-procs.xql,
+	  www/categories.tcl, www/index.adp: - Fixed bug in ads query -
+	  Fixed wrong call to Tcl functions - Fixed link in index.adp
+
+	  Many of these problems exist because I lost code in a hard drive
+	  crash a few months ago when developing the package.
+
+2004-01-18 04:04  rmello
+
+	* contrib/packages/classified-ads/www/index.tcl: Got rid of spaces
+	  after / in lines. Fixes #1348.
+
+2004-01-17 00:54  vinodk
+
+	*
+	  packages/acs-kernel/sql/postgresql/upgrade/upgrade-5.0.0a1-5.0.0a2.sql:
+	  Upgrade script for auth_driver_params changes
+
+2004-01-16 15:35  joela
+
+	* packages/acs-core-docs/www/tutorial-advanced.html: Simon added
+	  notifications section
+
+2004-01-16 15:27  joela
+
+	*
+	  packages/acs-core-docs/www/xml/developers-guide/tutorial-advanced.xml:
+	  Simon added notifications section
+
+2004-01-16 01:34  vinodk
+
+	*
+	  packages/acs-kernel/sql/postgresql/upgrade/upgrade-5.0d7-5.0d9.sql:
+	  Changes to apm_package_version__delete and
+	  apm_package_version__copy didn't get into an upgrade script
+
+2004-01-15 06:40  marka
+
+	* packages/ecommerce/www/admin/cat/: category-add-0.tcl,
+	  category-add-2.tcl, category-add.tcl, category-delete.tcl,
+	  category.tcl, index.tcl, subcategory-add-0.tcl,
+	  subcategory-add-2.tcl, subcategory-add.tcl,
+	  subcategory-delete.tcl, subcategory.tcl,
+	  subsubcategory-add-0.tcl, subsubcategory-add-2.tcl,
+	  subsubcategory-add.tcl, subsubcategory.tcl: fixed bug #1370
+
+2004-01-15 02:20  jader
+
+	* contrib/packages/project-manager/www/tasks-postgresql.xql: Fix
+	  allows tasks to be viewed from tasks page
+
+2004-01-15 02:20  jader
+
+	* contrib/packages/project-manager/: project-manager.info,
+	  www/add-edit.tcl, www/index-postgresql.xql, www/index.tcl: Now
+	  depends on organizations package.
+
+	  Cosmetic change to add-edit
+
+	  Index page now shows company a project is associated with
+
+	  Task page shows tickets now (instead of not showing them!)
+
+2004-01-15 00:06  dirkg
+
+	* packages/acs-subsite/tcl/group-procs.xql: Fixed Bug #1373 in
+	  ACS-Subsite by using Jade's patch 415
+
+2004-01-14 20:26  jader
+
+	*
+	  contrib/packages/project-manager/www/task-assign-add-edit-postgresql.xql:
+	  Fixed: query for project with multiple revisions didn't work.
+
+2004-01-14 00:10  maltes
+
+	* contrib/packages/survey/: survey.info,
+	  sql/oracle/survey-package-create.sql: Upped the version number.
+
+2004-01-14 00:03  maltes
+
+	* contrib/packages/survey/sql/postgresql/survey-package-create.sql:
+	  Added deletion of branches and conditions if a survey/section has
+	  been removed.
+
+2004-01-13 23:53  maltes
+
+	* contrib/packages/survey/tcl/: survey-procs.tcl, survey-procs.xql:
+	  Fixed the date display for predefined questions, got rid of an
+	  unnecessary DB call and fixed the selection of checkboxes.
+
+2004-01-13 23:45  maltes
+
+	* contrib/packages/survey/www/process-response.tcl: Fixed insertion
+	  for predefined questions into the Database, if the database
+	  record was not already present.
+
+2004-01-13 21:41  maltes
+
+	* contrib/packages/survey/www/: respond-oracle.xql,
+	  respond-postgresql.xql, respond.tcl, respond.xql: Removed
+	  unnecessary queries to tune performance.
+
+2004-01-13 21:30  maltes
+
+	* contrib/packages/survey/www/admin/predefined-question-ae-2.tcl:
+	  Fixed a problem with new-request and an unset action_type.
+
+2004-01-13 21:26  maltes
+
+	* contrib/packages/survey/acs-templating/widget-procs.tcl: Added
+	  answer description to the widget.
+
+2004-01-13 21:23  maltes
+
+	*
+	  contrib/packages/survey/sql/oracle/upgrade/survey-upgrade-0.3d1-0.4.sql:
+	  Wrote upgrade script for block questions.
+
+2004-01-13 21:19  maltes
+
+	* contrib/packages/survey/: sql/oracle/survey-create.sql,
+	  sql/postgresql/survey-create.sql, tcl/survey-procs.tcl,
+	  tcl/survey-procs.xql, www/admin/section-edit-2.tcl,
+	  www/admin/section-edit-2.xql, www/admin/section-edit.tcl,
+	  www/admin/section-edit.xql: Added answer description to block
+	  sections as has been written for AIESEC by Kolja Lehmann.
+
+2004-01-13 20:43  maltes
+
+	* contrib/packages/survey/www/: admin/predefined-question-ae-2.tcl,
+	  respond.tcl: Applied Path 347
+
+2004-01-12 06:16  marka
+
+	* packages/ecommerce/www/: mailing-list-add-2.adp,
+	  mailing-list-add.adp, product-search.adp, shopping-cart.adp:
+	  noquote
+
+2004-01-12 06:03  marka
+
+	* packages/ecommerce/www/category-browse.adp: noquote
+
+2004-01-12 05:47  marka
+
+	* packages/ecommerce/www/contextbar.adp: fixed context bar noquote
+
+2004-01-12 05:23  marka
+
+	* packages/ecommerce/www/doc/ecommerce-setup.adp: fixed admin url
+	  rendering
+
+2004-01-12 04:27  marka
+
+	* packages/ecommerce/www/doc/contextbar.adp: added required noquote
+
+2004-01-12 00:28  vinodk
+
+	* packages/static-pages/static-pages.info: version url must be
+	  unique, otherwise upgrade won't work
+
+2004-01-11 15:55  joela
+
+	* www/global/file-not-found.html: removed word placeholder
+

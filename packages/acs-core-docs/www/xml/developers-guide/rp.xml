@@ -33,9 +33,6 @@ request like <computeroutput>http://someserver.com/notes/somepage.adp</computero
   <imageobject>
     <imagedata fileref="images/rp-flow.gif" format="GIF" align="center"/>
   </imageobject>
-  <textobject>
-    <para>This is an image of the flow in the Request Processor</para>
-  </textobject>
 </mediaobject>
 
 </para>

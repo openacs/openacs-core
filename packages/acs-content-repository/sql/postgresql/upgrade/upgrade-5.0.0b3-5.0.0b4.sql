@@ -448,20 +448,23 @@ declare
   is_assigned__keyword_id             alias for $2;  
   is_assigned__recurse                alias for $3;  -- default ''none''  
   v_ret                               boolean;    
+  v_is_assigned__recurse	      varchar;
 begin
   if is_assigned__recurse is null then 
-	is_assigned__recurse := ''none'';
+	v_is_assigned__recurse := ''none'';
+  else
+      	v_is_assigned__recurse := is_assigned__recurse;	
   end if;
 
   -- Look for an exact match
-  if is_assigned__recurse = ''none'' then
+  if v_is_assigned__recurse = ''none'' then
       return count(*) > 0 from cr_item_keyword_map
        where item_id = is_assigned__item_id
          and keyword_id = is_assigned__keyword_id;
   end if;
 
   -- Look from specific to general
-  if is_assigned__recurse = ''up'' then
+  if v_is_assigned__recurse = ''up'' then
       return count(*) > 0
       where exists (select 1
                     from (select keyword_id from cr_keywords c, cr_keywords c2
@@ -472,7 +475,7 @@ begin
                       and m.item_id = is_assigned__item_id);
   end if;
 
-  if is_assigned__recurse = ''down'' then
+  if v_is_assigned__recurse = ''down'' then
       return count(*) > 0
       where exists (select 1
                     from (select k2.keyword_id

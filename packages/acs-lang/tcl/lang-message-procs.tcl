@@ -430,7 +430,7 @@ ad_proc -private lang::message::edit {
             and    message_key = :message_key
             and    locale = :locale
         "
-        db_dml edit_message_key $sql
+        db_dml edit_message $sql
     }
 }
 

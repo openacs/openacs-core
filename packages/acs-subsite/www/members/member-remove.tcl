@@ -5,20 +5,17 @@ ad_page_contract {
     @creation-date 2003-06-02
     @cvs-id $Id$
 } {
-    rel_id:integer,multiple
+    user_id:integer,multiple
 }
 
 set group_id [application_group::group_id_from_package_id]
 
-ad_require_permission $group_id "admin"
+permission::require_permission -object_id $group_id -privilege "admin"
 
-foreach one_rel_id $rel_id {
-    db_transaction {
-	relation_remove $one_rel_id
-    } on_error {
-	ad_return_error "Error creating the relation" "We got the following error while trying to remove the relation: <pre>$errmsg</pre>"
-	ad_script_abort
-    }
+foreach id $user_id {
+    group::remove_member \
+        -group_id $group_id \
+        -user_id $user_id
 }
 
 ad_returnredirect .

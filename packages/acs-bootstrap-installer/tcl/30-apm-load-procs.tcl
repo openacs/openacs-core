@@ -26,7 +26,7 @@ proc_doc apm_first_time_loading_p {} {
     return [info exists apm_first_time_loading_p]
 }
 
-ad_proc ad_after_server_initialization { name args } {
+ad_proc -public ad_after_server_initialization { name args } {
 
     Registers code to run after server initialization is complete.
 
@@ -37,7 +37,7 @@ ad_proc ad_after_server_initialization { name args } {
     nsv_lappend ad_after_server_initialization . [list name $name script [info script] args $args]
 }
 
-ad_proc apm_guess_file_type { package_key path } {
+ad_proc -public apm_guess_file_type { package_key path } {
 
     Guesses and returns the file type key corresponding to a particular path
     (or an empty string if none is known). <code>$path</code> should be
@@ -370,7 +370,7 @@ ad_proc apm_package_supports_rdbms_p {
     return [expr ![file exists "${package_path}/sql"] || [file exists "${package_path}/sql/[db_type]"]]
 }
 
-ad_proc apm_source { __file } {
+ad_proc -private apm_source { __file } {
     Sources $__file in a clean environment, returning 1 if successful or 0 if not.
     Records that the file has been sourced and stores its mtime in the nsv array
     apm_library_mtime
@@ -394,7 +394,7 @@ ad_proc apm_source { __file } {
 
 # Special boot strap load file routine.  
 
-ad_proc apm_bootstrap_load_file { root_directory file } {
+ad_proc -private apm_bootstrap_load_file { root_directory file } {
     Source a single file during initial bootstrapping and set APM data.
 } {
     ns_log "Notice" "Loading [file tail $root_directory]/$file"
@@ -402,7 +402,7 @@ ad_proc apm_bootstrap_load_file { root_directory file } {
     apm_source "${root_directory}/${file}"
 }
 
-ad_proc apm_bootstrap_load_libraries {
+ad_proc -private apm_bootstrap_load_libraries {
     {-load_tests:boolean 0}
     {-init:boolean}
     {-procs:boolean}

@@ -132,8 +132,6 @@ ad_proc -public template::data::transform::currency { element_ref } {
 
 ad_proc -public template::util::currency::set_property { what currency_list value } {
 
-    # There's no internal error checking, just like the date version ...
-
     # Erase leading zeroes from the value, but make sure that 00
     # is not completely erased
     set value [template::util::leadingTrim $value]
@@ -157,11 +155,22 @@ ad_proc -public template::util::currency::set_property { what currency_list valu
             set new_value [lreplace $currency_list 1 1 $whole_part]
             return [lreplace $new_value 3 3 $fractional_part]
         }
+        default {
+            error "util::currency::property: unknown property: '$what'."
+        }
     }
 }
 
 ad_proc -public template::util::currency::get_property { what currency_list } {
 
+    Return a property of a currency list which was created by a 
+    currency widget.
+
+    @param what the name of the property (see code for allowed values)
+    @param currency_list a currency widget list, usually created with ad_form
+
+
+} {
     # There's no internal error checking, just like the date version ... and
     # of course whole_part might be pounds and fractional_part pfennings ...
 
@@ -218,6 +227,9 @@ ad_proc -public template::util::currency::get_property { what currency_list } {
 
             # Glom everything into one pretty picture
             return "$leading_symbol$whole_part$separator$fractional_part$trailing_money"
+        }
+        default {
+            error "util::currency::property: unknown property: '$what'."
         }
     }
 }
