@@ -21,7 +21,7 @@ namespace eval acs_mail_lite {
         Reliably send an email message.
     } {
         if {![empty_string_p $extraheaders]} {
-            set eh_list [util_ns_set_to_list $extraheaders]
+            set eh_list [util_ns_set_to_list -set $extraheaders]
         } else {
             set eh_list ""
         }
