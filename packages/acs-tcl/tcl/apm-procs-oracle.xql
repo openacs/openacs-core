@@ -160,7 +160,7 @@
 <fullquery name="apm_package_instance_delete.apm_package_instance_delete">
   <querytext>
     begin
-      apm_package.delete(
+      apm_package.del(
 	package_id => :package_id
       );
     end;

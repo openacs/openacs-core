@@ -76,23 +76,23 @@ begin
 end new;                 
 
 -- delete all template relations
-procedure delete (
+procedure del (
   template_id	in cr_templates.template_id%TYPE
 ) is
 begin
 
   delete from cr_type_template_map
-    where template_id = content_template.delete.template_id;
+    where template_id = content_template.del.template_id;
 
   delete from cr_item_template_map
-    where template_id = content_template.delete.template_id;
+    where template_id = content_template.del.template_id;
  
   delete from cr_templates
-    where template_id = content_template.delete.template_id;
+    where template_id = content_template.del.template_id;
 
-  content_item.delete(content_template.delete.template_id);
+  content_item.del(content_template.del.template_id);
 
-end delete;
+end del;
 
 function is_template (
   template_id	in cr_templates.template_id%TYPE

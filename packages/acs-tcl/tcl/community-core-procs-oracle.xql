@@ -31,7 +31,7 @@
 <fullquery name="acs_user::delete.permanent_delete">
       <querytext>
           begin
-              acs_user.delete(
+              acs_user.del(
                   user_id => :user_id
               );
           end;
@@ -41,7 +41,7 @@
 <fullquery name="person::delete.delete_person">      
       <querytext>
 
-	    select person.delete(:person_id) from dual;
+	    select person.del(:person_id) from dual;
 	
       </querytext>
 </fullquery>

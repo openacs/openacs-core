@@ -108,7 +108,7 @@ is
   context_id	in acs_objects.context_id%TYPE default null
  ) return rel_segments.segment_id%TYPE;
 
- procedure delete (
+ procedure del (
     --/** Deletes a relational segment
     -- 
     --    @author Oumi Mehrotra (oumi@arsdigita.com)

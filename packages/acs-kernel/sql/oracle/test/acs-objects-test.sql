@@ -55,7 +55,7 @@ as
 
     procedure new;
 
-    procedure delete;
+    procedure del;
 
     procedure name;
 
@@ -176,7 +176,7 @@ as
 	
     end;
 
-    procedure delete
+    procedure del
     is
     begin
         dbms_output.put_line('Testing delete...');
@@ -190,7 +190,7 @@ as
         );
 
 	-- delete the row.
-	acs_object.delete(object_id => -1001);
+	acs_object.del(object_id => -1001);
 
  	-- verify object not there.
  	utassert.eqtable (

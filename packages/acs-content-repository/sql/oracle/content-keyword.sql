@@ -121,26 +121,26 @@ begin
   return v_id;
 end new;
 
-procedure delete (
+procedure del (
   keyword_id  in cr_keywords.keyword_id%TYPE
 )
 is
   v_item_id integer;
   cursor c_rel_cur is
     select item_id from cr_item_keyword_map 
-    where keyword_id = content_keyword.delete.keyword_id;
+    where keyword_id = content_keyword.del.keyword_id;
 begin
 
   open c_rel_cur;
   loop
     fetch c_rel_cur into v_item_id;
     exit when c_rel_cur%NOTFOUND;
-    item_unassign(v_item_id, content_keyword.delete.keyword_id);
+    item_unassign(v_item_id, content_keyword.del.keyword_id);
   end loop;
   close c_rel_cur;
 
-  acs_object.delete(keyword_id);
-end delete;
+  acs_object.del(keyword_id);
+end del;
 
 procedure item_assign (
   item_id       in cr_items.item_id%TYPE,

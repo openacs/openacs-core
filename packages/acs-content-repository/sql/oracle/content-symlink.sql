@@ -105,16 +105,16 @@ begin
 end new;
 
 
-procedure delete (
+procedure del (
   symlink_id	in cr_symlinks.symlink_id%TYPE
 ) is
 begin
 
   delete from cr_symlinks
-    where symlink_id = content_symlink.delete.symlink_id;
+    where symlink_id = content_symlink.del.symlink_id;
 
-  content_item.delete(content_symlink.delete.symlink_id);
-end delete;
+  content_item.del(content_symlink.del.symlink_id);
+end del;
 
 
 

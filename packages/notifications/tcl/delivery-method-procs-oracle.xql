@@ -6,7 +6,7 @@
     <fullquery name="notification::delivery::delete.delete">
         <querytext>
             begin
-                notification_delivery_method.delete(:delivery_method_id);
+                notification_delivery_method.del(:delivery_method_id);
             end;
         </querytext>
     </fullquery>

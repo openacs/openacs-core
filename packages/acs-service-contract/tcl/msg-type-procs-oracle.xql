@@ -17,7 +17,7 @@
   <fullquery name="acs_sc::msg_type::delete.delete_by_id">
     <querytext>
         begin
-            acs_sc_msg_type.delete(
+            acs_sc_msg_type.del(
                 msg_type_id => :msg_type_id
             );
         end;
@@ -27,7 +27,7 @@
   <fullquery name="acs_sc::msg_type::delete.delete_by_name">
     <querytext>
         begin
-            acs_sc_msg_type.delete(
+            acs_sc_msg_type.del(
                 msg_type_name => :name
             );
         end;

@@ -816,7 +816,7 @@ ad_proc -public apm_parameter_unregister {
 	where parameter_id = :parameter_id;
 	delete from apm_parameters 
 	where parameter_id = :parameter_id;
-	acs_object.delete(:parameter_id);
+	acs_object.del(:parameter_id);
 	end;
     }   
 }

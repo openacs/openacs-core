@@ -62,7 +62,7 @@ as
         msg		in journal_entries.msg%TYPE default null
     ) return journal_entries.journal_id%TYPE;
 
-    procedure delete(
+    procedure del (
 	journal_id	in journal_entries.journal_id%TYPE
     );
 
@@ -108,14 +108,14 @@ as
         return v_journal_id;
     end new;
 
-    procedure delete(
+    procedure del (
 	journal_id	in journal_entries.journal_id%TYPE
     )
     is
     begin
-	delete from journal_entries where journal_id = journal_entry.delete.journal_id;
-	acs_object.delete(journal_entry.delete.journal_id);
-    end delete;
+	delete from journal_entries where journal_id = journal_entry.del.journal_id;
+	acs_object.del(journal_entry.del.journal_id);
+    end del;
 
     procedure delete_for_object(
 	object_id       in acs_objects.object_id%TYPE
@@ -125,7 +125,7 @@ as
 	    select journal_id from journal_entries where object_id = delete_for_object.object_id;
     begin
         for journal_rec in journal_cur loop
-	    journal_entry.delete(journal_rec.journal_id);
+	    journal_entry.del(journal_rec.journal_id);
 	end loop;
     end delete_for_object;
 

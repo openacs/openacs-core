@@ -68,7 +68,7 @@ as
 
   -- Delete a site node.
 
-  procedure delete (
+  procedure del (
     node_id             in site_nodes.node_id%TYPE
   );
 
@@ -139,15 +139,15 @@ as
      return v_node_id;
   end;
 
-  procedure delete (
+  procedure del (
     node_id             in site_nodes.node_id%TYPE
   )
   is
   begin
     delete from site_nodes
-    where node_id = site_node.delete.node_id;
+    where node_id = site_node.del.node_id;
 
-    acs_object.delete(node_id);
+    acs_object.del(node_id);
   end;
 
   function find_pattern (

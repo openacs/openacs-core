@@ -261,7 +261,7 @@ as
   context_id	in acs_objects.context_id%TYPE default null
  ) return parties.party_id%TYPE;
 
- procedure delete (
+ procedure del (
   party_id	in parties.party_id%TYPE
  );
 
@@ -310,13 +310,13 @@ as
   return v_party_id;
  end new;
 
- procedure delete (
+ procedure del (
   party_id	in parties.party_id%TYPE
  )
  is
  begin
-  acs_object.delete(party_id);
- end delete;
+  acs_object.del(party_id);
+ end del;
 
  function name (
   party_id	in parties.party_id%TYPE
@@ -392,7 +392,7 @@ as
   context_id	in acs_objects.context_id%TYPE default null
  ) return persons.person_id%TYPE;
 
- procedure delete (
+ procedure del (
   person_id	in persons.person_id%TYPE
  );
 
@@ -447,16 +447,16 @@ as
   return v_person_id;
  end new;
 
- procedure delete (
+ procedure del (
   person_id	in persons.person_id%TYPE
  )
  is
  begin
   delete from persons
-  where person_id = person.delete.person_id;
+  where person_id = person.del.person_id;
 
-  party.delete(person_id);
- end delete;
+  party.del(person_id);
+ end del;
 
  function name (
   person_id	in persons.person_id%TYPE
@@ -650,7 +650,7 @@ as
   user_id	in users.user_id%TYPE
  );
 
- procedure delete (
+ procedure del (
   user_id	in users.user_id%TYPE
  );
 
@@ -753,19 +753,19 @@ as
     where user_id = unapprove_email.user_id;
  end unapprove_email;
 
- procedure delete (
+ procedure del (
   user_id	in users.user_id%TYPE
  )
  is
  begin
   delete from user_preferences
-  where user_id = acs_user.delete.user_id;
+  where user_id = acs_user.del.user_id;
 
   delete from users
-  where user_id = acs_user.delete.user_id;
+  where user_id = acs_user.del.user_id;
 
-  person.delete(user_id);
- end delete;
+  person.del(user_id);
+ end del;
 
 end acs_user;
 /

@@ -17,7 +17,7 @@
 
     <fullquery name="membership_rel::change_state.delete">
         <querytext>
-            begin membership_rel.deleted(rel_id => :rel_id); end;
+            begin membership_rel.del(rel_id => :rel_id); end;
         </querytext>
     </fullquery>
 

@@ -406,7 +406,7 @@ as
     creation_ip         in acs_objects.creation_ip%TYPE default null
   ) return composition_rels.rel_id%TYPE;
 
-  procedure delete (
+  procedure del (
     rel_id      in composition_rels.rel_id%TYPE
   );
 
@@ -457,7 +457,7 @@ as
     rel_id      in membership_rels.rel_id%TYPE
   );
 
-  procedure delete (
+  procedure del (
     rel_id      in membership_rels.rel_id%TYPE
   );
 
@@ -483,7 +483,7 @@ as
     creation_ip         in acs_objects.creation_ip%TYPE default null
   ) return admin_rels.rel_id%TYPE;
 
-  procedure delete (
+  procedure del (
     rel_id      in admin_rels.rel_id%TYPE
   );
 
@@ -510,7 +510,7 @@ is
   context_id	in acs_objects.context_id%TYPE default null
  ) return groups.group_id%TYPE;
 
- procedure delete (
+ procedure del (
    group_id     in groups.group_id%TYPE
  );
 

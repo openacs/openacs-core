@@ -88,6 +88,8 @@ end;
 /
 show errors
 
+--alter trigger membership_rels_in_tr disable;
+
 create or replace trigger membership_rels_del_tr
 before delete on membership_rels
 for each row
@@ -216,6 +218,8 @@ begin
 end;
 /
 show errors
+
+--alter trigger composition_rels_in_tr disable;
 
 --
 -- TO DO: See if this can be optimized now that the member and component
@@ -354,12 +358,12 @@ as
     return v_rel_id;
   end;
 
-  procedure delete (
+  procedure del (
     rel_id      in composition_rels.rel_id%TYPE
   )
   is
   begin
-    acs_rel.delete(rel_id);
+    acs_rel.del(rel_id);
   end;
 
   function check_path_exists_p (
@@ -585,12 +589,12 @@ as
     where rel_id = deleted.rel_id;
   end;
 
-  procedure delete (
+  procedure del (
     rel_id      in membership_rels.rel_id%TYPE
   )
   is
   begin
-    acs_rel.delete(rel_id);
+    acs_rel.del(rel_id);
   end;
 
   function check_index (
@@ -710,12 +714,12 @@ as
     return v_rel_id;
   end;
 
-  procedure delete (
+  procedure del (
     rel_id      in admin_rels.rel_id%TYPE
   )
   is
   begin
-    membership_rel.delete(rel_id);
+    membership_rel.del(rel_id);
   end;
 
 end admin_rel;
@@ -785,7 +789,7 @@ is
  end new;
 
 
- procedure delete (
+ procedure del (
     group_id     in groups.group_id%TYPE
   )
   is
@@ -794,9 +798,9 @@ is
    -- Delete all segments defined for this group
    for row in (select segment_id 
                  from rel_segments 
-                where group_id = acs_group.delete.group_id) loop
+                where group_id = acs_group.del.group_id) loop
 
-       rel_segment.delete(row.segment_id);
+       rel_segment.del(row.segment_id);
 
    end loop;
 
@@ -804,13 +808,13 @@ is
    for row in (select r.rel_id, t.package_name
                  from acs_rels r, acs_object_types t
                 where r.rel_type = t.object_type
-                  and (r.object_id_one = acs_group.delete.group_id
-                       or r.object_id_two = acs_group.delete.group_id)) loop
-      execute immediate 'begin ' ||  row.package_name || '.delete(' || row.rel_id || '); end;';
+                  and (r.object_id_one = acs_group.del.group_id
+                       or r.object_id_two = acs_group.del.group_id)) loop
+      execute immediate 'begin ' ||  row.package_name || '.del(' || row.rel_id || '); end;';
    end loop;
  
-   party.delete(group_id);
- end delete;
+   party.del(group_id);
+ end del;
 
  function name (
   group_id      in groups.group_id%TYPE

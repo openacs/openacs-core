@@ -159,12 +159,12 @@ namespace eval group {
                          where segs.segment_id = cons.required_rel_segment
                            and segs.group_id = :group_id) loop
 
-                rel_segment.delete(row.constraint_id);
+                rel_segment.del(row.constraint_id);
 
             end loop;
 
 	    -- delete the actual group
-	    ${package_name}.delete(:group_id); 
+	    ${package_name}.del(:group_id); 
 	  END;
         "
 

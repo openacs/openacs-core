@@ -199,15 +199,15 @@ as
 
   end new;
 
-  procedure delete (
+  procedure del (
     $id_column      in ${table_name}.${id_column}%TYPE
   )
   is 
   begin
 
-    ${supertype_package_name}.delete( $package_name.delete.$id_column );
+    ${supertype_package_name}.del( $package_name.del.$id_column );
 
-  end delete;
+  end del;
 
 end ${package_name};
     
@@ -229,7 +229,7 @@ create or replace package $package_name as
 		 $object_type]]
  ) return ${table_name}.${id_column}%TYPE;
 
-  procedure delete (
+  procedure del (
     $id_column      in ${table_name}.${id_column}%TYPE
   );
 END ${package_name};

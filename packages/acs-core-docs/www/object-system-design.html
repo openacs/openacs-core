@@ -580,7 +580,7 @@ Realistically however, limitations in PL/SQL and Oracle will make it hard to
 build generic procedures for doing large scale queries in the object system,
 so developers who need to do this will probably have to be fairly familiar
 with the data model at a lower level.</p><p>The function <tt>acs_object.new()</tt> makes a new object for you. The
-function <tt>acs_object.delete()</tt> deletes an object. As before, this
+function <tt>acs_object.del()</tt> deletes an object. As before, this
 is an abbreviated interface with all the long type specs removed. See the
 data model or developer's guide for the full interface.</p><pre class="programlisting">
 
@@ -851,7 +851,7 @@ group:</p><pre class="programlisting">
     delete from membership_rels
     where rel_id = membership_rel.delete.rel_id;
 
-    acs_rel.delete(rel_id);
+    acs_rel.del(rel_id);
   end;
 </tt>
 

@@ -66,17 +66,17 @@ begin
 
 end new;
 
-procedure delete (
+procedure del (
   extlink_id	in cr_extlinks.extlink_id%TYPE
 ) is
 begin
 
   delete from cr_extlinks
-    where extlink_id = content_extlink.delete.extlink_id;
+    where extlink_id = content_extlink.del.extlink_id;
 
-  content_item.delete(content_extlink.delete.extlink_id);
+  content_item.del(content_extlink.del.extlink_id);
 
-end delete;
+end del;
 
 function is_extlink (
   item_id	 in cr_items.item_id%TYPE

@@ -57,7 +57,7 @@ is
   context_id	in acs_objects.context_id%TYPE default null
  ) return application_groups.group_id%TYPE;
 
- procedure delete (
+ procedure del (
    group_id     in application_groups.group_id%TYPE
  );
 
@@ -112,15 +112,15 @@ is
  end new;
 
 
- procedure delete (
+ procedure del (
     group_id     in application_groups.group_id%TYPE
  )
  is
  begin
 
-   acs_group.delete(group_id); 
+   acs_group.del(group_id); 
 
- end delete;
+ end del;
 
  function group_id_from_package_id (
    package_id    in application_groups.group_id%TYPE,

@@ -149,7 +149,7 @@ as
   -- 
   -- Be careful, cannot be undone (easily)
   --*/
-  procedure delete (
+  procedure del (
     item_id		in cr_items.item_id%TYPE
   );
 
@@ -307,12 +307,12 @@ as
   is
 	v_content	cr_files_to_delete.path%TYPE default null;
   begin
-    content_revision.delete (
+    content_revision.del (
       revision_id => revision_id
     );
   end delete_revision;
   
-  procedure delete (
+  procedure del (
     item_id		in cr_items.item_id%TYPE
   )
   is 
@@ -323,7 +323,7 @@ as
       from
         cr_revisions
       where
-        item_id = image.delete.item_id
+        item_id = image.del.item_id
       order by revision_id asc;
 
       -- order by used in cursur so latest revision will be deleted last
@@ -336,10 +336,10 @@ as
       );
     end loop;
 
-    content_item.delete (
+    content_item.del (
       item_id => item_id
     );
-  end delete;
+  end del;
     
 end image;
 /

@@ -39,7 +39,7 @@ begin
     while (v_object_id > 0) loop
          delete from acs_permissions where object_id = v_object_id;
 
-        acs_object.delete(
+        acs_object.del(
                 v_object_id
         );
 

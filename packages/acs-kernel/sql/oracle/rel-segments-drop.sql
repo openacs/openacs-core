@@ -8,7 +8,7 @@
 
 begin
     for r in (select segment_id from rel_segments) loop
-	rel_segment.delete(r.segment_id);
+	rel_segment.del(r.segment_id);
     end loop;
 
     acs_object_type.drop_type('rel_segment');

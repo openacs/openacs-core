@@ -93,7 +93,7 @@ as
     return integer
     is
     begin
-        acs_object.delete(delete_authority_id);
+        acs_object.del(delete_authority_id);
 
         return 0;
     end del;

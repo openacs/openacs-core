@@ -13,7 +13,7 @@ begin
     from   acs_reference_repositories
     where  lower(table_name) = 'timezones';
 
-    acs_reference.delete(v_repository_id);
+    acs_reference.del(v_repository_id);
 end;
 /
 show errors;

@@ -43,7 +43,7 @@
 <fullquery name="member_deleted">
       <querytext>
 
-                       begin membership_rel.deleted( rel_id => :rel_id ); end;
+                       begin membership_rel.del( rel_id => :rel_id ); end;
       </querytext>
 </fullquery>
 

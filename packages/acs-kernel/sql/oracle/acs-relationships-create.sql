@@ -406,7 +406,7 @@ as
     creation_ip		in acs_objects.creation_ip%TYPE default null
   ) return acs_rels.rel_id%TYPE;
 
-  procedure delete (
+  procedure del (
     rel_id	in acs_rels.rel_id%TYPE
   );
 
@@ -447,12 +447,12 @@ as
      return v_rel_id;
   end;
 
-  procedure delete (
+  procedure del (
     rel_id	in acs_rels.rel_id%TYPE
   )
   is
   begin
-    acs_object.delete(rel_id);
+    acs_object.del(rel_id);
   end;
 
 end;

@@ -882,5 +882,3 @@ begin
 end;
 /
 show errors
-
-

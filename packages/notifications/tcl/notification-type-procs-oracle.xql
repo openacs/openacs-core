@@ -6,7 +6,7 @@
     <fullquery name="notification::type::delete.delete_notification_type">
         <querytext>
           begin
-            notification_type.delete(:type_id);
+            notification_type.del(:type_id);
           end;
         </querytext>
     </fullquery>

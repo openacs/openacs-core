@@ -28,7 +28,7 @@
  
 <fullquery name="relation_remove.relation_delete">      
       <querytext>
-      begin ${package_name}.delete(:rel_id); end;
+      begin ${package_name}.del(:rel_id); end;
       </querytext>
 </fullquery>
 

@@ -535,7 +535,7 @@ ad_proc -public db_exec_plsql {{ -dbn "" } statement_name sql args } {
     <pre>
     # Oracle:
     db_exec_plsql delete_note {
-        begin  note.delete(:note_id);  end;
+        begin  note.del(:note_id);  end;
     }
 
     # PostgreSQL:
@@ -587,9 +587,9 @@ ad_proc -public db_exec_plsql {{ -dbn "" } statement_name sql args } {
     # Oracle:
     db_exec_plsql delete_note {
         begin
-        note.delete(:note_id);
-        note.delete(:another_note_id);
-        note.delete(:yet_another_note_id);
+        note.del(:note_id);
+        note.del(:another_note_id);
+        note.del(:yet_another_note_id);
         end;
     }
 
@@ -619,7 +619,7 @@ ad_proc -public db_exec_plsql {{ -dbn "" } statement_name sql args } {
     &lt;fullquery name="delete_note">      
       &lt;querytext>
         begin
-        note.delete(:note_id);
+        note.del(:note_id);
         end;
       &lt;/querytext>
     &lt;/fullquery></pre>

@@ -47,7 +47,7 @@ is
   return v_segment_id;
  end new;
 
- procedure delete (
+ procedure del (
    segment_id     in rel_segments.segment_id%TYPE
  )
  is
@@ -56,15 +56,15 @@ is
    -- remove all constraints on this segment
    for row in (select constraint_id 
                  from rel_constraints 
-                where rel_segment = rel_segment.delete.segment_id) loop
+                where rel_segment = rel_segment.del.segment_id) loop
 
-       rel_constraint.delete(row.constraint_id);
+       rel_constraint.del(row.constraint_id);
 
    end loop;
 
-   party.delete(segment_id);
+   party.del(segment_id);
 
- end delete;
+ end del;
 
  -- EXPERIMENTAL / UNSTABLE -- use at your own risk
  --
