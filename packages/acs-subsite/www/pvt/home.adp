@@ -9,7 +9,7 @@
 
 <if @form_request_p@ true>
   <p>
-    <b>&raquo;</b> <a href="../user/password-update?return_url=@pvt_home_url@">#acs-subsite.Change_my_Password#</a>
+    <b>&raquo;</b> <a href="../user/password-update">#acs-subsite.Change_my_Password#</a>
   </p>
 
   <p>
