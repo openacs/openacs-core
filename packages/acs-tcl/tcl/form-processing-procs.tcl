@@ -927,7 +927,7 @@ ad_proc -public ad_form {
                     }            
                 }
             }
-            set values(__key_signature) [ad_sign "$values($key_name):$form_name"]
+            set values(__key_signature) [ad_sign -- "$values($key_name):$form_name"]
         }
 
         foreach element_name $properties(element_names) {
