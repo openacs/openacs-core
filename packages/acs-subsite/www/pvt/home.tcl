@@ -58,7 +58,7 @@ ad_form -name user_info -cancel_url [ad_conn url] -mode display -form {
     }
     {url:text,optional
         {label "Home Page"}
-        {html {size 80}}
+        {html {size 50}}
     }
     {bio:text(textarea),optional
         {label "About yourself"}
