@@ -372,11 +372,16 @@ if parameter_true $do_checkout; then
     if parameter_true $use_daemontools && ! [ -e $svscanroot ]; then
         # Create a daemontools directory
 	# prevent it from autostarting when linked
-	echo "$(date): Creating daemontools directory"
+        if [ ! -d $svscan_sourcedir ]; then
+            echo "$(date): ABORTING: Failed to create daemontools symlink $svscan_sourcedir"
+            exit -1
+        fi
+	echo "$(date): Linking $svscan_sourcedir from $svscanroot"
 	touch $svscan_sourcedir/down
-	ln -s $svscan_sourcedir $svscanroot
+	ln -s $svscan_sourcedir $svscanroot 
+
         # allow svscan to start
-        echo "$(date): Waiting for 10 seconds for svscan to come up."
+        echo "$(date): Waiting for 10 seconds for svscan to find the new link."
         sleep 10
         echo "$(date): supervise status is: $($svc_bindir/svstat ${svscanroot})"	
         echo "$(date): daemontools errors: : $(ps -auxw | grep readproctitle)"
@@ -413,6 +418,9 @@ if parameter_true $do_checkout; then
     echo "$(date): Setting permissions and ownership for files under ${serverroot}"
     chown -R ${aolserver_user}.${aolserver_group} ${serverroot}
     chmod -R go+rwX ${serverroot}
+else
+    echo "$(date): Proceeding without checkout.  This assumes that you have a full working site already set up at ${serverroot}, including correctly configured ${serverroot}/etc/config.tcl and ${svscan_sourcedir}"
+
 fi
 
 #
@@ -444,11 +452,16 @@ else
 fi
 
 # Wait in a finite loop for the server to become responsive
+# but first wait just a few seconds, since this startup is usually very quick
+sleep 4
+
+# prep for the test
 wget_test=${server_url}/SYSTEM/success
 if [ -f ${script_path}/success ]; then
     rm ${script_path}/success
 fi
 x=0
+
 while test "$x" -lt $startup_loop_count ; do
 
     # check for static file
