@@ -1,13 +1,12 @@
 <?xml version="1.0"?>
 <queryset>
 
-<fullquery name="unused">      
-      <querytext>
-      select count(email)
-from parties where email = lower(:email)
-and party_id <> :user_id
-      </querytext>
+<fullquery name="admin_name">      
+   <querytext>
+      select first_names || ' ' || last_name
+      from persons
+      where person_id = :admin_user_id
+   </querytext>
 </fullquery>
-
  
 </queryset>

@@ -36,6 +36,14 @@ as a user of <a href="index">@system_name@</a>
   offer to email it to you.
 
 </if>
+<else>
+  <h3>Security</h3>
+
+  We will generate and send to you a random password when your registration
+  is confirmed. Once you login, you can change your password.
+  <input type="hidden" name="password" value="somevalue">
+  <input type="hidden" name="password_confirmation" value="othervalue">
+</else>
 
 <h3>About You</h3>
 

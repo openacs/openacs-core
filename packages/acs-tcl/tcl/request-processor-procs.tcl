@@ -385,6 +385,15 @@ ad_proc -private rp_filter { why } {
     # End of patch "hostname-based subsites"
     # -------------------------------------------------------------------------
 
+    # DRB: a bug in ns_conn causes urlc to be set to one and urlv to be set to
+    # {} if you hit the site with the host name alone.  This confuses code that
+    # expects urlc to be set to zero and the empty list.  This bug is probably due
+    # to changes in list handling in Tcl 8x vs. Tcl 7x.
+
+    if { [ad_conn urlc] == 1 && [lindex [ad_conn urlv] 0] == "" } {
+        ad_conn -set urlc 0
+        ad_conn -set urlv [list]
+    }
 
     rp_debug -ns_log_level debug -debug t "rp_filter: setting up request: [ns_conn method] [ns_conn url] [ns_conn query]"
 

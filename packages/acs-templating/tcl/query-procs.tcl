@@ -572,7 +572,7 @@ ad_proc -private template::query::flush_cache { cache_match } {
 # Perform get/set operations on a multirow datasource
 
 ad_proc -public template::multirow { op name args } {
-    @param op Multirow datasource operation: create, extend, append, size, get, set
+    @param op Multirow datasource operation: create, extend, append, size, get, set, foreach
     @param name Name of the multirow datasource
     @param args optional args
 } {  
@@ -588,7 +588,7 @@ ad_proc -public template::multirow { op name args } {
     extend {
       upvar $name:columns columns
       foreach column_name $args {
-	lappend columns $column_name
+        lappend columns $column_name
       }
     }
 
@@ -596,12 +596,12 @@ ad_proc -public template::multirow { op name args } {
       upvar \#[adp_level] $name:rowcount rowcount $name:columns columns
       incr rowcount
       upvar \#[adp_level] $name:$rowcount row
-
+      
       for { set i 0 } { $i < [llength $columns] } { incr i } {
-	
-	set key [lindex $columns $i]
-	set value [lindex $args $i];	#(!) missing columns are silently empty
-	set row($key) $value
+        
+        set key [lindex $columns $i]
+        set value [lindex $args $i];	#(!) missing columns are silently empty
+        set row($key) $value
       }
       set row(rownum) $rowcount
     }
@@ -609,45 +609,107 @@ ad_proc -public template::multirow { op name args } {
     size {
       upvar \#[adp_level] $name:rowcount rowcount
       if { [template::util::is_nil rowcount] } {
-	error "malformed multirow datasource - $name"
+        error "malformed multirow datasource - $name"
       }
       return $rowcount
     }
-  
+    
     get {
-
+      
       set index [lindex $args 0]
       set column [lindex $args 1]
       # Set an array reference if no column is specified
       if { [string equal $column {}] } {
         uplevel "upvar \#[adp_level] $name:$index $name"
       } else {
-      # If a column is specified, just return the value for it
+        # If a column is specified, just return the value for it
         upvar \#[adp_level] $name:$index arr
         return $arr($column)
       }
     }
-
+    
     set {
-
+      
       set index [lindex $args 0]
       set column [lindex $args 1]
       set value [lindex $args 2]
-
+      
       if { [string equal $column {}] } {
         error "No column specified to template::multirow set"
       }
-
+      
       # Mutate the value
       upvar \#[adp_level] $name:$index arr
       set arr($column) $value
       return $arr($column)
       
     } 
+    
+    foreach {
+      set code_block [lindex $args 0]
+      
+      upvar \#[adp_level] $name:rowcount rowcount
+
+      upvar \#[adp_level] $name:columns columns
+
+      for { set i 1 } { $i <= $rowcount } { incr i } {
+        # Pull values into variables (and into the array - aks),
+        # evaluate the code block, and pull values back out to
+        # the array.
+        
+        upvar \#[adp_level] $name:$i row
+
+        foreach column_name $columns {
+          upvar \#[adp_level] $column_name column_value
+          if { [info exists row($column_name)] } {
+            set column_value $row($column_name)
+          }
+        }
+        
+        # Also set the special var __rownum
+        upvar \#[adp_level] __rownum __rownum
+        set __rownum $row(rownum)
+
+        set errno [catch { uplevel \#[adp_level] $code_block } error]
+
+        switch $errno {
+          0 {
+            # TCL_OK
+          }
+          1 {
+            # TCL_ERROR
+            global errorInfo errorCode
+            error $error $errorInfo $errorCode
+          }
+          2 {
+            # TCL_RETURN
+            error "Cannot return from inside template::multirow foreach loop"
+          }
+          3 {
+            # TCL_BREAK
+            break
+          }
+          4 {
+            # TCL_CONTINUE - just ignore and continue looping.
+          }
+          default {
+            error "template::multirow foreach: Unknown return code: $errno"
+          }
+        }
+
+        # Pull the variables into the array.
+        foreach column_name $columns {
+          upvar \#[adp_level] $column_name column_value
+          if { [info exists column_value] } {
+            set row($column_name) $column_value
+          }
+        }
+      }
+    }
 
     default {
-      error "Unknown op $op in template::multirow.  
-             Must be create, append, get, set or size."
+      error "Unknown op $op in template::multirow.
+      Must be create, extend, append, get, set, size, or foreach."
     }
   }
 }

@@ -82,7 +82,7 @@ as
         file_name     in cr_items.name%TYPE,
         title         in cr_revisions.title%TYPE        default null,
         description   in cr_revisions.description%TYPE  default null,
-        mime_type     in cr_revisions.mime_type%TYPE,
+        mime_type     in cr_revisions.mime_type%TYPE    default 'text/plain',
         content       in cr_revisions.content%TYPE      default null,
         creation_date in acs_objects.creation_date%TYPE default sysdate,
         creation_user in acs_objects.creation_user%TYPE default null,
@@ -95,7 +95,7 @@ as
         file_id       in cr_items.item_id%TYPE,
         title         in cr_revisions.title%TYPE        default null,
         description   in cr_revisions.description%TYPE  default null,
-        mime_type     in cr_revisions.mime_type%TYPE,
+        mime_type     in cr_revisions.mime_type%TYPE    default 'text/plain',
         content       in cr_revisions.content%TYPE      default null,
         creation_date in acs_objects.creation_date%TYPE default sysdate,
         creation_user in acs_objects.creation_user%TYPE default null,
@@ -113,7 +113,7 @@ as
         file_name     in cr_items.name%TYPE,
         title         in cr_revisions.title%TYPE        default null,
         description   in cr_revisions.description%TYPE  default null,
-        mime_type     in cr_revisions.mime_type%TYPE,
+        mime_type     in cr_revisions.mime_type%TYPE	default 'text/plain',
         content       in cr_revisions.content%TYPE      default null,
         width         in images.width%TYPE              default null,
         height        in images.height%TYPE             default null,
@@ -128,7 +128,7 @@ as
         image_id      in cr_items.item_id%TYPE,
         title         in cr_revisions.title%TYPE        default null,
         description   in cr_revisions.description%TYPE  default null,
-        mime_type     in cr_revisions.mime_type%TYPE,
+        mime_type     in cr_revisions.mime_type%TYPE	default 'text/plain',
         content       in cr_revisions.content%TYPE      default null,
         width         in images.width%TYPE              default null,
         height        in images.height%TYPE             default null,
@@ -143,7 +143,7 @@ as
     );
 
     function new_extlink (
-        name          in cr_items.name%TYPE,
+        name          in cr_items.name%TYPE		default null,
         extlink_id    in cr_extlinks.extlink_id%TYPE    default null,
         url           in cr_extlinks.url%TYPE,
         label         in cr_extlinks.label%TYPE         default null,
@@ -179,7 +179,7 @@ as
     function new (
         message_id    in acs_messages.message_id%TYPE   default null,
         reply_to      in acs_messages.reply_to%TYPE     default null,
-        sent_date     in acs_messages.sent_date%TYPE    default null,
+        sent_date     in acs_messages.sent_date%TYPE    default sysdate,
         sender        in acs_messages.sender%TYPE       default null,
         rfc822_id     in acs_messages.rfc822_id%TYPE    default null,
         title         in cr_revisions.title%TYPE        default null,

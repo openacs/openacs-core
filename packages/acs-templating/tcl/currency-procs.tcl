@@ -128,28 +128,86 @@ ad_proc -public template::util::currency::set_property { what currency_list valu
     # is not completely erased
     set value [template::util::leadingTrim $value]
 
+    set format [lindex $currency_list 5]
+
     switch $what {
         sql_number {
-            set value_parts [split $value "."]
-            set new_value [lreplace $currency_list 1 1 [lindex $value_parts 0]]
-            return [lreplace $new_value 3 3 [lindex $value_parts 1]]
+
+            if { [empty_string_p $value]} {
+                return ""
+            }
+
+            foreach {whole_part fractional_part} [split $value "."] {
+                # Make sure we have at least one leading digit, i.e. zero
+                set whole_part "[string range "0" [string length $whole_part] end]$whole_part"
+
+                # Chop off trailing digits beyond those called for by the given format
+                set fractional_part "[string range $fractional_part 0 [expr {[lindex $format 3] - 1}]]"
+            }
+            set new_value [lreplace $currency_list 1 1 $whole_part]
+            return [lreplace $new_value 3 3 $fractional_part]
         }
     }
 }
 
 ad_proc -public template::util::currency::get_property { what currency_list } {
 
-    # There's no internal error checking, just like the date version ...
+    # There's no internal error checking, just like the date version ... and
+    # of course whole_part might be pounds and fractional_part pfennings ...
+
+    set leading_symbol [lindex $currency_list 0]
+    set whole_part [lindex $currency_list 1]
+    set separator [lindex $currency_list 2]
+    set fractional_part [lindex $currency_list 3]
+    set trailing_money [lindex $currency_list 4]
+    set format [lindex $currency_list 5]
 
     switch $what {
+        leading_symbol {
+            return $leading_symbol
+        }
+        whole_part {
+            return $whole_part
+        }
+        separator {
+            return $separator
+        }
+        fractional_part {
+            return $fractional_part
+        }
+        trailing_money {
+            return $trailing_money
+        }
+        format {
+            return $format
+        }
         sql_number {
-            set sql_number "[lindex $currency_list 1].[lindex $currency_list 3]"
-            if { [string equal $sql_number "."] } {
-                # No value hack ...
+
+            if { [empty_string_p $whole_part] && [empty_string_p $fractional_part] } {
                 return ""
-            } else {
-                return $sql_number
             }
+
+            # Make sure we have at least one leading digit, i.e. zero
+            set whole_part "[string range "0" [string length $whole_part] end]$whole_part"
+
+            # Pad out the fractional part with enough leading zeros to satisfy the format
+            set fractional_part "[string range [string repeat "0" [lindex $format 3]] [string length $fractional_part] end]$fractional_part"
+            return ${whole_part}.${fractional_part}
+        }
+        display_currency {
+
+            if { [empty_string_p $whole_part] && [empty_string_p $fractional_part] } {
+                return ""
+            }
+
+            # Make sure we have at least one leading digit, i.e. zero
+            set whole_part "[string range "0" [string length $whole_part] end]$whole_part"
+
+            # Pad out the fractional part with enough leading zeros to satisfy the format
+            set fractional_part "[string range [string repeat "0" [lindex $format 3]] [string length $fractional_part] end]$fractional_part"
+
+            # Glom everything into one pretty picture
+            return "$leading_symbol$whole_part$separator$fractional_part$trailing_money"
         }
     }
 }

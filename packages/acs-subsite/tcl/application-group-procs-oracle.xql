@@ -3,7 +3,7 @@
 <queryset>
    <rdbms><type>oracle</type><version>8.1.6</version></rdbms>
 
-<fullquery name="contains_party_p.app_group_contains_party_p">      
+<fullquery name="application_group::contains_party_p.app_group_contains_party_p">      
       <querytext>
       
 	    select case when exists (
@@ -23,7 +23,7 @@
 </fullquery>
 
  
-<fullquery name="contains_party_p.app_group_contains_party_p">      
+<fullquery name="application_group::contains_party_p.app_group_contains_party_p">      
       <querytext>
       
 	    select case when exists (
@@ -43,7 +43,7 @@
 </fullquery>
 
  
-<fullquery name="contains_relation_p.app_group_contains_rel_p">      
+<fullquery name="application_group::contains_relation_p.app_group_contains_rel_p">      
       <querytext>
       
 	    select case when exists (
@@ -58,7 +58,7 @@
 </fullquery>
 
  
-<fullquery name="contains_segment_p.app_group_contains_segment_p">      
+<fullquery name="application_group::contains_segment_p.app_group_contains_segment_p">      
       <querytext>
       
 	    select case when exists (
@@ -73,7 +73,7 @@
 </fullquery>
 
  
-<fullquery name="group_id_from_package_id.application_group_from_package_id_query">      
+<fullquery name="application_group::group_id_from_package_id.application_group_from_package_id_query">      
       <querytext>
       
 	    begin
@@ -87,7 +87,7 @@
 </fullquery>
 
  
-<fullquery name="new.parent_group_id_query">      
+<fullquery name="application_group::new.parent_group_id_query">      
       <querytext>
       
 		    select ag.group_id as parent_group_id
@@ -95,17 +95,17 @@
 		         apm_packages,
 		         (select object_id, rownum as tree_rownum
 		          from site_nodes
-		          start with node_id = :node_id
+		          start with node_id = :parent_node_id
 		          connect by node_id = prior parent_id) nodes
                     where nodes.object_id = apm_packages.package_id
                       and apm_packages.package_id = ag.package_id
-                      and rownum=1
+                      and tree_rownum=1
 		
       </querytext>
 </fullquery>
 
  
-<fullquery name="new.add_group">      
+<fullquery name="application_group::new.add_group">      
       <querytext>
       
 		begin
@@ -126,7 +126,7 @@
 </fullquery>
 
  
-<fullquery name="new.add_composition_rel">      
+<fullquery name="application_group::new.add_composition_rel">      
       <querytext>
       
 		    begin

@@ -12,27 +12,6 @@ ad_library {
 }
 
 
-
-# the arguments are lists ( [list URL anchor])
-# except for the last one, which we expect to be just text
-#proc_doc ad_context_bar args {
-#    Returns a Yahoo-style hierarchical navbar, each arg should be a
-#    list of URL and description.  The last arg should be a just plain
-#    description.
-#} {
-#    set choices [list]
-#    set index 0
-#    foreach arg $args {
-#	incr index
-#	if { $index == [llength $args] } {
-#	    lappend choices $arg
-#	} else {
-#	    lappend choices "<a href=\"[lindex $arg 0]\">[lindex $arg 1]</a>"
-#	}
-#    }
-#    return [join $choices " : "]
-#}
-
 ad_proc ad_context_bar { args } {
 
     Returns a Yahoo-style hierarchical navbar. Includes "Your Workspace" or "Administration"
@@ -42,13 +21,8 @@ ad_proc ad_context_bar { args } {
 
   set context [list]
 
-  set display_main_p 1
-  if {[ad_conn user_id] != 0} {
-    if {[string match /pvt/home* [ad_conn url]]} {
-      set display_main_p 0
-    } else {
+  if {[ad_conn user_id] != 0 && ![string match /pvt/home* [ad_conn url]]} {
       lappend context [list "[ad_pvt_home]" "[ad_pvt_home_name]"]
-    }
   }
 
   set node_id [ad_conn node_id]
@@ -61,9 +35,7 @@ ad_proc ad_context_bar { args } {
     connect by prior parent_id = node_id
     order by level asc
   } {
-    if {$display_main_p || $url != "/"} {
       lappend context [list $url $object_name]
-    }
   }
 
   if { [string match admin/* [ad_conn extra_url]] } {
@@ -98,13 +70,6 @@ proc_doc ad_context_bar_ws args {
 } {
     set choices [list "[ad_pvt_home_link]"]
 
-#    if { [ad_conn scope on_which_table] != "." } {
-#	if { [llength $args] == 0 } {
-#	    lappend choices [ad_conn scope name]
-#	} else {
-#	    lappend choices "<a href=\"[ad_conn scope url]/\">[ad_conn scope name]</a>"
-#	}
-#    }
 
     set index 0
     foreach arg $args {

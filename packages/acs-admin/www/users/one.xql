@@ -26,7 +26,7 @@
 
 <fullquery name="all_group_membership">
   <querytext>
-    select groups.group_id, groups.group_name
+    select distinct lower(groups.group_name) as group_name
       from groups, group_member_map gm
      where groups.group_id = gm.group_id and gm.member_id=:user_id
   order by lower(groups.group_name)
