@@ -30,6 +30,7 @@ if { [empty_string_p $all_spec_files] } {
 
 # Determine which spec files are new installs; install all of the new items.
 set spec_files [list]
+set warnings [list]
 foreach spec_file $all_spec_files {
     array set version [apm_read_package_info_file $spec_file]
     set version_name $version(name)
@@ -39,10 +40,14 @@ foreach spec_file $all_spec_files {
         if { [apm_package_registered_p $package_key] } {
             if { [apm_higher_version_installed_p $package_key $version_name] } {
                 lappend spec_files $spec_file
+            } else {
+                lappend warnings "Package &quot;$package_name&quot; ($package_key) skipped because a later version is already installed."
             }
         } else {
             lappend spec_files $spec_file
         }
+    } else {
+        lappend warnings "Package &quot;$package_name&quot; ($package_key) skipped because it doesn't support [db_type]."
     }
 }
 
@@ -50,6 +55,11 @@ ns_log Debug $spec_files
 
 ns_write "Done.<p>
 "
+
+if { [llength $warnings] > 0 } {
+    ns_write "<h3>Packages skipped</h3><ul><li>[join $warnings "<li>"]</ul>"
+}
+
 
 if { [empty_string_p $spec_files] } {
     # No spec files to work with.

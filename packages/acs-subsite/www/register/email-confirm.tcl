@@ -44,7 +44,7 @@ if {$email_verified_p == "f" && $member_state == "approved"} {
                         set email_verified_p = 't'
                         where user_id = :user_id" 
 
-} elseif { $member_state == "" && $email_verified_p == "f" } {
+} elseif { $member_state == "needs approval" && $email_verified_p == "f" } {
     #state is need_email_verification_and_admin_approv
     db_dml register_email_confirm_update3 "update users
                         set email_verified_p = 't'

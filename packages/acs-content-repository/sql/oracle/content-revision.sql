@@ -63,7 +63,7 @@ function new (
   publish_date  in cr_revisions.publish_date%TYPE default sysdate,
   mime_type   	in cr_revisions.mime_type%TYPE default 'text/plain',
   nls_language 	in cr_revisions.nls_language%TYPE default null,
-  text		in varchar2 default ' ',
+  text		in varchar2 default null,
   item_id       in cr_items.item_id%TYPE,
   revision_id   in cr_revisions.revision_id%TYPE default null,
   creation_date	in acs_objects.creation_date%TYPE default sysdate,
@@ -387,7 +387,7 @@ procedure to_html (
 
 begin
 
-  ctx_doc.filter('cr_doc_filter_index', revision_id, tmp_clob);
+  ctx_doc.filter('cr_doc_filter_index', revision_id, tmp_clob, false);
 
   select 
     content into blob_loc

@@ -421,17 +421,68 @@ proc_doc db_foreach { statement_name sql args } {
 ad_proc -public db_multirow {
     -local:boolean
     -append:boolean
+    {-extend {}}
     var_name
     statement_name
     sql
     args } {
 
-    Performs the SQL query $sql, saving results in variables of the form
+    Performs the SQL query <code>sql</code>, saving results in variables
+    of the form
     <code><i>var_name</i>:1</code>, <code><i>var_name</i>:2</code>, etc,
-    and setting <code><i>var_name</i>:rowcount</code> to the total number
-    of rows.  Notice the nonstandard numbering (everything else in Tcl
-    starts at 0); the reason is that the graphics designer, a non
+    setting <code><i>var_name</i>:rowcount</code> to the total number
+    of rows, and setting <code><i>var_name</i>:columns</code> to a
+    list of column names. Each row also has a column, rownum, automatically 
+    added and set to the row number, starting with 1. Note that this will
+    override any column in the SQL statement named 'rownum', also if you're
+    using the Oracle rownum pseudo-column.
+
+    <p>
+
+    You may supply a code block, which will be executed for each row in 
+    the loop. This is very useful if you need to make computations that 
+    are better done in Tcl than in SQL, for example using ns_urlencode 
+    or ad_quotehtml, etc. When the Tcl code is executed, all the columns 
+    from the SQL query will be set as local variables in that code. Any
+    changes made to these local variables will be copied back into the
+    multirow.
+
+    <p>
+
+    You may also add additional, computed columns to the multirow, using the
+    <code>-extend { <i>col_1</i> <i>col_2</i> ... }</code> switch. This is 
+    useful for things like constructing a URL for the object retrieved by 
+    the query.
+
+    <p>
+
+    If you're constructing your multirow through multiple queries with the 
+    same set of columns, but with different rows, you can use the 
+    <code>-append</code> switch. This causes the rows returned by this query
+    to be appended to the rows already in the multirow, instead of starting
+    a clean multirow, as is the normal behavior. The columns must match the
+    columns in the original multirow, or an error will be thrown.
+
+    <p>
+
+    Your code block may call <code>continue</code> in order to skip a row 
+    and not include it in the multirow. Or you can call <code>break</code>
+    to skip this row and quit looping.
+
+    <p>
+
+    Notice the nonstandard numbering (everything
+    else in Tcl starts at 0); the reason is that the graphics designer, a non
     programmer, may wish to work with row numbers.
+
+    <p>
+
+    Example: 
+<pre>db_multirow -extend { user_url } users users_query {
+    select user_id first_names, last_name, email from cc_users
+} {
+    set user_url [acs_community_member_url -user_id $user_id]
+}</pre>
 
 } {
     # Query Dispatcher (OpenACS - ben)
@@ -466,6 +517,7 @@ ad_proc -public db_multirow {
     }
     
     upvar $level_up "$var_name:rowcount" counter
+    upvar $level_up "$var_name:columns" columns
 
     if { !$append_p } {
 	set counter 0
@@ -473,38 +525,50 @@ ad_proc -public db_multirow {
 
     db_with_handle db {
 	set selection [db_exec select $db $full_statement_name $sql]
+        set local_counter 0
 
 	while { [db_getrow $db $selection] } {
+            
+            if { $local_counter == 0 } {
+                for { set i 0 } { $i < [ns_set size $selection] } { incr i } {
+                    lappend local_columns [ns_set key $selection $i]
+                }
+                set local_columns [concat $local_columns $extend]
+                if { !$append_p } {
+                    # store the list of columns in the var_name:columns variable
+                    set columns $local_columns
+                } else {
+                    # Check that the columns match, if not throw an error
+                    if { ![string equal [join [lsort -ascii $local_columns]] [join [lsort -ascii $columns]]] } {
+                        error "Appending to a multirow with differing columns.
+Original columns     : [join [lsort -ascii $columns] ", "].
+Columns in this query: [join [lsort -ascii $local_columns] ", "]" "" "ACS_MULTIROW_APPEND_COLUMNS_MISMATCH"
+                    }
+                }
+            }
+
 	    if { [empty_string_p $code_block] } {
 		# No code block - pull values directly into the var_name array.
-	        upvar $level_up \
-		    "$var_name:[expr {$counter+1}]" array_val
+	        upvar $level_up "$var_name:[expr {$counter+1}]" array_val
 		for { set i 0 } { $i < [ns_set size $selection] } { incr i } {
 		    set array_val([ns_set key $selection $i]) \
 			[ns_set value $selection $i]
 		}
 	    } else {
-		# Pull values into variables (and into the array - aks),
-                # evaluate the code block, and pull values back out to
-                # the array.
-
+		# Pull values from the query into local variables
 		for { set i 0 } { $i < [ns_set size $selection] } { incr i } {
 		    upvar 1 [ns_set key $selection $i] column_value
 		    set column_value [ns_set value $selection $i]
 		}
 
-		# Pull the variables into the array.
-		upvar $level_up \
-		    "$var_name:[expr {$counter + 1}]" array_val                
-		for { set i 0 } { $i < [ns_set size $selection] } { incr i } {
-		    upvar 1 [ns_set key $selection $i] column_value
-		    set array_val([ns_set key $selection $i]) $column_value
-		}                
- 
-                regsub -all "$var_name" $code_block \
-                        "$var_name:[expr {$counter + 1}]" new_code_block
- 
-		set errno [catch { uplevel 1 $new_code_block } error]
+                # Initialize the "extend" columns to the empty string
+                foreach column_name $extend {
+		    upvar 1 $column_name column_value
+		    set column_value ""
+                }
+                
+                # Execute the code block
+		set errno [catch { uplevel 1 $code_block } error]
 
 		# Handle or propagate the error. Can't use the usual
 		# "return -code $errno..." trick due to the db_with_handle
@@ -536,15 +600,15 @@ ad_proc -public db_multirow {
 		    }
 		}
 
-		# Pull the variables into the array.
-		upvar $level_up \
-		    "$var_name:[expr {$counter + 1}]" array_val                
-		for { set i 0 } { $i < [ns_set size $selection] } { incr i } {
-		    upvar 1 [ns_set key $selection $i] column_value
-		    set array_val([ns_set key $selection $i]) $column_value
+		# Pull the local variables back out and into the array.
+		upvar $level_up "$var_name:[expr {$counter + 1}]" array_val
+		foreach column_name $columns {
+		    upvar 1 $column_name column_value
+		    set array_val($column_name) $column_value
 		}
 	    }
 	    incr counter
+            incr local_counter
 	    set array_val(rownum) $counter
 	}
     }

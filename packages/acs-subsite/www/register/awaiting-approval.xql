@@ -5,7 +5,7 @@
       <querytext>
       select member_state, email, email_verified_p, rel_id
 from cc_users where user_id = :user_id 
-and  (member_state is null or member_state = 'rejected')
+and  (member_state is null or member_state = 'rejected' or member_state = 'needs approval')
       </querytext>
 </fullquery>
 

@@ -375,6 +375,26 @@ ad_proc -public template::element::set_error { form_id element_id message } {
   set formerror($element_id) $message
 }
 
+# @public error_p
+
+# Return true if the named element has an error set.  Helpful for client code
+# that wants to avoid overwriting an initial error message.
+
+# @param form_id     The identifier of the form containing the element.
+# @param element_id  The unique identifier of the element with which
+#                    the error message should be associated in the form
+#                    template.
+
+ad_proc -public template::element::error_p { form_id element_id } {
+
+  set level [template::adp_level]
+
+  upvar #$level $form_id:error formerror
+
+  # set the message
+  return [info exists formerror($element_id)]
+}
+
 # Get all values for an element, performing any transformation defined
 # for the datatype.
 

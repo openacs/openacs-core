@@ -224,14 +224,11 @@ ad_proc -public template::util::date::get_property { what date } {
       set value ""
       set format ""
       set space ""
+      set pad "0000"
       foreach { index sql_form } { 0 YYYY 1 MM 2 DD 3 HH24 4 MI 5 SS } {
         set piece [lindex $date $index]
         if { ![string equal $piece {}] } {
-          append value $space
-          if { [string length $piece] == 1 } {
-            append value "0"
-          }
-          append value $piece 
+          append value "$space[string range $pad [string length $piece] end]$piece"
           append format $space
           append format $sql_form
           set space " "
@@ -244,16 +241,37 @@ ad_proc -public template::util::date::get_property { what date } {
       # For use with karl's non-working form builder API
       set clipped_date [lrange $date 0 5]
       set ret [list]
+      set pad "0000"
       foreach fragment $clipped_date {
-        if { [string equal $fragment {}] } {
-          lappend ret "00"
-        } elseif {[string length $fragment] == 1} {
-          lappend ret "0$fragment"
-	} else {
-          lappend ret $fragment
-	}
+        lappend ret "[string range $pad [string length $fragment] end]$fragment"
+        set pad "00"
       }
       return $ret
+    }
+    display_date {
+
+      # Return a beautified date.  It should use the widget format string but DRB
+      # doesn't have the time to dive into that today.  The simple hack would be
+      # to use the database's to_char() function to do the conversion but that's
+      # not a terribly efficient thing to do.
+
+      set clipped_date [lrange $date 0 2]
+      set date_list [list]
+      set pad "0000"
+      foreach fragment $clipped_date {
+        lappend date_list "[string range $pad [string length $fragment] end]$fragment"
+        set pad "00"
+      }
+      set value [util_AnsiDatetoPrettyDate [join $date_list "-"]]
+      unpack $date
+      if { ![string equal $hours {}] && \
+           ![string equal $minutes {}] } {
+        append value " ${hours}:${minutes}"
+        if { ![string equal $seconds {}] } {
+          append value ":$seconds"
+	}
+      }
+      return $value
     }
     clock {
       set value ""
@@ -279,7 +297,14 @@ ad_proc -public template::util::date::get_property { what date } {
 # Perform date comparison; same syntax as string compare
 
 ad_proc -public template::util::date::compare { date1 date2 } {
-  return [string compare [get_property clock $date1] [get_property clock $date2]]
+    for { set i 0 } { $i < 5 } { incr i } {
+        if { [lindex $date1 $i] < [lindex $date2 $i] } {
+            return -1
+        } elseif { [lindex $date1 $i] > [lindex $date2 $i] } {
+            return 1
+        }
+    }
+    return 0
 }
 
 # mutate properties of the Date object

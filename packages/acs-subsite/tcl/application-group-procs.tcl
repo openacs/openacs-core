@@ -215,20 +215,9 @@ namespace eval application_group {
 		# by default, this application group will be a subgroup
 		# of the first parent application group based on the site map.
 
-		set node_id [ad_conn node_id]
+		set parent_node_id [db_string parent_node_id ""]
 
-		db_0or1row parent_group_id_query {
-		    select ag.group_id as parent_group_id
-		    from application_groups ag,
-		         apm_packages,
-		         (select object_id, rownum as tree_rownum
-		          from site_nodes
-		          start with node_id = :node_id
-		          connect by node_id = prior parent_id) nodes
-                    where nodes.object_id = apm_packages.package_id
-                      and apm_packages.package_id = ag.package_id
-                      and rownum=1
-		}		
+		db_0or1row parent_group_id_query ""
 	    }
 	}
 

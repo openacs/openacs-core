@@ -844,11 +844,19 @@ ad_proc -private apm_post_instantiation_tcl_proc_from_key { package_key } {
 }
 
 
+<<<<<<< apm-procs.tcl
 ad_proc -public apm_package_instance_new {
     {-package_id 0}
     instance_name
     context_id
     package_key
+=======
+ad_proc -public apm_package_create_instance {
+    {
+	-package_id 0
+    }
+    instance_name context_id package_key
+>>>>>>> 1.16.2.1
 } {
     Creates a new instance of a package.
 } {
@@ -868,6 +876,19 @@ ad_proc -public apm_package_instance_new {
     }]
    
     apm_parameter_sync $package_key $package_id
+    
+    return $package_id
+}
+
+
+ad_proc -public apm_package_call_post_instantiation_proc {
+    package_id
+    package_key
+} {
+
+    Call the package-specific post instantiation proc, if any
+
+} {
 
     # Check for a post-instantiation TCL procedure
     set procedure_name [apm_post_instantiation_tcl_proc_from_key $package_key]
@@ -879,6 +900,7 @@ ad_proc -public apm_package_instance_new {
 	}
     }
     
+<<<<<<< apm-procs.tcl
     return $package_id
 }
 
@@ -888,6 +910,28 @@ ad_proc -public apm_package_instance_delete {
     Deletes an instance of a package
 } {
     db_exec_plsql apm_package_instance_delete {}
+=======
+}
+
+ad_proc -public apm_package_instance_new {
+    {
+	-package_id 0
+    }
+    instance_name context_id package_key
+} {
+
+    Creates a new instance of a package and call the post instantiation proc, if any.
+
+    DRB: I split out the subpieces into two procs because the subsite post instantiation proc
+    needs to be able to find the package's node in the site node map, which results in a 
+    cart-before-the-horse scenario.  The code can't update the site node map until after the
+    package is created yet the original code called the post instantiation proc before the
+    site node code could update the table.
+
+} {
+    set package_id [apm_package_create_instance -package_id $package_id $instance_name $context_id $package_key]
+    apm_package_call_post_instantiation_proc $package_id $package_key
+>>>>>>> 1.16.2.1
 }
 
 
