@@ -3,13 +3,8 @@
 # @column first_name First name of the user.
 # @column last_name Last name of the user.
 
-set query "select 
-             first_name, last_name
-           from
-             ad_template_sample_users"
 
-template::query get_users users multirow $query \
- -eval { set row(full_name) "$row(last_name), $row(first_name)" }
+db_multirow users get_users "" { set full_name "${last_name}, $first_name" }
 
 # Manually access the datasource 
 
