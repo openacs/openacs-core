@@ -7,13 +7,13 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>t</singleton-p>
     
-    <version name="5.0a3" url="http://openacs.org/repository/download/apm/acs-authentication-5.0a3.apm">
+    <version name="5.0.0b2" url="http://openacs.org/repository/download/apm/acs-authentication-5.0.0b2.apm">
         <owner url="mailto:lars@collaboraid.biz">Lars Pind</owner>
         <summary>Authentication and related functionality.</summary>
         <vendor url="http://www.collaboraid.biz">Collaboraid</vendor>
         <description format="text/html">Implements authentication-related security functions for OpenACS, including authentication, password maangement, account management, session management, etc.</description>
 
-        <provides url="acs-authentication" version="5.0a3"/>
+        <provides url="acs-authentication" version="5.0.0b2"/>
         <requires url="acs-kernel" version="5.0d10"/>
         <requires url="acs-service-contract" version="4.7d2"/>
 
