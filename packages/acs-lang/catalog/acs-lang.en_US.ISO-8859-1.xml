@@ -20,6 +20,7 @@
   <msg key="localization-dlongweekday_fmt">%A %B %d, %Y</msg>
   <msg key="localization-firstdayofweek">0</msg>
   <msg key="localization-formbuilder_time_format">HH12:MI AM</msg>
+  <msg key="localization-formbuilder_date_format">MONTH DD YYYY</msg>
   <msg key="localization-frac_digits">2</msg>
   <msg key="localization-grouping">3 3 </msg>
   <msg key="localization-int_curr_symbol">USD </msg>
