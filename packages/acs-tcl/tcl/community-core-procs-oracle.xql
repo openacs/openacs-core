@@ -50,10 +50,10 @@
   <querytext>
       select distinct u.first_names || ' ' || u.last_name || ' (' || u.email || ')' as name, u.user_id
       from   cc_users u
-      where  upper(nvl(u.first_names || ' ', '')  ||
+      where  lower(nvl(u.first_names || ' ', '')  ||
              nvl(u.last_name || ' ', '') ||
              u.email || ' ' ||
-             nvl(u.screen_name, '')) like upper('%'||:value||'%')
+             nvl(u.screen_name, '')) like lower('%'||:value||'%')
       order  by name
   </querytext>
 </fullquery>
@@ -126,7 +126,7 @@
                  creation_ip
           from   cc_users 
           where  authority_id = :authority_id
-          and    upper(username) = upper(:username)
+          and    lower(username) = lower(:username)
 
       </querytext>
 </fullquery>

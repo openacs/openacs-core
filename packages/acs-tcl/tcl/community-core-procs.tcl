@@ -13,9 +13,7 @@ namespace eval person {}
 namespace eval acs_user {}
 
 ad_proc -private cc_lookup_screen_name_user { screen_name } {
-    return [db_string user_select {
-        select user_id from cc_users where upper(screen_name) = upper(:screen_name)
-    } -default ""]
+    return [db_string user_select {*SQL*} -default {}]
 }
 
 ad_proc cc_screen_name_user { screen_name } {
@@ -30,17 +28,13 @@ ad_proc cc_screen_name_user { screen_name } {
 ad_proc -private cc_lookup_email_user { email } {
     Return the user_id of a user given the email. Returns the empty string if no such user exists.
 } {
-    return [db_string user_select {
-        select user_id from cc_users where email = lower(:email)
-    } -default ""]
+    return [db_string user_select {*SQL*} -default {}]
 }
 
 ad_proc -public cc_email_from_party { party_id } {
     @return The email address of the indicated party.
 } {
-    return [db_string email_from_party {
-        select email from parties where party_id = :party_id
-    } -default ""]
+    return [db_string email_from_party {*SQL*} -default {}]
 }
 
 ad_proc cc_email_user { email } {
@@ -53,9 +47,7 @@ ad_proc cc_email_user { email } {
 }
 
 ad_proc -private cc_lookup_name_group { name } {
-    return [db_string group_select {
-        select group_id from groups where group_name = :name
-    } -default ""]
+    return [db_string group_select {*SQL*} -default {}]
 }
 
 ad_proc cc_name_to_group { name } {
@@ -123,12 +115,7 @@ ad_proc -deprecated ad_user_new {
         set user_id [db_exec_plsql user_insert {}]
 
         # set password_question, password_answer
-        db_dml update_question_answer {
-            update users
-            set    password_question = :password_question,
-                   password_answer = :password_answer
-            where  user_id = :user_id
-        }
+        db_dml update_question_answer {*SQL*} 
 
         if {[catch {
             # Call the extension
@@ -318,11 +305,7 @@ ad_proc -public acs_user::change_state {
 } {
     Change the membership state of a user.
 } {
-    set rel_id [db_string select_rel_id {
-        select rel_id
-        from cc_users
-        where user_id = :user_id
-    } -default ""]
+    set rel_id [db_string select_rel_id {*SQL*} -default {}]
 
     if {[empty_string_p $rel_id]} {
         return
@@ -479,7 +462,7 @@ ad_proc -private acs_user::get_from_user_id_not_cached { user_id } {
 
     @author Peter Marklund
 } {
-    db_1row select_user_info {} -column_array row
+    db_1row select_user_info {*SQL*} -column_array row
     
     return [array get row]
 }
@@ -490,7 +473,7 @@ ad_proc -private acs_user::get_from_username_not_cached { username authority_id 
 
     @author Peter Marklund
 } {
-    db_1row select_user_info {} -column_array row
+    db_1row select_user_info {*SQL*} -column_array row
 
     return [array get row]
 }
@@ -584,9 +567,7 @@ ad_proc -public acs_user::get_user_id_by_screen_name {
     Returns the user_id from a screen_name, or empty string if no user found.
     Searches all users, including banned, deleted, unapproved, etc.
 } {
-    return [db_string select_user_id_by_screen_name { 
-        select user_id from users where screen_name = :screen_name 
-    } -default {}]
+    return [db_string select_user_id_by_screen_name {*SQL*} -default {}]
 }
 
 
@@ -606,8 +587,8 @@ ad_proc -public acs_user::site_wide_admin_p {
     }
 
     return [permission::permission_p -party_id $user_id \
-                                     -object_id [acs_lookup_magic_object security_context_root] \
-                                     -privilege "admin"]
+		-object_id [acs_lookup_magic_object security_context_root] \
+		-privilege "admin"]
 }
 
 
@@ -657,6 +638,6 @@ ad_proc -public party::get_by_email {
 
     @return party_id
 } {
-    return [db_string select_party_id {} -default {}]
+    return [db_string select_party_id {*SQL*} -default {}]
 }
 

@@ -255,6 +255,8 @@ create table parties (
 	url		varchar(200)
 );
 
+create index parties_email_lower_idx on parties(lower(email));
+
 comment on table parties is '
  Party is the supertype of person and organization. It exists because
  many other types of object can have relationships to parties.
@@ -523,6 +525,9 @@ create table users (
         constraint users_authority_username_un
         unique (authority_id, username)
 );
+
+create index users_username_lower_idx on users(lower(username));
+create index users_screenname_lower_idx on users(lower(screen_name));
 
 create table user_preferences (
 	user_id			integer constraint user_prefs_user_id_fk
