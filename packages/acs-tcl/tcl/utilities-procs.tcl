@@ -910,7 +910,7 @@ ad_proc -public export_vars {
 	for { set i 0 } { $i < $export_size } { incr i } {
 	    lappend export_list "[ns_urlencode [ns_set key $export_set $i]]=[ns_urlencode [ns_set value $export_set $i]]"
 	}
-	set export_string [join $export_list "&"]
+	set export_string [join $export_list "&amp;"]
     } else {
 	for { set i 0 } { $i < $export_size } { incr i } {
 	    append export_string "<input type=\"hidden\" name=\"[ad_quotehtml [ns_set key $export_set $i]]\" value=\"[ad_quotehtml "[ns_set value $export_set $i]"]\" />\n"
@@ -1299,7 +1299,6 @@ ad_proc -public export_entire_form_as_url_vars {
     }
 }
 
-
 ad_proc -public util_get_current_url {} {
     Returns a URL for re-issuing the current request, with query variables.
     If a form submission is present, that is converted into query vars as well.
@@ -1318,8 +1317,6 @@ ad_proc -public util_get_current_url {} {
 
     return $url
 }
-
-
 
 proc with_catch {error_var body on_error} { 
     upvar 1 $error_var $error_var 
@@ -1584,50 +1581,88 @@ ad_proc -public exists_and_equal { varname value } {
     return [expr { [info exists var] && [string equal $var $value] } ]
 }
 
-ad_proc -public util_httpget {
-    url {headers ""} {timeout 30} {depth 0}
+ad_proc -public ad_httpget {
+    -url 
+    {-headers ""} 
+    {-timeout 30}
+    {-depth 0}
 } {
-    Just like ns_httpget, but first optional argument is an ns_set of 
+    Just like ns_httpget, but first headers is an ns_set of
     headers to send during the fetch.
+
+    ad_httpget also makes use of Conditional GETs (if called with a 
+    Last-Modified header).
+
+    Returns the data in array get form with array elements page status modified.
 } {
+    ns_log "Notice" "Getting {$url} {$headers} {$timeout} {$depth}"
+
     if {[incr depth] > 10} {
-	return -code error "util_httpget:  Recursive redirection:  $url"
+        return -code error "ad_httpget:  Recursive redirection:  $url"
     }
-    ns_log Notice "Getting {$url} {$headers} {$timeout} {$depth}"
+
     set http [ns_httpopen GET $url $headers $timeout]
     set rfd [lindex $http 0]
     close [lindex $http 1]
     set headers [lindex $http 2]
     set response [ns_set name $headers]
     set status [lindex $response 1]
-    if {$status == 302} {
+    set last_modified [ns_set iget $headers last-modified]
+
+    if {$status == 302 || $status == 301} {
 	set location [ns_set iget $headers location]
-	if {$location != ""} {
-	    ns_set free $headers
-	    close $rfd
-	    return [util_httpget $location {} $timeout $depth]
+	if {![empty_string_p $location]} { 
+            ns_set free $headers
+            close $rfd
+	    return [ad_httpget -url $location -timeout $timeout -depth $depth]
 	}
+    } elseif { $status == 304 } {
+        # The requested variant has not been modified since the time specified
+        # A conditional get didn't return anything.  return an empty page and 
+        set page {}
+
+        ns_set free $headers
+        close $rfd
+    } else { 
+        set length [ns_set iget $headers content-length]
+        if [string match "" $length] {set length -1}
+    
+        set err [catch {
+            while 1 {
+                set buf [_ns_http_read $timeout $rfd $length]
+                append page $buf
+                if [string match "" $buf] break
+                if {$length > 0} {
+                    incr length -[string length $buf]
+                    if {$length <= 0} break
+                }
+            }
+        } errMsg]
+        ns_set free $headers
+        close $rfd
+
+        if $err {
+            global errorInfo
+            return -code error -errorinfo $errorInfo $errMsg
+        }
     }
-    set length [ns_set iget $headers content-length]
-    if [string match "" $length] {set length -1}
-    set err [catch {
-	while 1 {
-	    set buf [_ns_http_read $timeout $rfd $length]
-	    append page $buf
-	    if [string match "" $buf] break
-	    if {$length > 0} {
-		incr length -[string length $buf]
-		if {$length <= 0} break
-	    }
-	}
-    } errMsg]
-    ns_set free $headers
-    close $rfd
-    if $err {
-	global errorInfo
-	return -code error -errorinfo $errorInfo $errMsg
-    }
-    return $page
+
+    # order matters here since we depend on page content 
+    # being element 1 in this list in util_httpget 
+    return [list page $page \
+                status $status \
+                modified $last_modified]
+}
+
+ad_proc -public util_httpget {
+    url {headers ""} {timeout 30} {depth 0}
+} {
+    util_httpget simply calls ad_httpget which also returns 
+    status and last_modfied
+    
+    @see ad_httpget
+} {
+    return [lindex [ad_httpget -url $url -headers $headers -timeout $timeout -depth $depth] 1]
 }
 
 # some procs to make it easier to deal with CSV files (reading and writing)
@@ -2802,31 +2837,51 @@ ad_proc -public util_wrap_list {
 
 ad_proc -public util_text_to_url { 
     {-existing_urls {}}
-    {-resolve_conflicts_p:boolean 1}
+    {-no_resolve:boolean}
     {-replacement "-"}
-    text
+    {-text ""}
+    {_text ""}
 } {
     Modify a string so that it is suited as a well formatted URL path element.
-    for example given "Foo Bar" and it will return "foo-bar".  Also, 
-    if given a list of existing urls it can catch duplicate or optionally 
-    create an unambiguous url by appending -N.
+    Also, if given a list of existing urls it can catch duplicate or optionally 
+    create an unambiguous url by appending a dash and a digit.
+
+    <p>
+
+    Examples:<br>
+    <code>util_text_to_url -text "Foo Bar"</code> returns <code>foo-bar</code><br>
+    <code>util_text_to_url -existing_urls {foo-bar some-other-item} -text "Foo Bar"</code> returns <code>foo-bar-2</code><br>
+
 
     @param text the text to modify, e.g. "Foo Bar"
+    @param _text the text to modify, e.g. "Foo Bar" (Deprecated, use -text instead. Fails when the value starts with a dash.)
 
     @param existing_urls a list of URLs that already exist on the same level and would cause a conflict
 
-    @param resolve_conflicts_p automatically generate "foo-bar-2" if "foo-bar" is already in existing_urls. If set to false it throws an error in case of a conflict.
+    @param no_resolve Specify this flag if you do not want util_text_to_url to automatically generate 
+    "foo-bar-2" if "foo-bar" is already in existing_urls, and would rather have an error thrown.
 
     @param replacement the character that is used to replace illegal characters
 
-    @author Tillman Singer
+    @author Tilmann Singer
 } {
+    if { [empty_string_p $text] && [empty_string_p $_text] } {
+        error "You must specify either -text or _text."
+    }
+
+    if { [empty_string_p $text] } {
+        set text $_text
+    }
+
     set original_text $text
     set text [string trim [string tolower $original_text]]
 
     # Save some german and french characters from removal by replacing
     # them with their ascii counterparts.
     set text [string map { \x00e4 ae \x00f6 oe \x00fc ue \x00df ss \x00f8 o \x00e0 a \x00e1 a \x00e8 e \x00e9 e } $text]
+
+    # here's the Danish ones (hm. the o-slash conflicts with the definition above, which just says 'o')
+    set text [string map { \x00e6 ae \x00f8 oe \x00e5 aa \x00C6 Ae \x00d8 Oe \x00c5 Aa } $text]
 
     # substitute all non-word characters
     regsub -all {([^a-z0-9])+} $text $replacement text
@@ -2841,7 +2896,7 @@ ad_proc -public util_text_to_url {
     # check if the resulting url is already present
     if { [lsearch -exact $existing_urls $text] > -1 } {
         
-        if { !$resolve_conflicts_p } {
+        if { $no_resolve_p } {
             # URL is already present in the existing_urls list and we
             # are asked to not automatically resolve the collision
             error "The url $text is already present"
@@ -2872,8 +2927,6 @@ ad_proc -public util_text_to_url {
     return $text
 
 }
-
-
 
 ad_proc util_unlist { list args } {
 
@@ -3016,7 +3069,7 @@ ad_proc -deprecated -warn ad_dateentrywidget_default_to_today {column} {
 ad_proc -public util_ns_set_to_list {
     {-set:required}
 } {
-    Convert an ns_set into a TCL array.
+    Convert an ns_set into a list suitable for passing in to the "array set" command (key value key value ...).
 
     @param set The ns_set to convert
 
@@ -3034,9 +3087,9 @@ ad_proc -public util_ns_set_to_list {
 
 
 ad_proc -public util_list_to_ns_set { aList } {
-    Convert an ns_set into a TCL array.
+    Convert a list in the form "key value key value ..." into a ns_set.
 
-    @param set The list to convert
+    @param aList The list to convert
 
     @return The id of a (non-persistent) ns_set
 } {
@@ -3666,4 +3719,23 @@ if {![catch {package require Trf 2.0}]} {
 # don't want to barf if, per chance, a newer version is already available
 catch { package provide base64 2.2 }
 
-
+ad_proc -public util_list_of_ns_sets_to_list_of_lists {
+    {-list_of_ns_sets:required}
+} {
+    Transform a list of ns_sets (most likely produced by db_list_of_ns_sets)
+    into a list of lists that match the array set format in the sublists
+    (key value key value ...) 
+    
+    @param -list_of_ns_sets A list of ns_set ids
+    
+    @author Ola Hansson (ola@polyxena.net)
+    @creation-date September 27, 2002
+} {
+    set result [list]
+    
+    foreach ns_set $list_of_ns_sets {
+	lappend result [util_ns_set_to_list -set $ns_set]
+    }
+    
+    return $result
+}
