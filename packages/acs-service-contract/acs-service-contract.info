@@ -13,6 +13,7 @@
         <database>postgresql</database>
     </database-support>
         <owner url="mailto:k2pts@yahoo.com">Neophytos Demetriou</owner>
+	<owner url="mailto:k_vertigo@yahoo.com">Kapil Thangavelu</owner>
 
         <!-- No dependency information -->
 
