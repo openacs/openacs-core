@@ -15,7 +15,7 @@ if { $return_url == "" } {
 
 # Create a list of lists containing the possible locale choiches
 
-set list_of_locales [db_list_of_lists locale_loop { select label, locale from ad_locales }]
+set list_of_locales [db_list_of_lists locale_loop { select label, locale from enabled_locales order by label }]
 set list_of_locales [linsert $list_of_locales 0 [list (default) ""]]
 
 form create locale

@@ -9,7 +9,7 @@ ad_page_contract {
     @cvs-id $Id$
 
 } {
-    locales
+    locale
     package_key
 } -properties {
 }
@@ -19,8 +19,8 @@ ad_page_contract {
 # locale. If not, we can't allow the creation of a new localized 
 # message.
 
-if {[info exists locales]} {
-    set locale_user $locales
+if {[info exists locale]} {
+    set locale_user $locale
 } else {
     set locale_user [ad_conn locale]
 }
@@ -31,18 +31,18 @@ if { $locale_user != $default_locale } {
    # ooops!
    # We should let the user know about this ... shouldn't we? noooooo... :)
    set encoded_locale [ns_urlencode $locale_user]
-   ad_returnredirect "display-grouped-messages?locales=$encoded_locale"
+   ad_returnredirect "display-grouped-messages?locale=$encoded_locale"
 
 }
 
 set locale_label [ad_locale_get_label $locale_user]
 
-append return_url "display-grouped-messages?locales=" [ns_urlencode $locale_user]
+append return_url "display-grouped-messages?locale=" [ns_urlencode $locale_user]
 
 set tab [ns_urlencode "localized-messages"]
 
 set context_bar [ad_context_bar [list "index?tab=$tab" "Locales & Messages"] \
-    [list "display-grouped-messages?tab=$tab&locales=$locales" "Listing"] \
+    [list "display-grouped-messages?tab=$tab&locale=$locale" "Listing"] \
     "New"]
 
 template::form create message_new
@@ -59,12 +59,12 @@ template::element create message_new package_key -datatype text -widget hidden
 
 # The two hidden tags that we need to pass on the key and language to the
 # processing of the form
-template::element create message_new locales -label "locale" -datatype text -widget hidden
+template::element create message_new locale -label "locale" -datatype text -widget hidden
 
 if { [template::form is_request message_new] } {
 
     template::element set_properties message_new package_key -value $package_key
-    template::element set_properties message_new locales -value $locale_user
+    template::element set_properties message_new locale -value $locale_user
 
 } else {
 
@@ -97,14 +97,14 @@ if { [template::form is_valid message_new] } {
     # We get the values from the form
     template::form get_values message_new package_key
     template::form get_values message_new message_key
-    template::form get_values message_new locales
+    template::form get_values message_new locale
     template::form get_values message_new message
 
     # We use the acs-lang registration of a translation. Simple, eh?
 
-    lang::message::register $locales $package_key $message_key $message
+    lang::message::register $locale $package_key $message_key $message
 
-    set escaped_locale [ns_urlencode $locales]
+    set escaped_locale [ns_urlencode $locale]
 
     template::forward $return_url
 

@@ -9,7 +9,7 @@ ad_page_contract {
     @creation-date 19 march 2002
     @cvs-id $Id$
 } {
-    locales
+    locale
 } -properties {
 }
 
@@ -98,8 +98,8 @@ element create locale_editing mime_charset \
 element create locale_editing default_p -label "Default" \
     -datatype text -widget hidden  
 
-element create locale_editing locales -p label "Locales" \
-    -datatype text -widget hidden -value $locales
+element create locale_editing locale -p label "Locale" \
+    -datatype text -widget hidden -value $locale
 
 if { [form is_request locale_editing] } {
 
@@ -110,7 +110,7 @@ if { [form is_request locale_editing] } {
             nls_territory as locale_nls_territory, nls_charset as locale_nls_charset,
             mime_charset as locale_mime_charset, default_p as locale_default_p
         from ad_locales
-        where locale = :locales"
+        where locale = :locale"
     element set_properties locale_editing label -value $locale_label
     element set_properties locale_editing language -value $locale_language
     element set_properties locale_editing country -value $locale_country
@@ -127,7 +127,7 @@ if { [form is_request locale_editing] } {
 
     form get_values locale_editing
 
-    set locale_label [ad_locale_get_label $locales]
+    set locale_label [ad_locale_get_label $locale]
 
     if { $label == "" } {
         element set_error locale_editing label "Label is required"
@@ -150,7 +150,7 @@ if { [form is_valid locale_editing] } {
             nls_language = :nls_language, nls_territory = :nls_territory,
             nls_charset = :nls_charset, mime_charset = :mime_charset,
             default_p = :default_p
-            where locale = :locales"
+            where locale = :locale"
 
     }
     forward "index?tab=locales"

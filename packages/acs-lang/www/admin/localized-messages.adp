@@ -10,7 +10,7 @@
     <multiple name="locales">
      <tr style="background: #EEEEEE">
       <td>@locales.locale@</td>
-      <td><a href="display-grouped-messages?locales=@locales.escaped_locale@">@locales.locale_name@</a></td>
+      <td><a href="display-grouped-messages?locale=@locales.escaped_locale@">@locales.locale_name@</a></td>
      </tr>
     </multiple>
    </table>

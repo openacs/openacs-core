@@ -35,22 +35,24 @@ multirow create timezones label value selected_p
 foreach entry [lc_list_all_timezones] {
     set tz [lindex $entry 0]
     
-    multirow append timezones $entry $tz [string equal $tz $system_timezone]
+    multirow append timezones $entry $tz [string equal $tz $system_timezone]>
 }
 
 # Try to get the correct UTC time from www.timeanddate.com
+
 if { [catch {
+
     set time_and_date_page [util_httpget "http://www.timeanddate.com/worldclock/"]
 
     regexp {Current <b>UTC</b> \(or GMT\)-time used: <b>([^<]*)</b>} $time_and_date_page match utc_from_page
 
     # UTC in format:
     # Wednesday, November 20, 2002, at 2:49:07 PM
-
-    regexp {^([^,]*), ([^ ]*) ([0-9]*), ([0-9]*), at (.*)$} $utc_from_page match weekday month day year time
+    # Wednesday, August  6, 2003, at 12:11:48
+    regexp {^([^,]*), *([^ ]*) *([0-9]*), *([0-9]*), at (.*)$} $utc_from_page match weekday month day year time
 
     set utc_epoch [clock scan "${month} ${day}, ${year} ${time}"]
-    
+
     set utc_ansi [clock format $utc_epoch -format "%Y-%m-%d %T"]
 
 } errmsg] } {
@@ -60,3 +62,43 @@ if { [catch {
     set utc_ansi {Couldn't get time from timeanddate.com, sorry.}
 }
 
+set correct_p {}
+
+if { [info exists utc_epoch] } {
+    with_catch errmsg {
+        set sysdate_utc_epoch [clock scan $sysdate_utc]
+        set delta_hours [expr round(($sysdate_utc_epoch - $utc_epoch)*4.0 / (60*60)) / 4.0]
+        set recommended_offset [expr $system_utc_offset + $delta_hours]
+
+        if { $delta_hours == 0 } {
+            set correct_p 1
+        } else {
+            set correct_p 0
+        }
+        
+        set try_offsets [list]
+        foreach offset [list $recommended_offset [expr $recommended_offset -24]] {
+            lappend try_offsets [expr int($offset*60*60)]
+        }
+
+        set query "
+            select tz.tz, tz.gmt_offset
+            from   timezones tz, 
+                   timezone_rules tzr
+            where  tzr.gmt_offset in ([join $try_offsets ", "])
+            and    tzr.tz_id = tz.tz_id
+            and    to_date('$utc_ansi', 'YYYY-MM-DD HH24:MI:SS') between tzr.utc_start and tzr.utc_end
+            order  by tz
+        "
+
+        db_multirow -extend { value label selected_p } suggested_timezones select_suggested_timezones $query {
+            set selected_p [string equal $tz $system_timezone]
+            set value $tz
+            set label "$tz $gmt_offset"
+        }
+    } {
+        # Didn't work, too bad
+        global errorInfo
+        error $errmsg $errorInfo
+    }
+}

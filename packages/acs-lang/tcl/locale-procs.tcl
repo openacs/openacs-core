@@ -373,6 +373,40 @@ ad_proc -public lang::conn::locale {
         set locale [lang::user::site_wide_locale]
     } 
 
+    # LARS TODO: Pull this out into a proc and write an automated test for it
+    set acclang [ns_set iget [ns_conn headers] "accept-language"]
+
+    # Split by comma, and get rid of any ;q=0.5 parts
+    # acclang is something like 'da,en-us;q=0.8,es-ni;q=0.5,de;q=0.3'
+    set acclangv [list]
+    foreach elm [split $acclang ","] {
+        # Get rid of trailing ;q=0.5 part
+        set elm [lindex [split $elm ";"] 0]
+
+        # elm is now either like 'da' or 'en-us'
+        # make it into something like 'da' or 'en_US'
+        set elmv [split $elm "-"]
+        set elm [lindex $elmv 0]
+        if { [llength $elmv] > 1 } {
+            append elm "_[string toupper [lindex $elmv 1]]"
+        }
+        
+        lappend acclangv $elm
+    }
+    
+    # acclangv is now a list of languages/locales of the form:
+    # { da en_US es_NI de }
+
+    # LARS TODO: Run through the list, and the locales available on this system, and pick the most reasonable match
+    # If accept-headers has language without country, and we have that language available, that's a perfect match
+    # If accept-headesr has language+country, and we have that language+country, that's a perfect match
+    # If accept-headesr has language+country, and we have that language but with another country, that's a tentative match
+    
+    # Tentative match means we'll continue to search for a perfect match, but if we don't find any perfect match, we'll use the tentative one
+
+
+
+
     # if that does not exist use system's site wide locale
 
     if { [empty_string_p $locale] } {

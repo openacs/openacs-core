@@ -5,6 +5,6 @@
 <p style="color: red; font-weight: bold">Are you sure you want to proceed?</p>
 <p />
 <form action="locale-delete" method="post">
-@confirm_data@
+@confirm_data;noquote@
 <input type="submit" value="Delete..." />
 </form>

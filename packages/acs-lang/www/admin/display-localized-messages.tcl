@@ -7,14 +7,14 @@ ad_page_contract {
     @creation-date 26 October 2001
     @cvs-id $Id$
 } {
-    locales
+    locale
     translated_p
     package_key
 } -properties {
 }
 
 set tab [ns_urlencode "localized-messages"]
-set return_url "display-grouped-messages?tab=$tab&locales=$locales"
+set return_url "display-grouped-messages?tab=$tab&locale=$locale"
 
 if { ! $translated_p } {
     set title "Edit Untranslated - $package_key"
@@ -27,10 +27,10 @@ set context_bar [ad_context_bar [list $return_url Listing] $title]
 set default_locale [ad_parameter DefaultLocale]
 set default_locale en_US
 
-if { ![info exists locales] } {
+if { ![info exists locale] } {
     set current_locale [ad_conn locale]
 } else {
-    set current_locale $locales
+    set current_locale $locale
 }
 
 # Query to get all the messages that DO NOT have a translation to the
@@ -68,16 +68,27 @@ set cat_msg_translated {
     order by upper(lm1.message_key)
 }
 
-template::multirow create missing_translation message_key locale default_message escaped_key escaped_language
-template::multirow create translated_messages message_key locale default_message translated_message escaped_key escaped_language
+multirow create missing_translation message_key locale default_message escaped_key escaped_language
+multirow create translated_messages message_key locale default_message translated_message escaped_key escaped_language
 
 if { ! $translated_p } {
     db_foreach select_messages_not_translated $cat_msg_not_translated {
-        template::multirow append missing_translation $message_key $current_locale [ad_quotehtml $default_message] [ns_urlencode $message_key] [ns_urlencode $current_locale]
+        multirow append missing_translation \
+            $message_key \
+            $current_locale \
+            $default_message \
+            [ns_urlencode $message_key] \
+            [ns_urlencode $current_locale]
     }
 } else {
     db_foreach select_messages_translated $cat_msg_translated {
-        template::multirow append translated_messages $message_key $current_locale [ad_quotehtml $default_message] [ad_quotehtml $translated_message] [ns_urlencode $message_key] [ns_urlencode $current_locale]
+        multirow append translated_messages \
+            $message_key \
+            $current_locale \
+            $default_message \
+            $translated_message \
+            [ns_urlencode $message_key] \
+            [ns_urlencode $current_locale]
     }
 }
 

@@ -47,4 +47,11 @@
     </querytext>
   </fullquery>
 
+  <fullquery name="lang::message::register.lang_message_insert_null_msg">
+    <querytext>
+      insert into lang_messages (package_key, message_key, locale, message, upgrade_status) 
+      values (:package_key, :message_key, :locale, null, :message_upgrade_status) 
+    </querytext>
+  </fullquery>
+
 </queryset>

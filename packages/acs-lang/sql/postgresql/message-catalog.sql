@@ -70,6 +70,12 @@ create table lang_messages_audit (
                        references ad_locales(locale)
                        constraint lang_messages_audit_l_nn
                        not null,
+
+    -- LARS: This is really the old, overwritten message, not the new message being
+    -- entered on this date by this user.
+    -- The column should either be renamed 'old_message', or change
+    -- semantics to be the message being inserted on this date.
+
     message            text,
     overwrite_date     date default now() not null,
     overwrite_user     integer

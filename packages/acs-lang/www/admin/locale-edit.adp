@@ -4,6 +4,6 @@
 
 <p>Please update the necesary fields and press &quot;Submit&quot;</p>
 <p />
-<p>Editing locale <strong>@locale_label@</strong> [ <tt>@locales@</tt> ]</p>
+<p>Editing locale <strong>@locale_label@</strong> [ <tt>@locale@</tt> ]</p>
 <formtemplate id="locale_editing"></formtemplate>
 

@@ -7,7 +7,7 @@ ad_page_contract {
     @creation-date 26 October 2001
     @cvs-id $Id$
 } {
-    locales:optional
+    locale:optional
 } -properties {
 }
 
@@ -16,10 +16,10 @@ set page_title "Messages"
 set context_bar [ad_context_bar $page_title]
 set default_locale en_US
 
-if { ![info exists locales] } {
+if { ![info exists locale] } {
     set current_locale [ad_conn locale]
 } else { 
-    set current_locale $locales
+    set current_locale $locale
 }
 
 # Query to get all packages that are prepared for translation
@@ -83,3 +83,5 @@ if { $current_locale == $default_locale } {
 } else {
     set new_allowed_p 0
 }
+
+set message_search_url "message-search?[export_vars { locale }]"

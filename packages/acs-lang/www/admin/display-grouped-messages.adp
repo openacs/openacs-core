@@ -6,6 +6,10 @@
 
 <p>Your locale is <strong>@locale_label@</strong> [ <tt>@current_locale@</tt> ]</p>
 
+<p>
+  <b>&raquo;</b> <a href="@message_search_url@">Search localized messages</a>
+</p>
+
 <if @missing_translation_group:rowcount@ eq 0>
 
   <p>Note from the system: <strong>NO</strong> messages need to be translated. <emphasis>Job well done</emphasis> <tt>:-)</tt></p>
@@ -39,9 +43,9 @@
              <tr style="background: #EEEEEE">
               <td>@all_packages_group.package_key@</td>
               <td>
-               (<span class="edit-anchor"><a href="batch-editor?package_key=@all_packages_group.package_key_encoded@&amp;locales=@all_packages_group.locale_encoded@&translated_p=0">batch edit</a></span>)
+               (<span class="edit-anchor"><a href="batch-editor?package_key=@all_packages_group.package_key_encoded@&amp;locale=@all_packages_group.locale_encoded@&translated_p=0">batch edit</a></span>)
                <if @new_allowed_p@ eq 1>
-                (<span class="edit-anchor"><a href="localized-message-new?package_key=@all_packages_group.package_key_encoded@&amp;locales=@all_packages_group.locale_encoded@">new</a></span>)
+                (<span class="edit-anchor"><a href="localized-message-new?package_key=@all_packages_group.package_key_encoded@&amp;locale=@all_packages_group.locale_encoded@">new message key</a></span>)
                </if>
               </td>
              </tr>
@@ -82,9 +86,9 @@
              <tr style="background: #EEEEEE">
               <td>@missing_translation_group.package_key@</td>
               <td>
-               (<span class="edit-anchor"><a href="display-localized-messages?package_key=@missing_translation_group.package_key_encoded@&amp;locales=@missing_translation_group.locale_encoded@&translated_p=0">edit untranslated</a></span>)
+               (<span class="edit-anchor"><a href="display-localized-messages?package_key=@missing_translation_group.package_key_encoded@&amp;locale=@missing_translation_group.locale_encoded@&translated_p=0">edit untranslated</a></span>)
                <if @new_allowed_p@ eq 1>
-                (<span class="edit-anchor"><a href="localized-message-new?package_key=@missing_translation_group.package_key_encoded@&amp;locales=@missing_translation_group.locale_encoded@">new</a></span>)
+                (<span class="edit-anchor"><a href="localized-message-new?package_key=@missing_translation_group.package_key_encoded@&amp;locale=@missing_translation_group.locale_encoded@">new message key</a></span>)
                </if>
               </td>
              </tr>
@@ -127,9 +131,9 @@
              <tr style="background: #EEEEEE">
               <td>@translated_messages_group.package_key@</td>
               <td>
-               (<span class="edit-anchor"><a href="display-localized-messages?package_key=@translated_messages_group.package_key_encoded@&amp;locales=@translated_messages_group.locale_encoded@&translated_p=1">edit translated</a></span>)
+               (<span class="edit-anchor"><a href="display-localized-messages?package_key=@translated_messages_group.package_key_encoded@&amp;locale=@translated_messages_group.locale_encoded@&translated_p=1">edit translated</a></span>)
                <if @new_allowed_p@ eq 1>
-                (<span class="edit-anchor"><a href="localized-message-new?package_key=@translated_messages_group.package_key_encoded@&amp;locales=@translated_messages_group.locale_encoded@">new</a></span>)
+                (<span class="edit-anchor"><a href="localized-message-new?package_key=@translated_messages_group.package_key_encoded@&amp;locale=@translated_messages_group.locale_encoded@">new message key</a></span>)
                </if>
               </td>
              </tr>

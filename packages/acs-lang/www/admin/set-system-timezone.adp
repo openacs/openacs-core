@@ -55,6 +55,28 @@
     </tr>
   </if>
 
+  <if @correct_p@ not nil>
+    <tr bgcolor="red">
+      <td>
+        <font color="white">
+          Does the system timezone look like it's set correctly?
+        </font>
+      </td>
+      <td>
+        <font color="white">
+          <if @correct_p@ true>
+            <b>YES!</b> (Congratulations)
+          </if>
+          <else>
+            <b>NO</b>. Set below.
+          </else>
+        </font>
+      </td>
+    </tr>
+  </if>
+
+
+
 </table>
 
 <p>
@@ -71,23 +93,48 @@
   database this question automatically).
 </p>
 
-<form action="set-system-timezone" method="get">
 
-Set Timezone:
-
-<select name="timezone">
-  <multiple name="timezones">
-    <if @timezones.selected_p@ true>
-      <option value="@timezones.value@" selected="selected">@timezones.label@</option>
-    </if>
-    <else>
-      <option value="@timezones.value@">@timezones.label@</option>
-    </else>
-  </multiple>
-</select>
-
+<if @suggested_timezones:rowcount@ not nil and @suggested_timezones:rowcount@ gt 0>
+  <p>
+   <b>Based on the UTC time retrieved from timeanddate.com, we believe that your server is set to one of the following timezones:</b>
+  </p>
+  <p>
+    <form action="set-system-timezone" method="get">
+      <select name="timezone">
+        <multiple name="suggested_timezones">
+          <if @suggested_timezones.selected_p@ true>
+            <option value="@suggested_timezones.value@" selected="selected">@suggested_timezones.label@</option>
+          </if>
+          <else>
+            <option value="@suggested_timezones.value@">@suggested_timezones.label@</option>
+          </else>
+        </multiple>
+      </select>
+    <input type="submit" value="Set Server Timezone">
+    </form>
+  </p>
+  <p>
+    <b>In case we're wrong, you can pick another timezone here:</b>
+  </p>
+</if>
+<else>
+  <p>
+    <b>Set Timezone:</b>
+  </p>
+</else>
 <p>
-
-<input type="submit">
-</form>
+  <form action="set-system-timezone" method="get">
+    <select name="timezone">
+      <multiple name="timezones">
+        <if @timezones.selected_p@ true>
+          <option value="@timezones.value@" selected="selected">@timezones.label@</option>
+        </if>
+        <else>
+          <option value="@timezones.value@">@timezones.label@</option>
+        </else>
+      </multiple>
+    </select>
+    <input type="submit" value="Set Server Timezone">
+  </form>
+</p>
 

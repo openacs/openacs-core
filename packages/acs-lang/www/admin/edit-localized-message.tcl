@@ -9,16 +9,16 @@ ad_page_contract {
     @cvs-id $Id$
 
 } {
-    locales
+    locale
     message_key
     package_key
     {translated_p 0}
-    {return_url "display-localized-messages?[export_vars { package_key locales translated_p }]"}
+    {return_url "display-localized-messages?[export_vars { package_key locale translated_p }]"}
 } -properties {
 }
 
-if {[info exists locales]} {
-    set current_locale $locales
+if {[info exists locale]} {
+    set current_locale $locale
 } else {
     set current_locale [ad_conn locale]
 }
@@ -26,8 +26,8 @@ if {[info exists locales]} {
 set tab [ns_urlencode "localized-messages"]
 
 set context_bar [ad_context_bar [list "index?tab=$tab" "Locales & Messages"] \
-    [list "display-grouped-messages?tab=$tab&locales=$locales" "Listing"] \
-    [list "display-localized-messages?[export_vars { package_key locales translated_p }]" "Messages"] "Edit"]
+    [list "display-grouped-messages?tab=$tab&locale=$locale" "Listing"] \
+    [list "display-localized-messages?[export_vars { package_key locale translated_p }]" "Messages"] "Edit"]
 
 
 # This has an ugly smell: But let's hardcode the default to en_US
@@ -51,7 +51,7 @@ element create message_editing message_key -datatype text -widget hidden
 
 element create message_editing package_key -datatype text -widget hidden
 
-element create message_editing locales -datatype text -widget hidden
+element create message_editing locale -datatype text -widget hidden
 
 element create message_editing translated_p -label "translated_p" -datatype text -widget hidden -value $translated_p
 element create message_editing return_url -datatype text -widget hidden -value $return_url
@@ -95,7 +95,7 @@ if { [form is_request message_editing] } {
    
     element set_properties message_editing message_key -value $message_key
     element set_properties message_editing package_key -value $package_key
-    element set_properties message_editing locales -value $current_locale
+    element set_properties message_editing locale -value $current_locale
     element set_properties message_editing original_message -value [ad_quotehtml $message]
 
 } else {
@@ -128,15 +128,15 @@ if { [form is_valid message_editing] } {
     # We get the values from the form
     form get_values message_editing message_key
     form get_values message_editing package_key
-    form get_values message_editing locales
+    form get_values message_editing locale
     form get_values message_editing message
     form get_values message_editing return_url
 
     # Register message via acs-lang
-    lang::message::register $locales $package_key $message_key $message
+    lang::message::register $locale $package_key $message_key $message
 
     # Even if the country code is 2 chars, we avoid problems...
-    set escaped_locale [ns_urlencode $locales]
+    set escaped_locale [ns_urlencode $locale]
 
     forward $return_url
     

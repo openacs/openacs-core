@@ -6,7 +6,11 @@
    <fullquery name="lang::system::timezone_utc_offset.system_utc_offset">
       <querytext>
       
-	select timezone__get_offset (timezone__get_id(:system_timezone), current_timestamp)
+        select (extract(epoch from current_timestamp
+                          + timezone__get_offset (timezone__get_id(:system_timezone), current_timestamp)
+                         )
+                - extract(epoch from current_timestamp)
+               ) / 60/60;
     
       </querytext>
    </fullquery>
