@@ -228,6 +228,11 @@ ad_proc -public ad_change_password {
 } {
     # In case someone wants to change the salt from now on, you can do
     # this and still support old users by changing the salt below.
+
+    if { [empty_string_p $user_id] } {
+        error "No user_id supplied"
+    } 
+    
     set salt [sec_random_token]
     set new_password [ns_sha1 "$new_password$salt"]
     db_dml password_update {}
