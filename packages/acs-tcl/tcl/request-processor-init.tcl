@@ -46,6 +46,12 @@ if [ad_parameter -package_id [ad_acs_kernel_id] PerformanceModeP request-process
   }
 }
 
+# JCD this belongs in acs-permission-init.tcl but I did not want to duplicate [ad_acs_kernel_id]
+# Nuke the existing definition. and create one with the parameter set
+rename permission::cache_p {}
+proc permission::cache_p {} "return [ad_parameter -package_id [ad_acs_kernel_id] PermissionCacheP permissions 0]"
+
+
 nsv_set rp_properties request_count 0
 
 foreach method {GET HEAD POST} {
