@@ -6,5 +6,5 @@ ad_library {
     @cvs-id $Id$
 }
 
-# This is done in a scheduled proc so that it won't take up time at server startup.
-ad_schedule_proc -once t 5 lang::catalog::import -initialize -cache
+# Cache I18N messages in memory for fast lookups
+lang::message::cache
