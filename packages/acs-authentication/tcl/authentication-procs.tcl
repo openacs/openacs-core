@@ -444,7 +444,7 @@ ad_proc -public auth::create_user {
     if { $verify_password_confirm_p } {
         if { ![string equal $password $password_confirm] } {
             return [list \
-                        creation_status datta_error \
+                        creation_status data_error \
                         creation_message "Passwords don't match" \
                         element_messages [list \
                                               password_confirm "Passwords don't match"]]
