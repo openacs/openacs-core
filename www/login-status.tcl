@@ -12,5 +12,5 @@ if { [string equal [ad_conn url] $pvt_home_url] } {
 
 set pvt_home_name [ad_pvt_home_name]
 
-set login_url "/register/.?[export_vars { { return_url [util_get_current_url]} }]"
+set login_url "/register/.?[export_vars { { return_url [ad_return_url]} }]"
 set logout_url "/register/logout"
