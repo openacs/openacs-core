@@ -91,7 +91,11 @@ template_tag include { params } {
   }
   append command "\]"
 
-  template::adp_append_code "append __adp_output \[$command\]"
+  template::adp_append_code "if { \[catch { append __adp_output \[$command\] } errmsg\] } {"
+  template::adp_append_code "    global errorInfo"
+  template::adp_append_code "    append __adp_output \"Error in include template \\\"\[template::util::url_to_file \"$src\" \"\$__adp_stub\"\]\\\": \$errmsg\""
+  template::adp_append_code "    ns_log Error \"Error in include template \\\"\[template::util::url_to_file \"$src\" \"\$__adp_stub\"\]\\\": \$errmsg\n\$errorInfo\""
+  template::adp_append_code "}"
 }
 
 # Repeat a template chunk for each row of a multirow data source
@@ -582,16 +586,19 @@ template_tag include-optional { chunk params } {
   # chunk inside the include-optional tag.
   # Finally, we pop the output off of the __adp_include_optional_output stack.
 
-  template::adp_append_code "
-    lappend __adp_include_optional_output \[$command\]
-    if { !\[string equal \[string trim \[lindex \$__adp_include_optional_output end\]\] \"\"] } {
-      "
+  template::adp_append_code "if { \[catch { lappend __adp_include_optional_output \[$command\] } errmsg\] } {"
+  template::adp_append_code "    global errorInfo"
+  template::adp_append_code "    append __adp_output \"Error in include template \\\"\[template::util::url_to_file \"$src\" \"\$__adp_stub\"\]\\\": \$errmsg\""
+  template::adp_append_code "    ns_log Error \"Error in include template \\\"\[template::util::url_to_file \"$src\" \"\$__adp_stub\"\]\\\": \$errmsg\n\$errorInfo\""
+  template::adp_append_code "} else {"
+  template::adp_append_code "if { !\[string equal \[string trim \[lindex \$__adp_include_optional_output end\]\] \"\"] } {"
 
   template::adp_compile_chunk $chunk
 
   template::adp_append_code "
     }
-  template::util::lpop __adp_include_optional_output
+    template::util::lpop __adp_include_optional_output
+  }
   "
 }
 
