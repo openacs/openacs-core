@@ -1,14 +1,15 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Setting Up Database Objects</title><meta name="generator" content="DocBook XSL Stylesheets V1.60.1"><link rel="home" href="index.html" title="OpenACS Documentation"><link rel="up" href="tutorial.html" title="Chapter 10. Development Tutorial"><link rel="previous" href="tutorial-newpackage.html" title="Creating a Package"><link rel="next" href="tutorial-pages.html" title="Creating Web Pages"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="tutorial-newpackage.html">Prev</a> </td><th width="60%" align="center">Chapter 10. Development Tutorial</th><td width="20%" align="right"> <a accesskey="n" href="tutorial-pages.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="tutorial-database"></a>Setting Up Database Objects</h2></div></div><div></div></div><div class="authorblurb"><p>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Setting Up Database Objects</title><meta name="generator" content="DocBook XSL Stylesheets V1.60.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="tutorial.html" title="Chapter 8. Development Tutorial"><link rel="previous" href="tutorial-newpackage.html" title="Creating a Package"><link rel="next" href="tutorial-pages.html" title="Creating Web Pages"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="tutorial-newpackage.html">Prev</a> </td><th width="60%" align="center">Chapter 8. Development Tutorial</th><td width="20%" align="right"> <a accesskey="n" href="tutorial-pages.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="tutorial-database"></a>Setting Up Database Objects</h2></div></div><div></div></div><div class="authorblurb"><p>
       by <a href="mailto:joel@aufrecht.org" target="_top">Joel Aufrecht</a><br>
           OpenACS docs are written by the named authors, and may be edited
           by OpenACS documentation staff.
-        </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2838908"></a>Code the data model</h3></div></div><div></div></div><p>We create all database objects with scripts in the
-      <tt class="computeroutput">samplenote/sql/</tt> directory.  All
+        </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2838209"></a>Code the data model</h3></div></div><div></div></div><p>We create all database objects with scripts in the
+      <tt class="computeroutput">myfirstpackage/sql/</tt> directory.  All
       database scripts are database-specific and are thus in either
-      the <tt class="computeroutput">samplenote/sql/oracle</tt> or
-      <tt class="computeroutput">samplenote/sql/postgresql</tt>.
-      Packages can support Oracle, PostgreSQL, or both.  </p><p>The first file will be
-      <tt class="computeroutput">samplenote-create.sql</tt>.  The
+      the <tt class="computeroutput">myfirstpackage/sql/oracle</tt> or
+      <tt class="computeroutput">myfirstpackage/sql/postgresql</tt>.
+      Packages can support Oracle, PostGreSQL, or both.  In this
+      tutorial, we'll work only with PostGreSQL</p><p>The first file will be
+      <tt class="computeroutput">myfirstpackage-create.sql</tt>.  The
       package manager requires a file with the name
       <tt class="computeroutput"><span class="replaceable"><span class="replaceable">packagekey</span></span>-create.sql</tt>,
       which it will run automatically when the package in installed.
@@ -17,228 +18,82 @@
       TABLE</tt> command, however, because we want to
       integrate our table with the OpenACS system.  By making each
       record in our table an OpenACS object, we gain access to the
-      permissions system as well as some metadata.  The downside is
+      permissions system and to services that integrate with OpenACS
+      objects, such as <tt class="computeroutput">general-comments</tt> and <tt class="computeroutput">notification</tt>. The cost
       that our table creation code must include several functions and
       stored procedures and is fairly complicated even for a simple
-      table.  A listing is provided below for you to cut and paste.
-      Comments are located within the source code, with each comment
-      preceeding the relevant code. (<a href="objects.html" target="_top">More
-      info about ACS Objects</a>)</p><p>First, create the necessary subdirectories and add them
-      cvs as you go.</p><pre class="screen">[service0@yourserver samplenote]$<b class="userinput"><tt> cd /web/service0/packages/samplenote</tt></b>
-[service0@yourserver samplenote]$ <b class="userinput"><tt>mkdir sql</tt></b>
-[service0@yourserver samplenote]$ <b class="userinput"><tt>cvs add sql</tt></b>
-Directory /cvsroot/service0/packages/samplenote/sql added to the repository
-[service0@yourserver samplenote]$ <b class="userinput"><tt>cd sql/</tt></b>
-[service0@yourserver sql]$ <b class="userinput"><tt>mkdir postgresql</tt></b>
-[service0@yourserver sql]$ <b class="userinput"><tt>cvs add postgresql</tt></b>
-Directory /cvsroot/service0/packages/samplenote/sql/postgresql added to the repository
-[service0@yourserver sql]$ <b class="userinput"><tt>cd postgresql/</tt></b></pre><p>We break out the sql commands into several files that can
-      be called independently, and then call all of the create files
-      from the master create file.  The top of each sql file has some
+      table.  </p><p>There are many kinds of OpenACS objects in the system.  (You
+      can see them with <tt class="computeroutput"> select object_type from
+      acs_object_types;</tt>.)  One such object is the
+      content_item, which is part of the content repository system.
+      We will make our data objects children of the content_item
+      object.  Not only will we gain the benefits of both OpenACS
+      Objects and content objects, we can also use some content
+      repository functions to simplify our database creation.  (<a href="objects.html" target="_top">More
+      information about ACS Objects</a>.  <a href="/doc/acs-content-repository" target="_top">More information about the
+      Content Repository</a>.)
+</p><p>The top of each sql file has some
       standard comments, including doc tags such as
       <tt class="computeroutput">@author</tt> which will be picked up
       by the API browser.  The string
       <tt class="computeroutput">$Id$</tt> will automatically be
-      expanded when the file is checked in to cvs.</p><pre class="screen">[service0@yourserver postgresql]$ <b class="userinput"><tt>emacs samplenote-create.sql</tt></b></pre><p>Paste this into the file and save and close.</p><div class="figure"><a name="id2835341"></a><p class="title"><b>Figure 10.2. Database Creation Script - master create file</b></p><pre class="programlisting">--
--- packages/samplenote/sql/postgresql/samplenote-create.sql
---
+      expanded when the file is checked in to cvs.</p><pre class="screen">[service0@yourserver postgresql]$ <b class="userinput"><tt>emacs myfirstpackage-create.sql</tt></b></pre><p>Paste this into the file and save and close.</p><div class="figure"><a name="id2828323"></a><p class="title"><b>Figure 8.2. Database Creation Script - master create file</b></p><pre class="programlisting">--
 -- @author rhs@mit.edu
--- @creation-date 2000-10-22
 -- @cvs-id $Id$
---
 --
 
-\i samplenote-table-create.sql
-\i samplenote-functions-create.sql</pre></div><p>Create the file to create the database table.</p><pre class="screen">[service0@yourserver postgresql]$ <b class="userinput"><tt>emacs samplenote-table-create.sql</tt></b></pre><p>Paste this into the file and save and close.</p><div class="figure"><a name="id2835198"></a><p class="title"><b>Figure 10.3. Database Creation Script - table</b></p><pre class="programlisting">--
--- packages/samplenote/sql/postgresql/samplenote-table-create.sql
---
--- @author rhs@mit.edu
--- @creation-date 2000-10-22
--- @cvs-id $Id$
---
-<span class="emphasis"><em>
-/* Create the table.  Each constraint is named to make it easier to
-identify during debugging.  The note_id is identical to the object
-id. */
-</em></span>
-create table samplenote (
-    note_id    integer        constraint samplenote_fk
-			        references acs_objects(object_id) 
-			      constraint samplenote_pk
-			        primary key,
-    title      varchar(255) 
-			      constraint samplenote_title_nn
- 			        not null,
-    body       varchar(1024)
+select content_type__create_type(
+    'mfp_note',                    -- content_type
+    'content_revision',            -- supertype
+    'MFP Note',                    -- pretty_name,
+    'MFP Notes',                   -- pretty_plural
+    'mfp_notes',                   -- table_name
+    'note_id',                     -- id_column
+    null                           -- name_method
 );
-
-<span class="emphasis"><em>
-/* Each record in our package is an 'samplenote', and each samplenote
-is an ACS Object.  That means that each record in the samplenote table
-has a corresponding record in acs_objects.  By making our records ACS
-objects, we gain access to the permissions model and other
-meta-functions.  In general, you should make a table an ACS Object
-Type if you expect to apply permissions directly at that level. */
-</em></span>
-select acs_object_type__create_type (
-	''samplenote'',			        -- object_type
-	''Sample Note'', 			-- pretty_name
-	''Sample Notes'', 			-- pretty_plural
-	''acs_object'',			        -- supertype
-	''samplenote'', 			        -- table_name
-	''note_id'',        			-- id_column
-	null,				        -- package_name
-	''f'',				        -- abstract_p
-	null,				        -- type_extension_table
-	''samplenote__name'' 			-- name_method
-	);
-</pre></div><p>Create the file to create the functions used to manipulate records.</p><pre class="screen">[service0@yourserver postgresql]$ <b class="userinput"><tt>emacs samplenote-functions-create.sql</tt></b></pre><p>Paste this into the file and save and close.</p><div class="figure"><a name="id2838636"></a><p class="title"><b>Figure 10.4. Database Creation Script - functions</b></p><pre class="programlisting">--
--- packages/samplenote/sql/postgresql/samplenote-functions-create.sql
---
--- @author rhs@mit.edu
--- @creation-date 2000-10-22
--- @cvs-id $Id$
---
---
-<span class="emphasis"><em>
-/* Since each record is also an Object, we make a creation function
-that will create an object and then use the object id to create a
-record in our table.  The function also takes several input variables.
-Title is required
-Body is required
-Creation date is optional and defaults to now
-Creation user, required, is the user id owns the object
-Creation ip is optional
-Context id, required, is the id of the package instance.  This allows 
-segregation of records by package instance, required to make the package 
-"package-aware." 
-define_function_args prepares the function to be used by a tcl wrapper function. */
-</em></span>
-select define_function_args('samplenote__new','note_id,title,body,creation_date,creation_user,creation_ip,context_id'); 
-
-create or replace function samplenote__new (integer,varchar,varchar,timestamptz,integer,varchar,integer)
-returns integer as '
-declare
-  p_note_id                                     alias for $1;
-  p_title					alias for $2;
-  p_body					alias for $3;
-  p_creation_date				alias for $4;
-  p_creation_user				alias for $5;
-  p_creation_ip					alias for $6;
-  p_context_id					alias for $7;
-  v_samplenote_id				int;
-begin
-	v_samplenote_id := acs_object__new (
-		p_note_id,
-		''samplenote'',
-		p_creation_date,
-		p_creation_user,
-		p_creation_ip,
-		p_context_id
-	);
-	insert into samplenote
-	  (note_id, title, body)
-	values
-	  (v_samplenote_id, p_title, p_body);
-	PERFORM acs_permission__grant_permission(
-          v_samplenote_id,
-          p_creation_user,
-          ''admin''
-    );
-	return v_samplenote_id;
-end;' language 'plpgsql';
-<span class="emphasis"><em>
-/* The __delete function deletes a record and all related overhead. */
-</em></span>  
-
-select define_function_args('samplenote__delete','note_id');
-create or replace function samplenote__delete (integer)
-returns integer as '
-declare
-  p_samplenote_id				alias for $1;
-begin
-    delete from acs_permissions
-		   where object_id = p_samplenote_id;
-	delete from samplenote
-		   where note_id = p_samplenote_id;
-	raise NOTICE ''Deleting samplenote...'';
-	PERFORM acs_object__delete(p_samplenote_id);
-	return 0;
-end;' language 'plpgsql';
-<span class="emphasis"><em>
-/* When we created the acs object type above, we specified a
-'name_method'.  This is the name of a function that will return the
-name of the object.  This is a convention ensuring that all objects
-can be identified.  Now we have to build that function.  In this case,
-we'll return a field called title as the name. */
-</em></span>
-select define_function_args('samplenote__name','note_id');
-
-create or replace function samplenote__name (integer)
-returns varchar as '
-declare
-    p_samplenote_id      alias for $1;
-    v_samplenote_name    samplenote.title%TYPE;
-begin
-	select title into v_samplenote_name
-		from samplenote
-		where note_id = p_samplenote_id;
-    return v_samplenote_name;
-end;
-' language 'plpgsql';
-</pre></div><p>Create a database file to drop everything if the package
-        is uninstalled.</p><pre class="screen">[service0@yourserver postgresql]$ <b class="userinput"><tt>emacs samplenote-drop.sql</tt></b></pre><div class="figure"><a name="id2833054"></a><p class="title"><b>Figure 10.5. Database deletion script</b></p><pre class="programlisting">-- packages/samplenote/sql/samplenote-drop.sql
+</pre></div><p>The creation script calls a function,
+    <tt class="computeroutput">content_type__create_type</tt>, which
+    in turn creates the necessary database changes to support our data
+    object.  Notice the use of "mfp."  This token, derived from "My
+    First Package," ensures that our object is unlikely to conflict
+    with objects from other packages.</p><p>Create a database file to drop everything if the package
+        is uninstalled.</p><pre class="screen">[service0@yourserver postgresql]$ <b class="userinput"><tt>emacs myfirstpackage-drop.sql</tt></b></pre><div class="figure"><a name="id2828334"></a><p class="title"><b>Figure 8.3. Database deletion script</b></p><pre class="programlisting">-- packages/myfirstpackage/sql/myfirstpackage-drop.sql
 -- drop script
 --
 -- @author rhs@mit.edu
--- @creation-date 2000-10-22
 -- @cvs-id $Id$
 --
-<span class="emphasis"><em>
-/* This script removes from the database everything associated with
-our table. */
-</em></span>
---drop package, which drops all functions created with define_function_args
-
-select drop_package('samplenote');
-
---drop permissions
-delete from acs_permissions where object_id in (select note_id from samplenote);
-
---drop objects
+-- THIS SCRIPT IS BROKEN AT THE MOMENT
+create function inline_0 ()
+returns integer as '
 declare
-	object_rec		record;
+    rec                 record;      
 begin
-	for object_rec in select object_id from acs_objects where object_type=''samplenote''
-	loop
-		perform acs_object__delete( object_rec.object_id );
-	end loop;
-	return 0;
+    for rec in (select folder_id 
+                  from cr_folders 
+                 where package_id in (select package_id 
+                                        from apm_packages 
+                                       where package_key = ''myfirstpackage''))
+        loop
+            perform content_folder__unregister_content_type(rec.folder_id, ''mfp_note'',''t'');
+        end loop;
+    return 0;
 end;' language 'plpgsql';
+select inline_0();
+drop function inline_0 ();
 
---drop table
-drop table samplenote;
-
---drop type
-select acs_object_type__drop_type(
-	   'samplenote',
+select content_type__drop_type(
+	   'mfp_notes',
+	   't',
 	   't'
-    );</pre></div><p>Add the database files to cvs.</p><pre class="screen">[service0@yourserver postgresql]$<b class="userinput"><tt> cvs add *.sql</tt></b>
-cvs add: scheduling file `samplenote-create.sql' for addition
-cvs add: scheduling file `samplenote-drop.sql' for addition
-cvs add: use 'cvs commit' to add these files permanently
-[service0@yourserver samplenote]$ <b class="userinput"><tt>cvs commit -m "new database files"</tt></b>
-cvs commit: Examining .
-cvs commit: Examining sql
-cvs commit: Examining sql/postgresql
-cvs commit: Examining www
-cvs commit: Examining www/doc
-cvs commit: Examining www/doc/xml
-RCS file: /cvsroot/service0/packages/samplenote/sql/postgresql/samplenote-create.sql,v
-done
-<span class="emphasis"><em>(many lines omitted)</em></span>
-done
-[service0@yourserver samplenote]$</pre><p>Run the create script manually to add your tables and functions.</p><pre class="screen">[service0@yourserver samplenote]$ <b class="userinput"><tt>cd sql/postgresql/</tt></b>
-[service0@yourserver postgresql]$ <b class="userinput"><tt>psql -f samplenote-create.sql</tt></b>
-[service0@yourserver postgresql]$</pre><p>If there are errors, use them to debug the sql file and try again.  If there are errors in the database table creation, you may need to run the drop script to drop the table so that you can recreate it.  The drop script will probably have errors since some of the things it's trying to drop may be missing.  They can be ignored.</p><p>If there are errors creating the functions, you can re-run the function creation file directly after fixing it, because all of the functions are created with <tt class="computeroutput">create or replace</tt> commands.  This will also make it easier to fix mistakes within the functions that aren't apparent until the functions are used.  And it will make upgrades easier.</p><p>Once you get the same output as shown above, test the drop script:</p><pre class="screen">[service0@yourserver postgresql]$ <b class="userinput"><tt>psql -f samplenote-drop.sql</tt></b>
+    );
+</pre></div><p>The drop script is a bit hairier than the create script.</p><p>Run the create script manually to add your tables and functions.</p><pre class="screen">[service0@yourserver postgresql]$ <b class="userinput"><tt>psql -f myfirstpackage-create.sql</tt></b>
+psql:myfirstpackage-create.sql:14: NOTICE:  CREATE TABLE / PRIMARY KEY will create implicit index 'mfp_notes_pkey' for table 'mfp_notes'
+psql:myfirstpackage-create.sql:14: NOTICE:  CREATE TABLE will create implicit trigger(s) for FOREIGN KEY check(s)
+ content_type__create_type
+---------------------------
+                         0
+(1 row)
+
+[service0@yourserver postgresql]$</pre><p>If there are errors, use them to debug the sql file and try again.  If there are errors in the database table creation, you may need to run the drop script to drop the table so that you can recreate it.  The drop script will probably have errors since some of the things it's trying to drop may be missing.  They can be ignored.</p><p>Once you get the same output as shown above, test the drop script:</p><pre class="screen">[service0@yourserver postgresql]$ <b class="userinput"><tt>psql -f myfirstpackage-drop.sql</tt></b>
 [service0@yourserver postgresql]$</pre><p>Once both scripts are working without errors, run the create script one last time and proceed.</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="tutorial-newpackage.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="tutorial-pages.html">Next</a></td></tr><tr><td width="40%" align="left">Creating a Package </td><td width="20%" align="center"><a accesskey="u" href="tutorial.html">Up</a></td><td width="40%" align="right"> Creating Web Pages</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a><center><a href="http://openacs.org/doc/tutorial-database.html#comments">View comments on this page at openacs.org</a></center></body></html>

@@ -7,9 +7,7 @@
 <p><strong>Getting Started</strong>
 <ul>
 <li><a href="release-notes.html">Release Notes</a>
-<li><a href="individual-programs.html">Required Software</a>
-<li><a href="unix-install.html">Unix Installation Guide</a>, 
-(<a href="win2k-installation.html">Windows</a>), (<a href="mac-installation.html">Mac OS X</a>)
+<li><a href="install-steps.html">Installation</a>
 <li><a href="upgrade.html">Upgrading</a>
 <li><a href="backup-recovery.html">Backup and Recovery</a>
 </ul>
@@ -38,7 +36,6 @@
 </td>
 
 <td valign="top">
-<a href="index.html">Core Documentation</a>
 <p><a href="/api-doc/">API Browser</a>
 <% 
 # This block of ADP code ensures that the Installer can still serve this
@@ -51,6 +48,7 @@ if {[db_table_exists apm_package_types]} {
         if { ! $found_p } { 
            set found_p 1
            adp_puts "\n<p><strong>Installed Packages</strong>\n<ul>\n"
+           adp_puts "\n<li><strong><a href=\"index.html\">Core Documentation</a></strong>\n"
         }
 	set index_page [lindex [glob -nocomplain \
 				  "[acs_package_root_dir $package_key]/www/doc/index.*"] 0]
@@ -73,6 +71,7 @@ if {[db_table_exists apm_package_types]} {
 
 
 if {!$found_p} {
+           adp_puts "\n<li><strong><a href=\"index.html\">Core Documentation</a></strong>\n"
     adp_puts "<li> No installed packages.\n"
 }
     adp_puts "</ul>"

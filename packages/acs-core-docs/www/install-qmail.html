@@ -1,4 +1,4 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Install qmail (OPTIONAL)</title><meta name="generator" content="DocBook XSL Stylesheets V1.60.1"><link rel="home" href="index.html" title="OpenACS Documentation"><link rel="up" href="install-more-software.html" title="Appendix B. Install additional supporting software"><link rel="previous" href="install-daemontools.html" title="Install Daemontools (OPTIONAL)"><link rel="next" href="analog-install.html" title="Install Analog web file analyzer"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="install-daemontools.html">Prev</a> </td><th width="60%" align="center">Appendix B. Install additional supporting software</th><td width="20%" align="right"> <a accesskey="n" href="analog-install.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="install-qmail"></a>Install qmail (OPTIONAL)</h2></div></div><div></div></div><p>Qmail is a Mail Transfer Agent.  It handles incoming and outgoing mail.  Install qmail if you want your OpenACS server to send and receive mail, and you don't want to use an alternate MTA.</p><div class="orderedlist"><ol type="1"><li><p><b>Install ucspi. </b>This program handles incoming tcp connections.
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Install qmail (OPTIONAL)</title><meta name="generator" content="DocBook XSL Stylesheets V1.60.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="install-more-software.html" title="Appendix B. Install additional supporting software"><link rel="previous" href="install-daemontools.html" title="Install Daemontools (OPTIONAL)"><link rel="next" href="analog-install.html" title="Install Analog web file analyzer"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="install-daemontools.html">Prev</a> </td><th width="60%" align="center">Appendix B. Install additional supporting software</th><td width="20%" align="right"> <a accesskey="n" href="analog-install.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="install-qmail"></a>Install qmail (OPTIONAL)</h2></div></div><div></div></div><p>Qmail is a Mail Transfer Agent.  It handles incoming and outgoing mail.  Install qmail if you want your OpenACS server to send and receive mail, and you don't want to use an alternate MTA.</p><div class="orderedlist"><ol type="1"><li><p><b>Install ucspi. </b>This program handles incoming tcp connections.
               <a href="individual-programs.html#ucspi-download">Download ucspi</a> and install it.</p><p>Red Hat 9.0: put </p><pre class="programlisting">#include &lt;errno.h&gt;</pre><p> as the first line of <tt class="computeroutput">error.h</tt>.  <a href="http://www.riverside.org/archive/html/djbdns/2003-01/msg00307.html" target="_top">More information</a>)</p><pre class="screen">[root@yourserver root]# <b class="userinput"><tt>cd /usr/local/src</tt></b>
 [root@yourserver src]# <b class="userinput"><tt>tar xzf /tmp/ucspi-tcp-0.88.tar.gz</tt></b>
 [root@yourserver src]# <b class="userinput"><tt>cd ucspi-tcp-0.88</tt></b>
@@ -21,7 +21,7 @@ running the tcpserver program which is part of ucspi-tcp:</p><pre class="screen"
 tcpserver: usage: tcpserver [ -1UXpPhHrRoOdDqQv ] [ -c limit ] [ -x rules.cdb ] [ -B banner ] [ -g gid ] [ -u uid
 ] [ -b backlog ] [ -l localname ] [ -t timeout ] host port program
 [root@yourserver ucspi-tcp-0.88]#
-</pre><p><a class="indexterm" name="id2836516"></a>
+</pre><p><a class="indexterm" name="id2837002"></a>
 (I'm not sure if this next step is 100% necessary, but when I skip it
 I get problems.  If you get the error <tt class="computeroutput">553 sorry, that domain isn't in my list of allowed rcpthosts (#5.7.1)</tt> then you need to do this.)  AOLServer sends outgoing mail via the ns_sendmail
 command, which pipes a command to the sendmail executable.  Or, in our
@@ -35,7 +35,7 @@ set up an exception so that any mail sent from 127.0.0.1 is allowed to
 send outgoing mail.</p><pre class="screen">[root@yourserver ucspi-tcp-0.88]# <b class="userinput"><tt>cp /tmp/openacs-5.0.0a1/packages/acs-core-docs/www/files/tcp.smtp.txt /etc/tcp.smtp</tt></b>
 [root@yourserver ucspi-tcp-0.88]# <b class="userinput"><tt>tcprules /etc/tcp.smtp.cdb /etc/tcp.smtp.tmp &lt; /etc/tcp.smtp</tt></b>
 <pre class="action"><span class="action">cp /tmp/openacs-5.0.0a1/packages/acs-core-docs/www/files/tcp.smtp.txt /etc/tcp.smtp 
-tcprules /etc/tcp.smtp.cdb /etc/tcp.smtp.tmp &lt; /etc/tcp.smtp </span></pre></pre></li><li><p><b>Install Qmail. </b><a class="indexterm" name="id2836558"></a></p><p><a href="individual-programs.html#ucspi-download">Download qmail</a>,
+tcprules /etc/tcp.smtp.cdb /etc/tcp.smtp.tmp &lt; /etc/tcp.smtp </span></pre></pre></li><li><p><b>Install Qmail. </b><a class="indexterm" name="id2837069"></a></p><p><a href="individual-programs.html#ucspi-download">Download qmail</a>,
             set up the standard supporting users and build the binaries:</p><p>Red Hat 9.0: Put 
 </p><pre class="programlisting">#include &lt;errno.h&gt;</pre><p>
 as the first line of
@@ -74,7 +74,7 @@ useradd -g qmail -d /var/qmail qmailq
 useradd -g qmail -d /var/qmail qmailr 
 useradd -g qmail -d /var/qmail qmails
 cd qmail-1.03 
-make setup check</span></pre></pre><p>Replace sendmail with qmail's wrapper.</p><a class="indexterm" name="id2838035"></a><pre class="screen">[root@yourserver qmail-1.03]# <b class="userinput"><tt>rm -f /usr/bin/sendmail /usr/sbin/sendmail</tt></b>
+make setup check</span></pre></pre><p>Replace sendmail with qmail's wrapper.</p><a class="indexterm" name="id2834966"></a><pre class="screen">[root@yourserver qmail-1.03]# <b class="userinput"><tt>rm -f /usr/bin/sendmail /usr/sbin/sendmail</tt></b>
 [root@yourserver qmail-1.03]# <b class="userinput"><tt>ln -s /var/qmail/bin/sendmail /usr/sbin/sendmail</tt></b>
 [root@yourserver qmail-1.03]#
 <pre class="action"><span class="action">rm -f /usr/bin/sendmail /usr/sbin/sendmail
@@ -96,7 +96,7 @@ Make sure to change rcpthosts if you add hosts to locals or virtualdomains!
 <pre class="action"><span class="action">cd ~alias; touch .qmail-postmaster .qmail-mailer-daemon .qmail-root 
 chmod 644 ~alias/.qmail* 
 /var/qmail/bin/maildirmake ~alias/Maildir/ 
-chown -R alias.nofiles /var/qmail/alias/Maildir</span></pre></pre><a class="indexterm" name="id2836625"></a><p>Configure qmail to use the Maildir delivery format
+chown -R alias.nofiles /var/qmail/alias/Maildir</span></pre></pre><a class="indexterm" name="id2835087"></a><p>Configure qmail to use the Maildir delivery format
           (instead of mbox), and install a version of the qmail startup script modified to use Maildir.</p><pre class="screen">[root@yourserver alias]# <b class="userinput"><tt>echo "./Maildir" &gt; /var/qmail/bin/.qmail</tt></b>
 [root@yourserver alias]# <b class="userinput"><tt>cp /tmp/openacs-5.0.0a1/packages/acs-core-docs/www/files/qmail.rc.txt /var/qmail/rc</tt></b>
 [root@yourserver alias]# <b class="userinput"><tt>chmod 755 /var/qmail/rc</tt></b>

@@ -2,7 +2,7 @@
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
                "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
 
-<!ENTITY % myvars SYSTEM "../variables.ent">
+<!ENTITY % myvars SYSTEM "variables.ent">
 %myvars;
 ]>
 <appendix id="releasing-openacs">
