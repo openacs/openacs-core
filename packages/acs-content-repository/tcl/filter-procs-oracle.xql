@@ -65,7 +65,7 @@
     from 
       cr_items
     where
-      item_id = content_item.get_id(:url, :content_root, :resolve_index)
+      item_id = content_item.get_id(:url, :content_root)
 
       </querytext>
 </fullquery>

@@ -32,7 +32,7 @@ ad_proc -public ::content::item::new {
     {-storage_type "file"}
     {-attributes ""}
 } {
-    @author Dave Bauer (dave@etthedesignexperience.org)
+    @author Dave Bauer (dave@thedesignexperience.org)
     @creation-date 2004-05-28
 
     Create a new content item This proc creates versioned content
@@ -54,8 +54,13 @@ ad_proc -public ::content::item::new {
     @param creation_date - defaults to current date and time
     @param storage_type - file, lob, or text (postgresql only)
     @param locale -
-
-    @param attributes - A list of pairs of additional attributes and their values to pass to the constructor. Each pair is a list of two elements: key => value
+    @param title - title of content_revision to be created
+    @param description of content_revision to be created
+    @param text - text of content revision to be created
+    @param attributes - A list of lists ofpairs of additional attributes and
+    their values to pass to the constructor. Each pair is a list of two
+     elements: key => value such as
+    [list [list attribute value] [list attribute value]]
 
     @return item_id of the new content item
 
@@ -73,29 +78,48 @@ ad_proc -public ::content::item::new {
         [list creation_ip $creation_ip ] \
         [list item_subtype $item_subtype ] \
         [list content_type $content_type ] \
-        [list title $title ] \
-        [list description $description ] \
         [list mime_type $mime_type ] \
         [list nls_language $nls_language ] \
-        [list text $text ] \
-        [list data $data ] \
         [list relation_tag $relation_tag ] \
         [list is_live $is_live ] \
         [list storage_type $storage_type]
 
+    # we don't pass title, text, or data to content_item__new
+    # because the magic revision creation of the pl/sql proc does
+    # not create a proper subtype of content revision, also it
+    # can't set attributes of an extended type
+    
     # the content type is not the object type of the cr_item so we pass in
     # the cr_item subtype here and content_type as part of
     # var_list
-    ns_log Debug "
-DB --------------------------------------------------------------------------------
-DB DAVE debugging /var/lib/aolserver/ctk/packages/acs-content-repository/tcl/content-item-procs.tcl
-DB --------------------------------------------------------------------------------
-DB var_list = '${var_list}'
-DB --------------------------------------------------------------------------------"
+
     set item_id [package_exec_plsql \
 		     -var_list $var_list \
 		     content_item new]
+    # if we have attributes we pass in everything
+    # and create a revision with all subtype attributes that were
+    # passed in
+
+    # since we can't rely on content_item__new to create a revision
+    # we have to pass is_live to content::revision::new and
+    # set the live revision there
+    if {[exists_and_not_null title] \
+            || [exists_and_not_null text] \
+            || [exists_and_not_null data] \
+            || [llength $attributes]} {
+        content::revision::new \
+            -item_id $item_id \
+            -title $title \
+            -description $description \
+            -content $text \
+            -mime_type $mime_type \
+            -content_type $content_type \
+            -is_live $is_live \
+            -attributes $attributes
+    }
+    
     return $item_id
+
 }
 
 ad_proc -public ::content::item::delete {
@@ -156,62 +180,34 @@ ad_proc -public ::content::item::move {
 
 ad_proc -public ::content::item::get {
     -item_id:required
-    {-array "content_item"}
     {-revision "live"}
-    {-revision_id ""}
-    {-attributes ""}
+    {-array_name "content_item"}
 } {
     @author Dave Bauer (dave@thedesignexperience.org)
     @creation-date 2004-05-28
 
     @param item_id
     @param revision live, latest, or best (live if it exists, otherwise latest)
-    @param attributes A list of pairs of additional attributes and their values to get. Each pair is a list of two elements: key => value
-
-    @return
+    @param array_name name of array to upvar content into
+    @return upvars array_name containing all attributes of the content
+    type except content
+    @return returns 0 if item does not exists or 1 if query was sucessful
 
     @error
 } {
-    upvar $array content_item
-
-    array set content_item {}
-    if {![string equal "" $item_id]} {
-        item::get -item_id $item_id -array item
-    } else {
-        db_1row get_item_from_revision_id "select * from cr_items where item_id=(select item_id from cr_revisions where revision_id=:revision_id)" -column_array item
+    upvar $array_name local_array
+    if {[lsearch {live latest} $revision] == -1} {
+        error "content::item::get revision was '${revision}'. It must be 'live' or 'latest'"
     }
-    if {[array size item] < 1} {
+    set content_type [content_type -item_id $item_id]
+    if {[string equal "" $content_type]} {
+        # content_type query was unsucessful, item does not exist
         return 0
     }
-
-    acs_object_type::get -object_type $item(content_type) -array object_type
-
-    set revision_id 0
-    if {[string equal $revision "live"] && ![empty_string_p $item(live_revision)]} {
-        set revision_id $item(live_revision)
-    } elseif {[string equal $revision "best"]} {
-        if {![empty_string_p $item(live_revision)]} {
-            set revision_id $item(live_revision)
-        } else {
-            set revision_id $item(latest_revision)
-        }
-    } elseif {[string equal $revision "latest"]} {
-        set revision_id $item(latest_revision)
-    }
-
-    if {!$revision_id} {
-        return 0
-    }
-
-    # content array will be set by item::get_conrent_revision
-    item::get_revision_content $revision_id
-
-    set content_item_list [array get item]
-    append content_item_list " [array get content]"
-
-    array set content_item $content_item_list
-
-    return 1
+    set table_name [db_string get_table_name "select table_name from acs_object_types where object_type=:content_type"]
+    set table_name "${table_name}x"    
+    # get attributes of the content_item use the content_typex view
+    return [db_0or1row get_item "" -column_array local_array]
 }
 
 ad_proc -public ::content::item::update {
@@ -581,7 +577,7 @@ ad_proc -public content::item::register_template {
 ad_proc -public content::item::relate {
     -item_id:required
     -object_id:required
-    {-relation_tag "generic"}
+    {-relation_tag ""}
     {-order_n ""}
     {-relation_type "cr_item_rel"}
 } {
@@ -605,7 +601,7 @@ ad_proc -public content::item::relate {
 
 ad_proc -public content::item::set_live_revision {
     -revision_id:required
-    {-publish_status ""}
+    {-publish_status "ready"}
 } {
     @param revision_id
     @param publish_status
