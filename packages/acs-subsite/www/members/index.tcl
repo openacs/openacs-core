@@ -94,9 +94,10 @@ template::list::create \
             link_url_eval {[acs_community_member_url -user_id $user_id]}
         }
         email {
-            label "[_ acs-subsite.Email]"
-            link_url_col email_url
-            link_html { title "[_ acs-subsite.Send_email_to_this_user]" }
+           label "[_ acs-subsite.Email]"
+	    display_template {
+		@members.user_email;noquote@
+	    }
         }
         rel_role {
             label "[_ acs-subsite.Role]"
@@ -169,6 +170,7 @@ db_multirow -extend {
     make_admin_url
     make_member_url
     rel_role_pretty
+    user_email
 } -unclobber members members_select {} {
     if { $member_admin_p > 0 } {
         set rel_role_pretty [lang::util::localize $admin_role_pretty]
@@ -176,7 +178,7 @@ db_multirow -extend {
         set rel_role_pretty [lang::util::localize $member_role_pretty]
     }
     set member_state_pretty [group::get_member_state_pretty -member_state $member_state]
-
+    set user_email [email_image::get_user_email -user_id $user_id]
     if { $admin_p } {
         switch $member_state {
             approved {
