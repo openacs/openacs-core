@@ -11,12 +11,19 @@ ad_library {
 # Find the aspell or, second best, the ispell binary.
 # In case neither one is found, spell-checking will be disabled.
 
-set bin [ad_decode [catch {exec which aspell}] \
-	     0 [exec which aspell] \
-	     [ad_decode [catch {exec which ispell}] \
-		  0 [exec which ispell] \
-		  ""]]
+# DRB: The original code here apparently was written under the delusion
+# that using "catch" to guard calls to "exec" would allow one to safely use
+# the same "exec" elsewhere in the same command, as though Tcl does short-circuit
+# evaluation of exprs.  I only mention this in case someone sees the clever (but wrong)
+# code and decides they want to replace my fix with the clever (but wrong) version ...
 
+if { ![catch {exec which aspell}] } {
+    set bin [exec which aspell]
+} elseif { ![catch {exec which ispell}] } {
+    set bin [exec which ispell]
+} else {
+    set bin ""
+}
 
 # Do we want dialect dictionaries (if available) or not?
 # Note that if you change this param it won't take effect
