@@ -51,33 +51,6 @@ if { ![install_good_data_model_p] } {
 
 install_do_packages_install
 
-##############
-#
-# Load message catalogs
-#
-#############
-
-# Doing this before restart so that keys are available in init files on startup
-ns_write "<p>Loading message catalogs..."
-lang::catalog::import -initialize
-ns_write "  <p>Done.<p>"
-
-##############
-#
-# Secret tokens
-#
-#############
-
-ns_write "<p>Generating secret tokens..."
-populate_secret_tokens_db
-ns_write "  <p>Done.<p>"
-
-##############
-#
-# Admin create
-#
-#############
-
 if { [empty_string_p $username] } {
     set username $email
 }
@@ -123,7 +96,38 @@ Please <a href=\"javascript:history.back()\">try again</a>.
     rename util_memoize_flush {}
     rename util_memoize_flush_saved util_memoize_flush
   }
+  ad_conn -set user_id $user_id
 }
+
+# Now process the application bundle if an install.xml file was found.
+
+if { [file exists "[acs_root_dir]/install.xml"] } {
+    set output [apm::process_install_xml "/install.xml" {}]
+    ns_write "<p>[join $output "</p><p>"]</p>"
+}
+
+
+##############
+#
+# Load message catalogs
+#
+#############
+
+
+# Doing this before restart so that keys are available in init files on startup
+ns_write "<p>Loading message catalogs..."
+lang::catalog::import -initialize
+ns_write "  <p>Done.<p>"
+
+##############
+#
+# Secret tokens
+#
+#############
+
+ns_write "<p>Generating secret tokens..."
+populate_secret_tokens_db
+ns_write "  <p>Done.<p>"
 
 ##############
 #

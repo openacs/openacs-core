@@ -327,17 +327,10 @@ proc install_redefine_ad_conn {} {
     # Peter Marklund
     # We need to be able to invoke ad_conn in the installer. However
     # We cannot use the rp_filter that sets up ad_conn
-    proc ad_conn { args } {
-        set attribute [lindex $args 0]
-
-        if { [string equal $attribute "-connected_p"] } {
-            set return_value 1
-        } elseif { [catch {set return_value [ns_conn $attribute] } error] } {
-            set return_value ""
-        }
-
-        return $return_value
-    }
+    ad_conn -set connected_p 1
+    ad_conn -set user_id {}
+    ad_conn -set node_id {}
+    ad_conn -set package_id {}
 }
 
 ad_proc -public ad_windows_p {} {
@@ -461,11 +454,6 @@ ad_proc -private install_do_packages_install {} {
 
         ns_write "</pre></blockquote>"
 
-        # Now process the application bundle if an install.xml file was found.
-        if { [file exists "[acs_root_dir]/install.xml"] } {
-            set output [apm::process_install_xml "/install.xml" {}]
-            ns_write "<p>[join $output "</p><p>"]</p>"
-        }
     }
 
 
