@@ -9,7 +9,7 @@
 
  
 <authorblurb>
-<para>By <ulink url="mailto:psu@arsdigita.com">Pete Su</ulink></para>
+<para>By Pete Su</para>
 </authorblurb>
 
 
@@ -256,7 +256,7 @@ explained by example: consider some hypothetical rows in the
 <computeroutput>address_book</computeroutput> table:
 </para>
 
-<blockquote>
+
 <informaltable frame="all">
 <tgroup cols="5">
 <thead>
@@ -294,7 +294,6 @@ explained by example: consider some hypothetical rows in the
 </tbody>
 </tgroup>
 </informaltable>
-</blockquote>
 
 <para>
 The first row represents an entry in User 123's personal address book,
@@ -326,7 +325,7 @@ field to <computeroutput>'f'</computeroutput> if you want to override the defaul
 permissions in a subtree of some context.
 </para>
 
-<para> A good example of how to use this hierarchy is in the bboard
+<para> A good example of how to use this hierarchy is in the forums
 application. With only row-level permissions it is not obvious how to
 reasonably initialize the access control list when creating a
 message. At best, we have to explicitly grant various read and write
@@ -376,28 +375,26 @@ some object has no permissions attached to it, and its value for
 <para>
 
 At this point, you should either go and download the Notes example
-code from the package repository, or check it out of the ArsDigita CVS
+code from the package repository, or check it out of the OpenACS CVS
 repository and add it to your server. The package is called
-"notes". To check it out from CVS, read the <ulink url="http://acs40.arsdigita.com/acs40-project-central/client-build.html">these instructions</ulink> on how to use anonymous checkouts and then
-checkout the module <computeroutput>acs-packages/notes</computeroutput>:
+"notes". To check it out from CVS, read the <ulink url="http://openacs.org/4/checkout">these instructions</ulink>
+on how to use anonymous checkouts and then
+checkout the module <computeroutput>notes</computeroutput>:
 
 </para>
 
  
 
-<programlisting>
-
-% export CVSROOT=:pserver:anonymous@cvs.arsdigita.com:/usr/local/cvsroot
-% cvs login # the password is acsrules
-% cvs checkout acs-packages/notes
-
+<programlisting>% export CVSROOT=:pserver:anonymous@openacs.org:/cvsroot
+% cvs login # just hit enter when prompted for a password
+% cvs co notes
 </programlisting>
 
 
 <para>
 After you have downloaded the package, look at the
 <computeroutput>index.tcl</computeroutput> page in the <computeroutput>www</computeroutput> directory. You can also
-look at the code <ulink url="http://cvs.arsdigita.com/cgi-bin/cvsweb.pl/acs-packages/notes/www/index.tcl?rev=1.3&amp;content-type=text/x-cvsweb-markup">in your browser</ulink>. The code should look something like this:
+look at the code <ulink url="http://cvs.openacs.org/cvs/openacs-4/packages/notes/www/index.tcl?view=markup">in your browser</ulink>. The code should look something like this:
 </para>
 
  
@@ -473,7 +470,7 @@ see notes that we are allowed to see.
 </para>
 
 <para>
-Next, look at the <ulink url="http://cvs.arsdigita.com/cgi-bin/cvsweb.pl/acs-packages/notes/www/index.adp?rev=1.1&amp;content-type=text/x-cvsweb-markup">index.adp</ulink>. It is pretty complicated.
+Next, look at the <ulink url="http://cvs.openacs.org/cvs/openacs-4/packages/notes/www/index.adp?view=markup">index.adp</ulink>. It is pretty complicated.
 The main part of this page uses a <computeroutput>multiple</computeroutput> template
 tag. If you want to experiment, you can replace the main body of the
 <computeroutput>multiple</computeroutput> tag with this:

@@ -3,12 +3,11 @@
         version="1.1"
                 exclude-result-prefixes="doc">
 
-<!-- Import chunk.xsl  
-
-  <xsl:import href="/usr/share/sgml/docbook/xsl-stylesheets/html/chunk.xsl"/>
+<!-- Import chunk.xsl, assumes XSL is a symlink to the docbook xsl-stylesheets 
+     see http://sourceforge.net/projects/docbook/ 
+     the makefile will try to create the link but may not find it.
 -->
-<!-- Debian 3.0 use this path for chunk.xsl instead: -->
-  <xsl:import href="/usr/share/sgml/docbook/stylesheet/xsl/nwalsh/html/chunk.xsl"/>
+  <xsl:import href="XSL/html/chunk.xsl"/>
 
 <!-- override default cellspacing value -->
 
@@ -17,6 +16,7 @@
 <!-- vinodk: Not sure if this is needed                   -->
   <xsl:output media-type="text/html" encoding="utf-8"/>
 
+  <xsl:variable name="generate.index">1</xsl:variable>
 
 <!-- vinodk: narrower TOC's, use chunker (?), pretty file names      -->
   <xsl:variable name="toc.section.depth">1</xsl:variable>
@@ -24,7 +24,8 @@
   <xsl:variable name="use.id.as.filename">1</xsl:variable>
 
   <xsl:variable name="chunk.first.sections">1</xsl:variable>
-  
+
+
 <!-- vinodk: Add our logo to header                   -->
   <xsl:template name="header.navigation">
     <xsl:param name="prev" select="/foo"/>
@@ -34,7 +35,7 @@
 
     <xsl:if test="$suppress.navigation = '0'">
       <div class="navheader">
-        <a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0" /></a>
+        <a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0" alt="Alex logo" /></a>
         <table width="100%" summary="Navigation header" border="0">
           <tr>
             <td width="20%" align="left">
@@ -199,14 +200,11 @@
                   for authorblurb. Also add doc disclaimer.   -->
   <xsl:template match="authorblurb">
     <div class="{name(.)}">
-      <p>
       <xsl:apply-templates/>
-        <br />
         <xsl:text>
           OpenACS docs are written by the named authors, and may be edited
           by OpenACS documentation staff.
         </xsl:text>
-      </p>
     </div>
   </xsl:template>
   
@@ -307,9 +305,7 @@
 </xsl:template>
 
 <xsl:template match="action">
-  <pre class="action">
-    <xsl:call-template name="inline.charseq"/>
-  </pre>	
+    <span class="action"><xsl:call-template name="inline.charseq"/></span>
 </xsl:template>
 
 <xsl:template match="replaceable">

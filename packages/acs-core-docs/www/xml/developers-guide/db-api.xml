@@ -8,9 +8,7 @@
   <title>The OpenACS Database Access API</title>
 
   <para>
-    By <ulink url="mailto:psu@arsdigita.com">Pete Su</ulink> and
-    <ulink url="mailto:jsalz@mit.edu">Jon Salz</ulink>. Modified
-    by Roberto Mello.
+    By Pete Su and Jon Salz. Modified by Roberto Mello.
   </para>
   
   <sect2 id="db-api-overview">
@@ -135,14 +133,18 @@ and some_table.condition_p = 'foo'
     </para>
     <orderedlist>
       <listitem>
+	<para>
 	If the literal value is a
 	huge string, then we waste a lot of time in the database server doing
 	useless parsing.
+	</para>
       </listitem>
       <listitem>
+	<para>
 	Second, if the literal value contains characters like
 	single quotes, we have to be careful to double-quote them, because not
 	quoting them will lead to surprising errors.
+	</para>
       </listitem>
       <listitem>
 	<para>
@@ -542,9 +544,9 @@ db_abort_transaction
     <para>
 	Performs the SQL query <computeroutput>sql</computeroutput>, saving results in variables
     of the form
-    <computeroutput><emphasis>var_name</emphasis>:1</computeroutput>, <computeroutput><emphasis>var_name</emphasis>:2</computeroutput>, etc,
-    setting <computeroutput><emphasis>var_name</emphasis>:rowcount</computeroutput> to the total number
-    of rows, and setting <computeroutput><emphasis>var_name</emphasis>:columns</computeroutput> to a
+    <computeroutput><replaceable>var_name</replaceable>:1</computeroutput>, <computeroutput><replaceable>var_name</replaceable>:2</computeroutput>, etc,
+    setting <computeroutput><replaceable>var_name</replaceable>:rowcount</computeroutput> to the total number
+    of rows, and setting <computeroutput><replaceable>var_name</replaceable>:columns</computeroutput> to a
     list of column names. 
     </para>
 
@@ -573,7 +575,7 @@ db_abort_transaction
 
     <para>
     You may also add additional, computed columns to the multirow, using the
-    <computeroutput>-extend { <emphasis>col_1</emphasis> <emphasis>col_2</emphasis> ... }</computeroutput> switch. This is
+    <computeroutput>-extend { <replaceable>col_1</replaceable> <replaceable>col_2</replaceable> ... }</computeroutput> switch. This is
     useful for things like constructing a URL for the object retrieved by
     the query.
     </para>                                                                                                                                           

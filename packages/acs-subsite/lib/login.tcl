@@ -171,8 +171,8 @@ ad_form -extend -name login -on_request {
     array set auth_info [auth::authenticate \
                              -return_url $return_url \
                              -authority_id $authority_id \
-                             -email $email \
-                             -username $username \
+                             -email [string trim $email] \
+                             -username [string trim $username] \
                              -password $password \
                              -persistent=[expr $allow_persistent_login_p && [template::util::is_true $persistent_p]]]
     

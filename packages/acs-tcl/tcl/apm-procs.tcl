@@ -126,7 +126,7 @@ ad_proc -public apm_doc_body_callback { string } {
     doc_body_append $string
 }
 
-ad_proc apm_callback_and_log { { -severity Debug } callback message } {
+ad_proc apm_callback_and_log { { -severity Notice } callback message } {
 
     Executes the $callback callback routine with $message as an argument,
     and calls ns_log with the given $severity.

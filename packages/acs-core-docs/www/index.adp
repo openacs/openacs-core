@@ -3,8 +3,10 @@
 <table border="0" cellpadding="8" cellspacing="0" width="80%">
 
 <tr><td valign="top">
-<a href="http://openacs.org/projects/openacs/doc-project">Errata and
-Corrections</a>
+<a href="index.html">Full index</a>
+
+<br>
+<a href="http://openacs.org/projects/openacs/doc-project">Errata and Corrections</a>
 <p><strong>Getting Started</strong>
 <ul>
 <li><a href="release-notes.html">Release Notes</a>
@@ -32,7 +34,9 @@ Corrections</a>
 
 <strong>Archive</strong>
 <ul>
-<li><a href="http://openacs.org/projects/openacs/doc-project/olddocs">Documentation for Earlier Versions of OpenACS</a>
+<li><a
+href="http://openacs.org/projects/openacs/doc-project/olddocs">Documentation
+for Past and Future Versions of OpenACS</a>
 </ul>
 </td>
 

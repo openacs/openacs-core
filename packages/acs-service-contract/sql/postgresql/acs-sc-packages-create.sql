@@ -1,4 +1,4 @@
-create function acs_sc_contract__new(varchar,text)
+create or replace function acs_sc_contract__new(varchar,text)
 returns integer as '
 declare
     p_contract_name             alias for $1;
@@ -31,7 +31,7 @@ end;' language 'plpgsql';
 
 
 
-create function acs_sc_contract__get_id(varchar)
+create or replace function acs_sc_contract__get_id(varchar)
 returns integer as '
 declare
     p_contract_name             alias for $1;
@@ -44,11 +44,11 @@ begin
 
     return v_contract_id;
 
-end;' language 'plpgsql';
+end;' language 'plpgsql' stable strict;
 
 
 
-create function acs_sc_contract__get_name(integer)
+create or replace function acs_sc_contract__get_name(integer)
 returns varchar as '
 declare
     p_contract_id               alias for $1;
@@ -61,11 +61,11 @@ begin
 
     return v_contract_name;
 
-end;' language 'plpgsql';
+end;' language 'plpgsql' stable strict;
 
 
 
-create function acs_sc_contract__delete(integer)
+create or replace function acs_sc_contract__delete(integer)
 returns integer as '
 declare
     p_contract_id               alias for $1;
@@ -80,7 +80,7 @@ end;' language 'plpgsql';
 
 
 
-create function acs_sc_contract__delete(varchar)
+create or replace function acs_sc_contract__delete(varchar)
 returns integer as '
 declare
     p_contract_name             alias for $1;
@@ -97,7 +97,7 @@ end;' language 'plpgsql';
 
 
 
-create function acs_sc_operation__new(varchar,varchar,text,boolean,integer,varchar,varchar)
+create or replace function acs_sc_operation__new(varchar,varchar,text,boolean,integer,varchar,varchar)
 returns integer as '
 declare
     p_contract_name             alias for $1;
@@ -156,7 +156,7 @@ end;' language 'plpgsql';
 
 
 
-create function acs_sc_operation__get_id(varchar,varchar)
+create or replace function acs_sc_operation__get_id(varchar,varchar)
 returns integer as '
 declare
     p_contract_name             alias for $1;
@@ -171,11 +171,10 @@ begin
 
     return v_operation_id;
 
-end;' language 'plpgsql';
+end;' language 'plpgsql' stable strict;
 
 
-
-create function acs_sc_operation__delete(integer)
+create or replace function acs_sc_operation__delete(integer)
 returns integer as '
 declare
     p_operation_id              alias for $1;
@@ -189,8 +188,8 @@ begin
 end;' language 'plpgsql';
 
 
-
-create function acs_sc_operation__delete(varchar,varchar)
+-- XXX: should it exception on null?
+create or replace function acs_sc_operation__delete(varchar,varchar)
 returns integer as '
 declare
     p_contract_name             alias for $1;
@@ -207,9 +206,9 @@ begin
 
     return v_operation_id;
 
-end;' language 'plpgsql';
+end;' language 'plpgsql' strict;
 
-create function acs_sc_impl__new(varchar,varchar,varchar,varchar)
+create or replace function acs_sc_impl__new(varchar,varchar,varchar,varchar)
 returns integer as '
 declare
     p_impl_contract_name        alias for $1;
@@ -267,7 +266,7 @@ begin
 
 end;' language 'plpgsql';
 
-create function acs_sc_impl__get_id(varchar,varchar)
+create or replace function acs_sc_impl__get_id(varchar,varchar)
 returns integer as '
 declare
     p_impl_contract_name        alias for $1;
@@ -282,10 +281,10 @@ begin
 
     return v_impl_id;
 
-end;' language 'plpgsql';
+end;' language 'plpgsql' stable strict;
 
 
-create function acs_sc_impl__get_name(integer)
+create or replace function acs_sc_impl__get_name(integer)
 returns varchar as '
 declare
     p_impl_id                   alias for $1;
@@ -298,11 +297,11 @@ begin
 
     return v_impl_name;
 
-end;' language 'plpgsql';
+end;' language 'plpgsql' stable strict;
 
 
 
-create function acs_sc_impl__delete(varchar,varchar)
+create or replace function acs_sc_impl__delete(varchar,varchar)
 returns integer as '
 declare
     p_impl_contract_name        alias for $1;
@@ -322,7 +321,7 @@ end;' language 'plpgsql';
 
 
 
-create function acs_sc_impl_alias__new(varchar,varchar,varchar,varchar,varchar)
+create or replace function acs_sc_impl_alias__new(varchar,varchar,varchar,varchar,varchar)
 returns integer as '
 declare
     p_impl_contract_name        alias for $1;
@@ -358,7 +357,7 @@ end;' language 'plpgsql';
 
 
 
-create function acs_sc_impl_alias__delete(varchar,varchar,varchar)
+create or replace function acs_sc_impl_alias__delete(varchar,varchar,varchar)
 returns integer as '
 declare
     p_impl_contract_name        alias for $1;
@@ -380,7 +379,7 @@ end;' language 'plpgsql';
 
 
 
-create function acs_sc_binding__new(integer,integer)
+create or replace function acs_sc_binding__new(integer,integer)
 returns integer as '
 declare
     p_contract_id               alias for $1;
@@ -419,7 +418,7 @@ end;' language 'plpgsql';
 
 
 
-create function acs_sc_binding__new(varchar,varchar)
+create or replace function acs_sc_binding__new(varchar,varchar)
 returns integer as '
 declare
     p_contract_name             alias for $1;
@@ -444,7 +443,7 @@ begin
 end;' language 'plpgsql';
 
 
-create function acs_sc_binding__delete(integer,integer)
+create or replace function acs_sc_binding__delete(integer,integer)
 returns integer as '
 declare
     p_contract_id               alias for $1;
@@ -459,7 +458,7 @@ begin
 end;' language 'plpgsql';
 
 
-create function acs_sc_binding__delete(varchar,varchar)
+create or replace function acs_sc_binding__delete(varchar,varchar)
 returns integer as '
 declare
     p_contract_name             alias for $1;
@@ -480,7 +479,7 @@ end;' language 'plpgsql';
 
 
 
-create function acs_sc_binding__exists_p(varchar,varchar)
+create or replace function acs_sc_binding__exists_p(varchar,varchar)
 returns integer as '
 declare
     p_contract_name             alias for $1;
@@ -501,7 +500,7 @@ begin
 
     return v_exists_p;
 
-end;' language 'plpgsql';
+end;' language 'plpgsql' stable;
 
 
 

@@ -5,10 +5,10 @@
 %myvars;
 ]>
 <sect1 id="permissions-requirements" xreflabel="OpenACS 4 Permissions Requirements">
-<title>OpenACS 4 Permissions Requirements</title>
+<title>Permissions Requirements</title>
 
 <authorblurb>
-by <ulink url="mailto:jmp@arsdigita.com">John McClary Prevost</ulink> 
+<para>By John McClary Prevost</para>
 </authorblurb>
 
 <sect2 id="permissions-requirements-intro">
@@ -104,7 +104,7 @@ that operation.</para>
 
 
 <para>Examples of the essential question addressed by the Permissions system:
-Can jane@attacker.com delete the web security bboard? Can the Boston office
+Can jane@attacker.com delete the web security forum? Can the Boston office
 (a party) within the VirtuaCorp intranet/website create its own news
 instance?</para>
 
@@ -167,7 +167,7 @@ may party P perform operation O?&quot;</para>
 <para>Privileges must be designed with appropriate scope for a given OpenACS
 package. Some privileges are of general utility (e.g. &quot;read&quot; and
 &quot;write&quot;). Others are of more limited use (e.g. &quot;moderate&quot;
-- applies mainly to a package like bboard, where many users are contributing
+- applies mainly to a package like forum, where many users are contributing
 content simultaneously). A package defining its own privileges should do so
 with moderation, being careful not to overload a privilege like
 &quot;read&quot; to mean too many things.</para>
@@ -192,8 +192,8 @@ should be available to all members of that aggregate.</para>
 <blockquote><para><emphasis role="strong">70.10 Context</emphasis></para>
 
 <para>There must be a method for objects to receive default access control from
-some context. For example, if you do not have read access to a bboard, you
-should not have read access to a message in that bboard.</para>
+some context. For example, if you do not have read access to a forum, you
+should not have read access to a message in that forum.</para>
 
 </blockquote><blockquote><para><emphasis role="strong">70.20 Overriding</emphasis></para>
 
@@ -205,7 +205,7 @@ object (as in 70.10), in both a positive and negative manner.</para>
 
 <para>It must be possible to allow a party more access to some target than they
 would get by default. (For example, a user does not have the right to edit
-any message on a bboard. But a user does possibly have the right to edit
+any message on a forum. But a user does possibly have the right to edit
 their own messages.)</para>
 
 </blockquote><blockquote><para><emphasis role="strong">70.20.20 Negative Overriding</emphasis></para>

@@ -21,7 +21,7 @@ db_transaction {
     doc_body_append "</ul>"
 } on_error {
     if {![apm_version_installed_p $version_id] } {
-	ad_return_complaint "Database Error" "The database returned the following error
+	ad_return_complaint 1 "Database Error: The database returned the following error
 	message <pre><blockquote>[ad_quotehtml $errmsg]</blockquote></pre>"
     }
 }

@@ -111,7 +111,7 @@ begin
     return v_group_id;
   end if;
 
-end;' language 'plpgsql';
+end;' language 'plpgsql' stable;
 
 insert into group_type_rels
 (group_rel_type_id, group_type, rel_type)

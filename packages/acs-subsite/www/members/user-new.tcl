@@ -5,7 +5,7 @@ ad_page_contract {
     @creation-date 2003-06-02
     @cvs-id $Id$
 } {
-    email
+    email:trim
 }
 
 auth::require_login

@@ -138,7 +138,7 @@ begin
 
     return magic_object_id__object_id;
    
-end;' language 'plpgsql' with(isstrict,iscachable);
+end;' language 'plpgsql' immutable strict;
 
 -- ******************************************************************
 -- * Community Core API
@@ -161,7 +161,7 @@ as
 
 -- faster simpler view
 -- does not check for registered user/banned etc
-create view all_users
+create or replace view acs_users_all
 as
 select pa.*, pe.*, u.*
 from  parties pa, persons pe, users u
@@ -180,8 +180,8 @@ where o.object_id = pa.party_id
   and amo.name = 'registered_users'
   and m.group_id = amo.object_id
   and m.rel_id = mr.rel_id
-  and m.rel_type = 'membership_rel'
-  and m.container_id = m.group_id;
+  and m.container_id = m.group_id
+  and m.rel_type = 'membership_rel';
 
 
 -----------------------------------

@@ -13,14 +13,14 @@
 create view content_template_globals as 
 select -200 as c_root_folder_id;
 
-create function content_template__get_root_folder() returns integer as '
+create or replace function content_template__get_root_folder() returns integer as '
 begin
   return content_template_globals.c_root_folder_id;
-end;' language 'plpgsql';
+end;' language 'plpgsql' immutable;
 
 -- create or replace package body content_template
 
-create function content_template__new(varchar) returns integer as '
+create or replace function content_template__new(varchar) returns integer as '
 declare
         new__name       alias for $1;
 begin
@@ -36,7 +36,7 @@ end;' language 'plpgsql';
 
 -- function new
 
-create function content_template__new (varchar,integer,integer,timestamptz,integer,varchar)
+create or replace function content_template__new (varchar,integer,integer,timestamptz,integer,varchar)
 returns integer as '
 declare
   new__name                   alias for $1;  
@@ -174,7 +174,7 @@ end;' language 'plpgsql';
 
 
 -- procedure delete
-create function content_template__delete (integer)
+create or replace function content_template__delete (integer)
 returns integer as '
 declare
   delete__template_id            alias for $1;  
@@ -196,7 +196,7 @@ end;' language 'plpgsql';
 
 
 -- function is_template
-create function content_template__is_template (integer)
+create or replace function content_template__is_template (integer)
 returns boolean as '
 declare
   is_template__template_id            alias for $1;  
@@ -205,11 +205,11 @@ begin
   return count(*) > 0 from cr_templates
     where template_id = is_template__template_id;
  
-end;' language 'plpgsql';
+end;' language 'plpgsql' stable;
 
 
 -- function get_path
-create function content_template__get_path (integer,integer)
+create or replace function content_template__get_path (integer,integer)
 returns varchar as '
 declare
   template_id            alias for $1;  
@@ -219,7 +219,7 @@ begin
 
   return content_item__get_path(template_id, root_folder_id);
 
-end;' language 'plpgsql';
+end;' language 'plpgsql' stable;
 
 
 

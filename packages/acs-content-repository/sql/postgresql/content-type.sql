@@ -45,7 +45,7 @@ for each row execute procedure cr_type_template_map_tr ();
 
 -- create or replace package body content_type is
 -- procedure create_type
-create function content_type__create_type (varchar,varchar,varchar,varchar,varchar,varchar,varchar)
+create or replace function content_type__create_type (varchar,varchar,varchar,varchar,varchar,varchar,varchar)
 returns integer as '
 declare
   create_type__content_type           alias for $1;  
@@ -94,7 +94,7 @@ begin
 end;' language 'plpgsql';
 
 
-create function content_type__drop_type (varchar,boolean,boolean)
+create or replace function content_type__drop_type (varchar,boolean,boolean)
 returns integer as '
 declare
   drop_type__content_type           alias for $1;  
@@ -197,7 +197,7 @@ end;' language 'plpgsql';
 
 
 -- function create_attribute
-create function content_type__create_attribute (varchar,varchar,varchar,varchar,varchar,integer,varchar,varchar)
+create or replace function content_type__create_attribute (varchar,varchar,varchar,varchar,varchar,integer,varchar,varchar)
 returns integer as '
 declare
   create_attribute__content_type           alias for $1;  
@@ -258,7 +258,7 @@ end;' language 'plpgsql';
 
 
 -- procedure drop_attribute
-create function content_type__drop_attribute (varchar,varchar,boolean)
+create or replace function content_type__drop_attribute (varchar,varchar,boolean)
 returns integer as '
 declare
   drop_attribute__content_type           alias for $1;  
@@ -308,7 +308,7 @@ end;' language 'plpgsql';
 
 
 -- procedure register_template
-create function content_type__register_template (varchar,integer,varchar,boolean)
+create or replace function content_type__register_template (varchar,integer,varchar,boolean)
 returns integer as '
 declare
   register_template__content_type           alias for $1;  
@@ -360,7 +360,7 @@ end;' language 'plpgsql';
 
 
 -- procedure set_default_template
-create function content_type__set_default_template (varchar,integer,varchar)
+create or replace function content_type__set_default_template (varchar,integer,varchar)
 returns integer as '
 declare
   set_default_template__content_type           alias for $1;  
@@ -389,7 +389,7 @@ end;' language 'plpgsql';
 
 
 -- function get_template
-create function content_type__get_template (varchar,varchar)
+create or replace function content_type__get_template (varchar,varchar)
 returns integer as '
 declare
   get_template__content_type           alias for $1;  
@@ -409,17 +409,13 @@ begin
   and
     is_default = ''t'';
 
-  if NOT FOUND then 
-     return null;
-  else
-     return v_template_id;
-  end if;
+  return v_template_id;
  
-end;' language 'plpgsql';
+end;' language 'plpgsql' stable strict;
 
 
 -- procedure unregister_template
-create function content_type__unregister_template (varchar,integer,varchar)
+create or replace function content_type__unregister_template (varchar,integer,varchar)
 returns integer as '
 declare
   unregister_template__content_type           alias for $1;  -- default null  
@@ -459,7 +455,7 @@ end;' language 'plpgsql';
 
 
 -- function trigger_insert_statement
-create function content_type__trigger_insert_statement (varchar)
+create or replace function content_type__trigger_insert_statement (varchar)
 returns varchar as '
 declare
   trigger_insert_statement__content_type   alias for $1;  
@@ -469,6 +465,9 @@ declare
   vals                                     varchar default '''';
   attr_rec                                 record;
 begin
+  if trigger_insert_statement__content_type is null then 
+	return exception ''content_type__trigger_insert_statement called with null content_type'';
+  end if;
 
   select 
     table_name, id_column into v_table_name, v_id_column
@@ -492,7 +491,7 @@ begin
     '' ( '' || v_id_column || cols || '' ) values (cr_dummy.val'' ||
     vals || '')'';
   
-end;' language 'plpgsql';
+end;' language 'plpgsql' stable;
 
 -- dummy table provides a target for updates in dynamically generated trigger
 -- statements.  If type is cr_revisions then rule would end up having only a 
@@ -538,7 +537,7 @@ cr_dummy for each row execute procedure cr_dummy_ins_del_tr ();
 -- revisions for any content type
 
 -- procedure refresh_trigger
-create function content_type__refresh_trigger (varchar)
+create or replace function content_type__refresh_trigger (varchar)
 returns integer as '
 declare
   refresh_trigger__content_type           alias for $1;  
@@ -709,7 +708,7 @@ end;' language 'plpgsql';
 
 
 -- procedure register_child_type
-create function content_type__register_child_type (varchar,varchar,varchar,integer,integer)
+create or replace function content_type__register_child_type (varchar,varchar,varchar,integer,integer)
 returns integer as '
 declare
   register_child_type__parent_type   alias for $1;  
@@ -756,12 +755,12 @@ end;' language 'plpgsql';
 
 
 -- procedure unregister_child_type
-create function content_type__unregister_child_type (varchar,varchar,varchar)
+create or replace function content_type__unregister_child_type (varchar,varchar,varchar)
 returns integer as '
 declare
   unregister_child_type__parent_type            alias for $1;  
   unregister_child_type__child_type             alias for $2;  
-  unregister_child_type__relation_tag           alias for $3;  -- default null
+  unregister_child_type__relation_tag           alias for $3;
 begin
 
   delete from 
@@ -778,7 +777,7 @@ end;' language 'plpgsql';
 
 
 -- procedure register_relation_type
-create function content_type__register_relation_type (varchar,varchar,varchar,integer,integer)
+create or replace function content_type__register_relation_type (varchar,varchar,varchar,integer,integer)
 returns integer as '
 declare
   register_relation_type__content_type  alias for $1;  
@@ -830,7 +829,7 @@ end;' language 'plpgsql';
 
 
 -- procedure unregister_relation_type
-create function content_type__unregister_relation_type (varchar,varchar,varchar)
+create or replace function content_type__unregister_relation_type (varchar,varchar,varchar)
 returns integer as '
 declare
   unregister_relation_type__content_type  alias for $1;  
@@ -853,7 +852,7 @@ end;' language 'plpgsql';
 
 
 -- procedure register_mime_type
-create function content_type__register_mime_type (varchar,varchar)
+create or replace function content_type__register_mime_type (varchar,varchar)
 returns integer as '
 declare
   register_mime_type__content_type           alias for $1;  
@@ -890,7 +889,7 @@ end;' language 'plpgsql';
 
 
 -- procedure unregister_mime_type
-create function content_type__unregister_mime_type (varchar,varchar)
+create or replace function content_type__unregister_mime_type (varchar,varchar)
 returns integer as '
 declare
   unregister_mime_type__content_type           alias for $1;  
@@ -906,7 +905,7 @@ end;' language 'plpgsql';
 
 
 -- function is_content_type
-create function content_type__is_content_type (varchar)
+create or replace function content_type__is_content_type (varchar)
 returns boolean as '
 declare
   is_content_type__object_type            alias for $1;  
@@ -926,11 +925,11 @@ begin
   
   return v_is_content_type;
  
-end;' language 'plpgsql';
+end;' language 'plpgsql' stable;
 
 
 -- procedure rotate_template
-create function content_type__rotate_template (integer,varchar,varchar)
+create or replace function content_type__rotate_template (integer,varchar,varchar)
 returns integer as '
 declare
   rotate_template__template_id            alias for $1;  
@@ -1003,7 +1002,7 @@ end;' language 'plpgsql';
 
 -- prompt *** Refreshing content type attribute views...
 
-create function inline_0 ()
+create or replace function inline_0 ()
 returns integer as '
 declare 
         type_rec        record;

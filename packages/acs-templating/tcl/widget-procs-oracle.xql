@@ -1,6 +1,8 @@
 <?xml version="1.0"?>
 <queryset>
 
+<rdbms><type>oracle</type><version>8.1.6</version></rdbms>
+
 <fullquery name="template::data::transform::party_search.search_persons">      
       <querytext>
         select (first_names || ' ' || last_name) as name, pe.person_id from persons pe, parties pa 

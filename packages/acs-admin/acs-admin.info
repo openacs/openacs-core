@@ -7,15 +7,17 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>t</singleton-p>
     
-    <version name="5.0.0a5" url="http://openacs.org/repository/download/apm/acs-admin-5.0.0a5.apm">
+    <version name="5.0.0b4" url="http://openacs.org/repository/download/apm/acs-admin-5.0.0b4.apm">
         <owner url="mailto:dhogaza@pacifier.com">Don Baccus</owner>
-        <summary>Provides an interface for administering the OpenACS Community System Installation.</summary>
+        <summary>An interface for Site-wide administration of an OpenACS Installation.</summary>
         <release-date>2003-11-07</release-date>
-        <vendor url="http://www.openacs.org/">OpenACS</vendor>
-        <description format="text/html">A UI for administering the OpenACS system.</description>
+        <vendor url="http://openacs.org">OpenACS</vendor>
+        <description format="text/html">Provides a UI for administering site-wide services
+          (including package installation, cache, authentication, and user accounts) for an OpenACS system.
+        </description>
 
-        <provides url="acs-admin" version="5.0.0a5"/>
-        <requires url="acs-kernel" version="5.0.0a5"/>
+        <provides url="acs-admin" version="5.0.0b4"/>
+        <requires url="acs-kernel" version="5.0.0b4"/>
 
         <callbacks>
         </callbacks>

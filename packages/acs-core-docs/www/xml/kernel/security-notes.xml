@@ -5,11 +5,11 @@
 %myvars;
 ]>
 <sect1 id="security-notes" xreflabel="OpenACS 4 Security Notes">
-<title>OpenACS 4 Security Notes</title>
+<title>Security Notes</title>
 
 
 <authorblurb>
-by <ulink url="mailto:richardl@arsdigita.com">Richard Li</ulink> 
+<para>By Richard Li</para>
 </authorblurb>
 
 <para>

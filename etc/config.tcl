@@ -53,7 +53,6 @@ ns_param   nslog              ${bindir}/nslog.so
 ns_param   nssha1             ${bindir}/nssha1.so 
 ns_param   nscache            ${bindir}/nscache.so 
 ns_param   nsrewrite          ${bindir}/nsrewrite.so 
-ns_param   libtdom            ${bindir}/libtdom.so
 
 #---------------------------------------------------------------------
 # nsopenssl will fail unless the cert files are present as specified
@@ -74,9 +73,13 @@ ns_param   libtdom            ${bindir}/libtdom.so
 #ns_param   nscgi              ${bindir}/nscgi.so 
 #ns_param   nsjava             ${bindir}/libnsjava.so
 
-# Required for AOLserver 4
-#ns_param   nsdb               ${bindir}/nsdb.so
-
+if { [ns_info version] >= 4 } {
+    # Required for AOLserver 4.x
+    ns_param   nsdb               ${bindir}/nsdb.so
+} else {
+    # Required for AOLserver 3.x
+    ns_param   libtdom            ${bindir}/libtdom.so
+}
 
 #---------------------------------------------------------------------
 #
@@ -143,7 +146,8 @@ ns_param   debug              $debug
 
 ns_section ns/threads 
 ns_param   mutexmeter         true      ;# measure lock contention 
-ns_param   stacksize          500000
+# The per-thread stack size must be a multiple of 8k for AOLServer to run under MacOS X
+ns_param   stacksize          [expr 128 * 8192]
 
 # 
 # MIME types. 

@@ -74,7 +74,7 @@ comment on column apm_package_types.singleton_p is '
 ';
 
 
-create function inline_0 ()
+create or replace function inline_0 ()
 returns integer as '
 begin
 -- Create a new object type for packages.
@@ -101,7 +101,7 @@ drop function inline_0 ();
 
 -- show errors
 
-create function inline_1 ()
+create or replace function inline_1 ()
 returns integer as '
 declare
  attr_id acs_attributes.attribute_id%TYPE;
@@ -414,7 +414,7 @@ comment on column apm_package_versions.auto_mount is '
 
 -- Metadata for the apm_package_versions object.
 
-create function inline_2 ()
+create or replace function inline_2 ()
 returns integer as '
 declare
  attr_id acs_attributes.attribute_id%TYPE;
@@ -822,7 +822,7 @@ comment on column apm_parameter_values.attr_value is '
 
 -- Metadata for the apm_parameter and apm_parameter_value system.
 
-create function inline_4 ()
+create or replace function inline_4 ()
 returns integer as '
 declare
  attr_id acs_attributes.attribute_id%TYPE;
@@ -947,7 +947,7 @@ drop function inline_4 ();
 -- show errors
 
 
-create function inline_5 ()
+create or replace function inline_5 ()
 returns integer as '
 declare
  attr_id acs_attributes.attribute_id%TYPE;
@@ -1071,7 +1071,7 @@ This table records data on all of the services registered in OpenACS.
 ';
 
 
-create function inline_6 ()
+create or replace function inline_6 ()
 returns integer as '
 declare 
         dummy   integer;
@@ -1101,7 +1101,7 @@ drop function inline_6 ();
 -- show errors
 
 
-create function inline_7 ()
+create or replace function inline_7 ()
 returns integer as '
 declare
         dummy   integer;
@@ -1127,7 +1127,7 @@ select inline_7 ();
 
 drop function inline_7 ();
 
-create function apm__register_package (varchar,varchar,varchar,varchar,varchar,boolean,boolean,varchar,integer)
+create or replace function apm__register_package (varchar,varchar,varchar,varchar,varchar,boolean,boolean,varchar,integer)
 returns integer as '
 declare
   package_key            alias for $1;  
@@ -1157,7 +1157,7 @@ end;' language 'plpgsql';
 
 
 -- function update_package
-create function apm__update_package (varchar,varchar,varchar,varchar,varchar,boolean,boolean,varchar,integer)
+create or replace function apm__update_package (varchar,varchar,varchar,varchar,varchar,boolean,boolean,varchar,integer)
 returns varchar as '
 declare
   package_key            alias for $1;  
@@ -1187,12 +1187,16 @@ end;' language 'plpgsql';
 
 
 -- procedure unregister_package
-create function apm__unregister_package (varchar,boolean)
+create or replace function apm__unregister_package (varchar,boolean)
 returns integer as '
 declare
   package_key            alias for $1;  
   cascade_p              alias for $2;  -- default ''t''  
 begin
+   if cascade_p is null then 
+	cascade_p := ''t'';
+   end if;
+
    PERFORM apm_package_type__drop_type(
 	package_key,
 	cascade_p
@@ -1203,7 +1207,7 @@ end;' language 'plpgsql';
 
 
 -- function register_p
-create function apm__register_p (varchar)
+create or replace function apm__register_p (varchar)
 returns integer as '
 declare
   register_p__package_key            alias for $1;  
@@ -1215,11 +1219,11 @@ begin
 
     return v_register_p;
    
-end;' language 'plpgsql';
+end;' language 'plpgsql' stable;
 
 
 -- procedure register_application
-create function apm__register_application (varchar,varchar,varchar,varchar,boolean,boolean,varchar,integer)
+create or replace function apm__register_application (varchar,varchar,varchar,varchar,boolean,boolean,varchar,integer)
 returns integer as '
 declare
   package_key            alias for $1;  
@@ -1248,7 +1252,7 @@ end;' language 'plpgsql';
 
 
 -- procedure unregister_application
-create function apm__unregister_application (varchar,boolean)
+create or replace function apm__unregister_application (varchar,boolean)
 returns integer as '
 declare
   package_key            alias for $1;  
@@ -1264,7 +1268,7 @@ end;' language 'plpgsql';
 
 
 -- procedure register_service
-create function apm__register_service (varchar,varchar,varchar,varchar,boolean,boolean,varchar,integer)
+create or replace function apm__register_service (varchar,varchar,varchar,varchar,boolean,boolean,varchar,integer)
 returns integer as '
 declare
   package_key            alias for $1;  
@@ -1293,12 +1297,16 @@ end;' language 'plpgsql';
 
 
 -- procedure unregister_service
-create function apm__unregister_service (varchar,boolean)
+create or replace function apm__unregister_service (varchar,boolean)
 returns integer as '
 declare
   package_key            alias for $1;  
   cascade_p              alias for $2;  -- default ''f''  
 begin
+   if cascade_p is null then 
+	cascade_p := ''f'';
+   end if;
+
    PERFORM apm__unregister_package (
 	package_key,
 	cascade_p
@@ -1309,7 +1317,7 @@ end;' language 'plpgsql';
 
 
 -- function register_parameter
-create function apm__register_parameter (integer,varchar,varchar,varchar,varchar,varchar,varchar,integer,integer)
+create or replace function apm__register_parameter (integer,varchar,varchar,varchar,varchar,varchar,varchar,integer,integer)
 returns integer as '
 declare
   register_parameter__parameter_id           alias for $1;  -- default null  
@@ -1366,7 +1374,7 @@ end;' language 'plpgsql';
 
 
 -- function update_parameter
-create function apm__update_parameter (integer,varchar,varchar,varchar,varchar,varchar,integer,integer)
+create or replace function apm__update_parameter (integer,varchar,varchar,varchar,varchar,varchar,integer,integer)
 returns varchar as '
 declare
   update_parameter__parameter_id           alias for $1;  
@@ -1394,7 +1402,7 @@ end;' language 'plpgsql';
 
 
 -- function parameter_p
-create function apm__parameter_p (varchar,varchar)
+create or replace function apm__parameter_p (varchar,varchar)
 returns integer as '
 declare
   parameter_p__package_key            alias for $1;  
@@ -1408,11 +1416,11 @@ begin
 
     return v_parameter_p;
    
-end;' language 'plpgsql';
+end;' language 'plpgsql' stable;
 
 
 -- procedure unregister_parameter
-create function apm__unregister_parameter (integer)
+create or replace function apm__unregister_parameter (integer)
 returns integer as '
 declare
   unregister_parameter__parameter_id           alias for $1;  -- default null
@@ -1428,7 +1436,7 @@ end;' language 'plpgsql';
 
 
 -- function id_for_name
-create function apm__id_for_name (varchar,varchar)
+create or replace function apm__id_for_name (varchar,varchar)
 returns integer as '
 declare
   id_for_name__parameter_name         alias for $1;  
@@ -1442,11 +1450,11 @@ begin
 
     return a_parameter_id;
    
-end;' language 'plpgsql';
+end;' language 'plpgsql' stable strict;
 
 
 -- function get_value
-create function apm__get_value (integer,integer)
+create or replace function apm__get_value (integer,integer)
 returns varchar as '
 declare
   get_value__parameter_id           alias for $1;  
@@ -1459,11 +1467,11 @@ begin
 
     return value;
    
-end;' language 'plpgsql';
+end;' language 'plpgsql' stable strict;
 
 
 -- function get_value
-create function apm__get_value (integer,varchar)
+create or replace function apm__get_value (integer,varchar)
 returns varchar as '
 declare
   get_value__package_id             alias for $1;  
@@ -1480,11 +1488,11 @@ begin
 	get_value__package_id
     );	
    
-end;' language 'plpgsql';
+end;' language 'plpgsql' stable strict;
 
 
 -- procedure set_value
-create function apm__set_value (integer,integer,varchar)
+create or replace function apm__set_value (integer,integer,varchar)
 returns integer as '
 declare
   set_value__parameter_id           alias for $1;  
@@ -1515,7 +1523,7 @@ end;' language 'plpgsql';
 
 
 -- procedure set_value
-create function apm__set_value (integer,varchar,varchar)
+create or replace function apm__set_value (integer,varchar,varchar)
 returns integer as '
 declare
   set_value__package_id             alias for $1;  
@@ -1549,7 +1557,7 @@ end;' language 'plpgsql';
 
 -- create or replace package body apm_package
 -- procedure initialize_parameters
-create function apm_package__initialize_parameters (integer,varchar)
+create or replace function apm_package__initialize_parameters (integer,varchar)
 returns integer as '
 declare
   ip__package_id             alias for $1;  
@@ -1575,7 +1583,7 @@ end;' language 'plpgsql';
 
 
 -- function new
-create function apm_package__new (integer,varchar,varchar,varchar,timestamptz,integer,varchar,integer)
+create or replace function apm_package__new (integer,varchar,varchar,varchar,timestamptz,integer,varchar,integer)
 returns integer as '
 declare
   new__package_id             alias for $1;  -- default null  
@@ -1651,7 +1659,7 @@ begin
   end if;
 end;' language 'plpgsql';
   
-create function apm_package__delete (integer) returns integer as '
+create or replace function apm_package__delete (integer) returns integer as '
 declare
    delete__package_id   alias for $1;
    cur_val              record;
@@ -1678,7 +1686,7 @@ begin
     return 0;
 end;' language 'plpgsql';
 
-create function apm_package__initial_install_p (varchar) returns integer as '
+create or replace function apm_package__initial_install_p (varchar) returns integer as '
 declare
 	initial_install_p__package_key  alias for $1;
         v_initial_install_p             integer;
@@ -1693,26 +1701,22 @@ begin
         else
            return v_initial_install_p;
         end if;
-end;' language 'plpgsql';
+end;' language 'plpgsql' stable;
 
-create function apm_package__singleton_p (varchar) returns integer as '
+create or replace function apm_package__singleton_p (varchar) returns integer as '
 declare
 	singleton_p__package_key        alias for $1;
         v_singleton_p                   integer;
 begin
-        select 1 into v_singleton_p
+        select count(*) into v_singleton_p
 	from apm_package_types
 	where package_key = singleton_p__package_key
         and singleton_p = ''t'';
-	
-        if NOT FOUND then 
-           return 0;
-        else
-           return v_singleton_p;
-        end if;
-end;' language 'plpgsql';
 
-create function apm_package__num_instances (varchar) returns integer as '
+        return v_singleton_p;
+end;' language 'plpgsql' stable;
+
+create or replace function apm_package__num_instances (varchar) returns integer as '
 declare
         num_instances__package_key     alias for $1;
         v_num_instances                integer;
@@ -1720,17 +1724,12 @@ begin
         select count(*) into v_num_instances
 	from apm_packages
 	where package_key = num_instances__package_key;
-	
-	-- exception
-	if NOT FOUND then
-           return 0;
-        else 
-           return v_num_instances;
-        end if;
-        
-end;' language 'plpgsql';
 
-create function apm_package__name (integer) returns varchar as '
+        return v_num_instances;
+
+end;' language 'plpgsql' stable;
+
+create or replace function apm_package__name (integer) returns varchar as '
 declare
     name__package_id       alias for $1;
     v_result               apm_packages.instance_name%TYPE;
@@ -1741,9 +1740,9 @@ begin
 
     return v_result;
 
-end;' language 'plpgsql';
+end;' language 'plpgsql' stable strict;
 
-create function apm_package__highest_version (varchar) returns integer as '
+create or replace function apm_package__highest_version (varchar) returns integer as '
 declare
      highest_version__package_key    alias for $1;
      v_version_id                    apm_package_versions.version_id%TYPE;
@@ -1759,9 +1758,9 @@ begin
       else
          return v_version_id;
       end if;
-end;' language 'plpgsql';
+end;' language 'plpgsql' stable;
 
-create function apm_package__parent_id (integer) returns integer as '
+create or replace function apm_package__parent_id (integer) returns integer as '
 declare
     apm_package__parent_id__package_id alias for $1;
     v_package_id apm_packages.package_id%TYPE;
@@ -1773,15 +1772,12 @@ begin
                          from site_nodes sn2
                          where sn2.object_id = apm_package__parent_id__package_id);
 
-    if NOT FOUND then
-        return -1;
-    else
-        return v_package_id;
-    end if;
-end;' language 'plpgsql';
+    return v_package_id;
+
+end;' language 'plpgsql' stable strict;
 
 -- create or replace package body apm_package_version 
-create function apm_package_version__new (integer,varchar,varchar,varchar,varchar,varchar,varchar,timestamptz,varchar,varchar,varchar,boolean,boolean) returns integer as '
+create or replace function apm_package_version__new (integer,varchar,varchar,varchar,varchar,varchar,varchar,timestamptz,varchar,varchar,varchar,boolean,boolean) returns integer as '
 declare
       apm_pkg_ver__version_id           alias for $1;  -- default null
       apm_pkg_ver__package_key		alias for $2;
@@ -1831,7 +1827,7 @@ end;' language 'plpgsql';
 
 
 -- procedure delete
-create function apm_package_version__delete (integer)
+create or replace function apm_package_version__delete (integer)
 returns integer as '
 declare
   delete__version_id             alias for $1;  
@@ -1852,7 +1848,7 @@ end;' language 'plpgsql';
 
 
 -- procedure enable
-create function apm_package_version__enable (integer)
+create or replace function apm_package_version__enable (integer)
 returns integer as '
 declare
   enable__version_id             alias for $1;  
@@ -1865,7 +1861,7 @@ end;' language 'plpgsql';
 
 
 -- procedure disable
-create function apm_package_version__disable (integer)
+create or replace function apm_package_version__disable (integer)
 returns integer as '
 declare
   disable__version_id             alias for $1;  
@@ -1879,7 +1875,7 @@ end;' language 'plpgsql';
 
 
 -- function copy
-create function apm_package_version__copy (integer,integer,varchar,varchar,boolean)
+create or replace function apm_package_version__copy (integer,integer,varchar,varchar,boolean)
 returns integer as '
 declare
   copy__version_id             alias for $1;  
@@ -1930,7 +1926,7 @@ end;' language 'plpgsql';
 
 
 -- function edit
-create function apm_package_version__edit (integer,integer,varchar,varchar,varchar,varchar,varchar,timestamptz,varchar,varchar,varchar,boolean,boolean)
+create or replace function apm_package_version__edit (integer,integer,varchar,varchar,varchar,varchar,varchar,timestamptz,varchar,varchar,varchar,boolean,boolean)
 returns integer as '
 declare
   edit__new_version_id         alias for $1;  -- default null  
@@ -1984,7 +1980,7 @@ begin
 end;' language 'plpgsql';
 
 -- function add_interface
-create function apm_package_version__add_interface (integer,integer,varchar,varchar)
+create or replace function apm_package_version__add_interface (integer,integer,varchar,varchar)
 returns integer as '
 declare
   add_interface__interface_id         alias for $1;  -- default null  
@@ -2011,7 +2007,7 @@ end;' language 'plpgsql';
 
 
 -- procedure remove_interface
-create function apm_package_version__remove_interface (integer)
+create or replace function apm_package_version__remove_interface (integer)
 returns integer as '
 declare
   remove_interface__interface_id           alias for $1;  
@@ -2024,7 +2020,7 @@ end;' language 'plpgsql';
 
 
 -- procedure remove_interface
-create function apm_package_version__remove_interface (varchar,varchar,integer)
+create or replace function apm_package_version__remove_interface (varchar,varchar,integer)
 returns integer as '
 declare
   remove_interface__interface_uri          alias for $1;  
@@ -2042,7 +2038,7 @@ end;' language 'plpgsql';
 
 
 -- function add_dependency
-create function apm_package_version__add_dependency (integer,integer,varchar,varchar)
+create or replace function apm_package_version__add_dependency (integer,integer,varchar,varchar)
 returns integer as '
 declare
   add_dependency__dependency_id          alias for $1;  -- default null  
@@ -2069,7 +2065,7 @@ end;' language 'plpgsql';
 
 
 -- procedure remove_dependency
-create function apm_package_version__remove_dependency (integer)
+create or replace function apm_package_version__remove_dependency (integer)
 returns integer as '
 declare
   remove_dependency__dependency_id          alias for $1;  
@@ -2082,7 +2078,7 @@ end;' language 'plpgsql';
 
 
 -- procedure remove_dependency
-create function apm_package_version__remove_dependency (varchar,varchar,integer)
+create or replace function apm_package_version__remove_dependency (varchar,varchar,integer)
 returns integer as '
 declare
   remove_dependency__dependency_uri         alias for $1;  
@@ -2100,7 +2096,7 @@ end;' language 'plpgsql';
 
 
 -- function sortable_version_name
-create function apm_package_version__sortable_version_name (varchar)
+create or replace function apm_package_version__sortable_version_name (varchar)
 returns varchar as '
 declare
   version_name           alias for $1;  
@@ -2172,10 +2168,10 @@ begin
 	    a_start := a_end + 1;
 	end loop;
     
-end;' language 'plpgsql';
+end;' language 'plpgsql' immutable;
 
 -- function version_name_greater
-create function apm_package_version__version_name_greater (varchar,varchar)
+create or replace function apm_package_version__version_name_greater (varchar,varchar)
 returns integer as '
 declare
   version_name_one       alias for $1;  
@@ -2192,10 +2188,10 @@ begin
 	end if; end if;
 
 	return 0;   
-end;' language 'plpgsql';
+end;' language 'plpgsql' immutable;
 
 -- function upgrade_p
-create function apm_package_version__upgrade_p (varchar,varchar,varchar)
+create or replace function apm_package_version__upgrade_p (varchar,varchar,varchar)
 returns integer as '
 declare
   upgrade_p__path                   alias for $1;  
@@ -2239,11 +2235,11 @@ begin
 	-- Invalid version number.
 	-- return 0;
    
-end;' language 'plpgsql';
+end;' language 'plpgsql' immutable;
 
 
 -- procedure upgrade
-create function apm_package_version__upgrade (integer)
+create or replace function apm_package_version__upgrade (integer)
 returns integer as '
 declare
   upgrade__version_id             alias for $1;  
@@ -2267,7 +2263,7 @@ end;' language 'plpgsql';
 
 -- create or replace package body apm_package_type
 -- procedure create_type
-create function apm_package_type__create_type (varchar,varchar,varchar,varchar,varchar,boolean,boolean,varchar,integer)
+create or replace function apm_package_type__create_type (varchar,varchar,varchar,varchar,varchar,boolean,boolean,varchar,integer)
 returns integer as '
 declare
   create_type__package_key            alias for $1;  
@@ -2293,7 +2289,7 @@ end;' language 'plpgsql';
 
 
 -- function update_type
-create function apm_package_type__update_type (varchar,varchar,varchar,varchar,varchar,boolean,boolean,varchar,integer)
+create or replace function apm_package_type__update_type (varchar,varchar,varchar,varchar,varchar,boolean,boolean,varchar,integer)
 returns varchar as '
 declare
   update_type__package_key            alias for $1;  
@@ -2323,7 +2319,7 @@ end;' language 'plpgsql';
 
 
 -- procedure drop_type
-create function apm_package_type__drop_type (varchar,boolean)
+create or replace function apm_package_type__drop_type (varchar,boolean)
 returns integer as '
 declare
   drop_type__package_key            alias for $1;  
@@ -2361,7 +2357,7 @@ end;' language 'plpgsql';
 
 
 -- function num_parameters
-create function apm_package_type__num_parameters (varchar)
+create or replace function apm_package_type__num_parameters (varchar)
 returns integer as '
 declare
   num_parameters__package_key            alias for $1;  
@@ -2373,7 +2369,7 @@ begin
 
     return v_count;
    
-end;' language 'plpgsql';
+end;' language 'plpgsql' stable;
 
 
 
@@ -2383,7 +2379,7 @@ end;' language 'plpgsql';
 
 -- create or replace package body apm_parameter_value
 -- function new
-create function apm_parameter_value__new (integer,integer,integer,varchar)
+create or replace function apm_parameter_value__new (integer,integer,integer,varchar)
 returns integer as '
 declare
   new__value_id               alias for $1;  -- default null  
@@ -2411,7 +2407,7 @@ end;' language 'plpgsql';
 
 
 -- procedure delete
-create function apm_parameter_value__delete (integer)
+create or replace function apm_parameter_value__delete (integer)
 returns integer as '
 declare
   delete__value_id               alias for $1;  -- default null
@@ -2425,7 +2421,7 @@ end;' language 'plpgsql';
 
 
 -- function new
-create function apm_application__new (integer,varchar,varchar,varchar,timestamptz,integer,varchar,integer)
+create or replace function apm_application__new (integer,varchar,varchar,varchar,timestamptz,integer,varchar,integer)
 returns integer as '
 declare
   application_id         alias for $1;  -- default null  
@@ -2455,7 +2451,7 @@ end;' language 'plpgsql';
 
 
 -- procedure delete
-create function apm_application__delete (integer)
+create or replace function apm_application__delete (integer)
 returns integer as '
 declare
   delete__application_id         alias for $1;  
@@ -2475,7 +2471,7 @@ end;' language 'plpgsql';
 
 -- create or replace package body apm_service
 -- function new
-create function apm_service__new (integer,varchar,varchar,varchar,timestamptz,integer,varchar,integer)
+create or replace function apm_service__new (integer,varchar,varchar,varchar,timestamptz,integer,varchar,integer)
 returns integer as '
 declare
   service_id             alias for $1;  -- default null  
@@ -2505,7 +2501,7 @@ end;' language 'plpgsql';
 
 
 -- procedure delete
-create function apm_service__delete (integer)
+create or replace function apm_service__delete (integer)
 returns integer as '
 declare
   delete__service_id    alias for $1;  

@@ -274,16 +274,7 @@ if { $display_batch_history_p } {
         if { $run_time_seconds > 0 && $num_actions > 0 } {
             set actions_per_minute [expr round(60.0 * $num_actions / $run_time_seconds)]
         }
-        
-        set run_time {}
-        if { $run_time_seconds > 0 } {
-            set hrs [expr $run_time_seconds / (60*60)]
-            set mins [expr ($run_time_seconds / 60) % 60]
-            set secs [expr $run_time_seconds % 60]
-            if { $hrs > 0 } { append run_time "${hrs}h " }
-            if { $hrs > 0 || $mins > 0 } { append run_time "${mins}m " }
-            append run_time "${secs}s"
-        }
+        set run_time [util::interval_pretty -seconds $run_time_seconds]
     }
     if { [exists_and_not_null get_doc_impl_id] && [exists_and_not_null process_doc_impl_id] } {
         set batch_sync_run_url [export_vars -base batch-job-run { authority_id }]

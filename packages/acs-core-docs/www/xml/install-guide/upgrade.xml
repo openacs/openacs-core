@@ -5,39 +5,22 @@
 %myvars;
 ]>
 <sect1 id="upgrade-detail">
-    <title>Support for upgrades.</title>
+    <title>Upgrading</title>
   <authorblurb>
-    by <ulink url="mailto:joel@aufrecht.org">Joel Aufrecht</ulink>
+    <para>by <ulink url="mailto:joel@aufrecht.org">Joel Aufrecht</ulink></para>
   </authorblurb>
+  <sect2 id="upgrade-overview">
+    <title>Overview</title>
   <para>Starting with Version 4.5, all OpenACS core packages support
     automatic upgrade.  That means that, if you have OpenACS 4.5
     or better, you should always be able to upgrade all of your core
     packages automatically.  If you haven't changed anything, no
     manual intervention should be required.  If you are running
     OpenACS prior to 4.5, upgrading will require manual effort.</para>
-
-  <sect2 id="upgrade-4.5-to-4.6">
-<title>Checklist</title>
-    <para>The required platform for OpenACS 4.6 is the same as
-    4.5, with the excepion of OpenFTS.  You now need OpenFTS 0.3.2, not 0.2.
-    OpenACS 4.6 does not support PostGreSQL 7.3.</para>
-    <itemizedlist mark="circle">
-      <listitem><para>A computer with OpenACS 4.5.</para>
-      </listitem>
-      <listitem><para><ulink url="http://openacs.org/projects/openacs/download/">OpenACS 4.6 tarball</ulink></para>
-      </listitem>
-      <listitem><para>Required for Full Text Search on PostGreSQL: <ulink url="http://openfts.sourceforge.net">OpenFTS 0.3.2</ulink></para>
-      </listitem>
-    </itemizedlist>
-  </sect2>
-  <sect2>
-    <title>Overview</title>
+    <para>It's always a good idea to precede an upgrade attempt with a <link linkend="snapshot-backup">snapshot backup</link>.</para>
     <para>OpenACS consists of files and a database schema.  The files
-    in the OpenACS 4.6 tarball include database upgrade scripts.  To start the
-    upgrade, replace your existing files with the new files and
-    then restart the server.  Then, browse to the APM, which will
-    detect the new packages and offer to run the appropriate database upgrade
-    scripts.  After restarting the server again, the upgrade is
+    in a new tarball include database upgrade scripts.  To start the
+    upgrade, replace your existing files with the new files and then browse to the APM, which will detect the new packages and offer to run the appropriate database upgrade scripts.  After restarting the server again, the upgrade is
     complete.</para>
     <figure>
       <title>Assumptions in this section</title>
@@ -65,11 +48,30 @@
       </informaltable>
     </figure>
   </sect2>
-  <sect2><title><indexterm>
-        <primary>upgrade</primary>
+  <sect2 id="upgrade-4.6.3-to-5">
+    <title>Upgrading 4.6.3 to 5.0</title>
+    <para>Current working notes in <ulink url="http://openacs.org/forums/message-view?message_id=143497">Forum OpenACS Development: 4.6.3 upgrade to 5-HEAD: final results</ulink>.</para>
+  </sect2>
+
+  <sect2 id="upgrade-4.5-to-4.6">
+    <title>Upgrading 4.5 to 4.6</title>
+    <indexterm>
+      <primary>upgrade</primary>
         <secondary>OpenACS 4.5 to 4.6</secondary>
-        <secondary>Linux/Unix</secondary>
-</indexterm>Upgrading on Linux/Unix</title>
+        <tertiary>Linux/Unix</tertiary>
+</indexterm>
+<para>The required platform for OpenACS 4.6 is the same as
+    4.5, with the excepion of OpenFTS.  You now need OpenFTS 0.3.2, not 0.2.
+    OpenACS 4.6 does not support PostgreSQL 7.3.</para>
+    <itemizedlist mark="circle">
+      <listitem><para>A computer with OpenACS 4.5.</para>
+      </listitem>
+      <listitem><para><ulink url="http://openacs.org/projects/openacs/download/">OpenACS 4.6 tarball</ulink></para>
+      </listitem>
+      <listitem><para>Required for Full Text Search on PostgreSQL: <ulink url="http://openfts.sourceforge.net">OpenFTS 0.3.2</ulink></para>
+      </listitem>
+    </itemizedlist>
+    <para>Upgrade Sequence</para>
     <orderedlist>
       <listitem>
         <formalpara>
@@ -141,9 +143,9 @@ exit</action></screen>
         </orderedlist>
       </listitem>
       <listitem>
-        <formalpara>
-          <title>Stop the server</title>
-        </formalpara>
+        <para>
+         Stop the server
+        </para>
         <screen>[root@localhost root]# <userinput>svc -d /service/<replaceable>openacs-dev</replaceable></userinput></screen>
       </listitem>
       <listitem>
@@ -170,9 +172,9 @@ cp -r openacs-4-6/* openacs-4
 exit</action></screen>
           </listitem>
           <listitem>
-            <formalpara>
-              <title>Upgrading files with CVS</title>
-            </formalpara>
+            <para>
+              <emphasis role="strong">Upgrading files with CVS</emphasis>
+	    </para>
             <orderedlist>
               
               <listitem>
@@ -229,9 +231,9 @@ exit</action></screen>
         </itemizedlist>
       </listitem>
       <listitem>
-        <formalpara>
-          <title>Start the server</title>
-        </formalpara>
+        <para>
+          <emphasis role="strong">Start the server</emphasis>
+        </para>
         <screen>[root@localhost root]# <userinput>svc -u /service/<replaceable>openacs-dev</replaceable></userinput></screen>
       </listitem>
       <listitem>
@@ -304,11 +306,12 @@ exit</action></screen>
       <listitem>
         <formalpara>
           <title>Rollback</title>
-          <para>If anything goes wrong, <link linkend="rollback-database">roll back</link> to the backup snapshot.</para>
+          <para>If anything goes wrong, <link linkend="recovery">roll back</link> to the backup snapshot.</para>
         </formalpara>
       </listitem>
     </orderedlist>
+    <para><phrase role="cvstag">($Id$)</phrase></para>
   </sect2>
-  <para><phrase role="cvstag">($Id$)</phrase></para>
-
 </sect1>
+
+

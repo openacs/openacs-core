@@ -15,7 +15,7 @@
 
 -- create or replace package body rel_constraint
 
-create function rel_constraint__new(varchar,integer,varchar,integer) 
+create or replace function rel_constraint__new(varchar,integer,varchar,integer) 
 returns integer as '
 declare
         nam     alias for $1;
@@ -36,7 +36,7 @@ begin
 end;' language 'plpgsql';
 
 -- function new
-create function rel_constraint__new (integer,varchar,varchar,integer,char,integer,integer,integer,varchar)
+create or replace function rel_constraint__new (integer,varchar,varchar,integer,char,integer,integer,integer,varchar)
 returns integer as '
 declare
   new__constraint_id          alias for $1;  -- default null  
@@ -72,7 +72,7 @@ end;' language 'plpgsql';
 
 
 -- procedure delete
-create function rel_constraint__delete (integer)
+create or replace function rel_constraint__delete (integer)
 returns integer as '
 declare
   constraint_id          alias for $1;  
@@ -84,7 +84,7 @@ end;' language 'plpgsql';
 
 
 -- function get_constraint_id
-create function rel_constraint__get_constraint_id (integer,char,integer)
+create or replace function rel_constraint__get_constraint_id (integer,char,integer)
 returns integer as '
 declare
   get_constraint_id__rel_segment            alias for $1;  
@@ -92,19 +92,18 @@ declare
   get_constraint_id__required_rel_segment   alias for $3;  
   v_constraint_id                           rel_constraints.constraint_id%TYPE;
 begin
-    select constraint_id into v_constraint_id
+
+    return constraint_id
     from rel_constraints
     where rel_segment = get_constraint_id__rel_segment
       and rel_side = get_constraint_id__rel_side
       and required_rel_segment = get_constraint_id__required_rel_segment;
 
-    return v_constraint_id;
-
-end;' language 'plpgsql';
+end;' language 'plpgsql' stable strict;
 
 
 -- function violation
-create function rel_constraint__violation (integer)
+create or replace function rel_constraint__violation (integer)
 returns varchar as '
 declare
   violation__rel_id                 alias for $1;  
@@ -148,11 +147,11 @@ begin
 
     return v_error;
    
-end;' language 'plpgsql';
+end;' language 'plpgsql' stable strict;
 
 
 -- function violation_if_removed
-create function rel_constraint__violation_if_removed (integer)
+create or replace function  rel_constraint__violation_if_removed (integer)
 returns varchar as '
 declare
   violation_if_removed__rel_id                 alias for $1;  
@@ -188,7 +187,7 @@ begin
     return v_error;
 
    
-end;' language 'plpgsql';
+end;' language 'plpgsql' stable strict;
 
 
 

@@ -267,7 +267,7 @@ declare
   p_item_id    alias for $1;
 begin
   return tree_sortkey from cr_items where item_id = p_item_id;
-end;' language 'plpgsql';
+end;' language 'plpgsql' stable strict;
 
 create function cr_items_tree_insert_tr () returns opaque as '
 declare
@@ -1004,7 +1004,7 @@ declare
   p_keyword_id    alias for $1;
 begin
   return tree_sortkey from cr_keywords where keyword_id = p_keyword_id;
-end;' language 'plpgsql';
+end;' language 'plpgsql' stable strict;
 
 create function cr_keywords_tree_insert_tr () returns opaque as '
 declare

@@ -5,10 +5,10 @@
 %myvars;
 ]>
 <sect1 id="groups-requirements" xreflabel="OpenACS 4 Groups Requirements">
-<title>OpenACS 4 Groups Requirements</title>
+<title>Groups Requirements</title>
 
 <authorblurb>
-by <ulink url="http://planitia.org">Rafael H. Schloming</ulink>, <ulink url="mailto:mthomas@arsdigita.com">Mark Thomas</ulink> 
+<para>By <ulink url="http://planitia.org">Rafael H. Schloming</ulink>, Mark Thomas</para>
 </authorblurb>
 
 
@@ -36,7 +36,7 @@ corporation can be broken into structures (the corporation, its divisions,
 and their departments) or regions (the Boston office, the LA office); a
 person who is employed by (is a member of) a specific department is also a
 member of the division and the corporation, and works at (is a member of, but
-in a different sense) a particular office. OpenACS 4&#39;s Parties and Groups
+in a different sense) a particular office. OpenACS&#39;s Parties and Groups
 system will support such complex relations faithfully.</para>
 
 <para><emphasis role="strong">Historical Motivations</emphasis></para>

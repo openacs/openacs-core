@@ -1674,9 +1674,9 @@ is
   v_parent_folder_p   char(1);
 begin
   v_parent_folder_p := 'f';
+  v_folder_id := get_parent_folder.item_id;
 
-  while v_parent_folder_p = 'f' loop
-
+  while v_parent_folder_p = 'f' and v_folder_id is not null loop
     select
       parent_id, content_folder.is_folder( parent_id ) 
     into 
@@ -1684,14 +1684,12 @@ begin
     from
       cr_items
     where
-      item_id = get_parent_folder.item_id;
+      item_id = v_folder_id;
 
   end loop; 
 
   return v_folder_id;
-  exception
-    when NO_DATA_FOUND then
-      return null;
+
 end get_parent_folder;
 
 end content_item;

@@ -7,7 +7,7 @@ ad_library {
 
 namespace eval lang::test {}
 
-ad_proc lang::test::get_dir {} {
+ad_proc -private lang::test::get_dir {} {
     The test directory of the acs-lang package (where this file resides).
 
     @author Peter Marklund (peter@collaboraid.biz)
@@ -16,7 +16,7 @@ ad_proc lang::test::get_dir {} {
     return "[acs_package_root_dir acs-lang]/tcl/test"
 }
 
-ad_proc lang::test::assert_browser_locale {accept_language expect_locale} {
+ad_proc -private lang::test::assert_browser_locale {accept_language expect_locale} {
     Assert that with given accept language header lang::conn::browser_locale returns
     the expected locale.
 
@@ -27,9 +27,442 @@ ad_proc lang::test::assert_browser_locale {accept_language expect_locale} {
     aa_equals "accept-language header \"$accept_language\"" $browser_locale $expect_locale
 }
 
+ad_proc -private lang::test::test_package_key {} {
+    return "acs-lang-test-tmp"
+}
 
+ad_proc -private lang::test::setup_test_package {} {
+    set package_key [test_package_key]
+    set package_name "acs-lang temporary test package"
+    set package_dir [file join [acs_root_dir] packages $package_key]
+    file mkdir $package_dir
 
+    set info_file_path "${package_dir}/${package_key}.info"
+    set info_file_contents "<?xml version=\"1.0\"?>
+<package key=\"$package_key\" url=\"http://www.openacs.org/acs-repository/apm/packages/$package_key\" type=\"apm_service\">
+    <package-name>$package_name</package-name>
+    <pretty-plural>$package_name</pretty-plural>
+    <initial-install-p>f</initial-install-p>
+    <singleton-p>f</singleton-p>
+    
+    <version name=\"1.0\" url=\"http://www.openacs.org/acs-repository/download/apm/$package_key-1.0.apm\">
+        <owner url=\"mailto:peter@collaboraid.biz\">Peter Marklund</owner>
+        <summary>Temporary acs-lang test package</summary>
+        <release-date>2003-11-07</release-date>
+        <vendor url=\"http://www.collaboraid.biz\">Collaboraid</vendor>
+        <description format=\"text/plain\">Temporary test package created by acs-lang test case.</description>
+    </version>
+</package>
+"
+    template::util::write_file $info_file_path $info_file_contents
 
+    # Install the test package without catalog files
+    apm_package_install \
+        -enable \
+        [apm_package_info_file_path $package_key]
+    aa_true "Package install: package enabled" \
+        [expr [lsearch -exact [apm_enabled_packages] $package_key] != -1]
+}
+
+ad_proc -private lang::test::teardown_test_package {} {
+    apm_package_delete -remove_files=1 [test_package_key]
+}
+
+ad_proc -private lang::test::check_import_result {
+    {-package_key:required}
+    {-locale:required}
+    {-upgrade_array:required}
+    {-base_array:required}
+    {-db_array:required}
+    {-file_array:required}
+} {
+    This proc checks that the properties of messages in the database
+    are what we expect after a message catalog import or upgrade.
+
+    @author Peter Marklund
+} {
+    upvar $upgrade_array upgrade_expect
+    upvar $base_array base_messages
+    upvar $db_array db_messages
+    upvar $file_array file_messages
+
+    # Check that we have the expected message properties in the database after upgrade        
+    foreach message_key [lsort [array names upgrade_expect]] {
+        array set expect_property $upgrade_expect($message_key) 
+        switch $expect_property(message) {
+            db {
+                set expect_message $db_messages($message_key)
+            }
+            file {
+                set expect_message $file_messages($message_key)
+            }
+            base {
+                set expect_message $base_messages($message_key)
+            }
+        }
+
+        array unset message_actual
+        lang::message::get \
+            -package_key $package_key \
+            -message_key $message_key \
+            -locale $locale \
+            -array message_actual
+
+        # Check message properties
+        aa_equals "Import check: $message_key - lang_messages.message" $message_actual(message) $expect_message
+        aa_equals "Import check: $message_key - lang_messages.deleted_p" $message_actual(deleted_p) $expect_property(deleted_p)
+        aa_equals "Import check: $message_key - lang_messages.conflict_p" $message_actual(conflict_p) $expect_property(conflict_p)
+        aa_equals "Import check: $message_key - lang_messages.upgrade_status" \
+            $message_actual(upgrade_status) $expect_property(upgrade_status)
+        if { [string equal $expect_property(sync_time) "not_null"] } {
+            aa_true "Import check: $message_key - lang_messages.sync_time not null" \
+                [expr ![empty_string_p $message_actual(sync_time)]]
+        } else {
+            aa_true "Import check: $message_key - lang_messages.sync_time null" \
+                [expr [empty_string_p $message_actual(sync_time)]]
+        }
+    }
+}
+
+ad_proc -private lang::test::execute_upgrade {
+    {-locale:required}
+} {
+    Executes the logic of the upgrade test case for a certain locale.
+
+    @author Peter Marklund
+} {
+    set package_key [lang::test::test_package_key]
+
+    # The key numbers correspond to the 14 cases described in the api-doc for lang::catalog::upgrade
+    array set base_messages {
+        key01 "Key 1"
+        key04 "Key 4"
+        key05 "Key 5"
+        key06 "Key 6"
+        key07 "Key 7"
+        key10 "Key 10"
+        key11 "Key 11"
+        key12 "Key 12"
+        key13 "Key 13 differ"
+        key14 "Key 14 base"
+    }
+
+    array set db_messages {
+        key02 "Key 2"
+        key06 "Key 6 differ"
+        key07 "Key 7"
+        key08 "Key 8"
+        key09 "Key 9"
+        key10 "Key 10"
+        key11 "Key 11 differ"
+        key12 "Key 12"
+        key13 "Key 13"
+        key14 "Key 14 db"
+    }
+
+    array set file_messages {
+        key03 "Key 3"
+        key04 "Key 4 differ"
+        key05 "Key 5"
+        key08 "Key 8 differ"
+        key09 "Key 9"
+        key10 "Key 10"
+        key11 "Key 11"
+        key12 "Key 12 differ"
+        key13 "Key 13"
+        key14 "Key 14 file"
+    }
+
+    # Add the locale to each message so we can tell messages in
+    # different locales apart
+    foreach array_name {base_messages db_messages file_messages} {
+        foreach message_key [array names $array_name] {
+            append ${array_name}($message_key) " $locale"
+        }
+    }
+
+    array set upgrade_expect {
+        key01 {
+          message base
+          deleted_p t
+          conflict_p f
+          sync_time not_null
+          upgrade_status no_upgrade
+        }
+        key02 {
+          message db
+          deleted_p f
+          conflict_p f
+          sync_time null
+          upgrade_status no_upgrade
+        }
+        key03 {
+          message file
+          deleted_p f
+          conflict_p f
+          sync_time not_null
+          upgrade_status added
+        }
+        key04 {
+          message file
+          deleted_p f
+          conflict_p t
+          sync_time not_null
+          upgrade_status added
+        }
+        key05 {
+          message base
+          deleted_p t
+          conflict_p f
+          sync_time null
+          upgrade_status no_upgrade
+        }
+        key06 {
+          message db
+          deleted_p t
+          conflict_p t
+          sync_time not_null
+          upgrade_status deleted
+        }
+        key07 {
+          message db
+          deleted_p t
+          conflict_p f
+          sync_time not_null
+          upgrade_status deleted
+        }
+        key08 {
+          message file
+          deleted_p f
+          conflict_p t
+          sync_time not_null
+          upgrade_status updated
+        }
+        key09 {
+          message db
+          deleted_p f
+          conflict_p f
+          sync_time not_null
+          upgrade_status no_upgrade
+        }
+        key10 {
+          message db
+          deleted_p f
+          conflict_p f
+          sync_time not_null
+          upgrade_status added
+        }
+        key11 {
+          message db
+          deleted_p f
+          conflict_p f
+          sync_time null
+          upgrade_status no_upgrade
+        }
+        key12 {
+          message file
+          deleted_p f
+          conflict_p f
+          sync_time not_null
+          upgrade_status updated
+        }
+        key13 {
+          message db
+          deleted_p f
+          conflict_p f
+          sync_time not_null
+          upgrade_status no_upgrade
+        }
+        key14 {
+          message file
+          deleted_p f
+          conflict_p t
+          sync_time not_null
+          upgrade_status updated
+        }
+    }
+
+    #
+    # Execution plan:
+    #
+    # 1. Import some messages (base_messages below)
+    # 2. Make changes to DB (db_messages below)
+    # 3. Make changes to catalog files and import again (file_messages below)
+    # 4. Check that merged result is what we expect (upgrade_expect below)
+    # 5. Import again
+    # 6. Check that we still have the same result (verify idempotent)
+    # 7. Resolve some conflicts, but not all
+    # 8. Import again
+    # 9. Check that we have what's expected then
+    #
+
+    aa_log "-------------------------------------------------------------------"
+    aa_log "*** Executing upgrade test with locale $locale"
+    aa_log "-------------------------------------------------------------------"
+
+    #----------------------------------------------------------------------
+    # 1. Import some messages (base_messages)
+    #----------------------------------------------------------------------
+    aa_log "locale=$locale ----------1. import some messages----------"
+
+    # Write original catalog file
+    set catalog_file_path [lang::catalog::get_catalog_file_path \
+                                   -package_key $package_key \
+                                   -locale $locale]
+    lang::catalog::export_to_file $catalog_file_path [array get base_messages]
+    aa_true "Initial export: messages exported to file $catalog_file_path" [file exists $catalog_file_path]
+
+    aa_log [template::util::read_file $catalog_file_path]
+
+    # Import the catalog file
+    array unset message_count
+    array set message_count [lang::catalog::import -package_key $package_key -locales [list $locale]]
+    aa_log "Imported messages: [array get message_count]"
+
+    # Check that we have the expected messages in the database
+    array unset actual_db_messages
+    array set actual_db_messages [lang::catalog::messages_in_db -package_key $package_key -locale $locale]
+    foreach message_key [lsort [array names base_messages]] {
+        aa_equals "Initial import: message for key $message_key in db same as in file" \
+            $actual_db_messages($message_key) $base_messages($message_key)
+    }
+
+    #----------------------------------------------------------------------
+    # 2. Make changes to DB (db_messages)
+    #----------------------------------------------------------------------
+    aa_log "locale=$locale ----------2. Make changes to DB----------"
+
+    # Carry out changes to the message catalog in the db
+    foreach message_key [lsort [array names upgrade_expect]] {
+
+        set register_p 0
+        if { ![info exists db_messages($message_key)] } {
+            # Message is not supposed to exist in DB
+            if { [info exists base_messages($message_key)] } {
+                # Message currently does exist in DB: Delete
+                aa_log "Deleting message $message_key"
+                lang::message::delete \
+                    -package_key $package_key \
+                    -message_key $message_key \
+                    -locale $locale
+            }
+        } else {
+            # Message is supposed to exist in DB
+            # Is it new or changed?
+            if { ![info exists base_messages($message_key)] || \
+                     ![string equal $base_messages($message_key) $db_messages($message_key)] } {
+                # Added || updated 
+                aa_log "Adding/updating message $message_key"
+                lang::message::register \
+                    $locale \
+                    $package_key \
+                    $message_key \
+                    $db_messages($message_key)
+            }
+        }
+    }
+
+    #----------------------------------------------------------------------
+    # 3. Make changes to catalog files and import again (file_messages)
+    #----------------------------------------------------------------------
+    aa_log "locale=$locale ----------3. Make changes to catalog files and do first upgrade----------"
+
+    # Update the catalog file
+    file delete -force $catalog_file_path
+    lang::catalog::export_to_file $catalog_file_path [array get file_messages]
+    aa_true "First upgrade: catalog file $catalog_file_path updated" [file exists $catalog_file_path]
+
+    # Execute a first upgrade
+    lang::catalog::import -package_key $package_key -locales [list $locale]
+
+    #----------------------------------------------------------------------
+    # 4. Check that merged result is what we expect (upgrade_expect)
+    #----------------------------------------------------------------------
+    aa_log "locale=$locale ----------4. Check merge result of first upgrade----------"
+    lang::test::check_import_result \
+        -package_key $package_key \
+        -locale $locale \
+        -upgrade_array upgrade_expect \
+        -base_array base_messages \
+        -db_array db_messages \
+        -file_array file_messages
+
+    #----------------------------------------------------------------------
+    # 5. First upgrade (second import)
+    #----------------------------------------------------------------------
+    aa_log "locale=$locale ----------5. Second upgrade ----------"
+    lang::catalog::import -package_key $package_key -locales [list $locale]
+
+    #----------------------------------------------------------------------
+    # 6. Check that we still have the same result (verify idempotent)
+    #----------------------------------------------------------------------
+    aa_log "locale=$locale ----------6. Check merge results of second upgrade (verify idempotent)----------"
+    lang::test::check_import_result \
+        -package_key $package_key \
+        -locale $locale \
+        -upgrade_array upgrade_expect \
+        -base_array base_messages \
+        -db_array db_messages \
+        -file_array file_messages
+
+    #----------------------------------------------------------------------
+    # 7. Resolve some conflicts, but not all
+    #----------------------------------------------------------------------
+    aa_log "locale=$locale ----------7. Resolve some conflicts, but not all----------"
+    array set conflict_resolutions {
+        key06 "key06 resolution message"
+        key08 "accept"
+    }
+    foreach message_key [array names conflict_resolutions] {
+        if { [string equal $conflict_resolutions($message_key) "accept"] } {
+            # Resolution is an accept - just toggle conflict_p flag
+            lang::message::edit $package_key $message_key $locale [list conflict_p f]
+
+            # Set the message to be what's in the database (the accepted message)
+            set conflict_resolutions($message_key) [lang::message::get_element \
+                                                        -package_key $package_key \
+                                                        -message_key $message_key \
+                                                        -locale $locale \
+                                                        -element message]
+        } else {
+            # Resolution is an edit
+            lang::message::register \
+                $locale \
+                $package_key \
+                $message_key \
+                $conflict_resolutions($message_key)
+        }
+    }
+
+    # TODO: test resolution being to retain the message (just toggle conflict_p)
+    # TODO: test resolution being to delete a resurrected message
+    # TODO: test other resolution possibilities
+
+    #----------------------------------------------------------------------
+    # 8. Third upgrade
+    #----------------------------------------------------------------------
+    aa_log "locale=$locale ----------8. Do third upgrade----------"
+    lang::catalog::import -package_key $package_key -locales [list $locale]
+
+    #----------------------------------------------------------------------
+    # 9. Check that we have what's expected then (resolutions are sticky)
+    #----------------------------------------------------------------------
+    aa_log "locale=$locale ----------9. Check results of third upgrade (that resolutions are sticky)----------"
+    foreach message_key [array names conflict_resolutions] {
+    
+        array unset message_array
+        lang::message::get \
+            -package_key $package_key \
+            -message_key $message_key \
+            -locale $locale \
+            -array message_array
+
+        aa_equals "$message_key - conflict message that has been resolved in UI has conflict_p=f" \
+            $message_array(conflict_p) "f"
+        aa_equals "$message_key - the resolved conflict is not clobbered by an additional import" \
+            $message_array(message) $conflict_resolutions($message_key)
+    }
+}
 
 aa_register_case util__replace_temporary_tags_with_lookups {
     Primarily tests lang::util::replace_temporary_tags_with_lookups,
@@ -497,5 +930,40 @@ aa_register_case locale_language_fallback {
 
     if { $error_p } {
         error $saved_error $saved_errorInfo
+    }
+}
+
+aa_register_case upgrade {
+    Test that a package can be upgraded with new
+    catalog files and that the resulting keys and messages
+    in the database can then be exported properly.
+
+    What we are testing is a scenario similar to what we have on the OpenACS
+    Translation server (http://translate.openacs.org).
+
+    @author Peter Marklund
+} {
+    # Create the test package in the file system
+    lang::test::setup_test_package
+
+    # Can't run this test case with the usual rollback switch since if everthing
+    # is wrapped in one transaction then the creation_date of the messages will be the
+    # same and the query in lang::catalog::last_sync_messages will return duplicates.
+    aa_run_with_teardown \
+        -test_code {
+
+        lang::test::execute_upgrade -locale en_US
+
+        lang::system::locale_set_enabled \
+            -locale de_DE \
+            -enabled_p t
+
+        lang::test::execute_upgrade -locale de_DE
+
+    } -teardown_code {                 
+        foreach message_key [array names upgrade_expect] {
+            lang::message::unregister $package_key $message_key
+        }    
+        lang::test::teardown_test_package
     }
 }

@@ -173,6 +173,31 @@ ad_proc -public template::data::validate::url { value_ref message_ref } {
   return $result 
 }
 
+ad_proc -public template::data::validate::url_element { value_ref message_ref } {
+
+    Beautiful URL elements that may only contain lower case 
+    characters, numbers and hyphens.
+
+    <p>
+
+
+    @see util_text_to_url if you want to offer auto-generation of URLs based on a pretty name
+
+    @author Tilmann Singer
+
+} {
+    upvar 2 $message_ref message $value_ref value
+
+    set expr {^[a-z0-9-]+$}
+    set result [regexp $expr $value]
+
+    if { ! $result } {
+	set message "Invalid url \"$value\". Please use only lowercase characters, numbers and hyphens, e.g. \"foo-bar\"."
+    }
+   
+    return $result 
+}
+
 ad_proc -public template::data::validate::date { value_ref message_ref } {
 
   upvar 2 $message_ref message $value_ref value

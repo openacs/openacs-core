@@ -5,10 +5,10 @@
 %myvars;
 ]>
 <sect1 id="permissions-design" xreflabel="OpenACS 4 Permissions Design">
-<title>OpenACS 4 Permissions Design</title>
+<title>Permissions Design</title>
 
 <authorblurb>
-by <ulink url="mailto:jmp@arsdigita.com">John Prevost</ulink> and <ulink url="http://planitia.org">Rafael H. Schloming</ulink> 
+<para>By John Prevost and <ulink url="http://planitia.org">Rafael H. Schloming</ulink> </para>
 </authorblurb>
 
 <sect2 id="permissions-design-essentials">
@@ -162,8 +162,8 @@ the system - this is a denormalization of
 questions about permissions. For example, a number of the above tables
 describe &quot;direct&quot; or explicit permissions. Inheritance and default
 values can, however, introduce permissions which are not directly specified.
-(For example, read access on a bboard allows read access on all the messages
-in the bboard.)</para>
+(For example, read access on a forum allows read access on all the messages
+in the forum.)</para>
 
 <para>The following views provide flattened versions of inherited
 information:</para>
@@ -355,7 +355,7 @@ procedure revoke_permission (
 );
 </programlisting>
 
-<para>These procedures are defined in <ulink url="http://acs40.arsdigita.com/doc/sql/display-sql?url=acs-permissions-create.sql&amp;package_key=acs-kernel">
+<para>These procedures are defined in <ulink url="/doc/sql/display-sql?url=acs-permissions-create.sql&amp;package_key=acs-kernel">
 <computeroutput>permissions-create.sql</computeroutput></ulink></para>
 
 <para><emphasis role="strong">Tcl Procedures</emphasis></para>
@@ -462,7 +462,7 @@ inheritance.</para></listitem>
 
 </term>
  
-<listitem><para><ulink url="mailto:jmp@arsdigita.com">John Prevost</ulink></para></listitem>
+<listitem><para>John Prevost</para></listitem>
 </varlistentry>
 </variablelist>
 

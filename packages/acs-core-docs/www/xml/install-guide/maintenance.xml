@@ -6,14 +6,16 @@
 ]>
 <sect1 id="maintenance-web">
   <title>Hosting Web Sites</title>
-    
+
     <authorblurb>
-      by <ulink url="mailto:joel@aufrecht.org">Joel Aufrecht</ulink>
+      <para>By <ulink url="mailto:joel@aufrecht.org">Joel Aufrecht</ulink></para>
     </authorblurb>
     
     <para>Maintenance tasks, optional software, and alternate configurations for AOLserver.</para>
     
-    <sect2 id="install-openacs-keepalive" xreflabel="Keep AOLServer alive">
+    <sect2 id="install-openacs-keepalive" xreflabel="Keep AOLserver alive">
+	<title>Keep AOLserver Alive</title> 
+
       <para>Assuming AOLserver started cleanly in the previous step, we'll set it up so that it's always running, and automatically restarts whenever it dies or is stopped.  This step is strongly recommended, even for development sites, because it makes install and maintenance much simpler.  </para>
       
       <para>The Reference Platform uses Daemontools to control AOLserver.  A simpler method, using <computeroutput>init</computeroutput>, is <link linkend="install-openacs-inittab">here</link>.</para>
@@ -86,7 +88,7 @@ root      5582  0.0  0.2  3276  628 pts/0    S    11:55   0:00 grep nsd
 
         <listitem>
           <para>Install a script to automate the stopping and starting
-          of aolserver services via daemontools.  You can then restart a service via <computeroutput>restart-aolserver <replaceable>service0</replaceable></computeroutput></para>
+          of AOLserver services via daemontools.  You can then restart a service via <computeroutput>restart-aolserver <replaceable>service0</replaceable></computeroutput></para>
           <screen>[root@yourserver root]# <userinput>cp /var/lib/aolserver/<replaceable>service0</replaceable>/packages/acs-core-docs/www/files/restart-aolserver-daemontools.txt /usr/local/bin/restart-aolserver</userinput>
 [root@yourserver root]# <userinput>chmod 755 /usr/local/bin/restart-aolserver</userinput>
 [root@yourserver root]#</screen>
@@ -104,7 +106,7 @@ root      5582  0.0  0.2  3276  628 pts/0    S    11:55   0:00 grep nsd
             <para>
 
         Most of this information comes from Tom Jackson's <ulink
-          url="http://zmbh.com/daemontools-aolserver/aolserver+daemontools.html">AOLServer+Daemontools
+          url="http://zmbh.com/daemontools-aolserver/aolserver+daemontools.html">AOLserver+Daemontools
           Mini-HOWTO</ulink>.
 </para>
         </listitem>
@@ -301,18 +303,20 @@ set httpsport             8443 </programlisting>
 <programlisting>set hostname               [ns_info hostname]
 set address                127.0.0.1 </programlisting>
 </para>
+    </formalpara>
+
     <para>If you want to install two services with different host
     names sharing the same ip, you'll need nsvhr to redirect requests
     based on the contents of the tcp headers.  See <ulink
     url="http://borkware.com/rants/aolserver-vhosting/">AOLserver
     Virtual Hosting with TCP</ulink> by <ulink url="mailto:markd@borkware.com">markd</ulink>.
 </para>
-  </formalpara>
+
   </sect2>
 
     <sect2 id="install-ssl">
       <title>Installing SSL Support</title>
-        <para>nsopenssl is an open-sounce module for Aolserver which
+        <para>nsopenssl is an open-sounce module for AOLserver which
         adds support for the ssl encryption layer.  To use it, you
         must <link linkend="install-nsopenssl">install</link> the software, create or purchase certificates,
         and configure your OpenACS instance to use it.</para>
@@ -322,7 +326,7 @@ set address                127.0.0.1 </programlisting>
             <programlisting>#ns_param   nsopenssl       ${bindir}/nsopenssl.so
 </programlisting>
           </listitem>
-          <listitem id="ssl-certificates" linkref="Generate ssl certificates">
+          <listitem id="ssl-certificates" xreflabel="Generate ssl certificates">
             <para>Prepare a certificate directory for the service.</para>
             <screen>[service0@yourserver etc]$ <userinput>mkdir /var/lib/aolserver/<replaceable>service0</replaceable>/etc/certs</userinput>
 [service0@yourserver etc]$ <userinput>chmod 700 /var/lib/aolserver/<replaceable>service0</replaceable>/etc/certs</userinput>
@@ -422,11 +426,12 @@ logout
       </listitem>
     </orderedlist>
   </sect2>
+  <sect2 id="uptime">
+    <title>External uptime validation</title>
+    <para>The <ulink url="http://uptime.openacs.org/uptime/">OpenACS uptime site</ulink> can monitor your site and send you an email whenever your site fails to respond.  If you test the url <computeroutput>http://<replaceable>yourserver.test</replaceable>/SYSTEM/dbtest.tcl</computeroutput>, you should get back the string <computeroutput>success</computeroutput>.</para>
 
 
-
-    
     <para><phrase role="cvstag">($Id$)</phrase></para>
-  </sect1>
-  
-  
+
+  </sect2>
+</sect1>

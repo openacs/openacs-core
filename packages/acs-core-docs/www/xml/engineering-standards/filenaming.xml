@@ -9,8 +9,7 @@
 
  
 <authorblurb>
-<para>By <ulink url="mailto:michael@arsdigita.com">michael@arsdigita.com</ulink> and 
-<ulink url="mailto:aure@arsdigita.com">aure@arsdigita.com</ulink></para>
+<para>By Michael Yoon and Aurelius Prochazka</para>
 </authorblurb>
 
 <para>
@@ -268,7 +267,7 @@ ad_page_contract {
     @param password_from_from The password the user entered.
     @param return_url What url to return to after successful login.
     @param persistent_cookie_p Specifies whether a cookie should be set to keep the user logged in forever.
-    @author John Doe (jdoe@arsdigita.com)
+    @author John Doe (jdoe@example.com)
     @cvs-id file-standards.html,v 1.2 2000/09/19 07:22:45 ron Exp
 } {
     user_id:integer,notnull
@@ -335,7 +334,7 @@ there.  Here is an example of using ad_library:
 ad_library {
     Provides helper routines for the Wimpy Point module.
 
-    @author John Doe (jdoe@arsdigita.com)
+    @author John Doe (jdoe@example.com)
     @cvs-id file-standards.html,v 1.2 2000/09/19 07:22:45 ron Exp
 }
 </programlisting>

@@ -67,6 +67,15 @@
 
 <slave>
 
+<if @num_of_locales@ gt 1>
+    <p><a href="@change_locale_url@">Change Locale</a>
+</if>
+<else>
+  <if @locale_admin_url@ not nil>
+    <a href="@locale_admin_url@">Install Locales</a>
+  </if>
+</else>
+
 <if @curriculum_bar_p@ true>
-<include src="/packages/curriculum/lib/bar" />
+<p><include src="/packages/curriculum/lib/bar" />
 </if>

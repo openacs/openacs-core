@@ -17,8 +17,26 @@ set bootstrap_file "$root_directory/packages/acs-bootstrap-installer/bootstrap.t
 ns_log "Notice" "Sourcing $bootstrap_file"
 
 if { [file isfile $bootstrap_file] } {
+
+    # Check that the appropriate version of tDom (http://www.tdom.org) is installed
+    # and spit out a comment or try to install it if not.
+    if {[string equal {} [info commands domNode]]} { 
+	if {[ns_info version] < 4} {
+	    ns_log Error "0-acs-init.tcl: domNode command not found -- libtdom.so not loaded?"
+	} elseif {[ns_info version] >= 4} {
+	    if {[catch {set version [package require tdom]} errmsg]} { 
+		ns_log Error "0-acs-init.tcl: error loading tdom: $errmsg" 
+	    } else {
+		foreach {major minor point} [split $version .] { break }
+		if {$major == 0 
+		    && ( $minor < 7 || ($minor == 7 && $point < 8))} { 
+		    ns_log Error "0-acs-init.tcl: please use tdom version 0.7.8 or greater (you have version $version)"
+		}
+	    }
+	}
+    }
+        
     source $bootstrap_file
 } else {
     ns_log "Error" "$bootstrap_file does not exist. Aborting the OpenACS load process."
 }
-

@@ -46,8 +46,9 @@ if { [ad_conn untrusted_user_id] != 0 } {
     set sw_admin_p [acs_user::site_wide_admin_p -user_id [ad_conn untrusted_user_id]]
 
     if { $sw_admin_p } {
-            set admin_url "/acs-admin/"
-            set devhome_url "/acs-admin/developer"
+        set admin_url "/acs-admin/"
+        set devhome_url "/acs-admin/developer"
+        set locale_admin_url "/acs-lang/admin"
     } else {
         set subsite_admin_p [permission::permission_p \
                                  -object_id [subsite::get_element -element object_id] \
@@ -67,7 +68,11 @@ if { [ad_conn untrusted_user_id] != 0 } {
 # Context bar
 if { [template::util::is_nil no_context_p] } {
     if { ![template::util::is_nil context] } {
-        set context_bar [eval ad_context_bar -from_node $subsite_node_id $context]
+        set cmd [list ad_context_bar -from_node $subsite_node_id --]
+        foreach elem $context {
+            lappend cmd $elem
+        }
+        set context_bar [eval $cmd]
     }
     if [template::util::is_nil context_bar] { 
         set context_bar [ad_context_bar -from_node $subsite_node_id]
@@ -75,6 +80,15 @@ if { [template::util::is_nil no_context_p] } {
 } else {
     set context_bar {}
 }
+
+# change locale
+set num_of_locales [llength [lang::system::get_locales]]
+if { $num_of_locales > 1 } {
+    set change_locale_url \
+        "/acs-lang/?[export_vars { { package_id "[ad_conn package_id]" } }]"
+}
+
+
 
 # Curriculum bar
 set curriculum_bar_p [llength [site_node::get_children -all -filters { package_key "curriculum" } -node_id $subsite_node_id]]

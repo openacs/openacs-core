@@ -516,34 +516,41 @@ ad_proc -private apm_load_apm_file {
     @return If successful, a path to the .info file of the package uncompressed 
             into the apm-workspace directory
 
-} {
-    apm_callback_and_log $callback "<li>Downloading $url..."
-    if { [catch {
-	# Open a destination file.
-	set file_path [ns_tmpnam].apm
-	set fileChan [open $file_path w+ 0600]
-	# Open the channel to the server.
-	set httpChan [lindex [ns_httpopen GET $url] 0]
-	ns_log Debug "APM: Copying data from $url"
-	# Copy the data
-	fcopy $httpChan $fileChan
-	# Clean up.
-	ns_log Debug "APM: Done copying data."
-	close $httpChan
-	close $fileChan
-    } errmsg] } {
-	apm_callback_and_log $callback "Unable to download. Please check your URL.</ul>.
-	The following error was returned: <blockquote><pre>[ad_quotehtml $errmsg]
-	</pre></blockquote>[ad_footer]"
-	return
-    }	
+} {    
+    # First download the apm file if a URL is provided
+    if { ![empty_string_p $url] } {
+        apm_callback_and_log $callback "<li>Downloading $url..."
+        if { [catch {
+            # Open a destination file.
+            set file_path [ns_tmpnam].apm
+            set fileChan [open $file_path w 0640]
+            # Open the channel to the server.
+            set httpChan [lindex [ns_httpopen GET $url] 0]
+            ns_log Debug "APM: Copying data from $url"
+            fconfigure $httpChan -encoding binary
+            fconfigure $fileChan -encoding binary
+            # Copy the data
+            fcopy $httpChan $fileChan
+            # Clean up.
+            ns_log Debug "APM: Done copying data."
+            close $httpChan
+            close $fileChan
+        } errmsg] } {
+            apm_callback_and_log $callback "Unable to download. Please check your URL.</ul>.
+            The following error was returned: <blockquote><pre>[ad_quotehtml $errmsg]
+            </pre></blockquote>[ad_footer]"
+            return
+        }	
 
-    if {![file exists $file_path]} {
-	apm_callback_and_log $callback  "
-	The file cannot be found.  Your URL or your file name is incorrect.  Please verify that the file name
-	is correct and try again."
-	return
+        if {![file exists $file_path]} {
+            apm_callback_and_log $callback  "
+            The file cannot be found.  Your URL or your file name is incorrect.  Please verify that the file name
+            is correct and try again."
+            ns_log Error "Error loading APM file form url $url: The file cannot be found."
+            return
+        }
     }
+
     if { [catch {
 	set files [split [string trim \
 		[exec [apm_gunzip_cmd] -q -c $file_path | [apm_tar_cmd] tf - 2>/dev/null] "\n"]]
@@ -552,11 +559,14 @@ ad_proc -private apm_load_apm_file {
 	apm_callback_and_log $callback "The follow error occured during the uncompression process:
 	<blockquote><pre>[ad_quotehtml $errmsg]</pre></blockquote><br>
 	"
+        global errorInfo
+        ns_log Error "Error loading APM file form url $url: $errmsg\n$errorInfo"
 	return
     }
 	
     if { [llength $files] == 0 } {
 	apm_callback_and_log $callback  "The archive does not contain any files.\n"
+        ns_log Error "Error loading APM file form url $url: The archive does not contain any files."
 	return
     }
 
@@ -569,22 +579,25 @@ ad_proc -private apm_load_apm_file {
 	    apm_callback_and_log $callback  "All files in the archive must be contained in the same directory 
 	    (corresponding to the package's key). This is not the case, so the archive is not 
 	    a valid APM file.\n"
+            ns_log Error "Error loading APM file form url $url: Invalid APM file. All files in the archive must be contained in the same directory corresponding to the package's key."
 	    return
 	}
     
 	if { [llength $components] == 2 && ![string compare [file extension $file] ".info"] } {
 	    if { [info exists info_file] } {
 		apm_callback_and_log $callback  "The archive contains more than one <tt>package/*/*.info</tt> file, so it is not a valid APM file.</ul>\n"
+                ns_log Error "Error loading APM file form url $url: Invalid APM file. More than one package .info file."
 		return
 	    } else {
 	    set info_file $file
 	    }
 	}
     }
-	if { ![info exists info_file] || [regexp {[^a-zA-Z0-9\-\./_]} $info_file] } {
-	apm_callback_and_log $callback  "The archive does not contain a <tt>*/*.info</tt> file, so it is not 
-	a valid APM file.</ul>\n"
-	return
+    if { ![info exists info_file] || [regexp {[^a-zA-Z0-9\-\./_]} $info_file] } {
+        apm_callback_and_log $callback  "The archive does not contain a <tt>*/*.info</tt> file, so it is not 
+        a valid APM file.</ul>\n"
+        ns_log Error "Error loading APM file form url $url: Invalid APM file. No package .info file."
+        return
     }
 
     apm_callback_and_log $callback  "Extracting the .info file (<tt>$info_file</tt>)..."
@@ -602,6 +615,8 @@ ad_proc -private apm_load_apm_file {
 	<p>
 	The package cannot be installed.
 	</ul>\n"
+        global errorInfo
+        ns_log Error "Error loading APM file form url $url: Bad package .info file. $errmsg\n$errorInfo"
 	return
     }
     file delete -force $tmpdir
@@ -611,8 +626,8 @@ ad_proc -private apm_load_apm_file {
     ns_log Debug "APM: Preparing to load $pretty_name $version_name"
     # Determine if this package version is already installed.
     if {[apm_package_version_installed_p $package_key $version_name]} {	
-	apm_callback_and_log $callback  "<li>$pretty_name $version_name is already installed in your system.
-	"
+	apm_callback_and_log $callback  "<li>$pretty_name $version_name is already installed in your system."
+        ns_log Error "Error loading APM file form url $url: Package $pretty_name $version_name is already installed"
     } else {
 	
 	set install_path "[apm_workspace_install_dir]"

@@ -8,7 +8,7 @@
   <title>Creating Web Pages</title>
   
   <authorblurb>
-    by <ulink url="mailto:joel@aufrecht.org">Joel Aufrecht</ulink>
+    <para>by <ulink url="mailto:joel@aufrecht.org">Joel Aufrecht</ulink></para>
   </authorblurb>
   
   <sect2>
@@ -16,7 +16,7 @@
     <para>As a workaround for missing content-repository functionality, copy a provided file into the directory for tcl files:</para>
     <screen>
     <action>cp <replaceable>/var/lib/aolserver/service1</replaceable>/packages/acs-core-docs/www/files/note-procs.tcl <replaceable>/var/lib/aolserver/service1</replaceable>/packages/myfirstpackage/tcl/</action></screen>
-    <para>To make this file take effect, go to the <ulink href="/acs-admin/apm">APM</ulink> and choose "Reload all files" for "MyFirstPackage".</para>
+    <para>To make this file take effect, go to the <ulink url="/acs-admin/apm">APM</ulink> and choose "Reload all files" for "MyFirstPackage".</para>
   </sect2>
   <sect2>
     <title>Build the "Index" page</title>

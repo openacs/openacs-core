@@ -12,7 +12,7 @@
 
 -- create or replace package body content_folder
 
-create function content_folder__new(varchar,varchar,varchar,integer) 
+create or replace function content_folder__new(varchar,varchar,varchar,integer) 
 returns integer as '
 declare
   new__name                   alias for $1;  
@@ -35,7 +35,7 @@ end;' language 'plpgsql';
 -- function new
 select define_function_args('content_folder__new','name,label,description,parent_id,context_id,folder_id,creation_date,creation_user,creation_ip');
 
-create function content_folder__new (varchar,varchar,varchar,integer,integer,integer,timestamptz,integer,varchar)
+create or replace function content_folder__new (varchar,varchar,varchar,integer,integer,integer,timestamptz,integer,varchar)
 returns integer as '
 declare
   new__name                   alias for $1;  
@@ -117,7 +117,7 @@ end;' language 'plpgsql';
 
 -- function new -- accepts security_inherit_p DaveB
 
-create function content_folder__new (varchar,varchar,varchar,integer,integer,integer,timestamptz,integer,varchar, boolean)
+create or replace function content_folder__new (varchar,varchar,varchar,integer,integer,integer,timestamptz,integer,varchar, boolean)
 returns integer as '
 declare
   new__name                   alias for $1;  
@@ -199,7 +199,7 @@ where
 end;' language 'plpgsql';
 
 -- procedure delete
-create function content_folder__delete (integer)
+create or replace function content_folder__delete (integer)
 returns integer as '
 declare
   delete__folder_id              alias for $1;  
@@ -243,7 +243,7 @@ end;' language 'plpgsql';
 
 
 -- procedure rename
-create function content_folder__rename (integer,varchar,varchar,varchar)
+create or replace function content_folder__rename (integer,varchar,varchar,varchar)
 returns integer as '
 declare
   rename__folder_id              alias for $1;  
@@ -285,7 +285,7 @@ end;' language 'plpgsql';
 -- 3) update the parent_id for the folder
 
 -- procedure move
-create function content_folder__move (integer,integer)
+create or replace function content_folder__move (integer,integer)
 returns integer as '
 declare
   move__folder_id              alias for $1;  
@@ -352,7 +352,7 @@ end;' language 'plpgsql';
 
 
 -- procedure copy
-create function content_folder__copy (integer,integer,integer,varchar)
+create or replace function content_folder__copy (integer,integer,integer,varchar)
 returns integer as '
 declare
   copy__folder_id              alias for $1;  
@@ -463,7 +463,7 @@ end;' language 'plpgsql';
 
 
 -- function is_folder
-create function content_folder__is_folder (integer)
+create or replace function content_folder__is_folder (integer)
 returns boolean as '
 declare
   item_id                alias for $1;  
@@ -472,11 +472,11 @@ begin
   return count(*) > 0 from cr_folders
     where folder_id = item_id;
 
-end;' language 'plpgsql';
+end;' language 'plpgsql' stable;
 
 
 -- function is_sub_folder
-create function content_folder__is_sub_folder (integer,integer)
+create or replace function content_folder__is_sub_folder (integer,integer)
 returns boolean as '
 declare
   is_sub_folder__folder_id              alias for $1;  
@@ -521,7 +521,7 @@ end;' language 'plpgsql';
 
 
 -- function is_empty
-create function content_folder__is_empty (integer)
+create or replace function content_folder__is_empty (integer)
 returns boolean as '
 declare
   is_empty__folder_id              alias for $1;  
@@ -537,11 +537,11 @@ begin
 
   return v_return;
  
-end;' language 'plpgsql';
+end;' language 'plpgsql' stable;
 
 
 -- procedure register_content_type
-create function content_folder__register_content_type (integer,varchar,boolean)
+create or replace function content_folder__register_content_type (integer,varchar,boolean)
 returns integer as '
 declare
   register_content_type__folder_id              alias for $1;  
@@ -606,7 +606,7 @@ end;' language 'plpgsql';
 
 
 -- procedure unregister_content_type
-create function content_folder__unregister_content_type (integer,varchar,boolean)
+create or replace function content_folder__unregister_content_type (integer,varchar,boolean)
 returns integer as '
 declare
   unregister_content_type__folder_id              alias for $1;  
@@ -644,7 +644,7 @@ end;' language 'plpgsql';
 
 
 -- function is_registered
-create function content_folder__is_registered (integer,varchar,boolean)
+create or replace function content_folder__is_registered (integer,varchar,boolean)
 returns boolean as '
 declare
   is_registered__folder_id              alias for $1;  
@@ -654,7 +654,7 @@ declare
   v_subtype_val                         record;
 begin
 
-  if is_registered__include_subtypes = ''f'' then
+  if is_registered__include_subtypes = ''f'' or  is_registered__include_subtypes is null then
     select 
       count(1)
     into 
@@ -699,11 +699,11 @@ begin
     return ''t'';
   end if;
  
-end;' language 'plpgsql';
+end;' language 'plpgsql' stable;
 
 
 -- function get_label
-create function content_folder__get_label (integer)
+create or replace function content_folder__get_label (integer)
 returns varchar as '
 declare
   get_label__folder_id              alias for $1;  
@@ -719,11 +719,11 @@ begin
 
   return v_label;
  
-end;' language 'plpgsql';
+end;' language 'plpgsql' stable strict;
 
 
 -- function get_index_page
-create function content_folder__get_index_page (integer)
+create or replace function content_folder__get_index_page (integer)
 returns integer as '
 declare
   get_index_page__folder_id              alias for $1;  
@@ -761,11 +761,11 @@ begin
 
   return v_index_page_id;
 
-end;' language 'plpgsql';
+end;' language 'plpgsql' stable strict;
 
 
 -- function is_root
-create function content_folder__is_root (integer)
+create or replace function content_folder__is_root (integer)
 returns boolean as '
 declare
   is_root__folder_id              alias for $1;  

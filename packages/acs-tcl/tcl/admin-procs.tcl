@@ -268,12 +268,12 @@ proc_doc ad_user_class_query { set_id  } {
 		}
 		
 		"last_name_starts_with" {
-		    lappend where_clauses "upper(users.last_name) like upper([ns_dbquotevalue "${last_name_starts_with}%"])"
+		    lappend where_clauses "lower(users.last_name) like lower([ns_dbquotevalue "${last_name_starts_with}%"])"
 		    # note the added percent sign  here
 		    
 		}
 		"email_starts_with" {
-		    lappend where_clauses "upper(users.email) like upper([ns_dbquotevalue "${email_starts_with}%"])"
+		    lappend where_clauses "lower(users.email) like lower([ns_dbquotevalue "${email_starts_with}%"])"
 		    # note the added percent sign  here
 		    
 		}

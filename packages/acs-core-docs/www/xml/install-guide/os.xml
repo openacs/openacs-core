@@ -4,11 +4,11 @@
 <!ENTITY % myvars SYSTEM "../variables.ent">
 %myvars;
 ]>
-<sect1 id="unix-installation">
-  <title>Install Unix-like system and supporting software</title>
+<sect1 id="unix-installation" xreflabel="Install a Unix-like OS">
+  <title>Install a Unix-like system and supporting software</title>
   
   <authorblurb>
-    by <ulink url="mailto:joel@aufrecht.org">Joel Aufrecht</ulink>
+    <para>by <ulink url="mailto:joel@aufrecht.org">Joel Aufrecht</ulink></para>
   </authorblurb>
   <sect2 id="unix-install">
     <title>a Unix-like system</title>
@@ -22,7 +22,7 @@
           <title>BSD Note</title>
           <para>BSD users: in most places in these instructions, gmake
           will work better than make.  (<ulink
-          href="http://openacs.org/forums/message-view?message_id=136910">more
+          url="http://openacs.org/forums/message-view?message_id=136910">more
           information on FreeBSD installation</ulink>)</para>
         </note>
 </listitem>
@@ -46,8 +46,10 @@
     <para>To install a machine to the specifications of the Reference
     Platform, do the <link linkend="install-redhat">walkthrough of the
     Red Hat 8.0 Install for OpenACS</link>.</para>
+
+    <para><phrase role="cvstag">($Id$)</phrase></para>
   </sect2>
 
-  <para><phrase role="cvstag">($Id$)</phrase></para>
+
   
 </sect1>

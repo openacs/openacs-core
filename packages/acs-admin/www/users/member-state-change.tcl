@@ -29,7 +29,7 @@ if {![db_0or1row get_states {
     where user_id = :user_id
 }]} {
     # The user is not in there
-    ad_return_complaint "Invalid User" "The user is not in the system"
+    ad_return_complaint 1 "Invalid User: the user is not in the system"
     return
 }
 
@@ -70,7 +70,7 @@ switch $email_verified_p {
 }
 
 if [empty_string_p $action] {
-    ad_return_complaint "Not valid action" "You have not changed the user in any way"
+    ad_return_complaint 1 "Not valid action: You have not changed the user in any way"
     return
 }
 

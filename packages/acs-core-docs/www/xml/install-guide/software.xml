@@ -8,7 +8,7 @@
     <sect1 id="individual-programs">
       <title>Prerequisite Software</title>    
   <authorblurb>
-      by <ulink url="mailto:joel@aufrecht.org">Joel Aufrecht</ulink>
+      <para>by <ulink url="mailto:joel@aufrecht.org">Joel Aufrecht</ulink></para>
     </authorblurb>
     
     <para>
@@ -23,7 +23,7 @@
             url="http://openacs.org/projects/openacs/download/">OpenACS &version;</ulink></title>
             <para>The OpenACS tarball comprises the core packages and
             many useful additional packages.  This includes a full set
-            of documentation.  The tarball works with both PostGreSQL
+            of documentation.  The tarball works with both PostgreSQL
             and Oracle.</para>
           </formalpara>
         </listitem>
@@ -190,18 +190,10 @@
           AOLserver is available at <ulink url="http://aolserver.com">aolserver.com</ulink> 
         </para></listitem>
                 
-                <listitem><para> 
-          ArsDigita's AOLserver distribution (including
-          internationalization patches, nscache, nsrewrite, nssha1 and the
-          oracle driver) is available at <ulink
-          url="http://www.arsdigita.com/acs-repository/download-verify?version_id=2081">arsdigita.com</ulink>
-          </para></listitem>
-                
                 <listitem><para>
-
           The OpenACS PostgreSQL driver (nspostgres.so) is available from
           <ulink
-          url="http://prdownloads.sourceforge.net/aolserver/nspostgres-3.5beta1.tar.gz?download">SourceForge. If
+          url="http://prdownloads.sourceforge.net/aolserver/nspostgres-3.5.tar.gz?download">SourceForge. If
           you do decide to use nspostgres.so, you have to remember to
           change the AOLserver config file to point to nspostgres.so
           instead of postgres.so. This guide uses Mat Kovach's distro
@@ -233,10 +225,12 @@
             <listitem id="nsopenssl-download">
               <formalpara>
                 <title><ulink
-              url="http://www.scottg.net/download/nsopenssl-2.1.tar.gz">nsopenssl 2.1</ulink>, OPTIONAL</title>
+              url="http://www.scottg.net/download/nsopenssl-2.1a.tar.gz">nsopenssl 2.1a</ulink>, OPTIONAL</title>
                 <para>Provides SSL capabilities for AOLserver.  It requires
 	    OpenSSL.  You need this if you want users to make
-	    secure (https) connections to your webserver.</para>
+	    secure (https) connections to your webserver. (<ulink
+              url="http://www.scottg.net/webtools/aolserver/modules/nsopenssl/">home
+              page</ulink>)</para>
               </formalpara>
             </listitem>
             
@@ -279,7 +273,7 @@
               <formalpara>
                 <title><ulink
                url="http://unc.dl.sourceforge.net/sourceforge/openfts/Search-OpenFTS-tcl-0.3.2.tar.gz">OpenFTS TCL 0.3.2</ulink>, OPTIONAL</title>
-                <para>Adds full-text-search to PostGreSQL and includes a
+                <para>Adds full-text-search to PostgreSQL and includes a
                driver for AOLserver.  You need this if you want users
                to be able to search for any text on your site.</para>
               </formalpara>
@@ -304,7 +298,7 @@
         calender entries, and notes) is stored in the database.
         OpenACS seperates the database with an abstraction layer,
         which means that several different databases all function
-        identically.  Currently OpenACS supports PostGreSQL 7.2 and
+        identically.  Currently OpenACS supports PostgreSQL 7.2 and
         Oracle 8.1.7.  While you can run the core OpenACS on any
         supported database, not all contributed packages support all
         databases.</para>
@@ -313,7 +307,7 @@
             <listitem>
               
               <formalpara>
-                <title>Oracle 8.1.7 (Either this or PostGreSQL is REQUIRED)</title>
+                <title>Oracle 8.1.7 (Either this or PostgreSQL is REQUIRED)</title>
                 <para>You can register and download Oracle from <ulink
               url="http://otn.oracle.com/software/content.html">Oracle
               TechNet</ulink>.  You need this if you want to use an
@@ -322,8 +316,8 @@
             </listitem>
             <listitem>
               <formalpara id="source-postgresql">
-                <title><ulink url="http://sourceforge.net/projects/pgsql/">PostGreSQL 7.3.4</ulink> (Either this or Oracle is REQUIRED)</title>
-                <para>You need this if you want to use a PostGreSQL database.</para>
+                <title><ulink url="http://sourceforge.net/projects/pgsql/">PostgreSQL 7.3.4</ulink> (Either this or Oracle is REQUIRED)</title>
+                <para>You need this if you want to use a PostgreSQL database.</para>
               </formalpara>
             </listitem>
           </itemizedlist>

@@ -26,9 +26,6 @@ create table lang_message_keys (
                        on delete cascade
                        constraint lang_message_keys_p_key_nn
                        not null,
-    upgrade_status     varchar2(30)
-                       constraint lang_message_keys_us_ck
-                       check (upgrade_status in ('no_upgrade', 'added','deleted')),
     description        clob,
     constraint lang_message_keys_pk
     primary key (message_key, package_key)
@@ -47,6 +44,11 @@ create table lang_messages (
                        constraint lang_messages_locale_nn
                        not null,
     message            clob,
+    deleted_p          char(1) default 'f'
+                       constraint lang_messages_dp_ck check (deleted_p in ('t','f')),
+    sync_time          date,
+    conflict_p         char(1) default 'f'
+                       constraint lang_messages_cp_ck check (conflict_p in ('t','f')),
     upgrade_status     varchar2(30)
                        constraint lang_messages_us_ck
                        check (upgrade_status in ('no_upgrade', 'added', 'deleted', 'updated')),
@@ -81,6 +83,14 @@ create table lang_messages_audit (
                        constraint lang_messages_audit_l_nn
                        not null,
     old_message        clob,
+    deleted_p          char(1) default 'f'
+                       constraint lang_messages_audit_dp_ck check (deleted_p in ('t','f')),
+    sync_time          date,
+    conflict_p         char(1) default 'f'
+                       constraint lang_messages_audit_cp_ck check (conflict_p in ('t','f')),
+    upgrade_status     varchar2(30)
+                       constraint lang_messages_audit_us_ck
+                       check (upgrade_status in ('no_upgrade', 'added', 'deleted', 'updated')),
     comment_text       clob,
     overwrite_date     date default sysdate not null,
     overwrite_user     integer

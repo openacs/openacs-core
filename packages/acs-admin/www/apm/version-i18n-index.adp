@@ -5,16 +5,14 @@
 <h3>Import/Export Messages</h3>
 
 <p>
-  <b>&raquo;</b> <a href="version-i18n-export?version_id=@version_id@"><b>Export</b>
-      messages from the database to catalog files</a> (NB! Overwrites
-      catalog files in the file system)
+  <b>&raquo;</b> <a href="@export_url@"><b>Export</b>
+      messages from the database to catalog files</a>
 </p>
 
 <p>
   <b>&raquo;</b> <a
-      href="version-i18n-import?version_id=@version_id@&format=xml"><b>Import</b>
-      messages from catalog files to the database</a> (NB! Overwrites
-      messages in the database)
+      href="@import_url@"><b>Import</b>
+      messages from catalog files to the database</a>
 </p>
 
 

@@ -16,6 +16,7 @@ ad_proc -public ad_form {
     data is to be added, or existing data modified.   You can declare form validation blocks that
     are similar in spirit to those found in ad_page_contract.
 
+    <p><a href="/doc/form-builder.html">Developer's Guide fo ad_form</a>
     <p>
 
     We use the standard OpenACS Templating System (ATS) form builder's form and element create 
@@ -425,7 +426,7 @@ ad_proc -public ad_form {
     </blockquote>
 
     <blockquote><pre>
-    start_date:date,to_sql(sql_date),to_html(sql_date),optional
+    start_date:date,to_sql(linear_date),to_html(sql_date),optional
     </pre><p>
 
     Define the optional element "start_date" of type "date", get the sql_date property before executing
@@ -934,9 +935,9 @@ ad_proc -public ad_form {
             if { [info exists values($element_name)] } {
                 if { [info exists af_flag_list(${form_name}__$element_name)] && \
                      [lsearch $af_flag_list(${form_name}__$element_name) multiple] >= 0 } {
-                    template::element set_properties $form_name $element_name -values $values($element_name)
+                    template::element set_values $form_name $element_name $values($element_name)
                 } else {
-                    template::element set_properties $form_name $element_name -value $values($element_name)
+                    template::element set_value $form_name $element_name $values($element_name)
                 }
             }
         }

@@ -266,12 +266,11 @@ ad_proc -public template::util::array_to_vars { arrayname } {
 
     @param arrayname   The name of an array in the calling frame.
 } {
+    upvar $arrayname arr
 
-  upvar $arrayname arr
-
-  foreach { key value } [array get arr] {
-    uplevel "set \{${key}\} \{$value\}"
-  }
+    foreach { key value } [array get arr] {
+        uplevel [list set $key $value]
+    }
 }
 
 ad_proc -public template::util::vars_to_array { arrayname args } {
@@ -412,15 +411,19 @@ ad_proc -public template::util::list_of_ns_sets_to_multirow {
     @param level How many levels up the stack to place the new datasource,
                  defaults to 1 level up.
 } {
-    upvar $level $var_name:rowcount rowcount
+    upvar $level $var_name:rowcount rowcount $var_name:columns columns
     set rowcount [llength $rows]
 
     set i 1
     foreach row_set $rows {
+
         ns_set put $row_set rownum $i
 
         upvar $level $var_name:$i row
         array set row [util_ns_set_to_list -set $row_set]
+	if {$i == 1} {
+	    set columns [array names row]
+	} 
         incr i
     }
 }

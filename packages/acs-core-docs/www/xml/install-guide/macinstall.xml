@@ -4,6 +4,7 @@
 <!ENTITY % myvars SYSTEM "../variables.ent">
 %myvars;
 ]>
+
 <sect1 id="mac-installation">
 <title>OpenACS Installation Guide for Mac OS X</title>
   <para>There are several resources for installing on OS X.</para>

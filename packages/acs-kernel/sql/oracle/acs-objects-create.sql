@@ -251,9 +251,10 @@ for each row
 declare
   security_context_root acs_objects.object_id%TYPE;
 begin
-  if :new.object_id = :old.object_id and
-     :new.context_id = :old.context_id and
-     :new.security_inherit_p = :old.security_inherit_p then
+  if :new.object_id = :old.object_id
+     and (:new.context_id = :old.context_id
+	  or (:new.context_id is null and :old.context_id is null))
+     and :new.security_inherit_p = :old.security_inherit_p then
     return;
   end if;
 
@@ -263,7 +264,7 @@ begin
   security_context_root := -4;
 
   -- Remove my old ancestors from my descendants.
-  for pair in ( select object_id from acs_object_contexts where 
+  for pair in ( select object_id from acs_object_contexts where
                 ancestor_id = :old.object_id) loop
     delete from acs_object_context_index
     where object_id = pair.object_id

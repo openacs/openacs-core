@@ -269,6 +269,19 @@ ad_proc -public template::element::set_value { form_id element_id value } {
   set element(values) [list $value]
 }
 
+ad_proc -public template::element::set_values { form_id element_id values } {
+    Sets the list of values of an element
+
+    @param form_id     The identifier of the form containing the element.
+    @param element_id  The unique identifier of the element.
+    @param values      The list of values to apply
+} {
+
+  get_reference
+
+  set element(values) [list $values]
+}
+
 ad_proc -public template::element::get_value { form_id element_id } {
     Retrieves the current value of an element.  Typically used following
     a valid form submission to retrieve the submitted value.

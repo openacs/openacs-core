@@ -22,7 +22,7 @@ db_transaction {
 	}
 
 	default {
-	    ad_return complaint "Dependency Entry Error" "Depenendencies are either provided or required."
+	    ad_return_complaint 1 "Entry error: Depenendencies are either provided or required."
 	}
     }
     apm_package_install_spec $version_id
@@ -31,7 +31,7 @@ db_transaction {
 	select count(*) from apm_package_dependencies
 	where dependency_id = :dependency_id
     } -default 0] } {
-	ad_return_complaint "Database Error" "The database returned the following error:
+	ad_return_complaint 1 "The database returned the following error:
 	<blockquote><pre>[ad_quotehtml $errmsg]</pre></blockquote>"
     }
 }
