@@ -80,9 +80,7 @@ aa_register_case -cats {api db} sync_start_end {
         }
 }
 
-aa_register_case  \ 
-    -cats {api} \
-    sync_actions {
+aa_register_case -cats {api} sync_actions {
     Test job actions: insert, update, 
 } {    
     aa_run_with_teardown \
@@ -338,9 +336,7 @@ aa_register_case  \
         }
 }
 
-aa_register_case  \ 
-    -cats {api db} \
-    sync_snapshot {
+aa_register_case -cats {api db} sync_snapshot {
     Test a snapshot job
 } {
     aa_run_with_teardown \
@@ -483,9 +479,7 @@ aa_register_case  \
 }
 
 
-aa_register_case  \ 
-    -cats {api smoke} \
-    sync_batch_for_local {
+aa_register_case -cats {api smoke} sync_batch_for_local {
     Test a batch job for the local authority
 } {
     aa_run_with_teardown \
@@ -502,9 +496,7 @@ aa_register_case  \
 }
 
 
-aa_register_case  \ 
-    -cats {api} \
-    sync_batch_ims_example_doc { 
+aa_register_case -cats {api} sync_batch_ims_example_doc { 
     Test IMS Enterprise 1.1 batch sync with the XML document from the specification.
 } {
     aa_stub acs_sc::invoke {
@@ -687,9 +679,7 @@ aa_register_case  \
 }
 
 
-aa_register_case  \ 
-    -cats {api} \
-    sync_batch_ims_test {
+aa_register_case -cats {api} sync_batch_ims_test {
     Test IMS Enterprise 1.1 batch sync with a constructed document which actually works
 } {
     aa_stub acs_sc::invoke {
@@ -955,9 +945,7 @@ aa_register_case  \
         }
 }
 
-aa_register_case  \ 
-    -cats {api smoke} \
-    sync_http_get_document {
+aa_register_case -cats {api smoke} sync_http_get_document {
     Test the HTTPGet implementation of GetDocument service contract.
 } {
     array set result [acs_sc::invoke \
@@ -973,9 +961,7 @@ aa_register_case  \
     aa_equals "result.document is 'success'" $result(document) "success"
 }
 
-aa_register_case  \ 
-    -cats {api web} \
-    sync_file_get_document {
+aa_register_case -cats {api web} sync_file_get_document {
     Test the HTTPGet implementation of GetDocument service contract.
 } {
     set path "[acs_root_dir]/www/SYSTEM/dbtest.tcl"
