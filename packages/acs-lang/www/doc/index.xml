@@ -1,0 +1,21 @@
+
+
+<listitem>
+<para>
+
+1. Browser makes request.  
+  Browser might contain HTTP-header
+
+2. Request processor initializes ad_conn object.  In doing so, it calls a function in /packages/acs-lang/tcl/change-locale-include.tcl  lang::user::set_locale to set ad_conn.locale.  
+
+
+User preference
+  User's package setting ad_locale_user_prefs per package per user.
+  User's general preference: stored in user_preferences.locale
+  User's browser preference: look at Browser's "HTTP-Accept-Language" header
+  system setting for the package (not implemented)
+  sitewide default locale, stored as acs_lang parameter "SitewideLocale"
+
+
+
+  
