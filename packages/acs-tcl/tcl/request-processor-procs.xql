@@ -20,5 +20,15 @@
       </querytext>
 </fullquery>
 
+<fullquery name="root_of_host.node_id">
+      <querytext>
+
+        select node_id 
+	from host_node_map
+	where host = :host
+
+      </querytext>
+</fullquery>
+
  
 </queryset>

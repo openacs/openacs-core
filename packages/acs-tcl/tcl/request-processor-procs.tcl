@@ -353,6 +353,39 @@ ad_proc -private rp_filter { why } {
     ad_conn -set user_id 0
     ad_conn -set start_clicks [clock clicks]
 
+    # -------------------------------------------------------------------------
+    # Start of patch "hostname-based subsites"
+    # -------------------------------------------------------------------------
+    # 1. determine the root of the host and the requested URL
+    set root [root_of_host [ad_host]]
+    set url [ad_conn url]
+    # 2. handle special case: if the root is a prefix of the URL, 
+    #                         remove this prefix from the URL, and redirect.
+    if { ![empty_string_p $root] && [regexp "^${root}(.*)$" $url match url] } {
+	if [regexp {^GET [^\?]*\?(.*) HTTP} [ns_conn request] match vars] {
+	    append url ?$vars
+	}
+        if {[ad_secure_conn_p]} {
+            # it's a secure connection.
+            ad_returnredirect https://[ad_host]$url
+	    return "filter_return"
+        } else {
+            ad_returnredirect http://[ad_host]$url
+	    return "filter_return"
+        }
+    }
+    # Normal case: Prepend the root to the URL.
+    # 3. set the intended URL
+    ad_conn -set url ${root}${url}
+    # 4. set urlv and urlc for consistency
+    set urlv [lrange [split $root /] 1 end]
+    ad_conn -set urlc [expr [ad_conn urlc]+[llength $urlv]]
+    ad_conn -set urlv [concat $urlv [ad_conn urlv]]
+    # -------------------------------------------------------------------------
+    # End of patch "hostname-based subsites"
+    # -------------------------------------------------------------------------
+
+
     rp_debug -ns_log_level debug -debug t "rp_filter: setting up request: [ns_conn method] [ns_conn url] [ns_conn query]"
 
     global tcl_site_nodes
@@ -975,4 +1008,41 @@ if { [apm_first_time_loading_p] } {
     foreach method { GET POST HEAD } {
 	nsv_set rp_registered_procs $method [list]
     }
+}
+
+
+# -------------------------------------------------------------------------
+# procs for hostname-based subsites
+# -------------------------------------------------------------------------
+
+ad_proc ad_host {} {
+    Returns the hostname as it was typed in the browser,
+    provided forcehostp is set to 0.
+} {
+    set host_and_port [ns_set iget [ns_conn headers] Host]
+    if { [regexp {^([^:]+)} $host_and_port match host] } {
+	return $host
+    } else {
+	return "unknown host"
+    }
+}
+
+ad_proc root_of_host {host} {
+    Maps a hostname to the corresponding sub-directory.
+} {
+    # The main hostname is mounted at /.
+    if { [string equal $host [ns_config ns/server/[ns_info server]/module/nssock Hostname]] } {
+        return ""
+    }
+    # Other hostnames map to subsites.
+    db_1row node_id {
+	select node_id 
+	from host_node_map
+	where host = :host
+    }
+    db_1row root_get {
+	select site_node.url(:node_id) as url
+	from dual
+    }
+    string range $url 0 [expr [string length $url]-2]
 }
