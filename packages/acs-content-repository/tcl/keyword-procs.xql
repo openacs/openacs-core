@@ -24,7 +24,7 @@
         <querytext>
             select parent_id
             from cr_keywords
-            where keyword_id = :keyword_id
+            where keyword_id = :keyword
         </querytext>
     </fullquery>
 
