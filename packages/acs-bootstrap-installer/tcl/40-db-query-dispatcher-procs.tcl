@@ -445,7 +445,7 @@ proc db_qd_internal_get_queryname_root {relative_path} {
     # NOTE: THIS MAY NEED BETTER ABSTRACTION, since this assumes a naming scheme
     # of -rdbms.XXX (ben)
     regsub {\.xql} $relative_path {} relative_path
-    regsub {\-(postgresql|oracle)$} $relative_path {} relative_path
+    regsub -- "\-[db_type]$" $relative_path {} relative_path
 
     # Change all . to :
     regsub -all {\.} $relative_path {:} relative_path    
