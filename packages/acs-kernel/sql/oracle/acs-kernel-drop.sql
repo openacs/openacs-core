@@ -19,6 +19,7 @@
 @@ site-node-object-map-drop
 @@ site-nodes-drop
 @@ community-core-drop
+@@ authentication-drop
 @@ acs-relationships-drop
 @@ acs-object-util-remove
 @@ acs-objects-drop

@@ -512,9 +512,13 @@ create table users (
 				constraint users_user_id_fk
 				references persons (person_id)
 				constraint users_pk primary key,
-	password		char(40),
-	salt			char(40),
-	screen_name		varchar2(100)
+        authority_id            integer
+                                constraint users_auth_authorities_fk
+                                references auth_authorities(authority_id),
+        username                varchar2(100) 
+                                constraint users_username_nn 
+                                not null,
+    	screen_name		varchar2(100)
 				constraint users_screen_name_un
 				unique,
 	priv_name		integer default 0 not null,
@@ -529,8 +533,14 @@ create table users (
 	last_visit		date,
 	second_to_last_visit	date,
 	n_sessions		integer default 1 not null,
+        -- local authentication information
+	password		char(40),
+	salt			char(40),
 	password_question	varchar2(1000),
-	password_answer		varchar2(1000)
+	password_answer		varchar2(1000),
+        -- table constraints
+        constraint users_authority_username_un
+        unique (authority_id, username)
 );
 
 create index users_email_verified_idx on users (email_verified_p);

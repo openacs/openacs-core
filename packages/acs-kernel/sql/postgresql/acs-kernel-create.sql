@@ -18,6 +18,7 @@
 \i acs-object-util.sql
 \i acs-relationships-create.sql
 \i utilities-create.sql
+\i authentication-create.sql
 \i community-core-create.sql
 \i groups-create.sql
 \i rel-segments-create.sql
