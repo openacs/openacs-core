@@ -242,12 +242,7 @@ ad_proc -private db_exec_lob { type db statement_name pre_sql {ulevel 2} args } 
 
                 blob_get_file {
                     if {[file exists $content]} {
-                        set file [lindex $args 0]
-                        set ifp [open $content r]
-                        set ofp [open $file w]
-                        ns_cpfp $ifp $ofp
-                        close $ifp
-                        close $ofp
+                        file copy -- $content $file
                         return $selection
                     } else {
                         error "file: $content doesn't exist"
@@ -258,6 +253,7 @@ ad_proc -private db_exec_lob { type db statement_name pre_sql {ulevel 2} args } 
 
                     if {[file exists $content]} {
                         set ofp [open $content r]
+                        fconfigure $ofp -encoding binary
                         ns_writefp $ofp
                         close $ofp
                         return $selection
