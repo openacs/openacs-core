@@ -17,9 +17,9 @@ ad_form -name application -cancel_url . -form {
         {options $packages}
         {help_text "The type of application you want to add."}
     }
-    {instance_name:text
+    {instance_name:text,optional
         {label "Application name"}
-        {help_text "The human-readable name of your application."}
+        {help_text "The human-readable name of your application. If you leave this out, we'll use the name of the application (e.g. 'Forums')."}
         {html {size 50}}
     }
     {folder:text,optional
@@ -35,6 +35,21 @@ ad_form -name application -cancel_url . -form {
 } -on_submit {
     # Get the node ID of this subsite
     set node_id [ad_conn node_id]
+
+    if { [empty_string_p $instance_name] } {
+        # Find the package pretty name from the list of packages
+
+        foreach elm $packages {
+            if { [string equal [lindex $elm 1] $package_key] } {
+                set instance_name [lindex $elm 0]
+                break
+            }
+        }
+        if { [empty_string_p $instance_name] } {
+            error "Couldn't find package_key '$package_key' in list of system applications"
+        }
+
+    }
 
     # Autogenerate folder name
     if { [empty_string_p $folder] } {
