@@ -483,6 +483,27 @@ a.action {
   list-style: circle url(/resources/acs-subsite/right.gif);
 }
 
+#footer-links {
+  padding: 6px;
+  margin-top: 4px;
+  font-size: 85%;
+}
+
+#footer-links ul {
+  display: inline;
+  margin-left: 0;
+  padding-left: 0;
+  border: none;
+}
+
+#footer-links ul li {
+  margin-left: 0;
+  padding-left: 10px;
+  border: none;
+  list-style: none;
+  display: inline;
+}
+
 #developer-support-footer {
   float: left;
   padding: 6px;
