@@ -129,6 +129,10 @@ ad_form -extend -name user_info -form {
         set $var $user($var)
     }
 } -on_submit {
+
+    # Makes the email an image or text according to the level of privacy
+    email_image::edit_email_image -user_id $user_id -new_email $email
+
     set user_info(authority_id) $user(authority_id)
     set user_info(username) $user(username)
     foreach elm $form_elms {
@@ -161,6 +165,7 @@ ad_form -extend -name user_info -form {
             break
         }
     }
+ 
 } -after_submit {
     if { [string equal [ad_conn account_status] "closed"] } {
         auth::verify_account_status

@@ -24,6 +24,7 @@ ad_page_contract {
     subsite_url:onevalue
 }
 
+
 set subsite_url [subsite::get_element -element url]
 
 #See if this page has been overrided by a parameter in kernel 
@@ -57,6 +58,12 @@ if { ![db_0or1row user_information "select first_names, last_name, email, priv_e
     ns_log Notice "Could not find user_id $user_id in community-member.tcl from [ad_conn peeraddr]"
     return
 }
+
+# Here the email_image is created according to the priv_email
+# field in the users table
+
+set email_image "<p><b>\#acs-subsite.E_mail\#:</b>&nbsp;[email_image::get_user_email -user_id $user_id]</p>"
+
 
 if { ![empty_string_p $url] && ![string match -nocase "http://*" $url] } {
     set url "http://$url"

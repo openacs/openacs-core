@@ -41,14 +41,12 @@
 </p>
 
 <if @show_email_p@ true>
-  <p>
-    <b>#acs-subsite.E_mail#:</b> <a href="mailto:@email@">@email@</a>
-  </p>
+ 	@email_image;noquote@
 </if>
 
 <if @url@ not nil>
   <p>
-    <b>#acs-subsite.Home_page#:</b> <a href="@url@">@url@</a>
+    <b>#acs-subsite.Home_page#:</b><a href="@url@">@url@</a>
   </p>
 </if>
 
