@@ -126,7 +126,7 @@ Make sure to change rcpthosts if you add hosts to locals or virtualdomains!
 <pre class="action"><span class="action">cd ~alias; touch .qmail-postmaster .qmail-mailer-daemon .qmail-root 
 chmod 644 ~alias/.qmail* 
 /var/qmail/bin/maildirmake ~alias/Maildir/ 
-chown -R alias.nofiles /var/qmail/alias/Maildir</span></pre></pre><a class="indexterm" name="id2836218"></a><p>Configure qmail to use the Maildir delivery format
+chown -R alias.nofiles /var/qmail/alias/Maildir</span></pre></pre><a class="indexterm" name="id2836217"></a><p>Configure qmail to use the Maildir delivery format
           (instead of mbox), and install a version of the qmail startup script modified to use Maildir.</p><pre class="screen">[root@yourserver alias]# <b class="userinput"><tt>echo "./Maildir" &gt; /var/qmail/bin/.qmail</tt></b>
 [root@yourserver alias]# <b class="userinput"><tt>cp /tmp/openacs-5.0.0a4/packages/acs-core-docs/www/files/qmail.rc.txt /var/qmail/rc</tt></b>
 [root@yourserver alias]# <b class="userinput"><tt>chmod 755 /var/qmail/rc</tt></b>
