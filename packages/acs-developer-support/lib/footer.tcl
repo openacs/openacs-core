@@ -1,6 +1,5 @@
 set show_p [ds_show_p]
 
-# TODO: Get rid of the 3 always-present rp_handler ds_comments, and move that info somewhere else
 # TODO: Go through request-processor to see what other information should be exposed to developer-support
 
 if { $show_p } {
