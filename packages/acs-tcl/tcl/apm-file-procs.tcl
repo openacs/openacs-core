@@ -260,7 +260,7 @@ ad_proc -public apm_file_add {
 }
 
 ad_proc -private apm_files_load {
-    {-force_reload_p 0}
+    {-force_reload:boolean 0}
     {-callback apm_dummy_callback} 
     files
 } {
@@ -269,7 +269,6 @@ ad_proc -private apm_files_load {
     @param -force_reload Indicates if the file should be loaded even if it \
 	    is already loaded in the interpreter.
 } {
-    
     # This will be the first time loading for each of these files (since if a
     # file has already been loaded, we just skip it in the loop below).
     global apm_first_time_loading_p
