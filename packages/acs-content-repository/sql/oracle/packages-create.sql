@@ -433,7 +433,7 @@ procedure del (
   item_id	in cr_items.item_id%TYPE
 );
 
-procedure rename (
+procedure edit_name (
   --/** Renames the item. If an item with the specified name already exists 
   --    under this item's parent, an error is thrown
   --    @author Karl Goldstein
@@ -1204,7 +1204,7 @@ procedure del (
   cascade_p     in char default 'f' 
 );
 
-procedure rename (
+procedure edit_name (
   --/** Change the name, label and/or description of the folder
   --    @author Karl Goldstein
   --    @param folder_id    The id of the folder to modify

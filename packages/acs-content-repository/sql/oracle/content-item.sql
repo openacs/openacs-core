@@ -604,7 +604,7 @@ begin
 end del;
 
 
-procedure rename (
+procedure edit_name (
   item_id in cr_items.item_id%TYPE,
   name	  in cr_items.name%TYPE
 ) is
@@ -614,14 +614,14 @@ procedure rename (
     from 
       cr_items
     where
-      cr_items.name = content_item.rename.name
+      cr_items.name = content_item.edit_name.name
     and 
       parent_id = (select 
 		     parent_id
 		   from
 		     cr_items
 		   where
-		     cr_items.item_id = content_item.rename.item_id);
+		     cr_items.item_id = content_item.edit_name.item_id);
 
   exists_id integer;
 begin
@@ -632,8 +632,8 @@ begin
   if exists_cur%NOTFOUND then
     close exists_cur;
     update cr_items
-	set cr_items.name = content_item.rename.name
-       	where cr_items.item_id = content_item.rename.item_id;
+	set cr_items.name = content_item.edit_name.name
+       	where cr_items.item_id = content_item.edit_name.item_id;
   else
     close exists_cur;
     if exists_id <> item_id then
@@ -643,7 +643,7 @@ begin
     end if;
   end if;
 
-end rename;
+end edit_name;
 
 function get_id (
   item_path      in varchar2,

@@ -150,7 +150,7 @@ begin
 end del;
 
 -- renames a folder, making sure the new name is not already in use
-procedure rename (
+procedure edit_name (
   folder_id	 in cr_folders.folder_id%TYPE,
   name	         in cr_items.name%TYPE default null,
   label	         in cr_folders.label%TYPE default null,
@@ -166,19 +166,19 @@ begin
   if label is not null and description is not null then 
 
     update cr_folders
-       set cr_folders.label = content_folder.rename.label,
-       cr_folders.description = content_folder.rename.description
-       where cr_folders.folder_id = content_folder.rename.folder_id;
+       set cr_folders.label = content_folder.edit_name.label,
+       cr_folders.description = content_folder.edit_name.description
+       where cr_folders.folder_id = content_folder.edit_name.folder_id;
 
   elsif label is not null and description is null then 
 
     update cr_folders
-       set cr_folders.label = content_folder.rename.label
-       where cr_folders.folder_id = content_folder.rename.folder_id;
+       set cr_folders.label = content_folder.edit_name.label
+       where cr_folders.folder_id = content_folder.edit_name.folder_id;
 
   end if;
 
-end rename;
+end edit_name;
 
 
 -- 1) make sure we are not moving the folder to an invalid location:
