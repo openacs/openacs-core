@@ -1840,6 +1840,15 @@ ad_proc -private apm_get_package_repository {
     }
 }
 
+ad_proc -public apm_get_repository_channel {} {
+    Returns the channel to use when installing software from the repository.
+    Based on the version of the acs-kernel package, e.g. if acs-kernel is 
+    version 5.0.1, then this will return 5-0.
+} {
+    set kernel_versionv [split [ad_acs_version] .]
+    return [join [lrange $kernel_versionv 0 1] "-"]
+}
+
 
 
 
