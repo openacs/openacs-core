@@ -16,3 +16,6 @@
   <li> <a href="admin/">Administration</a></li>
  </if>
 </ul>
+
+<if @user_id@ eq 0><a href="/register/?return_url=/">login</a></if>
+<else><a href="register/logout">logout</a></else>
