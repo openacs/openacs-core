@@ -112,8 +112,8 @@ select content_item__new(
       <querytext>
 
 	select apm_package_version__remove_file(
-				:path,
-				:version_id
+				:version_id,
+				:path
 				)
     
       </querytext>
