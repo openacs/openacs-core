@@ -22,7 +22,7 @@ create table acs_sc_contracts (
 create table acs_sc_operations (
     contract_id		      integer
 			      constraint acs_sc_operations_cid_fk
-			      references acs_sc_contract(contract_id)
+			      references acs_sc_contracts(contract_id)
 			      on delete cascade,
     operation_id	      integer
 			      constraint acs_sc_operations_opid_fk
@@ -64,7 +64,7 @@ create table acs_sc_impls (
 create table acs_sc_impl_aliases (
     impl_id		      integer
 			      constraint acs_sc_impl_proc_impl_id_fk
-			      references acs_sc_impl(impl_id)
+			      references acs_sc_impls(impl_id)
 			      on delete cascade,
     impl_name		      varchar(100),
     impl_contract_name	      varchar(1000),
@@ -79,11 +79,11 @@ constraint acs_sc_impl_alias_un unique(impl_name,impl_contract_name,impl_operati
 create table acs_sc_bindings (
     contract_id		      integer
 			      constraint acs_sc_bindings_cid_fk
-			      references acs_sc_contract(contract_id)
+			      references acs_sc_contracts(contract_id)
 			      on delete cascade,
     impl_id		      integer
 			      constraint acs_sc_bindings_impl_id_fk
-			      references acs_sc_impl(impl_id)
+			      references acs_sc_impls(impl_id)
 			      on delete cascade
 );
 
