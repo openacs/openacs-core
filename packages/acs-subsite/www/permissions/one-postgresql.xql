@@ -22,7 +22,7 @@
         select grantee_id, acs_object__name(grantee_id) as grantee_name,
                privilege, -1 as counter
         from acs_permissions
-        where object_id = :object_id) dummy
+        where object_id = :object_id ) dummy
   group by grantee_id, grantee_name, privilege
   having sum(counter) > 0
 
@@ -37,6 +37,7 @@
          privilege
   from acs_permissions
   where object_id = :object_id
+	$extra_where_clause
 
       </querytext>
 </fullquery>
