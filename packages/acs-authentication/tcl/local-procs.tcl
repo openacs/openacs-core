@@ -411,6 +411,8 @@ ad_proc -private auth::local::registration::Register {
         element_messages {}
         account_status "ok"
         account_message {}
+        generated_pwd_p 0
+        password {}
     }
 
     # We don't create anything here, so creation always succeeds
@@ -423,6 +425,8 @@ ad_proc -private auth::local::registration::Register {
         set password [ad_generate_random_string]
         set generated_pwd_p 1
     }
+    set result(generated_pwd_p) $generated_pwd_p
+    set result(password) $password
 
     # Set user's password
     set user_id [acs_user::get_by_username -username $username]
