@@ -4,7 +4,7 @@
 <fullquery name="apm_package_by_version_id">      
       <querytext>
       
-    select package_name, version_name, package_id from apm_package_version_info where version_id = :version_id
+    select package_key, pretty_name, version_name from apm_package_version_info where version_id = :version_id
 
       </querytext>
 </fullquery>

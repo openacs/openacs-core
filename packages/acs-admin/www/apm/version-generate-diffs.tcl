@@ -12,13 +12,11 @@ ad_page_contract {
     {context_p 1}
 }
 
-db_1row apm_package_by_version_id {
-    select package_name, version_name, package_id from apm_package_version_info where version_id = :version_id
-}
+db_1row apm_package_by_version_id {}
 
 set analyze_dir [ns_mktemp "[acs_root_dir]/apm-workspace/diffs-XXXXXX"]
 
-doc_body_append "[apm_header "Create Diffs for $package_name $version_name"]
+doc_body_append "[apm_header "Create Diffs for $pretty_name $version_name"]
 
 <ul><li>Extracting the archive into $analyze_dir...<li>
 "
@@ -33,7 +31,7 @@ set no_changes [list]
 
 global errorCode
 
-foreach file [apm_version_file_list $version_id] {
+foreach file [apm_get_package_files -package_key $package_key] {
     if { ![file isfile "[acs_root_dir]/$file"] } {
 	doc_body_append "<h3>$file</h3>\n<blockquote>This file has been locally added.</blockquote>\n"
 	continue

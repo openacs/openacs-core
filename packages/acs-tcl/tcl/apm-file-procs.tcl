@@ -442,29 +442,6 @@ ad_proc -public pkg_home {package_key} {
     return "/packages/$package_key"
 }
 
-ad_proc -public -deprecated -warn apm_version_file_list { 
-    {-type ""} 
-    {-db_type ""}
-    version_id 
-} {
-    Returns a list of paths to files of a given type (or all files, if
-    $type is not specified) which support a given database (if specified) in a version.
-    Use the proc apm_get_package_files instead.
-
-    @param type Optionally specifiy what type of files to check, for instance "tcl_procs"
-    @param db_type This argument is ignored for now.
-    @param version_id The version to retrieve the file list from.
-    @param path_prefix A prefix that will be used for all the returned paths. By default
-                       the prefix will be the empty string which means that the returned paths
-                       will be relative to the package root.
-
-    @see apm_get_package_files
-} {
-    set package_key [apm_package_key_from_version_id $version_id]
-
-    return [apm_get_package_files -package_key $package_key -file_types $type]
-}
-
 ad_proc -private apm_system_paths {} {
 
     @return a list of acceptable system paths to search for executables in.

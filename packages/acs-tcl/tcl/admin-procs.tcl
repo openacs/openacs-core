@@ -8,14 +8,6 @@ ad_library {
 
 }
 
-ad_proc -deprecated -warn ad_ssl_available_p {} {
-    Returns 1 if this AOLserver has the SSL module installed.
-
-    @see security::https_available_p
-} {
-    return [security::https_available_p]
-}
-
 ad_proc -public ad_restrict_to_https {conn args why} {
     Redirects user to HTTPS.
 

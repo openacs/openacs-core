@@ -2343,15 +2343,3 @@ ad_proc -private apm::package_version::attributes::generate_xml {
 #
 #############
 
-ad_proc -private -deprecated -warn apm_package_instantiate_and_mount {
-    {-callback apm_dummy_callback} 
-    package_key
-} { 
-    Instantiate and mount a package of the indicated type. This proc
-    has been deprecated and will be removed. Please change to using
-    site_node::instantiate_and_mount instead.
- 
-    @see site_node::instantiate_and_mount
-} {
-    site_node::instantiate_and_mount -package_key $package_key
-}
