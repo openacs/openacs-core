@@ -1144,7 +1144,7 @@ ad_proc -private apm_data_model_scripts_find {
         # remove the kludge and insist that datamodel files live in the proper directory.
 
 	if {[lsearch -exact $types_to_retrieve $file_type] != -1 && \
-            ([empty_string_p $file_db_type] || ![string compare [db_type] $file_db_type])} {
+            ([db_compatible_rdbms_p $file_db_type])} {
 	    if { ![string compare $file_type "data_model_upgrade"] } {
 		if {[apm_upgrade_for_version_p $path $upgrade_from_version_name \
 			$upgrade_to_version_name]} {

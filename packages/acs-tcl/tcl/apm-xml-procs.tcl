@@ -294,7 +294,7 @@ ad_proc -public apm_read_package_info_file { path } {
     set tree [xml_parse $xml_data]
     # set package [dom::node cget $tree -firstChild]
     set root_node [xml_doc_get_first_node_by_name $tree package]
-    ns_log Notice "XML: root node is [ns_xml node name $root_node]"
+    ns_log Debug "XML: root node is [ns_xml node name $root_node]"
     set package $root_node
 
     # set root_name [dom::node cget $package -nodeName]
@@ -305,11 +305,11 @@ ad_proc -public apm_read_package_info_file { path } {
 
     ns_log Notice "XML - there are [llength $root_children] child nodes"
     foreach child $root_children {
-	ns_log Notice "XML - one root child: [xml_node_get_name $child]"
+	ns_log Debug "XML - one root child: [xml_node_get_name $child]"
     }
 
     if { ![string equal $root_name "package"] } {
-	ns_log Notice "XML: the root name is $root_name"
+	ns_log Debug "XML: the root name is $root_name"
 	error "Expected <package> as root node"
     }
     set properties(package.key) [apm_required_attribute_value $package key]
