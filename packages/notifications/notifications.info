@@ -24,7 +24,7 @@
         </callbacks>
         <parameters>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="EmailDomain"  description="The domain for the notification email address" section_name="email"/>
-            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="EmailQmailQueue"  description="The location of the qmail queue for incoming email" section_name="email"/>
+            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="EmailQmailQueue"  description="The location of the qmail queue for incoming email, mail will be looked for in EmailQmailQueue/new/*" section_name="email"/>
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="EmailQmailQueueScanP"  default="0" description="Should the package scan the qmail queue for incoming mail? (1 is true, 0 is false)" section_name="email"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="EmailReplyAddressPrefix"  default="notification" description="The prefix for email replies" section_name="email"/>
         </parameters>
