@@ -9,31 +9,31 @@
   <title>Basic Steps</title>
 
   <para>
-    The basic steps to getting OpenACS up and running are:
+    The basic steps for getting OpenACS installed are:
   </para>
 
   <orderedlist>
-    <listitem><para>Install an OS (<link
-          linkend="unix-install">Linux, FreeBSD, OpenBSD</link>, <xref linkend="install-redhat"/>, <xref linkend="mac-installation"/>, <xref
-          linkend="win2k-installation"/>).</para>
+    <listitem><para>Install an OS and supporting software (see <xref linkend="unix-installation"/> or <xref linkend="install-redhat"/> for more details).</para>
     </listitem>
 
-    <listitem><para>Install a database (<link
-	  linkend="oracle">Oracle</link> or
-        <link linkend="postgres">PostgreSQL</link>).</para>
+    <listitem><para>Install a database (see <xref linkend="oracle"/> or
+        <xref linkend="postgres"/>).</para>
     </listitem>
 
     <listitem>
-      <para><link linkend="aolserver">Install the AOLserver webserver</link>.</para>
+      <para> Install AOLserver (see <xref linkend="aolserver"/>).</para>
     </listitem>
 
     <listitem><para>Create a unique database and system user.
         Install the OpenACS tarball, start and AOLserver instance, and
         use the OpenACS web pages to complete installation
-        (<xref linkend="openacs"/>).</para>
+        (see <xref linkend="openacs"/>).</para>
     </listitem>
   </orderedlist>
 
+  <para> There are specific instructions available for Mac OS X and
+    Windows2000 available (see <xref linkend="mac-installation"/> or
+    <xref linkend="win2k-installation"/> for those).</para>
 
   <sect2 id="install-rpms">
     <title>Binaries and other shortcuts</title>
@@ -49,40 +49,26 @@
           PostgreSQL in Debian and Red Hat and FreeBSD ports works fine.</para>
       </listitem>
       <listitem>
-        <para>Jonathan Marsden has created RPMs (at
-          <ulink
-            url="http://www.xc.org/jonathan/openacs/openacs4-rpm-based-install.html">http://www.xc.org</ulink>)
-          for OpenACS 4.5 but there are not yet any for version
-          &version;.  </para>
-      </listitem>
-      <listitem>
         <para>An experimental script <link
-            linkend="install-with-script">automates OpenACS checkout and
+            linkend="install-with-script">automates the OpenACS checkout and
             installation</link>.
         </para>
       </listitem>
-      <!--
-      <listitem>
-        <para>The <link linkend="quick">Quick Guide</link> lists the essential steps for a minimal install.</para>
-      </listitem>
-      -->
     </orderedlist>
   </sect2>
 
 
   <sect2 id="install-requirements">
-    <title>Requirements</title>
+    <title>System Requirements</title>
     <para>
       You will need a PC (or equivalent) with at least these minimum
       requirements:
     </para>
     <itemizedlist>
-      <listitem><para>Pentium processor</para></listitem>
-      <listitem><para>128 MB RAM
-          (much more if you want Oracle)</para></listitem> 
-      <listitem><para>4 GB hard drive</para></listitem>
-      <listitem><para>A Unix-like operating system with tcl, tdom, and
-          a mail transport agent.  (<xref
+      <listitem><para>128MB RAM (much more if you want Oracle)</para></listitem> 
+      <listitem><para>1GB free space on your hard drive (much more if you want Oracle)</para></listitem>
+      <listitem><para>A Unix-like operating system with Tcl, tDOM, and
+          a mail transport agent like sendmail or qmail. (see <xref
             linkend="individual-programs"/>)</para>
       </listitem>
     </itemizedlist><para>
@@ -216,23 +202,24 @@
           examine or edit:</para>
         <programlisting>if {$database == "oracle"} {
           set db_password        "mysitepassword"
-          }</programlisting>
+}</programlisting>
       </listitem>
       <listitem>
         <para>This is text that you will
           <computeroutput>see</computeroutput> and <userinput>type</userinput> in a command shell, including <replaceable>text you may have to
             change</replaceable>.  It is followed by a list of just the commands,
           which you can copy and paste.</para>
-        <screen>[root@localhost root]# <userinput>su - nsadmin</userinput>
-          [nsadmin@localhost aolserver]$ <userinput>svc -d /service/<replaceable>server1</replaceable></userinput>
-          [nsadmin@localhost aolserver]$ <userinput>dropdb <replaceable>server1</replaceable></userinput>
-          DROP DATABASE
-          [nsadmin@localhost aolserver]$ <userinput>createdb <replaceable>server1</replaceable></userinput>
-          CREATE DATABASE
-          <action>su - nsadmin
-            svc -d /service/<replaceable>server1</replaceable>
-            dropdb <replaceable>server1</replaceable>
-            createdb <replaceable>server1</replaceable></action></screen>
+        <screen>
+[root@localhost root]# <userinput>su - nsadmin</userinput>
+[nsadmin@localhost aolserver]$ <userinput>svc -d /service/<replaceable>server1</replaceable></userinput>
+[nsadmin@localhost aolserver]$ <userinput>dropdb <replaceable>server1</replaceable></userinput>
+DROP DATABASE
+[nsadmin@localhost aolserver]$ <userinput>createdb <replaceable>server1</replaceable></userinput>
+CREATE DATABASE
+<action>su - nsadmin
+svc -d /service/<replaceable>server1</replaceable>
+dropdb <replaceable>server1</replaceable>
+createdb <replaceable>server1</replaceable></action></screen>
       </listitem>
     </itemizedlist>
   </sect2>
@@ -241,9 +228,8 @@
   <sect2>
     <title>Paths and Users</title>
     
-    <figure>
-      <title>Assumptions in this Chapter</title>
-      <informaltable>
+   <table pgwide="1">
+      <title>Default directories for a standard install</title>
         <tgroup cols="2">
           <tbody>
             <row>
@@ -270,7 +256,7 @@
               <entry><replaceable>service0</replaceable></entry>
             </row>
             <row>
-              <entry>Root of OpenACS service file tree</entry>
+              <entry>Root of OpenACS service file tree (SERVERROOT)</entry>
               <entry><replaceable>/var/lib/aolserver/service0</replaceable></entry>
             </row>
             <row>
@@ -309,8 +295,7 @@
             </row>
           </tbody>
         </tgroup>
-      </informaltable>
-    </figure>
+    </table>
 
     <para>
       None of these locations are set in stone - they're simply

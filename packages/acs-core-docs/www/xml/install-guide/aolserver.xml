@@ -4,7 +4,7 @@
 <!ENTITY % myvars SYSTEM "../variables.ent">
 %myvars;
 ]>
-<sect1 id="aolserver" xreflabel="Install AOLserver 3.3+ad13">
+<sect1 id="aolserver" xreflabel="Install AOLserver 3.3oacs1">
   <title>Install AOLserver 3.3oacs1</title>
 
   <authorblurb>

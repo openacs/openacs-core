@@ -5,7 +5,7 @@
 %myvars;
 ]>
 
-<sect1 id="postgres">
+<sect1 id="postgres" xreflabel="Install PostgreSQL">
   <title>Install PostgreSQL</title>
 
   <authorblurb>

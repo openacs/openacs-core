@@ -4,8 +4,8 @@
 <!ENTITY % myvars SYSTEM "../variables.ent">
 %myvars;
 ]>
-<sect1 id="unix-installation">
-  <title>Install Unix-like system and supporting software</title>
+<sect1 id="unix-installation" xreflabel="Install a Unix-like OS">
+  <title>Install a Unix-like system and supporting software</title>
   
   <authorblurb>
     <para>by <ulink url="mailto:joel@aufrecht.org">Joel Aufrecht</ulink></para>
