@@ -717,6 +717,7 @@ begin
   insert into apm_package_file_types(file_type_key, pretty_name) values(''template'', ''Template file'');
   insert into apm_package_file_types(file_type_key, pretty_name) values(''shell'', ''Shell utility'');
   insert into apm_package_file_types(file_type_key, pretty_name) values(''sqlj_code'', ''SQLJ library'');
+  insert into apm_package_file_types(file_type_key, pretty_name) values(''message_catalog'', ''Message Catalog'');
 
   return 0;
 end;' language 'plpgsql';
