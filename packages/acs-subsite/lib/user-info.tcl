@@ -19,7 +19,7 @@ if { ![exists_and_not_null return_url] } {
 }
 
 if { ![exists_and_not_null show_groups_p] } {
-    set show_groups_p 1
+    set show_groups_p 0
 }
 
 set action_url "[subsite::get_element -element url]user/basic-info-update"
@@ -186,9 +186,3 @@ if { ![form is_valid user_info] } {
 		"<a href=\"[element get_value user_info url]\">[element get_value user_info url]</a>"
     }
 }
-
-db_multirow groups groups "
-  select distinct groups.group_id, lower(groups.group_name), groups.group_name
-     from groups, group_member_map gm
-     where groups.group_id = gm.group_id and gm.member_id=:user_id
-  order by lower(groups.group_name)"
