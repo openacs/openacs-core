@@ -7,7 +7,7 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>t</singleton-p>
     
-    <version name="5.1.5" url="http://openacs.org/repository/download/apm/acs-lang-5.1.5.apm">
+    <version name="5.1.6a1" url="http://openacs.org/repository/download/apm/acs-lang-5.1.6a1.apm">
         <owner url="mailto:peter@collaboraid.biz">Peter Marklund</owner>
         <summary>OpenACS Internationalization Support.</summary>
         <release-date>2004-02-28</release-date>
