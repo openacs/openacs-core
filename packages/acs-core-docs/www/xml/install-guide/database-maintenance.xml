@@ -1,11 +1,17 @@
-  <sect1 id="database-management">
+<?xml version='1.0' ?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+               "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
+<!ENTITY % myvars SYSTEM "../variables.ent">
+%myvars;
+]>
+<chapter id="database-management">
     <title>Database Management</title>
 
     <authorblurb>
       <para>By <ulink url="mailto:joel@aufrecht.org">Joel Aufrecht</ulink></para>
     </authorblurb>
 
-    <sect2 id="remote-postgres">
+    <sect1 id="remote-postgres">
       <title>Running a PostgreSQL database on another server</title>
 
       <para>To run a database on a different machine than the
@@ -36,15 +42,15 @@
           <programlisting></programlisting>
         </listitem>
       </itemizedlist>
-    </sect2>
+    </sect1>
     
-    <sect2 id="install-openacs-delete-tablespace">
+    <sect1 id="install-openacs-delete-tablespace">
       <title>Deleting a tablespace</title>
       
     <para>Skip down for instructions on <xref linkend="install-openacs-delete-postgres-tablespace"/>.
     </para>
 
-    <sect3 id="install-openacs-delete-oracle-tablespace">
+    <sect2 id="install-openacs-delete-oracle-tablespace">
       <title>Deleting an Oracle tablespace</title>
 
       <para>
@@ -76,9 +82,9 @@
         If you feel the need to delete <emphasis>everything</emphasis>
         related to the service, you can also issue the following:</para>
       <programlisting>SVRMGR&gt; <userinput>drop tablespace <replaceable>service0</replaceable> including contents cascade constraints;</userinput></programlisting>   
-    </sect3>
+    </sect2>
 
-    <sect3 id="install-openacs-delete-postgres-tablespace" xreflabel="Deleting a PostgreSQL tablespace">
+    <sect2 id="install-openacs-delete-postgres-tablespace" xreflabel="Deleting a PostgreSQL tablespace">
       <title>Deleting a PostgreSQL tablespace</title>
 
       <para>
@@ -95,9 +101,9 @@
       <programlisting>
 [service0 ~]$ <userinput>dropdb <replaceable>service0</replaceable></userinput>
 DROP DATABASE</programlisting>
-    </sect3>
-  </sect2>
-  <sect2 id="install-next-nightly-vacuum">
+    </sect2>
+  </sect1>
+  <sect1 id="install-next-nightly-vacuum">
     <title>Vacuum Postgres nightly</title>
     <para>
       The "vacuum" command must be run periodically to reclaim space. The
@@ -123,9 +129,9 @@ DROP DATABASE</programlisting>
 0 1 * * * /usr/local/pgsql/bin/vacuumdb <replaceable>service0</replaceable></programlisting>
     <para><phrase role="cvstag">($Id$)</phrase></para>
 
-  </sect2>
+  </sect1>
 
-</sect1>
+</chapter>
     
   <!--
   Local Variables:

@@ -1,12 +1,11 @@
 <?xml version='1.0' ?>
-<!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
                "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
 <!ENTITY % myvars SYSTEM "../variables.ent">
 %myvars;
 ]>
-    <sect1 id="maintenance-web">
-  <title>Running OpenACS in Production Environments</title>
-
+<chapter id="maintenance-web">
+  <title>Production Environments</title>
 
     <authorblurb>
       <para>By <ulink url="mailto:joel@aufrecht.org">Joel Aufrecht</ulink></para>
@@ -14,7 +13,7 @@
     
     <para>Maintenance tasks, optional software, and alternate configurations for AOLserver.</para>
     
-    <sect2 id="install-openacs-keepalive" xreflabel="Keep AOLserver alive">
+    <sect1 id="install-openacs-keepalive" xreflabel="Keep AOLserver alive">
 	<title>Starting and Stopping an OpenACS instance.</title> 
 
     <para>The simplest way to start and stop and OpenACS site is to run the startup shell script provided, <computeroutput>/var/lib/aolserver/<replaceable>service0</replaceable>/etc/daemontools/run</computeroutput>.  This runs as a regular task, and logs to the logfile.  To stop the site, kill the script.</para>
@@ -26,12 +25,38 @@
         </listitem>
           <listitem>
             <para>Each service controlled by daemontools must have a
-        directory in <computeroutput>/service</computeroutput>.  That
-        directory must have a file called
-        <computeroutput>run</computeroutput>.  Daemontools then
-        creates additional files and directories to track status and
-        log.  A daemontools directory is included in the OpenACS
-        tarball at
+            directory in <computeroutput>/service</computeroutput>.  That
+            directory must have a file called
+            <computeroutput>run</computeroutput>.  It works like this:</para>
+            <itemizedlist>
+              <listitem><para>The <computeroutput>init</computeroutput> program starts every
+              time the computer is booted. </para></listitem>
+              <listitem><para>A line in <computeroutput>init</computeroutput>'s configuration
+              file, <computeroutput>/etc/inittab</computeroutput>, tells init to
+              run, and to restart if necessary,
+              <computeroutput>svscanboot</computeroutput>.</para></listitem>
+              <listitem><para><computeroutput>svscanboot</computeroutput> checks
+              the directory <computeroutput>/service</computeroutput>
+              every few seconds.</para>
+              </listitem>
+              <listitem><para>If it sees a subdirectory there, it
+              looks for a file in the subdirectory called
+              <computeroutput>run</computeroutput>.  If it finds a run file, it creates a <computeroutput>supervise</computeroutput> process</para>
+              </listitem>
+              <listitem>
+                <para><computeroutput>supervise </computeroutput> executes the run script.  Whenever the run script stops, <computeroutput>supervise</computeroutput> executes it again.  It also creates additional control files in the same directory. </para>
+              </listitem>
+            </itemizedlist>
+            <para>Hence, the AOLserver
+	  instance for your development server is started by the file
+	  <computeroutput>/service/service0/run</computeroutput>.
+	  But we use a symlink to make it easier to add and remove
+	  stuff from the <computeroutput>/service</computeroutput>, so
+	  the actual location is
+          <computeroutput>/var/lib/aolserver/<replaceable>service0</replaceable>etc/daemontools/run</computeroutput>.</para>
+
+          <para>Daemontools creates additional files and directories to track status and
+        log.  A daemontools directory is included in the OpenACS tarball at
         <computeroutput>/var/lib/aolserver/<replaceable>service0</replaceable>/etc/daemontools</computeroutput>.  To use it, first ill any existing AOLserver instances.  As root, link the <computeroutput>daemontools</computeroutput> directory into the <computeroutput>/service</computeroutput> directory.  Daemontools' <computeroutput>svscan</computeroutput> process checks this directory every five seconds, and will quickly execute <computeroutput>run</computeroutput>.</para>
             
             <screen>[service0 etc]$ <userinput>killall nsd</userinput>
@@ -112,8 +137,52 @@ root      5582  0.0  0.2  3276  628 pts/0    S    11:55   0:00 grep nsd
 </para>
         </listitem>
       </orderedlist>
-    </sect2>
-    <sect2 id="install-openacs-inittab" xreflabel="Editing inittab">
+
+      <table frame='all'><title>How it Works</title>
+	<tgroup cols='6' align='top' colsep='1' rowsep='1'>
+	  <thead>
+	    <row>
+	      <entry>Program</entry>
+	      <entry>Invoked by this program ...</entry>
+	      <entry>... using this file</entry>
+	      <entry>Where to find errors</entry>
+	      <entry>Log goes to</entry>
+	      <entry>Use these commands to control it</entry>
+	    </row>
+	  </thead>
+	  <tbody>
+	    <row>
+	      <entry>svscanboot
+      </entry>
+	      <entry>init</entry>
+	      <entry>/etc/inittab</entry>
+	      <entry>ps -auxw | grep readproctitle</entry>
+	      <entry>n/a</entry>
+	      <entry></entry>
+	    </row>
+	    <row>
+	      <entry>aolserver</entry>
+	      <entry><computeroutput></computeroutput>supervise
+(a child of svscanboot)</entry>
+	      <entry>/service/<replaceable>service0</replaceable>/run</entry>
+	      <entry>/var/lib/aolserver/<replaceable>service0</replaceable>/log/error.log</entry>
+	      <entry>/var/lib/aolserver/<replaceable>service0</replaceable>/log/service0.log</entry>
+            <entry>svc -k /service/<replaceable>service0</replaceable></entry>
+	    </row>
+	    <row>
+	      <entry>postgresql</entry>
+	      <entry>Redhat init scripts during boot</entry>
+	      <entry>/etc/init.d/postgresql</entry>
+	      <entry>/usr/local/pgsql/data/server.log</entry>
+	      <entry></entry>
+	      <entry>service postgresql start (Red Hat), /etc/init.d/postgresql start (Debian)</entry>
+	    </row>
+	  </tbody>
+	</tgroup>
+      </table>
+
+    </sect1>
+    <sect1 id="install-openacs-inittab" xreflabel="Editing inittab">
       <title>AOLserver keepalive with inittab</title>
       
       <para>This is an alternative method for keeping the AOLserver
@@ -257,32 +326,9 @@ Killing 23750</programlisting>
         If processes were killed, congratulations, your server is now
         automated for startup and shutdown. 
       </para>
-    </sect2>
+    </sect1>
   
-  
-  <sect2 id="install-openacs-port80">
-    <title>Running AOLserver on Port 80</title>
-    <para>If you want your webserver to be <computeroutput>http://yourserver.com</computeroutput>, it must run on port 80, the default HTTP port.  You set this in the <computeroutput>config.tcl</computeroutput> file.  You will need to start the service as
-      <computeroutput>root</computeroutput>. If you follow the instructions
-      above for <link linkend="install-openacs-keepalive">automating
-      startup</link>, this will be taken care of, but if you ever start the
-      server from the command line, be sure to <computeroutput>su
-      -</computeroutput> first.
-    </para>
-
-    <para>
-      Port 80 is a <emphasis>privileged</emphasis> port. Only certain users
-      can claim it. When you start <computeroutput>nsd</computeroutput> as
-      root, it obtains the port, and then changes to run as whatever user
-      you specify in the server configuration file. This ensures a high
-      level of security, as the server, once started, is not running as
-      <computeroutput>root</computeroutput>. This mean that if someone was
-      able to exploit your web server to execute a command on your server,
-      they would not be able to gain <computeroutput>root</computeroutput>
-      access.</para>
-  </sect2>
-
-  <sect2 id="install-next-add-server">
+  <sect1 id="install-next-add-server">
     <title>Running multiple services on one machine</title>
       <formalpara>
         <title>Services on different ports</title>
@@ -313,9 +359,93 @@ set address                127.0.0.1 </programlisting>
     Virtual Hosting with TCP</ulink> by <ulink url="mailto:markd@borkware.com">markd</ulink>.
 </para>
 
-  </sect2>
+  </sect1>
 
-    <sect2 id="install-ssl">
+  <sect1 id="high-avail">
+    <title>High Availability/High Performance Configurations</title>
+    <figure>
+      <title>Multiple-server configuration</title>
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="images/hpha.png" format="png" align="center"/>
+        </imageobject>
+      </mediaobject>
+    </figure>
+
+  </sect1>
+
+    <sect1 id="maintenance-deploy">
+  <title>Staged Deployment for Production Networks</title>
+    <authorblurb>
+      <para>By <ulink url="mailto:joel@aufrecht.org">Joel Aufrecht</ulink></para>
+    </authorblurb>
+  <para>This section describes minimal-risk methods for deploying changes on a production network.  The important characteristics of a safe change deployment include:</para>
+  <itemizedlist>
+    <listitem>
+      <para>Control: You know for sure that the change you are making is the change that you intend to make and is the change that you tested.</para>
+    </listitem>
+    <listitem>
+      <para>Rollback: If anything goes wrong, you can return to the previous working configuration safely and quickly.</para>
+    </listitem>
+  </itemizedlist>
+  <para>The approach taken in this section is to always create a new service with the desired changes, running in parallel with the existing site.  This guarantees control, at least at the final step of the process: you know what changes you are about to make because you can see them directly.  It does not, by itself, guarantee the entire control chain.  You need additional measures to make sure that the change you are making is exactly and completely the change you intended to make and tested previously, and nothing more.  Those additional measures typically take the form of source control tags and system version numbers.  The parallel-server approach also guarantees rollback because the original working service is not touched; it is merely set aside.</para>
+  <para>This approach can has limitations.  If the database or file system regularly receiving new data, you must interrupt this function or risk losing data in the shuffle.  It also requires extra steps if the database will be affected.</para>
+  <sect2>
+    <title>Simple Deployment: Database is not changed</title>
+    <figure>
+      <title>Simple Deployment - Step 1</title>
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="images/simple-deploy-1.png" format="png" align="center"/>
+        </imageobject>
+      </mediaobject>
+    </figure>
+     <figure>
+      <title>Simple Deployment - Step 1</title>
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="images/simple-deploy-2.png" format="png" align="center"/>
+        </imageobject>
+      </mediaobject>
+    </figure>
+     <figure>
+      <title>Simple Deployment - Step 1</title>
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="images/simple-deploy-3.png" format="png" align="center"/>
+        </imageobject>
+      </mediaobject>
+    </figure>
+  </sect2>
+  <sect2>
+    <title>Complex Deployment: Database is changed</title>
+    <figure>
+      <title>Complex Deployment - Step 1</title>
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="images/complex-deploy-1.png" format="png" align="center"/>
+        </imageobject>
+      </mediaobject>
+    </figure>
+     <figure>
+      <title>Complex Deployment - Step 1</title>
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="images/complex-deploy-2.png" format="png" align="center"/>
+        </imageobject>
+      </mediaobject>
+    </figure>
+     <figure>
+      <title>Complex Deployment - Step 1</title>
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="images/complex-deploy-3.png" format="png" align="center"/>
+        </imageobject>
+      </mediaobject>
+    </figure>
+  </sect2>
+</sect1>
+    <sect1 id="install-ssl">
       <title>Installing SSL Support</title>
         <para>nsopenssl is an open-sounce module for AOLserver which
         adds support for the ssl encryption layer.  To use it, you
@@ -368,9 +498,9 @@ S/Sd2MYA0JVmQuIt5bYowXR1KYKDka1d3DUgtoVTiFepIRUrMkZlCli08mWVjE6T
 -----END RSA PRIVATE KEY-----</programlisting>
         </listitem>
       </orderedlist>
-    </sect2>
+    </sect1>
 
-    <sect2 id="analog-setup">
+    <sect1 id="analog-setup">
     <title>Set up Log Analysis Reports - OPTIONAL</title>
     
     <para>Analog is a program with processes webserver access logs,
@@ -426,13 +556,107 @@ logout
         <para>Browse to <computeroutput>http://<replaceable>yourserver.test</replaceable>/log/traffic.html</computeroutput></para>
       </listitem>
     </orderedlist>
-  </sect2>
-  <sect2 id="uptime">
+  </sect1>
+  <sect1 id="uptime">
     <title>External uptime validation</title>
     <para>The <ulink url="http://uptime.openacs.org/uptime/">OpenACS uptime site</ulink> can monitor your site and send you an email whenever your site fails to respond.  If you test the url <computeroutput>http://<replaceable>yourserver.test</replaceable>/SYSTEM/dbtest.tcl</computeroutput>, you should get back the string <computeroutput>success</computeroutput>.</para>
+  </sect1>
+<sect1 id="maint-performance">
+  <title>Diagnosing Performance Problems</title>
+  <itemizedlist>
+    <listitem>
+      <para>Did performance problems happen overnight, or did they sneak up on
+    you? Any clue what caused the performance problems (e.g. loading 20K
+    users into .LRN)</para>
+    </listitem>
+    <listitem>
+      <para>Is the file system out of space?  Is the machine swapping to disk constantly?</para>
+    </listitem>
+    <listitem>
+      <para>Isolating and solving database problems.</para>
+    <itemizedlist>
+      <listitem>
+          <para>Without daily internal maintenance, most databases slowly degrade in performance.  For PostGreSQL, see <xref linkend="install-next-nightly-vacuum"/>.  For Oracle, use <computeroutput>exec dbms_stats.gather_schema_stats('SCHEMA_NAME')</computeroutput> (<ulink url="http://www.piskorski.com/docs/oracle.html">Andrew Piskorski's Oracle notes</ulink>).</para>
+      </listitem>
+      <listitem>
+        <para>You can track the exact amount of time each database query on a page takes:</para>
+          <orderedlist>
+            <listitem>
+              <para>Go to <ulink url="/acs-admin/install">Main Site : Site-Wide Administration : Install Software</ulink></para>
+              </listitem>
+              <listitem>
+                <para>Click on "Install New Application" in "Install from OpenACS Repository"</para>
+            </listitem>
+            <listitem>
+              <para>Choose "ACS Developer Support"></para>
+            </listitem>
+            <listitem>
+              <para>After install is complete, restart the server.</para>
+            </listitem>
+            <listitem>
+              <para>Browse to Developer Support, which is automatically mounted at <computeroutput><ulink url="/ds">/ds</ulink></computeroutput>.
+              </para>
+            </listitem>
+            <listitem>
+              <para>Turn on Database statistics</para>
+            </listitem>
+            <listitem>
+              <para>Browse directly to a slow page and click "Request Information" at the bottom of the page.</para>
+            </listitem>
+            <listitem>
+              <para>This should return a list of database queries on the page, including the exact query (so it can be cut-paste into psql or oracle) and the time each query took.</para>
+              <figure>
+                <title>Query Analysis example</title>
+              <mediaobject>
+                <imageobject>
+                  <imagedata fileref="images/query-duration.png" format="PNG"/>
+                </imageobject>
+              </mediaobject>
+              </figure>
+            </listitem>
+          </orderedlist>
+        </listitem>
+        <listitem>
+          <para>Identify a runaway Oracle query: first, use <userinput>ps aux</userinput> or <userinput>top</userinput> to get the UNIX process ID of a runaway Oracle process.</para>
+        <para>Log in to SQL*Plus as the admin:</para>
+        <screen>[<replaceable>service0</replaceable> ~]$ svrmgrl
 
+Oracle Server Manager Release 3.1.7.0.0 - Production
+
+Copyright (c) 1997, 1999, Oracle Corporation.  All Rights Reserved.
+
+Oracle8i Enterprise Edition Release 8.1.7.3.0 - Production
+With the Partitioning option
+JServer Release 8.1.7.3.0 - Production
+
+SVRMGR> <userinput>connect internal</userinput>	        
+Password:</screen>
+        <para>See all of the running queries, and match the UNIX PID:</para>
+        <programlisting>select p.spid  -- The UNIX PID
+       ,s.sid  ,s.serial#
+       ,p.username  as os_user
+       ,s.username  ,s.status
+       ,p.terminal  ,p.program
+  from v$session s  ,v$process p
+ where p.addr = s.paddr
+ order by s.username ,p.spid ,s.sid ,s.serial# ;</programlisting>
+        <para>See the SQL behind the oracle processes:</para>
+        <programlisting>select s.username
+       ,s.sid  ,s.serial#
+       ,sql.sql_text
+  from v$session s, v$sqltext sql
+ where sql.address    = s.sql_address
+   and sql.hash_value = s.sql_hash_value
+ --and upper(s.username) like 'USERNAME%'
+ order by s.username ,s.sid ,s.serial# ,sql.piece ;</programlisting>
+        <para>To kill a troubled process:</para>
+        <programlisting>alter system kill session 'SID,SERIAL#';  --substitute values for SID and SERIAL#</programlisting>
+        <para>(See <ulink url="http://www.piskorski.com/docs/oracle.html">Andrew Piskorski's Oracle notes</ulink>)</para>
+        </listitem>
+      </itemizedlist>
+    </listitem>
+  </itemizedlist>
+</sect1>
 
     <para><phrase role="cvstag">($Id$)</phrase></para>
-
-  </sect2>
-</sect1>
+</chapter>

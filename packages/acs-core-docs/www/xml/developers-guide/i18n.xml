@@ -549,7 +549,7 @@
     <sect3>
       <title>Internationalize Package Parameters with visible messages</title>
       <para>
-      See <xref linkend="i18n-message-catalog-params"/>
+      See <xref linkend="i18n-message-apm-params"/>
     </para>
     </sect3>
 

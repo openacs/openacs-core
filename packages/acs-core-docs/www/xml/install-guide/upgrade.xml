@@ -17,11 +17,40 @@
     packages automatically.  If you haven't changed anything, no
     manual intervention should be required.  If you are running
     OpenACS prior to 4.5, upgrading will require manual effort.</para>
+    <para>If all of these conditions are true:</para>
+      <itemizedlist>
+        <listitem>
+          <para>Your OpenACS Core is 5.0.0 or later</para>
+        </listitem>
+        <listitem>
+          <para>You do not keep your OpenACS site in a local CVS repository</para>
+        </listitem>
+        <listitem>
+          <para>You do not have any custom code</para>
+        </listitem>
+      </itemizedlist>
+      <para>then you can upgrade automatically using the automated installer in the OpenACS Package Manager (APM), and you can probably skip the rest of this chapter.  To upgrade directly from the OpenACS repository using the APM:</para>
+      <orderedlist>
+        <listitem>
+          <para>Browse to the <ulink url="/acs-admin/install/">Installer</ulink>.</para>
+        </listitem>
+        <listitem>
+          <para>Click install or upgrade under "Install from OpenACS Repository" and select the packages to install or upgrade.</para>
+        </listitem>
+        <listitem>
+          <para>The APM will download the requested packages from OpenACS.org, install the files on your hard drive, run any appropriate database upgrade scripts, and prompt you to restart the server.  After restarting the server again, the upgrade is complete.</para>
+        </listitem>
+      </orderedlist>
+      <figure>
+        <title>Upgrading with the APM</title>
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="images/upgrade-apm.png" format="png" align="center"/>
+          </imageobject>
+        </mediaobject>
+      </figure>
+
     <para>It's always a good idea to precede an upgrade attempt with a <link linkend="snapshot-backup">snapshot backup</link>.</para>
-    <para>OpenACS consists of files and a database schema.  The files
-    in a new tarball include database upgrade scripts.  To start the
-    upgrade, replace your existing files with the new files and then browse to the APM, which will detect the new packages and offer to run the appropriate database upgrade scripts.  After restarting the server again, the upgrade is
-    complete.</para>
     <table>
       <title>Assumptions in this section</title>
       <tgroup cols="2">
@@ -259,6 +288,14 @@ parameter::set_value -package_id [ad_acs_kernel_id] -parameter UsePasswordWidget
         <para>
           <emphasis role="strong">Upgrading files for a site in a private CVS repository</emphasis>
         </para>
+        <figure>
+          <title>Upgrading a local CVS repository</title>
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="images/upgrade-cvs.png" format="png" align="center"/>
+            </imageobject>
+          </mediaobject>
+        </figure>
         <orderedlist>
           <listitem>
             <para>Unpack the new files into a working directory.</para>

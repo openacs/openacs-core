@@ -158,21 +158,18 @@
       <xi:fallback>Section missing</xi:fallback>
     </xi:include>
     
-    <chapter id="maintenance">
-       <title>Maintenance</title>
-       <xi:include href="install-guide/maintenance.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
-         <xi:fallback>Section missing</xi:fallback>
-      </xi:include>
-      <xi:include href="install-guide/database-maintenance.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
-        <xi:fallback>Section missing</xi:fallback>
-      </xi:include>
-      <xi:include href="install-guide/recovery.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
-        <xi:fallback>Section missing</xi:fallback>
-      </xi:include>
-       <xi:include href="install-guide/maintenance-performance.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
-         <xi:fallback>Section missing</xi:fallback>
-      </xi:include>
-    </chapter>
+    <xi:include href="install-guide/maintenance.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
+      <xi:fallback>Section missing</xi:fallback>
+    </xi:include>
+
+    <xi:include href="install-guide/database-maintenance.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
+      <xi:fallback>Section missing</xi:fallback>
+    </xi:include>
+
+    <xi:include href="install-guide/recovery.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
+      <xi:fallback>Section missing</xi:fallback>
+    </xi:include>
+
 
     <xi:include href="install-guide/red-hat.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
       <xi:fallback>Section missing</xi:fallback>
