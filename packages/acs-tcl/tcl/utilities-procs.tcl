@@ -2772,7 +2772,7 @@ ad_proc util_email_valid_p { query_email } {
     # This regexp was very kindly contributed by Jeff Friedl, author of 
     # _Mastering Regular Expressions_ (O'Reilly 1997).
 
-    return [regexp "^\[^@<>\"\t ]+@\[^@<>\".\t]+(\\.\[^@<>\".\n ]+)+$" $query_email]
+    return [regexp "^\[^@<>\"\t ]+@\[^@<>\".\t ]+(\\.\[^@<>\".\n ]+)+$" $query_email]
 }
 
 ad_proc util_email_unique_p { email } {
