@@ -13,7 +13,7 @@
 -- create or replace package body content_revision
 
 -- function new
-create function content_revision__new (varchar,varchar,timestamptz,varchar,varchar,integer,integer,integer,timestamptz,integer,varchar)
+create or replace function content_revision__new (varchar,varchar,timestamptz,varchar,varchar,integer,integer,integer,timestamptz,integer,varchar)
 returns integer as '
 declare
   new__title                  alias for $1;  
@@ -65,7 +65,7 @@ begin
 
 end;' language 'plpgsql';
 
-create function content_revision__new(varchar,varchar,timestamptz,varchar,text,integer) returns integer as '
+create or replace function content_revision__new(varchar,varchar,timestamptz,varchar,text,integer) returns integer as '
 declare
         new__title              alias for $1;
         new__description        alias for $2;  -- default null
@@ -89,7 +89,7 @@ begin
 
 end;' language 'plpgsql';
 
-create function content_revision__new (varchar,varchar,timestamptz,varchar,varchar,text,integer,integer,timestamptz,integer,varchar)
+create or replace function content_revision__new (varchar,varchar,timestamptz,varchar,varchar,text,integer,integer,timestamptz,integer,varchar)
 returns integer as '
 declare
   new__title                  alias for $1;  
@@ -120,7 +120,7 @@ begin
 end;' language 'plpgsql';
 
 -- function new
-create function content_revision__new (varchar,varchar,timestamptz,varchar,varchar,text,integer,integer,timestamptz,integer,varchar,integer)
+create or replace function content_revision__new (varchar,varchar,timestamptz,varchar,varchar,text,integer,integer,timestamptz,integer,varchar,integer)
 returns integer as '
 declare
   new__title                  alias for $1;  
@@ -180,7 +180,7 @@ end;' language 'plpgsql';
 
 
 -- procedure copy_attributes
-create function content_revision__copy_attributes (varchar,integer,integer)
+create or replace function content_revision__copy_attributes (varchar,integer,integer)
 returns integer as '
 declare
   copy_attributes__content_type           alias for $1;  
@@ -191,6 +191,10 @@ declare
   cols                                    varchar default ''''; 
   attr_rec                                record;
 begin
+
+  if copy_attributes__content_type is null or copy_attributes__revision_id is null or copy_attributes__copy_id is null then 
+     raise exception ''content_revision__copy_attributes called with null % % %'',copy_attributes__content_type,copy_attributes__revision_id, copy_attributes__copy_id;
+  end if;
 
   select table_name, id_column into v_table_name, v_id_column
   from acs_object_types where object_type = copy_attributes__content_type;
@@ -215,7 +219,7 @@ end;' language 'plpgsql';
 
 
 -- function copy
-create function content_revision__copy (integer,integer,integer,integer,varchar)
+create or replace function content_revision__copy (integer,integer,integer,integer,varchar)
 returns integer as '
 declare
   copy__revision_id            alias for $1;  
@@ -317,7 +321,7 @@ end;' language 'plpgsql';
 
 
 -- procedure delete
-create function content_revision__delete (integer)
+create or replace function content_revision__delete (integer)
 returns integer as '
 declare
   delete__revision_id    alias for $1;  
@@ -381,7 +385,7 @@ end;' language 'plpgsql';
 
 
 -- function get_number
-create function content_revision__get_number (integer)
+create or replace function content_revision__get_number (integer)
 returns integer as '
 declare
   get_number__revision_id            alias for $1;  
@@ -410,9 +414,9 @@ begin
 
   return null;
  
-end;' language 'plpgsql';
+end;' language 'plpgsql' stable strict;
 
-create function content_revision__revision_name(integer)
+create or replace function content_revision__revision_name(integer)
 returns text as '
 declare
         p_revision_id   alias for $1;
@@ -421,10 +425,10 @@ begin
                '' of '' || (select count(*) from cr_revisions where item_id = r.item_id) || '' for item: '' 
                || content_item__get_title(item_id)
                from cr_revisions r where r.revision_id = p_revision_id;
-end;' language 'plpgsql';
+end;' language 'plpgsql' stable strict;
 
 -- procedure index_attributes
-create function content_revision__index_attributes (integer)
+create or replace function content_revision__index_attributes (integer)
 returns integer as '
 declare
   index_attributes__revision_id            alias for $1;  
@@ -432,19 +436,13 @@ declare
   v_revision_id                            cr_revisions.revision_id%TYPE;
 begin
 
-  insert into cr_revision_attributes 
-    select index_attributes__revision_id as revision_id, 
-           clob_loc as attributes 
+	raise exception ''content_revision__index_attributes not implemented on postgres'';
 
-  -- FIXME: need to find a way to deal with these xml calls
-  v_revision_id := write_xml(revision_id, clob_loc);  
-
-  return 0; 
 end;' language 'plpgsql';
 
 
 -- function import_xml
-create function content_revision__import_xml (integer,integer,numeric)
+create or replace function content_revision__import_xml (integer,integer,numeric)
 returns integer as '
 declare
   import_xml__item_id                alias for $1;  
@@ -454,18 +452,13 @@ declare
   v_revision_id                      cr_revisions.revision_id%TYPE;
 begin
 
-  -- FIXME: need a way to deal with this xml call.
-  select doc into clob_loc from cr_xml_docs where doc_id = import_xml__doc_id;
-  v_revision_id := read_xml(import_xml__item_id, import_xml__revision_id, 
-                            clob_loc);  
+	raise exception ''content_revision__import_xml not implemented on postgres'';
 
-  return v_revision_id;
- 
 end;' language 'plpgsql';
 
 
 -- function export_xml
-create function content_revision__export_xml (integer)
+create or replace function content_revision__export_xml (integer)
 returns integer as '
 declare
   revision_id            alias for $1;  
@@ -474,21 +467,13 @@ declare
   v_revision_id          cr_revisions.revision_id%TYPE;
 begin
 
-  v_doc_id := cr_xml_doc_seq.nextval;
-
-  insert into cr_xml_docs (doc_id, doc) 
-    values (v_doc_id, '''');
-
-  -- FIXME: need a way to deal with this xml call.
-  v_revision_id := write_xml(revision_id, clob_loc);  
-
-  return v_doc_id;
+  raise exception ''content_revision__export_xml Not currently implemented on postgresql'';
  
 end;' language 'plpgsql';
 
 
 -- procedure to_html
-create function content_revision__to_html (integer)
+create or replace function content_revision__to_html (integer)
 returns integer as '
 declare
   to_html__revision_id            alias for $1;  
@@ -516,7 +501,7 @@ end;' language 'plpgsql';
 
 
 -- function is_live
-create function content_revision__is_live (integer)
+create or replace function content_revision__is_live (integer)
 returns boolean as '
 declare
   is_live__revision_id            alias for $1;  
@@ -525,11 +510,11 @@ begin
   return count(*) > 0 from cr_items
    where live_revision = is_live__revision_id;
 
-end;' language 'plpgsql';
+end;' language 'plpgsql' strict;
 
 
 -- function is_latest
-create function content_revision__is_latest (integer)
+create or replace function content_revision__is_latest (integer)
 returns boolean as '
 declare
   is_latest__revision_id            alias for $1;  
@@ -538,11 +523,11 @@ begin
   return count(*) > 0 from cr_items
     where latest_revision = is_latest__revision_id;
  
-end;' language 'plpgsql';
+end;' language 'plpgsql' stable;
 
 
 -- procedure to_temporary_clob
-create function content_revision__to_temporary_clob (integer)
+create or replace function content_revision__to_temporary_clob (integer)
 returns integer as '
 declare
   to_temporary_clob__revision_id            alias for $1;  
@@ -571,7 +556,7 @@ end;' language 'plpgsql';
 
 
 -- procedure content_copy
-create function content_revision__content_copy (integer,integer)
+create or replace function content_revision__content_copy (integer,integer)
 returns integer as '
 declare
   content_copy__revision_id            alias for $1;  
@@ -584,6 +569,9 @@ declare
   v_new_lob                            cr_revisions.lob%TYPE;
   v_storage_type                       varchar;
 begin
+  if content_copy__revision_id is null then 
+	raise exception ''content_revision__content_copy attempt to copy a null revision_id'';
+  end if;
 
   select
     content_length, item_id
@@ -659,7 +647,7 @@ end;' language 'plpgsql';
 
 
 -- procedure content__get_content
-create function content_revision__get_content (integer)
+create or replace function content_revision__get_content (integer)
 returns text as '
 declare
   get_content__revision_id            alias for $1;  
@@ -681,7 +669,7 @@ begin
             where revision_id = get_content__revision_id;
         end if;
 
-end;' language 'plpgsql';
+end;' language 'plpgsql' stable strict;
 
 -- show errors
 

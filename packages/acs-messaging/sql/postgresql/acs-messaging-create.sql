@@ -95,14 +95,14 @@ comment on column acs_messages.rfc822_id is '
 
 -- support for tree queries on acs_messages
 
-create function acs_message_get_tree_sortkey(integer) returns varbit as '
+create or replace function acs_message_get_tree_sortkey(integer) returns varbit as '
 declare
   p_message_id    alias for $1;
 begin
   return tree_sortkey from acs_messages where message_id = p_message_id;
-end;' language 'plpgsql';
+end;' language 'plpgsql' stable strict;
 
-create function acs_message_insert_tr () returns opaque as '
+create or replace function acs_message_insert_tr () returns opaque as '
 declare
         v_parent_sk     varbit  default null;
         v_max_value     integer;

@@ -39,6 +39,6 @@ begin
       ELSE 
         return ''f'';   
       END IF; END IF;
-END;' language 'plpgsql';
+END;' language 'plpgsql' immutable strict;
 
 

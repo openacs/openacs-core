@@ -452,7 +452,7 @@ end;' language 'plpgsql';
 
 
 -- procedure revoke_permission
-create function acs_permission__revoke_permission (integer, integer, varchar)
+create or replace function acs_permission__revoke_permission (integer, integer, varchar)
 returns integer as '
 declare
     revoke_permission__object_id         alias for $1;
@@ -488,4 +488,4 @@ begin
                    and m.member_id = permission_p__party_id
                    and p.privilege = h.privilege
                    and p.grantee_id = m.party_id);
-end;' language 'plpgsql';
+end;' language 'plpgsql' stable;

@@ -23,7 +23,7 @@ create table lobs (
 	refcount		integer not null default 0
 );
 
-create function on_lobs_delete() returns opaque as '
+create or replace function on_lobs_delete() returns opaque as '
 begin
 	delete from lob_data where lob_id = old.lob_id;
 	return old;
@@ -47,7 +47,7 @@ create index lob_data_index on lob_data(lob_id);
 -- and PG 7.0.  The ACS doesn't share LOBs between tables
 -- or rows within a table anyway, I don't think/hope.
 
-create function on_lob_ref() returns opaque as '
+create or replace function on_lob_ref() returns opaque as '
 begin
 	if TG_OP = ''UPDATE'' then
 		if new.lob = old.lob then
@@ -76,18 +76,18 @@ begin
 
 end;' language 'plpgsql';
 
-create function empty_lob() returns integer as '
+create or replace function empty_lob() returns integer as '
 begin
 	return nextval(''lob_sequence'');
 end;' language 'plpgsql';
 
-create function lob_get_data(integer) returns text as '
+create or replace function lob_get_data(integer) returns text as '
 declare
-        lob_id  integer;
+        p_lob_id alias for $1;
         v_rec   record;
         v_data  text default '''';
 begin
-        for v_rec in select data, segment from lob_data order by segment;
+        for v_rec in select data, segment from lob_data where lob_id = p_lob_id order by segment;
             v_data := v_data || v_rec.data;
         end if;
 
@@ -95,11 +95,15 @@ begin
 
 end;' language 'plpgsql';
 
-create function lob_copy(integer, integer) returns integer as '
+create or replace function lob_copy(integer, integer) returns integer as '
 declare
         from_id         alias for $1;
         to_id           alias for $2;
 begin
+	if from_id is null then 
+	    raise exception ''lob_copy: attempt to copy null from_id to % to_id'',to_id;
+        end if;
+
         insert into lobs (lob_id,refcount) values (to_id,0);
 
         insert into lob_data
@@ -111,7 +115,7 @@ begin
 
 end;' language 'plpgsql';
 
-create function lob_length(integer) returns integer as '
+create or replace function lob_length(integer) returns integer as '
 declare
         id  alias for $1;
 begin

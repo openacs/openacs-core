@@ -12,7 +12,7 @@
 
 -- create or replace package body content_symlink
 -- function new
-create function content_symlink__new (varchar,varchar,integer,integer,integer,timestamptz,integer,varchar)
+create or replace function content_symlink__new (varchar,varchar,integer,integer,integer,timestamptz,integer,varchar)
 returns integer as '
 declare
   new__name                   alias for $1;  -- default null  
@@ -108,7 +108,7 @@ end;' language 'plpgsql';
 
 
 -- procedure delete
-create function content_symlink__delete (integer)
+create or replace function content_symlink__delete (integer)
 returns integer as '
 declare
   delete__symlink_id             alias for $1;  
@@ -124,7 +124,7 @@ end;' language 'plpgsql';
 
 
 -- function is_symlink
-create function content_symlink__is_symlink (integer)
+create or replace function content_symlink__is_symlink (integer)
 returns boolean as '
 declare
   is_symlink__item_id                alias for $1;  
@@ -140,11 +140,11 @@ begin
 
   return v_symlink_p;  
  
-end;' language 'plpgsql';
+end;' language 'plpgsql' stable;
 
 
 -- procedure copy
-create function content_symlink__copy (integer,integer,integer,varchar)
+create or replace function content_symlink__copy (integer,integer,integer,varchar)
 returns integer as '
 declare
   copy__symlink_id             alias for $1;  
@@ -157,6 +157,7 @@ declare
   v_label                      cr_symlinks.label%TYPE;
   v_symlink_id                 cr_symlinks.symlink_id%TYPE;
 begin
+  -- XXX: bug if target is not a folder this will silently fail.
 
   if content_folder__is_folder(copy__target_folder_id) = ''t'' then
     select
@@ -210,7 +211,7 @@ end;' language 'plpgsql';
 
 
 -- function resolve
-create function content_symlink__resolve (integer)
+create or replace function content_symlink__resolve (integer)
 returns integer as '
 declare
   resolve__item_id                alias for $1;  
@@ -230,11 +231,11 @@ begin
      return v_target_id;
   end if;
 
-end;' language 'plpgsql';
+end;' language 'plpgsql' stable strict;
 
 
 -- function resolve_content_type
-create function content_symlink__resolve_content_type (integer)
+create or replace function content_symlink__resolve_content_type (integer)
 returns varchar as '
 declare
   resolve_content_type__item_id                alias for $1;  
@@ -248,13 +249,9 @@ begin
   where
     symlink_id = resolve_content_type__item_id;
 
-  if NOT FOUND then 
-     return null;
-  end if;
-
   return v_content_type;
  
-end;' language 'plpgsql';
+end;' language 'plpgsql' stable strict;
 
 
 

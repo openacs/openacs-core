@@ -13,7 +13,7 @@
 create view content_item_globals as 
 select -100 as c_root_folder_id;
 
-create function content_item__get_root_folder (integer)
+create or replace function content_item__get_root_folder (integer)
 returns integer as '
 declare
   get_root_folder__item_id                alias for $1;  -- default null 
@@ -39,7 +39,7 @@ begin
 
   return v_folder_id;
  
-end;' language 'plpgsql';
+end;' language 'plpgsql' stable;
 
 -- new 19 param version of content_item__new
 create or replace function content_item__new (
@@ -236,7 +236,7 @@ begin
 end;' language 'plpgsql';
 
 --
-create function content_item__new (varchar,integer,integer,varchar,timestamptz,integer,integer,varchar,varchar,varchar,varchar,varchar,varchar,varchar,varchar,varchar)
+create or replace function content_item__new (varchar,integer,integer,varchar,timestamptz,integer,integer,varchar,varchar,varchar,varchar,varchar,varchar,varchar,varchar,varchar)
 returns integer as '
 declare
   new__name                   alias for $1;  
@@ -392,7 +392,7 @@ begin
  
 end;' language 'plpgsql';
 
-create function content_item__new (varchar,integer,integer,varchar,timestamptz,integer,integer,varchar,varchar,varchar,varchar,varchar,varchar,varchar,integer)
+create or replace function content_item__new (varchar,integer,integer,varchar,timestamptz,integer,integer,varchar,varchar,varchar,varchar,varchar,varchar,varchar,integer)
 returns integer as '
 declare
   new__name                   alias for $1;  
@@ -551,7 +551,7 @@ begin
  
 end;' language 'plpgsql';
 
-create function content_item__new(varchar,integer,varchar,text,text) 
+create or replace function content_item__new(varchar,integer,varchar,text,text) 
 returns integer as '
 declare
         new__name               alias for $1;
@@ -580,7 +580,7 @@ begin
                                  
 end;' language 'plpgsql';
 
-create function content_item__new(varchar,integer) returns integer as '
+create or replace function content_item__new(varchar,integer) returns integer as '
 declare
         new__name       alias for $1;
         new__parent_id  alias for $2;
@@ -594,7 +594,7 @@ end;' language 'plpgsql';
 
 -- function new -- sets security_inherit_p to FALSE -DaveB
 
-create function content_item__new ( integer, varchar, integer, varchar, timestamptz, integer, integer, varchar, boolean, varchar, text, varchar, boolean, varchar,varchar,varchar)
+create or replace function content_item__new ( integer, varchar, integer, varchar, timestamptz, integer, integer, varchar, boolean, varchar, text, varchar, boolean, varchar,varchar,varchar)
 
 returns integer as '
 declare
@@ -755,7 +755,7 @@ begin
 
 end;' language 'plpgsql';
 
-create function content_item__is_published (integer)
+create or replace function content_item__is_published (integer)
 returns boolean as '
 declare
   is_published__item_id                alias for $1;  
@@ -772,20 +772,27 @@ begin
   and
     item_id = is_published__item_id;
  
-end;' language 'plpgsql';
+end;' language 'plpgsql' stable;
 
 
-create function content_item__is_publishable (integer)
+create or replace function content_item__is_publishable (integer)
 returns boolean as '
 declare
   is_publishable__item_id                alias for $1;  
   v_child_count                          integer;       
   v_rel_count                            integer;       
+  v_content_type			 varchar;
   v_template_id                          cr_templates.template_id%TYPE;
   v_child_type                           record;
   v_rel_type                             record;
   -- v_pub_wf                               record;
 begin
+  -- check valid item_id
+  select content_item__get_content_type(is_publishable__item_id) into v_content_type;
+
+  if v_content_type is null then 
+	raise exception ''content_item__is_publishable item_id % invalid'',is_publishable__item_id;
+  end if;
 
   -- validate children
   -- make sure the # of children of each type fall between min_n and max_n
@@ -794,7 +801,8 @@ begin
                       from
                         cr_type_children
                       where
-                        parent_type = content_item__get_content_type(is_publishable__item_id) 
+                        parent_type = v_content_type 
+	                and (min_n is not null or max_n is not null)
   LOOP
     select
       count(rel_id) into v_child_count
@@ -819,13 +827,14 @@ begin
 
   -- validate relations
   -- make sure the # of ext links of each type fall between min_n and max_n
+  -- only check if one of min_n max_n not null
   for v_rel_type in select
                       target_type, min_n, max_n
                     from
                       cr_type_relations
                     where
-                      content_type = content_item__get_content_type(is_publishable__item_id)
-
+                      content_type = v_content_type
+		      and (max_n is not null or min_n is not null)
   LOOP
     select
       count(rel_id) into v_rel_count
@@ -879,9 +888,9 @@ begin
 
   return ''t'';
  
-end;' language 'plpgsql';
+end;' language 'plpgsql' stable;
 
--- new verson of is_valid_child that checks relation_tag
+-- new verson of is_valid_child that checks relation_tag 
 
 create or replace function content_item__is_valid_child (integer,varchar,varchar)
 returns boolean as '
@@ -942,9 +951,9 @@ begin
 
   return v_is_valid_child;
  
-end;' language 'plpgsql';
+end;' language 'plpgsql' stable;
 --
-create function content_item__is_valid_child (integer,varchar)
+create or replace function content_item__is_valid_child (integer,varchar)
 returns boolean as '
 declare
   is_valid_child__item_id                alias for $1;  
@@ -1007,7 +1016,7 @@ end;' language 'plpgsql';
  6) delete keyword associations
  7) delete all associated comments */
 
-create function content_item__delete (integer)
+create or replace function content_item__delete (integer)
 returns integer as '
 declare
   delete__item_id                alias for $1;  
@@ -1132,7 +1141,7 @@ begin
 end;' language 'plpgsql';
 
 
-create function content_item__rename (integer,varchar)
+create or replace function content_item__rename (integer,varchar)
 returns integer as '
 declare
   rename__item_id                alias for $1;  
@@ -1167,7 +1176,7 @@ begin
   return 0; 
 end;' language 'plpgsql';
 
-create function content_item__get_id (varchar,integer,boolean)
+create or replace function content_item__get_id (varchar,integer,boolean)
 returns integer as '
 declare
   get_id__item_path              alias for $1;  
@@ -1248,7 +1257,7 @@ begin
 
   return child_id;
 
-end;' language 'plpgsql';
+end;' language 'plpgsql' stable;
 
 create sequence content_item_gp_session_id;
 
@@ -1276,7 +1285,7 @@ create table get_path_rel_cursor (
        primary key (sid,pos)
 );
 
-create function content_item__create_rel_cursor(integer,integer) 
+create or replace function content_item__create_rel_cursor(integer,integer) 
 returns integer as '
 declare
         v_item_id       alias for $1;
@@ -1305,7 +1314,7 @@ begin
         return null;
 end;' language 'plpgsql';
 
-create function content_item__create_abs_cursor(integer,integer) 
+create or replace function content_item__create_abs_cursor(integer,integer) 
 returns integer as '
 declare
         v_item_id       alias for $1;
@@ -1334,7 +1343,7 @@ begin
         return null;
 end;' language 'plpgsql';
 
-create function content_item__abs_cursor_next_pos() returns integer as '
+create or replace function content_item__abs_cursor_next_pos() returns integer as '
 declare 
         v_pos   integer;
 begin
@@ -1344,7 +1353,7 @@ begin
         return v_pos;        
 end;' language 'plpgsql';
 
-create function content_item__rel_cursor_next_pos() returns integer as '
+create or replace function content_item__rel_cursor_next_pos() returns integer as '
 declare 
         v_pos   integer;
 begin
@@ -1354,7 +1363,8 @@ begin
         return v_pos;        
 end;' language 'plpgsql';
 
-create function content_item__cleanup_cursors(integer) returns integer as '
+-- if called with null its a noop and returns null so strict.
+create or replace function content_item__cleanup_cursors(integer) returns integer as '
 declare
         v_sid   alias for $1;
 begin
@@ -1362,9 +1372,9 @@ begin
         delete from get_path_rel_cursor where sid = v_sid;
         
         return null;
-end;' language 'plpgsql';
+end;' language 'plpgsql' strict;
 
-create function content_item__get_path (integer,integer)
+create or replace function content_item__get_path (integer,integer)
 returns varchar as '
 declare
   get_path__item_id                alias for $1;  
@@ -1515,7 +1525,7 @@ begin
 end;' language 'plpgsql';
 
 
-create function content_item__get_virtual_path (integer,integer)
+create or replace function content_item__get_virtual_path (integer,integer)
 returns varchar as '
 declare
   get_virtual_path__item_id               alias for $1;  
@@ -1525,6 +1535,7 @@ declare
   v_is_folder                             boolean;       
   v_index                                 cr_items.item_id%TYPE;
 begin
+  -- XXX possible bug: root_folder_id arg is ignored.
 
   -- first resolve the item
   v_item_id := content_symlink__resolve(get_virtual_path__item_id);
@@ -1544,7 +1555,7 @@ begin
 end;' language 'plpgsql';
 
 
-create function content_item__write_to_file (integer,varchar)
+create or replace function content_item__write_to_file (integer,varchar)
 returns integer as '
 declare
   item_id                alias for $1;  
@@ -1571,7 +1582,7 @@ begin
 end;' language 'plpgsql';
 
 
-create function content_item__register_template (integer,integer,varchar)
+create or replace function content_item__register_template (integer,integer,varchar)
 returns integer as '
 declare
   register_template__item_id                alias for $1;  
@@ -1603,7 +1614,7 @@ begin
 end;' language 'plpgsql';
 
 
-create function content_item__unregister_template (integer,integer,varchar)
+create or replace function content_item__unregister_template (integer,integer,varchar)
 returns integer as '
 declare
   unregister_template__item_id                alias for $1;  
@@ -1643,7 +1654,7 @@ begin
 end;' language 'plpgsql';
 
 
-create function content_item__get_template (integer,varchar)
+create or replace function content_item__get_template (integer,varchar)
 returns integer as '
 declare
   get_template__item_id                alias for $1;  
@@ -1687,10 +1698,10 @@ begin
 
   return v_template_id;
  
-end;' language 'plpgsql';
+end;' language 'plpgsql' stable strict;
 
 
-create function content_item__get_content_type (integer)
+create or replace function content_item__get_content_type (integer)
 returns varchar as '
 declare
   get_content_type__item_id                alias for $1;  
@@ -1704,16 +1715,12 @@ begin
   where 
     item_id = get_content_type__item_id;  
 
-  if NOT FOUND then 
-     return null;
-  end if;
-
   return v_content_type;
  
-end;' language 'plpgsql';
+end;' language 'plpgsql' stable strict;
 
 
-create function content_item__get_live_revision (integer)
+create or replace function content_item__get_live_revision (integer)
 returns integer as '
 declare
   get_live_revision__item_id                alias for $1;  
@@ -1727,16 +1734,12 @@ begin
   where
     item_id = get_live_revision__item_id;
 
-  if NOT FOUND then 
-     return null;
-  else 
-     return v_revision_id;
-  end if;
+  return v_revision_id;
  
-end;' language 'plpgsql';
+end;' language 'plpgsql' stable strict;
 
 
-create function content_item__set_live_revision (integer) returns integer as '
+create or replace function content_item__set_live_revision (integer) returns integer as '
 declare
   set_live_revision__revision_id    alias for $1;  
   set_live_revision__publish_status cr_items.publish_status%TYPE default ''ready'';
@@ -1765,7 +1768,7 @@ begin
   return 0; 
 end;' language 'plpgsql';
 
-create function content_item__set_live_revision (integer,varchar)
+create or replace function content_item__set_live_revision (integer,varchar)
 returns integer as '
 declare
   set_live_revision__revision_id    alias for $1;  
@@ -1796,7 +1799,7 @@ begin
 end;' language 'plpgsql';
 
 
-create function content_item__unset_live_revision (integer)
+create or replace function content_item__unset_live_revision (integer)
 returns integer as '
 declare
   unset_live_revision__item_id                alias for $1;  
@@ -1822,7 +1825,7 @@ begin
   return 0; 
 end;' language 'plpgsql';
 
-create function content_item__set_release_period (integer, timestamptz, timestamptz)
+create or replace function content_item__set_release_period (integer, timestamptz, timestamptz)
 returns integer as '
 declare
   set_release_period__item_id                alias for $1;  
@@ -1854,7 +1857,7 @@ begin
 end;' language 'plpgsql';
 
 
-create function content_item__get_revision_count (integer)
+create or replace function content_item__get_revision_count (integer)
 returns integer as '
 declare
   get_revision_count__item_id   alias for $1;  
@@ -1870,10 +1873,10 @@ begin
 
   return v_count;
  
-end;' language 'plpgsql';
+end;' language 'plpgsql' stable;
 
 
-create function content_item__get_context (integer)
+create or replace function content_item__get_context (integer)
 returns integer as '
 declare
   get_context__item_id                alias for $1;  
@@ -1890,12 +1893,12 @@ begin
     object_id = get_context__item_id;
 
   if NOT FOUND then 
-     raise EXCEPTION ''-20000: Content item % does not exist in content_item.get_context'', item_id;
+     raise EXCEPTION ''-20000: Content item % does not exist in content_item.get_context'', get_context__item_id;
   end if;
 
   return v_context_id;
  
-end;' language 'plpgsql';
+end;' language 'plpgsql' stable;
 
 
 -- 1) make sure we are not moving the item to an invalid location:
@@ -1904,12 +1907,16 @@ end;' language 'plpgsql';
 --   to the target folder
 -- 3) update the parent_id for the item
 
-create function content_item__move (integer,integer)
+create or replace function content_item__move (integer,integer)
 returns integer as '
 declare
   move__item_id                alias for $1;  
   move__target_folder_id       alias for $2;  
 begin
+
+  if move__target_folder_id is null then 
+	raise exception ''attempt to move item_id % to null folder_id'', move__item_id;
+  end if;
 
   if content_folder__is_folder(move__item_id) = ''t'' then
 
@@ -1936,7 +1943,7 @@ begin
 end;' language 'plpgsql';
 
 
-create function content_item__copy (integer,integer,integer,varchar)
+create or replace function content_item__copy (integer,integer,integer,varchar)
 returns integer as '
 declare
   item_id                alias for $1;  
@@ -1960,7 +1967,7 @@ end;' language 'plpgsql';
 -- 3) create a new item with no revisions in the target folder
 -- 4) copy the latest revision from the original item to the new item (if any)
 
-create function content_item__copy2 (integer,integer,integer,varchar)
+create or replace function content_item__copy2 (integer,integer,integer,varchar)
 returns integer as '
 declare
   copy2__item_id                alias for $1;  
@@ -2086,11 +2093,11 @@ begin
 end;' language 'plpgsql';
 
 
-create function content_item__get_latest_revision (integer)
+create or replace function content_item__get_latest_revision (integer)
 returns integer as '
 declare
-  get_latest_revision__item_id                alias for $1;  
-  v_revision_id                               integer;       
+  get_latest_revision__item_id                alias for $1;
+  v_revision_id                               integer;
   v_rec                                       record;
 begin
   for v_rec in 
@@ -2105,20 +2112,16 @@ begin
   order by 
     o.creation_date desc
   LOOP
-        v_revision_id := v_rec.revision_id;
-        exit;
+      v_revision_id := v_rec.revision_id;
+      exit;
   end LOOP;
-
-  if NOT FOUND then
-     return null;
-  end if;
 
   return v_revision_id;
  
-end;' language 'plpgsql' with (isstrict);
+end;' language 'plpgsql' strict stable;
 
 
-create function content_item__get_best_revision (integer)
+create or replace function content_item__get_best_revision (integer)
 returns integer as '
 declare
   get_best_revision__item_id                alias for $1;  
@@ -2134,16 +2137,12 @@ begin
   where
     item_id = get_best_revision__item_id;
 
-  if NOT FOUND then 
-     return null;
-  end if;
-
   return v_revision_id;
  
-end;' language 'plpgsql';
+end;' language 'plpgsql' stable strict;
 
 
-create function content_item__get_title (integer,boolean)
+create or replace function content_item__get_title (integer,boolean)
 returns varchar as '
 declare
   get_title__item_id                alias for $1;  
@@ -2185,10 +2184,10 @@ begin
 
   return v_title;
 
-end;' language 'plpgsql';
+end;' language 'plpgsql' stable;
 
 
-create function content_item__get_title (integer)
+create or replace function content_item__get_title (integer)
 returns varchar as '
 declare
   get_title__item_id                alias for $1;  
@@ -2196,10 +2195,10 @@ begin
   
   return content_item__get_title(get_title__item_id, ''f'');
 
-end;' language 'plpgsql';
+end;' language 'plpgsql' stable strict;
 
 
-create function content_item__get_publish_date (integer,boolean)
+create or replace function content_item__get_publish_date (integer,boolean)
 returns timestamptz as '
 declare
   get_publish_date__item_id                alias for $1;  
@@ -2228,16 +2227,12 @@ begin
       r.revision_id = i.latest_revision;
   end if;
 
-  if NOT FOUND then 
-     return null;
-  end if;
-
   return v_publish_date;
  
-end;' language 'plpgsql';
+end;' language 'plpgsql' stable;
 
 
-create function content_item__is_subclass (varchar,varchar)
+create or replace function content_item__is_subclass (varchar,varchar)
 returns boolean as '
 declare
   is_subclass__object_type            alias for $1;  
@@ -2245,26 +2240,19 @@ declare
   v_subclass_p                        boolean;      
   v_inherit_val                       record;
 begin
-
-  v_subclass_p := ''f'';
-
-  for v_inherit_val in select o.object_type
-                       from acs_object_types o, acs_object_types o2
-                       where o2.object_type = is_subclass__supertype
-                         and o.tree_sortkey between o2.tree_sortkey and tree_right(o2.tree_sortkey)
-                       order by o.tree_sortkey
-  LOOP
-    if v_inherit_val.object_type = is_subclass__object_type then
-         v_subclass_p := ''t'';
-    end if;
-  end loop;
+  select count(*) > 0 into v_subclass_p where exists (
+	select 1
+          from acs_object_types o, acs_object_types o2
+         where o2.object_type = is_subclass__supertype
+           and o.object_type = is_subclass__object_type
+           and o.tree_sortkey between o2.tree_sortkey and tree_right(o2.tree_sortkey));
 
   return v_subclass_p;
 
-end;' language 'plpgsql';
+end;' language 'plpgsql' stable;
 
 
-create function content_item__relate (integer,integer,varchar,integer,varchar)
+create or replace function content_item__relate (integer,integer,varchar,integer,varchar)
 returns integer as '
 declare
   relate__item_id                alias for $1;  
@@ -2359,7 +2347,7 @@ begin
 end;' language 'plpgsql';
 
 
-create function content_item__unrelate (integer)
+create or replace function content_item__unrelate (integer)
 returns integer as '
 declare
   unrelate__rel_id      alias for $1;  
@@ -2375,7 +2363,7 @@ begin
 end;' language 'plpgsql';
 
 
-create function content_item__is_index_page (integer,integer)
+create or replace function content_item__is_index_page (integer,integer)
 returns boolean as '
 declare
   is_index_page__item_id                alias for $1;  
@@ -2387,18 +2375,18 @@ begin
     return ''f'';
   end if;
  
-end;' language 'plpgsql';
+end;' language 'plpgsql' stable;
 
-
-create function content_item__get_parent_folder (integer)
+create or replace function content_item__get_parent_folder (integer)
 returns integer as '
 declare
   get_parent_folder__item_id               alias for $1;  
   v_folder_id                              cr_folders.folder_id%TYPE;
   v_parent_folder_p                        boolean default ''f'';       
 begin
+  v_folder_id := get_parent_folder__item_id;
 
-  while NOT v_parent_folder_p LOOP
+  while NOT v_parent_folder_p and v_folder_id is not null LOOP
 
     select
       parent_id, content_folder__is_folder(parent_id) 
@@ -2407,17 +2395,13 @@ begin
     from
       cr_items
     where
-      item_id = get_parent_folder__item_id;
-
-    if NOT FOUND then
-       return null;
-    end if;
+      item_id = v_folder_id;
 
   end loop; 
 
   return v_folder_id;
  
-end;' language 'plpgsql';
+end;' language 'plpgsql' stable strict;
 
 
 

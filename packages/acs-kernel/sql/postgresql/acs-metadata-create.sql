@@ -57,7 +57,7 @@ create index acs_obj_types_tree_skey_idx on acs_object_types (tree_sortkey);
 
 -- support for tree queries on acs_object_types
 
-create function acs_object_type_get_tree_sortkey(varchar) returns varbit as '
+create or replace function acs_object_type_get_tree_sortkey(varchar) returns varbit as '
 declare
   p_object_type    alias for $1;
 begin
@@ -81,7 +81,7 @@ begin
 
         return new;
 
-end;' language 'plpgsql';
+end;' language 'plpgsql' stable strict;
 
 create trigger acs_object_type_insert_tr before insert 
 on acs_object_types for each row 
@@ -570,13 +570,14 @@ end;' language 'plpgsql';
 
 
 -- procedure drop_type
-create function acs_object_type__drop_type (varchar,boolean)
+create or replace function acs_object_type__drop_type (varchar,boolean)
 returns integer as '
 declare
   drop_type__object_type            alias for $1;  
   drop_type__cascade_p              alias for $2;  -- default ''f''
   row                               record;
 begin
+    -- XXX: drop_type cascade_p is ignored (ignored in oracle too, but defaults f)
 
     -- drop all the attributes associated with this type
     for row in select attribute_name 
@@ -598,7 +599,7 @@ end;' language 'plpgsql';
 
 
 -- function pretty_name
-create function acs_object_type__pretty_name (varchar)
+create or replace function acs_object_type__pretty_name (varchar)
 returns varchar as '
 declare
   pretty_name__object_type            alias for $1;  
@@ -610,26 +611,19 @@ begin
 
     return v_pretty_name;
    
-end;' language 'plpgsql';
+end;' language 'plpgsql' stable strict;
 
 
 -- function is_subtype_p
-create function acs_object_type__is_subtype_p (varchar,varchar)
+create or replace function acs_object_type__is_subtype_p (varchar,varchar)
 returns boolean as '
 declare
   is_subtype_p__object_type_1          alias for $1;  
   is_subtype_p__object_type_2          alias for $2;  
   v_result                             integer;       
 begin
-    -- select count(*) into v_result
-    --  where exists (select 1 
-    --                 from acs_object_types t 
-    --                where t.object_type	= is_subtype_p__object_type_2
-    --              connect by prior t.object_type = t.supertype
-    --                start with t.supertype = is_subtype_p__object_type_1);
-
     select count(*) into v_result
-     where exists (select 1 
+     where exists (select 1
                      from acs_object_types t, acs_object_types t2
                     where t.object_type = is_subtype_p__object_type_2
                       and t2.object_type = is_subtype_p__object_type_1
@@ -640,8 +634,8 @@ begin
     end if;
 
     return ''f'';
-   
-end;' language 'plpgsql';
+
+end;' language 'plpgsql' stable;
 
 
 

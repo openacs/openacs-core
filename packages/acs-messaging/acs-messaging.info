@@ -7,7 +7,7 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>t</singleton-p>
     
-    <version name="5.0.0a5" url="http://www.openacs.org/repository/download/apm/acs-messaging-5.0.0a5.apm">
+    <version name="5.0.0b4" url="http://www.openacs.org/repository/download/apm/acs-messaging-5.0.0b4.apm">
         <owner url="mailto:akk+@cs.cmu.edu">Anukul Kapoor</owner>
         <owner url="mailto:prevost@maya.com">John Prevost</owner>
         <owner url="mailto:vinod@kurup.com">Vinod Kurup</owner>
@@ -16,9 +16,9 @@
         <vendor url="http://www.openacs.org/">OpenACS</vendor>
         <description format="text/html">Provides generic message services, with email sending.</description>
 
-        <provides url="acs-messaging" version="5.0.0a5"/>
-        <requires url="acs-content-repository" version="5.0.0a5"/>
-        <requires url="acs-kernel" version="5.0.0a5"/>
+        <provides url="acs-messaging" version="5.0.0b4"/>
+        <requires url="acs-content-repository" version="5.0.0b4"/>
+        <requires url="acs-kernel" version="5.0.0b4"/>
 
         <callbacks>
         </callbacks>

@@ -6,7 +6,7 @@
 -- @cvs-id site-nodes-create.sql,v 1.6.2.2 2001/01/12 22:53:32 dennis Exp
 --
 
-create function inline_0 ()
+create or replace function inline_0 ()
 returns integer as '
 declare
         dummy   integer;
@@ -62,14 +62,14 @@ create index site_nodes_object_id_idx on site_nodes (object_id);
 create index site_nodes_parent_id_idx on site_nodes(parent_id,object_id,node_id);
 create index site_nodes_tree_skey_idx on site_nodes (tree_sortkey);
 
-create function site_node_get_tree_sortkey(integer) returns varbit as '
+create or replace function site_node_get_tree_sortkey(integer) returns varbit as '
 declare
   p_node_id         alias for $1;
 begin
   return tree_sortkey from site_nodes where node_id = p_node_id;
-end;' language 'plpgsql';
+end;' language 'plpgsql' stable strict;
 
-create function site_node_insert_tr () returns opaque as '
+create or replace function site_node_insert_tr () returns opaque as '
 declare
         v_parent_sk     varbit default null;
         v_max_value     integer;
@@ -98,7 +98,7 @@ create trigger site_node_insert_tr before insert
 on site_nodes for each row 
 execute procedure site_node_insert_tr ();
 
-create function site_node_update_tr () returns opaque as '
+create or replace function site_node_update_tr () returns opaque as '
 declare
         v_parent_sk     varbit default null;
         v_max_value     integer;
@@ -205,7 +205,7 @@ execute procedure site_node_update_tr ();
 
 select define_function_args ('site_node__new', 'node_id,parent_id,name,object_id,directory_p,pattern_p,creation_user,creation_ip');
 
-create function site_node__new (integer,integer,varchar,integer,boolean,boolean,integer,varchar)
+create or replace function site_node__new (integer,integer,varchar,integer,boolean,boolean,integer,varchar)
 returns integer as '
 declare
   new__node_id                alias for $1;  -- default null  
@@ -250,7 +250,7 @@ end;' language 'plpgsql';
 
 
 -- procedure delete
-create function site_node__delete (integer)
+create or replace function site_node__delete (integer)
 returns integer as '
 declare
   delete__node_id                alias for $1;  
@@ -265,7 +265,7 @@ end;' language 'plpgsql';
 
 
 -- function find_pattern
-create function site_node__find_pattern (integer)
+create or replace function site_node__find_pattern (integer)
 returns integer as '
 declare
   find_pattern__node_id         alias for $1;  
@@ -291,7 +291,7 @@ end;' language 'plpgsql';
 
 
 -- function node_id
-create function site_node__node_id (varchar,integer)
+create or replace function site_node__node_id (varchar,integer)
 returns integer as '
 declare
   node_id__url           alias for $1;  
@@ -352,7 +352,7 @@ end;' language 'plpgsql';
 
 
 -- function url
-create function site_node__url (integer)
+create or replace function site_node__url (integer)
 returns varchar as '
 declare
   url__node_id           alias for $1;  

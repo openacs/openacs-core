@@ -41,7 +41,7 @@ begin
 
         return 0;
 
-end;' language 'plpgsql' with (iscachable);
+end;' language 'plpgsql' immutable;
 
 
 create function instr(varchar,char,integer) returns integer as '
@@ -51,7 +51,7 @@ declare
         dir             alias for $3;
 begin
         return instr(str,pat,dir,1);
-end;' language 'plpgsql' with (iscachable);
+end;' language 'plpgsql' immutable;
 
 
 create function instr(varchar,char) returns integer as '
@@ -60,7 +60,7 @@ declare
         pat             alias for $2;
 begin
         return instr(str,pat,1,1);
-end;' language 'plpgsql' with (iscachable);
+end;' language 'plpgsql' immutable;
 
 
 -- Splits string on requested character. Returns requested element
@@ -94,7 +94,7 @@ begin
     return null;
   end if;
   return substr(p_string, v_left_split+1, (v_right_split - v_left_split - 1));
-end;' language 'plpgsql' with (iscachable);
+end;' language 'plpgsql' immutable;
 
 
 create function get_func_drop_command (varchar) returns varchar as '
@@ -179,6 +179,10 @@ declare
         v_tmp   text;
         v_cnt   integer default -1;
 begin
+        if v_src is null then 
+	     return null;
+        end if;
+
         v_tmp := v_src;
         LOOP
             v_pos := position(''\n'' in v_tmp);
@@ -194,9 +198,9 @@ begin
 
         return v_ret || rpad(v_cnt,10) || v_tmp;
 
-end;' language 'plpgsql' with (iscachable);
+end;' language 'plpgsql' immutable strict;
 
-create function get_func_definition (varchar,oidvector) returns text as '
+create or replace function get_func_definition (varchar,oidvector) returns text as '
 declare
         fname           alias for $1;
         args            alias for $2;
@@ -216,12 +220,12 @@ begin
           from pg_proc p 
          where proname = fname::name
            and proargtypes = args;
-        
+
          v_funcdef := v_funcdef || ''
 create function '' || fname || ''('';
-        
+
          v_pos := position('' '' in v_args);
-        
+
          while nargs < v_nargs loop
              nargs := nargs + 1;
              if nargs = v_nargs then 
@@ -238,13 +242,13 @@ create function '' || fname || ''('';
                          end into v_one_type 
                from pg_type 
               where oid = v_one_arg;
-             v_funcdef := v_funcdef || v_one_type;            
+             v_funcdef := v_funcdef || v_one_type;
          end loop;
          v_funcdef := v_funcdef || '') returns '' || v_rettype || '' as \\\'\\n'' || v_src || ''\\\' language \\\'plpgsql\\\';'';
-        
+
         return v_funcdef;
 
-end;' language 'plpgsql';
+end;' language 'plpgsql' stable strict;
 
 create function get_func_header(varchar,oidvector) returns text as '
 declare
@@ -258,7 +262,7 @@ begin
 
         return substr(v_src, 1, pos + 4);
 
-end;' language 'plpgsql';
+end;' language 'plpgsql' stable strict;
 
 create view acs_func_defs as 
 select get_func_definition(proname,proargtypes) as definition, 
@@ -283,7 +287,7 @@ begin
 	create or replace function bitfromint4 (integer) returns bit varying as ''
 	begin 
     	    return "bit"($1);
-	end;'' language ''plpgsql'';
+	end;'' language ''plpgsql'' immutable strict;
    end if;
    return 1;
 end;' language 'plpgsql';
@@ -302,7 +306,7 @@ begin
 	create or replace function bittoint4 (bit varying) returns integer as ''
 	begin 
     	    return "int4"($1);
-	end;'' language ''plpgsql'';
+	end;'' language ''plpgsql'' immutable strict;
    end if;
    return 1;
 end;' language 'plpgsql';
@@ -310,43 +314,6 @@ end;' language 'plpgsql';
 select inline_1();
 drop function inline_1();
 
-create function inline_0 () returns integer as '
--- Create a bitfromint4(integer) function if it doesn''t exists.
--- Due to a bug in PG 7.3 this function is absent in PG 7.3.
-declare
-    v_bitfromint4_count integer;
-begin
-    select into v_bitfromint4_count count(*) from pg_proc where proname = ''bitfromint4'';
-    if v_bitfromint4_count = 0 then
-	create or replace function bitfromint4 (integer) returns bit varying as ''
-	begin 
-    	    return "bit"($1);
-	end;'' language ''plpgsql'';
-   end if;
-   return 1;
-end;' language 'plpgsql';
-
-select inline_0();
-drop function inline_0();
-
-create function inline_1 () returns integer as '
--- Create a bitfromint4(integer) function if it doesn''t exists.
--- Due to a bug in PG 7.3 this function is absent in PG 7.3.
-declare
-    v_bittoint4_count integer;
-begin
-    select into v_bittoint4_count count(*) from pg_proc where proname = ''bittoint4'';
-    if v_bittoint4_count = 0 then
-	create or replace function bittoint4 (bit varying) returns integer as ''
-	begin 
-    	    return "int4"($1);
-	end;'' language ''plpgsql'';
-   end if;
-   return 1;
-end;' language 'plpgsql';
-
-select inline_1();
-drop function inline_1();
 
 -- tree query support, m-vgID method.
 
@@ -405,7 +372,7 @@ begin
     return substring(bitfromint4(cast (-2^31 + p_intkey as int4)), 1, 32);
   end if;
 
-end;' language 'plpgsql' with (isstrict, iscachable);
+end;' language 'plpgsql' immutable strict;
 
 create function tree_key_to_int(varbit, integer) returns integer as '
 
@@ -441,7 +408,7 @@ begin
     return bittoint4(substring(p_tree_key, v_parent_pos, 8));
   end if;
 
-end;' language 'plpgsql' with (isstrict, iscachable);
+end;' language 'plpgsql' immutable strict;
 
 create function tree_ancestor_key(varbit, integer) returns varbit as '
 
@@ -470,7 +437,7 @@ begin
 
   return substring(p_tree_key, 1, v_pos - 1);
 
-end;' language 'plpgsql' with (isstrict, iscachable);
+end;' language 'plpgsql' immutable strict;
 
 create function tree_root_key(varbit) returns varbit as '
 
@@ -487,7 +454,7 @@ begin
       return substring(p_tree_key, 1, 8);
   end if;
 
-end;' language 'plpgsql' with (isstrict, iscachable);
+end;' language 'plpgsql' immutable strict;
 
 create function tree_leaf_key_to_int(varbit) returns integer as '
 
@@ -516,19 +483,17 @@ begin
     return bittoint4(substring(p_tree_key, v_leaf_pos, 8));
   end if;
 
-end;' language 'plpgsql' with (isstrict, iscachable);
+end;' language 'plpgsql' immutable strict;
 
 create function tree_next_key(varbit, integer) returns varbit as '
-
--- Create a new child of the given key with a leaf key number one greater than
--- the child value parameter.  If the child value parameter is null, make the
--- child the first child of the parent.
-
 declare
   p_parent_key      alias for $1;
   p_child_value     alias for $2;
   v_child_value     integer;
 begin
+-- Create a new child of the given key with a leaf key number one greater than
+-- the child value parameter.  If the child value parameter is null, make the
+-- child the first child of the parent.
 
   if p_child_value is null then
     v_child_value := 0;
@@ -542,7 +507,7 @@ begin
     return p_parent_key || int_to_tree_key(v_child_value);
   end if;
 
-end;' language 'plpgsql' with(iscachable);
+end;' language 'plpgsql' immutable;
 
 create function tree_increment_key(varbit)
 returns varbit as '
@@ -557,7 +522,7 @@ begin
     end if;
 
     return int_to_tree_key(v_child_sort_key);
-end;' language 'plpgsql' with(iscachable);
+end;' language 'plpgsql' immutable;
 
 create function tree_left(varbit) returns varbit as '
 
@@ -572,7 +537,7 @@ begin
   else
     return key || ''X00''::varbit;
   end if;
-end;' language 'plpgsql' with(iscachable);
+end;' language 'plpgsql' immutable;
 
 create function tree_right(varbit) returns varbit as '
 
@@ -588,7 +553,7 @@ begin
   else
     return key || ''XFFFFFFFF''::varbit;
   end if;
-end;' language 'plpgsql' with(iscachable);
+end;' language 'plpgsql' immutable;
 
 create function tree_level(varbit) returns integer as '
 
@@ -619,7 +584,7 @@ begin
   end loop;
 
   return v_level;
-end;' language 'plpgsql' with(iscachable);
+end;' language 'plpgsql' immutable;
 
 create function tree_ancestor_p(varbit, varbit) returns boolean as '
 declare
@@ -627,7 +592,7 @@ declare
   p_potential_child         alias for $2;
 begin
   return position(p_potential_ancestor in p_potential_child) = 1;
-end;' language 'plpgsql' with(iscachable);
+end;' language 'plpgsql' immutable;
 
 -- PG does not allow recursive SQL functions during CREATE, but you can fool it easily
 -- with CREATE OR REPLACE, a feature added in 7.2.
@@ -651,7 +616,7 @@ create or replace function tree_ancestor_keys(varbit, integer) returns setof var
   union
   select tree_ancestor_keys($1, $2 + 1)
   where $2 < tree_level($1)
-' language 'sql' with (isstrict);
+' language 'sql' immutable strict;
 
 
 ------------------------------
@@ -703,7 +668,7 @@ create or replace function tree_ancestor_keys(varbit) returns setof varbit as '
 
   select tree_ancestor_keys($1, 1)
 
-' language 'sql' with (isstrict);
+' language 'sql' immutable strict;
 
 ----------------------------------------------------------------------------
 

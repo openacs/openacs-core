@@ -7,13 +7,13 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>t</singleton-p>
     
-    <version name="5.0.0a5" url="http://openacs.org/repository/download/apm/acs-content-repository-5.0.0a5.apm">
+    <version name="5.0.0b4" url="http://openacs.org/repository/download/apm/acs-content-repository-5.0.0b4.apm">
         <owner url="mailto:dcwickstrom@earthlink.net">Dan Wickstrom</owner>
         <summary>A canonical repository for all OpenACS content.</summary>
         <release-date>2003-11-07</release-date>
         <vendor url="http://openacs.org/">OpenACS</vendor>
 
-        <provides url="acs-content-repository" version="5.0.0a5"/>
+        <provides url="acs-content-repository" version="5.0.0b4"/>
         <requires url="acs-kernel" version="5.0.0a5"/>
         <requires url="acs-service-contract" version="5.0.0a5"/>
         <requires url="search" version="5.0.0a5"/>

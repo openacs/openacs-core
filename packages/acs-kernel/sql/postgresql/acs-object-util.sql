@@ -1,6 +1,6 @@
 -- moved from site-wide search to acs-kernel
 
-create function acs_object_util__object_type_exist_p (varchar)
+create or replace function acs_object_util__object_type_exist_p (varchar)
 returns boolean as '
 declare
     p_object_type       alias for $1;
@@ -13,10 +13,10 @@ begin
     where  object_type = p_object_type;
  
     return v_exist_p;
-end;' language 'plpgsql';
+end;' language 'plpgsql' stable;
 
 
-create function acs_object_util__get_object_type (integer)
+create or replace function acs_object_util__get_object_type (integer)
 returns varchar as '
 declare
     p_object_id         alias for $1;
@@ -26,16 +26,16 @@ begin
     from acs_objects
     where object_id = p_object_id;
 
-    return v_object_type;
-
     if not found then
-        raise exception ''Invalid Object id: % '', p_object_id;
+        raise exception ''acs_object_util__get_object_type: Invalid Object id: % '', p_object_id;
     end if;
 
-end;' language 'plpgsql';
+    return v_object_type;
+
+end;' language 'plpgsql' stable;
 
 
-create function acs_object_util__type_ancestor_type_p (varchar,varchar)
+create or replace function acs_object_util__type_ancestor_type_p (varchar,varchar)
 returns boolean as '
 declare
     p_object_type1      alias for $1;
@@ -55,11 +55,11 @@ begin
                    where p_object_type2 = o2.object_type
                      and o1.object_type = p_object_type1
                      and o1.tree_sortkey between o2.tree_sortkey and tree_right(o2.tree_sortkey));
-end;' language 'plpgsql';
+end;' language 'plpgsql' stable;
 
 
 
-create function acs_object_util__object_ancestor_type_p (integer,varchar)
+create or replace function acs_object_util__object_ancestor_type_p (integer,varchar)
 returns boolean as '
 declare
     p_object_id         alias for $1;
@@ -71,10 +71,10 @@ begin
 
     v_exist_p := acs_object_util__type_ancestor_type_p (v_object_type, p_object_type);
     return v_exist_p;
-end;' language 'plpgsql';
+end;' language 'plpgsql' stable;
 
 
-create function acs_object_util__object_type_p (integer,varchar)
+create or replace function acs_object_util__object_type_p (integer,varchar)
 returns boolean as '
 declare
     p_object_id         alias for $1;
@@ -83,4 +83,4 @@ declare
 begin
     v_exist_p := acs_object_util__object_ancestor_type_p(p_object_id, p_object_type);
     return v_exist_p;
-end;' language 'plpgsql';
+end;' language 'plpgsql' stable;

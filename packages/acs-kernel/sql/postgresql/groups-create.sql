@@ -387,7 +387,7 @@ begin
     end if;
     return ''f'';
   end if;
-end;' language 'plpgsql';
+end;' language 'plpgsql' stable;
 
 
 

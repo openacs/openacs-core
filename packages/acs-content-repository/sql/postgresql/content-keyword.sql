@@ -8,7 +8,7 @@
 -- License.  Full text of the license is available from the GNU Project:
 -- http://www.fsf.org/copyleft/gpl.html
 
-create function content_keyword__get_heading (integer)
+create or replace function content_keyword__get_heading (integer)
 returns text as '
 declare
   get_heading__keyword_id             alias for $1;  
@@ -20,11 +20,11 @@ begin
 
   return v_heading;
  
-end;' language 'plpgsql';
+end;' language 'plpgsql' stable strict;
 
 
 -- function get_description
-create function content_keyword__get_description (integer)
+create or replace function content_keyword__get_description (integer)
 returns text as '
 declare
   get_description__keyword_id             alias for $1;  
@@ -36,11 +36,11 @@ begin
 
   return v_description;
  
-end;' language 'plpgsql';
+end;' language 'plpgsql' stable strict;
 
 
 -- procedure set_heading
-create function content_keyword__set_heading (integer,varchar)
+create or replace function content_keyword__set_heading (integer,varchar)
 returns integer as '
 declare
   set_heading__keyword_id             alias for $1;  
@@ -57,7 +57,7 @@ end;' language 'plpgsql';
 
 
 -- procedure set_description
-create function content_keyword__set_description (integer,varchar)
+create or replace function content_keyword__set_description (integer,varchar)
 returns integer as '
 declare
   set_description__keyword_id             alias for $1;  
@@ -74,7 +74,7 @@ end;' language 'plpgsql';
 
 
 -- function is_leaf
-create function content_keyword__is_leaf (integer)
+create or replace function content_keyword__is_leaf (integer)
 returns boolean as '
 declare
   is_leaf__keyword_id             alias for $1;  
@@ -87,11 +87,11 @@ begin
   where
     k.parent_id = is_leaf__keyword_id;
  
-end;' language 'plpgsql';
+end;' language 'plpgsql' stable;
 
 
 -- function new
-create function content_keyword__new (varchar,varchar,integer,integer,timestamptz,integer,varchar,varchar)
+create or replace function content_keyword__new (varchar,varchar,integer,integer,timestamptz,integer,varchar,varchar)
 returns integer as '
 declare
   new__heading                alias for $1;  
@@ -124,7 +124,7 @@ end;' language 'plpgsql';
 
 
 -- procedure delete
-create function content_keyword__delete (integer)
+create or replace function content_keyword__delete (integer)
 returns integer as '
 declare
   delete__keyword_id             alias for $1;  
@@ -143,7 +143,7 @@ end;' language 'plpgsql';
 
 
 -- procedure item_assign
-create function content_keyword__item_assign (integer,integer,integer,integer,varchar)
+create or replace function content_keyword__item_assign (integer,integer,integer,integer,varchar)
 returns integer as '
 declare
   item_assign__item_id                alias for $1;  
@@ -174,7 +174,7 @@ end;' language 'plpgsql';
 
 
 -- procedure item_unassign
-create function content_keyword__item_unassign (integer,integer)
+create or replace function content_keyword__item_unassign (integer,integer)
 returns integer as '
 declare
   item_unassign__item_id                alias for $1;  
@@ -198,6 +198,9 @@ declare
   is_assigned__recurse                alias for $3;  -- default ''none''  
   v_ret                               boolean;    
 begin
+  if is_assigned__recurse is null then 
+	is_assigned__recurse := ''none'';
+  end if;
 
   -- Look for an exact match
   if is_assigned__recurse = ''none'' then
@@ -235,11 +238,11 @@ begin
   raise EXCEPTION ''-20000: The recurse parameter to content_keyword.is_assigned should be \\\'none\\\', \\\'up\\\' or \\\'down\\\''';
   
   return null;
-end;' language 'plpgsql';
+end;' language 'plpgsql' stable;
 
 
 -- function get_path
-create function content_keyword__get_path (integer)
+create or replace function content_keyword__get_path (integer)
 returns text as '
 declare
   get_path__keyword_id             alias for $1;  
@@ -280,8 +283,45 @@ begin
 end;' language 'plpgsql';
 
 
+create or replace function content_keyword__get_path (integer)
+returns text as '
+declare
+  get_path__keyword_id             alias for $1;  
+  v_path                          text default '''';
+  v_is_found                      boolean default ''f'';   
+  v_heading                       cr_keywords.heading%TYPE;
+  v_rec                           record;
+begin
+--               select
+--                 heading 
+--               from (
+--                  select 
+--                    heading, level as tree_level
+--                  from cr_keywords
+--                    connect by prior parent_id = keyword_id
+--                    start with keyword_id = get_path.keyword_id) k 
+--                order by 
+--                  tree_level desc 
 
--- show errors
+  for v_rec in select heading 
+               from (select k2.heading, tree_level(k2.tree_sortkey) as tree_level
+                     from cr_keywords k1, cr_keywords k2
+                     where k1.keyword_id = get_path__keyword_id
+                       and k1.tree_sortkey between k2.tree_sortkey and tree_right(k2.tree_sortkey)) k
+                order by tree_level desc 
+  LOOP
+      v_heading := v_rec.heading;
+      v_is_found := ''t'';
+      v_path := v_path || ''/'' || v_heading;
+  end LOOP;
+
+  if v_is_found = ''f'' then
+    return null;
+  else
+    return v_path;
+  end if;
+ 
+end;' language 'plpgsql' stable strict;
 
 
 -- Ensure that the context_id in acs_objects is always set to the
