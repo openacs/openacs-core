@@ -6,19 +6,24 @@
 # specifically the script does the following:
 #
 # 1) Checks that the info in the catalog filename matches info in
-# its xml content (package_key, locale and charset).
+#    its xml content (package_key, locale and charset).
 # 
 # 2) Checks that the set of keys in the message catalog is identical to the
-# set of keys in the adp, info, sql, and tcl files in the package.
+#    set of keys in the adp, info, sql, and tcl files in the package.
 #
 # 3) Checks that the set of keys in non-en_US catalog files is present
 #    in the en_US catalog file of the package.
+#
+# 4) Checks that all keys in non-en_US catalog files are present in the en_US one.
+#
+# 5) Checks that the package version in every catalog file is consistent with what
+#    is in the corresponding info file.
 #
 # The scripts assumes that message lookups in adp and info files are 
 # on the format #package_key.message_key#, and that message lookups 
 # in tcl files are always done with the underscore procedure. 
 #
-# usage: check-catalog.sh [package_key]
+# usage: check-catalog.sh [package_key package_key ...]
 #
 # @author Peter Marklund (peter@collaboraid.biz)
 
@@ -28,10 +33,24 @@ get_catalog_keys() {
     echo $(${script_path}/mygrep '<msg key="([^"]+)"' $file_name)
 }
 
+check_package_version_of_catalog_files() {
+    
+    info_file_package_version=$(cat ${package_key}.info | ${script_path}/mygrep '<version name="([^"]+)"')
+
+    for catalog_file in $(ls catalog/${package_key}*.xml)
+    do
+        catalog_package_version=$(cat $catalog_file | ${script_path}/mygrep '<message_catalog .*package_version="([^"]+)"')
+
+        if [ ! "$info_file_package_version" == "$catalog_package_version" ]; then
+            echo "$0: $package_key - Warning: package version $catalog_package_version in file $catalog_file does not equal version $info_file_package_version in info file."
+        fi
+    done
+}
+
 check_consistency_non_en_US_files() {
     en_US_file=catalog/${package_key}.en_US.ISO-8859-1.xml
 
-    for file_name in $(ls catalog/*.xml | grep -v 'en_US.ISO-8859-1.xml')
+    for file_name in $(ls catalog/${package_key}*.xml | grep -v 'en_US.ISO-8859-1.xml')
     do
         echo "$0: $package_key - checking that keys in $file_name are also in en_US catalog file"
 
@@ -95,38 +114,39 @@ if [ "$#" == "0" ]; then
     done
 
     exit 0
-
-elif [ "$#" == "1" ]; then
-    # Package key provided
-    export package_key=$1
-else
-    echo "$0: Error - invoked with more than one argument, this script only accepts one argument, exiting."
-    exit 1
 fi
 
-# Check that the catalog file exists
-catalog_file_path="${packages_dir}${package_key}/catalog/${package_key}.en_US.ISO-8859-1.xml"
-if [ ! -e $catalog_file_path ]; then
-    echo "$0: Error - the file $catalog_file_path in package $package_key doesn't exist, exiting"
-    exit 1
-fi
-
-package_path="${script_path}/../../${package_key}"
-cd $package_path
-
-for file_name in $(ls catalog/*.xml)
+for package_key in "$@"
 do
-    echo "$0: $package_key - checking filename consistency of catalog file $file_name"
-    ${script_path}/check-catalog-file-path.pl "${package_path}/${file_name}"
+    export package_key
+
+    # Check that the catalog file exists
+    catalog_file_path="${packages_dir}${package_key}/catalog/${package_key}.en_US.ISO-8859-1.xml"
+    if [ ! -e $catalog_file_path ]; then
+        echo "$0: Error - the file $catalog_file_path in package $package_key doesn't exist, exiting"
+        exit 1
+    fi
+
+    package_path="${script_path}/../../${package_key}"
+    cd $package_path
+
+    for file_name in $(ls catalog/*.xml)
+    do
+        echo "$0: $package_key - checking filename consistency of catalog file $file_name"
+        ${script_path}/check-catalog-file-path.pl "${package_path}/${file_name}"
+    done
+
+    echo "$0: $package_key - checking en_US catalog keys are in lookups"
+    check_catalog_keys_have_lookups
+
+    echo "$0: $package_key - checking tcl lookups are in en_US catalog file"
+    check_tcl_file_lookups_are_in_catalog
+
+    echo "$0: $package_key - checking adp lookups are in en_US catalog file"
+    check_adp_file_lookups_are_in_catalog
+
+    check_consistency_non_en_US_files
+
+    echo "$0: $package_key - checking that package version in each catalog file is consistent with package version in corresponding info file"
+    check_package_version_of_catalog_files
 done
-
-echo "$0: $package_key - checking en_US catalog keys are in lookups"
-check_catalog_keys_have_lookups
-
-echo "$0: $package_key - checking tcl lookups are in en_US catalog file"
-check_tcl_file_lookups_are_in_catalog
-
-echo "$0: $package_key - checking adp lookups are in en_US catalog file"
-check_adp_file_lookups_are_in_catalog
-
-check_consistency_non_en_US_files
