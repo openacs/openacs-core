@@ -689,7 +689,7 @@ end;' language 'plpgsql';
 
 -- function receives_alerts_p
 create function acs_user__receives_alerts_p (integer)
-returns integer as '
+returns boolean as '
 declare
   receives_alerts_p__user_id                alias for $1;  
   counter                                   boolean;       
