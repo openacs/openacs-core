@@ -114,10 +114,6 @@ ad_form -extend -name register -on_request {
         }
     }
 
-    # Insert eabis user information
-    db_dml eabis_user_info "insert into eabis_user_info (organization, position,user_id,institution_short_name,responsibilities,role) values (:organization,:position,:user_id,:institution_short_name,:responsibilities,:role)"
-
-
     # Handle registration problems
     
     switch $creation_info(creation_status) {
