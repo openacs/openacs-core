@@ -6,31 +6,20 @@ ad_proc content_search__datasource {
 } {
     db_0or1row revisions_datasource {
 	select r.revision_id as object_id, 
-	       r.title as title, 
-	       r.content as content,
-               r.lob as lob,
+	       r.title,
+               case i.storage_type
+                    when 'lob' then r.lob::text
+                    when 'file' then '[cr_fs_path]' || r.content
+                    when 'text' then r.content
+                    else r.content
+               end as content,
 	       r.mime_type as mime,
 	       '' as keywords,
-	       i.storage_type as storage
+	       i.storage_type
 	from cr_revisions r, cr_items i
 	where revision_id = :object_id
         and i.item_id = r.item_id
     } -column_array datasource
-
-    switch $datasource(storage) {
-        lob {
-            db_with_handle db {
-                set datasource(content) [ns_pg blob_get $db $datasource(lob)]
-            }
-        }
-
-        file {
-            set fh [open [cr_fs_path]/$content r]
-            fconfigure $fh -translation binary
-            set datasource(content) [read $fh]
-            close $fh
-        }
-    }
 
     return [array get datasource]
 }
@@ -66,13 +55,12 @@ ad_proc image_search__datasource {
 	select r.revision_id as object_id, 
 	       r.title as title, 
 	       r.description as content,
-               r.lob as lob,
 	       r.mime_type as mime,
 	       '' as keywords,
-	       i.storage_type as storage
-	from cr_revisions r, cr_items i
+	       'text' as storage_type
+	from cr_revisions r
 	where revision_id = :object_id
-        and i.item_id = r.item_id
+
     } -column_array datasource
 
     return [array get datasource]
@@ -109,30 +97,19 @@ ad_proc template_search__datasource {
     db_0or1row revisions_datasource {
 	select r.revision_id as object_id, 
 	       r.title as title, 
-	       r.content as content,
-               r.lob as lob,
+               case i.storage_type
+                    when 'lob' then r.lob::text
+                    when 'file' then '[cr_fs_path]' || r.content
+                    when 'text' then r.content
+                    else r.content
+               end as content,
 	       r.mime_type as mime,
 	       '' as keywords,
-	       i.storage_type as storage
+	       i.storage_type
 	from cr_revisions r, cr_items i
 	where revision_id = :object_id
         and i.item_id = r.item_id
     } -column_array datasource
-
-    switch $datasource(storage) {
-        lob {
-            db_with_handle db {
-                set datasource(content) [ns_pg blob_get $db $datasource(lob)]
-            }
-        }
-
-        file {
-            set fh [open [cr_fs_path]/$content r]
-            fconfigure $fh -translation binary
-            set datasource(content) [read $fh]
-            close $fh
-        }
-    }
 
     return [array get datasource]
 }

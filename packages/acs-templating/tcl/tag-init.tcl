@@ -406,3 +406,66 @@ template_tag formtemplate { chunk params } {
 
   template::adp_append_string "</form>"
 }
+
+
+# @private tag_child
+#
+# Implements the <tt>child</tt> tag which renders a child item.
+# See the Developer Guide for more information. <br>
+# The child tag format is 
+# <blockquote><tt>
+# &lt;child tag=<i>tag</i> index=<i>n embed args</i>&gt;
+# </blockquote>
+#
+# @param params  The ns_set id for extra HTML parameters
+
+template_tag child { params } {
+  publish::process_tag child $params
+}
+
+# @private tag_relation
+#
+# Implements the <tt>relation</tt> tag which renders a related item.
+# See the Developer Guide for more information. <br>
+# The relation tag format is 
+# <blockquote><tt>
+# &lt;relation tag=<i>tag</i> index=<i>n embed args</i>&gt;
+# </tt></blockquote>
+#
+# @param params  The ns_set id for extra HTML parameters
+
+template_tag relation { params } {
+  publish::process_tag relation $params
+}
+
+
+# @private tag_content
+#
+# Implements the <tt>content</tt> tag which renders the content
+# of the current item.
+# See the Developer Guide for more information. <br>
+# The content tag format is simply <tt>&lt;content&gt;</tt>. The
+# <tt>embed</tt> and <tt>no_merge</tt> parameters are implicit to
+# the tag.
+#
+# @param params  The ns_set id for extra HTML parameters
+
+template_tag content { params } {
+
+  # Get item id/revision_id
+  set item_id [publish::get_main_item_id]
+  set revision_id [publish::get_main_revision_id]
+
+  # Concatenate all other keys into the extra arguments list
+  set extra_args [publish::set_to_pairs $params]
+
+  # Add code to flush the cache
+
+  # Render the item, return the html
+  set    command "publish::get_html_body \[publish::handle_item"
+  append command " \$::content::item_id"
+  append command " -html \{$extra_args\} -no_merge -embed"
+  append command " -revision_id \[publish::get_main_revision_id\]\]"
+
+  template::adp_append_code "append __adp_output \[$command\]" 
+}

@@ -1275,7 +1275,7 @@ drop function inline_2 ();
 -- show errors
 
 -- prompt *** Preparing search indices...
--- \i content-search.sql
+\i content-search.sql
 
 
 

@@ -82,6 +82,7 @@
             <file type="data_model" db_type="postgresql" path="sql/postgresql/packages-create.sql"/>
             <file type="data_model" db_type="postgresql" path="sql/postgresql/types-create.sql"/>
             <file type="data_model" db_type="postgresql" path="sql/postgresql/types-drop.sql"/>
+            <file type="data_model_upgrade" db_type="postgresql" path="sql/postgresql/upgrade/upgrade-4.1-4.1.2.sql"/>
             <file type="query_file" db_type="oracle" path="tcl/acs-content-repository-init-oracle.xql"/>
             <file type="query_file" db_type="postgresql" path="tcl/acs-content-repository-init-postgresql.xql"/>
             <file type="tcl_init" path="tcl/acs-content-repository-init.tcl"/>
@@ -93,9 +94,18 @@
             <file type="query_file" db_type="postgresql" path="tcl/filter-procs-postgresql.xql"/>
             <file type="tcl_procs" path="tcl/filter-procs.tcl"/>
             <file type="query_file" path="tcl/filter-procs.xql"/>
+            <file type="query_file" db_type="oracle" path="tcl/item-procs-oracle.xql"/>
+            <file type="query_file" db_type="postgresql" path="tcl/item-procs-postgresql.xql"/>
+            <file type="tcl_procs" path="tcl/item-procs.tcl"/>
+            <file type="query_file" path="tcl/item-procs.xql"/>
+            <file type="query_file" db_type="oracle" path="tcl/publish-procs-oracle.xql"/>
+            <file type="query_file" db_type="postgresql" path="tcl/publish-procs-postgresql.xql"/>
+            <file type="tcl_procs" path="tcl/publish-procs.tcl"/>
+            <file type="query_file" path="tcl/publish-procs.xql"/>
             <file type="query_file" db_type="oracle" path="tcl/revision-procs-oracle.xql"/>
             <file type="query_file" db_type="postgresql" path="tcl/revision-procs-postgresql.xql"/>
             <file type="tcl_procs" path="tcl/revision-procs.tcl"/>
+            <file type="tcl_procs" path="tcl/search-procs.tcl"/>
             <file type="documentation" path="www/doc/api/content.html"/>
             <file type="documentation" path="www/doc/api/extlink.html"/>
             <file type="documentation" path="www/doc/api/folder.html"/>
@@ -137,9 +147,14 @@
             <file type="documentation" path="www/doc/style.css"/>
             <file type="documentation" path="www/doc/todo.html"/>
             <file type="documentation" path="www/doc/uninstall.html"/>
+            <file type="query_file" db_type="oracle" path="www/index-oracle.xql"/>
+            <file type="query_file" db_type="postgresql" path="www/index-postgresql.xql"/>
+            <file path="www/index.vuh"/>
+            <file type="query_file" path="www/index.xql"/>
         </files>
         <parameters>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="TemplateRoot"  default="templates" description="The directory to which templates are published and from where they are retrieved when a page is served. If the value does not start with a '/', it is taken to be relative to [acs_root_dir]. Packages that use the content-repository can override this setting by defining their own TemplateRoot parameter." section_name="templates"/>
         </parameters>
+
     </version>
 </package>
