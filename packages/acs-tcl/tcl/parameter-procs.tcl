@@ -43,17 +43,40 @@ namespace eval parameter {
         @param parameter which parameter's value to get
         @param default what to return if we don't find a value
     } {
+
         if {[empty_string_p $package_id]} {
             ::set package_id [ad_requested_object_id]
         }
 
-        # 1. check the parameter cache
-        ::set value [ad_parameter_cache $package_id $parameter]
+	::set package_key ""
+	::set value ""
+	if {![empty_string_p $package_id]} {
+	    # This can fail at server startup--OpenACS calls parameter::get to
+	    # get the size of the util_memoize cache so it can setup the cache.
+	    # apm_package_key_from_id needs that cache, but on server start 
+	    # when the toolkit tries to get the parameter for the cache size
+	    # the cache doesn't exist yet, so apm_package_key_from_id fails
+	    catch {
+		::set package_key [apm_package_key_from_id $package_id]
+	    }
+	}
 
-        # 2. use the default value
+	# If I convert the package_id to a package_key, is there a parameter by this
+	# name in the parameter file?  If so, it takes precedence.
+	# 1. use the parameter file
+	if {![empty_string_p $package_key]} {
+	    ::set value [ad_parameter_from_file $parameter $package_key]
+	}
+
+        # 2. check the parameter cache
+        if {[empty_string_p $value]} {
+	    ::set value [ad_parameter_cache $package_id $parameter]
+	}
+        # 3. use the default value
         if {[empty_string_p $value]} {
             ::set value $default
         }
+
 
         return $value
     }
