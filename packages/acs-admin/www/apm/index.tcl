@@ -21,7 +21,7 @@ set my_email [db_string email_by_user_id {
 set dimensional_list {
     {
         supertype "Package Type:" apm_application {
-	    { apm_application "Applications" { where "t.package_type = 'apm_application'" } }
+	    { apm_application "Applications" { where "[db_map apm_application]" } }
 	    { apm_service "Services" { where "t.package_type = 'apm_service'"} }
 	    { all "All" {} }
 	}
@@ -29,19 +29,14 @@ set dimensional_list {
     {
 
 	owned_by "Owned by:" everyone {
-	    { me "Me" {where "exists (select 1 from apm_package_owners o where o.version_id = v.version_id and owner_uri='mailto:$my_email')"} }
+	    { me "Me" {where "[db_map everyone]"} }
 	    { everyone "Everyone" {where "1 = 1"} }
 	}
     }
     {
 	status "Status:" all {
 	    {
-		latest "Latest" {where "
-                    (installed_p = 't' or enabled_p = 't' or not exists (
-                        select 1 from apm_package_versions v2
-                        where v2.package_key = v.package_key
-                        and (v2.installed_p = 't' or v2.enabled_p = 't')
-		and apm_package_version.sortable_version_name(v2.version_name) > apm_package_version.sortable_version_name(v.version_name)))"}
+		latest "Latest" {where "[db_map latest]" }
 	    }
 	    { all "All" {where "1 = 1"} }
 	}
