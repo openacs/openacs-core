@@ -799,26 +799,26 @@ ad_proc -private rp_handler {} {
     }
 
     foreach {root path} $paths {
-      ad_call_proc_if_exists ds_comment "rp_handler: trying rp_serve_abstract_file $root / $path "
-      ad_try {
-	rp_serve_abstract_file "$root/$path"
-	set tcl_url2file([ad_conn url]) [ad_conn file]
-	set tcl_url2path_info([ad_conn url]) [ad_conn path_info]
-      } notfound val {
-          ad_call_proc_if_exists ds_comment "rp_handler: not found"
-          ad_call_proc_if_exists ds_add rp [list transformation [list notfound "$root / $path" $val] $startclicks [clock clicks -milliseconds]]
-	continue
-      } redirect url {
-          ad_call_proc_if_exists ds_comment "rp_handler: redirect"
-          ad_call_proc_if_exists ds_add rp [list transformation [list redirect $root/$path $url] $startclicks [clock clicks -milliseconds]]
-	ad_returnredirect $url
-      } directory dir_index {
-          ad_call_proc_if_exists ds_comment "rp_handler: dir_index"
-          ad_call_proc_if_exists ds_add rp [list transformation [list directory $root/$path $dir_index] $startclicks [clock clicks -milliseconds]]
-	continue
-      }
-
-      return
+        ad_call_proc_if_exists ds_add rp [list notice "Trying rp_serve_abstract_file $root/$path" $startclicks [clock clicks -milliseconds]]
+        ad_try {
+            rp_serve_abstract_file "$root/$path"
+            set tcl_url2file([ad_conn url]) [ad_conn file]
+            set tcl_url2path_info([ad_conn url]) [ad_conn path_info]
+        } notfound val {
+            ad_call_proc_if_exists ds_add rp [list notice "File $root/$path: Not found" $startclicks [clock clicks -milliseconds]]
+            ad_call_proc_if_exists ds_add rp [list transformation [list notfound "$root / $path" $val] $startclicks [clock clicks -milliseconds]]
+            continue
+        } redirect url {
+            ad_call_proc_if_exists ds_add rp [list notice "File $root/$path: Redirect" $startclicks [clock clicks -milliseconds]]
+            ad_call_proc_if_exists ds_add rp [list transformation [list redirect $root/$path $url] $startclicks [clock clicks -milliseconds]]
+            ad_returnredirect $url
+        } directory dir_index {
+            ad_call_proc_if_exists ds_add rp [list notice "File $root/$path: Directory index" $startclicks [clock clicks -milliseconds]]
+            ad_call_proc_if_exists ds_add rp [list transformation [list directory $root/$path $dir_index] $startclicks [clock clicks -milliseconds]]
+            continue
+        }
+        
+        return
     }
 
     if {[info exists dir_index]
