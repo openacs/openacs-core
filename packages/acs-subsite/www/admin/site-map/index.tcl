@@ -231,7 +231,7 @@ db_foreach nodes_select {} {
         </form>
       "
   } else {
-      doc_body_append "<a href=\"$url\">$object_name</a>"
+      doc_body_append "<a href=\"$url\">[lang::util::localize $object_name]</a>"
   }
 
   if {![empty_string_p $object_id] || $new_application != $node_id } {
