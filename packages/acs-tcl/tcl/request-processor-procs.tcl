@@ -589,8 +589,18 @@ ad_proc -private rp_filter { why } {
     # ns_log Notice "OACS= RP end"
 
     # Set locale and language of the request. We need ad_conn user_id to be set at this point
-    ad_conn -set locale [lang::conn::locale]
-    ad_conn -set language [lang::conn::language]
+    if { [catch {
+        ad_conn -set locale [lang::conn::locale]
+        ad_conn -set language [lang::conn::language]
+    }] } {
+        # acs-lang doesn't seem to be installed. Even though it must be installed now,
+        # the problem is that if it isn't, everything breaks. So we wrap it in
+        # a catch, and set locale and language to the empty strings.
+        # This is a temporary work-around until it's reasonably safe
+        # to assume that most people have added acs-lang to their system.
+        ad_conn -set locale ""
+        ad_conn -set language ""
+    }
 
     #####
     #
