@@ -1,18 +1,18 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html><head><meta content="text/html; charset=ISO-8859-1" http-equiv="Content-Type"><title>OpenACS 4 Object Model Design</title><meta name="generator" content="DocBook XSL Stylesheets V1.50.0"><link rel="home" href="index.html" title="OpenACS Documentation"><link rel="up" href="kernel-doc.html" title="Chapter 11. Kernel Documentation"><link rel="previous" href="object-system-requirements.html" title="OpenACS 4 Object Model Requirements"><link rel="next" href="permissions-requirements.html" title="OpenACS 4 Permissions Requirements"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="images/alex.jpg" border="0"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="object-system-requirements.html">Prev</a>&nbsp;</td><th width="60%" align="center">Chapter 11. Kernel Documentation</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="permissions-requirements.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><h2 class="title" style="clear: both"><a name="object-system-design"></a>OpenACS 4 Object Model Design</h2></div></div><div class="authorblurb"><p>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>OpenACS 4 Object Model Design</title><meta name="generator" content="DocBook XSL Stylesheets V1.58.1"><link rel="home" href="index.html" title="OpenACS Documentation"><link rel="up" href="kernel-doc.html" title="Chapter 11. Kernel Documentation"><link rel="previous" href="object-system-requirements.html" title="OpenACS 4 Object Model Requirements"><link rel="next" href="permissions-requirements.html" title="OpenACS 4 Permissions Requirements"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="images/alex.jpg" border="0"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="object-system-requirements.html">Prev</a>&amp;nbsp;</td><th width="60%" align="center">Chapter 11. Kernel Documentation</th><td width="20%" align="right">&amp;nbsp;<a accesskey="n" href="permissions-requirements.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><h2 class="title" style="clear: both"><a name="object-system-design"></a>OpenACS 4 Object Model Design</h2></div></div><div class="authorblurb"><p>
 by <a href="mailto:psu@arsdigita.com" target="_top">Pete Su</a>,
    <a href="mailto:mcyoon@arsdigita.com" target="_top">Michael Yoon</a>,
    <a href="mailto:richardl@arsdigita.com" target="_top">Richard Li</a>
    and <a href="mailto:rhs@arsdigita.com" target="_top">Rafael Schloming</a><br>
           OpenACS docs are written by the named authors, but may be edited
           by OpenACS documentation staff.
-        </p></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="object-system-design-essentials"></a>Essentials</h3></div></div><div class="sect3"><div class="titlepage"><div><h4 class="title"><a name="objects-design-data-model"></a>Data Model</h4></div></div><div class="itemizedlist"><ul type="disc"><li><p><a href="/doc/sql/display-sql?url=acs-metadata-create.sql&amp;package_key=acs-kernel" target="_top">
+        </p></div><div class="sect2" lang="en"><div class="titlepage"><div><h3 class="title"><a name="object-system-design-essentials"></a>Essentials</h3></div></div><div class="sect3" lang="en"><div class="titlepage"><div><h4 class="title"><a name="objects-design-data-model"></a>Data Model</h4></div></div><div class="itemizedlist"><ul type="disc"><li><p><a href="/doc/sql/display-sql?url=acs-metadata-create.sql&amp;package_key=acs-kernel" target="_top">
 acs-metadata-create.sql</a></p></li><li><p><a href="/doc/sql/display-sql?url=acs-objects-create.sql&amp;package_key=acs-kernel" target="_top">
 acs-objects-create.sql</a></p></li><li><p><a href="/doc/sql/display-sql?url=acs-relationships-create.sql&amp;package_key=acs-kernel" target="_top">
-acs-relationships-create.sql</a></p></li></ul></div></div><div class="sect3"><div class="titlepage"><div><h4 class="title"><a name="objects-design-tcl-files"></a>Tcl Files</h4></div></div><p><span class="emphasis"><em>Not yet linked.</em></span></p></div><div class="sect3"><div class="titlepage"><div><h4 class="title"><a name="objects-design-requirements"></a>Requirements</h4></div></div><div class="itemizedlist"><ul type="disc"><li><p><a href="object-system-requirements.html" title="OpenACS 4 Object Model Requirements">Object Model
+acs-relationships-create.sql</a></p></li></ul></div></div><div class="sect3" lang="en"><div class="titlepage"><div><h4 class="title"><a name="objects-design-tcl-files"></a>Tcl Files</h4></div></div><p><span class="emphasis"><em>Not yet linked.</em></span></p></div><div class="sect3" lang="en"><div class="titlepage"><div><h4 class="title"><a name="objects-design-requirements"></a>Requirements</h4></div></div><div class="itemizedlist"><ul type="disc"><li><p><a href="object-system-requirements.html" title="OpenACS 4 Object Model Requirements">Object Model
 Requirements</a></p></li><li><p><a href="groups-requirements.html" title="OpenACS 4 Groups Requirements">Groups
 Requirements</a></p></li><li><p><a href="permissions-requirements.html" title="OpenACS 4 Permissions Requirements">Permissions
-Requirements</a></p></li></ul></div></div></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="object-system-design-introduction"></a>Introduction</h3></div></div><p>Before OpenACS 4, software developers writing OpenACS applications or modules
+Requirements</a></p></li></ul></div></div></div><div class="sect2" lang="en"><div class="titlepage"><div><h3 class="title"><a name="object-system-design-introduction"></a>Introduction</h3></div></div><p>Before OpenACS 4, software developers writing OpenACS applications or modules
 would develop each data model separately. However, many applications built on
 OpenACS share certain characteristics or require certain common services.
 Examples of such services include:</p><div class="itemizedlist"><ul type="disc"><li><p>User comments</p></li><li><p>Storage of user-defined or extensible sets of attributes</p></li><li><p>Access control</p></li><li><p>General auditing and bookkeeping (e.g. creation date, IP addresses, and
@@ -37,9 +37,9 @@ allow developers to customize the data that is stored with each object.
 object type (e.g. users) to instances of another object type (e.g.
 groups).
 </p></li></ul></div><p>The next section will explore these facilities in the context of the the
-particular programming idioms that we wish to generalize.</p><p><span class="strong"><em>Related Links</em></span></p><p>This design document should be read along with the design documents for <a href="groups-design.html" title="OpenACS 4 Groups Design">the new groups system</a>, <a href="subsites-design.html" title="OpenACS 4 Subsites Design Document">subsites</a> and <a href="permissions-design.html" title="OpenACS 4 Permissions Design">the permissions system</a></p></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="object-system-design-history"></a>History</h3></div></div><p>The motivation for most of the facilities in the OpenACS 4 Object Model can be
+particular programming idioms that we wish to generalize.</p><p><span class="strong">Related Links</span></p><p>This design document should be read along with the design documents for <a href="groups-design.html" title="OpenACS 4 Groups Design">the new groups system</a>, <a href="subsites-design.html" title="OpenACS 4 Subsites Design Document">subsites</a> and <a href="permissions-design.html" title="OpenACS 4 Permissions Design">the permissions system</a></p></div><div class="sect2" lang="en"><div class="titlepage"><div><h3 class="title"><a name="object-system-design-history"></a>History</h3></div></div><p>The motivation for most of the facilities in the OpenACS 4 Object Model can be
 understood in the context of the 3.x code base and the kinds of programming
-idioms that evolved there. These are listed and discussed below.</p><div class="sect3"><div class="titlepage"><div><h4 class="title"><a name="objects-design-object-ident"></a>Object Identification</h4></div></div><p>Object identification is a central mechanism in OpenACS 4. Every application
+idioms that evolved there. These are listed and discussed below.</p><div class="sect3" lang="en"><div class="titlepage"><div><h4 class="title"><a name="objects-design-object-ident"></a>Object Identification</h4></div></div><p>Object identification is a central mechanism in OpenACS 4. Every application
 object in OpenACS 4 has a unique ID which is mapped to a row in a central table
 called <tt>acs_objects</tt>. Developers that wish to use OpenACS 4 services
 need only take a few simple steps to make sure that their application objects
@@ -77,14 +77,14 @@ do to take advantage of general services in OpenACS 4 is to use the new API to
 make sure every object the system is to manage is associated with a row in
 <tt>acs_objects</tt>. More importantly, if they do this, new services
 like general comments can be created without requiring existing applications
-to &quot;hook into&quot; them via new metadata.</p><p><span class="strong"><em>Note:</em></span> Object identifiers are a good example of metadata
+to &quot;hook into&quot; them via new metadata.</p><p><span class="strong">Note:</span> Object identifiers are a good example of metadata
 in the new system. Each row in <tt>acs_objects</tt> stores information
 <span class="emphasis"><em>about</em></span> the application object, but not the application object itself.
 This becomes more clear if you skip ahead and look at the SQL schema code
-that defines this table.</p></div><div class="sect3"><div class="titlepage"><div><h4 class="title"><a name="objects-design-obj-context"></a>Object Context and Access Control</h4></div></div><p>Until the implementation of the general permissions system, every OpenACS
+that defines this table.</p></div><div class="sect3" lang="en"><div class="titlepage"><div><h4 class="title"><a name="objects-design-obj-context"></a>Object Context and Access Control</h4></div></div><p>Until the implementation of the general permissions system, every OpenACS
 application had to manage access control to its data separately. Later on, a
 notion of &quot;scoping&quot; was introduced into the core data model.</p><p>&quot;Scope&quot; is a term best explained by example. Consider some
-hypothetical rows in the <tt>address_book</tt> table:</p><blockquote class="blockquote"><div class="informaltable"><table border="1"><colgroup><col><col><col></colgroup><tbody><tr><td><span class="strong"><em>...</em></span></td><td><span class="strong"><em><tt>scope</tt></em></span></td><td><span class="strong"><em><tt>user_id</tt></em></span></td><td><span class="strong"><em><tt>group_id</tt></em></span></td><td><span class="strong"><em>...</em></span></td></tr><tr><td>...</td><td><tt>user</tt></td><td><tt>123</tt></td><td> </td><td>...</td></tr><tr><td>...</td><td><tt>group</tt></td><td> </td><td><tt>456</tt></td><td>...</td></tr><tr><td>...</td><td><tt>public</tt></td><td> </td><td> </td><td>...</td></tr></tbody></table></div></blockquote><p>The first row represents an entry in User 123's personal address book,
+hypothetical rows in the <tt>address_book</tt> table:</p><div class="blockquote"><blockquote class="blockquote"><div class="informaltable"><table border="1"><colgroup><col><col><col></colgroup><tbody><tr><td><span class="strong">...</span></td><td><span class="strong"><tt>scope</tt></span></td><td><span class="strong"><tt>user_id</tt></span></td><td><span class="strong"><tt>group_id</tt></span></td><td><span class="strong">...</span></td></tr><tr><td>...</td><td><tt>user</tt></td><td><tt>123</tt></td><td> </td><td>...</td></tr><tr><td>...</td><td><tt>group</tt></td><td> </td><td><tt>456</tt></td><td>...</td></tr><tr><td>...</td><td><tt>public</tt></td><td> </td><td> </td><td>...</td></tr></tbody></table></div></blockquote></div><p>The first row represents an entry in User 123's personal address book,
 the second row represents an entry in User Group 456's shared address
 book, and the third row represents an entry in the site's public address
 book.</p><p>In this way, the scoping columns identify the security context in which a
@@ -106,7 +106,7 @@ to an object's context if there is no information about user X's
 permission to perform action Y on object Z.</p><p>The context system forms the basis for the rest of the OpenACS access control
 system, which is described in in two separate documents: one for the <a href="permissions-design.html" title="OpenACS 4 Permissions Design">permissions system</a> and another for the
 <a href="groups-design.html" title="OpenACS 4 Groups Design">party groups</a> system. The context system
-is also used to implement <a href="subsites-design.html" title="OpenACS 4 Subsites Design Document">subsites</a>.</p></div><div class="sect3"><div class="titlepage"><div><h4 class="title"><a name="objects-design-obj-types"></a>Object Types</h4></div></div><p>As mentioned above, many OpenACS modules provide extensible data models, and
+is also used to implement <a href="subsites-design.html" title="OpenACS 4 Subsites Design Document">subsites</a>.</p></div><div class="sect3" lang="en"><div class="titlepage"><div><h4 class="title"><a name="objects-design-obj-types"></a>Object Types</h4></div></div><p>As mentioned above, many OpenACS modules provide extensible data models, and
 need to use application specific mechanisms to keep track of user defined
 attributes and to map application data to these attributes. In the past,
 modules either used user/groups or their own ad hoc data model to provide
@@ -146,7 +146,7 @@ subtype's table), is also a member of the parent type (i.e. there is a
 corresponding row in the parent type table). Therefore, applications an use
 this mechanism without worrying about this bookkeeping themselves, and we
 avoid having applications pollute the core data model with their specific
-information.</p></div><div class="sect3"><div class="titlepage"><div><h4 class="title"><a name="objects-design-attributes"></a>Object Attributes, Skinny Tables</h4></div></div><p>As we described above, the OpenACS 3.x user/groups system stored object
+information.</p></div><div class="sect3" lang="en"><div class="titlepage"><div><h4 class="title"><a name="objects-design-attributes"></a>Object Attributes, Skinny Tables</h4></div></div><p>As we described above, the OpenACS 3.x user/groups system stored object
 attributes in two ways. The first was to use columns in the helper table. The
 second consisted of two tables, one describing attributes and one storing
 values, to provide a flexible means for attaching attributes to metadata
@@ -177,7 +177,7 @@ they will generally be more efficient. Occasionally, a data model will use
 skinny tables because doing so allows developers and users to dynamically
 update the set of attributes stored on an object without updating the data
 model at the code level. The bottom line: Helper tables are more functional
-and more efficient, skinny tables are more flexible but limited.</p></div><div class="sect3"><div class="titlepage"><div><h4 class="title"><a name="objects-design-relation-types"></a>Relation Types</h4></div></div><p>Many OpenACS 3.x modules use <span class="emphasis"><em>mapping tables</em></span> to model relationships
+and more efficient, skinny tables are more flexible but limited.</p></div><div class="sect3" lang="en"><div class="titlepage"><div><h4 class="title"><a name="objects-design-relation-types"></a>Relation Types</h4></div></div><p>Many OpenACS 3.x modules use <span class="emphasis"><em>mapping tables</em></span> to model relationships
 between application objects. Again, the 3.x user/groups system provides the
 canonical example of this design style. In that system, there was a single
 table called <tt>user_group_map</tt> that kept track of which users
@@ -208,9 +208,9 @@ registering this table as a relation type is that in principle the OpenACS 4
 object system could use the meta data in the types table to do useful things
 in a generic way on all relation types. But this mechanism doesn't really
 exist yet.</p><p>Relation types are a somewhat abstract idea. To get a better feel for
-them, you should just skip to the <a href="object-system-design.html#object-system-design-relsmodel">data model</a>.</p></div></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="object-system-design-summary"></a>Summary and Design Considerations</h3></div></div><p>The OpenACS 4 Object Model is designed to generalize and unify the following
+them, you should just skip to the <a href="object-system-design.html#object-system-design-relsmodel">data model</a>.</p></div></div><div class="sect2" lang="en"><div class="titlepage"><div><h3 class="title"><a name="object-system-design-summary"></a>Summary and Design Considerations</h3></div></div><p>The OpenACS 4 Object Model is designed to generalize and unify the following
 mechanisms that are repeatedly implemented in OpenACS-based systems to manage
-generic and application specific metadata:</p><div class="sect3"><div class="titlepage"><div><h4 class="title"><a name="objects-design-why-not-objdb"></a>Why not Object Databases?</h4></div></div><p>The presence of a framework for subtyping and inheritance always brings up
+generic and application specific metadata:</p><div class="sect3" lang="en"><div class="titlepage"><div><h4 class="title"><a name="objects-design-why-not-objdb"></a>Why not Object Databases?</h4></div></div><p>The presence of a framework for subtyping and inheritance always brings up
 the question of why we don't just use an object database. The main reason
 is that all of the major object database vendors ship products that are
 effectively tied to some set of object oriented programming languages. Their
@@ -234,7 +234,7 @@ systems have strange limitations that make using inheritance difficult in
 practice. Finally, object databases are not as widely used as traditional
 relational systems. They have not been tested as extensively and their
 scalability to very large databases is not proven (though some will disagree
-with this statement).</p></div><div class="sect3"><div class="titlepage"><div><h4 class="title"><a name="objects-design-oracle"></a>Oracle</h4></div></div><p>The conclusion: the best design is to add a limited notion of subtyping to
+with this statement).</p></div><div class="sect3" lang="en"><div class="titlepage"><div><h4 class="title"><a name="objects-design-oracle"></a>Oracle</h4></div></div><p>The conclusion: the best design is to add a limited notion of subtyping to
 our existing relational data model. By doing this, we retain all the power of
 the relational data model while gaining the object oriented features we need
 most.</p><p>In the context of OpenACS 4, this means using the object model to make our
@@ -245,9 +245,9 @@ that the data model is not designed to scale to large type hierarchies. In
 the more limited domain of the metadata model, this is acceptable since the
 type hierarchy is fairly small. But the object system data model is not
 designed to support, for example, a huge type tree like the Java runtime
-libraries might define.</p><p>This last point cannot be over-stressed: <span class="strong"><em>the object model is not
-meant to be used for large scale application data storage</em></span>. It is
-meant to represent and store metadata, not application data.</p></div></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="object-system-design-datamodel"></a>Data Model</h3></div></div><p>Like most data models, the OpenACS Core data model has two levels:</p><div class="orderedlist"><ol type="1"><li><p>The <span class="emphasis"><em>knowledge level</em></span> (i.e. the metadata model)</p></li><li><p>The <span class="emphasis"><em>operational level</em></span> (i.e. the concrete data model)</p></li></ol></div><p>
+libraries might define.</p><p>This last point cannot be over-stressed: <span class="strong">the object model is not
+meant to be used for large scale application data storage</span>. It is
+meant to represent and store metadata, not application data.</p></div></div><div class="sect2" lang="en"><div class="titlepage"><div><h3 class="title"><a name="object-system-design-datamodel"></a>Data Model</h3></div></div><p>Like most data models, the OpenACS Core data model has two levels:</p><div class="orderedlist"><ol type="1"><li><p>The <span class="emphasis"><em>knowledge level</em></span> (i.e. the metadata model)</p></li><li><p>The <span class="emphasis"><em>operational level</em></span> (i.e. the concrete data model)</p></li></ol></div><p>
 You can browse the data models themselves from here: 
 </p><div class="itemizedlist"><ul type="disc"><li><p><a href="/doc/sql/display-sql?url=acs-metadata-create.sql&amp;package_key=acs-kernel" target="_top">
 acs-metadata-create.sql</a></p></li><li><p><a href="/doc/sql/display-sql?url=acs-objects-create.sql&amp;package_key=acs-kernel" target="_top">
@@ -258,7 +258,7 @@ knowledge level first. In the text below, we include abbreviated versions of
 the SQL definitions of many tables. Generally, these match the actual
 definitions in the existing data model but they are meant to reflect design
 information, not implementation. Some less relevant columns may be left out,
-and things like constraint names are not included.</p><div class="sect3"><div class="titlepage"><div><h4 class="title"><a name="objects-design-knowledge-level"></a>Knowledge-Level Model</h4></div></div><p>The knowledge level data model for OpenACS objects centers around three tables
+and things like constraint names are not included.</p><div class="sect3" lang="en"><div class="titlepage"><div><h4 class="title"><a name="objects-design-knowledge-level"></a>Knowledge-Level Model</h4></div></div><p>The knowledge level data model for OpenACS objects centers around three tables
 that keep track of object types, attributes, and relation types. The first
 table is <tt>acs_object_types</tt>, shown here in an abbreviated
 form:</p><pre class="programlisting">
@@ -371,7 +371,7 @@ data model in OpenACS 3.x. The <tt>acs_rel_types</tt> table stores
 information about relation types.</p><p>This part of the data model is somewhat analogous to the data dictionary
 in Oracle. The information stored here is primarily metadata that describes
 the data stored in the <a href="object-system-design.html#objects-design-op-level" title="Operational-level Data Model">operational level</a> of the data
-model, which is discussed next.</p></div><div class="sect3"><div class="titlepage"><div><h4 class="title"><a name="objects-design-op-level"></a>Operational-level Data Model</h4></div></div><p>The operational level data model centers around the
+model, which is discussed next.</p></div><div class="sect3" lang="en"><div class="titlepage"><div><h4 class="title"><a name="objects-design-op-level"></a>Operational-level Data Model</h4></div></div><p>The operational level data model centers around the
 <tt>acs_objects</tt> table. This table contains a single row for every
 instance of the type <tt>acs_object</tt>. The table contains the
 object's unique identifier, a reference to its type, security
@@ -442,7 +442,7 @@ As in the 3.x user/groups system, these places include helper tables or
 generic skinny tables.</p><p>This table, along with <tt>acs_attributes</tt> and
 <tt>acs_attribute_values</tt> generalize the old user/group tables
 <tt>user_group_map</tt>, <tt>user_group_member_fields_map</tt> and
-<tt>user_group_member_fields</tt>.</p></div><div class="sect3"><div class="titlepage"><div><h4 class="title"><a name="objects-design-discussion"></a>Summary and Discussion</h4></div></div><p>The core tables in the OpenACS 4 data model store information about instances
+<tt>user_group_member_fields</tt>.</p></div><div class="sect3" lang="en"><div class="titlepage"><div><h4 class="title"><a name="objects-design-discussion"></a>Summary and Discussion</h4></div></div><p>The core tables in the OpenACS 4 data model store information about instances
 of object types and relation types. The <tt>acs_object</tt> table
 provides the central location that contains a single row for every object in
 the system. Services can use this table along with the metadata in stored in
@@ -450,8 +450,8 @@ the knowledge level data model to create, manage, query and manipulate
 objects in a uniform manner. The <tt>acs_rels</tt> table has an analogous
 role in storing information on relations.</p><p>These are all the tables that we'll discuss in this document. The rest
 of the Kernel data model is described in the documents for <a href="subsites-design.html" title="OpenACS 4 Subsites Design Document">subsites</a>, the <a href="permissions-design.html" title="OpenACS 4 Permissions Design">permissions</a> system and for the <a href="groups-design.html" title="OpenACS 4 Groups Design">groups</a> system.</p><p>Some examples of how these tables are used in the system can be found in
-the discussion of the API, which comes next.</p></div></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="object-system-design-api"></a>API</h3></div></div><p>Now we'll examine each piece of the API in detail. Bear in mind that
-the Object Model API is defined primarily through PL/SQL packages.</p><div class="sect3"><div class="titlepage"><div><h4 class="title"><a name="objects-design-object-types"></a>Object Types and Attributes</h4></div></div><p>The object system provides an API for creating new object types and then
+the discussion of the API, which comes next.</p></div></div><div class="sect2" lang="en"><div class="titlepage"><div><h3 class="title"><a name="object-system-design-api"></a>API</h3></div></div><p>Now we'll examine each piece of the API in detail. Bear in mind that
+the Object Model API is defined primarily through PL/SQL packages.</p><div class="sect3" lang="en"><div class="titlepage"><div><h4 class="title"><a name="objects-design-object-types"></a>Object Types and Attributes</h4></div></div><p>The object system provides an API for creating new object types and then
 attaching attributes to them. The procedures <tt>create_type</tt> and
 <tt>drop_type</tt> are used to create and delete type definitions.</p><p>The two calls show up in the package <tt>acs_object_type</tt>.</p><pre class="programlisting">
 
@@ -572,7 +572,7 @@ end;
 automatically be hooked into every generic object service that exists. Better
 still, this code need not be changed as new services are added. As an aside,
 the most important service that requires you to subtype
-<tt>acs_object</tt> is <a href="permissions-design.html" title="OpenACS 4 Permissions Design">permissions</a>.</p></div><div class="sect3"><div class="titlepage"><div><h4 class="title"><a name="objects-design-objects"></a>Objects</h4></div></div><p>The next important piece of the API is defined in the
+<tt>acs_object</tt> is <a href="permissions-design.html" title="OpenACS 4 Permissions Design">permissions</a>.</p></div><div class="sect3" lang="en"><div class="titlepage"><div><h4 class="title"><a name="objects-design-objects"></a>Objects</h4></div></div><p>The next important piece of the API is defined in the
 <tt>acs_object</tt> package, and is concerned with creating and managing
 objects. This part of the API is designed to take care of the mundane
 bookkeeping needed to create objects and query their attributes.
@@ -684,7 +684,7 @@ are represented in the <tt>acs_objects</tt> table. Subsequently, all of
 the general services in OpenACS 4 (i.e. permissions, general comments, and so on)
 are written to work with any object that appears in <tt>acs_objects</tt>.
 Therefore, in general these three steps are sufficient to make OpenACS 4 services
-available to your application.</p></div><div class="sect3"><div class="titlepage"><div><h4 class="title"><a name="objects-design-relat-types"></a>Relation Types</h4></div></div><p>The relations system defines two packages: <tt>acs_rel_type</tt> for
+available to your application.</p></div><div class="sect3" lang="en"><div class="titlepage"><div><h4 class="title"><a name="objects-design-relat-types"></a>Relation Types</h4></div></div><p>The relations system defines two packages: <tt>acs_rel_type</tt> for
 creating and managing relation types, and <tt>acs_rel</tt> for relating
 objects.</p><p>These two procedures just insert and remove roles from the
 <tt>acs_rel_roles</tt> table. This table stores the legal relationship
@@ -855,11 +855,11 @@ group:</p><pre class="programlisting">
   end;
 </tt>
 
-</pre></div><div class="sect3"><div class="titlepage"><div><h4 class="title"><a name="objects-design-discuss"></a>Summary and Discussion</h4></div></div><p>The Object Model's API and data model provides a small set of simple
+</pre></div><div class="sect3" lang="en"><div class="titlepage"><div><h4 class="title"><a name="objects-design-discuss"></a>Summary and Discussion</h4></div></div><p>The Object Model's API and data model provides a small set of simple
 procedures that allow applications to create object types, object instances,
 and object relations. Most of the data model is straightforward; the relation
 type mechanism is a bit more complex, but in return it provides functionality
-on par with the old user/groups system in a more general way.</p></div></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="object-system-design-future"></a>Future Improvements/Areas of Likely Change</h3></div></div><p>Nothing here yet.</p></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="object-system-design-authors"></a>Authors</h3></div></div><p><a href="mailto:psu@arsdigita.com" target="_top">Pete Su</a> generated this document
+on par with the old user/groups system in a more general way.</p></div></div><div class="sect2" lang="en"><div class="titlepage"><div><h3 class="title"><a name="object-system-design-future"></a>Future Improvements/Areas of Likely Change</h3></div></div><p>Nothing here yet.</p></div><div class="sect2" lang="en"><div class="titlepage"><div><h3 class="title"><a name="object-system-design-authors"></a>Authors</h3></div></div><p><a href="mailto:psu@arsdigita.com" target="_top">Pete Su</a> generated this document
 from material culled from other documents by <a href="mailto:mcyoon@arsdigita.com" target="_top">Michael Yoon</a>, <a href="mailto:richardl@arsdigita.com" target="_top">Richard Li</a> and <a href="mailto:rhs@arsdigita.com" target="_top">Rafael Schloming</a>. But, any remaining lies
-are his and his alone.</p></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="object-system-design-revision-hist"></a>Revision History</h3></div></div><div class="informaltable"><table border="1"><colgroup><col><col><col><col></colgroup><tbody><tr><td><span class="strong"><em>Document Revision #</em></span></td><td><span class="strong"><em>Action Taken, Notes</em></span></td><td><span class="strong"><em>When?</em></span></td><td><span class="strong"><em>By Whom?</em></span></td></tr><tr><td>0.1</td><td>Creation</td><td>9/09/2000</td><td>Pete Su</td></tr><tr><td>0.2</td><td>Edited for ACS 4 Beta</td><td>9/30/2000</td><td>Kai Wu</td></tr><tr><td>0.3</td><td>Edited for ACS 4.0.1, fixed some mistakes, removed use of term
-&quot;OM&quot;</td><td>11/07/2000</td><td>Pete Su</td></tr></tbody></table></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="object-system-requirements.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="permissions-requirements.html">Next</a></td></tr><tr><td width="40%" align="left">OpenACS 4 Object Model Requirements&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="kernel-doc.html">Up</a></td><td width="40%" align="right">&nbsp;OpenACS 4 Permissions Requirements</td></tr></table><hr><address>rmello at fslc.usu.edu</address><address><a href="mailto:vinod@kurup.com">vinod@kurup.com</a></address></div><a name="comments"></a><center><a href="http://openacs.org/doc/openacs-4/object-system-design.html#comments">View comments on this page at openacs.org</a></center></body></html>
+are his and his alone.</p></div><div class="sect2" lang="en"><div class="titlepage"><div><h3 class="title"><a name="object-system-design-revision-hist"></a>Revision History</h3></div></div><div class="informaltable"><table border="1"><colgroup><col><col><col><col></colgroup><tbody><tr><td><span class="strong">Document Revision #</span></td><td><span class="strong">Action Taken, Notes</span></td><td><span class="strong">When?</span></td><td><span class="strong">By Whom?</span></td></tr><tr><td>0.1</td><td>Creation</td><td>9/09/2000</td><td>Pete Su</td></tr><tr><td>0.2</td><td>Edited for ACS 4 Beta</td><td>9/30/2000</td><td>Kai Wu</td></tr><tr><td>0.3</td><td>Edited for ACS 4.0.1, fixed some mistakes, removed use of term
+&quot;OM&quot;</td><td>11/07/2000</td><td>Pete Su</td></tr></tbody></table></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="object-system-requirements.html">Prev</a>&amp;nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right">&amp;nbsp;<a accesskey="n" href="permissions-requirements.html">Next</a></td></tr><tr><td width="40%" align="left">OpenACS 4 Object Model Requirements&amp;nbsp;</td><td width="20%" align="center"><a accesskey="u" href="kernel-doc.html">Up</a></td><td width="40%" align="right">&amp;nbsp;OpenACS 4 Permissions Requirements</td></tr></table><hr><address>rmello at fslc.usu.edu</address><address><a href="mailto:vinod@kurup.com">vinod@kurup.com</a></address></div><a name="comments"></a><center><a href="http://openacs.org/doc/openacs-4/object-system-design.html#comments">View comments on this page at openacs.org</a></center></body></html>

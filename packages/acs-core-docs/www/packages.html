@@ -1,17 +1,17 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html><head><meta content="text/html; charset=ISO-8859-1" http-equiv="Content-Type"><title>OpenACS 4.6.2 Packages</title><meta name="generator" content="DocBook XSL Stylesheets V1.50.0"><link rel="home" href="index.html" title="OpenACS Documentation"><link rel="up" href="dev-guide.html" title="Chapter 9. Development Reference"><link rel="previous" href="dev-guide.html" title="Chapter 9. Development Reference"><link rel="next" href="objects.html" title="OpenACS 4.6.2 Data Models and the Object System"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="images/alex.jpg" border="0"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="dev-guide.html">Prev</a>&nbsp;</td><th width="60%" align="center">Chapter 9. Development Reference</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="objects.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><h2 class="title" style="clear: both"><a name="packages"></a>OpenACS 4.6.2 Packages</h2></div></div><div class="authorblurb"><p>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>OpenACS 4.6.2 Packages</title><meta name="generator" content="DocBook XSL Stylesheets V1.58.1"><link rel="home" href="index.html" title="OpenACS Documentation"><link rel="up" href="dev-guide.html" title="Chapter 9. Development Reference"><link rel="previous" href="dev-guide.html" title="Chapter 9. Development Reference"><link rel="next" href="objects.html" title="OpenACS 4.6.2 Data Models and the Object System"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="images/alex.jpg" border="0"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="dev-guide.html">Prev</a>&amp;nbsp;</td><th width="60%" align="center">Chapter 9. Development Reference</th><td width="20%" align="right">&amp;nbsp;<a accesskey="n" href="objects.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><h2 class="title" style="clear: both"><a name="packages"></a>OpenACS 4.6.2 Packages</h2></div></div><div class="authorblurb"><p>
     By Pete Su and Bryan Quinn
   <br>
           OpenACS docs are written by the named authors, but may be edited
           by OpenACS documentation staff.
-        </p></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="packages-overview"></a>Overview</h3></div></div><p>
+        </p></div><div class="sect2" lang="en"><div class="titlepage"><div><h3 class="title"><a name="packages-overview"></a>Overview</h3></div></div><p>
       This document is a guide on how to write a software package for
       OpenACS. OpenACS packages are installed and maintained
       with the OpenACS Package Manager (APM).  This document presents reasons
       for packaging software, conventions for the file system and naming
       that must be followed, and step by step instructions for creating a
       new package for the &quot;Notes&quot; example package.
-    </p></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="packages-why-package"></a>Why package your software?</h3></div></div><p>
+    </p></div><div class="sect2" lang="en"><div class="titlepage"><div><h3 class="title"><a name="packages-why-package"></a>Why package your software?</h3></div></div><p>
       To answer this question, we should examine how OpenACS servers were
       organized in the past. We will assume throughout this document that
       the page root for your server is called <tt>ROOT</tt>.  In OpenACS
@@ -126,7 +126,7 @@ ROOT/
       package. While we're at it, this tool should also automate
       package installation, dependency checking, upgrades, and package
       removal. In OpenACS 4.6.2, this tool is called the APM.
-    </p></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="packages-apm"></a>The APM</h3></div></div><p>
+    </p></div><div class="sect2" lang="en"><div class="titlepage"><div><h3 class="title"><a name="packages-apm"></a>The APM</h3></div></div><p>
       The APM is used to create, maintain, and install packages.  It takes
       care of copying all of the files and registering the package in the
       system.  The APM is responsible for:
@@ -154,7 +154,7 @@ ROOT/
     </p><p>
       We will also discuss how to organize your files and queries so
       they work with the OpenACS Query Dispatcher.
-    </p></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="packages-looks"></a>What a Package Looks Like</h3></div></div><p>
+    </p></div><div class="sect2" lang="en"><div class="titlepage"><div><h3 class="title"><a name="packages-looks"></a>What a Package Looks Like</h3></div></div><p>
       <a class="indexterm" name="baby"></a>
       To illustrate the general structure of a package, let's see what the
       package for the &quot;notes&quot; application should look like. This is shown in
@@ -303,7 +303,7 @@ ROOT/
           <tt>index.adp</tt>.</td><td><tt>/www/index.tcl</tt></td></tr><tr><td>Package Specification File</td><td>The package specification file is an XML file generated and
           maintained by the OpenACS Package Manager (APM).  It specifies
           information about the package including its parameters and its
-          files.</td><td><tt>notes.info</tt></td></tr></tbody></table></div></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="packages-making-a-package"></a>Making a Package</h3></div></div><p>
+          files.</td><td><tt>notes.info</tt></td></tr></tbody></table></div></div><div class="sect2" lang="en"><div class="titlepage"><div><h3 class="title"><a name="packages-making-a-package"></a>Making a Package</h3></div></div><p>
       Here is how you make a package.
     </p><div class="orderedlist"><ol type="1"><li><p>Login as a site-wide administrator on your web service.
     </p></li><li><p>Go to the package manager on your server.  The URL is <a href="/acs-admin/apm" target="_top">/acs-admin/apm</a>.
@@ -414,7 +414,7 @@ ROOT/
     </pre></li><li><p>
       Now you can start developing the package. In addition to writing code,
       you should also consider the tasks outlined in the <a href="http://acs40.arsdigita.com/acs40-project-central/package-submission.html" target="_top">package submission guidelines</a>.
-    </p></li></ol></div></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="packages-subsites"></a>The Site Map and Package Instances</h3></div></div><p>
+    </p></li></ol></div></div><div class="sect2" lang="en"><div class="titlepage"><div><h3 class="title"><a name="packages-subsites"></a>The Site Map and Package Instances</h3></div></div><p>
       At this point, you are probably excited to see your new package in
       action. But, we haven't added any user visible pages yet. By
       convention, user visible pages go in the
@@ -478,7 +478,7 @@ http://your-server.your-domain.com/notes/hello.html
       later document, we'll see how to write your application so that the
       code can detect from what URL it was invoked. This is the key
       to supporting <a href="subsites.html" title="Writing OpenACS 4.6.2 Application Pages">subsites</a>.
-    </p></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="packages-summary"></a>Summary</h3></div></div><p>
+    </p></div><div class="sect2" lang="en"><div class="titlepage"><div><h3 class="title"><a name="packages-summary"></a>Summary</h3></div></div><p>
       The APM performs the following tasks in an OpenACS site:
     </p><div class="itemizedlist"><ul type="disc"><li><p>
       Manages creation, installation, and removal of packages from the
@@ -493,4 +493,4 @@ http://your-server.your-domain.com/notes/hello.html
     </p></li><li><p>
       Writes out package distribution files for other people to download and
       install. We'll cover this later.
-    </p></li></ul></div></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="packages-add-reading"></a>Additional Reading</h3></div></div><div class="itemizedlist"><ul type="disc"><li><p><a href="apm-design.html">OpenACS 4.6.2 Package Manager Design</a></p></li><li><p><a href="apm-requirements.html">OpenACS 4.6.2 Package Manager Requirements</a></p></li><li><p><a href="http://acs40.arsdigita.com/acs40-project-central/package-submission.html" target="_top">Package submission guidelines</a></p></li></ul></div><p><div class="cvstag">($Id$)</div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="dev-guide.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="objects.html">Next</a></td></tr><tr><td width="40%" align="left">Chapter 9. Development Reference&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="dev-guide.html">Up</a></td><td width="40%" align="right">&nbsp;OpenACS 4.6.2 Data Models and the Object System</td></tr></table><hr><address>rmello at fslc.usu.edu</address><address><a href="mailto:vinod@kurup.com">vinod@kurup.com</a></address></div><a name="comments"></a><center><a href="http://openacs.org/doc/openacs-4/packages.html#comments">View comments on this page at openacs.org</a></center></body></html>
+    </p></li></ul></div></div><div class="sect2" lang="en"><div class="titlepage"><div><h3 class="title"><a name="packages-add-reading"></a>Additional Reading</h3></div></div><div class="itemizedlist"><ul type="disc"><li><p><a href="apm-design.html">OpenACS 4.6.2 Package Manager Design</a></p></li><li><p><a href="apm-requirements.html">OpenACS 4.6.2 Package Manager Requirements</a></p></li><li><p><a href="http://acs40.arsdigita.com/acs40-project-central/package-submission.html" target="_top">Package submission guidelines</a></p></li></ul></div><div class="cvstag">($Id$)</div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="dev-guide.html">Prev</a>&amp;nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right">&amp;nbsp;<a accesskey="n" href="objects.html">Next</a></td></tr><tr><td width="40%" align="left">Chapter 9. Development Reference&amp;nbsp;</td><td width="20%" align="center"><a accesskey="u" href="dev-guide.html">Up</a></td><td width="40%" align="right">&amp;nbsp;OpenACS 4.6.2 Data Models and the Object System</td></tr></table><hr><address>rmello at fslc.usu.edu</address><address><a href="mailto:vinod@kurup.com">vinod@kurup.com</a></address></div><a name="comments"></a><center><a href="http://openacs.org/doc/openacs-4/packages.html#comments">View comments on this page at openacs.org</a></center></body></html>
