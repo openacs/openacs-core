@@ -53,6 +53,9 @@ ad_proc ds_enabled_p {} {
 ad_proc ds_collection_enabled_p {} {
     Returns whether we're collecting information about this request
 } {
+    if { ![ds_enabled_p] } {
+        return 0
+    }
     global ad_conn
     if { ![info exists ad_conn(request)] } {
 	return 0
@@ -68,12 +71,18 @@ ad_proc ds_collection_enabled_p {} {
 ad_proc ds_user_switching_enabled_p {} { 
     Returns whether user-switching is enabled.
 } {
+    if { ![ds_enabled_p] } {
+        return 0
+    }
     return [nsv_get ds_properties user_switching_enabled_p]
 }
 
 ad_proc ds_database_enabled_p {} { 
     Returns true if developer-support database facilities are enabled. 
 } {
+    if { ![ds_enabled_p] } {
+        return 0
+    }
     return [nsv_get ds_properties database_enabled_p]
 }
 
@@ -218,16 +227,13 @@ proc_doc ds_collect_db_call { db command statement_name sql start_time errno err
 }
 
 proc_doc ds_add { name args } { Sets a developer-support property for the current request. Should never be used except by elements of the request processor (e.g., security filters or abstract URLs). } {
-    if { [catch { nsv_exists ds_request . }] } {
-	ns_log "Warning" "ds_request NSVs not initialized"
-	return
+    if { [ds_enabled_p] } {
+        global ad_conn
+        if { ![info exists ad_conn(request)] } {
+            set ad_conn(request) [nsv_incr rp_properties request_count]
+        }
+        eval [concat [list nsv_lappend ds_request "$ad_conn(request).$name"] $args]
     }
-
-    global ad_conn
-    if { ![info exists ad_conn(request)] } {
-	set ad_conn(request) [nsv_incr rp_properties request_count]
-    }
-    eval [concat [list nsv_lappend ds_request "$ad_conn(request).$name"] $args]
 }
 
 proc_doc ds_comment { value } { Adds a comment to the developer-support information for the current request. } {
@@ -238,29 +244,31 @@ proc_doc ds_comment { value } { Adds a comment to the developer-support informat
 }
 
 proc ds_sweep_data {} {
-    set now [ns_time]
-    set lifetime [ad_parameter -package_id [ds_instance_id] DataLifetime "developer-support" 900]
-
-    # kill_requests is an array of request numbers to kill
-    array set kill_requests [list]
-
-    set names [nsv_array names ds_request]
-    foreach name $names {
-	if { [regexp {^([0-9]+)\.start$} $name "" request] && \
-                 $now - [lindex [nsv_get ds_request $name] 0] > $lifetime } {
-	    set kill_requests($request) 1
-	}
+    if { [ds_enabled_p] } { 
+        set now [ns_time]
+        set lifetime [ad_parameter -package_id [ds_instance_id] DataLifetime "developer-support" 900]
+        
+        # kill_requests is an array of request numbers to kill
+        array set kill_requests [list]
+        
+        set names [nsv_array names ds_request]
+        foreach name $names {
+            if { [regexp {^([0-9]+)\.start$} $name "" request] && \
+                     $now - [lindex [nsv_get ds_request $name] 0] > $lifetime } {
+                set kill_requests($request) 1
+            }
+        }
+        set kill_count 0
+        foreach name $names {
+            if { [regexp {^([0-9]+)\.} $name "" request] && \
+                     [info exists kill_requests($request)] } {
+                incr kill_count
+                nsv_unset ds_request $name
+            }
+        }	
+        
+        ns_log "Notice" "Swept developer support information for [array size kill_requests] requests ($kill_count nsv elements)"
     }
-    set kill_count 0
-    foreach name $names {
-	if { [regexp {^([0-9]+)\.} $name "" request] && \
-		[info exists kill_requests($request)] } {
-	    incr kill_count
-	    nsv_unset ds_request $name
-	}
-    }	
-
-    ns_log "Notice" "Swept developer support information for [array size kill_requests] requests ($kill_count nsv elements)"
 }
 
 proc_doc ds_trace_filter { conn args why } { Adds developer-support information about the end of sessions.} {
