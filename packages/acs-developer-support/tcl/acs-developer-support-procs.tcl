@@ -460,7 +460,7 @@ ad_proc -private ds_replace_get_user_procs { enabled_p } {
 } {
     if { $enabled_p } {
 	if { [llength [info proc orig_ad_get_user_id]] == 0 } {
-            ds_comment "Enabling user-switching2"
+            #ds_comment "Enabling user-switching2"
 
 	    # let the user stay who he is now (but ignore any error trying to do so)
 	    catch {
@@ -481,7 +481,7 @@ ad_proc -private ds_replace_get_user_procs { enabled_p } {
 	    }
 	}
     } else {
-        ds_comment "Disabling user-switching"
+        #ds_comment "Disabling user-switching"
 	if { [llength [info proc orig_ad_get_user_id]] == 1 } {
             rename ad_conn {}
             rename orig_ad_conn ad_conn
