@@ -1015,15 +1015,28 @@ ad_proc -private aa_execute_rollback_tests {} {
 
 namespace eval aa_test {}
 
-ad_proc -public aa_test::parse_test_server_file {
-    {-name:required}
+ad_proc -public aa_test::xml_report_dir {} {
+    # TODO: make this a parameter
+    return "/var/log/openacs-install"
+}
+
+ad_proc -private aa_test::test_file_path {
+    {-install_file_path:required}
+} {
+    set filename [file tail $install_file_path]
+    regexp {^(.+)-(.+)-(.+)\.xml$} $filename match hostname server    
+    set test_path [file dirname $install_file_path]/${hostname}-${server}-testreport.xml    
+
+    return $test_path
+}
+
+ad_proc -public aa_test::parse_install_file {
+    {-path:required}
     {-array:required}
 } {
     Processes the xml report outputted from install.sh for display.
 } {
     upvar 1 $array service
-
-    set path /var/log/openacs/test/$name
 
     set tree [xml_parse -persist [template::util::read_file $path]]
 
@@ -1037,7 +1050,7 @@ ad_proc -public aa_test::parse_test_server_file {
         set service($entry) "n/a"
     }
     set service(path) $path
-    set service(filename) $name
+    set service(filename) [file tail $path]
     set service(parse_errors) {}
 
     set service(name) [xml_node_get_attribute $root_node "name"]
@@ -1067,4 +1080,37 @@ ad_proc -public aa_test::parse_test_server_file {
     set service(auto_test_url) "$service(url)test/admin"
 
     set service(rebuild_cmd) "sh [file join $service(script_path) recreate.sh]"
+}
+
+ad_proc -public aa_test::parse_test_file {
+    {-path:required}
+    {-array:required}
+} {
+    Processes the xml report with test result data for display.
+} {
+    upvar 1 $array test
+
+    set tree [xml_parse -persist [template::util::read_file $path]]
+
+    set root_node [xml_doc_get_first_node $tree]
+
+    # Get the total test case cound
+    set testcase_count_node [xml_node_get_children_by_name $root_node testcase_count]
+    set test(testcase_count) [xml_node_get_content $testcase_count_node]
+
+    # Get the result counts by result type
+    foreach result_count_node [xml_node_get_children_by_name $root_node result_count] {
+        set result [xml_node_get_attribute $result_count_node result]
+        set count [xml_node_get_content $result_count_node]
+        set result_count($result) $count
+    }
+    set test(result_count) [array get result_count]
+
+    # Get counts for failing test cases
+    foreach testcase_failure_node [xml_node_get_children_by_name $root_node testcase_failure] {
+        set testcase_id [xml_node_get_attribute $testcase_failure_node testcase_id]
+        set count [xml_node_get_content $testcase_failure_node]
+        set testcase_failure($testcase_id) $count
+    }
+    set test(testcase_failure) [array get testcase_failure]
 }
