@@ -323,7 +323,9 @@ ad_proc -private apm_load_queries {
 
         # DRB: without the quotes ${base}www turns into the two element list
         # {${base} www}, not what was wanted...
-	set dirs [list "${base}www"]
+ 
+        # SDW: look in www and all it's subdirectories
+        set dirs [apm_subdirs "${base}www"]
 	set paths [list]
 
         # DRB: For now just slurp all .sql files
@@ -353,6 +355,19 @@ ad_proc -private apm_load_queries {
 	db_qd_load_query_file $file
     }
     ns_log Notice "APM/QD = DONE looping through files to load queries from"
+}
+
+ad_proc -private apm_subdirs { path } {
+
+    Returns a list of subdirectories of path (including path itself)
+
+} {
+    set dirs [list]
+    lappend dirs $path
+    foreach subdir [glob -nocomplain -type d [file join $path *]] {
+       set dirs [concat $dirs [apm_subdirs $subdir]]
+    }
+    return $dirs
 }
 
 ad_proc -private apm_pretty_name_for_file_type { type } {
