@@ -11,7 +11,7 @@ ad_proc acs_sc_binding_exists_p {
     @author Neophytos Demetriou
 } {
 
-    return [db_exec_plsql binding_exists_p {select acs_sc_binding__exists_p(:contract,:impl)}]
+    return [db_string binding_exists_p {select acs_sc_binding__exists_p(:contract,:impl)}]
 
 }
 
