@@ -14,7 +14,7 @@
 </if>
 <else><if @inline_portrait_state eq "link">
 
-  <li><a href="portrait?@portrait_export_vars@">Portrait</a>
+  <li><a href="portrait?@portrait_export_vars@">Portrait</a></li>
 
 </if></else>
 
@@ -42,10 +42,10 @@ A member of the @system_name@ community since @pretty_creation_date@
 
     <ul>
     <li>E-mail @first_names@ @last_name@:
-    <A HREF="mailto:@email@">@email@</a>
+    <A HREF="mailto:@email@">@email@</a></li>
 
     <if @url@ not nil>
-      <li>Personal home page:  <a href="@url@">@url@</a>
+      <li>Personal home page:  <a href="@url@">@url@</a></li>
     </if>
 
     <if @bio@ not nil>
@@ -58,7 +58,7 @@ A member of the @system_name@ community since @pretty_creation_date@
   <else>
 
     <if @url@ not nil>
-      <ul><li>Personal home page:  <a href="@url@">@url@</a></ul>
+      <ul><li>Personal home page:  <a href="@url@">@url@</a></li></ul>
     </if>
 
   </else>
@@ -78,7 +78,7 @@ A member of the @system_name@ community since @pretty_creation_date@
   <ul>
   
   <group column="pretty_name">
-    <li>@creation_date@: @user_contributions.object_name@
+    <li>@user_contributions.creation_date@: @user_contributions.object_name@</li>
   </group>
   </ul>
   
