@@ -462,7 +462,7 @@ ad_proc -private template::element::render { form_id element_id tag_attributes }
   # Remember that the element has been rendered already
   set element(is_rendered) t
 
-  return [template::widget::$element(widget) element $tag_attributes]
+  return "$element(before_html) [template::widget::$element(widget) element $tag_attributes] $element(after_html)"
 }
 
 ad_proc -private template::element::render_help { form_id element_id tag_attributes } {
@@ -499,7 +499,7 @@ ad_proc -private template::element::options { form_id element_id tag_attributes 
   # render the widget once with a placeholder for value
   set element(value) "\$value"
   lappend tag_attributes "\$checked" ""
-  set widget [template::widget::$element(widget) element $tag_attributes]
+  set widget "$element(before_html) [template::widget::$element(widget) element $tag_attributes] $element(after_html)"
 
   set options $element(options)
   if { [info exists element(values)] } {
