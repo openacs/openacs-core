@@ -34,11 +34,10 @@ proc_doc ad_restrict_to_https {conn args why} {
     if { [ns_config ns/server/[ns_info server]/modules nsssl] != "" } {
     set ssl_port [ns_config -int "ns/server/[ns_info server]/module/nsssl" Port 443]
     } elseif { [ns_config ns/server/[ns_info server]/modules nsopenssl] != "" } {
-	set ssl_port [ns_config -int "ns/server/[ns_info server]/module/nsopenssl" Port 443]
+	set ssl_port [ns_config -int "ns/server/[ns_info server]/module/nsopenssl" ServerPort 443]
     }
     
-    set host [ad_conn host]
-    #set host [ns_set iget [ad_conn headers] "host"]
+    set host [ns_set iget [ad_conn headers] "host"]
     if { [regexp {^(.*?):(.*)$} $host match host port] == 0 || [string compare $port $http_port] == 0 } {
 	set url [ad_conn url]
 	if { $ssl_port == 443 } {
