@@ -1025,13 +1025,12 @@ as
     begin
         update acs_objects
         set acs_objects.last_modified = acs_object.update_last_modified.last_modified
-        where acs_objects.object_id = acs_object.update_last_modified.object_id
-        returning acs_objects.context_id
-        into v_parent_id;
-
-        if v_parent_id is not null and v_parent_id != 0 then
-            acs_object.update_last_modified(v_parent_id, acs_object.update_last_modified.last_modified);
-        end if;
+        where acs_objects.object_id in (select ao.object_id
+                                        from acs_objects ao
+                                        connect by prior ao.context_id = ao.object_id
+                                        start with ao.object_id = acs_object.update_last_modified.object_id)
+        and acs_objects.context_id is not null
+        and acs_objects.object_id != 0;
     end update_last_modified;
 
 end acs_object;
