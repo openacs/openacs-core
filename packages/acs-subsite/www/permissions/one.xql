@@ -17,13 +17,9 @@
       
 	select count(*) as num_children
 	from acs_objects o
-	where context_id = :object_id
-              and exists (select 1
-                          from acs_object_party_privilege_map
-                          where object_id = o.object_id
-                          and party_id = :user_id
-                          and privilege = 'admin')    
-    
+	where context_id = :object_id and
+            acs_permission__permission_p(o.object_id, :user_id, 'admin') 
+
       </querytext>
 </fullquery>
 

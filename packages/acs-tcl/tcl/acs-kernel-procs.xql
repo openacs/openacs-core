@@ -7,7 +7,7 @@
 	select 1 as admin_exists_p
 	from dual
 	where exists (select 1
-		      from acs_object_party_privilege_map m, users u
+		      from all_object_party_privilege_map m, users u
 		      where m.object_id = 0
 		      and m.party_id = u.user_id
 		      and m.privilege = 'admin')

@@ -18,11 +18,8 @@
                    left outer join
            (select o.object_type, count(*) as number_groups
               from groups g, acs_objects o,  
-                   acs_object_party_privilege_map perm,
                    application_group_element_map app_group
-             where perm.object_id = g.group_id
-               and perm.party_id = :user_id
-               and perm.privilege = 'read'
+             where acs_permission__permission_p(g.group_id, :user_id, 'read')
                and o.object_id = g.group_id
                and app_group.package_id = :package_id
                and app_group.element_id = g.group_id
