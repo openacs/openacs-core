@@ -4,17 +4,13 @@
 
 <p>
   <b>&raquo;</b>
-  <a href="translator-mode-toggle">Toggle translator mode</a>: 
-  <if @translator_mode_p@ true><b>On</b><font color="gray"> <a href="translator-mode-toggle">Off</a></a></if>
-  <else><font color="gray"><a href="translator-mode-toggle">On</a> </font><b>Off</b></else>
+  Toggle translator mode: 
+  <if @translator_mode_p@ true><b>On</b> | <a href="translator-mode-toggle">Off</a></if>
+  <else><a href="translator-mode-toggle">On</a> | <b>Off</b></else>
 </p>
 
 <p>
   <b>&raquo;</b> <a href="@parameter_url@">Change system locale</a>: Current system locale is <b>@system_locale_label@ [ @system_locale@ ]</b>
-</p>
-
-<p>
-  <b>&raquo;</b> <a href="lookup">Look up message</a>
 </p>
 
 <if @timezone_p@>
@@ -22,6 +18,10 @@
     <b>&raquo;</b> <a href="set-system-timezone">Change system timezone</a>: Current system timezone is <b>@timezone@</b>
   </p>
 </if>
+
+<p>
+  <b>&raquo;</b> <a href="lookup">Look up message</a>
+</p>
 
 <h2>Installed Locales</h2>
 
