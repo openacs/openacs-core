@@ -98,38 +98,14 @@ db_foreach select_privileges_hierarchy { } {
 incr maxlevel
 
 
-# Now the $hierarchy datastructure is ready, use it to build the
-# multirow that will be used for display.
-multirow create mu_privileges privilege level inverted_level selected id standard_priv_p
+# The $hierarchy datastructure is ready, fill a select widget options list with it.
 
-foreach elm $hierarchy {
-    foreach { level privilege } $elm {}
+foreach element $hierarchy {
+    set privilege [lindex $element 1]
+    set level [lindex $element 0]
 
-    # Preserve checked value of the privilege checkboxes for
-    # re-submitted form status.
-    if { [info exists privileges] && [lsearch $privileges $privilege]>-1 } {
-        set selected "CHECKED"
-    } else {
-        set selected ""
-    }
-
-    # set standard_priv_p to emphasize standard privileges in the
-    # layout
-    if { [lsearch {admin create write delete read} $privilege] > -1 } {
-        set standard_priv_p 1
-    } else {
-        set standard_priv_p 0
-    }
-
-    multirow append mu_privileges $privilege [expr $level+1] [expr $maxlevel - $level] $selected $privilege $standard_priv_p
+    lappend select_list [list "[string repeat "&nbsp;&nbsp;&nbsp;" $level] $privilege" $privilege]
 }
-
-# build an html tr line manually to layout the table
-set first_tr "<tr>"
-for { set i 0 } { $i < $maxlevel } { incr i } {
-    append first_tr "<td>&nbsp;&nbsp;&nbsp;</td>"
-}
-append first_tr "</tr>"
 
 form create grant
 
@@ -146,6 +122,27 @@ element create grant party_id \
     -widget party_search \
     -datatype party_search \
     -optional
+
+if { ![info exists privileges] } {
+    set privileges [list]
+}
+
+# limit the size of the select widget to a number that should fit on a
+# 1024x768 screen
+if { [llength $select_list] > 23 } {
+    set size 23
+} else {
+    set size [llength $select_list]
+}
+
+element create grant privilege \
+    -widget multiselect \
+    -datatype text \
+    -optional \
+    -html [list size $size] \
+    -options $select_list \
+    -value $privileges
+
 
 
 if { [form is_valid grant] } {
