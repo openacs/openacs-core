@@ -12,22 +12,29 @@ ad_page_contract {
     package_id:naturalnum
     {root_id ""}
 }
-
 db_transaction {
-    # The catch{} below may be overkill, as it seems
-    # site_node::get_node_id_from_object_id always returns something,
-    # even if it is only an empty string. Not sure what would happen
-    # if we had a db error due to attempting to delete an object instance
-    # twice even though we are in a db_transaction{}, so I opted to keep
-    # the catch{}.
-    # Frank Nikolajsen, 2003-10-09.
-    set return_code [catch {set node_id [site_node::get_node_id_from_object_id -object_id $package_id]} errmsg]
-    if { ![empty_string_p $node_id] && [expr $return_code == 0] } {
+
+    # DRB: There used to be a "catch" around the "set" but I removed it because
+    # 1. blank is returned if no node_id exists for the object
+    # 2. the following "if" would throw an error if the "catch" caught anything ...
+
+    set node_id [site_node::get_node_id_from_object_id -object_id $package_id]
+
+    # DRB: This is a small trick.  If you mount subsite "foo", visit its sitemap page
+    # and delete it, you got an error when the code attempted to return.  So this code
+    # will go to the deleted node's parent page which should either be the site map page
+    # you were at when you clicked "delete" or its parent (the case mentioned above).
+
+    set parent \
+        [site_node::closest_ancestor_package \
+            -node_id $node_id \
+            -package_key acs-subsite \
+            -element url]
+
+    if { ![empty_string_p $node_id] } {
         # The package is mounted
         site_node::unmount -node_id $node_id
         site_node::delete -node_id $node_id
-    } else {
-        set node_id ""
     }
 
     # Delete the package
@@ -43,4 +50,4 @@ db_transaction {
     }
 }
 	
-ad_returnredirect [ad_decode $node_id "" unmounted "index?root_id=$root_id"]
+ad_returnredirect ${parent}admin/site-map
