@@ -11,8 +11,8 @@ ad_library {
 namespace eval acs_mail_lite {
 
     ad_proc -public send {
-        {-to:required}
-        {-from:required}
+        {-to_addr:required}
+        {-from_addr:required}
         {-subject ""}
         {-body:required}
         {-extraheaders ""}
@@ -28,7 +28,6 @@ namespace eval acs_mail_lite {
 
         db_dml create_queue_entry {}
     }
-
 
     ad_proc -private sweeper {} {
         Send messages in the acs_mail_lite_queue table.
