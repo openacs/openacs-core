@@ -1047,7 +1047,7 @@ ad_proc -public aa_test::parse_install_file {
     foreach entry { 
         name os dbtype dbversion webserver openacs_cvs_flag adminemail adminpassword 
         install_begin_epoch install_end_epoch install_end_timestamp num_errors 
-        install_duration install_duration_pretty script_path
+        install_duration install_duration_pretty script_path description
     } {
         set service($entry) "n/a"
     }

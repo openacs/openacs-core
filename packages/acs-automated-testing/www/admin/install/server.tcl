@@ -20,7 +20,7 @@ if { $has_test_report_p } {
     }
 }
 
-set page_title "Control Page For $service(name)"
+set page_title "Control Page for Server $service(name)"
 set context [list $page_title]
 
 set time [ns_time]
