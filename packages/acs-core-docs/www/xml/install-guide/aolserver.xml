@@ -5,19 +5,16 @@
     by <ulink url="mailto:vinod@kurup.com">Vinod Kurup</ulink>
   </authorblurb>
 
-  <para>This page assumes you have downloaded aolserver to  to 
-<computeroutput>/tmp/aolserver3.3oacs1.tar.gz</computeroutput>.  If not,
-<link linkend="source-aolserver">get it</link>.  It also assumes you are following the &version;-P or &version;-O Reference Platform installation, using Red Hat 8.0.  Places where other systems are different are noted.</para>
-
   <orderedlist>
-    <listitem>
-      <para>
-      As <computeroutput>root</computeroutput>, untar
+    <listitem id="aolserver-tarball">
+      <formalpara>
+        <title>Unpack the Aolserver tarball</title>
+        <para>Download the <link
+linkend="source-aolserver">aolserver tarball</link> to <computeroutput>/tmp/aolserver3.3oacs1.tar.gz</computeroutput>.  As <computeroutput>root</computeroutput>, untar
       <computeroutput>aolserver3.3oacs1.tar.gz</computeroutput>
       into <computeroutput>/usr/local/src</computeroutput>.
-
     </para>
-        
+      </formalpara>
       <screen>[root@yourserver root]# <userinput>cd /usr/local/src</userinput>
 [root@yourserver src]# <userinput>tar xzf /tmp/aolserver3.3oacs1.tar.gz</userinput>
 [root@yourserver src]#
@@ -25,8 +22,11 @@
 tar xzf /tmp/aolserver3.3oacs1.tar.gz</action></screen>
     </listitem>
     
-    <listitem id="install-aolserver-compile" xreflabel="Compile AOLserver">
+    <listitem id="install-aolserver-compile">
+      <formalpara>
+        <title>Compile AOLserver</title>
       <para>Compile and install AOLserver.  First, prepare the installation directory and the source code.  The message about BUILD-MODULES can be ignored.</para>
+      </formalpara>
       <screen>root@yourserver root]# <userinput>mkdir -p /usr/local/aolserver</userinput>
 [root@yourserver root]# <userinput>cd /usr/local/src/aolserver</userinput>
 [root@yourserver aolserver]# <userinput>./conf-clean</userinput>
@@ -46,12 +46,12 @@ cd /usr/local/src/aolserver
           the environment variables properly.
         </para>
 
-    <para><computeroutput>conf-inst</computeroutput> should contain the
+      <para><computeroutput>conf-inst</computeroutput> should contain the
           location where AOLserver is to be installed.  Overwrite the
           tarball's default value with our default value, <computeroutput>/usr/local/aolserver</computeroutput>:</para>
       <screen>[root@yourserver aolserver]# <userinput>echo "/usr/local/aolserver" > conf-inst</userinput>
 [root@yourserver aolserver]#</screen>
-
+      
       <para><computeroutput>conf-make</computeroutput> should contain the
           name of the GNU Make command on your system. It defaults to
           <computeroutput>gmake</computeroutput>.</para>
@@ -87,19 +87,22 @@ Creating  ...
 ==================================================================
 Done Building Sat Mar  8 10:31:35 PST 2003
 [root@yourserver aolserver]# </screen>
-          
-          <para>
+      
+      <para>
           This takes about 5 minutes. It builds aolserver, several modules, and the database driver.  (Upgraders, note that the postgres database driver has changed from postgres.so to nspostgres.so).  All of the results are logged to files in <computeroutput>/usr/local/src/aolserver/log</computeroutput>.  If you run into problems running AOLserver, check these files for build errors.</para>
-        </listitem>
-        
-        <listitem>
-          <para>Add a database-specific wrapper script.  This script
+    </listitem>
+    
+    <listitem id="aolserver-db-wrapper">
+      <formalpara>
+        <title>Add a database-specific wrapper script.</title>
+<para>This script
 	  sets database environment variables before starting
 	  AOLserver; this allows the AOLserver instance can
 	  communicate with the database.  There is one script each for
 	  Oracle and PostGreSQL.  They don't conflict, so if you plan
-	  to use both databases, install both.</para>	
-          <itemizedlist>
+	  to use both databases, install both.</para>
+      </formalpara>
+      <itemizedlist>
             <listitem>
               <para>Oracle</para>
               <screen>[root@yourserver aolserver]# <userinput>cd /usr/local/aolserver/bin</userinput>
@@ -122,6 +125,53 @@ chmod 755 nsd-postgres</action></screen>
         </listitem>
       </itemizedlist>
     </listitem>
+    <listitem id="install-tdom">
+      <formalpara>
+        <title>Install tDOM</title>
+        <para>Download the <link linkend="source-tdom">tDOM
+        tarball</link> to
+        <computeroutput>/tmp/tDOM-0.7.7.tar.gz</computeroutput>,
+        unpack it, adjust the configuration file to match our patched
+        distribution of aolserver, and compile it.</para>
+      </formalpara>
+      <screen>[root@yourserver root]# <userinput>cd /usr/local/src</userinput>
+[root@yourserver src]# <userinput>tar xzf /tmp/tDOM-0.7.7.tar.gz</userinput>
+[root@yourserver src]# <userinput>cd tDOM-0.7.7/unix</userinput>
+[root@yourserver unix]#
+<action>cd /usr/local/src
+tar xzf /tmp/tDOM-0.7.7.tar.gz
+cd unix</action> </screen>
+      <para>Edit the file CONFIG and change this section: 
+<programlisting># ----------------------------------------------------
+# aolsrc="/usr/src/aolserver-3.4"
+# ../configure --enable-threads --disable-tdomalloc \
+#   --with-aolserver=$aolsrc \
+#   --with-tcl=$aolsrc/tcl8.3.4/unix </programlisting>
+<para>to</para>
+<programlisting># ----------------------------------------------------
+aolsrc="/usr/local/src/aolserver/aolserver"
+../configure --enable-threads --disable-tdomalloc \
+  --with-aolserver=$aolsrc
+  --with-tcl=$aolsrc/tcl8.3.2/unix</programlisting>
+      <para>And configure and compile:</para>
+      <screen>[root@yourserver unix]# <userinput>sh CONFIG</userinput>
+creating cache ./config.cache
+checking for memmove... yes
+  <emphasis>(many lines omitted)</emphasis>
+creating Makefile
+creating tdomConfig.sh
+[root@yourserver unix]# <userinput>make</userinput>
+gcc -pipe -DHAVE_UNISTD_H=1 -DHAVE_LIMITS_H=1 -DTCL_THREADS=1
+-DHAVE_GETCWD=1 -DHAVE_OPENDIR=1 -DHAVE_STRSTR=1 -DHAVE_STRTOL=1 
+  <emphasis>(many lines omitted)</emphasis>
+          -Wl,-rpath,/usr/local/lib -o tcldomsh;\
+fi
+[root@yourserver unix]# <userinput>cp libtdom0.7.7.so /usr/local/aolserver/bin/</userinput>
+<action>sh CONFIG
+make
+cp libtdom0.7.7.so /usr/local/aolserver/bin/</action></screen>
+</para>
+    </listitem>
     <listitem>
       <para><link linkend="install-nsopenssl">Install nsopenssl</link>
       (OPTIONAL)</para>
@@ -130,7 +180,9 @@ chmod 755 nsd-postgres</action></screen>
       <para><link linkend="install-openfts">Install Full Text Search with OpenFTS</link> (OPTIONAL)</para>
     </listitem>
     
-    <listitem id="install-aolserver-permissions" xreflabel="Set File Permissions">
+    <listitem id="install-aolserver-permissions">
+      <formalpara>
+        <title>Test AOLserver</title>
       <para>In order to test AOLserver, we'll run it using the
       sample-config.tcl file provided in the AOLserver distribution,
       under the nobody user and <computeroutput>web</computeroutput>
@@ -140,6 +192,7 @@ chmod 755 nsd-postgres</action></screen>
       group permission to write to
       <computeroutput>/usr/local/aolserver/log</computeroutput> and
       <computeroutput>/usr/local/aolserver/servers</computeroutput>.</para>
+      </formalpara>
       <screen>[root@yourserver root]# <userinput>cd /usr/local/aolserver</userinput>
 [root@yourserver aolserver]# <userinput>chown -R root.web log servers</userinput>
 [root@yourserver aolserver]# <userinput>chmod -R g+w log servers</userinput>
@@ -214,15 +267,17 @@ config file.</screen>
         </para>
     </listitem>
 
-    <listitem id="install-aolserver-troubleshooting" xreflabel="Troubleshooting AOLserver">
-    <para>Troubleshooting.</para>
+    <listitem id="install-aolserver-troubleshooting"
+          xreflabel="Troubleshooting AOLserver">
+      <formalpara>
+        <title>Troubleshooting.</title>
       <para>If you can't view the welcome page, it's likely there's a
       problem with your server configuration. Start by viewing your
       AOLserver log, which is in
       <computeroutput>/usr/local/aolserver/log/server.log</computeroutput>.
       You should also try to find lines of the form:
-
     </para>
+      </formalpara>
     <screen>
 [01/Jun/2000:12:11:20][5914.2051][-nssock-] Notice: nssock: listening on http://localhost.localdomain:8000 (127.0.0.1:8000)
 [01/Jun/2000:12:11:20][5914.2051][-nssock-] Notice: accepting connections</screen>

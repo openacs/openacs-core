@@ -81,6 +81,14 @@ root      5582  0.0  0.2  3276  628 pts/0    S    11:55   0:00 grep nsd
           </para></listitem>
         </itemizedlist>
       </listitem>
+
+        <listitem>
+          <para>Install a script to automate the stopping and starting
+          of aolserver services via daemontools.  You can then restart a service via <computeroutput>restart-aolserver <replaceable>service0</replaceable></computeroutput></para>
+          <screen>[root@yourserver root]# <userinput>cp /web/<replaceable>service0</replaceable>/packages/acs-core-docs/www/files/restart-aolserver-daemontools.txt /usr/local/bin/restart-aolserver</userinput>
+[root@yourserver root]# <userinput>chmod 755 /usr/local/bin/restart-aolserver</userinput>
+[root@yourserver root]#</screen>
+        </listitem>
       <listitem>
         <para>
         At this point, these commands will work only for the
