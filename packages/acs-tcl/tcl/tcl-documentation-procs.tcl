@@ -1261,16 +1261,16 @@ ad_proc -public ad_page_contract_filter {
     # If you declare a filter like this: ad_page_contract_filter foo { name value } { ... }
     # it turns into this proc:
     # ad_proc ad_page_contract_filter_proc_foo { name value_varname } { upvar $value_varname value ; ... }
-    # so that when the filter proc is passed the name of a variable, the body of the proc
+    # so that when the filtger proc is passed the name of a variable, the body of the proc
     # will have access to that variable as if the value had been passed.
 
     set arg0 [lindex $proc_args 0]
     set arg1 [lindex $proc_args 1]
     if { $proc_args_len == 2 } {
-	ad_proc $proc_name [list $arg0 ${arg1}_varname] $doc_string "upvar \$${arg1}_varname $arg1\n$body"
+	ad_proc -public $proc_name [list $arg0 ${arg1}_varname] $doc_string "upvar \$${arg1}_varname $arg1\n$body"
     } else {
 	set arg2 [lindex $proc_args 2]
-	ad_proc $proc_name [list $arg0 ${arg1}_varname $arg2] $doc_string "upvar \$${arg1}_varname $arg1\n$body"
+	ad_proc -public $proc_name [list $arg0 ${arg1}_varname $arg2] $doc_string "upvar \$${arg1}_varname $arg1\n$body"
     }
 }
 
