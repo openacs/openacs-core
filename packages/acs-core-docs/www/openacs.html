@@ -1,4 +1,4 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Install OpenACS 5.0.0b4</title><meta name="generator" content="DocBook XSL Stylesheets V1.62.0"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="complete-install.html" title="Chapter 3. Complete Installation"><link rel="previous" href="aolserver4.html" title="Install AOLserver 4"><link rel="next" href="win2k-installation.html" title="OpenACS Installation Guide for Windows2000"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="aolserver4.html">Prev</a> </td><th width="60%" align="center">Chapter 3. Complete Installation</th><td width="20%" align="right"> <a accesskey="n" href="win2k-installation.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="openacs"></a>Install OpenACS 5.0.0b4</h2></div></div><div></div></div><div class="authorblurb"><p>by <a href="mailto:vinod@kurup.com" target="_top">Vinod Kurup</a></p>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Install OpenACS 5.0.0b4</title><meta name="generator" content="DocBook XSL Stylesheets V1.62.4"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="complete-install.html" title="Chapter 3. Complete Installation"><link rel="previous" href="aolserver4.html" title="Install AOLserver 4"><link rel="next" href="win2k-installation.html" title="OpenACS Installation Guide for Windows2000"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="aolserver4.html">Prev</a> </td><th width="60%" align="center">Chapter 3. Complete Installation</th><td width="20%" align="right"> <a accesskey="n" href="win2k-installation.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="openacs"></a>Install OpenACS 5.0.0b4</h2></div></div><div></div></div><div class="authorblurb"><p>by <a href="mailto:vinod@kurup.com" target="_top">Vinod Kurup</a></p>
           OpenACS docs are written by the named authors, and may be edited
           by OpenACS documentation staff.
         </div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="openacs-setup"></a>Set up the file system for one or more OpenACS Sites</h3></div></div><div></div></div><p>For Linux Standard Base compliance and ease of backup,
@@ -81,7 +81,6 @@ drwxr-xr-x   25 root     root         1024 Mar 29 16:24 ..
 drwx------    7 service0 web          1024 Jan  6 14:36 service0
 [service0 aolserver]$ <b class="userinput"><tt>exit</tt></b>
 logout
-
 [root root]#
 <span class="action"><span class="action">su - service0
 cd /var/lib/aolserver
@@ -96,23 +95,20 @@ exit</span></span></pre></li><li><p><a href="cvs-tips.html#cvs-service-import">A
 		  Verify membership by typing
 		  <tt class="computeroutput">groups</tt> when you login:
 
-		  </p><pre class="programlisting">
-<span class="replaceable"><span class="replaceable">service0</span></span>:~$ groups
+		  </p><pre class="programlisting">[service0 ~]$ groups
 dba web</pre><p>
 
 		  If you do not see these groups, take the following action: 
 
-		  </p><pre class="programlisting">
-<span class="replaceable"><span class="replaceable">service0</span></span>:~$ su -      
+		  </p><pre class="programlisting">[service0 ~]$ <b class="userinput"><tt>su -</tt></b>
 Password: ************
-[root ~]# adduser <span class="emphasis"><em><span class="replaceable"><span class="replaceable">service0</span></span></em></span> dba</pre><p>
+[root ~]# <b class="userinput"><tt>adduser <span class="replaceable"><span class="replaceable">service0</span></span> dba</tt></b></pre><p>
 
 		  If you get an error about an undefined group, then add that group
 		  manually:
 
-</p><pre class="programlisting">
-[root ~]# groupadd dba
-[root ~]# groupadd web</pre><p>
+</p><pre class="programlisting">[root ~]# <b class="userinput"><tt>groupadd dba</tt></b>
+[root ~]# <b class="userinput"><tt>groupadd web</tt></b></pre><p>
 
 		  Make sure to logout as <tt class="computeroutput">root</tt> when
 		  you are finished with this step and log back in as
@@ -121,20 +117,15 @@ Password: ************
 		  Connect to Oracle using
 		  <tt class="computeroutput">svrmgrl</tt> and login:
         
-		  </p><pre class="programlisting">
-<span class="replaceable"><span class="replaceable">service0</span></span>:~$ svrmgrl
-
-SVRMGR&gt; connect internal
+		  </p><pre class="programlisting">[service0 ~]$ <b class="userinput"><tt>svrmgrl</tt></b>
+SVRMGR&gt; <b class="userinput"><tt>connect internal</tt></b>
 Connected.</pre><p>
 		</p></li><li><p>
 		  Determine where the system tablespaces are stored: 
 
-		  </p><pre class="programlisting">
-SVRMGR&gt;  select file_name from dba_data_files;</pre><p>
+		  </p><pre class="programlisting">SVRMGR&gt; <b class="userinput"><tt>select file_name from dba_data_files;</tt></b></pre><p>
         Example results: 
-
-		  </p><pre class="programlisting">
-/ora8/m01/app/oracle/oradata/ora8/system01.dbf
+		  </p><pre class="programlisting">/ora8/m01/app/oracle/oradata/ora8/system01.dbf
 /ora8/m01/app/oracle/oradata/ora8/tools01.dbf
 /ora8/m01/app/oracle/oradata/ora8/rbs01.dbf
 /ora8/m01/app/oracle/oradata/ora8/temp01.dbf
@@ -159,14 +150,14 @@ SVRMGR&gt;  select file_name from dba_data_files;</pre><p>
 		  Create the directory for the datafile; to do this,
 		  exit from <tt class="computeroutput">svrmgrl</tt> and login as
 		  <tt class="computeroutput">root</tt> for this step: </p><pre class="programlisting">
-SVRMGR&gt; exit
-<span class="replaceable"><span class="replaceable">service0</span></span>:~$ su -
+SVRMGR&gt; <b class="userinput"><tt>exit</tt></b>
+[service0 ~]$ <b class="userinput"><tt>su -</tt></b>
 Password: ************
-[root ~]# mkdir -p /ora8/m02/oradata/ora8/
-[root ~]# chown <span class="emphasis"><em><span class="replaceable"><span class="replaceable">service0</span></span></em></span>.web /ora8/m02/oradata/ora8
-[root ~]# chmod 775 /ora8/m02/oradata/ora8
-[root ~]# exit
-<span class="replaceable"><span class="replaceable">service0</span></span>:~$</pre></li><li><p> 
+[root ~]# <b class="userinput"><tt>mkdir -p /ora8/m02/oradata/ora8/</tt></b>
+[root ~]# <b class="userinput"><tt>chown <span class="replaceable"><span class="replaceable">service0</span></span>:web /ora8/m02/oradata/ora8</tt></b>
+[root ~]# <b class="userinput"><tt>chmod 775 /ora8/m02/oradata/ora8</tt></b>
+[root ~]# <b class="userinput"><tt>exit</tt></b>
+[service0 ~]$</pre></li><li><p> 
 
 		  Create a tablespace for the service. It is important that the
 		  tablespace can <tt class="computeroutput">autoextend</tt>. This
@@ -177,47 +168,43 @@ Password: ************
 		  Oracle's ability to automatically coalesce free space in the
 		  tablespace.
 
-		</p><pre class="programlisting">
-<span class="replaceable"><span class="replaceable">service0</span></span>:~$ svrmgrl
-
-SVRMGR&gt; connect internal;
-SVRMGR&gt; create tablespace <span class="emphasis"><em><span class="replaceable"><span class="replaceable">service0</span></span></em></span> 
-             datafile '/ora8/m02/oradata/ora8/<span class="emphasis"><em><span class="replaceable"><span class="replaceable">service0</span></span></em></span>01.dbf' 
-             size 50M 
-             autoextend on 
-             next 10M
-             maxsize 300M
-             extent management local
-             uniform size 32K;</pre></li><li><p> 
+		</p><pre class="programlisting">[service0 ~]$ <b class="userinput"><tt>svrmgrl</tt></b>
+SVRMGR&gt; <b class="userinput"><tt>connect internal;</tt></b>
+SVRMGR&gt; <b class="userinput"><tt>create tablespace <span class="replaceable"><span class="replaceable">service0</span></span>
+      datafile '/ora8/m02/oradata/ora8/<span class="replaceable"><span class="replaceable">service0</span></span>01.dbf' 
+      size 50M 
+      autoextend on 
+      next 10M
+      maxsize 300M
+      extent management local
+      uniform size 32K;</tt></b></pre></li><li><p> 
 		  Create a database user for this service. Give the
 		  user access to the tablespace and rights to connect. We'll use
-		  <tt class="computeroutput"><span class="replaceable"><span class="replaceable">service0</span></span>password</tt> as our password.</p><p>
-		  Write down what you specify as <span class="emphasis"><em>service_name</em></span>
-			(i.e. <tt class="computeroutput"><span class="replaceable"><span class="replaceable">service0</span></span></tt>) and
-			<span class="emphasis"><em>database_password</em></span>
-			(i.e. <tt class="computeroutput"><span class="replaceable"><span class="replaceable">service0</span></span>password</tt>). You
-			will need this information for configuring exports and
-			AOLserver.
+		  <tt class="computeroutput"><span class="replaceable"><span class="replaceable">service0password</span></span></tt> as our password.</p><p>
+		  Write down what you specify as
+                  <span class="emphasis"><em>service_name</em></span>
+                  (i.e. <tt class="computeroutput"><span class="replaceable"><span class="replaceable">service0</span></span></tt>)
+                  and <span class="emphasis"><em>database_password</em></span>
+                  (i.e. <tt class="computeroutput"><span class="replaceable"><span class="replaceable">service0password</span></span></tt>). You
+                  will need this information for configuring exports
+                  and AOLserver.
 		</p><pre class="programlisting">
-SVRMGR&gt; create user <span class="emphasis"><em><span class="replaceable"><span class="replaceable">service0</span></span></em></span> identified by <span class="emphasis"><em><span class="replaceable"><span class="replaceable">service0</span></span>password</em></span> default tablespace <span class="emphasis"><em><span class="replaceable"><span class="replaceable">service0</span></span></em></span>
-temporary tablespace temp quota unlimited on <span class="emphasis"><em><span class="replaceable"><span class="replaceable">service0</span></span></em></span>;
-SVRMGR&gt; grant connect, resource, ctxapp, javasyspriv, query rewrite to <span class="emphasis"><em><span class="replaceable"><span class="replaceable">service0</span></span></em></span>;
-SVRMGR&gt; revoke unlimited tablespace from <span class="emphasis"><em><span class="replaceable"><span class="replaceable">service0</span></span></em></span>;
-SVRMGR&gt; alter user <span class="emphasis"><em><span class="replaceable"><span class="replaceable">service0</span></span></em></span> quota unlimited on <span class="emphasis"><em><span class="replaceable"><span class="replaceable">service0</span></span></em></span>;
-SVRMGR&gt; exit;</pre><p>
+SVRMGR&gt; <b class="userinput"><tt>create user <span class="replaceable"><span class="replaceable">service0</span></span> identified by <span class="replaceable"><span class="replaceable">service0password</span></span> default tablespace <span class="replaceable"><span class="replaceable">service0</span></span>
+    temporary tablespace temp quota unlimited on <span class="replaceable"><span class="replaceable">service0</span></span>;</tt></b>
+SVRMGR&gt; <b class="userinput"><tt>grant connect, resource, ctxapp, javasyspriv, query rewrite to <span class="replaceable"><span class="replaceable">service0</span></span>;</tt></b>
+SVRMGR&gt; <b class="userinput"><tt>revoke unlimited tablespace from <span class="replaceable"><span class="replaceable">service0</span></span>;</tt></b>
+SVRMGR&gt; <b class="userinput"><tt>alter user <span class="replaceable"><span class="replaceable">service0</span></span> quota unlimited on <span class="replaceable"><span class="replaceable">service0</span></span>;</tt></b>
+SVRMGR&gt; <b class="userinput"><tt>exit;</tt></b></pre><p>
 		  Your table space is now ready. In case you are trying to delete a
 		  previous OpenACS installation, consult these commands in <a href="database-management.html#install-openacs-delete-tablespace" title="Deleting a tablespace">the section called &#8220;Deleting a tablespace&#8221;</a> below.
 		</p></li><li><p>
         Make sure that you can login to Oracle using your
-        <span class="emphasis"><em>service_name</em></span> account: </p><pre class="programlisting">
-<span class="replaceable"><span class="replaceable">service0</span></span>:~$ sqlplus <span class="emphasis"><em><span class="replaceable"><span class="replaceable">service0</span></span></em></span>/<span class="emphasis"><em><span class="replaceable"><span class="replaceable">service0</span></span>password</em></span>
-SQL&gt; select sysdate from dual;
-
+        <span class="emphasis"><em>service_name</em></span> account: </p><pre class="programlisting">[service0 ~]$ <b class="userinput"><tt>sqlplus <span class="replaceable"><span class="replaceable">service0</span></span>/<span class="replaceable"><span class="replaceable">service0password</span></span></tt></b>
+SQL&gt; <b class="userinput"><tt>select sysdate from dual;</tt></b>
 SYSDATE
 ----------
 2001-12-20
-
-SQL&gt; exit</pre><p>
+SQL&gt; <b class="userinput"><tt>exit;</tt></b></pre><p>
 		  You should see today's date in a format 'YYYY-MM-DD.'
 		  If you can't login, try redoing step 1 again. If the date is
 		  in the wrong format, make sure you followed the steps outlined in
@@ -228,24 +215,20 @@ SQL&gt; exit</pre><p>
 CREATE USER
 [postgres pgsql]$ <b class="userinput"><tt>exit</tt></b>
 logout
-
 [root root]#</pre></li><li><p><a name="create-database"></a>Create a database with the same name as our service name, <span class="replaceable"><span class="replaceable">service0</span></span>.</p><pre class="screen">[root root]# <b class="userinput"><tt>su - <span class="replaceable"><span class="replaceable">service0</span></span></tt></b>
 [service0 service0]$ <b class="userinput"><tt>createdb -E UNICODE <span class="replaceable"><span class="replaceable">service0</span></span></tt></b>
 CREATE DATABASE
 [service0 service0]$
 <span class="action"><span class="action">su - <span class="replaceable"><span class="replaceable">service0</span></span>
-createdb -E UNICODE <span class="replaceable"><span class="replaceable">service0</span></span></span></span></pre></li><li><p>Automate daily database Vacuuming.  This is a process which cleans out discarded data from the database.  A quick way to automate vacuuming is to edit the cron file for the database user.  Recommended: <tt class="computeroutput">VACUUM ANALYZE</tt> every hour and <tt class="computeroutput">VACUUM FULL ANALYZE</tt> every day.</p><a class="indexterm" name="id2852626"></a><pre class="screen">[service0 service0]$ <b class="userinput"><tt>export EDITOR=emacs;crontab -e</tt></b></pre><p>Add this line to the file.  The numbers and stars at the beginning are cron columns that specify when the program should be run - in this case, whenever the minute is 0 and the hour is 1, i.e., 1:00 am every day.</p><pre class="programlisting">0 1-23 * * * /usr/local/pgsql/bin/vacuumdb --full --analyze <span class="replaceable"><span class="replaceable">service0</span></span>
-0 0 * * * /usr/local/pgsql/bin/vacuumdb --full --analyze <span class="replaceable"><span class="replaceable">service0</span></span></pre></li><li><p><a href="install-full-text-search.html#install-openfts-postgres" title="Install OpenFTS prerequisites in PostgreSQL instance">Add Full Text Search Support</a> (OPTIONAL)</p></li><li><a name="db-setup-exit"></a><pre class="screen">[service0 service0]$ <b class="userinput"><tt>exit</tt></b>
-logout
-
-[root root]# </pre></li></ul></div></li></ul></div></li><li><a name="install-openacs-configure-aol"></a><p><b>Configure an AOLserver Service for OpenACS. </b></p><div class="orderedlist"><ol type="a"><li><p><a name="configure-config-tcl"></a>
+createdb -E UNICODE <span class="replaceable"><span class="replaceable">service0</span></span></span></span></pre></li><li><p>Automate daily database Vacuuming.  This is a process which cleans out discarded data from the database.  A quick way to automate vacuuming is to edit the cron file for the database user.  Recommended: <tt class="computeroutput">VACUUM ANALYZE</tt> every hour and <tt class="computeroutput">VACUUM FULL ANALYZE</tt> every day.</p><a class="indexterm" name="id2836543"></a><pre class="screen">[service0 service0]$ <b class="userinput"><tt>export EDITOR=emacs;crontab -e</tt></b></pre><p>Add this line to the file.  The numbers and stars at the beginning are cron columns that specify when the program should be run - in this case, whenever the minute is 0 and the hour is 1, i.e., 1:00 am every day.</p><pre class="programlisting">0 1-23 * * * /usr/local/pgsql/bin/vacuumdb --full --analyze <span class="replaceable"><span class="replaceable">service0</span></span>
+0 0 * * * /usr/local/pgsql/bin/vacuumdb --full --analyze <span class="replaceable"><span class="replaceable">service0</span></span></pre></li><li><p><a href="install-full-text-search.html#install-openfts-postgres" title="Install OpenFTS prerequisites in PostgreSQL instance">Add Full Text Search Support</a> (OPTIONAL)</p></li><li><p><a name="db-setup-exit"></a> At this point the database should be ready for installing OpenACS.</p></li></ul></div></li></ul></div></li><li><a name="install-openacs-configure-aol"></a><p><b>Configure an AOLserver Service for OpenACS. </b></p><div class="orderedlist"><ol type="a"><li><p><a name="configure-config-tcl"></a>
 	  The AOLserver architecture lets you run an arbitrary number of
 	  virtual servers. A virtual server is an HTTP service running on a
 	  specific port, e.g. port 80. In order for OpenACS to work, you
 	  need to configure a virtual server.  The Reference Platform
 	  uses a configuration file included in the OpenACS tarball,
 	  <tt class="computeroutput">/var/lib/aolserver/<span class="replaceable"><span class="replaceable">service0</span></span>/etc/config.tcl</tt>.
-	   Open it in an editor to adjust the parameters.</p><a class="indexterm" name="id2862444"></a><pre class="screen">[root root]# <b class="userinput"><tt>su - <span class="replaceable"><span class="replaceable">service0</span></span></tt></b>
+	   Open it in an editor to adjust the parameters.</p><a class="indexterm" name="id2836667"></a><pre class="screen">[root root]# <b class="userinput"><tt>su - <span class="replaceable"><span class="replaceable">service0</span></span></tt></b>
 [service0 service0]$ <b class="userinput"><tt>cd /var/lib/aolserver/<span class="replaceable"><span class="replaceable">service0</span></span>/etc</tt></b>
 [service0 etc]$ <b class="userinput"><tt>emacs config.tcl</tt></b>
 </pre><p>
@@ -394,16 +377,15 @@ export ORA_NLS33=$ORACLE_HOME/ocommon/nls/admin/data</pre></li></ul></div><p>Tes
 	<tt class="computeroutput"><span class="replaceable"><span class="replaceable">service0</span></span></tt> and checking the paths.</p><pre class="screen">[service0 service0]$ <b class="userinput"><tt>exit</tt></b>
 logout
 [root src]# <b class="userinput"><tt>su - <b class="userinput"><tt><span class="replaceable"><span class="replaceable">service0</span></span></tt></b></tt></b>
-[postgres pgsql]$ <b class="userinput"><tt>env | grep PATH</tt></b>
+[service0 ~]$ <b class="userinput"><tt>env</tt></b>
 </pre><div class="itemizedlist"><ul type="circle"><li><p>For PostgreSQL, you should see:</p><pre class="screen">
-LD_LIBRARY_PATH=LD_LIBRARY_PATH=:/usr/local/pgsql/lib
-PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:/usr/bin/X11:/usr/X11R6/bin:/root/bin:/usr/local/pgsql/bin:/usr/local/pgsql/bin</pre></li><li><p>For Oracle:</p><pre class="screen">ORACLE_BASE=/ora8/m01/app/oracle
+LD_LIBRARY_PATH=:/usr/local/pgsql/lib
+PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:/usr/bin/X11:/usr/X11R6/bin:\
+  /root/bin:/usr/local/pgsql/bin:/usr/local/pgsql/bin</pre></li><li><p>For Oracle:</p><pre class="screen">ORACLE_BASE=/ora8/m01/app/oracle
 ORACLE_HOME=/ora8/m01/app/oracle/product/8.1.7
-PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:/usr/bin/X11:/usr/X11R6/bin:/root/bin:/ora8/m01/app/oracle/product/8.1.7/bin
+PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:/usr/bin/X11:/usr/X11R6/bin:\
+  /root/bin:/ora8/m01/app/oracle/product/8.1.7/bin
 LD_LIBRARY_PATH=/ora8/m01/app/oracle/product/8.1.7/lib:/lib:/usr/lib
 ORACLE_SID=ora8
 ORACLE_TERM=vt100
-ORA_NLS33=$ORACLE_HOME/ocommon/nls/admin/data</pre></li></ul></div><pre class="screen">[service0 service0]$ <b class="userinput"><tt>exit</tt></b>
-logout
-
-[root root]#</pre></li><li><p>Test your <a href="backup-recovery.html" title="Backup and Recovery">backup and recovery</a> procedure.</p></li><li><p>Set up <a href="maintenance-web.html#uptime" title="External uptime validation">the section called &#8220;External uptime validation&#8221;</a>.</p></li></ul></div><div class="cvstag">($Id$)</div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="aolserver4.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="win2k-installation.html">Next</a></td></tr><tr><td width="40%" align="left">Install AOLserver 4 </td><td width="20%" align="center"><a accesskey="u" href="complete-install.html">Up</a></td><td width="40%" align="right"> OpenACS Installation Guide for Windows2000</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a><center><a href="http://openacs.org/doc/openacs.html#comments">View comments on this page at openacs.org</a></center></body></html>
+ORA_NLS33=$ORACLE_HOME/ocommon/nls/admin/data</pre></li></ul></div></li><li><p>Test your <a href="backup-recovery.html" title="Backup and Recovery">backup and recovery</a> procedure.</p></li><li><p>Set up <a href="maintenance-web.html#uptime" title="External uptime validation">the section called &#8220;External uptime validation&#8221;</a>.</p></li></ul></div><div class="cvstag">($Id$)</div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="aolserver4.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="win2k-installation.html">Next</a></td></tr><tr><td width="40%" align="left">Install AOLserver 4 </td><td width="20%" align="center"><a accesskey="u" href="complete-install.html">Up</a></td><td width="40%" align="right"> OpenACS Installation Guide for Windows2000</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a><center><a href="http://openacs.org/doc/openacs.html#comments">View comments on this page at openacs.org</a></center></body></html>

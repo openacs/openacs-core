@@ -94,7 +94,7 @@
         </formalpara>
         <itemizedlist>
           <listitem>
-            <formalpara>
+            <formalpara id="oracle-snapshot-backup">
               <title>Oracle</title>
               <para></para>
             </formalpara>
@@ -178,7 +178,7 @@ Export terminated successfully without warnings.</programlisting>
           </listitem>
 
           <listitem>
-            <formalpara>
+            <formalpara id="postgres-snapshot-backup">
               <title>PostgreSQL</title>
               <para>Create a backup file and verify that it was created and has a reasonable size (several megabytes).</para>
             </formalpara>
