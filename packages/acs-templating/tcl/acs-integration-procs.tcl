@@ -103,6 +103,59 @@ ad_proc adp_parse_ad_conn_file {} {
     set parsed_template [template::adp_parse [file root [ad_conn file]] {}]
 
     if {![empty_string_p $parsed_template]} {
+        
+        #
+        # acs-lang translator mode
+        #
+
+        if { [lang::util::translator_mode_p] } {
+            
+            # Attempt to move all message keys outside of tags
+            while { [regsub -all {(<[^>]*)(\x002\[\x001[^\x001]*\x001\]\x002)([^>]*>)} $parsed_template {\2\1\3} parsed_template] } {}
+            
+            # Attempt to move all message keys outside of <select>...</select> statements
+            regsub -all -nocase {(<option\s[^>]*>[^<]*)(\x002\[\x001[^\x001]*\x001\]\x002)([^<]*</option[^>]*>)} $parsed_template {\2\1\3} parsed_template
+
+            while { [regsub -all -nocase {(<select[^>]*>[^<]*)(\x002\[\x001[^\x001]*\x001\]\x002)} $parsed_template {\2\1} parsed_template] } {}
+
+            set start 0
+            while { [regexp -nocase -indices -start $start {(<select[^\x002]*)(\x002\[\x001[^\x001]*\x001\]\x002)} $parsed_template indices select_idx message_idx] } {
+                set select [string range $parsed_template [lindex $select_idx 0] [lindex $select_idx 1]]
+
+                if { [string first "</select" [string tolower $select]] != -1 } {
+                    set start [lindex $indices 1]
+                } else {
+                    set before [string range $parsed_template 0 [expr [lindex $indices 0]-1]]
+                    set message [string range $parsed_template [lindex $message_idx 0] [lindex $message_idx 1]]
+                    set after [string range $parsed_template [expr [lindex $indices 1] + 1] end]
+                    set parsed_template "${before}${message}${select}${after}"
+                }
+            }
+
+            # TODO: We could also move message keys out of <head>...</head>
+
+            while { [regexp -indices {\x002\[\x001([^\x001]*)\x001\]\x002} $parsed_template indices key] } {
+                set before [string range $parsed_template 0 [expr [lindex $indices 0] - 1]]
+                set after [string range $parsed_template [expr [lindex $indices 1] + 1] end]
+
+                set key [string range $parsed_template [lindex $key 0] [lindex $key 1]]
+
+                set keyv [split $key "."]
+                set package_key [lindex $keyv 0]
+                set message_key [lindex $keyv 1]
+
+                set edit_url [export_vars -base "[apm_package_url_from_key "acs-lang"]admin/edit-localized-message" { { locale {[ad_conn locale]} } package_key message_key { return_url [ad_return_url] } }]
+
+                if { [lang::message::message_exists_p [ad_conn locale] $key] } {
+                    set edit_link "<a href=\"$edit_url\" title=\"$key\" style=\"color: green;\"><b>o</b></a>"
+                } else {
+                    set edit_link "<a href=\"$edit_url\" title=\"$key\" style=\"background-color: yellow; color: red;\"><b>*</b></a>"
+                }
+
+                set parsed_template "${before}${edit_link}${after}"
+            }
+        }
+
         set mime_type [template::get_mime_type]
         set header_preamble [template::get_mime_header_preamble $mime_type]
 	doc_return 200 $mime_type "$header_preamble $parsed_template"
