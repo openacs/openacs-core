@@ -28,3 +28,11 @@ if ![nsv_exists CR_LOCATIONS CR_FILES] {
     nsv_set CR_LOCATIONS CR_FILES "[file dirname [string trimright [ns_info tcllib] "/"]]/content-repository-content-files"
 
 }
+
+
+##
+## At boot time, we should scan AOLserver mime types and insert them if they're
+## not there already. (ben@openforce)
+##
+
+cr_scan_mime_types
