@@ -17,7 +17,7 @@
       <formalpara>
         <title>Special characters in Tcl</title>
         <para>
-Try strings starting with a <computeroutput>-Bad</computeroutput> and strings containing <computeroutput>[BAD]</computeroutput>, <computeroutput>{</computeroutput>, <computeroutput>\077</computeroutput>, and <computeroutput>$Bad</computeroutput>.  For user input, <computeroutput>[BAD]</computeroutput> should never be evaluated, <computeroutput>\077</computeroutput> should not be turned into a <computeroutput>?</computeroutput> and <computeroutput>$Bad</computeroutput> should not be interpolated.  The <computeroutput>string -Bad [BAD] \077 { $Bad</computeroutput> should be valid user input, should pass through the system unaltered, and if it isn't that's a bug.
+Try strings starting with a <computeroutput>-Bad</computeroutput> and strings containing <computeroutput>[BAD]</computeroutput>, <computeroutput>{</computeroutput>, <computeroutput>\077</computeroutput>, and <computeroutput>$Bad</computeroutput>.  For user input, <computeroutput>[BAD]</computeroutput> should never be evaluated, <computeroutput>\077</computeroutput> should not be turned into a <computeroutput>?</computeroutput> and <computeroutput>$Bad</computeroutput> should not be interpolated.  The string <computeroutput>-Bad [BAD] \077 { $Bad</computeroutput> should be valid user input, should pass through the system unaltered, and if it isn't that's a bug.
 </para>
       </formalpara>
     </listitem>
