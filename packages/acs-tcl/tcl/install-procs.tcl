@@ -103,9 +103,9 @@ ad_proc -public install::xml::action::mount { node } {
 
     if {[string is space $mount_point] ||
         [string equal $mount_point "/"]} {
-        set node_id [site_node::get_node_id -url "/"]
+        array set site_node [site_node::get -url "/"]
 
-        if { ![empty_string_p $node(object_id)] } {
+        if { ![empty_string_p $site_node(object_id)] } {
             ns_log Error "A package is already mounted at \"$mount_point\""
             ns_write "<br>mount: A package is already mounted at \"$mount_point\", ignoring mount command."
             set node_id ""
@@ -166,6 +166,73 @@ ad_proc -public install::xml::action::mount { node } {
         if {![string equal $id ""]} {
             set ::install::xml::ids($id) $package_id
         }
+    }
+
+    return $out
+}
+
+ad_proc -public install::xml::action::mount-existing { node } {
+    Mounts an existing package on a specified node.
+
+    <p>&lt;mount-existing package-id=&quot;<em>package-id</em> mount-point=&quot;<em>url</em>&quot; /&gt;</p>
+} { 
+    set package_id [apm_attribute_value -default "" $node package-id]
+    set package_key [apm_attribute_value -default "" $node package-key]
+    set mount_point [apm_attribute_value -default "" $node mount-point]
+
+    set out [list]
+
+    if {[string is space $mount_point] ||
+        [string equal $mount_point "/"]} {
+        array set site_node [site_node::get -url "/"]
+
+        if { ![empty_string_p $site_node(object_id)] } {
+            ns_log Error "A package is already mounted at \"$mount_point\""
+            ns_write "<br>mount: A package is already mounted at \"$mount_point\", ignoring mount command."
+            set node_id ""
+        }
+    } else {
+        regexp {(.*)/([^/]*)$} $mount_point match parent_url mount_point
+
+        if {[string eq $parent_url ""]} { 
+            set parent_url /
+        }
+
+        set parent_id [site_node::get_node_id -url $parent_url]
+
+        if { [catch {
+            db_transaction {
+                set node_id [site_node::new -name $mount_point \
+                    -parent_id $parent_id]
+            }
+        } error] } {
+            # There is already a node with that path, check if there is a 
+            # package mounted there
+            array set site_node [site_node::get -url "/$mount_point"]
+            if { [empty_string_p $site_node(object_id)] } {
+                # There is no package mounted there so go ahead and mount the 
+                # new package
+                set node_id $site_node(node_id)
+            } else {
+                ns_log Error "A package is already mounted at \"$mount_point\""
+                ns_write "<br>mount: A package is already mounted at \"$mount_point\", ignoring mount command."
+                set node_id ""
+            }
+        }
+    }
+
+    if { ![empty_string_p $node_id] } {
+        lappend out "Mounting existing package $package_id at /$mount_point"
+
+        if { ![string equal $package_id ""] } {
+            set package_id [install::xml::util::get_id $package_id]
+        } elseif { ![string equal $package_key ""] } {
+            set package_id [apm_package_id_from_key $package_key]
+        } 
+
+        set package_id [site_node::mount \
+            -node_id $node_id \
+            -object_id $package_id]
     }
 
     return $out
