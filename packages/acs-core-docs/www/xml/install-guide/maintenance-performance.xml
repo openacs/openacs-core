@@ -1,0 +1,104 @@
+<?xml version='1.0' ?>
+<!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+"http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
+<!ENTITY % myvars SYSTEM "../variables.ent">
+%myvars;
+]>
+<sect1 id="maint-performance">
+  <title>Diagnosing Performance Problems</title>
+  <itemizedlist>
+    <listitem>
+      <para>Did performance problems happen overnight, or did they sneak up on
+    you? Any clue what caused the performance problems (e.g. loading 20K
+    users into .LRN)</para>
+    </listitem>
+    <listitem>
+      <para>Is the file system out of space?  Is the machine swapping to disk constantly?</para>
+    </listitem>
+    <listitem>
+      <para>Isolating and solving database problems.</para>
+    <itemizedlist>
+      <listitem>
+        <para>Without daily internal maintenance, most databases slowly degrade in performance.  For PostGreSQL, see <xref linkend="install-next-nightly-vacuum"/>.  For Oracle, "gather schema stats" (more info?).</para>
+      </listitem>
+      <listitem>
+        <para>You can track the exact amount of time each database query on a page takes:</para>
+          <orderedlist>
+            <listitem>
+              <para>Go to <ulink url="/acs-admin/install">Main Site : Site-Wide Administration : Install Software</ulink></para>
+              </listitem>
+              <listitem>
+                <para>Click on "Install New Application" in "Install from OpenACS Repository"</para>
+            </listitem>
+            <listitem>
+              <para>Choose "ACS Developer Support"></para>
+            </listitem>
+            <listitem>
+              <para>After install is complete, restart the server.</para>
+            </listitem>
+            <listitem>
+              <para>Browse to Developer Support, which is automatically mounted at <computeroutput><ulink url="/ds">/ds</ulink></computeroutput>.
+              </para>
+            </listitem>
+            <listitem>
+              <para>Turn on Database statistics</para>
+            </listitem>
+            <listitem>
+              <para>Browse directly to a slow page and click "Request Information" at the bottom of the page.</para>
+            </listitem>
+            <listitem>
+              <para>This should return a list of database queries on the page, including the exact query (so it can be cut-paste into psql or oracle) and the time each query took.</para>
+              <figure>
+                <title>Query Analysis example</title>
+              <mediaobject>
+                <imageobject>
+                  <imagedata fileref="/doc/images/query-duration.png" format="PNG"/>
+                </imageobject>
+              </mediaobject>
+              </figure>
+            </listitem>
+          </orderedlist>
+        </listitem>
+        <listitem>
+          <para>Identify a runaway Oracle query: first, use <userinput>ps aux</userinput> or <userinput>top</userinput> to get the UNIX process ID of a runaway Oracle process.</para>
+        <para>Log in to SQL*Plus as the admin:</para>
+        <screen>[<replaceable>service0</replaceable> ~]$ svrmgrl
+
+Oracle Server Manager Release 3.1.7.0.0 - Production
+
+Copyright (c) 1997, 1999, Oracle Corporation.  All Rights Reserved.
+
+Oracle8i Enterprise Edition Release 8.1.7.3.0 - Production
+With the Partitioning option
+JServer Release 8.1.7.3.0 - Production
+
+SVRMGR> <userinput>connect internal</userinput>	        
+Password:</screen>
+        <para>See all of the running queries, and match the UNIX PID:</para>
+        <programlisting>select p.spid  -- The UNIX PID
+       ,s.sid  ,s.serial#
+       ,p.username  as os_user
+       ,s.username  ,s.status
+       ,p.terminal  ,p.program
+  from v$session s  ,v$process p
+ where p.addr = s.paddr
+ order by s.username ,p.spid ,s.sid ,s.serial# ;</programlisting>
+        <para>See the SQL behind the oracle processes:</para>
+        <programlisting>select s.username
+       ,s.sid  ,s.serial#
+       ,sql.sql_text
+  from v$session s, v$sqltext sql
+ where sql.address    = s.sql_address
+   and sql.hash_value = s.sql_hash_value
+ --and upper(s.username) like 'USERNAME%'
+ order by s.username ,s.sid ,s.serial# ,sql.piece ;</programlisting>
+        <para>To kill a troubled process:</para>
+        <programlisting>alter system kill session 'SID,SERIAL#';  --substitute values for SID and SERIAL#</programlisting>
+        <para>(See <ulink url="http://www.piskorski.com/docs/oracle.html">Andrew Piskorski's Oracle notes</ulink>)</para>
+        </listitem>
+      </itemizedlist>
+    </listitem>
+  </itemizedlist>
+  <para><phrase role="cvstag">($Id$)</phrase></para>
+  
+</sect1>
