@@ -323,7 +323,7 @@ begin
     raise exception ''int_to_tree_key: key must be a positive integer'';
   end if;
 
-  if p_intkey < 2^7 then
+  if p_intkey < 128 then
     return substring(bitfromint4(p_intkey), 25, 8);
   else
     return substring(bitfromint4(-2^31 + p_intkey), 1, 32);
