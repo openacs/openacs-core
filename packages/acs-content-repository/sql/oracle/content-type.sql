@@ -582,13 +582,16 @@ procedure refresh_view (
 
   cursor join_cur is
     select
-      table_name, id_column, level
+      distinct lower(table_name) as table_name,
+      id_column, level
     from
       acs_object_types
     where
       object_type <> 'acs_object'
     and
       object_type <> 'content_revision'
+    and lower(table_name) <> 'acs_objects'
+    and lower(table_name) <> 'cr_revisions'
     start with
       object_type = refresh_view.content_type
     connect by
