@@ -798,11 +798,6 @@ function get_parent_folder (
   item_id	in cr_items.item_id%TYPE
 ) return cr_folders.folder_id%TYPE;
 
-procedure update_last_modified (
-    item_id in cr_items.item_id%TYPE,
-    last_modified in acs_objects.last_modified%TYPE default sysdate
-);
-
 end content_item;
 /
 show errors
