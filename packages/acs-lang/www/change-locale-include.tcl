@@ -48,15 +48,17 @@ if { ($package_id != "") && ([ad_conn user_id] != 0) } {
             -options $list_of_locales
 }
 
-set timezone_options [list]
-foreach entry [lc_list_all_timezones] {
-    set tz [lindex $entry 0]
-    lappend timezone_options [list $entry $tz]
-}
+if { [lang::system::timezone_support_p] } {
+    set timezone_options [list]
+    foreach entry [lc_list_all_timezones] {
+        set tz [lindex $entry 0]
+        lappend timezone_options [list $entry $tz]
+    }
 
-element create locale timezone -datatype text -widget select -optional \
+    element create locale timezone -datatype text -widget select -optional \
         -label "Your Timezone" \
         -options $timezone_options
+}
 
 if { [form is_request locale] } {
     if { ($package_id != "") && ([ad_conn user_id] != 0) } {
@@ -65,7 +67,9 @@ if { [form is_request locale] } {
     element set_properties locale site_wide_locale -value [lang::user::site_wide_locale]
     element set_properties locale return_url_info -value $return_url
     element set_properties locale package_id_info -value $package_id
-    element set_properties locale timezone -value [lang::user::timezone]
+    if { [lang::system::timezone_support_p] } {
+        element set_properties locale timezone -value [lang::user::timezone]
+    }
 }
 
 if { [form is_valid locale] } {
@@ -75,7 +79,11 @@ if { [form is_valid locale] } {
         set package_level_locale [element get_value locale package_level_locale]
         lang::user::set_locale -package_id $package_id $package_level_locale
     }
-    lang::user::set_timezone [element get_value locale timezone]
+    
+    if { [lang::system::timezone_support_p] } {
+        lang::user::set_timezone [element get_value locale timezone]
+    }
+
     ad_returnredirect $return_url
     ad_script_abort
 }

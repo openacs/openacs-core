@@ -12,6 +12,11 @@ ad_page_contract {
     utc_ansi
 }
 
+if { ![lang::system::timezone_support_p] } {
+    ad_return_error "Timezone support not installed" "This installation of the acs-lang package does not support timezone settings. The ref-timezones package needs to be installed first"
+    ad_script_abort
+}
+
 if {![empty_string_p $timezone]} {
     lang::system::set_timezone $timezone
 }
