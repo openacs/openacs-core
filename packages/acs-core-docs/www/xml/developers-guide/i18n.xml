@@ -305,7 +305,7 @@
 
     </sect3>
 
-    <sect3 id="i18n-message-catalog-params" xreflabel="Multilingual APM Parameters">
+    <sect3 id="catalog-consistency-check">
 
       <title>Checking the Consistency of Catalog Files</title>
 

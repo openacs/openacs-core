@@ -156,10 +156,11 @@ ad_form -name note -form {
 }
 
 permission::require_write_permission -object_id $item_id
-
+set title [item::get_title $item_id]
 mfp::note::delete -item_id $item_id
+ad_returnredirect -message "Item $title deleted." "."
 
-ad_returnredirect "."</programlisting>
+</programlisting>
     </sect2>
   </sect1>
 
