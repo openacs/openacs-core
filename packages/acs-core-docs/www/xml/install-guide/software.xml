@@ -41,7 +41,7 @@
       <title>Individual Programs</title>
       <itemizedlist>
         <listitem id="openacs-download"><formalpara><title><ulink
-            url="http://openacs.org/projects/openacs/download/one-revision?revision_id=92178">OpenACS &version;</ulink></title>
+            url="http://openacs.org/projects/openacs/download/">OpenACS &version;</ulink></title>
             <para>The OpenACS tarball comprises the core packages and
             many useful additional packages.  This includes a full set
             of documentation.  The tarball works with both PostGreSQL
