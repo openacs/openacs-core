@@ -6,18 +6,15 @@ ad_page_contract {
     system_name:onevalue
 }
 
-set user_id [ad_get_user_id]
-set rel_id [db_string rel_id "select rel_id
-from group_member_map
-where group_id = acs.magic_object_id('registered_users')
-  and member_id = :user_id"]
+auth::require_login
 
+set page_title "Account Closed"
+set context [list [list [ad_pvt_home] [ad_pvt_home_name]] $page_title]
 
-db_exec_plsql unused "
-begin
-  membership_rel.deleted( rel_id => :rel_id );
-end;"
+acs_user::delete -user_id [ad_conn user_id]
 
 set system_name [ad_system_name]
 
-ad_return_template
+set login_url [ad_get_login_url]
+
+auth::verify_account_status
