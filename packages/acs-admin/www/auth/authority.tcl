@@ -39,39 +39,44 @@ set form_widgets_full {
     }
 
     {auth_impl_id:integer(select),optional
-        {label "Authentication implementation"}
-        {options {[acs_sc::impl::get_options -empty_label "disabled" -contract_name auth_authentication]}}
+        {label "Authentication"}
+        {section "Authentication"}
+        {options {[acs_sc::impl::get_options -empty_label "Disabled" -contract_name auth_authentication]}}
     }
 
     {pwd_impl_id:integer(select),optional
-        {label "Password implementation"}
-        {options {[acs_sc::impl::get_options -empty_label "disabled" -contract_name auth_password]}}
-    }
-
-    {register_impl_id:integer(select),optional
-        {label "Register implementation"}
-        {options {[acs_sc::impl::get_options -empty_label "disabled" -contract_name auth_registration]}}
+        {label "Password management"}
+        {section "Password Management"}
+        {options {[acs_sc::impl::get_options -empty_label "Disabled" -contract_name auth_password]}}
     }
 
     {forgotten_pwd_url:text,optional
         {html {size 50}}
-        {label "Forgotten password URL"}
-        {help_text "URL that users are sent to when they have forgotten their password. Any username in this url must be on the syntax foo={username} and {username} will be replaced with the real username"}
+        {label "Recover password URL"}
+        {help_text "Instead of a password management driver, you may provide a URL to which users are sent when they need help recovering their password. Any username in this url must be on the syntax foo={username} and {username} will be replaced with the real username."}
     }        
     {change_pwd_url:text,optional
         {html {size 50}}
         {label "Change password URL"}
-        {help_text "URL where users can change their password. Any username in this url must be on the syntax foo={username} and {username} will be replaced with the real username"}
+        {help_text "Instead of a password management driver, you may provide a URL to which users are sent when they want to change their password. Any username in this url must be on the syntax foo={username} and {username} will be replaced with the real username."}
     }        
+
+    {register_impl_id:integer(select),optional
+        {label "Account registration"}
+        {section "Account Registration"}
+        {options {[acs_sc::impl::get_options -empty_label "Disabled" -contract_name auth_registration]}}
+    }
+
     {register_url:text,optional
         {html {size 50}}
-        {label "Register URL"}
+        {label "Account registration URL"}
         {help_text "URL where users register for a new account."}
     }        
 
     {help_contact_text:richtext,optional
         {html {cols 60 rows 13}} 
         {label "Help contact text"}
+        {section "User Help"}
         {help_text "Contact information (phone, email, etc.) to be displayed as a last resort when people are having problems with an authority."}
     }        
 
@@ -82,20 +87,14 @@ set form_widgets_full {
         {section {Batch Synchronization}}
     }
 
-    {snapshot_p:text(radio)
-        {label "Use snapshot synchronization?"}
-        {options {{Yes t} {No f}}}
-        {value f}
-    }
-
     {get_doc_impl_id:integer(select),optional
         {label "GetDocument implementation"}
-        {options {[acs_sc::impl::get_options -empty_label "disabled" -contract_name auth_getdoc]}}
+        {options {[acs_sc::impl::get_options -empty_label "Disabled" -contract_name auth_sync_retrieve]}}
     }
 
     {process_doc_impl_id:integer(select),optional
         {label "ProcessDocument implementation"}
-        {options {[acs_sc::impl::get_options -empty_label "disabled" -contract_name auth_processdoc]}}
+        {options {[acs_sc::impl::get_options -empty_label "Disabled" -contract_name auth_sync_process]}}
     }
 }
 
@@ -187,7 +186,9 @@ ad_form -name authority \
     auth::authority::edit \
         -authority_id $authority_id \
         -array element_array
-} 
+} -after_submit {
+    ad_returnredirect [export_vars -base [ad_conn url] { authority_id }]
+}
 
 # Show recent batch jobs for existing authorities
 
@@ -249,11 +250,18 @@ if { $display_batch_history_p } {
         
         set short_message [string_truncate -len 30 $message]
     }
+    if { [exists_and_not_null get_doc_impl_id] && [exists_and_not_null process_doc_impl_id] } {
+        set batch_sync_run_url [export_vars -base batch-job-run { authority_id }]
+    } else {
+        # If there's neither a driver, nor any log history to display, hide any mention of batch jobs
+        if { ${batch_jobs:rowcount} == 0 } {
+            set display_batch_history_p 0
+        }
+    }
 }
 
 set context [list [list "." "Authentication"] $page_title]
 
-set batch_sync_run_url [export_vars -base batch-job-run { authority_id }]
 
 # This code should be executed for non-local authorities in the following types of requests:
 # - initial request of the form (display mode)

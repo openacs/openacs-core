@@ -26,6 +26,10 @@ ad_form -name batch_job_form \
             {job_end_time:text(inform)
                 {label "End time"}                
             }
+            {run_time_seconds:text(inform)
+                {label "Running time"}
+                {after_html " seconds"}
+            }
             {interactive_p:text(inform)
                 {label "Interactive"}
             }
@@ -52,9 +56,6 @@ ad_form -name batch_job_form \
             }            
             {document_download:text(inform)
                 {label "Document"}
-            }
-            {run_time_seconds:text(inform)
-                {label "Runtime seconds"}
             }
             {num_actions:text(inform)
                 {label "Number of actions"}

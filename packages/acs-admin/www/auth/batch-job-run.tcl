@@ -13,4 +13,6 @@ set page_title "Run batch job"
 set authority_page_url [export_vars -base authority { {authority_id $authority(authority_id)} }]
 set context [list [list "." "Authentication"] [list $authority_page_url "$authority(pretty_name)"] $page_title]
 
-auth::authority::batch_sync -authority_id $authority_id
+set job_id [auth::authority::batch_sync -authority_id $authority_id]
+
+set job_url [export_vars -base batch-job { job_id }]

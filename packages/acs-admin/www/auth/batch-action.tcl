@@ -7,7 +7,7 @@ ad_page_contract {
     entry_id:integer
 }
 
-auth::sync::entry::get -entry_id $entry_id -array batch_action
+auth::sync::job::get_entry -entry_id $entry_id -array batch_action
 
 set page_title "One batch action"
 
