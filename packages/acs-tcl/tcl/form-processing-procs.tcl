@@ -581,10 +581,11 @@ ad_proc -public ad_form {
                             return -code error "element $element_name: \"$flag\" attribute must have a parameter"
                         }
                         set name af_$flag
-                        append name "($element_name)"
+                        append name "(${form_name}__$element_name)"
                         if { [info exists $name] } {
                             return -code error "element $element_name: \"$flag\" appears twice"
                         }
+                        global $name
                         set $name $af_element_parameters($element_name:$flag)
                     }
 
@@ -638,10 +639,6 @@ ad_proc -public ad_form {
 
     # Check that any acquire and get_property attributes are supported by their element's datatype
     # These are needed at submission and fill-the-form-with-db-values time 
-
-    global af_from_sql
-    global af_to_sql
-    global af_to_html
 
     foreach element_name $af_element_names($form_name) {
         if { [llength $element_name] == 1 } {
