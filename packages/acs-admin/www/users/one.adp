@@ -3,13 +3,18 @@
 <property name="context">@context@</property>
 
 <ul>
-<li>Name:  @first_names@ @last_name@ (<a href="/user/basic-info-update?@export_edit_vars@">edit</a>)</li>
-<li>Email:  <a href="mailto:@email@">@email@</a> 
-(<a href="/user/basic-info-update?@export_edit_vars@">edit</a>)</li>
-<li>Screen name:  @screen_name@ (<a href="/user/basic-info-update?@export_edit_vars@">edit</a>)</li>
+<li>Name:  @first_names@ @last_name@ (<a href="@public_link@">public page</a>)</li>
+<li>Email:  <a href="mailto:@email@">@email@</a></li>
+<li>Screen name:  @screen_name@ </li>
+<if @url@ not nil>
+  <li>Homepage: <a href="@url@">@url@</a></li>
+</if>
 <li>User ID:  @user_id@</li>
+</ul>
+[<a href="/user/basic-info-update?@export_edit_vars@">edit user information</a>]
+<ul>
 <li>Registration date:  @registration_date@</li>
-
+<li>Registration IP: @creation_ip@ (<a href="complex-search?target=one&amp;ip=@creation_ip@" title="other registrations from this IP address">others</a>)</li>
 <if @last_visit@ not nil>
   <li>Last visit: @last_visit@</li>
 </if>
@@ -17,9 +22,8 @@
 <if @portrait_p@ eq 1>
   <li>Portrait:  <a href="/shared/portrait?user_id=@user_id@">@portrait_title@</a></li>
 </if>
-
-<li> Member state: @member_state@ @user_finite_state_links@</li>
 </ul>
+Member state: @member_state@ @user_finite_state_links@
 
 <h2>This user is a member of the following groups:</h2>
 <p>Note: These are the groups to which the user has been granted 

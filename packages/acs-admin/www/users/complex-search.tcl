@@ -29,6 +29,7 @@ ad_page_contract {
     @author Mark Thomas (mthomas@arsdigita.com)
 } {
     {email ""}
+    {ip ""}
     {last_name_starts_with ""}
     {first_names ""}
     keyword:optional
@@ -112,6 +113,12 @@ if { [exists_and_not_null email] } {
     lappend where_clause "email like :sql_email"
     incr rowcount
     set criteria:[set rowcount](data) "Email contains '$email'"
+}
+
+if { [exists_and_not_null ip] } {
+    lappend where_clause "creation_ip = :ip"
+    incr rowcount
+    set criteria:[set rowcount](data) "Creation IP is $ip"
 }
 
 if { [exists_and_not_null last_name_starts_with] } {
