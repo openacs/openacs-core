@@ -165,6 +165,9 @@ create table apm_packages (
 -- create bitmap index apm_packages_package_key_idx on apm_packages (package_key);
 create index apm_packages_package_key_idx on apm_packages (package_key);
 
+-- This cant be added at table create time since acs_objects is created before apm_packages;
+alter table acs_objects add constraint acs_objects_package_id_fk foreign key (package_id) references apm_packages(package_id);
+
 comment on table apm_packages is '
    This table maintains the list of all package instances in the sytem. 
 ';
