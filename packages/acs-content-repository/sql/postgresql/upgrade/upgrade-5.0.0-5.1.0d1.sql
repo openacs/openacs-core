@@ -48,23 +48,23 @@ declare
   v_storage_type                cr_items.storage_type%TYPE;
 begin
 
-	perform content_item__copy (
-		copy2__item_id,
-		copy2__target_folder_id,
-		copy2__creation_user,
-		copy2__creation_ip,
-		''''
-		);
-	return copy2__item_id;
+        perform content_item__copy (
+                copy2__item_id,
+                copy2__target_folder_id,
+                copy2__creation_user,
+                copy2__creation_ip,
+                null
+                );
+        return copy2__item_id;
 
 end;' language 'plpgsql';
 
 create or replace function content_item__copy (
-	integer,
-	integer,
-	integer,
-	varchar,
-	varchar
+        integer,
+        integer,
+        integer,
+        varchar,
+        varchar
 ) returns integer as '
 declare
   copy__item_id                alias for $1;  
@@ -111,14 +111,6 @@ begin
         copy__creation_user,
         copy__creation_ip,
 	copy__name
-    );
-  -- call content_extlink.copy if the item is an url
-  else if content_extlink__is_extlink(copy2__item_id) = ''t'' then
-    PERFORM content_extlink__copy(
-        copy2__item_id,
-        copy2__target_folder_id,
-        copy2__creation_user,
-        copy2__creation_ip
     );
   -- make sure the target folder is really a folder
   else if content_folder__is_folder(copy__target_folder_id) = ''t'' then
@@ -194,10 +186,11 @@ begin
         end if;
 
     end if;
+
   end if; end if; end if; end if;
 
   return v_item_id;
- 
+
 end;' language 'plpgsql';
 
 
@@ -208,10 +201,10 @@ declare
   move__target_folder_id       alias for $2;
 begin
   perform content_item__move(
-	move__item_id,
-	move__targer_folder_id,
-	move__name
-	);
+        move__item_id,
+        move__targer_folder_id,
+        move__name
+        );
 return null;
 end;' language 'plpgsql';
 
@@ -224,7 +217,7 @@ declare
 begin
 
   if move__target_folder_id is null then 
-	raise exception ''attempt to move item_id % to null folder_id'', move__item_id;
+        raise exception ''attempt to move item_id % to null folder_id'', move__item_id;
   end if;
 
   if content_folder__is_folder(move__item_id) = ''t'' then
@@ -253,10 +246,10 @@ begin
 end;' language 'plpgsql';
 
 create or replace function content_extlink__copy (
-	integer,
-	integer,
-	integer,
-	varchar)
+        integer,
+        integer,
+        integer,
+        varchar)
 returns integer as '
 declare
   copy__extlink_id             alias for $1;  
@@ -265,22 +258,22 @@ declare
   copy__creation_ip            alias for $4;  -- default null
   v_extlink_id                 cr_extlinks.extlink_id%TYPE;
 begin
-	v_extlink_id := content_extlink__copy (
-		copy__extlink_id,
-		copy__target_folder_id,
-		copy__creation_user,
-		copy__creation_ip,
-		NULL
-	);
-	return 0;
+        v_extlink_id := content_extlink__copy (
+                copy__extlink_id,
+                copy__target_folder_id,
+                copy__creation_user,
+                copy__creation_ip,
+                NULL
+        );
+        return 0;
 end;' language 'plpgsql' stable;
 
 create or replace function content_extlink__copy (
-	integer,
-	integer,
-	integer,
-	varchar,
-	varchar)
+        integer,
+        integer,
+        integer,
+        varchar,
+        varchar)
 returns integer as '
 declare
   copy__extlink_id             alias for $1;  
@@ -318,9 +311,9 @@ begin
       e.extlink_id = i.item_id
     and
       e.extlink_id = copy__extlink_id;
-	
-	-- copy to a different folder, or same folder if name
-	-- is different
+        
+        -- copy to a different folder, or same folder if name
+        -- is different
     if copy__target_folder_id != v_current_folder_id  or ( v_name <> copy_name and copy_name is not null ) then
 
       if content_folder__is_registered(copy__target_folder_id,
@@ -334,8 +327,8 @@ begin
             copy__target_folder_id,
             null,
             current_timestamp,
-	    copy__creation_user,
-	    copy__creation_ip
+            copy__creation_user,
+            copy__creation_ip
         );
 
       end if;
@@ -352,7 +345,7 @@ declare
   copy__target_folder_id       alias for $2;  
   copy__creation_user          alias for $3;  
   copy__creation_ip            alias for $4;  -- default null  
-  v_valid_folders_p            integer        
+  v_valid_folders_p            integer;        
   v_current_folder_id          cr_folders.folder_id%TYPE;
   v_name                       cr_items.name%TYPE;
   v_label                      cr_folders.label%TYPE;
@@ -360,25 +353,25 @@ declare
   v_new_folder_id              cr_folders.folder_id%TYPE;
   v_folder_contents_val        record;
 begin
-	v_new_folder_id := content_folder__copy (
-			copy__folder_id,
-			copy__target_folder_id,
-			copy__creation_user,
-			copy_creation_ip,
-			NULL
-			);
-	return v_new_folder_id;
+        v_new_folder_id := content_folder__copy (
+                        copy__folder_id,
+                        copy__target_folder_id,
+                        copy__creation_user,
+                        copy_creation_ip,
+                        NULL
+                        );
+        return v_new_folder_id;
 end;' language 'plpgsql';
 
-create function content_folder__copy (integer,integer,integer,varchar,varchar)
+create or replace function content_folder__copy (integer,integer,integer,varchar,varchar)
 returns integer as '
 declare
   copy__folder_id              alias for $1;  
   copy__target_folder_id       alias for $2;  
   copy__creation_user          alias for $3;  
   copy__creation_ip            alias for $4;  -- default null
-  copy__name              alias for $5; -- default null
-  v_valid_folders_p            integer        
+  copy__name                   alias for $5; -- default null
+  v_valid_folders_p            integer;        
   v_current_folder_id          cr_folders.folder_id%TYPE;
   v_name                       cr_items.name%TYPE;
   v_label                      cr_folders.label%TYPE;
@@ -409,8 +402,8 @@ begin
 
   if copy__folder_id = content_item__get_root_folder(null) 
      or copy__folder_id = content_template__get_root_folder() 
-     or copy__target_folder_id = copy__folder_id 
-    v_valid_folders_p := 0;
+     or copy__target_folder_id = copy__folder_id then
+	    v_valid_folders_p := 0;
   end if;
 
     -- get the source folder info
@@ -432,14 +425,14 @@ begin
       -- create the new folder
       v_new_folder_id := content_folder__new(
           coalesce (copy__name, v_name),
-	  v_label,
-	  v_description,
-	  copy__target_folder_id,
+          v_label,
+          v_description,
+          copy__target_folder_id,
           null,
           null,
           now(),
-	  copy__creation_user,
-	  copy__creation_ip
+          copy__creation_user,
+          copy__creation_ip
       );
 
       -- copy attributes of original folder
@@ -451,10 +444,10 @@ begin
         where
           folder_id = copy__folder_id
         and
-	  -- do not register content_type if it is already registered
+          -- do not register content_type if it is already registered
           not exists ( select 1 from cr_folder_type_map
-	               where folder_id = v_new_folder_id 
-		       and content_type = map.content_type ) ;
+                       where folder_id = v_new_folder_id 
+                       and content_type = map.content_type ) ;
 
       -- for each item in the folder, copy it
       for v_folder_contents_val in select
@@ -464,13 +457,13 @@ begin
                                    where
                                      parent_id = copy__folder_id 
       LOOP
-        
-	PERFORM content_item__copy(
-	    v_folder_contents_val.item_id,
-	    v_new_folder_id,
-	    copy__creation_user,
-	    copy__creation_ip    
-	);
+        raise notice ''COPYING item %'',v_folder_contents_val.item_id;
+        PERFORM content_item__copy(
+            v_folder_contents_val.item_id,
+            v_new_folder_id,
+            copy__creation_user,
+            copy__creation_ip    
+        );
 
       end loop;
     end if;
@@ -483,7 +476,7 @@ create or replace function content_folder__delete (integer, boolean)
 returns integer as '
 declare
   delete__folder_id              alias for $1;  
-  p_cascade_p      alias for $2;
+  p_cascade_p                    alias for $2;
   v_count                        integer;       
   v_child_row                    record;
   v_parent_id                    integer;  
@@ -508,14 +501,14 @@ begin
         item_id, tree_sortkey, name
         from cr_items
         where tree_sortkey between v_folder_sortkey and tree_right(v_folder_sortkey)   
-	and tree_sortkey != v_folder_sortkey
+        and tree_sortkey != v_folder_sortkey
         order by tree_sortkey desc
     loop
-	if content_folder__is_folder(v_child_row.item_id) then
-	  perform content_folder__delete(v_child_row.item_id);
+        if content_folder__is_folder(v_child_row.item_id) then
+          perform content_folder__delete(v_child_row.item_id);
         else
          perform content_item__delete(v_child_row.item_id);
-	end if;
+        end if;
     end loop;
   end if;
 
@@ -551,8 +544,8 @@ declare
   v_parent_id                    integer;  
   v_path                         varchar;     
 begin
-	return content_folder__delete(
-		delete__folder_id,
-		''f''
-		);
+        return content_folder__delete(
+                delete__folder_id,
+                ''f''
+                );
 end;' language 'plpgsql';
