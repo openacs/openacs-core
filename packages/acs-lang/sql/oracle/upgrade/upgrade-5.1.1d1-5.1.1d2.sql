@@ -126,7 +126,7 @@ update lang_translation_registry  set locale='fa_IR' where locale='FA_IR';
 
 delete from ad_locales where locale = 'FA_IR';
 -- reset the label to remove the unique constraint workaround
-update ad_locales set label = 'Farsi (IR)' where locale = 'FA_IR';
+update ad_locales set label = 'Farsi (IR)' where locale = 'fa_IR';
 
 
 ----------------------------------------------------------------------
