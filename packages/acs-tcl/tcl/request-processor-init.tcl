@@ -151,3 +151,8 @@ ad_after_server_initialization procs_register {
 		[list $method $path rp_invoke_proc [list $proc_index $debug_p $arg_count $proc $arg]]
     }
 }
+
+# Deny access to .xql URLs
+if { ![parameter::get -parameter ServeXQLFiles -package_id [ad_acs_kernel_id] -default 0] } {
+    ad_register_filter postauth GET *.xql request_denied_filter
+}

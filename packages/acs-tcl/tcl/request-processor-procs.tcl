@@ -1386,3 +1386,17 @@ ad_proc root_of_host {host} {
 ad_proc -private rp_lookup_node_from_host { host } {
     return [db_string  node_id { *SQL* } -default ""]
 } 
+
+
+
+ad_proc -public request_denied_filter { why } {
+    Deny serving the request
+} {
+    ad_return_forbidden \
+        "Forbidden URL" \
+        "<blockquote>No, we're not going to show you this file</blockquote>"
+
+    ns_return 200 text/html $output
+
+    return filter_return
+}
