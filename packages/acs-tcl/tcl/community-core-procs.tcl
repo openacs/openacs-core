@@ -641,3 +641,28 @@ ad_proc -public party::get_by_email {
     return [db_string select_party_id {*SQL*} -default {}]
 }
 
+ad_proc -public party::approved_members {
+    {-party_id:required}
+    {-object_type ""}
+} {
+    Get a list of approved members of the given party.
+   
+    @param party_id The id of the party to get members for
+    @param object_type Restrict to only members of this object type. For example,
+                       if you are only interested in users, set to "user".
+
+    @author Peter Marklund
+} {
+    if { ![empty_string_p $object_type] } {
+        set from_clause ", acs_objects ao"
+        set where_clause "and pamm.member_id = ao.object_id
+             and ao.object_type = :object_type"
+    }
+
+    return [db_list select_party_members "
+             select pamm.member_id
+             from party_approved_member_map pamm
+             $from_clause
+             where pamm.party_id = :party_id
+             $where_clause"]
+}
