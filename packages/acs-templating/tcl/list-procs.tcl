@@ -847,20 +847,20 @@ ad_proc -private template::list::prepare_for_rendering {
     #
 
     if { $__list_properties(dynamic_cols_p) || $__list_properties(aggregates_p) } {
-        foreach element_ref $__list_properties(element_refs) {
+        foreach __element_ref $__list_properties(element_refs) {
             # We don't need to prefix it with __ to become __element_properties here
             # because we're not doing the multirow foreach loop yet.
-            upvar #$__level $element_ref element_properties
+            upvar #$__level $__element_ref element_properties
             
             # display_eval, link_url_eval
-            foreach eval_property { display link_url } {
-                if { [exists_and_not_null element_properties(${eval_property}_eval)] } {
+            foreach __eval_property { display link_url } {
+                if { [exists_and_not_null element_properties(${__eval_property}_eval)] } {
 
                     # Set the display col to the name of the new, dynamic column
-                    set element_properties(${eval_property}_col) "$element_properties(name)___$eval_property"
+                    set element_properties(${__eval_property}_col) "$element_properties(name)___$__eval_property"
 
                     # And add that column to the multirow
-                    template::multirow extend $__list_properties(multirow) $element_properties(${eval_property}_col)
+                    template::multirow extend $__list_properties(multirow) $element_properties(${__eval_property}_col)
                 }
             }
 
@@ -889,16 +889,16 @@ ad_proc -private template::list::prepare_for_rendering {
 
         template::multirow foreach $__list_properties(multirow) {
 
-            foreach element_ref $__list_properties(element_refs) {
+            foreach __element_ref $__list_properties(element_refs) {
                 # We do need to prefix it with __ to become __element_properties here
                 # because we are inside the multirow foreach loop yet.
                 # LARS: That means we should probably also __-prefix element_ref, eval_property, and others.
-                upvar #$__level $element_ref __element_properties
+                upvar #$__level $__element_ref __element_properties
                 
                 # display_eval, link_url_eval
-                foreach eval_property { display link_url } {
-                    if { [exists_and_not_null __element_properties(${eval_property}_eval)] } {
-                        set $__element_properties(${eval_property}_col) [subst $__element_properties(${eval_property}_eval)]
+                foreach __eval_property { display link_url } {
+                    if { [exists_and_not_null __element_properties(${__eval_property}_eval)] } {
+                        set $__element_properties(${__eval_property}_col) [subst $__element_properties(${__eval_property}_eval)]
                     }
                 }
 
