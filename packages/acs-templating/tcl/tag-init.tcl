@@ -179,21 +179,47 @@ template_tag group { chunk params } {
 
   # Scan the parameter stack backward, looking for the tag name
 
-  set tag_id [template::enclosing_tag multiple]
+  set multiple_tag_id [template::enclosing_tag multiple]
 
-  if { [string equal $tag_id {}] } {
+  if { [string equal $multiple_tag_id {}] } {
     error "No enclosing MULTIPLE tag for GROUP tag on column $column"
-  }    
+  }
 
-  set name [template::tag_attribute $tag_id name]
+  # Get the name of the multiple variable we're looping over
+  set name [template::tag_attribute $multiple_tag_id name]
 
-  set i "__${tag_id}_i"
+  set tag_id [template::current_tag]
+
+  # If we're inside another group tag, we'll need to save and restore that tag's groupnum and groupnum_last_p values
+  # Find enclosing group tag, if one exists
+  set group_tag_id [template::enclosing_tag group]
+
+  # Save groupnum pseudocolumns from surrounding group tag
+  # We don't care about saving groupnum_last_p, since this doesn't work
+  # for group tags that have other group tags inside them, since we can't know
+  # if we're the last row until the inner group tag has eaten up all the 
+  # rows between the start of this tag and the end.
+  if { ![empty_string_p $group_tag_id] } {
+    template::adp_append_code "
+      if { \[info exists ${name}(groupnum)\] } {
+        set __${tag_id}_${group_tag_id}_groupnum \$${name}(groupnum)
+      }
+    "
+  }
+
+  set i "__${multiple_tag_id}_i"
   
   # while the value of name(column) stays the same
   template::adp_append_code "
     set __${tag_id}_group_rowcount 1
     while { 1 } {
       set ${name}(groupnum) \$__${tag_id}_group_rowcount
+      if { \$$i >= \${$name:rowcount} } {
+        set ${name}(groupnum_last_p) 1
+      } else {
+        upvar 0 ${name}:\[expr \$$i + 1\] $name:next 
+        set ${name}(groupnum_last_p) \[expr !\[string equal \${${name}:next($column)} \$${name}($column)\]\]
+      }
   "
 
   template::adp_compile_chunk $chunk     
@@ -213,6 +239,15 @@ template_tag group { chunk params } {
       incr __${tag_id}_group_rowcount
     }
   "
+
+  # Restore saved groupnum pseudocolumns
+  if { ![empty_string_p $group_tag_id] } {
+    template::adp_append_code "
+      if { \[info exists __${tag_id}_${group_tag_id}_groupnum\] } {
+        set ${name}(groupnum) \$__${tag_id}_${group_tag_id}_groupnum 
+      }
+    "
+  }
 }
 
 # Repeat a template chunk consisting of a grid cell for each row of a

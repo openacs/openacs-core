@@ -39,7 +39,7 @@
             <table cellpadding="4" cellspacing="0" border="0">
 	      <formgroup id=@elements.id@>
 		<tr><td>\@formgroup.widget@</td>
-                    <td>\@formgroup.label@</td></tr>
+                    <td><label for="@elements.form_id@:elements:@elements.id@:\@formgroup.option@">\@formgroup.label@</label></td></tr>
 	      </formgroup>
 	      </table>
 	      <formerror id=@elements.id@><br>
@@ -77,9 +77,13 @@
 
 </td></tr>
 
-<if @form_properties.has_submit@ nil>
+<if @buttons:rowcount@ gt 0>
   <tr>
-    <td align="center"><br /><input type="submit" value="Submit" /></td>
+    <td align="center">
+      <multiple name="buttons">
+        <input type="submit" name="@buttons.name@" value="@buttons.label@">
+      </multiple>
+    </td>
   </tr>
 </if>
 

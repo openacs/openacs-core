@@ -230,6 +230,10 @@ ad_proc -public template::util::date::get_property { what date } {
       return 0
     }
     sql_date {
+      # LARS: Empty date results in NULL value
+      if { [empty_string_p $date] } {
+        return "NULL"
+      }
       set value ""
       set format ""
       set space ""
@@ -700,7 +704,7 @@ ad_proc -public template::widget::numericRange { name interval_def size {value "
 }
 
 ad_proc -public template::widget::dateFragment {
-  element_reference fragment size type value } {
+  element_reference fragment size type value {mode edit} } {
       Create an input widget for the given date fragment
       If type is "t", uses a text widget for the fragment, with the given
       size.
@@ -713,26 +717,32 @@ ad_proc -public template::widget::dateFragment {
   set value [template::util::date::get_property $fragment $value]
   set value [template::util::leadingTrim $value]
 
-  if { [info exists element(${fragment}_interval)] } {
-    set interval $element(${fragment}_interval)
+  if { ![string equal $mode "edit"] } {
+    set output {}
+    append output "<input type=\"hidden\" name=\"$element(name).$fragment\" value=\"[template::util::leadingPad $value $size]\">"
+    append output $value
+    return $output
   } else {
-     # Display text entry for some elements, or if the type is text
-     if { [string equal $type t] ||
-          [regexp "year|short_year" $fragment] } {
-       return "<input type=\"text\" name=\"$element(name).$fragment\" size=\"$size\"
-     maxlength=\"$size\" value=\"[template::util::leadingPad $value $size]\"/>\n"
-     } else {
-     # Use a default range for others
-       set interval [template::util::date::defaultInterval $fragment]
-     }
+    if { [info exists element(${fragment}_interval)] } {
+      set interval $element(${fragment}_interval)
+    } else {
+       # Display text entry for some elements, or if the type is text
+       if { [string equal $type t] ||
+            [regexp "year|short_year" $fragment] } {
+         return "<input type=\"text\" name=\"$element(name).$fragment\" size=\"$size\"
+       maxlength=\"$size\" value=\"[template::util::leadingPad $value $size]\"/>\n"
+       } else {
+       # Use a default range for others
+         set interval [template::util::date::defaultInterval $fragment]
+       }
+    }
+    return [template::widget::numericRange "$element(name).$fragment" \
+        $interval $size $value]
   }
-
-  return [template::widget::numericRange "$element(name).$fragment" \
-           $interval $size $value]
 }
 
 ad_proc -public template::widget::ampmFragment {
-  element_reference fragment size type value } {
+  element_reference fragment size type value {mode edit} } {
       Create a widget that shows the am/pm selection
 } {
 
@@ -740,12 +750,19 @@ ad_proc -public template::widget::ampmFragment {
 
   set value [template::util::date::get_property $fragment $value]
 
-  return [template::widget::menu \
-    "$element(name).$fragment" { {A.M. am} {P.M. pm}} $value {}]
+  if { ![string equal $mode "edit"] } {
+    set output {}
+    append output "<input type=\"hidden\" name=\"$element(name).$fragment\" value=\"$value\">"
+    append output $value
+    return $output
+  } else {
+    return [template::widget::menu \
+        "$element(name).$fragment" { {A.M. am} {P.M. pm}} $value {}]
+  }
 }
 
 ad_proc -public template::widget::monthFragment { 
-  element_reference fragment size type value } {
+  element_reference fragment size type value {mode edit} } {
       Create a month entry widget with short or long month names
 } {
 
@@ -755,13 +772,22 @@ ad_proc -public template::widget::monthFragment {
 
   set value [template::util::date::get_property $fragment $value]
 
-  set options [list [list "--" {}]]
-  for { set i 1 } { $i <= 12 } { incr i } {
-    lappend options [list [template::util::date::monthName $i $size] $i]
+  if { ![string equal $mode "edit"] } {
+    set output {}
+    if { [exists_and_not_null value] } {
+      append output "<input type=\"hidden\" name=\"$element(name).$fragment\" value=\"$value\">"
+      append output [template::util::date::monthName $value $size]
+    }
+    return $output
+  } else {
+    set options [list [list "--" {}]]
+    for { set i 1 } { $i <= 12 } { incr i } {
+      lappend options [list [template::util::date::monthName $i $size] $i]
+    }
+   
+    return [template::widget::menu \
+     "$element(name).$fragment" $options $value {} ]
   }
- 
-  return [template::widget::menu \
-   "$element(name).$fragment" $options $value {} ]
 }
 
 
@@ -861,12 +887,14 @@ ad_proc -public template::widget::date { element_reference tag_attributes } {
     # Output the widget
     set fragment_def $template::util::date::fragment_widgets([string toupper $token])
     set fragment [lindex $fragment_def 1]
+    
     append output [template::widget::[lindex $fragment_def 0] \
                      element \
                      $fragment \
                      [lindex $fragment_def 2] \
                      $type \
-                     $value]
+                     $value \
+                     $element(mode)]
 
     # Output the separator
     if { [string equal $sep " "] } {

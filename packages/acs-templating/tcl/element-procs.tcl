@@ -133,10 +133,14 @@ ad_proc -public template::element::create { form_id element_id args } {
   variable defaults
   array set opts $defaults
 
-  template::util::get_opts $args
+  # By default, the form/edit mode is set to the empty string
+  # Can be set to something else if you want
+  set opts(mode) {}
 
   # set the form section
   set opts(section) $form_properties(section)
+
+  template::util::get_opts $args
 
   # set a name if none specified
   if { ! [info exists opts(name)] } { set opts(name) $opts(id) }
@@ -162,8 +166,16 @@ ad_proc -public template::element::create { form_id element_id args } {
   # check for submission
   if { [template::form is_submission $form_id] || [info exists opts(param)] } {
     validate $form_id $element_id
-  }
+  } elseif { ![empty_string_p [ns_queryget "__edit"]] } {
+    # If the magic __edit button was hit, try to get values from the form still
+    # but don't do any validation
+    set opts(values) [querygetall opts]
 
+    # be careful not to clobber a default value if one has been specified
+    if { [llength $opts(values)] || ! [info exists opts(value)] } {
+      set opts(value) [lindex $opts(values) 0]
+    }
+  }
 }
 
 ad_proc -public template::element::set_properties { form_id element_id args } {
@@ -371,6 +383,7 @@ ad_proc -private template::element::validate { form_id element_id } {
       if { ! [eval $v_code] } {
       
 	# value is invalid according to custom validation code
+        # Do some expansion on $value, ${value}, $label, and ${label}
 	lappend v_errors [string map [list \$value $value \${value} $value \$label $label \${label} $label] $v_message]
 	set formerror($element_id:$v_name) [lindex $v_errors end]
       }
@@ -501,7 +514,11 @@ ad_proc -private template::element::render { form_id element_id tag_attributes }
   # Remember that the element has been rendered already
   set element(is_rendered) t
 
-  return "$element(before_html) [template::widget::$element(widget) element $tag_attributes] $element(after_html)"
+  if { ![string equal $element(mode) "edit"] && [info exists element(display_value)] && ![string equal $element(widget) "hidden"] } {
+    return "$element(before_html) $element(display_value) $element(after_html)"  
+  } else {
+    return "$element(before_html) [template::widget::$element(widget) element $tag_attributes] $element(after_html)"
+  }
 }
 
 ad_proc -private template::element::render_help { form_id element_id tag_attributes } {

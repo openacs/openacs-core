@@ -53,7 +53,7 @@ namespace eval template {
     
     # default settings
     variable defaults
-    set defaults [list method post section {}]
+    set defaults [list method post section {} mode edit edit_buttons { { "OK" ok } } display_buttons { { "Edit" edit } }]
   }
 
   namespace eval wizard {
@@ -105,6 +105,13 @@ ad_proc -public template_tag { name arglist body } {
     Generic wrapper for registered tag handlers.
 } {
 
+  # LARS:
+  # We only ns_register_adptag the tag if it hasn't already been registered
+  # (if the proc doesn't exist).
+  # This makes debugging templating tags so much easier, because you don't have
+  # to restart the server each time.
+  set exists_p [llength [info procs template_tag_$name]]
+
   switch [llength $arglist] {
 
     1 { 
@@ -119,7 +126,9 @@ ad_proc -public template_tag { name arglist body } {
         return \"\"
       }"
 
-      ns_register_adptag $name template_tag_$name 
+      if { !$exists_p } {
+        ns_register_adptag $name template_tag_$name 
+      }
     }
 
     2 { 
@@ -139,7 +148,9 @@ ad_proc -public template_tag { name arglist body } {
         return \"\"
       }"
 
-      ns_register_adptag $name /$name template_tag_$name 
+      if { !$exists_p } {
+        ns_register_adptag $name /$name template_tag_$name 
+      }
     }
 
     default { error "Invalid number of arguments to tag handler." }

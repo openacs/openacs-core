@@ -53,7 +53,7 @@
 
 		  <if \@formgroup.rownum@ le \@formgroup:rowcount@>
 		    <td align=right>&nbsp;\@formgroup.widget@</td>      
-		    <td align=left>\@formgroup.label@</td> 
+		    <td align=left><label for="@elements.form_id@:elements:@elements.id@:\@formgroup.option@">\@formgroup.label@</label></td> 
 		  </if><else><td>&nbsp;</td><td>&nbsp;</td></else>
 
 		<if \@formgroup.col@ eq 4></tr></if>
@@ -98,9 +98,13 @@
 
 </td></tr>
 
-<noparse><if \@form_properties.has_submit\@ nil></noparse>
+<noparse><if \@buttons:rowcount\@ gt 0></noparse>
   <tr>
-    <td align=right><br><input type=submit value=Submit></td>
+    <td align=right>
+      <multiple name="buttons">
+        <input type="submit" name="@buttons.name@" value="@buttons.label@">
+      </multiple>
+    </td>
   </tr>
 <noparse></if></noparse>
 <noparse><else></noparse>

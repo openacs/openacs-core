@@ -510,7 +510,7 @@ ad_proc -private template::enclosing_tag {
 
   variable tag_stack
 
-  set last [expr [llength $tag_stack] - 1]
+  set last [expr [llength $tag_stack] - 2]
 
   for { set i $last } { $i >= 0 } { incr i -1 } {
 
