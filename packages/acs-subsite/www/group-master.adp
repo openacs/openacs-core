@@ -28,6 +28,7 @@
 <!-- Context bar -->
 
     <div class="subsite-context-bar">
+      <div style="float: right">@subnavbar_link;noquote@</div>
       @context_bar;noquote@&nbsp;
     </div>
 
