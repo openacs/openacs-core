@@ -521,8 +521,8 @@ ad_proc -public randomInit {seed} {
 ad_proc -public random {} {
     Return a pseudo-random number between 0 and 1.
 } {
-    nsv_set rand seed [expr ([nsv_get rand seed] * [nsv_get rand ia] + [nsv_get rand ic]) % [nsv_get rand im]]
-    return [expr [nsv_get rand seed]/double([nsv_get rand im])]
+    nsv_set rand seed [expr {([nsv_get rand seed] * [nsv_get rand ia] + [nsv_get rand ic]) % [nsv_get rand im]}]
+    return [expr {[nsv_get rand seed]/double([nsv_get rand im])}]
 }
 
 ad_proc -public randomRange {range} {
@@ -530,7 +530,7 @@ ad_proc -public randomRange {range} {
 
     @return integer
 } {
-    return [expr int([random] * $range)]
+    return [expr {int([random] * $range)}]
 }
 
 ad_proc -public db_html_select_options { 
@@ -1377,7 +1377,11 @@ ad_proc -public util_get_current_url {} {
     return $url
 }
 
-proc with_catch {error_var body on_error} { 
+ad_proc -public with_catch {error_var body on_error} { 
+    execute code in body with the catch errorMessage in error_var
+    and if there is a non-zero return code from body
+    execute the on_error block.
+} { 
     upvar 1 $error_var $error_var 
     global errorInfo errorCode 
     if { [catch { uplevel $body } $error_var] } { 
