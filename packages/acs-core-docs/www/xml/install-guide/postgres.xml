@@ -106,7 +106,7 @@ tar xfj /tmp/postgresql-7.4.1.tar.bz2</action></screen>
     <listitem>
       <formalpara>
         <title>Install Bison</title>
-        <para>Only do this if <userinput>bison --version</userinput> is smaller than 1.875 and you install PostgreSQL 7.4.</para> 
+        <para>Only do this if <userinput>bison --version</userinput> is smaller than 1.875 and you install PostgreSQL 7.4 from cvs instead of tarball.</para> 
       </formalpara>
       <screen>[root root]# <userinput>cd /usr/local/src</userinput>
 [root src]# <userinput>wget http://ftp.gnu.org/gnu/bison/bison-1.875.tar.gz</userinput>
