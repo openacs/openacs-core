@@ -30,15 +30,6 @@ set subsite_name $subsite_sitenode(instance_name)
 # Where to find the stylesheet
 set css_url "/resources/acs-subsite/group-master.css"
 
-# Context bar
-if { [info exists context] } {
-    set context_tmp $context
-    unset context
-} else {
-    set context_tmp {}
-}
-ad_context_bar_multirow -- $context_tmp
-
 if { [string equal [ad_conn url] $subsite_url] } {
     set subsite_url {}
 }
