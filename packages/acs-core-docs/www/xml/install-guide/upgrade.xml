@@ -57,6 +57,7 @@
       </indexterm>
       <para>The required platform for OpenACS 4.6 is the same as
       4.5, with the exception of OpenFTS.  OpenACS 4.6 and later require OpenFTS 0.3.2 for full text search on PostGreSQL.  If you have OpenFTS 0.2, you'll need to upgrade.  </para>
+      <para>If upgrading from 4.2, you need to manually run acs-kernel/sql/postgres/upgrade-4.2-4.5.sql.  See <ulink url="http://openacs.org/bugtracker/openacs/bug?bug_number=632">Bug #632</ulink></para>
       <itemizedlist mark="circle">
         <listitem><para>A computer with OpenACS 4.5.</para>
         </listitem>

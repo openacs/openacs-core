@@ -1,5 +1,5 @@
 <?xml version='1.0' ?>
-<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+<!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
                "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
 <!ENTITY % myvars SYSTEM "../variables.ent">
 %myvars;
@@ -308,7 +308,6 @@ In
           can take advantage of the Categories service there needs to be a
           way for administrators of your application to choose which
           category trees are applicable for the application.
-          <para>
           </para>
           <para>
           The way to achieve this is is to provide a link
@@ -330,6 +329,7 @@ set category_map_url [export_vars -base \
 &lt;li&gt;&lt;a href="@category_map_url@"
       class="action_link"&gt;Site-Wide Categories&lt;/a&gt;
           </programlisting>
+          <para>
           The link created by the above code will take the admin to the generic
           admin UI where he can pick category trees that make sense for this
           application.  The same UI also includes facilities to build and edit
@@ -622,7 +622,7 @@ ad_form -extend \
       some_table children
       WHERE 
       children.tree_sorktey between parent.tree_sortkey and tree_right(parent.tree_sortkey)
-      and parent.tree_sortkey <> children.tree_sortkey
+      and parent.tree_sortkey &lt;&gt; children.tree_sortkey
       and parent.key = :the_parent_key;
       </programlisting>
 
@@ -633,7 +633,7 @@ ad_form -extend \
     numbers in tree_sortkey SQL queries, like
     <computeroutput>tree_level(children.tree_sortkey) -
     4</computeroutput>. That is basically an incorrect way to do it,
-    and subtracting the parent's tree_level is the preferred method.<para>
+    and subtracting the parent's tree_level is the preferred method.</para>
 
     <para>This example does not include the parent. To return the entire subtree including the parent, leave out the non-equals clause:</para>
 
