@@ -176,6 +176,14 @@ as
         return length(raw_key) / 6;
     end tree_level;
 
+    function parent_key (
+        raw_key                         in raw
+    ) return raw
+    is
+    begin
+        return substr(raw_key, 1, 6 * tree_level(raw_key) - 6);
+    end parent_key;
+
     function ancestor_p (
         ancestor_key                    in raw,
         child_key                       in raw
