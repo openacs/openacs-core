@@ -1026,10 +1026,20 @@ ad_proc -public ad_conn {args} {
 
   Returns a property about the connection. See the <a
   href="/doc/request-processor.html">request
-  processor documentation</a> for a list of allowable values. If -set
-  is passed then it sets a property.
+  processor documentation</a> for an (almost complete) list of allowable values. 
 
-  added recursion_count to properly deal with internalredirects.
+  <p>
+
+  If -set is passed then it sets a property.
+
+  <p>
+
+  If the property has not been set directly by OpenACS it will be passed on to aolservers <code>ns_conn</code>: <a href="http://www.aolserver.com/docs/devel/tcl/api/conn.html#ns_conn">http://www.aolserver.com/docs/devel/tcl/api/conn.html#ns_conn</a>. If it is not a valid option for <code>ns_conn</code> either then it will throw an error.
+
+  <p>
+
+  Added recursion_count to properly deal with internalredirects.
+
 } {
   global ad_conn
 
