@@ -1,5 +1,5 @@
 <?xml version='1.0' ?>
-<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+<!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
                "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
 
 <!ENTITY % myvars SYSTEM "../variables.ent">
@@ -48,11 +48,45 @@ BEGINNING OF TEMPLATE
   </sect2>
 END OF TEMPLATE -->
 
+  <sect2 id="release-notes-5-0-2">
+    <title>Version 5.0.2</title>
+
+      <itemizedlist>
+        <listitem>
+        <para>Bug fixes: <ulink url="http://openacs.org/bugtracker/openacs/bug?bug%5fnumber=1495">#1495. Croatian enabled by default</ulink>, <ulink url="http://openacs.org/bugtracker/openacs/bug?bug%5fnumber=1496">#1496. APM automated install fails if files have spaces in their names</ulink>, <ulink url="http://openacs.org/bugtracker/openacs/bug?bug%5fnumber=1494">#1494. automated upgrade crashes (halting the upgrade process)</ulink></para>
+        </listitem>
+        <listitem>
+          <para>Complete Change list since 5.0.0 in Changelog</para>
+        </listitem>
+        <listitem>
+        <para>File tagging scheme in CVS changed to follow <ulink url="http://openacs.org/forums/message-view?message_id=161375">TIP #46: (Approved) Rules for Version Numbering and CVS tagging of Packages</ulink></para>
+        </listitem>
+    </itemizedlist>
+    </sect2>
+
+  <sect2 id="release-notes-5-0-1">
+    <title>Version 5.0.1</title>
+      <itemizedlist>
+        <listitem>
+          <para>All work on the translation server from 7 Nov 2003 to 7 Feb 2004 is now included in catalogs.</para>
+        </listitem>
+        <listitem>
+          <para>One new function in acs-tcl, util::age_pretty</para>
+        </listitem>
+        <listitem>
+          <para>Complete Change list since 5.0.0 in Changelog</para>
+        </listitem>
+        <listitem>
+          <para>Many documentation updates and doc bug fixes </para>
+        </listitem>
+    </itemizedlist>
+    </sect2>
+
   <sect2 id="release-notes-5-0-0">
     <title>Version 5.0.0</title>
 
     <para>
-	This is OpenACS 5.0.0.  This version contains no known security, data loss, or crashing bugs, nor any bugs judged release blockers.  This version has received manual testing.  It has passed current automated testing, which is not comprehensive.  This release contains work done on the translation server http://translate.openacs.org through 3 Nov 2003.  
+	This is OpenACS 5.0.0.  This version contains no known security, data loss, or crashing bugs, nor any bugs judged release blockers.  This version has received manual testing.  It has passed current automated testing, which is not comprehensive.  This release contains work done on the translation server http://translate.openacs.org through 7 Nov 2003.  
   </para>
     
     <para>
