@@ -213,6 +213,22 @@ _mr en_US dotlrn.class_may_not_be_deleted {Error: A %subject% must have <em>no</
 </pre>
 
 <p>
+Alternatively, the variable values in the message can be fetched with upvar, so that in the tcl file in the example above,
+we would have simply:
+</p>
+
+<pre>
+set subject [parameter::get -localize -parameter classes_pretty_name] 
+set class_instances [parameter::get -localize -parameter class_instances_pretty_plural]
+
+ad_return_complaint 1 [_ dotlrn.class_may_not_be_deleted]
+</pre>
+
+<p>
+This kind of interpolation also works in adp files where adp variable values will be inserted into the message.
+</p>
+
+<p>
   When we were done going through the tcl files we ran the following
   commands to check for mistakes:
 </p>
