@@ -7,5 +7,9 @@
 </p>
 
 <p>
+  <listfilters name="batch_actions" style="inline-filters"></listfilters>
+</p>
+
+<p>
   <listtemplate name="batch_actions"></listtemplate>
 </p>
