@@ -12,5 +12,5 @@
 
 <p>
   <b>&raquo;</b> <a href="/acs-admin/">Return to site-wide administration</a><br />
-  <b>&raquo;</b> <a href="/acs-admin/">Go to package manager</a>
+  <b>&raquo;</b> <a href="/acs-admin/apm">Go to package manager</a>
 </p>
