@@ -418,6 +418,8 @@ for each row execute procedure acs_objects_context_id_in_tr ();
 create or replace function acs_objects_context_id_up_tr () returns opaque as '
 declare
         pair    record;
+        outer record;
+        inner record;
         security_context_root integer;
 begin
   if new.object_id = old.object_id and
@@ -427,13 +429,15 @@ begin
   end if;
 
   -- Remove my old ancestors from my descendants.
-  delete from acs_object_context_index
-  where object_id in (select object_id
-                      from acs_object_contexts
-                      where ancestor_id = old.object_id)
-  and ancestor_id in (select ancestor_id
-		      from acs_object_contexts
-		      where object_id = old.object_id);
+  for outer in select object_id from acs_object_context_index where 
+               ancestor_id = old.object_id and object_id <> old.object_id loop
+    for inner in select ancestor_id from acs_object_context_index where
+                 object_id = old.object_id loop
+      delete from acs_object_context_index
+      where object_id = outer.object_id
+        and ancestor_id = inner.object_id;
+    end loop;
+  end loop;
 
   -- Kill all my old ancestors.
   delete from acs_object_context_index
