@@ -199,7 +199,7 @@
       <td colspan="@elements:rowcount@" class="list-button-bar">
         <multiple name="bulk_actions">
           <a href="#" title="@bulk_actions.title@" class="button"
-          onclick="acs_ListBulkActionClick('@list_properties.name@', '@bulk_actions.url@')">@bulk_actions.label@</a>
+          onclick="acs_ListBulkActionClick('@list_properties.name@', '@bulk_actions.url@'); return false;">@bulk_actions.label@</a>
         </multiple>
       </td>
     </tr>
