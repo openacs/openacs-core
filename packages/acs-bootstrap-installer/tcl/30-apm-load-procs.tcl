@@ -155,7 +155,9 @@ ad_proc -private apm_parse_catalog_path { file_path } {
 } {
     array set filename_info {}
 
-    set regexp_pattern "(?i)(\[^/\]+)/catalog/(.*)\\1\\.(\[a-z\]{2}_\[a-z\]{2})\\.(\[^.\]+)\\.xml\$"
+    # Catalog filepaths are on the form
+    # package_key/catalog/optional_prefix_package_key.language.country.charset.xml
+    set regexp_pattern "(?i)(\[^/\]+)/catalog/(.*)\\1\\.(\[a-z\]{2,3}_\[a-z\]{2})\\.(\[^.\]+)\\.xml\$"
     if { ![regexp $regexp_pattern $file_path match package_key prefix locale charset] } {
         return [list]
     }
