@@ -151,11 +151,11 @@ ad_proc -public aa_register_init_class {
   # aa_runseries function to gain visibility of all the variables
   # the constructor has exported.
   #
-  ad_proc _${package_key}__i_$init_class_id {} "
+  ad_proc -private _${package_key}__i_$init_class_id {} "
     aa_log \"Running \\\"$init_class_id\\\" initialisation class constructor\"
     $constructor
   "
-  ad_proc _${package_key}__d_$init_class_id {} "
+  ad_proc -private _${package_key}__d_$init_class_id {} "
     upvar _aa_exports _aa_exports
     foreach v \$_aa_exports(\[list $package_key $init_class_id\]) {
       upvar \$v \$v
