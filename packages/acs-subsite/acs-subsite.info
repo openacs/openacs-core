@@ -7,7 +7,7 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>f</singleton-p>
     
-    <version name="4.6.2" url="http://www.openacs.org/repository/download/apm/acs-subsite-4.6b.apm">
+    <version name="4.6.2" url="http://www.openacs.org/repository/download/apm/acs-subsite-4.6.2.apm">
     <database-support>
     </database-support>
         <owner>Michael Bryzek</owner>
