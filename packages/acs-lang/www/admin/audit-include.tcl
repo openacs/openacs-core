@@ -1,6 +1,6 @@
 set trail_counter 0
 
-set new_message [db_string current_message { select message from lang_messages where locale = :current_locale and package_key = :package_key and message_key = :message_key }]
+set new_message [db_string current_message { select message from lang_messages where locale = :current_locale and package_key = :package_key and message_key = :message_key } -default ""]
 
 multirow create audit_inv creation_user_id creation_user_name creation_date old_message new_message old_new_message comment_text
 
