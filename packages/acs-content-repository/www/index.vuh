@@ -25,7 +25,7 @@ set template_root \
 # Serve the page
 
 ns_log notice "RESOLVING URL: $the_root $the_url"
-if { [content::init_all the_url the_root $content_root $template_root $revision_id] } {
+if { [content::init the_url the_root $content_root $template_root public $revision_id] } {
   set file "$the_root/$the_url"
   ns_log notice "RESOLVED URL: $file"
   rp_serve_abstract_file $file
