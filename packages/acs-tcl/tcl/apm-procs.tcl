@@ -844,19 +844,11 @@ ad_proc -private apm_post_instantiation_tcl_proc_from_key { package_key } {
 }
 
 
-<<<<<<< apm-procs.tcl
 ad_proc -public apm_package_instance_new {
     {-package_id 0}
     instance_name
     context_id
     package_key
-=======
-ad_proc -public apm_package_create_instance {
-    {
-	-package_id 0
-    }
-    instance_name context_id package_key
->>>>>>> 1.16.2.1
 } {
     Creates a new instance of a package.
 } {
@@ -900,17 +892,7 @@ ad_proc -public apm_package_call_post_instantiation_proc {
 	}
     }
     
-<<<<<<< apm-procs.tcl
     return $package_id
-}
-
-ad_proc -public apm_package_instance_delete {
-    package_id
-} {
-    Deletes an instance of a package
-} {
-    db_exec_plsql apm_package_instance_delete {}
-=======
 }
 
 ad_proc -public apm_package_instance_new {
@@ -931,7 +913,6 @@ ad_proc -public apm_package_instance_new {
 } {
     set package_id [apm_package_create_instance -package_id $package_id $instance_name $context_id $package_key]
     apm_package_call_post_instantiation_proc $package_id $package_key
->>>>>>> 1.16.2.1
 }
 
 
@@ -956,3 +937,12 @@ ad_proc apm_parameter_sync {package_key package_id} {
 	ad_parameter_cache -set [lindex $name_value_pair 1] $package_id [lindex $name_value_pair 0]
     }
 }
+
+ad_proc -public apm_package_instance_delete {
+    package_id
+} {
+    Deletes an instance of a package
+} {
+    db_exec_plsql apm_package_instance_delete {}
+}
+
