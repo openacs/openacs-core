@@ -807,6 +807,42 @@ ad_proc -public auth::create_local_account {
         }
     }
     
+    # Default a local account username
+    if { $user_info(authority_id) == [auth::authority::local] \
+             && [auth::UseEmailForLoginP] \
+             && [empty_string_p $username] } {
+
+        # Generate a username that's guaranteed to be unique
+        # Rather much work, but that's the best I could think of
+
+        # Default to email
+        set username [string tolower $user_info(email)]
+
+        # Check if it already exists
+        set existing_user_id [acs_user::get_by_username -authority_id $authority_id -username $username]
+
+        # If so, add -2 or -3 or ... to make it unique
+        if { ![empty_string_p $existing_user_id] } {
+            set match "$user_info)username)-%"
+            set existing_usernames [db_list select_existing_usernames { 
+                select username 
+                from   users
+                where  authority_id = :authority_id
+                and    username like :match
+            }]
+
+            set number 2
+            foreach existing_username $existing_usernames {
+                if { [regexp "^${username}-(\\d+)\$" $existing_username match existing_number] } {
+                    # matches the foo-123 pattern
+                    if { $existing_number >= $number } { set number [expr $existing_number + 1] }
+                }
+            }
+            set username "$username-$number"
+            ns_log Notice "User's email was already used as someone else's username, setting username to $username"
+        }
+    }
+
     set error_p 0
     with_catch errmsg {
         # We create the user without a password
