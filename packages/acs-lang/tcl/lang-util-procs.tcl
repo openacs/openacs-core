@@ -310,8 +310,8 @@ ad_proc lang::util::replace_temporary_tags_with_lookups {
 }   
 
 ad_proc -public lang::util::localize {
-    {-locale ""}
     string_with_hashes
+    {locale ""}
 } {
     Takes a string with embedded message keys on the format #message_key_name#
     and returns the same string but with the message keys (and their surrounding hash
