@@ -341,12 +341,24 @@ ad_proc -public api_type_documentation {
     return $out
 }
 
-ad_proc -private api_set_public { version_id { public_p "" }} {
+ad_proc -private api_set_public {
+    version_id
+    { public_p "" }
+} {
+    
+    Gets or sets the user's public/private preferences for a given
+    package.
+
+    @param version_id the version of the package
+    @param public_p if empty, return the user's preferred setting or the default (1) if no preference found. If not empty, set the user's preference to public_p
+    @return public_p
+
+} {
     set public_property_name "api,package,$version_id,public_p"
     if { [empty_string_p $public_p] } {
 	set public_p [ad_get_client_property acs-api-browser $public_property_name]
 	if { [empty_string_p $public_p] } {
-	    set public_p 0
+	    set public_p 1
 	}
     } else {
 	ad_set_client_property acs-api-browser $public_property_name $public_p
