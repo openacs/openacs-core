@@ -53,7 +53,7 @@ foreach spec_file $all_spec_files {
     }
 }
 
-ns_log Debug $spec_files
+apm_log APMDebug $spec_files
 
 ns_write "Done.<p>
 "
@@ -115,7 +115,7 @@ function checkAll() {
     set errors [list]
     set pkg_info_list [list]
     set pkg_key_list [list]
-    ns_log Debug "APM: Specification files available: $spec_files"
+    apm_log APMDebug "APM: Specification files available: $spec_files"
     foreach spec_file $spec_files {
 	### Parse the package.
 	if { [catch {
@@ -124,7 +124,7 @@ function checkAll() {
 	    lappend errors "<li>Unable to parse $spec_file.  The following error was generated:
 	    <blockquote><pre>[ad_quotehtml $errmsg]</pre></blockquote><p>"
 	} else {
-	    ns_log Debug "APM: Adding $package(package.key) to list for installation." 
+	    apm_log APMDebug "APM: Adding $package(package.key) to list for installation." 
 	    lappend pkg_info_list [pkg_info_new $package(package.key) $spec_file \
 		    $package(provides) $package(requires) ""]
             lappend pkg_key_list $package(package.key)
@@ -170,4 +170,4 @@ if { [llength $already_installed_list] > 0 } {
 
 ns_write "
 [ad_footer]
-"
+" 
