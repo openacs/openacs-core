@@ -6,7 +6,7 @@
     <pretty-plural>ACS Templating Services</pretty-plural>
     <initial-install-p>t</initial-install-p>
     <singleton-p>t</singleton-p>
-
+    
     <version name="4.5" url="http://www.openacs.org/repository/download/apm/acs-templating-4.5.apm">
     <database-support>
         <database>oracle</database>
@@ -30,13 +30,13 @@ specification for many physical pages, so the overall layout of a site can be mo
             <file path="resources/assets/corners/lower-right.gif"/>
             <file path="resources/assets/corners/upper-left.gif"/>
             <file path="resources/assets/corners/upper-right.gif"/>
+            <file path="resources/forms/coddo.adp"/>
             <file path="resources/forms/confirm-button.adp"/>
             <file path="resources/forms/confirm-button.tcl"/>
             <file path="resources/forms/grid.adp"/>
-            <file path="resources/forms/standard-lars.adp"/>
-            <file path="resources/forms/coddo.adp"/>
             <file path="resources/forms/plain.adp"/>
             <file path="resources/forms/plainest.adp"/>
+            <file path="resources/forms/standard-lars.adp"/>
             <file path="resources/forms/standard.adp"/>
             <file path="resources/forms/tabbed-dialog.adp"/>
             <file path="resources/forms/wizard.adp"/>
@@ -71,6 +71,7 @@ specification for many physical pages, so the overall layout of a site can be mo
             <file type="tcl_procs" path="tcl/parse-procs.tcl"/>
             <file type="tcl_procs" path="tcl/query-procs.tcl"/>
             <file type="tcl_procs" path="tcl/request-procs.tcl"/>
+            <file type="tcl_procs" path="tcl/richtext-procs.tcl"/>
             <file type="tcl_procs" path="tcl/tab-procs.tcl"/>
             <file type="tcl_procs" path="tcl/table-procs.tcl"/>
             <file type="tcl_init" path="tcl/tag-init.tcl"/>
@@ -131,6 +132,8 @@ specification for many physical pages, so the overall layout of a site can be mo
             <file type="documentation" path="www/doc/demo/contract.tcl"/>
             <file type="documentation" path="www/doc/demo/date-test.adp"/>
             <file type="documentation" path="www/doc/demo/date-test.tcl"/>
+            <file type="documentation" path="www/doc/demo/display-edit.adp"/>
+            <file type="documentation" path="www/doc/demo/display-edit.tcl"/>
             <file type="documentation" path="www/doc/demo/embed_escape.adp"/>
             <file type="documentation" path="www/doc/demo/embed_escape.tcl"/>
             <file type="documentation" path="www/doc/demo/error.adp"/>
@@ -259,6 +262,7 @@ specification for many physical pages, so the overall layout of a site can be mo
             <file type="documentation" path="www/doc/tagref/grid.html"/>
             <file type="documentation" path="www/doc/tagref/group.html"/>
             <file type="documentation" path="www/doc/tagref/if.html"/>
+            <file type="documentation" path="www/doc/tagref/include-optional.html"/>
             <file type="documentation" path="www/doc/tagref/include.html"/>
             <file type="documentation" path="www/doc/tagref/index.html"/>
             <file type="documentation" path="www/doc/tagref/list.html"/>
@@ -267,6 +271,7 @@ specification for many physical pages, so the overall layout of a site can be mo
             <file type="documentation" path="www/doc/tagref/noparse.html"/>
             <file type="documentation" path="www/doc/tagref/property.html"/>
             <file type="documentation" path="www/doc/tagref/slave.html"/>
+            <file type="documentation" path="www/doc/tagref/switch.html"/>
             <file type="documentation" path="www/doc/tagref/variable.html"/>
             <file type="documentation" path="www/doc/time1/stage00.gif"/>
             <file type="documentation" path="www/doc/time1/stage01.gif"/>
@@ -330,10 +335,12 @@ specification for many physical pages, so the overall layout of a site can be mo
             <file type="documentation" path="www/doc/widgets/select.html"/>
             <file type="documentation" path="www/doc/widgets/table.html"/>
         </files>
+        <callbacks>
+        </callbacks>
         <parameters>
+            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="RefreshCache"  default="as needed" description="When to re-translate templates.  Speical values: "/>
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="ShowCompiledTemplatesP"  default="0" description="Show thecompiled template (for debugging) at .cmp URL"/>
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="ShowDataDictionariesP"  default="0" description="Offer data dictionaries on .dat/.fmt URL."/>
-            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="RefreshCache"  default="as needed" description="When to re-translate templates.  Speical values: "/>
         </parameters>
 
     </version>
