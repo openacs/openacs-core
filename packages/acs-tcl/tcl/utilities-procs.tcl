@@ -613,6 +613,7 @@ ad_proc -public export_vars {
     -url:boolean
     -quotehtml:boolean
     -entire_form:boolean
+    -no_empty:boolean
     {-exclude {}}
     {-override {}}
     {vars {}}
@@ -746,6 +747,9 @@ ad_proc -public export_vars {
 
     @param entire_form Export the entire form from the GET query string or the POST.
 
+    @option no_empty If specified, variables with an empty string value will be suppressed from being exported.
+                     This avoids cluttering up the URLs with lots of unnecessary variables.
+
     @author Lars Pind (lars@pinds.com)
     @creation-date December 7, 2000
 } {
@@ -825,18 +829,50 @@ ad_proc -public export_vars {
 		    }
 		    
 		    if { [llength $var_spec] > 1 } {
-			set exp_value($name) [uplevel subst \{[lindex $var_spec 1]\}]
+                        set value [uplevel subst \{[lindex $var_spec 1]\}]
+                        if { !$no_empty_p || ![empty_string_p $value] } {
+                            set exp_value($name) $value
+                        }
 		    } else {
 			upvar 1 $name upvar_variable
 			if { [info exists upvar_variable] } {
 			    if { [array exists upvar_variable] } {
-				set exp_value($name) [array get upvar_variable]
+                                if { $no_empty_p } {
+                                    # If the no_empty_p flag is set, remove empty string values first
+                                    set exp_value($name) [list]
+                                    foreach { key value } [array get upvar_variable] {
+                                        if { ![empty_string_p $value] } {
+                                            lappend exp_value($name) $key $value
+                                        }
+                                    }
+                                } else {
+                                    # If no_empty_p isn't set, just do an array get
+                                    set exp_value($name) [array get upvar_variable]
+                                }
 				set exp_flag($name:array) 1
 			    } else {
-				set exp_value($name) $upvar_variable
 				if { [info exists exp_flag($name:array)] } {
 				    return -code error "Variable \"$name\" is not an array"
 				}
+                                if { !$no_empty_p } {
+                                    set exp_value($name) $upvar_variable
+                                } else {
+                                    # no_empty_p flag set, remove empty strings
+                                    if { [info exists exp_flag($name:multiple)] } {
+                                        # This is a list, remove empty entries
+                                        set exp_value($name) [list]
+                                        foreach elm $upvar_variable {
+                                            if { ![empty_string_p $elm] } {
+                                                lappend exp_value($name) $elm
+                                            }
+                                        }
+                                    } else {
+                                        # Simple value, this is easy
+                                        if { ![empty_string_p $upvar_variable] } {
+                                            set exp_value($name) $upvar_variable
+                                        }
+                                    }
+                                }
 			    }
 			}
 		    }
