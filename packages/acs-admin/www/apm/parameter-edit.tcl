@@ -26,7 +26,11 @@ db_1row apm_get_name {
 
 db_release_unused_handles
 
-doc_body_append "[apm_header -form "action=parameter-edit-2 method=post" [list "version-view?version_id=$version_id" "$pretty_name $version_name"] [list "version-parameters?[export_url_vars version_id]" "Parameters"] "Edit a Parameter in $pretty_name ($version_name)" ]
+set page_title "Edit Parameter"
+set context [list [list "." "Package Manager"] [list [export_vars -base version-view { version_id }] "$pretty_name $version_name"] [list [export_vars -base version-parameters { version_id }] "Parameters"] $page_title]
+
+append body "
+<form action=\"parameter-edit-2\" method=\"post\">
 <blockquote>
 <table>
 [export_form_vars package_key parameter_id version_id]

@@ -36,18 +36,21 @@ if { [exists_and_not_null dimensional_list] } {
 
 lappend table_def [list parameter_id "Actions" no_sort \
 		       {<td>\[<font size=-1>
-	     <a href=parameter-delete?[export_url_vars parameter_id version_id]>delete</a> | 
+	     <a href=parameter-delete?[export_url_vars parameter_id version_id section_name]>delete</a> | 
 			  <a href=parameter-edit?[export_url_vars version_id parameter_id]>edit</a></font>\] 
 			   </td>}]
 
 append sql_clauses [ad_order_by_from_sort_spec $orderby $table_def]
 
-doc_body_append "[apm_header [list "version-view?version_id=$version_id" "$pretty_name $version_name"] "Parameters"]
+set page_title "Parameters"
+set context [list [list "." "Package Manager"] [list [export_vars -base version-view { version_id }] "$pretty_name $version_name"] $page_title]
+
+append body "
 <blockquote>
 "
 
 if { ![empty_string_p $dimensional_list] } {
-    doc_body_append "[ad_dimensional $dimensional_list]<p>"
+    append body "[ad_dimensional $dimensional_list]<p>"
 }
 
 # LARS hack
@@ -61,7 +64,7 @@ foreach section $sections {
 
 
 
-doc_body_append "[ad_table -Torderby $orderby \
+append body "[ad_table -Torderby $orderby \
      -bind [ad_tcl_vars_to_ns_set version_id package_key] \
      -Textra_vars {version_id} \
      -Tmissing_text "No parameters registered in this section." \
@@ -69,7 +72,6 @@ doc_body_append "[ad_table -Torderby $orderby \
 <br><a href=parameter-add?[export_url_vars version_id section_name]>Add a new parameter</a>
 
 </blockquote>
-[ad_footer]
 "
 
 
