@@ -1,0 +1,465 @@
+<sect1 id="db-api">
+<title>The Database Access API</title>
+
+<authorblurb>
+<para>By <ulink url="mailto:psu@arsdigita.com">Pete Su</ulink></para>
+</authorblurb>
+
+
+    	<sect2 id="db-api-overview"><title>Overview</title>
+
+    	<para>
+    		This document is a short tutorial on the Database API, meant for
+    		experienced ACS developers to get a jump-start on its usage. For a
+    		more complete discussion of the DB API, you can read
+    		<link linkend="db-api-detailed">the documentation in
+    		the kernel</link>.
+    	</para>
+
+	</sect2>
+
+    	<sect2 id="db-api-theoldway"><title>The Old Way</title>
+
+    	<para>
+    		Here's a typical block of code from an ACS 3.x dynamic page:
+</para>
+
+<programlisting>
+set tcl_var "foo"
+
+set db [ns_db gethandle]
+
+ns_db dml $db "begin transaction"
+
+set sql "select 
+             foo, 
+             bar, 
+             baz 
+	 from some_table, 
+	     some_other_table
+	 where some_table.id = some_other_table.id  
+	     and some_table.condition_p = '$tcl_var'
+	 "
+
+set selection [ns_db select $db $sql] 
+set count 0 
+
+while { [ns_db getrow $db $selection] } { 
+      	set_variables_after_query 
+ 
+        ...
+        call_some_proc $foo $bar $baz
+        incr count 
+}
+
+ns_db releasehandle $db
+</programlisting>
+
+  
+
+    	<para>
+    		Writing code like this had the following annoyances:
+
+    		<itemizedlist mark="opencircle">
+
+      			<listitem>
+      			<para>
+        		It was repetitive, tedious and error prone to write the same type of
+			loops over and over again.
+      			</para>
+      			</listitem>
+
+      			<listitem>
+      			<para>
+        		Using Tcl variable interpolation in a literal string, to pass values
+			from the page to the database, is error prone, relatively inefficient,
+			and a good way to compromise the security of a web site.
+      			</para>
+      			</listitem>
+      
+      			<listitem>
+      			<para>
+        		Magic like <computeroutput>set_variables_after_query</computeroutput> made code confusing.
+      			</para>
+      			</listitem>
+
+      			<listitem>
+      			<para>
+        		The scope of transactions is not clear from reading the code.
+      			</para>
+      			</listitem>
+
+      			<listitem>
+      			<para>
+        		Passing handles around explicitly made it easy to use them in bad
+			ways, like holding a handle for too long while returning data to a
+			user's browser.
+      			</para>
+      			</listitem>
+
+    		</itemizedlist>
+
+    	</para>
+
+    	<para>
+      		Introduced in ACS 3.4, the new Database API is meant to save
+      		developers from the above tedium and provide a more structured syntax
+      		for specifying database operations, including transactions.
+    	</para>
+
+	</sect2>
+
+    	<sect2 id="db-api-thenewway"><title>The New Way</title>
+	
+    	<para>
+    		Here is how you would code up the example above using the new API.
+</para>
+    		<programlisting>
+set count 0 
+
+set tcl_var "foo"
+
+set sql {
+       	select 
+            foo, 
+            bar, 
+            baz 
+        from some_table, some_other_table
+        where some_table.id = some_other_table.id  
+        and some_table.condition_p = :tcl_var
+      	}
+      
+db_transaction {
+        db_foreach my_example_query_name $sql {
+            	...
+            	call_some_proc $foo $bar $baz
+            	incr count
+        }
+}
+    		</programlisting>
+
+<para>
+    		There are several things to note here:
+
+    		<orderedlist numeration="arabic">
+
+      			<listitem>
+	      		<para>
+        		No explicit code for grabbing and releasing handles. Usage of the
+			Database API implicitly deals with all handle management issues.
+      			</para>
+      			</listitem>
+
+  			<listitem>
+			<para>
+  			The new command <computeroutput>db_transaction</computeroutput> makes the scope of a
+  			transaction clear. <computeroutput>db_transaction</computeroutput> takes the code block
+  			argument and automatically runs it in the context of a transaction.
+  			</para>
+			</listitem>
+
+  			<listitem>
+			<para>
+  			The new command <computeroutput>db_foreach</computeroutput> writes our old while loop for us.
+  			</para>
+			</listitem>
+	
+  			<listitem>
+			<para>
+  			Every SQL query has a name, meant to be unique within the server
+  			instance (though this is not enforced).
+  			</para>
+			</listitem>
+
+  			<listitem>
+			<para>
+  			Finally and most importantly, there is a new scheme for passing data
+  			from a Tcl variable to the database, which we'll cover next.
+  			</para>
+			</listitem>
+
+		</orderedlist>
+
+	</para>
+
+	</sect2>
+
+	<sect2 id="db-api-bindvariables"><title>Bind Variables</title>
+
+	<para>
+
+		Bind variables are placeholders for literal values in an SQL query
+		being sent to the server. Take the example query above: in the old
+		way, data was generally passed to Oracle directly, via Tcl string
+		interpolation. So in the example above, the actual query we send would
+		look like this:
+</para>
+		<programlisting>
+select 
+    foo, 
+    bar, 
+    baz 
+from some_table, some_other_table
+where some_table.id=some_other_table.id  
+and some_table.condition_p = 'foo'
+		</programlisting>
+
+
+	<para>
+		There are a few problems with this: first, if the literal value is a
+		huge string, then we waste a lot of time in the database server doing
+		useless parsing. Second, if the literal value contains characters like
+		single quotes, we have to be careful to double-quote them, because not
+		quoting them will lead to surprising errors. Third, no type checking
+		occurs on the literal value. Finally, if the Tcl variable is passed in
+		or between web forms or otherwise subject to external modification,
+		there is nothing keeping malicious users from setting the Tcl variable
+		to some string that changes the query textually. This type of attack,
+		called SQL smuggling, can be very damaging - entire tables can be
+		exposed or have their contents deleted, for example. Another very
+    important reason for using bind variables is performance. Oracle caches
+    all previously parsed queries. If there are values in the where clause,
+    that is how the query is cached. It also performs bind variable
+    susbstitution after parsing the SQL statement. This means that SQL
+    statements that use bind variables will always match (assuming all else is
+    the same) while SQL statements that do not use bind variables will not
+    match unless the values in the statement are exactly the same. This will
+    improve performance considerably.
+	</para>
+
+	<para>
+		To fix all these problems, we replace literal values in the query with
+		a placeholder character, and then send the data along after. So the
+		query looks like this:
+</para>
+		<programlisting>
+select 
+    foo, 
+    bar, 
+    baz 
+from some_table, some_other_table
+where some_table.id = some_other_table.id
+and some_table.condition_p = ?
+		</programlisting>
+
+	
+
+	<para>
+		The '?' character means "This will be filled in later with literal
+		data". In use, you might write code that looks like this:
+</para>
+		<programlisting>
+set statement [prepare_query "
+    		select 
+        		foo, 
+        		bar, 
+        		baz 
+    		from some_table, some_other_table
+    		where some_table.id = some_other_table.id  
+    		and some_table.condition_p = ?
+	       "]
+
+[bind_param $statement 1 $tcl_var]
+		</programlisting>
+
+	
+
+	<para>
+		The above example is meant to be psuedo-Tcl - no API like this
+		actually exists.  What happens is that we first send the SQL statement
+		to the server for parsing, then later we <emphasis>bind</emphasis> values to the
+		placeholders, and send those values along seperately. This seperate
+		binding step is where the term <emphasis>bind variable</emphasis> comes from.
+	</para>
+
+	<para>
+		This split has several advantages. First, type checking happens on the
+		literal. If the column we are comparing against holds numbers, and we
+		send a string, we get a nice error. Second, since string literals are
+		no longer in the query, no extra quoting is required. Third,
+		substitution of bind variables cannot change the actual text of the
+		query, only the literal values in the placeholders.
+	</para>
+
+	<para>
+		The database API makes bind variables easy to use by hooking them
+		smoothly into the Tcl runtime. Rather than using a '?' as a generic
+		placeholder, you use a colon followed by the name of the Tcl variable
+		that you wish to pass as a literal. So here's the final, real-life
+		form of the example query:
+</para>
+		<programlisting>
+select 
+    foo, 
+    bar, 
+    baz 
+from some_table, some_other_table
+where some_table.id = some_other_table.id  
+and some_table.condition_p = :tcl_var
+		</programlisting>
+
+
+	<para>
+		The database API parses the query and pulls out all the bind variable
+		specifications and replaces them with generic placeholders.  It then
+		automatically pulls the values of the named Tcl vars out of the
+		runtime environment of the script, and passes them to the database.
+	</para>
+
+	<para>
+		Note that while this looks like a simple syntactic change, it really
+		is very different from how we've written queries in the past.  You use
+		bind variables to replace what would otherwise be a literal value in a
+		query, and Tcl style string interpolation does not happen. So you
+		cannot do something like:
+</para>
+		<programlisting>
+set table "baz"
+set condition "where foo = bar"
+
+db_foreach my_query { select :table from some_table where :condition }
+		</programlisting>
+	
+
+	<para>
+		SQL will not allow a literal to occur where we've put the bind
+		variables, so the query is syntactically incorrect. You have to
+		remember that while the bind variable syntax looks similar to variable
+		interpolation in Tcl, it is <emphasis>not the same thing at all</emphasis>.
+	</para>
+
+	<para>
+		Finally, the DB API has several different styles for passing bind
+		variable values to queries. In general, use the style presented here
+		because it is the most convenient. You'll see the other styles
+		described in the detailed API document, but they're not important.
+	</para>
+
+	</sect2>
+
+	<sect2 id="db-api-basicapi"><title>Basic API</title>
+
+	<para>
+		The Database API has several functions that wrap familiar parts of the
+		AOLserver database API. We won't cover the details of all the calls
+		here; instead, we'll list the most frequently used calls, with links
+		to further detail:
+
+	<variablelist>
+
+  		<varlistentry>
+    		<term><link linkend="dbapi_db_null"><computeroutput>db_null</computeroutput></link></term>
+    		<listitem>
+		<para>
+			Returns a value which can be used in a bind variable to represent
+    			the SQL value <computeroutput>null</computeroutput>. You should use this instead of empty
+    			strings when passing nulls to the database, because using the empty
+    			string as the null value is not portable across databases. See 
+    			<link linkend="dbapi_nulls_and_bind_vars">Nulls and Bind Variables</link>.
+    		</para>
+		</listitem>
+  		</varlistentry>
+
+  		<varlistentry>
+    		<term><link linkend="dbapi_db_foreach">
+      		<computeroutput>db_foreach</computeroutput></link>
+      		<emphasis><computeroutput>query_name sql { code } </computeroutput></emphasis>
+    		</term>
+    		<listitem><para>Runs a query returning multiple rows and executes a code block for
+    		each row returned.
+    		</para></listitem>
+  		</varlistentry>
+
+
+
+  <varlistentry>
+  <term><link linkend="dbapi_db_1row">
+  <computeroutput>db_1row</computeroutput></link>
+  <emphasis><computeroutput>query_name sql</computeroutput></emphasis></term>
+
+  <listitem>
+  <para>This is similar to the old <computeroutput>ns_db 1row</computeroutput> call.</para>
+  </listitem>
+  </varlistentry>
+
+
+  <varlistentry>
+  <term><link linkend="dbapi_db_0or1row">
+  <computeroutput>db_0or1row</computeroutput></link>
+  <emphasis><computeroutput>query_name sql</computeroutput></emphasis></term>
+
+  <listitem>
+  <para>This is similar to the old call <computeroutput>ns_db 0or1row</computeroutput></para>
+  </listitem>
+  </varlistentry>
+
+
+  <varlistentry>
+  <term><link linkend="dbapi_db_string">
+  <computeroutput>db_string</computeroutput></link>
+  <emphasis><computeroutput>query_name sql</computeroutput></emphasis>
+  </term>
+
+  <listitem>
+  <para>Returns the first column of the result of a SQL query as a
+  string. Analogous to <computeroutput>database_to_tcl_string</computeroutput> and
+  <computeroutput>database_to_tcl_string_or_null</computeroutput>.
+  </para></listitem>
+  </varlistentry>
+
+
+  <varlistentry>
+  <term><link linkend="dbapi_db_list">
+  <computeroutput>db_list</computeroutput></link>
+  <emphasis><computeroutput>query_name sql</computeroutput></emphasis></term>
+
+  <listitem>
+  <para>Returns a Tcl list of values from the first column of each result row
+  of a SQL query.  Similar to the old <computeroutput>database_to_tcl_list</computeroutput>.
+  </para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+  <term><link linkend="dbapi_db_dml">
+  <computeroutput>db_dml</computeroutput></link>
+  <computeroutput>query_name dml</computeroutput>
+  </term>
+
+  <listitem>
+  <para>Performs a DML or DDL statement.</para>
+  </listitem>
+  </varlistentry>
+
+
+  <varlistentry>
+  <term><link linkend="dbapi_db_transaction">
+    <computeroutput>db_transaction</computeroutput></link>
+    <computeroutput> { code } </computeroutput>
+  </term>
+  
+  <listitem>
+  <para>Performs a block of Tcl code in the scope of a transaction.</para>
+  </listitem>
+  </varlistentry>
+
+
+  <varlistentry>
+  <term><link linkend="dbapi_db_abort_transaction">
+  <computeroutput>db_abort_transaction</computeroutput></link>
+  <computeroutput>{ code }</computeroutput>
+  </term>
+
+  <listitem>
+  <para>Aborts a transaction.</para>
+  </listitem>
+  </varlistentry>
+
+</variablelist>
+
+</para>
+
+<para><phrase role="cvstag">($Id$)</phrase></para>
+
+</sect2>
+
+</sect1>

@@ -1,0 +1,589 @@
+ad_library {
+
+    Functions that APM uses to interact with the file system and I/O.
+
+    @author Bryan Quinn (bquinn@arsdigita.com)
+    @creation-date Fri Oct  6 21:46:05 2000
+    @cvs-id $Id$
+} 
+
+
+ad_proc -private apm_mkdir {path} {
+
+    Creates the directory specified by path and returns it.
+
+} { 
+    if { [catch {
+	file mkdir $path
+    }] } {
+	# There must be a file blocking the directory creation.
+	if { [catch {
+	    file delete -force $path
+	    file mkdir $path
+	} errmsg]} {
+	    error "Error creationg directory $path: $errmsg"
+	}
+    }
+    return $path
+}
+
+ad_proc -public apm_workspace_dir {} {
+    
+    Return the path to the apm-workspace, creating the directory if necessary.
+    
+} {
+    set path [file join [acs_root_dir] apm-workspace]
+    if { [file isdirectory $path] } {
+	return $path
+    } else {
+	return [apm_mkdir $path]
+    }
+} 
+
+ad_proc -public apm_workspace_install_dir {} {
+    
+    Return the path to the installation directory of the apm-workspace, creating
+    the directory if necessary.
+} {
+    set base_path [apm_workspace_dir]
+    set install_path "$base_path/install"
+    if { [file isdirectory $install_path] } {
+	return $install_path
+    } else {
+	return [apm_mkdir $install_path]
+    }
+}
+
+
+ad_proc -public apm_file_type_keys {} {
+
+    Returns a list of valid file type keys.
+
+} {
+    return [util_memoize [list db_list unused "select file_type_key from apm_package_file_types"]]
+}
+
+
+ad_proc -public apm_package_info_file_path { 
+    {
+	-path ""
+    }
+    package_key 
+} {
+
+    Returns the path to a .info file in a package directory, or throws an
+    error if none exists. Currently, only $package_key.info is recognized
+    as a specification file.
+
+} {
+    if { [empty_string_p $path] } {
+	set path "[acs_package_root_dir $package_key]/$package_key.info"
+    } else {
+	set path "$path/$package_key/$package_key.info"
+    }
+    ns_log Notice "$path"
+    if { [file exists $path] } {
+	return $path
+    }
+    error "The $path/$package_key does not contain a package specification file ($package_key.info)."
+}
+
+
+ad_proc -private apm_extract_tarball { version_id dir } {
+
+    Extracts a distribution tarball into a particular directory,
+    overwriting any existing files.
+
+} {
+    set apm_file [ns_tmpnam]
+
+    db_blob_get_file distribution_tar_ball_select "select distribution_tarball from apm_package_versions where version_id = :version_id" $apm_file
+
+    file mkdir $dir
+    # cd, gunzip, and untar all in the same subprocess (to avoid having to
+    # chdir first).
+    exec sh -c "cd $dir ; [apm_gunzip_cmd] -c $apm_file | [apm_tar_cmd] xf -"
+    file delete $apm_file
+}
+
+
+ad_proc -private apm_generate_tarball { version_id } {
+    
+    Generates a tarball for a version, placing it in the version's distribution_tarball blob.
+    
+} {
+    set files [apm_version_file_list $version_id]
+    
+    set tmpfile [ns_tmpnam]
+    
+    db_1row package_key_select "select package_key from apm_package_version_info where version_id = :version_id"
+
+    # Generate a command like:
+    #
+    #   tar cf - -C /web/arsdigita/packages acs-kernel/00-proc-procs.tcl \
+    #                 -C /web/arsdigita/packages 10-database-procs.tcl ...  \
+    #     | gzip -c > $tmpfile
+    #
+    # Note that -C changes the working directory before compressing the next
+    # file; we need this to ensure that the tarballs are relative to the
+    # package root directory ([acs_root_dir]/packages).
+
+    set cmd [list exec [apm_tar_cmd] cf -]
+    foreach file $files {
+	lappend cmd -C "[acs_root_dir]/packages"
+	lappend cmd "$package_key/$file"
+    }
+    
+    lappend cmd "|" [apm_gzip_cmd] -c ">" $tmpfile
+    eval $cmd
+
+    # At this point, the APM tarball is sitting in $tmpfile. Save it in the database.
+
+    db_dml apm_tarball_insert {
+        update apm_package_versions
+           set distribution_tarball = empty_blob(),
+               distribution_uri = null,
+               distribution_date = sysdate
+         where version_id = :version_id
+     returning distribution_tarball into :1
+    } -blob_files [list $tmpfile]
+
+    file delete $tmpfile
+}
+
+
+ad_proc -public apm_file_add {
+    {
+	-file_id ""
+    }
+    version_id path file_type
+} {
+
+    Adds one file into the specified version.
+    @return the id of the file.
+
+} { 
+    if { [empty_string_p $file_id] } {
+	set file_id [db_null]
+    }
+    return [db_exec_plsql apm_file_add {
+	begin
+	:1 := apm_package_version.add_file(
+		file_id => :file_id,
+		version_id => :version_id,
+		path => :path,
+		file_type => :file_type
+		);
+	end;
+    }]
+}
+
+ad_proc -private apm_files_load {
+    {
+	-callback apm_dummy_callback
+	-force_reload:boolean
+    } files
+} {
+
+    Load the set of files into the currently running Tcl interpreter.
+    @param -force_reload Indicates if the file should be loaded even if it \
+	    is already loaded in the interpreter.
+} {
+    
+    # This will be the first time loading for each of these files (since if a
+    # file has already been loaded, we just skip it in the loop below).
+    global apm_first_time_loading_p
+    set apm_first_time_loading_p 1
+
+    global apm_current_package_key
+
+    foreach file_info $files {
+	util_unlist $file_info package_key path
+	if { $force_reload_p || ![nsv_exists apm_library_mtime packages/$package_key/$path] } {
+	    if { [file exists "[acs_root_dir]/packages/$package_key/$path"] } {
+		apm_callback_and_log $callback "Loading packages/$package_key/$path..."
+		set apm_current_package_key $package_key
+		# Remember that we've loaded the file.
+		apm_source "[acs_root_dir]/packages/$package_key/$path"
+		nsv_set apm_library_mtime packages/$package_key/$path [file mtime "[acs_root_dir]/packages/$package_key/$path"]
+
+		# Release outstanding database handles (in case this file
+		# used the db_* database API and a subsequent one uses
+		# ns_db).
+		db_release_unused_handles
+
+		apm_callback_and_log $callback "Loaded packages/$package_key/$path."
+		unset apm_current_package_key
+	    } else {
+		apm_callback_and_log $callback "Unable to load packages/$package_key/$path - file is marked as contained in a package but is not present in the filesystem"		
+	    }
+	}
+    }
+    unset apm_first_time_loading_p
+}
+
+	
+    
+
+
+ad_proc -public apm_file_watch {path} {
+
+    Marks the file of the indicated path to be watched.  If the file changes,
+    it will be reloaded prior to the next page load.
+
+} {
+    nsv_set apm_reload_watch $path 1
+}
+
+ad_proc -public apm_file_remove {path version_id} {
+    
+    Removes a files from a version.
+    
+} { 
+    return [db_exec_plsql apm_file_remove {
+	begin
+	apm_package_version.remove_file(
+				path => :path,
+				version_id => :version_id
+				);
+	end;
+    }]
+}
+
+ad_proc -public apm_version_from_file {file_id} {
+
+    @return The version id of the specified file.
+} {
+    return [db_string apm_version_id_from_file {
+	select version_id from apm_package_files
+	where file_id = :file_id
+    } -default 0]
+}
+
+ad_proc apm_filelist_update {version_id} {
+
+    Brings the .info list of files in sync with the directory structure.
+
+} {
+    set package_key [db_string package_key_for_version_id {
+	select package_key from apm_package_versions 
+	where version_id = :version_id
+    }]
+		     
+    # Add any new files.
+    foreach file [lsort [ad_find_all_files [acs_package_root_dir $package_key]]] {
+	set relative_path [ad_make_relative_path $file]
+	
+	# Now kill "packages" and the package_key from the path.
+	set components [split $relative_path "/"]
+	set relative_path [join [lrange $components 2 [llength $components]] "/"]	
+	set type [apm_guess_file_type $package_key $relative_path]	
+	apm_file_add $version_id $relative_path $type
+    }
+
+    # Remove stale files.
+    db_foreach apm_all_files {
+	select f.file_id, f.path
+	from   apm_package_files f
+	where  f.version_id = :version_id
+	order by path
+    } {
+	if { ![file exists "[acs_package_root_dir $package_key]/$path"] } {
+	    apm_file_remove $path $version_id
+	}
+    }
+} 
+
+ad_proc -public pkg_home {package_key} {
+
+    @return A server-root relative path to the directory for a package.  Usually /packages/package-key
+
+} {
+    return "/packages/$package_key"
+}
+
+ad_proc -public pkg_widgets {package_key} {
+
+    @return A server-root relative path to the widgets available to a package.  Usually /packages/package-key/widgets
+
+} {
+    return "[pkg_home $package_key]/widgets"
+}
+
+ad_proc -public apm_version_file_list { 
+    { 
+	-type "" 
+    } version_id } {
+
+    Returns a list of paths to files of a given type (or all files, if
+    $type is not specified) in a version.
+    @param type Optionally specifiy what type of files to check, for instance "tcl_procs"
+    @param version_id The version to retrieve the file list from.
+
+} {
+    if { ![empty_string_p $type] } {
+	set type_sql "and file_type = :type"
+    } else {
+	set type_sql ""
+    }
+    return [db_list path_select "
+        select path from apm_package_files
+        where  version_id = :version_id
+        $type_sql order by path
+    "]
+}
+
+
+ad_proc -private apm_guess_file_type { package_key path } {
+
+    Guesses and returns the file type key corresponding to a particular path
+    (or an empty string if none is known). <code>$path</code> should be
+    relative to the package directory (e.g., <code>www/index.tcl</code>
+    for <code>/packages/bboard/admin-www/index.tcl</code>. We use the following rules:
+
+    <ol>
+    <li>Files with extension <code>.sql</code> are considered data-model files,
+    or if any path contains the substring <code>upgrade</code>, data-model upgrade
+    files.
+    <li>Files with extension <code>.sqlj</code> are considered sqlj_code files.				       
+    <li>Files with extension <code>.info</code> are considered package specification files.
+    <li>Files with a path component named <code>doc</code> are considered
+    documentation files.
+    <li>Files with extension <code>.pl</code> or <code>.sh</code> or
+        which have a path component named
+    <code>bin</code>, are considered shell-executable files.
+    <li>Files with a path component named <code>templates</code> are considered
+    template files.
+    <li>Files with extension <code>.html</code> or <code>.adp</code>, in the top
+    level of the package, are considered documentation files.
+    <li>Files with a path component named <code>www</code> or <code>admin-www</code>
+    are considered content-page files.
+    <li>Files ending in <code>-procs.tcl</code> or <code>-init.tcl</code> are considered
+    Tcl procedure or Tcl initialization files, respectively.
+    </ol>
+
+    Rules are applied in this order (stopping with the first match).
+
+} {
+    set components [split $path "/"]
+    set extension [file extension $path]
+    set type ""
+
+    if { [string equal $extension ".sql"] } {
+	if { [lsearch -glob $components "*upgrade-*-*"] >= 0 } {
+	    set type "data_model_upgrade"
+	} elseif { [regexp -- "$package_key-(create|drop)" [file tail $path] "" kind] } {
+	    set type "data_model_$kind"
+	} else {
+	    set type "data_model"
+	}
+    } elseif { [string equal $extension ".sqlj"] } {
+	set type "sqlj_code"
+    } elseif { [string equal $extension ".info"] } {
+	set type "package_spec"
+    } elseif { [lsearch $components "doc"] >= 0 } {
+	set type "documentation"
+    } elseif { [string equal $extension ".pl"] || \
+	    [string equal $extension ".sh"] || \
+	    [lsearch $components "bin"] >= 0 } {
+	set type "shell"
+    } elseif { [lsearch $components "templates"] >= 0 } {
+	set type "template"
+    } elseif { [llength $components] == 1 && \
+	    ([string equal $extension ".html"] || [string equal $extension ".adp"]) } {
+	# HTML or ADP file in the top level of a package - assume it's documentation.
+	set type "documentation"
+    } elseif { [lsearch $components "www"] >= 0 || [lsearch $components "admin-www"] >= 0 } {
+	set type "content_page"
+    } else {
+	if { [string equal $extension ".tcl"] && \
+		[regexp -- {-(procs|init)\.tcl$} [file tail $path] "" kind] } {
+	    set type "tcl_$kind"
+	}
+    }
+    return $type
+}
+
+ad_proc -private apm_ignore_file_p { path } {
+
+    Return 1 if $path should, in general, be ignored for package operations.
+    Currently, a file is ignored if it is a backup file or a CVS directory.
+
+} {
+    set tail [file tail $path]
+    if { [apm_backup_file_p $tail] } {
+	return 1
+    }
+    if { [string equal $tail "CVS"] } {
+	return 1
+    }
+    return 0
+}
+
+ad_proc -private apm_backup_file_p { path } {
+
+    Returns 1 if $path is a backup file, or 0 if not. We consider it a backup file if
+    any of the following apply:
+
+    <ul>
+    <li>its name begins with <code>#</code>
+    <li>its name is <code>bak</code>
+    <li>its name begins with <code>bak</code> and one or more non-alphanumeric characters
+    <li>its name ends with <code>.old</code>, <code>.bak</code>, or <code>~</code>
+    </ul>
+
+} {
+    return [regexp {(\.old|\.bak|~)$|^#|^bak([^a-zA-Z]|$)} [file tail $path]]
+}
+
+
+ad_proc -private apm_system_paths {} {
+
+    @return a list of acceptable system paths to search for executables in.
+
+} {
+    set paths [ad_parameter_all_values_as_list -package_id [ad_acs_kernel_id] SystemCommandPaths acs-kernel]
+    if {[empty_string_p $paths]} {
+	return [list "/usr/local/bin" "/usr/bin" "/bin" "/usr/sbin" "/sbin" "/usr/sbin"]
+    } else {
+	return $paths
+    }
+}
+
+ad_proc -private apm_gunzip_cmd {} {
+
+    @return A valid pointer to gunzip, 0 otherwise.
+ 
+} {
+    return gunzip
+}
+
+ad_proc -private apm_tar_cmd {} {
+
+    @return A valid pointer to tar, 0 otherwise.
+ 
+} {
+    return tar
+}
+
+
+ad_proc -private apm_gzip_cmd {} {
+    
+    @return A valid pointer to gzip, 0 otherwise.
+
+} {
+    return gzip
+}
+
+ad_proc -private apm_load_apm_file {
+    {
+	-callback apm_dummy_callback
+    } file_path
+} {
+    
+    Uncompresses and loads an APM file into the filesystem.
+
+} {
+    if {![file exists $file_path]} {
+	apm_callback_and_log $callback  "
+	The file cannot be found.  Your URL or your file name is incorrect.  Please verify that the file name
+	is correct and try again."
+	return
+    }
+    if { [catch {
+	set files [split [string trim \
+		[exec [apm_gunzip_cmd]  -c $file_path | [apm_tar_cmd] tf -] "\n"]]
+	apm_callback_and_log $callback  "<li>Done. Archive is [format "%.1f" [expr { [file size $file_path] / 1024.0 }]]KB, with [llength $files] files.<li>"
+    } errmsg] } {
+	apm_callback_and_log $callback "The follow error occured during the uncompression process:
+	<blockquote><pre>[ad_quotehtml $errmsg]</pre></blockquote><br>
+	"
+	return
+    }
+	
+    if { [llength $files] == 0 } {
+	apm_callback_and_log $callback  "The archive does not contain any files.\n"
+	return
+    }
+
+    set package_key [lindex [split [lindex $files 0] "/"] 0]
+
+    # Find that .info file.
+    foreach file $files {
+	set components [split $file "/"]
+	if { [string compare [lindex $components 0] $package_key] } {
+	    apm_callback_and_log $callback  "All files in the archive must be contained in the same directory 
+	    (corresponding to the package's key). This is not the case, so the archive is not 
+	    a valid APM file.\n"
+	    return
+	}
+    
+	if { [llength $components] == 2 && ![string compare [file extension $file] ".info"] } {
+	    if { [info exists info_file] } {
+		apm_callback_and_log $callback  "The archive contains more than one <tt>package/*/*.info</tt> file, so it is not a valid APM file.</ul>\n"
+		return
+	    } else {
+	    set info_file $file
+	    }
+	}
+    }
+	if { ![info exists info_file] || [regexp {[^a-zA-Z0-9\-\./_]} $info_file] } {
+	apm_callback_and_log $callback  "The archive does not contain a <tt>*/*.info</tt> file, so it is not 
+	a valid APM file.</ul>\n"
+	return
+    }
+
+    apm_callback_and_log $callback  "Extracting the .info file (<tt>$info_file</tt>)..."
+    set tmpdir [ns_tmpnam]
+    file mkdir $tmpdir
+    exec sh -c "cd $tmpdir ; [apm_gunzip_cmd] -c $file_path | [apm_tar_cmd] xf - $info_file"
+    
+    if { [catch {
+	array set package [apm_read_package_info_file [file join $tmpdir $info_file]]
+    } errmsg]} {
+	file delete -force $tmpdir
+	apm_callback_and_log $callback  "The archive contains an unparseable package specification file: 
+	<code>$info_file</code>.  The following error was produced while trying to 
+	parse it: <blockquote><pre>[ad_quotehtml $errmsg]</pre></blockquote>.
+	<p>
+	The package cannot be installed.
+	</ul>\n"
+	return
+    }
+    file delete -force $tmpdir
+    set package_key $package(package.key)
+    set pretty_name $package(package-name)
+    set version_name $package(name)
+    ns_log Debug "APM: Preparing to load $pretty_name $version_name"
+    # Determine if this package version is already installed.
+    if {[apm_package_version_installed_p $package_key $version_name]} {	
+	apm_callback_and_log $callback  "<li>$pretty_name $version_name is already installed in your system.
+	"
+    } else {
+	
+	set install_path "[apm_workspace_install_dir]"
+	
+	if { ![file isdirectory $install_path] } {
+	    file mkdir $install_path
+	}
+    
+	apm_callback_and_log $callback  "<li>Extracting files into the filesytem."
+	apm_callback_and_log $callback  "<li>$pretty_name $version_name ready for installation."
+	# Remove the directory if it exists.
+	if {[file exists $package_key]} {
+	    file delete -force $package_key
+	}
+	exec sh -c "cd $install_path ; [apm_gunzip_cmd] -c $file_path | [apm_tar_cmd] xf -"
+    }
+}
+
+ad_proc -private apm_include_file_p { filename } {    
+    Check if the APM should consider a file found by ad_find_all_files.
+    Files for which apm_ignore_file_p returns true will be ignored.
+    Backup files are ignored.
+} {
+    if { [apm_ignore_file_p $filename] || [apm_backup_file_p $filename] } {
+  	return 0
+    }
+    return 1
+}

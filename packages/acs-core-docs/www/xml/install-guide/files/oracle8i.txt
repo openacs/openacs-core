@@ -1,0 +1,44 @@
+#!/bin/sh
+#
+# chkconfig: 345 51 49
+# description: starts the oracle dabase deamons ( part of the aD ACS install )
+#
+echo "Oracle 8i auto start/stop"
+
+ORA_OWNER=oracle
+ORA_HOME=/ora8/m01/app/oracle/product/8.1.6
+
+case "$1" in
+   'start')
+
+echo -n "Starting Oracle8i: "
+su - $ORA_OWNER -c $ORA_HOME/bin/dbstart
+touch /var/lock/subsys/oracle8i
+echo
+;;
+
+
+'stop')
+
+echo -n "Shutting Oracle8i: "
+su - $ORA_OWNER -c $ORA_HOME/bin/dbshut
+rm -f /var/lock/subsys/oracle8i
+echo
+;;
+
+
+'restart')
+
+echo -n "Restarting Oracle8i: "
+$0 stop
+$0 start
+echo
+;;
+
+*)
+echo "Usage: oracle8i {start | stop | restart }"
+exit 1
+
+esac
+exit 0
+

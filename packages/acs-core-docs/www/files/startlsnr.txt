@@ -1,0 +1,8 @@
+#!/bin/sh
+# Start the oracle listener
+export ORACLE_HOME=/ora8/m01/app/oracle/product/8.1.6
+export LD_LIBRARY_PATH=$ORACLE_HOME/lib:/lib:/usr/lib
+export ORACLE_SID=ora8
+export ORACLE_TERM=vt100 
+$ORACLE_HOME/bin/lsnrctl start
+exit 0 

@@ -1,0 +1,211 @@
+<html xmlns:lxslt="http://xml.apache.org/xslt" xmlns:saxon="http://icl.com/saxon" xmlns:xalanredirect="org.apache.xalan.xslt.extensions.Redirect"><head>
+<META http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>9. ACS 4 Subsites Design Document</title><link rel="stylesheet" href="ad.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.24"><link rel="home" href="index.html" title="ACS Core"><link rel="up" href="kernel-doc.html" title="7. Kernel Documentation"><link rel="previous" href="subsites-requirements.html" title="8. ACS 4 Subsites Requirements"><link rel="next" href="apm-requirements.html" title="10. ACS 4 Package Manager Requirements"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><a href="http://www.arsdigita.com/"><img src="images/arsdigita.gif" border="0" width="73" height="65"></a><br><br><a class="topnav" href="/">Home</a><span class="topnav"> : </span><a class="topnav" href="index">Documentation</a><span class="topnav"> : </span><a class="topnav" href="acs-dev.html">Part III. For ACS Developers</a><span class="topnav"> : </span><a class="topnav" href="kernel-doc.html">7. Kernel Documentation</a><span class="topnav"> : </span><strong class="topnav">9. ACS 4 Subsites Design Document&nbsp;</strong><hr size="1" noshade><div id="subsites-design" class="sect1"><div class="titlepage"><h2 class="title" style="clear: all"><a name="subsites-design"></a><span class="label">9.</span> <span class="title">ACS 4 Subsites Design Document</span></h2></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt>9.1. <a href="subsites-design.html#subsites-design-essentials">Essentials</a></dt><dt>9.2. <a href="subsites-design.html#subsites-design-intro">Introduction</a></dt><dt>9.3. <a href="subsites-design.html#subsites-design-hist-considerations">Historical Considerations</a></dt><dt>9.4. <a href="subsites-design.html#subsites-design-competitors">Competitive Analysis</a></dt><dt>9.5. <a href="subsites-design.html#subsites-design-design-tradeoffs">Design Tradeoffs</a></dt><dt>9.6. <a href="subsites-design.html#subsites-design-api">API</a></dt><dt>9.7. <a href="subsites-design.html#subsites-design-data-model">Data Model Discussion</a></dt><dt>9.8. <a href="subsites-design.html#subsites-design-ui">User Interface</a></dt><dt>9.9. <a href="subsites-design.html#subsites-design-config">Configuration/Parameters</a></dt><dt>9.10. <a href="subsites-design.html#subsites-design-future">Future Improvements/Areas of Likely Change</a></dt><dt>9.11. <a href="subsites-design.html#subsites-design-authors">Authors</a></dt></dl></div><p><p>
+by <a href="http://planitia.org" target="_top">Rafael H. Schloming</a> 
+</p></p><p><i>*Note* This document has not gone through the any of the
+required QA process yet. It is being tagged as stable due to high
+demand.</i></p><div id="subsites-design-essentials" class="sect2"><div class="titlepage"><h3 class="title"><a name="subsites-design-essentials"></a><span class="label">9.1.</span> <span class="title">Essentials</span></h3></div><div class="itemizedlist"><ul><li><a name="N15935"></a><p><a href="subsites-requirements.html">ACS 4 Subsites Requirements</a></p></li></ul></div></div><div id="subsites-design-intro" class="sect2"><div class="titlepage"><h3 class="title"><a name="subsites-design-intro"></a><span class="label">9.2.</span> <span class="title">Introduction</span></h3></div><p>An ACS 4 subsite is a managed suite of applications that work together for
+a particular user community. This definition covers a very broad range of
+requirements: from a Geocities style homepage where a user can install
+whatever available application he wants (e.g. a single user could have their
+own news and bboard), to a highly structured project subsite with multiple
+interdependent applications. Thus, flexibility in application deployment is
+the overarching philosophy of subsites.</p><p>Meeting such broad requirements of flexibility demands architecture-level
+support, i.e. very low level support from the core ACS 4 data model. For
+example, the subsites concept demands that any package can have multiple
+instances installed at different URLs - entailing support from the APM and
+the Request Processor. Since the design and implementation directly
+associated with subsites is actually minimal, a discussion of subsites design
+is, in fact, a discussion of how core ACS 4 components implicitly support
+subsites as a whole.</p></div><div id="subsites-design-hist-considerations" class="sect2"><div class="titlepage"><h3 class="title"><a name="subsites-design-hist-considerations"></a><span class="label">9.3.</span> <span class="title">Historical Considerations</span></h3></div><p>The subsites problem actually has several quite diverse origins. It was
+originally recognized as a toolkit feature in the form of
+"scoping". The basic concept behind scoping was to allow one scoped
+ACS installation to behave as multiple unscoped ACS installations so that one
+ACS install could serve multiple communities. Each piece of application data
+was tagged with a "scope" consisting of the (user_id, group_id,
+scope) triple. In practice the highly denormalized data models that this
+method uses produced large amounts of very redundant code and in general made
+it an extremely cumbersome process to "scopify" a module.</p><p>Before the advent of scoping there were several cases of client projects
+implementing their own version of scoping in special cases. One example being
+the wineaccess multi-retailer ecommerce. (Remember the other examples and get
+details. Archnet?, iluvcamp?)</p><p>The requirements of all these different projects vary greatly, but the one
+consistent theme among all of them is the concept that various areas of the
+web site have their own private version of a module. Because this theme is so
+dominant, this is the primary problem that the ACS4 implementation of
+subsites addresses.</p></div><div id="subsites-design-competitors" class="sect2"><div class="titlepage"><h3 class="title"><a name="subsites-design-competitors"></a><span class="label">9.4.</span> <span class="title">Competitive Analysis</span></h3></div><p>...</p></div><div id="subsites-design-design-tradeoffs" class="sect2"><div class="titlepage"><h3 class="title"><a name="subsites-design-design-tradeoffs"></a><span class="label">9.5.</span> <span class="title">Design Tradeoffs</span></h3></div><p>The current implementation of package instances and subsites allows
+extremely flexible URL configurations. This has the benefit of allowing
+multiple instances of the same package to be installed in one subsite, but
+can potentially complicate the process of integrating packages with each
+other since it is likely people will want packages that live at non standard
+URLs to operate together. This requirement would cause some packages to have
+more configuration options than normal since hard-coding the URLs would not
+be feasible anymore.</p></div><div id="subsites-design-api" class="sect2"><div class="titlepage"><h3 class="title"><a name="subsites-design-api"></a><span class="label">9.6.</span> <span class="title">API</span></h3></div><p>This section will cover all the APIs relevant to subsites, and so will
+consist of portions of the APIs of several systems.</p><p><strong>Packages</strong></p><p>The following package is provided for instantiation of packages. The
+apm_package.new function can be used to create a package of any type known to
+the system. The apm_package_types table can be queried for a list of
+installed packages. (See APM docs for more detail XXX: insert link here)</p><blockquote><table border="0" cellpadding="5" cellspacing="0"><tr><td class="codeblock"><pre>
+
+<tt>create or replace package apm_package
+as
+
+  function new (
+    package_id      in apm_packages.package_id%TYPE 
+               default null,
+    instance_name   in apm_packages.instance_name%TYPE
+               default null,
+    package_key     in apm_packages.package_key%TYPE,
+    object_type     in acs_objects.object_type%TYPE
+               default 'apm_package', 
+    creation_date   in acs_objects.creation_date%TYPE 
+               default sysdate,
+    creation_user   in acs_objects.creation_user%TYPE 
+               default null,
+    creation_ip     in acs_objects.creation_ip%TYPE 
+               default null,
+    context_id      in acs_objects.context_id%TYPE 
+               default null
+  ) return apm_packages.package_id%TYPE;
+
+  procedure delete (
+    package_id      in apm_packages.package_id%TYPE
+  );
+
+  function singleton_p (
+    package_key     in apm_packages.package_key%TYPE
+  ) return integer;
+
+  function num_instances (
+    package_key     in apm_package_types.package_key%TYPE
+  ) return integer;
+
+  function name (
+    package_id      in apm_packages.package_id%TYPE
+  ) return varchar;
+
+  -- Enable a package to be utilized by a subsite.
+  procedure enable (
+    package_id      in apm_packages.package_id%TYPE
+  );
+  
+  procedure disable (
+    package_id      in apm_packages.package_id%TYPE
+  );
+
+  function highest_version (
+    package_key     in apm_package_types.package_key%TYPE
+  ) return apm_package_versions.version_id%TYPE;
+  
+end apm_package;
+/
+show errors
+</tt>
+
+</pre></td></tr></table></blockquote><p><strong>Site Nodes</strong></p><p>This data model keeps track of what packages are being served from what
+URLs. You can think of this as a kind of rp_register_directory_map on drugs.
+This table represents a fully hierarchical site map. The directory_p column
+indicates whether or not the node is a leaf node. The pattern_p column
+indicates whether an exact match between the request URL and the URL of the
+node is required. If pattern_p is true then a match between a request URL and
+a site node occurs if any valid prefix of the request URL matches the site
+node URL. The object_id column contains the object mounted on the URL
+represented by the node. In most cases this will be a package instance.</p><blockquote><table border="0" cellpadding="5" cellspacing="0"><tr><td class="codeblock"><pre>
+
+<tt>create table site_nodes (
+    node_id     constraint site_nodes_node_id_fk
+            references acs_objects (object_id)
+            constraint site_nodes_node_id_pk
+            primary key,
+    parent_id   constraint site_nodes_parent_id_fk
+            references site_nodes (node_id),
+        name        varchar(100)
+            constraint site_nodes_name_ck
+            check (name not like '%/%'),
+    constraint site_nodes_un
+    unique (parent_id, name),
+    -- Is it legal to create a child node?
+    directory_p char(1) not null
+            constraint site_nodes_directory_p_ck
+            check (directory_p in ('t', 'f')),
+        -- Should urls that are logical children of this node be
+    -- mapped to this node?
+        pattern_p   char(1) default 'f' not null
+            constraint site_nodes_pattern_p_ck
+            check (pattern_p in ('t', 'f')),
+    object_id   constraint site_nodes_object_id_fk
+            references acs_objects (object_id)
+);
+</tt>
+
+</pre></td></tr></table></blockquote><p>The following package is provided for creating nodes.</p><blockquote><table border="0" cellpadding="5" cellspacing="0"><tr><td class="codeblock"><pre>
+
+<tt>create or replace package site_node
+as
+
+  -- Create a new site node. If you set directory_p to be 'f' then you
+  -- cannot create nodes that have this node as their parent.
+
+  function new (
+    node_id     in site_nodes.node_id%TYPE default null,
+    parent_id       in site_nodes.node_id%TYPE default null,
+    name        in site_nodes.name%TYPE,
+    object_id       in site_nodes.object_id%TYPE default null,
+    directory_p     in site_nodes.directory_p%TYPE,
+    pattern_p       in site_nodes.pattern_p%TYPE default 'f'
+  ) return site_nodes.node_id%TYPE;
+
+  -- Delete a site node.
+
+  procedure delete (
+    node_id     in site_nodes.node_id%TYPE
+  );
+
+  -- Return the node_id of a url. If the url begins with '/' then the
+  -- parent_id must be null. This will raise the no_data_found
+  -- exception if there is no matching node in the site_nodes table.
+  -- This will match directories even if no trailing slash is included
+  -- in the url.
+
+  function node_id (
+    url         in varchar,
+    parent_id   in site_nodes.node_id%TYPE default null
+  ) return site_nodes.node_id%TYPE;
+
+  -- Return the url of a node_id.
+
+  function url (
+    node_id     in site_nodes.node_id%TYPE
+  ) return varchar;
+
+end;
+/
+show errors
+</tt>
+
+</pre></td></tr></table></blockquote><p><strong>Request Processor</strong></p><p>Once the above APIs are used to create packages and mount them on a
+specific site node, the following request processor APIs can be used to allow
+the package to serve content appropriate to the package instance.</p><blockquote><table border="0" cellpadding="5" cellspacing="0"><tr><td class="codeblock"><pre>
+
+<tt>[ad_conn node_id]
+[ad_conn package_id]
+[ad_conn package_url]
+</tt>
+
+</pre></td></tr></table></blockquote></div><div id="subsites-design-data-model" class="sect2"><div class="titlepage"><h3 class="title"><a name="subsites-design-data-model"></a><span class="label">9.7.</span> <span class="title">Data Model Discussion</span></h3></div><p>The subsites implementation doesn't really have it's own data
+model, although it depends heavily on the site-nodes data model, and the APM
+data model.</p></div><div id="subsites-design-ui" class="sect2"><div class="titlepage"><h3 class="title"><a name="subsites-design-ui"></a><span class="label">9.8.</span> <span class="title">User Interface</span></h3></div><p>The primary elements of the subsite user interface consist of the subsite
+admin pages. These pages are divided up into two areas: Group administration,
+and the site map. The group administration pages allow a subsite
+administrator to create and modify groups. The site map pages allow a subsite
+administrator to install, remove, configure, and control access to packages.
+The site map interface is the primary point of entry for most of the things a
+subsite administrator would want to do.</p></div><div id="subsites-design-config" class="sect2"><div class="titlepage"><h3 class="title"><a name="subsites-design-config"></a><span class="label">9.9.</span> <span class="title">Configuration/Parameters</span></h3></div><p>...</p></div><div id="subsites-design-future" class="sect2"><div class="titlepage"><h3 class="title"><a name="subsites-design-future"></a><span class="label">9.10.</span> <span class="title">Future Improvements/Areas of Likely Change</span></h3></div><p>The current subsites implementation addresses the most basic functionality
+required for subsites. It is likely that as developers begin to use the
+subsites system for more sophisticated projects, it will become necessary to
+develop tools to help build tightly integrated packages. The general area
+this falls under is "inter-package communication". An actual
+implementation of this could be anything from clever use of configuration
+parameters to lots of package level introspection. Another area that is
+currently underdeveloped is the ability to "tar up" and distribute
+a particular configuration of site nodes/packages. As we build more
+fundamental applications that can be applied in more general areas, this
+feature will become more and more in demand since more problems will be
+solvable by configuration instead of coding.</p></div><div id="subsites-design-authors" class="sect2"><div class="titlepage"><h3 class="title"><a name="subsites-design-authors"></a><span class="label">9.11.</span> <span class="title">Authors</span></h3></div><p><a href="mailto:rhs@mit.edu" target="_top">rhs@mit.edu</a></p></div></div><div class="navfooter"><hr size="1" noshade><table width="100%"><tr><td width="40%" align="left"><a class="bottomnav" href="subsites-requirements.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a href="mailto:acs-docs@arsdigita.com"><address class="nav">acs-docs@arsdigita.com</address></a></td><td width="40%" align="right">&nbsp;<a class="bottomnav" href="apm-requirements.html">Next</a></td></tr></table></div></body></html>

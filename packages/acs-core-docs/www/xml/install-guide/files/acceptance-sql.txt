@@ -1,0 +1,95 @@
+-- acceptance-sql.txt by philg@mit.edu and jsc@arsdigita.com
+--                      (Philip Greenspun and Jin Choi)
+
+-- SQL commands to test an Oracle installation
+-- for adequate privileges and capacity
+-- run as the same user as the Web user
+
+-- creating a table
+create table foo (
+	foo_key	integer primary key,
+	random	varchar(1000)
+);
+
+-- creating an index
+create index foo_on_random on foo ( random );
+
+-- inserting some rows
+insert into foo values (1, '1');
+insert into foo values (2, '2');
+insert into foo values (3, '3');
+insert into foo values (4, '4');
+insert into foo values (5, '5');
+insert into foo values (6, '6');
+insert into foo values (7, '7');
+insert into foo values (8, '8');
+insert into foo values (9, '9');
+insert into foo values (10, '10');
+insert into foo values (11, null);
+insert into foo values (12, null);
+insert into foo values (13, null);
+insert into foo values (14, null);
+insert into foo values (15, null);
+insert into foo values (16, null);
+insert into foo values (17, null);
+insert into foo values (18, null);
+insert into foo values (19, null);
+insert into foo values (20, null);
+
+-- create another table to work with
+create table bar as select foo_key + 1 as bar_key, random from foo;
+
+-- joins
+select b.random from foo f, bar b where f.foo_key = b.bar_key and f.random like '3%';
+
+-- update
+update foo set foo_key = foo_key + 100 where random is null;
+
+-- should return 10
+select count(*) from foo where foo_key > 100;
+
+-- create a sequence
+create sequence foo_sequence start with 200;
+
+-- test whether truncate works
+truncate table bar;
+
+drop table bar;
+
+
+-- test 1) whether has privileges to create a procedure
+--  and 2)  whether rollback segments are adequately sized
+
+-- create a pl/sql procedure
+create or replace procedure thrash_database(v_number_of_rows IN integer)
+AS
+  i	integer;
+BEGIN
+  FOR i IN 1..v_number_of_rows LOOP
+    insert into foo (foo_key, random) values (foo_sequence.nextval, 'abcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghij');
+  END LOOP;
+END thrash_database;
+/
+show errors
+
+-- we think any Oracle installation ought to be able to handle
+-- 100,000 rows of 500 bytes each
+
+execute thrash_database(100000);
+
+select count(*) from foo;
+
+commit;
+
+delete from foo;
+commit;
+
+drop table foo;
+drop sequence foo_sequence;
+drop procedure thrash_database;
+
+-- make sure that NLS_DATE_FORMAT is correct by 
+-- seeing that the following command returns
+-- YYYY-MM-DD (e.g., 1999-05-22)
+
+select sysdate from dual;

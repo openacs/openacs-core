@@ -1,0 +1,30 @@
+
+BODY {
+  color:black;
+  background: white;
+  font-family: NamespaceListHeader, NamespaceListFont
+}
+
+h1, h2, h3 {
+	font-family: sans-serif
+}
+
+.NamespaceListHeader {
+        font-weight: bold;
+        font-size: large }
+
+
+
+.title {
+	text-align: center
+}
+
+.TableHead {
+	bgcolor: "#CCCCFF";
+	font-size: "+2"
+}
+
+.TableRow {
+	bgcolor: white
+}
+

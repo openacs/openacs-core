@@ -1,0 +1,57 @@
+<html xmlns:lxslt="http://xml.apache.org/xslt" xmlns:saxon="http://icl.com/saxon" xmlns:xalanredirect="org.apache.xalan.xslt.extensions.Redirect"><head>
+<META http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>14. ACS 4 Security Notes</title><link rel="stylesheet" href="ad.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.24"><link rel="home" href="index.html" title="ACS Core"><link rel="up" href="kernel-doc.html" title="7. Kernel Documentation"><link rel="previous" href="security-design.html" title="13. ACS 4 Security Design"><link rel="next" href="rp-requirements.html" title="15. ACS 4 Request Processor Requirements"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><a href="http://www.arsdigita.com/"><img src="images/arsdigita.gif" border="0" width="73" height="65"></a><br><br><a class="topnav" href="/">Home</a><span class="topnav"> : </span><a class="topnav" href="index">Documentation</a><span class="topnav"> : </span><a class="topnav" href="acs-dev.html">Part III. For ACS Developers</a><span class="topnav"> : </span><a class="topnav" href="kernel-doc.html">7. Kernel Documentation</a><span class="topnav"> : </span><strong class="topnav">14. ACS 4 Security Notes&nbsp;</strong><hr size="1" noshade><div id="security-notes" class="sect1"><div class="titlepage"><h2 class="title" style="clear: all"><a name="security-notes"></a><span class="label">14.</span> <span class="title">ACS 4 Security Notes</span></h2></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt>14.1. <a href="security-notes.html#security-notes-https-sessions">HTTPS and the sessions system</a></dt></dl></div><p><p>
+by <a href="mailto:richardl@arsdigita.com" target="_top">Richard Li</a> 
+</p></p><p>
+The security system was designed for security. Thus, decisions requiring
+trade-offs between ease-of-use and security tend to result in a system that
+may not be as easy to use but is more secure. 
+</p><div id="security-notes-https-sessions" class="sect2"><div class="titlepage"><h3 class="title"><a name="security-notes-https-sessions"></a><span class="label">14.1.</span> <span class="title">HTTPS and the sessions system</span></h3></div><p>
+
+If a user switches to HTTPS after logging into the system via HTTP, the user
+must obtain a secure token. To insure security, the <i>only way</i> to
+obtain a secure token in the security system is to authenticate yourself via
+password over an HTTPS connection. Thus, users may need to log on again to a
+system when switching from HTTP to HTTPS. Note that logging on to a system
+via HTTPS gives the user both insecure and secure authentication tokens, so
+switching from HTTPS to HTTP does not require reauthentication. 
+</p><p>This method of authentication is important in order to establish, in as
+strong a manner as possible, the identity of the owner of the secure token.
+In order for the security system to offer stronger guarantees of someone who
+issues a secure token, the method of authentication must be as strong as the
+method of transmission.</p><p>If a developer truly does not want such a level of protection, this system
+can be disabled via source code modification only. This can be accomplished
+by commenting out the following lines in the <tt>sec_handler</tt>
+procedure defined in <tt>security-procs.tcl</tt>:</p><blockquote><table border="0" cellpadding="5" cellspacing="0"><tr><td class="codeblock"><pre>
+
+    if { [ad_secure_conn_p] &amp;&amp; ![ad_login_page] } {
+        set s_token_cookie [ns_urldecode [ad_get_cookie "ad_secure_token"]]
+        
+        if { [empty_string_p $s_token_cookie] || [string compare $s_token_cookie [lindex [sec_get_session_info $session_id] 2]] != 0 } {
+        # token is incorrect or nonexistent, so we force relogin.
+        ad_returnredirect "/register/index?return_url=[ns_urlencode [ad_conn url]?[ad_conn query]]"
+        }
+    }
+
+</pre></td></tr></table></blockquote><p>The source code must also be edited if the user login pages have been
+moved out of an ACS system. This information is contained by the
+<tt>ad_login_page</tt> procedure in <tt>security-procs.tcl</tt>:</p><blockquote><table border="0" cellpadding="5" cellspacing="0"><tr><td class="codeblock"><pre>
+
+ad_proc -private ad_login_page {} {
+    
+    Returns 1 if the page is used for logging in, 0 otherwise. 
+
+} {
+
+    set url [ad_conn url]
+    if { [string match "*register/*" $url] || [string match "/index*" $url] } {
+    return 1
+    }
+
+    return 0
+}
+
+</pre></td></tr></table></blockquote><p>
+The set of string match expressions in the procedure above should be extended
+appropriately for other registration pages. This procedure does not use
+<tt>ad_parameter</tt> or regular expressions for performance reasons, as
+it is called by the request processor. </p><p><div align="right" class="cvstag">($Id$)</div></p></div></div><div class="navfooter"><hr size="1" noshade><table width="100%"><tr><td width="40%" align="left"><a class="bottomnav" href="security-design.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a href="mailto:acs-docs@arsdigita.com"><address class="nav">acs-docs@arsdigita.com</address></a></td><td width="40%" align="right">&nbsp;<a class="bottomnav" href="rp-requirements.html">Next</a></td></tr></table></div></body></html>

@@ -1,0 +1,39 @@
+#!/bin/sh
+#
+# chkconfig: 345 51 49
+# description: startup and shutdown the Oracle 8i listener
+#
+echo "Oracle 8i listener start/stop"
+
+ORA_OWNER=oracle
+ORA_HOME=/ora8/m01/app/oracle/product/8.1.6
+
+case "$1" in
+        'start')
+            # Start the listener
+             echo -n "Starting the Listener for 8i: "
+             su - $ORA_OWNER -c $ORA_HOME/bin/startlsnr
+             echo
+             ;;
+        'stop')
+
+             # Stop the listener
+             echo -n "Shutting down Listener for 8i: "
+             su - $ORA_OWNER -c $ORA_HOME/bin/stoplsnr          
+             echo
+             ;;
+             
+        'restart')
+             # Restart the Oracle databases:
+             echo -n "Restarting Listener for 8i: "
+             $0 stop
+             $0 start
+             echo
+             ;;
+
+         *)
+             echo "Usage: listener8i [ start | stop | restart }"
+             exit 1
+     esac
+     exit 0
+

@@ -1,0 +1,10 @@
+body, ol, td, th, hr, h1, h2, h3, strong, dl, a, blockquote, em, .force, dt, dd, ul, li, p{font-family:verdana,helvetica,arial,sans-serif}
+a:link{color:0000ff}
+a:visited{color:000099}
+a.topnav{font-size:11pt}
+a.bottomnav{font-size:11pt}
+
+code{font-family:mono-space}
+.CVS, .cvstag{font-family:mono-space; font-size:small; color:#999999}
+
+.codeblock{background-color:#ffffff;font-family:monospace}

@@ -1,0 +1,37 @@
+<html>
+  <head>
+    <title>Converting to the Templating System from DPS</title>
+  </head>
+  <body bgcolor="#ffffff">
+  <h3>Templating System</h3>
+  <p>Converting to the Templating System from DPS</p>
+  <hr>
+
+<p>Because the tag handlers are defined differently, the new templating system 
+is not compatible with the Dynamic Publishing System.</p>
+
+<h3>Installing the Templating System on the same server as DPS</h3>
+
+<p>It is possible to install the templating system on the same server
+as DPS.  However, you will have to comment out all <tt>register_adptag</tt>
+statements in the Tcl library files associated with DPS.</p>
+
+<h3>Converting Specification files to Tcl scripts</h3>
+
+<p>The templating system distribution will include procedures for 
+converting DPS specification files (<tt>.data</tt> and <tt>.form</tt> files)
+to Tcl scripts.</p>
+
+<h3>Converting ADP Templates</h3>
+
+<p>The templating system distribution will include a script for 
+converting ADP templates with DPS tags.  The main difference is
+the use of <tt>@...@</tt> for variable substitution rather than
+<tt>var</tt> tags; <tt>multiple</tt> and <tt>if</tt> tags retain
+the same syntax.</p>
+
+<hr>
+<a href="mailto:templating@arsdigita.com">templating@arsdigita.com</a>
+
+
+

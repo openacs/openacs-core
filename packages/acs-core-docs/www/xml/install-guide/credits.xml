@@ -1,0 +1,37 @@
+<sect1 id="credits" xreflabel="Credits">
+    <title>Credits</title>
+ 
+    <para>Long before Bryan Quinn had anything to do with this guide, Adam
+    Farkas and Brian Stein conceived of the idea. Working with Bryan Quinn
+    for the first version were Doug Hoffman, Ravi Jasuja, Hiro Iwashima, Ryan
+    Lee, and Jonathan Goler. Many ArsDigita employees contributed
+    documentation, criticized the document, and tested every line. Among them
+    were Audrey Mcloghlin, Doug Harris, Zvi Boshernitzan, Michael Yoon, Cesar
+    Brea, Dennis Gregorovic, David Fullagar, and Chris Spears.</para>
+
+    <para>A few members of the photo.net community were brave enough to test the
+    documentation while it was still under development and contributed very
+    valuable suggestions and bug reports. Among them were Kevin Tupper,
+    Michael Duffy, Simon Carstensen, and Dave Bauer.</para>
+
+    <para>This document was assembled in part from previous documentation due to
+    the efforts of Tracy Adams, Greg Haverkamp, Philip Greenspun, and Jin
+    Choi. It was duly influenced by documents by Sean Yamamoto, David Cohen,
+    and Chris Rasch.</para>
+
+    <para>Several improvements were suggested that will be incorporated RSN
+    (hold bquinn to it) by Richard Li and Jon Griffin.</para>
+
+    <para>This documentation resulted from the collected efforts of employees at
+    ArsDigita and ACS users world-wide. If it is useful, it is because of the
+    distributed work of many enabled by the Internet. All mistakes and
+    shortcomings are due to the slow typing of Bryan Quinn.</para>  
+
+<para><emphasis role="strong">All questions and comments</emphasis> regarding
+this guide should be sent to <ulink url="mailto:acs-docs@arsdigita.com">acs@arsdigita.com</ulink>.
+</para>
+
+<para><phrase role="cvstag">($Id$)</phrase></para>
+
+</sect1>
+

@@ -1,0 +1,264 @@
+<html xmlns:lxslt="http://xml.apache.org/xslt" xmlns:saxon="http://icl.com/saxon" xmlns:xalanredirect="org.apache.xalan.xslt.extensions.Redirect"><head>
+<META http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>5. The Database Access API</title><link rel="stylesheet" href="ad.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.24"><link rel="home" href="index.html" title="ACS Core"><link rel="up" href="dev-guide.html" title="4. ACS Developer's Guide"><link rel="previous" href="request-processor.html" title="4. The Request Processor"><link rel="next" href="templates.html" title="6. Using Templates in ACS 4"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><a href="http://www.arsdigita.com/"><img src="images/arsdigita.gif" border="0" width="73" height="65"></a><br><br><a class="topnav" href="/">Home</a><span class="topnav"> : </span><a class="topnav" href="index">Documentation</a><span class="topnav"> : </span><a class="topnav" href="acs-dev.html">Part III. For ACS Developers</a><span class="topnav"> : </span><a class="topnav" href="dev-guide.html">4. ACS Developer's Guide</a><span class="topnav"> : </span><strong class="topnav">5. The Database Access API&nbsp;</strong><hr size="1" noshade><div id="db-api" class="sect1"><div class="titlepage"><h2 class="title" style="clear: all"><a name="db-api"></a><span class="label">5.</span> <span class="title">The Database Access API</span></h2></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt>5.1. <a href="db-api.html#db-api-overview">Overview</a></dt><dt>5.2. <a href="db-api.html#db-api-theoldway">The Old Way</a></dt><dt>5.3. <a href="db-api.html#db-api-thenewway">The New Way</a></dt><dt>5.4. <a href="db-api.html#db-api-bindvariables">Bind Variables</a></dt><dt>5.5. <a href="db-api.html#db-api-basicapi">Basic API</a></dt></dl></div><p><p>By <a href="mailto:psu@arsdigita.com" target="_top">Pete Su</a></p></p><div id="db-api-overview" class="sect2"><div class="titlepage"><h3 class="title"><a name="db-api-overview"></a><span class="label">5.1.</span> <span class="title">Overview</span></h3></div><p>
+    		This document is a short tutorial on the Database API, meant for
+    		experienced ACS developers to get a jump-start on its usage. For a
+    		more complete discussion of the DB API, you can read
+    		<a href="db-api-detailed.html">the documentation in
+    		the kernel</a>.
+    	</p></div><div id="db-api-theoldway" class="sect2"><div class="titlepage"><h3 class="title"><a name="db-api-theoldway"></a><span class="label">5.2.</span> <span class="title">The Old Way</span></h3></div><p>
+    		Here's a typical block of code from an ACS 3.x dynamic page:
+</p><blockquote><table border="0" cellpadding="5" cellspacing="0"><tr><td class="codeblock"><pre>
+set tcl_var "foo"
+
+set db [ns_db gethandle]
+
+ns_db dml $db "begin transaction"
+
+set sql "select 
+             foo, 
+             bar, 
+             baz 
+	 from some_table, 
+	     some_other_table
+	 where some_table.id = some_other_table.id  
+	     and some_table.condition_p = '$tcl_var'
+	 "
+
+set selection [ns_db select $db $sql] 
+set count 0 
+
+while { [ns_db getrow $db $selection] } { 
+      	set_variables_after_query 
+ 
+        ...
+        call_some_proc $foo $bar $baz
+        incr count 
+}
+
+ns_db releasehandle $db
+</pre></td></tr></table></blockquote><p>
+    		Writing code like this had the following annoyances:
+
+    		<div class="itemizedlist"><ul><li style="list-style-type: opencircle"><a name="N6377"></a><p>
+        		It was repetitive, tedious and error prone to write the same type of
+			loops over and over again.
+      			</p></li><li style="list-style-type: opencircle"><a name="N6380"></a><p>
+        		Using Tcl variable interpolation in a literal string, to pass values
+			from the page to the database, is error prone, relatively inefficient,
+			and a good way to compromise the security of a web site.
+      			</p></li><li style="list-style-type: opencircle"><a name="N6383"></a><p>
+        		Magic like <tt>set_variables_after_query</tt> made code confusing.
+      			</p></li><li style="list-style-type: opencircle"><a name="N6390"></a><p>
+        		The scope of transactions is not clear from reading the code.
+      			</p></li><li style="list-style-type: opencircle"><a name="N6393"></a><p>
+        		Passing handles around explicitly made it easy to use them in bad
+			ways, like holding a handle for too long while returning data to a
+			user's browser.
+      			</p></li></ul></div>
+
+    	</p><p>
+      		Introduced in ACS 3.4, the new Database API is meant to save
+      		developers from the above tedium and provide a more structured syntax
+      		for specifying database operations, including transactions.
+    	</p></div><div id="db-api-thenewway" class="sect2"><div class="titlepage"><h3 class="title"><a name="db-api-thenewway"></a><span class="label">5.3.</span> <span class="title">The New Way</span></h3></div><p>
+    		Here is how you would code up the example above using the new API.
+</p><blockquote><table border="0" cellpadding="5" cellspacing="0"><tr><td class="codeblock"><pre>
+set count 0 
+
+set tcl_var "foo"
+
+set sql {
+       	select 
+            foo, 
+            bar, 
+            baz 
+        from some_table, some_other_table
+        where some_table.id = some_other_table.id  
+        and some_table.condition_p = :tcl_var
+      	}
+      
+db_transaction {
+        db_foreach my_example_query_name $sql {
+            	...
+            	call_some_proc $foo $bar $baz
+            	incr count
+        }
+}
+    		</pre></td></tr></table></blockquote><p>
+    		There are several things to note here:
+
+    		<div class="orderedlist"><ol type="1"><li><a name="N6414"></a><p>
+        		No explicit code for grabbing and releasing handles. Usage of the
+			Database API implicitly deals with all handle management issues.
+      			</p></li><li><a name="N6417"></a><p>
+  			The new command <tt>db_transaction</tt> makes the scope of a
+  			transaction clear. <tt>db_transaction</tt> takes the code block
+  			argument and automatically runs it in the context of a transaction.
+  			</p></li><li><a name="N6428"></a><p>
+  			The new command <tt>db_foreach</tt> writes our old while loop for us.
+  			</p></li><li><a name="N6435"></a><p>
+  			Every SQL query has a name, meant to be unique within the server
+  			instance (though this is not enforced).
+  			</p></li><li><a name="N6438"></a><p>
+  			Finally and most importantly, there is a new scheme for passing data
+  			from a Tcl variable to the database, which we'll cover next.
+  			</p></li></ol></div>
+
+	</p></div><div id="db-api-bindvariables" class="sect2"><div class="titlepage"><h3 class="title"><a name="db-api-bindvariables"></a><span class="label">5.4.</span> <span class="title">Bind Variables</span></h3></div><p>
+
+		Bind variables are placeholders for literal values in an SQL query
+		being sent to the server. Take the example query above: in the old
+		way, data was generally passed to Oracle directly, via Tcl string
+		interpolation. So in the example above, the actual query we send would
+		look like this:
+</p><blockquote><table border="0" cellpadding="5" cellspacing="0"><tr><td class="codeblock"><pre>
+select 
+    foo, 
+    bar, 
+    baz 
+from some_table, some_other_table
+where some_table.id=some_other_table.id  
+and some_table.condition_p = 'foo'
+		</pre></td></tr></table></blockquote><p>
+		There are a few problems with this: first, if the literal value is a
+		huge string, then we waste a lot of time in the database server doing
+		useless parsing. Second, if the literal value contains characters like
+		single quotes, we have to be careful to double-quote them, because not
+		quoting them will lead to surprising errors. Third, no type checking
+		occurs on the literal value. Finally, if the Tcl variable is passed in
+		or between web forms or otherwise subject to external modification,
+		there is nothing keeping malicious users from setting the Tcl variable
+		to some string that changes the query textually. This type of attack,
+		called SQL smuggling, can be very damaging - entire tables can be
+		exposed or have their contents deleted, for example. Another very
+    important reason for using bind variables is performance. Oracle caches
+    all previously parsed queries. If there are values in the where clause,
+    that is how the query is cached. It also performs bind variable
+    susbstitution after parsing the SQL statement. This means that SQL
+    statements that use bind variables will always match (assuming all else is
+    the same) while SQL statements that do not use bind variables will not
+    match unless the values in the statement are exactly the same. This will
+    improve performance considerably.
+	</p><p>
+		To fix all these problems, we replace literal values in the query with
+		a placeholder character, and then send the data along after. So the
+		query looks like this:
+</p><blockquote><table border="0" cellpadding="5" cellspacing="0"><tr><td class="codeblock"><pre>
+select 
+    foo, 
+    bar, 
+    baz 
+from some_table, some_other_table
+where some_table.id = some_other_table.id
+and some_table.condition_p = ?
+		</pre></td></tr></table></blockquote><p>
+		The '?' character means "This will be filled in later with literal
+		data". In use, you might write code that looks like this:
+</p><blockquote><table border="0" cellpadding="5" cellspacing="0"><tr><td class="codeblock"><pre>
+set statement [prepare_query "
+    		select 
+        		foo, 
+        		bar, 
+        		baz 
+    		from some_table, some_other_table
+    		where some_table.id = some_other_table.id  
+    		and some_table.condition_p = ?
+	       "]
+
+[bind_param $statement 1 $tcl_var]
+		</pre></td></tr></table></blockquote><p>
+		The above example is meant to be psuedo-Tcl - no API like this
+		actually exists.  What happens is that we first send the SQL statement
+		to the server for parsing, then later we <i>bind</i> values to the
+		placeholders, and send those values along seperately. This seperate
+		binding step is where the term <i>bind variable</i> comes from.
+	</p><p>
+		This split has several advantages. First, type checking happens on the
+		literal. If the column we are comparing against holds numbers, and we
+		send a string, we get a nice error. Second, since string literals are
+		no longer in the query, no extra quoting is required. Third,
+		substitution of bind variables cannot change the actual text of the
+		query, only the literal values in the placeholders.
+	</p><p>
+		The database API makes bind variables easy to use by hooking them
+		smoothly into the Tcl runtime. Rather than using a '?' as a generic
+		placeholder, you use a colon followed by the name of the Tcl variable
+		that you wish to pass as a literal. So here's the final, real-life
+		form of the example query:
+</p><blockquote><table border="0" cellpadding="5" cellspacing="0"><tr><td class="codeblock"><pre>
+select 
+    foo, 
+    bar, 
+    baz 
+from some_table, some_other_table
+where some_table.id = some_other_table.id  
+and some_table.condition_p = :tcl_var
+		</pre></td></tr></table></blockquote><p>
+		The database API parses the query and pulls out all the bind variable
+		specifications and replaces them with generic placeholders.  It then
+		automatically pulls the values of the named Tcl vars out of the
+		runtime environment of the script, and passes them to the database.
+	</p><p>
+		Note that while this looks like a simple syntactic change, it really
+		is very different from how we've written queries in the past.  You use
+		bind variables to replace what would otherwise be a literal value in a
+		query, and Tcl style string interpolation does not happen. So you
+		cannot do something like:
+</p><blockquote><table border="0" cellpadding="5" cellspacing="0"><tr><td class="codeblock"><pre>
+set table "baz"
+set condition "where foo = bar"
+
+db_foreach my_query { select :table from some_table where :condition }
+		</pre></td></tr></table></blockquote><p>
+		SQL will not allow a literal to occur where we've put the bind
+		variables, so the query is syntactically incorrect. You have to
+		remember that while the bind variable syntax looks similar to variable
+		interpolation in Tcl, it is <i>not the same thing at all</i>.
+	</p><p>
+		Finally, the DB API has several different styles for passing bind
+		variable values to queries. In general, use the style presented here
+		because it is the most convenient. You'll see the other styles
+		described in the detailed API document, but they're not important.
+	</p></div><div id="db-api-basicapi" class="sect2"><div class="titlepage"><h3 class="title"><a name="db-api-basicapi"></a><span class="label">5.5.</span> <span class="title">Basic API</span></h3></div><p>
+		The Database API has several functions that wrap familiar parts of the
+		AOLserver database API. We won't cover the details of all the calls
+		here; instead, we'll list the most frequently used calls, with links
+		to further detail:
+
+	<div class="variablelist"><dl><dt><a name="N6499"></a><span class="term"><a href="db-api-detailed.html#dbapi_db_null"><tt>db_null</tt></a></span></dt><dd><p>
+			Returns a value which can be used in a bind variable to represent
+    			the SQL value <tt>null</tt>. You should use this instead of empty
+    			strings when passing nulls to the database, because using the empty
+    			string as the null value is not portable across databases. See 
+    			<a href="db-api-detailed.html#dbapi_nulls_and_bind_vars">Nulls and Bind Variables</a>.
+    		</p></dd><dt><a name="N6517"></a><span class="term"><a href="db-api-detailed.html#dbapi_db_foreach">
+      		<tt>db_foreach</tt></a>
+      		<i><tt>query_name sql { code } </tt></i>
+    		</span></dt><dd><p>Runs a query returning multiple rows and executes a code block for
+    		each row returned.
+    		</p></dd><dt><a name="N6534"></a><span class="term"><a href="db-api-detailed.html#dbapi_db_1row">
+  <tt>db_1row</tt></a>
+  <i><tt>query_name sql</tt></i></span></dt><dd><p>This is similar to the old <tt>ns_db 1row</tt> call.</p></dd><dt><a name="N6554"></a><span class="term"><a href="db-api-detailed.html#dbapi_db_0or1row">
+  <tt>db_0or1row</tt></a>
+  <i><tt>query_name sql</tt></i></span></dt><dd><p>This is similar to the old call <tt>ns_db 0or1row</tt></p></dd><dt><a name="N6573"></a><span class="term"><a href="db-api-detailed.html#dbapi_db_string">
+  <tt>db_string</tt></a>
+  <i><tt>query_name sql</tt></i>
+  </span></dt><dd><p>Returns the first column of the result of a SQL query as a
+  string. Analogous to <tt>database_to_tcl_string</tt> and
+  <tt>database_to_tcl_string_or_null</tt>.
+  </p></dd><dt><a name="N6598"></a><span class="term"><a href="db-api-detailed.html#dbapi_db_list">
+  <tt>db_list</tt></a>
+  <i><tt>query_name sql</tt></i></span></dt><dd><p>Returns a Tcl list of values from the first column of each result row
+  of a SQL query.  Similar to the old <tt>database_to_tcl_list</tt>.
+  </p></dd><dt><a name="N6618"></a><span class="term"><a href="db-api-detailed.html#dbapi_db_dml">
+  <tt>db_dml</tt></a>
+  <tt>query_name dml</tt>
+  </span></dt><dd><p>Performs a DML or DDL statement.</p></dd><dt><a name="N6634"></a><span class="term"><a href="db-api-detailed.html#dbapi_db_transaction">
+    <tt>db_transaction</tt></a>
+    <tt> { code } </tt>
+  </span></dt><dd><p>Performs a block of Tcl code in the scope of a transaction.</p></dd><dt><a name="N6650"></a><span class="term"><a href="db-api-detailed.html#dbapi_db_abort_transaction">
+  <tt>db_abort_transaction</tt></a>
+  <tt>{ code }</tt>
+  </span></dt><dd><p>Aborts a transaction.</p></dd></dl></div>
+
+</p><p><div align="right" class="cvstag">($Id$)</div></p></div></div><div class="navfooter"><hr size="1" noshade><table width="100%"><tr><td width="40%" align="left"><a class="bottomnav" href="request-processor.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a href="mailto:acs-docs@arsdigita.com"><address class="nav">acs-docs@arsdigita.com</address></a></td><td width="40%" align="right">&nbsp;<a class="bottomnav" href="templates.html">Next</a></td></tr></table></div></body></html>

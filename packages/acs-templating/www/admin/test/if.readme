@@ -1,0 +1,4 @@
+become site-wide admin
+get /acs-templating/admin/test/include-0
+save the result as if.adp
+provoke failing by supplying values like ?x=30 or ?z=

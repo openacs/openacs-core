@@ -1,0 +1,72 @@
+ad_page_contract {
+    Set parameters on a package instance.
+    @author Bryan Quinn (bquinn@arsdigita.com)
+    @date 12 September 2000
+    @cvs-id $Id$
+} {
+    package_id:naturalnum,notnull
+    {orderby ""}
+}
+
+ad_require_permission $package_id admin
+db_1row package_info {
+    select package_key, acs_object.name(package_id) instance_name
+    from apm_packages
+    where package_id = :package_id
+}
+
+set table_def [list \
+		   [list parameter_name "Parameter Name"] \
+		   [list description "Description"]]
+
+set table_sql "select p.parameter_id, p.parameter_name, nvl(p.description, 'No Description') description,
+	 nvl(v.attr_value, 'No Value') attr_value, nvl(p.section_name, 'No Section Name') section_name
+	from apm_parameters p, (select parameter_id, attr_value 
+				from apm_parameter_values v 
+				where v.package_id = :package_id) v
+	where p.parameter_id = v.parameter_id(+)
+	and p.package_key = (select package_key from apm_packages where package_id = :package_id)"
+
+set dimensional_list [apm_parameter_section_slider $package_key]
+
+if {[exists_and_not_null dimensional_list] } {
+    lappend table_def [list section_name "Section:"]
+    append table_sql [ad_dimensional_sql $dimensional_list]
+    ns_log Notice [ad_dimensional_sql $dimensional_list]
+}
+
+ns_log Notice $table_sql
+
+lappend table_def [list attr_value "Value" no_sort \
+	{<td>
+	   <input name=params.$parameter_id value=\"$attr_value\" size=50>
+	    </td>}]
+
+append table_sql [ad_order_by_from_sort_spec $orderby $table_def]
+
+set body "[ad_header "Parameters for $instance_name"]
+<h2>Parameters for $instance_name</h2>
+[ad_context_bar [list "index" "Site Map"] "$instance_name Parameters"]
+<hr>
+"
+
+if { ![empty_string_p $dimensional_list] } {
+    append body "[ad_dimensional $dimensional_list]<p>"
+}
+
+ns_return 200 text/html "$body
+
+<blockquote>
+<form method=post action=parameter-set-2>
+[export_form_vars package_key package_id instance_name]
+[ad_table -Torderby $orderby \
+     -bind [ad_tcl_vars_to_ns_set package_id] \
+     -Tmissing_text "No parameters registered in this section." \
+     -Textra_rows "<tr>
+<td></td><td></td>
+<td><input type=submit value=\"Set Parameters\">
+</td></tr>" parameter_table $table_sql $table_def]
+</blockquote>
+</form>
+[ad_footer]
+"
