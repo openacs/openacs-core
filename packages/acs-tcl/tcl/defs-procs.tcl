@@ -36,6 +36,11 @@ proc ad_host_administrator {} {
     return [ad_parameter -package_id [ad_acs_kernel_id]  HostAdministrator]
 }
 
+# The email address that will sign outgoing alerts
+proc ad_outgoing_sender {} {
+    return [ad_parameter -package_id [ad_acs_kernel_id]  OutgoingSender]
+}
+
 # set to return 1 if there is a graphics site
 
 proc ad_graphics_site_available_p {} {

@@ -13,6 +13,7 @@ ad_page_contract {
     system_owner:notnull
     admin_owner:notnull
     host_administrator:notnull
+	outgoing_sender:notnull
 }
 
 set kernel_id [db_string acs_kernel_id_get {
@@ -26,6 +27,7 @@ foreach { var param } {
     system_owner SystemOwner
     admin_owner AdminOwner
     host_administrator HostAdministrator
+	outgoing_sender OutgoingSender
 } {
     ad_parameter -set [set $var] -package_id $kernel_id $param
 }

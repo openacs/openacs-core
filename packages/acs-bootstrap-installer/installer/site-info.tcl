@@ -39,7 +39,12 @@ The email address signed on administrative pages.<br><br>
 <tr valign=baseline>
   <th align=right>Host Administrator:</th>
   <td><input name=host_administrator size=40 value=\"$email\"><br>
-A person whom people can contact if they experience technical problems.
+A person whom people can contact if they experience technical problems.<br><br>
+</tr>
+<tr valign=baseline>
+  <th align=right>Outgoing Email Sender:</th>
+  <td><input name=outgoing_sender size=40 value=\"$email\"><br>
+The email address that will sign outgoing alerts.
 </tr>
 </table>
 

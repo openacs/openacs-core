@@ -10,6 +10,7 @@ ad_page_contract {
     {system_owner "System Owner"}
     {admin_owner "Admin Owner"}
     {host_administrator "Host Administrator"}
+    {outgoing_sender "Outgoing Sender"}
     {email "system"}
     {first_names "system"}
     {last_name "manager"}
@@ -137,6 +138,7 @@ foreach { var param } {
     system_owner SystemOwner
     admin_owner AdminOwner
     host_administrator HostAdministrator
+	outgoing_sender OutgoingSender
 } {
     ad_parameter -set [set $var] -package_id [ad_acs_kernel_id] $param
 }
