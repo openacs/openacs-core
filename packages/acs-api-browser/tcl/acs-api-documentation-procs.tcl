@@ -494,6 +494,23 @@ ad_proc -public api_proc_documentation {
 		append out "</dd>\n"
 	}
 	
+
+        # @option is used in  template:: and cms:: (and maybe should be used in some other 
+        # things like ad_form which have internal arg parsers.  although an option 
+        # and a switch are the same thing, just one is parsed in the proc itself rather than 
+        # by ad_proc.
+
+	if { [info exists doc_elements(option)] } {
+		append out "<b>Options:</b><dl>"
+		foreach param $doc_elements(option) {
+			if { [regexp {^([^ \t]+)[ \t](.+)$} $param "" name value] } {
+                            append out "<dt><b>-$name</b></dt><dd>$value<br/></dd>"
+			}
+		}
+		append out "</dl>"
+	}
+	
+
 	if { [info exists doc_elements(return)] } {
 		append out "<dt><b>Returns:</b></dt><dd>[join $doc_elements(return) "<br>"]</dd>\n"
 	}
