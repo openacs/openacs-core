@@ -279,7 +279,7 @@ select get_func_header(proname,proargtypes) as definition,
 -- offers excellent support for arbitrary strings of bits, and
 -- does a good job of optimizing manipulations on these strings
 -- that fall on byte boundaries.  They're also fully supported 
--- by PG's default high-concurrency nbtree index type.
+-- by the PG's default high-concurrency nbtree index type.
 
 -- Benefits of this new approach over the old, text-based
 -- approach:
@@ -546,7 +546,7 @@ create function create_tree_ancestor_keys() returns boolean as '
 
 -- This function should probably only be called from its overloaded cousin
 -- tree_ancestor_keys(varbit), which returns the set of tree_sortkeys for all of the
--- given tree_sortkey's ancestors..
+-- ancestors of the given tree_sortkey...
 
 begin
 
@@ -583,8 +583,8 @@ select create_tree_ancestor_keys();
 
 create function tree_ancestor_keys(varbit) returns setof varbit as '
 
--- Return the set of tree_sortkeys for all of the given tree_sortkey's
--- ancestors.
+-- Return the set of tree_sortkeys for all of the ancestors of the given
+-- tree_sortkey ancestors.
 
 -- Here is an example on acs_objects:
 
