@@ -115,15 +115,15 @@ ad_proc parse_incoming_email {
   # look for the files we need.  If they aren't there, we can't do anything
   # and will just return the message as-is (cringe)
   set source_dir [acs_root_dir]/packages/acs-tcl/tcl
-  if { ![file exists $source_dir/base64.tcl] || 
-       ![file exists $source_dir/md5.tcl] ||
-       ![file exists $source_dir/mime.tcl] } {
+  if { ![file exists $source_dir/base64-procs.tcl] || 
+       ![file exists $source_dir/md5-procs.tcl] ||
+       ![file exists $source_dir/mime-procs.tcl] } {
     return $message
   }
 
-  source $source_dir/base64.tcl
-  source $source_dir/md5.tcl
-  source $source_dir/mime.tcl
+  source $source_dir/base64-procs.tcl
+  source $source_dir/md5-procs.tcl
+  source $source_dir/mime-procs.tcl
   package require mime
 
   set mime [mime::initialize -string $message]
