@@ -273,7 +273,7 @@ ad_proc -public template::data::transform::search { element_ref } {
     # FIXME: need to get a statement name here
     set query $element(search_query)
 
-    template::query get_options options multilist $query
+    set options [db_list_of_lists get_options $query]
 
     set option_count [llength $options]
 
