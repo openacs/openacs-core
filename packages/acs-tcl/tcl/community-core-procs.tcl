@@ -467,7 +467,6 @@ ad_proc -public acs_user::get {
         array set row [util_memoize [list acs_user::get_from_user_id_not_cached $user_id] [cache_timeout]]
     } else {
         array set row [util_memoize [list acs_user::get_from_username_not_cached $username $authority_id] [cache_timeout]]
-        db_1row select_user_info_from_username {} -column_array row
         set user_id $row(user_id)
     }
 
@@ -494,6 +493,8 @@ ad_proc -private acs_user::get_from_username_not_cached { username authority_id 
     @author Peter Marklund
 } {
     db_1row select_user_info {} -column_array row
+
+    return [array get row]
 }
 
 ad_proc -private acs_user::cache_timeout {} {
