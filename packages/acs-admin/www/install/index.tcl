@@ -61,10 +61,7 @@ set local_service_install_url [export_vars -base "install" { { package_type apm_
 
 set local_upgrade_url [export_vars -base "install" { { package_type all } { upgrade_p 1 } }]
 
-
-
-set channel "[db_type]-5-0"
-set repository_url "http://lars.cph02.collaboraid.net/repository/$channel/"
+set repository_url "http://openacs.org/repository/[apm_get_repository_channel]/"
 
 set remote_install_url [export_vars -base "install" { repository_url }]
 
