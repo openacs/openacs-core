@@ -124,7 +124,7 @@ ad_proc -public util_convert_line_breaks_to_html {
     regsub -all {[ \t]*\n} $text "\n" text
     
     # Wrap P's around paragraphs
-    set text "<p style=\"margin-top: 0px;\">$text</p>"
+    set text "<p style=\"margin: 0px;\">$text</p>"
     regsub -all {([^\n\s])\n\n([^\n\s])} $text {\1</p><p>\2} text
 
     # Convert _single_ CRLF's to <br>'s to preserve line breaks
@@ -143,6 +143,12 @@ ad_proc -public util_convert_line_breaks_to_html {
 
     # Add line breaks to P tags
     regsub -all {</p>} $text "</p>\n" text
+
+    # Last <p> tag
+    set idx [string last "<p>" [string tolower $text]]
+    if { $idx != -1 } {
+        set text "[string range $text 0 [expr $idx-1]]<p style=\"margin-bottom: 0px;\">[string range $text [expr $idx+3] end]"
+    }
 
     return $text
 }

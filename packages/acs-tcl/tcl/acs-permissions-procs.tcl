@@ -54,16 +54,31 @@ ad_proc -public permission::permission_p {
     @param nocache force loading from db even if cached (flushes cache as well)
     @param party_id if null then it is the current user_id
 } {
-    if {[empty_string_p $party_id]} {
+    if { [empty_string_p $party_id] } {
         set party_id [ad_conn user_id]
     }
+
     if { $no_cache_p || ![permission::cache_p] } {
         util_memoize_flush "permission::permission_p_not_cached -party_id $party_id -object_id $object_id -privilege $privilege"
-        return [permission::permission_p_not_cached -party_id $party_id -object_id $object_id -privilege $privilege]
+        set permission_p [permission::permission_p_not_cached -party_id $party_id -object_id $object_id -privilege $privilege]
     } else { 
-        return [util_memoize "permission::permission_p_not_cached -party_id $party_id -object_id $object_id -privilege $privilege" \
+        set permission_p [util_memoize "permission::permission_p_not_cached -party_id $party_id -object_id $object_id -privilege $privilege" \
                     [parameter::get -package_id [ad_acs_kernel_id] -parameter PermissionCacheTimeout -default 300]]
     }
+
+    if { $party_id == 0 && [ad_conn user_id] == 0 && [ad_conn untrusted_user_id] != 0 && ![template::util::is_true $permission_p] } {
+        set untrusted_permission_p [permission_p_not_cached \
+                                        -party_id [ad_conn untrusted_user_id] \
+                                        -object_id $object_id \
+                                        -privilege $privilege]
+        if { $permission_p != $untrusted_permission_p } {
+            # Bump to registration page
+            ns_log Notice "permission_p: party_id=$party_id ([acs_object_name $party_id]), object_id=$object_id ([acs_object_name $object_id]), privilege=$privilege. Result=>$permission_p. Untrusted-Result=>$untrusted_permission_p\n[ad_get_tcl_call_stack]"
+            auth::require_login
+        }
+    }
+
+    return $permission_p
 }
 
 
@@ -83,6 +98,7 @@ ad_proc -private permission::permission_p_not_cached {
     if {[empty_string_p $party_id]} {
         set party_id [ad_conn user_id]
     }
+
     return [db_0or1row select_permission_p {}]
 }
 
