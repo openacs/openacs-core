@@ -2,8 +2,7 @@
 #
 # Read the README file before executing this script.
 #
-# Checks out all source code needed for .LRN from CVS and copies
-# the supervise run script that runs AOLServer to the server root directory.
+# Checks out all source code needed for OpenACS and .LRN from CVS
 #
 # This script should be executed as root and requires the following
 # environment variables to be set:

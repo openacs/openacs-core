@@ -46,6 +46,7 @@ fi
 
 # Set important configuration parameters
 serverroot=`get_config_param serverroot`
+svscanroot=`get_config_param svscanroot`
 database=`get_config_param database`
 server_url=`get_config_param server_url`
 error_log_file=`get_config_param error_log_file`
@@ -59,7 +60,7 @@ restart_seconds=$(expr $startup_seconds + $shutdown_seconds)
 dotlrn_demo_data=`get_config_param dotlrn_demo_data`
 dotlrn=`get_config_param dotlrn`
 crawl_links=`get_config_param crawl_links`
-
+do_checkout=`get_config_param do_checkout`
 # command-line settings override config file settings
 while [ -n "$1" ] ; do
    case "$1" in
@@ -111,13 +112,27 @@ fi
 # Log some important parameters for the installation
 echo "$0: Starting installation with config_file $config_file. Using serverroot=$serverroot, server_url=$server_url, do_checkout=$do_checkout, dotlrn=$dotlrn, and database=$database."
 prompt_continue $interactive
+set -x
+# See if a daemontools directory exists.
 
-# Take down the server
-echo "$0: Taking down $serverroot at $(date)"
-$stop_server_command
-# Wait for the server to come down
-echo "$0: Waiting $shutdown_seconds seconds for server to shut down at $(date)"
-sleep $shutdown_seconds
+if [ -d "${svscanroot}" ]; then
+    # if so, cycle the server.
+    echo "$0: Taking down $serverroot at $(date)"
+    $stop_server_command
+    # Wait for the server to come down
+    echo "$0: Waiting $shutdown_seconds seconds for server to shut down at $(date)"
+    sleep $shutdown_seconds
+
+else
+    # if not, create one
+    echo "$0: Creating daemontools directory"
+    # TODO: should put error handling here and a config param to make this optional
+    #create the directory disabled
+    touch $svscanroot/down
+    ln -s $serverroot/etc/daemontools $svscanroot
+fi
+
+
 
 # Recreate the database user
 echo "$0: Recreating database user at $(date)"
