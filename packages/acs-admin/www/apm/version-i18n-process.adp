@@ -9,7 +9,7 @@
 <blockquote>
 
 <form action="version-i18n-process-2">
-  @hidden_form_vars@
+  @hidden_form_vars;noquote@
 
   <table  border="1">
     <tr>
@@ -19,7 +19,7 @@
 
   <multiple name="replacements">
     <tr>
-      <td>@replacements.text@</td>
+      <td>@replacements.text;noquote@</td>
       <td><input type="text" name="message_keys" value="@replacements.key@" /></td>
     </tr>
   </multiple>    
