@@ -194,8 +194,8 @@ declare
   new__pattern_p              alias for $6;  
   new__creation_user          alias for $7;  
   new__creation_ip            alias for $8;  
-  v_node_id              site_nodes.node_id%TYPE;
-  v_directory_p          site_nodes.directory_p%TYPE;
+  v_node_id                   site_nodes.node_id%TYPE;
+  v_directory_p               site_nodes.directory_p%TYPE;
 begin
     if new__parent_id is not null then
       select directory_p into v_directory_p

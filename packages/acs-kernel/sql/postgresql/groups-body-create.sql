@@ -815,14 +815,14 @@ create function acs_group__name (integer)
 returns varchar as '
 declare
   name__group_id         alias for $1;  
-  group_name             varchar(200);  
+  name__group_name       varchar(200);  
 begin
   select group_name
-  into group_name
+  into name__group_name
   from groups
   where group_id = name__group_id;
 
-  return group_name;
+  return name__group_name;
   
 end;' language 'plpgsql';
 

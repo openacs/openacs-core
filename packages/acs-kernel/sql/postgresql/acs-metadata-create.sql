@@ -606,7 +606,8 @@ declare
 begin
     v_idx := position(''.'' in create_type__name_method);
     if v_idx <> 0 then
-         v_name_method := substr(create_type__name_method,1,v_idx - 1) || ''__'' || substr(create_type__name_method, v_idx + 1);
+         v_name_method := substr(create_type__name_method,1,v_idx - 1) || 
+                       ''__'' || substr(create_type__name_method, v_idx + 1);
     else 
          v_name_method := create_type__name_method;
     end if;
@@ -646,7 +647,8 @@ begin
                  from acs_attributes 
                 where object_type = drop_type__object_type 
     loop
-       PERFORM acs_attribute__drop_attribute (drop_type__object_type, row.attribute_name);
+       PERFORM acs_attribute__drop_attribute (drop_type__object_type, 
+                                              row.attribute_name);
     end loop;
 
     delete from acs_attributes
@@ -681,7 +683,7 @@ returns boolean as '
 declare
   is_subtype_p__object_type_1          alias for $1;  
   is_subtype_p__object_type_2          alias for $2;  
-  v_result                            integer;       
+  v_result                             integer;       
 begin
     -- select count(*) into v_result
     --  where exists (select 1 
@@ -689,13 +691,15 @@ begin
     --                where t.object_type	= is_subtype_p__object_type_2
     --              connect by prior t.object_type = t.supertype
     --                start with t.supertype = is_subtype_p__object_type_1);
-    select count(*)
+
+    select count(*) into v_result
      where exists (select 1 
                      from acs_object_types t 
                     where t.object_type = is_subtype_p__object_type_2
-                      and tree_sortkey like (select tree_sortkey || ''%'' 
-                                               from acs_object_types 
-                                              where object_type = is_subtype_p__object_type_1 ));
+                      and tree_sortkey like
+                        (select tree_sortkey || ''%'' 
+                           from acs_object_types 
+                           where object_type = is_subtype_p__object_type_1 ));
 
     if v_result > 0 then
        return ''t'';

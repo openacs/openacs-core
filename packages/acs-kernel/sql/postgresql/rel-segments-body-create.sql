@@ -142,14 +142,14 @@ create function rel_segment__name (integer)
 returns varchar as '
 declare
   name__segment_id             alias for $1;  
-  segment_name                 varchar(200);  
+  name__segment_name           varchar(200);  
 begin
   select segment_name
-  into segment_name
+  into name__segment_name
   from rel_segments
   where segment_id = name__segment_id;
 
-  return segment_name;
+  return name__segment_name;
   
 end;' language 'plpgsql';
 

@@ -321,7 +321,8 @@ begin
     delete from acs_rel_types
     where rel_type = drop_type__rel_type;
 
-    PERFORM acs_object_type__drop_type(drop_type__rel_type, drop_type__cascade_p);
+    PERFORM acs_object_type__drop_type(drop_type__rel_type, 
+                                       drop_type__cascade_p);
 
     return 0; 
 end;' language 'plpgsql';
@@ -410,9 +411,6 @@ declare
   actual_object_type_one acs_object_types.object_type%TYPE;
   actual_object_type_two acs_object_types.object_type%TYPE;
 begin
-
-/*
-
     select 1 into dummy
     from acs_rel_types rt,
          acs_objects o1, 
@@ -434,6 +432,7 @@ begin
       and rt.rel_type = new.rel_type
       and o1.object_id = new.object_id_one
       and o2.object_id = new.object_id_two;
+
     if NOT FOUND then
 
       -- At least one of the object types must have been wrong.
@@ -447,15 +446,16 @@ begin
         and o1.object_id = new.object_id_one
         and o2.object_id = new.object_id_two;
 
-      raise EXCEPTION ''-20001: %'', new.rel_type || '' violation: Invalid object types.  '' ||
-          ''Object '' || new.object_id_one || 
-          '' ('' || actual_object_type_one || '') '' || 
-          ''must be of type '' || target_object_type_one || ''. '' ||
-          ''Object '' || new.object_id_two || 
-          '' ('' || actual_object_type_two || '') '' || 
-          ''must be of type '' || target_object_type_two || ''.'';
+      raise EXCEPTION ''-20001: %  violation: Invalid object types. Object % (%) must be of type % Object % (%) must be of type %'',                new.rel_type, 
+                                         new.object_id_one,
+                                         actual_object_type_one,
+                                         target_object_type_one,
+                                         new.object_id_two,
+                                         actual_object_type_two,
+                                         target_object_type_two;
+
     end if;
-*/
+
     return new;
 
 end;' language 'plpgsql';

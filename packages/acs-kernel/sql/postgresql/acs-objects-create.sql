@@ -587,7 +587,7 @@ create function acs_object__initialize_attributes (integer)
 returns integer as '
 declare
   initialize_attributes__object_id              alias for $1;  
-  v_object_type          acs_objects.object_type%TYPE;
+  v_object_type                                 acs_objects.object_type%TYPE;
 begin
    -- XXX This should be fixed to initialize supertypes properly.
 
@@ -1021,7 +1021,7 @@ begin
    v_table_name := acs_object__get_attr_storage_table(v_storage);
    v_key_sql    := acs_object__get_attr_storage_sql(v_storage);
 
-   execute ''update '' || quote_identifier(v_table_name) || '' set '' || quote_identifier(v_column) || '' = '' || quote_literal(value_in) || '' where '' || quote_literal(v_key_sql);
+   execute ''update '' || quote_ident(v_table_name) || '' set '' || quote_ident(v_column) || '' = '' || quote_literal(value_in) || '' where '' || quote_literal(v_key_sql);
 
    return 0; 
 end;' language 'plpgsql';
@@ -1082,8 +1082,8 @@ declare
   check_object_ancestors__object_id              alias for $1;  
   check_object_ancestors__ancestor_id            alias for $2;  
   check_object_ancestors__n_generations          alias for $3;  
-  context_id                                     acs_objects.context_id%TYPE;
-  security_inherit_p                  acs_objects.security_inherit_p%TYPE;
+  check_object_ancestors__context_id             acs_objects.context_id%TYPE;
+  check_object_ancestors__security_inherit_p     acs_objects.security_inherit_p%TYPE;
   n_rows                                         integer;       
   n_gens                                         integer;       
   result                                         boolean;       
@@ -1102,12 +1102,14 @@ begin
 
    -- Grab the context and security_inherit_p flag of the current
    -- ancestor''''s parent.
-   select context_id, security_inherit_p into context_id, security_inherit_p
+   select context_id, security_inherit_p 
+   into check_object_ancestors__context_id, 
+        check_object_ancestors__security_inherit_p
    from acs_objects
    where object_id = check_object_ancestors__ancestor_id;
 
    if check_object_ancestors__ancestor_id = 0 then
-     if context_id is null then
+     if check_object_ancestors__context_id is null then
        result := ''t'';
      else
        -- This can be a constraint, can''''t it?
@@ -1116,15 +1118,20 @@ begin
        result := ''f'';
      end if;
    else
-     if context_id is null or security_inherit_p = ''f'' then
-       context_id := 0;
+     if check_object_ancestors__context_id is null or 
+        check_object_ancestors__security_inherit_p = ''f'' 
+     THEN
+       check_object_ancestors__context_id := 0;
      end if;
 
-     if acs_object__check_context_index(check_object_ancestors__object_id, check_object_ancestors__ancestor_id, check_object_ancestors__n_generations) = ''f'' then
+     if acs_object__check_context_index(check_object_ancestors__object_id, 
+                                        check_object_ancestors__ancestor_id, 
+                                        check_object_ancestors__n_generations) = ''f'' then
        result := ''f'';
      end if;
 
-     if acs_object__check_object_ancestors(check_object_ancestors__object_id, context_id,
+     if acs_object__check_object_ancestors(check_object_ancestors__object_id, 
+                                           check_object_ancestors__context_id,
 	                      check_object_ancestors__n_generations + 1) = ''f'' then
        result := ''f'';
      end if;
@@ -1207,7 +1214,8 @@ begin
      check_path__context_id := 0;
    end if;
 
-   return acs_object__check_path(check_path__context_id, check_path__ancestor_id);
+   return acs_object__check_path(check_path__context_id, 
+                                 check_path__ancestor_id);
   
 end;' language 'plpgsql';
 
@@ -1225,8 +1233,8 @@ declare
 begin
    result := ''t'';
    PERFORM acs_log__notice(''acs_object.check_representation'',
-                  ''Running acs_object.check_representation on object_id = '' ||
-		  check_representation__object_id || ''.'');
+                  ''Running acs_object.check_representation on object_id = '' 
+                  || check_representation__object_id || ''.'');
 
    select object_type into check_representation__object_type
    from acs_objects
@@ -1267,11 +1275,13 @@ begin
    PERFORM acs_log__notice(''acs_object.check_representation'',
                   ''OBJECT CONTEXT INTEGRITY TEST'');
 
-   if acs_object__check_object_ancestors(check_representation__object_id, check_representation__object_id, 0) = ''f'' then
+   if acs_object__check_object_ancestors(check_representation__object_id, 
+                                         check_representation__object_id, 0) = ''f'' then
      result := ''f'';
    end if;
 
-   if acs_object__check_object_descendants(check_representation__object_id, check_representation__object_id, 0) = ''f'' then
+   if acs_object__check_object_descendants(check_representation__object_id, 
+                                           check_representation__object_id, 0) = ''f'' then
      result := ''f'';
    end if;
    for row in  select object_id, ancestor_id, n_generations
