@@ -4,8 +4,8 @@
 <package key="acs-kernel" url="http://openacs.org/repository/apm/packages/acs-kernel/" type="apm_service">
     <package-name>ACS Kernel</package-name>
     <pretty-plural>ACS Kernel Services</pretty-plural>
-    <singleton-p>t</singleton-p>
     <initial-install-p>t</initial-install-p>
+    <singleton-p>t</singleton-p>
 
     <version name="4.2" url="http://openacs.org/repository/download/apm/acs-kernel-4.2.apm">
     <database-support>
@@ -128,7 +128,7 @@
             <file type="data_model_upgrade" path="upgrade-3.4-4.0/user-group-types.sql"/>
         </files>
         <parameters>
-	    <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="RestrictErrorsToAdminsP"  default="1" description="Whether we show errors to adminstrators only"/>
+            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="RestrictErrorsToAdminsP"  default="1" description="Whether we show errors to adminstrators only"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="HomeURL"  default="/pvt/home" description="the URL of the workspace link" section_name="system-information"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="HomeName"  default="Your Workspace" description="the name of the workspace link" section_name="system-information"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="SystemName"  default="yourdomain Network" description="the name of your system" section_name="system-information"/>
@@ -163,6 +163,8 @@
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="SessionRenew"  default="300" description="How much time do we let elapse before renewing a session cookie? This should be less than SessionTimeout." section_name="security"/>
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="MaxSize"  default="200000" description="The size of the util_memoize cache, if using the ns_cache module." section_name="memoize"/>
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="PrivacyControlEnabledP"  default="0" description="Whether we control privacy" section_name="privacy"/>
+            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="CommunityMemberURL"  default="/shared/community-member" description="the URL of the public community member page" section_name="system-information"/>
+            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="CommunityMemberAdminURL"  default="/admin/users/one" description="the URL of the admin community member page" section_name="system-information"/>
         </parameters>
 
     </version>

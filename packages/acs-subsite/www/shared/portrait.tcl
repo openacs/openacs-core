@@ -41,7 +41,7 @@ if { ![empty_string_p $width] && ![empty_string_p $height] } {
     set widthheight_param ""
 }
 
-set context_bar [ad_context_bar_ws_or_index [list "/shared/community-member.tcl?[export_url_vars user_id]" "One Member"] "Portrait"]
+set context_bar [ad_context_bar_ws_or_index [list [acs_community_member_url -user_id $user_id] "One Member"] "Portrait"]
 set export_vars [export_url_vars user_id]
 set publish_date [util_AnsiDatetoPrettyDate $publish_date]
 

@@ -105,12 +105,62 @@ proc ad_url {} {
     return [ad_parameter -package_id [ad_acs_kernel_id] SystemURL]
 }
 
+ad_proc -public acs_community_member_url {
+    {-user_id:required}
+} {
+    return the url for the community member page of a particular user
+} {
+    return "[ad_parameter -package_id [ad_acs_kernel_id] CommunityMemberURL]?[export_vars user_id]"
+}
+
+ad_proc -public acs_community_member_link {
+    {-user_id:required}
+    {-label ""}
+} {
+    return the link of the community member page of a particular user
+} {
+    if {[empty_string_p $label]} {
+        set label [db_string select_community_member_link_label {
+            select persons.first_names || ' ' || persons.last_name
+            from persons
+            where person_id = :user_id
+        } -default $user_id]
+    }
+
+    return "<a href=\"[acs_community_member_url -user_id $user_id]\">$label</a>"
+}
+
 proc ad_present_user {user_id name} {
-    return "<a href=\"/shared/community-member?user_id=$user_id\">$name</a>"
+    return [acs_community_member_link -user_id $user_id -label $name]
+}
+
+ad_proc -public acs_community_member_admin_url {
+    {-user_id:required}
+} {
+    return the url for the community member admin page of a particular user
+} {
+    return "[ad_parameter -package_id [ad_acs_kernel_id] CommunityMemberAdminURL]?[export_vars user_id]"
+}
+
+ad_proc -public acs_community_member_admin_link {
+    {-user_id:required}
+    {-label ""}
+} {
+    return the link of the community member page of a particular user
+} {
+    if {[empty_string_p $label]} {
+        set label [db_string select_community_member_link_label {
+            select persons.first_names || ' ' || persons.last_name
+            from persons
+            where person_id = :user_id
+        } -default $user_id]
+    }
+
+    return "<a href=\"[acs_community_member_admin_url -user_id $user_id]\">$label</a>"
 }
 
 proc ad_admin_present_user {user_id name} {
-    return "<a href=\"/admin/users/one?user_id=$user_id\">$name</a>"
+    return [acs_community_member_admin_link -user_id $user_id -label $name]
 }
 
 ad_proc ad_header {
