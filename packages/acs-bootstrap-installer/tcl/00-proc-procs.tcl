@@ -121,6 +121,20 @@ proc ad_proc args {
 
     # Set up the remaining arguments.
     set proc_name [lindex $args $i]
+
+    # (SDW - OpenACS). If proc_name is being defined inside a namespace, we
+    # want to use the fully qualified name. Except for actually defining the
+    # proc where we want to use the name as passed to us. We always set
+    # proc_name_as_passed and conditionally make proc_name fully qualified
+    # if we were called from inside a namespace eval.
+
+    set proc_name_as_passed $proc_name
+    set proc_namespace [uplevel {namespace current}]
+    if { $proc_namespace != "::" } {
+	regsub {^::} $proc_namespace {} proc_namespace
+	set proc_name "${proc_namespace}::${proc_name}"
+    }
+
     set arg_list [lindex $args [expr { $i + 1 }]]
     if { $n_args_remaining == 3 } {
         # No doc string provided.
@@ -284,7 +298,7 @@ proc ad_proc args {
     }
 
     if { [llength $switches] == 0 } {
-        uplevel [list proc $proc_name $arg_list $code_block]
+        uplevel [list proc $proc_name_as_passed $arg_list $code_block]
     } else {
         set parser_code "    upvar args args\n"
 
@@ -342,8 +356,8 @@ $switch_code
             ns_write "PARSER CODE:\n\n$parser_code\n\n"
         }
 
-        uplevel [list proc ${proc_name}__arg_parser {} $parser_code]
-        uplevel [list proc $proc_name args "    ${proc_name}__arg_parser\n$code_block"]
+        uplevel [list proc ${proc_name_as_passed}__arg_parser {} $parser_code]
+        uplevel [list proc $proc_name_as_passed args "    ${proc_name_as_passed}__arg_parser\n$code_block"]
     }
 }
 
