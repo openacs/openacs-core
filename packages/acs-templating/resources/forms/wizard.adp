@@ -62,7 +62,7 @@
 
 		</table>
 		<formerror id=@elements.id@><br>
-		  <font color="red"><b>\@formerror.@elements.id@\@</b></font>
+		  <font color="red"><b>\@formerror.@elements.id@;noquote\@</b></font>
 		</formerror>
               </noparse>
 	    </td>
@@ -72,7 +72,7 @@
 	      <if @elements.wide@ not nil>
                 <noparse>
                   <formerror  id=@elements.id@><br>
-                    <font color="red"><b>\@formerror.@elements.id@\@</b></font><br>
+                    <font color="red"><b>\@formerror.@elements.id@;noquote\@</b></font><br>
                   </formerror>
                 </noparse>
               </if><else><td bgcolor=#EEEEEE></else>
@@ -83,7 +83,7 @@
 	      <if @elements.wide@ not nil></if><else><td nowrap></else>
 		<noparse><formwidget id=@elements.id@>
 		<formerror id=@elements.id@><br><font 
-		   color="red"><b>\@formerror.@elements.id@\@<b></font>
+		   color="red"><b>\@formerror.@elements.id@;noquote\@<b></font>
                 </formerror></noparse>
 	      </td>
 	    </else>

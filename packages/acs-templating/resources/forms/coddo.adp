@@ -54,7 +54,7 @@
   	                 </formgroup>
   	               </table>
   	               <formerror id=@elements.id@><br>
-                         <span style="color: Red; font-weight: bold">\@formerror.@elements.id@\@</span>
+                         <span style="color: Red; font-weight: bold">\@formerror.@elements.id@;noquote\@</span>
                        </formerror>
                      </noparse>
   	             </td>	    
@@ -81,7 +81,7 @@
                       </else>
   		      <noparse><formwidget id=@elements.id@>
   		        <formerror id=@elements.id@><br />
-                          <span style="font-weight: bold; color: red">\@formerror.@elements.id@\@</span>
+                          <span style="font-weight: bold; color: red">\@formerror.@elements.id@;noquote\@</span>
                         </formerror>
                       </noparse>
   	              </td>
