@@ -229,11 +229,9 @@ ad_proc -private lang::catalog::parse { catalog_file_contents } {
          }
 
          # Write the messages and descriptions to the file
-         set file_charset [default_charset_if_unsupported $charset]         
          set catalog_file_path [get_catalog_file_path \
                  -package_key $package_key \
-                 -locale $locale \
-                 -charset $file_charset]
+                 -locale $locale]
          
          export_messages_to_file -descriptions_list $descriptions_list \
              $catalog_file_path $messages_list
@@ -325,9 +323,12 @@ ad_proc -private lang::catalog::get_catalog_file_path {
     {-backup_to_version ""}
     {-package_key:required} 
     {-locale:required}
-    {-charset:required}
+    {-charset ""}
 } {
-    Get the full path of the catalog file for a given package, locale, and charset.
+    Get the full path of the catalog file for a given package, and locale.
+
+    @param charset Should normally not be provided. Will force the charset to a certain value.
+                   If not provided an appropriate charset to write the locale in will be used.
 
     @see apm_parse_catalog_path
     @see lang::catalog::package_has_files_in_locale_p
@@ -336,12 +337,24 @@ ad_proc -private lang::catalog::get_catalog_file_path {
 } {
     set catalog_dir [package_catalog_dir $package_key]
 
+    if { ![empty_string_p $charset] } {
+        set file_charset $charset
+    } else {
+        # We had problems storing digits in ISO-8859-6 so we decided
+        # to use UTF-8 for all files except for locales that use ISO-8859-1. The reason we are making
+        # ISO-8859-1 an exception is that some developers may make the shortcut of editing
+        # the en_US catalog files directly to add keys and they might mess up the
+        # utf-8 encoding of the files when doing so.
+        set system_charset [ad_locale charset $locale]
+        set file_charset [ad_decode $system_charset "ISO-8859-1" $system_charset utf-8]
+    }
+
     set message_backup_prefix ""
     if { ![empty_string_p $backup_from_version] } {
         set message_backup_prefix "[message_backup_file_prefix]${backup_from_version}-${backup_to_version}_"
     }
 
-    set filename "${message_backup_prefix}${package_key}.${locale}.${charset}.xml"
+    set filename "${message_backup_prefix}${package_key}.${locale}.${file_charset}.xml"
 
     set file_path "[package_catalog_dir $package_key]/$filename"
     
@@ -387,17 +400,17 @@ ad_proc -public lang::catalog::export_messages_to_file {
     # Create the catalog directory if it doesn't exist
     set catalog_dir [package_catalog_dir $filename_info(package_key)]
     if { ![file isdirectory $catalog_dir] } {
-        ns_log Notice "lang::catalog::export_messages_to_file - Creating new catalog directory $catalog_dir"
+        ns_log Notice "Creating new catalog directory $catalog_dir"
         file mkdir $catalog_dir
     }
 
     # Create a backup file first if there isn't one already
     set backup_path "${file_path}.orig"
     if { [file exists $file_path] && ![file exists $backup_path] } {
-        ns_log Notice "lang::catalog::export_messages_to_file - Backing up catalog file $file_path"
+        ns_log Notice "Backing up catalog file $file_path"
         file copy -- $file_path $backup_path
     } else {
-        ns_log Notice "lang::catalog::export_messages_to_file - Not backing up $file_path as backup file already exists"
+        ns_log Notice "Not backing up $file_path as backup file already exists"
     }
 
     # Since the output charset, and thus the filename, may have changed since
@@ -419,7 +432,7 @@ ad_proc -public lang::catalog::export_messages_to_file {
 
     # Open the root node of the document
     set package_version [system_package_version_name $filename_info(package_key)]
-    puts $catalog_file_id "<?xml version=\"1.0\"?>
+    puts $catalog_file_id "<?xml version=\"1.0\" encoding=\"$filename_info(charset)\"?>
 <message_catalog package_key=\"$filename_info(package_key)\" package_version=\"$package_version\" locale=\"$filename_info(locale)\" charset=\"$filename_info(charset)\">
 "
 
@@ -437,7 +450,7 @@ ad_proc -public lang::catalog::export_messages_to_file {
    puts $catalog_file_id "</message_catalog>"
    close $catalog_file_id       
 
-   ns_log Notice "lang::catalog::export_messages_to_file - Wrote $message_count messages to file $file_path with encoding $file_encoding"
+   ns_log Notice "Wrote $message_count messages to file $file_path with encoding $file_encoding"
 }
 
 ad_proc -private lang::catalog::get_catalog_files { package_key } {
@@ -523,9 +536,6 @@ ad_proc -public lang::catalog::import_messages_from_file {
         error "lang::catalog::import_messages_from_file - the package_key $catalog_array(package_key) in the file $file_path does not match the package_key $package_key in the filesystem"
     }
 
-    # TODO: Check that package_version, locale, and charset in xml match info in filename
-    #       and warn in logfile if there is a mismatch
-
     # Figure out if we are upgrading
     if { ![apm_package_installed_p $package_key] } {
         # The package is not installed so we are not upgrading
@@ -539,7 +549,7 @@ ad_proc -public lang::catalog::import_messages_from_file {
         # want that to trigger an upgrade.
         set upgrade_p [ad_decode $higher_version_p 1 1 0]
     }
-    ns_log Notice "lang::catalog::import_messages_from_file - Loading messages in file $file_path [ad_decode $upgrade_p 0 "" ", upgrading"]"
+    ns_log Notice "Loading messages in file $file_path [ad_decode $upgrade_p 0 "" ", upgrading"]"
 
     # Get the messages array, and the list of message keys to iterate over
     array set messages_array [lindex [array get catalog_array messages] 1]
@@ -558,7 +568,7 @@ ad_proc -public lang::catalog::import_messages_from_file {
         template::util::multirow_foreach all_messages {
             set message_key @all_messages.message_key@
             if { [lsearch -exact $messages_array_names $message_key] < 0 } {
-                ns_log Notice "lang::catalog::import_messages_from_file - Marking message $message_key in locale $locale as deleted"
+                ns_log Notice "Marking message $message_key in locale $locale as deleted"
                 db_dml mark_message_as_deleted {}
 
                 # One approach to deleted message keys after upgrade is to consider those
@@ -614,16 +624,13 @@ ad_proc -public lang::catalog::import_messages_from_file {
     if { $upgrade_p && [array size overwritten_db_messages] > 0 } {
         set system_package_version [system_package_version_name $package_key]
         # Note that export_messages_to_file demands a certain filename format
-        set file_charset [default_charset_if_unsupported $charset]
 
-        ns_log Notice "lang::catalog::import_messages_from_file - Saving overwritten messages during upgrade for package $package_key and locale $locale in file $filename"
-
+        ns_log Notice "Saving overwritten messages during upgrade for package $package_key and locale $locale in file $filename"
         set file_path [get_catalog_file_path \
                 -backup_from_version ${system_package_version} \
                 -backup_to_version $catalog_array(package_version) \
                 -package_key $package_key \
-                -locale $locale \
-                -charset $file_charset]
+                -locale $locale]
         export_messages_to_file $file_path [array get overwritten_db_messages]
     }
 }
@@ -675,7 +682,7 @@ ad_proc -public lang::catalog::import_from_files {
 
     # Skip the package if it has no catalog files at all
     if { ![file exists [package_catalog_dir $package_key]] } {
-        ns_log Notice "lang::catalog::import_from_files - importing nothing as package $package_key has no catalog files"
+        ns_log Notice "importing nothing as package $package_key has no catalog files"
         return
     }
 
@@ -706,12 +713,9 @@ ad_proc -public lang::catalog::import_from_files {
             continue
         }
 
-        set charset [default_charset_if_unsupported $mime_charset]
-        
         set file_path [get_catalog_file_path \
                 -package_key $package_key \
-                -locale $locale \
-                -charset $charset]
+                -locale $locale]
 
         if { [file exists $file_path] } {
             lappend catalog_file_list $file_path
@@ -789,7 +793,7 @@ ad_proc -public -deprecated -warn lang::catalog::import_from_tcl_files {
 
 } { 
     set glob_pattern [file join [acs_package_root_dir $package_key] catalog *.cat]
-    ns_log Notice "lang::catalog::import_from_tcl_files - Starting load of the message catalogs $glob_pattern"
+    ns_log Notice "Starting load of the message catalogs $glob_pattern"
     
     global __lang_catalog_load_package_key
     set __lang_catalog_load_package_key $package_key
@@ -809,7 +813,7 @@ ad_proc -public -deprecated -warn lang::catalog::import_from_tcl_files {
         }
     }
 
-    ns_log Notice "lang::catalog::import_from_tcl_files - Finished load of the message catalog" 
+    ns_log Notice "Finished load of the message catalog" 
     
     unset __lang_catalog_load_package_key 
 

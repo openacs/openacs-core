@@ -161,8 +161,7 @@ ad_proc lang::util::replace_temporary_tags_with_lookups {
     # Read messages from any existing catalog file
     set catalog_file_path [lang::catalog::get_catalog_file_path \
             -package_key $package_key \
-            -locale $locale \
-            -charset [ad_locale charset $locale]]
+            -locale $locale]
     if { [file exists $catalog_file_path] } {
         set catalog_file_contents [lang::catalog::read_file $catalog_file_path]
         array set catalog_array [lang::catalog::parse $catalog_file_contents]            
