@@ -34,14 +34,24 @@ ad_proc apm_parameter_section_slider {package_key} {
 }
 
 ad_proc apm_header { { -form "" } args } {
+    Generates HTML for the header of a page (including context bar).
+    Must only be used for APM admin pages (under /acs-admin/apm).
+
+    We are adding the APM index page to the context bar
+    so it doesn't have to be added on each page
+
+    @author Peter Marklund
+} {
+    set apm_title "ACS Package Manager Administration"
+    set apm_url "/acs-admin/apm"
 
     if { [llength $args] == 0 } {
-	set context_bar [ad_admin_context_bar "ACS Package Manager"]
-	set title "ACS Package Manager Administration"
+	set title $apm_title
+        set context_bar [ad_context_bar $title]
     } else {
-	
-	set context_bar [eval [concat [list ad_admin_context_bar [list "/acs-admin/apm/" "ACS Package Manager"]] $args]]
 	set title [lindex $args end]
+        set context [concat [list [list $apm_url $apm_title]] $args]
+        set context_bar [eval ad_context_bar $context]
     }
     set header [ad_header $title ""]
     append body "$header\n"
