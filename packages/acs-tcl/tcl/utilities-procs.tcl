@@ -618,6 +618,7 @@ ad_proc -public export_vars {
     -entire_form:boolean
     -no_empty:boolean
     {-base}
+    {-anchor}
     {-exclude {}}
     {-override {}}
     {vars {}}
@@ -989,6 +990,11 @@ ad_proc -public export_vars {
         } else {
             set export_string $base
         }
+    }
+    
+    # Append anchor
+    if { [exists_and_not_null anchor] } {
+        append export_string "\#$anchor"
     }
     
     return $export_string
