@@ -4422,19 +4422,14 @@ ad_proc -private util::whos_online::init {} {
 
 ad_proc -private util::whos_online::flush {} {
     Removing all user_ids from the last_hit (nsv_set) wich have a time Stamp older than 
-    the number of seconds indicated by the LastVisitUpdateInterval parameter
-    of the main site (defaults to 600 seconds = 10 minutes).
+    the number of seconds indicated by the proc util::whos_online::interval.
 
     @author Bjoern Kiesbye
 } { 
     array set last_hit [nsv_array get last_hit]
     set onliners_out [list]
-    set interval [parameter::get \
-                      -package_id [subsite::main_site_id] \
-                      -parameter LastVisitUpdateInterval \
-                      -default 600]
     set interval 1
-    set oldtime [expr [ns_time] - $interval]
+    set oldtime [expr [ns_time] - [interval]]
 
     for {set search [array startsearch last_hit]} {[array anymore last_hit $search]} {} {
         set user [array nextelement last_hit $search]
@@ -4457,12 +4452,34 @@ ad_proc -private util::whos_online::flush {} {
     }
 }
 
+ad_proc -private util::whos_online::interval {} {
+    Returns the last number of seconds within a user must have requested
+    a page to be considered online. Based on the LastVisitUpdateInterval parameter
+    of the main site and defaults to 600 seconds = 10 minutes.
+
+    @author Peter Marklund
+} {
+    return [parameter::get \
+                -package_id [subsite::main_site_id] \
+                -parameter LastVisitUpdateInterval \
+                -default 600]
+}
+
 ad_proc -private util::whos_online::user_requested_page { user_id } {
     Records that the user with given id requested a page on the server
 
     @author Bjoern Kiesbye
 } {
     nsv_set last_hit $user_id [ns_time] 
+}
+
+ad_proc -public util::whos_online::time_since_last_request { user_id } {
+    Returns the number of seconds since the user with given id requested
+    a page.
+
+    @author Peter Marklund
+} {
+    return [expr [ns_time] - [nsv_get last_hit $user_id]]
 }
 
 ad_proc -public util::whos_online::user_ids {} {
@@ -4473,7 +4490,7 @@ ad_proc -public util::whos_online::user_ids {} {
 } {
     array set last_hit [nsv_array get last_hit]
     set onliners [list]
-    set oldtime [expr [ns_time] - [ad_parameter LastVisitUpdateInterval "" 600]]
+    set oldtime [expr [ns_time] - [interval]]
 
     array set invisible [nsv_array get invisible_users]
 
@@ -4509,7 +4526,7 @@ ad_proc -public util::whos_online::all_user_ids {} {
 } {
     array set last_hit [nsv_array get last_hit]
     set onliners [list]
-    set oldtime [expr [ns_time] - [ad_parameter LastVisitUpdateInterval "" 600]]
+    set oldtime [expr [ns_time] - [interval]]
 
     array set invisible [nsv_array get invisible_users]
 
