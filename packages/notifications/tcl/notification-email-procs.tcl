@@ -83,8 +83,10 @@ namespace eval notification::email {
     } {
         # Get email
         set email [cc_email_from_party $to_user_id]
-
-       append content "\nGetting too much email? Manage your notifications at: [manage_notifications_url]"
+        
+       # Variable used in the content
+       set manage_notifications_url [manage_notifications_url]
+       append content "\n[_ notifications.lt_Getting_too_much_emai]"
 
         acs_mail_lite::send \
             -to_addr $email \

@@ -19,30 +19,30 @@ notification::security::require_notify_object -object_id $object_id
 
 
 if {[empty_string_p $pretty_name]} { 
-    set page_title "Request Notification"
+    set page_title "[_ notifications.Request_Notification]"
 } else { 
-    set page_title "Request Notification for $pretty_name"
+    set page_title "[_ notifications.lt_Request_Notification_]"
 }
 
-set context [list "Request Notification"]
+set context [list "[_ notifications.Request_Notification]"]
 
 
 form create subscribe
 
 element create subscribe type_id \
-        -label "Type ID" -datatype integer -widget hidden
+        -label "[_ notifications.Type_ID]" -datatype integer -widget hidden
 
 element create subscribe object_id \
-        -label "Object ID" -datatype integer -widget hidden
+        -label "[_ notifications.Object_ID]" -datatype integer -widget hidden
 
 element create subscribe return_url \
-        -label "Return URL" -datatype text -widget hidden
+        -label "[_ notifications.Return_URL]" -datatype text -widget hidden
 
 element create subscribe interval_id \
-        -label "Notification Interval" -datatype integer -widget select -options [notification::get_intervals -type_id $type_id]
+        -label "[_ notifications.lt_Notification_Interval]" -datatype integer -widget select -options [notification::get_intervals -type_id $type_id]
 
 element create subscribe delivery_method_id \
-        -label "Delivery Method" -datatype integer -widget select -options [notification::get_delivery_methods -type_id $type_id]
+        -label "[_ notifications.Delivery_Method]" -datatype integer -widget select -options [notification::get_delivery_methods -type_id $type_id]
 
 if {[form is_valid subscribe]} {
     template::form get_values subscribe type_id object_id return_url interval_id delivery_method_id
