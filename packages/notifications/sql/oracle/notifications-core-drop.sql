@@ -21,6 +21,42 @@ drop table notification_delivery_methods;
 --
 -- Object Types
 --
+
+-- Remove Objects
+declare
+    v_object_id     integer;
+begin
+
+    select max(object_id) 
+    into   v_object_id 
+    from   acs_objects 
+    where  object_type = 'notification_interval' 
+    or     object_type = 'notification_delivery_method' 
+    or     object_type = 'notification_type' 
+    or     object_type='notification_request' 
+    or     object_type='notification';
+
+    while (v_object_id > 0) loop
+         delete from acs_permissions where object_id = v_object_id;
+
+        acs_object.delete(
+                v_object_id
+        );
+
+        select max(object_id) 
+        into   v_object_id 
+        from   acs_objects 
+        where  object_type = 'notification_interval' 
+        or     object_type = 'notification_delivery_method' 
+        or     object_type = 'notification_type' 
+        or     object_type = 'notification_request' 
+        or     object_type = 'notification';
+    end loop;
+
+end;
+/
+show errors
+
 declare
 begin
 
