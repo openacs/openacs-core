@@ -96,8 +96,6 @@
 
   </multiple>
 
-  </table>
-
 </td></tr>
 
 <noparse><if \@form_properties.has_submit\@ nil></noparse>
