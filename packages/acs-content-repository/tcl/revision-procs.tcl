@@ -52,7 +52,6 @@ ad_proc -public cr_write_content {
         ad_return -code error "Storage type '$storage_type' is invalid."
     }
 
-
     switch $storage_type {
         text {
             set text [db_string write_text_content ""]
@@ -65,6 +64,12 @@ ad_proc -public cr_write_content {
         file {
             set path [cr_fs_path $storage_area_key]
             set filename [db_string write_file_content ""]
+            # JCD: for webdavfs there needs to be a content-length 0 header 
+            # but ns_returnfile does not send one.  
+            set size [file size $filename]
+            if {!$size} { 
+                ns_set put [ns_conn outputheaders] "Content-Length" 0
+            }
             ns_returnfile 200 $mime_type $filename
         }
         lob  {
