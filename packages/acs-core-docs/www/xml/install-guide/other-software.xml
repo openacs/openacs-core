@@ -734,6 +734,10 @@ line, click
 
     <sect1 id="install-nsopenssl">
       <title>Install nsopenssl</title>
+      <authorblurb>
+      <para>By <ulink url="mailto:joel@aufrecht.org">Joel Aufrecht</ulink> and <ulink url="mailto:openacs@sussdorff.de">Malte Sussdorff</ulink></para>
+      </authorblurb>
+
       <para>This AOLserver module is required if you want people to connect to your site via
           https.  These commands compile nsopenssl and install it,
           along with a tcl helper script to handle https connections.
