@@ -12,6 +12,7 @@ ad_page_contract {
     party_type:notnull
     { party_type_exact_p t }
     { party_id:naturalnum "" }
+    { party.email ""}
     { return_url "" }
     {add_to_group_id ""}
     {add_with_rel_type "membership_rel"}
@@ -184,7 +185,7 @@ attribute::add_form_elements -form_id add_party -variable_prefix rel -start_with
 if { [template::form is_valid add_party] } {
 
     db_transaction {
-	party::new -form_id add_party -variable_prefix party -party_id $party_id -context_id [ad_conn package_id] $party_type 
+	party::new -email ${party.email} -form_id add_party -variable_prefix party -party_id $party_id -context_id [ad_conn package_id] $party_type 
 
 	relation_add -form_id add_party -variable_prefix rel -member_state $member_state $add_with_rel_type $add_to_group_id $party_id
 
