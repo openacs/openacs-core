@@ -1,5 +1,8 @@
 ad_page_contract {
     Localization home
+} {
+    {return_url ""}
+    {return_p "f"}
 }
 
 set instance_name [ad_conn instance_name]

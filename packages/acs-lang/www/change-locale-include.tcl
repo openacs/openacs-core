@@ -3,7 +3,7 @@
 # a user
 # @author Peter Marklund (peter@collaboraid.biz)
 
-if { ![exists_and_not_null return_url] } {
+if { ![exists_and_not_null return_url] && [exists_and_not_null return_p] && [string equal $return_p "t"] } {
     # Use referer header
     set return_url [ns_set iget [ns_conn headers] referer]
 }
