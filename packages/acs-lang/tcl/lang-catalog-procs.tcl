@@ -115,8 +115,10 @@ namespace eval lang::catalog {
         # Parse the xml document
         set tree [xml_parse -persist $catalog_file_contents]
 
+ns_log notice "Huh? tree: $tree"
         # Get the message catalog root node
         set root_node [xml_doc_get_first_node $tree]
+ns_log notice "Huh? root_node: $root_node name: [xml_node_get_name $root_node]"
         if { ![string equal [xml_node_get_name $root_node] ${MESSAGE_CATALOG_TAG}] } {
             error "lang::catalog_parse: Could not find root node ${MESSAGE_CATALOG_TAG}"
         }

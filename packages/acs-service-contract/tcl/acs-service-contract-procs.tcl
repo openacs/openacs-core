@@ -265,6 +265,7 @@ ad_proc -public acs_sc_call {
 	# MAYBE NOT, THE SEMANTICS MIGHT REQUIRE TO CALL 
 	# THE FUNCTION ONLY IF THE IMPLEMENTATION IS SUPPORTED.
 	ns_log warning "ACS-SC: Function Not Found: $proc_name [info procs $proc_name]"
+ns_log Notice "Huh? $contract $impl $operation"
 	return
     }
 }
