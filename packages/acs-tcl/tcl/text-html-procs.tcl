@@ -61,9 +61,6 @@ ad_proc -public ad_text_to_html {
     # Convert every two spaces to an nbsp
     regsub -all {  } $text "\\\&nbsp; " text
 
-    # Convert every tab to 4 nbsp's
-    regsub -all {\t} $text {\&nbsp;\&nbsp;\&nbsp;\&nbsp;} text
-    
     # turn CRLFCRLF into <P>
     if { [regsub -all {\r\n\s*\r\n} $text "<p>" text] == 0 } {
 	# try LFLF
@@ -75,13 +72,16 @@ ad_proc -public ad_text_to_html {
     
     if { !$no_links_p } {
 	# Dress the links and emails with A HREF
-	regsub -all {([]!?.:;,<>\(\)\}-]+)(eNdUrL\t)} $text {\2\1} text
-	regsub -all {([]!?.:;,<>\(\)\}-]+)(eNdEmAiL\t)} $text {\2\1} text
+	regsub -all {([]!?.:;,<>\(\)\}"'-]+)(eNdUrL\t)} $text {\2\1} text
+	regsub -all {([]!?.:;,<>\(\)\}"'-]+)(eNdEmAiL\t)} $text {\2\1} text
 	regsub -all {\tsTaRtUrL([^\t]*)eNdUrL\t} $text {<a href="\1">\1</a>} text
 	regsub -all {\tsTaRtEmAiL([^\t]*)eNdEmAiL\t} $text {<a href="mailto:\1">\1</a>} text
 	set text [string trimleft $text]
     }
 
+    # Convert every tab to 4 nbsp's
+    regsub -all {\t} $text {\&nbsp;\&nbsp;\&nbsp;\&nbsp;} text
+    
     return $text
 }
 
