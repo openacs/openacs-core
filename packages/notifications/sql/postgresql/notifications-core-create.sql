@@ -12,7 +12,8 @@
 -- intervals should really be service contracts so other intervals can be
 -- taken into account. For now we're going to make them just intervals
 create table notification_intervals (
-    interval_id                     constraint notif_interv_id_fk
+    interval_id                     integer
+                                    constraint notif_interv_id_fk
                                     references acs_objects (object_id)
                                     constraint notif_interv_id_pk
                                     primary key,
@@ -29,7 +30,8 @@ create table notification_intervals (
 
 -- delivery methods should be service contracts, too.
 create table notification_delivery_methods (
-    delivery_method_id              constraint notif_deliv_meth_fk
+    delivery_method_id              integer
+                                    constraint notif_deliv_meth_fk
                                     references acs_objects (object_id)
                                     constraint notif_deliv_meth_pk
                                     primary key,
@@ -43,7 +45,8 @@ create table notification_delivery_methods (
 );
 
 create table notification_types (
-        type_id                     constraint notif_type_type_id_fk
+        type_id                     integer
+                                    constraint notif_type_type_id_fk
                                     references acs_objects (object_id)
                                     constraint notif_type_type_id_pk
                                     primary key,
@@ -60,9 +63,11 @@ create table notification_types (
 
 -- what's allowed for a given notification type?
 create table notification_types_intervals (
-    type_id                         constraint notif_type_int_type_id_fk
+    type_id                         integer
+                                    constraint notif_type_int_type_id_fk
                                     references notification_types (type_id),
-    interval_id                     constraint notif_type_int_int_id_fk
+    interval_id                     integer
+                                    constraint notif_type_int_int_id_fk
                                     references notification_intervals (interval_id),
     constraint notif_type_int_pk
     primary key (type_id, interval_id)
@@ -70,9 +75,11 @@ create table notification_types_intervals (
 
 -- allowed delivery methods
 create table notification_types_del_methods (
-    type_id                         constraint notif_type_del_type_id_fk
+    type_id                         integer
+                                    constraint notif_type_del_type_id_fk
                                     references notification_types (type_id),
-    delivery_method_id              constraint notif_type_del_meth_id_fk
+    delivery_method_id              integer
+                                    constraint notif_type_del_meth_id_fk
                                     references notification_delivery_methods (delivery_method_id),
     constraint notif_type_deliv_pk
     primary key (type_id, delivery_method_id)
@@ -80,17 +87,21 @@ create table notification_types_del_methods (
 
 -- Requests for Notifications
 create table notification_requests (
-    request_id                      constraint notif_request_id_fk
+    request_id                      integer
+                                    constraint notif_request_id_fk
                                     references acs_objects (object_id)
                                     constraint notif_request_id_pk
                                     primary key,
-    type_id                         constraint notif_request_type_id_fk
+    type_id                         integer
+                                    constraint notif_request_type_id_fk
                                     references notification_types (type_id),
-    user_id                         constraint notif_request_user_id_fk
+    user_id                         integer
+                                    constraint notif_request_user_id_fk
                                     references users (user_id)
                                     on delete cascade,
     -- The object this request pertains to
-    object_id                       constraint notif_request_object_id_fk
+    object_id                       integer
+                                    constraint notif_request_object_id_fk
                                     references acs_objects (object_id)
                                     on delete cascade,
     -- the interval must be allowed for this type
@@ -122,21 +133,25 @@ create table notification_requests (
 
 -- the actual stuff that has to go out
 create table notifications (
-    notification_id                 constraint notif_notif_id_fk
+    notification_id                 integer
+                                    constraint notif_notif_id_fk
                                     references acs_objects (object_id)
                                     constraint notif_notif_id_pk
                                     primary key,
-    type_id                         constraint notif_type_id_fk
+    type_id                         integer
+                                    constraint notif_type_id_fk
                                     references notification_types(type_id),
     -- the object this notification pertains to
-    object_id                       constraint notif_object_id_fk
+    object_id                       integer
+                                    constraint notif_object_id_fk
                                     references acs_objects(object_id)
                                     on delete cascade,
     notif_date                      timestamp
                                     constraint notif_notif_date_nn
                                     not null,
     -- this is to allow responses to notifications
-    response_id                     constraint notif_reponse_id_fk
+    response_id                     integer
+                                    constraint notif_reponse_id_fk
                                     references acs_objects (object_id),
     notif_subject                   varchar(100),
     notif_text                      text,
@@ -145,10 +160,12 @@ create table notifications (
 
 -- who has received this notification?
 create table notification_user_map (
-    notification_id                 constraint notif_user_map_notif_id_fk
+    notification_id                 integer
+                                    constraint notif_user_map_notif_id_fk
                                     references notifications (notification_id)
                                     on delete cascade,
-    user_id                         constraint notif_user_map_user_id_fk
+    user_id                         integer
+                                    constraint notif_user_map_user_id_fk
                                     references users(user_id)
                                     on delete cascade,
     constraint notif_user_map_pk
@@ -159,66 +176,78 @@ create table notification_user_map (
 --
 -- Object Types
 --
+create function inline_0 ()
+returns integer as '
 begin
 
-    select acs_object_type__create_type(
-        'acs_object',
-        'notification_interval',
-        'Notification Interval',
-        'Notification Intervals',
-        'notification_intervals',
-        'interval_id',
-        'notification_interval',
+    perform acs_object_type__create_type(
+        ''notification_interval'',
+        ''Notification Interval'',
+        ''Notification Intervals'',
+        ''acs_object'',
+        ''notification_intervals'',
+        ''interval_id'',
+        ''notification_interval'',
+        ''f'',
         null,
         null
     );
 
-    select acs_object_type__create_type(
-        'acs_object',
-        'notification_delivery_method',
-        'Notification Delivery Method',
-        'Notification Delivery Methods',
-        'notification_delivery_methods',
-        'delivery_method_id',
-        'notification_delivery_method',
+    perform acs_object_type__create_type(
+        ''notification_delivery_method'',
+        ''Notification Delivery Method'',
+        ''Notification Delivery Methods'',
+        ''acs_object'',
+        ''notification_delivery_methods'',
+        ''delivery_method_id'',
+        ''notification_delivery_method'',
+        ''f'',
         null,
         null
     );
 
-    select acs_object_type__create_type(
-        'acs_object',
-        'notification_type',
-        'Notification Type',
-        'Notification Types',
-        'notification_types',
-        'type_id',
-        'notification_type',
+    perform acs_object_type__create_type(
+        ''notification_type'',
+        ''Notification Type'',
+        ''Notification Types'',
+        ''acs_object'',
+        ''notification_types'',
+        ''type_id'',
+        ''notification_type'',
+        ''f'',
         null,
         null
     );
 
-    select acs_object_type__create_type(
-        'acs_object',
-        'notification_request',
-        'Notification Request',
-        'Notification Requests',
-        'notification_requests',
-        'request_id',
-        'notification_request',
+    perform acs_object_type__create_type(
+        ''notification_request'',
+        ''Notification Request'',
+        ''Notification Requests'',
+        ''acs_object'',
+        ''notification_requests'',
+        ''request_id'',
+        ''notification_request'',
+        ''f'',
         null,
         null
     );
 
-    select acs_object_type__create_type(
-        'acs_object',
-        'notification',
-        'Notification',
-        'Notifications',
-        'notifications',
-        'notification_id',
-        'notification',
+    perform acs_object_type__create_type(
+        ''notification'',
+        ''Notification'',
+        ''Notifications'',
+        ''acs_object'',
+        ''notifications'',
+        ''notification_id'',
+        ''notification'',
+        ''f'',
         null,
         null
     );
 
-end;
+    return null;
+
+end;' language 'plpgsql';
+
+select inline_0();
+drop function inline_0();
