@@ -66,13 +66,21 @@ declare
         v_parent_sk     varchar;
         max_key         varchar;
 begin
-        select max(tree_sortkey) into max_key 
-          from site_nodes 
-         where parent_id = new.parent_id;
+        if new.parent_id is null then
+            select max(tree_sortkey) into max_key 
+              from site_nodes 
+             where parent_id is null;
 
-        select coalesce(max(tree_sortkey),'''') into v_parent_sk 
-          from site_nodes 
-         where node_id = new.parent_id;
+            v_parent_sk := '''';
+        else
+            select max(tree_sortkey) into max_key 
+              from site_nodes 
+             where parent_id = new.parent_id;
+
+            select coalesce(max(tree_sortkey),'''') into v_parent_sk 
+              from site_nodes 
+             where node_id = new.parent_id;
+        end if;
 
         new.tree_sortkey := v_parent_sk || ''/'' || tree_next_key(max_key);
 
@@ -88,6 +96,7 @@ create function site_node_update_tr () returns opaque as '
 declare
         v_parent_sk     varchar;
         max_key         varchar;
+        p_id            integer;
         v_rec           record;
         clr_keys_p      boolean default ''t'';
 begin
@@ -109,17 +118,25 @@ begin
                clr_keys_p := ''f'';
             end if;
             
-            select max(tree_sortkey) into max_key
+            select parent_id into p_id
               from site_nodes 
-              where parent_id = (select parent_id 
-                                   from site_nodes 
-                                  where node_id = v_rec.node_id);
+             where node_id = v_rec.node_id;
 
-            select coalesce(max(tree_sortkey),'''') into v_parent_sk 
-              from site_nodes 
-             where node_id = (select parent_id 
-                                from site_nodes 
-                               where node_id = v_rec.node_id);
+            if p_id is null then
+                select max(tree_sortkey) into max_key
+                  from site_nodes
+                 where parent_id is null;
+
+                v_parent_sk := '''';
+            else
+                select max(tree_sortkey) into max_key
+                  from site_nodes 
+                 where parent_id = p_id;
+
+                select coalesce(max(tree_sortkey),'''') into v_parent_sk 
+                  from site_nodes 
+                 where node_id = p_id;
+            end if;
 
             update site_nodes 
                set tree_sortkey = v_parent_sk || ''/'' || tree_next_key(max_key)

@@ -262,6 +262,42 @@ begin
   insert into groups_test_segs values (side_two_constraint,1,''side_two_constraint'');
   insert into groups_test_segs values (side_one_constraint,2,''side_one_constraint'');
 
+  side_two_constraint := rel_constraint__new(
+                                null,
+                                ''rel_constraint'',
+                                ''A: side 2 must be a blah of C'',
+                                rel_segment__get_or_new(A,
+                                                        ''blah_member_rel'', 
+                                                        null),
+                                 ''two'',
+                                rel_segment__get_or_new(C,
+                                                        ''blah_member_rel'', 
+                                                        null),
+                                null,
+                                null,
+                                null
+                                
+  );
+
+  side_one_constraint := rel_constraint__new(
+                                null,
+                                ''rel_constraint'',
+                                ''E: side 1 must be a component of B'',
+                                rel_segment__get_or_new(E, 
+                                                        ''composition_rel'', 
+                                                        null),
+                                ''one'',
+                                rel_segment__get_or_new(B, 
+                                                        ''composition_rel'', 
+                                                        null),
+                                null,
+                                null,
+                                null
+  );
+
+  insert into groups_test_segs values (side_two_constraint,3,''side_two_constraint 1'');
+  insert into groups_test_segs values (side_one_constraint,4,''side_one_constraint 1'');
+
   delete from acs_logs;
 
   -- Make a couple of memberships.
@@ -433,6 +469,15 @@ begin
   -- Remove the constraints
   PERFORM rel_constraint__delete(side_one_constraint);
   PERFORM rel_constraint__delete(side_two_constraint);
+  select seg_id into side_one_constraint 
+    from groups_test_segs 
+   where sname = ''side_one_constraint 1'';
+
+  select seg_id into side_two_constraint
+    from groups_test_segs 
+   where sname = ''side_two_constraint 1'';
+  PERFORM rel_constraint__delete(side_one_constraint);
+  PERFORM rel_constraint__delete(side_two_constraint);
 
   -- Remove the test memebership relations
   for r in select * from blah_member_rels LOOP
@@ -487,3 +532,4 @@ drop table groups_test_segs;
 select log_level, log_key, message
 from acs_logs
 where log_key = 'error';
+

@@ -388,3 +388,4 @@ drop table groups_test_segs;
 select log_level, log_key, message
 from acs_logs
 where log_level = 'error';
+

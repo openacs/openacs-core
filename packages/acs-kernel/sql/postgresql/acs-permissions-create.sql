@@ -182,7 +182,7 @@ declare
         v_rec           record;
 begin
 
-        -- now iterate over all of the children of the parent of the 
+        -- now iterate over all of the children of the 
         -- previous node.
         
         for v_rec in select privilege, child_privilege

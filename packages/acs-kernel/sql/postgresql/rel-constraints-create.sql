@@ -77,11 +77,13 @@ declare
 begin
         select max(tree_sortkey) into max_key 
           from rel_constraints 
-         where required_rel_segment = new.required_rel_segment;
+         where rel_segment = new.rel_segment
+           and rel_side = new.rel_side;
 
         select coalesce(max(tree_sortkey),'''') into v_parent_sk 
           from rel_constraints 
-         where rel_segment = new.required_rel_segment;
+         where required_rel_segment = new.rel_segment
+           and rel_side = new.rel_side;
 
         new.tree_sortkey := v_parent_sk || ''/'' || tree_next_key(max_key);
 
@@ -101,38 +103,46 @@ declare
         clr_keys_p      boolean default ''t'';
 begin
         if new.rel_segment = old.rel_segment and 
-           new.required_rel_segment = old.required_rel_segment then
+           new.required_rel_segment = old.required_rel_segment and 
+           new.rel_side = old.rel_side 
+        THEN
 
            return new;
 
         end if;
 
-        for v_rec in select rel_segment
+        for v_rec in select required_rel_segment
                        from rel_constraints 
-                      where tree_sortkey like new.tree_sortkey || ''%''
+                      where rel_side = new.rel_side 
+                        and tree_sortkey like new.tree_sortkey || ''%''
                    order by tree_sortkey
         LOOP
             if clr_keys_p then
                update rel_constraints set tree_sortkey = null
-               where tree_sortkey like new.tree_sortkey || ''%'';
+               where tree_sortkey like new.tree_sortkey || ''%''
+                 and rel_side = new.rel_side;
                clr_keys_p := ''f'';
             end if;
             
             select max(tree_sortkey) into max_key
               from rel_constraints 
-             where required_rel_segment = (select required_rel_segment 
-                                             from rel_constraints 
-                                            where rel_segment = v_rec.rel_segment);
+             where rel_side = new.rel_side 
+               and rel_segment = (select rel_segment 
+                                    from rel_constraints 
+                                   where rel_side = new.rel_side 
+                                     and required_rel_segment = v_rec.required_rel_segment);
 
             select coalesce(max(tree_sortkey),'''') into v_parent_sk 
               from rel_constraints 
-             where rel_segment = (select required_rel_segment 
-                                    from rel_constraints 
-                                   where rel_segment = v_rec.rel_segment);
+             where required_rel_segment = (select rel_segment 
+                                             from rel_constraints 
+                                            where rel_side = new.rel_side 
+                                              and required_rel_segment = v_rec.required_rel_segment);
 
             update rel_constraints 
                set tree_sortkey = v_parent_sk || ''/'' || tree_next_key(max_key)
-             where rel_segment = v_rec.rel_segment;
+             where required_rel_segment = v_rec.required_rel_segment
+               and rel_side = new.rel_side;
 
         end LOOP;
 
@@ -595,18 +605,15 @@ select r.rel_type as viol_rel_type, r.rel_id as viol_rel_id,
 create view rc_segment_required_seg_map as
 select rc.rel_segment, rc.rel_side, rc_required.required_rel_segment
 from rel_constraints rc, rel_constraints rc_required 
-where rc.rel_segment in (
-          select c.rel_segment
-            from rel_constraints c
-           where ('two' = (select rel_side 
-                             from rel_constraints 
-                            where rel_segment = c.required_rel_segment)
-                  or c.rel_segment = rc_required.rel_segment)         
-             and c.tree_sortkey 
-                 like 
-                 (select tree_sortkey || '%'
-                    from rel_constraints
-                   where rel_segment = rc_required.rel_segment));
+where rc.rel_segment in (select c2.rel_segment
+                           from rel_constraints c1, rel_constraints c2
+                          where exists (select 1 
+                                          from rel_constraints
+                                         where rel_side = 'two'
+                                           and rel_segment = c2.required_rel_segment)
+                            and c1.rel_segment = rc_required.rel_segment 
+                            and c2.tree_sortkey <= c1.tree_sortkey
+                            and c1.tree_sortkey like (c2.tree_sortkey || '%'));
 
 -- View: rc_segment_dependency_levels
 --
