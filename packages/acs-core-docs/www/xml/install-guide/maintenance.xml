@@ -838,52 +838,7 @@ openacs.org=&gt;</programlisting>
     </sect3>
   </sect2>
 
-</sect1>
-
-  <sect2 id="install-oracle-monitoring">
-    <title>Creating an appropriate tuning and monitoring environment</title>
-    <para>
-      The first task is to create an appropriate environment for finding out
-      what is going on inside Oracle. Oracle provides Statspack, a package to
-      monitor and save the state of the v$ performance views. These reports
-      help finding severe problems by exposing summary data about the Oracle
-      wait interface, executed queries. You'll find the installation
-      instructions in $ORACLE_HOME/rdbms/admin/spdoc.txt. Follow the
-      instructions carefully and take periodic snapshots, this way you'll be
-      able to look at historical performance data.
-    </para>
-
-    <para>
-      Also turn on the timed_statistics in your init.ora file, so that
-      Statspack reports (and all other Oracle reports) are timed, which makes
-      them a lot more meaningful. The overhead of timing data is about 1% per
-      Oracle Support information.
-    </para>
-
-
-    <para>
-      To be able to get a overview of how Oracle executes a particular query,
-      install "autotrace". I usually follow the instructions here <ulink
-      url="http://asktom.oracle.com/~tkyte/article1/autotrace.html">http://asktom.oracle.com/~tkyte/article1/autotrace.html</ulink>.
-    </para>
-    <sect3>
-      <title>Make sure, that the Oracle CBO works with adequate statistics</title>
-  
-      <para>
-    The Oracle Cost Based optimizer is a piece of software that tries to find
-    the "optimal" execution plan for a given SQL statement. For that it
-    estimates the costs of running a SQL query in a particular way (by default
-    up to 80.000 permutations are being tested in a Oracle 8i). To get an
-    adequate cost estimate, the CBO needs to have adequate statistics. For
-    that Oracle supplies the <ulink
-    url="http://download-west.oracle.com/docs/cd/B10501_01/appdev.920/a96612/d_stats.htm#999107">dbms_stats
-    package</ulink>.
-      </para>
-    </sect3>
-  </sect2>
   </sect1>
-  
-  <para>
-    <phrase role="cvstag">($Id$)</phrase></para>
+  <para><phrase role="cvstag">($Id$)</phrase></para>
 </chapter>
    

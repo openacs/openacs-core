@@ -159,8 +159,7 @@ nspostgres.c:679: warning: passing arg 3 of `Tcl_DStringAppend' as signed due to
             </listitem>
             <listitem id="aolserver4-nssha1-install">
               <para>Install nssha1</para>
-              <screen>[root nspostgres]# <userinput>cd ../nssha1</userinput>
-[root nssha1]# 
+              <screen>[root nspostgres]# <userinput>cd ../nssha1</userinput></screen>
               <para>Now install nssha1:</para>
               <screen>[root nssha1]# <userinput>make install AOLSERVER=/usr/local/aolserver40r10</userinput></screen>
               <para>If the make fails you will have to edit nssha1.c. Comment out the following 2 lines (lines 139-140):        </para>
