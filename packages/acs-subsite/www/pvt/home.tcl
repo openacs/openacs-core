@@ -40,6 +40,9 @@ set ad_url [ad_url]
 
 set community_member_url [acs_community_member_url -user_id $user_id]
 
+set notifications_url [lindex [site_node::get_children -node_id [subsite::get_element -element node_id] -package_key "notifications"] 0]
+
+
 set system_name [ad_system_name]
 
 set portrait_upload_url [export_vars -base "../user/portrait/upload" { { return_url [ad_return_url] } }]
@@ -47,6 +50,7 @@ set portrait_upload_url [export_vars -base "../user/portrait/upload" { { return_
 if { [llength [lang::system::get_locales]] > 1 } { 
     set change_locale_url [apm_package_url_from_key "acs-lang"]
 }
+
 
 
 if [ad_parameter SolicitPortraitP "user-info" 0] {
@@ -72,3 +76,8 @@ if [ad_parameter SolicitPortraitP "user-info" 0] {
     set portrait_state "none"
 }
 
+
+set whos_online_url "[subsite::get_element -element url]shared/whos-online"
+set make_visible_url "[subsite::get_element -element url]shared/make-visible"
+set make_invisible_url "[subsite::get_element -element url]shared/make-invisible"
+set invisible_p [whos_online::user_invisible_p [ad_conn untrusted_user_id]]

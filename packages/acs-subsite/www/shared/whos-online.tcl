@@ -12,32 +12,44 @@ ad_page_contract {
 set title "Who's Online?"
 set context [list "Who's Online"]
 
-set whos_online_interval [util::whos_online::interval]
+set whos_online_interval [whos_online::interval]
 
 template::list::create \
     -name online_users \
     -multirow online_users \
     -elements {
-        user_link {
+        name {
             label "User name"
-            display_template {
-                @online_users.user_link;noquote@
-            }
+            link_url_col url
         }
-        last_request_seconds {
-            label "Seconds since last request"
+        online_time_pretty {
+            label "Online Time"
+            html { align right }
         }
     }
 
-multirow create online_users user_link last_request_seconds
-foreach user_id [util::whos_online::user_ids] {
+set users [list]
+
+foreach user_id [whos_online::user_ids] {
     acs_user::get -user_id $user_id -array user
-    set user_name "$user(first_names) $user(last_name)"
-    set user_link [acs_community_member_link -user_id $user_id -label $user_name]
 
-    set last_request_seconds [util::whos_online::time_since_last_request $user_id]
+    set first_request_minutes [expr [whos_online::seconds_since_first_request $user_id] / 60]
 
-    multirow append online_users $user_link $last_request_seconds
+    lappend users [list \
+                       "$user(first_names) $user(last_name)" \
+                       [acs_community_member_url -user_id $user_id] \
+                       "$first_request_minutes minutes"]
+
 }
 
-ad_return_template
+set users [lsort -index 0 $users]
+
+multirow create online_users name url online_time_pretty
+
+foreach elm $users {
+    multirow append online_users \
+        [lindex $elm 0] \
+        [lindex $elm 1] \
+        [lindex $elm 2]
+}
+

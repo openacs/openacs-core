@@ -638,8 +638,8 @@ ad_proc -private rp_filter { why } {
 
     # Who's online
     # Don't record requests for not-logged in users
-    if { [ad_conn user_id] != "0"} { 
-        util::whos_online::user_requested_page [ad_conn user_id]
+    if { [ad_conn untrusted_user_id] != 0 } { 
+        whos_online::user_requested_page [ad_conn untrusted_user_id]
     }
 
     #####
