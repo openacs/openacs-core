@@ -4,8 +4,8 @@
 <package key="acs-messaging" url="http://www.arsdigita.com/acs-repository/apm/packages/acs-messaging/" type="apm_service">
     <package-name>ACS Messaging</package-name>
     <pretty-plural>ACS Messaging Services</pretty-plural>
-    <singleton-p>t</singleton-p>
     <initial-install-p>t</initial-install-p>
+    <singleton-p>t</singleton-p>
 
     <version name="4.1.1" url="http://www.arsdigita.com/acs-repository/download/apm/acs-messaging-4.1.1.apm">
     <database-support>
@@ -32,9 +32,24 @@
             <file type="data_model_upgrade" db_type="oracle" path="sql/oracle/upgrade-4.0-4.0.1a.sql"/>
             <file type="data_model_upgrade" db_type="oracle" path="sql/oracle/upgrade-4.0.1-4.1.sql"/>
             <file type="data_model_upgrade" db_type="oracle" path="sql/oracle/upgrade-4.0.1a-4.0.1.sql"/>
+            <file type="data_model_upgrade" db_type="oracle" path="sql/oracle/upgrade/upgrade-4.0-4.0.1a.sql"/>
+            <file type="data_model_upgrade" db_type="oracle" path="sql/oracle/upgrade/upgrade-4.0.1-4.1.sql"/>
+            <file type="data_model_upgrade" db_type="oracle" path="sql/oracle/upgrade/upgrade-4.0.1a-4.0.1.sql"/>
             <file type="data_model_upgrade" db_type="oracle" path="sql/oracle/upgrade/upgrade-4.1-4.1.1.sql"/>
+            <file type="data_model" path="sql/postgres/acs-create.sql"/>
+            <file type="data_model_create" path="sql/postgres/acs-messaging-create.sql"/>
+            <file type="data_model_drop" path="sql/postgres/acs-messaging-drop.sql"/>
+            <file type="data_model" path="sql/postgres/acs-messaging-packages.sql"/>
+            <file type="data_model" path="sql/postgres/acs-messaging-views.sql"/>
+            <file type="data_model_upgrade" path="sql/postgres/upgrade/upgrade-4.0-4.0.1a.sql"/>
+            <file type="data_model_upgrade" path="sql/postgres/upgrade/upgrade-4.0.1-4.1.sql"/>
+            <file type="data_model_upgrade" path="sql/postgres/upgrade/upgrade-4.0.1a-4.0.1.sql"/>
+            <file type="data_model_upgrade" path="sql/postgres/upgrade/upgrade-4.1-4.1.1.sql"/>
             <file type="tcl_init" path="tcl/acs-messaging-init.tcl"/>
+            <file type="query_file" db_type="oracle" path="tcl/acs-messaging-procs-oracle.xql"/>
+            <file type="query_file" db_type="postgresql" path="tcl/acs-messaging-procs-postgresql.xql"/>
             <file type="tcl_procs" path="tcl/acs-messaging-procs.tcl"/>
+            <file type="query_file" path="tcl/acs-messaging-procs.xql"/>
             <file type="documentation" path="www/doc/design.html"/>
             <file type="documentation" path="www/doc/index.html"/>
             <file type="documentation" path="www/doc/requirements.html"/>
