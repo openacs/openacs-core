@@ -7,7 +7,7 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>t</singleton-p>
 
-    <version name="4.5" url="http://www.openacs.org/repository/download/apm/acs-messaging-4.5.apm">
+    <version name="5.0d1" url="http://www.openacs.org/repository/download/apm/acs-messaging-5.0d1.apm">
     <database-support>
         <database>oracle</database>
         <database>postgresql</database>
@@ -20,9 +20,9 @@
         <vendor url="http://www.openacs.org/">OpenACS</vendor>
         <description format="text/html">Provides generic message services, with email sending.</description>
 
-        <provides url="acs-messaging" version="4.5"/>
-        <requires url="acs-content-repository" version="4.0.1"/>
-        <requires url="acs-kernel" version="4.6.2"/>
+        <provides url="acs-messaging" version="5.0d1"/>
+        <requires url="acs-content-repository" version="5.0d1"/>
+        <requires url="acs-kernel" version="5.0d13"/>
 
         <parameters>
         <!-- No version parameters -->

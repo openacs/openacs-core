@@ -8,7 +8,7 @@
     <singleton-p>t</singleton-p>
     <auto-mount>notifications</auto-mount>
 
-    <version name="4.6.4" url="http://openacs.org/repository/download/apm/notifications-4.6.4.apm">
+    <version name="5.0d1" url="http://openacs.org/repository/download/apm/notifications-5.0d1.apm">
     <database-support>
         <database>oracle</database>
         <database>postgresql</database>
@@ -17,7 +17,7 @@
         <summary>Notification Management</summary>
         <release-date>2003-02-17</release-date>
 
-        <provides url="notifications" version="4.6.4"/>
+        <provides url="notifications" version="5.0d1"/>
         <requires url="acs-mail-lite" version="0.1d"/>
 
         <callbacks>
