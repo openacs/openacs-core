@@ -520,6 +520,7 @@ declare
   create_type__type_extension_table   alias for $9;  -- default null
   create_type__name_method            alias for $10; -- default null
   v_package_name acs_object_types.package_name%TYPE;
+  v_supertype						  acs_object_types.supertype%TYPE;
   v_name_method                       varchar;
   v_idx                               integer;
 begin
@@ -537,13 +538,19 @@ begin
       v_package_name := create_type__package_name;
     end if;
 
+	if create_type__supertype is null or create_type__supertype = '''' then
+	  v_supertype := ''acs_object'';
+	else
+	  v_supertype := create_type__supertype;
+	end if;
+
     insert into acs_object_types
       (object_type, pretty_name, pretty_plural, supertype, table_name,
        id_column, abstract_p, type_extension_table, package_name,
        name_method)
     values
       (create_type__object_type, create_type__pretty_name, 
-       create_type__pretty_plural, create_type__supertype, 
+       create_type__pretty_plural, v_supertype, 
        create_type__table_name, create_type__id_column, 
        create_type__abstract_p, create_type__type_extension_table, 
        v_package_name, v_name_method);
