@@ -147,19 +147,25 @@ ad_proc -public permission::set_not_inherit {
 
 ad_proc -public permission::write_permission_p {
     {-object_id:required}
+    {-party_id ""}
     {-creation_user ""}
 } {
     Returns whether a user is allowed to edit an object.
     The logic is that you must have either write permission, 
     or you must be the one who created the object.
 
-    @param object_id The object you want to check write permissions for
-    @param creation_user Optionally specify creation_user directly as an optimization. Otherwise a query will be executed.
+    @param object_id     The object you want to check write permissions for
+
+    @param party_id      The party to have or not have write permission.
+
+    @param creation_user Optionally specify creation_user directly as an optimization. 
+                         Otherwise a query will be executed.
+
     @return True (1) if user has permission to edit the object, 0 otherwise.
 
     @see permission::require_write_permission
 } {
-    if { [permission::permission_p -privilege write -object_id $object_id] } {
+    if { [permission::permission_p -privilege write -object_id $object_id -party_id $party_id] } {
         return 1
     }
     if { [empty_string_p $creation_user] } {
@@ -174,15 +180,19 @@ ad_proc -public permission::write_permission_p {
 ad_proc -public permission::require_write_permission {
     {-object_id:required}
     {-creation_user ""}
+    {-party_id ""}
     {-action "edit"}
 } {
     If the user is not allowed to edit this object, returns a permission denied page.
 
-    @param creation_user Optionally specify creation_user directly as an optimization. Otherwise a query will be executed.
+    @param creation_user Optionally specify creation_user directly as an optimization. 
+                         Otherwise a query will be executed.
+
+    @param party_id      The party to have or not have write permission.
 
     @see permission::write_permission_p
 } {
-    if { ![permission::write_permission_p -object_id $object_id] } {
+    if { ![permission::write_permission_p -object_id $object_id -party_id $party_id] } {
         ad_return_forbidden  "Permission Denied"  "<blockquote>
     You don't have permission to $action this object.
     </blockquote>"
