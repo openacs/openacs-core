@@ -20,7 +20,7 @@ ad_proc -public content::type::new {
     -pretty_name:required
     -pretty_plural:required
     {-table_name ""}
-    {-id_column ""}
+    -id_column:required
     {-name_method ""}
 } {
     @param content_type

@@ -36,13 +36,16 @@ ad_proc -public ::content::item::new {
     @creation-date 2004-05-28
 
     Create a new content item This proc creates versioned content
-    items where content_type iscontent_revision or subtypes of content
-    revision. There are procedures for each other base content
-    item. This procdedure uses package_instantiate object. Under
-    PostgreSQL the object_type new function must be registered with
-    define_function_args. If title, description, text, or data are
-    specified a content revision will also be created.
- 
+items where content_type iscontent_revision or subtypes of content
+revision. There are procedures for each other base content
+item. This procdedure uses package_instantiate object. Under
+PostgreSQL the object_type new function must be registered with
+define_function_args.  For correct creation of extended content types pass
+title and content in the attributes paramter which will cause
+content::revision::new to be called and create a proper extended
+content type revision.
+    If title, text, or data are specified a
+content revision will also be created. 
 
     @param name
     @param item_id - item_id of this content_item. If this is not
@@ -59,7 +62,10 @@ ad_proc -public ::content::item::new {
     @param title - title of content_revision to be created
     @param description of content_revision to be created
     @param text - text of content revision to be created
-    @param attributes - A list of pairs of additional attributes and their values to pass to the constructor. Each pair is a list of two elements: key => value
+    @param attributes - A list of pairs of additional attributes and
+    their values to pass to the constructor. Each pair is a list of two
+     elements: key => value such as
+    [list attribute value attribute value]
 
     @return item_id of the new content item
 
@@ -77,29 +83,44 @@ ad_proc -public ::content::item::new {
         [list creation_ip $creation_ip ] \
         [list item_subtype $item_subtype ] \
         [list content_type $content_type ] \
-        [list title $title ] \
-        [list description $description ] \
         [list mime_type $mime_type ] \
         [list nls_language $nls_language ] \
-        [list text $text ] \
-        [list data $data ] \
         [list relation_tag $relation_tag ] \
         [list is_live $is_live ] \
         [list storage_type $storage_type]
 
+    # we don't pass title, text, or data to content_item__new
+    # because the magic revision creation of the pl/sql proc does
+    # not create a proper subtype of content revision, also it
+    # can't set attributes of an extended type
+    
     # the content type is not the object type of the cr_item so we pass in
     # the cr_item subtype here and content_type as part of
     # var_list
-    ns_log Debug "
-DB --------------------------------------------------------------------------------
-DB DAVE debugging /var/lib/aolserver/ctk/packages/acs-content-repository/tcl/content-item-procs.tcl
-DB --------------------------------------------------------------------------------
-DB var_list = '${var_list}'
-DB --------------------------------------------------------------------------------"
+
     set item_id [package_exec_plsql \
 		     -var_list $var_list \
 		     content_item new]
+    # if we have attributes we pass in everything
+    # and create a revision with all subtype attributes that were
+    # passed in
+
+    if {[exists_and_not_null title] \
+            || [exists_and_not_null text] \
+            || [exists_and_not_null data] \
+            || [llength $attributes]} {
+        content::revision::new \
+            -item_id $item_id \
+            -title $title \
+            -description $description \
+            -content $text \
+            -mime_type $mime_type \
+            -content_type $content_type \
+            -attributes $attributes
+    }
+    
     return $item_id
+
 }
 
 ad_proc -public ::content::item::delete {
