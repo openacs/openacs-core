@@ -207,11 +207,6 @@ usable functionality, makes the design and implementation of general-purpose per
 more difficult, and as mentioned previously negatively impacts performance.
 </para>
 
-<para>These steps involve directly manipulating the <computeroutput>acs_methods</computeroutput>,
-<computeroutput>acs_privileges</computeroutput>, and <computeroutput>acs_privilege_method_rules</computeroutput> tables. A
-web page for manipulating these features should be limited to site-wide
-administrators.</para>
-
 <para><emphasis role="strong">&quot;Modification of permissions.&quot;</emphasis> - involves fairly
 common operations. Users are typically able to administer permissions for
 objects they themselves create. The two basic operations here are
