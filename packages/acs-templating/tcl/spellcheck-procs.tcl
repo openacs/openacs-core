@@ -18,7 +18,10 @@ ad_proc -public template::util::spellcheck::merge_text { element_id } {
     Returns the merged (possibly corrected) text or the empty string
     if it is not time to merge.
 } {
-    set merge_text [ns_queryget $element_id.merge_text]
+
+    set __form__ [ns_getform]
+    set merge_text [ns_set get $__form__ $element_id.merge_text]
+    ns_set delkey $__form__ $element_id.merge_text
 
     if { [empty_string_p $merge_text] } {
 	return {}
@@ -26,10 +29,14 @@ ad_proc -public template::util::spellcheck::merge_text { element_id } {
 
     # loop through errors and substitute the corrected words for #errnum#.
     set i 0
-    while { [ns_queryexists $element_id.error_$i] } {
-	regsub "\#$i\#" $merge_text [ns_queryget $element_id.error_$i] merge_text
+    while { [ns_set find $__form__ $element_id.error_$i] != -1 } {
+	regsub "\#$i\#" $merge_text [ns_set get $__form__ $element_id.error_$i] merge_text
+	ns_set delkey $__form__ $element_id.error_$i
 	incr i
     }
+
+    ns_set cput $__form__ $element_id $merge_text
+    ns_set cput $__form__ $element_id.spellcheck ":nospell:"
 
     return $merge_text
 }
@@ -308,11 +315,11 @@ ad_proc -public template::util::spellcheck::get_element_formtext {
 ad_proc -public template::util::spellcheck::spellcheck_properties {
     -element_ref:required
 } {
-    Returns a list of spellcheck properties.
+    Returns a list of spellcheck properties in array setable format.
 } {
     upvar $element_ref element
     
-    if { [empty_string_p [set spellcheck [ns_queryget $element(id).spellcheck]]] } {
+    if { [empty_string_p [set spellcheck_value [ns_queryget $element(id).spellcheck]]] } {
 	
 	# The user hasn't been able to state whether (s)he wants spellchecking to be performed or not.
 	# That's either because spell-checking is disabled for this element, or we're not dealing with a submit.
@@ -321,7 +328,6 @@ ad_proc -public template::util::spellcheck::spellcheck_properties {
 	if { [empty_string_p [nsv_get spellchecker path]] } {
 
 	    # The aspell or ispell binary was not found during server startup - turn spell-checking off.
-	    #set spellcheck ":nospell:"    
 	    set spellcheck_p 0
 
 	} else {
@@ -341,21 +347,24 @@ ad_proc -public template::util::spellcheck::spellcheck_properties {
 	if { $spellcheck_p } {
 	    # This is not a submit; we are rendering the form element for the first time and
 	    # since the spellcheck "sub widget" is to be displayed we'll also want to know
-	    # which option that should be selected by default.
+	    # which option should be selected by default.
+
+	    set spellcheck(render_p) 1
+	    set spellcheck(perform_p) 1
 
 	    if { $widget_info(${element(widget)}) } {
-		set spellcheck [nsv_get spellchecker default_lang]
-		set selected_option $spellcheck
+		set spellcheck(selected_option) [nsv_get spellchecker default_lang]
 	    } else {
-		set spellcheck [nsv_get spellchecker default_lang]
-		set selected_option ":nospell:"
+		set spellcheck(selected_option) ":nospell:"
 	    }
 
 	} else {
 
+	    set spellcheck(render_p) 0
+	    set spellcheck(perform_p) 0
+
 	    # set this to something so the script won't choke.
-	    set selected_option "n/a"
-	    set spellcheck ":nospell:"
+	    set spellcheck(selected_option) ":nospell:"
 	}
 	
     } else {
@@ -363,10 +372,17 @@ ad_proc -public template::util::spellcheck::spellcheck_properties {
 	# The user has explicitly stated if (s)he wants spellchecking to be performed
 	# on the text or not. Hence we are in submit mode with spell-checking enabled.
 	# Let's check which it is and keep record of the states of our select menu in
-	# case the error page is shown.
+	# case the error page is shown (because of an error in a neighboring element).
 
-	set selected_option $spellcheck
+	set spellcheck(selected_option) $spellcheck_value
+	set spellcheck(render_p) 1
+
+	if { [string equal ":nospell:" $spellcheck(selected_option)] } {
+	    set spellcheck(perform_p) 0
+	} else {
+	    set spellcheck(perform_p) 1
+	}
     }
-    
-    return [list $spellcheck $selected_option]
+
+    return [array get spellcheck]
 }

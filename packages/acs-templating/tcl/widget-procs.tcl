@@ -209,13 +209,12 @@ ad_proc -public template::widget::textarea { element_reference tag_attributes } 
 
   set output [textarea_internal $element(name) attributes $value $mode]
 
-  set spellcheck_properties [template::util::spellcheck::spellcheck_properties -element_ref element]
-  set spellcheck [lindex $spellcheck_properties 0]
-
-  if { ![string equal ":nospell:" $spellcheck] } {
-      set selected_option [lindex $spellcheck_properties 1]
+  # Spell-checker
+  array set spellcheck [template::util::spellcheck::spellcheck_properties -element_ref element]
+  
+  if { $spellcheck(render_p) } {
       append output "<br>Spellcheck: 
-[menu "$element(id).spellcheck" [nsv_get spellchecker lang_options] $selected_option {}]"
+[menu "$element(id).spellcheck" [nsv_get spellchecker lang_options] $spellcheck(selected_option) {}]"
   }   
   
   return $output
@@ -330,13 +329,12 @@ ad_proc -public template::widget::text { element_reference tag_attributes } {
 
   upvar $element_reference element
 
-  set spellcheck_properties [template::util::spellcheck::spellcheck_properties -element_ref element]
-  set spellcheck [lindex $spellcheck_properties 0]
-
-  if { [string equal $element(mode) "edit"] && ![string equal ":nospell:" $spellcheck] } {
-      set selected_option [lindex $spellcheck_properties 1]
+  # Spell-checker
+  array set spellcheck [template::util::spellcheck::spellcheck_properties -element_ref element]
+  
+  if { [string equal $element(mode) "edit"] && $spellcheck(render_p) } {
       return "[input text element $tag_attributes] <br>Spellcheck: 
-[menu "$element(id).spellcheck" [nsv_get spellchecker lang_options] $selected_option {}]"
+[menu "$element(id).spellcheck" [nsv_get spellchecker lang_options] $spellcheck(selected_option) {}]"
   } else {
       return [input text element $tag_attributes]
   }
