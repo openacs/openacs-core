@@ -65,7 +65,7 @@
 <fullquery name="apm_parameter_register.apm_parameter_cache_update">      
       <querytext>
       
-	select v.package_id, p.parameter_name,
+	select nvl(v.package_id, 0) as package_id, p.parameter_name,
           decode(v.value_id, null, p.default_value, v.attr_value) as attr_value
 	from apm_parameters p, apm_parameter_values v
 	where p.package_key = :package_key
