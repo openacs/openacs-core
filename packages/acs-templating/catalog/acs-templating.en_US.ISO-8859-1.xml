@@ -15,4 +15,5 @@
   <msg key="Invalid_email_format">Invalid email format</msg>
   <msg key="Invalid_url">Invalid url</msg>
   <msg key="No_row_pretty_plural">No %row_pretty_plural%.</msg>
+  <msg key="Spellcheck">Spellcheck</msg>
 </message_catalog>

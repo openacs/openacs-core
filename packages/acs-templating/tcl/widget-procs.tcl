@@ -219,7 +219,7 @@ ad_proc -public template::widget::textarea { element_reference tag_attributes } 
   array set spellcheck [template::util::spellcheck::spellcheck_properties -element_ref element]
   
   if { [string equal $element(mode) "edit"] && $spellcheck(render_p) } {
-      append output "<br>Spellcheck: 
+      append output "<br>[_ acs-templating.Spellcheck]: 
 [menu "$element(id).spellcheck" [nsv_get spellchecker lang_options] $spellcheck(selected_option) {}]"
   }   
   
@@ -339,7 +339,7 @@ ad_proc -public template::widget::text { element_reference tag_attributes } {
   array set spellcheck [template::util::spellcheck::spellcheck_properties -element_ref element]
   
   if { [string equal $element(mode) "edit"] && $spellcheck(render_p) } {
-      return "[input text element $tag_attributes] <br>Spellcheck: 
+      return "[input text element $tag_attributes] <br>[_ acs-templating.Spellcheck]: 
 [menu "$element(id).spellcheck" [nsv_get spellchecker lang_options] $spellcheck(selected_option) {}]"
   } else {
       return [input text element $tag_attributes]
