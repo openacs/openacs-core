@@ -183,7 +183,6 @@ After adding support the larger stacksize, please restart your web server.
 # APM needs to check its permissions.
 if { [catch {apm_workspace_dir} ] } {
     append errors "<li><p><strong>The [acs_root_dir] directory has incorrect permissions.  It must be owned by
-[apm_workspace_dir]
 the user executing the web server, normally <code>nsadmin</code>, and the owner must have read and write priveliges
 on this directory.  You can correct this by running the following script as root.
 To give another user access to the files, add them to <code>web</code> group.
