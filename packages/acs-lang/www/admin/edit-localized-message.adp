@@ -22,6 +22,8 @@
 
 </div>
 
-<include src="lookups-include" package_key="@package_key;noquote@" message_key_list="@message_key;noquote@">
+<p>
+  <b>&raquo;</b> <a href="@lookups_url@">Show message key usage</a>
+</p>
 
 <include src="audit-include" current_locale="@current_locale;noquote@" message_key="@message_key;noquote@" package_key="@package_key;noquote@">
