@@ -9,19 +9,6 @@ ad_page_contract {
 
 db_1row apm_all_version_info {}
 
-db_1row apm_file_count {
-	select count(*) n_files from apm_package_files where version_id = :version_id
-}
-
-set supported_databases_list [db_list supported_databases {
-    select pretty_db_name
-    from apm_package_db_types
-    where exists (select 1
-                  from apm_package_files
-                  where version_id = :version_id
-                  and   db_type = db_type_key)
-}]
-
 set downloaded_p [ad_decode $version_uri "" 0 1]
 
 # Obtain information about the enabled version of the package (if there is one).
@@ -104,11 +91,6 @@ if { [file isdirectory "[acs_package_root_dir $package_key]/CVS"] } {
 }
 
 
-if { $n_files < 2 && [empty_string_p $version_uri] } {
-    lappend prompts "There [ad_decode $n_files 0 "are no files" "is only one file"] registered for this package. You probably want to
-<a href=\"file-add?version_id=$version_id\">scan the usual places in the filesystem for files in this package</a>."
-}
-
 # Obtain a list of owners, properly hyperlinked.
 set owners [list]
 db_foreach apm_all_owners {
@@ -153,6 +135,7 @@ $prompt_text
 <tr valign=baseline><th align=left>Data Model:</th><td>$data_model_status</td></th></tr>
 "
 
+set supported_databases_list [apm_package_supported_databases $package_key]
 if { [empty_string_p $supported_databases_list] } {
     set supported_databases "none specified"
 } else {
@@ -258,4 +241,3 @@ if { $installed_p == "t" } {
 append body "
 </ul>
 "
-

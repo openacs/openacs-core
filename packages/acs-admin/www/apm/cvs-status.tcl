@@ -6,7 +6,7 @@ ad_page_contract {
 } {
 }
 
-db_1row email_by_user_id "select email from parties where user_id = [ad_get_user_id]"
+db_1row email_by_user_id {}
 
 doc_body_append "[apm_header "Your Non-Up-To-Date Files"]"
 
