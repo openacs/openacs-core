@@ -12,17 +12,17 @@ if { [catch {
 
     # Grep for packages with failed tests
     if { [regexp -nocase {fail} [response body]] } {
-        puts "$alert_keyword - There are failed tests at $server_url"
+        ::twt::log "$alert_keyword - There are failed tests at $server_url"
     }
 
     # Test Execution END
 } result] } {
     global errorInfo
-    puts stderr $result
-    puts stderr "*** Tcl TRACE ***"
-    puts stderr $errorInfo
+    ::twt::log $result
+    ::twt::log "*** Tcl TRACE ***"
+    ::twt::log $errorInfo
 
-    puts "The response body is: [response body]"
+    ::twt::log "The response body is: [response body]"
 
     error "Test failed: $result"
 }

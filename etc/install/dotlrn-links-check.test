@@ -7,22 +7,22 @@ if { [catch {
     # Login the site wide admin
     login_site_wide_admin
 
-    puts "crawling links starting from /dotlrn"        
+    ::twt::log "crawling links starting from /dotlrn"        
     lappend __url_history "${server_url}/dotlrn"
     crawl_links
 
-    puts "crawling links starting from /dotlrn/admin"        
+    ::twt::log "crawling links starting from /dotlrn/admin"        
     lappend __url_history "${server_url}/dotlrn/admin"
     crawl_links 
 
     # Test Execution END
 } result] } {
     global errorInfo
-    puts stderr $result
-    puts stderr "*** Tcl TRACE ***"
-    puts stderr $errorInfo
+    ::twt::log stderr $result
+    ::twt::log stderr "*** Tcl TRACE ***"
+    ::twt::log stderr $errorInfo
 
-    puts "The response body is: [response body]"
+    ::twt::log "The response body is: [response body]"
 
     error "Test failed: $result"
 }

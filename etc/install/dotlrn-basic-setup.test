@@ -49,16 +49,21 @@ if { [catch {
     ::twt::log_section "Add news items - one per class"
     ::twt::news::add_item_to_classes $server_url
 
+    ::twt::log_section "Customize layout of the MySpace page as a student"
+    ::twt::user::login [::twt::user::get_random_users student 1]
+    ::twt::new_portal::test::customize_layout        
+    ::twt::user::login_site_wide_admin            
+
     # Test Execution END
 
 } result] } {
     global errorInfo
 
     # Output error stack trace and HTML response body
-    puts stderr $result
-    puts stderr "*** Tcl TRACE ***"
-    puts stderr $errorInfo
-    puts "The response body is: [response body]"
+    ::twt::log $result
+    ::twt::log "*** Tcl TRACE ***"
+    ::twt::log $errorInfo
+    ::twt::log "The response body is: [response body]"
 
     error "Test failed: $result"
 }

@@ -22,10 +22,24 @@ ad_proc ::twt::log { message } {
     puts "${script_name}: $message"
 }
 
-ad_proc ::twt::log_warning { message } {
+ad_proc ::twt::log_alert { message } {
     set script_name [file tail [info script]]
-    puts "${script_name}: WARNING - $message"
+    puts ""
+    puts "${script_name}: [::twt::config::alert_keyword] - $message"
+    puts ""
 }
+
+ad_proc ::twt::assert { explanation expression } {
+    if { !$expression } {
+        ::twt::log_alert "Assertion \"$explanation\" failed"
+    }
+} 
+
+ad_proc ::twt::assert_equals { explanation actual_value expected_value } {
+    if { ![string equal $actual_value $expected_value] } {
+        ::twt::log_alert "Assertion \"$explanation\" failed: actual_value=\"$actual_value\", expected_value=\"$expected_value\""
+    }
+} 
 
 ad_proc ::twt::do_request { page_url } {
     Takes a a url and invokes tclwebtest::do_request. Will retry
@@ -90,17 +104,6 @@ ad_proc ::twt::get_url_list { page_url link_url_pattern } {
     
 
     return $urls_list
-}
-
-ad_proc ::twt::oacs_eval { tcl_command } {
-    Execute an OpenACS Tcl API command and return the result.
-
-    @param tcl_command A list where the first item is the the
-           proc name and the remaining ones are proc arguments
-} {
-    ::twt::do_request "/eval-command?[::http::formatQuery tcl_command $tcl_command]"
-
-    return [response body]
 }
 
 ad_proc ::twt::get_random_items_from_list { list number } {
@@ -181,13 +184,11 @@ ad_proc ::twt::crawl_links {} {
     global __server_url
     set absolute_url [tclwebtest::absolute_link $start_url]
     if { [string first $__server_url $absolute_url] == -1 } {
-        #puts "not following link to external url $absolute_url"
         return
     }
 
     # Also return if this is the logout link
     if { [regexp {/register/logout} $start_url match] } {
-        #puts "not following logout link"
         return
     }
 
@@ -204,13 +205,10 @@ ad_proc ::twt::crawl_links {} {
             # Don't revisit URL:s we have already tested
             # Don't follow relative anchors on pages - can't get them to work with TclWebtest
             if { [lsearch -exact $__url_history $url] == -1 && [string range $url 0 0] != "#" } {
-                #puts "$start_url following url $url"
-
                 lappend __url_history $url
 
                 crawl_links
             } else {
-                #puts "$start_url skipping url $url as visited before"
             }
          }
    }

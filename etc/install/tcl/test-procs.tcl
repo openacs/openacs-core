@@ -9,12 +9,9 @@ namespace eval ::twt {}
 
 set script_dir [file dirname [info script]]
 
-source $script_dir/config-procs.tcl
-source $script_dir/twt-procs.tcl
-source $script_dir/user-procs.tcl
-source $script_dir/admin-procs.tcl
-source $script_dir/acs-lang-procs.tcl
-source $script_dir/dotlrn-procs.tcl
-source $script_dir/class-procs.tcl
-source $script_dir/forums-procs.tcl
-source $script_dir/news-procs.tcl
+# Source all *-procs.tcl files in this directory
+foreach path [glob ${script_dir}/*-procs.tcl] {
+    if { ![regexp {test-procs\.tcl$} $path] } {
+        source $path
+    }
+}

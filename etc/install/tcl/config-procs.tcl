@@ -47,6 +47,9 @@ if { [info exists dotlrn_users_data_file] } {
     set __dotlrn_users_data_file users-data.csv
 } 
 
+global __alert_keyword
+set __alert_keyword $alert_keyword
+
 ad_proc ::twt::config::server_url { } {
     global __server_url
 
@@ -69,4 +72,10 @@ ad_proc ::twt::config::serverroot { } {
     global __serverroot
 
     return $__serverroot
+}
+
+ad_proc ::twt::config::alert_keyword { } {
+    global __alert_keyword
+
+    return $__alert_keyword
 }
