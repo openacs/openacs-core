@@ -235,7 +235,7 @@ ad_proc -public template::paginator::get_pages { name group } {
   set start [expr ($group - 1) * $group_size + 1]
   set end [expr $start + $group_size]
 
-  if { $end > $page_count } { set end $page_count) }
+  if { $end > $page_count } { set end $page_count }
 
   set pages [list]
 
@@ -444,7 +444,7 @@ ad_proc -public template::paginator::get_data { statement_name name datasource q
   set query [uplevel 2 "db_map ${statement_name}_partial"]
   set in_list [join $ids ","]
   if { ! [regsub CURRENT_PAGE_SET $query $in_list query] } {
-    error "Token CURRENT_PAGE_SET not found in page data query: $query"
+    error "Token CURRENT_PAGE_SET not found in page data query  ${statement_name}_partial: $query"
   }
 
   if { [llength $in_list] == 0 } {
