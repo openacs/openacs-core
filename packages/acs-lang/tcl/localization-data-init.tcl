@@ -413,6 +413,40 @@ nsv_set locale pt_BR,t_fmt "%r"
 nsv_set locale pt_BR,thousands_sep ","
 nsv_set locale pt_BR,formbuilder_time_format "HH12:MI AM"
 
+# IT
+nsv_set locale it_IT,abday {{Dom} {Lun} {Mar} {Mer} {Gio} {Ven} {Sab}}
+nsv_set locale it_IT,abmon {{Gen} {Feb} {Mar} {Apr} {Mag} {Giu} {Lug} {Ago} {Set} {Ott} {Nov} {Dic}}
+nsv_set locale it_IT,am_str ""
+nsv_set locale it_IT,currency_symbol "€"
+nsv_set locale it_IT,day {{Domenica} {Lunedì} {Martedì} {Mercoledì} {Giovedì} {Venerdì} {Sabato}}
+nsv_set locale it_IT,firstdayofweek 1
+nsv_set locale it_IT,decimal_point ","
+nsv_set locale it_IT,d_fmt "%d/%m/%y"
+nsv_set locale it_IT,d_t_fmt "%a %d %B %Y %H:%M %Z"
+nsv_set locale it_IT,dlong_fmt "%d %B %Y"
+nsv_set locale it_IT,dlongweekday_fmt "%A %d %B %Y"
+nsv_set locale it_IT,frac_digits 2
+nsv_set locale it_IT,grouping {3 3 }
+nsv_set locale it_IT,int_curr_symbol "Euro"
+nsv_set locale it_IT,int_frac_digits 2
+nsv_set locale it_IT,mon_decimal_point "."
+nsv_set locale it_IT,mon_grouping {3 3 }
+nsv_set locale it_IT,mon {{Gennaio} {Febbraio} {Marzo} {Aprile} {Maggio} {Giugno} {Luglio} {Agosto} {Settembre} {Ottobre} {Novembre} {Dicembere}}
+nsv_set locale it_IT,mon_thousands_sep " "
+nsv_set locale it_IT,n_cs_precedes 1
+nsv_set locale it_IT,negative_sign "-"
+nsv_set locale it_IT,n_sep_by_space 0
+nsv_set locale it_IT,n_sign_posn             1
+nsv_set locale it_IT,p_cs_precedes 1
+nsv_set locale it_IT,pm_str ""
+nsv_set locale it_IT,positive_sign ""
+nsv_set locale it_IT,p_sep_by_space 0
+nsv_set locale it_IT,p_sign_posn 1
+nsv_set locale it_IT,t_fmt_ampm ""
+nsv_set locale it_IT,t_fmt "%H:%M"
+nsv_set locale it_IT,thousands_sep " "
+nsv_set locale it_IT,formbuilder_time_format "HH24:MI"
+
 # Monetary amounts
 nsv_set locale money:000  {($num$sym)}
 nsv_set locale money:001  {($num $sym)}
