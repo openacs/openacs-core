@@ -46,7 +46,7 @@
         </thead>
         <tbody>
           <row>
-            <entry morerows="6">AOLserver</entry>
+            <entry morerows="7">AOLserver</entry>
             <entry>3</entry>
             <entry namest="3.2.5" nameend="3.2.5" align="center" ><?dbhtml bgcolor="lightgreen" ?><?dbfo bgcolor="lightgreen" ?>Yes</entry>
             <entry namest="4.5" nameend="5.1" align="center"><?dbhtml bgcolor="red" ?><?dbfo bgcolor="red" ?>No</entry>
@@ -83,7 +83,7 @@
             <entry namest="4.6.2" nameend="5.1" align="center"><?dbhtml bgcolor="lightgreen" ?><?dbfo bgcolor="lightgreen" ?>Yes</entry>
           </row>
           <row>
-            <entry morerows="3">PostgreSQL</entry>
+            <entry morerows="4">PostgreSQL</entry>
             <entry>7.0</entry>
             <entry namest="3.2.5" nameend="3.2.5" align="center"><?dbhtml bgcolor="lightgreen" ?><?dbfo bgcolor="lightgreen" ?>Yes</entry>
             <entry namest="4.5" nameend="5.1" align="center"><?dbhtml bgcolor="red" ?><?dbfo bgcolor="red" ?>No</entry>
@@ -104,7 +104,7 @@
             <entry namest="5.0.0" nameend="5.1" align="center"><?dbhtml bgcolor="yellow" ?><?dbfo bgcolor="yellow" ?>Maybe</entry>
           </row>
           <row>
-            <entry morerows="2">Oracle</entry>
+            <entry morerows="3">Oracle</entry>
             <entry>8.1.6</entry>
             <entry namest="3.2.5" nameend="3.2.5" align="center"><?dbhtml bgcolor="yellow" ?><?dbfo bgcolor="yellow" ?>Maybe</entry>
             <entry namest="4.5" nameend="5.1" align="center"><?dbhtml bgcolor="lightgreen" ?><?dbfo bgcolor="lightgreen" ?>Yes</entry>
