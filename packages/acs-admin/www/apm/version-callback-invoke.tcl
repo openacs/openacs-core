@@ -23,5 +23,9 @@ set context [list \
                  [list [export_vars -base "version-view" { version_id }] "$pretty_name $version_name"] \
                  [list $return_url "Tcl Callbacks"] $page_title]
 
-catch $proc_value result
+if { [catch $proc_value result] } {
+    global errorInfo
+    ns_log Error "Error invoking callback $proc_value: $result\n$errorInfo"
+}
+
 

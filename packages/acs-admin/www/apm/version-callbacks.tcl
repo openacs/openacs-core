@@ -43,9 +43,10 @@ template::list::create \
         }
         invoke {
             label "Invoke"
-            display_template "Invoke"
-            link_url_eval {[export_vars -base "version-callback-invoke" { version_id type }]}
+            display_template {<if @callbacks.type@ in "before-install" "after-install" "before-uninstall" "after-uninstall">Invoke</if><else><i style="color: gray;">N/A</i></else>}
+            link_url_eval {[ad_decode [lsearch { before-install after-install before-uninstall after-uninstall } $type] -1 {} [export_vars -base "version-callback-invoke" { version_id type }]]}
             link_html { title "Invoke this callback proc now. Be careful!" }
+            html { align center }
         }
         delete {
             label {}
