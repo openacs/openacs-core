@@ -82,7 +82,7 @@ begin
                                    new__creation_date,
                                    new__creation_user,
                                    new__creation_ip,
-                                   't',
+                                   ''t'',
                                    null::integer
                );
 
@@ -115,7 +115,7 @@ begin
                                    new__creation_date,
                                    new__creation_user,
                                    new__creation_ip,
-                                   't',
+                                   ''t'',
                                    new__package_id
                );
 end;' language 'plpgsql';
