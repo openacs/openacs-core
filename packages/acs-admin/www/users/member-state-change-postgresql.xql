@@ -18,5 +18,17 @@
       </querytext>
 </fullquery>
 
- 
+
+<fullquery name="approve_email">
+	<querytext>
+	select acs_user__approve_email (:user_id);
+	</querytext>
+</fullquery>
+
+<fullquery name="unapprove_email">
+	<querytext>
+	select acs_user__unapprove_email (:user_id);
+	</querytext>
+</fullquery>
+
 </queryset>
