@@ -22,9 +22,7 @@
 
 	<para>
 	  What's OpenACS? OpenACS was born when Don Baccus, Ben Adida,
-	  et al decided to port ACS from Oracle to
-	  PostgreSQL, thus making it a fully open-source solution.
-	</para>
+	  et al decided to port ACS from Oracle to PostgreSQL, thus making it a fully open-source solution.</para>
 
 	<para>
 	  OpenACS &version; is the next generation of the web toolkit. It's based on
@@ -42,12 +40,9 @@
   <sect2 id="install-purpose" xreflabel="Purpose of this document">
 	<title>Purpose of this document</title>
 	<para>
-	  This document will describe how to install OpenACS &version; from scratch,
-	  using the source code. We will assume that you have an OS installed,
-	  but we'll discuss this more in the next section. For most of this
-	  guide, we will assume that you are using Linux on a PC, but we'll
-	  also point you to excellent step-by-step guides for other operating
-	  systems.
+	  This document will describe how to install an operating
+	  system, OpenACS &version;, and all supporting software, from
+	  scratch. 
 	</para>
   </sect2>
 
@@ -63,7 +58,7 @@
 		  (much more if you want Oracle)</para></listitem> 
 	  <listitem><para>4 GB hard drive</para></listitem>
 	</itemizedlist>
-	
+
 	<para>
 	  If you want to serve pages to people outside of your machine, you'll
 	  need a network connection of some type.
@@ -71,17 +66,20 @@
 	
 	<para>
 	  Note that these are minimum requirements to get a development system
-	  up and running. For a production system, we recommend you read about
-	  the <ulink
-	  url="http://www.arsdigita.com/asj/arsdigita-server-architecture">ArsDigita
-	  Server Architecture</ulink>
+	  up and running. For a large production system, we recommend you read about
+	  the (now slightly obsolete) <ulink
+	  url="http://philip.greenspun.com/wtr/arsdigita-server-architecture.html">ArsDigita
+	  Server Architecture</ulink> article.
 	</para>
 	
 	<para>
 	  Running a reliable database-backed web server requires experience
 	  with the server's environment, in this case UNIX.  UNIX is not always
 	  an intuitive environment and this guide cannot hope to explain every
-	  nuance.  You should be comfortable with the following tasks before
+	  nuance.  If you follow the reference implementation, all of
+	  the unix commands you need will be in the text.  However,
+	  you will have trouble indentifying typos or other problems.
+	  Ideally, you should be comfortable with the following tasks before
 	  attempting an installation:
 	</para>
 
@@ -91,7 +89,7 @@
 		</para></listitem>
 
 	  <listitem><para> 		  
-		  Starting an X server and running an X program remotely
+		  (For Oracle) Starting an X server and running an X program remotely
 	  </para></listitem> 
 
 	  <listitem><para> 
@@ -100,7 +98,7 @@
 		</para></listitem> 
 
 	  <listitem><para> 
-		  Compiling a program using a Makefile 
+		  Compiling a program using ./config and make.
 		</para></listitem>
 	</itemizedlist>
 
@@ -121,30 +119,72 @@
   </sect2>
 
   <sect2 id="install-steps" xreflabel="Steps involved">
-	<title>Steps involved</title>
-	<para>
+    <title>Steps involved</title>
+    <para>
 	  The basic steps to getting OpenACS up and running are: 
 	</para>
-	
-	<orderedlist>
-	  <listitem><para>Install an OS</para></listitem>
-	  
-	  <listitem>
-		<para>Install a webserver (AOLServer)</para>
-	  </listitem>
-	  
-	  <listitem><para>Install a database (Oracle or
+    
+    <orderedlist>
+      <listitem><para>Install an OS and supporting software</para></listitem>
+      
+      <listitem>
+        <para>Install a webserver (AOLServer)</para>
+      </listitem>
+      
+      <listitem><para>Install a database (Oracle or
 	  PostgreSQL)</para></listitem> 
-
-	  <listitem><para> Install a database
-	  driver (allows the webserver to talk to the database)
-	  </para></listitem> <listitem><para>Configure the webserver and
-	  database</para></listitem> <listitem><para>Start the OpenACS
-	  installer</para></listitem>
+      
+      <listitem>
+        <para> Install a database driver (allows the webserver to talk to the database)
+	  </para>
+      </listitem> 
+      
+      <listitem><para>Start the OpenACS
+	  installer, which will configure a database.</para></listitem>
 	</orderedlist>
 
   </sect2>
 
+  <sect2>
+    <title>How to use this guide</title>
+    <itemizedlist>
+      <listitem>
+        <para><emphasis role='bold'>This is text that
+	tells you to do something, like click a
+	<guibutton><accel>B</accel>utton</guibutton> or
+	<guibutton><accel>link</accel></guibutton></emphasis> </para>
+      </listitem>
+      <listitem>
+        <para><guilabel>This</guilabel> is an option you will see
+            on screen, such as in a radio button list or menu.</para>
+      </listitem>
+      <listitem><para><userinput>This is text that you will type.</userinput></para></listitem>
+      <listitem>
+        <para>This is text from a program or file which you may need to
+examine or edit:</para>
+        <programlisting>if {$database == "oracle"} {
+    set db_password        "mysitepassword"
+}</programlisting>
+      </listitem>
+      <listitem>
+        <para>This is text that you will
+<computeroutput>see</computeroutput> and <userinput>type</userinput> in a command shell, including <replaceable>text you may have to
+change</replaceable>.  It is followed by a list of just the commands,
+which you can copy and paste.</para>
+        <screen>[root@localhost root]# <userinput>su - nsadmin</userinput>
+[nsadmin@localhost aolserver]$ <userinput>svc -d /service/<replaceable>openacs-dev</replaceable></userinput>
+[nsadmin@localhost aolserver]$ <userinput>dropdb <replaceable>openacs-dev</replaceable></userinput>
+DROP DATABASE
+[nsadmin@localhost aolserver]$ <userinput>createdb <replaceable>openacs-dev</replaceable></userinput>
+CREATE DATABASE
+<action>su - nsadmin
+svc -d /service/<replaceable>openacs-dev</replaceable>
+dropdb <replaceable>openacs-dev</replaceable>
+createdb <replaceable>openacs-dev</replaceable></action></screen>
+      </listitem>
+    </itemizedlist>
+  </sect2>
+  
   <sect2 id="install-stuck" xreflabel="What if I get stuck?">
 	<title>What if I get stuck?</title>
 	
@@ -172,7 +212,7 @@
 		  worry if you feel overwhelmed by all the information in the error
 		  logs. Over time, you'll find that they make more and more
 		  sense. Soon, you'll actually look forward to errors so that you
-		  can run to the log and diagnose the problem. 
+		  can find the problem in the log.
 		</para>
 	  </listitem>
 
@@ -258,10 +298,17 @@
         </para></listitem> 
 
       <listitem><para> 
-          <ulink url="http://kurup.com/acs/openacs-4.html">My own Brief OpenACS4
-          installation guide</ulink>
+          <ulink url="http://kurup.com/acs/openacs-4.html">Vinod
+          Kurup's Brief OpenACS4 installation guide</ulink>
         </para></listitem>
     </itemizedlist>
+
+      <listitem><para> 
+          <ulink
+          url="http://www.aufrecht.org/openacs-4.5-quick-guide/">Joel
+          Aufrecht's OpenACS 4.5 Quick Guide.</ulink>
+        </para></listitem> 
+
 
     <para>
       Please also see the <xref linkend="credits"/> section for more acknowledgements.
@@ -372,6 +419,7 @@
   <para><phrase role="cvstag">($Id$)</phrase></para>
 
 </sect1>
+
 <!--
    Local Variables:
    sgml-parent-document: ("../index.xml" "book" "sect1")

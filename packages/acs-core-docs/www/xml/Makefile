@@ -29,4 +29,4 @@ html: prelim
 	cd .. ; $(XSLTPROC) xml/openacs.xsl xml/index.xml
 
 pdf: html
-	$(HTMLDOC) --batch ../for-everyone.book ../for-admins.book ../for-developers.book
+#	$(HTMLDOC) --batch ../for-everyone.book ../for-admins.book ../for-developers.book

@@ -1,5 +1,5 @@
-<sect1 id="i18n" xreflabel="Internationalization">
-  <title></title>
+<sect1 id="i18n">
+  <title>Internationalization</title>
 
   <authorblurb>
     <para>
@@ -421,4 +421,8 @@
 
 
 </sect1>
-
+<!--
+       Local Variables:
+       sgml-parent-document: ("../index.xml" "book" "sect1")
+       End:
+-->
