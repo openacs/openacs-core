@@ -56,6 +56,238 @@ create table acs_privilege_hierarchy (
 
 create index acs_priv_hier_child_priv_idx on acs_privilege_hierarchy (child_privilege);
 
+create table acs_privilege_hierarchy_index (
+	privilege       varchar(100) not null 
+                        constraint acs_priv_hier_priv_fk
+			references acs_privileges (privilege),
+        child_privilege varchar(100) not null 
+                        constraint acs_priv_hier_child_priv_fk
+			references acs_privileges (privilege),
+        tree_sortkey    varchar(4000)
+);
+
+create index priv_hier_sortkey_idx on 
+acs_privilege_hierarchy_index (tree_sortkey);
+
+
+-- This big ugly trigger is used to create a pseudo-tree hierarchy that
+-- can be used to emulate tree queries on the acs_privilege_hierarchy table.
+-- The acs_privilege_hierarchy table maintains the permissions structure, but 
+-- it has a complication in that the same privileges can exist in more than one
+-- paths in the tree.  As such, tree queries cannot be represented by the 
+-- usual tree query methods used for openacs.  
+
+-- FIXME: simplify this if possible.  There's got to be a better way.
+--        also need to create a delete trigger.
+
+-- DCW, 2001-03-15.
+
+-- usage: queries directly on acs_privilege_hierarchy don't seem to occur
+--        in many places.  Rather it seems that acs_privilege_hierarchy is
+--        used to build the view: acs_privilege_descendant_map.  I did however
+--        find one tree query in content-perms.sql that looks like the 
+--        following:
+
+-- select privilege, child_privilege from acs_privilege_hierarchy
+--           connect by prior privilege = child_privilege
+--           start with child_privilege = 'cm_perm'
+
+-- This query is finding all of the ancestor permissions of 'cm_perm'. The
+-- equivalent query for the postgresql tree-query model would be:
+
+-- select  h2.privilege 
+--   from acs_privilege_hierarchy_index h1, 
+--        acs_privilege_hierarchy_index h2
+--  where h1.child_privilege = 'cm_perm'
+--    and h1.tree_sortkey like (h2.tree_sortkey || '%')
+--    and h2.tree_sortkey < h1.tree_sortkey;
+
+
+create function acs_priv_hier_insert_tr () returns opaque as '
+declare
+        v_parent_sk                     varchar;
+        max_key                         varchar;
+        new_key                         varchar;
+        pkey                            varchar;
+        clr_keys_p                      boolean;
+        child_exists_p                  boolean;
+        parent_exists_p                 boolean;
+        child_has_other_parents_p       boolean;
+        v_rec                           record;
+        v_rec2                          record;
+begin
+        -- find out if the parent or the child of thie relation exists
+
+        select count(*) > 0 into child_exists_p
+          from acs_privilege_hierarchy_index
+         where privilege = new.child_privilege;
+
+        select count(*) > 0 into parent_exists_p
+          from acs_privilege_hierarchy_index
+         where child_privilege = new.privilege;
+
+        -- simple case - just insert the new privilege and child privilege
+
+        if NOT child_exists_p and NOT parent_exists_p then
+
+           -- find the next key on the first level and insert the privilege
+
+           select max(tree_sortkey) into max_key
+             from acs_privilege_hierarchy_index
+            where tree_level(tree_sortkey) = 1;
+
+           new_key := ''/'' || tree_next_key(max_key);
+
+           insert into acs_privilege_hierarchy_index 
+                       (privilege, child_privilege, tree_sortkey)
+                        values
+                       (new.privilege, new.child_privilege, new_key);
+
+           -- and enter the child privilege on its own row with the child
+           -- privilege the same as the parent privilege.
+
+           new_key := new_key || ''/00'';
+
+           insert into acs_privilege_hierarchy_index 
+                       (privilege, child_privilege, tree_sortkey)
+                        values
+                       (new.child_privilege, new.child_privilege, new_key);
+
+        else if child_exists_p and NOT parent_exists_p then
+
+           -- child exists, so first insert the parent privilege
+
+           select max(tree_sortkey) into max_key
+             from acs_privilege_hierarchy_index
+            where tree_level(tree_sortkey) = 1;
+
+           new_key := ''/'' || tree_next_key(max_key);
+           pkey := new_key;
+
+           insert into acs_privilege_hierarchy_index 
+                       (privilege, child_privilege, tree_sortkey)
+                        values
+                       (new.privilege, new.child_privilege, new_key);
+
+
+           -- before inserting the child privilege, check to see if 
+           -- the child privilege is a child for another privilege already
+           -- in the table.
+
+           select count(*) > 0 into child_has_other_parents_p
+             from acs_privilege_hierarchy_index
+            where child_privilege = new.child_privilege
+              and NOT ((privilege, child_privilege) = 
+                       (new.privilege, new.child_privilege));
+           if NOT child_has_other_parents_p then
+
+              -- loop over all of the child privileges
+
+              for v_rec in select privilege, child_privilege, tree_sortkey
+                             from acs_privilege_hierarchy_index
+                            where privilege = new.child_privilege
+              LOOP
+                  -- loop over all of the child privileges of the child 
+                  -- privilege.
+
+                  clr_keys_p := ''t'';
+                  for v_rec2 in select privilege, child_privilege, tree_sortkey
+                                  from acs_privilege_hierarchy_index
+                                 where tree_sortkey 
+                                       like v_rec.tree_sortkey || ''%''
+                              order by tree_sortkey
+                  LOOP
+                  
+                      -- clear all the childs children sortkeys so that 
+                      -- new sortkeys can be calculated.
+                      
+                      if clr_keys_p then
+                         update acs_privilege_hierarchy_index
+                            set tree_sortkey = null
+                          where tree_sortkey 
+                                like v_rec.tree_sortkey || ''%'';
+                         clr_keys_p := ''f'';
+                      end if;
+
+                      -- find the parent key of this privilege
+
+                      select coalesce(max(tree_sortkey),'''') into v_parent_sk
+                        from acs_privilege_hierarchy_index
+                       where child_privilege = v_rec2.privilege
+                         and child_privilege <> privilege;
+                      
+                      -- and find the next key for this level
+
+                      select max(tree_sortkey) into max_key 
+                        from acs_privilege_hierarchy_index
+                       where privilege = v_rec2.privilege
+                         and child_privilege <> privilege;
+                      new_key := v_parent_sk || ''/'' || tree_next_key(max_key);
+                      -- now update the key with new value
+
+                      update acs_privilege_hierarchy_index 
+                         set tree_sortkey = new_key
+                       where privilege = v_rec2.privilege
+                         and child_privilege = v_rec2.child_privilege
+                         and tree_sortkey = null;
+                  end LOOP;
+              end LOOP;
+           else
+
+              -- this child privilege is a child of an existing privilege.
+              -- so get the first existing child and its children
+
+              for v_rec in select privilege, child_privilege, tree_sortkey 
+                            from acs_privilege_hierarchy_index
+                           where child_privilege = new.child_privilege
+              LOOP
+
+                  -- now copy the subtree and insert under the newly inserted
+                  -- privilege.
+
+                  for v_rec2 in select privilege, child_privilege, tree_sortkey
+                                  from acs_privilege_hierarchy_index
+                                 where tree_sortkey 
+                                       like v_rec.tree_sortkey || ''/%''
+                              order by tree_sortkey
+                  LOOP
+
+                      -- calc the parent key of this privilege
+
+                      select coalesce(max(tree_sortkey),'''') into v_parent_sk
+                        from acs_privilege_hierarchy_index
+                       where child_privilege = v_rec2.privilege
+                         and child_privilege <> privilege;
+
+                      -- now find the next key for this level
+
+                      select max(tree_sortkey) into max_key 
+                        from acs_privilege_hierarchy_index
+                       where privilege = v_rec2.privilege
+                         and child_privilege <> privilege
+                         and tree_sortkey like pkey || ''/%'';
+                      new_key := v_parent_sk || ''/'' || tree_next_key(max_key);
+                      
+                      -- insert (copy) the privilege
+
+                      insert into acs_privilege_hierarchy_index 
+                             (privilege, child_privilege, tree_sortkey)
+                             values
+                             (v_rec2.privilege, v_rec2.child_privilege, new_key);
+                  end LOOP;                
+                exit;
+              end LOOP;
+           end if;
+        end if; end if;
+
+        return new;
+
+end;' language 'plpgsql';
+
+create trigger acs_priv_hier_insert_tr before insert 
+on acs_privilege_hierarchy for each row 
+execute procedure acs_priv_hier_insert_tr ();
+
 --create table acs_privilege_method_rules (
 --	privilege	not null constraint acs_priv_method_rules_priv_fk
 --			references acs_privileges (privilege),
@@ -221,14 +453,25 @@ create table acs_permissions (
 create index acs_permissions_grantee_idx on acs_permissions (grantee_id);
 create index acs_permissions_privilege_idx on acs_permissions (privilege);
 
+-- create view acs_privilege_descendant_map
+-- as select p1.privilege, p2.privilege as descendant
+--    from acs_privileges p1, acs_privileges p2
+--    where p2.privilege in (select child_privilege
+-- 			  from acs_privilege_hierarchy
+-- 			  start with privilege = p1.privilege
+-- 			  connect by prior child_privilege = privilege)
+--    or p2.privilege = p1.privilege;
+
 create view acs_privilege_descendant_map
 as select p1.privilege, p2.privilege as descendant
    from acs_privileges p1, acs_privileges p2
-   where p2.privilege in (select child_privilege
-			  from acs_privilege_hierarchy
-			  start with privilege = p1.privilege
-			  connect by prior child_privilege = privilege)
-   or p2.privilege = p1.privilege;
+   where p2.privilege in (select distinct h2.child_privilege
+                            from
+                              acs_privilege_hierarchy_index h1,
+                              acs_privilege_hierarchy_index h2
+                            where
+                              h1.privilege = p1.privilege
+                              and h2.tree_sortkey like h1.tree_sortkey || '%');
 
 create view acs_permissions_all
 as select op.object_id, p.grantee_id, p.privilege
