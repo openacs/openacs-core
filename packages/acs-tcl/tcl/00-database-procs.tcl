@@ -2457,15 +2457,19 @@ ad_proc db_load_sql_data {{
             }
             
             set fd [open $file r]
-            set copy_command [subst [read $fd]]
+            set copy_command [subst -nobackslashes [read $fd]]
             close $fd
-
+            set copy_file [ns_mktemp /tmp/psql-copyfile-XXXXXX]
+            set fd [open $copy_file "CREAT EXCL WRONLY" 0600]
+            puts $fd $copy_command
+            close $fd
+            
             if { $tcl_platform(platform) == "windows" } {
-                set fp [open "|[file join [db_get_pgbin] psql] -c \"$copy_command\" -h [ns_info hostname] $pgport $pguser  [db_get_database]" "r"]
+                set fp [open "|[file join [db_get_pgbin] psql] -f $copy_file -h [ns_info hostname] $pgport $pguser  [db_get_database]" "r"]
             } else {
-                set fp [open "|[file join [db_get_pgbin] psql] -c \"$copy_command\" $pghost $pgport $pguser [db_get_database] $pgpass" "r"]
+                set fp [open "|[file join [db_get_pgbin] psql] -f $copy_file $pghost $pgport $pguser [db_get_database] $pgpass" "r"]
             }
-
+            
             while { [gets $fp line] >= 0 } {
                 # Don't bother writing out lines which are purely whitespace.
                 if { ![string is space $line] } {
@@ -2480,6 +2484,9 @@ ad_proc db_load_sql_data {{
             set errno [ catch {
                 close $fp
             } error]
+
+            # remove the copy file.
+            file delete -force $copy_file
 
             if { $errno == 2 } {
                 return $error
@@ -2911,7 +2918,7 @@ ad_proc -private db_exec_lob {{
         }
     }
 
-    ns_log Notice "$proc_name: atp: $which_proc -ulevel [expr {$ulevel +1}] $type $db $statement_name $pre_sql $file"
+    ns_log Debug "$proc_name: $which_proc -ulevel [expr {$ulevel +1}] $type $db $statement_name $pre_sql $file"
     return [$which_proc -ulevel [expr {$ulevel +1}] $type $db $statement_name $pre_sql $file]
 }
 
