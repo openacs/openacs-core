@@ -35,6 +35,7 @@
             <file type="data_model" db_type="oracle" path="sql/oracle/notifications-replies-package-create.sql"/>
             <file type="data_model_upgrade" db_type="oracle" path="sql/oracle/upgrade/upgrade-0.1d-0.2d.sql"/>
             <file type="data_model_upgrade" db_type="oracle" path="sql/oracle/upgrade/upgrade-0.3d-0.4d.sql"/>
+            <file type="data_model_upgrade" db_type="oracle" path="sql/oracle/upgrade/upgrade-0.4d-0.5d.sql"/>
             <file type="data_model" db_type="postgresql" path="sql/postgresql/delivery-method-sc-create.sql"/>
             <file type="data_model" db_type="postgresql" path="sql/postgresql/email-sc-impl-create.sql"/>
             <file type="data_model" db_type="postgresql" path="sql/postgresql/notification-type-sc-create.sql"/>
