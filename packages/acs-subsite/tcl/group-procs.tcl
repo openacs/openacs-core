@@ -1,4 +1,4 @@
-# /packages/mbryzek-subsite/tcl/group-procs.tcl
+# /packages/acs-subsite/tcl/group-procs.tcl
 
 ad_library {
 
@@ -351,13 +351,21 @@ ad_proc -public group::member_p {
 } {
     Return 1 if the user is a member of the group specified.
     You can specify a group name or group id.
+    </p><p>
+    <strong>Note:</strong> The group name is <strong>not</strong> unique
+    by definition,
+    and if you call this function with a duplicate group name it 
+    <strong>will</strong> bomb!!! Using the group name as a parameter is
+    thus strongly discouraged unless you are really, really sure the 
+    name is unique.</p>
+    <p>
     If cascade is true, check to see if the user is
     a member of the group by virtue of any other component group.
     (e.g. if group B is a component of group A then if a user
      is a member of group B then he is automatically a member of A
      also.)
     If cascade is false, then the user must have specifically
-    been granted membership on the group in question.
+    been granted membership on the group in question.</p>
 } {
     if { [empty_string_p $user_id] } {
 	set user_id [ad_conn user_id]
