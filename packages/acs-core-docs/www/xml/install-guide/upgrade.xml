@@ -546,7 +546,10 @@ parameter::set_value -package_id [ad_acs_kernel_id] -parameter UsePasswordWidget
           Postgres installation guide. Keep in mind that your
           installation location is different, and your startup script
           (/etc/init.d/postgres73 should be named differently. You
-          might even need to edit that file to make the paths correct)
+          might even need to edit that file to make the paths
+          correct). You'll also need to add <computeroutput>export
+          PGPORT=5434</computeroutput> to the .bashrc and/or
+          .bash_profile for the postgres73 user.
           </para> 
         </listitem>
         <listitem>
@@ -564,7 +567,7 @@ parameter::set_value -package_id [ad_acs_kernel_id] -parameter UsePasswordWidget
           <para>Change the path in
           <replaceable>service0</replaceable>'s .bashrc or
           .bash_profile (or both) files to reflect the new postgres73
-          user directory.</para>
+          user directory. Also add in the PGPORT.</para>
         </listitem>
         <listitem>
           <para>Restore the database from dump as per the <link linkend="restore-postgres">recovery instructions</link>.</para>
