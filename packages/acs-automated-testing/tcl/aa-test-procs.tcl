@@ -699,12 +699,12 @@ ad_proc aa_log_result {
     ns_log Notice "LOG: $aa_testcase_id, $test_notes"
     set test_result "log"
   }
-  db_dml test_result_insert {
-    insert into aa_test_results
-           (testcase_id, package_key, test_id, timestamp, result, notes)
-    values (:aa_testcase_id, :aa_package_key, :aa_testcase_test_id,
-            sysdate, :test_result, :test_notes)
+  # Notes in database can only hold so many characters
+  if { [string length $test_notes] > 2000 } {
+      set test_notes "[string range $test_notes 0 1996]..."
   }
+
+  db_dml test_result_insert {}
 }
 
 ad_proc aa_log_final {
