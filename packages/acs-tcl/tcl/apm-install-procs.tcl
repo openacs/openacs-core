@@ -525,9 +525,6 @@ ad_proc -private apm_package_install {
 	}
     }
 
-    # Load Tcl libraries and xql queries so that restart is not necessary    
-    apm_load_package -force_reload -load_tests=[apm_load_tests_p] $package_key
-
     return $version_id
 }
 

@@ -266,17 +266,9 @@ ad_proc -private apm_load_libraries {
     to in *all* active interpreters).
 
 } {
-
+ 
     if { [empty_string_p $packages] } {
-        # DRB: query extractor's dumb about repeated query
-        # names so I changed these to be unique.  We should
-        # really be sharing these at some level rather than
-        # duping them anyway.
-        set packages [db_list apm_enabled_packages_l {
-            select distinct package_key
-            from apm_package_versions
-            where enabled_p='t'
-        }]
+        set packages [apm_enabled_packages]
     }
 
     # Scan the package directory for files to source.    
@@ -332,32 +324,42 @@ ad_proc -public apm_load_tests_p {} {
     return [apm_package_enabled_p "acs-automated-testing"]
 }
 
-ad_proc -public apm_load_package {
+ad_proc -public apm_load_packages {
     {-force_reload:boolean 0}
-    {-load_tests:boolean 0}
-    package_key
+    {-packages {}}
 } {
-    Load libraries and queries for the package with given key.
+    Load Tcl libraries and queries for the packages with given keys.
+
+    @param force_reload Reload Tcl libraries even if they are already loaded.
+    @param packages     A list of package_keys for packages to be loaded. Defaults to 
+                        all enabled packages
 
     @author Peter Marklund
 } {
-    # Load *-procs.tcl and *-init.tcl files for enabled packages.
-    apm_load_libraries -force_reload=$force_reload_p -packages $package_key -procs
+    if { [empty_string_p $packages] } {
+        set packages [apm_enabled_packages]
+    }
+
+    # Should acs-automated-testing tests be loaded?
+    set load_tests_p [apm_load_tests_p]
+
+    # Load *-procs.tcl files
+    apm_load_libraries -force_reload=$force_reload_p -packages $packages -procs
 
     # Load up the Queries (OpenACS, ben@mit.edu)
-    apm_load_queries -packages $package_key
+    apm_load_queries -packages $packages
 
     # Load up the Automated Tests and associated Queries if necessary
     if {$load_tests_p} {
-      apm_load_libraries -force_reload=$force_reload_p -packages $package_key -test_procs
-      apm_load_queries -packages $package_key -test_queries
+      apm_load_libraries -force_reload=$force_reload_p -packages $packages -test_procs
+      apm_load_queries -packages $packages -test_queries
     }
 
-    apm_load_libraries -init -packages $package_key
+    apm_load_libraries -init -packages $packages
 
-    # Load up the Automated Tests initialisation scripts is necessary
+    # Load up the Automated Tests initialisation scripts if necessary
     if {$load_tests_p} {
-      apm_load_libraries -force_reload=$force_reload_p -packages $package_key -test_init
+      apm_load_libraries -force_reload=$force_reload_p -packages $packages -test_init
     }
 }
 
@@ -375,11 +377,7 @@ ad_proc -private apm_load_queries {
     @author ben@mit.edu
 } {
     if { [empty_string_p $packages] } {
-        set packages [db_list apm_enabled_packages_q {
-            select distinct package_key
-            from apm_package_versions
-            where enabled_p='t'
-        }]
+        set packages [apm_enabled_packages]
     }
 
     # Scan the package directory for files to source.    
@@ -594,6 +592,15 @@ ad_proc -public apm_package_enabled_p {
 } {
     return [db_string apm_package_enabled_p {} -default 0]
 }
+
+ad_proc -public apm_enabled_packages {} {
+    Returns a list of package_key's for all enabled packages.
+
+    @author Peter Marklund
+} {
+    return [db_list enabled_packages {}]
+}
+
 
 ad_proc -public apm_version_installed_p {
     version_id

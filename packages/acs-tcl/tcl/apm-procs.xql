@@ -54,23 +54,7 @@
     </querytext>
   </fullquery>
 
-  <fullquery name="apm_load_libraries.apm_enabled_packages">      
-    <querytext>
-      select distinct package_key
-      from apm_package_versions
-      where enabled_p='t'
-    </querytext>
-  </fullquery>
-  
-  <fullquery name="apm_load_libraries.apm_enabled_packages">      
-    <querytext>
-      select distinct package_key
-      from apm_package_versions
-      where enabled_p='t'
-    </querytext>
-  </fullquery>
-  
-  <fullquery name="apm_load_queries.apm_enabled_packages">      
+  <fullquery name="apm_enabled_packages.enabled_packages">      
     <querytext>
       select distinct package_key
       from apm_package_versions
