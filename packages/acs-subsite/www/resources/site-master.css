@@ -266,6 +266,9 @@ html>body #tabs { bottom: 0px }
   padding: 2px 5px 2px 5px;
   margin: 0px 2px 0px 2px;
 }
+#tabs .disabled { 
+  color: #999999;
+}
 #tabs a {
   text-decoration: none;
   color: black;
