@@ -56,8 +56,8 @@ if { [catch {
     ::twt::log_section "Test customize layout page"
     ::twt::new_portal::test::customize_layout        
 
-    #::twt::log_section "Test the manage memberships page"
-    #::twt::dotlrn::test::manage_my_memberships
+    ::twt::log_section "Test the manage memberships page"
+    ::twt::dotlrn::test::manage_my_memberships
 
     #::twt::user::login_site_wide_admin            
 

@@ -217,12 +217,6 @@ ad_proc ::twt::dotlrn::add_site_wide_admin { server_url } {
 ###################
 
 ad_proc ::twt::dotlrn::test::manage_my_memberships {} {
-    return [::twt::oacs::eval {
-        db_string select_non_member_classes
-    }]
-}
-
-ad_proc ::twt::dotlrn::test::manage_my_memberships {} {
     Test that user can manage (join/drop) his own class and community memberships.
 } {
     # First request some ids from the OpenACS server
