@@ -10,3 +10,5 @@ ad_library {
 # initialize the random number generator
 randomInit [ns_time]
 
+# Create mutex for util_background_exec
+nsv_set util_background_exec_mutex . [ns_mutex create]
