@@ -25,15 +25,11 @@ if { ![empty_string_p [set __form__ [ns_getform]]] } {
         } else {
 
 	    set __key__ [ns_set key $__form__ $__form_counter__]
-	    # QUIRK: ns_querygetall returns a single-element list {{key1 key2 ...}}
 	    set __values__ [ns_querygetall $__key__]
+
 	    foreach __value__ $__values__ {
 		multirow append __form_contents__ $__key__ $__value__
 	    }
-
-            #multirow append __form_contents__ [ns_set key $__form__ $__form_counter__] \
-                [ns_set value $__form__ $__form_counter__]
-
 
         }
         incr __form_counter__
