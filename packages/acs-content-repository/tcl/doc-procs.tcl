@@ -117,8 +117,8 @@ namespace eval doc {
     set opts(db) ""
     template::util::get_opts $args
 
-    doc::get_proc_header $proc_name $package_name doc_block code_block $opts(db)
-    doc::parse_proc_header $doc_block $code_block $param_ref $tags_ref $code_ref
+    get_proc_header $proc_name $package_name doc_block code_block $opts(db)
+    parse_proc_header $doc_block $code_block $param_ref $tags_ref $code_ref
 
     # Get the proc name
     if { [template::util::is_nil tags(name)] } {
