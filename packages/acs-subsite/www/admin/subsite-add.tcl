@@ -15,7 +15,6 @@ if ([string equal [ad_conn package_url] "/"]) {
     set subsite_pretty_name "Subcommunity name"
 }
 set context [list [list "." "Communities"] $page_title]
-set focus application.instance_name
 
 set package_key acs-subsite
 
