@@ -27,6 +27,7 @@ namespace eval parameter {
         }
 
         db_exec_plsql set_parameter_value {}
+
         return [ad_parameter_cache -set $value $package_id $parameter]
     }
 
@@ -46,8 +47,16 @@ namespace eval parameter {
             ::set package_id [ad_requested_object_id]
         }
 
-        ::set value [ad_parameter_cache $package_id $parameter]
+        # 1. check to see if this parameter is being set in the server's
+        # configuration file; this value has highest precedence
+        ::set value [ad_parameter_from_file $parameter $package_id]
 
+        # 2. check the parameter cache
+        if {[empty_string_p $value]} {
+            ::set value [ad_parameter_cache $package_id $parameter]
+        }
+
+        # 3. use the default value
         if {[empty_string_p $value]} {
             ::set value $default
         }
@@ -60,9 +69,10 @@ namespace eval parameter {
         {-parameter:required}
         {-value:required}
     } {
-        set_value -package_id [apm_package_id_from_key $package_key] \
-                -parameter $parameter \
-                -value $value
+        set_value \
+            -package_id [apm_package_id_from_key $package_key] \
+            -parameter $parameter \
+            -value $value
     }
 
     ad_proc -public get_from_package_key {
@@ -83,7 +93,7 @@ namespace eval parameter {
             ::set value [get \
                 -package_id [apm_package_id_from_key $package_key] \
                 -parameter $parameter \
-                -default $default
+                -default $default \
             ]
         } {
             ::set value $default
