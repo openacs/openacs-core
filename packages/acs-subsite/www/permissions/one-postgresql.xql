@@ -44,10 +44,10 @@
  
 <fullquery name="context">      
       <querytext>
-      
-  select acs_object__name(context_id)
-  from acs_objects
-  where object_id = :object_id
+
+SELECT acs_object__name(context_id) as context_name, context_id, security_inherit_p
+  FROM acs_objects
+ WHERE object_id = :object_id
 
       </querytext>
 </fullquery>
@@ -56,15 +56,14 @@
 <fullquery name="children">      
       <querytext>
       
-	select object_id as c_object_id,acs_object__name(object_id) as c_name
+	select object_id as c_object_id,acs_object__name(object_id) as c_name, object_type as c_type
 	from acs_objects o
 	where context_id = :object_id
               and exists (select 1
-                          from all_object_party_privilege_map
+                          from acs_object_party_privilege_map
                           where object_id = o.object_id
                           and party_id = :user_id
                           and privilege = 'admin')    
-    
       </querytext>
 </fullquery>
 

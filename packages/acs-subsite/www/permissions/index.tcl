@@ -1,46 +1,28 @@
 # packages/acs-core-ui/www/permissions/index.tcl
-
 ad_page_contract {
-  Display all objects that the user has admin on.
-
-  @author rhs@mit.edu
-  @creation-date 2000-08-29
-  @cvs-id $Id$
+    Display all objects that the user has admin on.
+    
+    Templated and changed to browse heirarchy by davis@xarg.net 
+    since all objects can be a *lot* of objects.
+    
+    @author rhs@mit.edu
+    @creation-date 2000-08-29
+    @cvs-id $Id$
+} { 
+    root:trim,integer,optional
 }
 
 set user_id [ad_maybe_redirect_for_registration]
 
-doc_body_append "[ad_header "Permissions"]
-
-<h2>Permissions</h2>
-
-[ad_context_bar "Permissions"]
-<hr>
-
-<form method=\"get\" action=\"one\">
-Select an Object by Id:
-<input name=\"object_id\" type=\"text\"> <input value=\"Continue\" type=\"submit\">
-</form><p>
-
-You have admin on the following objects:
-
-<ul>
-"
-
-db_foreach adminable_objects {
-  select o.object_id, acs_object.name(o.object_id) as name
-  from acs_objects o, acs_object_party_privilege_map map
-  where map.object_id = o.object_id
-    and map.party_id = :user_id
-    and map.privilege = 'admin'
-} {
-  doc_body_append "  <li><a href=one?[export_url_vars object_id]>$name</a></li>\n"
-} if_no_rows {
-  doc_body_append "  <li>(none)</li>\n"
+if {![exists_and_not_null root]} { 
+    set root [ad_conn package_id]
 }
 
-doc_body_append "
-</ul>
+db_multirow objects adminable_objects { *SQL* }
 
-[ad_footer]
-"
+set context "Permissions"
+
+set security_context_root [acs_magic_object security_context_root]
+set default_context [acs_magic_object default_context]
+set admin_p [permission::permission_p -object_id $security_context_root -party_id $user_id -privilege admin]
+set subsite [ad_conn package_id]

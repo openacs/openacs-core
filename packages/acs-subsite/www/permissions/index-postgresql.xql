@@ -5,13 +5,14 @@
 
 <fullquery name="adminable_objects">      
       <querytext>
-      
-  select distinct o.object_id, acs_object__name(o.object_id) as name
-  from acs_objects o, all_object_party_privilege_map map
+ select distinct o.object_id, acs_object__name(o.object_id) as name, context_id, object_type,
+    (case when o.object_id = :root then 0 else 1 end) as child
+  from acs_objects o, acs_permissions_all map
   where map.object_id = o.object_id
-    and map.party_id = :user_id
+    and map.grantee_id = :user_id
     and map.privilege = 'admin'
-
+    and (o.object_id = :root or o.context_id = :root)
+    order by child, object_type, name
       </querytext>
 </fullquery>
 
