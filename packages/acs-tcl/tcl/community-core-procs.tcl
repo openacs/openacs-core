@@ -89,25 +89,31 @@ ad_proc ad_user_new {email first_names last_name password password_question pass
     db_transaction {
 
 	set user_id [db_exec_plsql user_insert {
-	begin
+            begin
 	    :1 := acs.add_user(user_id => :user_id,
-			 email => :email,
-			 url => :url,
-			 first_names => :first_names,
-			 last_name => :last_name,
-			 password => :hashed_password,
-	                 salt => :salt,
-	                 password_question => :password_question,
-	                 password_answer => :password_answer,
-	                 creation_ip => :peeraddr,
-	                 email_verified_p => :email_verified_p,
-	                 member_state => :member_state);
+            email => :email,
+            url => :url,
+            first_names => :first_names,
+            last_name => :last_name,
+            password => :hashed_password,
+            salt => :salt,
+            password_question => :password_question,
+            password_answer => :password_answer,
+            creation_ip => :peeraddr,
+            email_verified_p => :email_verified_p,
+            member_state => :member_state);
 	    end;
-	}] 
-
-        # Call the extension
-        acs_user_extension::user_new -user_id $user_id
-
+	}
+        ] 
+            
+        if {[catch {
+            # Call the extension
+            acs_user_extension::user_new -user_id $user_id
+        } errmsg]} {
+            # At this point, we don't want the user addition to fail
+            # if some extension is screwing things up
+        }
+        
     } on_error {
 	# we got an error.  log it and signal failure.
 	ns_log Error "Problem creating a new user: $errmsg"
