@@ -735,7 +735,6 @@ ad_proc -private apm_package_install {
             # We are upgrading a package
 
             # Load catalog files with upgrade switch before package version is changed in db
-            ns_log Notice "pm debug upgrading loading catalog files"
             apm_load_catalog_files -upgrade $package_key
 
 	    set version_id [apm_package_install_version -callback $callback $package_key $version_name \
@@ -746,7 +745,6 @@ ad_proc -private apm_package_install {
 	} else {
             # We are installing a new package
 
-            ns_log Notice "pm debug installing loading catalog files"
             apm_load_catalog_files $package_key
 
 	    set version_id [apm_package_install_version \
