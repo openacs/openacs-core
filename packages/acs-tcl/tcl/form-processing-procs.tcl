@@ -522,7 +522,9 @@ ad_proc -public ad_form {
         foreach value $export {
             set name [lindex $value 0]
             if { [llength $value] == 1 } {
-                template::element create $form_name $name -datatype text -widget hidden -value [uplevel [list set $name]]
+                if { [uplevel [list info exists $name]] } {
+                    template::element create $form_name $name -datatype text -widget hidden -value [uplevel [list set $name]]
+                }
             } else {
                 template::element create $form_name $name -datatype text -widget hidden -value [uplevel [list subst [lindex $value 1]]]
             }
