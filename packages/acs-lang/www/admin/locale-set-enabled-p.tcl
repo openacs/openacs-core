@@ -1,6 +1,6 @@
 ad_page_contract {
 
-    Enables a locale
+    Sets enabled_p for a locale.
 
     @author Simon Carstensen (simon@collaboraid.biz)
 
