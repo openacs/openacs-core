@@ -7,7 +7,7 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>t</singleton-p>
     
-    <version name="5.1.4d5" url="http://openacs.org/repository/download/apm/acs-content-repository-5.1.4d5.apm">
+    <version name="5.1.4d6" url="http://openacs.org/repository/download/apm/acs-content-repository-5.1.4d6.apm">
         <owner url="mailto:dcwickstrom@earthlink.net">Dan Wickstrom</owner>
         <summary>The canonical repository for OpenACS content.</summary>
         <release-date>2004-11-26</release-date>
@@ -17,7 +17,7 @@
          other CMS backing functionality.  Utilized by Bug Tracker, File Storage, and other packages.
         </description>
 
-        <provides url="acs-content-repository" version="5.1.4d5"/>
+        <provides url="acs-content-repository" version="5.1.4d6"/>
         <requires url="acs-kernel" version="5.1.0"/>
         <requires url="acs-service-contract" version="5.1.0"/>
         <requires url="search" version="5.1.0"/>
