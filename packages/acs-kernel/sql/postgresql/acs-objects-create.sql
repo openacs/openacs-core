@@ -694,9 +694,13 @@ begin
   --                             where o.object_id = delete__object_id)
   --  connect by object_type = prior supertype
 
+  -- There was a gratuitous join against the objects table here,
+  -- probably a leftover from when this was a join, and not a subquery.
+  -- Functionally, this was working, but time taken was O(n) where n is the 
+  -- number of objects. OUCH. Fixed. (ben)
   for obj_type
   in select o2.table_name, o2.id_column
-        from acs_object_types o1, acs_object_types o2, acs_objects o
+        from acs_object_types o1, acs_object_types o2
        where o1.object_type = (select object_type
                                from acs_objects o
                                where o.object_id = delete__object_id)
