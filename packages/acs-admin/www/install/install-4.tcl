@@ -10,7 +10,12 @@ if { ![empty_string_p $repository_url] } {
 } else {
     set parent_page_title "Install From Local File System"
 }
-set page_title "Installation Complete"
+
+if { $success_p } {
+    set page_title "Installation Complete"
+} else {
+    set page_title "Installation Failed"
+}
 
 set context [list [list "." "Install Software"] [list "install" $parent_page_title] $page_title]
 
