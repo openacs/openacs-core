@@ -97,7 +97,10 @@ doc_body_append "</b></font>
 "
 
 if {[llength $expand] == 0} {
-  lappend expand [db_string node_id {select site_node.node_id('/') from dual}]
+    lappend expand $root_id 
+    if { ![empty_string_p $parent_id] } {
+        lappend expand $parent_id
+    }
 }
 
 # You might wonder why level is aliased as mylevel here.  Well, for some

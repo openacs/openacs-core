@@ -37,7 +37,8 @@ proc_doc ad_restrict_to_https {conn args why} {
 	set ssl_port [ns_config -int "ns/server/[ns_info server]/module/nsopenssl" Port 443]
     }
     
-    set host [ns_set iget [ad_conn headers] "host"]
+    set host [ad_conn host]
+    #set host [ns_set iget [ad_conn headers] "host"]
     if { [regexp {^(.*?):(.*)$} $host match host port] == 0 || [string compare $port $http_port] == 0 } {
 	set url [ad_conn url]
 	if { $ssl_port == 443 } {

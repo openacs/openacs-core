@@ -945,7 +945,7 @@ declare
   child_id                       integer;       
   start_pos                      integer default 1;        
   end_pos                        integer;       
-  counter                        integer default 0;       
+  counter                        integer default 1;
   item_name                      varchar;  
 begin
 
@@ -967,12 +967,13 @@ begin
 
   LOOP
 
-    end_pos := instr(v_item_path, ''/'', start_pos);
+    end_pos := instr(v_item_path, ''/'', 1, counter);
 
     if end_pos = 0 then
       item_name := substr(v_item_path, start_pos);
     else
       item_name := substr(v_item_path, start_pos, end_pos - start_pos);
+      counter := counter + 1;
     end if;
 
     select 

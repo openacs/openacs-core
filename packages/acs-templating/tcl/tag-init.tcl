@@ -102,21 +102,33 @@ template_tag multiple { chunk params } {
   set startrow [template::get_attribute multiple $params startrow  0]
   set maxrows  [template::get_attribute multiple $params maxrows  -1]; #unlimit
 
+  set tag_id [template::current_tag]
+
+  set i "__${tag_id}_i"
+  
   template::adp_append_code "
 
-  for { set __i [expr 1 + $startrow] } { \$__i <= \${$name:rowcount}"
+  if {\[info exists $name\]} {
+      upvar 0 $name __${tag_id}_swap
+  }
+
+  for { set $i [expr 1 + $startrow] } { \$$i <= \${$name:rowcount}"
 
   if {$maxrows >= 0} {
-    template::adp_append_code " && \$__i <= [expr $maxrows + $startrow]" \
+    template::adp_append_code " && \$$i <= [expr $maxrows + $startrow]" \
 	-nobreak
   }
   
-  template::adp_append_code " } { incr __i } {
-    upvar 0 $name:\$__i $name
+  template::adp_append_code " } { incr $i } {
+    upvar 0 $name:\$$i $name
   " -nobreak
   template::adp_compile_chunk $chunk
 
-  template::adp_append_code "}"
+  template::adp_append_code "}
+
+  if {\[info exists __${tag_id}_swap\]} {
+      upvar 0 __${tag_id}_swap $name
+  }"
 }  
 
 # Repeat a template chunk for each item in a list
@@ -164,17 +176,21 @@ template_tag group { chunk params } {
 
   # Scan the parameter stack backward, looking for the tag name
 
-  set name [template::get_enclosing_tag multiple]
+  set tag_id [template::enclosing_tag multiple]
 
-  if { [string equal $name {}] } {
+  if { [string equal $tag_id {}] } {
     error "No enclosing MULTIPLE tag for GROUP tag on column $column"
   }    
 
+  set name [template::tag_attribute $tag_id name]
+
+  set i "__${tag_id}_i"
+  
   # while the value of name(column) stays the same
   template::adp_append_code "
-    set __ats_group_rowcount 1
+    set __${tag_id}_group_rowcount 1
     while { 1 } {
-      set ${name}(groupnum) \$__ats_group_rowcount
+      set ${name}(groupnum) \$__${tag_id}_group_rowcount
   "
 
   template::adp_compile_chunk $chunk     
@@ -182,16 +198,16 @@ template_tag group { chunk params } {
   # look ahead to the next value and break if it is different
   # otherwise advance the cursor to the next row
   template::adp_append_code "
-      if { \$__i == \${$name:rowcount} } {
+      if { \$$i >= \${$name:rowcount} } {
         break
       }
-      upvar 0 ${name}:\[expr \$__i + 1\] $name:next 
+      upvar 0 ${name}:\[expr \$$i + 1\] $name:next 
       if { !\[string equal \${${name}:next($column)} \$${name}($column)\] } { 
         break
       }
-      incr __i
-      upvar 0 $name:\$__i $name
-      incr __ats_group_rowcount
+      incr $i
+      upvar 0 $name:\$$i $name
+      incr __${tag_id}_group_rowcount
     }
   "
 }
