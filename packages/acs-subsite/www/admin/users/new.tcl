@@ -170,18 +170,22 @@ if { [template::form is_valid add_user] } {
     if {!$double_click_p} {
 
 	db_transaction {
-	    set user_id [ad_user_new \
-		    [template::element::get_value add_user email] \
-		    [template::element::get_value add_user first_names] \
-		    [template::element::get_value add_user last_name] \
-		    $password \
-		    {} \
-		    {} \
-		    [template::element::get_value add_user url] \
-		    $email_verified_p \
-		    $member_state \
-		    $user_id]
+            
+            # LARS: Hack - we should use acs-subsite/lib/user-new instead
 
+	    array set result [auth::create_user \
+                                  -user_id $user_id \
+                                  -email [template::element::get_value add_user email] \
+                                  -first_names [template::element::get_value add_user first_names] \
+                                  -last_name [template::element::get_value add_user last_name] \
+                                  -password $password \
+                                  -password_confirm $password \
+                                  -url [template::element::get_value add_user url] \
+                                  -email_verified_p $email_verified_p]
+
+            # LARS: Hack, we should check the result
+            set user_id $result(user_id)
+                         
             # Hack for adding users to the main subsite, whose application group is the registered users group.
 
             if { $add_to_group_id != [acs_lookup_magic_object "registered_users"] ||
