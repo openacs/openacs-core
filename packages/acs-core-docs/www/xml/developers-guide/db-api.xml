@@ -1,30 +1,31 @@
 <sect1 id="db-api">
-<title>The Database Access API</title>
+  <title>The Database Access API</title>
 
-<authorblurb>
-<para>By <ulink url="mailto:psu@arsdigita.com">Pete Su</ulink></para>
-</authorblurb>
+  <para>
+    By <ulink url="mailto:psu@arsdigita.com">Pete Su</ulink> and
+    <ulink url="mailto:jsalz@mit.edu">Jon Salz</ulink>. Modified
+    by Roberto Mello.
+  </para>
+  
+  <sect2 id="db-api-overview">
+    <title>Overview</title>
+    <para>
+      One of ACS&#39;s great strengths is that code written for it is very close to
+      the database. It is very easy to interact with the database from anywhere
+      within ACS. Our goal is to develop a coherent API for database access which
+      makes this even easier. 
+    </para>
 
+  </sect2>
 
-    	<sect2 id="db-api-overview"><title>Overview</title>
+  <sect2 id="db-api-theoldway">
+    <title>The Old Way</title>
 
-    	<para>
-    		This document is a short tutorial on the Database API, meant for
-    		experienced ACS developers to get a jump-start on its usage. For a
-    		more complete discussion of the DB API, you can read
-    		<link linkend="db-api-detailed">the documentation in
-    		the kernel</link>.
-    	</para>
+    <para>
+      Here's a typical block of code from an ACS 3.x dynamic page:
+    </para>
 
-	</sect2>
-
-    	<sect2 id="db-api-theoldway"><title>The Old Way</title>
-
-    	<para>
-    		Here's a typical block of code from an ACS 3.x dynamic page:
-</para>
-
-<programlisting>
+    <programlisting>
 set tcl_var "foo"
 
 set db [ns_db gethandle]
@@ -53,68 +54,68 @@ while { [ns_db getrow $db $selection] } {
 }
 
 ns_db releasehandle $db
-</programlisting>
+    </programlisting>
 
-  
+    
 
-    	<para>
-    		Writing code like this had the following annoyances:
+    <para>
+      Writing code like this had the following annoyances:
 
-    		<itemizedlist mark="opencircle">
+      <itemizedlist mark="opencircle">
 
-      			<listitem>
-      			<para>
-        		It was repetitive, tedious and error prone to write the same type of
-			loops over and over again.
-      			</para>
-      			</listitem>
+	<listitem>
+	  <para>
+	    It was repetitive, tedious and error prone to write the same type of
+	    loops over and over again.
+	  </para>
+	</listitem>
 
-      			<listitem>
-      			<para>
-        		Using Tcl variable interpolation in a literal string, to pass values
-			from the page to the database, is error prone, relatively inefficient,
-			and a good way to compromise the security of a web site.
-      			</para>
-      			</listitem>
-      
-      			<listitem>
-      			<para>
-        		Magic like <computeroutput>set_variables_after_query</computeroutput> made code confusing.
-      			</para>
-      			</listitem>
-
-      			<listitem>
-      			<para>
-        		The scope of transactions is not clear from reading the code.
-      			</para>
-      			</listitem>
-
-      			<listitem>
-      			<para>
-        		Passing handles around explicitly made it easy to use them in bad
-			ways, like holding a handle for too long while returning data to a
-			user's browser.
-      			</para>
-      			</listitem>
-
-    		</itemizedlist>
-
-    	</para>
-
-    	<para>
-      		Introduced in ACS 3.4, the new Database API is meant to save
-      		developers from the above tedium and provide a more structured syntax
-      		for specifying database operations, including transactions.
-    	</para>
-
-	</sect2>
-
-    	<sect2 id="db-api-thenewway"><title>The New Way</title>
+	<listitem>
+	  <para>
+	    Using Tcl variable interpolation in a literal string, to pass values
+	    from the page to the database, is error prone, relatively inefficient,
+	    and a good way to compromise the security of a web site.
+	  </para>
+	</listitem>
 	
-    	<para>
-    		Here is how you would code up the example above using the new API.
-</para>
-    		<programlisting>
+	<listitem>
+	  <para>
+	    Magic like <computeroutput>set_variables_after_query</computeroutput> made code confusing.
+	  </para>
+	</listitem>
+
+	<listitem>
+	  <para>
+	    The scope of transactions is not clear from reading the code.
+	  </para>
+	</listitem>
+
+	<listitem>
+	  <para>
+	    Passing handles around explicitly made it easy to use them in bad
+	    ways, like holding a handle for too long while returning data to a
+	    user's browser.
+	  </para>
+	</listitem>
+
+      </itemizedlist>
+
+    </para>
+
+    <para>
+      Introduced in ACS 3.4, the new Database API is meant to save
+      developers from the above tedium and provide a more structured syntax
+      for specifying database operations, including transactions.
+    </para>
+
+  </sect2>
+
+  <sect2 id="db-api-thenewway"><title>The New Way</title>
+    
+    <para>
+      Here is how you would code up the example above using the new API.
+    </para>
+    <programlisting>
 set count 0 
 
 set tcl_var "foo"
@@ -136,65 +137,65 @@ db_transaction {
             	incr count
         }
 }
-    		</programlisting>
+    </programlisting>
 
-<para>
-    		There are several things to note here:
+    <para>
+      There are several things to note here:
 
-    		<orderedlist numeration="arabic">
+      <orderedlist numeration="arabic">
 
-      			<listitem>
-	      		<para>
-        		No explicit code for grabbing and releasing handles. Usage of the
-			Database API implicitly deals with all handle management issues.
-      			</para>
-      			</listitem>
+	<listitem>
+	  <para>
+	    No explicit code for grabbing and releasing handles. Usage of the
+	    Database API implicitly deals with all handle management issues.
+	  </para>
+	</listitem>
 
-  			<listitem>
-			<para>
-  			The new command <computeroutput>db_transaction</computeroutput> makes the scope of a
-  			transaction clear. <computeroutput>db_transaction</computeroutput> takes the code block
-  			argument and automatically runs it in the context of a transaction.
-  			</para>
-			</listitem>
+	<listitem>
+	  <para>
+	    The new command <computeroutput>db_transaction</computeroutput> makes the scope of a
+	    transaction clear. <computeroutput>db_transaction</computeroutput> takes the code block
+	    argument and automatically runs it in the context of a transaction.
+	  </para>
+	</listitem>
 
-  			<listitem>
-			<para>
-  			The new command <computeroutput>db_foreach</computeroutput> writes our old while loop for us.
-  			</para>
-			</listitem>
+	<listitem>
+	  <para>
+	    The new command <computeroutput>db_foreach</computeroutput> writes our old while loop for us.
+	  </para>
+	</listitem>
 	
-  			<listitem>
-			<para>
-  			Every SQL query has a name, meant to be unique within the server
-  			instance (though this is not enforced).
-  			</para>
-			</listitem>
+	<listitem>
+	  <para>
+	    Every SQL query has a name, meant to be unique within the server
+	    instance (though this is not enforced).
+	  </para>
+	</listitem>
 
-  			<listitem>
-			<para>
-  			Finally and most importantly, there is a new scheme for passing data
-  			from a Tcl variable to the database, which we'll cover next.
-  			</para>
-			</listitem>
+	<listitem>
+	  <para>
+	    Finally and most importantly, there is a new scheme for passing data
+	    from a Tcl variable to the database, which we'll cover next.
+	  </para>
+	</listitem>
 
-		</orderedlist>
+      </orderedlist>
 
-	</para>
+    </para>
 
-	</sect2>
+  </sect2>
 
-	<sect2 id="db-api-bindvariables"><title>Bind Variables</title>
+  <sect2 id="db-api-bindvariables"><title>Bind Variables</title>
 
-	<para>
+    <para>
 
-		Bind variables are placeholders for literal values in an SQL query
-		being sent to the server. Take the example query above: in the old
-		way, data was generally passed to Oracle directly, via Tcl string
-		interpolation. So in the example above, the actual query we send would
-		look like this:
-</para>
-		<programlisting>
+      Bind variables are placeholders for literal values in an SQL query
+      being sent to the server. Take the example query above: in the old
+      way, data was generally passed to Oracle directly, via Tcl string
+      interpolation. So in the example above, the actual query we send would
+      look like this:
+    </para>
+    <programlisting>
 select 
     foo, 
     bar, 
@@ -202,37 +203,54 @@ select
 from some_table, some_other_table
 where some_table.id=some_other_table.id  
 and some_table.condition_p = 'foo'
-		</programlisting>
+    </programlisting>
 
 
+    <para>
+      There are a few problems with this:
+    </para>
+    <orderedlist>
+      <listitem>
+	If the literal value is a
+	huge string, then we waste a lot of time in the database server doing
+	useless parsing.
+      </listitem>
+      <listitem>
+	Second, if the literal value contains characters like
+	single quotes, we have to be careful to double-quote them, because not
+	quoting them will lead to surprising errors.
+      </listitem>
+      <listitem>
 	<para>
-		There are a few problems with this: first, if the literal value is a
-		huge string, then we waste a lot of time in the database server doing
-		useless parsing. Second, if the literal value contains characters like
-		single quotes, we have to be careful to double-quote them, because not
-		quoting them will lead to surprising errors. Third, no type checking
-		occurs on the literal value. Finally, if the Tcl variable is passed in
-		or between web forms or otherwise subject to external modification,
-		there is nothing keeping malicious users from setting the Tcl variable
-		to some string that changes the query textually. This type of attack,
-		called SQL smuggling, can be very damaging - entire tables can be
-		exposed or have their contents deleted, for example. Another very
-    important reason for using bind variables is performance. Oracle caches
-    all previously parsed queries. If there are values in the where clause,
-    that is how the query is cached. It also performs bind variable
-    susbstitution after parsing the SQL statement. This means that SQL
-    statements that use bind variables will always match (assuming all else is
-    the same) while SQL statements that do not use bind variables will not
-    match unless the values in the statement are exactly the same. This will
-    improve performance considerably.
+	   Third, no type checking
+	  occurs on the literal value. Finally, if the Tcl variable is passed in
+	  or between web forms or otherwise subject to external modification,
+	  there is nothing keeping malicious users from setting the Tcl variable
+	  to some string that changes the query textually.
 	</para>
-
 	<para>
-		To fix all these problems, we replace literal values in the query with
-		a placeholder character, and then send the data along after. So the
-		query looks like this:
-</para>
-		<programlisting>
+	    This type of attack,
+	  called <emphasis>SQL smuggling</emphasis>, can be very
+	  damaging - entire tables can be
+	  exposed or have their contents deleted, for example. Another very
+	  important reason for using bind variables is performance. Oracle caches
+	  all previously parsed queries. If there are values in the where clause,
+	  that is how the query is cached. It also performs bind variable
+	  susbstitution after parsing the SQL statement. This means that SQL
+	  statements that use bind variables will always match (assuming all else is
+	  the same) while SQL statements that do not use bind variables will not
+	  match unless the values in the statement are exactly the same. This will
+	  improve performance considerably.
+	</para>
+      </listitem>
+    </orderedlist>
+
+    <para>
+      To fix all these problems, we replace literal values in the query with
+      a placeholder character, and then send the data along after. So the
+      query looks like this:
+    </para>
+    <programlisting>
 select 
     foo, 
     bar, 
@@ -240,15 +258,14 @@ select
 from some_table, some_other_table
 where some_table.id = some_other_table.id
 and some_table.condition_p = ?
-		</programlisting>
-
-	
-
-	<para>
-		The '?' character means "This will be filled in later with literal
-		data". In use, you might write code that looks like this:
-</para>
-		<programlisting>
+    </programlisting>
+    
+    <para>
+      The '?' character means "This will be filled in later with literal
+      data". In use, you might write code that looks like this:
+    </para>
+    
+    <programlisting>
 set statement [prepare_query "
     		select 
         		foo, 
@@ -260,35 +277,34 @@ set statement [prepare_query "
 	       "]
 
 [bind_param $statement 1 $tcl_var]
-		</programlisting>
+    </programlisting>
 
-	
+    <para>
+      The above example is meant to be psuedo-Tcl - no API like this
+      actually exists.  What happens is that we first send the SQL statement
+      to the server for parsing, then later we <emphasis>bind</emphasis> values to the
+      placeholders, and send those values along seperately. This seperate
+      binding step is where the term <emphasis>bind variable</emphasis> comes from.
+    </para>
 
-	<para>
-		The above example is meant to be psuedo-Tcl - no API like this
-		actually exists.  What happens is that we first send the SQL statement
-		to the server for parsing, then later we <emphasis>bind</emphasis> values to the
-		placeholders, and send those values along seperately. This seperate
-		binding step is where the term <emphasis>bind variable</emphasis> comes from.
-	</para>
+    <para>
+      This split has several advantages. First, type checking happens on the
+      literal. If the column we are comparing against holds numbers, and we
+      send a string, we get a nice error. Second, since string literals are
+      no longer in the query, no extra quoting is required. Third,
+      substitution of bind variables cannot change the actual text of the
+      query, only the literal values in the placeholders.
+    </para>
 
-	<para>
-		This split has several advantages. First, type checking happens on the
-		literal. If the column we are comparing against holds numbers, and we
-		send a string, we get a nice error. Second, since string literals are
-		no longer in the query, no extra quoting is required. Third,
-		substitution of bind variables cannot change the actual text of the
-		query, only the literal values in the placeholders.
-	</para>
-
-	<para>
-		The database API makes bind variables easy to use by hooking them
-		smoothly into the Tcl runtime. Rather than using a '?' as a generic
-		placeholder, you use a colon followed by the name of the Tcl variable
-		that you wish to pass as a literal. So here's the final, real-life
-		form of the example query:
-</para>
-		<programlisting>
+    <para>
+      The database API makes bind variables easy to use by hooking them
+      smoothly into the Tcl runtime. Rather than using a '?' as a generic
+      placeholder, you use a colon followed by the name of the Tcl variable
+      that you wish to pass as a literal. So here's the final, real-life
+      form of the example query:
+    </para>
+    
+    <programlisting>
 select 
     foo, 
     bar, 
@@ -296,170 +312,913 @@ select
 from some_table, some_other_table
 where some_table.id = some_other_table.id  
 and some_table.condition_p = :tcl_var
-		</programlisting>
+    </programlisting>
 
+    <para>
+      The database API parses the query and pulls out all the bind variable
+      specifications and replaces them with generic placeholders.  It then
+      automatically pulls the values of the named Tcl vars out of the
+      runtime environment of the script, and passes them to the database.
+    </para>
 
-	<para>
-		The database API parses the query and pulls out all the bind variable
-		specifications and replaces them with generic placeholders.  It then
-		automatically pulls the values of the named Tcl vars out of the
-		runtime environment of the script, and passes them to the database.
-	</para>
-
-	<para>
-		Note that while this looks like a simple syntactic change, it really
-		is very different from how we've written queries in the past.  You use
-		bind variables to replace what would otherwise be a literal value in a
-		query, and Tcl style string interpolation does not happen. So you
-		cannot do something like:
-</para>
-		<programlisting>
+    <para>
+      Note that while this looks like a simple syntactic change, it really
+      is very different from how we've written queries in the past.  You use
+      bind variables to replace what would otherwise be a literal value in a
+      query, and Tcl style string interpolation does not happen. So you
+      cannot do something like:
+    </para>
+    <programlisting>
 set table "baz"
 set condition "where foo = bar"
 
 db_foreach my_query { select :table from some_table where :condition }
-		</programlisting>
+    </programlisting>
+    
+
+    <para>
+      SQL will not allow a literal to occur where we've put the bind
+      variables, so the query is syntactically incorrect. You have to
+      remember that while the bind variable syntax looks similar to variable
+      interpolation in Tcl, it is <emphasis>not the same thing at all</emphasis>.
+    </para>
+
+    <para>
+      Finally, the DB API has several different styles for passing bind
+      variable values to queries. In general, use the style presented here
+      because it is the most convenient. 
+    </para>
+
+    <sect3 id="db-api-bind-vars-usage" xreflabel="Bind Variables Usage">
+      <title>Usage</title>
+
+      <para>Every <computeroutput>db_*</computeroutput> command accepting a SQL command as an argument
+	supports bind variables. You can either</para>
+
+      <itemizedlist>
+	<listitem>
+	  <para>
+	    Specify the <computeroutput>-bind</computeroutput> switch to provide a set with bind variable
+	    values, or
+	  </para>
+	</listitem>
+
+	<listitem>
+	  <para>
+	    Specify the <computeroutput>-bind</computeroutput> switch to explicitly provide a list of
+	    bind variable names and values, or
+	  </para>
+	</listitem>
+
+	<listitem>
+	  <para>
+	    Not specify a bind variable list at all, in which case Tcl variables are
+	    used as bind variables.
+	  </para>
+	</listitem>
+      </itemizedlist>
+
+      <para>
+	The default behavior (i.e., if the <computeroutput>-bind</computeroutput> switch is omitted) is
+	that these procedures expect to find local variables that correspond in name
+	to the referenced bind variables, e.g.: 
+      </para>
+      
+      <programlisting>
+
+set user_id 123456
+set role &quot;administrator&quot;
+
+db_foreach user_group_memberships_by_role {
+    select g.group_id, g.group_name
+    from user_groups g, user_group_map map
+    where g.group_id = map.user_id
+    and map.user_id = :user_id
+    and map.role = :role
+} {
+    # do something for each group of which user 123456 is in the role
+    # of &quot;administrator&quot;
+}
+
+      </programlisting>
+
+      <para>
+	The value of the local Tcl variable <computeroutput>user_id</computeroutput> (123456) is bound to
+	the <computeroutput>user_id</computeroutput> bind variable. 
+      </para>
+
+      <para>The <computeroutput>-bind</computeroutput> switch can takes the name of an <computeroutput>ns_set</computeroutput>
+	containing keys for each bind variable named in the query, e.g.:</para>
+
+      <programlisting>
+
+set bind_vars [ns_set create]
+ns_set put $bind_vars user_id 123456
+ns_set put $bind_vars role &quot;administrator&quot;
+
+db_foreach user_group_memberships_by_role {
+    select g.group_id, g.group_name
+    from user_groups g, user_group_map map
+    where g.group_id = map.user_id
+    and map.user_id = :user_id
+    and map.role = :role
+} -bind $bind_vars {
+    # do something for each group in which user 123456 has the role
+    # of &quot;administrator&quot;
+}
+
+      </programlisting>
+
+      <para>
+	Alternatively, as an argument to <computeroutput>-bind</computeroutput> you can specify a list of
+	alternating name/value pairs for bind variables: 
+      </para>
+      
+      <programlisting>
 	
+db_foreach user_group_memberships_by_role {
+    select g.group_id, g.group_name
+    from user_groups g, user_group_map map
+    where g.group_id = map.user_id
+    and map.user_id = :user_id
+    and map.role = :role
+} -bind [list user_id 123456 role &quot;administrator&quot;] {
+    # do something for each group in which user 123456 has the role
+    # of &quot;administrator&quot;
+}
 
-	<para>
-		SQL will not allow a literal to occur where we've put the bind
-		variables, so the query is syntactically incorrect. You have to
-		remember that while the bind variable syntax looks similar to variable
-		interpolation in Tcl, it is <emphasis>not the same thing at all</emphasis>.
-	</para>
+      </programlisting>
+    </sect3>
+    
+    <sect3 id="dbapi_nulls_and_bind_vars" xreflabel="Nulls and Bind Variables">
+      <title>Nulls and Bind Variables</title>
 
-	<para>
-		Finally, the DB API has several different styles for passing bind
-		variable values to queries. In general, use the style presented here
-		because it is the most convenient. You'll see the other styles
-		described in the detailed API document, but they're not important.
-	</para>
+      <para>
+	When processing a DML statement, Oracle coerces empty strings into
+	<computeroutput>null</computeroutput>. (This coercion does <emphasis>not</emphasis> occur in the
+	<computeroutput>WHERE</computeroutput> clause of a query, i.e.
+	<computeroutput>col = &#39;&#39;</computeroutput> and
+	<computeroutput>col is null</computeroutput> are not equivalent.) 
+      </para>
 
-	</sect2>
+      <para>As a result, when using bind variables, the only way to make Oracle set a
+	column value to <computeroutput>null</computeroutput> is to set the corresponding bind variable
+	to the empty string, since a bind variable whose value is the string
+	&quot;null&quot; will be interpreted as the literal string
+	&quot;null&quot;.</para>
 
-	<sect2 id="db-api-basicapi"><title>Basic API</title>
+      <para>These Oracle quirks complicate the process of writing clear and abstract
+	DML difficult. Here is an example that illustrates why:</para>
 
-	<para>
-		The Database API has several functions that wrap familiar parts of the
-		AOLserver database API. We won't cover the details of all the calls
-		here; instead, we'll list the most frequently used calls, with links
-		to further detail:
+      <programlisting>
 
-	<variablelist>
+#
+# Given the table:
+#
+#   create table foo (
+#           bar        integer,
+#           baz        varchar(10)
+#   );
+#
 
-  		<varlistentry>
-    		<term><link linkend="dbapi_db_null"><computeroutput>db_null</computeroutput></link></term>
-    		<listitem>
-		<para>
-			Returns a value which can be used in a bind variable to represent
-    			the SQL value <computeroutput>null</computeroutput>. You should use this instead of empty
-    			strings when passing nulls to the database, because using the empty
-    			string as the null value is not portable across databases. See 
-    			<link linkend="dbapi_nulls_and_bind_vars">Nulls and Bind Variables</link>.
-    		</para>
-		</listitem>
-  		</varlistentry>
+set bar &quot;&quot;
+set baz &quot;&quot;
 
-  		<varlistentry>
-    		<term><link linkend="dbapi_db_foreach">
-      		<computeroutput>db_foreach</computeroutput></link>
-      		<emphasis><computeroutput>query_name sql { code } </computeroutput></emphasis>
-    		</term>
-    		<listitem><para>Runs a query returning multiple rows and executes a code block for
-    		each row returned.
-    		</para></listitem>
-  		</varlistentry>
+db_dml foo_create &quot;insert into foo(bar, baz) values(:bar, :baz)&quot;
+#
+# the values of the &quot;bar&quot; and &quot;baz&quot; columns in the new row are both
+# null, because Oracle has coerced the empty string (even for the
+# numeric column &quot;bar&quot;) into null in both cases
 
+      </programlisting>
 
+      <para>
+	Since databases other than Oracle do not coerce empty strings into
+	<computeroutput>null</computeroutput>, this code has different semantics depending on the
+	underlying database (i.e., the row that gets inserted may not have null as
+	its column values), which defeats the purpose of SQL abstraction. 
+      </para>
 
-  <varlistentry>
-  <term><link linkend="dbapi_db_1row">
-  <computeroutput>db_1row</computeroutput></link>
-  <emphasis><computeroutput>query_name sql</computeroutput></emphasis></term>
+      <para>Therefore, the Database Access API provides a database-independent way to
+	represent <computeroutput>null</computeroutput> (instead of the Oracle-specific idiom of the
+	empty string): <phrase><computeroutput>db_null</computeroutput></phrase>.</para>
 
-  <listitem>
-  <para>This is similar to the old <computeroutput>ns_db 1row</computeroutput> call.</para>
-  </listitem>
-  </varlistentry>
+      <para>Use it instead of the empty string whenever you want to set a column value
+	explicitly to <computeroutput>null</computeroutput>, e.g.:</para>
 
+      <programlisting>
 
-  <varlistentry>
-  <term><link linkend="dbapi_db_0or1row">
-  <computeroutput>db_0or1row</computeroutput></link>
-  <emphasis><computeroutput>query_name sql</computeroutput></emphasis></term>
+set bar [db_null]
+set baz [db_null]
 
-  <listitem>
-  <para>This is similar to the old call <computeroutput>ns_db 0or1row</computeroutput></para>
-  </listitem>
-  </varlistentry>
+db_dml foo_create &quot;insert into foo(bar, baz) values(:bar, :baz)&quot;
+#
+# sets the values for both the &quot;bar&quot; and &quot;baz&quot; columns to null
 
+      </programlisting>
+    </sect3>
+    
+  </sect2>
 
-  <varlistentry>
-  <term><link linkend="dbapi_db_string">
-  <computeroutput>db_string</computeroutput></link>
-  <emphasis><computeroutput>query_name sql</computeroutput></emphasis>
-  </term>
+  <sect2 id="db-api-pooling" xreflabel="Sequence Pooling">
+    <title>Sequence Pooling</title>
 
-  <listitem>
-  <para>Returns the first column of the result of a SQL query as a
-  string. Analogous to <computeroutput>database_to_tcl_string</computeroutput> and
-  <computeroutput>database_to_tcl_string_or_null</computeroutput>.
-  </para></listitem>
-  </varlistentry>
+    <para>
+      The database library can transparently maintain pools of sequence values, so
+      that each request for a new sequence value (using <computeroutput>db_nextval</computeroutput>)
+      does not incur a roundtrip to the server. For instance, this functionality is
+      very useful in the security/sessions library, which very frequently allocates
+      values from the <computeroutput>sec_id_seq</computeroutput> sequence. To utilize this
+      functionality for a particular sequence, register the sequence to be pooled,
+      either using the <computeroutput>db_register_pooled_sequence</computeroutput> procedure at server
+      startup time, or by including a configuration parameter of the form 
+    </para>
+    
+    <programlisting>
 
+PoolSequence.<emphasis>sequence_name_seq</emphasis>=<emphasis>count</emphasis>
 
-  <varlistentry>
-  <term><link linkend="dbapi_db_list">
-  <computeroutput>db_list</computeroutput></link>
-  <emphasis><computeroutput>query_name sql</computeroutput></emphasis></term>
+    </programlisting>
 
-  <listitem>
-  <para>Returns a Tcl list of values from the first column of each result row
-  of a SQL query.  Similar to the old <computeroutput>database_to_tcl_list</computeroutput>.
-  </para></listitem>
-  </varlistentry>
+    <para>
+      in <emphasis>any</emphasis> configuration section in the <computeroutput>yourservername.ini</computeroutput>
+      file, e.g., e.g., 
+    </para>
+    
+    <programlisting>
 
-  <varlistentry>
-  <term><link linkend="dbapi_db_dml">
-  <computeroutput>db_dml</computeroutput></link>
-  <computeroutput>query_name dml</computeroutput>
-  </term>
+[ns/server/<emphasis>yourservername</emphasis>/acs/security]
+PoolSequence.sec_id_seq=20
 
-  <listitem>
-  <para>Performs a DML or DDL statement.</para>
-  </listitem>
-  </varlistentry>
+    </programlisting>
 
+    <para>
+      The database library will allocate this number of sequence values at server
+      startup. It will periodically scan pools and allocate new values for
+      sequences which are less than half-full. (This normally occurs every 60
+      seconds, and is configurable via the
+      <computeroutput>PooledSequenceUpdateInterval</computeroutput> parameter in the
+      <computeroutput>[ns/server/</computeroutput>
+      <emphasis><computeroutput>yourservername</computeroutput></emphasis>
+      <computeroutput>/acs/database]</computeroutput> configuration
+      section.) 
+    </para>
 
-  <varlistentry>
-  <term><link linkend="dbapi_db_transaction">
-    <computeroutput>db_transaction</computeroutput></link>
-    <computeroutput> { code } </computeroutput>
-  </term>
+  </sect2>
   
-  <listitem>
-  <para>Performs a block of Tcl code in the scope of a transaction.</para>
-  </listitem>
-  </varlistentry>
+  <sect2 id="db-api-basicapi"><title>Basic API</title>
+
+    <para>
+      The Database API has several functions that wrap familiar parts of the
+      AOLserver database API. 
+    </para>
+
+    <para>
+      Note that you never have to use <computeroutput>ns_db</computeroutput> anymore (including
+      <computeroutput>ns_db gethandle</computeroutput>)! Just start doing stuff, and (if you want) call
+      <computeroutput>db_release_unused_handles</computeroutput> when you&#39;re done as a hint to
+      release the database handle. 
+    </para>
 
 
-  <varlistentry>
-  <term><link linkend="dbapi_db_abort_transaction">
-  <computeroutput>db_abort_transaction</computeroutput></link>
-  <computeroutput>{ code }</computeroutput>
-  </term>
+    <variablelist>
+      <varlistentry>
+	<term>
+	  <phrase>
+	    <computeroutput>
+	      <anchor
+		id="dbapi_db_abort_transaction"/>db_abort_transaction
+	    </computeroutput>
+	  </phrase>
+	</term>
 
-  <listitem>
-  <para>Aborts a transaction.</para>
-  </listitem>
-  </varlistentry>
+	<listitem>
+	  <programlisting>
+<phrase>db_abort_transaction</phrase>
+	  </programlisting> 
 
-</variablelist>
+	  <para>Aborts all levels of a transaction. That is if this is called within
+	    several nested transactions, all of them are terminated. Use this insetead of
+	    <computeroutput>db_dml &quot;abort&quot; &quot;abort transaction&quot;</computeroutput>. 
+	    
 
-</para>
+	  </para>
+	</listitem>
+      </varlistentry>
 
-<para><phrase role="cvstag">($Id$)</phrase></para>
+      <varlistentry>
+	<term>
+	  <phrase>
+	    <computeroutput>
+	      <anchor id="dbapi_db_null"/>db_null
+	    </computeroutput>
+	  </phrase>
 
-</sect2>
+	</term>
+ 
+	<listitem>
+	  <programlisting>
+<phrase><computeroutput>db_null</computeroutput></phrase>
+	  </programlisting>
+
+	  <para>
+	    Returns a value which can be used in a bind variable
+	    to represent the SQL value
+	    <computeroutput>null</computeroutput>.
+	    See <link linkend="dbapi_nulls_and_bind_vars">Nulls and
+	    Bind Variables</link> above.
+	  </para>
+	</listitem>
+      </varlistentry>
+
+      <varlistentry>
+	<term>
+	  <phrase>
+	    <computeroutput>
+	      <anchor id="dbapi_db_foreach"/>db_foreach
+	    </computeroutput>
+	  </phrase>
+	</term>
+
+	<listitem>
+	  <programlisting>
+<phrase>db_foreach</phrase> <emphasis>statement-name sql</emphasis> [ -bind <emphasis>bind_set_id</emphasis> | -bind <emphasis>bind_value_list</emphasis> ] \
+    [ -column_array <emphasis>array_name</emphasis> | -column_set <emphasis>set_name</emphasis> ] \
+    <emphasis>code_block</emphasis> [ if_no_rows <emphasis>if_no_rows_block ]</emphasis>
+	  </programlisting>
+ 
+	  <para>
+	    Performs the SQL query <emphasis>
+	      <computeroutput>sql</computeroutput>
+	    </emphasis>, executing
+	    <emphasis><computeroutput>code_block
+	      </computeroutput></emphasis> once for each row
+	    with variables set to column values (or a set or array
+	    populated if
+	    <computeroutput>-column_array</computeroutput> or
+	    <computeroutput>column_set</computeroutput> is
+	    specified). If the query returns no rows, executes
+	    <emphasis><computeroutput>if_no_rows_block
+	      </computeroutput></emphasis> (if provided).
+	  </para>
+
+	  <para>Example:</para>
+
+	  <programlisting>
+
+db_foreach select_foo &quot;select foo, bar from greeble&quot; {
+    doc_body_append &quot;&lt;li&gt;foo=$foo; bar=$bar\n&quot;
+} if_no_rows {
+    doc_body_append &quot;&lt;li&gt;There are no greebles in the database.\n&quot;
+}
+
+	  </programlisting>
+
+	  <para>
+	    The code block may contain <computeroutput>break</computeroutput> statements (which terminate the
+	    loop and flush the database handle) and <computeroutput>continue</computeroutput> statements
+	    (which continue to the next row of the loop). </para>
+
+	</listitem>
+      </varlistentry>
+      
+      <varlistentry>
+	<term>
+	  <phrase>
+	    <computeroutput>
+	      <anchor id="dbapi_db_1row"/>db_1row
+	    </computeroutput>
+	  </phrase>
+	</term>
+
+	<listitem>
+	  <programlisting>
+<phrase>db_1row</phrase> <emphasis>statement-name</emphasis> <emphasis>sql</emphasis> [ -bind <emphasis>bind_set_id</emphasis> | -bind <emphasis>bind_value_list</emphasis> ] \
+    [ -column_array <emphasis>array_name</emphasis> | -column_set <emphasis>set_name</emphasis> ]
+	  </programlisting>
+
+	  <para>
+	    Performs the SQL query <emphasis>
+	      <computeroutput>sql</computeroutput></emphasis>,
+	    setting variables to column values. Raises an error if the
+	    query does not return exactly 1 row.
+	  </para>
+
+	  <para>Example:</para>
+
+	  <programlisting>
+
+db_1row select_foo &quot;select foo, bar from greeble where greeble_id = $greeble_id&quot;
+# Bombs if there&#39;s no such greeble!
+# Now $foo and $bar are set.
+
+	  </programlisting>
+
+	</listitem>
+      </varlistentry>
+      
+      <varlistentry>
+	<term>
+	  <phrase>
+	    <computeroutput>
+	      <anchor id="dbapi_db_0or1row"/>db_0or1row
+	    </computeroutput>
+	  </phrase>
+	</term>
+
+	<listitem>
+	  <programlisting>
+<phrase>db_0or1row</phrase> <emphasis>statement-name</emphasis> <emphasis>sql</emphasis> [ -bind <emphasis>bind_set_id</emphasis> | -bind <emphasis>bind_value_list</emphasis> ] \
+    [ -column_array <emphasis>array_name</emphasis> | -column_set <emphasis>set_name</emphasis> ]
+	  </programlisting>
+
+	  <para>
+	    Performs the SQL query
+	    <emphasis><computeroutput>sql</computeroutput></emphasis>.
+	    If a row is returned, sets variables to column values and
+	    returns 1. If no rows are returned, returns 0. If more
+	    than one row is returned, throws an error.
+	  </para>
+
+	</listitem>
+      </varlistentry>
+      
+      <varlistentry>
+	<term><phrase><computeroutput><anchor id="dbapi_db_nextval"/>db_nextval</computeroutput></phrase> </term>
+
+	<listitem>
+	  <programlisting>
+<phrase>db_nextval</phrase> <emphasis>sequence-name</emphasis>
+	  </programlisting>
+
+	  <para>
+	    Returns the next value for the sequence <emphasis>sequence-name</emphasis> (using a
+	    SQL statement like <computeroutput>SELECT</computeroutput>
+	    <emphasis><computeroutput>sequence-name</computeroutput></emphasis><computeroutput>.nextval FROM
+	      DUAL</computeroutput>). If sequence pooling is enabled for the sequence, transparently
+	    uses a value from the pool if available to save a round-trip to the database
+	    (see <emphasis><xref linkend="db-api-pooling"/></emphasis>). 
+	  </para>
+	</listitem>
+      </varlistentry>
+
+      <varlistentry>
+	<term>
+	  <phrase>
+	    <computeroutput>
+	      <anchor
+	      id="dbapi_db_register_pooled_sequence"/>db_register_pooled_sequence
+	    </computeroutput>
+	  </phrase>
+	</term>
+
+	<listitem>
+	  <programlisting>
+<phrase>db_register_pooled_sequence</phrase> <emphasis>sequence-name</emphasis> <emphasis>pool-size</emphasis>
+	  </programlisting>
+
+	  <para>Registers the sequence <emphasis>sequence-name</emphasis> to be pooled, with a pool
+	    size of <emphasis>pool-size</emphasis> sequence values
+	    (see <emphasis><xref linkend="db-api-pooling"/></emphasis>). 
+
+	  </para>
+	</listitem>
+      </varlistentry>
+
+      <varlistentry>
+	<term><phrase><computeroutput><anchor id="dbapi_db_string"/>db_string</computeroutput></phrase> </term>
+	
+	<listitem>
+	  <programlisting>
+<phrase>db_string</phrase> <emphasis>statement-name</emphasis> <emphasis>sql</emphasis> [ -default <emphasis>default</emphasis> ] [ -bind <emphasis>bind_set_id</emphasis> | -bind <emphasis>bind_value_list</emphasis> ]
+	  </programlisting>
+
+	  <para>Returns the first column of the result of SQL query
+	    <emphasis><computeroutput>sql</computeroutput></emphasis>.
+	    If <emphasis><computeroutput>sql</computeroutput></emphasis> doesn&#39;t return a
+	    row, returns
+	    <emphasis><computeroutput>default</computeroutput></emphasis>
+	    (or throws an error if
+	    <emphasis><computeroutput>default</computeroutput></emphasis> is unspecified). Analogous to
+	    <computeroutput>database_to_tcl_string</computeroutput> and
+	    <computeroutput>database_to_tcl_string_or_null</computeroutput>. 
+
+	  </para>
+	</listitem>
+      </varlistentry>
+
+      <varlistentry>
+	<term><phrase><computeroutput><anchor id="dbapi_db_list"/>db_list</computeroutput></phrase></term>
+
+	<listitem>
+	  <programlisting>
+<phrase>db_list</phrase> <emphasis>statement-name</emphasis> <emphasis>sql</emphasis> [ -bind <emphasis>bind_set_id</emphasis> | -bind <emphasis>bind_value_list</emphasis> ]
+	  </programlisting>
+
+	  <para>Returns a Tcl list of the values in the first column of the result of SQL
+	    query
+	    <emphasis><computeroutput>sql</computeroutput></emphasis>.
+	    If <emphasis><computeroutput>sql</computeroutput></emphasis> doesn&#39;t
+	    return any rows, returns an empty list. Analogous to
+	    <computeroutput>database_to_tcl_list</computeroutput>. 
+
+	  </para>
+	</listitem>
+      </varlistentry>
+
+      <varlistentry>
+	<term><phrase><computeroutput><anchor id="dbapi_db_list_of_lists"/>db_list_of_lists</computeroutput></phrase></term>
+
+	<listitem>
+	  <programlisting>
+<phrase>db_list_of_lists</phrase> <emphasis>statement-name</emphasis> <emphasis>sql</emphasis> [ -bind <emphasis>bind_set_id</emphasis> | -bind <emphasis>bind_value_list</emphasis> ]
+	  </programlisting>
+
+	  <para>Returns a Tcl list, each element of which is a list of all column values
+	    in a row of the result of SQL query <emphasis><computeroutput>sql</computeroutput></emphasis>. If
+	    <emphasis><computeroutput>sql</computeroutput></emphasis> doesn&#39;t return any rows, returns an empty list.
+	    (Analogous to <computeroutput>database_to_tcl_list_list</computeroutput>.) 
+
+	  </para>
+	</listitem>
+      </varlistentry>
+
+      <varlistentry>
+	<term><phrase><computeroutput><anchor id="dbapi_db_dml"/>db_dml</computeroutput></phrase></term> 
+	
+	<listitem>
+	  <programlisting>
+<phrase>db_dml</phrase> <emphasis>statement-name</emphasis> <emphasis>sql</emphasis> \
+    [ -bind <emphasis>bind_set_id</emphasis> | -bind <emphasis>bind_value_list</emphasis> ] \
+    [ -blobs <emphasis>blob_list</emphasis> | -clobs <emphasis>clob_list</emphasis> |
+      -blob_files <emphasis>blob_file_list</emphasis> | -clob_files <emphasis>clob_file_list</emphasis> ]
+	  </programlisting>
+
+	  <para>Performs the DML or DDL statement <emphasis><computeroutput>sql</computeroutput></emphasis>. </para>
+
+	  <para>If a length-<emphasis>n</emphasis> list of blobs or clobs is provided, then the SQL
+	    should return <emphasis>n</emphasis> blobs or clobs into the bind variables
+	    <computeroutput>:1</computeroutput>, <computeroutput>:2</computeroutput>, ... :<emphasis><computeroutput>n</computeroutput></emphasis>.
+	    <emphasis><computeroutput>blobs</computeroutput></emphasis> or <emphasis><computeroutput>clobs</computeroutput></emphasis>, if specified,
+	    should be a list of individual BLOBs or CLOBs to insert;
+	    <emphasis><computeroutput>blob_files</computeroutput></emphasis> or <emphasis><computeroutput>clob_files</computeroutput></emphasis>, if
+	    specified, should be a list of <emphasis>paths to files</emphasis> containing the data to
+	    insert. Only one of <computeroutput>-blobs</computeroutput>, <computeroutput>-clobs</computeroutput>,
+	    <computeroutput>-blob_files</computeroutput>, and <computeroutput>-clob_files</computeroutput> may be provided.</para>
+	  
+	  <para>Example:</para>
+
+	  <programlisting>
+
+db_dml insert_photos &quot;
+        insert photos(photo_id, image, thumbnail_image)
+        values(photo_id_seq.nextval, empty_blob(), empty_blob())
+        returning image, thumbnail_image into :1, :2
+    &quot;  -blob_files [list &quot;/var/tmp/the_photo&quot; &quot;/var/tmp/the_thumbnail&quot;] 
+
+	  </programlisting>
+
+
+	  <para>
+	    This inserts a new row into the <computeroutput>photos</computeroutput> table, with the contents
+	    of the files <computeroutput>/var/tmp/the_photo</computeroutput> and
+	    <computeroutput>/var/tmp/the_thumbnail</computeroutput> in the <computeroutput>image</computeroutput> and
+	    <computeroutput>thumbnail</computeroutput> columns, respectively. 
+	    
+
+	  </para>
+	</listitem>
+      </varlistentry>
+
+      <varlistentry>
+	<term>
+	  <phrase><computeroutput><anchor id="dbapi_db_write_clob"/>db_write_clob</computeroutput></phrase>,
+	  <phrase><computeroutput><anchor id="dbapi_db_write_blob"/>db_write_blob</computeroutput></phrase>,
+	  <phrase><computeroutput><anchor id="dbapi_db_blob_get_file"/>db_blob_get_file</computeroutput></phrase>
+	</term>
+
+	<listitem>
+	  <programlisting>
+<phrase>db_write_clob</phrase> <emphasis>statement-name</emphasis> <emphasis>sql</emphasis> [ -bind <emphasis>bind_set_id</emphasis> | -bind <emphasis>bind_value_list</emphasis> ]
+
+<phrase>db_write_blob</phrase> <emphasis>statement-name</emphasis> <emphasis>sql</emphasis> [ -bind <emphasis>bind_set_id</emphasis> | -bind <emphasis>bind_value_list</emphasis> ]
+
+<phrase>db_blob_get_file</phrase> <emphasis>statement-name</emphasis> <emphasis>sql</emphasis> [ -bind <emphasis>bind_set_id</emphasis> | -bind <emphasis>bind_value_list</emphasis> ]
+	  </programlisting>
+
+	  <para>Analagous to <computeroutput>ns_ora write_clob/write_blob/blob_get_file</computeroutput>. 
+
+
+	  </para>
+	</listitem>
+      </varlistentry>
+
+      <varlistentry>
+	<term><phrase><computeroutput><anchor id="dbapi_db_release_unused_handles"/>db_release_unused_handles</computeroutput></phrase></term>
+	<listitem>
+	  <programlisting>
+	    <phrase>db_release_unused_handles</phrase>
+	  </programlisting>
+ 
+	  <para>Releases any allocated, unused database handles. </para>
+
+	</listitem>
+      </varlistentry>
+
+      <varlistentry>
+	<term><phrase><computeroutput><anchor id="dbapi_db_transaction"/>db_transaction</computeroutput></phrase></term>
+	<listitem>
+
+	  <programlisting>
+<phrase>db_transaction</phrase> <emphasis>code_block</emphasis> [ on_error { <emphasis>code_block</emphasis> } ]
+	  </programlisting>
+
+	  <para>Executes <emphasis><computeroutput>code_block</computeroutput></emphasis> transactionally. Nested
+	    transactions are supported (<computeroutput>end transaction</computeroutput> is transparently
+	    <computeroutput>ns_db dml</computeroutput>&#39;ed when the outermost transaction completes). The
+	    <computeroutput>db_abort_transaction</computeroutput> command can be used to abort all levels of
+	    transactions. It is possible to specify an optional <computeroutput>on_error</computeroutput>
+	    code block that will be executed if some code in <emphasis>code_block</emphasis> throws
+	    an exception. The variable <computeroutput>errmsg</computeroutput> will be bound in that scope.
+	    If there is no <computeroutput>on_error</computeroutput> code, any errors will be propagated. </para>
+
+	  <para>Example:</para>
+
+	  
+
+	  <programlisting>
+
+proc replace_the_foo { col } {
+    db_transaction {
+        db_dml &quot;delete from foo&quot;
+        db_dml &quot;insert into foo(col) values($col)&quot;
+    }
+}
+
+proc print_the_foo {} {
+    doc_body_append &quot;foo is [db_string &quot;select col from foo&quot;]&lt;br&gt;\n&quot;
+}
+
+replace_the_foo 8
+print_the_foo ; # Writes out &quot;foo is 8&quot;
+
+db_transaction {
+    replace_the_foo 14
+    print_the_foo ; # Writes out &quot;foo is 14&quot;
+    db_dml &quot;insert into some_other_table(col) values(999)&quot;
+    ...
+    db_abort_transaction
+} on_error {
+    doc_body_append &quot;Error in transaction: $errmsg&quot;
+}
+    
+
+print_the_foo ; # Writes out &quot;foo is 8&quot;
+
+	  </programlisting>
+
+	</listitem>
+      </varlistentry>
+
+      <varlistentry>
+	<term><phrase><computeroutput><anchor id="dbapi_db_resultrows"/>db_resultrows</computeroutput></phrase></term>
+
+
+	<listitem>
+	  <programlisting>
+<phrase>db_resultrows</phrase>
+	  </programlisting>
+
+	  <para>Returns the number of rows affected or returned by the previous
+	    statement. 
+
+
+	  </para></listitem>
+      </varlistentry>
+
+      <varlistentry>
+	<term><phrase><computeroutput><anchor id="dbapi_db_with_handle"/>db_with_handle</computeroutput></phrase></term>
+	<listitem>
+	  <programlisting>
+<phrase>db_with_handle</phrase> <emphasis>var</emphasis> <emphasis>code_block</emphasis>
+	  </programlisting>
+
+
+	  <para>Places a database handle into the variable <emphasis><computeroutput>var</computeroutput></emphasis> and
+	    executes <emphasis><computeroutput>code_block</computeroutput></emphasis>. This is useful when you don&#39;t
+	    want to have to use the new API (<computeroutput>db_foreach</computeroutput>,
+	    <computeroutput>db_1row</computeroutput>, etc.), but need to use database handles explicitly. </para>
+
+	  <para>Example:</para>
+
+	  
+
+	  <programlisting>
+
+proc lookup_the_foo { foo } {
+    db_with_handle db {
+        return [db_string unused &quot;select ...&quot;]
+    }
+}
+
+db_with_handle db {
+    # Now there&#39;s a database handle in $db.
+    set selection [ns_db select $db &quot;select foo from bar&quot;]
+    while { [ns_db getrow $db $selection] } {
+        set_variables_after_query
+
+        lookup_the_foo $foo
+    }
+}
+
+	  </programlisting>
+	</listitem>
+      </varlistentry>
+
+      <varlistentry>
+	<term>
+	  <phrase>
+	    <computeroutput>
+	      <anchor
+		id="dbapi_db_nullify_empty_string"/>db_nullify_empty_string
+	    </computeroutput>
+	  </phrase>
+	</term>
+	<listitem>
+	  <programlisting>
+<phrase>db_nullify_empty_string</phrase> <emphasis>string</emphasis>
+	  </programlisting>
+
+	  <para>For true SQL purists, we provide the convenience function
+	    <phrase><computeroutput>db_nullify_empty_string</computeroutput></phrase>, which returns
+	    [db_null] if its <emphasis><computeroutput>string</computeroutput></emphasis> argument is the empty string
+	    and can be used to encapsulate another Oracle quirk: </para>
+
+	  <programlisting>
+
+set baz &quot;&quot;
+
+# Clean out the foo table
+#
+db_dml unused &quot;delete from foo&quot;
+
+db_dml unused &quot;insert into foo(baz) values(&#39;$baz&#39;)&quot;
+
+set n_rows [db_string unused &quot;select count(*) from foo where baz is null&quot;]
+#
+# $n_rows is 1; in effect, the &quot;baz is null&quot; criterion is matching
+# the empty string we just inserted (because of Oracle&#39;s coercion
+# quirk)
+
+	  </programlisting>
+
+	  <para>
+	    To balance out this asymmetry, you can explicitly set <computeroutput>baz</computeroutput> to
+	    <computeroutput>null</computeroutput> by writing: 
+	  </para>
+	  
+
+	  <programlisting>
+
+db_dml foo_insert &quot;insert into foo(baz) values(:1)&quot; {[db_nullify_empty_string $baz]}
+
+	  </programlisting>
+
+	</listitem>
+      </varlistentry>
+    </variablelist>
+
+    <para><phrase>Implementation Design (work in progress)</phrase></para>
+
+    <para>
+      <emphasis>The ideas here are preliminary, so please send feedback to <ulink url="mailto:michael@arsdigita.com">michael@arsdigita.com</ulink>. There may well
+	be a much simpler, superior design that I (Michael) am just missing right
+	now. If so, please let me know!</emphasis> 
+    </para>
+
+    <para>The basic idea is to translate the logical
+      <emphasis><computeroutput>statement-name</computeroutput></emphasis> into an actual SQL statement, written in
+      the appropriate SQL dialect for the RDBMS that is in use. The
+      <emphasis><computeroutput>sql</computeroutput></emphasis> argument is essentially a convenience that enables
+      the SQL for the &quot;default dialect&quot; to be written inline. For 3.4, we
+      will probably use configuration parameters to tell the Database Access API
+      what the default dialect is and what dialect is actually in use:</para>
+
+    <programlisting>
+
+[ns/server/<emphasis>server_name</emphasis>/acs]
+...
+DefaultSQLDialect=oracle8
+SQLDialect=postgres7
+
+    </programlisting>
+
+    <para>
+      (An alternative approach would be to use the ACS Package Manager, i.e.,
+      install a &quot;pseudo-package&quot; with no actual code to indicate what
+      RDBMS is installed. Then, the Database Access API could query the APM to
+      figure what SQL dialect to employ.) 
+    </para>
+    
+    <para>For instructing the Database Access API to translate a named statement in
+      a specific SQL dialect, we may define a new API call:</para>
+
+    <programlisting>
+<emphasis>statement_location</emphasis> <emphasis>statement_name</emphasis> <emphasis>sql_dialect</emphasis> <emphasis>sql</emphasis>
+
+    </programlisting>
+
+    <para>
+      which would be called at server initialization time. The Database Access API
+      will then know to use the SQL statement appropriate for the specified
+      <computeroutput>SQLDialect</computeroutput>. (The name <computeroutput>db_implement_statement</computeroutput> is
+      very tentative.) </para>
+    
+    <para>Issues:</para>
+
+    <itemizedlist>
+      <listitem>
+	<para>
+	  Is making the caller of <computeroutput>db_implement_statement</computeroutput> explicitly
+	  specify the statement location (e.g., &quot;/bboard/q-and-a&quot;) too much
+	  of a pain? Can we make this more convenient somehow? 
+	</para>
+      </listitem>
+
+      <listitem>
+	<para>
+	  In the case that the inline SQL is not in the specified
+	  <computeroutput>SQLDialect</computeroutput>, reading the rewritten SQL into memory for the life
+	  of the server may not be a good idea. The three basic approaches I can think
+	  of to implement the
+	  <computeroutput>db_implement_statement</computeroutput> API are:
+	</para>
+	<orderedlist>
+	  <listitem>
+	    <para>
+	      Cache the rewritten SQL for the appropriate SQL dialect in an
+	      <computeroutput>nsv</computeroutput> array
+	    </para>
+	  </listitem>
+
+	  <listitem>
+	    <para>Cache the rewritten SQL for the appropriate SQL dialect in a special
+	      database table that we keep pinned in memory
+	    </para>
+	  </listitem>
+	  <listitem>
+	    <para>
+	      Cache the rewritten SQL for the appropriate SQL dialect in a special
+	      file, maybe even a DBM file
+	    </para>
+	  </listitem>
+	</orderedlist>
+      </listitem>
+      <listitem>
+	<para>
+	  Given the above two issues, should we rethink the
+	  <computeroutput>db_implement_statement</computeroutput> API
+	  altogether?
+	</para>
+
+	<para>
+	  One possibility is a file-based approach, where the alternative SQL
+	  statements would live in conventionally named and located files, e.g.,
+	  <computeroutput>/bboard/q-and-a.postgres7</computeroutput> would contain Postgres 7 versions of
+	  the SQL statements in <computeroutput>/bboard/q-and-a.tcl</computeroutput>.) A potential con of
+	  this approach is that the Database Access API would have to perform file I/O
+	  for every SQL statement that&#39;s been rewritten. This may be a non-issue; I
+	  don&#39;t actually know. (We could augment this approach with caching too,
+	  perhaps a fixed-size LRU cache.)</para>
+
+	<para>Another similar approach would be just to have one massive, magic file for
+	  each SQL dialect that maps each statement identifier (location plus name) to
+	  the corresponding statement.</para>
+
+      </listitem>
+
+      <listitem><para>Another larger problem is the fact that this design does not work for
+	  instances where we build a SQL statement based on control flow logic, e.g.,
+	  we sometimes join in an extra table based on the user input. This problem
+	  doesn&#39;t mean that the design as a whole is broken; it just means that
+	  this design alone does not get us all the way to full SQL abstraction.</para></listitem>
+    </itemizedlist>
+    
+    <para>
+      Version 2.1 of <ulink url="http://www.arsdigita.com/free-tools/oracle-driver">the ArsDigita Oracle
+	Driver</ulink> adds a set of <computeroutput>ns_ora</computeroutput> analogs for the following
+      <computeroutput>ns_db</computeroutput> calls:
+      <computeroutput>0or1row</computeroutput>, <computeroutput>1row</computeroutput>,
+      <computeroutput>select</computeroutput>, and
+      <computeroutput>dml</computeroutput>.
+      (It also adds <computeroutput>ns_ora
+	array_dml</computeroutput>.) Thus, the groundwork for implementing the above API for
+      ACS/Oracle is already established. </para>
+    
+    <para>
+      <phrase role="cvstag">($Id$)</phrase>
+    </para>
+
+  </sect2>
 
 </sect1>

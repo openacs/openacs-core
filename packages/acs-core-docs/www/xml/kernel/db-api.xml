@@ -472,8 +472,8 @@ db_foreach user_group_memberships_by_role {
 When processing a DML statement, Oracle coerces empty strings into
 <computeroutput>null</computeroutput>. (This coercion does <emphasis>not</emphasis> occur in the
 <computeroutput>WHERE</computeroutput> clause of a query, i.e.
-<computeroutput>col&nbsp;=&nbsp;&#39;&#39;</computeroutput> and
-<computeroutput>col&nbsp;is&nbsp;null</computeroutput> are not equivalent.) 
+<computeroutput>col = &#39;&#39;</computeroutput> and
+<computeroutput>col is null</computeroutput> are not equivalent.) 
 </para>
 
 <para>As a result, when using bind variables, the only way to make Oracle set a

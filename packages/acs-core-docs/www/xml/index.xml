@@ -1,6 +1,6 @@
 <?xml version='1.0' ?>
-<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" 
-	       "http://developer.arsdigita.com/docbook/dtd/4.1.2/docbookx.dtd" [
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+               "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [ 
 
 <!-- For Developers -->
 <!ENTITY api SYSTEM "developers-guide/db-api.xml">
@@ -12,8 +12,6 @@
 <!ENTITY templates SYSTEM "developers-guide/templates.xml">
 <!ENTITY object-identity SYSTEM "developers-guide/object-identity.xml">
 <!ENTITY parties SYSTEM "developers-guide/parties.xml">
-
-
 
 <!ENTITY objects-design SYSTEM "kernel/object-system-design.xml">
 <!ENTITY objects-req SYSTEM "kernel/object-system-req.xml">
@@ -65,228 +63,220 @@
 <!-- "For Everyone" documents -->
 
 <!ENTITY release-notes SYSTEM "for-everyone/release-notes.xml">
- 
-
-
 ]>
 
 <book>
-<title>ACS Core</title>
+  <title>OpenACS Documentation</title>
 
-<part label="Part I" id="for-everyone">
-<title>ACS For Everyone</title>
-<partintro>
-<para>High level information: What is the ACS?</para>
-</partintro>
+  <part label="Part I" id="for-everyone">
+    <title>OpenACS For Everyone</title>
+    <partintro>
+      <para>High level information: What is OpenACS?</para>
+    </partintro>
 
-<chapter id="general-documents" xreflabel="High level information: What is the ACS?">
-<title>High level information: What is the ACS?</title>
-<sect1>
-<title>Overview</title>
-<para>The place to start if you want a soft, high level introduction to the ACS</para>
-</sect1>
+    <chapter id="general-documents" xreflabel="High level information: What is OpenACS?">
+      <title>High level information: What is OpenACS?</title>
+      <sect1>
+	<title>Overview</title>
+	<para>The place to start if you want a soft, high level introduction to OpenACS</para>
+      </sect1>
 
       &release-notes;
 
-</chapter>
+    </chapter>
 
-</part>
+  </part>
 
-<part label="Part II" id="acs-admin">
-<title>For ACS Admins</title>
-<partintro>
-<para>Help to the folks keeping an ACS installation up and running.</para>
-</partintro>
+  <part label="Part II" id="acs-admin">
+    <title>For OpenACS Admins</title>
+    <partintro>
+      <para>Help to the folks keeping an OpenACS installation up and running.</para>
+    </partintro>
 
 
-<chapter id="unix-install" xreflabel="Installing on Unix/Linux">
-<title>Installing on Unix/Linux</title>
+    <chapter id="unix-install" xreflabel="Installing on Unix/Linux">
+      <title>Installing on Unix/Linux</title>
 
-<sect1>
-<title>Overview</title>
-<para> 
-This document is a guide to installing the ArsDigita Community
-System (ACS).  It is targeted for first time users who may not be
-familiar with Oracle and AOLServer, but who are familiar with UNIX -
-with an emphasis on Linux.  However, for the purposes of running the
-ACS, Linux is not substantially different from other UNIX systems,
-such as Solaris or HP-UX.
-</para>
-
-<para> 
-Assuming you have a computer with a network connection, before
-starting installation of ACS please refer to the following:
-</para>
-
-<itemizedlist>
-    <listitem><para> If it's a PC and you're going to use Linux, then read everything. </para></listitem>
-    <listitem><para> If it's a UNIX box, skip the Linux chapter and read everything else. </para></listitem>
-    <listitem><para> If it's a Windows box, read <link linkend="win-install">How to install ACS on Windows</link>
-    instead.  </para></listitem>
-    <listitem><para> If you already have Oracle up and running, then skip to the
-    AOLServer 3.1 chapter and read from there.</para></listitem>
-
-</itemizedlist>
-
- <para>
-If you are interested in learning more about the ACS first, then
-please read Chapter Three: <ulink url="http://www.arsdigita.com/books/panda/community.html">Scalable
-Systems for Online Communities</ulink> from <ulink url="http://www.arsdigita.com/books/panda/">Philip &amp; Alex's Guide to
-Web Publishing</ulink>, and this document on <ulink url="http://philip.greenspun.com/wtr/using-the-acs.html">Using the
-ArsDigita Community System</ulink>.
-</para>
-</sect1>
-
-       &getstarted;
-       &requirements;
-       &redhat;
-       &oracle;
-       &aolserver;
-       &acs;
-       &acc-tests;
-       &credits;
-
-</chapter>
-
-<chapter id="win-install">
-<title>Installing on Windows</title>
-
-<sect1>
-<title>Overview</title>
-<para>This walks you through an ACS installation under Windows.</para>
-</sect1>
-
-&win2k;
-
-</chapter>
-
-</part>
-
-<part label="Part III" id="acs-dev">
-<title>For ACS Developers</title>
-<partintro>
-<para>This is the place to look if you want to extend the ACS and build on top
-of what's already here. Here you can find out about the guts of the system.</para>
-</partintro>
-
-<chapter id="dev-guide">
-<title>ACS Developer's Guide</title>
-
-	<sect1>
+      <sect1>
 	<title>Overview</title>
-	<para>A tour of what you need to know in order to extend the ACS.</para>
-	</sect1>
+	<para> 
+	  This document is a guide to installing OpenACS).
+	  It is targeted for first time users who may not be
+	  familiar with Oracle and AOLServer, but who are familiar with UNIX -
+	  with an emphasis on Linux.  However, for the purposes of running the
+	  OpenACS, Linux is not substantially different from other UNIX systems,
+	  such as Solaris or HP-UX.
+	</para>
 
-	&objects;
-	&packages;
-	&rp;
-	&api;
-	&templates;
-	&permissions;
-	&subsites;
+	<para> 
+	  Assuming you have a computer with a network connection, before
+	  starting installation of OpenACS please refer to the following:
+	</para>
 
-   
-	
-</chapter>
+	<itemizedlist>
+	  <listitem><para> If it's a PC and you're going to use Linux, then read everything. </para></listitem>
+	  <listitem><para> If it's a UNIX box, skip the Linux chapter and read everything else. </para></listitem>
+	  <listitem><para> If it's a Windows box, read <link linkend="win-install">How to install OpenACS on Windows</link>
+	      instead.  </para></listitem>
+	  <listitem><para> If you already have Oracle up and running, then skip to the
+	      AOLserver 3.x chapter and read from there.</para></listitem>
 
-<chapter id="more-developer-info">
-<title>Other Developer Resources</title>
+	</itemizedlist>
 
-        <sect1>
+	<para>
+	  If you are interested in learning more about OpenACS first, then
+	  please read Chapter Three: <ulink url="http://www.arsdigita.com/books/panda/community.html">Scalable
+	    Systems for Online Communities</ulink> from <ulink url="http://www.arsdigita.com/books/panda/">Philip &amp; Alex's Guide to
+	    Web Publishing</ulink>, and this document on <ulink url="http://philip.greenspun.com/wtr/using-the-acs.html">Using the
+	    ArsDigita Community System</ulink>.
+	</para>
+      </sect1>
+
+      &getstarted;
+      &requirements;
+      &redhat;
+      &oracle;
+      &aolserver;
+      &acs;
+      &acc-tests;
+      &credits;
+
+    </chapter>
+
+    <chapter id="win-install">
+      <title>Installing on Windows</title>
+
+      <sect1>
+	<title>Overview</title>
+	<para>This walks you through an OpenACS installation under Windows.</para>
+      </sect1>
+
+      &win2k;
+
+    </chapter>
+
+  </part>
+
+  <part label="Part III" id="acs-dev">
+    <title>For OpenACS Developers</title>
+    <partintro>
+      <para>This is the place to look if you want to extend OpenACS and build on top
+	of what's already here. Here you can find out about the guts of the system.</para>
+    </partintro>
+
+    <chapter id="dev-guide">
+      <title>OpenACS Developer's Guide</title>
+
+      <sect1>
+	<title>Overview</title>
+	<para>A tour of what you need to know in order to extend OpenACS.</para>
+      </sect1>
+
+      &objects;
+      &packages;
+      &rp;
+      &api;
+      &templates;
+      &permissions;
+      &subsites;
+
+      
+      
+    </chapter>
+
+    <chapter id="more-developer-info">
+      <title>Other Developer Resources</title>
+
+      <sect1>
         <title>Overview</title>
         <para>Developer information that doesn't really fit anywhere else.</para>
-        </sect1>
+      </sect1>
 
-        &parties;
-        &object-identity;
-        &programming-aolserver;
-        &working-with-xml;
+      &parties;
+      &object-identity;
+      &programming-aolserver;
+      &working-with-xml;
 
-</chapter>
+    </chapter>
 
-<chapter id="eng-standards">
-<title>Engineering Standards</title>
+    <chapter id="eng-standards">
+      <title>Engineering Standards</title>
 
-	<sect1>
-	<title>Overview</title>
-	<para>ArsDigita standards.</para>
-	</sect1>
+      &dbprimer;
+      &psgml-mode;
+      &design-template;
+      &requirements-template;
+      &versioning;
+      &constraint-naming;
+      &filenaming;
+      &plsql-standards;
 
-	&dbprimer;
-        &psgml-mode;
-        &design-template;
-        &requirements-template;
-        &versioning;
-        &constraint-naming;
-        &filenaming;
-        &plsql-standards;
+    </chapter>
 
-</chapter>
+    <chapter id="kernel-doc">
+      <title>Kernel Documentation</title>
 
-<chapter id="kernel-doc">
-<title>Kernel Documentation</title>
-
-        <sect1>
+      <sect1>
         <title>Overview</title>
         <para>
-        Compared to its predecessors, version 4 of the ArsDigita Community
-        System (ACS) has a much more structured organization, i.e. the most
-        significant change is found at the system architecture level,
-        reflected in the following hierarchy:
+	  Compared to its predecessors, version 4 of OpenACS has a much
+	  more structured organization, i.e. the most
+	  significant change is found at the system architecture level,
+	  reflected in the following hierarchy:
         </para>
 
-<itemizedlist>
-    <listitem><para>The <phrase>ACS 4 Kernel</phrase>, which handles system-wide necessities
-    such as metadata, security, users and groups, subsites, and
-    package management and deployment.
-    </para></listitem>
-    
-    
+	<itemizedlist>
+	  <listitem><para>The <phrase>OpenACS 4 Kernel</phrase>, which handles system-wide necessities
+	      such as metadata, security, users and groups, subsites, and
+	      package management and deployment.
+	    </para></listitem>
+	  
+	  
 
-    <listitem><para>The <phrase>ACS 4 Core</phrase>, which comprises all the other packages
-    that ship with the kernel and are most frequently needed by users,
-    such as templating, bboard, and user registration/management. The
-    packages tend to be developed and distributed with the kernel.
-    </para></listitem>
-    
-    
-    
-    <listitem><para><phrase>ACS 4 Application packages</phrase>, which typically provide
-    user-level web services built on top of the Kernel and Core.  Such
-    packages include those built by ArsDigita as well as external
-    contributors.  Application packages are developed separately from
-    the Kernel, and are typically released independently of it.
-    </para></listitem>
-</itemizedlist>
+	  <listitem><para>The <phrase>OpenACS 4 Core</phrase>, which comprises all the other packages
+	      that ship with the kernel and are most frequently needed by users,
+	      such as templating, bboard, and user registration/management. The
+	      packages tend to be developed and distributed with the kernel.
+	    </para></listitem>
+	  
+	  
+	  
+	  <listitem><para><phrase>OpenACS 4 Application packages</phrase>, which typically provide
+	      user-level web services built on top of the Kernel and Core.  Such
+	      packages include those built by ArsDigita as well as external
+	      contributors.  Application packages are developed separately from
+	      the Kernel, and are typically released independently of it.
+	    </para></listitem>
+	</itemizedlist>
 
-<para>
-This document provides a high level overview of the kernel
-package. Documentation for the other packages can be found <ulink url="index.html">elsewhere</ulink>.
-</para>
-</sect1>
+	<para>
+	  This document provides a high level overview of the kernel
+	  package. Documentation for the other packages can be found <ulink url="index.html">elsewhere</ulink>.
+	</para>
+      </sect1>
 
-     &objects-req;
-     &objects-design;
-     &permissions-req;
-     &permissions-design;
-     &groups-req;
-     &groups-design;
-     &subsites-req;
-     &subsites-design;
-     &apm-req;
-     &apm-design;
+      &objects-req;
+      &objects-design;
+      &permissions-req;
+      &permissions-design;
+      &groups-req;
+      &groups-design;
+      &subsites-req;
+      &subsites-design;
+      &apm-req;
+      &apm-design;
 
-     &security-req;
-     &security-design;
-     &security-notes;
-     &rp-req;
-     &rp-design;
-     &db-api;
-     &tcl-doc;
-     &bootstrap-acs;
+      &security-req;
+      &security-design;
+      &security-notes;
+      &rp-req;
+      &rp-design;
+      &db-api;
+      &tcl-doc;
+      &bootstrap-acs;
 
-</chapter>
+    </chapter>
 
-</part>
+  </part>
 
 </book>
