@@ -210,6 +210,7 @@ admin_email=`get_config_param admin_email`
 admin_password=`get_config_param admin_password`
 aolserver_config_file=`get_config_param aolserver_config_file`
 install_xml_file=`get_config_param install_xml_file`
+tclwebtest_scripts=`get_config_param tclwebtest_scripts`
 
 # If pre/post checkout scripts have been provided, check that they can
 # be executed
@@ -562,7 +563,19 @@ if parameter_true $do_install; then
       echo "$(date): Beginning 'vacuum analyze'."
       su  `get_config_param pg_db_user` -c "export LD_LIBRARY_PATH=${pg_bindir}/../lib; ${pg_bindir}/vacuumdb -p $pg_port -z $db_name"
   fi
-   
+
+  #-------------------------------------------------------------------
+  # Run any additional tclwebtest scripts
+  if [ -n "$tclwebtest_scripts" ]; then
+      echo "$(date): Running additional tclwebtest scripts"
+
+      for tclwebtest_script_path in $tclwebtest_scripts
+      do
+        echo "$(date): Running tclwebtest script $tclwebtest_script_path"
+        ${tclwebtest_dir}/tclwebtest -config_file $config_file $tclwebtest_script_path
+      done
+  fi  
+
   #-------------------------------------------------------------------
   # Warn about errors in the HTML returned from the server
   ./warn-if-installation-errors.sh `get_config_param install_output_file`
@@ -604,4 +617,3 @@ admin email   : $admin_email
 admin password: $admin_password
 ######################################################################"
 fi
-

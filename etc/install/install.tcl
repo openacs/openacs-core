@@ -257,3 +257,10 @@ set demo_users_password "guest"
 
 # Should links be crawled to search for broken pages? This doesn't quite work!
 set crawl_links "no"
+
+#----------------------------------------------------------------------
+# HTTP level testing and demo data setup with tclwebtest
+#----------------------------------------------------------------------
+# A list of full paths for any additional tclwebtest scripts that should
+# be executed after install
+set tclwebtest_scripts ""
