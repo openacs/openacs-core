@@ -669,7 +669,7 @@ ad_proc ad_html_security_check { html } {
 		    set attr_value [lindex $attribute 1]
 		    
 		    if { ![info exists allowed_attribute($attr_name)] } {
-			return "The attribute '$attr_name' is not allowed for <$tagname> tags"
+			return "The attribute '$attr_name' is not allowed for $tagname tags"
 		    }
 		    
 		    if { [regexp {^\s*([^\s:]+):} $attr_value match protocol] } {
