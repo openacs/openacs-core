@@ -45,26 +45,34 @@ proc db_rdbms_get_version {rdbms} {
 
 # The Constructor
 
-proc db_fullquery_create {querytext bind_vars_lst query_type rdbms} {
-    return [list $querytext $bind_vars_lst $query_type $rdbms_type $rdbms_version]
+proc db_fullquery_create {queryname querytext bind_vars_lst query_type rdbms load_location} {
+    return [list $queryname $querytext $bind_vars_lst $query_type $rdbms_type $rdbms_version $load_location]
 }
 
 # The Accessor procs
 
-proc db_fullquery_get_querytext {fullquery} {
+proc db_fullquery_get_name {fullquery} {
     return [list $fullquery 0]
 }
 
-proc db_fullquery_get_bind_vars {fullquery} {
+proc db_fullquery_get_querytext {fullquery} {
     return [list $fullquery 1]
 }
 
-proc db_fullquery_get_query_type {fullquery} {
+proc db_fullquery_get_bind_vars {fullquery} {
     return [list $fullquery 2]
 }
 
-proc db_fullquery_get_rdbms {fullquery} {
+proc db_fullquery_get_query_type {fullquery} {
     return [list $fullquery 3]
+}
+
+proc db_fullquery_get_rdbms {fullquery} {
+    return [list $fullquery 4]
+}
+
+proc db_fullquery_get_load_location {fullquery} {
+    return [list $fullquery 5]
 }
 
 
@@ -144,16 +152,37 @@ proc db_fullquery_internal_load_queries {file_pointer file_tag} {
 
 # Load from Cache
 proc db_fullquery_internal_get_cache {fullquery_name} {
+    set fullquery_struct [nsv_get OACS_FULLQUERIES $fullquery_name]
+
+    # If this isn't cached!
+    if {$fullquery_struct == ""} {
+	# we need to do something
+    }
+
+    # What we get back from the cache is the FullQuery structure
+    return $fullquery_struct
 }
 
 # Store in Cache
 #
 # The load_location is the file where this query was found
-proc db_fullquery_internal_store_cache {fullquery_name load_location fullquery} {
+proc db_fullquery_internal_store_cache {fullquery} {
+    set name [db_fullquery_get_name $fullquery]
+
+    nsv_set OACS_FULLQUERIES $name $fullquery
 }
 
-# Flush queries for a particular file tag
-proc db_fullquery_internal_flush_cache {file_tag} {
+# Flush queries for a particular file path, and reload them
+proc db_fullquery_internal_load_cache {file_path} {
+    # First we actually need to flush queries that are associated with that file tag
+    # in case they are not all replaced by reloading that file. That is nasty! Oh well.
+
+    # We'll do this later
+    
+    # we just reparse the file
+    set stream [open $file_path "r"]
+    db_fullquery_internal_load_queries $stream $file_path
+    close $stream
 }
 
 
@@ -169,31 +198,53 @@ proc db_fullquery_internal_flush_cache {file_tag} {
 # Initialize the parsing state
 proc db_fullquery_internal_parse_init {stuff_to_parse} {
     
-    ## NOTE: note done, must actually XML parse here
-    ## using ns_xml
-    set parsed_stuff ""
+    # Do initial parse
+    set parsed_doc [ns_xml parse -persist $stuff_to_parse]
 
+    # Initialize the parsing state
     set index 0
 
-    return [list $index $parsed_stuff]
+    # Get the list of queries out
+    set root_node [ns_xml doc root $parsed_doc]
+
+    # Check that it's a queryset
+    if {[ns_xml node name $root_node] != "queryset"} {
+	# CHANGE THIS: throw an error!!!
+	return ""
+    }
+
+    set parsed_stuff [ns_xml node children $root_node]
+
+    return [list $index $parsed_stuff $parsed_doc]
 }
 
 # Parse one query using the query state
 proc db_fullquery_internal_parse_one_query {parsing_state} {
     
-    ## Get the right query using the state
-    ## Note: not done!!
-    set one_query_xml ""
-
-    # BASE CASE: if there are no more queries, return empty string
-
-    # Increase the index
+    # Find the index that we're looking at
     set index [lindex $parsing_state 0]
+    
+    # Find the list of nodes
+    set node_list [lindex $parsing_state 1]
+
+    # BASE CASE
+    if {[llength $node_list] >= $index} {
+	# Clean up
+	ns_xml doc free [lindex $parsing_state 2]
+
+	# return nothing
+	return ""
+    }
+
+    # Get one query
+    set one_query_xml [lindex $node_list $index]
+    
+    # increase index
     incr index
 
     # Update the parsing state so we know
     # what to parse next 
-    set parsing_state [list $index [lindex $parsing_state 1]]
+    set parsing_state [list $index $node_list [lindex $parsing_state 2]]
 
     # Parse the actual query from XML
     set one_query [db_fullquery_internal_parse_one_query_from_xml_node $one_query_xml]
@@ -201,4 +252,10 @@ proc db_fullquery_internal_parse_one_query {parsing_state} {
     # Return the query, the query name, and the parsing state
     return [list [lindex $one_query 0] [lindex $one_query 1] $parsing_state]
 
+}
+
+
+# Parse one query from an XML node
+proc db_fullquery_internal_parse_one_query_from_xml_node {one_query_node} {
+    
 }
