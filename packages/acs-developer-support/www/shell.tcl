@@ -19,7 +19,7 @@ set result ""
 
 ad_form -name shell -form {
     {
-      script:text(textarea)
+      script:text(textarea),nospell
       {label {Input tcl_script}}
       {html {cols 80 rows 10}}
     }
