@@ -16,7 +16,7 @@ create table countries (
     a3  char(3),
     -- this is the numeric code - hardly used
     -- it is a char because of leading zeros so it isn't really a number
-    numeric char(3),
+    n3 char(3),
     -- this violates 3nf but is used for 2 reasons
     -- 1. to help efficiency
     -- 2. to make querys not fail if no translation exists yet
@@ -40,7 +40,7 @@ comment on column countries.a3 is '
    This is the three letter abbreviation - hardly used.
 ';
 
-comment on column countries.numeric is ' 
+comment on column countries.n3 is ' 
     This is the numeric code - hardly used.
 ';
 
