@@ -49,6 +49,8 @@ set missing_text "<strong>No packages match criteria.</strong>"
 
 doc_body_append "<center><table><tr><td>[ad_dimensional $dimensional_list]</td></tr></table></center>"
 
+set use_watches_p [expr ! [ad_parameter -package_id [ad_acs_kernel_id] PerformanceModeP request-processor 1]]
+
 set table_def {
     { package_key "Key" "" "<td><a href=\"version-view?version_id=$version_id\">$package_key</a></td>" }
     { pretty_name "Name" "" "<td><a href=\"version-view?version_id=$version_id\">$pretty_name</a></td>" }
@@ -74,7 +76,11 @@ set table_def {
 	action "" "" {<td bgcolor=white>&nbsp;&nbsp;[eval {
 
 	    if { $installed_p == "t" && $enabled_p == "t" } {
-                set watch_all_link "<a href=\"package-watch?package_key=$package_key\">watch all files</a>"
+	        if { ! [ad_parameter -package_id [ad_acs_kernel_id] PerformanceModeP request-processor 1] } {
+                    set watch_all_link "<a href=\"package-watch?package_key=$package_key\">watch all files</a>"
+                } else {
+                    set watch_all_link ""
+                }
                 set format_string $watch_all_link
 
                 if {[string equal [apm_version_load_status $version_id] "needs_reload"]} {
@@ -108,16 +114,22 @@ $table
 "
 
 # Build the list of files we're watching.
-set watch_files [nsv_array names apm_reload_watch]
-if { [llength $watch_files] > 0 } {
-    doc_body_append "<h3>Watches</h3><ul>
+if { $use_watches_p } {
+    set watch_files [nsv_array names apm_reload_watch]
+    if { [llength $watch_files] > 0 } {
+        doc_body_append "<h3>Watches</h3><ul>
 <li><a href=\"file-watch-cancel\">Stop watching all files</a></li><br />"
-    foreach file [lsort $watch_files] {
-	if { [string compare $file "."] } {
-	    doc_body_append "<li>$file (<a href=\"file-watch-cancel?watch_file=[ns_urlencode $file]\">stop watching this file</a>)\n"
-	}
-    }
-    doc_body_append "</ul>\n"
+        foreach file [lsort $watch_files] {
+            if { [string compare $file "."] } {
+                doc_body_append "<li>$file (<a href=\"file-watch-cancel?watch_file=[ns_urlencode $file]\">stop watching this file</a>)\n"
+            }
+        }
+        doc_body_append "</ul>"
+    }            
+} else {
+    set kernel_id [ad_acs_kernel_id]
+    doc_body_append "<h3>Watches</h3>
+Watching of files is not enabled in performance mode (see the PerformanceModeP parameter on the <a href=\"/admin/site-map/parameter-set?package_id=$kernel_id&package_key=acs-kernel&section_name=all\">ACS Kernel parameter page</a>)"
 }
 
 doc_body_append "
