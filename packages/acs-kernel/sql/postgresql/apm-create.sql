@@ -1315,8 +1315,6 @@ begin
    return 0; 
 end;' language 'plpgsql';
 
-
--- function register_parameter
 create or replace function apm__register_parameter (integer,varchar,varchar,varchar,varchar,varchar,varchar,integer,integer)
 returns integer as '
 declare
@@ -1331,7 +1329,9 @@ declare
   register_parameter__max_n_values           alias for $9;  -- default 1
 
   v_parameter_id         apm_parameters.parameter_id%TYPE;
-  cur_val                record;
+  v_value_id             apm_parameter_values.value_id%TYPE;
+  v_pkg                  record;
+
 begin
     -- Create the new parameter.    
     v_parameter_id := acs_object__new(
@@ -1354,24 +1354,22 @@ begin
      register_parameter__max_n_values);
 
     -- Propagate parameter to new instances.	
-    for cur_val in select ap.package_id, p.parameter_id, p.default_value 
-       from apm_parameters p left outer join apm_parameter_values v 
-             using (parameter_id), apm_packages ap
-      where p.package_key = ap.package_key
-        and v.attr_value is null
-        and p.package_key = register_parameter__package_key
+    for v_pkg in
+        select package_id
+	from apm_packages
+	where package_key = register_parameter__package_key
       loop
-      	PERFORM apm__set_value(
-	    cur_val.parameter_id, 
-	    cur_val.package_id,
-	    cur_val.default_value
+      	v_value_id := apm_parameter_value__new(
+	    null,
+	    v_pkg.package_id,
+	    v_parameter_id, 
+	    register_parameter__default_value
 	    ); 	
-      end loop;	
+      end loop;		
 	
     return v_parameter_id;
    
 end;' language 'plpgsql';
-
 
 -- function update_parameter
 create or replace function apm__update_parameter (integer,varchar,varchar,varchar,varchar,varchar,integer,integer)
