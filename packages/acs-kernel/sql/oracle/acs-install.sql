@@ -21,7 +21,6 @@ begin
 		    instance_name => 'Main Site',
                     context_id => acs.magic_object_id('default_context')
 	       );
-  apm_package.enable(main_site_id); 
 
   node_id := site_node.new (
     name => '',
