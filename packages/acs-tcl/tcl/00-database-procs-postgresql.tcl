@@ -162,7 +162,7 @@ ad_proc -private db_bind_var_substitution { sql { bind "" } } {
                     if {[string equal $__db_tcl_var ""]} {
                         set __db_tcl_var null
                     } else {
-                        set __db_tcl_var "'$__db_tcl_var'"
+                        set __db_tcl_var "'[DoubleApos $__db_tcl_var]'"
                     }
                     set __db_sql [string replace $__db_sql $__db_ws $__db_we $__db_tcl_var]
                 }                
@@ -184,7 +184,7 @@ ad_proc -private db_bind_var_substitution { sql { bind "" } } {
                 if {[string equal $val ""]} {
                     set val null
                 } else {
-                    set val "'$val'"
+                    set val "'[DoubleApos $val]'"
                 }
                 set lsql [string replace $lsql $ws $we $val]
             }                
