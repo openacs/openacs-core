@@ -12,7 +12,7 @@ if { ![info exists query_string] } {
 
 set aolserver_tcl_api_root "http://www.aolserver.com/docs/devel/tcl/api/"
 
-set tcl_docs_root "http://dev.scriptics.com/man/tcl[info tclversion]/TclCmd/contents.htm"
+set tcl_docs_root "http://tcl.tk/man/tcl[info tclversion]/TclCmd/contents.htm"
 
 set package_url [apm_package_url_from_key "acs-api-browser"]
 
