@@ -292,9 +292,9 @@ ad_proc -private template::adp_init { type file_stub } {
 	tcl {
 	  set code [template::util::read_file $file_stub.tcl]
 	}
-	default { # works for adp and wdp
+	default {
 	  set code [adp_compile -file $file_stub.$type]
-	}
+        }
       }
 
       # wrap the code for both types of files within an uplevel in
@@ -406,12 +406,27 @@ ad_proc -public template::adp_compile { source_type source } {
   # expand_percentage_signs which amongst other things does an uplevel subst
   while {[regsub -all {([^\\])\#([-a-zA-Z0-9_:\.]+)\#} $code {\1[template::expand_percentage_signs [lang::message::lookup [ad_conn locale] {\2} {TRANSLATION MISSING} {} -1]]} code]} {}
 
-  # substitute array variable references
-  # loop to handle the case of adjacent variable references, like @a@@b@
-  while {[regsub -all [template::adp_array_variable_regexp] $code {\1${\2(\3)}} code]} {}
+  # We do each substitution set in two pieces, separately for normal
+  # variables and for variables with ";noquote" attached to them.
+  # Specifically, @x@ gets translated to [ad_quotehtml ${x}], whereas
+  # @x;noquote@ gets translated to ${x}.  The same goes for array
+  # variable references.
+
+   # substitute array variable references
+  if { [lsearch -exact {new-portals foobar forums} [ad_conn package_key]] == -1 } {
+    while {[regsub -all [template::adp_array_variable_regexp] $code {\1[ad_quotehtml $\2(\3)]} code]} {}
+  } else {
+    while {[regsub -all [template::adp_array_variable_regexp] $code {\1${\2(\3)}} code]} {}
+  }
+  while {[regsub -all [template::adp_array_variable_regexp_noquote] $code {\1$\2(\3)} code]} {}
 
   # substitute simple variable references
-  while {[regsub -all [template::adp_variable_regexp] $code {\1${\2}} code]} {}
+  if { [lsearch -exact {new-portals forums} [ad_conn package_key]] == -1 } {
+    while {[regsub -all [template::adp_variable_regexp] $code {\1[ad_quotehtml ${\2}]} code]} {}
+  } else {
+    while {[regsub -all [template::adp_variable_regexp] $code {\1${\2}} code]} {}
+  }
+  while {[regsub -all [template::adp_variable_regexp_noquote] $code {\1${\2}} code]} {}
 
   # unescape protected @ references
   set code [string map { \\@ @ } $code]
@@ -433,6 +448,15 @@ ad_proc -public template::adp_array_variable_regexp {} {
   return {(^|[^\\])@([a-zA-Z0-9_:]+)\.([a-zA-Z0-9_:]+)@}
 }
 
+ad_proc -public template::adp_array_variable_regexp_noquote {} {
+  adp_array_variable_regexp's pattern augmented by "noquote"
+
+  @author Dirk Gomez (openacs@dirkgomez.de)
+  @creation-date 12 February 2003
+} {
+  return {(^|[^\\])@([a-zA-Z0-9_:]+)\.([a-zA-Z0-9_:]+);noquote@}
+}
+
 ad_proc -public template::adp_variable_regexp {} {
   The regexp pattern used to find adp variables in
   a piece of text, i.e. occurenceis of @variable_name@. 
@@ -443,6 +467,15 @@ ad_proc -public template::adp_variable_regexp {} {
   @creation-date 25 October 2002
 } {
   return {(^|[^\\])@([a-zA-Z0-9_:]+)@}
+}
+
+ad_proc -public template::adp_variable_regexp_noquote {} {
+  adp_variable_regexp augmented by "noquote"
+
+  @author Dirk Gomez (openacs@dirkgomez.de)
+  @creation-date 12 February 2003
+} {
+  return {(^|[^\\])@([a-zA-Z0-9_:]+);noquote@}
 }
 
 ad_proc -private template::adp_compile_chunk { chunk } {
