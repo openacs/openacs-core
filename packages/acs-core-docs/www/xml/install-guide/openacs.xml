@@ -57,6 +57,14 @@ chmod 770 /var/lib/aolserver</action></screen>
 <screen>
 [root root]# <userinput>useradd <replaceable>$OPENACS_SERVICE_NAME</replaceable></userinput>
 [root root]#</screen>
+    <para><title>FreeBSD</title> creates the user this way:</para>
+<screen>
+[root root]# <userinput>mkdir -p /home/<replaceable>$OPENACS_SERVICE_NAME</replaceable></userinput>
+[root root]# <userinput>pw useradd -n <replaceable>$OPENACS_SERVICE_NAME</replaceable> -g web -d /home/<replaceable>$OPENACS_SERVICE_NAME</replaceable> -s /bin/bash</userinput>
+[root root]#
+<action>mkdir -p /home/<replaceable>$OPENACS_SERVICE_NAME</replaceable>
+pw useradd -n <replaceable>$OPENACS_SERVICE_NAME</replaceable> -g web -d /home/<replaceable>$OPENACS_SERVICE_NAME</replaceable> -s /bin/bash
+</action></screen>
   </sect2>
   
   <sect2 id="install-with-script">
@@ -107,7 +115,9 @@ admin password: xxxx
       <computeroutput>/tmp</computeroutput> and proceed:</para>
     <orderedlist>
       <listitem id="install-openacs-download">
-        <para>Unpack the OpenACS tarball and rename it to <computeroutput>$OPENACS_SERVICE_NAME</computeroutput>.  Secure the directory so that only the owner can access it.  Check the permissions by listing the directory.</para>       
+        <para>Unpack the OpenACS tarball and rename it to <computeroutput>$OPENACS_SERVICE_NAME</computeroutput>.  Secure the directory so that only the owner can access it.  Check the permissions by listing the directory.</para> 
+        <para>FreeBSD note: Change the period in <userinput>chown -R $OPENACS_SERVICE_NAME.$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME</userinput> to a colon: <userinput>chown -R $OPENACS_SERVICE_NAME:$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME</userinput>
+        </para>
         <screen>[root root]# <userinput>su - <replaceable>$OPENACS_SERVICE_NAME</replaceable></userinput>
 [$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <userinput>cd /var/lib/aolserver</userinput>
 [$OPENACS_SERVICE_NAME aolserver]$ <userinput>tar xzf /tmp/&tarballpath;.tgz</userinput>
@@ -127,7 +137,7 @@ cd /var/lib/aolserver
 tar xzf /tmp/&tarballpath;.tgz
 mv &tarballpath; $OPENACS_SERVICE_NAME
 chmod -R 755 $OPENACS_SERVICE_NAME
-chgrp -R $OPENACS_SERVICE_NAME.$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME
+chown -R $OPENACS_SERVICE_NAME.$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME
 exit</action></screen>
       </listitem>
       <listitem>
