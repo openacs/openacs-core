@@ -17,7 +17,7 @@
 
 <if @change_locale_url@ not nil>
   <p>
-    <b>&raquo;</b> <a href="@change_locale_url@">Change language</a>
+    <b>&raquo;</b> <a href="@change_locale_url@">#acs-subsite.Change_locale_label#</a>
   </p>
 </if>
 

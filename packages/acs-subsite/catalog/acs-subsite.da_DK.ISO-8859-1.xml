@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<message_catalog package_key="acs-subsite" package_version="5.0d3" locale="da_DK" charset="ISO-8859-1">
+<message_catalog package_key="acs-subsite" package_version="5.0d4" locale="da_DK" charset="ISO-8859-1">
 
   <msg key="About_You">Omkring dig</msg>
   <msg key="again">igen</msg>
@@ -13,6 +13,7 @@
   <msg key="Change_my_Password">Ændr min adgangskode</msg>
   <msg key="Check_Your_Inbox">Tjek din indbakke</msg>
   <msg key="Children">Børn</msg>
+  <msg key="Close_your_account">Luk din konto</msg>
   <msg key="Confirm">Bekræft:</msg>
   <msg key="Current_Password">Nuværende adgangskode:</msg>
   <msg key="Current_users">Nuværende brugere:</msg>
@@ -119,6 +120,7 @@
   <msg key="lt_We_will_generate_and_">Vi vil autogenerere din adgangskode og sende den til dig, når din registrering er bekræftet. Når du senere logger ind, kan du ændre koden.</msg>
   <msg key="lt_welcome_please_register">Velkommen til %system_name%. Begynd registreringen ved at skrive en gyldig email-adresse og et kodeord. Vi sender der videre til en anden formular, hvor du kan gøre registreringen færdig.</msg>
   <msg key="lt_Welcome_to_system_nam">Velkommen til %system_name%</msg>
+  <msg key="lt_What_other_people_see">Hvad vi viser andre når de klikker på dit navn</msg>
   <msg key="lt_What_we_tell_other_us">Hvad vi fortæller andre brugere om dig</msg>
   <msg key="lt_when_trying_to_send_y">under forsøget på at sende dig følgende e-mail:</msg>
   <msg key="lt_When_you_get_your_ema">Nå du modtage din e-mail, går du tilbage &lt;a href=&quot;index?email=%email%&quot;&gt;siden for log ind&lt;/a&gt; og påbegynder brugen af %system_name%.</msg>
@@ -127,13 +129,10 @@
   <msg key="lt_You_cant_have_a_lt_in_1">Du kan ikke have et &amp;lt; i dit efternavn, da dette vil se ud som HTML og derfor forvirre andre brugere.</msg>
   <msg key="lt_You_have_encountered_">Du er stødt på et problem i godkendelsesfasen.</msg>
   <msg key="lt_You_have_encountered__1">Du er stødt på et problem i godkendelsesfasen.</msg>
-  <msg key="lt_Your_Account_at_site_">Din konto på %site_link% er blevet gendannet.</msg>
-  <msg key="lt_Your_Account_is_Resto">Din konto er blevet gendannet.</msg>
   <msg key="lt_Your_email_has_been_c">Din e-mailadresse er blevet bekræftet. Du kan nu logge ind på %system_name%.</msg>
   <msg key="lt_Your_email_has_been_c_1">Din e-mailadresse er blevet bekræftet. Der ventes nu på godkendelse fra administratoren af %system_name%.</msg>
   <msg key="lt_Your_email_is_confirm">Din e-mailadresse er blevet bekræftet.</msg>
   <msg key="lt_Your_forgotten_passwo">Din glemte adgangskode på %system_name%</msg>
-  <msg key="lt_Your_registration_is_">Din registrering er nu lagt ind i databasen. Sidens administrator er blevet orienteret om din forespørgsel, og når du er blevet godkendt, vil du modtage en e-mailbesked, og du vil herefter kunne vende tilbage til %site_link% og tage denne service i brug.</msg>
   <msg key="lt_Your_URL_doesnt_have_">Din URL har ikke den korrekte form. En gyldig URL vil se ud i retningen af \&quot;%valid_url_example%\&quot;.&quot;</msg>
   <msg key="Name">Navn:</msg>
   <msg key="New_Password">Ny adgangskode:</msg>
@@ -158,7 +157,6 @@
   <msg key="Thank_you">Mange tak.</msg>
   <msg key="to">til</msg>
   <msg key="to_site_link">til %site_link%</msg>
-  <msg key="to_site_link_1">genstarte din konto med status som aktiv</msg>
   <msg key="Unauthorized_Access">Uautoriseret adgang</msg>
   <msg key="Unsubscribe">Af-abonnere</msg>
   <msg key="Update">Opdatér</msg>
@@ -167,7 +165,6 @@
   <msg key="upload_a_portrait">upload et portræt</msg>
   <msg key="User_Creation_Failed">Brugeroprettelse fejlede</msg>
   <msg key="Welcome_Back">Velkommen tilbage</msg>
-  <msg key="Welcome_Back_1">Din konto er i øjeblikket markeret som &quot;slettet&quot;, hvis du ønsker det, kan vi</msg>
   <msg key="Your_email">Din e-mail:</msg>
   <msg key="Your_email_address">Din email-adresse:</msg>
   <msg key="Your_Portrait">Dit portræt</msg>
