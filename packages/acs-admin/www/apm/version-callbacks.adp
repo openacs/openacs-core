@@ -1,6 +1,6 @@
 <master>
 <property name="title">@page_title;noquote@</property>
-<property name="context_bar">@context_bar;noquote@</property>
+<property name="context">@context;noquote@</property>
 
 
 <p><listtemplate name="callbacks"></listtemplate></p>
@@ -18,7 +18,7 @@
 </p>
 
 <p>
-  For the upgrade callbacks, you should definitely check out the <a
+  For the upgrade callbacks, you should definitely check out the proc <a
   href="/api-doc/proc-view?proc=apm%5fupgrade%5flogic">apm_upgrade_logic</a>,
   which makes it very easy to handle the logic of which things to
   process depending on which version you're upgrading from and to.

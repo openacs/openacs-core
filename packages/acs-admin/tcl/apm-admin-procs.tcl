@@ -42,8 +42,8 @@ ad_proc apm_header { { -form "" } args } {
 
     @author Peter Marklund
 } {
-    set apm_title "ACS Package Manager Administration"
-    set apm_url "/acs-admin/apm"
+    set apm_title "Package Manager"
+    set apm_url "/acs-admin/apm/"
 
     if { [llength $args] == 0 } {
         set title $apm_title

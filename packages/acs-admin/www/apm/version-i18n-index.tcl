@@ -18,8 +18,8 @@ db_1row package_version_info {
     where  version_id = :version_id 
 }
 
-set page_title "Manage Internationalization of $pretty_name $version_name"
-set context_bar [ad_context_bar $page_title]
+set page_title "Internationalization"
+set context [list [list "/acs-admin/apm/" "Package Manager"] [list [export_vars -base version-view { version_id }] "$pretty_name $version_name"] $page_title]
 
 set num_cat_files [llength [glob -nocomplain "[acs_package_root_dir $package_key]/catalog/*.cat"]]
 
