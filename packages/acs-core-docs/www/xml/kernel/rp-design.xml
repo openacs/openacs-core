@@ -22,17 +22,17 @@
 <para><xref linkend="rp-requirements"/></para>
 </listitem>
 
-<listitem><para><ulink url="/api-doc/procs-file-view?path=packages/acs-kernel/tcl/request-processor-procs.tcl">
-/packages/acs-kernel/tcl/request-processor-procs.tcl</ulink></para></listitem>
+<listitem><para><ulink url="/api-doc/procs-file-view?path=packages/acs-tcl/tcl/request-processor-procs.tcl">
+/packages/acs-tcl/tcl/request-processor-procs.tcl</ulink></para></listitem>
 
-<listitem><para><ulink url="/api-doc/procs-file-view?path=packages/acs-kernel/tcl/request-processor-init.tcl">
-/packages/acs-kernel/tcl/request-processor-init.tcl</ulink></para></listitem>
+<listitem><para><ulink url="/api-doc/procs-file-view?path=packages/acs-tcl/tcl/request-processor-init.tcl">
+/packages/acs-tcl/tcl/request-processor-init.tcl</ulink></para></listitem>
 
-<listitem><para><ulink url="/api-doc/procs-file-view?path=packages/acs-kernel/tcl/site-nodes-procs.tcl">
-/packages/acs-kernel/tcl/site-nodes-procs.tcl</ulink></para></listitem>
+<listitem><para><ulink url="/api-doc/procs-file-view?path=packages/acs-tcl/tcl/site-nodes-procs.tcl">
+/packages/acs-tcl/tcl/site-nodes-procs.tcl</ulink></para></listitem>
 
-<listitem><para><ulink url="/api-doc/procs-file-view?path=packages/acs-kernel/tcl/site-nodes-init.tcl">
-/packages/acs-kernel/tcl/site-nodes-init.tcl</ulink></para></listitem>
+<listitem><para><ulink url="/api-doc/procs-file-view?path=packages/acs-tcl/tcl/site-nodes-init.tcl">
+/packages/acs-tcl/tcl/site-nodes-init.tcl</ulink></para></listitem>
 
 <listitem><para><ulink url="/doc/sql/display-sql?package_key=acs-kernel&amp;url=site-nodes-create.sql">
 /packages/acs-kernel/sql/site-nodes-create.sql</ulink></para></listitem>
