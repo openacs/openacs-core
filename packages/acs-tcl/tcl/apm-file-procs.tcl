@@ -421,7 +421,7 @@ ad_proc -private apm_get_watchable_files { package_key } {
 
     @author Peter Marklund
 } {
-    set watchable_file [list]
+    set watchable_files [list]
 
     set files [ad_find_all_files [acs_root_dir]/packages/$package_key]
     foreach file [lsort $files] {
