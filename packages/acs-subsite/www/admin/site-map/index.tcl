@@ -187,7 +187,7 @@ db_foreach nodes_select {} {
       doc_body_append "<form name=new_application action=package-new>
         [export_form_vars expand:multiple root_id node_id new_package_id]
         <font size=-1>
-        <input name=instance_name type=text size=8 value=\"Untitled\">
+        <input name=instance_name type=text size=8 value=\"\">
         </td><td>
         <select name=package_key>
       "
