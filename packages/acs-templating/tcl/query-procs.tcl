@@ -571,16 +571,32 @@ ad_proc -private template::query::flush_cache { cache_match } {
 
 # Perform get/set operations on a multirow datasource
 
-ad_proc -public template::multirow { op name args } {
-    @param op Multirow datasource operation: create, extend, append, size, get, set, foreach
-    @param name Name of the multirow datasource
-    @param args optional args
+ad_proc -public template::multirow { 
+  {-ulevel 1}
+  {-local:boolean}
+  op
+  name
+  args
+} {
+  @param local If set, the multirow will be looked for in the scope the number of levels up
+         given by ulevel (normally the caller's scope), instead of the
+         [template::adp_level] scope, which is the default.
+  @param ulevel Used in conjunction with the "local" parameter to specify how many levels up
+         the multirow variable resides.
+  @param op Multirow datasource operation: create, extend, append, size, get, set, foreach
+  @param name Name of the multirow datasource
+  @param args optional args
 } {  
-
+  if { $local_p } {
+    set multirow_level_up $ulevel
+  } else {
+    set multirow_level_up \#[adp_level]
+  }
+  
   switch -exact $op {
 
     create {
-      upvar \#[adp_level] $name:rowcount rowcount $name:columns columns
+      upvar $multirow_level_up $name:rowcount rowcount $name:columns columns
       set rowcount 0
       set columns $args
     }
@@ -593,9 +609,9 @@ ad_proc -public template::multirow { op name args } {
     }
 
     append {
-      upvar \#[adp_level] $name:rowcount rowcount $name:columns columns
+      upvar $multirow_level_up $name:rowcount rowcount $name:columns columns
       incr rowcount
-      upvar \#[adp_level] $name:$rowcount row
+      upvar $multirow_level_up $name:$rowcount row
       
       for { set i 0 } { $i < [llength $columns] } { incr i } {
         
@@ -607,7 +623,7 @@ ad_proc -public template::multirow { op name args } {
     }
 
     size {
-      upvar \#[adp_level] $name:rowcount rowcount
+      upvar $multirow_level_up $name:rowcount rowcount
       if { [template::util::is_nil rowcount] } {
         error "malformed multirow datasource - $name"
       }
@@ -620,10 +636,10 @@ ad_proc -public template::multirow { op name args } {
       set column [lindex $args 1]
       # Set an array reference if no column is specified
       if { [string equal $column {}] } {
-        uplevel "upvar \#[adp_level] $name:$index $name"
+        uplevel "upvar $multirow_level_up $name:$index $name"
       } else {
         # If a column is specified, just return the value for it
-        upvar \#[adp_level] $name:$index arr
+        upvar $multirow_level_up $name:$index arr
         return $arr($column)
       }
     }
@@ -639,38 +655,53 @@ ad_proc -public template::multirow { op name args } {
       }
       
       # Mutate the value
-      upvar \#[adp_level] $name:$index arr
+      upvar $multirow_level_up $name:$index arr
       set arr($column) $value
       return $arr($column)
       
-    } 
+    }
+    
+    upvar {
+      # upvar from wherever the multirow is to the current stack frame
+      if { [llength $args] > 0 } {
+        set new_name [lindex $args 0]
+      } else {
+        set new_name $name
+      }
+      uplevel "
+        upvar $multirow_level_up $name:rowcount $new_name:rowcount $name:columns $new_name:columns
+        for { set i 1 } { \$i <= \${$new_name:rowcount} } { incr i } {
+          upvar $multirow_level_up $name:\$i $new_name:\$i
+        }
+      "
+    }
     
     foreach {
       set code_block [lindex $args 0]
       
-      upvar \#[adp_level] $name:rowcount rowcount
-
-      upvar \#[adp_level] $name:columns columns
+      upvar $multirow_level_up $name:rowcount rowcount $name:columns columns
 
       for { set i 1 } { $i <= $rowcount } { incr i } {
         # Pull values into variables (and into the array - aks),
         # evaluate the code block, and pull values back out to
         # the array.
         
-        upvar \#[adp_level] $name:$i row
+        upvar $multirow_level_up $name:$i row
 
         foreach column_name $columns {
-          upvar \#[adp_level] $column_name column_value
+          upvar 1 $column_name column_value
           if { [info exists row($column_name)] } {
             set column_value $row($column_name)
+          } else {
+            set column_value ""
           }
         }
         
         # Also set the special var __rownum
-        upvar \#[adp_level] __rownum __rownum
+        upvar 1 __rownum __rownum
         set __rownum $row(rownum)
 
-        set errno [catch { uplevel \#[adp_level] $code_block } error]
+        set errno [catch { uplevel 1 $code_block } error]
 
         switch $errno {
           0 {
@@ -699,7 +730,7 @@ ad_proc -public template::multirow { op name args } {
 
         # Pull the variables into the array.
         foreach column_name $columns {
-          upvar \#[adp_level] $column_name column_value
+          upvar 1 $column_name column_value
           if { [info exists column_value] } {
             set row($column_name) $column_value
           }
@@ -709,7 +740,7 @@ ad_proc -public template::multirow { op name args } {
 
     default {
       error "Unknown op $op in template::multirow.
-      Must be create, extend, append, get, set, size, or foreach."
+      Must be create, extend, append, get, set, size, upvar, or foreach."
     }
   }
 }
