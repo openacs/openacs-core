@@ -108,7 +108,7 @@ is
 
    if v_segment_id is null then
 
-      if v_segment_name is not null then
+      if segment_name is not null then
          v_segment_name := segment_name;
       else
          select groups.group_name || ' - ' || acs_object_types.pretty_name ||
