@@ -3,6 +3,13 @@
 #
 
 
+if { ![acs_user::site_wide_admin_p] } {
+    ad_return_forbidden \
+        "Permission Denied" \
+        "<blockquote>You don't have permission to view this page.</blockquote>"
+    ad_script_abort
+}
+
 set user_id [ad_conn user_id]
 set swadmin_p 0
 db_multirow -extend { url admin_url param_url } packages services_select {} {
