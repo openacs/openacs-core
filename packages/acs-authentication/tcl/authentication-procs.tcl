@@ -244,7 +244,7 @@ ad_proc -public auth::create_user {
     {-url ""}
     {-secret_question ""}
     {-secret_answer ""}
-    {-email_verified_p "t"} 
+    {-email_verified_p ""} 
     {-member_state "approved"}
 } {
     Create a user, and return creation status and account status.
@@ -451,8 +451,12 @@ ad_proc -public auth::create_user {
     }
 
     if { [exists_and_not_null local_account_message] } {
-        # Concatenate local and remote account messages
-        set creation_info(account_message) "<p>[auth::authority::get_element -authority_id $authority_id -element pretty_name]: $creation_info(account_message)</p> <p>[ad_system_name]: $local_account_message</p>"
+        if { [exists_and_not_null creation_info(account_message)] } {
+            # Concatenate local and remote account messages
+            set creation_info(account_message) "<p>[auth::authority::get_element -authority_id $authority_id -element pretty_name]: $creation_info(account_message)</p> <p>[ad_system_name]: $local_account_message</p>"
+        } else {
+            set creation_info(account_message) $local_account_message
+        }
     }
         
     # Issue login cookie if login was successful
