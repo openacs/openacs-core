@@ -147,6 +147,7 @@ procedure copy (
   target_folder_id	in cr_folders.folder_id%TYPE,
   creation_user		in acs_objects.creation_user%TYPE,
   creation_ip		in acs_objects.creation_ip%TYPE default null
+  name                  in cr_items.name%TYPE default null
 ) is
   v_current_folder_id   cr_folders.folder_id%TYPE;
   v_name		cr_items.name%TYPE;
@@ -165,11 +166,9 @@ begin
     where
       item_id = copy.symlink_id;
 
-    -- can't copy to the same folder
-    if copy.target_folder_id ^= v_current_folder_id then
 
       select
-        i.name, content_symlink.resolve(i.item_id), s.label
+        i.name content_symlink.resolve(i.item_id), s.label
       into
         v_name, v_target_id, v_label
       from
@@ -179,7 +178,16 @@ begin
       and
         s.symlink_id = copy.symlink_id;
 
+    if copy.name = '' then
+      copy.name := NULL;
+    end if;
 
+-- can't copy to the same folder
+    if copy.target_folder_id ^= v_current_folder_id or (v.name != copy.name and copy.name is not null) then
+
+    if copy.name is not null then
+      v_name := copy.name;
+    end if;
       if content_folder.is_registered(copy.target_folder_id,
         'content_symlink') = 't' then
         if content_folder.is_registered(copy.target_folder_id,
