@@ -7,7 +7,7 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>t</singleton-p>
     
-    <version name="5.0.3" url="http://openacs.org/repository/download/apm/acs-admin-5.0.3.apm">
+    <version name="5.0.4" url="http://openacs.org/repository/download/apm/acs-admin-5.0.4.apm">
         <owner url="mailto:dhogaza@pacifier.com">Don Baccus</owner>
         <summary>An interface for Site-wide administration of an OpenACS Installation.</summary>
         <release-date>2004-01-21</release-date>
@@ -16,7 +16,7 @@
           (including package installation, cache, authentication, and user accounts) for an OpenACS system.
         </description>
 
-        <provides url="acs-admin" version="5.0.3"/>
+        <provides url="acs-admin" version="5.0.4"/>
         <requires url="acs-kernel" version="5.0.0"/>
 
         <callbacks>
