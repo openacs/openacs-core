@@ -22,11 +22,12 @@
         <querytext>
             select package_id,
                    package_key,
+                   pretty_name as package_pretty_name,
                    apm_package_type__num_parameters(package_key) as parameter_count,
                    node_id, url, parent_url, name, root_p, mylevel, object_id,
                    object_name, directory_p, parent_id, n_children,
                    (select case when acs_permission__permission_p(object_id, :user_id, 'admin') = 't' then 1 else 0 end) as object_admin_p
-            from apm_packages p right outer join
+            from apm_packages p join apm_package_types using (package_key) right outer join
                  (select n.node_id,
                          site_node__url(n.node_id) as url,
                          site_node__url(n.parent_id) as parent_url,

@@ -87,7 +87,7 @@ doc_body_append "</b></font>
 </td></tr>
 <tr bgcolor=#aaaaaa><td>
 <table align=center width=100% bgcolor=#eeeeee cellspacing=1 border=0>
-<tr bgcolor=#cccccc><th>URL</th><th>Application</th><th>&nbsp;</th></tr>
+<tr bgcolor=#cccccc><th>URL</th><th>Instance Name</th><th>Package Type</th><th>&nbsp;</th></tr>
 "
 
 if {[llength $expand] == 0} {
@@ -188,6 +188,7 @@ db_foreach nodes_select {} {
         [export_form_vars expand:multiple root_id node_id new_package_id]
         <font size=-1>
         <input name=instance_name type=text size=8 value=\"Untitled\">
+        </td><td>
         <select name=package_key>
       "
 
@@ -203,6 +204,8 @@ db_foreach nodes_select {} {
 
       doc_body_append "
         </select>
+        </td>
+        <td>
         <input type=submit value=New>
         </font>
       </form>
@@ -222,7 +225,10 @@ db_foreach nodes_select {} {
     doc_body_append "<a href=\"$url\">$object_name</a>"
   }
 
-  doc_body_append "</td><td><font size=-1>\[ [join $controls " | "] \]</font></td></tr>\n"
+  if {![empty_string_p $object_id] || $new_application != $node_id } {
+      doc_body_append "</td><td>$package_pretty_name</td><td><font size=-1>\[ [join $controls " | "] \]</font></td>"
+  } 
+  doc_body_append "</tr>\n"
 
   if {$node_id == $new_parent} {
     set parent_id $new_parent
