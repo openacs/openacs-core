@@ -11,7 +11,7 @@
   
   <rdbms>
     <type>oracle</type>
-    <version>8.1.7</version>
+    <version>8.1.6</version>
   </rdbms>
   <fullquery name="content::revision::update_content.update_content">
     <querytext>
