@@ -10,7 +10,7 @@ ad_library {
     @cvs-id $Id$
 }
 
-namespace eval ::tsearch2 {}
+namespace eval tsearch2 {}
 
 ad_proc -private tsearch2::index {
     object_id
@@ -156,7 +156,7 @@ ad_proc -private tsearch2::summary {
     return [db_string summary "select headline(:txt,to_tsquery(:query))"]
 }
 
-ad_proc -private tsearch2::info {
+ad_proc -private tsearch2::driver_info {
 } {
     
     
