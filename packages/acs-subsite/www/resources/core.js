@@ -78,22 +78,18 @@ function acs_RichText_WriteButtons () {
     }
 }
 
-function acs_RichText_InputMethodChanged(form_name, richtext_name, radio_elm) {
+function acs_RichText_Or_File_InputMethodChanged(form_name, richtext_name, radio_elm) {
     if (radio_elm == null) return;
     if (document.forms == null) return;
     if (document.forms[form_name] == null) return;
 
-    if ( radio_elm.value == 'upload' ) {
-        document.forms[form_name].elements[richtext_name].disabled = true;
-        document.forms[form_name].elements[richtext_name+".format"].disabled = true;
-        document.forms[form_name].elements[richtext_name+".spellcheck"].disabled = true;
-
+    if ( radio_elm.value == 'file' ) {
+        document.forms[form_name].elements[richtext_name+".text"].disabled = true;
+        document.forms[form_name].elements[richtext_name+".mime_type"].disabled = true;
         document.forms[form_name].elements[richtext_name+".file"].disabled = false;
     } else {
-        document.forms[form_name].elements[richtext_name].disabled = false;
-        document.forms[form_name].elements[richtext_name+".format"].disabled = false;
-        document.forms[form_name].elements[richtext_name+".spellcheck"].disabled = false;
-
+        document.forms[form_name].elements[richtext_name+".text"].disabled = false;
+        document.forms[form_name].elements[richtext_name+".mime_type"].disabled = false;
         document.forms[form_name].elements[richtext_name+".file"].disabled = true;
     }
 }
