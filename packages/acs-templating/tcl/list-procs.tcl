@@ -518,7 +518,7 @@ ad_proc -public template::list::get_reference {
 } {
     set refname [get_refname -name $name]
     
-    if { !$create_p && ![uplevel \#[template::adp_level] info exists $refname] } {
+    if { !$create_p && ![uplevel \#[template::adp_level] [list info exists $refname]] } {
         error "List '$name' not found"
     }
     
@@ -1588,7 +1588,7 @@ ad_proc -public template::list::element::get_reference {
 
     set refname [get_refname -list_name $list_name -element_name $element_name]
     
-    if { !$create_p && ![uplevel \#[template::adp_level] info exists $refname] } {
+    if { !$create_p && ![uplevel \#[template::adp_level] [list info exists $refname]] } {
         error "Element '$element_name' not found in list '$list_name'"
     }
 
@@ -1895,7 +1895,7 @@ ad_proc -public template::list::filter::get_reference {
 } {
     set refname [get_refname -list_name $list_name -filter_name $filter_name]
     
-    if { !$create_p && ![uplevel \#[template::adp_level] info exists $refname] } {
+    if { !$create_p && ![uplevel \#[template::adp_level] [list info exists $refname]] } {
         error "Filter '$filter_name' not found"
     }
     
@@ -1978,7 +1978,7 @@ ad_proc -public template::list::filter::exists_p {
 } {
     set refname [get_refname -list_name $list_name -filter_name $filter_name]
     
-    return [uplevel \#[template::adp_level] info exists $refname]
+    return [uplevel \#[template::adp_level] [list info exists $refname]]
 }
 
  
@@ -2321,7 +2321,7 @@ ad_proc -public template::list::orderby::get_reference {
 
     set refname [get_refname -list_name $list_name -orderby_name $orderby_name]
 
-    if { !$create_p && ![uplevel #[template::adp_level] info exists $refname] } {
+    if { !$create_p && ![uplevel #[template::adp_level] [list info exists $refname]] } {
         error "Orderby '$orderby_name' not found in list '$list_name'"
     }
 
