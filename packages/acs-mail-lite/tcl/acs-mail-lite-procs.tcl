@@ -690,11 +690,11 @@ namespace eval acs_mail_lite {
 	    set send_p $send_immediately_p
 	} else {
 	    # if parameter is not set, get the global setting
-	    set send_p [parameter::get -package_id [get_package_id] -parameter "send_immediately"]
+	    set send_p [parameter::get -package_id [get_package_id] -parameter "send_immediately" -default 0]
 	}
 
 	# if send_p true, then start acs_mail_lite::send_immediately, so mail is not stored in the db before delivery
-	if {$send_p} {
+	if { $send_p } {
 	    acs_mail_lite::send_immediately -to_addr $to_addr -from_addr $from_addr -subject $subject -body $body -extraheaders $eh_list -bcc $bcc -valid_email_p $valid_email_p -package_id $package_id
 	} else {
 	    # else, store it in the db and let the sweeper deliver the mail
