@@ -69,6 +69,8 @@
             <file type="content_page" path="www/apm/version-view.tcl"/>
             <file type="content_page" path="www/apm/view-unattached-files.tcl"/>
             <file type="content_page" path="www/apm/write-all-specs.tcl"/>
+            <file type="query_file" db_type="postgresql" path="www/index-postgresql.xql"/>
+            <file type="query_file" db_type="oracle" path="www/index-oracle.xql"/>
             <file type="content_page" path="www/index.tcl"/>
             <file type="content_page" path="www/test/security-test.tcl"/>
             <file type="content_page" path="www/test/signed-cookies-test-2.tcl"/>

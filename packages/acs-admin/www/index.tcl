@@ -23,7 +23,8 @@ ACS Administration is used to administer the site-wide services of the ArsDigita
 "
 
 db_foreach subsite_admin_urls {
-    select site_node.url(node_id) || 'admin/' subsite_admin_url, instance_name
+    select site_node.url(node_id) || 'admin/' as subsite_admin_url, 
+           instance_name
     from site_nodes s, apm_packages p
     where s.object_id = p.package_id
     and p.package_key = 'acs-subsite'
