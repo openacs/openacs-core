@@ -1,6 +1,16 @@
-<master>
-<property name="title">#dotlrn.Update_Password#</property>
-<property name="context_bar">@context_bar@</property>
+ad_page_contract {
+    Let's the admin change a user's password.
 
-<include src="/packages/acs-admin/lib/password-update" return_url=@return_url@ user_id=@user_id@ >
+    @version $Id$
+} {
+    {user_id:integer}
+    {return_url ""}
+    {password_old ""}
+}
 
+
+set context_bar [list [list users Users] [list "user.tcl?user_id=$user_id" "usuario"] "Update Password"]
+
+set site_link [ad_site_home_link]
+
+ad_return_template
