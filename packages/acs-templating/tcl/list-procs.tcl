@@ -335,7 +335,7 @@ ad_proc -public template::list::create {
     # Handle filters
     foreach { dim_name dim_spec } $filters {
         if { [lsearch $reserved_filter_names $dim_name] != -1 } {
-            error "The name '$dim_name' is a reserved filter name. Reserved names are [join $reserved_filter_named ", "]."
+            error "The name '$dim_name' is a reserved filter name. Reserved names are [join $reserved_filter_names ", "]."
         }
         template::list::filter::create \
             -list_name $name \
