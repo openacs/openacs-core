@@ -390,6 +390,7 @@ proc_doc db_foreach { statement_name sql args } {
 
 ad_proc -public db_multirow {
     -local:boolean
+    -append:boolean
     var_name
     statement_name
     sql
@@ -433,13 +434,16 @@ ad_proc -public db_multirow {
     } else {
 	return -code error "Expected 1 or 3 arguments after switches"
     }
-
+    
     upvar $level_up "$var_name:rowcount" counter
+
+    if { !$append_p } {
+	set counter 0
+    } 
 
     db_with_handle db {
 	set selection [db_exec select $db $full_statement_name $sql]
 
-	set counter 0
 	while { [db_getrow $db $selection] } {
 	    if { [empty_string_p $code_block] } {
 		# No code block - pull values directly into the var_name array.
@@ -450,15 +454,27 @@ ad_proc -public db_multirow {
 			[ns_set value $selection $i]
 		}
 	    } else {
-		# Pull values into variables, evaluate the code block,
-		# and pull values back out to the array.
+		# Pull values into variables (and into the array - aks),
+                # evaluate the code block, and pull values back out to
+                # the array.
 
 		for { set i 0 } { $i < [ns_set size $selection] } { incr i } {
 		    upvar 1 [ns_set key $selection $i] column_value
 		    set column_value [ns_set value $selection $i]
 		}
 
-		set errno [catch { uplevel 1 $code_block } error]
+		# Pull the variables into the array.
+		upvar $level_up \
+		    "$var_name:[expr {$counter + 1}]" array_val                
+		for { set i 0 } { $i < [ns_set size $selection] } { incr i } {
+		    upvar 1 [ns_set key $selection $i] column_value
+		    set array_val([ns_set key $selection $i]) $column_value
+		}                
+ 
+                regsub -all "$var_name" $code_block \
+                        "$var_name:[expr {$counter + 1}]" new_code_block
+ 
+		set errno [catch { uplevel 1 $new_code_block } error]
 
 		# Handle or propagate the error. Can't use the usual
 		# "return -code $errno..." trick due to the db_with_handle
@@ -492,7 +508,7 @@ ad_proc -public db_multirow {
 
 		# Pull the variables into the array.
 		upvar $level_up \
-		    "$var_name:[expr {$counter + 1}]" array_val
+		    "$var_name:[expr {$counter + 1}]" array_val                
 		for { set i 0 } { $i < [ns_set size $selection] } { incr i } {
 		    upvar 1 [ns_set key $selection $i] column_value
 		    set array_val([ns_set key $selection $i]) $column_value
