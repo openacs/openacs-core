@@ -50,10 +50,10 @@ ad_proc ad_host_administrator {} {
     return [ad_parameter -package_id [ad_acs_kernel_id]  HostAdministrator]
 }
 
-ad_proc ad_outgoing_sender {} {
+ad_proc -public ad_outgoing_sender {} {
     @return The email address that will sign outgoing alerts
 } {
-    return [ad_parameter -package_id [ad_acs_kernel_id]  OutgoingSender]
+    return [ad_parameter -package_id [ad_acs_kernel_id] OutgoingSender]
 }
 
 
@@ -64,7 +64,7 @@ ad_proc ad_graphics_site_available_p {} {
     return [ad_parameter -package_id [ad_acs_kernel_id]  GraphicsSiteAvailableP]
 }
 
-ad_proc ad_system_name {} {
+ad_proc -public ad_system_name {} {
     This is the main name of the Web service that you're offering
     on top of the OpenACS Web Publishing System.
 } {
@@ -72,14 +72,14 @@ ad_proc ad_system_name {} {
 }
 
 
-ad_proc ad_pvt_home {} {
+ad_proc -public ad_pvt_home {} {
     This is the URL of a user's private workspace on the system, usually
     [subsite]/pvt/home.tcl
 } {
     return "[subsite::get_element -element url -notrailing][ad_parameter -package_id [ad_acs_kernel_id] HomeURL]"
 }
 
-ad_proc ad_admin_home {} {
+ad_proc -public ad_admin_home {} {
    Returns the directory for the admin home.
 } {
     return "[subsite::get_element -element url]admin"
@@ -93,7 +93,7 @@ ad_proc ad_package_admin_home { package_key } {
     return "[ad_admin_home]/$package_key"
 }
 
-ad_proc ad_pvt_home_name {} {
+ad_proc -public ad_pvt_home_name {} {
     This is the name that will be used for the user's workspace (usually "Your Workspace").
     @return the name especified for the user's workspace in the HomeName kernel parameter.
 } {
