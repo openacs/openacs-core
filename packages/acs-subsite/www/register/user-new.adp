@@ -1,7 +1,6 @@
 <master>
 <property name="title">#acs-subsite.Register#</property>
-
-
+<property name="context">#acs-subsite.Register#</property>
 
 #acs-subsite.lt_Register_as_a_user_of# <a href="index">@system_name@</a>
 

@@ -73,7 +73,7 @@
   <msg key="lt_Note_that_you_can_era">L'option &quot;déconnecter&quot; de votre espace de travail, permet d'effacer toute trace de votre adresse email et mot de passe.</msg>
   <msg key="lt_Now_were_really_in_tr">Maintenant nous avons vraiment un problème car nous venons de recevoir l'erreur suivante:</msg>
   <msg key="lt_num_children_Children">%num_children% fils cachés</msg>
-  <msg key="lt_On_portrait_publish_d">Vous avez envoyé &lt;a href=&quot;/user/portrait/&quot;&gt;%portrait_title%&lt;/a&gt; le %portrait_publish_date%</msg>
+  <msg key="lt_On_portrait_publish_d">Vous avez envoyé &lt;a href=&quot;%subsite_url%user/portrait/?return_url=%pvt_home_url%&quot;&gt;%portrait_title%&lt;/a&gt; le %portrait_publish_date%</msg>
   <msg key="lt_Our_server_can_tell_y">Notre serveur peut envoyer certaines données à votre navigateur, comme vos adresse email et mot de passe. C'est un avantage car, si vous êtes la seule personne à utiliser cet ordinateur, vous n'aurez pas à les introduire à chaque fois.</msg>
   <msg key="lt_Password_Confirmation">Confirmation de mot de passe:</msg>
   <msg key="lt_Personal_Home_Page_UR">URL de votre page web personnelle:</msg>

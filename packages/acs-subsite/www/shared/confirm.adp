@@ -1,5 +1,6 @@
 <master>
 <property name="title">@title;noquote@</property>
+<property name="context">#acs-subsite.Confirm#</property>
 
 @message@
 

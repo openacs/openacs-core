@@ -1,6 +1,7 @@
 <master>
 <property name="title">#acs-subsite.Update_Password#</property>
 <property name="context_bar">#acs-subsite.lt_for_first_names_last_#</property>
+<property name="context">#acs-subsite.Update_Password#</property>
 
 <form method="post" action="password-update-2">
   <input type="hidden" name="user_id" value="@user_id@" />

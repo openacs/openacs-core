@@ -1,6 +1,6 @@
 <master>
-<property name=title>@first_names;noquote@ @last_name;noquote@</property>
-<property name="context">@context;noquote@</property>
+<property name="title">@first_names;noquote@ @last_name;noquote@</property>
+<property name="context">Community Member</property>
 
 <if @inline_portrait_state@ eq "inline">
   <a href="portrait?@portrait_export_vars@"><img src="portrait-bits?@portrait_export_vars@" align="right" width="@width@" height="@height@"></a><br />
@@ -59,7 +59,7 @@ A member of the @system_name@ community since @pretty_creation_date@
 <if @verified_user_id@ eq 0>
 
   <blockquote>
-  If you were to <a href="/register/index?@login_export_vars@">log in</a>, you'd be able to get more information on your fellow community member.
+  If you were to <a href="@subsite_url@register/index?@login_export_vars@">log in</a>, you'd be able to get more information on your fellow community member.
   </blockquote>
 
 </if>

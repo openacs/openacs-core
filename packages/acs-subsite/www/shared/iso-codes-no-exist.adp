@@ -1,7 +1,7 @@
 <master>
-
-
-  
+<property name="title">ISO Codes Not Loaded</property>
+<property name="context">No ISO Codes</property>
+ 
 <H2>ISO Codes not loaded</H2>
 <hr>
 

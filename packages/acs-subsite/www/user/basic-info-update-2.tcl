@@ -159,7 +159,7 @@ db_transaction {
     <blockquote>
     $errmsg
     </blockquote>
-    hi richard $bio_change_to 
+    Debug error code: $bio_change_to 
     "
     return
 
@@ -168,7 +168,7 @@ db_transaction {
 if { [exists_and_not_null return_url] } {
     ad_returnredirect $return_url
 } else {
-    ad_returnredirect "/pvt/home"
+    ad_returnredirect [ad_pvt_home]
 }
 
 

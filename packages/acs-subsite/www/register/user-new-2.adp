@@ -1,5 +1,6 @@
 <master>
 <property name="title">@title;noquote@</property>
+<property name="context">#acs-subsite.Awaiting_Approval#</property>
 
 <if @email_verified_p@ eq f>
 

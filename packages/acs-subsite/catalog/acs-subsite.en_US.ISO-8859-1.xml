@@ -92,7 +92,7 @@ to @email@</msg>
 choosing the &quot;log out&quot; option from your workspace.</msg>
   <msg key="lt_Now_were_really_in_tr">Now we're really in trouble because we got this error:</msg>
   <msg key="lt_num_children_Children">%num_children% Children Hidden</msg>
-  <msg key="lt_On_portrait_publish_d">On %portrait_publish_date%, you uploaded &lt;a href=&quot;/user/portrait/&quot;&gt;%portrait_title%&lt;/a&gt;</msg>
+  <msg key="lt_On_portrait_publish_d">On %portrait_publish_date%, you uploaded &lt;a href=&quot;%subsite_url%user/portrait/?return_url=%pvt_home_url%&quot;&gt;%portrait_title%&lt;/a&gt;</msg>
   <msg key="lt_Our_server_can_tell_y">Our server can tell your browser to remember certain things, such as
 your email address and password.  This is convenient for you because,
 if you're the only person who uses your computer, you won't have to

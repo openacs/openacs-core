@@ -17,9 +17,11 @@ ad_page_contract {
     pretty_date:onevalue
     description:onevalue
     export_edit_vars:onevalue
+    subsite_url:onevalue
 }
    
 set current_user_id [ad_verify_and_get_user_id]
+set subsite_url     [subsite::get_element -element url]
 
 if [empty_string_p $user_id] {
     set user_id $current_user_id

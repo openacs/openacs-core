@@ -1,5 +1,6 @@
 <master>
-<property name=title>#acs-subsite.Email_Confirmation#</property>
+<property name="title">#acs-subsite.Email_Confirmation#</property>
+<property name="context">#acs-subsite.Email_Confirmation#</property>
 
 <if @email_verified_p@ eq "f">
 

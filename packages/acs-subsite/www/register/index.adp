@@ -1,7 +1,8 @@
 <master>
 <property name="title">#acs-subsite.Log_In#</property>
 <property name="focus">login.email</property>
-<property name="context_bar">#acs-subsite.to# <a href="/">@system_name;noquote@</a></property>
+<property name="context_bar">#acs-subsite.to# <a href="@subsite_url@">@system_name;noquote@</a></property>
+<property name="context">#acs-subsite.Log_In#</property>
 
 <p><strong>#acs-subsite.Current_users#</strong> #acs-subsite.lt_Please_enter_your_ema#</p>
 <p><strong>#acs-subsite.New_users#</strong> #acs-subsite.lt_welcome_please_register#</p>

@@ -1,6 +1,6 @@
 <master>
 <property name="title">#acs-subsite.lt_Your_Account_is_Resto#</property>
-
+<property name="context">#acs-subsite.lt_Your_Account_is_Resto#</property>
 
 <p>#acs-subsite.lt_Your_Account_at_site_#</p>
 

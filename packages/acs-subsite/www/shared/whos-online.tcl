@@ -9,8 +9,10 @@ ad_page_contract {
     chat_system_name:onevalue
     connected_user_id:onevalue
     users:multirow
+    subsite_url:onevalue
 }
 
+set subsite_url       [subsite::get_element -element url]
 set connected_user_id [ad_verify_and_get_user_id]
 
 db_multirow users grab_users "select user_id, first_names, last_name, email

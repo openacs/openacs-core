@@ -10,7 +10,10 @@ ad_page_contract {
     system_name:onevalue
     email_forgotten_password_p:onevalue
     user_id:onevalue
+    subsite_url:onevalue
 }
+
+set subsite_url [subsite::get_element -element url]
 
 set email_forgotten_password_p [ad_parameter EmailForgottenPasswordP security 1]
 
@@ -19,3 +22,4 @@ set system_name [ad_system_name]
 set email_password_url "email-password?user_id=$user_id"
 
 ad_return_template
+

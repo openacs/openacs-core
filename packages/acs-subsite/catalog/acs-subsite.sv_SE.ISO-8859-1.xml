@@ -73,7 +73,7 @@
   <msg key="lt_Note_that_you_can_era">Notera att du kan ta bort din sparade e-postadress ocj lösenord genom att välja &quot;logga ut&quot; från ditt arbetsrum.</msg>
   <msg key="lt_Now_were_really_in_tr">Nu har vi verkliga problem, beroende på detta fel:</msg>
   <msg key="lt_num_children_Children">%num_children% Children gömda</msg>
-  <msg key="lt_On_portrait_publish_d">På %portrait_publish_date%, laddade du upp &lt;a href=&quot;/user/portrait/&quot;&gt;%portrait_title%&lt;/a&gt; </msg>
+  <msg key="lt_On_portrait_publish_d">På %portrait_publish_date%, laddade du upp &lt;a href=&quot;%subsite_url%user/portrait/?return_url=%pvt_home_url%&quot;&gt;%portrait_title%&lt;/a&gt; </msg>
   <msg key="lt_Our_server_can_tell_y">Vår server kan få din webbläsare att minnas vissa saker, t.ex. dín epostadress och ditt lösenord. Om du är den enda personen som använder din dator, kommer det att underlätta eftersom du inte behöver ange epostadress och lösenord.</msg>
   <msg key="lt_Password_Confirmation">Lösenordsbekräftelse:</msg>
   <msg key="lt_Personal_Home_Page_UR">URL till personlig hemsida:</msg>

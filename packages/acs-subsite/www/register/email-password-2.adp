@@ -1,5 +1,6 @@
 <master>
-<property name=title>#acs-subsite.Check_Your_Inbox#</property>
+<property name="title">#acs-subsite.Check_Your_Inbox#</property>
+<property name="context">#acs-subsite.Check_Your_Inbox#</property>
 
 #acs-subsite.lt_Please_check_your_inb#
 

@@ -75,7 +75,7 @@ Bearbeiten &amp;gt; Einstellungen &amp;gt; Erweitert aktiviert werden. In Micros
   <msg key="lt_Note_that_you_can_era">Beachten Sie dass Sie Ihre abgespeicherte eMail-Adresse und Ihr Passwort auslöschen können, indem Sie die Option &quot;Abmelden&quot; in Ihrem Arbeitsbereich wählen.</msg>
   <msg key="lt_Now_were_really_in_tr">Nun haben wir ein echtes Problem, denn wir haben folgenden Fehler bekommen:</msg>
   <msg key="lt_num_children_Children">%num_children% Kinder ausgeblendet</msg>
-  <msg key="lt_On_portrait_publish_d">Am %portrait_publish_date% haben Sie  &lt;a href=&quot;/user/portrait/&quot;&gt;%&quot;&gt;%portrait_title% hochgeladen.</msg>
+  <msg key="lt_On_portrait_publish_d">Am %portrait_publish_date% haben Sie  &lt;a href=&quot;%subsite_url%user/portrait/?return_url=%pvt_home_url%&quot;&gt;%&quot;&gt;%portrait_title% hochgeladen.</msg>
   <msg key="lt_Our_server_can_tell_y">Unser Server kann Ihrem Browser sagen dass er sich bestimmte Dinge merken soll, wie etwa Ihre eMail-Adresse und Ihr Passwort. Dies ist angenehm für Sie, wenn Sie die einzige Person sind die Ihren PC benutzt; Sie müssen uns dann nicht immer wieder eMail-Adresse und Passwort angeben.</msg>
   <msg key="lt_Password_Confirmation">Passwort-Bestätigung:</msg>
   <msg key="lt_Personal_Home_Page_UR">Adresse der persönlichen Homepage:</msg>

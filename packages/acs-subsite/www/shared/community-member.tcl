@@ -24,7 +24,10 @@ ad_page_contract {
     bio:onevalue
     verified_user_id:onevalue
     user_contributions:multirow
+    subsite_url:onevalue
 }
+
+set subsite_url [subsite::get_element -element url]
 
 #See if this page has been overrided by a parameter in kernel 
 set community_member_url [ad_parameter -package_id [ad_acs_kernel_id] CommunityMemberURL "/shared/community-member"]

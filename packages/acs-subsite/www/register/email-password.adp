@@ -1,6 +1,6 @@
 <master>
 <property name="title">#acs-subsite.Email_Password#</property>
-
+<property name="context">#acs-subsite.Email_Password#</property>
 
 <p>#acs-subsite.lt_Please_verify_your_id#</p>
 
