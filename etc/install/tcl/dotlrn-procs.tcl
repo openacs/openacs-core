@@ -15,13 +15,13 @@ ad_proc ::twt::dotlrn::add_term { server_url term_name start_month start_year en
 
     field fill "$term_name"
     # Start date
-    field select $start_month
-    field select "01"
+    ::twt::multiple_select_value start_date.month $start_month
+    ::twt::multiple_select_value start_date.day "1"
     field find ~n "start_date.year"
     field fill $start_year
     # End date
-    field select $end_month
-    field select "01"
+    ::twt::multiple_select_value end_date.month $end_month
+    ::twt::multiple_select_value end_date.day "1"
     field find ~n "end_date.year"
     field fill $end_year
     form submit
@@ -29,9 +29,9 @@ ad_proc ::twt::dotlrn::add_term { server_url term_name start_month start_year en
 
 ad_proc ::twt::dotlrn::setup_terms { server_url } {
 
-    add_term $server_url "Fall" "September" "2003" "January" "2004"    
-    add_term $server_url "Spring" "January" "2004" "July" "2004"
-    add_term $server_url "Fall" "September" "2004" "January" "2005"    
+    add_term $server_url "Fall" "9" "2003" "1" "2004"    
+    add_term $server_url "Spring" "1" "2004" "7" "2004"
+    add_term $server_url "Fall" "9" "2004" "1" "2005"    
 }
 
 ad_proc ::twt::dotlrn::current_term_pretty_name {} {
@@ -43,6 +43,7 @@ ad_proc ::twt::dotlrn::current_term_id {} {
 
     form find ~n term_form
     field find ~n term_id
+    # Term pretty names are not I18N so this will work in different locales
     field select [current_term_pretty_name]
     array set term_select_field [field current]
     set term_id $term_select_field(value)
@@ -95,6 +96,7 @@ ad_proc ::twt::dotlrn::add_subject { server_url department_pretty_name pretty_na
 
     form find ~n add_class
     field find ~n "form:id"
+    # Department pretty names are not I18N so this will work in different locales    
     field select "$department_pretty_name"
     field find ~n "pretty_name"
     field fill $pretty_name
@@ -145,6 +147,7 @@ ad_proc ::twt::dotlrn::setup_classes_for_term { server_url term_name } {
         ::twt::do_request $link
         form find ~n "add_class_instance"
         field find
+        # Term pretty names are not I18N so this will work in different locales
         field select $term_name
         field find ~n pretty_name
         array set name_field [field current]
@@ -156,10 +159,10 @@ ad_proc ::twt::dotlrn::setup_classes_for_term { server_url term_name } {
 
 ad_proc ::twt::dotlrn::setup_communities { server_url } {
 
-    add_community $server_url "Tennis Club" "Community for the university tennis club with tournaments and other events, also helps you find people to play with." "Open"
-    add_community $server_url "Business Alumni Class of 1997" "Alumni community for the Business Administration graduates from the class of 1997." "Closed"
-    add_community $server_url "Business Administration Program" "Community for all students following the Business Administration Program" "Closed"
-    add_community $server_url "Star Trek Fan Club" "Community for die-hard fans of Star Trek" "Needs Approval"
+    add_community $server_url "Tennis Club" "Community for the university tennis club with tournaments and other events, also helps you find people to play with." "open"
+    add_community $server_url "Business Alumni Class of 1997" "Alumni community for the Business Administration graduates from the class of 1997." "closed"
+    add_community $server_url "Business Administration Program" "Community for all students following the Business Administration Program" "closed"
+    add_community $server_url "Star Trek Fan Club" "Community for die-hard fans of Star Trek" "needs approval"
 }
 
 ad_proc ::twt::dotlrn::add_community { server_url name description policy } {
@@ -172,8 +175,7 @@ ad_proc ::twt::dotlrn::add_community { server_url name description policy } {
     field fill $name
     field find ~n description
     field fill $description
-    field find ~n join_policy
-    field select $policy
+    ::twt::multiple_select_value join_policy $policy
 
     form submit
 }
