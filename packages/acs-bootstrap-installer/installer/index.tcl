@@ -336,8 +336,9 @@ function updateSystemEmails() {
 
 <tr>
   <th align=right>System URL:</th>
-<td>[install_input_widget system_url]<br>
-The canonical URL of your system.<br><br>
+  <td>[install_input_widget system_url]<br>
+The canonical URL of your system as visible from the outside world<br>
+Usually it should include the port if your server is not on port 80<br><br>
 </tr>
 <tr>
   <th align=right>System Name:</th>
@@ -397,7 +398,7 @@ The email address to send New registration notifications.<br><br>
     } else {
 	append body "<p>The OpenACS data model is already installed. Click <i>Next</i> 
 	to scan the available packages.
-	
+
 	[install_next_button "packages-install"]
 	"
     }
