@@ -93,7 +93,7 @@ begin;
    null,
    'f',
    null,
-   name_method   => 'content_folder.get_label'
+   'content_folder.get_label'
  );
 
  select acs_attribute__create_attribute (
@@ -145,7 +145,7 @@ begin;
    null,
    'f',
    null,
-   name_method   => 'acs_object.default_name'
+   'acs_object.default_name'
  );
 
  select acs_attribute__create_attribute (
@@ -200,7 +200,7 @@ begin;
    null,
    'f',
    null,
-   name_method   => 'acs_object.default_name'
+   'acs_object.default_name'
  );
 
  select acs_attribute__create_attribute (
@@ -235,7 +235,7 @@ begin;
    null,
    'f',
    null,
-   name_method   => 'acs_object.default_name'
+   'acs_object.default_name'
  );
 
  select acs_attribute__create_attribute (
@@ -317,7 +317,7 @@ begin;
    'Basic Item',
    'Basic Items',
    'cr_revisions',
-   'revision_id'
+   'revision_id',
    null
  );
 
@@ -371,6 +371,7 @@ begin;
    'text',
    'Language',
    'Language',
+   null,
    null,
    'text'
  );

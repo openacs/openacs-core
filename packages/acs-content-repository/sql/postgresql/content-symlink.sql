@@ -41,13 +41,13 @@ begin
   end if;
 
   -- 3) check that parent folder supports symlinks
-  if content_folder__is_registered(new__parent_id,''content_symlink'') = ''f'' then
+  if content_folder__is_registered(new__parent_id,''content_symlink'',''f'') = ''f'' then
     raise EXCEPTION ''-20000: This folder does not allow symlinks to be created'';
   end if;
 
   -- 4) check that the content folder supports the target item''s content type
   if content_folder__is_registered(
-    parent_id,content_item__get_content_type(new__target_id)) = ''f'' then
+    parent_id,content_item__get_content_type(new__target_id),''f'') = ''f'' then
 
     raise EXCEPTION ''-20000: This folder does not allow symlinks to items of type % to be created'', '', content_item__get_content_type(new__target_id);
   end if;
@@ -183,9 +183,9 @@ begin
 
 
       if content_folder__is_registered(copy__target_folder_id,
-        ''content_symlink'') = ''t'' then
+        ''content_symlink'',''f'') = ''t'' then
         if content_folder__is_registered(copy__target_folder_id,
-          content_item__get_content_type(content_symlink__resolve(copy__symlink_id))) = ''t'' then
+          content_item__get_content_type(content_symlink__resolve(copy__symlink_id)),''f'') = ''t'' then
 
           v_symlink_id := content_symlink__new(
               v_name,

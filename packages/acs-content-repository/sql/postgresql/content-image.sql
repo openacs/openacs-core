@@ -36,22 +36,22 @@ begin;
  );
 
  select content_type__create_attribute (
-   content_type   => 'image',
-   attribute_name => 'width',
-   datatype       => 'integer',
-   pretty_name    => 'Width',
-   pretty_plural  => 'Widths',
+   'image',
+   'width',
+   'integer',
+   'Width',
+   'Widths',
    null,
    null,
    'text'
  );
 
  select content_type__create_attribute (
-   content_type   => 'image',
-   attribute_name => 'height',
-   datatype       => 'integer',
-   pretty_name    => 'Height',
-   pretty_plural  => 'Heights',
+   'image',
+   'height',
+   'integer',
+   'Height',
+   'Heights',
    null,
    null,
    'text'

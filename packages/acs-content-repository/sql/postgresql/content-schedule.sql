@@ -142,7 +142,7 @@ begin
   return 0;
 end;' language 'plpgsql';
 
-select inline_1 ();
+-- select inline_1 ();
 
 drop function inline_1 ();
 

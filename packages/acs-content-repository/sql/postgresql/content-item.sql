@@ -126,7 +126,7 @@ begin
       content_folder__is_registered(
         v_parent_id, new__content_type, ''f'') = ''f'' then
 
-      raise EXCEPTION ''-20000: This item\\\\'s content type % is not registered to this folder %'', new__content_type, v_parent_id;
+      raise EXCEPTION ''-20000: This item\\\'s content type % is not registered to this folder %'', new__content_type, v_parent_id;
     end if;
 
   else if v_parent_id != 0 then
@@ -141,7 +141,7 @@ begin
      if content_item__is_subclass(v_parent_type, ''content_item'') = ''t'' and
 	content_item__is_valid_child(v_parent_id, new__content_type) = ''f'' then
 
-       raise EXCEPTION ''-20000: This item\\\\'s content type % is not allowed in this container %'', new__content_type, v_parent_id);
+       raise EXCEPTION ''-20000: This item\\\'s content type % is not allowed in this container %'', new__content_type, v_parent_id;
      end if;
 
   end if; end if;
@@ -153,8 +153,8 @@ begin
       new__item_subtype, 
       new__creation_date, 
       new__creation_user, 
-      new__creation_ip 
-      v_context_id,
+      new__creation_ip, 
+      v_context_id
   );
 
   -- Turn off security inheritance if there is no security context
@@ -216,13 +216,13 @@ begin
 	new__description,
         now(),
 	new__mime_type,
-	new__nls_language
+	new__nls_language,
 	new__data,
         v_item_id,
         null,
         new__creation_date, 
         new__creation_user, 
-        new__creation_ip,
+        new__creation_ip
     );
 
   else if new__title is not null or 
@@ -1196,7 +1196,7 @@ begin
    
 
     if content_folder__is_registered(move__target_folder_id,
-          content_item__get_content_type(move__item_id)) = ''t'' and
+          content_item__get_content_type(move__item_id),''f'') = ''t'' and
        content_folder__is_registered(move__target_folder_id,
           content_item__get_content_type(content_symlink__resolve(move__item_id)),''f'') = ''t''
       then

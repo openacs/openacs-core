@@ -43,7 +43,7 @@ begin
     
 
   -- the root folder for content items	
-  v_id := content_item__get_root_folder();
+  v_id := content_item__get_root_folder(null);
 
   PERFORM content_folder__unregister_content_type(
     v_id,

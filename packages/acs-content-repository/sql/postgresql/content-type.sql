@@ -70,8 +70,8 @@ begin
     select table_name into v_supertype_table from acs_object_types
       where object_type = create_type__supertype;
 
-    execute ''create table '' || table_name || '' ('' ||
-      id_column  || '' integer primary key references '' || 
+    execute ''create table '' || create_type__table_name || '' ('' ||
+      create_type__id_column  || '' integer primary key references '' || 
       v_supertype_table || '')'';
   end if;
 
@@ -87,6 +87,8 @@ begin
     null,
     create_type__name_method
   );
+
+  raise notice ''table = %, col = %, super = %'', create_type__table_name,create_type__id_column, table_exists;
 
   PERFORM content_type__refresh_view(create_type__content_type);
 
@@ -204,7 +206,7 @@ begin
 
  select count(*) > 0 into v_column_exists 
    from pg_class c, pg_attribute a
-  where c.relname = v_table_name
+  where c.relname::varchar = v_table_name
     and c.oid = a.attrelid
     and a.attname = lower(create_attribute__attribute_name);
 
@@ -595,9 +597,9 @@ create function content_type__refresh_view (varchar)
 returns integer as '
 declare
   refresh_view__content_type           alias for $1;  
-  cols                                 varchar; 
-  tabs                                 varchar; 
-  joins                                varchar;
+  cols                                 varchar default ''''; 
+  tabs                                 varchar default ''''; 
+  joins                                varchar default '''';
   v_table_name                         varchar;
   join_rec                             record;
 begin
@@ -644,15 +646,23 @@ begin
 
   -- create the input view (includes content columns)
 
+  if table_exists(v_table_name || ''i'') then
+     execute ''drop view '' || v_table_name || ''i'';
+  end if;
+
   execute ''create view '' || v_table_name ||
     ''i as select acs_objects.*, cr.revision_id, cr.title, cr.item_id,
-    content_revision__get_content(cr.revision_id) as data, cr_text.text,
+    content_revision__get_content(cr.revision_id) as data, cr_text.text_data as text,
     cr.description, cr.publish_date, cr.mime_type, cr.nls_language'' || 
     cols || 
     '' from acs_objects, cr_revisions cr, cr_text'' || tabs || '' where 
     acs_objects.object_id = cr.revision_id '' || joins;
 
   -- create the output view (excludes content columns to enable SELECT *)
+
+  if table_exists(v_table_name || ''x'') then
+     execute ''drop view '' || v_table_name || ''x'';
+  end if;
 
   execute ''create view '' || v_table_name ||
     ''x as select acs_objects.*, cr.revision_id, cr.title, cr.item_id,
@@ -663,7 +673,7 @@ begin
     '' where acs_objects.object_id = cr.revision_id 
       and cr.item_id = i.item_id'' || joins;
 
-  PERFORM content_type__refresh_trigger(refresh_view__content_type);
+  -- PERFORM content_type__refresh_trigger(refresh_view__content_type);
 
 -- exception
 --   when others then

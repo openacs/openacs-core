@@ -26,7 +26,7 @@ begin
   return 0;
 end;' language 'plpgsql';
 
-select inline_0 ();
+-- select inline_0 ();
 
 drop function inline_0 ();
 
@@ -206,7 +206,7 @@ begin
   return null;
 end;' language 'plpgsql';
 
-select inline_1 ();
+-- select inline_1 ();
 
 drop function inline_1 ();
 

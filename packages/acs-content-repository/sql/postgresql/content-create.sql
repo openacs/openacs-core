@@ -203,7 +203,7 @@ create unique index cr_items_unique_id on cr_items(parent_id, item_id);
 create index cr_items_by_parent_id on cr_items(parent_id);
 
 
-create function cr_items_insert_tr () returns opaque as '
+create function cr_items_tree_insert_tr () returns opaque as '
 declare
         v_parent_sk     varchar;
         max_key         varchar;
@@ -231,11 +231,11 @@ begin
 
 end;' language 'plpgsql';
 
-create trigger cr_items_insert_tr before insert 
+create trigger cr_items_tree_insert_tr before insert 
 on cr_items for each row 
-execute procedure cr_items_insert_tr ();
+execute procedure cr_items_tree_insert_tr ();
 
-create function cr_items_update_tr () returns opaque as '
+create function cr_items_tree_update_tr () returns opaque as '
 declare
         v_parent_sk     varchar;
         max_key         varchar;
@@ -291,10 +291,10 @@ begin
 
 end;' language 'plpgsql';
 
-create trigger cr_items_update_tr after update 
+create trigger cr_items_tree_update_tr after update 
 on cr_items
 for each row 
-execute procedure cr_items_update_tr ();
+execute procedure cr_items_tree_update_tr ();
 
 comment on table cr_items is '
   Each content item has a row in this table, as well as a row in
@@ -514,7 +514,7 @@ comment on table cr_scheduled_release_job is '
   One-row table to track job ID of scheduled release update.
 ';
 
-insert into cr_scheduled_release_job values (NULL, sysdate);
+insert into cr_scheduled_release_job values (NULL, now());
 
 --------------------------------------------------------------
 -- CONTENT FOLDERS
@@ -722,7 +722,7 @@ create table cr_keywords (
 );
 
 
-create function cr_keywords_insert_tr () returns opaque as '
+create function cr_keywords_tree_insert_tr () returns opaque as '
 declare
         v_parent_sk     varchar;
         max_key         varchar;
@@ -750,11 +750,11 @@ begin
 
 end;' language 'plpgsql';
 
-create trigger cr_keywords_insert_tr before insert 
+create trigger cr_keywords_tree_insert_tr before insert 
 on cr_keywords for each row 
-execute procedure cr_keywords_insert_tr ();
+execute procedure cr_keywords_tree_insert_tr ();
 
-create function cr_keywords_update_tr () returns opaque as '
+create function cr_keywords_tree_update_tr () returns opaque as '
 declare
         v_parent_sk     varchar;
         max_key         varchar;
@@ -810,10 +810,10 @@ begin
 
 end;' language 'plpgsql';
 
-create trigger cr_keywords_update_tr after update 
+create trigger cr_keywords_tree_update_tr after update 
 on cr_keywords
 for each row 
-execute procedure cr_keywords_update_tr ();
+execute procedure cr_keywords_tree_update_tr ();
 
 comment on table cr_keywords is '
   Stores a subject taxonomy for classifying content items, analogous
@@ -949,7 +949,7 @@ begin
     ''Site pages go here'',
     0,
     null,
-    content_item__get_root_folder(),
+    content_item__get_root_folder(null),
     now(),
     null,
     null
@@ -1012,5 +1012,6 @@ drop function inline_1 ();
 
 
 -- show errors
+
 
 

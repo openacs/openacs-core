@@ -37,20 +37,22 @@ begin
 
   -- parent_id = 0 means that this is a mount point
   if new__parent_id != 0 and 
-     content_folder__is_registered(new__parent_id,''content_folder'') = ''f'' then
+     content_folder__is_registered(new__parent_id,''content_folder'',''f'') = ''f'' then
 
     raise EXCEPTION ''-20000: This folder does not allow subfolders to be created'';
+    return null;
+
   else
 
     v_folder_id := content_item__new(
-        name, 
-        parent_id,
-        folder_id,
+        new__name, 
+        new__parent_id,
+        new__folder_id,
         null,
-        creation_date, 
-        creation_user, 
+        new__creation_date, 
+        new__creation_user, 
 	v_context_id,
-        creation_ip, 
+        new__creation_ip, 
         ''content_folder'',
         ''content_folder'',
         null,
@@ -86,7 +88,8 @@ begin
     return v_folder_id;
 
   end if;
- 
+
+  return null; 
 end;' language 'plpgsql';
 
 
@@ -198,7 +201,7 @@ begin
     raise ''-20000: content_folder.move - Not valid folder(s)'';
   end if;
 
-  if move__folder_id = content_item__get_root_folder() or
+  if move__folder_id = content_item__get_root_folder(null) or
     move__folder_id = content_template__get_root_folder() then
     raise EXCEPTION ''-20000: content_folder.move - Cannot move root folder'';
   end if;
@@ -211,7 +214,7 @@ begin
     raise EXCEPTION ''-20000: content_folder.move - Destination folder is subfolder'';
   end if;
 
-  if content_folder__is_registered(move__target_folder_id,''content_folder'') != ''t'' then
+  if content_folder__is_registered(move__target_folder_id,''content_folder'',''f'') != ''t'' then
     raise EXCEPTION ''-20000: content_folder.move - Destination folder does not allow subfolders'';
   end if;
 
@@ -277,7 +280,7 @@ begin
   where
     item_id = copy__folder_id;  
 
-  if copy__folder_id = content_item__get_root_folder() 
+  if copy__folder_id = content_item__get_root_folder(null) 
      or copy__folder_id = content_template__get_root_folder() 
      or copy__target_folder_id = copy__folder_id 
      or v_current_folder_id = copy__target_folder_id then
@@ -381,7 +384,7 @@ declare
   v_rec                                 record;
 begin
 
-  if is_sub_folder__folder_id = content_item__get_root_folder() or
+  if is_sub_folder__folder_id = content_item__get_root_folder(null) or
     is_sub_folder__folder_id = content_template__get_root_folder() then
 
     v_sub_folder_p := ''t'';

@@ -28,8 +28,6 @@ begin
 end;' language 'plpgsql';
 
 
-end table_exists;
-
 -- show errors
 
 -- or replace  function

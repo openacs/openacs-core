@@ -42,7 +42,7 @@ begin
       new__item_id
   );
 
-  -- binary data is stored in cr_revisions using Don's lob hack.
+  -- binary data is stored in cr_revisions using Dons lob hack.
   -- This routine only inserts the lob id.  It would need to be followed by 
   -- ns_pg blob_dml from within a tcl script to actually insert the lob data.
 
@@ -480,8 +480,8 @@ declare
   -- b                                         blob;          
   -- c                                         text;          
 begin
-  -- FIXME:  I can't find an instance in the 4.2 beta code where this
-  --         is used so I'm not worrying about porting it for now.
+  -- FIXME:  I cannot find an instance in the 4.2 beta code where this
+  --         is used so I am not worrying about porting it for now.
   --         DCW - 2001-03-28.
 
   raise EXCEPTION ''not implemented content_revision.to_temporary_clob'';

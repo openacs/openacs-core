@@ -13,6 +13,11 @@
 create view content_template_globals as 
 select -200 as c_root_folder_id;
 
+create function content_template__get_root_folder() returns integer as '
+begin
+  return content_template_globals.c_root_folder_id;
+end;' language 'plpgsql';
+
 -- create or replace package body content_template
 -- function new
 create function content_template__new (varchar,integer,integer,timestamp,integer,varchar)
@@ -36,7 +41,7 @@ begin
 
   -- make sure we''re allowed to create a template in this folder
   if content_folder__is_folder(new__parent_id) = ''t'' and
-    content_folder__is_registered(new__parent_id,''content_template'') = ''f'' then
+    content_folder__is_registered(new__parent_id,''content_template'',''f'') = ''f'' then
 
     raise EXCEPTION ''-20000: ''This folder does not allow templates to be created'';
 

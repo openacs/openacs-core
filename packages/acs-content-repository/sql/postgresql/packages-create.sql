@@ -1,6 +1,6 @@
 -- Ensure that the data model is up-to-date before compiling packages
 
-\i content-util.sql
+-- \i content-util.sql
 \i content-update.sql
 
 -- create or replace package content_type AUTHID CURRENT_USER as
