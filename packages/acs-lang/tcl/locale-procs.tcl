@@ -469,7 +469,7 @@ ad_proc -private lang::conn::browser_locale {} {
                 # we have a different locale with matching language, 
                 # i.e. a tentative match
                 if { ![info exists tentative_match] } {
-                    set default_locale [lang::util::default_locale_for_lang $language]
+                    set default_locale [lang::util::default_locale_from_lang $language]
                     if { ![empty_string_p $default_locale] } {
                         set tentative_match $default_locale
                     }                    
@@ -481,7 +481,7 @@ ad_proc -private lang::conn::browser_locale {} {
             }
         } else {
             # We have just a language, e.g. en
-            set default_locale [lang::util::default_locale_for_lang $locale]
+            set default_locale [lang::util::default_locale_from_lang $locale]
             if { ![empty_string_p $default_locale] } {
                 set perfect_match $default_locale
                 break

@@ -97,7 +97,7 @@ insert into ad_locales
        (locale, label, language, country, nls_language, nls_territory, 
         nls_charset, mime_charset, default_p, enabled_p)
  values ('fr_FR', 'French (FR)', 'fr', 'FR', 'FRENCH', 
-        'FRANCE', 'WE8ISO8859P1', 'ISO-8859-1', 't', 'f');
+        'FRANCE', 'WE8ISO8859P1', 'ISO-8859-1', 't', 't');
 
 insert into ad_locales 
        (locale, label, language, country, nls_language, nls_territory, 
@@ -108,7 +108,7 @@ insert into ad_locales
 insert into ad_locales 
        (locale, label, language, country, nls_language, nls_territory, 
         nls_charset, mime_charset, default_p, enabled_p)
- values ('da_DK', 'Danish (DK)', 'da', 'DK', 'DANISH', 'DENMARK', 'WE8ISO8859P1', 'ISO-8859-1', 't', 'f');
+ values ('da_DK', 'Danish (DK)', 'da', 'DK', 'DANISH', 'DENMARK', 'WE8ISO8859P1', 'ISO-8859-1', 't', 't');
 
 insert into ad_locales 
        (locale, label, language, country, nls_language, nls_territory, 
@@ -118,7 +118,7 @@ insert into ad_locales
 insert into ad_locales 
        (locale, label, language, country, nls_language, nls_territory, 
         nls_charset, mime_charset, default_p, enabled_p)
- values ('fi_FI', 'Finnish (FI)', 'fi', 'FI', 'FINNISH', 'FINLAND', 'WE8ISO8859P15', 'ISO-8859-15', 't', 'f');
+ values ('fi_FI', 'Finnish (FI)', 'fi', 'FI', 'FINNISH', 'FINLAND', 'WE8ISO8859P15', 'ISO-8859-15', 't', 't');
 
 insert into ad_locales 
        (locale, label, language, country, nls_language, nls_territory, 

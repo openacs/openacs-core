@@ -16,7 +16,7 @@ ad_proc lang::test::get_dir {} {
     return "[acs_package_root_dir acs-lang]/tcl/test"
 }
 
-ad_proc assert_browser_locale {accept_language expect_locale} {
+ad_proc lang::test::assert_browser_locale {accept_language expect_locale} {
     Assert that with given accept language header lang::conn::browser_locale returns
     the expected locale.
 
@@ -315,76 +315,84 @@ aa_register_case strange_oracle_problem {
 aa_register_case set_get_timezone {
     Test that setting and getting user timezone works
 } {
-    # Make sure we have a logged in user
-    set org_user_id [ad_conn user_id]
+    # We cannot test timezones if they are not installed
+    if { [lang::system::timezone_support_p] } {
 
-    if { $org_user_id == 0 } {
-        set user_id [db_string user { select min(user_id) from users }]
-        ad_conn -set user_id $user_id
-    } else {
-        set user_id $org_user_id
-    }
+        # Make sure we have a logged in user
+        set org_user_id [ad_conn user_id]
 
-    # Remember originals so we can restore them
-    set system_timezone [lang::system::timezone]
-    set user_timezone [lang::user::timezone]
+        if { $org_user_id == 0 } {
+            set user_id [db_string user { select min(user_id) from users }]
+            ad_conn -set user_id $user_id
+        } else {
+            set user_id $org_user_id
+        }
+
+        # Remember originals so we can restore them
+        set system_timezone [lang::system::timezone]
+        set user_timezone [lang::user::timezone]
 
 
-    set timezones [lc_list_all_timezones]
-    
-    set desired_user_timezone [lindex [lindex $timezones [randomRange [expr [llength $timezones]-1]]] 0]
-    set desired_system_timezone [lindex [lindex $timezones [randomRange [expr [llength $timezones]-1]]] 0]
-    
-    with_catch catched_error {
-        # User timezone
-        lang::user::set_timezone $desired_user_timezone
-        aa_equals "User timezone retrieved is the same as the one set" [lang::user::timezone] $desired_user_timezone
+        set timezones [lc_list_all_timezones]
         
-        # Storage
-        set user_id [ad_conn user_id]
-        aa_equals "User timezone stored in user_preferences table" \
-            [db_string user_prefs { select timezone from user_preferences where user_id = :user_id }] \
-            $desired_user_timezone
+        set desired_user_timezone [lindex [lindex $timezones [randomRange [expr [llength $timezones]-1]]] 0]
+        set desired_system_timezone [lindex [lindex $timezones [randomRange [expr [llength $timezones]-1]]] 0]
         
-        
-        # System timezone
-        lang::system::set_timezone $desired_system_timezone
-        aa_equals "System timezone retrieved is the same as the one set" [lang::system::timezone] $desired_system_timezone
-        
-        # Connection timezone
-        aa_equals "Using user timezone" [lang::conn::timezone] $desired_user_timezone
-        lang::user::set_timezone {}
-        aa_equals "Fallback to system timezone" [lang::conn::timezone] $desired_system_timezone
+        with_catch catched_error {
+            # User timezone
+            lang::user::set_timezone $desired_user_timezone
+            aa_equals "User timezone retrieved is the same as the one set" [lang::user::timezone] $desired_user_timezone
+            
+            # Storage
+            set user_id [ad_conn user_id]
+            aa_equals "User timezone stored in user_preferences table" \
+                [db_string user_prefs { select timezone from user_preferences where user_id = :user_id }] \
+                $desired_user_timezone
+            
+            
+            # System timezone
+            lang::system::set_timezone $desired_system_timezone
+            aa_equals "System timezone retrieved is the same as the one set" [lang::system::timezone] $desired_system_timezone
+            
+            # Connection timezone
+            aa_equals "Using user timezone" [lang::conn::timezone] $desired_user_timezone
+            lang::user::set_timezone {}
+            aa_equals "Fallback to system timezone" [lang::conn::timezone] $desired_system_timezone
 
-    } {
-        #
-    }
-    
-    # Clean up
-    lang::system::set_timezone $system_timezone
-    lang::user::set_timezone $user_timezone
-    ad_conn -set user_id $org_user_id
+        } {
+            #
+        }
+        
+        # Clean up
+        lang::system::set_timezone $system_timezone
+        lang::user::set_timezone $user_timezone
+        ad_conn -set user_id $org_user_id
 
-    if { ![empty_string_p $catched_error] } {
-        # rethrow the error
-        global errorInfo
-        error $catched_error $errorInfo
+        if { ![empty_string_p $catched_error] } {
+            # rethrow the error
+            global errorInfo
+            error $catched_error $errorInfo
+        }
     }
 }
 
 aa_register_case set_timezone_not_logged_in {
     Test that setting and getting user timezone throws an error when user is not logged in
 } {
-    set user_id [ad_conn user_id]
+    # We cannot test timezones if they are not installed
+    if { [lang::system::timezone_support_p] } {
 
-    ad_conn -set user_id 0
-    aa_equals "Fallback to system timezone when no user" [lang::conn::timezone] [lang::system::timezone]
+        set user_id [ad_conn user_id]
 
-    set error_p [catch { lang::user::set_timezone [lang::system::timezone] } errmsg]
-    aa_true "Error when setting user timezone when user not logged in" $error_p
+        ad_conn -set user_id 0
+        aa_equals "Fallback to system timezone when no user" [lang::conn::timezone] [lang::system::timezone]
 
-    # Reset the user_id 
-    ad_conn -set user_id $user_id
+        set error_p [catch { lang::user::set_timezone [lang::system::timezone] } errmsg]
+        aa_true "Error when setting user timezone when user not logged in" $error_p
+
+        # Reset the user_id 
+        ad_conn -set user_id $user_id
+    }
 }
 
 aa_register_case lc_time_fmt_Z_timezone {
