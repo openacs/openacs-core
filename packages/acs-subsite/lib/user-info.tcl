@@ -23,13 +23,17 @@ set action_url "[subsite::get_element -element url]user/basic-info-update"
 
 acs_user::get -user_id $user_id -array user -include_bio
 
-set authority [auth::authority::get_element -authority_id $user(authority_id) -element pretty_name]
+set authority_name [auth::authority::get_element -authority_id $user(authority_id) -element pretty_name]
 
-set form_elms { username first_names last_name email screen_name url bio }
+set form_elms { authority_id username first_names last_name email screen_name url bio }
 foreach elm $form_elms {
     set elm_mode($elm) {}
 }
 set read_only_elements [auth::sync::get_sync_elements -authority_id $user(authority_id)]
+set read_only_notice_p [expr [llength $read_only_elements] > 0]
+if { ![acs_user::site_wide_admin_p] } {
+    lappend read_only_elements authority_id username
+}
 foreach elm $read_only_elements {
     set elm_mode($elm) {display}
 }
@@ -41,7 +45,6 @@ foreach elm $form_elms {
     }
 }
 set focus "user_info.$first_element"
-set read_only_notice_p [expr [llength $read_only_elements] > 0]
 set edit_mode_p [expr ![empty_string_p [form::get_action user_info]]]
 
 set form_mode display
@@ -57,12 +60,15 @@ ad_form -name user_info -cancel_url $return_url -action $action_url -mode $form_
 
 if { [llength [auth::authority::get_authority_options]] > 1 } {
     ad_form -extend -name user_info -form {
-        {authority:text(inform)
+        {authority_id:text(select)
+            {mode $elm_mode(authority_id)}
             {label "Authority"}
+            {options {[auth::authority::get_authority_options]}}
         }
     }
 }
-if { $user(authority_id) != [auth::authority::local] || ![auth::UseEmailForLoginP] } {
+if { $user(authority_id) != [auth::authority::local] || ![auth::UseEmailForLoginP] || \
+     ([acs_user::site_wide_admin_p] && [llength [auth::authority::get_authority_options]] > 1) } {
     ad_form -extend -name user_info -form {
         {username:text(text)
             {label "Username"}
@@ -71,7 +77,7 @@ if { $user(authority_id) != [auth::authority::local] || ![auth::UseEmailForLogin
     }
 }
 
-# TODO: Use get_registration_form_elements ...
+# TODO: Use get_registration_form_elements, or auto-generate the form somehow? Deferred.
 
 
 ad_form -extend -name user_info -form {
@@ -116,7 +122,7 @@ ad_form -extend -name user_info -form {
         {display_value {[ad_text_to_html -- $user(bio)]}}
     }
 } -on_request {
-    foreach var { first_names last_name email username screen_name url bio } {
+    foreach var { authority_id first_names last_name email username screen_name url bio } {
         set $var $user($var)
     }
 } -on_submit {
