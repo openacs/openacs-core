@@ -8,7 +8,7 @@
   <else>
 </noparse>
   <if @bulk_actions:rowcount@ gt 0>
-    <form name="@list_properties.name@" method="get">
+    <form name="@list_properties.name@" method="@list_properties.bulk_action_method@">
     @list_properties.bulk_action_export_chunk;noquote@
   </if>
 
@@ -19,7 +19,6 @@
       </multiple>
     </div>
   </if>
-
 
     <noparse>
       <multiple name="@list_properties.multirow@">

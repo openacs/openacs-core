@@ -1,7 +1,7 @@
 <table class="@list_properties.class@" cellpadding="3" cellspacing="1"@list_properties.table_attributes;noquote@>
 
 <if @list_properties.bulk_actions@ not nil>
-  <form name="@list_properties.name@" method="get">
+  <form name="@list_properties.name@" method="@list_properties.bulk_action_method@">
   @list_properties.bulk_action_export_chunk;noquote@
 </if>
 

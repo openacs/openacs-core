@@ -1,6 +1,6 @@
 <property name="focus">@focus;noquote@</property>
 
-<formtemplate id="login" style="standard-lars"></formtemplate>
+<formtemplate id="login"></formtemplate>
 
 <if @forgotten_pwd_url@ not nil>
   <a href="@forgotten_pwd_url@">#acs-subsite.Forgot_your_password#</a> <br />

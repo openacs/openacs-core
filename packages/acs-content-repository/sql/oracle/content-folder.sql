@@ -133,7 +133,7 @@ begin
 	fetch c_folder_children_cur into v_child_item_id;
 	exit when c_folder_children_cur%NOTFOUND;
 	if is_folder(v_child_item_id) = 't' then
-	  content_folder.del(v_child_item_id);
+	  content_folder.del(v_child_item_id,'t');
         else
 
          content_item.del(v_child_item_id);
@@ -186,15 +186,15 @@ begin
   if label is not null and description is not null then 
 
     update cr_folders
-       set cr_folders.label = label,
-       cr_folders.description = description
-       where cr_folders.folder_id = folder_id;
+       set cr_folders.label = content_folder.rename.label,
+       cr_folders.description = content_folder.rename.description
+       where cr_folders.folder_id = content_folder.rename.folder_id;
 
   elsif label is not null and description is null then 
 
     update cr_folders
-       set cr_folders.label = label
-       where cr_folders.folder_id = folder_id;
+       set cr_folders.label = content_folder.rename.label
+       where cr_folders.folder_id = content_folder.rename.folder_id;
 
   end if;
 

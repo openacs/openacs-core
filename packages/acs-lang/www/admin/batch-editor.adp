@@ -37,7 +37,7 @@
   </if>
 
   <!-- TODO: Remove 'style' when we've merged 4.6.4 back onto HEAD -->
-  <formtemplate id="batch_editor" style="standard-lars"></formtemplate>
+  <formtemplate id="batch_editor"></formtemplate>
 
   <if @pagination:rowcount@ ne "1">
     <p>

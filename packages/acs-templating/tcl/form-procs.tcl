@@ -431,7 +431,7 @@ ad_proc -private template::form::render { id tag_attributes } {
   #----------------------------------------------------------------------
 
   if { [exists_and_not_null form_properties(cancel_url)] && ![exists_and_not_null form_properties(cancel_label)] } {
-    set form_properties(cancel_label) "Cancel"
+      set form_properties(cancel_label) [_ acs-kernel.common_Cancel]
   }
 
   if { [exists_and_not_null form_properties(cancel_url)] } {

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="acs-subsite" package_version="5.1.0a2" locale="en_US" charset="ISO-8859-1">
+<message_catalog package_key="acs-subsite" package_version="5.1.0" locale="en_US" charset="ISO-8859-1">
 
   <msg key="_or">, or</msg>
   <msg key="_Update_Basic_Information">Update Basic Information</msg>
@@ -28,7 +28,7 @@
   <msg key="Account_reopened_title">Account Reopened</msg>
   <msg key="Action">Action</msg>
   <msg key="Add_new_app">Add new application</msg>
-  <msg key="Admin">Admin</msg>
+  <msg key="Admin">Control Panel</msg>
   <msg key="Administer_subsite">Administer %subsite_name%</msg>
   <msg key="Administrative_options">Administrative options for this user</msg>
   <msg key="Alert_Type">Alert Type</msg>
@@ -230,6 +230,7 @@ the Internet; this image must be on your computer's hard drive).</msg>
   <msg key="lt_Uploaded_pretty_date">Uploaded:  %pretty_date%</msg>
   <msg key="lt_Uploaded_publish_date">Uploaded: %publish_date%</msg>
   <msg key="lt_Use_the_Browse_button">Use the &quot;Browse...&quot; button to locate your file, then click &quot;Open&quot;.</msg>
+  <msg key="lt_User_has_portrait_title">This user has a entered a biography or uploaded a portrait</msg>
   <msg key="lt_We_cant_find_you">We can't find you (user %user_id%) in the users table.  Probably your
 account was deleted for some reason.</msg>
   <msg key="lt_We_had_a_problem_proc">We had a problem processing your entry.</msg>
@@ -297,6 +298,7 @@ You can always change your password by doing the following:
   <msg key="Permissions_for_name">Permissions for %name%</msg>
   <msg key="Please_return_to_home">Please return to %home_link%.</msg>
   <msg key="Portrait">Portrait</msg>
+  <msg key="Profile">Profile</msg>
   <msg key="Question">Question</msg>
   <msg key="Re_enable">Re-enable</msg>
   <msg key="Recover_Password">Recover Password</msg>

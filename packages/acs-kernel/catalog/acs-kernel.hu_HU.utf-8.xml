@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<message_catalog package_key="acs-kernel" package_version="5.0.4" locale="hu_HU" charset="utf-8">
+<message_catalog package_key="acs-kernel" package_version="5.1.0" locale="hu_HU" charset="utf-8">
 
   <msg key="authentication_authority">Jogosultság</msg>
   <msg key="common_apply">Alkalmaz</msg>
@@ -11,6 +11,7 @@
   <msg key="common_discard">Hagyjuk</msg>
   <msg key="common_edit">Szerkesztés</msg>
   <msg key="common_finish">Befejezés</msg>
+  <msg key="common_go">OK</msg>
   <msg key="common_help">Segítség</msg>
   <msg key="common_login">Bejelentkezés</msg>
   <msg key="common_next">Következő</msg>

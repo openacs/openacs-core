@@ -10,7 +10,7 @@
     <version name="5.2.0d2" url="http://openacs.org/repository/download/apm/acs-subsite-5.2.0d2.apm">
         <owner url="http://openacs.org">OpenACS</owner>
         <summary>Subsite</summary>
-        <release-date>2004-04-18</release-date>
+        <release-date>2004-04-29</release-date>
         <vendor url="http://openacs.org">OpenACS</vendor>
 	<license url="http://www.gnu.org/copyleft/gpl.html">GPL</license>
 	<maturity>3</maturity>
@@ -58,5 +58,7 @@
 
     </version>
 </package>
+
+
 
 

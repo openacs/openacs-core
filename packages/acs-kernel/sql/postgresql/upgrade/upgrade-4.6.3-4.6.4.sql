@@ -26,7 +26,7 @@ update users set password_changed_date = current_timestamp;
 
 -- recreate the registered_users view
 
-drop view registered_users;
+drop view registered_users CASCADE;
 
 create view registered_users
 as
@@ -41,10 +41,15 @@ as
   and mr.member_state = 'approved'
   and u.email_verified_p = 't';
 
+create view registered_users_of_package_id
+as
+SELECT u.*, au.package_id
+FROM application_users au, registered_users u
+WHERE (au.user_id = u.user_id);
 
 -- recreate the cc_users view
 
-drop view cc_users;
+drop view cc_users CASCADE;
 
 create view cc_users
 as
@@ -58,6 +63,13 @@ where o.object_id = pa.party_id
   and m.group_id = amo.object_id
   and m.rel_id = mr.rel_id
   and m.container_id = m.group_id;
+
+create view cc_users_of_package_id
+as
+SELECT u.*, au.package_id
+FROM application_users au, cc_users u
+WHERE (au.user_id = u.user_id);
+
 
 -- Fixing a really lame = null bug in this proc that would cause default values
 -- of new parameters to not be propagated to package instances

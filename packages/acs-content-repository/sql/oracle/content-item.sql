@@ -629,14 +629,14 @@ procedure rename (
     from 
       cr_items
     where
-      cr_items.name = name
+      cr_items.name = content_item.rename.name
     and 
       parent_id = (select 
 		     parent_id
 		   from
 		     cr_items
 		   where
-		     cr_items.item_id = item_id);
+		     cr_items.item_id = content_item.rename.item_id);
 
   exists_id integer;
 begin
@@ -647,12 +647,12 @@ begin
   if exists_cur%NOTFOUND then
     close exists_cur;
     update cr_items
-	set cr_items.name = rename.name
-       	where cr_items.item_id = rename.item_id;
+	set cr_items.name = content_item.rename.name
+       	where cr_items.item_id = content_item.rename.item_id;
 
     update acs_objects
-      set title = rename.name
-      where object_id = rename.item_id;
+      set title = content_item.rename.name
+      where object_id = content_item.rename.item_id;
   else
     close exists_cur;
     if exists_id <> item_id then

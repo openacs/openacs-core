@@ -10,7 +10,7 @@
     <version name="5.2.0d3" url="http://openacs.org/repository/download/apm/acs-content-repository-5.2.0d3.apm">
         <owner url="http://openacs.org">OpenACS</owner>
         <summary>The canonical repository for OpenACS content.</summary>
-        <release-date>2004-04-18</release-date>
+        <release-date>2004-04-29</release-date>
         <vendor url="http://openacs.org">OpenACS</vendor>
 	<license url="http://www.gnu.org/copyleft/gpl.html">GPL</license>
 	<maturity>3</maturity>
@@ -32,5 +32,7 @@
 
     </version>
 </package>
+
+
 
 
