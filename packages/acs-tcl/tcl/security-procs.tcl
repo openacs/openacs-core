@@ -122,13 +122,15 @@ proc_doc sec_handler {} {
 		# can't have that cookie unless he had logged in securely
 		# at some time in the past.
 		# So just call sec_setup_session to generate a new token.
-		# Otherwise, force a trip to /register
+		# Otherwise, force a trip to [subsite]/register
 		if { [catch {
 		    set new_user_id [lindex [split [ad_get_signed_cookie "ad_user_login_secure"] {,}] 0] }] } {
-#		     ns_log notice "OACS= sec_handler:token invalid $errmsg"
+		     # ns_log notice "OACS= sec_handler:token invalid $errmsg"
 
-		     ad_returnredirect "/register/index?return_url=[ns_urlencode [ad_conn url]?[ad_conn query]]"
-		     return filter_break
+			
+		     ad_returnredirect "[subsite::get_element \
+			     -element url]register/index?return_url=[ns_urlencode [ad_conn url]?[ad_conn query]]"
+			return filter_break
 		 } else {
 		     sec_setup_session $new_user_id
 		 }
@@ -525,7 +527,7 @@ ad_proc -public -deprecated ad_privacy_threshold {} {
 
 ad_proc -public ad_redirect_for_registration {} {
     
-    Redirects user to /register/index to require the user to
+    Redirects user to [subsite]/register/index to require the user to
     register. When registration is complete, the user will be returned
     to the current location.  All variables in ns_getform (both posts and
     gets) will be maintained.
@@ -550,19 +552,19 @@ ad_proc -public ad_redirect_for_registration {} {
 	    incr form_counter_i
 	}
     }
-    ad_returnredirect "/register/?return_url=[ns_urlencode [ad_conn url]$url_args]"
+    ad_returnredirect "[subsite::get_element -element url]register/?return_url=[ns_urlencode [ad_conn url]$url_args]"
     return
 }
 
 ad_proc -public ad_maybe_redirect_for_registration {} {
 
     Checks to see if a user is logged in.  If not, redirects to
-    /register/index to require the user to register. When registration
-    is complete, the user will return to the current location.  All
-    variables in ns_getform (both posts and gets) will be maintained.
-    Note that this will return out of its caller so that the caller need
-    not explicitly call "return". Returns the user id if login was
-    succesful.
+    [subsite]/register/index to require the user to register.
+    When registration is complete, the user will return to the current
+    location. All variables in ns_getform (both posts and gets) will
+    be maintained. Note that this will return out of its caller so that
+    the caller need not explicitly call "return". Returns the user id
+    if login was succesful.
 
 } {
     set user_id [ad_conn user_id]
@@ -580,13 +582,13 @@ ad_proc -public ad_maybe_redirect_for_registration {} {
 ad_proc -public -deprecated ad_restrict_entire_server_to_registered_users {conn args why} {
     A preauth filter that will halt service of any page if the user is
     unregistered, except the site index page and stuff underneath
-    /register. Use permissions on the site node map to control access.
+    [subsite]/register. Use permissions on the site node map to control access.
 } {
-    if {![string match "/index.tcl" [ad_conn url]] && ![string match "/" [ad_conn url]] && ![string match "/register/*" [ad_conn url]] && ![string match "/SYSTEM/*" [ad_conn url]] && ![string match "/user_please_login.tcl" [ad_conn url]]} {
+    if {![string match "/index.tcl" [ad_conn url]] && ![string match "/" [ad_conn url]] && ![string match "*/register/*" [ad_conn url]] && ![string match "*/SYSTEM/*" [ad_conn url]] && ![string match "*/user_please_login.tcl" [ad_conn url]]} {
 	# not one of the magic acceptable URLs
 	set user_id [ad_conn user_id]
 	if {$user_id == 0} {
-	    ad_returnredirect "/register/?return_url=[ns_urlencode [ad_conn url]?[ad_conn query]]"
+	    ad_returnredirect "[subsite::get_element -element url]register/?return_url=[ns_urlencode [ad_conn url]?[ad_conn query]]"
 	    return filter_return
 	}
     }
