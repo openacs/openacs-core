@@ -1,5 +1,5 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html><head><meta content="text/html; charset=ISO-8859-1" http-equiv="Content-Type"><title>Backup and Recovery</title><meta name="generator" content="DocBook XSL Stylesheets V1.50.0"><link rel="home" href="index.html" title="OpenACS Documentation"><link rel="up" href="maintenance.html" title="Chapter 7. Maintenance"><link rel="previous" href="database-management.html" title="Database Management"><link rel="next" href="install-redhat.html" title="Appendix A. Install Red Hat 8.0"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="images/alex.jpg" border="0"></a><center>4.6.x DRAFT IN PROGRESS</center><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="database-management.html">Prev</a>&nbsp;</td><th width="60%" align="center">Chapter 7. Maintenance</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="install-redhat.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><h2 class="title" style="clear: both"><a name="backup-recovery"></a>Backup and Recovery</h2></div></div><div class="authorblurb"><p>
+<html><head><meta content="text/html; charset=ISO-8859-1" http-equiv="Content-Type"><title>Backup and Recovery</title><meta name="generator" content="DocBook XSL Stylesheets V1.50.0"><link rel="home" href="index.html" title="OpenACS Documentation"><link rel="up" href="maintenance.html" title="Chapter 7. Maintenance"><link rel="previous" href="database-management.html" title="Database Management"><link rel="next" href="install-redhat.html" title="Appendix A. Install Red Hat 8.0"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="images/alex.jpg" border="0"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="database-management.html">Prev</a>&nbsp;</td><th width="60%" align="center">Chapter 7. Maintenance</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="install-redhat.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><h2 class="title" style="clear: both"><a name="backup-recovery"></a>Backup and Recovery</h2></div></div><div class="authorblurb"><p>
     by <a href="mailto:dhogaza@pacifier.com" target="_top">Don Baccus</a>
       with additions by <a href="mailto:joel@aufrecht.org" target="_top">Joel Aufrecht</a><br>
           OpenACS docs are written by the named authors, but may be edited
@@ -42,21 +42,51 @@
       (This should moved into OpenACS's scheduled task project so that
       it's integrated with OpenACS's alerts and such.)</p><pre class="screen">[service0@yourserver service0]$ export EDITOR=emacs;crontab -e</pre><p>Add this line to the file.  The numbers and stars at the beginning are cron columns that specify when the program should be run - in this case, whenever the minute is 0 and the hour is 1, i.e., 1:00 am every day.</p><pre class="programlisting">0 1 * * * /usr/local/pgsql/bin/pg_dump -f /web/<span class="replaceable">service0</span>/database-backup/<span class="replaceable">service0</span>_$(date +%Y-%m-%d).dmp <span class="replaceable">service0</span></pre></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="backup-file-system"></a>Back up the file system</h3></div></div><p>Here's a quick manual way to back up a reference install -
       it should be replaced by an automated script within
-      OpenACS.  Also watch out for permission problems.</p><pre class="screen">[root@yourserver root]# <b><tt>su - <span class="replaceable">service0</span></tt></b>
-[service0@yourserver service0]$ <b><tt>tar -cps --file /tmp/<span class="replaceable">service0</span>-backup.tar.bz2 /web/<span class="replaceable">service0</span></tt></b>
+      OpenACS.  The command excludes the auto-generated
+      <tt>supervise</tt> directory, which is
+      unneccesary and has complicated permissions.  Make sure that you are using the cron job to back up the database to a file in <tt>/web/<span class="replaceable">service0</span>/database-backup</tt> so that the tar command will include the database.</p><pre class="screen">[root@yourserver root]# <b><tt>su - <span class="replaceable">service0</span></tt></b>
+[service0@yourserver service0]$ <b><tt>tar -cpsj --exclude /web/<span class="replaceable">service0</span>/etc/daemontools/supervise --file /tmp/<span class="replaceable">service0</span>-backup.tar.bz2 /web/<span class="replaceable">service0</span>/ --exclude /web/<span class="replaceable">service0</span>/etc/daemontools/supervise/</tt></b>
 tar: Removing leading `/' from member names
-[service0@yourserver service0]$</pre></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="Restore"></a>Restore</h3></div></div><div class="orderedlist"><ol type="1"><li><p>Restore the operating system and required software.
+[service0@yourserver service0]$</pre></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="id2850480"></a>Testing</h3></div></div><p><span class="emphasis"><em>On a test service</em></span>, make sure that your backup-recovery process work.  After backing up the database and file system, delete the service as detailed below and then recover it.</p><pre class="screen">[root@yourserver root]# <b><tt>svc -d /service/service0</tt></b>
+[root@yourserver root]# <b><tt>mv /web/service0/ /web/service0.lost</tt></b>
+[root@yourserver root]#<b><tt> rm /service/service0</tt></b>
+rm: remove symbolic link `/service/service0'? y
+[root@yourserver root]# <b><tt>ps -auxw | grep service0</tt></b>
+root      1496  0.0  0.0  1312  252 ?        S    16:58   0:00 supervise service0
+[root@yourserver root]#<b><tt> kill<span class="replaceable"> 1496</span></tt></b>
+[root@yourserver root]# <b><tt>ps -auxw | grep service0</tt></b>
+[root@yourserver root]# <b><tt>su - postgres</tt></b>
+[postgres@yourserver pgsql]$ <b><tt>dropdb service0</tt></b>
+DROP DATABASE
+[postgres@yourserver pgsql]$ <b><tt>dropuser service0</tt></b>
+DROP USER
+[postgres@yourserver pgsql]$ <b><tt>exit</tt></b>
+logout
+[root@yourserver root]#</pre></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="Recovery"></a>Recovery</h3></div></div><div class="orderedlist"><ol type="1"><li><p>Restore the operating system and required software.
           You can do this with standard backup processes or by
           keeping copies of the install material (OS CDs, OpenACS
-          tarball and supporting software) and repeating the install guide.</p></li><li><p>Restore the OpenACS service.  Assuming the user already exists, restore the database and files from backup and restore the daemontools link:</p><pre class="screen">[root@yourserver root]# <b><tt>su - <span class="replaceable">service0</span></tt></b>
+          tarball and supporting software) and repeating the install guide.</p></li><li><p>Restore the OpenACS service.  Assuming the user already exists, restore the database and files from backup and restore the daemontools link.  (Because of a bug in Postgres backup-recovery, not all database objects are created in the correct order.  To compensate, pre-creating some objects usually work.)</p><pre class="screen">[root@yourserver root]# <b><tt>su - postgres</tt></b>
+[postgres@yourserver pgsql]$ <b><tt>createuser <span class="replaceable">service0</span></tt></b>
+Shall the new user be allowed to create databases? (y/n) <b><tt>y</tt></b>
+Shall the new user be allowed to create more new users? (y/n) <b><tt>y</tt></b>
+CREATE USER
+[postgres@yourserver pgsql]$ <b><tt>exit</tt></b>
+logout
+
+[root@yourserver root]# <b><tt>su - <span class="replaceable">service0</span></tt></b>
 [service0@yourserver service0]$ <b><tt>cd /web</tt></b>
 [service0@yourserver web]$<b><tt> tar xjf /tmp/service0-backup.tar.bz2</tt></b>
+[service0@yourserver web]$ <b><tt>chmod -R 700 service0</tt></b>
 [service0@yourserver web]$ <b><tt>createdb <span class="replaceable">service0</span></tt></b>
+CREATE DATABASE
 [service0@yourserver web]$<b><tt> psql -f /web/<span class="replaceable">service0</span>/packages/acs-kernel/sql/postgresql/postgresql.sql <span class="replaceable">service0</span></tt></b>
+<span class="emphasis"><em>(many lines omitted)</em></span>
 [service0@yourserver web]$ <b><tt>psql <span class="replaceable">service0</span> &lt; /web/<span class="replaceable">service0</span>/database-backup/<span class="replaceable">database-backup.dmp</span></tt></b>
+<span class="emphasis"><em>(many lines omitted)</em></span>
 [service0@yourserver web]$ <b><tt>exit</tt></b>
-[root@yourserver root]# <b><tt>ln -s /web/<span class="replaceable">service0</span>/etc/daemontools /service/</tt></b>
-[service0@yourserver web]$ <b><tt>svc -u /service/<span class="replaceable">service0</span></tt></b>
+[root@yourserver root]# <b><tt>ln -s /web/<span class="replaceable">service0</span>/etc/daemontools /service/<span class="replaceable">service0</span></tt></b>
+[root@yourserver root]# <b><tt>sleep 10</tt></b>
+[root@yourserver root]# <b><tt>svgroup web /service/<span class="replaceable">service0</span></tt></b>
 [root@yourserver root]#</pre></li></ol></div></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="other-backup-strategies"></a>Other Backup Strategies</h3></div></div><p>Earlier strategies, included here because this section
         hasn't been fully updated yet.</p><div class="sect3"><div class="titlepage"><div><h4 class="title"><a name="install-export-oracle"></a>Set Up Nightly Oracle Exports</h4></div></div><p>
       (This has not yet been updated to fit with the Reference
