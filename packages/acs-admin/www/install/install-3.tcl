@@ -81,7 +81,8 @@ foreach package_key $install {
     if { [apm_package_upgrade_p $package_key $final_version_name] == 1} {
         ns_log Debug "Upgrading package [string totitle $version(package-name)] to $final_version_name."
         set upgrade_p 1
-        set initial_version_name [apm_highest_version $package_key]
+        
+        set initial_version_name [apm_highest_version_name $package_key]
     } else {
         set upgrade_p 0
         set initial_version_name ""
