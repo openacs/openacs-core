@@ -6,7 +6,7 @@ ad_library {
     @cvs-id $Id$
 }
 
-aa_register_case -cats {smoke} acs_tcl__tcl_file_syntax_errors {
+aa_register_case -cats {smoke production_safe} files__tcl_file_syntax_errors {
     Test all known tcl files for successful parsing "(in the [info complete] sense at least)" and other common errors.
 
     @author Jeff Davis davis@xarg.net
@@ -41,7 +41,7 @@ aa_register_case -cats {smoke} acs_tcl__tcl_file_syntax_errors {
     aa_log "$good good of $nfiles checked"
 }
 
-aa_register_case -cats {} -error_level notice acs_tcl__tcl_file_common_errors {
+aa_register_case -cats {smoke production_safe} -error_level notice files__tcl_file_common_errors {
     Check for some common error patterns 
 
     @author Jeff Davis davis@xarg.net
@@ -69,26 +69,7 @@ aa_register_case -cats {} -error_level notice acs_tcl__tcl_file_common_errors {
     }
 }
 
-aa_register_case -cats {db smoke production_safe} acs-tcl__named_constraints {
-    Check that there are no tables with unnamed constraints
-
-    @author Jeff Davis davis@xarg.net
-} {
-    switch -exact -- [db_name] {
-        PostgreSQL {
-            db_foreach check_constraints {
-                select relname as table from pg_constraint r join (select relname,oid from pg_class) c on (c.oid = r.conrelid) where conname like '$%'
-            } {
-                aa_true "Table $table constraints named" [string is space $table]
-            }
-        }
-        default {
-            aa_log "Not run for [db_name]"
-        }
-    }
-}
-
-aa_register_case -cats {smoke production_safe} acs-tcl__check_info_files {
+aa_register_case -cats {smoke production_safe} files__check_info_files {
     Check that all the info files parse correctly
 
     @author Jeff Davis davis@xarg.net
@@ -137,7 +118,7 @@ aa_register_case -cats {smoke production_safe} acs-tcl__check_info_files {
     }
 }
 
-aa_register_case -cats {smoke production_safe} acs-tcl__check_upgrade_ordering { 
+aa_register_case -cats {smoke production_safe} files__check_upgrade_ordering { 
     Check that all the upgrade files are well ordered (non-overlapping and v1 > v2)
 
     @author Jeff Davis davis@xarg.net
@@ -195,8 +176,10 @@ aa_register_case -cats {smoke production_safe} acs-tcl__check_upgrade_ordering {
 
 
 
-aa_register_case -cats {smoke} acs_tcl__check_xql_files {
+aa_register_case -cats {smoke} files__check_xql_files {
     Check for some common errors in the xql files.
+
+    Not production safe since malformed xql can crass aolserver in the parse.
 
     @author Jeff Davis davis@xarg.net
 } {
@@ -238,36 +221,36 @@ aa_register_case -cats {smoke} acs_tcl__check_xql_files {
 
         regexp {(.*)[.]xql$} $file match base
 
-        if {![file exists ${base}.tcl] && ![file exists ${base}.vuh]} {
 
+        if {![file exists ${base}.tcl] && ![file exists ${base}.vuh]} {
             # the file did not exist so we must have a -db extension...
             regexp {(.*?)(-)?([A-Za-z_]*)[.]xql$} $file match base dummy db
             ns_log debug "JCD: acs_tcl__check_xql_files: $db $base from $file"
             if { ![empty_string_p $db]
                  && ![string match $db oracle]
                  && ![string match $db postgresql] } {
-                aa_log_result fail "bad db name $db file $file (or maybe .tcl or .vuh missing)"
+                aa_log_result fail "bad db name \"$db\" file $file (or maybe .tcl or .vuh missing)"
             } elseif { ![empty_string_p $db]
                        && ![regexp $db $data] } {
-                aa_log_result fail "rdbms $db missing $file"
-
+                aa_log_result fail "rdbms \"$db\" missing $file"
             } elseif {[empty_string_p $db]
                       && [regexp {<rdbms>} $data] } {
                 aa_log_result fail "rdbms found in generic $file"
-            } else {
-                set allxql($base) 1
             }
 
             if {[string equal $db postgresql] || [empty_string_p $db]} {
                 if {[regexp {(nvl[ ]*\(|decode[ ]*\()} $data]} {
                     aa_log_result fail "postgres or generic with oracle code $file" 
                 }
+                set allxql($base) $file
             } else {
                 if {[regexp {(now[ ]*\()} $data] || [empty_string_p $db]} {
                     aa_log_result fail "oracle or generic with oracle code $file" 
                 }
+                set allxql($base) $file
             }
-
+        } else {
+            set allxql($base) $file
         }
     }
 
@@ -275,7 +258,7 @@ aa_register_case -cats {smoke} acs_tcl__check_xql_files {
         # check there is a corresponding .tcl file
         if {![file exists ${xql}.tcl]
             && ![file exists ${xql}.vuh]} {
-            aa_log_result fail "missing .tcl or .vuh file for $xql" 
+            aa_log_result fail "missing .tcl or .vuh file for $allxql($xql)" 
         }
         if { 0 } { 
             # check that if there is a db specific version that the corresponding
@@ -283,12 +266,12 @@ aa_register_case -cats {smoke} acs_tcl__check_xql_files {
             if {[info exists onexql(${xql}-oracle)]
                 && !([info exists onexql(${xql}-postgresql)]
                      || [info exists onexql(${xql})]) } {
-                aa_log_result fail "No postgresql or generic $xql" 
+                aa_log_result fail "No postgresql or generic $allxql($xql)" 
             }
             if {[info exists onexql(${xql}-postgresql)]
                 && !([info exists onexql(${xql}-oracle)]
                      || [info exists onexql(${xql})]) } {
-                aa_log_result fail "No oracle or generic $xql" 
+                aa_log_result fail "No oracle or generic $allxql($xql)" 
             }
 
         }
