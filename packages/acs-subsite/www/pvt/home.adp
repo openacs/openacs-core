@@ -1,11 +1,6 @@
-<master>
+<master src="master">
 <property name=title>@full_name@'s workspace at @system_name@</property>
-
-<h2>@full_name@'s workspace at @system_name@</h2>
-
-@context_bar@
-
-<hr>
+<property name="context_bar">@context_bar@</property>
 
 <ul>
 
@@ -33,19 +28,18 @@ other.
 <p>
 
 If you want to check what other users of this service are shown, visit
-<%= [acs_community_member_link -user_id $user_id -label "${ad_url}[acs_community_member_url -user_id $user_id]"] %>
+@member_link@
 
 <h4>Basic Information</h4>
 
 <ul>
-<li>Name:  @full_name@
-<li>email address:  @email@
-<li>personal URL:  <a target=new_window href="@url@">@url@</a>
-<li>screen name:  @screen_name@
-<li>bio: @bio@
-<p>
-(<a href="/user/basic-info-update">update</a>)
+<li>Name:  @full_name@</li>
+<li>email address:  @email@</li>
+<li>personal URL:  <a target=new_window href="@url@">@url@</a></li>
+<li>screen name:  @screen_name@</li>
+<li>bio: @bio@</li>
 </ul>
+<p>(<a href="/user/basic-info-update">update</a>)</p>
 
 
 <if @portrait_state@ eq upload>
@@ -68,14 +62,9 @@ On @portrait_publish_date@, you uploaded <a href="/user/portrait/">@portrait_tit
 Then you should either 
 
 <ul>
-<li><a href="alerts">edit your alerts</a>
-
-<p>
-
-or
-
-<p>
-
-<li><a href="unsubscribe">Unsubscribe</a> (for a period of vacation or permanently)
-
+<li><a href="alerts">edit your alerts</a></li>
+</ul>
+<p>or</p>
+<ul>
+<li><a href="unsubscribe">Unsubscribe</a> (for a period of vacation or permanently)</li>
 </ul>

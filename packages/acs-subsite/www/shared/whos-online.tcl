@@ -3,7 +3,8 @@ ad_page_contract {
 
     @cvs-id $Id$
 } -properties {
-    decorate_top:onevalue
+    title:onevalue
+    context_bar:onevalue
     last_visit_interval:onevalue
     chat_system_name:onevalue
     connected_user_id:onevalue
@@ -19,7 +20,9 @@ order by upper(last_name), upper(first_names), email"
 
 db_release_unused_handles
 
-set decorate_top [ad_decorate_top "<h2>Who's Online?</h2>\n[ad_context_bar_ws_or_index "Who's Online"]" [ad_parameter WhosOnlineDecoration]]
+set title "Who's Online?"
+set context_bar [ad_context_bar_ws_or_index "Who's Online"]
+
 set last_visit_interval [ad_parameter LastVisitUpdateInterval ""]
 
 #if ![ad_parameter EnabledP chat 0] {

@@ -16,6 +16,7 @@ ad_page_contract {
     portrait_title:onevalue
     export_user_id:onevalue
     ad_url:onevalue
+    member_link:onevalue
 }
 
 set user_id [ad_verify_and_get_user_id]
@@ -50,6 +51,8 @@ set user_exists_p [db_0or1row pvt_home_user_info {
     from cc_users 
     where user_id=:user_id
 }]
+
+
 
 set bio [db_string biography "
 select attr_value
@@ -165,6 +168,7 @@ if {[ad_conn package_url] == "/"} {
 set export_user_id [export_url_vars user_id]
 set ad_url [ad_url]
 
+set member_link [acs_community_member_link -user_id $user_id -label "${ad_url}[acs_community_member_url -user_id $user_id]"]
 
 set interest_items ""
 

@@ -1,9 +1,6 @@
-<master>
+<master src="master">
 <property name=title>@title@</property>
-
-@decorate_top@
-
-<hr>
+<property name="context_bar">@context_bar@</property>
 
 <if @discussion_forum_alert_p@ eq 1>
 
@@ -19,11 +16,11 @@
        <th>Keyword</th>
      </if>
    </tr>
- <multiple name=bboard_rows>
 
+ <multiple name=bboard_rows>
    <tr>
       <if @status@ eq "enabled">
-       <td><font color=red>Enabled</font></td>
+       <td><font color="red">Enabled</font></td>
        <td><a href="@action_url@">Disable</a></td>
       </if>
       <else>
@@ -36,8 +33,8 @@
        <td>@keyword@</td>
      </if>
    </tr>
- 
  </multiple>
+
    </table>
 </blockquote> 
 
@@ -66,7 +63,7 @@
        <td><a href="/gc/alert-extend?rowid=@rowid@">@expires@</a></td>
        <td>@frequency@</td>
        <td>@alert_type@</td>
-       <td>@alert_value@</td></tr>
+       <td>@alert_value@</td>
    </tr>
      
  </multiple>

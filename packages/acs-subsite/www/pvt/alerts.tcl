@@ -3,7 +3,7 @@ ad_page_contract {
 } {
 } -properties {
     title:onevalue
-    decorate_top:onevalue
+    context_bar:onevalue
     discussion_forum_alert_p:onevalue
     bboard_keyword_p:onevalue
     bboard_rows:multirow
@@ -22,11 +22,9 @@ if { ![empty_string_p $first_names] || ![empty_string_p $last_name] } {
     set full_name "name unknown"
 }
 
-set title [ad_header "$full_name's alerts in [ad_system_name]"]
-set decorate_top [ad_decorate_top "<h2>Email Alerts</h2>
+set title "$full_name's alerts in [ad_system_name]"
 
-for $full_name in [ad_system_name]
-" [ad_parameter AlertPageDecoration pvt]]
+set context_bar [ad_context_bar "Alerts"]
 
 
 set discussion_forum_alert_p 0

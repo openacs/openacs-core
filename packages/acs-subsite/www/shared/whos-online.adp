@@ -1,9 +1,6 @@
-<master>
-<property name=title>Who's Online</property>
-
-@decorate_top@
-
-<hr>
+<master src="master">
+<property name="title">@title@</property>
+<property name="context_bar">@context_bar@</property>
 
 <if @chat_system_name@ not nil>
   This page is mostly useful in conjuction with 

@@ -1,16 +1,8 @@
-<master>
-<property name=title>Portrait of @first_names@ @last_name@</property>
+<master src="master">
+<property name="title">Portrait of @first_names@ @last_name@</property>
+<property name="context_bar">@context_bar@</property>
 
-<h2>Portrait of @first_names@ @last_name@</h2>
-
-@context_bar@
-
-<hr>
-
-This is the image that we show to other users at @system_name@:
-
-<br>
-<br>
+<p>This is the image that we show to other users at @system_name@:</p>
 
 <center>
 <img @widthheight@ src="/shared/portrait-bits.tcl?@export_vars@">
@@ -19,24 +11,21 @@ This is the image that we show to other users at @system_name@:
 Data:
 
 <ul>
-<li>Uploaded:  @pretty_date@
-<li>Comment:  
-
+<li>Uploaded:  @pretty_date@</li>
+<li>Comment: 
 <blockquote>
 @description@
 </blockquote>
-
+</li>
 </ul>
 
 Options:
 
 <ul>
-<li><a href=comment-edit?@export_edit_vars@>edit comment</a>
-<li><a href="upload?@export_edit_vars@">upload a replacement</a>
+<li><a href="comment-edit?@export_edit_vars@">edit comment</a></li>
+<li><a href="upload?@export_edit_vars@">upload a replacement portrait</a></li>
 
-<p>
-
-<li><a href="erase?@export_edit_vars@">erase</a>
+<li><a href="erase?@export_edit_vars@">erase portrait</a><li>
 
 </ul>
 
