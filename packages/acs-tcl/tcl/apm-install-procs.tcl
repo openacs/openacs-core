@@ -225,7 +225,7 @@ ad_proc -private apm_dependency_check {
 	if { [catch {
 	    array set package [apm_read_package_info_file $spec_file]
 	    if { ([string equal $package(initial-install-p) "t"] || !$initial_install_p) && \
-                    [db_package_supports_rdbms_p $package(database_support)] } {
+                    [apm_package_supports_rdbms_p -package_key $package(package.key)] } {
                 lappend install_pend [pkg_info_new $package(package.key) $spec_file $package(provides) $package(requires) ""]
             }
 
@@ -1242,7 +1242,7 @@ ad_proc -private apm_data_model_scripts_find {
     }
     set file_list [concat [apm_order_upgrade_scripts $upgrade_file_list] $data_model_list]
     apm_log APMDebug "APM: Data model scripts for $package_key: $file_list"
-    ns_log Notice "pm debug APM: Data model scripts for $package_key: $file_list"
+
     return $file_list
 }
 

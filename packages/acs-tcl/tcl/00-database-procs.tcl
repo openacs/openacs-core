@@ -20,10 +20,12 @@ ad_proc db_compatible_rdbms_p { db_type } {
     return [expr { [empty_string_p $db_type] || [string equal [db_type] $db_type] }]
 }
 
-ad_proc db_package_supports_rdbms_p { db_type_list } {
+ad_proc -deprecated db_package_supports_rdbms_p { db_type_list } {
     Returns 1 if db_type_list contains the current RDMBS type.  A package
     intended to run with a given RDBMS must note this in it's package info
     file regardless of whether or not it actually uses the database. 
+
+    @see apm_package_supports_rdbms_p
 } {
     if { [lsearch $db_type_list [db_type]] != -1 } {
         return 1
