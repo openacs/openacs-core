@@ -35,6 +35,8 @@ begin
     (object_id, node_id)
     values
     (p_object_id, p_node_id);
+
+    return 0;
 end;
 ' language 'plpgsql';
 
@@ -48,5 +50,7 @@ begin
     delete
     from site_node_object_mappings
     where object_id = p_object_id;
+
+    return 0;
 end;
 ' language 'plpgsql';
