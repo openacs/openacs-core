@@ -1,0 +1,132 @@
+# Configuration file for analog 5.31
+# See http://www.analog.cx/
+# modified by Joel Aufrecht for OpenACS Reference Platform 09 March 2003
+#
+#
+# Here are a couple of configuration commands to get you started. Add any more
+# you like from the Readme.
+#
+# Lines starting with # are comments.
+#
+# There is a much more extensive configuration file in examples/big.cfg
+#
+# If you need a LOGFORMAT command (most people don't -- try it without first!),
+# it must go here, above the LOGFILE commands.
+
+LOGFILE /web/service0/log/service0.log*
+OUTFILE /web/service0/www/log/traffic.html
+
+# do DNS lookups
+
+DNSFILE /home/service0/dnscache
+DNSLOCKFILE /home/service0/dnslock
+DNS WRITE
+
+HOSTNAME "[Your Organization]"
+
+# exclude these hosts
+# Put your own network here to omit local calls from the total
+# HOSTEXCLUDE 10.10.0.*
+
+######################################################################
+#
+# You probably don't need to change anything below this until you are
+# experienced.
+
+
+IMAGEDIR /log/images/
+PNGIMAGES ON
+ALLCHART OFF
+DESCRIPTIONS OFF
+GOTOS OFF
+
+# ERRFILE errors.txt
+# REQINCLUDE pages
+
+REQLINKINCLUDE pages
+REFLINKINCLUDE *
+REDIRREFLINKINCLUDE *
+FAILREFLINKINCLUDE *
+SUBBROW */*
+SUBTYPE *.gz,*.Z
+# OSCHARTEXPAND Windows
+# Add whichever of these types of pages you have on your server, or others.
+PAGEINCLUDE .adp
+PAGEINCLUDE .tcl
+# PAGEINCLUDE *.shtml
+# PAGEINCLUDE *.asp
+# PAGEINCLUDE *.jsp
+# PAGEINCLUDE *.cfm
+# PAGEINCLUDE *.pl
+# PAGEINCLUDE *.php
+# More SEARCHENGINE commands can be found at
+#   http://www.analog.cx/helpers/#conffiles
+SEARCHENGINE http://*google.*/* q,as_q,as_epq,as_oq
+SEARCHENGINE http://*altavista.*/* q
+SEARCHENGINE http://*yahoo.*/* p
+SEARCHENGINE http://*lycos.*/* query,wfq
+SEARCHENGINE http://*aol.*/* query
+SEARCHENGINE http://*excite.*/* search
+SEARCHENGINE http://*go2net.*/* general
+SEARCHENGINE http://*metacrawler.*/* general
+SEARCHENGINE http://*msn.*/* q,MT
+SEARCHENGINE http://*netscape.*/* search
+SEARCHENGINE http://*looksmart.*/* key
+SEARCHENGINE http://*webcrawler.*/* qkw,search,searchText
+SEARCHENGINE http://*overture.*/* Keywords
+SEARCHENGINE http://*teoma.*/* q
+SEARCHENGINE http://*infospace.*/* qkw
+SEARCHENGINE http://*alltheweb.*/* q
+SEARCHENGINE http://*dogpile.*/* q
+SEARCHENGINE http://*ask.*/* ask
+SEARCHENGINE http://*alltheweb.*/* query
+SEARCHENGINE http://*northernlight.*/* qr
+SEARCHENGINE http://*nlsearch.*/* qr
+SEARCHENGINE http://*dmoz.*/* search
+SEARCHENGINE http://*/netfind* query
+SEARCHENGINE http://*/pursuit query
+ROBOTINCLUDE REGEXPI:robot
+ROBOTINCLUDE REGEXPI:spider
+ROBOTINCLUDE REGEXPI:crawler
+ROBOTINCLUDE Googlebot*
+ROBOTINCLUDE Infoseek*
+ROBOTINCLUDE Scooter*
+ROBOTINCLUDE *Slurp*
+ROBOTINCLUDE *Validator*
+ROBOTINCLUDE Ultraseek*
+TYPEALIAS .html    ".html [Hypertext Markup Language]"
+TYPEALIAS .htm     ".htm  [Hypertext Markup Language]"
+TYPEALIAS .shtml   ".shtml [Server-parsed HTML]"
+TYPEALIAS .ps      ".ps   [PostScript]"
+TYPEALIAS .gz      ".gz   [Gzip compressed files]"
+TYPEALIAS .tar.gz  ".tar.gz [Compressed archives]"
+TYPEALIAS .jpg     ".jpg  [JPEG graphics]"
+TYPEALIAS .jpeg    ".jpeg [JPEG graphics]"
+TYPEALIAS .gif     ".gif  [GIF graphics]"
+TYPEALIAS .png     ".png  [PNG graphics]"
+TYPEALIAS .txt     ".txt  [Plain text]"
+TYPEALIAS .cgi     ".cgi  [CGI scripts]"
+TYPEALIAS .pl      ".pl   [Perl scripts]"
+TYPEALIAS .css     ".css  [Cascading Style Sheets]"
+TYPEALIAS .class   ".class [Java class files]"
+TYPEALIAS .pdf     ".pdf  [Adobe Portable Document Format]"
+TYPEALIAS .zip     ".zip  [Zip archives]"
+TYPEALIAS .hqx     ".hqx  [Macintosh BinHex files]"
+TYPEALIAS .exe     ".exe  [Executables]"
+TYPEALIAS .wav     ".wav  [WAV sound files]"
+TYPEALIAS .avi     ".avi  [AVI movies]"
+TYPEALIAS .arc     ".arc  [Compressed archives]"
+TYPEALIAS .mid     ".mid  [MIDI sound files]"
+TYPEALIAS .mp3     ".mp3  [MP3 sound files]"
+TYPEALIAS .doc     ".doc  [Microsoft Word document]"
+TYPEALIAS .rtf     ".rtf  [Rich Text Format]"
+TYPEALIAS .mov     ".mov  [Quick Time movie]"
+TYPEALIAS .mpg     ".mpg  [MPEG movie]"
+TYPEALIAS .mpeg    ".mpeg [MPEG movie]"
+TYPEALIAS .asp     ".asp  [Active Server Pages]"
+TYPEALIAS .jsp     ".jsp  [Java Server Pages]"
+TYPEALIAS .cfm     ".cfm  [Cold Fusion]"
+TYPEALIAS .php     ".php  [PHP]"
+TYPEALIAS .js      ".js   [JavaScript code]"
+
+

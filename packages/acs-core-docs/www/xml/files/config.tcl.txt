@@ -14,7 +14,7 @@ set httpsport             8443
 set hostname               [ns_info hostname]
 set address                127.0.0.1 
 
-set server              "server0" 
+set server              "service0" 
 set db_name             $server
 set servername          "New OpenACS Installation - Development"
 
@@ -29,7 +29,7 @@ set debug false
 # 
 # AOLserver's home and binary directories. Autoconfigurable. 
 #
-set homedir                 [file dirname [ns_info config]] 
+set homedir                 /usr/local/aolserver
 set bindir                  [file dirname [ns_info nsd]] 
 
 #
@@ -44,7 +44,7 @@ set directoryfile           index.tcl,index.adp,index.html,index.htm
 #
 
 ns_section ns/parameters 
-ns_param   serverlog          ${homedir}/log/${server}-error.log 
+ns_param   serverlog          ${serverroot}/log/${server}-error.log 
 ns_param   home               $homedir 
 ns_param   maxkeepalive       0
 ns_param   logroll            on
@@ -138,14 +138,14 @@ ns_section "ns/server/${server}/module/nsopenssl"
 # Typically where you store your certificates
 # Defaults to $AOLSERVER/servers/${servername}/modules/nsopenssl
 #ns_param ModuleDir                       ${homedir}/servers/${server}/modules/nsopenssl
-ns_param ModuleDir                       ${homedir}/certs
+ns_param ModuleDir                       ${serverroot}/etc/certs
 
 # NSD-driven connections:
 ns_param ServerPort                      $httpsport
 ns_param ServerHostname                  $hostname
 ns_param ServerAddress                   $address
-ns_param ServerCertFile                  test-cert.pem
-ns_param ServerKeyFile                   test-key.pem
+ns_param ServerCertFile                  certfile.pem
+ns_param ServerKeyFile                   keyfile.pem
 ns_param ServerProtocols                 "SSLv2, SSLv3, TLSv1"
 ns_param ServerCipherSuite               "ALL:!ADH:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv2:+EXP"
 ns_param ServerSessionCache              false
@@ -159,8 +159,8 @@ ns_param ServerCAFile                    ca.pem
 ns_param ServerTrace                     false
 
 # For listening and accepting SSL connections via Tcl/C API:
-ns_param SockServerCertFile              test-cert.pem
-ns_param SockServerKeyFile               test-key.pem
+ns_param SockServerCertFile              certfile.pem
+ns_param SockServerKeyFile               keyfile.pem
 ns_param SockServerProtocols             "SSLv2, SSLv3, TLSv1"
 ns_param SockServerCipherSuite           "ALL:!ADH:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv2:+EXP"
 ns_param SockServerSessionCache          false
@@ -174,8 +174,8 @@ ns_param SockServerCAFile                internal_ca.pem
 ns_param SockServerTrace                 false
 
 # Outgoing SSL connections
-ns_param SockClientCertFile              test-cert.pem
-ns_param SockClientKeyFile               test-key.pem
+ns_param SockClientCertFile              certfile.pem
+ns_param SockClientKeyFile               keyfile.pem
 ns_param SockClientProtocols             "SSLv2, SSLv3, TLSv1"
 ns_param SockClientCipherSuite           "ALL:!ADH:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv2:+EXP"
 ns_param SockClientSessionCache          false
@@ -234,7 +234,7 @@ if { $database == "oracle" } {
 } else {
     ns_param   driver             postgres 
     ns_param   datasource         localhost::${db_name}
-    ns_param   user               nsadmin
+    ns_param   user               $server
     ns_param   password           ""
 } 
 
@@ -253,7 +253,7 @@ if { $database == "oracle" } {
 } else {
     ns_param   driver             postgres 
     ns_param   datasource         localhost::${db_name}
-    ns_param   user               nsadmin
+    ns_param   user               $server
     ns_param   password           ""
 } 
 
@@ -272,7 +272,7 @@ if { $database == "oracle" } {
 } else {
     ns_param   driver             postgres 
     ns_param   datasource         localhost::${db_name}
-    ns_param   user               nsadmin
+    ns_param   user               $server
     ns_param   password           ""
 } 
 
@@ -288,7 +288,7 @@ ns_param   403                "global/forbidden.html"
 # Access log -- nslog 
 # 
 ns_section ns/server/${server}/module/nslog 
-ns_param   file                 ${homedir}/log/${server}.log
+ns_param   file                 ${serverroot}/log/${server}.log
 ns_param   enablehostnamelookup false
 ns_param   logcombined          true
 #ns_param   logrefer             false
@@ -337,8 +337,14 @@ ns_param   nssha1          ${bindir}/nssha1.so
 ns_param   nscache         ${bindir}/nscache.so 
 ns_param   nsrewrite       ${bindir}/nsrewrite.so 
 ns_param   nsxml           ${bindir}/nsxml.so 
-ns_param   nsopenssl       ${bindir}/nsopenssl.so
-ns_param   nsfts           ${bindir}/nsfts.so
+
+# nsopenssl is commented out to prevent errors on load if all
+# the cert files are not present
+#ns_param   nsopenssl       ${bindir}/nsopenssl.so
+
+# Full Text Search
+#ns_param   nsfts           ${bindir}/nsfts.so
+
 #ns_param   nsperm          ${bindir}/nsperm.so 
 #ns_param   nscgi           ${bindir}/nscgi.so 
 #ns_param   nsjava          ${bindir}/libnsjava.so
