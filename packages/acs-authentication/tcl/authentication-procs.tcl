@@ -892,7 +892,7 @@ ad_proc -public auth::delete_local_account {
     
     if { [empty_string_p $user_id] } {
         set result(delete_status) "delete_error"
-        set result(delete_messages) "No user found with this username"
+        set result(delete_message) "No user found with this username"
         return [array get result]
     }
     
@@ -924,7 +924,7 @@ ad_proc -private auth::validate_user_info {
 
     foreach elm { authority_id username first_names last_name email } {
         if { ![exists_and_not_null user($elm)] } {
-            set element_messages(first_names) "Required"
+            set element_messages($elm) "Required"
         }
     }
 
@@ -934,7 +934,7 @@ ad_proc -private auth::validate_user_info {
                                -username $user(username)]
         
         if { [empty_string_p $user(user_id)] } {
-            set element_messages(username) "No user with username '$username' found for authority [auth::authority::get_element -authority_id $authority_id -element pretty_name]"
+            set element_messages(username) "No user with username '$user(username)' found for authority [auth::authority::get_element -authority_id $user(authority_id) -element pretty_name]"
         }
     }
 

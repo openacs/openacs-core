@@ -29,12 +29,18 @@ ad_proc -private auth::package_install {} {} {
 
         # Register HTTP method for GetDocument
         auth::sync::get_doc::http::register_impl
+
+        # Register IMS Enterprise 1.1 ProcessDocument implementation
+        auth::sync::process_doc::ims::register_impl
     }
 }
 
 ad_proc -private auth::package_uninstall {} {} {
 
     db_transaction {
+
+        # Unregister IMS Enterprise 1.1 ProcessDocument implementation
+        auth::sync::process_doc::ims::unregister_impl
 
         # Unregister HTTP method for GetDocument
         auth::sync::get_doc::http::unregister_impl

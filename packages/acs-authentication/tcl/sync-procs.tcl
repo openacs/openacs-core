@@ -11,6 +11,8 @@ namespace eval auth::sync {}
 namespace eval auth::sync::job {}
 namespace eval auth::sync::get_doc {}
 namespace eval auth::sync::get_doc::http {}
+namespace eval auth::sync::process_doc {}
+namespace eval auth::sync::process_doc::ims {}
 
 
 #####
@@ -37,6 +39,73 @@ ad_proc -public auth::sync::job::get {
 
     # TODO: This is temporary, make sure this is where the UI ends up
     set row(log_url) [export_vars -base "[ad_url]/acs-admin/package/acs-authentication/sync-log" { job_id }]
+}
+
+ad_proc -public auth::sync::job::get_entries {
+    {-job_id:required}
+} {
+    Get a list of entry_ids of the job log entries, ordered by entry_time.
+
+    @param job_id        The ID of the batch job you're ending.
+    
+    @author Lars Pind (lars@collaboraid.biz)
+} {
+    return [db_list select_entries { select entry_id from auth_batch_job_entries where job_id = :job_id order by entry_time }]
+}
+
+ad_proc -public auth::sync::job::get_authority_id_from_job_id {
+    {-job_id:required}
+} {
+    Get the authority_id from a job_id. Cached.
+
+    @param job_id        The ID of the batch job you're ending.
+    
+    @author Lars Pind (lars@collaboraid.biz)
+} {
+    return [util_memoize [list auth::sync::job::get_authority_id_from_job_id_not_cached $job_id]]
+}
+
+ad_proc -private auth::sync::job::get_authority_id_from_job_id_flush {
+    {-job_id ""}
+} {
+    Flush cache
+
+    @param job_id        The ID of the batch job you're ending.
+    
+    @author Lars Pind (lars@collaboraid.biz)
+} {
+    if { ![empty_string_p $job_id] } {
+        util_memoize_flush [list auth::sync::job::get_authority_id_from_job_id_not_cached $job_id]
+    } else {
+        util_memoize_flush_regexp [list auth::sync::job::get_authority_id_from_job_id_not_cached .*]
+    }
+}
+
+ad_proc -private auth::sync::job::get_authority_id_from_job_id_seed {
+    {-job_id:required}
+    {-authority_id:required}
+} {
+    Flush cache
+
+    @param job_id        The ID of the batch job you're ending.
+    
+    @author Lars Pind (lars@collaboraid.biz)
+} {
+    util_memoize_seed [list auth::sync::job::get_authority_id_from_job_id_not_cached $job_id] $authority_id
+}
+
+ad_proc -private auth::sync::job::get_authority_id_from_job_id_not_cached {
+    job_id
+} {
+    Get the authority_id from a job_id. Not cached.
+
+    @param job_id        The ID of the batch job you're ending.
+    
+    @author Lars Pind (lars@collaboraid.biz)
+    
+    @see auth::sync::job::get_authority_id_from_job_id
+} {
+    return [db_string select_auth_id { select authority_id from auth_batch_jobs where job_id = :job_id }]
 }
 
 ad_proc -public auth::sync::job::start {
@@ -75,6 +144,9 @@ ad_proc -public auth::sync::job::start {
         }
     }
     
+    # See the cache, we're going to need it shortly
+    auth::sync::job::get_authority_id_from_job_id_seed -job_id $job_id -authority_id $authority_id
+
     return $job_id
 }
 
@@ -156,7 +228,6 @@ ad_proc -public auth::sync::job::end_get_document {
 ad_proc -public auth::sync::job::create_entry {
     {-job_id:required}
     {-operation:required}
-    {-authority_id:required}
     {-username:required}
     {-user_id ""}
     {-success:boolean}
@@ -169,8 +240,6 @@ ad_proc -public auth::sync::job::create_entry {
     
     @param operation One of 'insert', 'update', or 'delete'.
 
-    @param authority_id The authority this is about
-    
     @param username The username of the user being inserted/updated/deleted.
     
     @param user_id The user_id of the local user account, if known.
@@ -199,18 +268,20 @@ ad_proc -public auth::sync::job::get_entry {
     upvar 1 $array row
 
     db_1row select_entry {
-        select   entry_id,
-                 job_id,
-                 entry_time,
-                 operation,
-                 authority_id,
-                 username,
-                 user_id,
-                 success_p,
-                 message,
-                 element_messages
-        from     auth_batch_job_entries
-        where    entry_id = :entry_id
+        select e.entry_id,
+               e.job_id,
+               e.entry_time,
+               e.operation,
+               j.authority_id,
+               e.username,
+               e.user_id,
+               e.success_p,
+               e.message,
+               e.element_messages
+        from   auth_batch_job_entries e,
+               auth_batch_jobs j
+        where  e.entry_id = :entry_id
+        and    j.job_id = e.job_id
     } -column_array row
 }
 
@@ -218,7 +289,6 @@ ad_proc -public auth::sync::job::get_entry {
 ad_proc -public auth::sync::job::action {
     {-job_id:required}
     {-operation:required}
-    {-authority_id:required}
     {-username:required}
     {-first_names ""}
     {-last_name ""}
@@ -232,14 +302,14 @@ ad_proc -public auth::sync::job::action {
     
     @param operation     'insert', 'update', 'delete', or 'snapshot'.
     
-    @param authority_id  The authority involved
-
     @param username      The username which this action refers to. 
     
     @return entry_id of newly created entry
 } {
     set entry_id {}
     set user_id {}
+
+    set authority_id [get_authority_id_from_job_id -job_id $job_id]
 
     db_transaction {
         # We deal with insert/update in a snaphsot sync here
@@ -328,7 +398,6 @@ ad_proc -public auth::sync::job::action {
         set entry_id [auth::sync::job::create_entry \
                           -job_id $job_id \
                           -operation $operation \
-                          -authority_id $authority_id \
                           -username $username \
                           -user_id $user_id \
                           -success=$success_p \
@@ -340,11 +409,12 @@ ad_proc -public auth::sync::job::action {
 }
 
 ad_proc -public auth::sync::job::snapshot_delete_remaining {
-    -job_id:required
-    -authority_id:required
+    {-job_id:required}
 } {
     Deletes the users that weren't included in the snapshot.
 } {
+    set authority_id [get_authority_id_from_job_id -job_id $job_id]
+
     set usernames [db_list select_user_ids {
         select username
         from   cc_users
@@ -357,7 +427,6 @@ ad_proc -public auth::sync::job::snapshot_delete_remaining {
         auth::sync::job::action \
             -job_id $job_id \
             -operation "delete" \
-            -authority_id $authority_id \
             -username $username
     }
 }
@@ -418,6 +487,7 @@ ad_proc -private auth::sync::GetDocument {
 
     return [acs_sc::invoke \
                 -error \
+                -contract "GetDocument" \
                 -impl_id $impl_id \
                 -operation GetDocument \
                 -call_args [list $parameters]]
@@ -510,4 +580,105 @@ ad_proc -private auth::sync::get_doc::http::GetDocument {
     retun [array get result]
 }
 
+
+
+
+#####
+#
+# auth::sync::process_doc::ims namespace
+#
+#####
+
+ad_proc -private auth::sync::process_doc::ims::register_impl {} {
+    Register this implementation
+} {
+    set spec {
+        contract_name "auth_sync_process"
+        owner "acs-authentication"
+        name "IMS Enterprise 1.1"
+        aliases {
+            ProcessDocument auth::sync::process_doc::ims::ProcessDocument
+            GetParameters auth::sync::proecss_doc::ims::GetParameters
+        }
+    }
+
+    return [acs_sc::impl::new_from_spec -spec $spec]
+
+}
+
+ad_proc -private auth::sync::process_doc::ims::unregister_impl {} {
+    Unregister this implementation
+} {
+    acs_sc::impl::delete -contract_name "auth_sync_process" -impl_name "IMS Enterprise 1.1"
+}
+
+ad_proc -private auth::sync::process_doc::ims::GetParameters {} {
+    Parameters for IMS Enterprise 1.1 auth_sync_process implementation.
+} {
+    return {}
+}
+
+ad_proc -private auth::sync::process_doc::ims::ProcessDocument {
+    job_id
+    document
+    parameters
+} {
+    Process IMS Enterprise 1.1 document.
+} {
+    set tree [xml_parse -persist $document]
+
+    set root_node [xml_doc_get_first_node $tree]
+
+    if { ![string equal [xml_node_get_name $root_node] "enterprise"] } {
+        error "Root node was not <enterprise>"
+    }
+
+    # Loop over <person> records
+    foreach person_node [xml_node_get_children_by_name $root_node "person"] {
+        switch [xml_node_get_attribute $person_node "recstatus"] {
+            1 {
+                set operation "insert"
+            }
+            2 { 
+                set operation "update"
+            }
+            3 {
+                set operation "delete"
+            }
+            default {
+                set operation "snapshot"
+            }
+        }
+
+        # Initialize variables for this record
+        foreach elm { username first_names last_name email url } {
+            set $elm {}
+        }
+        
+        set username [xml_get_child_node_content_by_path $person_node { { userid } { sourcedid id } }]
+        set email [xml_get_child_node_content_by_path $person_node { { email } }]
+        set url [xml_get_child_node_content_by_path $person_node { { url } }]
+
+        # We need a little more logic to deal with first_names/last_name, since they may not be split up in the XML
+        set first_names [xml_get_child_node_content_by_path $person_node { { name given } }]
+        set last_name [xml_get_child_node_content_by_path $person_node { { name family } }]
+
+        if { [empty_string_p $first_names] || [empty_string_p $last_name] } {
+            set formatted_name [xml_get_child_node_content_by_path $person_node { { name fn } }]
+            if { ![empty_string_p $formatted_name] || [string first " " $formatted_name] > -1 } {
+                # Split, so everything up to the last space goes to first_names, the rest to last_name
+                regexp {^(.+) ([^ ]+)$} $formatted_name match first_names last_name
+            }
+        }
+
+        auth::sync::job::action \
+            -job_id $job_id \
+            -operation $operation \
+            -username $username \
+            -first_names $first_names \
+            -last_name $last_name \
+            -email $email \
+            -url $url
+    }
+}
 

@@ -297,15 +297,17 @@ ad_proc -public auth::authority::batch_sync {
         } {
             global errorInfo
             ns_log Error "Error getting sync document:\n$errorInfo"
+            set doc_result(doc_status) failed_to_connect
+            set doc_result(doc_message) $errmsg
         }
         
-        auth::sync::end_get_document \
+        auth::sync::job::end_get_document \
             -job_id $job_id \
             -doc_status $doc_result(doc_status) \
             -doc_message $doc_result(doc_message) \
             -document $doc_result(document)
 
-        if { [string equal $doc_status "ok"] && ![empty_string_p $doc_result(document)] } {
+        if { [string equal $doc_result(doc_status) "ok"] && ![empty_string_p $doc_result(document)] } {
             with_catch errmsg {
                 auth::sync::ProcessDocument \
                     -authority_id $authority_id \
@@ -315,6 +317,10 @@ ad_proc -public auth::authority::batch_sync {
                 global errorInfo
                 ns_log Error "Error processing sync document:\n$errorInfo"
                 set message "Error processing sync document: $errmsg"
+            }
+        } else {
+            if { [empty_string_p $message] } {
+                set message $doc_result(doc_message)
             }
         }
         

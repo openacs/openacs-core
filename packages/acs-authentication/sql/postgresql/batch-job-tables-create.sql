@@ -15,7 +15,8 @@ create table auth_batch_jobs (
                              not null,
   authority_id               integer
                              constraint auth_batch_jobs_auth_fk
-                             references auth_authorities(authority_id),
+                             references auth_authorities(authority_id)
+                             on delete cascade,
   message                    text,
   -- if interactive, by which user
   creation_user              integer 
@@ -31,6 +32,7 @@ create table auth_batch_jobs (
 );
 
 create index auth_batch_jobs_user_idx on auth_batch_jobs(creation_user);
+create index auth_batch_jobs_auth_idx on auth_batch_jobs(authority_id);
 
 
 create sequence auth_batch_job_entry_id_seq;
@@ -47,10 +49,6 @@ create table auth_batch_job_entries (
   operation                  varchar(100) 
                              constraint auth_batch_jobs_entries_op_ck
                              check (operation in ('insert', 'update', 'delete')),
-  authority_id               integer 
-                             constraint auth_batch_job_entries_auth_fk
-                             references auth_authorities(authority_id)
-                             on delete cascade,
   username                   varchar(100),
   user_id                    integer 
                              constraint auth_batch_job_entries_user_fk
@@ -61,7 +59,6 @@ create table auth_batch_job_entries (
 );
 
 create index auth_batch_job_ent_job_idx on auth_batch_job_entries(job_id);
-create index auth_batch_job_ent_auth_idx on auth_batch_job_entries(authority_id);
 create index auth_batch_job_ent_user_idx on auth_batch_job_entries(user_id);
 
 
