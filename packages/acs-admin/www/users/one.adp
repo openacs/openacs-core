@@ -26,6 +26,30 @@
 <li> Member state: @member_state@ @user_finite_state_links@
 </ul>
 
+<h3>This user is a member of the following groups:</h3>
+<p>Note: These are the groups to which the user has been granted 
+<em>direct</em> membership.</p>
+
+<ul>
+  <multiple name="direct_group_membership">
+    <li>@direct_group_membership.group_name@
+        (<a href="/admin/relations/remove?rel_id=@direct_group_membership.rel_id@&return_url=@return_url@">Remove</a>)</li>
+  </multiple>
+</ul>
+<p>
+And the user is a member of these groups by virtue of being directly
+added (see above) or because these groups are components of the groups
+above.
+</p>
+
+<ul><li><strong>
+  <multiple name="all_group_membership">
+    @all_group_membership.group_name@<if @all_group_membership.rownum@ lt @all_group_membership:rowcount@>, </if>
+  </multiple>
+  </strong>
+  </li>
+</ul>
+
 <multiple name="user_contributions">
 
   <H3>@user_contributions.pretty_plural@</H3>

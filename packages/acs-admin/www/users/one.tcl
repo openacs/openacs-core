@@ -23,7 +23,7 @@ ad_page_contract {
     user_finite_state_links:onevalue
 }
 
-if ![db_0or1row user_info "select first_names, last_name, email, nvl(screen_name,'&lt none set up &gt') as screen_name, creation_date, creation_ip, last_visit, member_state, email_verified_p
+if ![db_0or1row user_info "select first_names, last_name, email, coalesce(screen_name,'&lt none set up &gt') as screen_name, creation_date, creation_ip, last_visit, member_state, email_verified_p
 from cc_users
 where user_id = :user_id"] {
     ad_return_complaint 1 "<li>We couldn't find user #$user_id; perhaps this person was deleted?"
@@ -57,6 +57,32 @@ where a.object_type = at.object_type
 and a.creation_user = :user_id
 order by object_name, creation_date"
 
+# cro@ncacasi.org 2002-02-20 
+# Boy is this query wacked, but I think I am starting to understand
+# how this groups thing works.
+# Find out which groups this user belongs to where he was added to the group
+# directly (e.g. his membership is not by virtue of the group being
+# a component of another group).
+db_multirow direct_group_membership direct_group_membership "
+  select group_id, rel_id, party_names.party_name as group_name
+    from (select /*+ ORDERED */ DISTINCT rels.rel_id, object_id_one as group_id, 
+                 object_id_two
+            from acs_rels rels, all_object_party_privilege_map perm
+           where perm.object_id = rels.rel_id
+                 and perm.privilege = 'read'
+                 and rels.rel_type = 'membership_rel'
+                 and rels.object_id_two = :user_id) r, 
+         party_names 
+   where r.group_id = party_names.party_id
+order by lower(party_names.party_name)"
+
+# And also get the list of all groups he is a member of, direct or
+# inherited.
+db_multirow all_group_membership all_group_membership "
+  select groups.group_id, groups.group_name
+     from groups, group_member_map gm
+     where groups.group_id = gm.group_id and gm.member_id=:user_id
+  order by lower(groups.group_name)"
 
 
 ad_return_template
