@@ -1,6 +1,0 @@
-<?xml version="1.0"?>
-<message_catalog package_key="acs-kernel" package_version="5.0d12" locale="pl_PL" charset="ISO-8859-2">
-
-  <msg key="member_role_pretty_name">Cz³onek</msg>
-  <msg key="member_role_pretty_plural">Cz³onkowie</msg>
-</message_catalog>

@@ -1,7 +1,0 @@
-<?xml version="1.0"?>
-<message_catalog package_key="acs-tcl" package_version="5.0d1" locale="ms_my" charset="US-ASCII">
-
-  <msg key="approve">lulus</msg>
-  <msg key="delete">buang</msg>
-  <msg key="reject">ditolak</msg>
-</message_catalog>
