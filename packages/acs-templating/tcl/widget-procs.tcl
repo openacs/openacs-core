@@ -236,7 +236,7 @@ ad_proc -public template::widget::textarea_internal {
 
   if { ![string equal $mode "edit"] } {
     set output {}
-    if { ![empty_string_p value] } {
+    if { ![empty_string_p $value] } {
       append output "[ad_quotehtml $value]<input type=\"hidden\" name=\"$name\" value=\"[ad_quotehtml $value]\">"
     }
   } else {

@@ -273,7 +273,7 @@ ad_proc -private site_node::update_cache {
                 lappend url_by_package_key($package_key) $url
             }
 
-	    if { [empty_string_p package_id] } {
+	    if { [empty_string_p $package_id] } {
 		set object_type ""
 	    } else {
 		set object_type "apm_package"
