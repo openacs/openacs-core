@@ -5,11 +5,11 @@
 
 <fullquery name="acs_message_p.acs_message_p">      
       <querytext>
-      FIX ME PLSQL
+--      FIX ME PLSQL
 
-	begin
-	    :1 := acs_message__message_p(:message_id);
-	end;
+--	begin
+	    select acs_message__message_p(:message_id);
+--	end;
     
       </querytext>
 </fullquery>
@@ -26,8 +26,8 @@
  
 <fullquery name="acs_messaging_process_queue.acs_message_send">      
       <querytext>
-      FIX ME OUTER JOIN
-
+--      FIX ME OUTER JOIN
+-- Hope this is right syntax
         select o.message_id as sending_message_id,
                o.to_address as recip_email,
                p.email as sender_email,
@@ -42,7 +42,7 @@
                  acs_messages_all m2,
                  parties p
             where o.message_id = m.message_id
-                and m2.message_id(+) = m.reply_to
+                and left join m2 using (m2.message_id = m.reply_to)
                 and p.party_id = m.sender
                 and wait_until <= current_timestamp
     
