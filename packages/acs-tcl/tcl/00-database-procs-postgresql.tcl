@@ -241,7 +241,7 @@ proc_doc db_dml { statement_name sql args } {
     unbounded compressed text columns.  BLOBs are handled much differently,
     to.
 } {
-    ad_arg_parser { bind blob_files blobs } $args
+    ad_arg_parser { clobs clob_files bind blob_files blobs } $args
 
     # Query Dispatcher (OpenACS - ben)
     set full_statement_name [db_qd_get_fullname $statement_name]
