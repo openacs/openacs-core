@@ -92,14 +92,12 @@ ad_proc ::twt::user::add {
     form submit
 
     form find ~n add_user
-    field find ~n "id"
-    field select $type
-
-    # FIXME: TclWebTest chooses option based on label rather than value
-    # Full Access or Limited Access
-    field select $full_access
-    # Yes or No
-    field select $guest
+    field find ~n type
+    ::twt::multiple_select_value $type
+    field find ~n can_browse_p
+    ::twt::multiple_select_value $full_access
+    field find ~n read_private_data_p
+    ::twt::multiple_select_value $guest
     form submit    
 }
 
@@ -125,33 +123,13 @@ ad_proc ::twt::user::get_test_data {} {
 
 	# Allow commenting of lines with hash
 	if { ![regexp {\#.+} "[string trim [lindex $fields_list 0]]" match] } {
-	    
-	    # FIXME: TclWebTest chooses option based on label rather than value
-	    # This is a workaround that converts values to labels
-	    if { [string trim [lindex $fields_list 5]] == "1" } {
-		set full_access "Full Access"
-	    } else {
-		set full_access "Limited Access"
-	    }	
-	    if { [string trim [lindex $fields_list 6]] == "t" } {
-		set guest "Yes"
-	    } else {
-		set guest "No"
-	    }
-	    set type [string trim [lindex $fields_list 4]]
-	    if { $type == "admin" } {
-		set type "Staff"
-	    }
-             
-	    lappend return_list [list \
-		    [string trim [lindex $fields_list 0]] \
-		    [string trim [lindex $fields_list 1]] \
-		    [string trim [lindex $fields_list 2]] \
-		    [string trim [lindex $fields_list 3]] \
-		    $type \
-		    $full_access \
-		    $guest]
+            # Get the first 6 items without leading/trailing space
+            set trimmed_list [list]
+            foreach item [lrange $fields_list 0 6] {
+                lappend trimmed_list [string trim $item]
+            }
 
+	    lappend return_list $trimmed_list
 	}
     }
 

@@ -214,7 +214,6 @@ ad_proc ::twt::multiple_select_value { value } {
     form widget (workaround since I can only get tclwebtest
     to select based on label).
 } {
-    # Get the label from the value
     array set current_field [field current]
     set field_choices $current_field(choices)
     set index 0
