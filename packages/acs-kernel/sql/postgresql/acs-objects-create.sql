@@ -657,7 +657,7 @@ begin
     v_object_id := new__object_id;
   end if;
 
-  if new__object_id is null then
+  if new__title is null then
    select pretty_name
    into v_object_type_pretty_name
    from acs_object_types
