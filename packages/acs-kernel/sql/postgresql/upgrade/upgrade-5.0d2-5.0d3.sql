@@ -28,18 +28,30 @@ create table auth_authorities (
     -- Cannot reference acs_sc_impls table as it doesn't exist yet
     auth_impl_id             integer
                              constraint auth_authority_auth_impl_fk
-                             acs_objects(object_id),
+                             references acs_objects(object_id),
     -- Id of the password management service contact implementation
     pwd_impl_id              integer
                              constraint auth_authority_pwd_impl_fk
-                             acs_objects(object_id),
+                             references acs_objects(object_id),
     forgotten_pwd_url        varchar(4000),
     change_pwd_url           varchar(4000),
     -- Id of the registration service contract implementation
     register_impl_id         integer
                              constraint auth_authority_reg_impl_fk
-                             acs_objects(object_id),
-    register_url             varchar(4000)
+                             references acs_objects(object_id),
+    register_url             varchar(4000),
+    -- batch sync
+    -- Id of service contract getting batch sync doc
+    get_doc_impl_id          integer references acs_objects(object_id),
+    -- Id of service contract processing batch sync doc
+    process_doc_impl_id      integer references acs_objects(object_id),
+    -- Are batch syncs snapshots or of incremental type
+    snapshot_p               boolean default 'f'
+                             constraint auth_authority_snapshot_p_nn
+                             not null,
+    batch_sync_enabled_p     boolean default 'f'
+                             constraint auth_authority_bs_enabled_p_nn
+                             not null
 );
 
 comment on column auth_authorities.help_contact_text is '
@@ -72,7 +84,7 @@ select acs_object_type__create_type (
     null
 );
 
--- Create PLSQL package
+-- Create PLSQL functions
 create or replace function authority__new (
     integer, -- authority_id
     varchar, -- object_type
@@ -87,6 +99,10 @@ create or replace function authority__new (
     integer, -- register_impl_id
     varchar, -- register_url
     varchar, -- help_contact_text
+    integer, -- get_doc_impl_id
+    integer, -- process_doc_impl_id
+    boolean, -- snapshot_p
+    boolean, -- batch_sync_enabled_p
     integer, -- creation_user
     varchar, -- creation_ip
     integer  -- context_id
@@ -106,9 +122,13 @@ declare
     p_register_impl_id alias for $11; -- default null
     p_register_url alias for $12; -- default null
     p_help_contact_text alias for $13; -- default null,
-    p_creation_user alias for $14; -- default null
-    p_creation_ip alias for $15; -- default null
-    p_context_id alias for $16; -- default null
+    p_get_doc_impl_id alias for $14; -- default null
+    p_process_doc_impl_id alias for $15; -- default null
+    p_snapshot_p alias for $16; -- default ''f''
+    p_batch_sync_enabled_p alias for $17; -- default ''f''
+    p_creation_user alias for $18; -- default null
+    p_creation_ip alias for $19; -- default null
+    p_context_id alias for $20; -- default null
   
     v_authority_id           integer;
     v_object_type            varchar;    
@@ -134,11 +154,13 @@ begin
     insert into auth_authorities (authority_id, short_name, pretty_name, enabled_p, 
                                   sort_order, auth_impl_id, pwd_impl_id, 
                                   forgotten_pwd_url, change_pwd_url, register_impl_id,
-                                  help_contact_text)
+                                  help_contact_text, get_doc_impl_id, process_doc_impl_id,
+                                  snapshot_p, batch_sync_enabled_p)
     values (v_authority_id, p_short_name, p_pretty_name, p_enabled_p, 
                                   p_sort_order, p_auth_impl_id, p_pwd_impl_id, 
                                   p_forgotten_pwd_url, p_change_pwd_url, p_register_impl_id,
-                                  p_help_contact_text);
+                                  p_help_contact_text, p_get_doc_impl_id, p_process_doc_impl_id,
+                                  p_snapshot_p, p_batch_sync_enabled_p);
 
    return v_authority_id;
 end;
@@ -170,11 +192,14 @@ select authority__new(
     null,              -- register_impl_id
     null,              -- register_url
     null,              -- help_contact_text
+    null,              -- get_doc_impl_id
+    null,              -- process_doc_impl_id
+    'f',               -- snapshot_p
+    'f',               -- batch_sync_enabled_p
     null,              -- creation_user
     null,              -- creation_ip
     null               -- context_id
 );
-
 
 
 -- ****** Changes to the users table

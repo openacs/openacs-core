@@ -30,18 +30,34 @@ create table auth_authorities (
     -- Cannot reference acs_sc_impls table as it doesn't exist yet
     auth_impl_id             integer
                              constraint auth_authority_auth_impl_fk
-                             acs_objects(object_id),
+                             references acs_objects(object_id),
     -- Id of the password management service contact implementation
     pwd_impl_id              integer
                              constraint auth_authority_pwd_impl_fk
-                             acs_objects(object_id),
+                             references acs_objects(object_id),
     forgotten_pwd_url        varchar2(4000),
     change_pwd_url           varchar2(4000),
     -- Id of the registration service contract implementation
     register_impl_id         integer
                              constraint auth_authority_reg_impl_fk
-                             acs_objects(object_id),
-    register_url             varchar2(4000)
+                             references acs_objects(object_id),
+    register_url             varchar2(4000),
+    -- batch sync
+    -- Id of service contract getting batch sync doc
+    get_doc_impl_id          integer references acs_objects(object_id),
+    -- Id of service contract processing batch sync doc
+    process_doc_impl_id      integer references acs_objects(object_id),
+    -- Are batch syncs snapshots or of incremental type
+    snapshot_p               char(1) default 'f' 
+                             constraint auth_authority_snapshot_p_nn
+                             not null 
+                             constraint auth_authority_snapshot_p_ck
+                             check (snapshot_p in ('t','f')),
+    batch_sync_enabled_p     char(1) default 'f' 
+                             constraint auth_authority_bs_enabled_p_nn
+                             not null 
+                             constraint auth_authority_bs_enabled_p_ck
+                             check (batch_sync_enabled_p in ('t','f'))
 );
 
 comment on column auth_authorities.help_contact_text is '
@@ -94,6 +110,10 @@ as
         register_impl_id in auth_authorities.register_impl_id%TYPE default null,
         register_url in auth_authorities.register_url%TYPE default null,
         help_contact_text in auth_authorities.help_contact_text%TYPE default null,
+        get_doc_impl_id in auth_authorities.get_doc_impl_id%TYPE default null,
+        process_doc_impl_id auth_authorities.process_doc_impl_id%TYPE default null,
+        snapshot_p auth_authorities.snapshot_p%TYPE default 'f',
+        batch_sync_enabled_p auth_authorities.batch_sync_enabled_p%TYPE default 'f',
         creation_user in acs_objects.creation_user%TYPE default null,
         creation_ip in acs_objects.creation_ip%TYPE default null,
         context_id in acs_objects.context_id%TYPE default null
@@ -123,6 +143,10 @@ as
         register_impl_id in auth_authorities.register_impl_id%TYPE default null,
         register_url in auth_authorities.register_url%TYPE default null,
         help_contact_text in auth_authorities.help_contact_text%TYPE default null,
+        get_doc_impl_id in auth_authorities.get_doc_impl_id%TYPE default null,
+        process_doc_impl_id auth_authorities.process_doc_impl_id%TYPE default null,
+        snapshot_p auth_authorities.snapshot_p%TYPE default 'f',
+        batch_sync_enabled_p auth_authorities.batch_sync_enabled_p%TYPE default 'f',
         creation_user in acs_objects.creation_user%TYPE default null,
         creation_ip in acs_objects.creation_ip%TYPE default null,
         context_id in acs_objects.context_id%TYPE default null
@@ -143,11 +167,13 @@ as
         insert into auth_authorities (authority_id, short_name, pretty_name, enabled_p, 
                                       sort_order, auth_impl_id, pwd_impl_id, 
                                       forgotten_pwd_url, change_pwd_url, register_impl_id,
-                                      help_contact_text)
+                                      help_contact_text, get_doc_impl_id, process_doc_impl_id,
+                                      snapshot_p, batch_sync_enabled_p)
         values (v_authority_id, new.short_name, new.pretty_name, new.enabled_p, 
                                       new.sort_order, new.auth_impl_id, new.pwd_impl_id, 
                                       new.forgotten_pwd_url, new.change_pwd_url, new.register_impl_id, 
-                                      new.help_contact_text);
+                                      new.help_contact_text, new.get_doc_impl_id, new.process_doc_impl_id,
+                                      new.snapshot_p, new.batch_sync_enabled_p);
 
         return v_authority_id;
     end new;
@@ -166,7 +192,6 @@ as
 end authority;
 /
 show errors
-
 
 -- Create the local authority
 declare
