@@ -2051,6 +2051,13 @@ ad_proc -public apm::process_install_xml {
     if {!$nested_p} {
         array unset ids 
         array set ids [list]
+  
+        # set default ids for the main site and core packages
+        set ids(ACS_KERNEL) [apm_package_id_from_key acs-kernel]
+        set ids(ACS_TEMPLATING) [apm_package_id_from_key acs-templating]
+        set ids(ACS_AUTHENTICATION) [apm_package_id_from_key acs-authentication]
+        set ids(ACS_LANG) [apm_package_id_from_key acs-lang]
+        set ids(MAIN_SITE) [subsite::main_site_id]
     }
 
     set root_node [apm_load_install_xml $filename $binds] 
