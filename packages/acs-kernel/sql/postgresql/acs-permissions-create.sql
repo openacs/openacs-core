@@ -161,9 +161,8 @@ begin
 
             -- now recurse down from this node
 
-            PERFORM priv_recurse_subtree(new_key, 
-                                         v_rec.privilege, 
-                                         v_rec.child_privilege);
+            PERFORM priv_recurse_subtree(new_key, v_rec.child_privilege);
+
         end LOOP;
 
         return new;
@@ -174,12 +173,11 @@ create trigger acs_priv_hier_ins_del_tr after insert or delete
 on acs_privilege_hierarchy for each row
 execute procedure acs_priv_hier_ins_del_tr ();
 
-create function priv_recurse_subtree(varchar, varchar, varchar) 
+create function priv_recurse_subtree(varchar, varchar) 
 returns integer as '
 declare
         nkey            alias for $1;
-        priv            alias for $2;
-        child_priv      alias for $3;
+        child_priv      alias for $2;
         new_key         varchar;
         v_rec           record;
 begin
@@ -211,9 +209,8 @@ begin
 
             -- keep recursing down until no more children are found
 
-            PERFORM priv_recurse_subtree(new_key, 
-                                         v_rec.privilege, 
-                                         v_rec.child_privilege);
+            PERFORM priv_recurse_subtree(new_key, v_rec.child_privilege);
+
         end LOOP;
 
         -- no children found, so insert the child node as its own separate 
