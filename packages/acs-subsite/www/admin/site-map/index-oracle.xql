@@ -52,7 +52,11 @@
                          parent_id
                   from site_nodes n
                   where (object_id is null
-                  or acs_permission.permission_p(object_id, :user_id, 'read') = 't')
+                         or exists (
+                            select 1 from acs_object_party_privilege_map ppm 
+                             where ppm.object_id = n.object_id 
+                               and ppm.party_id = :user_id 
+                               and ppm.privilege = 'read'))
             start with node_id = nvl(:root_id, site_node.node_id('/'))
             connect by prior node_id = parent_id and parent_id in ([join $expand ", "])) site_map
             where site_map.object_id = p.package_id (+)
@@ -64,16 +68,15 @@
         <querytext>
             select package_id,
                    ap.package_key,
-                   acs_object.name(package_id) as instance_name,
+                   ap.instance_name,
                    apm_package_type.num_parameters(ap.package_key) as parameter_count
             from apm_packages ap,
                  apm_package_types
             where ap.package_key = apm_package_types.package_key
             and package_type = 'apm_service'
-            and (
-                    acs_permission.permission_p(package_id, :user_id, 'read') = 't'
-                 or acs_permission.permission_p(package_id, acs.magic_object_id('the_public'), 'read') = 't'
-                )
+            and not exists (select 1 from site_nodes sn where sn.object_id = package_id)
+            and exists (select 1 from acs_object_party_privilege_map ppm 
+                        where ppm.object_id = package_id and ppm.party_id = :user_id and ppm.privilege = 'admin')
             order by instance_name
         </querytext>
     </fullquery>

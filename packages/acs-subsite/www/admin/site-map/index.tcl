@@ -291,16 +291,14 @@ doc_body_append "
 <a href=\"unmounted\">Manage unmounted applications</a>
 </p>
 
-<h2>Set Parameters</h2>
+<h2>Services</h2>
        <ul>
 "
 
 
 db_foreach services_select {} {
     if {$parameter_count > 0} {
-        if {[ad_permission_p $package_id admin]} {		
-	    doc_body_append "  <li><a href=\"[export_vars -base "/shared/parameters" { package_id { return_url {[ad_return_url]} } }]\">$instance_name</a>"
-	}
+        doc_body_append "  <li><a href=\"[export_vars -base "/shared/parameters" { package_id { return_url {[ad_return_url]} } }]\">$instance_name</a>"
     }
     doc_body_append "\n"
 } if_no_rows {
