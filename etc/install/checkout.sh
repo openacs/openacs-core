@@ -62,11 +62,7 @@ if [ $dotlrn == "yes" ]; then
     # Checkout needed packages
     echo "$0: Checking out packages from branch $oacs_branch"
     cd ${serverroot}/packages
-    cvs -q -z3 -d :pserver:anonymous@openacs.org:/cvsroot co -r $oacs_branch \
-        acs-datetime acs-developer-support acs-events acs-mail-lite \
-        attachments bulk-mail calendar faq file-storage forums general-comments \
-        news notifications ref-timezones user-preferences survey lars-blogger weblogger-portlet \
-        rss-support trackback workflow curriculum
+    cvs -q -z3 -d :pserver:anonymous@openacs.org:/cvsroot co -r $oacs_branch dotlrn-prereq
 
     # Copy short reference files to save time when installing datamodel
     if parameter_true "$use_timesaver_files"; then
