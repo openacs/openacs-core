@@ -281,7 +281,7 @@ ns_param ServerSessionCache        true
 ns_param ServerSessionCacheID      1
 ns_param ServerSessionCacheSize    512
 ns_param ServerSessionCacheTimeout 300
-ns_param ServerPeerVerify          true
+ns_param ServerPeerVerify          false
 ns_param ServerPeerVerifyDepth     3
 ns_param ServerCADir               ca
 ns_param ServerCAFile              ca.pem
@@ -296,7 +296,7 @@ ns_param SockServerSessionCache          true
 ns_param SockServerSessionCacheID        2
 ns_param SockServerSessionCacheSize      512
 ns_param SockServerSessionCacheTimeout   300
-ns_param SockServerPeerVerify            true
+ns_param SockServerPeerVerify            false
 ns_param SockServerPeerVerifyDepth       3
 ns_param SockServerCADir                 internal_ca
 ns_param SockServerCAFile                internal_ca.pem
@@ -311,7 +311,7 @@ ns_param SockClientSessionCache          false
 ns_param SockClientSessionCacheID        3
 ns_param SockClientSessionCacheSize      512
 ns_param SockClientSessionCacheTimeout   300
-ns_param SockClientPeerVerify            true
+ns_param SockClientPeerVerify            false
 ns_param SockServerPeerVerifyDepth       3
 ns_param SockClientCADir                 ca
 ns_param SockClientCAFile                ca.pem
