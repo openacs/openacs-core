@@ -338,7 +338,7 @@ hierarchy for a hypothetical site:
 </para>
 
 <blockquote>
-<graphic fileref="images/context-hierarchy.jpg" format="JPG"></graphic>
+<graphic fileref="images/context-hierarchy.gif" format="GIF"></graphic>
 </blockquote>
 
 <para>
@@ -548,4 +548,8 @@ editing notes, and discuss these issues further.
 </sect2>
 
 </sect1>
-
+<!--
+       Local Variables:
+       sgml-parent-document: ("../index.xml" "book" "sect1")
+       End:
+-->

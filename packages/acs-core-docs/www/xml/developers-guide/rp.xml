@@ -3,7 +3,7 @@
 <title>The Request Processor</title>
 
 <authorblurb>
-<para>By <ulink url="mailto:psu@arsdigita.com">Pete Su</ulink></para>
+By Pete Su
 </authorblurb>
 
 <sect2 id="rp-overview"><title>Overview</title>
@@ -19,7 +19,7 @@ system, and implications and usage for the application developer.
 
 <para>
 In older versions of the OpenACS, the mapping between URLs and pages was
-simple. AOLserver (the usual webserver for the OpenACS) would find the
+simple. AOLserver, the usual webserver for the OpenACS, would find the
 appropriate file by appending the server's page-root to the path in
 the URL and returning that file to the user.  For example, a user's
 request for a URL like "http://foo-service.com/bar.html" would cause
@@ -258,3 +258,8 @@ of the package.
 </sect2>
 
 </sect1>
+<!--
+       Local Variables:
+       sgml-parent-document: ("../index.xml" "book" "sect1")
+       End:
+-->

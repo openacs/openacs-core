@@ -2,7 +2,7 @@
 <title>OpenACS &version; Data Models and the Object System</title>
 
 <authorblurb>
-<para>By <ulink url="mailto:psu@arsdigita.com">Pete Su</ulink></para>
+By Pete Su
 </authorblurb>
 
 <sect2 id="objects-overview"><title>Overview</title>
@@ -20,13 +20,13 @@ that users have entered.  A simple data model might look like this:
 
 <programlisting>
 create table notes (
-    note_id integer primary key,
-    owner_id integer references users(user_id),
-    creation_user references(user_id) not null,
-    creation_date date not null,
-    last_modified date not null,
-    title varchar(255) not null,
-    body varchar(1024)
+    note_id           integer primary key,
+    owner_id          integer references users(user_id),
+    creation_user     references(user_id) not null,
+    creation_date     date not null,
+    last_modified     date not null,
+    title             varchar(255) not null,
+    body              varchar(1024)
 )
 </programlisting>
 
@@ -43,7 +43,7 @@ things with Notes as well:
 <itemizedlist mark="opencircle">
 <listitem><para>Define access control policies on notes.</para></listitem>
 <listitem><para>Attach user comments on notes.</para></listitem>
-<listitem><para>Allows users to define custom fields to store on their notes.</para></listitem>
+<listitem><para>Allow users to define custom fields to store on their notes.</para></listitem>
 <listitem><para>Automatically generate input forms or output displays for notes.</para></listitem>
 <listitem><para>Allow other applications to use notes in ways we don't know of yet.</para></listitem>
 </itemizedlist>
@@ -51,7 +51,7 @@ things with Notes as well:
 <para>
 In OpenACS &version;, the key to enabling these types of services on your
 application data is to take advantage of the Object System.  The first
-question anyone asks is usually "Just what are objects, and what do
+question, then, is "Just what are objects, and what do
 you use them for anyway?".  The short answer: objects are anything
 represented in the application's data model that will need to be
 managed by any central service in OpenACS &version;, or that may be reusable in
@@ -65,7 +65,7 @@ generic auditing columns.
 <para>
 To make use of the object system, you as the application developer
 have to write your data model in a way that is slightly more complex
-than before. What you get for this extra work includes:
+than in the ACS 3.x days. What you get for this extra work includes:
 
 <itemizedlist>
   <listitem><para>The <xref linkend="permissions"></xref> lets you 
@@ -95,10 +95,10 @@ extra steps in the design of your application data model.
 </para>
 
 <para>
-For our example Notes application, to hook into the object system we
+In order to hook our Notes application into the object system, we
 make some calls to use our <computeroutput>notes</computeroutput> table as the basis for a
 new <emphasis>object type</emphasis>. Object types are analogous to classes in
-programming languages such as C++ and Java. For example, in Java a
+programming languages such as C++ and Java. In Java, a
 class defines a set of attributes that store data and a set of methods
 that run code. In OpenACS &version;, we use one or more Oracle tables to store the
 data attributes, and we define a PL/SQL package to hold procedures to
@@ -107,20 +107,21 @@ define the programming interface to the data model.
 
 <para>
 The object type itself is described using data in the
-<computeroutput>acs_object_types</computeroutput> and <computeroutput>acs_attributes</computeroutput> tables,
-which plays a role similar to the data dictionary in Oracle. As in
-Java, object types can inherit attributes from a parent type, so the
-type system forms a hierarchy. Unlike Java, Oracle does not support
-this inheritance transparently, so we have to make sure we add our own
-bookkeeping code to keep everything consistent. Given all of this,
-below you'll find the code needed to describe a new object type called
-<computeroutput>notes</computeroutput> in your system.
+<computeroutput>acs_object_types</computeroutput> and
+<computeroutput>acs_attributes</computeroutput> tables, which play a role
+similar to the data dictionary in Oracle. As in Java, object types can
+inherit attributes from a parent type, so the type system forms a
+hierarchy. Unlike Java, Oracle does not support this inheritance
+transparently, so we have to make sure we add our own bookkeeping code to
+keep everything consistent. Below you'll find the code needed to describe a
+new object type called <computeroutput>notes</computeroutput> in your
+system.
 </para>
 
 <para>
 Fire up your text editor and open the
-<computeroutput>ROOT/packages/notes/sql/notes-create.sql</computeroutput> file created
-during the earlier <link linkend="packages">created the package</link>.  Then, do the following:
+<computeroutput>ROOT/packages/notes/sql/oracle/notes-create.sql</computeroutput> (<computeroutput>ROOT/packages/notes/sql/postgresql/notes-create.sql</computeroutput> for the PG version) file created
+when we <link linkend="packages">created the package</link>.  Then, do the following:
 </para>
 
 
@@ -160,7 +161,7 @@ that are simple subtypes of <computeroutput>acs_object</computeroutput>.
 </para>
 
 <para>
-Now add entries to the <computeroutput>acs_attributes</computeroutput> table to describe
+Add entries to the <computeroutput>acs_attributes</computeroutput> table to describe
 the data attributes of the new type. This data can eventually be used
 to do things like automatically generate user interfaces to manipulate
 the <computeroutput>notes</computeroutput> table, though that functionality isn't yet
@@ -218,23 +219,23 @@ definition looks like this:
 
 <programlisting>
 create table notes (
-    note_id integer references acs_objects(object_id) primary key,
-    owner_id integer references users(user_id),
-    title varchar(255) not null,
-    body varchar(1024)
+    note_id    integer references acs_objects(object_id) primary key,
+    owner_id   integer references users(user_id),
+    title      varchar(255) not null,
+    body       varchar(1024)
 )
 </programlisting>
 
 
 <para>
-Again, the usual <computeroutput>creation_date</computeroutput> and
+The usual <computeroutput>creation_date</computeroutput> and
 <computeroutput>modified_date</computeroutput> columns are absent since they already exist
 in <computeroutput>acs_objects</computeroutput>.  Also, note the constraint we have added
 to reference the <computeroutput>acs_objects</computeroutput> table, which makes clear
 that since <computeroutput>note</computeroutput> is a subtype of <computeroutput>acs_object</computeroutput>,
 every row in the notes table must have a corresponding row in the
 <computeroutput>acs_objects</computeroutput> table. This is the fundamental means by which
-we model inheritance; it guarantees that any services developed that
+we model inheritance; it guarantees that any services that
 use the <computeroutput>acs_objects</computeroutput> table to find objects will
 transparently find any objects that are instances of any subtype of
 <computeroutput>acs_objects</computeroutput>.
@@ -409,7 +410,7 @@ drop table notes;
 <sect2 id="objects-when-to-use-objects"><title>When to Use Objects</title>
 
 <para>
-While it is generally hard to give general design advice without
+While it is hard to give general design advice without
 knowing anything about a particular application, you should follow the
 following rule of thumb when deciding when to hook part of your data
 model to the object system:
@@ -555,3 +556,8 @@ especially true for the <computeroutput>context_id</computeroutput> field.
 
 
 </sect1>
+<!--
+       Local Variables:
+       sgml-parent-document: ("../index.xml" "book" "sect1")
+       End:
+-->

@@ -2,9 +2,9 @@
 <title>Object Identity</title>
 
 
-<authorblurb><para>
+<authorblurb>
 by <ulink url="http://planitia.org">Rafael H. Schloming</ulink> 
-</para></authorblurb>
+</authorblurb>
 
 
 <para>One of the major design features of OpenACS &version; is the explicit representation
@@ -50,4 +50,8 @@ level services</emphasis>.</para>
 <para><phrase role="cvstag">($Id$)</phrase></para>
 
 </sect1>
-
+<!--
+       Local Variables:
+       sgml-parent-document: ("../index.xml" "book" "sect1")
+       End:
+-->
