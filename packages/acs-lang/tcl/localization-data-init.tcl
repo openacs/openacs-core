@@ -249,6 +249,39 @@ nsv_set locale fi_FI,dlong_fmt "%d. %Bta %Y"
 nsv_set locale fi_FI,dlongweekday_fmt "%A, %d. %Bta %Y"
 nsv_set locale fi_FI,formbuilder_time_format "HH24:MI"
 
+# Poland pl_PL
+nsv_set locale pl_PL,abday  {{Nd} {Pn} {Wt} {Śr} {Czw} {Pt} {So}} 
+nsv_set locale pl_PL,abmon  {{Sty} {Lut} {Mar} {Kwi} {Maj} {Cze} {Lip} {Sie} {Wrz} {Paź} {Lis} {Gru}}
+nsv_set locale pl_PL,am_str ""
+nsv_set locale pl_PL,currency_symbol "zł"
+nsv_set locale pl_PL,day {{Niedziela} {Poniedziałek} {Wtorek} {Środa} {Czwartek} {Piątek} {Sobota}}
+nsv_set locale pl_PL,decimal_point ","
+nsv_set locale pl_PL,d_fmt "%d-%m-%y"  
+nsv_set locale pl_PL,d_t_fmt "%d %B %Y %T %Z"
+nsv_set locale pl_PL,frac_digits 2
+nsv_set locale pl_PL,grouping {3 3 }
+nsv_set locale pl_PL,int_curr_symbol "PLN "
+nsv_set locale pl_PL,int_frac_digits 2
+nsv_set locale pl_PL,mon_decimal_point ","
+nsv_set locale pl_PL,mon_grouping {3 3 }
+nsv_set locale pl_PL,mon {{Styczeń} {Luty} {Marzec} {Kwiecień} {Maj} {Czerwiec} {Lipiec} {Sierpień} {Wrzesień} {Październik} {Listopad} {Grudzień}}
+nsv_set locale pl_PL,mon_thousands_sep " "
+nsv_set locale pl_PL,n_cs_precedes 1
+nsv_set locale pl_PL,negative_sign "-"
+nsv_set locale pl_PL,n_sep_by_space 1
+nsv_set locale pl_PL,n_sign_posn  1
+nsv_set locale pl_PL,p_cs_precedes 1
+nsv_set locale pl_PL,pm_str " "
+nsv_set locale pl_PL,positive_sign ""
+nsv_set locale pl_PL,p_sep_by_space 0
+nsv_set locale pl_PL,p_sign_posn 1
+nsv_set locale pl_PL,t_fmt_ampm "%H:%M:%S "
+nsv_set locale pl_PL,t_fmt "%T"
+nsv_set locale pl_PL,thousands_sep " "
+
+
+
+
 # Monetary amounts
 nsv_set locale money:000  {($num$sym)}
 nsv_set locale money:001  {($num $sym)}
