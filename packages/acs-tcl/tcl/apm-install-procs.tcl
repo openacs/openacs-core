@@ -1187,9 +1187,8 @@ ad_proc -private apm_data_model_scripts_find {
 	apm_log APMDebug "APM: Checking \"$path\" of type \"$file_type\" and db_type \"$file_db_type\"."
 
         # DRB: we return datamodel files which match the given database type or for which no db_type
-        # is defined.  The latter case is a kludge to simplify support of legacy ACS Oracle-only
-        # modules which haven't had their datamodel files moved to sql/oracle.  Eventually we should
-        # remove the kludge and insist that datamodel files live in the proper directory.
+        # is defined.  The latter case allows for sharing of common SQL files in the package's
+        # sql/common directory.
 
 	if {[lsearch -exact $types_to_retrieve $file_type] != -1 && \
             ([db_compatible_rdbms_p $file_db_type])} {
