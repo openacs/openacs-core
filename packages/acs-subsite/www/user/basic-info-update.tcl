@@ -18,5 +18,4 @@ if { ![exists_and_not_null user_id] } {
     set context [list $page_title]
 }
 
-
-
+set focus {}
