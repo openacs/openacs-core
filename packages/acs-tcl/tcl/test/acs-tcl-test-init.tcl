@@ -52,7 +52,7 @@ aa_register_case apm__test_info_file {
         db_dml set_test_mount {update apm_package_versions
                                set auto_mount = :auto_mount
                                where version_id = :version_id}
-                               ail    } 
+        } 
 
     set error_p [catch {         
         # Add a few test callbacks
