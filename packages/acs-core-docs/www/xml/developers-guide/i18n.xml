@@ -76,49 +76,8 @@
   </sect1>
 
 
-  <sect1 id="i18n-translators">
-    <title>Translator's Guide</title>
-    <para>Most translators use the <ulink url="http://translate.openacs.org">OpenACS Public Translation Server</ulink>, because the process of getting new message keys onto the server and getting new translations back into the distribution are handled by the maintainers of that machine.  You can also do translation work on your own OpenACS site; this makes your own translations more readily available to you but also means that your work will not be shared with other users unless you take extra steps (contacting an OpenACS core developer or submitting a patch) to get your work back to the OpenACS core.</para>
-    <para>The basic steps for translators:</para>
-    <itemizedlist>
-      <listitem>
-        <para>Go to the <ulink url="/acs-lang">Localization</ulink> page and choose the locale that you are translating to. If the locale is not present you need to visit <ulink url="/acs-lang/admin">Administration of Localization</ulink> and create the locale.</para>
-      </listitem>
-      <listitem>
-        <formalpara>
-          <title>Translating with Translator Mode</title>
-          <para>To translate messages in the pages they appear, <ulink url="http://localhost:8008/acs-lang/admin/translator-mode-toggle">Toggle Translator Mode</ulink> and then browse to the page you want to translate.  Untranslated messages will have a yellow background and a red star that you click to translate the message. Translated messages have a green star next to them that is a hyperlink to editing your translation. There is a history mechanism that allows you to see previous translations in case you would want to revert a translation.</para>
-        </formalpara>
-      <mediaobject>
-        <imageobject>
-          <imagedata fileref="images/translator-mode.png" format="png" align="center"/>
-        </imageobject>
-      </mediaobject>
-        <para>While in Translator mode, a list of all message keys appears at the bottom of each page.</para>
-      <mediaobject>
-        <imageobject>
-          <imagedata fileref="images/translations.png" format="png" align="center"/>
-        </imageobject>
-      </mediaobject>
-      </listitem>
-      <listitem>
-        <formalpara>
-          <title>Batch translation</title>
-          <para>To translate many messages at once, go to <ulink url="/acs-lang/admin">Administration of Localization</ulink>, click on the locale to translate, then click on a package, and then click <computeroutput>Batch edit these messages</computeroutput>.</para>
-        </formalpara>
-      <mediaobject>
-        <imageobject>
-          <imagedata fileref="images/translation-batch-edit.png" format="png" align="center"/>
-        </imageobject>
-      </mediaobject>
-
-      </listitem>
-    </itemizedlist>
-  </sect1>
   <sect1 id="i18n-introduction">
-
-    <title>Introduction to Developing Internationalized Packages</title>
-
+    <title>How Internationalization/Localization works in OpenACS</title>
     <para>
       This document describes how to develop internationalized OpenACS
       packages, including writing new packages with
@@ -135,11 +94,11 @@
 
     <para>
       The main difference between monolingual and internationalized
-      packages is that all user-visible text in an internationalized
+      packages is that all user-visible text in the code of an internationalized
       package are coded as "message keys."  The message keys
       correspond to a message catalog, which contains versions of the
-      text for each available language.  Both script files
-      (ADP/TCL) and APM parameters are affected.
+      text for each available language.  Script files (.adp and .tcl and .vuh), database files (.sql), and APM parameters are affected.
+
     </para>
 
     <para>
@@ -147,29 +106,12 @@
       database must use internationalized functions.  All displayed
       dates must use internationalized functions.  All displayed
       numbers must use internationalized functions.
-</para>
-
-  <sect2 id="i18n-aolserver">
-
-    <title>AOLserver Configuration for Multilingual Sites</title>
-
-    <para>
-      For multilingual websites we recommend using the UTF8
-      charset. In order for AOLserver to use utf8 you need to set
-      the config parameters OutputCharset and
-      URLCharset to utf-8 in your AOLserver config file (use the etc/config.tcl
-      template file).  This is the default for OpenACS 5.1 and later. For sites running on Oracle you need to make
-      sure that AOLserver is running with the NLS_LANG environment
-      variable set to .UTF8. You should set this variable in the
-      nsd-oracle run script (use the
-      acs-core-docs/www/files/nds-oracle.txt template file).
     </para>
-  </sect2>
-
-  <sect2 id="i18n-message-catalog">
-
-    <title>Using the Message Catalog</title>
-
+    <sect2 id="i18n-content">
+      <title>User Content</title>
+      <para>OpenACS does not have a general system for supporting multiple, localized versions of user-input content.  This document currently refers only to internationalizing the text in the package user interface.</para>
+    </sect2>
+    
     <para>
       Localizable text must be handled in ADP files, in TCL files, and
       in APM Parameters.  OpenACS provides two approaches, message
@@ -182,13 +124,13 @@
       distinguished by a file naming convention.
     </para>
 
+    <sect2 id="i18n-locale-templates">
 
-    <sect3>
       <title>Separate Templates for each Locale</title>
-      <para>If the request processor finds a file named <computeroutput>filename.locale.adp</computeroutput>, where locale matches the user's locale, it will process that file instead of <computeroutput>filename.adp</computeroutput>.  For example, for a user with locale <computeroutput>tl_PH</computeroutput>, the file <computeroutput>index.tl_PH.adp</computeroutput>, if found, will be used instead of <computeroutput>index.adp</computeroutput>.  The locale-specific file should thus contain text in the language appropriate for that locale.  The code in the page, however, should still be in English.  Message keys are still processed.</para>
-
-    </sect3>
-
+      <para>If the request processor finds a file named <computeroutput>filename.locale.adp</computeroutput>, where locale matches the user's locale, it will process that file instead of <computeroutput>filename.adp</computeroutput>.  For example, for a user with locale <computeroutput>tl_PH</computeroutput>, the file <computeroutput>index.tl_PH.adp</computeroutput>, if found, will be used instead of <computeroutput>index.adp</computeroutput>.  The locale-specific file should thus contain text in the language appropriate for that locale.  The code in the page, however, should still be in English.  Message keys are processed normally.</para>
+    </sect2>
+    <sect2 id="i18n-message-catalog">
+    <title>Message Catalogs</title>
     <sect3 id="i18n-message-catalog-adps">
       <title>Message Keys in Template Files (ADP Files)</title>
 
@@ -280,27 +222,24 @@
 
       <para>
         <itemizedlist>
-          <listitem>Typical static key lookup: <computeroutput>[_ package_key.message_key]</computeroutput> - The message key and package key used here must be string literals, they can't result from variable evaluation.
+          <listitem><para>Typical static key lookup: <computeroutput>[_ package_key.message_key]</computeroutput> - The message key and package key used here must be string literals, they can't result from variable evaluation.</para>
           </listitem> 
 
-          <listitem>
-            Static key lookup with non-default locale: <computeroutput>[lang::message::lookup $locale package_key.message_key]</computeroutput> - The message key and package key used here must be string literals, they can't result from variable evaluation.
+          <listitem><para>
+            Static key lookup with non-default locale: <computeroutput>[lang::message::lookup $locale package_key.message_key]</computeroutput> - The message key and package key used here must be string literals, they can't result from variable evaluation.</para>
           </listitem>
 
           <listitem>
-            Dynamic key lookup: 
-<screen>
-<userinput>[lang::util::localize $var_with_embedded_message_keys]</userinput>
-- In this case the message keys in the variable <computeroutput>var_with_embedded_message_keys</computeroutput> must appear as string literals <computeroutput>\#package_key.message_key\#</computeroutput> somewhere in the code. Here is an example of a dynamic lookup:           
-<userinput>set message_key_array {
-  dynamic_key_1  \#package_key.message_key1\#
-  dynamic_key_2  \#package_key.message_key2\#
+            <para>
+            Dynamic key lookup: <computeroutput>[lang::util::localize $var_with_embedded_message_keys]</computeroutput> - In this case the message keys in the variable <computeroutput>var_with_embedded_message_keys</computeroutput> must appear as string literals <computeroutput>\#package_key.message_key\#</computeroutput> somewhere in the code. Here is an example of a dynamic lookup:
+            </para>
+            <computeroutput>set message_key_array {
+    dynamic_key_1  \#package_key.message_key1\#
+    dynamic_key_2  \#package_key.message_key2\#
 }
 
-set my_text [lang::util::localize $message_key_array([get_dynamic_key])]
-</userinput>
-</screen>
-
+              set my_text [lang::util::localize $message_key_array([get_dynamic_key])]
+            </computeroutput>
           </listitem>
         </itemizedlist>  
       </para>
@@ -408,34 +347,22 @@ ad_return_complaint 1 [_ dotlrn.class_may_not_be_deleted $msg_subst_list]
         procedure.
       </para>
 
-    </sect3>
+      <sect4 id="i18n-date-time-number">
 
-    <sect3 id="catalog-consistency-check">
+    <title>Dates, Times, and Numbers in TCL files</title>
 
-      <title>Checking the Consistency of Catalog Files</title>
-
-      <para>
-        This section describes how to check that the set of keys used in
-        message lookups in tcl, adp, and info files and the set of keys in
-        the catalog file are identical.  The scripts below assume that
-        message lookups in adp and info files are on the format
-        \#package_key.message_key\#, and that message lookups in tcl files
-        are always is done with one of the valid lookups described above. The script further assumes
-        that you have perl installed and in your path.  Run the script like
-        this:
-      </para>
-
-      <computeroutput>
-      acs-lang/bin/check-catalog.sh package_key
-      </computeroutput>
-
-      <para>
-        where package_key is the key of the package that you want to
-        test. If you don't provide the package_key argument then all
-        packages with catalog files will be checked. 
-        The script will run its checks primarily on en_US xml catalog files.
-      </para>
-
+    <para>
+      Most date, time, and number variables are calculated in TCL files.  Dates and times must be converted when stored in the database,
+      when retrieved from the database, and when displayed.  All dates
+      are stored in the database in the server's timezone, which is an
+      APM Parameter set at
+      <computeroutput>/acs-lang/admin/set-system-timezone</computeroutput>
+      and readable at
+      <computeroutput>lang::system::timezone.</computeroutput>.  When
+      retrieved from the database and displayed, dates and times must
+      be localized to the user's locale.
+    </para>
+    </sect4>
     </sect3>
 
     <sect3 id="i18n-message-apm-params" xreflabel="Multilingual APM Parameters">
@@ -535,42 +462,225 @@ ad_return_complaint 1 [_ dotlrn.class_may_not_be_deleted $msg_subst_list]
 
     </sect3>
     </sect2>
+  </sect1>
 
-  <sect2 id="i18n-date-time-number">
+  <sect1 id="i18n-convert">
+    <title>How to Internationalize a Package</title>
 
-    <title>Dates, Times, and Numbers</title>
-
-    <para>
-      Dates and times must be converted when stored in the database,
-      when retrieved from the database, and when displayed.  All dates
-      are stored in the database in the server's timezone, which is an
-      APM Parameter set at
-      <computeroutput>/acs-lang/admin/set-system-timezone</computeroutput>
-      and readable at
-      <computeroutput>lang::system::timezone.</computeroutput>.  When
-      retrieved from the database and displayed, dates and times must
-      be localized to the user's locale.
+    <tip>
+      <para>
+      For multilingual websites we recommend using the UTF8
+      charset. In order for AOLserver to use utf8 you need to set
+      the config parameters OutputCharset and
+      URLCharset to utf-8 in your AOLserver config file (use the etc/config.tcl
+      template file).  This is the default for OpenACS 5.1 and later. For sites running on Oracle you need to make
+      sure that AOLserver is running with the NLS_LANG environment
+      variable set to .UTF8. You should set this variable in the
+      nsd-oracle run script (use the
+      acs-core-docs/www/files/nds-oracle.txt template file).
     </para>
+    </tip>
 
     <orderedlist>
-
       <listitem>
-        <para>
-          Get the date in ANSI format from the database (YYYY-MM-DD
-          HH24:MI:SS; the time portion is optional).  By convention,
-          we identify dates in ansi format by ending the column name
-          with <computeroutput>_ansi</computeroutput>.
-          Example:</para>
-        <programlisting>select to_char(posting_date, 'YYYY-MM-DD HH24:MI:SS') as posting_date_ansi
-  from table
-</programlisting>
+        <formalpara>
+          <title>Replace all text with temporary message tags</title>
+          <para>From<computeroutput>/acs-admin/apm/</computeroutput>, select a
+        package and then click on
+        <computeroutput>Internationalization</computeroutput>, then
+        <computeroutput>Convert ADP, Tcl, and SQL files to using the
+        message catalog.</computeroutput>.  This pass only changes the adp files; it does not affect catalog files or the catalog in the database.</para>
+        </formalpara>
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="images/i18n-1.png" format="png" align="center"/>
+        </imageobject>
+      </mediaobject>
+
+      <para>You will now be walked through all of the selected adp pages.  The UI shows you the intended changes and lets you edit or cancel them key by key.</para>
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="images/i18n-2.png" format="png" align="center"/>
+        </imageobject>
+      </mediaobject>
+        <note>
+          <para>The automatic process can easily get confused by tags within message texts, so that it tries to create two or three message keys for one long string with a tag in the middle.  In these cases, uncheck those keys during the conversion and then edit the files directly.  For example, this code:</para>
+<programlisting>  &lt;p class="form-help-text"&gt;&lt;b&gt;Invitations&lt;/b&gt; are sent,
+    when this wizard is completed and casting begins.&lt;/p&gt;</programlisting>
+    <para>has a bold tag which confuses the converter into thinking there are two message keys for the text beginning "Invitations ..." where there should be one:</para>
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="images/i18n-3.png" format="png" align="center"/>
+        </imageobject>
+      </mediaobject>
+      <para>Instead, we cancel those keys, edit the file manually, and put in a single temporory message tag:</para>
+      <programlisting>  &lt;p class="form-help-text"&gt; &lt;#Invitations_are_sent &lt;b&gt;Invitations&lt;/b&gt; are sent,
+    when this wizard is completed and casting begins.#&gt;
+  &lt;/p&gt;</programlisting>
+        </note>
+        <note>
+          <para>Complex if statements may produce convoluted message keys that are very hard to localize.  Rewrite these if statements.  For example:</para>
+        <programlisting>
+Select which case &lt;if @simulation.casting_type@ eq "open"&gt;and
+role&lt;/if&gt; to join, or create a new case for yourself.  If you do not
+select a case &lt;if @simulation.casting_type@ eq "open"&gt;and role&lt;/if&gt;
+to join, you will be automatically assigned to a case &lt;if
+@simulation.casting_type@ eq "open"&gt;and role&lt;/if&gt; when the
+simulation begins.</programlisting>
+        <para>... can be rewritten:</para>
+<programlisting>&lt;if @simulation.casting_type@ eq "open"&gt;
+
+Select which case and role to join, or create a new case for
+yourself.  If you do not select a case and role to join, you will
+be automatically assigned to a case and role when the simulation
+begins.
+
+&lt;/if&gt;
+&lt;else&gt;
+
+Select which case to join, or create a new case for
+yourself.  If you do not select a case to join, you will
+be automatically assigned to a case when the simulation
+begins.
+
+&lt;/else&gt;</programlisting>
+        </note>
       </listitem>
-
       <listitem>
-        <para>
-          Use the Tcl command <computeroutput>lc_time_fmt</computeroutput> to format the
-          date in "pretty" format.  Several standard formats localize automatically:
+        <formalpara>
+          <title>Replace the temporary message tags in ADP files</title>
+          <para>From the same <computeroutput>Convert ADP ...</computeroutput> page in <computeroutput>/acs-admin/apm</computeroutput> as in the last step, repeat the process but deselect <computeroutput>Find human language text ...</computeroutput> and select <computeroutput>Replace &lt;# ... #&gt; tags ...</computeroutput> and click OK.  This step replaces all of the temporary tags with "short" message lookups, inserts the message keys into the database message catalog, and then writes that catalog out to an xml file.</para>
+        </formalpara>
+      </listitem>
+      <listitem>
+        <formalpara>
+          <title>Replace human-readable text in TCL files with temporary tags</title>
+          <para>Examine all of the tcl files in the packages for human-readable text and replace it with temporary tags.  The temporary tags in TCL are slightly different from those in ADP.  If the first character in the temporary tag is an underscore (<computeroutput>_</computeroutput>), then the message keys will be auto-generated from the original message text.  Here is an unmodified tcl file:</para>
+        </formalpara>
+        <programlisting>ad_page_contract {
+    List of messages for a case
+} {
+    case_id:integer
+    role_id:integer
+}
+
+set workflow_id [simulation::case::get_element -case_id $case_id -element workflow_id]
+set simulation_name [simulation::template::get_element -workflow_id $workflow_id -element pretty_name]
+workflow::role::get -role_id $role_id -array role_array
+simulation::case::get -case_id $case_id -array case_array
+
+set title "Messages for $role_array(pretty_name) in $case_array(label)"
+set context [list [list . "SimPlay"] [list [export_vars -base case-admin { case_id }] 
+             "Administer $case_array(label)"] "Messages for $role_array(pretty_name)"]
+
+set user_id [ad_conn user_id]</programlisting>
+<para>... and here is the same file after temporary message tags have been manually added:</para>
+
+<programlisting>ad_page_contract {
+    List of messages for a case
+} {
+    case_id:integer
+    role_id:integer
+}
+
+set workflow_id [simulation::case::get_element -case_id $case_id -element
+workflow_id]
+set simulation_name [simulation::template::get_element -workflow_id
+$workflow_id -element pretty_name]
+workflow::role::get -role_id $role_id -array role_array
+simulation::case::get -case_id $case_id -array case_array
+
+# Variables used by I18N messages (array variables not currently
+supported)
+set role_pretty_name $role_array(pretty_name)
+set case_pretty_name $case_array(label)
+set title &lt;#case_admin_page_title Messages for %role_pretty_name% in
+%case_pretty_name%#&gt;
+set context [list [list . &lt;#_ SimPlay#&gt;] [list [export_vars -base
+case-admin { case_id }] &lt;#_ Administer %case_pretty_name%#&gt;] &lt;#_ Messages
+for %role_pretty_name%#&gt;]</programlisting>
+        <para>Note that the message key <computeroutput>case_admin_page_title</computeroutput> was manually selected, because an autogenerated key for this text, with its substitute variables, would have been very confusing
 </para>
+      </listitem>
+      <listitem>
+        <formalpara>
+          <title>Replace the temporary message tags in TCL files</title>
+          <para>Repeat step 2 for tcl files.  Here is the example TCL file after conversion:</para>
+        </formalpara>
+        <programlisting>ad_page_contract {
+    List of messages for a case
+} {
+    case_id:integer
+    role_id:integer
+}
+
+set workflow_id [simulation::case::get_element -case_id $case_id -element
+workflow_id]
+set simulation_name [simulation::template::get_element -workflow_id
+$workflow_id -element pretty_name]
+workflow::role::get -role_id $role_id -array role_array
+simulation::case::get -case_id $case_id -array case_array
+
+# Variables used by I18N messages (array variables not currently
+supported)
+set role_pretty_name $role_array(pretty_name)
+set case_pretty_name $case_array(label)
+set title [_ simulation.case_admin_page_title]
+set context [list [list . [_ simulation.SimPlay]] [list [export_vars
+-base case-admin { case_id }] [_ simulation.lt_Administer_case_prett]] [_
+simulation.lt_Messages_for_role_pre]]
+
+set user_id [ad_conn user_id]</programlisting>
+      </listitem>
+      <listitem>
+        <formalpara>
+          <title>Internationalize SQL Code</title>
+          <para>If there is any user-visible TCL code in the .sql or .xql files, internationalize that the same way as for the TCL files.</para>
+        </formalpara>
+      </listitem>
+      <listitem>
+        <formalpara>
+          <title>Internationalize Package Parameters</title>
+      <para>
+      See <xref linkend="i18n-message-apm-params"/>
+    </para>
+        </formalpara>
+      </listitem>
+      <listitem>
+        <formalpara>
+          <title>Internationalize Date and Time queries</title>
+          <para></para>
+        </formalpara>
+      <orderedlist>
+        <listitem>
+          <para>Find datetime in .xql files.  Use command line tools to find suspect SQL code:</para>
+          <programlisting>grep -r "to_char.*H" *
+grep -r "to_date.*H" *
+</programlisting>
+        </listitem>
+        <listitem>
+          <para>In SQL statements, replace the format string with the ANSI standard format, <computeroutput>YYYY-MM-DD HH24:MI:SS</computeroutput> and change the field name to *_ansi so that it cannot be confused with previous, improperly formatting fields.  For example,</para>
+          <programlisting>to_char(timestamp,'MM/DD/YYYY HH:MI:SS') as foo_date_pretty</programlisting>
+          <para>becomes</para>
+          <programlisting>to_char(timestamp,'YYYY-MM-DD HH24:MI:SS') as foo_date_ansi</programlisting>
+        </listitem>
+
+        <listitem>
+          <para>In TCL files where the date fields are used, convert the datetime from local server timezone, which is how it's stored in the database, to the user's timezone for display.  Do this with the localizing function <computeroutput><ulink url="/api-doc/proc-view?proc=lc_time_system_to_conn">lc_time_system_to_conn</ulink></computeroutput>:</para>
+<programlisting>
+set foo_date_ansi [lc_time_system_to_conn $foo_date_ansi]</programlisting>
+          <para>When a datetime will be written to the database, first convert it from the user's local time to the server's timezone with <computeroutput><ulink url="/api-doc/proc-view?proc=lc%5ftime%5fconn%5fto%5fsystem">lc_time_conn_to_system</ulink></computeroutput>.
+</para>
+        </listitem>
+        <listitem>
+          <para>When a datetime field will be displayed, format it using the localizing function <computeroutput><ulink url="/api-doc/proc-view?proc=lc_time_fmt">lc_time_fmt</ulink></computeroutput>. lc_time_fmt takes two parameters, datetime and format code.  Several format codes are usable for localization; they are placeholders that format dates with the appropriate codes for the user's locale.  These codes are: <computeroutput>%x, %X, %q, %Q, and %c.</computeroutput></para>
+          <programlisting>set foo_date_pretty [lc_time_fmt $foo_date_ansi "%x %X"]</programlisting>
+
+        <para>
+          Use the <computeroutput>_pretty</computeroutput> version in your ADP page.
+        </para>
+
+
     <itemizedlist>
 
       <listitem>
@@ -610,82 +720,52 @@ ad_return_complaint 1 [_ dotlrn.class_may_not_be_deleted $msg_subst_list]
       strftime</computeroutput>).
     </para>
         
-        <programlisting>set posting_date_pretty [lc_time_fmt $posting_date_ansi &quot;%q&quot;]</programlisting>
-        
+          </listitem>
+        </orderedlist>
       </listitem>
-      
       <listitem>
-        <para>
-          Use the <computeroutput>*_pretty</computeroutput> version in your ADP page.
-        </para>
+        <formalpara>
+          <title>Internationalize Numbers</title>
+          <para>
+            To internationalize numbers, use <computeroutput>lc_numeric $value</computeroutput>, which formats the number using the appropriate decimal point and thousand separator for the locale.
+          </para>
+        </formalpara>
       </listitem>
-      
-    </orderedlist>
+          <listitem>
+            <formalpara>
+              <title>Internationalizing Forms</title>
+              <para>When coding forms, remember to use message keys for each piece of text that is user-visible, including form option labels and button labels.</para>
+            </formalpara>
+          </listitem>
 
-    <para>
-      To internationalize numbers, use <computeroutput>lc_numeric $value</computeroutput>, which formats the number using the appropriate decimal point and thousand separator for the locale.
-    </para>
-    
-    </sect2>
+          <listitem>
+    <formalpara id="catalog-consistency-check">
 
-  <sect2 id="i18n-forms">
-    <title>Internationalizing Forms</title>
-    <para>When coding forms, remember to use message keys for each piece of text that is user-visible, including form option labels and button labels.</para>
-    </sect2>
-  </sect1>
+      <title>Checking the Consistency of Catalog Files</title>
 
-  <sect1 id="i18n-convert">
-
-    <title>Internationalizing Existing Packages</title>
-
-    <sect3>
-        <title>Internationalize Message text in ADP and TCL</title>
-
-        <para>Acs-lang includes tools to automate some
-        internationalization.  From
-        <computeroutput>/acs-admin/apm/</computeroutput>, select a
-        package and then click on
-        <computeroutput>Internationalization</computeroutput>, then
-        <computeroutput>Convert ADP, Tcl, and SQL files to using the
-        message catalog.</computeroutput>.</para>
-    </sect3>
-
-    <sect3>
-      <title>Internationalize Package Parameters with visible messages</title>
       <para>
-      See <xref linkend="i18n-message-apm-params"/>
-    </para>
-    </sect3>
+        This section describes how to check that the set of keys used in
+        message lookups in tcl, adp, and info files and the set of keys in
+        the catalog file are identical.  The scripts below assume that
+        message lookups in adp and info files are on the format
+        \#package_key.message_key\#, and that message lookups in tcl files
+        are always is done with one of the valid lookups described above. The script further assumes
+        that you have perl installed and in your path.  Run the script like
+        this:
+      </para>
+    </formalpara>
+      <computeroutput>
+      acs-lang/bin/check-catalog.sh package_key
+      </computeroutput>
 
-    <sect3>
-      <title>Internationalize Date and Time queries</title>
-      <orderedlist>
-        <listitem>
-          <para>Find datetime in .xql files.  Use command line tools to find suspect SQL code:</para>
-          <programlisting>grep -r "to_char.*H" *
-grep -r "to_date.*H" *
-</programlisting>
-        </listitem>
-        <listitem>
-          <para>In SQL statements, replace the format string with the ANSI standard format, <computeroutput>YYYY-MM-DD HH24:MI:SS</computeroutput> and change the field name to *_ansi so that it cannot be confused with previous, improperly formatting fields.  For example,</para>
-          <programlisting>to_char(timestamp,'MM/DD/YYYY HH:MI:SS') as foo_date_pretty</programlisting>
-          <para>becomes</para>
-          <programlisting>to_char(timestamp,'YYYY-MM-DD HH24:MI:SS') as foo_date_ansi</programlisting>
-        </listitem>
-
-        <listitem>
-          <para>In TCL files where the date fields are used, convert the datetime from local server timezone, which is how it's stored in the database, to the user's timezone for display.  Do this with the localizing function <computeroutput><ulink url="/api-doc/proc-view?proc=lc_time_system_to_conn">lc_time_system_to_conn</ulink></computeroutput>:</para>
-<programlisting>
-set foo_date_ansi [lc_time_system_to_conn $foo_date_ansi]</programlisting>
-          <para>When a datetime will be written to the database, first convert it from the user's local time to the server's timezone with <computeroutput><ulink url="/api-doc/proc-view?proc=lc%5ftime%5fconn%5fto%5fsystem">lc_time_conn_to_system</ulink></computeroutput>.
-</para>
-        </listitem>
-        <listitem>
-          <para>When a datetime field will be displayed, format it using the localizing function <computeroutput><ulink url="/api-doc/proc-view?proc=lc_time_fmt">lc_time_fmt</ulink></computeroutput>. lc_time_fmt takes two parameters, datetime and format code.  Several format codes are usable for localization; they are placeholders that format dates with the appropriate codes for the user's locale.  These codes are: <computeroutput>%x, %X, %q, %Q, and %c.</computeroutput></para>
-          <programlisting>set foo_date_pretty [lc_time_fmt $foo_date_ansi "%x %X"]</programlisting>
-        </listitem>
-      </orderedlist>
-    </sect3>
+      <para>
+        where package_key is the key of the package that you want to
+        test. If you don't provide the package_key argument then all
+        packages with catalog files will be checked. 
+        The script will run its checks primarily on en_US xml catalog files.
+      </para>
+      </listitem>
+    </orderedlist>
   </sect1>
 
   <sect1 id="i18n-design">
@@ -704,4 +784,43 @@ set foo_date_ansi [lc_time_system_to_conn $foo_date_ansi]</programlisting>
 found, then that locale is offered instead.</para>
   </sect1>
 
+  <sect1 id="i18n-translators">
+    <title>Translator's Guide</title>
+    <para>Most translators use the <ulink url="http://translate.openacs.org">OpenACS Public Translation Server</ulink>, because the process of getting new message keys onto the server and getting new translations back into the distribution are handled by the maintainers of that machine.  You can also do translation work on your own OpenACS site; this makes your own translations more readily available to you but also means that your work will not be shared with other users unless you take extra steps (contacting an OpenACS core developer or submitting a patch) to get your work back to the OpenACS core.</para>
+    <para>The basic steps for translators:</para>
+    <itemizedlist>
+      <listitem>
+        <para>Go to the <ulink url="/acs-lang">Localization</ulink> page and choose the locale that you are translating to. If the locale is not present you need to visit <ulink url="/acs-lang/admin">Administration of Localization</ulink> and create the locale.</para>
+      </listitem>
+      <listitem>
+        <formalpara>
+          <title>Translating with Translator Mode</title>
+          <para>To translate messages in the pages they appear, <ulink url="http://localhost:8008/acs-lang/admin/translator-mode-toggle">Toggle Translator Mode</ulink> and then browse to the page you want to translate.  Untranslated messages will have a yellow background and a red star that you click to translate the message. Translated messages have a green star next to them that is a hyperlink to editing your translation. There is a history mechanism that allows you to see previous translations in case you would want to revert a translation.</para>
+        </formalpara>
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="images/translator-mode.png" format="png" align="center"/>
+        </imageobject>
+      </mediaobject>
+        <para>While in Translator mode, a list of all message keys appears at the bottom of each page.</para>
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="images/translations.png" format="png" align="center"/>
+        </imageobject>
+      </mediaobject>
+      </listitem>
+      <listitem>
+        <formalpara>
+          <title>Batch translation</title>
+          <para>To translate many messages at once, go to <ulink url="/acs-lang/admin">Administration of Localization</ulink>, click on the locale to translate, then click on a package, and then click <computeroutput>Batch edit these messages</computeroutput>.</para>
+        </formalpara>
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="images/translation-batch-edit.png" format="png" align="center"/>
+        </imageobject>
+      </mediaobject>
+
+      </listitem>
+    </itemizedlist>
+  </sect1>
 </chapter>
