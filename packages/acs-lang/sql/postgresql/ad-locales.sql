@@ -19,7 +19,7 @@ create table ad_locales (
   locale		varchar(30)
                         constraint ad_locale_abbrev_pk
                         primary key,
-  language		char(2) 
+  language		char(3) 
                         constraint ad_language_name_nil
 			not null,
   country		char(2) 

@@ -42,11 +42,11 @@ catch {
     }
 }
 
-element create locale_creation country -label "Country (2 digit ISO-code)" \
+element create locale_creation country -label "Country (2 digit ISO 3166 code)" \
     -datatype text -widget text -html { maxLength 2 size 2 }
 
-element create locale_creation language -label "Language (2 digit ISO-code)" \
-    -datatype text -widget text -html { maxLength 2 size 2 }
+element create locale_creation language -label "Language (2 digit ISO 639-1 code, or 3 digit ISO 639-2 code)" \
+    -datatype text -widget text -html { maxLength 3 size 3 }
 
 element create locale_creation label -label "Label" -datatype text
 
