@@ -38,15 +38,21 @@ switch [db_type] {
     oracle {
         set db_pretty "Oracle [db_version]"
         # Oracle docs require login, can't offer direct search link
-        switch [db_version] {
+        switch -glob [db_version] {
             8.1.7 {
                 set db_doc_url "http://otn.oracle.com/documentation/oracle8i.html"
+		set db_doc_search_url "http://otn.oracle.com/pls/tahiti/tahiti.drilldown"
+		set db_doc_search_export ""
+		set db_doc_search_query_name "word"
             }
             8.1.6 {
                 set db_doc_url "http://otn.oracle.com/documentation/oracle8i_arch_816.html"
             }
             9* {
                 set db_doc_url "http://otn.oracle.com/documentation/oracle9i.html"
+		set db_doc_search_url "http://otn.oracle.com/pls/db92/db92.drilldown"
+		set db_doc_search_export ""
+		set db_doc_search_query_name "word"	
             }
         }
     }
