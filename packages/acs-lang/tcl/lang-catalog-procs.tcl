@@ -600,32 +600,38 @@ ad_proc -private lang::catalog::import_from_file {
         set qualified_key "$package_key.$message_key"
         set new_message $messages_array($message_key)
 
-        if { [info exists descriptions_array($message_key)] } {
-            lang::message::update_description \
-                -package_key $catalog_array(package_key) \
-                -message_key $message_key \
-                -description $descriptions_array($message_key)
-        }
-
-        # If this is an upgrade - save old message if it will be overwritten
-        if { $upgrade_p } {
-            # Check if the message existed previously
-            if { [lang::message::message_exists_p $locale $qualified_key] } {
-                # Check if message is updated, avoid variable substitution during lookup by setting upvar_level to 0
-                set old_message [lang::message::lookup $locale $qualified_key {} {} 0]
-                if { ![string equal $old_message $new_message] } {
-                    set overwritten_db_messages($message_key) $old_message
+        # Failing to register one message should not cause the whole file import to fail
+        with_catch errmsg {
+            # If this is an upgrade - save old message if it will be overwritten
+            if { $upgrade_p } {
+                # Check if the message existed previously
+                if { [lang::message::message_exists_p $locale $qualified_key] } {
+                    # Check if message is updated, avoid variable substitution during lookup by setting upvar_level to 0
+                    set old_message [lang::message::lookup $locale $qualified_key {} {} 0]
+                    if { ![string equal $old_message $new_message] } {
+                        set overwritten_db_messages($message_key) $old_message
+                    }
                 }
-            }
-        }
+            }    
 
-        # Register the new message with the system
-        lang::message::register \
-            -upgrade=$upgrade_p \
-            $catalog_array(locale) \
-            $catalog_array(package_key) \
-            $message_key \
-            $new_message
+            # Register the new message with the system
+            lang::message::register \
+                    -upgrade=$upgrade_p \
+                    $catalog_array(locale) \
+                    $catalog_array(package_key) \
+                    $message_key \
+                    $new_message
+
+            if { [info exists descriptions_array($message_key)] } {
+                lang::message::update_description \
+                    -package_key $catalog_array(package_key) \
+                    -message_key $message_key \
+                    -description $descriptions_array($message_key)
+            }    
+        } {
+            global errorInfo
+            ns_log Error "Registering message for key $qualified_key in locale $locale failed with error message \"$errmsg\"\n\n$errorInfo"
+        }
     }       
 
     # Save any messages overwritten in database
