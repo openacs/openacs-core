@@ -93,16 +93,21 @@
   </blockquote>
 
   <if @view_by@ eq "package">
-    <table width="100%">
+    <table cellpadding="2px">
     <tr>
         <th bgcolor=#c0c0c0>Package key</th>
-        <th bgcolor=#c0c0c0>Total run testcases</th>
+        <th bgcolor=#c0c0c0>Testcases run</th>
         <th bgcolor=#c0c0c0>Passes</th>
         <th bgcolor=#c0c0c0>Fails</th>
         <th bgcolor=#c0c0c0>Result</th>
     </tr>
     <multiple name="packageinfo">
-      <tr>
+        <if @packageinfo.rownum@ odd>
+          <tr class="odd">
+        </if>
+        <else>
+          <tr class="even">
+        </else>
         <td> <a href="index?stress=@stress@&security_risk=@security_risk@&by_package_key=@packageinfo.key@&view_by=testcase&quiet=@quiet@">@packageinfo.key@</a></td>
         <if @packageinfo.total@ eq "0">
           <td> No Data </td><td>-</td><td>-</td>
@@ -110,10 +115,10 @@
               <font color=#ff0000> fail </font>
           </td>
         </if><else>
-          <td> @packageinfo.total@ </td>
-          <td> @packageinfo.passes@ </td>
-          <td> @packageinfo.fails@ </td>
-          <td>
+          <td align="right"> @packageinfo.total@ </td>
+          <td align="right"> @packageinfo.passes@ </td>
+          <td align="right"> @packageinfo.fails@ </td>
+          <td align="right">
             <if @packageinfo.fails@ gt 0>
                <span style="background-color: red; color: white; font-weight: bold;">FAILED</span>
             </if><else>
@@ -138,9 +143,14 @@
     </tr>
     <multiple name="tests">
       <if @tests.marker@ eq 1>
-        <tr><td colspan=8 align=centre bgcolor=#f0f0f0><strong>@tests.package_key@</strong></td></tr>
+        <tr><td colspan=8 align=centre bgcolor=#c0f0c0><strong>@tests.package_key@</strong></td></tr>
       </if>
-      <tr valign=top>
+        <if @tests.rownum@ odd>
+          <tr class="odd">
+        </if>
+        <else>
+          <tr class="even">
+        </else>
         <td> @tests.package_key@ </td>
         <td> <a href="testcase?testcase_id=@tests.id@&package_key=@tests.package_key@&view_by=@view_by@&category=@by_category@&quiet=@quiet@">@tests.id@</a></td>
         <td> @tests.categories@ </td>
@@ -159,8 +169,8 @@
             </else>
           </td>
           <td> @tests.timestamp@ </td>
-          <td> @tests.passes@ </td>
-          <td> @tests.fails@ </td>
+          <td align="right"> @tests.passes@ </td>
+          <td align="right"> @tests.fails@ </td>
         </else>
       </tr>
     </multiple>
