@@ -13,27 +13,33 @@ ns_log notice "nsd.tcl: starting to read config file..."
 set httpport                  8000
 set httpsport                 8443 
 
+# If setting port below 1024 with AOLServer 4, read daemontools/run
+
 # The hostname and address should be set to actual values.
-set hostname                  "www.thedesignexperience.org"
-set address                   65.77.253.23
+set hostname                  [ns_info hostname]
+set address                   [ns_info address]
 
-set server                    "openacs-5-1" 
-set servername                "the Design Experience"
+# Note: If port is privileged (usually < 1024), OpenACS must be
+# started by root, and, in AOLserver 4, the run script have a 
+# '-b address' flag which matches the address given above
 
-set serverroot                "/home/daveb/${server}"
+set server                    "service0" 
+set servername                "New OpenACS Installation - Development"
+
+set serverroot                "/var/lib/aolserver/${server}"
 
 #---------------------------------------------------------------------
 # which database do you want? postgres or oracle
 set database              postgres 
 
-set db_name               openacs-5-1
+set db_name               $server
 
 if { $database == "oracle" } {
     set db_password           "mysitepassword"
 } else {
     set db_host               localhost
     set db_port               ""
-    set db_user               daveb
+    set db_user               $server
 }
 
 #---------------------------------------------------------------------
@@ -52,7 +58,9 @@ ns_param   nssock             ${bindir}/nssock.so
 ns_param   nslog              ${bindir}/nslog.so 
 ns_param   nssha1             ${bindir}/nssha1.so 
 ns_param   nscache            ${bindir}/nscache.so 
-ns_param   nsrewrite          ${bindir}/nsrewrite.so 
+
+#nsrewrite is not used by any standard OpenACS code
+#ns_param   nsrewrite          ${bindir}/nsrewrite.so 
 
 #---------------------------------------------------------------------
 # nsopenssl will fail unless the cert files are present as specified
@@ -60,7 +68,7 @@ ns_param   nsrewrite          ${bindir}/nsrewrite.so
 #ns_param   nsopenssl          ${bindir}/nsopenssl.so
 
 # Full Text Search
-ns_param   nsfts              ${bindir}/nsfts.so
+#ns_param   nsfts              ${bindir}/nsfts.so
 
 # PAM authentication
 #ns_param   nspam              ${bindir}/nspam.so
@@ -139,9 +147,15 @@ ns_param   maxkeepalive       0
 ns_param   logroll            on
 ns_param   maxbackup          5
 ns_param   debug              $debug
-#ns_param  OutputCharset  utf-8    ;# Default output charset.  When none specified,
-                                   # no character encoding of output is performed.
-#ns_param  URLCharset     utf-8    ;# Default Charset for Url Encode/Decode.
+#ns_param   mailhost           localhost 
+
+# Unicode by default:
+# see http://dqd.com/~mayoff/encoding-doc.html
+ns_param   HackContentType    1     
+ns_param   DefaultCharset     utf-8
+ns_param   HttpOpenCharset    utf-8
+ns_param   OutputCharset      utf-8
+ns_param   URLCharset         utf-8
 
 #---------------------------------------------------------------------
 # Thread library (nsthread) parameters 
@@ -243,6 +257,8 @@ ns_param   timeout            120
 ns_param   address            $address
 ns_param   hostname           $hostname
 ns_param   port               $httpport
+ns_param   maxinput           [expr 5 * 1024 * 1024] ;# Maximum File Size for uploads in bytes
+ns_param   recvwait           [expr 5 * 60] ;# Maximum request time in minutes
 
 #---------------------------------------------------------------------
 #
@@ -402,61 +418,7 @@ if { [ns_info version] < 4} {
     ns_param hostname              $hostname
     ns_param address               $address
 
-<<<<<<< config.tcl
-# NSD-driven connections:
-ns_param ServerPort                $httpsport
-ns_param ServerHostname            $hostname
-ns_param ServerAddress             $address
-ns_param ServerCertFile            certfile.pem
-ns_param ServerKeyFile             keyfile.pem
-ns_param ServerProtocols           "SSLv2, SSLv3, TLSv1"
-ns_param ServerCipherSuite         "ALL:!ADH:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv2:+EXP"
-ns_param ServerSessionCache        false
-ns_param ServerSessionCacheID      1
-ns_param ServerSessionCacheSize    512
-ns_param ServerSessionCacheTimeout 300
-ns_param ServerPeerVerify          true
-ns_param ServerPeerVerifyDepth     3
-ns_param ServerCADir               ca
-ns_param ServerCAFile              ca.pem
-ns_param ServerTrace               false
-
-# For listening and accepting SSL connections via Tcl/C API:
-ns_param SockServerCertFile              certfile.pem
-ns_param SockServerKeyFile               keyfile.pem
-ns_param SockServerProtocols             "SSLv2, SSLv3, TLSv1"
-ns_param SockServerCipherSuite           "ALL:!ADH:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv2:+EXP"
-ns_param SockServerSessionCache          false
-ns_param SockServerSessionCacheID        2
-ns_param SockServerSessionCacheSize      512
-ns_param SockServerSessionCacheTimeout   300
-ns_param SockServerPeerVerify            true
-ns_param SockServerPeerVerifyDepth       3
-ns_param SockServerCADir                 internal_ca
-ns_param SockServerCAFile                internal_ca.pem
-ns_param SockServerTrace                 false
-
-# Outgoing SSL connections
-ns_param SockClientCertFile              certfile.pem
-ns_param SockClientKeyFile               keyfile.pem
-ns_param SockClientProtocols             "SSLv2, SSLv3, TLSv1"
-ns_param SockClientCipherSuite           "ALL:!ADH:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv2:+EXP"
-ns_param SockClientSessionCache          false
-ns_param SockClientSessionCacheID        3
-ns_param SockClientSessionCacheSize      512
-ns_param SockClientSessionCacheTimeout   300
-ns_param SockClientPeerVerify            true
-ns_param SockServerPeerVerifyDepth       3
-ns_param SockClientCADir                 ca
-ns_param SockClientCAFile                ca.pem
-ns_param SockClientTrace                 false
-
-# OpenSSL library support:
-#ns_param RandomFile          /some/file
-ns_param SeedBytes            1024
-=======
 }
->>>>>>> 1.19.2.8
 
 
 #---------------------------------------------------------------------
@@ -472,6 +434,12 @@ if { $database == "oracle" } {
     ns_param   ora8           ${bindir}/ora8.so
 } else {
     ns_param   postgres       ${bindir}/nspostgres.so  ;# Load PostgreSQL driver
+}
+
+if { $database == "oracle" } {
+    ns_section "ns/db/driver/ora8"
+    ns_param  maxStringLogLength -1
+    ns_param  LobBufferSize      32768
 }
 
 # 
@@ -601,8 +569,8 @@ ns_param   classpath          /usr/local/jdk/jdk118_v1/lib/classes.zip:${bindir}
 #---------------------------------------------------------------------
 
 #ns_section "ns/server/${server}/module/nscgi" 
-#       ns_param   map "GET  /cgi-bin/ /web/$server/cgi-bin"
-#       ns_param   map "POST /cgi-bin/ /web/$server/cgi-bin" 
+#       ns_param   map "GET  /cgi-bin/ ${serverroot}/cgi-bin"
+#       ns_param   map "POST /cgi-bin/ ${serverroot}/cgi-bin" 
 #       ns_param   Interps CGIinterps
 
 #ns_section "ns/interps/CGIinterps" 
@@ -618,7 +586,6 @@ ns_param   classpath          /usr/local/jdk/jdk118_v1/lib/classes.zip:${bindir}
 ns_section ns/server/${server}/module/nspam
 ns_param   PamDomain          "pam_domain"
 
-
 #---------------------------------------------------------------------
 #
 # WebDAV Support (optional, requires oacs-dav package to be installed
@@ -628,6 +595,7 @@ ns_param   PamDomain          "pam_domain"
 ns_section ns/server/${server}/tdav
 ns_param propdir ${serverroot}/data/dav/properties
 ns_param lockdir ${serverroot}/data/dav/locks
+ns_param defaultlocktimeout "300"
 
 ns_section ns/server/${server}/tdav/shares
 ns_param share1 "OpenACS"
@@ -636,7 +604,7 @@ ns_param share1 "OpenACS"
 ns_section ns/server/${server}/tdav/share/share1
 ns_param uri "/dav/*"
 # all WebDAV options
-ns_param options "OPTIONS COPY GET PUT MOVE DELETE HEAD MKCOL POST PROPFIND PROPPATCH"
+ns_param options "OPTIONS COPY GET PUT MOVE DELETE HEAD MKCOL POST PROPFIND PROPPATCH LOCK UNLOCK"
 
 #ns_section ns/server/${server}/tdav/share/share2
 #ns_param uri "/share2/path/*"
