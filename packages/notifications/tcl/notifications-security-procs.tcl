@@ -19,7 +19,7 @@ namespace eval notification::security {
         or if a user is on vacation. Right now it just makes sure its an 
         approved user.
     } {
-        return [db_string user_approved_p {}]
+        return [db_string user_approved_p {} -default 0]
     }
 
     ad_proc -public can_notify_object_p {
