@@ -101,6 +101,13 @@
   <part id="acs-admin">
     <title>Administrator's Guide</title>
 
+  <chapter id="install-overview">
+    <title>Installation Overview</title>
+    
+    <authorblurb>
+      by <ulink url="mailto:vinod@kurup.com">Vinod Kurup</ulink>
+    </authorblurb>
+
     <xi:include href="install-guide/overview.xml"  xmlns:xi="http://www.w3.org/2001/XInclude">
       <xi:fallback>Overview Section Missing</xi:fallback>
     </xi:include>
@@ -112,8 +119,7 @@
     <xi:include href="install-guide/software.xml"  xmlns:xi="http://www.w3.org/2001/XInclude">
       <xi:fallback>Section Missing</xi:fallback>
     </xi:include>
-
-    
+    </chapter>
  
     <chapter id="complete-install">
       <title>Complete Installation</title>
@@ -269,13 +275,13 @@
       <xi:fallback>Section missing</xi:fallback>
       </xi:include> 
 
+    </chapter>
     <xi:include href="developers-guide/cvs.xml"  xmlns:xi="http://www.w3.org/2001/XInclude">
 <xi:fallback>CVS Section missing</xi:fallback>
       </xi:include> 
     <xi:include href="releasing-openacs.xml"  xmlns:xi="http://www.w3.org/2001/XInclude">
 <xi:fallback>'Releasing OpenACS' missing</xi:fallback>
       </xi:include> 
-    </chapter>
   </part>
   
   <part id="acs-plat-dev">

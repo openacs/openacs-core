@@ -4,12 +4,6 @@
 <!ENTITY % myvars SYSTEM "../variables.ent">
 %myvars;
 ]>
-  <chapter id="install-overview">
-    <title>Installation Overview</title>
-    
-    <authorblurb>
-      by <ulink url="mailto:vinod@kurup.com">Vinod Kurup</ulink>
-    </authorblurb>
     
     <sect1 id="install-steps">
       <title>Basic Steps</title>
@@ -388,7 +382,9 @@ createdb <replaceable>server1</replaceable></action></screen>
           </listitem>
         </itemizedlist>
       </sect2>
+    <para><phrase role="cvstag">($Id: overview.xml,v 1.12 2003/10/28
+    22:07:41 joela Exp $)</phrase></para>
     </sect1>
-    <para><phrase role="cvstag">($Id$)</phrase></para>
 
-  </chapter>
+
+
