@@ -14,7 +14,7 @@ list::create \
     -elements {
         instance_name {
             label "[_ acs-subsite.Name]"
-            link_url_col url
+            link_url_eval "$name/"
         }
         num_members {
             label "\# [_ acs-subsite.Members]"
