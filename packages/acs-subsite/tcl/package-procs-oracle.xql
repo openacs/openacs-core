@@ -140,8 +140,22 @@
 	select args.argument_name
         from user_arguments args
         where args.position > 0
-	  and args.object_name = upper(:function_name)
+	  and args.object_name = upper(:object_name)
 	  and args.package_name = upper(:package_name)
+    
+      </querytext>
+</fullquery>
+ 
+<fullquery name="package_function_p.function_p">      
+      <querytext>
+
+	 select 1
+	 from dual
+         where exists (select 1
+	               from user_arguments
+		       where rtrim(package_name) = upper(:package_name)
+		       and rtrim(object_name) = upper(:object_name)
+		       and position = 0)
     
       </querytext>
 </fullquery>
@@ -259,11 +273,25 @@ END ${package_name};
       <querytext>sysdate</querytext>
 </partialquery>
 
-<fullquery name="package_exec_plsql.exec_plsql">      
+<fullquery name="package_exec_plsql.exec_func_plsql">      
       <querytext>
       
     BEGIN
-      :1 := ${package_name}.${function_name}([plsql_utility::generate_attribute_parameter_call \
+      :1 := ${package_name}.${object_name}([plsql_utility::generate_attribute_parameter_call \
+	      -prepend ":" \
+	      -indent [expr [string length $package_name] + 29] \
+	      $pieces]
+      );
+    END; 
+    
+      </querytext>
+</fullquery>
+
+<fullquery name="package_exec_plsql.exec_proc_plsql">      
+      <querytext>
+      
+    BEGIN
+      ${package_name}.${object_name}([plsql_utility::generate_attribute_parameter_call \
 	      -prepend ":" \
 	      -indent [expr [string length $package_name] + 29] \
 	      $pieces]
