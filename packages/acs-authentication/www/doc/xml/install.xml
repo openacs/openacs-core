@@ -79,9 +79,8 @@ cp nspam.so /usr/local/aolserver/bin</action></screen>
                   </formalpara>
                   <orderedlist>
                     <listitem>
-                      <para>Untar the <link
-                    linkend="pam-radius-download">pam_radius
-                    tarball</link> and compile and install.  (<ulink
+                      <para>Untar the <ulink url="/doc/individual-programs.html#pam-radius-download">pam_radius
+                    tarball</ulink> and compile and install.  (<ulink
                     url="http://www.freeradius.org/pam_radius_auth/">more
                     information</ulink>)</para>
                       <screen>[root@yourserver root]# <userinput>cd /usr/local/src/</userinput>
@@ -177,6 +176,29 @@ cp pam_radius_auth.so /lib/security/pam_radius_auth.so</action></screen>
             </listitem>
           <listitem>
             <para>Configure your Authority (RADIUS server, etc) to supply XML files to the URLs IncrementalURL and SnapshotURL</para>
+<programlisting>
+&lt;enterprise&gt;
+  &lt;person recstatus = "1"&gt;  <emphasis>added person</emphasis>
+    &lt;sourcedid&gt;
+      &lt;id&gt;[username]&lt;/id&gt;
+    &lt;/sourcedid&gt;
+    &lt;name&gt;
+      &lt;family&gt;[last_name]&lt;/family&gt;
+      &lt;given&gt;[first_names]&lt;/given&gt;
+    &lt;/name&gt;
+    &lt;email&gt;[email]&lt;/email&gt;
+    &lt;url&gt;[homepage_url]&lt;/url&gt;
+  &lt;/person&gt;
+  &lt;person recstatus = "2"&gt;    <emphasis>modified person</emphasis>
+    ...
+  &lt;/person&gt;
+  &lt;person recstatus = "3"&gt;    <emphasis>deleted person</emphasis>
+    &lt;sourcedid&gt;
+      &lt;id&gt;LL1&lt;/id&gt;      <emphasis>only requires username</emphasis>
+    &lt;/sourcedid&gt;
+  &lt;/person&gt;
+&lt;/enterprise&gt;</programlisting>
+              <para>(More information: <xref linkend="ims-sync-driver-design"/>, <ulink url="http://www.imsproject.org/enterprise/">The IMS 1.1 spec</ulink>)</para>
           </listitem>
         </orderedlist>
       </listitem>
