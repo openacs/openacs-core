@@ -43,3 +43,7 @@ div.form-help-text {
     font-family: tahoma,verdana,arial,helvetica,sans-serif; 
     font-size: 90%;
 }
+
+span.form-required-mark {
+    color: red;
+}
