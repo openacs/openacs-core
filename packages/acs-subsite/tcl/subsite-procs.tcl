@@ -641,7 +641,7 @@ ad_proc -public subsite::get_template_options {} {
 } {
     set master_template_options [list]
     lappend master_template_options [list "Default" "/www/default-master"]
-    lappend master_template_options [list "Subsite" "/packages/acs-subsite/www/group-master"]
+    lappend master_template_options [list "Community" "/packages/acs-subsite/www/group-master"]
     set current_master [parameter::get -parameter DefaultMaster -package_id [ad_conn subsite_id]]
     set found_p 0
     foreach elm $master_template_options {
