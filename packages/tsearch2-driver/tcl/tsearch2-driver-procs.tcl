@@ -188,6 +188,9 @@ ad_proc tsearch2::build_query { -query } {
     @param string string to convert
     @return returns formatted query string for tsearch2 tsquery
 } {
+    # get rid of everything that isn't a letter or number
+    regsub -all {[^?\d\w]} $query {} query
+
     # replace boolean words with boolean operators
     set query [string map {" and " & " or " | " not " !} $query]
     # remove leading and trailing spaces so they aren't turned into |
