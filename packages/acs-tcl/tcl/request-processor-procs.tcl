@@ -262,7 +262,7 @@ ad_proc -private rp_invoke_filter { conn filter_info why } {
        set error_msg "error in filter $proc for [ns_conn method] [ns_conn url]?[ns_conn query].  Filter returned invalid result \"$result\""
        ad_call_proc_if_exists ds_add rp [list filter [list $why [ns_conn method] [ns_conn url] $proc $arg] $startclicks [clock clicks -milliseconds] "error" $error_msg]
        # report the bad filter_return message
-       rp_debug -debug t error $error_msg
+       rp_debug -debug t -ns_log_level error $error_msg
        rp_report_error -message $error_msg
        set result "filter_return"
     } else {
