@@ -99,25 +99,3 @@ ad_proc -public template::data::transform { type value_ref } {
   }
 }
 
-ad_proc -public template::data::validate::user { value_ref message_ref } {
-    A data type that works with the 'user' widget. It allows you to
-    search for a particular user when a dropdown would get too big.
-} {
-
-    upvar 2 $message_ref message $value_ref value
-
-    if { [info exists value] && [string equal $value ":other:"] } { 
-        set result 0
-        set message "Please search for user by name, email, or screen name."
-    } elseif { [info exists value] && [string equal $value ":noresult:"] } { 
-        set result 0
-        set message "Your search didn't find any users, please search again."
-    } elseif { [info exists value] && ![regexp {^[0-9]*$} $value] } {
-        set result 0
-        set message "Please pick a user from the result of your search."
-    } else {
-        set result 1
-    }
-
-    return $result 
-}
