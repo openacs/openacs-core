@@ -61,7 +61,8 @@ namespace eval site_node {
         {-context_id ""}
         {-package_key:required}
     } {
-        Instantiate and mount a package of given type.
+        Instantiate and mount a package of given type. If the package is a singleton (should only have one instance)
+        and an instance already exists then this proc will attempt to mount that instance.
 
         @param node_id        The id of the node in the site map where the package should be mounted.
                               If not specified a new node under the main site will be created.

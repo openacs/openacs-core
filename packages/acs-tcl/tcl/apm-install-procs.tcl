@@ -1254,6 +1254,8 @@ ad_proc -private apm_mount_core_packages {} {
       before acs-content-repository in order to be able to mount acs-content-repository.
     </p>
 
+    @see site_node::instantiate_and_mount
+
     @author Peter Marklund
 } {
     ns_log Notice "Starting instantiation and mounting of core packages"
