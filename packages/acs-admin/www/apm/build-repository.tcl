@@ -16,7 +16,7 @@ set work_dir "[acs_root_dir]/repository-builder/"
 set repository_dir "[acs_root_dir]/www/repository/"
 set repository_url "http://openacs.org/repository/"
 
-set head_channel "5-0"
+set head_channel "5-1"
 
 
 #----------------------------------------------------------------------
