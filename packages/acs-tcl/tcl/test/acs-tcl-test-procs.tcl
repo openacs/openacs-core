@@ -691,8 +691,8 @@ aa_register_case util__subset_p {
     aa_equals "List is not a subset" [util_get_subset_missing [list a b c d] [list a b c]] [list d]
 }
 
-aa_register_case acs_tcl__all_tcl_files_parse_p {
-    Test all known tcl files for successful parsing "(in the [info complete] sense at least)."
+aa_register_case acs_tcl__tcl_file_common_errors {
+    Test all known tcl files for successful parsing "(in the [info complete] sense at least)" and other common errors.
 
     @author Jeff Davis
 } {
@@ -701,20 +701,23 @@ aa_register_case acs_tcl__all_tcl_files_parse_p {
         return [expr [string match {*.tcl} $file] || [file isdirectory $file]]
     }
     
-    set startdir [acs_root_dir]/packages/
+    # if startdir is not [acs_root_dir]/packages, then somebody checked in the wrong thing by accident
+    set startdir [acs_root_dir]/packages
     
     aa_log "Checks starting from $startdir<br />"
 
+    #inspect every tcl file in the directory tree starting with $startdir
     foreach file [ad_find_all_files -check_file_func ::tcl_p $startdir] { 
 
-        # Check that the file parses
         set fp [open $file "r"]
         set data [read $fp]
         close $fp
-        
-        aa_true "$file parses successfully" [info complete $data]
-    }
 
+        # Check that the file parses        
+        aa_true "$file parses successfully" [info complete $data]
+
+        aa_true "$file should not contain '@returns'.  @returns is probably a typo of @return" [expr [string first @returns $data] == -1]
+    }
 
 }
 
