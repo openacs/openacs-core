@@ -19,11 +19,11 @@
 
     <script src="/resources/acs-subsite/core.js" language="javascript"></script>
 
-    <textarea id="holdtext" style="display: none;"></textarea>
-
     @header_stuff;noquote@
   </head>
   <body<multiple name="attribute"> @attribute.key@="@attribute.value@"</multiple>>
+
+    <textarea id="holdtext" style="display: none;" rows="1" cols="1"></textarea>
     <if @developer_support_p@ true>
       <include src="/packages/acs-developer-support/lib/toolbar">
     </if>
