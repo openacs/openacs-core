@@ -629,6 +629,8 @@ ad_proc -public template::multirow {
     <dd> appends the row to an existing multirow.</dd>
     <dt> <b>template::multirow size datasourcename</b></dt>
     <dd> returns the rowcount</dd>
+    <dt> <b>template::multirow columns datasourcename</b></dt>
+    <dd> returns the columns in the datasource</dd>
     <dt> <b>template::multirow get datasourcename rownum [column]</b></dt>
     <dd> returns the row of of data (or the particular row/column if column is provided)</dd>
     <dt> <b>template::multirow get datasourcename rownum column value</b></dt>
@@ -698,6 +700,14 @@ ad_proc -public template::multirow {
       }
       return $rowcount
     }
+
+    columns {
+      upvar $multirow_level_up $name:columns columns
+      if { [template::util::is_nil columns] } {
+          return {}
+      }
+      return $columns
+    }
     
     get {
       
@@ -750,6 +760,10 @@ ad_proc -public template::multirow {
       
       upvar $multirow_level_up $name:rowcount rowcount $name:columns columns
 
+      if {![info exists rowcount] || ![info exists columns]} { 
+        return 
+      } 
+        
       for { set i 1 } { $i <= $rowcount } { incr i } {
         # Pull values into variables (and into the array - aks),
         # evaluate the code block, and pull values back out to
