@@ -24,11 +24,11 @@
 
 <table cellspacing="0" cellpadding="0" width="100%" class="subsite-header" border="0">
   <tr class="subsite-header">
-    <td class="system-name" width="25%">
+    <td class="system-name">
       <a href="@system_url@" class="system-name">@system_name@</a>
     </td>
 
-    <td align="center" class="subsite-header" width="25%">
+    <td align="center" class="subsite-header">
       <if @user_id@ ne 0>
         Welcome, @user_name@
       </if>
@@ -37,7 +37,7 @@
       </else>
     </td>
 
-    <td align="right" class="subsite-header" style="padding-right: 8px;" width="50%">
+    <td align="right" class="subsite-header" style="padding-right: 8px;">
       <if @admin_url@ not nil>
         &nbsp;
         <a href="@admin_url@" title="Site-wide administration" class="button">Admin</a>
