@@ -95,40 +95,26 @@ ad_proc ad_user_new {
         set url [db_null]
     }
 
+    # Lars: This is a hack until we sort out the UsernameIsEmail situation
+    if { [empty_string_p $username] } {
+        set username $email
+    }
+
     set peeraddr [ad_conn peeraddr]
     set salt [sec_random_token]
     set hashed_password [ns_sha1 "$password$salt"]
 
     db_transaction {
 
-        set user_id [db_exec_plsql user_insert {
-            begin
-            :1 := acs.add_user(user_id => :user_id,
-            email => :email,
-            url => :url,
-            first_names => :first_names,
-            last_name => :last_name,
-            password => :hashed_password,
-            salt => :salt,
-            password_question => :password_question,
-            password_answer => :password_answer,
-            creation_ip => :peeraddr,
-            email_verified_p => :email_verified_p,
-            member_state => :member_state);
-            end;
-        }
-        ]
- 
-        if { [empty_string_p $username] } {
-            set username $email
-        }
+        set user_id [db_exec_plsql user_insert {}]
 
-        # Add username, authority_id
-        db_dml update_users {
+        # set password_question, password_answer
+        db_dml update_question_answer {
             update users
-            set    username = :username,
-                   authority_id = :authority_id
+            set    password_question = :password_question,
+                   password_answer = :password_answer
             where  user_id = :user_id
+            
         }
 
         if {[catch {
