@@ -653,7 +653,9 @@ create or replace function tree_ancestor_keys(varbit, integer) returns setof var
   where $2 < tree_level($1)
 ' language 'sql' with (isstrict);
 
-create function tree_ancestor_keys(varbit) returns setof varbit as '
+
+------------------------------
+-- TREE_ANCESTOR_KEYS
 
 -- Return the set of tree_sortkeys for all of the ancestors of the given
 -- tree_sortkey ancestors.
@@ -697,6 +699,7 @@ create function tree_ancestor_keys(varbit) returns setof varbit as '
 -- WARNING: subselects in where clauses that call this function and join on an outer table appear
 -- to reliably kill PG 7.1.2, at least if "exists" is involved.   PG 7.2 doesn''t die on my test
 -- case, so it appears to have been fixed.
+create or replace function tree_ancestor_keys(varbit) returns setof varbit as '
 
   select tree_ancestor_keys($1, 1)
 
