@@ -55,7 +55,8 @@ ad_proc ad_context_node_list { node_id } {
         # JCD: Provide something for the name if the instance name is
         # absent.  name is the tail bit of the url which seems like a
         # reasonable thing to display.
-        if {[empty_string_p $node(instance_name)]} { 
+        if {[empty_string_p $node(instance_name)]
+            && [info exists node(name)]} { 
             set node(instance_name) $node(name)
         }
 
