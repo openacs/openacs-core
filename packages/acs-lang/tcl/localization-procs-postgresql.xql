@@ -21,4 +21,16 @@
 </fullquery>
 
  
+<fullquery name="lc_time_tz_convert.convert">
+      <querytext>
+      
+
+           select to_char(     
+                          timezone__convert_to_local(timezone__get_id(:to), 
+                                                to_char(timezone__convert_to_utc(timezone__get_id(:from), :time_value), 'YYYY-MM-DD HH24:MI:SS')
+                                                ), 'YYYY-MM-DD HH24:MI:SS')
+	
+      </querytext>
+</fullquery>
+
 </queryset>

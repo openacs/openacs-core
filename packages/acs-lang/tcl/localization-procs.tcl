@@ -59,11 +59,6 @@ ad_proc -public lc_parse_number {
 	return ""
     }
 
-    # Any (usable) locale will have to have a decimal separator
-    if {![nsv_exists locale "$locale,decimal_point"]} {
-	error "Unsupported Locale"
-    }
-
     set dec [lc_get -locale $locale "decimal_point"]
     set thou [lc_get -locale $locale "mon_thousands_sep"][lc_get -locale $locale "thousands_sep"]
     set neg [lc_get -locale $locale "negative_sign"]
@@ -599,6 +594,80 @@ ad_proc -public lc_time_local_to_utc {
 
     return $utc_time
 }
+
+
+
+
+ad_proc -public lc_time_system_to_conn {
+    time_value 
+} {
+    Converts a date from the system (database) to the connection's timezone,
+    using the OpenACS timezone setting and user's preference
+
+    @param time_value        Timestamp from the database in the ISO datetime format.
+    @return                  Timestamp in conn's local time, also in ISO datetime format.
+} {
+    if { ![ad_conn isconnected] } {
+        return $time_value
+    }
+
+    set system_tz [lang::system::timezone]
+    set conn_tz [lang::conn::timezone]
+
+    if { [empty_string_p $conn_tz] || [string equal $system_tz $conn_tz] } {
+        return $time_value
+    }
+
+    return [lc_time_tz_convert -from $system_tz -to $conn_tz -time_value $time_value]
+}
+
+ad_proc -public lc_time_conn_to_system {
+    time_value 
+} {
+    Converts a date from the connection's timezone to the system (database) timezone, 
+    using the OpenACS timezone setting and user's preference
+
+    @param time_value        Timestamp from conn input in the ISO datetime format.
+    @return                  Timestamp in the database's time zone, also in ISO datetime format.
+} {
+    if { ![ad_conn isconnected] } {
+        return $time_value
+    }
+
+    set system_tz [lang::system::timezone]
+    set conn_tz [lang::conn::timezone]
+
+    if { [empty_string_p $conn_tz] || [string equal $system_tz $conn_tz] } {
+        return $time_value
+    }
+
+    return [lc_time_tz_convert -from $conn_tz -to $system_tz -time_value $time_value]
+}
+
+
+ad_proc -public lc_time_tz_convert {
+    {-from:required}
+    {-to:required}
+    {-time_value:required}
+} {
+    Converts a date from one timezone to another.
+
+    @param time_value        Timestamp in the 'from' timezone, in the ISO datetime format.
+    @return                  Timestamp in the 'to' timezone, also in ISO datetime format.
+} {
+    with_catch errmsg {
+        set time_value [db_exec_plsql convert {}]
+    } {
+        ns_log Warning "Error converting timezone: $errmsg"
+    }
+    return $time_value
+}
+
+
+
+
+
+
 
 ad_proc -public lc_list_all_timezones { } {
     @return list of pairs containing all  timezone names and offsets.
