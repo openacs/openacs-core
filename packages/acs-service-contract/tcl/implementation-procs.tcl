@@ -146,7 +146,7 @@ ad_proc -public acs_sc::impl::get {
 ad_proc -public acs_sc::impl::get_options {
     {-contract_name:required}
     {-exclude_names ""}
-    {-empty_option:boolean}
+    {-empty_label "-"}
 } {
     Get a list of service contract implementation options
     for an HTML multiple choice widget.
@@ -155,7 +155,7 @@ ad_proc -public acs_sc::impl::get_options {
            to return options for.
 
     @param exclude_names A list of implementation names to exclude
-    @param empty_option_p If provided an empty option is added
+    @param empty_label If provided an option with id empty string and the provided label will be added.
 
     @return A list of lists with the inner lists having label in first element and id in second.
 
@@ -182,8 +182,8 @@ ad_proc -public acs_sc::impl::get_options {
         set impl_list $full_list
     }
 
-    if { $empty_option_p } {
-        lappend impl_list [list "-" ""]
+    if { ![empty_string_p $empty_label] } {
+        lappend impl_list [list $empty_label ""]
     }
 
     return $impl_list
