@@ -48,14 +48,15 @@ BEGINNING OF TEMPLATE
   </sect2>
 END OF TEMPLATE -->
 
-  <sect2 id="release-notes-5-0-0">
-    <title>Version 5.0.0</title>
-    <authorblurb>
-      by <ulink url="mailto:dhogaza@pacifier.com">Don Baccus</ulink>
-    </authorblurb>
-    
+  <sect2 id="release-notes-5-0-0a1">
+    <title>Version 5.0.0 alpha1</title>
+
     <para>
-	This is a pre-alpha release of OpenACS 5.0.0. 
+	This is the first alpha release of OpenACS 5.0.0.  This
+	release has a number of severe bugs, and is not suitable for
+	production systems.  It has passed several release criteria,
+	including that it installs successfully and that all automated
+	tests succeed.
   </para>
     
     <para>

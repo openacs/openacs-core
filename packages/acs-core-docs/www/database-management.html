@@ -1,28 +1,27 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Database Management</title><meta name="generator" content="DocBook XSL Stylesheets V1.58.1"><link rel="home" href="index.html" title="OpenACS Documentation"><link rel="up" href="maintenance.html" title="Chapter 9. Maintenance"><link rel="previous" href="maintenance-web.html" title="Hosting Web Sites"><link rel="next" href="backup-recovery.html" title="Backup and Recovery"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="images/alex.jpg" border="0"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="maintenance-web.html">Prev</a> </td><th width="60%" align="center">Chapter 9. Maintenance</th><td width="20%" align="right"> <a accesskey="n" href="backup-recovery.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><h2 class="title" style="clear: both"><a name="database-management"></a>Database Management</h2></div></div><div class="authorblurb"><p>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Database Management</title><meta name="generator" content="DocBook XSL Stylesheets V1.60.1"><link rel="home" href="index.html" title="OpenACS Documentation"><link rel="up" href="maintenance.html" title="Chapter 9. Maintenance"><link rel="previous" href="maintenance-web.html" title="Hosting Web Sites"><link rel="next" href="backup-recovery.html" title="Backup and Recovery"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="maintenance-web.html">Prev</a> </td><th width="60%" align="center">Chapter 9. Maintenance</th><td width="20%" align="right"> <a accesskey="n" href="backup-recovery.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="database-management"></a>Database Management</h2></div></div><div></div></div><div class="authorblurb"><p>
       by <a href="mailto:joel@aufrecht.org" target="_top">Joel Aufrecht</a><br>
           OpenACS docs are written by the named authors, and may be edited
           by OpenACS documentation staff.
-        </p></div><div class="sect2" lang="en"><div class="titlepage"><div><h3 class="title"><a name="remote-postgres"></a>Running a PostGreSQL database on another server</h3></div></div><p>To run a database on a different machine than the
+        </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="remote-postgres"></a>Running a PostGreSQL database on another server</h3></div></div><div></div></div><p>To run a database on a different machine than the
       webserver requires changes to the database configuration file
       and access control file, and to the OpenACS service's
       configuration file.</p><div class="itemizedlist"><ul type="disc"><li><p>Edit the database configuration file, which in a
-      Reference install is located at <tt>/usr/local/pgsql/data/postgresql.conf</tt>
+      Reference install is located at <tt class="computeroutput">/usr/local/pgsql/data/postgresql.conf</tt>
       and change</p><pre class="programlisting">#tcpip_socket = false</pre><p>to</p><pre class="programlisting">tcpip_socket = true</pre></li><li><p>Change the access control file for the database to
           permit specific remote clients to access.  Access can be
           controlled ... (add notes from forum post) </p></li><li><p>Change the OpenACS service's configuration file to
           point to the remote database.  Edit
-          <tt>/web/<span class="replaceable">service0</span>/etc/config.tcl</tt>
-          and change</p><pre class="programlisting"></pre><p>to </p><pre class="programlisting"></pre></li></ul></div></div><div class="sect2" lang="en"><div class="titlepage"><div><h3 class="title"><a name="install-openacs-delete-tablespace"></a>Deleting a tablespace</h3></div></div><p>Skip down for instructions on <a href="database-management.html#install-openacs-delete-postgres-tablespace">Deleting a PostgreSQL tablespace</a>.
-    </p><div class="sect3" lang="en"><div class="titlepage"><div><h4 class="title"><a name="install-openacs-delete-oracle-tablespace"></a>Deleting an Oracle tablespace</h4></div></div><p>
+          <tt class="computeroutput">/web/<span class="replaceable"><span class="replaceable">service0</span></span>/etc/config.tcl</tt>
+          and change</p><pre class="programlisting"></pre><p>to </p><pre class="programlisting"></pre></li></ul></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="install-openacs-delete-tablespace"></a>Deleting a tablespace</h3></div></div><div></div></div><p>Skip down for instructions on <a href="database-management.html#install-openacs-delete-postgres-tablespace">Deleting a PostgreSQL tablespace</a>.
+    </p><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="install-openacs-delete-oracle-tablespace"></a>Deleting an Oracle tablespace</h4></div></div><div></div></div><p>
         Should it become necessary to rebuild a tablespace from scratch,
-        you can use the <tt>drop user</tt> command
-        in SVRMGRL with the <tt>cascade</tt>
+        you can use the <tt class="computeroutput">drop user</tt> command
+        in SVRMGRL with the <tt class="computeroutput">cascade</tt>
         option. This command will drop the user and every database object
         the user owns.</p><pre class="programlisting">
 SVRMGR&gt; drop user <span class="emphasis"><em>service0</em></span> cascade;</pre><p>
-        If this does not work because svrmgrl &quot;cannot drop a user that
-        is currently connected&quot;, make sure to kill the AOLserver using
+        If this does not work because svrmgrl "cannot drop a user that
+        is currently connected", make sure to kill the AOLserver using
         this user. If it still does not work, do:</p><pre class="programlisting">
 SVRMGR&gt; select username, sid, serial# from v$session where lower(username)='<span class="emphasis"><em>service0</em></span>';</pre><p>and then</p><pre class="programlisting">
 SVRMGR&gt; alter system kill session '<span class="emphasis"><em>sid</em></span>,<span class="emphasis"><em>serial#</em></span>';</pre><p>
@@ -30,27 +29,27 @@ SVRMGR&gt; alter system kill session '<span class="emphasis"><em>sid</em></span>
         replaced with the corresponding values for the open session.</p><p><span class="strong">Use with caution!</span></p><p>
         If you feel the need to delete <span class="emphasis"><em>everything</em></span>
         related to the service, you can also issue the following:</p><pre class="programlisting">
-SVRMGR&gt; drop tablespace <span class="emphasis"><em>service0</em></span> including contents cascade constraints;</pre></div><div class="sect3" lang="en"><div class="titlepage"><div><h4 class="title"><a name="install-openacs-delete-postgres-tablespace"></a>Deleting a PostgreSQL tablespace</h4></div></div><p>
+SVRMGR&gt; drop tablespace <span class="emphasis"><em>service0</em></span> including contents cascade constraints;</pre></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="install-openacs-delete-postgres-tablespace"></a>Deleting a PostgreSQL tablespace</h4></div></div><div></div></div><p>
         Dropping a PostgreSQL tablespace is easy. You have to stop any
         AOLserver instances that are using the database that you wish to
         drop. If you're using daemontools, this is simple, just use the
         'down' flag (-d). If you're using inittab, you have to comment out
-        your server in <tt>/etc/inittab</tt>,
-        reread the inittab with <tt>/sbin/init
-        q</tt>, and then <tt>restart-aolserver
+        your server in <tt class="computeroutput">/etc/inittab</tt>,
+        reread the inittab with <tt class="computeroutput">/sbin/init
+        q</tt>, and then <tt class="computeroutput">restart-aolserver
         <span class="emphasis"><em>service0</em></span></tt>.</p><p>Then, to drop the db, just do:</p><pre class="programlisting">
 service0:~$ dropdb <span class="emphasis"><em>service0</em></span>
-DROP DATABASE</pre></div></div><div class="sect2" lang="en"><div class="titlepage"><div><h3 class="title"><a name="install-next-nightly-vacuum"></a>Vacuum Postgres nightly</h3></div></div><p>
-      The &quot;vacuum&quot; command must be run periodically to reclaim space. The
-      &quot;vacuum analyze&quot; form additionally collects statistics on the
+DROP DATABASE</pre></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="install-next-nightly-vacuum"></a>Vacuum Postgres nightly</h3></div></div><div></div></div><p>
+      The "vacuum" command must be run periodically to reclaim space. The
+      "vacuum analyze" form additionally collects statistics on the
       disbursion of columns in the database, which the optimizer uses when
       it calculates just how to execute queries. The availability of this
       data can make a tremendous difference in the execution speed of
       queries. This command can also be run from cron, but it probably makes
       more sense to run this command as part of your nightly backup
-      procedure - if &quot;vacuum&quot; is going to screw up the database, you'd
+      procedure - if "vacuum" is going to screw up the database, you'd
       prefer it to happen immediately after (not before!) you've made a
-      backup! The &quot;vacuum&quot; command is very reliable, but conservatism is
+      backup! The "vacuum" command is very reliable, but conservatism is
       the key to good system management. So, if you're using the export
       procedure described above, you don't need to do this extra step.
     </p><p>Edit your crontab:</p><pre class="programlisting">

@@ -1,9 +1,8 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Install PostGreSQL</title><meta name="generator" content="DocBook XSL Stylesheets V1.58.1"><link rel="home" href="index.html" title="OpenACS Documentation"><link rel="up" href="unix-install.html" title="Chapter 4. Installing on Unix/Linux"><link rel="previous" href="oracle.html" title="Install Oracle 8.1.7"><link rel="next" href="aolserver.html" title="Install AOLserver 3.3oacs1"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="images/alex.jpg" border="0"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="oracle.html">Prev</a> </td><th width="60%" align="center">Chapter 4. Installing on Unix/Linux</th><td width="20%" align="right"> <a accesskey="n" href="aolserver.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><h2 class="title" style="clear: both"><a name="postgres"></a>Install PostGreSQL</h2></div></div><div class="authorblurb"><p>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Install PostGreSQL</title><meta name="generator" content="DocBook XSL Stylesheets V1.60.1"><link rel="home" href="index.html" title="OpenACS Documentation"><link rel="up" href="unix-install.html" title="Chapter 4. Installing on Unix/Linux"><link rel="previous" href="oracle.html" title="Install Oracle 8.1.7"><link rel="next" href="aolserver.html" title="Install AOLserver 3.3oacs1"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="oracle.html">Prev</a> </td><th width="60%" align="center">Chapter 4. Installing on Unix/Linux</th><td width="20%" align="right"> <a accesskey="n" href="aolserver.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="postgres"></a>Install PostGreSQL</h2></div></div><div></div></div><div class="authorblurb"><p>
 	by <a href="mailto:vinod@kurup.com" target="_top">Vinod Kurup</a><br>
           OpenACS docs are written by the named authors, and may be edited
           by OpenACS documentation staff.
-        </p></div><p>Skip this section if you will run only Oracle.</p><p>OpenACS 5.0.0d will run with PostGreSQL 7.2.x or 7.3.2.  It
+        </p></div><p>Skip this section if you will run only Oracle.</p><p>OpenACS 5.0.0a1 will run with PostGreSQL 7.2.x or 7.3.2.  It
   has not been fully tested with 7.3.2; 7.2.4 is the recommended
   version of PostgreSQL to use.</p><div class="itemizedlist"><ul type="disc"><li><p><a name="install-postgres-rpm"></a><b>Using the Red Hat RPM. </b>Red Hat users: If you install PostGreSQL 7.3.2 from the Red Hat 9 RPM, you
   can skip a few steps.  These shell commands add a link so that the
@@ -11,107 +10,107 @@
   install; start the service; create a new group for web service
   users, and modify the postgres user's
   environment (<a href="postgres.html#install-postgres-env">more
-  information</a>):</p><pre class="screen">[root@yourserver root]# <b><tt>ln -s /var/lib/pgsql/data /usr/local/pgsql/data</tt></b>
-[root@yourserver root]# <b><tt>service postgresql start</tt></b>
+  information</a>):</p><pre class="screen">[root@yourserver root]# <b class="userinput"><tt>ln -s /var/lib/pgsql/data /usr/local/pgsql/data</tt></b>
+[root@yourserver root]# <b class="userinput"><tt>service postgresql start</tt></b>
 Initializing database:
                                                            [  OK  ]
 Starting postgresql service:                               [  OK  ]
-[root@yourserver root]# <b><tt>echo &quot;export LD_LIBRARY_PATH=/usr/local/pgsql/lib&quot; &gt;&gt; ~postgres/.bash_profile</tt></b>
-[root@yourserver root]# <b><tt>echo &quot;export PATH=$PATH:/usr/local/pgsql/bin&quot; &gt;&gt; ~postgres/.bash_profile</tt></b>
-[root@yourserver root]# <b><tt>groupadd web</tt></b>
-[root@yourserver root]# <b><tt>su - postgres</tt></b>
+[root@yourserver root]# <b class="userinput"><tt>echo "export LD_LIBRARY_PATH=/usr/local/pgsql/lib" &gt;&gt; ~postgres/.bash_profile</tt></b>
+[root@yourserver root]# <b class="userinput"><tt>echo "export PATH=$PATH:/usr/local/pgsql/bin" &gt;&gt; ~postgres/.bash_profile</tt></b>
+[root@yourserver root]# <b class="userinput"><tt>groupadd web</tt></b>
+[root@yourserver root]# <b class="userinput"><tt>su - postgres</tt></b>
 -bash-2.05b$
-<pre class="action">
+<pre class="action"><span class="action">
 ln -s /var/lib/pgsql/data /usr/local/pgsql/data
 service postgresql start
-echo &quot;export LD_LIBRARY_PATH=/usr/local/pgsql/lib&quot; &gt;&gt; ~postgres/.bash_profile
-echo &quot;export PATH=$PATH:/usr/local/pgsql/bin&quot; &gt;&gt; ~postgres/.bash_profile
+echo "export LD_LIBRARY_PATH=/usr/local/pgsql/lib" &gt;&gt; ~postgres/.bash_profile
+echo "export PATH=$PATH:/usr/local/pgsql/bin" &gt;&gt; ~postgres/.bash_profile
 groupadd web
-su - postgres</pre></pre><p>... and then skip to <a href="quick.html#install-plpgsql" title="">3</a>.  Something similar may work for other binary packages as well.</p></li></ul></div><div class="orderedlist"><ol type="1"><li><p><b>Unpack PostGreSQL. </b>If you have not downloaded the postgresql tarball to
-        <tt>/tmp/postgresql-7.2.4.tar.gz</tt>,
-        <a href="individual-programs.html#source-postgresql">get it</a>.</p><pre class="screen">[root@yourserver root]# <b><tt>cd /usr/local/src</tt></b>
-[root@yourserver src]# <b><tt>tar xzf /tmp/postgresql-7.2.4.tar.gz</tt></b>
+su - postgres</span></pre></pre><p>... and then skip to <a href="postgres.html#install-plpgsql" title="">6</a>.  Something similar may work for other binary packages as well.</p></li></ul></div><div class="orderedlist"><ol type="1"><li><p><b>Unpack PostGreSQL. </b>If you have not downloaded the postgresql tarball to
+        <tt class="computeroutput">/tmp/postgresql-7.2.4.tar.gz</tt>,
+        <a href="individual-programs.html#source-postgresql">get it</a>.</p><pre class="screen">[root@yourserver root]# <b class="userinput"><tt>cd /usr/local/src</tt></b>
+[root@yourserver src]# <b class="userinput"><tt>tar xzf /tmp/postgresql-7.2.4.tar.gz</tt></b>
 [root@yourserver src]# 
-<pre class="action">cd /usr/local/src
-tar xzf /tmp/postgresql-7.2.4.tar.gz</pre></pre></li><li><p><b>Create the Postgres user. </b>
+<pre class="action"><span class="action">cd /usr/local/src
+tar xzf /tmp/postgresql-7.2.4.tar.gz</span></pre></pre></li><li><p><b>Create the Postgres user. </b>
 	  Create a user and group (if you haven't done so before) for
 	  PostgreSQL. This is the account that PostgreSQL will run as
 	  since it will not run as root.  Since nobody will log in
 	  directly as that user, we'll leave the password blank.
-	</p><pre class="screen">[root@yourserver src]# <b><tt>groupadd web</tt></b>
-[root@yourserver src]# <b><tt>useradd -g web -d /usr/local/pgsql postgres</tt></b>
-[root@yourserver src]# <b><tt>mkdir -p /usr/local/pgsql</tt></b>
-[root@yourserver src]# <b><tt>chown -R postgres.web /usr/local/pgsql /usr/local/src/postgresql-7.2.4</tt></b>
-[root@yourserver src]# <b><tt>chmod 750 /usr/local/pgsql</tt></b>
+	</p><pre class="screen">[root@yourserver src]# <b class="userinput"><tt>groupadd web</tt></b>
+[root@yourserver src]# <b class="userinput"><tt>useradd -g web -d /usr/local/pgsql postgres</tt></b>
+[root@yourserver src]# <b class="userinput"><tt>mkdir -p /usr/local/pgsql</tt></b>
+[root@yourserver src]# <b class="userinput"><tt>chown -R postgres.web /usr/local/pgsql /usr/local/src/postgresql-7.2.4</tt></b>
+[root@yourserver src]# <b class="userinput"><tt>chmod 750 /usr/local/pgsql</tt></b>
 [root@yourserver src]#
-<pre class="action">groupadd web
+<pre class="action"><span class="action">groupadd web
 useradd -g web -d /usr/local/pgsql postgres
 mkdir -p /usr/local/pgsql
 chown -R postgres.web /usr/local/pgsql /usr/local/src/postgresql-7.2.4
-chmod 750 /usr/local/pgsql</pre></pre></li><li><a name="install-postgres-env"></a><p><b>Set up postgres's environment variables. </b>They are necessary for the executable to find its supporting
+chmod 750 /usr/local/pgsql</span></pre></pre></li><li><a name="install-postgres-env"></a><p><b>Set up postgres's environment variables. </b>They are necessary for the executable to find its supporting
 	libraries.  For convenience, we'll simply append the necessary
-	lines to the postgres shell config file.</p><pre class="screen">[root@yourserver src]# <b><tt>echo &quot;export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/pgsql/lib&quot; &gt;&gt; ~postgres/.bashrc</tt></b>
-[root@yourserver src]# <b><tt>echo &quot;export PATH=$PATH:/usr/local/pgsql/bin&quot; &gt;&gt; ~postgres/.bashrc</tt></b>
-<pre class="action">echo &quot;export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/pgsql/lib&quot; &gt;&gt; ~postgres/.bashrc
-echo &quot;export PATH=$PATH:/usr/local/pgsql/bin&quot; &gt;&gt; ~postgres/.bashrc</pre></pre><p>Test this by logging in as
-	<tt>postgres</tt> and checking the
-	paths; you should see <tt>/usr/local/pgsql/bin</tt></p><pre class="screen">[root@yourserver src]# <b><tt>su - postgres</tt></b>
-[postgres@yourserver pgsql]$ <b><tt>env | grep PATH</tt></b>
+	lines to the postgres shell config file.</p><pre class="screen">[root@yourserver src]# <b class="userinput"><tt>echo "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/pgsql/lib" &gt;&gt; ~postgres/.bashrc</tt></b>
+[root@yourserver src]# <b class="userinput"><tt>echo "export PATH=$PATH:/usr/local/pgsql/bin" &gt;&gt; ~postgres/.bashrc</tt></b>
+<pre class="action"><span class="action">echo "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/pgsql/lib" &gt;&gt; ~postgres/.bashrc
+echo "export PATH=$PATH:/usr/local/pgsql/bin" &gt;&gt; ~postgres/.bashrc</span></pre></pre><p>Test this by logging in as
+	<tt class="computeroutput">postgres</tt> and checking the
+	paths; you should see <tt class="computeroutput">/usr/local/pgsql/bin</tt></p><pre class="screen">[root@yourserver src]# <b class="userinput"><tt>su - postgres</tt></b>
+[postgres@yourserver pgsql]$ <b class="userinput"><tt>env | grep PATH</tt></b>
 LD_LIBRARY_PATH=:/usr/local/pgsql/lib
 PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:/usr/bin/X11:/usr/X11R6/bin:/root/bin:/usr/local/pgsql/bin:/usr/local/pgsql/bin
-[postgres@yourserver pgsql]$ <b><tt>exit</tt></b>
+[postgres@yourserver pgsql]$ <b class="userinput"><tt>exit</tt></b>
 </pre></li><li><a name="install-postgres-compile"></a><p><b>Compile and install PostgreSQL. </b>
-	  Change to the postgres user and run <tt>./configure</tt> to set the compilation options automatically. This is the point at which you can
+	  Change to the postgres user and run <tt class="computeroutput">./configure</tt> to set the compilation options automatically. This is the point at which you can
 	  configure PostgreSQL in various ways. For example, if you want to
 	  enable
-	  Unicode<a class="indexterm" name="id2969953"></a> support, add the flags <tt>--enable-locale</tt> and <tt>--enable-multibyte</tt>. If you want to see what the other possibilities are, run <tt>./configure --help</tt>.
-	</p><pre class="screen">[root@yourserver src]# <b><tt>su - postgres</tt></b>
-[postgres@yourserver pgsql]$<b><tt> cd /usr/local/src/postgresql-7.2.4</tt></b>
-[postgres@yourserver postgresql-7.2.4]$ <b><tt>./configure</tt></b>
+	  Unicode<a class="indexterm" name="id2820861"></a> support, add the flags <tt class="computeroutput">--enable-locale</tt> and <tt class="computeroutput">--enable-multibyte</tt>. If you want to see what the other possibilities are, run <tt class="computeroutput">./configure --help</tt>.
+	</p><pre class="screen">[root@yourserver src]# <b class="userinput"><tt>su - postgres</tt></b>
+[postgres@yourserver pgsql]$<b class="userinput"><tt> cd /usr/local/src/postgresql-7.2.4</tt></b>
+[postgres@yourserver postgresql-7.2.4]$ <b class="userinput"><tt>./configure</tt></b>
 creating cache ./config.cache
 checking host system type... i686-pc-linux-gnu
 (many lines omitted&gt;
 linking ./src/makefiles/Makefile.linux to src/Makefile.port
 linking ./src/backend/port/tas/dummy.s to src/backend/port/tas.s
-[postgres@yourserver postgresql-7.2.4]$ <b><tt>make all</tt></b>
+[postgres@yourserver postgresql-7.2.4]$ <b class="userinput"><tt>make all</tt></b>
 make -C doc all
 make[1]: Entering directory `/usr/local/src/postgresql-7.2.4/doc'
 (many lines omitted)
 make[1]: Leaving directory `/usr/local/src/postgresql-7.2.4/src'
 All of PostgreSQL successfully made. Ready to install.
-[postgres@yourserver postgresql-7.2.4]$ <b><tt>make install</tt></b>
+[postgres@yourserver postgresql-7.2.4]$ <b class="userinput"><tt>make install</tt></b>
 make -C doc install
 make[1]: Entering directory `/usr/local/src/postgresql-7.2.4/doc'
 (many lines omitted)
 Thank you for choosing PostgreSQL, the most advanced open source database
 engine.
-<pre class="action">su - postgres
+<pre class="action"><span class="action">su - postgres
 cd /usr/local/src/postgresql-7.2.4
 ./configure
 make all
-make install</pre></pre></li><li><a name="install-postgres-startup"></a><p><b>Start PostgreSQL. </b>
-	  The <tt>initdb</tt> command initializes the
-	  database. <tt>pg_ctl</tt> is used to start up
+make install</span></pre></pre></li><li><a name="install-postgres-startup"></a><p><b>Start PostgreSQL. </b>
+	  The <tt class="computeroutput">initdb</tt> command initializes the
+	  database. <tt class="computeroutput">pg_ctl</tt> is used to start up
 	  PostgreSQL.
-	</p><pre class="screen">[postgres@yourserver tsearch]$ <b><tt>/usr/local/pgsql/bin/initdb -D /usr/local/pgsql/data</tt></b>
-The files belonging to this database system will be owned by user &quot;postgres&quot;.
+	</p><pre class="screen">[postgres@yourserver tsearch]$ <b class="userinput"><tt>/usr/local/pgsql/bin/initdb -D /usr/local/pgsql/data</tt></b>
+The files belonging to this database system will be owned by user "postgres".
 This user must also own the server process.
 (17 lines omitted)
 or
     /usr/local/pgsql/bin/pg_ctl -D /usr/local/pgsql/data -l logfile start
-[postgres@yourserver tsearch]$ <b><tt>/usr/local/pgsql/bin/pg_ctl -D /usr/local/pgsql/data -l /usr/local/pgsql/data/server.log start</tt></b>
+[postgres@yourserver tsearch]$ <b class="userinput"><tt>/usr/local/pgsql/bin/pg_ctl -D /usr/local/pgsql/data -l /usr/local/pgsql/data/server.log start</tt></b>
 postmaster successfully started
 [postgres@yourserver tsearch]$
-<pre class="action">/usr/local/pgsql/bin/initdb -D /usr/local/pgsql/data
-/usr/local/pgsql/bin/pg_ctl -D /usr/local/pgsql/data -l /usr/local/pgsql/data/server.log start</pre></pre><p>
+<pre class="action"><span class="action">/usr/local/pgsql/bin/initdb -D /usr/local/pgsql/data
+/usr/local/pgsql/bin/pg_ctl -D /usr/local/pgsql/data -l /usr/local/pgsql/data/server.log start</span></pre></pre><p>
 	  PostgreSQL errors will be logged in
-	  <tt>/usr/local/pgsql/data/server.log</tt>
+	  <tt class="computeroutput">/usr/local/pgsql/data/server.log</tt>
 	</p></li><li><a name="install-plpgsql"></a><p><b>Install Pl/pgSQL. </b>Set up plpgsq and allow your user to have
 	  access. Plpgsql is a PL/SQL-like language.  We add it to
 	  template1, which is the template from which all new
 	  databases are created.  We can verify that it was created
-	  with the createlang command in list mode.</p><pre class="screen">[postgres@yourserver pgsql]$ <b><tt>createlang plpgsql template1</tt></b>
-[postgres@yourserver pgsql]$ <b><tt>createlang -l template1</tt></b>
+	  with the createlang command in list mode.</p><pre class="screen">[postgres@yourserver pgsql]$ <b class="userinput"><tt>createlang plpgsql template1</tt></b>
+[postgres@yourserver pgsql]$ <b class="userinput"><tt>createlang -l template1</tt></b>
 Procedural languages
   Name   | Trusted?
 ---------+----------
@@ -119,11 +118,11 @@ Procedural languages
 (1 row)
 
 [postgres@yourserver pgsql]$
-<pre class="action">createlang plpgsql template1
-createlang -l template1</pre></pre></li><li><a name="install-postgres-test"></a><p><b>Test PostgreSQL (OPTIONAL). </b>Create a database and try some simple commands. The output should be as shown.
-	</p><pre class="screen">[postgres@yourserver pgsql]$ <b><tt>createdb mytestdb</tt></b>
+<pre class="action"><span class="action">createlang plpgsql template1
+createlang -l template1</span></pre></pre></li><li><a name="install-postgres-test"></a><p><b>Test PostgreSQL (OPTIONAL). </b>Create a database and try some simple commands. The output should be as shown.
+	</p><pre class="screen">[postgres@yourserver pgsql]$ <b class="userinput"><tt>createdb mytestdb</tt></b>
 CREATE DATABASE
-[postgres@yourserver pgsql]$ <b><tt>psql mytestdb</tt></b>
+[postgres@yourserver pgsql]$ <b class="userinput"><tt>psql mytestdb</tt></b>
 Welcome to psql, the PostgreSQL interactive terminal.
 
 Type:  \copyright for distribution terms
@@ -132,24 +131,24 @@ Type:  \copyright for distribution terms
        \g or terminate with semicolon to execute query
        \q to quit
 
-mytestdb=# <b><tt>select current_timestamp;</tt></b>
+mytestdb=# <b class="userinput"><tt>select current_timestamp;</tt></b>
           timestamptz
 -------------------------------
  2003-03-07 22:18:29.185413-08
 (1 row)
 
-mytestdb=# <b><tt>create function test1() returns integer as 'begin return 1; end;' language 'plpgsql';</tt></b>
+mytestdb=# <b class="userinput"><tt>create function test1() returns integer as 'begin return 1; end;' language 'plpgsql';</tt></b>
 CREATE
-mytestdb=#<b><tt> select test1();</tt></b>
+mytestdb=#<b class="userinput"><tt> select test1();</tt></b>
  test1
 -------
      1
 (1 row)
 
-mytestdb=# <b><tt>\q</tt></b>
-[postgres@yourserver pgsql]$<b><tt> dropdb mytestdb</tt></b>
+mytestdb=# <b class="userinput"><tt>\q</tt></b>
+[postgres@yourserver pgsql]$<b class="userinput"><tt> dropdb mytestdb</tt></b>
 DROP DATABASE
-[postgres@yourserver pgsql]$ <b><tt>exit</tt></b>
+[postgres@yourserver pgsql]$ <b class="userinput"><tt>exit</tt></b>
 logout
 
 [root@yourserver src]#</pre></li><li><p><a name="install-postgres-startonboot"></a>Set PostgreSQL to start on boot.  First, we copy the
@@ -160,42 +159,42 @@ logout
         changes runlevels, postgresql goes to the appropriate
         state. Red Hat and Debian and SuSE each work a little
         differently.
-	</p><div class="itemizedlist"><ul type="disc"><li><p>Red Hat RPM:</p><p>The init script is already installed; just turn it on for the appropriate run levels.</p><pre class="screen">[root@yourserver root]# <b><tt>chkconfig --level 345 postgresql on</tt></b>
-[root@yourserver root]# </pre></li><li><p>Red Hat from source:</p><pre class="screen">[root@yourserver src]# <b><tt>cp /tmp/openacs-5.0.0d/packages/acs-core-docs/www/files/postgresql.txt /etc/init.d/postgresql</tt></b>
-[root@yourserver src]# <b><tt>chown root.root /etc/rc.d/init.d/postgresql</tt></b>
-[root@yourserver src]# <b><tt>chmod 755 /etc/rc.d/init.d/postgresql</tt></b>
+	</p><div class="itemizedlist"><ul type="disc"><li><p>Red Hat RPM:</p><p>The init script is already installed; just turn it on for the appropriate run levels.</p><pre class="screen">[root@yourserver root]# <b class="userinput"><tt>chkconfig --level 345 postgresql on</tt></b>
+[root@yourserver root]# </pre></li><li><p>Red Hat from source:</p><pre class="screen">[root@yourserver src]# <b class="userinput"><tt>cp /tmp/openacs-5.0.0a1/packages/acs-core-docs/www/files/postgresql.txt /etc/init.d/postgresql</tt></b>
+[root@yourserver src]# <b class="userinput"><tt>chown root.root /etc/rc.d/init.d/postgresql</tt></b>
+[root@yourserver src]# <b class="userinput"><tt>chmod 755 /etc/rc.d/init.d/postgresql</tt></b>
 [root@yourserver src]# 
-<pre class="action">cp /tmp/openacs-5.0.0d/packages/acs-core-docs/www/files/postgresql.txt /etc/init.d/postgresql
+<pre class="action"><span class="action">cp /tmp/openacs-5.0.0a1/packages/acs-core-docs/www/files/postgresql.txt /etc/init.d/postgresql
 chown root.root /etc/rc.d/init.d/postgresql
-chmod 755 /etc/rc.d/init.d/postgresql</pre></pre><p>Test the script.</p><pre class="screen">[root@yourserver root]# <b><tt>service postgresql stop</tt></b>
+chmod 755 /etc/rc.d/init.d/postgresql</span></pre></pre><p>Test the script.</p><pre class="screen">[root@yourserver root]# <b class="userinput"><tt>service postgresql stop</tt></b>
 Stopping PostgreSQL: ok
 [root@yourserver root]# </pre><p>If PostgreSQL successfully stopped, then use the following
 		  command to make sure that the script is run appropriately at boot
 		  and shutdown.  And turn it back on because we'll use
 		  it later.
 
-		</p><pre class="screen">[root@yourserver root]# <b><tt>chkconfig --add postgresql</tt></b>
-[root@yourserver root]# <b><tt>chkconfig --level 345 postgresql on</tt></b>
-[root@yourserver root]# <b><tt>chkconfig --list postgresql</tt></b>
+		</p><pre class="screen">[root@yourserver root]# <b class="userinput"><tt>chkconfig --add postgresql</tt></b>
+[root@yourserver root]# <b class="userinput"><tt>chkconfig --level 345 postgresql on</tt></b>
+[root@yourserver root]# <b class="userinput"><tt>chkconfig --list postgresql</tt></b>
 postgresql      0:off   1:off   2:on    3:on    4:on    5:on    6:off
-[root@yourserver root]# <b><tt>service postgresql start</tt></b>
+[root@yourserver root]# <b class="userinput"><tt>service postgresql start</tt></b>
 Starting PostgreSQL: ok
 [root@yourserver root]#
-<pre class="action">chkconfig --add postgresql
+<pre class="action"><span class="action">chkconfig --add postgresql
 chkconfig --level 345 postgresql on
 chkconfig --list postgresql
-service postgresql start</pre></pre></li><li><p>Debian:</p><pre class="screen">root:~# <b><tt>cp /tmp/openacs-5.0.0d/packages/acs-core-docs/www/files/postgresql.txt /etc/init.d/postgresql</tt></b>
-root:~# <b><tt>chown root.root /etc/init.d/postgresql</tt></b>
-root:~# <b><tt>chmod 755 /etc/init.d/postgresql</tt></b>
-root:~# <pre class="action">
-cp /tmp/openacs-5.0.0d/packages/acs-core-docs/www/files/postgresql.txt /etc/init.d/postgresql
+service postgresql start</span></pre></pre></li><li><p>Debian:</p><pre class="screen">root:~# <b class="userinput"><tt>cp /tmp/openacs-5.0.0a1/packages/acs-core-docs/www/files/postgresql.txt /etc/init.d/postgresql</tt></b>
+root:~# <b class="userinput"><tt>chown root.root /etc/init.d/postgresql</tt></b>
+root:~# <b class="userinput"><tt>chmod 755 /etc/init.d/postgresql</tt></b>
+root:~# <pre class="action"><span class="action">
+cp /tmp/openacs-5.0.0a1/packages/acs-core-docs/www/files/postgresql.txt /etc/init.d/postgresql
 chown root.root /etc/init.d/postgresql
-chmod 755 /etc/init.d/postgresql</pre></pre><p>Test the script</p><pre class="screen">root:~# <b><tt>/etc/init.d/postgresql stop</tt></b>
+chmod 755 /etc/init.d/postgresql</span></pre></pre><p>Test the script</p><pre class="screen">root:~# <b class="userinput"><tt>/etc/init.d/postgresql stop</tt></b>
 Stopping PostgreSQL: ok
 root:~# </pre><p>If PostgreSQL successfully stopped, then use the following
 		  command to make sure that the script is run
 		  appropriately at boot and shutdown.</p><pre class="screen">
-root:~# <b><tt>update-rc.d postgresql defaults</tt></b>
+root:~# <b class="userinput"><tt>update-rc.d postgresql defaults</tt></b>
  Adding system startup for /etc/init.d/postgresql ...
    /etc/rc0.d/K20postgresql -&gt; ../init.d/postgresql
    /etc/rc1.d/K20postgresql -&gt; ../init.d/postgresql
@@ -204,50 +203,50 @@ root:~# <b><tt>update-rc.d postgresql defaults</tt></b>
    /etc/rc3.d/S20postgresql -&gt; ../init.d/postgresql
    /etc/rc4.d/S20postgresql -&gt; ../init.d/postgresql
    /etc/rc5.d/S20postgresql -&gt; ../init.d/postgresql
-root:~# <b><tt>/etc/init.d/postgresql start</tt></b>
+root:~# <b class="userinput"><tt>/etc/init.d/postgresql start</tt></b>
 Starting PostgreSQL: ok
 root:~#</pre></li><li><p>SuSE:</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>
 
 			I have received reports that SuSE 8.0 is different from
             previous versions. Instead of installing the boot scripts in
-            <tt>/etc/rc.d/init.d/</tt>, they should
-            be placed in <tt>/etc/init.d/</tt>. If
+            <tt class="computeroutput">/etc/rc.d/init.d/</tt>, they should
+            be placed in <tt class="computeroutput">/etc/init.d/</tt>. If
             you're using SuSE 8.0, delete the
-            <tt>rc.d/</tt> part in each of the
+            <tt class="computeroutput">rc.d/</tt> part in each of the
             following commands.
 
-          </p></div><pre class="screen">root:~# <b><tt>cp /tmp/openacs-5.0.0d/packages/acs-core-docs/www/files/postgresql.txt /etc/rc.d/init.d/postgresql</tt></b>
-root:~# <b><tt>chown root.root /etc/rc.d/init.d/postgresql</tt></b>
-root:~# <b><tt>chmod 755 /etc/rc.d/init.d/postgresql</tt></b></pre><p>
+          </p></div><pre class="screen">root:~# <b class="userinput"><tt>cp /tmp/openacs-5.0.0a1/packages/acs-core-docs/www/files/postgresql.txt /etc/rc.d/init.d/postgresql</tt></b>
+root:~# <b class="userinput"><tt>chown root.root /etc/rc.d/init.d/postgresql</tt></b>
+root:~# <b class="userinput"><tt>chmod 755 /etc/rc.d/init.d/postgresql</tt></b></pre><p>
 
           Test the script.
 
-        </p><pre class="screen">root:~# <b><tt>/etc/rc.d/init.d/postgresql stop</tt></b>
+        </p><pre class="screen">root:~# <b class="userinput"><tt>/etc/rc.d/init.d/postgresql stop</tt></b>
 Stopping PostgreSQL: ok</pre><p>
 
           If PostgreSQL successfully stopped, then use the following
           command to make sure that the script is run appropriately at boot
           and shutdown.
 
-        </p><pre class="screen">root:~# <b><tt>cd /etc/rc.d/init.d</tt></b>
-root:/etc/rc.d/init.d# <b><tt>ln -s /etc/rc.d/init.d/postgresql K20postgresql</tt></b>
-root:/etc/rc.d/init.d# <b><tt>ln -s /etc/rc.d/init.d/postgresql S20postgresql  </tt></b>
-root:/etc/rc.d/init.d# <b><tt>cp K20postgresql rc2.d</tt></b>
-root:/etc/rc.d/init.d# <b><tt>cp S20postgresql rc2.d</tt></b>
-root:/etc/rc.d/init.d# <b><tt>cp K20postgresql rc3.d</tt></b>
-root:/etc/rc.d/init.d# <b><tt>cp S20postgresql rc3.d</tt></b>
-root:/etc/rc.d/init.d# <b><tt>cp K20postgresql rc4.d</tt></b>
-root:/etc/rc.d/init.d# <b><tt>cp S20postgresql rc4.d </tt></b>
-root:/etc/rc.d/init.d# <b><tt>cp K20postgresql rc5.d</tt></b>
-root:/etc/rc.d/init.d# <b><tt>cp S20postgresql rc5.d</tt></b>
-root:/etc/rc.d/init.d# <b><tt>rm K20postgresql</tt></b>
-root:/etc/rc.d/init.d# <b><tt>rm S20postgresql</tt></b>
+        </p><pre class="screen">root:~# <b class="userinput"><tt>cd /etc/rc.d/init.d</tt></b>
+root:/etc/rc.d/init.d# <b class="userinput"><tt>ln -s /etc/rc.d/init.d/postgresql K20postgresql</tt></b>
+root:/etc/rc.d/init.d# <b class="userinput"><tt>ln -s /etc/rc.d/init.d/postgresql S20postgresql  </tt></b>
+root:/etc/rc.d/init.d# <b class="userinput"><tt>cp K20postgresql rc2.d</tt></b>
+root:/etc/rc.d/init.d# <b class="userinput"><tt>cp S20postgresql rc2.d</tt></b>
+root:/etc/rc.d/init.d# <b class="userinput"><tt>cp K20postgresql rc3.d</tt></b>
+root:/etc/rc.d/init.d# <b class="userinput"><tt>cp S20postgresql rc3.d</tt></b>
+root:/etc/rc.d/init.d# <b class="userinput"><tt>cp K20postgresql rc4.d</tt></b>
+root:/etc/rc.d/init.d# <b class="userinput"><tt>cp S20postgresql rc4.d </tt></b>
+root:/etc/rc.d/init.d# <b class="userinput"><tt>cp K20postgresql rc5.d</tt></b>
+root:/etc/rc.d/init.d# <b class="userinput"><tt>cp S20postgresql rc5.d</tt></b>
+root:/etc/rc.d/init.d# <b class="userinput"><tt>rm K20postgresql</tt></b>
+root:/etc/rc.d/init.d# <b class="userinput"><tt>rm S20postgresql</tt></b>
 root:/etc/rc.d/init.d# </pre><p>
 
           Test configuration.
 
-        </p><pre class="screen">root:/etc/rc.d/init.d # <b><tt>cd</tt></b>
-root:~ # <b><tt>/etc/rc.d/init.d/rc2.d/S20postgresql start</tt></b>
+        </p><pre class="screen">root:/etc/rc.d/init.d # <b class="userinput"><tt>cd</tt></b>
+root:~ # <b class="userinput"><tt>/etc/rc.d/init.d/rc2.d/S20postgresql start</tt></b>
 Starting PostgreSQL: ok
 root:~ # </pre></li></ul></div><p>
 
@@ -259,11 +258,11 @@ root:~ # </pre></li></ul></div><p>
       little. This usually isn't a problem as Red Hat defaults to runlevel 3)
 
     </p></li><li><p><b>Tune postgres.  (OPTIONAL). </b>The default values for PostGreSQL are very conservative; we can safely change some of them and improve performance.</p><div class="orderedlist"><ol type="a"><li><p>Change the kernel parameter for maximum shared memory
-          segment size to 128Mb:</p><pre class="screen">[root@yourserver root]# <b><tt>echo 134217728 &gt;/proc/sys/kernel/shmmax</tt></b>
+          segment size to 128Mb:</p><pre class="screen">[root@yourserver root]# <b class="userinput"><tt>echo 134217728 &gt;/proc/sys/kernel/shmmax</tt></b>
 [root@yourserver root]#</pre><p>Make that change permanent by editing
-          <tt>emacs /etc/sysctl.conf</tt> to
+          <tt class="computeroutput">emacs /etc/sysctl.conf</tt> to
           add these lines at the end:</p><pre class="programlisting"># increase shared memory limit for postgres
-kernel.shmmax = 134217728</pre></li><li><p>Edit the PostGreSQL config file, <tt>/usr/local/pgsql/data/postgresql.conf</tt>, to use more memory.  These values should improve performance in most cases.  (<a href="http://openacs.org/forums/message-view?message_id=94071" target="_top">more information</a>)</p><pre class="programlisting">#       Shared Memory Size
+kernel.shmmax = 134217728</pre></li><li><p>Edit the PostGreSQL config file, <tt class="computeroutput">/usr/local/pgsql/data/postgresql.conf</tt>, to use more memory.  These values should improve performance in most cases.  (<a href="http://openacs.org/forums/message-view?message_id=94071" target="_top">more information</a>)</p><pre class="programlisting">#       Shared Memory Size
 #
 shared_buffers = 15200      # 2*max_connections, min 16
 
@@ -276,7 +275,7 @@ sort_mem = 32168            # min 32
 #
 wal_files = 3               # range 0-64
 checkpoint_segments = 3     # in logfile segments (16MB each), min 1
-</pre><p>Restart postgres (<tt>service postgres restart</tt>) so that the changes take effect.</p></li></ol></div></li></ol></div><div class="sect2" lang="en"><div class="titlepage"><div><h3 class="title"><a name="install-postgres-moreinfo"></a>more information about PostgreSQL</h3></div></div><div class="itemizedlist"><ul type="disc"><li><p>
+</pre><p>Restart postgres (<tt class="computeroutput">service postgres restart</tt>) so that the changes take effect.</p></li></ol></div></li></ol></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="install-postgres-moreinfo"></a>more information about PostgreSQL</h3></div></div><div></div></div><div class="itemizedlist"><ul type="disc"><li><p>
 
           <a href="http://www.postgresql.org/idocs/" target="_top">Official PostgreSQL
           Docs</a>

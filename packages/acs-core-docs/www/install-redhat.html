@@ -1,5 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Appendix A. Install Red Hat 8.0</title><meta name="generator" content="DocBook XSL Stylesheets V1.58.1"><link rel="home" href="index.html" title="OpenACS Documentation"><link rel="up" href="acs-admin.html" title="Part II. Administrator's Guide"><link rel="previous" href="backup-recovery.html" title="Backup and Recovery"><link rel="next" href="install-more-software.html" title="Appendix B. Install additional supporting software"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="images/alex.jpg" border="0"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="backup-recovery.html">Prev</a> </td><th width="60%" align="center">Part II. Administrator's Guide</th><td width="20%" align="right"> <a accesskey="n" href="install-more-software.html">Next</a></td></tr></table><hr></div><div class="appendix" lang="en"><div class="titlepage"><div><h2 class="title"><a name="install-redhat"></a>Appendix A. Install Red Hat 8.0</h2></div></div><div class="authorblurb"><p>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Appendix A. Install Red Hat 8.0</title><meta name="generator" content="DocBook XSL Stylesheets V1.60.1"><link rel="home" href="index.html" title="OpenACS Documentation"><link rel="up" href="acs-admin.html" title="Part II. Administrator's Guide"><link rel="previous" href="backup-recovery.html" title="Backup and Recovery"><link rel="next" href="install-more-software.html" title="Appendix B. Install additional supporting software"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="backup-recovery.html">Prev</a> </td><th width="60%" align="center">Part II. Administrator's Guide</th><td width="20%" align="right"> <a accesskey="n" href="install-more-software.html">Next</a></td></tr></table><hr></div><div class="appendix" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="install-redhat"></a>Appendix A. Install Red Hat 8.0</h2></div></div><div></div></div><div class="authorblurb"><p>
       by <a href="mailto:joel@aufrecht.org" target="_top">Joel Aufrecht</a><br>
           OpenACS docs are written by the named authors, and may be edited
           by OpenACS documentation staff.
@@ -12,35 +11,35 @@
     of these packages installed independently.)</p><div class="orderedlist"><ol type="1"><li><p><a name="install-first-step"></a>Unplug the network cable from your
           computer.  We don't want to connect to the network
           until we're sure the computer is secure.  
-<a class="indexterm" name="id2972826"></a>
+<a class="indexterm" name="id2833026"></a>
   (Wherever you see
-          the word secure, you should always read it as, &quot;secure
+          the word secure, you should always read it as, "secure
           enough for our purposes, given the amount of work we're
           willing to exert and the estimated risk and
-          consequences.&quot;)</p></li><li><p>Insert Red Hat 8.0 Disk 1 into the  
+          consequences.")</p></li><li><p>Insert Red Hat 8.0 Disk 1 into the  
 	  CD-ROM and reboot the computer</p></li><li><p>At the
-          <tt><span class="guilabel">boot:</span></tt>
+          <tt class="computeroutput"><span class="guilabel"><span class="guilabel">boot:</span></span></tt>
           prompt, press Enter for a
           graphical install.  The text install is fairly different, so
           if you need to do that instead proceed with caution, because
           the guide won't match the steps.</p></li><li><p>Checking the media is probably a waste of
           time, so when it asks press Tab and
-          then Enter to skip it.</p></li><li><p>After the graphical introduction page loads, click <tt><span class="guibutton"><u>N</u>ext</span></tt></p></li><li><p>Choose the language you want to use and then click
-<tt><span class="guibutton"><u>N</u>ext</span></tt>
-</p></li><li><p>Select the keyboard layout you will use and Click <tt><span class="guibutton"><u>N</u>ext</span></tt></p></li><li><p>Choose your mouse type and Click <tt><span class="guibutton"><u>N</u>ext</span></tt></p></li><li><p>Red Hat has several templates for new
-          computers.  We'll start with the &quot;Server&quot; template and then
+          then Enter to skip it.</p></li><li><p>After the graphical introduction page loads, click <tt class="computeroutput"><span class="guibutton"><span class="guibutton"><u><span class="accel">N</span></u>ext</span></span></tt></p></li><li><p>Choose the language you want to use and then click
+<tt class="computeroutput"><span class="guibutton"><span class="guibutton"><u><span class="accel">N</span></u>ext</span></span></tt>
+</p></li><li><p>Select the keyboard layout you will use and Click <tt class="computeroutput"><span class="guibutton"><span class="guibutton"><u><span class="accel">N</span></u>ext</span></span></tt></p></li><li><p>Choose your mouse type and Click <tt class="computeroutput"><span class="guibutton"><span class="guibutton"><u><span class="accel">N</span></u>ext</span></span></tt></p></li><li><p>Red Hat has several templates for new
+          computers.  We'll start with the "Server" template and then
           fine-tune it during the rest of the install.  Choose
-	<tt><span class="guilabel">Server</span></tt>
+	<tt class="computeroutput"><span class="guilabel"><span class="guilabel">Server</span></span></tt>
 	and click
-	<tt><span class="guibutton"><u>N</u>ext</span></tt>.</p></li><li><p>Reformat the hard drive.  If you know what you're doing,
+	<tt class="computeroutput"><span class="guibutton"><span class="guibutton"><u><span class="accel">N</span></u>ext</span></span></tt>.</p></li><li><p>Reformat the hard drive.  If you know what you're doing,
 	do this step on your own.  Otherwise:  we're going to let the
 	installer wipe out the everything on the main hard drive and then arrange things to
-	its liking.</p><div class="orderedlist"><ol type="a"><li><p>Choose <tt><span class="guilabel">Automatically Partition</span></tt>
-	  and click <tt><span class="guibutton"><u>N</u>ext</span></tt></p></li><li><p>Uncheck
-<tt><span class="guilabel">Re<u>v</u>iew (and modify if needed) the partitions created</span></tt> and click <tt><span class="guibutton"><u>N</u>ext</span></tt></p></li><li><p>On the pop-up window asking &quot;Are you sure
-	  you want to do this?&quot; click
-	  <tt><span class="guibutton"><u>Y</u>es</span></tt>
-	  IF YOU ARE WIPING YOUR HARD DRIVE.</p></li><li><p>Click <tt><span class="guibutton"><u>N</u>ext</span></tt> on the boot loader screen</p></li></ol></div></li><li><p>Configure Networking.  <a class="indexterm" name="id2997236"></a>
+	its liking.</p><div class="orderedlist"><ol type="a"><li><p>Choose <tt class="computeroutput"><span class="guilabel"><span class="guilabel">Automatically Partition</span></span></tt>
+	  and click <tt class="computeroutput"><span class="guibutton"><span class="guibutton"><u><span class="accel">N</span></u>ext</span></span></tt></p></li><li><p>Uncheck
+<tt class="computeroutput"><span class="guilabel"><span class="guilabel">Re<u><span class="accel">v</span></u>iew (and modify if needed) the partitions created</span></span></tt> and click <tt class="computeroutput"><span class="guibutton"><span class="guibutton"><u><span class="accel">N</span></u>ext</span></span></tt></p></li><li><p>On the pop-up window asking "Are you sure
+	  you want to do this?" click
+	  <tt class="computeroutput"><span class="guibutton"><span class="guibutton"><u><span class="accel">Y</span></u>es</span></span></tt>
+	  IF YOU ARE WIPING YOUR HARD DRIVE.</p></li><li><p>Click <tt class="computeroutput"><span class="guibutton"><span class="guibutton"><u><span class="accel">N</span></u>ext</span></span></tt> on the boot loader screen</p></li></ol></div></li><li><p>Configure Networking.  <a class="indexterm" name="id2835006"></a>
 Again, if you know what you're doing, do this step
           yourself, being sure to note the firewall holes. Otherwise,
           follow the instructions in this step to set up a computer directly connected to the internet with a dedicated IP address.</p><div class="orderedlist"><ol type="a"><li><p>DHCP is a system by which a computer that
@@ -49,31 +48,31 @@ and other network information.  Assuming the machine has a dedicated
 IP address (if it doesn't, it will be tricky to access the OpenACS
 service from the outside world), we're going to set up that address.
 If you don't know your netmask, 255.255.255.0 is usually a pretty safe
-guess.  Click <tt><span class="guibutton">Edit</span></tt>, uncheck <tt><span class="guilabel">Configure using <u>D</u>HCP</span></tt>
-and type in your IP and netmask.  Click <tt><span class="guibutton"><u>O</u>k</span></tt>.</p></li><li><p> Type in your host
-name, gateway, and DNS server(s).  Then click <tt><span class="guibutton"><u>N</u>ext</span></tt>.</p></li><li><p>We're going to use the firewall template for high
+guess.  Click <tt class="computeroutput"><span class="guibutton"><span class="guibutton">Edit</span></span></tt>, uncheck <tt class="computeroutput"><span class="guilabel"><span class="guilabel">Configure using <u><span class="accel">D</span></u>HCP</span></span></tt>
+and type in your IP and netmask.  Click <tt class="computeroutput"><span class="guibutton"><span class="guibutton"><u><span class="accel">O</span></u>k</span></span></tt>.</p></li><li><p> Type in your host
+name, gateway, and DNS server(s).  Then click <tt class="computeroutput"><span class="guibutton"><span class="guibutton"><u><span class="accel">N</span></u>ext</span></span></tt>.</p></li><li><p>We're going to use the firewall template for high
 security, meaning that we'll block almost all incoming traffic.  Then
 we'll add a few holes to the firewall for services which we need and
-know are secure.  Choose <tt><span class="guilabel">Hi<u>g</u>h</span></tt>
+know are secure.  Choose <tt class="computeroutput"><span class="guilabel"><span class="guilabel">Hi<u><span class="accel">g</span></u>h</span></span></tt>
 security level. Check
-<tt><span class="guilabel">WWW</span></tt>,
-<tt><span class="guilabel">SSH</span></tt>, and
-<tt><span class="guilabel">Mail (SMTP)</span></tt>.  In the <tt><span class="guilabel">Other <u>p</u>orts</span></tt>
-box, enter <b><tt>443, 8000, 8443</tt></b>.  Click
-<tt><span class="guibutton"><u>N</u>ext</span></tt>.
-Port 443 is for https (http over ssl), and 8000 and 8443 are http and https access to the development server we'll be setting up.</p></li></ol></div></li><li><p><a class="indexterm" name="id2972563"></a>Select any additional languages you want the
+<tt class="computeroutput"><span class="guilabel"><span class="guilabel">WWW</span></span></tt>,
+<tt class="computeroutput"><span class="guilabel"><span class="guilabel">SSH</span></span></tt>, and
+<tt class="computeroutput"><span class="guilabel"><span class="guilabel">Mail (SMTP)</span></span></tt>.  In the <tt class="computeroutput"><span class="guilabel"><span class="guilabel">Other <u><span class="accel">p</span></u>orts</span></span></tt>
+box, enter <b class="userinput"><tt>443, 8000, 8443</tt></b>.  Click
+<tt class="computeroutput"><span class="guibutton"><span class="guibutton"><u><span class="accel">N</span></u>ext</span></span></tt>.
+Port 443 is for https (http over ssl), and 8000 and 8443 are http and https access to the development server we'll be setting up.</p></li></ol></div></li><li><p><a class="indexterm" name="id2834573"></a>Select any additional languages you want the
 	  computer to support and then click
-	  <tt><span class="guibutton"><u>N</u>ext</span></tt></p></li><li><p>Choose your time zone and click <tt><span class="guibutton"><u>N</u>ext</span></tt>.</p></li><li><p>Type in a root
+	  <tt class="computeroutput"><span class="guibutton"><span class="guibutton"><u><span class="accel">N</span></u>ext</span></span></tt></p></li><li><p>Choose your time zone and click <tt class="computeroutput"><span class="guibutton"><span class="guibutton"><u><span class="accel">N</span></u>ext</span></span></tt>.</p></li><li><p>Type in a root
 password, twice.  To
             improve security, we're going to prevent anyone from
             connecting to the computer directly as root.  Instead,
             we'll create a different user, called
-            <tt>remadmin</tt>, used solely to
+            <tt class="computeroutput">remadmin</tt>, used solely to
             connect to the computer for administration.  Click
-<tt><span class="guibutton"><u>A</u>dd</span></tt>
-and enter username <b><tt>remadmin</tt></b> and a password,
-twice, then click <tt><span class="guibutton"><u>O</u>K</span></tt>.  Then click
-<tt><span class="guibutton"><u>N</u>ext</span></tt>.</p></li><li><p>On the Package selection page, we're going to
+<tt class="computeroutput"><span class="guibutton"><span class="guibutton"><u><span class="accel">A</span></u>dd</span></span></tt>
+and enter username <b class="userinput"><tt>remadmin</tt></b> and a password,
+twice, then click <tt class="computeroutput"><span class="guibutton"><span class="guibutton"><u><span class="accel">O</span></u>K</span></span></tt>.  Then click
+<tt class="computeroutput"><span class="guibutton"><span class="guibutton"><u><span class="accel">N</span></u>ext</span></span></tt>.</p></li><li><p>On the Package selection page, we're going to
 uncheck a lot of packages that install software we don't need, and add
 packages that have stuff we do need.  You should install everything
 we're installing here or the guide may not work for you; you can
@@ -82,87 +81,87 @@ stuff, with relative impunity - at worst, you'll introduce a security
 risk that's still screened by the firewall, or a resource hog.  Just
 don't install a database or web server, because that would conflict
 with the database and web server we'll install later.
-</p><div class="literallayout"><p>check <tt><span class="guilabel">Editors</span></tt> (this installs emacs<a class="indexterm" name="id2972714"></a>),<br>
-click <tt><span class="guilabel">Details</span></tt> next to <tt><span class="guilabel">Text-based Internet</span></tt>, check <tt><span class="guilabel">lynx</span></tt>, and click <tt><span class="guibutton"><u>O</u>K</span></tt>;<br>
-check <tt><span class="guilabel">Authoring and Publishing</span></tt> (<a class="indexterm" name="id2977900"></a>this installs docbook),<br>
-uncheck <tt><span class="guilabel">Server Configuration Tools</span></tt>,<br>
-uncheck <tt><span class="guilabel">Web Server</span></tt>,<br>
-uncheck <tt><span class="guilabel">Windows File Server</span></tt>,<br>
-check <tt><span class="guilabel">Development Tools</span></tt> (this installs gmake and other build tools),<br>
-uncheck <tt><span class="guilabel">Administration Tools</span></tt>, and<br>
-uncheck <tt><span class="guilabel">Printing Support</span></tt>. </p></div><p>At the bottom, check <tt><span class="guilabel"><u>S</u>elect Individual Packages</span></tt> and click <tt><span class="guibutton"><u>N</u>ext</span></tt></p></li><li><p>We need to fine-tune the exact list of packages.
+</p><div class="literallayout"><p>check <tt class="computeroutput"><span class="guilabel"><span class="guilabel">Editors</span></span></tt> (this installs emacs<a class="indexterm" name="id2834679"></a>),<br>
+click <tt class="computeroutput"><span class="guilabel"><span class="guilabel">Details</span></span></tt> next to <tt class="computeroutput"><span class="guilabel"><span class="guilabel">Text-based Internet</span></span></tt>, check <tt class="computeroutput"><span class="guilabel"><span class="guilabel">lynx</span></span></tt>, and click <tt class="computeroutput"><span class="guibutton"><span class="guibutton"><u><span class="accel">O</span></u>K</span></span></tt>;<br>
+check <tt class="computeroutput"><span class="guilabel"><span class="guilabel">Authoring and Publishing</span></span></tt> (<a class="indexterm" name="id2834720"></a>this installs docbook),<br>
+uncheck <tt class="computeroutput"><span class="guilabel"><span class="guilabel">Server Configuration Tools</span></span></tt>,<br>
+uncheck <tt class="computeroutput"><span class="guilabel"><span class="guilabel">Web Server</span></span></tt>,<br>
+uncheck <tt class="computeroutput"><span class="guilabel"><span class="guilabel">Windows File Server</span></span></tt>,<br>
+check <tt class="computeroutput"><span class="guilabel"><span class="guilabel">Development Tools</span></span></tt> (this installs gmake and other build tools),<br>
+uncheck <tt class="computeroutput"><span class="guilabel"><span class="guilabel">Administration Tools</span></span></tt>, and<br>
+uncheck <tt class="computeroutput"><span class="guilabel"><span class="guilabel">Printing Support</span></span></tt>. </p></div><p>At the bottom, check <tt class="computeroutput"><span class="guilabel"><span class="guilabel"><u><span class="accel">S</span></u>elect Individual Packages</span></span></tt> and click <tt class="computeroutput"><span class="guibutton"><span class="guibutton"><u><span class="accel">N</span></u>ext</span></span></tt></p></li><li><p>We need to fine-tune the exact list of packages.
 The same rules apply as in the last step - you can add more stuff, but
 you shouldn't remove anything the guide adds.  We're going to go
 through all the packages in one big list, so select
-<tt><span class="guilabel"><u>F</u>lat
-View</span></tt> and wait. In a minute, a
-list of packages will appear.</p><div class="literallayout"><p>uncheck <tt><span class="guilabel">apmd</span></tt> (monitors power, not very useful for servers), <br>
-check <tt><span class="guilabel">ImageMagick</span></tt> (required for the <a class="indexterm" name="id2978069"></a>photo-album packages, <br>
-uncheck<tt><span class="guilabel">isdn4k-utils</span></tt> (unless you are using isdn, this installs a useless daemon), <br>
-check <tt><span class="guilabel">mutt</span></tt> (a mail program that reads Maildir),<br>
-uncheck <tt><span class="guilabel">nfs-utils</span></tt> (nfs is a major security risk), <br>
-uncheck <tt><span class="guilabel">pam-devel</span></tt> (I don't remember why, but we don't want this), <br>
-uncheck <tt><span class="guilabel">portmap</span></tt>, <br>
-uncheck <tt><span class="guilabel">postfix</span></tt> (this is an MTA, but we're going to install qmail later), <br>
-uncheck <tt><span class="guilabel">rsh</span></tt> (rsh is a security hole), <br>
-uncheck <tt><span class="guilabel">sendmail</span></tt> (sendmail is an insecure MTA; we're going to install qmail instead later),<br>
-check <tt><span class="guilabel">tcl</span></tt> (we need tcl), and <br>
-uncheck <tt><span class="guilabel">xinetd</span></tt> (xinetd handles incoming tcp connections.  We'll install a different, more secure program, ucspi-tcp).<br>
-Click <tt><span class="guibutton"><u>N</u>ext</span></tt></p></div></li><li><p>Red Hat isn't completely happy with the combination
+<tt class="computeroutput"><span class="guilabel"><span class="guilabel"><u><span class="accel">F</span></u>lat
+View</span></span></tt> and wait. In a minute, a
+list of packages will appear.</p><div class="literallayout"><p>uncheck <tt class="computeroutput"><span class="guilabel"><span class="guilabel">apmd</span></span></tt> (monitors power, not very useful for servers), <br>
+check <tt class="computeroutput"><span class="guilabel"><span class="guilabel">ImageMagick</span></span></tt> (required for the <a class="indexterm" name="id2834823"></a>photo-album packages, <br>
+uncheck<tt class="computeroutput"><span class="guilabel"><span class="guilabel">isdn4k-utils</span></span></tt> (unless you are using isdn, this installs a useless daemon), <br>
+check <tt class="computeroutput"><span class="guilabel"><span class="guilabel">mutt</span></span></tt> (a mail program that reads Maildir),<br>
+uncheck <tt class="computeroutput"><span class="guilabel"><span class="guilabel">nfs-utils</span></span></tt> (nfs is a major security risk), <br>
+uncheck <tt class="computeroutput"><span class="guilabel"><span class="guilabel">pam-devel</span></span></tt> (I don't remember why, but we don't want this), <br>
+uncheck <tt class="computeroutput"><span class="guilabel"><span class="guilabel">portmap</span></span></tt>, <br>
+uncheck <tt class="computeroutput"><span class="guilabel"><span class="guilabel">postfix</span></span></tt> (this is an MTA, but we're going to install qmail later), <br>
+uncheck <tt class="computeroutput"><span class="guilabel"><span class="guilabel">rsh</span></span></tt> (rsh is a security hole), <br>
+uncheck <tt class="computeroutput"><span class="guilabel"><span class="guilabel">sendmail</span></span></tt> (sendmail is an insecure MTA; we're going to install qmail instead later),<br>
+check <tt class="computeroutput"><span class="guilabel"><span class="guilabel">tcl</span></span></tt> (we need tcl), and <br>
+uncheck <tt class="computeroutput"><span class="guilabel"><span class="guilabel">xinetd</span></span></tt> (xinetd handles incoming tcp connections.  We'll install a different, more secure program, ucspi-tcp).<br>
+Click <tt class="computeroutput"><span class="guibutton"><span class="guibutton"><u><span class="accel">N</span></u>ext</span></span></tt></p></div></li><li><p>Red Hat isn't completely happy with the combination
 of packages we've selected, and wants to satisfy some dependencies.
 Don't let it.  On the next screen, choose
-<tt><span class="guilabel">I<u>g</u>nore Package
-Dependencies</span></tt> and click
-<tt><span class="guibutton"><u>N</u>ext</span></tt>.
+<tt class="computeroutput"><span class="guilabel"><span class="guilabel">I<u><span class="accel">g</span></u>nore Package
+Dependencies</span></span></tt> and click
+<tt class="computeroutput"><span class="guibutton"><span class="guibutton"><u><span class="accel">N</span></u>ext</span></span></tt>.
 </p></li><li><p>Click
-        <tt><span class="guibutton"><u>N</u>ext</span></tt>
+        <tt class="computeroutput"><span class="guibutton"><span class="guibutton"><u><span class="accel">N</span></u>ext</span></span></tt>
         to start the copying of files.</p></li><li><p>Wait. Insert Disk 2 when
 asked.</p></li><li><p>Wait. Insert Disk 3 when asked.</p></li><li><p>If you know how to use it, create a boot
         disk.  Since you can also boot into recovery mode with the
         Install CDs, this is less useful than it used to be, and we
-        won't bother.  Select <tt><span class="guilabel">No,I <u>d</u>o not want to create a boot disk</span></tt> and click <tt><span class="guibutton"><u>N</u>ext</span></tt>.</p></li><li><p>Click <tt><span class="guilabel"><u>E</u>xit</span></tt>, remove the CD, and watch the
+        won't bother.  Select <tt class="computeroutput"><span class="guilabel"><span class="guilabel">No,I <u><span class="accel">d</span></u>o not want to create a boot disk</span></span></tt> and click <tt class="computeroutput"><span class="guibutton"><span class="guibutton"><u><span class="accel">N</span></u>ext</span></span></tt>.</p></li><li><p>Click <tt class="computeroutput"><span class="guilabel"><span class="guilabel"><u><span class="accel">E</span></u>xit</span></span></tt>, remove the CD, and watch the
 computer reboot.
 </p></li><li><p>After it finishes rebooting and shows the login
-	  prompt, log in:</p><pre class="screen">yourserver login: <b><tt>root</tt></b>
+	  prompt, log in:</p><pre class="screen">yourserver login: <b class="userinput"><tt>root</tt></b>
 Password:
-[root@yourserver root]#</pre></li><li><p>Lock down SSH</p><div class="orderedlist"><ol type="a"><li><p><a class="indexterm" name="id2993504"></a>
+[root@yourserver root]#</pre></li><li><p>Lock down SSH</p><div class="orderedlist"><ol type="a"><li><p><a class="indexterm" name="id2835483"></a>
 SSH is the protocol we use to connect
             securely to the computer (replacing telnet, which is
             insecure).  sshd is the daemon that listens for incoming
             ssh connections.  As a security precaution, we are now going
 	to tell ssh not to allow anyone to connect directly to this
 	computer as root.  Type this into the shell:
-    </p><pre class="screen"><b><tt>emacs /etc/ssh/sshd_config</tt></b></pre></li><li><div class="literallayout"><p>Search for the word &quot;root&quot; by typing C-s (that's emacs-speak for control-s) and then <b><tt>root</tt></b>.   <br>
+    </p><pre class="screen"><b class="userinput"><tt>emacs /etc/ssh/sshd_config</tt></b></pre></li><li><div class="literallayout"><p>Search for the word "root" by typing C-s (that's emacs-speak for control-s) and then <b class="userinput"><tt>root</tt></b>.   <br>
 Make the following changes:<br>
 <pre class="programlisting">#Protocol 2,1</pre> to <pre class="programlisting">Protocol 2</pre> (this prevents any connections via SSH 1, which is insecure)<br>
 <pre class="programlisting">#PermitRootLogin yes</pre> to <pre class="programlisting">PermitRootLogin no</pre> (this prevents the root use from logging in via ssh)<br>
 <pre class="programlisting">#PermitEmptyPasswords no</pre> to <pre class="programlisting">PermitEmptyPasswords no</pre> (this blocks passwordless accounts)<br>
 <br>
- and save and exit by typing C-x C-s C-x C-c</p></div></li><li>Restart sshd so that the change takes effect.<pre class="screen"><b><tt>service sshd restart</tt></b></pre></li></ol></div></li><li><p>Red Hat still installed a few services we
-don't need, and which can be security holes.  Use the service command to turn them off, and then use chkconfig to automatically edit the System V init directories to permanently (The System V init directories are the ones in /etc/rc.d.  They consist of a bunch of scripts for starting and stopping programs, and directories of symlinks for each system level indicating which services should be up and down at any given service level.  We'll use this system for PostGreSQL, but we'll use daemontools to perform a similar function for AOLServer.  (The reason for this discrepencies is that, while daemontools is better, it's a pain in the ass to deal with and nobody's had any trouble leaving PostGreSQL the way it is.)</p><pre class="screen">[root@yourserver root]# <b><tt>service pcmcia stop</tt></b>
-[root@yourserver root]# <b><tt>service netfs stop</tt></b>
-[root@yourserver root]# <b><tt>chkconfig --del pcmcia</tt></b>
-[root@yourserver root]# <b><tt>chkconfig --del netfs</tt></b>
+ and save and exit by typing C-x C-s C-x C-c</p></div></li><li>Restart sshd so that the change takes effect.<pre class="screen"><b class="userinput"><tt>service sshd restart</tt></b></pre></li></ol></div></li><li><p>Red Hat still installed a few services we
+don't need, and which can be security holes.  Use the service command to turn them off, and then use chkconfig to automatically edit the System V init directories to permanently (The System V init directories are the ones in /etc/rc.d.  They consist of a bunch of scripts for starting and stopping programs, and directories of symlinks for each system level indicating which services should be up and down at any given service level.  We'll use this system for PostGreSQL, but we'll use daemontools to perform a similar function for AOLServer.  (The reason for this discrepencies is that, while daemontools is better, it's a pain in the ass to deal with and nobody's had any trouble leaving PostGreSQL the way it is.)</p><pre class="screen">[root@yourserver root]# <b class="userinput"><tt>service pcmcia stop</tt></b>
+[root@yourserver root]# <b class="userinput"><tt>service netfs stop</tt></b>
+[root@yourserver root]# <b class="userinput"><tt>chkconfig --del pcmcia</tt></b>
+[root@yourserver root]# <b class="userinput"><tt>chkconfig --del netfs</tt></b>
 [root@yourserver root]#
-<pre class="action">service pcmcia stop
+<pre class="action"><span class="action">service pcmcia stop
 service netfs stop
 chkconfig --del pcmcia
-chkconfig --del netfs</pre></pre></li><li><p>Plug in the network cable.</p></li><li><p>Verify that you have connectivity by going to another
+chkconfig --del netfs</span></pre></pre></li><li><p>Plug in the network cable.</p></li><li><p>Verify that you have connectivity by going to another
           computer and ssh'ing to
-          <span class="replaceable">yourserver</span>, logging in as
-          remadmin, and promoting yourself to root:</p><pre class="screen">[joeuser@someotherserver]$ <b><tt> ssh <span class="replaceable">remadmin@yourserver.test</span></tt></b>
+          <span class="replaceable"><span class="replaceable">yourserver</span></span>, logging in as
+          remadmin, and promoting yourself to root:</p><pre class="screen">[joeuser@someotherserver]$ <b class="userinput"><tt> ssh <span class="replaceable"><span class="replaceable">remadmin@yourserver.test</span></span></tt></b>
 The authenticity of host 'yourserver.test (1.2.3.4)' can't be established.
 DSA key fingerprint is 10:b9:b6:10:79:46:14:c8:2d:65:ae:c1:61:4b:a5:a5.
-Are you sure you want to continue connecting (yes/no)? <b><tt>yes</tt></b>
+Are you sure you want to continue connecting (yes/no)? <b class="userinput"><tt>yes</tt></b>
 Warning: Permanently added 'yourserver.test (1.2.3.4)' (DSA) to the list of known hosts.
 Password:
 Last login: Mon Mar  3 21:15:27 2003 from host-12-01.dsl-sea.seanet.com
-[remadmin@yourserver remadmin]$ <b><tt>su -</tt></b>
+[remadmin@yourserver remadmin]$ <b class="userinput"><tt>su -</tt></b>
 Password: 
 [root@yourserver root]#</pre></li><li><p>Upgrade the kernel to fix a security hole.  The default
           Red Hat 8.0 system kernel (2.4.18-14, which you can check
-          with <b><tt>uname -a</tt></b>) has several <a href="https://rhn.redhat.com/errata/RHSA-2003-098.html" target="_top">security problems</a>.  Download the new kernel, install it, and reboot.</p><pre class="screen">[root@yourserver root]# <b><tt>cd /tmp</tt></b>
-[root@yourserver tmp]# <b><tt>wget http://updates.redhat.com/7.1/en/os/i686/kernel-2.4.18-27.7.x.i686.rpm</tt></b>
+          with <b class="userinput"><tt>uname -a</tt></b>) has several <a href="https://rhn.redhat.com/errata/RHSA-2003-098.html" target="_top">security problems</a>.  Download the new kernel, install it, and reboot.</p><pre class="screen">[root@yourserver root]# <b class="userinput"><tt>cd /tmp</tt></b>
+[root@yourserver tmp]# <b class="userinput"><tt>wget http://updates.redhat.com/7.1/en/os/i686/kernel-2.4.18-27.7.x.i686.rpm</tt></b>
 --20:39:00--  http://updates.redhat.com/7.1/en/os/i686/kernel-2.4.18-27.7.x.i686.rpm
            =&gt; `kernel-2.4.18-27.7.x.i686.rpm'
 Resolving updates.redhat.com... done.
@@ -174,17 +173,17 @@ Length: 12,736,430 [application/x-rpm]
 
 20:41:39 (78.38 KB/s) - `kernel-2.4.18-27.7.x.i686.rpm' saved [12736430/12736430]
 
-root@yourserver tmp]# <b><tt>rpm -Uvh kernel-2.4.18-27.7.x.i686.rpm</tt></b>
+root@yourserver tmp]# <b class="userinput"><tt>rpm -Uvh kernel-2.4.18-27.7.x.i686.rpm</tt></b>
 warning: kernel-2.4.18-27.7.x.i686.rpm: V3 DSA signature: NOKEY, key ID db42a60e
 Preparing...                ########################################### [100%]
    1:kernel                 ########################################### [100%]
-[root@yourserver tmp]# <b><tt>reboot</tt></b>
+[root@yourserver tmp]# <b class="userinput"><tt>reboot</tt></b>
 
 Broadcast message from root (pts/0) (Sat May  3 20:46:39 2003):
 
 The system is going down for reboot NOW!
 [root@yourserver tmp]#
-<pre class="action">cd /tmp
+<pre class="action"><span class="action">cd /tmp
 wget http://updates.redhat.com/7.1/en/os/i686/kernel-2.4.18-27.7.x.i686.rpm
 rpm -Uvh kernel-2.4.18-27.7.x.i686.rpm
-reboot</pre></pre></li></ol></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="backup-recovery.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="install-more-software.html">Next</a></td></tr><tr><td width="40%" align="left">Backup and Recovery </td><td width="20%" align="center"><a accesskey="u" href="acs-admin.html">Up</a></td><td width="40%" align="right"> Appendix B. Install additional supporting software</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a><center><a href="http://openacs.org/doc/install-redhat.html#comments">View comments on this page at openacs.org</a></center></body></html>
+reboot</span></pre></pre></li></ol></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="backup-recovery.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="install-more-software.html">Next</a></td></tr><tr><td width="40%" align="left">Backup and Recovery </td><td width="20%" align="center"><a accesskey="u" href="acs-admin.html">Up</a></td><td width="40%" align="right"> Appendix B. Install additional supporting software</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a><center><a href="http://openacs.org/doc/install-redhat.html#comments">View comments on this page at openacs.org</a></center></body></html>

@@ -1,11 +1,10 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Release Version Numbering</title><meta name="generator" content="DocBook XSL Stylesheets V1.58.1"><link rel="home" href="index.html" title="OpenACS Documentation"><link rel="up" href="eng-standards.html" title="Chapter 12. Engineering Standards"><link rel="previous" href="requirements-template.html" title="System/Application Requirements Template"><link rel="next" href="eng-standards-constraint-naming.html" title="Constraint naming standard"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="images/alex.jpg" border="0"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="requirements-template.html">Prev</a> </td><th width="60%" align="center">Chapter 12. Engineering Standards</th><td width="20%" align="right"> <a accesskey="n" href="eng-standards-constraint-naming.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><h2 class="title" style="clear: both"><a name="eng-standards-versioning"></a>Release Version Numbering</h2></div></div><div class="authorblurb"><p><p>By <a href="mailto:ron@arsdigita.com" target="_top">Ron Henderson</a></p><br>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Release Version Numbering</title><meta name="generator" content="DocBook XSL Stylesheets V1.60.1"><link rel="home" href="index.html" title="OpenACS Documentation"><link rel="up" href="eng-standards.html" title="Chapter 12. Engineering Standards"><link rel="previous" href="requirements-template.html" title="System/Application Requirements Template"><link rel="next" href="eng-standards-constraint-naming.html" title="Constraint naming standard"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="requirements-template.html">Prev</a> </td><th width="60%" align="center">Chapter 12. Engineering Standards</th><td width="20%" align="right"> <a accesskey="n" href="eng-standards-constraint-naming.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="eng-standards-versioning"></a>Release Version Numbering</h2></div></div><div></div></div><div class="authorblurb"><p><p>By <a href="mailto:ron@arsdigita.com" target="_top">Ron Henderson</a></p><br>
           OpenACS docs are written by the named authors, and may be edited
           by OpenACS documentation staff.
         </p></div><p> 
 OpenACS version numbers help identify at a high-level what is in a
 particular release and what has changed since the last release. A
-&quot;version number&quot; is really just a string of the form:
+"version number" is really just a string of the form:
 </p><div class="blockquote"><blockquote class="blockquote"><p><span class="emphasis"><em>major</em></span>-<span class="emphasis"><em>minor</em></span>-<span class="emphasis"><em>release</em></span></p></blockquote></div><p>
 A change in the <span class="emphasis"><em>major</em></span> version number indicates a fundamental
 change in the architecture of the system, e.g. OpenACS 3 to ACS 4.  A
@@ -36,7 +35,7 @@ code tree can be restored to the exact state it was in for a
 particular release.  To translate between a distribution tar file
 (acs-3.2.2.tar.gz) and a CVS tag, just swap '.' for '-' and add the
 release date.  The entire release history of the toolkit is recorded
-in the tags for the top-level <tt>readme.txt</tt> file:
+in the tags for the top-level <tt class="computeroutput">readme.txt</tt> file:
 </p><pre class="programlisting">
 &gt; cvs log readme.txt
 RCS file: /usr/local/cvsroot/acs/readme.txt,v
@@ -72,7 +71,7 @@ description:
 </pre><p>
 In the future, OpenACS packages should follow this same
 convention on version numbers.
-</p><div class="sect2" lang="en"><div class="titlepage"><div><h3 class="title"><a name="eng-standards-transition-rules"></a>Transition Rules</h3></div></div><p>So what distinguishes an <span class="emphasis"><em>alpha</em></span> release from a <span class="emphasis"><em>beta</em></span>
+</p><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="eng-standards-transition-rules"></a>Transition Rules</h3></div></div><div></div></div><p>So what distinguishes an <span class="emphasis"><em>alpha</em></span> release from a <span class="emphasis"><em>beta</em></span>
 release?  Or from a production release?  We follow a specific set of
 rules for how OpenACS makes the transition from one state of maturity to
 the next.</p><p> Every release must pass the minimum requirements that it cleanly
