@@ -18,27 +18,32 @@ set user_id [ad_conn user_id]
 # Check that the object can be subcribed to
 notification::security::require_notify_object -object_id $object_id
 
-form create request
+set page_title "Request Notification for $pretty_name"
 
-element create request type_id \
+set context_bar [ad_context_bar $page_title]
+
+
+form create subscribe
+
+element create subscribe type_id \
         -label "Type ID" -datatype integer -widget hidden
 
-element create request object_id \
+element create subscribe object_id \
         -label "Object ID" -datatype integer -widget hidden
 
-element create request return_url \
+element create subscribe return_url \
         -label "Return URL" -datatype text -widget hidden
 
-element create request interval_id \
+element create subscribe interval_id \
         -label "Notification Interval" -datatype integer -widget select -options [notification::get_intervals -type_id $type_id]
 
-element create request delivery_method_id \
+element create subscribe delivery_method_id \
         -label "Delivery Method" -datatype integer -widget select -options [notification::get_delivery_methods -type_id $type_id]
 
-if {[form is_valid request]} {
-    template::form get_values request type_id object_id return_url interval_id delivery_method_id
+if {[form is_valid subscribe]} {
+    template::form get_values subscribe type_id object_id return_url interval_id delivery_method_id
 
-    # Add the request
+    # Add the subscribe
     notification::request::new \
             -type_id $type_id \
             -user_id $user_id \
@@ -50,6 +55,6 @@ if {[form is_valid request]} {
     ad_script_abort
 }
         
-element set_properties request type_id -value $type_id
-element set_properties request object_id -value $object_id
-element set_properties request return_url -value $return_url
+element set_properties subscribe type_id -value $type_id
+element set_properties subscribe object_id -value $object_id
+element set_properties subscribe return_url -value $return_url
