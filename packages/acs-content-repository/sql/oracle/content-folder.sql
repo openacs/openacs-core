@@ -680,4 +680,3 @@ end is_root;
 end content_folder;
 /
 show errors
-
