@@ -2114,8 +2114,8 @@ as
 	    from apm_package_dependencies
 	    where version_id = copy.version_id;
     
-	insert into apm_package_files(file_id, version_id, path, file_type)
-	    select acs_object_id_seq.nextval, v_version_id, path, file_type
+	insert into apm_package_files(file_id, version_id, path, file_type, db_type)
+	    select acs_object_id_seq.nextval, v_version_id, path, file_type, db_type
 	    from apm_package_files
 	    where version_id = copy.version_id;
     
