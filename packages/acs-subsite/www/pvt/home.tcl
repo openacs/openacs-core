@@ -44,6 +44,9 @@ set system_name [ad_system_name]
 set portrait_upload_url [export_vars -base "../user/portrait/upload" { { return_url [ad_return_url] } }]
 
 ad_form -name user_info -cancel_url [ad_conn url] -mode display -form {
+    {username:text(inform)
+        {label "Username"}
+    }
     {first_names:text
         {label "First names"}
         {html {size 50}}
@@ -69,7 +72,7 @@ ad_form -name user_info -cancel_url [ad_conn url] -mode display -form {
         {html {rows 8 cols 60}}
     }
 } -on_request {
-    foreach var { first_names last_name email screen_name url bio } {
+    foreach var { first_names last_name email username screen_name url bio } {
         set $var $user($var)
     }
 } -on_submit {
