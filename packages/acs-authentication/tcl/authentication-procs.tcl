@@ -389,12 +389,6 @@ ad_proc -public auth::create_user {
     # This holds element error messages
     array set element_messages [list]
 
-    # Initialize username to email
-    if { [auth::UseEmailForLoginP] && [empty_string_p $username] } {
-        set username $email
-    }
-
-
     #####
     #
     # Create local account
@@ -427,6 +421,9 @@ ad_proc -public auth::create_user {
         # Local account creation error
         return [array get creation_info]
     }
+
+    # Need to find out which username was set
+    set username $creation_info(username)
 
     # Save the local account information for later
     set local_account_status $creation_info(account_status)
@@ -848,6 +845,11 @@ ad_proc -public auth::create_local_account {
     }
 
     set result(user_id) $user_id
+
+    if { [empty_string_p $username] } {
+        set username [acs_user::get_element -user_id $user_id -element username]
+    }
+    set result(username) $username
     
     # Creation succeeded
     set result(creation_status) "ok"
