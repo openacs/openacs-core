@@ -123,6 +123,13 @@ ad_proc -public ad_form {
 
     <p>
 
+    <b>General information about parameters</b>
+
+    <p>Parameters which take a name (for instance "-name" or "-select_query_name") expect a simple name
+    not surrounded by curly braces (in other words not a single-element list).  All other parameters expect
+    a single list to be passed in.
+    <p>
+
     Here's a complete list of switches that are supported by ad_form:
 
     <p>
@@ -146,11 +153,6 @@ ad_proc -public ad_form {
     <p><dt><b>-html</b></dt><p>
     <dd>The given html will be added to the "form" tag when page is rendered.  This is commonly used to
         define multipart file handling forms.
-    </dd>
-
-    <p><dt><b>-action</b></dt><p>
-    <dd>The name of the script to be called when the form is submitted.  Defaults to the name of the script
-        being served.  
     </dd>
 
     <p><dt><b>-export</b></dt><p>
