@@ -6,49 +6,49 @@
 
 # This is the name of your server (website).
 # It will be used as the name of directories, the name of database users and/or tablespaces, etc.
-set server "test"
+set server "service0"
 
 # Server root directory. This is where all of the files for your server will live.
 # Some people like this to be at /web/${server}, but we recommend the below standard setting.
-set serverroot "/web/${server}"
+set serverroot                "/web/${server}"
 
 # The host name (DNS) the server will be listening on
-set server_host {}
+set server_host               yourserver.test
 
 # The IP address the server will be listening on
-set server_ip {}
+set server_ip                 127.0.0.1
 
 # The port number the server will be listening on
-set server_port 8028
+set server_port               8000
 
 # The URL where your server will be accessible. This is used by the installation scripts to complete the installation.
 # Don't forget to include the port number above
-set server_url "http://${server_host}:${server_port}"
+set server_url                "http://${server_ip}:${server_port}"
 
 # OS user and group that AOLserver runs as. We recommend that you create a new user for your server.
 # If you do not want to do that, change the user name below
-set aolserver_user "nsadmin"
-set aolserver_group "web"
+set aolserver_user            "nsadmin"
+set aolserver_group           "web"
 
 # OpenACS configuration
-set admin_email "admin@collaboraid.net"
-set admin_username "admin"
-set admin_first_names "Admin"
-set admin_last_name "Collaboraid"
-set admin_password "password"
-set system_name "Test Server"
-set publisher_name "Collaboraid"
+set admin_email               "admin@yourserver.test"
+set admin_username            "admin"
+set admin_first_names         "Admin"
+set admin_last_name           "User"
+set admin_password            "1"
+set system_name               "An OpenACS Development Server"
+set publisher_name            "An OpenACS Developer"
 
 # Should we automatically grab the OpenACS code from CVS?
 # If not, you must have already unpacked a tar-ball in the server root directory specified above
-set do_checkout "yes"
+set do_checkout               "yes"
 
 # Which branch or symbolic tag should we use for the checkout
 # For example, say "HEAD" to get the latest code, oacs-5-0-0 to get the 5.0.0 release.
-set oacs_branch "HEAD"
+set oacs_branch               "HEAD"
 
 # Choose which database you will use - Say 'oracle' or 'postgres'
-set database "postgres"
+set database                  "postgres"
 
 #----------------------------------------------------------------------
 # Database configuration - PostgreSQL
@@ -70,7 +70,6 @@ set pg_port 5432
 set pg_bindir "/usr/local/pgsql-7.3/bin"
 
 
-
 #----------------------------------------------------------------------
 # Database configuration - Oracle
 #----------------------------------------------------------------------
@@ -84,9 +83,6 @@ set oracle_password ${db_name}
 # The system user account and password. We need this to create the tablespace and user above.
 set system_user "system"
 set system_user_password "manager"
-
-
-
 
 
 
