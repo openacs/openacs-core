@@ -162,7 +162,7 @@ ad_proc -public content::revision::copy {
 }
 
 
-ad_proc -public content::revision::del {
+ad_proc -public content::revision::delete {
     -revision_id:required
 } {
     @param revision_id
@@ -234,7 +234,7 @@ ad_proc -public content::revision::is_latest {
 } {
     @param revision_id
 
-    @return VARCHAR2
+    @return t or f
 } {
     return [package_exec_plsql -var_list [list \
         [list revision_id $revision_id ] \
@@ -247,7 +247,7 @@ ad_proc -public content::revision::is_live {
 } {
     @param revision_id
 
-    @return VARCHAR2
+    @return t or f
 } {
     return [package_exec_plsql -var_list [list \
         [list revision_id $revision_id ] \
