@@ -31,6 +31,11 @@ if { ![db_0or1row select_role_props {
     ad_script_abort
 }
 
+# The role pretty names can be message catalog keys that need
+# to be localized before they are displayed
+set role_props(pretty_name) [lang::util::localize $role_props(pretty_name)]
+set role_props(pretty_plural) [lang::util::localize $role_props(pretty_plural)]
+
 db_multirow rels select_rel_types_one {
     select r.rel_type as role, t.pretty_name, r.rel_type,
            decode(r.role_one,:role,'Side one', 'Side two') as side

@@ -61,4 +61,9 @@ db_multirow rels relations_query {
        and g.group_id = valid_types.group_id(+)
        and g.rel_type = valid_types.rel_type(+)
      order by lower(g.rel_type)
+} {
+    # The role pretty names can be message catalog keys that need
+    # to be localized before they are displayed
+    set role_pretty_name [lang::util::localize $role_pretty_name]
+    set role_pretty_plural [lang::util::localize $role_pretty_plural]    
 }

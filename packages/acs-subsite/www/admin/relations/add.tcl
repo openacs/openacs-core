@@ -77,6 +77,10 @@ db_1row rel_type_info {
            )
 }
 
+# The role pretty names can be message catalog keys that need
+# to be localized before they are displayed
+set role_pretty_name [lang::util::localize $role_pretty_name]
+
 if {[string equal $ancestor_rel_type membership_rel]} {
     if {[string equal $join_policy "closed"] && !$create_p} {
 	ad_complain "You do not have permission to add elements to $group_name"
