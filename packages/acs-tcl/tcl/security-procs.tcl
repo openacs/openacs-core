@@ -67,9 +67,14 @@ proc_doc sec_handler {} {
     Reads the security cookies, setting fields in ad_conn accordingly.
 
 } {
+
+    #  ns_log notice "OACS= sec_handler: enter"
     if { [catch { 
 	set cookie_list [ad_get_signed_cookie_with_expr "ad_session_id"]
     } errmsg ] } {
+
+	# ns_log notice "OACS= sec_handler:ad_get_signed_cookie failed $errmsg"
+
 	# cookie is invalid because either:
 	# -> it was never set
 	# -> it failed the cryptographic check
@@ -81,14 +86,16 @@ proc_doc sec_handler {} {
             catch {
                 set new_user_id [ad_get_signed_cookie "ad_user_login"]
             }
+	    # ns_log notice "OACS= sec_handler:http, ad_user_login cookie user_id $new_user_id"
 	} else {
             catch {
                 set new_user_id [lindex [split [ad_get_signed_cookie "ad_user_login_secure"] {,}] 0]
             }
+	    # ns_log notice "OACS= sec_handler:https, ad_user_login_secure cookie user_id $new_user_id"
 	}
-	# ns_log Notice "OACS= setting up session"
+	# ns_log Notice "OACS= sec_handler:setting up session"
 	sec_setup_session $new_user_id
-	# ns_log Notice "OACS= done setting up session"
+	# ns_log Notice "OACS= sec_handler:done setting up session"
     } else {
 	# The session already exists and is valid.
 	set cookie_data [split [lindex $cookie_list 0] {,}]
@@ -97,19 +104,42 @@ proc_doc sec_handler {} {
 	set session_id [lindex $cookie_data 0]
 	set user_id [lindex $cookie_data 1]
 
+	# ns_log notice "OACS= sec_handler:sess exists & is valid"
+	# ns_log notice "OACS= sec_handler:cookie: $cookie_list, exp: $session_expr"
+	# ns_log notice "OACS= sec_handler:sess_id: $session_id, user_id: $user_id"
+
 	# If it's a secure page and not a login page, we check
 	# secure token (can't check login page because they aren't
 	# issued their secure tokens until after they pass through)
 	# It is important to note that the entire secure login
 	# system depends on these two functions
   	if { [ad_secure_conn_p] && ![ad_login_page] } {
-  	    if { [catch { set sec_token [split [ad_get_signed_cookie "ad_secure_token"] {,}] }] } {
+
+	    # ns_log notice "OACS= sec_handler:secure but not login page"
+
+  	    if { [catch { set sec_token [split [ad_get_signed_cookie "ad_secure_token"] {,}] } errmsg] } {
   		# token is incorrect or nonexistent, so we force relogin.
-  		ad_returnredirect "/register/index?return_url=[ns_urlencode [ad_conn url]?[ad_conn query]]"
-  		return filter_break
+
+		# cro@ncacasi.org 2002-08-01
+		# but wait--does user have an ad_user_login_secure cookie?
+		# If so, just generate a secure token because he
+		# can't have that cookie unless he had logged in securely
+		# at some time in the past.
+		# So just call sec_setup_session to generate a new token.
+		# Otherwise, force a trip to /register
+		if { [catch {
+		    set new_user_id [lindex [split [ad_get_signed_cookie "ad_user_login_secure"] {,}] 0] }] } {
+#		     ns_log notice "OACS= sec_handler:token invalid $errmsg"
+
+		     ad_returnredirect "/register/index?return_url=[ns_urlencode [ad_conn url]?[ad_conn query]]"
+		     return filter_break
+		 } else {
+		     sec_setup_session $new_user_id
+		 }
   	    } else {
 		# need to check only one of the user_id and session_id
 		# if the cookie had been tampered.
+#		ns_log notice "OACS= sec_handler:token ok, $sec_token $session_id"
 		if { ![string match [lindex $sec_token 0] $session_id] } {
 		    ad_returnredirect "/register/index?return_url=[ns_urlencode [ad_conn url]?[ad_conn query]]"
 		    return filter_break
@@ -259,7 +289,7 @@ ad_proc -private sec_setup_session { new_user_id } {
 
     # ns_log Notice "OACS= done generating session id cookie"
 
-    if { [ad_secure_conn_p] } {
+    if { [ad_secure_conn_p] && $new_user_id != 0 } {
         # this is a secure session, so the browser needs
         # a cookie marking it as such
 	sec_generate_secure_token_cookie
