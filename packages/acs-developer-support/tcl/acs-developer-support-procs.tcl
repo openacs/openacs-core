@@ -88,13 +88,7 @@ ad_proc -private ds_support_url {} {
     @return A link to the first instance of the developer-support information available in the site node, \
 	    the empty_string if none are available.
 } {
-    return [util_memoize [list db_string ds_support_url {
-	select site_node.url(node_id) 
-	from site_nodes s, apm_packages p
-	where p.package_id = s.object_id
-	and p.package_key ='acs-developer-support'
-	and rownum = 1
-    } -default ""]]
+    return [apm_package_url_from_key "acs-developer-support"]
 }
 
 proc_doc ds_link {} { Returns the "Developer Information" link in a right-aligned table, if enabled. } {
