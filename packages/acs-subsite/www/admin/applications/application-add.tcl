@@ -4,6 +4,8 @@ ad_page_contract {
     @author Lars Pind (lars@collaboraid.biz)
     @creation-date 2003-05-28
     @cvs-id $Id$
+} {
+    node_id:integer,optional
 }
 
 set page_title "New Application"
@@ -11,11 +13,19 @@ set context [list [list "." "Applications"] $page_title]
 
 set packages [db_list_of_lists package_types {}]
 
+if { [ad_form_new_p -key node_id] } {
+    set focus application.package_key
+} else {
+    set focus application.instance_name
+}
+
 ad_form -name application -cancel_url . -form {
+    {node_id:key}
     {package_key:text(select)
         {label "Application"}
         {options $packages}
         {help_text "The type of application you want to add."}
+        {mode {[ad_decode [ad_form_new_p -key node_id] 1 "" "display"]}}
     }
     {instance_name:text,optional
         {label "Application name"}
@@ -26,15 +36,21 @@ ad_form -name application -cancel_url . -form {
         {label "URL folder name"}
         {help_text "This should be a short string, all lowercase, with hyphens instead of spaces, whicn will be used in the URL of the new application. If you leave this blank, we will generate one for you from name of the application."}
         {html {size 30}}
-        {validate {
-            empty_or_not_exists 
-            {expr \[empty_string_p \$value\] || \[catch { site_node::get_from_url -url "[ad_conn package_url]\$value/" -exact }\]}
-            {This folder name is already used.}
-        }}
     }
+} -edit_request {
+    array set node [site_node::get -node_id $node_id]
+    set package_key $node(package_key)
+    set instance_name $node(instance_name)
+    set folder $node(name)
 } -on_submit {
-    # Get the node ID of this subsite
-    set node_id [ad_conn node_id]
+    if { ![empty_string_p $folder] } {
+        set existing_node(node_id) {}
+        set errno [catch { array set existing_node [site_node::get_from_url -exact -url "[ad_conn package_url]$folder"] }]
+        if { ([ad_form_new_p -key node_id] && !$errno) || (![ad_form_new_p -key node_id] && !$errno && $existing_node(node_id) != $node_id)} {
+            form set_error application folder "This folder name is already used"
+            break
+        }
+    }
 
     if { [empty_string_p $instance_name] } {
         # Find the package pretty name from the list of packages
@@ -53,23 +69,35 @@ ad_form -name application -cancel_url . -form {
 
     # Autogenerate folder name
     if { [empty_string_p $folder] } {
+        set parent_node_id [ad_conn node_id]
         set existing_urls [db_list existing_urls {}]
 
         set folder [util_text_to_url \
                       -existing_urls $existing_urls \
                       -text $instance_name]
     }
-
+} -new_data {
     if { [catch {
         site_node::instantiate_and_mount \
-            -parent_node_id $node_id \
+            -parent_node_id [ad_conn node_id] \
             -node_name $folder \
             -package_name $instance_name \
             -package_key $package_key
     } errsmg] } {
         ad_return_error "Problem Creating Application" "We had a problem creating the application."
     }
+} -edit_data {
+    # this is where we would rename ...
+    
+    array set node [site_node::get -node_id $node_id]
+    set package_id $node(object_id)
 
+    db_transaction {
+        apm_package_rename -package_id $node(package_id) -instance_name $instance_name
+        
+        site_node::rename -node_id $node_id -name $folder
+    }
+} -after_submit {
     ad_returnredirect .
     ad_script_abort
 }

@@ -6,10 +6,24 @@ ad_page_contract {
     @cvs-id $Id$
 } {
     node_id:integer,multiple
+    {confirm_p 0}
 }
 
-# TODO:
-# Add some kind of confirmation
+if { !$confirm_p } {
+    set num [llength $node_id]
+
+    if { $num == 0 } {
+        ad_returnredirect .
+        return
+    }
+
+    set page_title "Delete [ad_decode $num 1 "Application" "Applications"]"
+    set context [list [list "." "Applications"] $page_title]
+    set yes_url [export_vars -base [ad_conn url] { node_id:multiple { confirm_p 1 } }]
+    set no_url "."
+
+    return
+}
 
 db_transaction {
     foreach id $node_id {
@@ -26,6 +40,7 @@ db_transaction {
         
     }
 }
-
+    
 ad_returnredirect .
+
 

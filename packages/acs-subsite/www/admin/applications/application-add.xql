@@ -6,7 +6,7 @@
         <querytext>
             select name
             from   site_nodes
-            where  parent_id = :node_id
+            where  parent_id = :parent_node_id
         </querytext>
     </fullquery>
 
