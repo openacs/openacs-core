@@ -171,7 +171,7 @@ namespace eval person {
         
         set person(person_id) $person_id
         set person(first_names) $first_names
-        set person(last_name) $last_names
+        set person(last_name) $last_name
 
         return [array get person]
     }
