@@ -12,3 +12,6 @@ randomInit [ns_time]
 
 # Create mutex for util_background_exec
 nsv_set util_background_exec_mutex . [ns_mutex create]
+
+# Schedule proc to clean up whos_online data structure
+util::whos_online::init
