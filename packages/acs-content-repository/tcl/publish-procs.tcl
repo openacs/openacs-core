@@ -204,7 +204,7 @@ ad_proc -public publish::handle_binary_file {
   if { [info exists opts(embed)] } {
 
     set file_url [publish::write_content $revision_id \
-       -item_id $item_id]
+                   -item_id $item_id -root_path [publish::get_publish_roots]]
 
     # If write_content aborted, give up
     if { [template::util::is_nil file_url] } {
@@ -310,18 +310,7 @@ ad_proc -public publish::handle::image { item_id args } {
   }
 
   # If the merging failed, output a straight <img> tag
-  template::query i_get_image_info image_info onerow "
-    select 
-      im.width, im.height, r.title as image_alt
-    from 
-      images im, cr_revisions r
-    where 
-      im.image_id = :revision_id
-    and
-      r.revision_id = :revision_id
-  " -cache "image_info $revision_id"
-  
-  template::util::array_to_vars image_info
+  db_1row i_get_image_info ""
 
   # Concatenate all the extra html arguments into a string
   if { [info exists opts(html)] } {
@@ -449,15 +438,7 @@ ad_proc -public publish::handle::text { item_id args } {
             }
 
             # Query for values from a previous revision
-
-            template::query get_previous_content html onevalue "
-                       select 
-                         content
-                       from 
-                         cr_content_text
-                       where 
-                         revision_id = :revision_id"
-
+            set html [db_string get_previous_content ""]
         }
     } 
   } else {
@@ -756,33 +737,9 @@ ad_proc -public publish::render_subitem {
   # Get the child item
 
   if { [string equal $relation_type child] } {
-    template::query rs_get_subitems subitems onelist "
-      select 
-        child_id
-      from 
-        cr_child_rels r, cr_items i
-      where 
-        r.parent_id = :main_item_id
-      and 
-        r.relation_tag = :relation_tag
-      and
-        i.item_id = r.child_id
-      order by 
-        order_n" -cache "item_child_items $main_item_id $relation_tag"
+      set subitems [db_list rs_get_subitems ""]
   } else {
-    template::query cs_get_subitems_related subitems onelist "
-      select 
-        related_object_id
-      from 
-        cr_item_rels r, cr_items i
-      where 
-        r.item_id = :main_item_id
-      and 
-        r.relation_tag = :relation_tag
-      and
-        i.item_id = r.related_object_id 
-      order by 
-        r.order_n" -cache "item_related_items $main_item_id $relation_tag"  
+      set subitems [db_list cs_get_subitems_related ""]
   }
 
   set sub_item_id [lindex $subitems [expr $index - 1]]
@@ -900,6 +857,7 @@ ad_proc -private publish::foreach_publish_path { url code {root_path ""} } {
   upvar current_page_root current_page_root
 
   foreach root_path $paths {
+    ns_log Notice "FOREACH_PUBLISH_PATH: root_path: $root_path"
     set current_page_root $root_path
     set filename [ns_normalizepath "/$root_path/$url"]   
     uplevel $code
@@ -956,6 +914,7 @@ ad_proc -private publish::write_multiple_files { url text {root_path ""}} {
   @see proc publish::write_multiple_blobs
 
 } {
+    ns_log Notice "WRITE_MULTIPLE_FILES: root_path = $root_path"
   foreach_publish_path $url {
     mkdirs $filename
     template::util::write_file $filename $text
@@ -1013,9 +972,7 @@ ad_proc -public publish::write_content { revision_id args } {
 
       # Get the item id if none specified
       if { [template::util::is_nil opts(item_id)] } {
-          template::query get_one_revision item_id onevalue "
-             select item_id from cr_revisions where revision_id = :revision_id
-           " -cache "item_from_revision $revision_id"
+          set item_id [db_string get_one_revision ""]
 	  
 	  if { [template::util::is_nil item_id] } {
 	      ns_log notice \
@@ -1042,13 +999,7 @@ ad_proc -public publish::write_content { revision_id args } {
 
               # Query for values from a previous revision
 
-              template::query gcv_get_previous_content text onevalue "
-                   select 
-                     content
-                   from 
-                     cr_content_text
-                   where 
-                     revision_id = :revision_id"
+              set text [db_string gcv_get_previous_content ""]
           }
 
 	  write_multiple_files $file_url $text $root_path
