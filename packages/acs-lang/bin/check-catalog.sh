@@ -15,18 +15,37 @@
 # @author Peter Marklund (peter@collaboraid.biz)
 
 ### Functions start
+get_catalog_keys() {
+    file_name=$1
+    echo $(${script_path}/mygrep '<msg key="([^"]+)"' $file_name)
+}
+
+check_consistency_non_en_US_files() {
+    en_US_file=catalog/${package_key}.en_US.ISO-8859-1.xml
+
+    for file_name in $(ls catalog/*.xml | grep -v 'en_US.ISO-8859-1.xml')
+    do
+        echo "$0: $package_key - checking that keys in $file_name are also in en_US catalog file"
+
+        for catalog_key in `get_catalog_keys $file_name`
+        do
+            egrep -q "<msg key=\"${catalog_key}\">" $en_US_file || echo "$0: $package_key - Warning: key $catalog_key in $file_name missing in $en_US_file"
+        done
+    done
+}
+
 check_catalog_keys_have_lookups() {
 
     # Check that all keys in the catalog file are either in tcl or adp or info files
-    for catalog_key in $(${script_path}/mygrep '<msg key="([^"]+)"' catalog/${package_key}.en_US.ISO-8859-1.xml) 
+    for catalog_key in `get_catalog_keys catalog/${package_key}.en_US.ISO-8859-1.xml` 
     do 
         find -iname '*.tcl' | xargs ${script_path}/mygrep \
-           "(?ms)\[_\s+(?:\[ad_conn locale\]\s+)?\"?${package_key}\.$catalog_key\"?" \
+           "${package_key}\.$catalog_key" \
          || \
         find -regex '.*\.\(info\|adp\|sql\|tcl\)' | xargs ${script_path}/mygrep \
-           "#${package_key}\.$catalog_key#" \
+           "${package_key}\.$catalog_key" \
          || \
-        echo "Warning key $catalog_key in catalog file not found in any adp, info, sql, or tcl file"
+        echo "$0: $package_key - Warning key $catalog_key in catalog file not found in any adp, info, sql, or tcl file"
     done
 }
 
@@ -38,7 +57,7 @@ check_tcl_file_lookups_are_in_catalog() {
     do 
         egrep -q "<msg[[:space:]]+key=\"$tcl_message_key\"" catalog/${package_key}.en_US.ISO-8859-1.xml \
           || \
-        echo "Warning: key $tcl_message_key not in catalog file" 
+        echo "$0: $package_key - Warning: key $tcl_message_key not in catalog file" 
     done
 }
 
@@ -52,7 +71,7 @@ check_adp_file_lookups_are_in_catalog() {
     do 
         egrep -q "<msg[[:space:]]+key=\"$adp_message_key\"" $catalog_file \
           || \
-        echo "Warning: key $adp_message_key not in catalog file"
+        echo "$0: $package_key - Warning: key $adp_message_key not in catalog file"
     done
 }
 ### Functions end
@@ -89,14 +108,19 @@ fi
 package_path="${script_path}/../../${package_key}"
 cd $package_path
 
-echo "$0: $package_key - checking catalog file name"
-${script_path}/check-catalog-file-path.pl $catalog_file_path
+for file_name in $(ls catalog/*.xml)
+do
+    echo "$0: $package_key - checking filename consistency of catalog file $file_name"
+    ${script_path}/check-catalog-file-path.pl "${package_path}/${file_name}"
+done
 
-echo "$0: $package_key - checking catalog keys are in lookups"
-check_catalog_keys_have_lookups $package_key
+echo "$0: $package_key - checking en_US catalog keys are in lookups"
+check_catalog_keys_have_lookups
 
-echo "$0: $package_key - checking tcl lookups are in catalog file"
-check_tcl_file_lookups_are_in_catalog $package_key
+echo "$0: $package_key - checking tcl lookups are in en_US catalog file"
+check_tcl_file_lookups_are_in_catalog
 
-echo "$0: $package_key - checking adp lookups are in catalog file"
-check_adp_file_lookups_are_in_catalog $package_key
+echo "$0: $package_key - checking adp lookups are in en_US catalog file"
+check_adp_file_lookups_are_in_catalog
+
+check_consistency_non_en_US_files
