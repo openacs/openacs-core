@@ -36,7 +36,7 @@
 	  </td>
         </if>
 	<if @elements.widget@ in radio checkbox>
-            <if @elements.label@ nil><td colspan=2>></if>
+            <if @elements.label@ nil><td colspan=2></if>
 	    <else><td></else>
 	    <noparse>
             <table cellpadding=4 cellspacing=0 border=0>
