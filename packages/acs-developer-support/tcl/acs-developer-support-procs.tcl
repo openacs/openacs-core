@@ -52,14 +52,19 @@ ad_proc -public ds_collection_enabled_p {} {
     Returns whether we're collecting information about this request
 } {
     global ad_conn
+    if { [info exists ad_conn(ds_collection_enabled_p)] } {
+        return $ad_conn(ds_collection_enabled_p)
+    }
     if { ![info exists ad_conn(request)] } {
 	return 0
     }
     foreach pattern [nsv_get ds_properties enabled_ips] {
 	if { [string match $pattern [ad_conn peeraddr]] } {
+            set ad_conn(ds_collection_enabled_p) 1
 	    return 1
 	}
     }
+    set ad_conn(ds_collection_enabled_p) 0
     return 0
 }
 
