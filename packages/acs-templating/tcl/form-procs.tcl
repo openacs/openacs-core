@@ -148,12 +148,6 @@ ad_proc -public template::form::create { id args } {
     ad_script_abort
   }
 
-  # If the user hit a button named "cancel", redirect and about
-  if { $submission && [string equal $formbutton "cancel"] && [exists_and_not_null opts(cancel_url)]} {
-    ad_returnredirect $opts(cancel_url)
-    ad_script_abort
-  }
-
   set formaction [get_action $id]
   # If we were in display mode, and a button was clicked, we should be in edit mode now
   if { $submission && [string equal [ns_queryget "form:mode"] "display"] } {
