@@ -17,7 +17,7 @@
     </form>
     <p>
     Note: If you've forgotten your password, <a
-    href="email-password.tcl?user_id=@user_id@">ask this server to email it
+    href="email-password?user_id=@user_id@">ask this server to email it
     to @email@</a>.
 
   </if>
