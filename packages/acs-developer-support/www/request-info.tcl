@@ -32,7 +32,7 @@ if { [info exists property(start)] } {
 
 <blockquote>
 <table cellspacing=0 cellpadding=0>
-<tr><th align=left>Request Start Time:&nbsp;</th><td>[ns_fmttime $property(start)]\n"
+<tr><th align=left>Request Start Time:&nbsp;</th><td>[ns_fmttime [lindex $property(start) 0]]\n"
 } else {
     doc_body_append "The information for this request is gone - either the server has been restarted, or
 the request is more than [ad_parameter DeveloperSupportLifetime "" 900] seconds old.
