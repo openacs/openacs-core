@@ -397,6 +397,9 @@
       <xi:include href="kernel/ext-auth.xml"  xmlns:xi="http://www.w3.org/2001/XInclude">
         <xi:fallback>Section missing</xi:fallback>
       </xi:include> 
+      <xi:include href="kernel/ext-auth-design.xml"  xmlns:xi="http://www.w3.org/2001/XInclude">
+        <xi:fallback>Section missing</xi:fallback>
+      </xi:include> 
 
     </chapter>
 
