@@ -6,7 +6,9 @@
 <fullquery name="binding_install">      
       <querytext>
          begin
-           select acs_sc_binding.new(:contract_id,:impl_id)
+           acs_sc_binding.new(
+             contract_id => :contract_id,
+             impl_id => :impl_id);
          end;
       </querytext>
 </fullquery>

@@ -968,7 +968,7 @@ ad_proc -public ad_page_contract {
 		} else {
 		    # This is an array: verify the [array get] form of the array
 		    if { ![info exists apc_signatures($formal_name)] || \
-			    ![ad_verify_signature [array get var] $apc_signatures($formal_name)] } {
+			    ![ad_verify_signature [lsort [array get var]] $apc_signatures($formal_name)] } {
 			ad_complain -key $formal_name:verify "The signature for the variable '$formal_name' was incorrect."
 			continue
 		    }

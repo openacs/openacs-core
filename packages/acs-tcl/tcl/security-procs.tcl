@@ -1019,6 +1019,7 @@ ad_proc -private __ad_verify_signature {
     ns_log Debug "Security: Expire_Time is $expire_time (compare to [ns_time]), hash is $hash"
 
     # validate cookie: verify hash and expire_time
+
     set computed_hash [ns_sha1 "$value$token_id$expire_time$secret_token"]
 
     if { [string compare $computed_hash $hash] == 0 && ($expire_time > [ns_time] || $expire_time == 0) } {

@@ -799,10 +799,11 @@ ad_proc -public export_vars {
     The value is an array and should be exported in a way compliant with the <code>:array</code> flag of 
     <a href="/api-doc/proc-view?proc=ad_page_contract"><code>ad_page_contract</code></a>, which means
     that each entry will get output as <code>name.key=value</code>.
-    If you need to specify a value for an array directly, it should be in <code>array get</code> format.
+    <p>
     If you don't specify a value directly, but want it pulled out of the Tcl environment, then you don't 
     need to specify <code>:array</code>. If you do, and the variable is in fact not an array, an error will
     be thrown.
+    <p>
     </dd>
 
     <dt><b>sign</b></dt>
@@ -945,7 +946,15 @@ ad_proc -public export_vars {
 			}
 		    }
 		    if { [info exists exp_flag($name:sign)] } { 
-			ns_set put $export_set "$name:sig" [ad_sign $exp_value($name)]
+
+                        # DRB: array get does not define the order in which elements are returned,
+                        # meaning that arrays constructed in different ways can have different
+                        # signatures unless we sort the returned list.  I ran into this the
+                        # very first time I tried to sign an array passed to a page that used
+                        # ad_page_contract to verify the veracity of the parameter.
+
+			ns_set put $export_set "$name:sig" [ad_sign [lsort $exp_value($name)]]
+
 		    }
 		} else {
 		    if { [info exists exp_flag($name:multiple)] } {
