@@ -6,10 +6,15 @@ ad_page_contract {
     @cvs-id $Id$  
 } {
     version_id:integer
-    {return_url "version-i18n-index?version_id=$version_id"}
+    {return_url ""}
 }
 
 set page_title "Message Export Results"
+
+# Default return_url
+if { [empty_string_p $return_url] } {
+    set return_url "version-i18n-index?[export_vars { version_id }]"
+}
 
 set catalog_dir [lang::catalog::package_catalog_dir [apm_package_key_from_version_id $version_id]]
 
