@@ -260,10 +260,9 @@ ad_proc -public apm_file_add {
 }
 
 ad_proc -private apm_files_load {
-    {
-	-callback apm_dummy_callback
-	-force_reload:boolean
-    } files
+    {-force_reload_p 0}
+    {-callback apm_dummy_callback} 
+    files
 } {
 
     Load the set of files into the currently running Tcl interpreter.

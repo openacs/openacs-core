@@ -250,6 +250,7 @@ ad_proc -private apm_version_load_status { version_id } {
 }
 
 ad_proc -private apm_load_libraries { 
+    {-force_reload_p 0}
     {-packages {}}
     {-callback apm_dummy_callback}
     {-procs:boolean} 
@@ -317,10 +318,11 @@ ad_proc -private apm_load_libraries {
     # Release all outstanding database handles (since the file we're sourcing
     # might be using the ns_db database API as opposed to the new db_* API).
     db_release_unused_handles
-    apm_files_load -callback $callback $files
+    apm_files_load -force_reload_p $force_reload_p -callback $callback $files
 }
 
 ad_proc -public apm_load_package {
+    {-force_reload_p 0}
     {-load_tests_p 0}
     package_key
 } {
@@ -329,14 +331,14 @@ ad_proc -public apm_load_package {
     @author Peter Marklund
 } {
     # Load *-procs.tcl and *-init.tcl files for enabled packages.
-    apm_load_libraries -packages $package_key -procs
+    apm_load_libraries -force_reload_p $force_reload_p -packages $package_key -procs
 
     # Load up the Queries (OpenACS, ben@mit.edu)
     apm_load_queries -packages $package_key
 
     # Load up the Automated Tests and associated Queries if necessary
     if {$load_tests_p} {
-      apm_load_libraries -packages $package_key -test_procs
+      apm_load_libraries -force_reload_p $force_reload_p -packages $package_key -test_procs
       apm_load_queries -packages $package_key -test_queries
     }
 
@@ -344,7 +346,7 @@ ad_proc -public apm_load_package {
 
     # Load up the Automated Tests initialisation scripts is necessary
     if {$load_tests_p} {
-      apm_load_libraries -packages $package_key -test_init
+      apm_load_libraries -force_reload_p $force_reload_p -packages $package_key -test_init
     }
 }
 
