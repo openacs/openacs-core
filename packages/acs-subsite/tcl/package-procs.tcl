@@ -908,17 +908,6 @@ ad_proc -public package_instantiate_object {
 
 }
 
-ad_proc -public package_function_p {
-  package_name
-  function_name
-} {
-    Returns 0 if the given function is a procedure, 1 if a function.  Always
-    returns 1 in the Postgres version.  Broken out into its own function so we
-    can util_memoize it.
-} {
-    return [db_string function_p {}]
-}
-
 ad_proc -public package_exec_plsql {
     { -var_list "" }
     package_name 
