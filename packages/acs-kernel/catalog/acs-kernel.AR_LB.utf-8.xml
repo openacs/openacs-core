@@ -2,7 +2,6 @@
 <message_catalog package_key="acs-kernel" package_version="5.0d13" locale="AR_LB" charset="utf-8">
 
   <msg key="authentication_authority">السلطة</msg>
-  <msg key="common_add">أضفّ</msg>
   <msg key="common_apply">طبّق</msg>
   <msg key="common_cancel">ألغي</msg>
   <msg key="common_close">أغلق</msg>

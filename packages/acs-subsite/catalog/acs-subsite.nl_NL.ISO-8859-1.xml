@@ -1,106 +1,82 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <message_catalog package_key="acs-subsite" package_version="5.0d5" locale="nl_NL" charset="ISO-8859-1">
 
-  <msg key="About_You">Over jou</msg>
-  <msg key="Account_close_confirm_no_label">Nee, ga terug naar %pvt_home_name%</msg>
-  <msg key="Account_close_confirm_yes_label">Ja, sluit mijn account alstublieft</msg>
+  <msg key="About_You">Over u</msg>
   <msg key="Account_closed">&lt;p&gt;Uw registratie contract is gesloten.&lt;/p&gt; &lt;p&gt;Als u wilt kunnen we &lt;a href=&quot;%restore_url%&quot;&gt;deze heropenen&lt;/a&gt;.&lt;/p&gt;</msg>
-  <msg key="Account_closed_workspace_msg">&lt;p&gt; &lt;font color=&quot;red&quot;&gt; &lt;b&gt; Je account staat gemarkeerd als gesloten. &lt;/b&gt; &lt;/font&gt; &lt;a href=&quot;%login_url%&quot;&gt;Log in&lt;/a&gt; om te zien wat je er aan kunt doen.  </msg>
-  <msg key="Account_reopened_message">Je account op %system_name% is heropend. Welkom terug!</msg>
-  <msg key="Account_reopened_title">Account heropend</msg>
   <msg key="Answer">Antwoord:</msg>
   <msg key="at">op</msg>
-  <msg key="Bad_Password">Foutief wachtwoord</msg>
+  <msg key="Bad_Password">Foutief Wachtwoord</msg>
   <msg key="Basic_Information">Basisinformatie</msg>
   <msg key="cannot_retrieve_password">Het verkrijgen van een wachtwoord via de gezaghebbende server wordt niet ondersteund.</msg>
-  <msg key="Change_locale_label">Verander van taal</msg>
-  <msg key="Change_my_Password">Wijzig wachtwoord</msg>
+  <msg key="Change_my_Password">Wijzig Wachtwoord</msg>
   <msg key="Check_Your_Inbox">Controleer uw e-postbus</msg>
   <msg key="Children">Kinderen</msg>
-  <msg key="Close_account_explanation">&lt;P&gt;Bevestig hieronder dat je je account op %system_name% wilt sluiten.&lt;P&gt;Het sluiten van je account betekent dat we je geen bercihtmeldingen meer sturen en je niet meer in lijsten op %system_name% zult verschijnen. Je bijdrage aan de gemeenschap zal desalnietemin behouden blijven als deel van de geschiedenis van deze gemeenschap.&lt;P&gt;Je kunt je account trouwens op ieder moment weer heropenen, door opnieuw in te loggen.
-</msg>
-  <msg key="Close_your_account">Dit account sluiten</msg>
   <msg key="Confirm">Bevestigen:</msg>
-  <msg key="Current_Password">Huidig wachtwoord:</msg>
-  <msg key="Currently_invisible_msg">&lt;P&gt;Jouw online status is op dit moment niet opvraagbaar voor andere gebruikers</msg>
-  <msg key="Currently_visible_msg">&lt;P&gt;Jouw online status is opvraagbaar voor andere gebruikers</msg>
-  <msg key="Customize_Question">Vraag veranderen</msg>
+  <msg key="Current_Password">Huidig Wachtwoord:</msg>
+  <msg key="Customize_Question">Vraag Op Maat maken</msg>
   <msg key="Direct_Permissions">Directe permissies</msg>
-  <msg key="Email">E-mail</msg>
-  <msg key="email_body_Forgotten_password">Hier is je nieuwe inloginformatie: %account_id_label%: %account_id% %password_label%: %password% Volg de volgende link om je wachtwoord direct te veranderen:</msg>
-  <msg key="email_body_Registration_password">Bedankt voor het registreren op %system_name%. Dit is hoe je inlogt op %system_url%: %account_id_label%: %account_id% %password_label%: %password% Volg alsjeblieft de volgende link om je wachtwoord direct te veranderen: %reset_password_url%
-
-</msg>
+  <msg key="Email">Email</msg>
   <msg key="Email_Confirmation">E-mailbevestiging</msg>
   <msg key="Email_not_Requested">E-mail niet gevraagd</msg>
-  <msg key="email_subject_Forgotten_password">Je vergeten wachtwoord op %system_name%</msg>
-  <msg key="email_subject_Registration_password">Welkom op %system_name%</msg>
   <msg key="Error_sending_mail">Fout bij verzenden e-mail</msg>
   <msg key="First_names">Voornamen</msg>
   <msg key="Grant">Toekennen</msg>
   <msg key="Grant_Permission">Permissie toekennen</msg>
   <msg key="Join_group_name">Wordt lid van %group_name%</msg>
   <msg key="Last_name">Achternaam.</msg>
-  <msg key="Log_In">Log in</msg>
+  <msg key="Log_In">Log In</msg>
   <msg key="lt_Cannot_join_this_grou">Lid worden van deze groep is niet mogelijk.</msg>
   <msg key="lt_first_names_last_name">%first_names% %last_name% (%email%) heeft zich geregistreerd als gebruiker op %system_url% </msg>
-  <msg key="lt_Grant_Permission_on_n">Ken recht toe aan %name%</msg>
-  <msg key="lt_Inherited_Permissions">Geërfde rechten</msg>
+  <msg key="lt_Grant_Permission_on_n">Ken toestemming toe aan %name%</msg>
+  <msg key="lt_Inherited_Permissions">Geërfde Permissies</msg>
   <msg key="lt_It_would_be_a_very_ba">Het is een zeer slecht idee om deze optie te gebruiken indien u een gedeelde computer gebruikt, zoals in een bibliotheek of school. Elke volgende gebruiker van die computer kan zich dan voordoen als u op ons systeem.</msg>
   <msg key="lt_New_registration_at_s">Nieuwe registratie op %system_url%</msg>
   <msg key="lt_Note_that_you_can_era">Een opgeslagen e-mailadres en wachtwoord kan worden gewist door de &quot;log uit&quot; optie te kiezen vanuit de &quot;Werkplek&quot;.</msg>
   <msg key="lt_num_children_Children">%num_children% verborgen onderliggende elementen</msg>
   <msg key="lt_On_portrait_publish_d">&lt;a href=&quot;%subsite_url%user/portrait/?return_url=%pvt_home_url%&quot;&gt;%portrait_title%&lt;/a&gt; is op %portrait_publish_date% ingevoerd</msg>
   <msg key="lt_Our_server_can_tell_y">Ons systeem kan uw browser helpen om dingen te onthouden, zoals uw e-mailadres en wachtwoord. Dit is handig als u de enige bent die op uw computer werkt. U hoeft uw e-mailadres en wachtwoord dan niet steeds in te typen.</msg>
-  <msg key="lt_Password_Confirmation">Bevestig wachtwoord:</msg>
+  <msg key="lt_Password_Confirmation">Bevestig Wachtwoord:</msg>
   <msg key="lt_Personal_Home_Page_UR">URL van persoonlijke webpagina:</msg>
   <msg key="lt_Please_read_and_follo">Lees en volgt de instructies in deze e-mail alstublieft.</msg>
   <msg key="lt_Please_try_to_a_hrefi">Probeer nogmaals om &lt;a href=&quot;index&quot;&gt;in te loggen&lt;/a&gt;</msg>
-  <msg key="lt_Problem_with_authenti">Probleem tijdens aanmelden</msg>
+  <msg key="lt_Problem_with_authenti">Probleem tijdens controle van authenticiteit</msg>
   <msg key="lt_Registration_informat">Inschrijfgegevens voor deze service zijn toegezonden aan %email%.</msg>
   <msg key="lt_Registration_informat_1">Inschrijfgegevens voor deze service zijn toegezonden aan %email%.</msg>
   <msg key="lt_registration_request_submitted">Het verzoek om inschrijving is verzonden aan de beheerder van %system_name%. We zijn in afwachting van toestemming.</msg>
   <msg key="lt_Saving_email_address_">Opslaan e-mailadres en wachtwoord</msg>
-  <msg key="lt_Show_everyone_else_at">Laat iedereen op %system_name% zien hoe goed je eruit ziet:</msg>
+  <msg key="lt_Show_everyone_else_at">Laat aan iedereen op %system_name% zien hoe goed u eruit ziet:</msg>
   <msg key="lt_Sorry_but_it_seems_th">Het spijt ons, maar het lijkt alsof u bent uitgesloten van %system_name%.</msg>
   <msg key="lt_There_was_a_problem_w">Er was een probleem met de authenciteit van uw account</msg>
   <msg key="lt_To_confirm_your_regis">Ga naar %confirmation_url% om de inschrijving te bevestigen.</msg>
   <msg key="lt_We_were_not_awaiting_">Wij verwachtten geen e-mail van u. Er is ergens iets misgegaan.</msg>
   <msg key="lt_Welcome_to_system_nam">Welkom bij %system_name%</msg>
-  <msg key="lt_What_other_people_see">Wat andere mensen zien als ze je naam aanklikken</msg>
   <msg key="lt_You_cant_have_a_lt_in">&amp;lt; kan niet in een voornaam worden gebruikt. Het lijkt dan alsof er een HTML tag staat, hetgeen andere gebruikers in verwarring kan brengen.</msg>
   <msg key="lt_You_cant_have_a_lt_in_1">&amp;lt; kan niet in een achternaam worden gebruikt. Het lijkt dan alsof er een HTML tag staat, hetgeen andere gebruikers in verwarring kan brengen.</msg>
   <msg key="lt_Your_email_has_been_c">De e-mail is bevestigd. Log nu in op %system_name%.</msg>
   <msg key="lt_Your_email_has_been_c_1">De e-mail is bevestigd. We zijn nu in afwachting van toestemming van de beheerder van %system_name%.</msg>
   <msg key="lt_Your_email_is_confirm">De e-mail is bevestigd.</msg>
   <msg key="lt_Your_URL_doesnt_have_">De URL heeft niet de juiste opmaak. Een geldige URL ziet er ongeveer alsvolgt uit \&quot;%valid_url_example%\&quot;.&quot;</msg>
-  <msg key="Make_yourself_invisible_label">Maak jezelf onzichtbaar</msg>
-  <msg key="Make_yourself_visible_label">Maak jezelf zichtbaar</msg>
-  <msg key="Manage_your_notifications">Mijn berichtmeldingen beheren</msg>
-  <msg key="New_Password">Nieuw wachtwoord:</msg>
+  <msg key="New_Password">Nieuw Wachtwoord:</msg>
   <msg key="no_portrait_title_message">Jouw portret</msg>
   <msg key="none">geen</msg>
   <msg key="Password">Wachtwoord:</msg>
   <msg key="Password_changed_body">Uw login gegevens op %system_name% voor %account_id_label% %account_id%. 
 Uw wachtwoord is recent gewijzigd. U hoeft niets te doen, dit bericht is slechts bedoeld om de veiligheid van uw gegevens te verhogen. --------------- U kunt uw wachtwoord altijd wijzigen door het volgende te doen: 1. Login op %system_name% 2. Klik op de &quot;%pvt_home_name%&quot; link 3. Kies &quot;%password_update_link_text%&quot; </msg>
   <msg key="Password_changed_subject">Wachtwoord is veranderd</msg>
-  <msg key="Permissions">Rechten</msg>
-  <msg key="Permissions_for_name">Rechten voor %name%</msg>
+  <msg key="Permissions">Permissies</msg>
+  <msg key="Permissions_for_name">Permissies van %name%</msg>
   <msg key="Question">Vraag:</msg>
-  <msg key="Recover_Password">Wachtwoord herstellen</msg>
+  <msg key="Recover_Password">Terugkrijgen wachtwoord</msg>
   <msg key="Register">Inschrijven</msg>
-  <msg key="Registration_Approval_Notice">Bedankt voor het registreren op %system_name%. De beheerders krijgen hier bericht van en zodra zij akkoord zijn krijg je een e-mailtje. Kom dan terug om %system_name% te gebruiken.</msg>
-  <msg key="Revoke_Checked">Selectie ongedaan maken</msg>
+  <msg key="Revoke_Checked">Gemarkeerde Intrekken</msg>
   <msg key="Screen_name">Schermnaam</msg>
   <msg key="Show">Toon</msg>
   <msg key="sorry_forgotten_pwd">Sorry, wij kunnen u niet verder helpen met het wachtwoord dat u vergeten bent.</msg>
   <msg key="Thank_you">Bedankt.</msg>
   <msg key="up_to_context_name">tot aan %context_name% </msg>
   <msg key="Update">Bijwerken</msg>
-  <msg key="Update_Password">Wachtwoord veranderen</msg>
+  <msg key="Update_Password">Bijwerken Wachtwoord</msg>
   <msg key="upload_a_portrait">Sla een portret op</msg>
   <msg key="Username">Gebruikersnaam</msg>
-  <msg key="Whos_Online_link_label">Gebruikers momenteel online</msg>
-  <msg key="Whos_Online_title">Wie is er online?</msg>
-  <msg key="Your_Portrait">Jouw portret:</msg>
+  <msg key="Your_Portrait">Portret:</msg>
 </message_catalog>

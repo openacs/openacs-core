@@ -7,7 +7,6 @@
   <msg key="Frequency">Kekerapan</msg>
   <msg key="Item">Bahan</msg>
   <msg key="lt_Getting_too_much_emai">Menerima terlalu banyak e-mel? Uruskan notfikasi-notifikasi anda di: %manage_notifications_url%</msg>
-  <msg key="lt_Notification_Interval">Tempoh Notifikasi</msg>
   <msg key="lt_Request_Notification_">Memohon Notifikasi untuk %pretty_name%</msg>
   <msg key="lt_system_name_-_Batched">[%system_name% - Notifikasi Berkelompok]</msg>
   <msg key="lt_You_have_no_notificat">Anda tidak mempunyai sebarang notifikasi.</msg>
@@ -17,5 +16,4 @@
   <msg key="Notification_type">Jenis notifikasi</msg>
   <msg key="Request_Notification">Memohon Notifikasi</msg>
   <msg key="SUBJECT">SUBJEK:</msg>
-  <msg key="Unsubscribe">Batalkan Langganan</msg>
 </message_catalog>

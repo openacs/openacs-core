@@ -2,7 +2,6 @@
 <message_catalog package_key="acs-kernel" package_version="5.0d13" locale="ru_RU" charset="utf-8">
 
   <msg key="authentication_authority">Удостоверение подлинности</msg>
-  <msg key="common_add">Добавить</msg>
   <msg key="common_apply">Применить</msg>
   <msg key="common_cancel">Отменить</msg>
   <msg key="common_close">Закрыть</msg>

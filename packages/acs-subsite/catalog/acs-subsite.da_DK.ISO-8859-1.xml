@@ -11,7 +11,6 @@
   <msg key="Change_my_Password">Ændr min adgangskode</msg>
   <msg key="Check_Your_Inbox">Tjek din indbakke</msg>
   <msg key="Children">Børn</msg>
-  <msg key="Close_your_account">Luk din konto</msg>
   <msg key="Confirm">Bekræft:</msg>
   <msg key="Current_Password">Nuværende adgangskode:</msg>
   <msg key="Customize_Question">Tilpas spørgsmål</msg>
@@ -51,7 +50,6 @@
   <msg key="lt_To_confirm_your_regis">Gå venligt til %confirmation_url% for at bekræfte din registrering</msg>
   <msg key="lt_We_were_not_awaiting_">Vi afventer ikke din e-mail. Der må være sket en fejl.</msg>
   <msg key="lt_Welcome_to_system_nam">Velkommen til %system_name%</msg>
-  <msg key="lt_What_other_people_see">Hvad vi viser andre når de klikker på dit navn</msg>
   <msg key="lt_You_cant_have_a_lt_in">Du kan ikke have et &amp;lt; i dit fornavn, da dette vil se ud som HTML og derfor forvirre andre brugere.</msg>
   <msg key="lt_You_cant_have_a_lt_in_1">Du kan ikke have et &amp;lt; i dit efternavn, da dette vil se ud som HTML og derfor forvirre andre brugere.</msg>
   <msg key="lt_Your_email_has_been_c">Din e-mailadresse er blevet bekræftet. Du kan nu logge ind på %system_name%.</msg>

@@ -2,7 +2,6 @@
 <message_catalog package_key="acs-kernel" package_version="5.0d13" locale="pt_PT" charset="ISO-8859-1">
 
   <msg key="authentication_authority">Autoridade</msg>
-  <msg key="common_add">Adicionar</msg>
   <msg key="common_apply">Aplicar</msg>
   <msg key="common_cancel">Cancelar</msg>
   <msg key="common_close">Fechar</msg>
