@@ -15,9 +15,12 @@ ad_require_permission $object_id admin
 
 set user_id [ad_conn user_id]
 
-db_multirow users users_who_dont_have_any_permissions {}
-
 set perm_url "[site_node_closest_ancestor_package_url]permissions/"
+
+db_multirow -extend { add_url } users users_who_dont_have_any_permissions {} {
+    set add_url [export_vars -base "${perm_url}perm-user-add-2" { return_url object_id user_id }]
+}
+
 
 list::create \
     -name users \
@@ -35,6 +38,12 @@ list::create \
         email {
             label "Email"
             link_url_eval {mailto:$email}
+        }
+        add {
+            label "Add"
+            link_url_col add_url
+            link_html { title "Add this user" }
+            display_template "Add"
         }
     }
 
