@@ -228,7 +228,7 @@ ad_proc -public site_node::get_from_node_id {
 
 ad_proc -public site_node::get_from_url {
     {-url:required}
-	{-exact:boolean}
+    {-exact:boolean}
 } {
     Returns an array representing the site node that matches the given url.<p>
 
@@ -339,6 +339,22 @@ ad_proc -public site_node::get_url_from_object_id {
     come before their parents. This ordering is useful when deleting site nodes
     as we must delete child site nodes before their parents.
 } {
+    set sort [list]
+    foreach url [nsv_array names site_nodes] {
+        lappend sort [list $url [string length $url]]
+    }
+    set sorted [lsort -index 1 $sort]
+    foreach elm $sorted {
+        set url [lindex $elm 0]
+        array unset site_node
+        array set site_node [site_node::get_from_url -url $url]
+        if { $site_node(object_id) == $object_id } {
+            return $url
+        }
+    }
+    return {}
+    
+
     return [db_list select_url_from_object_id {}]
 }
 
