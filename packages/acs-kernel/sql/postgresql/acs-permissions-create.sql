@@ -84,171 +84,172 @@ create table acs_privilege_descendant_map (
 
 );
 
--- This trigger is used to create a pseudo-tree hierarchy that
--- can be used to emulate tree queries on the acs_privilege_hierarchy table.
--- The acs_privilege_hierarchy table maintains the permissions structure, but 
--- it has a complication in that the same privileges can exist in more than one
--- path in the tree.  As such, tree queries cannot be represented by the 
--- usual tree query methods used for openacs.  
 
--- DCW, 2001-03-15.
 
--- usage: queries directly on acs_privilege_hierarchy don't seem to occur
---        in many places.  Rather it seems that acs_privilege_hierarchy is
---        used to build the view: acs_privilege_descendant_map.  I did however
---        find one tree query in content-perms.sql that looks like the 
---        following:
+-- DanW: eliminated hierarchy index in favor of using descendant map
 
--- select privilege, child_privilege from acs_privilege_hierarchy
---           connect by prior privilege = child_privilege
---           start with child_privilege = 'cm_perm'
 
--- This query is used to find all of the ancestor permissions of 'cm_perm'. 
--- The equivalent query for the postgresql tree-query model would be:
-
--- select  h2.privilege 
---   from acs_privilege_hierarchy_index h1, 
---        acs_privilege_hierarchy_index h2
---  where h1.child_privilege = 'cm_perm'
---    and h1.tree_sortkey between h2.tree_sortkey and tree_right(h2.tree_sortkey)
---    and h2.tree_sortkey <> h1.tree_sortkey;
-
--- Also since acs_privilege_descendant_map is simply a path enumeration of
--- acs_privilege_hierarchy, we should be able to replace the above connect-by
--- with: 
-
--- select privilege 
--- from acs_privilege_descendant_map 
--- where descendant = 'cm_perm'
-
--- This would be better, since the same query could be used for both oracle
--- and postgresql.
-
-create function acs_priv_hier_ins_del_tr () returns opaque as '
+create or replace function acs_priv_hier_ins_tr() returns opaque as '
 declare
-        new_value       integer;
-        new_key         varbit default null;
-        v_rec           record;
-        deleted_p       boolean;
+        v_rec record;
+        v_id  integer;
+        v_lvl integer;
+        v_cont boolean;
 begin
-        -- if more than one node was deleted the second trigger call
-        -- will error out.  This check avoids that problem.
 
-        if TG_OP = ''DELETE'' then 
-            select count(*) = 0 into deleted_p
-              from acs_privilege_hierarchy_index 
-             where old.privilege = privilege
-               and old.child_privilege = child_privilege;     
-       
-            if deleted_p then
+        -- first insert the new child relation if it does not exist already
+        insert into acs_privilege_descendant_map
+        select new.privilege, new.child_privilege as descendant
+         where not exists (select 1 
+                             from acs_privilege_descendant_map
+                            where privilege = new.privilege
+                              and descendant = new.child_privilege);
 
-                return new;
+        -- insert self-reference for privilege
+        insert into acs_privilege_descendant_map
+        select new.privilege, new.privilege as descendant
+         where not exists (select 1 
+                             from acs_privilege_descendant_map
+                            where privilege = new.privilege
+                              and descendant = new.privilege);
 
-            end if;
-        end if;
+        -- insert self-reference for descendant
+        insert into acs_privilege_descendant_map
+        select new.child_privilege as privilege, new.child_privilege as descendant
+         where not exists (select 1 
+                             from acs_privilege_descendant_map
+                            where privilege = new.child_privilege
+                              and descendant = new.child_privilege);
 
-        -- recalculate the table from scratch.
-
-        delete from acs_privilege_hierarchy_index;
-
-        -- first find the top nodes of the tree
-
-        for v_rec in select privilege, child_privilege
-                       from acs_privilege_hierarchy
-                      where privilege 
-                            NOT in (select distinct child_privilege
-                                      from acs_privilege_hierarchy)
-                                           
+        -- now look for existing children to add to
+        for v_rec in select privilege, descendant
+                       from acs_privilege_descendant_map
+                      where descendant = new.privilege
         LOOP
-
-            -- top level node, so find the next key at this level.
-
-            select max(tree_leaf_key_to_int(tree_sortkey)) into new_value 
-              from acs_privilege_hierarchy_index
-             where tree_level(tree_sortkey) = 1;
-
-             -- insert the new node
-
-            insert into acs_privilege_hierarchy_index 
-                        (privilege, child_privilege, tree_sortkey)
-                        values
-                        (v_rec.privilege, v_rec.child_privilege, tree_next_key(null, new_value));
-
-            -- now recurse down from this node
-
-            PERFORM priv_recurse_subtree(tree_next_key(null, new_value), v_rec.child_privilege);
-
+                insert into acs_privilege_descendant_map
+                select v_rec.privilege, new.child_privilege as descendant
+                 where not exists (select 1
+                                     from acs_privilege_descendant_map
+                                    where privilege =  v_rec.privilege
+                                      and descendant = new.child_privilege);
         end LOOP;
 
-        -- materialize the map view to speed up queries
-        -- DanW (dcwickstrom@earthlink.net) 30 Jan, 2003
-        delete from acs_privilege_descendant_map;
+        -- now look for existing parents to add to
+        for v_rec in select privilege, descendant
+                       from acs_privilege_descendant_map
+                      where privilege = new.child_privilege
+        LOOP
+                insert into acs_privilege_descendant_map
+                select new.privilege, v_rec.descendant
+                 where not exists (select 1
+                                     from acs_privilege_descendant_map
+                                    where privilege =  new.privilege
+                                      and descendant = v_rec.descendant);
+        end LOOP;
 
-        insert into acs_privilege_descendant_map (privilege, descendant) 
-        select privilege, descendant from acs_privilege_descendant_map_view;
 
         return new;
 
 end;' language 'plpgsql';
 
-create trigger acs_priv_hier_ins_del_tr after insert or delete
+
+create trigger acs_priv_hier_ins_tr after insert
 on acs_privilege_hierarchy for each row
-execute procedure acs_priv_hier_ins_del_tr ();
+execute procedure acs_priv_hier_ins_tr ();
 
-create function priv_recurse_subtree(varbit, varchar) 
-returns integer as '
+
+
+create or replace function recurse_del_priv_hier(varchar,varchar) 
+returns varchar as '
 declare
-        nkey            alias for $1;
-        child_priv      alias for $2;
-        new_value       integer;
-        v_rec           record;
-        new_key         varbit;
+        parent  alias for $1;
+        child   alias for $2;
+        v_rec   record;
 begin
-
-        -- now iterate over all of the children of the 
-        -- previous node.
-        
-        for v_rec in select privilege, child_privilege
-                       from acs_privilege_hierarchy
-                      where privilege = child_priv
-
+        -- now look for more children of this child
+        for v_rec in  select privilege, 
+                             child_privilege 
+                        from acs_privilege_hierarchy
+                       where privilege = child
         LOOP
+            -- insert the children
+            insert into acs_privilege_descendant_map
+            select parent as privilege, v_rec.child_privilege as descendant
+             where not exists (select 1 
+                                 from acs_privilege_descendant_map 
+                                where privilege = parent 
+                                  and descendant = v_rec.child_privilege);
 
-            -- calculate the next key for this level and parent
-
-            select max(tree_leaf_key_to_int(tree_sortkey)) into new_value
-              from acs_privilege_hierarchy_index
-             where tree_sortkey between nkey and tree_right(nkey)
-               and tree_level(tree_sortkey) = tree_level(nkey) + 1;
-
-            new_key := tree_next_key(nkey, new_value);
-
-            -- insert the new child node.
-
-            insert into acs_privilege_hierarchy_index
-                        (privilege, child_privilege, tree_sortkey)
-                        values
-                        (v_rec.privilege, v_rec.child_privilege, new_key);
-
-            -- keep recursing down until no more children are found
-
-            PERFORM priv_recurse_subtree(new_key, v_rec.child_privilege);
-
-        end LOOP;
-
-        -- no children found, so insert the child node as its own separate 
-        -- node.
-
-        if NOT FOUND then
-           insert into acs_privilege_hierarchy_index
-                       (privilege, child_privilege, tree_sortkey)
-                       values 
-                       (child_priv, child_priv, tree_next_key(nkey, null));
-        end if;
+            -- and recurse down ad-nauseum
+            PERFORM recurse_del_priv_hier(parent,v_rec.child_privilege); 
+        end loop;
 
         return null;
+end;' language 'plpgsql';
+
+create or replace function acs_priv_hier_del_tr() returns opaque as '
+declare
+        v_rec record;
+        v_id  integer;
+begin
+        -- rebuild from scratch
+        delete from acs_privilege_descendant_map;
+
+        -- loop through the top-level of privileges
+        for v_rec in  select privilege, 
+                             child_privilege 
+                        from acs_privilege_hierarchy
+        LOOP
+                -- insert the top level privileges if they do not already exist
+                insert into acs_privilege_descendant_map
+                select v_rec.privilege, v_rec.child_privilege as descendant
+                 where not exists (select 1 
+                                     from acs_privilege_descendant_map 
+                                    where privilege = v_rec.privilege 
+                                      and descendant = v_rec.child_privilege);
+
+                -- now recurse down to the next level                      
+                PERFORM recurse_del_priv_hier(v_rec.privilege,v_rec.child_privilege);
+        end LOOP;
+
+        -- provide self-mapping
+        for v_rec in select privilege, privilege as child_privilege 
+                       from acs_privilege_descendant_map
+                      
+        LOOP
+
+                insert into acs_privilege_descendant_map
+                select v_rec.privilege, v_rec.child_privilege as descendant
+                 where not exists (select 1 
+                                     from acs_privilege_descendant_map 
+                                    where privilege = v_rec.privilege 
+                                      and descendant = v_rec.child_privilege);
+        end loop;
+
+        -- provide self-mapping
+        for v_rec in select descendant as privilege, descendant as child_privilege 
+                       from acs_privilege_descendant_map
+                      
+        LOOP
+
+                insert into acs_privilege_descendant_map
+                select v_rec.privilege, v_rec.child_privilege as descendant
+                 where not exists (select 1 
+                                     from acs_privilege_descendant_map 
+                                    where privilege = v_rec.privilege 
+                                      and descendant = v_rec.child_privilege);
+        end loop;
+
+
+        return new;
 
 end;' language 'plpgsql';
+
+create trigger acs_priv_hier_del_tr after delete
+on acs_privilege_hierarchy for each row
+execute procedure acs_priv_hier_del_tr ();
+
+
 
 --create table acs_privilege_method_rules (
 --	privilege	not null constraint acs_priv_method_rules_priv_fk
@@ -373,24 +374,6 @@ create table acs_permissions (
 
 create index acs_permissions_grantee_idx on acs_permissions (grantee_id);
 create index acs_permissions_privilege_idx on acs_permissions (privilege);
-
--- Added table to materialize view that previously used 
--- acs_privilege_descendant_map name
---
--- DanW (dcwickstrom@earthlink.net) 30 Jan, 2003
-
-create view acs_privilege_descendant_map_view
-as select p1.privilege, p2.privilege as descendant
-   from acs_privileges p1, acs_privileges p2
-   where exists (select h2.child_privilege
-                   from
-                     acs_privilege_hierarchy_index h1,
-                     acs_privilege_hierarchy_index h2
-                   where
-                     h1.privilege = p1.privilege
-                     and h2.privilege = p2.privilege
-                     and h2.tree_sortkey between h1.tree_sortkey and tree_right(h1.tree_sortkey)) or
-     p1.privilege = p2.privilege;
 
 create view acs_permissions_all
 as select op.object_id, p.grantee_id, p.privilege
