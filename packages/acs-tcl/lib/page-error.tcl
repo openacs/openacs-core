@@ -43,12 +43,12 @@ set error_desc_email "
 <b>[_ acs-tcl.File]</b> $error_file<br>
 <b>[_ acs-tcl.User_Name]</b> $user_name<br>
 <b>[_ acs-tcl.lt_User_Id_of_the_user_t]</b> $user_id<br>
-<b>[_ acs-tcl.Browser_of_the_user]</b> [ns_set get [ns_conn headers] User-Agent]<br>
+<b>[_ acs-tcl.Browser_of_the_user]</b> [ad_quotehtml [ns_set get [ns_conn headers] User-Agent]]<br>
 <br>
 -----------------------------<br>
 [_ acs-tcl.Error_details]<br>
 -----------------------------<br>
-<pre>$error_info</pre>
+<pre>[ad_quotehtml $error_info]</pre>
 <br>
 ------------------------------<br>
 <br>
@@ -288,7 +288,7 @@ if {$auto_submit_p && $user_id > 0} {
 <br><b>[_ acs-tcl.File]</b> $error_file
 <br><b>[_ acs-tcl.User_Name]</b> $user_name
 <br><b>[_ acs-tcl.lt_User_Id_of_the_user_t]</b> $user_id
-<br>[_ acs-tcl.Browser_of_the_user]</b> [ns_set get [ns_conn headers] User-Agent]
+<br>[_ acs-tcl.Browser_of_the_user]</b> [ad_quotehtml [ns_set get [ns_conn headers] User-Agent]]
 <br><br><b>[_ acs-tcl.User_comments]</b>  
 <br>
 [template::util::richtext::get_property contents $description] <br>
