@@ -253,8 +253,15 @@ ad_proc -public group::get_member_state_pretty {
 } {
     Returns the pretty-name of a member state.
 } {
-    regsub -all { } $member_state {_} member_state
-    return [_ acs-kernel.member_state_$member_state]
+    array set message_key_array {
+        approved #acs-kernel.member_state_approved#
+        "need approval" #acs-kernel.member_state_needs_approval#
+        banned #acs-kernel.member_state_banned#
+        rejected #acs-kernel.member_state_rejected#
+        deleted #acs-kernel.member_state_deleted#
+    }
+
+    return [lang::util::localize $message_key_array($member_state)]
 }
 
 ad_proc -public group::get_join_policy_options {} {
