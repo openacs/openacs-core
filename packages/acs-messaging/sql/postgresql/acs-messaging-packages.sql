@@ -297,7 +297,7 @@ begin
     );
 
     -- create an initial revision for the new attachment
-    v_revision_id := acs_file__edit_file (
+    v_revision_id := acs_message__edit_file (
          v_file_id,				-- file_id        
          p_title,				-- title          
          p_description,			-- description    
