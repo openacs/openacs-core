@@ -1,5 +1,8 @@
 ad_page_contract {
     Build package repository.
+
+    @cvs-id $Id$
+    @author Lars Pind (lars@collaboraid.biz)
 }
 
 # TODO: Build repository in temp dir, then rename
@@ -17,9 +20,15 @@ set work_dir "[acs_root_dir]/repository-builder/"
 set repository_dir "[acs_root_dir]/www/repository/"
 set repository_url "http://openacs.org/repository/"
 
+set channel_index_template "/packages/acs-admin/www/apm/repository-channel-index"
+set index_template "/packages/acs-admin/www/apm/repository-index"
+
 set exclude_package_list { cms cms-news-demo glossary site-wide-search spam library }
 
 set head_channel "5-1"
+
+# Set this to 1 to only checkout sample packages -- useful for debugging and testing
+set debug_p 1
 
 
 #----------------------------------------------------------------------
@@ -28,6 +37,7 @@ set head_channel "5-1"
 
 ReturnHeaders
 ns_write [ad_header "Building repository"]
+ns_write "<h1>Building OpenACS Package Repository</h1><hr>"
 ns_write <ul>
 
 #----------------------------------------------------------------------
@@ -80,7 +90,7 @@ for { } { $i < [llength $lines] } { incr i } {
 set channel_tag($head_channel) HEAD
 
 
-ns_write "<li>Channels are: [array get channel_tag]\n"
+ns_write "<li>Channels are: [array get channel_tag]</ul>\n"
 
 
 #----------------------------------------------------------------------
@@ -93,7 +103,7 @@ file mkdir ${work_dir}
 cd $work_dir
     
 foreach channel [lsort -decreasing [array names channel_tag]] {
-    ns_write "<li>Starting channel $channel with tag $channel_tag($channel)\n"
+    ns_write "<h2>Channel $channel using tag $channel_tag($channel)</h2><ul>"
 
     # Wipe and re-create the checkout directory
     file delete -force "${work_dir}openacs-4"
@@ -109,22 +119,37 @@ foreach channel [lsort -decreasing [array names channel_tag]] {
     set packages [list]
     
     # Checkout from the tag given by channel_tag($channel)
-    if { ![string equal $channel_tag($channel) HEAD] } {
-        catch { exec $cvs_command -d $cvs_root -z3 co -r $channel_tag($channel) openacs-4/packages } output
-        catch { exec $cvs_command -d $cvs_root -z3 co -r $channel_tag($channel) openacs-4/contrib/packages } output
-        cd ${work_dir}dotlrn/packages/
-        catch { exec $cvs_command -d $dotlrn_cvs_root -z3 co -r $channel_tag($channel) dotlrn-core } output
-        cd $work_dir
+    if { $debug_p } {
+        # Smaller list for debugging purposes
+        set checkout_list [list \
+                               $work_dir $cvs_root openacs-4/packages/acs-kernel \
+                               $work_dir $cvs_root openacs-4/contrib/packages/bcms \
+                               ${work_dir}dotlrn/packages/ $dotlrn_cvs_root dotlrn]
     } else {
-        catch { exec $cvs_command -d $cvs_root -z3 co openacs-4/packages } output
-        catch { exec $cvs_command -d $cvs_root -z3 co openacs-4/contrib/packages } output
-        cd ${work_dir}dotlrn/packages/
-        catch { exec $cvs_command -d $dotlrn_cvs_root -z3 co dotlrn-core } output
-        cd $work_dir
+        # Full list for real use
+        set checkout_list [list \
+                               $work_dir $cvs_root openacs-4/packages \
+                               $work_dir $cvs_root openacs-4/contrib/packages \
+                               ${work_dir}dotlrn/packages/ $dotlrn_cvs_root dotlrn-core]
     }
+    
+    foreach { cur_work_dir cur_cvs_root cur_module } $checkout_list {
+        cd $cur_work_dir
+        if { ![string equal $channel_tag($channel) HEAD] } {
+            catch { exec $cvs_command -d $cur_cvs_root -z3 co -r $channel_tag($channel) $cur_module } output
+        } else {
+            catch { exec $cvs_command -d $cur_cvs_root -z3 co $cur_module } output
+        }
+    }
+    cd $work_dir
 
     set manifest {<manifest>}
     append manifest \n
+
+    template::multirow create packages \
+        package_path package_key version pretty_name \
+        package_type summary description \
+        release_date vendor_url vendor
     
     foreach packages_dir \
         [list "${work_dir}openacs-4/packages" \
@@ -169,9 +194,14 @@ foreach channel [lsort -decreasing [array names channel_tag]] {
                     append manifest {    } {<vendor url="} [ad_quotehtml $version(vendor.url)] {">} 
                     append manifest [ad_quotehtml $version(vendor)] {</vendor>} \n
                     
+                    template::multirow append packages \
+                        $package_path $package_key $version(name) $version(package-name) \
+                        $version(package.type) $version(summary) $version(description) \
+                        $version(release-date) $version(vendor.url) $version(vendor)
+
                     set apm_file "${channel_dir}${version(package.key)}-${version(name)}.apm"
 
-                    ns_write "<li> Building package $package_key for channel $channel in file $apm_file\n"
+                    ns_write "<li>Building package $package_key for channel $channel\n"
                     
                     set files [apm_get_package_files \
                                    -all_db_types \
@@ -222,9 +252,27 @@ foreach channel [lsort -decreasing [array names channel_tag]] {
     puts $fw $manifest
     close $fw
 
-    ns_write "<li> Channel $channel complete.\n"
+    ns_write "<li>Writing $channel index page to ${channel_dir}index.html"
+    set fw [open "${channel_dir}index.html" w]
+    puts $fw [ad_parse_template -params [list channel packages] -- $channel_index_template]
+    close $fw
+
+    ns_write "<li> Channel $channel complete.</ul>\n"
     
 }
+
+ns_write "<h2>Finishing Repository</h2><ul>"
+
+# Write the index page
+ns_write "<li>Writing repository index page to ${work_dir}repository/index.html"
+template::multirow create channels name
+foreach channel [lsort -decreasing [array names channel_tag]] {
+    template::multirow append channels $channel
+}
+set fw [open "${work_dir}repository/index.html" w]
+puts $fw [ad_parse_template -params [list channels] -- $index_template]
+close $fw
+
 
 # Without the trailing slash
 set work_repository_dirname "${work_dir}repository"
@@ -241,6 +289,6 @@ if { [file exists $repository_dirname] } {
 }
 file rename $work_repository_dirname  $repository_dirname
 
-ns_write "</ul> DONE.\n"
+ns_write "</ul> <h2>DONE</h2>\n"
 
         
