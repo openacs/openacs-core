@@ -1,9 +1,9 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Install Full Text Search</title><meta name="generator" content="DocBook XSL Stylesheets V1.64.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="install-more-software.html" title="Appendix B. Install additional supporting software"><link rel="previous" href="install-nspam.html" title="Install nspam"><link rel="next" href="install-nsopenssl.html" title="Install nsopenssl"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="install-nspam.html">Prev</a> </td><th width="60%" align="center">Appendix B. Install additional supporting software</th><td width="20%" align="right"> <a accesskey="n" href="install-nsopenssl.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="install-full-text-search"></a>Install Full Text Search</h2></div></div><div></div></div><div class="authorblurb"><p>By <a href="mailto:joel@aufrecht.org" target="_top">Joel Aufrecht</a> and <a href="mailto:openacs@sussdorff.de" target="_top">Malte Sussdorff</a></p>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Install Full Text Search</title><meta name="generator" content="DocBook XSL Stylesheets V1.65.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="install-more-software.html" title="Appendix B. Install additional supporting software"><link rel="previous" href="install-nspam.html" title="Install nspam"><link rel="next" href="install-nsopenssl.html" title="Install nsopenssl"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="install-nspam.html">Prev</a> </td><th width="60%" align="center">Appendix B. Install additional supporting software</th><td width="20%" align="right"> <a accesskey="n" href="install-nsopenssl.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="install-full-text-search"></a>Install Full Text Search</h2></div></div><div></div></div><div class="authorblurb"><p>By <a href="mailto:joel@aufrecht.org" target="_top">Joel Aufrecht</a> and <a href="mailto:openacs@sussdorff.de" target="_top">Malte Sussdorff</a></p>
           OpenACS docs are written by the named authors, and may be edited
           by OpenACS documentation staff.
-        </div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="install-openfts"></a>Install OpenFTS module</h3></div></div><div></div></div><a class="indexterm" name="id2553878"></a><p>If you want full text search, and you are running PostgreSQL, install this module to support FTS.  Do this step after you have installed both PostgreSQL and
+        </div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="install-openfts"></a>Install OpenFTS module</h3></div></div><div></div></div><a class="indexterm" name="id2578919"></a><p>If you want full text search, and you are running PostgreSQL, install this module to support FTS.  Do this step after you have installed both PostgreSQL and
       AOLserver.  You will need the <a href="individual-programs.html#openfts-download">openfts
-      tarball</a> in <tt class="computeroutput">/tmp</tt>.</p><div class="orderedlist"><ol type="1"><li><p>Install Tsearch.  This is a PostgreSQL module that
+      tarball</a> in <tt class="computeroutput">/var/tmp</tt>.</p><div class="orderedlist"><ol type="1"><li><p>Install Tsearch.  This is a PostgreSQL module that
 	  OpenFTS requires.</p><pre class="screen">[root root]# <b class="userinput"><tt>su - postgres</tt></b>
 [postgres pgsql]$ <b class="userinput"><tt>cd /usr/local/src/postgresql-7.3.4/contrib/tsearch/</tt></b>
 [postgres tsearch]$ <b class="userinput"><tt>make</tt></b>
@@ -26,7 +26,7 @@ make
 make install
 exit</span></span></pre></li><li><p>Unpack the OpenFTS tarball and compile and install
               the driver.</p><pre class="screen">[root root]# <b class="userinput"><tt>cd /usr/local/src</tt></b>
-[root src]# <b class="userinput"><tt>tar xzf /tmp/Search-OpenFTS-tcl-0.3.2.tar.gz</tt></b>
+[root src]# <b class="userinput"><tt>tar xzf /var/tmp/Search-OpenFTS-tcl-0.3.2.tar.gz</tt></b>
 [root src]# <b class="userinput"><tt>cd /usr/local/src/Search-OpenFTS-tcl-0.3.2/</tt></b>
 [root Search-OpenFTS-tcl-0.3.2]# <b class="userinput"><tt>./configure --with-aolserver-src=/usr/local/src/aolserver/aolserver --with-tcl=/usr/lib/</tt></b>
 checking prefix... /usr/local
@@ -48,7 +48,7 @@ n_stem.o italian_stem.o norwegian_stem.o portuguese_stem.o russian_stem.o nsfts.
 [root aolserver]# <b class="userinput"><tt>cp nsfts.so /usr/local/aolserver/bin/</tt></b>
 [root aolserver]#
 <span class="action"><span class="action">cd /usr/local/src 
-tar xzf /tmp/Search-OpenFTS-tcl-0.3.2.tar.gz
+tar xzf /var/tmp/Search-OpenFTS-tcl-0.3.2.tar.gz
 cd /usr/local/src/Search-OpenFTS-tcl-0.3.2/
 ./configure --with-aolserver-src=/usr/local/src/aolserver/aolserver --with-tcl=/usr/lib/
 make
@@ -76,7 +76,7 @@ cd /usr/local/src/postgresql-7.3.4/contrib/pgsql_contrib_openfts
 make
 su postgres
 make install
-exit</span></span></pre></li></ol></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="install-openfts-postgres"></a>Install OpenFTS prerequisites in PostgreSQL instance</h3></div></div><div></div></div><a class="indexterm" name="id2552603"></a><p>If you are installing Full Text Search, add required
+exit</span></span></pre></li></ol></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="install-openfts-postgres"></a>Install OpenFTS prerequisites in PostgreSQL instance</h3></div></div><div></div></div><a class="indexterm" name="id2558082"></a><p>If you are installing Full Text Search, add required
         packages to the new database.  (In order for full text search
         to work, you must also <a href="install-full-text-search.html#install-openfts" title="Install OpenFTS module">install</a> the PostgreSQL
         OpenFTS module and prerequisites.)</p><pre class="screen">[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <b class="userinput"><tt>/usr/local/pgsql/bin/psql <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span> -f /usr/local/src/postgresql-7.3.4/contrib/tsearch/tsearch.sql</tt></b>

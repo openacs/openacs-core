@@ -1,4 +1,4 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>AOLserver keepalive with inittab</title><meta name="generator" content="DocBook XSL Stylesheets V1.64.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="maintenance-web.html" title="Chapter 6. Production Environments"><link rel="previous" href="install-openacs-keepalive.html" title="Starting and Stopping an OpenACS instance."><link rel="next" href="install-next-add-server.html" title="Running multiple services on one machine"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="install-openacs-keepalive.html">Prev</a> </td><th width="60%" align="center">Chapter 6. Production Environments</th><td width="20%" align="right"> <a accesskey="n" href="install-next-add-server.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="install-openacs-inittab"></a>AOLserver keepalive with inittab</h2></div></div><div></div></div><p>This is an alternative method for keeping the AOLserver
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>AOLserver keepalive with inittab</title><meta name="generator" content="DocBook XSL Stylesheets V1.65.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="maintenance-web.html" title="Chapter 6. Production Environments"><link rel="previous" href="install-openacs-keepalive.html" title="Starting and Stopping an OpenACS instance."><link rel="next" href="install-next-add-server.html" title="Running multiple services on one machine"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="install-openacs-keepalive.html">Prev</a> </td><th width="60%" align="center">Chapter 6. Production Environments</th><td width="20%" align="right"> <a accesskey="n" href="install-next-add-server.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="install-openacs-inittab"></a>AOLserver keepalive with inittab</h2></div></div><div></div></div><p>This is an alternative method for keeping the AOLserver
 		process running.  The recommended method is to <a href="install-openacs-keepalive.html" title="Starting and Stopping an OpenACS instance.">run AOLserver
 		supervised</a>.</p><p>
 		This step should be completed as root. This can break every service
@@ -22,7 +22,7 @@
 			restarts our service.  
 		  </p></li><li><p> 
 			Copy this <a href="files/restart-aolserver.txt" target="_top">file</a> into
-			<tt class="computeroutput">/tmp/restart-aolserver.txt</tt>.
+			<tt class="computeroutput">/var/tmp/restart-aolserver.txt</tt>.
 		  </p></li><li><p> 
 			This script needs to be SUID-root, which means
 			that the script will run as root. This is necessary to ensure
@@ -36,7 +36,7 @@
 		  </p><pre class="programlisting">
 [joeuser ~]$ su - 
 Password: ***********
-[root ~]# cp /tmp/restart-aolserver.txt /usr/local/bin/restart-aolserver
+[root ~]# cp /var/tmp/restart-aolserver.txt /usr/local/bin/restart-aolserver
 [root ~]# chown root.web /usr/local/bin/restart-aolserver
 [root ~]# chmod 4750 /usr/local/bin/restart-aolserver
 [root ~]# ln -s /usr/bin/perl /usr/local/bin/perl
