@@ -100,12 +100,7 @@ for { set __i 0 } { $__i < [expr $high - $low +1] } { incr __i } {
     if {[string equal $object_type "etp_page_revision"]} {
 	set url_one [string trimright $url_one "index"]
     }
-
-    # Make sure that only items are displayed the user has access to.
-    if {[permission::permission_p -object_id $object_id -privilege read]} {
 	template::multirow append searchresult $title_summary $txt_summary $url_one
-    }
-
 }
 
 
