@@ -280,7 +280,7 @@
   
   <part id="acs-plat-dev">
     <title>For OpenACS Platform Developers</title>
-    <preface>
+    <preface id="platform-dev">
       <title>Platform Development</title>
       <para>Information about the internal workings of OpenACS, useful
       both for modifying the core functionality and for developing new

@@ -2,7 +2,7 @@
       by <a href="mailto:joel@aufrecht.org" target="_top">Joel Aufrecht</a><br>
           OpenACS docs are written by the named authors, and may be edited
           by OpenACS documentation staff.
-        </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2832151"></a>Overview</h3></div></div><div></div></div><p>To start developing new code in OpenACS, we build a new
+        </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2829786"></a>Overview</h3></div></div><div></div></div><p>To start developing new code in OpenACS, we build a new
     package.  A package is a a discrete collection of web
     pages, tcl code, and database tables and procedures.  A package
       with user interface is called an <span class="emphasis"><em>application</em></span>; a package which provides
@@ -15,11 +15,11 @@
       writing web pages, debugging, and automatic regression testing.
 </p><p>In this tutorial, we will make an application package for
     displaying a list of text notes.
-</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2833939"></a>Before you begin</h3></div></div><div></div></div><p>You will need:</p><div class="itemizedlist"><ul type="disc"><li><p>A computer with a working installation of
+</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2836507"></a>Before you begin</h3></div></div><div></div></div><p>You will need:</p><div class="itemizedlist"><ul type="disc"><li><p>A computer with a working installation of
 	  OpenACS.  If you don't have this, see <a href="install-overview.html" title="Chapter 2. Installation Overview">Chapter 2, <i>Installation Overview</i></a>.
 	  </p></li><li><p>Example files, which are included in the
 standard OpenACS 5.0.0a1 distribution.
-	  </p></li></ul></div><div class="figure"><a name="id2820843"></a><p class="title"><b>Figure 8.1. Assumptions in this section</b></p><div class="informaltable"><table cellspacing="0" border="1"><colgroup><col><col></colgroup><tbody><tr><td>Fully qualified domain name of your server</td><td><span class="replaceable"><span class="replaceable">yourserver.test</span></span></td></tr><tr><td>URL of your server</td><td><span class="replaceable"><span class="replaceable">http://yourserver.test:8000</span></span></td></tr><tr><td>Name of development account</td><td><span class="replaceable"><span class="replaceable">service0</span></span></td></tr><tr><td>New Package key</td><td><span class="replaceable"><span class="replaceable">myfirstpackage</span></span></td></tr></tbody></table></div></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2837696"></a>Use the APM to initialize a new package</h3></div></div><div></div></div><p>We use the <a href="packages.html" target="_top">ACS Package Manager</a> (APM) to add, remove, and
+	  </p></li></ul></div><div class="figure"><a name="id2833926"></a><p class="title"><b>Figure 8.1. Assumptions in this section</b></p><div class="informaltable"><table cellspacing="0" border="1"><colgroup><col><col></colgroup><tbody><tr><td>Fully qualified domain name of your server</td><td><span class="replaceable"><span class="replaceable">yourserver.test</span></span></td></tr><tr><td>URL of your server</td><td><span class="replaceable"><span class="replaceable">http://yourserver.test:8000</span></span></td></tr><tr><td>Name of development account</td><td><span class="replaceable"><span class="replaceable">service0</span></span></td></tr><tr><td>New Package key</td><td><span class="replaceable"><span class="replaceable">myfirstpackage</span></span></td></tr></tbody></table></div></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2834337"></a>Use the APM to initialize a new package</h3></div></div><div></div></div><p>We use the <a href="packages.html" target="_top">ACS Package Manager</a> (APM) to add, remove, and
     upgrade packages.  It handles package meta-data, such as lists of
     files that belong in the package.  Each package is uniquely
     identified by a package key.  To start developing a new
@@ -51,7 +51,7 @@ standard OpenACS 5.0.0a1 distribution.
         </p></li></ol></div><p>This creates a package rooted at
           <tt class="computeroutput">/var/lib/aolserver/<span class="replaceable"><span class="replaceable">service0</span></span>/packages/<span class="replaceable"><span class="replaceable">myfirstpackage</span></span></tt>.
           This is the "home directory" of our new package, and all
-          files in the package will be within this directory.</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2837322"></a>Mount the package in the site map</h3></div></div><div></div></div><p>In order to see your work in progress, you must create a
+          files in the package will be within this directory.</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2836263"></a>Mount the package in the site map</h3></div></div><div></div></div><p>In order to see your work in progress, you must create a
       map between the URL space of incoming requests and the package.
       You do this by mounting the package in the Site Map.  This
       creates a link between the incoming URL and an
