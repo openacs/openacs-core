@@ -32,7 +32,7 @@ if {[empty_string_p $ancestor]} {
 
 set name [db_string name {}]
 
-set context [list [list "./" [_ acs-subsite.Permissions]] [_ acs-subsite.Permissions_for_name]]
+set context [list [list "./" [_ acs-subsite.Permissions]] [ad_quotehtml [_ acs-subsite.Permissions_for_name]]]
 
 db_multirow inherited inherited_permissions { *SQL* } { 
 }
@@ -47,9 +47,9 @@ lappend controls "<a href=\"grant?[export_vars {application_url object_id}]\">[_
 db_1row context { *SQL* }
 
 if { $security_inherit_p == "t" && ![empty_string_p $context_id] } {
-    lappend controls "<a href=\"toggle-inherit?[export_vars {application_url object_id}]\">Don't Inherit Permissions from $context_name</a>"
+    lappend controls "<a href=\"toggle-inherit?[export_vars {application_url object_id}]\">Don't Inherit Permissions from [ad_quotehtml $context_name]</a>"
 } else {
-    lappend controls "<a href=\"toggle-inherit?[export_vars {application_url object_id}]\">Inherit Permissions from $context_name</a>"
+    lappend controls "<a href=\"toggle-inherit?[export_vars {application_url object_id}]\">Inherit Permissions from [ad_quotehtml $context_name]</a>"
 }
 
 set controls "\[ [join $controls " | "] \]"
