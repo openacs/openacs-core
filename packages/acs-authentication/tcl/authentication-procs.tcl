@@ -422,7 +422,7 @@ ad_proc -public auth::create_user {
 
         if { ![string equal $creation_info(creation_status) "ok"] } {
             # Local account creation error
-            ad_abort_transaction
+            db_abort_transaction
             return
         }
 
