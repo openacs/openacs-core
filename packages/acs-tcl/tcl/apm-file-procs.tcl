@@ -283,9 +283,8 @@ ad_proc -private apm_files_load {
 	    if { [file exists "[acs_root_dir]/packages/$package_key/$path"] } {
 		apm_callback_and_log $callback "Loading packages/$package_key/$path..."
 		set apm_current_package_key $package_key
-		# Remember that we've loaded the file.
+
 		apm_source "[acs_root_dir]/packages/$package_key/$path"
-		nsv_set apm_library_mtime packages/$package_key/$path [file mtime "[acs_root_dir]/packages/$package_key/$path"]
 
 		# Release outstanding database handles (in case this file
 		# used the db_* database API and a subsequent one uses

@@ -322,8 +322,8 @@ ad_proc -private db_exec { type db statement_name pre_sql {ulevel 2} } {
 
     db_qd_log QDDebug "POST-QD: the SQL is $sql"
 
+    upvar bind bind
     set errno [catch {
-	upvar bind bind
 	if { [info exists bind] && [llength $bind] != 0 } {
 	    if { [llength $bind] == 1 } {
 		return [eval [list ns_pg_bind $type $db -bind $bind $sql]]
@@ -333,6 +333,7 @@ ad_proc -private db_exec { type db statement_name pre_sql {ulevel 2} } {
 		    ns_set put $bind_vars $name $value
 		}
 		return [eval [list ns_pg_bind $type $db -bind $bind_vars $sql]]
+                
 	    }
 	} else {
 	    return [uplevel $ulevel [list ns_pg_bind $type $db $sql]]

@@ -408,9 +408,6 @@ ad_proc -private apm_package_install {
     array set version [apm_read_package_info_file $spec_file_path]
     set package_key $version(package.key)
 
-    # Flush the installed_p cache
-    util_memoize_flush [list apm_package_installed_p_not_cached $package_key]
-
     if { $copy_files_p } {
 	if { [empty_string_p $install_path] } {
 	    set install_path [apm_workspace_install_dir]/$package_key
@@ -521,8 +518,8 @@ ad_proc -private apm_package_install {
     # Instantiating, mounting, and after-install callback only invoked on initial install
     if { ! $upgrade_p } {
         # Source Tcl procs and queries to be able
-        # to invoke any Tcl callbacks after mounting and instantiation. Note that this reloading is only in this interpreter.
-        # The proc apm_mark_packages_for_bootstrap is used later to reload libraries in all interpreters.
+        # to invoke any Tcl callbacks after mounting and instantiation. Note that this reloading 
+        # is only done in the Tcl interpreter of this particular request.
         apm_load_libraries -procs -force_reload -packages $package_key
         apm_load_queries -packages $package_key
 
@@ -553,6 +550,9 @@ ad_proc -private apm_package_install {
         # After install Tcl proc callback
         apm_invoke_callback_proc -version_id $version_id -type after-install
     }
+
+    # Flush the installed_p cache
+    util_memoize_flush [list apm_package_installed_p_not_cached $package_key]
 
     return $version_id
 }

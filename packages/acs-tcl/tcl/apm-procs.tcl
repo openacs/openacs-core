@@ -57,7 +57,7 @@ ad_library {
 #     apm_reload_watch($path)
 #
 #         Indicates that $path is a -procs.tcl file which should be examined
-#         every time apm_reload_any_changed_libraries is invoked, to see whether
+#         every time apm_load_any_changed_libraries is invoked, to see whether
 #         it has changed since last loaded. The path starts at acs_root_dir.
 #
 # RELOADING VOODOO
@@ -78,7 +78,7 @@ ad_library {
 #     Each interpreter maintains its private, interpreter-specific reload level
 #     as a proc named apm_reload_level_in_this_interpreter. Every time the
 #     request processor sees a request, it invokes
-#     apm_reload_any_changed_libraries, which compares the server-wide
+#     apm_load_any_changed_libraries, which compares the server-wide
 #     reload level to the interpreter-private one. If it notes a difference,
 #     it reloads the set of files necessary to bring itself up-to-date (i.e.,
 #     files noted in the applicable entries of apm_reload).
@@ -93,7 +93,7 @@ ad_library {
 #           and sets apm_reload(1) to [list "packages/acs-tcl/utilities-procs.tcl"].
 #         - A request is handled in some other interpreter, whose reload
 #           level (as returned by apm_reload_level_in_this_interpreter)
-#           is 0. apm_reload_any_changed_libraries notes that
+#           is 0. apm_load_any_changed_libraries notes that
 #           [apm_reload_level_in_this_interpreter] != [nsv_get apm_properties reload_level],
 #           so it sources the files listed in apm_reload(1) (i.e., utilities-procs.tcl)
 #           and redefines apm_reload_level_in_this_interpreter to return 1.
@@ -175,7 +175,6 @@ ad_proc -private apm_mark_files_for_reload {
 		    [nsv_get apm_library_mtime $relative_path] != $mtime) } {
 
 		lappend changed_files $relative_path
-		nsv_set apm_library_mtime $relative_path $mtime
 	    }
 	} 
     }
@@ -193,7 +192,7 @@ ad_proc -private apm_mark_version_for_reload { version_id { file_info_var "" } }
     Examines all tcl_procs files in package version $version_id; if any have
     changed since they were loaded, marks (in the apm_reload array) that
     they must be reloaded by each Tcl interpreter (using the
-    apm_reload_any_changed_libraries procedure).
+    apm_load_any_changed_libraries procedure).
     
     <p>Saves a list of files that have changed (and thus marked to be reloaded) in
     the variable named <code>$file_info_var</code>, if provided. Each element
@@ -230,38 +229,6 @@ ad_proc -private apm_mark_version_for_reload { version_id { file_info_var "" } }
     }
 }
 
-ad_proc -private apm_mark_packages_for_bootstrap { packages_list } {
-    Bootstraps given packages by marking files of type tcl_procs, query_file, and
-    tcl_init for reload in the proper order. This prevents os from having
-    to restart the server after installing a number of packages.
-
-    @param packages_list A list of package_keys for the packages that need bootstrapping.
-                         Assumes that package_key is at index 0 of each item in the list.
-
-    @return The paths (relative to acs_root_dir) of the files marked for
-            reload by apm_mark_files_for_reload.
-
-    @author Peter Marklund
-} {
-    set tcl_proc_files [list]
-    set query_files [list]
-    set init_tcl_files [list]
-
-    foreach package_item $packages_list {
-        set package_key [lindex $package_item 0]
-        set version_id [apm_version_id_from_package_key $package_key]
-        set path_prefix "packages/$package_key/"
-
-        set tcl_proc_files [concat $tcl_proc_files [apm_version_file_list -type "tcl_procs" -db_type [db_type] -path_prefix $path_prefix $version_id]]
-        set query_files [concat $query_files [apm_version_file_list -type "query_file" -db_type [db_type] -path_prefix $path_prefix $version_id]]
-        set init_tcl_files [concat $init_tcl_files [apm_version_file_list -type "tcl_init" -db_type [db_type] -path_prefix $path_prefix $version_id]]
-    }
-
-    set reload_file_list [concat $tcl_proc_files $query_files $init_tcl_files]
-
-    return [apm_mark_files_for_reload -force_reload $reload_file_list]
-}
-   
 ad_proc -private apm_version_load_status { version_id } {
 
     If a version needs to be reloaded (i.e., a <code>-procs.tcl</code> has changed
@@ -393,7 +360,8 @@ ad_proc -public apm_load_packages {
     {-load_queries_p 1}
     {-packages {}}
 } {
-    Load Tcl libraries and queries for the packages with given keys. Will
+    Load Tcl libraries and queries for the packages with given keys. Only
+    loads procs into the current interpreter. Will
     load Tcl tests if the acs-automated-testing package is enabled.
 
     @param force_reload Reload Tcl libraries even if they are already loaded.
@@ -402,6 +370,8 @@ ad_proc -public apm_load_packages {
     @param load_queries   Switch to indicate if xql query files should be loaded. Default true.
     @param packages     A list of package_keys for packages to be loaded. Defaults to 
                         all enabled packages
+
+    @see apm_mark_version_for_reload
 
     @author Peter Marklund
 } {
@@ -605,7 +575,6 @@ ad_proc -public apm_load_any_changed_libraries {} {
                     query_file { db_qd_load_query_file [acs_root_dir]/$file }
                 }
 
-		nsv_set apm_library_mtime $file [file mtime $file_path]
 		set reloaded_files($file) 1
 	    }
 	}
