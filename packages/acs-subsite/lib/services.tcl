@@ -1,4 +1,4 @@
-set admin_p [permission::permission_p -object_id [ad_conn package_id] -privilege admin]
+set admin_p [permission::permission_p -object_id [ad_conn package_id] -privilege admin -party_id [ad_conn untrusted_user_id]]
 
 list::create \
     -name services \
@@ -39,4 +39,3 @@ foreach elm $services {
         [lindex $elm 3] \
         [lindex $elm 4]
 }
-
