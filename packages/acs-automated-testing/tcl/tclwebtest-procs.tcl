@@ -20,6 +20,8 @@ ad_proc twt::do_request { page_url } {
     the request a number of times if it fails because of a socket
     connect problem.
 } {
+    aa_log "twt::do_request $page_url"
+
     # Qualify page_url if necessary
     if { [regexp {^/} $page_url] } {
         set page_url "[twt::server_url]${page_url}"
@@ -53,11 +55,11 @@ ad_proc twt::do_request { page_url } {
     if { $error_p } {
         # Either some non-socket error, or a socket problem occuring with more than
         # $retry_max times. Propagate the error while retaining the stack trace
+        aa_log "twt::do_request failed with error=\"$errmsg\" response_url=\"[tclwebtest::response url]\". See error log for the HTML response body"
+        ns_log Error "twt::do_request failed with error=\"$errmsg\" response_url=\"[tclwebtest::response url]\" response_body=\"[tclwebtest::response body]\""
         global errorInfo
         error $errmsg $errorInfo
     }
-
-    #::twt::acs_lang::check_no_keys
 }
 
 ad_proc twt::log { message } {
@@ -89,8 +91,11 @@ ad_proc twt::server_url {} {
 
 ad_proc twt::user::create { 
     {-user_id {}}
+    {-admin:boolean}
  } {
     Create a test user with random email and password for testing
+
+     @param admin Provide this switch to make the user site-wide admin
     
     @return The user_info array list returned by auth::create_user. Contains
             the additional keys email and password.
@@ -119,6 +124,13 @@ ad_proc twt::user::create {
     set user_info(password) $password
     set user_info(email) $email
 
+    aa_log "Created user with email=\"$email\" and password=\"$password\""
+
+    if { $admin_p } {
+        aa_log "Making user site-wide admin"
+        permission::grant -object_id [acs_magic_object "security_context_root"] -party_id $user_info(user_id) -privilege "admin"
+    }
+
     return [array get user_info]
 }
 
@@ -134,7 +146,7 @@ ad_proc twt::user::delete {
 
 ad_proc twt::user::login { email password } {
 
-    ::twt::user::logout
+    tclwebtest::cookies clear
 
     # Request the start page
     ::twt::do_request "[twt::server_url]/register"
@@ -146,6 +158,20 @@ ad_proc twt::user::login { email password } {
     tclwebtest::field find ~n password
     tclwebtest::field fill $password
     tclwebtest::form submit
+
+    # Verify that user is actually logged in and throw error otherwise
+    set home_uri "/pvt/home"
+    twt::do_request $home_uri
+    set response_url [tclwebtest::response url]
+    if { ![string match "*${home_uri}*" $response_url] } {
+        if { [empty_string_p [cc_lookup_email_user $email]] } {
+            error "Failed to login user with email=\"$email\" and password=\"$password\". No user with such email in database."
+        } else {
+            ns_log Error "Failed to log in user with email=\"$email\" and password=\"$password\" eventhough email exists (password may be incorrect). response_body=[tclwebtest::response body]"
+            error "Failed to log in user with email=\"$email\" and password=\"$password\" eventhough email exists (password may be incorrect). User should be able to request $home_uri without redirection, however response url=$response_url"
+
+        }
+    }
 }
 
 ad_proc twt::user::logout {} {
