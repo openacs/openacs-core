@@ -131,7 +131,7 @@ begin
     return object_id
     from acs_magic_objects
     where name = magic_object_id__name;
-end;' language 'plpgsql' immutable strict;
+end;' language 'plpgsql' stable strict;
 
 -- ******************************************************************
 -- * Community Core API
