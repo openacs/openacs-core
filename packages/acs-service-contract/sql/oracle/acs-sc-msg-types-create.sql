@@ -95,7 +95,8 @@ as
 	v_spec_parse_level integer;
      begin
         v_msg_type_id := acs_object.new(
-		      object_type => 'acs_sc_msg_type'
+		      object_type => 'acs_sc_msg_type',
+		      title => msg_type_name
 		      );		    
 
         insert into acs_sc_msg_types (

@@ -299,8 +299,14 @@ as
   v_party_id parties.party_id%TYPE;
  begin
   v_party_id :=
-   acs_object.new(party_id, object_type,
-                  creation_date, creation_user, creation_ip, context_id);
+   acs_object.new(
+     object_id => party_id,
+     object_type => object_type,
+     title => lower(email),
+     creation_date => creation_date,
+     creation_user => creation_user,
+     creation_ip => creation_ip,
+     context_id => context_id);
 
   insert into parties
    (party_id, email, url)
@@ -443,6 +449,10 @@ as
    (person_id, first_names, last_name)
   values
    (v_person_id, first_names, last_name);
+
+  update acs_objects
+  set title = first_names || ' ' || last_name
+  where object_id = v_person_id;
 
   return v_person_id;
  end new;

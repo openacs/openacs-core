@@ -259,9 +259,9 @@ begin
   -- with the user_id assigned throughout the toolkit Tcl code
 
   insert into acs_objects
-    (object_id, object_type)
+    (object_id, object_type, title)
   values
-    (0, ''user'');
+    (0, ''user'', ''Unregistered Visitor'');
 
   insert into parties
     (party_id)
@@ -372,7 +372,8 @@ select acs_object__new (
     now(),
     null,
     null,
-    null
+    null,
+    'Default Context'
   );
 
 insert into acs_magic_objects

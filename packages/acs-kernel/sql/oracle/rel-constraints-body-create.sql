@@ -33,6 +33,7 @@ as
     v_constraint_id := acs_object.new (
       object_id => constraint_id,
       object_type => constraint_type,
+      title => constraint_name,
       context_id => context_id,
       creation_user => creation_user,
       creation_ip => creation_ip

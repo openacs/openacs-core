@@ -42,6 +42,11 @@ ad_form -name segment -cancel_url $view_url -form {
         set    segment_name = :segment_name
         where  segment_id = :segment_id
     }
+    db_dml update_object_title {
+	update acs_objects
+	set title = :segment_name
+	where object_id = :segment_id
+    }
 } -after_submit {
     ad_returnredirect $view_url
     ad_script_abort

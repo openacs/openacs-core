@@ -10,7 +10,7 @@
 -- License.  Full text of the license is available from the GNU Project:
 -- http://www.fsf.org/copyleft/gpl.html
 
-create view content_item_globals as 
+create or replace view content_item_globals as 
 select -100 as c_root_folder_id;
 
 create or replace function content_item__get_root_folder (integer)
@@ -64,7 +64,8 @@ create or replace function content_item__new (
   cr_revisions.content%TYPE,
   cr_child_rels.relation_tag%TYPE,
   boolean,
-  cr_items.storage_type%TYPE
+  cr_items.storage_type%TYPE,
+  acs_objects.package_id%TYPE
 ) returns integer as '
 declare
   new__name       alias for $1;
@@ -86,6 +87,7 @@ declare
   new__relation_tag  alias for $17;
   new__is_live       alias for $18;
   new__storage_type  alias for $19;
+  new__package_id    alias for $20;
   v_parent_id      cr_items.parent_id%TYPE;
   v_parent_type    acs_objects.object_type%TYPE;
   v_item_id        cr_items.item_id%TYPE;
@@ -94,6 +96,7 @@ declare
   v_rel_id         acs_objects.object_id%TYPE;
   v_rel_tag        cr_child_rels.relation_tag%TYPE;
   v_context_id     acs_objects.context_id%TYPE;
+  v_package_id     acs_objects.package_id%TYPE;
   v_storage_type   cr_items.storage_type%TYPE;
 begin
 
@@ -111,6 +114,12 @@ begin
     v_context_id := v_parent_id;
   else
     v_context_id := new__context_id;
+  end if;
+
+  if new__package_id is null then
+    v_package_id := acs_object__package_id(content_item__get_root_folder(v_parent_id));
+  else
+    v_package_id := new__package_id;
   end if;
 
   if v_parent_id = 0 or 
@@ -155,7 +164,10 @@ begin
       new__creation_date, 
       new__creation_user, 
       new__creation_ip, 
-      v_context_id
+      v_context_id,
+      ''t'',
+      new__name,
+      v_package_id
   );
 
 
@@ -175,7 +187,10 @@ begin
       now(),
       null,
       null,
-      v_parent_id
+      v_parent_id,
+      ''t'',
+      v_rel_tag || '': '' || v_parent_id || '' - '' || v_item_id,
+      v_package_id
     );
 
     insert into cr_child_rels (
@@ -208,7 +223,8 @@ begin
         null,
         new__creation_date, 
         new__creation_user, 
-        new__creation_ip
+        new__creation_ip,
+        v_package_id
         );
 
   elsif new__text is not null or new__title is not null then
@@ -224,7 +240,8 @@ begin
         null,
         new__creation_date, 
         new__creation_user, 
-        new__creation_ip
+        new__creation_ip,
+        v_package_id
     );
 
   end if;
@@ -238,8 +255,61 @@ begin
 
 end;' language 'plpgsql';
 
+create or replace function content_item__new (
+  cr_items.name%TYPE,
+  cr_items.parent_id%TYPE,
+  acs_objects.object_id%TYPE,
+  cr_items.locale%TYPE,
+  acs_objects.creation_date%TYPE,
+  acs_objects.creation_user%TYPE,
+  acs_objects.context_id%TYPE,
+  acs_objects.creation_ip%TYPE,
+  acs_object_types.object_type%TYPE,
+  acs_object_types.object_type%TYPE, 
+  cr_revisions.title%TYPE,
+  cr_revisions.description%TYPE,
+  cr_revisions.mime_type%TYPE,
+  cr_revisions.nls_language%TYPE,
+  varchar,
+  cr_revisions.content%TYPE,
+  cr_child_rels.relation_tag%TYPE,
+  boolean,
+  cr_items.storage_type%TYPE
+) returns integer as '
+declare
+  new__name       alias for $1;
+  new__parent_id  alias for $2;
+  new__item_id    alias for $3;
+  new__locale     alias for $4;
+  new__creation_date alias for $5;
+  new__creation_user alias for $6;
+  new__context_id    alias for $7;
+  new__creation_ip   alias for $8;
+  new__item_subtype  alias for $9;
+  new__content_type  alias for $10;
+  new__title         alias for $11;
+  new__description   alias for $12;
+  new__mime_type     alias for $13;
+  new__nls_language  alias for $14;
+  new__text          alias for $15;
+  new__data          alias for $16;
+  new__relation_tag  alias for $17;
+  new__is_live       alias for $18;
+  new__storage_type  alias for $19;
+  v_item_id        cr_items.item_id%TYPE;
+begin
+  v_item_id := content_item__new (new__name, new__parent_id, new__item_id, new__locale,
+               new__creation_date, new__creation_user, new__context_id, new__creation_ip,
+               new__item_subtype, new__content_type, new__title, new__description,
+               new__mime_type, new__nls_language, new__text, new__data, new__relation_tag,
+               new__is_live, new__storage_type, null);
+
+  return v_item_id;
+
+end;' language 'plpgsql';
+
 --
-create or replace function content_item__new (varchar,integer,integer,varchar,timestamptz,integer,integer,varchar,varchar,varchar,varchar,varchar,varchar,varchar,varchar,varchar)
+create or replace function content_item__new (varchar,integer,integer,varchar,timestamptz,integer,integer,varchar,varchar,varchar,varchar,varchar,varchar,varchar,varchar,varchar,integer)
 returns integer as '
 declare
   new__name                   alias for $1;  
@@ -258,6 +328,7 @@ declare
   new__nls_language           alias for $14; -- default null
   new__text                   alias for $15; -- default null
   new__storage_type           alias for $16; -- check in (''text'',''file'')
+  new__package_id             alias for $17; -- default null
   new__relation_tag           varchar default null;
   new__is_live                boolean default ''f'';
 
@@ -269,6 +340,7 @@ declare
   v_rel_id                    acs_objects.object_id%TYPE;
   v_rel_tag                   cr_child_rels.relation_tag%TYPE;
   v_context_id                acs_objects.context_id%TYPE;
+  v_package_id     acs_objects.package_id%TYPE;
 begin
 
   -- place the item in the context of the pages folder if no
@@ -285,6 +357,12 @@ begin
     v_context_id := v_parent_id;
   else
     v_context_id := new__context_id;
+  end if;
+
+  if new__package_id is null then
+    v_package_id := acs_object__package_id(content_item__get_root_folder(v_parent_id));
+  else
+    v_package_id := new__package_id;
   end if;
 
   if v_parent_id = 0 or 
@@ -322,7 +400,10 @@ begin
       new__creation_date, 
       new__creation_user, 
       new__creation_ip, 
-      v_context_id
+      v_context_id,
+      ''t'',
+      new__name,
+      v_package_id
   );
 
   insert into cr_items (
@@ -336,21 +417,24 @@ begin
     content_folder__is_folder(v_parent_id) = ''f'' and 
     content_item__is_valid_child(v_parent_id, new__content_type) = ''t'' then
 
-    v_rel_id := acs_object__new(
-      null,
-      ''cr_item_child_rel'',
-      now(),
-      null,
-      null,
-      v_parent_id
-    );
-
     if new__relation_tag is null then
       v_rel_tag := content_item__get_content_type(v_parent_id) 
         || ''-'' || new__content_type;
     else
       v_rel_tag := new__relation_tag;
     end if;
+
+    v_rel_id := acs_object__new(
+      null,
+      ''cr_item_child_rel'',
+      now(),
+      null,
+      null,
+      v_parent_id,
+      ''t'',
+      v_rel_tag || '': '' || v_parent_id || '' - '' || v_item_id,
+      v_package_id
+    );
 
     insert into cr_child_rels (
       rel_id, parent_id, child_id, relation_tag, order_n
@@ -381,7 +465,8 @@ begin
         null,
         new__creation_date, 
         new__creation_user, 
-        new__creation_ip
+        new__creation_ip,
+        v_package_id
     );
 
   end if;
@@ -395,7 +480,37 @@ begin
  
 end;' language 'plpgsql';
 
-create or replace function content_item__new (varchar,integer,integer,varchar,timestamptz,integer,integer,varchar,varchar,varchar,varchar,varchar,varchar,varchar,integer)
+create or replace function content_item__new (varchar,integer,integer,varchar,timestamptz,integer,integer,varchar,varchar,varchar,varchar,varchar,varchar,varchar,varchar,varchar)
+returns integer as '
+declare
+  new__name                   alias for $1;  
+  new__parent_id              alias for $2;  -- default null  
+  new__item_id                alias for $3;  -- default null
+  new__locale                 alias for $4;  -- default null
+  new__creation_date          alias for $5;  -- default now()
+  new__creation_user          alias for $6;  -- default null
+  new__context_id             alias for $7;  -- default null
+  new__creation_ip            alias for $8;  -- default null
+  new__item_subtype           alias for $9;  -- default ''content_item''
+  new__content_type           alias for $10; -- default ''content_revision''
+  new__title                  alias for $11; -- default null
+  new__description            alias for $12; -- default null
+  new__mime_type              alias for $13; -- default ''text/plain''
+  new__nls_language           alias for $14; -- default null
+  new__text                   alias for $15; -- default null
+  new__storage_type           alias for $16; -- check in (''text'',''file'')
+  v_item_id                   cr_items.item_id%TYPE;
+begin
+  v_item_id := content_item__new (new__name, new__parent_id, new__item_id, new__locale,
+               new__creation_date, new__creation_user, new__context_id, new__creation_ip,
+               new__item_subtype, new__content_type, new__title, new__description,
+               new__mime_type, new__nls_language, new__text, new__storage_type, null);
+
+  return v_item_id;
+ 
+end;' language 'plpgsql';
+
+create or replace function content_item__new (varchar,integer,integer,varchar,timestamptz,integer,integer,varchar,varchar,varchar,varchar,varchar,varchar,varchar,integer,integer)
 returns integer as '
 declare
   new__name                   alias for $1;  
@@ -414,6 +529,7 @@ declare
   new__nls_language           alias for $14; -- default null
 -- changed to integer for blob_id
   new__data                   alias for $15; -- default null
+  new__package_id             alias for $16; -- default null
   new__relation_tag           varchar default null;
   new__is_live                boolean default ''f'';
 
@@ -425,6 +541,7 @@ declare
   v_rel_id                    acs_objects.object_id%TYPE;
   v_rel_tag                   cr_child_rels.relation_tag%TYPE;
   v_context_id                acs_objects.context_id%TYPE;
+  v_package_id                acs_objects.package_id%TYPE;
 begin
 
   -- place the item in the context of the pages folder if no
@@ -441,6 +558,12 @@ begin
     v_context_id := v_parent_id;
   else
     v_context_id := new__context_id;
+  end if;
+
+  if new__package_id is null then
+    v_package_id := acs_object__package_id(content_item__get_root_folder(v_parent_id));
+  else
+    v_package_id := new__package_id;
   end if;
 
   if v_parent_id = 0 or 
@@ -478,7 +601,10 @@ begin
       new__creation_date, 
       new__creation_user, 
       new__creation_ip, 
-      v_context_id
+      v_context_id,
+      ''t'',
+      new__name,
+      v_package_id
   );
 
   insert into cr_items (
@@ -492,6 +618,13 @@ begin
     content_folder__is_folder(v_parent_id) = ''f'' and 
     content_item__is_valid_child(v_parent_id, new__content_type) = ''t'' then
 
+    if new__relation_tag is null or new__relation_tag = '''' then
+      v_rel_tag := content_item__get_content_type(v_parent_id) 
+        || ''-'' || new__content_type;
+    else
+      v_rel_tag := new__relation_tag;
+    end if;
+
     v_rel_id := acs_object__new(
       null,
       ''cr_item_child_rel'',
@@ -499,14 +632,10 @@ begin
       null,
       null,
       v_parent_id
+      ''t'',
+      v_rel_tag || '': '' || v_parent_id || '' - '' || v_item_id,
+      v_package_id
     );
-
-    if new__relation_tag is null or new__relation_tag = '''' then
-      v_rel_tag := content_item__get_content_type(v_parent_id) 
-        || ''-'' || new__content_type;
-    else
-      v_rel_tag := new__relation_tag;
-    end if;
 
     insert into cr_child_rels (
       rel_id, parent_id, child_id, relation_tag, order_n
@@ -540,7 +669,8 @@ begin
         null,
         new__creation_date, 
         new__creation_user, 
-        new__creation_ip
+        new__creation_ip,
+        v_package_id
         );
 
   end if;
@@ -554,7 +684,37 @@ begin
  
 end;' language 'plpgsql';
 
-create or replace function content_item__new(varchar,integer,varchar,text,text) 
+create or replace function content_item__new (varchar,integer,integer,varchar,timestamptz,integer,integer,varchar,varchar,varchar,varchar,varchar,varchar,varchar,integer)
+returns integer as '
+declare
+  new__name                   alias for $1;  
+  new__parent_id              alias for $2;  -- default null  
+  new__item_id                alias for $3;  -- default null
+  new__locale                 alias for $4;  -- default null
+  new__creation_date          alias for $5;  -- default now()
+  new__creation_user          alias for $6;  -- default null
+  new__context_id             alias for $7;  -- default null
+  new__creation_ip            alias for $8;  -- default null
+  new__item_subtype           alias for $9;  -- default ''content_item''
+  new__content_type           alias for $10; -- default ''content_revision''
+  new__title                  alias for $11; -- default null
+  new__description            alias for $12; -- default null
+  new__mime_type              alias for $13; -- default ''text/plain''
+  new__nls_language           alias for $14; -- default null
+-- changed to integer for blob_id
+  new__data                   alias for $15; -- default null
+  v_item_id                   cr_items.item_id%TYPE;
+begin
+  v_item_id := content_item__new (new__name, new__parent_id, new__item_id, new__locale,
+               new__creation_date, new__creation_user, new__context_id, new__creation_ip,
+               new__item_subtype, new__content_type, new__title, new__description,
+               new__mime_type, new__nls_language, new__data, null);
+
+  return v_item_id;
+ 
+end;' language 'plpgsql';
+
+create or replace function content_item__new(varchar,integer,varchar,text,text,integer) 
 returns integer as '
 declare
         new__name               alias for $1;
@@ -562,6 +722,7 @@ declare
         new__title              alias for $3;  -- default null
         new__description        alias for $4;  -- default null
         new__text               alias for $5;  -- default null
+        new__package_id         alias for $6;  -- default null
 begin
         return content_item__new(new__name,
                                  new__parent_id,
@@ -578,9 +739,33 @@ begin
                                  ''text/plain'',
                                  null,
                                  new__text,
-                                 ''text''
+                                 ''text'',
+                                 new__package_id
                );
                                  
+end;' language 'plpgsql';
+
+create or replace function content_item__new(varchar,integer,varchar,text,text) 
+returns integer as '
+declare
+        new__name               alias for $1;
+        new__parent_id          alias for $2;  -- default null
+        new__title              alias for $3;  -- default null
+        new__description        alias for $4;  -- default null
+        new__text               alias for $5;  -- default null
+begin
+        return content_item__new(new__name, new__parent_id, new__title, new__description,
+                                 new__text, null);
+
+end;' language 'plpgsql';
+
+create or replace function content_item__new(varchar,integer,integer) returns integer as '
+declare
+        new__name        alias for $1;
+        new__parent_id   alias for $2;
+        new__package_id  alias for $3;
+begin
+        return content_item__new(new__name, new__parent_id, null, null, null, new__package_id);
 end;' language 'plpgsql';
 
 create or replace function content_item__new(varchar,integer) returns integer as '
@@ -588,17 +773,13 @@ declare
         new__name       alias for $1;
         new__parent_id  alias for $2;
 begin
-        return content_item__new(new__name,
-                                 new__parent_id,
-                                 null,
-                                 null,
-                                 null);
+        return content_item__new(new__name, new__parent_id, null, null, null, null);
+
 end;' language 'plpgsql';
 
 -- function new -- sets security_inherit_p to FALSE -DaveB
 
-create or replace function content_item__new ( integer, varchar, integer, varchar, timestamptz, integer, integer, varchar, boolean, varchar, text, varchar, boolean, varchar,varchar,varchar)
-
+create or replace function content_item__new ( integer, varchar, integer, varchar, timestamptz, integer, integer, varchar, boolean, varchar, text, varchar, boolean, varchar,varchar,varchar,integer)
 returns integer as '
 declare
   new__item_id                alias for $1; --default null
@@ -617,6 +798,7 @@ declare
   new__storage_area_key       alias for $14; -- default ''CR_FILES''
   new__item_subtype	      alias for $15;
   new__content_type	      alias for $16; 
+  new__package_id	      alias for $17; -- default null
   new__description	      varchar default null;
   new__relation_tag           varchar default null;
   new__nls_language	      varchar default null; 
@@ -628,6 +810,7 @@ declare
   v_rel_id                    acs_objects.object_id%TYPE;
   v_rel_tag                   cr_child_rels.relation_tag%TYPE;
   v_context_id                acs_objects.context_id%TYPE;
+  v_package_id                acs_objects.package_id%TYPE;
 begin
 
   -- place the item in the context of the pages folder if no
@@ -644,6 +827,12 @@ begin
     v_context_id := v_parent_id;
   else
     v_context_id := new__context_id;
+  end if;
+
+  if new__package_id is null then
+    v_package_id := acs_object__package_id(content_item__get_root_folder(v_parent_id));
+  else
+    v_package_id := new__package_id;
   end if;
 
   if v_parent_id = 0 or 
@@ -683,7 +872,9 @@ begin
       new__creation_user, 
       new__creation_ip, 
       v_context_id,
-      new__security_inherit_p
+      new__security_inherit_p,
+      new__name,
+      v_package_id
   );
 
   insert into cr_items (
@@ -698,6 +889,13 @@ begin
     content_folder__is_folder(v_parent_id) = ''f'' and 
     content_item__is_valid_child(v_parent_id, new__content_type) = ''t'' then
 
+    if new__relation_tag is null then
+      v_rel_tag := content_item__get_content_type(v_parent_id) 
+        || ''-'' || new__content_type;
+    else
+      v_rel_tag := new__relation_tag;
+    end if;
+
     v_rel_id := acs_object__new(
       null,
       ''cr_item_child_rel'',
@@ -705,15 +903,10 @@ begin
       null,
       null,
       v_parent_id,
-      ''f''
+      ''f'',
+      v_rel_tag || '': '' || v_parent_id || '' - '' || v_item_id,
+      v_package_id
     );
-
-    if new__relation_tag is null then
-      v_rel_tag := content_item__get_content_type(v_parent_id) 
-        || ''-'' || new__content_type;
-    else
-      v_rel_tag := new__relation_tag;
-    end if;
 
     insert into cr_child_rels (
       rel_id, parent_id, child_id, relation_tag, order_n
@@ -744,7 +937,8 @@ begin
         null,
         new__creation_date, 
         new__creation_user, 
-        new__creation_ip
+        new__creation_ip,
+        v_package_id
     );
 
   end if;
@@ -753,6 +947,37 @@ begin
   if new__is_live = ''t'' then
     PERFORM content_item__set_live_revision(v_revision_id);
   end if;
+
+  return v_item_id;
+
+end;' language 'plpgsql';
+
+create or replace function content_item__new ( integer, varchar, integer, varchar, timestamptz, integer, integer, varchar, boolean, varchar, text, varchar, boolean, varchar,varchar,varchar)
+returns integer as '
+declare
+  new__item_id                alias for $1; --default null
+  new__name                   alias for $2;  
+  new__parent_id              alias for $3;  -- default null  
+  new__title                  alias for $4; -- default null
+  new__creation_date	      alias for $5; -- default now()
+  new__creation_user	      alias for $6; -- default null
+  new__context_id	      alias for $7; -- default null
+  new__creation_ip	      alias for $8; -- default null
+  new__is_live		      alias for $9; -- default ''f''
+  new__mime_type	      alias for $10; 
+  new__text		      alias for $11; -- default null
+  new__storage_type	      alias for $12; -- check in (''text'', ''file'') 
+  new__security_inherit_p     alias for $13; -- default ''t''
+  new__storage_area_key       alias for $14; -- default ''CR_FILES''
+  new__item_subtype	      alias for $15;
+  new__content_type	      alias for $16; 
+  v_item_id                   cr_items.item_id%TYPE;
+begin
+  v_item_id := content_item__new (new__item_id, new__name, new__parent_id, new__title,
+               new__creation_date, new__creation_user, new__context_id, new__creation_ip,
+               new__is_live, new__mime_type, new__text, new__storage_type,
+               new__security_inherit_p, new__storage_area_key, new__item_subtype,
+               new__content_type, null);
 
   return v_item_id;
 
@@ -1169,6 +1394,10 @@ begin
     update cr_items
       set name = rename__name
       where item_id = rename__item_id;
+
+    update acs_objects
+      set title = rename__name
+      where object_id = rename__item_id;
   else
     if exists_id != rename__item_id then
       raise EXCEPTION ''-20000: An item with the name % already exists in this directory.'', rename__name;
@@ -2044,7 +2273,13 @@ begin
       where item_id = move__item_id;
     end if;
 
-  end if; end if;
+    if move__name is not null then
+      update acs_objects
+        set title = move__name
+        where object_id = move__item_id;
+    end if;
+
+  end if;
 
   return 0; 
 end;' language 'plpgsql';
@@ -2413,6 +2648,7 @@ declare
   v_object_type                  acs_objects.object_type%TYPE;
   v_is_valid                     integer;       
   v_rel_id                       integer;       
+  v_package_id                   integer;       
   v_exists                       integer;       
   v_order_n                      cr_item_rels.order_n%TYPE;
 begin
@@ -2453,6 +2689,8 @@ begin
        v_exists := 0;
     end if;
     
+    v_package_id := acs_object__package_id(relate__item_id);
+
     -- if order_n is null, use rel_id (the order the item was related)
     if relate__order_n is null then
       v_order_n := v_rel_id;
@@ -2470,8 +2708,12 @@ begin
         now(),
         null,
         null,
-        relate__item_id
+        relate__item_id,
+        ''t'',
+        relate__relation_tag || '': '' || relate__item_id || '' - '' || relate__object_id,
+        v_package_id
       );
+
       insert into cr_item_rels (
         rel_id, item_id, related_object_id, order_n, relation_tag
       ) values (
@@ -2487,6 +2729,10 @@ begin
         order_n = v_order_n
       where
         rel_id = v_rel_id;
+
+      update acs_objects set
+        title = relate__relation_tag || '': '' || relate__item_id || '' - '' || relate__object_id
+      where object_id = v_rel_id;
     end if;
 
   end if;

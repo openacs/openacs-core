@@ -169,6 +169,7 @@ and rel_type = 'user_portrait_rel'"] } {
 	    update images
 	    set width = :original_width, height = :original_height
 	    where image_id = :revision_id"
+
 	    db_dml update_photo_info "
 	    update cr_revisions
 	    set description = :portrait_comment,
@@ -176,6 +177,11 @@ and rel_type = 'user_portrait_rel'"] } {
 	        mime_type = :guessed_file_type,
 	        title = :title
 	    where revision_id = :revision_id"
+
+	    db_dml update_object_title "
+	    update acs_objects
+	    set title = :title
+	    where object_id = :revision_id"
         }
     }
 }
