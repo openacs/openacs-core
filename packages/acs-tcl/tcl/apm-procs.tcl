@@ -767,6 +767,22 @@ proc apm_package_id_from_key_mem {package_key} {
     } -default 0]
 }
 
+ad_proc -public apm_package_url_from_key {package_key} {
+    @return The package url of the instance of the package.
+    only valid for singleton packages.
+} {
+    return [util_memoize "apm_package_url_from_key_mem $package_key"]
+}
+
+proc apm_package_url_from_key_mem {package_key} {
+    set package_id [apm_package_id_from_key $package_key]
+    return [db_string apm_package_url_from_key {
+	select site_node.url(node_id) 
+          from site_nodes 
+         where object_id = :package_id
+    } -default ""]
+}
+
 ad_proc -public apm_version_info {version_id} {
 
     Sets a set of common package information in the caller's environment.

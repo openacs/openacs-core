@@ -138,4 +138,15 @@
       </querytext>
 </fullquery>
 
+
+<fullquery name="apm_package_url_from_key_mem.apm_package_url_from_key">      
+      <querytext>
+      
+	select site_node__url(node_id) 
+          from site_nodes 
+         where object_id = :package_id
+    
+      </querytext>
+</fullquery>
+
 </queryset>
