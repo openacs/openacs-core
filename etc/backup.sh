@@ -103,7 +103,7 @@ if [ ! -s $TIMEDIR/$COMPUTER-full-date ];
     TYPE="full";
 fi
 
-if [[ $DOM = "01" || $DOW = "Sun" ]];
+if [[ $DOM == "01" || $DOW == "Sun" ]];
     then
     TYPE="full";
 fi
