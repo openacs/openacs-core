@@ -8,6 +8,8 @@ ad_library {
     @cvs-id $Id$
 }
 
+# TODO: Count anonymous users based on their IP, just to have the number
+
 namespace eval whos_online {}
 
 
@@ -34,7 +36,7 @@ ad_proc -private whos_online::flush {} {
     set interval 1
     set oldtime [expr [ns_time] - [interval]]
 
-    for {set search [array startsearch last_hit]} {[array anymore last_hit $search]} {} {
+    for { set search [array startsearch last_hit] } { [array anymore last_hit $search] } {} {
         set user [array nextelement last_hit $search]
         set time $last_hit($user)
         if {$time<$oldtime} { 
@@ -44,7 +46,7 @@ ad_proc -private whos_online::flush {} {
     
     array donesearch last_hit $search
 
-    for {set i 0 } { $i < [llength $onliners_out]} {incr i} {
+    for { set i 0 } { $i < [llength $onliners_out] } { incr i } {
         set user_id [lindex $onliners_out $i]
         foreach name { last_hit invsible_users first_hit } {
             if { [nsv_exists $name $user_id] } {
@@ -67,14 +69,18 @@ ad_proc -private whos_online::interval {} {
                 -default 600]
 }
 
-ad_proc -private whos_online::user_requested_page { user_id } {
+ad_proc -private whos_online::user_requested_page { user_id ip_address } {
     Records that the user with given id requested a page on the server
 
     @author Bjoern Kiesbye
 } {
-    nsv_set last_hit $user_id [ns_time] 
-    if { ![nsv_exists first_hit $user_id] } {
-        nsv_set first_hit $user_id [ns_time]
+    if { $user_id != 0 } {
+        nsv_set last_hit $user_id [ns_time] 
+        if { ![nsv_exists first_hit $user_id] } {
+            nsv_set first_hit $user_id [ns_time]
+        }
+    } else {
+        # TODO: Record the IP address
     }
 }
 
@@ -104,6 +110,20 @@ ad_proc -public whos_online::seconds_since_first_request { user_id } {
     }
 }
 
+ad_proc -public whos_online::num_users {} {
+    Get the number of registered users currently online, and not invisible 
+} {
+    # We might want to optimize this, but for now, let's just do it this way:
+    return [llength [whos_online::user_ids]]
+}
+
+ad_proc -public whos_online::num_anonymous {} {
+    Get the number of anony users currently online, and not invisible 
+} {
+    # Not implemented yet: number of anonymous users counted by IP + number of invisible users
+    return 0
+}
+
 ad_proc -public whos_online::user_ids {
     {-all:boolean}
 } {
@@ -118,7 +138,7 @@ ad_proc -public whos_online::user_ids {
     set onliners [list]
     set oldtime [expr [ns_time] - [interval]]
 
-    for {set search [array startsearch last_hit]} {[array anymore last_hit $search]} {} {
+    for { set search [array startsearch last_hit] } { [array anymore last_hit $search] } {} {
         set user_id [array nextelement last_hit $search]
         if { $last_hit($user_id) > $oldtime } { 
             # User is online
