@@ -41,7 +41,7 @@
   </td>
  </tr>
 
- <form action="tcl-doc-search" method="get">
+ <form action="tcl-proc-view" method="get">
   <tr bgcolor="#DDDDDD">
    <td colspan="2">
     <h4>AOLserver API Search</h4>
