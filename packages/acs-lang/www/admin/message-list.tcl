@@ -35,6 +35,7 @@ set site_wide_admin_p [acs_user::site_wide_admin_p]
 set export_messages_url [export_vars -base "export-messages" { package_key locale { return_url {[ad_return_url]} } }]
 set import_messages_url [export_vars -base "import-messages" { package_key locale { return_url {[ad_return_url]} } }]
 set download_messages_url [export_vars -base "download-messages" { package_key locale }]
+set import_messages_from_ts_url [export_vars -base "import-messages-from-ts" { package_key locale { return_url {[ad_return_url]} } }]
 
 # We let you create new messages keys if you're in the default locale
 set create_p [string equal $current_locale $default_locale]
