@@ -196,7 +196,7 @@ namespace eval site_node {
     } {
         return the site node associated with the given object_id
     } {
-        return [get -url [get_url_from_object_id -object_id $object_id]]
+        return [get -url [lindex [get_url_from_object_id -object_id $object_id] 0]]
     }
 
     ad_proc -public get_url {
@@ -215,9 +215,10 @@ namespace eval site_node {
     ad_proc -public get_url_from_object_id {
         {-object_id:required}
     } {
-        return the url of the site node associated with the given object
+        returns a list of urls for site_nodes that have the given object
+        mounted or the empty list if there are none
     } {
-        return [db_string select_url_from_object_id {} -default ""]
+        return [db_list select_url_from_object_id {} -default [list]]
     }
 
     ad_proc -public get_node_id {
@@ -234,7 +235,7 @@ namespace eval site_node {
     } {
         return the site node id associated with the given object_id
     } {
-        return [get_node_id -url [get_url_from_object_id -object_id $object_id]]
+        return [get_node_id -url [lindex [get_url_from_object_id -object_id $object_id] 0]]
     }
 
     ad_proc -public get_parent_id {
@@ -514,5 +515,5 @@ ad_proc -public site_node_closest_ancestor_package_url {
 	return $default
     }
 
-    return [site_node::get_url_from_object_id -object_id $subsite_pkg_id]
+    return [lindex [site_node::get_url_from_object_id -object_id $subsite_pkg_id] 0]
 }
