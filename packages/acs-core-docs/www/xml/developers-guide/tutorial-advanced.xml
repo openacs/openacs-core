@@ -869,6 +869,67 @@ db_multirow \
 
   </sect1>
 
+
+  <sect1 id="tutorial-css-layout">
+    <title>Laying out a page with CSS instead of tables</title>
+    <sect2>
+      <title>.LRN home page with table-based layout</title>
+    <mediaobject>
+      <imageobject>
+        <imagedata fileref="images/dotlrn-style-1.png" format="PNG" align="center"/>
+      </imageobject>
+    </mediaobject>
+    <para>A sample of the HTML code (<ulink url="files/dotlrn-style-1.html">full source</ulink>)</para>
+      <programlisting>&lt;table border="0" width="100%"&gt;
+  &lt;tr&gt;
+    &lt;td valign="top" width="50%"&gt;
+      &lt;table class="element" border=0 cellpadding="0" cellspacing="0" width="100%"&gt;
+        &lt;tr&gt; 
+          &lt;td colspan=3 class="element-header-text"&gt;
+            &lt;bold&gt;Groups&lt;/bold&gt;
+         &lt;/td&gt;
+       &lt;/tr&gt;
+       &lt;tr&gt;
+         &lt;td colspan=3 class="dark-line" height="0"&gt;&lt;img src="/resources/acs-subsite/spacer.gif"&gt;&lt;/td&gt;&lt;/tr&gt;
+          &lt;tr&gt;
+            &lt;td class="light-line" width="1"&gt;
+              &lt;img src="/resources/acs-subsite/spacer.gif" width="1"&gt;
+            &lt;/td&gt;
+            &lt;td class="element-text" width="100%"&gt;
+            &lt;table cellspacing="0" cellpadding="0" class="element-content" width="100%"&gt;
+              &lt;tr&gt;
+                &lt;td&gt;
+                  &lt;table border="0" bgcolor="white" cellpadding="0" cellspacing="0" width="100%"&gt;
+                    &lt;tr&gt;
+                      &lt;td class=element-text&gt;
+                        MBA 101</programlisting>
+    </sect2>
+    <sect2>
+      <title>.LRN Home with CSS-based layout</title>
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="images/dotlrn-style-3.png" format="PNG" align="center"/>
+        </imageobject>
+      </mediaobject>
+    <para>A sample of the HTML code (<ulink url="files/dotlrn-style-2.html">full source</ulink>)</para>
+    <programlisting>&lt;div class="left"&gt;
+  &lt;div class="portlet-wrap-shadow"&gt;
+    &lt;div class="portlet-wrap-bl"&gt;
+      &lt;div class="portlet-wrap-tr"&gt;
+        &lt;div class="portlet"&gt;
+          &lt;h2&gt;Groups&lt;/h2&gt;
+          &lt;ul&gt;
+            &lt;li&gt;
+              &lt;a href="#"&gt;Class MBA 101&lt;/a&gt;</programlisting>
+    <para>If the CSS is removed from the file, it looks somewhat different:</para>
+    <mediaobject>
+      <imageobject>
+        <imagedata fileref="images/dotlrn-style-2.png" format="PNG" align="center"/>
+      </imageobject>
+    </mediaobject>
+    </sect2>
+  </sect1>
+
   <sect1 id="tutorial-html-email">
     <title>Sending HTML email from your application</title>
     <authorblurb>
