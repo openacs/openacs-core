@@ -65,6 +65,12 @@ ad_proc -public cr_write_content {
         file {
             set path [cr_fs_path $storage_area_key]
             set filename [db_string write_file_content ""]
+            # JCD: for webdavfs there needs to be a content-length 0 header 
+            # but ns_returnfile does not send one.  
+            set size [file size $filename]
+            if {!$size} { 
+                ns_set put [ns_conn outputheaders] "Content-Length" 0
+            }
             ns_returnfile 200 $mime_type $filename
         }
         lob  {
@@ -72,7 +78,7 @@ ad_proc -public cr_write_content {
                 return [db_blob_get write_lob_content ""]
             }
 	    # need to set content_length header here
-	    ns_set put [ns_conn outputheaders] Content-Length $content_length
+	    ns_set put [ns_conn outputheaders] "Content-Length" $content_length
             ReturnHeaders $mime_type
 	    # also need to check for HEAD method and skip sending
 	    # actual content
