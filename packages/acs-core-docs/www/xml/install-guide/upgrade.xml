@@ -86,6 +86,7 @@
       </indexterm>
       <para>The required platform for OpenACS 4.6 is the same as
       4.5, with the exception of OpenFTS.  OpenACS 4.6 and later require OpenFTS 0.3.2 for full text search on PostGreSQL.  If you have OpenFTS 0.2, you'll need to upgrade.  </para>
+      <para>If upgrading from 4.2, you need to manually run acs-kernel/sql/postgres/upgrade-4.2-4.5.sql.  See <ulink url="http://openacs.org/bugtracker/openacs/bug?bug_number=632">Bug #632</ulink></para>
       <itemizedlist mark="circle">
         <listitem><para>A computer with OpenACS 4.5.</para>
         </listitem>
@@ -261,7 +262,58 @@ parameter::set_value -package_id [ad_acs_kernel_id] -parameter UsePasswordWidget
         </listitem>
       </itemizedlist>
     </sect2>
-  </sect1>
+    <sect2 id="upgrade-5-0-dot">
+      <title>Upgrading 5.0.0 to 5.0.x</title>
+        <itemizedlist>
+          <listitem>
+            <formalpara>
+              <title>Upgrading a stock site</title>
+              <para>If you have no custom code, and your site is not in a CVS repository, upgrade with these steps:</para>
+            </formalpara>
+            <orderedlist>
+              <listitem>
+                <para>Go to <ulink url="/acs-admin/install">/acs-admin/install/</ulink> and click "Upgrade Your System" in "Install from OpenACS Repository"</para>
+              </listitem>
+              <listitem>
+                <para>Select all of the packages you want to upgrade and proceed</para>
+              </listitem>
+              <listitem>
+                <para>After upgrade is complete, restart the server as indicated.</para>
+              </listitem>
+              <listitem>
+                <para>If you are using locales other than en_US, go to acs-lang/admin and "Import all Messages" to load the new translated messages.  Your local translations, if any, will take precedence over imported translations.</para>
+              </listitem>
+            </orderedlist>
+          </listitem>
+          <listitem>
+            <formalpara>
+              <title>Upgrading a Custom or CVS site</title>
+              <para>If you have no custom code, and your site is not in a CVS repository, upgrade with these steps:</para>
+            </formalpara>
+            <orderedlist>
+              <listitem>
+                <formalpara>
+                  <title>Upgrade the file system for all packages in use</title>
+                  <para><xref linkend="upgrade-openacs-files"/></para>
+                </formalpara>
+              </listitem>
+              <listitem>
+                <para>Go to <ulink url="/acs-admin/install">/acs-admin/install/</ulink> and click "Upgrade Your System" in "Install from local file system"</para>
+              </listitem>
+              <listitem>
+                <para>Select all of the packages you want to upgrade and proceed</para>
+              </listitem>
+              <listitem>
+                <para>After upgrade is complete, restart the server as indicated.</para>
+              </listitem>
+              <listitem>
+                <para>If you are using locales other than en_US, go to acs-lang/admin and "Import all Messages" to load the new translated messages.  Your local translations, if any, will take precedence over imported translations.</para>
+              </listitem>
+            </orderedlist>
+          </listitem>
+        </itemizedlist>
+      </sect2>
+    </sect1>
   <sect1 id="upgrade-openacs-files">
     <title>Upgrading the OpenACS files</title>
     <para>OpenACS is distributed as a collection of files, available as one big tarball, via CVS, and via automatic download from within the APM.  Upgrades work by first changing the file system (via any of the previous methods), and then using the APM to scan the file system, find upgrade scripts, and execute them.  This section describes how to upgrade the file system.  Starting with OpenACS 5.0, this section can generally be skipped because the OpenACS APM can directly download new files from the openacs.org repository.</para>

@@ -239,6 +239,13 @@ into templates more deeply, and show how to use database queries as
 data sources.
 </para>
 
+</sect2>
+
+<sect2 id="templates-summary">
+<title>Documentation</title>
+
+<ulink url="/doc/acs-templating/">Templating system documentation</ulink>
+
 <para><phrase role="cvstag">($Id$)</phrase></para>
 
 </sect2>

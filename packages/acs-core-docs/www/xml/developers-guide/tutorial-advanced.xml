@@ -620,7 +620,7 @@ ad_form -extend -name note \ </userinput>
         <para>Click on <computeroutput><guilabel>Generate a distribution file
         for this package from the
         filesystem</guilabel></computeroutput>.
-</para>
+        </para>
         <para>Click on the file size
         (<computeroutput><guilabel>37.1KB</guilabel></computeroutput>)
         after the label <computeroutput><guilabel>Distribution

@@ -9,7 +9,8 @@
     select lm1.message_key,
            lm1.message as default_message,
            lm2.message as translated_message,
-           lmk.description
+           lmk.description,
+           coalesce(lm2.deleted_p, 'f') as deleted_p
     from   lang_messages lm1 left outer join 
            lang_messages lm2 on (lm2.locale = :locale and lm2.message_key = lm1.message_key and lm2.package_key = lm1.package_key),
            lang_message_keys lmk

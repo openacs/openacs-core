@@ -11,6 +11,16 @@
     <para>by <ulink url="mailto:vinod@kurup.com">Vinod Kurup</ulink></para>
   </authorblurb>
 
+
+  <para>
+    (Debian users: we do not recommend installing Debian packages for
+    Aolserver or Postgres. Several people have
+    reported problems while trying to install using apt-get
+    instead of from source. If you have the time to debug these
+    and submit what you did, that's great, but if not, you
+    should stick to installing from source. 
+  </para>
+
   <orderedlist>
     <listitem id="aolserver-tarball">
       <formalpara>
@@ -76,8 +86,9 @@ cd /usr/local/src/aolserver
           <computeroutput>conf</computeroutput>, which compiles
           AOLserver, the default modules, and the database driver, and
           installs them.</para>
-      <para>(Debian Users working with AOLserver 3.3+ad13 and
-          postgresql from apt-get may need to
+      <para>Debian users, see
+          warning above, but if you do use apt-get for AOLserver
+          3.3+ad13 and postgresql from apt-get may need to 
           make these symlinks: <computeroutput>ln -s
           /usr/include/postgresql/ /usr/include/pgsql</computeroutput>
           and <computeroutput>ln -s /usr/lib/postgresql /usr/local/pgsql</computeroutput>)</para>

@@ -330,7 +330,7 @@ ad_proc -public lang::util::localize {
         set message_key [string range $replacement_string 1 [expr [string length $replacement_string] - 2]]
         
         # Attempt a message lookup
-        set message_value [_ $message_key]
+        set message_value [lang::message::lookup [ad_conn locale] $message_key "" "" 2]
         
         # Replace the string
         # LARS: We don't use regsub here, because regsub interprets certain characters

@@ -52,6 +52,27 @@ ad_proc -public auth::require_login {
     ad_script_abort
 }
 
+ad_proc -public auth::refresh_login {} {
+    If there currently is a user associated with this session,
+    but the user's authentication is expired, redirect the
+    user to refresh his/her login. This allows for users to not be logged in,
+    but if the user is logged in, then we require that the authentication is not expired.
+
+    @return user_id of user, if the user is logged in and auth_status is not expired, or 0 if the user is not logged in.
+            If user's auth_status is expired, this proc will issue a returnredirect and abort the current page.
+
+    @see ad_script_abort
+} {
+    if { ![string equal [ad_conn auth_level] "expired"] } {
+        return [ad_conn user_id]
+    }
+        
+
+    # The -return switch causes the URL to return to the current page
+    ad_returnredirect [ad_get_login_url -return]
+    ad_script_abort
+}
+
 ad_proc -public auth::get_user_id {
     {-level ok}
     {-account_status ok}

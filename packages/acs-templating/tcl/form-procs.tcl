@@ -405,9 +405,29 @@ ad_proc -private template::form::render { id tag_attributes } {
 } {
   get_reference
 
-  #
+  #----------------------------------------------------------------------
+  # Check for errors on form
+  #----------------------------------------------------------------------
+
+  # make a reference to the formerror array with any validation messages
+  upvar #$level $id:error $id:error
+
+  # Clear the formerror array if it has
+  # been set by another form on the same page
+  upvar #$level formerror formerror
+  if { [info exists formerror] } { unset formerror }
+
+  if { [info exists $id:error] } {
+
+    uplevel #$level "upvar 0 $id:error formerror"
+    
+    # There were errors on the form, force edit mode
+    set properties(mode) edit
+  }
+
+  #----------------------------------------------------------------------
   # Buttons
-  #
+  #----------------------------------------------------------------------
 
   if { [exists_and_not_null form_properties(cancel_url)] && ![exists_and_not_null form_properties(cancel_label)] } {
     set form_properties(cancel_label) "Cancel"
@@ -444,22 +464,6 @@ ad_proc -private template::form::render { id tag_attributes } {
       set name "formbutton:$name"
 
       template::element create $id $name -widget submit -label $label -datatype text
-  }
-
-  # make a reference to the formerror array with any validation messages
-  upvar #$level $id:error $id:error
-
-  # Clear the formerror array if it has
-  # been set by another form on the same page
-  upvar #$level formerror formerror
-  if { [info exists formerror] } { unset formerror }
-
-  if { [info exists $id:error] } {
-
-    uplevel #$level "upvar 0 $id:error formerror"
-    
-    # There were errors on the form, force edit mode
-    set properties(mode) edit
   }
 
   # Propagate form mode to all form elements

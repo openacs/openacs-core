@@ -76,21 +76,21 @@ OpenACS installation is required to serve files from multiple pageroots.</para>
 
 <listitem>
 <para><emphasis role="strong">global pageroot</emphasis>
-(<emphasis role="strong">/web/<emphasis>servicename</emphasis>/www</emphasis>) -- Files appearing under
+(<emphasis role="strong">/var/lib/aolserver/<emphasis>servicename</emphasis>/www</emphasis>) -- Files appearing under
 this pageroot will be served directly off the base url
 http://www.<emphasis>servicename</emphasis>.com/</para>
 </listitem>
 
 <listitem>
 <para><emphasis role="strong">package root</emphasis>
-(<emphasis role="strong">/web/<emphasis>servicename</emphasis>/packages</emphasis>) -- Each subdirectory of
+(<emphasis role="strong">/var/lib/aolserver/<emphasis>servicename</emphasis>/packages</emphasis>) -- Each subdirectory of
 the package root is a package. A typical OpenACS installation will have several
 packages.</para>
 </listitem>
 
 <listitem>
 <para><emphasis role="strong">package pageroot</emphasis>
-(<emphasis role="strong">/web/<emphasis>servicename</emphasis>/packages/<emphasis>package_key</emphasis>/www</emphasis>)
+(<emphasis role="strong">/var/lib/aolserver/<emphasis>servicename</emphasis>/packages/<emphasis>package_key</emphasis>/www</emphasis>)
 -- This is the pageroot for the <emphasis>package_key</emphasis> package.</para>
 </listitem>
 

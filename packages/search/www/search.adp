@@ -1,12 +1,6 @@
-<html>
-<head>
-   <title>@title@</title>
-</head>
-<body bgcolor=ffffff text=000000 leftmargin=15 topmargin=5 marginwidth=15 marginheight=5>
-<h2>@title@</h2>
-@context_bar;noquote@
-<hr>
-
+<master>
+<property name="title">@page_title@</property>
+<property name="context">@context;noquote@</property>
 <form method=GET action=search>
   <small>
     <a href=@url_advanced_search@>Advanced Search</a>
@@ -39,6 +33,20 @@
       	  </font>
 	</if>
 
+<multiple name="searchresult">
+	<if @searchresult.title_summary@ nil>
+  		<a href=@searchresult.url_one@>Untitled</a><br>
+	</if>	
+	<else>
+	  <a href=@searchresult.url_one@>@searchresult.title_summary;noquote@</a><br>
+	</else>
+	<if @searchresult.txt_summary@ nil>	
+	</if>
+	<else>	
+	@searchresult.txt_summary;noquote@<br>	
+	</else>
+	<font color=green>@searchresult.url_one@</font><br><br>
+</multiple>
 
 <if @count@ eq 0>
   Your search - <b>@query@</b> - did not match any documents.
@@ -69,4 +77,40 @@
   <br clear=all>
 </else>
 
-<slave>
+<if @from_result_page@ lt @to_result_page@>
+  <center>
+
+    <small>Result page:</small>
+
+    <if @from_result_page@ lt @current_result_page@>
+      <small><a href=@url_previous@><font color=0000cc><b>Previous</b></font></a></small>
+    </if>
+    &nbsp;@choice_bar;noquote@&nbsp;
+    
+    <if @current_result_page@ lt @to_result_page@>
+	<small><a href=@url_next@><font color=0000cc><b>Next</b></font></a></small>
+    </if>
+  </center>
+</if>
+<if @count@ gt 0>
+  <center>
+    <table border=0 cellpadding=3 cellspacing=0>
+      <tr><td nowrap>
+        <form method=GET action=search>
+          <center>
+            <small>
+              <input type=text name=q size=31 maxlength=256 value="@query@">
+              <input type=submit value=Search>
+            </small>
+          </center>
+        </form>
+      </td></tr>
+    </table>
+  </center>
+
+  <if @stw@ not nil>
+    <center>
+      <font size=-1>Try your query on: @stw;noquote@</font></center>
+    </center>
+  </if>
+</if>

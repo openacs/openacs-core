@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<message_catalog package_key="acs-templating" package_version="5.0d3" locale="fr_FR" charset="ISO-8859-1">
+
+  <msg key="Next_with_arrow">Suivant &gt;&gt;</msg>
+  <msg key="No_row_pretty_plural">Pas de %row_pretty_plural%.</msg>
+  <msg key="Previous_with_arrow">&lt;&lt; Précédent</msg>
+  <msg key="required">champ obligatoire</msg>
+  <msg key="Spellcheck">Orthographe</msg>
+</message_catalog>

@@ -6,9 +6,11 @@
   <msg key="at">à</msg>
   <msg key="Bad_Password">Mot de passe erroné</msg>
   <msg key="Basic_Information">Information </msg>
+  <msg key="Change_locale_label">Changer de langue</msg>
   <msg key="Change_my_Password">Changer mon mot de passe</msg>
   <msg key="Check_Your_Inbox">Voir boite aux lettres</msg>
   <msg key="Children">Fils</msg>
+  <msg key="Close_your_account">Fermer votre compte</msg>
   <msg key="Confirm">Confirmer:</msg>
   <msg key="Current_Password">Mot de passe actuel:</msg>
   <msg key="Customize_Question">Question personnalisée</msg>
@@ -47,6 +49,7 @@
   <msg key="lt_To_confirm_your_regis">Pour confirmer votre inscription, allez à %confirmation_url%</msg>
   <msg key="lt_We_were_not_awaiting_">Nous n'attendions pas de courrier de votre part. Il doit s'agir d'une erreur.</msg>
   <msg key="lt_Welcome_to_system_nam">Bienvenu à %system_name%</msg>
+  <msg key="lt_What_other_people_see">Tout ce que les autres peuvent savoir de vous</msg>
   <msg key="lt_You_cant_have_a_lt_in">Votre prénom ne peut pas contenir le signe &amp;lt; car il pourrait être pris pour une étiquette HTML.</msg>
   <msg key="lt_You_cant_have_a_lt_in_1">Votre nom ne peut pas contenir le signe &amp;lt; car il pourrait être pris pour une étiquette HTML.</msg>
   <msg key="lt_Your_email_has_been_c">Votre adresse email a été vérifiée. Vous pouvez maintenant vous connecter à %system_name%.</msg>

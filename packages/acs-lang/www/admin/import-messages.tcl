@@ -23,4 +23,10 @@ set conflict_count [lang::message::conflict_count \
                         -package_key $package_key \
                         -locale $locale]
 
+set errors_list "<ul>
+  <li>
+    [join $message_count(errors) "</li><li>"]
+</ul>
+"
+
 set conflict_url [export_vars -base message-conflicts { package_key locale }]
