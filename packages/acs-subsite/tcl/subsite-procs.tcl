@@ -296,8 +296,10 @@ ad_proc -public subsite::upload_allowed {} {
     @author Hector Amado (hr_amado@galileo.edu)
     @creation-date 2004-06-16
 } {
+   
+    set package_id [ad_conn subsite_id]
 
-    if { ![parameter::get_from_package_key -package_key acs-subsite -parameter SolicitPortraitP]  } {
+    if { ![parameter::get -package_id $package_id -parameter SolicitPortraitP -default 1]  } {
         if { ![acs_user::site_wide_admin_p] } {
              ns_log notice "user is tried to see user/portrait/upload  without permission"
         ad_return_forbidden \
