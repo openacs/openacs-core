@@ -17,20 +17,19 @@ set focus ""
 set authority_options [auth::authority::get_authority_options]
 
 if { [llength $authority_options] > 1 } {
-    ad_form -name recover_password -form {
+    ad_form -name recover_password -edit_buttons [list [list [_ acs-subsite.Recover_Password_Button] ok]] -form {
         {authority_id:integer(select) 
-            {label "Authority"} 
+            {label "[_ acs-kernel.authentication_authority]"} 
             {options $authority_options}
             {value $authority_id}
         }
     }
 } else {
-    ad_form -name recover_password -form {
+    ad_form -name recover_password -edit_buttons [list [list [_ acs-subsite.Recover_Password_Button] ok]] -form {
         {authority_id:integer(hidden) 
             {value $authority_id}
         }
     }
-
 }
 
 ad_form -extend -name recover_password -form { 
@@ -44,6 +43,8 @@ ad_form -extend -name recover_password -form {
         # Will be defaulted to local authority
         set authority_id ""
     }
+
+
 
     array set recover_info [auth::password::recover_password \
                                 -authority_id $authority_id \
@@ -72,4 +73,4 @@ if { [exists_and_not_null username] && !$form_submitted_p } {
                                 -username $username]
 }
 
-# BEWARE: the template page is a pretty ugly construction! I'm gonna have someone look at it
+
