@@ -26,7 +26,10 @@ namespace eval acs_mail_lite {
             set eh_list ""
         }
 
-        set subject [string range $subject 0 199]
+        # Subject can not be longer than 200 characters
+        if { [string length $subject] > 200 } {
+            set subject "[string range $subject 0 196]..."
+        }
 
         db_dml create_queue_entry {}
     }
