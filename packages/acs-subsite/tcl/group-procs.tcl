@@ -255,7 +255,7 @@ ad_proc -public group::get_member_state_pretty {
 } {
     array set message_key_array {
         approved #acs-kernel.member_state_approved#
-        "need approval" #acs-kernel.member_state_needs_approval#
+        "needs approval" #acs-kernel.member_state_needs_approval#
         banned #acs-kernel.member_state_banned#
         rejected #acs-kernel.member_state_rejected#
         deleted #acs-kernel.member_state_deleted#
