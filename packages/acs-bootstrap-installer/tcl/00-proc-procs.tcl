@@ -603,7 +603,7 @@ ad_proc -public ad_make_relative_path { path } {
 } -
 
 # procedures for doing type based dispatch
-ad_proc -proc ad_method {
+ad_proc -public ad_method {
     method_name
     type
     argblock
