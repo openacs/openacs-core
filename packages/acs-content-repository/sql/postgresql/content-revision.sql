@@ -412,7 +412,7 @@ begin
     end if;
   end LOOP;
 
-  return v_row_count;
+  return null;
  
 end;' language 'plpgsql';
 
