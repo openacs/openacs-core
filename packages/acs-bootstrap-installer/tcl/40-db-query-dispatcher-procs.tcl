@@ -161,6 +161,12 @@ proc db_qd_get_fullname {local_name {added_stack_num 1}} {
     # Get the proc name being executed.
     set proc_name [info level [expr "-1 - $added_stack_num"]]
 
+    # If util_memoize, we have to go back up one in the stack
+    if {[lindex $proc_name 0] == "util_memoize"} {
+	ns_log Notice "QD= util_memoize! going up one level"
+	set proc_name [info level [expr "-2 - $added_stack_num"]]
+    }
+
     set list_of_source_procs {ns_sourceproc apm_source template::adp_parse}
 
     # We check if we're running the special ns_ proc that tells us
@@ -314,6 +320,9 @@ proc db_qd_internal_load_queries {file_pointer file_tag} {
 
     # Read entire contents
     set whole_file [read $file_pointer]
+
+    # PREPARE THE FILE (ben - this is in case the file needs massaging before parsing)
+    set whole_file [db_qd_internal_prepare_queryfile_content $whole_file]
 
     # Iterate and parse out each query
     set parsing_state [db_qd_internal_parse_init $whole_file]
@@ -613,4 +622,53 @@ proc db_qd_relative_path_p {path} {
 # Make a path absolute
 proc db_qd_make_absolute_path {relative_root suffix} {
     return "[db_qd_root_path]${relative_root}$suffix"
+}
+
+
+##
+## Extra Utilities to Massage the system and Rub it in all the right ways
+##
+proc db_qd_internal_prepare_queryfile_content {file_content} {
+    
+    set new_file_content ""
+    set rest_of_file_content $file_content
+
+    set querytext_open "<querytext>"
+    set querytext_close "</querytext>"
+
+    set querytext_open_len [string length $querytext_open]
+    set querytext_close_len [string length $querytext_close]
+
+    # We're going to ns_quotehtml the querytext,
+    # because ns_xml will choke otherwise
+    while {1} {
+	# ns_log Notice "QD=temp=rest_of_file \n $rest_of_file_content \n"
+
+	set first_querytext_open [string first $querytext_open $rest_of_file_content]
+	set first_querytext_close [string first $querytext_close $rest_of_file_content]
+
+	# ns_log Notice "QD=TEMP=massage= $first_querytext_open,$first_querytext_close"
+
+	# We have no more querytext to process
+	if {$first_querytext_open == -1} {
+	    append new_file_content $rest_of_file_content
+	    break
+	}
+
+	# append first chunk before the querytext including "<querytext>"
+	append new_file_content [string range $rest_of_file_content 0 [expr "$first_querytext_open + $querytext_open_len - 1"]]
+
+	# append quoted querytext
+	append new_file_content [ns_quotehtml [string range $rest_of_file_content [expr "$first_querytext_open + $querytext_open_len"] [expr "$first_querytext_close - 1"]]]
+
+	# append close querytext
+	append new_file_content $querytext_close
+
+	# Set up the rest
+	set rest_of_file_content [string range $rest_of_file_content [expr "$first_querytext_close + $querytext_close_len"] end]
+    }
+
+    # ns_log Notice "QD=TEMP= new massaged file content: \n $new_file_content \n"
+
+    return $new_file_content
 }

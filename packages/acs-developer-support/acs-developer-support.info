@@ -23,6 +23,7 @@
             <file type="package_spec" path="acs-developer-support.info"/>
             <file type="tcl_init" path="tcl/acs-developer-support-init.tcl"/>
             <file type="tcl_procs" path="tcl/acs-developer-support-procs.tcl"/>
+            <file type="query_type" db_type="postgresql" path="tcl/acs-developer-support-procs-postgresql.xql"/>
             <file type="documentation" path="www/doc/developer-support-example.html"/>
             <file type="documentation" path="www/doc/index.html"/>
             <file type="content_page" path="www/index.tcl"/>
