@@ -30,6 +30,7 @@ ad_proc -public template::widget {} {
     @see template::widget::numericRange
     @see template::widget::password
     @see template::widget::radio
+    @see template::util::richtext
     @see template::widget::search
     @see template::widget::select
     @see template::widget::submit
