@@ -580,6 +580,15 @@ CREATE
 [$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$
 <action>/usr/local/pgsql/bin/psql <replaceable>$OPENACS_SERVICE_NAME</replaceable> -f /usr/local/src/postgresql-7.3.4/contrib/tsearch/tsearch.sql
 /usr/local/pgsql/bin/psql <replaceable>$OPENACS_SERVICE_NAME</replaceable> -f /usr/local/src/postgresql-7.3.4/contrib/pgsql_contrib_openfts/openfts.sql</action></screen>
+      <note>
+        <para>
+          If you get the error 
+          <computeroutput>ERROR: could not access file "$libdir/tsearch": no such file or directory</computeroutput>
+          It is probably because PostgreSQL's libdir configuration variable points to a diffent directory than where tsearch is.
+          You can find out where PostgreSQL expects to find tsearch via
+          <screen><userinput>pg_config --pkglibdir</userinput></screen>
+        </para>
+      </note>
       </sect2>
       
       <sect2 id="enable-openfts">
