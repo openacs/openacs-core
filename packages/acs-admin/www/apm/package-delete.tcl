@@ -14,6 +14,67 @@ apm_version_info $version_id
 
 set db_type [db_type]
 
+set dependent_packages_list [db_list dependency_p {
+select package_key
+    from apm_package_versions av
+    where av.enabled_p = 't'
+      and av.installed_p = 't'
+      and exists (select 1 from
+                  apm_package_dependencies ad
+                  where ad.version_id = av.version_id 
+                    and ad.service_uri = :package_key
+                    and ad.dependency_type = 'requires'
+                  )
+}]
+
+if { [llength $dependent_packages_list] > 0 } {
+    set dependency_warning_text "
+The following packages depend on package <code>$package_key</code> that you are about to delete: 
+
+<p>
+<code> 
+  [join $dependent_packages_list "<br />"]
+</code>
+</p>
+"
+} else {
+    set dependency_warning_text ""
+}
+
+set initial_install_p [db_string initial_install_p {
+    select initial_install_p
+    from apm_package_types
+    where package_key = :package_key
+}]
+
+if { [string equal $initial_install_p "t"] } {
+    set kernel_deletion_warning "
+<p>
+  You are about to delete package <code>$package_key</code> which is part of the <b>OpenACS core</b>
+</p>
+"
+} else {
+    set kernel_deletion_warning ""
+}
+
+if { ![empty_string_p $dependency_warning_text] || ![empty_string_p $kernel_deletion_warning] } {
+    set warning_text "
+<p>
+  <b><font color=\"red\">WARNING</font></b> 
+</p>
+
+$kernel_deletion_warning
+
+$dependency_warning_text
+
+<p>
+<b>Proceeding with the deletion of the package may render the system in a broken state.</b>
+</p>
+"
+} else {
+    set warning_text ""
+}
+
 set file_list ""
 foreach file [apm_get_package_files -package_key $package_key -file_types data_model_drop] {
     append file_list "  <tr>
@@ -32,6 +93,8 @@ $file_list
 } 
 
 set body "[apm_header -form "action=\"package-delete-2\" method=\"post\"" [list "version-view?version_id=$version_id" "$pretty_name $version_name"] "Delete"]
+
+$warning_text
 
 <p>Deleting a package removes all record of it from the APM's database.</p>
 
