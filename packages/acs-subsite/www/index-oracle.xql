@@ -19,6 +19,7 @@
     from site_nodes n
    where n.parent_id = :node_id
     and n.object_id is not null
+    and acs_permission.permission_p(n.object_id, :user_id, 'read') = 't'
    order by name
 
       </querytext>
