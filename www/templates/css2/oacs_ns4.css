@@ -1,0 +1,73 @@
+
+SPAN.nav
+{font-family:verdana,helvetica,arial;color:#333333;
+font-weight:bold;font-size:12pt;}
+
+SPAN.navon
+{font-family:verdana,helvetica,arial;color:#666666;
+font-weight:bold;font-size:12pt;}
+
+SPAN.footer
+{font-family:verdana,helvetica,arial;color:#333333;
+font-weight:normal;font-size:10pt;}
+
+span
+{font-family:verdana,helvetica,arial;color:#333333;font-size:10pt;}
+
+span.reg
+{font-family:verdana,helvetica,arial;color:#333333;font-size:10pt;}
+
+span.small
+{font-family:verdana,helvetica,arial;color:#333333;font-size:9pt;}
+
+span.light
+{font-family:verdana,helvetica,arial;color:#666666;font-size:10pt;font-weight:bold;}
+
+TD {font-family:verdana,helvetica,arial;color:#333333;font-size:10pt;}
+
+P {font-family:verdana,helvetica,arial;color:#333333;font-size:10pt}
+
+.button {
+font-family:verdana,helvetica,arial,sans-serif;color:#999999;font-weight:bold;font-size:8pt;background-color:#eeeeee;}
+
+
+h1 {font-family:verdana,helvetica,arial;color:#666666;font-size:14pt;
+font-weight:bold;}
+span.one {font-family:verdana,helvetica,arial;color:#666666;font-size:14pt;
+font-weight:bold;}
+
+h2 {font-family:verdana,helvetica,arial;color:#333333;font-size:13pt;
+font-weight:bold;}
+span.two {font-family:verdana,helvetica,arial;color:#333333;font-size:13pt;
+font-weight:bold;}
+
+h3 {font-family:verdana,helvetica,arial;color:#333333;font-size:12pt;
+font-weight:bold;}
+span.three {font-family:verdana,helvetica,arial;color:#333333;font-size:12pt;
+font-weight:bold;}
+
+h4 {font-family:verdana,helvetica,arial;color:#333333;font-size:11pt
+font-weight:bold;}
+span.four 
+{font-family:verdana,helvetica,arial;color:#333333;font-size:11pt;font-weight:bold;}
+
+span.pink {font-family:verdana,helvetica,arial;color:#cc0066;font-size:11pt;
+font-weight:bold;}
+
+span.blue {font-family:verdana,helvetica,arial;color:#006699;font-size:14pt;
+text-decoration:none;font-weight:bold;}
+
+A:link {color:#006699;text-decoration:underline;}
+A:active {color:#3399cc;text-decoration:underline;}
+A:visited {color:#006699;text-decoration:underline;}
+A:hover {color:#3399cc;text-decoration:underline;}
+
+A.top:link {color:#333333;text-decoration:none;}
+A.top:active {color:#666666;text-decoration:none;}
+A.top:visited {color:#333333;text-decoration:none;}
+A.top:hover {color:#666666;text-decoration:none;}
+
+A.on:link {color:#666666;text-decoration:none;}
+A.on:active {color:#cc0066;text-decoration:none;}
+A.on:visited {color:#666666;text-decoration:none;}
+A.on:hover {color:#cc0066;text-decoration:none;}

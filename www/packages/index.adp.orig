@@ -1,0 +1,782 @@
+<master>
+<property name="title">All OpenACS and dotLRN Packages</property>
+<property name="context">{all packages}</property>
+
+
+    <table cellspacing="5" cellpadding="5">
+	    <tbody><tr bgcolor="#f8f8f8">
+	    	<th width="20%">Package</th>
+		<th width="80%">Description</th>
+	    </tr>
+		<tr bgcolor="#ececec">
+			<td valign="top"><b>Acknowledgement</b><br>  key: <i>acknowledgement</i></td>
+			<td><b>Ask system users for acknowledgements</b><br>Ask
+system users for acknowledgements such as acceptance of a privacy
+policy or terms of use. The users acceptance is logged and can be
+checked via a simple API call.</td></tr>
+		<tr bgcolor="white">
+			<td valign="top"><b>Site-Wide Administration</b><br>  key: <i>acs-admin</i></td>
+			<td><b>An interface for Site-wide administration of an OpenACS Installation.</b><br>Provides a UI for administering site-wide services
+          (including package installation, cache, authentication, and user accounts) for an OpenACS system.
+        </td></tr>
+		<tr bgcolor="#ececec">
+			<td valign="top"><b>API Browser</b><br>  key: <i>acs-api-browser</i></td>
+			<td><b>Interactive documentation for the Tcl and SQL APIs.</b><br>On
+line interactive documentation for the locally installed Tcl and SQL
+APIs. Links to the Tcl core and AOLServer online documentation as well.</td></tr>
+		<tr bgcolor="white">
+			<td valign="top"><b>Authentication</b><br>  key: <i>acs-authentication</i></td>
+			<td><b>Authentication, account management, and related functionality.</b><br>Implements
+authentication-related security functions for OpenACS, including
+password, account and session management, bulk account creation etc.
+Provides a contract based interface for different authentication
+methods such as PAM or LDAP based authentication.</td></tr>
+		<tr bgcolor="#ececec">
+			<td valign="top"><b>Automated Testing</b><br>  key: <i>acs-automated-testing</i></td>
+			<td><b>The interface to the automated testing facilities within OpenACS.</b><br>Provides a UI for viewing and running automated tests provided by each package within the OpenACS system.</td></tr>
+		<tr bgcolor="white">
+			<td valign="top"><b>Bootstrap Installer</b><br>  key: <i>acs-bootstrap-installer</i></td>
+			<td><b>Bootstraps an OpenACS installation.</b><br>This
+package bootstraps OpenACS. If the core packages have not yet been
+installed, it calls the installer which leads the user through the
+steps necessary to do so. It also checks that the installation meets
+the requirements for a successful install of OpenACS.</td></tr>
+		<tr bgcolor="#ececec">
+			<td valign="top"><b>Content Repository</b><br>  key: <i>acs-content-repository</i></td>
+			<td><b>The canonical repository for OpenACS content.</b><br>Provides the API for creating and managing user generated content including 
+         full support for versioning, rendering content to the filesystem, folders and composite content items, and
+         other CMS backing functionality.  Utilized by Bug Tracker, File Storage, and other packages.
+        </td></tr>
+		<tr bgcolor="white">
+			<td valign="top"><b>Documentation</b><br>  key: <i>acs-core-docs</i></td>
+			<td><b>Documentation for the OpenACS Core.</b><br>Static HTML documentation for the OpenACS core (includes the DocBook sources).
+        </td></tr>
+		<tr bgcolor="#ececec">
+			<td valign="top"><b>Date and Time Utilities</b><br>  key: <i>acs-datetime</i></td>
+			<td><b>An API for date and time functions</b><br>Note: this version of the package requires acs-event(s) for a helper function. This requirement may go away in the future. </td></tr>
+		<tr bgcolor="white">
+			<td valign="top"><b>Developer Support</b><br>  key: <i>acs-developer-support</i></td>
+			<td><b>Profiling for requests including database timing information.</b><br>Developer support stores timing and other logged information for requests 
+        to support debugging and tuning and supports user switching and a Tcl Sell to invoke arbitrary tcl code on the server.
+        </td></tr>
+		<tr bgcolor="#ececec">
+			<td valign="top"><b>Events</b><br>  key: <i>acs-events</i></td>
+			<td><b>API support for relationships between intervals in time, activities, and parties.</b><br>The
+events service is primarily intended for use by writers of application
+packages and other service packages. The service allows developers to
+specify and manipulate relationships (possibly recurring) between an
+object and another object.</td></tr>
+		<tr bgcolor="white">
+			<td valign="top"><b>ACS Interface</b><br>  key: <i>acs-interface</i></td>
+			<td><b>Define interfaces for object types.</b><br>Stores
+metadata for a label and a set of methods. Objects can register their
+package that provides these methods. Used by Site Wide Search.</td></tr>
+		<tr bgcolor="#ececec">
+			<td valign="top"><b>Kernel</b><br>  key: <i>acs-kernel</i></td>
+			<td><b>Routines and data models providing the foundation for OpenACS-based Web services.</b><br>The
+OpenACS kernel contains the core datamodel create and drop scripts for
+such things as objects, groups, partiies and the supporting PL/SQL and
+PL/pgSQL procedures.</td></tr>
+		<tr bgcolor="white">
+			<td valign="top"><b>Localization</b><br>  key: <i>acs-lang</i></td>
+			<td><b>OpenACS Internationalization Support.</b><br>Internationalization and localization support routines and admin UI for manipulating Locales,
+request processor hooks, templating, accessing and managing the message catalog, and
+locale-specific formatting functions for localizing dates, times, monetary amounts etc.</td></tr>
+		<tr bgcolor="#ececec">
+			<td valign="top"><b>ACS LDAP Authentication</b><br>  key: <i>acs-ldap-authentication</i></td>
+			<td><b>Authentication via LDAP (deprecated)</b><br>Deprecated in favor of the auth-ldap package.</td></tr>
+		<tr bgcolor="white">
+			<td valign="top"><b>Mail</b><br>  key: <i>acs-mail</i></td>
+			<td><b>General messaging system, mark II</b><br>Provides generic message services, with email sending.  The acs-mail-lite package is the prefered 
+        interface for new packages and it's anticipated that this package will ultimately be deprecated.</td></tr>
+		<tr bgcolor="#ececec">
+			<td valign="top"><b>Mail Services Lite</b><br>  key: <i>acs-mail-lite</i></td>
+			<td><b>Simple reliable email transmission.</b><br>This
+package provides a simple ns_sendmail-like interface for sending
+messages, but queues messages in the database to ensure reliable
+sending and make sending a message 'transactional'. Prefered over
+acs-messaging or acs-mail.</td></tr>
+		<tr bgcolor="white">
+			<td valign="top"><b>Messaging</b><br>  key: <i>acs-messaging</i></td>
+			<td><b>General messaging for bboard and general comments.</b><br>Provides
+generic message services, with email sending. acs-mail-lite and
+notifications are the prefered packages for delivering this
+functionality and it is anticipated that this package will ultimately
+be deprecated.</td></tr>
+		<tr bgcolor="#ececec">
+			<td valign="top"><b>Reference Data</b><br>  key: <i>acs-reference</i></td>
+			<td><b>Tools and API for managing refrence data.</b><br>Reference Data provides an API to support:
+<ul>
+<li> A common set of reference data.
+</li><li> Running standard reports on this data.
+</li><li> Monitoring the usage of reference data.
+</li></ul></td></tr>
+		<tr bgcolor="white">
+			<td valign="top"><b>Service Contracts</b><br>  key: <i>acs-service-contract</i></td>
+			<td><b>API and UI for service contracts</b><br>Service
+contracts defines an API for the creation of interfaces and discovery
+of interface implementations. Examples are the contracts used for
+search which provide a means to get content on a given object and to
+translate an object_id to a url or the contracts used by dotlrn and
+new-portals to allow packages to provide portalized panes.</td></tr>
+		<tr bgcolor="#ececec">
+			<td valign="top"><b>Subsite</b><br>  key: <i>acs-subsite</i></td>
+			<td><b>Subsite</b><br>Provides
+for creating subsites within the OpenACS Community System. Aware of
+parties, groups, users, portraits. Can be themed via a per subsite
+master template.</td></tr>
+		<tr bgcolor="white">
+			<td valign="top"><b>Tcl Library</b><br>  key: <i>acs-tcl</i></td>
+			<td><b>The Kernel Tcl API library.</b><br>Contains
+all the core Tcl API, including the request processor, security and
+session management, permissions, site-nodes, package management
+infrastructure, etc.</td></tr>
+		<tr bgcolor="#ececec">
+			<td valign="top"><b>Templating</b><br>  key: <i>acs-templating</i></td>
+			<td><b>Templating library.</b><br>
+The templating system provides the tag library and support routines
+that allow developers and graphic designers to work
+independently. Templates specify the layout of the page seperately
+from the contents of the page. Graphic designers work primarily on the
+layout part of the template (the template), while programmers work
+primarily a script that generates the the content part of the template
+(the code). In addition, the template system provides a way to use a
+single layout specification for many physical pages, so the overall
+layout of a site can be more easily administered.
+</td></tr>
+		<tr bgcolor="white">
+			<td valign="top"><b>Ad Server</b><br>  key: <i>adserver</i></td>
+			<td><b>Serve banner ads to users and monitor clickthroughs</b><br>Create ad groups and ads and server banners in random rotation with display and clickthrough statistics recorded</td></tr>
+		<tr bgcolor="#ececec">
+			<td valign="top"><b>Attachments</b><br>  key: <i>attachments</i></td>
+			<td><b>Attachment support</b><br>Provide widgets and datamodel to support attachments on arbitrary objects.  Used by forums.</td></tr>
+		<tr bgcolor="white">
+			<td valign="top"><b>LDAP Authentication Driver</b><br>  key: <i>auth-ldap</i></td>
+			<td><b>LDAP authentication drivers for acs-authentication.</b><br>Implements
+the LDAP authentication, password management, and other drivers for use
+with the acs-authentication service contracts.</td></tr>
+		<tr bgcolor="#ececec">
+			<td valign="top"><b>PAM Authentication Driver</b><br>  key: <i>auth-pam</i></td>
+			<td><b>PAM authentication drivers for acs-authentication.</b><br>Implements the PAM authentication, password management, and other drivers for use with the acs-authentication service contracts.</td></tr>
+		<tr bgcolor="white">
+			<td valign="top"><b>Authentication Server</b><br>  key: <i>auth-server</i></td>
+			<td><b>Allows OpenACS to act as an authentication server for a single-sign-on environment.</b></td></tr>
+		<tr bgcolor="#ececec">
+			<td valign="top"><b>Authorize.net Gateway</b><br>  key: <i>authorize-gateway</i></td>
+			<td><b>Authorize.net payment gateway</b><br>Payment gateway to Authorize.net. An account with Authorize.net and a merchant account are required.</td></tr>
+		<tr bgcolor="white">
+			<td valign="top"><b>Bboard Portlet</b><br>  key: <i>bboard-portlet</i></td>
+			<td><b></b></td></tr>
+		<tr bgcolor="#ececec">
+			<td valign="top"><b>Basic Content Delivery System</b><br>  key: <i>bcds</i></td>
+			<td><b>A presentation system for the Content Repository.</b><br>A presentation system for Content Repository.  Normally used together with Basic Content Management System (BCMS).</td></tr>
+		<tr bgcolor="white">
+			<td valign="top"><b>Basic Content Management System</b><br>  key: <i>bcms</i></td>
+			<td><b>Basic CMS is a thin layer on top of Content Repository to manipulate its data model.</b><br>Basic CMS is a thin layer on top of Content Repository to manipulate its data model.</td></tr>
+		<tr bgcolor="#ececec">
+			<td valign="top"><b>BCMS UI Base</b><br>  key: <i>bcms-ui-base</i></td>
+			<td><b>Base BCMS UI to provide the minimum set of UI functionality.</b><br>Base BCMS UI to provide the minimum set of UI functionality.  You can copy this package and extend it to create your own.</td></tr>
+		<tr bgcolor="white">
+			<td valign="top"><b>BCMS UI Wizard</b><br>  key: <i>bcms-ui-wizard</i></td>
+			<td><b>A BCMS UI implementation that makes use of wizard</b><br>A BCMS UI implementation that makes use of wizard.</td></tr>
+		<tr bgcolor="#ececec">
+			<td valign="top"><b>Bulk Mail Portlet</b><br>  key: <i>bm-portlet</i></td>
+			<td><b></b></td></tr>
+		<tr bgcolor="white">
+			<td valign="top"><b>Bookmarks</b><br>  key: <i>bookmarks</i></td>
+			<td><b>Web based user bookmark application.</b><br>User bookmark management package with the following functionality:
+<ul>
+<li>Adding bookmarks when browsing with the help of a Bookmarklet (a
+Bookmark in the browser that contains Javascript instead of a url).</li>
+<li>Sorting by name and access date</li>
+<li>Enhanced access permissions including toggling between private and public.</li>
+<li>Display of keywords and descriptions of urls (fetched with ns_httpget)
+</li><li>Bookmarks are viewed in a tree structure with open/collapse
+functionality of folders. Alternatively the bookmarks can be viewed in
+a Javascript version.</li>
+<li>Importing/exporting bookmarks from/to Netscape and IE browsers</li>
+<li>Checking for broken or changed URLs</li>
+<li>Display of the most popular hosts and urls in the community</li>
+</ul>
+</td></tr>
+		<tr bgcolor="#ececec">
+			<td valign="top"><b>Bookshelf</b><br>  key: <i>bookshelf</i></td>
+			<td><b>Share your bookshelf with others.</b><br>Store commentary on books with an interface to amazon to retrieve thumbnails and other book data</td></tr>
+		<tr bgcolor="white">
+			<td valign="top"><b>Bug Tracker</b><br>  key: <i>bug-tracker</i></td>
+			<td><b>Tracks bugs and features, versions and maintainers, in software projects.</b><br>Bug tracking application with notifications, configurable state management, and patch upload.
+        Contains the best of SDM, Bugzilla, FogBUGZ, and bughost.com.</td></tr>
+		<tr bgcolor="#ececec">
+			<td valign="top"><b>Bulk Mail</b><br>  key: <i>bulk-mail</i></td>
+			<td><b>Mailing form letters to groups of users.</b><br>Provides
+an API for sending messages to a collection of users (which can be
+chosen via arbitrary sql). Mails can be personalized and can be
+scheduled for a later date.</td></tr>
+		<tr bgcolor="white">
+			<td valign="top"><b>Calendar</b><br>  key: <i>calendar</i></td>
+			<td><b>Personal and shared event calendars.</b><br>Manage group and shared calendars with download.</td></tr>
+		<tr bgcolor="#ececec">
+			<td valign="top"><b>Calendar Portlet</b><br>  key: <i>calendar-portlet</i></td>
+			<td><b></b></td></tr>
+		<tr bgcolor="white">
+			<td valign="top"><b>Categories</b><br>  key: <i>categories</i></td>
+			<td><b>Manage categories in category trees and let users map objects to categories.</b><br>Datamodel
+for category trees with supporting API and management pages. Provides a
+widget for general categorization of arbitrary objects and tracks which
+package instances use which category trees. Also supports localization.</td></tr>
+		<tr bgcolor="#ececec">
+			<td valign="top"><b>Chat</b><br>  key: <i>chat</i></td>
+			<td><b>Server based chat with an html and java client.</b><br>This package has not really been used.  Probably better to look at the jabber package in contrib.</td></tr>
+		<tr bgcolor="white">
+			<td valign="top"><b>Classified Ads</b><br>  key: <i>classified-ads</i></td>
+			<td><b>User entered classified ads.</b><br>This
+package implements a generic classified ads module using the content
+repository. It features categorization, adding of custom fields, etc.</td></tr>
+		<tr bgcolor="#ececec">
+			<td valign="top"><b>Clickthrough</b><br>  key: <i>clickthrough</i></td>
+			<td><b>Track which links are actually followed by a user.</b><br>
+Clickthrough collects information about each pair of local (origin)
+and foreign (destination) addresses, including summary statistics of
+clickthroughs between each such pairs of addresses.  The clickthrough
+log can be used to provide external sites with a measure of how much
+traffic originated from the local site, which can be useful for
+auditing or confirming revenue generating clickthroughs (e.g.,
+referrals).  Any link can be clickthrough-enabled by embedding special
+information in its destination address. This is achieved by wrapping
+the href attribute with a call to `clickthrough_href' (e.g.,
+[clickthrough_href http://www.openacs.org]).
+</td></tr>
+		<tr bgcolor="white">
+			<td valign="top"><b>Content Management System</b><br>  key: <i>cms</i></td>
+			<td><b>A CMS implemented on top of the Content Repository.</b><br>CMS is a full featured content management system implemented on top of
+        the content repository which supports workflow, composite objects, dynamicly created attributes, publishing to 
+        the filesystem and categorization.  The user interface needs a great deal of work and the package relies on 
+        acs-workflow which has been deprecated.  Alternatives include etp and bcms (which is a work in progress), CMS 
+        remains the best place to look to find examples of how the content repository should be used.
+        </td></tr>
+		<tr bgcolor="#ececec">
+			<td valign="top"><b>CMS News Site Demo</b><br>  key: <i>cms-news-demo</i></td>
+			<td><b>News site demo built using CMS.</b><br>A demo news site built using CMS.</td></tr>
+		<tr bgcolor="white">
+			<td valign="top"><b>Cronjob</b><br>  key: <i>cronjob</i></td>
+			<td><b>Run sql and tcl code on schedule, similar to unix cron.</b><br>Runs sql and tcl code on schedule similar to unix cron.  Some issues exist with 
+        guaranteed execution and blocking.</td></tr>
+		<tr bgcolor="#ececec">
+			<td valign="top"><b>Curriculum</b><br>  key: <i>curriculum</i></td>
+			<td><b>Create and track user page sequence "curriculum"</b><br>Provides a UI for creating a sequence of links as a "curriculum" which can 
+be presented as a linkbar in the page footer (or elsewhere) and is tracked per user.</td></tr>
+		<tr bgcolor="white">
+			<td valign="top"><b>Curriculum Portlet</b><br>  key: <i>curriculum-portlet</i></td>
+			<td><b></b></td></tr>
+		<tr bgcolor="#ececec">
+			<td valign="top"><b>Directory</b><br>  key: <i>directory</i></td>
+			<td><b>User Directory</b><br>This
+package lets you browse or search for users of an OpenACS site. It is
+subsite-aware, and allows you to view the members of the current
+subsite, or all users of the site. </td></tr>
+		<tr bgcolor="white">
+			<td valign="top"><b>dotLRN</b><br>  key: <i>dotlrn</i></td>
+			<td><b>A Course Management System</b><br>Course Management</td></tr>
+		<tr bgcolor="#ececec">
+			<td valign="top"><b>dotLRN BBoard Applet</b><br>  key: <i>dotlrn-bboard</i></td>
+			<td><b></b></td></tr>
+		<tr bgcolor="white">
+			<td valign="top"><b>dotLRN Bulk Mail Applet</b><br>  key: <i>dotlrn-bm</i></td>
+			<td><b></b></td></tr>
+		<tr bgcolor="#ececec">
+			<td valign="top"><b>dotLRN Calendar Applet</b><br>  key: <i>dotlrn-calendar</i></td>
+			<td><b></b></td></tr>
+		<tr bgcolor="white">
+			<td valign="top"><b>dotLRN Curriculum Applet</b><br>  key: <i>dotlrn-curriculum</i></td>
+			<td><b></b></td></tr>
+		<tr bgcolor="#ececec">
+			<td valign="top"><b>dotLRN Applet</b><br>  key: <i>dotlrn-dotlrn</i></td>
+			<td><b>Helper routines for dotLRN applets</b></td></tr>
+		<tr bgcolor="white">
+			<td valign="top"><b>dotLRN FAQ Applet</b><br>  key: <i>dotlrn-faq</i></td>
+			<td><b></b></td></tr>
+		<tr bgcolor="#ececec">
+			<td valign="top"><b>dotLRN Forums Applet</b><br>  key: <i>dotlrn-forums</i></td>
+			<td><b></b></td></tr>
+		<tr bgcolor="white">
+			<td valign="top"><b>dotLRN File Storage Applet</b><br>  key: <i>dotlrn-fs</i></td>
+			<td><b></b></td></tr>
+		<tr bgcolor="#ececec">
+			<td valign="top"><b>dotLRN Homework</b><br>  key: <i>dotlrn-homework</i></td>
+			<td><b>Provides a homework assignment dropboxes for dotLRN classes.</b></td></tr>
+		<tr bgcolor="white">
+			<td valign="top"><b>dotLRN News Applet</b><br>  key: <i>dotlrn-news</i></td>
+			<td><b></b></td></tr>
+		<tr bgcolor="#ececec">
+			<td valign="top"><b>dotLRN News Aggregator Applet</b><br>  key: <i>dotlrn-news-aggregator</i></td>
+			<td><b></b></td></tr>
+		<tr bgcolor="white">
+			<td valign="top"><b>dotLRN Photo Album Applet</b><br>  key: <i>dotlrn-photo-album</i></td>
+			<td><b></b></td></tr>
+		<tr bgcolor="#ececec">
+			<td valign="top"><b>dotLRN Portlet</b><br>  key: <i>dotlrn-portlet</i></td>
+			<td><b></b></td></tr>
+		<tr bgcolor="white">
+			<td valign="top"><b>dotLRN Recruiting</b><br>  key: <i>dotlrn-recruiting</i></td>
+			<td><b></b></td></tr>
+		<tr bgcolor="#ececec">
+			<td valign="top"><b>dotLRN Research Paper</b><br>  key: <i>dotlrn-research</i></td>
+			<td><b></b></td></tr>
+		<tr bgcolor="white">
+			<td valign="top"><b>dotLRN Static Applet</b><br>  key: <i>dotlrn-static</i></td>
+			<td><b></b></td></tr>
+		<tr bgcolor="#ececec">
+			<td valign="top"><b>dotLRN Survey</b><br>  key: <i>dotlrn-survey</i></td>
+			<td><b>dotLRN applet for Survey package</b><br>dotLRN applet for Survey package</td></tr>
+		<tr bgcolor="white">
+			<td valign="top"><b>dotLRN Syllabus</b><br>  key: <i>dotlrn-syllabus</i></td>
+			<td><b></b></td></tr>
+		<tr bgcolor="#ececec">
+			<td valign="top"><b>dotLRN Weblogger Applet</b><br>  key: <i>dotlrn-weblogger</i></td>
+			<td><b></b></td></tr>
+		<tr bgcolor="white">
+			<td valign="top"><b>dotLRN Wimpy Point</b><br>  key: <i>dotlrn-wps</i></td>
+			<td><b></b></td></tr>
+		<tr bgcolor="#ececec">
+			<td valign="top"><b>Download</b><br>  key: <i>download</i></td>
+			<td><b>Manage downloadable resources, versioned and with download tracking.</b><br>Intended to support downloads of versioned software and packages.  UI needs work.</td></tr>
+		<tr bgcolor="white">
+			<td valign="top"><b>E-Commerce</b><br>  key: <i>ecommerce</i></td>
+			<td><b>The ACS 3.x based e-commerce solution ported to OpenACS.</b><br>This
+module implements all that IT needs for a standard business-to-consumer
+Web service. You can find a feature summary in the documentaion.</td></tr>
+		<tr bgcolor="#ececec">
+			<td valign="top"><b>Edit This Page</b><br>  key: <i>edit-this-page</i></td>
+			<td><b>An easy-to-use content management system.</b><br>An Easy to use publishing system with versioning and permissions.</td></tr>
+		<tr bgcolor="white">
+			<td valign="top"><b>Email Handler</b><br>  key: <i>email-handler</i></td>
+			<td><b>Service to automatically dispatch and process incoming email messages.</b><br>A
+service to autmatically dispatch and process incoming email messages.
+Email messages are tagged and inserted into a database table by an
+external script, and the email handler dispatches emails by tag to Tcl
+procedures to handle them. See notifications for an alternative maildir
+based handler for inbound mail.</td></tr>
+		<tr bgcolor="#ececec">
+			<td valign="top"><b>Events Management</b><br>  key: <i>events</i></td>
+			<td><b>Event registration and management such as a lecture series or a social gathering online.</b><br>Organizations
+often have a number of set events which they like to repeat. For
+example, a company may have a certain presentation which it makes over
+and over. A photoraphy club may hold monthly outings. A marathon race
+could occur annually. The Events package provides a way to coordinate
+activities, venues, and users via a web page. This is a port of the ACS
+Classic 3.x events package originally written by Arsdigita. See package
+documentation for more info. </td></tr>
+		<tr bgcolor="white">
+			<td valign="top"><b>FAQ</b><br>  key: <i>faq</i></td>
+			<td><b>Manage simple Question and Answer style FAQs</b><br>Handles
+frequently asked questions Q&amp;A presentation. Can be one Q&amp;A per
+page or all presented flat. Straightforward application with room for
+improvement.</td></tr>
+		<tr bgcolor="#ececec">
+			<td valign="top"><b>FAQ Portlet</b><br>  key: <i>faq-portlet</i></td>
+			<td><b></b></td></tr>
+		<tr bgcolor="white">
+			<td valign="top"><b>File Manager</b><br>  key: <i>file-manager</i></td>
+			<td><b>lightweight file-system based content-management application</b><br>Provides a simple interface to upload and modify documents directly in the filesystem.  An alternative to ftp 
+which uses the built in authentication of OpenACS.</td></tr>
+		<tr bgcolor="#ececec">
+			<td valign="top"><b>File Storage</b><br>  key: <i>file-storage</i></td>
+			<td><b>Collaborative document storage</b><br>Provides
+a versioned document store with storage in the filesystem or database
+(depending on configuration). Documents and folders can be permissioned
+and folders downloaded.</td></tr>
+		<tr bgcolor="white">
+			<td valign="top"><b>Form To Mail</b><br>  key: <i>form-to-mail</i></td>
+			<td><b>Form-to-Email Handling</b><br><p>The
+Form-To-Mail package is designed to work somewhat like formmail.pl -
+the user enters information into an HTML form on a page, and upon
+submitting the page the data is collected and emailed to an address of
+the administrator's choosing.
+</p>
+          <p>Form-to-Mail (FTM) is designed with reuse, and
+hopefully some security, in mind. Email addresses such as sender and
+recipient are configured by the administrator, stored in the database,
+and cannnot be overridden by form variables, which limits abuse of the
+form by third parties.
+</p>
+          <p>FTM is designed to be included on other pages in the
+site, and provides a facility for adding custom form elements to the
+form, using a .tcl file that can be as simple or complex as the
+developer requires. The package uses a single instance to generate the
+included HTML form, and to process the submitted form.
+</p></td></tr>
+		<tr bgcolor="#ececec">
+			<td valign="top"><b>Forums</b><br>  key: <i>forums</i></td>
+			<td><b>Online discussion forums.</b><br>This
+online discussion board software is the successor of the original
+bboard package. The biggest improvement is a scalable datamodel. Forums
+supports threaded and flat view, moderation, a stand alone search
+function as well as integration with the OpenACS search package and
+integration with the notifications package for email alerts. It also
+supports reply via email.</td></tr>
+		<tr bgcolor="white">
+			<td valign="top"><b>Forums Portlet</b><br>  key: <i>forums-portlet</i></td>
+			<td><b></b></td></tr>
+		<tr bgcolor="#ececec">
+			<td valign="top"><b>File Storage Portlet</b><br>  key: <i>fs-portlet</i></td>
+			<td><b></b></td></tr>
+		<tr bgcolor="white">
+			<td valign="top"><b>GateKeeper</b><br>  key: <i>gatekeeper</i></td>
+			<td><b>Provides ability to retrieve remote URLs in a controlled way.</b><br>Gatekeeper
+can act as a proxy for requests, passing a request on to another server
+via an http GET or POST and returning the resulting document via the
+existing connection</td></tr>
+		<tr bgcolor="#ececec">
+			<td valign="top"><b>General Comments</b><br>  key: <i>general-comments</i></td>
+			<td><b>Service to provide comment entry and display on objects.</b><br>General
+comments provides the widgets and UI to support commentability on any
+object. There is also an admin interface to edit/hide/delete comments.</td></tr>
+		<tr bgcolor="white">
+			<td valign="top"><b>Glossary</b><br>  key: <i>glossary</i></td>
+			<td><b>User maintained glossary.</b><br>
+        The glossary package supports glossaries for multiple
+        contexts. A site, subsite, group, user, or even a document
+        may have one or more glossaries associated with it. Terms may have
+        illustrations (acs-content-repository). Each glossary can have its
+        security set (acs-permissions), a workflow, and optionally except user
+        comments. A glossary's content is stored in the content repository.  Relies on the deprecated acs-workflow module.
+        </td></tr>
+		<tr bgcolor="#ececec">
+			<td valign="top"><b>IRC Logger</b><br>  key: <i>irc-logger</i></td>
+			<td><b>The IRC logger uses the logger perl script to feed ETP for integration with OpenACS.</b><br>The IRC logger places the log files of <a href="http://cvs.ilrt.org/cvsweb/redland/logger/">logger</a> (a Perl script by Dave Beckett) into ETP for integration with OpenACS. Besides logger, this package also depends on <a href="http://www.tdom.org/">tDOM</a> (high performance XML data processing with easy and powerful Tcl scripting functionality).</td></tr>
+		<tr bgcolor="white">
+			<td valign="top"><b>Jabber</b><br>  key: <i>jabber</i></td>
+			<td><b>Package for Messaging based on the Jabber Server.</b><br>This package allows users to communicate through the different IM services with other users using the jabber server.</td></tr>
+		<tr bgcolor="#ececec">
+			<td valign="top"><b>Weblogger</b><br>  key: <i>lars-blogger</i></td>
+			<td><b>Individual or collaborative web logs.</b><br>Weblog
+creation and management with notifications, RSS, archives, draft and
+published entries, includable templates for presenting on other pages,
+and permissioning for multiple users.</td></tr>
+		<tr bgcolor="white">
+			<td valign="top"><b>Library</b><br>  key: <i>library</i></td>
+			<td><b>Red Hat Knowledge Library for ACS4.0</b><br>Red Hat Knowledge Library for ACS4.0</td></tr>
+		<tr bgcolor="#ececec">
+			<td valign="top"><b>Logger</b><br>  key: <i>logger</i></td>
+			<td><b>Time and expenses reporting.</b><br>Logger
+lets you keep track of measurements over time. The primary use case is
+time and expenses reporting, an area where we are being guided by the
+HR-XML Time Expense Reporting 2.0 standard. However, the intention is
+to allow for reporting of arbitrary types of numerical data such as
+financial results - account balance, revenue etc. You could even use
+this application to monitor your weight. The full specification is
+here: <a href="http://www.collaboraid.biz/developer/logger-spec">http://www.collaboraid.biz/developer/logger-spec</a><a></a></td></tr>
+		<tr bgcolor="white">
+			<td valign="top"><b>Mail Clickthrough</b><br>  key: <i>mail-links</i></td>
+			<td><b>Record which email-links are followed to external sites.</b><br>The
+Mail Clickthrough package provides a service that allows a site to
+monitor how its users exit the site, by recording which email-links are
+followed to external sites.</td></tr>
+		<tr bgcolor="#ececec">
+			<td valign="top"><b>Mailing List</b><br>  key: <i>mailing-lists</i></td>
+			<td><b>Mailing list management.</b><br>First version of mailing lists.</td></tr>
+		<tr bgcolor="white">
+			<td valign="top"><b>Monitoring</b><br>  key: <i>monitoring</i></td>
+			<td><b>Server and database monitoring.</b><br>A
+collection of tools for monitoring server and database health,
+including cassandracle (oracle monitoring), watchdog (error log
+monitoring). Derived from the ACS 3.4.x /admin/monitoring tools.</td></tr>
+		<tr bgcolor="#ececec">
+			<td valign="top"><b>New Portal</b><br>  key: <i>new-portal</i></td>
+			<td><b>Portals.</b><br>New
+Portal Package aka NPP. Portals are used to aggregate content from
+different sources within a single page. Props to Ian Baker for "Portal".</td></tr>
+		<tr bgcolor="white">
+			<td valign="top"><b>News</b><br>  key: <i>news</i></td>
+			<td><b>Used for announcements and news items.</b><br>News publication tool.  Publication of plain text or html news items with support for scheduled publication and commentability.</td></tr>
+		<tr bgcolor="#ececec">
+			<td valign="top"><b>News Aggregator</b><br>  key: <i>news-aggregator</i></td>
+			<td><b>Read news sources from your website.</b><br>The
+news aggregator periodically reads a set of news sources, in one of
+several XML-based formats, finds the new bits, and displays them in
+reverse-chronological order on a single page.</td></tr>
+		<tr bgcolor="white">
+			<td valign="top"><b>News Aggregator Portlet</b><br>  key: <i>news-aggregator-portlet</i></td>
+			<td><b>A portlet interface to News Aggregator</b></td></tr>
+		<tr bgcolor="#ececec">
+			<td valign="top"><b>News Portlet</b><br>  key: <i>news-portlet</i></td>
+			<td><b></b></td></tr>
+		<tr bgcolor="white">
+			<td valign="top"><b>Note</b><br>  key: <i>notes</i></td>
+			<td><b>Sample application for users to manage notes online.</b><br>This is a sample application for OpenACS 4.x to show how applications should be built, unfortunately it
+        has not kept pace with current best practices.</td></tr>
+		<tr bgcolor="#ececec">
+			<td valign="top"><b>Notifications</b><br>  key: <i>notifications</i></td>
+			<td><b>Email notifications management</b><br>Provides
+an API for packages to provide subscription based email notifications
+and handle replies. Used by forums, bug-tracker, etc. The currently
+prefered package for email notifications.</td></tr>
+		<tr bgcolor="white">
+			<td valign="top"><b>OpenFTS Driver</b><br>  key: <i>openfts-driver</i></td>
+			<td><b>Full text search support for Search via OpenFTS.</b><br>Provides an implementation for the search packages service contract for searching on postgresql.</td></tr>
+		<tr bgcolor="#ececec">
+			<td valign="top"><b>Organization</b><br>  key: <i>organizations</i></td>
+			<td><b>Implementation of HR-XML organizations datamodel.</b><br>Provides the datamodel for an
+      implementation of the HR-XML organizations spec, but no API for
+      manipulating the data.  Also note that the Oracle code is out of sync
+      with the Postgres code. The source code has comments in it indicating
+      what needs to be updated to make things work correctly [Jade Rubick].
+        </td></tr>
+		<tr bgcolor="white">
+			<td valign="top"><b>Page</b><br>  key: <i>page</i></td>
+			<td><b>Minimal site node package</b><br>a
+minimal package which exists primarily as a site-node placeholder for a
+path component (so that the context bar can be properly constructed</td></tr>
+		<tr bgcolor="#ececec">
+			<td valign="top"><b>PayFlowPro Gateway</b><br>  key: <i>payflowpro</i></td>
+			<td><b>PayFlowPro payment gateway.</b><br>This
+is a payment gateway for Verisign's PayFlowPro. Note that there are
+problems with the supplied libraries from verisign and it is
+anticipated that this package will be deprecated or removed see <a href="http://openacs.org/forums/message-view?message_id=149360">TIP 33</a></td></tr>
+		<tr bgcolor="white">
+			<td valign="top"><b>Payment Gateway</b><br>  key: <i>payment-gateway</i></td>
+			<td><b>Payment Gateway Service Contract</b><br>This service contract defines an API for modules to interact with a credit card payment service providers.</td></tr>
+		<tr bgcolor="#ececec">
+			<td valign="top"><b>Photo Album</b><br>  key: <i>photo-album</i></td>
+			<td><b>Organization, editing and display of user uploaded photos.</b><br>A photo album application that provides photo display and grouping
+functionality using the ACS Content Repository.
+<p>
+Allows users to upload photos, store and edit attributes, and group
+photos into albums and folders.  Supports permissioning, exif data, and user clipboards.
+</p><p>
+Requires installation of ImageMagick and jhead on host machine.  See design doc
+for details.
+</p></td></tr>
+		<tr bgcolor="white">
+			<td valign="top"><b>Photo Album Portlet</b><br>  key: <i>photo-album-portlet</i></td>
+			<td><b></b></td></tr>
+		<tr bgcolor="#ececec">
+			<td valign="top"><b>Photobook</b><br>  key: <i>photobook</i></td>
+			<td><b>Enter, manage, and present user data appropriate for a "face book"</b><br>Enter, manage, and present user data appropriate for 
+generation of a "facebook" or general user profile.
+Allows upload of a photo portrait as well as general education/work history.
+<p>
+PLEASE NOTE - although this module is in use at Sloan, it is far from
+finished. Sloan still plans to add many features, including the ability
+to dynamically manage fields and categories, and awareness of user
+types. In addition the package needs to be internationalized and ported
+to Postgres. There is also Sloan-specific code here, related to the
+Email For Life program, which needs to be parameterized or removed.
+</p><p>
+In short, this package is provided more for looking at than for using and will change significantly in future releases.</p></td></tr>
+		<tr bgcolor="white">
+			<td valign="top"><b>Populate</b><br>  key: <i>populate</i></td>
+			<td><b>Populate database with test data.</b><br>This
+package provides a convenient web-based UI which allows one to populate
+the database with large numbers of users, groups, etc for scalability
+testing.</td></tr>
+		<tr bgcolor="#ececec">
+			<td valign="top"><b>Portal</b><br>  key: <i>portal</i></td>
+			<td><b>Portals</b><br>Portals are used to aggregate content from different sources within a single page.  Props to Ian Baker for "Portal".</td></tr>
+		<tr bgcolor="white">
+			<td valign="top"><b>Postal Address</b><br>  key: <i>postal-address</i></td>
+			<td><b>An implementation of HR-XML's address standard.</b><br>This is an implementation of HR-XML's address standard.<p>Originally part of Contacts-Lite, now a service.</p></td></tr>
+		<tr bgcolor="#ececec">
+			<td valign="top"><b>Press</b><br>  key: <i>press</i></td>
+			<td><b>Display external press coverage.</b><br>Supports templated display of press coverage with templates to 
+        support bibliographic style display and excerpts of print and web based external press converage.</td></tr>
+		<tr bgcolor="white">
+			<td valign="top"><b>Profile Provider</b><br>  key: <i>profile-provider</i></td>
+			<td><b></b></td></tr>
+		<tr bgcolor="#ececec">
+			<td valign="top"><b>Project Manager</b><br>  key: <i>project-manager</i></td>
+			<td><b>Project management tool for OpenACS</b><br>Track tasks, estimates and actual progress for a project.  See the <a href="http://openacs.org/projects/dotwrk/project_management/">project page</a> for more information.</td></tr>
+		<tr bgcolor="white">
+			<td valign="top"><b>recruiting</b><br>  key: <i>recruiting</i></td>
+			<td><b></b></td></tr>
+		<tr bgcolor="#ececec">
+			<td valign="top"><b>Recruiting Portlet</b><br>  key: <i>recruiting-portlet</i></td>
+			<td><b></b></td></tr>
+		<tr bgcolor="white">
+			<td valign="top"><b>Redirect</b><br>  key: <i>redirect</i></td>
+			<td><b>Simple redirection package.</b><br>Redirects
+from the URL at which it is mounted on to another URL. Useful when you
+have moved content to a new place but don't want old links to break.
+The new URL can be entered with a parameter setting. Note that it does
+not pass through requests to another application, e.g. one that is
+running on apache. Use the gatekeeper package for this.</td></tr>
+		<tr bgcolor="#ececec">
+			<td valign="top"><b>Reference Data - Country</b><br>  key: <i>ref-countries</i></td>
+			<td><b>ISO 3166 country data.</b><br>Countries supplies the ISO 3166 Country data for acs-reference.</td></tr>
+		<tr bgcolor="white">
+			<td valign="top"><b>Reference Data - Currency</b><br>  key: <i>ref-currency</i></td>
+			<td><b>Currency Data, ISO 4217 for acs-reference.</b><br>This is the currency sub-module for acs-reference.
+It provides ISO 4217 compatibility.</td></tr>
+		<tr bgcolor="#ececec">
+			<td valign="top"><b>Reference Data - ITU Code</b><br>  key: <i>ref-itu</i></td>
+			<td><b>Telecom Country codes, ITU-T Recommendation E.164 for acs-reference.</b><br>List of ITU-T Recommendation E.164 assigned country codes.</td></tr>
+		<tr bgcolor="white">
+			<td valign="top"><b>Reference Data - Language</b><br>  key: <i>ref-language</i></td>
+			<td><b>ISO 639-1 language reference data for acs-reference.</b><br>This is the ISO 639-1 language reference data (with languages names in english).</td></tr>
+		<tr bgcolor="#ececec">
+			<td valign="top"><b>Reference Data - Timezone</b><br>  key: <i>ref-timezones</i></td>
+			<td><b>Timezone data for acs-reference.</b><br>This is the timezone data for the acs-reference data package.  Used by acs-lang (among others) for localized times.</td></tr>
+		<tr bgcolor="white">
+			<td valign="top"><b>Reference Data - US County</b><br>  key: <i>ref-us-counties</i></td>
+			<td><b>US Counties geo-spatial data.</b><br>Provides FIPS codes, name,state, population, land area, latitude and longitute, etc.</td></tr>
+		<tr bgcolor="#ececec">
+			<td valign="top"><b>Reference Data - US State</b><br>  key: <i>ref-us-states</i></td>
+			<td><b>US States</b><br>This is all the US States.  Provides abbreviation, name, and FIPS state code.</td></tr>
+		<tr bgcolor="white">
+			<td valign="top"><b>Reference Data - US Zipcode</b><br>  key: <i>ref-us-zipcodes</i></td>
+			<td><b>US Zipcodes</b><br>Provides zipcode, name, FIPS state and county codes, latitude and longitude.  Does not provide ZIP+4 data.</td></tr>
+		<tr bgcolor="#ececec">
+			<td valign="top"><b>Research Paper Portlet</b><br>  key: <i>research-portlet</i></td>
+			<td><b></b></td></tr>
+		<tr bgcolor="white">
+			<td valign="top"><b>Robot Detection</b><br>  key: <i>robot-detection</i></td>
+			<td><b>Redirect web robots to specified URLs</b><br>With
+this package, you can automatically redirect web robots from search
+engines away from areas that require login and into a separate area
+which provides content suitable for indexing. You should be aware that
+this is sometimes considered to be <a href="http://www.google.com/webmasters/faq.html#cloaking">cloaking</a> so excercise care here.
+</td></tr>
+		<tr bgcolor="#ececec">
+			<td valign="top"><b>RSS Support</b><br>  key: <i>rss-support</i></td>
+			<td><b>Service contracts and support for generating RSS feeds</b><br> Basic support for RSS
+generation and parsing.  RDF Site Summary (RSS) is a lightweight
+multipurpose extensible metadata description and syndication format.
+This package can be used to publish site content in a manner useful to
+other websites and webservices.  <p> For each item (news event,
+ticket, bboard message, ...) that you want to publish, you create a
+property list that describes that item (url to item, title of item,
+description of item, etc.). You pass a list of those items (and some
+other parameters) to rss_gen, and it will generate your XML for you.
+You can also implenent a set of functions that satisfy the RSS service
+contracts and the RSS can be recreated from a scheduled procedure.
+
+</p><ul>
+<li> <a href="http://www.google.com/search?q=rss+0.91">RSS 0.91 specification</a>
+</li><li> <a href="http://groups.yahoo.com/group/rss-dev/files/specification.html">RSS 1.0 specification</a>
+</li></ul>
+</td></tr>
+		<tr bgcolor="white">
+			<td valign="top"><b>Sample Gateway</b><br>  key: <i>sample-gateway</i></td>
+			<td><b>Sample payment gateway.</b><br>A sample payment gateway, suitable for testing and as a skeletion for a full implementation.</td></tr>
+		<tr bgcolor="#ececec">
+			<td valign="top"><b>Schema Browser</b><br>  key: <i>schema-browser</i></td>
+			<td><b>OpenACS datamodel browser.</b><br>Lets you browse the tables and procedures in an OpenACS instance.</td></tr>
+		<tr bgcolor="white">
+			<td valign="top"><b>Search</b><br>  key: <i>search</i></td>
+			<td><b>Site wide search</b><br>Site wide search implemented with service contracts, currently 
+        only supports postgres via the OpenFTS driver.</td></tr>
+		<tr bgcolor="#ececec">
+			<td valign="top"><b>Shipping Service Contract</b><br>  key: <i>shipping-gateway</i></td>
+			<td><b>Service contract definitions for for shipping services like UPS or Fedex.</b><br>First
+stab at a service contract to define an interface to shipping services
+like UPS, Fedex or home grown shipping rates like value-based shipping
+rates.</td></tr>
+		<tr bgcolor="white">
+			<td valign="top"><b>Simple Survey</b><br>  key: <i>simple-survey</i></td>
+			<td><b>Ask users questions and record results.</b><br>Simple
+survey is a survey builder. Surveys can contain questions with
+different types of answer several types: multiple choice (radio
+buttons), multiple answer (checkboxes) or free text entry. Multiple
+choice questions may also be scored on one or more variables.
+In general survey is a better choice than simple-survey.
+</td></tr>
+		<tr bgcolor="#ececec">
+			<td valign="top"><b>Simulation</b><br>  key: <i>simulation</i></td>
+			<td><b>Workflow-based task simulator.</b></td></tr>
+		<tr bgcolor="white">
+			<td valign="top"><b>site-wide-search</b><br>  key: <i>site-wide-search</i></td>
+			<td><b>Provides site wide search functionality for application data. oracle only.</b><br>Provides
+search functionality for application data. Supports permissioning,
+subsites, and searching by keywords. This version fixed a few bottle
+necks in the installation process. There are scripts to support news,
+bboards , and file-storage.</td></tr>
+		<tr bgcolor="#ececec">
+			<td valign="top"><b>Skin</b><br>  key: <i>skin</i></td>
+			<td><b>Demonstration of themes or co-branding.</b><br>An example package to show how to theme via master templates.</td></tr>
+		<tr bgcolor="white">
+			<td valign="top"><b>Sloan Bboard</b><br>  key: <i>sloan-bboard</i></td>
+			<td><b>ACS 4 bboard package.</b><br>This
+is the release candidate for bboard version 4.0.2. This package
+provides customizable discussion forums for a community of users.</td></tr>
+		<tr bgcolor="#ececec">
+			<td valign="top"><b>Spam System</b><br>  key: <i>spam</i></td>
+			<td><b>Send mail to collections of users.</b><br>Provides
+a UI for sending e-mail to groups of users, selected based on some
+criteria in the database. Applications may link to the spam system with
+their own set of criteria (SQL queries). Bulk-mail is now the prefered
+package for this functionality. </td></tr>
+		<tr bgcolor="white">
+			<td valign="top"><b>Static Pages</b><br>  key: <i>static-pages</i></td>
+			<td><b>Support searchable and commentable static site content.</b><br>Static
+Pages loads the static pages of a site into the database so that their
+contents are available to other packages, such as site-wide-search. It
+also allows users to make comments on static pages.</td></tr>
+		<tr bgcolor="#ececec">
+			<td valign="top"><b>Static Portlet</b><br>  key: <i>static-portlet</i></td>
+			<td><b></b></td></tr>
+		<tr bgcolor="white">
+			<td valign="top"><b>Survey</b><br>  key: <i>survey</i></td>
+			<td><b>User defined surveys with reporting.</b><br>Expanded functionality survey package derived from simple-survey.</td></tr>
+		<tr bgcolor="#ececec">
+			<td valign="top"><b>Survey Portlet</b><br>  key: <i>survey-portlet</i></td>
+			<td><b>Survey package portlet for new-portal</b><br>Survey package portlet for new-portal</td></tr>
+		<tr bgcolor="white">
+			<td valign="top"><b>Telecom Information</b><br>  key: <i>telecom-number</i></td>
+			<td><b>Datamodel and UI for the HR-XML telecom standard.</b><br>This is a mapping of HR-XML's telecom standard.<p>
+Originally part of contacts-lite, now stand-alone to allow for  use in other packages.</p></td></tr>
+		<tr bgcolor="#ececec">
+			<td valign="top"><b>Trackback</b><br>  key: <i>trackback</i></td>
+			<td><b>Support for sending and receiving trackback pings.</b><br>Implements the trackback ping specification 
+<a href="http://www.movabletype.org/docs/mttrackback.html">http://www.movabletype.org/docs/mttrackback.html</a>,
+for use with lars-blogger.
+</td></tr>
+		<tr bgcolor="white">
+			<td valign="top"><b>User Preferences</b><br>  key: <i>user-preferences</i></td>
+			<td><b>A skeleton for how to implement user-preference storage</b></td></tr>
+		<tr bgcolor="#ececec">
+			<td valign="top"><b>User Profile</b><br>  key: <i>user-profile</i></td>
+			<td><b></b></td></tr>
+		<tr bgcolor="white">
+			<td valign="top"><b>Users Selection</b><br>  key: <i>users-selection</i></td>
+			<td><b>Create and manage selections of users that match certain criteria.</b><br>Create and manage selections of users that match certain criteria.</td></tr>
+		<tr bgcolor="#ececec">
+			<td valign="top"><b>Value-based Shipping</b><br>  key: <i>value-based-shipping</i></td>
+			<td><b>Calculates the shipping charges based on the total value of the shipment.</b><br>
+        This package calculates the total shipping charges for all
+        available service levels based on the total value of the shipment.  An
+        implementation of the shipping-gateway service contract.
+        </td></tr>
+		<tr bgcolor="white">
+			<td valign="top"><b>Version Control</b><br>  key: <i>version-control</i></td>
+			<td><b>CVS abstraction layer for packages that need access to version control.</b><br>
+        Provides an API for talking to the version control system for the
+        site.  It is hard-coded for the Concurrent Versions System (CVS).
+        There are procs to fetch various types of status information and procs
+        to execute certain version control operations on the underlying files.
+        </td></tr>
+		<tr bgcolor="#ececec">
+			<td valign="top"><b>Weblogger Portlet</b><br>  key: <i>weblogger-portlet</i></td>
+			<td><b></b></td></tr>
+		<tr bgcolor="white">
+			<td valign="top"><b>Webmail</b><br>  key: <i>webmail</i></td>
+			<td><b>Web-based email service.</b><br>Provides a web-based email service for ACS 4.x, uses the database for message storage.  Broken and oracle only.</td></tr>
+		<tr bgcolor="#ececec">
+			<td valign="top"><b>Workflow</b><br>  key: <i>workflow</i></td>
+			<td><b>A Tcl API for creating and managing workflows.</b><br>
+          This package lets you define the process that your tickets, articles,
+          documents, reports, claims, change requests, or any other
+          object of interest, must go through to ensure consistent quality and
+          to avoid that any cases falls through the cracks.
+          It supports the Bug Tracker, CMS publication, simple approval, and much more.
+<p>
+For more information, see: <a href="http://www.collaboraid.biz/developer/workflow-spec">the workflow specification</a>.</p></td></tr>
+		<tr bgcolor="white">
+			<td valign="top"><b>Wimpy Point</b><br>  key: <i>wp-slim</i></td>
+			<td><b>A collaborative online presentation package.</b><br>Wimpy
+Point allows users to create online slide presentations and supports
+collaborative editing, customizable style sheets, printable output, and
+commentability.</td></tr>
+		<tr bgcolor="#ececec">
+			<td valign="top"><b>Wimpy Point Portlet</b><br>  key: <i>wps-portlet</i></td>
+			<td><b></b></td></tr>
+    	</tbody></table>

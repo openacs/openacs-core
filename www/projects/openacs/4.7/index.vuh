@@ -1,0 +1,8 @@
+ad_page_contract {
+    
+    Moved a bunch of pages from 4.7/ to 5/ - this index.vuh redirects there so that
+    old urls don't break.
+
+}
+
+ad_returnredirect "/projects/openacs/5.0/[ad_conn path_info]"

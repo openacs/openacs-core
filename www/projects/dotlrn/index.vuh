@@ -1,0 +1,57 @@
+ad_page_contract {
+  packages/editthispage/www/index.vuh
+
+  @author Luke Pond (dlpond@pobox.com)
+  @creation-date 2001-06-01
+
+  Virtual URL Handler to serve files from an
+  instance of the Edit This Page package.
+
+  Helpful .vuh example at 
+  http://www.arsdigita.com/bboard/q-and-a-fetch-msg?msg_id=000JTn
+} {
+	{revision_id ""}
+}
+
+ad_conn -set revision_id $revision_id
+
+# get the portion of the url following the package directory
+set name [ad_conn path_info]
+
+ns_log Notice "index.vuh: request for $name" 
+
+if { [string index $name end] == "/" } {
+    # it's in a subdirectory, and we know there's no
+    # other package mounted on that subdirectory.
+    ns_returnnotfound
+}
+
+set server_root [file dirname [ns_info pageroot]]
+
+if {[empty_string_p $name] || $name == "index"} {
+    set path "$server_root/[etp::get_application_param index_template]"
+} elseif {[string match "etp*" $name]} {
+    # this trickery is for serving pages from the top level,
+    # where the acs-subsite package is mounted rather than
+    # the editthispage package.  normally the request processor 
+    # finds these before invoking this file.
+    set path "$server_root/packages/edit-this-page/www/$name"
+} else {
+
+    set path "$server_root/[etp::get_application_param content_template]"
+
+    # set up form variables so we can pass the "name" 
+    # variable to the content page. 
+    global _ns_form
+    set _ns_form [ns_set create]
+    ns_set put [ns_getform] "name" $name
+}
+
+ns_log Notice "Edit This Page index.vuh: serving $path"
+
+rp_serve_abstract_file $path
+
+
+
+
+

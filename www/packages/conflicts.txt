@@ -1,0 +1,64 @@
+C openacs.org-dev/packages/acs-core-docs/www/index.adp
+C openacs.org-dev/packages/acs-subsite/www/register/email-password-2.tcl
+C openacs.org-dev/packages/acs-tcl/tcl/community-core-procs-oracle.xql
+C openacs.org-dev/packages/acs-tcl/tcl/community-core-procs-postgresql.xql
+C openacs.org-dev/packages/acs-tcl/tcl/community-core-procs.tcl
+C openacs.org-dev/packages/acs-tcl/tcl/text-html-procs.tcl
+C openacs.org-dev/packages/directory/www/index.adp
+C openacs.org-dev/packages/directory/www/index.tcl
+C openacs.org-dev/packages/download/www/index.adp
+C openacs.org-dev/packages/edit-this-page/tcl/etp-gc.tcl
+C openacs.org-dev/packages/edit-this-page/tcl/etp-init.tcl
+C openacs.org-dev/packages/edit-this-page/tcl/etp-procs.tcl
+C openacs.org-dev/packages/edit-this-page/www/etp-symlink-postgresql.xql
+C openacs.org-dev/packages/edit-this-page/www/index.vuh
+C openacs.org-dev/packages/file-storage/tcl/file-storage-procs-postgresql.xql
+C openacs.org-dev/packages/forums/forums.info
+C openacs.org-dev/packages/forums/sql/oracle/forums-search-create.sql
+C openacs.org-dev/packages/forums/sql/oracle/forums-search-drop.sql
+C openacs.org-dev/packages/forums/sql/postgresql/forums-messages-package-create.sql
+C openacs.org-dev/packages/forums/tcl/forum-reply-procs.tcl
+C openacs.org-dev/packages/forums/tcl/messages-procs-postgresql.xql
+C openacs.org-dev/packages/forums/tcl/messages-procs.tcl
+C openacs.org-dev/packages/forums/tcl/messages-procs.xql
+C openacs.org-dev/packages/forums/www/forum-view.adp
+C openacs.org-dev/packages/forums/www/forum-view.tcl
+C openacs.org-dev/packages/forums/www/index.tcl
+C openacs.org-dev/packages/forums/www/message-attachment-chunk.tcl
+C openacs.org-dev/packages/forums/www/message-chunk.adp
+C openacs.org-dev/packages/forums/www/message-chunk.tcl
+C openacs.org-dev/packages/forums/www/message-email.tcl
+C openacs.org-dev/packages/forums/www/message-post-confirm.adp
+C openacs.org-dev/packages/forums/www/message-post.tcl
+C openacs.org-dev/packages/forums/www/message-view.adp
+C openacs.org-dev/packages/forums/www/message-view.tcl
+C openacs.org-dev/packages/forums/www/search-postgresql.xql
+C openacs.org-dev/packages/forums/www/search.tcl
+C openacs.org-dev/packages/forums/www/user-history.tcl
+C openacs.org-dev/packages/forums/www/admin/forum-disable.tcl
+C openacs.org-dev/packages/forums/www/admin/forum-edit.tcl
+C openacs.org-dev/packages/forums/www/admin/forum-enable.tcl
+C openacs.org-dev/packages/forums/www/admin/forum-new.tcl
+C openacs.org-dev/packages/forums/www/admin/index.tcl
+C openacs.org-dev/packages/forums/www/moderate/forum.tcl
+C openacs.org-dev/packages/forums/www/moderate/message-approve.tcl
+C openacs.org-dev/packages/forums/www/moderate/message-delete.adp
+C openacs.org-dev/packages/forums/www/moderate/message-delete.tcl
+C openacs.org-dev/packages/forums/www/moderate/message-edit.tcl
+C openacs.org-dev/packages/forums/www/moderate/message-reject.tcl
+C openacs.org-dev/packages/notifications/tcl/sweep-init.tcl
+C openacs.org-dev/packages/schema-browser/www/index.tcl
+C openacs.org-dev/packages/search/tcl/search-init.tcl
+C openacs.org-dev/packages/search/tcl/search-procs.tcl
+C openacs.org-dev/packages/search/tcl/search-procs.xql
+C openacs.org-dev/packages/wp-slim/www/index.adp
+C openacs.org-dev/www/default-master.adp
+C openacs.org-dev/www/default-master.tcl
+C openacs.org-dev/www/index.adp
+C openacs.org-dev/www/index.tcl
+
+58 conflicts created by this import.
+Use the following command to help the merge:
+
+	cvs -d /cvsroot checkout -jOpenACS:yesterday -jOpenACS openacs.org-dev
+
