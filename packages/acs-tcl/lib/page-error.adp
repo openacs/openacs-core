@@ -1,25 +1,33 @@
 <master>
-  <property name="title">Server Error</property>
-
+  <property name="title">#acs-tcl.Server#</property>
 <p>
-  There was a server error processing your request. We apologize.
+  #acs-tcl.There#
 </p>
-
 <if @message@ not nil>
   <p>
     @message;noquote@
   </p>
 </if>
+<br>
 
-<if @stacktrace@ not nil>
-  <p>
-    Here is a detailed dump of what took place at the time of the error, which may assist a programmer in tracking down the problem:
-  </p>
-  <blockquote><pre>@stacktrace@</pre></blockquote>
-</if>
-<else>
-  <p>
-    The error has been logged and will be investigated by our system
-    programmers.
-  </p>
+ <a href=@prev_url@>#acs-tcl.Return_wiwas#</a>
+
+ <if @bt_instance@ ne "">
+  <if @auto_submit_p@ gt 0>
+    <if @user_id@ gt 0> 
+      <br>
+      <formtemplate id="bug_edit"></formtemplate>
+      <br>
+	#acs-tcl.Bug_History#
+	<br><br>
+	  <formtemplate id="bug_history"></formtemplate>
+      </if>
+      <else>
+         
+      </else>
+    </if>
+  </if>
+ <else>
+ <pre>@stacktrace@</pre>
 </else>
+

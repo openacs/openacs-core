@@ -78,7 +78,7 @@ namespace eval parameter {
 	}
         # 3. use the default value
         if {[empty_string_p $value]} {
-            ::set value $default
+	    ::set value $default
         }
 
         if { $localize_p } {
