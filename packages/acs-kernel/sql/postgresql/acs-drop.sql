@@ -3,7 +3,7 @@
 --
 -- @author rhs@mit.edu
 -- @creation-date 2000-08-22
--- @cvs-id acs-drop.sql,v 1.5 2000/10/24 22:26:18 bquinn Exp
+-- @cvs-id $Id$
 --
 
 drop view cc_users;

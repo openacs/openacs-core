@@ -3,7 +3,7 @@
 -- 
 -- @author Oumi Mehrotra
 -- @creation-date 2000-11-22
--- @cvs-id rel-constraints-drop.sql,v 1.1.4.1 2001/01/12 22:58:51 mbryzek Exp
+-- @cvs-id $Id$
 \t
 create function  inline_0 () returns integer as '
 begin

@@ -10,7 +10,7 @@
 --
 -- @creation-date 2000-08-13
 --
--- @cvs-id acs-permissions-create.sql,v 1.10.2.2 2001/01/12 22:59:20 oumi Exp
+-- @cvs-id $Id$
 --
 
 

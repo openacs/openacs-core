@@ -8,7 +8,7 @@
 -- @author Richard Li (richardl@arsdigita.com)
 --
 -- @creation-date 2000/02/02
--- @cvs-id security-create.sql,v 1.16.2.4 2001/01/12 22:58:16 mbryzek Exp
+-- @cvs-id $Id$
 
 create table sec_session_properties (
     session_id     integer

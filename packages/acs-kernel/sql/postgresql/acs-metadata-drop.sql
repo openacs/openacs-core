@@ -5,7 +5,7 @@
 --
 -- @author Michael Yoon (michael@arsdigita.com)
 -- @creation-date 2000-05-18
--- @cvs-id acs-metadata-drop.sql,v 1.5.2.1 2001/01/12 23:05:13 oumi Exp
+-- @cvs-id $Id$
 --
 \t
 select drop_package('acs_attribute');

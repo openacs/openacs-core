@@ -15,7 +15,7 @@
 --
 -- @creation-date 2000-05-18
 --
--- @cvs-id community-core-create.sql,v 1.11.2.2 2001/01/12 22:49:48 mbryzek Exp
+-- @cvs-id $Id$
 --
 
 -- HIGH PRIORITY:
