@@ -17,6 +17,19 @@
       </querytext>
 </fullquery>
 
+<fullquery name="package_id">
+      <querytext>
+      
+      select package_id from cr_folders where folder_id=(select context_id from acs_objects where object_id=:assessment_id)
+    
+      </querytext>
+</fullquery>
+
+<fullquery name="get_instance_id">
+      <querytext>
+      select package_id from apm_packages where package_key='assessment'
+      </querytext>
+</fullquery>
  
 </queryset>
 
