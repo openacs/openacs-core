@@ -7,13 +7,13 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>t</singleton-p>
     
-    <version name="5.0d9" url="http://openacs.org/repository/download/apm/acs-kernel-5.0d9.apm">
+    <version name="5.0d10" url="http://openacs.org/repository/download/apm/acs-kernel-5.0d10.apm">
         <owner url="mailto:dhogaza@pacifier.com">Don Baccus</owner>
         <summary>Routines and data models providing the foundation for OpenACS-based Web services.</summary>
-        <release-date>2003-02-18</release-date>
+        <release-date>2003-09-25</release-date>
         <vendor url="http://openacs.org/">OpenACS</vendor>
 
-        <provides url="acs-kernel" version="5.0d9"/>
+        <provides url="acs-kernel" version="5.0d10"/>
 
         <callbacks>
         </callbacks>
@@ -24,6 +24,7 @@
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="AllowedTag"  default="B I P A LI OL UL EM BR TT STRONG BLOCKQUOTE CODE PRE FIRST_NAMES LAST_NAME EMAIL GROUP_NAME" description="A space separated list of all the HTML tags that people may use." section_name="antispam"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="AllowedURLAttribute"  default="HREF" description="A space separated list of allowed attribute names, for which the attribute value should be interpreted as a URL. These attributes will then be checked for valid protocols, cf. the AllowedProtocol parameter. This is in addition to the attributes allowed by the AllowedAttribute parameter." section_name="antispam"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="AllowPersistentLoginP"  default="1" description="do we allow persistent logins?" section_name="security"/>
+            <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="ApprovalExpirationDays"  default="0" description="The number of days after which registration approval expires, which will cause the user to change state to 'needs_approval'. Set to 0 to disable expiration of approval." section_name="security"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="CanonicalServer"  description="In the list of IPs above, which is the canonical (primary) server? If a port is not listed, we assume port 80." section_name="server-cluster"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="ClusterAuthorizedIP"  description="A space separated list of which machines can issues requests (e.g., flushing) to the cluster. Can use glob matching notation (10.0.0.*)" section_name="server-cluster"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="ClusterEnabledP"  default="0" description="is clustering enabled?" section_name="server-cluster"/>
@@ -32,6 +33,7 @@
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="CommunityMemberURL"  default="/shared/community-member" description="the URL of the public community member page" section_name="system-information"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="DebugP"  default="0" description="save debugging information for developer support?" section_name="request-processor"/>
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="DefaultPersistentLoginP"  default="1" description="On the login screen, should the default be to login the user permanently (1) or not (0)." section_name="security"/>
+            <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="EmailAccountOwnerOnPasswordChangeP"  default="1" description="Say 1 if you want us to send an email to the account owner when changing password for local accounts." section_name="Local Accounts"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="EnableLoggingP"  default="1" description="log clustering events?" section_name="server-cluster"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="ExtensionPrecedence"  default="adp,tcl,html,jpg,gif" description="precedence for file extensions, e.g., 'tcl,adp,html' means 'serve a .tcl file if available, else an .adp file if available, else an .html file if available, else the first file available in alphabetical order. Comma-separated." section_name="request-processor"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="ForceHostP"  default="0" description="if a user provides a Host header which isn't this, redirect the user to this particular host. e.g., if yourservername.com and                                     www.yourservername.com point to the same IP, set this to 1 so cookies will be properly set." section_name="request-processor"/>
@@ -46,6 +48,7 @@
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="LoginTimeout"  default="28800" description="The maximum number of seconds to let users stay logged in without requiring them to refresh their password. 0 for infinite." section_name="security"/>
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="MaxSize"  default="200000" description="The size of the util_memoize cache, if using the ns_cache module." section_name="memoize"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="OutgoingSender"  default="somenerd@yourdomain.com" description="The email address that will sign outgoing alerts." section_name="system-information"/>
+            <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="PasswordExpirationDays"  default="0" description="How long can a password be used before it expires and must be changed. Specify 0 to disable password expiration." section_name="security"/>
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="PerformanceModeP"  default="0" description="Setting this to 1 will tell the request processor to make the assumption that once a url is mapped to a file, that mapping never changes. This obviously would cause problems on a development system, but will improve performance on a production server." section_name="request-processor"/>
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="PermissionCacheP"  default="0" description="Whether to cache permission_p calls.  Use with extreme caution.  Only direct permissions managed via the tcl api are properly handled and some packages modify permissions directly in the database and will not work properly when this is turned on. You must restart the server after changing this param." section_name="permissions"/>
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="PermissionCacheTimeout"  default="300" description="Number of seconds until the permissions cache times out." section_name="permissions"/>
@@ -54,6 +57,8 @@
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="RegisterRestrictToSSLFilters"  default="1" description="Whether to process the RestrictToSSL paths per site node on startup which can be quite slow on a site with many nodes." section_name="security"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="RestrictErrorsToAdminsP"  default="1" description="Whether we show errors to adminstrators only"/>
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="RestrictLoginToSSLP"  default="0" description="Should login, register, and password update pages be restricted to HTTPS?" section_name="security"/>
+            <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="ScreenName"  default="solicit" description="Can be 'none', 'solicit', or 'require'. If you say none, we will not ask users to provide a screen_name. If you say 'solicit', we will ask for one, but not require it. If you say 'require', we will not let users register or login without setting up a screen_name." section_name="Local Accounts"/>
+            <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="ServeXQLFiles"  default="0" description="Should we serve .xql files (database query files) to browsers? Say 0 to not serve them, 1 to serve them. Typically you do not want to serve these files. Requires a server restart to take effect." section_name="request-processor"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="SessionLifetime"  default="604800" description="how long after the last hit should we save information in the SessionLifetime table?" section_name="security"/>
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="SessionRenew"  default="300" description="How much time do we let elapse before renewing a session cookie? This should be less than SessionTimeout." section_name="security"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="SessionSweepInterval"  default="3600" description="how often should we sweep for old stale sessions?" section_name="security"/>
@@ -62,13 +67,8 @@
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="SystemName"  default="yourdomain Network" description="the name of your system" section_name="system-information"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="SystemOwner"  default="webmaster@yourdomain.com" description="who signs the average user-visible pages" section_name="system-information"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="SystemURL"  default="http://yourdomain.com" description="URL to tell users to go to" section_name="system-information"/>
-            <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="UseEmailForLoginP"  default="1" description="Say 1 if we should login with email instead of username." section_name="Security"/>
-            <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="UsePasswordWidgetForUsername"  default="0" description="Should we hide what the user types in the username field, the way we do with the password field? Set this to 1 if you are using sensitive information such as social security number for username." section_name="Security"/>
-
-            <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="EmailAccountOwnerOnPasswordChangeP"  default="1" description="Say 1 if you want us to send an email to the account owner when changing password for local accounts." section_name="Local Accounts"/>
-            <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="ScreenName"  default="solicit" description="Can be 'none', 'solicit', or 'require'. If you say none, we will not ask users to provide a screen_name. If you say 'solicit', we will ask for one, but not require it. If you say 'require', we will not let users register or login without setting up a screen_name." section_name="Local Accounts"/>
-            <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="ApprovalExpirationDays"  default="0" description="The number of days after which registration approval expires, which will cause the user to change state to 'needs_approval'. Set to 0 to disable expiration of approval." section_name="security"/>
-            <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="PasswordExpirationDays"  default="0" description="How long can a password be used before it expires and must be changed. Specify 0 to disable password expiration." section_name="security"/>
+            <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="UseEmailForLoginP"  default="1" description="Say 1 if we should login with email instead of username." section_name="security"/>
+            <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="UsePasswordWidgetForUsername"  default="0" description="Should we hide what the user types in the username field, the way we do with the password field? Set this to 1 if you are using sensitive information such as social security number for username." section_name="security"/>
         </parameters>
 
     </version>
