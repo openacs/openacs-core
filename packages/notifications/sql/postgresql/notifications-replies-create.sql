@@ -24,7 +24,7 @@ create table notification_replies (
                                   constraint notif_repl_from_fk references users(user_id),
        subject                    varchar(100),
        content                    text,
-       reply_date                 timestamp
+       reply_date                 timestamptz
 );
 
 -- RI indexes
