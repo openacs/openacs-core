@@ -179,6 +179,7 @@ namespace eval lang::util {
             ns_log Notice "lang::util::replace_temporary_tags_with_lookups - processing file $file"
 
             set full_file_path "[acs_root_dir]/$file"
+            regexp {\.([^.]+)$} $file match file_ending
     
             # Attempt a backup of the file first. Do not overwrite an old backup file.
             if { [catch "file copy $full_file_path \"${full_file_path}.orig\"" errmsg] } {
@@ -221,7 +222,12 @@ namespace eval lang::util {
                     set message_key [suggest_key $new_text]
                 }
 
-                # Check if the key already exists, if does and texts differ - make key unique
+                # If this is an adp file - replace adp variable syntax with percentage variables
+                if { [string equal $file_ending "adp"] } {
+                    set new_text [convert_adp_variables_to_percentage_signs $new_text]
+                }
+
+                # Check if the key already exists, if it does and texts differ - make key unique
                 set key_comp_counter "0"
                 set unique_key $message_key
                 while { 1 } {
@@ -267,7 +273,6 @@ namespace eval lang::util {
                 }
 
                 # Replace the message tag with a message key lookup in the file
-                regexp {\.([^.]+)$} $file match file_ending
                 switch -regexp -- $file_ending {
                     {^(adp|sql)$} {
                         regsub [message_tag_regexp] \
@@ -411,8 +416,8 @@ namespace eval lang::util {
     }
 
     ad_proc -private convert_adp_variables_to_percentage_signs { text } {
-        Convert ADP variables to percentage_signs - that is the variable
-        notation used in acs-lang messages.
+        Convert ADP variables to percentage_signs - the notation used to
+        interpolate variable values into acs-lang messages.
 
         @author Peter Marklund
     } {
@@ -485,26 +490,17 @@ namespace eval lang::util {
                     set s {}
                 }  
 
-                regsub -all {@[a-zA-Z0-9_\.]+@} $text "" text_wo_variables
-    
-                # make sure the string is not empty, doesn't contain all spaces, is at least one character long,
-                # contains alphabetical characters, doesn't contain all &nbsp;, and isn't an adp message lookup 
-                if {![empty_string_p $text] 
-                    && ![string is space $text_wo_variables] 
-                    && [string length $text] > 1
-                    && [string match -nocase {*[A-Z]*} $text]
-                    && ![regexp {^(?:\s*&nbsp;\s*)+$} $text_wo_variables match]
-                    && ![regexp {^\s*#[a-zA-Z\._-]+#\s*$} $text_wo_variables match]
-                } {
-                    # Peter: texts with a hash or curly brace used to be excluded, my thinking
-                    # is it's better to include those texts and let the user say if they should
-                    # be included or not now that this script is used interactively in the APM.
-                    #&& ![string match {*\#*} $text]
-                    #&& ![string match {*\{*} $text]
-                    #&& ![string match {*\}*} $text]                    
-                    regexp {^(\s*)(.*?)(\s*)$} $text match lead text lag
+                # Remove parts from the text that we know are not translatable
+                # such as adp variables, message key lookups, and &nbsp;
+                regsub -all {@[a-zA-Z0-9_\.]+@} $text "" translatable_remainder
+                regsub -all {#[a-zA-Z0-9\._-]+#} $translatable_remainder "" translatable_remainder
+                regsub -all {&nbsp;} $translatable_remainder "" translatable_remainder
 
-                    set text_w_percentages [convert_adp_variables_to_percentage_signs $text]
+                # Only consider the text translatable if the remainder contains
+                # at least one letter
+                if { [string match -nocase {*[A-Z]*} $translatable_remainder] } {
+
+                    regexp {^(\s*)(.*?)(\s*)$} $text match lead text lag
 
                     if { $mode == "report" } {
                         # create a key for the text
@@ -532,7 +528,7 @@ namespace eval lang::util {
                             # Write tag to file
                             lappend report [list ${write_key} "<code>[string range [remove_gt_lt $out$lead] end-20 end]<b><span style=\"background:yellow\">$text</span></b>[string range [remove_gt_lt $lag$s] 0 20]</code>" ]
 
-                            append out "$lead<\#${write_key} $text_w_percentages\#>$lag"
+                            append out "$lead<\#${write_key} $text\#>$lag"
                         } else {
                             # Leave the text untouched
                             lappend garbage "<code>[string range [remove_gt_lt $out$lead] end-20 end]<b><span style=\"background:yellow\">$text </span></b>[string range [remove_gt_lt $lag$s] 0 20]</code>"
