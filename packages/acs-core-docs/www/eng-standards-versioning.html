@@ -1,41 +1,26 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Release Version Numbering</title><meta name="generator" content="DocBook XSL Stylesheets V1.62.4"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="eng-standards.html" title="Chapter 9. Engineering Standards"><link rel="previous" href="style-guide.html" title="OpenACS Style Guide"><link rel="next" href="eng-standards-constraint-naming.html" title="Constraint naming standard"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="style-guide.html">Prev</a> </td><th width="60%" align="center">Chapter 9. Engineering Standards</th><td width="20%" align="right"> <a accesskey="n" href="eng-standards-constraint-naming.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="eng-standards-versioning"></a>Release Version Numbering</h2></div></div><div></div></div><div class="authorblurb"><p><p>By Ron Henderson</p><br>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Release Version Numbering</title><meta name="generator" content="DocBook XSL Stylesheets V1.62.4"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="eng-standards.html" title="Chapter 9. Engineering Standards"><link rel="previous" href="style-guide.html" title="OpenACS Style Guide"><link rel="next" href="eng-standards-constraint-naming.html" title="Constraint naming standard"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="style-guide.html">Prev</a> </td><th width="60%" align="center">Chapter 9. Engineering Standards</th><td width="20%" align="right"> <a accesskey="n" href="eng-standards-constraint-naming.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="eng-standards-versioning"></a>Release Version Numbering</h2></div></div><div></div></div><div class="authorblurb"><p><p>By Ron Henderson</p><p>Revised by Joel Aufrecht</p><br>
           OpenACS docs are written by the named authors, and may be edited
           by OpenACS documentation staff.
         </p></div><p> 
 OpenACS version numbers help identify at a high-level what is in a
 particular release and what has changed since the last release. A
 "version number" is really just a string of the form:
-</p><div class="blockquote"><blockquote class="blockquote"><p><span class="emphasis"><em>major</em></span>-<span class="emphasis"><em>minor</em></span>-<span class="emphasis"><em>release</em></span></p></blockquote></div><p>
-A change in the <span class="emphasis"><em>major</em></span> version number indicates a fundamental
-change in the architecture of the system, e.g. OpenACS 3 to ACS 4.  A
-change in the <span class="emphasis"><em>minor</em></span> version number signifies the addition of
-new modules and minor data model changes, e.g. OpenACS 3.1 to OpenACS 3.2.
-The final <span class="emphasis"><em>release</em></span> number indicates the relative maturity of a
-release and marks things like bug fixes; it follows the ordered
-progression:
-</p><pre class="programlisting">
-alpha
-beta
-0 (production release)
-1
-2
-...
-</pre><p>
-So typical release version numbers would be:
-</p><pre class="programlisting">
-openacs-3.2.5
-openacs-4.0.beta
-</pre><p>
-The first is a relatively mature release of the OpenACS 3.2 base code
-and the second is a non-public release of OpenACS 4.0 that probably still
-has lots of bugs.
-</p><p>
+</p><div class="blockquote"><blockquote class="blockquote"><p><span class="emphasis"><em>major</em></span>.<span class="emphasis"><em>minor</em></span>.<span class="emphasis"><em>dot</em></span>(milestone)</p></blockquote></div><div class="itemizedlist"><ul type="disc"><li><p>A <span class="emphasis"><em>major</em></span> number change indicates a fundamental change in the architecture of the system, e.g. OpenACS 3 to ACS 4.  A major change is required if core backwards compatibility is broken, if upgrade is non-trivial, or if the platform changes substantially.</p></li><li><p>A <span class="emphasis"><em>minor</em></span> change represents the addition of new functionality or changed UI.</p></li><li><p>A <span class="emphasis"><em>dot</em></span> holds only bug fixes and security patches.  Dot releases are always recommended and safe.
+      </p></li><li><p>A <span class="emphasis"><em>milestone</em></span> marker indicates the state of the release:</p><div class="itemizedlist"><ul type="circle"><li><p><span class="emphasis"><em>d</em></span>, for development, means the release is in active development and is not in its intended released form.</p></li><li><p><span class="emphasis"><em>a</em></span>, for alpha, means new development is complete and code checkins are frozen.  Alpha builds should work well enough to be testable.</p></li><li><p><span class="emphasis"><em>b</em></span>, for beta, means most severe bugs are fixed and end users can start trying the release.</p></li><li><p>Release Candidate builds (<span class="emphasis"><em>rc</em></span>) are believed to meet all of the criteria for release and can be installed on test instances of production systems.</p></li><li><p>Final releases have no milestone marker.  (Exception: In CVS, they are tagged with -final to differentiate them from branch tags.)
+            </p></li></ul></div><p>Milestone markers are numbered: d1, d2, ..., a1, b1, rc1, etc.</p></li></ul></div><p>
+The complete sequence of milestones between OpenACS 4.6.3 and 5.0.0 was:</p><pre class="programlisting">openacs-5-0-0-final
+openacs-5-0-0rc2
+openacs-5-0-0rc1
+openacs-5-0-0b4
+openacs-5-0-0b1
+openacs-5-0-0a4
+openacs-5-0-0a3
+openacs-5-0-0a1
+oacs-4-6-3-final</pre><p>
 Version numbers are also recorded in the CVS repository so that the
 code tree can be restored to the exact state it was in for a
 particular release.  To translate between a distribution tar file
-(acs-3.2.2.tar.gz) and a CVS tag, just swap '.' for '-' and add the
-release date.  The entire release history of the toolkit is recorded
-in the tags for the top-level <tt class="computeroutput">readme.txt</tt> file:
+(acs-3.2.2.tar.gz) and a CVS tag, just swap '.' for '-'.The entire release history of the toolkit is recorded in the tags for the top-level <tt class="computeroutput">readme.txt</tt> file:
 </p><pre class="programlisting">
 &gt; cvs log readme.txt
 RCS file: /usr/local/cvsroot/acs/readme.txt,v
@@ -74,20 +59,4 @@ convention on version numbers.
 </p><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="eng-standards-transition-rules"></a>Transition Rules</h3></div></div><div></div></div><p>So what distinguishes an <span class="emphasis"><em>alpha</em></span> release from a <span class="emphasis"><em>beta</em></span>
 release?  Or from a production release?  We follow a specific set of
 rules for how OpenACS makes the transition from one state of maturity to
-the next.</p><p> Every release must pass the minimum requirements that it cleanly
-installs and cleanly upgrades from the previous version of OpenACS.  In
-addition to this the <span class="emphasis"><em>release</em></span> label implies:</p><div class="blockquote"><blockquote class="blockquote"><div class="variablelist"><dl><dt><span class="term"><span class="emphasis"><em>development</em></span>
-</span></dt><dd><p>This is the default state for the head of the current release branch.  We
-make no guarantees about this code.</p></dd><dt><span class="term"><span class="emphasis"><em>alpha</em></span>
-</span></dt><dd><p>All tickets of severity <span class="emphasis"><em>critical</em></span> have been closed and the
-distribution has no known installation or upgrade problems.</p></dd><dt><span class="term"><span class="emphasis"><em>beta</em></span>
-</span></dt><dd><p>All tickets of severity <span class="emphasis"><em>serious</em></span> or greater have been closed
-and all documentation is up to date (version history, release notes,
-new module docs, etc.).</p></dd><dt><span class="term"><span class="emphasis"><em>production</em></span> [0, 1, ...]
-</span></dt><dd><p>All tickets of severity <span class="emphasis"><em>medium</em></span> or greater have been closed,
-including issues reported from outside users.</p></dd></dl></div></blockquote></div><p> In the future we will guarantee that more mature releases
-incorporate all the fixes for earlier problems by developing a
-detailed set of regression tests.  For now we try to enforce this by
-restricting work on the release branch to fixing reported problem in
-the current release, e.g. no new features or big changes to
-fundamental behavior.</p><div class="cvstag">($Id$)</div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="style-guide.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="eng-standards-constraint-naming.html">Next</a></td></tr><tr><td width="40%" align="left">OpenACS Style Guide </td><td width="20%" align="center"><a accesskey="u" href="eng-standards.html">Up</a></td><td width="40%" align="right"> Constraint naming standard</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a><center><a href="http://openacs.org/doc/eng-standards-versioning.html#comments">View comments on this page at openacs.org</a></center></body></html>
+the next.  These rules are fine-tuned with each release; an example is <a href="http://openacs.org/projects/openacs/5.0/milestones" target="_top">5.0.0 Milestones and Milestone Criteria</a></p><div class="cvstag">($Id$)</div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="style-guide.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="eng-standards-constraint-naming.html">Next</a></td></tr><tr><td width="40%" align="left">OpenACS Style Guide </td><td width="20%" align="center"><a accesskey="u" href="eng-standards.html">Up</a></td><td width="40%" align="right"> Constraint naming standard</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a><center><a href="http://openacs.org/doc/eng-standards-versioning.html#comments">View comments on this page at openacs.org</a></center></body></html>
