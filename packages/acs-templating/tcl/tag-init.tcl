@@ -218,7 +218,7 @@ template_tag group { chunk params } {
         set ${name}(groupnum_last_p) 1
       } else {
         upvar 0 ${name}:\[expr \$$i + 1\] $name:next 
-        set ${name}(groupnum_last_p) \[expr !\[string equal \${${name}:next($column)} \$${name}($column)\]\]
+        set ${name}(groupnum_last_p) \[expr !\[string equal \[set \"${name}:next(${column})\"\] \$${name}($column)\]\]
       }
   "
 
@@ -231,7 +231,7 @@ template_tag group { chunk params } {
         break
       }
       upvar 0 ${name}:\[expr \$$i + 1\] $name:next 
-      if { !\[string equal \${${name}:next($column)} \$${name}($column)\] } { 
+      if { !\[string equal \[set \"${name}:next(${column})\"\] \$${name}(${column})\] } { 
         break
       }
       incr $i
