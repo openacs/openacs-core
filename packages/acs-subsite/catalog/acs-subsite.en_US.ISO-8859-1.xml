@@ -245,7 +245,6 @@ You can always change your password by doing the following:
   <msg key="Thank_you">Thank you.</msg>
   <msg key="to">to</msg>
   <msg key="to_site_link">to %site_link%</msg>
-  <msg key="to_site_link_1">restore your account to live status</msg>
   <msg key="Unauthorized_Access">Unauthorized Access</msg>
   <msg key="Unsubscribe">Unsubscribe</msg>
   <msg key="up_to_context_name">up to %context_name%</msg>
@@ -256,8 +255,10 @@ You can always change your password by doing the following:
   <msg key="User_Creation_Failed">User Creation Failed</msg>
   <msg key="Username">Username</msg>
   <msg key="Welcome_Back">Welcome Back</msg>
-  <msg key="Welcome_Back_1">Your account is currently marked &quot;deleted&quot;. If you wish, we
-can</msg>
+  <msg key="Account_closed">
+    &lt;p&gt;Your account is currently closed.&lt;/p&gt;
+    &lt;p&gt;If you wish, we can &lt;a href=&quot;%restore_url%&quot;&gt;reopen your account&lt;/a&gt;.&lt;/p&gt;
+  </msg>
   <msg key="Your_email">Your email:</msg>
   <msg key="Your_email_address">Your email address:</msg>
   <msg key="Your_Portrait">Your Portrait</msg>
