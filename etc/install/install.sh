@@ -41,6 +41,7 @@ usage="$0 [OPTIONS]
     --config-file Sets up information about the server and database used (see config.tcl.in). Defaults to config.tcl
     --no-checkout Do not checkout new source code
     --oacs-only   Do not install .LRN, only OpenACS
+    --no-install  Do not install .LRN or OpenACS. Useful if you only want to recreate the db user and then install manually
     --postgresql  Install on PostgreSQL. Overrides database setting in install config file.
     --interactive Gives you the possibility to exit at certain points during installation
 "
