@@ -99,7 +99,7 @@ begin
  --
  -- Membership Relationship
  --
- attr_id := acs_rel_type__create_role (''member'', ''Member'', ''Members'');
+ attr_id := acs_rel_type__create_role (''member'', ''#acs-kernel.member_role_pretty_name#'', ''#acs-kernel.member_role_pretty_plural#'');
 
  attr_id := acs_rel_type__create_type (
    ''membership_rel'',

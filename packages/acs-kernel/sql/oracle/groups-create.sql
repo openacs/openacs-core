@@ -86,7 +86,7 @@ begin
  --
  -- Membership Relationship
  --
- acs_rel_type.create_role ('member', 'Member', 'Members');
+ acs_rel_type.create_role ('member', '#acs-kernel.member_role_pretty_name#', '#acs-kernel.member_role_pretty_plural#');
 
  acs_rel_type.create_type (
    rel_type => 'membership_rel',
