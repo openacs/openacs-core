@@ -30,8 +30,12 @@ ad_proc -public ad_form_prototype {
         return -code error "No arguments to ad_form"
     } 
 
-    set valid_args { form method action html name select_query select_query_name add_data \
-                     edit_data from_sql to_sql validate on_submit confirm_template extend}; 
+    # I've removed "extend" because making it work correctly requires considerable rewriting,
+    # including maintaining of per-form global state.   The global state should be folded in
+    # with the state already maintained by the form builder proper.
+
+    set valid_args { form method action html name select_query select_query_name new_data \
+                     edit_data from_sql to_sql validate on_submit confirm_template}; 
 
     ad_arg_parser $valid_args $args
 
