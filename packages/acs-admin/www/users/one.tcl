@@ -6,28 +6,21 @@ ad_page_contract {
     
     @cvs-id $Id$
 } {
-    user_id
-} -properties {
-    context:onevalue
-    first_names:onevalue
-    last_name:onevalue
-    email:onevalue
-    screen_name:onevalue
-    user_id:onevalue
-    registration_date:onevalue
-    last_date:onevalue
-    last_visit:onevalue
-    export_edit_vars:onevalue
-    portrait_p:onevalue
-    portrait_title:onevalue
-    user_finite_state_links:onevalue
+    user_id:integer
 }
 
-if { ![db_0or1row user_info {}] } {
+with_catch errmsg {
+    acs_user::get -user_id $user_id -array user_info
+} {
     ad_return_complaint 1 "<li>We couldn't find user #$user_id; perhaps this person was deleted?"
     return
 }
-set last_visit_pretty [lc_time_fmt $last_visit_ansi "%q %X"]
+set user_info(last_visit_pretty) [lc_time_fmt $user_info(last_visit_ansi) "%q %X"]
+set user_info(creation_date_pretty) [lc_time_fmt $user_info(creation_date) "%q"]
+set user_info(url) [acs_community_member_url -user_id $user_id]
+set user_info(by_ip_url) [export_vars -base "complex-search" { { target one } { ip $user_info(creation_ip) } }]
+
+set return_url [ad_return_url]
 
 #
 # RBM: Check if the requested user is a site-wide admin and warn the 
@@ -42,31 +35,19 @@ if { $site_wide_admin_p } {
     set warning_p 1
 }
 
-set public_link [acs_community_member_url -user_id $user_id]
-set sec_context_root [acs_magic_object "security_context_root"] 
-if [db_0or1row user_is_admin "select privilege from acs_permissions where object_id = :sec_context_root and grantee_id = :user_id and privilege = 'admin'"] {
-    set admin_p 1
-} else {
-    set admin_p 0
-}
-
-set return_url "/acs-admin/users/one?user_id=$user_id"
 
 set context [list [list "./" "Users"] "One User"]
-set export_edit_vars [export_url_vars user_id return_url]
-set registration_date [lc_time_fmt $creation_date "%q"]
 
-set portrait_p 0
 if {[db_0or1row get_item_id "select live_revision as revision_id, nvl(title,'view this portrait') portrait_title
 from acs_rels a, cr_items c, cr_revisions cr 
 where a.object_id_two = c.item_id
 and c.live_revision = cr.revision_id
 and a.object_id_one = :user_id
 and a.rel_type = 'user_portrait_rel'"]} {
-    set portrait_p 1
+    set portrait_url [export_vars -base /shared/portrait { user_id }]
 }
 
-set user_finite_state_links "[join [ad_registration_finite_state_machine_admin_links $member_state $email_verified_p $user_id] " | "]"
+set user_finite_state_links "[join [ad_registration_finite_state_machine_admin_links $user_info(member_state) $user_info(email_verified_p) $user_id] " | "]"
 
 
 # XXX Make sure to make the following into links and this looks okay
@@ -103,6 +84,12 @@ db_multirow all_group_membership all_group_membership "
      from groups, group_member_map gm
      where groups.group_id = gm.group_id and gm.member_id=:user_id
   order by lower(groups.group_name)"
+
+if { [auth::password::can_reset_p -authority_id $user_info(authority_id)] } {
+    set password_reset_url [export_vars -base "password-reset" { user_id { return_url [ad_return_url] } }]
+}
+
+set portrait_manage_url [export_vars -base /user/portrait/ { user_id { return_url [ad_return_url] } }]
 
 
 ad_return_template

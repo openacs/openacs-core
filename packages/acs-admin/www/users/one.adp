@@ -1,5 +1,5 @@
 <master>
-<property name=title>@first_names;noquote@ @last_name;noquote@</property>
+<property name=title>@user_info.first_names;noquote@ @user_info.last_name;noquote@</property>
 <property name="context">@context;noquote@</property>
 
 <h2>Basic Information</h2>
@@ -8,14 +8,14 @@
 
 <ul>
 <li>User ID:  @user_id@</li>
-<li><a href="@public_link@">View community member page</a></li>
-<li>Registration date:  @registration_date@</li>
-<li>Registration IP: @creation_ip@ (<a href="complex-search?target=one&amp;ip=@creation_ip@" title="other registrations from this IP address">others</a>)</li>
-<li>Last visit: @last_visit_pretty@</li>
+<li><a href="@user_info.url@">View community member page</a></li>
+<li>Registration date:  @user_info.creation_date_pretty@</li>
+<li>Registration IP: @user_info.creation_ip@ (<a href="@user_info.by_ip_url@" title="Other registrations from this IP address">others</a>)</li>
+<li>Last visit: @user_info.last_visit_pretty@</li>
 
 
-<if @portrait_p@ eq 1>
-  <li>Portrait:  <a href="/shared/portrait?user_id=@user_id@">@portrait_title@</a></li>
+<if @portrait_url@ not nil>
+  <li>Portrait:  <a href="@portrait_url@">@portrait_title@</a></li>
 </if>
 </ul>
 
@@ -27,10 +27,10 @@
         Deleting or banning this user may mean you will be unable to administrate the site.
       </p>
   </if>
-  <p>Member state: <b>@member_state@</b> - change member state: @user_finite_state_links;noquote@</p>
+  <p>Member state: <b>@user_info.member_state@</b> - change member state: @user_finite_state_links;noquote@</p>
 </if>
 <else>
-  <p>Member state: <b>@member_state@</b> <i>(cannot change state for yourself)</i></p>
+  <p>Member state: <b>@user_info.member_state@</b> <i>(cannot change state for yourself)</i></p>
 </else>
 
 <h2>This user is a member of the following groups:</h2>
@@ -69,16 +69,18 @@ above.
 <h2>Administrative Actions</h2>
 
 <ul>
-<if @admin_p@>
+<if @site_wide_admin_p@ true>
   <li><a href="modify-admin-privileges?user_id=@user_id@&action=revoke">Revoke site-wide administration privileges</a></li>
 </if>
 <else>
   <li><a href="modify-admin-privileges?user_id=@user_id@&action=grant">Grant site-wide administration privileges</a></li>
 </else>
 
-<li><a href="/user/password-update?@export_edit_vars@">Update this user's password</a></li>
+<if @password_reset_url@ not nil>
+  <li><a href="@password_reset_url@">Reset this user's password</a></li>
+</if>
 
-<li><a href="/user/portrait/index.tcl?@export_edit_vars@">Manage this user's portrait</a></li>
+<li><a href="@portrait_manage_url@">Manage this user's portrait</a></li>
 
 <li><a href="become?user_id=@user_id@">Login as this user</a></li>
 </ul>
