@@ -60,9 +60,9 @@ SELECT acs_object__name(context_id) as context_name, context_id, security_inheri
 	from acs_objects o
 	where context_id = :object_id
               and exists (select 1
-                          from acs_object_party_privilege_map
+                          from acs_permissions_all
                           where object_id = o.object_id
-                          and party_id = :user_id
+                          and grantee_id = :user_id
                           and privilege = 'admin')    
       </querytext>
 </fullquery>
