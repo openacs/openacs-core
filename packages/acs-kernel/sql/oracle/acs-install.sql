@@ -13,6 +13,7 @@ declare
     node_id    site_nodes.node_id%TYPE;
     main_site_id site_nodes.node_id%TYPE;
     admin_id	apm_packages.package_id%TYPE;
+    lang_id     apm_packages.package_id%TYPE;
     workflow_id 	apm_packages.package_id%TYPE;
     docs_id    apm_packages.package_id%TYPE;
     api_doc_id apm_packages.package_id%TYPE;
@@ -47,6 +48,20 @@ begin
     object_id => main_site_id,
     grantee_id => acs.magic_object_id('the_public'),
     privilege => 'read'
+  );
+
+  lang_id := apm_service.new (
+      instance_name => 'OpenACS Localization Utils',
+      package_key => 'acs-lang'
+  );
+  apm_package.enable(lang_id);
+
+  node_id := site_node.new (
+    parent_id => site_node.node_id('/'),
+    name => 'acs-lang',
+    directory_p => 't',
+    pattern_p => 't',
+    object_id => lang_id
   );
 
   admin_id := apm_service.new (
