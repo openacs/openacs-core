@@ -8,6 +8,11 @@
       <li>URL: <a href="@service.url@">@service.url@</a>
     </ul>
   </li>
+  <li>Login:
+    <ul>
+      <li><a href="@admin_login_url@">Admin user</a>
+    </ul>
+  </li>
   <li>Installation: 
     <ul>
       <li>Installation completed at: @service.install_end_timestamp@
