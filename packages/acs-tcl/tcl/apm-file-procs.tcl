@@ -305,13 +305,14 @@ ad_proc -public apm_file_watch_cancel {
 ad_proc -public apm_file_watchable_p { path } {
     Given the path of a file determine if it is
     appropriate to be watched for reload. The file should
-    should be db compatible with system and be of right 
-    type (for example contain tcl procs).
+    be db compatible with the system and be of right 
+    type (for example contain tcl procs or xql queries).
 
     @param The path of the file relative to server root
 
-    @return 1 If file is watchable and 0 otherwise. The proc will return 0 if the
-              file doesn't exist.
+    @return 1 If file is watchable and 0 otherwise. The proc will throw an error if the
+              file doesn't exist or if the given path cannot be parsed as a path relative
+              to server root.
 
     @see apm_guess_file_type
     @see apm_guess_db_type
@@ -319,8 +320,14 @@ ad_proc -public apm_file_watchable_p { path } {
     @author Peter Marklund
 } {        
     # The apm_guess procs need package_key and a path relative to package root
-    # I'm letting the regexp be forgiving so the proc will work with absolute paths
-    regexp {packages/([^/]+)/(.*)$} $path match package_key package_rel_path
+    # so parse those out of the given path
+    if { [regexp {^packages/([^/]+)/(.*)$} $path match package_key package_rel_path] } {
+        if { ![file exists "[acs_root_dir]/$path"] } {
+            error "apm_file_watchable_p: path $path does not correspond to an existing file"
+        }
+    } else {
+        error "apm_file_watchable_p: path $path cannot be parsed as a path relative to server root"
+    }
 
     # Check the db type
     set file_db_type [apm_guess_db_type $package_key $package_rel_path]
