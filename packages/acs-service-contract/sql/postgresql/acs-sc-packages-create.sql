@@ -209,8 +209,6 @@ begin
 
 end;' language 'plpgsql';
 
-
-
 create function acs_sc_impl__new(varchar,varchar,varchar,varchar)
 returns integer as '
 declare
@@ -248,7 +246,23 @@ begin
 
 end;' language 'plpgsql';
 
+-- Only three arguments, defaults pretty name to empty string
+create function acs_sc_impl__new(varchar,varchar,varchar)
+returns integer as '
+declare
+    p_impl_contract_name	alias for $1;
+    p_impl_name			alias for $2;
+    p_impl_owner_name		alias for $3;
+    v_impl_id			integer;
+begin
+    -- Using an empty pretty name
+    v_impl_id := acs_sc_impl__new(p_impl_contract_name,
+                                  p_impl_name,
+                                  '',
+                                  p_impl_owner_name);
+    return v_impl_id;
 
+end;' language 'plpgsql';
 
 create function acs_sc_impl__get_id(varchar,varchar)
 returns integer as '
