@@ -1,8 +1,10 @@
 -- @author Mark Dettinger (mdettinger@arsdigita.com)
+-- $Id$
 
 create table host_node_map (
-   host                 varchar(200),
+   host                 varchar(200) 
+	constraint host_node_map_host_pk primary key 
+	constraint host_node_map_host_nn not null,
    node_id              integer 
-			constraint host_node_map_pk primary key
-			constraint host_node_map_fk references acs_objects (object_id)
+	constraint host_node_map_node_id_fk references site_nodes
 );
