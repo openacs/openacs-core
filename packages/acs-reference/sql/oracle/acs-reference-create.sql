@@ -212,7 +212,3 @@ as
 end acs_reference;
 /
 show errors
-
--- now load the reference data packages
-
---acs-reference-data
