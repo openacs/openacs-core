@@ -41,7 +41,7 @@ ad_proc acs_sc_get_alias {
 
     db_0or1row get_alias {
 	select impl_alias, impl_pl
-	from acs_sc_impl_alias
+	from acs_sc_impl_aliases
 	where impl_contract_name = :contract
 	and impl_operation_name = :operation
 	and impl_name = :impl
@@ -82,7 +82,7 @@ ad_proc acs_sc_proc {
 	    operation_nargs,
 	    operation_inputtype_id,
 	    operation_outputtype_id
-	from acs_sc_operation
+	from acs_sc_operations
 	where contract_name = :contract
 	and operation_name = :operation
     }
