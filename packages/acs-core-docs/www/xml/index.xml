@@ -2,7 +2,7 @@
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
                "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [ 
 
-<!ENTITY version "4.6.2">
+<!ENTITY version "4.6.3">
 <!ENTITY majorversion "4">
 <!-- 
      OpenACS Version. 
@@ -184,8 +184,8 @@
     &redhat;
   </part>
 
-  <part id="acs-dev">
-    <title>For OpenACS Developers</title>
+  <part id="acs-package-dev">
+    <title>For OpenACS Package Developers</title>
     <partintro>
       <para>
         This is the place to look if you want to extend OpenACS and build on
@@ -232,6 +232,9 @@
 
     </chapter>
 
+  </part>
+  <part id="acs-plat-dev">
+    <title>For OpenACS Platform Developers</title>
     <chapter id="kernel-doc">
       <title>Kernel Documentation</title>
 

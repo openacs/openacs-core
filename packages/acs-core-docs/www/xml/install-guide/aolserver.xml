@@ -1,5 +1,5 @@
 <sect1 id="aolserver" xreflabel="Install AOLserver 3.3+ad13">
-  <title>Install AOLserver 3.3+ad13</title>
+  <title>Install AOLserver 3.3oacs1</title>
 
   <authorblurb>
     by <ulink url="mailto:vinod@kurup.com">Vinod Kurup</ulink>
@@ -92,12 +92,8 @@ Done Building Sat Mar  8 10:31:35 PST 2003
 [root@yourserver aolserver]# </screen>
           
           <para>
-          This takes about 5 minutes. All of the results are logged to
-          files in
-          <computeroutput>/usr/local/src/aolserver/log</computeroutput>.  If you run into problems running AOLserver, check these files for build errors.</para>
-          
+          This takes about 5 minutes. It builds aolserver, several modules, and the database driver.  (Upgraders, note that the postgres database driver has changed from postgres.so to nspostgres.so).  All of the results are logged to files in <computeroutput>/usr/local/src/aolserver/log</computeroutput>.  If you run into problems running AOLserver, check these files for build errors.</para>
         </listitem>
-        
         
         <listitem>
           <para>Add a database-specific wrapper script.  This script
@@ -384,7 +380,8 @@ have the <link linkend="analog-download">source tarball</link> in
 <computeroutput>/tmp</computeroutput>.  Unpack, compile, and install analog.</para>
       <screen>[root@yourserver aolserver]# <userinput>cd /usr/local/src</userinput>
 [root@yourserver src]# <userinput>tar xzf /tmp/analog-5.31.tar.gz</userinput>
-root@yourserver analog-5.31]# <userinput>make</userinput>
+[root@yourserver src]# <userinput>cd analog-5.31</userinput>
+[root@yourserver analog-5.31]# <userinput>make</userinput>
 cd src &amp;&amp; make
 make[1]: Entering directory `/usr/local/src/analog-5.31/src'
 <emphasis>(many lines omitted)</emphasis>

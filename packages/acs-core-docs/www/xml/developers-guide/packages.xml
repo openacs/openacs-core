@@ -681,7 +681,7 @@ ROOT/
       this point, you should add your package files to your CVS repository.
       I'll assume that you have set up your development repository according
       to the standards described in 
-      <ulink url="http://acs40.arsdigita.com/acs40-project-central/client-build.html">these instructions</ulink>. If so, then you just do this:
+      <ulink url=" http://web.archive.org/web/20010612233418/http://acs40.arsdigita.com/acs40-project-central/client-build.html">these instructions</ulink>. If so, then you just do this:
     </para>
     
 
@@ -704,7 +704,7 @@ ROOT/
 
       <listitem><para>
       Now you can start developing the package. In addition to writing code,
-      you should also consider the tasks outlined in the <ulink url="http://acs40.arsdigita.com/acs40-project-central/package-submission.html">package submission guidelines</ulink>.
+      you should also consider the tasks outlined in the <ulink url="http://web.archive.org/web/20010206211817/http://acs40.arsdigita.com/acs40-project-central/package-submission.html">package submission guidelines</ulink>.
     </para></listitem>
 
     </orderedlist>

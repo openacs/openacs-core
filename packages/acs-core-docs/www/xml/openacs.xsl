@@ -5,7 +5,7 @@
 
 <!-- vinodk: Import chunk.xsl - location depends on which distribution    -->
 
-<!-- Red Hat 8/xsl-stylesheets 1.50.0-3
+<!-- Red Hat 8/xsl-stylesheets 1.50.0-3 commented out
   <xsl:import href="/usr/share/sgml/docbook/xsl-stylesheets-1.50.0-3/html/chunk.xsl"/>
 -->
 
@@ -160,14 +160,11 @@
         </table>
         <hr/>
         <address>
-            <xsl:text>rmello at fslc.usu.edu</xsl:text>
-        </address>
-        <address>
           <a>
             <xsl:attribute name="href">
-              <xsl:text>mailto:vinod@kurup.com</xsl:text>
+              <xsl:text>mailto:docs@openacs.org</xsl:text>
             </xsl:attribute>
-            <xsl:text>vinod@kurup.com</xsl:text>
+            <xsl:text>docs@openacs.org</xsl:text>
           </a>
         </address>
       </div>
@@ -184,7 +181,7 @@
       <center>
         <a>
           <xsl:attribute name="href">
-            <xsl:text>http://openacs.org/doc/openacs-4/</xsl:text>
+            <xsl:text>http://openacs.org/doc/openacs-4-6-3/</xsl:text>
                     <xsl:call-template name="href.target">
                       <xsl:with-param name="object" select="."/>
                     </xsl:call-template>
@@ -204,7 +201,7 @@
       <xsl:apply-templates/>
         <br />
         <xsl:text>
-          OpenACS docs are written by the named authors, but may be edited
+          OpenACS docs are written by the named authors, and may be edited
           by OpenACS documentation staff.
         </xsl:text>
       </p>
