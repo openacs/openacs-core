@@ -1099,9 +1099,6 @@ create table cr_doc_filter (
 -- prompt *** Creating object types...
 \i types-create.sql
 
--- prompt *** Preparing search indices...
-\i content-search.sql
-
 -- this index requires prefs created in content-search
 -- create index cr_doc_filter_index on cr_doc_filter ( content )
 --  indextype is ctxsys.context
@@ -1200,8 +1197,10 @@ select inline_1 ();
 
 drop function inline_1 ();
 
-
 -- show errors
+
+-- prompt *** Preparing search indices...
+\i content-search.sql
 
 
 
