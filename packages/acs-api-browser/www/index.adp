@@ -17,32 +17,23 @@
 
 </ul>
 
-<h3>Disabled Packages</h3>
-
-
-<if @disabled_packages:rowcount@ eq 0>
- <b>NONE</b>  
-</if>
-<else>
+<if @disabled_packages:rowcount@ gt 0>
+  <h3>Disabled Packages</h3>
  <multiple name="disabled_packages">
   <ul>
    <li>@disabled_packages.pretty_name@ @disabled_packages.version_name@</a>
   </ul>
  </multiple>
-</else>
-
-
-<h3>Uninstalled Packages</h3>
-
-<if @uninstalled_packages:rowcount@ eq 0>
-<b>NONE</b>
 </if>
-<else>
+
+
+<if @uninstalled_packages:rowcount@ gt 0>
+  <h3>Uninstalled Packages</h3>
  <multiple name="uninstalled_packages">
   <ul>
    <li>@uninstalled_packages.pretty_name@ @uninstalled_packages.version_name@</a>
   </ul>
  </multiple>
-</else>
+</if>
 
 <br clear="both">
