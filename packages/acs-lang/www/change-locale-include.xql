@@ -8,6 +8,14 @@
         from   timezones
     </querytext>
 </fullquery>
-	        
+
+<fullquery name="locale_loop">
+    <querytext>
+        select label,   
+               locale
+          from enabled_locales
+         order by label
+    </querytext>
+</fullquery>	        
 </queryset>
 	                            
