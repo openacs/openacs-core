@@ -215,6 +215,36 @@ nsv_set locale da_DK,t_fmt "%H:%M"
 nsv_set locale da_DK,thousands_sep "."
 nsv_set locale da_DK,formbuilder_time_format "HH24:MI"
 
+# FI
+nsv_set locale fi_FI,abday {{su} {ma} {ti} {ke} {to} {pe} {la}}
+nsv_set locale fi_FI,abmon {{tammi} {helmi} {maalis} {huhti} {touko} {kesä}{heinä} {elo} {syys} {loka} {marras} {joulu}}
+nsv_set locale fi_FI,am_str ""
+nsv_set locale fi_FI,currency_symbol "E"
+nsv_set locale fi_FI,day {{sunnuntai} {maanantai} {tiistai} {keskiviikko} {torstai} {perjantai} {lauantai}}
+nsv_set locale fi_FI,decimal_point ","
+nsv_set locale fi_FI,d_fmt "%d.%m.%Y"
+nsv_set locale fi_FI,d_t_fmt "%a, %d. %Bta %Y %H:%M %Z"
+nsv_set locale fi_FI,frac_digits 2
+nsv_set locale fi_FI,grouping {3 3 }
+nsv_set locale fi_FI,int_curr_symbol "EUR "
+nsv_set locale fi_FI,int_frac_digits 2
+nsv_set locale fi_FI,mon_decimal_point ","
+nsv_set locale fi_FI,mon_grouping {3 3 }
+nsv_set locale fi_FI,mon {{tammikuu} {helmikuu} {maaliskuu} {huhtikuu} {toukokuu} {kesäkuu} {heinäkuu} {elokuu} {syyskuu} {lokakuu} {marraskuu} {joulukuu}}
+nsv_set locale fi_FI,mon_thousands_sep " "
+nsv_set locale fi_FI,n_cs_precedes 1
+nsv_set locale fi_FI,negative_sign "-"
+nsv_set locale fi_FI,n_sep_by_space 0
+nsv_set locale fi_FI,n_sign_posn             1
+nsv_set locale fi_FI,p_cs_precedes 1
+nsv_set locale fi_FI,pm_str ""
+nsv_set locale fi_FI,positive_sign ""
+nsv_set locale fi_FI,p_sep_by_space 0
+nsv_set locale fi_FI,p_sign_posn 1
+nsv_set locale fi_FI,t_fmt_ampm ""
+nsv_set locale fi_FI,t_fmt "%H:%M"
+nsv_set locale fi_FI,thousands_sep " "
+
 # Monetary amounts
 nsv_set locale money:000  {($num$sym)}
 nsv_set locale money:001  {($num $sym)}
