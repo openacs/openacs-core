@@ -123,4 +123,48 @@ tar cz -f <replaceable>dotlrn-2.0.0a1.tar.gz</replaceable> dotlrn-<replaceable>2
         <para>Update on the site</para>
       </listitem>
     </orderedlist>
+    <orderedlist>
+      <listitem>
+        <para>
+          Setup a local OpenACS server.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Edit the file packages/acs-admin/www/build-repository.tcl; 
+          Change the line with 'set head_channel' to '5-1' if the version on HEAD in the openacs.org cvs repository is 5.1. Etcetera.
+          You may also want to change the line setting the variable 'repository_dir'.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Request /acs-admin/apm/build-repository on your new server.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The page will find all branches in the cvs repository
+          labeled oacs-x-y, and build a repository channel for each of
+          those branches where x>=5 (so not for 4.6 and
+          earlier). Finally, it'll build another channel for HEAD,
+          which will be named after what you set in 'head_channel'
+          above.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          For each channel, it'll do an anonymous checkout of packges and contrib/packages, then build .apm files for each package in the checkout.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The files will be stored on the server's hard drive in the directory specified by the 'repository_dir' variable in the page script, by default "[acs_root_dir]/www/repository/".
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          If you're on openacs.org, everything should now be fine. Otherwise, you need to move the entire directory tree to openacs.org:/web/openacs/www/repository, replacing what was already there.
+        </para>
+      </listitem>
+    </orderedlist>
   </appendix>
