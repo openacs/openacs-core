@@ -9,32 +9,6 @@ ad_library {
     @cvs-id $Id$
 } 
 
-ad_proc -private -deprecated apm_load_xml_packages {} {
-
-    <p>
-    NOTE: This proc doesn't do anything anymore.
-    </p>
-
-    <p>
-    Loads XML packages into the running interpreter, if they're not
-    already there. We need to load these packages once per connection,
-    since AOLserver doesn't seem to deal with packages very well.
-    </p>
-
-} {
-    global ad_conn
-    if { ![info exists ad_conn(xml_loaded_p)] } {
-	# ns_xml needs to be loaded
-
-#  	foreach file [glob "[acs_package_root_dir acs-tcl]/tcl/xml-*-procs.tcl"] {
-#  	    apm_source $file
-#  	}
-	set ad_conn(xml_loaded_p) 1
-    }
-
-#    package require xml 1.9
-}
-
 ad_proc -private apm_required_attribute_value { element attribute } {
 
     Returns an attribute of an XML element, throwing an error if the attribute
