@@ -7,8 +7,9 @@
         <querytext>
             begin
                 :1 := acs_sc_impl.new(
-                           :contract_name, 
+                       :contract_name, 
                        :name,
+                       :pretty_name,
                        :owner
                    );
             end;

@@ -20,6 +20,7 @@ namespace eval acs_sc::impl::binding {}
 ad_proc -public acs_sc::impl::new {
     {-contract_name:required}
     {-name:required}
+    {-pretty_name:required}
     {-owner:required}
 } {
     Add new service contract implementation.
@@ -58,6 +59,7 @@ ad_proc -public acs_sc::impl::new_from_spec {
         contract_name "Action_SideEffect"
         owner "bug-tracker"
         name "CaptureResolutionCode"
+        pretty_name "Capture Resolution Code"
         aliases {
             GetObjectType bug_tracker::bug::object_type
             GetPrettyName bug_tracker::bug::capture_resolution_code::pretty_name
@@ -77,6 +79,7 @@ ad_proc -public acs_sc::impl::new_from_spec {
       <li>contract_name: The name of the service contract you're implementing.
       <li>owner: Owner of the implementation, use the package-key.
       <li>name: Name of your implementation.
+      <li>name: Pretty name of your implementation. You'd typically use this when displaying the service contract implementation through a UI.
       <li>aliases: Specification of the tcl procedures for each of the service contract's operations.
     </ul>
 
@@ -88,15 +91,20 @@ ad_proc -public acs_sc::impl::new_from_spec {
     
     @return the impl_id of the newly registered implementation
 } {
-    # Spec contains: contract_name, name, owner, aliases
+    # Spec contains: contract_name, name, pretty_name, owner, aliases
     array set impl $spec
     
+    if { ![exists_and_not_null impl(pretty_name)] } {
+        set impl(pretty_name) ""
+    }
+
     db_transaction {
         set impl_id [new \
                 -contract_name $impl(contract_name) \
                 -name $impl(name) \
+                -pretty_name $impl(pretty_name) \
                 -owner $impl(owner)]
-        
+
         acs_sc::impl::alias::parse_aliases_spec \
                 -contract_name $impl(contract_name) \
                 -impl_name $impl(name) \
@@ -133,6 +141,52 @@ ad_proc -public acs_sc::impl::get {
 } {
     upvar 1 $array row
     db_1row select_impl {} -column_array row
+}
+
+ad_proc -public acs_sc::impl::get_options {
+    {-contract_name:required}
+    {-exclude_names ""}
+    {-empty_option:boolean}
+} {
+    Get a list of service contract implementation options
+    for an HTML multiple choice widget.
+
+    @param contract_name The name of the service contract
+           to return options for.
+
+    @param exclude_names A list of implementation names to exclude
+    @param empty_option_p If provided an empty option is added
+
+    @return A list of lists with the inner lists having label in first element and id in second.
+
+    @author Peter Marklund
+} {
+    set full_list [db_list_of_lists select_impl_options {
+        select impl_name,
+               impl_id
+        from acs_sc_impls
+        where impl_contract_name = :contract_name
+    }]
+
+    if { [llength $exclude_names] > 0 } {
+        # There are exclude names
+        foreach element $full_list {
+            set impl_name [lindex $element 0]
+            if { [lsearch -exact $exclude_names $impl_name] == -1 } {
+                # Name is not in exclude list so add option
+                lappend impl_list $element
+            }
+        }
+    } else {
+        # No exclude names, use all options
+        set impl_list $full_list
+    }
+
+    if { $empty_option_p } {
+        lappend impl_list [list "-" ""]
+    }
+
+    return $impl_list
 }
 
 #####

@@ -55,6 +55,7 @@ create table acs_sc_impls (
 			      constraint acs_sc_impls_pk
 			      primary key,
     impl_name		      varchar(100),
+    impl_pretty_name          varchar(200),
     impl_owner_name	      varchar(1000),
     impl_contract_name	      varchar(1000)
 );

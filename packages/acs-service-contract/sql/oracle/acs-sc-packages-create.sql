@@ -59,6 +59,7 @@ as
    function new (
        impl_contract_name	acs_sc_impls.impl_contract_name%TYPE,
        impl_name		acs_sc_impls.impl_name%TYPE,
+       impl_pretty_name		acs_sc_impls.impl_pretty_name%TYPE,
        impl_owner_name		acs_sc_impls.impl_owner_name%TYPE
    ) return acs_sc_impls.impl_id%TYPE;
 
@@ -334,6 +335,7 @@ as
    function new (
        impl_contract_name	acs_sc_impls.impl_contract_name%TYPE,
        impl_name		acs_sc_impls.impl_name%TYPE,
+       impl_pretty_name		acs_sc_impls.impl_pretty_name%TYPE,
        impl_owner_name		acs_sc_impls.impl_owner_name%TYPE
    ) return acs_sc_impls.impl_id%TYPE
    is
@@ -343,12 +345,14 @@ as
 
        insert into acs_sc_impls (
 	      impl_id,
-	      impl_name,	
+	      impl_name,
+              impl_pretty_name,
 	      impl_owner_name,
 	      impl_contract_name
        ) values (
 	      v_impl_id,
 	      impl_name,
+              impl_pretty_name,
 	      impl_owner_name,
 	      impl_contract_name
        );
@@ -453,8 +457,6 @@ end acs_sc_impl;
 /
 show errors
 
-
-
 create or replace package body acs_sc_impl_alias
 as
 
@@ -512,7 +514,7 @@ as
 
 end acs_sc_impl_alias;
 /
-show errors
+show errors 
 
 create or replace package body acs_sc_binding
 as
