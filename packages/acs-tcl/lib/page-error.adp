@@ -10,7 +10,7 @@
 </if>
 <br>
 
- <a href=@prev_url@>#acs-tcl.Return_wiwas#</a>
+ <a href=@prev_url@>#acs-tcl.Return_prev#</a>
 
  <if @bt_instance@ ne "">
   <if @auto_submit_p@ gt 0>
