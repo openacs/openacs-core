@@ -46,7 +46,15 @@ ORACLE8I_DBS="service0"              # space-separated list of Oracle8i database
                                      # to be backed up to file system
 
                                      # space-separated list of directories to be backed up
-DIRECTORIES="/etc /home /root /cvsroot /var/qmail/alias /usr/local/aolserver $WEBDIR"
+
+#---------------------------------------------------------------------
+# a space-delimited list of directories to back up
+# A minimal backup  
+DIRECTORIES="/var/lib/aolserver/service0"
+#
+# this is a fairly thorough set of data back - must run as root to work, though
+#DIRECTORIES="/etc /home /root /cvsroot /var/qmail/alias /usr/local/aolserver $WEBDIR"
+#---------------------------------------------------------------------
 
 # System Program Paths
 PG_BINDIR=/usr/local/pgsql/bin       # path to PostGreSQL binaries
