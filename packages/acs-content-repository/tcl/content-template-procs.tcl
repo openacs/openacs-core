@@ -12,57 +12,6 @@ ad_library {
 
 namespace eval ::content::template {}
 
-
-ad_proc -public content::template::del {
-    -template_id:required
-} {
-    @param template_id
-} {
-    return [package_exec_plsql -var_list [list \
-        [list template_id $template_id ] \
-    ] content_template del]
-}
-
-
-ad_proc -public content::template::get_path {
-    -template_id:required
-    {-root_folder_id ""}
-} {
-    @param template_id
-    @param root_folder_id
-
-    @return VARCHAR2
-} {
-    return [package_exec_plsql -var_list [list \
-        [list template_id $template_id ] \
-        [list root_folder_id $root_folder_id ] \
-    ] content_template get_path]
-}
-
-
-ad_proc -public content::template::get_root_folder {
-} {
-
-    @return NUMBER(38)
-} {
-    return [package_exec_plsql -var_list [list \
-    ] content_template get_root_folder]
-}
-
-
-ad_proc -public content::template::is_template {
-    -template_id:required
-} {
-    @param template_id
-
-    @return VARCHAR2
-} {
-    return [package_exec_plsql -var_list [list \
-        [list template_id $template_id ] \
-    ] content_template is_template]
-}
-
-
 ad_proc -public content::template::new {
     -name:required
     {-text ""}
@@ -84,7 +33,7 @@ ad_proc -public content::template::new {
     @param creation_ip
     @param package_id
 
-    @return NUMBER(38)
+    @return template_id of created template
 } {
     return [package_exec_plsql -var_list [list \
         [list name $name ] \
@@ -98,3 +47,57 @@ ad_proc -public content::template::new {
         [list package_id $package_id ] \
     ] content_template new]
 }
+
+
+ad_proc -public content::template::delete {
+    -template_id:required
+} {
+    @param template_id
+    @return 0
+} {
+    return [package_exec_plsql -var_list [list \
+        [list template_id $template_id ] \
+    ] content_template del]
+}
+
+
+ad_proc -public content::template::get_path {
+    -template_id:required
+    {-root_folder_id ""}
+} {
+    @param template_id
+    @param root_folder_id
+    @throws -20000: Invalid item ID: %'', get_path__item_id;
+
+    @return "/" delimited path from root to supplied template_id
+} {
+    return [package_exec_plsql -var_list [list \
+        [list template_id $template_id ] \
+        [list root_folder_id $root_folder_id ] \
+    ] content_template get_path]
+}
+
+
+ad_proc -public content::template::get_root_folder {
+} {
+
+    @return folder_id of Template Root Folder
+} {
+    return [package_exec_plsql -var_list [list \
+    ] content_template get_root_folder]
+}
+
+
+ad_proc -public content::template::is_template {
+    -template_id:required
+} {
+    @param template_id
+
+    @return t or f
+} {
+    return [package_exec_plsql -var_list [list \
+        [list template_id $template_id ] \
+    ] content_template is_template]
+}
+
+
