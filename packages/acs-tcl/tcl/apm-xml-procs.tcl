@@ -306,9 +306,14 @@ ad_proc -public apm_read_package_info_file { path } {
 	foreach node $dependency_types {
 	    set service_uri [apm_required_attribute_value $node url]
 	    set service_version [apm_required_attribute_value $node version]
-	    lappend properties($dependency_type) [list $service_uri $service_version]
+            # Package always provides itself, we'll add that below, so don't add it here
+            if { ![string equal $dependency_type provides] || ![string equal $service_uri $properties(package.key)] } {
+                lappend properties($dependency_type) [list $service_uri $service_version]
+            }
 	}
     }
+    # Package provides itself always
+    lappend properties(provides) [list $properties(package.key) $properties(name)]
 
     set properties(files) [list]
 
