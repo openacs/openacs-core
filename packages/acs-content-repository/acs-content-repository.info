@@ -18,9 +18,9 @@
         </description>
 
         <provides url="acs-content-repository" version="5.0.0b4"/>
-        <requires url="acs-kernel" version="5.0.0a5"/>
-        <requires url="acs-service-contract" version="5.0.0a5"/>
-        <requires url="search" version="5.0.0a5"/>
+        <requires url="acs-kernel" version="5.0.0b4"/>
+        <requires url="acs-service-contract" version="5.0.0b4"/>
+        <requires url="search" version="5.0.0b4"/>
 
         <callbacks>
         </callbacks>

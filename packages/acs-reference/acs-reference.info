@@ -7,7 +7,7 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>t</singleton-p>
     
-    <version name="5.0.0a5" url="http://openacs.org/repository/download/apm/acs-reference-5.0.0a5.apm">
+    <version name="5.0.0b4" url="http://openacs.org/repository/download/apm/acs-reference-5.0.0b4.apm">
         <owner url="mailto:jon@jongriffin.com">Jon Griffin</owner>
         <summary>Tools and API for managing refrence data.</summary>
         <release-date>2003-11-07</release-date>
@@ -19,8 +19,8 @@
 &lt;li&gt; Monitoring the usage of reference data.
 &lt;/ul&gt;</description>
 
-        <provides url="acs-reference" version="5.0.0a5"/>
-        <requires url="acs-kernel" version="5.0.0a5"/>
+        <provides url="acs-reference" version="5.0.0b4"/>
+        <requires url="acs-kernel" version="5.0.0b4"/>
 
         <callbacks>
         </callbacks>
