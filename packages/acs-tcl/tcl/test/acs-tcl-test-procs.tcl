@@ -718,3 +718,24 @@ aa_register_case acs_tcl__all_tcl_files_parse_p {
 
 }
 
+aa_register_case util__randomize_list {
+    Test util::randomize_list
+} {
+    aa_equals "Emtpy list" [util::randomize_list {}] {}
+
+    aa_equals "One-element list" [util::randomize_list {a}] {a}
+
+    aa_true "Two-element list" [util_sets_equal_p [list a b] [util::randomize_list [list a b]]]
+
+    set org_list [list a b c d e f g h i j]
+    set randomized_list [util::randomize_list $org_list]
+    aa_true "Ten-element list: $randomized_list" [util_sets_equal_p $org_list $randomized_list]
+
+    set len [randomRange 200]
+    set org_list [list]
+    for { set i 0 } { $i < $len } { incr i } {
+        lappend org_list [ad_generate_random_string]
+    }
+    set randomized_list [util::randomize_list $org_list]
+    aa_true "Long random list" [util_sets_equal_p $org_list $randomized_list]
+}

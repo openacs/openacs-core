@@ -4697,3 +4697,17 @@ ad_proc -public util::interval_pretty {
     return $result
 }
 
+ad_proc -public util::randomize_list {
+    list
+} {
+    Returns a random permutation of the list.
+} {
+    set len [llength $list]
+    set result [list]
+    while { [llength $list] > 0 } {
+        set index [randomRange [llength $list]]
+        lappend result [lindex $list $index]
+        set list [lreplace $list $index $index]
+    }
+    return $result
+}
