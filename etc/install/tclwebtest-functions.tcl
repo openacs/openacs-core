@@ -161,7 +161,7 @@ proc login_user { user_email user_password} {
     global __server_url
 
     # Request the start page
-    do_request "$__server_url"
+    do_request "${__server_url}/register"
 
     # Login the user
     form find ~n login
