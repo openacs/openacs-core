@@ -29,6 +29,7 @@ ad_proc -public permission::grant {
 } {
     db_exec_plsql grant_permission {}
     util_memoize_flush "permission::permission_p_not_cached -party_id $party_id -object_id $object_id -privilege $privilege"
+    permission::permission_thread_cache_flush
 }
 
 ad_proc -public permission::revoke {
@@ -40,6 +41,7 @@ ad_proc -public permission::revoke {
 } {
     db_exec_plsql revoke_permission {}
     util_memoize_flush "permission::permission_p_not_cached -party_id $party_id -object_id $object_id -privilege $privilege"
+    permission::permission_thread_cache_flush
 }
 
 # args to permission_p and permission_p_no_cache must match
@@ -60,6 +62,10 @@ ad_proc -public permission::permission_p {
     } else {
         set no_party_p 0
     }    
+
+    if { $no_cache_p } {
+        permission::permission_thread_cache_flush
+    }
 
     if { $no_cache_p || ![permission::cache_p] } {
         util_memoize_flush "permission::permission_p_not_cached -party_id $party_id -object_id $object_id -privilege $privilege"
@@ -100,11 +106,24 @@ ad_proc -private permission::permission_p_not_cached {
 
     @see permission::permission_p
 } {
-    if {[empty_string_p $party_id]} {
+    if { [empty_string_p $party_id] } {
         set party_id [ad_conn user_id]
     }
 
-    return [db_0or1row select_permission_p {}]
+    # We have a thread-local cache here
+    global permission__permission_p__cache
+    if { ![info exists permission__permission_p__cache($party_id,$object_id,$privilege)] } {
+        set permission__permission_p__cache($party_id,$object_id,$privilege) [db_0or1row select_permission_p {}]
+    }
+    return $permission__permission_p__cache($party_id,$object_id,$privilege)
+}
+
+
+ad_proc -private permission::permission_thread_cache_flush {
+    Flush thread cache
+} {
+    global permission__permission_p__cache
+    array unset permission__permission_p__cache
 }
 
 ad_proc -public permission::require_permission {
@@ -148,6 +167,7 @@ ad_proc -public permission::toggle_inherit {
     toggle whether or not this object inherits permissions from it's parent
 } {
     db_dml toggle_inherit {}
+    permission::permission_thread_cache_flush
 }
 
 ad_proc -public permission::set_inherit {
@@ -156,6 +176,7 @@ ad_proc -public permission::set_inherit {
     set inherit to true
 } {
     db_dml set_inherit {}
+    permission::permission_thread_cache_flush
 }
 
 ad_proc -public permission::set_not_inherit {
@@ -164,6 +185,7 @@ ad_proc -public permission::set_not_inherit {
     set inherit to false
 } {
     db_dml set_not_inherit {}
+    permission::permission_thread_cache_flush
 }
 
 ad_proc -public permission::write_permission_p {
