@@ -1,0 +1,22 @@
+#!/usr/sh
+# Restarts an AOLserver (daemontools version). 
+# Takes as its only argument the name of the server to kill.
+# joela 06/23/2003
+# Much simpler version of restart-aolserver, just for daemontools
+
+
+# improvements when someone feels like some bash programming:
+
+# should test for input here and do 
+# echo "usage: restart-aolserver service-name"
+# if input is empty
+
+# if input is not empty, check to make sure it's a subdirectory in
+#  /service
+# and if it isn't, get a list of valid servers (check permissions,
+# too!) and print it
+
+# meanwhile, this works:
+
+svc -d $1
+svc -u $1
