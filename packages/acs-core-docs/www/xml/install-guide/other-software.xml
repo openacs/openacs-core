@@ -835,6 +835,38 @@ ln -s /usr/local/tclwebtest/tclwebtest /usr/local/bin
 </action></screen>
 
     </sect1>
-
+    <sect1 id="install-php">
+      <title>Install PHP for use in AOLserver</title>
+      <authorblurb>
+        <para>By <ulink url="mailto:openacs@sussdorff.de">Malte Sussdorff</ulink></para>
+      </authorblurb>
+      
+      <para>To be able to use PHP software with AOLserver (and OpenACS), you have to install PHP with AOLserver support. Get the latest version from <ulink url="http://www.php.net">www.php.net</ulink>. For convenience we get version 4.3.4 from a mirror</para>
+      <screen>[root root]# <userinput>cd /usr/local/src</userinput>
+[root src]# <userinput>wget http://de3.php.net/distributions/php-4.3.4.tar.gz</userinput>
+[root src]# <userinput>tar xfz php-4.3.4.tar.gz</userinput>
+[root src]# <userinput>cd php-4.3.4</userinput>
+[root php-4.3.4]# <userinput>cd php-4.3.4</userinput>
+[root php-4.3.4]# <userinput> ./configure --with-aolserver=/usr/local/aolserver/ --with-pgsql=/usr/local/pg74 --without-mysql</userinput>
+[root php-4.3.4]# <userinput>make install</userinput>
+      </screen>
+      <para>Once installed you can enable this by configuring your config file. Make sure your config file supports php (it should have a php section with it). Furthermore add <userinput>index.php</userinput> as the last element to your <computeroutput>directoryfile</computeroutput> directive.</para>
+    </sect1>
+    <sect1 id="install-squirrelmail">
+      <authorblurb>
+        <para>By <ulink url="mailto:openacs@sussdorff.de">Malte Sussdorff</ulink></para>
+      </authorblurb>
+      
+      <title>Install Squirrelmail for use as a webmail system for OpenACS</title>
+      <para>This section is work in progress. It will detail how you can install Squirrelmail as a webmail frontend for OpenACS, thereby neglecting the need to have a seperate webmail package within OpenACS</para>
+      <screen>[service0 service0]# <userinput>cd www</userinput>
+[service0 www]# <userinput>wget http://cesnet.dl.sourceforge.net/sourceforge/squirrelmail/squirrelmail-1.4.2.tar.gz</userinput>
+[service0 www]# <userinput>tar xfz squirrelmail-1.4.2.tar.gz</userinput>
+[service0 www]# <userinput>mv squirrelmail-1.4.2 mail</userinput>
+[service0 www]# <userinput>cd mail/config</userinput>
+[service0 www]# <userinput>./conf.pl</userinput>
+      </screen>
+      <para>Now you are about to configure Squirrelmail. The configuration heavily depends on your setup, so no instructions are given here.</para>
+    </sect1>
   </appendix>
 
