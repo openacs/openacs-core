@@ -847,3 +847,16 @@ aa_register_case -cats {smoke api} util__age_pretty {
     aa_log "100 years - we know it's wrong because of Tcl library limitations: [util::age_pretty -timestamp_ansi "1904-01-01 12:00:00" -sysdate_ansi "2004-01-01 12:00:00"]"
 }
 
+aa_register_case -cats {api} \
+    -bugs 1450 \
+    acs_tcl__process_enhanced_correctly {
+       
+	Process sample text correctly
+	@author Nima Mazloumi
+    } {
+	
+	set string_with_img {<img src="http://test.test/foo.png">}
+	aa_log "Original string is $string_with_img"
+	set html_version [ad_enhanced_text_to_html $string_with_img]
+	aa_true "new: $html_version should be the same" [string equal $html_version $string_with_img] 
+}
