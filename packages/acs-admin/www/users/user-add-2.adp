@@ -12,7 +12,8 @@ Edit the message below and hit "Send Email" to
 notify this user.
 
 <p>
-<form method=POST action="user-add-3">
+<form method="post" action="user-add-3">
+<input type="hidden" name="referer" value="@referer@"></input>
 @export_vars@
 Message:
 
@@ -37,7 +38,7 @@ Thank you,
 
 <center>
 
-<input type=submit value="Send Email">
+<input type="submit" value="Send Email">
 
 </center>
 

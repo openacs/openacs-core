@@ -9,6 +9,7 @@
 
 <form action=user-add-2 method=post>
 @export_vars@
+<input type="hidden" name="referer" value="@referer@"></input>
 <table>
 <tr><td>Email:</td><td><input type=text name=email size=20 maxlength=40></td></tr>
 <tr><td>Full Name:</td><td><input type=text name=first_names size=25 maxlength=40> <input type=text name=last_name size=25 maxlength=40></td></tr>
