@@ -1,18 +1,36 @@
 <?xml version="1.0"?>
-<message_catalog package_key="acs-subsite" package_version="5.0d4" locale="da_DK" charset="ISO-8859-1">
+<message_catalog package_key="acs-subsite" package_version="5.0d6" locale="da_DK" charset="ISO-8859-1">
 
-  <msg key="About_You">Omkring dig</msg>
-  <msg key="Account_closed">&lt;p&gt;Din konto er i øjeblikket lukket.&lt;/p&gt; &lt;p&gt;Hvis du vil, kan vi &lt;a href=&quot;%restore_url%&quot;&gt;genåbne kontoen&lt;/a&gt;.&lt;/p&gt; </msg>
-  <msg key="Answer">Svar:</msg>
+  <msg key="About_You">Om dig</msg>
+  <msg key="Account_close_confirm_no_label">Nej tak, vend tilbage til %pvt_home_name% </msg>
+  <msg key="Account_close_confirm_yes_label">Ja tak, luk venligst min konto</msg>
+  <msg key="Account_closed">&lt;p&gt;Din konto er lukket i øjeblikket.&lt;/p&gt; &lt;p&gt;Hvis du ønsker, kan &lt;a href=&quot;%restore_url%&quot;&gt;kontoen genåbnes&lt;/a&gt;.&lt;/p&gt; </msg>
+  <msg key="Account_closed_workspace_msg">&lt;p&gt; &lt;font color=&quot;red&quot;&gt; &lt;b&gt;Din konto er lukket for øjeblikket.&lt;/b&gt; &lt;/font&gt; &lt;a href=&quot;%login_url%&quot;&gt;Log ind&lt;/a&gt; igen for at finde ud af hvad du kan gøre ved det.&lt;/p&gt;</msg>
+  <msg key="Account_reopened_message">Din konto på %system_name% er blevet genåbnet. Velkommen tilbage.</msg>
+  <msg key="Account_reopened_title">Konto genåbnet</msg>
+  <msg key="Add_new_app">Tilføj nyt modul</msg>
+  <msg key="Admin">Admin</msg>
+  <msg key="Administer_subsite">Administration af %subsite_name%</msg>
+  <msg key="Answer">Svar</msg>
+  <msg key="Applications">Moduler</msg>
+  <msg key="Approve">Godkend</msg>
   <msg key="at">på</msg>
-  <msg key="Bad_Password">Dårlig adgangskode</msg>
-  <msg key="Basic_Information">Staminformation</msg>
-  <msg key="cannot_retrieve_password">Der er ikke understøttet afhentning af adgangskoden hos den lokale autoritet.</msg>
-  <msg key="Change_my_Password">Ændr min adgangskode</msg>
+  <msg key="Bad_Password">Forkert Adgangskode</msg>
+  <msg key="Ban">Forbyd</msg>
+  <msg key="Basic_Information">Baggrundsinfo</msg>
+  <msg key="cannot_retrieve_password">Gendannelse af adgangskoden er ikke understøttet af det lokale system.</msg>
+  <msg key="Cannot_see_memb_list">Visning af medlemslisten er ikke tilladt</msg>
+  <msg key="Change_locale_label">Ret foretrukket sprog</msg>
+  <msg key="Change_my_Password">Ret min adgangskode</msg>
+  <msg key="Change_pass_email_por">Ret adgangskode, E-mail, portræt</msg>
   <msg key="Check_Your_Inbox">Tjek din indbakke</msg>
   <msg key="Children">Børn</msg>
+  <msg key="Close_account_explanation">&lt;p&gt;Bekræft venligst, at du ønsker at lukke din konto hos %system_name%.&lt;/p&gt; &lt;p&gt;Hvis du lukker din konto, vil vi ikke længere sende dig Email ifm. nye indlæg i diverse fora, ligesom du ikke længer vil figurere på medlemslisten for %system_name%. Dine bidrag til websamfundet vil dog blive bevaret, da de er en del af fællesskabets historie.&lt;/p&gt; &lt;p&gt;Bemærk, at du altid kan genåbne din konto på et senere tidspunkt ved simpelthen at logge ind igen.&lt;/p&gt;</msg>
   <msg key="Close_your_account">Luk din konto</msg>
-  <msg key="Confirm">Bekræft:</msg>
+  <msg key="Communities">Samfund</msg>
+  <msg key="communities">samfund</msg>
+  <msg key="community">samfund</msg>
+  <msg key="Confirm">Bekræft</msg>
   <msg key="Current_Password">Nuværende adgangskode:</msg>
   <msg key="Customize_Question">Tilpas spørgsmål</msg>
   <msg key="Direct_Permissions">Direkte rettigheder</msg>
