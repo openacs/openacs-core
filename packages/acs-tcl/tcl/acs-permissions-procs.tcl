@@ -1,58 +1,11 @@
 ad_library {
+
     Tcl procs for the acs permissioning system.
 
     @author rhs@mit.edu
     @creation-date 2000-08-17
-    @cvs-id $Id$
-}
+    @version $Id$
 
-ad_proc -deprecated ad_permission_grant {
-    user_id
-    object_id
-    privilege
-} {
-    Grant a permission
-
-    @author ben@openforce
-} {
-    permission::grant -party_id $user_id -object_id $object_id -privilege $privilege
-}
-
-ad_proc -deprecated ad_permission_revoke {
-    user_id
-    object_id
-    privilege
-} {
-    Revoke a permission
-
-    @author ben@openforce
-} {
-    permission::revoke -party_id $user_id -object_id $object_id -privilege $privilege
-}
-
-ad_proc -deprecated ad_permission_p {
-    {-user_id ""}
-    object_id
-    privilege
-} {
-    return [permission::permission_p -party_id $user_id -object_id $object_id -privilege $privilege]
-}
-
-ad_proc -deprecated ad_require_permission {
-  object_id
-  privilege
-} {
-    permission::require_permission -object_id $object_id -privilege $privilege
-}
-
-ad_proc -private ad_admin_filter {} {
-    permission::require_permission -object_id [ad_conn object_id] -privilege "admin"
-    return filter_ok
-}
-
-ad_proc -private ad_user_filter {} {
-    permission::require_permission -object_id [ad_conn object_id] -privilege "read"
-    return filter_ok
 }
 
 namespace eval permission {
@@ -120,6 +73,14 @@ namespace eval permission {
         }
     }
 
+    ad_proc -public inherit_p {
+        {-object_id:required}
+    } {
+        does this object inherit permissions
+    } {
+        return [db_string select_inherit_p {} -default 0]
+    }
+
     ad_proc -public toggle_inherit {
         {-object_id:required}
     } {
@@ -144,4 +105,53 @@ namespace eval permission {
         db_dml set_not_inherit {}
     }
 
+}
+
+ad_proc -deprecated ad_permission_grant {
+    user_id
+    object_id
+    privilege
+} {
+    Grant a permission
+
+    @author ben@openforce
+} {
+    permission::grant -party_id $user_id -object_id $object_id -privilege $privilege
+}
+
+ad_proc -deprecated ad_permission_revoke {
+    user_id
+    object_id
+    privilege
+} {
+    Revoke a permission
+
+    @author ben@openforce
+} {
+    permission::revoke -party_id $user_id -object_id $object_id -privilege $privilege
+}
+
+ad_proc -deprecated ad_permission_p {
+    {-user_id ""}
+    object_id
+    privilege
+} {
+    return [permission::permission_p -party_id $user_id -object_id $object_id -privilege $privilege]
+}
+
+ad_proc -deprecated ad_require_permission {
+  object_id
+  privilege
+} {
+    permission::require_permission -object_id $object_id -privilege $privilege
+}
+
+ad_proc -private ad_admin_filter {} {
+    permission::require_permission -object_id [ad_conn object_id] -privilege "admin"
+    return filter_ok
+}
+
+ad_proc -private ad_user_filter {} {
+    permission::require_permission -object_id [ad_conn object_id] -privilege "read"
+    return filter_ok
 }
