@@ -213,7 +213,8 @@ ad_proc -private db_getrow { db selection } {
 }
 
 proc_doc db_string { statement_name sql args } {
-
+    Usage: <b>db_string</b> <i>statement-name sql</i> [ <tt>-default</tt> <i>default</i> ] [ <tt>-bind</tt> <i>bind_set_id</i> | <tt>-bind</tt> <i>bind_value_list</i> ]
+  
     Returns the first column of the result of the SQL query $sql.
     If the query doesn't return a row, returns $default (or raises an error if no $default is provided).
 
@@ -237,9 +238,11 @@ proc_doc db_string { statement_name sql args } {
 }
 
 proc_doc db_list { statement_name sql args } {
-
-    Returns a list containing the first column of each row returned by the SQL query $sql.
-
+    Usage: <b>db_list</b> <i>statement-name sql</i> [ <tt>-bind</tt> <i>bind_set_id</i> | <tt>-bind</tt> <i>bind_value_list</i> ]
+    
+    Returns a Tcl list of the values in the first column of the result of SQL query <tt>sql</tt>. 
+    If <tt>sql</tt> doesn't return any rows, returns an empty list. Analogous to <tt>database_to_tcl_list</tt>.
+	
 } {
     ad_arg_parser { bind } $args
 
@@ -258,8 +261,12 @@ proc_doc db_list { statement_name sql args } {
 }
 
 proc_doc db_list_of_lists { statement_name sql args } {
+    Usage: <b>db_list_of_lists</b> <i>statement-name sql</i> [ <tt>-bind</tt> <i>bind_set_id</i> | <tt>-bind</tt> <i>bind_value_list</i> ]
 
-    Returns a list containing lists of the values in each column of each row returned by the SQL query $sql.
+    Returns a Tcl list, each element of which is a list of all column 
+    values in a row of the result of the SQL query<tt>sql</tt>. If 
+    <tt>sql</tt> doesn't return any rows, returns an empty list. 
+    Analogous to <tt>database_to_tcl_list_list</tt>.
 
 } {
     ad_arg_parser { bind } $args
@@ -289,12 +296,14 @@ ad_proc -public db_list_of_ns_sets {
     sql
     {args ""}
 } {
+    Usage: <b>db_list_of_ns_sets</b> <i>statement-name sql</i> [ <tt>-bind</tt> <i>bind_set_id</i> | <tt>-bind</tt> <i>bind_value_list</i> ]
+
     Returns a list of ns_sets with the values of each column of each row
-    returned byt he sql query specified.
+    returned by the sql query specified.
 
     @param statement_name The name of the query.
     @param sql The SQL to be executed.
-    @param args Any additional arguments, such as a 'if_no_rows'
+    @param args Any additional arguments.
 
     @return list of ns_sets, one per each row return by the SQL query
 } {
@@ -315,9 +324,19 @@ ad_proc -public db_list_of_ns_sets {
 }
 
 proc_doc db_foreach { statement_name sql args } {
-    Usage: db_foreach statement_name sql [-bind ns_set | list of bind variables] code_block [if_no_rows if_no_rows_code_block]
+    Usage: 
+    <pre>
+    <b><i>db_foreach</i></b> <em><i>statement-name sql</i></em> [ -bind <em><i>bind_set_id</i></em> | -bind <em><i>bind_value_list</i></em> ] \
+        [ -column_array <em><i>array_name</i></em> | -column_set <em><i>set_name</i></em> ] \
+	    <em><i>code_block</i></em> [ if_no_rows <em><i>if_no_rows_block ]</i></em>
 
-    Performs the SQL query $sql, executing code_block once for each row with variables set to column values.
+    </pre>
+
+    Performs the SQL query <em><i><tt>sql</tt></i></em>, executing
+    <em><i><tt>code_block</tt></i></em> once for each row with variables set to
+    column values (or a set or array populated if <tt>-column_array</tt> or
+    <tt>column_set</tt> is specified). If the query returns no rows, executes
+    <em><i><tt>if_no_rows_block</tt></i></em> (if provided). </p>
 
     <p>Example:
 
@@ -425,7 +444,16 @@ ad_proc -public db_multirow {
     var_name
     statement_name
     sql
-    args } {
+    args 
+} {
+   Usage:
+    <pre>
+    <b><i>
+    db_multirow</i></b> [ -local ] [ -append ] [ -extend <em><i>column_list</i></em> ] \
+        <em><i>var-name statement-name sql</i></em> [ -bind <em><i>bind_set_id</i></em> | -bind <em><i>bind_value_list</i></em> ] \
+	<em><i>code_block</i></em> [ if_no_rows <em><i>if_no_rows_block ]</i></em>
+
+    </pre>
 
     Performs the SQL query <code>sql</code>, saving results in variables
     of the form
@@ -621,8 +649,17 @@ Columns in this query: [join [lsort -ascii $local_columns] ", "]" "" "ACS_MULTIR
 
 
 ad_proc db_0or1row { statement_name sql args } { 
-
-    Performs the SQL query $sql, setting variables to column values. Returns 1 if a row is returned, or 0 if no row is returned.
+    Usage: 
+    <pre>
+    <b><i>
+    db_0or1row</i></b> <i>statement-name sql</i> [ -bind <i>bind_set_id</i> | -bind <i>bind_value_list</i> ] \
+        [ -column_array <i>array_name</i> | -column_set <i>set_name</i> ]
+	
+    </pre>
+    Performs the SQL query sql. If a row is returned, sets variables 
+    to column values (or a set or array populated if -column_array 
+    or column_set is specified) and returns 1. If no rows are returned, 
+    returns 0. If more than one row is returned, throws an error.
 
 } {
     ad_arg_parser { bind column_array column_set } $args
@@ -668,8 +705,17 @@ ad_proc db_0or1row { statement_name sql args } {
 }
 
 ad_proc db_1row { args } {
-
-    Performs the SQL query $sql, setting variables to column values. Raises an error if no rows are returned.
+    Usage: 
+    <pre>
+    <b><i>
+    db_1row</i></b> <i>statement-name sql</i> [ -bind <i>bind_set_id</i> | -bind <i>bind_value_list</i> ] \
+        [ -column_array <i>array_name</i> | -column_set <i>set_name</i> ]
+	
+    </pre>
+    Performs the SQL query sql. If a row is returned, sets variables 
+    to column values (or a set or array populated if -column_array 
+    or column_set is specified). If no rows are returned, 
+    throws an error.
 
 } {
     if { ![uplevel db_0or1row $args] } {
@@ -679,14 +725,16 @@ ad_proc db_1row { args } {
 
 
 ad_proc db_transaction { transaction_code args } {
+    Usage: <b><i>db_transaction</i></b> <i>code_block</i> [ on_error { <i>error_code_block</i> } ]
+    
     Executes transaction_code with transactional semantics.  This means that either all of the database commands
     within transaction_code are committed to the database or none of them are.  Multiple <code>db_transaction</code>s may be
     nested (end transaction is transparently ns_db dml'ed when the outermost transaction completes).<p>
 
-    To handle errors, use <code>db_transaction {transaction_code} on_error {error_code}</code>.  Any error generated in 
-    <code>transaction_code</code> will be caught automatically and process control will transfer to <code>error_code</code>
+    To handle errors, use <code>db_transaction {transaction_code} on_error {error_code_block}</code>.  Any error generated in 
+    <code>transaction_code</code> will be caught automatically and process control will transfer to <code>error_code_block</code>
     with a variable <code>errmsg</code> set.  The error_code block can then clean up after the error, such as presenting a usable
-    error message to the user.  Following the execution of <code>error_code</code> the transaction will be aborted.
+    error message to the user.  Following the execution of <code>error_code_block</code> the transaction will be aborted.
     If you want to explicity abort the transaction, call <code>db_abort_transaction</code>
     from within the transaction_code block or the error_code block.<p>
 
@@ -715,7 +763,7 @@ ad_proc db_transaction { transaction_code args } {
 
     global db_state 
     
-    set syn_err "db_transaction: Invalid arguments. Use db_transaction { code } \[on_error { error_code }\] "
+    set syn_err "db_transaction: Invalid arguments. Use db_transaction { code } \[on_error { error_code_block }\] "
     set arg_c [llength $args]
     
     if { $arg_c != 0 && $arg_c != 2 } {
@@ -872,7 +920,9 @@ ad_proc db_transaction { transaction_code args } {
 
 ad_proc db_abort_transaction {} { 
     
-    Aborts a transaction. 
+    Aborts all levels of a transaction. That is if this is called within 
+    several nested transactions, all of them are terminated. Use this 
+    instead of db_dml "abort" "abort transaction".
 } {
     global db_state
     db_with_handle db {
