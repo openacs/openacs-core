@@ -56,7 +56,7 @@ ad_proc -public template::widget::textarea { element_reference tag_attributes } 
 
   if { [info exists element(value)] } {
     # As per scottwseago's request
-    append output [ns_quotehtml $element(value)]
+    append output [ad_quotehtml $element(value)]
   } 
 
   append output "</textarea>"
