@@ -916,6 +916,9 @@ ad_proc -public template::multirow {
 
             # Replace the row in the multirow with the row from the copy with the rownum according to the sort
             array set row [array get copy:$org_rownum]
+
+            # Replace the 'rownum' column
+            set row(rownum) $i
         }
         
         # Multirow length may have changed if you said -unique
