@@ -41,7 +41,6 @@ in that directory for details.</description>
             <file type="data_model" db_type="oracle" path="sql/oracle/ad-locales.sql"/>
             <file type="data_model" db_type="oracle" path="sql/oracle/message-catalog-drop.sql"/>
             <file type="data_model" db_type="oracle" path="sql/oracle/message-catalog.sql"/>
-            <file type="data_model_upgrade" db_type="oracle" path="sql/oracle/upgrade/upgrade-4.1-4.7.sql"/>
             <file type="data_model_upgrade" db_type="oracle" path="sql/oracle/upgrade/upgrade-4.1-4.7d2.sql"/>
             <file type="data_model_upgrade" db_type="oracle" path="sql/oracle/upgrade/upgrade-4.7d2-4.7d3.sql"/>
             <file type="data_model_create" db_type="postgresql" path="sql/postgresql/acs-lang-create.sql"/>
@@ -50,11 +49,10 @@ in that directory for details.</description>
             <file type="data_model" db_type="postgresql" path="sql/postgresql/message-catalog-drop.sql"/>
             <file type="data_model" db_type="postgresql" path="sql/postgresql/message-catalog.sql"/>
             <file type="data_model_upgrade" db_type="postgresql" path="sql/postgresql/upgrade/upgrade-4.1-4.7d2.sql"/>
-            <file type="tcl_procs" path="tcl/acs-lang-test-procs.tcl"/>
-            <file type="tcl_init" path="tcl/lang-catalog-init.tcl"/>
+            <file type="data_model_upgrade" db_type="postgresql" path="sql/postgresql/upgrade/upgrade-4.7d2-4.7d3.sql"/>
+            <file type="tcl_init" path="tcl/acs-lang-init.tcl"/>
             <file type="tcl_procs" path="tcl/lang-catalog-procs.tcl"/>
             <file type="query_file" path="tcl/lang-catalog-procs.xql"/>
-            <file type="tcl_init" path="tcl/lang-message-init.tcl"/>
             <file type="query_file" db_type="oracle" path="tcl/lang-message-procs-oracle.xql"/>
             <file type="query_file" db_type="postgresql" path="tcl/lang-message-procs-postgresql.xql"/>
             <file type="tcl_procs" path="tcl/lang-message-procs.tcl"/>
