@@ -127,10 +127,6 @@ for { set __i 0 } { $__i < [expr $high - $low +1] } { incr __i } {
     set txt_summary [acs_sc_call FtsEngineDriver summary [list $q $txt] $driver]
     set url_one [acs_sc_call FtsContentProvider url [list $object_id] $object_type]
 
-    # Replace the "index" with ETP as this is not needed for accessing the page
-    if {[string equal $object_type "etp_page_revision"]} {
-	set url_one [string trimright $url_one "index"]
-    }
     template::multirow append searchresult $title_summary $txt_summary $url_one
 }
 
