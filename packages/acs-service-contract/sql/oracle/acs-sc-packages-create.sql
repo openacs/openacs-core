@@ -76,7 +76,7 @@ as
        impl_name		acs_sc_impls.impl_name%TYPE
    );
 
-   /* not sure if this should get folded into the impl package or not*/
+   /* Next 2 functions are deprecated but left here for backwards compatability */
 
    function new_alias (
        impl_contract_name	acs_sc_contracts.contract_name%TYPE,
@@ -94,6 +94,26 @@ as
    ) return acs_sc_impls.impl_id%TYPE;
 
 end acs_sc_impl;
+/
+show error
+
+create or replace package acs_sc_impl_alias
+as
+   function new (
+       impl_contract_name	acs_sc_contracts.contract_name%TYPE,
+       impl_name		acs_sc_impls.impl_name%TYPE,
+       impl_operation_name	acs_sc_operations.operation_name%TYPE,
+       impl_alias		acs_sc_impl_aliases.impl_alias%TYPE,
+       impl_pl			acs_sc_impl_aliases.impl_pl%TYPE
+   ) return acs_sc_impl_aliases.impl_id%TYPE;
+
+   function delete (
+       impl_contract_name	acs_sc_contracts.contract_name%TYPE,
+       impl_name		acs_sc_impls.impl_name%TYPE,
+       impl_operation_name	acs_sc_operations.operation_name%TYPE
+   ) return acs_sc_impls.impl_id%TYPE;
+
+end acs_sc_impl_alias;
 /
 show error
 
@@ -381,7 +401,7 @@ as
    end delete;
 
 
-   /* not sure if this should get folded into the impl package */
+   /* next 2 functions are deprecated. */
 
   function new_alias (
        impl_contract_name	acs_sc_contracts.contract_name%TYPE,
@@ -393,32 +413,87 @@ as
    is
        v_impl_id		acs_sc_impls.impl_id%TYPE;
    begin
+	-- FUNCTION DEPRECATED. USE acs_sc_impl_alias.new
+	dbms_output.put_line('acs_sc_impl.new_alias DEPRECATED. Use acs_sc_impl_alias.new');
 
-       v_impl_id := acs_sc_impl.get_id(impl_contract_name,impl_name);
+	v_impl_id := acs_sc_impl_alias.new(
+		impl_contract_name,
+		impl_name,
+		impl_operation_name,
+		impl_alias,
+		impl_pl
+	);
 
-       insert into acs_sc_impl_aliases (
-        impl_id,
-	impl_name,
-	impl_contract_name,
-	impl_operation_name,
-	impl_alias,
-	impl_pl
-       ) values (
-        v_impl_id,
-	impl_name,
-	impl_contract_name,
-	impl_operation_name,
-	impl_alias,
-	impl_pl
-       );
-
-       return v_impl_id;
+	return v_impl_id;
 
    end new_alias;
 
    function delete_alias (
        impl_contract_name	acs_sc_contracts.contract_name%TYPE,
        impl_name		acs_sc_impls.impl_name%TYPE,
+       impl_operation_name	acs_sc_operations.operation_name%TYPE
+   ) return acs_sc_impls.impl_id%TYPE
+   is
+       v_impl_id		acs_sc_impls.impl_id%TYPE;
+   begin
+	-- FUNCTION DEPRECATED. USE acs_sc_impl_alias.delete
+	dbms_output.put_line('acs_sc_impl.delete_alias DEPRECATED. Use acs_sc_impl_alias.delete');
+
+	v_impl_id := acs_sc_impl_alias.delete(
+		impl_contract_name,
+		impl_name,
+		impl_operation_name
+	);
+
+       return v_impl_id;
+
+   end delete_alias;
+
+end acs_sc_impl;
+/
+show errors
+
+
+
+create or replace package body acs_sc_impl_alias
+as
+
+  function new (
+       impl_contract_name	acs_sc_contracts.contract_name%TYPE,
+       impl_name			acs_sc_impls.impl_name%TYPE,
+       impl_operation_name	acs_sc_operations.operation_name%TYPE,
+       impl_alias			acs_sc_impl_aliases.impl_alias%TYPE,
+       impl_pl				acs_sc_impl_aliases.impl_pl%TYPE
+   ) return acs_sc_impl_aliases.impl_id%TYPE
+   is
+       v_impl_id		acs_sc_impls.impl_id%TYPE;
+   begin
+
+       v_impl_id := acs_sc_impl.get_id(impl_contract_name,impl_name);
+
+       insert into acs_sc_impl_aliases (
+        impl_id,
+		impl_name,
+		impl_contract_name,
+		impl_operation_name,
+		impl_alias,
+		impl_pl
+       ) values (
+        v_impl_id,
+		impl_name,
+		impl_contract_name,
+		impl_operation_name,
+		impl_alias,
+		impl_pl
+       );
+
+       return v_impl_id;
+
+   end new;
+
+   function delete (
+       impl_contract_name	acs_sc_contracts.contract_name%TYPE,
+       impl_name			acs_sc_impls.impl_name%TYPE,
        impl_operation_name	acs_sc_operations.operation_name%TYPE
    ) return acs_sc_impls.impl_id%TYPE
    is
@@ -433,13 +508,11 @@ as
 
        return v_impl_id;
 
-   end delete_alias;
+   end delete;
 
-end acs_sc_impl;
+end acs_sc_impl_alias;
 /
 show errors
-
-
 
 create or replace package body acs_sc_binding
 as
@@ -535,22 +608,17 @@ as
    end delete;
 
    function exists_p (
-       contract_name		acs_sc_contracts.contract_name%TYPE,
-       impl_name		acs_sc_impls.impl_name%TYPE
+       contract_name        acs_sc_contracts.contract_name%TYPE,
+       impl_name            acs_sc_impls.impl_name%TYPE
    ) return integer
    is
-       v_contract_id		acs_sc_contracts.contract_id%TYPE;
-       v_impl_id		acs_sc_impls.impl_id%TYPE;
-       v_exists_p		integer;
+       v_exists_p       integer;
    begin
-       v_contract_id := acs_sc_contract.get_id(contract_name);
-       v_impl_id := acs_sc_impl.get_id(contract_name,impl_name);
-
        select decode(count(*),0, 0, 1) into v_exists_p
-          from acs_sc_bindings
-	  where contract_id = v_contract_id
-	  and impl_id = v_impl_id;
-	
+       from acs_sc_bindings
+       where contract_id = acs_sc_contract.get_id(contract_name)
+       and impl_id = acs_sc_impl.get_id(contract_name,impl_name);
+    
        return v_exists_p;
    end exists_p;
 
