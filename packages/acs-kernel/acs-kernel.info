@@ -155,7 +155,7 @@
         <parameters>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="RestrictErrorsToAdminsP"  default="1" description="Whether we show errors to adminstrators only"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="HomeURL"  default="/pvt/home" description="the URL of the workspace link" section_name="system-information"/>
-            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="HomeName"  default="Your Workspace" description="the name of the workspace link" section_name="system-information"/>
+            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="HomeName"  default="Your Account" description="the name of the workspace link" section_name="system-information"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="SystemName"  default="yourdomain Network" description="the name of your system" section_name="system-information"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="PublisherName"  default="Yourdomain Network, Inc." description="for legal pages, full corporate entity" section_name="system-information"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="SystemOwner"  default="webmaster@yourdomain.com" description="who signs the average user-visible pages" section_name="system-information"/>
