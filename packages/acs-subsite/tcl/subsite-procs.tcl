@@ -15,23 +15,17 @@ namespace eval subsite {
 }
 
 
-ad_proc -public acs_subsite_post_instantiation { 
-    package_id
+ad_proc -public acs_subsite_after_mount_callback { 
+    {-package_id:required}
+    {-node_id:required}
 } {
     This is the TCL proc that is called automatically by the APM
-    whenever a new instance of the subsites application is created.
+    whenever a new instance of the subsites application is mounted.
 
-    @author Michael Bryzek (mbryzek@arsdigita.com)
-    @creation-date 2000-03-05
-
-    @param package_id The package_id of the newly mounted subsites
-    application
-
+    @author Peter Marklund
 } {
     subsite::configure_if_necessary -package_id $package_id
 }
-
-
 
     ad_proc subsite::configure_if_necessary {
 	{-package_id ""}
@@ -216,7 +210,8 @@ ad_proc -public subsite::auto_mount_application {
     package_key
 } {
     Mounts a new instance of the application specified by package_key
-    beneath node_id
+    beneath node_id. This proc makes sure that the instance_name (the
+    name of the new node) is unique before invoking site_node::instantiate_and_mount.
     
     @author Michael Bryzek (mbryzek@arsdigita.com)
     @creation-date 2001-02-28
@@ -230,6 +225,8 @@ ad_proc -public subsite::auto_mount_application {
     mounted at this node + the package pretty name (e.g. Intranet News)
 
     @param node_id Defaults to [ad_conn node_id]
+
+    @see site_node::instantiate_and_mount
 
     @return The package id of the newly mounted package 
 
@@ -266,8 +263,10 @@ ad_proc -public subsite::auto_mount_application {
 	}
     }
 
-    return [site_node_mount_application -return package_id $node_id $instance_name $package_key $pretty_name]
-
+    return [site_node::instantiate_and_mount -parent_node_id $node_id \
+                                             -node_name $instance_name \
+                                             -package_name $pretty_name \
+                                             -package_key $package_key]
 }
 
 ad_proc subsite::util::sub_type_exists_p {

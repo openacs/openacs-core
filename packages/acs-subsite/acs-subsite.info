@@ -487,7 +487,6 @@
             <file type="content_page" path="www/pvt/alerts.adp"/>
             <file type="content_page" path="www/pvt/alerts.tcl"/>
             <file type="query_file" path="www/pvt/alerts.xql"/>
-            <file type="query_file" db_type="oracle" path="www/pvt/home-oracle.xql"/>
             <file type="content_page" path="www/pvt/home.adp"/>
             <file type="content_page" path="www/pvt/home.tcl"/>
             <file type="query_file" db_type="postgresql" path="www/pvt/home.xql"/>
@@ -613,6 +612,9 @@
             <file type="content_page" path="www/user/portrait/upload.adp"/>
             <file type="content_page" path="www/user/portrait/upload.tcl"/>
         </files>
+        <callbacks>
+            <callback type="after-mount" proc="acs_subsite_after_mount_callback" />
+        </callbacks>
         <parameters>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="RequireQuestionForPasswordResetP"  default="1" description="Do we require a question/answer pair to reset a users password?" section_name="user-login"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="DefaultMaster"  default="/www/default-master" description="Path to the default master page (skin) for acs-templating.  Extensions                                             .adp/.tcl are implied."/>
