@@ -560,10 +560,11 @@
         Provide working examples that highlight the various
         subsystems, tcl environment, OpenACS protocols, aolserver
         template and ns_* commands, OpenACS templating, sql queries,
-        db triggers, scheduling protocols etc
+        db triggers, scheduling protocols, how to use the page contract,
+        how to get the accessing user_id etc
       </para><itemizedlist>
       <listitem><para>
-        Show how to construct basic SQL queries using the db API 
+        Show how to construct basic SQL queries using the db API,
       </para><itemizedlist>
       <listitem><para>
         The life of an http request to a dynamic, templated page
@@ -577,8 +578,8 @@
         package development, by referring to developer resources.
       </para><itemizedlist>
       <listitem><para>
-        Use the ArsDigita problem sets as inspiration for a
-        PostgreSQLl equivalent tutorial about developing a new
+        Use the ArsDigita problem sets and "what Lars produced for ACS Java" as inspiration for a
+        PostgreSQL equivalent tutorial about developing a new
         OpenACS package including discussion of the significance of
         the package documentation templates
       </para><itemizedlist>
@@ -588,6 +589,106 @@
       <listitem><para>
         Note any deprecated tools and methods by linking to prior
         versions instead of describing them in current docs
+      </para></listitem>
+    </itemizedlist>
+  </sect2>
+  
+  <sect2 id="docs-developer-reqs" xreflabel="Developer Documentation Requirements">
+    <title>OpenACS Developer Documentation Requirements</title>
+    <para>
+      By the OpenACS Community. This section is a collection of
+      documentation requirements that have been expressed in the
+      OpenACS forums to 4th July 2003.
+    </para>    
+    <para>
+      OpenACS developer documentation should meet the following requirements. No
+      significance has been given to the order presented, topic breadth or depth here.
+    </para>
+    <itemizedlist>
+      <listitem><para>
+        list documenation assumptions, such as familiarity with
+        modifying OpenACS packages. All kernel docs are here etc.
+      </para><listitem>
+      <listitem><para>
+        This documenation should be written for ongoing use by
+        developers, not as a tutorial.
+      </para><listitem>
+      <listitem><para>
+        List of practical development and diagnostics tools and
+        methodologies.
+      </para><listitem>
+      <listitem><para>
+        List of OpenACS development resources, api-doc,
+        schema-browser, developer-support package etc.
+      </para><listitem>
+      <listitem><para>
+        Identify each OpenACS subsystem, explain why it is used
+        (instead of other choices). In the case of subsystems that
+        are developed outside of OpenACS such as tcl, include
+        external references to development and reference areas.
+      </para><listitem>
+      <listitem><para>
+        Show current engineering standards and indicate where
+        changes to the standards are in the works.
+      </para><listitem>
+      <listitem><para>
+        Sections should be dedicated to DotLRN standards as well, if
+        they are not available elsewhere.
+      </para><listitem>
+      <listitem><para>
+        Add overview diagrams showing the core parts of the
+        datamodel including an updated summary of Greenspun's
+        Chapter 4: Data Models and the Object System 
+      </para><listitem>
+      <listitem><para>
+        package design guidelines and development process templates
+        including planning, core functions, testing, usability, and
+        creating case studies
+      </para><listitem>
+      <listitem><para>
+        Standard package conventions, where to see "model" code, and
+        guidelines (or where to find them) for:
+        <itemizedlist>
+          <listitem><para>
+            programming tcl/sql
+          </para></listitem>
+          <listitem><para>
+            using the acs-api
+          </para></listitem>
+          <listitem><para>
+            ad_form
+          </para></listitem>
+          <listitem><para>
+            coding permissions 
+          </para></listitem>
+          <listitem><para>
+            OpenACS objects
+          </para></listitem>
+          <listitem><para>
+            scheduled procs
+          </para></listitem>
+          <listitem><para>
+            call backs
+          </para></listitem>
+          <listitem><para>
+            directory structure
+          </para></listitem>
+          <listitem><para>
+            user interface
+          </para></listitem>
+          <listitem><para>
+            widgets
+          </para></listitem>
+          <listitem><para>
+            package_name and type_extension_table
+          </para></listitem>
+          <listitem><para>
+            adding optional services, including search, general comments, attachments, notifications, workflow, CR and the new CR Tcl API
+          </para></listitem>
+        </itemizedlist>
+      </para><listitem>
+      <listitem><para>
+        Document kernel coding requirements, strategy and guidelines to help code changers make decisions that meet kernel designers' criteria
       </para></listitem>
     </itemizedlist>
   </sect2>
