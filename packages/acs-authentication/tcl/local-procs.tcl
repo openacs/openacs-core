@@ -107,24 +107,18 @@ ad_proc -private auth::local::authentication::Authenticate {
 } {
     array set auth_info [list]
 
-    # TODO: username = email parameter ...
-
+    # usernames are case insensitive
     set username [string tolower $username]
     
     set authority_id [auth::authority::local]
 
-    set account_exists_p [db_0or1row select_user_info {
-        select user_id
-        from   cc_users
-        where  username = :username
-        and    authority_id = :authority_id
-    }] 
-    
-    if { !$account_exists_p } {
-        set auth_info(auth_status) "no_account"
-        return [array get auth_info]
+
+    set user_id [acs_user::get_by_username -username $username]
+    if { [empty_string_p $user_id] } {
+        set result(auth_status) "no_account"
+        return [array get result]
     }
-    
+
     if { [ad_check_password $user_id $password] } {
         set auth_info(auth_status) "ok"
     } else {
@@ -133,7 +127,7 @@ ad_proc -private auth::local::authentication::Authenticate {
     }
 
     # We set 'external' account status to 'ok', because the 
-    # local account status will be checked anyways
+    # local account status will be checked anyways by the framework
     set auth_info(account_status) ok
 
     return [array get auth_info]
@@ -173,6 +167,7 @@ ad_proc -private auth::local::password::register_impl {} {
             RetrievePassword auth::local::password::RetrievePassword
             CanResetPassword auth::local::password::CanResetPassword
             ResetPassword auth::local::password::ResetPassword
+            GetParameters auth::local::password::GetParameters
         }
     }
     return [acs_sc::impl::new_from_spec -spec $spec]
@@ -219,21 +214,28 @@ ad_proc -private auth::local::password::ChangePassword {
     service contract for the local account implementation.
 } {
     array set result { 
-        successful_p 0
-        message {} 
+        password_status {}
+        password_message {} 
+    }
+
+    set user_id [acs_user::get_by_username -username $username]
+    if { [empty_string_p $user_id] } {
+        set result(password_status) "no_account"
+        return [array get result]
     }
     
     if { ![ad_check_password $user_id $old_password] } {
-        set result(message) "Old password is incorrect."
+        set result(password_status) "old_password_bad"
         return [array get result]
     }
-    if { [catch { ad_change_password $user_id $password_1 } errmsg] } {
-        ns_log Warning "Error changing local password: $errmsg"
-        set result(message) "We experienced an error changing your password."
+    if { [catch { ad_change_password $user_id $new_password } errmsg] } {
+        set result(password_status) "change_error"
+        global errorInfo
+        ns_log Error "Error changing local password for username $username, user_id $user_id: \n$errorInfo"
         return [array get result]
     }
 
-    set result(successful_p) 1
+    set result(password_status) "ok"
 
     return [array get result]
 }
@@ -245,9 +247,7 @@ ad_proc -private auth::local::password::RetrievePassword {
     Implements the RetrievePassword operation of the auth_password 
     service contract for the local account implementation.
 } {
-    set result(successful_p) 0
-    set result(message) "Cannot retrieve your password."
-
+    set result(password_status) "not_supported"
     return [array get result]
 }
 
@@ -258,15 +258,26 @@ ad_proc -private auth::local::password::ResetPassword {
     Implements the ResetPassword operation of the auth_password 
     service contract for the local account implementation.
 } {
-    set result(successful_p) 0
-    set result(message) {}
+    array set result { 
+        password_status {}
+        password_message {} 
+    }
 
-    # TODO: 
-    # What about security question/answer? Who should ask for those?
+    set user_id [acs_user::get_by_username -username $username]
+    if { [empty_string_p $user_id] } {
+        set result(password_status) "no_account"
+        return [array get result]
+    }
 
-    # Change the password
+    # Reset the password
     set password [ad_generate_random_string]
-    ad_change_password $user_id $password
+
+    if { [catch { ad_change_password $user_id $password } errmsg] } {
+        set result(password_status) "reset_error"
+        global errorInfo
+        ns_log Error "Error resetting local password for username $username, user_id $user_id: \n$errorInfo"
+        return [array get result]
+    }
 
     # We return the new passowrd here and let the OpenACS framework send the email with the new password
     set result(password) $password
@@ -274,6 +285,13 @@ ad_proc -private auth::local::password::ResetPassword {
     return [array get result]
 }
 
+ad_proc -private auth::local::password::GetParameters {} {
+    Implements the GetParameters operation of the auth_password
+    service contract for the local account implementation.
+} {
+    # No parameters
+    return [list]
+}
 
 
 #####

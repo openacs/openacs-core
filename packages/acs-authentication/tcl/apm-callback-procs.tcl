@@ -58,7 +58,10 @@ ad_proc -private auth::authentication::create_contract {} {
                     Validate this username/password combination, and return the result.
                     Valid auth_status codes are 'ok', 'no_account', 'bad_password', 'auth_error', 'failed_to_connect'. 
                     The last, 'failed_to_connect', is reserved for communications or implementation errors.
+                    auth_message is a human-readable explanation of what went wrong, may contain HTML. 
+                    Only checked if auth_status is not ok.
                     Valid account_status codes are 'ok' and 'closed'.
+                    account_message may be supplied regardless of account_status, and may contain HTML.
                 }
                 input {
                     username:string
@@ -84,11 +87,6 @@ ad_proc -private auth::authentication::create_contract {} {
     }
 
     acs_sc::contract::new_from_spec -spec $spec
-
-    # LARS:
-    # If we do the configurator package, this proc should register the parameters as well,
-    # and GetParameters should return parameter_set_id.
-    # Hm. But it'll be up to the specific implementation which parameters it takes ... yeah, above won't work.
 }
 
 ad_proc -private auth::authentication::delete_contract {} {
@@ -134,8 +132,8 @@ ad_proc -private auth::password::create_contract {} {
                     parameters:string,multiple
                 }
                 output {
-                    successful_p:boolean
-                    message:string
+                    password_status:string
+                    password_message:string
                 }
             }
             CanRetrievePassword {
@@ -162,8 +160,8 @@ ad_proc -private auth::password::create_contract {} {
                     parameters:string,multiple
                 }
                 output {
-                    successful_p:boolean
-                    message:string
+                    password_status:string
+                    password_message:string
                     password:string
                 }
             }
@@ -176,7 +174,7 @@ ad_proc -private auth::password::create_contract {} {
                     parameters:string,multiple
                 }
                 output {
-                    retrievable_p:boolean
+                    resettable_p:boolean
                 }
                 iscachable_p "t"
             }
@@ -192,8 +190,8 @@ ad_proc -private auth::password::create_contract {} {
                     parameters:string,multiple
                 }
                 output {
-                    successful_p:boolean
-                    message:string
+                    password_status:string
+                    password_message:string
                     password:string
                 }
             }
@@ -283,10 +281,6 @@ ad_proc -private auth::registration::create_contract {} {
     }
 
     acs_sc::contract::new_from_spec -spec $spec
-
-    # LARS:
-    # If we do the configurator package, this proc should register the parameters as well,
-    # and GetParameters should return parameter_set_id.
 }
 
 
