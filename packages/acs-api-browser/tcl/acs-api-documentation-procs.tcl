@@ -485,12 +485,12 @@ ad_proc -public api_proc_documentation {
 <dl>
 "
 
-	if { [info exists doc_elements(param)] } {
-		foreach param $doc_elements(param) {
-			if { [regexp {^([^ \t]+)[ \t](.+)$} $param "" name value] } {
-				set params($name) $value
-			}
-		}
+        if { [info exists doc_elements(param)] } {
+            foreach param $doc_elements(param) {
+                if { [regexp {^([^ \t\n]+)[ \t\n]+(.*)$} $param "" name value] } {
+                    set params($name) $value
+                }
+            }
 	}
 	
 	if { [llength $doc_elements(switches)] > 0 } {
