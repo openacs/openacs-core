@@ -30,13 +30,13 @@ ad_proc ::twt::dotlrn::add_term { server_url term_name start_month start_year en
 
 ad_proc ::twt::dotlrn::setup_terms { server_url } {
 
-    add_term $server_url "Fall" "9" "2003" "1" "2004"    
     add_term $server_url "Spring" "1" "2004" "7" "2004"
     add_term $server_url "Fall" "9" "2004" "1" "2005"    
+    add_term $server_url "Spring" "1" "2005" "7" "2005"
 }
 
 ad_proc ::twt::dotlrn::current_term_pretty_name {} {
-    return "Fall 2003/2004"
+    return "Spring 2004"
 }
 
 ad_proc ::twt::dotlrn::current_term_id {} {
