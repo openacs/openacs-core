@@ -77,7 +77,7 @@ The installer will automatically install the $acs_application(pretty_name)
 application after the basic OpenACS tookit has been installed.
 "
 
-    if { ![string equal $acs_application(home)] ""] } {
+    if { ![string equal $acs_application(home) ""] } {
         append body "<p>
 For more information about the $acs_application(pretty_name) application visit the
 <a href=\"$acs_application(home)\">$acs_application(pretty_name) home page</a>
