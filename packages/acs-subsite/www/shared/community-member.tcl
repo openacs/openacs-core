@@ -87,6 +87,8 @@ and a.rel_type = 'user_portrait_rel'"] {
     }
 }
 
+# Check if the users are allow to see the emails
+set allow_email_p [parameter::get_from_package_key -package_key acs-subsite -parameter ShowEmailP -default 1]
 
 if { $priv_email <= [ad_privacy_threshold] } {
     set show_email_p 1
@@ -95,6 +97,10 @@ if { $priv_email <= [ad_privacy_threshold] } {
     # guy doesn't want his email address shown, but we can still put out 
     # the home page
 }
+
+# The users table has a field where the user can especify to show his/her email
+# or not. It can be change in pvt/home if the parameter ShowEmailP is set to 1
+db_1row show_email_info { }
 
 set page_title "$first_names $last_name"
 set context [list "Community Member"]

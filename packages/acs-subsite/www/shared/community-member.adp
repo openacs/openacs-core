@@ -39,10 +39,14 @@
   <b>#acs-subsite.Name#:</b> @first_names@ @last_name@
 </p>
 
-<if @show_email_p@ true>
-  <p>
-    <b>#acs-subsite.E_mail#:</b> <a href="mailto:@email@">@email@</a>
-  </p>
+<if @allow_email_p@ true>
+	<if @show_email_p@ true>
+	  <p>
+	    <if @show_email@ true>
+	       <b>#acs-subsite.E_mail#:</b> <a href="mailto:@email@">@email@</a>
+	    </if>
+	  </p>
+	</if>
 </if>
 
 <if @url@ not nil>
