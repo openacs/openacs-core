@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<message_catalog package_key="acs-subsite" package_version="5.0d6" locale="ch_zh" charset="utf-8">
+<message_catalog package_key="acs-subsite" package_version="5.0.4" locale="ch_zh" charset="utf-8">
 
   <msg key="_or">，否则</msg>
   <msg key="A_member_of_the_system">%system_name%团体的会员</msg>
@@ -37,6 +37,7 @@
   <msg key="Children">子</msg>
   <msg key="Close_account_explanation">&lt;p&gt; 请确认您要关闭在%system_name%的帐户。 &lt;/p&gt; &lt;p&gt; 关闭帐户意味着我们将不再给你发邮件通知，也不会再为您显示%system_name%的会员列表。但是，您的资料作为团体历史记录的一部分将被保留下来。&lt;/p&gt; &lt;p&gt; 注意：您可以随时登陆，重新打开您的帐户。&lt;/p&gt;</msg>
   <msg key="Close_your_account">关闭帐户</msg>
+  <msg key="Closed_group">关闭组</msg>
   <msg key="Comment">评论</msg>
   <msg key="Communities">团体</msg>
   <msg key="communities">团体</msg>
@@ -45,6 +46,7 @@
   <msg key="Continue">继续</msg>
   <msg key="Country_Name">国家名</msg>
   <msg key="Create_new_community">创建新%pretty_name%</msg>
+  <msg key="Create_new_subsite">新建子网页</msg>
   <msg key="Current_Password">当前密码</msg>
   <msg key="Currently_invisible_msg">当前的在线状态为不可见。</msg>
   <msg key="Currently_visible_msg">当前的在线状态为可见。</msg>
@@ -95,14 +97,18 @@
   <msg key="ISO_Codes_not_loaded">ISO编码没有装载</msg>
   <msg key="Join_community">加入团体</msg>
   <msg key="Join_group_name">加入%group_name%</msg>
+  <msg key="Join_subsite">参加子网站</msg>
   <msg key="Join_this_community">加入这个团体</msg>
+  <msg key="Join_this_subsite">参加此子网站</msg>
   <msg key="Keyword">关键字</msg>
   <msg key="Last_name">姓</msg>
   <msg key="later">稍后。</msg>
   <msg key="Leave_community">离开团体</msg>
+  <msg key="Leave_subsite">离开子网页</msg>
   <msg key="Leave_this_community">离开团体</msg>
+  <msg key="Leave_this_subsite">离开这个子网页</msg>
   <msg key="lGo_back_without_adding">不增加任何用户后退</msg>
-  <msg key="Log_In">登陆</msg>
+  <msg key="Log_In">登录</msg>
   <msg key="log_in">登陆</msg>
   <msg key="Log_in_to_system">登陆到%system_name%</msg>
   <msg key="logging_back_in">重新登陆</msg>
@@ -179,7 +185,7 @@
   <msg key="Mem_list_not_allowed">对不起，您不能浏览会员列表。</msg>
   <msg key="Member_State">会员状态</msg>
   <msg key="Members">会员</msg>
-  <msg key="Name">姓名</msg>
+  <msg key="Name">名称</msg>
   <msg key="New_Password">新密码</msg>
   <msg key="No_applications">没有申请</msg>
   <msg key="No_ISO_Codes">没有ISO编码</msg>
@@ -207,12 +213,14 @@
   <msg key="Question">问题</msg>
   <msg key="Re_enable">重新使能</msg>
   <msg key="Recover_Password">恢复密码</msg>
+  <msg key="Refresh_login">更新登陆</msg>
   <msg key="Register">注册</msg>
   <msg key="Registration_Approval_Notice">&lt;p&gt; 感谢您注册%system_name%. 管理员已经看到您的申请. &lt;/p&gt; &lt;p&gt; 当您收到申请被批准的email，就可以使用%system_name%。 &lt;/p&gt; </msg>
   <msg key="Reject">拒绝</msg>
-  <msg key="Remember_my_login">在此计算机上记住我的登陆</msg>
+  <msg key="Remember_my_login">在此计算机上记住我的登录</msg>
   <msg key="Remove">移除</msg>
   <msg key="Req_membership_comm">申请为此团体的会员</msg>
+  <msg key="Req_membership_subs">申请参加此子网站</msg>
   <msg key="Request_membership">申请为会员</msg>
   <msg key="return_to_application">返回申请</msg>
   <msg key="Revoke_Checked">撤消选中的</msg>
@@ -232,8 +240,12 @@
   <msg key="Subcommunities">子团体</msg>
   <msg key="subcommunities">子团体</msg>
   <msg key="subcommunity">子团体</msg>
+  <msg key="subsite">子网站</msg>
+  <msg key="Subsites">子网站</msg>
+  <msg key="subsites">子网站</msg>
   <msg key="Thank_you">谢谢！</msg>
   <msg key="The_ISO_codes_were_not">此服务器没有安装ISO编码。</msg>
+  <msg key="This_group_is_closed">该组诗关闭的。新的成员收到邀请后才能加入。</msg>
   <msg key="this_subsite">子网站</msg>
   <msg key="This_user_has_left_the">此用户已离开该团体。</msg>
   <msg key="To_log_in_visit_the">要登陆，访问</msg>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="acs-subsite" package_version="5.0d6" locale="pt_BR" charset="ISO-8859-1">
+<message_catalog package_key="acs-subsite" package_version="5.0.4" locale="pt_BR" charset="ISO-8859-1">
 
   <msg key="_or">, ou</msg>
   <msg key="A_member_of_the_system">Um membro da comunidade %system_name% desde</msg>
@@ -37,6 +37,7 @@
   <msg key="Children">Filhos</msg>
   <msg key="Close_account_explanation">Por favor, confirme se você deseja mesmo cancelar sua inscrição no sistema %system_name%.&lt;/p&gt;&lt;p&gt;O encerramento de sua inscrição significa que você não receberá mais notificações por correio eletrônico, nem aparecerá na lista dos membros deste sistema. Suas contribuições, contudo, serã opreservadas, pois são parte da história da nossa comunidade.&lt;/p&gt;&lt;p&gt;Não se esqueça: você pode se cadastrar novamente quando quiser.&lt;/p&gt;</msg>
   <msg key="Close_your_account">Feche sua conta</msg>
+  <msg key="Closed_group">Grupo Fechado</msg>
   <msg key="Comment">Comentário</msg>
   <msg key="Communities">Comunidades</msg>
   <msg key="communities">comunidades</msg>
@@ -45,6 +46,7 @@
   <msg key="Continue">Continuar</msg>
   <msg key="Country_Name">Nome do País</msg>
   <msg key="Create_new_community">Criar novo %pretty_name%</msg>
+  <msg key="Create_new_subsite">Criar novo subsite</msg>
   <msg key="Current_Password">Senha Atual:</msg>
   <msg key="Currently_invisible_msg">&lt;p&gt; Seu estado online está atualmente invisível aos outros usuários &lt;/p&gt;</msg>
   <msg key="Currently_visible_msg">&lt;p&gt; Seu estado online está atualmente visível aos outros usuários &lt;/p&gt;</msg>
@@ -95,12 +97,16 @@
   <msg key="ISO_Codes_not_loaded">Códigos ISO não carregados</msg>
   <msg key="Join_community">Aderir à comunidade</msg>
   <msg key="Join_group_name">Juntar-se a %group_name%</msg>
+  <msg key="Join_subsite">Aderir ao subsite</msg>
   <msg key="Join_this_community">Aderir a esta comunidade</msg>
+  <msg key="Join_this_subsite">Aderir a este subsite</msg>
   <msg key="Keyword">Palavra Chave</msg>
   <msg key="Last_name">Último nome</msg>
   <msg key="later">mais tarde.</msg>
   <msg key="Leave_community">Deixar comunidade</msg>
+  <msg key="Leave_subsite">Deixar o subsite</msg>
   <msg key="Leave_this_community">Deixar esta comunidade</msg>
+  <msg key="Leave_this_subsite">Deixar este subsite</msg>
   <msg key="lGo_back_without_adding">Voltar sem incluir usuários</msg>
   <msg key="Log_In">Log In</msg>
   <msg key="log_in">log in</msg>
@@ -232,6 +238,9 @@
   <msg key="Subcommunities">Subcomunidades</msg>
   <msg key="subcommunities">subcomunidades</msg>
   <msg key="subcommunity">subcomunidade</msg>
+  <msg key="subsite">subsite</msg>
+  <msg key="Subsites">Subsites</msg>
+  <msg key="subsites">subsites</msg>
   <msg key="Thank_you">Obrigado.</msg>
   <msg key="The_ISO_codes_were_not">Os códigos ISO não foram carregados neste servidor.</msg>
   <msg key="this_subsite">este subsite</msg>

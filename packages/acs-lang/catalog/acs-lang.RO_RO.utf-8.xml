@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<message_catalog package_key="acs-lang" package_version="5.0.1" locale="RO_RO" charset="utf-8">
+<message_catalog package_key="acs-lang" package_version="5.0.4" locale="RO_RO" charset="utf-8">
 
+  <msg key="available-in-this-language">Disponibil in Engleza</msg>
   <msg key="English">Engleză</msg>
   <msg key="French">Franceză</msg>
   <msg key="German">Germană</msg>

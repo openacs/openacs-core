@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="acs-subsite" package_version="5.0d6" locale="es_ES" charset="ISO-8859-1">
+<message_catalog package_key="acs-subsite" package_version="5.0.4" locale="es_ES" charset="ISO-8859-1">
 
   <msg key="A_member_of_the_system">Miembro de %system_name% desde</msg>
   <msg key="About_You">Mi información</msg>
@@ -88,9 +88,12 @@ Para cambiar su contraseña, visite %reset_password_url%</msg>
   <msg key="Grant">Otorgar</msg>
   <msg key="Grant_Permission">Autorizar</msg>
   <msg key="Home_page">Página web</msg>
+  <msg key="Information_Updated">Información Actualizada</msg>
   <msg key="Join_group_name">Unirse a %group_name%</msg>
   <msg key="Last_name">Apellido</msg>
   <msg key="Log_In">Ingresar</msg>
+  <msg key="Logout">Salir</msg>
+  <msg key="Logout_from_system">Salir de %system_name%</msg>
   <msg key="lt_Cannot_join_this_grou">No puede unirse a este grupo.</msg>
   <msg key="lt_first_names_last_name">%first_names% %last_name% (%email%) se registró como usuario de %system_url%</msg>
   <msg key="lt_Grant_Permission_on_n">Otorgar permiso en %name%</msg>
@@ -126,18 +129,25 @@ Para cambiar su contraseña, visite %reset_password_url%</msg>
   <msg key="Make_yourself_invisible_label">Volverse invisible</msg>
   <msg key="Make_yourself_visible_label">Volverse visible</msg>
   <msg key="Manage_your_notifications">Administrar notificaciones</msg>
+  <msg key="Members">Miembros</msg>
   <msg key="Name">Nombre y apellidos:</msg>
   <msg key="New_Password">Nueva contraseña:</msg>
   <msg key="no_portrait_title_message">su foto</msg>
   <msg key="none">ninguno</msg>
+  <msg key="optional">(opcional)</msg>
+  <msg key="Options">Opciones</msg>
   <msg key="Password">Contraseña:</msg>
   <msg key="Password_changed_body">Su información de ingreso en %system_name%: %account_id_label%: %account_id% Su contraseña para esta cuenta ha sido modificiada recientemente. Usted no necesita hacer nada, ésta es simplemente una notificación para proteger la seguridad de su cuenta. --------------- Usted puede cambiar su contraseña realizando los siguientes pasos: 1. Ingrese a %system_name% 2. Haga click en el link &quot;%pvt_home_name%&quot; 3. Escoja &quot;%password_update_link_text%&quot;</msg>
   <msg key="Password_changed_subject">Contraseña modificada</msg>
   <msg key="Permissions">Permisos</msg>
+  <msg key="permissions">permisos</msg>
   <msg key="Permissions_for_name">Permisos para %name%</msg>
+  <msg key="Portrait">Foto</msg>
   <msg key="Question">Pregunta:</msg>
   <msg key="Recover_Password">Recuperar Contraseña</msg>
   <msg key="Register">Registro</msg>
+  <msg key="Reject">Rechazar</msg>
+  <msg key="Remove">Eliminar</msg>
   <msg key="Revoke_Checked">Revocar</msg>
   <msg key="Screen_name">Alias</msg>
   <msg key="Show">Mostrar</msg>
@@ -146,9 +156,11 @@ Para cambiar su contraseña, visite %reset_password_url%</msg>
   <msg key="up_to_context_name">volver a %context_name%</msg>
   <msg key="Update">Actualizar</msg>
   <msg key="Update_Password">Actualizar contraseña</msg>
+  <msg key="upload">subir</msg>
   <msg key="upload_a_portrait">subir una foto</msg>
   <msg key="Username">Nombre de usuario</msg>
   <msg key="Whos_Online_link_label">Usuarios conectados en este momento</msg>
   <msg key="Whos_Online_title">Quién está conectado</msg>
+  <msg key="Yes_I_am_sure">Sí, estoy seguro</msg>
   <msg key="Your_Portrait">Su foto</msg>
 </message_catalog>

@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<message_catalog package_key="acs-kernel" package_version="5.0.0" locale="RO_RO" charset="utf-8">
+<message_catalog package_key="acs-kernel" package_version="5.0.4" locale="RO_RO" charset="utf-8">
 
   <msg key="authentication_authority">Autoritate</msg>
   <msg key="common_add">Adauga</msg>
+  <msg key="common_Administration">Administrare</msg>
   <msg key="common_apply">Aplică</msg>
   <msg key="common_cancel">Cancel</msg>
   <msg key="common_close">Închide</msg>

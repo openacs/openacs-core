@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="acs-templating" package_version="5.0d3" locale="pt_BR" charset="ISO-8859-1">
+<message_catalog package_key="acs-templating" package_version="5.0.4" locale="pt_BR" charset="ISO-8859-1">
 
   <msg key="Invalid_choice">Escolha inválida</msg>
   <msg key="Invalid_currency">Moeda corrente inválida</msg>

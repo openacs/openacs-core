@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="acs-subsite" package_version="5.0d6" locale="da_DK" charset="ISO-8859-1">
+<message_catalog package_key="acs-subsite" package_version="5.0.4" locale="da_DK" charset="ISO-8859-1">
 
   <msg key="_or">, eller </msg>
   <msg key="A_member_of_the_system">Medlem af %system_name% siden</msg>
@@ -8,7 +8,7 @@
   <msg key="Account_close_confirm_no_label">Nej, jeg vil tilbage til %pvt_home_name%</msg>
   <msg key="Account_close_confirm_yes_label">Ja, luk venligst min konto</msg>
   <msg key="Account_closed">&lt;p&gt;Din konto er i øjeblikket lukket.&lt;/p&gt; &lt;p&gt;Hvis du vil, kan vi &lt;a href=&quot;%restore_url%&quot;&gt;genåbne kontoen&lt;/a&gt;.&lt;/p&gt; </msg>
-  <msg key="Account_closed_workspace_msg">&lt;p&gt; &lt;font color=&quot;red&quot;&gt; &lt;b&gt;Din konto er pt. lukket.&lt;/b&gt; &lt;/font&gt; &lt;a href=&quot;%login_url%&quot;&gt;Log ind&lt;/a&gt; igen for at se hvad du kan gøre ved det.&lt;/p&gt;</msg>
+  <msg key="Account_closed_workspace_msg">&lt;p&gt; &lt;font color=&quot;red&quot;&gt;&lt;b&gt;Din konto er i øjeblikket lukket.&lt;/b&gt;&lt;/font&gt; &lt;a href=&quot;%login_url%&quot;&gt;Log ind&lt;/a&gt; igen for at se hvad du kan gøre ved det.&lt;/p&gt;</msg>
   <msg key="Account_reopened_message">Din konto på %system_name% er blevet genåbnet. Velkommen tilbage.</msg>
   <msg key="Account_reopened_title">Konto Genåbnet</msg>
   <msg key="Action">Handling</msg>
@@ -17,7 +17,7 @@
   <msg key="Administer_subsite">Administrer %subsite_name%</msg>
   <msg key="Administrative_options">Administrative muligheder for denne bruger</msg>
   <msg key="Alert_Type">Alarmtype</msg>
-  <msg key="another_picture">et andet billede.</msg>
+  <msg key="another_picture">et billede til.</msg>
   <msg key="Answer">Svar:</msg>
   <msg key="Application_Error">Fejl i Applikation</msg>
   <msg key="Applications">Applikationer</msg>
@@ -32,12 +32,13 @@
   <msg key="Cannot_see_memb_list">Kan ikke se medlemslisten</msg>
   <msg key="Change_locale_label">Skift sprog</msg>
   <msg key="Change_my_Password">Ændre min adgangskode</msg>
-  <msg key="Change_pass_email_por">Ændre password, e-mail, portræt</msg>
+  <msg key="Change_pass_email_por">Skift kodeord, e-mail-adresse, portræt</msg>
   <msg key="Check_Your_Inbox">Tjek din indbakke</msg>
   <msg key="Children">Børn</msg>
   <msg key="Close_account_explanation">&lt;p&gt; Bekræft venligst at du gerne vil lukke din konto på %system_name%. &lt;/p&gt;
 &lt;p&gt; Lukning af din konto indebærer at vi ikke længere vil sende dig beskeder med e-mail. Du vil heller ikke optræde på medlemslisten på %system_name%. Dine bidrag til gruppen vil dog blive bevaret, da de er en del af gruppens historik. &lt;/p&gt; &lt;p&gt;Bemærk at du når som helst kan genåbne din konto ved simpelthen at logge ind igen.</msg>
   <msg key="Close_your_account">Luk din konto</msg>
+  <msg key="Closed_group">Lukket gruppe</msg>
   <msg key="Comment">Kommentar</msg>
   <msg key="Communities">Grupper</msg>
   <msg key="communities">grupper</msg>
@@ -46,6 +47,7 @@
   <msg key="Continue">Fortsæt</msg>
   <msg key="Country_Name">Land</msg>
   <msg key="Create_new_community">Opret nyt %pretty_name%</msg>
+  <msg key="Create_new_subsite">Opret nyt undersite</msg>
   <msg key="Current_Password">Nuværende adgangskode:</msg>
   <msg key="Currently_invisible_msg">&lt;p&gt; Din status er ikke synlig for andre brugere. &lt;/p&gt;</msg>
   <msg key="Currently_visible_msg">&lt;p&gt; Din status er synlig for andre brugere. &lt;/p&gt;</msg>
@@ -54,14 +56,14 @@
   <msg key="default_context">standardkontekst</msg>
   <msg key="Delete">Slet</msg>
   <msg key="DevAdmin">DevAdmin</msg>
-  <msg key="Developers_Admin">Administration for Udviklere</msg>
+  <msg key="Developers_Admin">Udvikleradministration</msg>
   <msg key="Direct_Permissions">Direkte Rettigheder</msg>
   <msg key="Disable">Deaktivér</msg>
-  <msg key="Disabled">Deaktiveret</msg>
+  <msg key="Disabled">Inaktiv</msg>
   <msg key="Domain">Domæne</msg>
   <msg key="E_mail">E-mail</msg>
   <msg key="edit_comment">rediger kommentar</msg>
-  <msg key="Elements_not_editable">Visse elementer kan ikke redigeres fordi de styres af %authority_name%.</msg>
+  <msg key="Elements_not_editable">Visse felter kan ikke redigeres fordi de styres af %authority_name%.</msg>
   <msg key="Email">E-mail</msg>
   <msg key="email_body_Forgotten_password">Her er din nye logininformation:
 
@@ -81,7 +83,7 @@ Her er hvordan du logger ind på %system_url%:
   <msg key="Email_not_Requested">E-mail blev ikke anmodet</msg>
   <msg key="email_subject_Forgotten_password">Din glemte adgangskode til %system_name%</msg>
   <msg key="email_subject_Registration_password">Velkommen til %system_name%</msg>
-  <msg key="Enabled">Aktiveret</msg>
+  <msg key="Enabled">Aktiv</msg>
   <msg key="Enter_your_username_to">Indtast dit brugernavn for at generhverve din adgangskode.</msg>
   <msg key="Erase_Portrait">Slet Portræt</msg>
   <msg key="erase_portrait">slet portræt</msg>
@@ -108,35 +110,39 @@ Her er hvordan du logger ind på %system_url%:
   <msg key="ISO_Codes_not_loaded">ISO-koder ikke indlæst</msg>
   <msg key="Join_community">Tilmeld gruppe</msg>
   <msg key="Join_group_name">Meld ind i %group_name%</msg>
+  <msg key="Join_subsite">Tilmeld dig dette undersite</msg>
   <msg key="Join_this_community">Tilmeld denne gruppe</msg>
+  <msg key="Join_this_subsite">Tilmeld dette undersite</msg>
   <msg key="Keyword">Stikord</msg>
   <msg key="Last_name">Efternavn</msg>
   <msg key="later">senere.</msg>
   <msg key="Leave_community">Forlad gruppen</msg>
+  <msg key="Leave_subsite">Forlad undersite</msg>
   <msg key="Leave_this_community">Forlad denne gruppe</msg>
-  <msg key="lGo_back_without_adding">Tilbage uden at oprette nogen brugere</msg>
+  <msg key="Leave_this_subsite">Forlad dette undersite</msg>
+  <msg key="lGo_back_without_adding">Gå tilbage uden at tilføje brugere</msg>
   <msg key="Log_In">Log ind</msg>
   <msg key="log_in">log ind</msg>
   <msg key="Log_in_to_system">Log ind på %system_name%</msg>
   <msg key="logging_back_in">logge ind igen</msg>
-  <msg key="Login_has_expired">Denne loginside er udløbet. Log venligst ind igen.</msg>
+  <msg key="Login_has_expired">Siden er udløbet. Prøv venligst at logge ind igen.</msg>
   <msg key="Login_or_register">Log ind eller tilmeld</msg>
   <msg key="login_page">loginside</msg>
   <msg key="Logout">Log ud</msg>
   <msg key="Logout_from_system">Log ud fra %system_name%</msg>
-  <msg key="lt__youd_be_able_to_get"> ville du kunne se flere oplysninger om de andre medlemmer af din gruppe.</msg>
+  <msg key="lt__youd_be_able_to_get"> kan du få flere oplysninger om brugeren.</msg>
   <msg key="lt_Cannot_join_this_grou">Kan ikke tilmeldes denne gruppe.</msg>
   <msg key="lt_Complete_List_of_ISO_">Fuldstændig liste over ISO-koder</msg>
-  <msg key="lt_Continue_working_with">Fortsæt med %system_name%</msg>
+  <msg key="lt_Continue_working_with">Fortsæt på %system_name%</msg>
   <msg key="lt_Edit_comment_for_the_">Rediger kommentar til portrættet af %first_names% %last_name%</msg>
   <msg key="lt_first_names_last_name">%first_names% %last_name% (%email%) registeret som bruger af %system_url% </msg>
   <msg key="lt_For_Site-Wide_Adminis">For administratorer for hele sitet</msg>
   <msg key="lt_Grant_Permission_on_n">Tildel rettighed til %name%</msg>
   <msg key="lt_Heres_what_the_databa">Her er hvad databasen meldte tilbage:</msg>
-  <msg key="lt_How_would_you_like_the">Hvordan vil du have at verden skal se %first_names% %last_name%?</msg>
+  <msg key="lt_How_would_you_like_the">Hvordan vil du have at folk skal se %first_names% %last_name%?</msg>
   <msg key="lt_If_you_dont_think_the">Hvis du ikke mener at personen allerede har en konto:</msg>
-  <msg key="lt_If_you_happen_to_know">Hvis du mener eller tror at personen du vil invitere allerede har en konto i dette system:</msg>
-  <msg key="lt_If_you_need_this_func">Indlæs acs-reference og ref-countries hvis du har brug for denne funktionalitet.</msg>
+  <msg key="lt_If_you_happen_to_know">Hvis du ved eller tror at personen du vil invitere, allerede har en konto på dette site:</msg>
+  <msg key="lt_If_you_need_this_func">Hvis du har brug for denne funktionalitet, skal du installere acs-reference og ref-countries.</msg>
   <msg key="lt_Inherited_Permissions">Nedarvede Rettigheder</msg>
   <msg key="lt_It_would_be_a_very_ba">Det ville være en meget dårlig idé at vælge denne mulighed hvis du bruger en delt computer på et bibliotek eller en skole. Alle senere brugere af denne computer vil kunne udgive sig for at være dig.</msg>
   <msg key="lt_New_registration_at_s">Ny tilmelding på %system_url% </msg>
@@ -163,34 +169,34 @@ Her er hvordan du logger ind på %system_url%:
   <msg key="lt_Sure_erase_your_por">Er du sikker på at du vil slette dit portræt?</msg>
   <msg key="lt_The_picture_of_you_in">Billedet af dig i systemet er ugyldigt. Venligst</msg>
   <msg key="lt_There_was_a_problem_w">Der opstod problemer ved godkendelse af din konto</msg>
-  <msg key="lt_This_is_the_image_that">Dette er billedet vi viser til andre brugere i %system_name%</msg>
-  <msg key="lt_This_user_doesnt_have">Denne bruger har endnu ikke et portræt. Du kan</msg>
-  <msg key="lt_This_user_is_deleted">Denne bruger er slettet og bandlyst fra gruppen.</msg>
+  <msg key="lt_This_is_the_image_that">Dette er billedet vi viser til andre brugere på %system_name%</msg>
+  <msg key="lt_This_user_doesnt_have">Brugeren har ikke noget portræt endnu. Du kan </msg>
+  <msg key="lt_This_user_is_deleted">Brugeren er slettet og bandlyst fra gruppen.</msg>
   <msg key="lt_To_confirm_your_regis">Fortsæt venligt til %confirmation_url% for at bekræfte din tilmelding</msg>
   <msg key="lt_Upload_your_favorite">Indsend din ønskede fil, en scannet JPEG eller GIF, fra din computer (bemærk at du ikke kan henvise til et billde der ligger et andet sted på internettet; dette billede skal være på din computers harddisk).</msg>
   <msg key="lt_Uploaded_pretty_date">Indsendt: %pretty_date%</msg>
   <msg key="lt_Uploaded_publish_date">Indsendt: %publish_date%</msg>
   <msg key="lt_Use_the_Browse_button">Brug &quot;Gennemse...&quot;-knappen til at finde din fil, klik derefter på &quot;Åbn&quot;.</msg>
   <msg key="lt_We_cant_find_you">Vi kan ikke finde dig (bruger %user_id%) i brugertabellen. Din konto er højst sandsynligt blevet slettet.</msg>
-  <msg key="lt_We_had_a_problem_proc">Vi havde et problem under behandlingen af din indtastning.</msg>
+  <msg key="lt_We_had_a_problem_proc">Vi har et problem med din indtastning.</msg>
   <msg key="lt_We_were_not_awaiting_">Vi afventede ikke din e-mail. Der må være sket en fejl.</msg>
   <msg key="lt_Welcome_to_system_nam">Velkommen til %system_name%</msg>
-  <msg key="lt_What_other_people_see">Se hvad andre ser når de klikker på dit navn</msg>
+  <msg key="lt_What_other_people_see">Hvad andre ser når de klikker på dit navn</msg>
   <msg key="lt_You_cant_have_a_lt_in">Du kan ikke have et &amp;lt; i dit fornavn da dette vil se ud som HTML og derfor forvirre andre brugere.</msg>
   <msg key="lt_You_cant_have_a_lt_in_1">Du kan ikke have et &amp;lt; i dit efternavn da dette vil se ud som HTML og derfor forvirre andre brugere.</msg>
-  <msg key="lt_You_wont_get_any_email">Du kommer ikke til at modtage nogen e-mail efter %pretty_date%.</msg>
+  <msg key="lt_You_wont_get_any_email">Du modtager ikke nogen e-mails før %pretty_date%.</msg>
   <msg key="lt_Your_email_has_been_c">Din e-mail-adresse er blevet bekræftet. Du kan nu logge ind på %system_name%.</msg>
   <msg key="lt_Your_email_has_been_c_1">Din e-mail-adresse er blevet bekræftet. Der ventes nu på godkendelse fra administratoren af %system_name%.</msg>
   <msg key="lt_Your_email_is_confirm">Din e-mail-adresse er blevet bekræftet.</msg>
-  <msg key="lt_Your_login_has_expire">Din forbindelse er udløbet. Indtast venligst din adgangskode igen for at fortsætte med at arbejde.</msg>
+  <msg key="lt_Your_login_has_expire">Din adgang er udløbet. Indtast venligst dit kodeord igen for at fortsætte.</msg>
   <msg key="lt_Your_URL_doesnt_have_">Din URL har ikke det korrekte format. En gyldig URL vil se ud i retningen af \&quot;%valid_url_example%\&quot;.</msg>
   <msg key="Make_administrator">Gør til administrator</msg>
   <msg key="Make_member">Gør til medlem</msg>
-  <msg key="Make_yourself_invisible_label">Gør dig selv usynlig</msg>
-  <msg key="Make_yourself_visible_label">Gør dig selv usynlig</msg>
-  <msg key="Manage_your_notifications">Administrer dine alarmer</msg>
+  <msg key="Make_yourself_invisible_label">Gør dig usynlig</msg>
+  <msg key="Make_yourself_visible_label">Gør dig synlig</msg>
+  <msg key="Manage_your_notifications">Rediger dine alarmer</msg>
   <msg key="Mem_list_not_allowed">Beklager, men du må ikke se medlemslisten.</msg>
-  <msg key="Member_State">Medlemskabsstatus</msg>
+  <msg key="Member_State">Medlemsstatus</msg>
   <msg key="Members">Medlemmer</msg>
   <msg key="Name">Navn</msg>
   <msg key="New_Password">Ny Adgangskode</msg>
@@ -206,7 +212,7 @@ Her er hvordan du logger ind på %system_url%:
   <msg key="Notice">Meddelelse:</msg>
   <msg key="on_name_to">på %name% til:</msg>
   <msg key="optional">(valgfri)</msg>
-  <msg key="Options">Muligheder</msg>
+  <msg key="Options">Indstillinger</msg>
   <msg key="Or_add_a_new_user">Eller opret en ny bruger</msg>
   <msg key="or_the">eller</msg>
   <msg key="Password">Adgangskode</msg>
@@ -231,13 +237,15 @@ Du kan altid ændre din adgangskode ved at gøre følgende:
   <msg key="Question">Spørgsmål</msg>
   <msg key="Re_enable">Genaktivér</msg>
   <msg key="Recover_Password">Gendan Adgangskode</msg>
+  <msg key="Refresh_login">Forny login</msg>
   <msg key="Register">Tilmeld</msg>
   <msg key="Registration_Approval_Notice">&lt;p&gt; Tak for tilmeldingen til %system_name%. En administrator har fået besked om din anmodning. &lt;/p&gt;
 &lt;p&gt;Så snart du er blevet godkendt, vil du modtage en e-mail, og du kan fortsætte med at bruge %system_name%.</msg>
   <msg key="Reject">Afvis</msg>
-  <msg key="Remember_my_login">Husk min adgangskode på denne computer</msg>
+  <msg key="Remember_my_login">Gem mit kodeord på denne computer</msg>
   <msg key="Remove">Fjern</msg>
   <msg key="Req_membership_comm">Anmod om medlemskab af denne gruppe</msg>
+  <msg key="Req_membership_subs">Anmod om medlemsskab af dette undersite</msg>
   <msg key="Request_membership">Anmod om medlemskab</msg>
   <msg key="return_to_application">vend tilbage til applikation</msg>
   <msg key="Revoke_Checked">Fjern markerede</msg>
@@ -246,19 +254,23 @@ Du kan altid ændre din adgangskode ved at gøre følgende:
   <msg key="Screen_name">Skærmnavn</msg>
   <msg key="Search_For_Exist_User">Søg efter en eksisterende bruger</msg>
   <msg key="Security_context_root">Sikkerhedskontekstens rod</msg>
-  <msg key="Select_an_Object_by_Id">Vælg et objekt efter Id:</msg>
+  <msg key="Select_an_Object_by_Id">Vælg et objekt efter ID:</msg>
   <msg key="Send_email_to_this_user">Send e-mail til denne bruger</msg>
   <msg key="Show">Vis</msg>
   <msg key="Site_wide_administration">Administration for hele sitet</msg>
   <msg key="sorry_forgotten_pwd">Beklager, vi kan ikke hjælpe dig med den glemte adgangskode.</msg>
   <msg key="Status">Status</msg>
-  <msg key="Story_Behind_Photo">Historie Bag Billedet</msg>
-  <msg key="Story_behind_photo">Historie Bag Billedet</msg>
+  <msg key="Story_Behind_Photo">Historien Bag Billedet</msg>
+  <msg key="Story_behind_photo">Historien Bag Billedet</msg>
   <msg key="Subcommunities">Undergrupper</msg>
   <msg key="subcommunities">undergrupper</msg>
   <msg key="subcommunity">undergruppe</msg>
+  <msg key="subsite">undersite</msg>
+  <msg key="Subsites">Undersites</msg>
+  <msg key="subsites">undersites</msg>
   <msg key="Thank_you">Mange tak.</msg>
-  <msg key="The_ISO_codes_were_not">ISO-koderne var ikke indlæst på denne server.</msg>
+  <msg key="The_ISO_codes_were_not">ISO-koderne er ikke indlæst på denne server.</msg>
+  <msg key="This_group_is_closed">Denne gruppe er lukket. Du kan kun få adgang ved at blive inviteret.</msg>
   <msg key="this_subsite">dette undersite</msg>
   <msg key="This_user_has_left_the">Brugeren har forladt gruppen.</msg>
   <msg key="To_log_in_visit_the">For at logge ind, besøg</msg>
@@ -275,20 +287,20 @@ Du kan altid ændre din adgangskode ved at gøre følgende:
   <msg key="Username">Brugernavn</msg>
   <msg key="Vacation_Info_Updated">Ferieoplysninger Opdateret</msg>
   <msg key="Vacation_information_updated">Dine ferieoplysninger på %site_link% er blevet opdateret.</msg>
-  <msg key="Welcome_user">Velkommen, %user_name%</msg>
+  <msg key="Welcome_user">Velkommen %user_name%</msg>
   <msg key="When_leaving_checkbox_empty">Når du lader fluebenet være tomt, betyder det at rettigheden vil blive tilbagekaldt fra parten i tilfælde af at rettigheden før er blevet tildelt den pågældende part.</msg>
   <msg key="Whos_Online_link_label">Brugere der er online</msg>
   <msg key="Whos_Online_title">Hvem er Online</msg>
   <msg key="Yes_I_am_sure">Ja, jeg er sikker</msg>
   <msg key="You_can_also_browse_from">Du kan også gennemse fra</msg>
   <msg key="You_can_always_re_open">Du kan altid genåbne den ved at</msg>
-  <msg key="You_do_not_have_admin_on">Du har ikke administrationsrettigheder på objektet %root% eller nogen af dets barn.</msg>
+  <msg key="You_do_not_have_admin_on">Du har ikke administrationsrettigheder på objektet %root% eller nogen af dets børn</msg>
   <msg key="You_dont_have_a_portrait">Du har endnu ikke et portræt. Du kan</msg>
   <msg key="You_have_admin_rights_on">Du har administrationsrettigheder på følgende objekter:</msg>
-  <msg key="You_have_no_email_alerts">Du har pt. ikke nogen registrerede e-mail-alarmer.</msg>
+  <msg key="You_have_no_email_alerts">Du har ikke nogen e-mail-alarmer lige nu.</msg>
   <msg key="Your_Account">Din Konto</msg>
   <msg key="Your_discussion_alerts">Dine alarmer på diskussionsfora</msg>
   <msg key="Your_Portrait">Dit Portræt</msg>
   <msg key="Your_system_alerts">Dine alarmer på %gc_system_name%</msg>
-  <msg key="Youre_marked_as_back">Du er på %site_link% markeret som tilbage fra ferie.</msg>
+  <msg key="Youre_marked_as_back">Du er markeret som tilbage fra ferie på %site_link%.</msg>
 </message_catalog>

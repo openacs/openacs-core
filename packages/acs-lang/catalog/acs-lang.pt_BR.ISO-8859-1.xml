@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="acs-lang" package_version="5.0.1" locale="pt_BR" charset="ISO-8859-1">
+<message_catalog package_key="acs-lang" package_version="5.0.4" locale="pt_BR" charset="ISO-8859-1">
 
+  <msg key="available-in-this-language">Disponível em Inglês</msg>
   <msg key="English">Inglês</msg>
   <msg key="French">Francês</msg>
   <msg key="German">Alemão</msg>

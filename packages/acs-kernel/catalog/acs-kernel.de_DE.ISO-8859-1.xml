@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="acs-kernel" package_version="5.0.0" locale="de_DE" charset="ISO-8859-1">
+<message_catalog package_key="acs-kernel" package_version="5.0.4" locale="de_DE" charset="ISO-8859-1">
 
   <msg key="authentication_authority">Authentifizierungsstelle</msg>
   <msg key="common_add">Hinzufügen</msg>
+  <msg key="common_Administration">Administration</msg>
   <msg key="common_apply">Übernehmen</msg>
   <msg key="common_cancel">Abbrechen</msg>
   <msg key="common_close">Schließen</msg>
