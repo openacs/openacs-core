@@ -536,7 +536,10 @@ as
   -- sourced. We need to clean up the creates and once that is done
   -- we can turn this into a simple delete statement.
   --
-  execute immediate 'delete from acs_permissions where object_id = :object_id or grantee_id = :object_id'
+  execute immediate 'delete from acs_permissions where object_id = :object_id'
+  using in object_id;
+
+  execute immediate 'delete from acs_permissions where grantee_id = :object_id'
   using in object_id;
 
   for object_type
