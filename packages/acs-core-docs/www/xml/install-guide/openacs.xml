@@ -143,9 +143,9 @@ SVRMGR&gt;  select file_name from dba_data_files;</programlisting>
 		  system and database files to be on separate disks for optimized
 		  performance. For more information on such a configuration, see
 		  <ulink
-		  url="http://www.arsdigita.com/books/panda/databases-choosing">Chapter
+		  url="http://philip.greenspun.com/panda/databases-choosing">Chapter
 		  12</ulink> of <ulink
-		  url="http://www.arsdigita.com/books/panda/">Philip&#39;s
+		  url="http://philip.greenspun.com/panda/">Philip&#39;s
 		  book</ulink>.  For this example, we&#39;ll use
 		  <computeroutput>/ora8/m02/oradata/ora8/</computeroutput>.
 		</para></listitem>

@@ -152,7 +152,7 @@ ArsDigita offers a variety of free teaching material:
       <emphasis>NOTE: This material was provided by ArsDigita
       Corporation. As ArsDigita has ceased their operations, we don't
       know for how long the following URLs will be operational, and we
-      could not simply mirror them before asking permission from th
+      could not simply mirror them before asking permission from the
       authors. If arsdigita.com goes dead, you can find these
       documents under <ulink
       url="http://web.archive.org/web/*/http://arsdigita.com">http://web.archive.org/web/*/http://arsdigita.com</ulink>.
@@ -160,14 +160,14 @@ ArsDigita offers a variety of free teaching material:
     </para>
     
 <itemizedlist>
-<listitem><para><ulink url="http://www.arsdigita.com/books/panda/">Philip and Alex&#39;s Guide to
+<listitem><para><ulink url="http://philip.greenspun.com/panda/">Philip and Alex&#39;s Guide to
 Web Publishing</ulink></para></listitem>
 
-<listitem><para><ulink url="http://www.arsdigita.com/books/sql/">SQL for Web Nerds</ulink>
+<listitem><para><ulink url="http://philip.greenspun.com/books/sql/">SQL for Web Nerds</ulink>
 (tutorial for the SQL language; links into online Oracle docs for
 completeness)</para></listitem>
 
-<listitem><para><ulink url="http://www.arsdigita.com/books/tcl/">Tcl
+<listitem><para><ulink url="http://philip.greenspun.com/books/tcl/">Tcl
 for Web Nerds</ulink> (tutorial for the Tcl language; in rough shape right now
 and you might consider using the Welch book (below))</para></listitem>
 
