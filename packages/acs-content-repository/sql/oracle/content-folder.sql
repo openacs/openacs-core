@@ -85,7 +85,7 @@ end new;
 
 procedure del (
   folder_id	in cr_folders.folder_id%TYPE,
-  cascade_p     in varchar2(1) default 'f'
+  cascade_p     in char default 'f'
 ) is
 
   v_count integer;
@@ -113,9 +113,9 @@ begin
   else
     for v_child_item_id in c_folder_children_cur loop
 	if content_folder.is_folder(v_child_item_id) then
-	  perform content_folder.delete(v_child_item_id);
+	  content_folder.delete(v_child_item_id);
         else
-         perform content_item.delete(v_child_item_id);
+          content_item.delete(v_child_item_id);
       end if;
     end loop;
   end if;  
@@ -297,10 +297,6 @@ begin
     cr_items
   where
     item_id = copy.folder_id;  
-
-  if copy.name = '' then
-    copy.name := NULL;
-  end if;
 
   if folder_id = content_item.get_root_folder or folder_id = content_template.get_root_folder or target_folder_id = folder_id then
     v_valid_folders_p := 0;

@@ -637,7 +637,7 @@ procedure move (
   --*/
   item_id		in cr_items.item_id%TYPE,
   target_folder_id	in cr_folders.folder_id%TYPE,
-  name                  in cr_items.name%TYPE default NULL
+  name                  in cr_items.name%TYPE default null
 );
 
 procedure copy (
@@ -656,7 +656,7 @@ procedure copy (
   target_folder_id	in cr_folders.folder_id%TYPE,
   creation_user		in acs_objects.creation_user%TYPE,
   creation_ip		in acs_objects.creation_ip%TYPE default null,
-  name                  in cr_items.name%TYPE default NULL
+  name                  in cr_items.name%TYPE default null
 );
 
 function copy2 (
@@ -676,7 +676,7 @@ function copy2 (
   target_folder_id	in cr_folders.folder_id%TYPE,
   creation_user		in acs_objects.creation_user%TYPE,
   creation_ip		in acs_objects.creation_ip%TYPE default null,
-  name                  in cr_items.name%TYPE default NULL
+  name                  in cr_items.name%TYPE default null
 ) return cr_items.item_id%TYPE;
 
 -- get the latest revision for an item
@@ -1057,7 +1057,7 @@ procedure copy (
   target_folder_id	in cr_folders.folder_id%TYPE,
   creation_user		in acs_objects.creation_user%TYPE,
   creation_ip		in acs_objects.creation_ip%TYPE default null,
-  name                  in cr_items.name%TYPE default NULL
+  name                  in cr_items.name%TYPE default null
 );
 
 function is_symlink (
@@ -1158,7 +1158,7 @@ procedure copy (
   target_folder_id	in cr_folders.folder_id%TYPE,
   creation_user		in acs_objects.creation_user%TYPE,
   creation_ip		in acs_objects.creation_ip%TYPE default null,
-  name                  in cr_items.name%TYPE default NULL
+  name                  in cr_items.name%TYPE default null
 );
 
 end content_extlink;
@@ -1200,7 +1200,7 @@ procedure del (
   --    @see {acs_object.delete}, {content_item.delete}
   --*/
   folder_id	in cr_folders.folder_id%TYPE,
-  cascade_p     in char(1) default 'f' 
+  cascade_p     in char default 'f' 
 );
 
 procedure rename (
@@ -1252,7 +1252,7 @@ procedure copy (
   target_folder_id	in cr_folders.folder_id%TYPE,
   creation_user		in acs_objects.creation_user%TYPE,
   creation_ip		in acs_objects.creation_ip%TYPE default null,
-  name                  in cr_items.name%TYPE default NULL
+  name                  in cr_items.name%TYPE default null
 );
 
 function is_folder (
