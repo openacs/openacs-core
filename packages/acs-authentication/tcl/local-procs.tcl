@@ -108,9 +108,6 @@ ad_proc -private auth::local::authentication::Authenticate {
 } {
     array set auth_info [list]
 
-    # usernames are case insensitive
-    set username [string tolower $username]
-    
     set authority_id [auth::authority::local]
 
     set user_id [acs_user::get_by_username -username $username]
