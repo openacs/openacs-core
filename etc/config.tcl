@@ -495,6 +495,7 @@ ns_param   PamDomain          "pam_domain"
 ns_section ns/server/${server}/tdav
 ns_param propdir ${serverroot}/data/dav/properties
 ns_param lockdir ${serverroot}/data/dav/locks
+ns_param defaultlocktimeout "300"
 
 ns_section ns/server/${server}/tdav/shares
 ns_param share1 "OpenACS"
