@@ -166,8 +166,18 @@ begin
       acs_object_types 
     where
       object_type = drop_type.content_type;
+
+    -- drop the input/output views for the type
+    -- being dropped.
+    -- FIXME: does the trigger get dropped when the 
+    -- view is dropped?  This did not exist in the 4.2 release,
+    -- and it needs to be tested.
+
        
-    execute immediate 'drop table ' || v_table_name ;
+    execute immediate 'drop view ' || v_table_name || 'x';
+    execute immediate 'drop view ' || v_table_name || 'i';
+
+    execute immediate 'drop table ' || v_table_name;
 
   end if;
 

@@ -371,7 +371,8 @@ function new (
   text	        in varchar2 default null,
   data	        in cr_revisions.content%TYPE default null,
   relation_tag  in cr_child_rels.relation_tag%TYPE default null,
-  is_live       in char default 'f'
+  is_live       in char default 'f',
+  storage_type  in cr_items.storage_type%TYPE default 'lob'
 ) return cr_items.item_id%TYPE;
 
 

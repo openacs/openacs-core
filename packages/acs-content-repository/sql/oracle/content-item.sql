@@ -72,7 +72,8 @@ function new (
   text	        in varchar2 default null,
   data	        in cr_revisions.content%TYPE default null,
   relation_tag  in cr_child_rels.relation_tag%TYPE default null,
-  is_live       in char default 'f'
+  is_live       in char default 'f',
+  storage_type  in cr_items.storage_type%TYPE default 'lob'
 ) return cr_items.item_id%TYPE
 is
   v_parent_id      cr_items.parent_id%TYPE;
@@ -163,10 +164,10 @@ begin
   --end if;
 
   insert into cr_items (
-    item_id, name, content_type, parent_id
+    item_id, name, content_type, parent_id, storage_type
   ) values (
     v_item_id, content_item.new.name, 
-    content_item.new.content_type, v_parent_id
+    content_item.new.content_type, v_parent_id, content_item.new.storage_type
   );
 
   -- if the parent is not a folder, insert into cr_child_rels
@@ -1245,6 +1246,7 @@ function copy2 (
   v_is_registered     char(1);
   v_old_revision_id   cr_revisions.revision_id%TYPE;
   v_new_revision_id   cr_revisions.revision_id%TYPE;
+  v_storage_type      cr_items.storage_type%TYPE;
 begin
 
   -- call content_folder.copy if the item is a folder
@@ -1280,9 +1282,9 @@ begin
 
       select
         content_type, name, locale,
-        nvl(live_revision, latest_revision)
+        nvl(live_revision, latest_revision), storage_type
       into
-        v_content_type, v_name, v_locale, v_revision_id
+        v_content_type, v_name, v_locale, v_revision_id, v_storage_type
       from
         cr_items
       where
@@ -1303,7 +1305,8 @@ begin
             locale        => v_locale,
             content_type  => v_content_type,
             creation_user => copy2.creation_user,
-            creation_ip   => copy2.creation_ip
+            creation_ip   => copy2.creation_ip,
+            storage_type  => v_storage_type
         );
 
         -- get the latest revision of the old item

@@ -47,6 +47,10 @@ begin
   -- This routine only inserts the lob id.  It would need to be followed by 
   -- ns_pg blob_dml from within a tcl script to actually insert the lob data.
 
+  -- After the lob data is inserted, the content_length needs to be updated 
+  -- as well.
+  -- DanW, 2001-05-10.
+
   insert into cr_revisions (
     revision_id, title, description, mime_type, publish_date,
     nls_language, lob, item_id, storage_type, content_length
@@ -54,7 +58,7 @@ begin
     v_revision_id, new__title, new__description,
     new__mime_type, 
     new__publish_date, new__nls_language, new__data, 
-    new__item_id, ''lob'', 1     
+    new__item_id, ''lob'', 0
   );
 
   return v_revision_id;
@@ -85,7 +89,6 @@ begin
 
 end;' language 'plpgsql';
 
--- function new
 create function content_revision__new (varchar,varchar,timestamp,varchar,varchar,text,integer,integer,timestamp,integer,varchar)
 returns integer as '
 declare
@@ -100,9 +103,42 @@ declare
   new__creation_date          alias for $9;  -- default now()
   new__creation_user          alias for $10; -- default null
   new__creation_ip            alias for $11; -- default null
+begin
+        return content_revision__new(new__title,
+                                     new__description,
+                                     new__publish_date,
+                                     new__mime_type,
+                                     new__nls_language,
+                                     new__text,
+                                     new__item_id,
+                                     new__revision_id,
+                                     new__creation_date,
+                                     new__creation_user,
+                                     new__creation_ip,
+                                     null
+                                     );
+end;' language 'plpgsql';
+
+-- function new
+create function content_revision__new (varchar,varchar,timestamp,varchar,varchar,text,integer,integer,timestamp,integer,varchar,integer)
+returns integer as '
+declare
+  new__title                  alias for $1;  
+  new__description            alias for $2;  -- default null  
+  new__publish_date           alias for $3;  -- default now()
+  new__mime_type              alias for $4;  -- default ''text/plain''
+  new__nls_language           alias for $5;  -- default null
+  new__text                   alias for $6;  -- default '' ''
+  new__item_id                alias for $7;  
+  new__revision_id            alias for $8;  -- default null
+  new__creation_date          alias for $9;  -- default now()
+  new__creation_user          alias for $10; -- default null
+  new__creation_ip            alias for $11; -- default null
+  new__content_length         alias for $12; -- default null
   v_revision_id               integer;       
   v_content_type              acs_object_types.object_type%TYPE;
   v_storage_type              cr_items.storage_type%TYPE;
+  v_length                    cr_revisions.content_length%TYPE;
 begin
 
   v_content_type := content_item__get_content_type(new__item_id);
@@ -120,6 +156,12 @@ begin
     from cr_items
    where item_id = new__item_id;
 
+  if v_storage_type = ''text'' then 
+     v_length := length(new__text);
+  else
+     v_length := coalesce(new__content_length,0);
+  end if;
+
   -- text data is stored directly in cr_revisions using text datatype.
 
   insert into cr_revisions (
@@ -130,7 +172,7 @@ begin
      new__mime_type, 
     new__publish_date, new__nls_language, 
     new__text, new__item_id, v_storage_type,
-    length(new__text)
+    v_length
   );
 
   return v_revision_id;
@@ -580,13 +622,25 @@ begin
        PERFORM lob_copy(v_lob, v_new_lob);
 
         update cr_revisions
-           set content = v_content,
+           set content = null,
                content_length = v_content_length,
                storage_type = ''lob''
                lob = v_new_lob
          where revision_id = v_revision_id_dest;
     else 
-        -- FIXME: need to modify for file storage type.
+        -- this will work for both file and text types... well sort of.
+        -- this really just creates a reference to the first file which is
+        -- wrong since, the item_id, revision_id uniquely describes the 
+        -- location of the file in the content repository file system.  
+        -- after copy is called, the content attribute needs to be updated 
+        -- with the new relative file path:
+
+        -- update cr_revisions
+        -- set content = ''[cr_create_content_file $item_id $revision_id [cr_fs_path]$old_rel_path]''
+        -- where revision_id = :revision_id
+        
+        -- old_rel_path is the content attribute value of the content revision
+        -- that is being copied.
         update cr_revisions
            set content = v_content,
                content_length = v_content_length,

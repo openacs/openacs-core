@@ -8,7 +8,8 @@
 
 begin
  :1 := content_item.new(name => :name,
-                        creation_ip => :creation_ip
+                        creation_ip => :creation_ip,
+                        storage_type => 'file'
                         );
 end;
 
@@ -40,9 +41,8 @@ end;
       <querytext>
 
                 update cr_revisions
-                set content = empty_blob()
+                set filename = '[set content_file [cr_create_content_file $item_id $revision_id $tmpfile]]'
                 where revision_id = :revision_id
-                returning content into :1
 
       </querytext>
 </fullquery>
@@ -51,9 +51,7 @@ end;
       <querytext>
 
                 update apm_package_versions
-                   set content_length = (select dbms_lob.getlength(content)
-                                           from cr_revisons
-                                          where revision_id = :revision_id)
+                   set content_length = [cr_file_size $content_file]
                  where version_id = :version_id
 
       </querytext>
@@ -63,7 +61,7 @@ end;
 <fullquery name="apm_extract_tarball.distribution_tar_ball_select">      
       <querytext>
 
-   select content 
+   select  '[cr_fs_path]' || filename as content, storage_type
      from cr_revisions 
     where revision_id = (select content_item.get_latest_revision(item_id)
                            from apm_package_versions 
