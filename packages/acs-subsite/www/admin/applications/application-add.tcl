@@ -12,13 +12,15 @@ ad_page_contract {
 set page_title "New Application"
 set context [list [list "." "Applications"] $page_title]
 
-set packages [db_list_of_lists package_types {}]
+set packages [subsite::get_application_options]
 
 if { [ad_form_new_p -key node_id] } {
     set focus application.package_key
 } else {
     set focus application.instance_name
 }
+
+set multiple_add_url [export_vars -base multiple-add { return_url }]
 
 ad_form -name application -cancel_url . -form {
     {return_url:text(hidden),optional}
