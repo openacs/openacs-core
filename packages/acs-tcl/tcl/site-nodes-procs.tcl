@@ -372,7 +372,12 @@ ad_proc -public site_node::get_node_id_from_object_id {
 } {
     return the site node id associated with the given object_id
 } {
-    return [get_node_id -url [lindex [get_url_from_object_id -object_id $object_id] 0]]
+    set url  [lindex [get_url_from_object_id -object_id $object_id] 0]
+    if { ![empty_string_p $url] } {
+        return [get_node_id -url]
+    } else {
+        return {}
+    }
 }
 
 ad_proc -public site_node::get_parent_id {
