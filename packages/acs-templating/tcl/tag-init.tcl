@@ -669,9 +669,9 @@ template_tag trn { chunk params } {
   for { set i 0 } { $i < $size } { incr i } {
      set [ns_set key $params $i] [ns_set value $params $i]
      # substitute array variables
-     regsub {@([a-zA-z0-9_]+)\.([a-zA-z0-9_]+)@} [set [ns_set key $params $i]] {${\1(\2)}} [ns_set key $params $i]
+     regsub {@([a-zA-Z0-9_]+)\.([a-zA-Z0-9_.]+)@} [set [ns_set key $params $i]] {${\1(\2)}} [ns_set key $params $i]
      # substitute regular variables
-     regsub {@([a-zA-z0-9_:]+)@} [set [ns_set key $params $i]] {${\1}} [ns_set key $params $i]
+     regsub {@([a-zA-Z0-9_:]+)@} [set [ns_set key $params $i]] {${\1}} [ns_set key $params $i]
   }
 
   # And this needs to be executed at page execution time due to interactions with the
