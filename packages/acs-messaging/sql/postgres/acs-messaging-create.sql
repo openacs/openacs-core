@@ -2,39 +2,39 @@
 -- packages/acs-messaging/sql/acs-messaging-create.sql
 --
 -- @author John Prevost <jmp@arsdigita.com>
+-- @author Jon Griffin <jon@jongriffin.com>
 -- @creation-date 2000-08-27
--- @cvs-id $Id$
 --
+-- @cvs-id $Id$
+--  updated for OpenACS
 
 -- Object System Metadata ----------------------------------------------
 
-begin;
 select acs_object_type__create_type (
-        'acs_message',
-        'Message',
-        'Messages',
-        'content_item',
-        'ACS_MESSAGES',
-        'MESSAGE_ID',
-        null,
-        'f',
-        null,
-        'ACS_MESSAGE.NAME'
-    );
+    'acs_message',
+    'Message',
+    'Messages',
+    'content_item',
+    'ACS_MESSAGES',
+    'MESSAGE_ID',
+    null,
+    'f',
+    null,
+    'ACS_MESSAGE.NAME'
+);
 
-    select acs_object_type__create_type (
-        'acs_message_revision',
-        'Message Revision',
-        'Message Revisions',
-        'content_revision',
-        'CR_REVISIONS',
-        'REVISION_ID',
-        null,
-        'f',
-        null,
-        'ACS_OBJECT.DEFAULT_NAME'
-    );
-end;
+select acs_object_type__create_type (
+    'acs_message_revision',
+    'Message Revision',
+    'Message Revisions',
+    'content_revision',
+    'CR_REVISIONS',
+    'REVISION_ID',
+    null,
+    'f',
+    null,
+    'ACS_OBJECT.DEFAULT_NAME'
+);
 
 
 -- Raw Tables and Comments ---------------------------------------------
