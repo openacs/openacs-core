@@ -16,7 +16,7 @@ if {![ad_parameter EmailForgottenPasswordP security 1]} {
     return
 }
 
-if {![ad_parameter "RequireQuestionForPasswordResetP"]} {
+if {![ad_parameter "RequireQuestionForPasswordResetP" security 0]} {
     ad_returnredirect "./email-password-2?user_id=$user_id&validated_p=1"
     ad_script_abort
 }
