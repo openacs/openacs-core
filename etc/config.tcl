@@ -257,7 +257,8 @@ ns_param   timeout            120
 ns_param   address            $address
 ns_param   hostname           $hostname
 ns_param   port               $httpport
-ns_param   maxinput           5000000   ;# Maximum File Size for uploads in bytes
+ns_param   maxinput           [expr 5 * 1024 * 1024] ;# Maximum File Size for uploads in bytes
+ns_param   recvwait           [expr 5 * 60] ;# Maximum request time in minutes
 
 #---------------------------------------------------------------------
 #
