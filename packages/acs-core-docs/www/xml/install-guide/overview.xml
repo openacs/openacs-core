@@ -21,7 +21,8 @@
     </listitem>
 
     <listitem>
-      <para> Install AOLserver (see <xref linkend="aolserver"/>).</para>
+      <para> Install AOLserver (see <xref linkend="aolserver"/> or
+      <xref linkend="aolserver4" />).</para>
     </listitem>
 
     <listitem><para>Create a unique database and system user.
