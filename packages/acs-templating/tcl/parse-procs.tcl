@@ -26,6 +26,7 @@ ad_proc -private template::adp_parse { __adp_stub __args } {
   # declare any variables passed in to an include or master
   # TODO: call adp_set_vars instead.
 
+
   foreach {__key __value} $__args {
     if {[string match "&*" $__key]} {	# "&" triggers call by reference
       if {[string compare "&" $__key]} {
@@ -93,7 +94,6 @@ ad_proc -private template::adp_parse { __adp_stub __args } {
 
     # get result of template output procedure into __adp_output, and properties into __adp_properties
     template::code::${template_extension}::$__adp_stub
-  
     # call the master template if one has been defined
     if { [info exists __adp_master] } {
 
@@ -103,13 +103,22 @@ ad_proc -private template::adp_parse { __adp_stub __args } {
     }
   } {
     # no template;  errMsg tells us if adp_prepare at least found a script.
-    if !$errMsg { error "No script or template found for page '$__adp_stub'"}
-  }
+    if !$errMsg {
+      #No template. Perhaps there is an html file.
+      if { [file exists $__adp_stub.html] } {
+	ns_log notice "getting output from html file"
+	set __adp_output [template::util::read_file "${__adp_stub}.html"]
+      } elseif  { [file exists $__adp_stub.htm] } {
+	set __adp_output [template::util::read_file "${__adp_stub}.htm"]
+      } else {
+	error "No script or template found for page '$__adp_stub'"
+      }
+    }
 
-  # pop off parse level
-  template::util::lpop parse_level
+    # pop off parse level
+    template::util::lpop parse_level
 
-  return $__adp_output				; # empty in non-templated page
+    return $__adp_output				; # empty in non-templated page
 }
 
 ad_proc -private template::adp_set_vars {} {
