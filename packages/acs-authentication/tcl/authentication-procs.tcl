@@ -1575,11 +1575,27 @@ ad_proc -private auth::authentication::Authenticate {
                         -authority_id $authority_id \
                         -impl_id $impl_id]
 
-    return [acs_sc::invoke \
-                -error \
-                -impl_id $impl_id \
-                -operation Authenticate \
-                -call_args [list $username $password $parameters $authority_id]]
+    # See http://openacs.org/bugtracker/openacs/bug?format=table&f%5fstate=8&bug%5fnumber=2200
+    # Basically, we want upgrades to work, so we have to check for
+    # version number -jfr 
+
+    set authentication_version [util_memoize [list apm_highest_version_name acs-authentication]]
+    set old_version_p [util_memoize [list apm_version_names_compare 5.1.3 $authentication_version]]
+
+    if {[string is true $old_version_p]} {
+	return [acs_sc::invoke \
+		    -error \
+		    -impl_id $impl_id \
+		    -operation Authenticate \
+		    -call_args [list $username $password $parameters]]
+
+    } else {
+	return [acs_sc::invoke \
+		    -error \
+		    -impl_id $impl_id \
+		    -operation Authenticate \
+		    -call_args [list $username $password $parameters $authority_id]]
+    }
 }
 
 #####
