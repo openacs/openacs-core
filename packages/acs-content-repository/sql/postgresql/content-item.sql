@@ -869,11 +869,14 @@ begin
 
     -- an item relative to itself is ../item
     if v_resolved_root_id = get_path__item_id then
-	v_path := ''../'';
+	v_path := ''../'' || v_name;
+        return v_path;
     end if;
 
     -- loop over the remainder of the absolute path
-    v_path := v_path || v_name;
+    -- v_path := v_path || v_name;
+
+    v_path = rtrim(v_path,''/'');
 
     for v_rec in select 
                        i2.name, i2.parent_id, 
@@ -883,12 +886,12 @@ begin
                      where 
                        i2.parent_id <> 0
                      and
-                       i1.item_id = v_item_id
+                       i1.item_id = get_path__item_id
                      and 
                        i2.tree_sortkey <= i1.tree_sortkey
                      and
                        i1.tree_sortkey like (i2.tree_sortkey || ''%'')
-                     order by i2.tree_sortkey desc      
+                     order by i2.tree_sortkey    
  
     LOOP
       v_path := v_path || ''/'' || v_rec.name;
@@ -917,7 +920,7 @@ begin
                  and 
                    i1.tree_sortkey like (i2.tree_sortkey || ''%'')
                  order by
-                   tree_level desc
+                   tree_level
     LOOP
       v_path := v_path || ''/'' || v_rec.name;
     end loop;
@@ -1314,7 +1317,9 @@ declare
 begin
 
   if content_folder__is_folder(move__item_id) = ''t'' then
-    content_folder__move(move__item_id, move__target_folder_id);
+
+    PERFORM content_folder__move(move__item_id, move__target_folder_id);
+
   else if content_folder__is_folder(move__target_folder_id) = ''t'' then
    
 

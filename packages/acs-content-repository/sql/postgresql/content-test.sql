@@ -277,7 +277,7 @@ begin
            );
    PERFORM content_test__put_line(''Get id of item with invalid path - shouldn''''t return anything'');
    PERFORM content_test__put_line(''Found item at '' || 
-                                  content_item__get_id(''grandpa/me'', -200,''f'')
+                                  coalesce(content_item__get_id(''grandpa/me'', -200,''f'')::varchar,''null'')
            );
    PERFORM content_test__put_line(''Get id of item using subpath'');
    PERFORM content_test__put_line(''Found item at '' || 
@@ -307,40 +307,45 @@ begin
                                   content_item__get_path(item_id,folder_b_id)
            );
 
-/*
+
    PERFORM content_test__put_line(''-------------------------------------'');
    PERFORM content_test__put_line(''MOVING/RENAMING CONTENT FOLDERS...'');
    PERFORM content_test__put_line(''...all tests passed'');
    PERFORM content_test__put_line(''Moving me from under pa to under grandpa'');
    PERFORM content_item__move(sub_sub_folder_id, folder_id);
    PERFORM content_test__put_line(''Path for '' || item_id || '' is '' || 
-                                  content_item__get_path(item_id)
+                                  content_item__get_path(item_id,null)
            );
-   PERFORM content_test__put_line(''Moving grandpa to pa - this should''''nt work'');
-   PERFORM content_folder__move(folder_id, sub_folder_id);
+   -- PERFORM content_test__put_line(''Moving grandpa to pa - this shouldn\\\'t work'');
+   -- PERFORM content_folder__move(folder_id, sub_folder_id);
    PERFORM content_test__put_line(''Path for '' || item_id || '' is '' || 
-                                  content_item__get_path(item_id)
+                                  content_item__get_path(item_id,null)
            );
    PERFORM content_test__put_line(''Renaming puppy to kitty...'');
    PERFORM content_item__rename(item_id, ''kitty'');
    PERFORM content_test__put_line(''Renaming me to aunty...'');
-   PERFORM content_folder__rename(sub_sub_folder_id, ''aunty'');
+   PERFORM content_folder__rename(sub_sub_folder_id, ''aunty'',null,null);
    PERFORM content_test__put_line(''Path for '' || item_id || '' is '' || 
-                                  content_item__get_path(item_id)
+                                  content_item__get_path(item_id,null)
            );
    PERFORM content_test__put_line(''Renaming kitty to pa -- this should work'');
    PERFORM content_item__rename(item_id, ''pa'');
    PERFORM content_test__put_line(''Path for '' || item_id || '' is '' || 
-                                  content_item__get_path(item_id)
+                                  content_item__get_path(item_id,null)
            );
 
    PERFORM content_test__put_line(''-------------------------------------'');
    PERFORM content_test__put_line(''SYMLINKS...'');
    PERFORM content_test__put_line(''...all tests passed'');
 
-   symlink_a_id := content_symlink__new(''link_a'',
+   symlink_a_id := content_symlink__new(null,
+                                        ''link_a'',
                                         sub_sub_folder_id,
-                                        sub_folder_id
+                                        sub_folder_id,
+                                        null,
+                                        now(),
+                                        null,
+                                        null
                    );
    PERFORM content_test__put_line(''Create a link in pa to aunty: Symlink is '' || symlink_a_id);
 
@@ -354,7 +359,7 @@ begin
 
    PERFORM content_test__put_line(''Path for symlink '' || symlink_a_id ||
                                   '' is '' || 
-                                  content_item__get_path(symlink_a_id)
+                                  content_item__get_path(symlink_a_id,null)
            );
 
    PERFORM content_test__put_line(''Resolving symlink '' || symlink_a_id ||
@@ -364,7 +369,7 @@ begin
 
    PERFORM content_test__put_line(''Resolved path for symlink '' || 
                                   symlink_a_id || '' is '' || 
-             content_item__get_path(content_symlink__resolve(symlink_a_id))
+             content_item__get_path(content_symlink__resolve(symlink_a_id),null)
            );
 
    PERFORM content_test__put_line(''Path to item '' || item_id || 
@@ -386,28 +391,30 @@ begin
            );
 
    PERFORM content_test__put_line(''Found item '' || item_id || '' at '' ||
-                          content_item__get_id(''/grandpa/aunty/kitty'')
+                          content_item__get_id(''/grandpa/aunty/kitty'',null,''f'')
            );
    PERFORM content_test__put_line(''Found item '' || item_id || '' at '' ||
-                           content_item__get_id(''/grandpa/pa/link_a/kitty'')
+                           content_item__get_id(''/grandpa/pa/link_a/kitty'',null,''f'')
            );
    PERFORM content_test__put_line(''Found item '' || item_id || 
                                   '' starting at aunty '' ||
                                   sub_sub_folder_id || '' at '' ||
                                   content_item__get_id(''kitty'',
-                                                        sub_sub_folder_id
+                                                        sub_sub_folder_id,
+                                                        ''f''
                                   )
            );
    PERFORM content_test__put_line(''Found item '' || item_id || 
                                '' starting at symlink '' ||
                                symlink_a_id || '' at '' ||
-                               content_item__get_id(''kitty'',symlink_a_id)
+                               content_item__get_id(''kitty'',symlink_a_id,''f'')
            );
    PERFORM content_test__put_line(''Found item '' || item_id || 
                                   '' starting at pa '' ||
                                   sub_folder_id || '' at '' ||
                                   content_item__get_id(''link_a/kitty'',
-                                                       sub_folder_id
+                                                       sub_folder_id,
+                                                       ''f''
                                   )
            );
 
@@ -421,7 +428,7 @@ begin
            );
    PERFORM content_item__move(item_id,folder_b_id);
    PERFORM content_test__put_line(''Path for item '' || item_id || '' is '' ||
-                                  content_item__get_path(item_id)
+                                  content_item__get_path(item_id,null)
            );     
 
    PERFORM content_test__put_line(''Moving folder '' || folder_b_id || 
@@ -429,7 +436,7 @@ begin
            );
    PERFORM content_item__move(folder_b_id,sub_sub_folder_id);
    PERFORM content_test__put_line(''Path for item '' || item_id || '' is '' ||
-                                  content_item__get_path(item_id)
+                                  content_item__get_path(item_id,null)
            );     
 
    PERFORM content_test__put_line(''--------------------------------'');
@@ -445,7 +452,7 @@ begin
    PERFORM content_folder__delete(sub_folder_id);
    PERFORM content_folder__delete(folder_id);
    PERFORM content_folder__delete(folder_b_id);
-*/
+
    return null;
 
 end;' language 'plpgsql';

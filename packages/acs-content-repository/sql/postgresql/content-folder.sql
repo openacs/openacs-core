@@ -169,7 +169,7 @@ declare
   rename__name                   alias for $2;  
   rename__label                  alias for $3;  
   rename__description            alias for $4;  
-  v_name_already_exists_p        integer        
+  v_name_already_exists_p        integer;
 begin
 
   if rename__name is not null then
@@ -209,7 +209,7 @@ declare
   move__folder_id              alias for $1;  
   move__target_folder_id       alias for $2;  
   v_source_folder_id           integer;       
-  v_valid_folders_p            integer        
+  v_valid_folders_p            integer;
 begin
 
   select 
@@ -224,7 +224,7 @@ begin
     folder_id = move__folder_id;
 
   if v_valid_folders_p != 2 then
-    raise ''-20000: content_folder.move - Not valid folder(s)'';
+    raise EXCEPTION ''-20000: content_folder.move - Not valid folder(s)'';
   end if;
 
   if move__folder_id = content_item__get_root_folder(null) or

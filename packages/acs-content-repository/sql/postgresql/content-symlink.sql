@@ -26,13 +26,14 @@ declare
   v_symlink_id                cr_symlinks.symlink_id%TYPE;
   v_name                      cr_items.name%TYPE;
   v_label                     cr_symlinks.label%TYPE;
+  v_ctype                     varchar;
 begin
 
   -- SOME CHECKS --
 
   -- 1) check that the target is now a symlink
   if content_symlink__is_symlink(new__target_id) = ''t'' then
-    raise EXCEPTION ''-20000: Cannot create a symlink to a symlink %'', target_id;
+    raise EXCEPTION ''-20000: Cannot create a symlink to a symlink %'', new__target_id;
   end if;
 
   -- 2) check that the parent is a folder
@@ -45,11 +46,11 @@ begin
     raise EXCEPTION ''-20000: This folder does not allow symlinks to be created'';
   end if;
 
-  -- 4) check that the content folder supports the target item''s content type
-  if content_folder__is_registered(
-    parent_id,content_item__get_content_type(new__target_id),''f'') = ''f'' then
+  -- 4) check that the content folder supports the target items content type
+  if content_folder__is_registered(new__parent_id, content_item__get_content_type(new__target_id), ''f'') = ''f'' then
 
-    raise EXCEPTION ''-20000: This folder does not allow symlinks to items of type % to be created'', '', content_item__get_content_type(new__target_id);
+    v_ctype := content_item__get_content_type(new__target_id);
+    raise EXCEPTION ''-20000: This folder does not allow symlinks to items of type % to be created'', v_ctype;
   end if;
 
   -- PASSED ALL CHECKS --
@@ -57,7 +58,7 @@ begin
   -- Select default name if the name is null
   if  new__name is null then
     select 
-      ''symlink_to_'' ||  new__name into v_name
+      ''symlink_to_'' ||  name into v_name
     from 
       cr_items
     where
@@ -79,7 +80,7 @@ begin
 
   v_symlink_id := content_item__new(
       v_name, 
-      new__parent_id
+      new__parent_id,
       new__symlink_id,
       null,
       new__creation_date, 
@@ -124,7 +125,7 @@ end;' language 'plpgsql';
 
 -- function is_symlink
 create function content_symlink__is_symlink (integer)
-returns char as '
+returns boolean as '
 declare
   is_symlink__item_id                alias for $1;  
   v_symlink_p                        boolean;
