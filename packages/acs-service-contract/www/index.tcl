@@ -128,7 +128,4 @@ template::list::create \
         impl_pretty_name {
             label "Label"
         }
-        impl_owner_name {
-            label "Owner"
-        }
     }
