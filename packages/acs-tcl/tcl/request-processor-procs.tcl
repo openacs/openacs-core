@@ -710,37 +710,16 @@ ad_proc rp_report_error {
     }
 
     set error_url [ad_conn url]
-
+    
     ad_call_proc_if_exists ds_add conn error $message
-
+    
     if {![ad_parameter -package_id [ad_acs_kernel_id] "RestrictErrorsToAdminsP" dummy 0] || \
-	[permission::permission_p -object_id [ad_conn package_id] -privilege admin] } {
-	if { [ad_parameter -package_id [ad_acs_kernel_id] "AutomaticErrorReportingP" "rp" 0] } { 
-	    set error_info $message
-	    set report_url [ad_parameter -package_id [ad_acs_kernel_id] "ErrorReportURL" "rp" ""]
-	    if { [empty_string_p $report_url] } {
-		ns_log Error "Automatic Error Reporting Misconfigured.  Please add a field in the acs/rp section of form ErrorReportURL=http://your.errors/here."
-	    } else {
-		set auto_report 1
-		ns_returnerror 500 "</table></table></table></h1></b></i>
-               <form method=\"post\" action=\"$report_url\">
-[export_form_vars error_url error_info]
-This file has generated an error.  
-<input type=\"submit\" value='Report this error' />
-</form><hr />
-	<blockquote><pre>[ns_quotehtml $error_info]</pre></blockquote>[ad_footer]"
-	    }
-	} else {
-	    # No automatic report.
-	    ns_returnerror 500 "</table></table></table></h1></b></i>
-	<blockquote><pre>[ns_quotehtml $message]</pre></blockquote>[ad_footer]"
-	}
+            [permission::permission_p -object_id [ad_conn package_id] -privilege admin] } {
+        # Serve the stacktrace
+        ns_return 500 text/html [ad_parse_template -params [list [list stacktrace $message]] "/packages/acs-tcl/lib/page-error"]
     } else {
-	ns_returnerror 500 "
-      The server has encountered an internal server error. The error
-      has been logged and will be investigated by our system
-      programmers.
-      "
+        # Do not serve up a stack trace, just an apologetic note
+        ns_return 500 text/html [ad_parse_template "/packages/acs-tcl/lib/page-error"]
     }
     set headers [ns_conn headers]
     ns_log Error "[ns_conn method] http://[ns_set iget $headers host][ns_conn url]?[ns_conn query]
