@@ -3,11 +3,8 @@
 #
 # Ben Adida (ben@mit.edu)
 #
-# STATE OF THIS FILE (7/12/2001) - ben:
-# This is now patched to use ns_xml 1.4 which works!
-
 # The Query Dispatcher is documented at http://openacs.org/
-# The Query Dispatcher needs ns_xml to work.
+# The Query Dispatcher needs tDOM (http://tdom.org) to work.
 
 # This doesn't use the ad_proc construct, or any significant aD constructs,
 # because we want this piece to be usable in a separate context. While this makes
@@ -24,7 +21,8 @@ if {! [string equal {} [info procs ad_library]]} {
         Query Dispatching for multi-RDBMS capability
 
         @author Ben Adida (ben@openforce.net)
-        @cvs-id $Id$
+        @author Bart Teeuwisse (bart.teeuwisse@thecodemill.biz)
+	@cvs-id $Id$
     } 
 }
 
@@ -829,7 +827,7 @@ ad_proc db_qd_internal_prepare_queryfile_content {file_content} {
     set querytext_close_len [string length $querytext_close]
 
     # We're going to ns_quotehtml the querytext,
-    # because ns_xml will choke otherwise
+    # because XML parsing might choke otherwise
     while {1} {
 	set first_querytext_open [string first $querytext_open $rest_of_file_content]
 	set first_querytext_close [string first $querytext_close $rest_of_file_content]
