@@ -375,12 +375,12 @@ ad_proc -private auth::local::registration::GetElements {
     set result(required) [concat $result(required) { email first_names last_name }]
     set result(optional) { url }
 
-    if { ![parameter::get -parameter RegistrationProvidesRandomPasswordP -default 0] } {
+    if { ![parameter::get -package_id [ad_conn subsite_id] -parameter RegistrationProvidesRandomPasswordP -default 0] } {
         lappend result(optional) password
     }
 
-    if { [parameter::get -parameter RequireQuestionForPasswordResetP -default 1] && 
-         [parameter::get -parameter UseCustomQuestionForPasswordReset -default 1] } {
+    if { [parameter::get -package_id [ad_acs_kernel_id] -parameter RequireQuestionForPasswordResetP -default 0] && 
+         [parameter::get -package_id [ad_acs_kernel_id] -parameter UseCustomQuestionForPasswordReset -default 0] } {
         lappend result(required) secret_question secret_answer 
     }
 
@@ -416,7 +416,7 @@ ad_proc -private auth::local::registration::Register {
 
     # Generate random password?
     set generated_pwd_p 0
-    if { [empty_string_p $password] || [parameter::get -parameter RegistrationProvidesRandomPasswordP -default 0] } {
+    if { [empty_string_p $password] || [parameter::get -package_id [ad_conn subsite_id] -parameter RegistrationProvidesRandomPasswordP -default 0] } {
         set password [ad_generate_random_string]
         set generated_pwd_p 1
     }
@@ -431,15 +431,15 @@ ad_proc -private auth::local::registration::Register {
 
     # Send password confirmation email to user
     if { $generated_pwd_p || \
-             [parameter::get -parameter RegistrationProvidesRandomPasswordP -default 0] || \
-             [parameter::get -parameter EmailRegistrationConfirmationToUserP -default 0] } {
+             [parameter::get -parameter RegistrationProvidesRandomPasswordP -package_id [ad_conn subsite_id] -default 0] || \
+             [parameter::get -parameter EmailRegistrationConfirmationToUserP -package_id [ad_conn subsite_id] -default 0] } {
 
 	with_catch errmsg {
             auth::password::email_password \
                 -username $username \
                 -authority_id $authority_id \
                 -password $password \
-                -from [parameter::get -parameter NewRegistrationEmailAddress -default [ad_system_owner]] \
+                -from [parameter::get -parameter NewRegistrationEmailAddress -package_id [ad_conn subsite_id] -default [ad_system_owner]] \
                 -subject_msg_key "acs-subsite.email_subject_Registration_password" \
                 -body_msg_key "acs-subsite.email_body_Registration_password" 
 	} {
@@ -453,7 +453,7 @@ ad_proc -private auth::local::registration::Register {
     if { [ad_parameter NotifyAdminOfNewRegistrationsP "security" 0] } {
 	with_catch errmsg {
             ns_sendmail \
-                [parameter::get -parameter NewRegistrationEmailAddress -default [ad_system_owner]] \
+                [parameter::get -parameter NewRegistrationEmailAddress -package_id [ad_conn subsite_id] -default [ad_system_owner]] \
                 $email \
                 [_ acs-subsite.lt_New_registration_at_s] \
                 [_ acs-subsite.lt_first_names_last_name]
