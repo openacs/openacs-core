@@ -1043,14 +1043,16 @@ create table get_path_abs_cursor (
        pos              integer,
        name             text,
        parent_id        integer,
-       tree_level       integer
+       tree_level       integer,
+       primary key (sid,pos)
 );
 
 create table get_path_rel_cursor (
        sid              integer,
        pos              integer,
        parent_id        integer,
-       tree_level       integer
+       tree_level       integer,
+       primary key (sid,pos)
 );
 
 create function content_item__create_rel_cursor(integer,integer) 
@@ -1376,8 +1378,8 @@ begin
  -- register template if it is not already registered
   insert into cr_item_template_map
   select
-    register_template__template_id as template_id,
     register_template__item_id as item_id,
+    register_template__template_id as template_id,
     register_template__use_context as use_context
   from
     dual
