@@ -145,6 +145,49 @@ ad_proc -public apm_version_loaded_p { version_id } {
     return [nsv_exists apm_version_init_loaded_p $version_id]
 }
 
+ad_proc -private apm_mark_files_for_reload { 
+    {-force_reload:boolean}
+    file_list 
+} {
+    Mark the given list of Tcl and query files for reload in all
+    interpreters. Only marks files for reload if they haven't been
+    loaded before or they have changed since last reload.
+
+    @param file_list A list of paths relative to acs_root_dir
+    @param force_reload Mark the files for reload even if their modification
+                        time in the nsv cache doesn't differ from the one
+                        in the filesystem.
+
+    @return The list of files marked for reload.
+
+    @author Peter Marklund
+} {
+    set changed_files [list]
+    foreach relative_path $file_list {
+        set full_path "[acs_root_dir]/$relative_path"
+
+	# If the file exists, and either has never been loaded or has an mtime
+	# which differs the mtime it had when last loaded, mark to be loaded.
+	if { [file isfile $full_path] } {
+	    set mtime [file mtime $full_path]
+
+	    if { $force_reload_p || (![nsv_exists apm_library_mtime $relative_path] || \
+		    [nsv_get apm_library_mtime $relative_path] != $mtime) } {
+
+		lappend changed_files $relative_path
+		nsv_set apm_library_mtime $relative_path $mtime
+	    }
+	} 
+    }
+
+    if { [llength $changed_files] > 0 } {
+	set reload [nsv_incr apm_properties reload_level]
+	nsv_set apm_reload $reload $changed_files
+    }
+
+    return $changed_files
+}
+
 ad_proc -private apm_mark_version_for_reload { version_id { file_info_var "" } } {
 
     Examines all tcl_procs files in package version $version_id; if any have
@@ -179,26 +222,46 @@ ad_proc -private apm_mark_version_for_reload { version_id { file_info_var "" } }
 	set full_path "[acs_package_root_dir $package_key]/$path"
 	set relative_path "packages/$package_key/$path"
 
-	# If the file exists, and either has never been loaded or has an mtime
-	# which differs the mtime it had when last loaded, mark to be loaded.
-	if { [file isfile $full_path] } {
-	    set mtime [file mtime $full_path]
-
-	    if { ![nsv_exists apm_library_mtime $relative_path] || \
-		    [nsv_get apm_library_mtime $relative_path] != $mtime } {
-		lappend changed_files $relative_path
-		lappend file_info [list $file_id $path $relative_path]
-		nsv_set apm_library_mtime $relative_path $mtime
-	    }
-	}
-    }
-
-    if { [llength $changed_files] > 0 } {
-	set reload [nsv_incr apm_properties reload_level]
-	nsv_set apm_reload $reload $changed_files
+        set changed_files [apm_mark_files_for_reload $relative_path]
+        if { [llength $changed_files] > 0 } {
+            # The file marked for reload
+            lappend file_info [list $file_id $path $relative_path]
+        }
     }
 }
 
+ad_proc -private apm_mark_packages_for_bootstrap { packages_list } {
+    Bootstraps given packages by marking files of type tcl_procs, query_file, and
+    tcl_init for reload in the proper order. This prevents os from having
+    to restart the server after installing a number of packages.
+
+    @param packages_list A list of package_keys for the packages that need bootstrapping.
+                         Assumes that package_key is at index 0 of each item in the list.
+
+    @return The paths (relative to acs_root_dir) of the files marked for
+            reload by apm_mark_files_for_reload.
+
+    @author Peter Marklund
+} {
+    set tcl_proc_files [list]
+    set query_files [list]
+    set init_tcl_files [list]
+
+    foreach package_item $packages_list {
+        set package_key [lindex $package_item 0]
+        set version_id [apm_version_id_from_package_key $package_key]
+        set path_prefix "packages/$package_key/"
+
+        set tcl_proc_files [concat $tcl_proc_files [apm_version_file_list -type "tcl_procs" -db_type [db_type] -path_prefix $path_prefix $version_id]]
+        set query_files [concat $query_files [apm_version_file_list -type "query_file" -db_type [db_type] -path_prefix $path_prefix $version_id]]
+        set init_tcl_files [concat $init_tcl_files [apm_version_file_list -type "tcl_init" -db_type [db_type] -path_prefix $path_prefix $version_id]]
+    }
+
+    set reload_file_list [concat $tcl_proc_files $query_files $init_tcl_files]
+
+    return [apm_mark_files_for_reload -force_reload $reload_file_list]
+}
+   
 ad_proc -private apm_version_load_status { version_id } {
 
     If a version needs to be reloaded (i.e., a <code>-procs.tcl</code> has changed
@@ -366,7 +429,7 @@ ad_proc -public apm_load_packages {
     }
 
     if { $load_libraries_p } {
-        apm_load_libraries -init -packages $packages
+        apm_load_libraries -force_reload=$force_reload_p -init -packages $packages
     }
 
     # Load up the Automated Tests initialisation scripts if necessary
@@ -1016,34 +1079,21 @@ ad_proc -private apm_post_instantiation_tcl_proc_from_key { package_key } {
 }
 
 
-ad_proc -public apm_package_create_instance {
-    {
-	-package_id 0
-    }
-    instance_name context_id package_key
+ad_proc -public -deprecated -warn apm_package_create_instance {
+    {-package_id 0}
+    instance_name 
+    context_id 
+    package_key
 } {
+    Creates a new instance of a package. Deprecated - please use
+    apm_package_instance_new instead.
 
-    Creates a new instance of a package.
-
-} {
-    if {$package_id == 0} {
-	set package_id [db_null]
-    } 
-
-    set package_id [db_exec_plsql apm_package_instance_new {
-	begin
-      :1 := apm_package.new(
-        package_id => :package_id,
-        instance_name => :instance_name,
-        package_key => :package_key,
-        context_id => :context_id
-      );
-	end;
-    }]
-   
-    apm_parameter_sync $package_key $package_id
-    
-    return $package_id
+    @see apm_package_instance_new
+} {    
+    return [apm_package_instance_new -package_id $package_id \
+                                     $instance_name \
+                                     $context_id \
+                                     $package_key]
 }
 
 ad_proc -public apm_set_callback_proc {
@@ -1053,6 +1103,7 @@ ad_proc -public apm_set_callback_proc {
     proc
 } {
     Set the name of an APM Tcl procedure callback for a certain package version.
+    Checks if the callback already exists and updates if it does.
     If version_id is not supplied the id of the currently enabled version
     of the package will be used.
 
@@ -1070,7 +1121,15 @@ ad_proc -public apm_set_callback_proc {
         set version_id [apm_version_id_from_package_key $package_key]
     }
 
-    db_dml insert_proc {}
+    set current_proc [apm_get_callback_proc -type $type -version_id $version_id]
+
+    if { [empty_string_p $current_proc] } {
+        # We are adding
+        db_dml insert_proc {}
+    } else {
+        # We are editing
+        db_dml update_proc {}
+    }    
 }
 
 ad_proc -public apm_get_callback_proc {
@@ -1106,6 +1165,30 @@ ad_proc -public apm_remove_callback_proc {
     apm_assert_callback_type_supported $type
 
     return [db_dml delete_proc {}]
+}
+
+ad_proc -public apm_unused_callback_types {
+    {-version_id:required}
+} {
+    Get a list enumerating the supported callback types
+    that are not used by the given package version.
+} {
+    set used_callback_types [db_list used_callback_types {
+        select distinct type
+        from apm_package_callbacks
+        where version_id = :version_id
+    }]
+
+    set supported_types [apm_supported_callback_types]
+
+    set unused_types [list]
+    foreach supported_type $supported_types {
+        if { [lsearch -exact $used_callback_types $supported_type] < 0 } {
+            lappend unused_types $supported_type
+        }
+    }
+
+    return $unused_types
 }
 
 ad_proc -public apm_invoke_callback_proc {
@@ -1227,6 +1310,10 @@ ad_proc -public apm_arg_names_for_callback_type {
         after-instantiate {
             return [list package_id]
         }
+        
+        after-mount {
+            return [list package_id node_id]
+        }
 
         default {
             # By default a callback proc takes no arguments
@@ -1243,14 +1330,14 @@ ad_proc -public apm_supported_callback_types {} {
 
     @author Peter Marklund
 } {
-    return [list after-install after-instantiate]
+    return [list after-install after-instantiate after-mount]
 }
 
 ad_proc -public apm_package_instance_new {
-    {
-	-package_id 0
-    }
-    instance_name context_id package_key
+    {-package_id 0}
+    instance_name 
+    context_id 
+    package_key
 } {
 
     Creates a new instance of a package and call the post instantiation proc, if any.
@@ -1261,10 +1348,28 @@ ad_proc -public apm_package_instance_new {
     package is created yet the original code called the post instantiation proc before the
     site node code could update the table.
 
+    @param instance_name The name of the package instance, defaults to the pretty name of the
+                         package type.
+
+    @return The id of the instantiated package
 } {
-    set package_id [apm_package_create_instance -package_id $package_id $instance_name $context_id $package_key]
-            
+    if { [empty_string_p $instance_name] } {
+        set instance_name [db_string pretty_name_from_key {select pretty_name 
+                                                          from apm_enabled_package_versions 
+                                                          where package_key = :package_key}]
+    }
+
+    if {$package_id == 0} {
+	set package_id [db_null]
+    } 
+
+    set package_id [db_exec_plsql invoke_new {}]
+   
+    apm_parameter_sync $package_key $package_id
+
     apm_invoke_callback_proc -package_key $package_key -type "after-instantiate" -arg_list [list package_id $package_id]
+
+    return $package_id
 }
 
 ad_proc apm_parameter_sync {package_key package_id} {

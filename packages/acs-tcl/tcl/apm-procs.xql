@@ -198,6 +198,15 @@
     </querytext>
   </fullquery>  
 
+  <fullquery name="apm_set_callback_proc.update_proc">      
+    <querytext>
+        update apm_package_callbacks
+                set proc = :proc
+        where version_id = :version_id
+          and type = :type
+    </querytext>
+  </fullquery>  
+
   <fullquery name="apm_remove_callback_proc.delete_proc">      
     <querytext>
         delete from apm_package_callbacks
