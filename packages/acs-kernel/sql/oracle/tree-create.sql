@@ -101,7 +101,7 @@ as
         v_remainder                     integer := p_int;
         v_current_div                   integer;
     begin
-        while v_remainder > 0 loop
+        while v_current_pow >= 1 loop
             v_current_div:= floor(v_remainder/v_current_pow);
 
             -- we're not prepending 0's
