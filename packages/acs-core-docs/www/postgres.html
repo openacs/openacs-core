@@ -100,7 +100,7 @@ PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:/usr/bin/X11:/
 	  Change to the postgres user and run <tt class="computeroutput">./configure</tt> to set the compilation options automatically. This is the point at which you can
 	  configure PostgreSQL in various ways. For example, if you want to
 	  enable
-	  Unicode<a class="indexterm" name="id2507288"></a> support, add the flags <tt class="computeroutput">--enable-locale</tt> and <tt class="computeroutput">--enable-multibyte</tt>. If you want to see what the other possibilities are, run <tt class="computeroutput">./configure --help</tt>.
+	  Unicode<a class="indexterm" name="id2510501"></a> support, add the flags <tt class="computeroutput">--enable-locale</tt> and <tt class="computeroutput">--enable-multibyte</tt>. If you want to see what the other possibilities are, run <tt class="computeroutput">./configure --help</tt>.
 	</p><p>On debian woody (stable, 3.0), do <tt class="computeroutput">./configure --without-readline --without-zlib</tt>.</p><pre class="screen">[root src]# <b class="userinput"><tt>su - postgres</tt></b>
 [postgres pgsql]$<b class="userinput"><tt> cd /usr/local/src/postgresql-7.3.4</tt></b>
 [postgres postgresql-7.3.4]$ <b class="userinput"><tt>./configure --with-includes=/sw/include/ --with-libraries=/sw/lib --enable-locale --enable-multibyte \
