@@ -1227,20 +1227,53 @@ ad_proc -public ad_html_text_convert {
     {-maxlen 70}
     text
 } {
-    Converts a chunk of text from text/html to text/html.
-    Text to text does nothing, but html to html closes any unclosed html tags (see util_close_html_tags).
-    Text to html does ad_text_to_html, and html to text does a ad_html_to_text.
-    See those procs for details.
+    Converts a chunk of text from a variety of formats to either 
+    text/html or text/plain.
 
-    DRB: Modified this to accept mime types (text/plain or text/html).  Simplies things when 
-    providing confirmation pages for input destined for the content repository ...
+    <p>
 
-    @param from specify with html or text what type of text you're providing.
-    @param to specify what format you want this translated into
+    Html to html closes any unclosed html tags 
+    (see util_close_html_tags).
+    
+    <p>
+
+    Text to html does ad_text_to_html, and html to text does a 
+    ad_html_to_text. See those procs for details.
+
+    <p>
+
+    When text is empty, then an empty string will be returned 
+    regardless of any format. This is especially useful when
+    displaying content that was created with the richtext widget
+    and might contain empty values for content and format.
+
+    @param from specify what type of text you're providing. Allowed values:
+    <ul>
+    <li>text/plain</li>
+    <li>text/enhanced</li>
+    <li>text/fixed-width</li>
+    <li>text/html</li>
+    </ul>
+
+    @param to specify what format you want this translated into. Allowed values: 
+    <ul>
+    <li>text/plain</li>
+    <li>text/html</li>
+    </ul>
+
+    @param maxlen the maximum line width when generating text/plain
     
     @author Lars Pind (lars@pinds.com)
     @creation-date 19 July 2000
-} {
+} { 
+    # DRB: Modified this to accept mime types (text/plain or
+    # text/html).  Simplies things when providing confirmation pages
+    # for input destined for the content repository ...
+
+    if { [empty_string_p $text] } {
+        return ""
+    }
+
     set valid_froms { text/enhanced text/plain text/fixed-width text/html }
     set valid_tos { text/plain text/html }
     
