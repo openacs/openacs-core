@@ -6,7 +6,7 @@ ad_page_contract {
     @cvs-id $Id$
 
 } {
-    {checked_by_default_p:boolean 1}
+    {checked_by_default_p:boolean 0}
     {install_path [apm_workspace_install_dir]}
 }
 
@@ -33,16 +33,20 @@ set spec_files [list]
 set already_installed_list [list]
 set not_compatible_list [list]
 
+ns_log Notice "pm debug spec_files $all_spec_files"
 foreach spec_file $all_spec_files {
     array set version [apm_read_package_info_file $spec_file]
     set version_name $version(name)
     set package_name $version(package-name)
     set package_key $version(package.key)
-    if { [db_package_supports_rdbms_p $version(database_support)] } {
+    if { [apm_package_supports_rdbms_p -package_key $package_key] } {
         if { [apm_package_registered_p $package_key] } {
+            # This package is already on the system
             if { [apm_higher_version_installed_p $package_key $version_name] } {
+                ns_log Notice "higher version installed of $package_key $version_name"
                 lappend spec_files $spec_file
             } else {
+                ns_log Notice "need upgrade of package $package_key $version_name"
                 lappend already_installed_list "Package &quot;$package_name&quot; ($package_key) version $version_name or higher is already installed."
             }
         } else {

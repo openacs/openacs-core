@@ -14,24 +14,17 @@ apm_version_info $version_id
 
 set db_type [db_type]
 
-db_foreach apm_package_drop_scripts {
-    select file_id, path 
-    from apm_package_files
-    where version_id = :version_id
-    and file_type = 'data_model_drop'
-    and (db_type is null or db_type = :db_type)
-} {
+set file_list ""
+foreach file [apm_get_package_files -package_key $package_key -file_types data_model_drop] {
     append file_list "  <tr>
-    <td><input type=checkbox name=\"sql_drop_scripts\" value=$file_id></td>
-    <td>$path</td>
+    <td><input type=checkbox name=\"sql_drop_scripts\" value=$file checked></td>
+    <td>$file</td>
   </tr>"
-} if_no_rows {
-    set file_list ""
-}
+} 
 
 if {![empty_string_p $file_list]} {
     set file_list "
-    Please check the drop scripts you want to run.  Be aware that this will
+    We recommend sourcing all of the drop scripts for the package.  Be aware that this will
     erase all data associated with this package from the database.
 <table cellpadding=3 cellspacing=3>
 $file_list

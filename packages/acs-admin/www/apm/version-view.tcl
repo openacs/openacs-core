@@ -7,18 +7,8 @@ ad_page_contract {
     {version_id:integer}
 }
 
-db_1row apm_all_version_info {
-    select version_id, package_key, package_uri, pretty_name, version_name, version_uri,
-    summary, description_format, description, singleton_p, initial_install_p,
-    to_char(release_date, 'Month DD, YYYY') as release_date , vendor, vendor_uri,
-    enabled_p, installed_p, tagged_p, imported_p, data_model_loaded_p, 
-    to_char(activation_date, 'Month DD, YYYY') as activation_date,
-    tarball_length, distribution_uri,
-    to_char(deactivation_date, 'Month DD, YYYY') as deactivation_date,
-    to_char(distribution_date, 'Month DD, YYYY') as distribution_date
- from apm_package_version_info 
- where version_id = :version_id
-}
+db_1row apm_all_version_info {}
+
 db_1row apm_file_count {
 	select count(*) n_files from apm_package_files where version_id = :version_id
 }
@@ -154,6 +144,7 @@ $prompt_text
 <tr valign=baseline><th align=left>Version:</th><td>$version_name</td></tr>
 <tr valign=baseline><th align=left>OpenACS Core:</th><td>$initial_install_p</td></tr>
 <tr valign=baseline><th align=left>Singleton:</th><td>$singleton_p</td></tr>
+<tr valign=baseline><th align=left>Auto-mount:</th><td>$auto_mount</td></tr>
 <tr valign=baseline><th align=left>Status:</th><td>$status</td></tr>
 <tr valign=baseline><th align=left>Data Model:</th><td>$data_model_status</td></th></tr>
 "
@@ -213,12 +204,18 @@ doc_body_append "
 </blockquote>
 
 <ul>
-<li><a href=\"version-edit?version_id=$version_id\">Edit information for this version of the package or create a new version</a>
-<li><a href=\"version-dependencies?version_id=$version_id\">Manage dependency information</a>
-<li><a href=\"version-files?version_id=$version_id\">Manage file information</a>
-<li><a href=\"version-parameters?version_id=$version_id\">Manage parameter information</a>
-<li><a href=\"version-generate-info?version_id=$version_id\">Display an XML package specification file for this version</a>
-
+<li><a href=\"version-edit?[export_vars { version_id }]\">Edit above information</a> (Also use this to create a new version)
+</ul>
+<h4>Manage</h4>
+<ul>
+<li><a href=\"version-files?[export_vars { version_id }]\">Files</a>
+<li><a href=\"version-dependencies?[export_vars { version_id }]\">Dependencies and Provides</a>
+<li><a href=\"version-parameters?[export_vars { version_id }]\">Parameters</a>
+<li><a href=\"version-callbacks?[export_vars { version_id }]\">Tcl Callbacks (install, instantiate, mount)</a>
+</ul>
+<h4>XML .info package specification file</h4>
+<ul>
+<li><a href=\"version-generate-info?[export_vars { version_id }]\">Display an XML package specification file for this version</a>
 "
 
 if { ![info exists installed_version_id] || $installed_version_id == $version_id && \
@@ -226,28 +223,30 @@ if { ![info exists installed_version_id] || $installed_version_id == $version_id
     # As long as there isn't a different installed version, and this package is being
     # generated locally, allow the user to write a specification file for this version
     # of the package.
-    doc_body_append "<li><a href=\"version-generate-info?version_id=$version_id&write_p=1\">Write an XML package specification to the <tt>packages/$package_key/$package_key.info</tt> file</a>\n"
+    doc_body_append "<li><a href=\"version-generate-info?[export_vars { version_id }]&write_p=1\">Write an XML package specification to the <tt>packages/$package_key/$package_key.info</tt> file</a>\n"
 }
 
 if { $installed_p == "t" } {
     if { [empty_string_p $distribution_uri] } {
 	# The distribution tarball was either (a) never generated, or (b) generated on this
 	# system. Allow the user to make a tarball based on files in the filesystem.
-	doc_body_append "<li><a href=\"version-generate-tarball?version_id=$version_id\">Generate a distribution file for this package from the filesystem</a>\n"
+	doc_body_append "<p><li><a href=\"version-generate-tarball?[export_vars { version_id }]\">Generate a distribution file for this package from the filesystem</a>\n"
     }
 
+    doc_body_append "</ul><h4>Disable/Uninstall</h4><ul>"
+
     if { [info exists can_disable_p] } {
-	doc_body_append "<p><li><a href=\"version-disable?version_id=$version_id\">Disable this version of the package</a>\n"
+	doc_body_append "<p><li><a href=\"version-disable?[export_vars { version_id }]\">Disable this version of the package</a>\n"
     }
     if { [info exists can_enable_p] } {
-	doc_body_append "<p><li><a href=\"version-enable?version_id=$version_id\">Enable this version of the package</a>\n"
+	doc_body_append "<p><li><a href=\"version-enable?[export_vars { version_id }]\">Enable this version of the package</a>\n"
     }
     
     doc_body_append "<p>"
     
     if { $installed_p == "t" } {	
 	doc_body_append "
-	<li><a href=\"package-delete?version_id=$version_id\">Delete this package from your system.</a> (be very careful!)\n"
+	<li><a href=\"package-delete?[export_vars { version_id }]\">Uninstall this package from your system.</a> (be very careful!)\n"
 	
     }
 }

@@ -11,6 +11,7 @@ ad_page_contract {
     { package_type "apm_application"}
     { initial_install_p "f" }
     { singleton_p "f" }
+    { auto_mount "" }
     package_uri
     version_name
     version_uri
@@ -89,7 +90,7 @@ is already registerd to another package."
     summary {Please summarize your package so that users can determine what it is for.}
     description {Please provide a description of your package so that users can consider using it.}
     descrption_format {Please indicate if your package is HTML or text.}    
-    package_key_format {The package key should contain only letters, numbers, and hyphens and it must be lowercase.}
+    package_key_format {The package key should contain only letters, numbers, and hyphens (dashes) and it must be lowercase.}
     package_id {You must provide an integer key for your package.}
     version_id {You must provide an integer key for your package version.}
 }
@@ -101,7 +102,7 @@ db_transaction {
     # Insert the version
     set version_id [apm_package_install_version -callback apm_dummy_callback -version_id \
 	    $version_id $package_key $version_name $version_uri $summary $description \
-	    $description_format $vendor $vendor_uri]
+	    $description_format $vendor $vendor_uri $auto_mount]
     apm_version_enable -callback apm_dummy_callback $version_id
     apm_package_install_owners -callback apm_dummy_callback \
 	    [apm_package_install_owners_prepare $owner_name $owner_uri] $version_id

@@ -7,6 +7,8 @@ ad_page_contract {
     @cvs-id $Id$
 } {
     {sql_file:multiple ""}
+    {mount_p:multiple ""} 
+    {mount_path:array ""}
 }
 
 set pkg_install_list [ad_get_client_property apm pkg_install_list]
@@ -56,27 +58,41 @@ foreach pkg_info $pkg_install_list {
 	    lappend data_model_files $file
 	}
     }
-    
+
+    # Mount path of package
+    if { [lsearch $mount_p $package_key] != -1 && [info exists mount_path($package_key)] && ![empty_string_p $mount_path($package_key)] } {
+        set selected_mount_path $mount_path($package_key)
+    } else {
+        set selected_mount_path ""
+    }
+
     # Install the packages.
     ns_log Debug "APM: Installing packages from $install_path."
     if {$copy_files_p} {
 	set version_id [apm_package_install -install_path $install_path \
 		-callback apm_ns_write_callback -copy_files -load_data_model \
-		-data_model_files $data_model_files $spec_file]
+		-data_model_files $data_model_files \
+                -mount_path $selected_mount_path \
+                $spec_file]
 	if {$version_id != 0} {
 	    file delete -force $install_path/$package_key
 	}
     } else {
-	set version_id [apm_package_install -install_path $install_path \
-		-callback apm_ns_write_callback -load_data_model \
-		-data_model_files $data_model_files $spec_file]
+        set enable_p [expr [lsearch -exact $pkg_enable_list $package_key] != -1]
+
+	set version_id [apm_package_install \
+                -enable=$enable_p \
+                -install_path $install_path \
+		-callback apm_ns_write_callback \
+                -load_data_model \
+		-data_model_files $data_model_files \
+                -mount_path $selected_mount_path \
+                $spec_file]
     }
-    if { ($version_id != 0) && ([lsearch -exact $pkg_enable_list $package_key] != -1) } {
-	apm_version_enable -callback apm_ns_write_callback $version_id
-    }
+
     incr installed_count
 }
-    
+
 if {$installed_count < 1} {
     ns_write "</ul>
     All packages in this directory have already been installed.
@@ -87,9 +103,7 @@ if {$installed_count < 1} {
 
 ns_write "</ul><p>
 Done installing packages.
-<p>
-You must restart your server for the newly installed package(s) to be available.<p>
-Return to the <a href=\"index\">APM</a>.<p>
+<p>You should restart the server now to make installed and upgraded packages available.</p>
 [ad_footer]
 "
 }

@@ -20,7 +20,7 @@ Check all the files you want to be loaded into the database.<p>
 <form action=\"packages-install-4\" method=\"post\">
 "
 
-set file_list [list]
+set sql_file_list [list]
 set file_count 0
 
 foreach pkg_info $pkg_install_list {
@@ -46,9 +46,11 @@ foreach pkg_info $pkg_install_list {
     # Find out which script is appropriate to be run.
     set data_model_in_package 0
     set table_rows ""
-    set data_model_files [apm_data_model_scripts_find -upgrade_from_version_name \
-	    $initial_version_name -upgrade_to_version_name $final_version_name $package_key $version(files)]
-    set file_list [concat $file_list $data_model_files]
+    set data_model_files [apm_data_model_scripts_find \
+                              -upgrade_from_version_name $initial_version_name \
+                              -upgrade_to_version_name $final_version_name \
+                              $package_key]
+    set sql_file_list [concat $sql_file_list $data_model_files]
     if {![empty_string_p $data_model_files]} {
 	foreach file $data_model_files {
 	    set path [lindex $file 0]
@@ -61,6 +63,12 @@ foreach pkg_info $pkg_install_list {
   </tr>"
 	    incr file_count
 	}
+
+        if { [empty_string_p $version(auto-mount)] && [string equal $version(package.type) apm_application] } {
+            set mount_html "<input type=\"checkbox\" name=\"mount_p\" value=\"$version(package.key)\" /> Mount package under the main site at path <input type=\"text\" name=\"mount_path.$version(package.key)\" value=\"$version(package.key)\" />"
+        } else {
+            set mount_html ""
+        }
 	append body "
 	Select what data files to load for $version(package-name) $final_version_name
 	<blockquote>
@@ -71,13 +79,15 @@ foreach pkg_info $pkg_install_list {
 	    <th>File Name</th>
           </tr>
 	$table_rows
-	</table></blockquote> <p>"
+	</table>
+        $mount_html
+       </blockquote> <p>"
     }
 }
 
-ad_set_client_property -clob t apm sql_file_paths $file_list
+ad_set_client_property -clob t apm sql_file_paths $sql_file_list
 
-if {[empty_string_p $file_list]} {
+if {[empty_string_p $sql_file_list]} {
     ad_returnredirect packages-install-4
     ad_script_abort
 }

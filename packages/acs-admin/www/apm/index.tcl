@@ -73,13 +73,19 @@ set table_def {
     { maintained "Maintained" "" {<td align=center>[ad_decode $distribution_uri "" "Locally" "Externally"]</td>} }
     {
 	action "" "" {<td bgcolor=white>&nbsp;&nbsp;[eval {
-	    ns_log Notice "Status for $version_id: [apm_version_load_status $version_id]"
-	    if { $installed_p == "t" && $enabled_p == "t" && \
-		    [string equal [apm_version_load_status $version_id] "needs_reload"] } {
-		format "<a href=\"version-reload?version_id=$version_id\">reload</a>"
-	    } else {
-		format ""
-	    }
+
+	    if { $installed_p == "t" && $enabled_p == "t" } {
+                set watch_all_link "<a href=\"package-watch?package_key=$package_key\">watch all files</a>"
+                set format_string $watch_all_link
+
+                if {[string equal [apm_version_load_status $version_id] "needs_reload"]} {
+                    set format_string "$watch_all_link | <a href=\"version-reload?version_id=$version_id\">reload changed</a>"
+                } 
+            } else {
+                set format_string ""
+            }
+            format $format_string
+            
 	}]&nbsp;&nbsp;</td>}
     }
 }
@@ -90,7 +96,10 @@ set table [ad_table -Torderby $orderby -Tmissing_text $missing_text "apm_table" 
 
 db_release_unused_handles
 
-doc_body_append "<h3>Packages</h3><blockquote>$table</blockquote>
+doc_body_append "<h3>Packages</h3>
+
+$table
+
 <ul>
 <li><a href=\"package-add\">Create a new package.</a>
 <li><a href=\"write-all-specs\">Write new specification files for all installed, locally generated packages</a>
