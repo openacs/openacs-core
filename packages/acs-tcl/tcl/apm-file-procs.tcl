@@ -386,45 +386,27 @@ ad_proc -public pkg_home {package_key} {
     return "/packages/$package_key"
 }
 
-ad_proc -public apm_version_file_list { 
+ad_proc -public -deprecated -warn apm_version_file_list { 
     {-type ""} 
     {-db_type ""}
-    {-path_prefix ""}
     version_id 
 } {
-
     Returns a list of paths to files of a given type (or all files, if
     $type is not specified) which support a given database (if specified) in a version.
+    Use the proc apm_get_package_files instead.
+
     @param type Optionally specifiy what type of files to check, for instance "tcl_procs"
-    @param db_type Optionally specifiy what type of database support to check, for instance
-    "postgresql".  All files of the given type that are used by the given database version are
-    returned (i.e. all database-agnostic as well as the proper database-specific files).
+    @param db_type This argument is ignored for now.
     @param version_id The version to retrieve the file list from.
     @param path_prefix A prefix that will be used for all the returned paths. By default
                        the prefix will be the empty string which means that the returned paths
                        will be relative to the package root.
 
+    @see apm_get_package_files
 } {
-    if { ![empty_string_p $type] } {
-	set type_sql "and file_type = :type"
-    } else {
-	set type_sql ""
-    }
-    if { ![empty_string_p $db_type] } {
-	set db_type_sql "and (db_type = :db_type or db_type is null)"
-    } else {
-	set db_type_sql ""
-    }
-    set path_list [list]
-    db_foreach path_select "
-        select path from apm_package_files
-        where  version_id = :version_id
-        $type_sql $db_type_sql order by path
-    " {
-        lappend path_list "${path_prefix}${path}"
-    }
+    set package_key [apm_package_key_from_version_id $version_id]
 
-    return $path_list
+    return [apm_get_package_files -package_key $package_key -file_types $type]
 }
 
 ad_proc -private apm_ignore_file_p { path } {
