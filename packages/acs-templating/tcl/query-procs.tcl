@@ -627,6 +627,8 @@ ad_proc -public template::multirow {
     <dd> extend adds a column to an existing multirow</dd>
     <dt> <b>template::multirow append datasourcename value [value ...]</b></dt>
     <dd> appends the row to an existing multirow.</dd>
+    <dt> <b>template::multirow pop datasourcename </b></dt>
+    <dd> pops a row off an existing multirow, returning a list of the rows keys and values</dd>
     <dt> <b>template::multirow size datasourcename</b></dt>
     <dd> returns the rowcount</dd>
     <dt> <b>template::multirow columns datasourcename</b></dt>
@@ -649,7 +651,7 @@ ad_proc -public template::multirow {
     @param ulevel Used in conjunction with the "local" parameter to specify how 
            many levels up the multirow variable resides.
 
-    @param command Multirow datasource operation: create, extend, append, size, get, set, foreach, upvar
+    @param command Multirow datasource operation: create, extend, append, pop, size, get, set, foreach, upvar
 
     @param name Name of the multirow datasource
 
@@ -677,6 +679,24 @@ ad_proc -public template::multirow {
       foreach column_name $args {
         lappend columns $column_name
       }
+    }
+
+    pop {
+        upvar $multirow_level_up $name:rowcount rowcount $name:columns columns
+        set r_list [list]
+        if {$rowcount > 0} {
+            upvar $multirow_level_up $name:$rowcount row
+            for { set i 0 } { $i < [llength $columns] } { incr i } {
+                set key [lindex $columns $i]
+                if {[info exists row($key)]} {
+                    set value $row($key)
+                    lappend r_list $key $value
+                }
+            }
+            array unset row
+        }
+        incr rowcount -1
+        return $r_list
     }
 
     append {
@@ -823,7 +843,7 @@ ad_proc -public template::multirow {
 
     default {
       error "Unknown command $command in template::multirow.
-      Must be create, extend, append, get, set, size, upvar, or foreach."
+      Must be create, extend, append, backup, get, set, size, upvar, or foreach."
     }
   }
 }
