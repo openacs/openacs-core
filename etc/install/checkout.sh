@@ -30,12 +30,12 @@ use_timesaver_files=`get_config_param use_timesaver_files`
 
 echo "$0: Starting checkout for server path $serverroot with config_file $config_file and dotlrn=$dotlrn"
 
-# Move away the old sources
+# Move away the old sources if they exist
 if [ -d ${serverroot} ]; then
 
   # Remove old tmp storage of sources
   server_name=$(basename ${serverroot})
-  old_sources_path="/tmp/${server_name}"
+  old_sources_path="/var/tmp/${server_name}"
   if [ -d ${old_sources_path} ]; then
     echo "$0: removing old server sources at ${old_sources_path}"
     rm -rf ${old_sources_path}
@@ -87,6 +87,10 @@ if [ $dotlrn == "yes" ]; then
         co -r $dotlrn_branch dotlrn-core
 fi
 
+echo $(date) > ${serverroot}/www/SYSTEM/checkout-date
 # Set proper privileges
-chown -R nsadmin.web ${serverroot}
+
+# TODO - get service name and group from config file
+chown -R service0.web ${serverroot}
 chmod -R go+rwX ${serverroot}
+

@@ -4,6 +4,7 @@ Prerequisites:
 tclwebtest
 aolserver
 oracle or postgresql
+user named service0
 
 see /packages/acs-core-docs/www/index.html for more documentation
 about installing OpenACS and its prerequisites
