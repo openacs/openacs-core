@@ -13,8 +13,9 @@
 # to tie this in with the acs-lang money database as this code's far too
 # simplistic.
 
-# Dispatch procedure for the currency object
 ad_proc -public template::util::currency { command args } {
+    Dispatch procedure for the currency object
+} {
   eval template::util::currency::$command $args
 }
 
@@ -25,9 +26,10 @@ ad_proc -public template::util::currency::create {
     return [list $leading_symbol $whole_part $separator $fractional_part $trailing_money $format]
 }
 
-# Create a new currency value with some predefined value
-# Basically, create and set the currency value
 ad_proc -public template::util::currency::acquire { type { value "" } } {
+    Create a new currency value with some predefined value
+    Basically, create and set the currency value
+} {
   set currency_list [template::util::currency::create]
   return [template::util::currency::set_property $type $currency_list $value]
 }

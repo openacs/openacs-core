@@ -11,12 +11,17 @@
 
 # Prepare an array to map symbolic month names to their indices
 
-# Dispatch procedure for the date object
 ad_proc -public template::util::date { command args } {
+    Dispatch procedure for the date object
+} {
   eval template::util::date::$command $args
 }
 
 ad_proc -public template::util::date::init {} {
+    Sets up some initial variables and other conditions
+    to facilitate the data structure template::util::date
+    working properly and completely.
+} {
   variable month_data
   variable fragment_widgets
   variable fragment_formats
@@ -61,8 +66,9 @@ ad_proc -public template::util::date::init {} {
   set token_exp "([join [array names fragment_widgets] |])(t*)"
 }
 
-# Return the specified month name (short or long)
 ad_proc -public template::util::date::monthName { month length } {
+    Return the specified month name (short or long)
+} {
   variable month_data
 
   if { [string equal $length long] } {
@@ -80,10 +86,11 @@ ad_proc -public template::util::date::monthName { month length } {
   }
 }
 
-# Return the number of days in a month, accounting for leap years
-# IS THE LEAP YEAR CODE CORRECT ?
 
 ad_proc -public template::util::date::daysInMonth { month {year 0} } {
+    @return the number of days in a month, accounting for leap years
+    LOOKATME: IS THE LEAP YEAR CODE CORRECT ?
+} {
   variable month_data
   set month_desc $month_data($month)
   set days [lindex $month_desc 2]
@@ -98,26 +105,28 @@ ad_proc -public template::util::date::daysInMonth { month {year 0} } {
   } 
 }  
 
-# Create a new Date object
-# I chose to implement the date objects as lists instead of 
-# arrays, because arrays are not first-class in TCL
-
 ad_proc -public template::util::date::create {
   {year {}} {month {}} {day {}} {hours {}} 
   {minutes {}} {seconds {}} {format "DD MONTH YYYY"}
 } {
+    Create a new Date object
+    I chose to implement the date objects as lists instead of 
+    arrays, because arrays are not first-class in TCL
+} {
   return [list $year $month $day $hours $minutes $seconds $format]
 }
 
-# Create a new date with some predefined value
-# Basically, create and set the date
 ad_proc -public template::util::date::acquire { type { value "" } } {
+    Create a new date with some predefined value
+    Basically, create and set the date
+} {
   set the_date [template::util::date::create]
   return [template::util::date::set_property $type $the_date $value]
 }
 
-# Create a new Date object for the current date
 ad_proc -public template::util::date::today {} {
+    Create a new Date object for the current date
+} {
 
   set now [clock format [clock seconds] -format "%Y %m %d"]
   set today [list]
@@ -130,9 +139,9 @@ ad_proc -public template::util::date::today {} {
   return [eval create $today]
 }
 
-# Create a new Date object for the current date and time
 ad_proc -public template::util::date::now {} {
-
+    Create a new Date object for the current date and time
+} {
   set now [clock format [clock seconds] -format "%Y %m %d %H %M %S"]
   set today [list]
 
@@ -143,11 +152,11 @@ ad_proc -public template::util::date::now {} {
   return [eval create $today]
 }
 
-# Access properties of the Date object
-# Is it better to name them symbolically, as opposed to 
-# using the format string codes ?
-
 ad_proc -public template::util::date::get_property { what date } {
+    Access properties of the Date object
+    Is it better to name them symbolically, as opposed to 
+    using the format string codes ?
+} {
 
   variable month_data
 
@@ -306,9 +315,9 @@ ad_proc -public template::util::date::get_property { what date } {
   }
 }
 
-# Perform date comparison; same syntax as string compare
-
 ad_proc -public template::util::date::compare { date1 date2 } {
+    Perform date comparison; same syntax as string compare
+} {
     for { set i 0 } { $i < 5 } { incr i } {
         if { [lindex $date1 $i] < [lindex $date2 $i] } {
             return -1
@@ -319,9 +328,9 @@ ad_proc -public template::util::date::compare { date1 date2 } {
     return 0
 }
 
-# mutate properties of the Date object
-
 ad_proc -public template::util::date::set_property { what date value } {
+    mutate properties of the Date object
+} {
   # Erase leading zeroes from the value, but make sure that 00
   # is not completely erased
   set value [template::util::leadingTrim $value]
@@ -383,9 +392,9 @@ ad_proc -public template::util::date::set_property { what date value } {
 
 }
 
-# Get the default ranges for all the numeric fields of a Date object
-
 ad_proc -public template::util::date::defaultInterval { what } {
+    Get the default ranges for all the numeric fields of a Date object
+} {
   switch $what {
     year        { return [list 2000 2010 1 ] }
     month       { return [list 1 12 1] }
@@ -398,10 +407,10 @@ ad_proc -public template::util::date::defaultInterval { what } {
   }
 }
 
-
-# Set the variables for each field of the date object in 
-# the calling frame
 ad_proc -public template::util::date::unpack { date } {
+    Set the variables for each field of the date object in 
+    the calling frame
+} {
   uplevel {
     set year    [lindex $date 0]
     set month   [lindex $date 1]
@@ -551,9 +560,10 @@ ad_proc -public template::util::date::add_time { {-time_array_name:required} {-d
     } 
 }
 
-# Check if a value is less than zero, but return false
-# if the value is an empty string
 ad_proc -public template::util::negative { value } {
+    Check if a value is less than zero, but return false
+    if the value is an empty string
+} {
   if { [string equal $value {}] } {
     return 0
   } else {
@@ -561,12 +571,12 @@ ad_proc -public template::util::negative { value } {
   }
 }
 
-# Validate a date object. Return 1 if the object is valid,
-# 0 otherwise. Set the error_ref variable to contain
-# an error message, if any
 
 ad_proc -public template::util::date::validate { date error_ref } {
-
+    Validate a date object. Return 1 if the object is valid,
+    0 otherwise. Set the error_ref variable to contain
+    an error message, if any
+} {
   # If the date is empty, it's valid
   if { ![get_property not_null $date] } {
     return 1
@@ -642,9 +652,11 @@ ad_proc -public template::util::date::validate { date error_ref } {
   return $return_code
 }
 
-# Pad a string with leading zeroes
+
 
 ad_proc -public template::util::leadingPad { string size } {
+    Pad a string with leading zeroes
+} {
   
   if { [string equal $string {}] } {
     return {}
@@ -656,9 +668,10 @@ ad_proc -public template::util::leadingPad { string size } {
 
 }  
 
-# Trim the leading zeroes from the value, but preserve the value
-# as "0" if it is "00"
 ad_proc -public template::util::leadingTrim { value } {
+    Trim the leading zeroes from the value, but preserve the value
+    as "0" if it is "00"
+} {
   set empty [string equal $value {}]
   set value [string trimleft $value 0]
   if { !$empty && [string equal $value {}] } {
@@ -671,6 +684,9 @@ ad_proc -public template::util::leadingTrim { value } {
 # interval_def is in form { start stop interval }
 
 ad_proc -public template::widget::numericRange { name interval_def size {value ""} } {
+    Create an html fragment to display a numeric range widget
+    interval_def is in form { start stop interval }
+} {
   
   set options [list [list "--" {}]]
 
@@ -683,14 +699,14 @@ ad_proc -public template::widget::numericRange { name interval_def size {value "
   return [template::widget::menu $name $options [list $value] {}]
 }
 
-# Create an input widget for the given date fragment
-# If type is "t", uses a text widget for the fragment, with the given
-# size.
-# Otherwise, determines the proper widget based on the element flags,
-# which may be text or a picklist
-
 ad_proc -public template::widget::dateFragment {
   element_reference fragment size type value } {
+      Create an input widget for the given date fragment
+      If type is "t", uses a text widget for the fragment, with the given
+      size.
+      Otherwise, determines the proper widget based on the element flags,
+      which may be text or a picklist
+} {
 
   upvar $element_reference element
   
@@ -715,9 +731,10 @@ ad_proc -public template::widget::dateFragment {
            $interval $size $value]
 }
 
-# Create a widget that shows the am/pm selection
 ad_proc -public template::widget::ampmFragment {
   element_reference fragment size type value } {
+      Create a widget that shows the am/pm selection
+} {
 
   upvar $element_reference element
 
@@ -727,10 +744,10 @@ ad_proc -public template::widget::ampmFragment {
     "$element(name).$fragment" { {A.M. am} {P.M. pm}} $value {}]
 }
 
-# Create a month entry widget with short or long month names
-
 ad_proc -public template::widget::monthFragment { 
   element_reference fragment size type value } {
+      Create a month entry widget with short or long month names
+} {
 
   variable ::template::util::date::month_data
 
@@ -747,27 +764,30 @@ ad_proc -public template::widget::monthFragment {
    "$element(name).$fragment" $options $value {} ]
 }
 
-# Create a date entry widget according to a format string
-# The format string should contain the following fields, separated
-# by / \ - : . or whitespace:
-# string   meaning
-# YYYY     4-digit year
-# YY       2-digit year
-# MM       2-digit month
-# MON      month name, short (i.e. "Jan")
-# MONTH    month name, long (i.e. "January")
-# DD       day of month
-# HH12     12-hour hour
-# HH24     24-hour hour
-# MI       minutes
-# SS       seconds
-# AM       am/pm flag
-# Any format field may be followed by "t", in which case a text 
-# widget will be used to represent the field.
-# the array in range_ref determines interval ranges; the keys
-# are the date fields and the values are in form {start stop interval}
 
 ad_proc -public template::widget::date { element_reference tag_attributes } {
+    Create a date entry widget according to a format string
+    The format string should contain the following fields, separated
+    by / \ - : . or whitespace:
+    <table border="1">
+      <tr><th>string</th><th>meaning</th></tr>
+      <tr><td>YYYY</td><td>4-digit year</td></tr>
+      <tr><td>YY</td><td>2-digit year</td></tr>
+      <tr><td>MM</td><td>2-digit month</td></tr>
+      <tr><td>MON</td><td>month name, short (i.e. "Jan")</td></tr>
+      <tr><td>MONTH</td><td>month name, long (i.e. "January")</td></tr>
+      <tr><td>DD</td><td>day of month</td></tr>
+      <tr><td>HH12</td><td>12-hour hour</td></tr>
+      <tr><td>HH24</td><td>24-hour hour</td></tr>
+      <tr><td>MI</td><td>minutes</td></tr>
+      <tr><td>SS</td><td>seconds</td></tr>
+      <tr><td>AM</td><td>am/pm flag</td></tr>
+    </table>
+    Any format field may be followed by "t", in which case a text 
+    widget will be used to represent the field.
+    the array in range_ref determines interval ranges; the keys
+    are the date fields and the values are in form {start stop interval}
+} {
 
   variable ::template::util::date::fragment_widgets
 
@@ -878,9 +898,9 @@ ad_proc -public template::widget::date { element_reference tag_attributes } {
 
 }
 
-# Collect a Date object from the form
-
 ad_proc -public template::data::transform::date { element_ref } {
+    Collect a Date object from the form
+} {
 
   upvar $element_ref element
   set element_id $element(id)
