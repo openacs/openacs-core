@@ -268,18 +268,21 @@ namespace eval lang::util {
 
                 # Replace the message tag with a message key lookup in the file
                 regexp {\.([^.]+)$} $file match file_ending
-                switch $file_ending {
-                    adp {
+                switch -regexp -- $file_ending {
+                    {^(adp|sql)$} {
                         regsub [message_tag_regexp] \
                                $modified_file_contents \
                                "#${package_key}.${unique_key}#" \
                                modified_file_contents
                     } 
-                    tcl {
+                    {^tcl$} {
                         regsub [message_tag_regexp] \
                                 $modified_file_contents \
                                 "\[_ ${package_key}.${unique_key}\]" \
                                 modified_file_contents
+                    }
+                    {.*} {
+                        error "Unknown ending $file_ending of file $file, aborting"
                     }
                 }
             }
