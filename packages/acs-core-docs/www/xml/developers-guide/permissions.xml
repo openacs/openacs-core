@@ -160,6 +160,11 @@ permissions work. For further detail, you can look at <xref linkend="parties"/> 
 <sect2 id="permissions-permissions">
 <title>Permissions</title>
 
+<para>
+  NOTE: Much more detailed information about the permissions system
+  and how to use it is available in the
+  <xref linkend="permissions-tediously-explained"/> document.
+</para>
 
 <para>
 The permissions data model is actually pretty simple.  The data model
