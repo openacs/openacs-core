@@ -718,7 +718,6 @@ ad_proc -private package_table_columns_for_type {
 ad_proc -public package_instantiate_object {
     { -creation_user "" }
     { -creation_ip "" }
-    { -package_id "" }
     { -package_name "" }
     { -var_list "" }
     { -extra_vars "" }
@@ -804,9 +803,6 @@ ad_proc -public package_instantiate_object {
 	if { [empty_string_p $creation_ip] } {
 	    set creation_ip [ad_conn peeraddr]
 	}
-	if { [empty_string_p $package_id] } {
-	    set package_id [ad_conn package_id]
-	}
     }
 
     if {$creation_user == 0} {
@@ -815,7 +811,7 @@ ad_proc -public package_instantiate_object {
 
     lappend var_list [list creation_user $creation_user]
     lappend var_list [list creation_ip $creation_ip]
-    lappend var_list [list package_id  $package_id]
+
 
     # The first thing we need to do is select out the list of all
     # the parameters that can be passed to this object type's new function.
@@ -893,6 +889,8 @@ ad_proc -public package_instantiate_object {
 	}
     }	
 
+    ReturnHeaders
+    ns_write "package_id is $package_id; var_list is $var_list"
     set object_id [db_exec_plsql create_object {}]
 
     if { [ad_conn isconnected] } {
