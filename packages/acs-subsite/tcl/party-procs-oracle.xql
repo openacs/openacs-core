@@ -3,17 +3,6 @@
 <queryset>
    <rdbms><type>oracle</type><version>8.1.6</version></rdbms>
 
-<fullquery name="new.add_party">      
-      <querytext>
-      
-	  begin
-	    :1 := ${party_type}.new (email => 'joe@foo.com');
-	  end;
-	
-      </querytext>
-</fullquery>
-
- 
 <fullquery name="types_valid_for_rel_type_multirow.select_sub_rel_types">      
       <querytext>
       
