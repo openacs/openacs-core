@@ -514,7 +514,7 @@ create table secret_tokens (
     token_id                    integer
                                 constraint secret_tokens_token_id_pk primary key,
     token                       char(40),
-    timestamp               sysdate
+    token_timestamp             sysdate
 );
 
 </programlisting>

@@ -1252,7 +1252,7 @@ ad_proc -private populate_secret_tokens_db {} {
 	set random_token [sec_random_token]
 
 	db_dml insert_random_token {
-	    insert /*+ APPEND */ into secret_tokens(token_id, token, timestamp)
+	    insert /*+ APPEND */ into secret_tokens(token_id, token, token_timestamp)
 	    values(sec_security_token_id_seq.nextval, :random_token, sysdate)
 	}
 	incr counter
