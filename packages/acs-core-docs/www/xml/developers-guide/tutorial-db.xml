@@ -73,6 +73,10 @@ select content_type__create_type(
     'note_id',                     -- id_column
     null                           -- name_method
 );
+
+-- necessary to work around limitation of content repository:
+select content_folder__register_content_type(-100,'mfp_note','t');
+
 </programlisting>
       </figure>
     <para>The creation script calls a function,
@@ -93,6 +97,8 @@ select content_type__create_type(
 -- @author joel@aufrecht.org
 -- @cvs-id &#36;Id:$
 --
+select content_folder__unregister_content_type(-100,'mfp_note','t');
+
 select content_type__drop_type(
 	   'mfp_note',
 	   't',

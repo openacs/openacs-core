@@ -1,4 +1,4 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Install Oracle 8.1.7</title><meta name="generator" content="DocBook XSL Stylesheets V1.60.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="complete-install.html" title="Chapter 3. Complete Installation"><link rel="previous" href="unix-installation.html" title="Install Unix-like system and supporting software"><link rel="next" href="postgres.html" title="Install PostGreSQL"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="unix-installation.html">Prev</a> </td><th width="60%" align="center">Chapter 3. Complete Installation</th><td width="20%" align="right"> <a accesskey="n" href="postgres.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="oracle"></a>Install Oracle 8.1.7</h2></div></div><div></div></div><div class="authorblurb"><p>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Install Oracle 8.1.7</title><meta name="generator" content="DocBook XSL Stylesheets V1.62.4"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="complete-install.html" title="Chapter 3. Complete Installation"><link rel="previous" href="unix-installation.html" title="Install Unix-like system and supporting software"><link rel="next" href="postgres.html" title="Install PostGreSQL"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="unix-installation.html">Prev</a> </td><th width="60%" align="center">Chapter 3. Complete Installation</th><td width="20%" align="right"> <a accesskey="n" href="postgres.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="oracle"></a>Install Oracle 8.1.7</h2></div></div><div></div></div><div class="authorblurb"><p>
 	by <a href="mailto:vinod@kurup.com" target="_top">Vinod Kurup</a><br>
           OpenACS docs are written by the named authors, and may be edited
           by OpenACS documentation staff.
@@ -67,7 +67,7 @@ $ tar xvf oracle81701.tar</pre></li></ul></div></li><li><p>
       of passwords, we advise you to follow these defaults unless you know
       what you are doing.  Subsequent documents will expect that you used
       the defaults, so a change made here will necessitate further changes
-      later. For a guide to the defaults, please see <a href="oracle.html#install-oracle-defaults" title="Defaults">Section , &#8220;Defaults&#8221;</a>.
+      later. For a guide to the defaults, please see <a href="oracle.html#install-oracle-defaults" title="Defaults">the section called &#8220;Defaults&#8221;</a>.
 
     </p><p>
 
@@ -330,16 +330,16 @@ oracle:/where/oracle/Disk1$ ./runInstaller</pre><p>
         </p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>
             Some people have had trouble with this step on RedHat 7.3 and 8.0. If
             so, try the following steps before calling
-            <b class="command">./runInstaller</b>:
+            <span><b class="command">./runInstaller</b></span>:
 
           </p><div class="orderedlist"><ol type="1"><li><p>
 
                 Execute the following command:
-                <b class="command">/usr/i386-glibc21-linux/bin/i386-glibc21-linux-env.sh</b>
+                <span><b class="command">/usr/i386-glibc21-linux/bin/i386-glibc21-linux-env.sh</b></span>
 
               </p></li><li><p>
 
-                Type <b class="command">export LD_ASSUME_KERNEL=2.2.5</b>
+                Type <span><b class="command">export LD_ASSUME_KERNEL=2.2.5</b></span>
 
               </p></li></ol></div></div></li><li><p>
 
@@ -363,7 +363,7 @@ oracle:/where/oracle/Disk1$ ./runInstaller</pre><p>
               logged on as <tt class="computeroutput">oracle</tt> using
               <tt class="computeroutput">su - oracle</tt>. If so, edit the
               <tt class="computeroutput">~/.bash_profile</tt> as you
-              did in <a href="oracle.html#install-oracle-preinstall" title="Pre-Installation Tasks">Section , &#8220;Pre-Installation Tasks&#8221;</a>
+              did in <a href="oracle.html#install-oracle-preinstall" title="Pre-Installation Tasks">the section called &#8220;Pre-Installation Tasks&#8221;</a>
 
             </p></li><li><p>
 
@@ -568,7 +568,7 @@ joeuser:~$ exit</pre></li><li><p>
             </p></li><li><p> 
             Run the script. Switch to the oracle user first
             to set the environment appropriately and then do
-            <b class="command">su</b> to get root privileges, while keeping
+            <span><b class="command">su</b></span> to get root privileges, while keeping
             the oracle user's enviroment.
             </p><pre class="programlisting">
 joeuser:~$ su - oracle
@@ -691,7 +691,7 @@ joeuser:~$ exit</pre></li><li><p>
       This step will take you through the steps of creating a customized
       database. Be warned that this process takes about an hour on a
       Pentium II with 128 MB of RAM.
-    </p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>RedHat 7.3 and 8.0 users: Before running <b class="command">dbassist</b>, do the following.</p><div class="orderedlist"><ol type="1"><li><p>
+    </p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>RedHat 7.3 and 8.0 users: Before running <span><b class="command">dbassist</b></span>, do the following.</p><div class="orderedlist"><ol type="1"><li><p>
             Download the <a href="http://otn.oracle.com/software/products/oracle8i/htdocs/linuxsoft.html" target="_top">glibc
             patch</a> from Oracle Technet into <tt class="computeroutput">/tmp</tt>.
           </p></li><li><p>
@@ -887,7 +887,7 @@ SQL&gt; alter user ctxsys identified by alexisahunk;</pre></li><li><p>
         </p><pre class="programlisting">
 SQL&gt; select sysdate from dual;</pre><p>
           If you don't see a date that fits the format
-          <tt class="computeroutput">YYYY-MM-DD</tt>, please read <a href="oracle.html#install-oracle-troubleshooting" title="Troubleshooting Oracle Dates">Section , &#8220;Troubleshooting Oracle Dates&#8221;</a>.
+          <tt class="computeroutput">YYYY-MM-DD</tt>, please read <a href="oracle.html#install-oracle-troubleshooting" title="Troubleshooting Oracle Dates">the section called &#8220;Troubleshooting Oracle Dates&#8221;</a>.
         </p></li><li><p>
           At this point we are going to hammer your database with an
           intense acceptance test. This usually takes around 30 minutes.
@@ -912,7 +912,7 @@ ORA-01450: maximum key length (758) exceeded</pre><p>
           pre-existing database.  Unfortunately, the only solution is to
           create a new database with a block size of at least
           <tt class="computeroutput">4096</tt>. For instructions on how to
-          do this, see <a href="oracle.html#install-oracle-create" title="Creating the First Database">Section , &#8220;Creating the First Database&#8221;</a> above. You
+          do this, see <a href="oracle.html#install-oracle-create" title="Creating the First Database">the section called &#8220;Creating the First Database&#8221;</a> above. You
           can set the parameter using the
           <tt class="computeroutput">dbassist</tt> program or by setting
           the <tt class="computeroutput">DB_BLOCK_SIZE</tt> parameter in

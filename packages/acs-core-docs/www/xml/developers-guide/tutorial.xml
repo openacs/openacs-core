@@ -14,10 +14,10 @@
     </authorblurb>
     
 <sect2 id="tutorial-picture">
-  <title>The basic coding model</title>
+  <title>The intended page map</title>
 <para>...</para>
 <imageobject>
-          <imagedata fileref="images/code-model.png" format="png"/>
+          <imagedata fileref="images/openacs best practice.png" format="png"/>
   </imageobject>
 </sect2>
 
@@ -35,8 +35,17 @@
     minimum steps to create a useful package, including writing
       documentation, setting up database tables and procedures,
       writing web pages, debugging, and automatic regression testing.
-</para>
+      </para>
+      
+      <para>
+        This tutorial uses the content repository package.  This
+        radically simplifies the database work, but forces us to work
+        around the content repository's limitations, including an
+        incomplete TCL API.  So the tutorial is messier than we'd like
+        right now.  Code that is temporary hackage is clearly marked.
 
+      </para>
+      
     <para>In this tutorial, we will make an application package for
     displaying a list of text notes.
 </para>
@@ -117,10 +126,6 @@ standard OpenACS &version; distribution.
               <computeroutput>Package Plural</computeroutput>:
               <userinput>My First Package</userinput></para></listitem>
             <listitem><para>	  
-              <computeroutput>Auto-mount URI</computeroutput>:
-              <userinput>myfirstpackage</userinput>
-            </para></listitem>
-            <listitem><para>	  
               <computeroutput>Initial Version</computeroutput>:
               <userinput>0.1d</userinput>
             </para></listitem>
@@ -155,27 +160,14 @@ standard OpenACS &version; distribution.
       <orderedlist>
         <listitem><para>Browse to
 <computeroutput><replaceable>http://yourserver.test:8000</replaceable><ulink
-        url="/admin/site-map/">/admin/site-map/</ulink></computeroutput>.</para>
+        url="/admin/applications/application-add">/admin/applications/application-add/</ulink></computeroutput>.</para>
         </listitem>
         <listitem>
-          <para>Click the <computeroutput><guilabel>new sub
-        folder</guilabel></computeroutput> link on the top row in the
-        Site Map table.</para>
+          <para>Choose "My First Package" from the list and click OK (the other fields are optional).</para>
         </listitem>
-        <listitem><para>Type <userinput>note</userinput>
-and click <computeroutput><guibutton>New</guibutton></computeroutput>. </para></listitem>
-        <listitem><para>This creates a new row called
-<computeroutput>note</computeroutput>.  In the new row, click the <computeroutput><guilabel>new
-application</guilabel></computeroutput> link</para></listitem>
-        <listitem><para>Type <userinput>My First Package</userinput> where
-it says
-<computeroutput><guilabel>untitled</guilabel></computeroutput>, choose
-<computeroutput><guilabel>My First Package</guilabel></computeroutput> from the drop-down list, and
-click <computeroutput><guibutton>New</guibutton></computeroutput>.
-</para></listitem>
       </orderedlist>
       <para>By mounting the package, we've caused all requests to
-      <computeroutput>http://yourserver.test:8000/myfirstpackage</computeroutput>
+      <computeroutput>http://yourserver.test:8000/my-first-package</computeroutput>
       to be satisfied from the files at <computeroutput>/var/lib/aolserver/service0/packages/myfirstpackage/www</computeroutput>.</para>
     </sect2>
   </sect1>

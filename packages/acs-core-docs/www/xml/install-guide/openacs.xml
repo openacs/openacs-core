@@ -89,7 +89,7 @@ U install/tcl/user-procs.tcl
         unchanged at 127.0.0.1:8000.</para>
         <para>Run the file as root.</para>
         <screen>[service0@yourserver service0]$ <userinput>exit</userinput> 
-[root@yourserver root]# <userinput>./home/<replaceable>service0</replaceable>/install/install.sh</userinput>
+[root@yourserver root]# <userinput>sh /home/<replaceable>service0</replaceable>/install/install.sh</userinput>
 /home/service0/install/install.sh: Starting installation with config_file 
 /home/service0/install/install.tcl. Using serverroot=/var/lib/aolserver/
 service0, server_url=http://0.0.0.0:8000, do_checkout=yes, do_install=yes, 

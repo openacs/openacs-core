@@ -19,9 +19,23 @@
 
   <itemizedlist>
     <listitem>
-      <formalpara id="install-postgres-rpm">
+      <formalpara id="install-postgres-debian">
+        <title>Debian</title>
+        <para></para>
+      </formalpara>
+      <para>Debian users can install the package and add some backwards-compatibility links:</para>
+      <screen><userinput>apt-get install postgresql postgresql-dev postgresql-doc
+ln -s /usr/include/postgresql/ /usr/include/pgsql
+ln -s /var/lib/postgres /usr/local/pgsql
+ln -s /usr/include/pgsql /usr/local/pgsql/include
+su postgres -c "/usr/lib/postgresql/bin/createlang plpgsql template1"</userinput></screen>
+      <para>and proceed to <xref linkend="postgres-tune"/> or to the
+      next section.</para>
+    </listitem>
+    <listitem>
+        <formalpara id="install-postgres-rpm">
         <title>Using the Red Hat RPM</title>
-  <para>Red Hat users: If you install PostGreSQL 7.3.2 from the Red Hat 9 RPM, you
+       <para>Red Hat users: If you install PostGreSQL 7.3.2 from the Red Hat 9 RPM, you
   can skip a few steps.  These shell commands add some links for compatibility with the directories from a source-based install; start the service; create a new group for web service
   users, and modify the postgres user's
   environment (<link linkend="install-postgres-env">more
@@ -388,7 +402,7 @@ root:~ # </screen>
     </para>
     </listitem>
     <listitem>
-      <formalpara>
+      <formalpara id="postgres-tune">
         <title>Tune postgres.  (OPTIONAL)</title>
         <para>The default values for PostGreSQL are very conservative; we can safely change some of them and improve performance.</para>  
       </formalpara>
@@ -399,7 +413,7 @@ root:~ # </screen>
           <screen>[root@yourserver root]# <userinput>echo 134217728 &gt;/proc/sys/kernel/shmmax</userinput>
 [root@yourserver root]#</screen>
           <para>Make that change permanent by editing
-          <computeroutput>emacs /etc/sysctl.conf</computeroutput> to
+          <computeroutput>/etc/sysctl.conf</computeroutput> to
           add these lines at the end:</para>
 <programlisting># increase shared memory limit for postgres
 kernel.shmmax = 134217728</programlisting>

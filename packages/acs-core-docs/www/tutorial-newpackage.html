@@ -1,8 +1,8 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Creating a Package</title><meta name="generator" content="DocBook XSL Stylesheets V1.60.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="tutorial.html" title="Chapter 7. Development Tutorial"><link rel="previous" href="tutorial.html" title="Chapter 7. Development Tutorial"><link rel="next" href="tutorial-database.html" title="Setting Up Database Objects"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="tutorial.html">Prev</a> </td><th width="60%" align="center">Chapter 7. Development Tutorial</th><td width="20%" align="right"> <a accesskey="n" href="tutorial-database.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="tutorial-newpackage"></a>Creating a Package</h2></div></div><div></div></div><div class="authorblurb"><p>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Creating a Package</title><meta name="generator" content="DocBook XSL Stylesheets V1.62.4"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="tutorial.html" title="Chapter 7. Development Tutorial"><link rel="previous" href="tutorial.html" title="Chapter 7. Development Tutorial"><link rel="next" href="tutorial-database.html" title="Setting Up Database Objects"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="tutorial.html">Prev</a> </td><th width="60%" align="center">Chapter 7. Development Tutorial</th><td width="20%" align="right"> <a accesskey="n" href="tutorial-database.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="tutorial-newpackage"></a>Creating a Package</h2></div></div><div></div></div><div class="authorblurb"><p>
       by <a href="mailto:joel@aufrecht.org" target="_top">Joel Aufrecht</a><br>
           OpenACS docs are written by the named authors, and may be edited
           by OpenACS documentation staff.
-        </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="tutorial-picture"></a>The basic coding model</h3></div></div><div></div></div><p>...</p><img src="images/code-model.png"></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2837664"></a>Overview</h3></div></div><div></div></div><p>To start developing new code in OpenACS, we build a new
+        </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="tutorial-picture"></a>The intended page map</h3></div></div><div></div></div><p>...</p><img src="images/openacs%20best%20practice.png"></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2841847"></a>Overview</h3></div></div><div></div></div><p>To start developing new code in OpenACS, we build a new
     package.  A package is a a discrete collection of web
     pages, tcl code, and database tables and procedures.  A package
       with user interface is called an <span class="emphasis"><em>application</em></span>; a package which provides
@@ -13,13 +13,20 @@
     minimum steps to create a useful package, including writing
       documentation, setting up database tables and procedures,
       writing web pages, debugging, and automatic regression testing.
-</p><p>In this tutorial, we will make an application package for
+      </p><p>
+        This tutorial uses the content repository package.  This
+        radically simplifies the database work, but forces us to work
+        around the content repository's limitations, including an
+        incomplete TCL API.  So the tutorial is messier than we'd like
+        right now.  Code that is temporary hackage is clearly marked.
+
+      </p><p>In this tutorial, we will make an application package for
     displaying a list of text notes.
-</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2832534"></a>Before you begin</h3></div></div><div></div></div><p>You will need:</p><div class="itemizedlist"><ul type="disc"><li><p>A computer with a working installation of
+</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2846399"></a>Before you begin</h3></div></div><div></div></div><p>You will need:</p><div class="itemizedlist"><ul type="disc"><li><p>A computer with a working installation of
 	  OpenACS.  If you don't have this, see <a href="install-overview.html" title="Chapter 2. Installation Overview">Chapter 2, <i>Installation Overview</i></a>.
 	  </p></li><li><p>Example files, which are included in the
 standard OpenACS 5.0.0a4 distribution.
-	  </p></li></ul></div><div class="figure"><a name="id2834526"></a><p class="title"><b>Figure 7.1. Assumptions in this section</b></p><div class="informaltable"><table cellspacing="0" border="1"><colgroup><col><col></colgroup><tbody><tr><td>Fully qualified domain name of your server</td><td><span class="replaceable"><span class="replaceable">yourserver.test</span></span></td></tr><tr><td>URL of your server</td><td><span class="replaceable"><span class="replaceable">http://yourserver.test:8000</span></span></td></tr><tr><td>Name of development account</td><td><span class="replaceable"><span class="replaceable">service0</span></span></td></tr><tr><td>New Package key</td><td><span class="replaceable"><span class="replaceable">myfirstpackage</span></span></td></tr></tbody></table></div></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2837724"></a>Use the APM to initialize a new package</h3></div></div><div></div></div><p>We use the <a href="packages.html" target="_top">ACS Package Manager</a> (APM) to add, remove, and
+	  </p></li></ul></div><div class="figure"><a name="id2844174"></a><p class="title"><b>Figure 7.1. Assumptions in this section</b></p><div class="informaltable"><table cellspacing="0" border="1"><colgroup><col><col></colgroup><tbody><tr><td>Fully qualified domain name of your server</td><td><span class="replaceable"><span class="replaceable">yourserver.test</span></span></td></tr><tr><td>URL of your server</td><td><span class="replaceable"><span class="replaceable">http://yourserver.test:8000</span></span></td></tr><tr><td>Name of development account</td><td><span class="replaceable"><span class="replaceable">service0</span></span></td></tr><tr><td>New Package key</td><td><span class="replaceable"><span class="replaceable">myfirstpackage</span></span></td></tr></tbody></table></div></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2827249"></a>Use the APM to initialize a new package</h3></div></div><div></div></div><p>We use the <a href="packages.html" target="_top">ACS Package Manager</a> (APM) to add, remove, and
     upgrade packages.  It handles package meta-data, such as lists of
     files that belong in the package.  Each package is uniquely
     identified by a package key.  To start developing a new
@@ -39,9 +46,6 @@ standard OpenACS 5.0.0a4 distribution.
             </p></li><li><p>
               <tt class="computeroutput">Package Plural</tt>:
               <b class="userinput"><tt>My First Package</tt></b></p></li><li><p>	  
-              <tt class="computeroutput">Auto-mount URI</tt>:
-              <b class="userinput"><tt>myfirstpackage</tt></b>
-            </p></li><li><p>	  
               <tt class="computeroutput">Initial Version</tt>:
               <b class="userinput"><tt>0.1d</tt></b>
             </p></li><li><p><tt class="computeroutput">Summary</tt>:
@@ -51,7 +55,7 @@ standard OpenACS 5.0.0a4 distribution.
         </p></li></ol></div><p>This creates a package rooted at
           <tt class="computeroutput">/var/lib/aolserver/<span class="replaceable"><span class="replaceable">service0</span></span>/packages/<span class="replaceable"><span class="replaceable">myfirstpackage</span></span></tt>.
           This is the "home directory" of our new package, and all
-          files in the package will be within this directory.</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2837927"></a>Mount the package in the site map</h3></div></div><div></div></div><p>In order to see your work in progress, you must create a
+          files in the package will be within this directory.</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2848216"></a>Mount the package in the site map</h3></div></div><div></div></div><p>In order to see your work in progress, you must create a
       map between the URL space of incoming requests and the package.
       You do this by mounting the package in the Site Map.  This
       creates a link between the incoming URL and an
@@ -61,16 +65,6 @@ standard OpenACS 5.0.0a4 distribution.
       code and tables.  This requires that a package be developed
       <span class="emphasis"><em>package-aware</em></span>.  You'll see how to do that
       in this tutorial.</p><div class="orderedlist"><ol type="1"><li><p>Browse to
-<tt class="computeroutput"><span class="replaceable"><span class="replaceable">http://yourserver.test:8000</span></span><a href="/admin/site-map/" target="_top">/admin/site-map/</a></tt>.</p></li><li><p>Click the <tt class="computeroutput"><span class="guilabel"><span class="guilabel">new sub
-        folder</span></span></tt> link on the top row in the
-        Site Map table.</p></li><li><p>Type <b class="userinput"><tt>note</tt></b>
-and click <tt class="computeroutput"><span class="guibutton"><span class="guibutton">New</span></span></tt>. </p></li><li><p>This creates a new row called
-<tt class="computeroutput">note</tt>.  In the new row, click the <tt class="computeroutput"><span class="guilabel"><span class="guilabel">new
-application</span></span></tt> link</p></li><li><p>Type <b class="userinput"><tt>My First Package</tt></b> where
-it says
-<tt class="computeroutput"><span class="guilabel"><span class="guilabel">untitled</span></span></tt>, choose
-<tt class="computeroutput"><span class="guilabel"><span class="guilabel">My First Package</span></span></tt> from the drop-down list, and
-click <tt class="computeroutput"><span class="guibutton"><span class="guibutton">New</span></span></tt>.
-</p></li></ol></div><p>By mounting the package, we've caused all requests to
-      <tt class="computeroutput">http://yourserver.test:8000/myfirstpackage</tt>
+<tt class="computeroutput"><span class="replaceable"><span class="replaceable">http://yourserver.test:8000</span></span><a href="/admin/applications/application-add" target="_top">/admin/applications/application-add/</a></tt>.</p></li><li><p>Choose "My First Package" from the list and click OK (the other fields are optional).</p></li></ol></div><p>By mounting the package, we've caused all requests to
+      <tt class="computeroutput">http://yourserver.test:8000/my-first-package</tt>
       to be satisfied from the files at <tt class="computeroutput">/var/lib/aolserver/service0/packages/myfirstpackage/www</tt>.</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="tutorial.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="tutorial-database.html">Next</a></td></tr><tr><td width="40%" align="left">Chapter 7. Development Tutorial </td><td width="20%" align="center"><a accesskey="u" href="tutorial.html">Up</a></td><td width="40%" align="right"> Setting Up Database Objects</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a><center><a href="http://openacs.org/doc/tutorial-newpackage.html#comments">View comments on this page at openacs.org</a></center></body></html>
