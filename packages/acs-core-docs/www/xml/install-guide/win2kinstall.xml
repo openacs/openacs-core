@@ -5,6 +5,15 @@
 <para>By <ulink url="mailto:mburke@arsdigita.com">Matthew Burke</ulink> and <ulink url="mailto:curtisg@arsdigita.com">Curtis Galloway</ulink></para>
 </authorblurb>
     
+  <para><emphasis role="strong">NOTE:</emphasis> These instructions were
+	valid for ACS v4, but have not been tested with OpenACS. Currently
+	(5/2002), the best option to get OpenACS &version; running on Windows
+	is to use <ulink url="http://vmware.com">VMware</ulink> and John
+	Sequeira's <ulink
+	url="http://www.pobox.com/~johnseq/projects/oasisvm/">Oasis VM
+	distribution</ulink>
+  </para>
+
 
     <itemizedlist>
       <listitem><para>Source: <ulink url="http://software.arsdigita.com/dist">http://software.arsdigita.com/dist</ulink></para></listitem>
@@ -485,3 +494,8 @@ bin\nsd -I -s iguanasdirect -t iguanasdirect.tcl
 </sect2>
 </sect1>
 
+<!--
+       Local Variables:
+       sgml-parent-document: ("../index.xml" "chapter" "sect1")
+       End:
+-->

@@ -1,6 +1,10 @@
 <sect1 id="operating-system" xreflabel="Install an Operating System">
   <title>Install an Operating System</title>
 
+  <authorblurb>
+	by <ulink url="mailto:vinod@kurup.com">Vinod Kurup</ulink>
+  </authorblurb>
+
   <para>
 	We won't provide detailed instructions to install an operating system
 	since there are so many valid choices available and each OS has their
@@ -38,11 +42,16 @@
 		  <xref linkend="win2k-installation" />
 		</para>
 		<para>
-		  This was written for ACS and has <emphasis>not</emphasis> yet been updated for
-		  OpenACS. (Note: AOLServer is no longer supporting Windows 
-		  - it may be possible to run AOLServer under 
-		  <ulink url="http://www.cygwin.com">Cygwin</ulink>, but I 
-		  haven't seen any success reports yet).
+		  This was written for ACS and has <emphasis>not</emphasis> yet
+		  been updated for OpenACS. (Note: AOLServer is no longer
+		  supporting Windows - it may be possible to run AOLServer under
+		  <ulink url="http://www.cygwin.com">Cygwin</ulink>, but I haven't
+		  seen any success reports yet). Another alternative is to use John
+		  Sequeira's <ulink
+		  url="http://www.pobox.com/~johnseq/projects/oasisvm/">Oasis
+		  VM</ulink>, which is basically a fully working OpenACS &version;
+		  system that you load into <ulink
+		  url="http://vmware.com">VMware</ulink>.
 		</para>
 	  </listitem>
 	  
@@ -234,3 +243,8 @@
 	<para><phrase role="cvstag">($Id$)</phrase></para>
 
 </sect1>
+<!--
+       Local Variables:
+       sgml-parent-document: ("../index.xml" "chapter" "sect1")
+       End:
+-->

@@ -1,51 +1,16 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-<meta content="text/html; charset=ISO-8859-1" http-equiv="Content-Type">
-<title>The OpenACS Database Access API</title>
-<meta name="generator" content="DocBook XSL Stylesheets V1.45">
-<link rel="home" href="index.html" title="OpenACS Documentation">
-<link rel="up" href="dev-guide.html" title="Chapter 4. OpenACS Developer's Guide">
-<link rel="previous" href="request-processor.html" title="The Request Processor">
-<link rel="next" href="templates.html" title="Using Templates in OpenACS 4.5">
-<link rel="stylesheet" href="openacs.css" type="text/css">
-</head>
-<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
-<div class="navheader">
-<a href="http://openacs.org"><img src="images/alex.jpg" border="0"></a><table width="100%" summary="Navigation header" border="0"><tr>
-<td width="20%" align="left">
-<a accesskey="p" href="request-processor.html">Prev</a>&nbsp;</td>
-<th width="60%" align="center">Chapter 4. OpenACS Developer's Guide</th>
-<td width="20%" align="right">&nbsp;<a accesskey="n" href="templates.html">Next</a>
-</td>
-</tr></table>
-<hr>
-</div>
-<div class="sect1">
-<div class="titlepage"><div><h2 class="title" style="clear: both">
-<a name="db-api"></a>The OpenACS Database Access API</h2></div></div>
-<p>
+<html><head><meta content="text/html; charset=ISO-8859-1" http-equiv="Content-Type"><title>The OpenACS Database Access API</title><meta name="generator" content="DocBook XSL Stylesheets V1.50.0"><link rel="home" href="index.html" title="OpenACS Documentation"><link rel="up" href="dev-guide.html" title="Chapter 4. OpenACS Developer's Guide"><link rel="previous" href="request-processor.html" title="The Request Processor"><link rel="next" href="templates.html" title="Using Templates in OpenACS 4.5"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="images/alex.jpg" border="0"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="request-processor.html">Prev</a>&nbsp;</td><th width="60%" align="center">Chapter 4. OpenACS Developer's Guide</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="templates.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><h2 class="title" style="clear: both"><a name="db-api"></a>The OpenACS Database Access API</h2></div></div><p>
     By <a href="mailto:psu@arsdigita.com" target="_top">Pete Su</a> and
     <a href="mailto:jsalz@mit.edu" target="_top">Jon Salz</a>. Modified
     by Roberto Mello.
-  </p>
-<div class="sect2">
-<div class="titlepage"><div><h3 class="title">
-<a name="db-api-overview"></a>Overview</h3></div></div>
-<p>
+  </p><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="db-api-overview"></a>Overview</h3></div></div><p>
       One of OpenACS's great strengths is that code written for it is
       very close to the database. It is very easy to interact with the
       database from anywhere within OpenACS. Our goal is to develop a
       coherent API for database access which makes this even easier.
-    </p>
-</div>
-<div class="sect2">
-<div class="titlepage"><div><h3 class="title">
-<a name="db-api-theoldway"></a>The Old Way</h3></div></div>
-<p>
+    </p></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="db-api-theoldway"></a>The Old Way</h3></div></div><p>
       Here's a typical block of code from an OpenACS 3.x dynamic page:
-    </p>
-<pre class="programlisting">
+    </p><pre class="programlisting">
 set tcl_var &quot;foo&quot;
 
 set db [ns_db gethandle]
@@ -74,47 +39,33 @@ while { [ns_db getrow $db $selection] } {
 }
 
 ns_db releasehandle $db
-    </pre>
-<p>
+    </pre><p>
       Writing code like this had the following annoyances:
 
-      <div class="itemizedlist"><ul>
-<li style="list-style-type: opencircle"><p>
+      </p><div class="itemizedlist"><ul type="opencircle"><li style="list-style-type: opencircle"><p>
 	    It was repetitive, tedious and error prone to write the same type of
 	    loops over and over again.
-	  </p></li>
-<li style="list-style-type: opencircle"><p>
+	  </p></li><li style="list-style-type: opencircle"><p>
 	    Using Tcl variable interpolation in a literal string, to pass values
 	    from the page to the database, is error prone, relatively inefficient,
 	    and a good way to compromise the security of a web site.
-	  </p></li>
-<li style="list-style-type: opencircle"><p>
+	  </p></li><li style="list-style-type: opencircle"><p>
 	    Magic like <tt>set_variables_after_query</tt> made code confusing.
-	  </p></li>
-<li style="list-style-type: opencircle"><p>
+	  </p></li><li style="list-style-type: opencircle"><p>
 	    The scope of transactions is not clear from reading the code.
-	  </p></li>
-<li style="list-style-type: opencircle"><p>
+	  </p></li><li style="list-style-type: opencircle"><p>
 	    Passing handles around explicitly made it easy to use them in bad
 	    ways, like holding a handle for too long while returning data to a
 	    user's browser.
-	  </p></li>
-</ul></div>
+	  </p></li></ul></div><p>
 
-    </p>
-<p>
+    </p><p>
       Introduced in ACS 3.4, the new Database API is meant to save
       developers from the above tedium and provide a more structured syntax
       for specifying database operations, including transactions.
-    </p>
-</div>
-<div class="sect2">
-<div class="titlepage"><div><h3 class="title">
-<a name="db-api-thenewway"></a>The New Way</h3></div></div>
-<p>
+    </p></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="db-api-thenewway"></a>The New Way</h3></div></div><p>
       Here is how you would code up the example above using the new API.
-    </p>
-<pre class="programlisting">
+    </p><pre class="programlisting">
 set count 0 
 
 set tcl_var &quot;foo&quot;
@@ -136,49 +87,36 @@ db_transaction {
             	incr count
         }
 }
-    </pre>
-<p>
+    </pre><p>
       There are several things to note here:
 
-      <div class="orderedlist"><ol type="1">
-<li><p>
+      </p><div class="orderedlist"><ol type="1"><li><p>
 	    No explicit code for grabbing and releasing handles. Usage of the
 	    Database API implicitly deals with all handle management issues.
-	  </p></li>
-<li><p>
+	  </p></li><li><p>
 	    The new command <tt>db_transaction</tt>
 	    makes the scope of a transaction
 	    clear. <tt>db_transaction</tt> takes the
 	    code block argument and automatically runs it in the context of a
 	    transaction.
-	  </p></li>
-<li><p>
+	  </p></li><li><p>
 	    The new command <tt>db_foreach</tt> writes
 	    our old while loop for us.
-	  </p></li>
-<li><p>
+	  </p></li><li><p>
 	    Every SQL query has a name, meant to be unique within the server
 	    instance (though this is not enforced).
-	  </p></li>
-<li><p>
+	  </p></li><li><p>
 	    Finally and most importantly, there is a new scheme for passing data
 	    from a Tcl variable to the database, which we'll cover next.
-	  </p></li>
-</ol></div>
+	  </p></li></ol></div><p>
 
-    </p>
-</div>
-<div class="sect2">
-<div class="titlepage"><div><h3 class="title">
-<a name="db-api-bindvariables"></a>Bind Variables</h3></div></div>
-<p>
+    </p></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="db-api-bindvariables"></a>Bind Variables</h3></div></div><p>
       Bind variables are placeholders for literal values in an SQL query
       being sent to the server. Take the example query above: in the old
       way, data was generally passed to Oracle directly, via Tcl string
       interpolation. So in the example above, the actual query we send would
       look like this:
-    </p>
-<pre class="programlisting">
+    </p><pre class="programlisting">
 select 
     foo, 
     bar, 
@@ -186,32 +124,25 @@ select
 from some_table, some_other_table
 where some_table.id=some_other_table.id  
 and some_table.condition_p = 'foo'
-    </pre>
-<p>
+    </pre><p>
       There are a few problems with this:
-    </p>
-<div class="orderedlist"><ol type="1">
-<li>
+    </p><div class="orderedlist"><ol type="1"><li>
 	If the literal value is a
 	huge string, then we waste a lot of time in the database server doing
 	useless parsing.
-      </li>
-<li>
+      </li><li>
 	Second, if the literal value contains characters like
 	single quotes, we have to be careful to double-quote them, because not
 	quoting them will lead to surprising errors.
-      </li>
-<li>
-<p>
+      </li><li><p>
 	   Third, no type checking
 	  occurs on the literal value. Finally, if the Tcl variable is passed in
 	  or between web forms or otherwise subject to external modification,
 	  there is nothing keeping malicious users from setting the Tcl variable
 	  to some string that changes the query textually.
-	</p>
-<p>
+	</p><p>
 	    This type of attack,
-	  called <span class="emphasis"><i>SQL smuggling</i></span>, can be very
+	  called <span class="emphasis"><em>SQL smuggling</em></span>, can be very
 	  damaging - entire tables can be
 	  exposed or have their contents deleted, for example. Another very
 	  important reason for using bind variables is performance. Oracle caches
@@ -222,15 +153,11 @@ and some_table.condition_p = 'foo'
 	  the same) while SQL statements that do not use bind variables will not
 	  match unless the values in the statement are exactly the same. This will
 	  improve performance considerably.
-	</p>
-</li>
-</ol></div>
-<p>
+	</p></li></ol></div><p>
       To fix all these problems, we replace literal values in the query with
       a placeholder character, and then send the data along after. So the
       query looks like this:
-    </p>
-<pre class="programlisting">
+    </p><pre class="programlisting">
 select 
     foo, 
     bar, 
@@ -238,12 +165,10 @@ select
 from some_table, some_other_table
 where some_table.id = some_other_table.id
 and some_table.condition_p = ?
-    </pre>
-<p>
+    </pre><p>
       The '?' character means &quot;This will be filled in later with literal
       data&quot;. In use, you might write code that looks like this:
-    </p>
-<pre class="programlisting">
+    </p><pre class="programlisting">
 set statement [prepare_query &quot;
     		select 
         		foo, 
@@ -255,30 +180,26 @@ set statement [prepare_query &quot;
 	       &quot;]
 
 [bind_param $statement 1 $tcl_var]
-    </pre>
-<p>
+    </pre><p>
       The above example is meant to be psuedo-Tcl - no API like this
       actually exists.  What happens is that we first send the SQL statement
-      to the server for parsing, then later we <span class="emphasis"><i>bind</i></span> values to the
+      to the server for parsing, then later we <span class="emphasis"><em>bind</em></span> values to the
       placeholders, and send those values along seperately. This seperate
-      binding step is where the term <span class="emphasis"><i>bind variable</i></span> comes from.
-    </p>
-<p>
+      binding step is where the term <span class="emphasis"><em>bind variable</em></span> comes from.
+    </p><p>
       This split has several advantages. First, type checking happens on the
       literal. If the column we are comparing against holds numbers, and we
       send a string, we get a nice error. Second, since string literals are
       no longer in the query, no extra quoting is required. Third,
       substitution of bind variables cannot change the actual text of the
       query, only the literal values in the placeholders.
-    </p>
-<p>
+    </p><p>
       The database API makes bind variables easy to use by hooking them
       smoothly into the Tcl runtime. Rather than using a '?' as a generic
       placeholder, you use a colon followed by the name of the Tcl variable
       that you wish to pass as a literal. So here's the final, real-life
       form of the example query:
-    </p>
-<pre class="programlisting">
+    </p><pre class="programlisting">
 select 
     foo, 
     bar, 
@@ -286,62 +207,46 @@ select
 from some_table, some_other_table
 where some_table.id = some_other_table.id  
 and some_table.condition_p = :tcl_var
-    </pre>
-<p>
+    </pre><p>
       The database API parses the query and pulls out all the bind variable
       specifications and replaces them with generic placeholders.  It then
       automatically pulls the values of the named Tcl vars out of the
       runtime environment of the script, and passes them to the database.
-    </p>
-<p>
+    </p><p>
       Note that while this looks like a simple syntactic change, it really
       is very different from how we've written queries in the past.  You use
       bind variables to replace what would otherwise be a literal value in a
       query, and Tcl style string interpolation does not happen. So you
       cannot do something like:
-    </p>
-<pre class="programlisting">
+    </p><pre class="programlisting">
 set table &quot;baz&quot;
 set condition &quot;where foo = bar&quot;
 
 db_foreach my_query { select :table from some_table where :condition }
-    </pre>
-<p>
+    </pre><p>
       SQL will not allow a literal to occur where we've put the bind
       variables, so the query is syntactically incorrect. You have to
       remember that while the bind variable syntax looks similar to variable
-      interpolation in Tcl, it is <span class="emphasis"><i>not the same thing at all</i></span>.
-    </p>
-<p>
+      interpolation in Tcl, it is <span class="emphasis"><em>not the same thing at all</em></span>.
+    </p><p>
       Finally, the DB API has several different styles for passing bind
       variable values to queries. In general, use the style presented here
       because it is the most convenient. 
-    </p>
-<div class="sect3">
-<div class="titlepage"><div><h4 class="title">
-<a name="db-api-bind-vars-usage"></a>Usage</h4></div></div>
-<p>Every <tt>db_*</tt> command accepting a SQL command as an argument
-	supports bind variables. You can either</p>
-<div class="itemizedlist"><ul>
-<li><p>
+    </p><div class="sect3"><div class="titlepage"><div><h4 class="title"><a name="db-api-bind-vars-usage"></a>Usage</h4></div></div><p>Every <tt>db_*</tt> command accepting a SQL command as an argument
+	supports bind variables. You can either</p><div class="itemizedlist"><ul type="disc"><li><p>
 	    Specify the <tt>-bind</tt> switch to provide a set with bind variable
 	    values, or
-	  </p></li>
-<li><p>
+	  </p></li><li><p>
 	    Specify the <tt>-bind</tt> switch to explicitly provide a list of
 	    bind variable names and values, or
-	  </p></li>
-<li><p>
+	  </p></li><li><p>
 	    Not specify a bind variable list at all, in which case Tcl variables are
 	    used as bind variables.
-	  </p></li>
-</ul></div>
-<p>
+	  </p></li></ul></div><p>
 	The default behavior (i.e., if the <tt>-bind</tt> switch is omitted) is
 	that these procedures expect to find local variables that correspond in name
 	to the referenced bind variables, e.g.: 
-      </p>
-<pre class="programlisting">
+      </p><pre class="programlisting">
 
 set user_id 123456
 set role &quot;administrator&quot;
@@ -357,14 +262,11 @@ db_foreach user_group_memberships_by_role {
     # of &quot;administrator&quot;
 }
 
-      </pre>
-<p>
+      </pre><p>
 	The value of the local Tcl variable <tt>user_id</tt> (123456) is bound to
 	the <tt>user_id</tt> bind variable. 
-      </p>
-<p>The <tt>-bind</tt> switch can takes the name of an <tt>ns_set</tt>
-	containing keys for each bind variable named in the query, e.g.:</p>
-<pre class="programlisting">
+      </p><p>The <tt>-bind</tt> switch can takes the name of an <tt>ns_set</tt>
+	containing keys for each bind variable named in the query, e.g.:</p><pre class="programlisting">
 
 set bind_vars [ns_set create]
 ns_set put $bind_vars user_id 123456
@@ -381,12 +283,10 @@ db_foreach user_group_memberships_by_role {
     # of &quot;administrator&quot;
 }
 
-      </pre>
-<p>
+      </pre><p>
 	Alternatively, as an argument to <tt>-bind</tt> you can specify a list of
 	alternating name/value pairs for bind variables: 
-      </p>
-<pre class="programlisting">
+      </p><pre class="programlisting">
 	
 db_foreach user_group_memberships_by_role {
     select g.group_id, g.group_name
@@ -399,26 +299,18 @@ db_foreach user_group_memberships_by_role {
     # of &quot;administrator&quot;
 }
 
-      </pre>
-</div>
-<div class="sect3">
-<div class="titlepage"><div><h4 class="title">
-<a name="dbapi_nulls_and_bind_vars"></a>Nulls and Bind Variables</h4></div></div>
-<p>
+      </pre></div><div class="sect3"><div class="titlepage"><div><h4 class="title"><a name="dbapi_nulls_and_bind_vars"></a>Nulls and Bind Variables</h4></div></div><p>
 	When processing a DML statement, Oracle coerces empty strings into
-	<tt>null</tt>. (This coercion does <span class="emphasis"><i>not</i></span> occur in the
+	<tt>null</tt>. (This coercion does <span class="emphasis"><em>not</em></span> occur in the
 	<tt>WHERE</tt> clause of a query, i.e.
 	<tt>col = ''</tt> and
 	<tt>col is null</tt> are not equivalent.) 
-      </p>
-<p>As a result, when using bind variables, the only way to make Oracle set a
+      </p><p>As a result, when using bind variables, the only way to make Oracle set a
 	column value to <tt>null</tt> is to set the corresponding bind variable
 	to the empty string, since a bind variable whose value is the string
 	&quot;null&quot; will be interpreted as the literal string
-	&quot;null&quot;.</p>
-<p>These Oracle quirks complicate the process of writing clear and abstract
-	DML difficult. Here is an example that illustrates why:</p>
-<pre class="programlisting">
+	&quot;null&quot;.</p><p>These Oracle quirks complicate the process of writing clear and abstract
+	DML difficult. Here is an example that illustrates why:</p><pre class="programlisting">
 
 #
 # Given the table:
@@ -438,19 +330,15 @@ db_dml foo_create &quot;insert into foo(bar, baz) values(:bar, :baz)&quot;
 # null, because Oracle has coerced the empty string (even for the
 # numeric column &quot;bar&quot;) into null in both cases
 
-      </pre>
-<p>
+      </pre><p>
 	Since databases other than Oracle do not coerce empty strings into
 	<tt>null</tt>, this code has different semantics depending on the
 	underlying database (i.e., the row that gets inserted may not have null as
 	its column values), which defeats the purpose of SQL abstraction. 
-      </p>
-<p>Therefore, the Database Access API provides a database-independent way to
+      </p><p>Therefore, the Database Access API provides a database-independent way to
 	represent <tt>null</tt> (instead of the Oracle-specific idiom of the
-	empty string): <tt>db_null</tt>.</p>
-<p>Use it instead of the empty string whenever you want to set a column value
-	explicitly to <tt>null</tt>, e.g.:</p>
-<pre class="programlisting">
+	empty string): <tt>db_null</tt>.</p><p>Use it instead of the empty string whenever you want to set a column value
+	explicitly to <tt>null</tt>, e.g.:</p><pre class="programlisting">
 
 set bar [db_null]
 set baz [db_null]
@@ -459,13 +347,7 @@ db_dml foo_create &quot;insert into foo(bar, baz) values(:bar, :baz)&quot;
 #
 # sets the values for both the &quot;bar&quot; and &quot;baz&quot; columns to null
 
-      </pre>
-</div>
-</div>
-<div class="sect2">
-<div class="titlepage"><div><h3 class="title">
-<a name="db-api-pooling"></a>Sequence Pooling</h3></div></div>
-<p>
+      </pre></div></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="db-api-pooling"></a>Sequence Pooling</h3></div></div><p>
       The database library can transparently maintain pools of sequence values, so
       that each request for a new sequence value (using <tt>db_nextval</tt>)
       does not incur a roundtrip to the server. For instance, this functionality is
@@ -474,113 +356,86 @@ db_dml foo_create &quot;insert into foo(bar, baz) values(:bar, :baz)&quot;
       functionality for a particular sequence, register the sequence to be pooled,
       either using the <tt>db_register_pooled_sequence</tt> procedure at server
       startup time, or by including a configuration parameter of the form 
-    </p>
-<pre class="programlisting">
+    </p><pre class="programlisting">
 
-PoolSequence.<span class="emphasis"><i>sequence_name_seq</i></span>=<span class="emphasis"><i>count</i></span>
+PoolSequence.<span class="emphasis"><em>sequence_name_seq</em></span>=<span class="emphasis"><em>count</em></span>
 
-    </pre>
-<p>
-      in <span class="emphasis"><i>any</i></span> configuration section in the <tt>yourservername.ini</tt>
+    </pre><p>
+      in <span class="emphasis"><em>any</em></span> configuration section in the <tt>yourservername.ini</tt>
       file, e.g., e.g., 
-    </p>
-<pre class="programlisting">
+    </p><pre class="programlisting">
 
-[ns/server/<span class="emphasis"><i>yourservername</i></span>/acs/security]
+[ns/server/<span class="emphasis"><em>yourservername</em></span>/acs/security]
 PoolSequence.sec_id_seq=20
 
-    </pre>
-<p>
+    </pre><p>
       The database library will allocate this number of sequence values at server
       startup. It will periodically scan pools and allocate new values for
       sequences which are less than half-full. (This normally occurs every 60
       seconds, and is configurable via the
       <tt>PooledSequenceUpdateInterval</tt> parameter in the
       <tt>[ns/server/</tt>
-      <span class="emphasis"><i><tt>yourservername</tt></i></span>
+      <span class="emphasis"><em><tt>yourservername</tt></em></span>
       <tt>/acs/database]</tt> configuration
       section.) 
-    </p>
-</div>
-<div class="sect2">
-<div class="titlepage"><div><h3 class="title">
-<a name="db-api-basicapi"></a>Basic API</h3></div></div>
-<p>
+    </p></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="db-api-basicapi"></a>Basic API</h3></div></div><p>
       The Database API has several functions that wrap familiar parts of the
       AOLserver database API. 
-    </p>
-<p>
+    </p><p>
       Note that you never have to use <tt>ns_db</tt> anymore (including
       <tt>ns_db gethandle</tt>)! Just start doing stuff, and (if you want) call
       <tt>db_release_unused_handles</tt> when you're done as a hint to
       release the database handle. 
-    </p>
-<div class="variablelist"><dl>
-<dt><span class="term">
+    </p><div class="variablelist"><dl><dt><span class="term">
 	    <tt>
 	      <a name="devguide.dbapi_db_abort_transaction"></a>db_abort_transaction
 	    </tt>
-	</span></dt>
-<dd>
-<pre class="programlisting">
+	</span></dt><dd><pre class="programlisting">
 db_abort_transaction
-	  </pre>
-<p>Aborts all levels of a transaction. That is if this is called within
+	  </pre><p>Aborts all levels of a transaction. That is if this is called within
 	    several nested transactions, all of them are terminated. Use this insetead of
 	    <tt>db_dml &quot;abort&quot; &quot;abort transaction&quot;</tt>. 
 	    
 
-	  </p>
-</dd>
-<dt><span class="term">
+	  </p></dd><dt><span class="term">
 	  
 	    <tt>
 	      <a name="devguide.dbapi_db_null"></a>db_null
 	    </tt>
 	  
 
-	</span></dt>
-<dd>
-<pre class="programlisting">
+	</span></dt><dd><pre class="programlisting">
 <tt>db_null</tt>
-	  </pre>
-<p>
+	  </pre><p>
 	    Returns a value which can be used in a bind variable
 	    to represent the SQL value
 	    <tt>null</tt>.
 	    See <a href="db-api.html#dbapi_nulls_and_bind_vars" title="Nulls and Bind Variables">Nulls and
 	    Bind Variables</a> above.
-	  </p>
-</dd>
-<dt><span class="term">
+	  </p></dd><dt><span class="term">
 	  
 	    <tt>
 	      <a name="devguide.dbapi_db_foreach"></a>db_foreach
 	    </tt>
 	  
-	</span></dt>
-<dd>
-<pre class="programlisting">
-db_foreach <span class="emphasis"><i>statement-name sql</i></span> [ -bind <span class="emphasis"><i>bind_set_id</i></span> | -bind <span class="emphasis"><i>bind_value_list</i></span> ] \
-    [ -column_array <span class="emphasis"><i>array_name</i></span> | -column_set <span class="emphasis"><i>set_name</i></span> ] \
-    <span class="emphasis"><i>code_block</i></span> [ if_no_rows <span class="emphasis"><i>if_no_rows_block ]</i></span>
-	  </pre>
-<p>
-	    Performs the SQL query <span class="emphasis"><i>
+	</span></dt><dd><pre class="programlisting">
+db_foreach <span class="emphasis"><em>statement-name sql</em></span> [ -bind <span class="emphasis"><em>bind_set_id</em></span> | -bind <span class="emphasis"><em>bind_value_list</em></span> ] \
+    [ -column_array <span class="emphasis"><em>array_name</em></span> | -column_set <span class="emphasis"><em>set_name</em></span> ] \
+    <span class="emphasis"><em>code_block</em></span> [ if_no_rows <span class="emphasis"><em>if_no_rows_block ]</em></span>
+	  </pre><p>
+	    Performs the SQL query <span class="emphasis"><em>
 	      <tt>sql</tt>
-	    </i></span>, executing
-	    <span class="emphasis"><i><tt>code_block
-	      </tt></i></span> once for each row
+	    </em></span>, executing
+	    <span class="emphasis"><em><tt>code_block
+	      </tt></em></span> once for each row
 	    with variables set to column values (or a set or array
 	    populated if
 	    <tt>-column_array</tt> or
 	    <tt>column_set</tt> is
 	    specified). If the query returns no rows, executes
-	    <span class="emphasis"><i><tt>if_no_rows_block
-	      </tt></i></span> (if provided).
-	  </p>
-<p>Example:</p>
-<pre class="programlisting">
+	    <span class="emphasis"><em><tt>if_no_rows_block
+	      </tt></em></span> (if provided).
+	  </p><p>Example:</p><pre class="programlisting">
 
 db_foreach select_foo &quot;select foo, bar from greeble&quot; {
     doc_body_append &quot;&lt;li&gt;foo=$foo; bar=$bar\n&quot;
@@ -588,153 +443,107 @@ db_foreach select_foo &quot;select foo, bar from greeble&quot; {
     doc_body_append &quot;&lt;li&gt;There are no greebles in the database.\n&quot;
 }
 
-	  </pre>
-<p>
+	  </pre><p>
 	    The code block may contain <tt>break</tt> statements (which terminate the
 	    loop and flush the database handle) and <tt>continue</tt> statements
-	    (which continue to the next row of the loop). </p>
-</dd>
-<dt><span class="term">
+	    (which continue to the next row of the loop). </p></dd><dt><span class="term">
 	  
 	    <tt>
 	      <a name="devguide.dbapi_db_1row"></a>db_1row
 	    </tt>
 	  
-	</span></dt>
-<dd>
-<pre class="programlisting">
-db_1row <span class="emphasis"><i>statement-name</i></span> <span class="emphasis"><i>sql</i></span> [ -bind <span class="emphasis"><i>bind_set_id</i></span> | -bind <span class="emphasis"><i>bind_value_list</i></span> ] \
-    [ -column_array <span class="emphasis"><i>array_name</i></span> | -column_set <span class="emphasis"><i>set_name</i></span> ]
-	  </pre>
-<p>
-	    Performs the SQL query <span class="emphasis"><i>
-	      <tt>sql</tt></i></span>,
+	</span></dt><dd><pre class="programlisting">
+db_1row <span class="emphasis"><em>statement-name</em></span> <span class="emphasis"><em>sql</em></span> [ -bind <span class="emphasis"><em>bind_set_id</em></span> | -bind <span class="emphasis"><em>bind_value_list</em></span> ] \
+    [ -column_array <span class="emphasis"><em>array_name</em></span> | -column_set <span class="emphasis"><em>set_name</em></span> ]
+	  </pre><p>
+	    Performs the SQL query <span class="emphasis"><em>
+	      <tt>sql</tt></em></span>,
 	    setting variables to column values. Raises an error if the
 	    query does not return exactly 1 row.
-	  </p>
-<p>Example:</p>
-<pre class="programlisting">
+	  </p><p>Example:</p><pre class="programlisting">
 
 db_1row select_foo &quot;select foo, bar from greeble where greeble_id = $greeble_id&quot;
 # Bombs if there's no such greeble!
 # Now $foo and $bar are set.
 
-	  </pre>
-</dd>
-<dt><span class="term">
+	  </pre></dd><dt><span class="term">
 	  
 	    <tt>
 	      <a name="devguide.dbapi_db_0or1row"></a>db_0or1row
 	    </tt>
 	  
-	</span></dt>
-<dd>
-<pre class="programlisting">
-db_0or1row <span class="emphasis"><i>statement-name</i></span> <span class="emphasis"><i>sql</i></span> [ -bind <span class="emphasis"><i>bind_set_id</i></span> | -bind <span class="emphasis"><i>bind_value_list</i></span> ] \
-    [ -column_array <span class="emphasis"><i>array_name</i></span> | -column_set <span class="emphasis"><i>set_name</i></span> ]
-	  </pre>
-<p>
+	</span></dt><dd><pre class="programlisting">
+db_0or1row <span class="emphasis"><em>statement-name</em></span> <span class="emphasis"><em>sql</em></span> [ -bind <span class="emphasis"><em>bind_set_id</em></span> | -bind <span class="emphasis"><em>bind_value_list</em></span> ] \
+    [ -column_array <span class="emphasis"><em>array_name</em></span> | -column_set <span class="emphasis"><em>set_name</em></span> ]
+	  </pre><p>
 	    Performs the SQL query
-	    <span class="emphasis"><i><tt>sql</tt></i></span>.
+	    <span class="emphasis"><em><tt>sql</tt></em></span>.
 	    If a row is returned, sets variables to column values and
 	    returns 1. If no rows are returned, returns 0. If more
 	    than one row is returned, throws an error.
-	  </p>
-</dd>
-<dt><span class="term"><tt><a name="devguide.dbapi_db_nextval"></a>db_nextval</tt> </span></dt>
-<dd>
-<pre class="programlisting">
-db_nextval <span class="emphasis"><i>sequence-name</i></span>
-	  </pre>
-<p>
-	    Returns the next value for the sequence <span class="emphasis"><i>sequence-name</i></span> (using a
+	  </p></dd><dt><span class="term"><tt><a name="devguide.dbapi_db_nextval"></a>db_nextval</tt> </span></dt><dd><pre class="programlisting">
+db_nextval <span class="emphasis"><em>sequence-name</em></span>
+	  </pre><p>
+	    Returns the next value for the sequence <span class="emphasis"><em>sequence-name</em></span> (using a
 	    SQL statement like <tt>SELECT</tt>
-	    <span class="emphasis"><i><tt>sequence-name</tt></i></span><tt>.nextval FROM
+	    <span class="emphasis"><em><tt>sequence-name</tt></em></span><tt>.nextval FROM
 	      DUAL</tt>). If sequence pooling is enabled for the sequence, transparently
 	    uses a value from the pool if available to save a round-trip to the database
-	    (see <span class="emphasis"><i><a href="db-api.html#db-api-pooling">Sequence Pooling</a></i></span>). 
-	  </p>
-</dd>
-<dt><span class="term">
+	    (see <span class="emphasis"><em><a href="db-api.html#db-api-pooling">Sequence Pooling</a></em></span>). 
+	  </p></dd><dt><span class="term">
 	  
 	    <tt>
 	      <a name="devguide.dbapi_db_register_pooled_sequence"></a>db_register_pooled_sequence
 	    </tt>
 	  
-	</span></dt>
-<dd>
-<pre class="programlisting">
-db_register_pooled_sequence <span class="emphasis"><i>sequence-name</i></span> <span class="emphasis"><i>pool-size</i></span>
-	  </pre>
-<p>Registers the sequence <span class="emphasis"><i>sequence-name</i></span> to be pooled, with a pool
-	    size of <span class="emphasis"><i>pool-size</i></span> sequence values
-	    (see <span class="emphasis"><i><a href="db-api.html#db-api-pooling">Sequence Pooling</a></i></span>). 
+	</span></dt><dd><pre class="programlisting">
+db_register_pooled_sequence <span class="emphasis"><em>sequence-name</em></span> <span class="emphasis"><em>pool-size</em></span>
+	  </pre><p>Registers the sequence <span class="emphasis"><em>sequence-name</em></span> to be pooled, with a pool
+	    size of <span class="emphasis"><em>pool-size</em></span> sequence values
+	    (see <span class="emphasis"><em><a href="db-api.html#db-api-pooling">Sequence Pooling</a></em></span>). 
 
-	  </p>
-</dd>
-<dt><span class="term"><tt><a name="devguide.dbapi_db_string"></a>db_string</tt> </span></dt>
-<dd>
-<pre class="programlisting">
-db_string <span class="emphasis"><i>statement-name</i></span> <span class="emphasis"><i>sql</i></span> [ -default <span class="emphasis"><i>default</i></span> ] [ -bind <span class="emphasis"><i>bind_set_id</i></span> | -bind <span class="emphasis"><i>bind_value_list</i></span> ]
-	  </pre>
-<p>Returns the first column of the result of SQL query
-	    <span class="emphasis"><i><tt>sql</tt></i></span>.
-	    If <span class="emphasis"><i><tt>sql</tt></i></span> doesn't return a
+	  </p></dd><dt><span class="term"><tt><a name="devguide.dbapi_db_string"></a>db_string</tt> </span></dt><dd><pre class="programlisting">
+db_string <span class="emphasis"><em>statement-name</em></span> <span class="emphasis"><em>sql</em></span> [ -default <span class="emphasis"><em>default</em></span> ] [ -bind <span class="emphasis"><em>bind_set_id</em></span> | -bind <span class="emphasis"><em>bind_value_list</em></span> ]
+	  </pre><p>Returns the first column of the result of SQL query
+	    <span class="emphasis"><em><tt>sql</tt></em></span>.
+	    If <span class="emphasis"><em><tt>sql</tt></em></span> doesn't return a
 	    row, returns
-	    <span class="emphasis"><i><tt>default</tt></i></span>
+	    <span class="emphasis"><em><tt>default</tt></em></span>
 	    (or throws an error if
-	    <span class="emphasis"><i><tt>default</tt></i></span> is unspecified). Analogous to
+	    <span class="emphasis"><em><tt>default</tt></em></span> is unspecified). Analogous to
 	    <tt>database_to_tcl_string</tt> and
 	    <tt>database_to_tcl_string_or_null</tt>. 
 
-	  </p>
-</dd>
-<dt><span class="term"><tt><a name="devguide.dbapi_db_list"></a>db_list</tt></span></dt>
-<dd>
-<pre class="programlisting">
-db_list <span class="emphasis"><i>statement-name</i></span> <span class="emphasis"><i>sql</i></span> [ -bind <span class="emphasis"><i>bind_set_id</i></span> | -bind <span class="emphasis"><i>bind_value_list</i></span> ]
-	  </pre>
-<p>Returns a Tcl list of the values in the first column of the result of SQL
+	  </p></dd><dt><span class="term"><tt><a name="devguide.dbapi_db_list"></a>db_list</tt></span></dt><dd><pre class="programlisting">
+db_list <span class="emphasis"><em>statement-name</em></span> <span class="emphasis"><em>sql</em></span> [ -bind <span class="emphasis"><em>bind_set_id</em></span> | -bind <span class="emphasis"><em>bind_value_list</em></span> ]
+	  </pre><p>Returns a Tcl list of the values in the first column of the result of SQL
 	    query
-	    <span class="emphasis"><i><tt>sql</tt></i></span>.
-	    If <span class="emphasis"><i><tt>sql</tt></i></span> doesn't
+	    <span class="emphasis"><em><tt>sql</tt></em></span>.
+	    If <span class="emphasis"><em><tt>sql</tt></em></span> doesn't
 	    return any rows, returns an empty list. Analogous to
 	    <tt>database_to_tcl_list</tt>. 
 
-	  </p>
-</dd>
-<dt><span class="term"><tt><a name="devguide.dbapi_db_list_of_lists"></a>db_list_of_lists</tt></span></dt>
-<dd>
-<pre class="programlisting">
-db_list_of_lists <span class="emphasis"><i>statement-name</i></span> <span class="emphasis"><i>sql</i></span> [ -bind <span class="emphasis"><i>bind_set_id</i></span> | -bind <span class="emphasis"><i>bind_value_list</i></span> ]
-	  </pre>
-<p>Returns a Tcl list, each element of which is a list of all column values
-	    in a row of the result of SQL query <span class="emphasis"><i><tt>sql</tt></i></span>. If
-	    <span class="emphasis"><i><tt>sql</tt></i></span> doesn't return any rows, returns an empty list.
+	  </p></dd><dt><span class="term"><tt><a name="devguide.dbapi_db_list_of_lists"></a>db_list_of_lists</tt></span></dt><dd><pre class="programlisting">
+db_list_of_lists <span class="emphasis"><em>statement-name</em></span> <span class="emphasis"><em>sql</em></span> [ -bind <span class="emphasis"><em>bind_set_id</em></span> | -bind <span class="emphasis"><em>bind_value_list</em></span> ]
+	  </pre><p>Returns a Tcl list, each element of which is a list of all column values
+	    in a row of the result of SQL query <span class="emphasis"><em><tt>sql</tt></em></span>. If
+	    <span class="emphasis"><em><tt>sql</tt></em></span> doesn't return any rows, returns an empty list.
 	    (Analogous to <tt>database_to_tcl_list_list</tt>.) 
 
-	  </p>
-</dd>
-<dt><span class="term"><tt><a name="devguide.dbapi_db_dml"></a>db_dml</tt></span></dt>
-<dd>
-<pre class="programlisting">
-db_dml <span class="emphasis"><i>statement-name</i></span> <span class="emphasis"><i>sql</i></span> \
-    [ -bind <span class="emphasis"><i>bind_set_id</i></span> | -bind <span class="emphasis"><i>bind_value_list</i></span> ] \
-    [ -blobs <span class="emphasis"><i>blob_list</i></span> | -clobs <span class="emphasis"><i>clob_list</i></span> |
-      -blob_files <span class="emphasis"><i>blob_file_list</i></span> | -clob_files <span class="emphasis"><i>clob_file_list</i></span> ]
-	  </pre>
-<p>Performs the DML or DDL statement <span class="emphasis"><i><tt>sql</tt></i></span>. </p>
-<p>If a length-<span class="emphasis"><i>n</i></span> list of blobs or clobs is provided, then the SQL
-	    should return <span class="emphasis"><i>n</i></span> blobs or clobs into the bind variables
-	    <tt>:1</tt>, <tt>:2</tt>, ... :<span class="emphasis"><i><tt>n</tt></i></span>.
-	    <span class="emphasis"><i><tt>blobs</tt></i></span> or <span class="emphasis"><i><tt>clobs</tt></i></span>, if specified,
+	  </p></dd><dt><span class="term"><tt><a name="devguide.dbapi_db_dml"></a>db_dml</tt></span></dt><dd><pre class="programlisting">
+db_dml <span class="emphasis"><em>statement-name</em></span> <span class="emphasis"><em>sql</em></span> \
+    [ -bind <span class="emphasis"><em>bind_set_id</em></span> | -bind <span class="emphasis"><em>bind_value_list</em></span> ] \
+    [ -blobs <span class="emphasis"><em>blob_list</em></span> | -clobs <span class="emphasis"><em>clob_list</em></span> |
+      -blob_files <span class="emphasis"><em>blob_file_list</em></span> | -clob_files <span class="emphasis"><em>clob_file_list</em></span> ]
+	  </pre><p>Performs the DML or DDL statement <span class="emphasis"><em><tt>sql</tt></em></span>. </p><p>If a length-<span class="emphasis"><em>n</em></span> list of blobs or clobs is provided, then the SQL
+	    should return <span class="emphasis"><em>n</em></span> blobs or clobs into the bind variables
+	    <tt>:1</tt>, <tt>:2</tt>, ... :<span class="emphasis"><em><tt>n</tt></em></span>.
+	    <span class="emphasis"><em><tt>blobs</tt></em></span> or <span class="emphasis"><em><tt>clobs</tt></em></span>, if specified,
 	    should be a list of individual BLOBs or CLOBs to insert;
-	    <span class="emphasis"><i><tt>blob_files</tt></i></span> or <span class="emphasis"><i><tt>clob_files</tt></i></span>, if
-	    specified, should be a list of <span class="emphasis"><i>paths to files</i></span> containing the data to
+	    <span class="emphasis"><em><tt>blob_files</tt></em></span> or <span class="emphasis"><em><tt>clob_files</tt></em></span>, if
+	    specified, should be a list of <span class="emphasis"><em>paths to files</em></span> containing the data to
 	    insert. Only one of <tt>-blobs</tt>, <tt>-clobs</tt>,
-	    <tt>-blob_files</tt>, and <tt>-clob_files</tt> may be provided.</p>
-<p>Example:</p>
-<pre class="programlisting">
+	    <tt>-blob_files</tt>, and <tt>-clob_files</tt> may be provided.</p><p>Example:</p><pre class="programlisting">
 
 db_dml insert_photos &quot;
         insert photos(photo_id, image, thumbnail_image)
@@ -742,56 +551,38 @@ db_dml insert_photos &quot;
         returning image, thumbnail_image into :1, :2
     &quot;  -blob_files [list &quot;/var/tmp/the_photo&quot; &quot;/var/tmp/the_thumbnail&quot;] 
 
-	  </pre>
-<p>
+	  </pre><p>
 	    This inserts a new row into the <tt>photos</tt> table, with the contents
 	    of the files <tt>/var/tmp/the_photo</tt> and
 	    <tt>/var/tmp/the_thumbnail</tt> in the <tt>image</tt> and
 	    <tt>thumbnail</tt> columns, respectively. 
 	    
 
-	  </p>
-</dd>
-<dt><span class="term">
+	  </p></dd><dt><span class="term">
 	  <tt><a name="devguide.dbapi_db_write_clob"></a>db_write_clob</tt>,
 	  <tt><a name="devguide.dbapi_db_write_blob"></a>db_write_blob</tt>,
 	  <tt><a name="devguide.dbapi_db_blob_get_file"></a>db_blob_get_file</tt>
-	</span></dt>
-<dd>
-<pre class="programlisting">
-db_write_clob <span class="emphasis"><i>statement-name</i></span> <span class="emphasis"><i>sql</i></span> [ -bind <span class="emphasis"><i>bind_set_id</i></span> | -bind <span class="emphasis"><i>bind_value_list</i></span> ]
+	</span></dt><dd><pre class="programlisting">
+db_write_clob <span class="emphasis"><em>statement-name</em></span> <span class="emphasis"><em>sql</em></span> [ -bind <span class="emphasis"><em>bind_set_id</em></span> | -bind <span class="emphasis"><em>bind_value_list</em></span> ]
 
-db_write_blob <span class="emphasis"><i>statement-name</i></span> <span class="emphasis"><i>sql</i></span> [ -bind <span class="emphasis"><i>bind_set_id</i></span> | -bind <span class="emphasis"><i>bind_value_list</i></span> ]
+db_write_blob <span class="emphasis"><em>statement-name</em></span> <span class="emphasis"><em>sql</em></span> [ -bind <span class="emphasis"><em>bind_set_id</em></span> | -bind <span class="emphasis"><em>bind_value_list</em></span> ]
 
-db_blob_get_file <span class="emphasis"><i>statement-name</i></span> <span class="emphasis"><i>sql</i></span> [ -bind <span class="emphasis"><i>bind_set_id</i></span> | -bind <span class="emphasis"><i>bind_value_list</i></span> ]
-	  </pre>
-<p>Analagous to <tt>ns_ora write_clob/write_blob/blob_get_file</tt>. 
+db_blob_get_file <span class="emphasis"><em>statement-name</em></span> <span class="emphasis"><em>sql</em></span> [ -bind <span class="emphasis"><em>bind_set_id</em></span> | -bind <span class="emphasis"><em>bind_value_list</em></span> ]
+	  </pre><p>Analagous to <tt>ns_ora write_clob/write_blob/blob_get_file</tt>. 
 
 
-	  </p>
-</dd>
-<dt><span class="term"><tt><a name="devguide.dbapi_db_release_unused_handles"></a>db_release_unused_handles</tt></span></dt>
-<dd>
-<pre class="programlisting">
+	  </p></dd><dt><span class="term"><tt><a name="devguide.dbapi_db_release_unused_handles"></a>db_release_unused_handles</tt></span></dt><dd><pre class="programlisting">
 	    db_release_unused_handles
-	  </pre>
-<p>Releases any allocated, unused database handles. </p>
-</dd>
-<dt><span class="term"><tt><a name="devguide.dbapi_db_transaction"></a>db_transaction</tt></span></dt>
-<dd>
-<pre class="programlisting">
-db_transaction <span class="emphasis"><i>code_block</i></span> [ on_error { <span class="emphasis"><i>code_block</i></span> } ]
-	  </pre>
-<p>Executes <span class="emphasis"><i><tt>code_block</tt></i></span> transactionally. Nested
+	  </pre><p>Releases any allocated, unused database handles. </p></dd><dt><span class="term"><tt><a name="devguide.dbapi_db_transaction"></a>db_transaction</tt></span></dt><dd><pre class="programlisting">
+db_transaction <span class="emphasis"><em>code_block</em></span> [ on_error { <span class="emphasis"><em>code_block</em></span> } ]
+	  </pre><p>Executes <span class="emphasis"><em><tt>code_block</tt></em></span> transactionally. Nested
 	    transactions are supported (<tt>end transaction</tt> is transparently
 	    <tt>ns_db dml</tt>'ed when the outermost transaction completes). The
 	    <tt>db_abort_transaction</tt> command can be used to abort all levels of
 	    transactions. It is possible to specify an optional <tt>on_error</tt>
-	    code block that will be executed if some code in <span class="emphasis"><i>code_block</i></span> throws
+	    code block that will be executed if some code in <span class="emphasis"><em>code_block</em></span> throws
 	    an exception. The variable <tt>errmsg</tt> will be bound in that scope.
-	    If there is no <tt>on_error</tt> code, any errors will be propagated. </p>
-<p>Example:</p>
-<pre class="programlisting">
+	    If there is no <tt>on_error</tt> code, any errors will be propagated. </p><p>Example:</p><pre class="programlisting">
 
 proc replace_the_foo { col } {
     db_transaction {
@@ -820,30 +611,18 @@ db_transaction {
 
 print_the_foo ; # Writes out &quot;foo is 8&quot;
 
-	  </pre>
-</dd>
-<dt><span class="term"><tt><a name="devguide.dbapi_db_resultrows"></a>db_resultrows</tt></span></dt>
-<dd>
-<pre class="programlisting">
+	  </pre></dd><dt><span class="term"><tt><a name="devguide.dbapi_db_resultrows"></a>db_resultrows</tt></span></dt><dd><pre class="programlisting">
 db_resultrows
-	  </pre>
-<p>Returns the number of rows affected or returned by the previous
+	  </pre><p>Returns the number of rows affected or returned by the previous
 	    statement. 
 
 
-	  </p>
-</dd>
-<dt><span class="term"><tt><a name="devguide.dbapi_db_with_handle"></a>db_with_handle</tt></span></dt>
-<dd>
-<pre class="programlisting">
-db_with_handle <span class="emphasis"><i>var</i></span> <span class="emphasis"><i>code_block</i></span>
-	  </pre>
-<p>Places a database handle into the variable <span class="emphasis"><i><tt>var</tt></i></span> and
-	    executes <span class="emphasis"><i><tt>code_block</tt></i></span>. This is useful when you don't
+	  </p></dd><dt><span class="term"><tt><a name="devguide.dbapi_db_with_handle"></a>db_with_handle</tt></span></dt><dd><pre class="programlisting">
+db_with_handle <span class="emphasis"><em>var</em></span> <span class="emphasis"><em>code_block</em></span>
+	  </pre><p>Places a database handle into the variable <span class="emphasis"><em><tt>var</tt></em></span> and
+	    executes <span class="emphasis"><em><tt>code_block</tt></em></span>. This is useful when you don't
 	    want to have to use the new API (<tt>db_foreach</tt>,
-	    <tt>db_1row</tt>, etc.), but need to use database handles explicitly. </p>
-<p>Example:</p>
-<pre class="programlisting">
+	    <tt>db_1row</tt>, etc.), but need to use database handles explicitly. </p><p>Example:</p><pre class="programlisting">
 
 proc lookup_the_foo { foo } {
     db_with_handle db {
@@ -861,24 +640,18 @@ db_with_handle db {
     }
 }
 
-	  </pre>
-</dd>
-<dt><span class="term">
+	  </pre></dd><dt><span class="term">
 	  
 	    <tt>
 	      <a name="devguide.dbapi_db_nullify_empty_string"></a>db_nullify_empty_string
 	    </tt>
 	  
-	</span></dt>
-<dd>
-<pre class="programlisting">
-db_nullify_empty_string <span class="emphasis"><i>string</i></span>
-	  </pre>
-<p>For true SQL purists, we provide the convenience function
+	</span></dt><dd><pre class="programlisting">
+db_nullify_empty_string <span class="emphasis"><em>string</em></span>
+	  </pre><p>For true SQL purists, we provide the convenience function
 	    <tt>db_nullify_empty_string</tt>, which returns
-	    [db_null] if its <span class="emphasis"><i><tt>string</tt></i></span> argument is the empty string
-	    and can be used to encapsulate another Oracle quirk: </p>
-<pre class="programlisting">
+	    [db_null] if its <span class="emphasis"><em><tt>string</tt></em></span> argument is the empty string
+	    and can be used to encapsulate another Oracle quirk: </p><pre class="programlisting">
 
 set baz &quot;&quot;
 
@@ -894,46 +667,15 @@ set n_rows [db_string unused &quot;select count(*) from foo where baz is null&qu
 # the empty string we just inserted (because of Oracle's coercion
 # quirk)
 
-	  </pre>
-<p>
+	  </pre><p>
 	    To balance out this asymmetry, you can explicitly set <tt>baz</tt> to
 	    <tt>null</tt> by writing: 
-	  </p>
-<pre class="programlisting">
+	  </p><pre class="programlisting">
 
 db_dml foo_insert &quot;insert into foo(baz) values(:1)&quot; {[db_nullify_empty_string $baz]}
 
-	  </pre>
-</dd>
-</dl></div>
-<p>
-      <div class="cvstag">($Id$)</div>
-    </p>
-</div>
-</div>
-<div class="navfooter">
-<hr>
-<table width="100%" summary="Navigation footer">
-<tr>
-<td width="40%" align="left">
-<a accesskey="p" href="request-processor.html">Prev</a>&nbsp;</td>
-<td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
-<td width="40%" align="right">&nbsp;<a accesskey="n" href="templates.html">Next</a>
-</td>
-</tr>
-<tr>
-<td width="40%" align="left">The Request Processor&nbsp;</td>
-<td width="20%" align="center"><a accesskey="u" href="dev-guide.html">Up</a></td>
-<td width="40%" align="right">&nbsp;Using Templates in OpenACS 4.5</td>
-</tr>
-</table>
-<hr>
-<address>
-			rmello at fslc.usu.edu
-		</address>
-<address><a href="mailto:vinod@kurup.com">
+	  </pre></dd></dl></div><p>
+      </p><div class="cvstag">($Id$)</div><p>
+    </p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="request-processor.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="templates.html">Next</a></td></tr><tr><td width="40%" align="left">The Request Processor&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="dev-guide.html">Up</a></td><td width="40%" align="right">&nbsp;Using Templates in OpenACS 4.5</td></tr></table><hr><address>rmello at fslc.usu.edu</address><address><a href="mailto:vinod@kurup.com">
 			vinod@kurup.com
-		  </a></address>
-</div>
-</body>
-</html>
+		  </a></address></div></body></html>

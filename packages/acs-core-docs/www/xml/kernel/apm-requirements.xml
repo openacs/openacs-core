@@ -1,9 +1,9 @@
 <sect1 id="apm-requirements" xreflabel="OpenACS &version; Package Manager Requirements">
 <title>OpenACS &version; Package Manager Requirements</title>
 
-<authorblurb><para>
+<authorblurb>
 by <ulink url="mailto:bquinn@arsdigita.com">Bryan Quinn</ulink> and <ulink url="mailto:tnight@arsdigita.com">Todd Nightingale</ulink> 
-</para></authorblurb>
+</authorblurb>
 
 <sect2 id="apm-requirements-intro">
 <title>Introduction</title>
@@ -1014,3 +1014,8 @@ these features should be quite straightforward.</para>
 
 </sect1>
 
+<!--
+       Local Variables:
+       sgml-parent-document: ("../index.xml" "chapter" "sect1")
+       End:
+-->

@@ -1,9 +1,9 @@
 <sect1 id="permissions-design" xreflabel="OpenACS 4 Permissions Design">
 <title>OpenACS 4 Permissions Design</title>
 
-<authorblurb><para>
+<authorblurb>
 by <ulink url="mailto:jmp@arsdigita.com">John Prevost</ulink> and <ulink url="http://planitia.org">Rafael H. Schloming</ulink> 
-</para></authorblurb>
+</authorblurb>
 
 <sect2 id="permissions-design-essentials">
 <title>Essentials</title>
@@ -497,3 +497,8 @@ inheritance.</para></listitem>
 
 </sect1>
 
+<!--
+       Local Variables:
+       sgml-parent-document: ("../index.xml" "chapter" "sect1")
+       End:
+-->

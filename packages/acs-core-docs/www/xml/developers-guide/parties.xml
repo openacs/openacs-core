@@ -1,9 +1,9 @@
 <sect1 id="parties" xreflabel="Parties in OpenACS 4">
 <title>Parties in OpenACS &version;</title>
 
-<authorblurb><para>
+<authorblurb>
 by <ulink url="http://planitia.org">Rafael H. Schloming</ulink> 
-</para></authorblurb>
+</authorblurb>
 
 <sect2 id="parties-intro">
 <title>Introduction</title>
@@ -476,3 +476,8 @@ table or the groups table.</para>
 
 </sect1>
 
+<!--
+       Local Variables:
+       sgml-parent-document: ("../index.xml" "chapter" "sect1")
+       End:
+-->

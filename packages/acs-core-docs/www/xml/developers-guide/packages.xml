@@ -815,5 +815,8 @@ http://your-server.your-domain.com/notes/hello.html
 
 </sect1>
 
-
-
+<!--
+       Local Variables:
+       sgml-parent-document: ("../index.xml" "chapter" "sect1")
+       End:
+-->

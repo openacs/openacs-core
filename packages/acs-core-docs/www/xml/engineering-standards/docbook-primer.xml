@@ -795,6 +795,6 @@ bash$  xsltproc /usr/share/sgml/docbook/stylesheet/xsl/nwalsh/html/chunk.xsl fil
 
 <!--
    Local Variables:
-   sgml-parent-document: ("../index.xml" "book" "sect1")
+   sgml-parent-document: ("../index.xml" "chapter" "sect1")
    End:
 -->

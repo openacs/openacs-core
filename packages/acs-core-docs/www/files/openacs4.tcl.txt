@@ -63,7 +63,7 @@ ns_param   debug              $debug
 # 
 ns_section ns/threads 
 ns_param   mutexmeter         true      ;# measure lock contention 
-ns_param   stacksize          [expr 128*1024]
+ns_param   stacksize          500000
 
 # 
 # MIME types. 
@@ -129,7 +129,7 @@ ns_param   enabledebug   $debug    ;# Allow Tclpro debugging with "?debug"
 ns_param   defaultparser fancy
 
 ns_section ns/server/${server}/adp/parsers
-ns_param   fancy	".adp"
+ns_param   fancy    ".adp"
  
 # 
 # Socket driver module (HTTP)  -- nssock 
@@ -159,9 +159,9 @@ ns_param   certfile    $sslcertfile
 #
 ns_section "ns/db/drivers" 
 if { $database == "oracle" } {
-	ns_param   ora8            ${bindir}/ora8.so
+    ns_param   ora8            ${bindir}/ora8.so
 } else {
-	ns_param   postgres        ${bindir}/postgres.so  ;# Load PostgreSQL driver
+    ns_param   postgres        ${bindir}/postgres.so  ;# Load PostgreSQL driver
 }
 
 # 
@@ -174,9 +174,9 @@ if { $database == "oracle" } {
 # and even different different database servers.
 # 
 ns_section ns/db/pools 
-ns_param   pool1	   "Pool 1"
-ns_param   pool2	   "Pool 2"
-ns_param   pool3	   "Pool 3"
+ns_param   pool1       "Pool 1"
+ns_param   pool2       "Pool 2"
+ns_param   pool3       "Pool 3"
 
 ns_section ns/db/pool/pool1
 ns_param   maxidle            1000000000

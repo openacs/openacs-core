@@ -1,9 +1,9 @@
 <sect1 id="subsites-design" xreflabel="OpenACS 4 Subsites Design Document">
 <title>OpenACS 4 Subsites Design Document</title>
 
-<authorblurb><para>
+<authorblurb>
 by <ulink url="http://planitia.org">Rafael H. Schloming</ulink> 
-</para></authorblurb>
+</authorblurb>
 
 <para><emphasis>*Note* This document has not gone through the any of the
 required QA process yet. It is being tagged as stable due to high
@@ -368,3 +368,8 @@ solvable by configuration instead of coding.</para>
 
 </sect1>
 
+<!--
+       Local Variables:
+       sgml-parent-document: ("../index.xml" "chapter" "sect1")
+       End:
+-->

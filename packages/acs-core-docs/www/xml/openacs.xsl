@@ -3,19 +3,21 @@
 		version="1.1"
                 exclude-result-prefixes="doc">
 
-<!-- vinodk: This stylesheet simply imports chunk.xsl                   -->
-<!-- I'll add customization later                                       -->
+<!-- vinodk: Imports chunk.xsl                   -->
 
   <xsl:import href="/usr/share/sgml/docbook/stylesheet/xsl/nwalsh/html/chunk.xsl"/>
+
+<!-- vinodk: Not sure if this is needed                   -->
   <xsl:output media-type="text/html" encoding="iso-8859-1"/>
 
-
+<!-- vinodk: narrower TOC's, use chunker (?), pretty file names      -->
   <xsl:variable name="toc.section.depth">1</xsl:variable>
   <xsl:variable name="using.chunker">1</xsl:variable>
   <xsl:variable name="use.id.as.filename">1</xsl:variable>
 
   <xsl:variable name="chunk.first.sections">1</xsl:variable>
   
+<!-- vinodk: Add our logo to header                   -->
   <xsl:template name="header.navigation">
 	<xsl:param name="prev" select="/foo"/>
 	<xsl:param name="next" select="/foo"/>
@@ -69,6 +71,7 @@
   </xsl:template>
   
   
+<!-- vinodk: Add our emails to footer                   -->
   <xsl:template name="footer.navigation">
 	<xsl:param name="prev" select="/foo"/>
 	<xsl:param name="next" select="/foo"/>
@@ -151,7 +154,7 @@
 		</table>
 		<hr/>
 		<address>
-			rmello at fslc.usu.edu
+		  <xsl:text>rmello at fslc.usu.edu</xsl:text>
 		</address>
 		<address>
 		  <a>
@@ -165,9 +168,18 @@
 	</xsl:if>
   </xsl:template>
   
+<!-- vinodk: for some reason, chunk.xsl doesn't have a template 
+                  for authorblurb. Also add doc disclaimer.   -->
   <xsl:template match="authorblurb">
 	<div class="{name(.)}">
-	  <xsl:apply-templates/>
+	  <p>
+		<xsl:apply-templates/>
+		<br />
+		<xsl:text>
+		  OpenACS docs are written by the named authors, but may be edited
+		  by OpenACS documentation staff.
+		</xsl:text>
+	  </p>
 	</div>
   </xsl:template>
   
@@ -241,7 +253,7 @@
 	</head>
   </xsl:template>
 
-<!-- make phrase a "div" tag instead of "span" -->
+<!-- vinodk: make phrase a "div" tag instead of "span" -->
   <xsl:template match="phrase">
 	<div>
 	  <xsl:if test="@role and $phrase.propagates.style != 0">

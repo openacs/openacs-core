@@ -1,6 +1,10 @@
 <sect1 id="nextsteps" xreflabel="Next Steps">
   <title>Next Steps</title>
 
+  <authorblurb>
+	by <ulink url="mailto:vinod@kurup.com">Vinod Kurup</ulink>
+  </authorblurb>
+
   <sect2 id="install-next-backups">
 	<title>Backup Strategy</title>
 
@@ -467,6 +471,12 @@ nsadmin:~$ restart-aolserver <emphasis>birdnotes</emphasis></programlisting>
 		  being meant to be mounted)
 		</para></listitem>
 
+	  <listitem><para>Click on "Set parameters" for the OpenFTS instance
+		  and make sure that openfts_tcl_src_path properly points to your
+		  local copy of the Search package source code. If you've followed
+		  these directions strictly, you shouldn't need to change it.
+		</para></listitem>
+
 	  <listitem><para>
 		  Create another folder under "Main Site" at the url
 		  "search". Create a "new application". Call the application
@@ -512,3 +522,9 @@ nsadmin:~$ restart-aolserver <emphasis>birdnotes</emphasis></programlisting>
 
   <para><phrase role="cvstag">($Id$)</phrase></para>
 </sect1>
+
+<!--
+       Local Variables:
+       sgml-parent-document: ("../index.xml" "chapter" "sect1")
+       End:
+-->

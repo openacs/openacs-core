@@ -1,6 +1,10 @@
 <sect1 id="install-overview" xreflabel="Installation Overview">
   <title>Overview</title>
 
+  <authorblurb>
+	by <ulink url="mailto:vinod@kurup.com">Vinod Kurup</ulink>
+  </authorblurb>
+
   <sect2 id="install-description" xreflabel="What is OpenACS?">
 	<title>What is OpenACS?</title>
 	<para>
@@ -147,16 +151,16 @@
 	<para>
 	  We'll do our best to assure that following our instructions will get
 	  you to the promised land. If something goes wrong, don't
-	  panic. There's plenty of ways to get help. Here are some tips:
+	  panic. There are plenty of ways to get help. Here are some tips:
 	</para>
 
 	<itemizedlist>
 	  <listitem>
 		<para>
-		  Make sure that you keep track of what commands you are running
-		  and their output. I like to do my installations in a shell inside
-		  of emacs (M-x shell) so that I can save the output if needed. An
-		  alternative would be to use the
+		  Keep track of the commands you are run and record their output. I
+		  like to do my installations in a shell inside of emacs
+		  (<computeroutput>M-x shell</computeroutput>) so that I can save
+		  the output if needed. An alternative would be to use the
 		  <computeroutput>script</computeroutput> command.
 		</para>
 	  </listitem>
@@ -360,3 +364,8 @@
   <para><phrase role="cvstag">($Id$)</phrase></para>
 
 </sect1>
+<!--
+       Local Variables:
+       sgml-parent-document: ("../index.xml" "chapter" "sect1")
+       End:
+-->

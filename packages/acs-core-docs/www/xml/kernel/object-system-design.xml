@@ -1,12 +1,12 @@
 <sect1 id="object-system-design" xreflabel="OpenACS 4 Object Model Design">
 <title>OpenACS 4 Object Model Design</title>
 
-<authorblurb><para>
+<authorblurb>
 by <ulink url="mailto:psu@arsdigita.com">Pete Su</ulink>,
    <ulink url="mailto:mcyoon@arsdigita.com">Michael Yoon</ulink>,
    <ulink url="mailto:richardl@arsdigita.com">Richard Li</ulink>
    and <ulink url="mailto:rhs@arsdigita.com">Rafael Schloming</ulink>
-</para></authorblurb>
+</authorblurb>
 
 <sect2 id="object-system-design-essentials">
 <title>Essentials</title>
@@ -1516,3 +1516,8 @@ are his and his alone.</para>
 
 </sect1>
 
+<!--
+       Local Variables:
+       sgml-parent-document: ("../index.xml" "chapter" "sect1")
+       End:
+-->

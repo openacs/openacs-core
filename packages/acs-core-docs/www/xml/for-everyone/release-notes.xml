@@ -1,10 +1,10 @@
 <sect1 id="release-notes" xreflabel="OpenACS &version; Release Notes">
   <title>OpenACS &version; Release Notes</title>
 
-  <authorblurb><para>
+  <authorblurb>
 	  by <ulink url="mailto:dhogaza@pacifier.com">Don Baccus</ulink> and
 	  <ulink url="mailto:vinod@kurup.com">Vinod Kurup</ulink>
-	</para></authorblurb>
+  </authorblurb>
 
   <para>
 	This is a beta release of OpenACS &version;.  This release has been subjected
@@ -17,17 +17,19 @@
 	<ulink url="http://openacs.org/sdm/one-package.tcl&amp;package_id=9">
 	  Software Development Manager</ulink> at the <ulink
 	  url="http://openacs.org/">OpenACS website</ulink>.  The latest
-	information on installating this alpha release under Oracle 8.1.6/7
+	information on installing this alpha release under Oracle 8.1.6/7
 	or PostgreSQL 7.1.* can be found there as well.  Currently the
 	toolkit will not install under Oracle 9i due to Oracle having made
 	"delete" an illegal name for PL/SQL procedures and functions.
   </para>
 
   <para>
-	You may want to begin by reading our installation documentation for <xref
-	linkend="unix-install"/> or <xref
-	linkend="win-install"/>.  Note that the Windows
-	documentation is not current for OpenACS &version;.
+	You may want to begin by reading our installation documentation for
+	<xref linkend="unix-install"/> or <xref linkend="win-install"/>.  Note
+	that the Windows documentation is not current for OpenACS &version;,
+	but an alternative is to use John Sequeira's <ulink
+	url="http://www.pobox.com/~johnseq/projects/oasisvm/">Oasis VM
+	project</ulink>.
   </para>
 
   <para>
@@ -42,7 +44,7 @@
 	<para>
 	  If you're using Oracle 8.1.6 or 8.1.7 Enterprise Edition you may want
 	  to uncomment the SQL that causes InterMedia to keep online searching
-	  online while indexing.  The feature doesn't exist in Standard Editionx
+	  online while indexing.  The feature doesn't exist in Standard Edition
 	  and OpenACS &version; now defaults to being loadable in SE.  Just grep for
 	  'sync' to find the code.  
 	</para>
@@ -236,3 +238,9 @@ Comments: Don tested personally
   <para><phrase role="cvstag">($Id$)</phrase></para>
  
 </sect1>
+
+<!--
+       Local Variables:
+       sgml-parent-document: ("../index.xml" "chapter" "sect1")
+       End:
+-->

@@ -1,9 +1,9 @@
 <sect1 id="psgml-mode" xreflabel="Using PSGML mode in Emacs">
 <title>Using PSGML mode in Emacs</title>
 
-<authorblurb><para>
+<authorblurb>
 By <ulink url="mailto:lutter@arsdigita.com">David Lutterkort</ulink>
-</para></authorblurb>
+</authorblurb>
 
 <sect2 id="psgml-mode-whatisit">
 <title>What it is</title>
@@ -221,6 +221,8 @@ what its contents can be and lists its attributes.</entry>
 
 </sect1>
 
-
-
-
+<!--
+       Local Variables:
+       sgml-parent-document: ("../index.xml" "chapter" "sect1")
+       End:
+-->

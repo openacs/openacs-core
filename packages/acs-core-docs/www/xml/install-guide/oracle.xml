@@ -1,14 +1,11 @@
 <sect1 id="oracle" xreflabel="Install Oracle">
   <title>Install Oracle 8.1.7</title>
 
-  <para>Skip this page if you're not interested in Oracle</para>
+  <authorblurb>
+	by <ulink url="mailto:vinod@kurup.com">Vinod Kurup</ulink>
+  </authorblurb>
 
-  <para><emphasis role="strong">NOTE:</emphasis><emphasis> This document
-	  was originally written based on Oracle, version 8.1.6.  However, the
-	  same approach should lead to a successful installation of Oracle
-	  8.1.7. If you encounter any incompatibilities, please <ulink
-	  url="mailto:vinod@kurup.com">let us know</ulink></emphasis>
-  </para>
+  <para>Skip this page if you're not interested in Oracle</para>
 
   <para><emphasis role="strong">NOTE:</emphasis> We've not yet tested
 	OpenACS &version; under Oracle 9i</para>
@@ -58,7 +55,7 @@
 			</para>
 			<programlisting>
 $ cd /directory/where/oracle/is
-$ tar -xvf oracle81701.tar</programlisting>
+$ tar xvf oracle81701.tar</programlisting>
 		  </listitem>
 		</itemizedlist>
 	  </listitem>
@@ -1854,3 +1851,9 @@ SQL&gt; drop tablespace <emphasis>table_space_name</emphasis> including contents
   <para><phrase role="cvstag">($Id$)</phrase></para>
 
 </sect1>
+
+<!--
+       Local Variables:
+       sgml-parent-document: ("../index.xml" "chapter" "sect1")
+       End:
+-->

@@ -1,9 +1,9 @@
 <sect1 id="groups-design" xreflabel="OpenACS 4 Groups Design">
 <title>OpenACS 4 Groups Design</title>
 
-<authorblurb><para>
+<authorblurb>
 by <ulink url="http://planitia.org">Rafael H. Schloming</ulink> and <ulink url="mailto:mthomas@arsdigita.com">Mark Thomas</ulink> 
-</para></authorblurb>
+</authorblurb>
 
 
 <sect2 id="groups-design-essentials">
@@ -734,3 +734,8 @@ procedure membership_rel.delete (
 
 </sect1>
 
+<!--
+       Local Variables:
+       sgml-parent-document: ("../index.xml" "chapter" "sect1")
+       End:
+-->

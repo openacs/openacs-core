@@ -1,9 +1,9 @@
 <sect1 id="subsites-requirements" xreflabel="OpenACS 4 Subsites Requirements">
 <title>OpenACS 4 Subsites Requirements</title>
 
-<authorblurb><para>
+<authorblurb>
 by <ulink url="http://planitia.org">Rafael H. Schloming</ulink> and <ulink url="mailto:dennis@arsdigita.com">Dennis Gregorovic</ulink> 
-</para></authorblurb>
+</authorblurb>
 
 
 <sect2 id="subsites-requirements-intro">
@@ -226,3 +226,8 @@ that package.</para>
 
 </sect1>
 
+<!--
+       Local Variables:
+       sgml-parent-document: ("../index.xml" "chapter" "sect1")
+       End:
+-->

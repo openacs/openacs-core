@@ -2,9 +2,9 @@
 <title>Documenting Tcl Files: Page Contracts and Libraries</title>
 
 
-<authorblurb><para>
+<authorblurb>
 by <ulink url="mailto:jsalz@mit.edu">Jon Salz</ulink> on 3 July 2000 
-</para></authorblurb>
+</authorblurb>
 
 <itemizedlist>
 <listitem><para>Tcl procedures: /packages/acs-kernel/tcl-documentation-procs.tcl</para></listitem>
@@ -345,3 +345,8 @@ substitute an appropriate string when you check the file in.</para></listitem>
 </sect2>
 </sect1>
 
+<!--
+       Local Variables:
+       sgml-parent-document: ("../index.xml" "chapter" "sect1")
+       End:
+-->

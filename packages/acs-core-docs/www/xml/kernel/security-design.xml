@@ -1,11 +1,11 @@
 <sect1 id="security-design" xreflabel="OpenACS 4 Security Design">
 <title>OpenACS 4 Security Design</title>
 
-<authorblurb><para>
+<authorblurb>
 
 by <ulink url="mailto:richardl@arsdigita.com">Richard Li</ulink>, <ulink url="mailto:ashah@arsdigita.com">Archit Shah</ulink> 
 
-</para></authorblurb>
+</authorblurb>
 
 
 <sect2 id="security-design-essentials">
@@ -879,3 +879,8 @@ dependent upon this function.</para></listitem> </itemizedlist>
 
 </sect1>
 
+<!--
+       Local Variables:
+       sgml-parent-document: ("../index.xml" "chapter" "sect1")
+       End:
+-->

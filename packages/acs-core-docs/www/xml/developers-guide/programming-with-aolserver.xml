@@ -2,9 +2,9 @@
 <title>Programming with AOLserver</title>
 
 
-<authorblurb><para>
+<authorblurb>
 by <ulink url="mailto:michael@arsdigita.com">Michael Yoon</ulink>, <ulink url="mailto:jsalz@mit.edu">Jon Salz</ulink> and <ulink url="http://www.pinds.com/lars">Lars Pind</ulink>. 
-</para></authorblurb>
+</authorblurb>
 
 <sect2 id="programming-aolserver-global">
 <title>The <computeroutput>global</computeroutput> command</title>
@@ -324,3 +324,8 @@ entries is large.
 
 </sect1>
 
+<!--
+       Local Variables:
+       sgml-parent-document: ("../index.xml" "chapter" "sect1")
+       End:
+-->

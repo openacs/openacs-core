@@ -1,6 +1,10 @@
 <sect1 id="openacs" xreflabel="Install OpenACS &version;">
 <title>Install OpenACS &version;</title>
 
+  <authorblurb>
+	by <ulink url="mailto:vinod@kurup.com">Vinod Kurup</ulink>
+  </authorblurb>
+
   <sect2 id="install-openacs-download">
 	<title>Downloading OpenACS</title>
 
@@ -13,9 +17,9 @@
       <listitem><para> 
 		  Login as <computeroutput>nsadmin</computeroutput> and untar the
 		  downloaded components into <computeroutput>/web</computeroutput>
-		  directory. The alpha-2 tarball is currently named
-		  <computeroutput>alpha2.tgz</computeroutput>. Replace
-		  <computeroutput>alpha2.tgz</computeroutput> in the commands below
+		  directory. The OpenACS &version; tarball is currently named
+		  <computeroutput>openacs-4-5.tgz</computeroutput>. Replace
+		  <computeroutput>openacs-4-5.tgz</computeroutput> in the commands below
 		  with whatever the current tarball is named.
 		</para>
 
@@ -23,7 +27,7 @@
 joeuser:~$ su - nsadmin
 Password: ***********
 nsadmin:~$ cd /web
-nsadmin:/web$ tar xzf /tmp/alpha2.tgz</programlisting>
+nsadmin:/web$ tar xzf /tmp/openacs-4-5.tgz</programlisting>
       </listitem>
 
       <listitem><para> 
@@ -879,3 +883,8 @@ DROP DATABASE</programlisting>
   <para><phrase role="cvstag">($Id$)</phrase></para>
 </sect1>
 
+<!--
+       Local Variables:
+       sgml-parent-document: ("../index.xml" "chapter" "sect1")
+       End:
+-->

@@ -1,6 +1,10 @@
 <sect1 id="credits" xreflabel="Credits">
   <title>Credits</title>
 
+  <authorblurb>
+	by <ulink url="mailto:vinod@kurup.com">Vinod Kurup</ulink>
+  </authorblurb>
+
   <para><ulink url="mailto:vinod@kurup.com">Vinod Kurup</ulink> put
 	together the January 2002 version of this guide from many sources of
 	information.</para>
@@ -47,8 +51,7 @@
 
   <para>
 	<emphasis role="strong">All questions and comments</emphasis> regarding
-	this guide should be sent to <ulink
-	url="mailto:vinod@kurup.com">vinod@kurup.com</ulink> or on the <ulink
+	this guide should be posted on the <ulink
 	url="http://openacs.org/bboard">OpenACS bboards</ulink>.
   </para>
 
@@ -56,3 +59,8 @@
 
 </sect1>
 
+<!--
+       Local Variables:
+       sgml-parent-document: ("../index.xml" "chapter" "sect1")
+       End:
+-->

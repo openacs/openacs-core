@@ -1,9 +1,9 @@
 <sect1 id="object-system-requirements" xreflabel="OpenACS 4 Object Model Requirements">
 <title>OpenACS 4 Object Model Requirements</title>
 
-<authorblurb><para>
+<authorblurb>
 By <ulink url="mailto:psu@arsdigita.com">Pete Su</ulink> 
-</para></authorblurb>
+</authorblurb>
 
 
 
@@ -808,3 +808,8 @@ requirements on relation types.</entry>
 
 </sect1>
 
+<!--
+       Local Variables:
+       sgml-parent-document: ("../index.xml" "chapter" "sect1")
+       End:
+-->

@@ -1,9 +1,9 @@
 <sect1 id="permissions-requirements" xreflabel="OpenACS 4 Permissions Requirements">
 <title>OpenACS 4 Permissions Requirements</title>
 
-<authorblurb><para>
+<authorblurb>
 by <ulink url="mailto:jmp@arsdigita.com">John McClary Prevost</ulink> 
-</para></authorblurb>
+</authorblurb>
 
 <sect2 id="permissions-requirements-intro">
 <title>Introduction</title>
@@ -285,3 +285,8 @@ freeze.</entry>
 
 </sect1>
 
+<!--
+       Local Variables:
+       sgml-parent-document: ("../index.xml" "chapter" "sect1")
+       End:
+-->

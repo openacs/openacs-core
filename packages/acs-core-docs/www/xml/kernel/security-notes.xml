@@ -2,9 +2,9 @@
 <title>OpenACS 4 Security Notes</title>
 
 
-<authorblurb><para>
+<authorblurb>
 by <ulink url="mailto:richardl@arsdigita.com">Richard Li</ulink> 
-</para></authorblurb>
+</authorblurb>
 
 <para>
 The security system was designed for security. Thus, decisions requiring
@@ -90,3 +90,8 @@ it is called by the request processor. </para>
 </sect2>
 </sect1>
 
+<!--
+       Local Variables:
+       sgml-parent-document: ("../index.xml" "chapter" "sect1")
+       End:
+-->

@@ -2,9 +2,9 @@
 <title>OpenACS &version; Package Manager Design</title>
 
 
-<authorblurb><para>
+<authorblurb>
 by <ulink url="mailto:bquinn@arsdigita.com">Bryan Quinn</ulink> 
-</para></authorblurb>
+</authorblurb>
 
 
 <sect2 id="apm-design-essentials">
@@ -1083,3 +1083,8 @@ Salz, Michael Yoon, and Lars Pind.</para></listitem>
 
 </sect1>
 
+<!--
+       Local Variables:
+       sgml-parent-document: ("../index.xml" "chapter" "sect1")
+       End:
+-->

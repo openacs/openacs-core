@@ -2,13 +2,13 @@
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
                "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [ 
 
+<!ENTITY version "4.5">
+<!ENTITY majorversion "4">
 <!-- 
      OpenACS Version. 
      Update this to propagate current version numbers to documents.
      In documents, use  &version;  
 -->
-<!ENTITY version "4.5">
-<!ENTITY majorversion "4">
 
 <!-- For Developers -->
 <!ENTITY api SYSTEM "developers-guide/db-api.xml">
@@ -115,7 +115,7 @@
 
     </chapter>
 
-    <chapter id="win-install">
+    <chapter id="win-install" xreflabel="Installing on Windows">
       <title>Installing on Windows</title>
 
       <sect1 id="win-overview" xreflabel="Windows Installation Overview">

@@ -1,9 +1,9 @@
 <sect1 id="groups-requirements" xreflabel="OpenACS 4 Groups Requirements">
 <title>OpenACS 4 Groups Requirements</title>
 
-<authorblurb><para>
+<authorblurb>
 by <ulink url="http://planitia.org">Rafael H. Schloming</ulink>, <ulink url="mailto:mthomas@arsdigita.com">Mark Thomas</ulink> 
-</para></authorblurb>
+</authorblurb>
 
 
 <sect2 id="groups-requirements-intro">
@@ -702,3 +702,8 @@ outlined in 130.x to 165.x</para></listitem>
 
 </sect1>
 
+<!--
+       Local Variables:
+       sgml-parent-document: ("../index.xml" "chapter" "sect1")
+       End:
+-->

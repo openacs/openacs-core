@@ -1,9 +1,9 @@
 <sect1 id="db-api-detailed" xreflabel="Database Access API">
 <title>Database Access API</title>
 
-<authorblurb><para>
+<authorblurb>
 by <ulink url="mailto:jsalz@mit.edu">Jon Salz</ulink> 
-</para></authorblurb>
+</authorblurb>
 
 <itemizedlist>
 <listitem><para>Tcl procedures: /packages/acs-kernel/10-database-procs.tcl</para></listitem>
@@ -1114,3 +1114,8 @@ db_dml foo_insert &quot;insert into foo(baz) values(:1)&quot; {[db_nullify_empty
 </sect2>
 </sect1>
 
+<!--
+       Local Variables:
+       sgml-parent-document: ("../index.xml" "chapter" "sect1")
+       End:
+-->

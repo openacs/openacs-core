@@ -1,6 +1,10 @@
 <sect1 id="aolserver" xreflabel="Install AOLserver 3.3+ad13">
   <title>Install AOLserver 3.3+ad13</title>
 
+  <authorblurb>
+	by <ulink url="mailto:vinod@kurup.com">Vinod Kurup</ulink>
+  </authorblurb>
+
   <sect2 id="install-aolserver-download" xreflabel="Download AOLServer">
 	<title>Download the Distribution</title>
 
@@ -409,3 +413,9 @@ set address 127.0.0.1</programlisting>
   <para><phrase role="cvstag">($Id$)</phrase></para>
 
 </sect1>
+
+<!--
+       Local Variables:
+       sgml-parent-document: ("../index.xml" "chapter" "sect1")
+       End:
+-->
