@@ -111,8 +111,8 @@ begin
                            new__object_type,
                            new__creation_date, 
                            new__creation_user, 
-                           new__creation_ip
-                           new__parent_id,
+                           new__creation_ip,
+                           new__parent_id
   );
     
   insert into cr_keywords 
@@ -274,7 +274,7 @@ end;' language 'plpgsql';
 create function content_keyword__get_path (integer)
 returns text as '
 declare
-  get_path_keyword_id             alias for $1;  
+  get_path__keyword_id             alias for $1;  
   v_path                          text default '''';
   v_is_found                      boolean default ''f'';   
   v_heading                       cr_keywords.heading%TYPE;
