@@ -1,8 +1,11 @@
 ad_page_contract {
+
     Set parameters on a package instance.
+
     @author Bryan Quinn (bquinn@arsdigita.com)
     @date 12 September 2000
-    @cvs-id $Id$
+    @version $Id$
+
 } {
     package_key:notnull
     package_id:naturalnum,notnull
@@ -12,14 +15,8 @@ ad_page_contract {
 
 ad_require_permission $package_id admin
 
-ns_log Notice "[array names params]"
-
 if { [catch {
-    db_foreach apm_parameters_set {
-	select parameter_id, parameter_name
-	from apm_parameters
-	where package_key = :package_key
-    } {
+    db_foreach apm_parameters_set {} {
 	if {[info exists params($parameter_id)]} {
 	    ad_parameter -set $params($parameter_id) -package_id $package_id $parameter_name $package_key 
 	}

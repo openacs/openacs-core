@@ -420,31 +420,19 @@
             <file type="query_file" db_type="postgresql" path="www/admin/relations/remove-postgresql.xql"/>
             <file type="content_page" path="www/admin/relations/remove.adp"/>
             <file type="content_page" path="www/admin/relations/remove.tcl"/>
-            <file type="query_file" db_type="oracle" path="www/admin/site-map/auto-mount-oracle.xql"/>
-            <file type="query_file" db_type="postgresql" path="www/admin/site-map/auto-mount-postgresql.xql"/>
             <file type="content_page" path="www/admin/site-map/auto-mount.tcl"/>
-            <file type="query_file" db_type="oracle" path="www/admin/site-map/delete-oracle.xql"/>
-            <file type="query_file" db_type="postgresql" path="www/admin/site-map/delete-postgresql.xql"/>
             <file type="content_page" path="www/admin/site-map/delete.tcl"/>
-            <file type="query_file" path="www/admin/site-map/delete.xql"/>
             <file type="query_file" db_type="oracle" path="www/admin/site-map/index-oracle.xql"/>
             <file type="query_file" db_type="postgresql" path="www/admin/site-map/index-postgresql.xql"/>
             <file type="content_page" path="www/admin/site-map/index.tcl"/>
-            <file type="query_file" path="www/admin/site-map/index.xql"/>
-            <file type="query_file" db_type="oracle" path="www/admin/site-map/instance-delete-oracle.xql"/>
-            <file type="query_file" db_type="postgresql" path="www/admin/site-map/instance-delete-postgresql.xql"/>
             <file type="content_page" path="www/admin/site-map/instance-delete.tcl"/>
             <file type="query_file" path="www/admin/site-map/instance-delete.xql"/>
             <file type="content_page" path="www/admin/site-map/mount-2.tcl"/>
-            <file type="query_file" path="www/admin/site-map/mount-2.xql"/>
             <file type="query_file" db_type="oracle" path="www/admin/site-map/mount-oracle.xql"/>
             <file type="query_file" db_type="postgresql" path="www/admin/site-map/mount-postgresql.xql"/>
             <file type="content_page" path="www/admin/site-map/mount.tcl"/>
-            <file type="query_file" db_type="oracle" path="www/admin/site-map/new-oracle.xql"/>
-            <file type="query_file" db_type="postgresql" path="www/admin/site-map/new-postgresql.xql"/>
             <file type="content_page" path="www/admin/site-map/new.tcl"/>
             <file type="query_file" path="www/admin/site-map/new.xql"/>
-            <file type="query_file" db_type="postgresql" path="www/admin/site-map/package-new-postgresql.xql"/>
             <file type="content_page" path="www/admin/site-map/package-new.tcl"/>
             <file type="query_file" path="www/admin/site-map/package-new.xql"/>
             <file type="content_page" path="www/admin/site-map/parameter-set-2.tcl"/>
@@ -453,7 +441,6 @@
             <file type="query_file" db_type="postgresql" path="www/admin/site-map/parameter-set-postgresql.xql"/>
             <file type="content_page" path="www/admin/site-map/parameter-set.tcl"/>
             <file type="content_page" path="www/admin/site-map/unmount.tcl"/>
-            <file type="query_file" path="www/admin/site-map/unmount.xql"/>
             <file type="query_file" db_type="oracle" path="www/admin/site-map/unmounted-oracle.xql"/>
             <file type="query_file" db_type="postgresql" path="www/admin/site-map/unmounted-postgresql.xql"/>
             <file type="content_page" path="www/admin/site-map/unmounted.tcl"/>
@@ -577,7 +564,11 @@
             <file type="content_page" path="www/register/user-new.adp"/>
             <file type="content_page" path="www/register/user-new.tcl"/>
             <file type="query_file" path="www/register/user-new.xql"/>
+            <file type="content_page" path="www/shared/1pixel.footer"/>
+            <file type="content_page" path="www/shared/1pixel.header"/>
             <file type="content_page" path="www/shared/1pixel.tcl"/>
+            <file type="content_page" path="www/shared/1pixel.tcl.orig"/>
+            <file type="content_page" path="www/shared/1pixel.tcl.rej"/>
             <file type="query_file" db_type="postgresql" path="www/shared/community-member-postgresql.xql"/>
             <file type="content_page" path="www/shared/community-member.adp"/>
             <file type="content_page" path="www/shared/community-member.tcl"/>
@@ -595,6 +586,7 @@
             <file type="content_page" path="www/shared/portrait-thumbnail-bits.tcl"/>
             <file type="content_page" path="www/shared/portrait.adp"/>
             <file type="content_page" path="www/shared/portrait.tcl"/>
+            <file type="content_page" path="www/shared/report-error.adp"/>
             <file type="content_page" path="www/shared/send-email.adp"/>
             <file type="content_page" path="www/shared/send-email.tcl"/>
             <file type="content_page" path="www/shared/session-update.tcl"/>
