@@ -8,7 +8,7 @@ ad_library {
     @cvs-id defs-procs.tcl,v 1.19.2.2 2003/03/28 13:43:28 lars Exp
 }
 
-ad_proc -public ad_acs_version {} {
+ad_proc -public ad_acs_version_no_cache {} {
     The OpenACS version of this instance. Uses the version name
     of the acs-kernel package.
 
@@ -17,6 +17,14 @@ ad_proc -public ad_acs_version {} {
     apm_version_get -package_key acs-kernel -array kernel
 
     return $kernel(version_name)
+}
+ad_proc -public ad_acs_version {} {
+    The OpenACS version of this instance. Uses the version name
+    of the acs-kernel package.
+
+    @author Peter Marklund
+} {
+    return [util_memoize ad_acs_version_no_cache]
 }
 
 ad_proc -public ad_acs_release_date {} {
