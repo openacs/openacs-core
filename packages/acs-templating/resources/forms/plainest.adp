@@ -1,13 +1,19 @@
-<table bgcolor="#FFFFFF" cellspacing="0" cellpadding="6" border="0">
+
+<!-- Dark blue frame -->
+<table bgcolor=#FFFFFF cellspacing=0 cellpadding=4 border=0>
+<tr><td>
+
+<!-- Light blue pad -->
+<table bgcolor=#FFFFFF cellspacing=0 cellpadding=6 border=0 width="100%">
 <tr><td>
 
 <!-- Form elements -->
-<table bgcolor="#FFFFFF" cellspacing="0" cellpadding="2" border="0" width="100%">
+<table bgcolor=#FFFFFF cellspacing=0 cellpadding=2 border=0 width="100%">
 
   <multiple name=elements>
 
     <if @elements.section@ not nil>
-      <tr><td colspan="2">@elements.section@</td></tr>
+      <tr><td colspan=2 bgcolor=#FFFFFF><b>@elements.section@</b></td></tr>
     </if>
 
     <group column="section">
@@ -18,49 +24,48 @@
 
     <else>
       <if @elements.widget@ eq "submit">
-        <tr><td align="center" colspan="2">
+        <tr><td align=center colspan=2>
           <noparse><formwidget id=@elements.id@></noparse>
         </td></tr>
       </if>
       <else>
        <tr>
         <if @elements.label@ not nil>
-	<td>@elements.label@&nbsp;&nbsp;
+	<td><b>@elements.label@</b>&nbsp;&nbsp;
           <if @elements.help_text@ not nil>
-            <br />&nbsp;&nbsp;
-            <span style="font-size: 90%"><noparse><formhelp id=@elements.id@></noparse></span><br />
+            <br>&nbsp;&nbsp;
+            <font size=-1><noparse><formhelp id=@elements.id@></noparse></font><br>
           </if>
 	  </td>
         </if>
 	<if @elements.widget@ in radio checkbox>
-            <if @elements.label@ nil><td colspan="2"></if>
+            <if @elements.label@ nil><td colspan=2>></if>
 	    <else><td></else>
 	    <noparse>
-            <table cellpadding="4" cellspacing="0" border="0">
+            <table cellpadding=4 cellspacing=0 border=0>
 	      <formgroup id=@elements.id@>
 		<tr><td>\@formgroup.widget@</td>
                     <td><label for="@elements.form_id@:elements:@elements.id@:\@formgroup.option@">\@formgroup.label@</label></td></tr>
 	      </formgroup>
 	      </table>
 	      <formerror id=@elements.id@><br>
-                <span style="color: Red; font-weight: bold">\@formerror.@elements.id@\@</span>
+                <font color="red"><b>\@formerror.@elements.id@\@</b></font>
               </formerror>
             </noparse>
 	    </td>	    
 	</if>
 	<else> 
 	    <if @elements.widget@ eq inform>
-              <if @elements.label@ nil><td style="background: #EEEEEE" colspan="2"></if>
-	      <else><td style="background: #EEEEEE"></else>
+	      <td bgcolor=#FFFFFF>
 		<noparse><formwidget id=@elements.id@></noparse>
 	      </td>
 	    </if>
 	    <else>
-              <if @elements.label@ nil><td nowrap="nowrap" colspan="2"></if>
-                <else><td nowrap="nowrap"></else>
+              <if @elements.label@ nil><td nowrap colspan=2></if>
+                <else><td nowrap></else>
 		<noparse><formwidget id=@elements.id@>
-		<formerror id=@elements.id@><br />
-                 <span style="font-weight: bold; color: red">\@formerror.@elements.id@\@</span>
+		<formerror id=@elements.id@><br><font 
+		   color="red"><b>\@formerror.@elements.id@\@<b></font>
                 </formerror></noparse>
 	      </td>
 	    </else>
@@ -78,7 +83,6 @@
 </td></tr>
 
 <if @buttons:rowcount@ gt 0>
-<if @form_properties.has_submit@ nil>
   <tr>
     <td align="center">
       <multiple name="buttons">
@@ -88,4 +92,9 @@
   </tr>
 </if>
 
+<!-- End of light blue pad -->
+</table>
+
+<!-- Dark blue frame -->
+</td></tr>
 </table>
