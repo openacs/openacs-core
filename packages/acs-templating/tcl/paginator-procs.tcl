@@ -442,18 +442,32 @@ ad_proc -public template::paginator::get_data { statement_name name datasource q
   # stack frame as we go, using the order lookup created above to ensure
   # that the rows are properly sorted.  Do it in the calling stack frame
   # so that bind variables may be used.
-
   uplevel 2 "
-
-    db_multirow __page_data $statement_name \"$query\" {
+    
+    set __page_cnt 0
+    db_foreach $statement_name \"$query\" -column_array row {
+      incr __page_cnt
       set i \$__page_order(\$row($id_column))
       upvar 0 $datasource:\$i __page_sorted_row
       array set __page_sorted_row \[array get row\]
       set __page_sorted_row(rownum) \[expr \$i + \$__page_firstrow - 1\]
     }
 
-    set $datasource:rowcount \${__page_data:rowcount}
+    set $datasource:rowcount \${__page_cnt}
   "
+
+#   uplevel 2 "
+
+#     db_multirow __page_data $statement_name \"$query\" {
+#       set i \$__page_order(\$row($id_column))
+#       upvar 0 $datasource:\$i __page_sorted_row
+#       array set __page_sorted_row \[array get row\]
+#       set __page_sorted_row(rownum) \[expr \$i + \$__page_firstrow - 1\]
+#     }
+
+#     set $datasource:rowcount \${__page_data:rowcount}
+#   "
+
 }
 
 ad_proc -private template::paginator::get_reference {} {
