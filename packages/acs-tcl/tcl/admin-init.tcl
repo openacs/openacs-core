@@ -8,15 +8,15 @@ ad_library {
 
 }
 
-if { [ad_ssl_available_p] } {
+# This can be very time consuming on a large site and may be 
+# disabled by setting RegisterRestrictToSSLFilters in the kernel params.
+if { [ad_ssl_available_p] 
+     && [parameter::get -package_id [ad_acs_kernel_id] -name RegisterRestrictToSSLFilters -default 1]} {
     set admin_ssl_filters_installed_p 1
 
-    db_foreach path_select {
-	select package_id, site_node.url(node_id) as url from apm_packages p, site_nodes n
-	where p.package_id = n.object_id
-    } {
+    db_foreach path_select {} { 
 	ns_log Notice "Processing RestrictToSSL for $url"
-	foreach pattern [ad_parameter -package_id $package_id RestrictToSSL "acs-subsite"] {
+	foreach pattern [parameter::get -package_id $package_id -parameter RestrictToSSL] {
 	    ad_register_filter preauth GET "$url$pattern" ad_restrict_to_https
 	    ns_log Notice "URLs matching \"$url$pattern\" are restricted to SSL"
 	}
