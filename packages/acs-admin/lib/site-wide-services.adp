@@ -11,5 +11,6 @@
   <if @acs_service_contract_url@ not nil>
     <li><a href="@acs_service_contract_url@">Service Contracts</a>
   </if>
+  <li><a href="@acs_admin_url@auth">Authentication</a>
 </ul>
 <p>
