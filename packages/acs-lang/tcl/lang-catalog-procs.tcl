@@ -111,10 +111,7 @@ namespace eval lang::catalog {
         # Initialize the array to return
         array set msg_catalog_array {}
 
-        # An ns_xml bug workaround, may not be necessary still but won't do any harm
-        set xml_data [xml_prepare_data $catalog_file_contents]
-
-        # Parse the xml document with ns_xml
+        # Parse the xml document
         set tree [xml_parse $xml_data]
 
         # Get the message catalog root node
@@ -153,7 +150,7 @@ namespace eval lang::catalog {
         set value [xml_node_get_attribute $element $attribute]
 
         if { [empty_string_p $value] } {
-            error "Required attribute \"$attribute\" missing from <[ns_xml node get name $element]>"
+            error "Required attribute \"$attribute\" missing from <[xml_node_get_name $element]>"
         }
 
         return $value
@@ -168,7 +165,7 @@ namespace eval lang::catalog {
         set content [xml_node_get_content $element]
 
         if { [empty_string_p $content] } {
-            error "Required content missing from element <[ns_xml node get name $element]>"
+            error "Required content missing from element <[xml_node_get_name $element]>"
         }
 
         return $content

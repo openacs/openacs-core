@@ -1,10 +1,10 @@
 ad_library {
 
     Functions that APM uses to parse and generate XML.
-    Changed to use ns_xml by ben (OpenACS).
 
     @author Bryan Quinn (bquinn@arsdigita.com)
     @author Ben Adida (ben@mit.edu)
+    @author Bart Teeuwisse (bart.teeuwisse@thecodemill.biz)
     @creation-date Fri Oct  6 21:47:39 2000
     @cvs-id $Id$
 } 
@@ -31,13 +31,8 @@ ad_proc -private apm_attribute_value {
     Parses the XML element to return the value for the specified attribute.
 
 } {
-    set value [xml_node_get_attribute $element $attribute]
-
-    if { [empty_string_p $value] } {
-	return $default
-    } else {
-	return $value
-    }
+    ns_log notice "apm_attribute_value $element $attribute $default --> [xml_node_get_attribute $element $attribute $default]"
+    return [xml_node_get_attribute $element $attribute $default]
 }
 
 ad_proc -private apm_tag_value {
@@ -48,18 +43,14 @@ ad_proc -private apm_tag_value {
 } {
     Parses the XML element and returns the associated property name if it exists.
 } {
-    set node [lindex [xml_node_get_children_by_name $root $property_name] 0]
+    ns_log notice "apm_tag_value [$root nodeName] $property_name"
+    set node [xml_node_get_first_child_by_name $root $property_name]
 
     if { ![empty_string_p $node] } {
-        set child [lindex [xml_node_get_children $node] 0]
-
-        # JCD 20020914 ns_xml when given something like <pretty-name></pretty-name> (i.e. empty content)
-        # will have the node but the node will not have a child node and the 
-        # getcontent will then fail.
-        if { ![empty_string_p $child] } {
-            return [xml_node_get_content $child]
-        }
+#	ns_log notice "apm_tag_value $root $property_name $default --> [xml_node_get_content $node]"
+	return [xml_node_get_content $node]
     }    
+    ns_log notice "apm_tag_value $root $property_name $default --> $default"
     return $default
 }
 
@@ -237,10 +228,8 @@ ad_proc -public apm_read_package_info_file { path } {
     set xml_data [read $file]
     close $file
 
-    set xml_data [xml_prepare_data $xml_data]
-
-    set tree [xml_parse $xml_data]
-    set root_node [xml_doc_get_first_node_by_name $tree package]
+    set tree [xml_parse -persist $xml_data]
+    set root_node [xml_doc_get_first_node $tree]
     apm_log APMDebug "XML: root node is [xml_node_get_name $root_node]"
     set package $root_node
 
@@ -294,7 +283,7 @@ ad_proc -public apm_read_package_info_file { path } {
 	vendor url
 	description format
     } {
-	set node [lindex [xml_node_get_children_by_name $version $property_name] 0]
+	set node [xml_node_get_first_child_by_name $version $property_name]
 	if { ![empty_string_p $node] } {
 	    set properties($property_name.$attribute_name) [apm_attribute_value $node $attribute_name]
 	} else {
@@ -364,7 +353,7 @@ ad_proc -public apm_read_package_info_file { path } {
 
     foreach node $owners {
 	set url [apm_attribute_value $node url]
-	set name [xml_node_get_content [lindex [xml_node_get_children $node] 0]]
+	set name [xml_node_get_content $node]
 	lappend properties(owners) [list $name $url]
     }
 
@@ -391,6 +380,9 @@ ad_proc -public apm_read_package_info_file { path } {
 	    lappend properties(parameters) [list $name $description $section_name $datatype $min_n_values $max_n_values $default_value]
 	}
     }
+    
+    # Release the XML tree
+    xml_doc_free $tree
 
     # Serialize the array into a list.
     set return_value [array get properties]
