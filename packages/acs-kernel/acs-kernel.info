@@ -164,7 +164,7 @@
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="MaxSize"  default="200000" description="The size of the util_memoize cache, if using the ns_cache module." section_name="memoize"/>
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="PrivacyControlEnabledP"  default="0" description="Whether we control privacy" section_name="privacy"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="CommunityMemberURL"  default="/shared/community-member" description="the URL of the public community member page" section_name="system-information"/>
-            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="CommunityMemberAdminURL"  default="/admin/users/one" description="the URL of the admin community member page" section_name="system-information"/>
+            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="CommunityMemberAdminURL"  default="/acs-admin/users/one" description="the URL of the admin community member page" section_name="system-information"/>
         </parameters>
 
     </version>
