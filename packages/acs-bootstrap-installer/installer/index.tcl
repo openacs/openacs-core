@@ -71,7 +71,7 @@ if { [file exists [apm_install_xml_file_path]] } {
     set acs_application(name) [apm_required_attribute_value $root_node name]
     set acs_application(pretty_name) [apm_attribute_value -default $acs_application(name) $root_node pretty-name]
     set acs_application(home) [apm_attribute_value -default "" $root_node home]
-
+    set acs_application(min_stack_size) [apm_attribute_value -default 128 $root_node min_stack_size]
     append body "<p>
 The installer will automatically install the $acs_application(pretty_name)
 application after the basic OpenACS tookit has been installed.
@@ -83,6 +83,11 @@ For more information about the $acs_application(pretty_name) application visit t
 <a href=\"$acs_application(home)\">$acs_application(pretty_name) home page</a>
 "
     }
+} else {
+    set acs_application(name) openacs
+    set acs_application(pretty_name) OpenACS
+    set acs_application(home) ""
+    set acs_application(min_stack_size) 128
 }
 
 set error_p 0
@@ -183,22 +188,20 @@ After adding support for the fancy ADP parser, please restart your web server.
     set error_p 1
 }   
 
-# AOLserver must have a large stack size (at least 128K)
-set stacksize [ns_config "ns/threads" StackSize]
-if { $stacksize < [expr 128 * 1024] } {
+# AOLserver must have a large stack size (at least 128K by default, or the value specified
+# in the install.xml file)
 
-    append errors "<li><p>The configured AOLserver Stacksize is too small ($stacksize).
-OpenACS requires a StackSize parameter of at least 131072 (ie 128K).
-Please add the following to your AOLserver configuration file or 
-see the <a href=\"/doc/install-guide/\">Installation Guide</a> for more information.<p>
-<blockquote><pre>
-\[ns/threads\] 
-stacksize=131072 
-</blockquote></pre>
-<p>If you use a .tcl configuration file, add
+set stacksize [ns_config "ns/threads" StackSize]
+if { $stacksize < [expr $acs_application(min_stack_size) * 1024] } {
+
+    append errors "<li><p>The configured AOLserver Stacksize is too small
+([expr $stacksize / 1024]K).
+$acs_application(pretty_name) requires a StackSize parameter of at least
+${acs_application(min_stack_size)}K.
+<p>Please add the following line to your .tcl configuration file
 <blockquote><pre>
 ns_section \"ns/threads\"
-        ns_param StackSize [expr 128*1024]
+        ns_param StackSize \[expr ${acs_application(min_stack_size)}*1024\]
 </blockquote></pre>
 After adding support the larger stacksize, please restart your web server.
 </strong></p>"

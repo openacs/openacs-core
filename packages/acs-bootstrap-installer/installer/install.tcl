@@ -161,13 +161,22 @@ ad_parameter -set $new_registrations -package_id $main_site_id NewRegistrationEm
 # We're done - kill the server (will restart if server is setup properly)
 ad_schedule_proc -thread t -once t 1 ns_shutdown
 
+set post_installation_message \
+    [parameter::get_from_package_key -package_key acs-bootstrap-installer \
+     -parameter post_installation_message \
+     -default ""]
+
 ns_write "<b>Installation finished</b>
 
 <p> The server has been shut down. Normally, it should come back up by itself after a minute or so. </p>
 
-<p> If not, please check your server error log, or contact your system administrator. </p>
+<p> If not, please check your server error log, or contact your system administrator. </p>"
 
-<p> When the server is back up you can visit <a href=\"/acs-admin/\">the site-wide administration pages</a> </p>
+if { ![string equal $post_installation_message ""] } {
+    ns_write $post_installation_message
+} else {
+    ns_write "
+<p> When the server is back up you can visit <a href=\"/acs-admin/\">the site-wide administration pages</a> </p>"
+}
 
-[install_footer]
-"
+ns_write [install_footer]
