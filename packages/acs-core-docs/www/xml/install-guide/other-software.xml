@@ -503,7 +503,7 @@ CREATE
 packages</guilabel></computeroutput> link.</para>
           </listitem>
 
-	<listitem><para>On the next screen, after it loads, click on <computeroutput><guilabel>Uncheck all boxes</guilabel></computeroutput>, then click the second checkbox next to <computeroutput><guilabel>OpenFTS Driver 4.2</guilabel></computeroutput>.  This will automatically check the first box. Then click <computeroutput><guibutton><accel>N</accel>ext</guibutton></computeroutput>. </para></listitem>
+	<listitem><para>On the next screen, after it loads, click on <computeroutput><guilabel>Uncheck all boxes</guilabel></computeroutput>, then click the checkbox next to <computeroutput><guilabel>OpenFTS Driver 4.2</guilabel></computeroutput>.  Then click <computeroutput><guibutton><accel>N</accel>ext</guibutton></computeroutput>. </para></listitem>
           
           <listitem><para>Click <computeroutput><guibutton>Install Packages</guibutton></computeroutput></para></listitem>
           
