@@ -7,7 +7,7 @@
       <querytext>
 
 begin
- :1 := content_item.new(name => 'tarball-for-package-version-${version_id}',
+ :1 := content_item.new(name => :name,
                         creation_ip => :creation_ip
                         );
 end;
@@ -19,10 +19,10 @@ end;
       <querytext>
 
         begin
-          :1 := content_revision.new(title => '${package_key}-tarball',
+          :1 := content_revision.new(title => :title,
                                    description => 'gzipped tarfile',
                                    text => 'not_important',
-                                   mime_type => 'application/x-compressed',
+                                   mime_type => 'text/plain',
                                    item_id => :item_id,
                                    creation_user => :user_id,
                                    creation_ip => :creation_ip
@@ -47,6 +47,18 @@ end;
       </querytext>
 </fullquery>
 
+<fullquery name="apm_generate_tarball.update_content_length">      
+      <querytext>
+
+                update apm_package_versions
+                   set content_length = (select dbms_lob.getlength(content)
+                                           from cr_revisons
+                                          where revision_id = :revision_id)
+                 where version_id = :version_id
+
+      </querytext>
+</fullquery>
+
 
 <fullquery name="apm_extract_tarball.distribution_tar_ball_select">      
       <querytext>
@@ -59,20 +71,6 @@ end;
 
       </querytext>
 </fullquery>
-
- 
-<fullquery name="apm_generate_tarball.apm_tarball_insert">      
-      <querytext>
-        update apm_package_versions
-           set distribution_tarball = empty_blob(),
-               distribution_uri = null,
-               distribution_date = sysdate
-         where version_id = :version_id
-     returning distribution_tarball into :1
-    
-      </querytext>
-</fullquery>
-
  
 <fullquery name="apm_file_add.apm_file_add">      
       <querytext>
@@ -104,5 +102,5 @@ end;
       </querytext>
 </fullquery>
 
- 
+
 </queryset>

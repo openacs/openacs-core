@@ -264,10 +264,11 @@ create table apm_package_versions (
     -- FIXME: store the tarball in the content-repository
     -- distribution_tarball blob,
     item_id            integer,
-    -- This constraint can't be adde yet, as the cr_items table 
+    -- This constraint can't be added yet, as the cr_items table 
     -- has not been created yet.
                        -- constraint apm_package_ver_item_id_fk 
                        -- references cr_items(item_id),
+    content_length     integer,
     distribution_uri   varchar(1500),
     distribution_date  timestamp,
     constraint apm_package_vers_id_name_un unique(package_key, version_name)
@@ -645,16 +646,17 @@ comment on table apm_package_owners is '
 -- Ths view faciliates accessing information about package versions by joining
 -- the apm_package_types information and acs_object_types information (which is
 -- invariant across versions) with the specific version information.
+
+-- DCW - 2001-05-04, converted tarball storage to use content repository.
 create view apm_package_version_info as
     select v.package_key, t.package_uri, t.pretty_name, v.version_id, v.version_name,
            v.version_uri, v.summary, v.description_format, v.description, v.release_date,
            v.vendor, v.vendor_uri, v.enabled_p, v.installed_p, v.tagged_p, v.imported_p, v.data_model_loaded_p,
            v.activation_date, v.deactivation_date,
 --           dbms_lob.getlength(distribution_tarball) tarball_length,
--- FIXME:
-           case when item_id is not null then 1 else 0 end as tarball_length,
+           coalesce(v.content_length,0) as tarball_length,
            distribution_uri, distribution_date
-    from   apm_package_types t, apm_package_versions v
+    from   apm_package_types t, apm_package_versions v 
     where  v.package_key = t.package_key;
 
 
