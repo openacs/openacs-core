@@ -234,7 +234,7 @@ ad_proc ::twt::dotlrn::test::manage_my_memberships {} {
 
     # Assert class join link is gone
     if { [::twt::count_links $link_pattern] > 0 } {
-        ::twt::log_alert "Class with community_id $community_id was joined but the join link still appears to be present"
+        ::twt::log_alert "Class with community_id $class_community_id was joined but the join link still appears to be present"
     }
     
     # Join a club
@@ -243,7 +243,7 @@ ad_proc ::twt::dotlrn::test::manage_my_memberships {} {
 
     # Assert join club link is gone
     if { [::twt::count_links $link_pattern] > 0 } {
-        ::twt::log_alert "Club with community_id $community_id was joined but the join link still appears to be present"
+        ::twt::log_alert "Club with community_id $club_join_community_id was joined but the join link still appears to be present"
     }    
     
     # Request membership for a club
@@ -252,7 +252,7 @@ ad_proc ::twt::dotlrn::test::manage_my_memberships {} {
 
     # Assert request membership link is gone
     if { [::twt::count_links $link_pattern] > 0 } {
-        ::twt::log_alert "Requested membership for club with community_id $community_id but the request link still appears to be present"
+        ::twt::log_alert "Requested membership for club with community_id $club_request_community_id but the request link still appears to be present"
     }    
 
     # Drop a class
