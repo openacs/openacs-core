@@ -771,8 +771,8 @@ ad_proc -private apm_package_install_queries {
             apm_callback_and_log $callback "<ul>\n"
             set ul_p 1
         }
-        apm_callback_and_log $callback "<li>Loading data model $path/$file_path..."
-	db_fullquery_internal_load_cache $file
+        apm_callback_and_log $callback "<li>Loading query file $path/$query_file..."
+	db_fullquery_internal_load_cache $path/$query_file
     }
     if { $ul_p } {
         apm_callback_and_log $callback "</ul>\n"
@@ -1182,6 +1182,6 @@ ad_proc -private apm_query_files_find {
             lappend query_file_list $path
 	}
     }
-    ns_log Notice "APM: Data model scripts for $package_key: $query_file_list"
+    ns_log Notice "APM: Query files for $package_key: $query_file_list"
     return $query_file_list
 }

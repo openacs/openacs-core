@@ -19,7 +19,6 @@ db_transaction {
 	set index_path [lindex $info 0]
 	set file_type [lindex $info 1]
         set db_type [lindex $info 2]
-ns_log Notice "Huh? db_type: $db_type"
 	# Do a doubleclick protection check.
 	if { ![db_string apm_file_add_doubleclick_ck {
 	    select count(*) from apm_package_files
