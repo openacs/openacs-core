@@ -15,9 +15,7 @@
 
         <provides url="acs-kernel" version="4.6.3"/>
 
-        <files>
             <!-- No files -->
-        </files>
         <callbacks>
         </callbacks>
         <parameters>

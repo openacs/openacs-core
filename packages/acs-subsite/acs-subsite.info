@@ -24,9 +24,7 @@
         <requires url="acs-kernel" version="4.6.2"/>
         <requires url="acs-tcl" version="4.1"/>
 
-        <files>
             <!-- No files -->
-        </files>
         <callbacks>
             <callback type="after-mount"  proc="subsite::after_mount"/>
             <callback type="before-uninstantiate"  proc="subsite::before_uninstantiate"/>
