@@ -21,7 +21,8 @@
 
 <div id="body">
   <div id="subsite-name">
-    <a href="@subsite_url@" class="subsite-name">@subsite_name@</a>
+    <if @subsite_url@ not nil><a href="@subsite_url@" class="subsite-name">@subsite_name@</a></if>
+    <else>@subsite_name@</else>
   </div>
 
 <!-- Top level navigation -->

@@ -37,3 +37,6 @@ if { [template::util::is_nil no_context_p] } {
     set context_bar {}
 }
 
+if { [string equal [ad_conn url] $subsite_url] } {
+    set subsite_url {}
+}
