@@ -1200,7 +1200,7 @@ procedure del (
   --    @see {acs_object.delete}, {content_item.delete}
   --*/
   folder_id	in cr_folders.folder_id%TYPE,
-  cascade_p     in varchar(2) default 'f' 
+  cascade_p     in char(1) default 'f' 
 );
 
 procedure rename (
