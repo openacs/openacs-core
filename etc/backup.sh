@@ -191,7 +191,7 @@ for directory in $DIRECTORIES
       then 
       
       scp_success=1
-      sc_success=`$SCP -q $FULLNAME $OTHERUSER@$OTHERHOST:$BACKUPDIR`
+      scp_success=`$SCP -q $FULLNAME $OTHERUSER@$OTHERHOST:$BACKUPDIR`
       
      # if scp returns success, see if we should wipe
       if [[ scp_success -eq 0 && $WIPE_OLD_AFTER_SCP_FULL == "true" && $TYPE = "full" ]];
