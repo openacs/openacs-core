@@ -32,6 +32,29 @@ ad_proc -public content::extlink::copy {
     ] content_extlink copy]
 }
 
+ad_proc -public content::extlink::new {
+    -extlink_id:required
+    -url:required
+    -parent_id:required
+    {-name ""}
+    {-label ""}
+    {-description ""}
+    {-package_id ""}
+} {
+    @param Create a new external link.
+    @return 0
+} {
+    return [package_exec_plsql -var_list [list \
+        [list extlink_id $extlink_id ] \
+        [list url $url ] \
+        [list parent_id $parent_id ] \
+        [list name $name ] \
+        [list label $label ] \
+        [list description $description ] \
+        [list package_id $package_id ] \
+    ] content_extlink new]
+}
+
 
 ad_proc -public content::extlink::delete {
     -extlink_id:required
