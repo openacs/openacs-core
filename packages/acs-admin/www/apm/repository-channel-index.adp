@@ -1,5 +1,7 @@
 <h2>OpenACS @channel@ Core and compatibile packages</h2>
-
+<p>Packages can be installed with the OpenACS Automated Installer on
+your OpenACS site at <code>/acs-admin/install</code>.  Only packages
+designated compatible with your OpenACS kernel will be shown.</p>
 <table border="1" cellpadding="4" cellspacing="0">
   <tr>
     <th>Package</th>
