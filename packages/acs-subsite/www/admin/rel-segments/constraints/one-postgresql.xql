@@ -16,7 +16,6 @@
        and s2.segment_id = c.required_rel_segment
        and c.constraint_id = :constraint_id
        and s.package_id = :package_id
-       and s2.package_id = :package_id
 
       </querytext>
 </fullquery>

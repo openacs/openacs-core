@@ -30,17 +30,12 @@ ad_page_contract {
 
 set context [list [list "./" "Relational segments"] "One segment"]
 
-if { ![db_0or1row select_segment_properties {
-    select s.segment_id, s.segment_name, s.group_id, acs_object.name(s.group_id) as group_name,
-           s.rel_type, acs_object_type.pretty_name(r.rel_type) as rel_type_pretty_name,
-           acs_rel_type.role_pretty_plural(r.role_two) as role_pretty_plural
-      from rel_segments s, acs_rel_types r
-     where s.segment_id = :segment_id
-       and s.rel_type = r.rel_type
-} -column_array props] } {
+if { ![db_0or1row select_segment_properties {} -column_array props] } {
     ad_return_error "Segment does not exist" "Segment $segment_id does not exist"
     return
 }
+
+set props(role_pretty_plural) [lang::util::localize $props(role_pretty_plural)]
 
 set name_edit_url [export_vars -base edit { segment_id }]
 
