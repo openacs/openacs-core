@@ -36,19 +36,6 @@
 	
       </querytext>
 </fullquery>
-
- 
-<fullquery name="ad_set_client_property.prop_delete_dml">      
-      <querytext>
-      
-		delete from sec_session_properties
-		where  session_id = :session_id
-		and    module = :module
-		and    property_name = :name
-	    
-      </querytext>
-</fullquery>
-
  
 <fullquery name="ad_set_client_property.prop_insert_dml">      
       <querytext>
@@ -60,6 +47,21 @@
       </querytext>
 </fullquery>
 
+ 
+<fullquery name="ad_set_client_property.prop_update_dml">      
+      <querytext>
+      
+                update sec_session_properties
+                set property_value = :value,
+                  property_clob = null,
+                  secure_p = :secure,
+                  last_hit = :last_hit 
+                where session_id = :session_id and
+                  module = :module and
+                  property_name = :name
+	    
+      </querytext>
+</fullquery>
  
 <fullquery name="sec_get_token.get_token">      
       <querytext>

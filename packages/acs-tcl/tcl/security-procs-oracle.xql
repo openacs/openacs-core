@@ -63,4 +63,20 @@
       </querytext>
 </fullquery>
  
+
+<fullquery name="ad_set_client_property.prop_update_dml_clob">      
+      <querytext>
+                update sec_session_properties
+                set property_value = null,
+                  property_clob = empty_clob(),
+                  secure_p = :secure,
+                  last_hit = :last_hit 
+                where session_id = :session_id and
+                  module = :module and
+                  property_name = :name
+                returning property_clob into :1
+
+      </querytext>
+</fullquery>
+ 
 </queryset>

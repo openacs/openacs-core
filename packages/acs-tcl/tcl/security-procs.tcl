@@ -388,7 +388,7 @@ ad_proc -public ad_set_client_property {
 	db_transaction {
 
             # DRB: Older versions of this code did a delete/insert pair in an attempt
-            # to guard against duplicate insertions.  This didn't work if there were
+            # to guard against duplicate insertions.  This didn't work if there was
             # no value for this property in the table and two transactions ran in
             # parallel.  The problem is that without an existing row the delete had
             # nothing to lock on, thus allowing the two inserts to conflict.  This
@@ -400,8 +400,8 @@ ad_proc -public ad_set_client_property {
 
             set clob_insert_dml [db_map prop_insert_dml_clob]
 
-            if { $clob == "t" && ![empty_string_p $clob_dml] } {
-                if { [catch {db_dml dummy $clob_dml -clobs [list $value]} errmsg] } {
+            if { $clob == "t" && ![empty_string_p $clob_insert_dml] } {
+                if { [catch {db_dml dummy $clob_insert_dml -clobs [list $value]} errmsg] } {
                     db_dml prop_update_dml_clob "" -clobs [list $value]
                 }
             } else {
