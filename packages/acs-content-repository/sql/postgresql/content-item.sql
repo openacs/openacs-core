@@ -546,7 +546,7 @@ begin
                    where
                      workflow_key = ''publishing_wf''
                    and
-                     object_id = is_publishable__item_id;
+                     object_id = is_publishable__item_id
 
   LOOP
     if v_pub_wf.state != ''finished'' then
@@ -1407,7 +1407,7 @@ end;' language 'plpgsql';
 
 -- function get_revision_count
 create function content_item__get_revision_count (integer)
-returns number as '
+returns integer as '
 declare
   get_revision_count__item_id   alias for $1;  
   v_count                       integer;       
