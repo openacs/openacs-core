@@ -3,9 +3,11 @@
 
 <fullquery name="general_info">      
       <querytext>
-      select first_names, last_name, email, url, screen_name
-           from cc_users 
-          where user_id=:user_id
+      select first_names, last_name, email, 
+      case when url is null then 'http://' else url end as url,
+      screen_name
+      from cc_users 
+      where user_id=:user_id
       </querytext>
 </fullquery>
 

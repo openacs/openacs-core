@@ -56,7 +56,7 @@ if {!$validated_p} {
     return
 }
 
-set require_question_p [ad_parameter "RequireQuestionForPasswordResetP"]
+set require_question_p [ad_parameter "RequireQuestionForPasswordResetP" security 0]
 
 # generate a random password
 set password [ad_generate_random_string]

@@ -1,7 +1,7 @@
 <master>
 <property name=title>Login Expired</property>
 
-<p>The login page has expired. Please <a href="./index">login</a> again.</p>
+<p>The login page has expired. Please <a href="./index?">login</a> again.</p>
 
 <table cellpadding=5 cellspacing=1 border=1>
   <tr>
