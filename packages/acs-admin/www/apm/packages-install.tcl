@@ -75,14 +75,21 @@ if { [empty_string_p $spec_files] } {
     
     If you think you might want to use a package later (but not right away),
     install it but don't enable it.<p>
+
+<script language=javascript>
+function uncheckAll() {
+    for (var i = 0; i < [expr [llength $spec_files] * 2]; ++i)
+        document.forms\[0\].elements\[i\].checked = false;
+}
+function checkAll() {
+    for (var i = 0; i < [expr [llength $spec_files] * 2]; ++i)
+        document.forms\[0\].elements\[i\].checked = true;
+}
+</script>
+<input type=\"submit\" name=\"null\" value=\"Check all Boxes\" onclick=\"javascript:checkAll()\">
+<input type=\"submit\" name=\"null\" value=\"Uncheck all Boxes\" onclick=\"javascript:uncheckAll()\">
     "
 
-    if { $checked_by_default_p } {
-        ns_write "<a href=\"[ns_conn url]?checked_by_default_p=0&[export_url_vars install_path]\">Uncheck all boxes</a>"
-    } else {
-        ns_write "<a href=\"[ns_conn url]?checked_by_default_p=1&[export_url_vars install_path]\">Check all boxes</a>"
-    }
-    
     ns_write "<form action=packages-install-2 method=post>"
 
     # Client properties do not deplete the limited URL variable space.
