@@ -543,9 +543,9 @@ begin
                   and 
                     ot1.object_type = refresh_trigger__content_type
                   and 
-                    ot2.object_type <= ot1.object_type
+                    ot2.tree_sortkey <= ot1.tree_sortkey
                   and 
-                    ot1.object_type like (ot2.object_type || ''%'')
+                    ot1.tree_sortkey like (ot2.tree_sortkey || ''%'')
                   order by
                     level desc
   LOOP
@@ -608,9 +608,9 @@ begin
                   and 
                     ot1.object_type = refresh_view__content_type
                   and 
-                    ot2.object_type <= ot1.object_type
+                    ot2.tree_sortkey <= ot1.tree_sortkey
                   and 
-                    ot1.object_type like (ot2.object_type || ''%'')
+                    ot1.tree_sortkey like (ot2.tree_sortkey || ''%'')
                   order by
                     ot2.tree_sortkey desc
   LOOP

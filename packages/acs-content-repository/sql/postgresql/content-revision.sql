@@ -263,9 +263,9 @@ begin
                                          from acs_objects 
                                         where object_id = copy__revision_id)
                   and 
-                    ot2.object_type <= ot1.object_type
+                    ot2.tree_sortkey <= ot1.tree_sortkey
                   and 
-                    ot1.object_type like (ot2.object_type || ''%'')
+                    ot1.tree_sortkey like (ot2.tree_sortkey || ''%'')
                   order by
                     level desc
   LOOP
