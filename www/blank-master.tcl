@@ -71,3 +71,5 @@ if { [llength [namespace eval :: info procs ds_link]] == 1 } {
 }
 
 set translator_mode_p [lang::util::translator_mode_p]
+
+set openacs_version [ad_acs_version]
