@@ -127,4 +127,14 @@ namespace eval oacs_util {
             }
         }
     }
+
+    ad_proc -public vars_to_ns_set {
+	{-ns_set:required}
+	{-var_list:required}
+    } {
+	foreach var $var_list {
+	    upvar $var one_var
+	    ns_set put $ns_set $var $one_var
+	}
+    }
 }
