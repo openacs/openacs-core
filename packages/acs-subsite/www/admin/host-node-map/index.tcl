@@ -50,7 +50,7 @@ doc_body_append "
 $table
 </table>
 <h3>Add another hostname/URL pair</h3>
-<form method=get action=add.tcl>
+<form method=get action=add>
 <table border>
 <tr>
   <th>Hostname</th>

@@ -131,9 +131,9 @@ if {[empty_string_p $group_rel_type_list]} {
 set object_type_path_list [subsite::util::object_type_path_list $party_type party]
 
 set redirects_for_type [list \
-	group "groups/new.tcl?group_id=$party_id&group_type_exact_p=$party_type_exact_p&group_type=$party_type&[ad_export_vars -exclude {party_id party_type_exact_p party_type} $export_var_list]" \
-	rel_segment "rel-segments/new.tcl?segment_id=$party_id&group_id=$add_to_group_id" \
-	user "users/new.tcl?user_id=$party_id&[ad_export_vars -exclude {party_id party_type_exact_p party_type} $export_var_list]"]
+	group "groups/new?group_id=$party_id&group_type_exact_p=$party_type_exact_p&group_type=$party_type&[ad_export_vars -exclude {party_id party_type_exact_p party_type} $export_var_list]" \
+	rel_segment "rel-segments/new?segment_id=$party_id&group_id=$add_to_group_id" \
+	user "users/new?user_id=$party_id&[ad_export_vars -exclude {party_id party_type_exact_p party_type} $export_var_list]"]
 
 foreach {type url} $redirects_for_type {
     if {[lsearch $object_type_path_list $type] != -1} {
@@ -196,7 +196,7 @@ if { [template::form is_valid add_party] } {
 	set next_group_id [lindex $group_rel_type 0]
 	set next_rel_type [lindex $group_rel_type 1]
 	lappend return_url_list \
-		"../relations/add.tcl?group_id=$next_group_id&rel_type=[ad_urlencode $next_rel_type]&party_id=$party_id&allow_out_of_scope_p=t"
+		"../relations/add?group_id=$next_group_id&rel_type=[ad_urlencode $next_rel_type]&party_id=$party_id&allow_out_of_scope_p=t"
     }
 
     # Add the original return_url as the last one in the list

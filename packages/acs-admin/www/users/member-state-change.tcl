@@ -65,7 +65,7 @@ switch $email_verified_p {
     }
     "f" {
 	set action "Require Email from $name"
-	set email_message "Your email in [ad_system_name] needs approval. please go to [ad_url]/register/email-confirm.tcl?[export_url_vars row_id]"
+	set email_message "Your email in [ad_system_name] needs approval. please go to [ad_url]/register/email-confirm?[export_url_vars row_id]"
     }
 }
 

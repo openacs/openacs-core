@@ -194,7 +194,7 @@ if { [template::form is_valid add_user] } {
 	set next_group_id [lindex $group_rel_type 0]
 	set next_rel_type [lindex $group_rel_type 1]
 	lappend return_url_list \
-		"../relations/add.tcl?group_id=$next_group_id&rel_type=[ad_urlencode $next_rel_type]&party_id=$user_id&allow_out_of_scope_p=t"
+		"../relations/add?group_id=$next_group_id&rel_type=[ad_urlencode $next_rel_type]&party_id=$user_id&allow_out_of_scope_p=t"
     }
 
     # Add the original return_url as the last one in the list
@@ -203,7 +203,7 @@ if { [template::form is_valid add_user] } {
     set return_url_stacked [subsite::util::return_url_stack $return_url_list]
 
     if {[empty_string_p $return_url_stacked]} {
-	set return_url_stacked "../parties/one.tcl?party_id=$user_id"
+	set return_url_stacked "../parties/one?party_id=$user_id"
     }
     ad_returnredirect $return_url_stacked
 
@@ -240,7 +240,7 @@ The user was added by $creation_name from [ad_conn url].
 	    ns_sendmail [template::element::get_value add_user email] \
 		    $notification_address \
 		    "Welcome to [ad_system_name]" \
-		    "To confirm your registration, please go to [ad_parameter -package_id [ad_acs_kernel_id] SystemURL]/register/email-confirm.tcl?[export_url_vars row_id].
+		    "To confirm your registration, please go to [ad_parameter -package_id [ad_acs_kernel_id] SystemURL]/register/email-confirm?[export_url_vars row_id]
 
 After confirming your email, here's how you can log in at [ad_url]:
 

@@ -32,7 +32,7 @@ db_1row apm_get_file_to_watch {
 
 # Why did we need all that information? -KS
 
-doc_body_append "[apm_header -form "method=post action=\"file-add-2.tcl\"" [list "version-view?version_id=$version_id" "$pretty_name $version_name"] [list "version-files?version_id=$version_id" "Files"] "Watch file"]
+doc_body_append "[apm_header -form "method=post action=\"file-add-2\"" [list "version-view?version_id=$version_id" "$pretty_name $version_name"] [list "version-files?version_id=$version_id" "Files"] "Watch file"]
 
 "
 

@@ -32,7 +32,7 @@ ad_page_contract {
 
 if { [string match "*..*" $url] || [string match "*..*" $package_key] } {
     ad_return_error "Can't back up beyond the pageroot" "You can't use display-sql.tcl to look at files underneath the pageroot."
-    return -code return 
+    ad_script_abort
 }
 
 if {[exists_and_not_null package_key]} {

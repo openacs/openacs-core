@@ -47,9 +47,9 @@ and a.object_id_one = :user_id
 and a.rel_type = 'user_portrait_rel'"] || [empty_string_p $revision_id]} {
     # The user doesn't have a portrait yet
     if {$admin_p} {
-	set message "This user doesn't have a portrait yet.  You can <a href=\"upload.tcl?[export_url_vars user_id return_url]\">go upload the user's portrait</a>."
+	set message "This user doesn't have a portrait yet.  You can <a href=\"upload?[export_url_vars user_id return_url]\">go upload the user's portrait</a>."
     } else {
-	set message "You don't have a portrait yet. You can <a href=\"upload.tcl?[export_url_vars return_url]\">go upload your portrait</a>"
+	set message "You don't have a portrait yet. You can <a href=\"upload?[export_url_vars return_url]\">go upload your portrait</a>"
     }
     
     ad_return_error "No Portrait" "$message"
@@ -67,7 +67,7 @@ and image_id = :revision_id
 "} errmsg] {
     # There was an error obtaining the picture information
 
-    ad_return_error "Invalid Picture" "The picture of you in the system is invalid. Please <a href=\"upload.tcl\">upload</a> another picture."
+    ad_return_error "Invalid Picture" "The picture of you in the system is invalid. Please <a href=\"upload\">upload</a> another picture."
     return
 }
 

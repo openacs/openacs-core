@@ -150,7 +150,7 @@ if { [template::form is_valid add_group] } {
 	set next_group_id [lindex $group_rel_type 0]
 	set next_rel_type [lindex $group_rel_type 1]
 	lappend return_url_list \
-		"${package_url}admin/relations/add.tcl?group_id=$next_group_id&rel_type=[ad_urlencode $next_rel_type]&party_id=$group_id&allow_out_of_scope_p=t"
+		"${package_url}admin/relations/add?group_id=$next_group_id&rel_type=[ad_urlencode $next_rel_type]&party_id=$group_id&allow_out_of_scope_p=t"
     }
 
     # Add the original return_url as the last one in the list

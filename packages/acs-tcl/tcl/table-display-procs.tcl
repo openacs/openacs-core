@@ -256,14 +256,14 @@ ad_proc ad_table {
     set table_def { 
         {ffn "Full Name" 
             {upper(last_name) $order, upper(first_names) $order}
-            {&lt;td&gt;&lt;a href="/admin/users/one.tcl?user_id=$user_id"&gt;$first_names&nbsp;$last_name&lt;/a&gt;&lt;/td&gt;}}
+            {&lt;td&gt;&lt;a href="/admin/users/one?user_id=$user_id"&gt;$first_names&nbsp;$last_name&lt;/a&gt;&lt;/td&gt;}}
         {email "e-Mail" {} {&lt;td&gt;&lt;a href="mailto:$email"&gt;$email&lt;/a&gt;}}
         {email_bouncing_p "e-Bouncing?" {} tf}
         {user_state "State" {} {}}
         {last_visit "Last Visit" {} r}
         {actions "Actions" no_sort {&lt;td&gt;
-                &lt;a href="/admin/users/basic-info-update.tcl?user_id=$user_id"&gt;Edit Info&lt;/a&gt; | 
-                &lt;a href="/admin/users/password-update.tcl?user_id=$user_id"&gt;New Password&lt;/a&gt; |
+                &lt;a href="/admin/users/basic-info-update?user_id=$user_id"&gt;Edit Info&lt;/a&gt; | 
+                &lt;a href="/admin/users/password-update?user_id=$user_id"&gt;New Password&lt;/a&gt; |
             [ad_registration_finite_state_machine_admin_links $user_state $user_id]}}
     }
     </pre>
