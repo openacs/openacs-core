@@ -12,6 +12,8 @@
         <summary>OpenACS Internationalization Support.</summary>
         <release-date>2004-04-18</release-date>
         <vendor url="http://www.collaboraid.biz">Collaboraid</vendor>
+	<license url="http://www.gnu.org/copyleft/gpl.html">GPL</license>
+	<maturity>3</maturity>
         <description format="text/plain">Internationalization and localization support routines and admin UI for manipulating Locales,
 request processor hooks, templating, accessing and managing the message catalog, and
 locale-specific formatting functions for localizing dates, times, monetary amounts etc.</description>

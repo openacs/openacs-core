@@ -12,9 +12,9 @@
         <summary>Subsite</summary>
         <release-date>2004-04-18</release-date>
         <vendor url="http://openacs.org">OpenACS</vendor>
+	<license url="http://www.gnu.org/copyleft/gpl.html">GPL</license>
+	<maturity>3</maturity>
         <description format="text/html">Provides for creating subsites within the OpenACS Community System.  Aware of parties, groups, users, portraits.  Can be themed via a per subsite master template.</description>
-
-
         <provides url="acs-subsite" version="5.2.0d2"/>
         <requires url="acs-content-repository" version="5.2.0d1"/>
         <requires url="acs-kernel" version="5.2.0d3"/>

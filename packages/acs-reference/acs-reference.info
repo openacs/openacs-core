@@ -12,6 +12,8 @@
         <summary>Tools and API for managing refrence data.</summary>
         <release-date>2004-04-18</release-date>
         <vendor url="http://www.mayuli.com">Mayuli Enterprises, LLC</vendor>
+	<license url="http://www.gnu.org/copyleft/gpl.html">GPL</license>
+	<maturity>3</maturity>
         <description format="text/html">Reference Data provides an API to support:
 &lt;ul&gt;
 &lt;li&gt; A common set of reference data.
