@@ -218,7 +218,7 @@ ad_proc -public lang::user::package_level_locale {
     Get the user's preferred package level locale for a package
     given by its package id.
 } {
-    set user_id [ad_conn user_id]
+    set user_id [ad_conn untrusted_user_id]
 
     # If package-level locales are turned off, or the user isn't logged in, return the empty string
     if { ![lang::system::use_package_level_locales_p] || $user_id == 0 } {
@@ -241,10 +241,11 @@ ad_proc -public lang::user::site_wide_locale_not_cached {
 } {
     Get the user's preferred site wide locale.
 } {
-    if { [ad_conn user_id] == 0 } {
+    if { [ad_conn untrusted_user_id] == 0 } {
+        # TODO: Make this a cookie
         return [ad_get_client_property -cache t "acs-lang" "user_locale"]
     } else {
-        set user_id [ad_conn user_id]
+        set user_id [ad_conn untrusted_user_id]
         return [db_string get_user_site_wide_locale {} -default ""]
     }
 }
