@@ -319,8 +319,7 @@
         building tools that are waiting to be added. It seems that
         most portals just add another layer of complexity to the
         cake. See <ulink
-        url="http://openacs.org/bboard/q-and-a-fetch-msg.tcl?msg_id=
-        00058H&amp;topic_id=11&amp;topic=OpenACS">Slides on OACS
+        url="http://openacs.org/bboard/q-and-a-fetch-msg.tcl?msg_id=00058H&amp;topic_id=11&amp;topic=OpenACS">Slides on OACS
         features</ulink>...a set of slides on OACS features that can
         be used for beginners who want to know OACS is about and
         what they can do with it. Screen captures that highlight
@@ -438,8 +437,8 @@
         description information and almost everything about a
         package for administrators and developers is already
         described in the package itself through two basic
-        development document templates: a <ulink url="http://openacs.org/doc/current/requirements-template.
-        html">Requirements Template</ulink> and <ulink
+        development document templates: a <ulink url="http://openacs.org/doc/current/requirements-template.html">
+        Requirements Template</ulink> and <ulink
         url="http://openacs.org/doc/current/filename.html">Detailed
         Design Document</ulink>.
       </para></listitem>
