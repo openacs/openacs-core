@@ -121,30 +121,49 @@ aa_register_case auth_create_user {
         -rollback \
         -test_code {
 
-        # Successful creation
+         # Successful creation
          array set user_info [auth::create_user \
-                                  -username "auth_create_user1@test_user.com" \
+                                  -username "auth_create_user1" \
+                                  -email "auth_create_user1@test_user.com" \
                                   -first_names "Test" \
                                   -last_name "User" \
                                   -password "changeme" \
                                   -secret_question "no_question" \
                                   -secret_answer "no_answer"]
 
-         aa_true "returns integer user_id ([array get user_info])" [regexp {[1-9][0-9]*} $user_info(user_id)]
-         aa_equals "creation_status for successful creation" $user_info(creation_status) "ok"
-         aa_true "creation_message for successful creation" [empty_string_p $user_info(creation_message)]
+         aa_true "returns user_id" [info exists user_info(user_id)]
+
+         if { [info exists user_info(user_id)] } {         
+             aa_true "returns integer user_id ([array get user_info])" [regexp {[1-9][0-9]*} $user_info(user_id)]
+         }
+
+         aa_true "returns creation_status" [info exists user_info(creation_status)]
+         if { [info exists user_info(creation_status)] } {
+             aa_equals "creation_status for successful creation" $user_info(creation_status) "ok"
+         }
+         
+         aa_false "No creation_message for successful creation" [exists_and_not_null user_info(creation_message)]
 
          # Missing first_names
          array unset user_info
          array set user_info [auth::create_user \
-                                  -username "auth_create_user2@test_user.com" \
+                                  -username "auth_create_user2" \
+                                  -email "auth_create_user2@test_user.com" \
                                   -first_names "" \
                                   -last_name "User" \
                                   -password "changeme" \
                                   -secret_question "no_question" \
                                   -secret_answer "no_answer"]
 
-         aa_equals "creation_status for missing first names" $user_info(creation_status) "fail"         
+         aa_equals "creation_status for missing first names" $user_info(creation_status) "data_error" 
+         
+         aa_true "element_messages exists" [exists_and_not_null user_info(element_messages)]
+         
+         if { [info exists user_info(element_messages)] } {
+             array set element_message $user_info(element_messages)
+             aa_log "user_info(element_messages) = '$user_info(element_messages)'"
+             aa_true "Element message for first_names exists" [exists_and_not_null element_message(first_names)]
+         }
 
     } 
 }
