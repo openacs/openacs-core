@@ -25,15 +25,19 @@
 </if>
 </ul>
 
-<if @warning_p@>
-    <!-- RBM: Added August 1, 2003 --!>
-    <p>
-      <b>WARNING:</b> This user is a site-wide administrator (maybe the only one).
-      Deleting or banning this user may mean you will be unable to administrate the site.
-    </p>
+<if @user_id@ ne @ad_conn_user_id@>
+  <if @warning_p@>
+      <!-- RBM: Added August 1, 2003 --!>
+      <p>
+        <b>WARNING:</b> This user is a site-wide administrator (maybe the only one).
+        Deleting or banning this user may mean you will be unable to administrate the site.
+      </p>
+  </if>
+  <p>Member state: <b>@member_state@</b> - change member state: @user_finite_state_links;noquote@</p>
 </if>
-
-Member state: @member_state@ @user_finite_state_links;noquote@
+<else>
+  <p>Member state: <b>@member_state@</b> <i>(cannot change state for yourself)</i></p>
+</else>
 
 <h2>This user is a member of the following groups:</h2>
 <p>Note: These are the groups to which the user has been granted 

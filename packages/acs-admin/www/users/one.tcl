@@ -37,6 +37,7 @@ where user_id = :user_id"] {
 
 set site_wide_admin_p [acs_user::site_wide_admin_p -user_id $user_id]
 set warning_p 0
+set ad_conn_user_id [ad_conn user_id]
 
 if { $site_wide_admin_p } {
     set warning_p 1
@@ -66,7 +67,7 @@ and a.rel_type = 'user_portrait_rel'"]} {
     set portrait_p 1
 }
 
-set user_finite_state_links "([join [ad_registration_finite_state_machine_admin_links $member_state $email_verified_p $user_id] " | "])"
+set user_finite_state_links "[join [ad_registration_finite_state_machine_admin_links $member_state $email_verified_p $user_id] " | "]"
 
 
 # XXX Make sure to make the following into links and this looks okay
