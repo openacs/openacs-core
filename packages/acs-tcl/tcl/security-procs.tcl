@@ -262,6 +262,7 @@ ad_proc -public sec_get_user_auth_token {
     } -default {}]
 
     if { [empty_string_p $auth_token] } {
+        ns_log Debug "Security: User $user_id does not have any auth_token, creating a new one."
         set auth_token [sec_change_user_auth_token $user_id]
     }
 
@@ -274,6 +275,8 @@ ad_proc -public sec_change_user_auth_token {
     Change the user's auth_token, which invalidates all existing login cookies.
 } {
     set auth_token [ad_generate_random_string]
+
+    ns_log Debug "Security: Changing user $user_id's auth_token to '$auth_token'"
     db_dml update_auth_token {
         update users set auth_token = :auth_token where user_id = :user_id
     }
