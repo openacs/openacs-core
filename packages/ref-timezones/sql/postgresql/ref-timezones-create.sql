@@ -293,9 +293,3 @@ begin
 
   return v_isdst_p;
 end;' language 'plpgsql';
-    
--------------------------------------------------------------------------------
--- TimeZone data
--------------------------------------------------------------------------------
-\i ../common/ref-timezones-data.sql
-\i ../common/ref-timezones-rules.sql
