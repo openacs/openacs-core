@@ -748,7 +748,6 @@ ad_proc -public lang::catalog::import_from_files {
     }
 
     # Loop over each catalog file
-    ns_log Notice "lang::catalog::import_from_files - Starting import of message catalogs: $catalog_file_list"
     foreach file_path $catalog_file_list {
 
         # First make sure this is really a message catalog file and not some other xml file in the catalog
