@@ -28,19 +28,9 @@ if [empty_string_p $user_id] {
 
 ad_require_permission $user_id "write"
 
-db_1row general_info "select first_names, last_name, email, url, screen_name
-           from cc_users 
-          where user_id=:user_id"
+db_1row general_info {}
 
-set bio [db_string biography "
-select attr_value
-from acs_attribute_values
-where object_id = :user_id
-and attribute_id =
-   (select attribute_id
-    from acs_attributes
-    where object_type = 'person'
-    and attribute_name = 'bio')" -default ""]
+set bio [db_string biography {} -default ""]
 
 db_release_unused_handles
 

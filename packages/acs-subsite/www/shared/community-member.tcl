@@ -26,6 +26,13 @@ ad_page_contract {
     user_contributions:multirow
 }
 
+#See if this page has been overrided by a parameter in kernel 
+set community_member_url [ad_parameter -package_id [ad_acs_kernel_id] CommunityMemberURL "/shared/community-member"]
+if { $community_member_url != "/shared/community-member" } {
+    ad_returnredirect "$community_member_url?user_id=$user_id"
+    ad_script_abort
+}
+
 set verified_user_id [ad_verify_and_get_user_id]
 
 if { [empty_string_p $user_id] } {

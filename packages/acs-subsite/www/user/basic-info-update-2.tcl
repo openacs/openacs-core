@@ -5,11 +5,11 @@ ad_page_contract {
     @creation-date Unknown
     @cvs-id $Id$
 } {
-    first_names
-    last_name
-    email
-    {url ""}
-    {screen_name ""}
+    first_names:trim
+    last_name:trim
+    email:trim
+    {url:trim ""}
+    {screen_name:trim ""}
     {bio ""}
     {return_url ""}
     {user_id ""}
