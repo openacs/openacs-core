@@ -323,7 +323,7 @@ ad_proc -private template::element::validate { form_id element_id } {
     set label $element(name)
   }
 
-  set is_inform [string equal $element(widget) inform]
+    set is_inform [expr [string equal $element(widget) inform] || ![string equal $element(mode) "edit"]]
 
   # Check for required element
   if { ! $is_inform  && ! $is_optional && ! [llength $values] } {
