@@ -17,7 +17,7 @@ ad_page_contract {
         }
     }
     name_duplicate_ck -requires name_root_ck {
-        if { [db_string site_node_duplicate_name_root_ck {} -default 0]} {
+        if {[db_string site_node_duplicate_name_root_ck {} -default 0]} {
             ad_complain
         }
     }
@@ -53,13 +53,12 @@ db_transaction {
         -pattern_p $pattern_p \
     ]
 } on_error {
-    if {![db_string site_node_new_doubleclick_protect {} -default 0]} {
-        ad_return_complaint "Error Creating Site Node" "The following error was generated
-                when attempting to create the site node:
+    ad_return_complaint \
+        "Error Creating Site Node" \
+        "The following error was generated when attempting to create the site node:
         <blockquote><pre>
                 [ad_quotehtml $errmsg]
         </pre></blockquote>"
-    }
 }
 
 if {[lsearch $expand $parent_id] == -1} {

@@ -203,6 +203,8 @@ execute procedure site_node_update_tr ();
 
 -- show errors
 
+select define_function_args ('site_node__new', 'node_id,parent_id,name,object_id,directory_p,pattern_p,creation_user,creation_ip');
+
 create function site_node__new (integer,integer,varchar,integer,boolean,boolean,integer,varchar)
 returns integer as '
 declare
