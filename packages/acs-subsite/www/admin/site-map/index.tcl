@@ -98,12 +98,13 @@ if {[llength $expand] == 0} {
 # reason, Oracle does not allow level to be selected from an on-the-fly view
 # containing connect by.  However, if you rename the column, Oracle is happy to give
 # it to you.  We could tell you how we figured this out, but then we would have to kill you.
-
+set open_nodes [list]
 db_foreach nodes_select {} {
-  doc_body_append "<tr><td><nobr><font face=courier size=-1>"
-  for {set i 0} {$i < 3*$mylevel} {incr i} {
-    doc_body_append "&nbsp;"
-  }
+    if { [lsearch -exact $open_nodes $parent_id] == -1 && $parent_id != "" && $mylevel > 2 } { continue } 
+    doc_body_append "<tr><td><nobr><font face=courier size=-1>"
+    for {set i 0} {$i < 3*$mylevel} {incr i} {
+        doc_body_append "&nbsp;"
+    }
 
   if {!$root_p && $n_children > 0} {
     set link "+"
@@ -111,6 +112,7 @@ db_foreach nodes_select {} {
     foreach n $expand {
       if {$n == $node_id} {
 	set link "-"
+	lappend open_nodes "$node_id"
       } else {
 	lappend urlvars "expand=$n"
       }
