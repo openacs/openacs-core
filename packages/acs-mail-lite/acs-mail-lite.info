@@ -7,7 +7,7 @@
     <initial-install-p>f</initial-install-p>
     <singleton-p>t</singleton-p>
     
-    <version name="0.2a" url="http://openacs.org/repository/download/apm/acs-mail-lite-0.2a.apm">
+    <version name="0.3a" url="http://openacs.org/repository/download/apm/acs-mail-lite-0.3a.apm">
         <owner url="mailto:eric@openforce.biz">Eric Lorenzo</owner>
         <owner url="mailto:timo@studio-k4.de">Timo Hentschel</owner>
         <summary>Simplified reliable email transmission with bounce management.</summary>
