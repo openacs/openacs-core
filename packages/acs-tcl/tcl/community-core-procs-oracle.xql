@@ -15,6 +15,7 @@
 		username => :username,
 		first_names => :first_names,
 		last_name => :last_name,
+		screen_name => :screen_name,
 		password => :hashed_password,
 	        salt => :salt,
                 creation_user => :creation_user,
