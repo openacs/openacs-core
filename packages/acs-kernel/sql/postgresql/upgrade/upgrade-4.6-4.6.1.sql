@@ -639,9 +639,6 @@ begin
 
 end;' language 'plpgsql';
 
-create trigger membership_rels_del_tr before delete on membership_rels
-for each row execute procedure membership_rels_del_tr ();
-
 ------------------------------------------------------------------------------------
 
 -- DRB: upgrade to Dan Wickstrom's version of acs-permissions which materializes the
@@ -663,7 +660,20 @@ create table acs_privilege_descendant_map (
 
 create index acs_priv_desc_map_idx on acs_privilege_descendant_map(descendant);
 
-insert into acs_privilege_descendant_map
+create view acs_privilege_descendant_map_view
+as select p1.privilege, p2.privilege as descendant
+   from acs_privileges p1, acs_privileges p2
+   where exists (select h2.child_privilege
+                   from
+                     acs_privilege_hierarchy_index h1,
+                     acs_privilege_hierarchy_index h2
+                   where
+                     h1.privilege = p1.privilege
+                     and h2.privilege = p2.privilege
+                     and h2.tree_sortkey between h1.tree_sortkey and tree_right(h1.tree_sortkey)) or
+     p1.privilege = p2.privilege;
+
+insert into acs_privilege_descendant_map (privilege, descendant) 
 select privilege, descendant from acs_privilege_descendant_map_view;
 
 drop view acs_object_grantee_priv_map;
@@ -739,21 +749,6 @@ begin
 
 end;' language 'plpgsql';
 
-create view acs_privilege_descendant_map_view
-as select p1.privilege, p2.privilege as descendant
-   from acs_privileges p1, acs_privileges p2
-   where exists (select h2.child_privilege
-                   from
-                     acs_privilege_hierarchy_index h1,
-                     acs_privilege_hierarchy_index h2
-                   where
-                     h1.privilege = p1.privilege
-                     and h2.privilege = p2.privilege
-                     and h2.tree_sortkey between h1.tree_sortkey and tree_right(h1.tree_sortkey)) or
-     p1.privilege = p2.privilege;
-
-insert into acs_privilege_descendant_map (privilege, descendant) 
-select privilege, descendant from acs_privilege_descendant_map_view;
 
 -- New fast version of acs_object_party_privilege_map
 
