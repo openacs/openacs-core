@@ -18,10 +18,12 @@
 XSLTPROC=/usr/bin/xsltproc
 HTMLDOC=/usr/bin/htmldoc
 
-all: html pdf
+all: html
 
 prelim:
 	cp -u files/*.{txt,html} ../files/
+	cp -u files/samplenote/*.* ../files/samplenote/
+	cp -u files/samplenote/Makefile ../files/samplenote/
 	cp -u images/*.{pdf,png,gif,jpg} ../images/
 	cp -u openacs.css ..
 

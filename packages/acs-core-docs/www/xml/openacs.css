@@ -1,4 +1,20 @@
+/* Override some HTML defaults to make things look better */
+
+hr 
+{height: 1px}
+
+table {
+border-collapse: collapse;
+border-spacing: 0;}
+
+td {
+padding: 2px}
+}
+
+/* These are aimed at DocBook output, specifically from the chunk.xsl style and derivatives /*
+
 body, ol, td, th, hr, h1, h2, h3, strong, dl, a, blockquote, em, .force, dt, dd, ul, li, p{font-family:verdana,helvetica,arial,sans-serif}
+
 a:link{color:0000ff}
 a:visited{color:000099}
 a.topnav{font-size:11pt}
@@ -7,7 +23,23 @@ a.bottomnav{font-size:11pt}
 code{font-family:mono-space}
 .CVS, .cvstag{font-family:mono-space; font-size:small; color:#999999; text-align:right}
 
+
+/* this section is targeted at Docbook-generated HTML */
+
+pre {background-color:#eeeeee;}
+
 .codeblock{background-color:#ffffff;font-family:monospace}
 .programlisting{background-color:#CCCCCC}
 .strong{font-weight:bold}
 .authorblurb{font-size:small}
+
+.guibutton{}
+.replaceable{color:red; font-style:italic;font-size:1.1em;}
+.guilabel{padding:2px;}
+.programlisting{background-color:#eeeeee}
+.strong{font-weight:bold}
+.authorblurb{font-size:small}
+.screen{padding:3px; background-color:#eeeeee}
+.action{padding:0.5em; margin:0.5em;font-weight:bold; border: 1px dotted gray;}
+
+

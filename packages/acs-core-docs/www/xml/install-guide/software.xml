@@ -21,7 +21,7 @@
           <formalpara>
             <title>Reference Platform &version;-P (<ulink>tarball</ulink>, <ulink>ISO image</ulink>)</title>
             <para>Reference Platform A: OpenACS &version;, AOLserver
-        3.3ad13-oacs1-beta, PostGreSQL 7.2.3, and all supporting
+        3.3oacs1, PostGreSQL 7.2.3, and all supporting
         files.  Also requires <ulink url="ftp://ftp.redhat.com/pub/redhat/linux/8.0/en/iso/i386/">Red Hat 8.0</ulink>.</para>
           </formalpara>
         </listitem>
@@ -29,7 +29,7 @@
           <formalpara>
             <title>Reference Platform &version;-O (<ulink>tarball</ulink>, <ulink>ISO image</ulink>)</title>
             <para>Reference Platform B: OpenACS &version;, AOLserver
-        3.3ad13-oacs1-beta, Oracle 8.1.7, and all supporting
+3.3oacs1, Oracle 8.1.7, and all supporting
         files.  Also requires <ulink>Red Hat 8.0</ulink>.  Also
           requires Oracle - see <xref linkend="oracle"/> for information on how to get Oracle.</para>
           </formalpara>
@@ -174,7 +174,7 @@
           <listitem id="source-aolserver">
             <formalpara>
               <title><ulink
-            url="http://uptime.openacs.org/aolserver-openacs/aolserver3.3ad13-oacs1-beta-src.tar.gz">AOLserver 3.3ad13-oacs1-beta</ulink>, REQUIRED</title>
+            url="http://uptime.openacs.org/aolserver-openacs/aolserver3.3oacs1.tar.gz">AOLserver 3.3oacs1</ulink>, REQUIRED</title>
               <para>Mat Kovach's source distribution of AOLserver, including all of the patches listed below.</para>
             </formalpara>
 

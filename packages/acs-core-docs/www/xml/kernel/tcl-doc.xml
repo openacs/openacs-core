@@ -14,35 +14,8 @@ by <ulink url="mailto:jsalz@mit.edu">Jon Salz</ulink> on 3 July 2000
 <sect2 id="tcl-doc-bigpicture">
 <title>The Big Picture</title>
 
-
-<para>In versions of the OpenACS prior to 3.4, <ulink url="/doc/standards">the standard
-place</ulink> to document Tcl files (both Tcl pages and Tcl library files) was in
-a comment at the top of the file:</para>
-
- 
-
-<programlisting>
-#
-# <emphasis>path from server home</emphasis>/<emphasis>filename</emphasis>
-#
-# <emphasis>Brief description of the file&#39;s purpose</emphasis>
-#
-# <emphasis>author&#39;s email address</emphasis>, <emphasis>file creation date</emphasis>
-#
-# <ulink url="http://www.loria.fr/~molli/cvs/doc/cvs_12.html#SEC93">$Id$</ulink>
-#
-</programlisting>
-
-<para>
-In addition, the inputs expected by a Tcl page (i.e., form variables) would
-be enumerated in a call to <computeroutput>ad_page_variables</computeroutput>, in effect,
-documenting the page&#39;s argument list. 
-</para>
-
-<para>The problem with these practices is that the documentation is only
-accessible by reading the source file itself. For this reason, ACS 3.4
-introduces a new API for documenting Tcl files and, on top of that, a
-web-based user interface for browsing the documentation:</para>
+<para>We use functions to document Tcl files and a web-based user
+interface for browsing the documentation:</para>
 
 <itemizedlist>
 <listitem><para><emphasis role="strong"><computeroutput><link linkend="tcl-doc-ad-page-contract">ad_page_contract</link></computeroutput></emphasis>: Every Tcl page
@@ -89,7 +62,7 @@ Currently <computeroutput>ad_page_contract</computeroutput> serves mostly as a r
 with the documents API so that each script&#39;s contract will document
 precisely the set of properties available to graphical designers in
 templates. (Document API integration is subject to change, so we don&#39;t
-decsribe it here yet; for now, you can just consider
+desrribe it here yet; for now, you can just consider
 <computeroutput>ad_page_contract</computeroutput> a newer, better, documented
 <computeroutput>ad_page_variables</computeroutput>.) 
 </para>

@@ -6,23 +6,23 @@
   </authorblurb>
 
   <para>This page assumes you have downloaded aolserver to  to 
-<computeroutput>/tmp/aolserver3.3ad13-oacs1-beta-src.tar.gz</computeroutput>.  If not,
+<computeroutput>/tmp/aolserver3.3oacs1.tar.gz</computeroutput>.  If not,
 <link linkend="source-aolserver">get it</link>.  It also assumes you are following the &version;-P or &version;-O Reference Platform installation, using Red Hat 8.0.  Places where other systems are different are noted.</para>
 
   <orderedlist>
     <listitem>
       <para>
       As <computeroutput>root</computeroutput>, untar
-      <computeroutput>aolserver3.3ad13-oacs1-beta-src.tar.gz</computeroutput>
+      <computeroutput>aolserver3.3oacs1.tar.gz</computeroutput>
       into <computeroutput>/usr/local/src</computeroutput>.
 
     </para>
         
       <screen>[root@yourserver root]# <userinput>cd /usr/local/src</userinput>
-[root@yourserver src]# <userinput>tar xzf /tmp/aolserver3.3ad13-oacs1-beta-src.tar.gz</userinput>
+[root@yourserver src]# <userinput>tar xzf /tmp/aolserver3.3oacs1.tar.gz</userinput>
 [root@yourserver src]#
 <action>cd /usr/local/src
-tar xzf /tmp/aolserver3.3ad13-oacs1-beta-src.tar.gz</action></screen>
+tar xzf /tmp/aolserver3.3oacs1.tar.gz</action></screen>
     </listitem>
     
     <listitem id="install-aolserver-compile" xreflabel="Compile AOLserver">
@@ -36,21 +36,19 @@ Done.
 cd /usr/local/src/aolserver
 ./conf-clean</action></screen>
       <para>
-          Put the name of the driver(s) that you want into
-          <computeroutput>conf-db</computeroutput>. This can be
-          <computeroutput>postgresql</computeroutput>,
-          <computeroutput>oracle</computeroutput>, or the word
+          If you are using Oracle, edit
+          <computeroutput>conf-db</computeroutput> and change
+          <computeroutput>postgresql</computeroutput> to
+          <computeroutput>oracle</computeroutput>, or to the word
           <computeroutput>both</computeroutput> if you want both drivers
           installed.
         </para>
 
-      <screen>[root@yourserver aolserver]# <userinput>echo "postgresql" > conf-db</userinput>
-[root@yourserver aolserver]#</screen>
-
     <para><computeroutput>conf-inst</computeroutput> should contain the
-          location where AOLserver is to be installed. This defaults to
-          <computeroutput>/usr/local/aolserver</computeroutput>, so we
-          don't need to change it.</para>
+          location where AOLserver is to be installed.  Overwrite the
+          tarball's default value with our default value, <computeroutput>/usr/local/aolserver</computeroutput>:</para>
+      <screen>[root@yourserver aolserver]# <userinput>echo "/usr/local/aolserver" > conf-inst</userinput>
+[root@yourserver aolserver]#</screen>
 
       <para><computeroutput>conf-make</computeroutput> should contain the
           name of the GNU Make command on your system. It defaults to
@@ -68,23 +66,9 @@ Report bugs to &lt;bug-make@gnu.org&gt;.
 
 [root@yourserver aolserver]# </screen>
       <para>If you don't get similar results, including an equal or higher version number to 3.79.1, install gmake or check your aliases.</para>
-      <para>
-          If you're going to be installing the Postgresql driver, you'll
-          have to adjust the makefile first. This will hopefully be cleaned
-          up in future versions of this distribution.
-        </para>
-
-      <screen>[root@yourserver aolserver]# <userinput>emacs pgdriver/makefile</userinput></screen>
-
-        <para>
-          Edit the lines containing PGLIB and PGINC so they look like this:
-        </para>
-          
-      <programlisting>PGLIB=/usr/local/pgsql/lib
-PGINC=/usr/local/pgsql/include</programlisting>
-
-      <para>Run the <computeroutput>conf</computeroutput> program, which compiles AOLserver and the default modules and installs them.</para>
-      <screen>[root@yourserver aolserver]# <userinput>./conf</userinput>
+      <para>Set an environment variable that the nspostgres driver
+      Makefile needs to compile correctly and run <computeroutput>conf</computeroutput>, which compiles AOLserver and the default modules and installs them.</para>
+      <screen>[root@yourserver aolserver]# <userinput>export POSTGRES=/usr/local/pgsql; ./conf</userinput>
 Building in /usr/local/aolserver
 with the following modules:
 aolserver
@@ -101,7 +85,7 @@ Running gmake in nscache/; output in log/nscache.log
 Running gmake in nsrewrite/; output in log/nsrewrite.log
 Running gmake in nssha1/; output in log/nssha1.log
 Running gmake in nsxml/; output in log/nsxml.log
-Running gmake in pgdriver/; output in log/pgdriver.log
+Running gmake in nspostgres/; output in log/nspostgres.log
 Creating  ...
 ==================================================================
 Done Building Sat Mar  8 10:31:35 PST 2003
