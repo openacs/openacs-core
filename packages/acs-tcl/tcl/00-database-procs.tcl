@@ -388,7 +388,12 @@ proc_doc db_foreach { statement_name sql args } {
     }
 }
 
-proc_doc db_multirow { var_name statement_name sql args } {
+ad_proc -public db_multirow {
+    -local:boolean
+    var_name
+    statement_name
+    sql
+    args } {
 
     Performs the SQL query $sql, saving results in variables of the form
     <code><i>var_name</i>:1</code>, <code><i>var_name</i>:2</code>, etc,
@@ -400,6 +405,12 @@ proc_doc db_multirow { var_name statement_name sql args } {
 } {
     # Query Dispatcher (OpenACS - ben)
     set full_statement_name [db_qd_get_fullname $statement_name]
+
+    if { $local_p } {
+        set level_up 1
+    } else {
+        set level_up \#[template::adp_level]
+    }
 
     ad_arg_parser { bind args } $args
 
@@ -423,7 +434,7 @@ proc_doc db_multirow { var_name statement_name sql args } {
 	return -code error "Expected 1 or 3 arguments after switches"
     }
 
-    upvar \#[template::adp_level] "$var_name:rowcount" counter
+    upvar $level_up "$var_name:rowcount" counter
 
     db_with_handle db {
 	set selection [db_exec select $db $full_statement_name $sql]
@@ -432,7 +443,7 @@ proc_doc db_multirow { var_name statement_name sql args } {
 	while { [db_getrow $db $selection] } {
 	    if { [empty_string_p $code_block] } {
 		# No code block - pull values directly into the var_name array.
-	        upvar \#[template::adp_level] \
+	        upvar $level_up \
 		    "$var_name:[expr {$counter+1}]" array_val
 		for { set i 0 } { $i < [ns_set size $selection] } { incr i } {
 		    set array_val([ns_set key $selection $i]) \
@@ -480,7 +491,7 @@ proc_doc db_multirow { var_name statement_name sql args } {
 		}
 
 		# Pull the variables into the array.
-		upvar \#[template::adp_level] \
+		upvar $level_up \
 		    "$var_name:[expr {$counter + 1}]" array_val
 		for { set i 0 } { $i < [ns_set size $selection] } { incr i } {
 		    upvar 1 [ns_set key $selection $i] column_value
