@@ -60,7 +60,7 @@ if { ![ad_acs_admin_node] } {
 
     ns_write "</pre></blockquote>"
 
-    # Now mount the application bundle if the install.xml file was found.
+    # Now process the application bundle if an install.xml file was found.
 
     if { [nsv_exists acs_application node] } {
 
@@ -82,7 +82,20 @@ if { ![ad_acs_admin_node] } {
 
                 install {
 
-                    set install_spec_files [glob -nocomplain "[acs_root_dir]/packages/[apm_required_attribute_value $action package]/*.info"]
+                    set install_spec_files [list]
+                    foreach install_spec_file \
+                        [glob -nocomplain "[acs_root_dir]/packages/[apm_required_attribute_value $action package]/*.info"] {
+                        if { [catch { array set package [apm_read_package_info_file $install_spec_file] } errmsg] } {
+                            # Unable to parse specification file.
+                            ns_log Error "$install_spec_file could not be parsed correctly.  The error: $errmsg"	
+                            ns_write "<br>install: $install_spec_file could not be parsed correctly.  The error: $errmsg"	
+                            return
+                        }
+                        if { [apm_package_supports_rdbms_p -package_key $package(package.key)] &&
+                             ![apm_package_installed_p $package(package.key)] } {
+                            lappend install_spec_files $install_spec_file
+                        }
+                    }
 
                     set pkg_info_list [list]
                     foreach spec_file [glob -nocomplain "[acs_root_dir]/packages/*/*.info"] {
@@ -90,17 +103,32 @@ if { ![ad_acs_admin_node] } {
                         if { [catch { array set package [apm_read_package_info_file $spec_file] } errmsg] } {
                             # Unable to parse specification file.
                             ns_log Error "$spec_file could not be parsed correctly.  The error: $errmsg"	
+                            ns_write "<br>install: $spec_file could not be parsed correctly.  The error: $errmsg"	
+                            return
                         }
-        
-                        # Save the package info, we may need it for dependency satisfaction later
-                        lappend pkg_info_list [pkg_info_new $package(package.key) $spec_file \
-                            $package(provides) $package(requires) ""]
+
+                        if { [apm_package_supports_rdbms_p -package_key $package(package.key)] &&
+                             ![apm_package_installed_p $package(package.key)] } {
+                            # Save the package info, we may need it for dependency satisfaction later
+                            lappend pkg_info_list [pkg_info_new $package(package.key) $spec_file \
+                                $package(provides) $package(requires) ""]
+                        }
                     }
 
-                    set dependency_results [apm_dependency_check -pkg_info_all $pkg_info_list $install_spec_files]
-
-                    if { [lindex $dependency_results 0] == 1 } {
-                        apm_packages_full_install -callback apm_ns_write_callback [lindex $dependency_results 1]
+                    if { [llength $install_spec_files] > 0 } {
+                        set dependency_results [apm_dependency_check -pkg_info_all $pkg_info_list $install_spec_files]
+                        if { [lindex $dependency_results 0] == 1 } {
+                            apm_packages_full_install -callback apm_ns_write_callback [lindex $dependency_results 1]
+                        } else {
+                            foreach package_spec [lindex $dependency_results 1] {
+                                if { [string is false [pkg_info_dependency_p $package_spec]] } {
+                                    ns_log Error "install: package \"[pkg_info_key $package_spec]\"[join [pkg_info_comment $package_spec] ","]"
+                                    append html "<p>Package \"[pkg_info_key $package_spec]\"\n<ul><li>[join [pkg_info_comment $package_spec] "<li>"]\n</ul>\n"
+                                }
+                            }
+                            ns_write "$html\n"
+                            return
+                        }
                     }
                 }
 
@@ -123,7 +151,8 @@ if { ![ad_acs_admin_node] } {
                             # There is no package mounted there so go ahead and mount the new package
                             set node_id $node(node_id)
                         } else {
-                            # Don't unmount already mounted packages
+                            ns_log Error "A package is already mounted at \"$mount_point\""
+                            ns_write "<br>mount: A package is already mounted at \"$mount_point\", ignoring mount command."
                             set node_id ""
                         }
                     }
@@ -139,11 +168,31 @@ if { ![ad_acs_admin_node] } {
 
                     }
 
-                 }
+                }
 
-                 default {
-                     ns_log Error "Error in \"install.xml\": got bad node \"[xml_node_get_name $action]\""
-                 }
+                set-parameter {
+                    set name [apm_required_attribute_value $action name]
+                    set value [apm_required_attribute_value $action value]
+                    set package_key [apm_attribute_value -default "" $action package]
+                    set url [apm_attribute_value -default "" $action url]
+
+                    if { ![string equal $package_key ""] && ![string equal $url ""] } {
+                        ns_log Error "set-parameter: Can't specify both package and url"
+                        ns_write "<br>set-parameter: Can't specify both package and url"
+                        return
+                    } elseif { ![string equal $package_key ""] } {
+                        parameter::set_from_package_key -package_key $package_key -parameter $name -value $value
+                    } else {
+                        parameter::set_value \
+                            -package_id [site_node::get_object_id -node_id [site_node::get_node_id -url $url]] \
+                            -parameter $name \
+                            -value $value
+                    }
+                }
+
+                default {
+                    ns_log Error "Error in \"install.xml\": got bad node \"[xml_node_get_name $action]\""
+                }
 
             }
 
