@@ -164,10 +164,18 @@ ad_proc -public ad_quotehtml { arg } {
     Analogous to ns_quotehtml except that it quotes double-quotes (which
     ns_quotehtml does not).
 
+    @see ad_unquotehtml
 } {
     return [string map {& &amp; \" &quot; < &lt; > &gt;} $arg]
 }
 
+ad_proc -public ad_unquotehtml {arg} {
+    reverses ad_quotehtml
+
+    @see ad_quotehtml
+} {
+    return [string map {&gt; > &lt; < &quot; \" &amp; &} $arg]
+}
 
 
 ####################
