@@ -96,13 +96,12 @@ ad_proc -public lang::message::register {
 
     # Check that non-en_US messages don't have invalid embedded variables
     if { ![string equal $locale "en_US"] } {
-        set en_us_message [lang::message::lookup en_US $key {} {} 0]
-        # Note that we only check for invalid variables here, not for missing ones.
-        # A translator may choose to omit a variable if this yields a better translation
-        set invalid_vars [get_missing_embedded_vars $message $en_us_message]
+        set embedded_vars [get_embedded_vars $message]
+        set embedded_vars_en_us [get_embedded_vars [lang::message::lookup en_US $key {} {} 0]]
+        set missing_vars [util_get_subset_missing $embedded_vars $embedded_vars_en_us]
 
-        if { ![empty_string_p $invalid_vars] } {
-            error "The following variables are in the \"$locale\" message but not in the en_US message: \"$invalid_vars\". Cannot register/update message for key=\"$key\" and locale=\"$locale\""
+        if { [llength $missing_vars] > 0 } {
+            error "Message key '$key' in locale '$locale' has these embedded variables not present in the en_US locale: [join $missing_vars ","]. Message has not been imported."
         }
     }
 
@@ -180,46 +179,34 @@ ad_proc -public lang::message::unregister {
     }
 }
 
-ad_proc -private lang::message::get_missing_embedded_vars {
-    existing_message
-    new_message
+ad_proc -private lang::message::get_embedded_vars {
+    message
 } {
-    Returns a list of variables that are in an existing message and should
-    also be in a new message with the same key but a different locale.
-    The set of embedded variables in the messages for a certain key
-    should be identical across locales.
+    Returns a list of embedded substitution variables on the form %varname% in a message.
+    This is useful if you want to check that the variables used in a translated message also 
+    appear in the en_US message. If not, there's likely to be a typo.
 
-    @param existing_message The existing message with vars that should
-                            also be in the new message
-    @param new_message      The new message that we are checking for
-                            consistency.
+    @param message  A message with embedded %varname% notation
 
-    @return The list of variables in the existing en_US message
-            that are missing in the new message.
+    @return         The list of variables in the message
 
     @author Peter Marklund (peter@collaboraid.biz)
     @creation-date 12 November 2002
 } {
-    # Loop over the vars in the en_US message
-    set missing_variable_list [list]
-    set remaining_message $existing_message
-    while { [regexp [embedded_vars_regexp] $remaining_message match before_percent \
-                                                                          percent_match \
-                                                                          remaining_message] } {
+    set variables_list [list]
+    set remaining_message $message
+    while { [regexp [embedded_vars_regexp] $remaining_message \
+            match before_percent percent_match remaining_message] } {
+
         if { [string equal $percent_match "%%"] } {
             # A quoted percentage sign - ignore
             continue
         } else {
-            # A variable - check that it is in the new message
-            if { ![regexp "(?:^|\[^%]\)${percent_match}" $new_message match] } {
-                # The variable is missing
-                set variable_name [string range $percent_match 1 end-1]                    
-                lappend missing_variable_list $variable_name
-            }
+            lappend variables_list [string range $percent_match 1 end-1]
         }
     }
 
-    return $missing_variable_list
+    return $variables_list
 }
 
 ad_proc -private lang::message::format {
@@ -245,7 +232,6 @@ ad_proc -private lang::message::format {
 
     The frog jumped across the fence. About 50% of the time, he stumbled, or maybe it was %20 %times%.
 } {        
-
     array set value_array $value_array_list
     set value_array_keys [array names value_array]
     set remaining_message $localized_message
@@ -301,7 +287,7 @@ ad_proc -private lang::message::embedded_vars_regexp {} {
     @author Peter Marklund (peter@collaboraid.biz)
     @creation-date 12 November 2002
 } {
-    return {^(.*?)(%%|%[a-zA-Z_\.]+%)(.*)$}
+    return {^(.*?)(%%|%[-a-zA-Z0-9_:\.]+%)(.*)$}
 }
 
 ad_proc -public lang::message::message_exists_p { locale key } {
