@@ -54,8 +54,41 @@
   display: inline;
 }
 
+/* ADP Reveal mode */
 
+div.developer-support-adp-box-on {
+  background-color: #fcc;
+  border-style: solid;
+  border-color: #f33;
+  border-width: 1px 1px 1px 1px;
+}
 
+div.developer-support-adp-box-off {
+  background-color: inherit;
+  border-width: 0px;
+}
+
+span.developer-support-adp-file-on {
+  font-size: 80%;
+}
+
+span.developer-support-adp-file-off {
+  display: none;
+}
+
+div.developer-support-adp-output-on {
+  background-color: #fff;
+  border-style: solid;
+  border-color: #777;
+  border-width: 1px 0px 0px 0px;
+  padding: 3px;
+}
+
+div.developer-support-adp-output-off {
+  background-color: inherit;
+  border-width: 0px;
+  padding: 0px;
+}
 
 /* Developer-support footer */
 

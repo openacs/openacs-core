@@ -81,6 +81,35 @@ ad_proc -public ds_database_enabled_p {} {
     return [nsv_get ds_properties database_enabled_p]
 }
 
+ad_proc -public ds_adp_reveal_enabled_p {} { 
+    Returns true if developer-support adp revealing facilities are enabled. 
+} {
+    return [nsv_get ds_properties adp_reveal_enabled_p]
+}
+
+ad_proc -public ds_adp_box_class {} {
+    if { [ds_adp_reveal_enabled_p] } {
+        return developer-support-adp-box-on
+    } else {
+        return developer-support-adp-box-off
+    }
+}
+
+ad_proc -public ds_adp_file_class {} {
+    if { [ds_adp_reveal_enabled_p] } {
+        return developer-support-adp-file-on
+    } else {
+        return developer-support-adp-file-off
+    }
+}
+
+ad_proc -public ds_adp_output_class {} {
+    if { [ds_adp_reveal_enabled_p] } {
+        return developer-support-adp-output-on
+    } else {
+        return developer-support-adp-output-off
+    }
+}
 
 ad_proc -public ds_lookup_administrator_p { user_id } { } {
     return 1
@@ -458,6 +487,16 @@ ad_proc -public ds_set_database_enabled { enabled_p } {
 } {
     ns_log Notice "Developer-support database stats [ad_decode $enabled_p 1 "enabled" "disabled"]"
     nsv_set ds_properties database_enabled_p $enabled_p
+}
+
+ad_proc -public ds_set_adp_reveal_enabled { enabled_p } {
+    Enables/disables database statistics in a safe manner.
+
+    @author Lars Pind (lars@pinds.com)
+    @creation-date 31 August 2000
+} {
+    ns_log Notice "Developer-support adp reveal stats [ad_decode $enabled_p 1 "enabled" "disabled"]"
+    nsv_set ds_properties adp_reveal_enabled_p $enabled_p
 }
 
 ad_proc -private ds_replace_get_user_procs { enabled_p } {

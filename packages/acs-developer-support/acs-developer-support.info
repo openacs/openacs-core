@@ -16,6 +16,7 @@
         <description format="text/html">Developer support stores timing and other logged information for requests 
         to support debugging and tuning and supports user switching and a Tcl Sell to invoke arbitrary tcl code on the server.
         </description>
+        <maturity>0</maturity>
 
         <provides url="acs-developer-support" version="5.0d3"/>
         <requires url="acs-kernel" version="4.6.2"/>
@@ -23,9 +24,10 @@
         <callbacks>
         </callbacks>
         <parameters>
-            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="DatabaseEnabledP"  default="0" description="Remember information about every database request?" section_name="developer-support"/>
+            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="AdpRevealEnabledP"  default="0" description="Will put a frame around each ADP file in the page, with an identifying title and hyperlink to api-doc." section_name="developer-support"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="DataLifetime"  default="900" description="Number of seconds to keep connection data" section_name="developer-support"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="DataSweepInterval"  default="900" description="Number of seconds between sweeping for old data" section_name="developer-support"/>
+            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="DatabaseEnabledP"  default="0" description="Remember information about every database request?" section_name="developer-support"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="EnabledIPs"  default="*" description="remember information for which client hosts?" section_name="developer-support"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="EnabledOnStartupP"  default="1" description="Remember information about connections, for developers' benefit?" section_name="developer-support"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="PackageWatchList"  description="A space separated list of keys for packages that you are developing on and that will have full watches (automatic reloading of tcl libraries and xql files) activated on every server startup.

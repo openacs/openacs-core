@@ -25,6 +25,10 @@ if { $show_p } {
     set translator_toggle_url [export_vars -base "/acs-lang/admin/translator-mode-toggle" { { return_url [ad_return_url] } }]
     set translator_on [ad_decode $translator_p 1 "on" "off"]
 
+    set adp_p [ds_adp_reveal_enabled_p]
+    set adp_toggle_url {javascript:void(d=document);void(el=d.getElementsByTagName('span'));for(i=0;i<el.length;i++){if(el[i].className=='developer-support-adp-file-on'){void(el[i].className='developer-support-adp-file-off')}else{if(el[i].className=='developer-support-adp-file-off'){void(el[i].className='developer-support-adp-file-on')}}};void(el=d.getElementsByTagName('div'));for(i=0;i<el.length;i++){if(el[i].className=='developer-support-adp-box-on'){void(el[i].className='developer-support-adp-box-off')}else{if(el[i].className=='developer-support-adp-box-off'){void(el[i].className='developer-support-adp-box-on')}};if(el[i].className=='developer-support-adp-output-on'){void(el[i].className='developer-support-adp-output-off')}else{if(el[i].className=='developer-support-adp-output-off'){void(el[i].className='developer-support-adp-output-on')}};}}
+    set adp_on [ad_decode $adp_p 1 "on" "off"]
+
     set oacs_shell_url "${ds_url}shell"
 
     set auto_test_url [site_node::get_package_url -package_key acs-automated-testing]

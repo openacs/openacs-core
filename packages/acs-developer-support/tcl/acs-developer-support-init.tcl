@@ -27,6 +27,7 @@ if { ![nsv_exists ds_properties enabled_p] } {
 
 
     nsv_set ds_properties database_enabled_p [ad_parameter -package_id [ds_instance_id] DatabaseEnabledP developer-support 0]
+    nsv_set ds_properties adp_reveal_enabled_p [ad_parameter -package_id [ds_instance_id] AdpRevealEnabledP developer-support 0]
     ds_set_user_switching_enabled [ad_parameter -package_id [ds_instance_id] UserSwitchingEnabledP acs-developer-support 0]
 }
 
