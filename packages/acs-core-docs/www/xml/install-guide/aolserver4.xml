@@ -94,6 +94,11 @@ make install
               <screen>[root nscache]# <userinput>cd ../nsoracle</userinput>
 [root nsoracle]# <userinput>make install</userinput></screen>
             </listitem>
+            <para>OpenACS looks for the Oracle driver at
+            /usr/local/aolserver/bin/ora8.so, but some versions of
+            nsoracle may create nsoracle.so instead. In that case, you
+            can symlink (ln -s nsoracle.so ora8.so) to fix it. </para>
+
             <listitem id="aolserver4-nspostgres-install">
               <para>Install nspostgres (if you want to use Postgres)</para>
               <screen>[root nscache]# <userinput>cd ../nspostgres</userinput>
