@@ -1,7 +1,8 @@
 #!/bin/sh
 #
 # There is some degree of duplication of parameters in the etc/install/install.tcl file
-# and the etc/config.tcl file. This script will take 
+# and the etc/config.tcl file. This script will take parameter values in install.tcl
+# and insert them in the config.tcl file so that the two are in sync.
 #
 #
 # The next line restarts using tclsh. Do not remove this backslash: \
@@ -57,23 +58,3 @@ close $__fd
 file delete "${__config_file_path}.bak"
 file rename $__config_file_path "${__config_file_path}.bak"
 file rename $__new_config_file_path $__config_file_path
-
-
-#----------------------------------------------------------------------
-# Create daemontools run file
-#----------------------------------------------------------------------
-
-set __run_file_path "${serverroot}/etc/daemontools/run"
-set __new_run_file_path "${serverroot}/etc/daemontools/run.new"
-
-set __fd [open $__new_run_file_path w]
-puts $__fd "#!/bin/sh"
-puts $__fd ""
-puts $__fd "exec ${aolserver_home}/bin/nsd-${database} -it ${serverroot}/etc/config.tcl -u ${aolserver_user} -g ${aolserver_group}"
-close $__fd
-
-# Rename
-file delete "${__run_file_path}.bak"
-file rename $__run_file_path "${__run_file_path}.bak"
-file rename $__new_run_file_path $__run_file_path
-
