@@ -67,6 +67,7 @@ create table acs_messages (     -- extends cr_items
 create index acs_messages_tree_skey_idx on acs_messages (tree_sortkey);
 create index acs_messages_reply_to_idx on acs_messages (reply_to);
 create index acs_messages_sender_idx on acs_messages (sender);
+create index acs_messages_sent_idx on acs_messages (sent_date);
 
 comment on table acs_messages is '
     A generic message which may be attached to any object in the system.
