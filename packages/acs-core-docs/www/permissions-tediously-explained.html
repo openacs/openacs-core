@@ -1,4 +1,4 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>OpenACS Permissions Tediously Explained</title><meta name="generator" content="DocBook XSL Stylesheets V1.64.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="dev-guide.html" title="Chapter 11. Development Reference"><link rel="previous" href="parties.html" title="Parties in OpenACS"><link rel="next" href="object-identity.html" title="Object Identity"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="parties.html">Prev</a> </td><th width="60%" align="center">Chapter 11. Development Reference</th><td width="20%" align="right"> <a accesskey="n" href="object-identity.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="permissions-tediously-explained"></a>OpenACS Permissions Tediously Explained</h2></div></div><div></div></div><p>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>OpenACS Permissions Tediously Explained</title><meta name="generator" content="DocBook XSL Stylesheets V1.65.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="dev-guide.html" title="Chapter 11. Development Reference"><link rel="previous" href="parties.html" title="Parties in OpenACS"><link rel="next" href="object-identity.html" title="Object Identity"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="parties.html">Prev</a> </td><th width="60%" align="center">Chapter 11. Development Reference</th><td width="20%" align="right"> <a accesskey="n" href="object-identity.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="permissions-tediously-explained"></a>OpenACS Permissions Tediously Explained</h2></div></div><div></div></div><p>
     by Vadim Nasardinov. Modified and converted to Docbook XML by Roberto Mello
   </p><p>The code has been modified since this document was written so it is now out of date.  See <a href="http://openacs.org/forums/message-view?message_id=121807" target="_top">this forum thread</a>.</p><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="permissions-tedious-overview"></a>Overview</h3></div></div><div></div></div><p>
       The general permissions system has a relatively complex data model in OpenACS.
@@ -100,7 +100,7 @@ create table <span class="bold"><b>acs_objects</b></span> (
     </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="permissions-tedious-context-hierarchy"></a>Context Hierarchy</h3></div></div><div></div></div><p>
       Suppose objects <span class="emphasis"><em>A</em></span>, <span class="emphasis"><em>B</em></span>, ..., 
       and <span class="emphasis"><em>F</em></span> form the following hierarchy. 
-    </p><div class="table"><a name="id2562053"></a><p class="title"><b>Table 11.2. Context Hierarchy Example</b></p><table summary="Context Hierarchy Example" cellspacing="0" border="1"><colgroup><col align="center"><col align="center"><col align="center"></colgroup><tbody><tr><td colspan="3" align="center"><span class="bold"><b>A</b></span><p>
+    </p><div class="table"><a name="id2553264"></a><p class="title"><b>Table 11.2. Context Hierarchy Example</b></p><table summary="Context Hierarchy Example" cellspacing="0" border="1"><colgroup><col align="center"><col align="center"><col align="center"></colgroup><tbody><tr><td colspan="3" align="center"><span class="bold"><b>A</b></span><p>
   	        <tt class="computeroutput">object_id=10</tt>
               </p></td></tr><tr><td colspan="2" align="center"><span class="bold"><b>B</b></span><p>
   	        <tt class="computeroutput">object_id=20</tt>
@@ -116,7 +116,7 @@ create table <span class="bold"><b>acs_objects</b></span> (
       This can be represented in the 
       <a href="permissions-tediously-explained.html#acs_objects">acs_objects</a> table
       by the following entries: 
-    </p><div class="table"><a name="id2538337"></a><p class="title"><b>Table 11.3. acs_objects example data</b></p><table summary="acs_objects example data" cellspacing="0" border="1"><colgroup><col align="center"><col align="center"></colgroup><thead><tr><th align="center">object_id</th><th align="center">context_id</th></tr></thead><tbody><tr><td align="center">20</td><td align="center">10</td></tr><tr><td align="center">30</td><td align="center">10</td></tr><tr><td align="center">40</td><td align="center">20</td></tr><tr><td align="center">50</td><td align="center">20</td></tr><tr><td align="center">60</td><td align="center">30</td></tr></tbody></table></div><p>
+    </p><div class="table"><a name="id2547992"></a><p class="title"><b>Table 11.3. acs_objects example data</b></p><table summary="acs_objects example data" cellspacing="0" border="1"><colgroup><col align="center"><col align="center"></colgroup><thead><tr><th align="center">object_id</th><th align="center">context_id</th></tr></thead><tbody><tr><td align="center">20</td><td align="center">10</td></tr><tr><td align="center">30</td><td align="center">10</td></tr><tr><td align="center">40</td><td align="center">20</td></tr><tr><td align="center">50</td><td align="center">20</td></tr><tr><td align="center">60</td><td align="center">30</td></tr></tbody></table></div><p>
       The first entry tells us that object 20 is the descendant of object 10, and
       the third entry shows that object 40 is the descendant of object 20. By
       running a <a href="http://www.oradoc.com/ora817/server.817/a85397/expressi.htm#1023748" target="_top">CONNECT BY</a> query,
@@ -228,19 +228,20 @@ security_inherit_p = 'f'<br>
 security_inherit_p = 'f'<br>
 <span class="emphasis"><em>not readable by Joe</em></span><br>
 	      </p></div></td></tr></tbody></table></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="permissions-tedious-privilege-hierarchy"></a>Privilege Hierarchy</h3></div></div><div></div></div><p>
-      Privileges are also organized hierarchically.  In addition to the five main system privileges
-      defined in the ACS Kernel data model, application developers may define their own. For instance,
-      the Bboard package defines the following privileges: 
-    </p><div class="informaltable"><table cellspacing="0" border="1"><colgroup><col align="center"></colgroup><thead><tr><th align="center">privilege</th></tr></thead><tbody><tr><td align="center">create_category</td></tr><tr><td align="center">create_forum</td></tr><tr><td align="center">create_message</td></tr><tr><td align="center">delete_category</td></tr><tr><td align="center">delete_forum</td></tr><tr><td align="center">delete_message</td></tr><tr><td align="center">moderate_forum</td></tr><tr><td align="center">read_category</td></tr><tr><td align="center">read_forum</td></tr><tr><td align="center">read_message</td></tr><tr><td align="center">write_category</td></tr><tr><td align="center">write_forum</td></tr><tr><td align="center">write_message</td></tr></tbody></table></div><p>
-      By defining parent-child relationship between privileges, the OpenACS data model
-      makes it easier for developers to manage permissions.  Instead of granting
-      a user explicit <span class="emphasis"><em>read</em></span>, <span class="emphasis"><em>write</em></span>, <span class="emphasis"><em>delete</em></span>, 
-      and <span class="emphasis"><em>create</em></span>
-      privileges on an object, it is sufficient to grant the user the <span class="emphasis"><em>admin</em></span>
-      privilege to which the first four privileges are tied. To give
-      a more detailed example, the Bboard privileges are structured
-      as follows.
-    </p><div class="informaltable"><table cellspacing="0" border="1"><colgroup><col align="center"><col align="center"><col align="center"><col align="center"><col align="center"><col align="center"><col align="center"><col align="center"><col align="center"><col align="center"><col align="center"><col align="center"><col align="center"></colgroup><tbody><tr><td colspan="13" align="center">admin</td></tr><tr><td colspan="3" align="center">create</td><td colspan="3" align="center">delete</td><td colspan="3" align="center">read</td><td colspan="3" align="center">write</td><td rowspan="2" align="center" valign="middle">moderate forum</td></tr><tr><td align="center">create category</td><td align="center">create forum</td><td align="center">create message</td><td align="center">delete category</td><td align="center">delete forum</td><td align="center">delete message</td><td align="center">read category</td><td align="center">read forum</td><td align="center">read message</td><td align="center">write category</td><td align="center">write forum</td><td align="center">write message</td></tr></tbody></table></div><p>
+      Privileges are also organized hierarchically.  In addition to
+      the five main system privileges defined in the ACS Kernel data
+      model, application developers may define their own. Note,
+      however, that this is no longer recommended practice. 
+    </p><p>
+      By defining parent-child relationship between privileges, the
+      OpenACS data model makes it easier for developers to manage
+      permissions.  Instead of granting a user explicit
+      <span class="emphasis"><em>read</em></span>, <span class="emphasis"><em>write</em></span>,
+      <span class="emphasis"><em>delete</em></span>, and <span class="emphasis"><em>create</em></span>
+      privileges on an object, it is sufficient to grant the user the
+      <span class="emphasis"><em>admin</em></span> privilege to which the first four
+      privileges are tied. Privileges are structured as follows.
+    </p><div class="informaltable"><table cellspacing="0" border="1"><colgroup><col align="center"><col align="center"><col align="center"><col align="center"></colgroup><tbody><tr><td colspan="4" align="center">admin</td></tr><tr><td align="center">create</td><td align="center">delete</td><td align="center">read</td><td align="center">write</td></tr></tbody></table></div><p>
       The parent-child relationship between privileges is represented in
       the <tt class="computeroutput">acs_privilege_hierarchy</tt> table: 
     </p><a name="acs_privilege_hierarchy"></a><pre class="programlisting">
@@ -536,7 +537,8 @@ from
       table, unless doing so results in substantial performance gains.
     </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="permissions-tedious-putting-all-together"></a>Putting It All Together</h3></div></div><div></div></div><p>
       Security information is queried by calling the <tt class="computeroutput">acs_permission.permission_p</tt>
-      function in OpenACS 4.x. 
+      function in OpenACS 4.x+. This is accessible from Tcl via the
+      <tt class="computeroutput">permission::permission_p</tt> procedure. 
     </p><pre class="programlisting">  
   create or replace package body acs_permission
   as

@@ -1,4 +1,4 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Install Oracle 8.1.7</title><meta name="generator" content="DocBook XSL Stylesheets V1.64.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="complete-install.html" title="Chapter 3. Complete Installation"><link rel="previous" href="unix-installation.html" title="Install a Unix-like system and supporting software"><link rel="next" href="postgres.html" title="Install PostgreSQL"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="unix-installation.html">Prev</a> </td><th width="60%" align="center">Chapter 3. Complete Installation</th><td width="20%" align="right"> <a accesskey="n" href="postgres.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="oracle"></a>Install Oracle 8.1.7</h2></div></div><div></div></div><div class="authorblurb"><p>By <a href="mailto:vinod@kurup.com" target="_top">Vinod Kurup</a></p>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Install Oracle 8.1.7</title><meta name="generator" content="DocBook XSL Stylesheets V1.65.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="complete-install.html" title="Chapter 3. Complete Installation"><link rel="previous" href="unix-installation.html" title="Install a Unix-like system and supporting software"><link rel="next" href="postgres.html" title="Install PostgreSQL"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="unix-installation.html">Prev</a> </td><th width="60%" align="center">Chapter 3. Complete Installation</th><td width="20%" align="right"> <a accesskey="n" href="postgres.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="oracle"></a>Install Oracle 8.1.7</h2></div></div><div></div></div><div class="authorblurb"><p>By <a href="mailto:vinod@kurup.com" target="_top">Vinod Kurup</a></p>
           OpenACS docs are written by the named authors, and may be edited
           by OpenACS documentation staff.
         </div><p>
@@ -655,11 +655,11 @@ IMPORTANT NOTE: Please delete any log and trace files previously
       Pentium II with 128 MB of RAM.
     </p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>RedHat 7.3 and 8.0 users: Before running <span><b class="command">dbassist</b></span>, do the following.</p><div class="orderedlist"><ol type="1"><li><p>
             Download the <a href="http://otn.oracle.com/software/products/oracle8i/htdocs/linuxsoft.html" target="_top">glibc
-            patch</a> from Oracle Technet into <tt class="computeroutput">/tmp</tt>.
+            patch</a> from Oracle Technet into <tt class="computeroutput">/var/tmp</tt>.
           </p></li><li><p>
             cd $ORACLE_HOME
             </p></li><li><p>
-            tar xzf /tmp/glibc2.1.3-stubs.tgz
+            tar xzf /var/tmp/glibc2.1.3-stubs.tgz
             </p></li><li><p>
             ./setup_stubs
             </p></li></ol></div></div><div class="itemizedlist"><ul type="disc"><li><p> 
@@ -822,11 +822,11 @@ oracle:/ora8/m01/app/oracle/product/8.1.7/assistants/dbca/jlib$ ./sqlora8.sh</pr
     </p><div class="itemizedlist"><ul type="disc"><li><p>
           You need to download the "Oracle Acceptance Test" file.
           It's available <a href="files/acceptance-sql.txt" target="_top">here</a> and at <a href="http://philip.greenspun.com/wtr/oracle/acceptance-sql.txt" target="_top">http://philip.greenspun.com/wtr/oracle/acceptance-sql.txt</a>.
-          Save the file to <tt class="computeroutput">/tmp</tt>
+          Save the file to <tt class="computeroutput">/var/tmp</tt>
         </p></li><li><p>
           In the oracle shell, copy the file.
         </p><pre class="programlisting">
-[oracle ~]$ cp /tmp/acceptance-sql.txt /tmp/acceptance.sql</pre></li><li><p>        
+[oracle ~]$ cp /var/tmp/acceptance-sql.txt /var/tmp/acceptance.sql</pre></li><li><p>        
           Once you've got the acceptance test file all set, stay in
           your term and type the following:
         </p><pre class="programlisting">
@@ -854,7 +854,7 @@ SQL&gt; select sysdate from dual;</pre><p>
           At this point we are going to hammer your database with an
           intense acceptance test. This usually takes around 30 minutes.
         </p><pre class="programlisting">
-SQL&gt; @ /tmp/acceptance.sql
+SQL&gt; @ /var/tmp/acceptance.sql
 
 ; A bunch of lines will scroll by.  You'll know if the test worked if
 ; you see this at the end:
@@ -893,10 +893,10 @@ ORA-01450: maximum key length (758) exceeded</pre><p>
           shipped in the Linux distribution does not work out of the
           box. The fix is simple. Follow these directions to apply
           it. First, save <a href="files/dbstart.txt" target="_top">dbstart</a> to
-          <tt class="computeroutput">/tmp</tt>. Then, as 
+          <tt class="computeroutput">/var/tmp</tt>. Then, as 
           <tt class="computeroutput">oracle</tt>, do the following:
         </p><pre class="programlisting">
-[oracle ~]$ cp /tmp/dbstart.txt /ora8/m01/app/oracle/product/8.1.7/bin/dbstart 
+[oracle ~]$ cp /var/tmp/dbstart.txt /ora8/m01/app/oracle/product/8.1.7/bin/dbstart 
 [oracle ~]$ chmod 755 /ora8/m01/app/oracle/product/8.1.7/bin/dbstart</pre></li><li><p>
 
           While you're logged in as
@@ -920,7 +920,7 @@ ora8:/ora8/m01/app/oracle/product/8.1.7:Y</pre></li><li><p>
               Save the file &amp; quit the terminal.
             </p></li></ul></div></li><li><p> 
           You need a script to automate startup and shutdown. Save <a href="files/oracle8i.txt" target="_top">oracle8i.txt</a> in
-          <tt class="computeroutput">/tmp</tt>. Then login as
+          <tt class="computeroutput">/var/tmp</tt>. Then login as
           <tt class="computeroutput">root</tt> and install the
           script. (Debian users: substitute
           <tt class="computeroutput">/etc/init.d</tt> for
@@ -928,7 +928,7 @@ ora8:/ora8/m01/app/oracle/product/8.1.7:Y</pre></li><li><p>
           this section)
         </p><pre class="programlisting">
 [oracle ~]$ su -
-[root ~]# cp /tmp/oracle8i.txt /etc/rc.d/init.d/oracle8i
+[root ~]# cp /var/tmp/oracle8i.txt /etc/rc.d/init.d/oracle8i
 [root ~]# chown root.root /etc/rc.d/init.d/oracle8i
 [root ~]# chmod 755 /etc/rc.d/init.d/oracle8i</pre></li><li><p> 
           Test the script by typing the following commands and checking the
@@ -1042,7 +1042,7 @@ Finished.</pre></li></ul></div></li><li><p>
           and full site search.
         </p><p>
           Download these three scripts into
-          <tt class="computeroutput">/tmp</tt>
+          <tt class="computeroutput">/var/tmp</tt>
         </p><div class="itemizedlist"><ul type="circle"><li><p>
               <a href="files/startlsnr.txt" target="_top">startlsnr.txt</a>
             </p></li><li><p>
@@ -1054,12 +1054,12 @@ Finished.</pre></li></ul></div></li><li><p>
           <tt class="computeroutput">root</tt>).
         </p><pre class="programlisting">
 [root ~]# su - oracle
-[oracle ~]$ cp /tmp/startlsnr.txt /ora8/m01/app/oracle/product/8.1.7/bin/startlsnr
-[oracle ~]$ cp /tmp/stoplsnr.txt /ora8/m01/app/oracle/product/8.1.7/bin/stoplsnr    
+[oracle ~]$ cp /var/tmp/startlsnr.txt /ora8/m01/app/oracle/product/8.1.7/bin/startlsnr
+[oracle ~]$ cp /var/tmp/stoplsnr.txt /ora8/m01/app/oracle/product/8.1.7/bin/stoplsnr    
 [oracle ~]$ chmod 755 /ora8/m01/app/oracle/product/8.1.7/bin/startlsnr
 [oracle ~]$ chmod 755 /ora8/m01/app/oracle/product/8.1.7/bin/stoplsnr
 [oracle ~]$ exit
-[root ~]# cp /tmp/listener8i.txt /etc/rc.d/init.d/listener8i
+[root ~]# cp /var/tmp/listener8i.txt /etc/rc.d/init.d/listener8i
 [root ~]# cd /etc/rc.d/init.d
 root:/etc/rc.d/init.d# chmod 755 listener8i</pre><p>
           Test the listener automation by running the following commands
