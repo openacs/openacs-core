@@ -477,8 +477,11 @@ aa_register_case auth_authority_api {
                 change_pwd_url ""
                 register_impl_id ""
                 register_url ""
+                get_doc_impl_id ""
+                process_doc_impl_id ""
+                snapshot_p "f"
+                batch_sync_enabled_p "f"
             }
-
             
             set authority_id [auth::authority::create -array columns]
 
@@ -492,7 +495,6 @@ aa_register_case auth_authority_api {
 
             # Edit authority and test that it has actually changed.
             array set columns {
-                short_name "test2"
                 pretty_name "Test authority2"
                 help_contact_text "Blah blah2"
                 enabled_p "f"
@@ -501,6 +503,7 @@ aa_register_case auth_authority_api {
                 change_pwd_url "foobar.com"
                 register_url "foobar.com"
             }
+            set columns(short_name) [ad_generate_random_string]
 
             auth::authority::edit \
                 -authority_id $authority_id \

@@ -55,6 +55,14 @@ ad_proc -public auth::authority::create {
 
       <li> register_url       An alternative URL to redirect to when the user wants to register for an account.
                               Defaults to none.
+
+      <li> get_doc_impl_id     Id of the batch sync GetDocument service contract implementation
+
+      <li> process_doc_impl_id Id of the batch sync ProcessDocument service contract implementation
+
+      <li> snapshot_p          Whether batch jobs are snapshots or not
+
+      <li> batch_sync_enabled_p Is batch sync enabled for the authority?
     </ul>
 
     @author Lars Pind (lars@collaboraid.biz)
@@ -261,6 +269,10 @@ ad_proc -private auth::authority::get_columns {} {
         change_pwd_url
         register_impl_id
         register_url
+        get_doc_impl_id
+        process_doc_impl_id
+        snapshot_p
+        batch_sync_enabled_p
     }
 }
 
