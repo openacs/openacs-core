@@ -131,7 +131,8 @@
         <listitem>
           <para>
             The <emphasis role="strong">temporary</emphasis>:
-           <computeroutput> &lt;#<emphasis>message_key</emphasis> <emphasis>original&nbsp;text</emphasis>#&gt;</computeroutput>
+           <computeroutput> &lt;#<emphasis>message_key</emphasis>
+           <emphasis>original text</emphasis>#&gt;</computeroutput>
           </para>
           <para>
             This syntax has been designed to make it easy to
