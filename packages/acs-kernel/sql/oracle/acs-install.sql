@@ -41,7 +41,8 @@ begin
     (-2, main_site_id);
 
   update acs_objects
-  set object_type = 'application_group'
+  set object_type = 'application_group',
+      context_id = main_site_id
   where object_id = -2;
 
   insert into group_rels
