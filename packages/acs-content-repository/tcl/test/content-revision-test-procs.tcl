@@ -34,7 +34,7 @@ aa_register_case content_revision {
                                             -item_id $first_item_id \
                                             -parent_id $first_folder_id]
 
-            aa_true "First item created" [expr $first_item_id == $returned_first_item_id]
+            aa_true "First item created $first_item_id" [expr $first_item_id == $returned_first_item_id]
 
             # create a revision
             set revision_id [db_nextval "acs_object_id_seq"]

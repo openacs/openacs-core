@@ -119,7 +119,8 @@ DB -----------------------------------------------------------------------------
 		append attribute_names  ", ${attribute_name}"		
 		# create local variable to use for binding
 		set $attribute_name $attribute_value
-		append attribute_values ", :${attribute_name}"
+	ns_log notice "DAVEB CR REVISION NEW setting $attribute_name '${attribute_value}'"
+	append attribute_values ", :${attribute_name}"
 	    }
 	}
     }
