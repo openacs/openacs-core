@@ -267,7 +267,11 @@ ad_proc -private lang::message::format {
                 # from scope calling lang::message::lookup
                 upvar $upvar_level $variable_key variable_value
 
-                append formated_message $variable_value
+                if { [info exists variable_value] } {
+                    append formated_message $variable_value
+                } else {
+                    error "Message contains a variable named '$variable_key' which doesn't exist in the caller's environment"
+                }
             }
         }
     }
