@@ -1213,15 +1213,18 @@ create or replace function apm__unregister_package (varchar,boolean)
 returns integer as '
 declare
   package_key            alias for $1;  
-  cascade_p              alias for $2;  -- default ''t''  
+  p_cascade_p            alias for $2;  -- default ''t''  
+  v_cascade_p            boolean;
 begin
    if cascade_p is null then 
-	cascade_p := ''t'';
+	v_cascade_p := ''t'';
+   else 
+       v_cascade_p := p_cascade_p;
    end if;
 
    PERFORM apm_package_type__drop_type(
 	package_key,
-	cascade_p
+	v_cascade_p
    );
 
    return 0; 
@@ -1278,11 +1281,18 @@ create or replace function apm__unregister_application (varchar,boolean)
 returns integer as '
 declare
   package_key            alias for $1;  
-  cascade_p              alias for $2;  -- default ''f''  
+  p_cascade_p              alias for $2;  -- default ''f''  
+  v_cascade_p            boolean;
 begin
+   if p_cascade_p is null then 
+	v_cascade_p := ''f'';
+   else 
+       v_cascade_p := p_cascade_p;
+   end if;
+
    PERFORM apm__unregister_package (
-	package_key,
-	cascade_p
+        package_key,
+        v_cascade_p
    );
 
    return 0; 
@@ -1322,16 +1332,19 @@ end;' language 'plpgsql';
 create or replace function apm__unregister_service (varchar,boolean)
 returns integer as '
 declare
-  package_key            alias for $1;  
-  cascade_p              alias for $2;  -- default ''f''  
+  package_key           alias for $1;  
+  p_cascade_p           alias for $2;  -- default ''f''  
+  v_cascade_p           boolean;
 begin
-   if cascade_p is null then 
-	cascade_p := ''f'';
+   if p_cascade_p is null then 
+	v_cascade_p := ''f'';
+   else 
+	v_cascade_p := p_cascade_p;
    end if;
 
    PERFORM apm__unregister_package (
 	package_key,
-	cascade_p
+	v_cascade_p
    );
 
    return 0; 

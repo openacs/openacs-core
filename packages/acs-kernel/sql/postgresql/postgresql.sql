@@ -265,12 +265,12 @@ begin
 end;' language 'plpgsql' stable strict;
 
 create view acs_func_defs as 
-select get_func_definition(proname,proargtypes) as definition, 
+select get_func_definition(proname::varchar,proargtypes) as definition, 
        proname as fname 
   from pg_proc;
 
 create view acs_func_headers as 
-select get_func_header(proname,proargtypes) as definition, 
+select get_func_header(proname::varchar,proargtypes) as definition, 
        proname as fname 
   from pg_proc;
 
@@ -278,7 +278,7 @@ select get_func_header(proname,proargtypes) as definition,
 
 create function inline_0 () returns integer as '
 -- Create a bitfromint4(integer) function if it doesn''t exists.
--- Due to a bug in PG 7.3 this function is absent in PG 7.3.
+-- This function is no longer present in 7.3 and above
 declare
     v_bitfromint4_count integer;
 begin
@@ -286,7 +286,7 @@ begin
     if v_bitfromint4_count = 0 then
 	create or replace function bitfromint4 (integer) returns bit varying as ''
 	begin 
-    	    return "bit"($1);
+    	    return $1::bit(32);
 	end;'' language ''plpgsql'' immutable strict;
    end if;
    return 1;
@@ -297,7 +297,7 @@ drop function inline_0();
 
 create function inline_1 () returns integer as '
 -- Create a bitfromint4(integer) function if it doesn''t exists.
--- Due to a bug in PG 7.3 this function is absent in PG 7.3.
+-- This function is no longer present in 7.3 and above
 declare
     v_bittoint4_count integer;
 begin
