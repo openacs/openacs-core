@@ -4839,3 +4839,17 @@ ad_proc -public util::age_pretty {
 
     }
 }
+
+ad_proc -public util::string_length_compare { s1 s2 } {
+    String length comparison function for use with lsort's -command switch.
+} {
+    set l1 [string length $s1]
+    set l2 [string length $s2]
+    if { $l1 < $l2 } {
+	return -1
+    } elseif { $l1 > $l2 } {
+	return 1
+    } else {
+	return 0
+    }
+}
