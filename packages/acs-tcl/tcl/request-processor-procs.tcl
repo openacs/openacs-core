@@ -60,6 +60,58 @@ ad_proc -public rp_internal_redirect { path } {
     ad_conn -set file $saved_file
 }
 
+ad_proc rp_getform {} {
+
+    This proc is a simple wrapper around AOLserver's standard ns_getform
+    proc, that will create the form if it doesn't exist, so that you
+    can then add values to that form. This is useful in conjunction 
+    with rp_internal_redirect to redirect to a different page with 
+    certain query variables set.
+
+    @author Lars Pind (lars@pinds.com)
+    @creation-date August 20, 2002
+
+    @return the form ns_set, just like ns_getform, except it will 
+    always be non-empty.
+    
+} {
+    # The form may not exist, if there's nothing in it
+    if { ![empty_string_p [ns_getform]] } {
+        # It's there
+        return [ns_getform]
+    } {
+        # It doesn't exist, create a new one
+
+        # This is the magic global Tcl variable that AOLserver uses 
+        # to store the ns_set that contains the query args or form.
+        global _ns_form
+
+        # Simply create a new ns_set and store it in the global _ns_set variable
+        set _ns_form [ns_set create]
+        return $_ns_form
+    }
+}
+
+ad_proc rp_form_put { name value } {
+
+    This proc adds a query variable to AOLserver's internal ns_getform
+    form, so that it'll be picked up by ad_page_contract and other procs 
+    that look at the query variables or form supplied. This is useful
+    when you do an rp_internal_redirect to a new page, and you want to
+    feed that page with certain query variables.
+
+    @author Lars Pind (lars@pinds.com)
+    @creation-date August 20, 2002
+
+    @return the form ns_set, in case you're interested. Mostly you'll
+    probably want to discard the result.
+
+ } {
+    set form [rp_getform]
+    ns_set put $form $name $value
+    return $form
+}
+
 
 ad_proc ad_return { args } {
 
