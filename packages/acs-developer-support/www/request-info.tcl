@@ -227,28 +227,9 @@ if { ![info exists property(db)] } {
 		set value "$statement_name: "
 	    }
             
-            # Remove extra whitespace before query
-            set min_whitespace -1
-            foreach line [split $sql \n] {
-                set len [string length $line]
-                set trimleft_len [string length [string trimleft $line]]
-                if { $trimleft_len > 0 } {
-                    set whitespace [expr $len - $trimleft_len]
-                    if { $min_whitespace == -1 || $whitespace < $min_whitespace } {
-                        set min_whitespace $whitespace
-                    }
-                }
-            }
-            
-            if { $min_whitespace > 0 } {
-                set new_sql {}
-                foreach line [split $sql \n] {
-                    append new_sql [string range $line $min_whitespace end] \n
-                }
-                set sql $new_sql
-            }
+            # TODO: Remove extra whitespace before query
 
-	    append value "$command $handle<pre>[ns_quotehtml $sql]</pre>"
+	    append value "$command $handle<blockquote><pre>[ns_quotehtml $sql]</pre></blockquote>"
 	}
 
         if { ![string equal $command "getrow"] || [template::util::is_true $getrow_p] } {
@@ -259,36 +240,35 @@ if { ![info exists property(db)] } {
 
     # TODO: Sort by duration, so you can see slowest queries at top
     template::list::create \
-        -name dbreqs \
-        -sub_class narrow \
-        -elements {
-            duration_ms {
-                label "Duration"
-                html { align right }
-                display_template {@dbreqs.duration_ms@ ms}
-                aggregate sum
-            }
-            command {
-                label "Command"
-            }
-            sql {
-                label "SQL"
-                aggregate_label "Total Duration (ms)"
-                display_template {@dbreqs.value;noquote@}
-            }
-        } -filters {
-            getrow_p {
-                label "Getrow"
-                values {
-                    {"Include" t}
-                    {"Exclude" f}
-                }
-                default_value t
-            }
-            request {
-                hide_p t
-            }
+            -name dbreqs \
+            -elements {
+        duration_ms {
+            label "Duration"
+            html { align right }
+            display_template {@dbreqs.duration_ms@ ms}
+            aggregate sum
         }
+        command {
+            label "Command"
+        }
+        sql {
+            label "SQL"
+            aggregate_label "Total Duration (ms)"
+            display_template {@dbreqs.value;noquote@}
+        }
+    } -filters {
+        getrow_p {
+            label "Getrow"
+            values {
+                {"Include" t}
+                {"Exclude" f}
+            }
+            default_value t
+        }
+        request {
+            hide_p t
+        }
+    }
             
 }
     

@@ -92,7 +92,6 @@ create table notification_types_del_methods (
 create table notification_requests (
     request_id                      constraint notif_request_id_fk
                                     references acs_objects (object_id)
-                                    on delete cascade
                                     constraint notif_request_id_pk
                                     primary key,
     type_id                         constraint notif_request_type_id_fk
@@ -142,7 +141,6 @@ create index notification_requests_t_o_idx on notification_requests(type_id, obj
 create table notifications (
     notification_id                 constraint notif_notif_id_fk
                                     references acs_objects (object_id)
-                                    on delete cascade
                                     constraint notif_notif_id_pk
                                     primary key,
     type_id                         constraint notif_type_id_fk
