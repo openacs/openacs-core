@@ -11,12 +11,12 @@ create table acs_mail_lite_queue (
     message_id                  integer
                                 constraint acs_mail_lite_queue_pk
                                 primary key,
-    to_addr                     text,
+    to_addr                     varchar(400),
     from_addr                   varchar(200),
     subject                     varchar(200),
-    body                        text,
-    extra_headers               text,
-    bcc                         text,
+    body                        clob,
+    extra_headers               clob,
+    bcc                         clob,
     package_id			integer
     				constraint acs_mail_lite_queue_pck_fk
 				references apm_packages,
