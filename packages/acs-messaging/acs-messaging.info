@@ -30,9 +30,6 @@
             <file type="data_model_drop" db_type="oracle" path="sql/oracle/acs-messaging-drop.sql"/>
             <file type="data_model" db_type="oracle" path="sql/oracle/acs-messaging-packages.sql"/>
             <file type="data_model" db_type="oracle" path="sql/oracle/acs-messaging-views.sql"/>
-            <file type="data_model_upgrade" db_type="oracle" path="sql/oracle/upgrade-4.0-4.0.1a.sql"/>
-            <file type="data_model_upgrade" db_type="oracle" path="sql/oracle/upgrade-4.0.1-4.1.sql"/>
-            <file type="data_model_upgrade" db_type="oracle" path="sql/oracle/upgrade-4.0.1a-4.0.1.sql"/>
             <file type="data_model_upgrade" db_type="oracle" path="sql/oracle/upgrade/upgrade-4.0-4.0.1a.sql"/>
             <file type="data_model_upgrade" db_type="oracle" path="sql/oracle/upgrade/upgrade-4.0.1-4.1.sql"/>
             <file type="data_model_upgrade" db_type="oracle" path="sql/oracle/upgrade/upgrade-4.0.1a-4.0.1.sql"/>
