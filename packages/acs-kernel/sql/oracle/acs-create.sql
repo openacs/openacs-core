@@ -173,6 +173,16 @@ as
   and u.email_verified_p = 't';
 
 
+-- faster simpler view
+-- does not check for registered user/banned etc
+create view all_users
+as
+select pa.*, pe.*, u.*
+from  parties pa, persons pe, users u
+where  pa.party_id = pe.person_id
+and pe.person_id = u.user_id;
+
+
 create or replace view cc_users
 as
 select
