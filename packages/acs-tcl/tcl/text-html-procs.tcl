@@ -1269,6 +1269,43 @@ ad_proc util_remove_html_tags { html } {
 }
 
 
+#####
+#
+# Truncate
+#
+#####
+
+ad_proc string_truncate { 
+    {-len 200}
+    {-format html}
+    string 
+} {
+    Truncates a string to len characters (defaults to the
+    parameter TruncateDescriptionLength), adding an ellipsis (...) if the
+    string was truncated. If format is html (default), any open
+    HTML tags are closed. Otherwise, it's converted to text using
+    ad_html_to_text.
+
+    @param len The lenght to truncate to. Defaults to parameter TruncateDescriptionLength.
+    @param format html or text.
+    @param string The string to truncate.
+    @return The truncated string, with HTML tags cloosed or
+            converted to text, depending on format.
+
+    @author Lars Pind (lars@pinds.com)
+    @creation-date September 8, 2002
+} {
+    if { [string length $string] > $len } {
+        set string "[string range $string 0 $len]..."
+    } 
+    
+    if { [string equal $format "html"] } {
+        set string [util_close_html_tags $string]
+    } else {
+        set string [ad_html_to_text -- $string]
+    }
+    return $string
+}
 
 
 
