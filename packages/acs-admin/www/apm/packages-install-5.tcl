@@ -29,6 +29,10 @@ ns_write "[apm_header  "Server Restart"]
   <b>&raquo;</b> <a href=\"/admin/site-map/\">Visit the site-map on the main site to mount your packages</a>.
 </p>
 
+<p>
+  <b>&raquo;</b> <a href=\"/\">Go to the home page</a>.
+</p>
+
 [ad_footer]
 "
 
