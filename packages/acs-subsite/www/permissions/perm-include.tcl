@@ -47,7 +47,7 @@ foreach priv $privs {
              label [string totitle [string map {_ { }} $priv]] \
              display_template "
                <if @permissions.${priv}_p@ ge 2>
-                 <img src=\"/shared/images/checkboxchecked\" border=\"0\" height=\"13\" width=\"13\" alt=\"X\" title=\"You cannot revoke this permission, because it is inherited from the parent object\">
+                 <img src=\"/shared/images/checkboxchecked\" border=\"0\" height=\"13\" width=\"13\" alt=\"X\" title=\"This permission is inherited, to remove, click the 'Do not inherit ...' button above.\">
                </if>
                <else>
                  <input type=\"checkbox\" name=\"perm\" value=\"@permissions.grantee_id@,${priv}\" @permissions.${priv}_checked@>
