@@ -271,28 +271,37 @@ end;' language 'plpgsql' stable strict;
 
 create function cr_items_tree_insert_tr () returns opaque as '
 declare
-        v_parent_sk     varbit default null;
-        v_max_value     integer;
+    v_parent_sk      varbit default null;
+    v_max_value      integer;
+    v_parent_id      integer;
 begin
-        if new.parent_id is null then 
-            select max(tree_leaf_key_to_int(tree_sortkey)) into v_max_value 
-              from cr_items 
-             where parent_id is null;
-        else 
-            select max(tree_leaf_key_to_int(tree_sortkey)) into v_max_value 
-              from cr_items 
-             where parent_id = new.parent_id;
+    -- Lars: If the parent is not a cr_item, we treat it as if it was null.
+    select item_id
+    into   v_parent_id
+    from   cr_items
+    where  item_id = new.parent_id;
 
-            select tree_sortkey into v_parent_sk 
-              from cr_items 
-             where item_id = new.parent_id;
-        end if;
+    if v_parent_id is null then 
 
+        -- Lars: Treat all items with a non-cr_item parent as one big pool wrt tree_sortkeys
+        -- The old algorithm had tree_sortkeys start from zero for each different parent
 
-        new.tree_sortkey := tree_next_key(v_parent_sk, v_max_value);
+        select max(tree_leaf_key_to_int(child.tree_sortkey)) into v_max_value 
+          from cr_items child,
+         where not exists (select 1 from cr_items parent where parent.item_id = child.parent_id);
+    else 
+        select max(tree_leaf_key_to_int(tree_sortkey)) into v_max_value 
+          from cr_items 
+         where parent_id = new.parent_id;
 
-        return new;
+        select tree_sortkey into v_parent_sk 
+          from cr_items 
+         where item_id = new.parent_id;
+    end if;
 
+    new.tree_sortkey := tree_next_key(v_parent_sk, v_max_value);
+
+    return new;
 end;' language 'plpgsql';
 
 create trigger cr_items_tree_insert_tr before insert 
@@ -326,14 +335,22 @@ begin
                clr_keys_p := ''f'';
             end if;
             
-            select parent_id into p_id
-              from cr_items 
-             where item_id = v_rec.item_id;
+            -- Lars: If the parent is not a cr_item, we treat it as if it was null.
+            select parent.item_id 
+              into p_id
+              from cr_items parent, 
+                   cr_items child
+             where child.item_id = v_rec.item_id
+             and   parent.item_id = chid.parent_id;
 
             if p_id is null then 
+
+                -- Lars: Treat all items with a non-cr_item parent as one big pool wrt tree_sortkeys
+                -- The old algorithm had tree_sortkeys start from zero for each different parent
+
                 select max(tree_leaf_key_to_int(tree_sortkey)) into v_max_value
-                  from cr_items 
-                 where parent_id is null;
+                  from cr_items child
+                 where not exists (select 1 from cr_items parent where parent.item_id = child.parent_id);
             else 
                 select max(tree_leaf_key_to_int(tree_sortkey)) into v_max_value
                   from cr_items 
