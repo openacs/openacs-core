@@ -39,19 +39,7 @@ set package_id [ad_conn package_id]
 #  (itself identified by rel_side) must belong before belonging to
 #  rel_segment
 
-if { ![db_0or1row select_constraint_properties {
-    select c.constraint_id, c.constraint_name, c.rel_side, 
-           s.segment_id, s.segment_name, s.rel_type, acs_group.name(s.group_id) as group_name,
-           s2.segment_id as req_segment_id, s2.segment_name as req_segment_name, 
-           s2.rel_type as req_rel_type, acs_group.name(s2.group_id) as req_group_name
-      from application_group_segments s, application_group_segments s2,
-           rel_constraints c
-     where s.segment_id = c.rel_segment
-       and s2.segment_id = c.required_rel_segment
-       and c.constraint_id = :constraint_id
-       and s.package_id = :package_id
-       and s2.package_id = :package_id
-} -column_array props] } {
+if { ![db_0or1row select_constraint_properties {} -column_array props] } {
     ad_return_error "Error" "Constraint #$constraint_id could not be found or is out of the scope of this subsite."
     return
 }
@@ -102,12 +90,12 @@ db_1row select_rel_type_info {
 set rel_side $props(rel_side)
 
 set rel(role) $rel(role_${rel_side})
-set rel(role_pretty_name) $rel(role_${rel_side}_pretty_name)
-set rel(role_pretty_plural) $rel(role_${rel_side}_pretty_plural)
+set rel(role_pretty_name) [lang::util::localize $rel(role_${rel_side}_pretty_name)]
+set rel(role_pretty_plural) [lang::util::localize $rel(role_${rel_side}_pretty_plural)]
 
 set req_rel(role) $req_rel(role_${rel_side})
-set req_rel(role_pretty_name) $req_rel(role_${rel_side}_pretty_name)
-set req_rel(role_pretty_plural) $req_rel(role_${rel_side}_pretty_plural)
+set req_rel(role_pretty_name) [lang::util::localize $req_rel(role_${rel_side}_pretty_name)]
+set req_rel(role_pretty_plural) [lang::util::localize $req_rel(role_${rel_side}_pretty_plural)]
 
 
 # Now query for any violations. Note that we use union all since we
