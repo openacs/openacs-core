@@ -4,11 +4,6 @@ ad_page_contract {
     package_key:multiple
 }
 
-set page_title "Confirm"
-
-set context [list [list "." "Install Applications"] [list "local-install" "Install From Local File System"] $page_title]
-
-
 # We save this under a different name
 foreach key $package_key {
     set install_p($key) 1
@@ -73,7 +68,12 @@ set extra_package_keys [lindex $result 2]
 if { $ok_p } {
     ad_set_client_property -clob t apm pkg_install_list $install_pkg_info_list
     set continue_url local-install-3
+    set page_title "Confirm"
+} else {
+    set page_title "Missing Required Packages"
 }
+
+set context [list [list "." "Install Applications"] [list "local-install" "Install From Local File System"] $page_title]
 
 # Add the extras to the list
 set package_key [concat $package_key $extra_package_keys]
@@ -102,7 +102,7 @@ foreach pkg_info $install_pkg_info_list {
         $key \
         $package_name($key) \
         $problem_p \
-        $comment \
+        [join $comment "<br>"] \
         $extra_p
 }
 
@@ -119,8 +119,9 @@ template::list::create \
         }
         extra_p {
             label "Added"
-            display_eval {[ad_decode $extra_p 1 "Added" ""]}
+            display_eval {[ad_decode $extra_p 1 "*" ""]}
             hide_p {[ad_decode $extras_p 1 0 1]}
+            html { align center }
         }
     }
 
