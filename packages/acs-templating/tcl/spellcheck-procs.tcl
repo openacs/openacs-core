@@ -59,7 +59,7 @@ ad_proc -public template::data::transform::spellcheck {
 	# special treatment for the "richtext" datatype.
     	set format [template::util::richtext::get_property format [lindex $values 0]]
 	if { ![empty_string_p $merge_text] } {
-	    return [list [list $merge_text [ns_queryget $element(id).format]]]
+	    return [template::util::richtext::set_property contents [lindex $values 0] $merge_text]
 	} 
     	set contents [template::util::richtext::get_property contents [lindex $values 0]]
     } else {
@@ -70,7 +70,7 @@ ad_proc -public template::data::transform::spellcheck {
     }
 
     if { [empty_string_p $contents] } {
-	return [list]
+	return $values
     } 
 
     set spellcheck_p [ad_decode [set language [ns_queryget $element(id).spellcheck]] ":nospell:" 0 1]
@@ -110,7 +110,7 @@ ad_proc -public template::data::transform::spellcheck {
         
     # no spellchecking was to take place, or there were no errors.
     if { $richtext_p } {
-	return [list [list $contents $format]]
+	return [list [template::util::richtext::set_property contents [lindex $values 0] $contents]]
     } else {
 	return [list $contents]
     }
