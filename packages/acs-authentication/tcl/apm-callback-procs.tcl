@@ -10,8 +10,8 @@ namespace eval auth {}
 namespace eval auth::authentication {}
 namespace eval auth::password {}
 namespace eval auth::registration {}
-namespace eval auth::getdoc {}
-namespace eval auth::processdoc {}
+namespace eval auth::get_doc {}
+namespace eval auth::process_doc {}
 
 
 ad_proc -private auth::package_install {} {} {
@@ -21,8 +21,8 @@ ad_proc -private auth::package_install {} {} {
         auth::authentication::create_contract
         auth::password::create_contract
         auth::registration::create_contract
-        auth::getdoc::create_contract
-        auth::processdoc::create_contract
+        auth::get_doc::create_contract
+        auth::process_doc::create_contract
 
         # Register local authentication implementations and update the local authority
         auth::local::install
@@ -40,8 +40,8 @@ ad_proc -private auth::package_uninstall {} {} {
         auth::authentication::delete_contract
         auth::password::delete_contract
         auth::registration::delete_contract
-        auth::getdoc::delete_contract
-        auth::processdoc::delete_contract
+        auth::get_doc::delete_contract
+        auth::process_doc::delete_contract
     }
 }
 
@@ -299,20 +299,22 @@ ad_proc -private auth::registration::delete_contract {} {
 
 #####
 #
-# auth_getdoc service contract
+# auth_get_doc service contract
 #
 #####
 
-ad_proc -private auth::getdoc::create_contract {} {
+ad_proc -private auth::get_doc::create_contract {} {
     Create service contract for account registration.
 } {
     set spec {
-        name "auth_getdoc"
+        name "GetDocument"
         description "Retrieve a document, e.g. using HTTP, SMP, FTP, SOAP, etc."
         operations {
             GetDocument {
                 description {
-                    Retrieves a document from somewhere, somehow.
+                    Retrieves the document. Returns doc_status of 'ok', 'get_error', or 'failed_to_connect'. 
+                    If not 'ok', then it should  set doc_message to explain the problem. If 'ok', it must set
+                    document to the document retrieved.
                 }
                 input {
                     parameters:string,multiple
@@ -338,25 +340,25 @@ ad_proc -private auth::getdoc::create_contract {} {
 }
 
 
-ad_proc -private auth::getdoc::delete_contract {} {
+ad_proc -private auth::get_doc::delete_contract {} {
     Delete service contract for account registration.
 } {
-    acs_sc::contract::delete -name "auth_getdoc"
+    acs_sc::contract::delete -name "GetDocument"
 }
 
 
 
 #####
 #
-# auth_processdoc service contract
+# auth_process_doc service contract
 #
 #####
 
-ad_proc -private auth::processdoc::create_contract {} {
+ad_proc -private auth::process_doc::create_contract {} {
     Create service contract for account registration.
 } {
     set spec {
-        name "auth_processdoc"
+        name "auth_sync_process"
         description "Process a document containing user information from a remote authentication authority"
         operations {
             ProcessDocument {
@@ -384,10 +386,10 @@ ad_proc -private auth::processdoc::create_contract {} {
 }
 
 
-ad_proc -private auth::processdoc::delete_contract {} {
+ad_proc -private auth::process_doc::delete_contract {} {
     Delete service contract for account registration.
 } {
-    acs_sc::contract::delete -name "auth_processdoc"
+    acs_sc::contract::delete -name "auth_sync_process"
 }
 
 
