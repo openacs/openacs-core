@@ -95,8 +95,19 @@ ad_proc -public template::data::transform::richtext { element_ref } {
 }
 
 ad_proc -public template::util::richtext::set_property { what richtext_list value } {
+    
+    Replace a property in a list created by a richtext widget.
 
-    # There's no internal error checking, just like the date version ...
+    @param what one of:<ul>
+    <li>contents</li>
+    <li>format</li>
+    </ul>
+    @param richtext_list the richtext list to modify
+    @param value the new value
+
+    @return the modified list
+
+} {
 
     set contents [lindex $richtext_list 0]
     set format   [lindex $richtext_list 1]
@@ -110,12 +121,24 @@ ad_proc -public template::util::richtext::set_property { what richtext_list valu
             # Replace format with value
             return [list $contents $value]
         }
+        default {
+            error "Parameter supplied to util::richtext::set_property 'what' must be one of: 'contents', 'format'. You specified: '$what'."
+        }
     }
 }
 
 ad_proc -public template::util::richtext::get_property { what richtext_list } {
+    
+    Returns a property of a list created by a richtext widget.
+    
+    @param what the name of the property. Must be one of:<ul>
+    <li>contents - returns the actual contents of the textarea field</li>
+    <li>format - returns the mimetype, e.g. 'text/plain'</li>
+    <li>html_value - returns the content converted to html format, regardless of the format the content is actually in. In case it is already text/html no conversion will be applied.</li></ul>
+    @param richtext_list the name of a richtext widget list, usually created with ad_form
+    
 
-    # There's no internal error checking, just like the date version ... 
+} {
 
     set contents  [lindex $richtext_list 0]
     set format    [lindex $richtext_list 1]
@@ -133,6 +156,9 @@ ad_proc -public template::util::richtext::get_property { what richtext_list } {
             } else {
                 return {}
             }
+        }
+        default {
+            error "Parameter supplied to util::richtext::get_property 'what' must be one of: 'contents', 'format', 'html_value'. You specified: '$what'."
         }
     }
 }
