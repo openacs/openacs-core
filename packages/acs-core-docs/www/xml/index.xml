@@ -256,7 +256,6 @@
 
     <chapter id="eng-standards">
       <title>Engineering Standards</title>
-
       <xi:include href="engineering-standards/docbook-primer.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
         <xi:fallback>Section missing</xi:fallback>
       </xi:include>
@@ -281,7 +280,12 @@
       <xi:include href="engineering-standards/plsql.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
         <xi:fallback>Section missing</xi:fallback>
       </xi:include>
-
+      <xi:include href="engineering-standards/variables.xml"  xmlns:xi="http://www.w3.org/2001/XInclude">
+<xi:fallback>Section missing</xi:fallback>
+      </xi:include>
+      <xi:include href="engineering-standards/auto-testing.xml"  xmlns:xi="http://www.w3.org/2001/XInclude">
+<xi:fallback>Section missing</xi:fallback>
+      </xi:include>
     </chapter>
     <xi:include href="developers-guide/cvs.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
       <xi:fallback>CVS Section missing</xi:fallback>
@@ -407,10 +411,6 @@
       <xi:include href="kernel/ext-auth.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
         <xi:fallback>Section missing</xi:fallback>
       </xi:include>
-      <xi:include href="kernel/ext-auth-design.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
-        <xi:fallback>Section missing</xi:fallback>
-      </xi:include>
-
     </chapter>
 
   </part>

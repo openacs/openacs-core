@@ -1,21 +1,18 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Writing OpenACS 5.0.0b1 Application Pages</title><meta name="generator" content="DocBook XSL Stylesheets V1.62.4"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="dev-guide.html" title="Chapter 8. Development Reference"><link rel="previous" href="permissions.html" title="Groups, Context, Permissions"><link rel="next" href="parties.html" title="Parties in OpenACS 5.0.0b1"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="permissions.html">Prev</a> </td><th width="60%" align="center">Chapter 8. Development Reference</th><td width="20%" align="right"> <a accesskey="n" href="parties.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="subsites"></a>Writing OpenACS 5.0.0b1 Application Pages</h2></div></div><div></div></div><div class="authorblurb"><p><p>
-By <a href="http://planitia.org/" target="_top">Rafael H. Schloming</a> 
-and <a href="mailto:psu@arsdigita.com" target="_top">Pete Su</a>
-</p><br>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Writing OpenACS 5.0.0b2 Application Pages</title><meta name="generator" content="DocBook XSL Stylesheets V1.62.4"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="dev-guide.html" title="Chapter 8. Development Reference"><link rel="previous" href="permissions.html" title="Groups, Context, Permissions"><link rel="next" href="parties.html" title="Parties in OpenACS 5.0.0b2"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="permissions.html">Prev</a> </td><th width="60%" align="center">Chapter 8. Development Reference</th><td width="20%" align="right"> <a accesskey="n" href="parties.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="subsites"></a>Writing OpenACS 5.0.0b2 Application Pages</h2></div></div><div></div></div><div class="authorblurb"><p>By Rafael H. Schloming and Pete Su</p>
           OpenACS docs are written by the named authors, and may be edited
           by OpenACS documentation staff.
-        </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="subsites-overview"></a>Overview</h3></div></div><div></div></div><p>
+        </div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="subsites-overview"></a>Overview</h3></div></div><div></div></div><p>
 In this document, we'll examine the user interface pages of the Notes
 application in more detail, covering two separate aspects of page
-development in OpenACS 5.0.0b1. First, we'll talk about the code needed to make
+development in OpenACS 5.0.0b2. First, we'll talk about the code needed to make
 your pages aware of which application instance they are running
 in. Second, we'll talk about using the form builder to develop
-form-based user interfaces in OpenACS 5.0.0b1. While these seem like unrelated
+form-based user interfaces in OpenACS 5.0.0b2. While these seem like unrelated
 topics, they both come up in the example page that we are going to
 look at, so it makes sense to address them at the same time.
 </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="subsites-instances"></a>Application Instances and Subsites</h3></div></div><div></div></div><p>
-As you will recall from the <a href="packages.html" title="OpenACS 5.0.0b1 Packages">packages</a> tutorial, the Request
-Processor (RP) and Package Manager (APM) in OpenACS 5.0.0b1 allow site
+As you will recall from the <a href="packages.html" title="OpenACS 5.0.0b2 Packages">packages</a> tutorial, the Request
+Processor (RP) and Package Manager (APM) in OpenACS 5.0.0b2 allow site
 administrators to define an arbitrary mapping from URLs in the site to
 objects representing content. These objects may represent single
 files, or entire applications. The APM uses the site map to map
@@ -256,7 +253,7 @@ home page, and set up the permissions so that the instance is only
 visible to that user. The end result is a site where users can come
 and write notes to themselves.
 </p><p>
-This is a good example of the leverage available in the OpenACS 5.0.0b1
+This is a good example of the leverage available in the OpenACS 5.0.0b2
 system. The code that we have written for Notes is not at all more
 complex than a similar application without access control or site map
 awareness. By adding a small amount of code, we have taken a small,
@@ -264,7 +261,7 @@ simple, and special purpose application to something that has the
 potential to be a very useful, general-purpose tool, complete with
 multi-user features, access control, and centralized administration.
 </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="subsites-summary"></a>Summary</h3></div></div><div></div></div><p>
-In OpenACS 5.0.0b1, application pages and scripts can be aware of the package
+In OpenACS 5.0.0b2, application pages and scripts can be aware of the package
 instance, or subsite in which they are executing. This is a powerful
 general purpose mechanism that can be used to structure web services
 in very flexible ways.
@@ -276,4 +273,4 @@ database.
 </p><p>
 We also saw how to use the templating system's forms API in a simple
 way, to create forms based pages with minimal duplication of code.
-</p><div class="cvstag">($Id$)</div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="permissions.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="parties.html">Next</a></td></tr><tr><td width="40%" align="left">Groups, Context, Permissions </td><td width="20%" align="center"><a accesskey="u" href="dev-guide.html">Up</a></td><td width="40%" align="right"> Parties in OpenACS 5.0.0b1</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a><center><a href="http://openacs.org/doc/subsites.html#comments">View comments on this page at openacs.org</a></center></body></html>
+</p><div class="cvstag">($Id$)</div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="permissions.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="parties.html">Next</a></td></tr><tr><td width="40%" align="left">Groups, Context, Permissions </td><td width="20%" align="center"><a accesskey="u" href="dev-guide.html">Up</a></td><td width="40%" align="right"> Parties in OpenACS 5.0.0b2</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a><center><a href="http://openacs.org/doc/subsites.html#comments">View comments on this page at openacs.org</a></center></body></html>

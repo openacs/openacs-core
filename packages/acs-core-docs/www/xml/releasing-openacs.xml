@@ -52,14 +52,14 @@ for dir in $(ls); do cd $dir; cvs tag <replaceable>dotlrn-2-0-0a3</replaceable>;
             <screen>
 <action>mkdir /tmp/tarball
 cd /tmp/tarball
-cvs -d :pserver:anonymous@openacs.org:/cvsroot export -r <replaceable>openacs-5-0-0a1</replaceable> -d openacs acs-core
+cvs -d :pserver:anonymous@openacs.org:/cvsroot export -r <replaceable>openacs-5-0-0a1</replaceable> acs-core
+mv openacs-4 openacs
 </action></screen>
               </listitem>
               <listitem>
                 <para>Generate the tarball</para>
             <screen><action>
 cd /tmp/tarball
-rm -rf /tmp/tarball/openacs/CVS
 tar cz -f <replaceable>openacs-5.0.0a1.tar.gz</replaceable> openacs
 </action></screen>
               </listitem>
@@ -95,7 +95,7 @@ mv openacs-4 openacs
                 which packages are installed on setup, to the root
                 location:</para>
                 <screen><action>
-cp /tmp/dotlrn-tarball/openacs-4/packages/dotlrn/install.xml /tmp/dotlrn-tarball/openacs
+cp /tmp/dotlrn-tarball/openacs/packages/dotlrn/install.xml /tmp/dotlrn-tarball/openacs
 </action></screen>
               </listitem>
 
@@ -104,7 +104,6 @@ cp /tmp/dotlrn-tarball/openacs-4/packages/dotlrn/install.xml /tmp/dotlrn-tarball
                 <para>Generate the tarball</para>
             <screen><action>
 cd /tmp/tarball
-rm -rf /tmp/tarball/openacs-4/CVS
 tar cz -f <replaceable>dotlrn-2.0.0a1.tar.gz</replaceable> openacs
 </action></screen>
               </listitem>

@@ -1,14 +1,12 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>OpenACS Internationalization Requirements</title><meta name="generator" content="DocBook XSL Stylesheets V1.62.4"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="kernel-doc.html" title="Chapter 10. Kernel Documentation"><link rel="previous" href="db-api-detailed.html" title="Database Access API"><link rel="next" href="i18n.html" title="Internationalization"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="db-api-detailed.html">Prev</a> </td><th width="60%" align="center">Chapter 10. Kernel Documentation</th><td width="20%" align="right"> <a accesskey="n" href="i18n.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="i18n-requirements"></a>OpenACS Internationalization Requirements</h2></div></div><div></div></div><div class="authorblurb"><p>
-      by Henry Minsky, 
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>OpenACS Internationalization Requirements</title><meta name="generator" content="DocBook XSL Stylesheets V1.62.4"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="kernel-doc.html" title="Chapter 10. Kernel Documentation"><link rel="previous" href="db-api-detailed.html" title="Database Access API"><link rel="next" href="i18n.html" title="Internationalization"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="db-api-detailed.html">Prev</a> </td><th width="60%" align="center">Chapter 10. Kernel Documentation</th><td width="20%" align="right"> <a accesskey="n" href="i18n.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="i18n-requirements"></a>OpenACS Internationalization Requirements</h2></div></div><div></div></div><div class="authorblurb"><p>by Henry Minsky, 
        <a href="mailto:yon@openforce.net" target="_top">Yon Feldman</a>, 
        <a href="mailto:lars@collaboraid.biz" target="_top">Lars Pind</a>,
        <a href="mailto:peter@collaboraid.biz" target="_top">Peter Marklund</a>, 
        <a href="mailto:christian@collaboraid.biz" target="_top">Christian Hvid</a>,
-       and others.
-  <br>
+       and others.</p>
           OpenACS docs are written by the named authors, and may be edited
           by OpenACS documentation staff.
-        </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="i18n-requirements-introduction"></a>Introduction</h3></div></div><div></div></div><p>
+        </div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="i18n-requirements-introduction"></a>Introduction</h3></div></div><div></div></div><p>
       This document describes the requirements for functionality in
       the OpenACS platform to support globalization of the core and optional
       modules. The goal is to make it possible to support delivery of
@@ -45,7 +43,7 @@ toolkit to another locale.</p><p>The cost of porting the OpenACS to another loca
 kind of globalization support would be large and ongoing, since
 without a mechanism to incorporate the locale-specific changes
 cleanly back into the code base, it would require making a new fork
-of the source code for each locale.</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="III._System/Application_Overview"></a>System/Application Overview</h3></div></div><div></div></div><p>A globalized application will perform some or all of the
+of the source code for each locale.</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="system-application-overview"></a>System/Application Overview</h3></div></div><div></div></div><p>A globalized application will perform some or all of the
 following steps to handle a page request for a specific
 locale:</p><div class="orderedlist"><ol type="1"><li><p>Decide what the target locale is for an incoming page
 request</p></li><li><p>Decide which character set encoding the output should be
@@ -79,8 +77,8 @@ additional modules or content supplied by the web site
 developer.</p><p>What do they need to modify to make this work? Can their
 localization work be easily folded in to future releases of
 OpenACS?</p></li><li><p>A developer needs to author a web site which operates in
-multiple languages simultaneously. For example, arsDigita.com with
-content and navigation in English, German, and Japanese.</p><p>The site would have an end-user visible UI to support these
+multiple languages simultaneously. For example, www.un.org with
+content and navigation in multiple languages.</p><p>The site would have an end-user visible UI to support these
 languages, and the content management system must allow articles to
 be posted in these languages. In some cases it may be necessary to
 make the modules' admin UI's operate in more than one
@@ -113,7 +111,7 @@ functionality.</p></div><div class="sect2" lang="en"><div class="titlepage"><div
 the system. A locale refers to a language and territory, and is
 uniquely identified by a combination of ISO language and ISO
 country abbreviations.</p><div class="blockquote"><blockquote class="blockquote"><p>See
-<a href="http://acs40.arsdigita.com/doc/acs-content-repository/requirements.html" target="_top">Content
+<a href="/doc/acs-content-repository/requirements.html#100-20" target="_top">Content
 Repository Requirement 100.20</a></p><p><span class="emphasis"><em>10.10</em></span> Provide a consistent
 representation and API for creating and referencing a locale</p><p><span class="emphasis"><em>10.20</em></span> There will be a Tcl library of
 locale-aware formatting and parsing functions for numbers, dates
@@ -131,13 +129,13 @@ formatting functions.</p><div class="blockquote"><blockquote class="blockquote">
 computed by the following method, in descending order of
 priority:</p><div class="itemizedlist"><ul type="disc"><li><p>get locale associated with subsite or package id</p></li><li><p>get locale from user preference</p></li><li><p>get locale from site wide default</p><p><span class="emphasis"><em>20.20</em></span> An API will be provided for
 getting the current request locale from the
-<tt class="literal">ad_conn</tt> structure.</p></li></ul></div></blockquote></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="VI.C_Resource_Bundles_/_Content_Repository"></a>Resource Bundles / Content Repository</h3></div></div><div></div></div><p><span class="emphasis"><em>30.0</em></span></p><p>A mechanism must be provided for a developer to group a set
+<tt class="literal">ad_conn</tt> structure.</p></li></ul></div></blockquote></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="resource-bundles"></a>Resource Bundles / Content Repository</h3></div></div><div></div></div><p><span class="emphasis"><em>30.0</em></span></p><p>A mechanism must be provided for a developer to group a set
 of arbitrary content resources together, keyed by a unique
 identifier and a locale.</p><p>For example, what approaches could be used to implement a
 localizable nav-bar mechanism for a site? A navigation bar might be
 made up of a set of text strings and graphics, where the graphics
 themselves are locale-specific, such as images of English or
-Japanese text (as on www.arsdigita.com). It should be easy to
+Japanese text (as on www.un.org). It should be easy to
 specify alternate configurations of text and graphics to lay out
 the page for different locales.</p><p>Design note: Alternative mechanisms to implement this
 functionality might include using templates, Java ResourceBundles,
