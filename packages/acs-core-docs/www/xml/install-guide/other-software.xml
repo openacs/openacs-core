@@ -12,7 +12,7 @@
     </authorblurb>
     
       <para>This section assumes that the source tarballs for supporting
-    software are in <computeroutput>/var/tmp</computeroutput>.  It assumes
+    software are in <computeroutput>/tmp</computeroutput>.  It assumes
     that you begin each continuous block of commands as root, and you
     should end each block as root.  It doesn't care which directory
     you start in.  Text instructions always precede the commands they
@@ -23,12 +23,12 @@
         <para>The OpenACS tarball contains sample configuration files
       for some of the packages listed below.  In order to access those
       files, unpack the tarball now.</para>
-        <screen>[root root]# <userinput>cd /var/tmp</userinput>
+        <screen>[root root]# <userinput>cd /tmp</userinput>
 [root tmp]# <userinput>tar xzf &tarballpath;.tgz</userinput>
-<action>cd /var/tmp
+<action>cd /tmp
 tar xzf &tarballpath;.tgz</action></screen>
       <para>If you are installing from a different method and just need the configuration files, you can instead get them from CVS:</para>
-<screen>[root root]# <userinput>cd /var/tmp</userinput>
+<screen>[root root]# <userinput>cd /tmp</userinput>
 [root tmp]# <userinput>cvs -d :pserver:anonymous@cvs.openacs.org:/cvsroot co openacs-4/packages/acs-core-docs/www/files/</userinput>
 cvs checkout: warning: failed to open /root/.cvspass for reading: No such file or directory
 cvs server: Updating openacs-4/packages/acs-core-docs/www/files
@@ -37,7 +37,7 @@ U openacs-4/packages/acs-core-docs/www/files/README.TXT
 U openacs-4/packages/acs-core-docs/www/files/template-ini.ini
 U openacs-4/packages/acs-core-docs/www/files/winnsd.txt
 [root tmp]# <userinput>mv openacs-4 &tarballpath;</userinput>
-<action>cd /var/tmp
+<action>cd /tmp
 cvs -d :pserver:anonymous@cvs.openacs.org:/cvsroot co openacs-4/packages/acs-core-docs/www/files/
 mv openacs-4 openacs-5.0.0a4</action></screen>
       </sect1>
@@ -68,7 +68,7 @@ If you plan to write or edit any documentation with emacs, install a
       fixes the backspace -> help mis-mapping that often occurs in
       terminals.</para>
 
-      <screen>[root tmp]# <userinput>cp /var/tmp/&tarballpath;/packages/acs-core-docs/www/files/emacs.txt /etc/skel/.emacs</userinput>
+      <screen>[root tmp]# <userinput>cp /tmp/&tarballpath;/packages/acs-core-docs/www/files/emacs.txt /etc/skel/.emacs</userinput>
 cp: overwrite `/etc/skel/.emacs'? <userinput>y</userinput>
 [root tmp]# </screen>
       <para>Debian users:</para>
@@ -98,7 +98,7 @@ cp: overwrite `/etc/skel/.emacs'? <userinput>y</userinput>
               <screen>[root root]# <userinput>mkdir -p /package</userinput>
 [root root]# <userinput>chmod 1755 /package/</userinput>
 [root root]# <userinput>cd /package/</userinput>
-[root package]# <userinput>tar xzf /var/tmp/daemontools-0.76.tar.gz</userinput>
+[root package]# <userinput>tar xzf /tmp/daemontools-0.76.tar.gz</userinput>
 [root package]# <userinput>cd admin/daemontools-0.76/</userinput>
 [root daemontools-0.76]# <userinput>package/install</userinput>
 Linking ./src/* into ./compile...
@@ -110,26 +110,26 @@ init should start svscan now.
 <action>mkdir -p /package 
 chmod 1755 /package 
 cd /package 
-tar xzf /var/tmp/daemontools-0.76.tar.gz 
+tar xzf /tmp/daemontools-0.76.tar.gz 
 cd admin/daemontools-0.76 
 package/install</action></screen>
             </listitem>
             <listitem>
-              <para>Red Hat 9 through Fedora Core 3</para>
+              <para>Red Hat 9</para>
               <para>Make sure you have the source tarball in
-          <computeroutput>/var/tmp</computeroutput>, or <link
+          <computeroutput>/tmp</computeroutput>, or <link
           linkend="daemontools-download">download it</link>.
 </para>
               <screen>[root root]# <userinput>mkdir -p /package</userinput>
 [root root]# <userinput>chmod 1755 /package/</userinput>
 [root root]# <userinput>cd /package/</userinput>
-[root package]# <userinput>tar xzf /var/tmp/daemontools-0.76.tar.gz</userinput>
+[root package]# <userinput>tar xzf /tmp/daemontools-0.76.tar.gz</userinput>
 [root package]# <userinput>cd admin</userinput>
-[root admin]# <userinput>wget http://www.qmail.org/moni.csi.hu/pub/glibc-2.3.1/daemontools-0.76.errno.patch</userinput>
---14:19:24--  http://www.qmail.org/moni.csi.hu/pub/glibc-2.3.1/daemontools-0.76.errno.patch
+[root admin]# <userinput>wget http://moni.csi.hu/pub/glibc-2.3.1/daemontools-0.76.errno.patch</userinput>
+--14:19:24--  http://moni.csi.hu/pub/glibc-2.3.1/daemontools-0.76.errno.patch
            => `daemontools-0.76.errno.patch'
-Resolving www.qmail.org... 192.203.178.37
-Connecting to www.qmail.org[192.203.178.37]:80... connected.
+Resolving moni.csi.hu... done.
+Connecting to moni.csi.hu[141.225.11.87]:80... connected.
 HTTP request sent, awaiting response... 200 OK
 Length: 355 [text/plain]
 
@@ -148,7 +148,7 @@ init should start svscan now.
 <action>mkdir -p /package 
 chmod 1755 /package 
 cd /package 
-tar xzf /var/tmp/daemontools-0.76.tar.gz 
+tar xzf /tmp/daemontools-0.76.tar.gz 
 cd admin
 wget http://moni.csi.hu/pub/glibc-2.3.1/daemontools-0.76.errno.patch
 cd daemontools-0.76
@@ -197,9 +197,9 @@ root     13295  0.0  0.0  1304  208 ?        S    09:51   0:00 readproctitle ser
         <listitem>
           <para>Install a script to grant non-root users permission to
         control daemontools services.</para>
-          <screen>[root root]# <userinput>cp /var/tmp/&tarballpath;/packages/acs-core-docs/www/files/svgroup.txt /usr/local/bin/svgroup</userinput>
+          <screen>[root root]# <userinput>cp /tmp/&tarballpath;/packages/acs-core-docs/www/files/svgroup.txt /usr/local/bin/svgroup</userinput>
 [root root]# <userinput>chmod 755 /usr/local/bin/svgroup</userinput>
-<action>cp /var/tmp/&tarballpath;/packages/acs-core-docs/www/files/svgroup.txt /usr/local/bin/svgroup 
+<action>cp /tmp/&tarballpath;/packages/acs-core-docs/www/files/svgroup.txt /usr/local/bin/svgroup 
 chmod 755 /usr/local/bin/svgroup</action></screen>
         </listitem>
       </orderedlist>
@@ -267,9 +267,9 @@ Unless this mail is addressed to the same machine, qmail thinks that
 it's an attempt to relay mail, and rejects it.  So these two commands
 set up an exception so that any mail sent from 127.0.0.1 is allowed to
 send outgoing mail.</para>
-          <screen>[root ucspi-tcp-0.88]# <userinput>cp /var/tmp/&tarballpath;/packages/acs-core-docs/www/files/tcp.smtp.txt /etc/tcp.smtp</userinput>
+          <screen>[root ucspi-tcp-0.88]# <userinput>cp /tmp/&tarballpath;/packages/acs-core-docs/www/files/tcp.smtp.txt /etc/tcp.smtp</userinput>
 [root ucspi-tcp-0.88]# <userinput>tcprules /etc/tcp.smtp.cdb /etc/tcp.smtp.tmp &lt; /etc/tcp.smtp</userinput>
-<action>cp /var/tmp/&tarballpath;/packages/acs-core-docs/www/files/tcp.smtp.txt /etc/tcp.smtp 
+<action>cp /tmp/&tarballpath;/packages/acs-core-docs/www/files/tcp.smtp.txt /etc/tcp.smtp 
 tcprules /etc/tcp.smtp.cdb /etc/tcp.smtp.tmp &lt; /etc/tcp.smtp </action></screen>
           </listitem>
           <listitem>
@@ -381,11 +381,11 @@ chown -R alias.nofiles /var/qmail/alias/Maildir</action></screen>
             <para>Configure qmail to use the Maildir delivery format
           (instead of mbox), and install a version of the qmail startup script modified to use Maildir.</para>
             <screen>[root alias]# <userinput>echo "./Maildir" > /var/qmail/bin/.qmail</userinput>
-[root alias]# <userinput>cp /var/tmp/&tarballpath;/packages/acs-core-docs/www/files/qmail.rc.txt /var/qmail/rc</userinput>
+[root alias]# <userinput>cp /tmp/&tarballpath;/packages/acs-core-docs/www/files/qmail.rc.txt /var/qmail/rc</userinput>
 [root alias]# <userinput>chmod 755 /var/qmail/rc</userinput>
 [root alias]# 
 <action>echo "./Maildir" &gt; /var/qmail/bin/.qmail 
-cp /var/tmp/&tarballpath;/packages/acs-core-docs/www/files/qmail.rc.txt /var/qmail/rc 
+cp /tmp/&tarballpath;/packages/acs-core-docs/www/files/qmail.rc.txt /var/qmail/rc 
 chmod 755 /var/qmail/rc 
 </action></screen>
             <para>Set up the skeleton directory so that new users will
@@ -402,13 +402,13 @@ echo "./Maildir/" > /etc/skel/.qmail</action></screen>
 [root root]# <userinput>mkdir -p /var/qmail/supervise/qmail-smtpd/log</userinput>
 [root root]# <userinput>mkdir /var/log/qmail</userinput>
 [root root]# <userinput>chown qmaill /var/log/qmail</userinput>
-[root root]# <userinput>cp /var/tmp/&tarballpath;/packages/acs-core-docs/www/files/qmailctl.txt /var/qmail/bin/qmailctl</userinput>
+[root root]# <userinput>cp /tmp/&tarballpath;/packages/acs-core-docs/www/files/qmailctl.txt /var/qmail/bin/qmailctl</userinput>
 [root root]# <userinput>chmod 755 /var/qmail/bin/qmailctl</userinput>
 [root root]# <userinput>ln -s /var/qmail/bin/qmailctl /usr/bin</userinput>
-[root root]# <userinput>cp /var/tmp/&tarballpath;/packages/acs-core-docs/www/files/qmail-send-run.txt /var/qmail/supervise/qmail-send/run </userinput>
-[root root]# <userinput>cp /var/tmp/&tarballpath;/packages/acs-core-docs/www/files/qmail-send-log-run.txt /var/qmail/supervise/qmail-send/log/run</userinput>
-[root root]# <userinput>cp /var/tmp/&tarballpath;/packages/acs-core-docs/www/files/qmail-smtpd-run.txt /var/qmail/supervise/qmail-smtpd/run</userinput>
-[root root]# <userinput>cp /var/tmp/&tarballpath;/packages/acs-core-docs/www/files/qmail-smtpd-log-run.txt /var/qmail/supervise/qmail-smtpd/log/run</userinput>
+[root root]# <userinput>cp /tmp/&tarballpath;/packages/acs-core-docs/www/files/qmail-send-run.txt /var/qmail/supervise/qmail-send/run </userinput>
+[root root]# <userinput>cp /tmp/&tarballpath;/packages/acs-core-docs/www/files/qmail-send-log-run.txt /var/qmail/supervise/qmail-send/log/run</userinput>
+[root root]# <userinput>cp /tmp/&tarballpath;/packages/acs-core-docs/www/files/qmail-smtpd-run.txt /var/qmail/supervise/qmail-smtpd/run</userinput>
+[root root]# <userinput>cp /tmp/&tarballpath;/packages/acs-core-docs/www/files/qmail-smtpd-log-run.txt /var/qmail/supervise/qmail-smtpd/log/run</userinput>
 [root root]# <userinput>chmod 755 /var/qmail/supervise/qmail-send/run</userinput>
 [root root]# <userinput>chmod 755 /var/qmail/supervise/qmail-send/log/run</userinput>
 [root root]# <userinput>chmod 755 /var/qmail/supervise/qmail-smtpd/run</userinput>
@@ -419,13 +419,13 @@ echo "./Maildir/" > /etc/skel/.qmail</action></screen>
 mkdir -p /var/qmail/supervise/qmail-smtpd/log
 mkdir /var/log/qmail
 chown qmaill /var/log/qmail
-cp /var/tmp/&tarballpath;/packages/acs-core-docs/www/files/qmailctl.txt /var/qmail/bin/qmailctl
+cp /tmp/&tarballpath;/packages/acs-core-docs/www/files/qmailctl.txt /var/qmail/bin/qmailctl
 chmod 755 /var/qmail/bin/qmailctl
 ln -s /var/qmail/bin/qmailctl /usr/bin
-cp /var/tmp/&tarballpath;/packages/acs-core-docs/www/files/qmail-send-run.txt /var/qmail/supervise/qmail-send/run
-cp /var/tmp/&tarballpath;/packages/acs-core-docs/www/files/qmail-send-log-run.txt /var/qmail/supervise/qmail-send/log/run
-cp /var/tmp/&tarballpath;/packages/acs-core-docs/www/files/qmail-smtpd-run.txt /var/qmail/supervise/qmail-smtpd/run
-cp /var/tmp/&tarballpath;/packages/acs-core-docs/www/files/qmail-smtpd-log-run.txt /var/qmail/supervise/qmail-smtpd/log/run
+cp /tmp/&tarballpath;/packages/acs-core-docs/www/files/qmail-send-run.txt /var/qmail/supervise/qmail-send/run
+cp /tmp/&tarballpath;/packages/acs-core-docs/www/files/qmail-send-log-run.txt /var/qmail/supervise/qmail-send/log/run
+cp /tmp/&tarballpath;/packages/acs-core-docs/www/files/qmail-smtpd-run.txt /var/qmail/supervise/qmail-smtpd/run
+cp /tmp/&tarballpath;/packages/acs-core-docs/www/files/qmail-smtpd-log-run.txt /var/qmail/supervise/qmail-smtpd/log/run
 chmod 755 /var/qmail/supervise/qmail-send/run
 chmod 755 /var/qmail/supervise/qmail-send/log/run
 chmod 755 /var/qmail/supervise/qmail-smtpd/run
@@ -448,9 +448,9 @@ messages in queue but not yet preprocessed: 0
     <sect1 id="analog-install">
       <title>Install Analog web file analyzer</title>
             <para>Download the Analog <link linkend="analog-download">source tarball</link> in
-<computeroutput>/var/tmp</computeroutput>.  Unpack, compile, and install analog.</para>
+<computeroutput>/tmp</computeroutput>.  Unpack, compile, and install analog.</para>
             <screen>[root aolserver]# <userinput>cd /usr/local/src</userinput>
-[root src]# <userinput>tar xzf /var/tmp/analog-5.32.tar.gz</userinput>
+[root src]# <userinput>tar xzf /tmp/analog-5.32.tar.gz</userinput>
 [root src]# <userinput>cd analog-5.32</userinput>
 [root analog-5.32]# <userinput>make</userinput>
 cd src &amp;&amp; make
@@ -463,7 +463,7 @@ make[1]: Leaving directory `/usr/local/src/analog-5.32/src'
 [root src]#<userinput> mv analog-5.32 /usr/share/</userinput>
 [root src]#
 <action>cd /usr/local/src
-tar xzf /var/tmp/analog-5.32.tar.gz
+tar xzf /tmp/analog-5.32.tar.gz
 cd analog-5.32
 make
 cd ..
@@ -478,11 +478,246 @@ mv analog-5.32 /usr/share/</action></screen>
       url="/doc/acs-authentication/ext-auth-install.html"></ulink></para>
       </sect1>
 
-    <sect1 id="install-full-text-search">
-      <title>Install Full Text Search</title>
+    <sect1 id="install-full-text-search-tsearch2" xreflabel="Install
+      Full Text Search using Tsearch2">
+      <title>Install Full Text Search using Tsearch2</title>
+      <authorblurb>
+      <para>By <ulink url="mailto:dave@thedesignexperience.org">Dave
+      Bauer</ulink>, <ulink url="mailto:joel@aufrecht.org">Joel
+      Aufrecht</ulink> and <ulink
+      url="mailto:openacs@sussdorff.de">Malte Sussdorff</ulink> with
+      help from <ulink
+      url="http://www.sai.msu.su/~megera/postgres/gist/tsearch/V2/docs/tsearch-V2-intro.html">Tsearch
+      V2 Introduction by Andrew J. Kopciuch</ulink></para>
+      </authorblurb>
+      <sect2 id="install-tsearch2">
+      <title>Install Tsearch2 module</title>
+        <indexterm>
+          <primary>full text search</primary>
+          <secondary>installation</secondary>
+        </indexterm>
+      <para>If you want full text search, and you are running PostgreSQL, install this module to support FTS.  Do this step after you have installed both PostgreSQL and
+      AOLserver.  You will need the tseach2 module form PostgreSQL
+      contrib. This is included with the PostgreSQL full source
+      distribution. It is also available with the PostgreSQL contrib
+      package provided by most distribution packages. On debian it is
+      called postgresql-contrib.</para>
+          <orderedlist>
+        <listitem>
+          <para>For PostgreSQL 7.3 or 7.4, download the
+          http://www.sai.msu.su/~megera/postgres/gist/tsearch/V2/regprocedure_7.4.patch.gz
+          tsearch2 patch
+          to correctly restore from a pg_dump backup. If you installed
+          tsearch2 from a package, you can use the
+          http://www.sai.msu.su/~megera/postgres/gist/tsearch/V2/regprocedure_update.sql
+          regprocedure script to update the database after tsearch2 is
+          installed into it. TODO link to section decribing how to fix
+          an existing tsearch2 database with this patch.</para>
+          </listitem>
+        <listitem>
+          <para>As of May 9, 2004 there is a source patch available
+          for
+              tsearch2. The patch provides changes to the pg_ts_
+          configuration
+              tables to allow for easy dump and restore of a database
+          containing
+              tsearch2. The patch is available here : <ulink url="
+                http://www.sai.msu.su/~megera/postgres/gist/tsearch/V2/regprocedure_7.4.patch.gz">
+                [http://www.sai.msu.su/~megera/postgres/gist/tsearch/V2/regprocedure_7.4.patch.gz]</ulink></para>
+
+            <para>To apply this patch, download the mentioned file and
+            place it in your postgreSQL source tree ($PGSQL_SRC). This
+            patch makes the backup and restore procedures very
+            simple.</para>
+            <screen>
+            [postgres pgsql]$ <userinput>cd /tmp</userinput>
+            [postgres tmp]$ <userinput>wget http://www.sai.msu.su/~megera/postgres/gist/tsearch/V2/regprocedure_7.4.patch.gz</userinput>
+            [postgres pgsql]$ <userinput>cd /usr/local/src/postgresql-7.4.5/</userinput>
+            [postgres postgresql-7.4.5] <userinput>gunzip /tmp/regprocedure_7.4.patch.gz</userinput>
+            [postgres postgresql-7.4.5] <userinput>patch -b -p1 &lt; regprocedure_7.4.patch</userinput>
+              </screen>
+            <para>If you have a working version of tsearch2 in your
+            database, you
+              do not need to re-install the tsearch2 module. Just
+            apply the patch
+              and run make. This patch only affects the tsearch2.sql
+            file. You
+              can run the SQL script found : <ulink url="
+                http://www.sai.msu.su/~megera/postgres/gist/tsearch/V2/regprocedure_update.sql">
+                [right here]</ulink> This script will make the
+            modifications found in
+              the patch, and update the fields from the existing
+            data. From this
+              point on, you can dump and restore the database in a
+            normal
+              fashion. Without this patch, you must follow the
+            instructions later
+              in this document for backup and restore.</para>
+            <para>This patch is only needed for tsearch2 in PostgreSQL
+            versions
+              7.3.x and 7.4.x. The patch has been applied to the
+            sources for
+              8.0.</para>
+        </listitem>
+        <listitem>
+              <para>Install Tsearch2.  This is a PostgreSQL module
+              that the tsearch2-driver OpenACS package requires. These
+              instructions assume you are using the latest point
+              release of PostgreSQL 7.4.5.</para>
+              <screen>[root root]# <userinput>su - postgres</userinput>
+[postgres pgsql]$ <userinput>cd /usr/local/src/postgresql-7.4.5/contrib/tsearch2/</userinput>
+[postgres tsearch2]$ <userinput>make</userinput>
+[postgres tsearch2]$ <userinput>make install</userinput>
+mkdir /usr/local/pgsql/share/contrib
+mkdir /usr/local/pgsql/doc/contrib
+(2 lines omitted)
+/bin/sh ../../config/install-sh -c -m 755 libtsearch.so.0.0 /usr/local/pgsql/lib/tsearch.so
+[postgres tsearch]$ <userinput>exit</userinput>
+logout
+
+[root root]#
+<action>su - postgres
+cd /usr/local/src/postgresql-7.4.5/contrib/tsearch2
+make
+make install
+exit</action></screen>
+            </listitem>
+      </orderedlist>
+      </sect2>
+
+      <sect2 id="install-fts-engine">
+        <title>Install Full Text Search Engine Package in OpenACS</title>
+        <orderedlist>
+          <listitem>
+            <para>Click <computeroutput><guilabel>Admin</guilabel></computeroutput> on the top of the default home page.  If prompted, log in with the account and password you entered during install.</para>
+          </listitem>
+
+          <listitem><para>Click on the <computeroutput><guilabel>Install
+software</guilabel></computeroutput> link.</para>
+          </listitem>
+
+          <listitem><para>Click on the <computeroutput><guilabel>Install
+new service</guilabel></computeroutput> link.</para>
+          </listitem>
+
+          <listitem><para>Click on the
+          <computeroutput><guilabel>Install</guilabel></computeroutput>
+          link next to Tsearch2 Driver. If you have installed tsearch2
+          into your PostgreSQL database, the installer will
+          automatically enable tsearch in your OpenACS database instance.</para>
+          </listitem>
+
+          <listitem><para>Restart the service.</para>
+<screen>[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <userinput>svc -t /service/<replaceable>$OPENACS_SERVICE_NAME</replaceable></userinput>
+[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$</screen></listitem>
+          
+          <listitem><para>Wait a minute, then browse back to the home page.</para>
+          </listitem>
+
+          <listitem><para>Click on <computeroutput><guilabel>Admin</guilabel></computeroutput> on the top of the screen.</para>
+          </listitem>
+
+          <listitem><para>Click on <computeroutput><guilabel>Main Site Administration</guilabel></computeroutput> in the "Subsite Administration" section.</para>
+          </listitem>
+
+          <listitem><para>Click on <computeroutput><guilabel>Site Map</guilabel></computeroutput> in the "Advanced Features" section.</para>
+          </listitem>
+          
+          <listitem>
+            <para>Mount the Search interface in the site map.</para>
+            <orderedlist>
+              <listitem><para>Click the
+<computeroutput><guilabel>new sub folder</guilabel></computeroutput> link on the
+Main Site line. </para></listitem>
+              <listitem><para>Type <userinput>search</userinput>
+and click <computeroutput><guibutton>New</guibutton></computeroutput>. </para></listitem>
+              <listitem><para>Click the <computeroutput><guilabel>new
+application</guilabel></computeroutput> link on the <computeroutput><guilabel>search</guilabel></computeroutput>
+	  line. </para></listitem>
+              <listitem><para>Type <userinput>search</userinput>
+where it says
+<computeroutput><guilabel>untitled</guilabel></computeroutput>, choose
+<computeroutput><guilabel>search</guilabel></computeroutput> from the
+drop-down list, and click
+<computeroutput><guibutton>New</guibutton></computeroutput>.
+</para></listitem>
+              <listitem><para>Click the 
+<computeroutput><guilabel>Parameters</guilabel></computeroutput> link
+                next to the Search package istance.</para></listitem>
+            <listitem><para>Type <userinput>tsearch2-driver</userinput>
+where it says
+<computeroutput><guilabel>openfts-driver</guilabel></computeroutput>
+                in the
+                <computeroutput><guilabel>FtsEngineDriver</guilabel></computeroutput> parameter.
+</para></listitem>
+
+            
+            </orderedlist>
+          </listitem>
+          <listitem>
+            <para>Restart the service.</para>
+            <screen>[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <userinput>svc -t /service/<replaceable>$OPENACS_SERVICE_NAME</replaceable></userinput>
+[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$</screen>
+          </listitem>
+          <listitem><para>Wait a minute, then click on <computeroutput><guilabel>Main Site</guilabel></computeroutput> at the top of the page.</para>
+          </listitem>
+
+        </orderedlist>
+      </sect2>
+      <sect2 id="install-fts-content-provider">
+        <title>Enable Full Text Search in packages</title>
+            <para>Enabling Full Text Search in packages at the moment is not trivial. It involves a couple of steps, which I will illustrate taking lars-blogger as an example package</para>
+            <orderedlist>
+              <listitem>
+                <para>Install the package.
+                <orderedlist>
+                  <listitem>
+                    <para>Click <computeroutput><guilabel>Admin</guilabel></computeroutput> on the top of the default home page.  If prompted, log in with the account and password you entered during install.</para>
+                  </listitem>
+                  
+                  <listitem><para>Click on the <computeroutput><guilabel>Install
+                  software</guilabel></computeroutput> link.</para>
+                  </listitem>
+
+                  <listitem><para>Click on the <computeroutput><guilabel>Install
+                  new application</guilabel></computeroutput> link.</para>
+                  </listitem>
+                  
+                  <listitem><para>Click on the <computeroutput><guilabel>Install</guilabel></computeroutput> link next to Weblogger.</para>
+                  </listitem>
+                  <listitem>
+                    <para>Install all required packages as well (always say okay until you shall restart the server)</para>
+                  </listitem>
+                </orderedlist>
+                </para>
+              </listitem>
+              <listitem>
+                <para>Load the service contracts datamodell and enable the service contract</para>
+                <screen>[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <userinput>cd packages/lars-blogger/sql/postgresql</userinput>
+[$OPENACS_SERVICE_NAME postgresql]$ psql <replaceable>$OPENACS_SERVICE_NAME</replaceable> -f lars-blogger-sc-create.sql</screen>
+<para>Note: Usually this script is called <replaceable>package_name</replaceable>-sc-create.sql</para>
+              </listitem>
+              <listitem>
+                <para>Restart the service.</para>
+                <screen>[$OPENACS_SERVICE_NAME postgresql]$ <userinput>svc -t /service/<replaceable>$OPENACS_SERVICE_NAME</replaceable></userinput>
+                [$OPENACS_SERVICE_NAME postgresl]$</screen>
+              </listitem>
+            </orderedlist>
+            <para>If you are lucky, Full Text Search is enabled now, if not consult <ulink url="http://openacs.org/forums/message-view?message_id=154759">http://openacs.org/forums/message-view?message_id=154759</ulink>. This link also contains some hints on how to make sure it is enabled.</para>
+      </sect2>
+    </sect1>
+  
+  <sect1 id="install-full-text-search-openfts">
+      <title>Install Full Text Search using OpenFTS (deprecated see tsearch2)</title>
       <authorblurb>
       <para>By <ulink url="mailto:joel@aufrecht.org">Joel Aufrecht</ulink> and <ulink url="mailto:openacs@sussdorff.de">Malte Sussdorff</ulink></para>
       </authorblurb>
+      <para>OpenFTS and tsearch1 use is deprecated in favor of
+      Tsearch2. See 
+      <xref linkend="install-full-text-search-tsearch2">Tsearch2</xref>. Tsearch2 is much easier to install, requiring only
+      compilation of one module from PostgreSQL contrib, with an
+      automated install process using the tsearch2-driver package.</para>
+      
       <sect2 id="install-openfts">
       <title>Install OpenFTS module</title>
         <indexterm>
@@ -491,7 +726,7 @@ mv analog-5.32 /usr/share/</action></screen>
         </indexterm>
       <para>If you want full text search, and you are running PostgreSQL, install this module to support FTS.  Do this step after you have installed both PostgreSQL and
       AOLserver.  You will need the <link linkend="openfts-download">openfts
-      tarball</link> in <computeroutput>/var/tmp</computeroutput>.</para>
+      tarball</link> in <computeroutput>/tmp</computeroutput>.</para>
           <orderedlist>
             <listitem>
               <para>Install Tsearch.  This is a PostgreSQL module that
@@ -522,7 +757,7 @@ exit</action></screen>
               <para>Unpack the OpenFTS tarball and compile and install
               the driver.</para>
               <screen>[root root]# <userinput>cd /usr/local/src</userinput>
-[root src]# <userinput>tar xzf /var/tmp/Search-OpenFTS-tcl-0.3.2.tar.gz</userinput>
+[root src]# <userinput>tar xzf /tmp/Search-OpenFTS-tcl-0.3.2.tar.gz</userinput>
 [root src]# <userinput>cd /usr/local/src/Search-OpenFTS-tcl-0.3.2/</userinput>
 [root Search-OpenFTS-tcl-0.3.2]# <userinput>./configure --with-aolserver-src=/usr/local/src/aolserver/aolserver --with-tcl=/usr/lib/</userinput>
 checking prefix... /usr/local
@@ -544,7 +779,7 @@ n_stem.o italian_stem.o norwegian_stem.o portuguese_stem.o russian_stem.o nsfts.
 [root aolserver]# <userinput>cp nsfts.so /usr/local/aolserver/bin/</userinput>
 [root aolserver]#
 <action>cd /usr/local/src 
-tar xzf /var/tmp/Search-OpenFTS-tcl-0.3.2.tar.gz
+tar xzf /tmp/Search-OpenFTS-tcl-0.3.2.tar.gz
 cd /usr/local/src/Search-OpenFTS-tcl-0.3.2/
 ./configure --with-aolserver-src=/usr/local/src/aolserver/aolserver --with-tcl=/usr/lib/
 make
@@ -621,7 +856,7 @@ CREATE
         <programlisting>#ns_param   nsfts           ${bindir}/nsfts.so</programlisting>
       </sect2>
 
-      <sect2 id="install-fts-engine">
+      <sect2 id="install-fts-engine-openfts">
         <title>Install Full Text Search Engine</title>
         <orderedlist>
           <listitem>
@@ -722,7 +957,7 @@ line, click
           </listitem>
         </orderedlist>
       </sect2>
-      <sect2 id="install-fts-content-provider">
+      <sect2 id="install-fts-content-provider-openfts">
         <title>Enable Full Text Search in packages</title>
             <para>Enabling Full Text Search in packages at the moment is not trivial. It involves a couple of steps, which I will illustrate taking lars-blogger as an example package</para>
             <orderedlist>
@@ -778,6 +1013,47 @@ line, click
           be different for each server service, you won't need <link
           linkend="ssl-certificates">those instructions</link> until
       later. </para>
+      <sect2 id="install-nsopenssl-aolserver3">
+        <title>Install on AOLserver3</title>
+        <para> You will need the <link
+      linkend="install-aolserver-compile">unpacked Aolserver tarball</link> in
+      <computeroutput>/usr/local/src/aolserver</computeroutput> and
+      the <link
+          linkend="nsopenssl-download">nsopenssl tarball</link> in
+          <computeroutput>/tmp</computeroutput>.</para>
+      <para>Red Hat 9 note: see <ulink
+          url="http://openacs.org/forums/message-view?message_id=92882">this
+          thread</ulink> for details on compiling nsopenssl.)</para>
+
+      <screen>[root bin]#<userinput> cd /usr/local/src/aolserver</userinput>
+[root aolserver]# <userinput>wget --passive http://www.scottg.net/download/nsopenssl-2.1.tar.gz</userinput>
+[root aolserver]# <userinput>tar xzf nsopenssl-2.1.tar.gz </userinput>
+[root aolserver]# <userinput>cd nsopenssl-2.1</userinput>
+[root nsopenssl-2.1]# <userinput>make OPENSSL=/usr/local/ssl</userinput>
+gcc -I/usr/local/ssl/include -I../aolserver/include -D_REENTRANT=1 -DNDEBUG=1 -g -fPIC -Wall -Wno-unused -mcpu=i686 -DHAVE_CMMSG=1 -DUSE_FIONREAD=1 -DHAVE_COND_EINTR=1   -c -o nsopenssl.o nsopenssl.c
+<emphasis>(many lines omitted)</emphasis>
+gcc -shared -nostartfiles -o nsopenssl.so nsopenssl.o config.o init.o ssl.o thread.o tclcmds.o -L/usr/local/ssl/lib -lssl -lcrypto
+[root nsopenssl-2.1]# <userinput>cp nsopenssl.so /usr/local/aolserver/bin</userinput>
+[root nsopenssl-2.1]# <userinput>cp https.tcl /usr/local/aolserver/modules/tcl/</userinput>
+[root nsopenssl-2.1]#
+<action>cd /usr/local/src/aolserver
+wget --passive http://www.scottg.net/download/nsopenssl-2.1.tar.gz
+tar xzf nsopenssl-2.1.tar.gz 
+cd nsopenssl-2.1 
+make OPENSSL=/usr/local/ssl 
+cp nsopenssl.so /usr/local/aolserver/bin 
+cp https.tcl /usr/local/aolserver/modules/tcl/</action></screen>
+      <para>For Debian (<ulink
+      url="http://openacs.org/forums/message-view?message_id=93854">more
+      information</ulink>):</para>
+<screen><action>apt-get install libssl-dev
+cd /usr/local/src/aolserver
+tar xzf /tmp/nsopenssl-2.1.tar.gz
+cd nsopenssl-2.1
+make OPENSSL=/usr/lib/ssl
+cp nsopenssl.so /usr/local/aolserver/bin
+cp https.tcl /usr/local/aolserver/modules/tcl/</action></screen>
+      </sect2>
       <sect2 id="install-nsopenssl-aolserver4">
         <title>Install on AOLserver4</title>
         <para> You will need the AOLserver4 source in <computeroutput>/usr/local/src/aolserver/aolserver</computeroutput> and OpenSSL installed in <computeroutput>/usr/local/ssl</computeroutput> (or at least symlinked there).</para>
@@ -791,14 +1067,14 @@ line, click
 [root nsopenssl]# <userinput>make OPENSSL=/usr/local/ssl</userinput>
 gcc -I/usr/local/ssl/include (many items omitted)  -c -o sslcontext.o sslcontext.c
 <emphasis>(many lines omitted)</emphasis>
-[root nsopenssl-2.1]# <userinput>make install OPENSSL=/usr/local/ssl INST=/usr/local/aolserver40r9</userinput>
+[root nsopenssl-2.1]# <userinput>make install OPENSSL=/usr/local/ssl INST=/usr/local/aolserver</userinput>
 [root nsopenssl-2.1]#
 <action>cd /usr/local/src/aolserver
 cvs -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver login
 cvs -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co nsopenssl
 cd nsopenssl
 make OPENSSL=/usr/local/ssl 
-make install OPENSSL=/usr/local/ssl INST=/usr/local/aolserver40r9</action></screen>
+make install OPENSSL=/usr/local/ssl INST=/usr/local/aolserver</action></screen>
 <para>If you have problems starting your server with nsopenssl.so due to missing libssl.so.0.9.7 (or lower), you have to create symlinks
 <screen>
 [root nsopenssl]# <userinput>cd /usr/local/aolserver/lib</userinput>
@@ -828,47 +1104,6 @@ ln -s /usr/local/ssl/lib/libcrypto.so.0.9.7 libcrypto.so.0.9.7
       that section is not present, try looking at the README file in
       <computeroutput>/usr/local/src/aolserver/nsopenssl</computeroutput>.</para>
       </sect2>
-      <sect2 id="install-nsopenssl-aolserver3">
-        <title>Install on AOLserver3</title>
-        <para> You will need the <link
-      linkend="install-aolserver-compile">unpacked Aolserver tarball</link> in
-      <computeroutput>/usr/local/src/aolserver</computeroutput> and
-      the <link
-          linkend="nsopenssl-download">nsopenssl tarball</link> in
-          <computeroutput>/var/tmp</computeroutput>.</para>
-      <para>Red Hat 9 note: see <ulink
-          url="http://openacs.org/forums/message-view?message_id=92882">this
-          thread</ulink> for details on compiling nsopenssl.)</para>
-
-      <screen>[root bin]#<userinput> cd /usr/local/src/aolserver</userinput>
-[root aolserver]# <userinput>wget --passive http://www.scottg.net/download/nsopenssl-2.1.tar.gz</userinput>
-[root aolserver]# <userinput>tar xzf nsopenssl-2.1.tar.gz </userinput>
-[root aolserver]# <userinput>cd nsopenssl-2.1</userinput>
-[root nsopenssl-2.1]# <userinput>make OPENSSL=/usr/local/ssl</userinput>
-gcc -I/usr/local/ssl/include -I../aolserver/include -D_REENTRANT=1 -DNDEBUG=1 -g -fPIC -Wall -Wno-unused -mcpu=i686 -DHAVE_CMMSG=1 -DUSE_FIONREAD=1 -DHAVE_COND_EINTR=1   -c -o nsopenssl.o nsopenssl.c
-<emphasis>(many lines omitted)</emphasis>
-gcc -shared -nostartfiles -o nsopenssl.so nsopenssl.o config.o init.o ssl.o thread.o tclcmds.o -L/usr/local/ssl/lib -lssl -lcrypto
-[root nsopenssl-2.1]# <userinput>cp nsopenssl.so /usr/local/aolserver/bin</userinput>
-[root nsopenssl-2.1]# <userinput>cp https.tcl /usr/local/aolserver/modules/tcl/</userinput>
-[root nsopenssl-2.1]#
-<action>cd /usr/local/src/aolserver
-wget --passive http://www.scottg.net/download/nsopenssl-2.1.tar.gz
-tar xzf nsopenssl-2.1.tar.gz 
-cd nsopenssl-2.1 
-make OPENSSL=/usr/local/ssl 
-cp nsopenssl.so /usr/local/aolserver/bin 
-cp https.tcl /usr/local/aolserver/modules/tcl/</action></screen>
-      <para>For Debian (<ulink
-      url="http://openacs.org/forums/message-view?message_id=93854">more
-      information</ulink>):</para>
-<screen><action>apt-get install libssl-dev
-cd /usr/local/src/aolserver
-tar xzf /var/tmp/nsopenssl-2.1.tar.gz
-cd nsopenssl-2.1
-make OPENSSL=/usr/lib/ssl
-cp nsopenssl.so /usr/local/aolserver/bin
-cp https.tcl /usr/local/aolserver/modules/tcl/</action></screen>
-      </sect2>
 
     </sect1>
 
@@ -877,7 +1112,7 @@ cp https.tcl /usr/local/aolserver/modules/tcl/</action></screen>
       <para>Download the <link linkend="source-tclwebtest">tclwebtest
       source</link>, unpack it, and put it an appropriate
       place.  (tclwebtest 1.0 will be required for auto-tests in OpenACS 5.1.  When it exists, the cvs command here will be replaced with http://prdownloads.sourceforge.net/tclwebtest/tclwebtest-0.3.tar.gz?download.) As root:</para>
-      <screen><action>cd /var/tmp
+      <screen><action>cd /tmp
 cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/tclwebtest co tclwebtest
 #wget http://umn.dl.sourceforge.net/sourceforge/tclwebtest/tclwebtest-1.0.tar.gz
 #tar xvzf tclwebtest-1-0.tar.gz
