@@ -87,7 +87,8 @@ as
        impl_pl			acs_sc_impl_alias.impl_pl%TYPE
    ) return acs_sc_impl_alias.impl_id%TYPE;
 
-   function delete_aliases (
+   -- fix by Ben from delete_aliases to delete_alias
+   function delete_alias (
        impl_contract_name	acs_sc_contracts.contract_name%TYPE,
        impl_name		acs_sc_impls.impl_name%TYPE,
        impl_operation_name	acs_sc_operations.operation_name%TYPE
@@ -229,7 +230,7 @@ as
    begin
 
        v_contract_id := acs_sc_contract.get_id(contract_name);
-       v_operation_id := acs_object.new (object_type=>'acs_operation');
+       v_operation_id := acs_object.new (object_type=>'acs_sc_operation');
        v_operation_inputtype_id := acs_sc_msg_type.get_id(operation_inputtype);
        v_operation_outputtype_id := acs_sc_msg_type.get_id(operation_outputtype);
 
