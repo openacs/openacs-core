@@ -667,7 +667,6 @@ begin
     result := ''t'';
 
     if acs_object__check_representation(check_representation__rel_id) = ''f'' then
-      raise notice ''acs_object rep failed'';
       result := ''f'';
     end if;
 
@@ -678,7 +677,6 @@ begin
     and m.rel_id = check_representation__rel_id;
 
     if membership_rel__check_index(group_id, member_id, group_id) = ''f'' then
-      raise notice ''check index failed'';
       result := ''f'';
     end if;
 
@@ -689,7 +687,6 @@ begin
       if composition_rel__check_path_exists_p(row.container_id,
                                              row.group_id) = ''f'' then
         result := ''f'';
-        raise notice ''path exists failed'';
         PERFORM acs_log__error(''membership_rel.check_representation'',
                       ''Extra row in group_member_index: '' ||
                       ''group_id = '' || row.group_id || '', '' ||
@@ -790,6 +787,7 @@ begin
                  from rel_segments 
                 where group_id = delete__group_id 
    LOOP
+      raise notice '' rel_segment_delete %'', row.package_name;
 
        PERFORM rel_segment__delete(row.segment_id);
 
@@ -802,7 +800,8 @@ begin
                   and (r.object_id_one = delete__group_id
                        or r.object_id_two = delete__group_id) 
    LOOP
-      execute ''perform '' ||  row.package_name || ''__delete('' || row.rel_id || '')'';
+      raise notice '' delete %'', row.package_name;
+      execute ''select '' ||  row.package_name || ''__delete('' || row.rel_id || '')'';
    end loop;
  
    PERFORM party__delete(delete__group_id);
@@ -845,17 +844,16 @@ create function acs_group__check_representation (integer)
 returns boolean as '
 declare
   group_id               alias for $1;  
-  result                 boolean; 
+  res                    boolean; 
   comp                   record;
   memb                   record;      
 begin
-   result := ''t'';
+   res := ''t'';
    PERFORM acs_log__notice(''acs_group.check_representation'',
                   ''Running check_representation on group '' || group_id);
 
    if acs_object__check_representation(group_id) = ''f'' then
-     raise notice ''failed 1'';
-     result := ''f'';
+     res := ''f'';
    end if;
 
    for comp in select c.rel_id
@@ -864,8 +862,7 @@ begin
              and r.object_id_one = group_id 
    LOOP
      if composition_rel__check_representation(comp.rel_id) = ''f'' then
-     raise notice ''failed 2'';
-       result := ''f'';
+       res := ''f'';
      end if;
    end loop;
 
@@ -875,15 +872,14 @@ begin
              and r.object_id_one = group_id 
    LOOP
      if membership_rel__check_representation(memb.rel_id) = ''f'' then
-     raise notice ''failed 3'';
-       result := ''f'';
+       res := ''f'';
      end if;
    end loop;
 
    PERFORM acs_log__notice(''acs_group.check_representation'',
                   ''Done running check_representation on group '' || group_id);
 
-   return result;
+   return res;
   
 end;' language 'plpgsql';
 

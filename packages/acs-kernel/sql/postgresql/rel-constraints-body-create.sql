@@ -135,6 +135,7 @@ declare
   violation_if_removed__rel_id                 alias for $1;  
   v_count                                      integer;       
   v_error                                      varchar(4000); 
+  constraint_violated                          record;
 begin
     v_error := null;
 
@@ -145,7 +146,7 @@ begin
                     where r.rel_id = violation_if_removed__rel_id);
 
     if v_count > 0 then
-      -- some other relation depends on this one. Let''s build up a string
+      -- some other relation depends on this one. Lets build up a string
       -- of the constraints we are violating
       for constraint_violated in select constraint_id, constraint_name
                                    from rc_violations_by_removing_rel r

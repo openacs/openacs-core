@@ -331,7 +331,7 @@ begin
                   where component_id = group_contains_p__component_id
                   and group_id = container_id 
       LOOP
-        if group_contains_p(group_contains_p__group_id, map.group_id) = ''t'' then
+        if group_contains_p(group_contains_p__group_id, map.group_id, null) = ''t'' then
           return ''t'';
         end if;
       end loop;
@@ -342,7 +342,7 @@ begin
                   and rel_id = group_contains_p__rel_id
                   and group_id = container_id 
       LOOP
-        if group_contains_p(group_contains_p__group_id, map.group_id) = ''t'' then
+        if group_contains_p(group_contains_p__group_id, map.group_id, null) = ''t'' then
           return ''t'';
         end if;
       end loop;
