@@ -14,8 +14,6 @@
     <input type=submit value="#acs-kernel.common_continue#">
     </form>
 
-    <p> #acs-subsite.lt_Note_If_youve_forgott_1#</a>. </p>
-
   </if>
   <else>
 
