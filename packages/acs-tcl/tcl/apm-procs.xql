@@ -9,17 +9,6 @@
     </querytext>
   </fullquery>
 
-  <fullquery name="apm_mark_version_for_reload.file_info">      
-    <querytext>
-      select file_id, path
-      from   apm_package_files
-      where  version_id = :version_id
-      and    file_type in ('tcl_procs', 'query_file')
-      and    (db_type is null or db_type = '[db_type]')
-      order by path
-    </querytext>
-  </fullquery>
-
   <fullquery name="apm_parameter_register.apm_parameter_cache_update">      
     <querytext>
       select v.package_id, p.parameter_name, 
@@ -38,14 +27,6 @@
     </querytext>
   </fullquery>
   
-  <fullquery name="apm_pretty_name_for_file_type.pretty_name_select">      
-    <querytext>
-      select pretty_name
-      from apm_package_file_types
-      where file_type_key = :type
-    </querytext>
-  </fullquery>
-
   <fullquery name="apm_pretty_name_for_db_type.pretty_db_name_select">      
     <querytext>
       select pretty_db_name
