@@ -2,34 +2,11 @@
 <property name="title">@title;noquote@</property>
 <property name="context">@context;noquote@</property>
 
-<if @chat_system_name@ not nil>
-  This page is mostly useful in conjunction with 
-  <a href="@subsite_url@chat">@chat_system_name@</a>.
-</if>
-
-<ul>
-
-<multiple name="users">
-
-  <if @connected_user_id@ eq 0>
-    <li><a href="@subsite_url@shared/community-member?user_id=@users.user_id@">@users.first_names@ @users.last_name@</a>
-  </if>
-  <else>
-    <li><a href="@subsite_url@shared/community-member?user_id=@users.user_id@">@users.first_names@ @users.last_name@</a> (@users.email@)
-  </else>
-
-</multiple>
-
-</ul>
-
 These are the registered users who have 
 requested a page from this server within the last
-@last_visit_interval@ seconds.
+@whos_online_interval@ seconds. Note that not logged
+in users are not included in this list.
 
 <p>
-
-On a public Internet service, the number of casual surfers
-(unregistered) will outnumber the registered users by at least 10 to
-1.  Thus there could be many more people using this service than it
-would appear.
-
+  <listtemplate name="online_users"></listtemplate>
+</p>
