@@ -37,7 +37,7 @@ set action ""
 switch $member_state {
     "approved" {
 	set action "Approve $name"
-	set email_message "Your membership in [ad_system_name] has been approved. Please return to [ad_parameter SystemUrl]."
+	set email_message "Your membership in [ad_system_name] has been approved. Please return to [ad_url]."
     }
     "banned" {
 	set action "Ban $name"
@@ -60,11 +60,11 @@ switch $member_state {
 switch $email_verified_p {
     "t" {
 	set action "Approve Email for $name"
-	set email_message "Your email in [ad_system_name] has been approved.  Please return to [ad_parameter SystemUrl]."
+	set email_message "Your email in [ad_system_name] has been approved.  Please return to [ad_url]."
     }
     "f" {
 	set action "Require Email from $name"
-	set email_message "Your email in [ad_system_name] needs approval. please go to [ad_parameter -package_id [ad_acs_kernel_id] SystemURL]/register/email-confirm.tcl?[export_url_vars row_id]"
+	set email_message "Your email in [ad_system_name] needs approval. please go to [ad_url]/register/email-confirm.tcl?[export_url_vars row_id]"
     }
 }
 
