@@ -35,15 +35,9 @@ set admin_p [ad_permission_p $package_id admin]
 
 set user_id [ad_conn user_id]
 
-set subsite_name [db_string name {
-    select acs_object.name(:package_id) from dual
-}]
+set subsite_name [ad_conn instance_name]
 
 set subsite_url [subsite::get_element -element url]
-
-set node_id [ad_conn node_id]
-
-db_multirow nodes site_nodes {}
 
 
 # User's group membership
