@@ -17,7 +17,12 @@ ad_page_contract {
 if { [info exists skip_button] } {
     # The user wants to skip the file so remove it from the file and redirect
     # to processing the next one
-    ad_returnredirect "version-i18n-process?[export_vars -url {version_id {files:multiple {[lrange $files 1 end]}} file_action:multiple}]"    
+    set remaining_files [lrange $files 1 end]
+    if { [llength $remaining_files] > 0 } {
+        ad_returnredirect "version-i18n-process?[export_vars -url {version_id {files:multiple $remaining_files} file_action:multiple}]"    
+    } else {
+        ad_returnredirect "version-i18n?[export_vars -url {version_id}]"
+    }
     ad_script_abort
 }
 
