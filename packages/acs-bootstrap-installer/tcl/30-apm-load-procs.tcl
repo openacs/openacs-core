@@ -70,6 +70,8 @@ ad_proc apm_guess_file_type { package_key path } {
 
 } {
     set components [split $path "/"]
+    set dirs_in_pageroot [llength [split [ns_info pageroot] "/"]]	   ;# See comments by RBM
+    set components_lesser [lrange $components $dirs_in_pageroot end]
     set extension [file extension $path]
     set type ""
 
@@ -101,16 +103,20 @@ ad_proc apm_guess_file_type { package_key path } {
     } elseif { [lsearch $components "doc"] >= 0 } {
 	set type "documentation"
     } elseif { [string equal $extension ".pl"] || \
-	    [string equal $extension ".sh"] || \
-	    [lsearch $components "bin"] >= 0 } {
+	       [string equal $extension ".sh"] || \
+	       [lsearch $components "bin"] >= 0 } {
 	set type "shell"
     } elseif { [lsearch $components "templates"] >= 0 } {
 	set type "template"
     } elseif { [llength $components] == 1 && \
-	    ([string equal $extension ".html"] || [string equal $extension ".adp"]) } {
-	# HTML or ADP file in the top level of a package - assume it's documentation.
+              ([string equal $extension ".html"] || [string equal $extension ".adp"]) } {
+		# HTML or ADP file in the top level of a package - assume it's documentation.
 	set type "documentation"
-    } elseif { [lsearch $components "www"] >= 0 || [lsearch $components "admin-www"] >= 0 } {
+
+        # RBM: Changed the next elseif to check for 'www' or 'admin-www' only n levels down
+        # the path, since that'd be the minimum in a path counting from the pageroot
+
+    } elseif { [lsearch $components_lesser "www"] >= 0 || [lsearch $components_lesser "admin-www"] >= 0 } {
 	set type "content_page"
     } else {
 	if { [string equal $extension ".tcl"] } {
@@ -179,14 +185,14 @@ ad_proc apm_source { __file } {
     Sources $__file in a clean environment, returning 1 if successful or 0 if not.
 } {
     if { ![file exists $__file] } {
-	ns_log "Error" "Unable to source $__file: file does not exist."
+		ns_log "Error" "Unable to source $__file: file does not exist."
 	return 0
     }
 
     # Actually do the source.
     if { [catch { source $__file }] } {
 	global errorInfo
-	ns_log "Error" "Error sourcing $__file:\n$errorInfo"
+		ns_log "Error" "Error sourcing $__file:\n$errorInfo"
 	return 0
     }
 
@@ -234,7 +240,7 @@ ad_proc apm_bootstrap_load_libraries {
 
     set files [ad_find_all_files $root_directory/packages/$package_key]
     if { [llength $files] == 0 } {
-	error "Unable to locate $root_directory/packages/$package_key/*."
+		error "Unable to locate $root_directory/packages/$package_key/*."
     }
 
     foreach file [lsort $files] {
@@ -246,7 +252,8 @@ ad_proc apm_bootstrap_load_libraries {
              [string equal $file_db_type $db_type]) &&
             ([string equal $file_type tcl_procs] && $procs_p ||
              [string equal $file_type tcl_init] && $init_p)} {
-	    apm_bootstrap_load_file $root_directory $file
+
+		    apm_bootstrap_load_file $root_directory $file
 
             # Call db_release_unused_handles, only if the library defining it
             # (10-database-procs.tcl) has been sourced yet.
@@ -268,8 +275,8 @@ proc apm_bootstrap_load_queries { package_key } {
 
     # DRB: We can't parse the $package_key.info file at this point in time, primarily because
     # grabbing the package information uses not only the XML file but tables from the APM,
-    # which haven't been loaded yet if we're installing.  So we just snarf all of the
-    # queryfiles in this package that match the current database or no database
+	# which haven't been loaded yet if we're installing.  So we just snarf all of the
+	# queryfiles in this package that match the current database or no database
     # (which we interpret to mean all supported databases).
 
     set files [ad_find_all_files $root_directory/packages/$package_key]
