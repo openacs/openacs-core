@@ -474,14 +474,22 @@ ad_proc ad_return_warning {
 }
 
 ad_proc ad_return_forbidden {
-    title 
-    explanation
+    {title ""}
+    {explanation ""}
 } {
     Returns a page with the HTTP 403 (Forbidden) code, along with 
     the given title and explanation.  Should be used by 
     access-control filters that determine whether a user has 
     permission to request a particular page.
+
+    Title and explanation is optional. If neither is specified,
+    then a default "Permission Denied" message will be displayed.
 } {
+    if [template::util::is_nil title] && \
+	    [template::util::is_nil explanation] {
+	set title "Permission Denied"
+	set explanation "Sorry, you haven't been given access to this area."
+    }
     ad_return_exception_page 403 $title $explanation
 }
 
