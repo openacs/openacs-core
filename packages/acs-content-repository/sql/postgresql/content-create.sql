@@ -469,15 +469,9 @@ comment on table cr_content_text is '
 --------------------------------------------------------------
 
 create table cr_item_publish_audit (
-  item_id            integer
-                     constraint cr_item_publish_audit_fk
-                     references cr_items on delete cascade, 
-  old_revision       integer
-                     constraint cr_item_pub_audit_old_rev_fk
-                     references cr_revisions, 
-  new_revision       integer
-                     constraint cr_item_pub_audit_new_rev_fk
-                     references cr_revisions, 
+  item_id            integer, 
+  old_revision       integer, 
+  new_revision       integer, 
   old_status         varchar(40),
   new_status         varchar(40),
   publish_date       timestamp
