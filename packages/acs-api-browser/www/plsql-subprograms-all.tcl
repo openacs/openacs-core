@@ -8,17 +8,10 @@ ad_page_contract {
     @cvs-id $Id$
 } -properties {
     all_subprograms:multirow
-    pretty_plurals:onerow
 }
 
 # Organize the subprograms under three headings: FUNCTION, PROCEDURE,
 # and PACKAGE.
-
-# We use this array to prettify the headings.
-#
-set pretty_plurals(PACKAGE) "Packages"
-set pretty_plurals(PROCEDURE) "Procedures"
-set pretty_plurals(FUNCTION) "Functions"
 
 db_multirow all_subprograms all_subprograms {
     select object_type as type, object_name as name
