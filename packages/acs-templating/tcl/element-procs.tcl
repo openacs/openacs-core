@@ -115,6 +115,9 @@ ad_proc -public template::element::create { form_id element_id args } {
                           the user to edit the contents. If set to the empty string or
                           not specified at all, the form's 'mode' setting is used instead.
 
+    @option nospell       A flag indicating that no spell-checking should be performed on
+                          this element. This overrides the 'SpellcheckFormWidgets' parameter.
+
     @option before_html   A chunk of HTML displayed immediately before the rendered element.
 
     @option after_html    A chunk of HTML displayed immediately after the rendered element.
@@ -523,7 +526,12 @@ ad_proc -public template::element::querygetall { element_ref } {
   } else {
     set values [template::data::transform::$datatype element]
   }
- 
+    
+    if { [lindex [template::util::spellcheck::spellcheck_properties -element_ref element] 0] } {
+	
+	set values [template::data::transform::spellcheck -element_ref element -values $values]
+    }
+
   return $values
 }
 

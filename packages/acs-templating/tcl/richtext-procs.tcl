@@ -187,6 +187,18 @@ if (document.selection) {
       append output [textarea_internal "$element(id)" attributes $contents]
       append output "<br>Format: [menu "$element(id).format" [template::util::richtext::format_options] $format {}]"
 
+      set spellcheck_properties [template::util::spellcheck::spellcheck_properties -element_ref element]
+      set spellcheck_p [lindex $spellcheck_properties 0]
+
+      if { $spellcheck_p } {
+          set yes_checked [lindex $spellcheck_properties 1]
+          set no_checked [lindex $spellcheck_properties 2]
+          append output " Spellcheck? 
+<input type=\"radio\" name=\"$element(id).spellcheck_p\" value=\"1\" $yes_checked /> Yes \n
+<input type=\"radio\" name=\"$element(id).spellcheck_p\" value=\"0\" $no_checked /> No"
+
+      }   
+
   } else {
       # Display mode
       if { [info exists element(value)] } {
