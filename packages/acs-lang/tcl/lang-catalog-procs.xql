@@ -7,11 +7,13 @@
       from   apm_package_types
       where  exists (select 1 
                      from   apm_package_versions
-                     where  installed_p = 't'
-                     and    enabled_p = 't')
+                     where  package_key = apm_package_types.package_key
+                        and installed_p = 't'
+                        and enabled_p = 't')
        and not exists (select 1
                        from lang_message_keys
                        where package_key = apm_package_types.package_key)
+       and package_key = 'dotlrn'
     </querytext>
   </fullquery>
 
@@ -25,15 +27,16 @@
 
   <fullquery name="lang::catalog::all_messages_for_package_and_locale.get_messages">
     <querytext>
-        select message_key, message
-        from lang_messages
-        where package_key = :package_key
-        and locale = :locale
-        and not exists (select 1 from lang_message_keys
-                        where message_key = lang_messages.message_key
-                        and package_key = lang_messages.package_key
-                        and upgrade_status = 'deleted'
-                       )
+        select lm.message_key, 
+               lm.message, 
+               lmk.description
+        from   lang_messages lm,
+               lang_message_keys lmk
+        where  lm.message_key = lmk.message_key
+        and    lm.package_key = lmk.package_key
+        and    lm.package_key = :package_key
+        and    lm.locale = :locale
+        and    lmk.upgrade_status != 'deleted'
     </querytext>
   </fullquery>
 
