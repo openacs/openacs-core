@@ -71,8 +71,11 @@
   <msg key="Elements_not_editable">Algunos elementos no pueden ser editados ya que están siendo administrados por %authority_name%.</msg>
   <msg key="Email">correo electrónico</msg>
   <msg key="email_as_a_form">Permitir contactarme mediante una forma</msg>
+  <msg key="email_as_a_form_admin">Permitir contacto mediante una forma</msg>
   <msg key="email_as_image">Mostrar mi correo electrónico como una imagen</msg>
+  <msg key="email_as_image_admin">Mostrar el correo electrónico como una imagen</msg>
   <msg key="email_as_text">Mostrar mi correo electrónico como texto</msg>
+  <msg key="email_as_text_admin">Mostrar el correo electrónico como texto</msg>
   <msg key="email_body_Forgotten_password">Datos de su cuenta: 
 %account_id_label%: %account_id% 
 %password_label%: %password%
@@ -83,6 +86,7 @@ Para cambiar su contraseña, visite %reset_password_url%</msg>
 Para cambiar su contraseña, visite %reset_password_url%</msg>
   <msg key="Email_Confirmation">Confirmación de correo</msg>
   <msg key="email_dont_show">No mostrar mi correo electrónico</msg>
+  <msg key="email_dont_show_admin">No mostrar el correo electrónico</msg>
   <msg key="email_not_available">No disponible</msg>
   <msg key="Email_not_Requested">Correo electrónico no solicitado</msg>
   <msg key="email_subject_Forgotten_password">Recordatorio de su contraseña en %system_name%</msg>
