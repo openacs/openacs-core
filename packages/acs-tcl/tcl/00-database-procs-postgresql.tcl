@@ -147,9 +147,9 @@ ad_proc -private db_bind_var_substitution { sql { bind "" } } {
         set lsql $sql
         uplevel {            
             set __db_lst [regexp -inline -indices -all -- {:?:\w+} $__db_sql]
-            for {set i [expr [llength $__db_lst] - 1]} {$i >= 0} {incr i -1} {
-                set __db_ws [lindex [lindex $__db_lst $i] 0]
-                set __db_we [lindex [lindex $__db_lst $i] 1]
+            for {set __db_i [expr [llength $__db_lst] - 1]} {$__db_i >= 0} {incr __db_i -1} {
+                set __db_ws [lindex [lindex $__db_lst $__db_i] 0]
+                set __db_we [lindex [lindex $__db_lst $__db_i] 1]
                 set __db_bind_var [string range $__db_sql $__db_ws $__db_we]
                 if {![string match "::*" $__db_bind_var]} {
                     set __db_tcl_var [string range $__db_bind_var 1 end]
