@@ -14,6 +14,7 @@ ds_require_permission [ad_conn package_id] "admin"
 
 set enabled_p [nsv_get ds_properties enabled_p]
 set user_switching_enabled_p [nsv_get ds_properties user_switching_enabled_p]
+set package_id [ad_conn package_id]
 
 doc_body_append "[ad_header "ACS Developer Support"]
 
@@ -59,6 +60,8 @@ doc_body_append "
 
 <li>Information is being swept every [ad_parameter DataSweepInterval "developer-support" 900] sec
 and has a lifetime of [ad_parameter DataLifetime "developer-support" 900] sec
+
+<li><a href=\"/admin/site-map/parameter-set?[export_vars { package_id }]\">Set package parameters</a>
 
 <p>
 
