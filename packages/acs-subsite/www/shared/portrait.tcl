@@ -46,6 +46,6 @@ if { ![empty_string_p $width] && ![empty_string_p $height] } {
 
 set context [list [list [acs_community_member_url -user_id $user_id] "One Member"] "Portrait"]
 set export_vars [export_url_vars user_id]
-set publish_date [lc_time_fmt $publish_date "%q"]
+set pretty_date [lc_time_fmt $publish_date "%q"]
 
 ad_return_template
