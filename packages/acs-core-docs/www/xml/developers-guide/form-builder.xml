@@ -44,5 +44,17 @@
         </para>
     </sect3>
   </sect2>
+
+  <sect2 id="errors">
+    <title>Common Errors</title>
+    <para>Here are some common errors and what to do when you
+    encounter them:</para>
+    <sect3>
+      <title>Error when selecting values</title>
+          <para>This may mean that you have a problem with the key you
+          are using.</para>
+    </sect3>
+  </sect2>
+
   <para><phrase role="cvstag">($Id$)</phrase></para>
 </sect1>
