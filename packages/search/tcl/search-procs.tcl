@@ -148,7 +148,7 @@ ad_proc -private search::indexer {} {
                         -action $event \
                         -object_id $object_id \
                         -datasource NONE \
-                        -object_type $object_type
+                        -object_type {}
 
                     search::dequeue -object_id $object_id -event_date $event_date -event $event
 
