@@ -48,12 +48,6 @@
         </querytext>
     </fullquery>
 
-    <fullquery name="site_node::get_url.select_url">
-        <querytext>
-            select site_node.url(:node_id) from dual
-        </querytext>
-    </fullquery>
-
     <fullquery name="site_node_closest_ancestor_package_url.select_url">
         <querytext>
             select site_node.url(node_id)

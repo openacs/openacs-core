@@ -61,6 +61,7 @@ namespace eval site_node {
         delete the site node
     } {
         db_exec_plsql delete_site_node {}
+        update_cache -node_id $node_id
     }
 
     ad_proc -public mount {
@@ -86,6 +87,7 @@ namespace eval site_node {
         initialize the site node cache
     } {
         nsv_array reset site_nodes [list]
+        nsv_array reset site_node_urls [list]
 
         db_foreach select_site_nodes {} {
             set node(url) $url
@@ -99,6 +101,7 @@ namespace eval site_node {
             set node(package_id) $package_id
 
             nsv_set site_nodes $url [array get node]
+            nsv_set site_node_urls $node_id $url
         }
 
         ns_eval {
@@ -124,12 +127,23 @@ namespace eval site_node {
             set node(package_id) $package_id
 
             nsv_set site_nodes $url [array get node]
+            nsv_set site_node_urls $node_id $url
 
             ns_eval {
                 global tcl_site_nodes
                 if {[info exists tcl_site_nodes]} {
                     array unset tcl_site_nodes "${url}*"
                 }
+            }
+        } else {
+            set url [get_url -node_id $node_id]
+
+            if {[nsv_exists site_nodes $url]} {
+                nsv_unset site_nodes $url
+            }
+
+            if {[nsv_exists site_node_urls $node_id]} {
+                nsv_unset site_node_urls $node_id
             }
         }
     }
@@ -205,7 +219,12 @@ namespace eval site_node {
     } {
         return the url of this node_id
     } {
-        return [db_string select_url {} -default ""]
+        set url ""
+        if {[nsv_exists site_node_urls $node_id]} {
+            set url [nsv_get site_node_urls $node_id]
+        }
+
+        return $url
     }
 
     ad_proc -public get_node_id {
