@@ -12,6 +12,14 @@ if { ![exists_and_not_null package_id] } {
     set subsite_id [subsite::get_element -element object_id]
 }
 
+if { ![info exists authority_id] } {
+    set authority_id {}
+}
+
+if { ![info exists username] } {
+    set username {}
+}
+
 # Persistent login
 # The logic is: 
 #  1. Allowed if allowed both site-wide (on acs-kernel) and on the subsite
@@ -45,7 +53,7 @@ set hash [ns_sha1 "$time$token_id$token"]
 
 set authority_options [auth::authority::get_authority_options]
 
-set forgotten_pwd_url [export_vars -base [auth::password::get_forgotten_url] { username authority_id }]
+set forgotten_pwd_url [auth::password::get_forgotten_url -authority_id $authority_id -username $username]
 
 set register_url "[subsite::get_element -element url]register/user-new"
 

@@ -3,17 +3,12 @@
   <property name="context">@context@</property>
   <property name="focus">@focus@</property>
 
-	Enter your username to begin password recovery.
-
-  <if @username@ not nil>
-    <if @form_submitted_p@ false or @form_valid_p@ true>
-      @recover_info.password_message@
-    </if>
-    <else>
-      <formtemplate id="recover_password"></formtemplate>
-    </else>
-  </if>
-  <else>
-    <formtemplate id="recover_password"></formtemplate>
-  </else>
+<if @recover_info.password_message@ not nil>
+  @recover_info.password_message@
+  <p> To log in, visit the <a href="@login_url@">login page</a>. </p>
+</if>
+<else>
+  <p> Enter your username to begin password recovery. </p>
+  <formtemplate id="recover_password"></formtemplate>
+</else>
 
