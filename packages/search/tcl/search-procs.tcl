@@ -57,6 +57,7 @@ ad_proc -private search::indexer {} {
     delete the entry.
 
     @author Neophytos Demetriou
+    @author Jeff Davis <davis@xarg.net>
 } {
 
     set driver [ad_parameter -package_id [apm_package_id_from_key search] FtsEngineDriver]
@@ -69,21 +70,25 @@ ad_proc -private search::indexer {} {
         return
     }
 
-    db_foreach search_observer_queue_entry {} {
+    # JCD: pull out the rows all at once so we release the handle
+    foreach row [db_list_of_lists search_observer_queue_entry {}] { 
+        foreach {object_id event_date event} $row { break }
 
+        array unset datasource
         switch -- $event {
             INSERT {
                 # Don't bother reindexing if we've already inserted/updated this object in this run
                 if {![info exists seen($object_id)]} {
                     set object_type [acs_object_type $object_id]
                     if {[acs_sc_binding_exists_p FtsContentProvider $object_type]} {
+                        array set datasource {mime {} storage_type {} keywords {}}
                         array set datasource [acs_sc_call FtsContentProvider datasource [list $object_id] $object_type]
                         if {$syndicate} {
                             search::syndicate -datasource datasource
                         }
                         search::content_get txt $datasource(content) $datasource(mime) $datasource(storage_type)
-                        acs_sc_call FtsEngineDriver index [list $datasource(object_id) $txt $datasource(title) $datasource(keywords)] $driver
-                        array unset datasource
+                        acs_sc_call FtsEngineDriver index \
+                            [list $datasource(object_id) $txt $datasource(title) $datasource(keywords)] $driver
                     }
                     # Remember seeing this object so we can avoid reindexing it later
                     set seen($object_id) 1
@@ -93,7 +98,7 @@ ad_proc -private search::indexer {} {
                 acs_sc_call FtsEngineDriver unindex [list $object_id] $driver
                 db_dml nuke_syn {delete from syndication where object_id = :object_id} 
                 # unset seen since you could conceivably delete one but then subsequently 
-                # insert it (eg when rolling back/forward the live revision).
+                # reinsert it (eg when rolling back/forward the live revision).
                 if {[info exists seen($object_id)]} {
                     unset seen($object_id)
                 }
@@ -103,13 +108,13 @@ ad_proc -private search::indexer {} {
                 if {![info exists seen($object_id)]} {
                     set object_type [acs_object_type $object_id]
                     if {[acs_sc_binding_exists_p FtsContentProvider $object_type]} {
+                        array set datasource {mime {} storage_type {} keywords {}}
                         array set datasource [acs_sc_call FtsContentProvider datasource [list $object_id] $object_type]
                         search::content_get txt $datasource(content) $datasource(mime) $datasource(storage_type)
                         if {$syndicate} { 
                             search::syndicate -datasource datasource
                         } 
                         acs_sc_call FtsEngineDriver update_index [list $datasource(object_id) $txt $datasource(title) $datasource(keywords)] $driver
-                        array unset datasource
                     }
                     # Remember seeing this object so we can avoid reindexing it later
                     set seen($object_id) 1
@@ -217,9 +222,16 @@ ad_proc -private search::syndicate {
 } {
     upvar $datasource d
 
-    if {![info exists d(syndication)]} { 
+    if {![info exists d(syndication)]} {
         return
-    } 
+    }
+
+    array set syn {
+        category {}
+        author {}
+        guid {}
+    }
+
     array set syn $d(syndication)
 
     set object_id $d(object_id)

@@ -5,7 +5,7 @@
   <form method="get" action="search">
     <input type="text" name="q" size="41" maxlength="256" value="@q@"/>
     <input type="submit" value="Search" name="t" />
-    #search.Date_Range#
+    <p>#search.Date_Range#
     <select name="dfs">
       <option value="all"> #search.anytime#</option>
       <option value="m3"> #search.past_3_months#</option>
@@ -19,6 +19,6 @@
       <option value="30" <if @num@ eq 30>selected="selected"</if>>30 #search.results#</option>
       <option value="50" <if @num@ eq 50>selected="selected"</if>>50 #search.results#</option>
       <option value="100" <if @num@ eq 100>selected="selected"</if>>100 #search.results#</option>
-    </select>
+    </select></p>
   </form>
 

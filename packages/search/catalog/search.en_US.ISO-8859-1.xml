@@ -15,7 +15,7 @@
   <msg key="lt_Try_different_keyword">Try different keywords.</msg>
   <msg key="lt_Try_more_general_keyw">Try more general keywords.</msg>
   <msg key="lt_Try_your_query_on_stw">Try your query on: %stw;noquote%</msg>
-  <msg key="lt_You_must_specify_some">You must specify some keywords</msg>
+  <msg key="lt_You_must_specify_some">You must specify some keywords.</msg>
   <msg key="Display">Display</msg>
   <msg key="Next">Next</msg>
   <msg key="no_driver_contact_webmaster">Search is not currently configured.  Please contact the webmaster to enable it.</msg>
