@@ -10,6 +10,8 @@ ad_page_contract {
 
 apm_version_info $version_id
 
+set return_url "[ad_conn url]?[ad_conn query]"
+
 set form ""
 set apm_header_args [list "Files"]
 
@@ -79,12 +81,12 @@ foreach path [apm_get_package_files -package_key $package_key] {
 		    if { [apm_file_watchable_p $server_rel_path] } {
 			if { [nsv_exists apm_reload_watch $server_rel_path] } {
 			    # This procs file is already being watched.
-			    doc_body_append "<td>&nbsp;watch&nbsp;</td>"
+			    doc_body_append "<td>&nbsp;being watched&nbsp;</td>"
 			} else {
 			    if {![ad_parameter -package_id [ad_acs_kernel_id] \
 				    PerformanceModeP request-processor 1]} {
 				# Provide a link to watch the procs file.
-				doc_body_append "<td>&nbsp;<a href=\"file-watch?version_id=$version_id&paths=$path\">watch</a>&nbsp;</td>"
+				doc_body_append "<td>&nbsp;<a href=\"file-watch?[export_vars -url {version_id {paths $path} return_url}]\">watch</a>&nbsp;</td>"
 			    } else {
 				doc_body_append "<td></td>"
 			    }
@@ -111,7 +113,8 @@ doc_body_append "</table>
 
 if { $installed_p == "t" } {
     doc_body_append "<ul>
-    <li><a href=\"package-watch?package_key=$package_key\">watch all files</a></li>"
+    <li><a href=\"package-watch?[export_vars -url {package_key return_url}]\">watch all files</a></li>
+<li><a href=\"package-watch-cancel?[export_vars -url {package_key return_url}]\">cancel all watches</a></li>"
 
     if { [empty_string_p $distribution_uri] } {
         doc_body_append "
