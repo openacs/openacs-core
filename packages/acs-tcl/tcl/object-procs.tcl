@@ -10,6 +10,16 @@ ad_library {
 
 namespace eval acs_object {}
 
+ad_proc -private acs_lookup_magic_object_no_cache { name } {
+    Non memoized version of acs_magic_object.
+
+    @return the magic object's object ID 
+
+    @see acs_magic_object
+} {
+    return [db_string magic_object_select {} ]
+}
+
 ad_proc -private acs_lookup_magic_object { name } {
     Non memoized version of acs_magic_object.
 
@@ -17,9 +27,7 @@ ad_proc -private acs_lookup_magic_object { name } {
 
     @see acs_magic_object
 } {
-    return [db_string magic_object_select {
-	select object_id from acs_magic_objects where name = :name
-    }]
+    return [util_memoize [list acs_lookup_magic_object_no_cache $name]]
 }
 
 ad_proc -public acs_magic_object { name } {
