@@ -457,7 +457,7 @@ exit</action></screen>
                   you just set it up). </para>
                   <screen>[root root]# <userinput>su - <replaceable>$OPENACS_SERVICE_NAME</replaceable></userinput>
 [$OPENACS_SERVICE_NAME aolserver]$ <userinput>cd /var/lib/aolserver/<replaceable>openacs-5-1</replaceable></userinput>
-[$OPENACS_SERVICE_NAME aolserver]$ <userinput>cvs up -Pd</userinput></screen>
+[$OPENACS_SERVICE_NAME aolserver]$ <userinput>cvs up -Pd ChangeLog *.txt bin etc tcl www packages/*</userinput></screen>
                 </listitem>
               <listitem>
                 <formalpara>
@@ -466,7 +466,7 @@ exit</action></screen>
                 </formalpara>
                 <screen>[root root]# <userinput>su - <replaceable>$OPENACS_SERVICE_NAME</replaceable></userinput>
 [$OPENACS_SERVICE_NAME aolserver]$ <userinput>cd /var/lib/aolserver/<replaceable>openacs-5-1</replaceable></userinput>
-[$OPENACS_SERVICE_NAME openacs-5-1]$ <userinput>cvs up -d <replaceable>myfirstpackage</replaceable></userinput></screen>
+[$OPENACS_SERVICE_NAME openacs-5-1]$ <userinput>cvs up -Pd <replaceable>packagename</replaceable></userinput></screen>
               <para>In the next section, the import must be tailored to just this package.</para>
               </listitem>
               </itemizedlist>
