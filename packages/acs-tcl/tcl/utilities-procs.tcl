@@ -771,21 +771,22 @@ ad_proc -public export_vars {
 	set url_p 1
     }
 
+    # 'noprocessing_vars' is yet another container of variables, 
+    # only this one doesn't have the values subst'ed
+    # and we don't try to find :multiple and :array flags in the namespec
+    set noprocessing_vars [list]
+
     if { $entire_form_p } {
         set the_form [ns_getform]
         if { ![empty_string_p $the_form] } {
-            set form_var_list [list]
-            for {set i 0} {$i<[ns_set size $the_form]} {incr i} {
+            for { set i 0 } { $i < [ns_set size $the_form] } { incr i } {
                 set varname [ns_set key $the_form $i]
-                regsub -all {:} $varname {\\:} varname
                 set varvalue [ns_set value $the_form $i]
-                lappend form_var_list [list $varname $varvalue]
+                lappend noprocessing_vars [list $varname $varvalue]
             }
-            # We simply prepend this to the existing vars list. 
-            # That way, the -exclude and -override arguments will still work
-            set vars [concat $form_var_list $vars]
         }
     }
+    
 
     #####
     # 
@@ -805,21 +806,27 @@ ad_proc -public export_vars {
     # This contains the value if provided, otherwise we'll pull it out of the caller's environment
     array set exp_value [list]
 
-    foreach precedence_type { override exclude vars } {
+    foreach precedence_type { override exclude vars noprocessing_vars } {
 	foreach var_spec [set $precedence_type] {
 	    if { [llength $var_spec] > 2 } {
 		return -code error "A varspec must have either one or two elements."
 	    }
 
-            # Hide escaped colons for below split
-            regsub -all {\\:} $var_spec "!!cOlOn!!" var_spec
+            if { ![string equal $precedence_type "noprocessing_vars"] } {
+                # Hide escaped colons for below split
+                regsub -all {\\:} $var_spec "!!cOlOn!!" var_spec
+                
+                set name_spec [split [lindex $var_spec 0] ":"]
+                
+                # Replace escaped colons with single colon
+                regsub -all {!!cOlOn!!} $name_spec ":" name_spec
 
-	    set name_spec [split [lindex $var_spec 0] ":"]
-
-            # Replace escaped colons with single colon
-            regsub -all {!!cOlOn!!} $name_spec ":" name_spec
-
-	    set name [lindex $name_spec 0]
+                set name [lindex $name_spec 0]
+            } else {
+                set name [lindex $var_spec 0]
+                # Nothing after the colon, since we don't interpret any colons
+                set name_spec [list $name {}]
+            }
 
 	    # If we've already encountered this varname, ignore it
 	    if { ![info exists exp_precedence_type($name)] } {
@@ -838,7 +845,11 @@ ad_proc -public export_vars {
 		    }
 		    
 		    if { [llength $var_spec] > 1 } {
-                        set value [uplevel subst \{[lindex $var_spec 1]\}]
+                        if { ![string equal $precedence_type "noprocessing_vars"] } {
+                            set value [uplevel subst \{[lindex $var_spec 1]\}]
+                        } else {
+                            set value [lindex $var_spec 1]
+                        }
                         set exp_value($name) $value
                         # If the value is specified explicitly, we include it even if the value is empty
 		    } else {
