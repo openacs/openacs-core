@@ -1,4 +1,4 @@
-<html><head><title>Datasource for @code_stub@.acs</title></head>
+<html><head><title>Datasource for @code_stub@</title></head>
 
 <body bgcolor=white>
 <h3>Data sources for @code_stub@.acs</h3>

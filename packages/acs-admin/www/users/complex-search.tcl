@@ -104,7 +104,7 @@ if {[exists_and_not_null limit_to_users_in_group_id] && ![regexp {[^-0-9]} $limi
 
 if { [exists_and_not_null email] } {
     set sql_email "%[string tolower $email]%"
-    lappend where_clause "lower(email) like :sql_email"
+    lappend where_clause "email like :sql_email"
     incr rowcount
     set criteria:[set rowcount](data) "Email contains '$email'"
 }

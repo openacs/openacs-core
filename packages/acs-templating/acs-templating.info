@@ -324,8 +324,8 @@ specification for many physical pages, so the overall layout of a site can be mo
             <file type="documentation" path="www/doc/widgets/table.html"/>
         </files>
         <parameters>
-            <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="ShowCompiledTemplatesP"  default="1" description="Show thecompiled template (for debugging) at .cmp URL"/>
-            <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="ShowDataDictionariesP"  default="1" description="Offer data dictionaries on .dat/.fmt URL."/>
+            <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="ShowCompiledTemplatesP"  default="0" description="Show thecompiled template (for debugging) at .cmp URL"/>
+            <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="ShowDataDictionariesP"  default="0" description="Offer data dictionaries on .dat/.fmt URL."/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="RefreshCache"  default="as needed" description="When to re-translate templates.  Speical values: "/>
         </parameters>
 

@@ -7,7 +7,7 @@
 select user_id, first_names, last_name, email
 from cc_users
 where last_visit > now() - '[ad_parameter LastVisitUpdateInterval "" 600] seconds'::interval
-order by upper(last_name), upper(first_names), upper(email)
+order by upper(last_name), upper(first_names), email
   </querytext>
 </fullquery>
 

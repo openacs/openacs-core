@@ -9,83 +9,18 @@
 # License.  Full text of the license is available from the GNU Project:
 # http://www.fsf.org/copyleft/gpl.html
 
-
-# Sample filter for handling pages with the ADP to Tcl compiler
-
-ad_proc -public acs_page_filter { why } {
-
-  # Check for updates to Tcl library files
-  # watch_files
-
-  set url [template::util::resolve_directory_url [ns_conn url]]
-
-  if { ! [regsub {.acs$} $url {} url_stub] } { return filter_ok }
-
-  if { [catch {
-
-    #set url [template::util::resolve_directory_url [ad_conn url]]
-    set root_path [ns_info pageroot]
-
-    template::filter exec url_stub root_path
-
-    set file_stub $root_path/$url_stub
-
-    ns_log Notice $file_stub
-
-    set beginTime [clock clicks]
-
-    set output [template::adp_parse $file_stub {}]
-
-    set timeElapsed [expr ([clock clicks] - $beginTime) / 1000]
-    ns_log Notice "Time elapsed: $timeElapsed"
-
-  } errMsg] } {
-
-    if { [string equal FILTER_ABORT $errMsg] } { return filter_return }
-
-    # truncate ADP buffer
-    ns_adp_trunc
-
-    global errorInfo
-    # truncate the error trace  (no problem for debugging ?)
-    regsub {\(procedure \"code::tcl.*$} $errorInfo {} errorInfo
-
-    set output "<html><body>
-      <p>An internal error ocurred while preparing a template $url_stub:</p>
-      <pre>$errorInfo</pre>
-      </body></html>"
-  }
-
-  if { [string length $output] } {
-    ns_return 200 text/html $output
-  }
-
-  return filter_return
-}
-
 # Redirect and abort processing
 
 ad_proc -public template::forward { url } {
 
-  if { ! [string match http://* $url] } {
-    
-    if { [string index $url 0] != "/" } {
-      set url [util::get_url_directory [ns_conn url]]$url
-    }
-    set host_name [ns_set iget [ns_conn headers] Host]
-    set url http://$host_name$url
-  }
+  # DRB: The code that was here before didn't preserve the protocol, always
+  # using HTTP even if HTTPS was used to establish the connection.  Besides
+  # which ad_returnredirect has funky checks for even funkier browsers, and
+  # is therefore not only the standard way to redirect in OpenACS 4 but
+  # more robust as well.
 
-  global errorInfo
-
-  ns_returnredirect $url
-
-  # (DanW OpenACS, dcwickstrom@earthlink.net) - commented this out since the 
-  # rp doesn't seem to support this processing method.  It appears that this 
-  # is used as a mechanism to abort further processing of a page, but the rp 
-  # doesn't have the catch and continue code as implied by acs_page_filter 
-  # example shown above.
-  #error FILTER_ABORT
+  ad_returnredirect $url
+  ad_script_abort
 }
 
 # Run any filter procedures that have been registered with the
@@ -113,14 +48,22 @@ ad_proc -public template::filter { command args } {
   }
 }
 
+# DRB: The following debugging filters weren't integrated with OpenACS.
+# I fixed them but not very elegantly - they assume you're trying to debug
+# a template within a package, not at the top www level.  As it turns out
+# the query processor makes similar assumptions so making these work for
+# "/foo"-style URLs would require fixing it, too.   Also ACS 4.2 had these
+# debugging filters enabled by default.  I've turned them off by default.
+
 # Show the compiled template (for debugging)
 
 ad_proc -public cmp_page_filter { why } {
 
   if { [catch {
-    set url [ad_conn url]
-    regsub {.cmp$} $url {} url_stub
-    set file_stub [ns_url2file $url_stub]
+    set url [ns_conn url]
+    regsub {.cmp} $url {} url_stub
+    regexp {^/([^/]*)(.*)} $url_stub all package_key rest
+    set file_stub "[acs_root_dir]/packages/$package_key/www$rest"
 
     set beginTime [clock clicks]
 
@@ -145,9 +88,10 @@ ad_proc -public cmp_page_filter { why } {
 ad_proc -public dat_page_filter { why } {
 
   if { [catch {
-    set url [ad_conn url]
-    regsub {.dat$} $url {} url_stub
-    set code_stub [ns_url2file $url_stub]
+    set url [ns_conn url]
+    regsub {.dat} $url {} url_stub
+    regexp {^/([^/]*)(.*)} $url_stub all package_key rest
+    set code_stub "[acs_root_dir]/packages/$package_key/www$rest"
 
     set beginTime [clock clicks]
 
@@ -170,16 +114,18 @@ ad_proc -public dat_page_filter { why } {
 
 # Return the auto-generated template for a form
 
-ad_proc -public frm_page_filter { why } {
 
-  namespace eval template {
+namespace eval template {
 
-    if { [catch {
+    ad_proc -private frm_page_handler { } {
+        Build the form information for the form page filter.   This was
+        originally handled inline but doing so screwed up the query
+        processor.
+    } {
       set url [ns_conn url]
       regsub {.frm} $url {} url_stub
-      set __adp_stub [ns_url2file $url_stub]
-
-      set beginTime [clock clicks]
+      regexp {^/([^/]*)(.*)} $url_stub all package_key rest
+      set __adp_stub "[acs_root_dir]/packages/$package_key/www$rest"
 
       # Set the parse level
       variable parse_level
@@ -189,8 +135,16 @@ ad_proc -public frm_page_filter { why } {
       adp_prepare
 
       # get the form template
-      set output [form::template \
-        [ns_queryget form_id] [ns_queryget form_style]]
+      return [form::template [ns_queryget form_id] [ns_queryget form_style]]
+    }
+}
+
+ad_proc -public frm_page_filter { why } {
+    if { [catch {
+
+      set beginTime [clock clicks]
+
+      set output [template::frm_page_handler]
 
       set timeElapsed [expr ([clock clicks] - $beginTime) / 1000.]
       ns_log Notice "Time elapsed: $timeElapsed"
@@ -204,7 +158,6 @@ ad_proc -public frm_page_filter { why } {
      <body>
        <pre>[ns_quotehtml $output]</pre>
      </body></html>"
-  }
 
   return filter_return
 }

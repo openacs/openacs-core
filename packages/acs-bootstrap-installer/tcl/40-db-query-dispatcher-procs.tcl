@@ -174,7 +174,7 @@ proc db_qd_get_fullname {local_name {added_stack_num 1}} {
 	set proc_name [info level [expr "-2 - $added_stack_num"]]
     }
 
-    set list_of_source_procs {ns_sourceproc apm_source template::adp_parse rp_handle_tcl_request}
+    set list_of_source_procs {ns_sourceproc apm_source template::adp_parse template::frm_page_handler rp_handle_tcl_request}
 
     # We check if we're running the special ns_ proc that tells us
     # whether this is an URL or a Tcl proc.
@@ -214,6 +214,12 @@ proc db_qd_get_fullname {local_name {added_stack_num 1}} {
                 regsub {\.vuh} [ad_conn file] {} url
                 set url [ad_make_relative_path $url]
                 regsub {^/?packages} $url {} url
+            }
+
+            template::frm_page_handler {
+                db_qd_log Debug "We are in the template system's form page debugger!"
+                set real_url_p 1
+                regsub {\.frm} [ad_conn url] {} url
             }
 
             default {

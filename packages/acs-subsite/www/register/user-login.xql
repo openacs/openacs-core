@@ -6,7 +6,7 @@
       
     select user_id, member_state, email_verified_p
     from cc_users
-    where lower(email) = :email
+    where email = lower(:email)
       </querytext>
 </fullquery>
 

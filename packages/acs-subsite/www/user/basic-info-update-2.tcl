@@ -86,7 +86,7 @@ if { $exception_count > 0 } {
     return
 }
 
-if { [db_string email_unique_count "select count(party_id) from parties where upper(email) = upper(:email) and party_id <> :user_id"] > 0 } {
+if { [db_string email_unique_count "select count(party_id) from parties where email = lower(:email) and party_id <> :user_id"] > 0 } {
     ad_return_error "$email already in database" "The email address
     \"$email\" is already in the database.  If this is your email address,
     perhaps you're trying to combine two accounts?  If so, please email <a

@@ -48,9 +48,8 @@ if {![info exists email] || ![util_email_valid_p $email]} {
 </ul>
 "
 } else {
-    set upper_email [string toupper $email]
     set email_count [db_string unused "select count(email)
-from parties where upper(email) = :upper_email
+from parties where email = lower(:email)
 and party_id <> :user_id"]
 
     # note, we dont' produce an error if this is a double click
