@@ -35,7 +35,7 @@ ad_proc -public subsite::after_mount {
 
 } {
 
-    if { [empty_string_p [application_group::group_id_from_package_id -package_id $package_id]] } {
+    if { [empty_string_p [application_group::group_id_from_package_id -no_complain -package_id $package_id]] } {
 
         set subsite_name [db_string subsite_name_query {}]
 

@@ -15,7 +15,7 @@
         <vendor url="http://openacs.org/">OpenACS</vendor>
 
         <provides url="acs-content-repository" version="4.6.5"/>
-        <requires url="acs-kernel" version="4.0"/>
+        <requires url="acs-kernel" version="4.6.2"/>
         <requires url="acs-service-contract" version="4.2"/>
         <requires url="search" version="4.2"/>
 

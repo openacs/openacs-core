@@ -282,4 +282,3 @@ ad_proc item::copy {
     db_exec_plsql copy_item {}
 
 }
-

@@ -1,6 +1,6 @@
 This is the OpenACS - the Open Architecture Community System.
 
-Version 4.6b2
+Version 4.6.2
 
 OpenACS is an advanced toolkit for building scalable,
 community-oriented web applications.

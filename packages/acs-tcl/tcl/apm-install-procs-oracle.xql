@@ -27,6 +27,29 @@
       </querytext>
 </fullquery>
 
+<fullquery name="apm_package_install_version.version_insert_4.6.1">      
+      <querytext>
+      
+		begin
+		:1 := apm_package_version.new(
+			version_id => :version_id,
+			package_key => :package_key,
+			version_name => :version_name,
+			version_uri => :version_uri,
+			summary => :summary,
+			description_format => :description_format,
+			description => :description,
+			release_date => :release_date,
+			vendor => :vendor,
+			vendor_uri => :vendor_uri,
+			installed_p => 't',
+			data_model_loaded_p => 't'
+	              );
+		end;
+	    
+      </querytext>
+</fullquery>
+
  
 <fullquery name="apm_package_delete.apm_package_delete">      
       <querytext>

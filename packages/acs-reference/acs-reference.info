@@ -27,7 +27,7 @@ data of this sort.
 </description>
 
         <provides url="acs-reference" version="0.2d"/>
-        <requires url="acs-kernel" version="4.1"/>
+        <requires url="acs-kernel" version="4.6.2"/>
 
         <files>
             <file type="package_spec" path="acs-reference.info"/>

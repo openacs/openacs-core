@@ -293,7 +293,7 @@ create table apm_package_versions (
     content_length     integer,
     distribution_uri   varchar(1500),
     distribution_date  timestamptz,
-    auto_mount         varchar(50),
+    auto_mount         varchar(50) default null,
     constraint apm_package_vers_id_name_un unique(package_key, version_name)
 );
 

@@ -15,11 +15,28 @@
 	Please report bugs using our
 	<ulink url="http://openacs.org/bugtracker/openacs/">
 	  Bug Tracker</ulink> at the <ulink
-	  url="http://openacs.org/">OpenACS website</ulink>.  The latest
-	information on installing this release under Oracle 8.1.7
-	or PostgreSQL 7.2.* can be found there as well.  Currently the
-	toolkit will not install under Oracle 9i due to Oracle having made
-	"delete" an illegal name for PL/SQL procedures and functions.
+	  url="http://openacs.org/">OpenACS website</ulink>.   This version
+        of the OpenACS Toolkit supports PostgreSQL 7.2.3 and 7.3.2, and
+        Oracle 8i.  It will not work with Oracle 9i (support is planned for
+        OpenACS 4.7.)
+  </para>
+
+  <para>
+        <emphasis role="bold">Upgrading from OpenACS 4.6.1</emphasis>
+  </para>
+  <para>
+        OpenACS 4.6.2 includes key datamodel changes to acs-kernel and other
+        packages.  Your first step after downloading OpenACS 4.6.2 and restarting
+        AOLserver should be to visit the Package Manager, click on the "install
+        packages" link, and select the checkbox to upgrade acs-kernel.  After
+        acs-kernel has been upgraded, return to the "install packages" page and
+        select the checkboxes for all other packages you have installed that
+        need upgrading (they are marked "upgrade" rather than "new install") and
+        perform the upgrade step.
+  </para>
+  <para>
+        After packages have been upgraded, your installation should run without
+        problems.
   </para>
 
   <para>

@@ -27,11 +27,19 @@ comment on column apm_package_callbacks.type is '
 -- Add column for auto-mount
 alter table apm_package_versions add auto_mount varchar(50);
 
+-- DRB: Set it null for all existing versions (probably not necessary but doesn't hurt)
+update apm_package_versions set auto_mount = NULL;
+
 comment on column apm_package_versions.auto_mount is '
  A dir under the main site site node where an instance of the package will be mounted
  automatically upon installation. Useful for site-wide services that need mounting
  such as general-comments and notifications.
 ';
+
+-- DRB: Need to drop this view first in PG 7.3 since "cascade" isn't implemented in
+-- PG 7.2 and PG 7.3 doesn't let you drop a view if another depends on it.
+
+drop view apm_enabled_package_versions;
 
 -- Recreate views for auto-mount
 drop view apm_package_version_info;
@@ -46,10 +54,27 @@ create view apm_package_version_info as
     from   apm_package_types t, apm_package_versions v 
     where  v.package_key = t.package_key;
 
-drop view apm_enabled_package_versions;
 create view apm_enabled_package_versions as
     select * from apm_package_version_info
     where  enabled_p = 't';
+	
+create or replace function apm_package__highest_version (varchar) returns integer as '
+declare
+     highest_version__package_key    alias for $1;
+     v_version_id                    apm_package_versions.version_id%TYPE;
+begin
+     select version_id into v_version_id
+	from apm_package_version_info i 
+	where apm_package_version__sortable_version_name(version_name) = 
+             (select max(apm_package_version__sortable_version_name(v.version_name))
+	             from apm_package_version_info v where v.package_key = highest_version__package_key)
+	and package_key = highest_version__package_key;
+      if NOT FOUND then 
+         return 0;
+      else
+         return v_version_id;
+      end if;
+end;' language 'plpgsql';
 
 -- Recreate functions for auto-mount
 create function apm_package_version__new (integer,varchar,varchar,varchar,varchar,varchar,varchar,timestamptz,varchar,varchar,varchar,boolean,boolean) returns integer as '

@@ -466,7 +466,15 @@ ad_proc -private apm_package_install {
 
     if { $upgrade_p } {
         # Run before-upgrade
-        apm_invoke_callback_proc -version_id $version_id -type before-upgrade -arg_list [list from_version_name $upgrade_from_version_name to_version_name $version(name)]
+
+        # DRB: another one-time hack to allow the upgrade of acs-kernel 4.6.1 to 4.6.2 from the APM.
+        # We know that if the callback list is empty that we don't need to invoke any callbacks,
+        # and that acs-kernel has no APM callbacks defined (in 4.6.2 at least) ...
+
+        if { [llength $version(callbacks)] > 0 } {
+            apm_invoke_callback_proc -version_id $version_id -type before-upgrade -arg_list [list from_version_name $upgrade_from_version_name to_version_name $version(name)]
+        }
+
     } else {
         # Run before-install
         apm_invoke_callback_proc -version_id $version_id -type before-install
@@ -556,17 +564,23 @@ ad_proc -private apm_package_install_version {
     @return The assigned version id.
 } {
     if { [empty_string_p $version_id] } {
-	set version_id [db_null]
+	set version_id ""
     }
     if { [empty_string_p $release_date] } {
-	set release_date [db_null]
+	set release_date ""
     }
 
-    return [db_exec_plsql version_insert {}]
+    # DRB: one time hack to allow us to upgrade from 4.6.1 to 4.6.2
+    # from the APM.  This depends on the fact that the kernel itself
+    # doesn't require the new callback feature.
 
-   # Every package provides by default the service that is the package itself
-   # This spares the developer from having to visit the dependency page
-   apm_interface_add $version_id $package_key $version_name
+    if { [catch {set ret [db_exec_plsql version_insert ""]} errmsg]} {
+        ns_log Notice "Version insert failed, trying OpenACS 4.6.1 version, errmsg: $errmsg"
+        return [db_exec_plsql version_insert_4.6.1 {}]
+    } else {
+        return $ret
+    }
+
 }
 
 
@@ -890,9 +904,15 @@ ad_proc -private apm_package_install_callbacks {
 
     @author Peter Marklund
 } {
-    db_dml delete_all_callbacks {
-        delete from apm_package_callbacks
-        where version_id = :version_id
+
+    # DRB: one-time hack to allow for the upgrading of the 4.6.1 kernel to
+    # 4.6.2 from the APM
+
+    with_catch errmsg {
+        db_dml delete_all_callbacks {}
+    } {
+        ns_log Notice "apm_package_install_callbacks failed (probably because you're upgrading from 4.6.1->4.6.2, if so ignore)"
+        ns_log Notice "the error message was: $errmsg"
     }
 
     foreach {type proc} $callback_list {
