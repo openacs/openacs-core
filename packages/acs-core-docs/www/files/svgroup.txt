@@ -16,4 +16,4 @@ for i in $* ; do
     chmod g+r $i/supervise/status
     chgrp $g $i/supervise
     chmod g+x $i/supervise
-done 
+done
