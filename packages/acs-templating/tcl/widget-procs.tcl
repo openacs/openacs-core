@@ -70,7 +70,11 @@ ad_proc -public template::widget::inform { element_reference tag_attributes } {
 
   upvar $element_reference element
 
-  return $element(value)
+  if { [info exists element(value)] } {
+    return $element(value)
+  } else {
+    return ""
+  }
 }
 
 ad_proc -public template::widget::input { type element_reference tag_attributes } {
