@@ -125,14 +125,21 @@ ad_proc -public ad_url {} {
     return [ad_parameter -package_id [ad_acs_kernel_id] SystemURL]
 }
 
+ad_proc -public acs_community_member_page {
+} {
+    @return the url for the community member page
+} {
+    return "[subsite::get_element -element url -notrailing][ad_parameter \
+	    -package_id [ad_acs_kernel_id] CommunityMemberURL]"
+}
+
 ad_proc -public acs_community_member_url {
     {-user_id:required}
 } {
     @return the url for the community member page of a particular user
     @see acs_community_member_url
 } {
-    return "[subsite::get_element -element url -notrailing][ad_parameter \
-	    -package_id [ad_acs_kernel_id] CommunityMemberURL]?[export_vars user_id]"
+    return "[acs_community_member_page]?[export_vars user_id]"
 }
 
 ad_proc -public acs_community_member_link {
