@@ -2,8 +2,7 @@
 -- acs-kernel/sql/acs-permissions-create.sql
 --
 -- The ACS core permissioning system. The knowledge level of system
--- allows you to define a hierarchichal system of privilages, and
--- associate them with low level operations on object types. The
+-- allows you to define a hierarchichal system of privilages.  The
 -- operational level allows you to grant to any party a privilege on
 -- any object.
 --
@@ -18,23 +17,6 @@
 ---------------------------------------------
 -- KNOWLEDGE LEVEL: PRIVILEGES AND ACTIONS --
 ---------------------------------------------
-
--- suggestion: acs_methods, acs_operations, acs_transactions?
--- what about cross-type actions? new-stuff? site-wide search?
-
---create table acs_methods (
---	object_type	not null constraint acs_methods_object_type_fk
---			references acs_object_types (object_type),
---	method		varchar2(100) not null,
---	constraint acs_methods_pk
---	primary key (object_type, method)
---);
-
---comment on table acs_methods is '
--- Each row in the acs_methods table directly corresponds to a
--- transaction on an object. For example an sql statement that updates a
--- bboard message would require an entry in this table.
---'
 
 create table acs_privileges (
 	privilege	varchar(100) not null constraint acs_privileges_pk
@@ -201,6 +183,20 @@ create trigger acs_priv_hier_ins_del_tr after insert or delete
 on acs_privilege_hierarchy for each row
 execute procedure acs_priv_hier_ins_del_tr ();
 
+create or replace function acs_priv_del_tr () returns opaque as '
+begin
+
+  delete from acs_privilege_descendant_map
+  where privilege = old.privilege;
+
+  return old;
+
+end;' language 'plpgsql';
+
+create trigger acs_priv_del_tr before delete
+on acs_privileges for each row
+execute procedure acs_priv_del_tr ();
+
 create function priv_recurse_subtree(varbit, varchar) 
 returns integer as '
 declare
@@ -256,20 +252,8 @@ begin
 
 end;' language 'plpgsql';
 
---create table acs_privilege_method_rules (
---	privilege	not null constraint acs_priv_method_rules_priv_fk
---			references acs_privileges (privilege),
---	object_type	varchar2(100) not null,
---	method		varchar2(100) not null,
---	constraint acs_privilege_method_rules_pk
---	primary key (privilege, object_type, method),
---	constraint acs_priv_meth_rul_type_meth_fk
---	foreign key (object_type, method) references acs_methods
---);
-
 comment on table acs_privileges is '
- The rows in this table correspond to aggregations of specific
- methods. Privileges share a global namespace. This is to avoid a
+ Privileges share a global namespace. This is to avoid a
  situation where granting the foo privilege on one type of object can
  have an entirely different meaning than granting the foo privilege on
  another type of object.
@@ -279,20 +263,6 @@ comment on table acs_privilege_hierarchy is '
  The acs_privilege_hierarchy gives us an easy way to say: The foo
  privilege is a superset of the bar privilege.
 ';
-
---comment on table acs_privilege_method_rules is '
--- The privilege method map allows us to create rules that specify which
--- methods a certain privilege is allowed to invoke in the context of a
--- particular object_type. Note that the same privilege can have
--- different methods for different object_types. This is because each
--- method corresponds to a piece of code, and the code that displays an
--- instance of foo will be different than the code that displays an
--- instance of bar. If there are no methods defined for a particular
--- (privilege, object_type) pair, then that privilege is not relavent to
--- that object type, for example there is no way to moderate a user, so
--- there would be no additional methods that you could invoke if you
--- were granted moderate on a user.
---'
 
 create function acs_privilege__create_privilege (varchar,varchar,varchar)
 returns integer as '

@@ -2,8 +2,7 @@
 -- acs-kernel/sql/acs-permissions-create.sql
 --
 -- The ACS core permissioning system. The knowledge level of system
--- allows you to define a hierarchichal system of privilages, and
--- associate them with low level operations on object types. The
+-- allows you to define a hierarchichal system of privilages.  The
 -- operational level allows you to grant to any party a privilege on
 -- any object.
 --
@@ -11,30 +10,13 @@
 --
 -- @creation-date 2000-08-13
 --
--- @cvs-id $Id$
+-- @cvs-id acs-permissions-create.sql,v 1.4.2.1 2003/02/15 03:23:55 donb Exp
 --
 
 
 ---------------------------------------------
--- KNOWLEDGE LEVEL: PRIVILEGES AND ACTIONS --
+-- KNOWLEDGE LEVEL: PRIVILEGES --
 ---------------------------------------------
-
--- suggestion: acs_methods, acs_operations, acs_transactions?
--- what about cross-type actions? new-stuff? site-wide search?
-
---create table acs_methods (
---	object_type	not null constraint acs_methods_object_type_fk
---			references acs_object_types (object_type),
---	method		varchar2(100) not null,
---	constraint acs_methods_pk
---	primary key (object_type, method)
---);
-
---comment on table acs_methods is '
--- Each row in the acs_methods table directly corresponds to a
--- transaction on an object. For example an sql statement that updates a
--- bboard message would require an entry in this table.
---'
 
 create table acs_privileges (
 	privilege	varchar2(100) not null constraint acs_privileges_pk
@@ -55,20 +37,8 @@ create table acs_privilege_hierarchy (
 -- create bitmap index acs_priv_hier_child_priv_idx on acs_privilege_hierarchy (child_privilege);
 create index acs_priv_hier_child_priv_idx on acs_privilege_hierarchy (child_privilege);
 
---create table acs_privilege_method_rules (
---	privilege	not null constraint acs_priv_method_rules_priv_fk
---			references acs_privileges (privilege),
---	object_type	varchar2(100) not null,
---	method		varchar2(100) not null,
---	constraint acs_privilege_method_rules_pk
---	primary key (privilege, object_type, method),
---	constraint acs_priv_meth_rul_type_meth_fk
---	foreign key (object_type, method) references acs_methods
---);
-
 comment on table acs_privileges is '
- The rows in this table correspond to aggregations of specific
- methods. Privileges share a global namespace. This is to avoid a
+ Privileges share a global namespace. This is to avoid a
  situation where granting the foo privilege on one type of object can
  have an entirely different meaning than granting the foo privilege on
  another type of object.
@@ -78,32 +48,6 @@ comment on table acs_privilege_hierarchy is '
  The acs_privilege_hierarchy gives us an easy way to say: The foo
  privilege is a superset of the bar privilege.
 ';
-
---comment on table acs_privilege_method_rules is '
--- The privilege method map allows us to create rules that specify which
--- methods a certain privilege is allowed to invoke in the context of a
--- particular object_type. Note that the same privilege can have
--- different methods for different object_types. This is because each
--- method corresponds to a piece of code, and the code that displays an
--- instance of foo will be different than the code that displays an
--- instance of bar. If there are no methods defined for a particular
--- (privilege, object_type) pair, then that privilege is not relavent to
--- that object type, for example there is no way to moderate a user, so
--- there would be no additional methods that you could invoke if you
--- were granted moderate on a user.
---'
-
---create or replace view acs_privilege_method_map
---as select r1.privilege, pmr.object_type, pmr.method
---     from acs_privileges r1, acs_privileges r2, acs_privilege_method_rules pmr
---    where r2.privilege in (select distinct rh.child_privilege
---                           from acs_privilege_hierarchy rh
---                           start with privilege = r1.privilege
---                           connect by prior child_privilege = privilege
---                           union
---                           select r1.privilege
---                           from dual)
---      and r2.privilege = pmr.privilege;
 
 create or replace package acs_privilege
 as
@@ -243,12 +187,6 @@ where c.ancestor_id = p.object_id
 
 create or replace view all_object_party_privilege_map as
 select * from acs_object_party_privilege_map;
-
-
---create or replace view acs_object_party_method_map
---as select opp.object_id, opp.party_id, pm.object_type, pm.method
---   from acs_object_party_privilege_map opp, acs_privilege_method_map pm
---   where opp.privilege = pm.privilege;
 
 create or replace package acs_permission
 as
