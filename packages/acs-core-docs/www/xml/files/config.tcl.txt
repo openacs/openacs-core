@@ -44,7 +44,7 @@ set directoryfile           index.tcl,index.adp,index.html,index.htm
 #
 
 ns_section ns/parameters 
-ns_param   serverlog          ${serverroot}/log/${server}-error.log 
+ns_param   serverlog          ${serverroot}/log/error.log 
 ns_param   home               $homedir 
 ns_param   maxkeepalive       0
 ns_param   logroll            on
@@ -202,7 +202,7 @@ ns_section "ns/db/drivers"
 if { $database == "oracle" } {
     ns_param   ora8            ${bindir}/ora8.so
 } else {
-    ns_param   postgres        ${bindir}/postgres.so  ;# Load PostgreSQL driver
+    ns_param   postgres        ${bindir}/nspostgres.so  ;# Load PostgreSQL driver
 }
 
 # 
