@@ -926,6 +926,19 @@ ad_proc -public apm_package_url_from_key_mem {package_key} {
 }
 
 #
+# package_key -> version_id 
+#
+
+ad_proc -public apm_version_id_from_package_key { package_key } {
+    Return the id of the enabled version of the given package_key.
+    If no such version id can be found, returns the empty string.
+
+    @author Peter Marklund
+} {
+    return [db_string get_id {} -default ""]
+}
+
+#
 # version_id -> package_key
 #
 
@@ -1033,26 +1046,204 @@ ad_proc -public apm_package_create_instance {
     return $package_id
 }
 
-
-ad_proc -public apm_package_call_post_instantiation_proc {
-    package_id
-    package_key
+ad_proc -public apm_set_callback_proc {
+    {-version_id ""}
+    {-package_key ""}
+    {-type:required}
+    proc
 } {
+    Set the name of an APM Tcl procedure callback for a certain package version.
+    If version_id is not supplied the id of the currently enabled version
+    of the package will be used.
 
-    Call the package-specific post instantiation proc, if any
+    @see apm_supported_callback_types
 
+    @author Peter Marklund
 } {
+    apm_assert_callback_type_supported $type
 
-    # Check for a post-instantiation TCL procedure
-    set procedure_name [apm_post_instantiation_tcl_proc_from_key $package_key]
-    if { ![empty_string_p $procedure_name] } {
-	with_catch errmsg {
-	    $procedure_name $package_id
-	} {
-	    ns_log Error "APM: Post-instantiation procedure, $procedure_name, failed: $errmsg"
-	}
+    if { [empty_string_p $version_id] } {
+        if { [empty_string_p $package_key] } {
+            error "apm_set_package_callback_proc: Invoked with both version_id and package_key empty. You must supply either of these"
+        }
+        
+        set version_id [apm_version_id_from_package_key $package_key]
     }
-    
+
+    db_dml insert_proc {}
+}
+
+ad_proc -public apm_get_callback_proc {
+    {-type:required}
+    {-package_key ""}
+    {-version_id ""}
+} {
+    Return Tcl procedure name for the callback of a certain
+    type for the given package. If no callback proc for the
+    given type is present returns the empty string.
+
+    @see apm_supported_callback_types
+
+    @author Peter Marklund
+} {
+    apm_assert_callback_type_supported $type
+
+    if { [empty_string_p $version_id] } {
+        set version_id [apm_version_id_from_package_key $package_key]
+    }
+
+    return [db_string select_proc {} -default ""]
+}
+
+ad_proc -public apm_remove_callback_proc {
+    {-type:required}
+    {-package_key:required}    
+} {
+    Remove the callback of a certain type for the given package.
+
+    @author Peter Marklund
+} {
+    apm_assert_callback_type_supported $type
+
+    return [db_dml delete_proc {}]
+}
+
+ad_proc -public apm_invoke_callback_proc {
+    {-version_id ""}
+    {-package_key ""}
+    {-arg_list {}}
+    {-type:required}
+} {
+    Invoke the Tcl callback proc of a given type 
+    for a given package version. Any errors during
+    invocation are logged.
+
+    @return 1 if invocation
+    was carried out successfully, 0 if no proc to invoke could
+    be found, and -1 if there was an error during invocation.
+
+    @author Peter Marklund
+} {
+    array set arg_array $arg_list
+
+    set proc_name [apm_get_callback_proc -version_id $version_id \
+                                         -package_key $package_key \
+                                         -type $type]
+    if { [empty_string_p $proc_name] } {
+        if { [string equal $type "after-instantiate"] } {
+            # We check for the old proc on format: package_key_post_instantiation package_id
+            if { [empty_string_p $package_key] } {
+                set package_key [apm_package_key_from_version_id $version_id]
+            }
+            set proc_name [apm_post_instantiation_tcl_proc_from_key $package_key]
+            if { [empty_string_p $proc_name] } {
+                # No callback and no old-style callback proc - no options left
+                return 0
+            }
+
+            with_catch errmsg {
+                $proc_name $arg_array(package_id)
+            } {
+                ns_log Error "APM: Post-instantiation procedure, $proc_name, failed: $errmsg"
+                return -1
+            }   
+
+            return 1
+            
+        } else {
+            # No other callback procs to fall back on
+            return 0
+        }
+    }
+
+    # We have a non-empty name of a callback proc to invoke
+    # Form the full command including arguments
+    set command "${proc_name} [apm_callback_format_args -type $type -arg_list $arg_list]"
+
+    # We are ready for invocation
+    with_catch errmsg {
+	    eval $command
+    } {
+        ns_log Error "APM: Callback invocation \"$command\" failed: $errmsg"
+        return -1
+    }
+
+    return 1
+}
+
+ad_proc -public apm_assert_callback_type_supported { type } {
+    Throw an error if the given callback type is not supported.
+
+    @author Peter Marklund
+} {
+    if { ![apm_callback_type_supported_p $type]  } {
+        error "The supplied callback type $type is not supported. Supported types are: [apm_supported_callback_types]"
+    }
+}
+
+ad_proc -public apm_callback_type_supported_p { type } {
+    Return 1 if the given type of callback is supported and 0
+    otherwise.
+
+    @author Peter Marklund
+} {
+    return [expr [lsearch -exact [apm_supported_callback_types] $type] >= 0]
+}
+
+ad_proc -public apm_callback_format_args {
+    {-version_id ""}
+    {-package_key ""}
+    {-type:required}
+    {-arg_list {}}
+} {
+    Return a string on format -arg_name1 arg_value1 -arg_name2 arg_value2 ...
+    for the callback proc of given type.
+
+    @author Peter Marklund
+} {
+    array set args_array $arg_list
+
+    set arg_string ""
+    set provided_arg_names [array names args_array]
+    foreach required_arg_name [apm_arg_names_for_callback_type -type $type] {
+        if { [lsearch -exact $provided_arg_names $required_arg_name] < 0 } {
+            error "required argument $required_arg_name not supplied to callback proc of type $type"
+        }
+
+        append arg_string " -${required_arg_name} $args_array($required_arg_name)"
+    }
+
+    return $arg_string
+}
+
+ad_proc -public apm_arg_names_for_callback_type {
+    {-type:required}
+} {
+    Return the list of required argument names for the given callback type.
+
+    @author Peter Marklund
+} {
+    switch $type {
+        after-instantiate {
+            return [list package_id]
+        }
+
+        default {
+            # By default a callback proc takes no arguments
+            return [list]
+        }
+    }
+}
+
+ad_proc -public apm_supported_callback_types {} {
+    Gets the list of package callback types
+    that are supported by the system.
+    Each callback type represents a certain event or time
+    when a Tcl procedure should be invoked, such as after-install
+
+    @author Peter Marklund
+} {
+    return [list after-install after-instantiate]
 }
 
 ad_proc -public apm_package_instance_new {
@@ -1072,7 +1263,8 @@ ad_proc -public apm_package_instance_new {
 
 } {
     set package_id [apm_package_create_instance -package_id $package_id $instance_name $context_id $package_key]
-    apm_package_call_post_instantiation_proc $package_id $package_key
+            
+    apm_invoke_callback_proc -package_key $package_key -type "after-instantiate" -arg_list [list package_id $package_id]
 }
 
 ad_proc apm_parameter_sync {package_key package_id} {
@@ -1103,17 +1295,6 @@ ad_proc -public apm_package_instance_delete {
     Deletes an instance of a package
 } {
     db_exec_plsql apm_package_instance_delete {}
-}
-
-ad_proc -public apm_supported_callback_types {} {
-    Gets the list of package callback types
-    that are supported by the system.
-    Each callback type represents a certain event or time
-    when a Tcl procedure should be invoked, such as after-install
-
-    @author Peter Marklund
-} {
-    return [list after-install]
 }
 
 ##
