@@ -602,7 +602,7 @@ ad_proc -public ::foobar::new {
 }
     </pre>
     </p>
-	
+
     @param public specifies that the procedure is part of a public API.
     @param private specifies that the procedure is package-private.
     @param deprecated specifies that the procedure should not be used.
@@ -617,7 +617,7 @@ ad_proc -public ::foobar::new {
     @param [doc_string] documentation for the procedure (optional, but greatly desired).
     @param body the procedure body.  Documentation may be provided for an arbitrary function 
     by passing the body as a "-".
-                             
+
 } -
 
 ad_proc -public ad_arg_parser { allowed_args argv } {
@@ -678,7 +678,11 @@ ad_proc -public callback {
     is provided.  The value returned by the callback function is
     determined by the return codes from the callback implementations.
     <p>
-    The return codes returned from the implmentation are treated 
+    The callbacks are executed one level below the calling function
+    so passing arrays to a callback can be done normally via
+    <pre>upvar arrayname $arrayref</pre>
+    <p>
+    The return codes returned from the implmentation are treated
     as follows:
     <dl>
      <dt>return -code ok or "<b>return</b>"</dt>
@@ -742,7 +746,8 @@ ad_proc -public callback {
 
     set base ::callback::${callback}::impl
     foreach procname [lsort [info procs ${base}::$impl]] {
-        set c [catch {::eval $procname $args} ret]
+
+        set c [catch {::uplevel 1 $procname $args} ret]
         switch -exact $c {
             0 { # code ok
                 if {[llength $ret] > 0} {
