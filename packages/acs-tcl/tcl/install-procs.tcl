@@ -514,8 +514,12 @@ ad_proc -public install::xml::object_id::package { node } {
     <p>&lt;package [ id=&quot;<em>id</em>&quot; | key=&quot;<em>package-key</em>&quot; | url=&quot;<em>package-url</em>&quot; ] /&gt;</p>
 } {
     set id [apm_attribute_value -default "" $node package-id]
-    set package_key [apm_attribute_value -default "" $node package-key]
     set url [apm_attribute_value -default "" $node url]
+
+    set package_key [apm_attribute_value -default "" $node package-key]
+    if {[string equal $package_key ""]} {
+        set package_key [apm_attribute_value -default "" $node package]
+    }
 
     # Remove double slashes
     regsub -all {//} $url "/" url
