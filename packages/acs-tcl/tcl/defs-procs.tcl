@@ -410,11 +410,11 @@ ad_proc -private ad_requested_object_id {} {
 }
 
 ad_proc -public ad_parameter {
-    { 
-	-set "" 
-	-package_id "" 
-    }
-    name {package_key ""} {default ""}
+    -set
+    {-package_id ""}
+    name
+    {package_key ""}
+    {default ""}
 } {
     Package instances can have parameters associated with them.  This function is used for accessing  
     and setting these values.  Parameter values are stored in the database and cached within memory.
@@ -436,7 +436,7 @@ ad_proc -public ad_parameter {
 	set package_id [ad_requested_object_id] } {
     }
 
-    if { ![empty_string_p $set] } {
+    if { [info exists set] } {
 	if { ![empty_string_p $package_id] } {
 	    # Write to the database.
 	    db_exec_plsql ad_parameter_set {
