@@ -133,7 +133,7 @@
       
         select party_id 
         from   parties 
-        where  email = :email 
+        where  lower(email) = lower(:email)
 
       </querytext>
 </fullquery>
