@@ -10,6 +10,8 @@ ad_library {
 
 }
 
+namespace eval relation {}
+
 ad_proc -public relation_permission_p {
     { -user_id "" }
     { -privilege "read" }
@@ -108,7 +110,7 @@ ad_proc -public relation_add {
 
 
 ad_proc -public relation_remove {
-    rel_id
+    {rel_id ""}
 } {
     Removes the specified relation. Throws an error if we violate a
     relational constraint by removing this relation.
@@ -120,7 +122,6 @@ ad_proc -public relation_remove {
               relation was already deleted)
 
 } {
-
     # Pull out the segment_id and the party_id (object_id_two) from
     # acs_rels. Note the outer joins since the segment may not exist.
     if { ![db_0or1row select_rel_info {}] } {
@@ -285,4 +286,16 @@ ad_proc -public relation_required_segments_multirow {
 	lappend group_rel_type_list [list $group_id $rel_type]
     }
     return $group_rel_type_list
+}
+
+ad_proc -public relation::get_id {
+    {-object_id_one:required}
+    {-object_id_two:required}
+    {-rel_type "membership_rel"}
+} {
+    Find the rel_id of the relation matching the given object_id_one, object_id_two, and rel_type.
+
+    @return rel_id of the found acs_rel, or the empty string if none existed.
+} {
+    return [db_string select_rel_id {} -default {}]
 }
