@@ -96,7 +96,7 @@ ad_proc -public cr_create_content_file_from_string {item_id revision_id str} {
 
     set content_file [cr_create_content_file_path $item_id $revision_id]
     set ofp [open [cr_fs_path]$content_file w]
-    ns_puts -nonewline $ofp $str
+    puts -nonewline $ofp $str
     close $ofp
 
     return $content_file
