@@ -397,6 +397,15 @@ ad_proc -public group::member_p {
 }
 
 
+ad_proc -public group::get_rel_segment {
+    {-group_id:required}
+    {-type:required}
+} {
+    Get a segment for a particular relation type for a given group.
+} {
+    return [db_string select_segment_id {}]
+}
+
 ad_proc -public group::get_rel_types_options {
     {-group_id:required}
     {-object_type "person"}
