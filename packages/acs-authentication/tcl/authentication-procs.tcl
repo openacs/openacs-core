@@ -1344,6 +1344,12 @@ ad_proc -private auth::validate_account_info {
             set user(email) [string tolower $user(email)]
         }
     }
+
+    if { [info exists user(screen_name)] } {
+        if { ![empty_string_p [acs_user::get_user_id_by_screen_name -screen_name $user(screen_name)]] } {
+            set element_messages(screen_name) "This screen name is already taken."
+        }
+    }
     
     if { [info exists user(url)] } {
         if { [empty_string_p $user(url)] || [string equal $user(url) "http://"] } {
