@@ -170,7 +170,7 @@ proc db_qd_get_fullname {local_name {added_stack_num 1}} {
 	# Means we are running inside an URL
 
 	# Check the ad_conn stuff
-	if {[catch {ns_log Notice "QD= the ad_conn file is [ad_conn file]"} errmsg]} {}
+	# if {[catch {ns_log Notice "QD= the ad_conn file is [ad_conn file]"} errmsg]} {}
 
 	# Now we do a check to see if this is a directly accessed URL or a sourced URL
 	if {[regexp {^ns_sourceproc} $proc_name all]} {
