@@ -34,21 +34,7 @@
 
 <if @user_search:rowcount@ eq 0>
   <li>No users found.
-</if><else>
-
-  <if @user_search:rowcount@ gt 30>
-
-    <if @only_authorized_p@ eq 0>
-      We're showing all users, authorized or not (<a href="search?@export_authorize@&only_authorized_p=1">
-      show only authorized</a>).
-      <p>
-    </if><else>
-      We're only showing authorized users (<a href="search?@export_authorize@&only_authorized_p=0">show all</a>).
-      <p>
-    </else>
-
-  </if>
-</else>
+</if>
 
 </ul>
 
