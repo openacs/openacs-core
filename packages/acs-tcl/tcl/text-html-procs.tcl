@@ -611,9 +611,6 @@ ad_proc ad_html_security_check { html } {
 	    [ad_parameter_all_values_as_list -package_id [ad_acs_kernel_id] AllowedAttribute antispam] \
 	    [ad_parameter_all_values_as_list AllowedAttribute antispam]]
 
-    set allowed_url_attributes_list [concat \
-	    [ad_parameter_all_values_as_list -package_id [ad_acs_kernel_id] AllowedURLAttribute antispam] [ad_parameter_all_values_as_list AllowedURLAttribute antispam]]
-
     set allowed_protocols_list [concat \
 	    [ad_parameter_all_values_as_list -package_id [ad_acs_kernel_id] AllowedProtocol antispam] \
 	    [ad_parameter_all_values_as_list AllowedProtocol antispam]]
@@ -625,9 +622,6 @@ ad_proc ad_html_security_check { html } {
     }
     foreach attribute $all_allowed_attributes_list {
 	set allowed_attribute([string tolower $attribute]) 1
-    }
-    foreach attribute $allowed_url_attributes_list {
-	set url_attribute([string tolower $attribute]) 1
     }
     foreach tagname $allowed_tags_list {
 	set allowed_tag([string tolower $tagname]) 1
@@ -649,7 +643,7 @@ ad_proc ad_html_security_check { html } {
 	    # The tag was valid ... now let's see if it's on the allowed list.
 	    set tagname [string tolower [string range $html [lindex $name_idx 0] [lindex $name_idx 1]]]
 
-	    if { ![info exists allowed_tag($tagname)] } {
+	    if { ![info exists allowed_tag($tagname)] && ![info exists allowed_tag(*)] } {
 		# Nope, this was a naughty tag.
 		return "For security reasons we only accept the submission of HTML
 		containing the following tags: [join $allowed_tags_list " "]. 
@@ -668,12 +662,12 @@ ad_proc ad_html_security_check { html } {
 		    set attr_name [lindex $attribute 0]
 		    set attr_value [lindex $attribute 1]
 		    
-		    if { ![info exists allowed_attribute($attr_name)] } {
+		    if { ![info exists allowed_attribute($attr_name)] && ![info exists allowed_attribute(*)] } {
 			return "The attribute '$attr_name' is not allowed for $tagname tags"
 		    }
 		    
 		    if { [regexp {^\s*([^\s:]+):} $attr_value match protocol] } {
-			if { ![info exists allowed_protocol([string tolower $protocol])] } {
+			if { ![info exists allowed_protocol([string tolower $protocol])] && ![info exists allowed_protocol(*)] } {
 			    return "Your URLs can only use these protocols: [join $allowed_protocols_list ", "].
 			    You have a '$protocol' protocol in there."
 			}
