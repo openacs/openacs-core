@@ -83,7 +83,7 @@ parts. Each has a section below.</para>
   <sect2 id="Diagram"><title>Conceptual Pictures</title>
     <para>Authentication:</para>
     <para><inlinemediaobject><imageobject>
-          <imagedata fileref="images/ext-auth.png"/>
+          <imagedata fileref="../images/ext-auth.png"/>
         </imageobject></inlinemediaobject>
 </para> 
 <para>Account Management (NO PICTURE YET)</para>
