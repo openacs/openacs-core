@@ -47,7 +47,7 @@
 
   <if @list_properties.bulk_actions@ not nil>
     <form name="@list_properties.name@" method="get">
-    @list_properties.bulk_action_export_chunk@
+    @list_properties.bulk_action_export_chunk;noquote@
   </if>
 
   <if @list_properties.page_size@ not nil>
