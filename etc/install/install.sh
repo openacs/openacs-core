@@ -193,7 +193,7 @@ prompt_continue $interactive
 echo "$0: Taking down $serverroot at $(date)"
 
 if parameter_true $use_daemontools; then
-    $svc_bindir/svc -d ${svscanroot}
+    $svc_bindir/svc -kd ${svscanroot}
 else
     # non-daemontools stop
     $stop_server_command
