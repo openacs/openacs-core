@@ -26,6 +26,7 @@ acs_user::get -array user -include_bio -user_id $user_id
 
 set account_status [ad_conn account_status]
 set login_url [ad_get_login_url]
+set subsite_url [ad_conn vhost_subsite_url]
 
 set page_title [ad_pvt_home_name]
 
