@@ -106,7 +106,7 @@ ad_proc -private search::indexer {} {
                         array set datasource [acs_sc_call FtsContentProvider datasource [list $object_id] $object_type]
                         search::content_get txt $datasource(content) $datasource(mime) $datasource(storage_type)
                         if {$syndicate} { 
-                            search::syndicate -array datasource
+                            search::syndicate -datasource datasource
                         } 
                         acs_sc_call FtsEngineDriver update_index [list $datasource(object_id) $txt $datasource(title) $datasource(keywords)] $driver
                         array unset datasource
