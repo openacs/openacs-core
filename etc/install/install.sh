@@ -60,6 +60,8 @@ dotlrn_demo_data=`get_config_param dotlrn_demo_data`
 dotlrn=`get_config_param dotlrn`
 crawl_links=`get_config_param crawl_links`
 do_checkout=`get_config_param do_checkout`
+use_daemontools=`get_config_param use_daemontools`
+
 # command-line settings override config file settings
 while [ -n "$1" ] ; do
    case "$1" in
@@ -111,45 +113,41 @@ fi
 # Log some important parameters for the installation
 echo "$0: Starting installation with config_file $config_file. Using serverroot=$serverroot, server_url=$server_url, do_checkout=$do_checkout, dotlrn=$dotlrn, and database=$database."
 prompt_continue $interactive
-set -x
-# See if a daemontools directory exists.
 
-if [ -d "${svscanroot}" ]; then
-    # if so, cycle the server.
-    echo "$0: Taking down $serverroot at $(date)"
-    $stop_server_command
-    # Wait for the server to come down
-    echo "$0: Waiting $shutdown_seconds seconds for server to shut down at $(date)"
-    sleep $shutdown_seconds
-
-else
-    # if not, create one
+# See if a daemontools directory should exist.
+if parameter_true $use_daemontools && [ ! -d "${svscanroot}" ]; then
+    # if we are supposed to use daemontools but there is no control
+    # directory, link the default directory from the cvs tree
     echo "$0: Creating daemontools directory"
-    # TODO: should put error handling here and a config param to make this optional
-    #create the directory disabled
-    touch $svscanroot/down
+    # TODO: should put error handling here
     ln -s $serverroot/etc/daemontools $svscanroot
 fi
 
-
+# stop the server
+echo "$0: Taking down $serverroot at $(date)"
+$stop_server_command
+# Wait for the server to come down
+echo "$0: Waiting $shutdown_seconds seconds for server to shut down at $(date)"
+sleep $shutdown_seconds
 
 # Recreate the database user
 echo "$0: Recreating database user at $(date)"
 if [ $database == "postgres" ]; then
+    # Postgres
     pg_bindir=`get_config_param pg_bindir`
     pg_port=`get_config_param pg_port`
     pg_db_name=`get_config_param pg_db_name`
-
-
     su  `get_config_param pg_db_user` -c "export LD_LIBRARY_PATH=${pg_bindir}/../lib; ${pg_bindir}/dropdb -p $pg_port $pg_db_name; ${pg_bindir}/createdb -p $pg_port $pg_db_name; ${pg_bindir}/createlang -p $pg_port plpgsql $pg_db_name";
+
 else
+    #Oracle
     su oracle -c "cd $script_path; config_file=$config_file ./oracle/recreate-user.sh";
 fi
 
 prompt_continue $interactive
 
 # Move away the old sources and checkout new ones check do_checkout
-if [ $dotlrn == "yes" ]; then
+if [ $do_checkout == "yes" ]; then
     echo "$0: Checking out .LRN at $(date)"
     config_file=$config_file dotlrn=$dotlrn ./checkout.sh
 
