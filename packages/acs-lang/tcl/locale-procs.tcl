@@ -1,7 +1,7 @@
 #/packages/lang/tcl/ad-locale.tcl
 ad_library {
 
-    Localization procedures for the ArsDigita Publishing System
+    Localization procedures for OpenACS
     <p>
     This is free software distributed under the terms of the GNU Public
     License.  Full text of the license is available from the GNU Project:
@@ -13,7 +13,7 @@ ad_library {
 }
 
 
-ad_proc -public ad_locale_set_system_timezone { timezone }  { Tell the ACS 
+ad_proc -public ad_locale_set_system_timezone { timezone }  { Tell OpenACS 
 what timezone Oracle thinks it is running in. 
 
   @param timezone name from acs-reference package (e.g., Asia/Tokyo, America/New_York)
@@ -23,7 +23,7 @@ what timezone Oracle thinks it is running in.
 }
 
 
-ad_proc -public ad_locale_get_system_timezone { }  { Ask the ACS 
+ad_proc -public ad_locale_get_system_timezone { }  { Ask OpenACS 
 what it thinks Oracle's timezone is.
 
   @return  a timezone name from acs-reference package (e.g., Asia/Tokyo, America/New_York)

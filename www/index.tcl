@@ -1,6 +1,6 @@
 ad_page_contract {
 
-    ACS main index page.  This is the standard page that is used to allow users
+    OpenACS main index page.  This is the standard page that is used to allow users
     to login to the site.  You can customize the presentation by editing index.adp.
     However, for a real web site, you will likely need to take this file as a boiler
     plate and add the necessary content and branding items.

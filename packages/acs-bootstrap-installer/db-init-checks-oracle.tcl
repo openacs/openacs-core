@@ -69,8 +69,8 @@ proc db_helper_checks { errors error_p } {
         set my_error_p 1
     } elseif { ![file exists "$env(ORACLE_HOME)/ctx/bin/ctxhx"] && ![ad_windows_p]} {
         append my_errors "<li><p><strong> The file <code>$env(ORACLE_HOME)/ctx/bin/ctxhx</code> which is needed 
-by the ACS Content Repository is not present in your filesystem.  You must be running Oracle 8.1.6 
-with Intermedia installed to use the ACS.  If you are using Linux, this file is missing because Oracle 
+by the OpenACS Content Repository is not present in your filesystem.  You must be running Oracle 8.1.6 
+with Intermedia installed to use OpenACS.  If you are using Linux, this file is missing because Oracle 
 does not distribute it with the Linux version of Oracle.  However, you can replace this file with a 
 shell script that acts as a workaround.<p>
 The program <code>ctxhx</code> is primarily used to convert files to HTML or TEXT and can
@@ -103,7 +103,7 @@ chmod 755 $env(ORACLE_HOME)/ctx/bin/ctxhx
         if {!($usr_bin_p)} {
 	    append my_errors "<li><p><strong>The file <code>/bin/ksh</code> is not present.  This file is the Korn shell and
 	    is required by Oracle's <code>loadjava</code> utility for adding Java class files to the database.
-	    It must be installed in order for the ACS to install properly.  Please obtain it from 
+	    It must be installed in order for OpenACS to install properly.  Please obtain it from 
 	    <a href=\"http://www.kornshell.com/\">David Korn's Kornshell page</a>.  Install it and provide
 	    a symbolic link from <code>/bin/ksh</code> to the executable.  Alternatively, <code>loadjava</code>
 	    is known to work if <code>/bin/sh</code> is linked to <code>/bin/ksh</code>.  You can do this by typing

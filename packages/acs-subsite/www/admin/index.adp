@@ -11,10 +11,10 @@
 </ul>
 
 <if @acs_admin_available_p@ eq "t">
-  To administer the site-wide services of the ArsDigita Community System, use
+  To administer the site-wide services of OpenACS, use
   <a href="@acs_admin_url@">@instance_name@</a>.
 </if><else>
-  The ACS Administration service is not available.  If you are a site-wide administrator, 
-  use the <a href="site-map">Site Map</a> to mount the ACS Administration service.  This provides 
-  an interface for administering the site-wide services of the ArsDigita Community System.
+  The OpenACS Administration service is not available.  If you are a site-wide administrator, 
+  use the <a href="site-map">Site Map</a> to mount the OpenACS Administration service.  This provides 
+  an interface for administering the site-wide services of OpenACS.
 </else>

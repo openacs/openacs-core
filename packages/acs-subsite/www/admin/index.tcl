@@ -22,7 +22,7 @@ set subsite_name [db_string subsite_name {
      where p.package_id = :package_id
 } -default "Subsite"]
 
-# Return the first available link to the ACS Admin page.
+# Return the first available link to the OpenACS Admin page.
 if {[db_0or1row acs_admin_url_get {
     select site_node.url(node_id) acs_admin_url, instance_name
     from site_nodes s, apm_packages p

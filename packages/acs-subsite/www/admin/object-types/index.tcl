@@ -1,6 +1,6 @@
 ad_page_contract {
 
-    Home page for ACS Object Type administration
+    Home page for OpenACS Object Type administration
 
     @author Yonatan Feldman (yon@arsdigita.com)
     @creation-date August 13, 2000
@@ -8,7 +8,7 @@ ad_page_contract {
 
 } {}
 
-set title "Object Type Administration"
+set title "OpenACS Object Type Administration"
 
 set page "
 [ad_admin_header $title]

@@ -15,7 +15,7 @@
    <input type=text name=query_string><br>
    <input type=submit value=Search name=search_type>
    <input type=submit value="Feeling Lucky" name=search_type><br>
-   <a href=proc-browse>Browse ACS Tcl API</a><br>
+   <a href=proc-browse>Browse OpenACS Tcl API</a><br>
 
  </td>
  <td><font size=-1>
@@ -34,7 +34,7 @@
 </form></table>
 
   <h4>ACS PL/SQL API Search:</h4>
-  <a href="plsql-subprograms-all">Browse ACS PL/SQL API</a>
+  <a href="plsql-subprograms-all">Browse OpenACS PL/SQL API</a>
 
   <p>
 

@@ -25,9 +25,9 @@ function updateURLs() {
     // Update the package and version URL, if the package key and/or version name change.
     var form = document.forms\[0\];
     if (form.package_uri.value == '')
-        form.package_uri.value = 'http://www.arsdigita.com/acs-repository/apm/packages/' + form.package_key.value;
+        form.package_uri.value = 'http://openacs.org/repository/apm/packages/' + form.package_key.value;
     if ((form.version_name.value != '') && (form.version_uri.value == ''))
-        form.version_uri.value = 'http://www.arsdigita.com/acs-repository/download/apm/' + form.package_key.value + '-' + form.version_name.value + '.apm';
+        form.version_uri.value = 'http://openacs.org/repository/download/apm/' + form.package_key.value + '-' + form.version_name.value + '.apm';
 }
 </script>
 
@@ -46,7 +46,7 @@ function checkMailto(element) {
   <td></td>
   <td>Select a package key for your package. This is a unique, short, and lower-case identifier
 for your package containing only letters, numbers, and hyphens (e.g., <tt>address-book</tt>
-for the address book package or <tt>apm</tt> for the ArsDigita Package Manager).
+for the address book package or <tt>photo-album</tt> for the Photo Album).
 Files for your package will be placed in a directory with this name.</td>
 </tr>
 
@@ -58,7 +58,7 @@ Files for your package will be placed in a directory with this name.</td>
 <tr>
   <td></td>
   <td>Select a short, human-readable name for your package, e.g., \"Address Book\" or
-\"ArsDigita Package Manager.\"
+\"Photo Album.\"
 </tr>
 
 <tr>
@@ -81,7 +81,7 @@ Files for your package will be placed in a directory with this name.</td>
   <td></td>
   <td>Indicate whether this package is an application or a service.   
   Applications are software intended for end-users, e.g. Bboard.
-  Services are system-level software that extend the ACS to provide new system-wide functionality,
+  Services are system-level software that extend OpenACS to provide new system-wide functionality,
   e.g. Workflow.
 </tr>
 <tr>
@@ -178,7 +178,7 @@ This description is <select name=description_format>
 These should be entered in order of importance: whoever works most heavily
 on the package should be first. You'll probably want to use email addresses
 for URLs, in which case you should precede them with <tt>mailto:</tt> (e.g.,
-<tt>mailto:samoyed@arsdigita.com</tt>).
+<tt>mailto:developername@openacs.org</tt>).
 </tr>
 
 <tr>
@@ -201,7 +201,7 @@ for URLs, in which case you should precede them with <tt>mailto:</tt> (e.g.,
 <tr>
   <td></td>
   <td>If the package is being released by a company, type in its name and URL here.
-ArsDigita employees should <a href=\"javascript:document.forms\[0\].vendor.value='ArsDigita Corporation';document.forms\[0\].vendor_uri.value='http://www.arsdigita.com/';void(0)\">click here</a> to fill this in automatically.</td>
+<!-- ArsDigita employees should <a href=\"javascript:document.forms\[0\].vendor.value='ArsDigita Corporation';document.forms\[0\].vendor_uri.value='http://www.arsdigita.com/';void(0)\">click here</a> to fill this in automatically.</td> -->
 </tr>
 
 <tr>

@@ -463,11 +463,11 @@ ad_proc empty_string_p {query_string} {
 } -
 
 ad_proc acs_root_dir {} { 
-    Returns the path root for the ACS installation. 
+    Returns the path root for the OpenACS installation. 
 } -
 
 ad_proc acs_package_root_dir { package } { 
-    Returns the path root for a particular package within the ACS installation. 
+    Returns the path root for a particular package within the OpenACS installation. 
 } -
 
 ad_proc ad_make_relative_path { path } { 

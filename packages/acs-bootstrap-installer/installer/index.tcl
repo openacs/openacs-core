@@ -157,6 +157,29 @@ After adding support for the fancy ADP parser, please restart your server.
     set error_p 1
 }   
 
+# OpenNSD must have a large stack size (at least 128K)
+set stacksize [ns_config "ns/threads" StackSize]
+if { $stacksize < [expr 128 * 1024] } {
+
+    append errors "<li><p>The configured OpenNSD Stacksize is too small ($stacksize).
+OpenACS requires a StackSize parameter of at least 131072 (ie 128K).
+Please add the following to your OpenNSD configuration file or 
+see the <a href=\"/doc/install-guide/\">Installation Guide</a> for more information.<p>
+<blockquote><pre>
+\[ns/threads\] 
+stacksize=131072 
+</blockquote></pre>
+<p>If you use a .tcl configuration file, add
+<blockquote><pre>
+ns_section \"ns/threads\"
+        ns_param StackSize [expr 128*1024]
+</blockquote></pre>
+After adding support the larger stacksize, please restart your web server.
+</strong></p>"
+    set error_p 1
+}   
+
+
 # APM needs to check its permissions.
 if { [catch {apm_workspace_dir} ] } {
     append errors "<li><p><strong>The [acs_root_dir] directory has incorrect permissions.  It must be owned by

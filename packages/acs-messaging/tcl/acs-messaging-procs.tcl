@@ -9,7 +9,7 @@ ad_library {
 ad_proc -public acs_message_p {
     {message_id}
 } {
-    Check if an integer is a valid ACS message id.
+    Check if an integer is a valid OpenACS message id.
 } {
     return [string equal [db_exec_plsql acs_message_p {
 	begin
@@ -20,14 +20,14 @@ ad_proc -public acs_message_p {
 
 ad_page_contract_filter acs_message_id { name value } {
     Checks whether the value (assumed to be an integer) is the id
-    of an already-existing ACS message.
+    of an already-existing OpenACS message.
 } {
     # empty is okay (handled by notnull)
     if [empty_string_p $value] {
         return 1
     }
     if ![acs_message_p $value] {
-        ad_complain "$name ($value) does not refer to a valid ACS message"
+        ad_complain "$name ($value) does not refer to a valid OpenACS message"
         return 0
     }
     return 1
