@@ -189,88 +189,8 @@ ad_proc -public get_folder_labels { { varname "folders" } } {
   }
 }
 
-ad_proc -public init { urlvar rootvar {content_root ""} {template_root ""} {context "public"}} {
 
-  upvar $urlvar url $rootvar root_path
-
-  variable item_id
-  variable revision_id
-  
-  # if a .tcl file exists at this url, then don't do any queries
-  if { [file exists [ns_url2file "$url.tcl"]] } {
-    return 0
-  }
-
-  # Get the content ID, content type 
-  set query "
-    select 
-      item_id, content_type
-    from 
-      cr_items
-    where
-      item_id = content_item.get_id(:url, :content_root)"
-
-  # cache this query persistently for 1 hour
-  template::query get_item_info item_info onerow $query \
-	  -cache "get_id_filter $url $content_root" \
-	  -persistent -timeout 216000
-
-  # No item found, so do not handle this request
-  if { ![info exists item_info] } { 
-    ns_log Notice "No content found for url $url"
-    return 0 
-  }
-
-  variable item_url
-  set item_url $url
-
-  set item_id $item_info(item_id)
-  set content_type $item_info(content_type)
-
-  # Make sure that a live revision exists
-  template::query get_live_revision live_revision onevalue "
-    select live_revision from cr_items where item_id = :item_id
-  " -cache "item_live_revision $item_id"
-
-  if { [template::util::is_nil live_revision] } {
-    ns_log Notice "No live revision found for content item $item_id"
-    return 0
-  }
-
-  set revision_id $live_revision
-
-  variable template_path
-
-  # Get the template 
-  set OFFquery "select 
-    content_template.get_path(
-      content_item.get_template(:item_id, 'public'),
-      :template_root) as template_url 
-  from   dual"
-
-  set query "select 
-    content_template.get_path(
-      content_item.get_template(:item_id, :context),
-      :template_root) as template_url 
-  from 
-    dual"
-
-
-  template::query get_template_url template_url onevalue $query
-
-  if { [string equal $template_url {}] } { 
-    ns_log Notice "No template found to render content item $item_id in context '$context'"
-    return 0
-  }
-
-  set url $template_url
-  set root_path [get_template_root]
-
-  return 1
-}
-
-
-ad_proc -public init_all { urlvar rootvar {content_root ""} {template_root ""} {rev_id ""} {context "public"}} {
+ad_proc -public init { urlvar rootvar {content_root ""} {template_root ""} {context "public"} {rev_id ""}} {
 
   upvar $urlvar url $rootvar root_path
 
