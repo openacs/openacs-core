@@ -1,7 +1,7 @@
 <table cellpadding=0 cellspacing=0 border=0 bgcolor=#999999 width=100% height=0>
   <tr bgcolor=#999999>
     <td>
-      <table cellpadding=0 cellspacing=0 border=0 bgcolor=#DDDDDD width=100%>
+      <table cellpadding=0 cellspacing=0 border=0 bgcolor=#DDDDDD width="100%">
         <tr align=center>
           <multiple name=elements>
             <if @elements.current@ eq 1><td bgcolor=#FFFFFF></if>

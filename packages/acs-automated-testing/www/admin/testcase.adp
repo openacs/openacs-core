@@ -4,7 +4,7 @@
 
 <html>
   <body>
-  <table width=100%><tr><td bgcolor=#e4e4e4>
+  <table width="100%"><tr><td bgcolor=#e4e4e4>
     <h2> Testcase @testcase_id@ (@package_key@)</h2>
     <blockquote>
     <dt><b>Description:</b></dt><dd>@testcase_desc@</dd>
