@@ -1,6 +1,6 @@
 This is the OpenACS - the Open Architecture Community System.
 
-Version CVS-HEAD-DANGER-DANGER-DANGER
+Version 5.0.0 beta 1
 
 --------------
 
