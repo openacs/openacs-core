@@ -1,7 +1,7 @@
 ad_page_contract {
   @Author Nis Jorgensen
 } {
-  {script:optional {}}
+  {script:optional,allhtml {}}
   } -properties {
   result
 }
