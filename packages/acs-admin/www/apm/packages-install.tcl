@@ -80,15 +80,17 @@ if { [empty_string_p $spec_files] } {
 function uncheckAll() {
     for (var i = 0; i < [expr [llength $spec_files] * 2]; ++i)
         document.forms\[0\].elements\[i\].checked = false;
+    this.href='';
 }
 function checkAll() {
     for (var i = 0; i < [expr [llength $spec_files] * 2]; ++i)
         document.forms\[0\].elements\[i\].checked = true;
+    this.href='';
 }
 </script>
-<input type=\"submit\" name=\"null\" value=\"Check all Boxes\" onclick=\"javascript:checkAll()\">
-<input type=\"submit\" name=\"null\" value=\"Uncheck all Boxes\" onclick=\"javascript:uncheckAll()\">
-    "
+<a href=\"packages-install?checked_by_default_p=0&[export_url_vars install_path]\" onclick=\"javascript:uncheckAll();return false\"><b>uncheck all boxes</b></a> |
+<a href=\"packages-install?checked_by_default_p=1&[export_url_vars install_path]\"  onclick=\"javascript:checkAll(); return false\"><b>check all boxes</b></a>
+"
 
     ns_write "<form action=packages-install-2 method=post>"
 
