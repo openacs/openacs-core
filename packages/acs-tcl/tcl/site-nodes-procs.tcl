@@ -254,6 +254,32 @@ ad_proc -public site_node_create_package_instance {
 
 }
 
+ad_proc -public site_node_delete_package_instance {
+    {-node_id:required}
+} {
+    Wrapper for apm_package_instance_delete
+
+    @author Arjun Sanyal (arjun@openforc.net)
+    @creation-date 2002-05-02
+} {
+    db_transaction {
+        
+        set package_id \
+                [site_nodes::get_package_id_from_node_id -node_id $node_id]
+        
+        # Update the site map
+        db_dml unmount {
+            update site_nodes
+            set object_id = null
+            where node_id = :node_id
+        }     
+        
+        apm_package_instance_delete $package_id 
+        
+
+    }
+}
+
 ad_proc -public site_node_mount_application { 
     { -sync_p "t" }
     { -return "package_id" }

@@ -157,6 +157,16 @@
       </querytext>
 </fullquery>
 
+<fullquery name="apm_package_instance_delete.apm_package_instance_delete">
+  <querytext>
+    begin
+      apm_package.delete(
+	package_id => :package_id
+      );
+    end;
+  </querytext>
+</fullquery>
+
 <fullquery name="apm_package_url_from_key_mem.apm_package_url_from_key">      
       <querytext>
       
