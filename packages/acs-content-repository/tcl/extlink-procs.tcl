@@ -9,7 +9,7 @@ ad_library {
 
 namespace eval content_extlink {}
 
-ad_proc content_extlink::new {
+ad_proc -deprecated content_extlink::new {
     {-extlink_id ""}
     -url:required
     -parent_id:required
@@ -20,6 +20,8 @@ ad_proc content_extlink::new {
 } {
 
     Create a new external link.
+
+    @see content::extlink::new
 
     @extlink_id Optional pre-assigned object_id for the link
     @url The URL of the external resource
@@ -70,11 +72,12 @@ ad_proc content_extlink::edit {
 
 }
 
-ad_proc content_extlink::delete {
+ad_proc -deprecated content_extlink::delete {
     -extlink_id:required
 } {
 
     Delete an external link.
+    @see content::extlink::delete
 
     @extlink_id  The object id of the link to delete
 
@@ -82,12 +85,13 @@ ad_proc content_extlink::delete {
     db_exec_plsql extlink_delete {}
 }
 
-ad_proc content_extlink::extlink_p {
+ad_proc -deprecated content_extlink::extlink_p {
     -item_id:required
 } {
 
     Returns true if the given item is an external link.
 
+    @see content::extlink::is_extlink
     @extlink_id  The object id of the item to check.
 
 } {
