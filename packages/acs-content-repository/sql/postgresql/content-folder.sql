@@ -33,7 +33,7 @@ begin
 
 end;' language 'plpgsql';
 -- function new
-create function content_folder__new (varchar,varchar,varchar,integer,integer,integer,timestamp with time zone,integer,varchar)
+create function content_folder__new (varchar,varchar,varchar,integer,integer,integer,timestamptz,integer,varchar)
 returns integer as '
 declare
   new__name                   alias for $1;  
@@ -115,7 +115,7 @@ end;' language 'plpgsql';
 
 -- function new -- accepts security_inherit_p DaveB
 
-create function content_folder__new (varchar,varchar,varchar,integer,integer,integer,timestamp with time zone,integer,varchar, boolean)
+create function content_folder__new (varchar,varchar,varchar,integer,integer,integer,timestamptz,integer,varchar, boolean)
 returns integer as '
 declare
   new__name                   alias for $1;  

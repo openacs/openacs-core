@@ -104,7 +104,7 @@ end;
 -- The Oracle version does allow a non-image type to be specified, as does my
 -- alternative down below.  This needs a little more straightening out.
 
-create function image__new (varchar,integer,integer,integer,varchar,integer,varchar,varchar,varchar,varchar,boolean,timestamp with time zone,varchar,integer,integer,integer
+create function image__new (varchar,integer,integer,integer,varchar,integer,varchar,varchar,varchar,varchar,boolean,timestamptz,varchar,integer,integer,integer
   ) returns integer as '
   declare
     new__name		alias for $1;
@@ -126,7 +126,7 @@ create function image__new (varchar,integer,integer,integer,varchar,integer,varc
 
     new__locale          varchar default null;
     new__nls_language	 varchar default null;
-    new__creation_date	 timestamp default now();
+    new__creation_date	 timestamptz default current_timestamp;
     new__context_id      integer;	
 
     v_item_id		 cr_items.item_id%TYPE;
@@ -199,7 +199,7 @@ end; ' language 'plpgsql';
 -- DRB's version
 
 create function image__new (varchar,integer,integer,integer,varchar,integer,varchar,varchar,varchar,varchar,varchar,
-                            varchar,timestamp,integer, integer) returns integer as '
+                            varchar,timestamptz,integer, integer) returns integer as '
   declare
     p_name              alias for $1;
     p_parent_id         alias for $2; -- default null
@@ -268,7 +268,7 @@ create function image__new (varchar,integer,integer,integer,varchar,integer,varc
     return v_item_id;
 end; ' language 'plpgsql';
 
-create function image__new_revision(integer, integer, varchar, varchar, timestamp with time zone, varchar, varchar,
+create function image__new_revision(integer, integer, varchar, varchar, timestamptz, varchar, varchar,
                                     integer, varchar, integer, integer) returns integer as '
 declare
    p_item_id          alias for $1;

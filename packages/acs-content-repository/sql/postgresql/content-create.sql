@@ -452,7 +452,7 @@ create table cr_revisions (
 		  cr_items on delete cascade,
   title		  varchar(1000),
   description	  text,
-  publish_date	  timestamp,
+  publish_date	  timestamptz,
   mime_type	  varchar(200) default 'text/plain'
 		  constraint cr_revisions_mime_type_ref
 		  references cr_mime_types,
@@ -696,7 +696,7 @@ create table cr_item_publish_audit (
   new_revision       integer, 
   old_status         varchar(40),
   new_status         varchar(40),
-  publish_date       timestamp
+  publish_date       timestamptz
                      constraint cr_item_publish_audit_date_nil
                      not null
 );
@@ -714,12 +714,12 @@ create table cr_release_periods (
 		   references cr_items
                    constraint cr_release_periods_pk
 		   primary key,
-  start_when	   timestamp default now(),
-  end_when	   timestamp default now() + interval '20 years'
+  start_when	   timestamptz default current_timestamp,
+  end_when	   timestamptz default current_timestamp + interval '20 years'
 );
 
 create table cr_scheduled_release_log (
-  exec_date        timestamp default now() not null,
+  exec_date        timestamptz default current_timestamp not null,
   items_released   integer not null,
   items_expired    integer not null,
   err_num          integer,
@@ -733,7 +733,7 @@ comment on table cr_scheduled_release_log is '
 
 create table cr_scheduled_release_job (
   job_id     integer,
-  last_exec  timestamp
+  last_exec  timestamptz
 );
 
 comment on table cr_scheduled_release_job is '
