@@ -367,10 +367,10 @@ ad_proc -private rp_filter { why } {
 	}
         if {[ad_secure_conn_p]} {
             # it's a secure connection.
-            ad_returnredirect https://[ad_host]$url
+            ad_returnredirect https://[ad_host][ad_port]$url
 	    return "filter_return"
         } else {
-            ad_returnredirect http://[ad_host]$url
+            ad_returnredirect http://[ad_host][ad_port]$url
 	    return "filter_return"
         }
     }
@@ -1024,6 +1024,18 @@ ad_proc ad_host {} {
 	return $host
     } else {
 	return "unknown host"
+    }
+}
+
+ad_proc ad_port {} {
+    Returns the port as it was typed in the browser,
+    provided forcehostp is set to 0.
+} {
+    set host_and_port [ns_set iget [ns_conn headers] Host]
+    if { [regexp {^([^:]+):([0-9]+)} $host_and_port match host port] } {
+	return ":$port"
+    } else {
+	return ""
     }
 }
 

@@ -11,7 +11,8 @@ ad_library {
 proc_doc ad_ssl_available_p {} {
     Returns 1 if this AOLserver has the SSL module installed.
 } {
-    if { [ns_config ns/server/[ns_info server]/modules nsssl] != "" } {
+    if { [ns_config ns/server/[ns_info server]/modules nsssl] != "" ||
+         [ns_config ns/server/[ns_info server]/modules nsopenssl] != "" } {
 	return 1
     } else {
 	return 0
@@ -24,12 +25,17 @@ proc_doc ad_restrict_to_https {conn args why} {
     @author Allen Pulsifer (pulsifer@mediaone.net)
     @creation-date 2 November 2000
 } {
-    if { [ad_conn driver] == "nsssl" } {
+    if { [ad_conn driver] == "nsssl" ||
+	 [ad_conn driver] == "nsopenssl"} {
  	return "filter_ok"
     } 
 
     set http_port [ns_config -int "ns/server/[ns_info server]/module/nssock" Port 80]
+    if { [ns_config ns/server/[ns_info server]/modules nsssl] != "" } {
     set ssl_port [ns_config -int "ns/server/[ns_info server]/module/nsssl" Port 443]
+    } elseif { [ns_config ns/server/[ns_info server]/modules nsopenssl] != "" } {
+	set ssl_port [ns_config -int "ns/server/[ns_info server]/module/nsopenssl" Port 443]
+    }
     
     set host [ns_set iget [ad_conn headers] "host"]
     if { [regexp {^(.*?):(.*)$} $host match host port] == 0 || [string compare $port $http_port] == 0 } {

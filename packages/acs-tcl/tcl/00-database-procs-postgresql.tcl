@@ -617,6 +617,24 @@ ad_proc db_get_database { } {
     return [string range $datasource [expr $last_colon_pos + 1] end]
 }
  
+ad_proc db_get_dbhost { } {
+
+    Returns the name of the database host from the first database pool.  
+    It assumes the datasource is properly formatted since we've already 
+    verified that we can connect to the pool.
+
+} {
+
+    set pool [lindex [nsv_get db_available_pools .] 0]
+    set datasource [ns_config ns/db/pool/$pool DataSource]    
+    set first_colon_pos [string first ":" $datasource]
+    if { $first_colon_pos == -1 } {
+        ns_log Error "datasource contains no \":\"? datasource = $datasource"
+        return ""
+    }
+    return [string range $datasource 0 [expr $first_colon_pos - 1]]
+}
+
 ad_proc db_source_sql_file { {-callback apm_ns_write_callback} file } {
  
     Sources a SQL file (in psql format).
@@ -632,7 +650,17 @@ ad_proc db_source_sql_file { {-callback apm_ns_write_callback} file } {
 
     set pgport [db_get_port]
     if { ![string equal $pgport ""] } {
-	set pgport "--port $pgport"
+	set pgport "-p $pgport"
+    }
+
+    set pgpass [db_get_password]
+    if { ![string equal $pgpass ""] } {
+	set pgpass "<<$pgpass"
+    }
+
+    set pghost [db_get_dbhost]
+    if { ![string equal $pghost ""] } {
+	set pghost "-h $pghost"
     }
 
     cd [file dirname $file]
@@ -640,7 +668,7 @@ ad_proc db_source_sql_file { {-callback apm_ns_write_callback} file } {
     if { $tcl_platform(platform) == "windows" } {
         set fp [open "|[file join [db_get_pgbin] psql] -h [ns_info hostname] $pgport $pguser -f $file_name [db_get_database]" "r"]
     } else {
-        set fp [open "|[file join [db_get_pgbin] psql] $pgport $pguser -f $file_name [db_get_database]" "r"]
+        set fp [open "|[file join [db_get_pgbin] psql] $pghost $pgport $pguser -f $file_name [db_get_database] $pgpass" "r"]
     }
 
     while { [gets $fp line] >= 0 } {
