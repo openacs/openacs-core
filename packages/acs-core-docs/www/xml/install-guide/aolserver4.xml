@@ -160,6 +160,15 @@ nspostgres.c:679: warning: passing arg 3 of `Tcl_DStringAppend' as signed due to
 	  communicate with the database.  There is one script each for
 	  Oracle and PostgreSQL.  They don't conflict, so if you plan
 	  to use both databases, install both.</para>
+
+    <para>
+      Note that this section requires you to have the OpenACS, which
+      you can get through CVS, through a tarball, or by other
+      means. You can come back to this section after you acquire the
+      OpenACS code, but don't forget to come back. (Note to
+      maintainers: this should be moved to the next page and
+      integrated into the text there)
+    </para>
       </formalpara>
       <itemizedlist>
             <listitem>

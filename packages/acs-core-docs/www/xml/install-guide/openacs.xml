@@ -11,23 +11,6 @@
     <para>by <ulink url="mailto:vinod@kurup.com">Vinod Kurup</ulink></para>
   </authorblurb>
 
-  <sect2 id="openacs-setup">
-    <title>Set up the file system for one or more OpenACS Sites</title>
-    <para>For Linux Standard Base compliance and ease of backup,
-      all of the files in each OpenACS site are stored in a
-      subdirectory of
-      <computeroutput>/var/lib/aolserver</computeroutput>, one
-      subdirectory per site.  The first time you install an OpenACS
-      site on a server, you must create the parent directory and set its permissions:</para>
-    <screen>[root root]# <userinput>mkdir /var/lib/aolserver</userinput>
-[root root]# <userinput>chgrp web /var/lib/aolserver</userinput>
-[root root]# <userinput>chmod 770 /var/lib/aolserver</userinput>
-[root root]#
-<action>mkdir /var/lib/aolserver
-chgrp web /var/lib/aolserver
-chmod 770 /var/lib/aolserver</action></screen>
-
-  </sect2>
   <sect2 id="install-aolserver-user-accounts">
     <title>Set up a user account for each site.</title>
     <para>
@@ -61,6 +44,38 @@ chmod 770 /var/lib/aolserver</action></screen>
 <screen>
 [root root]# <userinput>useradd <replaceable>$OPENACS_SERVICE_NAME</replaceable></userinput>
 </screen>
+
+    <para>You also need to set up a group called web.<para>
+      <screen>
+[root root]# <userinput>groupadd web</userinput>
+      </screen>
+
+    <para>
+      Then change the user to be a part of this group:
+    </para>
+
+      <screen>
+[root root]# <userinput>usermod -g web <replaceable>$OPENACS_SERVICE_NAME</replaceable></userinput>
+      </screen>
+
+  </sect2>
+
+  <sect2 id="openacs-setup">
+    <title>Set up the file system for one or more OpenACS Sites</title>
+    <para>For Linux Standard Base compliance and ease of backup,
+      all of the files in each OpenACS site are stored in a
+      subdirectory of
+      <computeroutput>/var/lib/aolserver</computeroutput>, one
+      subdirectory per site.  The first time you install an OpenACS
+      site on a server, you must create the parent directory and set its permissions:</para>
+    <screen>[root root]# <userinput>mkdir /var/lib/aolserver</userinput>
+[root root]# <userinput>chgrp web /var/lib/aolserver</userinput>
+[root root]# <userinput>chmod 770 /var/lib/aolserver</userinput>
+[root root]#
+<action>mkdir /var/lib/aolserver
+chgrp web /var/lib/aolserver
+chmod 770 /var/lib/aolserver</action></screen>
+
   </sect2>
   
   <sect2 id="install-with-script">
