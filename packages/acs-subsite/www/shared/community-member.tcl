@@ -1,113 +1,77 @@
-ad_page_contract {
-    shows User A what User B has contributed to the community
-    
-    @param user_id defaults to currently logged in user if there is one
-    @cvs-id $Id$
-} {
-    {user_id:integer ""}
-} -properties {
-    context:onevalue
-    member_state:onevalue
-    first_names:onevalue
-    last_name:onevalue
-    email:onevalue
-    inline_portrait_state:onevalue
-    portrait_export_vars:onevalue
-    width:onevalue
-    height:onevalue
-    system_name:onevalue
-    pretty_creation_date:onevalue
-    show_email_p:onevalue
-    url:onevalue
-    bio:onevalue
-    verified_user_id:onevalue
-    subsite_url:onevalue
-}
+<master>
+  <property name="title">@page_title@</property>
+  <property name="context">@context;noquote@</property>
 
-set subsite_url [subsite::get_element -element url]
+<if @inline_portrait_state@ eq "inline">
+  <a href="portrait?@portrait_export_vars@"><img src="portrait-bits?@portrait_export_vars@"
+  align="right" width="@width@" height="@height@" alt="Portrait of @first_names@ @last_name@"></a>
+</if>
+<else>
+  <if @inline_portrait_state eq "link">
+    <ul class="action-links">
+      <li><a href="portrait?@portrait_export_vars@">#acs-subsite.Portrait#</a></li>
+    </ul>
+  </if>
+</else>
 
-#See if this page has been overrided by a parameter in kernel 
-set community_member_url [ad_parameter -package_id [ad_acs_kernel_id] CommunityMemberURL "/shared/community-member"]
-if { $community_member_url != "/shared/community-member" } {
-    ad_returnredirect "$community_member_url?user_id=$user_id"
-    ad_script_abort
-}
+<p>
+  #acs-subsite.A_member_of_the_system# <b>@pretty_creation_date@</b>.
+</p>
 
-set site_wide_admin_p [acs_user::site_wide_admin_p]
-set admin_user_url [acs_community_member_admin_url -user_id $user_id]
+<if @member_state@ eq "deleted">
+  <blockquote>
+    <font color="red">
+      #acs-subsite.This_user_has_left_the#
+    </font>
+  </blockquote>
+</if>
+<else>
+  <if @member_state@ eq "banned">
+    <blockquote>
+      <font color="red">
+        #acs-subsite.lt_This_user_is_deleted#
+       </font>
+    </blockquote>
+  </if>
+</else>
 
-set verified_user_id [ad_conn user_id]
-set untrusted_user_id [ad_conn untrusted_user_id]
+<p>
+  <b>#acs-subsite.Name#:</b> @first_names@ @last_name@
+</p>
 
-if { [empty_string_p $user_id] } {
-    if { $verified_user_id == 0 } {
-	# Don't know what to do! 
-	ad_return_error "Missing user_id" "We need a user_id to display the community page"
-	return
-    }
-    set user_id $verified_user_id
-}
+<if @show_email_p@ true>
+  <p>
+    <b>#acs-subsite.E_mail#:</b> <a href="mailto:@email@">@email@</a>
+  </p>
+</if>
 
-set bind_vars [ad_tcl_vars_to_ns_set user_id]
+<if @url@ not nil>
+  <p>
+    <b>#acs-subsite.Home_page#:</b> <a href="@url@">@url@</a>
+  </p>
+</if>
 
-    
-if { ![db_0or1row user_information "select first_names, last_name, email, priv_email, url, creation_date, member_state from cc_users where user_id = :user_id" -bind $bind_vars]} {
-    
-    ad_return_error "No user found" "There is no community member with the user_id of $user_id"
-    ns_log Notice "Could not find user_id $user_id in community-member.tcl from [ad_conn peeraddr]"
-    return
-}
-
-if { ![empty_string_p $url] && ![string match -nocase "http://*" $url] } {
-    set url "http://$url"
-}
-
-set bio [ad_text_to_html -- [person::get_bio -person_id $user_id]]
-
-# Do we show the portrait?
-set inline_portrait_state "none"
-set portrait_export_vars [export_url_vars user_id]
-
-if [db_0or1row portrait_info "
-select i.width, i.height, cr.title, cr.description, cr.publish_date
-from acs_rels a, cr_items c, cr_revisions cr, images i
-where a.object_id_two = c.item_id
-and c.live_revision = cr.revision_id
-and cr.revision_id = i.image_id
-and a.object_id_one = :user_id
-and a.rel_type = 'user_portrait_rel'"] {
-    # We have a portrait. Let's see if we can show it inline
+<if @bio@ not nil>
+  <p>
+    <b>#acs-subsite.Biography#:</b>
+   </p>
+   <blockquote>
+     @bio;noquote@
+   </blockquote>
+</if>
 
 
-    if { ![empty_string_p $width] && $width < 300 } {
-	# let's show it inline
-	set inline_portrait_state "inline"
-    } else {
-	set inline_portrait_state "link"
-    }
-}
+<if @untrusted_user_id@ eq 0>
+  <blockquote>
+    #acs-subsite.If_you_were_to# <a href="@subsite_url@register/index?@login_export_vars@">#acs-subsite.log_in#</a>#acs-subsite.lt__youd_be_able_to_get#
+  </blockquote>
+</if>
 
-# Check if the users are allow to see the emails
-set allow_email_p [parameter::get_from_package_key -package_key acs-subsite -parameter ShowEmailP -default 1]
+<if @site_wide_admin_p@>
+  <h3>#acs-subsite.lt_For_Site-Wide_Adminis#</h3>
+  <ul class="action-links">
+    <li><a href="@admin_user_url@">#acs-subsite.Administrative_options#</a></li>
+  </ul>
+</if>
 
-if { $priv_email <= [ad_privacy_threshold] } {
-    set show_email_p 1
-} else {
-    set show_email_p 0
-    # guy doesn't want his email address shown, but we can still put out 
-    # the home page
-}
 
-# The users table has a field where the user can especify to show his/her email
-# or not. It can be change in pvt/home if the parameter ShowEmailP is set to 1
-db_1row show_email_info { }
-
-set page_title "$first_names $last_name"
-set context [list "Community Member"]
-set system_name [ad_system_name]
-set pretty_creation_date [lc_time_fmt $creation_date "%q"]
-set login_export_vars "return_url=[ns_urlencode [acs_community_member_url -user_id $user_id]]"
-
-set login_url [export_vars -base "/register/." { { return_url [ad_return_url]} }]
-
-ad_return_template
