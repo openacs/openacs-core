@@ -36,5 +36,6 @@
   <msg key="localization-positive_sign"></msg>
   <msg key="localization-t_fmt">%H:%M</msg>
   <msg key="localization-thousands_sep">.</msg>
+  <msg key="this-language">dansk</msg>
   <msg key="Spanish">Spansk</msg>
 </message_catalog>
