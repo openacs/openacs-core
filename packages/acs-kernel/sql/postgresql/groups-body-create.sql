@@ -269,7 +269,7 @@ for each row execute procedure composition_rels_del_tr ();
 
 -- create or replace package body composition_rel
 -- function new
-select define_function_args('composition_rel__new','rel_id,rel_type:composition_rel,object_id_one,object_id_two,creation_user,creation_ip');
+select define_function_args('composition_rel__new','rel_id,rel_type;composition_rel,object_id_one,object_id_two,creation_user,creation_ip');
 
 create function composition_rel__new (integer,varchar,integer,integer,integer,varchar)
 returns integer as '
@@ -704,7 +704,7 @@ end;' language 'plpgsql';
     
 -- create or replace package body acs_group
 -- function new
-select define_function_args('acs_group__new','group_id,object_type:group,creation_date:now(),creation_user,creation_ip,email,url,group_name,join_policy,context_id');
+select define_function_args('acs_group__new','group_id,object_type;group,creation_date;now(),creation_user,creation_ip,email,url,group_name,join_policy,context_id');
 
 create function acs_group__new (integer,varchar,timestamp,integer,varchar,varchar,varchar,varchar,varchar,integer)
 returns integer as '
