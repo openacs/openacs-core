@@ -75,6 +75,15 @@ if { [llength [namespace eval :: info procs ds_show_p]] == 1 } {
     set developer_support_p 0
 }
 
+# dotlrn toolbar : We include that here, so that master template authors don't have to worry about it
+
+if { [apm_package_installed_p dotlrn ] } {
+    multirow append header_links "stylesheet" "text/css" "/resources/dotlrn/dotlrn-toolbar.css" "all"
+    set dotlrn_toolbar_p 1
+} else {
+    set dotlrn_toolbar_p 0
+}
+
 set translator_mode_p [lang::util::translator_mode_p]
 
 set openacs_version [ad_acs_version]
