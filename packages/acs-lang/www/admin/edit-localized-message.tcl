@@ -30,10 +30,15 @@ set context [list [list "package-list?[export_vars { locale }]" $locale_label] \
                  "$package_key.$message_key"]
 
 
+# We let you create/delete messages keys if you're in the default locale
+set create_p [string equal $current_locale $default_locale]
+
 set description_edit_url "edit-description?[export_vars { locale package_key message_key show }]"
 
 set usage_hide_url "[ad_conn url]?[export_vars { locale package_key message_key show return_url }]"
 set usage_show_url "[ad_conn url]?[export_vars { locale package_key message_key show {usage_p 1} return_url }]"
+
+set delete_url "message-delete?[export_vars { locale package_key message_key show {return_url {[ad_return_url]}} }]"
 
 
 ad_form -name message -form {
