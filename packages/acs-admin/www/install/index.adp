@@ -15,3 +15,10 @@
 <p>
   <b>&raquo;</b> <a href="@local_upgrade_url@">Upgrade your system</a>
 </p>
+
+<h2>Already Installed Packages</h2>
+
+<p><listfilters name="packages" style="inline-filters"></listfilters></p>
+
+<p><listtemplate name="packages"></listtemplate></p>
+
