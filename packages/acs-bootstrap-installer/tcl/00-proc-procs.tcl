@@ -129,7 +129,7 @@ proc ad_proc args {
     # if we were called from inside a namespace eval.
 
     set proc_name_as_passed $proc_name
-    set proc_namespace [uplevel {namespace current}]
+    set proc_namespace [uplevel {::namespace current}]
     if { $proc_namespace != "::" } {
 	regsub {^::} $proc_namespace {} proc_namespace
 	set proc_name "${proc_namespace}::${proc_name}"
@@ -221,24 +221,24 @@ proc ad_proc args {
             if { [lsearch $arg_flags "boolean"] >= 0 } {
                 set default_values(${arg}_p) 0
 		append switch_code "            -$arg - -$arg=1 {
-                uplevel set ${arg}_p 1
+                ::uplevel ::set ${arg}_p 1
             }
             -$arg=0 {
-                uplevel set ${arg}_p 0
+                ::uplevel ::set ${arg}_p 0
             }
 "
             } else {
 		append switch_code "            -$arg {
                 if { \$i >= \[llength \$args\] - 1 } {
-                    return -code error \"No argument to switch -$arg\"
+                    ::return -code error \"No argument to switch -$arg\"
                 }
-                upvar ${arg} val ; set val \[lindex \$args \[incr i\]\]\n"
+                ::upvar ${arg} val ; ::set val \[::lindex \$args \[::incr i\]\]\n"
 		append switch_code "            }\n"
             }
 
             if { [lsearch $arg_flags "required"] >= 0 } {
-                append check_code "    if { !\[uplevel info exists $arg\] } {
-        return -code error \"Required switch -$arg not provided\"
+                append check_code "    ::if { !\[::uplevel ::info exists $arg\] } {
+        ::return -code error \"Required switch -$arg not provided\"
     }
 "
             }
@@ -298,55 +298,55 @@ proc ad_proc args {
     }
 
     if { [llength $switches] == 0 } {
-        uplevel [list proc $proc_name_as_passed $arg_list $code_block]
+        uplevel [::list proc $proc_name_as_passed $arg_list $code_block]
     } else {
-        set parser_code "    upvar args args\n"
+        set parser_code "    ::upvar args args\n"
 
         foreach { name value } [array get default_values] {
-            append parser_code "    upvar $name val ; set val [list $value]\n"
+            append parser_code "    ::upvar $name val ; ::set val [::list $value]\n"
         }
         
         append parser_code "
-    for { set i 0 } { \$i < \[llength \$args\] } { incr i } {
-        set arg \[lindex \$args \$i\]
-        if { !\[ad_proc_valid_switch_p \$arg\] } {
-            break
+    ::for { ::set i 0 } { \$i < \[::llength \$args\] } { ::incr i } {
+        ::set arg \[::lindex \$args \$i\]
+        ::if { !\[::ad_proc_valid_switch_p \$arg\] } {
+            ::break
         }
-        if { \[string equal \$arg \"--\"\] } {
-            incr i
-            break
+        ::if { \[::string equal \$arg \"--\"\] } {
+            ::incr i
+            ::break
         }
-        switch -- \$arg {
+        ::switch -- \$arg {
 $switch_code
-            default { return -code error \"Invalid switch: \\\"\$arg\\\"\" }
+            default { ::return -code error \"Invalid switch: \\\"\$arg\\\"\" }
         }
     }
 "
 
         set n_required_positionals [expr { [llength $positionals] - $n_positionals_with_defaults }]
         append parser_code "
-    set n_args_remaining \[expr { \[llength \$args\] - \$i }\]
-    if { \$n_args_remaining < $n_required_positionals } {
-        return -code error \"No value specified for argument \[lindex { [lrange $positionals 0 [expr { $n_required_positionals - 1 }]] } \$n_args_remaining\]\"
+    ::set n_args_remaining \[::expr { \[::llength \$args\] - \$i }\]
+    ::if { \$n_args_remaining < $n_required_positionals } {
+        ::return -code error \"No value specified for argument \[::lindex { [::lrange $positionals 0 [::expr { $n_required_positionals - 1 }]] } \$n_args_remaining\]\"
     }
 "
         for { set i 0 } { $i < $n_required_positionals } { incr i } {
-            append parser_code "    upvar [lindex $positionals $i] val ; set val \[lindex \$args \[expr { \$i + $i }\]\]\n"
+            append parser_code "    ::upvar [::lindex $positionals $i] val ; ::set val \[::lindex \$args \[::expr { \$i + $i }\]\]\n"
         }
         for {} { $i < [llength $positionals] } { incr i } {
-		append parser_code "    if { \$n_args_remaining > $i } {
-        upvar [lindex $positionals $i] val ; set val \[lindex \$args \[expr { \$i + $i }\]\]
+		append parser_code "    ::if { \$n_args_remaining > $i } {
+        ::upvar [::lindex $positionals $i] val ; ::set val \[::lindex \$args \[::expr { \$i + $i }\]\]
     }
 "
         }
     
         if { $varargs_p } {
-            append parser_code "    set args \[lrange \$args \[expr { \$i + [llength $positionals] }\] end\]\n"
+            append parser_code "    ::set args \[::lrange \$args \[::expr { \$i + [::llength $positionals] }\] end\]\n"
         } else {
-            append parser_code "    if { \$n_args_remaining > [llength $positionals] } {
+            append parser_code "    ::if { \$n_args_remaining > [::llength $positionals] } {
         return -code error \"Too many positional parameters specified\"
     }
-    unset args
+    ::unset args
 "
         }
 
@@ -356,8 +356,8 @@ $switch_code
             ns_write "PARSER CODE:\n\n$parser_code\n\n"
         }
 
-        uplevel [list proc ${proc_name_as_passed}__arg_parser {} $parser_code]
-        uplevel [list proc $proc_name_as_passed args "    ${proc_name_as_passed}__arg_parser\n$code_block"]
+        uplevel [::list proc ${proc_name_as_passed}__arg_parser {} $parser_code]
+        uplevel [::list proc $proc_name_as_passed args "    ${proc_name_as_passed}__arg_parser\n$code_block"]
     }
 }
 
