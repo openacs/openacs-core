@@ -84,7 +84,7 @@ want to <a href=\"version-generate-info?version_id=$version_id&write_p=1\">gener
     set status "[ad_decode $version_name_greater -1 "An older" "A newer"] version of this package,
 version $installed_version_name, is installed and [ad_decode $installed_enabled_p "t" "enabled" "disabled"]."
     if { $version_name_greater < 0 } {
-	doc_body_append " You may <a href=\"version-upgrade?version_id=$version_id\">upgrade to this version now</a>."
+	append body " You may <a href=\"version-upgrade?version_id=$version_id\">upgrade to this version now</a>."
     }
 }
 
@@ -132,8 +132,12 @@ if { [llength $prompts] == 0 } {
 }
 
 db_release_unused_handles
-doc_body_append "[apm_header "$pretty_name $version_name"]
 
+set page_title "$pretty_name $version_name"
+set context [list [list "/acs-admin/apm/" "ACS Package Manager Administration"] $page_title]
+
+
+append body "
 $prompt_text
 
 <h3>Package Information</h3>
@@ -155,11 +159,11 @@ if { [empty_string_p $supported_databases_list] } {
     set supported_databases [join $supported_databases_list ", "]
 }
 
-doc_body_append "
+append body "
 <tr valign=baseline><th align=left>Database Support:</th><td>$supported_databases</td></th></tr>
 "
 
-doc_body_append "
+append body "
 <tr valign=baseline><th align=left>CVS:</th><td>$cvs_status</td></tr>
 <tr valign=baseline><th align=left>[ad_decode [llength $owners] 1 "Owner" "Owners"]:</th><td>[join $owners "<br>"]</td></th></tr>
 <tr valign=baseline><th align=left>Package Key:</th><td>$package_key</td></th></tr>
@@ -172,34 +176,34 @@ doc_body_append "
 <tr valign=baseline><th align=left>Distribution File:</th><td>"
 
 if { ![empty_string_p $tarball_length] && $tarball_length > 0 } {
-    doc_body_append "<a href=\"packages/[file tail $version_uri]?version_id=$version_id\">[format "%.1f" [expr { $tarball_length / 1024.0 }]]KB</a> "
+    append body "<a href=\"packages/[file tail $version_uri]?version_id=$version_id\">[format "%.1f" [expr { $tarball_length / 1024.0 }]]KB</a> "
     if { [empty_string_p $distribution_uri] } {
-	doc_body_append "(generated on this system"
+	append body "(generated on this system"
 	if { ![empty_string_p $distribution_date] } {
-	    doc_body_append " on $distribution_date"
+	    append body " on $distribution_date"
 	}
-	doc_body_append ")"
+	append body ")"
     } else {
-	doc_body_append "(downloaded from $distribution_uri"
+	append body "(downloaded from $distribution_uri"
 	if { ![empty_string_p $distribution_date] } {
-	    doc_body_append " on $distribution_date"
+	    append body " on $distribution_date"
 	}
-	doc_body_append ")"
+	append body ")"
     }
 } else {
-    doc_body_append "None available"
+    append body "None available"
     if { $installed_p == "t" } {
-	doc_body_append " (<a href=\"version-generate-tarball?version_id=$version_id\">generate one now</a> from the filesystem)"
+	append body " (<a href=\"version-generate-tarball?version_id=$version_id\">generate one now</a> from the filesystem)"
     }
 }
 
-doc_body_append "
+append body "
 </td></tr>
 
 </table>
 "
 
-doc_body_append "
+append body "
 </blockquote>
 
 <ul>
@@ -223,37 +227,35 @@ if { ![info exists installed_version_id] || $installed_version_id == $version_id
     # As long as there isn't a different installed version, and this package is being
     # generated locally, allow the user to write a specification file for this version
     # of the package.
-    doc_body_append "<li><a href=\"version-generate-info?[export_vars { version_id }]&write_p=1\">Write an XML package specification to the <tt>packages/$package_key/$package_key.info</tt> file</a>\n"
+    append body "<li><a href=\"version-generate-info?[export_vars { version_id }]&write_p=1\">Write an XML package specification to the <tt>packages/$package_key/$package_key.info</tt> file</a>\n"
 }
 
 if { $installed_p == "t" } {
     if { [empty_string_p $distribution_uri] } {
 	# The distribution tarball was either (a) never generated, or (b) generated on this
 	# system. Allow the user to make a tarball based on files in the filesystem.
-	doc_body_append "<p><li><a href=\"version-generate-tarball?[export_vars { version_id }]\">Generate a distribution file for this package from the filesystem</a>\n"
+	append body "<p><li><a href=\"version-generate-tarball?[export_vars { version_id }]\">Generate a distribution file for this package from the filesystem</a>\n"
     }
 
-    doc_body_append "</ul><h4>Disable/Uninstall</h4><ul>"
+    append body "</ul><h4>Disable/Uninstall</h4><ul>"
 
     if { [info exists can_disable_p] } {
-	doc_body_append "<p><li><a href=\"version-disable?[export_vars { version_id }]\">Disable this version of the package</a>\n"
+	append body "<p><li><a href=\"version-disable?[export_vars { version_id }]\">Disable this version of the package</a>\n"
     }
     if { [info exists can_enable_p] } {
-	doc_body_append "<p><li><a href=\"version-enable?[export_vars { version_id }]\">Enable this version of the package</a>\n"
+	append body "<p><li><a href=\"version-enable?[export_vars { version_id }]\">Enable this version of the package</a>\n"
     }
     
-    doc_body_append "<p>"
+    append body "<p>"
     
     if { $installed_p == "t" } {	
-	doc_body_append "
+	append body "
 	<li><a href=\"package-delete?[export_vars { version_id }]\">Uninstall this package from your system.</a> (be very careful!)\n"
 	
     }
 }
 
-doc_body_append "
+append body "
 </ul>
-
-[ad_footer]
 "
 
