@@ -37,7 +37,8 @@ if { $community_member_url != "/shared/community-member" } {
 set site_wide_admin_p [acs_user::site_wide_admin_p]
 set admin_user_url [acs_community_member_admin_url -user_id $user_id]
 
-set verified_user_id [ad_verify_and_get_user_id]
+set verified_user_id [ad_conn user_id]
+set untrusted_user_id [ad_conn untrusted_user_id]
 
 if { [empty_string_p $user_id] } {
     if { $verified_user_id == 0 } {

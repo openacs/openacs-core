@@ -6,6 +6,8 @@
   <msg key="Answer">Answer:</msg>
   <msg key="answer">answer:</msg>
   <msg key="at">at</msg>
+  <msg key="Account_reopened_message">Your account at %system_name% has been reopened. Welcome back.</msg>
+  <msg key="Account_reopened_title">Account Reopened</msg>
   <msg key="Awaiting_Approval">Awaiting Approval</msg>
   <msg key="Bad_Password">Bad Password</msg>
   <msg key="Basic_Information">Basic Information</msg>
@@ -186,18 +188,12 @@ password:</msg>
   <msg key="lt_You_cant_have_a_lt_in_1">You can't have a &amp;lt; in your last name because it will look like an HTML tag and confuse other users.</msg>
   <msg key="lt_You_have_encountered_">You have encountered a problem with authentication.</msg>
   <msg key="lt_You_have_encountered__1">You have encountered a problem with authentication</msg>
-  <msg key="lt_Your_Account_at_site_">Your Account at %site_link% is restored.</msg>
-  <msg key="lt_Your_Account_is_Resto">Your Account is Restored</msg>
   <msg key="lt_Your_email_has_been_c">Your email has been confirmed. You may now log into
     %system_name%.</msg>
   <msg key="lt_Your_email_has_been_c_1">Your email has been confirmed. You are now awaiting approval
     from the %system_name% administrator.</msg>
   <msg key="lt_Your_email_is_confirm">Your email is confirmed</msg>
   <msg key="lt_Your_forgotten_passwo">Your forgotten password on %system_name%</msg>
-  <msg key="lt_Your_registration_is_">Your registration is in the database now.  A site administrator has
-been notified of your request to use the system.  Once you're
-approved, you'll get an email message and you can return to
-%site_link% to use the service.</msg>
   <msg key="lt_Your_URL_doesnt_have_">Your URL doesn't have the correct form.  A valid URL would be something like &quot;%valid_url_example%&quot;.</msg>
   <msg key="Name">Name:</msg>
   <msg key="New_Password">New Password</msg>
@@ -234,6 +230,10 @@ You can always change your password by doing the following:
   <msg key="question">question:</msg>
   <msg key="Recover_Password">Recover Password</msg>
   <msg key="Register">Register</msg>
+  <msg key="Registration_Approval_Notice">
+    <p> Thank you for registering for %system_name%. An administrator has been notified of your request. </p>
+    <p> Once you're approved, you'll get an email message and you can return to start using %system_name%. </p>
+  </msg>
   <msg key="Revoke_Checked">Revoke Checked</msg>
   <msg key="Screen_name">Screen name</msg>
   <msg key="screen_name">screen name:</msg>

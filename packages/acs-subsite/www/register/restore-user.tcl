@@ -5,7 +5,7 @@ ad_page_contract {
     {return_url {[ad_pvt_home]}}
 }
 
-set page_title [_ acs-subsite.lt_Your_Account_is_Resto]
+set page_title [_ acs-subsite.Account_reopened_title]
 set context [list [list [ad_pvt_home] [ad_pvt_home_name]] $page_title]
 
 # We do require authentication, though their account will be closed
@@ -32,4 +32,5 @@ switch $member_state {
 
 auth::verify_account_status
 
-set site_link [ad_site_home_link]
+# Used in a message key
+set system_name [ad_system_name]
