@@ -241,11 +241,14 @@ ad_proc tsearch2::build_query { -query } {
     # replace boolean words with boolean operators
     regsub -nocase "^not " $query {!} query
     set query [string map {" and " " & " " or " " | " " not " " ! "} " $query "]
+
     # remove leading and trailing spaces so they aren't turned into &
     set query [string trim $query]
+
     # remove any spaces between words and operators
     # all remaining spaces between words turn into &
-    regsub -all {([-/@.\d\w\(\)])\s+?([-/@.\d\w\(\)])} $query {\1 \& \2} query
+    while {[regsub {([-/@.\d\w\(\)])\s+?([-/@.\d\w\(\)])} $query {\1\&\2} query]} {}
+
     # if a ! is by itself then prepend &
     regsub {(\w+?)\s*(!)} $query {\1 \& !} query
     # if there is )( then insert an & between them 
