@@ -1,5 +1,5 @@
 <?xml version='1.0' ?>
-<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+<!DOCTYPE appendix PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
                "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
 
 <!ENTITY % myvars SYSTEM "variables.ent">
@@ -46,19 +46,22 @@ cvs -d /dotlrn-cvsroot checkout -r <replaceable>dotlrn-2-0</replaceable> dotlrn-
         <screen><action>cd /var/tmp/openacs-4
 cvs tag -F <replaceable>openacs-5-0-0a1</replaceable>
 </action></screen>
-        <para>Note that we use the <action>-F</action> flag which will force the tag to the new version (just in 
-          case someone has created the tag already on another version).  Excercise care when doing this since 
-          you don't want to inadvertently move a prior release tag.  Also if the tagging goes horribly wrong 
-          for some reason you can delete the tag via "<command>cvs tag -d &lt;symbolic_tag&gt;</command>".</para>
-
+        <tip>
+          <title>Branching</title>
+          <para>When we feature-freeze on HEAD as part of the release process, we are blocking new development.  To avoid this, we branch the code at this point, so that new work can continue on HEAD while the branch is stabilized for release. However, branching means that bug fixes have to be synchronized between HEAD and the branch, and bug fixes tend to be more frequent right at this time.  Therefore, our actual branch point is as late as possible - essentially, we do not branch until and unless new feature work is actively blocked by the feature freeze.  Branching is almost the same as tagging, except for the flag and slightly different tag nomenclature.  To see the list of old branches, <computeroutput>cvs status -v somefile</computeroutput>.</para>
+        <screen>cvs tag -b oacs-5-0</screen>
+        </tip>
         <para>Tag dotLRN.  Since the dotLRN packages aren't all in one
           module, we iterate through all of the modules.  Log in first
           (cvs login) so that you don't have to log in for each
           module.</para>
-
         <screen><action>cd /var/tmp/dotlrn-packages
 for dir in *; do ( cd $dir &amp;&amp; cvs tag -F <replaceable>dotlrn-2-0-0a1</replaceable> ); done
 </action></screen>
+        <para>Note that we use the <action>-F</action> flag which will force the tag to the new version (just in 
+          case someone has created the tag already on another version).  Excercise care when doing this since 
+          you don't want to inadvertently move a prior release tag.  Also if the tagging goes horribly wrong 
+          for some reason you can delete the tag via "<command>cvs tag -d &lt;symbolic_tag&gt;</command>".</para>
       </listitem>
       <listitem>
         <para>Make the tarball</para>
@@ -73,8 +76,8 @@ for dir in *; do ( cd $dir &amp;&amp; cvs tag -F <replaceable>dotlrn-2-0-0a1</re
                 <para>Go to a new working space and export the tagged files.</para>
             <screen><action>mkdir /var/tmp/tarball
 cd /var/tmp/tarball
-cvs -d /cvsroot export -r <replaceable>openacs-5-0-0a1</replaceable> acs-core
-</action></screen>
+cvs -d :pserver:anonymous@openacs.org:/cvsroot export -r <replaceable>openacs-5-0-0a1</replaceable> acs-core
+mv openacs-4 openacs</action></screen>
               </listitem>
               <listitem>
                 <para>Generate the tarball.</para>
@@ -138,19 +141,25 @@ rm -rf tarball dotlrn-tarball dotlrn-packages openacs-<replaceable>5.0.0a1</repl
       </listitem>
     </orderedlist>
 
+    <para>
+      Here is a shell script that automates packaging the tarball:
+    </para>
 
+    <programlisting><xi:include href="../../../../etc/install/build-release.sh" xi:parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"><xi:fallback>release script missing</xi:fallback></xi:include></programlisting>
+
+    <para><phrase role="cvstag">($Id$)</phrase></para>
+
+    <section id="update-repository">
+        <title>How to Update the OpenACS.org repository</title>
     <orderedlist>
       <listitem>
         <para>
-          Setup a local OpenACS server.
+          Setup a local OpenACS server running 5.0 or better.
         </para>
       </listitem>
       <listitem>
         <para>
-          Edit the file packages/acs-admin/www/build-repository.tcl; 
-          Change the line with 'set head_channel' to '5-1' if the version on HEAD in the openacs.org cvs repository is 5.1. Etcetera.
-          You may also want to change the line setting the variable 'repository_dir'.
-        </para>
+          Edit <computeroutput>packages/acs-admin/www/apm/build-repository.tcl</computeroutput> and adjust the Configuration Settings.        </para>
       </listitem>
       <listitem>
         <para>
@@ -158,16 +167,15 @@ rm -rf tarball dotlrn-tarball dotlrn-packages openacs-<replaceable>5.0.0a1</repl
         </para>
       </listitem>
       <listitem>
-        <para>
-          The page will find all branches in the cvs repository
-          labeled oacs-x-y, and build a repository channel for each of
-          those branches where x>=5 (so not for 4.6 and
-          earlier). Finally, it'll build another channel for HEAD,
-          which will be named after what you set in 'head_channel'
-          above.
-        </para>
-      </listitem>
-      <listitem>
+          <orderedlist>
+			<listitem>	
+              <para>
+          The page will find all branches in the cvs repository labeled oacs-x-y, and build a repository channel for each of
+          those branches where x>=5 (so not for 4.6 and earlier).  It will also build a channel for HEAD,
+          which will be named after what you set in 'head_channel' above.
+              </para>
+      	</listitem>  	
+        <listitem>
         <para>
           For each channel, it'll do an anonymous checkout of packges and contrib/packages, then build .apm files for each package in the checkout.
         </para>
@@ -177,20 +185,14 @@ rm -rf tarball dotlrn-tarball dotlrn-packages openacs-<replaceable>5.0.0a1</repl
           The files will be stored on the server's hard drive in the directory specified by the 'repository_dir' variable in the page script, by default "[acs_root_dir]/www/repository/".
         </para>
       </listitem>
+          </orderedlist>
+      </listitem>
       <listitem>
         <para>
           If you're on openacs.org, everything should now be fine. Otherwise, you need to move the entire directory tree to openacs.org:/web/openacs/www/repository, replacing what was already there.
         </para>
       </listitem>
     </orderedlist>
-
-
-    <para>
-      Here is a shell script that automates packaging the tarball:
-    </para>
-
-    <programlisting><xi:include href="../../../../etc/install/build-release.sh" xi:parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"><xi:fallback>release script missing</xi:fallback></xi:include></programlisting>
-
-    <para><phrase role="cvstag">($Id$)</phrase></para>
+    </section>
 
   </appendix>

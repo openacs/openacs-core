@@ -150,10 +150,9 @@
       </xi:include>
     </chapter>
 
-    <chapter id="configure">
-      <title>Configuring a New Service</title>
-      <para>Placeholder</para> 
-    </chapter>
+    <xi:include href="install-guide/configuring.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
+      <xi:fallback>Section missing</xi:fallback>
+    </xi:include>
 
     <xi:include href="install-guide/upgrade.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
       <xi:fallback>Section missing</xi:fallback>
@@ -184,7 +183,7 @@
     </xi:include>
 
     <xi:include href="install-guide/credits.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
-      <xi:fallback>Section Missing</xi:fallback>
+      <xi:fallback>Credits Section Missing</xi:fallback>
     </xi:include>
   </part>
 

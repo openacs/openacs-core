@@ -63,7 +63,7 @@ prelim:
 
 html: prelim XSL
 # adding --nonet --novalid is much faster but generates a bunch of bogus error messages
-	cd .. ; $(XSLTPROC) --xinclude xml/openacs.xsl xml/index.xml
+	cd .. ; $(XSLTPROC) --nonet --novalid --xinclude xml/openacs.xsl xml/index.xml
 
 # I got this to work with FOP 0.20.5 and docbook-xsl 1.62, and Jimi 1.0
 # see README.fop for some notes.

@@ -1,64 +1,48 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Debugging and Automated Testing</title><meta name="generator" content="DocBook XSL Stylesheets V1.62.0"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="tutorial.html" title="Chapter 7. Development Tutorial"><link rel="previous" href="tutorial-pages.html" title="Creating Web Pages"><link rel="next" href="tutorial-advanced.html" title="Advanced Topics"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="tutorial-pages.html">Prev</a> </td><th width="60%" align="center">Chapter 7. Development Tutorial</th><td width="20%" align="right"> <a accesskey="n" href="tutorial-advanced.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="tutorial-debug"></a>Debugging and Automated Testing</h2></div></div><div></div></div><div class="important" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Important</h3><p>This section is a work in progress.</p></div><div class="authorblurb"><p>by <a href="mailto:joel@aufrecht.org" target="_top">Joel Aufrecht</a></p>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Debugging and Automated Testing</title><meta name="generator" content="DocBook XSL Stylesheets V1.62.4"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="tutorial.html" title="Chapter 7. Development Tutorial"><link rel="previous" href="tutorial-pages.html" title="Creating Web Pages"><link rel="next" href="tutorial-advanced.html" title="Advanced Topics"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="tutorial-pages.html">Prev</a> </td><th width="60%" align="center">Chapter 7. Development Tutorial</th><td width="20%" align="right"> <a accesskey="n" href="tutorial-advanced.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="tutorial-debug"></a>Debugging and Automated Testing</h2></div></div><div></div></div><div class="authorblurb"><p>by <a href="mailto:joel@aufrecht.org" target="_top">Joel Aufrecht</a></p>
           OpenACS docs are written by the named authors, and may be edited
           by OpenACS documentation staff.
-        </div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2842663"></a>Debugging</h3></div></div><div></div></div><p><b>Developer Support. </b>The Developer Support package adds several goodies: debug
+        </div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2860971"></a>Debugging</h3></div></div><div></div></div><p><b>Developer Support. </b>The Developer Support package adds several goodies: debug
       information for every page; the ability to log comments to the
       page instead of the error log, and fast user switching so that you
       can test pages as anonymous and as dummy users without logging
       in and out.</p><p><b>PostgreSQL. </b>You can work directly with the database to do debugging
           steps like looking directly at tables and testing stored
-          procedures.  <span class="bold"><b>Start emacs.  Type
+          procedures.  Start emacs.  Type
             <b class="userinput"><tt>M-x sql-postgres</tt></b>.  Press enter for
-            server name and use <b class="userinput"><tt>openacs-dev</tt></b> for
+            server name and use <b class="userinput"><tt><span class="replaceable"><span class="replaceable">service0</span></span></tt></b> for
             database name.  You can use C-(up arrow) and C-(down arrow)
-            for command history.</b></span>
+            for command history.
 </p><p>Hint: "Parse error near *" usually means that an xql file
       wasn't recognized, because the tcl file is choking on the *SQL*
-      placeholder that it falls back on.</p><p><b>Watching the server log. </b>NOTE: explain how to add tcl to directly write your own
-      log output</p><p>To set up real-time monitoring of the AOLserver error
-          log, <span class="bold"><b>type</b></span> </p><pre class="screen">less /usr/local/aolserver/log/openacs-dev-error.log</pre><p>
+      placeholder that it falls back on.</p><p><b>Watching the server log. </b></p><p>To set up real-time monitoring of the AOLserver error
+          log, <span class="bold"><b>type</b></span> </p><pre class="screen">less /var/lib/aolserver/<span class="replaceable"><span class="replaceable">service0</span></span>/log/openacs-dev-error.log</pre><p>
           </p><div class="literallayout"><p>F to show new log entries in real time (like tail -f)<br>
 C-c to stop and F to start it up again. <br>
 G goes to the end.<br>
 ? searches backward <br>
 / searches forward. <br>
           </p></div><p>
-        </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2874599"></a>Manual testing</h3></div></div><div></div></div><p>Make a list of basic tests to make sure it works</p><div class="segmentedlist"><table border="0"><thead><tr><th>Test Num</th><th>Action</th><th>Expected Result</th></tr></thead><tbody><tr><td>001</td><td>Browse to the index page while not logged in and
+</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2861080"></a>Manual testing</h3></div></div><div></div></div><p>Make a list of basic tests to make sure it works</p><div class="segmentedlist"><table border="0"><thead><tr><th>Test Num</th><th>Action</th><th>Expected Result</th></tr></thead><tbody><tr><td>001</td><td>Browse to the index page while not logged in and
             while one or more notes exist.</td><td>No edit or delete or add links should appear.</td></tr><tr><td>002</td><td>Browse to the index page while logged in.  An Edit
             link should appear.  Click on it.  Fill out the form and
             click Submit.</td><td>The text added in the form should be visible on the
-            index page.</td></tr></tbody></table></div><p>Other things to test: try to delete someone else's
+            index page.</td></tr><tr><td>API-001</td><td>Invoke mfp::note::create with a specific word as the title.</td><td>Proc should return an object id.</td></tr><tr><td>API-002</td><td>Given an object id from API-001, invoke mfp::note::get.</td><td>Proc should return the specific word in the title.</td></tr><tr><td>API-003</td><td>Given the object id from API-001, invoke mfp::note::delete.</td><td>Proc should return 0 for success.</td></tr></tbody></table></div><p>Other things to test: try to delete someone else's
         note.  Try to delete your own note.  Edit your own note.
-        Search for a note.</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2874679"></a>Write automated tests</h3></div></div><div></div></div><div class="authorblurb"><p>by <a href="mailto:simon@collaboraid.net" target="_top">Simon Carstensen</a></p>
+        Search for a note.</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2860935"></a>Write automated tests</h3></div></div><div></div></div><div class="authorblurb"><p>by <a href="mailto:simon@collaboraid.net" target="_top">Simon Carstensen</a> and Joel Aufrecht</p>
           OpenACS docs are written by the named authors, and may be edited
           by OpenACS documentation staff.
-        </div><p>
-      <a class="indexterm" name="id2874702"></a>
-It seems to me that a lot of
-people have been asking for some guidelines on how to write automated
-tests. I've done several tests by now and have found the process to be
-extremely easy and useful. It's a joy to work with automated testing
-once you get the hang of it.</p><p>I just wrote a test script for the acs-service-contract package and
-thought I'd might as well post a step-by-step run-through, since some
-people have been asking for this. Here goes.
-</p><div class="orderedlist"><ol type="1"><li><p>Create the directory that will contain the test
-        script(s):</p><pre class="screen">
-$ cd /web/simon/packages/acs-service-contract/tcl
-$ mkdir test
-</pre></li><li><p>Create the .tcl library that holds the test
-        procs:</p><pre class="screen">
-$ cd test
-$ emacs acs-service-contract-procs.tcl
-</pre></li><li><p>Write the tests.  This is obviously the big step
-        :)</p><p>
-The script should first call ad_library like any normal -procs.tcl file:
-</p><pre class="screen">ad_library {
+        </div><p><a class="indexterm" name="id2856701"></a>
+    It seems to me that a lot of people have been asking for some guidelines on how to write automated tests. I've done several tests by now and have found the process to be extremely easy and useful. It's a joy to work with automated testing once you get the hang of it.</p><p>Create the directory that will contain the test
+    script and edit the script file.  The directory location and file name are standards which are recognized by the automated testing package:</p><pre class="screen">[service0 www]$<b class="userinput"><tt> mkdir /var/lib/aolserver/<span class="replaceable"><span class="replaceable">service0</span></span>/packages/myfirstpackage/tcl/test</tt></b>
+[service0 www]$<b class="userinput"><tt> cd /var/lib/aolserver/<span class="replaceable"><span class="replaceable">service0</span></span>/packages/myfirstpackage/tcl/test</tt></b>
+[service0 test]$ <b class="userinput"><tt>emacs myfirstpackages-procs.tcl</tt></b></pre><p>Write the tests.  This is obviously the big step :)  The script should first call ad_library like any normal -procs.tcl file:</p><pre class="screen">ad_library {
     ...
 }
 </pre><p>To create a test case you call
 <tt class="computeroutput">aa_register_case test_case_name.</tt>. 
 Once you've created the test case you start writing the needed logic.
-Let's say you just wrote an API for adding and deleting notes in the
+We'll use the tutorial package, "myfirstpackage," as an example.
+Let's say you just wrote an <a href="/api-doc" target="_top">API</a> for adding and deleting notes in the
 notes packages and wanted to test that. You'd probably want to write a
 test that first creates a note, then verifies that it was inserted,
 then perhaps deletes it again, and finally verifies that it is
@@ -69,61 +53,42 @@ this I usually do two things. I always put all my test code inside a
 call to aa_run_with_teardown which basically means that all the
 inserts, deletes, and updates will be rolled back once the test has
 been executed. A very useful feature. Instead of inserting bogus data
-like:        <tt class="computeroutput">set name "Simon"</tt>, I tend to generate a random script in order avoid inserting a value that's already in the database:
-</p><pre class="screen">set name [ad_generate_random_string]
-</pre><p>
-<i class="parameter"><tt>Here's how the test case looks so far:</tt></i>
-
-</p><pre class="screen">aa_register_case acs_sc_impl_new_from_spec {
-
-   aa_run_with_teardown \
+like:        <tt class="computeroutput">set name "Simon"</tt>, I tend to generate a random script in order avoid inserting a value that's already in the database:</p><pre class="screen">set name [ad_generate_random_string]
+</pre><i class="parameter"><tt>Here's how the test case looks so far:</tt></i><pre class="screen">aa_register_case mfp_basic_test {
+    My test
+} {
+    aa_run_with_teardown \
        -rollback \
-       -testcode  {
-          ... logic ...
+       -test_code  {
+
        }
 }
 </pre><p>Now let's look at the actual test code. That's the code that
-goes inside <tt class="computeroutput">-testcode {}</tt>.
-In my case I had added a new column to acs_sc_impls (pretty_name),
-which meant that I had to change the datamodel and the Tcl API to
-support this new change. To make sure I didn't screw up, I wrote a test
-that created a new service contract, then a new implementation of that
-contract, and called acs_sc::impl::get to check that the data in the
-new column had been added correctly and then finally verified that the
-pretty_name was actually what I had tried to insert. It looked
-something like this:
-</p><pre class="screen">set spec {
-     name "foo_contract"
-     description "Blah blah"
-     ...
+goes inside <tt class="computeroutput">-test_code {}</tt>.  We want to implement test case API-001, "Given an object id from API-001, invoke mfp::note::get.  Proc should return the specific word in the title."</p><pre class="programlisting">
+      set name [ad_generate_random_string]
+      set new_id [mfp::note::add -title $name]
+      aa_true "Note add succeeded" [exists_and_not_null new_id]</pre><p>To test our simple case, we must load the test file into the system (just as with the /tcl file in the basic tutorial, since the file didn't exist when the system started, the system doesn't know about it.)  To make this file take effect, go to the <a href="/acs-admin/apm" target="_top">APM</a> and choose "Reload changed" for "MyFirstPackage".  Since we'll be changing it frequently, select "watch this file" on the next page.  This will cause the system to check this file every time any page is requested, which is bad for production systems but convenient for developing.</p><p>Once the file is loaded, go to <a href="/test" target="_top">ACS Automated Testing</a> and click on myfirstpackage.  You should see your test case.  Run it and examine the results.</p><p>Now we can add the rest of the API tests.  The complete test looks like:</p><pre class="programlisting">ad_library {
+    Test cases for my first package.
 }
 
-# Create service contract
-acs_sc::contract::new_from_spec -spec $spec
+aa_register_case mfp_basic_test {
+    Test One
+} {
+   aa_run_with_teardown \
+       -rollback \
+       -test_code  {
+           set name [ad_generate_random_string]
+           set new_id [mfp::note::add -title $name]
+           aa_true "Note add succeeded" [exists_and_not_null new_id]
 
-set spec {
-     name "foo_impl"
-     description "Blah blah blah"
-     pretty_name "Foo Implementation"
-     ...
+           mfp::note::get -item_id $new_id -array note_array
+           aa_true "Note contains correct title" [string equal $note_array(title) $name]
+
+           mfp::note::delete -item_id $new_id
+
+           set get_again [catch {mfp::note::get -item_id $new_id -array note_array}]
+           aa_false "After deleting a note, retrieving it fails" [expr $get_again == 0]
+       }
 }
 
-# Create implementation
-set impl_id [acs_sc::impl::new_from_spec -spec $spec]
-
-# Get the values of the implementation we just created
-acs_sc::impl::get -impl_id $impl_id -array impl
-
-#Verify that the pretty_name column has the correct value
-aa_equals "did column pretty_name get set correctly?" $impl(pretty_name) "Foo Implementation"
-</pre><p>Now you might not know how acs-service-contract works, but that
-doesn't matter. I'm basically inserting data into the database, then
-querying for the database to check that it got inserted and then
-finally, using aa_equals, I compare the result with what I inserted to
-verify that everything is correct.</p><p>
-There are number of other useful procs for determening whether a test case was successful or not, namely:
-</p><pre class="screen">aa_true "is this true?" [expr ![empty_string $foo]]
-aa_false "is this true?" [empty_string $foo]
-</pre><p>There a number of other useful procs and I will encourage you to
-look at the few packages for which tests have already been implemented.
-That is perhaps the best documentation we have so far.  See also <a href="automated-testing-best-practices.html" title="Automated Testing">the section called &#8220;Automated Testing&#8221;</a>.</p></li></ol></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="tutorial-pages.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="tutorial-advanced.html">Next</a></td></tr><tr><td width="40%" align="left">Creating Web Pages </td><td width="20%" align="center"><a accesskey="u" href="tutorial.html">Up</a></td><td width="40%" align="right"> Advanced Topics</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a><center><a href="http://openacs.org/doc/tutorial-debug.html#comments">View comments on this page at openacs.org</a></center></body></html>
+</pre><p>See also <a href="automated-testing-best-practices.html" title="Automated Testing">the section called &#8220;Automated Testing&#8221;</a>.</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="tutorial-pages.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="tutorial-advanced.html">Next</a></td></tr><tr><td width="40%" align="left">Creating Web Pages </td><td width="20%" align="center"><a accesskey="u" href="tutorial.html">Up</a></td><td width="40%" align="right"> Advanced Topics</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a><center><a href="http://openacs.org/doc/tutorial-debug.html#comments">View comments on this page at openacs.org</a></center></body></html>

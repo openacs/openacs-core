@@ -28,7 +28,7 @@
         <title>Debian</title>
         <para></para>
       </formalpara>
-      <para>Debian users can install the package and add some backwards-compatibility links:</para>
+      <para>Debian users, especially Debian stable users, should install PostGreSQL from source as detailed below.  Debian unstable users: the following process has been known to work:</para>
       <screen><userinput>apt-get install postgresql postgresql-dev postgresql-doc
 ln -s /usr/include/postgresql/ /usr/include/pgsql
 ln -s /var/lib/postgres /usr/local/pgsql
@@ -512,8 +512,5 @@ checkpoint_segments = 3     # in logfile segments (16MB each), min 1
     </itemizedlist>
   <para><phrase role="cvstag">($Id$)</phrase></para>
   </sect2>
-
-
-
 </sect1>
 

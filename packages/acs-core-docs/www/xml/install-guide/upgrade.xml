@@ -49,7 +49,7 @@
   <sect1 id="upgrade-openacs">
     <title>Upgrading OpenACS</title>
     <sect2 id="upgrade-4.5-to-4.6">
-      <title>Upgrading 4.5 to 4.6.x</title>
+      <title>Upgrading 4.5 or higher to 4.6.3</title>
       <indexterm>
         <primary>upgrade</primary>
         <secondary>OpenACS 4.5 to 4.6.x</secondary>
@@ -151,16 +151,21 @@
         <listitem>
           <formalpara>
             <title>PostGreSQL</title>
-            <para>
-              You must use PostGreSQL 7.3.x or newer, or Oracle, to upgrade OpenACS beyond 4.6.3.  (OpenACS 5.0 requires PostGreSQL 7.3; OpenACS versions prior to 4.6.3 do not support PostGreSQL 7.3; only OpenACS 4.6.3 supports both 7.2 and 7.3.  <link linkend="upgrade-postgres-7.2-to-7.3">Upgrade PostGreSQL to 7.3</link>)
+              <para>You must use PostGreSQL 7.3.x or newer to upgrade OpenACS beyond 4.6.3.  See <link linkend="upgrade-postgres-7.2-to-7.3">Upgrade PostGreSQL to 7.3</link>; <xref linkend="compatibility-matrix"/>
             </para>
           </formalpara>
           <orderedlist>
             <listitem>
               <para><link linkend="snapshot-backup">Back up the database and file system.</link></para>
             </listitem>
+        <listitem>
+          <formalpara>
+            <title>Upgrade the file system for packages/acs-kernel</title>
+            <para><xref linkend="upgrade-openacs-files"/></para>
+          </formalpara>
+        </listitem>
             <listitem>
-              <para>Upgrade the kernel manually:</para>
+              <para>Upgrade the kernel manually. (There is a script to do most of the rest: <ulink url="http://cvs.openacs.org/cvs/openacs-4/contrib/misc/upgrade_4.6_to_5.0.sh?only_with_tag=HEAD">/contrib/misc/upgrade_4.6_to_5.0.sh on HEAD</ulink>).  You'll still have to do a lot of stuff manually, but automated trial and error is much more fun.)</para>
               <screen>[root root]# <userinput>su - <replaceable>service0</replaceable></userinput>
 [service0 aolserver]$ <userinput>cd /var/lib/aolserver/ <replaceable>service0</replaceable>/packages/acs-kernel/sql/postgresql/upgrade</userinput></screen>
               <para>
@@ -182,6 +187,12 @@ psql -f upgrade-5.0.0b2-5.0.0b3.sql <replaceable>service0</replaceable>
 psql -f upgrade-5.0.0b3-5.0.0b4.sql <replaceable>service0</replaceable></programlisting>
             </listitem>
             <listitem>
+              <para>Upgrade ACS Service Contracts manually:</para>
+              <screen>[service0 aolserver]$ <userinput>cd /var/lib/aolserver/ <replaceable>service0</replaceable>/packages/acs-service-contracts/sql/postgresql/upgrade</userinput>
+psql -f upgrade-4.7d2-4.7d3.sql <replaceable>service0</replaceable>
+</screen>
+            </listitem>
+            <listitem>
               <para>Load acs-authentication data model.</para>
               <screen><userinput>psql -f /var/lib/aolserver/<replaceable>service0</replaceable>/openacs-5/packages/acs-authentication/sql/postgresql/acs-authentication-create.sql <replaceable>service0</replaceable></userinput></screen>
             </listitem>
@@ -190,7 +201,7 @@ psql -f upgrade-5.0.0b3-5.0.0b4.sql <replaceable>service0</replaceable></program
               <screen><userinput>psql -f /var/lib/aolserver/<replaceable>service0</replaceable>/packages/acs-lang/sql/postgresql/acs-lang-create.sql <replaceable>service0</replaceable></userinput></screen>
             </listitem>
             <listitem>
-              <para>Create a file which will be executed on startup which takes care of a few issues with authentication and internationalization: create <replaceable>service0</replaceable>/tcl/zzz-postload.tcl containing:</para>
+              <para>(This step may overlap with the two previous steps, but I think it's harmless?) Create a file which will be executed on startup which takes care of a few issues with authentication and internationalization: create <replaceable>service0</replaceable>/tcl/zzz-postload.tcl containing:</para>
               <programlisting>if {![apm_package_installed_p acs-lang]} {
 apm_package_install -enable -mount_path acs-lang [acs_root_dir]/packages/acs-lang/acs-lang.info
 lang::catalog::import -locales [list "en_US"]
@@ -217,7 +228,7 @@ parameter::set_value -package_id [ad_acs_kernel_id] -parameter UsePasswordWidget
             </listitem>
           </orderedlist>
           <para>
-          See also this forum post: <ulink url="http://openacs.org/forums/message-view?message_id=143497">Forum OpenACS Development: 4.6.3 upgrade to 5-HEAD: final results</ulink>.</para>
+          See also these forum posts: <ulink url="http://openacs.org/forums/message-view?message_id=143497">Forum OpenACS Development: 4.6.3 upgrade to 5-HEAD: final results</ulink>, <ulink url="http://openacs.org/forums/message-view?message_id=152200">OpenACS 5.0 Upgrade Experiences</ulink>.</para>
         </listitem>
       </itemizedlist>
     </sect2>
@@ -246,7 +257,7 @@ parameter::set_value -package_id [ad_acs_kernel_id] -parameter UsePasswordWidget
       </listitem>
       <listitem>
         <para>
-          <emphasis role="strong">Upgrading files for a site which is in a CVS repository</emphasis>
+          <emphasis role="strong">Upgrading files for a site in a private CVS repository</emphasis>
         </para>
         <orderedlist>
           <listitem>
@@ -295,6 +306,19 @@ parameter::set_value -package_id [ad_acs_kernel_id] -parameter UsePasswordWidget
             exit</action></screen>
           </listitem>
         </orderedlist>
+      </listitem>
+      <listitem>
+        <para>
+          <emphasis role="strong">Upgrading files for a site using the OpenACS.org CVS repository</emphasis>
+        </para>
+          <orderedlist>
+            <listitem>
+            <screen>[service0 ~]$ <userinput>cd /var/lib/aolserver/<replaceable>service0</replaceable></userinput>
+            [service0 service0]$ <userinput>cvs up -Pd</userinput>
+            (CVS feedback)
+            [service0 service0]$</screen>
+            </listitem>
+          </orderedlist>
       </listitem>
     </itemizedlist>
   </sect1>

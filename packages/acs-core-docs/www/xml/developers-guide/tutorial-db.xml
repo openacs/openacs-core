@@ -49,6 +49,14 @@
       url="/doc/acs-content-repository">More information about the
       Content Repository</ulink>.)
 </para>
+    <figure>
+      <title>Tutorial Data Model</title>
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="images/tutorial-data-model.png" format="png" align="center"/>
+        </imageobject>
+      </mediaobject>
+</figure>
       <para>The top of each sql file has some
       standard comments, including doc tags such as
       <computeroutput>@author</computeroutput> which will be picked up
@@ -68,7 +76,6 @@
     object.  Notice the use of "mfp."  This token, derived from "My
     First Package," ensures that our object is unlikely to conflict
     with objects from other packages.</para>
-
       <para>Create a database file to drop everything if the package
         is uninstalled.</para>
       <screen>
