@@ -309,14 +309,10 @@ where rel_side = 'two';
 --   and rc_required_rel_segments.group_id is null;
 
 create view comp_or_member_rel_types as 
-select object_type as rel_type 
-  from acs_object_types
- where tree_sortkey like (select o.tree_sortkey || '%' 
-                            from acs_object_types o
-                           where o.object_type = 'composition_rel')
-    or tree_sortkey like (select o.tree_sortkey || '%' 
-                            from acs_object_types o
-                           where o.object_type = 'membership_rel');
+select o.object_type as rel_type 
+  from acs_object_types o, acs_object_types o1
+  where o1.object_type in ('composition_rel', 'membership_rel')
+    and o.tree_sortkey between o1.tree_sortkey and tree_right(o1.tree_sortkey);
 
 create view group_rel_type_combos as 
 select groups.group_id, comp_or_member_rel_types.rel_type

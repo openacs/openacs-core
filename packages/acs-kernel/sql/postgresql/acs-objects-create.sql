@@ -278,12 +278,12 @@ begin
 
         for v_rec in select object_id
                        from acs_objects 
-                      where tree_sortkey like new.tree_sortkey || ''%''
+                      where tree_sortkey between new.tree_sortkey and tree_right(new.tree_sortkey)
                    order by tree_sortkey
         LOOP
             if clr_keys_p then
                update acs_objects set tree_sortkey = null
-               where tree_sortkey like new.tree_sortkey || ''%'';
+               where tree_sortkey between new.tree_sortkey and tree_right(new.tree_sortkey);
                clr_keys_p := ''f'';
             end if;
             
@@ -744,8 +744,7 @@ begin
        where o1.object_type = (select object_type
                                  from acs_objects o
                                 where o.object_id = delete__object_id)
-         and o2.tree_sortkey <= o1.tree_sortkey
-         and o1.tree_sortkey like (o2.tree_sortkey || ''%'') 
+         and o1.tree_sortkey between o2.tree_sortkey and tree_right(o2.tree_sortkey)
     order by o2.tree_sortkey desc
   loop
     -- Delete from the table.
@@ -791,8 +790,7 @@ begin
        where o1.object_type = (select object_type
                                  from acs_objects o
                                 where o.object_id = name__object_id)
-         and o2.tree_sortkey <= o1.tree_sortkey
-         and o1.tree_sortkey like (o2.tree_sortkey || ''%'') 
+         and o1.tree_sortkey between o2.tree_sortkey and tree_right(o2.tree_sortkey)
     order by o2.tree_sortkey desc
   loop
    if obj_type.name_method != '''' and obj_type.name_method is NOT null then
@@ -881,8 +879,7 @@ begin
       where o1.object_type = (select object_type
                                 from acs_objects o
                                where o.object_id = object_id_in)
-        and o2.tree_sortkey <= o1.tree_sortkey
-        and o1.tree_sortkey like (o2.tree_sortkey || ''%'') 
+        and o1.tree_sortkey between o2.tree_sortkey and tree_right(o2.tree_sortkey)
      ) t
    where   
      a.attribute_name = attribute_name_in

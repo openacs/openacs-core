@@ -367,19 +367,15 @@ begin
          acs_objects o1, 
          acs_objects o2
     where exists (select 1 
-                    from acs_object_types t
+                    from acs_object_types t, acs_object_types o
                    where t.object_type = o1.object_type
-                     and t.tree_sortkey 
-                         like (select o.tree_sortkey || ''%'' 
-                                 from acs_object_types o
-                                where o.object_type = rt.object_type_one))
+                     and o.object_type = rt.object_type_one
+                     and t.tree_sortkey between o.tree_sortkey and tree_right(o.tree_sortkey))
       and exists (select 1 
-                    from acs_object_types t
+                    from acs_object_types t, acs_object_types o
                    where t.object_type = o2.object_type
-                     and t.tree_sortkey 
-                         like (select o.tree_sortkey || ''%'' 
-                                 from acs_object_types o
-                                where o.object_type = rt.object_type_two))
+                     and o.object_type = rt.object_type_two
+                     and t.tree_sortkey between o.tree_sortkey and tree_right(o.tree_sortkey))
       and rt.rel_type = new.rel_type
       and o1.object_id = new.object_id_one
       and o2.object_id = new.object_id_two;

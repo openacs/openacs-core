@@ -96,8 +96,8 @@ acs_privilege_hierarchy_index (tree_sortkey);
 --   from acs_privilege_hierarchy_index h1, 
 --        acs_privilege_hierarchy_index h2
 --  where h1.child_privilege = 'cm_perm'
---    and h1.tree_sortkey like (h2.tree_sortkey || '%')
---    and h2.tree_sortkey < h1.tree_sortkey;
+--    and h1.tree_sortkey between h2.tree_sortkey and tree_right(h2.tree_sortkey)
+--    and h2.tree_sortkey <> h1.tree_sortkey;
 
 -- Also since acs_privilege_descendant_map is simply a path enumeration of
 -- acs_privilege_hierarchy, we should be able to replace the above connect-by
@@ -361,7 +361,7 @@ as select p1.privilege, p2.privilege as descendant
                    where
                      h1.privilege = p1.privilege
                      and h2.privilege = p2.privilege
-                     and h2.tree_sortkey like h1.tree_sortkey || '%') or
+                     and h2.tree_sortkey between h1.tree_sortkey and tree_right(h1.tree_sortkey)) or
      p1.privilege = p2.privilege;
 
 create view acs_permissions_all

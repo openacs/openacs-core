@@ -42,7 +42,6 @@ declare
     p_object_type1      alias for $1;
     p_object_type2      alias for $2;
     v_exist_p           boolean := ''f'';
-    v_count             integer := 0;
 begin
     v_exist_p := acs_object_util__object_type_exist_p(p_object_type1);
 
@@ -56,17 +55,11 @@ begin
         raise exception ''Object type % does not exist'', p_object_type2;
     end if;
         
-    select count(*) into v_count
-    from dual 
-    where p_object_type2 in (select o2.object_type
-                           from acs_object_types o1, acs_object_types o2
-                          where o1.object_type = p_object_type1
-                            and o2.tree_sortkey <= o1.tree_sortkey
-                            and o1.tree_sortkey like (o2.tree_sortkey || ''%''));
-
-    select (case when v_count=1 then ''t'' else ''f'' end) into v_exist_p;
-
-    return v_exist_p;
+    return exists (select 1
+                   from acs_object_types o1, acs_object_types o2
+                   where p_object_type2 = o2.object_type
+                     and o1.object_type = p_object_type1
+                     and o1.tree_sortkey between o2.tree_sortkey and tree_right(o2.tree_sortkey);
 end;' language 'plpgsql';
 
 
