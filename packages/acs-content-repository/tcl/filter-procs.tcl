@@ -74,12 +74,14 @@ ad_proc -public content::get_content { { content_type {} } } {
         return
     }
 
-    # Get the live revision
-    set revision_id [db_string get_revision ""]
-
     if { [template::util::is_nil revision_id] } {
-        ns_log notice "content::get_content: No live revision for item $item_id"
-        return
+	# Try to get the live revision
+	ns_log notice "content::get_content: trying to get live revision"
+	set revision_id [db_string get_revision ""]
+	if { [template::util::is_nil revision_id] } {
+	    ns_log notice "content::get_content: No live revision for item $item_id"
+	    return
+	}
     }
 
     # Get the mime type, decide if we want the text
