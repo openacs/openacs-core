@@ -184,7 +184,7 @@ create table cr_items (
                       constraint cr_items_rev_type_fk
                       references acs_object_types,
   storage_type        varchar2(10) default 'lob' not null
-                      constraint cr_revisions_storage_type
+                      constraint cr_items_storage_type
                       check (storage_type in ('lob','file')),
   storage_area_key    varchar2(100) default 'CR_FILES' not null
 );  
