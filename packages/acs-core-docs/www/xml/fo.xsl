@@ -25,6 +25,11 @@
 
   <xsl:param name="generate.index" select="1"></xsl:param>
 
+  <!-- Footnote ulinks --> 
+  <xsl:param name="ulink.show" select="'1'"></xsl:param>
+  <xsl:param name="ulink.footnotes" select="'1'"></xsl:param>
+
+
   <!-- Number the chapters and sections -->
   <xsl:variable name="section.autolabel">1</xsl:variable>
   <xsl:variable name="section.label.includes.component.label">1</xsl:variable>
