@@ -7,7 +7,7 @@
     <initial-install-p>f</initial-install-p>
     <singleton-p>t</singleton-p>
 
-    <version name="0.2d" url="http://www.arsdigita.com/acs-repository/download/apm/acs-reference-0.2d.apm">
+    <version name="0.3d" url="http://www.arsdigita.com/acs-repository/download/apm/acs-reference-0.3d.apm">
     <database-support>
         <database>oracle</database>
         <database>postgresql</database>
@@ -26,8 +26,8 @@ data of this sort.
 &lt;/ul&gt;
 </description>
 
-        <provides url="acs-reference" version="0.2d"/>
-        <requires url="acs-kernel" version="4.6.2"/>
+        <provides url="acs-reference" version="0.3d"/>
+        <requires url="acs-kernel" version="5.0d13"/>
 
         <parameters>
         <!-- No version parameters -->
