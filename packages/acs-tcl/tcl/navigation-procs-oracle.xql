@@ -10,7 +10,7 @@
     from site_nodes
     start with node_id = :node_id
     connect by prior parent_id = node_id
-    order by level desc
+    order by level asc
   
       </querytext>
 </fullquery>

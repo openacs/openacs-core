@@ -11,7 +11,7 @@
         site_nodes n2
     where n2.tree_sortkey <= n1.tree_sortkey
       and n1.tree_sortkey like (n2.tree_sortkey || '%')
- order by level desc
+ order by level asc
   
       </querytext>
 </fullquery>

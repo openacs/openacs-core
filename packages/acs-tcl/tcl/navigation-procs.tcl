@@ -59,7 +59,7 @@ ad_proc ad_context_bar { args } {
     from site_nodes
     start with node_id = :node_id
     connect by prior parent_id = node_id
-    order by level desc
+    order by level asc
   } {
     if {$display_main_p || $url != "/"} {
       lappend context [list $url $object_name]
