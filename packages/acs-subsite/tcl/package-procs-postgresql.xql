@@ -153,7 +153,7 @@
 </fullquery>
 
 
-<fullquery name="package_plsql_args.select_object_type_param_list">      
+<fullquery name="package_plsql_args.select_package_func_param_list">      
       <querytext>
 	select args.arg_name
         from acs_function_args args
@@ -259,6 +259,17 @@ select 1;
 <partialquery name="package_attribute_default.last_modified">      
       <querytext>now()</querytext>
 </partialquery>
+
+<fullquery name="package_exec_plsql.exec_plsql">      
+      <querytext>
+
+	select ${package_name}__${plsql_name}([plpgsql_utility::generate_attribute_parameter_call \
+		-prepend ":" \
+		${package_name}__new \
+		$pieces])
+
+      </querytext>
+</fullquery>
 
  
 </queryset>
