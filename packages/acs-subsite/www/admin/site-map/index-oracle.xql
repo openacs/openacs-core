@@ -22,6 +22,7 @@
         <querytext>
             select package_id,
                    package_key,
+                   (select pretty_name from apm_package_types where package_key = p.package_key) as package_pretty_name,
                    apm_package_type.num_parameters(package_key) parameter_count,
                    node_id,
                    url,
