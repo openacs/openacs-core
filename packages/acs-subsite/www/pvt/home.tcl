@@ -31,6 +31,8 @@ set page_title [ad_pvt_home_name]
 
 set pvt_home_url [ad_pvt_home]
 
+set subsite_url [subsite::get_element -element url]
+
 set context [list $page_title]
 
 set ad_url [ad_url]
