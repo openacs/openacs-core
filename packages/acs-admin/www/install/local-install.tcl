@@ -32,12 +32,13 @@ foreach spec_file [apm_scan_packages "[acs_root_dir]/packages"] {
             set package_key $version(package.key)
             if {  [apm_package_supports_rdbms_p -package_key $version(package.key)] } {
                 
+                set installed_p 0
                 if { ![info exists installed_version($version(package.key))] } {
                     set upgrade_text {}
                 } elseif { [string equal $version(name) $installed_version($version(package.key))] } {
-                    continue
+                    set installed_p 1
                 } elseif { [apm_higher_version_installed_p $version(package.key) $version(name)] != 1 } {
-                    continue
+                    set installed_p 1
                 } else {
                     set upgrade_text Upgrade
                     set upgrades_p 1
@@ -45,7 +46,7 @@ foreach spec_file [apm_scan_packages "[acs_root_dir]/packages"] {
                 
 
                 # If in upgrade mode, only add to list if it's an upgrade
-                if { !$upgrade_p || ![empty_string_p $upgrade_text] } {
+                if { !$installed_p && (!$upgrade_p || ![empty_string_p $upgrade_text]) } {
                     multirow append packages \
                         $version(package.key) \
                         $version(package-name) \
@@ -57,7 +58,7 @@ foreach spec_file [apm_scan_packages "[acs_root_dir]/packages"] {
         }
     } {
         global errorInfo
-        ns_log Error "Error while checking package info file:\n$errorInfo"
+        ns_log Error "Error while checking package info file $spec_file: $errmsg\n$errorInfo"
     }
 }
 
