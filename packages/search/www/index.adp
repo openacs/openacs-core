@@ -3,7 +3,7 @@
   <property name="context">#search.Search#</property>
 
   <if @driver_p@ true> 
-    <form method="GET" action="search">
+    <form method="get" action="search">
       <input type="text" name="q" size="80" maxlength="256" />
       <input type="submit" value="#search.Search#" name="t" />
       <!--<input type="submit" value="#search.Feeling_Lucky#" name="t" />-->
