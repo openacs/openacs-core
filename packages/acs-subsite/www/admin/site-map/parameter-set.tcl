@@ -9,6 +9,7 @@ ad_page_contract {
 } {
     package_id:naturalnum,notnull
     {orderby ""}
+    {return_url "."}
 }
 
 ad_require_permission $package_id admin
@@ -89,7 +90,7 @@ tables.
 ns_return 200 text/html "$body
 <blockquote>
 <form method=post action=parameter-set-2>
-[export_form_vars package_key package_id instance_name]
+[export_form_vars package_key package_id instance_name return_url]
 $table
 </blockquote>
 </form>
