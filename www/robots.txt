@@ -1,4 +1,5 @@
 User-agent: *
+Disallow: /
 Disallow: /doc/
 Disallow: /api-doc/
 Disallow: /register/

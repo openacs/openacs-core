@@ -1,0 +1,13 @@
+<master src="../box-master">
+<property name="title"><a href="/forums/">@title@</a></property>
+
+<multiple name=forums>
+  <span id="title"><a href="/forums/forum-view?forum_id=@forums.forum_id@">@forums.short_name@</a></span>
+<br>
+</multiple>
+<br>
+Also: IRC chat at <a href="http://freenode.net/">irc.freenode.net</a> #openacs (<a href="irc://irc.freenode.net#openacs" title="Link for browsers which support irc">link</a>) (<a href="/irc/">more info</a>)<br>
+View the <a href="/irc/log/">chat logs</a> (registered users)
+<p>
+Or browse the <a href="/directory/">directory of users</a> on this site.
+

@@ -1,0 +1,84 @@
+ad_page_contract {
+  packages/editthispage/www/index.vuh
+
+  @author Luke Pond (dlpond@pobox.com)
+  @creation-date 2001-06-01
+
+  Virtual URL Handler to serve files from an
+  instance of the Edit This Page package.
+
+  Helpful .vuh example at 
+  http://www.arsdigita.com/bboard/q-and-a-fetch-msg?msg_id=000JTn
+} {
+	{revision_id ""}
+}
+
+ad_conn -set revision_id $revision_id
+
+# get the portion of the url following the package directory
+set name [ad_conn path_info]
+
+ns_log Notice "index.vuh: request for $name" 
+
+
+if { [string index $name end] == "/" } {
+    # it's in a subdirectory, and we know there's no
+    # other package mounted on that subdirectory.
+    ns_returnnotfound
+}
+
+if {[empty_string_p $name] || $name == "index"} {
+    set path "/[etp::get_application_param index_template]"
+} elseif {[string match "etp*" $name]} {
+    # this trickery is for serving pages from the top level,
+    # where the acs-subsite package is mounted rather than
+    # the editthispage package.  normally the request processor 
+    # finds these before invoking this file.
+    set path "/packages/edit-this-page/www/$name"
+} else {
+
+    set path "/[etp::get_application_param content_template]"
+
+    # set up form variables so we can pass the "name" 
+    # variable to the content page. 
+    global _ns_form
+    set _ns_form [ns_set create]
+    ns_set put [ns_getform] "name" $name
+}
+
+ns_log Notice "Edit This Page index.vuh: serving $path"
+
+
+#rp_serve_abstract_file $path
+### JCD: I switched this back since this change is making the 
+### server restart on a file not found recursion 
+#
+#rp_internal_redirect -absolute_path $path
+
+
+### Here is the log of a bad request...
+#[13/Nov/2002:15:08:32][8276.16392][-conn2-] Notice: Security: 1037218112 sec_generate_session_id_cookie setting 51390002, 0.
+#[13/Nov/2002:15:08:32][8276.16392][-conn2-] Notice: index.vuh: request for shared/84
+#[13/Nov/2002:15:08:32][8276.16392][-conn2-] Notice: ns_getform using encoding iso8859-1 for charset iso-8859-1
+#[13/Nov/2002:15:08:32][8276.16392][-conn2-] Notice: Edit This Page index.vuh: serving /web/openacs.org-dev/www/templates/default-content
+#[13/Nov/2002:15:08:33][8276.16392][-conn2-] Notice: Error from etp::get_pa was:
+# Query did not return any rows.
+#[13/Nov/2002:15:08:33][8276.16392][-conn2-] Notice: index.vuh: request for global/file-not-found.html
+#[13/Nov/2002:15:08:33][8276.16392][-conn2-] Notice: Edit This Page index.vuh: serving /web/openacs.org-dev/www/templates/default-content
+#[13/Nov/2002:15:08:33][8276.16392][-conn2-] Notice: Error from etp::get_pa was:
+# Query did not return any rows.
+#[13/Nov/2002:15:08:33][8276.16392][-conn2-] Notice: index.vuh: request for global/file-not-found.html
+#[13/Nov/2002:15:08:33][8276.16392][-conn2-] Notice: Edit This Page index.vuh: serving /web/openacs.org-dev/www/templates/default-content
+#[13/Nov/2002:15:08:33][8276.16392][-conn2-] Notice: Error from etp::get_pa was:
+# Query did not return any rows.
+#[13/Nov/2002:15:08:33][8276.16392][-conn2-] Notice: index.vuh: request for global/file-not-found.html
+#[13/Nov/2002:15:08:33][8276.16392][-conn2-] Notice: Edit This Page index.vuh: serving /web/openacs.org-dev/www/templates/default-content
+#[13/Nov/2002:15:08:33][8343.1024][-main-] Notice: nsmain: AOLserver/3.3.1+ad13 starting
+
+rp_internal_redirect $path
+
+
+
+
+
+

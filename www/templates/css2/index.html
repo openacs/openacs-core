@@ -1,0 +1,91 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>CSS example page</title>
+<script language="JavaScript" type="text/javascript">
+if (navigator.appName == "Netscape"){
+        if (navigator.appVersion.indexOf ("5.0") != -1) {
+                document.writeln ('<LINK REL="StyleSheet" HREF="/templates/css/oacs_ns6.css" type="text/css">');
+        }
+        else {
+                document.writeln ('<LINK REL="StyleSheet" HREF="/templates/css/oacs_ns4.css" type="text/css">');
+        }
+}
+else {
+document.writeln ('<LINK REL="StyleSheet" HREF="/templates/css/oacs_ie5.css" type="text/css">');
+}
+</script>
+<noscript>
+<LINK REL="StyleSheet" HREF="/templates/css/oacs_all.css" type="text/css">
+</noscript>
+</HEAD>
+
+<BODY BGCOLOR="#ffffff" TEXT="#000000" link="#006699" 
+alink="#0066cc" vlink="#003399">
+
+<br>
+<table align="center">
+<tr>
+<td align="center">
+<h1>THE RULES</h1>
+<p>P tags are not to be used for the purpose of line breaks.
+<br>Closing &lt;/P&gt; tags are required. 
+<br>Use &lt;BR&gt; tags for line breaks.
+<br><br>
+The following classes may be used in many elements, including these common ones:
+<br>SPAN
+<br>DIV
+<br>TD
+<br>TH
+<br>INPUT
+<br>SELECT
+<br><br>however, nesting classes<br> 
+&lt;TD class="small"&gt;&lt;span class="light"&gt;
+<span class="small"><span class="light">now i am very small</span></span>
+&lt;/span&gt;&lt;/td&gt;<br>
+may alter text sizes.
+</p>
+
+<h1>heading one (or span class="one")</h1>
+<h2>heading two (or span class="two")</h2>
+
+<h3>heading three (or span class="three")</h3>
+<h4>heading four (or span class="four")</h4>
+
+
+
+
+<span class="reg">span class="reg" -- span class="reg" -- span class="reg"</span>
+<br><br>
+
+<span class="small">span class="small" -- span class="small" --  span class="small"</span>
+<br><br>
+<span class="footer">span class="footer" -- span class="footer" -- span class="footer"</span>
+<br><br>
+<span class="light">span class="light" -- span class="light"</span>
+<br><br>
+
+<span class="nosize">class=nosize</span>
+<br><br>
+
+<span class="button">within a form field, just class="button"</span>
+<br><br>
+
+
+<span class="blue">span class="blue" -- span class="blue" -- span class="blue"</span>
+<br><br>
+
+<span class="pink">span class="pink" -- span class="pink" -- span class="pink"</span>
+<br><br>
+<span class="reg"><a href="#" class="top">link with class="top" in "A" tag</a></span>
+<br><br>
+<span class="reg"><a href="#">regular link, no class</a></span>
+<br><br>
+<span class="reg"><a class="noline" href="#">link with class="noline" in "A" tag</a></span>
+<br><br>
+</td>
+</tr>
+</table>
+</body>
+</html>
