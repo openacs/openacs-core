@@ -212,6 +212,7 @@ aolserver_config_file=`get_config_param aolserver_config_file`
 install_xml_file=`get_config_param install_xml_file`
 tclwebtest_scripts=`get_config_param tclwebtest_scripts`
 do_tclapi_testing=`get_config_param do_tclapi_testing`
+report_scp_target=`get_config_param report_scp_target`
 
 # If pre/post checkout scripts have been provided, check that they can
 # be executed
@@ -604,35 +605,35 @@ if parameter_true $do_install; then
   # Warn about errors in the HTML returned from the server
   ./warn-if-installation-errors.sh `get_config_param install_output_file`
 
-######################################################################
-#
-# Generate an XML report
-#
-######################################################################
+  ######################################################################
+  #
+  # Generate an XML report
+  #
+  ######################################################################
 
-xmlreportfile=$script_path/$HOSTNAME-$server-installreport.xml
-echo "<service name=\"$server\">" > $xmlreportfile
-echo "  <info type=\"os\">$(uname -a)</info>" >> $xmlreportfile
-echo "  <info type=\"dbtype\">$database</info>" >> $xmlreportfile
-if [ $database == "postgres" ]; then
-    # Postgres
-    echo "  <info type=\"dbversion\">$(${pg_bindir}/psql --version)</info>"  >> $xmlreportfile
-fi
-    #Oracle
-    #TODO: Oracle version number
+  xmlreportfile=$script_path/$HOSTNAME-$server-installreport.xml
+  echo "<service name=\"$server\">" > $xmlreportfile
+  echo "  <info type=\"os\">$(uname -a)</info>" >> $xmlreportfile
+  echo "  <info type=\"dbtype\">$database</info>" >> $xmlreportfile
+  if [ $database == "postgres" ]; then
+      # Postgres
+      echo "  <info type=\"dbversion\">$(${pg_bindir}/psql --version)</info>"  >> $xmlreportfile
+  fi
+  
+  #TODO: Oracle version number
 
-echo "  <info type=\"webserver\">$(/usr/local/aolserver/bin/nsd -V)</info>"  >> $xmlreportfile
-echo "  <info type=\"url\">$server_url</info>" >> $xmlreportfile
-echo "  <info type=\"hostname\">$HOSTNAME</info>" >> $xmlreportfile
-echo "  <info type=\"openacs-cvs-flag\">$(get_config_param oacs_branch)</info>" >> $xmlreportfile
-echo "  <info type=\"sitename\">$(get_config_param system_name)</info>" >> $xmlreportfile
-echo "  <info type=\"adminemail\">$admin_email</info>" >> $xmlreportfile
-echo "  <info type=\"adminpassword\">$admin_password</info>" >> $xmlreportfile
-echo "  <info type=\"install-begin-epoch\">$installation_start_time</info>" >> $xmlreportfile
-echo "  <info type=\"install-end-epoch\">$(date +%s)</info>" >> $xmlreportfile
-echo "  <info type=\"install-end-timestamp\">$(date)</info>" >> $xmlreportfile
-echo "  <info type=\"script_path\">$script_path</info>" >> $xmlreportfile
-echo "</service>"  >> $xmlreportfile
+  echo "  <info type=\"webserver\">$(/usr/local/aolserver/bin/nsd -V)</info>"  >> $xmlreportfile
+  echo "  <info type=\"url\">$server_url</info>" >> $xmlreportfile
+  echo "  <info type=\"hostname\">$HOSTNAME</info>" >> $xmlreportfile
+  echo "  <info type=\"openacs-cvs-flag\">$(get_config_param oacs_branch)</info>" >> $xmlreportfile
+  echo "  <info type=\"sitename\">$(get_config_param system_name)</info>" >> $xmlreportfile
+  echo "  <info type=\"adminemail\">$admin_email</info>" >> $xmlreportfile
+  echo "  <info type=\"adminpassword\">$admin_password</info>" >> $xmlreportfile
+  echo "  <info type=\"install-begin-epoch\">$installation_start_time</info>" >> $xmlreportfile
+  echo "  <info type=\"install-end-epoch\">$(date +%s)</info>" >> $xmlreportfile
+  echo "  <info type=\"install-end-timestamp\">$(date)</info>" >> $xmlreportfile
+  echo "  <info type=\"script_path\">$script_path</info>" >> $xmlreportfile
+  echo "</service>"  >> $xmlreportfile
 
   # Report the time at which we were done
   echo "$(date): Finished (re)installing $serverroot.
@@ -641,4 +642,9 @@ echo "</service>"  >> $xmlreportfile
 admin email   : $admin_email
 admin password: $admin_password
 ######################################################################"
+
+  if [ -n "$report_scp_target" ]; then
+      echo "$(date): Copying xml report to $report_scp_target"
+      scp $xmlreportfile $report_scp_target
+  fi
 fi
