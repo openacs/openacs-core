@@ -465,7 +465,7 @@ ad_proc -public ad_form {
     }
 
     if { [info exists af_parts(${form_name}__extend)] } {
-        report -code error "Can't extend form \"$form_name\" - a parameter block requiring the full form has already been declared"
+        return -code error "Can't extend form \"$form_name\" - a parameter block requiring the full form has already been declared"
     }
 
     global af_parts
