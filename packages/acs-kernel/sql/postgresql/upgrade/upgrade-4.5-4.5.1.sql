@@ -1,7 +1,7 @@
 -- added jon@jongriffin.com
 
 --include the new file
-\i site-node-object-map-create.sql
+\i ../site-node-object-map-create.sql
 
 
 -- acs-objects-create code
