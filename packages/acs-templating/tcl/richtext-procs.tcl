@@ -161,7 +161,7 @@ ad_proc -public template::util::richtext::get_property { what richtext_list } {
     }
 }
 
-ad_proc -public template::widget::richtext { element_reference tag_attributes } {
+ad_proc -public -deprecated template::widget::richtext_htmlarea { element_reference tag_attributes } {
     Implements the richtext widget, which offers rich text editing options.
 
     If the acs-templating.UseHtmlAreaForRichtextP parameter is set to true (1), this will use the htmlArea WYSIWYG editor widget.
@@ -173,6 +173,8 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
     <li>HTML = normal HTML.
     </ul>
     You can also parameterize the richtext widget with a 'htmlarea_p' attribute, which can be true or false, and which will override the parameter setting.
+
+    @see template::widget::richtext
 } {
 
   upvar $element_reference element
@@ -256,3 +258,93 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
       
   return $output
 }
+
+
+
+ad_proc -public template::widget::richtext { element_reference tag_attributes } {
+    Implements the richtext widget, which offers rich text editing options.
+
+    This version supports the rte editor.
+
+
+    If the acs-templating.UseHtmlAreaForRichtextP parameter is set to true (1), this will use the htmlArea WYSIWYG editor widget.
+    Otherwise, it will use a normal textarea, with a drop-down to select a format. The available formats are:
+    <ul>
+    <li>Enhanced text = Allows HTML, but automatically inserts line and paragraph breaks.
+    <li>Plain text = Automatically inserts line and paragraph breaks, and quotes all HTML-specific characters, such as less-than, greater-than, etc.
+    <li>Fixed-width text = Same as plain text, but conserves spacing; useful for tabular data.
+    <li>HTML = normal HTML.
+    </ul>
+    You can also parameterize the richtext widget with a 'htmlarea_p' attribute, which can be true or false, and which will override the parameter setting.
+
+    Derived from the htmlarea richtext widget for htmlarea by lars@pinds.com
+
+    modified for RTE http://www.kevinroth.com/ by davis@xarg.net
+} {
+
+    upvar $element_reference element
+
+    if { [info exists element(html)] } {
+        array set attributes $element(html)
+    }
+
+    array set attributes $tag_attributes
+
+    if { [info exists element(value)] } {
+        set contents [template::util::richtext::get_property contents $element(value)]
+        set format   [template::util::richtext::get_property format $element(value)]
+    } else {
+        set contents {}
+        set format {}
+    }
+
+    if { [string equal $element(mode) "edit"] } {
+
+        set attributes(id) "richtext__$element(form_id)__$element(id)"
+
+        if { [exists_and_not_null element(htmlarea_p)] } {
+            set htmlarea_p [template::util::is_true $element(htmlarea_p)]
+        } else {
+            set htmlarea_p [parameter::get \
+                                -package_id [apm_package_id_from_key "acs-templating"] \
+                                -parameter "UseHtmlAreaForRichtextP" \
+                                -default 0]
+        }
+
+        set output "[textarea_internal $element(id) attributes $contents]\n<br />Format: [menu $element(id).format [template::util::richtext::format_options] {} {}]"
+
+        if { $htmlarea_p } {
+            # Tell the blank-master to include the special stuff for htmlArea in the page header
+            global acs_blank_master__htmlareas
+            lappend acs_blank_master__htmlareas $element(form_id)
+
+
+            regsub -all "\n" $contents "\\n" contents
+            regsub -all "\r" $contents "" contents
+            # Beware: & means "repeat the string being replaced"
+            regsub -all "'" $contents "\\&#39;" contents
+
+            # What we are generating here is the call to write the richtext widget but we also 
+            # need to pass what to generate in for browsers for which the richtext widget
+            # won't work but which do have js enabled should output since we need the 
+            # format widget (this for Safari among some others)
+            set output "<script type='text/javascript'><!--\nwriteRichText('$element(id)','$contents',500,200,true,false,'<input name=\"$element(id).format\" value=\"text/html\" type=\"hidden\"/>','[string map {\n \\n} $output]'); //--></script><noscript id=\"rte-noscr-$element(id)\">$output</noscript>"
+
+        }
+        # Spell-checker
+        array set spellcheck [template::util::spellcheck::spellcheck_properties -element_ref element]
+        if { $spellcheck(render_p) } {
+            append output " Spellcheck: [menu "$element(id).spellcheck" [nsv_get spellchecker lang_options] $spellcheck(selected_option) attributes]"
+        }
+    } else {
+        # Display mode
+        if { [info exists element(value)] } {
+            append output [template::util::richtext::get_property html_value $element(value)]
+            append output "<input type=\"hidden\" name=\"$element(id)\" value=\"[ad_quotehtml $contents]\">"
+            append output "<input type=\"hidden\" name=\"$element(id).format\" value=\"[ad_quotehtml $format]\">"
+        }
+    }
+    
+    return $output
+}
+

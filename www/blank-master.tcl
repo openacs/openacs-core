@@ -33,12 +33,11 @@ multirow create attribute key value
 
 set onload {}
 
-# Handle htmlArea widget, which needs special javascript and css in the page header
+# Handle RTE widget, which needs special javascript and css in the page header
 global acs_blank_master__htmlareas
-if { [info exists acs_blank_master__htmlareas] } {
-    foreach htmlarea_id $acs_blank_master__htmlareas {
-        append header_stuff "<script type=\"text/javascript\">var editor_var_${htmlarea_id} = new HTMLArea(\"${htmlarea_id}\");</script>"
-        lappend onload "acs_initHtmlArea(editor_var_${htmlarea_id}, '${htmlarea_id}');"
+if {[info exists acs_blank_master__htmlareas] } {
+    foreach htmlarea_id [lsort -unique $acs_blank_master__htmlareas] {
+        lappend onload "acs_rteInit('${htmlarea_id}');"
     }
 }
 
