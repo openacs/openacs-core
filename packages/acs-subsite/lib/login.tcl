@@ -12,10 +12,6 @@ if { ![exists_and_not_null package_id] } {
     set subsite_id [subsite::get_element -element object_id]
 }
 
-if { ![exists_and_not_null authority_id] } {
-    set authority_id [auth::authority::local]
-}
-
 if { ![info exists username] } {
     set username {}
 }
@@ -52,6 +48,10 @@ set token [sec_get_token $token_id]
 set hash [ns_sha1 "$time$token_id$token"]
 
 set authority_options [auth::authority::get_authority_options]
+
+if { ![exists_and_not_null authority_id] } {
+    set authority_id [lindex $authority_options 0]
+}
 
 set forgotten_pwd_url [auth::password::get_forgotten_url -authority_id $authority_id -username $username]
 
