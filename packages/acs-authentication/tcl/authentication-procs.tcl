@@ -634,7 +634,7 @@ ad_proc -public auth::password::change {
                 -new_password $new_password]
 }
 
-ad_proc -public auth::password::forgotten {
+ad_proc -public auth::password::recover_password {
     {-authority_id:required}
     {-username:required}
 } { 
