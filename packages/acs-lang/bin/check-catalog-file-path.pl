@@ -13,7 +13,7 @@ use strict;
 my $file_path = shift or die "usage: $usage";
 
 # Parse information from the file path
-$file_path =~ m#(?i)([a-z-]+)/catalog/\1\.([a-z]{2}_[a-z]{2})\.(.*)\.xml$# 
+$file_path =~ m#(?i)([a-z-]+)/catalog/\1\.([a-z]{2,3}_[a-z]{2})\.(.*)\.xml$# 
     or die "catalog file path $file_path is not on format package_key/catalog/package_key.locale.charset.xml";
 my ($file_package, $file_locale, $file_charset) = ($1, $2, $3, $4);
 
