@@ -134,7 +134,7 @@ ad_proc -public permission::require_permission {
     require that party X have privilege Y on object Z
 } {
     if {[empty_string_p $party_id]} {
-        set party_id [ad_conn user_id
+        set party_id [ad_conn user_id]
     }
 
     if {![permission_p -party_id $party_id -object_id $object_id -privilege $privilege]} {
