@@ -17,6 +17,10 @@ set httpsport                 8443
 set hostname                  [ns_info hostname]
 set address                   [ns_info address]
 
+# Note: If port is privileged (usually < 1024), OpenACS must be
+# started by root, and, in AOLserver 4, the run script have a 
+# '-b address' flag which matches the address given above
+
 set server                    "service0" 
 set servername                "New OpenACS Installation - Development"
 
