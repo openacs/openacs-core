@@ -332,8 +332,8 @@ ad_proc -public template::element::validate { form_id element_id } {
       if { ! [eval $v_code] } {
       
 	# value is invalid according to custom validation code
-	lappend v_errors [subst $v_message]
-	set formerror($element_id:$v_name) [subst $v_message]
+	lappend v_errors [string map [list \$value $value \${value} $value \$label $label \${label} $label] $v_message]
+	set formerror($element_id:$v_name) [lindex $v_errors end]
       }
     }
   }
