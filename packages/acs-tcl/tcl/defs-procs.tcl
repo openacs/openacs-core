@@ -144,7 +144,7 @@ ad_proc -public acs_community_member_link {
 } {
     if {[empty_string_p $label]} {
         acs_user::get -user_id $user_id -array user
-        set label "$user(fist_names) $user(last_name)"
+        set label "$user(first_names) $user(last_name)"
     }
 
     return "<a href=\"[acs_community_member_url -user_id $user_id]\">$label</a>"
