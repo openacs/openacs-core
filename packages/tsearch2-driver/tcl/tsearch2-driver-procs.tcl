@@ -35,7 +35,7 @@ ad_proc -public tsearch2::index {
 } {
     set index_exists_p [db_0or1row object_exists "select 1 from txt where object_id=:object_id"]
     if {!$index_exists_p} {
-	db_dml index "insert into txt (object_id,fti) values ( :object_id, ts2_to_tsvector('default',:txt))"
+	db_dml index "insert into txt (object_id,fti) values ( :object_id, to_tsvector('default',:txt))"
 
     } else {
 	tsearch2::update_index $object_id $txt $title $keywords
@@ -83,9 +83,9 @@ ad_proc -public tsearch2::update_index {
 } {
     set index_exists_p [db_0or1row object_exists "select 1 from txt where object_id=:object_id"]
     if {!$index_exists_p} {
-	db_dml index "insert into txt (object_id,fti) values ( :object_id, ts2_to_tsvector('default',:txt))"
+	db_dml index "insert into txt (object_id,fti) values ( :object_id, to_tsvector('default',:txt))"
     } else {
-	db_dml update_index "update txt set fti = ts2_to_tsvector('default',:txt) where object_id=:object_id"
+	db_dml update_index "update txt set fti = to_tsvector('default',:txt) where object_id=:object_id"
     }
 	     
 }
@@ -135,9 +135,9 @@ ad_proc -public tsearch2::search {
     if {[string is integer $offset]} {
 	set offset_clause " offset :offset "
     }
-    set query_text "select object_id from txt where fti @@ ts2_to_tsquery('default',:query) order by rank(fti,ts2_to_tsquery('default',:query))  ${limit_clause} ${offset_clause}"
+    set query_text "select object_id from txt where fti @@ to_tsquery('default',:query) order by rank(fti,to_tsquery('default',:query))  ${limit_clause} ${offset_clause}"
     set results_ids [db_list search $query_text]
-    set count [db_string count "select count(*) from txt where fti @@ ts2_to_tsquery('default',:query)"]
+    set count [db_string count "select count(*) from txt where fti @@ to_tsquery('default',:query)"]
     set stop_words [list]
     # lovely the search package requires count to be returned but the
     # service contract definition doesn't specify it! 
@@ -162,7 +162,7 @@ ad_proc -public tsearch2::summary {
     @error 
 } {
     set query [tsearch2::build_query -query $query]
-   return [db_string summary "select headline(:txt,ts2_to_tsquery('default',:query))"]
+   return [db_string summary "select headline(:txt,to_tsquery('default',:query))"]
 }
 
 ad_proc -public tsearch2::driver_info {
