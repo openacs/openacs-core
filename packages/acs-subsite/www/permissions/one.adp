@@ -20,8 +20,8 @@
           <blockquote style="margin-left: 16px;">
             <multiple name="acl">
               <input type="checkbox" name="revoke_list" value="@acl.grantee_id@ @acl.privilege@" 
-                id="check_@acl.grantee_id@_@acl.privilege">
-              <label for="check_@acl.grantee_id@_@acl.privilege">@acl.grantee_name@, @acl.privilege@<label><br />
+                id="check_@acl.grantee_id@_@acl.privilege@">
+              <label for="check_@acl.grantee_id@_@acl.privilege@">@acl.grantee_name@, @acl.privilege@</label><br />
             </multiple>
           </blockquote>
     </if>
