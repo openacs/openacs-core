@@ -235,7 +235,8 @@ begin
    pretty_name   => 'Basic Item',
    pretty_plural => 'Basic Items',
    table_name    => 'cr_revisions',
-   id_column     => 'revision_id'
+   id_column     => 'revision_id',
+   name_method   => 'content_revision.revision_name'
  );
 
  attr_id := content_type.create_attribute (
