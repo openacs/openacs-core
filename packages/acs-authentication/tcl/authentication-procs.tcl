@@ -42,8 +42,13 @@ ad_proc -public auth::require_login {
 	return $user_id
     }
 
+    set message {}
+    if { [string equal [ad_conn auth_level] "expired"] } {
+        set message [_ acs-subsite.lt_Your_login_has_expire]
+    }
+
     # The -return switch causes the URL to return to the current page
-    ad_returnredirect [ad_get_login_url -return]
+    ad_returnredirect -message $message -- [ad_get_login_url -return]
     ad_script_abort
 }
 
