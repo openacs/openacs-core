@@ -26,6 +26,8 @@ namespace eval acs_mail_lite {
             set eh_list ""
         }
 
+        set subject [string range $subject 0 199]
+
         db_dml create_queue_entry {}
     }
 
