@@ -163,18 +163,20 @@ and rel_type = 'user_portrait_rel'"] {
 	}
     } else {
 	# it's merely an update
-	db_dml update_photo $update_photo -blob_files [list $tmp_filename]
-	db_dml update_image_info "
-	update images
-	set width = :original_width, height = :original_height
-	where image_id = :revision_id"
-	db_dml update_photo_info "
-	update cr_revisions
-	set description = :portrait_comment,
-	    publish_date = sysdate,
-	    mime_type = :guessed_file_type,
-	    title = :title
-	where revision_id = :revision_id"
+        db_transaction {
+	    db_dml update_photo $update_photo -blob_files [list $tmp_filename]
+	    db_dml update_image_info "
+	    update images
+	    set width = :original_width, height = :original_height
+	    where image_id = :revision_id"
+	    db_dml update_photo_info "
+	    update cr_revisions
+	    set description = :portrait_comment,
+	        publish_date = sysdate,
+	        mime_type = :guessed_file_type,
+	        title = :title
+	    where revision_id = :revision_id"
+        }
     }
 }
 

@@ -49,13 +49,15 @@ proc cr_create_content_file { item_id revision_id client_filename } {
     return $content_file
 }
 
-proc cr_create_content_lob { client_filename } {
+proc cr_create_content_lob { lob_id client_filename } {
 
-    set lob_id [db_string new_lob_id "select empty_lob()"]
 
-    db_with_handle db {
-        ns_pg blob_dml_file $db $lob_id $client_filename
+    db_transaction {
+
+        db_with_handle db {
+            ns_pg blob_dml_file $db $lob_id $client_filename
+        }
     }
 
-    return $lob_id
+    return 0
 }

@@ -20,8 +20,7 @@
          null,
          'text/plain',
          null,
-         null,
-         'file'
+         null
          )
 
 
@@ -45,6 +44,7 @@
         </querytext>
 </fullquery>
 
+
 <fullquery name="create_revision">
         <querytext>
 
@@ -58,7 +58,7 @@
                                        now(),
                                        :guessed_file_type,
                                        null,
-                                       'not_important',
+                                       null,
                                        :item_id,
                                        null,
                                        now(),
@@ -81,7 +81,7 @@
         <querytext>
 
         update cr_revisions
-        set content = '[cr_create_content_file $item_id $revision_id $tmp_filename]'
+        set lob = [set __lob_id [db_string get_lob_id "select empty_lob()"]]
         where revision_id = :revision_id
 
         </querytext>

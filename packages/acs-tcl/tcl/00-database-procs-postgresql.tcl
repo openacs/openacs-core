@@ -246,8 +246,21 @@ proc_doc db_dml { statement_name sql args } {
     # Query Dispatcher (OpenACS - ben)
     set full_statement_name [db_qd_get_fullname $statement_name]
 
-    db_with_handle db {
-	db_exec dml $db $full_statement_name $sql
+    if {[info exists blob_files]} {
+
+        db_with_handle db {
+            db_exec dml $db $full_statement_name $sql
+            if {[uplevel {info exists __lob_id}]} {
+                ns_pg blob_dml_file $db [uplevel {set __lob_id}] $blob_files
+                uplevel {unset __lob_id}
+            }
+        }
+
+    } else {
+
+        db_with_handle db {
+            db_exec dml $db $full_statement_name $sql
+        }
     }
 }
 
@@ -283,16 +296,20 @@ ad_proc db_write_clob { statement_name sql args } {
 ad_proc db_write_blob { statement_name sql args } {
     ad_arg_parser { bind } $args
 
+    set full_statement_name [db_qd_get_fullname $statement_name]
+
     db_with_handle db { 
-	db_exec_lob write_blob $db $statement_name $sql
+	db_exec_lob write_blob $db $full_statement_name $sql
     }
 }
 
 ad_proc db_blob_get_file { statement_name sql args } {
     ad_arg_parser { bind file args } $args
 
+    set full_statement_name [db_qd_get_fullname $statement_name]
+
     db_with_handle db {
-	db_exec_lob blob_select_file $db $statement_name $sql $file
+	db_exec_lob blob_select_file $db $full_statement_name $sql $file
     }
 }
 
@@ -347,6 +364,7 @@ ad_proc -private db_exec_lob { type db statement_name pre_sql { file "" } } {
         switch $type {
 
             blob_select_file {
+
                 if {[regexp {^[0-9]+$} $val match]} {
                     ns_pg blob_select_file $db $val $file
                 } else {
@@ -359,14 +377,14 @@ ad_proc -private db_exec_lob { type db statement_name pre_sql { file "" } } {
                 # this is an ugly hack, but it allows content to be written
                 # to the connection if it is stored as a lob or if it is
                 # stored in the content-repository as a file. (DanW - Openacs)
-                if {[file exists [cr_fs_path]$val]} {
-                    set ofp [open [cr_fs_path]$val r]
+                if {[file exists $val]} {
+                    set ofp [open $val r]
                     ns_writefp $ofp
                     close $ofp
                 } elseif {[regexp {^[0-9]+$} $val match]} {
                     ns_pg blob_write $db $val
                 } else {
-                    error "file: [cr_fs_path]$val doesn't exist"
+                    error "file: $val doesn't exist"
                 }
             }
         }
