@@ -56,17 +56,12 @@ ad_proc -private db_exec { type db statement_name pre_sql {ulevel 2} args } {
 } {
     set start_time [clock clicks]
 
-    db_qd_log QDDebug "PRE-QD: the SQL is $pre_sql for $statement_name"
-
-    # Query Dispatcher (OpenACS - ben)
     set sql [db_qd_replace_sql $statement_name $pre_sql]
 
     # insert tcl variable values (Openacs - Dan)
     if {![string equal $sql $pre_sql]} {
         set sql [uplevel $ulevel [list subst -nobackslashes $sql]]
     }
-
-    db_qd_log QDDebug "POST-QD: the SQL is $sql"
 
     set errno [catch {
 	upvar bind bind
@@ -188,8 +183,6 @@ ad_proc -private db_exec_lob { type db statement_name pre_sql {ulevel 2} args } 
 } {
     set start_time [clock clicks]
 
-    db_qd_log QDDebug "PRE-QD: the SQL is $pre_sql for $statement_name"
-
     # Query Dispatcher (OpenACS - ben)
     set sql [db_qd_replace_sql $statement_name $pre_sql]
 
@@ -205,13 +198,11 @@ ad_proc -private db_exec_lob { type db statement_name pre_sql {ulevel 2} args } 
         set file_storage_p 1
         set original_type $type
         set qtype 1row
-        ns_log Notice "db_exec_lob: file storage in use"
+        ns_log Debug "db_exec_lob: file storage in use"
     } else {
         set qtype $type
-        ns_log Notice "db_exec_lob: blob storage in use"
+        ns_log Debug "db_exec_lob: blob storage in use"
     }
-
-    db_qd_log QDDebug "POST-QD: the SQL is $sql"
 
     set errno [catch {
 	upvar bind bind

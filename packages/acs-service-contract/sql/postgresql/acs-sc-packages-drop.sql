@@ -3,7 +3,7 @@ drop function acs_sc_binding__delete(varchar,varchar);
 drop function acs_sc_binding__delete(integer,integer);
 drop function acs_sc_binding__new(integer,integer);
 drop function acs_sc_binding__new(varchar,varchar);
-drop function acs_sc_impl_alias__delete(varchar,varchar);
+drop function acs_sc_impl_alias__delete(varchar,varchar,varchar);
 drop function acs_sc_impl_alias__new(varchar,varchar,varchar,varchar,varchar);
 drop function acs_sc_impl__delete(varchar,varchar);
 drop  function acs_sc_impl__get_name(integer);

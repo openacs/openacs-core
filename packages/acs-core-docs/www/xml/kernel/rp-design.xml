@@ -318,12 +318,6 @@ blank</entry>
 </row>
 
 <row>
-<entry valign="top"><computeroutput>[ad_conn xml_loaded_p]</computeroutput> </entry>
-<entry valign="top">Checks whether the XML parser is loaded so that it only gets loaded once.
-Set in apm_load_xml_packages</entry>
-</row>
-
-<row>
 <entry spanname="hspan"> </entry>
 </row>
 

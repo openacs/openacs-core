@@ -288,7 +288,14 @@ as
    )
    is
    begin
-      acs_object.delete(request_id);
+     for v_notifications in (select notification_id
+                             from notifications n, notification_requests nr
+                             where n.response_id = nr.object_id
+                               and nr.request_id = request_id)
+     loop
+      acs_object.delete(v_notifications.notification_id);
+     end loop;
+     acs_object.delete(request_id);
    end delete;
 
    procedure delete_all (

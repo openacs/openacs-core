@@ -215,6 +215,10 @@ update acs_permissions
 set object_id = -4
 where object_id = 0;
 
+update acs_objects
+set context_id = -4
+where context_id = 0;
+
 -- Content Repository sets parent_id to security_context_root
 -- for content modules
 
@@ -386,19 +390,23 @@ declare
   p_member_id alias for $2;
   p_rel_id alias for $3;
   p_rel_type alias for $4;
-  v_segment_id rel_segments.segment_id%TYPE;
+  v_segments record;
 begin
 
   perform party_approved_member__add_one(p_party_id, p_member_id, p_rel_id);
 
-  select into v_segment_id segment_id
-  from rel_segments s
-  where s.rel_type = p_rel_type
-    and s.group_id = p_party_id;
+  -- if the relation type is mapped to relational segments unmap them too
 
-  if found then
-    perform party_approved_member__add_one(v_segment_id, p_member_id, p_rel_id);
-  end if;
+  for v_segments in select segment_id
+                  from rel_segments s, acs_object_types o1, acs_object_types o2
+                  where 
+                    o1.object_type = p_rel_type
+                    and o1.tree_sortkey between o2.tree_sortkey and tree_right(o2.tree_sortkey)
+                    and s.rel_type = o2.object_type
+                    and s.group_id = p_party_id
+  loop
+    perform party_approved_member__add_one(v_segments.segment_id, p_member_id, p_rel_id);
+  end loop;
 
   return 1;
 
@@ -420,33 +428,33 @@ begin
 
 end;' language 'plpgsql';
 
-
 create or replace function party_approved_member__remove(integer, integer, integer, varchar) returns integer as '
 declare
   p_party_id alias for $1;
   p_member_id alias for $2;
   p_rel_id alias for $3;
   p_rel_type alias for $4;
-  v_segment_id rel_segments.segment_id%TYPE;
+  v_segments record;
 begin
 
   perform party_approved_member__remove_one(p_party_id, p_member_id, p_rel_id);
 
-  -- if the relation type is mapped to a relational segment unmap that too
+  -- if the relation type is mapped to relational segments unmap them too
 
-  select into v_segment_id segment_id
-  from rel_segments s
-  where s.rel_type = p_rel_type
-    and s.group_id = p_party_id;
-
-  if found then
-    perform party_approved_member__remove_one(v_segment_id, p_member_id, p_rel_id);
-  end if;
+  for v_segments in select segment_id
+                  from rel_segments s, acs_object_types o1, acs_object_types o2
+                  where 
+                    o1.object_type = p_rel_type
+                    and o1.tree_sortkey between o2.tree_sortkey and tree_right(o2.tree_sortkey)
+                    and s.rel_type = o2.object_type
+                    and s.group_id = p_party_id
+  loop
+    perform party_approved_member__remove_one(v_segments.segment_id, p_member_id, p_rel_id);
+  end loop;
 
   return 1;
 
 end;' language 'plpgsql';
-
 
 -- Triggers to maintain party_approved_member_map when parties are created or
 -- destroyed.

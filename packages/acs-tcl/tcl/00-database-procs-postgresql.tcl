@@ -55,14 +55,14 @@ proc_doc db_exec_plsql { statement_name sql args } {
 	# if a table is being created, we need to bypass things, too (OpenACS - Ben).
         set test_sql [db_qd_replace_sql $full_statement_name $sql]
         if {[regexp -nocase -- {^\s*select} $test_sql match]} {
-            db_qd_log QDDebug "PLPGSQL: bypassed anon function"
+            ns_log Debug "PLPGSQL: bypassed anon function"
             set selection [db_exec 0or1row $db $full_statement_name $sql]
         } elseif {[regexp -nocase -- {^\s*create table} $test_sql match] || [regexp -nocase -- {^\s*drop table} $test_sql match]} {
-            db_qd_log QDDebug "PLPGSQL: bypassed anon function -- create/drop table"
+            ns_log Debug "PLPGSQL: bypassed anon function -- create/drop table"
             set selection [db_exec dml $db $full_statement_name $sql]
 	    return ""
 	} else {
-            db_qd_log QDDebug "PLPGSQL: using anonymous function"
+            ns_log Debug "PLPGSQL: using anonymous function"
             set selection [db_exec_plpgsql $db $full_statement_name $sql \
                            $statement_name]
         }
@@ -89,12 +89,7 @@ ad_proc -private db_exec_plpgsql { db statement_name pre_sql fname } {
 } {
     set start_time [clock clicks]
 
-    db_qd_log QDDebug "PRE-QD: the SQL is $pre_sql"
-
-    # Query Dispatcher (OpenACS - ben)
     set sql [db_qd_replace_sql $statement_name $pre_sql]
-
-    db_qd_log QDDebug "POST-QD: the SQL is $sql"
 
     set unique_id [db_nextval "anon_func_seq"]
 
@@ -104,7 +99,7 @@ ad_proc -private db_exec_plpgsql { db statement_name pre_sql fname } {
     if {![string equal $sql $pre_sql]} {
         set sql [uplevel 2 [list subst -nobackslashes $sql]]
     }
-    db_qd_log QDDebug "PLPGSQL: converted: $sql to: select $function_name ()"
+    ns_log Debug "PLPGSQL: converted: $sql to: select $function_name ()"
 
     # create a function definition statement for the inline code 
     # binding is emulated in tcl. (OpenACS - Dan)
@@ -221,8 +216,6 @@ ad_proc -private db_exec { type db statement_name pre_sql {ulevel 2} } {
 } {
     set start_time [clock clicks]
 
-    db_qd_log QDDebug "PRE-QD: the SQL is $pre_sql for $statement_name"
-
     # Query Dispatcher (OpenACS - ben)
     set sql [db_qd_replace_sql $statement_name $pre_sql]
 
@@ -230,8 +223,6 @@ ad_proc -private db_exec { type db statement_name pre_sql {ulevel 2} } {
     if {![string equal $sql $pre_sql]} {
         set sql [uplevel $ulevel [list subst -nobackslashes $sql]]
     }
-
-    db_qd_log QDDebug "POST-QD: the SQL is $sql"
 
     set errno [catch {
 	upvar bind bind
