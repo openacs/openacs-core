@@ -270,6 +270,28 @@ ad_proc -public delete { attribute_id } {
     return 1
 }
 
+ad_proc -public value_add {attribute_id enum_value sort_order} {
+    adds the specified enumeration value to the attribute.
+
+    @author Ben Adida (ben@openforce.net)
+    @creation-date 08/2001
+
+    @param attribute_id The attribute to which we are adding
+    @param enum_value The value which we are adding to the enum
+} {
+    # Just insert it if we can
+    db_dml insert_enum_value {
+	insert into acs_enum_values v
+	(attribute_id, sort_order, enum_value, pretty_name)
+	select :attribute_id, :sort_order, :enum_value, :enum_value
+	from dual
+	where not exists (select 1 
+	from acs_enum_values v2
+	where v2.pretty_name = :enum_value
+	and v2.attribute_id = :attribute_id)
+    }
+}
+
 ad_proc -public value_delete { attribute_id enum_value } {
     deletes the specified enumeration value from the attribute. The
     net effect is that this attribute will have one fewer options for

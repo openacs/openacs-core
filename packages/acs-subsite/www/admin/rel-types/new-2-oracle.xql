@@ -3,7 +3,7 @@
 <queryset>
    <rdbms><type>oracle</type><version>8.1.6</version></rdbms>
 
-<fullquery name="select_object_types">      
+<fullquery name="select_object_types_2">      
       <querytext>
       
     select replace(lpad(' ', (level - 1) * 4), ' ', '&nbsp;') || t.pretty_name, 

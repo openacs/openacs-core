@@ -7,6 +7,29 @@ ad_library {n
 }
 
 
+ad_proc -public site_node_create {
+    {-new_node_id ""}
+    {-directory_p "t"}
+    {-pattern_p "t"}
+    parent_node_id
+    name
+} {
+    Create a new site node.
+    Returns the node_id
+} {
+    # Generate an ID if we need one
+    if {[empty_string_p $new_node_id]} {
+	set new_node_id [db_nextval acs_object_id_seq]
+    }
+
+    set user_id [ad_verify_and_get_user_id]
+    set ip_address [ad_conn peeraddr]
+
+    set node_id [db_exec_plsql node_new {}]
+
+    return $node_id
+}
+
 ad_proc -public site_nodes_sync {args} {
   Brings the in memory copy of the url hierarchy in sync with the
   database version.

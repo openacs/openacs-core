@@ -6,7 +6,7 @@
 <fullquery name="select_supertypes">      
       <querytext>
 
-    select lpad('&nbsp;', (level - 1) * 4) || t.pretty_name as name,
+    select lpad('&nbsp;', (tree_level(tree_sortkey) - 1) * 4) || t.pretty_name as name,
            t.object_type
       from acs_object_types t
      where (t.tree_sortkey like (select tree_sortkey || '%' from acs_object_types

@@ -26,10 +26,10 @@
 <fullquery name="update_enum_value">      
       <querytext>
       
-		update acs_enum_values v
-		   set v.pretty_name = :pretty_name
-		 where v.attribute_id = :attribute_id
-		   and v.sort_order = :sort_order
+		update acs_enum_values
+		   set pretty_name = :pretty_name
+		 where attribute_id = :attribute_id
+		   and sort_order = :sort_order
 	    
       </querytext>
 </fullquery>

@@ -147,7 +147,7 @@ namespace eval rel_types {
 	set plsql [list]
 
 	# Create the actual acs object type
-	lappend plsql_drop [list "drop_type" "begin acs_rel_type.drop_type(:rel_type); end;"]
+	lappend plsql_drop [list "drop_type" "begin acs_rel_type.drop_type(:rel_type); end;" db_exec_plsql]
 	lappend plsql [list "create_type" {
 	 begin
 	  acs_rel_type.create_type (	
@@ -168,13 +168,13 @@ namespace eval rel_types {
             max_n_rels_two    => :max_n_rels_two
 	  );
 	 end;
-	}]
+	} db_exec_plsql]
 
         # Mark the type as dynamic
-        lappend plsql [list update_type "update acs_object_types set dynamic_p='t' where object_type = :rel_type"]
+        lappend plsql [list update_type "update acs_object_types set dynamic_p='t' where object_type = :rel_type" "db_dml"]
 
 	foreach pair $plsql { 
-	    db_exec_plsql [lindex $pair 0] [lindex $pair 1]
+	    eval [lindex $pair 2] [lindex $pair 0] [lindex $pair 1]
 	}
 
 	# The following create table statement commits the
@@ -204,5 +204,17 @@ namespace eval rel_types {
     
     }
 
+    ad_proc -public add_permissible {
+	group_type
+	rel_type
+    } {
+	Add a permissible relationship for a given group type
+    } {
+	if {[catch {
+	    db_dml insert_rel_type {}
+	} errmsg]} {
+	}
+    }
+	
 }
 
