@@ -46,6 +46,7 @@ ad_proc apm_guess_file_type { package_key path } {
 
     <ol>
     <li>Files with extension <code>.sql</code> are considered data-model files,
+    <li>Files with extension <code>.csv</code> are considered comma-separated values files.
     or if any path contains the substring <code>upgrade</code>, data-model upgrade
     files.
     <li>Files with extension <code>.sqlj</code> are considered sqlj_code files.				       
@@ -109,6 +110,8 @@ ad_proc apm_guess_file_type { package_key path } {
 	} else {
 	    set type "data_model"
 	}
+    } elseif { [string equal $extension ".csv"] } {
+	set type "csv_data"
     } elseif { [string equal $extension ".sqlj"] } {
 	set type "sqlj_code"
     } elseif { [string equal $extension ".info"] } {
@@ -193,6 +196,7 @@ ad_proc -public apm_get_package_files {
         set file_db_type [apm_guess_db_type $package_key $rel_path]
 
         set type_match_p [expr [empty_string_p $file_types] || [lsearch $file_types $file_type] != -1]
+
         if { $all_db_types_p } {
             set db_match_p 1
         } else {
@@ -307,6 +311,9 @@ ad_proc -private apm_guess_db_type { package_key path } {
         set sql_index [lsearch $components "sql"]
         if { $sql_index >= 0 } {
             set db_dir [lindex $components [expr $sql_index + 1]]
+            if { [string equal $db_dir "common"] } {
+                return ""
+            }
             foreach known_database_type [db_known_database_types] {
                 if { [string equal [lindex $known_database_type 0] $db_dir] } {
                     return $db_dir

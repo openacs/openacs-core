@@ -28,7 +28,7 @@ Installing the OpenACS kernel data model...
 <blockquote><pre>
 "
 cd [file join [acs_root_dir] packages acs-kernel sql [db_type]]
-db_source_sql_file -callback apm_dummy_callback "acs-kernel-create.sql"
+db_source_sql_file -callback apm_ns_write_callback acs-kernel-create.sql
 
 # DRB: Now initialize the APM's table of known database types.  This is
 # butt-ugly.  We could have apm-create.sql do this but that would mean
