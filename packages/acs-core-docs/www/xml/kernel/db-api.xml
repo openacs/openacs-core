@@ -1,10 +1,10 @@
 <sect1 id="db-api-detailed" xreflabel="Database Access API">
 <title>Database Access API</title>
 
-<authorblurb><para>
+<authorblurb>
 by <ulink url="mailto:jsalz@mit.edu">Jon Salz</ulink>. Revised and expanded by 
 Roberto Mello (rmello at fslc dot usu dot edu), July 2002. 
-</para></authorblurb>
+</authorblurb>
 
 <itemizedlist>
 <listitem><para>Tcl procedures: /packages/acs-kernel/10-database-procs.tcl</para></listitem>
@@ -750,8 +750,7 @@ row, returns <emphasis><computeroutput>default</computeroutput></emphasis> (or t
 <para>Returns the next value for the sequence <emphasis>sequence-name</emphasis> (using a
 SQL statement like <computeroutput>SELECT</computeroutput> <emphasis><computeroutput>sequence-name</computeroutput></emphasis><computeroutput>.nextval FROM
 DUAL</computeroutput>). If sequence pooling is enabled for the sequence, transparently
-uses a value from the pool if available to save a round-trip to the database
-(see <emphasis><xref linkend="db-api-detailed-pooling"/></emphasis>). 
+uses a value from the pool if available to save a round-trip to the database.
 
 </para></listitem>
 </varlistentry>
@@ -1266,3 +1265,8 @@ db_with_handle db {
 </sect2>
 </sect1>
 
+<!--
+   Local Variables:
+   sgml-parent-document: ("../index.xml" "book" "sect1")
+   End:
+-->
