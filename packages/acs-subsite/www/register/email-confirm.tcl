@@ -6,16 +6,19 @@ ad_page_contract {
     user_id:integer
 }
 
-if { [string equal $token [auth::get_user_secret_token -user_id $user_id]] } {
-    ad_return_error [_ acs-subsite.lt_Couldnt_find_your_rec] [_ acs-subsite.lt_Row_id_row_id_is_not_]
-    return
+ns_log Notice "LARS: Token = $token ; should be = [auth::get_user_secret_token -user_id $user_id]"
+
+if { ![string equal $token [auth::get_user_secret_token -user_id $user_id]] } {
+    # TODO: Fix
+    set message "Bad token"
+    ad_returnredirect [export_vars -base "[subsite::get_element -element url]register/account-closed" { message }]
+    ad_script_abort    
 } 
 
 auth::set_email_verified -user_id $user_id
 
 acs_user::get -user_id $user_id -array user_info
 
-set export_vars [export_vars -form { email }]
-set email $user_info(email)
+set export_vars [export_vars -form { { username $user_info(username) } }]
 set site_link [ad_site_home_link]
 set system_name [ad_system_name]
