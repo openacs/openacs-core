@@ -10,8 +10,10 @@ ad_page_contract {
     {return_url "index"}
 }
 
-set page_title "Reload a Package"
-set context [list [list "/acs-admin/apm/" "Package Manager"] $page_title]
+apm_version_info $version_id
+
+set page_title "Reload $pretty_name"
+set context [list [list "../developer" "Developer's Administration"] [list "/acs-admin/apm/" "Package Manager"] [list [export_vars -base version-view { version_id }] "$pretty_name $version_name"] $page_title]
 
 # files in $files.
 apm_mark_version_for_reload $version_id files

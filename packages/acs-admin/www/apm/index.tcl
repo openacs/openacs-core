@@ -56,8 +56,8 @@ append body "<center><table><tr><td>[ad_dimensional $dimensional_list]</td></tr>
 set use_watches_p [expr ! [ad_parameter -package_id [ad_acs_kernel_id] PerformanceModeP request-processor 1]]
 
 set table_def {
-    { package_key "Key" "" "<td><a href=\"version-view?version_id=$version_id\">$package_key</a></td>" }
-    { pretty_name "Name" "" "<td><a href=\"version-view?version_id=$version_id\">$pretty_name</a></td>" }
+    { package_key "Key" "" "<td><a href=\"[export_vars -base version-view { version_id }]\">$package_key</a></td>" }
+    { pretty_name "Name" "" "<td><a href=\"[export_vars -base version-view { version_id }]\">$pretty_name</a></td>" }
     { version_name "Ver." "" "" }
     {
 	status "Status" "" {<td align=center>&nbsp;&nbsp;[eval {
