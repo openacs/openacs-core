@@ -934,9 +934,9 @@ ad_proc -public ad_form {
             if { [info exists values($element_name)] } {
                 if { [info exists af_flag_list(${form_name}__$element_name)] && \
                      [lsearch $af_flag_list(${form_name}__$element_name) multiple] >= 0 } {
-                    template::element set_properties $form_name $element_name -values $values($element_name)
+                    template::element set_values $form_name $element_name $values($element_name)
                 } else {
-                    template::element set_properties $form_name $element_name -value $values($element_name)
+                    template::element set_value $form_name $element_name $values($element_name)
                 }
             }
         }

@@ -745,9 +745,7 @@ ad_proc -public template::form::set_values { id array_ref } {
   
   foreach name [array names values] {
     
-    template::element set_properties $id $name -value $values($name) 
-    # Resolve single value  / multiple value issues ?
-    template::element set_properties $id $name -values [list $values($name)]
+    template::element set_value $id $name $values($name) 
   }
 }
 
