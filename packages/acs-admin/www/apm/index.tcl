@@ -137,8 +137,8 @@ doc_body_append "
 <h3>Help</h3>
 
 <blockquote>
-It is <b>enabled</b> if it is scheduled to run at server startup
-and deliverable by the request processor.
+A package is <b>enabled</b> if it is scheduled to run at server startup
+and is deliverable by the request processor.
 
 <p>If a Tcl library file (<tt>*-procs.tcl</tt>) or query file (<tt>*.xql</tt>) is being
 <b>watched</b>, the request processor monitors it, reloading it into running interpreters
@@ -151,4 +151,3 @@ the file's name on the following screen.
 
 [ad_footer]
 "
-
