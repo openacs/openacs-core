@@ -637,60 +637,92 @@ comment on column users.n_sessions is '
 
 -- create or replace package body acs_user
 -- function new
-select define_function_args('user__new','user_id,object_type;user,creation_date;now(),creation_user,creation_ip,email,url,first_names,last_name,password,salt,password_question,password_answer,screen_name,email_verified_p;t,context_id');
+select define_function_args('user__new','user_id,object_type;user,creation_date;now(),creation_user,creation_ip,authority_id,username,email,url,first_names,last_name,password,salt,screen_name,email_verified_p;t,context_id');
 
 
-create function acs_user__new (integer,varchar,timestamptz,integer,varchar,varchar,varchar,varchar,varchar,char,char,varchar,varchar,varchar,boolean,integer)
+create or replace function acs_user__new (
+    integer,      -- user_id
+    varchar,      -- object_type
+    timestamptz,  -- creation_date
+    integer,      -- creation_user
+    varchar,      -- creation_ip
+    integer,      -- authority_id; default 'local'
+    varchar,      -- username
+    varchar,      -- email
+    varchar,      -- url
+    varchar,      -- first_names
+    varchar,      -- last_name
+    char,         -- password
+    char,         -- salt
+    varchar,      -- screen_name
+    boolean,      -- email_verified_p
+    integer       -- context_id
+)
 returns integer as '
 declare
-  new__user_id                  alias for $1;  -- default null  
-  new__object_type              alias for $2;  -- default ''user''
-  new__creation_date            alias for $3;  -- default now()
-  new__creation_user            alias for $4;  -- default null
-  new__creation_ip              alias for $5;  -- default null
-  new__email                    alias for $6;  
-  new__url                      alias for $7;  -- default null
-  new__first_names              alias for $8;  
-  new__last_name                alias for $9;  
-  new__password                 alias for $10; 
-  new__salt                     alias for $11; 
-  new__password_question        alias for $12; -- default null
-  new__password_answer          alias for $13; -- default null
-  new__screen_name              alias for $14; -- default null
-  new__email_verified_p         alias for $15; -- default ''t''
-  new__context_id               alias for $16; -- default null
-  v_user_id                     users.user_id%TYPE;
-  person_exists			varchar;			
+    p_user_id                  alias for $1;  -- default null  
+    p_object_type              alias for $2;  -- default ''user''
+    p_creation_date            alias for $3;  -- default now()
+    p_creation_user            alias for $4;  -- default null
+    p_creation_ip              alias for $5;  -- default null
+    p_authority_id             alias for $6;  -- defaults to local authority
+    p_username                 alias for $7;  --
+    p_email                    alias for $8;  
+    p_url                      alias for $9;  -- default null
+    p_first_names              alias for $10;  
+    p_last_name                alias for $11;  
+    p_password                 alias for $12; 
+    p_salt                     alias for $13; 
+    p_screen_name              alias for $14; -- default null
+    p_email_verified_p         alias for $15; -- default ''t''
+    p_context_id               alias for $16; -- default null
+    v_user_id                  users.user_id%TYPE;
+    v_authority_id             auth_authorities.authority_id%TYPE;
+    v_person_exists            varchar;			
 begin
-  v_user_id := new__user_id;
+    v_user_id := p_user_id;
 
-  select case when count(*) = 0 then ''f'' else ''t'' end into person_exists
-   from persons where person_id = v_user_id;
+    select case when count(*) = 0 then ''f'' else ''t'' end into v_person_exists
+    from persons where person_id = v_user_id;
 
-  if person_exists = ''f'' then
+    if v_person_exists = ''f'' then
+        v_user_id := person__new(
+            v_user_id, 
+            p_object_type,
+            p_creation_date, 
+            p_creation_user, 
+            p_creation_ip,
+            p_email, 
+            p_url, 
+            p_first_names, 
+            p_last_name, 
+            p_context_id
+        );
+    else
+     update acs_objects set object_type = ''user'' where object_id = v_user_id;
+    end if;
 
-  v_user_id :=
-   person__new(v_user_id, new__object_type,
-               new__creation_date, new__creation_user, new__creation_ip,
-               new__email, new__url, new__first_names, new__last_name, 
-               new__context_id);
-  else
-   update acs_objects set object_type = ''user'' where object_id = v_user_id;
-  end if;
+    -- default to local authority
+    if p_authority_id is null then
+        select authority_id
+        into   v_authority_id
+        from   auth_authorities
+        where  short_name = ''local'';
+    else
+        v_authority_id := p_authority_id;
+    end if;
 
-  insert into users
-   (user_id, password, salt, password_question, password_answer, screen_name,
-    email_verified_p)
-  values
-   (v_user_id, new__password, new__salt, new__password_question, 
-    new__password_answer, new__screen_name, new__email_verified_p);
-
-  insert into user_preferences
-    (user_id)
+    insert into users
+       (user_id, authority_id, username, password, salt, screen_name, email_verified_p)
     values
-    (v_user_id);
+       (v_user_id, v_authority_id, p_username, p_password, p_salt, p_screen_name, p_email_verified_p);
 
-  return v_user_id;
+    insert into user_preferences
+      (user_id)
+      values
+      (v_user_id);
+
+    return v_user_id;
   
 end;' language 'plpgsql';
 
