@@ -62,6 +62,24 @@ ad_proc -public subsite::after_mount {
             set creation_ip [ad_conn peeraddr]
             db_exec_plsql add_constraint {}
 
+            # Create segment of registered users for administrators
+            set segment_name "$truncated_subsite_name Administrators"
+            set admin_segment_id [rel_segments_new $subsite_group_id admin_rel $segment_name]
+
+            # Grant admin privileges to the admin segment
+            permission::grant \
+                -party_id $admin_segment_id \
+                -object_id $package_id \
+                -privilege admin
+
+            # Grant read/write/create privileges to the member segment
+            foreach privilege { read create write } {
+                permission::grant \
+                    -party_id $segment_id \
+                    -object_id $package_id \
+                    -privilege $privilege
+            }
+            
         }
     }
 }
@@ -310,3 +328,247 @@ ad_proc subsite::util::return_url_stack {
 
     return $first_url
 }
+
+
+ad_proc subsite::define_pageflow {
+    {-sections_multirow "sections"}
+    {-subsections_multirow "subsections"}
+    {-section ""}
+} {
+    Defines the page flow of the subsite
+} {
+    set pageflow [get_pageflow_struct]
+    
+    # TODO: add an image
+    # TODO: add link_p/selected_p for subsections
+
+    set base_url [site_node_closest_ancestor_package_url]
+
+    template::multirow create $sections_multirow name label title url selected_p link_p
+
+    template::multirow create $subsections_multirow name label title url selected_p link_p
+
+    foreach { section_name section_spec } $pageflow {
+        array set section_a {
+            label {}
+            url {}
+            title {}
+            subsections {}
+            folder {}
+            selected_patterns {}
+        }
+
+        array set section_a $section_spec
+        set section_a(name) $section_name
+
+        set selected_p [add_section_row \
+                            -array section_a \
+                            -base_url $base_url \
+                            -multirow $sections_multirow]
+
+        if { $selected_p } {
+            foreach { subsection_name subsection_spec } $section_a(subsections) {
+                array set subsection_a {
+                    label {}
+                    title {}
+                    folder {}
+                    url {}
+                    selected_patterns {}
+                }
+                array set subsection_a $subsection_spec
+                set subsection_a(name) $subsection_name
+                set subsection_a(folder) [file join $section_a(folder) $subsection_a(folder)]
+
+                add_section_row \
+                    -array subsection_a \
+                    -base_url $base_url \
+                    -multirow $subsections_multirow
+            }
+        }
+    }
+}
+
+
+ad_proc subsite::add_section_row {
+    {-array:required}
+    {-base_url:required}
+    {-multirow:required}
+    {-section {}}
+} {
+    upvar $array info
+
+    # the folder index page is called .
+    if { [string equal $info(url) ""] || [string equal $info(url) "index"] || \
+             [string match "*/" $info(url)] || [string match "*/index" $info(url)] } {
+        set info(url) "[string range $info(url) 0 [string last / $info(url)]]."
+    }
+    
+    if { [ad_conn node_id] == [ad_conn subsite_id] } {
+        set current_url [ad_conn extra_url]
+    } else {
+        # Need to prepend the path from the subsite to this package
+        set current_url [string range [ad_conn url] [string length $base_url] end]
+    }
+    if { [empty_string_p $current_url] || [string equal $current_url "index"] || \
+             [string match "*/" $current_url] || [string match "*/index" $current_url] } {
+        set current_url "[string range $current_url 0 [string last / $current_url]]."
+    }
+    
+    set info(url) [file join $info(folder) $info(url)]
+
+    # Default to not selected
+    set selected_p 0
+    
+    if { [string equal $current_url $info(url)] || [string equal $info(name) $section] } {
+        set selected_p 1
+    } else {
+        foreach pattern $info(selected_patterns) {
+            set full_pattern [file join $info(folder) $pattern]
+            ns_log Notice "LARS: pattern = $pattern ; current_url = $current_url ; full_pattern = $full_pattern ; info(folder) = $info(folder)"
+            if { [string match $full_pattern $current_url] } {
+                set selected_p 1
+                break
+            }
+        }
+    }
+    
+    set link_p [expr ![string equal $current_url $info(url)]]
+    
+    template::multirow append $multirow \
+        $info(name) \
+        $info(label) \
+        $info(title) \
+        [file join $base_url $info(url)] \
+        $selected_p \
+        $link_p
+
+    return $selected_p
+}
+
+ad_proc -public subsite::get_section_info {
+    {-array "section_info"}
+    {-sections_multirow "sections"}
+} {
+    upvar $array row
+    # Find the label of the selected section
+
+    array set row {
+        label {}
+        url {}
+    }
+
+    template::multirow foreach $sections_multirow {
+        if { [template::util::is_true $selected_p] } {
+            set row(label) $label
+            set row(url) $url
+            break
+        }
+    }
+}
+
+ad_proc subsite::get_pageflow_struct {} {
+    # This is where the page flow structure is defined
+    set pageflow {
+        home {
+            label "Home"
+            folder ""
+            url ""
+            selected_patterns {
+                ""
+                "groups"
+            }
+            subsections {
+                home {
+                    label "Home"
+                    url ""
+                }
+                groups {
+                    label "Groups"
+                    url "groups"
+                }
+            }
+        }
+        members {
+            label "Members"
+            default_section members
+            folder "members"
+            url ""
+            selected_patterns {
+                *
+            }
+            subsections {
+                members {
+                    label "Members"
+                    url ""
+                }
+            }
+        }
+    }
+
+    set subsite_url [site_node_closest_ancestor_package_url]
+    array set subsite_sitenode [site_node::get -url $subsite_url]
+    set subsite_node_id $subsite_sitenode(node_id)
+
+    set child_urls [site_node::get_children -node_id $subsite_node_id -package_type apm_application]
+
+    foreach child_url $child_urls {
+        array set child_node [site_node::get_from_url -exact -url $child_url]
+        lappend pageflow $child_node(name) [list \
+                                                label $child_node(instance_name) \
+                                                folder $child_node(name) \
+                                                url {} \
+                                                selected_patterns *]
+    }
+
+    if { [permission::permission_p -object_id [ad_conn subsite_id] -privilege admin] } {
+        lappend pageflow admin {
+            label "Administration"
+            folder "admin"
+            url "configure"
+            selected_patterns {
+                *
+            }
+            subsections {
+                configuration {
+                    label "Configuration"
+                    url "configure"
+                }
+                applications {
+                    label "Applications"
+                    folder "applications"
+                    url ""
+                    selected_patterns {
+                        *
+                    }
+                }
+                permissions {
+                    label "Permissions"
+                    url "permissions"
+                    selected_patterns {
+                        permissions*
+                    }
+                }
+                parameters {
+                    label "Parameters"
+                    url "parameters"
+                }
+                advanced {
+                    label "Advanced"
+                    url "."
+                    selected_patterns {
+                        site-map/*
+                        groups/*
+                        group-types/*
+                        rel-segments/*
+                        rel-types/*
+                        host-node-map/*
+                        object-types/*
+                    }
+                }
+            }
+        }
+    }
+
+    return $pageflow
+}
+
