@@ -41,7 +41,7 @@ begin
 
         return 0;
 
-end;' language 'plpgsql';
+end;' language 'plpgsql' with (iscachable);
 
 
 create function instr(varchar,char,integer) returns integer as '
@@ -51,7 +51,7 @@ declare
         dir             alias for $3;
 begin
         return instr(str,pat,dir,1);
-end;' language 'plpgsql';
+end;' language 'plpgsql' with (iscachable);
 
 
 create function instr(varchar,char) returns integer as '
@@ -60,7 +60,7 @@ declare
         pat             alias for $2;
 begin
         return instr(str,pat,1,1);
-end;' language 'plpgsql';
+end;' language 'plpgsql' with (iscachable);
 
 
 -- Splits string on requested character. Returns requested element
@@ -94,7 +94,7 @@ begin
     return null;
   end if;
   return substr(p_string, v_left_split+1, (v_right_split - v_left_split - 1));
-end;' language 'plpgsql';
+end;' language 'plpgsql' with (iscachable);
 
 
 create function get_func_drop_command (varchar) returns varchar as '
@@ -194,7 +194,7 @@ begin
 
         return v_ret || rpad(v_cnt,10) || v_tmp;
 
-end;' language 'plpgsql';
+end;' language 'plpgsql' with (iscachable);
 
 create function get_func_definition (varchar,oidvector) returns text as '
 declare
@@ -445,7 +445,7 @@ copy tree_encodings from stdin using delimiters '/' ;
 create function tree_default_encoding_base() returns integer as '
 begin
         return 159;
-end;' language 'plpgsql';
+end;' language 'plpgsql' with (iscachable);
 
 create function tree_next_key(varchar) returns varchar as '
 declare
@@ -511,8 +511,30 @@ begin
 
         return cnt;
 
-end;' language 'plpgsql';
+end;' language 'plpgsql' with (iscachable);
 
+-- DRB: Use tree_left() and tree_right() to do selects against
+-- tree_sortkey.
+
+-- To find a node's children in "t":
+-- tree_sortkey between tree_left(t.tree_sortkey) and tree_right(t.tree_sortkey)
+
+-- To get the children and the node (i.e. the subtree starting with the node):
+-- tree_sortkey between t.tree_sortkey and tree_right(t.tree_sortkey)
+
+create function tree_left(varchar) returns varchar as '
+declare
+  p_tree_sortkey alias for $1;
+begin
+  return p_tree_sortkey;
+end;' language 'plpgsql' with (iscachable);
+
+create function tree_right(varchar) returns varchar as '
+declare
+  p_tree_sortkey alias for $1;
+begin
+  return p_tree_sortkey || chr(255);
+end;' language 'plpgsql' with (iscachable);
 
 -- PG substitute for Oracle user_tab_columns view
 
@@ -644,5 +666,5 @@ begin
 
  return description;
 
-end;' language 'plpgsql';
+end;' language 'plpgsql' with (iscachable);
 
