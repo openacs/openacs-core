@@ -7,6 +7,7 @@ ad_page_contract {
   @cvs-id $Id$
 } {
   object_id:integer,notnull
+  {application_url ""}
 }
 
 ad_require_permission $object_id admin
@@ -21,7 +22,7 @@ doc_body_append "[ad_header "Grant Permission on $name"]
 <hr>
 
 <form method=get action=grant-2>
-[export_form_vars object_id]
+[export_vars -form {application_url object_id}]
 
 Grant: 
 

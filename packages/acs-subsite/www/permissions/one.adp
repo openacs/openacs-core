@@ -16,7 +16,7 @@
     <h3>Direct Permissions</h3>
     <if @acl:rowcount@ gt 0>
       <form method="get" action="revoke">
-        <input type=hidden name="object_id" value="@object_id@">
+        @export_form_vars@
           <blockquote style="margin-left: 16px;">
             <multiple name="acl">
               <input type="checkbox" name="revoke_list" value="@acl.grantee_id@ @acl.privilege@" 
@@ -42,20 +42,24 @@
             <li><a href="one?object_id=@children.c_object_id@">@children.c_name@</a> @children.c_type@</li>
           </multiple>
         </ul>
+
+        [<a href="@hide_children_url@">Hide</a>]
       </if>
       <else>
         <p><em>No children</em></p>
       </else>
     </if>
+
     <if @children_p@ eq "f">
-      <if @num_children@ gt 0> @num_children@ Children Hidden [<a href="one?object_id=@object_id@&amp;children_p=t">Show</a>]</if>
+      <if @num_children@ gt 0> @num_children@ Children Hidden [<a href="@show_children_url@">Show</a>]</if>
       <else>
         <em>No children</em>
       </else>
     </if>
-    <if @return_url@ not nil>
+
+    <if @application_url@ not nil>
       <p>
-        [<a href="@return_url@">return to application</a>]
+        [<a href="@application_url@">return to application</a>]
       </p>
     </if>
     <else>
