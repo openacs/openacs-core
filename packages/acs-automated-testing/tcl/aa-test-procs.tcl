@@ -736,7 +736,7 @@ ad_proc -public aa_log_result {
     ns_log Debug "aa_log_result: PASSED: $aa_testcase_id, $test_notes"
     incr aa_testcase_passes
   } elseif {$test_result == "fail"} {
-    ns_log Error "aa_log_result: FAILED: $aa_testcase_id, $test_notes"
+    ns_log Bug "aa_log_result: FAILED: $aa_testcase_id, $test_notes"
     incr aa_testcase_fails
   } else {
     ns_log Debug "aa_log_result: LOG: $aa_testcase_id, $test_notes"
@@ -764,7 +764,7 @@ ad_proc -public aa_log_final {
 
   if {$test_fails == 0} {
   } else {
-    ns_log Error "aa_log_final: FAILED: $aa_testcase_id, $test_fails tests failed"
+    ns_log Bug "aa_log_final: FAILED: $aa_testcase_id, $test_fails tests failed"
   }
 
   db_dml testcase_result_insert {
