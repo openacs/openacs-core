@@ -292,22 +292,6 @@ proc_doc db_resultrows {} { Returns the number of rows affected by the last DML 
     return [ns_pg ntuples $db_state(last_used)]
 }
 
-#ad_proc db_continue_transaction {} {
-#    
-#    If a transaction is set to be aborted, this procedure allows it to continue.
-#    Intended for use only within a db_transaction on_error code block.  
-#
-#    DRB: we can't emulate this in Postgres.  The best we can do is a COMMIT
-#    followed by BEGIN.  Commented out so caller will get an error.
-#
-#} {
-#    global db_state
-#    db_with_handle db {
-#	# The error has been handled, set the flag to false.
-#	set db_state(db_abort_p,$db) 0
-#    }
-#}
-
 ad_proc db_write_clob { statement_name sql args } {
     ad_arg_parser { bind } $args
 
@@ -322,8 +306,10 @@ ad_proc db_blob_get { statement_name sql args } {
     set full_statement_name [db_qd_get_fullname $statement_name]
 
     db_with_handle db { 
-	db_exec_lob blob_get $db $full_statement_name $sql
+	set data [db_exec_lob blob_get $db $full_statement_name $sql]
     }
+
+    return $data
 }
 
 ad_proc db_write_blob { statement_name sql args } {

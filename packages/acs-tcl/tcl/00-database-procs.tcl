@@ -566,8 +566,6 @@ ad_proc db_transaction { transaction_code args } {
     <code>transaction_code</code> will be caught automatically and process control will transfer to <code>error_code</code>
     with a variable <code>errmsg</code> set.  The error_code block can then clean up after the error, such as presenting a usable
     error message to the user.  Following the execution of <code>error_code</code> the transaction will be aborted.
-    Alternatively, a command to continue the transaction <code>db_continue_transaction</code> can be issued.  This
-    command will commit any successful database commands when the transaction completes, assuming no further errors are raised.  
     If you want to explicity abort the transaction, call <code>db_abort_transaction</code>
     from within the transaction_code block or the error_code block.<p>
 
@@ -592,23 +590,6 @@ ad_proc db_transaction { transaction_code args } {
     } 
     </pre>
 
-    Example 3:<br>
-    In this example, all of the dml statements are executed and committed.  The call to db_abort_transaction
-    signals that the transaction should be aborted which activates the higher level on_error block.  That code
-    issues a db_continue_transaction which commits the transaction.  Had there not been an on_error block, none
-    of the dml statements would have been committed.
-    <pre>
-    db_transaction {
-	db_dml test {insert into footest values(1)}
-	db_transaction {
-	    db_dml test {insert into footest values(2) }
-	    db_abort_transaction
-	}
-	db_dml test {insert into footest values(3) }
-    } on_error {
-	db_continue_transaction
-    }
-    </pre>
 } {
 
     global db_state 
@@ -721,7 +702,6 @@ ad_proc db_transaction { transaction_code args } {
 		# Good, no error thrown by the on_error block.
 		if [db_abort_transaction_p] {
 		    # This means we should abort the transaction.
-		    # Use db_continue_transaction in the on_error block to avoid this.
 		    if { $level == 1 } {
 			set db_state(db_abort_p,$dbh) 0
 			ns_db dml $dbh "abort transaction"
