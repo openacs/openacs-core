@@ -80,6 +80,7 @@ Please visit the following link to change your password now:
   <msg key="Grant_Permission">Grant Permission</msg>
   <msg key="Join_group_name">Join %group_name%</msg>
   <msg key="Last_name">Last name</msg>
+  <msg key="Login_or_register">Login or register</msg>
   <msg key="Log_In">Log In</msg>
   <msg key="Log_in_to_system">Log in to %system_name%</msg>
   <msg key="Logout">Logout</msg>
