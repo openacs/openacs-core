@@ -74,7 +74,7 @@ db_1row select_object_types {
        and r.rel_type = t.object_type
 }
 
-set object_types_one_list [db_list_of_lists select_object_types_2 {
+set object_types_one_list [db_list_of_lists select_object_types_one {
     select replace(lpad(' ', (level - 1) * 4), ' ', '&nbsp;') || t.pretty_name, 
            t.object_type as rel_type
       from acs_object_types t
@@ -82,7 +82,7 @@ set object_types_one_list [db_list_of_lists select_object_types_2 {
      start with t.object_type=:max_object_type_one
 }]
 
-set object_types_two_list [db_list_of_lists select_object_types {
+set object_types_two_list [db_list_of_lists select_object_types_two {
     select replace(lpad(' ', (level - 1) * 4), ' ', '&nbsp;') || t.pretty_name, 
            t.object_type as rel_type
       from acs_object_types t
@@ -175,7 +175,7 @@ Please back up and choose another.</li>"
 	    append exception_text "<li> The specified pretty name, $pretty_name, already exists. Please enter another </li>"
 	}
 
-	if { [db_string pretty_name_unique {
+	if { [db_string pretty_plural_unique {
 	    select case when exists (select 1 from acs_object_types t where t.pretty_plural = :pretty_plural)
                     then 1 else 0 end
 	      from dual
