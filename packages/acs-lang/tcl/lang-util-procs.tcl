@@ -121,7 +121,6 @@ ad_proc -private lang::util::get_regexp_indices { multilingual_string regexp_pat
 }    
 
 ad_proc lang::util::replace_temporary_tags_with_lookups { 
-    {-catalog_file_path ""}
     file_list 
 } {
     Modify the given adp or tcl files by replacing occurencies of
@@ -137,9 +136,6 @@ ad_proc lang::util::replace_temporary_tags_with_lookups {
     file per default) of the package that the files belong to, the database 
     is not accessed in any way.
 
-    @param catalog_file_path The fully qualified path of the catalog file.
-                             If not provided the catalog file for the en_US locale will be
-                             used, i.e. $package_root/catalog/$package_key.en_US.ISO-8859-1.xml.
     @param file_list         A list of paths to adp or tcl files to do replacements in. The
                              paths should be relative to [acs_root_dir]. All files must
                              belong to the same package.
@@ -153,17 +149,20 @@ ad_proc lang::util::replace_temporary_tags_with_lookups {
         return
     }
 
-    # Read messages from any existing catalog file
-    # Get the package the files belong to
-    set first_file [lindex $file_list 0]
-    
+    # Get package_key
+    set first_file [lindex $file_list 0]    
     if { ![regexp {/?packages/([^/]+)/} $first_file match package_key] } {
         error "lang::util::replace_temporary_tags_with_lookups - Could not extract package_key from file $first_file"
     }
-    set catalog_dir "[acs_root_dir]/packages/$package_key/catalog"
-    if { [empty_string_p $catalog_file_path] } {
-        set catalog_file_path "$catalog_dir/$package_key.en_US.ISO-8859-1.xml"
-    }
+
+    # Always create new keys in en_US
+    set locale "en_US"
+    
+    # Read messages from any existing catalog file
+    set catalog_file_path [lang::catalog::get_catalog_file_path \
+            -package_key $package_key \
+            -locale $locale \
+            -charset [ad_locale charset $locale]]
     if { [file exists $catalog_file_path] } {
         set catalog_file_contents [lang::catalog::read_file $catalog_file_path]
         array set catalog_array [lang::catalog::parse $catalog_file_contents]            
@@ -307,8 +306,7 @@ ad_proc lang::util::replace_temporary_tags_with_lookups {
         }
 
         # Generate a new catalog file
-        array set catalog_file [apm_parse_catalog_path $catalog_file_path]
-        lang::catalog::export_package_to_files -locales [list $catalog_file(locale)] $catalog_file(package_key)
+        lang::catalog::export_package_to_files -locales [list $locale] $package_key
     }
 
     return $number_of_replacements
