@@ -60,7 +60,7 @@ above.
   <ul>
   
   <group column="pretty_name">
-    <li>@creation_date@: @user_contributions.object_name@</li>
+    <li>@user_contributions.creation_date@: @user_contributions.object_name@</li>
   </group>
   </ul>
   
