@@ -10,8 +10,7 @@ ad_page_contract {
     {install_path [apm_workspace_install_dir]}
 }
 
-
-ns_write "[apm_header "Package Installation"]
+ad_return_top_of_page "[apm_header "Package Installation"]
 <p>Please wait while the installer loads ........<p>
 
 "

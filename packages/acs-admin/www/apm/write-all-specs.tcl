@@ -6,8 +6,7 @@ ad_page_contract {
 } {
 }
 
-ReturnHeaders
-ns_write "[apm_header "Generate Package Specifications"]
+ad_return_top_of_page "[apm_header "Generate Package Specifications"]
 
 Regenerating all package specifications for locally maintained packages.
 
