@@ -60,6 +60,8 @@ ad_proc -private search::indexer {} {
 } {
 
     set driver [ad_parameter -package_id [apm_package_id_from_key search] FtsEngineDriver]
+    set driver [ad_parameter -package_id [apm_package_id_from_key search] Syndicate -default 0]
+
     if {[empty_string_p $driver]
         || ! [acs_sc_binding_exists_p FtsEngineDriver $driver]} {
         # Nothing to do if no driver
@@ -75,6 +77,9 @@ ad_proc -private search::indexer {} {
                     set object_type [acs_object_type $object_id]
                     if {[acs_sc_binding_exists_p FtsContentProvider $object_type]} {
                         array set datasource [acs_sc_call FtsContentProvider datasource [list $object_id] $object_type]
+                        if {$syndicate} { 
+                            search::syndicate -array datasource
+                        }
                         search::content_get txt $datasource(content) $datasource(mime) $datasource(storage_type)
                         acs_sc_call FtsEngineDriver index [list $datasource(object_id) $txt $datasource(title) $datasource(keywords)] $driver
                         array unset datasource
@@ -85,6 +90,7 @@ ad_proc -private search::indexer {} {
             }
             DELETE {
                 acs_sc_call FtsEngineDriver unindex [list $object_id] $driver
+                db_dml nuke_syn {delete from syndication where object_id = :object_id} 
                 # unset seen since you could conceivably delete one but then subsequently 
                 # insert it (eg when rolling back/forward the live revision).
                 if {[info exists seen($object_id)]} {
@@ -98,6 +104,9 @@ ad_proc -private search::indexer {} {
                     if {[acs_sc_binding_exists_p FtsContentProvider $object_type]} {
                         array set datasource [acs_sc_call FtsContentProvider datasource [list $object_id] $object_type]
                         search::content_get txt $datasource(content) $datasource(mime) $datasource(storage_type)
+                        if {$syndicate} { 
+                            search::syndicate -array datasource
+                        } 
                         acs_sc_call FtsEngineDriver update_index [list $datasource(object_id) $txt $datasource(title) $datasource(keywords)] $driver
                         array unset datasource
                     }
@@ -189,5 +198,47 @@ ad_proc -private search::choice_bar {
     } else {
         return ""
     }
+
+}
+
+ad_proc -private search::syndicate {
+    -datasource 
+} { 
+    create or replace the record in the syndication table for 
+    a given item id.
+
+    called by the search::indexer.  See photo-album-search-procs for an example of 
+    what you need to provide to make something syndicable.
+
+    JCD: to fix: should not just glue together XML this way, also assumes rss 2.0, no provision for 
+    alternate formats, assumes content:encoded will be defined in the wrapper.
+
+} {
+    upvar $datasource d
+
+    if {![info exists d(syndication)]} { 
+        return
+    } 
+    array set syn $d(syndication)
+
+    set object_id $d(object_id)
+    set url $syn(link)
+    set body $d(content)
+
+    set published [lc_time_fmt $syn(pubDate) "%a, %d %b %Y %H:%M:%S GMT"]
+
+    set rss_xml_frag " <item>
+  <title>$d(title)</title>
+  <link>$url</link>
+  <guid isPermaLink=\"true\">$syn(guid)</guid>
+  <description>$syn(description)</description>
+  <author>$syn(author)</author>
+  <content:encoded><!\[CDATA\[$body]]></content:encoded>
+  <category>$syn(category)</category>
+  <pubDate>$published</pubDate>
+ </item>"
+
+    db_dml nuke {delete from syndication where object_id = :object_id}
+    db_dml ins {insert into syndication(object_id, rss_xml_frag, body, url) values (:object_id, :rss_xml_frag, :body, :url)}
 
 }

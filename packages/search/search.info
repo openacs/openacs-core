@@ -7,7 +7,7 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>f</singleton-p>
     
-    <version name="5.2.0d2" url="http://openacs.org/repository/download/apm/search-5.2.0d2.apm">
+    <version name="5.2.0d3" url="http://openacs.org/repository/download/apm/search-5.2.0d3.apm">
         <owner url="http://openacs.org">OpenACS</owner>
         <release-date>2004-04-29</release-date>
         <summary>Site wide search</summary>
@@ -17,7 +17,7 @@
         <description format="text/html">Site wide search implemented with service contracts, currently 
         only supports postgres via the OpenFTS driver.</description>
 
-        <provides url="search" version="5.2.0d2"/>
+        <provides url="search" version="5.2.0d3"/>
 
         <callbacks>
         </callbacks>
@@ -27,6 +27,7 @@
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="SearchIndexerInterval"  default="30" description="SearchIndexerInterval"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="SearchTheWeb"  default="http://av.com/sites/search/web?q=%s AltaVista http://search.excite.com/search.gw?s=%s Excite http://www.google.com/search?q=%s Google http://hotbot.com/?MT=%s HotBot http://lycos.com/cgi-bin/pursuit?query=%s Lycos http://search.yahoo.com/search?p=%s Yahoo!" description="Search the Web (e.g. Google)"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="Symbol2Interval"  default="m3 {3 month ago} m6 {6 month ago} y1 {1 year ago}" description="Translate symbol to date interval."/>
+            <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="Syndicate"  default="0" description="Should syndication data be stored when indexing for search."/>
         </parameters>
 
     </version>
