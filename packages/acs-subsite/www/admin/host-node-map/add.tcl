@@ -7,6 +7,9 @@ ad_page_contract {
     root:integer
 }
 
+# Flush the cache
+util_memoize_flush_regexp "rp_lookup_node_from_host"
+
 db_dml host_node_insert {
     insert into host_node_map 
     (host, node_id)

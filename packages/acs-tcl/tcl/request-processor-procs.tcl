@@ -1225,20 +1225,18 @@ ad_proc root_of_host {host} {
         return ""
     }
     # Other hostnames map to subsites.
-    set found_node_id [db_0or1row node_id {
-	select node_id 
-	from host_node_map
-	where host = :host
-    }]
+    set node_id [util_memoize [list rp_lookup_node_from_host $host]]
 
-    if { $found_node_id == 1 } {
-       db_1row root_get {
-           select site_node.url(:node_id) as url
-           from dual
-       }
+    if { ![empty_string_p $node_id] } {
+	set url [site_node::get_url -node_id $node_id]
+
        return [string range $url 0 [expr [string length $url]-2]]
     } else {
        # Hack to provide a useful default
        return ""
     }
 }
+
+ad_proc -private rp_lookup_node_from_host { host } {
+    return [db_string  node_id { *SQL* } -default ""]
+} 
