@@ -187,7 +187,7 @@
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="PrivacyControlEnabledP"  default="0" description="Whether we control privacy" section_name="privacy"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="CommunityMemberURL"  default="/shared/community-member" description="the URL of the public community member page" section_name="system-information"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="CommunityMemberAdminURL"  default="/acs-admin/users/one" description="the URL of the admin community member page" section_name="system-information"/>
-            <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="PermissionCacheP"  default="0" description="Whether to cache permission_p calls" section_name="permissions"/>
+            <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="PermissionCacheP"  default="0" description="Whether to cache permission_p calls.  Use with extreme caution.  Only direct permissions managed via the tcl api are properly handled and some packages modify permissions directly in the database and will not work properly when this is turned on" section_name="permissions"/>
         </parameters>
 
     </version>
