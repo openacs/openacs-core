@@ -304,9 +304,6 @@ ad_proc -private apm_package_install {
     array set version [apm_read_package_info_file $spec_file_path]
     set package_key $version(package.key)
 
-    # Install Queries (OpenACS Query Dispatcher - ben)
-    apm_package_install_queries $package_key $version(files)
-
     if { $copy_files_p } {
 	if { [empty_string_p $install_path] } {
 	    set install_path [apm_workspace_install_dir]/$package_key
@@ -314,6 +311,9 @@ ad_proc -private apm_package_install {
 	ns_log Notice "Copying $install_path to [acs_package_root_dir $package_key]"
 	exec "cp" "-r" -- "$install_path/$package_key" [acs_root_dir]/packages/
     }
+
+    # Install Queries (OpenACS Query Dispatcher - ben)
+    apm_package_install_queries $package_key $version(files)
 
     if { $load_data_model_p } {
 	    apm_package_install_data_model -callback $callback -data_model_files $data_model_files $spec_file_path
