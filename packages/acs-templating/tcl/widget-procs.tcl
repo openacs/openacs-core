@@ -287,27 +287,18 @@ ad_proc -public template::widget::input { type element_reference tag_attributes 
   }
   
   # Handle display mode of visible normal form elements, i.e. not hidden, not submit, not button, not clear
-  if { ![string equal $element(mode) "edit"] && ![string equal $type "hidden"] && \
-      ![string equal $type "submit"] && ![string equal $type "button"] && \
-      ![string equal $type "clear"] } {
-    
-    set output ""
-    switch $type {
-      checkbox - radio {
-        # There's a 'subst' done on the contents here
-        append output "<img src=\"/resources/acs-subsite/${type}\[ad_decode \$checked \"\" \"\" \"checked\"\].gif\" width=\"13\" height=\"13\">"
-        # This is ugly, but it works: Only export the value when we're on a selected option
-        append output "\[ad_decode \$checked \"\" \"\" \"<input type=\\\"hidden\\\" name=\\\"$element(name)\\\" value=\\\"\$value\\\">\"]"
-      }
-      default {
-        if { [info exists element(value)] } {
+  if { ![string equal $element(mode) "edit"] && [lsearch -exact { hidden submit button clear checkbox radio } $type] == -1 } {
+      set output ""
+      if { [info exists element(value)] } {
           append output [ad_quotehtml $element(value)]
           append output "<input type=\"hidden\" name=\"$element(name)\" value=\"[ad_quotehtml $element(value)]\">"
-        }
       }
-    }
   } else {
-    set output "<input type=\"$type\" name=\"$element(name)\""
+      set output "<input type=\"$type\" name=\"$element(name)\""
+
+      if { ![string equal $element(mode) "edit"] && [lsearch -exact { hidden submit button clear } $type] == -1 } {
+          append output " disabled"
+      }
 
     if { [info exists element(value)] } {
       append output " value=\"[template::util::quote_html $element(value)]\""
