@@ -123,43 +123,17 @@ ad_proc -public get_template_url {} {
 ad_proc -public get_folder_labels { { varname "folders" } } {
  
   variable item_id
+  set url ""
 
   # this repeats the query used to look up the item in the first place
   # but there does not seem to be a clear way around this
 
-  set query "
-    select
-      0 as tree_level, '' as name , 'Home' as title
-    from
-      dual
-    UNION
-    select
-      t.tree_level, i.name, content_item.get_title(t.context_id) as title
-    from (
-      select 
-        context_id, level as tree_level
-      from 
-        acs_objects
-      where
-        context_id <> content_item.get_root_folder
-      connect by
-        prior context_id = object_id
-      start with
-        object_id = :item_id
-      ) t, cr_items i
-    where
-      i.item_id = t.context_id
-    order by
-      tree_level
-  "
-
-  set url ""
-
   # build the folder URL out as we iterate over the query
-  template::query get_url $varname multirow $query -uplevel -eval {
-    append url "$row(name)/"
-    set row(url) ${url}index.acs
-  }
+  set query [db_map get_url]
+  uplevel 1 "db_multirow $varname ignore_get_url $query { 
+                                                       append url $name/ 
+                                                       set url ${url}index.acs
+                                                        }"
 }
 
 ad_proc -public get_content_value { revision_id } {
