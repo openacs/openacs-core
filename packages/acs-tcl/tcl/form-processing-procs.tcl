@@ -192,13 +192,15 @@ ad_proc -public ad_form {
     <dd>A code block which sets the values for each element of the form meant to be modifiable by the user.  Use
         this when a single query to grab database values is insufficient.  Can only be used if an element of
         type key is defined.  This block is only executed if the page is called with a valid key, i.e. a
-        self-submit form to add or edit an item called to edit the data.
+        self-submit form to add or edit an item called to edit the data. You just need to set the values as local
+        variables in the code block, and they'll get fetched and used as element values for you.
     </dd>
 
     <p><dt><b>-new_request</b></dt><p>
     <dd>A code block which sets the values for each element of the form meant to be modifiable by the user.  Use
         this when a single query to grab database values is insufficient.  Can only be used if an element of
-        type key is defined.  This block complements the -edit_request block.
+        type key is defined.  This block complements the -edit_request block. You just need to set the values as local
+        variables in the code block, and they'll get fetched and used as element values for you.
     </dd>
 
     <p><dt><b>-confirm_template</b></dt><p>
@@ -339,11 +341,11 @@ ad_proc -public ad_form {
     </blockquote>
 
     <blockquote><pre>
-    start_date:date,to_sql(sql_date),from_html(sql_date),optional
+    start_date:date,to_sql(sql_date),to_html(sql_date),optional
     </pre><p>
 
     Define the optional element "start_date" of type "date", get the sql_date property before executing
-    any new_date, edit_date or on_submit block, set the sql_date property after performing any
+    any new_data, edit_data or on_submit block, set the sql_date property after performing any
     select_query. 
 
     <p>
@@ -676,6 +678,7 @@ ad_proc -public ad_form {
 		    section -
                     before_html -
                     after_html -
+                    result_datatype -
                     search_query -
                     search_query_name {
                         if { [llength $extra_arg] > 2 || [llength $extra_arg] == 1 } {
@@ -819,6 +822,14 @@ ad_proc -public ad_form {
 
                 if { [info exists new_request] } {
                     ad_page_contract_eval uplevel #$level $new_request
+                    # LARS: Set form values based on local vars in the new_request block
+                    foreach element_name $af_element_names($form_name) {
+                        if { [llength $element_name] == 1 } {
+                            if { [uplevel \#$level [list info exists $element_name]] } {
+                                set values($element_name) [uplevel \#$level [list set $element_name]]
+                            }
+                        }
+                    }            
                 }
             }
             set values(__key_signature) [ad_sign "$values($key_name):$form_name"]
