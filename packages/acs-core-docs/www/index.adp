@@ -3,30 +3,13 @@
 <table border="0" cellpadding="8" cellspacing="0" width="80%">
 
 <tr><td valign="top">
-<p><strong><a href="index.html">Core Documentation</a></strong> with shortcuts
+<strong>OpenACS Core Documentation</strong>
 <ul>
 <li><a href="for-everyone.html">Part I: For Everyone</a>
-<ul>
-<li><a href="release-notes.html">Chapter 1: Release Notes</a></li>
-</ul>
-</li>
-<li><a href="acs-admin.html">Part II: Administrator's
-Guide</a>
-<ul>
-<li><a href="install-steps.html">Chapter 2: Installation</a>
-<li><a href="configuring-new-site.html">Chapter 4: Configuring a new
-site</a>
-<li><a href="upgrade.html">Chapter 5: Upgrading</a>
-<li><a href="backup-recovery.html">Chapter 8: Backup and Recovery</a>
-</ul>
-</li>
+<li><a href="acs-admin.html">Part II: Administrator's Guide</a>
 <li><a href="acs-admin.html">Part III: Package Developer's Guide</a>
-<ul>
 <li><a href="tutorial.html">Chapter 9: Developer Tutorial</a></li>
-</ul>
-</li>
 <li><a href="acs-plat-dev.html">Part IV:Platform Developer's Guide</a>
-</li>
 </ul>
 
 <strong>Primers and References</strong>
