@@ -85,7 +85,8 @@ ad_proc -public ad_context_bar {
     args
 } {
     Returns a Yahoo-style hierarchical navbar. Includes "Administration"
-    if applicable, and the subsite if not global.
+    if applicable, and the subsite if not global. 'args' can be either
+    one or more lists, or a simple string.
 
     @param node_id If provided work up from this node, otherwise the current node
     @param from_node If provided do not generate links to the given node and above.
@@ -112,6 +113,11 @@ ad_proc -public ad_context_bar {
     if {[llength $args] == 0} { 
         # fix last element to just be literal string
         set context [lreplace $context end end [lindex [lindex $context end] 1]]
+    } else {
+	if ![string match "{*}" $args] {
+	    # args is not a list, transform it into one.
+	    set args [list $args]
+	}	
     }
 
     if { [info exists separator] } {
