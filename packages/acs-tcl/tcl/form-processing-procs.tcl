@@ -183,7 +183,14 @@ ad_proc -public ad_form {
 
     <p><dt><b>-edit_request</b></dt><p>
     <dd>A code block which sets the values for each element of the form meant to be modifiable by the user.  Use
-        this when a single query to grab database values is insufficient.
+        this when a single query to grab database values is insufficient. You just need to set the values as local
+        variables in the code block, and they'll get fetched and used as element values for you.
+    </dd>
+
+    <p><dt><b>-new_request</b></dt><p>
+    <dd>A code block which initializes elements for a new row. Use this to set default values. 
+        You just need to set the values as local
+        variables in the code block, and they'll get fetched and used as element values for you.
     </dd>
 
     <p><dt><b>-confirm_template</b></dt><p>
@@ -787,6 +794,14 @@ ad_proc -public ad_form {
 
             if { [info exists new_request] } {
                 ad_page_contract_eval uplevel #$level $new_request
+                # LARS: Set form values based on local vars in the new_request block
+                foreach element_name $af_element_names($form_name) {
+                    if { [llength $element_name] == 1 } {
+                        if { [uplevel \#$level [list info exists $element_name]] } {
+                            set values($element_name) [uplevel \#$level [list set $element_name]]
+                        }
+                    }
+                }            
             }
         }
 
