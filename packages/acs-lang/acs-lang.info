@@ -7,7 +7,7 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>t</singleton-p>
 
-    <version name="4.7d8" url="http://www.openacs.org/acs-repository/download/apm/acs-lang-4.7d8.apm">
+    <version name="4.7d9" url="http://www.openacs.org/acs-repository/download/apm/acs-lang-4.7d9.apm">
     <database-support>
         <database>oracle</database>
         <database>postgresql</database>
@@ -21,7 +21,7 @@ request processor hooks, templating, message catalog, and
 locale-specific formatting functions.
 </description>
 
-        <provides url="acs-lang" version="4.7d8"/>
+        <provides url="acs-lang" version="4.7d9"/>
         <requires url="acs-kernel" version="4.1"/>
 
         <parameters>
