@@ -21,7 +21,7 @@ begin
 end;' language 'plpgsql';
 
 
-create function search_observer__dequeue(integer,timestamp with time zone,varchar)
+create function search_observer__dequeue(integer,timestamptz,varchar)
 returns integer as '
 declare
     p_object_id                 alias for $1;
