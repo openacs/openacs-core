@@ -660,7 +660,7 @@ ad_proc -public lang::catalog::import_from_all_files_and_cache {} {
     @author Peter Marklund (peter@collaboraid.biz)
 } {
     # Only execute this proc once
-#    if { ![nsv_exists lang_catalog_import_from_all_files_and_cache executed_p] } {            
+    if { ![nsv_exists lang_catalog_import_from_all_files_and_cache executed_p] } {            
         nsv_set lang_catalog_import_from_all_files_and_cache executed_p 1
 
         db_foreach all_enabled_not_loaded_packages {} {
@@ -672,7 +672,7 @@ ad_proc -public lang::catalog::import_from_all_files_and_cache {} {
         }
 
         lang::message::cache
-#    }
+    }
 }
 
 ad_proc -private lang::catalog::translate {} {
