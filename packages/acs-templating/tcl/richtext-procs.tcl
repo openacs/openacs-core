@@ -63,7 +63,7 @@ ad_proc -public template::data::validate::richtext { value_ref message_ref } {
     if { [lsearch { text/enhanced text/html } $format] != -1 } {
         set check_result [ad_html_security_check $contents]
         if { ![empty_string_p $check_result] } {
-            set message $check_result
+            set message [ad_quotehtml $check_result]
             return 0
         }
     }
