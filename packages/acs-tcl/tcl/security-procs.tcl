@@ -66,6 +66,7 @@ ad_proc -private sec_sweep_sessions {} {
     set expires [expr {[ns_time] - [sec_session_lifetime]}]
 
     db_dml sessions_sweep {} 
+    db_release_unused_handles
 }
 
 ad_proc -private sec_handler {} {
@@ -73,8 +74,7 @@ ad_proc -private sec_handler {} {
     Reads the security cookies, setting fields in ad_conn accordingly.
 
 } {
-
-    #  ns_log notice "OACS= sec_handler: enter"
+    ns_log debug "OACS= sec_handler: enter"
     if { [catch { 
 	set cookie_list [ad_get_signed_cookie_with_expr "ad_session_id"]
     } errmsg ] } {
@@ -84,6 +84,7 @@ ad_proc -private sec_handler {} {
 	# -> it expired.
 
         # Now check for login cookie
+        ns_log Debug "OACS: Not a valid session cookie, looking for login cookie"
         sec_login_handler
     } else {
 	# The session cookie already exists and is valid.
@@ -134,7 +135,6 @@ ad_proc -private sec_handler {} {
         ad_conn -set auth_level $auth_level
         ad_conn -set account_status $account_status
 
-        
 	# reissue session cookie so session doesn't expire if the
 	# renewal period has passed. this is a little tricky because
 	# the cookie doesn't know about sec_session_renew; it only
@@ -146,6 +146,8 @@ ad_proc -private sec_handler {} {
             # LARS: We use sec_login_handler here instead, so that we check the authentication status again
             # This prevents people from being logged in indefinitely just because they keep the session open
 	    #sec_generate_session_id_cookie
+
+	    ns_log Debug "OACS: sec_handler: Invoking sec_login_handler to reissue session cookie."
             sec_login_handler
 	}
     }
@@ -156,6 +158,8 @@ ad_proc -private sec_login_handler {} {
     Reads the login cookie, setting fields in ad_conn accordingly.
 
 } {
+    ns_log debug "OACS= sec_login_handler: enter"
+
     set auth_level none
     set new_user_id 0
     set untrusted_user_id 0
@@ -263,6 +267,7 @@ ad_proc -public sec_get_user_auth_token {
     set auth_token [db_string select_auth_token { 
         select auth_token from users where user_id = :user_id
     } -default {}]
+    db_release_unused_handles
 
     if { [empty_string_p $auth_token] } {
         ns_log Debug "Security: User $user_id does not have any auth_token, creating a new one."
@@ -283,6 +288,8 @@ ad_proc -public sec_change_user_auth_token {
     db_dml update_auth_token {
         update users set auth_token = :auth_token where user_id = :user_id
     }
+    db_release_unused_handles
+
     return $auth_token
 }
 
@@ -303,8 +310,10 @@ ad_proc -public ad_check_password {
     Returns 1 if the password is correct for the given user ID. 
 } {
 
-    if { ![db_0or1row password_select {select password, salt from users where user_id = :user_id}] } {
-	return 0
+    set found_p [db_0or1row password_select {select password, salt from users where user_id = :user_id}]
+    db_release_unused_handles
+    if { !$found_p } {
+    	return 0
     }
 
     set salt [string trim $salt]
@@ -332,6 +341,7 @@ ad_proc -public ad_change_password {
     set salt [sec_random_token]
     set new_password [ns_sha1 "$new_password$salt"]
     db_dml password_update {}
+    db_release_unused_handles
 }
 
 ad_proc -private sec_setup_session { 
@@ -344,23 +354,25 @@ ad_proc -private sec_setup_session {
     and generates the cookies necessary for the session
 
 } {
+    ns_log debug "OACS= sec_setup_session: enter"
+
     set session_id [ad_conn session_id]
 
     # figure out the session id, if we don't already have it
     if { [empty_string_p $session_id]} {
 
-	# ns_log Notice "OACS= empty session_id"
+	ns_log debug "OACS= empty session_id"
 
 	set session_id [sec_allocate_session]
         # if we have a user on an newly allocated session, update
         # users table
 
-	# ns_log Notice "OACS= newly allocated session $session_id"
+	ns_log debug "OACS= newly allocated session $session_id"
 
         if { $new_user_id != 0 } {
-	    # ns_log Notice "OACS= about to update user session info, user_id NONZERO"
+	    ns_log debug "OACS= about to update user session info, user_id NONZERO"
             sec_update_user_session_info $new_user_id
-	    # ns_log Notice "OACS= done updating user session info, user_id NONZERO"
+	    ns_log debug "OACS= done updating user session info, user_id NONZERO"
         }
     } else {
         # $session_id is an active verified session
@@ -399,11 +411,11 @@ ad_proc -private sec_setup_session {
     ad_conn -set account_status $account_status
     ad_conn -set user_id $user_id
 
-    # ns_log Notice "OACS= about to generate session id cookie"
+    ns_log debug "OACS= about to generate session id cookie"
 
     sec_generate_session_id_cookie
 
-    # ns_log Notice "OACS= done generating session id cookie"
+    ns_log debug "OACS= done generating session id cookie"
 
     if { [string equal $auth_level "secure"] && [security::secure_conn_p] && $new_user_id != 0 } {
         # this is a secure session, so the browser needs
@@ -426,6 +438,7 @@ ad_proc -private sec_update_user_session_info {
             n_sessions = n_sessions + 1
         where user_id = :user_id
     }
+    db_release_unused_handles
 }
 
 ad_proc -private sec_generate_session_id_cookie {} { 
@@ -477,6 +490,7 @@ ad_proc -private sec_allocate_session {} {
     if { ![info exists tcl_max_value] || ![info exists tcl_current_sequence_id] || $tcl_current_sequence_id > $tcl_max_value } {
 	# Thread just spawned or we exceeded preallocated count.
 	set tcl_current_sequence_id [db_nextval sec_id_seq]
+	db_release_unused_handles
 	set tcl_max_value [expr $tcl_current_sequence_id + 100]
     } 
 
@@ -960,7 +974,8 @@ ad_proc -private sec_get_token {
 	set token [ns_cache eval secret_tokens $token_id {
 	    set token [db_string get_token {select token from secret_tokens
                        	                 where token_id = :token_id} -default 0]
-
+	    db_release_unused_handles
+	    
 	    # Very important to throw the error here if $token == 0
 	    # see: http://www.arsdigita.com/sdm/one-ticket?ticket_id=10760
 
@@ -1012,6 +1027,7 @@ ad_proc -private populate_secret_tokens_cache {} {
 	    ns_cache set secret_tokens $token_id $token
 	}
     }
+    db_release_unused_handles
 }
 
 ad_proc -private populate_secret_tokens_db {} {
@@ -1040,7 +1056,6 @@ ad_proc -private populate_secret_tokens_db {} {
     }
 
     db_release_unused_handles
-
 }
 
 
