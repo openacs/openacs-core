@@ -6,7 +6,9 @@ ad_library {
     @cvs-id $Id$
 }
 
-aa_register_case auth_authenticate {
+aa_register_case \
+    -cats {api}\
+    auth_authenticate {
     Test the auth::authenticate proc.
 } {    
 
@@ -126,7 +128,9 @@ aa_register_case auth_authenticate {
         }
 }
 
-aa_register_case auth_create_user {
+aa_register_case \
+    -cats {api} \
+    auth_create_user {
     Test the auth::create_user proc.
 } {
 
@@ -249,7 +253,9 @@ aa_register_case auth_create_user {
         } 
 }
 
-aa_register_case auth_confirm_email {
+aa_register_case \
+    -cats {db api smoke} \
+    auth_confirm_email {
     Test the auth::set_email_verified proc.
 } {
     set user_id [ad_conn user_id]
@@ -268,7 +274,10 @@ aa_register_case auth_confirm_email {
         }
 }
 
-aa_register_case auth_get_registration_elements {
+aa_register_case  \
+    -cats {api smoke} \
+    -error_level {warning} \
+    auth_get_registration_elements {
     Test the auth::get_registration_elements proc
 } {
     array set element_array [auth::get_registration_elements]
@@ -279,7 +288,10 @@ aa_register_case auth_get_registration_elements {
     aa_true "there is more than one optional element" [expr [llength $element_array(optional)] > 0]
 }
 
-aa_register_case auth_get_registration_form_elements {
+aa_register_case  \
+    -cats {api smoke} \
+    -error_level {warning} \
+    auth_get_registration_form_elements {
     Test the auth::get_registration_form_elements proc
 } {
     set form_elements [auth::get_registration_form_elements]
@@ -293,7 +305,9 @@ aa_register_case auth_get_registration_form_elements {
 #
 ###########
 
-aa_register_case auth_password_get_change_url {
+aa_register_case  \
+    -cats {api smoke} \
+    auth_password_get_change_url {
     Test the auth::password::get_change_url proc.
 } {
 
@@ -307,7 +321,10 @@ aa_register_case auth_password_get_change_url {
     }
 }
 
-aa_register_case auth_password_can_change_p {
+aa_register_case  \
+    -cats {api smoke} \
+    -error_level {warning} \
+    auth_password_can_change_p {
     Test the auth::password::can_change_p proc.
 } {
     auth::test::get_password_vars -array_name test_vars
@@ -317,7 +334,9 @@ aa_register_case auth_password_can_change_p {
         "1"
 }
 
-aa_register_case auth_password_change {
+aa_register_case  \
+    -cats {api} \
+    auth_password_change {
     Test the auth::password::change proc.
 } {
     aa_stub ns_sendmail {
@@ -370,7 +389,9 @@ aa_register_case auth_password_change {
         }
 }
 
-aa_register_case auth_password_recover {
+aa_register_case  \
+    -cats {api smoke} \
+    auth_password_recover {
     Test the auth::password::recover_password proc.
 } {
     auth::test::get_password_vars -array_name test_vars
@@ -397,7 +418,9 @@ aa_register_case auth_password_recover {
         }
 }
 
-aa_register_case auth_password_get_forgotten_url {
+aa_register_case  \
+    -cats {api smoke} \
+    auth_password_get_forgotten_url {
     Test the auth::password::get_forgotten_url proc.
 } {
     auth::test::get_password_vars -array_name test_vars    
@@ -417,7 +440,9 @@ aa_register_case auth_password_get_forgotten_url {
     aa_true "there is a local recover-password page without user info" [regexp {recover-password} $url]
 }
 
-aa_register_case auth_password_retrieve {
+aa_register_case  \
+    -cats {api smoke} \
+    auth_password_retrieve {
     Test the auth::password::retrieve proc.
 } {
     auth::test::get_password_vars -array_name test_vars    
@@ -429,7 +454,9 @@ aa_register_case auth_password_retrieve {
     aa_true "must have message on failure" [expr ![empty_string_p $result(password_message)]]
 }
 
-aa_register_case auth_password_reset {
+aa_register_case  \
+    -cats {api} \
+    auth_password_reset {
     Test the auth::password::reset proc.
 } {
     # We don't want email to go out
@@ -490,7 +517,9 @@ aa_register_case auth_password_reset {
 #
 ###########
 
-aa_register_case auth_authority_api {
+aa_register_case  \
+    -cats {api db} \
+    auth_authority_api {
     Test the auth::authority::create, auth::authority::edit, and auth::authority::delete procs.
 } {
     aa_run_with_teardown \
@@ -561,7 +590,9 @@ aa_register_case auth_authority_api {
 }
 
 
-aa_register_case auth_driver_get_parameter_values {
+aa_register_case  \
+    -cats {api} \
+    auth_driver_get_parameter_values {
     Test the auth::driver::set_parameter_values proc.
 } {
     aa_run_with_teardown \
@@ -607,7 +638,9 @@ aa_register_case auth_driver_get_parameter_values {
         }
 }
 
-aa_register_case auth_use_email_for_login_p {
+aa_register_case  \
+    -cats {api} \
+    auth_use_email_for_login_p {
     Test auth::UseEmailForLoginP
 } {
     aa_stub auth::get_register_authority {
@@ -667,7 +700,9 @@ aa_register_case auth_use_email_for_login_p {
         }
 }
 
-aa_register_case auth_email_on_password_change {
+aa_register_case  \
+    -cats {api} \
+    auth_email_on_password_change {
     Test acs-kernel.EmailAccountOwnerOnPasswordChangeP parameter
 } {
     aa_stub ns_sendmail {
