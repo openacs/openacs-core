@@ -52,18 +52,19 @@ begin
 end;
 ' language 'plpgsql';
 
-select define_function_args ('notification_delivery_method__new','delivery_method_id,short_name,pretty_name,creation_date,creation_user,creation_ip,context_id');
+select define_function_args ('notification_delivery_method__new','delivery_method_id,sc_impl_id,short_name,pretty_name,creation_date,creation_user,creation_ip,context_id');
 
-create function notification_delivery_method__new (integer, varchar, varchar, timestamp, integer, varchar, integer)
+create function notification_delivery_method__new (integer, integer, varchar, varchar, timestamp, integer, varchar, integer)
 returns integer as '
 declare
     p_delivery_method_id            alias for $1;
-    p_short_name                    alias for $2;
-    p_pretty_name                   alias for $3;
-    p_creation_date                 alias for $4;
-    p_creation_user                 alias for $5;
-    p_creation_ip                   alias for $6;
-    p_context_id                    alias for $7;
+    p_sc_impl_id		    alias for $2;
+    p_short_name                    alias for $3;
+    p_pretty_name                   alias for $4;
+    p_creation_date                 alias for $5;
+    p_creation_user                 alias for $6;
+    p_creation_ip                   alias for $7;
+    p_context_id                    alias for $8;
     v_delivery_method_id            integer;
 begin
     v_delivery_method_id := acs_object__new(
@@ -77,43 +78,14 @@ begin
 
     insert
     into notification_delivery_methods
-    (delivery_method_id, short_name, pretty_name)
+    (delivery_method_id, sc_impl_id, short_name, pretty_name)
     values
-    (v_delivery_method_id, p_short_name, p_pretty_name);
+    (v_delivery_method_id, p_sc_impl_id, p_short_name, p_pretty_name);
 
     return v_delivery_method_id;
 end;
 ' language 'plpgsql';
 
-
-create function notification_delivery_method__new (integer, integer, varchar, varchar, timestamp, integer, varchar, integer)
-returns integer as '
-DECLARE
-	p_delivery_method_id			alias for $1;
-        p_sc_impl_id                            alias for $2;
-	p_short_name				alias for $3;
-	p_pretty_name				alias for $4;
-	p_creation_date				alias for $5;
-	p_creation_user				alias for $6;
-	p_creation_ip				alias for $7;
-	p_context_id				alias for $8;
-	v_delivery_method_id			integer;
-BEGIN
-	v_delivery_method_id:= acs_object__new (
-					       p_delivery_method_id,
-					       ''notification_delivery_method'',
-					       p_creation_date,
-					       p_creation_user,
-					       p_creation_ip,
-					       p_context_id);
-
-	insert into notification_delivery_methods
-	(delivery_method_id, sc_impl_id, short_name, pretty_name) values
-	(v_delivery_method_id, p_sc_impl_id, p_short_name, p_pretty_name);
-
-	return v_delivery_method_id;
-END;
-' language 'plpgsql';
 
 create function notification_delivery_method__delete(integer)
 returns integer as '

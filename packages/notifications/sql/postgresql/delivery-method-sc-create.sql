@@ -23,7 +23,7 @@ BEGIN
               ''Notification Delivery Method''
    );
 
-   PEROFRM acs_sc_msg_type__new (
+   PERFORM acs_sc_msg_type__new (
               ''NotificationDeliveryMethod.Send.InputType'',
               ''to_user_id:integer,reply_object_id:integer,notification_type_id:integer,subject:string,content:string''
    );
@@ -67,3 +67,6 @@ BEGIN
 
 end;
 ' language 'plpgsql';
+
+select inline_1();
+drop function inline_1();
