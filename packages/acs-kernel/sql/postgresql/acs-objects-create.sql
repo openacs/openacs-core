@@ -414,7 +414,7 @@ begin
   if new.object_id = old.object_id and
      new.context_id = old.context_id and
      new.security_inherit_p = old.security_inherit_p then
-    return;
+    return new;
   end if;
 
   -- Remove my old ancestors from my descendants.

@@ -1,4 +1,8 @@
 -- set serveroutput on
+create table tst_ids (
+       id    integer,
+       name  varchar(400)
+);
 
 create function content_test__put_line(text) returns integer as '
 begin
@@ -11,7 +15,7 @@ begin
         return case when $1 then ''t''::char else ''f''::char end;
 end;' language 'plpgsql';
 
-create function test_content() returns integer as '
+create function test_content_create() returns integer as '
 declare
   folder_id		cr_folders.folder_id%TYPE;
   folder_b_id		cr_folders.folder_id%TYPE;
@@ -85,6 +89,18 @@ begin
 	''Default Type Template''
    );
 
+   insert into tst_ids values (folder_id,''folder_id'');
+   insert into tst_ids values (folder_b_id,''folder_b_id'');
+   insert into tst_ids values (sub_folder_id,''sub_folder_id'');
+   insert into tst_ids values (sub_sub_folder_id,''sub_sub_folder_id'');
+   insert into tst_ids values (item_id,''item_id'');
+   insert into tst_ids values (simple_item_id,''simple_item_id'');
+   insert into tst_ids values (live_revision_id,''live_revision_id'');
+   insert into tst_ids values (late_revision_id,''late_revision_id'');
+   insert into tst_ids values (item_template_id,''item_template_id'');
+   insert into tst_ids values (type_template_id,''type_template_id'');
+   insert into tst_ids values (def_type_template_id,''def_type_template_id'');
+   insert into tst_ids values (dum_template_id,''dum_template_id'');
 
    PERFORM content_test__put_line(''-------------------------------------'');
    PERFORM content_test__put_line(''CREATING CONTENT FOLDERS AND ITEMS...'');
@@ -243,6 +259,7 @@ begin
            );
 
    found_folder_id := content_item__get_id(''grandpa/pa/me'', -100, ''f'');
+   insert into tst_ids values (found_folder_id,''found_folder_id'');
 
    PERFORM content_test__put_line(''-------------------------------------'');
    PERFORM content_test__put_line(''LOCATING CONTENT FOLDERS AND ITEMS...'');
@@ -307,20 +324,96 @@ begin
                                   content_item__get_path(item_id,folder_b_id)
            );
 
+   return null;
 
+end;' language 'plpgsql';
+
+create function test_content_check1() returns integer as '
+declare
+  folder_id		cr_folders.folder_id%TYPE;
+  folder_b_id		cr_folders.folder_id%TYPE;
+  sub_folder_id		cr_folders.folder_id%TYPE;
+  sub_sub_folder_id	cr_folders.folder_id%TYPE;
+  item_id		cr_items.item_id%TYPE;
+  simple_item_id	cr_items.item_id%TYPE;
+  live_revision_id	cr_revisions.revision_id%TYPE;
+  late_revision_id	cr_revisions.revision_id%TYPE;
+  item_template_id	cr_templates.template_id%TYPE;
+  type_template_id	cr_templates.template_id%TYPE;
+  def_type_template_id	cr_templates.template_id%TYPE;
+  dum_template_id	cr_templates.template_id%TYPE;
+
+  symlink_a_id		cr_symlinks.symlink_id%TYPE;
+  symlink_b_id		cr_symlinks.symlink_id%TYPE;
+
+  found_folder_id	cr_folders.folder_id%TYPE;
+begin
+   select id into folder_id from tst_ids where name = ''folder_id'';
+   select id into folder_b_id from tst_ids where name = ''folder_b_id'';
+   select id into sub_folder_id from tst_ids where name = ''sub_folder_id'';
+   select id into sub_sub_folder_id from tst_ids where name = ''sub_sub_folder_id'';
+   select id into item_id from tst_ids where name = ''item_id'';
+   select id into simple_item_id from tst_ids where name = ''simple_item_id'';
+   select id into live_revision_id from tst_ids where name = ''live_revision_id'';
+   select id into late_revision_id from tst_ids where name = ''late_revision_id'';
+   select id into item_template_id from tst_ids where name = ''item_template_id'';
+   select id into type_template_id from tst_ids where name = ''type_template_id'';
+   select id into def_type_template_id from tst_ids where name = ''def_type_template_id'';
+   select id into dum_template_id from tst_ids where name = ''dum_template_id'';
+   select id into found_folder_id from tst_ids where name = ''found_folder_id'';
    PERFORM content_test__put_line(''-------------------------------------'');
    PERFORM content_test__put_line(''MOVING/RENAMING CONTENT FOLDERS...'');
    PERFORM content_test__put_line(''...all tests passed'');
    PERFORM content_test__put_line(''Moving me from under pa to under grandpa'');
    PERFORM content_item__move(sub_sub_folder_id, folder_id);
+
+   return null;
+
+end;' language 'plpgsql';
+
+create function test_content_check2() returns integer as '
+declare
+  folder_id		cr_folders.folder_id%TYPE;
+  folder_b_id		cr_folders.folder_id%TYPE;
+  sub_folder_id		cr_folders.folder_id%TYPE;
+  sub_sub_folder_id	cr_folders.folder_id%TYPE;
+  item_id		cr_items.item_id%TYPE;
+  simple_item_id	cr_items.item_id%TYPE;
+  live_revision_id	cr_revisions.revision_id%TYPE;
+  late_revision_id	cr_revisions.revision_id%TYPE;
+  item_template_id	cr_templates.template_id%TYPE;
+  type_template_id	cr_templates.template_id%TYPE;
+  def_type_template_id	cr_templates.template_id%TYPE;
+  dum_template_id	cr_templates.template_id%TYPE;
+
+  symlink_a_id		cr_symlinks.symlink_id%TYPE;
+  symlink_b_id		cr_symlinks.symlink_id%TYPE;
+
+  found_folder_id	cr_folders.folder_id%TYPE;
+begin
+   select id into folder_id from tst_ids where name = ''folder_id'';
+   select id into folder_b_id from tst_ids where name = ''folder_b_id'';
+   select id into sub_folder_id from tst_ids where name = ''sub_folder_id'';
+   select id into sub_sub_folder_id from tst_ids where name = ''sub_sub_folder_id'';
+   select id into item_id from tst_ids where name = ''item_id'';
+   select id into simple_item_id from tst_ids where name = ''simple_item_id'';
+   select id into live_revision_id from tst_ids where name = ''live_revision_id'';
+   select id into late_revision_id from tst_ids where name = ''late_revision_id'';
+   select id into item_template_id from tst_ids where name = ''item_template_id'';
+   select id into type_template_id from tst_ids where name = ''type_template_id'';
+   select id into def_type_template_id from tst_ids where name = ''def_type_template_id'';
+   select id into dum_template_id from tst_ids where name = ''dum_template_id'';
+   select id into found_folder_id from tst_ids where name = ''found_folder_id'';
+
    PERFORM content_test__put_line(''Path for '' || item_id || '' is '' || 
                                   content_item__get_path(item_id,null)
            );
    -- PERFORM content_test__put_line(''Moving grandpa to pa - this shouldn\\\'t work'');
    -- PERFORM content_folder__move(folder_id, sub_folder_id);
-   PERFORM content_test__put_line(''Path for '' || item_id || '' is '' || 
-                                  content_item__get_path(item_id,null)
-           );
+   -- PERFORM content_test__put_line(''Path for '' || item_id || '' is '' || 
+   --                               content_item__get_path(item_id,null)
+   --        );
+
    PERFORM content_test__put_line(''Renaming puppy to kitty...'');
    PERFORM content_item__rename(item_id, ''kitty'');
    PERFORM content_test__put_line(''Renaming me to aunty...'');
@@ -347,6 +440,50 @@ begin
                                         null,
                                         null
                    );
+
+   insert into tst_ids values (symlink_a_id,''symlink_a_id'');
+
+   return null;
+
+end;' language 'plpgsql';
+
+create function test_content_check3() returns integer as '
+declare
+  folder_id		cr_folders.folder_id%TYPE;
+  folder_b_id		cr_folders.folder_id%TYPE;
+  sub_folder_id		cr_folders.folder_id%TYPE;
+  sub_sub_folder_id	cr_folders.folder_id%TYPE;
+  item_id		cr_items.item_id%TYPE;
+  simple_item_id	cr_items.item_id%TYPE;
+  live_revision_id	cr_revisions.revision_id%TYPE;
+  late_revision_id	cr_revisions.revision_id%TYPE;
+  item_template_id	cr_templates.template_id%TYPE;
+  type_template_id	cr_templates.template_id%TYPE;
+  def_type_template_id	cr_templates.template_id%TYPE;
+  dum_template_id	cr_templates.template_id%TYPE;
+
+  symlink_a_id		cr_symlinks.symlink_id%TYPE;
+  symlink_b_id		cr_symlinks.symlink_id%TYPE;
+
+  found_folder_id	cr_folders.folder_id%TYPE;
+begin
+   select id into folder_id from tst_ids where name = ''folder_id'';
+   select id into folder_b_id from tst_ids where name = ''folder_b_id'';
+   select id into sub_folder_id from tst_ids where name = ''sub_folder_id'';
+   select id into sub_sub_folder_id from tst_ids where name = ''sub_sub_folder_id'';
+   select id into item_id from tst_ids where name = ''item_id'';
+   select id into simple_item_id from tst_ids where name = ''simple_item_id'';
+   select id into live_revision_id from tst_ids where name = ''live_revision_id'';
+   select id into late_revision_id from tst_ids where name = ''late_revision_id'';
+   select id into item_template_id from tst_ids where name = ''item_template_id'';
+   select id into type_template_id from tst_ids where name = ''type_template_id'';
+   select id into def_type_template_id from tst_ids where name = ''def_type_template_id'';
+   select id into dum_template_id from tst_ids where name = ''dum_template_id'';
+   select id into found_folder_id from tst_ids where name = ''found_folder_id'';
+
+   select id into symlink_a_id from tst_ids where name = ''symlink_a_id'';
+
+
    PERFORM content_test__put_line(''Create a link in pa to aunty: Symlink is '' || symlink_a_id);
 
    PERFORM content_test__put_line(''Is '' || symlink_a_id || '' a symlink?: ''
@@ -391,15 +528,15 @@ begin
            );
 
    PERFORM content_test__put_line(''Found item '' || item_id || '' at '' ||
-                          content_item__get_id(''/grandpa/aunty/kitty'',null,''f'')
+                          content_item__get_id(''/grandpa/aunty/pa'',null,''f'')
            );
    PERFORM content_test__put_line(''Found item '' || item_id || '' at '' ||
-                           content_item__get_id(''/grandpa/pa/link_a/kitty'',null,''f'')
+                           content_item__get_id(''/grandpa/pa/link_a/aunty'',null,''f'')
            );
    PERFORM content_test__put_line(''Found item '' || item_id || 
                                   '' starting at aunty '' ||
                                   sub_sub_folder_id || '' at '' ||
-                                  content_item__get_id(''kitty'',
+                                  content_item__get_id(''pa'',
                                                         sub_sub_folder_id,
                                                         ''f''
                                   )
@@ -407,17 +544,16 @@ begin
    PERFORM content_test__put_line(''Found item '' || item_id || 
                                '' starting at symlink '' ||
                                symlink_a_id || '' at '' ||
-                               content_item__get_id(''kitty'',symlink_a_id,''f'')
+                               content_item__get_id(''aunty'',symlink_a_id,''f'')
            );
    PERFORM content_test__put_line(''Found item '' || item_id || 
                                   '' starting at pa '' ||
                                   sub_folder_id || '' at '' ||
-                                  content_item__get_id(''link_a/kitty'',
+                                  content_item__get_id(''link_a/aunty'',
                                                        sub_folder_id,
                                                        ''f''
                                   )
            );
-
 
    PERFORM content_test__put_line(''--------------------------------'');
 
@@ -427,6 +563,45 @@ begin
                                   folder_b_id
            );
    PERFORM content_item__move(item_id,folder_b_id);
+
+   return null;
+
+end;' language 'plpgsql';
+
+create function test_content_check4() returns integer as '
+declare
+  folder_id		cr_folders.folder_id%TYPE;
+  folder_b_id		cr_folders.folder_id%TYPE;
+  sub_folder_id		cr_folders.folder_id%TYPE;
+  sub_sub_folder_id	cr_folders.folder_id%TYPE;
+  item_id		cr_items.item_id%TYPE;
+  simple_item_id	cr_items.item_id%TYPE;
+  live_revision_id	cr_revisions.revision_id%TYPE;
+  late_revision_id	cr_revisions.revision_id%TYPE;
+  item_template_id	cr_templates.template_id%TYPE;
+  type_template_id	cr_templates.template_id%TYPE;
+  def_type_template_id	cr_templates.template_id%TYPE;
+  dum_template_id	cr_templates.template_id%TYPE;
+
+  symlink_a_id		cr_symlinks.symlink_id%TYPE;
+  symlink_b_id		cr_symlinks.symlink_id%TYPE;
+
+  found_folder_id	cr_folders.folder_id%TYPE;
+begin
+   select id into folder_id from tst_ids where name = ''folder_id'';
+   select id into folder_b_id from tst_ids where name = ''folder_b_id'';
+   select id into sub_folder_id from tst_ids where name = ''sub_folder_id'';
+   select id into sub_sub_folder_id from tst_ids where name = ''sub_sub_folder_id'';
+   select id into item_id from tst_ids where name = ''item_id'';
+   select id into simple_item_id from tst_ids where name = ''simple_item_id'';
+   select id into live_revision_id from tst_ids where name = ''live_revision_id'';
+   select id into late_revision_id from tst_ids where name = ''late_revision_id'';
+   select id into item_template_id from tst_ids where name = ''item_template_id'';
+   select id into type_template_id from tst_ids where name = ''type_template_id'';
+   select id into def_type_template_id from tst_ids where name = ''def_type_template_id'';
+   select id into dum_template_id from tst_ids where name = ''dum_template_id'';
+   select id into found_folder_id from tst_ids where name = ''found_folder_id'';
+
    PERFORM content_test__put_line(''Path for item '' || item_id || '' is '' ||
                                   content_item__get_path(item_id,null)
            );     
@@ -435,6 +610,43 @@ begin
                                   '' to aunty '' || sub_sub_folder_id
            );
    PERFORM content_item__move(folder_b_id,sub_sub_folder_id);
+   return null;
+
+end;' language 'plpgsql';
+
+create function test_content_check5() returns integer as '
+declare
+  folder_id		cr_folders.folder_id%TYPE;
+  folder_b_id		cr_folders.folder_id%TYPE;
+  sub_folder_id		cr_folders.folder_id%TYPE;
+  sub_sub_folder_id	cr_folders.folder_id%TYPE;
+  item_id		cr_items.item_id%TYPE;
+  simple_item_id	cr_items.item_id%TYPE;
+  live_revision_id	cr_revisions.revision_id%TYPE;
+  late_revision_id	cr_revisions.revision_id%TYPE;
+  item_template_id	cr_templates.template_id%TYPE;
+  type_template_id	cr_templates.template_id%TYPE;
+  def_type_template_id	cr_templates.template_id%TYPE;
+  dum_template_id	cr_templates.template_id%TYPE;
+
+  symlink_a_id		cr_symlinks.symlink_id%TYPE;
+  symlink_b_id		cr_symlinks.symlink_id%TYPE;
+
+  found_folder_id	cr_folders.folder_id%TYPE;
+begin
+   select id into folder_id from tst_ids where name = ''folder_id'';
+   select id into folder_b_id from tst_ids where name = ''folder_b_id'';
+   select id into sub_folder_id from tst_ids where name = ''sub_folder_id'';
+   select id into sub_sub_folder_id from tst_ids where name = ''sub_sub_folder_id'';
+   select id into item_id from tst_ids where name = ''item_id'';
+   select id into simple_item_id from tst_ids where name = ''simple_item_id'';
+   select id into live_revision_id from tst_ids where name = ''live_revision_id'';
+   select id into late_revision_id from tst_ids where name = ''late_revision_id'';
+   select id into item_template_id from tst_ids where name = ''item_template_id'';
+   select id into type_template_id from tst_ids where name = ''type_template_id'';
+   select id into def_type_template_id from tst_ids where name = ''def_type_template_id'';
+   select id into dum_template_id from tst_ids where name = ''dum_template_id'';
+   select id into found_folder_id from tst_ids where name = ''found_folder_id'';
    PERFORM content_test__put_line(''Path for item '' || item_id || '' is '' ||
                                   content_item__get_path(item_id,null)
            );     
@@ -458,9 +670,21 @@ begin
 end;' language 'plpgsql';
 
 
-select test_content();
+select test_content_create();
+select test_content_check1();
+select test_content_check2();
+select test_content_check3();
+select test_content_check4();
+select test_content_check5();
 
-drop function test_content();
+drop function test_content_create();
+drop function test_content_check1();
+drop function test_content_check2();
+drop function test_content_check3();
+drop function test_content_check4();
+drop function test_content_check5();
 drop function content_test__put_line(text);
 drop function cast_char(boolean);
+
+drop table tst_ids;
 

@@ -699,8 +699,7 @@ begin
   get_id__parent_id := content_symlink__resolve(get_id__parent_id);
 
   LOOP
-    -- FIXME: this use of instr in oracle code seems incorrect.
-    -- end_pos := instr(v_item_path, ''/'', start_pos);
+
     end_pos := instr(v_item_path, ''/'', start_pos);
 
     if end_pos = 0 then
@@ -952,9 +951,9 @@ begin
 
   -- if the folder has an index page
   if v_is_folder = ''t'' and v_index is not null then
-    v_path := content_item__get_path(content_symlink__resolve(v_index));
+    v_path := content_item__get_path(content_symlink__resolve(v_index),null);
   else
-    v_path := content_item__get_path(v_item_id);
+    v_path := content_item__get_path(v_item_id,null);
   end if;
 
   return v_path;
@@ -1598,7 +1597,8 @@ declare
   v_revision_id                            cr_revisions.revision_id%TYPE;
   v_publish_date                           cr_revisions.publish_date%TYPE;
 begin
-  
+  -- FIXME: what is up with this? both selects are the same.
+
   if get_publish_date__is_live then
     select
 	publish_date into v_publish_date
