@@ -226,9 +226,9 @@ as select ot.object_type, ota.object_type as ancestor_type
    where ota.object_type in (select ot2.object_type
                                from acs_object_types ot1, 
                                     acs_object_types ot2
-                              where o1.object_type = ot.supertype
-                                and o2.tree_sortkey <= o1.tree_sortkey
-                                and o1.tree_sortkey like (o2.tree_sortkey || '%'));
+                              where ot1.object_type = ot.supertype
+                                and ot2.tree_sortkey <= ot1.tree_sortkey
+                                and ot1.tree_sortkey like (ot2.tree_sortkey || '%'));
 
 
 create table acs_object_type_tables (
@@ -693,7 +693,7 @@ begin
      where exists (select 1 
                      from acs_object_types t 
                     where t.object_type = is_subtype_p__object_type_2
-                      and tree_sortkey like (select tree_sortkey || '%' 
+                      and tree_sortkey like (select tree_sortkey || ''%'' 
                                                from acs_object_types 
                                               where object_type = is_subtype_p__object_type_1 ));
 

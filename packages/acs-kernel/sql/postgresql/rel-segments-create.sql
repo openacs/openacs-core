@@ -194,7 +194,7 @@ as select rs.segment_id, gem.element_id as party_id, gem.rel_id, gem.rel_type,
    from rel_segments rs, 
         group_element_map gem 
    where gem.group_id = rs.group_id
-     and rs.rel_type in (select object_type
+     and rs.rel_type in (select o2.object_type
                            from acs_object_types o1, acs_object_types o2
                           where o1.object_type = gem.rel_type 
                             and o2.tree_sortkey <= o1.tree_sortkey
@@ -230,7 +230,7 @@ as select rs.segment_id, gem.element_id as member_id, gem.rel_id,
           gem.rel_type, gem.group_id, gem.container_id
     from membership_rels mr, group_element_map gem, rel_segments rs
    where rs.group_id = gem.group_id 
-     and rs.rel_type in (select object_type
+     and rs.rel_type in (select o2.object_type
                            from acs_object_types o1, acs_object_types o2
                           where o1.object_type = gem.rel_type 
                             and o2.tree_sortkey <= o1.tree_sortkey
@@ -319,7 +319,7 @@ from rel_segments s,
       from groups) gcm,
      acs_rel_types
 where s.group_id = gcm.group_id
-  and s.rel_type in (select object_type
+  and s.rel_type in (select o2.object_type
                        from acs_object_types o1, acs_object_types o2
                       where o1.object_type = acs_rel_types.rel_type
                         and o2.tree_sortkey <= o1.tree_sortkey

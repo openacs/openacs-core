@@ -440,14 +440,14 @@ begin
                     from acs_object_types t
                    where t.object_type = o1.object_type
                      and t.tree_sortkey 
-                         like (select o.tree_sortkey || '%' 
+                         like (select o.tree_sortkey || ''%'' 
                                  from acs_object_types o
                                 where o.object_type = rt.object_type_one))
       and exists (select 1 
                     from acs_object_types t
                    where t.object_type = o2.object_type
                      and t.tree_sortkey 
-                         like (select o.tree_sortkey || '%' 
+                         like (select o.tree_sortkey || ''%'' 
                                  from acs_object_types o
                                 where o.object_type = rt.object_type_two))
       and rt.rel_type = new.rel_type

@@ -602,7 +602,7 @@ begin
                                  from acs_objects o
                                 where o.object_id = delete__object_id)
          and o2.tree_sortkey <= o1.tree_sortkey
-         and o1.tree_sortkey like (o2.tree_sortkey || '%') 
+         and o1.tree_sortkey like (o2.tree_sortkey || ''%'') 
     order by tree_sortkey desc)
   loop
     -- Delete from the table.
@@ -643,7 +643,7 @@ begin
                                  from acs_objects o
                                 where o.object_id = name__object_id)
          and o2.tree_sortkey <= o1.tree_sortkey
-         and o1.tree_sortkey like (o2.tree_sortkey || '%') 
+         and o1.tree_sortkey like (o2.tree_sortkey || ''%'') 
     order by tree_sortkey desc)
   loop
    if obj_type.name_method is not null then
@@ -730,7 +730,7 @@ begin
                                 from acs_objects o
                                where o.object_id = object_id_in)
         and o2.tree_sortkey <= o1.tree_sortkey
-        and o1.tree_sortkey like (o2.tree_sortkey || '%') 
+        and o1.tree_sortkey like (o2.tree_sortkey || ''%'') 
      ) t
    where   
      a.attribute_name = attribute_name_in

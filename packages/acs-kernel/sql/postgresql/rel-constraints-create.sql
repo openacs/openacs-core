@@ -678,12 +678,12 @@ where rc.rel_segment in (
 -- DCW 2001-03-14.
 
 create view rc_segment_dependency_levels as
-      select rel_segment as segment_id,
-             max(tree_level) as dependency_level
+      select rc.rel_segment as segment_id,
+             max(rc.tree_level) as dependency_level
        from (select rc1.rel_segment, tree_level(rc1.tree_sortkey) as tree_level
                from rel_constraints rc1, rel_constraints rc2
               where rc1.tree_sortkey like rc2.tree_sortkey || '%'
-                and rc2.rel_side = 'two')
+                and rc2.rel_side = 'two') rc
    group by segment_id;
 
 --------------
