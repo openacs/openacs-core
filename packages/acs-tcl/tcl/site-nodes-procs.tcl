@@ -343,7 +343,7 @@ ad_proc -public site_map_unmount_application {
 
     if { [string eq $delete_p "t"] } {
 	# Delete the node from the site map
-	db_dml node_delete {
+	db_exec_plsql node_delete {
 	    begin site_node.delete(:node_id); end;
 	}	
     }
