@@ -47,4 +47,4 @@ set acs_version [ad_acs_version]
 
 set acs_root_dir [acs_root_dir]
 
-set focus [auth::get_login_focus]
+set focus {}

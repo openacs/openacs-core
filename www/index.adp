@@ -1,6 +1,5 @@
 <master>
 <property name="title">@system_name;noquote@</property>
-<if @user_id@ eq 0><property name="focus">@focus@</property></if>
 
 <table cellspacing="4" cellpadding="4" border="0">
   <tr>
@@ -94,7 +93,7 @@
       </if>
       <else>
         <div id="login-box">
-          <include src="/packages/acs-subsite/lib/login" return_url="/" username="@username@" authority_id="@authority_id@">
+          <include src="/packages/acs-subsite/lib/login" return_url="/" username="@username@" authority_id="@authority_id@" &="__adp_properties">
         </div>
       </else>
 
