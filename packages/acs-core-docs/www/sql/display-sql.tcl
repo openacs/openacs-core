@@ -3,7 +3,7 @@ ad_page_contract {
     AOLserver's db module magic (offering to load the SQL into a database)
     or without returning the SQL as content-type application/x-sql.
 
-    Patched by philg at Jeff Banks's request on 12/5/99
+    Patched by philg at Jeff Davis's request on 12/5/99
     to close the security hole whereby a client adds extra form
     vars.
 
@@ -15,12 +15,13 @@ ad_page_contract {
     @param url The full relative path of the file to display the source for.
     @param package_key The key of the package the file is part of.
 
-    @creation-date 12/19/98
     @author philg@mit.edu
+    @creation-date 12/19/98
     @cvs-id $Id$
 } {
     url:notnull
     {package_key ""}
+    {db ""}
 }
 
 # This is normally a password-protected page, but to be safe let's
@@ -31,15 +32,45 @@ ad_page_contract {
 
 if { [string match "*..*" $url] || [string match "*..*" $package_key] } {
     ad_return_error "Can't back up beyond the pageroot" "You can't use display-sql.tcl to look at files underneath the pageroot."
-    return
+    return -code return 
 }
 
 if {[exists_and_not_null package_key]} {
     set safe_p [regexp {/?(.*)} $url package_url]
 }
 
-if { $safe_p } {
-    ns_returnfile 200 text/plain "[acs_package_root_dir $package_key]/sql/$url"
-} else {
-    ad_return_error "Invalid file location" "Can only display files in package or doc directory"
+
+if {[empty_string_p $db]} { 
+
+    # if we were not passed a DB string get a list of matching files.
+
+    set text {}
+    set files [glob -nocomplain "[acs_package_root_dir $package_key]/sql/*/$url" "[acs_package_root_dir $package_key]/sql/$url"]
+    foreach f $files { 
+        regexp {([^/]*)/([^/]*)$} $f match db url
+        append text "<li> <a href=\"display-sql?[export_url_vars db url package_key]\">$db</a></li>"
+    }
+    if {[empty_string_p $text]} { 
+        set text "<li> No sql file found."
+    }
+    set context [list [list ../$package_key $package_key] "SQL Display"]
+} else { 
+
+    # we have a db.  
+
+    if {[string equal $db sql]} { 
+        set files [glob -nocomplain "[acs_package_root_dir $package_key]/sql/$url"]       
+    } else { 
+        set files [glob -nocomplain "[acs_package_root_dir $package_key]/sql/$db/$url"]       
+    }
+        
+
+    if { $safe_p && [llength $files] > 0 } {
+        ns_returnfile 200 text/plain $files
+    } else {
+        ad_return_error "Invalid file location" "Can only display files in package or doc directory."
+    }
+    ad_script_abort
 }
+
+
