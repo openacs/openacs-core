@@ -1,11 +1,8 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-       "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-<title>@title@</title>
-@header_stuff@
-</head>
-<body<multiple name=attribute> @attribute.key@="@attribute.value@"</multiple>>
+<master src="blank-master">
+  <property name="title">@title@</property>
+  <property name="header_stuff">@header_stuff@</property>
+  <property name="focus">@focus@</property>
+
 <include src="login-status" />
 
 <if @body_start_include@ not nil>
@@ -19,6 +16,3 @@
 
 <hr />
 <address><a href="mailto:@signatory@">@signatory@</a></address>
-@ds_link@
-</body>
-</html>
