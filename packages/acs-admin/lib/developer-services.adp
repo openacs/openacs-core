@@ -1,4 +1,5 @@
 <ul>
+  <li><a href="@acs_admin_url@apm">Package Manager</a>
   <li><a href="@acs_admin_url@cache">Cache Info</a>
   <if @acs_automated_testing_url@ not nil>
     <li><a href="@acs_automated_testing_url@admin">Automated Testing</a>

@@ -1,6 +1,6 @@
 <ul>
   <li><a href="@acs_admin_url@users">Users</a> 
-  <li><a href="@acs_admin_url@apm">Package Manager</a>
+  <li><a href="@acs_admin_url@install">Install applications</a>
   <if @acs_lang_admin_url@ not nil>
     <li><a href="@acs_lang_admin_url@">Internationalization/Localization</a>
   </if>
