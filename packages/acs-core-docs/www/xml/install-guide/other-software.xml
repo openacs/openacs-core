@@ -1056,7 +1056,7 @@ cp https.tcl /usr/local/aolserver/modules/tcl/</action></screen>
       </sect2>
       <sect2 id="install-nsopenssl-aolserver4">
         <title>Install on AOLserver4</title>
-        <para> You will need the AOLserver4 source in <computeroutput>/usr/local/src/aolserver/aolserver</computeroutput> and OpenSSL installed in <computeroutput>/usr/local/ssl</computeroutput> (or at least symlinked there).</para>
+        <para> You will need the AOLserver4 source in <computeroutput>/usr/local/src/aolserver/aolserver</computeroutput> and OpenSSL installed in <computeroutput>/usr/local/ssl</computeroutput> (or at least symlinked there). The use of <computeroutput>INST=/point/to/aolserver</computeroutput> is being replaced with <computeroutput>AOLSERVER=/point/to/aolserver</computeroutput>. We are including both here, because while this module still requires INST, if one just uses AOLSERVER, the default value would be used and could intefere with another existing installation.</para>
         <para>FreeBSD note: build nsopenssl with <userinput>gmake install OPENSSL=/usr/local/openssl AOLSERVER=/usr/local/aolserver4r10</userinput>
         </para>
 
@@ -1067,14 +1067,14 @@ cp https.tcl /usr/local/aolserver/modules/tcl/</action></screen>
 [root nsopenssl]# <userinput>make OPENSSL=/usr/local/ssl</userinput>
 gcc -I/usr/local/ssl/include (many items omitted)  -c -o sslcontext.o sslcontext.c
 <emphasis>(many lines omitted)</emphasis>
-[root nsopenssl-2.1]# <userinput>make install OPENSSL=/usr/local/ssl AOLSERVER=/usr/local/aolserver4r10</userinput>
+[root nsopenssl-2.1]# <userinput>make install OPENSSL=/usr/local/ssl AOLSERVER=/usr/local/aolserver4r10 INST=/usr/local/aolserver4r10</userinput>
 [root nsopenssl-2.1]#
 <action>cd /usr/local/src/aolserver
 cvs -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver login
 cvs -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co nsopenssl
 cd nsopenssl
 make OPENSSL=/usr/local/ssl 
-make install OPENSSL=/usr/local/ssl AOLSERVER=/usr/local/aolserver</action></screen>
+make install OPENSSL=/usr/local/ssl AOLSERVER=/usr/local/aolserver AOLSERVER=/usr/local/aolserver4r10</action></screen>
 <para>If you have problems starting your server with nsopenssl.so due to missing libssl.so.0.9.7 (or lower), you have to create symlinks
 <screen>
 [root nsopenssl]# <userinput>cd /usr/local/aolserver/lib</userinput>
