@@ -6,10 +6,7 @@ ad_page_contract {
     user_id:integer
 }
 
-ns_log Notice "LARS: Token = $token ; should be = [auth::get_user_secret_token -user_id $user_id]"
-
 if { ![string equal $token [auth::get_user_secret_token -user_id $user_id]] } {
-    # TODO: Fix
     set message "Bad token"
     ad_returnredirect [export_vars -base "[subsite::get_element -element url]register/account-closed" { message }]
     ad_script_abort    
