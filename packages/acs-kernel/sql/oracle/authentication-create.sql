@@ -43,7 +43,23 @@ create table auth_authorities (
     register_impl_id         integer
                              constraint auth_authority_reg_impl_fk
                              references acs_objects(object_id),
-    register_url             varchar2(4000)
+    register_url             varchar2(4000),
+    -- batch sync
+    -- Id of service contract getting batch sync doc
+    get_doc_impl_id          integer references acs_objects(object_id),
+    -- Id of service contract processing batch sync doc
+    process_doc_impl_id      integer references acs_objects(object_id),
+    -- Are batch syncs snapshots or of incremental type
+    snapshot_p               char(1) default 'f' 
+                             constraint auth_authority_snapshot_p_nn
+                             not null 
+                             constraint auth_authority_snapshot_p_ck
+                             check (snapshot_p in ('t','f')),
+    batch_sync_enabled_p     char(1) default 'f' 
+                             constraint auth_authority_bs_enabled_p_nn
+                             not null 
+                             constraint auth_authority_bs_enabled_p_ck
+                             check (batch_sync_enabled_p in ('t','f'))
 );
 
 comment on column auth_authorities.help_contact_text is '

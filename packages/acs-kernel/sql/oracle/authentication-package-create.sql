@@ -19,6 +19,10 @@ as
         register_impl_id in auth_authorities.register_impl_id%TYPE default null,
         register_url in auth_authorities.register_url%TYPE default null,
         help_contact_text in auth_authorities.help_contact_text%TYPE default null,
+        get_doc_impl_id in auth_authorities.get_doc_impl_id%TYPE default null,
+        process_doc_impl_id auth_authorities.process_doc_impl_id%TYPE default null,
+        snapshot_p auth_authorities.snapshot_p%TYPE default 'f',
+        batch_sync_enabled_p auth_authorities.batch_sync_enabled_p%TYPE default 'f',
         creation_user in acs_objects.creation_user%TYPE default null,
         creation_ip in acs_objects.creation_ip%TYPE default null,
         context_id in acs_objects.context_id%TYPE default null
@@ -48,6 +52,10 @@ as
         register_impl_id in auth_authorities.register_impl_id%TYPE default null,
         register_url in auth_authorities.register_url%TYPE default null,
         help_contact_text in auth_authorities.help_contact_text%TYPE default null,
+        get_doc_impl_id in auth_authorities.get_doc_impl_id%TYPE default null,
+        process_doc_impl_id auth_authorities.process_doc_impl_id%TYPE default null,
+        snapshot_p auth_authorities.snapshot_p%TYPE default 'f',
+        batch_sync_enabled_p auth_authorities.batch_sync_enabled_p%TYPE default 'f',
         creation_user in acs_objects.creation_user%TYPE default null,
         creation_ip in acs_objects.creation_ip%TYPE default null,
         context_id in acs_objects.context_id%TYPE default null
@@ -68,11 +76,13 @@ as
         insert into auth_authorities (authority_id, short_name, pretty_name, enabled_p, 
                                       sort_order, auth_impl_id, pwd_impl_id, 
                                       forgotten_pwd_url, change_pwd_url, register_impl_id,
-                                      help_contact_text)
+                                      help_contact_text, get_doc_impl_id, process_doc_impl_id,
+                                      snapshot_p, batch_sync_enabled_p)
         values (v_authority_id, new.short_name, new.pretty_name, new.enabled_p, 
                                       new.sort_order, new.auth_impl_id, new.pwd_impl_id, 
                                       new.forgotten_pwd_url, new.change_pwd_url, new.register_impl_id, 
-                                      new.help_contact_text);
+                                      new.help_contact_text, new.get_doc_impl_id, new.process_doc_impl_id,
+                                      new.snapshot_p, new.batch_sync_enabled_p);
 
         return v_authority_id;
     end new;

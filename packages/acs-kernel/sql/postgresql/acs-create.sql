@@ -389,6 +389,10 @@ select authority__new(
     null,              -- register_impl_id
     null,              -- register_url
     null,              -- help_contact_text
+    null,              -- get_doc_impl_id
+    null,              -- process_doc_impl_id
+    'f',               -- snapshot_p
+    'f',               -- batch_sync_enabled_p
     null,              -- creation_user
     null,              -- creation_ip
     null               -- context_id
