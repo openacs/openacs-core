@@ -54,7 +54,7 @@ insert into ad_locales (
   locale, label, language, country,
   nls_language, nls_territory, nls_charset, mime_charset, default_p
 ) values (
-  'en_US', 'American', 'en', 'US',
+  'en_US', 'American English', 'en', 'US',
   'AMERICAN', 'AMERICA', 'WE8ISO8859P1', 'ISO-8859-1', 't'
 );
 
@@ -72,7 +72,7 @@ insert into ad_locales (
   locale, label, language, country,
   nls_language, nls_territory, nls_charset, mime_charset, default_p
 ) values (
-  'es_ES', 'Spain', 'es', 'ES',
+  'es_ES', 'Spanish', 'es', 'ES',
   'SPANISH', 'SPAIN', 'WE8ISO8859P1', 'ISO-8859-1', 't'
 );
 
