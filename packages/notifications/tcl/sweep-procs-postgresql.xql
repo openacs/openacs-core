@@ -32,7 +32,7 @@
             where sent_date is null
               and creation_date <= notif_date
               and interval_id = :interval_id
-	      order by user_id, type_id, nnr.notif_date
+	      order by user_id, type_id, notif_date
         </querytext>
     </fullquery>
 
