@@ -635,15 +635,42 @@ ad_proc -public template::form::get_values { id args } {
     set elements $args
   } else {
     # Get all the form elements 
-    set level [template::adp_level]
-    upvar #$level $id:properties properties
-    set elements $properties(element_names)
+    set elements [get_elements $id]
   }
 
   foreach element_id $elements {
     upvar 2 $element_id value
     set value [template::element get_value $id $element_id]
   }
+}
+
+ad_proc -public template::form::get_elements { 
+    {-no_api:boolean}
+    id 
+} {
+    Return a list of element names for the form with given id.
+
+    @param no_api If provided, filter out form builder and ad_form API element names
+                     that start with the double underscore
+
+    @author Peter Marklund
+} {
+    set level [template::adp_level]
+    upvar #$level $id:properties properties
+    set elements $properties(element_names)
+
+    if { $no_api_p } {
+        set elements_no_api [list]
+        foreach element $elements {
+            if { ![regexp {^__} $element] } {
+                lappend elements_no_api $element
+            }
+        }
+
+        return $elements_no_api
+    } else {
+        return $elements
+    }
 }
 
 
