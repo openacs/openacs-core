@@ -1,33 +1,81 @@
-# Tracer Bullet:
-# We use this include to change the site wide locale as well as the preferred locale for
-# a user
-# @author Peter Marklund (peter@collaboraid.biz)
+ad_page_contract {
+    Change user preffered locale
 
-if { ![exists_and_not_null return_url] && [exists_and_not_null return_p] && [string equal $return_p "t"] } {
+    @author Peter Marklund (peter@collaboraid.biz)
+    @author Christian Hvid
+} {
+    { return_url "" }
+    { package_id "" }
+}
+
+if { $return_url == "" } {
     # Use referer header
     set return_url [ns_set iget [ns_conn headers] referer]
 }
 
+# Create a list of lists containing the possible locale choiches
+
+set list_of_locales [db_list_of_lists locale_loop { select label, locale from ad_locales }]
+set list_of_locales [linsert $list_of_locales 0 [list (default) ""]]
+
 form create locale
 
-element create locale return_url \
-        -datatype text \
-        -widget hidden \
-        -optional \
-        -value $return_url
+# Export variables
 
-element create locale user_locale \
-        -datatype text \
-        -widget select \
-        -label "Your Preferred Locale" \
-        -options [db_list_of_lists locale_loop { select label, locale from ad_locales }] \
-        -value [lang::user::locale]
+element create locale package_id_info -datatype text -widget hidden -optional
+element create locale return_url_info -datatype text -widget hidden -optional
 
 if { [form is_valid locale] } {
-    form get_values locale user_locale return_url
+    set return_url [element get_value locale return_url_info]
+    set package_id [element get_value locale package_id_info]
+}
 
-    lang::user::set_locale $user_locale
+element create locale site_wide_explain -datatype text -widget inform -label "&nbsp;" \
+        -value "Your locale setting for the whole site."
 
+element create locale site_wide_locale -datatype text -widget select -optional \
+        -label "Site-wide Locale" \
+        -options $list_of_locales
+
+# are we selecting package level locale as well?
+
+if { ($package_id != "") && ([ad_conn user_id] != 0) } {
+    element create locale package_level_explain -datatype text -widget inform -label "&nbsp;" \
+            -value "Your locale setting for this specific [apm_package_key_from_id $package_id] package. This will override the site-wide setting if it is set."
+    
+    element create locale package_level_locale -datatype text -widget select -optional \
+            -label "Locale for this [apm_package_key_from_id $package_id]" \
+            -options $list_of_locales
+}
+
+set timezone_options [list]
+foreach entry [lc_list_all_timezones] {
+    set tz [lindex $entry 0]
+    lappend timezone_options [list $entry $tz]
+}
+
+element create locale timezone -datatype text -widget select -optional \
+        -label "Your Timezone" \
+        -options $timezone_options
+
+if { [form is_request locale] } {
+    if { ($package_id != "") && ([ad_conn user_id] != 0) } {
+        element set_properties locale package_level_locale -value [lang::user::package_level_locale $package_id]
+    }
+    element set_properties locale site_wide_locale -value [lang::user::site_wide_locale]
+    element set_properties locale return_url_info -value $return_url
+    element set_properties locale package_id_info -value $package_id
+    element set_properties locale timezone -value [lang::user::timezone]
+}
+
+if { [form is_valid locale] } {
+    set site_wide_locale [element get_value locale site_wide_locale]
+    lang::user::set_locale -site_wide $site_wide_locale
+    if { ($package_id != "") && ([ad_conn user_id] != 0) } {
+        set package_level_locale [element get_value locale package_level_locale]
+        lang::user::set_locale -package_id $package_id $package_level_locale
+    }
+    lang::user::set_timezone [element get_value locale timezone]
     ad_returnredirect $return_url
     ad_script_abort
 }
