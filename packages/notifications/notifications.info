@@ -16,6 +16,7 @@
         <summary>Notification Management</summary>
 
         <provides url="notifications" version="0.1"/>
+        <requires url="acs-mail-lite" version="0.1d"/>
 
         <files>
             <file type="package_spec" path="notifications.info"/>
