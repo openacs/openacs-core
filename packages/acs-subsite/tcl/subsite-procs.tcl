@@ -531,20 +531,47 @@ ad_proc subsite::get_pageflow_struct {} {
 
 
     set pageflow [list]
-    lappend pageflow home {
-        label "Home"
-        folder ""
-        url ""
-        selected_patterns {
-            ""
-            "subsites"
+
+    set subsite_url [subsite::get_element -element url]
+    set subsite_id [ad_conn subsite_id]
+    array set subsite_sitenode [site_node::get -url $subsite_url]
+    set subsite_node_id $subsite_sitenode(node_id)
+
+    set index_redirect_url [parameter::get -parameter "IndexRedirectUrl" -package_id $subsite_id]
+
+    set child_urls [lsort -ascii [site_node::get_children -node_id $subsite_node_id -package_type apm_application]]
+
+    if { [empty_string_p $index_redirect_url] } {
+        lappend pageflow home {
+            label "Home"
+            folder ""
+            url ""
+            selected_patterns {
+                ""
+                "subsites"
+            }
+        }
+    } else {
+        # See if the redirect-url to a package inside this subsite
+        for { set i 0 } { $i < [llength $child_urls] } { incr i } {
+            array set child_node [site_node::get_from_url -exact -url [lindex $child_urls $i]]
+            if { [string equal $index_redirect_url "$child_node(name)/"] } {
+                lappend pageflow $child_node(name) [list \
+                                                        label "Home" \
+                                                        folder $child_node(name) \
+                                                        url {} \
+                                                        selected_patterns *]
+                set child_urls [lreplace $child_urls $i $i]
+                break
+            }
         }
     }
 
+
     set user_id [ad_conn user_id]
     set admin_p [permission::permission_p -object_id \
-	    [site_node_closest_ancestor_package "acs-subsite"] -privilege admin]
-    set show_member_list_to [parameter::get -parameter "ShowMembersListTo" -default 2]
+                     [site_node_closest_ancestor_package "acs-subsite"] -privilege admin -party_id [ad_conn untrusted_user_id]]
+    set show_member_list_to [parameter::get -parameter "ShowMembersListTo" -package_id $subsite_id -default 2]
 
     if { $admin_p || ($user_id != 0 && $show_member_list_to == 1) || \
 	$show_member_list_to == 0 } {
@@ -555,12 +582,6 @@ ad_proc subsite::get_pageflow_struct {} {
 	}
     }
 
-
-    set subsite_url [subsite::get_element -element url]
-    array set subsite_sitenode [site_node::get -url $subsite_url]
-    set subsite_node_id $subsite_sitenode(node_id)
-
-    set child_urls [lsort -ascii [site_node::get_children -node_id $subsite_node_id -package_type apm_application]]
 
     foreach child_url $child_urls {
         array set child_node [site_node::get_from_url -exact -url $child_url]
