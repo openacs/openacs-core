@@ -27,6 +27,20 @@ http://[your-host]/doc.
 The APM will die if you attempt to install more than a few
 packages at once in the Oracle version.  This is due to the list of required
 files being stored in a varchar which is limited in Oracle to being 4,000 bytes long.
+<h4>Site Wide Searching</h4>
+If you're using Oracle 8.1.6 or 8.1.7 Enterprise Edition you may want to uncomment
+the SQL that causes InterMedia to keep online searching online while indexing.
+The feature doesn't exist in Standard Edition and OpenACS 4 now defaults to being 
+loadable in SE.  Just grep for 'sync' to find the code.
+<p>Also be sure to read the documentation in the Site Wide Search package's
+sql/oracle directory.  The APM doesn't execute the SQL for this package, in
+part due to the fact that some steps need to be run as the Oracle user 
+'ctxsys'.
+<p>
+If you're using PostgreSQL be sure to read the documentation on installing the
+Open FTS driver for OpenACS.  It's included in the package as a text file.  As
+with the Oracle version, there are steps you must take manually in order to
+get this feature working.
 <h4>Testing Notes</h4>
 Here are some notes from our testing group.  While not quite up to date it should
 give you some ideas of where things stand.  
