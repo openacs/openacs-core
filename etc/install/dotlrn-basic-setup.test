@@ -39,8 +39,8 @@ if { [catch {
     ::twt::util::log "Set up class forums - one per class"
     ::twt::forums::add_default_forums $server_url
     
-    ::twt::util::log "Add forum postings"
-    ::twt::forums::add_postings 
+    #::twt::util::log "Add forum postings"
+    #::twt::forums::add_postings 
     
     ::twt::util::log "Add news items - one per class"
     ::twt::news::add_item_to_classes $server_url

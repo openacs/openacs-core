@@ -27,7 +27,7 @@ ad_proc ::twt::user::get_random_users { type number } {
 } {
     set email_list [get_users $type]
 
-    return [get_random_items_from_list $email_list $number]
+    return [::twt::util::get_random_items_from_list $email_list $number]
 }
 
 ad_proc ::twt::user::get_password { email } {

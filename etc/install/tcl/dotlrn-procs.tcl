@@ -34,6 +34,10 @@ ad_proc ::twt::dotlrn::setup_terms { server_url } {
     add_term $server_url "Fall" "September" "2004" "January" "2005"    
 }
 
+ad_proc ::twt::dotlrn::current_term_pretty_name {} {
+    return "Fall 2003/2004"
+}
+
 ad_proc ::twt::dotlrn::add_department { server_url pretty_name description external_url } {
 
     do_request "$server_url/dotlrn/admin/department-new"
@@ -112,7 +116,7 @@ ad_proc ::twt::dotlrn::get_class_add_urls { server_url } {
 
 ad_proc ::twt::dotlrn::setup_classes { server_url } {
 
-    setup_classes_for_term $server_url "Fall 2003/2004"
+    setup_classes_for_term $server_url "[::twt::dotlrn::current_term_pretty_name]"
     setup_classes_for_term $server_url "Spring 2004"
 }
 

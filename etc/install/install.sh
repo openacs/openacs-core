@@ -359,6 +359,5 @@ if parameter_true $do_install; then
   echo "$0: Finished (re)installing $serverroot at $(date).  Access the new site at $server_url with admin username $admin_email and password $admin_password"
   
   # Warn about errors in the HTML returned from the server
-  ./warn-if-installation-errors.sh `get_config_param openacs_output_file`
-  ./warn-if-installation-errors.sh `get_config_param openacs_packages_output_file`
+  ./warn-if-installation-errors.sh `get_config_param install_output_file`
 fi

@@ -50,7 +50,7 @@ ad_proc ::twt::class::get_professor { class_url } {
 
 ad_proc ::twt::class::setup_memberships { server_url } {
 
-    foreach admin_url [get_admin_urls $server_url "Fall 2003/2004"] {
+    foreach admin_url [get_admin_urls $server_url "[::twt::dotlrn::current_term_pretty_name]"] {
 
         # Admin page for the class
         do_request "$admin_url"
@@ -109,7 +109,7 @@ ad_proc ::twt::class::add_member { email role } {
 
 ad_proc ::twt::class::setup_subgroups { server_url } {
 
-    foreach admin_url [get_admin_urls $server_url "Fall 2003/2004"] {
+    foreach admin_url [get_admin_urls $server_url "[::twt::dotlrn::current_term_pretty_name]"] {
 
         foreach {name description policy} [subcommunity_properties_list] {
 
@@ -145,7 +145,7 @@ ad_proc ::twt::class::subcommunity_properties_list {} {
 
 ad_proc ::twt::class::add_member_applets { server_url } {
 
-    foreach admin_url [get_admin_urls $server_url "Fall 2003/2004"] {
+    foreach admin_url [get_admin_urls $server_url "[::twt::dotlrn::current_term_pretty_name]"] {
 
         # Only add the members applet to computing classes so that we can
         # demo adding it to other classes manually
