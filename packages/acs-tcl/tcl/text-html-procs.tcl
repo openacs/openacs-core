@@ -1273,6 +1273,15 @@ ad_proc -public ad_html_text_convert {
 
     <p>
 
+    Example: ad_html_text_convert -from "text/html" -to "text/plain" -- "text"
+
+    <p>
+
+    Putting in the -- prevents Tcl from treating a - in text portion
+    from being treated as a parameter.
+
+    <p>
+
     Html to html closes any unclosed html tags 
     (see util_close_html_tags).
     
