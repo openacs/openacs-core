@@ -458,7 +458,7 @@ namespace eval acs_mail_lite {
             if { [string equal [bounce_sendmail] "SMTP"] } {
                 ## Terminate body with a solitary period
                 foreach line [split $msg "\n"] { 
-                    if [string match . [strim trim $line]] {
+                    if {[string match . [string trim $line]]} {
                         append data .
                     }
                     append data "$line\r\n"
