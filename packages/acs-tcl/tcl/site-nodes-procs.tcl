@@ -108,7 +108,7 @@ namespace eval site_node {
         }
 
         # Instantiate the package
-        set package_id [apm_package_instance_new $package_name $context_id $package_key]
+        set package_id [apm_package_instance_new -- $package_name $context_id $package_key]
 
         # Mount the package
         site_node::mount -node_id $node_id -object_id $package_id
