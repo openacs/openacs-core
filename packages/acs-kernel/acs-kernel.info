@@ -22,6 +22,7 @@
             <file type="package_spec" path="acs-kernel.info"/>
             <file type="java_code" path="java/src/com/arsdigita/acs/acsKernel/test/ACSCommon.java"/>
             <file type="java_code" path="java/src/com/arsdigita/acs/acsKernel/test/SessionsTest.java"/>
+            <file type="data_model" db_type="oracle" path="sql/oracle/acs-create-2.sql"/>
             <file type="data_model" db_type="oracle" path="sql/oracle/acs-create.sql"/>
             <file type="data_model" db_type="oracle" path="sql/oracle/acs-drop.sql"/>
             <file type="data_model" db_type="oracle" path="sql/oracle/acs-install.sql"/>
@@ -31,6 +32,8 @@
             <file type="data_model" db_type="oracle" path="sql/oracle/acs-logs-drop.sql"/>
             <file type="data_model" db_type="oracle" path="sql/oracle/acs-metadata-create.sql"/>
             <file type="data_model" db_type="oracle" path="sql/oracle/acs-metadata-drop.sql"/>
+            <file type="data_model" db_type="oracle" path="sql/oracle/acs-object-util-remove.sql"/>
+            <file type="data_model" db_type="oracle" path="sql/oracle/acs-object-util.sql"/>
             <file type="data_model" db_type="oracle" path="sql/oracle/acs-objects-create.sql"/>
             <file type="data_model" db_type="oracle" path="sql/oracle/acs-objects-drop.sql"/>
             <file type="data_model" db_type="oracle" path="sql/oracle/acs-permissions-create.sql"/>
@@ -64,6 +67,8 @@
             <file type="data_model" db_type="oracle" path="sql/oracle/test/rel-segments-test-types-create.sql"/>
             <file type="data_model" db_type="oracle" path="sql/oracle/test/rel-segments-test-types-drop.sql"/>
             <file type="data_model" db_type="oracle" path="sql/oracle/test/rel-segments-test.sql"/>
+            <file type="data_model" db_type="oracle" path="sql/oracle/tree-create.sql"/>
+            <file type="data_model" db_type="oracle" path="sql/oracle/tree-drop.sql"/>
             <file type="data_model_upgrade" db_type="oracle" path="sql/oracle/upgrade/upgrade-4.0-4.0.1.sql"/>
             <file type="data_model_upgrade" db_type="oracle" path="sql/oracle/upgrade/upgrade-4.0.1-4.1b.sql"/>
             <file type="data_model_upgrade" db_type="oracle" path="sql/oracle/upgrade/upgrade-4.0b2-4.0rc0.sql"/>
@@ -75,6 +80,7 @@
             <file type="data_model_upgrade" db_type="oracle" path="sql/oracle/upgrade/upgrade-beta-1-beta-2.sql"/>
             <file type="data_model" db_type="oracle" path="sql/oracle/utilities-create.sql"/>
             <file type="data_model" db_type="oracle" path="sql/oracle/utilities-drop.sql"/>
+            <file type="data_model" db_type="postgresql" path="sql/postgresql/acs-create-2.sql"/>
             <file type="data_model" db_type="postgresql" path="sql/postgresql/acs-create.sql"/>
             <file type="data_model" db_type="postgresql" path="sql/postgresql/acs-drop.sql"/>
             <file type="data_model" db_type="postgresql" path="sql/postgresql/acs-install.sql"/>
@@ -84,6 +90,8 @@
             <file type="data_model" db_type="postgresql" path="sql/postgresql/acs-logs-drop.sql"/>
             <file type="data_model" db_type="postgresql" path="sql/postgresql/acs-metadata-create.sql"/>
             <file type="data_model" db_type="postgresql" path="sql/postgresql/acs-metadata-drop.sql"/>
+            <file type="data_model" db_type="postgresql" path="sql/postgresql/acs-object-util-remove.sql"/>
+            <file type="data_model" db_type="postgresql" path="sql/postgresql/acs-object-util.sql"/>
             <file type="data_model" db_type="postgresql" path="sql/postgresql/acs-objects-create.sql"/>
             <file type="data_model" db_type="postgresql" path="sql/postgresql/acs-objects-drop.sql"/>
             <file type="data_model" db_type="postgresql" path="sql/postgresql/acs-permissions-create.sql"/>
@@ -122,6 +130,10 @@
             <file type="data_model" db_type="postgresql" path="sql/postgresql/test/rel-segments-test.sql"/>
             <file type="data_model" db_type="postgresql" path="sql/postgresql/utilities-create.sql"/>
             <file type="data_model" db_type="postgresql" path="sql/postgresql/utilities-drop.sql"/>
+            <file type="data_model" db_type="oracle" path="sql/test/rel-constraints-test.sql"/>
+            <file type="data_model" db_type="oracle" path="sql/test/rel-segments-test-types-create.sql"/>
+            <file type="data_model" db_type="oracle" path="sql/test/rel-segments-test-types-drop.sql"/>
+            <file type="data_model" db_type="oracle" path="sql/test/rel-segments-test.sql"/>
             <file type="data_model_upgrade" path="upgrade-3.4-4.0/core-migrate.sql"/>
             <file type="data_model_upgrade" path="upgrade-3.4-4.0/resequence.sql"/>
             <file path="upgrade-3.4-4.0/upgrade.html"/>
