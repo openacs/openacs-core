@@ -56,6 +56,8 @@ ad_proc -public parameter::get {
 } {
     Get the value of a package parameter.
 
+    @param localize should we attempt to localize the parameter 
+    @param boolean insure boolean parameters are normalized to 0 or 1
     @param package_id what package to get the parameter from. defaults to
     [ad_conn package_id]
     @param parameter which parameter's value to get
