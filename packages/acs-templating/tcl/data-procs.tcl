@@ -91,6 +91,19 @@ ad_proc -public template::data::validate::filename { value_ref message_ref } {
   return $result 
 }
 
+ad_proc -public template::data::validate::email { value_ref message_ref } {
+
+  upvar 2 $message_ref message $value_ref value
+
+  set result [util_email_valid_p $value]
+
+  if { ! $result } {
+    set message "Invalid email format \"$value\""
+  }
+   
+  return $result 
+}
+
 ad_proc -public template::data::validate::url { value_ref message_ref } {
 
   upvar 2 $message_ref message $value_ref value
