@@ -556,13 +556,22 @@ ad_proc -public apm_load_any_changed_libraries {} {
 		    # Perform this ns_log only during the first iteration of this loop.
 		    ns_log "Notice" "APM: Reloading *-procs.tcl files in this interpreter..."
 		}
-		ns_log "Notice" "APM: Reloading $file..."
 		# File is usually of form packages/package_key
 		set file_path "[acs_root_dir]/$file"
-                switch [apm_guess_file_type "" $file] {
-                    tcl_procs -
-                    test_procs { apm_source [acs_root_dir]/$file }
-                    query_file { db_qd_load_query_file [acs_root_dir]/$file }
+                set file_ext [file extension $file_path]
+                
+                switch $file_ext {
+                    .tcl { 
+                        ns_log Notice "APM: Reloading $file..."
+                        apm_source $file_path
+                    }
+                    .xql { 
+                        ns_log Notice "APM: Reloading $file..."
+                        db_qd_load_query_file $file_path
+                    }
+                    default {
+                        ns_log Notice "APM: $file has unknown file type, '$file_type': Not reloading."
+                    }
                 }
 
 		set reloaded_files($file) 1
