@@ -1,12 +1,7 @@
 <master>
  <property name="title">@page_title@</property>
-
-<h2>@page_title@</h2>
-
-@context_bar@
-
-<hr />
-
+ <property name="context_bar">@context_bar@</property>
+ 
 <div>
 
 <p>Your locale is <strong>@locale_label@</strong> [ <tt>@current_locale@</tt> ]</p>

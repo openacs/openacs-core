@@ -1,10 +1,6 @@
 <master>
-  <property name="title">Messages Administration</property>
-
-<h2>Localized Messages</h2>
-@context_bar@
-
-<hr />
+  <property name="title">Localized Messages</property>
+  <property name="context_bar">@context_bar@</property>
 
 <div>
 
