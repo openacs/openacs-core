@@ -59,6 +59,7 @@ if [ ! -r ${config_file} ]; then
 fi
 
 # Set important configuration parameters
+server=`get_config_param server`
 serverroot=`get_config_param serverroot`
 svscanroot=`get_config_param svscanroot`
 database=`get_config_param database`
@@ -131,6 +132,11 @@ fi
 echo "$0: Starting installation with config_file $config_file. Using serverroot=$serverroot, server_url=$server_url, do_checkout=$do_checkout, do_install=${do_install}, dotlrn=$dotlrn, and database=$database."
 prompt_continue $interactive
 
+# Create the user
+# TODO - make this optional.  Check if the user exists first
+echo "$0: Creating the user $servername at $(date)"
+useradd -m -g web $server -d /home/$server
+
 # stop the server
 echo "$0: Taking down $serverroot at $(date) with command ${stop_server_command}"
 $stop_server_command
@@ -143,6 +149,8 @@ $stop_server_command
 
 echo "$0: Waiting $shutdown_seconds seconds for server to shut down at $(date)"
 sleep $shutdown_seconds
+
+# TODO - instead of waiting, do a real check wherever we currently sleep
 
 # Recreate the database user
 echo "$0: Recreating database user at $(date)"
