@@ -131,6 +131,10 @@ ad_proc -public site_node::mount {
         ns_mutex unlock [nsv_get site_nodes_mutex mutex]
     }
 
+    # update context_id
+    set context_id [site_node::closest_ancestor_package -node_id $node_id]
+    db_dml update_package_context_id ""
+
     apm_invoke_callback_proc -package_key [apm_package_key_from_id $object_id] -type "after-mount" -arg_list [list node_id $node_id package_id $object_id]
 
 }
