@@ -204,7 +204,7 @@ ad_proc -private pkg_info_comment {pkg_info} {
 ad_proc -private apm_dependency_check {
     {-callback apm_dummy_callback}
     {-initial_install:boolean}
-    {-pkg_info_all}
+    {-pkg_info_all {}}
     spec_files
 } {
     Check dependencies of all the packages provided.
@@ -258,7 +258,8 @@ ad_proc -private apm_dependency_check {
 
     # Outer loop tries to find a package from the pkg_info_all list to add if 
     # we're stuck because of unsatisfied dependencies
-    while { $updated_p && [exists_and_not_null pkg_info_all] } {
+    set updated_p 1
+    while { $updated_p } {
 
         # Inner loop tries to add another package from the install_pend list
         while { $updated_p && [exists_and_not_null install_pend]} {
@@ -302,8 +303,8 @@ ad_proc -private apm_dependency_check {
 
         set updated_p 0
         
-        if { [exists_and_not_null install_pend] } {
-            # Okay, there are some packages that could be installed
+        if { [exists_and_not_null install_pend] && [llength $pkg_info_all] > 0 } {
+            # Okay, there are some packages that could not be installed
             
             # Let's find a package, which
             # - have unsatisfied requirements
