@@ -155,7 +155,7 @@ ad_proc -public content::revision::update_content {
     
     @error 
 } {
-    db_dml update_content ""
+    db_dml update_content "" -blobs [list $content]
 }
 
 ad_proc -public content::revision::content_copy {

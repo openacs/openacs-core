@@ -109,7 +109,6 @@ aa_register_case content_item {
             # see if the item exists or not
             
             content::item::delete -item_id $evil_item_id
-            aa_true "evil_name item deleted"
             array unset evil_name
             aa_true "evil_name item no longer exists" [expr \
                 [content::item::get \
