@@ -819,7 +819,7 @@ ad_proc db_transaction { transaction_code args } {
 	}
 	3 {
 	    # TCL_BREAK - Abort the transaction and do the break.
-	    ns_db dml $db "abort transaction"
+	    ns_db dml $dbh "abort transaction"
 	    db_release_unused_handles
 	    break
 	}
@@ -837,6 +837,17 @@ ad_proc db_transaction { transaction_code args } {
 	db_abort_transaction
 	if { [info exists on_error] && ![empty_string_p $on_error] } {
 	    # An on_error block exists, so execute it.
+            if {[string equal postgresql [db_type]]} { 
+                # JCD: with postgres we abort the transaction prior to 
+                # executing the on_error block since there is nothing 
+                # you can do to "fix it" and keeping it meant things like 
+                # queries in the on_error block would then fail.
+                # 
+                # Note that the semantics described in the proc doc 
+                # are not possible to support on postresql.
+                ns_db dml $dbh "abort transaction"
+                db_release_unused_handles
+            }
 	    set errno  [catch {
 		uplevel 1 $on_error
 	    } on_errmsg]
@@ -852,7 +863,7 @@ ad_proc db_transaction { transaction_code args } {
 		}
 		3 {
 		    # TCL_BREAK
-		    ns_db dml $db "abort transaction"
+		    ns_db dml $dbh "abort transaction"
 		    db_release_unused_handles
 		    break
 		}
