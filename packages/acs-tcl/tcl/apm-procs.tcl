@@ -328,7 +328,7 @@ ad_proc -private apm_load_queries {
         set dirs [apm_subdirs "${base}www"]
 	set paths [list]
 
-        # DRB: For now just slurp all .sql files
+        # DRB: For now just slurp all .xql files
 	foreach dir $dirs {
 	    set paths [concat $paths [glob -nocomplain [file join $dir *.xql]]]
 	}

@@ -5,8 +5,8 @@
 #
 # Ben Adida (ben@mit.edu)
 #
-# STATE OF THIS FILE (4/2/2001) - BMA:
-# This is working correctly now for loading up FullQueries and dispatching!
+# STATE OF THIS FILE (4/20/2001) - ben:
+# This is working well with relative and absolute path names
 #
 
 # The Query Dispatcher is documented at http://openacs.org/
@@ -169,8 +169,15 @@ proc db_qd_get_fullname {local_name {added_stack_num 1}} {
 
 	# Means we are running inside an URL
 
+	# TEST
+	for {set i 0} {$i < 6} {incr i} {
+	    if {[catch {ns_log Notice "QD=LEVEL=$i= [info level [expr "-1 - $i"]]"} errmsg]} {}
+	}
+
 	# Check the ad_conn stuff
-	# if {[catch {ns_log Notice "QD= the ad_conn file is [ad_conn file]"} errmsg]} {}
+	if {[ns_conn isconnected]} {
+	    if {[catch {ns_log Notice "QD= the ad_conn file is [ad_conn file]"} errmsg]} {}
+	}
 
 	# Now we do a check to see if this is a directly accessed URL or a sourced URL
 	if {[regexp {^ns_sourceproc} $proc_name all]} {

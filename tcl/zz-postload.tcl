@@ -28,4 +28,20 @@ foreach init_item [nsv_get ad_after_server_initialization .] {
 	ns_log "Error" "Error executing initialization code block $init(name) in $init(script): $errorInfo"
     }
 }
+
+# OpenACS (ben)
+# We need to load query files for the top-level stuff in www and tcl
+set dirs {www tcl}
+set oacs_root [acs_root_dir]
+
+foreach dir $dirs {
+    set files [glob -nocomplain "${oacs_root}/$dir/*.xql"]
+    
+    ns_log Notice "QD=Postload files to load: $files"
+
+    foreach file $files {
+	db_qd_load_query_file $file
+    }
+}
+
 nsv_unset ad_after_server_initialization .

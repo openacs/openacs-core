@@ -23,7 +23,6 @@ set subsite_name [db_string name {
     select acs_object.name(:package_id) from dual
 }]
 
-
 set node_id [ad_conn node_id]
 
 db_multirow nodes site_nodes {
