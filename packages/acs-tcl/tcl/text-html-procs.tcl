@@ -291,11 +291,11 @@ ad_proc -private util_close_html_tags {
 
         if {![regexp "(\[^<]*)(<(/?)(\[^ \r\n\t>]+)(\[^>]*)>)?(.*)" $frag match pretag fulltag close tag tagbody frag]} {
             # should never get here since above will match anything.
-            # puts "NO MATCH: should never happen! frag=$frag"
+            ns_log Error "util_close_html_tag - NO MATCH: should never happen! frag=$frag"
             append out $frag 
             set frag {}
         } else {
-            # puts "\n\nmatch=$match\n pretag=$pretag\n fulltag=$fulltag\n close=$close\n tag=$tag\n tagbody=$tagbody\nfrag=$frag\n\n"
+            #ns_log Notice "pretag=$pretag\n fulltag=$fulltag\n close=$close\n tag=$tag\n tagbody=$tagbody frag length is [string length $frag]"
             if { ! $discard } {
                 # figure out if we can break with the pretag chunk 
                 if { $break_soft } {
