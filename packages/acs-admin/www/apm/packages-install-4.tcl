@@ -93,6 +93,10 @@ foreach pkg_info $pkg_install_list {
     }
     incr installed_count
 }
+
+# Reload Tcl libraries and queries etc. for all enabled packages so that a restart
+# isn't needed
+apm_load_packages -force_reload -packages $pkg_enable_list
     
 if {$installed_count < 1} {
     ns_write "</ul>
