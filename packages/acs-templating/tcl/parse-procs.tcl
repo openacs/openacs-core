@@ -76,7 +76,7 @@ ad_proc -private template::adp_parse { __adp_stub __args } {
 
     # ensure that template output procedure exists and is up-to-date
     template::adp_init $template_extension $__adp_stub
-  
+
     # get result of template output procedure into __adp_output
     template::code::${template_extension}::$__adp_stub
   
@@ -391,11 +391,27 @@ ad_proc -private template::adp_compile_chunk { chunk } {
   # last balanced tag in the chunk to the list
 
   if { ! [string is space $remaining] } {
-    # protect double quotes, brackets, the dollar sign, and backslash
-    regsub -all {[\]\[""\\$]} $remaining {\\&} quoted
 
-    adp_append_string $quoted
+    adp_quote_chunk remaining remaining_quoted
+
+    adp_append_string $remaining_quoted
   }
+}
+
+ad_proc -private template::adp_quote_chunk { chunk_var_name quoted_var_name } {
+  Quotes (precedes by backslash) all square brackets, curly braces, 
+  double quotes, backslashes, and dollar signs in a chunk of adp.
+
+  @param chunk_var_name  The name of the variable to quote
+  @param quoted_var_name The name of the variable to put the quoted result in
+
+  @author Peter Marklund (peter@collaboraid.biz)
+
+  @creation-date 2002-10-16
+} {
+  upvar $chunk_var_name chunk $quoted_var_name quoted
+
+  regsub -all {[\]\[\{\}\"\\$]} $chunk {\\&} quoted
 }
 
 ad_proc -private template::adp_append_string { s } {
@@ -458,9 +474,8 @@ ad_proc -private template::adp_tag_init { {tag_name ""} } {
   set chunk [ns_adp_dump]
 
   if { ! [string is space $chunk] } {
-    # protect double quotes, brackets, the dollar sign, and backslash
-    regsub -all {[\]\[""\\$]} $chunk {\\&} quoted
-    adp_append_string $quoted
+    adp_quote_chunk chunk chunk_quoted
+    adp_append_string $chunk_quoted
   }
 
   # flush the output buffer so that the next dump will only catch
