@@ -10,7 +10,24 @@
 # http://www.fsf.org/copyleft/gpl.html
 
 ad_proc -public template::paginator { command args } {
+    pagination object.  Please see the individual command for
+    their arguments.
 
+    @see template::paginator 
+    @see template::paginator::create 
+    @see template::paginator::get_context 
+    @see template::paginator::get_data 
+    @see template::paginator::get_display_info 
+    @see template::paginator::get_group 
+    @see template::paginator::get_group_count 
+    @see template::paginator::get_groups 
+    @see template::paginator::get_page 
+    @see template::paginator::get_page_count 
+    @see template::paginator::get_pages 
+    @see template::paginator::get_row 
+    @see template::paginator::get_row_count 
+    @see template::paginator::get_row_ids 
+} {
   eval paginator::$command $args
 }
 

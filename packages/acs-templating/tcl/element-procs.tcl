@@ -9,9 +9,36 @@
 # This is free software distributed under the terms of the GNU Public
 # License.  Full text of the license is available from the GNU Project:
 # http://www.fsf.org/copyleft/gpl.html
+ad_proc -public element { command form_id element_id args } {
+    form is really template::element although when in 
+    the "template" namespace you may omit the
+    template:: 
+
+    @see template::element
+} -    
 
 ad_proc -public template::element { command form_id element_id args } {
+    Manage elements of form objects. 
+    <p>
+    see the individual commands for further information.
+    @param command one of create, error_p, exists, get_property, get_value, 
+                          get_values, querygetall, set_error, set_properties, set_value
+    @param form_id string identifying the form 
+    @param element_id string identifying the element
 
+    @see template::element::create
+    @see template::element::error_p
+    @see template::element::exists
+    @see template::element::get_property
+    @see template::element::get_value
+    @see template::element::get_values
+    @see template::element::querygetall
+    @see template::element::set_error
+    @see template::element::set_properties
+    @see template::element::set_value 
+    
+    @see template::form
+} {
   eval template::element::$command $form_id $element_id $args
 }
 

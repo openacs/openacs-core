@@ -589,15 +589,53 @@ ad_proc -private template::query::flush_cache { cache_match } {
 
 }
 
+
+ad_proc -public multirow {
+    {-ulevel 1}
+    {-local:boolean}
+    op
+    name
+    args
+} { 
+    multirow is really template::multirow or possibly 
+    template::query::multirow depending on context.
+    the "template::" or "template::query::"
+    may be ommitted depending on what the namespace 
+    is.  .tcl pages are evaluated in the template:: 
+    namespace.
+
+    @see template::multirow
+    @see template::query::multirow
+} -        
+
 ad_proc -public template::multirow { 
   {-ulevel 1}
   {-local:boolean}
-  op
+  command
   name
   args
 } {
-    Perform get/set operations on a multirow datasource
+    Create/Manipulate a multirow datasource (for use with &lt;multiple&gt; tags)
 
+    <dl>
+    <dt> <b>template::multirow create datasourcename column [column ...]</b></dt>
+    <dd> creates a multirow datasource of datasourcename </dd>
+    <dt> <b>template::multirow extend datasourcename column [column ...] </b></dt>
+    <dd> extend adds a column to an existing multirow</dd>
+    <dt> <b>template::multirow append datasourcename value [value ...]</b></dt>
+    <dd> appends the row to an existing multirow.</dd>
+    <dt> <b>template::multirow size datasourcename</b></dt>
+    <dd> returns the rowcount</dd>
+    <dt> <b>template::multirow get datasourcename rownum [column]</b></dt>
+    <dd> returns the row of of data (or the particular row/column if column is provided)</dd>
+    <dt> <b>template::multirow get datasourcename rownum column value</b></dt>
+    <dd> set an element value</dd>
+    <dt> <b>template::multirow foreach datasource code </b></dt>
+    <dd> evaluate code block for each row (like db_foreach)</dd>
+    <dt> <b>template::multirow upvar datasource [new_name]</b></dt>
+    <dd> upvar the multirow, aliasing to new_name if provided</dd>
+    </dl>
+    
     @param local 
            If set, the multirow will be looked for in the scope the number 
            of levels up given by ulevel (normally the caller's scope), 
@@ -608,13 +646,16 @@ ad_proc -public template::multirow {
            Used in conjunction with the "local" parameter to specify how 
            many levels up the multirow variable resides.
 
-    @param op 
+    @param command
            Multirow datasource operation: create, extend, append, 
                                           size, get, set, foreach
 
     @param name Name of the multirow datasource
 
     @param args optional args
+
+    @see db_multirow
+    @see template::query::multirow
 } {  
   if { $local_p } {
     set multirow_level_up $ulevel
@@ -622,7 +663,7 @@ ad_proc -public template::multirow {
     set multirow_level_up \#[adp_level]
   }
   
-  switch -exact $op {
+  switch -exact $command {
 
     create {
       upvar $multirow_level_up $name:rowcount rowcount $name:columns columns
@@ -768,7 +809,7 @@ ad_proc -public template::multirow {
     }
 
     default {
-      error "Unknown op $op in template::multirow.
+      error "Unknown command $command in template::multirow.
       Must be create, extend, append, get, set, size, upvar, or foreach."
     }
   }
