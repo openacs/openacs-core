@@ -4,7 +4,7 @@
 #  return_url:optional
 #  edit_p:optional
 #  message:optional
-#
+#  show_groups_p:optional
 
 auth::require_login -account_status closed
 
@@ -18,6 +18,9 @@ if { ![exists_and_not_null return_url] } {
     set return_url [ad_conn url]
 }
 
+if { ![exists_and_not_null show_groups_p] } {
+    set show_groups_p 1
+}
 
 set action_url "[subsite::get_element -element url]user/basic-info-update"
 
