@@ -130,6 +130,7 @@ db_transaction {
       set first_names = :first_names,
       last_name = :last_name
       where person_id = :user_id"
+    person::name_flush -person_id $user_id
     db_dml update_users "update users
       set screen_name=:screen_name
       where user_id = :user_id"
