@@ -62,10 +62,10 @@ content revision will also be created.
     @param title - title of content_revision to be created
     @param description of content_revision to be created
     @param text - text of content revision to be created
-    @param attributes - A list of pairs of additional attributes and
+    @param attributes - A list of lists ofpairs of additional attributes and
     their values to pass to the constructor. Each pair is a list of two
      elements: key => value such as
-    [list attribute value attribute value]
+    [list [list attribute value] [list attribute value]]
 
     @return item_id of the new content item
 

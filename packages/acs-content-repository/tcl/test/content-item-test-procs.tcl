@@ -56,7 +56,7 @@ aa_register_case content_item {
                                             -name "$test_name" \
                                             -item_id $first_item_id \
                                             -parent_id $first_folder_id \
-                                            -attributes [list title "$test_name"]
+                                            -attributes [list [list title "$test_name"]]
                                        ]
 
             aa_true "First item created" [expr $first_item_id == $returned_first_item_id]
@@ -86,7 +86,7 @@ aa_register_case content_item {
                                             -name "${evil_test_name}" \
                                             -item_id $evil_item_id \
                                             -parent_id $first_folder_id \
-                                            -attributes [list title "${evil_test_name}"]
+                                           -attributes [list [list title "${evil_test_name}"]]
                                        ]
 
             aa_true "Evil_name item created" [expr $evil_item_id == $returned_evil_item_id]
@@ -156,7 +156,7 @@ aa_register_case content_item {
                                             -item_id $new_type_item_id \
                                             -parent_id $first_folder_id \
                                             -content_type  "__test_type" \
-                                            -attributes [list title "Title" attribute_name "attribute_value"]]
+                                               -attributes [list [list title "Title"] [list attribute_name "attribute_value"]]]
 
             #########################################################
             # check that the item exists

@@ -60,10 +60,10 @@ ad_proc -public ::content::revision::new {
 
     @param creation_ip
 
-    @param attributes A list of pairs of additional attributes and
+    @param attributes A list of lists of pairs of additional attributes and
     their values to pass to the constructor. Each pair is a list of two
      elements: key => value such as
-    [list attribute value attribute value]
+    [list [list attribute value] [list attribute value]]
 
     @return 
     
@@ -96,7 +96,8 @@ ad_proc -public ::content::revision::new {
 		lappend valid_attributes [lindex $type_attribute 2]
 	    }
 	}
-	foreach {attribute_name attribute_value} $attributes {
+	foreach attribute_pair $attributes {
+            foreach {attribute_name attribute_value} $attribute_pair {break}
 	    if {[lsearch $valid_attributes $attribute_name] > -1}  {
 
                 # first add the column name to the list
