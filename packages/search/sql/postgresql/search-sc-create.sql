@@ -21,7 +21,7 @@ select acs_sc_operation__new (
            'search',				-- operation_name
 	   'Search',                		-- operation_desc
 	   'f',					-- operation_iscachable_p
-	   3,					-- operation_nargs
+	   6,					-- operation_nargs
 	   'FtsEngineDriver.Search.InputType',	-- operation_inputtype
 	   'FtsEngineDriver.Search.OutputType'	-- operation_outputtype
 );
@@ -41,7 +41,7 @@ select acs_sc_operation__new (
            'index', 				-- operation_name
 	   'Index',                 		-- operation_desc
 	   'f',					-- operation_iscachable_p
-	   3,					-- operation_nargs
+	   4,					-- operation_nargs
 	   'FtsEngineDriver.Index.InputType',	-- operation_inputtype
 	   'FtsEngineDriver.Index.OutputType'	-- operation_outputtype
 );
@@ -81,7 +81,7 @@ select acs_sc_operation__new (
            'update_index',			-- operation_name
 	   'Update Index',             		-- operation_desc
 	   'f',					-- operation_iscachable_p
-	   3,					-- operation_nargs
+	   4,					-- operation_nargs
 	   'FtsEngineDriver.UpdateIndex.InputType',	-- operation_inputtype
 	   'FtsEngineDriver.UpdateIndex.OutputType'	-- operation_outputtype
 );
@@ -175,6 +175,8 @@ select acs_sc_operation__new (
 	   'FtsContentProvider.Url.InputType',		-- operation_inputtype
 	   'FtsContentProvider.Url.OutputType'		-- operation_outputtype
 );
+
+
 
 
 
