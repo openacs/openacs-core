@@ -104,6 +104,18 @@ ln -s /usr/local/aolserver40r2 /usr/local/aolserver</action></screen>
               <programlisting>nspostgres.c: In function `Ns_PgTableList':
 nspostgres.c:679: warning: passing arg 3 of `Tcl_DStringAppend' as signed due to prototype</programlisting>
               <para>then PostGreSQL is probably not in the standard location.  The location of PostGreSQL is very dependent on which method was used to install it.  To correct the problem, replace <computeroutput>LSB</computeroutput> with the path to the path to your PostGreSQL installation.  Often this is <computeroutput>/usr/local/pgsql</computeroutput>.</para>
+              <para>Another possibility is that you may need to set
+              the LD_LIBRARY_PATH environmental variable. You may
+              still get warnings, but sometimes this will fix things
+              enough to work.</para>
+              <screen>[root nspostgres]# <userinput>export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/pgsql/lib</userinput>
+              </screen>
+              <para>You can use the
+              <computeroutput>ldd</computeroutput> command to verify
+              that all libraries are linked in: 
+                <userinput>ldd nspostgres.so</userinput>
+              </para>
+
               <para>If you run into problems with libpq.a do the following (and repeat the step above)</para>
               <screen>[root nspostgres]# <userinput>ranlib /usr/local/pgsql/lib/libpq.a</userinput></screen>
               <para>If you run into problems with the linker, edit the Makefile. Add <computeroutput>-lnsdb</computeroutput> to the <computeroutput>MODLIBS</computeroutput> var.</para>
