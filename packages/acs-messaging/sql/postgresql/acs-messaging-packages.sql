@@ -230,20 +230,24 @@ begin
 end;' language 'plpgsql';
 
 
--- This needs work as there is no connect by
+-- Ported to take advantage of tree_sortkey column by DLP
 
 create function acs_message__first_ancestor (integer)
 returns integer as '
 declare
     p_message_id alias for $1;
     v_message_id acs_messages.message_id%TYPE;
+    v_tree_sk varchar;
 begin
+    select tree_sortkey into v_tree_sk
+      from acs_messages
+     where message_id = p_message_id;
+
+    v_tree_sk := substring(v_tree_sk from 0 for 4);
+
     select message_id into v_message_id
-    from (select message_id, reply_to
-          from acs_messages
-          connect by message_id = prior reply_to
-          start with message_id = p_message_id) ancestors
-          where reply_to is null;
+      from acs_messages
+     where tree_sortkey = v_tree_sk;
 
     return v_message_id;
 end;' language 'plpgsql';
@@ -258,6 +262,7 @@ end;' language 'plpgsql';
 create function acs_message__new_file (integer,integer,varchar,varchar,
 text,varchar,text,timestamp,integer,varchar,boolean)
 returns integer as '
+declare
     p_message_id    alias for $1;
     p_file_id       alias for $2;    -- default null
     p_file_name     alias for $3;
@@ -282,13 +287,13 @@ begin
         null,					   -- context_id
         p_creation_ip,			   -- creation_ip    
         ''content_item'',		   -- item_subtype
-        ''content_revision,		   -- content_type
+        ''content_revision'',		   -- content_type
         null,					   -- title
         null,					   -- description
         ''text/plain'',			   -- mime_type
         null,					   -- nls_language
         null,					   -- text
-		''file'',				   -- storage_type
+	''file''				   -- storage_type
     );
 
     -- create an initial revision for the new attachment

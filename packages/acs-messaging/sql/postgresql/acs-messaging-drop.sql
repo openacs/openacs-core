@@ -7,11 +7,16 @@
 --
 
 -- drop functions
+drop trigger acs_message_insert_tr on acs_messages;
+drop trigger acs_message_update_tr on acs_messages;
+drop function acs_message_insert_tr();
+drop function acs_message_update_tr();
+
 drop function acs_message__edit (integer,varchar,varchar,varchar,
-                                 text,timestamp,integer,varchar,boolean);
+                                 text,integer,timestamp,integer,varchar,boolean);
 drop function acs_message__new (integer,integer,timestamp,integer,
                                 varchar,varchar,varchar,varchar,varchar,text,
-                                integer,integer,integer,varchar,integer,boolean);
+                                integer,integer,integer,varchar,varchar,boolean);
 drop function acs_message__delete (integer);
 drop function acs_message__message_p (integer);
 drop function acs_message__send (integer,varchar,integer,timestamp);

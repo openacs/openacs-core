@@ -60,9 +60,11 @@ create table acs_messages (     -- extends cr_items
         constraint acs_messages_rfc822_id_nn
             not null
         constraint acs_messages_rfc822_id_un
-            unique
+            unique,
+    tree_sortkey varchar(4000)
 );
 
+create index acs_messages_tree_skey_idx on acs_messages (tree_sortkey);
 create index acs_messages_reply_to_idx on acs_messages (reply_to);
 create index acs_messages_sender_idx on acs_messages (sender);
 
@@ -87,6 +89,95 @@ comment on column acs_messages.sender is '
 comment on column acs_messages.rfc822_id is '
     The RFC822 message-id of this message, for sending email.
 ';
+
+
+-- support for tree queries on acs_messages
+
+create function acs_message_insert_tr () returns opaque as '
+declare
+        v_parent_sk     varchar;
+        max_key         varchar;
+begin
+	if new.reply_to is null then
+	    select max(tree_sortkey) into max_key
+              from acs_messages
+             where reply_to is null;
+
+            v_parent_sk := '''';
+        else
+            select max(tree_sortkey) into max_key 
+              from acs_messages
+             where reply_to = new.reply_to;
+
+            select coalesce(max(tree_sortkey),'''') into v_parent_sk 
+              from acs_messages
+             where message_id = new.reply_to;
+        end if;
+
+        new.tree_sortkey := v_parent_sk || ''/'' || tree_next_key(max_key);
+
+        return new;
+
+end;' language 'plpgsql';
+
+create trigger acs_message_insert_tr before insert 
+on acs_messages 
+for each row 
+execute procedure acs_message_insert_tr ();
+
+create function acs_message_update_tr () returns opaque as '
+declare
+        v_parent_sk     varchar;
+        max_key         varchar;
+        v_rec           record;
+        clr_keys_p      boolean default ''t'';
+begin
+        if new.message_id = old.message_id and 
+           ((new.reply_to = old.reply_to) or 
+            (new.reply_to is null and old.reply_to is null)) then
+
+           return new;
+
+        end if;
+
+        for v_rec in select message_id
+                       from acs_messages
+                      where tree_sortkey like new.tree_sortkey || ''%''
+                   order by tree_sortkey
+        LOOP
+            if clr_keys_p then
+               update acs_messages set tree_sortkey = null
+               where tree_sortkey like new.tree_sortkey || ''%'';
+               clr_keys_p := ''f'';
+            end if;
+            
+            select max(tree_sortkey) into max_key
+              from acs_messages
+              where reply_to = (select reply_to 
+                                   from acs_messages
+                                  where message_id = v_rec.message_id);
+
+            select coalesce(max(tree_sortkey),'''') into v_parent_sk 
+              from acs_messages 
+             where message_id = (select reply_to 
+                                   from acs_messages
+                                  where message_id = v_rec.message_id);
+
+            update acs_messages
+               set tree_sortkey = v_parent_sk || ''/'' || tree_next_key(max_key)
+             where message_id = v_rec.message_id;
+
+        end LOOP;
+
+        return new;
+
+end;' language 'plpgsql';
+
+create trigger acs_message_update_tr after update 
+on acs_messages
+for each row 
+execute procedure acs_message_update_tr ();
+
 
 create table acs_messages_outgoing (
     message_id integer
