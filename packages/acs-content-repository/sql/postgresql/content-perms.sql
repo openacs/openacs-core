@@ -159,17 +159,16 @@ begin
     -- old style's probably just as efficient as the first as an index scan is only preferred
     -- by the Postgres optimizer when it will significantly reduce the number of rows scanned.
 
+    -- DanW: Removed hierarchy index query in favor of using descendant map. 
+
     return exists (select 1 from 
         (select o2.object_id 
            from (select tree_ancestor_keys(acs_object__get_tree_sortkey(has_revoke_authority__object_id)) as tree_sortkey) parents,
              acs_objects o2
           where o2.tree_sortkey = parents.tree_sortkey) t
-        (select i2.privilege, i2.child_privilege 
-           from acs_privilege_hierarchy_index i1, 
-                acs_privilege_hierarchy_index i2 
-          where i1.child_privilege = ''cm_perm''
-            and i1.tree_sortkey between i2.tree_sortkey and tree_right(i2.tree_sortkey)
-            and tree_ancestor_p(i2.tree_sortkey, i1.tree_sortkey)) h
+        (select privilege, descendant as child_privilege 
+           from acs_privilege_descendant_map 
+          where descendant = 'cm_perm') h
       where
         content_permission__permission_p(
           t.object_id, has_revoke_authority__holder_id, h.child_privilege
