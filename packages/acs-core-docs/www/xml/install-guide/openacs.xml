@@ -334,7 +334,7 @@ createdb -E UNICODE <replaceable>service0</replaceable></action></screen>
                 </indexterm>
                 <screen>[service0 service0]$ <userinput>export EDITOR=emacs;crontab -e</userinput></screen>
                 <para>Add this line to the file.  The numbers and stars at the beginning are cron columns that specify when the program should be run - in this case, whenever the minute is 0 and the hour is 1, i.e., 1:00 am every day.</para>
-                <programlisting>0 1-23 * * * /usr/local/pgsql/bin/vacuumdb --full --analyze <replaceable>service0</replaceable>
+                <programlisting>0 1-23 * * * /usr/local/pgsql/bin/vacuumdb --analyze <replaceable>service0</replaceable>
 0 0 * * * /usr/local/pgsql/bin/vacuumdb --full --analyze <replaceable>service0</replaceable></programlisting>
               </listitem>
               <listitem>
