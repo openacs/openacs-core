@@ -62,8 +62,8 @@ table.developer-toolbar td a {
   border: solid 1px #616093;
   text-align: center; 
   padding: 1px;
-  padding-left: 4px;
-  padding-right: 4px;
+  padding-left: 2px;
+  padding-right: 2px;
   color: white;
   text-decoration: none;
 }
@@ -430,6 +430,12 @@ span.form-configuration-label {
 div.general-message {
   background-color: #ccff99; 
   padding: 4px;
+}
+
+ul.action-links li {
+  list-style: circle url(/resources/acs-subsite/right.gif);
+  margin: 8px;
+  margin-left: -16px;
 }
 
 a.action {
