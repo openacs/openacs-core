@@ -270,9 +270,6 @@ set dotlrn_demo_data "no"
 set dotlrn_users_data_file "users-data.csv"
 set demo_users_password "guest"
 
-# Should links be crawled to search for broken pages? This doesn't quite work!
-set crawl_links "no"
-
 #----------------------------------------------------------------------
 # Tcl API testing. Not recommended for production servers.
 #----------------------------------------------------------------------
