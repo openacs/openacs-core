@@ -6,6 +6,7 @@ ad_page_contract {
     @cvs-id $Id$  
 } {
     version_id:integer
+    {return_url {[export_vars -base "version-i18n-index" { version_id }]}}
 }
 
 db_1row package_version_info { 
@@ -14,13 +15,11 @@ db_1row package_version_info {
     where  version_id = :version_id 
 }
 
-set return_url [export_vars -base "version-i18n-index" { version_id }]
-
 set page_title "Export Messages"
 set context [list \
                  [list "/acs-admin/apm/" "Package Manager"] \
                  [list [export_vars -base version-view { version_id }] "$pretty_name $version_name"] \
-                 [list $return_url "Internationalization"] $page_title]
+                 [list [export_vars -base "version-i18n-index" { version_id }] "Internationalization"] $page_title]
 
 set catalog_dir [lang::catalog::package_catalog_dir $package_key]
 
