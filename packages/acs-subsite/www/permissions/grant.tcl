@@ -149,11 +149,7 @@ if { [form is_valid grant] } {
     # A valid submission, grant and revoke accordingly.
 
     form get_values grant
-
-    if { ![info exists privileges] } {
-        # no privilege was selected
-        set privileges [list]
-    }
+    set privileges [element get_values grant privilege]
 
     # loop through all privileges, grant checked and revoke un-checked
     # (assuming that there are not too many privs in total, otherwise
