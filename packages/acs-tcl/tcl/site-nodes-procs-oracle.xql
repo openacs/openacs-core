@@ -3,12 +3,12 @@
 <queryset>
    <rdbms><type>oracle</type><version>8.1.6</version></rdbms>
 
-<fullquery name="site_node_create">
+<fullquery name="site_node_create.node_new">
 <querytext>
         begin
         :1 := site_node.new (
         node_id => :new_node_id,
-        parent_id => :parent_id,
+        parent_id => :parent_node_id,
         name => :name,
         directory_p => :directory_p,
         pattern_p => :pattern_p,
