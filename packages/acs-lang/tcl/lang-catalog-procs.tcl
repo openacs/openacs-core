@@ -177,18 +177,46 @@ ad_proc -private lang::catalog::parse { catalog_file_contents } {
      return $value
  }
 
- ad_proc -public lang::catalog::export_package_to_files { package_key } {
+ ad_proc -public lang::catalog::export_to_files {
+     {-locales ""}
+ } {
+     Export messages to catalog files for all enabled packages on the system.
+
+     @param locales The locales to export. Defaults to all enabled locales that
+                   a package has messages for in the database.
+
+     @see lang::catalog::export_package_to_files
+     
+     @author Peter Marklund
+ } {
+     foreach package_key [apm_enabled_packages] {
+             lang::catalog::export_package_to_files -locales $locales $package_key
+     }     
+ }
+
+ ad_proc -public lang::catalog::export_package_to_files { 
+     {-locales ""}
+     package_key 
+} {
      Export all messages of the given package from the database to xml
      catalog files. The messages for each locale are stored in its own file.
      The catalog files are stored in the
      directory /packages/package_key/catalog with a filename on the format
      package_key.locale.charset.xml (i.e. dotlrn.en_US.iso-8859-1.xml).
 
+    @param locales The locales to export. Defaults to all enabled locales that
+                   the package has messages for in the database.
+
      @author Peter Marklund (peter@collaboraid.biz)
  } {
      # Loop over all locales that the package has messages in
      # and write a catalog file for each such locale
      db_foreach get_locales_for_package {} {
+         # If we are only exporting certain locales and this is not one of them - continue
+         if { ![empty_string_p $locales] && [lsearch -exact $locales $locale] == -1 } {
+             continue
+         }
+
          set charset [ad_locale charset $locale]
 
          # Get all messages in the current locale and put them in an array list
@@ -651,14 +679,23 @@ ad_proc -public lang::catalog::import_from_files {
         return
     }
 
-    # Get all catalog files for enabled locales
-    set catalog_file_list [list]
-    db_foreach select_locales {
+    # We always need to register en_US messages first as they create the keys
+    set en_us_locale_list [list [list en_US [ad_locale charset en_US]]]
+    set other_locales_list [db_list_of_lists locales_and_charsets {
         select locale,
                mime_charset
         from ad_locales
         where enabled_p = 't'
-    } {        
+        and locale <> 'en_US'
+    }]
+    set all_locales_list [concat $en_us_locale_list $other_locales_list]
+
+    # Get all catalog files for enabled locales
+    set catalog_file_list [list]
+    foreach locale_list $all_locales_list {        
+        set locale [lindex $locale_list 0]
+        set charset [lindex $locale_list 1]
+
         # If we are only processing certain locales and this is not one of them - continue
         if { ![empty_string_p $restrict_to_locale] && ![string equal $restrict_to_locale $locale]} {
             continue
@@ -669,7 +706,7 @@ ad_proc -public lang::catalog::import_from_files {
             continue
         }
 
-        set charset [default_charset_if_unsupported $mime_charset]
+        set charset [default_charset_if_unsupported $charset]
         
         set file_path [get_catalog_file_path \
                 -package_key $package_key \
