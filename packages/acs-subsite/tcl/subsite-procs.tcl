@@ -613,6 +613,10 @@ ad_proc subsite::get_pageflow_struct {} {
                         *
                     }
                 }
+                subsite_add {
+                    label "New Subsite"
+                    url "admin/subsite-add"
+                }
                 permissions {
                     label "Permissions"
                     url "admin/permissions"
