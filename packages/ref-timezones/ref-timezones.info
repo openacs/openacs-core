@@ -7,7 +7,7 @@
     <initial-install-p>f</initial-install-p>
     <singleton-p>t</singleton-p>
 
-    <version name="0.2d" url="http://openacs.org/repository/download/apm/ref-timezones-0.2d.apm">
+    <version name="0.3" url="http://openacs.org/repository/download/apm/ref-timezones-0.3.apm">
     <database-support>
         <database>oracle</database>
         <database>postgresql</database>
@@ -19,7 +19,7 @@
         <description format="text/plain">This is the timezone data for the reference data package.
 </description>
 
-        <provides url="ref-timezones" version="0.2d"/>
+        <provides url="ref-timezones" version="0.3"/>
         <requires url="acs-kernel" version="4.6.2"/>
         <requires url="acs-reference" version="0.2d"/>
 
