@@ -9,4 +9,4 @@ ad_page_contract {
 
 apm_version_disable -callback apm_dummy_callback $version_id
 
-ns_returnredirect "version-view?version_id=$version_id"
+ad_returnredirect "version-view?version_id=$version_id"

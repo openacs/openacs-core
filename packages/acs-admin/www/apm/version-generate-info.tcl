@@ -20,6 +20,7 @@ if { $write_p } {
     }
 
     ad_returnredirect "version-view?version_id=$version_id"
+    ad_script_abort
 } else {
     ns_return 200 text/plain [apm_generate_package_spec $version_id]
 }

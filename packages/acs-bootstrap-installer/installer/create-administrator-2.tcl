@@ -59,4 +59,4 @@ Please <a href=\"javascript:history.back()\">try again</a>.
   }
 }
     
-ns_returnredirect "site-info?[ad_export_vars email]"
+ad_returnredirect "site-info?[ad_export_vars email]"
