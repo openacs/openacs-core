@@ -70,6 +70,7 @@ if { [file exists [acs_root_dir]/install.xml] } {
         error "Installer: Could not find root node application in install.xml file"
     }
 
+    nsv_set acs_application node $root_node
     nsv_set acs_application name [apm_required_attribute_value [nsv_get acs_application node] name]
     nsv_set acs_application pretty_name \
         [apm_attribute_value -default [nsv_get acs_application name] [nsv_get acs_application node] pretty-name]
