@@ -8,14 +8,16 @@
     <singleton-p>t</singleton-p>
     
     <version name="5.2.0d8" url="http://openacs.org/repository/download/apm/acs-kernel-5.2.0d8.apm">
-        <owner url="mailto:dhogaza@pacifier.com">Don Baccus</owner>
+        <owner url="mailto:oct@openacs.org">OpenACS Core Team</owner>
         <summary>Routines and data models providing the foundation for OpenACS-based Web services.</summary>
         <release-date>2005-01-09</release-date>
-	<license url="http://www.gnu.org/copyleft/gpl.html">GPL</license>
         <vendor url="http://openacs.org">OpenACS</vendor>
         <description format="text/html">The OpenACS kernel contains the core datamodel create and drop scripts for such things as objects, groups, partiies and the supporting PL/SQL and PL/pgSQL procedures.</description>
-        <provides url="acs-kernel" version="5.2.0d8"/>
+        <license>GPL</license>
         <maturity>3</maturity>
+
+        <provides url="acs-kernel" version="5.2.0d8"/>
+
         <callbacks>
         </callbacks>
         <parameters>
@@ -27,6 +29,7 @@
             <parameter datatype="string"  min_n_values="1"
             max_n_values="1"  name="AllowedTag"  default="A ADDRESS B BLOCKQUOTE BR CODE DD DL DT EM FONT HR I LI OL P PRE SPAN STRIKE STRONG SUB SUP TABLE TBODY TD TR TT U UL EMAIL FIRST_NAMES LAST_NAME GROUP_NAME" description="A space separated list of all the HTML tags that people may use. Add a * to always allow all tags." section_name="antispam"/>
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="ApprovalExpirationDays"  default="0" description="The number of days after which registration approval expires, which will cause the user to change state to 'needs_approval'. Set to 0 to disable expiration of approval." section_name="security"/>
+            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="BugTrackerInstance"  default="" description="Use this parameter to indicate the instance of the bug tracker where the errors will be automatically submited. You must use a relative url indicating where is mounted the instance of the bug tracker. For instance, if you have your bug tracker instance mounted under &quot;/bug&quot;, this parameter must be &quot;/bug&quot;.  Leave this parameter in blank if you do not want to use it." section_name="request-processor"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="CanonicalServer"  description="In the list of IPs above, which is the canonical (primary) server? If a port is not listed, we assume port 80." section_name="server-cluster"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="ClusterAuthorizedIP"  description="A space separated list of which machines can issues requests (e.g., flushing) to the cluster. Can use glob matching notation (10.0.0.*)" section_name="server-cluster"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="ClusterEnabledP"  default="0" description="is clustering enabled?" section_name="server-cluster"/>
@@ -44,8 +47,8 @@
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="HomeURL"  default="/pvt/home" description="the URL of the workspace link" section_name="system-information"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="HostAdministrator"  default="somenerd@yourdomain.com" description="a person whom people can email with technical problems" section_name="system-information"/>
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="HttpCacheControlP"  default="1" description="Wether we output http headers on every request for dynamic pages that prevent browsers and proxies from caching the page." section_name="request-processor"/>
-            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="IndexRedirectUrl"  description="If non-blank, serve the given template rather than the default index template.  Example: /dotlrn/index"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="IndexInternalRedirectUrl"  description="If non-blank and IndexRedirectUrl is blank, serve the given template rather than the default index template, but with an rp_internal_redirect. Value is relative to serverroot. Example: /packages/dotlrn/index"/>
+            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="IndexRedirectUrl"  description="If non-blank, serve the given template rather than the default index template.  Example: /dotlrn/index"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="InfoFilePermissionsMode"  default="0775" description="The default UNIX permissions to assign to the .info file when it is created." section_name="apm"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="LogDebugP"  default="0" description="log request-processor debug messages to the error log? very verbose." section_name="request-processor"/>
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="LoginPageExpirationTime"  default="600" description="The expiration time in seconds for the login page. This is needed to protect against browser cached passwords." section_name="security"/>
