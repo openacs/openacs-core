@@ -32,29 +32,6 @@ namespace eval site_node {
         return $node_id
     }
 
-    ad_proc -public new_with_package {
-        {-name:required}
-        {-parent_id:required}
-        {-package_key:required}
-        {-instance_name:required}
-        {-context_id:required}
-    } {
-        create site node, instantiate package, mount package at new site node
-    } {
-        set node_id [new -name $name -parent_id $parent_id]
-
-        set package_id [apm_package_create_instance $instance_name $context_id $package_key]
-
-        mount -node_id $node_id -object_id $package_id
-
-        update_cache -node_id $node_id
-
-        # call post instantiation proc for the package
-        apm_package_call_post_instantiation_proc $package_id $package_key
-
-        return $package_id
-    }
-
     ad_proc -public delete {
         {-node_id:required}
     } {
@@ -389,7 +366,7 @@ ad_proc -public site_node_mount_application {
         set context_id $parent_node_id
     }
 
-    return [site_node::new_with_package \
+    return [site_node_apm_integration::new_site_node_and_package \
         -name $instance_name \
         -parent_id $parent_node_id \
         -package_key $package_key \
