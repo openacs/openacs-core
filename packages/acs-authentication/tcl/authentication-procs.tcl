@@ -405,6 +405,16 @@ ad_proc -public auth::create_user {
     #
     #####
 
+    if { $verify_password_confirm_p } {
+        if { ![string equal $password $password_confirm] } {
+            return [list \
+                        creation_status datta_error \
+                        creation_message "Passwords don't match" \
+                        element_messages [list \
+                                              password_confirm "Passwords don't match"]]
+        }
+    }
+
     foreach elm [get_all_registration_elements] {
         if { [info exists $elm] } {
             set user_info($elm) [set $elm]
