@@ -36,21 +36,29 @@ if { [ad_conn untrusted_user_id] != 0 } {
     set pvt_home_url [ad_pvt_home]
     set pvt_home_name [ad_pvt_home_name]
     set logout_url [ad_get_logout_url]
+
+    # Site-wide admin link
+    set admin_url {}
+
+    set sw_admin_p [acs_user::site_wide_admin_p -user_id [ad_conn untrusted_user_id]]
+
+    if { $sw_admin_p } {
+            set admin_url "/acs-admin/"
+            set devhome_url "/acs-admin/developer"
+    } else {
+        set subsite_admin_p [permission::permission_p \
+                                 -object_id [subsite::get_element -element object_id] \
+                                 -privilege admin \
+                                 -party_id [ad_conn untrusted_user_id]]
+
+        if { $subsite_admin_p  } {
+            set admin_url "[subsite::get_element -element url]admin/"
+        }
+    }
 } else {
     set login_url [ad_get_login_url -return]
 }
 
-# Site-wide admin link
-set admin_url {}
-if { [ad_conn user_id] != 0 } {
-    set sw_admin_p [acs_user::site_wide_admin_p]
-    if { $sw_admin_p } {
-        set admin_url "/acs-admin/"
-        set devhome_url "/acs-admin/developer"
-    } elseif { [permission::permission_p -object_id [subsite::get_element -element object_id] -privilege admin] } {
-        set admin_url "[subsite::get_element -element url]admin/"
-    }
-}
 
 
 # Context bar
