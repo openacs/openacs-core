@@ -140,7 +140,9 @@ ad_proc -public ad_form {
     <p><dt><b>-extend</b></dt><p>
     <dd>Extend an existing form.  This allows one to build forms incrementally.  Forms are built at the
         template level.  As a consequence one can write utility procs that use -extend to build form
-        snippets common to several data entry forms.  
+        snippets common to several data entry forms. Note that the full form block must be built up
+        (extended) and completed before any action blocks such as select_query, new_request, edit_request etc.
+        are defined.
         <p>This must be the first switch passed into ad_form
     </dd>
 
@@ -172,12 +174,22 @@ ad_proc -public ad_form {
         include your own.
     </dd>
 
+    <p><dt><b>-has_submit { 0 | 1 }</b></dt><p>
+    <dd>Set to 1 to suppress the OK button automatically added by the form builder. Use this if you 
+        include your own.
+    </dd>
+
+    <p><dt><b>-method</b></dt><p>
+    <dd>The standard METHOD attribute to specify in the HTML FORM tag at the beginning of the rendered 
+        form. Defaults to POST.
+    </dd>
+
     <p><dt><b>-form</b></dt><p>
     <dd>Declare form elements (described in detail below)
     </dd>
 
     <p><dt><b>-cancel_url</b></dt><p>
-    <dd>The URL the cancel button should take you to. If this is specified, a cancel button will show up.
+    <dd>The URL the cancel button should take you to. If this is specified, a cancel button will show up
         during the edit phase.
     </dd>
 
@@ -274,6 +286,18 @@ ad_proc -public ad_form {
     <p><dt><b>-after_submit</b></dt><p>
     <dd>This code block will be executed after the three blocks on_submit, new_data or edit_data have been
     executed. It is useful for putting in stuff like ad_returnredirect that is the same for new and edit.
+    </dd>
+
+    <p><dt><b>-validate</b></dt><p>
+    <dd>A code block that validates the elements in the form. The elements are set as local values.
+        The block has the following form:
+       <pre>
+{element_name
+    {tcl code that returns 1 or 0}
+    "Message to be shown by that element in case of error"
+}
+{...}
+       </pre>
     </dd>
 
     </dl>
