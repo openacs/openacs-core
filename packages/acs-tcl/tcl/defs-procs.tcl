@@ -459,7 +459,7 @@ ad_proc -private ad_requested_object_id {} {
     return $package_id
 }
 
-ad_proc -public ad_parameter {
+ad_proc -deprecated ad_parameter {
     -set
     {-package_id ""}
     name
@@ -478,48 +478,27 @@ ad_proc -public ad_parameter {
     you want.
 
     Note: <strong>The parameters/ad.ini file is deprecated.</strong>
+
+    @see parameter::set_value
+    @see parameter::get
+
     @param -set Use this if you want to indicate a value to set the parameter to.
     @param -package_id Specify this if you want to manually specify what object id to use the new parameter. 
     @return The parameter of the object or if it doesn't exist, the default.
 } {
-    if {[empty_string_p $package_id]} {
-	set package_id [ad_requested_object_id] } {
+    if {[info exists set]} {
+	set ns_param [parameter::set_value -package_id $package_id -parameter $name -value $set]
+    } else {
+        set ns_param [ad_parameter_from_file $name $package_key]
+	if {[empty_string_p $ns_param]} {
+            set ns_param [parameter::get -package_id $package_id -parameter $name -default $default]
+	}
     }
 
-    if { [info exists set] } {
-	if { ![empty_string_p $package_id] } {
-	    # Write to the database.
-	    db_exec_plsql ad_parameter_set {
-		begin
-		  apm.set_value(
-			  package_id => :package_id,
-			  parameter_name => :name,
-			  attr_value => :set
-			);
-		end;
-	    }
-	    ad_parameter_cache -set $set $package_id $name
-	}
-	return $set
-    } else {
-	if { [empty_string_p $package_key] } {
-	    set ns_param [ns_config "ns/server/[ns_info server]/acs" $name]
-	} else {
-	    set ns_param [ns_config "ns/server/[ns_info server]/acs/$package_key" $name]
-	}
-	if { [empty_string_p $ns_param] } {
-            # Just retrieve the parameter from the cache if it exists.
-            set ns_param [ad_parameter_cache $package_id $name]
-	}
-    }
-    if { ![empty_string_p $ns_param] } {
-	return $ns_param
-    } else {
-	return $default
-    }
+    return $ns_param
 }
 
-ad_proc -public ad_parameter_from_file {
+ad_proc -deprecated ad_parameter_from_file {
     name
     {package_key ""}
 } {
@@ -543,6 +522,7 @@ ad_proc -public ad_parameter_from_file {
     } else {
 	set ns_param [ns_config "ns/server/[ns_info server]/acs/$package_key" $name]
     }
+
     return $ns_param
 }
 
