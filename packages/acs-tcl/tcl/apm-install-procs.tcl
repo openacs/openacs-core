@@ -2060,6 +2060,9 @@ ad_proc -public apm::process_install_xml {
         set ids(MAIN_SITE) [subsite::main_site_id]
     }
 
+    variable ::template::parse_level
+    lappend ::template::parse_level [info level]
+
     set root_node [apm_load_install_xml $filename $binds] 
 
     set acs_application(name) [apm_required_attribute_value $root_node name]
@@ -2080,6 +2083,9 @@ ad_proc -public apm::process_install_xml {
         set install_proc_out [apm_invoke_install_proc -node $action]
         set out [concat $out $install_proc_out]
     }
+
+    # pop off parse level
+    template::util::lpop parse_level
 
     return $out
 }
