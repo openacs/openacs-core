@@ -23,12 +23,15 @@ set current_user_id [ad_verify_and_get_user_id]
 
 if [empty_string_p $user_id] {
     set user_id $current_user_id
-    set admin_p 0
-} else {
-    set admin_p 1
 }
 
-ad_require_permission $user_id "write"
+if { $current_user_id == $user_id } {
+    set admin_p 1
+    ad_require_permission $user_id "write"
+} else {
+    set admin_p 0
+}
+
 
 if ![db_0or1row user_info "select 
   first_names, 

@@ -2,13 +2,13 @@
 <property name="title">Portrait of @first_names@ @last_name@</property>
 <property name="context">@context@</property>
 
+<if @admin_p@ eq 1>
 <p>This is the image that we show to other users at @system_name@:</p>
+</if>
 
 <center>
 <img @widthheight@ src="/shared/portrait-bits.tcl?@export_vars@">
 </center>
-
-Data:
 
 <ul>
 <li>Uploaded:  @pretty_date@</li>
@@ -19,6 +19,7 @@ Data:
 </li>
 </ul>
 
+<if @admin_p@ eq 1>
 Options:
 
 <ul>
@@ -28,5 +29,4 @@ Options:
 <li><a href="erase?@export_edit_vars@">erase portrait</a></li>
 
 </ul>
-
-
+</if>

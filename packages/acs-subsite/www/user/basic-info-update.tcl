@@ -37,3 +37,16 @@ db_release_unused_handles
 set site_link [ad_site_home_link]
 set export_vars [export_form_vars return_url user_id]
 
+# moved from acs-subsite/www/pvt/home.tcl
+if [ad_parameter SolicitPortraitP "user-info" 0] {
+    # we have portraits for some users
+    if ![db_0or1row get_portrait_info ""] {
+        set portrait_state "upload"
+    } else {
+        set portrait_state "show"
+        set portrait_publish_date [util_AnsiDatetoPrettyDate $publish_date]
+    }
+} else {
+    set portrait_state "none"
+}
+
