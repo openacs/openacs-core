@@ -10,7 +10,7 @@ ad_library {
 
 # This can be very time consuming on a large site and may be 
 # disabled by setting RegisterRestrictToSSLFilters in the kernel params.
-if { [ad_ssl_available_p] 
+if { [security::https_available_p] 
      && [parameter::get -package_id [ad_acs_kernel_id] -parameter RegisterRestrictToSSLFilters -default 1]} {
     set admin_ssl_filters_installed_p 1
 
