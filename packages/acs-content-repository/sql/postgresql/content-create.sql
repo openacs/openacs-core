@@ -1321,8 +1321,11 @@ drop function inline_2 ();
 -- 05-Nov-2001 Jon Griffin jon@mayuli.com
 
 alter table cr_folders
-add package_id integer references apm_packages;
 
+alter table cr_folders
+add constraint cr_flder_pkg_id_fk foreign key (package_id) references apm_packages (package_id);
+
+--constraint cr_fldr_pkg_id_fk
 -- show errors
 
 -- prompt *** Preparing search indices...
