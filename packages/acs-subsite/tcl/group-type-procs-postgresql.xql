@@ -64,7 +64,7 @@
       begin
         insert into group_type_rels 
 	       (group_rel_type_id, rel_type, group_type)
-	       select acs_object_id_seq.nextval, r.rel_type, :group_type
+	       select nextval('t_acs_object_id_seq'), r.rel_type, :group_type
 	         from group_type_rels r
 	        where r.group_type = :supertype;
         return null;
