@@ -155,6 +155,7 @@ as
   and amo.name = 'registered_users'
   and m.group_id = amo.object_id
   and m.container_id = m.group_id
+  and m.rel_type = 'membership_rel'
   and mr.member_state = 'approved'
   and u.email_verified_p = 't';
 
@@ -179,6 +180,7 @@ where o.object_id = pa.party_id
   and amo.name = 'registered_users'
   and m.group_id = amo.object_id
   and m.rel_id = mr.rel_id
+  and m.rel_type = 'membership_rel'
   and m.container_id = m.group_id;
 
 

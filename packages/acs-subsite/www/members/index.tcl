@@ -25,8 +25,6 @@ set group_id [application_group::group_id_from_package_id]
 # only to ban/delete them.
 set main_site_p [string equal [site_node::get_url -node_id [ad_conn node_id]] "/"]
 
-set rel_type "membership_rel"
-
 set user_id [ad_conn user_id]
 
 set show_member_list_to [parameter::get -parameter "ShowMembersListTo" -default 2]
@@ -66,15 +64,7 @@ if { $admin_p || [parameter::get -parameter "MembersCanInviteMembersP" -default 
 }
 
 set member_state_options [list]
-db_foreach select_member_states {
-    select mr.member_state as state, 
-           count(mr.rel_id) as num_members
-    from   membership_rels mr,
-           acs_rels r
-    where  r.rel_id = mr.rel_id
-    and    r.object_id_one = :group_id
-    group  by mr.member_state
-} {
+db_foreach select_member_states {} {
     lappend member_state_options \
         [list \
              [group::get_member_state_pretty -member_state $state] \
@@ -82,12 +72,14 @@ db_foreach select_member_states {
              [lc_numeric $num_members]]
 }
 
+db_1row pretty_roles {}
+
 template::list::create \
     -name "members" \
     -multirow "members" \
-    -key rel_id \
     -row_pretty_plural "members" \
     -page_size 50 \
+    -page_flush_p t \
     -page_query_name members_pagination \
     -actions $actions \
     -elements {
@@ -104,32 +96,39 @@ template::list::create \
             label "[_ acs-subsite.Role]"
             display_template {
                 @members.rel_role_pretty@
+            }
+        }
+        rel_role_action {
+            label {}
+            display_template {
                 <if @members.make_admin_url@ not nil>
-                  (<a href="@members.make_admin_url@">#acs-subsite.Make_administrator#</a>)
+                  <a href="@members.make_admin_url@">#acs-subsite.Make_administrator#</a>
                 </if>
                 <if @members.make_member_url@ not nil>
-                  (<a href="@members.make_member_url@">#acs-subsite.Make_member#</a>)
+                  <a href="@members.make_member_url@">#acs-subsite.Make_member#</a>
                 </if>
             }
         }
         member_state_pretty {
             label "[_ acs-subsite.Member_State]"
+        }
+        member_state_change {
+            label {}
             display_template {
-                @members.member_state_pretty@
                 <if @members.approve_url@ not nil>
-                  (<a href="@members.approve_url@">#acs-subsite.Approve#</a>)
+                  <a href="@members.approve_url@">#acs-subsite.Approve#</a>
                 </if>
                 <if @members.reject_url@ not nil>
-                  (<a href="@members.reject_url@">#acs-subsite.Reject#</a>)
+                  <a href="@members.reject_url@">#acs-subsite.Reject#</a>
                 </if>
                 <if @members.ban_url@ not nil>
-                  (<a href="@members.ban_url@">#acs-subsite.Ban#</a>)
+                  <a href="@members.ban_url@">#acs-subsite.Ban#</a>
                 </if>
                 <if @members.delete_url@ not nil>
-                  (<a href="@members.delete_url@">#acs-subsite.Delete#</a>)
+                  <a href="@members.delete_url@">#acs-subsite.Delete#</a>
                 </if>
                 <if @members.remove_url@ not nil>
-                  (<a href="@members.remove_url@">#acs-subsite.Remove#</a>)
+                  <a href="@members.remove_url@">#acs-subsite.Remove#</a>
                 </if>
             }
         }
@@ -151,10 +150,6 @@ template::list::create \
             label "[_ acs-subsite.Email]"
             orderby "u.email"
         }
-        rel_role {
-            label "[_ acs-subsite.Role]"
-            orderby "role.pretty_name"
-        }
     }
 
 
@@ -172,20 +167,22 @@ db_multirow -extend {
     delete_url
     make_admin_url
     make_member_url
+    rel_role_pretty
 } -unclobber members members_select {} {
-    set rel_role_pretty [lang::util::localize $rel_role_pretty]
+    if { $member_admin_p > 0 } {
+        set rel_role_pretty [lang::util::localize $admin_role_pretty]
+    } else {
+        set rel_role_pretty [lang::util::localize $member_role_pretty]
+    }
     set member_state_pretty [group::get_member_state_pretty -member_state $member_state]
 
     if { $admin_p } {
         switch $member_state {
             approved {
-                switch $rel_role {
-                    member {
-                        set make_admin_url [export_vars -base make-admin { rel_id }]
-                    }
-                    admin {
-                        set make_member_url [export_vars -base make-member { rel_id }]
-                    }
+                if { $member_admin_p == 0 } {
+                    set make_admin_url [export_vars -base make-admin { user_id }]
+                } else {
+                    set make_member_url [export_vars -base make-member { user_id }]
                 }
                 if { $main_site_p } {
                     set ban_url [export_vars -base member-state-change { rel_id {member_state banned} }]
