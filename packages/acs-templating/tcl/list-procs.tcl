@@ -30,6 +30,7 @@ ad_proc -public template::list::create {
     {-selected_format ""}
     {-has_checkboxes:boolean}
     {-checkbox_name "checkbox"}
+    {-orderby_name "orderby"}
     {-row_pretty_plural "data"}
     {-no_data ""}
     {-main_class "list"}
@@ -205,6 +206,9 @@ ad_proc -public template::list::create {
                            If the name of your orderby is the same as the name of an element, that element's header will be made a link to sort by that column.
                            See <a href="/api-doc/proc-view?proc=template::list::orderby::create">template::list::orderby::create</a> for details.
 
+    @param  orderby_name   The page query variable name for the selected orderby is normally named 'orderby', but if you want to, you can 
+                           override it here.
+
     @param  formats        If no formats are specified, a default format is created. Automatically creates a filter called 'format'. 
                            Array-list of (format-name, spec) pairs, like elements. Each spec, in turn, is an array-list of property-name/value pairs, 
                            where the value is 'subst'ed in the caller's environment.
@@ -238,6 +242,7 @@ ad_proc -public template::list::create {
         actions {}
         bulk_actions {}
         bulk_action_export_vars {}
+        orderby_name {orderby}
     }
 
     # These are defauls for internally maintained properties
@@ -256,8 +261,8 @@ ad_proc -public template::list::create {
         format_refs {}
         row_template {}
         orderby_refs {}
-        orderby_name {}
-        orderby_direction {}
+        orderby_selected_name {}
+        orderby_selected_direction {}
         ulevel {}
         output {}
         bulk_action_export_chunk {}
@@ -288,6 +293,7 @@ ad_proc -public template::list::create {
         page_query
         page_query_name
         page_flush_p
+        orderby_name
     } {
         set list_properties($elm) [set $elm]
     }
@@ -365,7 +371,7 @@ ad_proc -public template::list::create {
         
         template::list::filter::set_property \
             -list_name $name \
-            -filter_name "orderby" \
+            -filter_name $list_properties(orderby_name) \
             -property default_value \
             -value $filter_default \
             -ulevel 2
@@ -441,10 +447,10 @@ ad_proc -public template::list::prepare {
     
     # Split the current ordering info into name and direction
     # name is the string before the comma, order (asc/desc) is what's after
-    if { [info exists list_properties(filter,orderby)] } {
-        foreach { orderby_name orderby_direction } [lrange [split $list_properties(filter,orderby) ","] 0 1] {}
-        set list_properties(orderby_name) $orderby_name
-        set list_properties(orderby_direction) $orderby_direction
+    if { [info exists list_properties(filter,$list_properties(orderby_name))] } {
+        foreach { orderby_name orderby_direction } [lrange [split $list_properties(filter,$list_properties(orderby_name)) ","] 0 1] {}
+        set list_properties(orderby_selected_name) $orderby_name
+        set list_properties(orderby_selected_direction) $orderby_direction
     }
 
     # This sets orderby, etc., for filters
@@ -714,7 +720,7 @@ ad_proc -public template::list::orderby_clause {
     # Get an upvar'd reference to list_properties
     get_reference -name $name
 
-    if { [empty_string_p $list_properties(orderby_name)] } {
+    if { [empty_string_p $list_properties(orderby_selected_name)] } {
         return {}
     }
     
@@ -722,9 +728,9 @@ ad_proc -public template::list::orderby_clause {
     if { $orderby_p } {
         append result "order by "
     }
-    template::list::orderby::get_reference -list_name $name -orderby_name $list_properties(orderby_name)
+    template::list::orderby::get_reference -list_name $name -orderby_name $list_properties(orderby_selected_name)
     
-    append result $orderby_properties(orderby_$list_properties(orderby_direction))
+    append result $orderby_properties(orderby_$list_properties(orderby_selected_direction))
     
     return $result
 }
@@ -1091,21 +1097,21 @@ ad_proc -private template::list::prepare_elements {
 
         if { ![empty_string_p $element_properties(default_direction)] } {
 
-            if { [string equal $list_properties(orderby_name) $element_name] } {
+            if { [string equal $list_properties(orderby_selected_name) $element_name] } {
                 # We're currently ordering on this column
-                set direction [ad_decode $list_properties(orderby_direction) "asc" "desc" "asc"]
+                set direction [ad_decode $list_properties(orderby_selected_direction) "asc" "desc" "asc"]
                 set element_properties(orderby_url) [get_url \
                                                          -name $name \
-                                                         -override [list [list orderby "${element_name},$direction"]]]
+                                                         -override [list [list $list_properties(orderby_name) "${element_name},$direction"]]]
                 set element_properties(orderby_html_title) "Reverse the sort order of this column"
                 set element_properties(ordering_p) "t"
-                set element_properties(orderby_direction) $list_properties(orderby_direction)
+                set element_properties(orderby_direction) $list_properties(orderby_selected_direction)
 
             } else {
                 # We're not currently ordering on this column
                 set element_properties(orderby_url) [get_url \
                                                          -name $name \
-                                                         -override [list [list orderby "${element_name},$element_properties(default_direction)"]]]
+                                                         -override [list [list $list_properties(orderby_name) "${element_name},$element_properties(default_direction)"]]]
                 set element_properties(orderby_html_title) "Sort the list by this column"
             }
         }
@@ -2252,10 +2258,10 @@ ad_proc -public template::list::orderby::create {
     }
 
     # Create the 'orderby' filter if it doesn't already exist
-    if { ![template::list::filter::exists_p -list_name $list_name -filter_name "orderby"] } {
+    if { ![template::list::filter::exists_p -list_name $list_name -filter_name $list_properties(orderby_name)] } {
         template::list::filter::create \
             -list_name $list_name \
-            -filter_name "orderby" \
+            -filter_name $list_properties(orderby_name) \
             -spec { 
                 label "Sort order" 
             } \
@@ -2264,7 +2270,7 @@ ad_proc -public template::list::orderby::create {
     
     template::list::filter::get_reference \
         -list_name $list_name \
-        -filter_name "orderby"
+        -filter_name $list_properties(orderby_name)
     
     lappend filter_properties(values) [list $orderby_properties(label) "${orderby_name},$orderby_properties(default_direction)"]
 
