@@ -37,7 +37,7 @@ ad_proc -public ad_verify_install {} {
   Returns 1 if the acs is properly installed, 0 otherwise.
 } {
     if { ![db_table_exists apm_packages] || ![db_table_exists site_nodes] } {
-	ad_proc util_memoize {script {max_age ""}} {no cache} {eval $script}
+	proc util_memoize {script {max_age ""}} {eval $script}
 	return 0
     }
     set kernel_install_p [apm_package_installed_p acs-kernel] 
@@ -49,7 +49,7 @@ ad_proc -public ad_verify_install {} {
     if { $kernel_install_p && $admin_exists_p} {
 	return 1 
     } else {
-	ad_proc util_memoize {script {max_age ""}} {no cache} {eval $script}
+	proc util_memoize {script {max_age ""}} {eval $script}
 	return 0
     }
 }

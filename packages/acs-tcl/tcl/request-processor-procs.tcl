@@ -1071,11 +1071,9 @@ ad_proc -private ad_acs_kernel_id_mem {} {
     return [db_string acs_kernel_id_get {} -default 0]
 }
 
-ad_proc -public ad_acs_kernel_id {} {
-
-    Returns the package_id of the kernel.
-
-} {
+# use proc rather than ad_proc since we redefine this internally
+# and dont want a redefined proc error...
+proc ad_acs_kernel_id {} {
     set acs_kernel_id [ad_acs_kernel_id_mem]
     ad_proc -public ad_acs_kernel_id {} {Returns the package_id of the kernel.} "return $acs_kernel_id"
     return $acs_kernel_id
