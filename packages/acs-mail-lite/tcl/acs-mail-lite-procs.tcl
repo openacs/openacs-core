@@ -441,14 +441,15 @@ namespace eval acs_mail_lite {
         # proc to ns_sendmail. So we simply call ns_sendmail instead
         # of the sendmail bin if the EmailDeliveryMode parameter is
         # set - JFR
-        # 
-        # I'm a little unsure if this handles multiple to addresses
-        # correctly.
         #-----------------------------------------------------
         set delivery_mode [ns_config ns/server/[ns_info server]/acs/acs-rollout-support EmailDeliveryMode] 
 
         if {![empty_string_p $delivery_mode]} {
-            ns_sendmail "$to_addr" "$from_addr" "$subject" "$body" "$extraheaders" "$bcc"
+            # The to_addr has been put in an array, and returned. Now
+            # it is of the form: email email_address name namefromdb
+            # user_id user_id_if_present_or_empty_string
+            set to_address "[lindex $to_addr 1] ([lindex $to_addr 3])"
+            ns_sendmail "$to_address" "$from_addr" "$subject" "$body" "$extraheaders" "$bcc"
         } else {
 
             if { [string equal [bounce_sendmail] "SMTP"] } {
