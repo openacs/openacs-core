@@ -854,3 +854,41 @@ ad_proc -public ad_return_url {
         return $url
     }
 }
+
+ad_proc -public ad_progress_bar_begin {
+    {-title:required}
+    {-message_1 ""}
+    {-message_2 ""}
+    {-template "/packages/acs-tcl/lib/progress-bar"}
+} {
+    Return a proress bar.
+
+    @param title     The title of the page
+    @param message_1 Message to display above the progress bar.
+    @param message_2 Message to display below the progress bar.
+    @param template  Name of template to use. Default value is recommended.
+
+    Example:
+
+    <code>ad_progress_bar_begin -title "Installing..." -message_1 "Please wait..." -message_2 "Will continue automatically"</code>
+    
+    <p><code>...</code></p>
+    
+    <code>ad_progress_bar_end -url $next_page</code>
+
+    @see ad_progress_bar_end
+} {
+    ReturnHeaders
+    ns_write [ad_parse_template -params [list [list title $title] [list message_1 $message_1] [list message_2 $message_2]] $template]
+}
+
+ad_proc -public ad_progress_bar_end {
+    {-url:required}
+} {
+    Ends the progress bar by causing the browser to redirect to a new URL.
+
+    @see ad_progress_bar_begin
+} { 
+    ns_write "<script language=\"javascript\">window.location='$url';</script>"
+    ns_conn close
+}
