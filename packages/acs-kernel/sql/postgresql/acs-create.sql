@@ -20,46 +20,6 @@ comment on table acs_magic_objects is '
  objects like the site-wide organization, and the all users party.
 ';
 
--- create or replace package acs
--- as
--- 
---   function add_user (
---     user_id		in users.user_id%TYPE default null,
---     object_type		in acs_objects.object_type%TYPE
--- 	 		   default 'user',
---     creation_date	in acs_objects.creation_date%TYPE
--- 			   default sysdate,
---     creation_user	in acs_objects.creation_user%TYPE
--- 			   default null,
---     creation_ip		in acs_objects.creation_ip%TYPE default null,
---     email		in parties.email%TYPE,
---     url			in parties.url%TYPE default null,
---     first_names		in persons.first_names%TYPE,
---     last_name		in persons.last_name%TYPE,
---     password		in users.password%TYPE,
---     salt		in users.salt%TYPE,
---     password_question   in users.password_question%TYPE default null,
---     password_answer	in users.password_answer%TYPE default null,
---     screen_name		in users.screen_name%TYPE default null,
---     email_verified_p 	in users.email_verified_p%TYPE default 't',
---     member_state	in membership_rels.member_state%TYPE default 'approved'
---   )
---   return users.user_id%TYPE;
--- 
---   procedure remove_user (
---     user_id	in users.user_id%TYPE
---   );
--- 
---   function magic_object_id (
---      name	in acs_magic_objects.name%TYPE
---   ) return acs_objects.object_id%TYPE;
--- 
--- end acs;
-
--- show errors
-
--- create or replace package body acs
--- function add_user
 create function acs__add_user (integer,varchar,timestamp with time zone,integer,varchar,varchar,varchar,varchar,varchar,char,char,varchar,varchar,varchar,boolean,varchar)
 returns integer as '
 declare
@@ -142,10 +102,6 @@ begin
     return magic_object_id__object_id;
    
 end;' language 'plpgsql' with(isstrict,iscachable);
-
-
-
--- show errors
 
 -- ******************************************************************
 -- * Community Core API
@@ -329,4 +285,3 @@ select acs_object__new (
   ('default_context', -3);
                   
                   
--- show errors
