@@ -588,9 +588,7 @@ ad_proc ad_html_security_check { html } {
     tag other than the ones marked allowed in antispam section of ad.ini.
     Otherwise returns an empty string.
     
-    @return a human-readable explanation of what's wrong with the user's input. 
-    The string will be HTML-escaped, so it's safe to pass on to a browser, but 
-    it'll probably look ugly when viewed with a plaintext viewer.
+    @return a human-readable, plaintext explanation of what's wrong with the user's input. 
     
     @author Lars Pind (lars@pinds.com)
     @creation-date 20 July 2000
@@ -654,8 +652,8 @@ ad_proc ad_html_security_check { html } {
 	    if { ![info exists allowed_tag($tagname)] } {
 		# Nope, this was a naughty tag.
 		return "For security reasons we only accept the submission of HTML
-		containing the following tags: <code>[join $allowed_tags_list " "]</code>. 
-		You have a &lt;$tagname&gt; tag in there."
+		containing the following tags: [join $allowed_tags_list " "]. 
+		You have a [string toupper $tagname] tag in there."
 	    } else {
 		# Legal tag.
 		
