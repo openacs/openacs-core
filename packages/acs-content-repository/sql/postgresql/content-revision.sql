@@ -389,7 +389,6 @@ create function content_revision__get_number (integer)
 returns integer as '
 declare
   get_number__revision_id            alias for $1;  
-  v_number                           integer;       
   v_revision                         cr_revisions.revision_id%TYPE;
   v_row_count                        integer default 0;
   rev_cur                            record;
@@ -407,13 +406,13 @@ begin
                    o.creation_date
   LOOP
     v_row_count := v_row_count + 1;
-    if v_revision = get_number__revision_id then 
-       v_number := v_row_count;
+    if rev_cur.revision_id = get_number__revision_id then 
+       return v_row_count;
        exit;
     end if;
   end LOOP;
 
-  return v_number;
+  return v_row_count;
  
 end;' language 'plpgsql';
 
