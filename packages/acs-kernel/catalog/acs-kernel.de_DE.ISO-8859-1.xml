@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="acs-kernel" package_version="5.0.0a2" locale="de_DE" charset="ISO-8859-1">
-
-  <msg key="member_role_pretty_name">Teilnehmer</msg>
-  <msg key="member_role_pretty_plural">Teilnehmer</msg>
-</message_catalog>
