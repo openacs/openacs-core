@@ -9,27 +9,17 @@
 # License.  Full text of the license is available from the GNU Project:
 # http://www.fsf.org/copyleft/gpl.html
 
-ad_proc -public template::forward { url args } {
+ad_proc -public template::forward { url } {
     Redirect and abort processing
 } {
-    # DRB: The code that was here before didn't preserve the protocol, always
-    # using HTTP even if HTTPS was used to establish the connection.  Besides
-    # which ad_returnredirect has funky checks for even funkier browsers, and
-    # is therefore not only the standard way to redirect in OpenACS 4 but
-    # more robust as well.
+  # DRB: The code that was here before didn't preserve the protocol, always
+  # using HTTP even if HTTPS was used to establish the connection.  Besides
+  # which ad_returnredirect has funky checks for even funkier browsers, and
+  # is therefore not only the standard way to redirect in OpenACS 4 but
+  # more robust as well.
 
-    set cache_p [lindex $args 0]
-
-    if { [string equal $cache_p "t"] } {
-	set persistent_p [lindex $args 1]
-	set excluded_vars [lindex $args 2]
-
-	ad_cache_returnredirect $url $persistent_p $excluded_vars
-    } else {
-	ad_returnredirect $url
-    }
-    
-    ad_script_abort
+  ad_returnredirect $url
+  ad_script_abort
 }
 
 ad_proc -public template::filter { command args } {
