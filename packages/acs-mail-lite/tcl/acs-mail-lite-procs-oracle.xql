@@ -19,7 +19,7 @@
    <fullquery name="acs_mail_lite::check_bounces.get_recent_bouncing_users">
      <querytext>
 
-       select u.user_id, u.email, u.first_names || ' ' u.last_name as name
+       select u.user_id, u.email, u.first_names || ' ' || u.last_name as name
        from cc_users u, acs_mail_lite_bounce_notif n
        where u.user_id = n.user_id
        and u.email_bouncing_p = 't'
