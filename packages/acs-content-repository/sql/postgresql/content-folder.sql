@@ -183,7 +183,7 @@ end;' language 'plpgsql';
 
 -- function new -- accepts security_inherit_p DaveB
 
-select define_function_args('content_folder__new','name,label,description,parent_id,context_id,folder_id,creation_date;now,creation_user,creation_ip,security_inherit_p;t');
+select define_function_args('content_folder__new','name,label,description,parent_id,context_id,folder_id,creation_date;now,creation_user,creation_ip,security_inherit_p;t,package_id');
 
 create or replace function content_folder__new (varchar,varchar,varchar,integer,integer,integer,timestamptz,integer,varchar,boolean,integer)
 returns integer as '
