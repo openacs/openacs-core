@@ -121,6 +121,9 @@ namespace eval site_node {
     } {
         unmount an object from the site node
     } {
+        set package_id [get_object_id -node_id $node_id]
+        apm_invoke_callback_proc -package_key [apm_package_key_from_id $package_id] -type before-unmount -arg_list [list package_id $package_id node_id $node_id]
+
         db_dml unmount_object {}
         update_cache -node_id $node_id
     }

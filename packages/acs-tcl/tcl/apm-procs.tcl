@@ -1315,6 +1315,18 @@ ad_proc -public apm_arg_names_for_callback_type {
             return [list package_id node_id]
         }
 
+        before-uninstall {
+            return [list version_id]
+        }
+
+        before-uninstantiate {
+            return [list package_id]
+        }
+
+        before-unmount {
+            return [list package_id node_id]
+        }
+        
         default {
             # By default a callback proc takes no arguments
             return [list]
@@ -1330,7 +1342,7 @@ ad_proc -public apm_supported_callback_types {} {
 
     @author Peter Marklund
 } {
-    return [list after-install after-instantiate after-mount]
+    return [list after-install after-instantiate after-mount before-uninstantiate before-uninstall before-unmount]
 }
 
 ad_proc -public apm_package_instance_new {
@@ -1398,7 +1410,11 @@ ad_proc -public apm_package_instance_delete {
     package_id
 } {
     Deletes an instance of a package
-} {
+} {    
+    apm_invoke_callback_proc -package_key [apm_package_key_from_id $package_id] \
+                             -type before-uninstantiate \
+                             -arg_list [list package_id $package_id]
+
     db_exec_plsql apm_package_instance_delete {}
 }
 
