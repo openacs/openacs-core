@@ -45,5 +45,5 @@ commit;
 end;
 /
 
--- data
-@ '../common/language-data'
+-- data, but this doesn't work from the apm
+@ '../common/ref-language-data.sql'
