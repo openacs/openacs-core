@@ -1,9 +1,6 @@
 <master>
-<property name="title">@system_name@</property>
+<property name="title">Congratulations</property>
 <property name="focus">@focus@</property>
-<h1>Congratulations!</h1>
-<hr />
-
 
 <table cellspacing="4" cellpadding="4" border="0">
   <tr>
@@ -12,7 +9,7 @@
       <p>
       You have successfully installed the 
       <b><a href="http://openacs.org/">OpenACS Community System</a></b>
-      version @acs_version@.
+      version @acs_version@ at @system_name@.
       </p>
 
       <p>

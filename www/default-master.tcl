@@ -12,7 +12,9 @@
 
 if [template::util::is_nil title]     { set title        [ad_system_name]  }
 if [template::util::is_nil signatory] { set signatory    [ad_system_owner] }
-if ![info exists header_stuff]        { set header_stuff {}                }
+if ![template::util::is_nil context] { set context_bar [eval ad_context_bar $context]}
+if [template::util::is_nil context_bar] { set context_bar [ad_context_bar]}
+if ![info exists header_stuff]        { set header_stuff {} }
 
 
 # Attributes
@@ -39,7 +41,7 @@ if { ![template::util::is_nil focus] } {
     regexp {^([^.]*)\.(.*)$} $focus match form_name element_name
     
     template::multirow append \
-            attribute onLoad "javascript:document.forms\['${form_name}'\].elements\['${element_name}'\].focus()"
+            attribute onload "javascript:document.forms\['${form_name}'\].elements\['${element_name}'\].focus()"
 }
 
 
