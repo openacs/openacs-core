@@ -268,9 +268,9 @@ ad_proc -public group::get_join_policy_options {} {
     Returns a list of valid join policies in a format suitable for a form builder drop-down.
 } {
     return [list \
-                [list "Open" "open"] \
-                [list "Needs approval" "needs approval"] \
-                [list "Closed" "closed"]]
+                [list [_ acs-kernel.common_open] "open"] \
+                [list [_ acs-kernel.common_needs_approval] "needs approval"] \
+                [list [_ acs-kernel.common_closed] "closed"]]
 }
 
 ad_proc -public group::default_member_state {
