@@ -3,6 +3,21 @@
 <queryset>
    <rdbms><type>postgresql</type><version>7.1</version></rdbms>
  
+<fullquery name="site_node_create">
+<querytext>
+select site_node__new (
+        :new_node_id,
+        :parent_id,
+        :name,
+	NULL,
+        :directory_p,
+        :pattern_p,
+        :user_id,
+        :ip_address
+        )
+</querytext>
+</fullquery>
+
 <fullquery name="site_node_mount_application.create_node">      
       <querytext>
 

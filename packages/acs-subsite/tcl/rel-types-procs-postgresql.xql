@@ -32,5 +32,33 @@
       </querytext>
 </fullquery>
 
+<fullquery name="rel_types::new.drop_type">
+<querytext>
+	select acs_rel_type__drop_type(:rel_type)
+</querytext>
+</fullquery>
+
+<fullquery name="rel_types::new.create_type">
+<querytext>
+select acs_rel_type__create_type (	
+	:rel_type,
+	:pretty_name,
+	:pretty_plural,
+	:supertype,
+	:table_name,
+	'rel_id',
+	:package_name,
+	:object_type_one,
+	:role_one,
+	:min_n_rels_one,
+	:max_n_rels_one,
+	:object_type_two,
+	:role_two,
+	:min_n_rels_two,
+	:max_n_rels_two
+);
+</querytext>
+</fullquery>
+
  
 </queryset>

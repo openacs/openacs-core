@@ -5,10 +5,7 @@
 
 <fullquery name="create_role">      
       <querytext>
-      FIX ME PLSQL
-
-	    begin acs_rel_type__create_role(role => :role, pretty_name => :pretty_name, pretty_plural => :pretty_plural); end;
-	
+	    select acs_rel_type__create_role(:role, :pretty_name, :pretty_plural)
       </querytext>
 </fullquery>
 

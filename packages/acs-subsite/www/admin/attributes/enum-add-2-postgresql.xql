@@ -6,7 +6,7 @@
 <fullquery name="insert_enum_value">      
       <querytext>
       
-		    insert into acs_enum_values v
+		    insert into acs_enum_values
 		    (attribute_id, sort_order, enum_value, pretty_name)
 		    select :attribute_id, :sort_order, :pretty_name, :pretty_name
 		    

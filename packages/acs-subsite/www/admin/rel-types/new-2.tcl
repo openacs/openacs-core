@@ -74,7 +74,7 @@ db_1row select_object_types {
        and r.rel_type = t.object_type
 }
 
-set object_types_one_list [db_list_of_lists select_object_types {
+set object_types_one_list [db_list_of_lists select_object_types_2 {
     select replace(lpad(' ', (level - 1) * 4), ' ', '&nbsp;') || t.pretty_name, 
            t.object_type as rel_type
       from acs_object_types t
