@@ -320,3 +320,31 @@ insert into acs_magic_objects
   (name, object_id)
 values
   ('default_context', -3);
+
+
+
+--------------------------------------------------------
+--
+-- Authentication object
+--
+--------------------------------------------------------
+
+-- Create the local authority
+select authority__new(
+    null,              -- authority_id
+    null,              -- object_type
+    'local',           -- short_name
+    'OpenACS Local',   -- pretty_name 
+    't',               -- enabled_p
+    1,                 -- sort_order
+    null,              -- auth_impl_id
+    null,              -- pwd_impl_id
+    null,              -- forgotten_pwd_url
+    null,              -- change_pwd_url
+    null,              -- register_impl_id
+    null,              -- register_url
+    null,              -- help_contact_text
+    null,              -- creation_user
+    null,              -- creation_ip
+    null               -- context_id
+);
