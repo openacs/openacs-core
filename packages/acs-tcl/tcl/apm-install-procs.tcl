@@ -1761,7 +1761,7 @@ ad_proc -private apm_get_package_repository {
             set manifest $result(page)
             
             # Store for subsequent requests
-            ad_set_client_property acs-admin [string range $manifest_url end-49 end] $manifest
+            ad_set_client_property -clob t acs-admin [string range $manifest_url end-49 end] $manifest
         }
 
         # Parse manifest
