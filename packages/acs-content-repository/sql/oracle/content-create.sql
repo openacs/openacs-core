@@ -70,7 +70,9 @@ comment on table cr_extension_mime_type_map is '
   a mapping table for extension to mime_type in db version of ns_guesstype data
 ';
 
--- Mime types and mappings defined in ../common/mime-type-data.sql
+prompt *** Loading mime type data ...
+@ '../common/mime-type-data.sql'
+
 
 create table cr_content_mime_type_map (
   content_type  varchar2(100)
@@ -802,9 +804,6 @@ show errors
 
 prompt *** Compiling documentation package...
 @@ doc-package
-
-prompt *** Loading mime type data ...
-@ '../common/mime-type-data.sql'
 
 prompt *** Creating image content type...
 @@ content-image

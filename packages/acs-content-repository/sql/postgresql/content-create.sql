@@ -78,6 +78,8 @@ comment on table cr_extension_mime_type_map is '
   a mapping table for extension to mime_type in db version of ns_guesstype data
 ';
 
+-- Load the mime type data.
+\i ../common/mime-type-data.sql
 
 create table cr_content_mime_type_map (
   content_type  varchar(100)
@@ -1371,9 +1373,6 @@ alter table cr_folders
 add constraint cr_flder_pkg_id_fk foreign key (package_id) references apm_packages (package_id);
 
 --constraint cr_fldr_pkg_id_fk
-
--- Load the mime type data.
-\i ../common/mime-type-data.sql
 
 -- prompt *** Preparing search indices...
 \i content-search.sql
