@@ -18,6 +18,7 @@
 	   object_id
 	from notification_requests
 	where user_id = :user_id
+        and   dynamic_p = 'f'
       </querytext>
 </fullquery>
 

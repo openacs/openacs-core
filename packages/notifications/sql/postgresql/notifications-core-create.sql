@@ -133,7 +133,8 @@ create table notification_requests (
     format                          varchar(100)
                                     default 'text'
                                     constraint notif_request_format_ch
-                                    check (format in ('text', 'html'))
+                                    check (format in ('text', 'html')),
+    dynamic_p                       bool default 'f'
 );
 
 create index notification_requests_t_o_idx on notification_requests(type_id, object_id);

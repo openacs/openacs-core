@@ -10,7 +10,7 @@ and type_id= :type_id
 </querytext>
 </fullquery>
 
-    <fullquery name="notification::type::get_type_id.select_type_id">
+    <fullquery name="notification::type::get_type_id_not_cached.select_type_id">
         <querytext>
             select type_id
             from notification_types
