@@ -11,7 +11,7 @@
 --
 -- @creation-date 2000-08-13
 --
--- @cvs-id acs-permissions-create.sql,v 1.10.2.2 2001/01/12 22:59:20 oumi Exp
+-- @cvs-id $Id$
 --
 
 
@@ -37,224 +37,23 @@
 --'
 
 create table acs_privileges (
-	privilege	varchar(100) not null constraint acs_privileges_pk
+	privilege	varchar2(100) not null constraint acs_privileges_pk
 			primary key,
-	pretty_name	varchar(100),
-	pretty_plural	varchar(100)
+	pretty_name	varchar2(100),
+	pretty_plural	varchar2(100)
 );
 
 create table acs_privilege_hierarchy (
-	privilege	varchar(100) not null 
-                        constraint acs_priv_hier_priv_fk
+	privilege	not null constraint acs_priv_hier_priv_fk
 			references acs_privileges (privilege),
-        child_privilege	varchar(100) not null 
-                        constraint acs_priv_hier_child_priv_fk
+    child_privilege	not null constraint acs_priv_hier_child_priv_fk
 			references acs_privileges (privilege),
 	constraint acs_privilege_hierarchy_pk
 	primary key (privilege, child_privilege)
 );
 
+-- create bitmap index acs_priv_hier_child_priv_idx on acs_privilege_hierarchy (child_privilege);
 create index acs_priv_hier_child_priv_idx on acs_privilege_hierarchy (child_privilege);
-
-create table acs_privilege_hierarchy_index (
-	privilege       varchar(100) not null 
-                        constraint acs_priv_hier_priv_fk
-			references acs_privileges (privilege),
-        child_privilege varchar(100) not null 
-                        constraint acs_priv_hier_child_priv_fk
-			references acs_privileges (privilege),
-        tree_sortkey    varbit
-);
-
-create index priv_hier_sortkey_idx on 
-acs_privilege_hierarchy_index (tree_sortkey);
-
--- Added table to materialize view that previously used 
--- acs_privilege_descendant_map name
---
--- DanW (dcwickstrom@earthlink.net) 30 Jan, 2003
-
-create table acs_privilege_descendant_map (
-	privilege       varchar(100) not null 
-                        constraint acs_priv_hier_priv_fk
-			references acs_privileges (privilege),
-        descendant      varchar(100) not null 
-                        constraint acs_priv_hier_child_priv_fk
-			references acs_privileges (privilege)
-
-);
-
--- DRB: Empirical testing showed that even with just 61 entries in the new table
--- this index sped things up by roughly 15%
-
-create index acs_priv_desc_map_idx on acs_privilege_descendant_map(descendant);
-
--- This trigger is used to create a pseudo-tree hierarchy that
--- can be used to emulate tree queries on the acs_privilege_hierarchy table.
--- The acs_privilege_hierarchy table maintains the permissions structure, but 
--- it has a complication in that the same privileges can exist in more than one
--- path in the tree.  As such, tree queries cannot be represented by the 
--- usual tree query methods used for openacs.  
-
--- DCW, 2001-03-15.
-
--- usage: queries directly on acs_privilege_hierarchy don't seem to occur
---        in many places.  Rather it seems that acs_privilege_hierarchy is
---        used to build the view: acs_privilege_descendant_map.  I did however
---        find one tree query in content-perms.sql that looks like the 
---        following:
-
--- select privilege, child_privilege from acs_privilege_hierarchy
---           connect by prior privilege = child_privilege
---           start with child_privilege = 'cm_perm'
-
--- This query is used to find all of the ancestor permissions of 'cm_perm'. 
--- The equivalent query for the postgresql tree-query model would be:
-
--- select  h2.privilege 
---   from acs_privilege_hierarchy_index h1, 
---        acs_privilege_hierarchy_index h2
---  where h1.child_privilege = 'cm_perm'
---    and h1.tree_sortkey between h2.tree_sortkey and tree_right(h2.tree_sortkey)
---    and h2.tree_sortkey <> h1.tree_sortkey;
-
--- Also since acs_privilege_descendant_map is simply a path enumeration of
--- acs_privilege_hierarchy, we should be able to replace the above connect-by
--- with: 
-
--- select privilege 
--- from acs_privilege_descendant_map 
--- where descendant = 'cm_perm'
-
--- This would be better, since the same query could be used for both oracle
--- and postgresql.
-
-create or replace function acs_priv_hier_ins_del_tr () returns opaque as '
-declare
-        new_value       integer;
-        new_key         varbit default null;
-        v_rec           record;
-        deleted_p       boolean;
-begin
-
-        -- if more than one node was deleted the second trigger call
-        -- will error out.  This check avoids that problem.
-
-        if TG_OP = ''DELETE'' then 
-            select count(*) = 0 into deleted_p
-              from acs_privilege_hierarchy_index 
-             where old.privilege = privilege
-               and old.child_privilege = child_privilege;     
-       
-            if deleted_p then
-
-                return new;
-
-            end if;
-        end if;
-
-        -- recalculate the table from scratch.
-
-        delete from acs_privilege_hierarchy_index;
-
-        -- first find the top nodes of the tree
-
-        for v_rec in select privilege, child_privilege
-                       from acs_privilege_hierarchy
-                      where privilege 
-                            NOT in (select distinct child_privilege
-                                      from acs_privilege_hierarchy)
-                                           
-        LOOP
-
-            -- top level node, so find the next key at this level.
-
-            select max(tree_leaf_key_to_int(tree_sortkey)) into new_value 
-              from acs_privilege_hierarchy_index
-             where tree_level(tree_sortkey) = 1;
-
-             -- insert the new node
-
-            insert into acs_privilege_hierarchy_index 
-                        (privilege, child_privilege, tree_sortkey)
-                        values
-                        (v_rec.privilege, v_rec.child_privilege, tree_next_key(null, new_value));
-
-            -- now recurse down from this node
-
-            PERFORM priv_recurse_subtree(tree_next_key(null, new_value), v_rec.child_privilege);
-
-        end LOOP;
-
-        -- materialize the map view to speed up queries
-        -- DanW (dcwickstrom@earthlink.net) 30 Jan, 2003
-        delete from acs_privilege_descendant_map;
-
-        insert into acs_privilege_descendant_map (privilege, descendant) 
-        select privilege, descendant from acs_privilege_descendant_map_view;
-
-        return new;
-
-end;' language 'plpgsql';
-
-create trigger acs_priv_hier_ins_del_tr after insert or delete
-on acs_privilege_hierarchy for each row
-execute procedure acs_priv_hier_ins_del_tr ();
-
-create function priv_recurse_subtree(varbit, varchar) 
-returns integer as '
-declare
-        nkey            alias for $1;
-        child_priv      alias for $2;
-        new_value       integer;
-        v_rec           record;
-        new_key         varbit;
-begin
-
-        -- now iterate over all of the children of the 
-        -- previous node.
-        
-        for v_rec in select privilege, child_privilege
-                       from acs_privilege_hierarchy
-                      where privilege = child_priv
-
-        LOOP
-
-            -- calculate the next key for this level and parent
-
-            select max(tree_leaf_key_to_int(tree_sortkey)) into new_value
-              from acs_privilege_hierarchy_index
-             where tree_sortkey between nkey and tree_right(nkey)
-               and tree_level(tree_sortkey) = tree_level(nkey) + 1;
-
-            new_key := tree_next_key(nkey, new_value);
-
-            -- insert the new child node.
-
-            insert into acs_privilege_hierarchy_index
-                        (privilege, child_privilege, tree_sortkey)
-                        values
-                        (v_rec.privilege, v_rec.child_privilege, new_key);
-
-            -- keep recursing down until no more children are found
-
-            PERFORM priv_recurse_subtree(new_key, v_rec.child_privilege);
-
-        end LOOP;
-
-        -- no children found, so insert the child node as its own separate 
-        -- node.
-
-        if NOT FOUND then
-           insert into acs_privilege_hierarchy_index
-                       (privilege, child_privilege, tree_sortkey)
-                       values 
-                       (child_priv, child_priv, tree_next_key(nkey, null));
-        end if;
-
-        return null;
-
-end;' language 'plpgsql';
 
 --create table acs_privilege_method_rules (
 --	privilege	not null constraint acs_priv_method_rules_priv_fk
@@ -294,69 +93,99 @@ comment on table acs_privilege_hierarchy is '
 -- were granted moderate on a user.
 --'
 
-create function acs_privilege__create_privilege (varchar,varchar,varchar)
-returns integer as '
-declare
-  create_privilege__privilege              alias for $1;  
-  create_privilege__pretty_name            alias for $2;  -- default null  
-  create_privilege__pretty_plural          alias for $3;  -- default null
-begin
+--create or replace view acs_privilege_method_map
+--as select r1.privilege, pmr.object_type, pmr.method
+--     from acs_privileges r1, acs_privileges r2, acs_privilege_method_rules pmr
+--    where r2.privilege in (select distinct rh.child_privilege
+--                           from acs_privilege_hierarchy rh
+--                           start with privilege = r1.privilege
+--                           connect by prior child_privilege = privilege
+--                           union
+--                           select r1.privilege
+--                           from dual)
+--      and r2.privilege = pmr.privilege;
+
+create or replace package acs_privilege
+as
+
+  procedure create_privilege (
+    privilege	in acs_privileges.privilege%TYPE,
+    pretty_name   in acs_privileges.pretty_name%TYPE default null,
+    pretty_plural in acs_privileges.pretty_plural%TYPE default null 
+  );
+
+  procedure drop_privilege (
+    privilege	in acs_privileges.privilege%TYPE
+  );
+
+  procedure add_child (
+    privilege		in acs_privileges.privilege%TYPE,
+    child_privilege	in acs_privileges.privilege%TYPE
+  );
+
+  procedure remove_child (
+    privilege		in acs_privileges.privilege%TYPE,
+    child_privilege	in acs_privileges.privilege%TYPE
+  );
+
+end;
+/
+show errors
+
+create or replace package body acs_privilege
+as
+
+  procedure create_privilege (
+    privilege	  in acs_privileges.privilege%TYPE,
+    pretty_name   in acs_privileges.pretty_name%TYPE default null,
+    pretty_plural in acs_privileges.pretty_plural%TYPE default null 
+  )
+  is
+  begin
     insert into acs_privileges
      (privilege, pretty_name, pretty_plural)
     values
-     (create_privilege__privilege, 
-      create_privilege__pretty_name, 
-      create_privilege__pretty_plural);
-      
-    return 0; 
-end;' language 'plpgsql';
+     (create_privilege.privilege, 
+      create_privilege.pretty_name, 
+      create_privilege.pretty_plural);
+  end;
 
-create function acs_privilege__create_privilege (varchar)
-returns integer as '
-declare
-  create_privilege__privilege              alias for $1;
-begin
-    return acs_privilege__create_privilege(create_privilege__privilege, null, null);
-end;' language 'plpgsql';
-
-
-create function acs_privilege__drop_privilege (varchar)
-returns integer as '
-declare
-  drop_privilege__privilege     alias for $1;  
-begin
+  procedure drop_privilege (
+    privilege	in acs_privileges.privilege%TYPE
+  )
+  is
+  begin
     delete from acs_privileges
-    where privilege = drop_privilege__privilege;
+    where privilege = drop_privilege.privilege;
+  end;
 
-    return 0; 
-end;' language 'plpgsql';
-
-create function acs_privilege__add_child (varchar,varchar)
-returns integer as '
-declare
-  add_child__privilege              alias for $1;  
-  add_child__child_privilege        alias for $2;  
-begin
+  procedure add_child (
+    privilege		in acs_privileges.privilege%TYPE,
+    child_privilege	in acs_privileges.privilege%TYPE
+  )
+  is
+  begin
     insert into acs_privilege_hierarchy
      (privilege, child_privilege)
     values
-     (add_child__privilege, add_child__child_privilege);
+     (add_child.privilege, add_child.child_privilege);
+  end;
 
-    return 0; 
-end;' language 'plpgsql';
-
-create function acs_privilege__remove_child (varchar,varchar)
-returns integer as '
-declare
-  remove_child__privilege              alias for $1;  
-  remove_child__child_privilege        alias for $2;  
-begin
+  procedure remove_child (
+    privilege		in acs_privileges.privilege%TYPE,
+    child_privilege	in acs_privileges.privilege%TYPE
+  )
+  is
+  begin
     delete from acs_privilege_hierarchy
-    where privilege = remove_child__privilege
-    and child_privilege = remove_child__child_privilege;
+    where privilege = remove_child.privilege
+    and child_privilege = remove_child.child_privilege;
+  end;
 
-    return 0; 
-end;' language 'plpgsql';
+
+end;
+/
+show errors
 
 
 ------------------------------------
@@ -364,53 +193,45 @@ end;' language 'plpgsql';
 ------------------------------------
 
 create table acs_permissions (
-	object_id		integer not null
+	object_id		not null
 				constraint acs_permissions_on_what_id_fk
 				references acs_objects (object_id),
-	grantee_id		integer not null
+	grantee_id		not null
 				constraint acs_permissions_grantee_id_fk
 				references parties (party_id),
-	privilege		varchar(100) not null 
-                                constraint acs_permissions_priv_fk
+	privilege		not null constraint acs_permissions_priv_fk
 				references acs_privileges (privilege),
 	constraint acs_permissions_pk
 	primary key (object_id, grantee_id, privilege)
 );
 
 create index acs_permissions_grantee_idx on acs_permissions (grantee_id);
+-- create bitmap index acs_permissions_privilege_idx on acs_permissions (privilege);
 create index acs_permissions_privilege_idx on acs_permissions (privilege);
 
--- Added table to materialize view that previously used 
--- acs_privilege_descendant_map name
---
--- DanW (dcwickstrom@earthlink.net) 30 Jan, 2003
+create or replace view acs_privilege_descendant_map
+as select p1.privilege, p2.privilege as descendant
+   from acs_privileges p1, acs_privileges p2
+   where p2.privilege in (select child_privilege
+			  from acs_privilege_hierarchy
+			  start with privilege = p1.privilege
+			  connect by prior child_privilege = privilege)
+   or p2.privilege = p1.privilege;
 
--- DRB: I switched this to UNION form because the old view was incredibly
--- slow and caused installation of packages to take exponentially increasing
--- time.   No code should be querying against this view other than the
--- trigger that recreates the denormalized map anyway ...
-
-create view acs_privilege_descendant_map_view
-as select distinct h1.privilege, h2.child_privilege as descendant
-   from acs_privilege_hierarchy_index h1, acs_privilege_hierarchy_index h2
-   where h2.tree_sortkey between h1.tree_sortkey and tree_right(h1.tree_sortkey)
-   union
-   select privilege, privilege
-   from acs_privileges;
-
-create view acs_permissions_all
+create or replace view acs_permissions_all
 as select op.object_id, p.grantee_id, p.privilege
    from acs_object_paths op, acs_permissions p
    where op.ancestor_id = p.object_id;
 
-create view acs_object_grantee_priv_map
+create or replace view acs_object_grantee_priv_map
 as select a.object_id, a.grantee_id, m.descendant as privilege
    from acs_permissions_all a, acs_privilege_descendant_map m
    where a.privilege = m.privilege;
 
--- New fast version of acs_object_party_privilege_map
+-- Fast new acs_object_party_privilege_map based on the denormalized
+-- party_approved_member_map.  You may now use this map without fear.
 
-create view acs_object_party_privilege_map as
+create or replace view acs_object_party_privilege_map as
 select c.object_id, pdm.descendant as privilege, pamm.member_id as party_id
 from acs_object_context_index c, acs_permissions p, acs_privilege_descendant_map pdm,
   party_approved_member_map pamm
@@ -418,104 +239,99 @@ where c.ancestor_id = p.object_id
   and pdm.privilege = p.privilege
   and pamm.party_id = p.grantee_id;
 
-create view all_object_party_privilege_map as
+-- Kept to avoid breaking existing code, should eventually go away.
+
+create or replace view all_object_party_privilege_map as
 select * from acs_object_party_privilege_map;
 
 
--- This table acts as a mutex for inserts/deletes from acs_permissions.
--- This is used since postgresql's exception handing mechanism is non-
--- existant.  A dup insert on acs_permissions will roll-back the 
--- transaction and give an error, which is not what we want.  Using a 
--- separate table for locking allows us exclusive access for 
--- inserts/deletes, but does not block readers.  That way we don't 
--- slow down permissions-checking which is known to have performance 
--- problems already.
+--create or replace view acs_object_party_method_map
+--as select opp.object_id, opp.party_id, pm.object_type, pm.method
+--   from acs_object_party_privilege_map opp, acs_privilege_method_map pm
+--   where opp.privilege = pm.privilege;
 
--- (OpenACS - DanW)
+create or replace package acs_permission
+as
 
-create table acs_permissions_lock (
-       lck  integer
-);
+  procedure grant_permission (
+    object_id	 acs_permissions.object_id%TYPE,
+    grantee_id	 acs_permissions.grantee_id%TYPE,
+    privilege	 acs_permissions.privilege%TYPE
+  );
 
-create function acs_permissions_lock_tr () returns opaque as '
-begin
-        raise EXCEPTION ''FOR LOCKING ONLY, NO DML STATEMENTS ALLOWED'';
-        return null;
-end;' language 'plpgsql';
+  procedure revoke_permission (
+    object_id	 acs_permissions.object_id%TYPE,
+    grantee_id	 acs_permissions.grantee_id%TYPE,
+    privilege	 acs_permissions.privilege%TYPE
+  );
 
-create trigger acs_permissions_lock_tr 
-before insert or update or delete on acs_permissions_lock
-for each row execute procedure acs_permissions_lock_tr();
+  function permission_p (
+    object_id	 acs_objects.object_id%TYPE,
+    party_id	 parties.party_id%TYPE,
+    privilege	 acs_privileges.privilege%TYPE
+  ) return char;
 
-create function acs_permission__grant_permission (integer, integer, varchar)
-returns integer as '
-declare
-    grant_permission__object_id         alias for $1;
-    grant_permission__grantee_id        alias for $2;
-    grant_permission__privilege         alias for $3;
-    exists_p                            boolean;
-begin
-    lock table acs_permissions_lock;
+end acs_permission;
+/
+show errors
 
-    select count(*) > 0 into exists_p
-      from acs_permissions
-     where object_id = grant_permission__object_id
-       and grantee_id = grant_permission__grantee_id
-       and privilege = grant_permission__privilege;
-
-    if not exists_p then
-
-        insert into acs_permissions
-          (object_id, grantee_id, privilege)
-          values
-          (grant_permission__object_id, grant_permission__grantee_id, 
-          grant_permission__privilege);
-
-    end if;
-
-    -- exception
-    --  when dup_val_on_index then
-    --    return;
-
-    return 0; 
-end;' language 'plpgsql';
-
-
--- procedure revoke_permission
-create function acs_permission__revoke_permission (integer, integer, varchar)
-returns integer as '
-declare
-    revoke_permission__object_id         alias for $1;
-    revoke_permission__grantee_id        alias for $2;
-    revoke_permission__privilege         alias for $3;
-begin
-    lock table acs_permissions_lock;
-
+create or replace package body acs_permission
+as
+  procedure grant_permission (
+    object_id	 acs_permissions.object_id%TYPE,
+    grantee_id	 acs_permissions.grantee_id%TYPE,
+    privilege	 acs_permissions.privilege%TYPE
+  )
+  as
+  begin
+    insert into acs_permissions
+      (object_id, grantee_id, privilege)
+    values
+      (object_id, grantee_id, privilege);
+  exception
+    when dup_val_on_index then
+      return;
+  end grant_permission;
+  --
+  procedure revoke_permission (
+    object_id	 acs_permissions.object_id%TYPE,
+    grantee_id	 acs_permissions.grantee_id%TYPE,
+    privilege	 acs_permissions.privilege%TYPE
+  )
+  as
+  begin
     delete from acs_permissions
-    where object_id = revoke_permission__object_id
-    and grantee_id = revoke_permission__grantee_id
-    and privilege = revoke_permission__privilege;
+    where object_id = revoke_permission.object_id
+    and grantee_id = revoke_permission.grantee_id
+    and privilege = revoke_permission.privilege;
+  end revoke_permission;
 
-    return 0; 
-end;' language 'plpgsql';
+  function permission_p (
+    object_id	 acs_objects.object_id%TYPE,
+    party_id	 parties.party_id%TYPE,
+    privilege	 acs_privileges.privilege%TYPE
+  ) return char
+  as
+    exists_p char(1);
+  begin
 
--- Really speedy version of permission_p written by Don Baccus
+    select decode(count(*),0,'f','t') into exists_p
+    from dual where exists
+      (select 1
+       from acs_permissions p, party_approved_member_map m,
+         acs_object_context_index c, acs_privilege_descendant_map h
+       where p.object_id = c.ancestor_id
+         and h.descendant = permission_p.privilege
+         and c.object_id = permission_p.object_id
+         and m.member_id = permission_p.party_id
+         and p.privilege = h.privilege
+         and p.grantee_id = m.party_id);
 
-create or replace function acs_permission__permission_p (integer,integer,varchar)
-returns boolean as '
-declare
-    permission_p__object_id           alias for $1;
-    permission_p__party_id            alias for $2;
-    permission_p__privilege           alias for $3;
-    exists_p                          boolean;
-begin
-  return exists (select 1
-                 from acs_permissions p, party_approved_member_map m,
-                   acs_object_context_index c, acs_privilege_descendant_map h
-                 where p.object_id = c.ancestor_id
-                   and h.descendant = permission_p__privilege
-                   and c.object_id = permission_p__object_id
-                   and m.member_id = permission_p__party_id
-                   and p.privilege = h.privilege
-                   and p.grantee_id = m.party_id);
-end;' language 'plpgsql';
+    return exists_p;
+
+  end permission_p;
+  --
+end acs_permission;
+/
+show errors
+

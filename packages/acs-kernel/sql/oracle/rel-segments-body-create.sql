@@ -3,7 +3,7 @@
 --
 -- @author Oumi Mehrotra oumi@arsdigita.com
 -- @creation-date 2000-11-22
--- @cvs-id rel-segments-body-create.sql,v 1.1.4.1 2001/01/12 22:58:33 mbryzek Exp
+-- @cvs-id $Id$
 
 -- Copyright (C) 1999-2000 ArsDigita Corporation
 -- This is free software distributed under the terms of the GNU Public
@@ -14,168 +14,146 @@
 -- PACKAGE BODY --
 ------------------
 
--- rel_segment__new -- full version
-create function rel_segment__new (integer,varchar,timestamptz,integer,varchar,varchar,varchar,varchar,integer,varchar,integer)
-returns integer as '
-declare
-  new__segment_id        alias for $1;  -- default null  
-  object_type            alias for $2;  -- default ''rel_segment''
-  creation_date          alias for $3;  -- default now()
-  creation_user          alias for $4;  -- default null
-  creation_ip            alias for $5;  -- default null
-  email                  alias for $6;  -- default null
-  url                    alias for $7;  -- default null
-  new__segment_name      alias for $8;  
-  new__group_id          alias for $9;  
-  new__rel_type          alias for $10; 
-  context_id             alias for $11; -- default null
-  v_segment_id           rel_segments.segment_id%TYPE;
-begin
+create or replace package body rel_segment
+is
+ function new (
+  segment_id            in rel_segments.segment_id%TYPE default null,
+  object_type           in acs_objects.object_type%TYPE
+                           default 'rel_segment',
+  creation_date         in acs_objects.creation_date%TYPE
+                           default sysdate,
+  creation_user         in acs_objects.creation_user%TYPE
+                           default null,
+  creation_ip           in acs_objects.creation_ip%TYPE default null,
+  email                 in parties.email%TYPE default null,
+  url                   in parties.url%TYPE default null,
+  segment_name          in rel_segments.segment_name%TYPE,
+  group_id              in rel_segments.group_id%TYPE,
+  rel_type              in rel_segments.rel_type%TYPE,
+  context_id	in acs_objects.context_id%TYPE default null
+ ) return rel_segments.segment_id%TYPE
+ is
+  v_segment_id rel_segments.segment_id%TYPE;
+ begin
   v_segment_id :=
-   party__new(new__segment_id, object_type, creation_date, creation_user,
+   party.new(segment_id, object_type, creation_date, creation_user,
              creation_ip, email, url, context_id);
 
   insert into rel_segments
    (segment_id, segment_name, group_id, rel_type)
   values
-   (v_segment_id, new__segment_name, new__group_id, new__rel_type);
+   (v_segment_id, new.segment_name, new.group_id, new.rel_type);
 
   return v_segment_id;
-  
-end;' language 'plpgsql';
+ end new;
 
--- rel_segment__new -- overloaded version for specifying only non-default values
-create function rel_segment__new (varchar,integer,varchar)
-returns integer as '
-declare
-  new__segment_name      alias for $1;  
-  new__group_id          alias for $2;  
-  new__rel_type          alias for $3;
-  v_segment_id           rel_segments.segment_id%TYPE;
-begin
-
-   v_segment_id := rel_segment__new(null, ''rel_segment'', now(), null, null, null, null, new__segment_name, new__group_id, new__rel_type, null);
-
-   return v_segment_id;
-
-end;' language 'plpgsql';
-
-
--- procedure delete
-create function rel_segment__delete (integer)
-returns integer as '
-declare
-  delete__segment_id            alias for $1;  
-  row                           record;
-begin
+ procedure delete (
+   segment_id     in rel_segments.segment_id%TYPE
+ )
+ is
+ begin
 
    -- remove all constraints on this segment
-   for row in  select constraint_id 
+   for row in (select constraint_id 
                  from rel_constraints 
-                where rel_segment = delete__segment_id 
-   LOOP
+                where rel_segment = rel_segment.delete.segment_id) loop
 
-       PERFORM rel_constraint__delete(row.constraint_id);
+       rel_constraint.delete(row.constraint_id);
 
    end loop;
 
-   PERFORM party__delete(delete__segment_id);
+   party.delete(segment_id);
 
-   return 0; 
-end;' language 'plpgsql';
+ end delete;
 
-
--- function get
-create function rel_segment__get (integer,varchar)
-returns integer as '
-declare
-  get__group_id         alias for $1;  
-  get__rel_type         alias for $2;  
-  v_segment_id          rel_segments.segment_id%TYPE;
-begin
+ -- EXPERIMENTAL / UNSTABLE -- use at your own risk
+ --
+ function get (
+   group_id       in rel_segments.group_id%TYPE,
+   rel_type       in rel_segments.rel_type%TYPE
+ ) return rel_segments.segment_id%TYPE
+ is
+   v_segment_id rel_segments.segment_id%TYPE;
+ begin
    select min(segment_id) into v_segment_id
    from rel_segments
-   where group_id = get__group_id
-     and rel_type = get__rel_type;
+   where group_id = get.group_id
+     and rel_type = get.rel_type;
 
    return v_segment_id;
-  
-end;' language 'plpgsql';
+ end get;
 
-create function rel_segment__get_or_new(integer,varchar) returns integer as '
-declare
-        gid     alias for $1;
-        typ     alias for $2;
-begin
-        return rel_segment__get_or_new(gid,typ,null);
-end;' language 'plpgsql';
 
--- function get_or_new
-create function rel_segment__get_or_new (integer,varchar,varchar)
-returns integer as '
-declare
-  get_or_new__group_id          alias for $1;  
-  get_or_new__rel_type          alias for $2;  
-  segment_name                  alias for $3;  -- default null
-  v_segment_id                  rel_segments.segment_id%TYPE;
-  v_segment_name                rel_segments.segment_name%TYPE;
-begin
+ -- EXPERIMENTAL / UNSTABLE -- use at your own risk
+ --
+ -- This function simplifies the use of segments a little by letting
+ -- you not have to worry about creating and initializing segments.
+ -- If the segment you're interested in exists, this function
+ -- returns its segment_id.
+ -- If the segment you're interested in doesn't exist, this function
+ -- does a pretty minimal amount of initialization for the segment
+ -- and returns a new segment_id.
+ function get_or_new (
+   group_id       in rel_segments.group_id%TYPE,
+   rel_type       in rel_segments.rel_type%TYPE,
+   segment_name   in rel_segments.segment_name%TYPE
+                  default null
+ ) return rel_segments.segment_id%TYPE
+ is
+   v_segment_id rel_segments.segment_id%TYPE;
+   v_segment_name rel_segments.segment_name%TYPE;
+ begin
 
-   v_segment_id := rel_segment__get(get_or_new__group_id,get_or_new__rel_type);
+   v_segment_id := get(group_id, rel_type);
 
    if v_segment_id is null then
 
       if segment_name is not null then
          v_segment_name := segment_name;
       else
-         select groups.group_name || '' - '' || acs_object_types.pretty_name ||
-                  '' segment''
+         select groups.group_name || ' - ' || acs_object_types.pretty_name ||
+                  ' segment'
          into v_segment_name
          from groups, acs_object_types
-         where groups.group_id = get_or_new__group_id
-           and acs_object_types.object_type = get_or_new__rel_type;
+         where groups.group_id = get_or_new.group_id
+           and acs_object_types.object_type = get_or_new.rel_type;
 
       end if;
 
-      v_segment_id := rel_segment__new (
-          null,
-          ''rel_segment'',
-          now(),
-          null,
-          null,
-          null,
-          null,
-          v_segment_name,
-          get_or_new__group_id,
-          get_or_new__rel_type,
-          get_or_new__group_id
+      v_segment_id := rel_segment.new (
+          object_type => 'rel_segment',
+          creation_user => null,
+          creation_ip => null,
+          email => null,
+          url => null,
+          segment_name => v_segment_name,
+          group_id => get_or_new.group_id,
+          rel_type => get_or_new.rel_type,
+          context_id => get_or_new.group_id
       );
 
    end if;
 
    return v_segment_id;
 
-  
-end;' language 'plpgsql';
+ end get_or_new;
 
-
--- function name
-create function rel_segment__name (integer)
-returns varchar as '
-declare
-  name__segment_id             alias for $1;  
-  name__segment_name           varchar(200);  
-begin
+ function name (
+  segment_id      in rel_segments.segment_id%TYPE
+ )
+ return rel_segments.segment_name%TYPE
+ is
+  segment_name varchar(200);
+ begin
   select segment_name
-  into name__segment_name
+  into segment_name
   from rel_segments
-  where segment_id = name__segment_id;
+  where segment_id = name.segment_id;
 
-  return name__segment_name;
-  
-end;' language 'plpgsql';
+  return segment_name;
+ end name;
 
-
-
--- show errors
+end rel_segment;
+/
+show errors
 
