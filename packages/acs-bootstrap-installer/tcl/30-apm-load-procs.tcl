@@ -393,7 +393,7 @@ ad_proc apm_source { __file } {
 ad_proc apm_bootstrap_load_file { root_directory file } {
     Source a single file during initial bootstrapping and set APM data.
 } {
-    ns_log "Notice" "Loading packages/$file"
+    ns_log "Notice" "Loading [file tail $root_directory]/$file"
 
     apm_source "${root_directory}/${file}"
 }
