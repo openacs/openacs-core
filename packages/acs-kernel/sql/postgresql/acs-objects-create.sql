@@ -644,6 +644,42 @@ end;' language 'plpgsql';
 
 
 -- function new
+create function acs_object__new (integer,varchar,timestamp,integer,varchar,integer,boolean)
+returns integer as '
+declare
+  new__object_id              alias for $1;  -- default null
+  new__object_type            alias for $2;  -- default ''acs_object''
+  new__creation_date          alias for $3;  -- default now()
+  new__creation_user          alias for $4;  -- default null
+  new__creation_ip            alias for $5;  -- default null
+  new__context_id             alias for $6;  -- default null
+  new__security_inherit_p     alias for $7;  -- default ''t''
+  v_object_id                 acs_objects.object_id%TYPE;
+begin
+  if new__object_id is null then
+   select acs_object_id_seq.nextval
+   into v_object_id from dual;
+  else
+    v_object_id := new__object_id;
+  end if;
+
+  insert into acs_objects
+   (object_id, object_type, context_id,
+    creation_date, creation_user, creation_ip, security_inherit_p)
+  values
+   (v_object_id, new__object_type, new__context_id,
+    new__creation_date, new__creation_user, new__creation_ip, 
+    new__security_inherit_p);
+
+  PERFORM acs_object__initialize_attributes(v_object_id);
+
+  return v_object_id;
+  
+end;' language 'plpgsql';
+
+
+
+-- function new
 create function acs_object__new (integer,varchar,timestamp,integer,varchar,integer)
 returns integer as '
 declare
