@@ -45,7 +45,7 @@
       <querytext>
 
 	select v.package_id, p.parameter_name, 
-               coalesce(p.default_value, v.attr_value) as attr_value
+               case when v.value_id is null then p.default_value else v.attr_value end as attr_value
 	from apm_parameters p left outer join apm_parameter_values v
              using (parameter_id)
 	where p.package_key = :package_key
