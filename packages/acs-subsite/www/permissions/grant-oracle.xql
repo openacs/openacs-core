@@ -5,21 +5,27 @@
 
 <fullquery name="name">      
       <querytext>
-      select acs_object.name(:object_id) from dual
+      select acs_object.name(:object_id) 
       </querytext>
 </fullquery>
 
- 
-<fullquery name="parties">      
+<fullquery name="select_privileges_hierarchy">      
       <querytext>
-      
-  select p.party_id, 
-         acs_object.name(p.party_id) || nvl2(p.email, ' ('||p.email||')', '') as name
-  from   parties p
-  order  by upper(acs_object.name(p.party_id))
-
+          select privilege, child_privilege
+          from acs_privilege_hierarchy
       </querytext>
 </fullquery>
 
+<fullquery name="grant">      
+      <querytext>
+          select acs_permission.grant_permission(:object_id, :party_id, :privilege)
+      </querytext>
+</fullquery>
+
+<fullquery name="revoke">      
+      <querytext>
+        select acs_permission.revoke_permission(:object_id, :party_id, :privilege)
+      </querytext>
+</fullquery>
  
 </queryset>
