@@ -11,6 +11,10 @@
 # fall back on defaults for title, signatory and header_stuff
 
 if [template::util::is_nil title]     { set title        [ad_conn instance_name]  }
+if [template::util::is_nil doc_type]     { 
+    set doc_type {<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+       "http://www.w3.org/TR/html4/loose.dtd">}
+}
 if [template::util::is_nil signatory] { set signatory    [ad_system_owner] }
 if ![template::util::is_nil context] { set context_bar [eval ad_context_bar $context]}
 if [template::util::is_nil context_bar] { set context_bar [ad_context_bar]}
@@ -24,10 +28,10 @@ template::multirow create attribute key value
 # Pull out the package_id of the subsite closest to our current node
 set pkg_id [site_node_closest_ancestor_package "acs-subsite"]
 
-template::multirow append \
-    attribute bgcolor [ad_parameter -package_id $pkg_id bgcolor   dummy "white"]
-template::multirow append \
-    attribute text    [ad_parameter -package_id $pkg_id textcolor dummy "black"]
+#template::multirow append \
+#    attribute bgcolor [ad_parameter -package_id $pkg_id bgcolor   dummy "white"]
+#template::multirow append \
+#    attribute text    [ad_parameter -package_id $pkg_id textcolor dummy "black"]
 
 if { [info exists prefer_text_only_p]
      && $prefer_text_only_p == "f"
