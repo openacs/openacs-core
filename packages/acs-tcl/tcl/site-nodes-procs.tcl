@@ -90,14 +90,15 @@ namespace eval site_node {
             set node_id [site_node::new -name $node_name -parent_id $parent_node_id]
         }
 
-        # Get the context_id of the new package
+        # Default context_id to the closest ancestor package_id
         if {[empty_string_p $context_id]} {
-            # Default to the closest ancestor package_id
             set context_id [site_node::closest_ancestor_package -node_id $node_id]
         }
 
         # Instantiate the package
-        set package_id [apm_package_instance_new -- $package_name $context_id $package_key]
+        set package_id [apm_package_instance_new -package_key $package_key \
+                                                 -instance_name $package_name \
+                                                 -context_id $context_id]
 
         # Mount the package
         site_node::mount -node_id $node_id -object_id $package_id
