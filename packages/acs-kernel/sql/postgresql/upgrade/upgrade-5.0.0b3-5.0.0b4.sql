@@ -644,7 +644,7 @@ declare
 	singleton_p__package_key        alias for $1;
         v_singleton_p                   integer;
 begin
-        select count(*) > 0 into v_singleton_p
+        select count(*) into v_singleton_p
 	from apm_package_types
 	where package_key = singleton_p__package_key
         and singleton_p = ''t'';
