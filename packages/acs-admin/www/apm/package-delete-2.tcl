@@ -7,6 +7,7 @@ ad_page_contract {
     @cvs-id $Id$
 } {
     version_id:naturalnum
+    {remove_files:boolean 0}
     {sql_drop_scripts:multiple ""}
 }
 
@@ -41,7 +42,7 @@ if {![empty_string_p $sql_drop_scripts]} {
 }
 
 db_transaction {
-    apm_package_delete -callback apm_doc_body_callback $package_key
+    apm_package_delete -remove_files=$remove_files -callback apm_doc_body_callback $package_key
 } on_error {
     if {[apm_package_registered_p $package_key] } {
 	doc_body_append "The database returned the following error
