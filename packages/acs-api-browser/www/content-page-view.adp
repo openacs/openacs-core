@@ -29,7 +29,8 @@ the default</a> ]
 <h4>Content File Source</h4>
 
 <pre>
-@file_contents;noquote@
+<!-- directly display file contents var to avoid translating i18n strings etc -->
+<%= $file_contents %>
 </pre>
 </if>
 
