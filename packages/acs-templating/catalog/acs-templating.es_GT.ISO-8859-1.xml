@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="acs-templating" package_version="5.1.0" locale="es_ES" charset="ISO-8859-1">
+<message_catalog package_key="acs-templating" package_version="5.1.0" locale="es_GT" charset="ISO-8859-1">
 
   <msg key="12-Hour">12-Horas</msg>
   <msg key="24-Hour">24-Horas</msg>
@@ -12,11 +12,11 @@
   <msg key="Invalid_currency">Moneda incorrecta</msg>
   <msg key="Invalid_decimal_number">Número decimal incorrecto</msg>
   <msg key="Invalid_email_format">Formato de email incorrecto</msg>
-  <msg key="Invalid_filename">Nombre de fichero incorrecto</msg>
+  <msg key="Invalid_filename">Nombre de archivo incorrecto</msg>
   <msg key="Invalid_integer">Entero incorrecto</msg>
   <msg key="Invalid_keyword">Palabra clave incorrecta</msg>
   <msg key="Invalid_natural_number">Número natural incorrecto</msg>
-  <msg key="Invalid_url">URL incorrecta</msg>
+  <msg key="Invalid_url">URL incorrecto</msg>
   <msg key="Meridian">Meridiano</msg>
   <msg key="Minutes">Minutos</msg>
   <msg key="Month">Mes</msg>

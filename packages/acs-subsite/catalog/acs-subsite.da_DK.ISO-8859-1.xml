@@ -2,6 +2,7 @@
 <message_catalog package_key="acs-subsite" package_version="5.1.0" locale="da_DK" charset="ISO-8859-1">
 
   <msg key="_or">, eller </msg>
+  <msg key="_Update_Basic_Information">Opdater Oplysninger</msg>
   <msg key="A_member_of_the_system">Medlem af %system_name% siden</msg>
   <msg key="About_You">Biografi</msg>
   <msg key="Account_at_system_closed">Din konto i %system_name% er blevet lukket.</msg>
@@ -44,7 +45,9 @@
   <msg key="communities">grupper</msg>
   <msg key="community">gruppe</msg>
   <msg key="Confirm">Bekræft:</msg>
+  <msg key="confirmation_password_changed">Du har valgt et nyt kodeord.</msg>
   <msg key="Continue">Fortsæt</msg>
+  <msg key="Continue_to_your_account">Fortsæt til %pvt_home_name%</msg>
   <msg key="Country_Name">Land</msg>
   <msg key="Create_new_community">Opret nyt %pretty_name%</msg>
   <msg key="Create_new_subsite">Opret nyt undersite</msg>
@@ -292,6 +295,7 @@ Du kan altid ændre din adgangskode ved at gøre følgende:
   <msg key="Whos_Online_link_label">Brugere der er online</msg>
   <msg key="Whos_Online_title">Hvem er Online</msg>
   <msg key="Yes_I_am_sure">Ja, jeg er sikker</msg>
+  <msg key="You_are_in_the_follow">Du er i følgende grupper:</msg>
   <msg key="You_can_also_browse_from">Du kan også gennemse fra</msg>
   <msg key="You_can_always_re_open">Du kan altid genåbne den ved at</msg>
   <msg key="You_do_not_have_admin_on">Du har ikke administrationsrettigheder på objektet %root% eller nogen af dets børn</msg>

@@ -40,6 +40,8 @@
   <msg key="common_login">log in</msg>
   <msg key="common_Needs_Approval">Needs Approval</msg>
   <msg key="common_needs_approval">needs approval</msg>
+  <msg key="common_New">New</msg>
+  <msg key="common_new">new</msg>
   <msg key="common_Next">Next</msg>
   <msg key="common_next">next</msg>
   <msg key="common_no">No</msg>
@@ -57,6 +59,8 @@
   <msg key="common_reset">reset</msg>
   <msg key="common_Save">Save</msg>
   <msg key="common_save">save</msg>
+  <msg key="common_Search">Search</msg>
+  <msg key="common_search">search</msg>
   <msg key="common_Stop">Stop</msg>
   <msg key="common_stop">stop</msg>
   <msg key="common_Update">Update</msg>

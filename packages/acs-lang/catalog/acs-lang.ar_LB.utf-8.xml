@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<message_catalog package_key="acs-lang" package_version="5.1.0" locale="AR_LB" charset="utf-8">
+<message_catalog package_key="acs-lang" package_version="5.1.0" locale="ar_LB" charset="utf-8">
 
+  <msg key="available-in-this-language">متوفر بالانجليزية</msg>
+  <msg key="change-locale">تغير الموقع </msg>
   <msg key="English">إنجليزيّ</msg>
   <msg key="French">فَرَنْسِيّ</msg>
   <msg key="German">أَلْمانِيّ</msg>
@@ -31,9 +33,10 @@
   <msg key="localization-p_cs_precedes">0</msg>
   <msg key="localization-p_sep_by_space">1</msg>
   <msg key="localization-p_sign_posn">1</msg>
-  <msg key="localization-pm_str">م</msg>
+  <msg key="localization-pm_str">صباحا</msg>
   <msg key="localization-positive_sign">+</msg>
   <msg key="localization-t_fmt">%r</msg>
   <msg key="localization-thousands_sep">,</msg>
   <msg key="Spanish">إِسْبانِيّ</msg>
+  <msg key="this-language">اللبنانية</msg>
 </message_catalog>

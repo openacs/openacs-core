@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="acs-subsite" package_version="5.1.0" locale="es_ES" charset="ISO-8859-1">
+<message_catalog package_key="acs-subsite" package_version="5.1.0" locale="es_GT" charset="ISO-8859-1">
 
   <msg key="_or">, o</msg>
   <msg key="_Update_Basic_Information">Actualizar Información Básica</msg>
@@ -10,11 +10,11 @@
   <msg key="Account_close_confirm_yes_label">Sí, cancelar mi cuenta</msg>
   <msg key="Account_closed">&lt;p&gt;Su cuenta se encuentra cerrada por el momento.&lt;/p&gt;&lt;p&gt;Si usted lo desea, podemos &lt;a href=&quot;%restore_url%&quot;&gt;re-abrir su cuenta&lt;/a&gt;.&lt;/p&gt;</msg>
   <msg key="Account_closed_workspace_msg">&lt;p&gt;&lt;font color=&quot;red&quot;&gt;&lt;b&gt;Su cuenta está actualmente cancelada.&lt;/b&gt;&lt;/font&gt;&lt;a href=&quot;%login_url%&quot;&gt;Conectese&lt;/a&gt; de nuevo para ver que puede hacer al respecto.&lt;/p&gt;</msg>
-  <msg key="Account_reopened_message">Su cuenta en %system_name% ha sido reactividad. Bienvenido de nuevo.</msg>
+  <msg key="Account_reopened_message">Su cuenta en %system_name% ha sido reactivada. Bienvenido de nuevo.</msg>
   <msg key="Account_reopened_title">Cuenta reactivada</msg>
   <msg key="Action">Acción</msg>
-  <msg key="Add_new_app">Añadir una nueva aplicación</msg>
-  <msg key="Admin">Admin</msg>
+  <msg key="Add_new_app">Agregar una nueva aplicación</msg>
+  <msg key="Admin">Panel de Control</msg>
   <msg key="Administer_subsite">Administrar %subsite_name%</msg>
   <msg key="Administrative_options">Opciones de administración para este usuario</msg>
   <msg key="Alert_Type">Tipo de aviso</msg>
@@ -65,10 +65,10 @@
   <msg key="Disable">Desactivar</msg>
   <msg key="Disabled">Desactivado</msg>
   <msg key="Domain">Dominio</msg>
-  <msg key="E_mail">Email</msg>
+  <msg key="E_mail">Correo Electrónico</msg>
   <msg key="edit_comment">editar comentario</msg>
   <msg key="Elements_not_editable">Algunos elementos no pueden ser editados ya que están siendo administrados por %authority_name%.</msg>
-  <msg key="Email">correo electrónico</msg>
+  <msg key="Email">Correo Electrónico</msg>
   <msg key="email_body_Forgotten_password">Datos de su cuenta: 
 %account_id_label%: %account_id% 
 %password_label%: %password%
@@ -77,7 +77,7 @@ Para cambiar su contraseña, visite %reset_password_url%</msg>
 %account_id_label%: %account_id%
 %password_label%: %password%
 Para cambiar su contraseña, visite %reset_password_url%</msg>
-  <msg key="Email_Confirmation">Confirmación de correo</msg>
+  <msg key="Email_Confirmation">Confirmación de Correo Electrónico</msg>
   <msg key="Email_not_Requested">Correo electrónico no solicitado</msg>
   <msg key="email_subject_Forgotten_password">Recordatorio de su contraseña en %system_name%</msg>
   <msg key="email_subject_Registration_password">Bienvenido a %system_name%</msg>
@@ -93,13 +93,13 @@ Para cambiar su contraseña, visite %reset_password_url%</msg>
   <msg key="Forgot_your_password">¿Ha olvidado su contraseña?</msg>
   <msg key="Frequency">Frecuencia</msg>
   <msg key="Go_back">Regresar</msg>
-  <msg key="go_upload_the_users_por">sube el retrato del usuario</msg>
+  <msg key="go_upload_the_users_por">subir la foto del usuario</msg>
   <msg key="go_upload_your_portrait">sube tu retrato</msg>
   <msg key="Grant">Otorgar</msg>
   <msg key="Grant_Permission">Autorizar</msg>
   <msg key="Hide">Oculto</msg>
   <msg key="Home_page">Página web</msg>
-  <msg key="If_you_were_to">si fueras a</msg>
+  <msg key="If_you_were_to">Si fueras a</msg>
   <msg key="Information_Updated">Información Actualizada</msg>
   <msg key="Invite">Invitar</msg>
   <msg key="ISO_Code">Código ISO</msg>
@@ -119,11 +119,11 @@ Para cambiar su contraseña, visite %reset_password_url%</msg>
   <msg key="Leave_this_community">Salir de esta comunidad</msg>
   <msg key="Leave_this_subsite">Salir de este subsitio</msg>
   <msg key="lGo_back_without_adding">Regresar sin agregar ningun usuario</msg>
-  <msg key="Log_In">Ingresar</msg>
-  <msg key="log_in">registrarse</msg>
+  <msg key="Log_In">Entrar</msg>
+  <msg key="log_in">entrar</msg>
   <msg key="Log_in_to_system">Registrate en %system_name%</msg>
-  <msg key="logging_back_in">registrandoce de nuevo</msg>
-  <msg key="Login_has_expired">La pagina de registro ha expirado. Por favor regístrece de nuevo.</msg>
+  <msg key="logging_back_in">registrarse de nuevo  </msg>
+  <msg key="Login_has_expired">La pagina de registro ha expirado. Por favor registrarse de nuevo.</msg>
   <msg key="Login_or_register">Entrar o registrarse.</msg>
   <msg key="login_page">página de registro</msg>
   <msg key="Logout">Salir</msg>
@@ -132,7 +132,7 @@ Para cambiar su contraseña, visite %reset_password_url%</msg>
   <msg key="lt_Cannot_join_this_grou">No puede unirse a este grupo.</msg>
   <msg key="lt_Complete_List_of_ISO_">Lista completa de los códigos ISO</msg>
   <msg key="lt_Continue_working_with">Sigue trabajando en %system_name%</msg>
-  <msg key="lt_Edit_comment_for_the_">Editar commentario del retrato de %first_names% %last_name%</msg>
+  <msg key="lt_Edit_comment_for_the_">Editar commentario de la foto de %first_names% %last_name%</msg>
   <msg key="lt_first_names_last_name">%first_names% %last_name% (%email%) se registró como usuario de %system_url%</msg>
   <msg key="lt_For_Site-Wide_Adminis">Para los Administradores del sitio</msg>
   <msg key="lt_Grant_Permission_on_n">Otorgar permiso en %name%</msg>
@@ -142,19 +142,19 @@ Para cambiar su contraseña, visite %reset_password_url%</msg>
   <msg key="lt_If_you_happen_to_know">Si sabes o crees que la persona que quieres invitar ya tiene una cuenta en el sistema: </msg>
   <msg key="lt_If_you_need_this_func">Si necesitas esta funcionalidad, por favor carga acs-reference y ref-countries.</msg>
   <msg key="lt_Inherited_Permissions">Permisos heredados</msg>
-  <msg key="lt_It_would_be_a_very_ba">Puede ser una mala idea escoger esta opción si está usando un ordenador compartido de una biblioteca o colegio. Cualquier usuario que utilice este ordenador en adelante podría hacerse pasar por usted en nuestra plataforma.</msg>
+  <msg key="lt_It_would_be_a_very_ba">Puede ser una mala idea escoger esta opción si está usando una computadora compartida de una biblioteca o colegio. Cualquier usuario que utilice esta computadora en adelante podría hacerse pasar por usted en nuestra plataforma.</msg>
   <msg key="lt_New_registration_at_s">Nuevo registro en %system_url%</msg>
   <msg key="lt_Note_text_in_red_below">Note que el texto en rojo mostrado debajo de la entrada del campo de parámetro indica que el valor del mismo está siendo sobreescrito por una entrada en el archivo de parámetro de OpenACS. Desalentamos el uso del mismo pero algunos sitios lo necesitan para proveer valores específicos de instancia para los parámetros independientes de la tabla apm_parameter.</msg>
-  <msg key="lt_Note_that_you_can_era">Tenga en cuenta que puede eliminar su dirección de correo y contraseña de la memoria de su ordenador, pulsando la opción &quot;Salir&quot; de su portal.</msg>
+  <msg key="lt_Note_that_you_can_era">Tenga en cuenta que puede eliminar su dirección de correo y contraseña de la memoria de su computadora, haciendo click en la opción &quot;Salir&quot; de su portal.</msg>
   <msg key="lt_num_children_Children">%num_children% Hijos ocultos</msg>
   <msg key="lt_On_portrait_publish_d">El %portrait_publish_date%, subiste &lt;a href=&quot;%subsite_url%user/portrait/?return_url=%pvt_home_url%&quot;&quot;&gt;%portrait_title%&lt;/a&gt;</msg>
-  <msg key="lt_Our_server_can_tell_y">Nuestro servidor le puede decir a su navegador que recuerde algunas cosas como su dirección electrónica y su contraseña. Esto es conveniente porque si usted es la única persona que usa su ordenador, no tiene que repetirnos su correo ni su contraseña.</msg>
+  <msg key="lt_Our_server_can_tell_y">Nuestro servidor le puede decir a su navegador que recuerde algunas cosas como su dirección electrónica y su contraseña. Esto es conveniente porque si usted es la única persona que usa su computadora, no tiene que repetirnos su correo ni su contraseña.</msg>
   <msg key="lt_Password_Confirmation">Confirmación de la contraseña:</msg>
   <msg key="lt_Personal_Home_Page_UR">URL de su página personal:</msg>
   <msg key="lt_Please_locate_your_co">Por favor localiza el código de tu país entre los listados debajo, luego usa el boton &quot;regresar&quot; en tu navegador para regresar al formulario anterior.</msg>
   <msg key="lt_Please_read_and_follo">Por favor, siga las instrucciones dadas en ese correo.</msg>
   <msg key="lt_Please_try_to_a_hrefi">Por favor, intente &lt;a href=&quot;index&quot;&gt;ingresar&lt;/a&gt; de nuevo</msg>
-  <msg key="lt_Portrait_of_first_last">Retrato de %first_names% %last_name%</msg>
+  <msg key="lt_Portrait_of_first_last">Foto de %first_names% %last_name%</msg>
   <msg key="lt_Privileges_higher_implied">Privilegios altos en la jerarquía implican todos los privilegios debajo, ejemplo: cuando otorgas admin, luego leer, escribir , etc. estan implicados automáticamente.</msg>
   <msg key="lt_Problem_with_authenti">Problema con la autenticación</msg>
   <msg key="lt_Registration_informat">La información de registro para este servicio acaba de ser enviada a %email%</msg>
@@ -163,23 +163,23 @@ Para cambiar su contraseña, visite %reset_password_url%</msg>
   <msg key="lt_Saving_email_address_">Guardando dirección de correo y contraseña</msg>
   <msg key="lt_Show_everyone_else_at">Hagase conocer a los usuarios de %system_name%</msg>
   <msg key="lt_Sorry_but_it_seems_th">Lo sentimos, pero ha sido expulsado de &amp;system_name%</msg>
-  <msg key="lt_Sure_erase_user_por">Seguro que quieres borrar el retrato de este usuario?</msg>
-  <msg key="lt_Sure_erase_your_por">Estas seguro de borrar tu retrato?</msg>
+  <msg key="lt_Sure_erase_user_por">Seguro que quieres borrar la foto de este usuario?</msg>
+  <msg key="lt_Sure_erase_your_por">Estas seguro de borrar tu foto?</msg>
   <msg key="lt_The_picture_of_you_in">Tu foto en el systema es inválida. Por favor</msg>
   <msg key="lt_There_was_a_problem_w">Ha ocurrido un problema durante la autenticación de su cuenta</msg>
   <msg key="lt_This_is_the_image_that">Esta es la imagen que mostraremos a los otros usuarios en %system_name%</msg>
-  <msg key="lt_This_user_doesnt_have">Este usuario no tiene un retrato todavía. Puedes</msg>
-  <msg key="lt_This_user_is_deleted">Este usuario fue borrado y su acceso prohibido de la comunidad.</msg>
+  <msg key="lt_This_user_doesnt_have">Este usuario no tiene foto todavía. Puedes</msg>
+  <msg key="lt_This_user_is_deleted">Este usuario fue borrado y su acceso a la comunidad fue prohibido.</msg>
   <msg key="lt_To_confirm_your_regis">Para confirmar su registro, por favor, acuda a %confirmation_url%</msg>
-  <msg key="lt_Upload_your_favorite">Sube tu retrado favorito, un archivo escaneado en formato JPEG o GIF, de tu computadora(nota que no puedes hacer referencia a una imagen en algún lado de internet; tiene que estar en tu disco duro).</msg>
+  <msg key="lt_Upload_your_favorite">Sube tu foto favorita, un archivo escaneado en formato JPEG o GIF, de tu computadora(nota que no puedes hacer referencia a una imagen en algún lado de internet; tiene que estar en tu disco duro).</msg>
   <msg key="lt_Uploaded_pretty_date">Subido: %pretty_date%</msg>
   <msg key="lt_Uploaded_publish_date">Subido: %pretty_date%</msg>
   <msg key="lt_Use_the_Browse_button">Utiliza el botón de &quot;Examinar...&quot; para localizar tu archivo, luego selecciona el botón de &quot;Abrir&quot;.</msg>
   <msg key="lt_We_cant_find_you">No te pudimos encontrar (usuario %user_id%) en la tabla de usuarios. Probablemente tu cuenta fue borrada por alguna razón.</msg>
   <msg key="lt_We_had_a_problem_proc">Tuvimos un problema procesando tu entrada.</msg>
-  <msg key="lt_We_were_not_awaiting_">No estabamos esperando su email. Debe tratarse de un error.</msg>
+  <msg key="lt_We_were_not_awaiting_">No estabamos esperando su correo. Debe tratarse de un error.</msg>
   <msg key="lt_Welcome_to_system_nam">Bienvenido a %system_name%</msg>
-  <msg key="lt_What_other_people_see">Lo que verán los demás al pulsar sobre su nombre</msg>
+  <msg key="lt_What_other_people_see">Lo que verán los demás al hacer click sobre su nombre</msg>
   <msg key="lt_You_cant_have_a_lt_in">No puede introducir un signo &amp;lt; en su nombre ya que corresponde a una etiqueta HTML y podría crear confusión.</msg>
   <msg key="lt_You_cant_have_a_lt_in_1">No puede introducir un signo &amp;lt; en sus apellidos ya que corresponde a una etiqueta HTML y podría crear confusión.</msg>
   <msg key="lt_You_wont_get_any_email">No podrás recibir ningún correo hasta después de pretty_date%.</msg>
@@ -187,7 +187,7 @@ Para cambiar su contraseña, visite %reset_password_url%</msg>
   <msg key="lt_Your_email_has_been_c_1">Su correo ha sido confirmado. Ahora, debe esperar la aprobación del administrador de %system_name%.</msg>
   <msg key="lt_Your_email_is_confirm">Su correo ha sido confirmado</msg>
   <msg key="lt_Your_login_has_expire">Tu sesión ha expirado. Por favor ingresa tu contraseña para poder seguir trabajando.</msg>
-  <msg key="lt_Your_URL_doesnt_have_">La URL introducida no es válida. Un ejemplo de URL válida es \&quot;%valid_url_example%\&quot;.&quot;</msg>
+  <msg key="lt_Your_URL_doesnt_have_">El URL introducido no es válido. Un ejemplo de URL válida es \&quot;%valid_url_example%\&quot;.&quot;</msg>
   <msg key="Make_administrator">Volver administrador</msg>
   <msg key="Make_member">Volver miembro</msg>
   <msg key="Make_yourself_invisible_label">Volverse invisible</msg>
@@ -211,7 +211,7 @@ Para cambiar su contraseña, visite %reset_password_url%</msg>
   <msg key="on_name_to">en %name% a</msg>
   <msg key="optional">(opcional)</msg>
   <msg key="Options">Opciones</msg>
-  <msg key="Or_add_a_new_user">O añadir un nuevo/a usuario/a</msg>
+  <msg key="Or_add_a_new_user">O agregar un nuevo/a usuario/a</msg>
   <msg key="or_the">o el</msg>
   <msg key="Password">Contraseña:</msg>
   <msg key="Password_changed_body">Su información de ingreso en %system_name%: %account_id_label%: %account_id% Su contraseña para esta cuenta ha sido modificiada recientemente. Usted no necesita hacer nada, ésta es simplemente una notificación para proteger la seguridad de su cuenta. --------------- Usted puede cambiar su contraseña realizando los siguientes pasos: 1. Ingrese a %system_name% 2. Haga click en el link &quot;%pvt_home_name%&quot; 3. Escoja &quot;%password_update_link_text%&quot;</msg>
@@ -276,13 +276,13 @@ Para cambiar su contraseña, visite %reset_password_url%</msg>
   <msg key="Welcome_user">Bienvenido/a, %user_name%</msg>
   <msg key="When_leaving_checkbox_empty">Cuando aquí usted deja un checkbox vacío ese privilegio será revocado por el grupo que escogió en caso de que haya sido concedido a ese grupo con anterioridad. </msg>
   <msg key="Whos_Online_link_label">Usuarios conectados en este momento</msg>
-  <msg key="Whos_Online_title">Quién está conectado</msg>
+  <msg key="Whos_Online_title">¿Quién está conectado?</msg>
   <msg key="Yes_I_am_sure">Sí, estoy seguro</msg>
   <msg key="You_are_in_the_follow">Usted esta en los siguientes grupos:</msg>
   <msg key="You_can_also_browse_from">También puede navegar desde el</msg>
   <msg key="You_can_always_re_open">Usted siembre puede reabrirlo con</msg>
   <msg key="You_do_not_have_admin_on">No tiene derechos de administración en el objeto %root% o cualquier de sus hijos</msg>
-  <msg key="You_dont_have_a_portrait">Usted aun no tiene un retrato. Usted puede</msg>
+  <msg key="You_dont_have_a_portrait">Usted aun no tiene una foto. Usted puede</msg>
   <msg key="You_have_admin_rights_on">Tiene derechos de administración en los siguientes objetos:</msg>
   <msg key="You_have_no_email_alerts">Actualmente no tiene avisos de correo activados.</msg>
   <msg key="Your_Account">Su Cuenta</msg>
