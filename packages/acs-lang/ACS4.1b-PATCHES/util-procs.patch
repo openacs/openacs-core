@@ -1,0 +1,33 @@
+*** ./packages/acs-templating/tcl/util-procs.tcl	Fri Jan 12 11:50:24 2001
+--- /web/acs41b/packages/acs-templating/tcl/util-procs.tcl	Sun Jan 21 22:41:28 2001
+***************
+*** 414,425 ****
+  
+  proc template::util::read_file { path } {
+  
+!   set fd [open $path]
+!   set text [read $fd]
+!   close $fd
+  
+!   return $text
+  }
+  
+  # @public write_file
+  
+--- 414,429 ----
+  
+  proc template::util::read_file { path } {
+  
+!     set type [ns_guesstype $path]
+!     set encoding [ns_encodingfortype $type]
+!     set fd [open $path r]
+!     fconfigure $fd -encoding $encoding
+!     set text [read $fd]
+!     close $fd
+  
+!     return $text
+  }
++ 
+  
+  # @public write_file
+  

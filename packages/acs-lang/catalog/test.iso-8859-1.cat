@@ -1,0 +1,21 @@
+# /packages/lang/catalog/test.iso8859-1.cat
+# Some test data for the catalog loader
+
+_mr en test.English English
+_mr en test.Spanish Spanish
+_mr en test.French  French
+_mr en test.German  German
+_mr es test.English Inglés
+_mr es test.Spanish Español
+_mr es test.French  Francés
+_mr es test.German  Alemán
+_mr fr test.English Anglais
+_mr fr test.Spanish Espagnol
+_mr fr test.French  Français
+_mr fr test.German  Allemand
+_mr de test.English Englischer
+_mr de test.Spanish Spanischer
+_mr de test.French  Französischer
+_mr de test.German  Deutscher
+
+
