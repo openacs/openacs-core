@@ -729,6 +729,11 @@ ad_proc -public export_vars {
     Similarly, if you want to change the sort order, you can say 
     <code>[export_vars -override { { sort_by $column } } $my_vars]</code>, and sorting will be done according to
     the new value of <code>column</code>.
+
+    <p>
+  
+    If the variable name contains a colon (:), that colon must be escaped with a backslash, 
+    so for example "form:id" becomes "form\:id". Sorry.
     
     @param sign Sign all variables.
 
@@ -792,7 +797,15 @@ ad_proc -public export_vars {
 	    if { [llength $var_spec] > 2 } {
 		return -code error "A varspec must have either one or two elements."
 	    }
+
+            # Hide escaped colons for below split
+            regsub -all {\\:} $var_spec "!!cOlOn!!" var_spec
+
 	    set name_spec [split [lindex $var_spec 0] ":"]
+
+            # Replace escaped colons with single colon
+            regsub -all {!!cOlOn!!} $name_spec ":" name_spec
+
 	    set name [lindex $name_spec 0]
 
 	    # If we've already encountered this varname, ignore it
