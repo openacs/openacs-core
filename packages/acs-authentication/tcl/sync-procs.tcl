@@ -622,8 +622,6 @@ ad_proc -private auth::sync::get_doc::http::GetDocument {
         snapshot_p f
     }
     
-    ns_log Notice "LARS: parameters = $parameters"
-
     array set param $parameters
     
     if { ![empty_string_p $param(SnapshotURL)] && [string equal [clock format [clock seconds] -format "%d"] "01"] } {
