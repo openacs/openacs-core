@@ -57,7 +57,7 @@ proc_doc ad_dimensional {option_list {url {}} {options_set ""} {optionstype url}
         set url [ad_conn url]
     }
 
-    append html "<table border=0 cellspacing=0 cellpadding=3 width=\"100%\">\n<tr>\n"
+    append html "<table border=\"0\" cellspacing=\"0\" cellpadding=\"3\" width=\"100%\">\n<tr>\n"
 
     foreach option $option_list { 
         append html " <th bgcolor=\"#ECECEC\">[lindex $option 1]</th>\n"
@@ -67,7 +67,7 @@ proc_doc ad_dimensional {option_list {url {}} {options_set ""} {optionstype url}
     append html "<tr>\n"
 
     foreach option $option_list { 
-        append html " <td align=center>\["
+        append html " <td align=\"center\">\["
 
         # find out what the current option value is.
         # check if a default is set otherwise the first value is used
@@ -194,7 +194,7 @@ ad_proc ad_table {
         -Tmax_rows 0
         -Ttable_extra_html {}
         -Theader_row_extra {bgcolor="#f8f8f8"}
-        -Ttable_break_html "<p>"
+        -Ttable_break_html "<br /><br />"
         -Tpre_row_code {}
         -Trow_code {[subst $Trow_default]}
         -Tpost_data_ns_sets {}
@@ -434,7 +434,7 @@ ad_proc ad_table {
 		if {[empty_string_p [lindex $Tband_colors $Tband_color]]} {
 		    set Trow_default "<tr>\n"
 		} else {
-		    set Trow_default "<tr bgcolor=[lindex $Tband_colors $Tband_color]>\n"
+		    set Trow_default "<tr bgcolor=\"[lindex $Tband_colors $Tband_color]\">\n"
 		}
 	    } else { 
 		set Trow_default "<tr>\n"
@@ -450,12 +450,12 @@ ad_proc ad_table {
 		set Tcolumn [lindex $Tcol 0]
 		switch $Tformat {
 		    "" {set Tdisplay_field " <td>[set $Tcolumn]</td>\n"}
-		    r {set Tdisplay_field " <td align=right>[set $Tcolumn]</td>\n"}
-		    l {set Tdisplay_field " <td align=left>[set $Tcolumn]</td>\n"}
-		    c {set Tdisplay_field " <td align=center>[set $Tcolumn]</td>\n"}
-		    tf {set Tdisplay_field " <td align=center>[util_PrettyBoolean [set $Tcolumn]]</td>\n"}
-		    01 {set Tdisplay_field " <td align=center>[util_PrettyTclBoolean [set $Tcolumn]]</td>\n"}
-		    bz {set Tdisplay_field " <td align=right>&nbsp;[blank_zero [set $Tcolumn]]</td>\n"}
+		    r {set Tdisplay_field " <td align=\"right\">[set $Tcolumn]</td>\n"}
+		    l {set Tdisplay_field " <td align=\"left\">[set $Tcolumn]</td>\n"}
+		    c {set Tdisplay_field " <td align=\"center\">[set $Tcolumn]</td>\n"}
+		    tf {set Tdisplay_field " <td align=\"center\">[util_PrettyBoolean [set $Tcolumn]]</td>\n"}
+		    01 {set Tdisplay_field " <td align=\"center\">[util_PrettyTclBoolean [set $Tcolumn]]</td>\n"}
+		    bz {set Tdisplay_field " <td align=\"right\">&nbsp;[blank_zero [set $Tcolumn]]</td>\n"}
 		    default {set Tdisplay_field " [subst $Tformat]\n"}
 		}
 
@@ -561,11 +561,11 @@ proc_doc ad_table_same varname {
     }
 }
         
-proc_doc ad_table_span {str {td_html "align=left"}} {
+proc_doc ad_table_span {str {td_html "align=\"left\""}} {
     given string the function generates a row which spans the 
     whole table.
 } {
-    return "<tr><td colspan=[uplevel llength \$Tcolumn_list] $td_html>$str</td></tr>"
+    return "<tr><td colspan=\"[uplevel llength \$Tcolumn_list]\" $td_html>$str</td></tr>"
 }
 
 proc_doc ad_table_form {datadef {type select} {return_url {}} {item_group {}} {item {}} {columns {}} {allowed {}}} {
@@ -592,9 +592,9 @@ proc_doc ad_table_form {datadef {type select} {return_url {}} {item_group {}} {i
     # now spit out the form fragment.
     if {![empty_string_p $item]} {
         append html "<h2>Editing <strong>$item</strong></h2>"
-        append html "<form method=get action=\"/tools/table-custom\">"
-        append html "<input type=submit value=\"Delete this view\">"
-        append html "<input type=hidden name=delete_the_view value=\"1\">"
+        append html "<form method=\"get\" action=\"/tools/table-custom\">"
+        append html "<input type=\"submit\" value=\"Delete this view\" />"
+        append html "<input type=\"hidden\" name=\"delete_the_view\" value=\"1\" />"
         append html "[export_form_vars item_group item]"
         if {![empty_string_p $return_url]} {
             append html "[export_form_vars return_url]"
@@ -614,13 +614,13 @@ proc_doc ad_table_form {datadef {type select} {return_url {}} {item_group {}} {i
     if {![empty_string_p $item]} {
         set item_original $item
         append html "[export_form_vars item_original]"
-        append html "<input type=submit value=\"Save changes\">"
+        append html "<input type=\"submit\" value=\"Save changes\" />"
     } else {
-        append html "<input type=submit value=\"Save new view\">"
+        append html "<input type=\"submit\" value=\"Save new view\" />"
     }
 
     append html "<table>"
-    append html "<tr><th>Name:</th><td><input type=text size=60 name=item [export_form_value item]></td></tr>"
+    append html "<tr><th>Name:</th><td><input type=\"text\" size=\"60\" name=\"item\" [export_form_value item] /></td></tr>"
     if {![empty_string_p $item]} {
         set item_original item
         append html "[export_form_vars item_original]"
@@ -629,15 +629,15 @@ proc_doc ad_table_form {datadef {type select} {return_url {}} {item_group {}} {i
 
     if {[string compare $type select] == 0} {
         # select table
-        set options "<option value=\"\">---"
+        set options "<option value=\"\">---</option>"
         foreach opt $sel_list { 
-            append options " <option value=\"[lindex [lindex $datadef $opt] 0]\">[lindex [lindex $datadef $opt] 1]"
+            append options " <option value=\"[lindex [lindex $datadef $opt] 0]\">[lindex [lindex $datadef $opt] 1]</option>"
         }
     
         for {set i 0} { $i < $max_columns} {incr i} {
             if {$i < $n_sel_columns} {
                 set match [lindex [lindex $datadef [lindex $sel_columns $i]] 0]
-                regsub "(<option )(value=\"$match\">)" $options "\\1 selected \\2" out
+                regsub "(<option )(value=\"$match\">)" $options "\\1 selected=\"selected\" \\2" out
             } else { 
                 set out $options
             }
@@ -652,12 +652,12 @@ proc_doc ad_table_form {datadef {type select} {return_url {}} {item_group {}} {i
         append html "</tr>"
 
         foreach opt $sel_list { 
-            append options "<td><input name=\"col_@@\" type=radio value=\"[lindex [lindex $datadef $opt] 0]\"></td>"
+            append options "<td><input name=\"col_@@\" type=\"radio\" value=\"[lindex [lindex $datadef $opt] 0]\" /></td>"
         }
         for {set i 0} { $i < $max_columns} {incr i} {
             if {$i < $n_sel_columns} {
                 set match [lindex [lindex $datadef [lindex $sel_columns $i]] 0]
-                regsub "( type=radio )(value=\"$match\">)" $options "\\1 checked \\2" out
+                regsub "( type=\"radio\" )(value=\"$match\">)" $options "\\1 checked=\"checked\" \\2" out
             } else { 
                 set out $options
             }
@@ -717,9 +717,9 @@ proc_doc ad_table_sort_form {datadef {type select} {return_url {}} {item_group {
     # now spit out the form fragment.
     if {![empty_string_p $item]} {
         append html "<h2>Editing <strong>$item</strong></h2>"
-        append html "<form method=get action=\"/tools/sort-custom\">"
-        append html "<input type=submit value=\"Delete this sort\">"
-        append html "<input type=hidden name=delete_the_sort value=\"1\">"
+        append html "<form method=\"get\" action=\"/tools/sort-custom\">"
+        append html "<input type=\"submit\" value=\"Delete this sort\" />"
+        append html "<input type=\"hidden\" name=\"delete_the_sort\" value=\"1\" />"
         append html "[export_form_vars item_group item]"
         if {![empty_string_p $return_url]} {
             append html "[export_form_vars return_url]"
@@ -739,38 +739,38 @@ proc_doc ad_table_sort_form {datadef {type select} {return_url {}} {item_group {
     if {![empty_string_p $item]} {
         set item_original $item
         append html "[export_form_vars item_original]"
-        append html "<input type=submit value=\"Save changes\">"
+        append html "<input type=\"submit\" value=\"Save changes\">"
     } else {
-        append html "<input type=submit value=\"Save new sort\">"
+        append html "<input type=\"submit\" value=\"Save new sort\">"
     }
 
     append html "<table>"
-    append html "<tr><th>Name:</th><td><input type=text size=60 name=item [export_form_value item]></td></tr>"
+    append html "<tr><th>Name:</th><td><input type=\"text\" size=\"60\" name=\"item\" [export_form_value item]></td></tr>"
     if {![empty_string_p $item]} {
         set item_original item
         append html "[export_form_vars item_original]"
         append html "<tr><td>&nbsp;</td><td><em>Editing the name will rename the sort</em></td></tr>"
     }
 
-    set options "<option value=\"\">---"
+    set options "<option value=\"\">---</option>"
     foreach opt $sel_list { 
-        append options " <option value=\"[lindex [lindex $datadef $opt] 0]\">[lindex [lindex $datadef $opt] 1]"
+        append options " <option value=\"[lindex [lindex $datadef $opt] 0]\">[lindex [lindex $datadef $opt] 1]</option>"
     }
     
     for {set i 0} { $i < $max_columns} {incr i} {
         if {$i < $n_sel_columns} {
             set match [lindex $sel_columns $i]
-            regsub "(<option )(value=\"$match\">)" $options "\\1 selected \\2" out
+            regsub "(<option )(value=\"$match\">)" $options "\\1 selected=\"selected\" \\2" out
         } else { 
             set out $options
         }
         append html "<tr><th>[expr $i + 1]</th><td><select name=\"col\">$out</select>"
         switch [lindex $direction $i] {
             asc {
-                append html "<select name=\"dir\"><option value=\"asc\" selected>increasing<option value=\"desc\">decreasing</select>"
+                append html "<select name=\"dir\"><option value=\"asc\" selected=\"selected\">increasing</option><option value=\"desc\">decreasing</option></select>"
             }
             default {
-                append html "<select name=\"dir\"><option value=\"asc\">increasing<option value=\"desc\" selected>decreasing</select>"
+                append html "<select name=\"dir\"><option value=\"asc\">increasing</option><option value=\"desc\" selected=\"selected\">decreasing</option></select>"
          
             }
         }
@@ -949,7 +949,7 @@ proc_doc ad_custom_page_defaults defaults {
 proc_doc ad_custom_form {return_url item_group item} { 
     sets up the head of a form to feed to /tools/form-custom.tcl
 } {
-    append html "<form method=get action=\"/tools/form-custom\">\n" 
+    append html "<form method=\"get\" action=\"/tools/form-custom\">\n" 
     if {![empty_string_p $return_url]} {
         append html "[export_form_vars return_url]\n"
     }
@@ -958,7 +958,7 @@ proc_doc ad_custom_form {return_url item_group item} {
     }
     set item_original $item
     append html "[export_form_vars item_group item item_original]\n"
-    append html "<input type=submit value=\"Save settings\">"
+    append html "<input type=\"submit\" value=\"Save settings\" />"
 }
 
 proc_doc ad_dimensional_settings {define current} {
@@ -968,9 +968,9 @@ proc_doc ad_dimensional_settings {define current} {
     NB...this does not close either the table or the form...
 } {
     foreach opt $define { 
-        append html "<tr><th align=left>[lindex $opt 1]</th><td>"
-        append html "<select name=[lindex $opt 0]>"
-        #append html "<option value=\"\">-- Unset --"
+        append html "<tr><th align=\"left\">[lindex $opt 1]</th><td>"
+        append html "<select name=\"[lindex $opt 0]\">"
+        #append html "<option value=\"\">-- Unset --</option>"
         if {![empty_string_p $current] 
             && [ns_set find $current [lindex $opt 0]] > -1} { 
             set picked [ns_set get $current [lindex $opt 0]]
@@ -979,9 +979,9 @@ proc_doc ad_dimensional_settings {define current} {
 	}
         foreach val [lindex $opt 3] { 
             if {[string compare $picked [lindex $val 0]] == 0} { 
-                append html "<option SELECTED value=\"[philg_quote_double_quotes [lindex $val 0]]\">[lindex $val 1]\n"
+                append html "<option selected=\"selected\" value=\"[philg_quote_double_quotes [lindex $val 0]]\">[lindex $val 1]</option>\n"
             } else { 
-                append html "<option value=\"[philg_quote_double_quotes [lindex $val 0]]\">[lindex $val 1]\n"
+                append html "<option value=\"[philg_quote_double_quotes [lindex $val 0]]\">[lindex $val 1]</option>\n"
             }
         }
         append html "</select></td></tr>\n"

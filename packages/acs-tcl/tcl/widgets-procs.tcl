@@ -1,4 +1,4 @@
-ad_library {
+1ad_library {
     UI widgets for use in forms, etc.
 
     @cvs-id $Id$
@@ -8,14 +8,14 @@ proc_doc state_widget { {default ""} {select_name "usps_abbrev"}} "Returns a sta
 
     set widget_value "<select name=\"$select_name\">\n"
     if { $default == "" } {
-        append widget_value "<option value=\"\" SELECTED>Choose a State</option>\n"
+        append widget_value "<option value=\"\" selected=\"selected\">Choose a State</option>\n"
     }
 
     db_foreach all_states {
 	select state_name, abbrev from us_states order by state_name
     } {
         if { $default == $abbrev } {
-            append widget_value "<option value=\"$abbrev\" SELECTED>$state_name</option>\n" 
+            append widget_value "<option value=\"$abbrev\" selected=\"selected\">$state_name</option>\n" 
         } else {            
             append widget_value "<option value=\"$abbrev\">$state_name</option>\n"
         }
@@ -30,16 +30,16 @@ proc_doc country_widget { {default ""} {select_name "country_code"} {size_subtag
     if { $default == "" } {
         if [ad_parameter SomeAmericanReadersP] {
 	    append widget_value "<option value=\"\">Choose a Country</option>
-<option value=\"us\" SELECTED>United States</option>\n"
+<option value=\"us\" selected=\"selected\">United States</option>\n"
 	} else {
-	    append widget_value "<option value=\"\" SELECTED>Choose a Country</option>\n"
+	    append widget_value "<option value=\"\" selected=\"selected\">Choose a Country</option>\n"
 	}
     }
     db_foreach all_countries {
 	select default_name, iso from countries order by default_name 
     } {
         if { $default == $iso } {
-            append widget_value "<option value=\"$iso\" SELECTED>$default_name</option>\n" 
+            append widget_value "<option value=\"$iso\" selected=\"selected\">$default_name</option>\n" 
         } else {            
             append widget_value "<option value=\"$iso\">$default_name</option>\n"
         }
@@ -60,9 +60,9 @@ proc_doc ad_generic_optionlist {items values {default ""}} "Use this to build se
     set return_string ""
     foreach value $values {
 	if {  [string compare $default $value] == 0 } {
-	    append return_string "<option SELECTED value=\"$value\">[lindex $items $count]\n"
+	    append return_string "<option selected=\"selected\" value=\"$value\">[lindex $items $count]</option>\n"
 	} else {
-	    append return_string "<option value=\"$value\">[lindex $items $count]\n"
+	    append return_string "<option value=\"$value\">[lindex $items $count]</option>\n"
 	}
 	incr count
    }
@@ -120,9 +120,9 @@ proc_doc ad_integer_optionlist {start_value end_value {default ""} { pad_to_two_
 	}
 
 	if { $default == $value } {
-	    append return_string "<option SELECTED value=\"$value\">$value\n"
+	    append return_string "<option selected=\"selected\" value=\"$value\">$value</option>\n"
 	} else {
-	    append return_string "<option value=\"$value\">$value\n"
+	    append return_string "<option value=\"$value\">$value</option>\n"
 	}
     }
     return $return_string
@@ -151,22 +151,19 @@ proc_doc ad_dateentrywidget {column { value 0 } } {
 	set day [lindex $date_parts 2]
     }
 
-    set output "<SELECT name=$column.month>\n"
-    append output "<OPTION>\n"
+    set output "<select name=\"$column.month\">\n"
+    append output "<option>\n"
     # take care of cases like 09 for month
     regsub "^0" $month "" month
     for {set i 0} {$i < 12} {incr i} {
 	if { $i == [expr $month - 1] } {
-	    append output "<OPTION selected> [lindex $NS(months) $i]\n"
+	    append output "<option selected=\"selected\"> [lindex $NS(months) $i]</option>\n"
 	} else {
-	    append output "<OPTION>[lindex $NS(months) $i]\n"
+	    append output "<option>[lindex $NS(months) $i]</option>\n"
 	}
     }
 
-    append output \
-"</SELECT><INPUT NAME=$column.day\
-TYPE=text SIZE=3 MAXLENGTH=2 value=\"$day\">&nbsp;<INPUT NAME=$column.year\
-TYPE=text SIZE=5 MAXLENGTH=4 value=\"$year\">"
+    append output "</select><input name=\"$column.day\" type=\"text\" size=\"3\" maxlength=\"2\" value=\"$day\">&nbsp;<input name=\"$column.year\" type=\"text\" size=\"5\" maxlength=\"4\" value=\"$year\">"
 
      return $output
 }
@@ -211,9 +208,9 @@ ad_proc ad_db_select_widget {
             set value [lindex $opt 0]
             if { (!$multiple && [string compare $value $default] == 0) 
                  || ($multiple && [lsearch -exact $default $value] > -1)} {
-                append retval "<option SELECTED value=\"$value\">$item\n"
+                append retval "<option selected=\"selected\" value=\"$value\">$item</option>\n"
             } else {
-                append retval "<option value=\"$value\">$item\n"
+                append retval "<option value=\"$value\">$item</option>\n"
             }
         }
     }
@@ -232,13 +229,13 @@ ad_proc ad_db_select_widget {
 	    set value [ns_set value $selection 1]
 	    if { (!$multiple && [string compare $value $default] == 0) 
 		 || ($multiple && [lsearch -exact $default $value] > -1)} {
-		append retval "<option SELECTED value=\"$value\">$item\n"
+		append retval "<option selected=\"selected\" value=\"$value\">$item</option>\n"
 	    } else {
-		append retval "<option value=\"$value\">$item\n"
+		append retval "<option value=\"$value\">$item</option>\n"
 	    }
 	} if_no_rows {
 	    if {![empty_string_p $default]} { 
-		return "<input type=hidden value=\"[philg_quote_double_quotes $default]\" name=$name>\n"
+		return "<input type=\"hidden\" value=\"[philg_quote_double_quotes $default]\" name=\"$name\" />\n"
 	    } else { 
 		return {}            
 	    }
@@ -246,11 +243,11 @@ ad_proc ad_db_select_widget {
     }
 
     if { $count == 1 || ($dbcount == 1 && $hidden_if_one_db) } {
-        return "$item<input type=hidden value=\"[philg_quote_double_quotes $value]\" name=$name>\n"
+        return "$item<input type=\"hidden\" value=\"[philg_quote_double_quotes $value]\" name=\"$name\" />\n"
     } else { 
-        set select "<select name=$name"
+        set select "<select name=\"$name\""
         if {$size != 0} { 
-            append select " size=$size"
+            append select " size=\"$size\""
         } 
         if {$multiple} {
             append select " multiple"
@@ -259,15 +256,15 @@ ad_proc ad_db_select_widget {
     }
 }
 
-proc_doc currency_widget {{default ""} {select_name "currency_code"} {size_subtag "size=4"}} "Returns a currency selection box" {
+proc_doc currency_widget {{default ""} {select_name "currency_code"} {size_subtag "size=\"4\""}} "Returns a currency selection box" {
 
     set widget_value "<select name=\"$select_name\" $size_subtag>\n"
     if { $default == "" } {
         if [ad_parameter SomeAmericanReadersP] {
 	    append widget_value "<option value=\"\">Currency</option>
-<option value=\"USD\" SELECTED>United States Dollar</option>\n"
+<option value=\"USD\" selected=\"selected\">United States Dollar</option>\n"
 	} else {
-	    append widget_value "<option value=\"\" SELECTED>Currency</option>\n"
+	    append widget_value "<option value=\"\" selected=\"selected\">Currency</option>\n"
 	}
     }
     db_foreach currency_info {
@@ -277,7 +274,7 @@ proc_doc currency_widget {{default ""} {select_name "currency_code"} {size_subta
 	order by currency_name 
     } {
 	if { $default == $iso } {
-	    append widget_value "<option value=\"$iso\" SELECTED>$currency_name</option>\n" 
+	    append widget_value "<option value=\"$iso\" selected=\"selected\">$currency_name</option>\n" 
         } else {            
             append widget_value "<option value=\"$iso\">$currency_name</option>\n"
         }
@@ -405,7 +402,7 @@ proc_doc ad_color_widget { name default { use_js 0 } } "Returns a color selectio
 	    set c2 255
 	    set c3 255
 	}
-	append out "</td><td>&nbsp; <img name=color_$name src=\"/shared/1pixel.tcl?r=$c1&g=$c2&b=$c3\" width=26 height=26 border=1>"
+	append out "</td><td>&nbsp; <img name=\"color_$name\" src=\"/shared/1pixel.tcl?r=$c1&g=$c2&b=$c3\" width=\"26\" height=\"26\" border=\"1\">"
     }
     append out "</td></tr></table>\n"
     return $out
