@@ -79,3 +79,13 @@ ad_proc -public content::extlink::is_extlink {
         [list item_id $item_id ] \
     ] content_extlink is_extlink]
 }
+
+ad_proc -public content::extlink::name {
+    -item_id:required
+} {
+    Returns the name of an extlink
+
+    @item_id  The object id of the item to check.
+} {
+    return [db_string get {}]
+}

@@ -12,7 +12,7 @@ ad_library {
 
 namespace eval application_group {}
 
-ad_proc application_group::contains_party_p {
+ad_proc -public application_group::contains_party_p {
     { -package_id "" }
     { -party_id "" }
     -include_self:boolean
@@ -68,7 +68,7 @@ ad_proc application_group::contains_party_p {
 
 }
 
-ad_proc application_group::contains_relation_p {
+ad_proc -public application_group::contains_relation_p {
     { -package_id "" }
     { -rel_id "" }
 } {
@@ -103,7 +103,7 @@ ad_proc application_group::contains_relation_p {
     return $found_p
 }
 
-ad_proc application_group::contains_segment_p {
+ad_proc -public application_group::contains_segment_p {
     { -package_id "" }
     { -segment_id "" }
 } {
@@ -140,7 +140,7 @@ ad_proc application_group::contains_segment_p {
 }
 
 
-ad_proc application_group::group_id_from_package_id {
+ad_proc -public application_group::group_id_from_package_id {
     -no_complain:boolean
     { -package_id "" }
 } {
@@ -178,7 +178,7 @@ ad_proc application_group::group_id_from_package_id {
     return $group_id
 }
 
-ad_proc application_group::new {
+ad_proc -public application_group::new {
     { -group_id "" } 
     { -group_type "application_group"}
     { -package_id "" }
@@ -230,7 +230,7 @@ ad_proc application_group::new {
 
 }
 
-ad_proc application_group::delete {
+ad_proc -public application_group::delete {
     -group_id:required
 } {
     Delete the given application group and all relational segments and constraints dependent
