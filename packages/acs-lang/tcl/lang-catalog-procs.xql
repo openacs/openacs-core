@@ -13,7 +13,6 @@
        and not exists (select 1
                        from lang_message_keys
                        where package_key = apm_package_types.package_key)
-       and package_key = 'dotlrn'
     </querytext>
   </fullquery>
 
