@@ -54,7 +54,12 @@ ad_proc -private ::install::xml::action::source { node } {
         }
 
         set name [apm_required_attribute_value $param name]
+        set id [apm_attribute_value -default {} $param id]
         set value [apm_attribute_value -default {} $param value]
+
+        if {![string equal $id ""]} {
+            set value [install::xml::util::get_id $id]
+        }
 
         set parameters($name) $value
     }
@@ -362,6 +367,11 @@ ad_proc -public install::xml::action::set-join-policy { node } {
 
 ad_proc -public install::xml::action::create-user { node } {
     Create a new user.
+
+    local-p should be set to true when this action is used in
+    the bootstrap install.xml - this ensures we call the 
+    auth::local api directly while the service contract has not
+    been setup.
 } {
     set email [apm_required_attribute_value $node email]
     set first_names [apm_required_attribute_value $node first-names]
@@ -373,26 +383,65 @@ ad_proc -public install::xml::action::create-user { node } {
     set secret_question [apm_attribute_value -default "" $node secret-question]
     set secret_answer [apm_attribute_value -default "" $node secret-answer]
     set id [apm_attribute_value -default "" $node id]
+    set local_p [apm_attribute_value -default 0 $node local-p]
 
-    array set result [auth::create_user -email $email \
-        -first_names $first_names \
-        -last_name $last_name \
-        -password $password \
-        -username $username \
-        -screen_name $screen_name \
-        -url $url \
-        -secret_question $secret_question \
-        -secret_answer $secret_answer \
-        -email_verified_p 1 \
-        -nologin \
-        ]
+    set local_p [template::util::is_true $local_p]
 
-    if {[string equal $result(creation_status) "ok"] &&
-        ![string equal $id ""]} {
-        set ::install::xml::ids($id) $result(user_id)
+    if {$local_p} {
+        foreach elm [auth::get_all_registration_elements] {
+            if { [info exists $elm] } {
+                set user_info($elm) [set $elm]
+            }
+        }
+
+        set user_info(email_verified_p) 1
+
+        array set result [auth::create_local_account \
+            -authority_id [auth::authority::local] \
+            -username $username \
+            -array user_info]
+
+        if {[string equal $result(creation_status) "ok"]} {
+            # Need to find out which username was set
+            set username $result(username)
+
+            array set result [auth::local::registration::Register \
+                {} \
+                $username \
+                [auth::authority::local] \
+                $first_names \
+                $last_name \
+                $screen_name \
+                $email \
+                $url \
+                $password \
+                $secret_question \
+                $secret_answer]
+        }
+    } else {
+        array set result [auth::create_user -email $email \
+            -first_names $first_names \
+            -last_name $last_name \
+            -password $password \
+            -username $username \
+            -screen_name $screen_name \
+            -url $url \
+            -secret_question $secret_question \
+            -secret_answer $secret_answer \
+            -email_verified_p 1 \
+            -nologin \
+            ]
     }
 
-    return [list $result(creation_message)]
+    if {[string equal $result(creation_status) "ok"]} {
+        if {![string equal $id ""]} {
+            set ::install::xml::ids($id) $result(user_id)
+        }
+
+        return [list $result(creation_message)]
+    } else {
+        ns_log error "create-user: $result(creation_status): $result(creation_message)"
+    }
 }
 
 ad_proc -public install::xml::action::add-subsite-member { node } {
@@ -411,7 +460,7 @@ ad_proc -public install::xml::action::add-subsite-member { node } {
 
         set user_id [::install::xml::object_id::object $node]
 
-        group::add -user_id $user_id \
+        group::add_member -user_id $user_id \
             -group_id $group_id \
             -member_state $member_state
     }
@@ -518,10 +567,15 @@ ad_proc -public install::xml::util::get_id { id } {
 } {
     variable ::install::xml::ids
 
-    if {[info exists ids($id)]} {
-        return $ids($id)
-    } else {
-        return [acs_magic_object $id]
+    if {[catch {
+        if {[info exists ids($id)]} {
+            set result $ids($id)
+        } else {
+            set result [acs_magic_object $id]
+        }
+    } err]} {
+        error "$id is not defined in this install.xml and is not an acs_magic_object"
     }
+    
+    return $result
 }
-
