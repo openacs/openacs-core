@@ -7,7 +7,7 @@
         <querytext>
 	    select search_observer__dequeue(
 	        :object_id,
-	        :date,
+	        :event_date,
 	        :event
 	    );
         </querytext>
