@@ -47,6 +47,6 @@ declare
 begin
     delete
     from site_node_object_mappings
-    where object_id = p__object_id;
+    where object_id = p_object_id;
 end;
 ' language 'plpgsql';
