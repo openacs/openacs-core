@@ -18,7 +18,7 @@
 
 
 	<para>
-        OpenACS &version; does not yet work with Oracle 9i
+        OpenACS &version; will install with Oracle 9i but has not been extensively tested so may still have bugs or tuning issues.
 	</para>
 
 	<para>

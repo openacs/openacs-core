@@ -181,7 +181,7 @@ exit</action></screen>
                 <para>Unpack the new files into a working directory.</para>
                 <screen>[root root]# <userinput>su - nsadmin</userinput>
 [nsadmin aolserver]$ <userinput>cd /tmp</userinput>
-[nsadmin tmp]$ <userinput>tar xzv openacs-4-6.tgz</userinput>
+[nsadmin tmp]$ <userinput>tar xzf openacs-4-6.tgz</userinput>
 [nsadmin tmp]$ <userinput>cd openacs-4.6</userinput>
 </screen>
                 <para>Import the new files into your cvs repository; where they match existing files, they will become the new version of the file.</para>
