@@ -925,9 +925,14 @@ ad_proc -public template::multirow {
         set rowcount [llength $sort_list]
     }
 
+    exists {
+       upvar $multirow_level_up $name:rowcount rowcount
+       return [info exists rowcount]
+    }
+
     default {
       error "Unknown command $command in template::multirow.
-      Must be create, extend, append, backup, get, set, size, upvar, or foreach."
+      Must be create, extend, append, backup, get, set, size, upvar, sort, exists or foreach."
     }
   }
 }
