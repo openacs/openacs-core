@@ -734,7 +734,7 @@ ad_proc db_1row { args } {
 
 
 ad_proc db_transaction { transaction_code args } {
-    Usage: <b><i>db_transaction</i></b> <i>code_block</i> [ on_error { <i>error_code_block</i> } ]
+    Usage: <b><i>db_transaction</i></b> <i>transaction_code</i> [ on_error { <i>error_code_block</i> } ]
     
     Executes transaction_code with transactional semantics.  This means that either all of the database commands
     within transaction_code are committed to the database or none of them are.  Multiple <code>db_transaction</code>s may be
@@ -753,7 +753,7 @@ ad_proc db_transaction { transaction_code args } {
     db_transaction {
 	db_dml test "nonsense"
     } on_error {
-	ad_return_complaint "The DML failed."
+        ad_return_error "Error in blah/foo/bar" "The error was: $errmsg"
     }
     </pre>
 
