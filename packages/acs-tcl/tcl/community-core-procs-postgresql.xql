@@ -72,14 +72,18 @@
                  email_bouncing_p,
                  no_alerts_until,
                  last_visit,
+                 to_char(last_visit, 'YYYY-MM-DD HH24:MI:SS') as last_visit_ansi, 
                  second_to_last_visit,
+                 to_char(second_to_last_visit, 'YYYY-MM-DD HH24:MI:SS') as second_to_last_visit_ansi, 
                  n_sessions,
                  password_question,
                  password_answer,
                  password_changed_date,
                  member_state,
                  rel_id, 
-                 trunc(date_part('epoch', age(password_changed_date))/(60*60*24)) as password_age_days
+                 trunc(date_part('epoch', age(password_changed_date))/(60*60*24)) as password_age_days,
+                 creation_date,
+                 creation_ip
           from   cc_users 
           where  user_id = :user_id
 
@@ -104,14 +108,18 @@
                  email_bouncing_p,
                  no_alerts_until,
                  last_visit,
+                 to_char(last_visit, 'YYYY-MM-DD HH24:MI:SS') as last_visit_ansi, 
                  second_to_last_visit,
+                 to_char(second_to_last_visit, 'YYYY-MM-DD HH24:MI:SS') as second_to_last_visit_ansi, 
                  n_sessions,
                  password_question,
                  password_answer,
                  password_changed_date,
                  member_state,
                  rel_id, 
-                 trunc(date_part('epoch', age(password_changed_date))/(60*60*24)) as password_age_days
+                 trunc(date_part('epoch', age(password_changed_date))/(60*60*24)) as password_age_days,
+                 creation_date,
+                 creation_ip
           from   cc_users 
           where  authority_id = :authority_id
           and    upper(username) = upper(:username)
