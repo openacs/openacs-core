@@ -889,8 +889,6 @@ ad_proc -public package_instantiate_object {
 	}
     }	
 
-    ReturnHeaders
-    ns_write "package_id is $package_id; var_list is $var_list"
     set object_id [db_exec_plsql create_object {}]
 
     if { [ad_conn isconnected] } {
