@@ -5,7 +5,7 @@ ad_library {
 
     @author Jon Salz (jsalz@arsdigita.com)
     @creation-date 15 May 2000
-    @cvs-id $Id$
+    @cvs-id request-processor-procs.tcl,v 1.25.2.7 2003/03/07 00:29:57 jeffd Exp
 }
 
 #####
@@ -447,6 +447,19 @@ ad_proc -private rp_filter { why } {
   session security.
 
 } {
+
+    # DRB: In AOLserver 4 a new thread created to serve a returnredirect gets
+    # a copy of the spawning thread's copy of db_state before the spawning thread
+    # clean-up code deallocates database handles.  The spawning thread gives all db
+    # handles back to AOLserver but the spawned thread thinks they're still
+    # available and a server error results when the spawned thread attempts to use
+    # one of the handles.  This bug was quite difficult to track down and debug I
+    # might add ...
+
+    global db_state
+    set db_state(handles) [list]
+    set db_state(n_handles_used) 0
+
     #####
     #
     # Initialize the environment: reset ad_conn, and populate it with
