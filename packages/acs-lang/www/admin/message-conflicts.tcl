@@ -8,7 +8,16 @@ ad_page_contract {
     package_key:optional
 }
 
+foreach optional_var {locale package_key} {
+    if { [info exists $optional_var] } {
+        if { [empty_string_p [set $optional_var]] } {
+            unset $optional_var
+        }
+    }
+}
+
 set page_title "I18N Message Conflicts"
+set context [list $page_title]
 
 list::create \
     -name messages \

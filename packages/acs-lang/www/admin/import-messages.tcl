@@ -15,10 +15,9 @@ if { ![acs_user::site_wide_admin_p] } {
     ad_script_abort
 }
 
-set locales [list $locale]
 array set message_count [lang::catalog::import \
                              -package_key $package_key \
-                             -locales $locales]
+                             -locales $locale]
 
 set conflict_count [lang::message::conflict_count \
                         -package_key $package_key \
