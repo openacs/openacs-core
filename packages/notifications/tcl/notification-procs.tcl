@@ -14,6 +14,18 @@ namespace eval notification {
         return "notifications"
     }
 
+    ad_proc -public get_interval_id {
+        {-name:required}
+    } {
+        return [db_string select_interval_id {} -default ""]
+    }
+
+    ad_proc -public get_delivery_method_id {
+        {-name:required}
+    } {
+        return [db_string select_delivery_method_id {} -default ""]
+    }
+
     ad_proc -public get_all_intervals {} {
         return [db_list_of_lists select_all_intervals {}]
     }

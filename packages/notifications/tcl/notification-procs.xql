@@ -1,6 +1,18 @@
 <?xml version="1.0"?>
 <queryset>
 
+<fullquery name="notification::get_interval_id.select_interval_id">
+<querytext>
+select interval_id from notification_intervals where name= :name
+</querytext>
+</fullquery>
+
+<fullquery name="notification::get_delivery_method_id.select_delivery_method_id">
+<querytext>
+select delivery_method_id from notification_delivery_methods where short_name= :name
+</querytext>
+</fullquery>
+
 <fullquery name="notification::get_all_intervals.select_all_intervals">
 <querytext>
 select name, interval_id from 
