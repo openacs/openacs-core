@@ -59,7 +59,7 @@
     where  o.object_id = ptab.grantee_id
     and    not exists (select 1
                        from acs_object_party_privilege_map m
-                       where m.object_id = 0
+                       where m.object_id = acs__magic_object_id('security_context_root')
                          and m.party_id = ptab.grantee_id
                          and m.privilege = 'admin')
     group  by ptab.grantee_id, grantee_name, object_type
