@@ -29,7 +29,7 @@ set page_title $locale_label
 set context [list $page_title]
 
 set locale_enabled_p [expr [lsearch [lang::system::get_locales] $current_locale] != -1]
-
+set site_wide_admin_p [acs_user::site_wide_admin_p]
 
 
 
@@ -114,6 +114,5 @@ ad_form -extend -name search -form {
 }
 
 
-set import_all_url [export_vars -base import-messages { { locale $current_locale } }]
-set export_all_url [export_vars -base export-locale-to-files { { locale $current_locale } }]
-
+set import_all_url [export_vars -base import-messages { { locale $current_locale } {return_url {[ad_return_url]}} }]
+set export_all_url [export_vars -base export-messages { { locale $current_locale } {return_url {[ad_return_url]}} }]

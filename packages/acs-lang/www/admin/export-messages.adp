@@ -20,9 +20,11 @@ locale <b>@locale@</b>
   Export complete.
 </p>
 
-<p>
-  Catalog files are stored in the directory <b>@catalog_dir@</b>.
-</p>
+<if @package_key@ not nil>
+  <p>
+    Catalog files are stored in the directory <b>@catalog_dir@</b>.
+  </p>
+</if>
 
 <p>
   <b>&raquo;</b> <a href="@return_url@">Return</a>

@@ -8,7 +8,7 @@ Search <formwidget id="search_locale"> for <formwidget id="q"> <input type="subm
 
 <include src="/packages/acs-lang/lib/conflict-link" locale="@current_locale@" />
 
-<if @locale_enabled_p@>
+<if @locale_enabled_p@ and @site_wide_admin_p@>
   <p>
     <b>&raquo;</b> <a href="@import_all_url@" title="Imports all messages for this locale from the catalog files">Import all messages for this locale</a>
   </p>

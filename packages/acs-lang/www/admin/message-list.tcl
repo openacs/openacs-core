@@ -30,10 +30,7 @@ set default_locale_label [ad_locale_get_label $default_locale]
 set page_title $package_key
 set context [list [list [export_vars -base package-list { locale }] $locale_label] $page_title]
 
-set site_wide_admin_p [permission::permission_p \
-                           -party_id [ad_conn user_id] \
-                           -object_id [acs_lookup_magic_object security_context_root] \
-                           -privilege "admin"]
+set site_wide_admin_p [acs_user::site_wide_admin_p]
 
 set export_messages_url [export_vars -base "export-messages" { package_key locale { return_url {[ad_return_url]} } }]
 set import_messages_url [export_vars -base "import-messages" { package_key locale { return_url {[ad_return_url]} } }]

@@ -25,6 +25,15 @@
   <b>&raquo;</b> <a href="lookup">Look up message</a>
 </p>
 
+<if @site_wide_admin_p@>
+  <p>
+    <b>&raquo;</b> <a href="@import_url@" title="Imports messages system-wide from catalog files" onclick="return confirm('Are you sure you want to import all I18N messages from catalog files?');">Import all messages</a>
+  </p>
+  <p>
+    <b>&raquo;</b> <a href="@export_url@" title="Export messages system-wide to catalog files" onclick="return confirm('Are you sure you want to export all I18N messages to catalog files?');">Export all messages</a>
+  </p>
+</if>
+
 <h2>Installed Locales</h2>
 
 <table cellpadding="0" cellspacing="0" border="0">
