@@ -12,6 +12,51 @@ ad_library {
 
 namespace eval ::content::type {}
 
+ad_proc -public content::type::new {
+    -content_type:required
+    {-supertype "content_revision"}
+    -pretty_name:required
+    -pretty_plural:required
+    {-table_name ""}
+    {-id_column ""}
+    {-name_method ""}
+} {
+    @param content_type
+    @param supertype
+    @param pretty_name
+    @param pretty_plural
+    @param table_name
+    @param id_column
+    @param name_method
+    @return type_id
+} {
+    return [package_exec_plsql -var_list [list \
+        [list content_type $content_type ] \
+        [list supertype $supertype ] \
+        [list pretty_name $pretty_name ] \
+        [list pretty_plural $pretty_plural ] \
+        [list table_name $table_name ] \
+        [list id_column $id_column ] \
+        [list name_method $name_method ] \
+    ] content_type create_type]
+}
+
+ad_proc -public content::type::delete {
+    -content_type:required
+    {-drop_children_p ""}
+    {-drop_table_p ""}
+} {
+    @param content_type
+    @param drop_children_p
+    @param drop_table_p
+} {
+    return [package_exec_plsql -var_list [list \
+        [list content_type $content_type ] \
+        [list drop_children_p $drop_children_p ] \
+        [list drop_table_p $drop_table_p ] \
+    ] content_type drop_type]
+}
+
 ad_proc -public content::type::create_attribute {
     -content_type:required
     -attribute_name:required
@@ -31,7 +76,7 @@ ad_proc -public content::type::create_attribute {
     @param default_value
     @param column_spec
 
-    @return NUMBER(38)
+    @return attribute_id for created attribute
 } {
     if {[db_type] == "oracle"} {
 	switch -- $column_spec {
@@ -57,34 +102,6 @@ ad_proc -public content::type::create_attribute {
 }
 
 
-ad_proc -public content::type::create_type {
-    -content_type:required
-    {-supertype ""}
-    -pretty_name:required
-    -pretty_plural:required
-    {-table_name ""}
-    {-id_column ""}
-    {-name_method ""}
-} {
-    @param content_type
-    @param supertype
-    @param pretty_name
-    @param pretty_plural
-    @param table_name
-    @param id_column
-    @param name_method
-} {
-    return [package_exec_plsql -var_list [list \
-        [list content_type $content_type ] \
-        [list supertype $supertype ] \
-        [list pretty_name $pretty_name ] \
-        [list pretty_plural $pretty_plural ] \
-        [list table_name $table_name ] \
-        [list id_column $id_column ] \
-        [list name_method $name_method ] \
-    ] content_type create_type]
-}
-
 
 ad_proc -public content::type::drop_attribute {
     -content_type:required
@@ -103,31 +120,15 @@ ad_proc -public content::type::drop_attribute {
 }
 
 
-ad_proc -public content::type::drop_type {
-    -content_type:required
-    {-drop_children_p ""}
-    {-drop_table_p ""}
-} {
-    @param content_type
-    @param drop_children_p
-    @param drop_table_p
-} {
-    return [package_exec_plsql -var_list [list \
-        [list content_type $content_type ] \
-        [list drop_children_p $drop_children_p ] \
-        [list drop_table_p $drop_table_p ] \
-    ] content_type drop_type]
-}
-
 
 ad_proc -public content::type::get_template {
     -content_type:required
-    -use_context:required
+    {-use_context "public"}
 } {
     @param content_type
     @param use_context
 
-    @return NUMBER(38)
+    @return template_id
 } {
     return [package_exec_plsql -var_list [list \
         [list content_type $content_type ] \
@@ -141,7 +142,7 @@ ad_proc -public content::type::is_content_type {
 } {
     @param object_type
 
-    @return CHAR
+    @return t or f
 } {
     return [package_exec_plsql -var_list [list \
         [list object_type $object_type ] \
@@ -153,6 +154,9 @@ ad_proc -public content::type::refresh_view {
     -content_type:required
 } {
     @param content_type
+
+    Creates or replaces the view associated with the supplied content type. By convention,
+    this view is called TYPEx .
 } {
     return [package_exec_plsql -var_list [list \
         [list content_type $content_type ] \
@@ -172,6 +176,7 @@ ad_proc -public content::type::register_child_type {
     @param relation_tag
     @param min_n
     @param max_n
+    @return 0
 } {
     return [package_exec_plsql -var_list [list \
         [list parent_type $parent_type ] \
@@ -187,8 +192,10 @@ ad_proc -public content::type::register_mime_type {
     -content_type:required
     -mime_type:required
 } {
+    Associate a content_type with a mime_type (both params are strings, e.g. folder , application/pdf )
     @param content_type
     @param mime_type
+    @return 0
 } {
     return [package_exec_plsql -var_list [list \
         [list content_type $content_type ] \
@@ -209,6 +216,7 @@ ad_proc -public content::type::register_relation_type {
     @param relation_tag
     @param min_n
     @param max_n
+    @return 0
 } {
     return [package_exec_plsql -var_list [list \
         [list content_type $content_type ] \
@@ -223,7 +231,7 @@ ad_proc -public content::type::register_relation_type {
 ad_proc -public content::type::register_template {
     -content_type:required
     -template_id:required
-    -use_context:required
+    {-use_context "public"}
     {-is_default ""}
 } {
     @param content_type
@@ -242,16 +250,20 @@ ad_proc -public content::type::register_template {
 
 ad_proc -public content::type::rotate_template {
     -template_id:required
-    -v_content_type:required
-    -use_context:required
+    -content_type:required
+    {-use_context "public"}
 } {
+    Force all items of content_type to use a new template. This will also cause items of this content
+    type with no template assigned to use the new template. Finally, sets new template as default for
+    this type. (IS THIS RIGHT ???? ----------------- ??????? )
+
     @param template_id
-    @param v_content_type
+    @param content_type
     @param use_context
 } {
     return [package_exec_plsql -var_list [list \
         [list template_id $template_id ] \
-        [list v_content_type $v_content_type ] \
+        [list content_type $v_content_type ] \
         [list use_context $use_context ] \
     ] content_type rotate_template]
 }
@@ -260,11 +272,12 @@ ad_proc -public content::type::rotate_template {
 ad_proc -public content::type::set_default_template {
     -content_type:required
     -template_id:required
-    -use_context:required
+    {use_context: "public"}
 } {
     @param content_type
     @param template_id
     @param use_context
+    @return 0
 } {
     return [package_exec_plsql -var_list [list \
         [list content_type $content_type ] \
@@ -282,6 +295,8 @@ ad_proc -public content::type::unregister_child_type {
     @param parent_type
     @param child_type
     @param relation_tag
+    @see content::type::register_child_type
+    @return 0
 } {
     return [package_exec_plsql -var_list [list \
         [list parent_type $parent_type ] \
@@ -297,6 +312,8 @@ ad_proc -public content::type::unregister_mime_type {
 } {
     @param content_type
     @param mime_type
+    @see content::type::register_mime_type
+    @return 0
 } {
     return [package_exec_plsql -var_list [list \
         [list content_type $content_type ] \
@@ -313,6 +330,8 @@ ad_proc -public content::type::unregister_relation_type {
     @param content_type
     @param target_type
     @param relation_tag
+    @see content::type::register_relation_type
+    @return 0
 } {
     return [package_exec_plsql -var_list [list \
         [list content_type $content_type ] \
@@ -330,6 +349,8 @@ ad_proc -public content::type::unregister_template {
     @param content_type
     @param template_id
     @param use_context
+    @see content::type::register_template
+    @return 0
 } {
     return [package_exec_plsql -var_list [list \
         [list content_type $content_type ] \
