@@ -235,17 +235,17 @@
               </tr>
               <tr bgcolor="#eeeeee">
                 <td>
-                  <a href="http://openacs.org/bboard/q-and-a?topic_id=11">OpenACS bboard</a>
+                  <a href="http://openacs.org/forums/forum-view?forum_id=14013">OpenACS bboard</a>
                 </td>
               </tr>
               <tr bgcolor="#eeeeee">
                 <td>
-                  <a href="http://openacs.org/bboard/">Other bboards</a>
+                  <a href="http://openacs.org/forums/">Other bboards</a>
                 </td>
               </tr>
              <tr bgcolor="#eeeeee">
                 <td>
-                  <a href="http://openacs.org/sdm/">Report a bug</a>
+                  <a href="http://openacs.org/bugtracker/openacs/">Report a bug</a>
                 </td>
               </tr>
             </table>
