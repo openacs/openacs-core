@@ -23,15 +23,19 @@
 
             <else>
               <if @elements.widget@ eq "submit">
-                <tr bgcolor="#5F6090"><td align="center" colspan="3">
-                  <noparse><formwidget id=@elements.id@></noparse>
-                </td></tr>
+               <tr bgcolor="#5F6090">
+                 <td align="center" colspan="3">
+                   <group column="widget">
+                     <noparse><formwidget id=@elements.id@></noparse>
+                   </group>
+                 </td>
+               </tr>
               </if>
               <else>
                 <tr bgcolor="#5F6090">
                   <if @elements.label@ not nil>
   	            <td width="40%" align="right" valign="middle" class="textstyle1">
-                      @elements.label@
+                      @elements.label;noquote@
                       <if @elements.help_text@ not nil>
                         <br />&nbsp;&nbsp;
                         <span style="font-size: 90%"><noparse><formhelp id=@elements.id@></noparse></span><br />
@@ -95,15 +99,5 @@
       </table>
     </td>
   </tr>
-
-  <if @buttons:rowcount@ gt 0>
-    <tr>
-      <td align="center">
-        <multiple name="buttons">
-          <input type="submit" name="@buttons.name@" value="@buttons.label@">
-        </multiple>
-      </td>
-    </tr>
-  </if>
 </table>
 

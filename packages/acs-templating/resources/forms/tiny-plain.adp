@@ -16,9 +16,11 @@
         <if @elements.widget@ eq "submit">
           <tr>
             <td align="center" colspan="2">
-              <noparse>
-                <formwidget id="@elements.id@">
-              </noparse>
+              <group column="widget">
+                <noparse>
+                  <formwidget id="@elements.id@">
+                </noparse>
+              </group>
             </td>
           </tr>
         </if>
@@ -37,7 +39,7 @@
               </noparse>
                 <b>
                   <font face="tahoma,verdana,arial,helvetica,sans-serif">
-                    @elements.label@
+                    @elements.label;noquote@
                   </font>
                 </b>
                 &nbsp;&nbsp;
@@ -111,14 +113,5 @@
       </else>
     </group>
   </multiple>
-  <if @buttons:rowcount@ gt 0>
-    <tr>
-      <td colspan="2">
-        <multiple name="buttons">
-          <input type="submit" name="@buttons.name@" value="@buttons.label@">
-        </multiple>
-      </td>
-    </tr>
-  </if>
 
 </table>

@@ -100,18 +100,11 @@
 
 <tr>
   <td align="right" colspan="2">
-    <if @buttons:rowcount@ gt 0>
-      <multiple name="buttons">
-        <input type="submit" name="@buttons.name@" value="@buttons.label@">
-      </multiple>
-    </if>
-    <else>
-      <multiple name="elements">
-        <if @elements.widget@ in "submit" "button">
-          <noparse><formwidget id=@elements.id@></noparse>
-        </if>
-      </multiple>
-    </else>
+    <multiple name="elements">
+      <if @elements.widget@ in "submit" "button">
+        <noparse><formwidget id=@elements.id@></noparse>
+      </if>
+    </multiple>
   </td>
 </tr>
  

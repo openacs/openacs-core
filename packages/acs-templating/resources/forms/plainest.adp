@@ -25,13 +25,15 @@
     <else>
       <if @elements.widget@ eq "submit">
         <tr><td align=center colspan=2>
-          <noparse><formwidget id=@elements.id@></noparse>
+          <group column="widget">
+            <noparse><formwidget id=@elements.id@></noparse>
+          </group>
         </td></tr>
       </if>
       <else>
        <tr>
         <if @elements.label@ not nil>
-	<td><b>@elements.label@</b>&nbsp;&nbsp;
+	<td><b>@elements.label;noquote@</b>&nbsp;&nbsp;
           <if @elements.help_text@ not nil>
             <br>&nbsp;&nbsp;
             <font size=-1><noparse><formhelp id=@elements.id@></noparse></font><br>
@@ -81,16 +83,6 @@
   </table>
 
 </td></tr>
-
-<if @buttons:rowcount@ gt 0>
-  <tr>
-    <td align="center">
-      <multiple name="buttons">
-        <input type="submit" name="@buttons.name@" value="@buttons.label@">
-      </multiple>
-    </td>
-  </tr>
-</if>
 
 <!-- End of light blue pad -->
 </table>

@@ -68,24 +68,13 @@
 
 </table>
 
-<if @buttons:rowcount@ gt 0>
-  <tr bgcolor="#FFFFFF">
-    <td align=right colspan=2>
-      <multiple name="buttons">
-        <input type="submit" name="@buttons.name@" value="@buttons.label@">
-      </multiple>
-    </td>
-  </tr>
-</if>
-<else>
-  <multiple name=elements>
-    <if @elements.widget@ eq "submit">
-      <tr bgcolor="#FFFFFF">
-        <td align=right colspan=2><input type=submit name=@elements.id@ value="@elements.label@"></td>
-      </tr>  
-    </if>
-  </multiple>
-</else>
+<multiple name=elements>
+  <if @elements.widget@ eq "submit">
+    <tr bgcolor="#FFFFFF">
+      <td align=right colspan=2><input type=submit name=@elements.id@ value="@elements.label@"></td>
+    </tr>  
+  </if>
+</multiple>
 
 </else>
 
