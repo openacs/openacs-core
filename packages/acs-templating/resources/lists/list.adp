@@ -1,3 +1,4 @@
+<div class="@list_properties.class@">
 <noparse>
   <if \@@list_properties.multirow@:rowcount@ eq 0>
 </noparse>
@@ -6,50 +7,10 @@
   </if>
   <else>
 </noparse>
-
-  <script language="JavaScript" type="text/javascript">
-    function ListFindInput() {
-      if (document.getElementsByTagName) {
-        return document.getElementsByTagName('input');
-      } else if (document.all) {
-        return document.all.tags('input');
-      }
-      return false;
-    }
-
-    function ListCheckAll(listName, checkP) {
-      var Obj, Type, Name, Id;
-      var Controls = ListFindInput(); if (!Controls) { return; }
-      // Regexp to find name of controls
-      var re = new RegExp('^' + listName + ',.+');
-
-      checkP = checkP ? true : false;
-
-      for (var i = 0; i < Controls.length; i++) {
-        Obj = Controls[i];
-        Type = Obj.type ? Obj.type : false;
-        Name = Obj.name ? Obj.name : false;
-        Id = Obj.id ? Obj.id : false;
-
-        if (!Type || !Name || !Id) { continue; }
-
-        if (Type == "checkbox" && re.exec(Id)) {
-          Obj.checked = checkP;
-        }
-      }
-    }
-
-    function ListBulkActionClick(formName, url) {
-
-      if (document.forms == null) return;
-      if (document.forms[formName] == null) return;
-    
-      var form = document.forms[formName];
-
-      form.action = url;
-      form.submit();
-    }
-  </script>
+  <if @bulk_actions:rowcount@ gt 0>
+    <form name="@list_properties.name@" method="get">
+    @list_properties.bulk_action_export_chunk;noquote@
+  </if>
 
   <if @actions:rowcount@ gt 0>
     <div class="list-button-bar">
@@ -59,23 +20,22 @@
     </div>
   </if>
 
-  <table class="list-tiny" cellpadding="3" cellspacing="1">
-
-  <form name="@list_properties.name@" method="get">
 
     <noparse>
       <multiple name="@list_properties.multirow@">
+      <if \@@list_properties.multirow@.rownum@ odd>
+         <div class="list-row odd">
+      </if><else>
+         <div class="list-row even">
+      </else>
     </noparse>
 
-      <p class="list-row">
         <listrow>
-      </p>
+      </div>
 
     <noparse>
       </multiple>
     </noparse>
-
-  </table>
 
   <if @bulk_actions:rowcount@ gt 0>
     <div class="list-button-bar">
@@ -84,10 +44,12 @@
         onclick="ListBulkActionClick('@list_properties.name@', '@bulk_actions.url@')">@bulk_actions.label@</a></span>
       </multiple>
     </div>
+    </form>
   </if>
-  </form>
+
 
 
 <noparse>
   </else>
 </noparse>
+</div>
