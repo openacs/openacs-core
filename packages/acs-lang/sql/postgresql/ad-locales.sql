@@ -19,9 +19,11 @@ create table ad_locales (
   locale		varchar(30)
                         constraint ad_locale_abbrev_pk
                         primary key,
-  language		char(2) constraint ad_language_name_nil
+  language		char(2) 
+                        constraint ad_language_name_nil
 			not null,
-  country		char(2) constraint ad_country_name_nil
+  country		char(2) 
+                        constraint ad_country_name_nil
 			not null,
   variant		varchar(30),
   label			varchar(200)
@@ -50,6 +52,23 @@ comment on table ad_locales is '
   mime_charset is IANA charset name
   nls_charset is  Oracle charset name
 ';
+
+create table ad_locale_user_prefs (
+  user_id               integer
+                        constraint ad_locale_user_prefs_pk
+                        primary key
+                        constraint ad_locale_user_prefs_users_fk
+                        references users (user_id) on delete cascade,
+  locale                varchar(30) not null
+                        constraint trb_language_preference_lid_fk
+                        references ad_locales (locale) on delete cascade
+);
+
+--
+--
+-- And now for some default locales
+--
+--
 
 insert into ad_locales (
   locale, label, language, country,
@@ -96,3 +115,4 @@ insert into ad_locales (
 );
 
 end;
+

@@ -95,3 +95,13 @@ insert into ad_locales (
 );
 
 commit;
+
+create table ad_locale_user_prefs (
+       user_id                        integer
+                                      primary key
+                                      references users (user_id),
+       locale                         varchar2(30) not null
+                                      constraint
+                                      trb_language_preference_lid_fk
+                                      references ad_locales (locale)
+);

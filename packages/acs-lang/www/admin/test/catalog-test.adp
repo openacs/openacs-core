@@ -3,7 +3,7 @@
 %>
 @header@
 <h3>@title@</h3>
-<a href="/pvt/home">Your Workspace</a> : Testing the language and localization API
+@context_bar@
 <hr>
 <p>
 [ad_locale user locale] ==> @locale@
@@ -38,30 +38,34 @@ language is set to
 or <a href="locale-set?locale=de_DE">German</a></em>.
 <p>
 
-Test of inline &lt;TRN&gt; adp tags:
+Test of inline  adp tags:
 <table cellspacing=0 cellpadding=4 border=1>
-<tr><th>Word to lookup</th><th>Result when user's preferred language is @language_name@</tr>
-<tr><td>English</td><td><trn key="test.English">English</trn></td></tr>
-<tr><td>French</td><td><trn key="test.French">French</trn></tr>
-<tr><td>Spanish</td><td><trn key="test.Spanish">Spanish</trn></td></tr>
-<tr><td>German</td><td><trn key="test.German">German</trn></td></td></tr>
+  <tr>
+    <th>Word to lookup</th>
+    <th>&lt;TRN&gt;</th>
+    <th>\#...#</th>
+  </tr>
+  <tr>
+    <td>English</td>
+    <td><trn key="test.English">English</trn></td>
+    <td>#test.English#</td>
+  </tr>
+  <tr>
+    <td>French</td>
+    <td><trn key="test.French">French</trn></td>
+    <td>#test.French#</td>
+  </tr>
+  <tr>
+    <td>Spanish</td>
+    <td><trn key="test.Spanish">Spanish</trn></td>
+    <td>#test.Spanish#</td>
+  </tr>
+  <tr>
+    <td>German</td>
+    <td><trn key="test.German">German</trn></td>
+    <td>#test.German#</td></td>
+  </tr>
 </table>
 <p>
-
-Test of inline &lt;TRN&gt; adp tags with STATIC option:
-<table cellspacing=0 cellpadding=4 border=1>
-<tr><th>Word to lookup</th><th>Result when user's preferred language is @language_name@</tr>
-<tr><td>English</td><td><trn static key="test.English">English</trn></td></tr>
-<tr><td>French</td><td><trn static key="test.French">French</trn></tr>
-<tr><td>Spanish</td><td><trn static key="test.Spanish">Spanish</trn></td></tr>
-<tr><td>German</td><td><trn static key="test.German">German</trn></td></td></tr>
-</table>
-<p>
-
-
 
 @footer@
-
-
-
-

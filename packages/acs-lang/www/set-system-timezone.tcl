@@ -19,10 +19,8 @@ append page "
 <hr>
 
 
-OpenACS currently believes that the 
-[string totitle [nsv_get ad_database_type .]] database 
-is running in the timezone
-<b>[ad_locale_get_system_timezone]</b>
+ACS currently believes that Oracle is running in the
+timezone <b>[ad_locale_get_system_timezone]</b>
 <p>
 
 If this is correct, then the offset between the time returned by
@@ -52,9 +50,8 @@ append widget "</select>"
 append page "
 <hr>
 
-You can use the form below to tell OpenACS what timezone the 
-[string totitle [nsv_get ad_database_type .]] database is operating in.
-(There does not appear to be a nice way to ask the database this question automatically).
+You can use the form below to tell ACS what timezone Oracle is operating in.
+(There does not appear to be a nice way to ask Oracle this question automatically).
 <p>
 
 <form action=set-system-timezone method=get>

@@ -10,7 +10,7 @@ ad_page_contract {
 
 set title "Test acs-lang package message catalog and locale API"
 set header [ad_header $title]
-# set navbar [ad_context_bar "Test"]
+set context_bar [ad_context_bar "Message Catalog Test"]
 set footer [ad_footer]
 
 # Test 1 verifies that the message catalog has loaded successfully

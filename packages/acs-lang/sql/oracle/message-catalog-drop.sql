@@ -1,7 +1,7 @@
 --
 -- packages/language/sql/language-drop.sql
 --
--- @author davis@xarg.net
+-- @author davis@arsdigita.com
 -- @creation-date 2000-09-10
 -- @cvs-id $Id$
 --

@@ -9,44 +9,259 @@ ad_library {
 
     @creation-date 28 September 2000
     @author Henry Minsky (hqm@mit.edu)
+    @author Lars Pind (lars@pinds.com)
     @cvs-id $Id$
 }
 
+namespace eval lang::system {
 
-ad_proc -public ad_locale_set_system_timezone { timezone }  { Tell OpenACS 
-what timezone Oracle thinks it is running in. 
+    ad_proc -public locale {
+        {-package_id ""}
+        {-site_wide:boolean}
+    } {
+        Get system locale setting for a given package instance.
+        
+        @param package_id The package for which you want to get the locale setting.
+        @param site_wide Set this if you want to get the site-wide locale setting.
+    } {
+        if { $site_wide_p } {
+            set package_id [apm_package_id_from_key "acs-lang"]
+            return [parameter::get -package_id $package_id -parameter SiteWideLocale]
+        } 
 
-  @param timezone name from acs-reference package (e.g., Asia/Tokyo, America/New_York)
-} {
-    set pid [apm_package_id_from_key "acs-lang"]
-    ad_parameter -set $timezone -package_id $pid SystemTimezone acs-lang 0
+        if { [empty_string_p $package_id] } {
+            set package_id [ad_conn package_id]
+        }
+
+        # Pssst! We don't actually use this package thing, 
+        # but we'll probably do so later.
+        set locale {}
+
+        # If there's no package setting, use the site-wide setting
+        if { [empty_string_p $locale] } {
+            set locale [locale -site_wide]
+        } 
+        return $locale
+    }
+
+    ad_proc -public set_locale {
+        {-package_id ""}
+        {-site_wide:boolean}
+        locale
+    } {
+        Set system locale setting for a given package instance, or the
+        site-wide system locale.
+        
+        @param package_id The package for which you want to set the locale setting.
+        @param site_wide Set this if you want to set the site-wide locale setting.
+        @param locale The new locale that you want to use as your system locale.
+    } {
+        if { $site_wide_p } {
+            set package_id [apm_package_id_from_key "acs-lang"]
+            parameter::set_value -package_id $package_id -parameter SiteWideLocale -value $locale
+        } else {
+            if { [empty_string_p $package_id] } {
+                set package_id [ad_conn package_id]
+            }
+            # Pssst! We don't actually use this package thing, 
+            # but we'll probably do so later.
+            set_locale -site_wide $locale
+        }
+    }
+
+    ad_proc -public language {
+        {-package_id ""}
+        {-site_wide:boolean}
+    } {
+        Get system language setting for a given package instance.
+        
+        @param package_id The package for which you want to get the language setting.
+        @param site_wide Set this if you want to get the site-wide language setting.
+    } {
+        return [string range [locale -package_id $package_id -site_wide=$site_wide_p] 0 1]
+    }
+
+    ad_proc -public timezone {} {
+        Ask OpenACS what it thinks our timezone is.
+        
+        @return  a timezone name from acs-reference package (e.g., Asia/Tokyo, America/New_York)
+    } {
+        set package_id [apm_package_id_from_key "acs-lang"]
+        return [parameter::get -package_id $package_id -parameter SystemTimezone -default 0]
+    }
+        
+    ad_proc -public set_timezone { 
+        timezone
+    }  { 
+        Tell OpenACS what timezone we think it's running in.
+        
+        @param timezone name from acs-reference package (e.g., Asia/Tokyo, America/New_York)
+    } {
+        set package_id [apm_package_id_from_key "acs-lang"]
+        parameter::set_value -package_id $package_id -parameter SystemTimezone -value $timezone
+    }
+
+    ad_proc -public timezone_utc_offset { } {
+        @return number of hours to subtract from local (database) time to get UTC
+    } {
+        set system_timezone [timezone]
+        return [db_string system_utc_offset {}]
+    }
+
+}
+
+namespace eval lang::user {
+
+    ad_proc -public locale {
+        {-package_id ""}
+        {-site_wide:boolean}
+    } {
+        Get user locale preference for a given package instance.
+        This preliminary implementation only has one site-wide setting, though.
+        
+        @param package_id The package for which you want to get the locale preference.
+        @param site_wide Set this if you want to get the site-wide locale preference.
+    } {
+        set user_id [ad_conn user_id]
+        if { $user_id == 0 } {
+            return ""
+        }
+    
+        # Pssst! We don't actually use this package thing, 
+        # but we'll probably do so later.
+        if { $site_wide_p } {
+
+            set package_id [apm_package_id_from_key "acs-lang"]
+            return [db_string get_user_locale {} -default ""]
+
+        } elseif { [empty_string_p $package_id] } {
+            set package_id [ad_conn package_id]
+        }
+        set locale [db_string get_user_locale {} -default ""]
+
+        # If there's no package setting, use the site-wide setting
+        if { [empty_string_p $locale] } {
+            set locale [locale -site_wide]
+        } 
+        return $locale
+    }
+
+    ad_proc -public set_locale {
+        {-package_id ""}
+        {-site_wide:boolean}
+        locale
+    } {
+        Set system locale setting for a given package instance. 
+        This preliminary implementation only has one site-wide setting, though.
+        
+        @param package_id The package for which you want to set the locale setting.
+        @param site_wide Set this if you want to set the site-wide locale setting.
+        @param locale The new locale that you want to use as your system locale.
+    } {
+        set user_id [ad_conn user_id]
+        if { $user_id == 0 } {
+            return
+        }
+    
+        # Pssst! We don't actually use this package thing, 
+        # but we'll probably do so later.
+        if { $site_wide_p } {
+            set package_id [apm_package_id_from_key "acs-lang"]
+        } elseif { [empty_string_p $package_id] } {
+            set package_id [ad_conn package_id]
+        }
+
+        set user_locale_exists_p [db_string user_locale_exists_p {}]
+        if { $user_locale_exists_p } {
+            db_dml update_user_locale {}
+        } else {
+            db_dml insert_user_locale {}
+        }
+    }
+
+    ad_proc -public language {
+        {-package_id ""}
+        {-site_wide:boolean}
+    } {
+        Get user language preference for a given package instance.
+        This preliminary implementation only has one site-wide setting, though.
+        
+        @param package_id The package for which you want to get the language setting.
+        @param site_wide Set this if you want to get the site-wide language setting.
+    } {
+        return [string range [locale -package_id $package_id -site_wide=$site_wide_p] 0 1]
+    }
+
+    ad_proc -public timezone {} {
+        Get the user's timezone. Defaults to system timezone if the user has no setting.
+        
+        @return  a timezone name from acs-reference package (e.g., Asia/Tokyo, America/New_York)
+    } {
+        # We probably don't want to keep this in client properties, since these are
+        # no longer permanent. We'll move this into a DB table at some point.
+        set timezone [ad_get_client_property -cache t "acs-lang" "timezone"]
+        if { [empty_string_p $timezone] } {
+            # No user timezone, return the system timezone
+            set timezone [parameter::get -parameter DefaultTimezone -package_id [apm_package_id_from_key acs-lang] -default "PST"]
+        }
+        return $timezone
+    }
+        
+    ad_proc -public set_timezone { 
+        timezone
+    }  { 
+        Set the user's timezone setting.
+        
+        @param timezone name from acs-reference package (e.g., Asia/Tokyo, America/New_York)
+    } {
+        ad_set_client_property -persistent t "acs-lang" timezone $timezone
+    }
+
+}
+
+namespace eval lang::conn {
+
+    ad_proc -public locale {
+        {-package_id ""}
+        {-site_wide:boolean}
+    } {
+        Get the locale for this request, perhaps for a given package instance.
+        
+        @param package_id The package for which you want to get the locale.
+        @param site_wide Set this if you want to get the site-wide locale.
+    } {
+        set locale [lang::user::locale -package_id $package_id -site_wide=$site_wide_p]
+        if { [empty_string_p $locale] } {
+            set locale [lang::system::locale -package_id $package_id -site_wide=$site_wide_p]
+        }
+        return $locale
+    }
+
+    ad_proc -public language {
+        {-package_id ""}
+        {-site_wide:boolean}
+    } {
+        Get the language for this request, perhaps for a given package instance.
+        
+        @param package_id The package for which you want to get the language.
+        @param site_wide Set this if you want to get the site-wide language.
+    } {
+        return [string range [locale -package_id $package_id -site_wide=$site_wide_p] 0 1]
+    }
+    
 }
 
 
-ad_proc -public ad_locale_get_system_timezone { }  { Ask OpenACS 
-what it thinks Oracle's timezone is.
+#####
+#
+# Backwards compatibility procs
+#
+#####
 
-  @return  a timezone name from acs-reference package (e.g., Asia/Tokyo, America/New_York)
+ad_proc -deprecated -warn ad_locale {
+    context 
+    item
 } {
-    set pid [apm_package_id_from_key "acs-lang"]
-    return [ad_parameter -package_id $pid SystemTimezone acs-lang 0]
-}
-
-
-ad_proc -public ad_locale_system_tz_offset { } {
-    @return number of hours to subtract from local (Oracle) time to get UTC
-} {
-    set system_timezone [ad_locale_get_system_timezone]
-    return [db_string system_offset {
-	select ( (sysdate - timezone.local_to_utc (:system_timezone, sysdate)) * 24 )
-	from dual
-    }]
-}
-
-
-
-ad_proc -public ad_locale {context item} {
-
     Returns the value of a locale item in a particular context. For example, to 
     get the language, locale, and timezone preference for the current user:
 
@@ -78,39 +293,34 @@ ad_proc -public ad_locale {context item} {
                    You can change the implementation to add other items as required.
     @return        Value of the item in the specified context
 
+    @see lang::conn::locale
+    @see lang::user::locale
+    @see lang::user::language
+    @see lang::user::timezone
+    @see lang::util::charset_for_locale
 } {
     switch $context {
+        request {
+            return [lang::conn::locale -site_wide]
+        }
 	user {
-	    set locale [ad_get_client_property -cache t "acs-lang" locale]
-	    if {[empty_string_p $locale]} {
-		set locale [ad_parameter DefaultLocale acs-lang "en_US"]
-		ad_locale_set locale $locale
-		ad_locale_set lang  [string range $locale 0 1]
-		ad_locale_set timezone [ad_parameter DefaultTimezone acs-lang "PST"]
-	    }
 	    switch $item {
 		locale {
-		    return $locale
+		    return [lang::user::locale -site_wide]
 		}
 		language {
-		    return [string range $locale 0 1]
+		    return [lang::user::language -site_wide]
 		}
 		timezone {
-		    return [ad_get_client_property -cache t "acs-lang" "timezone"]
+		    return [lang::user::timezone]
 		}
 		default {
 		    error "unsupported option to ad_locale: $item"
 		}
 	    }
 	}
-	subsite {
-	    error "ad_locale: subsite context not yet implemented"
-	}
 	charset {
-	    return [ad_locale_charset_for_locale $item]
-	}
-	fromabbrev {
-	    return [ad_locale_locale_from_abbrev $item]
+	    return [lang::util::charset_for_locale $item]
 	}
 	default {
 	    error "ad_locale: unknown context $context"
@@ -118,7 +328,10 @@ ad_proc -public ad_locale {context item} {
     }
 }
 
-ad_proc -public ad_locale_set  { item value } {
+ad_proc -deprecated -warn ad_locale_set  { 
+    item 
+    value 
+} {
     Sets the user's preferred locale info as a session var
     <p>
     usage:
@@ -126,72 +339,65 @@ ad_proc -public ad_locale_set  { item value } {
     ad_locale_set locale "en_US"
     ad_locale_set timezone "PST"
     </pre>
+    @see lang::user::set_locale
+    @see lang::user::set_timezone
 } {
-    set user_id [ad_get_user_id]
-    ad_set_client_property -persistent t "acs-lang" $item $value
+    switch $item {
+        locale {
+            lang::user::set_locale -site_wide $value
+        }
+        timezone {
+            lang::user::set_timezone $value
+        }
+        default {
+            error "Unknown item, $item"
+        }
+    }
 }
 
-ad_proc -public ad_locale_charset_for_locale { locale } {
-
-    Returns the MIME charset name corresponding to a locale.
-
-    @see           ad_locale
-    @author        Henry Minsky (hqm@mit.edu)
+ad_proc -deprecated -warn ad_locale_set_system_timezone { 
+    timezone
+}  { 
+    Tell OpenACS what timezone we think it's running in.
     
-    @param locale  Name of a locale, as language_COUNTRY using ISO 639 and ISO 3166
+    @param timezone name from acs-reference package (e.g., Asia/Tokyo, America/New_York)
+    @see lang::system::set_timezone
+} {
+    lang::system::set_timezone $timezone
+}
 
-    @return        IANA MIME character set name
-    
+
+ad_proc -deprecated -warn ad_locale_get_system_timezone { }  { 
+    Ask OpenACS what it thinks our timezone is.
+
+    @return  a timezone name from acs-reference package (e.g., Asia/Tokyo, America/New_York)
+    @see lang::system::timezone
+} {
+    return [lang::system::timezone]
+}
+
+
+ad_proc -deprecated -warn ad_locale_system_tz_offset { } {
+    @return number of hours to subtract from local (Oracle) time to get UTC
+    @see lang::system::timezone_utc_offset
+} {
+    return [lang::system::timezone_utc_offset]
+}
+
+ad_proc -deprecated -public ad_locale_get_label { locale } {
+
+    Returns the label (name) of locale
+
+    @author	Bruno Mattarollo (bruno.mattarollo@ams.greenpeace.org)
+
+    @param locale	Code for the locale, eg "en_US"
+
+    @return	String containing the label for the locale
 
 } {
-    return [db_string charset_for_locale {
-	select mime_charset
-	  from ad_locales 
-	 where locale = :locale
+    return [db_string select_locale_label {
+        select label 
+          from ad_locales
+         where locale = :locale
     }]
 }
-
-ad_proc -public ad_locale_locale_from_lang { language } {
-
-    Returns the default locale for a language
-
-    @see           ad_locale
-    @author        Henry Minsky (hqm@mit.edu)
-    
-    @param language  Name of a country, using ISO-3166 two letter code
-
-    @return        IANA MIME character set name
-    
-
-
-} {
-    return [db_string default_locale {
-	select locale 
-	  from ad_locales 
-	 where language = :language
-               and default_p = 't'
-    }]
-}
-
-
-ad_proc -public ad_locale_language_name { language } {
-
-    Returns the default locale for a language
-
-    @see           ad_locale
-    @author        Henry Minsky (hqm@mit.edu)
-    
-    @param language  Name of a country, using ISO-3166 two letter code
-
-    @return        IANA MIME character set name
-    
-
-
-} {
-    return [db_string default_locale {
-	select nls_language
-	  from ad_locales 
-	 where language = :language
-    }]
-}
-

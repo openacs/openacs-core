@@ -8,15 +8,11 @@ ad_page_contract {
     @cvs-id $Id$
 } {
     locale
-    { redirect_url {} }
+    {redirect_url {[ns_set iget [ns_conn headers] referer]}}
 }
 
 # set the locale property
 ad_locale_set locale $locale
-
-if [empty_string_p $redirect_url] {
-    set redirect_url  [ns_set iget [ns_conn headers] referer]
-}
 
 ad_returnredirect $redirect_url
 
