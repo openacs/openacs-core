@@ -7,7 +7,7 @@
     <querytext>
       select * from (
         select paginate.*, rownum rowsub from
-          ($list_properties(page_query_substed) paginate
+          ($list_properties(page_query_substed)) paginate
         where rownum <= $last_row)
       where rowsub >= $first_row
     </querytext>
