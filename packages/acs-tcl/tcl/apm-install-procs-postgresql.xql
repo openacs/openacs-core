@@ -234,6 +234,12 @@
       </querytext>
 </fullquery>
 
+ <fullquery name="apm_dependency_provided_p.version_greater_p">      
+      <querytext>
+        select apm_package_version__version_name_greater(:provided_version, :dependency_version)
+      </querytext>
+</fullquery>
+
 <fullquery name="apm_package_install.version_exists_p">      
       <querytext>
       
