@@ -82,37 +82,104 @@ ad_proc -public auth::authenticate {
                              -username $username \
                              -authority_id $authority_id \
                              -password $password]
-
     # Returns:
     #   auth_info(auth_status) 
     #   auth_info(auth_message) 
     #   auth_info(account_status) 
     #   auth_info(account_message) 
-    
-    if { [string equal $auth_info(auth_status) "ok"] && [string equal $auth_info(account_status) "ok"] } {
 
-        # LARS:
-        # Note: This has changed in the design to not throw away remote account status
 
-        # WRONG! External account status was ok, so we don't need that info anymore
-        # We'll replace it with local account status below
-        array unset auth_info account_status
-        array unset auth_info account_message
+    # Verify auth_info/auth_message return codes
+    array set default_auth_message {
+        no_account {Unknown username}
+        bad_password {Bad password}
+        auth_error {Unknown authentication error}
+        failed_to_connect {Error communicating with authentication server}
+    }
 
-        # Map to row in local users table
-        array set auth_info [auth::get_local_account \
-                           -username $username \
-                           -authority_id $authority_id]
-
-        # Returns: 
-        #   auth_info(account_status)
-        #   auth_info(account_message)  
-        #   auth_info(user_id)
-        # These are appended to the existing entries in auth_info
-        
-        if { [string equal $auth_info(account_status) "ok"] } {
-            auth::issue_login -user_id $auth_info(user_id) -persistent=$persistent_p
+    switch $auth_info(auth_status) {
+        ok { 
+            # Continue below
         }
+        no_account -
+        bad_password -
+        auth_error -
+        failed_to_connect {
+            if { ![exists_and_not_null auth_info(auth_message)] } {
+                set auth_info(auth_message) $default_auth_message($auth_info(auth_status))
+            }
+            return [array get auth_info]
+        }
+        default {
+            set auth_info(auth_status) "failed_to_connect"
+            set auth_info(auth_message) "Illegal error code returned from authentication driver"
+            return [array get auth_info]
+        }
+    }
+
+    # Verify remote account_info/account_message return codes
+    switch $auth_info(account_status) {
+        ok { 
+            # Continue below
+            set auth_info(account_message) {}
+        }
+        closed {
+            if { ![exists_and_not_null auth_info(account_message)] } {
+                set auth_info(account_message) "This account is not available at this time"
+            }
+        }
+        default {
+            set auth_info(account_status) "closed"
+            set auth_info(account_message) "Illegal error code returned from authentication driver"
+        }
+    }
+
+    # Save the remote account information for later
+    set remote_account_status $auth_info(account_status)
+    set remote_account_message $auth_info(account_message)
+
+    # Clear out remote account_status and account_message
+    array unset auth_info account_status
+    array unset auth_info account_message
+    
+    # Map to row in local users table
+    array set auth_info [auth::get_local_account \
+                             -username $username \
+                             -authority_id $authority_id]
+    # Returns: 
+    #   auth_info(account_status)
+    #   auth_info(account_message)  
+    #   auth_info(user_id)
+
+    # Verify local account_info/account_message return codes
+    switch $auth_info(account_status) {
+        ok { 
+            # Continue below
+        }
+        closed {
+            if { ![exists_and_not_null auth_info(account_message)] } {
+                set auth_info(account_message) "This account is not available at this time"
+            }
+        }
+        default {
+            set auth_info(account_status) "closed"
+            set auth_info(account_message) "Illegal error code returned from authentication driver"
+        }
+    }
+    
+    # If the remote account was closed, the whole account is closed, regardless of local account status
+    if { [string equal $remote_account_status "closed"] } {
+        set auth_info(account_status) closed
+    }
+
+    if { [exists_and_not_null remote_account_message] } {
+        # Concatenate local and remote account messages
+        set auth_info(account_message) "<p>[auth::authority::get_element -authority_id $authority_id -element pretty_name]: $remote_account_message </p> <p>[ad_system_name]: $auth_info(account_message)</p>"
+    }
+        
+    # Issue login cookie if login was successful
+    if { [string equal $auth_info(auth_status) "ok"] && [string equal $auth_info(account_status) "ok"] } {
+        auth::issue_login -user_id $auth_info(user_id) -persistent=$persistent_p
     }
     
     return [array get auth_info]
