@@ -13,3 +13,5 @@ drop table apm_package_files cascade;
 --drop view apm_file_info;
 drop function apm_package_version__add_file (integer,integer,varchar,varchar, varchar);
 drop function apm_package_version__remove_file (integer,varchar);
+drop function apm_package__disable (integer);
+drop function apm_package__enable (integer);
