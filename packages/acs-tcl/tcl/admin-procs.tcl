@@ -12,6 +12,7 @@ proc_doc ad_ssl_available_p {} {
     Returns 1 if this AOLserver has the SSL module installed.
 } {
     if { [ns_config ns/server/[ns_info server]/modules nsssl] != "" ||
+         [ns_config ns/server/[ns_info server]/modules nsssle] != "" ||
          [ns_config ns/server/[ns_info server]/modules nsopenssl] != "" } {
 	return 1
     } else {
@@ -26,6 +27,7 @@ proc_doc ad_restrict_to_https {conn args why} {
     @creation-date 2 November 2000
 } {
     if { [ad_conn driver] == "nsssl" ||
+         [ad_conn driver] == "nsssle" ||
 	 [ad_conn driver] == "nsopenssl"} {
  	return "filter_ok"
     } 
