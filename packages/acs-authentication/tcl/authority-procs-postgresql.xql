@@ -19,6 +19,10 @@
                 :register_impl_id,
                 :register_url,
                 :help_contact_text,
+                :get_doc_impl_id,
+                :process_doc_impl_id,
+                :snapshot_p,
+                :batch_sync_enabled_p,
                 :creation_user,
                 :creation_ip,
                 :context_id
