@@ -1,0 +1,1 @@
+<formtemplate id="register"></formtemplate>
