@@ -305,3 +305,21 @@ namespace eval group {
 }
 
 
+ad_proc -public group::get_rel_types_options {
+    {-group_id:required}
+    {-object_type "person"}
+} {
+    Get the valid relationship-types for this group in a format suitable for a select widget in the form builder.
+    The label used is the name of the role for object two.
+
+    @param group_id The ID of the group for which to get options.
+
+    @param object_type The object type which must occupy side two of the relationship. Typically 'person' or 'group'.
+    
+    @return a list of lists with label (role two pretty name) and ID (rel_type)
+} {
+    # LARS:
+    # The query has a hack to make sure 'membership_rel' appears before all other rel types
+    return [db_list_of_lists select_rel_types {}]
+}
+
