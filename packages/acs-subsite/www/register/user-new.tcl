@@ -4,7 +4,7 @@ ad_page_contract {
     @cvs-id $Id$
 } {
     username:optional
-    email:optional
+    {email ""}
     first_names:optional
     last_name:optional
     password:optional
