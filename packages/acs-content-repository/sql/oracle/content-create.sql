@@ -375,7 +375,7 @@ for each row
 begin
         insert into cr_files_to_delete (
           path, storage_area_key
-        ) select r.content, i.storage_area_key
+        ) select blob_to_string(r.content), i.storage_area_key
             from cr_items i, cr_revisions r
            where i.item_id = r.item_id
              and r.revision_id = :old.revision_id
