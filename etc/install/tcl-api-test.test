@@ -11,7 +11,7 @@ if { [catch {
     ::twt::do_request "/test/admin/rerun?package_key=&category=&view_by=package&quiet=0"
 
     # Grep for packages with failed tests
-    if { [regexp -nocase {fail} [response body]] } {
+    if { [regexp {FAILED} [response body]] } {
         ::twt::log "$alert_keyword - There are failed tests at $server_url"
     }
 
