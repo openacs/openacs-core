@@ -97,8 +97,6 @@ ad_proc adp_parse_ad_conn_file {} {
 } {
     namespace eval template variable parse_level ""
     #ns_log debug "adp_parse_ad_conn_file => file '[file root [ad_conn file]]'"
-    # Pull out the package_id of the subsite closest to our current node
-    ad_conn -set subsite_id [site_node_closest_ancestor_package "acs-subsite"]
 
     set parsed_template [template::adp_parse [file root [ad_conn file]] {}]
 
