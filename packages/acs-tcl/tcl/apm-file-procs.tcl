@@ -102,6 +102,7 @@ ad_proc -private apm_extract_tarball { version_id dir } {
 
     Extracts a distribution tarball into a particular directory,
     overwriting any existing files.
+    DCW - 2001-05-03, modified to extract tarball from content repository.
 
 } {
 
@@ -114,9 +115,6 @@ ad_proc -private apm_extract_tarball { version_id dir } {
                                          from apm_package_versions 
                                          where version_id = :version_id)
                  } $apm_file
-
-
-    #db_blob_get_file distribution_tar_ball_select "select distribution_tarball from apm_package_versions where version_id = :version_id" $apm_file
 
     file mkdir $dir
     # cd, gunzip, and untar all in the same subprocess (to avoid having to
@@ -132,11 +130,14 @@ ad_proc -private apm_generate_tarball { version_id } {
     DCW - 2001-05-03, change to use the content repository for tarball storage.
     
 } {
-    set files [apm_version_file_list $version_id]
-    
+    set files   [apm_version_file_list $version_id]    
     set tmpfile [ns_tmpnam]
     
-    db_1row package_key_select "select package_key from apm_package_version_info where version_id = :version_id"
+    db_1row package_key_select {
+                                select package_key 
+                                  from apm_package_version_info 
+                                 where version_id = :version_id
+                               }
 
     # Generate a command like:
     #
@@ -157,21 +158,24 @@ ad_proc -private apm_generate_tarball { version_id } {
     lappend cmd "|" [apm_gzip_cmd] -c ">" $tmpfile
     eval $cmd
 
-    # At this point, the APM tarball is sitting in $tmpfile. Save it in the database.
+    # At this point, the APM tarball is sitting in $tmpfile. Save it in 
+    # the database.
 
     set creation_ip [ad_conn peeraddr]
     set user_id     [ad_verify_and_get_user_id]
+    set name        "tarball-for-package-version-${version_id}"
+    set title       "${package_key}-tarball"
 
     set create_item "
                   begin
-                   :1 := content_item.new(name => 'tarball-for-package-version-${version_id}',
+                   :1 := content_item.new(name        => :name,
                                           creation_ip => :creation_ip
                          );
                   end;"
 
     set create_revision "
                   begin
-                   :1 := content_revision.new(title => '${package_key}-tarball',
+                   :1 := content_revision.new(title => :title,
                                               description => 'gzipped tarfile',
                                               text => 'not_important',
                                               mime_type => 'text/plain',
@@ -185,25 +189,20 @@ ad_proc -private apm_generate_tarball { version_id } {
                    where item_id = :item_id;
                  end;"
 
-    set update_tarball "
-                update cr_revisions
-                set content = empty_blob()
-                where revision_id = :revision_id
-                returning content into :1"
-
-    db_1row item_exists_p {select case when item_id is null then 0 else item_id end as item_id
-                           from apm_package_versions 
-                          where version_id = :version_id}
+    db_1row item_exists_p {select case when item_id is null 
+                                    then 0 
+                                    else item_id 
+                                  end as item_id
+                             from apm_package_versions 
+                            where version_id = :version_id}
 
     if {!$item_id} {
-        # content item hasen't been created yet - create one.
-        
-            set item_id [db_exec_plsql create_item $create_item]
-            db_dml set_item_id "update apm_package_versions 
-                                   set item_id = :item_id 
-                                 where version_id = :version_id"
-            set revision_id [db_exec_plsql create_revision $create_revision]
-            db_dml update_tarball $update_tarball -blob_files [list $tmpfile]
+        # content item hasen't been created yet - create one.        
+        set item_id [db_exec_plsql create_item $create_item]
+        db_dml set_item_id "update apm_package_versions 
+                               set item_id = :item_id 
+                             where version_id = :version_id"
+        set revision_id [db_exec_plsql create_revision $create_revision]
         
     } else {
         #tarball exists, so all we have to do is to make a new revision for it
@@ -211,18 +210,23 @@ ad_proc -private apm_generate_tarball { version_id } {
         if {![db_0or1row get_revision_id "select live_revision as revision_id
               from cr_items
              where item_id = :item_id"] || [empty_string_p $revision_id]} {
-            # It's an insert rather than an update
-            
-                set revision_id [db_exec_plsql create_revision $create_revision]
-                db_dml update_tarball $update_tarball -blob_files [list $tmpfile]
-            
-        } else {
-            # it's merely an update
-            
-                db_dml update_tarball $update_tarball -blob_files [list $tmpfile]
-            
+            # It's an insert rather than an update            
+            set revision_id [db_exec_plsql create_revision $create_revision]
         }
     }
+
+    db_dml update_tarball {update cr_revisions
+                              set content = empty_blob()
+                            where revision_id = :revision_id
+                        returning content into :1} -blob_files [list $tmpfile]
+
+    db_dml update_content_length {
+                update apm_package_versions
+                   set content_length = (select dbms_lob.getlength(content)
+                                           from cr_revisons
+                                          where revision_id = :revision_id)
+                 where version_id = :version_id
+                }
 
     file delete $tmpfile
 }

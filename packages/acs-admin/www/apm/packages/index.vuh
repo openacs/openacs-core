@@ -1,6 +1,7 @@
 ad_page_contract {
 
     This page serves .APM tarballs of packages.
+    Modified to serve tarballs from content repository (Openacs - DanW)
     
     @author Bryan Quinn (bquinn@arsdigita.com)
     @creation-date 29 September 2000
@@ -10,16 +11,21 @@ ad_page_contract {
 }
 
 if { [db_string apm_archive_exist_p {
-    select count(*) from apm_package_versions
-    where version_id = :version_id 
-    and distribution_tarball is not null
+ select count(*) 
+   from cr_revisions 
+  where revision_id = (select content_item.get_latest_revision(item_id) 
+                         from apm_package_versions
+                  	where version_id = :version_id)
 } -default 0] } {
 
     set file [ns_tmpnam]
 
     db_blob_get_file apm_archive_serve "
-	select distribution_tarball from apm_package_versions
-	where version_id = $version_id
+ select content 
+   from cr_revisions 
+  where revision_id = (select content_item.get_latest_revision(item_id) 
+                         from apm_package_versions
+                  	where version_id = :version_id)
     " -file $file
     db_release_unused_handles
     ns_returnfile 200 application/octet-stream $file

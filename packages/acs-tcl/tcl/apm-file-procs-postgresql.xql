@@ -7,7 +7,7 @@
       <querytext>
 
 select content_item__new(
-         'tarball-for-package-version-${version_id}',
+         :name,
          null,
          null,
          null,
@@ -36,7 +36,7 @@ select content_item__new(
   begin
 
   v_revision_id := content_revision__new(
-                                       '${package_key}-tarball',
+                                       :title,
                                        'gzipped tarfile',
                                        now(),
                                        'text/plain',
@@ -64,12 +64,22 @@ select content_item__new(
       <querytext>
 
     update cr_revisions
-    set content = '[cr_create_content_file $item_id $revision_id $tmpfile]'
+    set content = '[set content_file [cr_create_content_file $item_id $revision_id $tmpfile]]'
     where revision_id = :revision_id
 
       </querytext>
 </fullquery>
- 
+
+ <fullquery name="apm_generate_tarball.update_content_length">      
+      <querytext>
+
+                update apm_package_versions
+                set content_length = [file size [cr_fs_path]$content_file]
+                where version_id = :version_id
+
+      </querytext>
+</fullquery>
+
 <fullquery name="apm_extract_tarball.distribution_tar_ball_select">      
       <querytext>
 

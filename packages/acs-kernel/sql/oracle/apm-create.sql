@@ -212,7 +212,9 @@ create table apm_package_versions (
     cvs_import_results clob,
     activation_date    date,
     deactivation_date  date,
-    distribution_tarball blob,
+    -- distribution_tarball blob,
+    item_id            integer,
+    content_length     integer,
     distribution_uri   varchar2(1500),
     distribution_date  date,
     constraint apm_package_vers_id_name_un unique(package_key, version_name)
@@ -477,16 +479,18 @@ comment on table apm_package_owners is '
 -- Ths view faciliates accessing information about package versions by joining
 -- the apm_package_types information and acs_object_types information (which is
 -- invariant across versions) with the specific version information.
+
+-- DCW - 2001-05-04, converted tarball storage to use content repository.
 create or replace view apm_package_version_info as
     select v.package_key, t.package_uri, t.pretty_name, v.version_id, v.version_name,
            v.version_uri, v.summary, v.description_format, v.description, v.release_date,
            v.vendor, v.vendor_uri, v.enabled_p, v.installed_p, v.tagged_p, v.imported_p, v.data_model_loaded_p,
            v.activation_date, v.deactivation_date,
-           dbms_lob.getlength(distribution_tarball) tarball_length,
+           -- dbms_lob.getlength(distribution_tarball) tarball_length,
+           nvl(v.content_length,0) as tarball_length,
            distribution_uri, distribution_date
     from   apm_package_types t, apm_package_versions v
     where  v.package_key = t.package_key;
-
 
 -- A useful view for simply determining which packages are eanbled.
 create or replace view apm_enabled_package_versions as

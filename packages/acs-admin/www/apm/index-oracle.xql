@@ -20,7 +20,9 @@
              where v2.package_key = v.package_key
              and   v2.installed_p = 't'
              and   apm_package_version.sortable_version_name(v2.version_name) > apm_package_version.sortable_version_name(v.version_name)) as  superseded_p,
-            (select count(*) from dual where distribution_tarball is not null) as tarball_p
+            (select count(*) 
+               from cr_revisions 
+              where revision_id = content_item.get_latest_revision(item_id)) as tarball_p
         from    apm_package_versions v, apm_package_types t
         where  t.package_key = v.package_key
         [ad_dimensional_sql $dimensional_list where and]
