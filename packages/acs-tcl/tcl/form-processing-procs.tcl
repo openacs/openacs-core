@@ -615,7 +615,9 @@ ad_proc -public ad_form {
                     help_text -
                     label -
                     format -
-                    value {
+                    value -
+                    before_html -
+                    after_html {
                         if { [llength $extra_arg] > 2 || [llength $extra_arg] == 1 } {
                             return -code error "element $element_name: \"$extra_arg\" requires exactly one argument"
                         }
