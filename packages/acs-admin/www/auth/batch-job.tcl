@@ -10,16 +10,13 @@ ad_page_contract {
 
 auth::sync::job::get -job_id $job_id -array batch_job
 
-set page_title "Batch Job \"$batch_job(job_id)\""
-set context [list [list "." "Authentication"] [list [export_vars -base authority { {authority_id $batch_job(authority_id)} }] "Authority \"$batch_job(authority_pretty_name)\""] $page_title]
+set page_title "One batch job"
+set context [list [list "." "Authentication"] [list [export_vars -base authority { {authority_id $batch_job(authority_id)} }] "$batch_job(authority_pretty_name)"] $page_title]
 
 ad_form -name batch_job_form \
         -mode display \
         -display_buttons {} \
         -form {
-            {job_id:text(inform)
-                {label "Job ID"}                
-            }
             {authority_pretty_name:text(inform)
                 {label "Authority name"}                
             }            
@@ -77,6 +74,9 @@ ad_form -name batch_job_form \
                 }               
             }
 
+            set job_start_time [lc_time_fmt $batch_job(job_start_time) "%x %X"]
+            set job_end_time [lc_time_fmt $batch_job(job_end_time) "%x %X"]
+
             set document_download "<a href=\"[export_vars -base batch-document-download { job_id }]\">download</a>"
         }
 
@@ -93,7 +93,7 @@ list::create \
     -page_query $pagination_sql \
     -page_size 100 \
     -elements {
-        entry_time {
+        entry_time_pretty {
             label "Timestamp"
             link_url_eval {$entry_url}
             link_html { title "View log entry" }
@@ -122,9 +122,9 @@ list::create \
             job_id {}
     }
 
-db_multirow -extend { entry_url short_message } batch_actions select_batch_actions {
+db_multirow -extend { entry_url short_message entry_time_pretty } batch_actions select_batch_actions {
     select entry_id,
-           to_char(entry_time, 'YYYY-MM-DD HH24:MI:SS') as entry_time,
+           to_char(entry_time, 'YYYY-MM-DD HH24:MI:SS') as entry_time_ansi,
            operation,
            username,
            user_id,
@@ -149,4 +149,6 @@ db_multirow -extend { entry_url short_message } batch_actions select_batch_actio
         set short_message ""
     }
     set short_message [string_truncate -len 25 $short_message]
+
+    set entry_time_pretty [lc_time_fmt $entry_time_ansi "%x %X"]
 }
