@@ -289,7 +289,14 @@ ad_proc -public template::util::date::get_property { what date } {
 	}
         set pad "00"
       }
-      return "to_date('$value', '$format')"
+
+      # DRB: We need to differentiate between date and timestamp, for PG, at least,
+      # and since Oracle supports to_timestamp() we'll just do it for both DBs.
+      if { [llength $date] <= 3 } {
+          return "to_date('$value', '$format')"
+      } else {
+          return "to_timestamp('$value', '$format')"
+      }
     }
     ansi {
       # LARS: Empty date results in NULL value
