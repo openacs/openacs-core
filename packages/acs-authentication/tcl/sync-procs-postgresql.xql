@@ -51,6 +51,17 @@
         </querytext>
     </fullquery>
 
+    <fullquery name="auth::sync::job::end.update_job_end">
+        <querytext>
+
+            update auth_batch_jobs
+            set    job_end_time = current_timestamp,
+                   message = :message
+            where  job_id = :job_id
+
+        </querytext>
+    </fullquery>
+
     <fullquery name="auth::sync::job::create_entry.insert_entry">
         <querytext>
 
