@@ -1,0 +1,17 @@
+# Transform requests of type: a/b
+# into this internal request: A?c=b
+# for example, note/495 > note-edit?item_id=496
+# a: base name of this .vuh file
+# b: from the request
+# A: hard-coded
+# C: hard-coded
+
+set query [ad_conn url]
+
+set request [string range $query [expr [string last / $query] + 1] end]
+
+rp_form_put item_id $request
+
+set internal_path "/packages/[ad_conn package_key]/www/note-edit"
+
+rp_internal_redirect $internal_path
