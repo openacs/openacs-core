@@ -157,13 +157,13 @@ permission checks:
 set package_id [ad_conn package_id]
 
 if {[info exists note_id]} {
-  ad_require_permission $note_id write
+      permission::require_permission -object_id $note_id -privilege write
 
-  set context_bar [ad_context_bar "Edit Note"]
+      set context_bar [ad_context_bar "Edit Note"]
 } else {
-  ad_require_permission $package_id create
+      permission::require_permission -object_id $note_id -privilege create
 
-  set context_bar [ad_context_bar "New Note"]
+      set context_bar [ad_context_bar "New Note"]
 }
 
 </programlisting>
