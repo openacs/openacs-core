@@ -392,11 +392,31 @@ a.subsite-section:hover {
 }
 
 
-div.subsite-context-bar {
+#context-bar {
   font-family: Arial, sans-serif;
   font-size: 11px;
   margin-bottom: 2px;
   padding-left: 12px;
+}
+#context-bar #breadcrumbs {
+  float: left;
+  padding: 3px;
+}
+#context-bar #breadcrumbs ul {
+  margin-left: 0;
+  padding-left: 0;
+  display: inline;
+  border: none;
+} 
+#context-bar #breadcrumbs ul li {
+  margin-left: 0;
+  padding-left: 2px;
+  border: none;
+  list-style: none;
+  display: inline;
+}
+#context-bar #navlinks {
+  float: right;
 }
 
 h1 {
