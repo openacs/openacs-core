@@ -65,12 +65,17 @@ ad_proc -public cr_write_content {
             set path [cr_fs_path $storage_area_key]
             set filename [db_string write_file_content ""]
             # JCD: for webdavfs there needs to be a content-length 0 header 
-            # but ns_returnfile does not send one.  
+            # but ns_returnfile does not send one.   Also, we need to 
+            # ns_return size 0 files since if fastpath is enabled ns_returnfile 
+            # simply closes the connection rather than send anything (including 
+            # any headers).  Almost certainly a bug in fastpath.c.
             set size [file size $filename]
             if {!$size} { 
                 ns_set put [ns_conn outputheaders] "Content-Length" 0
+                ns_return 200  text/plain {}
+            } else {
+                ns_returnfile 200 $mime_type $filename
             }
-            ns_returnfile 200 $mime_type $filename
         }
         lob  {
             if { $string_p } {
