@@ -94,7 +94,7 @@ namespace eval ::lang::util {
     
     # Composites, now directly expanded, note that writing for %r specifically would be quicker than what we have here.
     set percent_match(T) {[lc_leading_zeros $lc_time_hours 2]:[lc_leading_zeros $lc_time_minutes 2]:[lc_leading_zeros $lc_time_seconds 2]}
-    set percent_match(D) {[lc_leading_zeros $lc_time_month 2]/[lc_leading_zeros $lc_time_month 2]/[lc_leading_zeros [expr $lc_time_year%100] 2]}
+    set percent_match(D) {[lc_leading_zeros $lc_time_days 2]/[lc_leading_zeros $lc_time_month 2]/[lc_leading_zeros [expr $lc_time_year%100] 2]}
     set percent_match(F) {${lc_time_year}-[lc_leading_zeros $lc_time_month 2]-[lc_leading_zeros $lc_time_days 2]}
     set percent_match(r) {[lc_leading_zeros [lc_time_drop_meridian $lc_time_hours] 2]:[lc_leading_zeros $lc_time_minutes 2] [lc_time_name_meridian $locale $lc_time_hours]}
     
