@@ -56,18 +56,6 @@
 </fullquery>
 
  
-<fullquery name="package_generate_body.select_supertype_function_params">      
-      <querytext>
-      
-	select args.argument_name
-	  from user_arguments args
-         where args.package_name =upper(:supertype_package_name)
-	   and args.object_name='NEW'
-    
-      </querytext>
-</fullquery>
-
- 
 <fullquery name="package_create_attribute_list.select_type_info">      
       <querytext>
       

@@ -15,26 +15,28 @@
 </fullquery>
 
  
-<fullquery name="delete.delete_group">      
+<fullquery name="group::delete.delete_group">      
       <querytext>
-      FIX ME PLSQL
-
+	  DECLARE
+	    row record;
 	  BEGIN 
             -- the acs_group package takes care of segments referred
   	    -- to by rel_constraints.rel_segment. We delete the ones
 	    -- references by rel_constraints.required_rel_segment here.
 
-	    for row in (select cons.constraint_id
+	    for row in select cons.constraint_id
                           from rel_constraints cons, rel_segments segs
                          where segs.segment_id = cons.required_rel_segment
-                           and segs.group_id = :group_id) loop
+                           and segs.group_id = :group_id loop
 
-                rel_segment__delete(row.constraint_id);
+                perform rel_segment__delete(row.constraint_id);
 
             end loop;
 
 	    -- delete the actual group
-	    ${package_name}.delete(:group_id); 
+	    perform ${package_name}__delete(:group_id);
+
+	    return 1;
 	  END;
         
       </querytext>

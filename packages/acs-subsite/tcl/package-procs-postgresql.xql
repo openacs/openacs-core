@@ -19,16 +19,16 @@
  
 <fullquery name="package_create_attribute_list.select_all_attributes">      
       <querytext>
-      FIX ME CONNECT BY
 
 	select upper(coalesce(attr.table_name,t.table_name)) as attr_table_name, 
 	       upper(coalesce(attr.column_name, attr.attribute_name)) as attr_column_name, 
 	       attr.ancestor_type, attr.min_n_values, attr.default_value
 	  from acs_object_type_attributes attr, 
-	       (select t.object_type, t.table_name, level as type_level
-	          from acs_object_types t
-	         start with t.object_type = :object_type
-	       connect by prior t.supertype = t.object_type) t
+	       (select t2.object_type, t2.table_name, (tree_level(t1.tree_sortkey) - tree_level(t2.tree_sortkey)) + 1 as type_level
+	          from acs_object_types t1, acs_object_types t2
+		 where t2.tree_sortkey <= t1.tree_sortkey
+		   and t1.tree_sortkey like (t2.tree_sortkey || '%')
+		   and t1.object_type = :object_type) t
          where attr.ancestor_type = t.object_type
            and attr.object_type = :object_type
         order by t.type_level 
@@ -39,13 +39,12 @@
  
 <fullquery name="package_recreate_hierarchy.select_object_types">      
       <querytext>
-      FIX ME CONNECT BY
 
-	select t.object_type
-	  from acs_object_types t
-	 where t.dynamic_p = 't'
-	 start with t.object_type = :object_type
-       connect by prior t.object_type = t.supertype
+	select t2.object_type
+	  from acs_object_types t1, acs_object_types t2
+	 where t2.dynamic_p = 't'
+	   and t2.tree_sortkey like (t1.tree_sortkey || '%')
+	   and t1.object_type = :object_type
     
       </querytext>
 </fullquery>
@@ -68,12 +67,12 @@
  
 <fullquery name="package_object_view_reset.select_ancestor_types">      
       <querytext>
-      FIX ME CONNECT BY
 
-	select t.object_type as ancestor_type
-	  from acs_object_types t 
-	 start with t.object_type = :object_type 
-       connect by prior t.supertype = t.object_type
+	select t2.object_type as ancestor_type
+	  from acs_object_types t1, acs_object_types t2
+	 where t2.tree_sortkey <= t1.tree_sortkey
+	   and t1.tree_sortkey like (t2.tree_sortkey || '%')
+	   and t1.object_type = :object_type
     
       </querytext>
 </fullquery>
@@ -81,12 +80,11 @@
  
 <fullquery name="package_object_view_reset.select_sub_types">      
       <querytext>
-      FIX ME CONNECT BY
 
-	select t.object_type as sub_type
-	  from acs_object_types t 
-	 start with t.object_type = :object_type 
-       connect by prior t.object_type = t.supertype
+	select t2.object_type as sub_type
+	  from acs_object_types t1, acs_object_types t2
+	 where t2.tree_sortkey like (t1.tree_sortkey || '%')
+	   and t1.object_type = :object_type 
     
       </querytext>
 </fullquery>
@@ -160,6 +158,15 @@
 </fullquery>
 
  
+<fullquery name="package_create.package_valid_p">      
+      <querytext>
+
+select 1
+    
+      </querytext>
+</fullquery>
+
+ 
 <fullquery name="package_instantiate_object.create_object">      
       <querytext>
 
@@ -170,6 +177,85 @@
 
       </querytext>
 </fullquery>
+
+ 
+<fullquery name="package_generate_body.select_supertype_function_params">      
+      <querytext>
+      
+	select args.arg_name
+	  from acs_function_args args
+         where args.function =upper(:supertype_package_name) || '__NEW'
+    
+      </querytext>
+</fullquery>
+
+ 
+<partialquery name="package_generate_body.body">      
+      <querytext>
+
+begin
+
+perform drop_package('${package_name}');
+
+perform define_function_args('${package_name}__new','[plpgsql_utility::define_function_args $attribute_list]');
+
+create function ${package_name}__new([plpgsql_utility::generate_function_signature $attribute_list])
+returns [plpgsql_utility::table_column_type ${table_name} ${id_column}] as '
+declare
+    [plpgsql_utility::generate_attribute_parameters $attribute_list];
+    v_$id_column ${table_name}.${id_column}%TYPE;
+begin
+
+    v_$id_column := ${supertype_package_name}__new (
+                     [plpgsql_utility::generate_attribute_parameter_call_from_attributes \
+			     -prepend "p_" \
+			     "${supertype_package_name}__new" \
+			     $supertype_attr_list]
+                   );
+
+    insert into ${table_name} 
+    ($id_column[plsql_utility::generate_attribute_dml -ignore [list $id_column] $table_name $attribute_list]) 
+    values 
+    (v_$id_column[plsql_utility::generate_attribute_dml -prepend "p." -ignore [list $id_column] $table_name $attribute_list]);
+
+    return v_$id_column;
+
+end;' language 'plpgsql';
+
+create function ${package_name}__delete ([plpgsql_utility::table_column_type ${table_name} ${id_column}])
+returns integer as '
+declare
+    p_${id_column}      alias for [plpgsql_utility::dollar]1;
+begin
+
+    perform ${supertype_package_name}__delete( p_${id_column} );
+    return 1;
+
+end;' language 'plpgsql';
+
+return null;
+end;
+    
+      </querytext>
+</partialquery>
+
+
+<partialquery name="package_generate_spec.spec">      
+      <querytext>
+
+select 1;
+    
+      </querytext>
+</partialquery>
+
+
+<partialquery name="package_attribute_default.creation_date">      
+      <querytext>now()</querytext>
+</partialquery>
+
+<partialquery name="package_attribute_default.last_modified">      
+      <querytext>now()</querytext>
+</partialquery>
 
  
 </queryset>

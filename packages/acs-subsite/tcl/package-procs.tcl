@@ -212,10 +212,10 @@ ad_proc -private package_attribute_default {
     if { [string equal $table "ACS_OBJECTS"] } {
 	switch -- $column {
 	    "OBJECT_TYPE"   { return "'[DoubleApos $object_type]'" }
-	    "CREATION_DATE" { return "sysdate" }
+	    "CREATION_DATE" { return [db_map creation_date] }
 	    "CREATION_IP"   { return "NULL" }
 	    "CREATION_USER" { return "NULL" }
-	    "LAST_MODIFIED" { return "sysdate" }
+	    "LAST_MODIFIED" { return [db_map last_modified] }
 	    "MODIFYING_IP"  { return "NULL" }
 	}
     } elseif { [string equal $table "ACS_RELS"] } {
@@ -315,7 +315,8 @@ ad_proc -private package_create {
 
     if { $debug_p == "t" } {
 	foreach pair $plsql {
-	    append text "[plsql_utility::parse_sql [lindex $pair 1]]\n\n"
+#	    append text "[plsql_utility::parse_sql [lindex $pair 1]]\n\n"
+	    append text [lindex $pair 2]
 	}
 	return $text
     }
@@ -366,23 +367,7 @@ ad_proc -private package_generate_spec {
 	 where t.object_type = :object_type
     }
 
-    return "
-create or replace package $package_name as
-[package_insert_default_comment]
-  function new (
-         [plsql_utility::generate_attribute_parameters [package_create_attribute_list \
-		 -supertype $supertype \
-		 -object_name "NEW" \
-		 -table $table_name \
-		 -column $id_column \
-		 $object_type]]
- ) return ${table_name}.${id_column}%TYPE;
-
-  procedure delete (
-    $id_column      in ${table_name}.${id_column}%TYPE
-  );
-END ${package_name};
-"
+    return [db_map spec]
 }
     
 
@@ -437,44 +422,7 @@ ad_proc -private package_generate_body {
 	    -column_value $id_column \
 	    $supertype]
 
-    return "
-create or replace package body ${package_name}
-as
-[package_insert_default_comment]
-  function new ( 
-         [plsql_utility::generate_attribute_parameters $attribute_list]
-  ) return ${table_name}.${id_column}%TYPE
-  is
-    v_$id_column ${table_name}.${id_column}%TYPE;
-  begin
-
-    v_$id_column := ${supertype_package_name}.new (
-                     [plsql_utility::generate_attribute_parameter_call_from_attributes \
-			     -prepend "new." \
-			     -indent 21 \
-			     $supertype_attr_list]
-                   );
-
-    insert into ${table_name} 
-    ($id_column[plsql_utility::generate_attribute_dml -ignore [list $id_column] $table_name $attribute_list]) 
-    values 
-    (v_$id_column[plsql_utility::generate_attribute_dml -prepend "new." -ignore [list $id_column] $table_name $attribute_list]);
-
-    return v_$id_column;
-
-  end new;
-
-  procedure delete (
-    $id_column      in ${table_name}.${id_column}%TYPE
-  )
-  is 
-  begin
-
-    ${supertype_package_name}.delete( $package_name.delete.$id_column );
-
-  end delete;
-
-end ${package_name};"
+    return [db_map body]
 }
 
 ad_proc -public package_object_view_reset {

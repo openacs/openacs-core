@@ -29,5 +29,32 @@
       </querytext>
 </fullquery>
 
+<partialquery name="package_drop">
+  <querytext>
+    drop package [DoubleApos $group_type]
+  </querytext>
+</partialquery>
+
+ 
+<partialquery name="delete_rel_types">
+  <querytext>
+delete from group_type_rels where group_type = :group_type
+  </querytext>
+</partialquery>
+
+ 
+<partialquery name="drop_type">
+  <querytext>
+begin acs_object_type.drop_type(:group_type); end;
+  </querytext>
+</partialquery>
+
+ 
+<partialquery name="drop_table">
+  <querytext>
+drop table $table_name
+  </querytext>
+</partialquery>
+
  
 </queryset>

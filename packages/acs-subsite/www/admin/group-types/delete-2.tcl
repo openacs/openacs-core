@@ -50,13 +50,13 @@ if { [db_string package_exists {
            then 1 else 0 end
       from dual
 }] } {
-    lappend plsql [list "package_drop" "drop package [DoubleApos $group_type]"]
+    lappend plsql [list "package_drop" [db_map package_drop]]
 } else {
     set package_name ""
 }
 
 # Remove the specified rel_types
-lappend plsql [list "delete_rel_types" "delete from group_type_rels where group_type = :group_type"]
+lappend plsql [list "delete_rel_types" [db_map delete_rel_types]]
 
 if { [db_string type_exists {
     select case when exists (select 1 from acs_object_types t where t.object_type = :group_type)
@@ -65,12 +65,12 @@ if { [db_string type_exists {
            end
       from dual
 }] } {
-    lappend plsql [list "drop_type" "begin acs_object_type.drop_type(:group_type); end;"]
+    lappend plsql [list "drop_type" [db_map drop_type]]
 }
 
 # Make sure we drop the table last
 if { ![empty_string_p $table_name] && [db_table_exists $table_name] } {
-    lappend plsql [list "drop_table" "drop table $table_name"]
+    lappend plsql [list "drop_table" [db_map drop_table]]
 }
 
 # How do we handle the situation where we delete the groups we can,
