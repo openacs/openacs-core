@@ -159,7 +159,12 @@ proc db_qd_get_fullname {local_name {added_stack_num 1}} {
     }
 
     # Get the proc name being executed.
-    set proc_name [info level [expr "-1 - $added_stack_num"]]
+    # We catch this in case we're being called from the top level
+    # (eg. from bootstrap.tcl), in which case we return what we
+    # were given
+    if { [catch {info level [expr "-1 - $added_stack_num"]} proc_name] } {
+	return $local_name
+    }
 
     # If util_memoize, we have to go back up one in the stack
     if {[lindex $proc_name 0] == "util_memoize"} {
