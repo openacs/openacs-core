@@ -132,7 +132,6 @@ aa_register_case auth_create_user {
                                      -first_names "Test" \
                                      -last_name "User" \
                                      -password "changeme" \
-                                     -password_confirm "changeme" \
                                      -secret_question "no_question" \
                                      -secret_answer "no_answer"]
 
@@ -163,7 +162,6 @@ aa_register_case auth_create_user {
                                      -first_names "" \
                                      -last_name "User" \
                                      -password "changeme" \
-                                     -password_confirm "changeme" \
                                      -secret_question "no_question" \
                                      -secret_answer "no_answer"]
             
@@ -191,7 +189,6 @@ aa_register_case auth_create_user {
                                      -first_names "Test3" \
                                      -last_name "User" \
                                      -password "changeme" \
-                                     -password_confirm "changeme" \
                                      -secret_question "no_question" \
                                      -secret_answer "no_answer"]
 
