@@ -499,8 +499,6 @@ namespace eval lang::util {
 
                     set text_w_percentages [convert_adp_variables_to_percentage_signs $text]
 
-                    ns_log Notice "PM: text $text text_w_percentages $text_w_percentages"
-    
                     if { $mode == "report" } {
                         # create a key for the text
                         
