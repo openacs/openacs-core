@@ -67,6 +67,7 @@ ad_proc -public acs_page_filter { why } {
 
 ad_proc -public template::forward { url } {
 
+  ns_log Notice "url = $url"
   if { ! [string match http://* $url] } {
     
     if { [string index $url 0] != "/" } {
@@ -77,8 +78,12 @@ ad_proc -public template::forward { url } {
   }
 
   ns_log Notice "Redirecting to $url"
+  global errorInfo
+  #ns_log Notice "errorInfo = $errorInfo"
 
-  ns_returnredirect $url
+  set ret_val [ns_returnredirect $url]
+  #ns_log Notice "ret_val = $ret_val, errorInfo = $errorInfo"
+
 
   error FILTER_ABORT
 }
