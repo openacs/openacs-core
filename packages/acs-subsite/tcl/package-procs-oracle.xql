@@ -128,7 +128,7 @@
                  start with t.object_type=:start_with
                connect by prior t.object_type = t.supertype) t 
          where a.object_type = :object_type
-           and t.object_type = a.object_type $storage_clause
+           and t.object_type = a.ancestor_type $storage_clause
          order by type_level
       </querytext>
 </fullquery>
