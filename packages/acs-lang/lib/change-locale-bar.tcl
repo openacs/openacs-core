@@ -1,7 +1,7 @@
-# Optional parameters
-# TODO:
-# 1) specify exactly which locales
-# 2) sort by descending popularity
+# optional inputs:
+# return_url
+# max_locales
+# avail_key
 
 set current_locale [lang::conn::locale]
 set base_lang_url [site_node::get_package_url -package_key acs-lang]
@@ -19,13 +19,13 @@ if { ![exists_and_not_null avail_key] } {
     set avail_key "this-language"
 }
 
-# get a list of valid locales
+# get a count of enabled locales
 set enabled_locale_count [db_string enabled_locale_count "
     select count(*)
       from enabled_locales el
 " -default 0]
 
-# get a list of valid locales
+# get a list of valid locales for switching
 db_multirow -extend {l10n_label switch_url} locale_list get_locale_list "
     select el.label,
            el.locale,
@@ -45,25 +45,43 @@ db_multirow -extend {l10n_label switch_url} locale_list get_locale_list "
 }
 
 set switchable_count [template::multirow size locale_list]
- 
-# display as many choices as possible, limited by availability of the localized message keys
-# and parameterized limit
-# If there are more locales in the system than displayable, extend the list with "Change Locale"
-# in the browser's requested locale.  If that is not available, fall back to "...", NOT to the
-# system default for "Change Locale".  The reason is that, after a list of language names, "..." should
-# be more recognizable than a foreign word
+set change_locale_url ""
 
-if {$enabled_locale_count > $switchable_count && $switchable_count > 1} {
-    set change_locale_url [export_vars -base $base_lang_url {return_url}]
-    set browser_locale [lang::conn::browser_locale]
-    set exists_p [lang::message::message_exists_p $browser_locale acs-lang.change-locale]
-    if { [exists_and_not_null browser_locale] && $exists_p } {
-        set change_locale_text "[lang::message::lookup $browser_locale  acs-lang.change-locale]"
-    } else {
-        set change_locale_text "..."
-    }
-    set change_locale_text 
+#######################################################################
+# The text to change locales, in decreasing order of desirability
+#   1) "Change Locale" in the browser's requested locale.  
+#   2) If there is a list of locales, "..."
+#      (NOT to the system default for "Change Locale".  The reason is that, after a list of 
+#       language names, "..." should be more recognizable than a foreign word)
+#   3) Fall back on the standard defaults for Change Locale
+
+set browser_locale [lang::conn::browser_locale]
+set localized_change_exists_p [lang::message::message_exists_p $browser_locale acs-lang.change-locale]
+if { $localized_change_exists_p } {
+    set change_locale_text "[lang::message::lookup $browser_locale acs-lang.change-locale]"
 } else {
-    set change_locale_url ""
-    set change_locale_text ""
+    set change_locale_text "[_ acs-lang.change-locale]"
 }
+
+if {$enabled_locale_count > 1 && $enabled_locale_count > $switchable_count} { 
+    set change_locale_url [export_vars -base ${base_lang_url} {return_url}]
+}
+
+
+if {$localized_change_exists_p && $switchable_count > 1 &&  $enabled_locale_count > $switchable_count} {
+    set change_locale_text "..."
+}
+
+
+
+#######################################################################
+# administrators' link
+set acs_lang_id [apm_package_id_from_key acs-lang]
+set lang_admin_p [permission::permission_p -privilege admin -object_id $acs_lang_id]
+set lang_admin_url [export_vars -base ${base_lang_url}admin {return_url}]
+
+if { $enabled_locale_count > 1 } {
+    set lang_admin_text "Administer Locales"
+} else {
+    set lang_admin_text "Add Locales"
+}    
