@@ -35,6 +35,7 @@ ad_proc -public template::form { command args } {
     @see template::form::export
     @see template::form::get_combined_values
     @see template::form::get_values
+    @see template::form::get_errors
     @see template::form::is_request
     @see template::form::is_submission
     @see template::form::is_valid
@@ -623,6 +624,24 @@ ad_proc -public template::form::get_values { id args } {
   foreach element_id $elements {
     upvar 2 $element_id value
     set value [template::element get_value $id $element_id]
+  }
+}
+
+
+ad_proc -public template::form::get_errors { id } {
+    @param id               The form identifier
+    @return the list of form errors
+} {
+  set level [template::adp_level]
+
+  upvar #$level $id:error formerror
+
+  if { [info exists formerror] } {
+    # errors exist in the form, return them
+    return [array get formerror]
+  } else {
+    # no errors exist in the form, return the empty list
+    return [list]
   }
 }
 

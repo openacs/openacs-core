@@ -16,7 +16,8 @@ ad_proc -public template::paginator { command args } {
     @see template::paginator 
     @see template::paginator::create 
     @see template::paginator::get_context 
-    @see template::paginator::get_data 
+    @see template::paginator::get_data
+    @see template::paginator::get_query 
     @see template::paginator::get_display_info 
     @see template::paginator::get_group 
     @see template::paginator::get_group_count 
@@ -24,11 +25,12 @@ ad_proc -public template::paginator { command args } {
     @see template::paginator::get_page 
     @see template::paginator::get_page_count 
     @see template::paginator::get_pages 
-    @see template::paginator::get_pages_info 
+    @see template::paginator::get_pages_info
     @see template::paginator::get_row 
     @see template::paginator::get_row_count 
     @see template::paginator::get_row_ids 
     @see template::paginator::get_row_last
+    @see template::paginator::reset
 } {
   eval paginator::$command $args
 }
@@ -46,7 +48,7 @@ ad_proc -public template::paginator::create { statement_name name query args } {
                         the results.  Bind variables may be used.
 
     @option timeout     The lifetime of a query result in seconds, after which
-                        the query must be refreshed.
+                        the query must be refreshed (if not reset).
 
     @option pagesize    The number of rows to display on a single page.
 
@@ -80,8 +82,57 @@ ad_proc -public template::paginator::create { statement_name name query args } {
   set cache_key	$name:$query
   set row_ids [cache get $cache_key:row_ids]
 
-  if { [string equal $row_ids {}] } {
-    init $statement_name $name $query
+    if { ([string equal $row_ids {}] && ![nsv_exists __template_cache_timeout $cache_key]) || ([info exists opts(flush_p)] && [string equal $opts(flush_p) "t"]) } {
+      if { [info exists opts(printing_prefs)] && ![empty_string_p $opts(printing_prefs)] } {
+	  ReturnHeadersNoCache "text/html"
+	  ns_write "
+<html>
+<head>"
+	  set title [lindex $opts(printing_prefs) 0]
+	  ns_write "<title>$title</title>
+          <meta http-equiv=\"Content-Type\" content=\"text/html; charset=iso-8859-1\">"
+	  set stylesheet [lindex $opts(printing_prefs) 1]
+	  if { ![empty_string_p $stylesheet] } {
+	      ns_write "<link rel=\"stylesheet\" href=\"$stylesheet\" type=\"text/css\">"
+	  }
+	  ns_write "</head>"
+	  ns_write "<body "
+	  set background [lindex $opts(printing_prefs) 2]
+	  if { ![empty_string_p $background] } {
+	      ns_write "background=\"$background\""
+	  }
+	  ns_write ">"
+	  set header_file [lindex $opts(printing_prefs) 3]
+	  if { ![empty_string_p $header_file] } {
+	      ns_write [ns_adp_parse -file $header_file]
+	  }
+	  ns_write [lindex $opts(printing_prefs) 6]
+	  init $statement_name $name $query 1
+	  ns_write [lindex $opts(printing_prefs) 7]
+	  set footer_file [lindex $opts(printing_prefs) 4]
+	  if { ![empty_string_p $footer_file] } {
+	      ns_write [ns_adp_parse -file $footer_file]
+	  }
+	  set return_url [lindex $opts(printing_prefs) 5]
+	  if { ![empty_string_p $return_url] } {
+	      if { [llength $opts(row_ids)]==0 } {
+		  nsv_set __template_cache_timeout $cache_key $opts(timeout)
+	      }
+	      ns_write "
+          <SCRIPT LANGUAGE=\"JavaScript\">
+          <!-- Begin
+          document.location.href=\"$return_url\";
+          // End -->
+          </script>
+          <noscript>
+          <a href=\"$return_url\">Click here to Continue</a>
+          </noscript>"
+	  }
+	  ns_write [ad_footer]
+	  ad_script_abort
+      } else {
+	  init $statement_name $name $query
+      }
   } else {
     set opts(row_ids) $row_ids
     set opts(context_ids) [cache get $cache_key:context_ids]
@@ -92,7 +143,7 @@ ad_proc -public template::paginator::create { statement_name name query args } {
   set opts(group_count) [get_group $name $opts(page_count)]
 }
 
-ad_proc -private template::paginator::init { statement_name name query } {
+ad_proc -private template::paginator::init { statement_name name query {print_p 0} } {
     Initialize a paginated query.  Only called by create.
 } {
   get_reference
@@ -100,12 +151,46 @@ ad_proc -private template::paginator::init { statement_name name query } {
   # query for an ordered list of all row identifiers to cache
   # perform the query in the calling scope so bind variables have effect
 
-  upvar 3 __paginator_ids ids
+  upvar 2 __paginator_ids ids
+  set ids [list]
 
   if { [info exists properties(contextual)] } {
 
       # query contains two columns, one for ID and one for context cue
-      uplevel 3 "set __paginator_ids \[db_list_of_lists $statement_name \"$query\"\]"
+
+      uplevel 2 "
+      set full_statement_name \[db_qd_get_fullname $statement_name\]
+
+      # Can't use db_foreach here, since we need to use the ns_set directly.
+      db_with_handle db {
+	set selection \[db_exec select \$db \$full_statement_name {$query}\]
+ 
+        set __paginator_ids \[list\]
+        set total_so_far 1
+
+	while { \[db_getrow \$db \$selection\] } {
+	    set this_result \[list\]
+	    for { set i 0 } { \$i < \[ns_set size \$selection\] } { incr i } {
+                lappend this_result \[ns_set value \$selection \$i\]
+	    }
+            if { $print_p } {
+               if { \$total_so_far % 250 == 0 } {
+                   ns_write \"&#133;\$total_so_far \"
+               }
+               if { \$total_so_far % 3000 == 0 } {
+                   ns_write \"<br>\"
+               }
+            }
+            incr total_so_far
+	    lappend __paginator_ids \$this_result
+	}
+
+        if { $print_p } {
+           ns_write \"&#133;\[expr \$total_so_far - 1\]\"
+        }
+
+      }
+      "
 
       set i 0
       set page_size $properties(pagesize)
@@ -120,7 +205,7 @@ ad_proc -private template::paginator::init { statement_name name query } {
           }
           incr i
       }
-      
+
       set properties(context_ids) $context_ids
       cache set $name:$query:context_ids $context_ids $properties(timeout)
 
@@ -130,13 +215,40 @@ ad_proc -private template::paginator::init { statement_name name query } {
       }
 
       set properties(row_ids) $row_ids
-      cache set $name:$query:row_ids $row_ids $properties(timeout)
 
+      cache set $name:$query:row_ids $row_ids $properties(timeout)
 
   } else {
 
-      # no extra column specified for paging by contextual cues
-      uplevel 3 "set __paginator_ids \[db_list $statement_name  \"$query\"\]"
+      uplevel 2 "
+      # Can't use db_foreach here, since we need to use the ns_set directly.
+      db_with_handle db {
+	set selection \[db_exec select \$db $statement_name \"$query\"\]
+
+        set __paginator_ids \[list\]
+        set total_so_far 1
+
+	while { \[db_getrow \$db \$selection\] } {
+	    set this_result \[list\]
+	    for { set i 0 } { \$i < \[ns_set size \$selection\] } { incr i } {
+                lappend this_result \[ns_set value \$selection \$i\]
+	    }
+            if { $print_p } {
+               if { \$total_so_far % 250 == 0 } {
+                   ns_write \"...\$total_so_far \"
+               }
+               if { \$total_so_far % 3000 == 0 } {
+                   ns_write \"<br>\"
+               }
+            }
+            incr total_so_far
+	    lappend __paginator_ids \$this_result
+	}
+        if { $print_p } {
+           ns_write \"...\[expr \$total_so_far - 1\]\"
+        }
+      }
+      "
 
       set properties(row_ids) $ids
       cache set $name:$query:row_ids $ids $properties(timeout)
@@ -243,6 +355,19 @@ ad_proc -public template::paginator::get_row_ids { name pagenum } {
   return $ids
 }
 
+ad_proc -public template::paginator::get_all_row_ids { name  } {
+    Gets a list of IDs in the master ID list
+    generated by the initial query submitted for pagination.  IDs are
+    typically primary key values.
+
+    @param name    The reference to the paginator object.
+
+    @return A Tcl list of row identifiers.
+} {
+  get_reference
+  return $properties(row_ids)
+}
+
 ad_proc -public template::paginator::get_pages { name group } {
     Gets a list of pages in a group, truncating if appropriate at the end.
 
@@ -268,7 +393,7 @@ ad_proc -public template::paginator::get_pages { name group } {
   set start [expr ($group - 1) * $group_size + 1]
   set end [expr $start + $group_size]
 
-  if { $end > $page_count } { set end $page_count }
+    if { $end > $page_count } { set end [expr $page_count] }
 
   set pages [list]
 
@@ -344,6 +469,9 @@ ad_proc -public template::paginator::get_context { name datasource pages } {
   upvar 2 $datasource:rowcount rowcount 
   set rowcount 0
 
+  upvar 2 $datasource:columns columns
+  set columns { page context }
+
   foreach page $pages {
 
     incr rowcount
@@ -375,6 +503,9 @@ ad_proc -public template::paginator::get_pages_info { name datasource pages } {
 
   upvar 2 $datasource:rowcount rowcount 
   set rowcount 0
+
+  upvar 2 $datasource:columns columns
+  set columns { page }
 
   foreach page $pages {
 
@@ -458,10 +589,28 @@ ad_proc -public template::paginator::get_display_info { name datasource page } {
   get_reference
   upvar 2 $datasource info
 
-  set info(page_count) $properties(page_count)
+  if { $page > $properties(page_count) } {
+    set page $properties(page_count)
+  }
 
-  array set info [list next_page {} previous_page {} \
-      next_group {} previous_group {}]
+  set group [get_group $name $page]
+  set groupsize $properties(groupsize)
+
+  set info(page_count) $properties(page_count)
+  set info(group_count) $properties(group_count)
+  set info(current_page) $page
+  set info(current_group) $group
+
+  array set info {
+    next_page {} 
+    previous_page {}
+    next_group {} 
+    previous_group {}
+    next_page_context {} 
+    previous_page_context {}
+    next_group_context {} 
+    previous_group_context {}
+  }
 
   if { $page > 1 } { 
     set info(previous_page) [expr $page - 1] 
@@ -471,8 +620,6 @@ ad_proc -public template::paginator::get_display_info { name datasource page } {
     set info(next_page) [expr $page + 1] 
   }
 
-  set group [get_group $name $page]
-  set groupsize $properties(groupsize)
 
   if { $group > 1 } {
     set info(previous_group) [expr ($group - 2) * $groupsize + 1]
@@ -480,6 +627,15 @@ ad_proc -public template::paginator::get_display_info { name datasource page } {
 
   if { $group < $properties(group_count) } {
     set info(next_group) [expr $group * $groupsize + 1]
+  }
+
+  # If the paginator is contextual, set the context
+  if { [info exists properties(context_ids)] } {
+    foreach elm { next_page previous_page next_group previous_group } {
+      if { [exists_and_not_null info($elm)] } {
+        set info(${elm}_context) [lindex $properties(context_ids) [expr $info($elm) -1]]
+      }
+    }
   }
 }
 
@@ -505,7 +661,9 @@ ad_proc -public template::paginator::get_data { statement_name name datasource q
   template::util::list_to_lookup $ids row_order
 
   # substitute the current page set
-  set query [uplevel 2 "db_map ${statement_name}_partial"]
+  if { [empty_string_p $query] } {
+    set query [uplevel 2 "db_map ${statement_name}_partial"]
+  }
 
   # DEDS: quote the ids so that we are not
   #       necessarily limited to integer keys
@@ -556,6 +714,58 @@ ad_proc -public template::paginator::get_data { statement_name name datasource q
 #     set $datasource:rowcount \${__page_data:rowcount}
 #   "
 
+}
+
+ad_proc -public template::paginator::get_query { name id_column page } {
+    Returns a query with the data for the rows on the current page.
+
+    @param name       The reference to the paginator object.
+    @param query      The query to execute, containing IN (CURRENT_PAGE_SET).
+    @param id_column  The name of the ID column in the display query (required
+                      to order rows properly).
+} {
+    set ids [get_row_ids $name $page]
+
+    if { ![empty_string_p $ids] } {
+	# calculate the base row number for the page
+	upvar 2 __page_firstrow firstrow
+	set firstrow [get_row $name $page]
+	
+	# build a hash of row order to order the rows on the page 
+	upvar 2 __page_order row_order
+	template::util::list_to_lookup $ids row_order
+	
+	set query "CURRENT_PAGE_SET"
+	
+	# DEDS: quote the ids so that we are not
+	#       necessarily limited to integer keys
+	set quoted_ids [list]
+	foreach one_id $ids {
+	    lappend quoted_ids "'[DoubleApos $one_id]'"
+	}
+	set in_list [join $quoted_ids ","]
+	if { ! [regsub CURRENT_PAGE_SET $query $in_list query] } {
+	    error "Token CURRENT_PAGE_SET not found."
+	}
+	
+	if { [llength $in_list] == 0 } {
+	    uplevel 2 "set $datasource:rowcount 0"
+	    return
+	}
+
+	# Return the query with CURRENT_PAGE_SET slugged
+	return $query
+    } else {
+	return "null"
+    }
+}
+
+ad_proc -public template::paginator::reset { name query } {
+    Resets the cache for a query.
+} {
+    # LARS TODO
+    cache flush $name:$query:context_ids
+    cache flush $name:$query:row_ids
 }
 
 ad_proc -private template::paginator::get_reference {} {
