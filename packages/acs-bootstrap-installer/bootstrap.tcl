@@ -127,6 +127,11 @@ set errno [catch {
     # Load libraries, queries etc. for remaining packages
     apm_load_packages
 
+    # The acs-tcl package is a special case. Its Tcl libraries need to be loaded
+    # before all the other packages. However, its tests need to be loaded after all
+    # packages have had their Tcl libraries loaded.
+    apm_load_packages -load_libraries_p 0 -load_queries_p 0 -packages acs-tcl
+
     if { ![nsv_exists rp_properties request_count] } {
 	# security-init.tcl has not been invoked, so it's safe to say that the
 	# core has not been properly initialized and the server will probably
