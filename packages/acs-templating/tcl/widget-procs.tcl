@@ -9,6 +9,36 @@
 # This is free software distributed under the terms of the GNU Public
 # License.  Full text of the license is available from the GNU Project:
 # http://www.fsf.org/copyleft/gpl.html
+ad_proc -public template::widget {} {
+    The template::widget namespace contains the code 
+    for the various input widgets.
+
+    @see template::widget::ampmFragment
+    @see template::widget::button
+    @see template::widget::checkbox
+    @see template::widget::comment
+    @see template::widget::currency
+    @see template::widget::date
+    @see template::widget::dateFragment
+    @see template::widget::file
+    @see template::widget::hidden
+    @see template::widget::inform
+    @see template::widget::input
+    @see template::widget::menu
+    @see template::widget::monthFragment
+    @see template::widget::multiselect
+    @see template::widget::numericRange
+    @see template::widget::password
+    @see template::widget::radio
+    @see template::widget::search
+    @see template::widget::select
+    @see template::widget::submit
+    @see template::widget::text
+    @see template::widget::textarea
+
+    @see template::element::create
+} -
+
 
 ad_proc -public template::widget::search { element_reference tag_attributes } {
 
@@ -129,7 +159,7 @@ ad_proc -public template::widget::input { type element_reference tag_attributes 
     switch $type {
       checkbox - radio {
         # There's a 'subst' done on the contents here
-        append output "<img src=\"/shared/${type}\$checked\" width=\"13\" height=\"13\">"
+        append output "<img src=\"/shared/images/${type}\$checked\" width=\"13\" height=\"13\">"
         # This is ugly, but it works: Only export the value when we're on a selected option
         append output "\[ad_decode \$checked \"checked\" \"<input type=\\\"hidden\\\" name=\\\"$element(name)\\\" value=\\\"\$value\\\">\" \"\"\]"
       }

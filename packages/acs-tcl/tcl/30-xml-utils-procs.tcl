@@ -145,12 +145,12 @@ proc xml_node_get_name {node_id} {
 
 # Get Node Attribute
 proc xml_node_get_attribute {node_id attribute_name} {
-    return [ns_xml node getattr $node_id $attribute_name]
+    return [ns_xml node get attr $node_id $attribute_name]
 }
 
 # Get Content
 proc xml_node_get_content {node_id} {
-    return [ns_xml node getcontent $node_id]
+    return [ns_xml node get content $node_id]
 }
 
 ##

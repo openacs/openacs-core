@@ -153,7 +153,7 @@ namespace eval lang::catalog {
         set value [xml_node_get_attribute $element $attribute]
 
         if { [empty_string_p $value] } {
-            error "Required attribute \"$attribute\" missing from <[dom::node cget $element -nodeName]>"
+            error "Required attribute \"$attribute\" missing from <[ns_xml node get name $element]>"
         }
 
         return $value
@@ -168,7 +168,7 @@ namespace eval lang::catalog {
         set content [xml_node_get_content $element]
 
         if { [empty_string_p $content] } {
-            error "Required content missing from element <[dom::node cget $element -nodeName]>"
+            error "Required content missing from element <[ns_xml node get name $element]>"
         }
 
         return $content
