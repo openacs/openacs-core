@@ -9,10 +9,153 @@
 --------------
 -- TRIGGERS --
 --------------
--- a dummy trigger was defined in groups-create.sql
-drop trigger membership_rels_in_tr on membership_rels;
-drop function membership_rels_in_tr ();
-create function membership_rels_in_tr () returns opaque as '
+
+-- DRB: Helper functions to maintain the materialized party_approved_member_map.  The counting crap
+-- has to do with the way composition_rels work, which is not how any sane person would care
+-- for them to work.   Fixing the groups and relational segments model will be a nice future project.
+-- For now I will just settle for making permission checking fast ...
+
+create or replace function insert_into_party_map(integer, integer, varchar) returns integer as '
+declare
+  p_party_id alias for $1;
+  p_member_id alias for $2;
+  p_rel_type alias for $3;
+  v_segment_id rel_segments.segment_id%TYPE;
+  v_count integer;
+begin
+
+  insert into party_approved_member_map
+    (party_id, member_id, count)
+  select p_party_id, p_member_id, 1
+  where not exists (select 1
+                    from party_approved_member_map
+                    where party_id = p_party_id
+                    and member_id = p_member_id);
+
+  get diagnostics v_count = row_count;
+
+  if v_count = 0 then
+    update party_approved_member_map
+    set count = count + 1
+    where party_id = p_party_id
+      and member_id = p_member_id;
+  end if;
+
+  -- if the relation type is mapped to a relational segment map that too
+
+  select into v_segment_id segment_id
+  from rel_segments s
+  where s.rel_type = p_rel_type
+    and s.group_id = p_party_id;
+
+  if found then
+    insert into party_approved_member_map
+      (party_id, member_id, count)
+    select v_segment_id, p_member_id, 1
+    where not exists (select 1
+                      from party_approved_member_map
+                      where party_id = v_segment_id
+                        and member_id = p_member_id);
+
+    get diagnostics v_count = row_count;
+
+    if v_count = 0 then
+      update party_approved_member_map
+      set count = count + 1
+      where party_id = v_segment_id
+        and member_id = p_member_id;
+    end if;
+
+  end if;
+
+  return 1;
+
+end;' language 'plpgsql';
+
+create or replace function delete_from_party_map(integer, integer, varchar) returns integer as '
+declare
+  p_party_id alias for $1;
+  p_member_id alias for $2;
+  p_rel_type alias for $3;
+  v_segment_id rel_segments.segment_id%TYPE;
+  v_count integer;
+begin
+
+  delete from party_approved_member_map
+  where party_id = p_party_id
+    and member_id = p_member_id
+    and count = 1;
+
+  get diagnostics v_count = row_count;
+
+  if v_count = 0 then
+    update party_approved_member_map
+    set count = count - 1
+    where party_id = p_party_id
+      and member_id = p_member_id;
+  end if;
+
+  -- if the relation type is mapped to a relational segment unmap that too
+
+  select into v_segment_id segment_id
+  from rel_segments s
+  where s.rel_type = p_rel_type
+    and s.group_id = p_party_id;
+
+  if found then
+
+    delete from party_approved_member_map
+    where party_id = v_segment_id
+      and member_id = p_member_id
+      and count = 1;
+
+    get diagnostics v_count = row_count;
+
+    if v_count = 0 then
+      update party_approved_member_map
+      set count = count - 1
+      where party_id = v_segment_id
+        and member_id = p_member_id;
+    end if;
+
+  end if;
+
+  return 1;
+
+end;' language 'plpgsql';
+
+create or replace function group_element_index_in_tr () returns opaque as '
+declare
+  v_member_state membership_rels.member_state%TYPE;
+begin
+
+  select into v_member_state m.member_state
+  from membership_rels m
+  where m.rel_id = new.rel_id;
+
+  -- Only membership_rels are tracked in the party_approved_member_map
+
+  if v_member_state = ''approved'' then
+    perform insert_into_party_map(new.group_id, new.element_id, new.rel_type);
+  end if;
+
+  return new;
+
+end;' language 'plpgsql';
+
+create trigger group_element_index_in_tr before insert on group_element_index
+for each row execute procedure group_element_index_in_tr ();
+
+create or replace function group_element_index_del_tr () returns opaque as '
+begin
+  perform delete_from_party_map(old.group_id, old.element_id, old.rel_type);
+  return old;
+end;' language 'plpgsql';
+
+create trigger group_element_index_del_tr after delete on group_element_index
+for each row execute procedure group_element_index_del_tr (); 
+
+create or replace function membership_rels_in_tr () returns opaque as '
 declare
   v_object_id_one acs_rels.object_id_one%TYPE;
   v_object_id_two acs_rels.object_id_two%TYPE;
@@ -32,7 +175,7 @@ begin
   from acs_rels
   where rel_id = new.rel_id;
 
-  -- Insert a row for me in the group_member_index.
+  -- Insert a row for me in the group_element_index.
   insert into group_element_index
    (group_id, element_id, rel_id, container_id, 
     rel_type, ancestor_rel_type)
@@ -41,11 +184,11 @@ begin
     v_rel_type, ''membership_rel'');
 
   -- For all groups of which I am a component, insert a
-  -- row in the group_member_index.
+  -- row in the group_element_index.
   for map in select distinct group_id
 	      from group_component_map
 	      where component_id = v_object_id_one 
-  LOOP
+  loop
     insert into group_element_index
      (group_id, element_id, rel_id, container_id,
       rel_type, ancestor_rel_type)
@@ -58,15 +201,59 @@ begin
 
 end;' language 'plpgsql';
 
-create trigger membership_rels_in_tr after insert on membership_rels
-for each row execute procedure membership_rels_in_tr ();
+create or replace function membership_rels_up_tr () returns opaque as '
+declare
+  map             record;
+begin
 
--- show errors
+  if new.member_state = old.member_state then
+    return new;
+  end if;
 
--- a dummy trigger was defined in groups-create.sql
-drop trigger composition_rels_in_tr on composition_rels;
-drop function composition_rels_in_tr();
-create function composition_rels_in_tr () returns opaque as '
+  for map in select group_id, element_id, rel_type
+             from group_element_index
+             where rel_id = new.rel_id
+  loop
+    if new.member_state = ''approved'' then
+      perform insert_into_party_map(map.group_id, map.element_id, map.rel_type);
+    else
+      perform delete_from_party_map(map.group_id, map.element_id, map.rel_type);
+    end if;
+  end loop;
+
+  return new;
+
+end;' language 'plpgsql';
+
+create trigger membership_rels_up_tr before update on membership_rels
+for each row execute procedure membership_rels_up_tr ();
+
+create or replace function membership_rels_del_tr () returns opaque as '
+declare
+  v_error text;
+  v_object_id_one acs_rels.object_id_one%TYPE;
+  v_object_id_two acs_rels.object_id_two%TYPE;
+  v_rel_type      acs_rels.rel_type%TYPE;
+  map             record;
+  v_count integer;
+begin
+  -- First check if removing this relation would violate any relational constraints
+  v_error := rel_constraint__violation_if_removed(old.rel_id);
+  if v_error is not null then
+      raise EXCEPTION ''-20000: %'', v_error;
+  end if;
+
+  delete from group_element_index
+  where rel_id = old.rel_id;
+
+  return old;
+
+end;' language 'plpgsql';
+
+create trigger membership_rels_del_tr before delete on membership_rels
+for each row execute procedure membership_rels_del_tr ();
+
+create or replace function composition_rels_in_tr () returns opaque as '
 declare
   v_object_id_one acs_rels.object_id_one%TYPE;
   v_object_id_two acs_rels.object_id_two%TYPE;
@@ -145,38 +332,11 @@ begin
 
 end;' language 'plpgsql';
 
-create trigger composition_rels_in_tr after insert on composition_rels
-for each row execute procedure composition_rels_in_tr ();
-
--- show errors
-
-create function membership_rels_del_tr () returns opaque as '
-declare
-  v_error text;
-begin
-  -- First check if removing this relation would violate any relational constraints
-  v_error := rel_constraint__violation_if_removed(old.rel_id);
-  if v_error is not null then
-      raise EXCEPTION ''-20000: %'', v_error;
-  end if;
-
-  delete from group_element_index
-  where rel_id = old.rel_id;
-
-  return old;
-
-end;' language 'plpgsql';
-
-create trigger membership_rels_del_tr before delete on membership_rels
-for each row execute procedure membership_rels_del_tr ();
-
--- show errors
-
 --
 -- TO DO: See if this can be optimized now that the member and component
 -- mapping tables have been combined
 --
-create function composition_rels_del_tr () returns opaque as '
+create or replace function composition_rels_del_tr () returns opaque as '
 declare
   v_object_id_one acs_rels.object_id_one%TYPE;
   v_object_id_two acs_rels.object_id_two%TYPE;
@@ -453,12 +613,12 @@ begin
     from acs_rels
     where rel_id = check_representation__rel_id;
 
-    -- First let''s check that the index has all the rows it should.
+    -- First let us check that the index has all the rows it should.
     if composition_rel__check_index(component_id, container_id) = ''f'' then
       result := ''f'';
     end if;
 
-    -- Now let''s check that the index doesn''t have any extraneous rows
+    -- Now let us check that the index doesn''t have any extraneous rows
     -- relating to this relation.
     for row in  select *
                 from group_component_index
@@ -629,7 +789,7 @@ declare
 begin
 
     select count(*) into n_rows
-    from group_member_index
+    from group_element_index
     where group_id = check_index__group_id
     and member_id = check_index__member_id
     and container_id = check_index__container_id;
@@ -637,7 +797,7 @@ begin
     if n_rows = 0 then
       result := ''f'';
       PERFORM acs_log__error(''membership_rel.check_representation'',
-                    ''Row missing from group_member_index: '' ||
+                    ''Row missing from group_element_index: '' ||
                     ''group_id = '' || check_index__group_id || '', '' ||
                     ''member_id = '' || check_index__member_id || '', '' ||
                     ''container_id = '' || check_index__container_id || ''.'');
