@@ -9,14 +9,6 @@ ns_log notice "nsd.tcl: starting to read config file..."
 ###################################################################### 
 
 #---------------------------------------------------------------------
-# which database do you want? postgres or oracle
-set database              postgres 
-
-if {$database == "oracle"} {
-    set db_password        "mysitepassword"
-}
-
-#---------------------------------------------------------------------
 # change to 80 and 443 for production use
 set httpport                  8000
 set httpsport                 8443 
@@ -26,10 +18,23 @@ set hostname                  [ns_info hostname]
 set address                   [ns_info address]
 
 set server                    "service0" 
-set db_name                   $server
 set servername                "New OpenACS Installation - Development"
 
 set serverroot                "/var/lib/aolserver/${server}"
+
+#---------------------------------------------------------------------
+# which database do you want? postgres or oracle
+set database              postgres 
+
+set db_name               $server
+
+if { $database == "oracle" } {
+    set db_password           "mysitepassword"
+} else {
+    set db_host               localhost
+    set db_port               ""
+    set db_user               postgres
+}
 
 #---------------------------------------------------------------------
 # if debug is false, all debugging will be turned off
@@ -338,8 +343,8 @@ if { $database == "oracle" } {
     ns_param   password           $db_password
 } else {
     ns_param   driver             postgres 
-    ns_param   datasource         localhost::${db_name}
-    ns_param   user               $server
+    ns_param   datasource         ${db_host}:${db_port}:${db_name}
+    ns_param   user               $db_user
     ns_param   password           ""
 } 
 
@@ -357,8 +362,8 @@ if { $database == "oracle" } {
     ns_param   password           $db_password
 } else {
     ns_param   driver             postgres 
-    ns_param   datasource         localhost::${db_name}
-    ns_param   user               $server
+    ns_param   datasource         ${db_host}:${db_port}:${db_name}
+    ns_param   user               $db_user
     ns_param   password           ""
 } 
 
@@ -376,8 +381,8 @@ if { $database == "oracle" } {
     ns_param   password           $db_password
 } else {
     ns_param   driver             postgres 
-    ns_param   datasource         localhost::${db_name}
-    ns_param   user               $server
+    ns_param   datasource         ${db_host}:${db_port}:${db_name}
+    ns_param   user               $db_user
     ns_param   password           ""
 } 
 
