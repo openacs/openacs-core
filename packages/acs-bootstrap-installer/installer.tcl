@@ -13,16 +13,25 @@
 # This procedure engages the installer mutex, as every installer page is a critical section.
 
 proc install_header { status title } {
+
+    # Prefix the page title
+    set page_title_prefix "OpenACS Installation"
+    if { ![empty_string_p $title] } {
+        set page_title "${page_title_prefix}: $title"
+    } else {
+        set page_title $page_title_prefix
+    }
+
     return "HTTP/1.0 $status OK
 MIME-Version: 1.0
 Content-Type: text/html
 
 <html>
   <head>
-    <title>OpenACS Installation: $title</title>
+    <title>$page_title</title>
   </head>
   <body bgcolor=white>
-    <h2>OpenACS Installation: $title</h2>
+    <h2>$page_title</h2>
     <hr>
 "
 }
