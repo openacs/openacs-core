@@ -38,7 +38,8 @@ proc_doc db_exec_plsql { statement_name sql args } {
     db_with_handle db {
 	# Right now, use :1 as the output value if it occurs in the statement,
 	# or not otherwise.
-	if { [regexp {:1} $sql] } {
+        set test_sql [db_qd_replace_sql $full_statement_name $sql]
+	if { [regexp {:1} $test_sql] } {
 	    return [db_exec exec_plsql_bind $db $full_statement_name $sql 2 1 ""]
 	} else {
 	    return [db_exec dml $db $full_statement_name $sql]
