@@ -136,6 +136,9 @@ ad_proc -public auth::sync::job::start {
             set creation_user [ad_conn user_id]
         }
         
+        set interactive_p [db_boolean $interactive_p]
+        set snapshot_p [db_boolean $snapshot_p]
+
         db_dml job_insert {
             insert into auth_batch_jobs
             (job_id, interactive_p, snapshot_p, creation_user, authority_id)
