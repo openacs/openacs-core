@@ -39,10 +39,14 @@ ad_proc -public template::get_mime_header_preamble { mime_type } {
 }
 
 ad_proc -public template::get_mime_type {} {
-  set mime_type [ns_set iget [ns_conn outputheaders] "content-type"]
-  if { [empty_string_p $mime_type] } {
-    set mime_type "text/html"
-  }
+    if {[ns_conn isconnected]} {
+        set mime_type [ns_set iget [ns_conn outputheaders] "content-type"]
+    } else { 
+        set mime_type {} 
+    }
+    if { [empty_string_p $mime_type] } {
+        set mime_type "text/html"
+    }
 
-  return $mime_type
+    return $mime_type
 }
