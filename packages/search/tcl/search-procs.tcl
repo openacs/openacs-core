@@ -13,18 +13,22 @@ ad_proc search_indexer {} {
 	switch $event {
 	    INSERT {
 		set object_type [db_exec_plsql get_object_type "select acs_object_util__get_object_type($object_id)"]
-		array set datasource [acs_sc_call FtsContentProvider datasource [list $object_id] $object_type]
-		search_content_get txt $datasource(content) $datasource(mime) $datasource(storage_type)
-		acs_sc_call FtsEngineDriver index [list $datasource(object_id) $txt $datasource(title) $datasource(keywords)] $driver
+		if [acs_sc_binding_exists_p FtsContentProvider $object_type] {
+		    array set datasource [acs_sc_call FtsContentProvider datasource [list $object_id] $object_type]
+		    search_content_get txt $datasource(content) $datasource(mime) $datasource(storage_type)
+		    acs_sc_call FtsEngineDriver index [list $datasource(object_id) $txt $datasource(title) $datasource(keywords)] $driver
+		}
 	    } 
 	    DELETE {
 		acs_sc_call FtsEngineDriver unindex [list $object_id] $driver
 	    } 
 	    UPDATE {
 		set object_type [db_exec_plsql get_object_type "select acs_object_util__get_object_type($object_id)"]
-		array set datasource [acs_sc_call FtsContentProvider datasource [list $object_id] $object_type] 
-		search_content_get txt $datasource(content) $datasource(mime) $datasource(storage_type)
-		acs_sc_call FtsEngineDriver update_index [list $datasource(object_id) $txt $datasource(title) $datasource(keywords)] $driver
+		if [acs_sc_binding_exists_p FtsContentProvider $object_type] {
+		    array set datasource [acs_sc_call FtsContentProvider datasource [list $object_id] $object_type] 
+		    search_content_get txt $datasource(content) $datasource(mime) $datasource(storage_type)
+		    acs_sc_call FtsEngineDriver update_index [list $datasource(object_id) $txt $datasource(title) $datasource(keywords)] $driver
+		}
 	    }
 	}
 
