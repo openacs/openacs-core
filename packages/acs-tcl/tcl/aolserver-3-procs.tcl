@@ -5,7 +5,7 @@ ad_library {
 
     @creation-date 27 Feb 2000
     @author Jon Salz [jsalz@arsdigita.com]
-    @cvs-id $Id$
+    @cvs-id aolserver-3-procs.tcl,v 1.2 2001/04/24 22:38:12 donb Exp
 }
 
 # -1 = Not there or value was ""
@@ -23,7 +23,7 @@ proc ns_dbformvalue {formdata column type valuebyref} {
 
     set value [ns_set get $formdata $column]
 
-    if [string match $value ""] {
+    if { [string match $value ""] } {
         switch $type {
 	    
 	    date      {
@@ -53,7 +53,7 @@ proc ns_dbformvalue {formdata column type valuebyref} {
 	    }
 	}
     }
-    if [string match $value ""] {
+    if { [string match $value ""] } {
 	return -1
     } else {
 	return 1
@@ -110,15 +110,15 @@ proc ns_dbformvalueput {htmlform column type value} {
 proc _ns_updatebutton {table var} {
     upvar $var updatebutton
 
-    if ![info exists updatebutton] {
+    if { ![info exists updatebutton] } {
 	set updatebutton ""
     }
-    if [string match "" $updatebutton] {
+    if { [string match "" $updatebutton] } {
 	db_with_handle db {
 	    set updatebutton [ns_table value $db $table update_button_label]
 	}
     }
-    if [string match "" $updatebutton] {
+    if { [string match "" $updatebutton] } {
 	set updatebutton "Update Record"
     }
 }

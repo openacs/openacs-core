@@ -7,7 +7,7 @@ ad_library {
     @author Jon Salz (jsalz@arsdigita.com)
     @author Richard Li (richardl@arsdigita.com)
     @author Archit Shah (ashah@arsdigita.com)
-    @cvs-id $Id$
+    @cvs-id security-procs.tcl,v 1.13.2.5 2003/06/06 08:48:50 lars Exp
 }
 
 # cookies (all are signed cookies):
@@ -536,7 +536,7 @@ ad_proc -public ad_redirect_for_registration {} {
     # note that there is no built-in function that will change
     # posted variables to url variables, so we write our own
     
-    if ![empty_string_p $form] {
+    if { ![empty_string_p $form] } {
 	set form_size [ns_set size $form]
 	set form_counter_i 0
 	while { $form_counter_i<$form_size } {
@@ -620,7 +620,7 @@ ad_proc -public -deprecated ad_block_sql_urls {conn args why} {
     @see ad_page_contract
 } {
     set form [ns_getform]
-    if [empty_string_p $form] { return filter_ok }
+    if { [empty_string_p $form] } { return filter_ok }
 
     # Check each form data variable to see if it contains malicious
     # user input that we don't want to interpolate into our SQL
@@ -783,7 +783,7 @@ proc_doc ad_var_type_check_integer_p {value} {
     <pre>
 } {
 
-    if [regexp {[^0-9]} $value] {
+    if { [regexp {[^0-9]} $value] } {
         return 0
     } else {
         return 1
@@ -798,7 +798,7 @@ proc_doc ad_var_type_check_safefilename_p {value} {
     <pre>
 } {
 
-    if [string match *..* $value] {
+    if { [string match *..* $value] } {
         return 0
     } else {
         return 1
@@ -813,7 +813,7 @@ proc_doc ad_var_type_check_dirname_p {value} {
     <pre>
 } {
 
-    if [regexp {[/\\]} $value] {
+    if { [regexp {[/\\]} $value] } {
         return 0
     } else {
         return 1
@@ -827,7 +827,7 @@ proc_doc ad_var_type_check_number_p {value} {
     #
     <pre>
 } {
-    if [catch {expr 1.0 * $value}] {
+    if { [catch {expr 1.0 * $value}] } {
         return 0
     } else {
         return 1
@@ -843,7 +843,7 @@ proc_doc ad_var_type_check_word_p {value} {
     </pre>
 } {
 
-    if [regexp {[^-A-Za-z0-9_]} $value] {
+    if { [regexp {[^-A-Za-z0-9_]} $value] } {
         return 0
     } else {
         return 1
@@ -874,7 +874,7 @@ proc_doc ad_var_type_check_noquote_p {value} {
     <pre>
 } {
 
-    if [string match *'* $value] {
+    if { [string match *'* $value] } {
         return 0
     } else {
         return 1
@@ -893,7 +893,7 @@ proc_doc ad_var_type_check_integerlist_p {value} {
     <pre>
 } {
 
-    if [regexp {[^ 0-9,]} $value] {
+    if { [regexp {[^ 0-9,]} $value] } {
         return 0
     } else {
         return 1
@@ -921,7 +921,7 @@ proc_doc ad_var_type_check_third_urlv_integer_p {{args ""}} {
 
     set third_url_element [lindex [ad_conn urlv] 3]
 
-    if [regexp {[^0-9]} $third_url_element] {
+    if { [regexp {[^0-9]} $third_url_element] } {
         return 0
     } else {
         return 1

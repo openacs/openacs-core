@@ -5,7 +5,7 @@ ad_library {
 
     @author yon [yon@arsdigita.com]
     @creation-date 9 Jul 2000
-    @cvs-id $Id$
+    @cvs-id deprecated-utilities-procs.tcl,v 1.4 2002/09/24 19:34:53 jeffd Exp
 
 }
 
@@ -224,7 +224,7 @@ ad_proc -deprecated -warn string_contains_p {small_string big_string} {
 ad_proc -deprecated -warn remove_whitespace {input_string} {
     to be removed.
 } { 
-    if [regsub -all "\[\015\012\t \]" $input_string "" output_string] {
+    if { [regsub -all "\[\015\012\t \]" $input_string "" output_string] } {
 	return $output_string 
     } else {
 	return $input_string
@@ -234,7 +234,7 @@ ad_proc -deprecated -warn remove_whitespace {input_string} {
 ad_proc -deprecated -warn util_just_the_digits {input_string} {
     to be removed.
 } { 
-    if [regsub -all {[^0-9]} $input_string "" output_string] {
+    if { [regsub -all {[^0-9]} $input_string "" output_string] } {
 	return $output_string 
     } else {
 	return $input_string

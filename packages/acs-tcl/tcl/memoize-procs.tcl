@@ -5,7 +5,7 @@ ad_library {
     @author Various [acs@arsdigita.com]
     @author Rob Mayoff <mayoff@arsdigita.com>
     @creation-date 2000-10-19
-    @cvs-id $Id$
+    @cvs-id memoize-procs.tcl,v 1.4.2.1 2003/03/05 14:40:42 lars Exp
 }
 
 # Use shiny new ns_cache-based util_memoize.
@@ -161,7 +161,7 @@ ad_proc -public util_memoize_flush_regexp {
        if $log_p {
            ns_log Notice "flush_regexp: checking $name for $expr"
        }
-       if [regexp $expr $name] {
+       if { [regexp $expr $name] } {
            if $log_p {
                ns_log Notice "flush_regexp: flushing $name"
            }

@@ -4,7 +4,7 @@ ad_library {
 
     @author Various (acs@arsdigita.com)
     @creation-date 13 April 2000
-    @cvs-id $Id$
+    @cvs-id utilities-procs.tcl,v 1.19.2.18 2003/06/06 21:40:37 donb Exp
 }
 
 # Let's define the nsv arrays out here, so we can call nsv_exists
@@ -12,7 +12,7 @@ ad_library {
 # we create the array by setting a bogus key.
 
 proc proc_source_file_full_path {proc_name} {
-    if ![nsv_exists proc_source_file $proc_name] {
+    if { ![nsv_exists proc_source_file $proc_name] } {
 	return ""
     } else {
 	set tentative_path [nsv_get proc_source_file $proc_name]
@@ -99,7 +99,7 @@ proc_doc check_for_form_variable_naughtiness {
 
         # check to make sure path is to an authorized directory
         set tmpdir_list [ad_parameter_all_values_as_list TmpDir]
-        if [empty_string_p $tmpdir_list] {
+        if { [empty_string_p $tmpdir_list] } {
             set tmpdir_list [list "/var/tmp" "/tmp"]
         }
 
@@ -122,12 +122,12 @@ proc_doc check_for_form_variable_naughtiness {
     # see if this is one of the typed variables
     global ad_typed_form_variables    
 
-    if [info exists ad_typed_form_variables] { 
+    if { [info exists ad_typed_form_variables] } { 
 
         foreach typed_var_spec $ad_typed_form_variables {
             set typed_var_name [lindex $typed_var_spec 0]
         
-            if ![string match $typed_var_name $name] {
+            if { ![string match $typed_var_name $name] } {
                 # no match. Go to the next variable in the list
                 continue
             }
@@ -135,14 +135,14 @@ proc_doc check_for_form_variable_naughtiness {
             # the variable matched the pattern
             set typed_var_type [lindex $typed_var_spec 1]
         
-            if [string match "" $typed_var_type] {
+            if { [string match "" $typed_var_type] } {
                 # if they don't specify a type, the default is 'integer'
                 set typed_var_type integer
             }
 
             set variable_safe_p [ad_var_type_check_${typed_var_type}_p $value]
         
-            if !$variable_safe_p {
+            if { !$variable_safe_p } {
                 ns_returnerror 500 "variable $name failed '$typed_var_type' type check"
                 ns_log Error "[ad_conn url] called with \$$name = $value"
                 error "variable $name failed '$typed_var_type' type check"
@@ -361,13 +361,13 @@ ad_proc ad_dbclick_check_dml {
     return_url. if database insert fails, this procedure will return a
     sensible error message to the user.
 } {
-    if [catch {
+    if { [catch {
 	if { ![empty_string_p $bind] } {
 	    	db_dml $statement_name $insert_dml -bind $bind
 	} else {
 	    db_dml $statement_name $insert_dml 
 	}
-    } errmsg] {
+    } errmsg] } {
 	# Oracle choked on the insert
 	
 	# detect double click
@@ -408,7 +408,7 @@ ad_proc -public util_AnsiDatetoPrettyDate {sql_date} {
     Converts 1998-09-05 to September 5, 1998
 } {
     set sql_date [string range $sql_date 0 9]
-    if ![regexp {(.*)-(.*)-(.*)$} $sql_date match year month day] {
+    if { ![regexp {(.*)-(.*)-(.*)$} $sql_date match year month day] } {
 	return ""
     } else {
 	set allthemonths {January February March April May June July August September October November December}
@@ -1215,12 +1215,12 @@ ad_proc export_ns_set_vars {{format "url"} {exclusion_list ""} {setid ""}} {
     @see export_vars
 }  {
 
-    if [empty_string_p $setid] {
+    if { [empty_string_p $setid] } {
 	set setid [ns_getform]
     }
 
     set return_list [list]
-    if ![empty_string_p $setid] {
+    if { ![empty_string_p $setid] } {
         set set_size [ns_set size $setid]
         set set_counter_i 0
         while { $set_counter_i<$set_size } {
@@ -1354,7 +1354,7 @@ ad_proc -public export_entire_form_as_url_vars {
 proc with_catch {error_var body on_error} { 
     upvar 1 $error_var $error_var 
     global errorInfo errorCode 
-    if [catch { uplevel $body } $error_var] { 
+    if { [catch { uplevel $body } $error_var] } { 
         set code [catch {uplevel $on_error} string] 
         # Return out of the caller appropriately. 
         if { $code == 1 } { 
@@ -1440,7 +1440,7 @@ ad_proc -public util_link_responding_p {
 
     @see util_get_http_status 
 } {
-    if [catch { set status [util_get_http_status $url] } errmsg] {
+    if { [catch { set status [util_get_http_status $url] } errmsg] } {
 	# got an error; definitely not valid
 	return 0
     } else {
@@ -1466,19 +1466,19 @@ ad_proc -public util_httpopen {
     Like ns_httpopen but works for POST as well; called by util_httppost
 } { 
     
-    if ![string match http://* $url] {
+    if { ![string match http://* $url] } {
         return -code error "Invalid url \"$url\":  _httpopen only supports HTTP"
     }
     set url [split $url /]
     set hp [split [lindex $url 2] :]
     set host [lindex $hp 0]
     set port [lindex $hp 1]
-    if [string match $port ""] {set port 80}
+    if { [string match $port ""] } {set port 80}
     set uri /[join [lrange $url 3 end] /]
     set fds [ns_sockopen -nonblock $host $port]
     set rfd [lindex $fds 0]
     set wfd [lindex $fds 1]
-    if [catch {
+    if { [catch {
         _ns_http_puts $timeout $wfd "$method $uri HTTP/1.0\r"
         if {$rqset != ""} {
             for {set i 0} {$i < [ns_set size $rqset]} {incr i} {
@@ -1493,11 +1493,11 @@ ad_proc -public util_httpopen {
             _ns_http_puts $timeout $wfd "Referer: $http_referer \r"    
 	}
 
-    } errMsg] {
+    } errMsg] } {
         global errorInfo
         #close $wfd
         #close $rfd
-        if [info exists rpset] {ns_set free $rpset}
+        if { [info exists rpset] } {ns_set free $rpset}
         return -1
     }
     return [list $rfd $wfd ""]
@@ -1520,7 +1520,7 @@ ad_proc -public util_httppost {url formvars {timeout 30} {depth 0} {http_referer
     <p> 
     @see util_http_file_upload
 } {
-    if [catch {
+    if { [catch {
 	if {[incr depth] > 10} {
 		return -code error "util_httppost:  Recursive redirection:  $url"
 	}
@@ -1540,7 +1540,7 @@ ad_proc -public util_httppost {url formvars {timeout 30} {depth 0} {http_referer
 	set rpset [ns_set new [_ns_http_gets $timeout $rfd]]
 		while 1 {
 			set line [_ns_http_gets $timeout $rfd]
-			if ![string length $line] break
+			if { ![string length $line] } break
 			ns_parseheader $rpset $line
 		}
 
@@ -1556,12 +1556,12 @@ ad_proc -public util_httppost {url formvars {timeout 30} {depth 0} {http_referer
 		}
 	}
 	set length [ns_set iget $headers content-length]
-	if [string match "" $length] {set length -1}
+	if { [string match "" $length] } {set length -1}
 	set err [catch {
 		while 1 {
 			set buf [_ns_http_read $timeout $rfd $length]
 			append page $buf
-			if [string match "" $buf] break
+			if { [string match "" $buf] } break
 			if {$length > 0} {
 				incr length -[string length $buf]
 				if {$length <= 0} break
@@ -1574,7 +1574,7 @@ ad_proc -public util_httppost {url formvars {timeout 30} {depth 0} {http_referer
 		global errorInfo
 		return -code error -errorinfo $errorInfo $errMsg
 	}
-    } errmgs ] {return -1}
+    } errmgs ] } {return -1}
 	return $page
 }
 
@@ -1658,13 +1658,13 @@ ad_proc -public ad_httpget {
         close $rfd
     } else { 
         set length [ns_set iget $headers content-length]
-        if [string match "" $length] {set length -1}
+        if { [string match "" $length] } {set length -1}
     
         set err [catch {
             while 1 {
                 set buf [_ns_http_read $timeout $rfd $length]
                 append page $buf
-                if [string match "" $buf] break
+                if { [string match "" $buf] } break
                 if {$length > 0} {
                     incr length -[string length $buf]
                     if {$length <= 0} break
@@ -2120,7 +2120,7 @@ Content-Type: $content_type\r\n"
 
     ns_startcontent -type $content_type
 
-    if ![empty_string_p $first_part_of_page] {
+    if { ![empty_string_p $first_part_of_page] } {
 	ns_write $first_part_of_page
     }
 }
@@ -3036,7 +3036,7 @@ ad_proc -public value_if_exists { var_name } {
     empty_string.
 } {
     upvar $var_name $var_name
-    if [info exists $var_name] {
+    if { [info exists $var_name] } {
         return [set $var_name]
     }
 }
@@ -3090,7 +3090,7 @@ returns an empty string.
     set tag_names [list div font]
     # look for a less than sign, zero or more spaces, then the tag
     if { ! [empty_string_p $tag_names]} { 
-        if [regexp "< *([join $tag_names "\[ \n\t\r\f\]|"]\[ \n\t\r\f\])" [string tolower $user_submitted_html]] {
+        if { [regexp "< *([join $tag_names "\[ \n\t\r\f\]|"]\[ \n\t\r\f\])" [string tolower $user_submitted_html]] } {
             return "<p>For security reasons we do not accept the submission of any HTML 
 	    containing the following tags:</p> <code>[join $tag_names " "]</code>" 
         }
@@ -3358,7 +3358,7 @@ ad_proc -public util_http_file_upload { -file -data -binary:boolean -filename
 
     append payload --$boundary-- \r\n
 
-    if [catch {
+    if { [catch {
         if {[incr depth -1] <= 0} {
             return -code error "util_http_file_upload:\
                 Recursive redirection: $url"
@@ -3379,7 +3379,7 @@ ad_proc -public util_http_file_upload { -file -data -binary:boolean -filename
         set rpset [ns_set new [_ns_http_gets $timeout $rfd]]
         while 1 {
             set line [_ns_http_gets $timeout $rfd]
-            if ![string length $line] break
+            if { ![string length $line] } break
             ns_parseheader $rpset $line
         }
 
@@ -3387,12 +3387,12 @@ ad_proc -public util_http_file_upload { -file -data -binary:boolean -filename
         set response [ns_set name $headers]
         set status [lindex $response 1]
         set length [ns_set iget $headers content-length]
-        if [string match "" $length] { set length -1 }
+        if { [string match "" $length] } { set length -1 }
         set err [catch {
             while 1 {
                 set buf [_ns_http_read $timeout $rfd $length]
                 append page $buf
-                if [string match "" $buf] break
+                if { [string match "" $buf] } break
                 if {$length > 0} {
                     incr length -[string length $buf]
                     if {$length <= 0} break
@@ -3407,7 +3407,7 @@ ad_proc -public util_http_file_upload { -file -data -binary:boolean -filename
             global errorInfo
             return -code error -errorinfo $errorInfo $errMsg
         }
-    } errmsg] {return -1}
+    } errmsg] } {return -1}
     
     return $page
 }
@@ -3423,7 +3423,7 @@ ad_proc -public util_http_file_upload { -file -data -binary:boolean -filename
 # See the file "license.terms" for information on usage and redistribution
 # of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 # 
-# RCS: @(#) $Id$
+# RCS: @(#) utilities-procs.tcl,v 1.19.2.18 2003/06/06 21:40:37 donb Exp
 
 # Version 1.0 implemented Base64_Encode, Bae64_Decode
 # Version 2.0 uses the base64 namespace

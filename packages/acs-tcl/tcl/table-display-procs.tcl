@@ -1,7 +1,7 @@
 ad_library {
     This is the table, dimensional bar and sort tools.
     an example of their use can be found in /acs-examples
-    @cvs-id $Id$
+    @cvs-id table-display-procs.tcl,v 1.9 2002/09/20 22:18:16 jeffd Exp
 }
     
 # Dimensional selection bars.
@@ -858,7 +858,7 @@ proc_doc ad_new_sort_by {key keys} {
 proc_doc ad_same_page_link {variable value text {form ""}} {
     Makes a link to this page, with a new value for "variable".
 } {
-    if [empty_string_p $form] {
+    if { [empty_string_p $form] } {
         set form [ns_getform]
     }
     set url_vars [export_ns_set_vars url $variable $form]

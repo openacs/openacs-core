@@ -81,7 +81,7 @@ $body
 
     } {
 	set targets [ns_config ns/server/[ns_info server]/acs/acs-rollout-support EmailRedirectTo]
-	if ![string equal $targets ""] {
+	if { ![string equal $targets ""] } {
 	    set body "The following email would have been sent from \"[ad_parameter SystemName]\", but
 was instead redirected to you.
 

@@ -448,23 +448,6 @@ ad_proc -private rp_filter { why } {
 
 } {
 
-    # DRB: In AOLserver 4 a new thread created to serve a returnredirect gets
-    # a copy of the spawning thread's copy of db_state before the spawning thread
-    # clean-up code deallocates database handles.  The spawning thread gives all db
-    # handles back to AOLserver but the spawned thread thinks they're still
-    # available and a server error results when the spawned thread attempts to use
-    # one of the handles.  This bug was quite difficult to track down and debug I
-    # might add ...
-
-    global db_state
-    set db_state(handles) [list]
-    set db_state(n_handles_used) 0
-
-    
-    ns_log Notice "Huh? Here we go!"
-    set form [ns_getform]
-    set size [ns_set size $form]
-
     #####
     #
     # Initialize the environment: reset ad_conn, and populate it with
@@ -492,10 +475,10 @@ ad_proc -private rp_filter { why } {
     if { ![empty_string_p $root] } {
         if { [regexp "^${root}(.*)$" $url match url] } {
 
-            if [regexp {^GET [^\?]*\?(.*) HTTP} [ns_conn request] match vars] {
+            if { [regexp {^GET [^\?]*\?(.*) HTTP} [ns_conn request] match vars] } {
                 append url ?$vars
             }
-            if {[ad_secure_conn_p]} {
+            if { [ad_secure_conn_p] } {
                 # it's a secure connection.
                 ad_returnredirect https://[ad_host][ad_port]$url
                 return "filter_return"
@@ -551,11 +534,11 @@ ad_proc -private rp_filter { why } {
 
     rp_debug -ns_log_level debug -debug t "rp_filter: setting up request: [ns_conn method] [ns_conn url] [ns_conn query]"
 
-    if [catch { array set node [site_node::get -url [ad_conn url]] } errmsg] {
+    if { [catch { array set node [site_node::get -url [ad_conn url]] } errmsg] } {
         # log and do nothing
         rp_debug -debug t "error within rp_filter [ns_conn method] [ns_conn url] [ns_conn query].  $errmsg"
     } else {
-	if {[string equal $node(url) "[ad_conn url]/"]} {
+	if { [string equal $node(url) "[ad_conn url]/"] } {
 	    ad_returnredirect $node(url)
             rp_debug "rp_filter: returnredirect $node(url)"
             rp_debug "rp_filter: return filter_return"
@@ -580,7 +563,7 @@ ad_proc -private rp_filter { why } {
     #
     #####
 
-    if ![rp_performance_mode] {
+    if { ![rp_performance_mode] } {
       # We wrap this in a catch, because we don't want an error here to 
       # cause the request to fail.
       if { [catch { apm_load_any_changed_libraries } error] } {
@@ -608,7 +591,8 @@ ad_proc -private rp_filter { why } {
     # Make sure the user is authorized to make this request. 
     #
     #####
-    if { ![empty_string_p [ad_conn object_id]]} {
+
+    if { ![empty_string_p [ad_conn object_id]] } {
       ad_try {
 	if {[string match "admin/*" [ad_conn extra_url]]} {
             permission::require_permission -object_id [ad_conn object_id] -privilege admin
@@ -738,13 +722,13 @@ ad_proc -private rp_handler {} {
 
   set startclicks [clock clicks]
   rp_debug "rp_handler: handling request: [ns_conn method] [ns_conn url]?[ns_conn query]"
-  if [set code [catch {
-    if [rp_performance_mode] {
+  if { [set code [catch {
+    if { [rp_performance_mode] } {
       global tcl_url2file tcl_url2path_info
-      if ![catch {
+      if { ![catch {
 	set file $tcl_url2file([ad_conn url])
 	set path_info $tcl_url2path_info([ad_conn url])
-      } errmsg] {
+      } errmsg] } {
 	ad_conn -set file $file
 	ad_conn -set path_info $path_info
 	rp_serve_concrete_file $file
@@ -817,7 +801,9 @@ ad_proc -private rp_handler {} {
     # Now visit the candidates columnwise: from most specific to least
     foreach cand0 [lindex $candidates 0] cand1 [lindex $candidates 1] {
       foreach candidate [list $cand0 $cand1] {
-	if [empty_string_p $candidate] continue;
+	if { [empty_string_p $candidate] } {
+            continue
+        }
 	set root   [lindex $candidate 0]; # fewer instructions than util_unlist
 	set path   [lindex $candidate 1]
 	set prefix [lindex $candidate 2]
@@ -845,7 +831,7 @@ ad_proc -private rp_handler {} {
 
     ad_call_proc_if_exists ds_add rp [list transformation [list notfound $root/$path notfound] $startclicks [clock clicks]]
     ns_returnnotfound
-  } errmsg]] {
+  } errmsg]] } {
     if {$code == 1} {
         if {![string equal [ns_conn query] ""]} {
             set q ?
