@@ -567,9 +567,11 @@ ad_proc db_qd_internal_store_cache {fullquery} {
 } { 
 
     # Check if it's compatible at all!
-    if {![db_rdbms_compatible_p [db_fullquery_get_rdbms $fullquery] [db_current_rdbms]]} {
-	ns_log Error "Query [db_fullquery_get_name $fullquery] is *NOT* compatible"
-	return
+    set rdbms [db_fullquery_get_rdbms $fullquery]
+    if {![db_rdbms_compatible_p $rdbms [db_current_rdbms]]} {
+        # The query isn't compatible, probably because of a too high version
+        ns_log Warning "Query [db_fullquery_get_name $fullquery] has rdbms info $rdbms which is not compatible with system rdbms [db_current_rdbms]"
+        return
     }
 
     set name [db_fullquery_get_name $fullquery]
