@@ -20,7 +20,7 @@
 </description>
 
         <provides url="ref-timezones" version="0.2d"/>
-        <requires url="acs-kernel" version="4.0"/>
+        <requires url="acs-kernel" version="4.6.2"/>
         <requires url="acs-reference" version="0.2d"/>
 
         <files>
