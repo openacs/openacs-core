@@ -7,13 +7,6 @@ ad_library {
     @cvs-id $Id$
 }
 
-ad_proc db_compatible_rdbms_p { db_type } {
-    Returns 1 if the given db_type is compatible with the current RDBMS.  If db_type
-    is blank we assume this is a legacy Oracle package that's not been ported to
-    PostgreSQL so don't return 1 as we do when running in Oracle mode.
-} {
-    return [expr { [string equal [db_type] $db_type] || [string equal $db_type "common"] }]
-}
 proc_doc db_nextval { sequence } { Returns the next value for a sequence. This can utilize a pool of sequence values to save hits to the database. } {
     return [db_string nextval "select ${sequence}.nextval"]
 }

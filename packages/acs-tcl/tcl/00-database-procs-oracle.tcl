@@ -7,15 +7,6 @@ ad_library {
     @cvs-id $Id$
 }
 
-ad_proc db_compatible_rdbms_p { db_type } {
-    Returns 1 if the given db_type is compatible with the current RDBMS.  If db_type
-    is blank we assume this is a legacy Oracle package that's not been moved to
-    the OpenACS multidb framework.
-} {
-    return [expr { [empty_string_p $db_type] || [string equal [db_type] $db_type] || \
-                   [string equal $db_type "common"] }]
-}
-
 ad_proc -public db_nullify_empty_string { string } {
     A convenience function that returns [db_null] if $string is the empty string.
 } {

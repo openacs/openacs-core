@@ -381,6 +381,20 @@ ad_proc -public apm_read_package_info_file { path } {
 
     # Build a list of the files contained in the package.
 
+    #DRB: we accept info files with no database-support section for legacy reasons.  They
+    # should work with Oracle, Postgres users load them at their peril but the installer won't
+    # try to load the datamodel anyway.
+
+    set database_support_sections [xml_node_get_children_by_name $version "database-support"]
+    set properties(database_support) [list]
+    if { [llength $database_support_sections] > 1 } {
+	error "Package must contain exactly one <database-support> node"
+    } elseif { [llength $database_support_sections] != 0 } {
+        foreach database [xml_node_get_children_by_name [lindex $database_support_sections 0] "database"] {
+            lappend properties(database_support) [xml_node_get_content [lindex $database 0]]
+        }
+    }
+
     set properties(files) [list]
 
     # set nodes [dom::element getElementsByTagName $version "files"]

@@ -149,7 +149,10 @@ ad_proc -private apm_guess_db_type { package_key path } {
        file used to create the APM datamodel.
 
        If the path contains a string matching "sql/common" the file is assumed to be
-       compatible with all supported RDBMS's and a db_type of "common" is returned.
+       compatible with all supported RDBMS's and a blank db_type is returned.
+
+       Otherwise "oracle" is returned.  This is a hardwired kludge to allow us to
+       handle legacy ACS 4 packages.
 
     2. Other files.
 
@@ -166,16 +169,13 @@ ad_proc -private apm_guess_db_type { package_key path } {
         set sql_index [lsearch $components "sql"]
         if { $sql_index >= 0 } {
             set db_dir [lindex $components [expr $sql_index + 1]]
-            if { [string equal db_dir "common"] } {
-                return "common"
-            }
             foreach known_database_type [db_known_database_types] {
                 if { [string equal [lindex $known_database_type 0] $db_dir] } {
                     return $db_dir
                 }
             }
         }
-        return ""
+        return "oracle"
     }
 
     set file_name [file tail $path]
@@ -184,6 +184,7 @@ ad_proc -private apm_guess_db_type { package_key path } {
             return [lindex $known_database_type 0]
         }
     }
+
     return ""
 }
 

@@ -91,7 +91,7 @@ db_foreach apm_all_files {
 		doc_body_append "<td><input type=checkbox name=file_id value=$file_id></td>"
 	    } else {
 		if { $installed_p == "t" } {
-		    if { $file_type == "tcl_procs" || $file_type == "query_file" } {
+		    if { $file_type == "tcl_procs" || ($file_type == "query_file" && [db_compatible_rdbms_p $db_type]) } {
 			if { [nsv_exists apm_reload_watch "packages/$package_key/$path"] } {
 			    # This procs file is already being watched.
 			    doc_body_append "<td>&nbsp;watch&nbsp;</td>"
