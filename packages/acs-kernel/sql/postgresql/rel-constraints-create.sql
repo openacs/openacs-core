@@ -61,114 +61,12 @@ create table rel_constraints (
     required_rel_segment	integer not null
 				constraint rc_required_rel_segment
 					references rel_segments (segment_id),
-    tree_sortkey                varchar(4000),
     constraint rel_constraints_uq
 	unique (rel_segment, rel_side, required_rel_segment)
 );
 
 -- required_rel_segment has a foreign key reference - create an index
 create index rel_constraint_req_rel_seg_idx on rel_constraints(required_rel_segment);
-create index rel_constraint_tree_skey_idx on rel_constraints (tree_sortkey);
-
-create function rel_constraints_insert_tr () returns opaque as '
-declare
-        v_parent_sk     varchar;
-        max_key         varchar;
-        has_parents_p   boolean;
-begin
-        select count(*) > 0 into has_parents_p
-          from rel_constraints 
-         where rel_segment = new.required_rel_segment
-           and rel_side = new.rel_side;
-       
-        if has_parents_p then 
-           select max(tree_sortkey) into max_key 
-             from rel_constraints 
-            where required_rel_segment = new.required_rel_segment
-              and rel_side = new.rel_side;
-
-           select coalesce(max(tree_sortkey),'''') into v_parent_sk 
-             from rel_constraints 
-            where rel_segment = new.required_rel_segment
-              and rel_side = new.rel_side;
-        else 
-           select max(tree_sortkey) into max_key 
-             from rel_constraints 
-            where rel_side = new.rel_side 
-              and tree_level(tree_sortkey) = 1;
-
-           v_parent_sk := '''';
-        end if;
-
-        new.tree_sortkey := v_parent_sk || ''/'' || tree_next_key(max_key);
-
-        return new;
-
-end;' language 'plpgsql';
-
-create trigger rel_constraints_insert_tr before insert 
-on rel_constraints for each row 
-execute procedure rel_constraints_insert_tr ();
-
-create function rel_constraints_update_tr () returns opaque as '
-declare
-        v_parent_sk     varchar;
-        max_key         varchar;
-        v_rec           record;
-        clr_keys_p      boolean default ''t'';
-begin
-        if new.rel_segment = old.rel_segment and 
-           new.required_rel_segment = old.required_rel_segment and 
-           new.rel_side = old.rel_side 
-        THEN
-
-           return new;
-
-        end if;
-
-        for v_rec in select required_rel_segment
-                       from rel_constraints 
-                      where rel_side = new.rel_side 
-                        and tree_sortkey like new.tree_sortkey || ''%''
-                   order by tree_sortkey
-        LOOP
-            if clr_keys_p then
-               update rel_constraints set tree_sortkey = null
-               where tree_sortkey like new.tree_sortkey || ''%''
-                 and rel_side = new.rel_side;
-               clr_keys_p := ''f'';
-            end if;
-            
-            select max(tree_sortkey) into max_key
-              from rel_constraints 
-             where rel_side = new.rel_side 
-               and rel_segment = (select rel_segment 
-                                    from rel_constraints 
-                                   where rel_side = new.rel_side 
-                                     and required_rel_segment = v_rec.required_rel_segment);
-
-            select coalesce(max(tree_sortkey),'''') into v_parent_sk 
-              from rel_constraints 
-             where required_rel_segment = (select rel_segment 
-                                             from rel_constraints 
-                                            where rel_side = new.rel_side 
-                                              and required_rel_segment = v_rec.required_rel_segment);
-
-            update rel_constraints 
-               set tree_sortkey = v_parent_sk || ''/'' || tree_next_key(max_key)
-             where required_rel_segment = v_rec.required_rel_segment
-               and rel_side = new.rel_side;
-
-        end LOOP;
-
-        return new;
-
-end;' language 'plpgsql';
-
-create trigger rel_constraints_update_tr after update 
-on rel_constraints
-for each row 
-execute procedure rel_constraints_update_tr ();
 
 comment on table rel_constraints is '
   Defines relational constraints. The relational constraints system is
@@ -617,29 +515,119 @@ select r.rel_type as viol_rel_type, r.rel_id as viol_rel_id,
 --                  and prior rel_side = 'two'
 --       );
 
--- FIXME: note this view doesn't match acsclassic, but from the description 
--- above, I believe that this view is correct.  The results from the 
--- acsclassic version of this view make no sense - DCW 2001-04-18.
+-- DCW 2001-04-19, replaced view with a table and a trigger since a tree query
+-- won't work on the rel_constraints table, because instead of a tree, we have 
+-- a directed graph structure.
 
--- drop view rc_segment_required_seg_map;
-create view rc_segment_required_seg_map as
-select rc.rel_segment, rc.rel_side, rc_required.required_rel_segment
-from rel_constraints rc, rel_constraints rc_required 
-where rc.rel_side = rc_required.rel_side 
-  and ((rc.rel_segment in (select rel_segment
-                             from rel_constraints
-                            where rel_side = 'two'
-                              and tree_sortkey 
-                                  like (select tree_sortkey || '%' 
-                                          from rel_constraints 
-                                         where rel_segment = rc_required.rel_segment and rel_side = 'two')))
-   or (rc.rel_segment in (select rel_segment
-                             from rel_constraints
-                            where rel_side = 'one'
-                              and tree_sortkey 
-                                  like (select tree_sortkey || '%' 
-                                          from rel_constraints 
-                                         where rel_segment = rc_required.rel_segment and rel_side = 'one'))));
+create table rc_segment_required_seg_map (
+    rel_segment 		integer not null
+				constraint rc_rel_segment_fk
+					references rel_segments (segment_id),
+    rel_side                    char(3) not null
+				constraint rc_rel_side_ck
+					check (rel_side in
+					('one', 'two')),
+    required_rel_segment	integer not null
+				constraint rc_required_rel_segment
+					references rel_segments (segment_id),
+    constraint rc_segment_required_seg_map_uq
+	unique (rel_segment, rel_side, required_rel_segment)
+);
+
+create function rel_constraints_ins_tr () returns opaque as '
+declare
+        v_rec   record;
+begin
+        -- insert the constraint
+
+        insert into rc_segment_required_seg_map
+               (rel_segment, rel_side, required_rel_segment)
+               values
+               (new.rel_segment, new.rel_side, new.required_rel_segment);
+
+        -- add dependencies
+
+        insert into rc_segment_required_seg_map
+             select new.rel_segment, new.rel_side, required_rel_segment
+               from rc_segment_required_seg_map
+              where rel_segment = new.required_rel_segment
+                and rel_side = new.rel_side;
+
+        -- now update the rel_segments that depend on this segment
+        
+        for v_rec in select rel_segment 
+                       from rc_segment_required_seg_map
+                      where required_rel_segment = new.rel_segment 
+                        and rel_side = new.rel_side
+        LOOP
+                insert into rc_segment_required_seg_map
+                     select v_rec.rel_segment, new.rel_side, 
+                            required_rel_segment
+                       from rc_segment_required_seg_map
+                      where rel_segment = new.rel_segment
+                        and rel_side = new.rel_side;
+                
+        end LOOP;
+
+        return new;
+
+end;' language 'plpgsql';
+
+create trigger rel_constraints_ins_tr after insert 
+on rel_constraints for each row 
+execute procedure rel_constraints_ins_tr ();
+
+create function rel_constraints_del_tr () returns opaque as '
+declare
+        v_rec   record;
+begin
+
+        -- now update the rel_segments that depend on this segment
+        
+        for v_rec in select rel_segment 
+                       from rc_segment_required_seg_map
+                      where required_rel_segment = old.rel_segment 
+                        and rel_side = old.rel_side
+        LOOP
+
+                delete from rc_segment_required_seg_map
+                      where rel_segment = v_rec.rel_segment
+                        and rel_side = old.rel_side
+                        and required_rel_segment 
+                            in (select required_rel_segment
+                                  from rc_segment_required_seg_map
+                                 where rel_segment = old.rel_segment
+                                   and rel_side = old.rel_side);
+                
+        end LOOP;
+
+        -- delete dependencies
+
+        delete from rc_segment_required_seg_map
+              where rel_segment = old.rel_segment
+                and rel_side = old.rel_side
+                and required_rel_segment 
+                    in (select required_rel_segment
+                          from rc_segment_required_seg_map
+                         where rel_segment = old.required_rel_segment
+                           and rel_side = old.rel_side);
+
+        -- delete the constraint
+
+        delete from rc_segment_required_seg_map
+              where rel_segment = old.rel_segment
+                and rel_side = old.rel_side 
+                and required_rel_segment = old.required_rel_segment;
+
+        return old;
+
+end;' language 'plpgsql';
+
+create trigger rel_constraints_del_tr after delete
+on rel_constraints for each row 
+execute procedure rel_constraints_del_tr ();
+
+
 
 -- View: rc_segment_dependency_levels
 --
@@ -679,22 +667,17 @@ where rc.rel_side = rc_required.rel_side
 --                 and prior rel_side = 'two')
 --       group by rel_segment;
 
--- FIXME: need to verify this against acs classic to see if this is correct.
--- It seems correct, but it might be bogus.
--- DCW 2001-03-14.
+-- DCW 2001-04-19, this view is not a direct port rather it gives equivalent
+-- information without the use of a tree query, which in this case would be
+-- problematic, since we are actually dealing with a directed graph instead 
+-- of a tree structure.  This view would also work for oracle.
 
--- drop view rc_segment_dependency_levels;
-create view rc_segment_dependency_levels as
-             select rc1.rel_segment as segment_id, 
-                    max(tree_level(rc1.tree_sortkey)) as dependency_level
-               from rel_constraints rc1, rel_constraints rc2
-              where ('two' = (select rel_side 
-                                from rel_constraints 
-                               where rel_segment = rc1.required_rel_segment
-                                 and rel_side = rc1.rel_side)
-                     or rc1.rel_segment = rc2.rel_segment)     
-                and rc1.tree_sortkey like rc2.tree_sortkey || '%'
-           group by segment_id;
+
+create view rc_segment_dependency_levels as 
+  select rel_segment as segment_id, count(*) as dependency_level
+    from rc_segment_required_seg_map
+   where rel_side = 'two'
+group by segment_id;
 
 --------------
 -- PACKAGES --
