@@ -18,7 +18,7 @@ ad_page_contract {
   fails:onevalue
 }
 set title "Test case $testcase_id"
-set context_bar [list $title]
+set context [list $title]
 
 db_multirow tests acs-automated-testing.testcase_query {
   select to_char(timestamp,'DD-MM-YYYY HH24:MI:SS') timestamp, result, notes

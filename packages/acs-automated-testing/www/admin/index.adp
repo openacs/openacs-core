@@ -1,6 +1,6 @@
-<master src="master">
+<master>
 <property name="title">@title;noquote@</property>
-<property name="context_bar">@context_bar;noquote@</property>
+
 <html>
   <body>
   <table border=0 cellspacing=0 cellpadding=3 width="100%">

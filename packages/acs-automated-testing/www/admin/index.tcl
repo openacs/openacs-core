@@ -18,7 +18,6 @@ ad_page_contract {
   quiet:onevalue
 }
 set title "System test cases"
-set context_bar [list $title]
 
 if {$by_package_key != ""} {
   append title " for package $by_package_key"
