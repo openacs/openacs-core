@@ -1,4 +1,4 @@
--- 
+--
 -- @author Lars Pind (lars@collaboraid.biz)
 -- @creation-date 2003-07-03
 
@@ -33,7 +33,7 @@ begin
   where role = ''admin'';
 
   if v_role_exists_p = 0 then
-    select acs_rel_type__create_role (''admin'', ''Administrator'', ''Administrators'');
+    PERFORM acs_rel_type__create_role (''admin'', ''Administrator'', ''Administrators'');
   end if;
 
   return 0;
@@ -125,4 +125,8 @@ begin
 end;' language 'plpgsql';
 
 
-
+-- Internationalize role "member"
+update acs_rel_roles
+set pretty_name = '#acs-kernel.member_role_pretty_name#',
+pretty_plural = '#acs-kernel.member_role_pretty_plural#'
+where role = 'member';
