@@ -563,6 +563,7 @@ begin
   insert into apm_package_file_types(file_type_key, pretty_name) values('tcl_util', 'Tcl utility script');
   insert into apm_package_file_types(file_type_key, pretty_name) values('content_page', 'Content page');
   insert into apm_package_file_types(file_type_key, pretty_name) values('package_spec', 'Package specification');
+  insert into apm_package_file_types(file_type_key, pretty_name) values('csv_data', 'CSV Data');
   insert into apm_package_file_types(file_type_key, pretty_name) values('data_model', 'Data model');
   insert into apm_package_file_types(file_type_key, pretty_name) values('data_model_create', 'Data model installation');
   insert into apm_package_file_types(file_type_key, pretty_name) values('data_model_drop', 'Data model deinstallation');
