@@ -275,7 +275,7 @@ begin
     
   if NOT FOUND then
     raise EXCEPTION ''-20000: Attribute %:% does not exist in content_type.drop_attribute'', drop_attribute__content_type, drop_attribute__attribute_name;
-  end;
+  end if;
 
   -- Drop the attribute
   PERFORM acs_attribute__drop_attribute(drop_attribute__content_type, 
@@ -283,7 +283,7 @@ begin
 
   -- FIXME: postgresql does not support drop column.
   -- Drop the column if neccessary
-  if drop_attribute__drop_column and ''f'' then
+  if drop_attribute__drop_column and ''f''::boolean then
       execute ''alter table '' || v_table || '' drop column '' ||
 	drop_attribute__attribute_name;
 
