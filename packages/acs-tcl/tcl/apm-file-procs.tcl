@@ -516,35 +516,39 @@ ad_proc -private apm_load_apm_file {
     @return If successful, a path to the .info file of the package uncompressed 
             into the apm-workspace directory
 
-} {
-    apm_callback_and_log $callback "<li>Downloading $url..."
-    if { [catch {
-	# Open a destination file.
-	set file_path [ns_tmpnam].apm
-	set fileChan [open $file_path w+ 0600]
-	# Open the channel to the server.
-	set httpChan [lindex [ns_httpopen GET $url] 0]
-	ns_log Debug "APM: Copying data from $url"
-	# Copy the data
-	fcopy $httpChan $fileChan
-	# Clean up.
-	ns_log Debug "APM: Done copying data."
-	close $httpChan
-	close $fileChan
-    } errmsg] } {
-	apm_callback_and_log $callback "Unable to download. Please check your URL.</ul>.
-	The following error was returned: <blockquote><pre>[ad_quotehtml $errmsg]
-	</pre></blockquote>[ad_footer]"
-	return
-    }	
+} {    
+    # First download the apm file if a URL is provided
+    if { ![empty_string_p $url] } {
+        apm_callback_and_log $callback "<li>Downloading $url..."
+        if { [catch {
+            # Open a destination file.
+            set file_path [ns_tmpnam].apm
+            set fileChan [open $file_path w+ 0600]
+            # Open the channel to the server.
+            set httpChan [lindex [ns_httpopen GET $url] 0]
+            ns_log Debug "APM: Copying data from $url"
+            # Copy the data
+            fcopy $httpChan $fileChan
+            # Clean up.
+            ns_log Debug "APM: Done copying data."
+            close $httpChan
+            close $fileChan
+        } errmsg] } {
+            apm_callback_and_log $callback "Unable to download. Please check your URL.</ul>.
+            The following error was returned: <blockquote><pre>[ad_quotehtml $errmsg]
+            </pre></blockquote>[ad_footer]"
+            return
+        }	
 
-    if {![file exists $file_path]} {
-	apm_callback_and_log $callback  "
-	The file cannot be found.  Your URL or your file name is incorrect.  Please verify that the file name
-	is correct and try again."
-        ns_log Error "Error loading APM file form url $url: The file cannot be found."
-	return
+        if {![file exists $file_path]} {
+            apm_callback_and_log $callback  "
+            The file cannot be found.  Your URL or your file name is incorrect.  Please verify that the file name
+            is correct and try again."
+            ns_log Error "Error loading APM file form url $url: The file cannot be found."
+            return
+        }
     }
+
     if { [catch {
 	set files [split [string trim \
 		[exec [apm_gunzip_cmd] -q -c $file_path | [apm_tar_cmd] tf - 2>/dev/null] "\n"]]
