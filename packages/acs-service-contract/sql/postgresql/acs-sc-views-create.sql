@@ -1,3 +1,6 @@
+-- $Id$
+
+create view valid_uninstalled_bindings as
     select c.contract_id, c.contract_name, i.impl_id, i.impl_name, i.impl_owner_name, i.impl_pretty_name
     from acs_sc_contracts c, acs_sc_impls i
     where c.contract_name = i.impl_contract_name
