@@ -1,0 +1,199 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html401/loose.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+<title>Using the Wizard</title>
+</head>
+<body>
+<h2>Overview Of How To Make A Wizard</h2>
+
+<ol>
+    <li>Create a wizard file (ex. wizard.tcl) that contains the "template::wizard create" code.
+    <pre>ex.
+       template::wizard create -action "wizard" -name my_wizard -params {
+          my_param1 my_param2
+       } -steps {
+	  1 -label "Step 1" -url "step1"
+	  2 -label "Step 2" -url "step2"	
+          3 -label "Step 3" -url "step3"
+       }
+    </pre>
+    <ul>
+       <li>action - the url where the wizard will always submit, normally its the
+       same as your current wizard file.  Has no effect for subwizards.</li>
+       <li>name - use to distinguish between the different wizards, since you can
+       have 1 or more subwizard. name must be no spaces, alpanumeric similar
+       to normal tcl variable naming convention</li>
+       <li>params - are used to keep values that you would like to pass on to 
+       the other steps</li>
+       <li>steps - are use to define what includes to use for each step of the
+       wizard</li>
+    </ul>
+    </li>
+
+    <li><p>Add the "template::wizard get_current_step" on wizard.tcl.  
+    Make sure that you call any "template::wizard set_param" if needed before 
+    calling get_current_step.  get_current_step will redirect to the wizard -action
+    properly setting all -params value and its other needed http state vars</p>
+
+    <p>Note: the wizard will rewrite the url always.  Only self submitting forms
+    are preserved.  Once the form is finished processing the wizard will take
+    over and rewrite the url.</p>
+    </li>
+
+    <li>Create the wizard template file (ex. wizard.adp).  This file will include
+    the file based current step of the wizard
+    <pre>ex.
+       &lt;include src="@wizard:current_url@"&gt;
+    </pre>
+    </li>
+
+    <li>Create the individual steps, these are just normal tcl and/or adp files.
+    So make a step1.tcl, step1.adp, step2.tcl, step2.adp, step3.tcl and step3.adp.
+    Normally this files are self submitting forms
+    </li>
+
+    <li>Add "template:wizard forward" on each step (eg. step1.tcl, step2.tcl, step3.tcl)
+    , usually the code where the step is processed and successful.
+    </li>
+
+    <li>On each step add the wizard buttons on the .tcl files. Ex. step1.tcl will 
+    include
+    <pre>
+    template::wizard submit myform -buttons {back next}
+    </pre>
+    On the last step you may want to use the following on step3.tcl
+    <pre>
+    template::wizard submit myform -buttons {back next}
+    </pre>
+    The following values are acceptable for the buttons: back, next and finish.
+    Back buttons are not rendered if the step is the first step, like wise next
+    buttons are not displayed if its the last step.  Finish can appear on any step
+    and will finish the current wizard even if not all steps are done.
+    </li>
+
+</ol>
+
+
+<h2>Tips And How To Use The Wizard</h2>
+
+<ul>
+    <li><h3>How do you display the steps in the wizard to serve as an indicator?</h3>
+    On your adp file do the following:
+    <pre>
+       &lt;multiple name="wizard"&gt;
+          &lt;if "@wizard.id@" eq "wizard:current_id"&gt;
+             @wizard.label@ - you are at this step &lt;br&gt;
+          &lt;/if&gt;
+          &lt;else&gt;
+             @wizard.label@ &lt;br&gt;
+          &lt;/else&gt;
+       &lt;/multiple&gt;
+    </pre>
+    </li>
+
+   <li><h3>How do you set the value of a wizard param?</h3>
+   <p>Use "template::wizard set_param myparam_name" to set it.  Normally you place
+   this in the steps of the wizard where the form has been processed.  A param
+   is normally used when you want to reuse a value across the steps.</p>
+
+   <p>Note: if you are to use "template::wizard set_param" on a wizard file ex. 
+   (wizard.tcl).  Make sure to do it before "template::wizard get_current_step".
+   So when "template::wizard get_current_step" redirects it will properly set
+   the correct values of the param to the new value.
+   </li>
+
+    <li><h3>How do you get the value of a wizard param?</h3>
+    For example you wizard was created this way:
+    <pre>
+           template::wizard create -action "wizard" -name my_wizard -params {
+              my_param1 my_param2
+           } -steps {
+              1 -label "Step 1" -url "step1"
+              2 -label "Step 2" -url "step2"	
+              3 -label "Step 3" -url "step3"
+           }
+    </pre>
+    You can access my_param1 and/or my_param2 on any step1.tcl, step2.tcl, or step3.tcl
+    by using "ad_page_contract" or "template::wizard get_param"
+    <pre>ex.
+    ad_page_contract {
+       gets the wizard params
+    } {
+       my_param1
+       my_param2
+    }
+    </pre>
+    or
+    <pre>
+    set my_param1 [template::wizard get_param my_param1]
+    set my_param2 [template::wizard get_param my_param2]
+    </pre>
+    Note: "template::wizard get_param" has the advantage of getting the
+    param value during the response time.  What does this mean?  It will properly
+    get the current value of the param which was set by "template::wizard set_param",
+    while ad_page_contract will not pick that up since it will get what is the request
+    http var value.  This is because "template::wizard get_param" gets the value
+    from the tcl var while ad_page_contract gets the value from the http var.
+    So while processing in tcl that value may change.
+   </li>
+
+   <li><h3>How can you get the url of a wizard that is not your current step?</h3>
+   You can use the following on your wizard.adp
+   <pre>
+       &lt;multiple name="wizard"&gt;
+             &lt;a href="[template::wizard get_forward_url @wizard.id@"&gt;
+             @wizard.label@ &lt;br&gt;
+             &lt;/a&gt;
+       &lt;/multiple&gt;
+   </pre>
+   Note: that this is not a very wise thing to do especially if the latter steps
+   will depend on the inputs from the earlier steps.  You can however do checking
+   on each step.
+   </li>
+
+   <li><h3>How do you know if a step is already visited or not?</h3>
+   <p>There are situations where in you would like to build a wizard when you can
+   go back several steps and jump back to the step furthest you have been.</p>
+
+   <p>On your wizard.adp you can do the following</p>
+   <pre>
+       &lt;multiple name="wizard"&gt;
+          &lt;if "@wizard.id@" le "wizard:visited_step"&gt;
+             &lt;a href="[template::wizard get_forward_url @wizard.id@"&gt;
+             @wizard.label@ &lt;br&gt;
+             &lt;/a&gt;
+          &lt;/if&gt;
+          &lt;else&gt;
+             @wizard.label@ &lt;br&gt;
+          &lt;/else&gt;
+       &lt;/multiple&gt;
+   </pre>
+   Note: that this is not a very wise thing to do especially if the latter steps
+   will depend on the inputs from the earlier steps.  You can however do checking
+   on each step.
+   </li>
+
+   <li><h3>Can I use a wizard as a step?</h3>
+   <p>Yes you can use another wizard a step of a wizard.  This will act as a subwizard.</p>
+
+   <p>Note: That visited steps will loose its value when moving from one subwizard to
+   another subwizard in the same level.  In order to preserve this you must call
+   "template::wizard load_last_visited_step -key $yourkey" before "template::wizard get_current_step",
+   after "get_current_step" call "template::wizard save_last_visited_step -key $yourkey"
+   </p>
+
+   <p>Also the wizard params name is present across the curent wizards being used, 
+   so the developer has to be aware not to use the same names with different 
+   purpose.  For example on main wizard with have a param called "name" for 
+   the user name.  And on on sub wizard we have the param again called "name" 
+   but used for the file name.
+   </p>
+   </li>
+
+</ul>
+
+</body>
+</html>
+
+
