@@ -253,6 +253,9 @@
       <xi:include href="engineering-standards/style-guide.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
         <xi:fallback>Section missing</xi:fallback>
       </xi:include>
+      <xi:include href="engineering-standards/cvs.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
+        <xi:fallback>Section missing</xi:fallback>
+      </xi:include>
       <xi:include href="engineering-standards/eng-standards-versioning.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
         <xi:fallback>Section missing</xi:fallback>
       </xi:include>

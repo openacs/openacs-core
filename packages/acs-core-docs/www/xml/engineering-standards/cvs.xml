@@ -330,7 +330,7 @@ cvs -d:ext:cvs.openacs.org:/cvsroot checkout acs-core</action></screen>
             <screen><action>cp -r /var/lib/aolserver/<replaceable>service0</replaceable>/packages/<replaceable>newpackage</replaceable> /tmp/openacs-4/packages</action></screen>
             <para>Import the package into the cvs.openacs.org cvs repository:</para>
             <screen><action>cd /tmp/openacs-4/packages/<replaceable>newpackage</replaceable>
-cvs import -m "Initial import of <replaceable>newpackage</replaceable>" openacs-4/packages/newpackage <replaceable>myname</replaceable> <replaceable>0.1d</replaceable></action></screen>
+cvs import -m "Initial import of <replaceable>newpackage</replaceable>" openacs-4/packages/newpackage <replaceable>myname</replaceable> <replaceable>newpackage-0-1d</replaceable></action></screen>
             </listitem>
             <listitem>
               <para>Add the new package to the modules file. (An administrator has to do this step.)  On any machine, in a temporary directory:</para>

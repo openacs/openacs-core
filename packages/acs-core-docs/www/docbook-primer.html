@@ -1,4 +1,4 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>OpenACS Documentation Guide</title><meta name="generator" content="DocBook XSL Stylesheets V1.66.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="doc-standards.html" title="Chapter 14. Documentation Standards"><link rel="previous" href="doc-standards.html" title="Chapter 14. Documentation Standards"><link rel="next" href="psgml-mode.html" title="Using PSGML mode in Emacs"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="doc-standards.html">Prev</a> </td><th width="60%" align="center">Chapter 14. Documentation Standards</th><td width="20%" align="right"> <a accesskey="n" href="psgml-mode.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="docbook-primer"></a>OpenACS Documentation Guide</h2></div></div></div><p>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>OpenACS Documentation Guide</title><meta name="generator" content="DocBook XSL Stylesheets V1.66.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="doc-standards.html" title="Chapter 15. Documentation Standards"><link rel="previous" href="doc-standards.html" title="Chapter 15. Documentation Standards"><link rel="next" href="psgml-mode.html" title="Using PSGML mode in Emacs"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="doc-standards.html">Prev</a> </td><th width="60%" align="center">Chapter 15. Documentation Standards</th><td width="20%" align="right"> <a accesskey="n" href="psgml-mode.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="docbook-primer"></a>OpenACS Documentation Guide</h2></div></div></div><p>
     By Claus Rasmussen, with additions by <a href="mailto:rmello@cc.usu.edu" target="_top">Roberto
       Mello</a> and the OpenACS Community
   </p><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="dbprimer-overview"></a>Overview of OpenACS Documentation</h3></div></div></div><p>
@@ -238,7 +238,7 @@
         is built and the library of tried and tested community
         building tools that are waiting to be added. It seems that
         most portals just add another layer of complexity to the
-        cake. See <a href="http://openacs.org/bboard/q-and-a-fetch-msg.tcl?msg_id=%20%20%20%20%20%20%20%20%2000058H&amp;topic_id=11&amp;topic=OpenACS" target="_top">Slides on OACS
+        cake. See <a href="http://openacs.org/bboard/q-and-a-fetch-msg.tcl?msg_id=00058H&amp;topic_id=11&amp;topic=OpenACS" target="_top">Slides on OACS
         features</a>...a set of slides on OACS features that can
         be used for beginners who want to know OACS is about and
         what they can do with it. Screen captures that highlight
@@ -336,7 +336,8 @@
         description information and almost everything about a
         package for administrators and developers is already
         described in the package itself through two basic
-        development document templates: a <a href="http://openacs.org/doc/current/requirements-template.%20%20%20%20%20%20%20%20%20html" target="_top">Requirements Template</a> and <a href="http://openacs.org/doc/current/filename.html" target="_top">Detailed
+        development document templates: a <a href="http://openacs.org/doc/current/requirements-template.html" target="_top">
+        Requirements Template</a> and <a href="http://openacs.org/doc/current/filename.html" target="_top">Detailed
         Design Document</a>.
       </p></li></ul></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="docs-admin-reqs"></a>OpenACS Documentation Requirements for Site and Administrators</h3></div></div></div><p>
       By the OpenACS Community. This section is a collection of
@@ -573,7 +574,7 @@
       sufficient. We could even write our own, or just use the
       OpenACS templating system via the Edit-This-Page package.
       However,
-      <a class="indexterm" name="id2593752"></a> 
+      <a class="indexterm" name="id2641282"></a> 
       is a publishing standard based on XML with
       similar goals to the OpenACS Documentation project.  Some specific reasons why we are using DocBook:
     </p><div class="itemizedlist"><ul type="disc"><li><p>      
@@ -637,7 +638,7 @@
     list of elements</a> and use more exotic features in your
       documents. The list is made up of SGML-elements but basically
       the same elements are valid in the XML DTD <span class="strong">as long as you remember to</span>:
-      <a class="indexterm" name="id2593918"></a>
+      <a class="indexterm" name="id2641449"></a>
     </p><div class="itemizedlist"><ul type="disc"><li><p>
       Always close your tags with corresponding end-tags and to
       <span class="strong">not use other tag minimization</span>
@@ -686,7 +687,7 @@
       The documentation for each package will make up a little "book" that is structured like this 
       - examples are <span class="emphasis"><em>emphasized</em></span>:
 
-      <a class="indexterm" name="id2587739"></a>
+      <a class="indexterm" name="id2641623"></a>
 
     </p><pre class="programlisting">
     book                        : <span class="strong">Docs for one package</span> - <span class="emphasis"><em>templating</em></span>
@@ -710,12 +711,12 @@
       <a href="http://openacs.org/cvs/openacs-4/packages/acs-core-docs/www/xml/engineering-standards" target="_top">sources of these DocBook documents</a>
       to get an idea of how they are tied together.
     </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="dbprimer-sections"></a>Headlines, Sections</h3></div></div></div><p>
-      <a class="indexterm" name="id2587834"></a>
+      <a class="indexterm" name="id2641718"></a>
       Given that your job starts at the <tt class="computeroutput">sect1</tt>-level, all your documents should open with a
       <a href="http://docbook.org/tdg/en/html/sect1.html" target="_top"><tt class="computeroutput">&lt;sect1&gt;</tt></a>-tag and end 
       with the corresponding <tt class="computeroutput">&lt;/sect1&gt;</tt>.
     </p><p>
-      <a class="indexterm" name="id2587857"></a>
+      <a class="indexterm" name="id2641741"></a>
       You need to feed every <tt class="computeroutput">&lt;sect1&gt;</tt> two attributes. The first attribute,
       <tt class="computeroutput">id</tt>, is standard and can be used with all elements. It comes in  very 
       handy when interlinking between documents (more about this when talking about links in <a href="docbook-primer.html#dbprimer-links" title="Links">the section called &#8220;Links&#8221;</a>). 
@@ -723,7 +724,7 @@
       throughout the book you're making since the <tt class="computeroutput">id</tt>'s in your 
       <tt class="computeroutput">sect1</tt>'s will turn into filenames when the book is parsed into HTML.
     </p><p>
-      <a class="indexterm" name="id2587891"></a>
+      <a class="indexterm" name="id2641775"></a>
       The other attribute is <tt class="computeroutput">xreflabel</tt>. The value of this is the text that will appear
       as the link when referring to this <tt class="computeroutput">sect1</tt>.
     </p><p>
@@ -738,7 +739,7 @@
 
 &lt;/sect1&gt;
 </pre><p>
-      <a class="indexterm" name="id2587922"></a>
+      <a class="indexterm" name="id2641805"></a>
       Inside this container your document will be split up into 
       <a href="http://docbook.org/tdg/en/html/sect2.html" target="_top"><tt class="computeroutput">&lt;sect2&gt;</tt></a>'s,
       each with the same requirements - <tt class="computeroutput">id</tt> and <tt class="computeroutput">xreflabel</tt>
@@ -747,7 +748,7 @@
       When it comes to naming your
       <tt class="computeroutput">sect2</tt>'s and below, prefix them with some abbreviation of the <tt class="computeroutput">id</tt> in the <tt class="computeroutput">sect1</tt> such as <tt class="computeroutput">requirements-overview</tt>.
     </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="dbprimer-code"></a>Code</h3></div></div></div><p>
-      <a class="indexterm" name="id2587978"></a>
+      <a class="indexterm" name="id2641861"></a>
       For displaying a snippet of code, a filename or anything else you just want to appear as a part of
       a sentence, we will use the tag 
       <a href="http://docbook.org/tdg/en/html/computeroutput.html" target="_top"><tt class="computeroutput">&lt;computeroutput&gt;</tt></a>.
@@ -757,12 +758,12 @@
       <a href="http://docbook.org/tdg/en/html/programlisting.html" target="_top"><tt class="computeroutput">&lt;programlisting&gt;</tt></a> is used. Just wrap your code block in it; mono-spacing, indents and all that stuff is taken care of
       automatically. 
     </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="dbprimer-links"></a>Links</h3></div></div></div><p>
-      <a class="indexterm" name="id2588024"></a>
+      <a class="indexterm" name="id2641907"></a>
       Linking falls into two different categories: inside the book you're making and outside:
     </p><div class="variablelist"><dl><dt><span class="term"><span class="strong">1. Inside linking, cross-referencing other parts of your book</span></span></dt><dd><p>
         By having unique <tt class="computeroutput">id</tt>'s you can cross-reference any part of your book
         with a simple tag, regardless of where that part is.
-      </p><p><a class="indexterm" name="id2588053"></a>Check out how I link to a subsection of the Developer's Guide:</p><p>Put this in your XML:</p><pre class="programlisting">
+      </p><p><a class="indexterm" name="id2641937"></a>Check out how I link to a subsection of the Developer's Guide:</p><p>Put this in your XML:</p><pre class="programlisting">
 - Find information about creating a package in
 &lt;xref linkend="packages-making-a-package"&gt;&lt;/xref&gt;.
 </pre><p>And the output is:</p><pre class="programlisting">
@@ -786,7 +787,7 @@
         <tt class="computeroutput">packages-looks</tt>, the
         parser will try its best to explain where the link takes you.
       </p></dd><dt><span class="term"><span class="strong">2. Linking outside the documentation</span></span></dt><dd><p>
-        <a class="indexterm" name="id2608041"></a>
+        <a class="indexterm" name="id2642047"></a>
         If you're hyper-linking out of the documentation, it works almost the same way as HTML - the tag is just
         a little different
 
@@ -807,7 +808,7 @@
     do it, so if you want to start converting your documents right away, start out with the ones without graphics ;)
       </em></span>
     </p><p>
-      <a class="indexterm" name="id2608118"></a>
+      <a class="indexterm" name="id2642124"></a>
       To insert a graphic we use the elements 
       <a href="http://docbook.org/tdg/en/html/mediaobject.html" target="_top"><tt class="computeroutput">&lt;mediaobject&gt;</tt></a>,
       <a href="http://docbook.org/tdg/en/html/imageobject.html" target="_top"><tt class="computeroutput">&lt;imageobject&gt;</tt></a>,
@@ -833,7 +834,7 @@
       Put your graphics in a separate directory ("images") and link to them 
       only with relative paths.
     </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="dbprimer-lists"></a>Lists</h3></div></div></div><p>
-      <a class="indexterm" name="id2608185"></a>
+      <a class="indexterm" name="id2642191"></a>
       Here's how you make the DocBook equivalent of the three usual HTML-lists:
     </p><div class="variablelist"><dl><dt><span class="term"><span class="strong">1. How to make an &lt;ul&gt;</span></span></dt><dd><p>
         Making an unordered list is pretty much like doing the same thing in HTML - if you close your <tt class="computeroutput">&lt;li&gt;</tt>, that is. The only differences are that each list item has to be wrapped in something more, such as
@@ -878,7 +879,7 @@
 
 &lt;/variablelist&gt;
 </pre></dd></dl></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="dbprimer-tables"></a>Tables</h3></div></div></div><p>
-      <a class="indexterm" name="id2608336"></a>
+      <a class="indexterm" name="id2642342"></a>
       DocBook supports several types of tables, but in most cases, the
       <a href="http://docbook.org/tdg/en/html/informaltable.html" target="_top"><tt class="computeroutput">&lt;informaltable&gt;</tt></a>
       is enough:
@@ -915,7 +916,7 @@
       <a href="http://docbook.org/tdg/en/html/table.html" target="_top"><tt class="computeroutput">&lt;table&gt;</tt></a>
       for an example.
     </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="dbprimer-emphasis"></a>Emphasis</h3></div></div></div><p>
-      <a class="indexterm" name="id2555384"></a>
+      <a class="indexterm" name="id2642447"></a>
       Our documentation uses two flavors of emphasis - italics and bold type. DocBook uses one - 
       <a href="http://docbook.org/tdg/en/html/emphasis.html" target="_top"><tt class="computeroutput">&lt;emphasis&gt;</tt></a>.
     </p><p>
@@ -993,4 +994,4 @@ bash$  xsltproc /usr/share/sgml/docbook/stylesheet/xsl/nwalsh/html/chunk.xsl fil
         </td><td>8/3/2002</td><td>Vinod Kurup</td></tr><tr><td>0.3</td><td>
           Added OpenACS information, updated tools, added
           extra links and added info to the Publishing section.
-        </td><td>12/24/2001</td><td>Roberto Mello</td></tr><tr><td>0.2</td><td>Changed recommendation from &lt;phrase&gt; to &lt;emphasis role="strong"&gt;</td><td>01/19/2000</td><td>Claus Rasmussen</td></tr><tr><td>0.1</td><td>Creation</td><td>12/2000</td><td>Claus Rasmussen</td></tr></tbody></table></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="doc-standards.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="psgml-mode.html">Next</a></td></tr><tr><td width="40%" align="left">Chapter 14. Documentation Standards </td><td width="20%" align="center"><a accesskey="u" href="doc-standards.html">Up</a></td><td width="40%" align="right"> Using PSGML mode in Emacs</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a><center><a href="http://openacs.org/doc/current/docbook-primer.html#comments">View comments on this page at openacs.org</a></center></body></html>
+        </td><td>12/24/2001</td><td>Roberto Mello</td></tr><tr><td>0.2</td><td>Changed recommendation from &lt;phrase&gt; to &lt;emphasis role="strong"&gt;</td><td>01/19/2000</td><td>Claus Rasmussen</td></tr><tr><td>0.1</td><td>Creation</td><td>12/2000</td><td>Claus Rasmussen</td></tr></tbody></table></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="doc-standards.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="psgml-mode.html">Next</a></td></tr><tr><td width="40%" align="left">Chapter 15. Documentation Standards </td><td width="20%" align="center"><a accesskey="u" href="doc-standards.html">Up</a></td><td width="40%" align="right"> Using PSGML mode in Emacs</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a><center><a href="http://openacs.org/doc/current/docbook-primer.html#comments">View comments on this page at openacs.org</a></center></body></html>
