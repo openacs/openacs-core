@@ -278,20 +278,33 @@ aa_register_case locale__test_lang_conn_browser_locale {
     @author Peter Marklund
     @creation-date 2003-08-13
 } {
-    # First locale is perfect language match
-    lang::test::assert_browser_locale "da,en-us;q=0.8,de;q=0.5,es;q=0.3" "da_DK"
+    aa_run_with_teardown \
+        -rollback \
+        -test_code {
 
-    # First locale is perfect locale match
-    lang::test::assert_browser_locale "da_DK,en-us;q=0.8,de;q=0.5,es;q=0.3" "da_DK"
+        # The tests assume that the danish locale is enabled
+        db_dml enable_all_locales {
+            update ad_locales
+            set enabled_p = 't'
+            where locale = 'da_DK'
+        }
+        util_memoize_flush_regexp {^lang::system::get_locales}
 
-    # Tentative match being discarded
-    lang::test::assert_browser_locale "da_BLA,foobar,en" "en_US"
-
-    # Tentative match being used
-    lang::test::assert_browser_locale "da_BLA,foobar" "da_DK"
-
-    # Several tentative matches, all being discarded
-    lang::test::assert_browser_locale "da_BLA,foobar,da_BLUB,da_DK" "da_DK"
+        # First locale is perfect language match
+        lang::test::assert_browser_locale "da,en-us;q=0.8,de;q=0.5,es;q=0.3" "da_DK"
+    
+        # First locale is perfect locale match
+        lang::test::assert_browser_locale "da_DK,en-us;q=0.8,de;q=0.5,es;q=0.3" "da_DK"
+    
+        # Tentative match being discarded
+        lang::test::assert_browser_locale "da_BLA,foobar,en" "en_US"
+    
+        # Tentative match being used
+        lang::test::assert_browser_locale "da_BLA,foobar" "da_DK"
+    
+        # Several tentative matches, all being discarded
+        lang::test::assert_browser_locale "da_BLA,foobar,da_BLUB,da_DK" "da_DK"
+    }
 }
 
 
