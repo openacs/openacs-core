@@ -451,19 +451,26 @@ ad_proc -public api_proc_documentation {
     if { [llength $doc_elements(switches)] > 0 } {
 	append out "<p><dt><b>Switches:</b></dt><dd>\n"
 	foreach switch $doc_elements(switches) {
-	    append out "<b>-$switch</b>"
-	    if { [lsearch $flags($switch) "boolean"] >= 0 } {
-		append out " (boolean)"
-	    } elseif { [info exists default_values($switch)] && \
-		    ![empty_string_p $default_values($switch)] } {
-		append out " (defaults to <code>\"$default_values($switch)\"</code>)"
-	    } elseif { ![lsearch $flags($switch) "required"] >= 0 } {
-		append out " (optional)"
-	    }
-	    if { [info exists params($switch)] } {
-		append out " - $params($switch)"
-	    }
-	    append out "<br>\n"
+		append out "<b>-$switch</b>"
+		if { [lsearch $flags($switch) "boolean"] >= 0 } {
+			append out " (boolean)"
+		} 
+
+		if { [info exists default_values($switch)] && \
+				![empty_string_p $default_values($switch)] } {
+			append out " (defaults to <code>\"$default_values($switch)\"</code>)"
+		} 
+
+		if { [lsearch $flags($switch) "required"] >= 0 } {
+			append out " (required)"
+		} else {
+			append out " (optional)"
+		}
+
+		if { [info exists params($switch)] } {
+			append out " - $params($switch)"
+		}
+		append out "<br>\n"
 	}
 	append out "</dd>\n"
     }
