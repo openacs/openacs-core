@@ -1139,7 +1139,7 @@ ad_proc -private apm_data_model_scripts_find {
 	set path [lindex $file 0]
 	set file_type [lindex $file 1]
         set file_db_type [lindex $file 2]
-	ns_log Debug "APM: Checking \"$path\" of type \"$file_type\" and db_type \"$file_db_type\"."
+	apm_log APMDebug "APM: Checking \"$path\" of type \"$file_type\" and db_type \"$file_db_type\"."
 
         # DRB: we return datamodel files which match the given database type or for which no db_type
         # is defined.  The latter case is a kludge to simplify support of legacy ACS Oracle-only
@@ -1156,13 +1156,13 @@ ad_proc -private apm_data_model_scripts_find {
 		    lappend upgrade_file_list [list $path $file_type $package_key]
 		}
 	    } else {
-		ns_log Debug "APM: Adding $path to the list of data model files."
+		apm_log APMDebug "APM: Adding $path to the list of data model files."
 		lappend data_model_list [list $path $file_type $package_key ]
 	    }
 	}
     }
     set file_list [concat [apm_order_upgrade_scripts $upgrade_file_list] $data_model_list]
-    ns_log Debug "APM: Data model scripts for $package_key: $file_list"
+    apm_log APMDebug "APM: Data model scripts for $package_key: $file_list"
     return $file_list
 }
 
