@@ -342,6 +342,9 @@ aa_register_case auth_password_change {
             global ns_sendmail_to
             set ns_sendmail_to {}
 
+            parameter::set_value -parameter EmailAccountOwnerOnPasswordChangeP  -package_id [ad_acs_kernel_id] -value 1
+            aa_true "Send email" [parameter::get -parameter EmailAccountOwnerOnPasswordChangeP -package_id [ad_acs_kernel_id] -default 1]
+
             # password_status "ok"
             set old_password "changeme"
             set new_password "changedyou"
@@ -362,6 +365,8 @@ aa_register_case auth_password_change {
             aa_equals "check that the new password is actually set correctly" \
                 $password_correct_p \
                 "1"
+
+            ad_parameter_cache -delete [ad_acs_kernel_id] EmailAccountOwnerOnPasswordChangeP
         }
 }
 
@@ -729,6 +734,8 @@ aa_register_case auth_email_on_password_change {
             
             # Check that we do not get an email
             aa_equals "Email NOT sent to user" $ns_sendmail_to {}
+
+            ad_parameter_cache -delete [ad_acs_kernel_id] EmailAccountOwnerOnPasswordChangeP
         }
 }
 
