@@ -12,16 +12,59 @@ db_1row package_version_info "select pretty_name, version_name from apm_package_
 set page_title "Tcl Callbacks"
 set context_bar [ad_context_bar [list "." "ACS Package Manager Administration"] [list "version-view?[export_vars { version_id }]" "$pretty_name $version_name"] $page_title]
 
+set unused_callback_types [apm_unused_callback_types -version_id $version_id]
+
+if { [llength $unused_callback_types] > 0  } {
+    set actions [list "Add callback" [export_vars -base "version-callback-add-edit" { version_id }]]
+} else {
+    set actions [list]
+}
+
+
+template::list::create \
+    -name callbacks \
+    -multirow callbacks \
+    -actions $actions \
+    -elements {
+        edit {
+            label {}
+            sub_class narrow
+            display_template {
+                <img src="/resources/acs-subsite/Edit16.gif" width="16" height="16" border="0">
+            } 
+            link_url_eval {[export_vars -base "version-callback-add-edit" { version_id type }]}
+            link_html { title "Edit callback" }
+        }
+        type {
+            label "Type"
+        }
+        proc {
+            label "Tcl Proc"
+        }
+        invoke {
+            label "Invoke"
+            display_template "Invoke"
+            link_url_eval {[export_vars -base "version-callback-invoke" { version_id type }]}
+            link_html { title "Invoke this callback proc now. Be careful!" }
+        }
+        delete {
+            label {}
+            sub_class narrow
+            display_template {
+                <img src="/resources/acs-subsite/Delete16.gif" width="16" height="16" border="0">
+            } 
+            link_url_eval {[export_vars -base "version-callback-delete" { version_id type }]}
+            link_html { title "Delete callback" }
+        }
+    }
+
 db_multirow callbacks get_all_callbacks {
-    select type,
+    select version_id,
+           type,
            proc
     from apm_package_callbacks
     where version_id = :version_id
     order by type
 }
-
-set unused_callback_types [apm_unused_callback_types -version_id $version_id]
-
-set unused_types_p [ad_decode [llength $unused_callback_types] 0 0 1]
 
 ad_return_template
