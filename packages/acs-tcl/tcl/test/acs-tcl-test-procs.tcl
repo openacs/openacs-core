@@ -847,6 +847,54 @@ aa_register_case -cats {smoke api} util__age_pretty {
     aa_log "100 years - we know it's wrong because of Tcl library limitations: [util::age_pretty -timestamp_ansi "1904-01-01 12:00:00" -sysdate_ansi "2004-01-01 12:00:00"]"
 }
 
+aa_register_case \
+    -procs db_get_quote_indices \
+    -cats {api} \
+    db_get_quote_indices {
+        Test the proc db_get_quote_indices.
+        
+        @author Peter Marklund
+} {
+    aa_equals "" [db_get_quote_indices {'a'}] {0 2}
+    aa_equals "" [db_get_quote_indices {'a''}] {}
+    aa_equals "" [db_get_quote_indices {'a'a'a'}] {0 2 4 6} 
+    aa_equals "" [db_get_quote_indices {a'b'c'd''s'}] {1 3 5 10} 
+    aa_equals "" [db_get_quote_indices {'}] {} 
+    aa_equals "" [db_get_quote_indices {''}] {} 
+    aa_equals "" [db_get_quote_indices {a''a}] {} 
+    aa_equals "" [db_get_quote_indices {a'b'a}] {1 3} 
+    aa_equals "" [db_get_quote_indices {'a''b'}] {0 5} 
+}
+
+aa_register_case \
+    -procs db_bind_var_substitution \
+    -cats {api} \
+    db_bind_var_substitution {
+        Test the proc db_bind_var_substitution.
+        
+        @author Peter Marklund
+} {
+    set sql {to_char(fm.posting_date, 'YYYY-MM-DD HH24:MI:SS')}
+    aa_equals "don't subst bind vars in quoted date" [db_bind_var_substitution $sql {SS 3 MI 4}] $sql
+
+    set sql {to_char(fm.posting_date, :SS)}
+    aa_equals "don't subst bind vars in quoted date" [db_bind_var_substitution $sql {SS 3 MI 4}] {to_char(fm.posting_date, '3')}
+
+    set sql {to_char(fm.posting_date, don''t subst ':SS', do subst :SS )}
+    aa_equals "don't subst bind vars in quoted date" [db_bind_var_substitution $sql {SS 3 MI 4}] {to_char(fm.posting_date, don''t subst ':SS', do subst '3' )}
+
+    set SS 3
+    set db_value [db_exec_plsql test_bind {
+        select ':SS'
+    }]
+    aa_equals "db_exec_plsql should not bind quoted var" $db_value ":SS"
+
+    set db_value [db_exec_plsql test_bind {
+        select :SS
+    }]
+    aa_equals "db_exec_plsql bind not quoted var" $db_value "3"
+}
+
 aa_register_case -cats {api} \
     -bugs 1450 \
     acs_tcl__process_enhanced_correctly {
