@@ -36,7 +36,7 @@
      <th>Translated</th>
      <th>Untranslated</th>
      <th>Enabled</th>
-     <th>Default Locale For Langauge</th>
+     <th>Default Locale For Language</th>
      <th></th>
     </tr>
     <multiple name="locales">
