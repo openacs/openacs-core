@@ -56,7 +56,7 @@ db_foreach select_params {} {
         set focus_elm $parameter_name
     }
 
-    set elm [list ${parameter_name}:text,optional \
+    set elm [list ${parameter_name}:text,optional,nospell \
                  [list label $parameter_name] \
                  [list help_text $description] \
                  [list section $section_name] \
