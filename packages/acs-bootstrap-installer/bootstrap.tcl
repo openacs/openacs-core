@@ -128,13 +128,14 @@ set errno [catch {
 	nsv_set apm_enabled_package $package_key 1
     }
 
+    # Load *-procs.tcl and *-init.tcl files for enabled packages.
+    ns_log Notice "Loading Tcl library files..."
+    apm_load_libraries -procs
+
     # Load up the Queries (OpenACS, ben@mit.edu)
     ns_log Notice "Loading QUERIES!! OpenACS - ben"
     apm_load_queries
 
-    # Load *-procs.tcl and *-init.tcl files for enabled packages.
-    ns_log Notice "Loading Tcl library files..."
-    apm_load_libraries -procs
     ns_log Notice "Loading Tcl Initialization files..."
     apm_load_libraries -init
 
