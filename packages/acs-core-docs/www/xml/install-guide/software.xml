@@ -21,27 +21,27 @@
     <sect1 id="bundled-programs">
     <title>Bundled Software</title>
     <para>All of these materials are available bundled:</para>
-      <itemizedlist>
-        <listitem>
-          <formalpara>
-            <title>Reference Platform &version;-P (<ulink>tarball</ulink>, <ulink>ISO image</ulink>)</title>
-            <para>Reference Platform A: OpenACS &version;, AOLserver
-        3.3oacs1, PostGreSQL 7.2.4, and all supporting
-        files.  Also requires <ulink url="ftp://ftp.redhat.com/pub/redhat/linux/8.0/en/iso/i386/">Red Hat 8.0</ulink>.</para>
-          </formalpara>
-        </listitem>
-        <listitem>
-          <formalpara>
-            <title>Reference Platform &version;-O (<ulink>tarball</ulink>, <ulink>ISO image</ulink>)</title>
-            <para>Reference Platform B: OpenACS &version;, AOLserver
-3.3oacs1, Oracle 8.1.7, and all supporting
-        files.  Also requires <ulink>Red Hat 8.0</ulink>.  Also
-          requires Oracle - see <xref linkend="oracle"/> for information on how to get Oracle.</para>
-          </formalpara>
-        </listitem>
+    <itemizedlist>
+    <listitem>
+    <formalpara>
+    <title>Reference Platform &version;-P (<ulink>tarball</ulink>, <ulink>ISO image</ulink>)</title>
+    <para>Reference Platform A: OpenACS &version;, AOLserver
+    3.3oacs1, PostGreSQL 7.2.4, and all supporting
+    files.  Also requires <ulink url="ftp://ftp.redhat.com/pub/redhat/linux/8.0/en/iso/i386/">Red Hat 8.0</ulink>.</para>
+  </formalpara>
+  </listitem>
+    <listitem>
+    <formalpara>
+    <title>Reference Platform &version;-O (<ulink>tarball</ulink>, <ulink>ISO image</ulink>)</title>
+    <para>Reference Platform B: OpenACS &version;, AOLserver
+    3.3oacs1, Oracle 8.1.7, and all supporting
+    files.  Also requires <ulink>Red Hat 8.0</ulink>.  Also
+    requires Oracle - see <xref linkend="oracle"/> for information on how to get Oracle.</para>
+  </formalpara>
+  </listitem>
   </itemizedlist>
-    </sect1>
--->
+  </sect1>
+    -->
     <sect1 id="compatibility-matrix">
       <title>Compatibility Matrix</title>
       <authorblurb>
@@ -234,7 +234,7 @@
         <listitem id="source-tdom">
           <formalpara>
             <title>tDOM, REQUIRED</title>
-          <para>OpenACS &version; stores
+            <para>OpenACS &version; stores
           queries in XML files, so we use an AOLserver module called
           tDOM to parse these files.  (This replaces libxml2, which
           was used prior to 4.6.4.)  tDOM is available from <ulink
@@ -243,26 +243,26 @@
         </listitem>
         <listitem>
           <formalpara>
-          <title>Web Server</title>
-          <para>The web server handles incoming HTTP requests, provides
+            <title>Web Server</title>
+            <para>The web server handles incoming HTTP requests, provides
         a runtime environment for OpenACS's tcl code, connects to the
         database, sends out HTTP responses, and logs requests and
         errors.  OpenACS uses AOLserver; some people have had success
         running Apache with mod_nsd - see <ulink
           url="http://openacs.org/forums/message-view?message_id=21461">this
         post.</ulink></para>
-        </formalpara>
-        
-        <itemizedlist>
+          </formalpara>
           
-          <listitem id="source-aolserver">
-            <formalpara>
-              <title><ulink
+          <itemizedlist>
+            
+            <listitem id="source-aolserver">
+              <formalpara>
+                <title><ulink
               url="http://uptime.openacs.org/aolserver-openacs/aolserver3.3oacs1.tar.gz">AOLserver 3.3oacs1</ulink>, REQUIRED</title>
-              <para>Mat Kovach's source distribution of AOLserver, including all of the patches listed below.</para>
-            </formalpara>
+                <para>Mat Kovach's source distribution of AOLserver, including all of the patches listed below.</para>
+              </formalpara>
 
-    <para>
+              <para>
       Mat Kovach is graciously maintaining an AOLserver distribution that
       includes all the patches and modules needed to run OpenACS &version;. These
       instructions will describe how to install using his source
@@ -299,7 +299,7 @@
 
         </para></listitem>
 
-      <listitem><para>
+                <listitem><para>
           The patch that makes <computeroutput>exec</computeroutput> work
           on BSD is available at <ulink
           url="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=415475&amp;group_id=3152&amp;atid=303152">sourceforge.net</ulink>
@@ -319,42 +319,78 @@
         </para></listitem>
                 
               </itemizedlist>
-              
-
-          </listitem>
-          <listitem id="nsopenssl-download">
-            <formalpara>
-              <title><ulink
+            </listitem>
+            <listitem id="nsopenssl-download">
+              <formalpara>
+                <title><ulink
               url="http://www.scottg.net/download/nsopenssl-2.1.tar.gz">nsopenssl 2.1</ulink>, OPTIONAL</title>
-              <para>Provides SSL capabilities for AOLserver.  It requires
+                <para>Provides SSL capabilities for AOLserver.  It requires
 	    OpenSSL.  You need this if you want users to make
 	    secure (https) connections to your webserver.</para>
-            </formalpara>
-          </listitem>
-          <listitem id="openfts-download">
-            <formalpara>
-              <title><ulink
-              url="http://unc.dl.sourceforge.net/sourceforge/openfts/Search-OpenFTS-tcl-0.3.2.tar.gz">OpenFTS TCL 0.3.2</ulink>, OPTIONAL</title>
-              <para>Adds full-text-search to PostGreSQL and includes a
-              driver for AOLserver.  You need this if you want users
-              to be able to search for any text on your site.</para>
-            </formalpara>
-          </listitem>
-          <listitem>
-            <formalpara id="analog-download">
-              <title><ulink
+              </formalpara>
+            </listitem>
+            
+            <listitem id="nspam-download">
+              <formalpara>
+                <title><ulink
+              url="http://braindamage.alal.com/software/ns_pam-0.1.tar.gz">ns_pam
+              0.1</ulink>, OPTIONAL</title>
+                <para>Provides PAM capabilities for AOLserver.  You
+              need this if you want OpenACS users to authenticate
+              through a PAM module (such as RADIUS).  (<ulink
+              url="http://braindamage.alal.com/software/nspam.html">home
+              page</ulink>)</para>
+              </formalpara>
+            </listitem>
+            
+            
+            <listitem id="pam-radius-download">
+              <formalpara>
+                <title><ulink
+              url="ftp://ftp.freeradius.org/pub/radius/pam_radius-1.3.16.tar">pam_radius 1.3.16</ulink>, OPTIONAL</title>
+                <para>Provides RADIUS capabilities for PAM.  You need
+              this if you want to use RADIUS authentication via PAM in OpenACS.</para>
+              </formalpara>
+            </listitem>
+
+            <listitem id="nsldap-download">
+              <formalpara>
+                <title><ulink
+              url="http://sourceforge.net/project/showfiles.php?group_id=3152">ns_ldap 0.r8
+              </ulink>, OPTIONAL</title>
+                <para>Provides LDAP capabilities for AOLserver.  You need
+              this if you want to use LDAP authentication in OpenACS.</para>
+              </formalpara>
+            </listitem>
+
+
+            
+            <listitem id="openfts-download">
+              <formalpara>
+                <title><ulink
+               url="http://unc.dl.sourceforge.net/sourceforge/openfts/Search-OpenFTS-tcl-0.3.2.tar.gz">OpenFTS TCL 0.3.2</ulink>, OPTIONAL</title>
+                <para>Adds full-text-search to PostGreSQL and includes a
+               driver for AOLserver.  You need this if you want users
+               to be able to search for any text on your site.</para>
+              </formalpara>
+            </listitem>
+            
+            
+            <listitem>
+              <formalpara id="analog-download">
+                <title><ulink
 	    url="http://www.analog.cx/analog-5.31.tar.gz">Analog 5.31</ulink>, OPTIONAL</title>
-	    <para>This program examines web server request logs, looks up
+                <para>This program examines web server request logs, looks up
 	    DNS values, and produces a report.  You need this if you
 	    want to see how much traffic your site is getting.</para>
-            </formalpara>
-          </listitem>
-        </itemizedlist>
-      </listitem>
+              </formalpara>
+            </listitem>
+          </itemizedlist>
+        </listitem>
         <listitem>
-        <formalpara>
-          <title>Database</title>
-          <para>The data on your site (for example, user names and passwords,
+          <formalpara>
+            <title>Database</title>
+            <para>The data on your site (for example, user names and passwords,
         calender entries, and notes) is stored in the database.
         OpenACS seperates the database with an abstraction layer,
         which means that several different databases all function
@@ -378,48 +414,48 @@
               <formalpara id="source-postgresql">
                 <title><ulink
               url="http://www.ca.postgresql.org/ftpsite/source/v7.2.4/postgresql-7.2.4.tar.gz">PostGreSQL 7.2.4</ulink> (Either this or Oracle is REQUIRED)</title>
-              <para>You need this if you want to use a PostGreSQL database.
+                <para>You need this if you want to use a PostGreSQL database.
               PostGreSQL 7.3 is not backwards-compatible, and OpenACS
               support for 7.3 has not been fully tested.  If you are
               not in the United States, select a closer <ulink
               url="http://www.postgresql.org">mirror</ulink></para>
-            </formalpara>
+              </formalpara>
             </listitem>
           </itemizedlist>
         </listitem>
         <listitem>
           <formalpara>
             <title>Process Controller</title>
-          <para>This is software that initiates other software, and
+            <para>This is software that initiates other software, and
           restarts that software if it fails.  On Linux, we recommend
           using Daemontools to control AOLserver and qmail.</para>
-        </formalpara>
-        <itemizedlist>
-          <listitem id="daemontools-download">
-            <formalpara>
-              <title><ulink
+          </formalpara>
+          <itemizedlist>
+            <listitem id="daemontools-download">
+              <formalpara>
+                <title><ulink
               url="http://cr.yp.to/daemontools/daemontools-0.76.tar.gz">Daemontools 0.76</ulink>, OPTIONAL</title>
-              <para>You need this if you want AOLserver and qmail to run
+                <para>You need this if you want AOLserver and qmail to run
               "supervised," meaning that they are monitored and
               automatically restarted if they fail.</para>
-            </formalpara>
-          </listitem>
+              </formalpara>
+            </listitem>
 
-      <listitem>
-        <formalpara>
-          <title>Mail Transport Agent</title>
-          <para>A Mail Transport Agent is a program that handles all
+            <listitem>
+              <formalpara>
+                <title>Mail Transport Agent</title>
+                <para>A Mail Transport Agent is a program that handles all
           incoming and outgoing mail.  The Reference Platform uses
           Qmail; any MTA that provides a sendmail wrapper (that is,
           that can be invoked by calling the sendmail program with the
           same variables that sendmail expects) can be used.</para>
-        </formalpara>
-        <itemizedlist>
-          <listitem>
-            <formalpara id="qmail-download">
-              <title><ulink
+              </formalpara>
+              <itemizedlist>
+                <listitem>
+                  <formalpara id="qmail-download">
+                    <title><ulink
               url="http://cr.yp.to/software/qmail-1.03.tar.gz">Qmail 1.03</ulink>, OPTIONAL</title>
-              <para>You need this (or a different Mail Transport
+                    <para>You need this (or a different Mail Transport
               Agent) if you want your webserver to send and
               receive email.</para>
                   </formalpara>

@@ -35,7 +35,7 @@
 
     <xsl:if test="$suppress.navigation = '0'">
       <div class="navheader">
-        <a href="http://openacs.org"><img src="images/alex.jpg" border="0" /></a>
+        <a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0" /></a>
         <table width="100%" summary="Navigation header" border="0">
           <tr>
             <td width="20%" align="left">

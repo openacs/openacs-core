@@ -22,27 +22,23 @@
           <para>Daemontools must already be installed.  If not, <link linkend="install-daemontools">install it</link>.</para>
         </listitem>
           <listitem>
-            <para>Each service controlled by daemontools must have a directory in <computeroutput>/service</computeroutput>.  That directory must have a file called <computeroutput>run</computeroutput>.  Daemontools then creates additional files and directories to track status and log.  Create the appropriate directory as <computeroutput>/web/<replaceable>service0</replaceable>/etc/daemontools</computeroutput>, copy the prepared <computeroutput>run</computeroutput> file, and set permissions.  If your server is not called <replaceable>service0</replaceable>, edit <computeroutput>/web/<replaceable>service0</replaceable>/etc/run accordingly.</computeroutput></para>
-        <screen>[service0@yourserver log]$ <userinput>cd /web/<replaceable>service0</replaceable>/etc</userinput>
-[service0@yourserver etc]$ <userinput>mkdir daemontools</userinput>
-[service0@yourserver etc]$ <userinput>cp /web/<replaceable>service0</replaceable>/packages/acs-core-docs/www/files/run.txt daemontools/run</userinput>
-[service0@yourserver etc]$ <userinput>chmod 700 daemontools/run</userinput>
-<action>cd /web/<replaceable>service0</replaceable>/etc
-mkdir daemontools
-cp /web/<replaceable>service0</replaceable>/packages/acs-core-docs/www/files/run.txt daemontools/run
-chmod 700 daemontools/run</action></screen>
-          </listitem>
-          <listitem>
-            <para>Kill any existing AOLserver instances.  As root, link the <computeroutput>daemontools</computeroutput> directory into the <computeroutput>/service</computeroutput> directory.  Daemontools' <computeroutput>svscan</computeroutput> process checks this directory every five seconds, and will quickly execute <computeroutput>run</computeroutput>.</para>
+            <para>Each service controlled by daemontools must have a
+        directory in <computeroutput>/service</computeroutput>.  That
+        directory must have a file called
+        <computeroutput>run</computeroutput>.  Daemontools then
+        creates additional files and directories to track status and
+        log.  A daemontools directory is included in the OpenACS
+        tarball at
+        <computeroutput>/var/lib/aolserver/<replaceable>service0</replaceable>/etc/daemontools</computeroutput>.  To use it, first ill any existing AOLserver instances.  As root, link the <computeroutput>daemontools</computeroutput> directory into the <computeroutput>/service</computeroutput> directory.  Daemontools' <computeroutput>svscan</computeroutput> process checks this directory every five seconds, and will quickly execute <computeroutput>run</computeroutput>.</para>
             
             <screen>[service0@yourserver etc]$ <userinput>killall nsd</userinput>
 nsd: no process killed
 [service0@yourserver etc]$ <userinput>exit</userinput>
 
-[root@yourserver root]# <userinput>ln -s /web/<replaceable>service0</replaceable>/etc/daemontools/ /service/<replaceable>service0</replaceable></userinput></screen>
+[root@yourserver root]# <userinput>ln -s /var/lib/aolserver/<replaceable>service0</replaceable>/etc/daemontools/ /service/<replaceable>service0</replaceable></userinput></screen>
             <para>Verify that AOLserver is running.</para>
             <screen>[root@yourserver root]#<userinput> ps -auxw | grep nsd</userinput>
-<replaceable>service0</replaceable>   5562 14.2  6.2 22436 15952 ?       S    11:55   0:04 /usr/local/aolserver/bin/nsd -it /web/<replaceable>service0</replaceable>/etc/config.tcl -u serve
+<replaceable>service0</replaceable>   5562 14.2  6.2 22436 15952 ?       S    11:55   0:04 /usr/local/aolserver/bin/nsd -it /var/lib/aolserver/<replaceable>service0</replaceable>/etc/config.tcl -u serve
 root      5582  0.0  0.2  3276  628 pts/0    S    11:55   0:00 grep nsd
 [root@yourserver root]#</screen>
           </listitem>
@@ -91,7 +87,7 @@ root      5582  0.0  0.2  3276  628 pts/0    S    11:55   0:00 grep nsd
         <listitem>
           <para>Install a script to automate the stopping and starting
           of aolserver services via daemontools.  You can then restart a service via <computeroutput>restart-aolserver <replaceable>service0</replaceable></computeroutput></para>
-          <screen>[root@yourserver root]# <userinput>cp /web/<replaceable>service0</replaceable>/packages/acs-core-docs/www/files/restart-aolserver-daemontools.txt /usr/local/bin/restart-aolserver</userinput>
+          <screen>[root@yourserver root]# <userinput>cp /var/lib/aolserver/<replaceable>service0</replaceable>/packages/acs-core-docs/www/files/restart-aolserver-daemontools.txt /usr/local/bin/restart-aolserver</userinput>
 [root@yourserver root]# <userinput>chmod 755 /usr/local/bin/restart-aolserver</userinput>
 [root@yourserver root]#</screen>
         </listitem>
@@ -103,7 +99,7 @@ root      5582  0.0  0.2  3276  628 pts/0    S    11:55   0:00 grep nsd
 [root@yourserver root]#</screen>
           </listitem>
           <listitem>
-            <para>Verify that the controls work.  You may want to <computeroutput>tail -f /web/<replaceable>service0</replaceable>/log/<replaceable>service0</replaceable>-error.log</computeroutput> in another window, so you can see what happens when you type these commands.
+            <para>Verify that the controls work.  You may want to <computeroutput>tail -f /var/lib/aolserver/<replaceable>service0</replaceable>/log/<replaceable>service0</replaceable>-error.log</computeroutput> in another window, so you can see what happens when you type these commands.
       </para>
             <para>
 
@@ -192,7 +188,7 @@ root:~# exit</programlisting>
 		<programlisting>
 joeuser:~$ killall nsd
 nsd: no process killed
-joeuser:~$ /usr/local/aolserver/bin/nsd-postgres -t ~/web/<emphasis>birdnotes</emphasis>/nsd.tcl
+joeuser:~$ /usr/local/aolserver/bin/nsd-postgres -t ~/var/lib/aolserver/<emphasis>birdnotes</emphasis>/nsd.tcl
 joeuser:~$ restart-aolserver <emphasis>birdnotes</emphasis>
 Killing 23727 
 joeuser:~$ killall nsd
@@ -223,7 +219,7 @@ root:~# emacs -nw /etc/inittab</programlisting>
             <computeroutput>nss1</computeroutput> is unique.
           </para>
           <programlisting>
-nss1:345:respawn:/usr/local/aolserver/bin/nsd-postgres -i -u nobody -g web -t /home/<emphasis>joeuser</emphasis>/web/<emphasis>birdnotes</emphasis>/nsd.tcl</programlisting>
+nss1:345:respawn:/usr/local/aolserver/bin/nsd-postgres -i -u nobody -g web -t /home/<emphasis>joeuser</emphasis>/var/lib/aolserver/<emphasis>birdnotes</emphasis>/nsd.tcl</programlisting>
         </listitem>
 
         <listitem><para>
@@ -328,16 +324,16 @@ set address                127.0.0.1 </programlisting>
           </listitem>
           <listitem id="ssl-certificates" linkref="Generate ssl certificates">
             <para>Prepare a certificate directory for the service.</para>
-            <screen>[service0@yourserver etc]$ <userinput>mkdir /web/<replaceable>service0</replaceable>/etc/certs</userinput>
-[service0@yourserver etc]$ <userinput>chmod 700 /web/<replaceable>service0</replaceable>/etc/certs</userinput>
+            <screen>[service0@yourserver etc]$ <userinput>mkdir /var/lib/aolserver/<replaceable>service0</replaceable>/etc/certs</userinput>
+[service0@yourserver etc]$ <userinput>chmod 700 /var/lib/aolserver/<replaceable>service0</replaceable>/etc/certs</userinput>
 [service0@yourserver etc]$ 
-<action>mkdir /web/<replaceable>service0</replaceable>/etc/certs
-chmod 700 /web/<replaceable>service0</replaceable>/etc/certs</action></screen>            
+<action>mkdir /var/lib/aolserver/<replaceable>service0</replaceable>/etc/certs
+chmod 700 /var/lib/aolserver/<replaceable>service0</replaceable>/etc/certs</action></screen>            
           </listitem>
           <listitem>
             <para>It takes two files to support an SSL connection.  The certificate is the public half of the key pair - the server sends the certificate to browser requesting ssl.  The key is the private half of the key pair.  In addition, the certificate must be signed by Certificate Authority or browsers will protest.  Each web browser ships with a built-in list of acceptable Certificate Authorities (CAs) and their keys.  Only a site certificate signed by a known and approved CA will work smoothly.  Any other certificate will cause browsers to produce some messages or block the site.  Unfortunately, getting a site certificate signed by a CA costs money.  In this section, we'll generate an unsigned certificate which will work in most browsers, albeit with pop-up messages.</para>
             <para>Use an OpenSSL perl script to generate a certificate and key.</para>
-            <screen>[service0@yourserver service0]$ <userinput>cd /web/service0/etc/certs</userinput>
+            <screen>[service0@yourserver service0]$ <userinput>cd /var/lib/aolserver/service0/etc/certs</userinput>
 [service0@yourserver certs]$ <userinput>perl /usr/share/ssl/misc/CA -newcert</userinput>
 Using configuration from /usr/share/ssl/openssl.cnf
 Generating a 1024 bit RSA private key
@@ -380,26 +376,26 @@ S/Sd2MYA0JVmQuIt5bYowXR1KYKDka1d3DUgtoVTiFepIRUrMkZlCli08mWVjE6T
     <orderedlist>
       <listitem>
         <screen>[root@yourserver src]# <userinput>su - service0</userinput>
-[service0@yourserver service0]$ <userinput>cd /web/service0</userinput>
-[service0@yourserver service0]$ <userinput>cp /web/service0/packages/acs-core-docs/www/files/analog.cfg.txt etc/analog.cfg</userinput>
+[service0@yourserver service0]$ <userinput>cd /var/lib/aolserver/service0</userinput>
+[service0@yourserver service0]$ <userinput>cp /var/lib/aolserver/service0/packages/acs-core-docs/www/files/analog.cfg.txt etc/analog.cfg</userinput>
 [service0@yourserver service0]$ <userinput>mkdir www/log</userinput>
 [service0@yourserver service0]$ <userinput>cp -r /usr/share/analog-5.31/images www/log/</userinput>
 [service0@yourserver service0]$ <action>
 su - service0
-cd /web/service0
-cp /web/service0/packages/acs-core-docs/www/files/analog.cfg.txt etc/analog.cfg
+cd /var/lib/aolserver/service0
+cp /var/lib/aolserver/service0/packages/acs-core-docs/www/files/analog.cfg.txt etc/analog.cfg
 mkdir www/log
 cp -r /usr/share/analog-5.31/images www/log/</action></screen>
         <para>Edit
-<computeroutput>/web/service0/etc/analog.cfg</computeroutput> and change the variable in <computeroutput>HOSTNAME "[my
+<computeroutput>/var/lib/aolserver/service0/etc/analog.cfg</computeroutput> and change the variable in <computeroutput>HOSTNAME "[my
 organisation]"</computeroutput> to reflect your website title.  If you
 don't want the traffic log to be publicly visible, change
-<computeroutput>OUTFILE /web/service0/www/log/traffic.html</computeroutput> to use a private
+<computeroutput>OUTFILE /var/lib/aolserver/service0/www/log/traffic.html</computeroutput> to use a private
 directory.</para>
       </listitem>
       <listitem>
         <para>Run it.</para>
-        <screen>[service0@yourserver service0]$ <userinput>/usr/share/analog-5.31/analog -G -g/web/service0/etc/analog.cfg</userinput>
+        <screen>[service0@yourserver service0]$ <userinput>/usr/share/analog-5.31/analog -G -g/var/lib/aolserver/service0/etc/analog.cfg</userinput>
 /usr/share/analog-5.31/analog: analog version 5.31/Unix
 /usr/share/analog-5.31/analog: Warning F: Failed to open DNS input file
   /home/service0/dnscache: ignoring it
@@ -418,7 +414,7 @@ logout
         <para>Put this into the file:</para>
         <programlisting>#!/bin/sh
 
-/usr/share/analog-5.31/analog -G -g/web/<replaceable>service0</replaceable>/etc/analog.cfg</programlisting>
+/usr/share/analog-5.31/analog -G -g/var/lib/aolserver/<replaceable>service0</replaceable>/etc/analog.cfg</programlisting>
         <screen>[root@yourserver root]# <userinput>chmod 755 /etc/cron.daily/analog</userinput></screen>
         <para>Test it by running the script.</para>
         <screen>[root@yourserver root]# <userinput>sh /etc/cron.daily/analog</userinput></screen>

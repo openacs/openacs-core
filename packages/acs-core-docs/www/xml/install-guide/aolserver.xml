@@ -185,7 +185,9 @@ cp libtdom0.7.7.so /usr/local/aolserver/bin/</action></screen>
     <listitem>
       <para><link linkend="install-openfts">Install Full Text Search with OpenFTS</link> (OPTIONAL)</para>
     </listitem>
-    
+    <listitem>
+      <para><link linkend="install-nspam">Install nspam</link> (OPTIONAL)</para>
+    </listitem>
     <listitem id="install-aolserver-permissions">
       <formalpara>
         <title>Test AOLserver</title>

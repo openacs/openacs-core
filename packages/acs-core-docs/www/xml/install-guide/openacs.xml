@@ -17,16 +17,15 @@
       
       <listitem id="make-web-directory">
         <para>The reference install stores all OpenACS services in
-      <computeroutput>/web</computeroutput>, with one subdirectory per
-      service.  The first time you install a service, you must create
+      <computeroutput>/var/lib/aolserver</computeroutput>, with one subdirectory per service.  The first time you install a service, you must create
       that directory and set its permissions:</para>
-        <screen>[root@yourserver root]# <userinput>mkdir /web</userinput>
-[root@yourserver root]# <userinput>chgrp web /web</userinput>
-[root@yourserver root]# <userinput>chmod 770 /web</userinput>
+        <screen>[root@yourserver root]# <userinput>mkdir /var/lib/aolserver</userinput>
+[root@yourserver root]# <userinput>chgrp web /var/lib/aolserver</userinput>
+[root@yourserver root]# <userinput>chmod 770 /var/lib/aolserver</userinput>
 [root@yourserver root]#
-<action>mkdir /web
-chgrp web /web
-chmod 770 /web</action></screen>
+<action>mkdir /var/lib/aolserver
+chgrp web /var/lib/aolserver
+chmod 770 /var/lib/aolserver</action></screen>
 
       </listitem>
 
@@ -126,21 +125,21 @@ logout
       <listitem id="unpack-openacs">
         <para>Unpack the OpenACS tarball and rename it to <computeroutput>service0</computeroutput>.  Secure the directory so that only the owner can access it.  Check the permissions by listing the directory.</para>       
         <screen>[root@yourserver root]# <userinput>su - <replaceable>service0</replaceable></userinput>
-[service0@yourserver service0]$ <userinput>cd /web</userinput>
-[service0@yourserver web]$ <userinput>tar xzf /tmp/&tarballpath;.tgz</userinput>
-[service0@yourserver web]$ <userinput>mv &tarballpath; <replaceable>service0</replaceable></userinput>
-[service0@yourserver web]$ <userinput>chmod -R 700 <replaceable>service0</replaceable></userinput>
-[service0@yourserver web]$ <userinput>ls -al</userinput>
+[service0@yourserver service0]$ <userinput>cd /var/lib/aolserver</userinput>
+[service0@yourserver aolserver]$ <userinput>tar xzf /tmp/&tarballpath;.tgz</userinput>
+[service0@yourserver aolserver]$ <userinput>mv &tarballpath; <replaceable>service0</replaceable></userinput>
+[service0@yourserver aolserver]$ <userinput>chmod -R 700 <replaceable>service0</replaceable></userinput>
+[service0@yourserver aolserver]$ <userinput>ls -al</userinput>
 total 3
 drwxrwx---    3 root     web          1024 Mar 29 16:41 .
 drwxr-xr-x   25 root     root         1024 Mar 29 16:24 ..
 drwx------    7 service0 web          1024 Jan  6 14:36 service0
-[service0@yourserver web]$ <userinput>exit</userinput>
+[service0@yourserver aolserver]$ <userinput>exit</userinput>
 logout
 
 [root@yourserver root]#
 <action>su - service0
-cd /web
+cd /var/lib/aolserver
 tar xzf /tmp/&tarballpath;.tgz
 mv &tarballpath; service0
 chmod -R 700 service0/
@@ -155,13 +154,13 @@ exit</action></screen>
       these directories will be included in the tarball)Set up several additional directories in the service root:
       <computeroutput>etc</computeroutput> is for configuration and control files, <computeroutput>log</computeroutput> is for error and request (web page hit) log files, and <computeroutput>database-backup</computeroutput> is for database backup files.  If you did the CVS step, note that these new directories are excluded from that step so that you can decide whether or not you want your logs and config files in source control.</para>
         <screen>[root@yourserver root]# <userinput>su - <replaceable>service0</replaceable></userinput>
-[service0@yourserver service0]$ <userinput>mkdir /web/<replaceable>service0</replaceable>/etc /web/<replaceable>service0</replaceable>/log /web/<replaceable>service0</replaceable>/database-backup</userinput>
-[service0@yourserver web]$ <userinput>exit</userinput>
+[service0@yourserver service0]$ <userinput>mkdir /var/lib/aolserver/<replaceable>service0</replaceable>/etc /var/lib/aolserver/<replaceable>service0</replaceable>/log /var/lib/aolserver/<replaceable>service0</replaceable>/database-backup</userinput>
+[service0@yourserver aolserver]$ <userinput>exit</userinput>
 logout
 
-[root@yourserver web]#
+[root@yourserver aolserver]#
 <action>su - service0
-mkdir /web/<replaceable>service0</replaceable>/etc /web/<replaceable>service0</replaceable>/log /web/<replaceable>service0</replaceable>/database-backup
+mkdir /var/lib/aolserver/<replaceable>service0</replaceable>/etc /var/lib/aolserver/<replaceable>service0</replaceable>/log /var/lib/aolserver/<replaceable>service0</replaceable>/database-backup
 exit</action></screen>
       </listitem>
     </orderedlist>
@@ -401,7 +400,7 @@ logout
 	  specific port, e.g. port 80. In order for OpenACS to work, you
 	  need to configure a virtual server.  The Reference Platform
 	  uses a configuration file included in the OpenACS tarball,
-	  <computeroutput>/web/<replaceable>service0</replaceable>/etc/config.tcl</computeroutput>.
+	  <computeroutput>/var/lib/aolserver/<replaceable>service0</replaceable>/etc/config.tcl</computeroutput>.
 	   Open it in an editor to adjust the parameters.</para>
         <indexterm>
           <primary>AOLserver</primary>
@@ -409,7 +408,7 @@ logout
         </indexterm>
     
         <screen>[root@yourserver root]# <userinput>su - <replaceable>service0</replaceable></userinput>
-[service0@yourserver service0]$ <userinput>cd /web/<replaceable>service0</replaceable>/etc</userinput>
+[service0@yourserver service0]$ <userinput>cd /var/lib/aolserver/<replaceable>service0</replaceable>/etc</userinput>
 [service0@yourserver etc]# <userinput>emacs config.tcl</userinput>
 </screen>
         <para>
@@ -499,7 +498,7 @@ logout
 	  nsd</computeroutput> and selectively kill by job number.</para>
         <screen>[service0@yourserver etc]$ <userinput>killall nsd</userinput>
 nsd: no process killed
-[service0@yourserver service0]$<userinput> /usr/local/aolserver/bin/nsd-postgres -t /web/<replaceable>service0</replaceable>/etc/config.tcl</userinput>
+[service0@yourserver service0]$<userinput> /usr/local/aolserver/bin/nsd-postgres -t /var/lib/aolserver/<replaceable>service0</replaceable>/etc/config.tcl</userinput>
 [service0@yourserver service0]$ [08/Mar/2003:18:13:29][32131.8192][-main-] Notice: nsd.tcl: starting to read config file...
 [08/Mar/2003:18:13:29][32131.8192][-main-] Notice: nsd.tcl: finished reading config file.</screen>
       </listitem>
@@ -513,13 +512,13 @@ nsd: no process killed
         url="files/openacs-start.html">this</ulink>.  If you <link
         linkend="cvs-service-import">imported your files into
         cvs</link>, now that you know it worked you can erase the temp
-        directory with <computeroutput>rm -rf /web/service0.orig</computeroutput>.
+        directory with <computeroutput>rm -rf /var/lib/aolserver/service0.orig</computeroutput>.
 	</para>
 
 	<para>
 
 	  If you don't see the login page, view your error log
-	  (<computeroutput>/web/<replaceable>service0</replaceable>/log/<replaceable>service0</replaceable>-error.log</computeroutput>)
+	  (<computeroutput>/var/lib/aolserver/<replaceable>service0</replaceable>/log/<replaceable>service0</replaceable>-error.log</computeroutput>)
 	  to make sure the service is starting without any
 	  problems. The most common errors here are trying to start a
 	  port 80 server while not root, failing to connect because of
@@ -612,7 +611,7 @@ Loading package .info files ... this will take a few minutes</programlisting>
 		  AOLServer to restart itself (ie. inittab or daemontools),
 		  you&#39;ll need to manually restart your service.
 		</para>
-        <screen>[service0@yourserver service0]$ <userinput>/usr/local/aolserver/bin/nsd-postgres -t /web/<emphasis><replaceable>service0</replaceable></emphasis>/config.tcl</userinput></screen>
+        <screen>[service0@yourserver service0]$ <userinput>/usr/local/aolserver/bin/nsd-postgres -t /var/lib/aolserver/<emphasis><replaceable>service0</replaceable></emphasis>/config.tcl</userinput></screen>
 	  </listitem>
 
       <listitem><para> 
