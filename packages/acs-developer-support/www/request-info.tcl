@@ -155,6 +155,9 @@ if { [info exists property(rp)] } {
 		    append body "<ul><li>returned error: <pre>[ns_quotehtml $error]</pre></ul>\n"
 		}
 	    }
+            notice {
+		append body "$info\n"
+            }
 	    debug {
 		append body "<i>$info</i>\n"
 	    }
@@ -228,12 +231,12 @@ if { [info exists property(db)] } {
 	    append value "$command $handle<blockquote><pre>[ns_quotehtml $sql]</pre></blockquote>\n"
 	}
 
-	append body "<tr valign=top><td align=right bgcolor=$bgcolor nowrap>&nbsp;&nbsp;[format "%.f" [expr { ($end - $start) / 1000 }]]&nbsp;ms&nbsp;&nbsp;</td><td bgcolor=$bgcolor>&nbsp;&nbsp;$statement_pool&nbsp;&nbsp;</td><td bgcolor=$bgcolor>$value</td></tr>\n"
+	append body "<tr valign=top><td align=right bgcolor=$bgcolor nowrap>&nbsp;&nbsp;[format "%.f" [expr { ($end - $start) }]]&nbsp;ms&nbsp;&nbsp;</td><td bgcolor=$bgcolor>&nbsp;&nbsp;$statement_pool&nbsp;&nbsp;</td><td bgcolor=$bgcolor>$value</td></tr>\n"
 	incr counter
 
 	incr total [expr { $end - $start }]
     }
-    append body "<tr><td bgcolor=black align=right><font color=white><b>&nbsp;&nbsp;[format "%.f" [expr { $total / 1000 }]]&nbsp;ms&nbsp;&nbsp;</td><th align=left>(total)</th></tr>\n"
+    append body "<tr><td bgcolor=black align=right><font color=white><b>&nbsp;&nbsp;[format "%.f" [expr { $total }]]&nbsp;ms&nbsp;&nbsp;</td><th align=left>(total)</th></tr>\n"
     append body "</table></blockquote>\n"
 }
     
