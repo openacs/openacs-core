@@ -1,6 +1,6 @@
 
 <!-- Dark blue frame -->
-<table bgcolor=white cellspacing="1" cellpadding="0" border="0" width="690" STYLE="table-layout: fixed">
+<table bgcolor=white cellspacing="1" cellpadding="0" border="0">
   <tr>
     <td>
 
