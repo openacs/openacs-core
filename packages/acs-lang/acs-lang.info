@@ -35,6 +35,7 @@ in that directory for details.</description>
             <file path="ACS4.1b-PATCHES/tag-init.patch"/>
             <file path="ACS4.1b-PATCHES/util-procs.patch"/>
             <file type="package_spec" path="acs-lang.info"/>
+            <file type="shell" path="bin/check-catalog-file-path.pl"/>
             <file type="shell" path="bin/check-catalog.sh"/>
             <file type="shell" path="bin/mygrep"/>
             <file path="catalog/acs-lang.de_DE.ISO-8859-1.xml"/>
@@ -44,6 +45,7 @@ in that directory for details.</description>
             <file type="data_model_create" db_type="oracle" path="sql/oracle/acs-lang-create.sql"/>
             <file type="data_model" db_type="oracle" path="sql/oracle/ad-locales-drop.sql"/>
             <file type="data_model" db_type="oracle" path="sql/oracle/ad-locales.sql"/>
+            <file type="data_model" db_type="oracle" path="sql/oracle/message-audit.sql"/>
             <file type="data_model" db_type="oracle" path="sql/oracle/message-catalog-drop.sql"/>
             <file type="data_model" db_type="oracle" path="sql/oracle/message-catalog.sql"/>
             <file type="data_model_upgrade" db_type="oracle" path="sql/oracle/upgrade/upgrade-4.1-4.7d2.sql"/>
@@ -56,7 +58,7 @@ in that directory for details.</description>
             <file type="data_model_upgrade" db_type="postgresql" path="sql/postgresql/upgrade/upgrade-4.1-4.7d2.sql"/>
             <file type="data_model_upgrade" db_type="postgresql" path="sql/postgresql/upgrade/upgrade-4.7d2-4.7d3.sql"/>
             <file type="tcl_init" path="tcl/acs-lang-init.tcl"/>
-            <file type="tcl_procs" path="tcl/acs-lang-test-procs.tcl"/>
+            <file type="tcl_procs" path="tcl/lang-audit-procs.tcl"/>
             <file type="tcl_procs" path="tcl/lang-catalog-procs.tcl"/>
             <file type="query_file" path="tcl/lang-catalog-procs.xql"/>
             <file type="query_file" db_type="oracle" path="tcl/lang-message-procs-oracle.xql"/>
@@ -77,6 +79,11 @@ in that directory for details.</description>
             <file type="tcl_procs" path="tcl/localization-procs.tcl"/>
             <file type="query_file" path="tcl/localization-procs.xql"/>
             <file type="tcl_util" path="tcl/test/acs-lang-test.tcl"/>
+            <file path="tcl/test/adp_tmp_file.adp.orig"/>
+            <file type="content_page" path="www/admin/audit-include.adp"/>
+            <file type="content_page" path="www/admin/audit-include.tcl"/>
+            <file type="content_page" path="www/admin/batch-editor.adp"/>
+            <file type="content_page" path="www/admin/batch-editor.tcl"/>
             <file type="content_page" path="www/admin/display-grouped-messages.adp"/>
             <file type="content_page" path="www/admin/display-grouped-messages.tcl"/>
             <file type="content_page" path="www/admin/display-localized-messages.adp"/>
@@ -103,9 +110,14 @@ in that directory for details.</description>
             <file type="content_page" path="www/admin/localized-message-new.tcl"/>
             <file type="content_page" path="www/admin/localized-messages.adp"/>
             <file type="content_page" path="www/admin/localized-messages.tcl"/>
+            <file type="content_page" path="www/admin/lookups-include.adp"/>
+            <file type="content_page" path="www/admin/lookups-include.tcl"/>
             <file type="content_page" path="www/admin/master.adp"/>
-            <file type="content_page" path="www/admin/master.tcl"/>
             <file type="content_page" path="www/admin/reload-cache.tcl"/>
+            <file type="query_file" db_type="oracle" path="www/admin/set-system-timezone-oracle.xql"/>
+            <file type="query_file" db_type="postgresql" path="www/admin/set-system-timezone-postgresql.xql"/>
+            <file type="content_page" path="www/admin/set-system-timezone.adp"/>
+            <file type="content_page" path="www/admin/set-system-timezone.tcl"/>
             <file type="content_page" path="www/admin/test/catalog-test.adp"/>
             <file type="content_page" path="www/admin/test/catalog-test.tcl"/>
             <file type="content_page" path="www/admin/test/compile.tcl"/>
@@ -139,9 +151,6 @@ in that directory for details.</description>
             <file type="content_page" path="www/index.adp"/>
             <file type="content_page" path="www/index.tcl"/>
             <file type="content_page" path="www/locale-set.tcl"/>
-            <file type="query_file" db_type="oracle" path="www/set-system-timezone-oracle.xql"/>
-            <file type="query_file" db_type="postgresql" path="www/set-system-timezone-postgresql.xql"/>
-            <file type="content_page" path="www/set-system-timezone.tcl"/>
         </files>
         <parameters>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="SystemTimezone"  default="America/New_York" description="The timezone that Oracle is set to use. Use a name from the acs-reference package, e.g., America/Los_Angeles or Asia/Tokyo"/>

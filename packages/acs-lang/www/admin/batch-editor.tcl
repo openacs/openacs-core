@@ -38,7 +38,7 @@ element create batch_editor page_end -widget hidden -datatype text -value $page_
 
 set count 0
 set keys [list]
-
+set displayed_keys [list]
 db_foreach get_messages {
     select lm1.message_key as message_key,
            lm1.message as default_message
@@ -58,6 +58,7 @@ db_foreach get_messages {
                    message_key =:message_key and 
                    locale =:current_locale
         }
+        lappend displayed_keys $message_key
         element create batch_editor "message_key_$count" -widget hidden -datatype text
         element create batch_editor "message_key_info_$count" -widget inform -datatype text -label "key"
         element create batch_editor "en_us_message_$count" -widget inform -datatype text -label "American"

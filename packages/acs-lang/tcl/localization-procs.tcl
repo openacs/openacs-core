@@ -540,7 +540,7 @@ ad_proc -public lc_time_fmt {
 
 ad_proc -public lc_time_utc_to_local {
     time_value 
-    tz
+    {tz ""}
 } {
     Converts a Universal Time to local time for the specified timezone.
 
@@ -548,8 +548,12 @@ ad_proc -public lc_time_utc_to_local {
     @param tz                Timezone that must exist in tz_data table.
     @return                  Local time
 } {
+    if { [empty_string_p $tz] } {
+        set tz [lang::conn::timezone]
+    }
 
     set local_time $time_value
+
     if {[catch {
 	set local_time [db_exec_plsql utc_to_local {}]
     } errmsg]
@@ -567,14 +571,18 @@ ad_proc -public lc_time_utc_to_local {
 
 ad_proc -public lc_time_local_to_utc {
     time_value 
-    tz
+    {tz ""}
 } {
     Converts a local time to a UTC time for the specified timezone.
 
-    @param time_value        Local time in the ISO datetime format.
+    @param time_value        Local time in the ISO datetime format, YYYY-MM-DD HH24:MI:SS
     @param tz                Timezone that must exist in tz_data table.
     @return                  UTC time.
 } {
+    if { [empty_string_p $tz] } {
+        set tz [lang::conn::timezone]
+    }
+
     set utc_time $time_value
     if {[catch {
 	set utc_time [db_exec_plsql local_to_utc {}]

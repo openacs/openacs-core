@@ -215,7 +215,8 @@ namespace eval lang::catalog {
    } {
        # Put the messages in an array so it's easier to access them
        array set messages_array $messages_list
-       set message_key_list [lsort [array names messages_array]]
+       # Sort the keys so that it's easier to manually read and edit the catalog files
+       set message_key_list [lsort -dictionary [array names messages_array]]
 
        # Extract package_key, locale, and charset from the file path
        if { ![regexp {(?i)([^/]+)\.([a-z]{2}_[a-z]{2})\.(.*)\.xml$} $file_path match package_key locale charset] } {
@@ -355,9 +356,10 @@ namespace eval lang::catalog {
         return $files
     }
         
-    ad_proc -public import_from_all_files {} {
+    ad_proc -public import_from_all_files_and_cache {} {
         Loops over all installed and enabled packages that don't already have messages in the database
-        and imports messages from the catalog files of each such package.
+        and imports messages from the catalog files of each such package. When this process is done
+        the message cache is reloaded.
 
         @author Peter Marklund (peter@collaboraid.biz)
     } {
@@ -366,6 +368,8 @@ namespace eval lang::catalog {
                 lang::catalog::import_from_files $package_key
             }
         }
+
+        lang::message::cache
     }
     
     ad_proc -private translate {} {

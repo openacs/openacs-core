@@ -63,35 +63,16 @@ namespace eval lang::message {
             set locale [util_memoize [list ad_locale_locale_from_lang $locale]]
         } 
 
-        if { $key_exists_p } {
-            # The message key exists so register has been invoked before with
-            # this key. Check that embedded variables are unchanged in the new message.
-
-            # Attempt to get the en_US message from the cache, or get a message
-            # in any locale from the database for variable comparison
-            if { [nsv_exists lang_message_en_us $key] } { 
-                set existing_en_us_message [nsv_get lang_message_en_US $key]
-            } else {
-                set existing_en_us_message [db_string select_an_existing_message {}]
-            }
-
-            set missing_vars_list [get_missing_embedded_vars $existing_en_us_message $message]
-            if { [llength $missing_vars_list] != 0 } {
-                error "The following variables are in the en_US message for key $message_key but not in the new message \"$message\" in locale $locale : $missing_vars_list"
-            }
-        }
-    
         # Check the cache
         if { [nsv_exists lang_message_$locale $key] } { 
-            # Update existing message
-            set old_message [nsv_get lang_message_$locale $key]
+            # Update existing message if the message has changed
 
+            set old_message [nsv_get lang_message_$locale $key]
             if { ![string equal $message $old_message] } {
 
-                # changed message ... update.
+                lang::audit::changed_message $old_message $package_key $message_key $locale
 
-                # Trying to avoid hitting Oracle bug#2011927
-    
+                # Trying to avoid hitting Oracle bug#2011927    
                 if { [empty_string_p [string trim $message]] } {
                     db_dml lang_message_null_update {}
                 } else { 
@@ -104,7 +85,7 @@ namespace eval lang::message {
             ns_log Debug "lang::message::register - Inserting into database message: $locale $key" 
             db_transaction {
                 # As above, avoiding the bug#2011927 from Oracle.
-    
+
                 if { [empty_string_p [string trim $message]] } {
                     db_dml lang_message_insert_null_msg {}
                 } else {

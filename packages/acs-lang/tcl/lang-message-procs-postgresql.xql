@@ -19,14 +19,4 @@
      </querytext>
  </fullquery>
 
-  <fullquery name="lang::message::register.select_an_existing_message">
-    <querytext>
-        select message
-          from lang_messages
-         where message_key = :message_key
-           and package_key = :package_key
-          limit 1
-    </querytext>
-  </fullquery>
-
 </queryset>

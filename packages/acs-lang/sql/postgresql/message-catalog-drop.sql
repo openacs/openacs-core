@@ -17,6 +17,7 @@ drop function lc_time_local_to_utc;
 drop table lang_translation_registry;
 drop table lang_translate_columns;
 drop table lang_messages;
+drop table lang_user_timezone;
 
 -- This might fail if the data model includes other multilingual tables
 -- that reference ad_locales. Really need to cascade here to ensure

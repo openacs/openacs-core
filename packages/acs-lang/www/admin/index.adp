@@ -29,6 +29,11 @@
     </p>
     <p>
       <li>
+        <a href="set-system-timezone">Set system timezone</a>
+      </li>
+    </p>
+    <p>
+      <li>
         <a href="translator-mode-toggle">Toggle translator mode</a> (Currently 
         <if @translator_mode_p@ true><font color="red"><b>ON</b></font></if>
         <else>off</else>)

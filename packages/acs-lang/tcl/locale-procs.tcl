@@ -15,6 +15,20 @@ ad_library {
 
 namespace eval lang::system {
 
+    ad_proc -public site_wide_locale {
+    } {
+        Get the site wide system locale setting.
+    } {
+        set package_id [apm_package_id_from_key "acs-lang"]
+        return [parameter::get -package_id $package_id -parameter SiteWideLocale]
+    }
+
+    ad_proc -public package_level_locale {
+        package_id
+    } {
+        return {}
+    }
+
     ad_proc -public locale {
         {-package_id ""}
         {-site_wide:boolean}
@@ -25,17 +39,16 @@ namespace eval lang::system {
         @param site_wide Set this if you want to get the site-wide locale setting.
     } {
         if { $site_wide_p } {
-            set package_id [apm_package_id_from_key "acs-lang"]
-            return [parameter::get -package_id $package_id -parameter SiteWideLocale]
+            return [site_wide_locale]
         } 
 
         if { [empty_string_p $package_id] } {
             set package_id [ad_conn package_id]
         }
 
-        # Pssst! We don't actually use this package thing, 
-        # but we'll probably do so later.
-        set locale {}
+        # get locale from lang_package_locale
+
+        set locale [package_level_locale $package_id]
 
         # If there's no package setting, use the site-wide setting
         if { [empty_string_p $locale] } {
@@ -87,7 +100,7 @@ namespace eval lang::system {
         @return  a timezone name from acs-reference package (e.g., Asia/Tokyo, America/New_York)
     } {
         set package_id [apm_package_id_from_key "acs-lang"]
-        return [parameter::get -package_id $package_id -parameter SystemTimezone -default 0]
+        return [parameter::get -package_id $package_id -parameter SystemTimezone -default "America/New_York"]
     }
         
     ad_proc -public set_timezone { 
@@ -112,6 +125,36 @@ namespace eval lang::system {
 
 namespace eval lang::user {
 
+    ad_proc -public package_level_locale {
+        package_id
+    } {
+        Get the user's preferred package level locale for a package
+        given by its package id.
+
+    } {
+        set user_id [ad_conn user_id]
+        if { [string equal $user_id 0] } {
+
+            # if the user is not logged in then use a session
+            # variable - right now this is only for acs-lang - aka the
+            # site wide locale
+
+            if { [string equal $package_id [apm_package_id_from_key "acs-lang"] ] } {
+                return [ad_get_client_property -cache t "acs-lang" "user_locale"]
+            }
+            return ""
+        }
+        set locale [db_string get_user_locale {} -default ""]
+        return $locale
+    }
+    
+    ad_proc -public site_wide_locale {
+    } {
+        Get the user's preferred site wide locale.
+    } {
+        return [package_level_locale [apm_package_id_from_key "acs-lang"]]
+    }
+
     ad_proc -public locale {
         {-package_id ""}
         {-site_wide:boolean}
@@ -122,27 +165,20 @@ namespace eval lang::user {
         @param package_id The package for which you want to get the locale preference.
         @param site_wide Set this if you want to get the site-wide locale preference.
     } {
-        set user_id [ad_conn user_id]
-        if { $user_id == 0 } {
-            # Not logged in, use a session-based client property
-            return [ad_get_client_property -cache t "acs-lang" "user_locale"]
-        }
-    
-        # Pssst! We don't actually use this package thing, 
-        # but we'll probably do so later.
-        if { $site_wide_p } {
+        # default value for package_id
 
-            set package_id [apm_package_id_from_key "acs-lang"]
-            return [db_string get_user_locale {} -default ""]
-
-        } elseif { [empty_string_p $package_id] } {
+        if { [empty_string_p $package_id] } {
             set package_id [ad_conn package_id]
         }
-        set locale [db_string get_user_locale {} -default ""]
 
-        # If there's no package setting, use the site-wide setting
+        # get package level locale
+
+        set locale [package_level_locale $package_id]
+
+        # If there's no package setting, then use the site-wide setting
+
         if { [empty_string_p $locale] } {
-            set locale [locale -site_wide]
+            set locale [site_wide_locale]
         } 
         return $locale
     }
@@ -166,13 +202,11 @@ namespace eval lang::user {
             return
         }
     
-        # Pssst! We don't actually use this package thing, 
-        # but we'll probably do so later.
         if { $site_wide_p } {
             set package_id [apm_package_id_from_key "acs-lang"]
         } elseif { [empty_string_p $package_id] } {
             set package_id [ad_conn package_id]
-        }
+        }        
 
         set user_locale_exists_p [db_string user_locale_exists_p {}]
         if { $user_locale_exists_p } {
@@ -202,18 +236,15 @@ namespace eval lang::user {
     }
 
     ad_proc -public timezone {} {
-        Get the user's timezone. Defaults to system timezone if the user has no setting.
+        Get the user's timezone. Returns the empty string if the user
+        has no timezone set.
         
         @return  a timezone name from acs-reference package (e.g., Asia/Tokyo, America/New_York)
     } {
+        # FIXME:
         # We probably don't want to keep this in client properties, since these are
         # no longer permanent. We'll move this into a DB table at some point.
-        set timezone [ad_get_client_property -cache t "acs-lang" "timezone"]
-        if { [empty_string_p $timezone] } {
-            # No user timezone, return the system timezone
-            set timezone [parameter::get -parameter DefaultTimezone -package_id [apm_package_id_from_key acs-lang] -default "PST"]
-        }
-        return $timezone
+        return [ad_get_client_property -cache t "acs-lang" "timezone"]
     }
         
     ad_proc -public set_timezone { 
@@ -223,6 +254,10 @@ namespace eval lang::user {
         
         @param timezone name from acs-reference package (e.g., Asia/Tokyo, America/New_York)
     } {
+        # FIXME: (lars)
+        # This shouldn't be in client properties, since they're session-based
+        # I'm doing this for now, because I don't know whether we'll use a separate table, 
+        # like with the locale setting, or the user-profile package.
         ad_set_client_property -persistent t "acs-lang" timezone $timezone
     }
 
@@ -241,20 +276,49 @@ namespace eval lang::conn {
         @param package_id The package for which you want to get the locale.
         @param site_wide Set this if you want to get the site-wide locale.
     } {
-        set locale {}
-        catch {
-            set locale [lang::user::locale -package_id $package_id -site_wide=$site_wide_p]
-        }
-        if { [empty_string_p $locale] } {
-            catch {
-                set locale [lang::system::locale -package_id $package_id -site_wide=$site_wide_p]
+        if { $site_wide_p } { 
+            set locale [lang::user::site_wide_locale]
+            if { [empty_string_p $locale] } {
+                set locale [lang::system::site_wide_locale]
             }
+            return $locale
         }
-	
-	# Check browser Accept-Language header
-	# Hm. Site-wide will always be set. Hm.
-	# Check Yon's ACS Java g15n doc
-	
+
+        # default value for package_id
+
+        if { [empty_string_p $package_id] } {
+            set package_id [ad_conn package_id]
+        }
+
+        # use user's package level locale
+
+        set locale [lang::user::package_level_locale $package_id]
+
+        # if that does not exist use system's package level locale
+
+        if { [empty_string_p $locale] } {
+            set locale [lang::system::package_level_locale $package_id]
+        } 
+
+        # if that does not exist use user's site wide locale
+
+        if { [empty_string_p $locale] } {
+            set locale [lang::user::site_wide_locale]
+        } 
+
+        # if that does not exist use system's site wide locale
+
+        if { [empty_string_p $locale] } {
+            set locale [lang::system::site_wide_locale]
+        } 
+
+        # if that does not exist then we are back to just another language
+        # let's pick uhmm... en_US
+
+        if { [empty_string_p $locale] } {
+            set locale en_US
+        } 
+
         return $locale
     }
 
@@ -280,6 +344,20 @@ namespace eval lang::conn {
     } {
         return [lang::util::charset_for_locale [lang::conn::locale]]
     }
+
+    ad_proc -public timezone {} {
+        Get this connection's timezone. This is the user timezone, if
+        set, otherwise the system timezone.
+        
+        @return  a timezone name from acs-reference package (e.g., Asia/Tokyo, America/New_York)
+    } {
+        set timezone [lang::user::timezone]
+        if { [empty_string_p $timezone] } {
+            # No user timezone, return the system timezone
+            set timezone [lang::system::timezone]
+        }
+        return $timezone
+    }
 }
 
 
@@ -291,7 +369,7 @@ namespace eval lang::conn {
 
 ad_proc -deprecated -warn ad_locale {
     context 
-    item
+    {item "locale"}
 } {
     Returns the value of a locale item in a particular context. For example, to 
     get the language, locale, and timezone preference for the current user:
@@ -332,7 +410,20 @@ ad_proc -deprecated -warn ad_locale {
 } {
     switch $context {
         request {
-            return [lang::conn::locale -site_wide]
+	    switch $item {
+                locale {
+                    return [lang::conn::locale -site_wide]
+                }
+                language {
+                    return [lang::conn::language -site_wide]
+                }
+                timezone {
+                    return [lang::conn::timezone]
+                }
+                default {
+		    error "unsupported option to ad_locale: $item"
+                }
+            }
         }
 	user {
 	    switch $item {
