@@ -3,18 +3,6 @@
 <queryset>
    <rdbms><type>postgresql</type><version>7.1</version></rdbms>
 
-<fullquery name="new.add_party">      
-      <querytext>
-      FIX ME PLSQL
-
-	  begin
-	    :1 := ${party_type}.new (email => 'joe@foo.com');
-	  end;
-	
-      </querytext>
-</fullquery>
-
- 
 <fullquery name="types_valid_for_rel_type_multirow.select_sub_rel_types">      
       <querytext>
       FIX ME OUTER JOIN
