@@ -92,6 +92,7 @@
 			:pretty_name,
 			:pretty_plural,
 			:package_uri,
+			:initial_install_p,
 			:singleton_p,
 			:spec_file_path,
 			:spec_file_mtime
@@ -109,6 +110,7 @@
 			:pretty_name,
 			:pretty_plural,
 			:package_uri,
+			:initial_install_p,
 			:singleton_p,
 			:spec_file_path,
 			:spec_file_mtime
@@ -140,7 +142,7 @@
 </fullquery>
 
  
-<fullquery name="apm_package_instantiate_and_mount.package_instantiate_mount">      
+<fullquery name="apm_package_instantiate_and_mount.package_instantiate_and_mount">      
       <querytext>
 
 	    declare

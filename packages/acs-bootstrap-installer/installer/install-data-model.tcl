@@ -63,7 +63,7 @@ Done installing the ACS kernel data model.<p>
 apm_version_enable -callback apm_ns_write_callback [apm_package_install -callback apm_ns_write_callback "[file join [acs_root_dir] packages acs-kernel acs-kernel.info]"]
 
 # Preload all the .info files so the next page is snappy.
-apm_dependency_check [apm_scan_packages -new [file join [acs_root_dir] packages]]
+apm_dependency_check -initial_install [apm_scan_packages -new [file join [acs_root_dir] packages]]
 
 ns_write "
 [install_next_button "packages-install"]

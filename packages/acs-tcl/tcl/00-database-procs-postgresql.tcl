@@ -498,15 +498,59 @@ ad_proc -private db_exec_lob { type db statement_name pre_sql { file "" } } {
 
 ad_proc db_get_pgbin { } {
 
-    Returns the database name from the first database pool.  It assumes the 
-    datasource is properly formatted since we've already verified that we
-    can connect to the pool.
+    Returns the pgbin parameter from the driver section of the first database pool.
 
 } {
 
     set pool [lindex [nsv_get db_available_pools .] 0]
     set driver [ns_config ns/db/pool/$pool Driver]    
     return [ns_config ns/db/driver/$driver pgbin]
+}
+
+ad_proc db_get_username { } {
+
+    Returns the username parameter from the driver section of the first database pool.
+
+} {
+
+    set pool [lindex [nsv_get db_available_pools .] 0]
+    return [ns_config ns/db/pool/$pool User]    
+}
+
+ad_proc db_get_password { } {
+
+    Returns the username parameter from the driver section of the first database pool.
+
+} {
+
+    set pool [lindex [nsv_get db_available_pools .] 0]
+    return [ns_config ns/db/pool/$pool Password]
+}
+
+ad_proc db_get_port { } {
+
+    Returns the port number from the first database pool.  It assumes the
+    datasource is properly formatted since we've already verified that we
+    can connect to the pool.
+    It returns an empty string for an empty port value.
+
+} {
+
+    set pool [lindex [nsv_get db_available_pools .] 0]
+    set datasource [ns_config ns/db/pool/$pool DataSource]
+    set last_colon_pos [string last ":" $datasource]
+    if { $last_colon_pos == -1 } {
+        ns_log Error "datasource contains no \":\"? datasource = $datasource"
+        return ""
+    }
+    set first_colon_pos [string first ":" $datasource]
+
+    if { $first_colon_pos == $last_colon_pos || [expr $last_colon_pos - $first_colon_pos] == 1 } {
+	# No port specified
+	return ""
+    }
+
+    return [string range $datasource [expr $first_colon_pos + 1] [expr $last_colon_pos - 1] ]
 }
 
 ad_proc db_get_database { } {
@@ -526,19 +570,27 @@ ad_proc db_get_database { } {
     }
     return [string range $datasource [expr $last_colon_pos + 1] end]
 }
-
+ 
 ad_proc db_source_sql_file { {-callback apm_ns_write_callback} file } {
-
-    Sources a SQL file (in SQL*Plus format).
-
+ 
+    Sources a SQL file (in psql format).
+ 
 } {
-    
+     
     set file_name [file tail $file]
+
+    set pguser [db_get_username]
+
+    set pgport [db_get_port]
+    if { ![string equal $pgport ""] } {
+	set pgport "--port $pgport"
+    }
+
     cd [file dirname $file]
-    set fp [open "|[file join [db_get_pgbin] psql] -f $file_name [db_get_database]" "r"]
+    set fp [open "|[file join [db_get_pgbin] psql] $pgport -U $pguser -f $file_name [db_get_database]" "r"]
 
     while { [gets $fp line] >= 0 } {
-	# Don't bother writing out lines which are purely whitespace.
+ 	# Don't bother writing out lines which are purely whitespace.
 	if { ![string is space $line] } {
 	    apm_callback_and_log $callback "[ad_quotehtml $line]\n"
 	}

@@ -5,6 +5,7 @@
     <package-name>OpenACS Bootstrap Installer</package-name>
     <pretty-plural>OpenACS Bootstrap Installers</pretty-plural>
     <singleton-p>t</singleton-p>
+    <initial-install-p>t</initial-install-p>
 
     <version name="4.2d" url="http://www.openacs.org/acs-repository/download/apm/acs-bootstrap-installer-4.2d.apm">
     <database-support>

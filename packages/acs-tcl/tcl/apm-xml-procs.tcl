@@ -79,7 +79,7 @@ ad_proc -private apm_generate_package_spec { version_id } {
     set spec ""
     db_1row package_version_select {
         select t.package_key, t.package_uri, t.pretty_name, t.pretty_plural, t.package_type,
-	t.singleton_p, v.*
+	t.initial_install_p, t.singleton_p, v.*
         from   apm_package_versions v, apm_package_types t
         where  v.version_id = :version_id
         and    v.package_key = t.package_key
@@ -91,6 +91,7 @@ ad_proc -private apm_generate_package_spec { version_id } {
 <package key=\"[ad_quotehtml $package_key]\" url=\"[ad_quotehtml $package_uri]\" type=\"$package_type\">
     <package-name>[ad_quotehtml $pretty_name]</package-name>
     <pretty-plural>[ad_quotehtml $pretty_plural]</pretty-plural>
+    <initial-install-p>$initial_install_p</initial-install-p>
     <singleton-p>$singleton_p</singleton-p>
 
     <version name=\"$version_name\" url=\"[ad_quotehtml $version_uri]\">
@@ -228,6 +229,7 @@ ad_proc -public apm_read_package_info_file { path } {
     <code>package.url</code>,
     <code>package.type</code>
     <code>pretty-plural</code>
+    <code>initial-install-p</code>
     <code>singleton-p</code>
     <code>name</code> (the version name, e.g., <code>3.3a1</code>,
     <code>url</code> (the version URL),
@@ -286,6 +288,7 @@ ad_proc -public apm_read_package_info_file { path } {
     set properties(package.url) [apm_required_attribute_value $package url]
     set properties(package.type) [apm_attribute_value -default "apm_application" $package type]
     set properties(package-name) [apm_tag_value $package package-name]
+    set properties(initial-install-p) [apm_tag_value -default "f" $package initial-install-p]
     set properties(singleton-p) [apm_tag_value -default "f" $package singleton-p]
     set properties(pretty-plural) [apm_tag_value -default "$properties(package-name)s" $package pretty-plural]
 

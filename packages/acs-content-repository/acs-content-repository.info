@@ -5,6 +5,7 @@
     <package-name>ACS Content Repository</package-name>
     <pretty-plural>ACS Content Repository Services</pretty-plural>
     <singleton-p>t</singleton-p>
+    <initial-install-p>t</initial-install-p>
 
     <version name="4.1.2" url="http://www.arsdigita.com/acs-repository/download/apm/acs-content-repository-4.1.2.apm">
     <database-support>

@@ -94,12 +94,18 @@ Files for your package will be placed in a directory with this name.</td>
    </tr>
 </tr>
 <tr>
+  <th align=right nowrap>OpenACS Core?</th>
+  <td><input type=checkbox name=initial_install_p value=t> Is your package part of the OpenACS Core that
+forms the set of packages initially installed?  If you're not part of the OpenACS Core development team,
+it would be best if you'd leave this box unchecked.
+</tr>
+<tr>
   <th align=right nowrap>Singleton?</th>
   <td><input type=checkbox name=singleton_p value=t> Is your package a singleton package?  Singleton packages
 can have at most one instance; attempts to create more instances of the singleton will return the currently
 created instance.  Singleton packages are appropriate for services that should not have multiple instances,
-such as the ACS Kernel.</tr>
-
+such as the ACS Kernel.
+</tr>
 <tr>
   <td></td>
   <td>Pick a canonical URL for your package. This should be a URL where the package can be downloaded.

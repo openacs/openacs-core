@@ -41,14 +41,6 @@ ad_proc apm_scan_packages {
 
 	# At this point, we should have a directory that is equivalent to a package_key.
 	if { [apm_package_installed_p $package_key] } {
-
-	    # Load up the queries (OpenACS Query Dispatcher - ben)
-            # DRB: shouldn't be done here ... this routine just scans for uninstalled
-            # packages and shouldn't have any side effects of this sort.  Bootstrap.tcl
-            # already loads queries for installed packages and the APM installer should
-            # be doing this when the user asks to install a package ...
-	    # apm_package_install_queries $package_key
-
 	    if {$new_p} {
 		continue
 	    }
@@ -201,13 +193,20 @@ ad_proc -private pkg_info_comment {pkg_info} {
     return [lindex $pkg_info 5]
 }
 
+# DRB: This routine does more than check dependencies, it also parses spec files,
+# something that really should be done separately, at least for bootstrap installation.
+# I'm leaving it alone for now, though, and kludging it further by passing in a
+# boolean to determine whether to process all spec files or just those needed for
+# initial bootstrap installation.
 
 ad_proc -private apm_dependency_check {
     {-callback apm_dummy_callback}
+    {-initial_install:boolean}
     spec_files
 } {
     Check dependencies of all the packages provided.
     @param spec_files A list of spec files to be processed.
+    @param initial_install Only process spec files with the initial install attribute.
     @return A list whose first element indicates whether dependencies were satisfied (1 if so, 0 otherwise).\
     The second element is the package info list with the packages ordered according to dependencies.\
     Packages that can be installed come first.  Any packages that failed the dependency check come last. 
@@ -224,7 +223,9 @@ ad_proc -private apm_dependency_check {
     foreach spec_file $spec_files {
 	if { [catch {
 	    array set package [apm_read_package_info_file $spec_file]
-	    lappend install_pend [pkg_info_new $package(package.key) $spec_file $package(provides) $package(requires) ""]
+	    if { [string equal $package(initial-install-p) "t"] || !$initial_install_p } {
+	        lappend install_pend [pkg_info_new $package(package.key) $spec_file $package(provides) $package(requires) ""]
+            }
 	} errmsg]} {
 	    # Failed to parse the specificaton file.
 	    apm_callback_and_log $callback "$spec_file could not be parsed correctly.  It is not being installed. 
@@ -323,6 +324,7 @@ ad_proc -private apm_package_install {
 	set package_type $version(package.type)
 	set package_name $version(package-name)
 	set pretty_plural $version(pretty-plural)
+	set initial_install_p $version(initial-install-p)
 	set singleton_p $version(singleton-p)
 	set version_name $version(name)
 	set version_uri $version(url)
@@ -336,7 +338,7 @@ ad_proc -private apm_package_install {
 	set relative_path [join [lreplace $split_path 0 [lsearch -exact $package_key $split_path]] /] 
 	# Register the package if it is not already registered.
 	if { ![apm_package_registered_p $package_key] } {
-	    apm_package_register $package_key $package_name $pretty_plural $package_uri $package_type $singleton_p $relative_path
+	    apm_package_register $package_key $package_name $pretty_plural $package_uri $package_type $initial_install_p $singleton_p $relative_path
 	}
 	    
 	# If an older version already exists in apm_package_versions, update it;
@@ -881,7 +883,7 @@ proc_doc -public apm_version_disable { {-callback apm_dummy_callback} version_id
 
 
 ad_proc -public apm_package_register {
-    package_key pretty_name pretty_plural package_uri package_type singleton_p {spec_file_path ""} {spec_file_mtime ""}
+    package_key pretty_name pretty_plural package_uri package_type initial_install_p singleton_p {spec_file_path ""} {spec_file_mtime ""}
 } {
     Register the package in the system.
 } {
@@ -902,6 +904,7 @@ ad_proc -public apm_package_register {
 			package_uri => :package_uri,
 			pretty_name => :pretty_name,
 			pretty_plural => :pretty_plural,
+			initial_install_p => :initial_install_p,
 			singleton_p => :singleton_p,
 			spec_file_path => :spec_file_path,
 			spec_file_mtime => :spec_file_mtime
@@ -916,6 +919,7 @@ ad_proc -public apm_package_register {
 			package_uri => :package_uri,
 			pretty_name => :pretty_name,
 			pretty_plural => :pretty_plural,
+			initial_install_p => :initial_install_p,
 			singleton_p => :singleton_p,
 			spec_file_path => :spec_file_path,
 			spec_file_mtime => :spec_file_mtime
@@ -995,7 +999,7 @@ ad_proc -private apm_package_instantiate_and_mount {
 } {
 # Instantiate and mount the package.
     if { [catch { 
-	db_exec_plsql package_instantiate_mount {
+	db_exec_plsql package_instantiate_and_mount {
 	    declare
 	            main_site_id  site_nodes.node_id%TYPE;
   	            instance_id   apm_packages.package_id%TYPE;

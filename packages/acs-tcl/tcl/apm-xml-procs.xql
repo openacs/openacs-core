@@ -5,7 +5,7 @@
       <querytext>
       
         select t.package_key, t.package_uri, t.pretty_name, t.pretty_plural, t.package_type,
-	t.singleton_p, v.*
+	t.initial_install_p, t.singleton_p, v.*
         from   apm_package_versions v, apm_package_types t
         where  v.version_id = :version_id
         and    v.package_key = t.package_key

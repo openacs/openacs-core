@@ -9,6 +9,7 @@ ad_page_contract {
     pretty_name
     pretty_plural
     { package_type "apm_application"}
+    { initial_install_p "f" }
     { singleton_p "f" }
     package_uri
     version_name
@@ -96,7 +97,7 @@ is already registerd to another package."
 db_transaction {
     # Register the package.
     apm_package_register $package_key $pretty_name $pretty_plural $package_uri \
-	    $package_type $singleton_p
+	    $package_type $initial_install_p $singleton_p
     # Insert the version
     set version_id [apm_package_install_version -callback apm_dummy_callback -version_id \
 	    $version_id $package_key $version_name $version_uri $summary $description \
