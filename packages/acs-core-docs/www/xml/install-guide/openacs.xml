@@ -332,9 +332,9 @@ logout
               <listitem id="create-database">
                 <para>Create a database with the same name as our service name, <replaceable>$OPENACS_SERVICE_NAME</replaceable>.</para>
                 <screen>[root root]# <userinput>su - postgres</userinput>
-[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <userinput>createdb -E UNICODE -U <replaceable>$OPENACS_SERVICE_NAME</replaceable> <replaceable>$OPENACS_SERVICE_NAME</replaceable></userinput>
+[postgres pgsql]$ <userinput>createdb -E UNICODE -U <replaceable>$OPENACS_SERVICE_NAME</replaceable> <replaceable>$OPENACS_SERVICE_NAME</replaceable></userinput>
 CREATE DATABASE
-[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$
+[postgres pgsql]$
 <action>su - postgres</replaceable>
 createdb -E UNICODE -U <replaceable>$OPENACS_SERVICE_NAME</replaceable> <replaceable>$OPENACS_SERVICE_NAME</replaceable></action></screen>
               </listitem>
