@@ -12,6 +12,9 @@
         <summary>Documentation for the OpenACS Core.</summary>
         <release-date>2004-04-18</release-date>
         <vendor url="http://openacs.org">OpenACS</vendor>
+	<license url="http://www.gnu.org/copyleft/gpl.html">GPL</license>
+	<maturity>3</maturity>
+
         <description format="text/html">Static HTML documentation for the OpenACS core (includes the DocBook sources).
         </description>
 
