@@ -39,6 +39,7 @@ aa_register_case auth_authenticate {
 
             # Failed authentications
             # Incorrect password
+            array unset auth_info
             array set auth_info \
                 [auth::authenticate \
                      -username $email \
@@ -48,6 +49,7 @@ aa_register_case auth_authenticate {
             aa_true "auth_message for bad password authentication" ![empty_string_p $auth_info(auth_message)]
 
             # Blank password
+            array unset auth_info
             array set auth_info \
                 [auth::authenticate \
                      -username $email \
@@ -57,6 +59,7 @@ aa_register_case auth_authenticate {
             aa_true "auth_message for blank password authentication" ![empty_string_p $auth_info(auth_message)]
 
             # Incorrect username
+            array unset auth_info
             array set auth_info \
                 [auth::authenticate \
                      -username "blabla" \
@@ -66,6 +69,7 @@ aa_register_case auth_authenticate {
             aa_true "auth_message for bad username authentication" ![empty_string_p $auth_info(auth_message)]
 
             # Blank username
+            array unset auth_info
             array set auth_info \
                 [auth::authenticate \
                      -username "" \
@@ -75,6 +79,7 @@ aa_register_case auth_authenticate {
             aa_true "auth_message for blank username authentication" ![empty_string_p $auth_info(auth_message)]
 
             # Authority bogus
+            array unset auth_info
             array set auth_info \
                 [auth::authenticate \
                      -authority_id -123 \
@@ -88,8 +93,9 @@ aa_register_case auth_authenticate {
             set closed_states {banned rejected "needs approval" deleted}
             foreach closed_state $closed_states {
                 acs_user::change_state -user_id $user_id -state $closed_state
-
-                # Successful authentication
+ 
+               # Successful authentication
+                array unset auth_info
                 array set auth_info \
                     [auth::authenticate \
                          -username $email \
@@ -128,6 +134,7 @@ aa_register_case auth_create_user {
          aa_true "creation_message for successful creation" [empty_string_p $user_info(creation_message)]
 
          # Missing first_names
+         array unset user_info
          array set user_info [auth::create_user \
                                   -username "auth_create_user2@test_user.com" \
                                   -first_names "" \
@@ -346,6 +353,7 @@ aa_register_case auth_password_reset {
                                      -password $reset_result(password)]
             aa_equals "can authenticate with new password" $auth_result(auth_status) "ok"
             
+            array unset auth_result
             array set auth_result [auth::authentication::Authenticate \
                                      -username $test_user(username) \
                                      -authority_id [auth::authority::local] \
