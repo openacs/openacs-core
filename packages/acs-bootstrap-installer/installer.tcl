@@ -173,14 +173,16 @@ proc install_admin_widget {} {
 }
 
 ad_proc -public ad_windows_p {} {
+    # DLB - this used to check the existence of the WINDIR environment
+    # variable, rather than just asking AOLserver.
     Returns 1 if the ACS is running under Windows.
     Note,  this procedure is a best guess, not sure of a better way of determining:
 } {
-    global env
-    if {[info exists env(WINDIR)]} {
-	return 1
+    set thisplatform [ns_info platform]
+    if {[string equal $thisplatform  "win32" ]} {
+       return 1
     } else {
-	return 0
+       return 0
     }
 }
 
