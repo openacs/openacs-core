@@ -2,6 +2,64 @@
 
 <queryset>
    <rdbms><type>oracle</type><version>8.1.6</version></rdbms>
+
+<fullquery name="apm_generate_tarball.create_item">      
+      <querytext>
+
+begin
+ :1 := content_item.new(name => 'tarball-for-package-version-${version_id}',
+                        creation_ip => :creation_ip
+                        );
+end;
+
+      </querytext>
+</fullquery>
+
+<fullquery name="apm_generate_tarball.create_revision">      
+      <querytext>
+
+        begin
+          :1 := content_revision.new(title => '${package_key}-tarball',
+                                   description => 'gzipped tarfile',
+                                   text => 'not_important',
+                                   mime_type => 'application/x-compressed',
+                                   item_id => :item_id,
+                                   creation_user => :user_id,
+                                   creation_ip => :creation_ip
+                );
+
+          update cr_items
+          set live_revision = :1
+          where item_id = :item_id;
+        end;
+
+      </querytext>
+</fullquery>
+
+<fullquery name="apm_generate_tarball.update_tarball">      
+      <querytext>
+
+                update cr_revisions
+                set content = empty_blob()
+                where revision_id = :revision_id
+                returning content into :1
+
+      </querytext>
+</fullquery>
+
+
+<fullquery name="apm_extract_tarball.distribution_tar_ball_select">      
+      <querytext>
+
+   select content 
+     from cr_revisions 
+    where revision_id = (select content_item.get_latest_revision(item_id)
+                           from apm_package_versions 
+                          where version_id = :version_id)
+
+      </querytext>
+</fullquery>
+
  
 <fullquery name="apm_generate_tarball.apm_tarball_insert">      
       <querytext>

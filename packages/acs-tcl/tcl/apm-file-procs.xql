@@ -1,18 +1,42 @@
 <?xml version="1.0"?>
 <queryset>
 
+<fullquery name="apm_generate_tarball.item_exists_p">      
+      <querytext>
+
+        select case when item_id is null then 0 else item_id end as item_id
+          from apm_package_versions 
+         where version_id = :version_id
+
+      </querytext>
+</fullquery>
+
+<fullquery name="apm_generate_tarball.set_item_id">      
+      <querytext>
+
+        update apm_package_versions 
+        set item_id = :item_id 
+        where version_id = :version_id
+
+      </querytext>
+</fullquery>
+
+<fullquery name="apm_generate_tarball.get_revision_id">      
+      <querytext>
+
+        select live_revision as revision_id
+          from cr_items
+         where item_id = :item_id
+
+      </querytext>
+</fullquery>
+
+
 <fullquery name="apm_file_type_keys.file_type_keys">      
       <querytext>
       select file_type_key from apm_package_file_types
       </querytext>
 </fullquery>
-
-<fullquery name="apm_extract_tarball.distribution_tar_ball_select">      
-      <querytext>
-      select distribution_tarball from apm_package_versions where version_id = :version_id
-      </querytext>
-</fullquery>
-
  
 <fullquery name="apm_db_type_keys.db_type_keys">      
       <querytext>

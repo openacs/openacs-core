@@ -3,21 +3,84 @@
 <queryset>
    <rdbms><type>postgresql</type><version>7.1</version></rdbms>
 
- 
-<fullquery name="apm_generate_tarball.apm_tarball_insert">      
+<fullquery name="apm_generate_tarball.create_item">      
       <querytext>
-      FIX ME LOB (DRB - *all* large objects should be handled by the content
-      repository so I'm leaving this wart for now.
-        update apm_package_versions
-           set distribution_tarball = empty_blob(),
-               distribution_uri = null,
-               distribution_date = sysdate
-         where version_id = :version_id
-     returning distribution_tarball into :1
-    
+
+select content_item__new(
+         'tarball-for-package-version-${version_id}',
+         null,
+         null,
+         null,
+         now(),
+         null,
+         null,
+         :creation_ip,
+         'content_item',
+         'content_revision',
+         null,
+         null,
+         'text/plain',
+         null,
+         null,
+         'file'
+         )
+
       </querytext>
 </fullquery>
 
+<fullquery name="apm_generate_tarball.create_revision">      
+      <querytext>
+
+  declare
+        v_revision_id      integer;
+  begin
+
+  v_revision_id := content_revision__new(
+                                       '${package_key}-tarball',
+                                       'gzipped tarfile',
+                                       now(),
+                                       'text/plain',
+                                       null,
+                                       'not_important',
+                                       :item_id,
+                                       null,
+                                       now(),
+                                       :user_id,
+                                       :creation_ip
+                                       );
+
+  update cr_items
+  set live_revision = v_revision_id
+  where item_id = :item_id;
+
+  return v_revision_id;
+
+  end;
+
+      </querytext>
+</fullquery>
+
+<fullquery name="apm_generate_tarball.update_tarball">      
+      <querytext>
+
+    update cr_revisions
+    set content = '[cr_create_content_file $item_id $revision_id $tmpfile]'
+    where revision_id = :revision_id
+
+      </querytext>
+</fullquery>
+ 
+<fullquery name="apm_extract_tarball.distribution_tar_ball_select">      
+      <querytext>
+
+   select '[cr_fs_path]' || content 
+     from cr_revisions 
+    where revision_id = (select content_item__get_latest_revision(item_id)
+                           from apm_package_versions 
+                          where version_id = :version_id)
+
+      </querytext>
+</fullquery>
  
 <fullquery name="apm_file_add.apm_file_add">      
       <querytext>

@@ -104,9 +104,19 @@ ad_proc -private apm_extract_tarball { version_id dir } {
     overwriting any existing files.
 
 } {
+
     set apm_file [ns_tmpnam]
 
-    db_blob_get_file distribution_tar_ball_select "select distribution_tarball from apm_package_versions where version_id = :version_id" $apm_file
+    db_blob_get_file distribution_tar_ball_select {
+                 select content 
+                   from cr_revisions 
+                  where revision_id = (select content_item.get_latest_revision(item_id)
+                                         from apm_package_versions 
+                                         where version_id = :version_id)
+                 } $apm_file
+
+
+    #db_blob_get_file distribution_tar_ball_select "select distribution_tarball from apm_package_versions where version_id = :version_id" $apm_file
 
     file mkdir $dir
     # cd, gunzip, and untar all in the same subprocess (to avoid having to
@@ -118,7 +128,8 @@ ad_proc -private apm_extract_tarball { version_id dir } {
 
 ad_proc -private apm_generate_tarball { version_id } {
     
-    Generates a tarball for a version, placing it in the version's distribution_tarball blob.
+    Generates a tarball for a version, placing it in the content repository.
+    DCW - 2001-05-03, change to use the content repository for tarball storage.
     
 } {
     set files [apm_version_file_list $version_id]
@@ -148,14 +159,70 @@ ad_proc -private apm_generate_tarball { version_id } {
 
     # At this point, the APM tarball is sitting in $tmpfile. Save it in the database.
 
-    db_dml apm_tarball_insert {
-        update apm_package_versions
-           set distribution_tarball = empty_blob(),
-               distribution_uri = null,
-               distribution_date = sysdate
-         where version_id = :version_id
-     returning distribution_tarball into :1
-    } -blob_files [list $tmpfile]
+    set creation_ip [ad_conn peeraddr]
+    set user_id     [ad_verify_and_get_user_id]
+
+    set create_item "
+                  begin
+                   :1 := content_item.new(name => 'tarball-for-package-version-${version_id}',
+                                          creation_ip => :creation_ip
+                         );
+                  end;"
+
+    set create_revision "
+                  begin
+                   :1 := content_revision.new(title => '${package_key}-tarball',
+                                              description => 'gzipped tarfile',
+                                              text => 'not_important',
+                                              mime_type => 'text/plain',
+                                              item_id => :item_id,
+                                              creation_user => :user_id,
+                                              creation_ip => :creation_ip
+                         );
+
+                   update cr_items
+                   set live_revision = :1
+                   where item_id = :item_id;
+                 end;"
+
+    set update_tarball "
+                update cr_revisions
+                set content = empty_blob()
+                where revision_id = :revision_id
+                returning content into :1"
+
+    db_1row item_exists_p {select case when item_id is null then 0 else item_id end as item_id
+                           from apm_package_versions 
+                          where version_id = :version_id}
+
+    if {!$item_id} {
+        # content item hasen't been created yet - create one.
+        
+            set item_id [db_exec_plsql create_item $create_item]
+            db_dml set_item_id "update apm_package_versions 
+                                   set item_id = :item_id 
+                                 where version_id = :version_id"
+            set revision_id [db_exec_plsql create_revision $create_revision]
+            db_dml update_tarball $update_tarball -blob_files [list $tmpfile]
+        
+    } else {
+        #tarball exists, so all we have to do is to make a new revision for it
+        #Let's check if a current revision exists:
+        if {![db_0or1row get_revision_id "select live_revision as revision_id
+              from cr_items
+             where item_id = :item_id"] || [empty_string_p $revision_id]} {
+            # It's an insert rather than an update
+            
+                set revision_id [db_exec_plsql create_revision $create_revision]
+                db_dml update_tarball $update_tarball -blob_files [list $tmpfile]
+            
+        } else {
+            # it's merely an update
+            
+                db_dml update_tarball $update_tarball -blob_files [list $tmpfile]
+            
+        }
+    }
 
     file delete $tmpfile
 }
