@@ -1195,9 +1195,13 @@ ad_proc -public ad_conn {args} {
             return [array get ad_conn]
         }
 
+
         if { [info exists ad_conn($var)] } {
             return $ad_conn($var)
         } else {
+            if { [string equal $var "locale"] } { 
+                return [parameter::get -parameter SiteWideLocale -package_id [apm_package_id_from_key "acs-lang"] -default {en_US}]
+            }
             return [ns_conn $var]
         }
     }
