@@ -248,7 +248,7 @@ ad_proc -public subsite::get {
     upvar $array subsite_info
 
     if { [empty_string_p $subsite_id] } {
-	set subsite_id [site_node_closest_ancestor_package "acs-subsite"]
+	set subsite_id [ad_conn subsite_id]
     }
 
     array unset subsite_info
@@ -275,7 +275,7 @@ ad_proc -public subsite::get_element {
     @author Frank Nikolajsen (frank@warpspace.com)
     @creation-date 2003-03-08
 } {
-    get -subsite_id $subsite_id -array subsite_info
+    subsite::get -subsite_id $subsite_id -array subsite_info
 
     if { $notrailing_p && [string match $element "url"]} {
         set returnval [string trimright $subsite_info($element) "/"]
@@ -665,8 +665,8 @@ ad_proc -public subsite::get_template_options {} {
     Gets options for subsite master template for use with a form builder select widget.
 } {
     set master_template_options [list]
-    lappend master_template_options [list "Default" "/www/default-master"]
-    lappend master_template_options [list "Community" "/packages/acs-subsite/www/group-master"]
+    lappend master_template_options [list "Plain" "/www/default-master"]
+    lappend master_template_options [list "Tabbed" "/packages/acs-subsite/www/group-master"]
     set current_master [parameter::get -parameter DefaultMaster -package_id [ad_conn subsite_id]]
     set found_p 0
     foreach elm $master_template_options {
@@ -686,3 +686,4 @@ ad_proc -public subsite::get_application_options {} {
 } {
     return [db_list_of_lists package_types {}]
 }
+
