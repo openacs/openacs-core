@@ -127,6 +127,7 @@ body {
   padding-left: 8px;
 }
 #context-bar #breadcrumbs {
+  clear: left;
   float: left;
   padding-top: 3px;
 }
