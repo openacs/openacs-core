@@ -76,4 +76,7 @@ if {[llength $testcase_bodys] == 0} {
   }
 }
 
+set return_url "[ad_conn url]?[ad_conn query]"
+set resource_file_url "init-file-resource?[export_vars -url {return_url {absolute_file_path $testcase_file}}]"
+
 ad_return_template

@@ -41,6 +41,7 @@
 
   <ul>
     <li> <a href="rerun?testcase_id=@testcase_id@&package_key=@package_key@&quiet=@quiet@">Rerun</a> this test case </li>
+    <li> <a href="@resource_file_url@">Re-source test definition file</a> </li>
   </ul>
 
 <b>Results</b>
