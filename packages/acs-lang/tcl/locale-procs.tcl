@@ -25,18 +25,36 @@ namespace eval lang::conn {}
 #
 #####
 
+ad_proc -public lang::system::use_package_level_locales_p {} {
+    Returns whether we're using package level locales.
+} { 
+    return [parameter::get -parameter UsePackageLevelLocalesP -package_id [apm_package_id_from_key "acs-lang"] -default 0]
+}
+
 ad_proc -public lang::system::site_wide_locale {
 } {
     Get the site wide system locale setting.
 } {
-    set package_id [apm_package_id_from_key "acs-lang"]
-    return [parameter::get -package_id $package_id -parameter SiteWideLocale]
+    return [parameter::get \
+                -package_id [apm_package_id_from_key "acs-lang"] \
+                -parameter "SiteWideLocale" \
+                -default "en_US"]
+}
+
+ad_proc -public lang::system::package_level_locale_not_cached {
+    package_id
+} {
+    return [db_string get_system_locale {} -default {}]
 }
 
 ad_proc -public lang::system::package_level_locale {
     package_id
 } {
-    return {}
+    if { ![use_package_level_locales_p] } {
+        return {}
+    }
+
+    return [util_memoize [list lang::system::package_level_locale_not_cached $package_id]]
 }
 
 ad_proc -public lang::system::locale {
@@ -62,33 +80,36 @@ ad_proc -public lang::system::locale {
 
     # If there's no package setting, use the site-wide setting
     if { [empty_string_p $locale] } {
-        set locale [locale -site_wide]
+        set locale [site_wide_locale]
     } 
     return $locale
 }
 
 ad_proc -public lang::system::set_locale {
     {-package_id ""}
-    {-site_wide:boolean}
     locale
 } {
     Set system locale setting for a given package instance, or the
     site-wide system locale.
     
-    @param package_id The package for which you want to set the locale setting.
-    @param site_wide Set this if you want to set the site-wide locale setting.
+    @param package_id The package for which you want to set the locale setting, if you want to set system setting for one package only. Leave blank for site-wide setting.
     @param locale The new locale that you want to use as your system locale.
 } {
-    if { $site_wide_p } {
-        set package_id [apm_package_id_from_key "acs-lang"]
-        parameter::set_value -package_id $package_id -parameter SiteWideLocale -value $locale
+    if { [empty_string_p $package_id] } {
+
+        parameter::set_value \
+            -package_id [apm_package_id_from_key "acs-lang"] \
+            -parameter SiteWideLocale \
+            -value $locale
+
     } else {
-        if { [empty_string_p $package_id] } {
-            set package_id [ad_conn package_id]
-        }
-        # Pssst! We don't actually use this package thing, 
-        # but we'll probably do so later.
-        set_locale -site_wide $locale
+        # Update the setting
+        db_dml update_system_locale {}
+        
+        # Flush the cache
+        util_memoize_flush [list lang::system::package_level_locale_not_cached $package_id]
+
+        # TODO: We will need to have site-map inheritance for this, so packages under a subsite/dotlrn inherit the subsite's/dotlrn's setting
     }
 }
 
@@ -155,6 +176,58 @@ ad_proc -public lang::system::timezone_utc_offset { } {
 }
 
 
+ad_proc -public lang::system::default_locale {
+    {-language:required}
+} {
+    Get the default locale for language. Cached.
+
+    @author Simon Carstensen
+    @author Peter Marklund
+    @creation-date 2003-08-13
+    @return the default locale or the empty string if there is no default enabled locale.
+} {
+    return [util_memoize [list lang::system::default_locale_not_cached \
+                              -language $language]]
+}
+
+ad_proc -private lang::system::default_locale_not_cached {
+    {-language:required}
+} {
+    Get the default locale for language.
+
+    @author Simon Carstensen
+    @author Peter Marklund
+    @creation-date 2003-08-13
+    @return the default locale or the empty string if there is no default enabled locale.
+} {
+    return [db_string select_default_locale {
+              select locale
+              from   ad_locales
+              where  language = :language
+              and    default_p = 't'
+              and    enabled_p = 't'
+    } -default ""]
+}
+
+ad_proc -public lang::system::get_locales {} {
+    Return all enabled locales in the system. Cached
+
+    @author Peter Marklund
+} {
+    return [util_memoize [list lang::system::get_locales_not_cached]]
+}
+
+ad_proc -private lang::system::get_locales_not_cached {} {
+    Return all enabled locales in the system.
+
+    @author Peter Marklund
+} {
+    return [db_list select_system_locales {
+        select locale
+        from   ad_locales
+        where  enabled_p = 't'
+    }]
+}
 
 #####
 #
@@ -170,21 +243,7 @@ ad_proc -public lang::user::package_level_locale_not_cached {
     given by its package id. Will return the empty string if the
     user has not preference for the package.
 } {
-    if { [string equal $user_id 0] } {
-
-        # if the user is not logged in then use a session
-        # variable - right now this is only for acs-lang - aka the
-        # site wide locale
-
-        if { [string equal $package_id [apm_package_id_from_key "acs-lang"] ] } {
-            return [ad_get_client_property -cache t "acs-lang" "user_locale"]
-        }
-        return {}
-    }
-
-    set locale [db_string get_user_locale {} -default ""]
-
-    return $locale
+    return [db_string get_user_locale {} -default ""]
 }
     
 ad_proc -public lang::user::package_level_locale {
@@ -194,15 +253,34 @@ ad_proc -public lang::user::package_level_locale {
     given by its package id.
 } {
     set user_id [ad_conn user_id]
+
+    # If package-level locales are turned off, or the user isn't logged in, return the empty string
+    if { ![lang::system::use_package_level_locales_p] || $user_id == 0 } {
+        return {}
+    }
+
     # Cache for the lifetime of sessions (7 days)
     return [util_memoize [list lang::user::package_level_locale_not_cached $user_id $package_id] [sec_session_timeout]]
 }
 
-ad_proc -public lang::user::site_wide_locale {
+ad_proc -public lang::user::site_wide_locale {} {
+    Get the user's preferred site wide locale.
+} {
+    # Cache for the lifetime of sessions (7 days)
+    return [util_memoize [list lang::user::site_wide_locale_not_cached [ad_conn user_id]] [sec_session_timeout]]
+}
+
+ad_proc -public lang::user::site_wide_locale_not_cached {
+    user_id
 } {
     Get the user's preferred site wide locale.
 } {
-    return [package_level_locale [apm_package_id_from_key "acs-lang"]]
+    if { [ad_conn user_id] == 0 } {
+        return [ad_get_client_property -cache t "acs-lang" "user_locale"]
+    } else {
+        set user_id [ad_conn user_id]
+        return [db_string get_user_site_wide_locale {} -default ""]
+    }
 }
 
 ad_proc -public lang::user::locale {
@@ -215,52 +293,51 @@ ad_proc -public lang::user::locale {
     @param package_id The package for which you want to get the locale preference.
     @param site_wide Set this if you want to get the site-wide locale preference.
 } {
-    # default value for package_id
-
+    # default to current connection package
     if { [empty_string_p $package_id] } {
         set package_id [ad_conn package_id]
     }
 
-    # get package level locale
-
+    # Try package level locale first
     set locale [package_level_locale $package_id]
 
     # If there's no package setting, then use the site-wide setting
-
     if { [empty_string_p $locale] } {
         set locale [site_wide_locale]
     } 
+
     return $locale
 }
 
 ad_proc -public lang::user::set_locale {
     {-package_id ""}
-    {-site_wide:boolean}
     locale
 } {
-    Set system locale setting for a given package instance. 
-    This preliminary implementation only has one site-wide setting, though.
+    Set user locale setting for a given package instance.
     
-    @param package_id The package for which you want to set the locale setting.
-    @param site_wide Set this if you want to set the site-wide locale setting.
+    @param package_id The package for which you want to set the locale setting, if you want to set it for a specific package, as opposed to a site-wide setting.
     @param locale The new locale that you want to use as your system locale.
 } {
     set user_id [ad_conn user_id]
+
     if { $user_id == 0 } {
         # Not logged in, use a session-based client property
         ad_set_client_property -persistent t "acs-lang" "user_locale" $locale
         return
     }
 
-    if { $site_wide_p } {
-        set package_id [apm_package_id_from_key "acs-lang"]
-    } elseif { [empty_string_p $package_id] } {
-        set package_id [ad_conn package_id]
-    }        
+    if { [empty_string_p $package_id] } {
+        # Set site-wide locale in user_preferences table
+        db_dml set_user_site_wide_locale {}
 
-    # Flush the user locale preference cache
-    util_memoize_flush [list lang::user::package_level_locale_not_cached $user_id $package_id]
-  
+        # Flush the site-wide user preference cache
+        util_memoize_flush [list lang::user::site_wide_locale_not_cached $user_id]
+        return
+    } 
+
+    # The rest is for package level locale settings only
+    # Even if package level locales are disabled, we'll still do this
+
     set user_locale_exists_p [db_string user_locale_exists_p {}]
     if { $user_locale_exists_p } {
         if { ![empty_string_p $locale] } {
@@ -273,6 +350,9 @@ ad_proc -public lang::user::set_locale {
             db_dml insert_user_locale {}
         }
     }
+
+    # Flush the user locale preference cache
+    util_memoize_flush [list lang::user::package_level_locale_not_cached $user_id $package_id]
 }
 
 ad_proc -public lang::user::language {
@@ -373,39 +453,11 @@ ad_proc -public lang::conn::locale {
         set locale [lang::user::site_wide_locale]
     } 
 
-    # LARS TODO: Pull this out into a proc and write an automated test for it
-    set acclang [ns_set iget [ns_conn headers] "accept-language"]
+    # Use the accept-language browser heading
 
-    # Split by comma, and get rid of any ;q=0.5 parts
-    # acclang is something like 'da,en-us;q=0.8,es-ni;q=0.5,de;q=0.3'
-    set acclangv [list]
-    foreach elm [split $acclang ","] {
-        # Get rid of trailing ;q=0.5 part
-        set elm [lindex [split $elm ";"] 0]
-
-        # elm is now either like 'da' or 'en-us'
-        # make it into something like 'da' or 'en_US'
-        set elmv [split $elm "-"]
-        set elm [lindex $elmv 0]
-        if { [llength $elmv] > 1 } {
-            append elm "_[string toupper [lindex $elmv 1]]"
-        }
-        
-        lappend acclangv $elm
-    }
-    
-    # acclangv is now a list of languages/locales of the form:
-    # { da en_US es_NI de }
-
-    # LARS TODO: Run through the list, and the locales available on this system, and pick the most reasonable match
-    # If accept-headers has language without country, and we have that language available, that's a perfect match
-    # If accept-headesr has language+country, and we have that language+country, that's a perfect match
-    # If accept-headesr has language+country, and we have that language but with another country, that's a tentative match
-    
-    # Tentative match means we'll continue to search for a perfect match, but if we don't find any perfect match, we'll use the tentative one
-
-
-
+    if { [empty_string_p $locale] } {
+        set locale [lang::conn::browser_locale]
+    }    
 
     # if that does not exist use system's site wide locale
 
@@ -421,6 +473,93 @@ ad_proc -public lang::conn::locale {
     } 
 
     return $locale
+}
+
+ad_proc -private lang::conn::browser_locale {} {
+    Get the users preferred locale from the accept-language
+    HTTP header.
+
+    @return A locale or an empty string if no locale can be found that
+            is supported by the system
+
+    @author Lars Pind
+    @author Peter Marklund
+} {
+    set conn_locales [lang::conn::get_accept_language_header]
+
+    set system_locales [lang::system::get_locales]
+
+    foreach locale $conn_locales {       
+        regexp {^([^_]+)(?:_([^_]+))?$} $locale locale language region 
+        set orig_locale $locale
+        if { [exists_and_not_null region] } {
+            # We have both language and region, e.g. en_US
+            if { [lsearch -exact $system_locales $locale] != -1 } {
+                # The locale was found in the system, a perfect match           
+                set perfect_match $locale
+                break
+            } else {
+                # We don't have the full locale in the system but check if
+                # we have a different locale with matching language, 
+                # i.e. a tentative match
+                if { ![info exists tentative_match] } {
+                    set default_locale [lang::system::default_locale \
+                                            -language $language]
+                    if { ![empty_string_p $default_locale] } {
+                        set tentative_match $default_locale
+                    }                    
+                } else {
+                    # We already have a tentative match with higher priority so
+                    # continue searching for a perfect match
+                    continue
+                }
+            }
+        } else {
+            # We have just a language, e.g. en
+            set default_locale [lang::system::default_locale \
+                                    -language $locale]
+            if { ![empty_string_p $default_locale] } {
+                set perfect_match $default_locale
+                break
+            }
+        }
+    }
+
+    if { [exists_and_not_null perfect_match] } {
+        return $perfect_match
+    } elseif { [exists_and_not_null tentative_match] } {
+        return $tentative_match
+    } else {
+        # We didn't find a match
+        return ""
+    }
+}
+
+ad_proc -private lang::conn::get_accept_language_header {} {
+
+    set acclang [ns_set iget [ns_conn headers] "Accept-Language"]
+
+    # Split by comma, and get rid of any ;q=0.5 parts
+    # acclang is something like 'da,en-us;q=0.8,es-ni;q=0.5,de;q=0.3'
+    set acclangv [list]
+    foreach elm [split $acclang ","] {
+        # Get rid of trailing ;q=0.5 part
+        set elm [lindex [split $elm ";"] 0]
+
+        # elm is now either like 'da' or 'en-us'
+        # make it into something like 'da' or 'en_US'
+        set elmv [split $elm "-"]
+        set elm [lindex $elmv 0]
+        if { [llength $elmv] > 1 } {
+            append elm "_[string toupper [lindex $elmv 1]]"
+        }
+
+        ns_log Notice "appending $elm"
+        
+        lappend acclangv $elm
+    }
+    
+    return $acclangv
 }
 
 ad_proc -public lang::conn::language {
@@ -571,7 +710,7 @@ ad_proc -deprecated -warn ad_locale_set  {
 } {
     switch $item {
         locale {
-            lang::user::set_locale -site_wide $value
+            lang::user::set_locale $value
         }
         timezone {
             lang::user::set_timezone $value

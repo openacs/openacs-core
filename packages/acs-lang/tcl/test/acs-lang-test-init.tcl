@@ -206,3 +206,65 @@ aa_register_case message__get_missing_embedded_vars {
     aa_true "check the missing vars" [expr [string equal [lindex $missing_vars_list 0] "vars"] && \
                                            [string equal [lindex $missing_vars_list 1] "variables"]]
 }
+
+
+aa_register_case locale__test_system_package_setting {
+    Tests whether the system package level setting works
+
+    @author Lars Pind (lars@collaboraid.biz)
+    @creation-date 2003-08-12
+} {
+    set use_package_level_locales_p_org [parameter::get -parameter UsePackageLevelLocalesP -package_id [apm_package_id_from_key "acs-lang"]]
+    
+    parameter::set_value -parameter UsePackageLevelLocalesP -package_id [apm_package_id_from_key "acs-lang"] -value 1
+
+
+    # There's no foreign key constraint on the locales column, so this should work
+    set locale_to_set [ad_generate_random_string]
+
+    set retrieved_locale {}
+    
+    # We could really use a 'finally' block on 'with_catch' (a block, which gets executed at the end, regardless of whether there was an error or not)
+    with_catch errmsg {
+        # Let's pick a random unmounted package to test with
+        set package_id [apm_package_id_from_key "acs-kernel"]
+        
+        set org_setting [lang::system::site_wide_locale]
+        
+        lang::system::set_locale -package_id $package_id $locale_to_set
+        
+        set retrieved_locale [lang::system::locale -package_id $package_id]
+        
+    } {
+        parameter::set_value -parameter UsePackageLevelLocalesP -package_id [apm_package_id_from_key "acs-lang"] -value $use_package_level_locales_p_org
+        
+        global errorInfo
+        error $errmsg $errorInfo
+    }
+
+    parameter::set_value -parameter UsePackageLevelLocalesP -package_id [apm_package_id_from_key "acs-lang"] -value $use_package_level_locales_p_org
+    
+    aa_true "Retrieved system locale ('$retrieved_locale') equals the one we just set ('$locale_to_set')" [string equal $locale_to_set $retrieved_locale]
+}
+
+aa_register_case locale__test_lang_conn_browser_locale {
+    Tests the proc lang::conn::browser_locale
+
+    @author Peter Marklund
+    @creation-date 2003-08-13
+} {
+    # First locale is perfect language match
+    lang::test::assert_browser_locale "da,en-us;q=0.8,de;q=0.5,es;q=0.3" "da_DK"
+
+    # First locale is perfect locale match
+    lang::test::assert_browser_locale "da_DK,en-us;q=0.8,de;q=0.5,es;q=0.3" "da_DK"
+
+    # Tentative match being discarded
+    lang::test::assert_browser_locale "da_BLA,foobar,en" "en_US"
+
+    # Tentative match being used
+    lang::test::assert_browser_locale "da_BLA,foobar" "da_DK"
+
+    # Several tentative matches, all being discarded
+    lang::test::assert_browser_locale "da_BLA,foobar,da_BLUB,da_DK" "da_DK"
+}
