@@ -21,6 +21,7 @@
       Because if an intruder somehow breaks in through AOLserver, you don't
       want her to have any ability to do damage to the rest of your
       server.</para>
+
         <para>At the same time, AOLserver needs to have write access to
       some files on your system in order for OpenACS to function
       properly. So, we'll run AOLserver with a different user account
@@ -30,6 +31,7 @@
       example &quot;<replaceable>$OPENACS_SERVICE_NAME</replaceable>&quot; might be the service name for the
       <ulink url="http://$OPENACS_SERVICE_NAME.net/"><replaceable>$OPENACS_SERVICE_NAME</replaceable>.net</ulink>
       community.</para>
+
         <para>We'll leave the password blank, which prevents login by
       password, for increased security.  The only way to log in will
       be with ssh certificates.  The only people who should log in are
@@ -38,14 +40,16 @@
       can use database and server commands associated with that group.
       (If you don't know how to do this, type 
       <userinput>man usermod</userinput>. You can type
-      <userinput>groups</userintput> to find out which groups a user
+      <userinput>groups</userinput> to find out which groups a user
       is a part of)
     </para>
+
 <screen>
 [root root]# <userinput>useradd <replaceable>$OPENACS_SERVICE_NAME</replaceable></userinput>
 </screen>
 
-    <para>You also need to set up a group called web.<para>
+    <para>You also need to set up a group called web.</para>
+
       <screen>
 [root root]# <userinput>groupadd web</userinput>
       </screen>

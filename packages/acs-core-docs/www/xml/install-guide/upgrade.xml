@@ -347,7 +347,7 @@ parameter::set_value -package_id [ad_acs_kernel_id] -parameter UsePasswordWidget
         using the last method, you can skip this page. This page
         describes whether or not you need to be upgrading using this
         page or not:
-        <xref linkend="upgrade-5-0-dot"/></para>
+        <xref linkend="upgrade-5-0-dot"/>
       </para>
     </sect2>
 
@@ -441,7 +441,9 @@ exit</action></screen>
               the entire CVS tree from OpenACS. A good way to check
               this is if it has a contrib directory. If it does, you
               probably checked out the entire tree. You might want to
-              start over, remove your working CVS checkout, and try again.
+              start over, remove your working CVS checkout, and try
+              again.
+              </para>
 
           </listitem>
 
