@@ -257,6 +257,15 @@ parameter::set_value -package_id [ad_acs_kernel_id] -parameter UsePasswordWidget
           </orderedlist>
           <para>
           See also these forum posts: <ulink url="http://openacs.org/forums/message-view?message_id=143497">Forum OpenACS Development: 4.6.3 upgrade to 5-HEAD: final results</ulink>, <ulink url="http://openacs.org/forums/message-view?message_id=152200">OpenACS 5.0 Upgrade Experiences</ulink>.</para>
+
+        <para>
+          There are a few things you might want to do once you've
+          upgraded. First, the acs-kernel parameters need to be set to
+          allow HREF and IMG tags, if you want users who can edit HTML
+          to be able to insert HREF and IMG tags. Also, you might need
+          to set the default language for your site. See the above
+          link on OpenACS 5.0 Upgrade Experiences for details.
+        </para>
         </listitem>
       </itemizedlist>
     </sect1>
