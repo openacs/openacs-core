@@ -13,11 +13,22 @@
         <para>Update documentation version numbers:</para>
         <orderedlist>
           <listitem>
-            <para>Update /packages/acs-core-docs/www/xml/variables.ent with the new version number and regenerate all HTML docs
+            <para>Update /packages/acs-core-docs/www/xml/variables.ent with the new version number.
             </para>
           </listitem>
           <listitem>
+            <para>Add new section in /packages/acs-core-docs/www/xml/for-everyone/release-notes.xml
+</para>
+          </listitem>
+          <listitem>
+            <para>Regenerate all HTML docs</para>
+          </listitem>
+          <listitem>
             <para>Update /readme.txt with the new version number</para>
+          </listitem>
+          <listitem>
+            <para>Rebuild the Changelog.  Using cvs2cl:</para>
+            <screen>perl /var/tmp/cvs2cl/cvs2cl.pl -F oacs-5-0 --delta openacs-5-0-0-final:oacs-5-0</screen>
           </listitem>
           <listitem>
             <para>
