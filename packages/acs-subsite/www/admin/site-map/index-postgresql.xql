@@ -53,16 +53,6 @@
         </querytext>
     </fullquery>
 
-    <fullquery name="package_types">
-        <querytext>
-            select package_key,
-                   pretty_name
-            from apm_package_types
-            where not (apm_package__singleton_p(package_key) = 1 and apm_package__num_instances(package_key) >= 1)
-            order by pretty_name
-        </querytext>
-    </fullquery>
-
     <fullquery name="services_select">
         <querytext>
             select package_id,
