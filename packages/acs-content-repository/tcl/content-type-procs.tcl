@@ -34,14 +34,14 @@ ad_proc -public content::type::create_attribute {
     @return NUMBER(38)
 } {
     return [package_exec_plsql -var_list [list \
-        content_type $content_type \
-        attribute_name $attribute_name \
-        datatype $datatype \
-        pretty_name $pretty_name \
-        pretty_plural $pretty_plural \
-        sort_order $sort_order \
-        default_value $default_value \
-        column_spec $column_spec \
+        [list content_type $content_type ] \
+        [list attribute_name $attribute_name ] \
+        [list datatype $datatype ] \
+        [list pretty_name $pretty_name ] \
+        [list pretty_plural $pretty_plural ] \
+        [list sort_order $sort_order ] \
+        [list default_value $default_value ] \
+        [list column_spec $column_spec ] \
     ] content_type create_attribute]
 }
 
@@ -64,13 +64,13 @@ ad_proc -public content::type::create_type {
     @param name_method
 } {
     return [package_exec_plsql -var_list [list \
-        content_type $content_type \
-        supertype $supertype \
-        pretty_name $pretty_name \
-        pretty_plural $pretty_plural \
-        table_name $table_name \
-        id_column $id_column \
-        name_method $name_method \
+        [list content_type $content_type ] \
+        [list supertype $supertype ] \
+        [list pretty_name $pretty_name ] \
+        [list pretty_plural $pretty_plural ] \
+        [list table_name $table_name ] \
+        [list id_column $id_column ] \
+        [list name_method $name_method ] \
     ] content_type create_type]
 }
 
@@ -85,9 +85,9 @@ ad_proc -public content::type::drop_attribute {
     @param drop_column
 } {
     return [package_exec_plsql -var_list [list \
-        content_type $content_type \
-        attribute_name $attribute_name \
-        drop_column $drop_column \
+        [list content_type $content_type ] \
+        [list attribute_name $attribute_name ] \
+        [list drop_column $drop_column ] \
     ] content_type drop_attribute]
 }
 
@@ -102,9 +102,9 @@ ad_proc -public content::type::drop_type {
     @param drop_table_p
 } {
     return [package_exec_plsql -var_list [list \
-        content_type $content_type \
-        drop_children_p $drop_children_p \
-        drop_table_p $drop_table_p \
+        [list content_type $content_type ] \
+        [list drop_children_p $drop_children_p ] \
+        [list drop_table_p $drop_table_p ] \
     ] content_type drop_type]
 }
 
@@ -119,8 +119,8 @@ ad_proc -public content::type::get_template {
     @return NUMBER(38)
 } {
     return [package_exec_plsql -var_list [list \
-        content_type $content_type \
-        use_context $use_context \
+        [list content_type $content_type ] \
+        [list use_context $use_context ] \
     ] content_type get_template]
 }
 
@@ -133,7 +133,7 @@ ad_proc -public content::type::is_content_type {
     @return CHAR
 } {
     return [package_exec_plsql -var_list [list \
-        object_type $object_type \
+        [list object_type $object_type ] \
     ] content_type is_content_type]
 }
 
@@ -144,7 +144,7 @@ ad_proc -public content::type::refresh_view {
     @param content_type
 } {
     return [package_exec_plsql -var_list [list \
-        content_type $content_type \
+        [list content_type $content_type ] \
     ] content_type refresh_view]
 }
 
@@ -163,11 +163,11 @@ ad_proc -public content::type::register_child_type {
     @param max_n
 } {
     return [package_exec_plsql -var_list [list \
-        parent_type $parent_type \
-        child_type $child_type \
-        relation_tag $relation_tag \
-        min_n $min_n \
-        max_n $max_n \
+        [list parent_type $parent_type ] \
+        [list child_type $child_type ] \
+        [list relation_tag $relation_tag ] \
+        [list min_n $min_n ] \
+        [list max_n $max_n ] \
     ] content_type register_child_type]
 }
 
@@ -180,8 +180,8 @@ ad_proc -public content::type::register_mime_type {
     @param mime_type
 } {
     return [package_exec_plsql -var_list [list \
-        content_type $content_type \
-        mime_type $mime_type \
+        [list content_type $content_type ] \
+        [list mime_type $mime_type ] \
     ] content_type register_mime_type]
 }
 
@@ -200,11 +200,11 @@ ad_proc -public content::type::register_relation_type {
     @param max_n
 } {
     return [package_exec_plsql -var_list [list \
-        content_type $content_type \
-        target_type $target_type \
-        relation_tag $relation_tag \
-        min_n $min_n \
-        max_n $max_n \
+        [list content_type $content_type ] \
+        [list target_type $target_type ] \
+        [list relation_tag $relation_tag ] \
+        [list min_n $min_n ] \
+        [list max_n $max_n ] \
     ] content_type register_relation_type]
 }
 
@@ -221,10 +221,10 @@ ad_proc -public content::type::register_template {
     @param is_default
 } {
     return [package_exec_plsql -var_list [list \
-        content_type $content_type \
-        template_id $template_id \
-        use_context $use_context \
-        is_default $is_default \
+        [list content_type $content_type ] \
+        [list template_id $template_id ] \
+        [list use_context $use_context ] \
+        [list is_default $is_default ] \
     ] content_type register_template]
 }
 
@@ -239,9 +239,9 @@ ad_proc -public content::type::rotate_template {
     @param use_context
 } {
     return [package_exec_plsql -var_list [list \
-        template_id $template_id \
-        v_content_type $v_content_type \
-        use_context $use_context \
+        [list template_id $template_id ] \
+        [list v_content_type $v_content_type ] \
+        [list use_context $use_context ] \
     ] content_type rotate_template]
 }
 
@@ -256,9 +256,9 @@ ad_proc -public content::type::set_default_template {
     @param use_context
 } {
     return [package_exec_plsql -var_list [list \
-        content_type $content_type \
-        template_id $template_id \
-        use_context $use_context \
+        [list content_type $content_type ] \
+        [list template_id $template_id ] \
+        [list use_context $use_context ] \
     ] content_type set_default_template]
 }
 
@@ -273,9 +273,9 @@ ad_proc -public content::type::unregister_child_type {
     @param relation_tag
 } {
     return [package_exec_plsql -var_list [list \
-        parent_type $parent_type \
-        child_type $child_type \
-        relation_tag $relation_tag \
+        [list parent_type $parent_type ] \
+        [list child_type $child_type ] \
+        [list relation_tag $relation_tag ] \
     ] content_type unregister_child_type]
 }
 
@@ -288,8 +288,8 @@ ad_proc -public content::type::unregister_mime_type {
     @param mime_type
 } {
     return [package_exec_plsql -var_list [list \
-        content_type $content_type \
-        mime_type $mime_type \
+        [list content_type $content_type ] \
+        [list mime_type $mime_type ] \
     ] content_type unregister_mime_type]
 }
 
@@ -304,9 +304,9 @@ ad_proc -public content::type::unregister_relation_type {
     @param relation_tag
 } {
     return [package_exec_plsql -var_list [list \
-        content_type $content_type \
-        target_type $target_type \
-        relation_tag $relation_tag \
+        [list content_type $content_type ] \
+        [list target_type $target_type ] \
+        [list relation_tag $relation_tag ] \
     ] content_type unregister_relation_type]
 }
 
@@ -321,9 +321,9 @@ ad_proc -public content::type::unregister_template {
     @param use_context
 } {
     return [package_exec_plsql -var_list [list \
-        content_type $content_type \
-        template_id $template_id \
-        use_context $use_context \
+        [list content_type $content_type ] \
+        [list template_id $template_id ] \
+        [list use_context $use_context ] \
     ] content_type unregister_template]
 }
 

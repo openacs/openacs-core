@@ -24,10 +24,10 @@ ad_proc -public content::extlink::copy {
     @param creation_ip
 } {
     return [package_exec_plsql -var_list [list \
-        extlink_id $extlink_id \
-        target_folder_id $target_folder_id \
-        creation_user $creation_user \
-        creation_ip $creation_ip \
+        [list extlink_id $extlink_id ] \
+        [list target_folder_id $target_folder_id ] \
+        [list creation_user $creation_user ] \
+        [list creation_ip $creation_ip ] \
     ] content_extlink copy]
 }
 
@@ -38,7 +38,7 @@ ad_proc -public content::extlink::del {
     @param extlink_id item_id of extlink to delete
 } {
     return [package_exec_plsql -var_list [list \
-        extlink_id $extlink_id \
+        [list extlink_id $extlink_id ] \
     ] content_extlink del]
 }
 
@@ -51,6 +51,6 @@ ad_proc -public content::extlink::is_extlink {
     @return 1 if extlink, otherwise 0
 } {
     return [package_exec_plsql -var_list [list \
-        item_id $item_id \
+        [list item_id $item_id ] \
     ] content_extlink is_extlink]
 }

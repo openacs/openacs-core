@@ -20,8 +20,8 @@ ad_proc -public content::keyword::write_to_file {
     @param root_path
 } {
     return [package_exec_plsql -var_list [list \
-        item_id $item_id \
-        root_path $root_path \
+        [list item_id $item_id ] \
+        [list root_path $root_path ] \
     ] content_keyword write_to_file]
 }
 
@@ -32,7 +32,7 @@ ad_proc -public content::keyword::del {
     @param keyword_id
 } {
     return [package_exec_plsql -var_list [list \
-        keyword_id $keyword_id \
+        [list keyword_id $keyword_id ] \
     ] content_keyword del]
 }
 
@@ -45,7 +45,7 @@ ad_proc -public content::keyword::get_description {
     @return VARCHAR2
 } {
     return [package_exec_plsql -var_list [list \
-        keyword_id $keyword_id \
+        [list keyword_id $keyword_id ] \
     ] content_keyword get_description]
 }
 
@@ -58,7 +58,7 @@ ad_proc -public content::keyword::get_heading {
     @return VARCHAR2
 } {
     return [package_exec_plsql -var_list [list \
-        keyword_id $keyword_id \
+        [list keyword_id $keyword_id ] \
     ] content_keyword get_heading]
 }
 
@@ -71,7 +71,7 @@ ad_proc -public content::keyword::get_path {
     @return VARCHAR2
 } {
     return [package_exec_plsql -var_list [list \
-        keyword_id $keyword_id \
+        [list keyword_id $keyword_id ] \
     ] content_keyword get_path]
 }
 
@@ -88,9 +88,9 @@ ad_proc -public content::keyword::is_assigned {
     @return VARCHAR2
 } {
     return [package_exec_plsql -var_list [list \
-        item_id $item_id \
-        keyword_id $keyword_id \
-        recurse $recurse \
+        [list item_id $item_id ] \
+        [list keyword_id $keyword_id ] \
+        [list recurse $recurse ] \
     ] content_keyword is_assigned]
 }
 
@@ -103,7 +103,7 @@ ad_proc -public content::keyword::is_leaf {
     @return VARCHAR2
 } {
     return [package_exec_plsql -var_list [list \
-        keyword_id $keyword_id \
+        [list keyword_id $keyword_id ] \
     ] content_keyword is_leaf]
 }
 
@@ -122,11 +122,11 @@ ad_proc -public content::keyword::item_assign {
     @param creation_ip
 } {
     return [package_exec_plsql -var_list [list \
-        item_id $item_id \
-        keyword_id $keyword_id \
-        context_id $context_id \
-        creation_user $creation_user \
-        creation_ip $creation_ip \
+        [list item_id $item_id ] \
+        [list keyword_id $keyword_id ] \
+        [list context_id $context_id ] \
+        [list creation_user $creation_user ] \
+        [list creation_ip $creation_ip ] \
     ] content_keyword item_assign]
 }
 
@@ -139,8 +139,8 @@ ad_proc -public content::keyword::item_unassign {
     @param keyword_id
 } {
     return [package_exec_plsql -var_list [list \
-        item_id $item_id \
-        keyword_id $keyword_id \
+        [list item_id $item_id ] \
+        [list keyword_id $keyword_id ] \
     ] content_keyword item_unassign]
 }
 
@@ -167,14 +167,14 @@ ad_proc -public content::keyword::new {
     @return NUMBER(38)
 } {
     return [package_exec_plsql -var_list [list \
-        heading $heading \
-        description $description \
-        parent_id $parent_id \
-        keyword_id $keyword_id \
-        creation_date $creation_date \
-        creation_user $creation_user \
-        creation_ip $creation_ip \
-        object_type $object_type \
+        [list heading $heading ] \
+        [list description $description ] \
+        [list parent_id $parent_id ] \
+        [list keyword_id $keyword_id ] \
+        [list creation_date $creation_date ] \
+        [list creation_user $creation_user ] \
+        [list creation_ip $creation_ip ] \
+        [list object_type $object_type ] \
     ] content_keyword new]
 }
 
@@ -187,8 +187,8 @@ ad_proc -public content::keyword::set_description {
     @param description
 } {
     return [package_exec_plsql -var_list [list \
-        keyword_id $keyword_id \
-        description $description \
+        [list keyword_id $keyword_id ] \
+        [list description $description ] \
     ] content_keyword set_description]
 }
 
@@ -201,7 +201,7 @@ ad_proc -public content::keyword::set_heading {
     @param heading
 } {
     return [package_exec_plsql -var_list [list \
-        keyword_id $keyword_id \
-        heading $heading \
+        [list keyword_id $keyword_id ] \
+        [list heading $heading ] \
     ] content_permission set_heading]
 }

@@ -19,7 +19,7 @@ ad_proc -public content::template::del {
     @param template_id
 } {
     return [package_exec_plsql -var_list [list \
-        template_id $template_id \
+        [list template_id $template_id ] \
     ] content_template del]
 }
 
@@ -34,8 +34,8 @@ ad_proc -public content::template::get_path {
     @return VARCHAR2
 } {
     return [package_exec_plsql -var_list [list \
-        template_id $template_id \
-        root_folder_id $root_folder_id \
+        [list template_id $template_id ] \
+        [list root_folder_id $root_folder_id ] \
     ] content_template get_path]
 }
 
@@ -58,7 +58,7 @@ ad_proc -public content::template::is_template {
     @return VARCHAR2
 } {
     return [package_exec_plsql -var_list [list \
-        template_id $template_id \
+        [list template_id $template_id ] \
     ] content_template is_template]
 }
 
@@ -85,13 +85,13 @@ ad_proc -public content::template::new {
     @return NUMBER(38)
 } {
     return [package_exec_plsql -var_list [list \
-        name $name \
-        text $text \
-        parent_id $parent_id \
-        is_live $is_live \
-        template_id $template_id \
-        creation_date $creation_date \
-        creation_user $creation_user \
-        creation_ip $creation_ip \
+        [list name $name ] \
+        [list text $text ] \
+        [list parent_id $parent_id ] \
+        [list is_live $is_live ] \
+        [list template_id $template_id ] \
+        [list creation_date $creation_date ] \
+        [list creation_user $creation_user ] \
+        [list creation_ip $creation_ip ] \
     ] content_template new]
 }
