@@ -6,7 +6,7 @@
 <fullquery name="site_nodes_sync_helper.nodes_select">      
       <querytext>
 
-    select site_node.url(n.node_id) as url, n.node_id, n.directory_p,
+    select site_node__url(n.node_id) as url, n.node_id, n.directory_p,
            n.pattern_p, n.object_id, o.object_type, n.package_key, n.package_id
     from acs_objects o left outer join
         (select n.node_id, n.directory_p, n.pattern_p, n.object_id, 

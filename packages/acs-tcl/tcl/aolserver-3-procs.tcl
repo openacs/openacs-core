@@ -123,29 +123,6 @@ proc _ns_updatebutton {table var} {
     }
 }
 
-ad_proc -deprecated ns_findrowbyid {table rowidset} {
-    db_with_handle db {
-	set sql "select * from [ns_dbquotename $table] where"
-	for {set i 0} {$i < [ns_set size $rowidset]} {incr i} {
-	    if {$i != 0} {
-		append sql " and"
-	    }
-	    set column [ns_urldecode [ns_set key $rowidset $i]]
-	    set value [ns_set value $rowidset $i]
-	    set type [ns_column type $db $table $column]
-	    append sql " [ns_dbquotename $column] = [ns_dbquotevalue $value $type]"
-	}
-	
-	if [catch {   
-	    set row [ns_ora select $db $sql]
-	} errMsg] {
-	    ns_db setexception $db NSINT "Could not find row"
-	    error $errMsg
-	}
-    }
-    return $row
-}
-
 proc _http_read {timeout sock length} {
 
     return [_ns_http_read $timeout $sock $length]
