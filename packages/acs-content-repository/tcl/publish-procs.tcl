@@ -6,6 +6,83 @@ namespace eval publish {
   namespace eval handle {}
 }
 
+
+ad_proc -public publish::get_page_root {} {
+
+    Get the page root. All items will be published to the 
+    filesystem with their URLs relative to this root.
+    The page root is controlled by the PageRoot parameter in CMS.
+    A relative path is relative to [ns_info pageroot]
+    The default is [ns_info pageroot]
+    
+    @return The page root
+    
+    @see publish::get_template_root
+    @see publish::get_publish_roots
+    
+} {
+    # LARS TODO: This parameter doesn't exist, it's a remnant from the CMS package
+    set root_path [parameter::get \
+                       -package_id [ad_conn package_id] \
+                       -parameter PageRoot]
+    
+    if { [string index $root_path 0] != "/" } {
+        # Relative path, prepend server_root
+        set root_path "[ns_info pageroot]/$root_path"
+    }
+    
+    return [ns_normalizepath $root_path]
+    
+}
+
+
+ad_proc -public publish::get_publish_roots {} {
+    Get a list of all page roots to which files may be published.
+    The publish roots are controlled by the PublishRoots parameter in CMS,
+    which should be a space-separated list of all the roots. Relative paths
+    are relative to publish::get_page_root.
+    The default is [list [publish::get_page_root]]
+    
+    @return A list of all the publish roots
+    
+    @see publish::get_template_root
+    @see publish::get_page_root
+    
+} {
+    # LARS TODO: This parameter doesn't exist, it's a remnant from the CMS package
+    set root_paths [parameter::get \
+                        -package_id [ad_conn package_id] \
+                        -parameter PublishRoots]
+    
+    if { [llength $root_paths] == 0 } {
+        set root_paths [list [get_page_root]]
+    }
+    
+    # Resolve relative paths
+    set page_root [publish::get_page_root]
+    set absolute_paths [list]
+    foreach path $root_paths {
+        if { [string index $path 0] != "/" } {
+            lappend absolute_paths [ns_normalizepath "$page_root/$path"]
+        } else {
+            lappend absolute_paths $path
+        }
+    }
+    
+    return $absolute_paths
+}
+
+ad_proc -public publish::mkdirs { path } {
+    Create all the directories neccessary to save the specified file
+    
+    @param path  The path to the file that is about to be saved
+} {
+    set index [string last "/" $path]
+    if { $index != -1 } {
+        file mkdir [string range $path 0 [expr $index - 1]]
+    } 
+}
+
 ###############################################
 # Procs to maintain the item_id stack
 # main_item_id is always the id at the top of the stack
@@ -205,7 +282,7 @@ ad_proc -public publish::handle_binary_file {
 
     set file_url [publish::write_content $revision_id \
                    -item_id $item_id -root_path [publish::get_publish_roots]]
-
+    
     # If write_content aborted, give up
     if { [template::util::is_nil file_url] } {
       set error_msg "No URL found for revision $revision_id, item $item_id"
@@ -292,11 +369,11 @@ ad_proc -public publish::handle::image { item_id args } {
   externally.
 
 } {
-
   template::util::get_opts $args
-
+  
+  # LARS TODO: Added -no_merge, verify how this is supposed to work
   set html [eval publish::handle_binary_file \
-     $item_id revision_id url error_msg $args]
+     $item_id revision_id url error_msg $args -no_merge]
 
   # If an error happened, abort
   if { ![template::util::is_nil error_msg] } {
@@ -321,7 +398,7 @@ ad_proc -public publish::handle::image { item_id args } {
     set have_alt 0
   }
 
-  set html "<img src=$url"
+  set html "<img src=\"$url\""
 
   if { ![template::util::is_nil width] } {
     append html " width=\"$width\""
@@ -733,7 +810,6 @@ ad_proc -public publish::render_subitem {
   @see publish::handle_item
 
 } {
-
   # Get the child item
 
   if { [string equal $relation_type child] } {
@@ -743,7 +819,7 @@ ad_proc -public publish::render_subitem {
   }
 
   set sub_item_id [lindex $subitems [expr $index - 1]]
-   
+
   if { [template::util::is_nil sub_item_id] } {
     ns_log notice "publish::render_subitem: No such subitem"
     return ""
@@ -985,6 +1061,14 @@ ad_proc -public publish::write_content { revision_id args } {
   
       set file_url [item::get_extended_url $item_id -revision_id $revision_id]
 
+      # LARS HACK: Delete the file if it already exists
+      # Not sure what we should really do here, since on the one hand, the below db commands
+      # crap out if the file already exists, but on the other hand, we shouldn't accidentally
+      # overwrite files
+      if { [file exists $root_path$file_url] } {
+          file delete $root_path$file_url
+      }
+
       # Write blob/text to file
       ns_log debug " publish::write_content: writing item $item_id to $file_url"
 
@@ -1010,7 +1094,7 @@ ad_proc -public publish::write_content { revision_id args } {
 	      ns_log warning "publish::write_content: No content supplied for revision $revision_id"
 	      return ""
 	  }
-
+          
 	  # Write the blob
 	  write_multiple_blobs $file_url $revision_id $root_path
       }
