@@ -21,7 +21,8 @@
                     from acs_objects
                     where acs_objects.object_id = site_nodes.object_id) as object_type,
                    apm_packages.package_key,
-                   apm_packages.package_id
+                   apm_packages.package_id,
+                   apm_packages.instance_name
             from site_nodes,
                  apm_packages
             where site_nodes.object_id = apm_packages.package_id(+)
@@ -40,7 +41,8 @@
                     from acs_objects
                     where acs_objects.object_id = site_nodes.object_id) as object_type,
                    apm_packages.package_key,
-                   apm_packages.package_id
+                   apm_packages.package_id,
+                   apm_packages.instance_name
             from site_nodes,
                  apm_packages
             where site_nodes.node_id = :node_id

@@ -66,19 +66,9 @@ namespace eval site_node {
         nsv_array reset site_nodes [list]
         nsv_array reset site_node_urls [list]
 
-        db_foreach select_site_nodes {} {
-            set node(url) $url
-            set node(node_id) $node_id
-            set node(parent_id) $parent_id
-            set node(directory_p) $directory_p
-            set node(pattern_p) $pattern_p
-            set node(object_id) $object_id
-            set node(object_type) $object_type
-            set node(package_key) $package_key
-            set node(package_id) $package_id
-
-            nsv_set site_nodes $url [array get node]
-            nsv_set site_node_urls $node_id $url
+        db_foreach select_site_nodes {} -column_array node {
+            nsv_set site_nodes $node(url) [array get node]
+            nsv_set site_node_urls $node(node_id) $node(url)
         }
 
         ns_eval {
@@ -92,24 +82,14 @@ namespace eval site_node {
     ad_proc -private update_cache {
         {-node_id:required}
     } {
-        if {[db_0or1row select_site_node {}]} {
-            set node(url) $url
-            set node(node_id) $node_id
-            set node(parent_id) $parent_id
-            set node(directory_p) $directory_p
-            set node(pattern_p) $pattern_p
-            set node(object_id) $object_id
-            set node(object_type) $object_type
-            set node(package_key) $package_key
-            set node(package_id) $package_id
-
-            nsv_set site_nodes $url [array get node]
-            nsv_set site_node_urls $node_id $url
+        if { [db_0or1row select_site_node {} -column_array node] } {
+            nsv_set site_nodes $node(url) [array get node]
+            nsv_set site_node_urls $node(node_id) $node(url)
 
             ns_eval {
                 global tcl_site_nodes
-                if {[info exists tcl_site_nodes]} {
-                    array unset tcl_site_nodes "${url}*"
+                if { [info exists tcl_site_nodes] } {
+                    array unset tcl_site_nodes "${node(url)}*"
                 }
             }
         } else {
