@@ -36,6 +36,7 @@ ad_page_contract {
     {passthrough ""}
     {limit_to_users_in_group_id ""}
     {only_authorized_p:integer 1}
+    {only_needs_approval_p:naturalnum 0}
     {registration_before_days:integer -1}
     {registration_after_days:integer -1}
     {last_visit_before_days:integer -1}
@@ -125,6 +126,8 @@ if { [exists_and_not_null first_names] } {
 
 if { $only_authorized_p } {
     lappend where_clause {member_state = 'approved'}
+} elseif { $only_needs_approval_p } {
+    lappend where_clause {member_state = 'needs approval'}
 }
 
 if { $registration_before_days >= 0 } {

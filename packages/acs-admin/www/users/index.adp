@@ -17,7 +17,7 @@
     <input type=hidden name='only_authorized_p' value="0">
     <li>Quick search: <input type=text size=15 name='keyword'> <input type='submit' value="Find User">
   </FORM>
-
+  <li><a href="complex-search?target=one&only_authorized_p=0&only_needs_approval_p=1">Find all users needing approval</a>
   <li><a href="user-add">Add a user</a>
 
   <form method='get' action='complex-search'>
