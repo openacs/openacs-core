@@ -61,7 +61,20 @@ ad_proc cc_name_to_group { name } {
     return [util_memoize [list cc_lookup_name_group $name]]
 }
 
-ad_proc ad_user_new {email first_names last_name password password_question password_answer  {url ""} {email_verified_p "t"} {member_state "approved"} {user_id ""} } {
+ad_proc ad_user_new {
+    email
+    first_names
+    last_name
+    password 
+    password_question
+    password_answer
+    {url ""} 
+    {email_verified_p "t"} 
+    {member_state "approved"} 
+    {user_id ""} 
+    {username ""} 
+    {authority_id ""}
+} {
 
     Creates a new user in the system.  The user_id can be specified as an argument to enable double click protection.
     If this procedure succeeds, returns the new user_id.  Otherwise, returns 0.
@@ -105,6 +118,18 @@ ad_proc ad_user_new {email first_names last_name password password_question pass
             end;
         }
         ]
+ 
+        if { [empty_string_p $username] } {
+            set username $email
+        }
+
+        # Add username, authority_id
+        db_dml update_users {
+            update users
+            set    username = :username,
+                   authority_id = :authority_id
+            where  user_id = :user_id
+        }
 
         if {[catch {
             # Call the extension
