@@ -280,6 +280,9 @@
     <xi:include href="developers-guide/cvs.xml"  xmlns:xi="http://www.w3.org/2001/XInclude">
 <xi:fallback>Section missing</xi:fallback>
       </xi:include> 
+    <xi:include href="releasing-openacs.xml"  xmlns:xi="http://www.w3.org/2001/XInclude">
+<xi:fallback>'Releasing OpenACS' missing</xi:fallback>
+      </xi:include> 
   </part>
   
   <part id="acs-plat-dev">
