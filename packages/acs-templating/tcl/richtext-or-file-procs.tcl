@@ -295,12 +295,10 @@ ad_proc -public template::widget::richtext_or_file { element_reference tag_attri
   } else {
       # Display mode
       if { [info exists element(value)] } {
-
-          # TODO
-
           append output [template::util::richtext_or_file::get_property html_value $element(value)]
-          append output "<input type=\"hidden\" name=\"$element(id)\" value=\"[ad_quotehtml $contents]\">"
-          append output "<input type=\"hidden\" name=\"$element(id).format\" value=\"[ad_quotehtml $format]\">"
+          append output "<input type=\"hidden\" name=\"$element(id).mime_type\" value=\"[ad_quotehtml $mime_type]\">"
+          append output "<input type=\"hidden\" name=\"$element(id).storage_type\" value=\"[ad_quotehtml $storage_type]\">"
+          append output "<input type=\"hidden\" name=\"$element(id).text\" value=\"[ad_quotehtml $text]\">"
       }
   }
       
