@@ -1035,6 +1035,16 @@ ad_proc -private __ad_verify_signature {
 	return 1
     }
 
+    # check to see if IE is lame (and buggy!) and is expanding \n to \r\n
+    # See: http://www.arsdigita.com/bboard/q-and-a-fetch-msg?msg_id=000bfF
+    set value [string map [list \r ""] $value]
+    set computed_hash [ns_sha1 "$value$token_id$expire_time$secret_token"]
+
+    if { [string compare $computed_hash $hash] == 0 && ($expire_time > [ns_time] || $expire_time == 0) } {
+	return 1
+    }
+
+
     ns_log Debug "Security: The string compare is [string compare $computed_hash $hash]."
     # signature could not be authenticated
     return 0
