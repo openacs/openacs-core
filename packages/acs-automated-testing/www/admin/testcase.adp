@@ -10,6 +10,8 @@
     <dt><b>Description:</b></dt><dd>@testcase_desc@</dd>
     <dt><b>Defined in file:</b></dt><dd>@testcase_file@</dd>
     <dt><b>Categories:</b></dt><dd>@testcase_cats@</dd>
+    <dt><b>Bugs:</b></dt><dd>This test case covers OpenACS bug number(s):
+    @bug_blurb;noquote@</dd>
     <if @testcase_inits@ ne "">
       <dt><b>Initialisation Classes:</b></dt><dd>@testcase_inits@</dd>
     </if>
