@@ -11,4 +11,11 @@
 </querytext>
 </fullquery>
 
+<fullquery name="ad_require_permission.name">      
+      <querytext>
+      select acs_object__name(:object_id)
+      </querytext>
+</fullquery>
+
+ 
 </queryset>
