@@ -52,7 +52,7 @@ ad_proc -private sec_session_lifetime {} {
     return [ad_parameter -package_id [ad_acs_kernel_id] SessionLifetime security 604800]
 }
 
-proc sec_sweep_sessions {} {
+ad_proc -private sec_sweep_sessions {} {
     set expires [expr {[ns_time] - [sec_session_lifetime]}]
 
     db_dml sessions_sweep {} 
