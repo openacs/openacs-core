@@ -381,9 +381,6 @@ ad_proc -private auth::local::registration::Register {
     # We don't create anything here, so creation always succeeds
     # And we don't check local account, either
 
-    ns_log Notice "LARS: username=$username, email=$email"
-
-
     # Generate random password?
     set generated_pwd_p 0
     if { [empty_string_p $password] || [parameter::get -parameter RegistrationProvidesRandomPasswordP -default 0] } {

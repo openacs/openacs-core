@@ -155,10 +155,12 @@ ad_proc -public auth::authority::create {
 
 
 ad_proc -public auth::authority::get {
-    {-authority_id:required}
+    {-authority_id {}}
+    {-user_id {}}
+    {-short_name {}}
     {-array:required}
 } {
-    Get info about a authority by authority_id.
+    Get info about an authority, either by authority_id, user_id, or authority short_name.
     
     @param authority_id The authority you want to get.
 
@@ -176,10 +178,29 @@ ad_proc -public auth::authority::get {
     lappend columns "(select impl_name from acs_sc_impls where impl_id = pwd_impl_id) as pwd_impl_name"
     lappend columns "(select impl_name from acs_sc_impls where impl_id = register_impl_id) as register_impl_name"
 
+    if { [exists_and_not_null authority_id] } {
+        if { ![empty_string_p "$short_name$user_id"] } {
+            error "Only one of authority_id, short_name, or user_id may be specified"
+        }
+        lappend where_clauses "authority_id = :authority_id"
+    } elseif { [exists_and_not_null short_name] } {
+        if { ![empty_string_p "$authority_id$user_id"] } {
+            error "Only one of authority_id, short_name, or user_id may be specified"
+        }
+        lappend where_clauses "short_name = :short_name"
+    } elseif { [exists_and_not_null user_id] } {
+        if { ![empty_string_p "$authority_id$short_name"] } {
+            error "Only one of authority_id, short_name, or user_id may be specified"
+        }
+        lappend where_clauses "authority_id = (select authority_id from users where user_id = :user_id)"
+    } else {
+        error "You must supply either authority_id, short_name, or user_id"
+    }
+
     db_1row select_authority "
         select     [join $columns ",\n                   "]
         from       auth_authorities
-        where      authority_id = :authority_id
+        where      [join $where_clauses " and "]
     " -column_array row
 
     return $authority_id
