@@ -39,7 +39,7 @@ proc db_rdbms_compatible_p {rdbms_test rdbms_pattern} {
     ns_log Notice "QD/COMPATIBILITY = The RDBMS_PATTERN is [db_rdbms_get_type $rdbms_pattern] - [db_rdbms_get_version $rdbms_pattern]"
 
     # If the pattern is for all RDBMS, then yeah, compatible
-    if {[empty_string_p [db_rdbms_get_type $rdbms_pattern]]} {
+    if {[empty_string_p [db_rdbms_get_type $rdbms_test]]} {
 	return 1
     }
 
@@ -406,7 +406,7 @@ proc db_qd_internal_store_cache {fullquery} {
 
     set name [db_fullquery_get_name $fullquery]
 
-    ns_log Notice "QD = Query $name is compatible!"
+    ns_log Notice "QD = Query $name is compatible! fullquery = $fullquery, name = $name"
 
     # If we already have a query for that name, we need to
     # figure out which one is *most* compatible.
@@ -415,7 +415,6 @@ proc db_qd_internal_store_cache {fullquery} {
 
 	set fullquery [db_qd_pick_most_specific_query [db_current_rdbms] $old_fullquery $fullquery]
     }
-
 
     nsv_set OACS_FULLQUERIES $name $fullquery
 }
@@ -445,7 +444,8 @@ proc db_qd_internal_get_queryname_root {relative_path} {
     # remove the last chunk of the file name, since we're just looking for the root path
     # NOTE: THIS MAY NEED BETTER ABSTRACTION, since this assumes a naming scheme
     # of -rdbms.XXX (ben)
-    regsub {\-[^/-]*$} $relative_path {} relative_path
+    regsub {\.xql} $relative_path {} relative_path
+    regsub {\-(postgresql|oracle)$} $relative_path {} relative_path
 
     # Change all . to :
     regsub -all {\.} $relative_path {:} relative_path    
