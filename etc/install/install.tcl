@@ -292,3 +292,10 @@ set tclwebtest_scripts ""
 # to start from here. To crawl the whole site, set this parameter to "/". To
 # not do any crawling, leave empty.
 set crawl_links_start_path ""
+
+# The directory the xml report of the installation should be copied to with scp. Use
+# a local absolute path if you want a local copy. Leave empty if you don't want the xml
+# report copied anywhere. Example values: 
+# /var/log/openacs-install
+# me@test.mycompany.com:/var/log/openacs-install
+set report_scp_target "/var/log/openacs-install"
