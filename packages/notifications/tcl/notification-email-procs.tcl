@@ -151,7 +151,7 @@ namespace eval notification::email {
         set bounce_to [parse_email_address $to_addr]
 	set bounce_address [parse_email_address $from_addr]
 	set bounce_from "MAILER-DAEMON@$domain"
-	set bounce_subject "failure debug"
+	set bounce_subject "failure notice"
 	set l "Hi.  This is the notification program at $domain.\n"
 	append l "I'm afraid I wasn't able to deliver your message to the\n"
 	append l "following addresses.  This is a permament error; I've\n"
