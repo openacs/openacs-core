@@ -3,7 +3,7 @@
 <queryset>
    <rdbms><type>postgresql</type><version>7.1</version></rdbms>
 
-<fullquery name="acs_subsite_post_instantiation.add_constraint">      
+<fullquery name="subsite::configure.add_constraint">      
       <querytext>
       FIX ME PLSQL
 
@@ -22,7 +22,7 @@
 </fullquery>
 
  
-<fullquery name="acs_subsite_post_instantiation.select_package_object_names">      
+<fullquery name="subsite::auto_mount_application.select_package_object_names">      
       <querytext>
       
 	    select t.pretty_name as package_name, acs_object__name(s.object_id) as object_name
@@ -34,7 +34,7 @@
 </fullquery>
 
  
-<fullquery name="acs_subsite_post_instantiation.sub_type_exists_p">      
+<fullquery name="subsite::util::sub_type_exists_p.sub_type_exists_p">      
       <querytext>
       
 	select case 

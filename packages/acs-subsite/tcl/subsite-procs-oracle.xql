@@ -3,7 +3,7 @@
 <queryset>
    <rdbms><type>oracle</type><version>8.1.6</version></rdbms>
 
-<fullquery name="acs_subsite_post_instantiation.add_constraint">      
+<fullquery name="subsite::configure.add_constraint">      
       <querytext>
       
 		    BEGIN
@@ -21,7 +21,7 @@
 </fullquery>
 
  
-<fullquery name="acs_subsite_post_instantiation.select_package_object_names">      
+<fullquery name="subsite::auto_mount_application.select_package_object_names">      
       <querytext>
       
 	    select t.pretty_name as package_name, acs_object.name(s.object_id) as object_name
@@ -33,7 +33,7 @@
 </fullquery>
 
  
-<fullquery name="acs_subsite_post_instantiation.sub_type_exists_p">      
+<fullquery name="subsite::util::sub_type_exists_p.sub_type_exists_p">      
       <querytext>
       
 	select case 
@@ -48,7 +48,7 @@
 </fullquery>
 
  
-<fullquery name="acs_subsite_post_instantiation.select_object_type_path">      
+<fullquery name="subsite::util::object_type_path_list.select_object_type_path">      
       <querytext>
       
 	select object_type
