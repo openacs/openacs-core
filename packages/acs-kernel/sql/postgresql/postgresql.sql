@@ -307,20 +307,28 @@ select get_func_header(proname,proargtypes) as definition,
 create function int_to_tree_key(integer) returns varbit as '
 
 -- Convert an integer into the bit string format used to store
--- tree sort keys.
+-- tree sort keys.   Using 4 bytes for the long keys requires
+-- using -2^31 rather than 2^31 to avoid a twos-complement 
+-- "integer out of range" error in PG - if for some reason you
+-- want to use a smaller value use positive powers of two!
+
+-- There was an "out of range" check in here when I was using 15
+-- bit long keys but the only check that does anything with the long
+-- keys is to check for negative numbers.
 
 declare
   p_intkey        alias for $1;
 begin
-  if p_intkey <= 127 then
+  if p_intkey < 0 then
+    raise exception ''int_to_tree_key: key must be a positive integer'';
+  end if;
+
+  if p_intkey < 2^7 then
     return substring(bitfromint4(p_intkey), 25, 8);
   else
-    if p_intkey <= 32767 then
-      return substring(bitfromint4(2^15 + p_intkey), 17, 16);
-    else
-      raise exception ''int_to_tree_key: key too large.'';
-    end if;
+    return substring(bitfromint4(-2^31 + p_intkey), 1, 32);
   end if;
+
 end;' language 'plpgsql' with (isstrict, iscachable);
 
 create function tree_key_to_int(varbit, integer) returns integer as '
@@ -341,7 +349,7 @@ begin
     v_parent_pos := v_pos;
     v_level := v_level + 1;
     if substring(p_tree_key, v_pos, 1) = ''1'' then
-      v_pos := v_pos + 16;
+      v_pos := v_pos + 32;
     else
       v_pos := v_pos + 8;
     end if;
@@ -352,7 +360,7 @@ begin
   end if;
 
   if substring(p_tree_key, v_parent_pos, 1) = ''1'' then
-    return bittoint4(substring(p_tree_key, v_parent_pos + 1, 15));
+    return bittoint4(substring(p_tree_key, v_parent_pos + 1, 31));
   else
     return bittoint4(substring(p_tree_key, v_parent_pos, 8));
   end if;
@@ -378,7 +386,7 @@ begin
   while v_level < p_level loop
     v_level := v_level + 1;
     if substring(p_tree_key, v_pos, 1) = ''1'' then
-      v_pos := v_pos + 16;
+      v_pos := v_pos + 32;
     else
       v_pos := v_pos + 8;
     end if;
@@ -398,7 +406,7 @@ declare
 begin
 
   if substring(p_tree_key, 1, 1) = ''1'' then
-      return substring(p_tree_key, 1, 16);
+      return substring(p_tree_key, 1, 32);
   else
       return substring(p_tree_key, 1, 8);
   end if;
@@ -420,14 +428,14 @@ begin
   while v_pos < length(p_tree_key) loop
     v_leaf_pos := v_pos;
     if substring(p_tree_key, v_pos, 1) = ''1'' then
-      v_pos := v_pos + 16;
+      v_pos := v_pos + 32;
     else
       v_pos := v_pos + 8;
     end if;
   end loop;
 
   if substring(p_tree_key, v_leaf_pos, 1) = ''1'' then
-    return bittoint4(substring(p_tree_key, v_leaf_pos + 1, 15));
+    return bittoint4(substring(p_tree_key, v_leaf_pos + 1, 31));
   else
     return bittoint4(substring(p_tree_key, v_leaf_pos, 8));
   end if;
@@ -485,9 +493,9 @@ declare
   key      alias for $1;
 begin
   if key is null then
-    return ''XFFFF'';
+    return ''XFFFFFFFF'';
   else
-    return key || ''XFFFF'';
+    return key || ''XFFFFFFFF'';
   end if;
 end;' language 'plpgsql' with(iscachable);
 
@@ -513,7 +521,7 @@ begin
   while v_pos <= length(p_tree_key) loop
     v_level := v_level + 1;
     if substring(p_tree_key, v_pos, 1) = ''1'' then
-      v_pos := v_pos + 16;
+      v_pos := v_pos + 32;
     else
       v_pos := v_pos + 8;
     end if;
