@@ -22,7 +22,7 @@ namespace eval acs_privacy {
     ad_proc -public privacy_control_set {val} {
 	set the privacy control
     } {
-	ad_parameter -set $val privacy_control_enabled_p acs-kernel
+	ad_parameter -set $val PrivacyControlEnabledP acs-kernel
     }
 
     ad_proc -public user_can_read_private_data_p {
