@@ -224,18 +224,27 @@ ad_proc -public ad_form {
     <dd>When the form is submitted, this code block will be executed before any new_data or edit_data code block.
         Use this if your form doesn't interact with the database or if the database type involved includes a Tcl
         API that works for both new and existing data. The values of the form's elements will be available as local variables.
+        Calling 'break' inside this block causes the submission process to be aborted, and neither new_data, edit_data, nor 
+        after_submit will get executed. Useful in combination with template::form set_error to display an error on a form 
+        element.
     </dd>
 
     <p><dt><b>-new_data</b></dt><p>
     <dd>This code block will be executed when a form for a new database row is submitted.  This block should
         insert the data into the database or create a new database object or content repository item containing
         the data.
+        Calling 'break' inside this block causes the submission process to be aborted, and  
+        after_submit will not get executed. Useful in combination with template::form set_error to display an error on a form 
+        element.
     </dd>
 
     <p><dt><b>-edit_data</b></dt><p>
     <dd>This code block will be executed when a form for an existing database row is submitted.  This block should
         update the database or create a new content revision for the exisiting item if the data's stored in the
         content repository.
+        Calling 'break' inside this block causes the submission process to be aborted, and  
+        after_submit will not get executed. Useful in combination with template::form set_error to display an error on a form 
+        element.
     </dd>
 
     <p><dt><b>-after_submit</b></dt><p>
@@ -956,22 +965,61 @@ ad_proc -public ad_form {
             }
         }
 
-        if { [info exists on_submit] } {
-            ad_page_contract_eval uplevel #$level $on_submit
-        }
 
-        upvar #$level __new_p __new_p
 
-        if { [info exists new_data] && $__new_p } {
-            ad_page_contract_eval uplevel #$level $new_data
-            template::element::set_value $form_name __new_p 0
-        } elseif { [info exists edit_data] && !$__new_p } {
-            ad_page_contract_eval uplevel #$level $edit_data
-        }
+        # Lars: We're wrapping this in a catch to allow people to throw a "break" inside
+        # the code block, causing submission to be canceled
+        # In order to make this work, I had to eliminate the ad_page_contract_eval's below
+        # and replace them with simple uplevel's. Otherwise, we'd get an error saying
+        # 'break used outside of a loop'.
+        set errno [catch {
+            if { [info exists on_submit] } {
+                uplevel #$level $on_submit
+            }
 
-        if { [info exists after_submit] } {
-            ad_page_contract_eval uplevel #$level $after_submit
+            upvar #$level __new_p __new_p
+
+            if { [info exists new_data] && $__new_p } {
+                uplevel #$level $new_data
+                template::element::set_value $form_name __new_p 0
+            } elseif { [info exists edit_data] && !$__new_p } {
+                uplevel #$level $edit_data
+            }
+
+            if { [info exists after_submit] } {
+                uplevel #$level $after_submit
+            }
+        } error]
+
+        # Handle or propagate the error. Can't use the usual
+        # "return -code $errno..." trick due to the db_with_handle
+        # wrapped around this loop, so propagate it explicitly.
+        switch $errno {
+            0 {
+                # TCL_OK
+            }
+            1 {
+                # TCL_ERROR
+                global errorInfo errorCode
+                error $error $errorInfo $errorCode
+            }
+            2 {
+                # TCL_RETURN
+                error "Cannot return from inside an ad_form block"
+            }
+            3 {
+                # TCL_BREAK
+                # nothing -- this is what we want to support
+            }
+            4 {
+                # TCL_CONTINUE
+                continue
+            }
+            default {
+                error "Unknown return code: $errno"
+            }
         }
+       
     }
 
     template::element::set_value $form_name __refreshing_p 0
