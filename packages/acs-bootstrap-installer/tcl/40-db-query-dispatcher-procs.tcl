@@ -330,7 +330,9 @@ proc db_qd_replace_sql {statement_name sql} {
 proc db_map {snippet_name} {
     set fullname [db_qd_get_fullname $snippet_name]
     set fullquery [db_qd_fetch $fullname]
-    return [db_fullquery_get_querytext $fullquery]
+    set sql [db_fullquery_get_querytext $fullquery]
+
+    return [uplevel 1 [list subst -nobackslashes $sql]]
 }
 
 # Check compatibility of a FullQuery against an RDBMS
