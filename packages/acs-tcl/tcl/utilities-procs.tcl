@@ -2871,3 +2871,19 @@ ad_proc -public util_ns_set_to_list {
 
     return $result
 }
+
+
+ad_proc -public util_list_to_ns_set { aList } {
+    Convert an ns_set into a TCL array.
+
+    @param set The list to convert
+
+    @return The id of a (non-persistent) ns_set
+} {
+    set setid [ns_set create]
+    foreach {k v} $aList {
+        ns_set put $setid $k $v
+    }
+
+    return $setid
+}
