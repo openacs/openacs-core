@@ -57,7 +57,9 @@ multirow append header_links "stylesheet" "text/css" "/resources/acs-subsite/def
 
 # Developer-support: We include that here, so that master template authors don't have to worry about it
 
-if { [llength [namespace eval :: info procs ds_show_p]] == 1 } {
+if { [llength [info procs ::ds_show_p]] == 1 
+     && [ds_show_p]
+ } {
     set developer_support_p 1
 } else {
     set developer_support_p 0
