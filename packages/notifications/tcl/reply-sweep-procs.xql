@@ -14,4 +14,11 @@ select reply_id, type_id from notification_replies order by reply_date
 </querytext>
 </fullquery>
 
+<fullquery name="notification::reply::sweep::process_all_replies.deletehold">
+  <querytext>
+    delete from notification_email_hold
+    where reply_id = :reply_id
+  </querytext>
+</fullquery>
+
 </queryset>

@@ -45,6 +45,7 @@ ad_proc -public notification::reply::sweep::process_all_replies {} {
 
         if { [ catch {
             notification::type::process_reply -type_id $type_id -reply_id $reply_id
+	    db_dml deletehold {}
             notification::reply::delete -reply_id $reply_id
         } err ] } {
             ns_log Error "notification::reply::sweep::process_all_replies: bombed on reply_id $reply_id:\n$err"

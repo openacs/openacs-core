@@ -128,6 +128,48 @@ namespace eval notification::email {
             -extraheaders $extra_headers
     }
 
+    ad_proc -public bounce_mail_message {
+        {-to_addr:required}
+	{-from_addr:required}
+	{-body:required}
+	{-message_headers:required}
+	{-reason ""}
+    } {
+        This sends a bounce message indicating a a failuring in sending
+	a message to the system.
+
+        @author mkovach@alal.com
+	@creation-date 05 Nov 2003
+
+	@param to_addr who the bounce is going to
+	@param from_addr who the bouncing message as sent to
+	@param the message body
+	@param message_headers the headers of the message
+    } {
+        set domain [address_domain]
+        set bounce_to [parse_email_address $to_addr]
+	set bounce_address [parse_email_address $from_addr]
+	set bounce_from "MAILER-DAEMON@$domain"
+	set bounce_subject "failure notice"
+	set l "Hi.  This is the notification program at $domain.\n"
+	append l "I'm afraid I wasn't able to deliver your message to the\n"
+	append l "following addresses.  This is a permament error; I've\n"
+	append l "given up.  Sorry it didn't work out.\n\n"
+        append l "<$from_addr>:\n"
+	append l "$reason\n\n"
+	append l "--- Below is this line is a copy of the message.\n\n"
+	#append l "Return-Path: <$from_addr>\n"
+	#append l "$message_headers\n\n"
+	append l "$body\n"
+	acs_mail_lite::send \
+	    -to_addr $bounce_to \
+	    -from_addr $bounce_from \
+	    -subject $bounce_subject \
+	    -body $l \
+	    -extraheaders ""
+        ns_log Notice "bounce: To: $bounce_to From: $bounce_from Subject $bounce_subject body: $l"
+    }
+
     ad_proc -private load_qmail_mail_queue {
         {-queue_dir:required}
     } {
@@ -244,6 +286,8 @@ namespace eval notification::email {
             # We don't accept empty users for now
             if {[empty_string_p $from_user]} {
                 ns_log Notice "load_qmail_mail_queue: no user $from"
+		# bounce message here
+		bounce_mail_message  -to_addr $email_headers(from) -from_addr $email_headers(to) -body $body  -message_headers $headers -reason "invalid sender.  You must be a member of the site."
                 if {[catch {ns_unlink $msg} errmsg]} {
                     ns_log Warning "load_qmail_mail_queue: couldn't remove message $msg:  $errmsg"
                 }
@@ -255,6 +299,9 @@ namespace eval notification::email {
             # We don't accept a bad incoming email address
             if {[empty_string_p $to_stuff]} {
                 ns_log Notice "load_qmail_mail_queue: bad to address $to"
+		# bounce message here
+		bounce_mail_message -to_addr $email_headers(from) -from_addr $email_headers(to)  -body $body  -message_headers $headers -reason "Invalid Address"
+
                 if {[catch {ns_unlink $msg} errmsg]} {
                     ns_log Warning "load_qmail_mail_queue: couldn't remove message $msg:  $errmsg"
                 }
@@ -263,6 +310,7 @@ namespace eval notification::email {
 
             set object_id [lindex $to_stuff 0]
             set type_id [lindex $to_stuff 1]
+	    set to_addr "$to" 
 
             db_transaction {
                 set reply_id [notification::reply::new \
@@ -271,7 +319,7 @@ namespace eval notification::email {
                         -from_user $from_user \
                         -subject $email_headers(subject) \
                         -content $body]
-
+                db_dml holdinsert {}
                 catch {ns_unlink $msg}
 
                 lappend list_of_reply_ids $reply_id
