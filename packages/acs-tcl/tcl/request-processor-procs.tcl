@@ -607,11 +607,15 @@ ad_proc -private rp_filter { why } {
 
     if { ![empty_string_p [ad_conn object_id]] } {
       ad_try {
-	if {[string match "admin/*" [ad_conn extra_url]]} {
-            permission::require_permission -object_id [ad_conn object_id] -privilege admin
-	} else {
-            permission::require_permission -object_id [ad_conn object_id] -privilege read
-	}
+        switch -glob [ad_conn extra_url] {
+            admin/* {
+              permission::require_permission -object_id [ad_conn object_id] -privilege admin
+            }
+            resources/* { }
+            default {
+              permission::require_permission -object_id [ad_conn object_id] -privilege read
+            }
+        }
       } ad_script_abort val {
 	rp_finish_serving_page
         rp_debug "rp_filter: return filter_return"
