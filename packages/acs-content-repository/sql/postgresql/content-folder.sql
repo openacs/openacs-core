@@ -121,6 +121,7 @@ declare
   delete__folder_id              alias for $1;  
   v_count                        integer;       
   v_parent_id                    integer;       
+  v_path                         varchar;
 begin
 
   -- check if the folder contains any items
@@ -129,7 +130,8 @@ begin
    where parent_id = delete__folder_id;
 
   if v_count > 0 then
-    raise EXCEPTION ''-20000: Folder ID % (%) cannot be deleted because it is not empty.'', delete__folder_id, content_item__get_path(delete__folder_id);
+    v_path := content_item__get_path(delete__folder_id, null);
+    raise EXCEPTION ''-20000: Folder ID % (%) cannot be deleted because it is not empty.'', delete__folder_id, v_path;
   end if;  
 
   PERFORM content_folder__unregister_content_type(
