@@ -28,6 +28,8 @@ ad_library {
 
 namespace eval lang::catalog {}
 
+
+
 ad_proc -private lang::catalog::read_file { catalog_filename } {
     Returns the contents of the given catalog file as a string
     reading the file with the charset given in the filename.
@@ -66,10 +68,12 @@ ad_proc -private lang::catalog::default_charset_if_unsupported { charset } {
     @author Jeff Davis
     @author Peter Marklund (peter@collaboraid.biz)
 } {
-    set ns_charsets [ns_charsets]
+    set ns_charsets [concat [ns_charsets] [encoding names]]
     # Do case insensitive matching
     if {[lsearch -regexp $ns_charsets "(?i)^${charset}\$"] < 0} { 
-        set default_charset [encoding system] 
+        #set default_charset [encoding system] 
+        # LARS: Default to utf-8
+        set default_charset utf-8
         ns_log Warning [list lang::catalog::default_charset_if_unsupported - charset $charset \
                         not supported by tcl, assuming $default_charset]
         set charset_to_use $default_charset
@@ -90,9 +94,11 @@ ad_proc -private lang::catalog::parse { catalog_file_contents } {
       locale
       charset
       messages    - An array with message keys as keys and the message texts as values.
+      descriptions - An array with message keys as keys and the descriptions as values.
     </pre>
 
     @author Peter Marklund (peter@collaboraid.biz)
+    @author Simon Carstensen (simon@collaboraid.biz)
 } {      
 
     # Check arguments
@@ -107,6 +113,7 @@ ad_proc -private lang::catalog::parse { catalog_file_contents } {
     set LOCALE_ATTR "locale"
     set CHARSET_ATTR "charset"
     set MESSAGE_TAG "msg"
+    set DESCRIPTION_TAG "description"
     set KEY_ATTR "key"
 
     # Initialize the array to return
@@ -127,17 +134,30 @@ ad_proc -private lang::catalog::parse { catalog_file_contents } {
     set msg_catalog_array(locale) [get_required_xml_attribute $root_node ${LOCALE_ATTR}]
     set msg_catalog_array(charset) [get_required_xml_attribute $root_node ${CHARSET_ATTR}]
 
-    # Loop over the keys and texts
+    # Loop over the keys and message texts
     set message_node_list [xml_node_get_children_by_name $root_node ${MESSAGE_TAG}]
     array set key_text_array {}
     foreach message_node $message_node_list {
         set key [get_required_xml_attribute $message_node ${KEY_ATTR}]
         set text [xml_node_get_content $message_node ]
         set key_text_array($key) $text
-    }        
+    }
 
-    # Add the keys and the texts to the array
+    # Add the keys and the texts to the messages array
     set msg_catalog_array(messages) [array get key_text_array]
+
+    # Loop over the keys and descriptions
+    set description_node_list [xml_node_get_children_by_name $root_node ${DESCRIPTION_TAG}]
+    array set key_description_array {}
+
+    foreach description_node $description_node_list {
+        set key [get_required_xml_attribute $description_node ${KEY_ATTR}]
+        set description [xml_node_get_content $description_node ]
+        set key_description_array($key) $description
+    }
+
+    # Add the keys and the texts to the descriptions array
+    set msg_catalog_array(descriptions) [array get key_description_array]
 
     return [array get msg_catalog_array]
 }
@@ -171,17 +191,22 @@ ad_proc -private lang::catalog::parse { catalog_file_contents } {
      db_foreach get_locales_for_package {} {
          set charset [ad_locale charset $locale]
 
-        # Get all messages in the current locale and put them in an array list
-        set messages_list [list]
-        all_messages_for_package_and_locale $package_key $locale
-        template::util::multirow_foreach all_messages {
-            lappend messages_list @all_messages.message_key@ @all_messages.message@
-        }
+         # Get all messages in the current locale and put them in an array list
+         set messages_list [list]
+         set descriptions_list [list]
+         all_messages_for_package_and_locale $package_key $locale
+         template::util::multirow_foreach all_messages {
+             lappend messages_list @all_messages.message_key@ @all_messages.message@
+             lappend descriptions_list @all_messages.message_key@ @all_messages.description@
+         }
 
-        # Write the messages to the file
-        set catalog_file_name "[package_catalog_dir $package_key]/${package_key}.${locale}.${charset}.xml"
-        export_messages_to_file $catalog_file_name $messages_list
-    } 
+         # Write the messages and descriptions to the file
+         set file_charset [default_charset_if_unsupported $charset]
+         set catalog_file_name "[package_catalog_dir $package_key]/${package_key}.${locale}.${file_charset}.xml"
+         
+         export_messages_to_file -descriptions_list $descriptions_list \
+             $catalog_file_name $messages_list
+     } 
 }
 
 ad_proc -private lang::catalog::all_messages_for_package_and_locale { package_key locale } {
@@ -249,7 +274,11 @@ ad_proc -private lang::catalog::assert_catalog_file { catalog_file_path } {
     }
 }
 
-ad_proc -public lang::catalog::export_messages_to_file { file_path messages_list } {
+ad_proc -public lang::catalog::export_messages_to_file { 
+    {-descriptions_list ""}
+    file_path 
+    messages_list 
+} {
 
     Export messages for a certain locale and package from the database 
     to a given XML catalog file.
@@ -257,9 +286,8 @@ ad_proc -public lang::catalog::export_messages_to_file { file_path messages_list
     same name but the extension .orig added to it. If there is an old backup
     file no new backup is done.
     
-    @param file_path The path of the catalog file to write messages to. The
-                     path must be on valid format, see apm_is_catalog_file
-                     and lang::catalog::is_upgrade_backup_file.
+    @param file_path The path of the catalog file to write messages to. The filename
+                     needs to be parseable by apm_parse_catalog_path.
                      The file and the catalog directory will be created if they don't exist.
 
     @param message_list A list with message keys on even indices followed by
@@ -267,19 +295,20 @@ ad_proc -public lang::catalog::export_messages_to_file { file_path messages_list
 
     @author Peter Marklund (peter@collaboraid.biz)
 } {
-    # Check arguments
-    if { !([apm_is_catalog_file $file_path] || [is_upgrade_backup_file $file_path]) } {
-        ns_log Error "lang::catalog::export_messages_to_file - Invalid format of catalog file path $file_path. Refusing to write file"
-        return
-    }
-
-    # Put the messages in an array so it's easier to access them
-    array set messages_array $messages_list
-    # Sort the keys so that it's easier to manually read and edit the catalog files
-    set message_key_list [lsort -dictionary [array names messages_array]]
-
     # Extract package_key, locale, and charset from the file path
     array set filename_info [apm_parse_catalog_path $file_path]
+    
+    # Check that the filename is parsable. We are not requiring any particular directory though
+    if { [array size filename_info] == 0 } {
+        error "Could not parse package_key, locale, and charset from filename of file $file_path"
+    }
+
+    # Put the messages and descriptions in an array so it's easier to access them
+    array set messages_array $messages_list
+    array set descriptions_array $descriptions_list
+
+    # Sort the keys so that it's easier to manually read and edit the catalog files
+    set message_key_list [lsort -dictionary [array names messages_array]]
 
     # Create the catalog directory if it doesn't exist
     set catalog_dir [package_catalog_dir $filename_info(package_key)]
@@ -297,9 +326,22 @@ ad_proc -public lang::catalog::export_messages_to_file { file_path messages_list
         ns_log Notice "lang::catalog::export_messages_to_file - Not backing up $file_path as backup file already exists"
     }
 
+    # Since the output charset, and thus the filename, may have changed since
+    # last time that we wrote the catalog file we remove old files with the same locale
+    foreach old_catalog_file [get_catalog_files $filename_info(package_key)] {
+        # Parse locale from filename
+        array set old_filename_info [apm_parse_catalog_path $old_catalog_file]
+
+        if { [string equal $old_filename_info(locale) $filename_info(locale)] } {
+            file delete $old_catalog_file
+        }
+    }
+
     # Open the catalog file for writing, truncate if it exists
+    set file_encoding [ns_encodingforcharset [default_charset_if_unsupported $filename_info(charset)]]
+
     set catalog_file_id [open $file_path w]
-    fconfigure $catalog_file_id -encoding [ns_encodingforcharset [default_charset_if_unsupported $filename_info(charset)]]
+    fconfigure $catalog_file_id -encoding $file_encoding
 
     # Open the root node of the document
     set package_version [system_package_version_name $filename_info(package_key)]
@@ -311,7 +353,10 @@ ad_proc -public lang::catalog::export_messages_to_file { file_path messages_list
    # Loop over and write the messages to the file
    set message_count "0"
    foreach message_key $message_key_list {
-       puts $catalog_file_id "  <msg key=\"[ad_quotehtml $message_key]\">[ad_quotehtml $messages_array($message_key)]</msg>"          
+       puts $catalog_file_id "  <msg key=\"[ad_quotehtml $message_key]\">[ad_quotehtml $messages_array($message_key)]</msg>"
+       if { [exists_and_not_null descriptions_array($message_key)] && $filename_info(locale) == "en_US" } {
+           puts $catalog_file_id "  <description key=\"[ad_quotehtml $message_key]\">[ad_quotehtml $descriptions_array($message_key)]</description>\n"
+       }
        incr message_count
    }
 
@@ -319,7 +364,28 @@ ad_proc -public lang::catalog::export_messages_to_file { file_path messages_list
    puts $catalog_file_id "</message_catalog>"
    close $catalog_file_id       
 
-   ns_log Notice "lang::catalog::export_messages_to_file - Wrote $message_count messages to file $file_path"
+   ns_log Notice "lang::catalog::export_messages_to_file - Wrote $message_count messages to file $file_path with encoding $file_encoding"
+}
+
+ad_proc -private lang::catalog::get_catalog_files { package_key } {
+    Return the full paths of the message catalog files of the given package.
+
+    @param package_key The key of the package to return catalog file paths for
+
+    @return A list of catalog file paths
+
+    @author Peter Marklund
+} {
+    set catalog_paths [list]
+
+    set catalog_dir [lang::catalog::package_catalog_dir $package_key]
+    foreach file_path [glob -nocomplain "$catalog_dir/*"] {
+        if { [apm_is_catalog_file $file_path] } {
+            lappend catalog_paths $file_path
+        }
+    }
+
+    return $catalog_paths
 }
 
 ad_proc -public lang::catalog::reset_upgrade_status_message_keys { package_key } {
@@ -406,6 +472,9 @@ ad_proc -public lang::catalog::import_messages_from_file {
     array set messages_array [lindex [array get catalog_array messages] 1]
     set messages_array_names [array names messages_array]
 
+    # Get the descriptions array
+    array set descriptions_array [lindex [array get catalog_array descriptions] 1]
+
     if { $upgrade_p } {
         # clear out any old upgrade status of messages
         db_dml reset_upgrade_status_messages {}
@@ -440,6 +509,13 @@ ad_proc -public lang::catalog::import_messages_from_file {
         set qualified_key "$package_key.$message_key"
         set new_message $messages_array($message_key)
 
+        if { [info exists descriptions_array($message_key)] } {
+            lang::message::update_description \
+                -package_key $catalog_array(package_key) \
+                -message_key $message_key \
+                -description $descriptions_array($message_key)
+        }
+
         # If this is an upgrade - save old message if it will be overwritten
         if { $upgrade_p } {
             # Check if the message existed previously
@@ -453,11 +529,12 @@ ad_proc -public lang::catalog::import_messages_from_file {
         }
 
         # Register the new message with the system
-        lang::message::register -upgrade=$upgrade_p \
-                                $catalog_array(locale) \
-                                $catalog_array(package_key) \
-                                $message_key \
-                                $new_message
+        lang::message::register \
+            -upgrade=$upgrade_p \
+            $catalog_array(locale) \
+            $catalog_array(package_key) \
+            $message_key \
+            $new_message
     }       
 
     # Save any messages overwritten in database
@@ -465,7 +542,8 @@ ad_proc -public lang::catalog::import_messages_from_file {
         set system_package_version [system_package_version_name $package_key]
         # Note that export_messages_to_file demands a certain filename format
         set catalog_dir [package_catalog_dir $package_key]
-        set filename "[message_backup_file_prefix]${system_package_version}-$catalog_array(package_version)_${package_key}.${locale}.${charset}.xml"
+        set file_charset [default_charset_if_unsupported $charset]
+        set filename "[message_backup_file_prefix]${system_package_version}-$catalog_array(package_version)_${package_key}.${locale}.${file_charset}.xml"
         ns_log Notice "lang::catalog::import_messages_from_file - Saving overwritten messages during upgrade for package $package_key and locale $locale in file $filename"
         export_messages_to_file "${catalog_dir}/${filename}" [array get overwritten_db_messages]
     }
@@ -582,17 +660,19 @@ ad_proc -public lang::catalog::import_from_all_files_and_cache {} {
     @author Peter Marklund (peter@collaboraid.biz)
 } {
     # Only execute this proc once
-    if { ![nsv_exists lang_catalog_import_from_all_files_and_cache executed_p] } {            
+#    if { ![nsv_exists lang_catalog_import_from_all_files_and_cache executed_p] } {            
         nsv_set lang_catalog_import_from_all_files_and_cache executed_p 1
 
         db_foreach all_enabled_not_loaded_packages {} {
+            ns_log Notice "pm debug package $package_key is enabled and does not have message keys"
             if { [file isdirectory [file join [acs_package_root_dir $package_key] catalog]] } {
+                ns_log Notice "pm debug package $package_key has a catalog dir"
                 lang::catalog::import_from_files $package_key
             }
         }
 
         lang::message::cache
-    }
+#    }
 }
 
 ad_proc -private lang::catalog::translate {} {
