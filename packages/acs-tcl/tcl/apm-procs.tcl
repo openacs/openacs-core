@@ -536,6 +536,15 @@ ad_proc -public apm_package_installed_p {
     return [db_string apm_package_installed_p {} -default 0]
 }
 
+ad_proc -public apm_package_enabled_p {
+    package_key
+} {
+    Returns 1 if there is an enabled package version corresponding to the package_key
+    and 0 otherwise.
+} {
+    return [db_string apm_package_enabled_p {} -default 0]
+}
+
 ad_proc -public apm_version_installed_p {
     version_id
 } {
