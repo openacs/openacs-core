@@ -131,11 +131,11 @@ ns_section ns/servers
 ns_section ns/server/${server} 
     ns_param   directoryfile      $directoryfile
     ns_param   pageroot           $pageroot
-    ns_param   maxconnections     5
+    ns_param   maxconnections     100      ;# Max connections to put on queue
     ns_param   maxdropped         0
-    ns_param   maxthreads         5
+    ns_param   maxthreads         10
     ns_param   minthreads         5
-    ns_param   threadtimeout      120
+    ns_param   threadtimeout      120      ;# Idle threads die at this rate
     ns_param   globalstats        false    ;# Enable built-in statistics 
     ns_param   urlstats           false    ;# Enable URL statistics 
     ns_param   maxurlstats        1000     ;# Max number of URL's to do stats on
