@@ -19,5 +19,3 @@
  </if>
 </ul>
 
-<if @user_id@ eq 0><a href="@login_url@">Login</a></if>
-<else><a href="register/logout?return_url=@subsite_url@">Logout</a></else>
