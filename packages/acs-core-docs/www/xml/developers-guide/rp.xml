@@ -15,41 +15,7 @@ system, and implications and usage for the application developer.
 </para>
 </sect2>
 
-<sect2 id="rp-theoldway"><title>The Old Way</title>
-
-<para>
-In older versions of the OpenACS, the mapping between URLs and pages was
-simple. AOLserver, the usual webserver for the OpenACS, would find the
-appropriate file by appending the server's page-root to the path in
-the URL and returning that file to the user.  For example, a user's
-request for a URL like "http://foo-service.com/bar.html" would cause
-the server to look in the filesystem for
-<computeroutput>/web/foo-service/www/bar.html</computeroutput>, and return that file.
-This was simple enough, but OpenACS did not provide a clean centralized
-mechanism for the following requirements of larger web services:
-
-
-<itemizedlist mark="opencircle">
-    <listitem><para>Support for more flexible mappings from URLs to content
-    </para></listitem>
-    <listitem><para>Robust user authentication
-    </para></listitem>
-    <listitem><para>Page level access control
-    </para></listitem>
-</itemizedlist>
-
-
-To achieve this functionality above in OpenACS 3.x, developers used an ad
-hoc combination of AOLserver filters, the <computeroutput>ns_perm</computeroutput> call,
-special purpose code in pages, and other procedures.  In OpenACS &version;, the
-Request Processor, along with the OpenACS Package Manager, centralizes and
-unifies this functionality, making it more transparent and readily
-available to developers.
-</para>
-
-</sect2>
-
-<sect2 id="rp-thenewway"><title>The New Way</title>
+<sect2 id="rp-thenewway"><title>Request Processor</title>
 
 <para>
 The &version; Request Processor is a global filter and set of Tcl procs that

@@ -13,7 +13,7 @@
 
 <sect1 id="upgrade-4.5-to-4.6">
   <title>Upgrading OpenACS 4.5 to 4.6</title>
-    <sect2><title>Checklist</title>
+  <sect2><title>Checklist</title>
     <para>The required platform for OpenACS 4.6 is the same as
     4.5, with the excepion of OpenFTS.  You now need OpenFTS 0.3.2, not 0.2.
     OpenACS 4.6 does not support PostGreSQL 7.3.</para>
@@ -70,75 +70,8 @@
       <listitem>
         <formalpara>
           <title>Make a Backup</title>
-          <para>Back up the database and file system.</para>
+          <para>Back up the database and file system (see <xref linkend="snapshot-backup"/>).</para>
         </formalpara>
-        <itemizedlist>
-          <listitem>
-            <formalpara>
-              <title>PostGreSQL</title>
-              <para>Create a backup file and verify that it was created and has a reasonable size (several megabytes).</para>
-            </formalpara>
-            <screen>[root@localhost root]# <userinput>su - nsadmin</userinput>
-[nsadmin@localhost aolserver]$ <userinput>pg_dump -f /backup/openacs/openacs_dev_before_upgrade_to_4.6.dmp <replaceable>openacs-dev</replaceable></userinput>
-[nsadmin@localhost aolserver]$ <userinput>ls -al /backup/openacs/openacs_dev_before_upgrade_to_4.6.dmp </userinput>
--rw-rw-r--    1 nsadmin  nsadmin   4005995 Feb 21 18:28 /backup/openacs/openacs_dev_before_upgrade_to_4.6.dmp
-[nsadmin@localhost aolserver]$ <userinput>exit</userinput>
-[root@localhost root]#
-<action>su - nsadmin
-pg_dump -f /backup/openacs/openacs_dev_before_upgrade_to_4.6.dmp <replaceable>openacs-dev</replaceable>
-ls -al /backup/openacs/openacs_dev_before_upgrade_to_4.6.dmp
-exit</action></screen>
-          </listitem>
-          <listitem>
-            <formalpara>
-              <title>Oracle - INCOMPLETE</title>
-              <para>Incomptele.</para>
-            </formalpara>
-          </listitem>
-          <listitem>
-            <formalpara>
-              <title>File tree with CVS</title>
-              <para>If you are already using CVS, you probably don't
-              need to do anything to back up your data.  Just make
-              sure that your current work is checked into the system.
-              You can then roll back based on date - just note the
-              current system time, down to the minute.  For maximum
-              safety, you can apply a tag to your current
-              files.</para>
-            </formalpara>
-            <screen>[root@localhost root]# <userinput>su - nsadmin</userinput>
-[nsadmin@localhost aolserver]$ <userinput>cd /web/<replaceable>openacs-dev</replaceable></userinput>
-[nsadmin@localhost openacs-dev]$ <userinput>cvs commit -m "last-minute commits before upgrade to 4.6"</userinput>
-cvs commit: Examining .
-cvs commit: Examining bin
-(many lines omitted)
-[nsadmin@localhost openacs-dev]$ <userinput>cvs tag before_upgrade_to_4_6</userinput>
-cvs server: Tagging bin
-T bin/acs-4-0-publish.sh
-T bin/ad-context-server.pl
-(many lines omitted)
-[nsadmin@localhost openacs-dev]$ <userinput>exit</userinput>
-[root@localhost root]# 
-<action>su - nsadmin
-cd /web/<replaceable>openacs-dev</replaceable>
-cvs commit -m "last-minute commits before upgrade to 4.6"
-cvs tag before_upgrade_to_4_6
-exit</action></screen>
-          </listitem>
-          <listitem>
-            <formalpara>
-              <title>File tree without CVS</title>
-              <para>If you don't use cvs, you may want to back up the working directory.  The simplest way is just to copy it.</para>
-            </formalpara>
-            <screen>[root@localhost root]# <userinput>su - nsadmin</userinput>
-[nsadmin@localhost aolserver]$ <userinput>cp -r /web/<replaceable>openacs-dev</replaceable> /web/<replaceable>openacs-dev</replaceable>-before-upgrade-to-4.6</userinput>
-[nsadmin@localhost aolserver]$ <userinput>exit</userinput>
-[root@localhost root]# 
-<action>su - nsadmin
-cp -r /web/<replaceable>openacs-dev</replaceable> /web/<replaceable>openacs-dev</replaceable>-before-upgrade-to-4.6
-exit</action></screen>
-          </listitem>
-        </itemizedlist>
       </listitem>
       <listitem>
         <formalpara>
@@ -310,7 +243,12 @@ exit</action></screen>
           <para>Click <computeroutput><guilabel>Install packages.</guilabel></computeroutput></para>
           </listitem>
           <listitem>
-          <para>Select the packages you want to install.  This should be everything that says <computeroutput>upgrade</computeroutput>, plus any new packages you want.</para>
+          <para>Select the packages you want to install.  This should
+          be everything that says
+          <computeroutput>upgrade</computeroutput>, plus any new
+          packages you want.  It's safest to upgrade the kernel by
+          itself, and then come back and upgrade the rest of the
+          desired packages in a second pass.</para>
           </listitem>
           <listitem>
             <para>On the next screen, click <computeroutput><guibutton>Install Packages</guibutton></computeroutput></para>
@@ -323,16 +261,16 @@ exit</action></screen>
             <para>Wait a minute, then browse to the package manager, <computeroutput>http://<replaceable>yourserver</replaceable>/acs-admin/apm</computeroutput>.</para>
           </listitem>
           <listitem>
-            <para>Check that the kernel upgrade worked by clicking <computeroutput><guilabel>All</guilabel></computeroutput> and making sure that <computeroutput>acs-kernel</computeroutput> version is 4.6.1.</para>
+            <para>Check that the kernel upgrade worked by clicking <computeroutput><guilabel>All</guilabel></computeroutput> and making sure that <computeroutput>acs-kernel</computeroutput> version is &version;.</para>
           </listitem>
         </orderedlist>
       </listitem>
       <listitem>
         <formalpara>
           <title>OPTIONAL: Install the new OpenFTS Engine.</title>
-          <para>If you want to upgrade the OpenFTS Engine, do these steps.  (You
-          must have already upgraded the OpenFTS driver to
-          0.3.2.</para>
+          <para>If you want to upgrade the OpenFTS Engine, do these
+          steps.  (You must have already upgraded the OpenFTS driver to
+          0.3.2.)</para>
         </formalpara>
         <orderedlist>
           <listitem>
@@ -362,45 +300,8 @@ exit</action></screen>
       <listitem>
         <formalpara>
           <title>Rollback</title>
-        <para>If anything goes wrong, roll back the database and try
-        again.</para>
+          <para>If anything goes wrong, <link linkend="rollback-database">roll back</link> to the backup snapshot.</para>
         </formalpara>
-        <screen>[root@localhost root]# <userinput>su - nsadmin</userinput>
-[nsadmin@localhost aolserver]$ <userinput>svc -d /service/<replaceable>openacs-dev</replaceable></userinput>
-[nsadmin@localhost aolserver]$ <userinput>dropdb <replaceable>openacs-dev</replaceable></userinput>
-DROP DATABASE
-[nsadmin@localhost aolserver]$ <userinput>createdb <replaceable>openacs-dev</replaceable></userinput>
-CREATE DATABASE
-[nsadmin@localhost aolserver]$ <userinput>psql -f /web/<replaceable>openacs-dev</replaceable>/packages/acs-kernel/sql/postgresql/postgresql.sql <replaceable>openacs-dev</replaceable></userinput></screen>
-<para>PostGreSQL's dump command does not guarantee to back up all of the
-procedures and things in the right order for them to be reassembled.
-In practice, OpenACS users have found that rebuilding some of the
-common procedures before running the restore usually addresses this.  You will see a number of "already exists" errors when you run the database restore; these can be ignored.  This <a href="http://openacs.org/forums/message-view?message_id=70759">forum thread</a> has more information.</para>
-<screen>[nsadmin@localhost aolserver]$ <userinput>psql <replaceable>openacs-dev</replaceable> &lt; /backup/openacs/openacs_dev_before_upgrade_to_4.6.dmp</userinput>
-[nsadmin@localhost aolserver]$ <userinput>svc -u /service/<replaceable>openacs-dev</replaceable></userinput>
-[nsadmin@localhost aolserver]$ <userinput>exit</userinput></screen>
-          <para>At this point, you can try go back to the APM and try
-to upgrade the database again.  Alternately, if you want to roll back
-all the way and stop the upgrade, you need to roll back the file
-system as well.</para>
-        <screen>[root@localhost root]# <userinput>su - nsadmin</userinput>
-[nsadmin@localhost aolserver]$<userinput> mv /web/<replaceable>openacs-dev</replaceable> /web/openacs-failed-upgrade</userinput>
-[nsadmin@localhost aolserver]$<userinput> mv /web/<replaceable>openacs-dev</replaceable>-before-upgrade-to-4.6 /web/<replaceable>openacs-dev</replaceable></userinput>
-[nsadmin@localhost aolserver]$ <userinput>svc -u /web/<replaceable>openacs-dev</replaceable></userinput>
-[nsadmin@localhost aolserver]$ <userinput>exit</userinput>
-[root@localhost root]#</screen>
-<screen>All commands for this section:
-<action>su - nsadmin
-svc -d /service/<replaceable>openacs-dev</replaceable>
-dropdb <replaceable>openacs-dev</replaceable>
-createdb <replaceable>openacs-dev</replaceable>
-psql -f /web/<replaceable>openacs-dev</replaceable>/packages/acs-kernel/sql/postgresql/postgresql.sql <replaceable>openacs-dev</replaceable>
-psql <replaceable>openacs-dev</replaceable> &lt; /backup/openacs/openacs_dev_before_upgrade_to_4.6.dmp
-
-svc -u /service/<replaceable>openacs-dev</replaceable>
-cd /web/<replaceable>openacs-dev</replaceable>
-cvs up -r current
-exit</action></screen>
       </listitem>
     </orderedlist>
   </sect2>

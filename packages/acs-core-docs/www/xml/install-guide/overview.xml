@@ -5,41 +5,6 @@
 	by <ulink url="mailto:vinod@kurup.com">Vinod Kurup</ulink>
   </authorblurb>
 
-  <sect2 id="install-description" xreflabel="What is OpenACS?">
-	<title>What is OpenACS?</title>
-	<para>
-	  According to Philip Greenspun:
-	</para>
-
-	<para>
-	  <quote>The ArsDigita Community System (ACS) is a toolkit of software
-	  that will help you build Web services with a collaborative dimension,
-	  ranging from knowledge management within companies to B2C ecommerce
-	  to product support and community among the customers. The software is
-	  free and open-source and has been tested in heavy use since
-	  1995.</quote>
-	</para>
-
-	<para>
-	  What's OpenACS? OpenACS was born when Don Baccus, Ben Adida,
-	  et al decided to port ACS from Oracle to
-	  PostgreSQL, thus making it a fully open-source solution.
-	</para>
-
-	<para>
-	  OpenACS &version; is the next generation of the web toolkit. It's based on
-	  ACS 4, but no longer follows ArsDigita development. Unlike both ACS
-	  (which required Oracle) and OpenACS 3.x (which required PostgreSQL),
-	  OpenACS &version; allows you to use either database. It's also built in such
-	  a way to allow enterprising hackers (in the good sense of
-	  the word) to extend it to other databases. Don Baccus leads
-	  the development and numerous developers (and non-developers)
-	  contribute from around the world.
-	</para>
-
-  </sect2>
-
-
   <sect2 id="install-purpose" xreflabel="Purpose of this document">
 	<title>Purpose of this document</title>
 	<para>
@@ -66,20 +31,12 @@
 		  (much more if you want Oracle)</para></listitem> 
       <listitem><para>4 GB hard drive</para></listitem>
     </itemizedlist>
-    <para>You will need all of the required <xref
-    linkend="software-versions">software</xref>.</para>
+    <para>You will need all of the <xref
+    linkend="individual-programs">software</xref> marked REQUIRED.</para>
     
     <para>
 	  If you want to serve pages to people outside of your machine, you'll
 	  need a network connection of some type.
-	</para>
-    
-    <para>
-	  Note that these are minimum requirements to get a development system
-	  up and running. For a production system, we recommend you read about
-	  the <ulink
-	  url="http://www.arsdigita.com/asj/arsdigita-server-architecture">ArsDigita
-	  Server Architecture</ulink>
 	</para>
     
     <para>
@@ -109,10 +66,9 @@
 	</itemizedlist>
 
 	<para>
-	  If you've never done these things before, consider exploring UNIX in
-	  greater depth before installing OpenACS.  Some useful resources for
-	  doing this are described in the <xref linkend="install-resources"/>
-	  section.
+	  You can complete this install without the above knowledge,
+	  but if anything goes wrong it may take extra time to
+	  understand and correct the problem.  <link linkend="install-resources">Some useful UNIX resources</link>.
 	</para>
 
 	<para>
@@ -140,12 +96,7 @@
 	  <listitem><para>Install a database (Oracle or
 	  PostgreSQL)</para></listitem> 
       
-      <listitem>
-        <para> Install a database driver (allows the webserver to talk to the database)
-	  </para>
-      </listitem> 
-      
-      <listitem><para>Start the OpenACS installer, which will configure a database instance..</para></listitem>
+      <listitem><para>Copy the OpenACS files into place and start the OpenACS installer, which will configure a database instance.</para></listitem>
 	</orderedlist>
 
   </sect2>
@@ -287,7 +238,7 @@ createdb <replaceable>server1</replaceable></action></screen>
       I've used something that you've written without proper credit, let me
       know and I'll fix it right away.
     </para>
-    <para>Version &version; was edited by <ulink
+    <para>Versions 4.6.2 to present were edited by <ulink
     url="mailto:joel@aufrecht.org">Joel Aufrecht</ulink>.
 </para>
     

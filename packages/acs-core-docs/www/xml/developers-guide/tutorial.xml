@@ -166,11 +166,11 @@ click <computeroutput><guibutton>New</guibutton></computeroutput>.
 	pre-written documentation files for the tutorial app.  Log in
       as <replaceable>service0</replaceable>, create the standard
       directories, and copy the prepared documentation:</para>
-      <screen>[service0@anthrax service0]$ <userinput>cd /web/service0/packages/samplenote/</userinput>
-[service0@anthrax samplenote]$ <userinput>mkdir -p www/doc/xml</userinput>
-[service0@anthrax samplenote]$ <userinput>cd www/doc/xml</userinput>
-[service0@anthrax xml]$ <userinput>cp /web/service0/packages/acs-core-docs/www/files/samplenote/* .</userinput>
-[service0@anthrax xml]$</screen>
+      <screen>[service0@yourserver service0]$ <userinput>cd /web/service0/packages/samplenote/</userinput>
+[service0@yourserver samplenote]$ <userinput>mkdir -p www/doc/xml</userinput>
+[service0@yourserver samplenote]$ <userinput>cd www/doc/xml</userinput>
+[service0@yourserver xml]$ <userinput>cp /web/service0/packages/acs-core-docs/www/files/samplenote/* .</userinput>
+[service0@yourserver xml]$</screen>
       <para> OpenACS uses DocBook for documentation.  DocBook is
 	an XML standard for semantic markup of documentation.  That
 	means that the tags you use indicate meaning, not intended
@@ -191,7 +191,7 @@ click <computeroutput><guibutton>New</guibutton></computeroutput>.
       directory.  A Makefile is provided to generate html from the xml, and copy all of the
       supporting files.  If Docbook is set up correctly, all you need
       to do is:</para>
-      <screen>[service0@anthrax xml]$<userinput> make</userinput>
+      <screen>[service0@yourserver xml]$<userinput> make</userinput>
 cd .. ; /usr/bin/xsltproc ../../../acs-core-docs/www/xml/openacs.xsl xml/index.xml
 Writing requirements-introduction.html for sect1(requirements-introduction)
 Writing requirements-overview.html for sect1(requirements-overview)

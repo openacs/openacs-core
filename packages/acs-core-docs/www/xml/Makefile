@@ -21,7 +21,6 @@ HTMLDOC=/usr/bin/htmldoc
 all: html pdf
 
 prelim:
-	cp -u files/*.{txt,html} ../files/
 	cp -u images/*.{pdf,png,gif,jpg} ../images/
 	cp -u openacs.css ..
 

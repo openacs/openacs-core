@@ -27,7 +27,7 @@ chmod 770 /web</action></screen>
       <listitem id="install-openacs-download">
         <para>You should already have downloaded the OpenACS tarball
       to the <computeroutput>/tmp</computeroutput> directory.  If
-      noot, <link linkend="openacs-download">download the OpenACS
+      not, <link linkend="openacs-download">download the OpenACS
       tarball</link> and save it in
       <computeroutput>/tmp</computeroutput> and proceed:</para>
 
@@ -140,87 +140,10 @@ mv &tarballpath; service0
 chmod -R 700 service0/
 exit</action></screen>
       </listitem>
-
       <listitem>
-        <formalpara id="cvs-service-import">
-        <title>Add the Service to CVS - OPTIONAL</title>
-          <indexterm>
-            <primary>cvs</primary>
-            <secondary>setup</secondary>
-          </indexterm>
-          <para>If this is a development server, you may want to add
-          it to a <link linkend="install-cvs">CVS
-          repository.</link>.</para>
-
-        </formalpara>
-        <orderedlist>
-          <listitem>
-        <para>Create and set permissions on a subdirectory in the local cvs repository.</para>
-        <screen>[root@yourserver root]# <userinput>mkdir /cvsroot/<replaceable>service0</replaceable></userinput>
-[root@yourserver root]#<userinput> chown <replaceable>service0</replaceable>.web /cvsroot/<replaceable>service0</replaceable></userinput>
-[root@yourserver root]#
-<action>mkdir /cvsroot/<replaceable>service0</replaceable>
-chown <replaceable>service0</replaceable>.web /cvsroot/<replaceable>service0</replaceable></action></screen>
-          </listitem>
-          <listitem>
-            <para>Add the repository location to the user environment.</para>
-            <screen>[root@yourserver root]# <userinput>su - <replaceable>service0</replaceable></userinput>
-[service0@yourserver service0]$<userinput> emacs .bashrc</userinput></screen>
-            <para>Put this string into <computeroutput>/home/<replaceable>service0</replaceable>/.bashrc</computeroutput>:</para>
-            <programlisting>export CVSROOT=/cvsroot</programlisting>
-            <screen>[service0@yourserver service0]$ <userinput>exit</userinput>
-logout
-
-[root@yourserver root]#</screen>
-          </listitem>
-          <listitem>
-            <para>Import all files into cvs.  In order to work on
-            files with source control, the files must be checked out
-            from cvs.  So we will import, move aside, and then check
-            out all of the files.  In the cvs import command,
-            <computeroutput><replaceable>service0</replaceable></computeroutput>
-            refers to the cvs repository to use; it uses the CVSROOT
-            plus this string,
-            i.e.
-            <computeroutput>/cvsroot/<replaceable>service0</replaceable></computeroutput>.
-            "OpenACS" is the vendor tag, and "&cvsversiontag;" is the
-            release tag.  These tags will be useful in upgrading and
-            branching.  -m sets the version comment.</para>
-            <screen>[root@yourserver root]# <userinput>su - <replaceable>service0</replaceable></userinput>
-[service0@yourserver service0]$ <userinput>cd /web/<replaceable>service0</replaceable></userinput>
-[service0@yourserver service0]$ <userinput>cvs import -m "initial install" <replaceable>service0</replaceable> OpenACS &cvsversiontag;</userinput>
-N <replaceable>service0</replaceable>/license.txt
-N <replaceable>service0</replaceable>/readme.txt
-<emphasis>(many lines omitted)</emphasis>
-N <replaceable>service0</replaceable>/www/SYSTEM/flush-memoized-statement.tcl
-
-No conflicts created by this import
-
-[service0@yourserver service0]$
-<action>su - <replaceable>service0</replaceable>
-cd /web/<replaceable>service0</replaceable>
-cvs import -m "initial install" <replaceable>service0</replaceable> OpenACS &cvsversiontag;</action></screen>
-            <para>Move the original directory to a temporary location, and check out the cvs repository in its place.  If the service starts correctly, come back and remove the temporary copy of the uploaded files.</para>
-            <screen>[service0@yourserver service0]$ <userinput>cd ..</userinput>
-[service0@yourserver web]$<userinput> mv <replaceable>service0</replaceable> <replaceable>service0</replaceable>.orig</userinput>
-[service0@yourserver web]$ <userinput>cvs checkout <replaceable>service0</replaceable></userinput>
-cvs checkout: Updating <replaceable>service0</replaceable>
-U <replaceable>service0</replaceable>/license.txt
-<emphasis>(many lines omitted)</emphasis>
-U <replaceable>service0</replaceable>/www/SYSTEM/dbtest.tcl
-U <replaceable>service0</replaceable>/www/SYSTEM/flush-memoized-statement.tcl
-[service0@yourserver web]$ <userinput>exit</userinput>
-logout
-
-[root@yourserver web]#
-<action>cd ..
-mv <replaceable>service0</replaceable> <replaceable>service0</replaceable>.orig
-cvs checkout <replaceable>service0</replaceable>
-exit</action></screen>
-            
-          </listitem>
-        </orderedlist>
+        <para><link linkend="cvs-service-import">Add the Service to CVS</link> (OPTIONAL)</para>
       </listitem>
+
       <listitem>
         <para>Set up several additional directories in the service root:
       <computeroutput>etc</computeroutput> is for configuration and control files, <computeroutput>log</computeroutput> is for error and request (web page hit) log files, and <computeroutput>database-backup</computeroutput> is for database backup files.  If you did the CVS step, note that these new directories are excluded from that step so that you can decide whether or not you want your logs and config files in source control.</para>
@@ -240,7 +163,7 @@ exit</action></screen>
   <sect2 id="install-openacs-prepare-oracle" xreflabel="Prepare Oracle for OpenACS">
     <title>Prepare Oracle for OpenACS</title>
     
-    <para>OPTIONAL - if you won't be using Oracle, skip to <xref
+    <para>If you won't be using Oracle, skip to <xref
 	  linkend="install-openacs-prepare-postgres"/></para>
     <para>
 	  You should be sure that your user account
@@ -449,25 +372,8 @@ createdb <replaceable>service0</replaceable></action></screen>
         <para>Add this line to the file.  The numbers and stars at the beginning are cron columns that specify when the program should be run - in this case, whenever the minute is 0 and the hour is 1, i.e., 1:00 am every day.</para>
         <programlisting>0 1 * * * /usr/local/pgsql/bin/vacuumdb --analyze <replaceable>service0</replaceable></programlisting>
       </listitem>
-      <listitem id="install-next-openfts">
-        <para>Add Full Text Search Support - OPTIONAL</para>
-        <indexterm>
-          <primary>full text search</primary>
-          <secondary>installation</secondary>
-        </indexterm>
-        <para>If you are installing Full Text Search, add required packages to the new database.</para>
-        <screen>[service0@yourserver service0]$ <userinput>/usr/local/pgsql/bin/psql <replaceable>service0</replaceable> -f /usr/local/src/postgresql-7.2.4/contrib/tsearch/tsearch.sql</userinput>
-BEGIN
-CREATE
-<emphasis>(many lines omitted)</emphasis>
-INSERT 0 1
-COMMIT
-[service0@yourserver service0]$ <userinput>/usr/local/pgsql/bin/psql <replaceable>service0</replaceable> -f /usr/local/src/postgresql-7.2.4/contrib/pgsql_contrib_openfts/openfts.sql</userinput>
-CREATE
-CREATE
-[service0@yourserver service0]$
-<action>/usr/local/pgsql/bin/psql <replaceable>service0</replaceable> -f /usr/local/src/postgresql-7.2.4/contrib/tsearch/tsearch.sql
-/usr/local/pgsql/bin/psql <replaceable>service0</replaceable> -f /usr/local/src/postgresql-7.2.4/contrib/pgsql_contrib_openfts/openfts.sql</action></screen>
+      <listitem>
+        <para><link linkend="install-openfts-postgres">Add Full Text Search Support</link> (OPTIONAL)</para>
       </listitem>
       <listitem>
         <screen>[service0@yourserver service0]$ <userinput>exit</userinput>
@@ -541,10 +447,10 @@ logout
           <listitem>
             <para><emphasis>debug</emphasis> - Set to true for a very verbose error log, including many lines for every page view, success or failure.</para>
           </listitem>
-          
         </itemizedlist>
-    
-    <para>
+      </listitem>
+      <listitem>
+        <para>
 	  AOLServer is very configurable. These settings should get you
 	  started, but for more options, read the <ulink
 	  url="http://aolserver.com/docs/admin/config.adp">AOLServer
@@ -552,58 +458,11 @@ logout
 	</para>
       </listitem>
       <listitem>
-        <para>OPTIONAL: To run OpenFTS, uncomment this line from <computeroutput>config.tcl</computeroutput>.  (To uncomment a line in a tcl file, remove the <computeroutput>#</computeroutput> at the beginning of the line.)</para>
-        <programlisting>#ns_param   nsfts           ${bindir}/nsfts.so</programlisting>
+        <para><link linkend="enable-openfts">Enable OpenFTS Full Text Search</link> (OPTIONAL)</para>
       </listitem>
       <listitem>
-        <para>OPTIONAL: To run nsopenssl:</para>
-        <orderedlist>
-          <listitem>
-            <para>Uncomment this line from <computeroutput>config.tcl</computeroutput>.</para>
-            <programlisting>#ns_param   nsopenssl       ${bindir}/nsopenssl.so
-</programlisting>
-          </listitem>
-          <listitem id="ssl-certificates" linkref="Generate ssl certificates">
-            <para>Prepare a certificate directory for the service.</para>
-            <screen>[service0@yourserver etc]$ <userinput>mkdir /web/<replaceable>service0</replaceable>/etc/certs</userinput>
-[service0@yourserver etc]$ <userinput>chmod 700 /web/<replaceable>service0</replaceable>/etc/certs</userinput>
-[service0@yourserver etc]$ 
-<action>mkdir /web/<replaceable>service0</replaceable>/etc/certs
-chmod 700 /web/<replaceable>service0</replaceable>/etc/certs</action></screen>            
-          </listitem>
-          <listitem>
-            <para>It takes two files to support an SSL connection.  The certificate is the public half of the key pair - the server sends the certificate to browser requesting ssl.  The key is the private half of the key pair.  In addition, the certificate must be signed by Certificate Authority or browsers will protest.  Each web browser ships with a built-in list of acceptable Certificate Authorities (CAs) and their keys.  Only a site certificate signed by a known and approved CA will work smoothly.  Any other certificate will cause browsers to produce some messages or block the site.  Unfortunately, getting a site certificate signed by a CA costs money.  In this section, we'll generate an unsigned certificate which will work in most browsers, albeit with pop-up messages.</para>
-            <para>Use an OpenSSL perl script to generate a certificate and key.</para>
-            <screen>[service0@yourserver service0]$ <userinput>cd /web/service0/etc/certs</userinput>
-[service0@yourserver certs]$ <userinput>perl /usr/share/ssl/misc/CA -newcert</userinput>
-Using configuration from /usr/share/ssl/openssl.cnf
-Generating a 1024 bit RSA private key
-...++++++
-.......++++++
-writing new private key to 'newreq.pem'
-Enter PEM pass phrase:</screen>
-            <para>Enter a pass phrase for the CA certificate.  Then, answer the rest of the questions.  At the end you should see this:</para>
-        <screen>Certificate (and private key) is in newreq.pem
-[service0@yourserver certs]$</screen>
-        <para><computeroutput>newreq.pem</computeroutput> contains our certificate and private key.  The key is protected by a passphrase, which means that we'll have to enter the pass phrase each time the server starts.  This is impractical and unnecessary, so we create an unprotected version of the key.  <emphasis>Security implication</emphasis>: if anyone gets access to the file keyfile.pem, they effectively own the key as much as you do.  Mitigation: don't use this key/cert combo for anything besides providing ssl for the web site.</para>
-            <screen>[root@yourserver misc]# <userinput>openssl rsa -in newreq.pem -out keyfile.pem</userinput>
-read RSA key
-Enter PEM pass phrase:
-writing RSA key
-[service0@yourserver certs]$ </screen>
-        <para>To create the certificate file, we take the combined file, copy it, and strip out the key.</para>
-        <screen>[service0@yourserver certs]$ <userinput>cp newreq.pem certfile.pem</userinput>
-[root@yourserver misc]# <userinput>emacs certfile.pem</userinput></screen>
-        <para>Strip out the section that looks like</para>
-        <programlisting>-----BEGIN RSA PRIVATE KEY-----
-Proc-Type: 4,ENCRYPTED
-DEK-Info: DES-EDE3-CBC,F3EDE7CA1B404997
-S/Sd2MYA0JVmQuIt5bYowXR1KYKDka1d3DUgtoVTiFepIRUrMkZlCli08mWVjE6T
-<emphasis>(11 lines omitted)</emphasis>
-1MU24SHLgdTfDJprEdxZOnxajnbxL420xNVc5RRXlJA8Xxhx/HBKTw==
------END RSA PRIVATE KEY-----</programlisting>
-          </listitem>
-        </orderedlist>
+        <para><link linkend="install-ssl">Install nsopenssl
+        for SSL support.</link> (OPTIONAL)</para>
       </listitem>
     </orderedlist>
   </sect2>
@@ -614,9 +473,22 @@ S/Sd2MYA0JVmQuIt5bYowXR1KYKDka1d3DUgtoVTiFepIRUrMkZlCli08mWVjE6T
       <listitem>
         <para>
 	  Kill any current running AOLserver processes and start a new
-	  one. (Note, if you are using Oracle, rather than PostgreSQL, replace
+	  one.  If you are using Oracle, rather than PostgreSQL, replace
 	  <computeroutput>nsd-postgres</computeroutput> with
-	  <computeroutput>nsd-oracle</computeroutput>).  If you are using port 80, you must be root for this step. </para>
+	  <computeroutput>nsd-oracle</computeroutput>).</para>
+        <para>If you want to use port 80, there are complications.
+	  First, Aolserver must be root to use system ports such as
+	  80, but refuses to run as root for security reasons.  Thus
+	  you must start as root and specify a non-root user ID and
+	  Group ID which Aolserver will switch to after claiming the
+	  port.  To do so, find the UID and GID of the
+	  <replaceable>service0</replaceable> user via
+	  <computeroutput>grep <replaceable>service0</replaceable>
+	  /etc/passwd</computeroutput> and then put those numbers into
+	  the command line via <computeroutput>-u
+	  <replaceable>501</replaceable> -g
+	  <replaceable>502</replaceable></computeroutput>.  Second, if you are root then killall will affect all OpenACS services on the machine, so if there's more than one you'll have to do <computeroutput>ps -auxw | grep
+	  nsd</computeroutput> and selectively kill by job number.</para>
         <screen>[service0@yourserver etc]$ <userinput>killall nsd</userinput>
 nsd: no process killed
 [service0@yourserver service0]$<userinput> /usr/local/aolserver/bin/nsd-postgres -t /web/<replaceable>service0</replaceable>/etc/config.tcl</userinput>
@@ -625,8 +497,7 @@ nsd: no process killed
       </listitem>
       <listitem>
         <para>
-	  Attempt to connect to the service from a web browser as you did
-	  You should specify a URL like:
+	  Attempt to connect to the service from a web browser.  You should specify a URL like:
 	</para>
 	<computeroutput>http://<replaceable>yourserver.test</replaceable>:8000</computeroutput>
 	<para>
@@ -650,100 +521,9 @@ nsd: no process killed
 	  <userinput>killall nsd</userinput>.
 	</para>
       </listitem>
-      <listitem id="install-openacs-keepalive" xreflabel="Keep AOLServer alive">
-        <para>OPTIONAL - Automate AOLserver keepalive</para>
-        
-        <para>Assuming AOLserver started cleanly in the previous step, we'll set it up so that it's always running, and automatically restarts whenever it dies or is stopped.  This step is strongly recommended, even for development sites, because it makes install and maintenance much simpler.  </para>
-
-        <para>The Reference Platform uses Daemontools to control AOLserver.  A simpler method, using <computeroutput>init</computeroutput>, is <link linkend="install-openacs-inittab">here</link>.</para>
-        <orderedlist>
-          <listitem>
-            <para>Daemontools must already be installed.  If not, <link linkend="install-daemontools">install it</link>.</para>
-          </listitem>
-          <listitem>
-            <para>Each service controlled by daemontools must have a directory in <computeroutput>/service</computeroutput>.  That directory must have a file called <computeroutput>run</computeroutput>.  Daemontools then creates additional files and directories to track status and log.  Create the appropriate directory as <computeroutput>/web/<replaceable>service0</replaceable>/etc/daemontools</computeroutput>, copy the prepared <computeroutput>run</computeroutput> file, and set permissions.  If your server is not called <replaceable>service0</replaceable>, edit <computeroutput>/web/<replaceable>service0</replaceable>/etc/run accordingly.</computeroutput></para>
-        <screen>[service0@yourserver log]$ <userinput>cd /web/<replaceable>service0</replaceable>/etc</userinput>
-[service0@yourserver etc]$ <userinput>mkdir daemontools</userinput>
-[service0@yourserver etc]$ <userinput>cp /web/<replaceable>service0</replaceable>/packages/acs-core-docs/www/files/run.txt daemontools/run</userinput>
-[service0@yourserver etc]$ <userinput>chmod 700 daemontools/run</userinput>
-<action>cd /web/<replaceable>service0</replaceable>/etc
-mkdir daemontools
-cp /web/<replaceable>service0</replaceable>/packages/acs-core-docs/www/files/run.txt daemontools/run
-chmod 700 daemontools/run</action></screen>
-          </listitem>
-          <listitem>
-            <para>Kill any existing AOLserver instances.  As root, link the <computeroutput>daemontools</computeroutput> directory into the <computeroutput>/service</computeroutput> directory.  Daemontools' <computeroutput>svscan</computeroutput> process checks this directory every five seconds, and will quickly execute <computeroutput>run</computeroutput>.</para>
-            
-            <screen>[service0@yourserver etc]$ <userinput>killall nsd</userinput>
-nsd: no process killed
-[service0@yourserver etc]$ <userinput>exit</userinput>
-
-[root@yourserver root]# <userinput>ln -s /web/<replaceable>service0</replaceable>/etc/daemontools/ /service/<replaceable>service0</replaceable></userinput></screen>
-            <para>Verify that AOLserver is running.</para>
-            <screen>[root@yourserver root]#<userinput> ps -auxw | grep nsd</userinput>
-<replaceable>service0</replaceable>   5562 14.2  6.2 22436 15952 ?       S    11:55   0:04 /usr/local/aolserver/bin/nsd -it /web/<replaceable>service0</replaceable>/etc/config.tcl -u serve
-root      5582  0.0  0.2  3276  628 pts/0    S    11:55   0:00 grep nsd
-[root@yourserver root]#</screen>
-          </listitem>
-          <listitem>
-            <para>The user <replaceable>service0</replaceable> can now control the service <replaceable>service0</replaceable> with these commands:</para>
-            <itemizedlist>
-              <listitem><para>
-
-            <computeroutput>svc -d /service/<replaceable>service0</replaceable></computeroutput> -
-            Bring the server down
-
-          </para></listitem>
-              
-              <listitem><para>
-
-            <computeroutput>svc -u /service/<replaceable>service0</replaceable></computeroutput> -
-            Start the server up and leave it in keepalive mode.
-
-          </para></listitem>
-              
-              <listitem><para>
-
-            <computeroutput>svc -o /service/<replaceable>service0</replaceable></computeroutput> -
-            Start the server up once. Do not restart it if it stops.
-
-          </para></listitem>
-
-        <listitem><para>
-
-            <computeroutput>svc -t /service/<replaceable>service0</replaceable></computeroutput> -
-            Stop and immediately restart the server.
-
-          </para></listitem>
-
-        <listitem><para>
-        
-            <computeroutput>svc -k /service/<replaceable>service0</replaceable></computeroutput> -
-            Sends the server a KILL signal. This is like KILL -9. AOLserver
-            exits immediately. If svc -t fails to fully kill AOLserver, use
-            this option.  This does not take the server out of keepalive mode, so it should still bounce back up immediately.
-
-          </para></listitem>
-        </itemizedlist>
-      </listitem>
       <listitem>
-        <para>
-        At this point, these commands will work only for the
-        <computeroutput>root</computeroutput> user.  Grant permission for the <computeroutput>web</computeroutput> group to use <computeroutput>svc</computeroutput> commands on the <emphasis><replaceable>service0</replaceable></emphasis> server.</para>
-            <screen>[root@yourserver root]# <userinput>svgroup web /service/<replaceable>service0</replaceable></userinput>
-[root@yourserver root]#</screen>
-          </listitem>
-          <listitem>
-            <para>Verify that the controls work.  You may want to <computeroutput>tail -f /web/<replaceable>service0</replaceable>/log/<replaceable>service0</replaceable>-error.log</computeroutput> in another window, so you can see what happens when you type these commands.
-      </para>
-            <para>
-
-        Most of this information comes from Tom Jackson's <ulink
-          url="http://zmbh.com/daemontools-aolserver/aolserver+daemontools.html">AOLServer+Daemontools
-          Mini-HOWTO</ulink>.
-</para>
-          </listitem>
-        </orderedlist>
+        <para><link linkend="install-openacs-keepalive">Automate
+        AOLserver keepalive</link> (OPTIONAL)</para>
       </listitem>
     </orderedlist>
   </sect2>
@@ -835,216 +615,36 @@ Loading package .info files ... this will take a few minutes</programlisting>
 		</para></listitem>
 
 
-      <listitem><para>OPTIONAL - Install Full Text Search.</para>
-        <orderedlist>
+      <listitem>
+        <para>Install Full Text Search (OPTIONAL).  If you have <link
+        linkend="install-openfts">installed OpenFTS</link> and enabled
+        OpenFTS, you can now <link linkend="install-fts-engine">install</link> the OpenFTS Driver package and
+        Full Text Search Engine package in the OpenACS service.</para>
 
-          <listitem>
-            <para>Click <computeroutput><guilabel>Package Manager</guilabel></computeroutput> on the right side of the default home page.  If prompted, log in with the account and password you entered during install.</para>
-          </listitem>
-
-          <listitem><para>Click on the <computeroutput><guilabel>Install
-packages</guilabel></computeroutput> link.</para>
-          </listitem>
-
-	<listitem><para>On the next screen, after it loads, click on <computeroutput><guilabel>Uncheck all boxes</guilabel></computeroutput>, then click the second checkbox next to <computeroutput><guilabel>OpenFTS Driver 4.2</guilabel></computeroutput>.  This will automatically check the first box. Then click <computeroutput><guibutton><accel>N</accel>ext</guibutton></computeroutput>. </para></listitem>
-          
-          <listitem><para>Click <computeroutput><guibutton>Install Packages</guibutton></computeroutput></para></listitem>
-          
-          <listitem><para>Restart the service.</para>
-<screen>[service0@yourserver service0]$ <userinput>svc -t /service/<replaceable>service0</replaceable></userinput>
-[service0@yourserver service0]$</screen></listitem>
-          
-          <listitem><para>Wait a minute, then browse back to the home page.</para>
-          </listitem>
-
-          <listitem><para>Click on <computeroutput><guilabel>Site Map</guilabel></computeroutput> on the top right side of the screen.</para>
-          </listitem>
-          
-          <listitem>
-            <para>Mount the OpenFTS Full Text Search Engine in the site map.</para>
-            <orderedlist>
-              <listitem><para>Click the <computeroutput><guilabel>new sub folder</guilabel></computeroutput> link on the "/" line, the first line under Main Site:/.</para></listitem>
-              <listitem><para>Type <userinput>openfts</userinput>
-and click <computeroutput><guibutton>New</guibutton></computeroutput>.</para></listitem>
-              <listitem><para>On the new <computeroutput><guilabel>openfts</guilabel></computeroutput> line, click the <computeroutput><guilabel>mount</guilabel></computeroutput> link.</para></listitem>
-              <listitem><para>Click <computeroutput><guilabel>OpenFTS
-Driver</guilabel></computeroutput>.</para></listitem>
-              <listitem><para>On the <computeroutput><guilabel>openfts</guilabel></computeroutput> line, click <computeroutput><guilabel>set parameters</guilabel></computeroutput>.</para>
-              </listitem>
-              <listitem><para>Change <computeroutput><guilabel>openfts_tcl_src_path</guilabel></computeroutput> to <userinput>/usr/local/src/Search-OpenFTS-tcl-0.3.2/</userinput> and click <computeroutput><guibutton>Set Parameters</guibutton></computeroutput>
-              </para>
-              </listitem>
-            </orderedlist>
-          </listitem>
-          <listitem>
-            <para>Mount the Search interface in the site map.</para>
-            <orderedlist>
-              <listitem><para>Click the
-<computeroutput><guilabel>new sub folder</guilabel></computeroutput> link on the
-Main Site line. </para></listitem>
-              <listitem><para>Type <userinput>search</userinput>
-and click <computeroutput><guibutton>New</guibutton></computeroutput>. </para></listitem>
-              <listitem><para>Click the <computeroutput><guilabel>new
-application</guilabel></computeroutput> link on the <computeroutput><guilabel>search</guilabel></computeroutput>
-	  line. </para></listitem>
-              <listitem><para>Type <userinput>search</userinput>
-where it says
-<computeroutput><guilabel>untitled</guilabel></computeroutput>, choose
-<computeroutput><guilabel>search</guilabel></computeroutput> from the
-drop-down list, and click
-<computeroutput><guibutton>New</guibutton></computeroutput>.
-</para></listitem>
-            </orderedlist>
-          </listitem>
-          <listitem>
-            <para>Restart the service.</para>
-            <screen>[service0@yourserver service0]$ <userinput>svc -t /service/<replaceable>service0</replaceable></userinput>
-[service0@yourserver service0]$</screen>
-          </listitem>
-          <listitem><para>Wait a minute, then click on <computeroutput><guilabel>Main Site</guilabel></computeroutput> at the top of the page.</para>
-          </listitem>
-          <listitem>
-            <para>Initialize the OpenFTS Engine.  This creates a set of tables in the database to support FTS.</para>
-            <para>Near the bottom of the page, click on the <computeroutput><guilabel>OpenFTS Driver</guilabel></computeroutput> link. Click on <computeroutput><guilabel>Administration</guilabel></computeroutput>.
-Click on <computeroutput><guilabel>Initialize OpenFTS Engine</guilabel></computeroutput>. 
-Click <computeroutput><guibutton>Initialize OpenFTS Engine</guibutton></computeroutput>. </para>
-          </listitem>
-          <listitem>
-            <para>Add the FTS Engine service contract</para>
-            <orderedlist>
-              <listitem><para>Click on the <computeroutput><guilabel>Main
-Site</guilabel></computeroutput>. </para></listitem>
-              <listitem><para>Click on the <computeroutput><guilabel>ACS
-Service Contract</guilabel></computeroutput> link near the bottom of the home page. </para></listitem>
-              <listitem><para>On the <computeroutput><guilabel>FtsEngineDriver</guilabel></computeroutput>
-line, click
-<computeroutput><guilabel>Install</guilabel></computeroutput>.
-</para></listitem>
-            </orderedlist>
-          </listitem>
-          <listitem>
-            <para>Restart the service.</para>
-            <screen>[service0@yourserver service0]$ <userinput>svc -t /service/<replaceable>service0</replaceable></userinput>
-[service0@yourserver service0]$</screen>
-          </listitem>
-          <listitem>
-            <para>Test FTS.  (INCOMPLETE).  Add a package that supports search,like "note," add some content, and search for it.</para>
-          </listitem>
-        </orderedlist>
       </listitem>
     </itemizedlist>
-  </sect2>
-
-  <sect2>
-    <title>Back up the New Service - OPTIONAL</title>
-    <para>This is a very good time to back the service, even if it's not a production service.  Making a backup now lets you roll back to this initial, clean setup at any point in the future, without repeating the install process.  A full OpenACS service backup includes everything in the <computeroutput>/web/<replaceable>service0</replaceable>/</computeroutput> directory.  At this point it's probably sufficient to back up just the database, because you can recover the files from a tarball.</para>
-    <para>Note that, if you did the CVS options in this document, the <computeroutput>/web/service0/etc</computeroutput> directory is not included in cvs and you may want to add it.</para>
-    <itemizedlist>
-      <listitem>
-        <formalpara>
-          <title>PostGreSQL</title>
-          <para>Create a backup file and verify that it was created and has a reasonable size (several megabytes).</para>
-        </formalpara>
-        <screen>[service0@yourserver service0]$ <userinput>mkdir /web/<replaceable>service0</replaceable>/database-backup</userinput>
-[service0@yourserver service0]$ <userinput>pg_dump -f /web/<replaceable>service0</replaceable>/database-backup/initial_backup.dmp <replaceable>service0</replaceable></userinput>
-[service0@yourserver service0]$ <userinput>ls -al /web/<replaceable>service0</replaceable>/database-backup</userinput>
-total 1425
-drwxr-xr-x    2 <replaceable>service0</replaceable>  web          1024 Mar  9 14:13 .
-drwx------   11 <replaceable>service0</replaceable>  web          1024 Mar  9 14:11 ..
--rw-r--r--    1 <replaceable>service0</replaceable>  web       1449826 Mar  9 14:13 initial_backup.dmp
-[service0@yourserver service0]$
-<action>mkdir /web/<replaceable>service0</replaceable>/database-backup
-pg_dump -f /web/<replaceable>service0</replaceable>/database-backup/initial_backup.dmp <replaceable>service0</replaceable>
-ls -al /web/<replaceable>service0</replaceable>/database-backup</action></screen>
-      </listitem>
-      <listitem>
-        <formalpara>
-          <title>Oracle - INCOMPLETE</title>
-          <para></para>
-        </formalpara>
-      </listitem>
-    </itemizedlist>
-  </sect2>
-
-  <sect2>
-    <title>Set up Automated Backup - OPTIONAL</title>
-    <para>Backup can encompass all files in <computeroutput>/web/service0</computeroutput>.  For a development server, putting the files in cvs is sufficient.  (It's important then to back up the cvs repository!)</para>
-    
-    <para>A quick way to automate database backup is a cron job.  This is not recommended for production and is not part of the Reference Platform, because it is not cross-platform and can fail silently.  More thorough methods are documented in <xref linkend="install-next-backups"/></para>
-    <screen>[service0@yourserver service0]$ <userinput>export EDITOR=emacs;crontab -e</userinput></screen>
-    <para>Add this line to the file.  The numbers and stars at the beginning are cron columns that specify when the program should be run - in this case, whenever the minute is 0 and the hour is 1, i.e., 1:00 am every day.</para>
-    <programlisting>0 1 * * * /usr/local/pgsql/bin/pg_dump -f /web/service0/database-backup/service0_$(date +%Y-%m-%d).dmp service0</programlisting>
-    <para>If you plan to back up the whole <computeroutput>/web/<replaceable>service0</replaceable></computeroutput> directory, then it would be redundant to keep a history of database backups.  In that case, set up the cron job to overwrite the previous backup each time:</para>
-    <programlisting>0 1 * * * /usr/local/pgsql/bin/pg_dump -f /web/service0/database-backup/service0_nightly.dmp service0</programlisting>
-  </sect2>
-
-  <sect2>
-    <title>Set up Log Analysis Reports - OPTIONAL</title>
-    
-    <para>Analog is a program with processes webserver access logs,
-      performs DNS lookup, and outputs HTML reports.  Analog should
-      <link linkend="analog-install">already be
-      installed.</link>  A modified configuration file is included in
-      the OpenACS tarball.</para>
-    <orderedlist>
-      <listitem>
-        <screen>[root@yourserver src]# <userinput>su - service0</userinput>
-[service0@yourserver service0]$ <userinput>cd /web/service0</userinput>
-[service0@yourserver service0]$ <userinput>cp /web/service0/packages/acs-core-docs/www/files/analog.cfg.txt etc/analog.cfg</userinput>
-[service0@yourserver service0]$ <userinput>mkdir www/log</userinput>
-[service0@yourserver service0]$ <userinput>cp -r /usr/share/analog-5.31/images www/log/</userinput>
-[service0@yourserver service0]$ <action>
-su - service0
-cd /web/service0
-cp /web/service0/packages/acs-core-docs/www/files/analog.cfg.txt etc/analog.cfg
-mkdir www/log
-cp -r /usr/share/analog-5.31/images www/log/</action></screen>
-        <para>Edit
-<computeroutput>/web/service0/etc/analog.cfg</computeroutput> and change the variable in <computeroutput>HOSTNAME "[my
-organisation]"</computeroutput> to reflect your website title.  If you
-don't want the traffic log to be publicly visible, change
-<computeroutput>OUTFILE /web/service0/www/log/traffic.html</computeroutput> to use a private
-directory.</para>
-      </listitem>
-      <listitem>
-        <para>Run it.</para>
-        <screen>[service0@yourserver service0]$ <userinput>/usr/share/analog-5.31/analog -G -g/web/service0/etc/analog.cfg</userinput>
-/usr/share/analog-5.31/analog: analog version 5.31/Unix
-/usr/share/analog-5.31/analog: Warning F: Failed to open DNS input file
-  /home/service0/dnscache: ignoring it
-  (For help on all errors and warnings, see docs/errors.html)
-/usr/share/analog-5.31/analog: Warning R: Turning off empty Search Word Report
-[service0@yourserver service0]$</screen>
-        <para>Verify that it works by browing to <computeroutput>http://yourserver.test:8000/log/traffic.html</computeroutput></para>
-      </listitem>
-      <listitem>
-        <para>Automate this by creating a file in
-          <computeroutput>/etc/cron.daily</computeroutput>.</para>
-          <screen>[service0@yourserver service0]$ <userinput>exit</userinput>
-logout
-
-[root@yourserver root]# <userinput>emacs /etc/cron.daily/analog</userinput></screen>
-        <para>Put this into the file:</para>
-        <programlisting>#!/bin/sh
-
-/usr/share/analog-5.31/analog -G -g/web/<replaceable>service0</replaceable>/etc/analog.cfg</programlisting>
-        <screen>[root@yourserver root]# <userinput>chmod 755 /etc/cron.daily/analog</userinput></screen>
-        <para>Test it by running the script.</para>
-        <screen>[root@yourserver root]# <userinput>sh /etc/cron.daily/analog</userinput></screen>
-        <para>Browse to <computeroutput>http://<replaceable>yourserver.test</replaceable>/log/traffic.html</computeroutput></para>
-      </listitem>
-      
-    </orderedlist>
   </sect2>
   <sect2>
     <title>Next Steps</title>
     <itemizedlist>
-      <listitem><para>Test your <link
-      linkend="backup-recovery">backup and recovery</link> procedure.</para>
+      <listitem>
+        <para>This is a good time to make a <link
+    linkend="snapshot-backup">backup</link> of your service.  If this is a
+    production site, you should set up <link
+    linkend="automated-backup">automatic nightly backups</link>.</para>
       </listitem>
-      <listitem><para>Follow the instruction on the home page to change the appearance of your service or add more packages.</para>
+      <listitem>
+        <para>If you want traffic reports, <link
+    linkend="analog-setup">set up analog</link> or another log
+    processing program.</para>
+      </listitem>
+      <listitem><para>Follow the instruction on the home page to
+      change the appearance of your service or add more
+      packages. (<link linkend="configure">more information</link>)</para>
       </listitem>
       <listitem><para>Proceed to the <link linkend="tutorial">tutorial</link> to learn how to develop your own packages.</para>
+      </listitem>
+      <listitem><para>Test your <link linkend="backup-recovery">backup and recovery</link> procedure.</para>
       </listitem>
     </itemizedlist>
 

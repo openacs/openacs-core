@@ -23,102 +23,13 @@
 
   </sect2>
 
-  <sect2 id="db-api-theoldway">
-    <title>The Old Way</title>
-
-    <para>
-      Here's a typical block of code from an OpenACS 3.x dynamic page:
-    </para>
-
-    <programlisting>
-set tcl_var "foo"
-
-set db [ns_db gethandle]
-
-ns_db dml $db "begin transaction"
-
-set sql "select 
-             foo, 
-             bar, 
-             baz 
-	 from some_table, 
-	     some_other_table
-	 where some_table.id = some_other_table.id  
-	     and some_table.condition_p = '$tcl_var'
-	 "
-
-set selection [ns_db select $db $sql] 
-set count 0 
-
-while { [ns_db getrow $db $selection] } { 
-      	set_variables_after_query 
- 
-        ...
-        call_some_proc $foo $bar $baz
-        incr count 
-}
-
-ns_db releasehandle $db
-    </programlisting>
-
+  <sect2 id="db-api-thenewway"><title>The New Way</title>
     
-
-    <para>
-      Writing code like this had the following annoyances:
-
-      <itemizedlist mark="opencircle">
-
-	<listitem>
-	  <para>
-	    It was repetitive, tedious and error prone to write the same type of
-	    loops over and over again.
-	  </para>
-	</listitem>
-
-	<listitem>
-	  <para>
-	    Using Tcl variable interpolation in a literal string, to pass values
-	    from the page to the database, is error prone, relatively inefficient,
-	    and a good way to compromise the security of a web site.
-	  </para>
-	</listitem>
-	
-	<listitem>
-	  <para>
-	    Magic like <computeroutput>set_variables_after_query</computeroutput> made code confusing.
-	  </para>
-	</listitem>
-
-	<listitem>
-	  <para>
-	    The scope of transactions is not clear from reading the code.
-	  </para>
-	</listitem>
-
-	<listitem>
-	  <para>
-	    Passing handles around explicitly made it easy to use them in bad
-	    ways, like holding a handle for too long while returning data to a
-	    user's browser.
-	  </para>
-	</listitem>
-
-      </itemizedlist>
-
-    </para>
-
     <para>
       Introduced in ACS 3.4, the new Database API is meant to save
       developers from the above tedium and provide a more structured syntax
       for specifying database operations, including transactions.
-    </para>
-
-  </sect2>
-
-  <sect2 id="db-api-thenewway"><title>The New Way</title>
-    
-    <para>
-      Here is how you would code up the example above using the new API.
+      Here's an example of the API.
     </para>
     <programlisting>
 set count 0 

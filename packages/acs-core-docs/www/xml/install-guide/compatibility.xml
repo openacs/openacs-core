@@ -54,7 +54,7 @@
           </row>
           <row>
             <entry>7.3.2</entry>
-            <entry namest="3.2.5" nameend="4.6.2" align="center">No</entry>
+            <entry namest="3.2.5" nameend="4.6.2" align="center">Not compatible</entry>
             <entry namest="4.6.3" nameend="4.6.3" align="center">Untested</entry>
           </row>
         </tbody>

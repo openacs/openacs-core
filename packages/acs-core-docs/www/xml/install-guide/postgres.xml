@@ -52,7 +52,7 @@ chmod 750 /usr/local/pgsql</action></screen>
 	necessary for the executable to find its supporting
 	libraries.  For convenience, we'll simply append the necessary
 	lines to the postgres shell config file.</para>
-      <screen>[root@yourserver src]# <userinput>echo "export LD_LIBRARY_PATH=LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/pgsql/lib" &gt;&gt; ~postgres/.bashrc</userinput>
+      <screen>[root@yourserver src]# <userinput>echo "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/pgsql/lib" &gt;&gt; ~postgres/.bashrc</userinput>
 [root@yourserver src]# <userinput>echo "export PATH=$PATH:/usr/local/pgsql/bin" &gt;&gt; ~postgres/.bashrc</userinput>
 <action>echo "export LD_LIBRARY_PATH=LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/pgsql/lib" &gt;&gt; ~postgres/.bashrc
 echo "export PATH=$PATH:/usr/local/pgsql/bin" &gt;&gt; ~postgres/.bashrc</action></screen>
@@ -228,11 +228,11 @@ service postgresql start</action></screen>
         <listitem><para>Debian:</para>
           <screen>root:~# <userinput>cp /tmp/&tarballpath;/packages/acs-core-docs/www/files/postgresql.txt /etc/init.d/postgresql</userinput>
 root:~# <userinput>chown root.root /etc/init.d/postgresql</userinput>
-root:~# <userinput>chmod 700 /etc/init.d/postgresql</userinput>
+root:~# <userinput>chmod 755 /etc/init.d/postgresql</userinput>
 root:~# <action>
 cp /tmp/&tarballpath;/packages/acs-core-docs/www/files/postgresql.txt /etc/init.d/postgresql
 chown root.root /etc/init.d/postgresql
-chmod 700 /etc/init.d/postgresql</action></screen>
+chmod 755 /etc/init.d/postgresql</action></screen>
           <para>Test the script</para>
           
           <screen>root:~# <userinput>/etc/init.d/postgresql stop</userinput>
@@ -276,7 +276,7 @@ root:~#</screen>
           
           <screen>root:~# <userinput>cp /tmp/&tarballpath;/packages/acs-core-docs/www/files/postgresql.txt /etc/rc.d/init.d/postgresql</userinput>
 root:~# <userinput>chown root.root /etc/rc.d/init.d/postgresql</userinput>
-root:~# <userinput>chmod 700 /etc/rc.d/init.d/postgresql</userinput></screen>
+root:~# <userinput>chmod 755 /etc/rc.d/init.d/postgresql</userinput></screen>
           <para>
 
           Test the script.
@@ -335,7 +335,7 @@ root:~ # </screen>
     </listitem>
     <listitem>
       <formalpara>
-        <title>Tune postgres.  OPTIONAL</title>
+        <title>Tune postgres.  (OPTIONAL)</title>
         <para>The default values for PostGreSQL are very conservative; we can safely change some of them and improve performance.</para>  
       </formalpara>
       <orderedlist>
@@ -351,7 +351,7 @@ root:~ # </screen>
 kernel.shmmax = 134217728</programlisting>
         </listitem>
         <listitem>
-          <para>Edit the PostGreSQL config file, <computeroutput>/usr/local/pgsql/data/postgresql.conf</computeroutput> to use more memory.  These values should improve performance in most cases.  (<ulink url="http://openacs.org/forums/message-view?message_id=94071">More information</ulink>)</para>
+          <para>Edit the PostGreSQL config file, <computeroutput>/usr/local/pgsql/data/postgresql.conf</computeroutput>, to use more memory.  These values should improve performance in most cases.  (<ulink url="http://openacs.org/forums/message-view?message_id=94071">More information</ulink>)</para>
           <programlisting>#       Shared Memory Size
 #
 shared_buffers = 15200      # 2*max_connections, min 16
