@@ -7,13 +7,13 @@ ad_page_contract {
 
 } {
     email:notnull
+    username:notnull
     first_names:notnull
     last_name:notnull
     password:notnull
     password_confirmation:notnull
-    password_question:notnull
-    password_answer:notnull
 }
+
 
 if { [string compare $password $password_confirmation] } {
     install_return 200 "Passwords Don't Match" "
@@ -28,7 +28,18 @@ if { ![db_string user_exists {
 
   db_transaction {
     
-    set user_id [ad_user_new $email $first_names $last_name $password $password_question $password_answer]
+    set user_id [ad_user_new \
+                     $email \
+                     $first_names \
+                     $last_name \
+                     $password \
+                     "" \
+                     "" \
+                     "" \
+                     "t" \
+                     "approved" \
+                     "" \
+                     $username]
     if { !$user_id } {
 
 	global errorInfo    
