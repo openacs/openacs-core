@@ -1351,12 +1351,6 @@ ad_proc -private auth::validate_account_info {
         }
     }
 
-    if { [info exists user(screen_name)] } {
-        if { ![empty_string_p [acs_user::get_user_id_by_screen_name -screen_name $user(screen_name)]] } {
-            set element_messages(screen_name) "This screen name is already taken."
-        }
-    }
-    
     if { [info exists user(url)] } {
         if { [empty_string_p $user(url)] || [string equal $user(url) "http://"] } {
             # The user left the default hint for the url
@@ -1367,6 +1361,15 @@ ad_proc -private auth::validate_account_info {
         }
     }
 
+    if { [info exists user(screen_name)] } {
+        set screen_name_user_id [acs_user::get_user_id_by_screen_name -screen_name $user(screen_name)]
+        if { ![empty_string_p $screen_name_user_id] && (!$update_p || $screen_name_user_id != $user(user_id)) } {
+            set element_messages(screen_name) "This screen name is already taken."
+
+            # We could do the same logic as below with 'stealing' the screen_name of an old, banned user.
+        }
+    }
+    
     if { [exists_and_not_null user(email)] } {
         # Check that email is unique
         set email $user(email)
@@ -1379,7 +1382,7 @@ ad_proc -private auth::validate_account_info {
                 set element_messages(email) "We already have a group with this email"
             } else {
                 acs_user::get \
-                    -user_id $email_party_id \
+                    -user_id $email_party_id \(Bscreen_
                     -array email_user
                 
                 switch $email_user(member_state) {
