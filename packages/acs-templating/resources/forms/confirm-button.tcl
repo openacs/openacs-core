@@ -10,7 +10,7 @@ set __return_url__ [ad_conn url]
 # step never happened.
 
 # There's one exception - we set the special form element "__confirmed_p" true.  This
-# informs ad_form that the use has indeed confirmed the submission.
+# informs ad_form that the user has indeed confirmed the submission.
 
 multirow create __form_contents__ __key__ __value__
 
@@ -23,8 +23,18 @@ if { ![empty_string_p [set __form__ [ns_getform]]] } {
         if { [string equal [ns_set key $__form__ $__form_counter__] __confirmed_p] } {
             multirow append __form_contents__ __confirmed_p 1
         } else {
-            multirow append __form_contents__ [ns_set key $__form__ $__form_counter__] \
+
+	    set __key__ [ns_set key $__form__ $__form_counter__]
+	    # QUIRK: ns_querygetall returns a single-element list {{key1 key2 ...}}
+	    set __values__ [ns_querygetall $__key__]
+	    foreach __value__ $__values__ {
+		multirow append __form_contents__ $__key__ $__value__
+	    }
+
+            #multirow append __form_contents__ [ns_set key $__form__ $__form_counter__] \
                 [ns_set value $__form__ $__form_counter__]
+
+
         }
         incr __form_counter__
     }
