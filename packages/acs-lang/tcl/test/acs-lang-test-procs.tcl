@@ -598,25 +598,31 @@ aa_register_case \
 aa_register_case \
     -procs {
 	lang::util::convert_adp_variables_to_percentage_signs
+	lang::util::convert_percentage_signs_to_adp_variables
     } util__convert_adp_variables_to_percentage_signs {
 
     @author Peter Marklund (peter@collaboraid.biz)
     @creation-date 25 October 2002
 } {
-    set adp_chunk "<property name=\"title\">@array.variable_name@ @variable_name2@ peter@collaboraid.biz</property>"
-
+    set adp_chunk "<property name=\"title\">@array.variable_name@ @variable_name2;noquote@ peter@collaboraid.biz</property>"
     set adp_chunk_converted [lang::util::convert_adp_variables_to_percentage_signs $adp_chunk]
-    set adp_chunk_expected "<property name=\"title\">%array.variable_name% %variable_name2% peter@collaboraid.biz</property>"
-
-    aa_true "adp vars should be subsituted with percentage sings" [string equal $adp_chunk_converted \
-                                                                                $adp_chunk_expected]
+    set adp_chunk_expected "<property name=\"title\">%array.variable_name% %variable_name2;noquote% peter@collaboraid.biz</property>"
+    aa_equals "adp vars should be subsituted with percentage sings" $adp_chunk_converted $adp_chunk_expected
+    set adp_chunk_converted_back [lang::util::convert_percentage_signs_to_adp_variables $adp_chunk_converted]
+    aa_equals "after having converted the text with percentage signs back to adp we should have what we started with" $adp_chunk_converted $adp_chunk_expected
 
     # Test that a string can start with adp vars
-    set adp_chunk "@first_names@ @last_name@&nbsp;peter@collaboraid.biz"
+    set adp_chunk "@first_names.foobar;noquote@ @last_name@&nbsp;peter@collaboraid.biz"
     set adp_chunk_converted [lang::util::convert_adp_variables_to_percentage_signs $adp_chunk]
-    set adp_chunk_expected "%first_names% %last_name%&nbsp;peter@collaboraid.biz"
-    aa_true "adp vars should be subsituted with percentage sings" [string equal $adp_chunk_converted \
-                                                                                $adp_chunk_expected]
+    set adp_chunk_expected "%first_names.foobar;noquote% %last_name%&nbsp;peter@collaboraid.biz"
+    aa_equals "adp vars should be subsituted with percentage sings" $adp_chunk_converted $adp_chunk_expected
+    set adp_chunk_converted_back [lang::util::convert_percentage_signs_to_adp_variables $adp_chunk_converted]
+    aa_equals "after having converted the text with percentage signs back to adp we should have what we started with" $adp_chunk_converted $adp_chunk_expected
+
+    set percentage_chunk {You are <a href="%role.character_url%">%role.character_title%</a> (%role.role_pretty%)}
+    set percentage_chunk_converted [lang::util::convert_percentage_signs_to_adp_variables $percentage_chunk]
+    set percentage_chunk_expected {You are <a href="@role.character_url@">@role.character_title@</a> (@role.role_pretty@)}
+    aa_equals "converting percentage vars to adp vars" $percentage_chunk_converted $percentage_chunk_expected
 }
 
 aa_register_case \

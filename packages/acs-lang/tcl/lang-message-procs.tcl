@@ -626,7 +626,7 @@ ad_proc -private lang::message::embedded_vars_regexp {} {
     @author Peter Marklund (peter@collaboraid.biz)
     @creation-date 12 November 2002
 } {
-    return {^(.*?)(%%|%[-a-zA-Z0-9_:\.]+%)(.*)$}
+    return {^(.*?)(%%|%[-a-zA-Z0-9_:\.]+(?:;noquote)?%)(.*)$}
 }
 
 ad_proc -public lang::message::message_exists_p { locale key } {
