@@ -68,7 +68,7 @@ ad_proc acs_sc_proc {
 
     set proc_name [acs_sc_generate_name $contract $impl $operation]
 
-    ns_log Notice "ACS_SC_PROC: proc_name = $proc_name"
+    acs_sc_log SCDebug "ACS_SC_PROC: proc_name = $proc_name"
     foreach {impl_alias impl_pl} [acs_sc_get_alias $contract $operation $impl] break 
 
     if ![info exists impl_alias] {
@@ -134,7 +134,7 @@ ad_proc acs_sc_proc {
 
     set docblock [join $docblock "\n\r"]
     set arguments [join $arguments]
-    ns_log Notice "sc_proc: $proc_name, $arguments"
+    acs_sc_log SCDebug "sc_proc: $proc_name, $arguments"
     ad_proc $proc_name $arguments $docblock $body
 
 }
@@ -197,6 +197,18 @@ ad_proc acs_sc_call {
 	# THE FUNCTION ONLY IF THE IMPLEMENTATION IS SUPPORTED.
 	ns_log warning "ACS-SC: Function Not Found: $proc_name"
 	return
+    }
+}
+
+
+##
+## Logging
+##
+
+proc acs_sc_log {level msg} {
+    # If you want to debug the SC, change SCDebug to Debug below
+    if {![string equal "SCDebug" $level]} {
+        ns_log $level "$msg"
     }
 }
 
