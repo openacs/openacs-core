@@ -531,23 +531,24 @@ returns integer as '
 declare
   drop_type__rel_type               alias for $1;  
   drop_type__cascade_p              alias for $2;  -- default ''f''  
+  v_cascade                         boolean;
 begin
     -- XXX do cascade_p.
     -- JCD: cascade_p seems to be ignored in acs_o_type__drop_type anyway...
-
     if drop_type__cascade_p is null then 
-	drop_type__cascade_p := ''f'';
+	v_cascade_p := ''f'';
+    else 
+	v_cascade_p := drop_type__cascade_p;
     end if;
 
     delete from acs_rel_types
 	  where rel_type = drop_type__rel_type;
 
     PERFORM acs_object_type__drop_type(drop_type__rel_type, 
-                                       drop_type__cascade_p);
+                                       v_cascade_p);
 
     return 0; 
 end;' language 'plpgsql';
-
 
 
 create or replace function apm__unregister_package (varchar,boolean)
