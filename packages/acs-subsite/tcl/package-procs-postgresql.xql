@@ -145,15 +145,15 @@
 
 	select cols.table_name, cols.column_name
 	  from user_tab_columns cols, 
-	       (select upper(t.table_name) as table_name
-	          from acs_object_types t
-		 where t.tree_sortkey like (select tree_sortkey || '%' from acs_object_types where object_type = :object_type)) t
+	       (select upper(t2.table_name) as table_name
+	          from acs_object_types t1, acs_object_types t2
+		 where t2.tree_sortkey <= t1.tree_sortkey
+		   and t1.tree_sortkey like (t2.tree_sortkey || '%')
+		   and t1.object_type = :object_type) t
 	 where cols.column_name in
-	          (select args.argument_name
-                     from user_arguments args
-                    where args.position > 0
-	              and args.object_name = upper(:object_name)
-	              and args.package_name = upper(:package_name))
+	          (select args.arg_name
+                     from acs_function_args args
+                    where args.function = upper(:package_name) || '__' || upper(:object_name))
 	   and cols.table_name = t.table_name
     
       </querytext>
@@ -162,16 +162,12 @@
  
 <fullquery name="package_instantiate_object.create_object">      
       <querytext>
-      FIX ME PLSQL
 
-    BEGIN
-      :1 := ${package_name}.new([plsql_utility::generate_attribute_parameter_call \
-	      -prepend ":" \
-	      -indent [expr [string length $package_name] + 29] \
-	      $pieces]
-      );
-    END; 
-    
+	select ${package_name}__new([plpgsql_utility::generate_attribute_parameter_call \
+		-prepend ":" \
+		${package_name}__new \
+		$pieces])
+
       </querytext>
 </fullquery>
 
