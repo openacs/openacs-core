@@ -22,9 +22,17 @@ create table admin_rels (
 );
 
 
-
+declare
+  v_role_exists_p    integer;  
 begin
- acs_rel_type.create_role ('admin', 'Administrator', 'Administrators');
+  -- dotlrn may have created the admin role already
+  select count(*) into v_role_exists_p
+  from acs_rel_roles
+  where role = 'admin';
+
+ if v_role_exists_p = 0 then
+   acs_rel_type.create_role ('admin', 'Administrator', 'Administrators');
+  end if;
 
  acs_rel_type.create_type (
    rel_type => 'admin_rel',

@@ -21,8 +21,25 @@ create table admin_rels (
                         primary key
 );
 
+-- Create the admin role if it doesn't already exist
+create function inline_0 ()
+returns integer as '
+declare
+  v_role_exists_p    integer;
+begin
+  -- dotlrn may have created the admin role already
+  select count(*) into v_role_exists_p
+  from acs_rel_roles
+  where role = ''admin'';
 
-select acs_rel_type__create_role ('admin', 'Administrator', 'Administrators');
+  if v_role_exists_p = 0 then
+    select acs_rel_type__create_role (''admin'', ''Administrator'', ''Administrators'');
+  end if;
+
+  return 0;
+end;' language 'plpgsql';
+select inline_0 ();
+drop function inline_0 ();
 
 select acs_rel_type__create_type (
    'admin_rel',                        -- rel_type
