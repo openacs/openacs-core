@@ -3,13 +3,12 @@
         version="1.1"
                 exclude-result-prefixes="doc">
 
-<!-- Import chunk.xsl  -->
+<!-- Import chunk.xsl  
 
   <xsl:import href="/usr/share/sgml/docbook/xsl-stylesheets/html/chunk.xsl"/>
-
-<!-- Debian 3.0 use this path for chunk.xsl instead:
-  <xsl:import href="/usr/share/sgml/docbook/stylesheet/xsl/nwalsh/html/chunk.xsl"/>
 -->
+<!-- Debian 3.0 use this path for chunk.xsl instead: -->
+  <xsl:import href="/usr/share/sgml/docbook/stylesheet/xsl/nwalsh/html/chunk.xsl"/>
 
 <!-- override default cellspacing value -->
 

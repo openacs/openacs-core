@@ -1,4 +1,4 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Install OpenACS 5.0.0a4</title><meta name="generator" content="DocBook XSL Stylesheets V1.60.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="complete-install.html" title="Chapter 3. Complete Installation"><link rel="previous" href="aolserver.html" title="Install AOLserver 3.3oacs1"><link rel="next" href="win2k-installation.html" title="OpenACS Installation Guide for Windows2000"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="aolserver.html">Prev</a> </td><th width="60%" align="center">Chapter 3. Complete Installation</th><td width="20%" align="right"> <a accesskey="n" href="win2k-installation.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="openacs"></a>Install OpenACS 5.0.0a4</h2></div></div><div></div></div><div class="authorblurb"><p>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Install OpenACS 5.0.0a4</title><meta name="generator" content="DocBook XSL Stylesheets V1.62.4"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="complete-install.html" title="Chapter 3. Complete Installation"><link rel="previous" href="aolserver.html" title="Install AOLserver 3.3oacs1"><link rel="next" href="win2k-installation.html" title="OpenACS Installation Guide for Windows2000"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="aolserver.html">Prev</a> </td><th width="60%" align="center">Chapter 3. Complete Installation</th><td width="20%" align="right"> <a accesskey="n" href="win2k-installation.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="openacs"></a>Install OpenACS 5.0.0a4</h2></div></div><div></div></div><div class="authorblurb"><p>
     by <a href="mailto:vinod@kurup.com" target="_top">Vinod Kurup</a><br>
           OpenACS docs are written by the named authors, and may be edited
           by OpenACS documentation staff.
@@ -38,7 +38,7 @@ chmod 770 /var/lib/aolserver</span></pre></pre></div><div class="sect2" lang="en
 [root@yourserver root]# <b class="userinput"><tt>useradd -g <span class="replaceable"><span class="replaceable">service0</span></span> -G web <span class="replaceable"><span class="replaceable">service0</span></span> -d /home/<span class="replaceable"><span class="replaceable">service0</span></span></tt></b>
 [root@yourserver root]#</pre></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="install-with-script"></a>Install with automated script (EXPERIMENTAL)</h3></div></div><div></div></div><p>Starting with OpenACS 5.0, an experimental script is
     available to automate all of the steps for the rest of this
-    section.  Requires <a href="install-tclwebtest.html" title="Install tclwebtest.">tclwebtest</a>.  If you are not feeling lucky, skip to <a href="openacs.html#install-from-tarball" title="Install from tarball">Section , &#8220;Install from tarball&#8221;</a>.</p><p>Get the install script from CVS.  It is located within
+    section.  Requires <a href="install-tclwebtest.html" title="Install tclwebtest.">tclwebtest</a>.  If you are not feeling lucky, skip to <a href="openacs.html#install-from-tarball" title="Install from tarball">the section called &#8220;Install from tarball&#8221;</a>.</p><p>Get the install script from CVS.  It is located within
         the main cvs tree, at /etc/install.  Use anonymous CVS
         checkout to get that directory in the home directory of the
         service's dedicated user.  We put it there so that it is not
@@ -57,7 +57,7 @@ U install/tcl/user-procs.tcl
         <tt class="computeroutput">/home/<span class="replaceable"><span class="replaceable">service0</span></span>/install/install.tcl</tt>
         and change the values as documented in the file.  It will work
         unchanged at 127.0.0.1:8000.</p><p>Run the file as root.</p><pre class="screen">[service0@yourserver service0]$ <b class="userinput"><tt>exit</tt></b> 
-[root@yourserver root]# <b class="userinput"><tt>./home/<span class="replaceable"><span class="replaceable">service0</span></span>/install/install.sh</tt></b>
+[root@yourserver root]# <b class="userinput"><tt>sh /home/<span class="replaceable"><span class="replaceable">service0</span></span>/install/install.sh</tt></b>
 /home/service0/install/install.sh: Starting installation with config_file 
 /home/service0/install/install.tcl. Using serverroot=/var/lib/aolserver/
 service0, server_url=http://0.0.0.0:8000, do_checkout=yes, do_install=yes, 
@@ -66,7 +66,7 @@ dotlrn=no, and database=postgres., use_daemontools=true
 ./install.sh: Finished (re)installing /var/lib/aolserver/service0 at Wed Nov  
 5 13:27:17 CET 2003.  Access the new site at http://127.0.0.1:8000 with admin 
 username admin@yourserver.test and password 1
-[root@yourserver root]#</pre><p>You can proceed to <a href="openacs.html#install-next-steps" title="Next Steps">Section , &#8220;Next Steps&#8221;</a>.</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="install-from-tarball"></a>Install from tarball</h3></div></div><div></div></div><p>You should already have downloaded the OpenACS tarball
+[root@yourserver root]#</pre><p>You can proceed to <a href="openacs.html#install-next-steps" title="Next Steps">the section called &#8220;Next Steps&#8221;</a>.</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="install-from-tarball"></a>Install from tarball</h3></div></div><div></div></div><p>You should already have downloaded the OpenACS tarball
       to the <tt class="computeroutput">/tmp</tt> directory.  If
       not, <a href="individual-programs.html#openacs-download">download the OpenACS
       tarball</a> and save it in
@@ -207,7 +207,7 @@ SVRMGR&gt; revoke unlimited tablespace from <span class="emphasis"><em><span cla
 SVRMGR&gt; alter user <span class="emphasis"><em><span class="replaceable"><span class="replaceable">service0</span></span></em></span> quota unlimited on <span class="emphasis"><em><span class="replaceable"><span class="replaceable">service0</span></span></em></span>;
 SVRMGR&gt; exit;</pre><p>
 		  Your table space is now ready. In case you are trying to delete a
-		  previous OpenACS installation, consult these commands in <a href="database-management.html#install-openacs-delete-tablespace" title="Deleting a tablespace">Section , &#8220;Deleting a tablespace&#8221;</a> below.
+		  previous OpenACS installation, consult these commands in <a href="database-management.html#install-openacs-delete-tablespace" title="Deleting a tablespace">the section called &#8220;Deleting a tablespace&#8221;</a> below.
 		</p></li><li><p>
         Make sure that you can login to Oracle using your
         <span class="emphasis"><em>service_name</em></span> account: </p><pre class="programlisting">
@@ -222,7 +222,7 @@ SQL&gt; exit</pre><p>
 		  You should see today's date in a format 'YYYY-MM-DD.'
 		  If you can't login, try redoing step 1 again. If the date is
 		  in the wrong format, make sure you followed the steps outlined in
-		  <a href="oracle.html#install-oracle-troubleshooting" title="Troubleshooting Oracle Dates">Section , &#8220;Troubleshooting Oracle Dates&#8221;</a>
+		  <a href="oracle.html#install-oracle-troubleshooting" title="Troubleshooting Oracle Dates">the section called &#8220;Troubleshooting Oracle Dates&#8221;</a>
 		  </p></li></ol></div></li><li><p><a name="install-openacs-prepare-postgres"></a><b>Prepare PostgreSQL for an OpenACS Service. </b></p><div class="itemizedlist"><ul type="circle"><li><p><a name="create-service-db-user"></a>PostGreSQL:</p><p>Create a user in the database matching the service
             name.  With default PostGreSQL authentication the name of
             the user of the process will be matched to this account
@@ -239,7 +239,7 @@ logout
 CREATE DATABASE
 [service0@yourserver service0]$
 <pre class="action"><span class="action">su - <span class="replaceable"><span class="replaceable">service0</span></span>
-createdb -E UNICODE <span class="replaceable"><span class="replaceable">service0</span></span></span></pre></pre></li><li><p>Automate daily database Vacuuming.  This is a process which cleans out discarded data from the database.  A quick way to automate vacuuming is to edit the cron file for the database user.</p><a class="indexterm" name="id2824819"></a><pre class="screen">[service0@yourserver service0]$ <b class="userinput"><tt>export EDITOR=emacs;crontab -e</tt></b></pre><p>Add this line to the file.  The numbers and stars at the beginning are cron columns that specify when the program should be run - in this case, whenever the minute is 0 and the hour is 1, i.e., 1:00 am every day.</p><pre class="programlisting">0 1 * * * /usr/local/pgsql/bin/vacuumdb --analyze <span class="replaceable"><span class="replaceable">service0</span></span></pre></li><li><p><a href="install-full-text-search.html#install-openfts-postgres" title="Install OpenFTS prerequisites in PostGreSQL instance">Add Full Text Search Support</a> (OPTIONAL)</p></li><li><a name="db-setup-exit"></a><pre class="screen">[service0@yourserver service0]$ <b class="userinput"><tt>exit</tt></b>
+createdb -E UNICODE <span class="replaceable"><span class="replaceable">service0</span></span></span></pre></pre></li><li><p>Automate daily database Vacuuming.  This is a process which cleans out discarded data from the database.  A quick way to automate vacuuming is to edit the cron file for the database user.</p><a class="indexterm" name="id2834406"></a><pre class="screen">[service0@yourserver service0]$ <b class="userinput"><tt>export EDITOR=emacs;crontab -e</tt></b></pre><p>Add this line to the file.  The numbers and stars at the beginning are cron columns that specify when the program should be run - in this case, whenever the minute is 0 and the hour is 1, i.e., 1:00 am every day.</p><pre class="programlisting">0 1 * * * /usr/local/pgsql/bin/vacuumdb --analyze <span class="replaceable"><span class="replaceable">service0</span></span></pre></li><li><p><a href="install-full-text-search.html#install-openfts-postgres" title="Install OpenFTS prerequisites in PostGreSQL instance">Add Full Text Search Support</a> (OPTIONAL)</p></li><li><a name="db-setup-exit"></a><pre class="screen">[service0@yourserver service0]$ <b class="userinput"><tt>exit</tt></b>
 logout
 
 [root@yourserver root]# </pre></li></ul></div></li></ul></div></li><li><a name="install-openacs-configure-aol"></a><p><b>Configure an AOLserver Service for OpenACS. </b></p><div class="orderedlist"><ol type="a"><li><p><a name="configure-config-tcl"></a>
@@ -249,7 +249,7 @@ logout
 	  need to configure a virtual server.  The Reference Platform
 	  uses a configuration file included in the OpenACS tarball,
 	  <tt class="computeroutput">/var/lib/aolserver/<span class="replaceable"><span class="replaceable">service0</span></span>/etc/config.tcl</tt>.
-	   Open it in an editor to adjust the parameters.</p><a class="indexterm" name="id2826613"></a><pre class="screen">[root@yourserver root]# <b class="userinput"><tt>su - <span class="replaceable"><span class="replaceable">service0</span></span></tt></b>
+	   Open it in an editor to adjust the parameters.</p><a class="indexterm" name="id2836112"></a><pre class="screen">[root@yourserver root]# <b class="userinput"><tt>su - <span class="replaceable"><span class="replaceable">service0</span></span></tt></b>
 [service0@yourserver service0]$ <b class="userinput"><tt>cd /var/lib/aolserver/<span class="replaceable"><span class="replaceable">service0</span></span>/etc</tt></b>
 [service0@yourserver etc]# <b class="userinput"><tt>emacs config.tcl</tt></b>
 </pre><p>

@@ -27,6 +27,19 @@
 [root@yourserver tmp]# <userinput>tar xzf &tarballpath;.tgz</userinput>
 <action>cd /tmp
 tar xzf &tarballpath;.tgz</action></screen>
+      <para>If you are installing from a different method and just need the configuration files, you can instead get them from CVS:</para>
+<screen>[root@yourserver root]# <userinput>cd /tmp</userinput>
+[root@yourserver tmp]# <userinput>cvs -d :pserver:anonymous@openacs.org:/cvsroot co openacs-4/packages/acs-core-docs/www/files/</userinput>
+cvs checkout: warning: failed to open /root/.cvspass for reading: No such file or directory
+cvs server: Updating openacs-4/packages/acs-core-docs/www/files
+U openacs-4/packages/acs-core-docs/www/files/README.TXT
+<emphasis>(many lines omitted)</emphasis>
+U openacs-4/packages/acs-core-docs/www/files/template-ini.ini
+U openacs-4/packages/acs-core-docs/www/files/winnsd.txt
+[root@yourserver tmp]# <userinput>mv openacs-4 &tarballpath;</userinput>
+<action>cd /tmp
+cvs -d :pserver:anonymous@openacs.org:/cvsroot co openacs-4/packages/acs-core-docs/www/files/
+mv openacs-4 openacs-5.0.0a4</action></screen>
       </sect1>
       <sect1 id="install-cvs">
       <title>Initialize CVS (OPTIONAL)</title>
@@ -58,6 +71,8 @@ If you plan to write or edit any documentation with emacs, install a
       <screen>[root@yourserver tmp]# <userinput>cp /tmp/&tarballpath;/packages/acs-core-docs/www/files/emacs.txt /etc/skel/.emacs</userinput>
 cp: overwrite `/etc/skel/.emacs'? <userinput>y</userinput>
 [root@yourserver tmp]# </screen>
+      <para>Debian users:</para>
+      <screen><action>apt-get install psgml</action></screen>
     </sect1>
 
     <sect1 id="install-daemontools">
@@ -86,7 +101,7 @@ cp: overwrite `/etc/skel/.emacs'? <userinput>y</userinput>
 [root@yourserver package]# <userinput>cd admin/daemontools-0.76/</userinput>
 [root@yourserver daemontools-0.76]# <userinput>package/install</userinput>
 Linking ./src/* into ./compile...
-(many lines omitted)
+
 Creating /service...
 Adding svscanboot to inittab...
 init should start svscan now.
@@ -124,8 +139,7 @@ Length: 355 [text/plain]
 [root@yourserver admin]# <userinput>cd daemontools-0.76</userinput>
 [root@yourserver daemontools-0.76]# <userinput>patch -p1 &lt; ../daemontools-0.76.errno.patch</userinput>
 [root@yourserver daemontools-0.76]# <userinput>package/install</userinput>
-Linking ./src/* into ./compile...
-(many lines omitted)
+Linking ./src/* into ./compile...<emphasis>(many lines omitted)</emphasis>
 Creating /service...
 Adding svscanboot to inittab...
 init should start svscan now.
@@ -195,8 +209,7 @@ cd ..</action></screen>
 <screen>[root@yourserver src]# <userinput>cd ucspi-tcp-0.88</userinput>
 [root@yourserver ucspi-tcp-0.88]#<userinput> make</userinput>
 ( cat warn-auto.sh; \
-echo 'main="$1"; shift'; \
-(many lines omitted)
+echo 'main="$1"; shift'; \<emphasis>(many lines omitted)</emphasis>
 ./compile instcheck.c
 ./load instcheck hier.o auto_home.o unix.a byte.a
 [root@yourserver ucspi-tcp-0.88]# <userinput>make setup check</userinput>
@@ -284,8 +297,7 @@ else, then something might be wrong.
 [root@yourserver netqmail-1.04]# <userinput>cd netqmail-1.04</userinput>
 [root@yourserver netqmail-1.04]# <userinput>make setup check</userinput>
 ( cat warn-auto.sh; \
-echo CC=\'`head -1 conf-cc`\'; \
-(many lines omitted)
+echo CC=\'`head -1 conf-cc`\'; \<emphasis>(many lines omitted)</emphasis>
 ./install
 ./instcheck
 <action>cd /usr/local/src 
@@ -460,8 +472,7 @@ mv analog-5.32 /usr/share/</action></screen>
 [postgres@yourserver pgsql]$ <userinput>cd /usr/local/src/postgresql-7.2.4/contrib/tsearch/</userinput>
 [postgres@yourserver tsearch]$ <userinput>make</userinput>
 sed 's,MODULE_PATHNAME,$libdir/tsearch,g' tsearch.sql.in >tsearch.sql
-/usr/bin/flex  -8 -Ptsearch_yy -o'parser.c' parser.l
-(many lines omitted)
+/usr/bin/flex  -8 -Ptsearch_yy -o'parser.c' parser.l<emphasis>(many lines omitted)</emphasis>
 rm -f libtsearch.so
 ln -s libtsearch.so.0.0 libtsearch.so
 [postgres@yourserver tsearch]$ <userinput>make install</userinput>
@@ -702,8 +713,7 @@ gcc -shared -nostartfiles -o nsopenssl.so nsopenssl.o config.o init.o ssl.o thre
 [root@yourserver nsopenssl-2.1]# <userinput>cp https.tcl /usr/local/aolserver/modules/tcl/</userinput>
 [root@yourserver nsopenssl-2.1]#
 <action>cd /usr/local/src/aolserver
-wget --passive
-http://www.scottg.net/download/nsopenssl-2.1.tar.gz
+wget --passive http://www.scottg.net/download/nsopenssl-2.1.tar.gz
 tar xzf nsopenssl-2.1.tar.gz 
 cd nsopenssl-2.1 
 make OPENSSL=/usr/local/ssl 
@@ -727,9 +737,8 @@ cp https.tcl /usr/local/aolserver/modules/tcl/</action></screen>
       source</link>, unpack it, and put it an appropriate
       place.  As root:</para>
       <screen><action>cd /tmp
-wget http://prdownloads.sourceforge.net/tclwebtest/tclwebtest-0.3.tar.gz?use_mirror=unc
 tar xvzf tclwebtest-0.3.tar.gz
-mv tclwebtest /usr/local/
+mv tclwebtest-0.3 /usr/local/
 ln -s /usr/local/tclwebtest-0.3 /usr/local/tclwebtest
 ln -s /usr/local/tclwebtest/tclwebtest /usr/local/bin
 </action></screen>

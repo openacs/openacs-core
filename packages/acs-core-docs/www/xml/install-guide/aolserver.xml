@@ -35,6 +35,7 @@ Length: 3,858,074 [application/x-compressed]
 <action>cd /usr/local/src
 wget --passive http://uptime.openacs.org/aolserver-openacs/aolserver3.3oacs1.tar.gz
 tar xzf aolserver3.3oacs1.tar.gz</action></screen>
+      <para>This section also relies on some OpenACS files, which you can get with <xref linkend="openacs-unpack"/>.</para>
     </listitem>
     
     <listitem id="install-aolserver-compile">
@@ -69,7 +70,7 @@ cd /usr/local/src/aolserver
       
       <para><computeroutput>conf-make</computeroutput> should contain the
           name of the GNU Make command on your system. It defaults to
-          <computeroutput>gmake</computeroutput>.</para>
+          <computeroutput>gmake</computeroutput>.  Debian users: <computeroutput><userinput>ln -s /usr/bin/make /usr/bin/gmake</userinput></computeroutput>.</para>
       <para>Set an environment variable that the nspostgres driver
       Makefile needs to compile correctly and run
           <computeroutput>conf</computeroutput>, which compiles

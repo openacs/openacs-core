@@ -1,9 +1,14 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Install PostGreSQL</title><meta name="generator" content="DocBook XSL Stylesheets V1.60.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="complete-install.html" title="Chapter 3. Complete Installation"><link rel="previous" href="oracle.html" title="Install Oracle 8.1.7"><link rel="next" href="aolserver.html" title="Install AOLserver 3.3oacs1"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="oracle.html">Prev</a> </td><th width="60%" align="center">Chapter 3. Complete Installation</th><td width="20%" align="right"> <a accesskey="n" href="aolserver.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="postgres"></a>Install PostGreSQL</h2></div></div><div></div></div><div class="authorblurb"><p>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Install PostGreSQL</title><meta name="generator" content="DocBook XSL Stylesheets V1.62.4"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="complete-install.html" title="Chapter 3. Complete Installation"><link rel="previous" href="oracle.html" title="Install Oracle 8.1.7"><link rel="next" href="aolserver.html" title="Install AOLserver 3.3oacs1"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="oracle.html">Prev</a> </td><th width="60%" align="center">Chapter 3. Complete Installation</th><td width="20%" align="right"> <a accesskey="n" href="aolserver.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="postgres"></a>Install PostGreSQL</h2></div></div><div></div></div><div class="authorblurb"><p>
 	by <a href="mailto:vinod@kurup.com" target="_top">Vinod Kurup</a><br>
           OpenACS docs are written by the named authors, and may be edited
           by OpenACS documentation staff.
         </p></div><p>Skip this section if you will run only Oracle.</p><p>OpenACS 5.0.0a4 will run with <a href="individual-programs.html#source-postgresql">PostGreSQL</a> 7.2.x, 7.3.2,
-  7.3.3, and 7.3.4.  7.3.4 is the recommended version of PostgreSQL.</p><div class="itemizedlist"><ul type="disc"><li><p><a name="install-postgres-rpm"></a><b>Using the Red Hat RPM. </b>Red Hat users: If you install PostGreSQL 7.3.2 from the Red Hat 9 RPM, you
+  7.3.3, and 7.3.4.  7.3.4 is the recommended version of PostgreSQL.</p><div class="itemizedlist"><ul type="disc"><li><p><a name="install-postgres-debian"></a><b>Debian. </b></p><p>Debian users can install the package and add some backwards-compatibility links:</p><pre class="screen"><b class="userinput"><tt>apt-get install postgresql postgresql-dev postgresql-doc
+ln -s /usr/include/postgresql/ /usr/include/pgsql
+ln -s /var/lib/postgres /usr/local/pgsql
+ln -s /usr/include/pgsql /usr/local/pgsql/include
+su postgres -c "/usr/lib/postgresql/bin/createlang plpgsql template1"</tt></b></pre><p>and proceed to <a href="postgres.html#postgres-tune" title="Tune postgres.  (OPTIONAL)">Tune postgres.  (OPTIONAL)</a> or to the
+      next section.</p></li><li><p><a name="install-postgres-rpm"></a><b>Using the Red Hat RPM. </b>Red Hat users: If you install PostGreSQL 7.3.2 from the Red Hat 9 RPM, you
   can skip a few steps.  These shell commands add some links for compatibility with the directories from a source-based install; start the service; create a new group for web service
   users, and modify the postgres user's
   environment (<a href="postgres.html#install-postgres-env">more
@@ -63,7 +68,7 @@ PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:/usr/bin/X11:/
 	  Change to the postgres user and run <tt class="computeroutput">./configure</tt> to set the compilation options automatically. This is the point at which you can
 	  configure PostgreSQL in various ways. For example, if you want to
 	  enable
-	  Unicode<a class="indexterm" name="id2820707"></a> support, add the flags <tt class="computeroutput">--enable-locale</tt> and <tt class="computeroutput">--enable-multibyte</tt>. If you want to see what the other possibilities are, run <tt class="computeroutput">./configure --help</tt>.
+	  Unicode<a class="indexterm" name="id2830341"></a> support, add the flags <tt class="computeroutput">--enable-locale</tt> and <tt class="computeroutput">--enable-multibyte</tt>. If you want to see what the other possibilities are, run <tt class="computeroutput">./configure --help</tt>.
 	</p><pre class="screen">[root@yourserver src]# <b class="userinput"><tt>su - postgres</tt></b>
 [postgres@yourserver pgsql]$<b class="userinput"><tt> cd /usr/local/src/postgresql-7.3.4</tt></b>
 [postgres@yourserver postgresql-7.3.4]$ <b class="userinput"><tt>./configure</tt></b>
@@ -257,10 +262,10 @@ root:~ # </pre></li></ul></div><p>
       start on runlevel 2 unless you alter the above commands a
       little. This usually isn't a problem as Red Hat defaults to runlevel 3)
 
-    </p></li><li><p><b>Tune postgres.  (OPTIONAL). </b>The default values for PostGreSQL are very conservative; we can safely change some of them and improve performance.</p><div class="orderedlist"><ol type="a"><li><p>Change the kernel parameter for maximum shared memory
+    </p></li><li><p><a name="postgres-tune"></a><b>Tune postgres.  (OPTIONAL). </b>The default values for PostGreSQL are very conservative; we can safely change some of them and improve performance.</p><div class="orderedlist"><ol type="a"><li><p>Change the kernel parameter for maximum shared memory
           segment size to 128Mb:</p><pre class="screen">[root@yourserver root]# <b class="userinput"><tt>echo 134217728 &gt;/proc/sys/kernel/shmmax</tt></b>
 [root@yourserver root]#</pre><p>Make that change permanent by editing
-          <tt class="computeroutput">emacs /etc/sysctl.conf</tt> to
+          <tt class="computeroutput">/etc/sysctl.conf</tt> to
           add these lines at the end:</p><pre class="programlisting"># increase shared memory limit for postgres
 kernel.shmmax = 134217728</pre></li><li><p>Edit the PostGreSQL config file, <tt class="computeroutput">/usr/local/pgsql/data/postgresql.conf</tt>, to use more memory.  These values should improve performance in most cases.  (<a href="http://openacs.org/forums/message-view?message_id=94071" target="_top">more information</a>)</p><pre class="programlisting">#       Shared Memory Size
 #
@@ -273,7 +278,6 @@ sort_mem = 32168            # min 32
 
 #       Write-ahead log (WAL)
 #
-wal_files = 3               # range 0-64
 checkpoint_segments = 3     # in logfile segments (16MB each), min 1
 </pre><p>Restart postgres (<tt class="computeroutput">service postgres restart</tt>) so that the changes take effect.</p></li></ol></div></li></ol></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="install-postgres-moreinfo"></a>more information about PostgreSQL</h3></div></div><div></div></div><div class="itemizedlist"><ul type="disc"><li><p>
 
