@@ -34,7 +34,6 @@ ad_proc -public ds_require_permission {
       ns_log Notice "$user_id doesn't have $privilege on object $object_id"
       ad_return_forbidden "Permission Denied" "<blockquote>
       <p>You don't have permission to $privilege [db_string name {select acs_object.name(:object_id) from dual}].</p>
-      <p>This incident has been logged.</p>
       </blockquote>"
     }
     ad_script_abort
