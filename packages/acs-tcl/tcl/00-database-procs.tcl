@@ -1867,7 +1867,7 @@ ad_proc db_1row { args } {
 }
 
 
-ad_proc db_transaction {{ -dbn ""} transaction_code args } {
+ad_proc -public db_transaction {{ -dbn ""} transaction_code args } {
     Usage: <b><i>db_transaction</i></b> <i>transaction_code</i> [ on_error { <i>error_code_block</i> } ]
     
     Executes transaction_code with transactional semantics.  This means that either all of the database commands
@@ -2091,7 +2091,7 @@ ad_proc db_transaction {{ -dbn ""} transaction_code args } {
 }
 
 
-ad_proc db_abort_transaction {{ -dbn "" }} {
+ad_proc -public db_abort_transaction {{ -dbn "" }} {
     
     Aborts all levels of a transaction. That is if this is called within 
     several nested transactions, all of them are terminated. Use this 
@@ -2108,7 +2108,7 @@ ad_proc db_abort_transaction {{ -dbn "" }} {
 }
 
 
-ad_proc db_abort_transaction_p {{ -dbn "" }} {
+ad_proc -private db_abort_transaction_p {{ -dbn "" }} {
     @param dbn The database name to use.  If empty_string, uses the default database.
 } {
     upvar "#0" [db_state_array_name_is -dbn $dbn] db_state
