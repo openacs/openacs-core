@@ -45,23 +45,8 @@ if { [info exists prefer_text_only_p]
 if { ![template::util::is_nil focus] } {
     # Handle elements wohse name contains a dot
     if { [regexp {^([^.]*)\.(.*)$} $focus match form_name element_name] } {
-
-        # Add safety code to test that the element exists '
-        set header_stuff "$header_stuff
-          <script language=\"JavaScript\">
-            function acs_focus( form_name, element_name ){
-                if (document.forms == null) return;
-                if (document.forms\[form_name\] == null) return;
-                if (document.forms\[form_name\].elements\[element_name\] == null) return;
-                if (document.forms\[form_name\].elements\[element_name\].type == 'hidden') return;
-
-                document.forms\[form_name\].elements\[element_name\].focus();
-            }
-          </script>
-        "
-        
         template::multirow append \
-                attribute onload "javascript:acs_focus('${form_name}', '${element_name}')"
+                attribute onload "javascript:acs_Focus('${form_name}', '${element_name}')"
     }
 }
 
@@ -70,7 +55,6 @@ multirow create header_links rel type href media
 multirow append header_links "stylesheet" "text/css" "/resources/acs-templating/lists.css" "all"
 multirow append header_links "stylesheet" "text/css" "/resources/acs-templating/forms.css" "all"
 multirow append header_links "stylesheet" "text/css" "/resources/acs-subsite/default-master.css" "all"
-
 
 # Developer-support: We include that here, so that master template authors don't have to worry about it
 
