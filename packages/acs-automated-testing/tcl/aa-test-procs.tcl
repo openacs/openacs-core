@@ -359,7 +359,7 @@ ad_proc -public aa_register_case {
   foreach case [nsv_get aa_test cases] {
     if {[lindex $case 0] == $testcase_id &&
         [lindex $case 3] == $package_key} {
-      nsv_set aa_test cases [lreplace [nsv_get aa_test cases] $lpos $lpos \
+      nsv_set aa_test cases [lreplace [nsv_get1 aa_test cases] $lpos $lpos \
                                  [list $testcase_id $testcase_desc \
                                       [info script] $package_key \
                                       $cats $init_classes $on_error $args]]
@@ -408,7 +408,7 @@ ad_proc -public aa_register_case {
       incr body_count
     }
   "
-  ns_log Notice "aa_register_case: Registered test case $testcase_id in package $package_key"
+  ns_log Debug "aa_register_case: Registered test case $testcase_id in package $package_key"
 }
 
 ad_proc -public aa_export_vars {
