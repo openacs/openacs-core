@@ -2408,7 +2408,7 @@ end;' language 'plpgsql';
 
 
 -- function edit
-create function apm_package_version__edit (integer,integer,varchar,varchar,varchar,varchar,varchar,timestamp,varchar,varchar,char,char)
+create function apm_package_version__edit (integer,integer,varchar,varchar,varchar,varchar,varchar,timestamp,varchar,varchar,boolean,boolean)
 returns integer as '
 declare
   edit__new_version_id         alias for $1;  -- default null  

@@ -66,7 +66,7 @@
       <querytext>
 
             update apm_package_versions
-            set    installed_p = (case when version_id = :version_id then 't' else 'f' end)::boolean
+            set    installed_p = (version_id = :version_id)
             where  package_key = :package_key
         
       </querytext>
@@ -89,9 +89,9 @@
 
 	    select apm__register_application (
 		        :package_key,
-			:package_uri,
 			:pretty_name,
 			:pretty_plural,
+			:package_uri,
 			:singleton_p,
 			:spec_file_path,
 			:spec_file_mtime

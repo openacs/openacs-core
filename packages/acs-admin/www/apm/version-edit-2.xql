@@ -13,7 +13,7 @@
 <fullquery name="old_version_name">      
       <querytext>
       
-	    select version_name old_version_name, version_uri old_version_uri 
+	    select version_name as old_version_name, version_uri as old_version_uri 
 	    from apm_package_versions
 	    where version_id = $version_id
 	

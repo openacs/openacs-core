@@ -187,15 +187,8 @@ ad_proc -private apm_higher_version_installed_p {package_key version_name} {
     @param version_name The name of the currently installed version.
 } {
 
-    return [db_exec_plsql apm_higher_version_installed_p {
-		declare 
-		v_version_name varchar(4000); 
-		begin
-		select version_name into v_version_name
-		from apm_package_versions where
-		version_id = apm_package.highest_version(:package_key);
-		:1 := apm_package_version.version_name_greater(:version_name, v_version_name);
-		end;
-    }]
+    # DRB: I turned this into a simple select by rearranging the code and
+    # stuck the result into queryfiles.
+    return [db_string apm_higher_version_installed_p {}]
 }
 

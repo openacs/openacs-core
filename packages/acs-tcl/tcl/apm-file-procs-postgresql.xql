@@ -6,7 +6,8 @@
  
 <fullquery name="apm_generate_tarball.apm_tarball_insert">      
       <querytext>
-      FIX ME LOB 
+      FIX ME LOB (DRB - *all* large objects should be handled by the content
+      repository so I'm leaving this wart for now.
         update apm_package_versions
            set distribution_tarball = empty_blob(),
                distribution_uri = null,
