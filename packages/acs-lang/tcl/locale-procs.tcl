@@ -183,6 +183,23 @@ ad_proc -public lang::system::get_locales {} {
     return [util_memoize [list lang::system::get_locales_not_cached]]
 }
 
+ad_proc -public lang::system::locale_set_enabled { 
+    {-locale:required}
+    {-enabled_p:required}
+} {
+    Enables or disables a locale.
+
+    @param enabled_p Should be t or f
+
+    @author Peter Marklund
+} {
+    db_dml set_enabled_p { update ad_locales set enabled_p = :enabled_p where locale = :locale }
+
+    # Flush caches
+    util_memoize_flush_regexp {^lang::util::default_locale_from_lang_not_cached}
+    util_memoize_flush_regexp {^lang::system::get_locales}
+}
+
 ad_proc -private lang::system::get_locales_not_cached {} {
     Return all enabled locales in the system.
 
