@@ -125,7 +125,7 @@ list::create \
             job_id {}
     }
 
-db_multirow -extend { entry_url short_message entry_time_pretty } batch_actions select_batch_actions {
+db_multirow -extend { entry_url short_message entry_time_pretty } batch_actions select_batch_actions "
     select entry_id,
            to_char(entry_time, 'YYYY-MM-DD HH24:MI:SS') as entry_time_ansi,
            operation,
@@ -137,7 +137,7 @@ db_multirow -extend { entry_url short_message entry_time_pretty } batch_actions 
     from   auth_batch_job_entries
     where  [template::list::page_where_clause -name batch_actions]
     order  by entry_id
-} {
+" {
     set entry_url [export_vars -base batch-action { entry_id }]
     
     # Use message and element_messages to display one short message in the table
