@@ -128,11 +128,21 @@ proc ad_proc args {
     # proc_name_as_passed and conditionally make proc_name fully qualified
     # if we were called from inside a namespace eval.
 
+    #
+    # RBM: 2003-01-26: 
+    # With the help of Michael Cleverly, fixed the namespace code so procs 
+    # declared like ::foo::bar would work, by only trimming the first :: 
+    # Also moved the uplevel'd call to namespace current to the if statement,
+    # to avoid it being called unnecessarily.
+    #
+    
     set proc_name_as_passed $proc_name
-    set proc_namespace [uplevel {::namespace current}]
-    if { $proc_namespace != "::" } {
-	regsub {^::} $proc_namespace {} proc_namespace
-	set proc_name "${proc_namespace}::${proc_name}"
+
+    if { ![string match ::* $proc_name] } {
+        set proc_name [string trimleft [uplevel 1 {::namespace current}]::$proc_name ::]
+
+    } else {
+        set proc_name [string trimleft $proc_name ::]
     }
 
     set arg_list [lindex $args [expr { $i + 1 }]]
