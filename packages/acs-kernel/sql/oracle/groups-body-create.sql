@@ -102,13 +102,14 @@ begin
 
   for map in (select group_id, element_id, rel_type
               from group_element_index
-              where rel_id = :new.rel_id)
+              where rel_id = :old.rel_id)
   loop
     party_approved_member.remove(map.group_id, map.element_id, map.rel_type);
   end loop;
 
   delete from group_element_index
   where rel_id = :old.rel_id;
+
 end;
 /
 show errors;

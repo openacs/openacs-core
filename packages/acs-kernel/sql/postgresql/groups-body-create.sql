@@ -10,37 +10,6 @@
 -- TRIGGERS --
 --------------
 
-create or replace function group_element_index_in_tr () returns opaque as '
-declare
-  v_member_state membership_rels.member_state%TYPE;
-begin
-
-  select into v_member_state m.member_state
-  from membership_rels m
-  where m.rel_id = new.rel_id;
-
-  -- Only membership_rels are tracked in the party_approved_member_map
-
-  if v_member_state = ''approved'' then
-    perform insert_into_party_map(new.group_id, new.element_id, new.rel_id, new.rel_type);
-  end if;
-
-  return new;
-
-end;' language 'plpgsql';
-
-create trigger group_element_index_in_tr before insert on group_element_index
-for each row execute procedure group_element_index_in_tr ();
-
-create or replace function group_element_index_del_tr () returns opaque as '
-begin
-  perform delete_from_party_map(old.group_id, old.element_id, old.rel_id, old.rel_type);
-  return old;
-end;' language 'plpgsql';
-
-create trigger group_element_index_del_tr after delete on group_element_index
-for each row execute procedure group_element_index_del_tr (); 
-
 -- The insert trigger was dummied up in groups-create.sql, so we just need
 -- to replace the trigger function, not create the trigger
 
@@ -72,18 +41,28 @@ begin
    (v_object_id_one, v_object_id_two, new.rel_id, v_object_id_one, 
     v_rel_type, ''membership_rel'');
 
+  if new.member_state = ''approved'' then
+    perform party_approved_member__add(v_object_id_one, v_object_id_two, new.rel_id, v_rel_type);
+  end if;
+
   -- For all groups of which I am a component, insert a
   -- row in the group_element_index.
   for map in select distinct group_id
 	      from group_component_map
 	      where component_id = v_object_id_one 
   loop
+
     insert into group_element_index
      (group_id, element_id, rel_id, container_id,
       rel_type, ancestor_rel_type)
     values
      (map.group_id, v_object_id_two, new.rel_id, v_object_id_one,
       v_rel_type, ''membership_rel'');
+
+    if new.member_state = ''approved'' then
+      perform party_approved_member__add(map.group_id, v_object_id_two, new.rel_id, v_rel_type);
+    end if;
+
   end loop;
 
   return new;
@@ -104,9 +83,9 @@ begin
              where rel_id = new.rel_id
   loop
     if new.member_state = ''approved'' then
-      perform insert_into_party_map(map.group_id, map.element_id, new.rel_id, map.rel_type);
+      perform party_approved_member__add(map.group_id, map.element_id, new.rel_id, map.rel_type);
     else
-      perform delete_from_party_map(map.group_id, map.element_id, new.rel_id, map.rel_type);
+      perform party_approved_member__remove(map.group_id, map.element_id, new.rel_id, map.rel_type);
     end if;
   end loop;
 
@@ -120,17 +99,20 @@ for each row execute procedure membership_rels_up_tr ();
 create or replace function membership_rels_del_tr () returns opaque as '
 declare
   v_error text;
-  v_object_id_one acs_rels.object_id_one%TYPE;
-  v_object_id_two acs_rels.object_id_two%TYPE;
-  v_rel_type      acs_rels.rel_type%TYPE;
   map             record;
-  v_count integer;
 begin
   -- First check if removing this relation would violate any relational constraints
   v_error := rel_constraint__violation_if_removed(old.rel_id);
   if v_error is not null then
       raise EXCEPTION ''-20000: %'', v_error;
   end if;
+
+  for map in select group_id, element_id, rel_type
+             from group_element_index
+             where rel_id = old.rel_id
+  loop
+    perform party_approved_member__remove(map.group_id, map.element_id, old.rel_id, map.rel_type);
+  end loop;
 
   delete from group_element_index
   where rel_id = old.rel_id;

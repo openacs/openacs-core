@@ -178,14 +178,11 @@ create index party_member_member_idx on party_approved_member_map(member_id);
 
 -- Helper functions to maintain the materialized party_approved_member_map. 
 
-create or replace function insert_into_party_map(integer, integer, integer, varchar) returns integer as '
+create or replace function party_approved_member__add_one(integer, integer, integer) returns integer as '
 declare
   p_party_id alias for $1;
   p_member_id alias for $2;
   p_rel_id alias for $3;
-  p_rel_type alias for $4;
-  v_segment_id rel_segments.segment_id%TYPE;
-  v_count integer;
 begin
 
   insert into party_approved_member_map
@@ -193,7 +190,20 @@ begin
   values
     (p_party_id, p_member_id, p_rel_id);
 
-  -- if the relation type is mapped to a relational segment map that too
+  return 1;
+
+end;' language 'plpgsql';
+
+create or replace function party_approved_member__add(integer, integer, integer, varchar) returns integer as '
+declare
+  p_party_id alias for $1;
+  p_member_id alias for $2;
+  p_rel_id alias for $3;
+  p_rel_type alias for $4;
+  v_segment_id rel_segments.segment_id%TYPE;
+begin
+
+  perform party_approved_member__add_one(p_party_id, p_member_id, p_rel_id);
 
   select into v_segment_id segment_id
   from rel_segments s
@@ -201,30 +211,40 @@ begin
     and s.group_id = p_party_id;
 
   if found then
-    insert into party_approved_member_map
-      (party_id, member_id, tag)
-    values
-      (v_segment_id, p_member_id, p_rel_id);
+    perform party_approved_member__add_one(v_segment_id, p_member_id, p_rel_id);
   end if;
 
   return 1;
 
 end;' language 'plpgsql';
 
-create or replace function delete_from_party_map(integer, integer, integer, varchar) returns integer as '
+create or replace function party_approved_member__remove_one(integer, integer, integer) returns integer as '
 declare
   p_party_id alias for $1;
   p_member_id alias for $2;
   p_rel_id alias for $3;
-  p_rel_type alias for $4;
-  v_segment_id rel_segments.segment_id%TYPE;
-  v_count integer;
 begin
 
   delete from party_approved_member_map
   where party_id = p_party_id
     and member_id = p_member_id
     and tag = p_rel_id;
+
+  return 1;
+
+end;' language 'plpgsql';
+
+
+create or replace function party_approved_member__remove(integer, integer, integer, varchar) returns integer as '
+declare
+  p_party_id alias for $1;
+  p_member_id alias for $2;
+  p_rel_id alias for $3;
+  p_rel_type alias for $4;
+  v_segment_id rel_segments.segment_id%TYPE;
+begin
+
+  perform party_approved_member__remove_one(p_party_id, p_member_id, p_rel_id);
 
   -- if the relation type is mapped to a relational segment unmap that too
 
@@ -234,10 +254,7 @@ begin
     and s.group_id = p_party_id;
 
   if found then
-    delete from party_approved_member_map
-    where party_id = v_segment_id
-      and member_id = p_member_id
-      and tag = p_rel_id;
+    perform party_approved_member__remove_one(v_segment_id, p_member_id, p_rel_id);
   end if;
 
   return 1;
@@ -261,7 +278,7 @@ begin
 
 end;' language 'plpgsql';
 
-create trigger parties_in_tr before insert on parties
+create trigger parties_in_tr after insert on parties
 for each row execute procedure parties_in_tr ();
 
 create or replace function parties_del_tr () returns opaque as '
