@@ -12,3 +12,10 @@ ad_proc -public acs_cr_scheduled_release_exec {} {
 }
 
 ad_schedule_proc [expr 15 * 60] acs_cr_scheduled_release_exec
+
+nsv_set CR_LOCATIONS . ""
+if ![nsv_exists CR_LOCATIONS CR_FILES] {
+
+    nsv_set CR_LOCATIONS CR_FILES "[file dirname [string trimright [ns_info tcllib] "/"]]/content-repository-content-files"
+
+}
