@@ -20,7 +20,8 @@ namespace eval notification::display {
         {-url:required}
         {-user_id ""}
     } {
-        Produce a widget for requesting notifications of a given type.
+        Produce a widget for requesting notifications of a given type.   If the notifications package has not been
+        mounted then return the empty string.
     } {
         if {[empty_string_p $user_id]} {
             set user_id [ad_conn user_id]
@@ -40,6 +41,10 @@ namespace eval notification::display {
             set sub_chunk "You may <a href=\"$sub_url\">request notification</a> for $pretty_name."
         }
 
+        if { [empty_string_p $sub_url] } {
+             return ""
+        }
+
         return "<font size=-1>\[ $sub_chunk \]</font>"
     }
 
@@ -50,11 +55,17 @@ namespace eval notification::display {
         {-user_id:required}
         {-pretty_name}
     } {
-	Returns the URL that allows one to subscribe to a notification type on a particular object.
+	Returns the URL that allows one to subscribe to a notification type on a particular object.   If the
+        notifications package has not been mounted return the empty string.
     } {
         set type_id [notification::type::get_type_id -short_name $type]
 
         set root_path [apm_package_url_from_key [notification::package_key]]
+
+        if { [empty_string_p $root_path] } {
+            return ""
+        }
+
         set subscribe_url "${root_path}request-new?[export_vars { type_id user_id object_id pretty_name {return_url $url} }]"
 
         return $subscribe_url
@@ -67,6 +78,11 @@ namespace eval notification::display {
 	Returns the URL that allows one to unsubscribe from a particular request.	
     } {
         set root_path [apm_package_url_from_key [notification::package_key]]
+
+        if { [empty_string_p $root_path] } {
+            return ""
+        }
+
         set unsubscribe_url "${root_path}request-delete?request_id=$request_id&return_url=[ns_urlencode $url]"
 
         return $unsubscribe_url

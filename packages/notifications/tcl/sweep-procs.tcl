@@ -17,9 +17,10 @@ namespace eval notification::sweep {
     }
 
     ad_proc -public cleanup_notifications {} {
-        Clean up the notifications that have been sent out.
+        Clean up the notifications that have been sent out (DRB: inefficiently...).
     } {
         # Get the list of the ones to kill
+
         set notification_id_list [db_list select_notification_ids {}]
 
         # Kill them
@@ -52,14 +53,14 @@ namespace eval notification::sweep {
 
             # Batched sending
             foreach notif $notifications {
-                ns_log Notice "NOTIF-BATCHED: one notif $notif"
+                ns_log Debug "NOTIF-BATCHED: one notif $notif"
 
                 if {$notif != "STOP"} {
-                    ns_log Notice "NOTIF-BATCHED: NOT a stop codon"
+                    ns_log Debug "NOTIF-BATCHED: NOT a stop codon"
                     set user_id [ns_set get $notif user_id]
                     set type_id [ns_set get $notif type_id]
                 } else {
-                    ns_log Notice "NOTIF-BATCHED stop codon!"
+                    ns_log Debug "NOTIF-BATCHED stop codon!"
                     set user_id ""
                     set type_id ""
                 }
@@ -68,20 +69,20 @@ namespace eval notification::sweep {
                 # if so, batch up previous stuff and send it
                 if {$notif == "STOP" || $user_id != $prev_user_id || $type_id != $prev_type_id} {
 
-                    ns_log Notice "NOTIF-BATCHED: batching things up for $prev_user_id"
+                    ns_log Debug "NOTIF-BATCHED: batching things up for $prev_user_id"
 
                     # If no content, keep going
                     if {![empty_string_p $batched_content]} {
-                        ns_log Notice "NOTIF-BATCHED: content to send!"
+                        ns_log Debug "NOTIF-BATCHED: content to send!"
                         db_transaction {
-                            ns_log Notice "NOTIF-BATCHED: sending content"
+                            ns_log Debug "NOTIF-BATCHED: sending content"
                             notification::delivery::send -to_user_id $prev_user_id \
                                     -notification_type_id $prev_type_id \
                                     -subject "\[[ad_system_name] - Batched Notification\]" \
                                     -content $batched_content \
                                     -delivery_method_id $prev_deliv_method_id
                             
-                            ns_log Notice "NOTIF-BATCHED: marking notifications"
+                            ns_log Debug "NOTIF-BATCHED: marking notifications"
                             foreach not_id $list_of_notification_ids {
                                 # Mark it as sent
                                 notification::mark_sent \
@@ -94,7 +95,7 @@ namespace eval notification::sweep {
                         set list_of_notification_ids [list]
                         set batched_content ""
                     } else {
-                        ns_log Notice "NOTIF-BATCHED: NO content to send!"
+                        ns_log Debug "NOTIF-BATCHED: NO content to send!"
                     }
                 }
 
@@ -104,7 +105,7 @@ namespace eval notification::sweep {
                 
 
                 # append content to built-up content
-                ns_log Notice "NOTIF-BATCHED: appending one notif!"
+                ns_log Debug "NOTIF-BATCHED: appending one notif!"
                 append batched_content "SUBJECT: [ns_set get $notif notif_subject]\n[ns_set get $notif notif_text]\n=====================\n"
                 lappend list_of_notification_ids [ns_set get $notif notification_id]
 

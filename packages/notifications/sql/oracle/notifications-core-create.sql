@@ -120,6 +120,8 @@ create table notification_requests (
                                     check (format in ('text', 'html'))
 );
 
+create index notification_requests_t_o_idx on notification_requests(type_id, object_id);
+
 -- preferences
 --
 -- for preferences that apply to each request, we're using the

@@ -53,10 +53,10 @@ create table notification_types (
                                     references acs_objects (object_id)
                                     constraint notif_type_type_id_pk
                                     primary key,
-       sc_impl_id                   integer not null
+    sc_impl_id                      integer not null
                                     constraint notif_deliv_meth_impl_id_fk
                                     references acs_sc_impls(impl_id),
-       short_name                   varchar(100)
+    short_name                      varchar(100)
                                     constraint notif_type_short_name_nn
                                     not null
                                     constraint notif_type_short_name_un
@@ -135,6 +135,8 @@ create table notification_requests (
                                     constraint notif_request_format_ch
                                     check (format in ('text', 'html'))
 );
+
+create index notification_requests_t_o_idx on notification_requests(type_id, object_id);
 
 -- preferences
 --
