@@ -3,7 +3,7 @@
 create or replace package acs_sc_contract
 as
 
-   function new ( 
+   function new (
        contract_name	in acs_sc_contracts.contract_name%TYPE,
        contract_desc	in acs_sc_contracts.contract_desc%TYPE
    ) return acs_sc_contracts.contract_id%TYPE;
@@ -24,11 +24,10 @@ end acs_sc_contract;
 /
 show errors
 
-
 create or replace package acs_sc_operation
 as
 
-   function new (    
+   function new (
        contract_name		in acs_sc_contracts.contract_name%TYPE,
        operation_name		in acs_sc_operations.operation_name%TYPE,
        operation_desc		in acs_sc_operations.operation_desc%TYPE,
@@ -37,7 +36,7 @@ as
        operation_inputtype	in acs_sc_msg_types.msg_type_name%TYPE,
        operation_outputtype	in acs_sc_msg_types.msg_type_name%TYPE
    ) return acs_sc_operations.operation_id%TYPE;
-       
+
    function get_id (
        contract_name		acs_sc_contracts.contract_name%TYPE,
        operation_name		acs_sc_operations.operation_name%TYPE
@@ -54,7 +53,7 @@ end acs_sc_operation;
 /
 show errors
 
-create or replace package acs_sc_impl 
+create or replace package acs_sc_impl
 as
 
    function new (
@@ -125,7 +124,7 @@ show errors
 
 create or replace package body acs_sc_contract
 as
-   function new ( 
+   function new (
        contract_name	in acs_sc_contracts.contract_name%TYPE,
        contract_desc	in acs_sc_contracts.contract_desc%TYPE
    ) return acs_sc_contracts.contract_id%TYPE
@@ -173,16 +172,16 @@ as
        select contract_name into v_contract_name
        from acs_sc_contracts
        where contract_id = get_name.contract_id;
-   
+
        return v_contract_name;
- 
+
    end get_name;
 
    procedure delete (
        contract_name	in acs_sc_contracts.contract_name%TYPE default null,
        contract_id	in acs_sc_contracts.contract_id%TYPE default null
-   ) 
-   is 
+   )
+   is
        v_contract_id	acs_sc_contracts.contract_id%TYPE;
    begin
 
@@ -213,7 +212,7 @@ show errors
 create or replace package body acs_sc_operation
 as
 
-   function new (    
+   function new (
        contract_name		in acs_sc_contracts.contract_name%TYPE,
        operation_name		in acs_sc_operations.operation_name%TYPE,
        operation_desc		in acs_sc_operations.operation_desc%TYPE,
@@ -235,7 +234,7 @@ as
        v_operation_outputtype_id := acs_sc_msg_type.get_id(operation_outputtype);
 
        insert into acs_sc_operations (
-           contract_id,		     
+           contract_id,		
 	   operation_id,
 	   contract_name,
 	   operation_name,
@@ -272,7 +271,7 @@ as
        from acs_sc_operations
        where contract_name = get_id.contract_name
        and operation_name = get_id.operation_name;
-       
+
        return v_operation_id;
    end get_id;
 
@@ -281,11 +280,11 @@ as
        operation_id		acs_sc_operations.operation_id%TYPE default null,
        operation_name		acs_sc_operations.operation_name%TYPE default null,
        contract_name		acs_sc_contracts.contract_name%TYPE default null
-   ) 
+   )
    is
-       v_operation_id		acs_sc_operations.operation_id%TYPE;       
+       v_operation_id		acs_sc_operations.operation_id%TYPE;
    begin
-   
+
        if (operation_id is NULL and operation_name is not NULL and contract_name is not NULL)
        then
 	  v_operation_id := get_id(contract_name, operation_name);
@@ -303,15 +302,15 @@ as
 
    end delete;
 
-   	   	 
+   	   	
 end acs_sc_operation;
 /
 show errors
-   
+
 
 create or replace package body acs_sc_impl
 as
-   
+
    function new (
        impl_contract_name	acs_sc_impls.impl_contract_name%TYPE,
        impl_name		acs_sc_impls.impl_name%TYPE,
@@ -321,7 +320,7 @@ as
        v_impl_id		acs_sc_impls.impl_id%TYPE;
    begin
        v_impl_id := acs_object.new (object_type => 'acs_sc_implementation');
-       
+
        insert into acs_sc_impls (
 	      impl_id,
 	      impl_name,	
@@ -341,7 +340,7 @@ as
        impl_contract_name	acs_sc_impls.impl_contract_name%TYPE,
        impl_name		acs_sc_impls.impl_name%TYPE
    ) return acs_sc_impls.impl_id%TYPE
-   as 
+   as
        v_impl_id		acs_sc_impls.impl_id%TYPE;
    begin
 
@@ -351,7 +350,7 @@ as
        and impl_contract_name = get_id.impl_contract_name;
 
        return v_impl_id;
-   
+
    end get_id;
 
 
@@ -367,9 +366,8 @@ as
        where impl_id = get_name.impl_id;
 
        return v_impl_name;
-   
+
    end get_name;
-             
 
    procedure delete (
        impl_contract_name	acs_sc_impls.impl_contract_name%TYPE,
@@ -377,15 +375,11 @@ as
    )
    as
    begin
-
-      
-
        delete from acs_sc_impls
-       where impl_contract_name = impl_contract_name
-       and impl_name = impl_name;   	  
-
+       where impl_contract_name = acs_sc_impl.delete.impl_contract_name
+       and impl_name = acs_sc_impl.delete.impl_name;   	
    end delete;
-   
+
 
    /* not sure if this should get folded into the impl package */
 
@@ -426,21 +420,21 @@ as
        impl_contract_name	acs_sc_contracts.contract_name%TYPE,
        impl_name		acs_sc_impls.impl_name%TYPE,
        impl_operation_name	acs_sc_operations.operation_name%TYPE
-   ) return acs_sc_impls.impl_id%TYPE  
+   ) return acs_sc_impls.impl_id%TYPE
    is
        v_impl_id		acs_sc_impls.impl_id%TYPE;
    begin
        v_impl_id := acs_sc_impl.get_id(impl_contract_name,impl_name);
 
-       delete from acs_sc_impl_aliases 
-       where impl_contract_name = delete_alias.impl_contract_name 
+       delete from acs_sc_impl_aliases
+       where impl_contract_name = delete_alias.impl_contract_name
        and impl_name = delete_alias.impl_name
        and impl_operation_name = delete_alias.impl_operation_name;
 
        return v_impl_id;
 
    end delete_alias;
- 
+
 end acs_sc_impl;
 /
 show errors
@@ -448,14 +442,14 @@ show errors
 
 
 create or replace package body acs_sc_binding
-as 
+as
    -- you can pick a pair of args, either ids or names to pass in.
    procedure new (
        contract_id	acs_sc_operations.contract_id%TYPE default null,
        impl_id		acs_sc_bindings.impl_id%TYPE default null,
        contract_name    acs_sc_contracts.contract_name%TYPE default null,
        impl_name	acs_sc_impls.impl_name%TYPE default null
-   ) 
+   )
    is
        v_contract_name	acs_sc_contracts.contract_name%TYPE;
        v_contract_id    acs_sc_contracts.contract_id%TYPE;
@@ -475,7 +469,7 @@ as
        elsif contract_name is not null and impl_name is not null
        then
           v_contract_id := acs_sc_contract.get_id(contract_name);
-          v_impl_id := acs_sc_impl.get_id(contract_name,impl_name);       
+          v_impl_id := acs_sc_impl.get_id(contract_name,impl_name);
 	  v_impl_name := impl_name;
 	  v_contract_name := contract_name;
 
@@ -483,7 +477,7 @@ as
           raise_application_error(-20001, 'Service Contracts:Invalid args to binding new');
        end if;
 
-       
+
        select count(*) into v_count
          from acs_sc_operations
 	 where contract_id = new.contract_id
@@ -494,7 +488,7 @@ as
 
        if v_count > 0
        then
-	  raise_application_error(-20001, 'Binding of ' || 
+	  raise_application_error(-20001, 'Binding of ' ||
 					v_contract_name ||
   					' to '		||
 					v_impl_name	||
@@ -534,7 +528,7 @@ as
        else
 	  raise_application_error(-20001, 'Service contract binding delete invalid args');
        end if;
-       
+
        delete from acs_sc_bindings
            where  contract_id = v_contract_id
 	   and impl_id = v_impl_id;
@@ -551,19 +545,15 @@ as
    begin
        v_contract_id := acs_sc_contract.get_id(contract_name);
        v_impl_id := acs_sc_impl.get_id(contract_name,impl_name);
-       
+
        select decode(count(*),0, 0, 1) into v_exists_p
           from acs_sc_bindings
 	  where contract_id = v_contract_id
 	  and impl_id = v_impl_id;
-	  
+	
        return v_exists_p;
-   end exists_p;       
+   end exists_p;
 
 end acs_sc_binding;
 /
 show errors
-
-
-
-
