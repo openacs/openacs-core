@@ -39,7 +39,7 @@ if { $database == "oracle" } {
 } else {
     set db_host               localhost
     set db_port               ""
-    set db_user               joel
+    set db_user               $server
 }
 
 #---------------------------------------------------------------------
