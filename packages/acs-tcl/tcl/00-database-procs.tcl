@@ -2547,7 +2547,20 @@ ad_proc db_blob_get {{ -dbn "" } statement_name sql args } {
             return $data
         }
 
-        oracle -
+        oracle {
+            set pre_sql $sql
+            set full_statement_name [db_qd_get_fullname $statement_name]
+            set sql [db_qd_replace_sql $full_statement_name $pre_sql]
+  
+            # insert tcl variable values (borrowed from Dan W - olah)
+            if {![string equal $sql $pre_sql]} {
+                set sql [uplevel 2 [list subst -nobackslashes $sql]]
+            }
+
+            set data [db_string dummy_statement_name $sql]
+            return $data
+        }
+
         nsodbc -
         default {
             error "$proc_name is not supported for this database."
