@@ -489,8 +489,14 @@ ad_proc -private rp_filter { why } {
     # -------------------------------------------------------------------------
 
     # Force the URL to look like [ns_conn location], if desired...
+
+    # JCD:  Only do this if ForceHostP set and root is {}
+    # if root non empty then we had a hostname based subsite and 
+    # should not redirect since we got a hostname we know about.
+
     set acs_kernel_id [util_memoize ad_acs_kernel_id]
-    if { [ad_parameter -package_id $acs_kernel_id ForceHostP request-processor 0] } {
+    if { [empty_string_p $root] 
+         && [ad_parameter -package_id $acs_kernel_id ForceHostP request-processor 0] } { 
 	set host_header [ns_set iget [ns_conn headers] "Host"]
 	regexp {^([^:]*)} $host_header "" host_no_port
 	regexp {^https?://([^:]+)} [ns_conn location] "" desired_host_no_port
