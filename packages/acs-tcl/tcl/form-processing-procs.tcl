@@ -540,6 +540,9 @@ ad_proc -public ad_form {
 
     global af_element_names
     global af_flag_list
+    global af_to_sql
+    global af_from_sql
+    global af_to_html
 
     # Track element names and their parameters locally as we'll generate those in this form
     # or extend block on the fly
@@ -1037,8 +1040,8 @@ ad_proc -public ad_form {
                 if { [info exists af_to_sql(${form_name}__$element_name)] } {
                     uplevel #$level [list set $element_name \
                         [uplevel #$level [list template::util::$af_type(${form_name}__$element_name)::get_property \
-                                      $af_to_sql(${form_name}__$element_name) \
-                                      [uplevel #$level [list set $element_name]]]]]
+                             $af_to_sql(${form_name}__$element_name) \
+                             [uplevel #$level [list set $element_name]]]]]
                 }
             }
         }
