@@ -3,7 +3,7 @@
 -- The Notifications Package
 --
 -- ben@openforce.net
--- Copyright OpenForce, 2002.
+-- Copyright (C) 2000 MIT
 --
 -- GNU GPL v2
 --
