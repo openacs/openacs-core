@@ -64,6 +64,8 @@ ad_proc apm_guess_file_type { package_key path } {
     Tcl procedure or Tcl initialization files, respectively.
     <li>File ending in <code>.tcl</code> are considered Tcl utility script files (normally
     found only in the bootstrap installer).
+    <li>Files with extension <code>.xml</code> in the directory catalog are
+        considered message catalog files.
     </ol>
 
     Rules are applied in this order (stopping with the first match).
@@ -125,16 +127,75 @@ ad_proc apm_guess_file_type { package_key path } {
 
     } elseif { [lsearch $components_lesser "www"] >= 0 || [lsearch $components_lesser "admin-www"] >= 0 } {
 	set type "content_page"
-    } else {
-	if { [string equal $extension ".tcl"] } {
-            if { [regexp -- {-(procs|init)(-[0-9a-zA-Z]*)?\.tcl$} [file tail $path] "" kind] } {
-	        set type "tcl_$kind"
-            } else {
-                set type "tcl_util"
-	    }
-	}
-    }
+    } elseif { [string equal $extension ".tcl"] } {
+        if { [regexp -- {-(procs|init)(-[0-9a-zA-Z]*)?\.tcl$} [file tail $path] "" kind] } {
+            set type "tcl_$kind"
+        } else {
+            set type "tcl_util"
+        }
+    } elseif { [apm_is_catalog_file "${package_key}/${path}"] } {
+        set type "message_catalog"
+    } 
+    
     return $type
+}
+
+ad_proc -private apm_parse_catalog_path { file_path } {
+    Given the path of a file attempt to extract package_key, 
+    prefix, charset and locale
+    information from the path assuming the path is on valid format
+    for a message catalog file. If the parsing fails
+    then the file is not considered a catalog file and the
+    empty list is returned.
+
+    @param file_path   Path of file, relative to the OpenACS /packages dir, 
+    one of its parent directories, or absolute path.
+
+    @author Peter Marklund
+} {
+    array set filename_info {}
+
+    set regexp_pattern "(?i)(\[^/\]+)/catalog/(.*)\\1\\.(\[a-z\]{2}_\[a-z\]{2})\\.(\[^.\]+)\\.xml\$"
+    if { ![regexp $regexp_pattern $file_path match package_key prefix locale charset] } {
+        return [list]
+    }
+
+    set filename_info(package_key) $package_key
+    set filename_info(prefix) $prefix
+    set filename_info(locale) $locale
+    set filename_info(charset) $charset
+
+    return [array get filename_info]
+}
+
+ad_proc -public apm_is_catalog_file { file_path } {
+    Given a file path return 1 if
+    the path represents a message catalog file and 0 otherwise.
+
+    @param file_path Should be absolute or relative to OpenACS /packages dir
+    or one of its parent dirs.
+
+    @see apm_parse_catalog_path
+    @author Peter Marklund
+} {
+    array set filename_info [apm_parse_catalog_path $file_path]
+
+    if { [array size filename_info] == 0 } {
+        # Parsing failed
+        set return_value 0
+    } else {
+        # Parsing succeeded
+        set prefix $filename_info(prefix)
+        if { [empty_string_p $prefix] } {
+            # No prefix - this is considered a catalog file
+            set return_value 1
+        } else {
+            # Catalog files don't have a prefix before the package_key
+            set return_value 0
+        }
+    }
+
+    return $return_value
 }
 
 ad_proc -private apm_guess_db_type { package_key path } {
