@@ -16,7 +16,7 @@
     <h3>#acs-subsite.Direct_Permissions#</h3>
     <if @acl:rowcount@ gt 0>
       <form method="get" action="revoke">
-        @export_form_vars@
+        @export_form_vars;noquote@
           <blockquote style="margin-left: 16px;">
             <multiple name="acl">
               <input type="checkbox" name="revoke_list" value="@acl.grantee_id@ @acl.privilege@" 
