@@ -56,7 +56,7 @@ ad_proc -private db_exec { type db statement_name pre_sql {ulevel 2} args } {
 } {
     set start_time [clock clicks]
 
-    db_qd_log Notice "PRE-QD: the SQL is $pre_sql for $statement_name"
+    db_qd_log Debug "PRE-QD: the SQL is $pre_sql for $statement_name"
 
     # Query Dispatcher (OpenACS - ben)
     set sql [db_qd_replace_sql $statement_name $pre_sql]
@@ -66,7 +66,7 @@ ad_proc -private db_exec { type db statement_name pre_sql {ulevel 2} args } {
         set sql [uplevel $ulevel [list subst -nobackslashes $sql]]
     }
 
-    db_qd_log Notice "POST-QD: the SQL is $sql"
+    db_qd_log Debug "POST-QD: the SQL is $sql"
 
     set errno [catch {
 	upvar bind bind
@@ -188,7 +188,7 @@ ad_proc -private db_exec_lob { type db statement_name pre_sql {ulevel 2} args } 
 } {
     set start_time [clock clicks]
 
-    db_qd_log Notice "PRE-QD: the SQL is $pre_sql for $statement_name"
+    db_qd_log Debug "PRE-QD: the SQL is $pre_sql for $statement_name"
 
     # Query Dispatcher (OpenACS - ben)
     set sql [db_qd_replace_sql $statement_name $pre_sql]
@@ -211,7 +211,7 @@ ad_proc -private db_exec_lob { type db statement_name pre_sql {ulevel 2} args } 
         ns_log Notice "db_exec_lob: blob storage in use"
     }
 
-    db_qd_log Notice "POST-QD: the SQL is $sql"
+    db_qd_log Debug "POST-QD: the SQL is $sql"
 
     set errno [catch {
 	upvar bind bind
