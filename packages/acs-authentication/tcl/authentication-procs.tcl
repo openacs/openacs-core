@@ -131,8 +131,10 @@ ad_proc -public auth::authenticate {
             return [array get auth_info]
         }
         default {
+            ns_log Error "Illegal auth_status code '$auth_info(auth_status)' returned from authentication driver for authority_id $authority_id ([auth::authority::get_element -authority_id $authority_id -element pretty_name])"
+
             set auth_info(auth_status) "failed_to_connect"
-            set auth_info(auth_message) "Illegal error code returned from authentication driver"
+            set auth_info(auth_message) "Internal error during authentication"
             return [array get auth_info]
         }
     }
@@ -151,8 +153,10 @@ ad_proc -public auth::authenticate {
             }
         }
         default {
+            ns_log Error "Illegal account_status code '$auth_info(account_status)' returned from authentication driver for authority_id $authority_id ([auth::authority::get_element -authority_id $authority_id -element pretty_name])"
+
             set auth_info(account_status) "closed"
-            set auth_info(account_message) "Illegal error code returned from authentication driver"
+            set auth_info(account_message) "Internal error during authentication"
         }
     }
 
@@ -187,8 +191,10 @@ ad_proc -public auth::authenticate {
             }
         }
         default {
+            ns_log Error "Illegal account_status code '$auth_info(account_status)' returned from auth::get_local_account for authority_id $authority_id ([auth::authority::get_element -authority_id $authority_id -element pretty_name])"
+
             set auth_info(account_status) "closed"
-            set auth_info(account_message) "Illegal error code returned from authentication driver"
+            set auth_info(account_message) "Internal error during authentication"
         }
     }
     
@@ -1104,8 +1110,19 @@ ad_proc -private auth::get_local_account {
 
     if { !$account_found_p } {
         # Local user account doesn't exist
-        set auth_info(account_status) "no_account"
-        set auth_info(account_message) {}
+        set auth_info(account_status) "closed"
+        auth::authority::get -authority_id $authority_id -array authority
+
+        set auth_info(account_message) "You have successfully authenticated, but you do not have an account on [ad_system_name] yet.<p>"
+
+        if { ![empty_string_p $authority(help_contact_text)] } {
+            append auth_info(account_message) "<h3>Help Information</h3>"
+            append auth_info(account_message) [ad_html_text_convert \
+                                                   -from $authority(help_contact_text_format) \
+                                                   -to "text/html" -- $authority(help_contact_text)]
+        }
+
+        
         return [array get auth_info]
     }
 
