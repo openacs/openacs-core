@@ -737,6 +737,10 @@ ad_proc -public ad_form {
                 return -code error "Couldn't get the next value from sequence \"$af_sequence_name($form_name)\""
             }
             set values(__new_p) 1
+
+            if { [info exists new_request] } {
+                ad_page_contract_eval uplevel #$level $new_request
+            }
         }
 
         set values(__key_signature) [ad_sign "$values($key_name):$form_name"]
@@ -907,37 +911,34 @@ ad_proc -public ad_set_form_values {
     foreach arg $args {
         if { [llength $arg] == 1 } {
             upvar $arg value
-            ad_set_element_value -element $arg $value
+            ad_set_element_value -element $arg -- $value
         } else {
-            ad_set_element_value -element [lindex $arg 0] [lindex $arg 1]
+            ad_set_element_value -element [lindex $arg 0] -- [lindex $arg 1]
         }
     }
 }
 
 ad_proc -public ad_form_new_p {
-    -key
+    -key:required
 } {
 
     This is for pages built with ad_form that handle edit and add requests in one file.
-    It determines wether the current request is for editing an existing item, 
-    in which case it returns 0, or adding a new one, which will return 1.
+    It returns 1 if the current form being built for the entry of new data, 0 if for
+    the editing of existing data.
     
-    <p>
-
-    For this to work there needs to be an element defined in the form that is of
-    the ad_form pseudo datatype "key". If you don't specify -key then this proc
-    will try to guess it from the existing variables - if there is exactly one that 
-    ends on _id then it takes that one, otherwise you have to specify it manually.
-
     <p>
 
     It does not make sense to use this in pages that don't use ad_form.
 
     <p>
 
+    @param key The database key for the form, which must be declared to be of type "key"
+
+    <p>
+
     Example usage:
     <pre>
-    if { [ad_form_new_p] } {
+    if { [ad_form_new_p -key item_id] } {
         ad_require_permission $package_id create
         set page_title "New Item"
     } else {
@@ -951,43 +952,7 @@ ad_proc -public ad_form_new_p {
 } {
 
     set form [ns_getform]
-    if { [empty_string_p $form] } {
-        # no form. assume new
-        return 1
-    }
     
-    if { ![info exists key] } {
-        # no key name given. loop through form and try to guess one
+    return [expr {[empty_string_p $form] || [ns_set find $form $key] == -1 || [ns_set get $form __new_p] == 1 }]
 
-        for { set i 0 } { $i < [ns_set size $form] } { incr i } {
-            
-            if { [regexp {_id$} [ns_set key $form $i]] } {
-                # this could be a key
-                
-                if { [info exists key] } {
-                    # we found one before already, bad. throw an error
-                    unset key
-                    break
-                }
-                set key [ns_set key $form $i]
-            }
-        }
-        if { ![info exists key] } {
-            ad_return_error "ad_form_new_p failed" "Could not guess key element. Please specify it by using \"ad_form_new_p -key your_key_id\"."
-            ad_script_abort
-        }
-    }
-
-    if { [ns_set find $form $key] == -1 } {
-        # no key
-        return 1
-    }
-
-    if { [ns_set get $form __new_p] == 1 } {
-        # there is a key, but __new_p is also set
-        return 1
-    }
-    
-    # not new
-    return 0
 }
