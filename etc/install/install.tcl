@@ -45,7 +45,7 @@ set aolserver_group           "web"
 
 #---------------------------------------------------------------------
 # OpenACS configuration
-set admin_email               "admin@${serverhost}"
+set admin_email               "admin@${server_host}"
 set admin_username            "admin"
 set admin_first_names         "Admin"
 set admin_last_name           "User"
