@@ -167,6 +167,10 @@ create table notifications (
     response_id                     integer
                                     constraint notif_reponse_id_fk
                                     references acs_objects (object_id),
+    -- this is the user that caused the notification to go out
+    notif_user                      integer
+                                    constraint notif_user_id_fk
+                                    references users(user_id),
     notif_subject                   varchar(1000),
     notif_text                      text,
     notif_html                      text
@@ -199,78 +203,68 @@ create index notification_user_map_user_idx ON notification_user_map(user_id);
 --
 -- Object Types
 --
-create function inline_0 ()
-returns integer as '
-begin
+select acs_object_type__create_type(
+    'notification_interval',
+    'Notification Interval',
+    'Notification Intervals',
+    'acs_object',
+    'notification_intervals',
+    'interval_id',
+    'notification_interval',
+    'f',
+    null,
+    null
+);
 
-    perform acs_object_type__create_type(
-        ''notification_interval'',
-        ''Notification Interval'',
-        ''Notification Intervals'',
-        ''acs_object'',
-        ''notification_intervals'',
-        ''interval_id'',
-        ''notification_interval'',
-        ''f'',
-        null,
-        null
-    );
+select acs_object_type__create_type(
+    'notification_delivery_method',
+    'Notification Delivery Method',
+    'Notification Delivery Methods',
+    'acs_object',
+    'notification_delivery_methods',
+    'delivery_method_id',
+    'notification_delivery_method',
+    'f',
+    null,
+    null
+);
 
-    perform acs_object_type__create_type(
-        ''notification_delivery_method'',
-        ''Notification Delivery Method'',
-        ''Notification Delivery Methods'',
-        ''acs_object'',
-        ''notification_delivery_methods'',
-        ''delivery_method_id'',
-        ''notification_delivery_method'',
-        ''f'',
-        null,
-        null
-    );
+select acs_object_type__create_type(
+    'notification_type',
+    'Notification Type',
+    'Notification Types',
+    'acs_object',
+    'notification_types',
+    'type_id',
+    'notification_type',
+    'f',
+    null,
+    null
+);
 
-    perform acs_object_type__create_type(
-        ''notification_type'',
-        ''Notification Type'',
-        ''Notification Types'',
-        ''acs_object'',
-        ''notification_types'',
-        ''type_id'',
-        ''notification_type'',
-        ''f'',
-        null,
-        null
-    );
+select acs_object_type__create_type(
+    'notification_request',
+    'Notification Request',
+    'Notification Requests',
+    'acs_object',
+    'notification_requests',
+    'request_id',
+    'notification_request',
+    'f',
+    null,
+    null
+);
 
-    perform acs_object_type__create_type(
-        ''notification_request'',
-        ''Notification Request'',
-        ''Notification Requests'',
-        ''acs_object'',
-        ''notification_requests'',
-        ''request_id'',
-        ''notification_request'',
-        ''f'',
-        null,
-        null
-    );
+select acs_object_type__create_type(
+    'notification',
+    'Notification',
+    'Notifications',
+    'acs_object',
+    'notifications',
+    'notification_id',
+    'notification',
+    'f',
+    null,
+    null
+);
 
-    perform acs_object_type__create_type(
-        ''notification'',
-        ''Notification'',
-        ''Notifications'',
-        ''acs_object'',
-        ''notifications'',
-        ''notification_id'',
-        ''notification'',
-        ''f'',
-        null,
-        null
-    );
-
-    return null;
-
-end;' language 'plpgsql';
-
-select inline_0();
-drop function inline_0();

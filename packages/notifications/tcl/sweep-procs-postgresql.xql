@@ -25,7 +25,8 @@
                    type_id,
                    delivery_method_id,
 		   response_id,
-		   notif_date
+		   notif_date,
+                   notif_user
             from notifications inner join notification_requests using (type_id, object_id)
               inner join acs_objects on (notification_requests.request_id = acs_objects.object_id)
               left outer join notification_user_map using (notification_id, user_id)
