@@ -98,7 +98,7 @@ ad_proc -public template::data::transform::currency { element_ref } {
 		if { ![string equal $value ""] } {
                     set have_values 1
                 }
-		set fractional_part_format [lindex format 3]
+		set fractional_part_format [lindex $format 3]
 		for { set j [string length $value] } { $j < $fractional_part_format } { set j [expr $j + 1] } {
 		    append $value 0
 		}
