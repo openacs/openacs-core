@@ -1,0 +1,595 @@
+<!DOCTYPE html
+      PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+     <title>My Space - SloanSpace</title>
+     <meta http-equiv="content-type" content="application/xhtml+xml; 
+charset=iso-8859-1" />
+<style type="text/css">
+
+/* Standard Elements */
+
+html {
+   background-color: #FFF;
+   }
+
+body {
+   font-family: Tahoma, Helvetica, Sans-Serif;
+   font-size: 75%;
+   margin-left: 10px;
+   margin-right: 10px;
+   margin-top: 6px;
+   }
+
+a:link, a:visited {
+   text-decoration: none;
+   border-bottom: 1px dotted #035156;
+   color: #035156;
+   }
+
+a:visited {
+   border-bottom: 1px dotted #035156;
+   /* Mangler visited color */
+   color: #035156;
+   }
+
+a:hover {
+   border-bottom: 1px dotted #95BC7E;
+   color: #95BC7E;
+   }
+
+a:active {
+   border-bottom: 1px dotted #035156;
+   color: #035156;
+   }
+
+
+/* Global Page Elements */
+
+#outer-container {
+   clear: both;
+   border-top: 1px solid #C8D8BE;
+   border-bottom: 1px solid #C8D8BE;
+   padding: 5px 5px 24px 5px;
+   background-color: #E8F0E3;
+   }
+
+/* This fixes an IE 6 bug - see 
+http://www.dracos.co.uk/web/css/ie6floatbug/ */
+#outer-container {
+   line-height: 1.2;
+   }
+
+h1 {
+   font-size: 180%;
+   font-weight: normal;
+   color: #035156;
+   margin: 3px 0px;
+   }
+
+#system-name {
+   font-size: 180%;
+   font-weight: bold;
+   color: #C8D8BE;
+   float: right;
+   padding-right: 5px;
+   }
+
+#breadcrumbs {
+   margin: 0;
+   padding: 0;
+   font-size: 80%;
+   float: left;
+   padding-bottom: 5px;
+   margin-left: 5px;
+   }
+
+#breadcrumbs li {
+   display: inline;
+   list-style: none;
+   color: #035156;
+   }
+
+#breadcrumbs a {
+   color: #035156;
+   }
+
+#login-status {
+   font-size: 80%;
+   color: #035156;
+   float: right;
+   margin-right: 5px;
+   }
+
+#login-status a {
+   color: #035156;
+   }
+
+#main-navigation {
+   font-size: 110%;
+   clear: both;
+   float: left;
+   width: 100%;
+   background: url("/resources/dotlrn/tab-passive-bottom.png") repeat-x 
+bottom;
+   }
+
+#main-navigation ul {
+   margin: 0;
+   padding: 0px 0px 0px 5px;
+   list-style: none;
+   }
+
+#main-navigation li {
+   float: left;
+   background: url("/resources/dotlrn/tab-passive-right.png") no-repeat 
+right top;
+   margin: 0px 2px;
+   padding: 0;
+   }
+
+#main-navigation a {
+   float: left;
+   border: none;
+   color: #509A9D;
+   font-weight: bold;
+   display: block;
+   background: url("/resources/dotlrn/tab-passive-left.png") no-repeat 
+left top;
+   padding: 3px 10px 2px;
+   }
+/* Commented Backslash Hack
+      hides rule from IE5-Mac \*/
+   #main-navigation a {float:none;}
+   /* End IE5-Mac hack */
+
+#main-navigation a:hover {
+   color: #035156;
+   }
+
+#main-navigation li.current {
+   background-image: url("/resources/dotlrn/tab-active-right.png");
+   }
+
+#main-navigation li.current a {
+   border: none;
+   color: #035156;
+   font-weight: bold;
+   background-image: url("/resources/dotlrn/tab-active-left.png");
+   padding-bottom: 3px;
+   }
+
+#main-container {
+   border-top: 5px solid #95BC7E;
+   border-bottom: 1px solid #509A9D;
+   padding: 14px 10px 24px 10px;
+   clear: both;
+   background: #C8D8BE 
+url("/resources/dotlrn/main-container-bottom.png") repeat-x bottom;
+   }
+
+/* IE 6 Hack - see http://css-discuss.incutio.com/?page=StarHtmlHack */
+* html #main-container {
+   margin-top: -3px;
+   }
+
+#message-bar {
+   background: url("/resources/dotlrn/message-bar-icon.png") no-repeat 
+left;
+   padding: 2px 5px 2px 25px;
+   margin: 0px 0 5px 0;
+   color: #FFF;
+   font-weight: bold;
+   background-color: #E35203;
+   border-width: 1px;
+   border-style: solid;
+   border-color: #F2AF8A #94471E #94471E #F2AF8A;
+   }
+#message-bar p {
+   margin-left: 39px;
+   }
+
+.left {
+   width: 49%;
+   padding: 5px;
+   float: left;
+   }
+.right {
+   width: 49%;
+   float: right;
+   padding-top: 5px;
+   }
+
+#footer {
+   float: right;
+   list-style: none;
+   font-size: 80%;
+   margin: 5px 5px 15px 0;
+   }
+#footer li {
+   display: inline;
+   color: #C8D8BE;
+   }
+#locale {
+   float: left;
+   list-style: none;
+   padding: 0;
+   font-size: 80%;
+   margin: 5px 0 0 5px;
+   }
+#locale li {
+   display: inline;
+   color: #C8D8BE;
+   }
+#locale .current {
+   font-weight: bold;
+   color: #035156;
+   }
+
+
+.portlet-wrap-shadow, .portlet-wrap-bl, .portlet-wrap-tr {
+   display: inline-table;
+   /* \*/display:block;/**/
+   }
+
+
+.portlet-wrap-shadow {
+   background:url("/resources/dotlrn/shadow.png") right bottom no-repeat;
+   margin-bottom: 10px;
+   }
+.portlet-wrap-bl {
+   background:url("/resources/dotlrn/corner-bl.png") left bottom 
+no-repeat;
+   }
+.portlet-wrap-tr {
+   padding: 0 3px 3px 0;
+   background:url("/resources/dotlrn/corner-tr.png") right top no-repeat;
+   }
+
+/* IE 6 Hack - see http://css-discuss.incutio.com/?page=StarHtmlHack */
+/* We can't find a way to make drop-shadows work on IE 6 */
+* html .portlet-wrap-shadow {
+   background: none;
+   }
+* html .portlet-wrap-bl {
+   background: none;
+   }
+* html .portlet-wrap-tr {
+   background: none;
+   }
+
+.portlet {
+   background-color: #FFF;
+   padding-bottom: 1px;
+   }
+
+
+
+.portlet h2 {
+   font-weight: bold;
+   font-size: 110%;
+   color: #035156;
+   background-color: #95BC7E;
+   text-transform: uppercase;
+   padding: 1px 5px;
+   border-top: 1px solid #035156;
+   border-bottom: 1px solid #035156;
+   margin: 0;
+   }
+
+.portlet h3 {
+   font-size: 140%;
+   color: #977632;
+   font-weight: normal;
+   margin: 0;
+   }
+
+.portlet .poster {
+   color: #509A9D;
+   margin: 3px 0px 5px 0px;
+   font-weight: normal;
+   }
+
+.portlet ul {
+   padding-left: 15px;
+   }
+
+.portlet ul li {
+   font-weight: bold;
+   color: #95BC7E;
+   margin-top: 3px;
+   }
+
+.portlet ul ul li {
+   font-weight: normal;
+   color: #035156;
+   font-size: 100%;
+   }
+
+
+
+.actions {
+   list-style: none;
+   list-style: disc url("/resources/dotlrn/action-bullet.png");
+   }
+
+.actions li {
+   }
+
+.actions a {
+   border-bottom: 1px dotted #509A9D;
+   color: #509A9D;
+}
+
+.actions a:hover {
+   border-bottom: 1px dotted #95BC7E;
+   color: #95BC7E;
+}
+
+.portlet .actions {
+   text-align: right;
+   margin-right: 10px;
+}
+
+
+
+/* Local Page Elements */
+
+
+.portlet h3 {
+   margin: 10px 0 0 10px;
+   }
+
+.portlet ul {
+   padding: 0 0 0 15px;
+   margin-left: 10px;
+   }
+
+.calendar-week-summary {
+   border-collapse: collapse;
+   margin: 10px 0px;
+   width: 100%;
+   }
+
+.calendar-week-summary th {
+   text-transform: uppercase;
+   text-align: left;
+   vertical-align: top;
+   color: #977632;
+   padding: 5px 10px;
+   }
+
+.calendar-week-summary td {
+   padding: 2px 5px;
+   color: #509A9D;
+   }
+
+.calendar-week-summary td.title {
+   font-weight: bold;
+   }
+
+.calendar-week-summary .odd {
+   background-color: #E8F0E3;
+   }
+
+</style>
+
+   </head>
+   <body>
+
+     <ul id="breadcrumbs">
+
+       <li><a href="#">My Space</a></li>
+       <li>&gt; <a href="#">MBA 101</a></li>
+       <li>&gt; Files</li>
+     </ul>
+
+     <div id="login-status">
+       Logged in as <a href="#">Al Essa</a> (<a href="#">Log out</a>)
+     </div>
+
+     <div id="outer-container">
+       <div id="system-name">SloanSpace</div>
+
+       <h1>My Space</h1>
+
+       <div id="main-navigation">
+         <ul>
+           <li class="current"><a href="#">My Space Home</a></li>
+
+           <li><a href="#">My Calendar</a></li>
+           <li><a href="#">My Files</a></li>
+           <li><a href="#">Blog</a></li>
+           <li><a href="#">Control Panel</a></li>
+         </ul>
+       </div>
+
+       <div id="main-container">
+
+
+         <div id="message-bar">
+           Your password has been saved.
+         </div>
+
+         <div class="left">
+
+           <div class="portlet-wrap-shadow">
+             <div class="portlet-wrap-bl">
+               <div class="portlet-wrap-tr">
+                 <div class="portlet">
+
+                   <h2>Groups</h2>
+                   <ul>
+                     <li>
+                       <a href="#">Class MBA 101</a>
+                       <ul>
+                         <li><a href="#">Subgroup 1</a></li>
+                         <li><a href="#">Subgroup 2</a></li>
+
+                       </ul>
+
+                     </li>
+                     <li>
+                       <a href="#">Class MBA 102</a>
+                     </li>
+                     <li>
+                       <a href="#">Space Freaks</a>
+
+                     </li>
+                     <li>
+                       <a href="#">Earthlings</a>
+                     </li>
+                   </ul>
+
+                   <ul class="actions">
+                     <li><a href="#">Group catalog</a></li>
+
+                   </ul>
+
+                 </div> <!-- portlet -->
+               </div> <!-- portlet-wrap-tr -->
+             </div> <!-- portlet-wrap-bl -->
+           </div> <!-- portlet-wrap-shadow -->
+
+           <div class="portlet-wrap-shadow">
+
+             <div class="portlet-wrap-bl">
+               <div class="portlet-wrap-tr">
+                 <div class="portlet">
+
+                   <h2>Latest News</h2>
+
+                   <h3>MBA 101</h3>
+                   <ul>
+                     <li>
+
+                       <a href="#">Here's what we have to say</a>
+                       <p class="poster">Posted by Anders Pollas on May 
+21 2004</p>
+                     </li>
+                     <li>
+                       <a href="#">Another subject</a>
+                       <p class="poster">Posted by Anders Pollas on May 
+17 2004</p>
+                     </li>
+
+                   </ul>
+
+                   <ul class="actions">
+                     <li><a href="#">View older news</a></li>
+                   </ul>
+
+                 </div> <!-- portlet -->
+               </div> <!-- portlet-wrap-tr -->
+
+             </div> <!-- portlet-wrap-bl -->
+           </div> <!-- portlet-wrap-shadow -->
+
+         </div> <!-- left -->
+
+         <div class="right">
+
+           <div class="portlet-wrap-shadow">
+             <div class="portlet-wrap-bl">
+
+               <div class="portlet-wrap-tr">
+                 <div class="portlet">
+
+                   <h2>Week Summary</h2>
+
+                   <table class="calendar-week-summary">
+                     <tr class="odd">
+                       <th>May 19</th>
+                       <td></td>
+
+                       <td></td>
+                       <td></td>
+                     </tr>
+                     <tr>
+                       <th rowspan="2">Thu 20</th>
+                       <td class="title"><a href="#">Morning 
+meeting</a></td>
+                       <td><a href="#">MBA 101</a></td>
+
+                       <td>9:00 am - 10:00 am</td>
+                     </tr>
+                     <tr>
+                       <td class="title"><a href="#">Lecture B</a></td>
+                       <td><a href="#">MBA 102</a></td>
+                       <td>3:00 pm - 5:00 pm</td>
+                     </tr>
+
+                     <tr class="odd">
+                       <th>Fri 21</th>
+                       <td></td>
+                       <td></td>
+                       <td></td>
+                     </tr>
+                     <tr>
+                       <th>Sat 22</th>
+
+                       <td></td>
+                       <td></td>
+                       <td></td>
+                     </tr>
+                     <tr class="odd">
+                       <th>Sun 23</th>
+                       <td class="title"><a href="#">Morning 
+meeting</a></td>
+                       <td><a href="#">MBA 101</a></td>
+
+                       <td>9:00 am - 10:00 am</td>
+                     </tr>
+                     <tr>
+                       <th>Mon 24</th>
+                       <td></td>
+                       <td></td>
+                       <td></td>
+                     </tr>
+
+                     <tr class="odd">
+                       <th>Tue 25</th>
+                       <td></td>
+                       <td></td>
+                       <td></td>
+                     </tr>
+                   </table>
+
+                   <ul class="actions">
+
+                     <li><a href="#">Go to calendar</a></li>
+                   </ul>
+
+                 </div> <!-- portlet -->
+               </div> <!-- portlet-wrap-tr -->
+             </div> <!-- portlet-wrap-bl -->
+           </div> <!-- portlet-wrap-shadow -->
+
+         </div> <!-- right -->
+
+         <div style="clear: both;"></div>
+
+       </div> <!-- main-container -->
+     </div> <!-- outer-container -->
+
+     <ul id="locale">
+
+       <li class="current">English</li>
+       <li>| <a href="#">Deutsch</a></li>
+       <li>| <a href="#">Dansk</a></li>
+       <li>| <a href="#">Nederlandse</a></li>
+       <li>| <a href="#">Svenska</a></li>
+
+       <li>| <a href="#">Change language</a></li>
+     </ul>
+
+     <ul id="footer">
+       <li><a href="http://dotlrn.org">.LRN</a></li>
+       <li>| <a href="http://openacs.org">OpenACS</a></li>
+       <li>| <a href="#">Terms of Service</a></li>
+
+     </ul>
+   </body>
+</html>
+
