@@ -4,36 +4,20 @@ ad_library {
 
     @creation-date 15 Apr 2000
     @author Jon Salz (jsalz@arsdigita.com)
-    @cvs-id $Id$
+    @cvs-id 10-database-procs.tcl,v 1.4.2.1 2000/11/20 18:23:12 brech Exp
 }
 
-ad_proc -public db_null {} {
-    Represents the SQL keyword <code>null</code> for use in SQL DML statements.
+proc_doc db_type { } {
+    Returns the RDBMS type (i.e. oracle, postgresql) this OpenACS installation is
+    using.  The nsv ad_database_type is set up during the bootstrap process.
 } {
-    # Oracle coerces the empty string into null, in DML.
-    #
-    return ""
-}
-
-ad_proc -public db_nullify_empty_string { string } {
-    A convenience function that returns [db_null] if $string is the empty string.
-} {
-    if { [empty_string_p $string] } {
-	return [db_null]
-    } else {
-	return $string
-    }
+    return [nsv_get ad_database_type .]
 }
 
 proc_doc db_quote { string } { Quotes a string value to be placed in a SQL statement. } {
     regsub -all {'} "$string" {''} result
     return $result
 }
-
-proc_doc db_nextval { sequence } { Returns the next value for a sequence. } {
-    return [db_string "nextval" "select $sequence.nextval from dual"]
-}
-
 
 proc_doc db_nth_pool_name { n } { 
     Returns the name of the pool used for the nth-nested selection (0-relative). 
@@ -46,31 +30,6 @@ proc_doc db_nth_pool_name { n } {
     }
     return $pool
 }
-
-#
-# Initialize the list of available pools
-#
-
-global apm_first_time_loading_p
-if { [info exist apm_first_time_loading_p] && $apm_first_time_loading_p } {
-    set server_name [ns_info server]
-    append config_path "ns/server/$server_name/acs/database"
-    set the_set [ns_configsection $config_path]
-    set pools [list]
-    if {![empty_string_p $the_set]} {
-	for {set i 0} {$i < [ns_set size $the_set]} {incr i} {
-	    if { [ns_set key $the_set $i] ==  "AvailablePool" } {
-		lappend pools [ns_set value $the_set $i]
-	    }
-	}
-    }
-    if { [llength $pools] == 0 } {
-	set pools [ns_db pools]
-    }
-    ns_log Notice "Database API: The following pools are available: $pools"
-    nsv_set db_available_pools . $pools
-}
-
 
 proc_doc db_with_handle { db code_block } {
 
@@ -138,27 +97,6 @@ Places a usable database handle in $db and executes $code_block.
     }
 }
 
-proc_doc db_exec_plsql { statement_name sql args } {
-
-    Executes a PL/SQL statement, returning the variable of bind variable <code>:1</code>.
-
-} {
-    ad_arg_parser { bind_output } $args
-    if { [info exists bind_output] } {
-	return -code error "the -bind_output switch is not currently supported"
-    }
-
-    db_with_handle db {
-	# Right now, use :1 as the output value if it occurs in the statement,
-	# or not otherwise.
-	if { [regexp {:1} $sql] } {
-	    return [db_exec exec_plsql_bind $db $statement_name $sql 1 ""]
-	} else {
-	    return [db_exec dml $db $statement_name $sql]
-	}
-    }
-}
-
 proc_doc db_release_unused_handles {} {
 
     Releases any database handles that are presently unused.
@@ -201,41 +139,6 @@ ad_proc -private db_getrow { db selection } {
     if { $errno == 2 } {
 	return $error
     }
-    global errorInfo errorCode
-    return -code $errno -errorinfo $errorInfo -errorcode $errorCode $error
-}
-
-ad_proc -private db_exec { type db statement_name sql args } {
-
-    A helper procedure to execute a SQL statement, potentially binding
-    depending on the value of the $bind variable in the calling environment
-    (if set).
-
-} {
-    set start_time [clock clicks]
-
-    set errno [catch {
-	upvar bind bind
-	if { [info exists bind] && [llength $bind] != 0 } {
-	    if { [llength $bind] == 1 } {
-		return [eval [list ns_ora $type $db -bind $bind $sql] $args]
-	    } else {
-		set bind_vars [ns_set create]
-		foreach { name value } $bind {
-		    ns_set put $bind_vars $name $value
-		}
-		return [eval [list ns_ora $type $db -bind $bind_vars $sql] $args]
-	    }
-	} else {
-	    return [uplevel 2 [list ns_ora $type $db $sql] $args]
-	}
-    } error]
-
-    ad_call_proc_if_exists ds_collect_db_call $db $type $statement_name $sql $start_time $errno $error
-    if { $errno == 2 } {
-	return $error
-    }
-
     global errorInfo errorCode
     return -code $errno -errorinfo $errorInfo -errorcode $errorCode $error
 }
@@ -511,57 +414,6 @@ proc_doc db_multirow { var_name statement_name sql args } {
     }
 }
 
-proc_doc db_dml { statement_name sql args } {
-    Do a DML statement.
-} {
-    ad_arg_parser { clobs blobs clob_files blob_files bind } $args
-
-    # Only one of clobs, blobs, clob_files, and blob_files is allowed.
-    # Remember which one (if any) is provided.
-    set lob_argc 0
-    set lob_argv [list]
-    set command "dml"
-    if { [info exists clobs] } {
-	set command "clob_dml"
-	set lob_argv $clobs
-	incr lob_argc
-    }
-    if { [info exists blobs] } {
-	set command "blob_dml"
-	set lob_argv $blobs
-	incr lob_argc
-    }
-    if { [info exists clob_files] } {
-	set command "clob_dml_file"
-	set lob_argv $clob_files
-	incr lob_argc
-    }
-    if { [info exists blob_files] } {
-	set command "blob_dml_file"
-	set lob_argv $blob_files
-	incr lob_argc
-    }
-    if { $lob_argc > 1 } {
-	error "Only one of -clobs, -blobs, -clob_files, or -blob_files may be specified as an argument to db_dml"
-    }
-    db_with_handle db {
-	if { $lob_argc == 1 } {
-	    # Bind :1, :2, ..., :n as LOBs (where n = [llength $lob_argv])
-	    set bind_vars [list]
-	    for { set i 1 } { $i <= [llength $lob_argv] } { incr i } {
-		lappend bind_vars $i
-	    }
-	    eval [list db_exec "${command}_bind" $db $statement_name $sql $bind_vars] $lob_argv
-	} else {
-	    eval [list db_exec $command $db $statement_name $sql] $lob_argv
-	}
-    }
-}
-
-proc_doc db_resultrows {} { Returns the number of rows affected by the last DML command. } {
-    global db_state
-    return [ns_ora resultrows $db_state(last_used)]
-}
 
 ad_proc db_0or1row { statement_name sql args } { 
 
@@ -854,103 +706,23 @@ ad_proc db_abort_transaction_p {} { } {
     }
 }
 
-ad_proc db_continue_transaction {} {
-    
-    If a transaction is set to be aborted, this procedure allows it to continue.
-    Intended for use only within a db_transaction on_error code block.  
+ad_proc -public db_name { } {
+
+    Returns the name of the database as reported by the driver.
+
 } {
-    global db_state
     db_with_handle db {
-	# The error has been handled, set the flag to false.
-	set db_state(db_abort_p,$db) 0
+        set dbtype [ns_db dbtype $db]
     }
+    return $dbtype
 }
 
-ad_proc db_write_clob { statement_name sql args } {
-    ad_arg_parser { bind } $args
-
-    db_with_handle db {
-	db_exec write_clob $db $statement_name $sql
-    }
-}
-
-ad_proc db_write_blob { statement_name sql args } {
-    ad_arg_parser { bind } $args
-
-    db_with_handle db { 
-	db_exec write_blob $db $statement_name $sql
-    }
-}
-
-ad_proc db_blob_get_file { statement_name sql args } {
-    ad_arg_parser { bind file args } $args
-
-    db_with_handle db {
-	eval [list db_exec blob_get_file $db $statement_name $sql $file] $args
-    }
-}
-
-ad_proc db_get_sql_user { } {
-
-    Returns a valid user@database/password string to access a database through sqlplus.
-
-} {
-
-    set pool [lindex [nsv_get db_available_pools .] 0]
-    set datasource [ns_config ns/db/pool/$pool DataSource]    
-    if { ![empty_string_p $datasource] && ![string is space $datasource] } {
-	return "[ns_config ns/db/pool/$pool User]/[ns_config ns/db/pool/$pool Password]@$datasource"
-    } else {
-	return "[ns_config ns/db/pool/$pool User]/[ns_config ns/db/pool/$pool Password]"
-    }
-}
-
-ad_proc db_source_sql_file { {-callback apm_ns_write_callback} file } {
-
-    Sources a SQL file (in SQL*Plus format).
-
-} {
-    
-    global env
-    set user_pass [db_get_sql_user]
-    set fp [open "|[file join $env(ORACLE_HOME) bin sqlplus] $user_pass @$file" "r"]
-
-    while { [gets $fp line] >= 0 } {
-	# Don't bother writing out lines which are purely whitespace.
-	if { ![string is space $line] } {
-	    apm_callback_and_log $callback "[ad_quotehtml $line]\n"
-	}
-    }
-    close $fp
-}
-
-
-ad_proc db_source_sqlj_file { {-callback apm_ns_write_callback} file } {
-
-    Sources a SQLJ file using loadjava.
-
-} {
-    
-    global env
-    set user_pass [db_get_sql_user]
-    set fp [open "|[file join $env(ORACLE_HOME) bin loadjava] -verbose -user $user_pass $file" "r"]
-
-
-    # Despite the fact that this works, the text does not get written to the stream.
-    # The output is generated as an error when you attempt to close the input stream as
-    # done below.
-    while { [gets $fp line] >= 0 } {
-	# Don't bother writing out lines which are purely whitespace.
-	if { ![string is space $line] } {
-	    apm_callback_and_log $callback "[ad_quotehtml $line]\n"
-	}
-    }
-    if { [catch {
-	close $fp
-    } errmsg] } {
-	apm_callback_and_log $callback "[ad_quotehtml $errmsg]\n"
-    }
-}
+# NSV db_pooled_sequences($sequence) is the number of sequence values for the
+#     sequence named $sequence that should be pooled.
+# NSV db_pooled_nextvals($sequence) is a list of available sequence values for
+#     the sequence named $sequence. It is a ring buffer (values are added to the
+#     end and popped from the beginning).
+# NSV db_pooled_nextvals(.mutex) is a mutex guarding the db_pooled_nextvals.
 
 # global db_state(handles) is a list of handles that have been allocated.
 #

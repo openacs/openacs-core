@@ -1,4 +1,4 @@
-
+create view dual as select now() as sysdate;
 
 create function instr(varchar,char,integer,integer) returns integer as '
 declare

@@ -28,13 +28,19 @@ ad_proc -public ad_acs_admin_node {} {
 
 } {
     # Obtain the id of the ACS Administration node.
+
+    # DRB: this used to say "and rownum = 1" to limit the return to a single row,
+    # but this is Oracle-specific.  It surprises me that the author thinks
+    # that more than one site_node might have object_id equal to the package_id being
+    # selected, but there's no harm in forcing the query to only return a single row
+    # no matter what.  Using "min()" is portable, at least...
+
     return [db_string acs_admin_node_p {
-	select node_id
+	select min(node_id)
 	from site_nodes
 	where object_id = (select package_id 
 	                   from apm_packages 
 	                   where package_key = 'acs-admin')
-	and rownum = 1
     } -default 0]
 }
 
