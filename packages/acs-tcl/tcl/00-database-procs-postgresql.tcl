@@ -7,9 +7,21 @@ ad_library {
     @cvs-id $Id$
 }
 
-proc_doc db_nextval { sequence } { 
-    Returns the next value for a sequence. 
-    This can utilize a pool of sequence values to save hits to the database. 
+ad_proc -public db_nextval { sequence } { 
+
+    Returns the next value for a sequence. This can utilize a pool
+    of sequence values to save hits to the database. 
+
+    <p>
+
+    Example: 
+    
+    <pre>
+    set new_object_id [db_nextval acs_object_id_seq]
+    </pre>
+
+    @param sequence the name of an sql sequence
+
 } {
     # the following query will return a nextval if the sequnce
     # is of relkind = 'S' (a sequnce).  if it is not of relkind = 'S'
@@ -26,18 +38,88 @@ proc_doc db_nextval { sequence } {
     }
 }
 
-proc_doc db_exec_plsql { statement_name sql args } {
+ad_proc -public db_exec_plsql { statement_name sql args } {
 
-    Postgres doesn't have PL/SQL, of course, but it does have PL/pgSQL and
-    other procedural languages.  Rather than assign the result to a bind
-    variable which is then returned to the caller, the Postgres version of
-    OpenACS requires the caller to perform a select query that returns
-    the value of the function.
+    Perform a pl/pgsql function or procedure call.
+    
+    <p>
 
-    We are no longer calling db_string, which screws up the bind variable
-    stuff otherwise because of calling environments. (ben)
+    Example:
+
+    <pre>
+    db_exec_plsql delete_note {
+        select note__delete(:note_id);
+    }
+    </pre>
+
+    If you need the return value then do something like this:
+
+    <pre>
+    set new_note_id [db_exec_plsql create_note {
+        select note__new(
+                         null,
+                         :user_id,
+                         :title,
+                         :body,
+                         'note',
+                         now(),
+                         :user_id,
+                         :peeraddr,
+                         :package_id
+                         );
+    }]
+    </pre>
+
+    You can call several pl/pgsql statements at once, like this:
+
+    <pre>
+    db_exec_plsql delete_note {
+        select note__delete(:note_id);
+        select note__delete(:another_note_id);
+        select note__delete(:yet_another_note_id);
+    }
+    </pre>
+
+    If you are using xql files then put the body of the query in a
+    <code>yourfilename-postgresql.xql</code> file. E.g. the first example 
+    transformed to use xql files looks like this:
+    <p>
+
+    <code>yourfilename.tcl</code>:<br>
+    
+    <pre>
+    db_exec_plsql delete_note { }
+    </pre>
+    
+    <code>yourfilename-postgresql.xql</code>:<br>
+
+    <pre>
+    &lt;fullquery name="delete_note">      
+      &lt;querytext>
+        select note__delete(:note_id);
+      &lt;/querytext>
+    &lt;/fullquery>
+    </pre>
+
+
+    <p>
+
+    Note that this description is <b>postgresql</b> specific, because 
+    this api-browser is running under postgresql.
+
+
+    @see <a href="/doc/db-api-detailed.html">/doc/db-api-detailed.html</a>
 
 } {
+    # Postgres doesn't have PL/SQL, of course, but it does have
+    # PL/pgSQL and other procedural languages.  Rather than assign the
+    # result to a bind variable which is then returned to the caller,
+    # the Postgres version of OpenACS requires the caller to perform a
+    # select query that returns the value of the function.
+
+    # We are no longer calling db_string, which screws up the bind
+    # variable stuff otherwise because of calling environments. (ben)
+
     ad_arg_parser { bind_output bind } $args
 
     # I'm not happy about having to get the fullname here, but right now
@@ -77,6 +159,7 @@ proc_doc db_exec_plsql { statement_name sql args } {
 
 ad_proc -private db_exec_plpgsql { db statement_name pre_sql fname } {
 
+
     A helper procedure to execute a SQL statement, potentially binding
     depending on the value of the $bind variable in the calling environment
     (if set).
@@ -85,6 +168,12 @@ ad_proc -private db_exec_plpgsql { db statement_name pre_sql fname } {
     db proc is dropped after execution.  This is a temporary fix until we can 
     port all of the db_exec_plsql calls to simple selects of the inline code
     wrapped in function calls.
+
+    <p>
+
+    This proc is <b>private</b> - use db_exec_plsql instead!
+
+    @see db_exec_plsql
 
 } {
     set start_time [clock clicks]
@@ -259,10 +348,12 @@ ad_proc -private db_exec { type db statement_name pre_sql {ulevel 2} } {
     return -code $errno -errorinfo $errorInfo -errorcode $errorCode $error
 }
 
-proc_doc db_dml { statement_name sql args } {
-    Do a DML statement.  We don't have CLOBs in PG as PG 7.1 allows
-    unbounded compressed text columns.  BLOBs are handled much differently,
-    to.
+ad_proc -public db_dml { statement_name sql args } {
+
+    Do a DML statement (e.g. insert, update or delete).
+
+    @see <a href="/doc/db-api-detailed.html">/doc/db-api-detailed.html</a>
+
 } {
     ad_arg_parser { clobs clob_files bind blob_files blobs } $args
 
