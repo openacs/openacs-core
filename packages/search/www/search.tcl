@@ -58,7 +58,7 @@ set t0 [clock clicks -milliseconds]
 array set result [acs_sc_call FtsEngineDriver search [list $q $offset $limit $user_id $df $dt] $driver]
 set tend [clock clicks -milliseconds]
 
-if { $t == "Feeling Lucky" } {
+if { $t == "Feeling Lucky" && $result(count) > 0} {
     set object_id [lindex $result(ids) 0]
     set object_type [db_exec_plsql get_object_type "select acs_object_util__get_object_type($object_id)"]
     set url [acs_sc_call FtsContentProvider url [list $object_id] $object_type]
