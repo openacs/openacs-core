@@ -68,6 +68,7 @@ if { ![template::util::is_nil focus] } {
 # Header links (stylesheets, javascript)
 multirow create header_links rel type href media
 multirow append header_links "stylesheet" "text/css" "/resources/acs-templating/lists.css" "all"
+multirow append header_links "stylesheet" "text/css" "/resources/acs-templating/forms.css" "all"
 multirow append header_links "stylesheet" "text/css" "/resources/acs-subsite/default-master.css" "all"
 
 
@@ -78,3 +79,5 @@ if { [llength [namespace eval :: info procs ds_link]] == 1 } {
 } else {
     set ds_link ""
 }
+
+set translator_mode_p [lang::util::translator_mode_p]

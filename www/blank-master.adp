@@ -12,5 +12,10 @@
 <slave>
 
 @ds_link;noquote@
+
+<if @translator_mode_p@ true>
+  <include src="/packages/acs-lang/lib/messages-to-translate">
+</if>
+
 </body>
 </html>
