@@ -2,6 +2,12 @@
 
 <queryset>
 
+    <fullquery name="search::queue.insert">
+        <querytext>
+        insert into search_observer_queue (object_id, event_date, event) values (:object_id, now(), :event)
+        </querytext>
+    </fullquery>
+
     <fullquery name="search::indexer.search_observer_queue_entry">
         <querytext>
             select object_id, event_date, event

@@ -7,6 +7,50 @@ ad_library {
 
 namespace eval search {}
 
+ad_proc -public search::queue {
+    -object_id
+    -event 
+} {
+    Add an object to the search_observer_queue table with
+    an event.
+
+    You should excercise care that the entry is not being
+    created from a trigger (although search is robust for multiple 
+    entries so it will not insert or update the same object
+    more than once per sweep).
+
+    @param object_id acs_objects object_id
+    @param event INSERT or UPDATE or DELETE
+    
+    @author Jeff Davis (davis@xarg.net)
+} {
+    package_exec_plsql \
+        -var_list [list \
+                       [list object_id $object_id] \
+                       [list event $event] ] \
+        search_observer enqueue
+}
+
+ad_proc -public search::dequeue {
+    -object_id
+    -event_date
+    -event 
+} {
+    Remove an object from the search queue
+
+    @param object_id acs_objects object_id
+    @param event_date the event date as retrieved from the DB (and which should not be changed)
+    @param event INSERT or UPDATE or DELETE
+
+    @author Jeff Davis (davis@xarg.net)
+} {
+    package_exec_plsql \
+        -var_list [list [list object_id $object_id] \
+                       [list event_date $event_date] \
+                       [list event $event] ] \
+        search_observer dequeue
+}
+
 ad_proc -private search::indexer {} {
     Search indexer loops over the existing entries in the search_observer_queue 
     table and calls the appropriate driver functions to index, update, or 
@@ -33,6 +77,7 @@ ad_proc -private search::indexer {} {
                         array set datasource [acs_sc_call FtsContentProvider datasource [list $object_id] $object_type]
                         search::content_get txt $datasource(content) $datasource(mime) $datasource(storage_type)
                         acs_sc_call FtsEngineDriver index [list $datasource(object_id) $txt $datasource(title) $datasource(keywords)] $driver
+                        array unset datasource
                     }
                     # Remember seeing this object so we can avoid reindexing it later
                     set seen($object_id) 1
@@ -54,6 +99,7 @@ ad_proc -private search::indexer {} {
                         array set datasource [acs_sc_call FtsContentProvider datasource [list $object_id] $object_type]
                         search::content_get txt $datasource(content) $datasource(mime) $datasource(storage_type)
                         acs_sc_call FtsEngineDriver update_index [list $datasource(object_id) $txt $datasource(title) $datasource(keywords)] $driver
+                        array unset datasource
                     }
                     # Remember seeing this object so we can avoid reindexing it later
                     set seen($object_id) 1
@@ -61,8 +107,7 @@ ad_proc -private search::indexer {} {
             }
         }
 
-        db_exec_plsql search_observer_dequeue_entry {}
-
+        search::dequeue -object_id $object_id -event_date $event_date -event $event
     }
 
 }
@@ -84,6 +129,7 @@ ad_proc -private search::content_get {
 
     set txt ""
 
+    # lob and file are not currently implemented
     switch $storage_type {
         text {
             set data $content
@@ -110,16 +156,18 @@ ad_proc -private search::content_filter {
     upvar $_data data
 
     switch -glob -- $mime {
-        {text/plain*} {
+        {text/*} {
             set txt $data
         }
-        {text/html*} {
-            set txt $data
+        default { 
+            error "invalid mime type in search::content_filter: $mime"
         }
     }
 }
 
-ad_proc -private search::choice_bar { items links values {default ""} } {
+ad_proc -private search::choice_bar { 
+    items links values {default ""} 
+} {
     @author Neophytos Demetriou
 } {
 
