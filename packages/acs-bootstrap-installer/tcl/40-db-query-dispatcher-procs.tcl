@@ -386,7 +386,7 @@ ad_proc db_qd_get_fullname {local_name {added_stack_num 1}} {
         set proc_name_with_parameters $proc_name
     }
 
-    db_qd_log Debug "db_qd_get_fullname: following query in file: $url proc: $proc_name_with_parameters"
+    db_qd_log QDDebug "db_qd_get_fullname: following query in file: $url proc: $proc_name_with_parameters"
 
     return $full_name
 }
@@ -425,7 +425,7 @@ ad_proc db_map {snippet_name} {
     set fullquery [db_qd_fetch $fullname]
     set sql [db_fullquery_get_querytext $fullquery]
 
-    db_qd_log Debug "PARTIALQUERY FOR $fullname: $sql"
+    db_qd_log QDDebug "PARTIALQUERY FOR $fullname: $sql"
     return [uplevel 1 [list subst -nobackslashes $sql]]
 }
 
@@ -485,7 +485,7 @@ ad_proc db_qd_internal_load_queries {file_pointer file_tag} {
     set acs_file_path [ad_make_relative_path $file_tag]
     set queryname_root [db_qd_internal_get_queryname_root $acs_file_path]
 
-    db_qd_log Debug "db_qd_internal_load_queries: \n file: [lindex $parsing_state 4] \n default_rdbms: [lindex $parsing_state 3] \n queryname_root: $queryname_root"
+    db_qd_log QDDebug "db_qd_internal_load_queries: \n file: [lindex $parsing_state 4] \n default_rdbms: [lindex $parsing_state 3] \n queryname_root: $queryname_root"
 
     while {1} {
 	set result [db_qd_internal_parse_one_query $parsing_state]
