@@ -11,9 +11,6 @@ ad_page_contract {
 set return_url [ad_pvt_home]
 
 # Get the password and user ID
-# as of Oracle 8.1 we'll have upper(email) constrained to be unique
-# in the database (could do it now with a trigger but there is really 
-# no point since users only come in via this form)
 
 if ![db_0or1row password "select password from users where user_id=$user_id"] {
     ad_return_error "Couldn't find user $user_id" "Couldn't find user $user_id."

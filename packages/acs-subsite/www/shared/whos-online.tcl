@@ -15,7 +15,7 @@ set connected_user_id [ad_verify_and_get_user_id]
 db_multirow users grab_users "select user_id, first_names, last_name, email
 from cc_users
 where last_visit > sysdate - [ad_parameter LastVisitUpdateInterval "" 600]/86400
-order by upper(last_name), upper(first_names), upper(email)" 
+order by upper(last_name), upper(first_names), email" 
 
 db_release_unused_handles
 

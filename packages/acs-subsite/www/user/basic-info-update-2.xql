@@ -11,7 +11,7 @@
  
 <fullquery name="email_unique_count">      
       <querytext>
-      select count(party_id) from parties where upper(email) = upper(:email) and party_id <> :user_id
+      select count(party_id) from parties where email = lower(:email) and party_id <> :user_id
       </querytext>
 </fullquery>
 

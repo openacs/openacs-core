@@ -16,7 +16,7 @@
         <release-date>2001-03-06</release-date>
         <vendor url="http://openacs.org/">OpenACS</vendor>
 
-        <provides url="acs-kernel" version="4.1"/>
+        <provides url="acs-kernel" version="4.5"/>
 
         <files>
             <file type="package_spec" path="acs-kernel.info"/>

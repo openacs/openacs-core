@@ -29,7 +29,7 @@ proc nmc_GetNewIDNumber {id_name} {
 # and you will find the Tcl var $n_rows set
 
 # You can also use this in a multi-row loop
-#   set selection [ns_db select $db "select *,upper(email) from mailing_list order by upper(email)"]
+#   set selection [ns_db select $db "select *,email from mailing_list order by email"]
 #   while { [ns_db getrow $db $selection] } {
 #        set_variables_after_query
 #         ... your code here ...

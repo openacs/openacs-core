@@ -78,11 +78,11 @@ set where_clause [list]
 if { [info exists keyword] } {
     set search_type "keyword"
     set sql_keyword "%[string tolower $keyword]%"
-    lappend where_clause "(lower(email) like :sql_keyword or lower(first_names || ' ' || last_name) like :sql_keyword)"
+    lappend where_clause "(email like :sql_keyword or lower(first_names || ' ' || last_name) like :sql_keyword)"
 } elseif { [info exists email] && ![empty_string_p $email] } {
     set search_type "email"    
     set sql_email "%[string tolower $email]%"
-    lappend where_clause "lower(email) like :sql_email"
+    lappend where_clause "email like :sql_email"
 } else {
     set search_type "last"        
     set sql_last_name "%[string tolower $last_name]%"

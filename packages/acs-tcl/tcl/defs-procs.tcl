@@ -568,7 +568,6 @@ ad_proc -private ad_parameter_cache {
 	return
     }
     if {[info exists set]} {
-	ns_log Notice "Caching $parameter_name for $package_id to $set"
 	nsv_set "ad_param_$package_id" $parameter_name $set
 	return $set
     } elseif { [nsv_exists ad_param_$package_id $parameter_name] } {

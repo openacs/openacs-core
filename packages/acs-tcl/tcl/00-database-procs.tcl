@@ -21,11 +21,11 @@ ad_proc db_compatible_rdbms_p { db_type } {
 }
 
 ad_proc db_package_supports_rdbms_p { db_type_list } {
-    Returns 1 if db_type_list is empty (needs no database support) or 
-    contains the current RDBMS type.  The list is typically built from
-    the XML database-support node in a packages .info file.
+    Returns 1 if db_type_list contains the current RDMBS type.  A package
+    intended to run with a given RDBMS must note this in it's package info
+    file regardless of whether or not it actually uses the database. 
 } {
-    if { [llength $db_type_list] == 0 || [lsearch $db_type_list [db_type]] != -1 } {
+    if { [lsearch $db_type_list [db_type]] != -1 } {
         return 1
     }
 

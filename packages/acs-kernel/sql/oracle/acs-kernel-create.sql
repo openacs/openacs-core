@@ -8,7 +8,7 @@
 -- @cvs-id $Id$
 --
 
-set feedback off
+-- set feedback off
 
 @@ acs-logs-create
 @@ acs-metadata-create
@@ -33,4 +33,4 @@ set feedback off
 -- added by Ben for OpenACS
 @@ acs-create-2
 
-set feedback on
+-- set feedback on

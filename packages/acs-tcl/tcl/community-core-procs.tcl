@@ -25,7 +25,7 @@ ad_proc cc_screen_name_user { screen_name } {
 
 ad_proc -private cc_lookup_email_user { email } {
     return [db_string user_select {
-        select user_id from cc_users where upper(email) = upper(:email)
+        select user_id from cc_users where email = lower(:email)
     } -default ""]
 }
 

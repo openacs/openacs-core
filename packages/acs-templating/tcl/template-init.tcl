@@ -10,21 +10,13 @@
 
 # XXX (bquinn): This file should not be here.
 
-# Register filters if ATS is installed as a Tcl "module".
-# Actually, acs-templating is a package.
-
-# ns_register_filter postauth GET *.acs acs_page_filter
-# ns_register_filter postauth POST *.acs acs_page_filter
-# ns_register_filter postauth GET */ acs_page_filter
-# ns_register_filter postauth POST */ acs_page_filter
-
 set pkg_id [apm_package_id_from_key acs-templating]
 
 if { [ad_parameter -package_id $pkg_id ShowCompiledTemplatesP dummy 0] } {
-  ns_register_filter postauth GET *.cmp cmp_page_filter
+  ad_register_filter postauth GET *.cmp cmp_page_filter
 }
 
-if { [ad_parameter -package_id $pkg_id ShowDataDictionariesP  dummy 1] } {
-  ns_register_filter postauth GET *.dat dat_page_filter
-  ns_register_filter postauth GET *.frm frm_page_filter
+if { [ad_parameter -package_id $pkg_id ShowDataDictionariesP  dummy 0] } {
+  ad_register_filter postauth GET *.dat dat_page_filter
+  ad_register_filter postauth GET *.frm frm_page_filter
 }

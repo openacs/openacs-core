@@ -7,7 +7,7 @@
       <querytext>
       
 	    begin
-	    :1 := to_char(timezone.utc_to_local(:tz, to_date(:time_value, 'YYYY-MM-DD HH24:MI:SS')), 'YYYY-MM-DD HH24:MI:SS');
+	    :1 := to_char(timezone.utc_to_local(timezone.get_id(:tz), to_date(:time_value, 'YYYY-MM-DD HH24:MI:SS')), 'YYYY-MM-DD HH24:MI:SS');
 	    end;
 	
       </querytext>
@@ -18,7 +18,7 @@
       <querytext>
       
 	    begin
-	    :1 := to_char(timezone.local_to_utc(:tz, to_date(:time_value, 'YYYY-MM-DD HH24:MI:SS')), 'YYYY-MM-DD HH24:MI:SS');
+	    :1 := to_char(timezone.local_to_utc(timezone.get_id(:tz), to_date(:time_value, 'YYYY-MM-DD HH24:MI:SS')), 'YYYY-MM-DD HH24:MI:SS');
 	    end;
 	
       </querytext>

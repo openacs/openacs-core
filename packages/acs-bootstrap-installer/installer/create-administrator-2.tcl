@@ -23,7 +23,7 @@ The passwords you've entered don't match. Please <a href=\"javascript:history.ba
 }
 
 if { ![db_string user_exists {
-    select count(*) from parties where email = :email
+    select count(*) from parties where email = lower(:email)
 }] } {
 
   db_transaction {

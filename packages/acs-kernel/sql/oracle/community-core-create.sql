@@ -227,6 +227,19 @@ comment on column parties.url is '
  without joining to any other table.
 ';
 
+-- DRB: I added this trigger to enforce the storing of e-mail in lower case.
+-- party.new() already did so but I found an update that didn't...
+
+create or replace trigger parties_in_up_tr
+before insert or update on parties
+for each row
+begin
+   :new.email := lower(:new.email);
+end;
+/
+show errors
+
+
 -------------------
 -- PARTY PACKAGE --
 -------------------
