@@ -265,9 +265,10 @@ begin
   -- create the basic revision (using v_target_item_id)
   insert into cr_revisions 
       select 
-        v_copy_id as revision_id, title, description, publish_date, 
+        v_copy_id as revision_id, v_target_item_id as item_id, title, 
+        description, publish_date, 
         mime_type, nls_language, 
-	content, v_target_item_id as item_id
+	content
       from 
         cr_revisions 
       where
