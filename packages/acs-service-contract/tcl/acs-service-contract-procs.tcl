@@ -134,6 +134,7 @@ ad_proc acs_sc_proc {
 
     set docblock [join $docblock "\n\r"]
     set arguments [join $arguments]
+    ns_log Notice "sc_proc: $proc_name, $arguments"
     ad_proc $proc_name $arguments $docblock $body
 
 }
