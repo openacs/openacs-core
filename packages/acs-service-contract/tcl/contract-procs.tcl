@@ -33,7 +33,7 @@ ad_proc -public acs_sc::contract::new {
     @return id of the contract
 
 } {
-    return [db_string insert_sc_contract {}]
+    return [db_exec_plsql insert_sc_contract {}]
 }
 
 ad_proc -public acs_sc::contract::new_from_spec {
@@ -111,7 +111,7 @@ ad_proc -public acs_sc::contract::delete {
         # LARS:
         # It seems like delete by ID doesn't work, because our PG bind thing turns all integers into strings
         # by wrapping them in single quotes, causing PG to invoke the function for deleting by name
-        db_string delete_by_name {}
+        db_exec_plsql delete_by_name {}
     }
 }
 
@@ -183,7 +183,7 @@ ad_proc -public acs_sc::contract::operation::delete {
         db_1row select_names {}
     }
 
-    db_string delete_by_name {}
+    db_exec_plsql delete_by_name {}
 }
 
 ad_proc -public acs_sc::contract::operation::parse_operations_spec {

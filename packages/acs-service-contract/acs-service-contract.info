@@ -7,18 +7,18 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>t</singleton-p>
     
-    <version name="4.7d1" url="http://www.openacs.org/repository/download/apm/acs-service-contract-4.7d1.apm">
+    <version name="4.7d2" url="http://www.openacs.org/repository/download/apm/acs-service-contract-4.7d2.apm">
     <database-support>
         <database>oracle</database>
         <database>postgresql</database>
     </database-support>
-        <owner url="mailto:k_vertigo@yahoo.com">Kapil Thangavelu</owner>
         <owner url="mailto:k2pts@yahoo.com">Neophytos Demetriou</owner>
+        <owner url="mailto:k_vertigo@yahoo.com">Kapil Thangavelu</owner>
         <summary>Allows different packages to communicate via defined contracts</summary>
-        <release-date>2003-01-31</release-date>
+        <release-date>2003-02-05</release-date>
         <vendor url="http://www.openacs.org/">OpenACS</vendor>
 
-        <provides url="acs-service-contract" version="4.7d1"/>
+        <provides url="acs-service-contract" version="4.7d2"/>
 
         <files>
             <file type="package_spec" path="acs-service-contract.info"/>
@@ -63,6 +63,7 @@
             <file type="query_file" db_type="oracle" path="tcl/implementation-procs-oracle.xql"/>
             <file type="query_file" db_type="postgresql" path="tcl/implementation-procs-postgresql.xql"/>
             <file type="tcl_procs" path="tcl/implementation-procs.tcl"/>
+            <file type="query_file" path="tcl/implementation-procs.xql"/>
             <file type="query_file" db_type="oracle" path="tcl/msg-type-procs-oracle.xql"/>
             <file type="query_file" db_type="postgresql" path="tcl/msg-type-procs-postgresql.xql"/>
             <file type="tcl_procs" path="tcl/msg-type-procs.tcl"/>

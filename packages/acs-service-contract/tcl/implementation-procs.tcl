@@ -26,7 +26,7 @@ ad_proc -public acs_sc::impl::new {
     
     @return the ID of the new implementation
 } {
-    return [db_string impl_new {}]
+    return [db_exec_plsql impl_new {}]
 }
 
 ad_proc -public acs_sc::impl::delete {
@@ -40,7 +40,7 @@ ad_proc -public acs_sc::impl::delete {
         error "You must supply contract_name and impl_name"
     }
 
-    db_string delete_impl {} 
+    db_exec_plsql delete_impl {} 
 }
 
 ad_proc -public acs_sc::impl::new_from_spec {
@@ -75,6 +75,12 @@ ad_proc -public acs_sc::impl::new_from_spec {
     return $impl_id
 }
 
+ad_proc -public acs_sc::impl::get_id {
+    {-owner:required}
+    {-name:required}
+} {
+    return [db_string select_impl_id {}]
+}
 
 
 
@@ -96,7 +102,7 @@ ad_proc -public acs_sc::impl::alias::new {
 
     @return the ID of the implementation
 } {
-    set impl_id [db_string alias_new {}]
+    set impl_id [db_exec_plsql alias_new {}]
 }
 
 ad_proc -private acs_sc::impl::alias::parse_aliases_spec {
@@ -163,22 +169,49 @@ ad_proc -public acs_sc::impl::binding::new {
     Bind implementation to the contract. Bombs if not all operations
     have aliases.
 } {
-    db_string binding_new {}
+    db_exec_plsql binding_new {}
 }
 
-ad_proc -public acs_sc::impl::binding::init_procs {
+ad_proc -private acs_sc::impl::binding::init_procs {
     {-impl_id:required}
 } {
     Initialize the procs so we can call the service contract.
+    
+    Note that this proc doesn't really work, because it doesn't
+    initialize the aliases in all interpreters, only in one.
 } {
+    # LARS:
+    # This is a hack to get around the problem with multiple interpreters:
+    # We ask the APM to reload the acs-service-contract-init file, which will
+    # redefine the service contract wrapper procs
+
+    set file "/packages/acs-service-contract/tcl/acs-service-contract-init.tcl"
+    apm_mark_files_for_reload -force_reload [list $file]
+
+    return
+    
+    # LARS:
+    # This is the left-over stuff, which we could one day resurrect if we
+    # decide to implement an apm_eval feature, which can eval chunks of code
+    # in each interpreter. Then we could just say 
+    # apm_eval "acs_sc::impl::binding::init_procs_internal -impl_id $impl_id"
+    
+    # Get the list of aliases
     db_foreach impl_operation {
         select impl_contract_name, 
                impl_operation_name,
                impl_name
         from   acs_sc_impl_aliases
         where  impl_id = :impl_id
-    } {
-        acs_sc_proc $impl_contract_name $impl_operation_name $impl_name
+    } -column_array row {
+        lappend rows [array get row]
+    }
+    
+    # Register them
+    # Hm. We need to do this in all interpreters
+    foreach row_list $rows {
+        array set row $row_list
+        acs_sc_proc $row(impl_contract_name) $row(impl_operation_name) $row(impl_name)
     }
 }
 

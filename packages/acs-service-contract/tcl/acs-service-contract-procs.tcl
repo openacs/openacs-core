@@ -84,17 +84,19 @@ ad_proc -private acs_sc_get_alias {
     
     @author Neophytos Demetriou
 } {
-
-    set exists_p [util_memoize "acs_sc_binding_exists_p $contract $impl"]
-
+    # LARS
+    set exists_p [acs_sc_binding_exists_p $contract $impl]
+    
+    #set exists_p [util_memoize "acs_sc_binding_exists_p $contract $impl"]
+    
     if ![set exists_p] {return ""}
-
+    
     db_0or1row get_alias {
 	select impl_alias, impl_pl
-	from acs_sc_impl_aliases
-	where impl_contract_name = :contract
-	and impl_operation_name = :operation
-	and impl_name = :impl
+	from   acs_sc_impl_aliases
+	where  impl_contract_name = :contract
+	and    impl_operation_name = :operation
+	and    impl_name = :impl
     }
 
     return [list $impl_alias $impl_pl]
