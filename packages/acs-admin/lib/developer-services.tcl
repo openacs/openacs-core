@@ -8,3 +8,5 @@ set acs_api_browser_url [site_node::get_package_url -package_key "acs-api-browse
 
 set acs_core_docs_url [site_node::get_package_url -package_key "acs-core-docs"]
 
+set acs_developer_support_url [site_node::get_package_url -package_key "acs-developer-support"]
+
