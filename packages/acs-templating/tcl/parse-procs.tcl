@@ -337,11 +337,9 @@ ad_proc -private template::adp_init { type file_stub } {
         if {\[ds_enabled_p\] && \[ds_collection_enabled_p\]} { ds_profile stop $file_stub.$type }\n"
       } else { 
         proc ::template::code::${type}::$file_stub {} "
-        ds_profile start $file_stub.$type
     	uplevel {
     	  $code
-    	}
-        ds_profile stop $file_stub.$type\n"
+    	}\n"
       }
 
       proc ::template::mtimes::${type}::$file_stub {} "return $mtime"
