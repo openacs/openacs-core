@@ -122,7 +122,7 @@ foreach proc [nsv_array names api_proc_doc] {
 
 set matches [lsort -command ad_sort_by_score_proc $matches]
 
-if {$quick_view && ![empty_string_p $matches]} {
+if {$quick_view && ![empty_string_p $matches] || [llength $matches] == 1 } {
     ad_returnredirect [api_proc_url [lindex [lindex $matches 0] 0]]
     ad_script_abort
 }
