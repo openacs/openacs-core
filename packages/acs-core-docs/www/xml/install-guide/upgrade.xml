@@ -454,7 +454,16 @@ parameter::set_value -package_id [ad_acs_kernel_id] -parameter UsePasswordWidget
     </sect2>
     <sect2 id="upgrade-postgres-7.2-to-7.3">
       <title>Upgrading from PostGreSQL 7.2 to 7.3</title>
-      <para>An OpenACS database created in PostGreSQL 7.2 will not work correctly in PostGreSQL 7.3.  This is because 7.2 truncates function names to 31 characters, but 7.3 does not.  This does not cause problems in 7.2, because truncation occurs both at function creation and at function calling, so they still match.  But if you use a database created in 7.2 in 7.3, the function names in the database remain truncated but the function calls are not, and so they don't match.  Also some functions use casting commands that no longer work in 7.3 and these functions must be recreated.</para>
+      <para>An OpenACS database created in PostGreSQL 7.2 will not
+      work correctly in PostGreSQL 7.3.  This is because 7.2 truncates
+      function names to 31 characters, but 7.3 does not.  This does
+      not cause problems in 7.2, because truncation occurs both at
+      function creation and at function calling, so they still match.
+      But if you use a database created in 7.2 in 7.3, the function
+      names in the database remain truncated but the function calls
+      are not, and so they don't match.  Also some functions use
+      casting commands that no longer work in 7.3 and these functions
+      must be recreated.</para>
       <para>
       To upgrade an OpenACS site from PostGreSQL 7.2 to 7.3, first upgrade the kernel to 4.6.3.  Then, dump the database, run the upgrade script <computeroutput>/var/lib/aolserver/<replaceable>service0</replaceable>/bin/pg_7.2to7.3_upgrade_helper.pl</computeroutput> on the dump file, and reply the dump.  See <ulink url="http://openacs.org/forums/message-view?message_id=109337">Forum OpenACS Q&amp;A: PG 7.2->7.3 upgrade gotcha?</ulink>.  Example:</para>
       <orderedlist>
@@ -485,9 +494,29 @@ parameter::set_value -package_id [ad_acs_kernel_id] -parameter UsePasswordWidget
           find . -type f -name "*sql" | xargs perl -p -i.tmp -e "s/\\wtimestamp[^t]/ timestamptz/g"</programlisting>
         </listitem>
         <listitem>
+          <para>Create a new user for PostgreSQL 7.3.x, as per the
+          Postgres installation guide. Keep in mind that your
+          installation location is different, and your startup script
+          (/etc/init.d/postgres73 should be named differently. You
+          might even need to edit that file to make the paths correct)
+          </para> 
+        </listitem>
+        <listitem>
           <para>Install PostgreSQL 7.3.x. Note that you PostgreSQL
           must listen on a different port in order to work
-          correctly.</para> 
+          correctly, so you'll need to edit the configuration file
+          (/usr/local/pgsql73/data/postgresql.conf) and
+          change the port (to 5433, say). create a second postgres
+          user to differentiate between the two postgres
+          installs. When you do ./configure, you'll need to include
+          --prefix=$HOME to ensure that it is installed in the
+          postgres73 user's home directory.</para> 
+        </listitem>
+        <listitem>
+          <para>Change the path in
+          <replaceable>service0</replaceable>'s .bashrc or
+          .bash_profile (or both) files to reflect the new postgres73
+          user directory.</para>
         </listitem>
         <listitem>
           <para>Restore the database from dump as per the <link linkend="restore-postgres">recovery instructions</link>.</para>
