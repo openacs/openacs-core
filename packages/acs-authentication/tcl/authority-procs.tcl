@@ -115,11 +115,18 @@ ad_proc -public auth::authority::create {
             set creation_ip [ad_conn peeraddr]
         }
 
-        # Auto generate short name if not provided
+        # Auto generate short name if not provided and make
+        # sure it's unique
+        # TODO: check for max length 255?
         if { [empty_string_p $short_name] } {
-            set short_name [string tolower $pretty_name]
-            regsub -all {\s|-} $short_name {_} short_name
-            set short_name [string_truncate -len 255 $short_name]
+            set existing_short_names [db_list select_short_names {
+                select short_name
+                from auth_authorities
+            }]
+            set short_name [util_text_to_url \
+                                -replacement "_" \
+                                -existing_urls $existing_short_names \
+                                -text $pretty_name]
         }
 
         db_transaction {
@@ -408,6 +415,15 @@ ad_proc -private auth::authority::get_required_columns {} {
         short_name
         pretty_name
     }
+}
+
+ad_proc -private auth::authority::get_sc_impl_columns {} {
+    Get a list of column names for storing service contract implementation ids
+    of the authority.
+
+    @author Peter Marklund 
+} {
+    return {auth_impl_id pwd_impl_id register_impl_id get_doc_impl_id process_doc_impl_id}
 }
 
 ad_proc -private auth::authority::get_select_columns {} {
