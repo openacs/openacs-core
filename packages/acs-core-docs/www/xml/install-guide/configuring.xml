@@ -13,6 +13,75 @@
 
   <para>In this chapter, <emphasis role="strong">Configuring</emphasis> refers to making changes to a new OpenACS site through the web interface.  In crude terms, these changes happen in the database, and are upgrade-safe.  <emphasis role="strong">Customizing</emphasis> refers to changes that touch the file system, and require some planning if easy upgradability is to be maintained.</para>
 
+  <sect1 id="configuring-install-packages">
+    <title>Installing OpenACS packages</title>
+    <authorblurb>
+      <para>by <ulink url="mailto:jade@rubick.com">Jade Rubick</ulink></para>
+    </authorblurb>
+    <sect2>
+      <title>Installing OpenACS packages</title>
+
+      <para>An OpenACS package lets your website do things it couldn't
+      before. You can have a weblog, a calendar, or even do
+      sophisticated project-management via your website.</para>
+
+      <para>After you've installed OpenACS, you can congratulate
+      yourself for a job well done. Then, you'll probably want to
+      install a couple of packages.</para>
+
+      <para>To install packages, you have to be an administrator on
+      the OpenACS webserver. Log in, and you'll see a link to Admin or
+      the Control Panel. Click on that, then click on 'Install
+      software'. </para>
+
+      <para>At this point, you'll need to determine whether or not
+      you're able to install from the repository, or whether you
+      should install from local files.</para>
+
+      <para>Basically, if you have a local CVS repository, or have
+      custom code, you need to install from 'Local Files'. Otherwise,
+      you can install from the OpenACS repository</para>
+
+      <para>If you want to install new packages, click on 'Install
+      from Repository' or 'Install from Local'. Select the package,
+      and click 'Install checked applications'. The system will check
+      to make sure you have all necessary packages that the package
+      you want depends on. If you're installing from Local Files, and
+      you are missing any packages, you may have to add the packages
+      your desired package depends on.</para>
+
+      <para>If you run into any errors at all, check your
+      /var/lib/aolserver/$OPENACS_SERVICE_NAME/log/error.log file, and
+      post your error on the OpenACS forums</para>
+
+      <para>This section is under construction</para>
+    </sect2>
+  </sect1>
+  
+  <sect1 id="configuring-mounting-packages">
+    <title>Mounting OpenACS packages</title>
+    <authorblurb>
+      <para>by <ulink url="mailto:jade@rubick.com">Jade Rubick</ulink></para>
+    </authorblurb>
+    <sect2>
+      <title>Mounting OpenACS packages</title>
+      <para>After you've installed your packages, you have to 'mount'
+      them in order to make them appear on your website.</para>
+    </sect2>
+  </sect1>
+
+  <sect1 id="configuring-configuring-packages">
+    <title>Configuring an OpenACS package</title>
+    <authorblurb>
+      <para>by <ulink url="mailto:jade@rubick.com">Jade Rubick</ulink></para>
+    </authorblurb>
+    <sect2>
+      <title>Configuring an OpenACS package</title>
+      <para>After you've installed and mounted your package, you can
+      configure each instance to act as you would like. </para>
+    </sect2>
+  </sect1>
+
   <sect1 id="how-do-I">
     <title>How Do I?</title>
     <sect2>
