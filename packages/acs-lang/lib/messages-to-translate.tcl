@@ -40,8 +40,10 @@ if { $display_p } {
     foreach message_key [lang::util::get_message_lookups] {
 
         set locale [ad_conn locale]
-        set orig_text [lang::message::lookup "en_US" $message_key]
-        set translated_text [lang::message::lookup $locale $message_key]
+
+        # Extra args mean no substitution
+        set orig_text [lang::message::lookup "en_US" $message_key {} {} 0]
+        set translated_text [lang::message::lookup $locale $message_key {} {}0]
 
         set key_split [split $message_key "."]
         set package_key_part [lindex $key_split 0]
