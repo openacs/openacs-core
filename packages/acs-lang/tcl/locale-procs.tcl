@@ -100,7 +100,7 @@ namespace eval lang::system {
         @return  a timezone name from acs-reference package (e.g., Asia/Tokyo, America/New_York)
     } {
         set package_id [apm_package_id_from_key "acs-lang"]
-        return [parameter::get -package_id $package_id -parameter SystemTimezone -default "America/New_York"]
+        return [parameter::get -package_id $package_id -parameter SystemTimezone -default "Etc/UTC"]
     }
         
     ad_proc -public set_timezone { 
