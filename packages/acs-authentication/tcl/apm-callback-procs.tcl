@@ -110,7 +110,7 @@ ad_proc -public auth::after_upgrade {
                     acs_sc::impl::delete -contract_name "auth_sync_process" -impl_name "IMS_Enterprise_v_1p1_old"
                 }
             }
-            5.1.1 5.1.2 {
+            5.1.1 5.1.2d1 {
                 db_transaction {
 
 		    # this is a direct update to the SC tables, we should expect a new
