@@ -34,6 +34,7 @@ ad_proc -public mfp::note::add {
     -title:required
 } { 
     This proc adds a note.  
+    @return item_id of the new note.
 } {
     db_transaction {
 	set item_id [db_exec_plsql note_insert {
@@ -51,6 +52,7 @@ ad_proc -public mfp::note::add {
 	    select content_item__set_live_revision(:revision_id)
 	}
     }
+    return $item_id
 }
 
 ad_proc -public mfp::note::edit {
