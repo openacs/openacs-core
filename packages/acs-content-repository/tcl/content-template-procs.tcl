@@ -21,6 +21,7 @@ ad_proc -public content::template::new {
     -creation_date
     {-creation_user ""}
     {-creation_ip ""}
+    {-package_id ""}
 } {
     @param name
     @param text
