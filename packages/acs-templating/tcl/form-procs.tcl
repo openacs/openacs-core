@@ -12,8 +12,31 @@
 
 # Commands for managing dynamic templated forms.
 
-ad_proc -public template::form { command args } {
+ad_proc -public form {command args} { 
+    form is really template::form although when in 
+    the "template" namespace you may omit the
+    template::
 
+    @see template::form
+} -
+
+ad_proc -public template::form { command args } {
+    template::form command invokes form functions.
+    Please see the individual functions for 
+    their arguments.
+    
+    @see template::form::create
+    @see template::form::exists
+    @see template::form::export
+    @see template::form::get_combined_values
+    @see template::form::get_values
+    @see template::form::is_request
+    @see template::form::is_submission
+    @see template::form::is_valid
+    @see template::form::section
+    @see template::form::set_values
+    @see template::form::size
+} {
   eval template::form::$command $args
 }
 
