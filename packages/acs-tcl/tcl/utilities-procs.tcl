@@ -4442,3 +4442,12 @@ ad_proc -public util::backup_file {
 }
 
 
+
+ad_proc -public util::subst_safe { string } {
+    Make string safe for subst'ing.
+} {
+    regsub -all {\$} $string {\$} string
+    regsub -all {\[} $string {\[} string
+    regsub -all {\]} $string {\]} string
+    return $string
+}
