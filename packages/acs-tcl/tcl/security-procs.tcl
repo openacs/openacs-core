@@ -602,7 +602,7 @@ ad_proc -public ad_get_logout_url {
     return $url
 }
 
-ad_proc -public ad_maybe_redirect_for_registration {} {
+ad_proc -deprecated ad_maybe_redirect_for_registration {} {
 
     Checks to see if a user is logged in.  If not, redirects to
     [subsite]/register/index to require the user to register.
@@ -612,15 +612,9 @@ ad_proc -public ad_maybe_redirect_for_registration {} {
     the caller need not explicitly call "return". Returns the user id
     if login was succesful.
 
-    @see ad_redirect_for_registration
+    @see auth::require_login
 } {
-    set user_id [ad_conn user_id]
-    if { $user_id != 0 } {
-	# user is in fact logged in, terminate
-	return $user_id
-    }
-    ad_redirect_for_registration
-    ad_script_abort
+    auth::require_login
 }
 
 # JCD 20020915 I think this probably should not be deprecated since it is 

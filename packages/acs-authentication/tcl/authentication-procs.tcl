@@ -31,7 +31,15 @@ ad_proc -public auth::require_login {} {
 
     @see ad_script_abort
 } {
-    return [ad_maybe_redirect_for_registration]
+    set user_id [ad_conn user_id]
+    if { $user_id != 0 } {
+	# user is in fact logged in, return user_id
+	return $user_id
+    }
+
+    # The -return switch causes the URL to return to the current page
+    ad_returnredirect [ad_get_login_url -return]
+    ad_script_abort
 }
 
 ad_proc -public auth::authenticate {
@@ -227,25 +235,25 @@ ad_proc -public auth::create_user {
                              be quoted. Guaranteed to be non-empty if account_status is not ok.
     </ul>
 } {
-     # Implementation note:
-     # just call auth::local::registration::Register for now
+
+     set authority_id [auth::authority::local]
+
+     set create_info [auth::registration::Register \
+                          -authority_id $authority_id \
+                          -username $username \
+                          -password $password \
+                          -first_names $first_names \
+                          -last_name $last_name \
+                          -email $email \
+                          -url $url \
+                          -secret_question $secret_question \
+                          -secret_answer $secret_answer]
+
+     # TODO: Check that return codes are correct
 
      # If we ever create remote users, make sure we concatenate any account messages and local account messages
      # into one combined message.
      # Same for account_status (only ok if both are ok)
-
-     set authority_id [auth::authority::local]
-
-     auth::registration::Register \
-         -authority_id $authority_id \
-         -username $username \
-         -password $password \
-         -first_names $first_names \
-         -last_name $last_name \
-         -email $email \
-         -url $url \
-         -secret_question $secret_question \
-         -secret_answer $secret_answer
 }
 
 ad_proc -public auth::get_registration_elements {
