@@ -20,7 +20,7 @@
 
 </fullquery>
 
-
+<fullquery name="acs_message_p.acs_message_p">      
       <querytext>
 	    select acs_message__message_p(:message_id);
       </querytext>
