@@ -52,9 +52,14 @@
 	<title>Acquire Oracle</title>
 
     <para>
-      Production Oracle systems should run on certified platforms.  Follow the <ulink url="http://metalink.oracle.com/metalink/plsql/ml2_documents.showDocument?p_database_id=NOT&amp;p_id=223718.1">metalink
-      note 223718.1</ulink>to find certified platforms. You need an support
-      contract to have a metalink account.  In summary, free and inexpensive Linux distributions are not certified.
+      Production Oracle systems should run on certified platforms.  Follow the
+      <ulink
+      url="http://metalink.oracle.com/metalink/plsql/ml2_documents.showDocument?p_database_id=NOT&amp;p_id=223718.1">metalink
+      note 223718.1</ulink>to find certified platforms. If you don't have
+      metalink access, take a look at the Oracle on Linux FAQ: <ulink
+      url="http://otn.oracle.com/tech/linux/htdocs/linux_techsupp_faq.html#Linux_Distributions">Which
+      Linux Distributions Are Directly Supported By Oracle?</url>. In summary,
+      free and inexpensive Linux distributions are not certified.
     </para>
 
     <para>
