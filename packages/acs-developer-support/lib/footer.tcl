@@ -24,7 +24,7 @@ if { $show_p } {
 
         set fake_user_id [ad_get_user_id]
         set real_user_id [ds_get_real_user_id]
-        
+
         if { $fake_user_id == 0 } {
             set selected " selected"
             set you_are "<small>You are currently <strong>not logged in</strong></small><br />"
@@ -48,7 +48,7 @@ if { $show_p } {
                    parties pa
             where  pa.party_id = u.user_id
             and    pe.person_id = u.user_id
-            order  by lower(pe.first_names), lower(pe.last_name)
+            order  by lower(pe.first_names), lower(pe.last_name) 
         } {
             if { $fake_user_id == $user_id } {
                 set selected_p 1
@@ -72,13 +72,20 @@ if { $show_p } {
     # Profiling information
     global ds_profile__total_ms ds_profile__iterations 
 
-    multirow create profiling tag num_iterations total_ms ms_per_iteration
+    multirow create profiling tag num_iterations total_ms ms_per_iteration file_links
 
     if { [info exists ds_profile__total_ms] } {
         foreach tag [lsort [array names ds_profile__total_ms]] {
+            if {[file exists $tag]} { 
+                set file_links "<a href=\"${ds_url}send?fname=[ns_urlencode $tag]\" title=\"edit\">e</a> <a href=\"${ds_url}send?code=[ns_urlencode $tag]\" title=\"compiled code\">c</a>"
+            } else { 
+                set file_links {}
+            }
+
             multirow append profiling $tag [set ds_profile__iterations($tag)] [lc_numeric [set ds_profile__total_ms($tag)]] \
                     [ad_decode [set ds_profile__iterations($tag)] 0 {} \
-                    [lc_numeric [expr [set ds_profile__total_ms($tag)]/[set ds_profile__iterations($tag)]]]]
+                    [lc_numeric [expr [set ds_profile__total_ms($tag)]/[set ds_profile__iterations($tag)]]]] \
+                    $file_links
         }
     }
 

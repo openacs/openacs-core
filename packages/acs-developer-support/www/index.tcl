@@ -76,6 +76,8 @@ and has a lifetime of [ad_parameter DataLifetime "developer-support" 900] sec
     "on (<a href=\"set-database-enabled?enabled_p=0\">turn it off</a>)" \
     "off (<a href=\"set-database-enabled?enabled_p=1\">turn it on</a>)"]
 
+<p>
+<li> Help on <a href=\"doc/editlocal\">edit and code links</a>.
 </ul>
 
 <h3>Available Request Information</h3>
