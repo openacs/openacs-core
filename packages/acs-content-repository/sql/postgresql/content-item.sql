@@ -1303,6 +1303,9 @@ begin
   delete from cr_release_periods
     where item_id = delete__item_id;
 
+  raise NOTICE ''Unsetting live and latest revisions...'';
+  update cr_items set live_revision = null, latest_revision = null where item_id = delete__item_id;
+
   raise NOTICE ''Deleting associated revisions...'';
   -- 3) delete all revisions of this item
   delete from cr_item_publish_audit
