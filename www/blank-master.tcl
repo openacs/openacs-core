@@ -77,7 +77,7 @@ if { [llength [namespace eval :: info procs ds_show_p]] == 1 } {
 
 # dotlrn toolbar : We include that here, so that master template authors don't have to worry about it
 
-if { [apm_package_installed_p dotlrn ] } {
+if { [llength [namespace eval :: info procs dotlrn_toolbar::show_p]] == 1 } {
     multirow append header_links "stylesheet" "text/css" "/resources/dotlrn/dotlrn-toolbar.css" "all"
     set dotlrn_toolbar_p 1
 } else {
