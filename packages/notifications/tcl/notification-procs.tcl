@@ -286,7 +286,9 @@ namespace eval notification {
                 }
 
                 # The notification below should be for the action_id object, not for the default object_id
-                set object_id $action_id
+                if { $subset_arg_p || $already_notified_arg_p } {
+                  set object_id $action_id
+                }
 
                 # Set up the vars
                 set extra_vars [ns_set create]

@@ -9,7 +9,7 @@
 
 select define_function_args ('notification_interval__new','interval_id,name,n_seconds,creation_date,creation_user,creation_ip,context_id');
 
-create function notification_interval__new (integer, varchar, integer, timestamp with time zone, integer, varchar, integer)
+create function notification_interval__new (integer, varchar, integer, timestamptz, integer, varchar, integer)
 returns integer as '
 declare
     p_interval_id                   alias for $1;
@@ -54,7 +54,7 @@ end;
 
 select define_function_args ('notification_delivery_method__new','delivery_method_id,sc_impl_id,short_name,pretty_name,creation_date,creation_user,creation_ip,context_id');
 
-create function notification_delivery_method__new (integer, integer, varchar, varchar, timestamp with time zone, integer, varchar, integer)
+create function notification_delivery_method__new (integer, integer, varchar, varchar, timestamptz, integer, varchar, integer)
 returns integer as '
 declare
     p_delivery_method_id            alias for $1;
@@ -103,7 +103,7 @@ select define_function_args ('notification_type__new','type_id,sc_impl_id,short_
 
 -- implementation
 
-create function notification_type__new (integer,integer,varchar,varchar,varchar,timestamp with time zone,integer,varchar,integer)
+create function notification_type__new (integer,integer,varchar,varchar,varchar,timestamptz,integer,varchar,integer)
 returns integer as '
 DECLARE
         p_type_id                       alias for $1;
@@ -157,11 +157,12 @@ create function notification_request__new (
        integer,                       -- delivery_method_id
        varchar,                       -- format
        bool,                          -- dynamic_p
-       timestamp with time zone,      -- creation_date
+       timestamptz,                   -- creation_date
        integer,                       -- creation_user
        varchar,                       -- creation_ip
        integer                        -- context_id
 ) returns integer as '
+
 DECLARE
         p_request_id                            alias for $1;
         p_object_type                           alias for $2;
@@ -197,11 +198,20 @@ END;
 
 select define_function_args ('notification_request__delete','request_id');
 
-create function notification_request__delete(integer)
+create or replace function notification_request__delete(integer)
 returns integer as '
 declare
     p_request_id                    alias for $1;
+    v_notifications record;
 begin
+    for v_notifications in select notification_id
+                           from notifications n, notification_requests nr
+                           where n.response_id = nr.object_id
+                             and nr.request_id = p_request_id
+    loop
+      perform acs_object__delete(v_notifications.notification_id);
+    end loop;
+
     perform acs_object__delete(p_request_id);
     return 0;
 end;
@@ -228,7 +238,7 @@ end;
 
 select define_function_args ('notification__new','notification_id,type_id,object_id,notif_date,response_id,notif_subject,notif_text,notif_html,creation_date,creation_user,creation_ip,context_id');
 
-create function notification__new(integer,integer,integer,timestamp with time zone,integer,varchar,text,text,timestamp with time zone,integer,varchar,integer)
+create function notification__new(integer,integer,integer,timestamptz,integer,varchar,text,text,timestamptz,integer,varchar,integer)
 returns integer as '
 declare
     p_notification_id               alias for $1;

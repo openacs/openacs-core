@@ -6,18 +6,19 @@ ad_page_contract {
     @cvs-id $Id$
 } {
     object_id:notnull
+    type_id:notnull
 } 
 
 
-# At the time of writing, the only supported
-# notification types were on the object types
-# forum_forums and forum_messages.  get_url
-# will handle both these types.  If there are
-# more type of notifications added, this file
-# has to be changed to handle them.  Perhaps
-# it could be handles in a generic way, using 
-# meta-data about the object_type to auto-generate
-# the url.
+# added type_id parameter to redirect to the correct page for an object
+# we need the implementation name which is not the same as the object_type
 
-ad_returnredirect [forum::notification::get_url $object_id]
+# look in tcl/delivery-procs.tcl, there is a get_impl_key proc that 
+# queries the acs_sc_impls table for the implementation name
+# but the query is delivery_type specific, so we can't use it here
 
+set sc_impl_name [db_string get_notif_type {}]
+
+set url [acs_sc_call NotificationType GetURL [list $object_id] $sc_impl_name]
+
+ad_returnredirect $url

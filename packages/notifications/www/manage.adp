@@ -10,6 +10,7 @@
       <th>#notifications.Action#</th>
     </tr>
 <multiple name="notifications">
+
   <if @notifications.rownum@ odd>
     <tr class="odd" bgcolor="white">
   </if>
