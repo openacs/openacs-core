@@ -213,6 +213,9 @@ ns_param   directoryfile      $directoryfile
 ns_param   pageroot           $pageroot
 ns_param   maxconnections     5
 ns_param   maxdropped         0
+# Production sites with dedicated servers and a lot of memory can
+# increase minthreads and maxthreads to ~ 10 to increase performance.
+# You can also increase the threadtimeout to improve performance
 ns_param   maxthreads         5
 ns_param   minthreads         5
 ns_param   threadtimeout      120
