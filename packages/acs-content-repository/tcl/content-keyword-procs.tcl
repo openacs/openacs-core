@@ -157,10 +157,10 @@ ad_proc -public content::keyword::new {
     {-description ""}
     {-parent_id ""}
     {-keyword_id ""}
-    {-creation_date ""}
+    -creation_date
     {-creation_user ""}
     {-creation_ip ""}
-    {-object_type ""}
+    -object_type
 } {
     @param heading
     @param description
@@ -173,16 +173,21 @@ ad_proc -public content::keyword::new {
 
     @return keyword_id of created keyword
 } {
-    return [package_exec_plsql -var_list [list \
+    set var_list [list \
         [list heading $heading ] \
         [list description $description ] \
         [list parent_id $parent_id ] \
         [list keyword_id $keyword_id ] \
-        [list creation_date $creation_date ] \
         [list creation_user $creation_user ] \
         [list creation_ip $creation_ip ] \
-        [list object_type $object_type ] \
-    ] content_keyword new]
+    ]
+    if {[exists_and_not_null creation_date]} {
+        lappend var_list [list creation_date $creation_date ]
+    }
+    if {[exists_and_not_null object_type]} {
+        lappend var_list [list object_type $object_type ]
+    }
+    return [package_exec_plsql -var_list $var_list content_keyword new]
 }
 
 

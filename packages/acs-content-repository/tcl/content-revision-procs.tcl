@@ -26,6 +26,7 @@ ad_proc -public ::content::revision::new {
     {-creation_user}
     {-creation_ip}
     {-attributes}
+    {-is_live "f"}
 } {
     Adds a new revision of a content item. If content_type is not
     passed in, we determine it from the content item. This is needed
@@ -59,7 +60,10 @@ ad_proc -public ::content::revision::new {
 
     @param creation_ip
 
-    @param attributes
+    @param attributes A list of lists of pairs of additional attributes and
+    their values to pass to the constructor. Each pair is a list of two
+     elements: key => value such as
+    [list [list attribute value] [list attribute value]]
 
     @return 
     
@@ -75,7 +79,7 @@ ad_proc -public ::content::revision::new {
     }
 
     if {![exists_and_not_null content_type]} {
-	set content_type [item::get_content_type $item_id]
+	set content_type [::content::item::content_type -item_id $item_id]
     }
     set attribute_names ""
     set attribute_values ""
@@ -93,14 +97,13 @@ ad_proc -public ::content::revision::new {
 	    }
 	}
 	foreach attribute_pair $attributes {
-	    set attribute_name [lindex $attribute_pair 0]
-	    set attribute_value [lindex $attribute_pair 1]
+            foreach {attribute_name attribute_value} $attribute_pair {break}
 	    if {[lsearch $valid_attributes $attribute_name] > -1}  {
 
+                # first add the column name to the list
+		append attribute_names  ", ${attribute_name}"		
 		# create local variable to use for binding
-		
 		set $attribute_name $attribute_value
-		append attribute_names  ", ${attribute_name}"
 		append attribute_values ", :${attribute_name}"
 	    }
 	}
@@ -118,7 +121,15 @@ ad_proc -public ::content::revision::new {
 	}
         db_dml insert_revision $query_text
     }
-
+ns_log notice "
+DB --------------------------------------------------------------------------------
+DB DAVE debugging /var/lib/aolserver/openacs-5-1/packages/acs-content-repository/tcl/content-revision-procs.tcl
+DB --------------------------------------------------------------------------------
+DB is_live = '${is_live}' \n
+DB revision_id = '${revision_id}'"
+    if {[string is true $is_live]} {
+        content::item::set_live_revision -revision_id $revision_id
+    }
     return $revision_id
 }
 

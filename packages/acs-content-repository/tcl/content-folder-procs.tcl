@@ -21,7 +21,7 @@ ad_proc -public ::content::folder::new {
     {-description ""}
     {-creation_user ""}
     {-creation_ip ""}
-    {-creation_date ""}
+    -creation_date
     {-context_id ""}
     {-package_id ""}
 } {
@@ -59,8 +59,11 @@ ad_proc -public ::content::folder::new {
     # FIXME or should this use package instantiate object which is a
     # little smarter
     set var_list [list]
-    foreach var [list folder_id name label description parent_id context_id package_id creation_date] {
+    foreach var [list folder_id name label description parent_id context_id package_id] {
 	lappend var_list [list $var [set $var]]
+    }
+    if {[exists_and_not_null creation_date]} {
+        lappend var_list [list creation_date $creation_date]
     }
     set folder_id [package_instantiate_object \
 		     -creation_user $creation_user \

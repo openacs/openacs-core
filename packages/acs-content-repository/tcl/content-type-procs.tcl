@@ -20,7 +20,7 @@ ad_proc -public content::type::new {
     -pretty_name:required
     -pretty_plural:required
     {-table_name ""}
-    {-id_column ""}
+    -id_column:required
     {-name_method ""}
 } {
     @param content_type
@@ -76,7 +76,8 @@ ad_proc -public content::type::attribute::new {
     @param pretty_plural
     @param sort_order
     @param default_value
-    @param column_spec
+    @param column_spec Specification for column to pass to the
+ database. Not optional if the column does not already exist in the table.
 
     @return attribute_id for created attribute
 } {
