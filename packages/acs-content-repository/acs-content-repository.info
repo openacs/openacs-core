@@ -6,22 +6,17 @@
     <pretty-plural>Content Repository Services</pretty-plural>
     <initial-install-p>t</initial-install-p>
     <singleton-p>t</singleton-p>
-
-    <version name="5.0d2" url="http://openacs.org/repository/download/apm/acs-content-repository-5.0d2.apm">
-    <database-support>
-        <database>oracle</database>
-        <database>postgresql</database>
-    </database-support>
-        <owner>Karl Goldstein</owner>
-        <owner>Dan Wickstrom</owner>
+    
+    <version name="5.0.0a5" url="http://openacs.org/repository/download/apm/acs-content-repository-5.0.0a5.apm">
+        <owner url="mailto:dcwickstrom@earthlink.net">Dan Wickstrom</owner>
         <summary>A canonical repository for all OpenACS content.</summary>
-        <release-date>2002-10-27</release-date>
+        <release-date>2003-11-07</release-date>
         <vendor url="http://openacs.org/">OpenACS</vendor>
 
-        <provides url="acs-content-repository" version="5.0d2"/>
-        <requires url="acs-kernel" version="4.6.2"/>
-        <requires url="acs-service-contract" version="4.2"/>
-        <requires url="search" version="4.2"/>
+        <provides url="acs-content-repository" version="5.0.0a5"/>
+        <requires url="acs-kernel" version="5.0.0a5"/>
+        <requires url="acs-service-contract" version="5.0.0a5"/>
+        <requires url="search" version="5.0.0a5"/>
 
         <callbacks>
         </callbacks>

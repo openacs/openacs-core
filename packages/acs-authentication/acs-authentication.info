@@ -7,19 +7,20 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>t</singleton-p>
     
-    <version name="5.0a3" url="http://openacs.org/repository/download/apm/acs-authentication-5.0a3.apm">
+    <version name="5.0.0a5" url="http://openacs.org/repository/download/apm/acs-authentication-5.0.0a5.apm">
         <owner url="mailto:lars@collaboraid.biz">Lars Pind</owner>
         <summary>Authentication and related functionality.</summary>
+        <release-date>2003-11-07</release-date>
         <vendor url="http://www.collaboraid.biz">Collaboraid</vendor>
         <description format="text/html">Implements authentication-related security functions for OpenACS, including authentication, password maangement, account management, session management, etc.</description>
 
-        <provides url="acs-authentication" version="5.0a3"/>
-        <requires url="acs-kernel" version="5.0d10"/>
-        <requires url="acs-service-contract" version="4.7d2"/>
+        <provides url="acs-authentication" version="5.0.0a5"/>
+        <requires url="acs-kernel" version="5.0.0a5"/>
+        <requires url="acs-service-contract" version="5.0.0a5"/>
 
         <callbacks>
-            <callback type="after-install"  proc="auth::package_install"/>
             <callback type="before-uninstall"  proc="auth::package_uninstall"/>
+            <callback type="after-install"  proc="auth::package_install"/>
             <callback type="after-upgrade"  proc="auth::after_upgrade"/>
         </callbacks>
         <parameters>

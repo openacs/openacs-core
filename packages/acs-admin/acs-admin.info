@@ -6,21 +6,19 @@
     <pretty-plural>Site-Wide Administration Services</pretty-plural>
     <initial-install-p>t</initial-install-p>
     <singleton-p>t</singleton-p>
-
-    <version name="4.7.2d" url="http://openacs.org/repository/download/apm/acs-admin-4.7.2d.apm">
-    <database-support>
-        <database>oracle</database>
-        <database>postgresql</database>
-    </database-support>
+    
+    <version name="5.0.0a5" url="http://openacs.org/repository/download/apm/acs-admin-5.0.0a5.apm">
         <owner url="mailto:dhogaza@pacifier.com">Don Baccus</owner>
         <summary>Provides an interface for administering the OpenACS Community System Installation.</summary>
-        <release-date>2002-05-15</release-date>
+        <release-date>2003-11-07</release-date>
         <vendor url="http://www.openacs.org/">OpenACS</vendor>
         <description format="text/html">A UI for administering the OpenACS system.</description>
 
-        <provides url="acs-admin" version="4.7.2d"/>
-        <requires url="acs-kernel" version="4.6.2"/>
+        <provides url="acs-admin" version="5.0.0a5"/>
+        <requires url="acs-kernel" version="5.0.0a5"/>
 
+        <callbacks>
+        </callbacks>
         <parameters>
         <!-- No version parameters -->
         </parameters>

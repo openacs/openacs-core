@@ -6,47 +6,18 @@
     <pretty-plural>Automated Testing</pretty-plural>
     <initial-install-p>t</initial-install-p>
     <singleton-p>f</singleton-p>
-
-    <version name="4.1" url="http://openacs.org/repository/download/apm/acs-automated-testing-4.1.apm">
-    <database-support>
-        <database>oracle</database>
-        <database>postgresql</database>
-    </database-support>
-        <owner url="mailto:peter.harper@open-msg.com">Peter Harper</owner>
+    
+    <version name="5.0.0a5" url="http://openacs.org/repository/download/apm/acs-automated-testing-5.0.0a5.apm">
+        <owner url="http://www.openacs.org">OpenACS</owner>
         <summary>Provides an interface for administering automated tests within the OpenACS.</summary>
-        <release-date>2002-11-15</release-date>
+        <release-date>2003-11-07</release-date>
         <vendor url="http://www.openacs.org">OpenACS</vendor>
         <description format="text/html">A UI for viewing and running automated tests within the OpenACS system.</description>
 
-        <!-- No dependency information -->
+        <provides url="acs-automated-testing" version="5.0.0a5"/>
 
-        <files>
-            <file type="package_spec" path="acs-automated-testing.info"/>
-            <file type="data_model_create" db_type="oracle" path="sql/oracle/acs-automated-testing-create.sql"/>
-            <file type="data_model_drop" db_type="oracle" path="sql/oracle/acs-automated-testing-drop.sql"/>
-            <file type="data_model_create" db_type="postgresql" path="sql/postgresql/acs-automated-testing-create.sql"/>
-            <file type="data_model_drop" db_type="postgresql" path="sql/postgresql/acs-automated-testing-drop.sql"/>
-            <file type="query_file" db_type="oracle" path="tcl/aa-test-procs-oracle.xql"/>
-            <file type="query_file" db_type="postgresql" path="tcl/aa-test-procs-postgresql.xql"/>
-            <file type="tcl_procs" path="tcl/aa-test-procs.tcl"/>
-            <file type="tcl_procs" path="tcl/example-procs.tcl"/>
-            <file type="tcl_procs" path="tcl/filter-procs.tcl"/>
-            <file type="tcl_procs" path="tcl/test/example-test-procs.tcl"/>
-            <file type="tcl_util" path="www/admin/clear.tcl"/>
-            <file type="content_page" path="www/admin/component.adp"/>
-            <file type="content_page" path="www/admin/component.tcl"/>
-            <file path="www/admin/index.adp"/>
-            <file type="query_file" db_type="oracle" path="www/admin/index-oracle.xql"/>
-            <file type="query_file" db_type="postgresql" path="www/admin/index-postgresql.xql"/>
-            <file type="tcl_util" path="www/admin/index.tcl"/>
-            <file path="www/admin/master.adp"/>
-            <file type="tcl_util" path="www/admin/rerun.tcl"/>
-            <file path="www/admin/testcase.adp"/>
-            <file type="query_file" db_type="oracle" path="www/admin/testcase-oracle.xql"/>
-            <file type="query_file" db_type="postgresql" path="www/admin/testcase-postgresql.xql"/>
-            <file type="tcl_util" path="www/admin/testcase.tcl"/>
-            <file path="www/index.html"/>
-        </files>
+        <callbacks>
+        </callbacks>
         <parameters>
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="enabled_p"  default="0" description="Source scripts flag"/>
         </parameters>

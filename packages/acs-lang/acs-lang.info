@@ -7,18 +7,17 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>t</singleton-p>
     
-    <version name="5.0d3" url="http://www.openacs.org/acs-repository/download/apm/acs-lang-5.0d3.apm">
+    <version name="5.0.0a5" url="http://www.openacs.org/acs-repository/download/apm/acs-lang-5.0.0a5.apm">
         <owner url="mailto:peter@collaboraid.biz">Peter Marklund</owner>
         <summary>OpenACS Internationalization Utilities</summary>
-        <release-date>2003-02-16</release-date>
+        <release-date>2003-11-07</release-date>
         <vendor url="http://www.collaboraid.biz">Collaboraid</vendor>
         <description format="text/plain">OpenACS Internationalization Utilities. Routines for manipulating Locales,
 request processor hooks, templating, message catalog, and
-locale-specific formatting functions.
-</description>
+locale-specific formatting functions.</description>
 
-        <provides url="acs-lang" version="5.0d3"/>
-        <requires url="acs-kernel" version="5.0d2"/>
+        <provides url="acs-lang" version="5.0.0a5"/>
+        <requires url="acs-kernel" version="5.0.0a5"/>
         <requires url="ref-timezones" version="4.0"/>
 
         <callbacks>
