@@ -177,10 +177,14 @@ ad_proc ::twt::write_response_to_file { filename } {
 
 ad_proc ::twt::crawl_links { 
     {-max_requests 2000}
+    {-previous_url ""}
     start_url 
 } {
     Crawl links recursively under the given
-    url. Will only visit links Does not visit links with external URLs (outside the server).
+    url. For example, if start_url is "/simulation" then a link
+    with the URL "/simulation/object-display?object_id=125" would be visited
+    whereas a link with a URL not under "/simulation", such as "/", would not.
+    Never visit links with external URLs (outside the server).
 
     @param max_requests The maximum number of links that the proc will crawl
     @param start_url    The url to start crawling from
@@ -188,8 +192,10 @@ ad_proc ::twt::crawl_links {
     @author Peter Marklund
 } {
     # Return if given start URL is external
-    set server_url [::twt::config::server_url]
+    set server_url [::twt::config::server_url]    
+    ::twt::log "pm debug about to generate absolute_url start_url=$start_url"
     set start_url_absolute [tclwebtest::absolute_link $start_url]
+    ::twt::log "pm debug after generating absolute_url start_url_absolute=$start_url_absolute"
     if { [string first $server_url $start_url_absolute] == -1 } {
         #::twt::log "pm debug returning because link $start_url_absolute is external"
         return
@@ -212,8 +218,14 @@ ad_proc ::twt::crawl_links {
     lappend __url_history $start_url_absolute
 
     # Request the page
+    ::twt::log "pm debug about to invoke \"do_request $start_url_absolute\" start_url=$start_url previous_url=$previous_url"
     if { [catch {::twt::do_request $start_url_absolute} errmsg] } {
-        ::twt::log "[::twt::config::alert_keyword] - requesting url $start_url_absolute failed. Response status is [response status] and error is $errmsg"
+        if { ![string equal "$previous_url" ""] } {
+            set previous_page_message " (link found on page $previous_url)"
+        } else {
+            set previous_page_message ""
+        }
+        ::twt::log "[::twt::config::alert_keyword] - requesting url $start_url_absolute failed${previous_page_message}. Response status is [response status] and error is $errmsg"
         return
     }
 
@@ -240,8 +252,8 @@ ad_proc ::twt::crawl_links {
         }
         set under_start_url_p [expr [string first $start_url_absolute $absolute_url] != -1]
         if { $new_url_p && !$anchor_link_p && $under_start_url_p } {
-            #::twt::log "pm debug appending to url history: $url and invoking crawl_links again" 
-            crawl_links $url
+            ::twt::log "pm debug crawl_links -previous_url $start_url $url"
+            crawl_links -previous_url $start_url $url
         } else {
             #::twt::log "pm debug skipping url $url $new_url_p $anchor_link_p $under_start_url_p"
         }
