@@ -237,7 +237,7 @@ begin
   insert into acs_objects
     (object_id, object_type)
   values
-    (0, ''person'');
+    (0, ''user'');
 
   insert into parties
     (party_id)
@@ -248,6 +248,11 @@ begin
     (person_id, first_names, last_name)
   values
     (0, ''Unregistered'', ''Visitor'');
+
+  insert into users
+    (user_id, username)
+  values
+    (0, ''guest'');
 
   insert into acs_magic_objects
     (name, object_id)
@@ -263,7 +268,7 @@ begin
     null,
     null,
     ''The Public'',
-    null,
+    ''closed'',
     null
   );
 
@@ -310,7 +315,7 @@ begin
     null,
     null,
     ''Registered Users'',
-    null,
+    ''closed'',
     null
   );
 

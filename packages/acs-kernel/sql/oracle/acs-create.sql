@@ -237,11 +237,12 @@ begin
 
   -- Make the "Unregistered Visitor" be object 0, which corresponds
   -- with the user_id assigned throughout the toolkit Tcl code
+  -- LARS: Make object_id 0 be a user, not a person
 
   insert into acs_objects
     (object_id, object_type)
   values
-    (0, 'person');
+    (0, 'user');
 
   insert into parties
     (party_id)
@@ -253,6 +254,11 @@ begin
   values
     (0, 'Unregistered', 'Visitor');
 
+  insert into users
+    (user_id, username)
+  values
+    (0, 'guest');
+
   insert into acs_magic_objects
     (name, object_id)
   values
@@ -261,7 +267,8 @@ begin
   -- Create the public group
   foo := acs_group.new (
     group_id => -1,
-    group_name => 'The Public'
+    group_name => 'The Public',
+    join_policy => 'closed'
   );
 
   insert into acs_magic_objects
@@ -282,7 +289,8 @@ begin
 
   foo := acs_group.new (
     group_id => -2,
-    group_name => 'Registered Users'
+    group_name => 'Registered Users',
+    join_policy => 'closed'
   );
 
  insert into acs_magic_objects

@@ -9,6 +9,14 @@
         </querytext>
     </fullquery>
 
+    <fullquery name="site_node::rename.rename_node">
+        <querytext>
+            update site_nodes
+            set    name = :name
+            where  node_id = :node_id
+        </querytext>
+    </fullquery>
+
     <fullquery name="site_node::unmount.unmount_object">
         <querytext>
             update site_nodes

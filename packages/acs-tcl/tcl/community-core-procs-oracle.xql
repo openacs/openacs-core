@@ -9,18 +9,17 @@
 	begin
 	    :1 := acs.add_user(
                 user_id => :user_id,
-                object_type => 'user',
+		email => :email,
+		url => :url,
+		username => :username,
+		first_names => :first_names,
+		last_name => :last_name,
+		password => :hashed_password,
+	        salt => :salt,
                 creation_user => :creation_user,
-                creation_ip => :peeraddr,
-                username => :username,
-                email => :email,
-                url => :url,
-                first_names => :first_names,
-                last_name => :last_name,
-                password => :password,
-                salt => :salt,
-                email_verified_p => :email_verified_p,
-                member_state => :member_state
+	        creation_ip => :peeraddr,
+	        email_verified_p => :email_verified_p,
+	        member_state => :member_state
             );
 	end;
 	
@@ -45,5 +44,16 @@
       </querytext>
 </fullquery>
 
+<fullquery name="user_search">
+  <querytext>
+      select distinct u.first_names || ' ' || u.last_name || ' (' || u.email || ')' as name, u.user_id
+      from   cc_users u
+      where  upper(nvl(u.first_names || ' ', '')  ||
+             nvl(u.last_name || ' ', '') ||
+             u.email || ' ' ||
+             nvl(u.screen_name, '')) like upper('%'||:value||'%')
+      order  by name
+  </querytext>
+</fullquery>
  
 </queryset>

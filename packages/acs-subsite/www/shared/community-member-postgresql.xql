@@ -8,7 +8,7 @@ select at.pretty_name, at.pretty_plural, a.creation_date, acs_object__name(a.obj
 from acs_objects a, acs_object_types at
 where a.object_type = at.object_type
 and a.creation_user = :user_id
-order by object_name, creation_date
+order by at.pretty_name, creation_date desc
   </querytext>
 </fullquery>
 

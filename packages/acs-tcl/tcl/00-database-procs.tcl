@@ -4,7 +4,7 @@ ad_library {
 
     @creation-date 15 Apr 2000
     @author Jon Salz (jsalz@arsdigita.com)
-    @cvs-id $Id$
+    @cvs-id 00-database-procs.tcl,v 1.19.2.5 2003/05/23 13:11:29 lars Exp
 }
 
 # As originally released in (at least) ACS 4.2 through OpenACS 4.6,
@@ -2032,7 +2032,7 @@ ad_proc db_transaction {{ -dbn ""} transaction_code args } {
                 error $on_errmsg $errorInfo $errorCode
             } else {
                 # Good, no error thrown by the on_error block.
-                if [db_abort_transaction_p] {
+                if { [db_abort_transaction_p] } {
                     # This means we should abort the transaction.
                     if { $level == 1 } {
                         set db_state(db_abort_p,$dbh) 0
@@ -2067,7 +2067,7 @@ ad_proc db_transaction {{ -dbn ""} transaction_code args } {
         }
     } else {
         # There was no error from the transaction code.   
-        if [db_abort_transaction_p] {
+        if { [db_abort_transaction_p] } {
             # The user requested the transaction be aborted.
             if { $level == 1 } {
                 set db_state(db_abort_p,$dbh) 0

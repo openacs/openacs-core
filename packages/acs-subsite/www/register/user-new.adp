@@ -1,10 +1,11 @@
 <master>
-<property name="title">#acs-subsite.Register#</property>
-<property name="context">#acs-subsite.Register#</property>
+  <property name="title">#acs-subsite.Register#</property>
+  <property name="context">#acs-subsite.Register#</property>
+  <property name="focus">usernew.password_confirmation</property>
 
 #acs-subsite.lt_Register_as_a_user_of# <a href="index">@system_name@</a>
 
-<form method=post action="user-new-2">
+<form method=post action="user-new-2" name="usernew">
 @export_vars;noquote@
 
 <if @no_require_password_p@ eq 0>

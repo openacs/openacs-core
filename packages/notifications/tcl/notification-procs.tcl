@@ -83,6 +83,7 @@ namespace eval notification {
         {-force:boolean}
         {-default_request_data {}}
         {-return_notified:boolean}
+        {-notif_user {}}
     } {
         Create a new notification if any notification requests exist for the object and type.
         
@@ -264,6 +265,10 @@ namespace eval notification {
                 }
             }
             
+            if { [empty_string_p $notif_user] && [ad_conn isconnected] } {
+                set notif_user [ad_conn user_id]
+            }
+            
             # Actually carry out inserting the notification
             db_transaction {
                 if { $subset_arg_p || $already_notified_arg_p } {
@@ -290,9 +295,14 @@ namespace eval notification {
                   set object_id $action_id
                 }
 
+                # Truncate notif_subject to the max len of 100
+                set notif_subject [string_truncate -len 100 $notif_subject]
+
                 # Set up the vars
                 set extra_vars [ns_set create]
-                oacs_util::vars_to_ns_set -ns_set $extra_vars -var_list {notification_id type_id object_id response_id notif_subject notif_text notif_html}
+                oacs_util::vars_to_ns_set \
+                    -ns_set $extra_vars \
+                    -var_list {notification_id type_id object_id response_id notif_subject notif_text notif_html notif_user}
                 
                 # Create the notification
                 package_instantiate_object -extra_vars $extra_vars notification

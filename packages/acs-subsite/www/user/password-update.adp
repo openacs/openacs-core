@@ -1,11 +1,21 @@
 <master>
-<property name="title">#acs-subsite.Update_Password#</property>
-<property name="context_bar">#acs-subsite.lt_for_first_names_last_#</property>
-<property name="context">#acs-subsite.Update_Password#</property>
+  <property name="title">#acs-subsite.Update_Password#</property>
+  <property name="context_bar">#acs-subsite.lt_for_first_names_last_#</property>
+  <property name="context">#acs-subsite.Update_Password#</property>
+  <property name="focus">@focus@</property>
 
-<form method="post" action="password-update-2">
-  <input type="hidden" name="user_id" value="@user_id@" />
-  <input type="hidden" name="return_url" value="@return_url@" />
+<if @expired_p@ true>
+  <p>
+    Welcome to @system_name@. 
+  </p>
+  <p>
+    Your login was successful, but your password has expired, and must
+    be updated now, before you can proceed to use @system_name@.
+  </p>
+</if>
+
+<form method="post" action="password-update-2" name="pwd">
+  @export_vars@
 
 <table>
 

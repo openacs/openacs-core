@@ -11,7 +11,7 @@ ad_page_contract {
     { last_name:notnull }
     { question "" }
     { answer "" }
-    { url }
+    { url "" }
     { user_id:integer,notnull }
     { return_url [ad_pvt_home] }
     { persistent_cookie_p 0 }
@@ -37,11 +37,19 @@ if {[info exists last_name] && [string first "<" $last_name] != -1} {
     append exception_text "<li> [_ acs-subsite.lt_You_cant_have_a_lt_in_1]"
 }
 
-if { [info exists url] && [string compare $url "http://"] == 0 } {
-    # the user left the default hint for the url
+if { [info exists url] && \
+     ( [empty_string_p $url] || \
+       [string compare $url "http://"] == 0 ) } {
+
+    #
+    # The user left the default hint for the url, or it's empty.
+    #
     set url ""
+
 } elseif { ![util_url_valid_p $url] } {
+
     # there is a URL but it doesn't match our REGEXP
+
     incr exception_count
     set valid_url_example "http://photo.net/philg/"
     append exception_text "<li>[_ acs-subsite.lt_Your_URL_doesnt_have_]\n"

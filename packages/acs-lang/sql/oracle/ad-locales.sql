@@ -35,10 +35,9 @@ create table ad_locales (
   mime_charset		varchar2(30),
   -- is this the default locale for its language
   default_p             char(1) default 'f'
-                        constraint ad_locale_defp_tf check(default_p in ('t','f'))
+                        constraint ad_locale_defp_tf check (default_p in ('t','f')),
   enabled_p             char(1) default 't'
-                        constraint ad_locale_enp_tf check(enabled_p in ('t','f'))
-
+                        constraint ad_locale_enp_tf check (enabled_p in ('t','f'))
 );
 
 comment on table ad_locales is '

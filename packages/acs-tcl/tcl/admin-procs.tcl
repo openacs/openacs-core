@@ -4,7 +4,7 @@ ad_library {
 
     @author Multiple
     @creation-date 11/18/98
-    @cvs-id $Id$
+    @cvs-id admin-procs.tcl,v 1.9 2002/09/18 18:55:29 jeffd Exp
 
 }
 
@@ -432,7 +432,7 @@ proc_doc ad_user_class_query { set_id  } {
     if { [llength $join_clauses] == 0 } {
 	set final_query "select [join $select_list ",\n    "]
 	from [join $tables ", "]"
-	if ![empty_string_p $complete_where] {
+	if { ![empty_string_p $complete_where] } {
 	    append final_query "\nwhere $complete_where"
 	}
     } else {
@@ -440,7 +440,7 @@ proc_doc ad_user_class_query { set_id  } {
 	set final_query "select [join $select_list ",\n    "]
 	from [join $tables ", "]
 	where [join $join_clauses "\nand "]"
-	if ![empty_string_p $complete_where] {
+	if { ![empty_string_p $complete_where] } {
 	    append final_query "\n and ($complete_where)"
 	}
     }

@@ -8,7 +8,7 @@ ad_library {
     @author Bryan Quinn (bquinn@arsdigita.com)
 
     @creation-date 16 June 2000
-    @cvs-id $Id$
+    @cvs-id tcl-documentation-procs.tcl,v 1.6 2002/09/23 11:25:02 jeffd Exp
 }
 
 ####################
@@ -889,7 +889,15 @@ ad_proc -public ad_page_contract {
 	    }
 	}
 	
-	# Remember that we've found the spec so we don't complain that argument is missing
+	if { [info exists apc_internal_filter($formal_name:multiple)] && [empty_string_p $actual_value] } {
+            # LARS:
+            # If you lappend an emptry_string, it'll actually add the empty string to the list as an element
+            # which is not what we want
+            continue
+        }
+
+
+	# Remember that we've found the spec so we don't complain that this argument is missing
 	ad_page_contract_set_validation_passed $formal_name
 
 	#
@@ -937,7 +945,7 @@ ad_proc -public ad_page_contract {
 	upvar 1 $formal_name var
 	
 	if { [info exists apc_internal_filter($formal_name:multiple)] } {
-	    lappend $variable_to_set $actual_value
+            lappend $variable_to_set $actual_value
 	} else {
 	    if { [info exists $variable_to_set] } {
 		ad_complain -key $formal_name:-doublevalue "You've supplied two values for '$formal_name'"
@@ -1566,7 +1574,7 @@ ad_page_contract_filter tmpfile { name value } {
     
     # check to make sure path is to an authorized directory
     set tmpdir_list [ad_parameter_all_values_as_list TmpDir]
-    if [empty_string_p $tmpdir_list] {
+    if { [empty_string_p $tmpdir_list] } {
 	set tmpdir_list [list "/var/tmp" "/tmp"]
     }
     
@@ -1837,7 +1845,7 @@ ad_page_contract_filter phone { name value } {
     @creation-date August 2000
 } {
     if { ![empty_string_p [string trim $value]] } {
-	if ![regexp {^\(?([1-9][0-9]{2})\)?(-|\.|\ )?([0-9]{3})(-|\.|\ )?([0-9]{4})} $value] {
+	if { ![regexp {^\(?([1-9][0-9]{2})\)?(-|\.|\ )?([0-9]{3})(-|\.|\ )?([0-9]{4})} $value] } {
 	    ad_complain "$value does not appear to be a valid U.S. phone
 	    number."
 	    return 0

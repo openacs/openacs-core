@@ -894,6 +894,12 @@ function get_number (
   revision_id   in cr_revisions.revision_id%TYPE
 ) return number;
 
+function revision_name (
+  --/** Return a pretty string 'revision x of y'
+  --*/
+  revision_id   in cr_revisions.revision_id%TYPE
+) return varchar2;
+
 procedure index_attributes(
   --/** Generates an XML document for insertion into cr_revision_attributes,
   --    which is indexed by Intermedia for searching attributes.

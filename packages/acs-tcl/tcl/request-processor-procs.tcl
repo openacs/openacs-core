@@ -650,6 +650,9 @@ ad_proc -private rp_filter { why } {
             admin/* {
               permission::require_permission -object_id [ad_conn object_id] -privilege admin
             }
+            sitewide-admin/* {
+                permission::require_permission -object_id [acs_lookup_magic_object security_context_root] -privilege admin
+            }
             default {
               permission::require_permission -object_id [ad_conn object_id] -privilege read
             }
