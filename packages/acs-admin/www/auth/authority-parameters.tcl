@@ -42,7 +42,7 @@ if { $has_parameters_p } {
 
     set form_widgets [list]
     foreach parameter_name [array names parameters] {
-        lappend form_widgets [list ${parameter_name}:text,optional [list label $parameter_name] [list help_text $parameters($parameter_name)] {html {size 50}}]
+        lappend form_widgets [list ${parameter_name}:text,optional [list label $parameter_name] [list help_text $parameters($parameter_name)] {html {size 80}}]
     }
 
     set hidden_vars {authority_id impl_id column_name}
