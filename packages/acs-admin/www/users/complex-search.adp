@@ -1,10 +1,9 @@
-<master>
-<property name=title>Complex User Search</property>
-
-<h2>Complex User Search</h2>
+<master src="master">
+<property name="title">Complex User Search</property>
+<property name="context_bar">@context_bar@</property>
 
 <if @criteria:rowcount@ eq 0>
-  all users
+  all matching users
 </if><else>
   <if @criteria:rowcount@ eq 1>
     for users matching the criterion:
@@ -24,12 +23,10 @@
 <ul>
 
 <multiple name="user_search">
-
   <li><a href="@target@?user_id=@user_search.user_id@&@user_search.export_vars@&@passthrough_parameters@">@user_search.first_names@ @user_search.last_name@ (@user_search.email@)</a>
   <if @user_search.member_state@ ne "approved">
-     <font color=red>@user_search.member_state@</font> @user_search.user_finite_state_links@
+     <font color="red">@user_search.member_state@</font> @user_search.user_finite_state_links@
   </if>
-
 </multiple>
 
 <if @user_search:rowcount@ eq 0>

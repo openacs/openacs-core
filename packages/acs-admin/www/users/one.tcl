@@ -32,7 +32,7 @@ where user_id = :user_id"] {
 
 set return_url "/acs-admin/users/one?user_id=$user_id"
 
-set context_bar [ad_admin_context_bar [list "index.tcl" "Users"] "One User"]
+set context_bar [ad_admin_context_bar [list "index" "Users"] "One User"]
 set export_edit_vars [export_url_vars user_id return_url]
 set registration_date [util_AnsiDatetoPrettyDate $creation_date] 
 

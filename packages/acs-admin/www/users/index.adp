@@ -1,24 +1,21 @@
-<master>
+<master src="master">
 <property name=title>Users</property>
-
-<h2>Users</h2>
-
-@context_bar@
-
-<hr>
+<property name="context_bar">@context_bar@</property>
 
 <ul>
-  <li>total users: <a href="complex-search?target=one">@n_users@</a> (@n_deleted_users@ deleted).  Last registration on @last_registration@ (<a href="registration-history">history</a>).
+  <li>total users: <a href="complex-search?target=one">@n_users@</a> (@n_deleted_users@ deleted).  Last registration on @last_registration@ (<a href="registration-history">history</a>).</li>
+
 
   <p>
-
   <FORM METHOD=get ACTION=search>
-    <input type=hidden name=target value="one">
-    <input type=hidden name='only_authorized_p' value="0">
-    <li>Quick search: <input type=text size=15 name='keyword'> <input type='submit' value="Find User">
+    <input type="hidden" name="target" value="one" />
+    <input type="hidden" name="only_authorized_p" value="0" />
+    <li>Quick search: <input type="text" size="15" name="keyword" />
+                  <input type="submit" value="Find User" />
   </FORM>
-  <li><a href="complex-search?target=one&only_authorized_p=0&only_needs_approval_p=1">Find all users needing approval</a>
-  <li><a href="user-add">Add a user</a>
+        </p>
+  <li><a href="complex-search?target=one&only_authorized_p=0&only_needs_approval_p=1">Find all users needing approval</a></li>
+  <li><a href="user-add">Add a user</a></li>
 
   <form method='get' action='complex-search'>
     <input type='hidden' name='target' value="one">

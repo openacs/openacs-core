@@ -32,11 +32,14 @@ ad_page_contract {
     only_authorized_p:onevalue
     export_authorize:onevalue
     passthrough_parameters:onevalue
+    context_bar:onevalue
 }
 
 # Check input.
 set exception_count 0
 set exception_text ""
+
+set context_bar [ad_admin_context_bar [list "index" "Users"] "Search"]
 
 if [info exists keyword] {
     # this is an administrator 
@@ -148,11 +151,12 @@ set user_search:rowcount $rowcount
 # We are limiting the search to one group - display that group's name
 if { [exists_and_not_null limit_to_users_in_group_id] && ![regexp {[^0-9]} $limit_to_users_in_group_id] } {
     set group_name [db_string user_group_name_from_id "select group_name from user_groups where group_id = :limit_to_users_in_group_id"]
+    set title "User search in $group_name"
 } else {
     set group_name ""
+    set title "User search"
 }
 
 set export_authorize [export_ns_set_vars {url} {only_authorized_p}]
-
 
 ad_return_template

@@ -54,11 +54,15 @@ ad_page_contract {
     export_authorize:onevalue
     passthrough_parameters:onevalue
     combine_method:onevalue
+    context_bar:onevalue
 }
 
 # Check input.
 set exception_count 0
 set exception_text ""
+
+
+set context_bar [ad_admin_context_bar [list "index" "Users"] "Complex search"]
 
 if { ![info exists target] || [empty_string_p $target] } {
     incr exception_count
@@ -128,6 +132,8 @@ if { $only_authorized_p } {
     lappend where_clause {member_state = 'approved'}
 } elseif { $only_needs_approval_p } {
     lappend where_clause {member_state = 'needs approval'}
+    incr rowcount
+    set criteria:[set rowcount](data) "Needs approval"
 }
 
 if { $registration_before_days >= 0 } {
