@@ -768,7 +768,7 @@ declare
   sep               varchar;
 begin
 
- if tgtype & 2 then
+ if (tgtype & 2) > 0 then
     description := ''BEFORE '';
  else 
     description := ''AFTER '';
@@ -776,22 +776,22 @@ begin
 
  sep := '''';
 
- if tgtype & 4 then
+ if (tgtype & 4) > 0 then
     description := description || ''INSERT '';
     sep := ''OR '';
  end if;
 
- if tgtype & 8 then
+ if (tgtype & 8) > 0 then
     description := description || sep || ''DELETE '';
     sep := ''OR '';
  end if;
 
- if tgtype & 16 then
+ if (tgtype & 16) > 0 then
     description := description || sep || ''UPDATE '';
     sep := ''OR '';
  end if;
 
- if tgtype & 1 then
+ if (tgtype & 1) > 0 then
     description := description || ''FOR EACH ROW'';
  else
     description := description || ''STATEMENT'';
