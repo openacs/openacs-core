@@ -1234,8 +1234,11 @@ ad_proc -private auth::check_local_account_status {
     # Initialize to 'closed', because most cases below mean the account is closed
     set result(account_status) "closed"
 
-    # system_name is used in some of the I18N messages
-    set system_name [ad_system_name]    
+    # system_name and email is used in some of the I18N messages
+    set system_name [ad_system_name]
+    acs_user::get -user_id $user_id -array user
+    set authority_id $user(authority_id)
+    set email $user(email)    
 
     switch $member_state {
         approved {
