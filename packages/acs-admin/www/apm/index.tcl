@@ -12,7 +12,9 @@ ad_page_contract {
     { reload_links_p 0 }
 }
 
-doc_body_append [apm_header]
+set page_title "Package Manager"
+set context [list $page_title]
+
 set user_id [ad_get_user_id]
 
 # Determine the user's email address.  If its not registered, put in a default.  
@@ -49,7 +51,7 @@ set dimensional_list {
 
 set missing_text "<strong>No packages match criteria.</strong>"
 
-doc_body_append "<center><table><tr><td>[ad_dimensional $dimensional_list]</td></tr></table></center>"
+append body "<center><table><tr><td>[ad_dimensional $dimensional_list]</td></tr></table></center>"
 
 set use_watches_p [expr ! [ad_parameter -package_id [ad_acs_kernel_id] PerformanceModeP request-processor 1]]
 
@@ -114,7 +116,7 @@ if { $reload_links_p } {
     set reload_filter "<a href=\"$page_url&reload_links_p=1\">display reload links</a>"
 }
 
-doc_body_append "<h3>Packages</h3>
+append body "<h3>Packages</h3>
 
 <table width=\"100%\">
 <tr><td align=\"right\">$reload_filter</td</tr>
@@ -134,22 +136,22 @@ $table
 if { $use_watches_p } {
     set watch_files [nsv_array names apm_reload_watch]
     if { [llength $watch_files] > 0 } {
-        doc_body_append "<h3>Watches</h3><ul>
+        append body "<h3>Watches</h3><ul>
 <li><a href=\"file-watch-cancel\">Stop watching all files</a></li><br />"
         foreach file [lsort $watch_files] {
             if { [string compare $file "."] } {
-                doc_body_append "<li>$file (<a href=\"file-watch-cancel?watch_file=[ns_urlencode $file]\">stop watching this file</a>)\n"
+                append body "<li>$file (<a href=\"file-watch-cancel?watch_file=[ns_urlencode $file]\">stop watching this file</a>)\n"
             }
         }
-        doc_body_append "</ul>\n"
+        append body "</ul>\n"
     }
 } else {
     set kernel_id [ad_acs_kernel_id]
-    doc_body_append "<h3>Watches</h3>
+    append body "<h3>Watches</h3>
 Watching of files is not enabled in performance mode (see the PerformanceModeP parameter on the <a href=\"/admin/site-map/parameter-set?package_id=$kernel_id&package_key=acs-kernel&section_name=all\">ACS Kernel parameter page</a>)"
 }
 
-doc_body_append "
+append body "
 <h3>Help</h3>
 
 <blockquote>
@@ -164,6 +166,4 @@ effect). To watch a file, click its package key above, click <i>Manage file
 information</i> on the next screen, and click <i>watch</i> next to
 the file's name on the following screen.
 </blockquote>
-
-[ad_footer]
 "
