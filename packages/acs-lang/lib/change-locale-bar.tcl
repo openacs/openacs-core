@@ -8,7 +8,7 @@ set base_lang_url [site_node::get_package_url -package_key acs-lang]
 
 if { ![exists_and_not_null return_url]} {
     # Use referer header
-    set return_url [ad_conn url]
+    set return_url [ad_return_url]
 }
 
 if { ![exists_and_not_null max_locales]} {
