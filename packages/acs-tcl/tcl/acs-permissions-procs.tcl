@@ -10,6 +10,16 @@ ad_library {
 
 namespace eval permission {
 
+    # define cache_p to be 0 here.  Note that it is redefined on init to be 
+    # the value of the PermissionCacheP kernel parameter.
+    # see request-processor-init.tcl
+    ad_proc cache_p {} {
+        returns 0 or 1 depending if permission_p caching is enabled or disabled.
+        by default caching is disabled.
+    } { 
+        return 0
+    }
+        
     ad_proc -public grant {
         {-party_id:required}
         {-object_id:required}
@@ -18,6 +28,7 @@ namespace eval permission {
         grant privilege Y to party X on object Z
     } {
         db_exec_plsql grant_permission {}
+        util_memoize_flush "permission::permission_p_not_cached -party_id $party_id -object_id $object_id -privilege $privilege"
     }
 
     ad_proc -public revoke {
@@ -28,19 +39,49 @@ namespace eval permission {
         revoke privilege Y from party X on object Z
     } {
         db_exec_plsql revoke_permission {}
+        util_memoize_flush "permission::permission_p_not_cached -party_id $party_id -object_id $object_id -privilege $privilege"
     }
 
+    # args to permission_p and permission_p_no_cache must match
     ad_proc -public permission_p {
+        {-no_cache:boolean}
         {-party_id ""}
         {-object_id:required}
         {-privilege:required}
     } {
         does party X have privilege Y on object Z
+        
+        @param nocache force loading from db even if cached (flushes cache as well)
+        @param party_id if null then it is the current user_id
     } {
         if {[empty_string_p $party_id]} {
             set party_id [ad_conn user_id]
         }
+        if { $no_cache_p || ![permission::cache_p] } {
+            util_memoize_flush "permission::permission_p_not_cached -party_id $party_id -object_id $object_id -privilege $privilege"
+            permission::permission_p_not_cached -party_id $party_id -object_id $object_id -privilege $privilege
+        } else { 
+            return [util_memoize "permission::permission_p_not_cached -party_id $party_id -object_id $object_id -privilege $privilege"]
+        }
+    }
 
+
+    # accepts nocache to match permission_p arguments 
+    # since we alias it to permission::permission_p if
+    # caching disabled.
+    ad_proc -private permission_p_not_cached {
+        {-no_cache:boolean}
+        {-party_id ""}
+        {-object_id:required}
+        {-privilege:required}
+    } {
+        does party X have privilege Y on object Z
+
+        @see permission::permission_p
+    } {
+        if {[empty_string_p $party_id]} {
+            set party_id [ad_conn user_id]
+        }
         return [db_0or1row select_permission_p {}]
     }
 
