@@ -583,7 +583,7 @@ declare
   unapprove__rel_id             alias for $1;  
 begin
     update membership_rels
-    set member_state = ''need approval''
+    set member_state = ''needs approval''
     where rel_id = unapprove__rel_id;
 
     return 0; 
