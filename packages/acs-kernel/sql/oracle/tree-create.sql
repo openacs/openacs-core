@@ -130,7 +130,7 @@ as
         then
             return '000000';
         else
-            return (lpad(int_to_hex(hex_to_int(tree_key) + 1)), 6, '0');
+            return (lpad(int_to_hex(hex_to_int(tree_key) + 1), 6, '0'));
         end if;
     end increment_key;
 
