@@ -100,6 +100,7 @@ create table notification_requests (
     request_id                      integer
                                     constraint notif_request_id_fk
                                     references acs_objects (object_id)
+                                    on delete cascade
                                     constraint notif_request_id_pk
                                     primary key,
     type_id                         integer
@@ -150,6 +151,7 @@ create table notifications (
     notification_id                 integer
                                     constraint notif_notif_id_fk
                                     references acs_objects (object_id)
+                                    on delete cascade
                                     constraint notif_notif_id_pk
                                     primary key,
     type_id                         integer
