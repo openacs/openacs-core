@@ -826,6 +826,10 @@ ad_proc -public package_instantiate_object {
 	}
     }
 
+    if {!$creation_user} {
+        set creation_user ""
+    }
+
     lappend var_list [list creation_user $creation_user]
     lappend var_list [list creation_ip $creation_ip]
     
