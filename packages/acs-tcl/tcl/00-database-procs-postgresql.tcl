@@ -80,7 +80,6 @@ ad_proc -private db_exec_plpgsql { db statement_name pre_sql fname } {
 
     set function_name "__exec_${unique_id}_${fname}"
 
-
     # insert tcl variable values (Openacs - Dan)
     if {![string equal $sql $pre_sql]} {
         set sql [uplevel 2 [list subst -nobackslashes $sql]]
@@ -112,18 +111,13 @@ ad_proc -private db_exec_plpgsql { db statement_name pre_sql fname } {
                       [DoubleApos $proc_sql]
                       ' language 'plpgsql'"
 
-        ns_log Notice "proc_sql = $proc_sql"
         set ret_val [ns_db 0or1row $db "select $function_name ()"]
-        ns_log Notice "anon func selected"
         # drop the anonymous function (OpenACS - Dan)
         ns_db dml $db "drop function $function_name ()"
-        ns_log Notice "anon func dropped $ret_val"
+
         return $ret_val
 
     } error]
-
-    # error in the plsql anonymous function - try and drop it.
-    ns_log Notice "errno = $errno"
 
     global errorInfo errorCode
     set errinfo $errorInfo
@@ -290,7 +284,7 @@ ad_proc db_write_blob { statement_name sql args } {
     ad_arg_parser { bind } $args
 
     db_with_handle db { 
-	db_exec write_blob $db $statement_name $sql
+	db_exec_lob write_blob $db $statement_name $sql
     }
 }
 
@@ -298,11 +292,11 @@ ad_proc db_blob_get_file { statement_name sql args } {
     ad_arg_parser { bind file args } $args
 
     db_with_handle db {
-	db_exec_lob $db $statement_name $sql $file
+	db_exec_lob blob_select_file $db $statement_name $sql $file
     }
 }
 
-ad_proc -private db_exec_lob { db statement_name pre_sql file } {
+ad_proc -private db_exec_lob { type db statement_name pre_sql { file "" } } {
 
     A helper procedure to execute a SQL statement, potentially binding
     depending on the value of the $bind variable in the calling environment
@@ -318,12 +312,12 @@ ad_proc -private db_exec_lob { db statement_name pre_sql file } {
     # Query Dispatcher (OpenACS - ben)
     set sql [db_qd_replace_sql $statement_name $pre_sql]
 
-    ns_log Notice "POST-QD: the SQL is $sql"
-
     # insert tcl variable values (Openacs - Dan)
     if {![string equal $sql $pre_sql]} {
         set sql [uplevel 2 [list subst -nobackslashes $sql]]
     }
+
+    ns_log Notice "POST-QD: the SQL is $sql"
 
     # create a function definition statement for the inline code 
     # binding is emulated in tcl. (OpenACS - Dan)
@@ -346,11 +340,37 @@ ad_proc -private db_exec_lob { db statement_name pre_sql file } {
             set lob_sql [uplevel 2 [list db_bind_var_substitution $sql]]
 	}
 
-        # get the lob id
+        # get the content
         set selection [ns_db 1row $db $lob_sql]
-        set lob_id [ns_set value $selection 0]
+        set val [ns_set value $selection 0]
 
-        ns_pg blob_select file $db $lob_id $file
+        switch $type {
+
+            blob_select_file {
+                if {[regexp {^[0-9]+$} $val match]} {
+                    ns_pg blob_select_file $db $val $file
+                } else {
+                    error "lob id is not an integer"
+                }
+            }
+
+            write_blob {
+
+                # this is an ugly hack, but it allows content to be written
+                # to the connection if it is stored as a lob or if it is
+                # stored in the content-repository as a file. (DanW - Openacs)
+                if {[file exists [cr_fs_path]$val]} {
+                    set ofp [open [cr_fs_path]$val r]
+                    ns_writefp $ofp
+                    close $ofp
+                } elseif {[regexp {^[0-9]+$} $val match]} {
+                    ns_pg blob_write $db $val
+                } else {
+                    error "file: [cr_fs_path]$val doesn't exist"
+                }
+            }
+        }
+
         return
 
     } error]
