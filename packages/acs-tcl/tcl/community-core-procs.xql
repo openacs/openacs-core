@@ -138,6 +138,17 @@
       </querytext>
 </fullquery>
 
+<fullquery name="acs_user::get_by_username.user_id_from_username">      
+      <querytext>
+
+            select user_id
+            from   users
+            where  username = :username
+            and    authority_id =:authority_id
+
+      </querytext>
+</fullquery>
+
 <fullquery name="party::update.party_update">      
       <querytext>
       
