@@ -26,6 +26,8 @@ select acs_sc_impl_alias__new(
 	   'TCL'				-- impl_pl
 );
 
+select acs_sc_binding__new('FtsContentProvider','content_revision');
+
 select acs_sc_impl__new(
 	   'FtsContentProvider',		-- impl_contract_name
            'image',                             -- impl_name
@@ -48,6 +50,7 @@ select acs_sc_impl_alias__new(
 	   'TCL'				-- impl_pl
 );
 
+select acs_sc_binding__new('FtsContentProvider','image');
 
 select acs_sc_impl__new(
 	   'FtsContentProvider',		-- impl_contract_name
@@ -71,6 +74,7 @@ select acs_sc_impl_alias__new(
 	   'TCL'				-- impl_pl
 );
 
+select acs_sc_binding__new('FtsContentProvider','content_template');
 
 -- triggers queue search interface to modify search index after content
 -- changes.
