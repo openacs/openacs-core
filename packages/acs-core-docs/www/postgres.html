@@ -124,7 +124,7 @@ Thank you for choosing PostgreSQL, the most advanced open source database
 engine.
 <span class="action"><span class="action">su - postgres
 cd /usr/local/src/postgresql-7.4.5
-./configure
+/configure --with-includes=/sw/include/ --with-libraries=/sw/lib --enable-locale --enable-multibyte --enable-syslog --enable-unicode-conversion --enable-recode
 make all
 make install</span></span></pre></li><li><a name="install-postgres-startup"></a><p><b>Start PostgreSQL. </b>
 	  The <tt class="computeroutput">initdb</tt> command initializes the

@@ -228,7 +228,7 @@ Thank you for choosing PostgreSQL, the most advanced open source database
 engine.
 <action>su - postgres
 cd /usr/local/src/postgresql-7.4.5
-./configure
+/configure --with-includes=/sw/include/ --with-libraries=/sw/lib --enable-locale --enable-multibyte --enable-syslog --enable-unicode-conversion --enable-recode
 make all
 make install</action></screen>
     </listitem>
