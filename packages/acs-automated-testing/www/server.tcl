@@ -6,6 +6,8 @@ ad_page_contract {
 
 aa_test::parse_install_file -path $path -array service
 
+set admin_p [permission::permission_p -object_id [ad_conn package_id] -privilege admin]
+
 set test_path [aa_test::test_file_path -install_file_path $path]
 set has_test_report_p [file exists $test_path]
 

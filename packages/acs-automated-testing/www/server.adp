@@ -10,12 +10,13 @@
       <li>URL: <a href="@service.url@">@service.url@</a>
     </ul>
   </li>
-  <li>Login:
-    <ul>
-      <li><a href="@admin_login_url@">Admin user</a>
-    </ul>
-  </li>
-
+  <if @admin_p@>
+    <li>Login:
+      <ul>
+        <li><a href="@admin_login_url@">Admin user</a>
+      </ul>
+    </li>
+  </if>
   </li>
   <li>Installation: 
     <ul>
