@@ -288,13 +288,26 @@ ad_proc -private apm_load_libraries {
     {-test_init:boolean}
 } {
 
-    Loads all -procs.tcl (if $procs_or_init is "procs") or -init.tcl (if $procs_or_init is
-    "init") files into the current interpreter for installed, enabled packages. Only loads
+    Loads all -procs.tcl (if $procs_or_init is "procs") or -init.tcl  files into the 
+    current interpreter for installed, enabled packages. Only loads
     files which have not yet been loaded. This is intended to be called only during server
     initialization (since it loads libraries only into the running interpreter, as opposed
     to in *all* active interpreters).
 
 } {
+    set file_types [list]
+    if { $procs_p } {
+        lappend file_types tcl_procs
+    }
+    if { $init_p } {
+        lappend file_types tcl_init
+    }
+    if { $test_procs_p } {
+        lappend file_types test_procs
+    }
+    if { $test_init_p } {
+        lappend file_types test_init
+    }
  
     if { [empty_string_p $packages] } {
         set packages [apm_enabled_packages]
@@ -304,35 +317,10 @@ ad_proc -private apm_load_libraries {
     set files [list]    
     foreach package $packages {
 
-	set base "[acs_root_dir]/packages/$package/"
-	set base_len [string length $base]
-	set dirs [list \
-		$base \
-		${base}tcl ]
-	set paths [list]
-      
-	foreach dir $dirs {
-	    if {$procs_p} {
-		set paths [concat $paths [glob -nocomplain "$dir/*procs.tcl"]]
-                set paths [concat $paths [glob -nocomplain "$dir/*procs-[db_type].tcl"]]
-	    } 
-	    if {$init_p} {
-		set paths [concat $paths [glob -nocomplain "$dir/*init.tcl"]]
-                set paths [concat $paths [glob -nocomplain "$dir/*init-[db_type].tcl"]]
-	    }    
-	    if {$test_procs_p} {
-		set paths [concat $paths [glob -nocomplain "$dir/test/*procs.tcl"]]
-                set paths [concat $paths [glob -nocomplain "$dir/test/*procs-[db_type].tcl"]]
-	    }    
-	    if {$test_init_p} {
-		set paths [concat $paths [glob -nocomplain "$dir/test/*init.tcl"]]
-                set paths [concat $paths [glob -nocomplain "$dir/test/*init-[db_type].tcl"]]
-	    }    
-	}
+        set paths [apm_get_package_files -package_key $package -file_types $file_types]
 
 	foreach path [lsort $paths] {
-	    set rel_path [string range $path $base_len end]
-	    lappend files [list $package $rel_path]
+	    lappend files [list $package $path]
 	}
     }
       
