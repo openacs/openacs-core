@@ -1,5 +1,5 @@
 ad_page_contract {
-  @cvs_id $Id$
+  @cvs-id $Id$
   @onevalue The greeting to print on the page.
 } -properties {
   hello:onevalue

@@ -4,7 +4,7 @@ ad_page_contract {
     @param version_id The package to be processed.
     @param write_p Set to 1 if you want the specification file written to disk.
     @author Jon Salz [jsalz@arsdigita.com]
-    @date 9 May 2000
+    @creation-date 9 May 2000
     @cvs-id $Id$
 } {
     {version_id:integer}

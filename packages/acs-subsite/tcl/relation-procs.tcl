@@ -41,7 +41,7 @@ ad_proc -public relation_add {
     constraint.
 
     @author Michael Bryzek (mbryzek@arsdigita.com)
-    @author Ben Adida (ben@openforce)
+    @author Ben Adida (ben@openforce.net)
     @creation-date 1/5/2001
 
     @param form_id         The form id from templating form system

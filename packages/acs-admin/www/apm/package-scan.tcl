@@ -1,7 +1,7 @@
 ad_page_contract {
     Scans the packages directory for new or modified packages.
     @author Jon Salz [jsalz@arsdigita.com]
-    @date 17 April 2000
+    @creation-date 17 April 2000
     @cvs-id $Id$
 } {
 }

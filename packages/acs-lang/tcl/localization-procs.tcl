@@ -64,7 +64,7 @@ ad_proc -public lc_parse_number {
 
     @param num      Localized number
     @param locale   Locale
-    @integer_only_p True if only integers returned
+    @param integer_only_p True if only integers returned
     @error          If unsupported locale or not a number
     @return         Canonical form of the number
 

@@ -4,7 +4,7 @@ ad_library {
 
     @author Eric Lorenzo (eric@openforce.net)
     @creation-date 22 March, 2002
-    @version $Id$
+    @cvs-id $Id$
 
 }
 

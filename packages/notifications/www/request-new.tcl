@@ -2,7 +2,7 @@ ad_page_contract {
 
     Request a new notification - Ask for more stuff
 
-    @author Ben Adida (ben@openforce)
+    @author Ben Adida (ben@openforce.net)
     @creation-date 2002-05-24
     @cvs-id $Id$
 } {

@@ -5,7 +5,7 @@ ad_library {
     @author arjun (arjun@openforce.net)
     @author yon (yon@openforce.net)
     @creation-date 2002-07-10
-    @version $Id$
+    @cvs-id $Id$
 
 }
 

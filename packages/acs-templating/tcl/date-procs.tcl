@@ -427,7 +427,7 @@ ad_proc -public template::util::date::now_min_interval {} {
     with the default interval for minutes
 
     @author Walter McGinnis (wtem@olywa.net)
-    @creation_date 2002-01-06
+    @creation-date 2002-01-06
 } {
   set now [list]
   foreach v [clock format [clock seconds] -format "%Y %m %d %H %M %S"] {
@@ -461,7 +461,7 @@ ad_proc -public template::util::date::now_min_interval_plus_hour {} {
     with the default interval for minutes
 
     @author Walter McGinnis (wtem@olywa.net)
-    @creation_date 2002-01-06
+    @creation-date 2002-01-06
 } {
   set now [list]
   foreach v [clock format [clock seconds] -format "%Y %m %d %H %M %S"] {
@@ -496,8 +496,8 @@ ad_proc -public template::util::date::add_time { {-time_array_name:required} {-d
     into one date object (list) which is returned
     not sure this proc should live here...
     
-    @author Walter McGinnis (wtem@olywa.net, 2001-01-05)
-    @creation_date 2002-01-04
+    @author Walter McGinnis (wtem@olywa.net)
+    @creation-date 2002-01-04
 } {
     # grab the form arrays
     upvar 1 $time_array_name time_in $date_array_name date_in

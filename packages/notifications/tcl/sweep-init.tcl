@@ -3,8 +3,8 @@ ad_library {
     notifications init - sets up scheduled procs
 
     @cvs-id $Id$
-    @author Ben Adida (ben@openforce)
-    @date 2002-05-27
+    @author Ben Adida (ben@openforce.net)
+    @creation-date 2002-05-27
 
 }
 

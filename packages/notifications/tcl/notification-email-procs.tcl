@@ -93,7 +93,8 @@ namespace eval notification::email {
         Scans qmail incoming email queue and queues up messages
         using acs-mail.
 
-        @Author dan.wickstrom@openforce.net, ben@openforce
+        @author ben@openforce.net
+        @author dan.wickstrom@openforce.net
         @creation-date 22 Sept, 2001
 
         @param queue_dir The location of the qmail mail queue in

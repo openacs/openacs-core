@@ -1,7 +1,7 @@
 ad_page_contract {
     Shows files not contained in any package.
     @author Jon Salz [jsalz@arsdigita.com]
-    @date 17 April 2000
+    @creation-date 17 April 2000
     @cvs-id $Id$
 } {
 }

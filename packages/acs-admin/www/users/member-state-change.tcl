@@ -2,9 +2,10 @@ ad_page_contract {
 
     Changes the member state of a user
 
-    @author-id Hiro Iwashima <iwashima@mit.edu>
+    @author Hiro Iwashima <iwashima@mit.edu>
     @creation-date 23 Aug 2000
-    @cvs-id
+    @cvs-id $Id$
+
 } {
     user_id
     {member_state "no_change"}

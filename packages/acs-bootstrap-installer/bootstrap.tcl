@@ -4,7 +4,7 @@
 #
 # @creation-date 12 May 2000
 # @author Jon Salz [jsalz@arsdigita.com]
-# @cvs-id bootstrap.tcl,v 1.3.2.1 2000/12/31 22:26:18 bquinn Exp
+# @cvs-id $Id$
 
 
 # Remember the length of the error log file (so we can easily seek back to this

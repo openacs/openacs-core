@@ -3,7 +3,7 @@ ad_library {
 
     @author yon (yon@openforce.net)
     @creation-date 2002-03-15
-    @version $Id$
+    @cvs-id $Id$
 }
 
 namespace eval membership_rel {

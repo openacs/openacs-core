@@ -1,7 +1,7 @@
 ad_page_contract {
     Adds a dependency to a version of a package. 
     @author Bryan Quinn
-    @date 17 April 2000
+    @creation-date 17 April 2000
     @cvs-id $Id$
 } {
     {dependency_id:naturalnum}

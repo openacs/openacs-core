@@ -4,7 +4,7 @@ ad_page_contract {
 
     @author rhs@mit.edu
     @creation-date 2000-09-13
-    @version $Id$
+    @cvs-id $Id$
 
 } {
     new_package_id:integer,notnull

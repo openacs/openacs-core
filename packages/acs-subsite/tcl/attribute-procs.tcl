@@ -7,7 +7,7 @@ ad_library {
 
     @author mbryzek@arsdigita.com
     @creation-date Thu Dec  7 10:30:57 2000
-    @cvs-id $Id$ 
+    @cvs-id $Id$
 }
 
 ad_page_contract_filter attribute_dynamic_p { name value } {

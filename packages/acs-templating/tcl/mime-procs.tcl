@@ -5,7 +5,7 @@ client browser, as
     well as other additional header information.
 
     @author Shan Shan Huang (shuang@arsdigita.com)
-    @date 12 January 2001
+    @creation-date 12 January 2001
     @cvs-id $Id$
 }  
 

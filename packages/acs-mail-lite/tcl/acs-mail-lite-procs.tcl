@@ -3,8 +3,8 @@ ad_library {
     Provides a simple API for reliably sending email.
 
     @author Eric Lorenzo (eric@openforce.net)
-    @date 22 March 2002
-    @version $Id$
+    @creation-date 22 March 2002
+    @cvs-id $Id$
 
 }
 

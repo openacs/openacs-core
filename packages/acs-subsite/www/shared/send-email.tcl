@@ -3,7 +3,7 @@ ad_page_contract {
 
     @author Hiro Iwashima <iwashima@mit.edu>
     @creation-date 23 Aug 2000
-    @cvs-id $ID$
+    @cvs-id $Id$
 } {
     email
     email_from

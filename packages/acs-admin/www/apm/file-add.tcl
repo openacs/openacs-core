@@ -2,8 +2,8 @@ ad_page_contract {
     Allows the user to add files to a package.
     @param version_id The identifier for the package.
     @author Jon Salz (jsalz@arsdigita.com)
-    @date 17 April 2000
-    @cvs-id file-add.tcl,v 1.4 2000/10/12 00:48:48 bquinn Exp    
+    @creation-date 17 April 2000
+    @cvs-id $Id$
 } {
     {version_id:integer}
     {verbose:integer 0}

@@ -645,7 +645,7 @@ ad_proc -private package_plsql_args {
     which combines field names and arguments to PL/SQL, which 
     makes no sense when you're trying to abstract out the actual fields.
 
-    @author Ben Adida (ben@openforce)
+    @author Ben Adida (ben@openforce.net)
     @creation-date 11/2001
 
     @param object_type The object type for which we are generating a list
@@ -752,7 +752,7 @@ ad_proc -public package_instantiate_object {
     associated PL/SQL package new function.
 
     @author Michael Bryzek (mbryzek@arsdigita.com)
-    @author Ben Adida (ben@openforce)
+    @author Ben Adida (ben@openforce.net)
     @creation-date 02/01/2001
     
     @param creation_user The current user. Defaults to <code>[ad_conn

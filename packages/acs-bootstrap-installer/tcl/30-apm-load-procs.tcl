@@ -230,18 +230,19 @@ ad_proc apm_bootstrap_load_libraries {
     {-procs:boolean}
     package_key
 } {
-
-    @author Don Baccus
-    @param The package to load (normally acs-tcl)
-    @init Load initialization files
-    @procs Load the proc library files
-
     Scan all the files in the package and load those asked for by the init
     and procs flags.
 
     This proc is an analog of apm_load_libraries.  We can't call
     apm_load_libraries during the initial portion of the bootstrap process
     because the acs-kernal datamodel may not exist.
+
+    @author Don Baccus (dhogaza@pacifier.com)
+
+
+    @param package_key The package to load (normally acs-tcl)
+    @param init Load initialization files
+    @param procs Load the proc library files
 } {
 
     set root_directory [nsv_get acs_properties root_directory]

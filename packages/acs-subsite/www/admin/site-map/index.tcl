@@ -3,7 +3,7 @@ ad_page_contract {
     @author rhs@mit.edu
     @author bquinn@arsidigta.com
     @creation-date 2000-09-09
-    @version $Id$
+    @cvs-id $Id$
 
 } {
     {expand:integer,multiple ""}

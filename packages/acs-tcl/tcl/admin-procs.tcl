@@ -4,7 +4,7 @@ ad_library {
 
     @author Multiple
     @creation-date 11/18/98
-    @cvs-id admin-procs.tcl,v 1.1.2.3 2000/08/24 04:38:03 bquinn Exp
+    @cvs-id $Id$
 
 }
 

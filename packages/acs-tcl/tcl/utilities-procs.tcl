@@ -3,7 +3,7 @@ ad_library {
     Provides a variety of non-ACS-specific utilities
 
     @author Various (acs@arsdigita.com)
-    @date 13 April 2000
+    @creation-date 13 April 2000
     @cvs-id $Id$
 }
 

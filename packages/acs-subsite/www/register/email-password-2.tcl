@@ -4,7 +4,7 @@ ad_page_contract {
 
     @author Hiro Iwashima <iwashima@mit.edu>
     @creation-date 15 Aug 2000
-    @version $Id$
+    @cvs-id $Id$
 } {
     user_id:integer,notnull
     {validated_p 0}

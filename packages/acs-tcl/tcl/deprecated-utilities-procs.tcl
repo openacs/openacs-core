@@ -4,7 +4,7 @@ ad_library {
     deprecated
 
     @author yon [yon@arsdigita.com]
-    @date 9 Jul 2000
+    @creation-date 9 Jul 2000
     @cvs-id $Id$
 
 }

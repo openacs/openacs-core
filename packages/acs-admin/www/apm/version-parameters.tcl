@@ -4,7 +4,7 @@ ad_page_contract {
     @param version_id The package to be processed.
     @author tnight@arsdigita.com
     @author Bryan Quinn (bquinn@arsdigita.com)
-    @date 12 September 2000
+    @creation-date 12 September 2000
     @cvs-id $Id$
 } {
     {orderby ""}

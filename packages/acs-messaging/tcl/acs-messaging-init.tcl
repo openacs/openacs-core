@@ -4,7 +4,7 @@ ad_library {
 
     @cvs-id $Id$
     @author John Prevost <jmp@arsdigita.com>
-    @date 2000-10-28
+    @creation-date 2000-10-28
 
 }
 

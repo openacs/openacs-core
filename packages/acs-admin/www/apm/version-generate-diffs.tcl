@@ -5,7 +5,7 @@ ad_page_contract {
     @param version_id The package to be processed.
     @param context_p Set to 0 if you don't want the diffs to be listed with context.
     @author Jon Salz [jsalz@arsdigita.com]
-    @date 9 May 2000
+    @creation-date 9 May 2000
     @cvs-id $Id$
 } {
     {version_id:integer}

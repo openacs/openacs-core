@@ -5,7 +5,7 @@ ad_library {
 
     @author Ben Adida (ben@openforce.net)
     @creation-date April 2002
-    @version $Id$
+    @cvs-id $Id$
 }
 
 namespace eval site_node_object_map {

@@ -3,7 +3,7 @@ ad_page_contract {
 
     @param version_id The package to be processed.
     @author kevin@caltech.edu
-    @date 17 May 2000
+    @creation-date 17 May 2000
     @cvs-id $Id$
 } {
     { version_id:integer }

@@ -2,7 +2,7 @@ ad_page_contract {
 
     @author Rafael Schloming (rhs@mit.edu)
     @creation-date 2000-09-09
-    @version $Id$
+    @cvs-id $Id$
 
 } {
     parent_id:integer,notnull

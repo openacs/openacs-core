@@ -1,5 +1,5 @@
 ad_page_contract {
-  @cvs_id $Id$
+  @cvs-id $Id$
   @datasource users multirow
   Complete list of sample users
   @column first_name First name of the user.
