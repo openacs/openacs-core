@@ -220,29 +220,6 @@ ad_proc -public auth::password::recover_password {
         set result(password_message) [_ acs-subsite.sorry_forgotten_pwd]
     }
 
-    if { [string equal $result(password_status) "ok"] } {
-        if { [exists_and_not_null result(password)] } {
-            # We have retrieved or reset a forgotten password that we should email to the user
-            with_catch errmsg {
-                auth::password::email_password \
-                    -authority_id $authority_id \
-                    -username $username \
-                    -password $result(password) \
-                    -subject_msg_key "acs-subsite.email_subject_Forgotten_password" \
-                    -body_msg_key "acs-subsite.email_body_Forgotten_password" 
-            } {
-                # We could not inform the user of his email - we failed
-                set result(password_status) "failed_to_connect"
-                set result(password_message) [_ acs-subsite.Error_sending_mail]
-                global errorInfo
-                ns_log Error "We had an error sending out email with new password to username $username, authority $authority_id:\n$errorInfo"
-            }
-        } 
-        if { ![exists_and_not_null result(password_message)] } {
-            set result(password_message) [_ acs-subsite.Check_Your_Inbox]
-        }
-    }
-
     return [array get result]
 }
 
@@ -366,7 +343,28 @@ ad_proc -public auth::password::retrieve {
     
     # Check the result code and provide canned responses
     switch $result(password_status) {
-        ok {} 
+        ok {
+            if { [exists_and_not_null result(password)] } {
+                # We have retrieved or reset a forgotten password that we should email to the user
+                with_catch errmsg {
+                    auth::password::email_password \
+                        -authority_id $authority_id \
+                        -username $username \
+                        -password $result(password) \
+                        -subject_msg_key "acs-subsite.email_subject_Forgotten_password" \
+                        -body_msg_key "acs-subsite.email_body_Forgotten_password" 
+                } {
+                    # We could not inform the user of his email - we failed
+                    set result(password_status) "failed_to_connect"
+                    set result(password_message) [_ acs-subsite.Error_sending_mail]
+                    global errorInfo
+                    ns_log Error "We had an error sending out email with new password to username $username, authority $authority_id:\n$errorInfo"
+                }
+            } 
+            if { ![exists_and_not_null result(password_message)] } {
+                set result(password_message) [_ acs-subsite.Check_Your_Inbox]
+            }
+        } 
         no_account - not_supported - retrieve_error - failed_to_connect {
             if { ![exists_and_not_null result(password_message)] } {
                 array set default_message {
@@ -452,7 +450,28 @@ ad_proc -public auth::password::reset {
     
     # Check the result code and provide canned responses
     switch $result(password_status) {
-        ok {} 
+        ok {
+            if { [exists_and_not_null result(password)] } {
+                # We have retrieved or reset a forgotten password that we should email to the user
+                with_catch errmsg {
+                    auth::password::email_password \
+                        -authority_id $authority_id \
+                        -username $username \
+                        -password $result(password) \
+                        -subject_msg_key "acs-subsite.email_subject_Forgotten_password" \
+                        -body_msg_key "acs-subsite.email_body_Forgotten_password" 
+                } {
+                    # We could not inform the user of his email - we failed
+                    set result(password_status) "failed_to_connect"
+                    set result(password_message) [_ acs-subsite.Error_sending_mail]
+                    global errorInfo
+                    ns_log Error "We had an error sending out email with new password to username $username, authority $authority_id:\n$errorInfo"
+                }
+            } 
+            if { ![exists_and_not_null result(password_message)] } {
+                set result(password_message) [_ acs-subsite.Check_Your_Inbox]
+            }
+        } 
         no_account - not_supported - retrieve_error - failed_to_connect {
             if { ![exists_and_not_null result(password_message)] } {
                 array set default_message {
