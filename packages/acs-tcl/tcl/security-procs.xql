@@ -58,4 +58,14 @@
       </querytext>
 </fullquery>
 
+<fullquery name="sec_lookup_property.update_last_hit_dml">
+      <querytext>
+	update sec_session_properties
+	   set last_hit = :new_last_hit
+	 where session_id = :id and
+               property_name = :name
+      </querytext>
+</fullquery>
+
+
 </queryset>
