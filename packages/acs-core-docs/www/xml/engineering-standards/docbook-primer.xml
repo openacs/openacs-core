@@ -133,7 +133,7 @@
       OpenACS forums to 4th July 2003.
     </para>    
     <para>
-      OpenACS documentation should meet the following goals. No
+      OpenACS documentation should meet the following requirements. No
       significance has been given to the order presented, topic breadth or depth here.
     </para>
     <itemizedlist>
@@ -275,7 +275,7 @@
       OpenACS forums to 4th July 2003.
     </para>    
     <para>
-      OpenACS end-user documentation should meet the following goals. No
+      OpenACS end-user documentation should meet the following requirements. No
       significance has been given to the order presented, topic breadth or depth here.
     </para>
     <itemizedlist>
@@ -406,7 +406,7 @@
       OpenACS forums to 4th July 2003.
     </para>    
     <para>
-      OpenACS administrators' documentation should meet the following goals. No
+      OpenACS administrators' documentation should meet the following requirements. No
       significance has been given to the order presented, topic breadth or depth here.
     </para>
     <itemizedlist>
@@ -483,6 +483,48 @@
         new master.adp, options on "user pages" , a quick
         introduction to the functions and processes. info about the
         user variables, file locations
+      </para></listitem>
+    </itemizedlist>
+  </sect2>
+
+  <sect2 id="docs-install-reqs" xreflabel="Installation Documentation Requirements">
+    <title>OpenACS Installation Documentation Requirements</title>
+    <para>
+      By the OpenACS Community. This section is a collection of
+      documentation requirements that have been expressed in the
+      OpenACS forums to 4th July 2003.
+    </para>    
+    <para>
+      OpenACS installation documentation should meet the following requirements. No
+      significance has been given to the order presented, topic breadth or depth here.
+    </para>
+    <itemizedlist>
+      <listitem><para>
+        state installation prerequisites. For example: "You should
+        read through the installation process to familiarize
+        yourself with the installation process, before beginning an
+        installation."
+      </para></listitem>
+      <listitem><para>
+        list critical decisions (perhaps as questions) that need to
+        be made before starting: which OS, which DB, which aolserver
+        version, system name, dependencies et cetera. Maybe summarize
+        options as tables or decision-trees. For example, "As you
+        proceed throughout the installation, you will be acting on
+        decisions that have an impact on how the remaining part of
+        the system is installed. Here is a list of questions you
+        should answer before beginning." 
+      </para></listitem>
+      <listitem><para>
+        list pre-installation assumptions
+      </para></listitem>
+      <listitem><para>
+        Show chronological overview of the process of installing a
+        system to full working status: Install operating
+        system with supporting software, configure with preparations
+        for OpenACS, RDBMS(s) install and configure, Webserver
+        install and configure, OpenACS install and configure,
+        post-install work
       </para></listitem>
     </itemizedlist>
   </sect2>
