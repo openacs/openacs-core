@@ -740,7 +740,10 @@ line, click
           You will also need ssl certificates.  Because those should
           be different for each server service, you won't need <link
           linkend="ssl-certificates">those instructions</link> until
-          later.  You will need the <link
+      later. </para>
+      <sect2 id="install-nsopenssl-aolserver3">
+        <title>Install on AOLserver3</title>
+        <para> You will need the <link
       linkend="install-aolserver-compile">unpacked Aolserver tarball</link> in
       <computeroutput>/usr/local/src/aolserver</computeroutput> and
       the <link
@@ -778,6 +781,41 @@ cd nsopenssl-2.1
 make OPENSSL=/usr/lib/ssl
 cp nsopenssl.so /usr/local/aolserver/bin
 cp https.tcl /usr/local/aolserver/modules/tcl/</action></screen>
+      </sect2>
+      <sect2 id="install-nsopenssl-aolserver4">
+        <title>Install on AOLserver4</title>
+        <para> You will need the AOLserver4 source in <computeroutput>/usr/local/src/aolserver/aolserver</computeroutput> and OpenSSL installed in <computeroutput>/usr/local/ssl</computeroutput> (or at least symlinked there).</para>
+
+      <screen>[root bin]#<userinput> cd /usr/local/src/aolserver</userinput>
+[root aolserver]# <userinput>cvs -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver login</userinput>
+[root aolserver]# <userinput>cvs -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co nsopenssl</userinput>
+[root aolserver]# <userinput>cd nsopenssl</userinput>
+[root nsopenssl]# <userinput>make OPENSSL=/usr/local/ssl</userinput>
+gcc -I/usr/local/ssl/include (many items omitted)  -c -o sslcontext.o sslcontext.c
+<emphasis>(many lines omitted)</emphasis>
+[root nsopenssl-2.1]# <userinput>make install OPENSSL=/usr/local/ssl INST=/usr/local/aolserver</userinput>
+[root nsopenssl-2.1]#
+<action>cd /usr/local/src/aolserver
+cvs -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver login
+cvs -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co nsopenssl
+cd nsopenssl
+make OPENSSL=/usr/local/ssl 
+make install OPENSSL=/usr/local/ssl INST=/usr/local/aolserver</action></screen>
+<para>If you have problems starting your server with nsopenssl.so due to missing libssl.so.0.9.7 (or lower), you have to create symlinks
+<screen>
+[root nsopenssl]# <userinput>cd /usr/local/aolserver/lib</userinput>
+[root lib]# <userinput>ln -s /usr/local/ssl/lib/libssl.so.0.9.7 libssl.so.0.9.7</userinput>
+[root lib]# <userinput>ln -s /usr/local/ssl/lib/libcrypto.so.0.9.7 libcrypto.so.0.9.7</userinput>
+[root lib]#
+<action>cd /usr/local/aolserver/lib
+ln -s /usr/local/ssl/lib/libssl.so.0.9.7 libssl.so.0.9.7
+ln -s /usr/local/ssl/lib/libcrypto.so.0.9.7 libcrypto.so.0.9.7
+</action>
+</screen>
+</para>
+      <para>To enable SSL support in your server, make sure your config.tcl file has a section on "OpenSSL 3 with AOLserver4". If your ports for SSL are priviledged (below 1024), you will have to start AOLserver with prebinds for both your HTTP and your HTTPS port (usually by adding <computeroutput>-b <replaceable>your_ip:your_http_port</replaceable>,<replaceable>your_ip:your_https_port</replaceable></computeroutput> to the nsd call).</para>
+      </sect2>
+
     </sect1>
 
     <sect1 id="install-tclwebtest">
@@ -791,6 +829,7 @@ mv tclwebtest-0.3 /usr/local/
 ln -s /usr/local/tclwebtest-0.3 /usr/local/tclwebtest
 ln -s /usr/local/tclwebtest/tclwebtest /usr/local/bin
 </action></screen>
+
     </sect1>
 
   </appendix>
