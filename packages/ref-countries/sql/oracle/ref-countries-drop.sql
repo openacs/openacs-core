@@ -18,7 +18,7 @@ declare
                   package_name,
                   repository_id
 	 from     acs_reference_repositories
-	 where upper(table_name) = 'COUNTR'
+	 where upper(table_name) like 'COUNTR%'
 	 order by repository_id desc;
 begin
     for rec in refsrc_cur loop
