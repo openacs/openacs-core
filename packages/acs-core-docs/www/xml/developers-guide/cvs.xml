@@ -54,7 +54,7 @@ logout
             release tag.  These tags will be useful in upgrading and
             branching.  -m sets the version comment.</para>
             <screen>[root root]# <userinput>su - <replaceable>service0</replaceable></userinput>
-[service0 service0]$ <userinput>cd /web/<replaceable>service0</replaceable></userinput>
+[service0 service0]$ <userinput>cd /var/lib/aolserver/<replaceable>service0</replaceable></userinput>
 [service0 service0]$ <userinput>cvs import -m "initial install" <replaceable>service0</replaceable> OpenACS &cvsversiontag;</userinput>
 N <replaceable>service0</replaceable>/license.txt
 N <replaceable>service0</replaceable>/readme.txt
@@ -65,7 +65,7 @@ No conflicts created by this import
 
 [service0 service0]$
 <action>su - <replaceable>service0</replaceable>
-cd /web/<replaceable>service0</replaceable>
+cd /var/lib/aolserver/<replaceable>service0</replaceable>
 cvs import -m "initial install" <replaceable>service0</replaceable> OpenACS &cvsversiontag;</action></screen>
             <para>Move the original directory to a temporary location, and check out the cvs repository in its place.  If the service starts correctly, come back and remove the temporary copy of the uploaded files.</para>
             <screen>[service0 service0]$ <userinput>cd ..</userinput>
