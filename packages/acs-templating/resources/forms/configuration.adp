@@ -1,4 +1,4 @@
-<ul>
+        <ul>
   <multiple name="elements">
     <if @elements.section@ not nil>
       <li><a href="#@elements.section@">@elements.section@</a></li>
@@ -46,7 +46,7 @@
             </td>
             <td width="60%">
               <if @elements.label@ not nil>
-                <span class="form-configuration-label">@elements.label@:</span>
+                <span class="form-configuration-label">@elements.label;noquote@:</span>
                 <br />
               </if>
               <if @form_properties.show_required_p@ true>
