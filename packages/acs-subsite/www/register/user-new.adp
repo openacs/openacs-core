@@ -1,11 +1,12 @@
 <master>
-<property name="title">Register</property>
+  <property name="title">Register</property>
+  <property name="focus">usernew.password_confirmation</property>
 
 
 
 Register as a user of <a href="index">@system_name@</a>
 
-<form method=post action="user-new-2">
+<form method=post action="user-new-2" name="usernew">
 @export_vars@
 
 <if @no_require_password_p@ eq 0>
