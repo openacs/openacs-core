@@ -655,7 +655,10 @@ ad_proc -public party::update {
 ad_proc -public party::get_by_email {
     {-email:required}
 } {
-    Return the party_id of the party with the given email. Returns empty string if no party found.
+    Return the party_id of the party with the given email. 
+    Uses a lowercase comparison as we don't allow for parties
+    to have emails that only differ in case.
+    Returns empty string if no party found.
 
     @return party_id
 } {
