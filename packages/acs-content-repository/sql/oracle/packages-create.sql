@@ -27,7 +27,7 @@ procedure create_type (
                            default 'content_revision',
   pretty_name		in acs_object_types.pretty_name%TYPE,
   pretty_plural	        in acs_object_types.pretty_plural%TYPE,
-  table_name		in acs_object_types.table_name%TYPE,
+  table_name		in acs_object_types.table_name%TYPE default null,
   id_column		in acs_object_types.id_column%TYPE default 'XXX',
   name_method           in acs_object_types.name_method%TYPE default null
 );
@@ -846,7 +846,7 @@ function new (
   publish_date  in cr_revisions.publish_date%TYPE default sysdate,
   mime_type   	in cr_revisions.mime_type%TYPE default 'text/plain',
   nls_language 	in cr_revisions.nls_language%TYPE default null,
-  text		in varchar2 default '',
+  text		in varchar2 default null,
   item_id       in cr_items.item_id%TYPE,
   revision_id   in cr_revisions.revision_id%TYPE default null,
   creation_date	in acs_objects.creation_date%TYPE default sysdate,

@@ -641,7 +641,7 @@ end rename;
 
 function get_id (
   item_path      in varchar2,
-  root_folder_id in cr_items.item_id%TYPE default null,
+  root_folder_id in cr_items.item_id%TYPE default c_root_folder_id,
   resolve_index  in char default 'f'
 ) return cr_items.item_id%TYPE is
 
