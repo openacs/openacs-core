@@ -172,8 +172,25 @@ ad_proc -public lang::message::unregister {
           and package_key = :package_key
     }
 
+    remove_from_cache $package_key $message_key
+}
+
+ad_proc -private lang::message::remove_from_cache {
+    package_key
+    message_key
+} {
+    Delete a certain message key from the cache for all
+    locales.
+
+    @author Peter Marklund
+} {
+    set locales_list [db_list select_system_locales {
+        select locale
+        from   ad_locales
+    }]
+
     # Delete from the cache for all enabled locales
-    foreach locale [lang::system::get_locales] {
+    foreach locale $locales_list {
         set nsv_array lang_message_$locale
         set nsv_key "${package_key}.${message_key}"
         if { [nsv_exists $nsv_array $nsv_key] } {
@@ -504,6 +521,7 @@ ad_proc -private lang::message::cache {
         
         set i 0 
         db_foreach select_locale_keys {} {
+            ns_log Notice "pm debug ${package_key}.${message_key} $message"
             nsv_set lang_message_$locale "${package_key}.${message_key}" $message
             incr i
         }

@@ -765,6 +765,35 @@ ad_proc -private lang::catalog::get_catalog_paths_for_import {
 
 ##################
 #
+# Mischellaneous procs
+#
+##################
+
+ad_proc -public lang::catalog::package_delete {
+    {-package_key:required}
+} {
+    Unregister the I18N messages for the package.
+
+    @author Peter Marklund
+} {
+    set message_key_list [db_list all_message_keys_for_package {
+        select message_key
+        from lang_message_keys
+        where package_key = :package_key
+    }]
+
+    db_dml delete_package_keys {
+        delete from lang_message_keys
+        where package_key = :package_key
+    }
+
+    foreach message_key $message_key_list {
+        lang::message::remove_from_cache $package_key $message_key
+    }
+}
+
+##################
+#
 # Inactive and unmaintained procs
 #
 ##################
