@@ -1,14 +1,8 @@
 // Table Operations Plugin for HTMLArea-3.0
-// Implementation by Mihai Bazon.  Sponsored by http://www.bloki.com
+// Implementation by Mihai Bazon.  Sponsored by http://www.zapatec.com
 //
-// htmlArea v3.0 - Copyright (c) 2002 interactivetools.com, inc.
-// This notice MUST stay intact for use (see license.txt).
-//
-// A free WYSIWYG editor replacement for <textarea> fields.
-// For full source code and docs, visit http://www.interactivetools.com/
-//
-// Version 3.0 developed by Mihai Bazon for InteractiveTools.
-//	     http://students.infoiasi.ro/~mishoo
+// Copyright (c) dynarch.com 2003-2005
+// This copyright notice must stay intact for use.
 //
 // $Id$
 
@@ -24,13 +18,13 @@ function TableOperations(editor) {
 
 	// register the toolbar buttons provided by this plugin
 	var toolbar = ["linebreak"];
-	for (var i in bl) {
+	for (var i = 0; i < bl.length; ++i) {
 		var btn = bl[i];
 		if (!btn) {
 			toolbar.push("separator");
 		} else {
 			var id = "TO-" + btn[0];
-			cfg.registerButton(id, tt[id], "plugins/TableOperations/img/" + btn[0] + ".gif", false,
+			cfg.registerButton(id, tt[id], editor.imgURL(btn[0] + ".gif", "TableOperations"), false,
 					   function(editor, id) {
 						   // dispatch button press event
 						   self.buttonPress(editor, id);
@@ -41,6 +35,17 @@ function TableOperations(editor) {
 
 	// add a new line in the toolbar
 	cfg.toolbar.push(toolbar);
+};
+
+TableOperations._pluginInfo = {
+	name          : "TableOperations",
+	version       : "1.0",
+	developer     : "Mihai Bazon",
+	developer_url : "http://dynarch.com/mishoo/",
+	c_owner       : "Mihai Bazon",
+	sponsor       : "Zapatec Inc.",
+	sponsor_url   : "http://www.bloki.com",
+	license       : "htmlArea"
 };
 
 /************************
@@ -54,7 +59,7 @@ TableOperations.prototype.getClosest = function(tagName) {
 	var ancestors = editor.getAllAncestors();
 	var ret = null;
 	tagName = ("" + tagName).toLowerCase();
-	for (var i in ancestors) {
+	for (var i = 0; i < ancestors.length; ++i) {
 		var el = ancestors[i];
 		if (el.tagName.toLowerCase() == tagName) {
 			ret = el;
@@ -181,21 +186,7 @@ TableOperations.prototype.dialogTableProperties = function() {
     <td> \
       <fieldset><legend>" + i18n["Spacing and padding"] + "</legend> \
        <table style='width:100%'> \
-"+//        <tr> \
-//           <td class='label'>" + i18n["Width"] + ":</td> \
-//           <td><input type='text' name='f_width' value='" + f_width + "' size='5' /> \
-//             <select name='f_unit'> \
-//               <option value='%'" + selected(f_unit == "percent") + ">" + i18n["percent"] + "</option> \
-//               <option value='px'" + selected(f_unit == "pixels") + ">" + i18n["pixels"] + "</option> \
-//             </select> &nbsp;&nbsp;" + i18n["Align"] + ": \
-//             <select name='f_align'> \
-//               <option value='left'" + selected(f_align == "left") + ">" + i18n["Left"] + "</option> \
-//               <option value='center'" + selected(f_align == "center") + ">" + i18n["Center"] + "</option> \
-//               <option value='right'" + selected(f_align == "right") + ">" + i18n["Right"] + "</option> \
-//             </select> \
-//           </td> \
-//         </tr> \
-"        <tr> \
+        <tr> \
           <td class='label'>" + i18n["Spacing"] + ":</td> \
           <td><input type='text' name='f_spacing' size='5' value='" + f_spacing + "' /> &nbsp;" + i18n["Padding"] + ":\
             <input type='text' name='f_padding' size='5' value='" + f_padding + "' /> &nbsp;&nbsp;" + i18n["pixels"] + "\
@@ -315,34 +306,7 @@ TableOperations.prototype.dialogRowCellProperties = function(cell) {
 <table style='width:100%'> \
   <tr> \
     <td id='--HA-layout'> \
-"+//      <fieldset><legend>" + i18n["Layout"] + "</legend> \
-//        <table style='width:100%'> \
-//         <tr> \
-//           <td class='label'>" + i18n["Align"] + ":</td> \
-//           <td> \
-//             <select name='f_align'> \
-//               <option value='left'" + selected(f_align == "left") + ">" + i18n["Left"] + "</option> \
-//               <option value='center'" + selected(f_align == "center") + ">" + i18n["Center"] + "</option> \
-//               <option value='right'" + selected(f_align == "right") + ">" + i18n["Right"] + "</option> \
-//               <option value='char'" + selected(f_align == "char") + ">" + i18n["Char"] + "</option> \
-//             </select> \
-//             &nbsp;&nbsp;" + i18n["Char"] + ": \
-//             <input type='text' style='font-family: monospace; text-align: center' name='f_char' size='1' value='" + f_char + "' /> \
-//           </td> \
-//         </tr><tr> \
-//           <td class='label'>" + i18n["Vertical align"] + ":</td> \
-//           <td> \
-//             <select name='f_valign'> \
-//               <option value='top'" + selected(f_valign == "top") + ">" + i18n["Top"] + "</option> \
-//               <option value='middle'" + selected(f_valign == "middle") + ">" + i18n["Middle"] + "</option> \
-//               <option value='bottom'" + selected(f_valign == "bottom") + ">" + i18n["Bottom"] + "</option> \
-//               <option value='baseline'" + selected(f_valign == "baseline") + ">" + i18n["Baseline"] + "</option> \
-//             </select> \
-//           </td> \
-//         </tr> \
-//        </table> \
-//       </fieldset> \
-"    </td> \
+    </td> \
   </tr> \
   <tr> \
     <td id='--HA-style'></td> \
@@ -857,7 +821,7 @@ TableOperations.createStyleLayoutFieldset = function(doc, editor, el) {
 		td.appendChild(select);
 		select.name = "f_st_float";
 		options = ["None", "Left", "Right"];
-		for (i in options) {
+		for (var i = 0; i < options.length; ++i) {
 			var Val = options[i];
 			var val = options[i].toLowerCase();
 			option = doc.createElement("option");
@@ -912,7 +876,7 @@ TableOperations.createStyleLayoutFieldset = function(doc, editor, el) {
 	input.size = "1";
 	input.style.fontFamily = "monospace";
 	td.appendChild(input);
-	for (i in options) {
+	for (var i = 0; i < options.length; ++i) {
 		var Val = options[i];
 		var val = Val.toLowerCase();
 		option = doc.createElement("option");
@@ -967,7 +931,7 @@ TableOperations.createStyleLayoutFieldset = function(doc, editor, el) {
 	select.style.marginLeft = "0.5em";
 	td.appendChild(select);
 	options = ["Top", "Middle", "Bottom", "Baseline"];
-	for (i in options) {
+	for (var i = 0; i < options.length; ++i) {
 		var Val = options[i];
 		var val = Val.toLowerCase();
 		option = doc.createElement("option");
@@ -1059,7 +1023,7 @@ TableOperations.createStyleFieldset = function(doc, editor, el) {
 	// That is, "top right bottom left" -- we only consider the first
 	// value.
 	(currentBorderStyle.match(/([^\s]*)\s/)) && (currentBorderStyle = RegExp.$1);
-	for (i in options) {
+	for (var i in options) {
 		var val = options[i];
 		option = doc.createElement("option");
 		option.value = val;
@@ -1069,7 +1033,7 @@ TableOperations.createStyleFieldset = function(doc, editor, el) {
 	}
 	select.style.marginRight = "0.5em";
 	function setBorderFieldsStatus(value) {
-		for (i in borderFields) {
+		for (var i = 0; i < borderFields.length; ++i) {
 			var el = borderFields[i];
 			el.style.visibility = value ? "hidden" : "visible";
 			if (!value && (el.tagName.toLowerCase() == "input")) {

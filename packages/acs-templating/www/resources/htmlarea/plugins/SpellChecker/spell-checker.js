@@ -1,14 +1,10 @@
 // Spell Checker Plugin for HTMLArea-3.0
-// Implementation by Mihai Bazon.  Sponsored by www.americanbible.org
+// Sponsored by www.americanbible.org
+// Implementation by Mihai Bazon, http://dynarch.com/mishoo/
 //
-// htmlArea v3.0 - Copyright (c) 2002 interactivetools.com, inc.
+// (c) dynarch.com 2003-2005.
+// Distributed under the same terms as HTMLArea itself.
 // This notice MUST stay intact for use (see license.txt).
-//
-// A free WYSIWYG editor replacement for <textarea> fields.
-// For full source code and docs, visit http://www.interactivetools.com/
-//
-// Version 3.0 developed by Mihai Bazon for InteractiveTools.
-//	     http://students.infoiasi.ro/~mishoo
 //
 // $Id$
 
@@ -22,13 +18,13 @@ function SpellChecker(editor) {
 
 	// register the toolbar buttons provided by this plugin
 	var toolbar = [];
-	for (var i in bl) {
+	for (var i = 0; i < bl.length; ++i) {
 		var btn = bl[i];
 		if (!btn) {
 			toolbar.push("separator");
 		} else {
 			var id = "SC-" + btn[0];
-			cfg.registerButton(id, tt[id], "plugins/SpellChecker/img/" + btn[0] + ".gif", false,
+			cfg.registerButton(id, tt[id], editor.imgURL(btn[0] + ".gif", "SpellChecker"), false,
 					   function(editor, id) {
 						   // dispatch button press event
 						   self.buttonPress(editor, id);
@@ -37,9 +33,20 @@ function SpellChecker(editor) {
 		}
 	}
 
-	for (var i in toolbar) {
+	for (var i = 0; i < toolbar.length; ++i) {
 		cfg.toolbar[0].push(toolbar[i]);
 	}
+};
+
+SpellChecker._pluginInfo = {
+	name          : "SpellChecker",
+	version       : "1.0",
+	developer     : "Mihai Bazon",
+	developer_url : "http://dynarch.com/mishoo/",
+	c_owner       : "Mihai Bazon",
+	sponsor       : "American Bible Society",
+	sponsor_url   : "http://www.americanbible.org",
+	license       : "htmlArea"
 };
 
 SpellChecker.btnList = [
@@ -52,15 +59,15 @@ SpellChecker.prototype.buttonPress = function(editor, id) {
 	    case "SC-spell-check":
 		SpellChecker.editor = editor;
 		SpellChecker.init = true;
-		var uiurl = editor.config.editorURL + "plugins/SpellChecker/spell-check-ui.html";
+		var uiurl = _editor_url + "plugins/SpellChecker/spell-check-ui.html";
 		var win;
 		if (HTMLArea.is_ie) {
 			win = window.open(uiurl, "SC_spell_checker",
 					  "toolbar=no,location=no,directories=no,status=no,menubar=no," +
-					  "scrollbars=no,resizable=yes,width=600,height=400");
+					  "scrollbars=no,resizable=yes,width=600,height=450");
 		} else {
 			win = window.open(uiurl, "SC_spell_checker",
-					  "toolbar=no,menubar=no,personalbar=no,width=600,height=400," +
+					  "toolbar=no,menubar=no,personalbar=no,width=600,height=450," +
 					  "scrollbars=no,resizable=yes");
 		}
 		win.focus();
