@@ -1,19 +1,20 @@
 ad_page_contract {
 
-  @author rhs@mit.edu
-  @author bquinn@arsidigta.com
-  @creation-date 2000-09-09
-  @cvs-id $Id$
+    @author rhs@mit.edu
+    @author bquinn@arsidigta.com
+    @creation-date 2000-09-09
+    @version $Id$
+
 } {
-  {expand:integer,multiple {}}
-  {new_parent:integer {}}
-  {new_type ""}
-  {root_id:integer {}}
-  {new_application:integer {}}
+    {expand:integer,multiple ""}
+    {new_parent:integer ""}
+    {new_type ""}
+    {root_id:integer ""}
+    {new_application:integer ""}
 }
 
 if {[empty_string_p $root_id]} {
-  set root_id [ad_conn node_id]
+    set root_id [ad_conn node_id]
 }
 
 # We do a check for the admin privilege because a user could have
@@ -22,11 +23,9 @@ if {[empty_string_p $root_id]} {
 # check, the user could end up making changes on site_nodes that he
 # does not have the admin privilege for.
  
-db_1row root_node {
-  select parent_id, object_id
-  from site_nodes
-  where node_id = :root_id
-}
+array set node [site_node::get -node_id $root_id]
+set parent_id $node(parent_id)
+set object_id $node(object_id)
 
 if {![empty_string_p $object_id]} {
   ad_require_permission $object_id admin
@@ -59,15 +58,7 @@ doc_body_append "<html>
 
 set user_id [ad_conn user_id]
 
-db_foreach path_select {
-  select node_id, name, directory_p, level,
-         acs_object.name(object_id) as obj_name,
-         acs_permission.permission_p(object_id, :user_id, 'admin') as admin_p
-  from site_nodes
-  start with node_id = :root_id
-  connect by node_id = prior parent_id
-  order by level desc
-} {
+db_foreach path_select {} {
   if {$node_id != $root_id && $admin_p == "t"} {
     doc_body_append "<a href=.?[export_url_vars expand:multiple root_id=$node_id]>"
   }
@@ -108,34 +99,7 @@ if {[llength $expand] == 0} {
 # containing connect by.  However, if you rename the column, Oracle is happy to give
 # it to you.  We could tell you how we figured this out, but then we would have to kill you.
 
-db_foreach nodes_select "
-select package_id,
-       package_key,
-       apm_package_type.num_parameters(package_key) parameter_count,
-       node_id, url, parent_url, name, root_p, mylevel - 1 as mylevel, object_id,
-       object_name, directory_p, parent_id, n_children,
-       (select decode(acs_permission.permission_p(object_id, :user_id, 'admin'),
-                      't', 1, 0) from dual) object_admin_p  
-from apm_packages p, (
-  select node_id, site_node.url(node_id) as url,
-         site_node.url(parent_id) as parent_url,
-         name,
-         (select count(*)
-          from site_nodes
-          where parent_id = n.node_id) as n_children,
-         decode(node_id, site_node.node_id('/'), 1, 0) as root_p,
-         level as mylevel,
-         object_id,
-         acs_object.name(object_id) as object_name,
-         directory_p,
-         parent_id
-  from site_nodes n
-  where (object_id is null or
-         acs_permission.permission_p(object_id, :user_id, 'read') = 't')
-  start with node_id = nvl(:root_id, site_node.node_id('/'))
-  connect by prior node_id = parent_id and parent_id in ([join $expand ", "])) site_map
- where site_map.object_id = p.package_id (+)
-" {
+db_foreach nodes_select {} {
   doc_body_append "<tr><td><nobr><font face=courier size=-1>"
   for {set i 0} {$i < 3*$mylevel} {incr i} {
     doc_body_append "&nbsp;"
@@ -254,9 +218,8 @@ from apm_packages p, (
       doc_body_append "&nbsp;"
     }
     # Generate a node_id for doubleclick protection.
-    set new_node_id [db_nextval acs_object_id_seq] 
     doc_body_append "
-        [export_form_vars expand:multiple parent_id node_type root_id new_node_id]
+        [export_form_vars expand:multiple parent_id node_type root_id]
         <b><input name=name type=text size=8 value=Untitled>
         <input type=submit value=New></b>
       </font></nobr>
@@ -287,15 +250,7 @@ doc_body_append "
 "
 
 
-db_foreach services_select {
-  select package_id, ap.package_key, acs_object.name(package_id) instance_name,
-  apm_package_type.num_parameters(ap.package_key) parameter_count
-  from apm_packages ap, apm_package_types
-  where ap.package_key = apm_package_types.package_key
-  and package_type = 'apm_service'
-  and (acs_permission.permission_p(package_id, :user_id, 'read') = 't' or
-       acs_permission.permission_p(package_id, acs.magic_object_id('the_public'), 'read') = 't')
-} {
+db_foreach services_select {} {
     set options [list]
     if {$parameter_count > 0} {
         if {[ad_permission_p $package_id admin]} {		

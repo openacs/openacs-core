@@ -14,15 +14,6 @@ ad_page_contract {
 
 ad_require_permission $package_id read
 
-db_transaction {
-  db_dml mount {
-    update site_nodes
-    set object_id = :package_id
-    where node_id = :node_id
-    and object_id is null
-  }
+site_node::mount -node_id $node_id -object_id $package_id
 
-  site_nodes_sync
-}
-
-ad_returnredirect .?[export_url_vars expand:multiple root_id]
+ad_returnredirect ".?[export_url_vars expand:multiple root_id]"

@@ -1,19 +1,19 @@
 ad_page_contract {
+
     Set parameters on a package instance.
+
     @author Bryan Quinn (bquinn@arsdigita.com)
     @date 12 September 2000
-    @cvs-id $Id$
+    @version $Id$
+
 } {
     package_id:naturalnum,notnull
     {orderby ""}
 }
 
 ad_require_permission $package_id admin
-db_1row package_info {
-    select package_key, acs_object.name(package_id) instance_name
-    from apm_packages
-    where package_id = :package_id
-}
+
+db_1row package_info {}
 
 set table_def [list \
 		   [list parameter_name "Parameter Name"] \

@@ -4,13 +4,14 @@ ad_page_contract {
 
     @author Bryan Quinn (bquinn@arsdigita.com)
     @creation-date Mon Oct 23 14:58:57 2000
-    @cvs-id $Id$
+    @version $Id$
+
 } {
     package_id:naturalnum
 } -validate {
     package_not_mounted_ck {
 	if {[db_string package_mounted_p {
-	    select decode(count(*),0, 0, 1) 
+	    select decode(count(*),0, 0, 1)
 	    from apm_packages p, site_nodes s
 	    where package_id = :package_id
 	    and p.package_id = s.object_id
@@ -23,11 +24,7 @@ ad_page_contract {
 }
 
 db_transaction {
-    db_exec_plsql package_instance_delete {
-	begin
-	apm_package.delete(package_id => :package_id);
-	end;
-    }
+    apm_package_instance_delete $package_id
 } on_error {
     if {[db_string instance_delete_doubleclick_ck {
 	select decode(count(*), 0, 0, 1) from apm_packages
@@ -39,4 +36,3 @@ db_transaction {
 }
 	
 ad_returnredirect unmounted
-	
