@@ -25,6 +25,7 @@ doc_body_append "[ad_header "ACS Developer Support"]
 <hr>
 
 <ul>
+<li><a href=\"shell.tcl\">OpenACS Shell</a>
 <li>Developer support information is currently
 [ad_decode $enabled_p 1 \
     "on (<a href=\"set-enabled?enabled_p=0\">turn it off</a>)" \

@@ -8,7 +8,7 @@
     <singleton-p>t</singleton-p>
     <auto-mount>ds</auto-mount>
 
-    <version name="5.0d1" url="http://www.arsdigita.com/acs-repository/download/apm/acs-developer-support-5.0d1.apm">
+    <version name="5.0d2" url="http://www.arsdigita.com/acs-repository/download/apm/acs-developer-support-5.0d2.apm">
     <database-support>
         <database>oracle</database>
         <database>postgresql</database>
@@ -19,7 +19,7 @@
         <release-date>2001-01-24</release-date>
         <vendor url="http://www.arsdigita.com/">ArsDigita Corporation</vendor>
 
-        <provides url="acs-developer-support" version="5.0d1"/>
+        <provides url="acs-developer-support" version="5.0d2"/>
         <requires url="acs-kernel" version="4.6.2"/>
 
         <parameters>
