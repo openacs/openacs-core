@@ -1,5 +1,5 @@
 <if @show_p@ true>
-  <if @comments:rowcount@ gt 0>
+    <if @comments:rowcount@ gt 0>
     <div class="developer-support-footer">
       <multiple name="comments">
         <b>Comment:</b> <pre style="display: inline;">@comments.text@</pre><br />
@@ -38,7 +38,7 @@
         </tr>
         <multiple name="profiling">
           <tr>
-            <td> @profiling.file_links;noquote@ @profiling.tag@</td>
+            <td align="left"> @profiling.file_links;noquote@ @profiling.tag@</td>
             <td align="right">@profiling.num_iterations@</td>
             <td align="right">@profiling.total_ms@ ms</td>
             <td align="right">@profiling.ms_per_iteration@ ms</td>
