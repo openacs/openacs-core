@@ -10,15 +10,22 @@
   <title>How to package and release OpenACS</title>
     <orderedlist>
       <listitem>
-        <para>update the version number in
-          packages/acs-core-docs/www/xml/variables.ent, readme.txt,
-          and all core .info files.  Regenerate the html documentation
-          and commit all the changes.  Update the information in the
-          packages/acs-core-docs/www/xml/for-everyone/release-notes.xml
-          file.
-        </para>
+        <para>Update documentation version numbers:</para>
+        <orderedlist>
+          <listitem>
+            <para>Update /packages/acs-core-docs/www/xml/variables.ent with the new version number and regenerate all HTML docs
+            </para>
+          </listitem>
+          <listitem>
+            <para>Update /readme.txt with the new version number</para>
+          </listitem>
+          <listitem>
+            <para>
+              Commit changes
+            </para>
+          </listitem>
+        </orderedlist>
       </listitem>
-
       <listitem>
         <para>Check out the whole cvs tree.  The files must be checked
           out through a cvs account with write access and should be a
@@ -26,8 +33,7 @@
           this is being done as a local user on openacs.org (which make the 
           checkout and tagging operations much faster).</para>
         <screen><action>cd /var/tmp
-cvs -d /cvsroot checkout -r <replaceable>oacs-5-0</replaceable> openacs-4</action>
-</screen>
+cvs -d /cvsroot checkout -r <replaceable>oacs-5-0</replaceable> openacs-4</action></screen>
         <para>Repeat with the dotlrn cvs tree.</para>
         <screen><action>cd /var/tmp
 mkdir dotlrn-packages
