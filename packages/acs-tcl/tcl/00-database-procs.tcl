@@ -459,10 +459,19 @@ ad_proc -public db_multirow {
     <code><i>var_name</i>:1</code>, <code><i>var_name</i>:2</code>, etc,
     setting <code><i>var_name</i>:rowcount</code> to the total number
     of rows, and setting <code><i>var_name</i>:columns</code> to a
-    list of column names. Each row also has a column, rownum, automatically 
+    list of column names. 
+
+    <p>
+    
+    Each row also has a column, rownum, automatically 
     added and set to the row number, starting with 1. Note that this will
     override any column in the SQL statement named 'rownum', also if you're
     using the Oracle rownum pseudo-column.
+    
+    <p>
+    If the <code>-local</code> is passed, the variables defined                                                            
+    by db_multirow will be set locally (useful if you're compiling dynamic templates                                                           
+    in a function or similar situations).
 
     <p>
 
