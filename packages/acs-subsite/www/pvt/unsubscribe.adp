@@ -3,7 +3,7 @@
 <property name="context">Confirm Unsubscribe</property>
 
 
-<p>Confirm that you'd like to unsubscribe from @site_link@.</p>
+<p>Confirm that you'd like to unsubscribe from @site_link;noquote@.</p>
 
 <if @on_vacation_p@ eq "t">
 
@@ -20,7 +20,7 @@ email then you might want to
 <ul>
 <li>tell the system that you're going on vacation until 
 <form method="get" action="set-on-vacation-until">
-@date_entry_widget@
+@date_entry_widget;noquote@
 <input type="submit" value="Put email on hold" />
 </form>
 <p>
