@@ -418,7 +418,7 @@ exit</action></screen>
             <tip>
               <para>If adding or upgrading a single package, run the cvs import from within the base directory of that package, and adjust the cvs command accordingly.  In this example, we are adding the <computeroutput>myfirstpackage</computeroutput> package.</para>
               <screen>[root root]# <userinput>su - <replaceable>service0</replaceable></userinput>
-[service0 aolserver]$ <userinput>cd /var/lib/aolserver/<replaceable>openacs-5-0</replaceable>/packagse/<replaceable>myfirstpackage</replaceable></userinput>
+[service0 aolserver]$ <userinput>cd /var/lib/aolserver/<replaceable>openacs-5-0</replaceable>/packagse/<replaceable>myfirstpackage</replaceable> OpenACS openacs-5-1</userinput>
 [service0 myfirstpackage]$ <userinput>cvs -d /var/lib/cvs/ import -m "importing package" <replaceable>service0</replaceable>/packages/<replaceable>myfirstpackage</replaceable></userinput></screen>
             </tip>
 
