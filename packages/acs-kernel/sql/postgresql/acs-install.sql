@@ -128,7 +128,7 @@ begin
   -- that only users logged in can view it
 
   update acs_objects
-     set security_inherit_p = 'f'
+     set security_inherit_p = ''f''
    where object_id = api_doc_id;
 
   PERFORM acs_permission__grant_permission (
