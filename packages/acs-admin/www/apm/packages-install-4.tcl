@@ -93,10 +93,6 @@ foreach pkg_info $pkg_install_list {
     incr installed_count
 }
 
-# Load init Tcl files and test Tcl files for all enable packages. Tcl -proc files and queries
-# have already been loaded by apm_package_install
-apm_mark_packages_for_bootstrap $pkg_enable_list
-
 if {$installed_count < 1} {
     ns_write "</ul>
     All packages in this directory have already been installed.
@@ -107,8 +103,7 @@ if {$installed_count < 1} {
 
 ns_write "</ul><p>
 Done installing packages.
-<p>The packages are available immediately. Enjoy!</p>
-<p>Return to the <a href=\"index\">APM</a>.</p>
+<p>You should restart the server now to make installed and upgraded packages available.</p>
 [ad_footer]
 "
 }
