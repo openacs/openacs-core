@@ -812,8 +812,10 @@ ad_proc -private api_tcl_to_html {proc_name} {
         } elseif {[string index $data 0] == " "} {
             return [length_spaces $data]
         }
-        regexp -indices { } $data match
-        return [lindex $match 1]
+        if { [regexp -indices { } $data match] } {
+            return [lindex $match 1]
+        }
+        return 0
     }
 
     # Calculate how much text we should ignore
