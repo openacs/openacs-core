@@ -18,6 +18,6 @@ ns_return 200 text/html "
 [ad_header "Signed Cookies Test Page"]
 
 
-cookies set. <a href=\"signed-cookies-test-2.tcl\">test it out</a>.
+cookies set. <a href=\"signed-cookies-test-2\">test it out</a>.
 
 [ad_footer]"

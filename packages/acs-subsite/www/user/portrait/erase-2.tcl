@@ -33,7 +33,7 @@ where item_id = (
    and rel_type = 'user_portrait_rel')"
 
 if [empty_string_p $return_url] {
-    set return_url "/pvt/home.tcl"
+    set return_url "/pvt/home"
 }
 
 ad_returnredirect $return_url

@@ -49,7 +49,7 @@ if { [llength $enabled_ips] == 0 } {
     }
 }
 if { !$includes_this_ip_p } {
-    doc_body_append "<li><a href=\"add-ip.tcl?ip=[ad_conn peeraddr]\">add your IP, [ad_conn peeraddr]</a>\n"
+    doc_body_append "<li><a href=\"add-ip?ip=[ad_conn peeraddr]\">add your IP, [ad_conn peeraddr]</a>\n"
 }
 
 set requests [nsv_array names ds_request]

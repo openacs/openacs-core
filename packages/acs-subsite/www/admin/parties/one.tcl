@@ -49,8 +49,8 @@ db_1row party_info {
 set object_type_path_list [subsite::util::object_type_path_list $party_type party]
 
 set redirects_for_type [list \
-	group "groups/one.tcl?group_id=$party_id" \
-	rel_segment "rel-segments/one.tcl?segment_id=$party_id"]
+	group "groups/one?group_id=$party_id" \
+	rel_segment "rel-segments/one?segment_id=$party_id"]
 
 foreach {type url} $redirects_for_type {
     if {[lsearch $object_type_path_list $type] != -1} {

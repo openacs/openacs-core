@@ -19,7 +19,7 @@ db_1row apm_package_by_version_id {
 
 if { $remove_files_p == 1 } {
     # This is really a "remove multiple files" page.
-    set form "action=\"file-remove.tcl\" method=post"
+    set form "action=\"file-remove\" method=post"
     set apm_header_args [list [list "version-files?version_id=$version_id" "Files"] "Remove Files"]
 } else {
     set form ""

@@ -18,7 +18,7 @@ db_1row apm_all_version_info {
     from apm_package_version_info where version_id = :version_id
 }
 
-doc_body_append "[apm_header -form "action=\"version-edit-2.tcl\" method=post" [list "version-view?version_id=$version_id" "$pretty_name $version_name"] "Edit a Version"]
+doc_body_append "[apm_header -form "action=\"version-edit-2\" method=post" [list "version-view?version_id=$version_id" "$pretty_name $version_name"] "Edit a Version"]
 
 "
 
