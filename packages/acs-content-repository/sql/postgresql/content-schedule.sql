@@ -28,7 +28,6 @@ for each row execute procedure cr_scheduled_release_tr ();
 
 -- Update the publishing status for items that are due to be released
 -- or expired.
--- FIXME: job scheduling not available through postgresql.
 
 create function cr_scheduled_release_exec () returns integer as '
 declare

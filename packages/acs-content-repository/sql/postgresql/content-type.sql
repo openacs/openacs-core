@@ -283,7 +283,7 @@ begin
 
   -- FIXME: postgresql does not support drop column.
   -- Drop the column if neccessary
-  if drop_attribute__drop_column then
+  if drop_attribute__drop_column and ''f'' then
       execute ''alter table '' || v_table || '' drop column '' ||
 	drop_attribute__attribute_name;
 
