@@ -174,7 +174,16 @@ begin
     -- The rule dropping might be redundant as the rule might be dropped
     -- when the view is dropped.
 
-    execute ''drop rule '' || v_table_name || ''_r'';
+    -- different syntax for dropping a rule in 7.2 and 7.3 so check which
+    -- version is being used (olah).
+
+    if version() like ''%7.2%'' then
+      execute ''drop rule '' || v_table_name || ''_r'';
+    else
+      -- 7.3 syntax
+      execute ''drop rule '' || v_table_name || ''_r '' || ''on '' || v_table_name || ''i'';
+    end if;
+
     execute ''drop view '' || v_table_name || ''x'';
     execute ''drop view '' || v_table_name || ''i'';
 
@@ -589,7 +598,16 @@ begin
 
   -- drop the old rule
   if rule_exists(v_table_name || ''_r'', v_table_name || ''i'') then 
-     execute ''drop rule '' || v_table_name || ''_r'';
+
+    -- different syntax for dropping a rule in 7.2 and 7.3 so check which
+    -- version is being used (olah).
+    if version() like ''%7.2%'' then
+      execute ''drop rule '' || v_table_name || ''_r'';
+    else
+      -- 7.3 syntax
+      execute ''drop rule '' || v_table_name || ''_r '' || ''on '' || v_table_name || ''i'';
+    end if;
+
   end if;
 
   -- create the new rule for inserts on the content type
