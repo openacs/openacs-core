@@ -1,5 +1,26 @@
 This is the OpenACS - the Open Architecture Community System.
 
+Version 4.6.2
+
+--------------
+
+For installation instructions, please see
+packages/acs-core-docs/www/acs-admin.html
+
+The release notes for this release are available at
+packages/acs-core-docs/www/release-notes.html
+
+Documentation for this system is at viewable via your favorite browser 
+at http://openacs.org/doc
+
+Once your service is up and running, this same documenation is
+available at http://yourserver/doc/
+
+Please report bugs via http://openacs.org/bugtracker/openacs/
+and any questions and feedback at http://openacs.org/forums/
+
+--------------
+
 OpenACS is an advanced toolkit for building scalable,
 community-oriented web applications.
 
@@ -14,7 +35,7 @@ OpenACS is a community created and supported software system, visit
 http://openacs.org for more information. 
 
 The major change in OpenACS 4.x is its database-independence; it can
-use either PostgreSQL (7.1 or later) or Oracle (8.1.6 or later).
+use either PostgreSQL (7.2 or later) or Oracle (8.1.6 or later).
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -30,19 +51,3 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
---------------
-
-For installation instructions, please see
-http://openacs.org/doc/openacs-4/acs-admin
-
-Documentation for this system is at viewable via your favorite browser 
-at http://openacs.org/doc
-
-Once your service is up and running, this same documenation is
-available at http://YOURSERVICENAME/doc/
-
-The release notes for this release are available at
-packages/acs-core-docs/www/release-notes.html
-
-Please report bugs via http://openacs.org/bugtracker/openacs/
-and any questions and feedback at http://openacs.org/forums/
