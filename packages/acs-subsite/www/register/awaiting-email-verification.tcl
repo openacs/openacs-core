@@ -45,5 +45,5 @@ db_release_unused_handles
 ad_return_template
 
 # the user has to come back and activate their account
-ns_sendmail  "$email" "[ad_parameter NewRegistrationEmailAddress "security"]" "Welcome to [ad_system_name]" "To confirm your registration, please go to [ad_parameter SystemURL]/register/email-confirm.tcl?[export_url_vars rowid]"
+ns_sendmail  "$email" "[ad_parameter NewRegistrationEmailAddress "security"]" "Welcome to [ad_system_name]" "To confirm your registration, please go to [ad_parameter -package_id [ad_acs_kernel_id] SystemURL]/register/email-confirm.tcl?[export_url_vars rowid]"
 
