@@ -26,9 +26,7 @@
 	       pretty_name,
                repeat('$indent_string',(tree_level(tree_sortkey) - 1) * $indent_width) as indent
 	  from acs_object_types
-         where tree_sortkey like (select tree_sortkey || '%'
-                                    from acs_object_types
-                                   where supertype is null)
+	 order by tree_sortkey
 
       </querytext>
 </partialquery>
