@@ -7,7 +7,7 @@ template::filter add content::init
 # Walter McGinnis (wtem@olywa.net), 2001-09-23
 # based on original photo-album package code by Tom Baginski
 
-ad_schedule_proc -thread t -schedule_proc ns_schedule_daily [list 1 0] cr_delete_scheduled_files
+ad_schedule_proc -thread t -schedule_proc ns_schedule_daily [list 22 0] cr_delete_scheduled_files
 
 ad_proc -public acs_cr_scheduled_release_exec {} {
 
