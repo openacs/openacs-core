@@ -15,6 +15,7 @@
     @header_stuff;noquote@
     <!--<link rel="stylesheet" type="text/css" href="@css_url@" media="all">-->
   </property>
+  <if @displayed_object_id@ not nil><property name="displayed_object_id">@displayed_object_id;noquote@</property></if>
 
 <div id="subsite-name">
   <if @subsite_url@ not nil><a href="@subsite_url@" class="subsite-name">@subsite_name@</a></if>
