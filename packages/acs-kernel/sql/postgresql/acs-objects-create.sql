@@ -150,6 +150,38 @@ begin
 	''f''
 	);
 
+ attr_id := acs_attribute__create_attribute (
+	''acs_object'',
+	''package_id'',
+	''integer'',
+	''Package ID'',
+	''Package IDs'',
+	null,
+	null,
+	null,
+	0,
+	1,
+	null,
+	''type_specific'',
+	''f''
+	);
+
+ attr_id := acs_attribute__create_attribute (
+	''acs_object'',
+	''title'',
+	''string'',
+	''Title'',
+	''Titles'',
+	null,
+	null,
+	null,
+	0,
+	1,
+	null,
+	''type_specific'',
+	''f''
+	);
+
   return 0;
 end;' language 'plpgsql';
 
@@ -178,6 +210,8 @@ create table acs_objects (
 	object_type		varchar(100) not null
 				constraint acs_objects_object_type_fk
 				references acs_object_types (object_type),
+        title			varchar(1000) default null,
+        package_id		integer default null,
         context_id		integer constraint acs_objects_context_id_fk
 				references acs_objects(object_id),
 	security_inherit_p	boolean default 't' not null,
@@ -202,6 +236,9 @@ create table acs_objects (
 
 create index acs_objects_creation_user_idx on acs_objects (creation_user);
 create index acs_objects_modify_user_idx on acs_objects (modifying_user);
+
+create index acs_objects_package_object_idx on acs_objects (package_id, object_id);
+create index acs_objects_title_idx on acs_objects(title);
 
 create index acs_objects_object_type_idx on acs_objects (object_type);
 
@@ -339,6 +376,18 @@ comment on column acs_objects.creation_user is '
 
 comment on column acs_objects.modifying_user is '
  Who last modified the object
+';
+
+comment on column acs_objects.package_id is '
+ Which package instance this object belongs to.
+ Please note that in mid-term this column will replace all
+ package_ids of package specific tables.
+';
+
+comment on column acs_objects.title is '
+ Title of the object if applicable.
+ Please note that in mid-term this column will replace all
+ titles or object_names of package specific tables.
 ';
 
 -----------------------
@@ -584,7 +633,7 @@ end;' language 'plpgsql';
 
 
 -- function new
-create or replace function acs_object__new (integer,varchar,timestamptz,integer,varchar,integer,boolean)
+create or replace function acs_object__new (integer,varchar,timestamptz,integer,varchar,integer,boolean,varchar,integer)
 returns integer as '
 declare
   new__object_id              alias for $1;  -- default null
@@ -594,14 +643,29 @@ declare
   new__creation_ip            alias for $5;  -- default null
   new__context_id             alias for $6;  -- default null
   new__security_inherit_p     alias for $7;  -- default ''t''
+  new__title                  alias for $8;  -- default null
+  new__package_id             alias for $9;  -- default null
   v_object_id                 acs_objects.object_id%TYPE;
   v_creation_date	      timestamptz;
+  v_title                     acs_objects.title%TYPE;
+  v_object_type_pretty_name   acs_object_types.pretty_name%TYPE;
 begin
   if new__object_id is null then
    select acs_object_id_seq.nextval
    into v_object_id from dual;
   else
     v_object_id := new__object_id;
+  end if;
+
+  if new__object_id is null then
+   select pretty_name
+   into v_object_type_pretty_name
+   from acs_object_types
+   where object_type = new__object_type;
+
+    v_title := v_object_type_pretty_name || '' '' || v_object_id;
+  else
+    v_title := new__title;
   end if;
 
   if new__creation_date is null then
@@ -611,10 +675,10 @@ begin
   end if;
 
   insert into acs_objects
-   (object_id, object_type, context_id,
+   (object_id, object_type, title, package_id, context_id,
     creation_date, creation_user, creation_ip, security_inherit_p)
   values
-   (v_object_id, new__object_type, new__context_id,
+   (v_object_id, new__object_type, v_title, new__package_id, new__context_id,
     v_creation_date, new__creation_user, new__creation_ip, 
     new__security_inherit_p);
 
@@ -637,30 +701,75 @@ declare
   v_object_id                 acs_objects.object_id%TYPE;
   v_creation_date	      timestamptz;
 begin
-  if new__object_id is null then
-   select acs_object_id_seq.nextval
-   into v_object_id from dual;
-  else
-    v_object_id := new__object_id;
-  end if;
+  return acs_object__new(new__object_id, new__object_type, new__creation_date,
+                         new__creation_user, new__creation_ip, new__context_id,
+                         ''t'', null, null);
+end;' language 'plpgsql';
 
-  if new__creation_date is null then
-   v_creation_date:= now();
-  else
-   v_creation_date := new__creation_date;
-  end if;
+create or replace function acs_object__new (integer,varchar,timestamptz,integer,varchar,integer,boolean)
+returns integer as '
+declare
+  new__object_id              alias for $1;  -- default null
+  new__object_type            alias for $2;  -- default ''acs_object''
+  new__creation_date          alias for $3;  -- default now()
+  new__creation_user          alias for $4;  -- default null
+  new__creation_ip            alias for $5;  -- default null
+  new__context_id             alias for $6;  -- default null
+  new__security_inherit_p     alias for $7;  -- default ''t''
+begin
+  return acs_object__new(new__object_id, new__object_type, new__creation_date,
+                         new__creation_user, new__creation_ip, new__context_id,
+                         new__security_inherit_p, null, null);
+end;' language 'plpgsql';
 
-  insert into acs_objects
-   (object_id, object_type, context_id,
-    creation_date, creation_user, creation_ip)
-  values
-   (v_object_id, new__object_type, new__context_id,
-    v_creation_date, new__creation_user, new__creation_ip);
+create or replace function acs_object__new (integer,varchar,timestamptz,integer,varchar,integer,boolean,varchar)
+returns integer as '
+declare
+  new__object_id              alias for $1;  -- default null
+  new__object_type            alias for $2;  -- default ''acs_object''
+  new__creation_date          alias for $3;  -- default now()
+  new__creation_user          alias for $4;  -- default null
+  new__creation_ip            alias for $5;  -- default null
+  new__context_id             alias for $6;  -- default null
+  new__security_inherit_p     alias for $7;  -- default ''t''
+  new__title                  alias for $8;  -- default null
+begin
+  return acs_object__new(new__object_id, new__object_type, new__creation_date,
+                         new__creation_user, new__creation_ip, new__context_id,
+                         new__security_inherit_p, new__title, null);
+end;' language 'plpgsql';
 
-  PERFORM acs_object__initialize_attributes(v_object_id);
+create or replace function acs_object__new (integer,varchar,timestamptz,integer,varchar,integer,varchar,integer)
+returns integer as '
+declare
+  new__object_id              alias for $1;  -- default null
+  new__object_type            alias for $2;  -- default ''acs_object''
+  new__creation_date          alias for $3;  -- default now()
+  new__creation_user          alias for $4;  -- default null
+  new__creation_ip            alias for $5;  -- default null
+  new__context_id             alias for $6;  -- default null
+  new__title                  alias for $7;  -- default null
+  new__package_id             alias for $8;  -- default null
+begin
+  return acs_object__new(new__object_id, new__object_type, new__creation_date,
+                         new__creation_user, new__creation_ip, new__context_id,
+                         ''t'', new__title, new__package_id);
+end;' language 'plpgsql';
 
-  return v_object_id;
-  
+create or replace function acs_object__new (integer,varchar,timestamptz,integer,varchar,integer,varchar)
+returns integer as '
+declare
+  new__object_id              alias for $1;  -- default null
+  new__object_type            alias for $2;  -- default ''acs_object''
+  new__creation_date          alias for $3;  -- default now()
+  new__creation_user          alias for $4;  -- default null
+  new__creation_ip            alias for $5;  -- default null
+  new__context_id             alias for $6;  -- default null
+  new__title                  alias for $7;  -- default null
+begin
+  return acs_object__new(new__object_id, new__object_type, new__creation_date,
+                         new__creation_user, new__creation_ip, new__context_id,
+                         ''t'', new__title, null);
 end;' language 'plpgsql';
 
 create function acs_object__new (integer,varchar) returns integer as '
@@ -750,6 +859,14 @@ begin
   --                            where o.object_id = name__object_id)
   -- connect by object_type = prior supertype
 
+  select title into object_name
+  from acs_objects
+  where object_id = name__object_id;
+
+  if (object_name is not null) then
+    return object_name;
+  end if;
+
   for obj_type
   in select o2.name_method
         from acs_object_types o1, acs_object_types o2
@@ -796,6 +913,25 @@ begin
 
   return object_type_pretty_name || '' '' || default_name__object_id;
 
+end;' language 'plpgsql' stable strict;
+
+
+-- function package_id
+create or replace function acs_object__package_id (integer)
+returns integer as '
+declare
+  p_object_id  alias for $1;
+  v_package_id acs_objects.package_id%TYPE;
+begin
+  if p_object_id is null then
+    return null;
+  end if;
+
+  select package_id into v_package_id
+  from acs_objects
+  where object_id = p_object_id;
+
+  return v_package_id;
 end;' language 'plpgsql' stable strict;
 
 

@@ -36,6 +36,8 @@ ad_proc -public ad_acs_admin_node {} {
 ad_proc -public ad_verify_install {} {
   Returns 1 if the acs is properly installed, 0 otherwise.
 } {
+    # define util_memoize with proc here to avoid error messages about multiple 
+    # defines.
     if { ![db_table_exists apm_packages] || ![db_table_exists site_nodes] } {
 	proc util_memoize {script {max_age ""}} {eval $script}
 	return 0

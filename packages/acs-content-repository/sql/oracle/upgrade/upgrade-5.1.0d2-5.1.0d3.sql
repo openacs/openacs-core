@@ -1,87 +1,102 @@
--- Data model to support content repository of the ArsDigita
--- Publishing System
+update acs_objects
+set title = (select label
+             from cr_folders
+             where folder_id = object_id),
+package_id = (select package_id
+             from apm_packages
+             where package_key = 'acs-content-repository')
+where object_type = 'content_folder'
+and object_id < 0;
 
--- Copyright (C) 1999-2000 ArsDigita Corporation
--- Author: Hiro Iwashima (iwashima@mit.edu)
+update acs_objects
+set title = (select label
+             from cr_folders
+             where folder_id = object_id),
+package_id = (select nvl(package_id, acs_object.package_id(content_item.get_root_folder(folder_id)))
+             from cr_folders
+             where folder_id = object_id)
+where object_type = 'content_folder'
+and object_id > 0;
 
--- $Id$
+update acs_objects
+set title = (select name
+             from cr_items
+             where item_id = object_id),
+package_id = acs_object.package_id(content_item.get_root_folder(object_id))
+where object_type = 'content_item';
 
--- This is free software distributed under the terms of the GNU Public
--- License.  Full text of the license is available from the GNU Project:
--- http://www.fsf.org/copyleft/gpl.html
+update acs_objects
+set title = (select title
+             from cr_revisions
+             where revision_id = object_id),
+package_id = (select acs_object.package_id(item_id)
+             from cr_revisions
+             where revision_id = object_id)
+where object_type in ('content_revision', 'image');
 
--- This is to handle images
+update acs_objects
+set title = (select label
+             from cr_symlinks
+             where symlink_id = object_id),
+package_id = (select acs_object.package_id(target_id)
+             from cr_symlinks
+             where symlink_id = object_id)
+where object_type = 'content_symlink';
 
-create table images (
-   image_id       integer
-                  constraint images_image_id_fk
-                  references cr_revisions
-                  constraint images_pk
-                  primary key,
-   width          integer,
-   height         integer
-);
+update acs_objects
+set title = (select label
+             from cr_extlinks
+             where extlink_id = object_id),
+package_id = (select acs_object.package_id(parent_id)
+             from cr_items
+             where item_id = object_id)
+where object_type = 'content_extlink';
 
+update acs_objects
+set title = (select heading
+             from cr_keywords
+             where keyword_id = object_id),
+package_id = (select package_id
+             from apm_packages
+             where package_key = 'acs-content-repository')
+where object_type = 'content_keyword';
 
-declare
- attr_id integer;
-begin
+update acs_objects
+set title = (select name
+             from cr_items
+             where item_id = object_id),
+package_id = (select acs_object.package_id(parent_id)
+             from cr_items
+             where item_id = object_id)
+where object_type = 'content_template';
 
- content_type.create_type (
-   content_type  => 'image',
-   supertype     => 'content_revision',
-   pretty_name   => 'Image',
-   pretty_plural => 'Images',
-   table_name	 => 'images',
-   id_column     => 'image_id'
- );
+update acs_objects
+set title = (select relation_tag || ': ' || item_id || ' - ' || related_object_id
+             from cr_item_rels
+             where rel_id = object_id),
+package_id = (select acs_object.package_id(item_id)
+             from cr_item_rels
+             where rel_id = object_id)
+where object_type = 'cr_item_rel';
 
- attr_id := content_type.create_attribute (
-   content_type   => 'image',
-   attribute_name => 'width',
-   datatype       => 'integer',
-   pretty_name    => 'Width',
-   pretty_plural  => 'Widths'
- );
+update acs_objects
+set title = (select relation_tag || ': ' || parent_id || ' - ' || child_id
+             from cr_child_rels
+             where rel_id = object_id),
+package_id = (select acs_object.package_id(parent_id)
+             from cr_child_rels
+             where rel_id = object_id)
+where object_type = 'cr_item_child_rel';
 
- attr_id := content_type.create_attribute (
-   content_type   => 'image',
-   attribute_name => 'height',
-   datatype       => 'integer',
-   pretty_name    => 'Height',
-   pretty_plural  => 'Heights'
- );
+@@ ../packages-create.sql
+@@ ../content-item.sql
+@@ ../content-revision.sql
+@@ ../content-folder.sql
+@@ ../content-template.sql
+@@ ../content-symlink.sql
+@@ ../content-extlink.sql
+@@ ../content-keyword.sql
 
-end;
-/
-show errors
-
-
--- register MIME types to this content type
-begin
-
-  content_type.register_mime_type(
-    content_type => 'image',
-    mime_type    => 'image/jpeg'
-  );
-
-  content_type.register_mime_type(
-    content_type => 'image',
-    mime_type    => 'image/gif'
-  );
-
-end;
-/
-show errors
-
-
--- content-image.sql patch
---
--- adds standard image pl/sql package
---
--- Walter McGinnis (wtem@olywa.net), 2001-09-23
--- based on original photo-album package code by Tom Baginski
---
 
 create or replace package image
 as

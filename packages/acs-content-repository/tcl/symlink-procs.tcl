@@ -15,6 +15,7 @@ ad_proc content_symlink::new {
     -parent_id:required
     {-name ""}
     {-label ""}
+    {-package_id ""}
 } {
 
     Create a new internal link.
@@ -25,11 +26,16 @@ ad_proc content_symlink::new {
     @name Name to assign the object (defaults to the name of the target item)
     @label Label for the symlink (defaults to the URL)
     @description An extended description of the link (defaults to NULL)
+    @package_id Package Id of the package that created the link
 
 } {
 
     set creation_user [ad_conn user_id]
     set creation_ip [ad_conn peeraddr]
+
+    if {[empty_string_p $package_id]} {
+	set package_id [ad_conn package_id]
+    }
 
     return [db_exec_plsql symlink_new {}]
 

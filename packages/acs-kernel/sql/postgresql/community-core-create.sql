@@ -286,7 +286,8 @@ declare
 begin
   v_party_id :=
    acs_object__new(new__party_id, new__object_type, new__creation_date, 
-                   new__creation_user, new__creation_ip, new__context_id);
+                   new__creation_user, new__creation_ip, new__context_id,
+                   ''t'', new__email, null);
 
   insert into parties
    (party_id, email, url)
@@ -408,6 +409,10 @@ begin
    party__new(new__person_id, new__object_type,
              new__creation_date, new__creation_user, new__creation_ip,
              new__email, new__url, new__context_id);
+
+  update acs_objects
+  set title = new__first_names || '' '' || new__last_name
+  where object_id = v_person_id;
 
   insert into persons
    (person_id, first_names, last_name)

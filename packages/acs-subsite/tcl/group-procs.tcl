@@ -269,6 +269,14 @@ ad_proc -public group::update {
         set    [join $set_clauses ", "]
         where  group_id = :group_id
     "
+
+    if {[info exists group_name]} {
+	db_dml update_object_title {
+	    update acs_objects
+	    set title = :group_name
+	    where object_id = :group_id
+	}
+    }
 }
 
 ad_proc -public group::possible_member_states {} {

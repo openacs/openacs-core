@@ -56,7 +56,10 @@ begin
       now(),
       new__creation_user,
       new__creation_ip,
-      new__context_id
+      new__context_id,
+      ''t'',
+      new__constraint_name,
+      null
     );
 
     insert into rel_constraints

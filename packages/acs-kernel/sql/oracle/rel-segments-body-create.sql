@@ -39,6 +39,10 @@ is
    party.new(segment_id, object_type, creation_date, creation_user,
              creation_ip, email, url, context_id);
 
+  update acs_objects
+  set title = segment_name
+  where object_id = v_segment_id;
+
   insert into rel_segments
    (segment_id, segment_name, group_id, rel_type)
   values

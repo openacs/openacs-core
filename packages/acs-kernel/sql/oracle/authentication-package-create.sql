@@ -69,6 +69,7 @@ as
         v_authority_id  := acs_object.new(
             object_id     => new.authority_id,
             object_type   => new.object_type,
+            title         => new.short_name,
             creation_date => sysdate(),
             creation_user => new.creation_user,
             creation_ip   => new.creation_ip,

@@ -375,7 +375,8 @@ function new (
   data	        in cr_revisions.content%TYPE default null,
   relation_tag  in cr_child_rels.relation_tag%TYPE default null,
   is_live       in char default 'f',
-  storage_type  in cr_items.storage_type%TYPE default 'lob'
+  storage_type  in cr_items.storage_type%TYPE default 'lob',
+  package_id    in acs_objects.package_id%TYPE default null
 ) return cr_items.item_id%TYPE;
 
 
@@ -841,7 +842,8 @@ function new (
   creation_user	in acs_objects.creation_user%TYPE
 			   default null,
   creation_ip	in acs_objects.creation_ip%TYPE default null,
-  filename	in cr_revisions.filename%TYPE default null
+  filename	in cr_revisions.filename%TYPE default null,
+  package_id	in acs_objects.package_id%TYPE default null
 ) return cr_revisions.revision_id%TYPE;
 
 function new (
@@ -855,7 +857,8 @@ function new (
   revision_id   in cr_revisions.revision_id%TYPE default null,
   creation_date	in acs_objects.creation_date%TYPE default sysdate,
   creation_user	in acs_objects.creation_user%TYPE default null,
-  creation_ip	in acs_objects.creation_ip%TYPE default null
+  creation_ip	in acs_objects.creation_ip%TYPE default null,
+  package_id	in acs_objects.package_id%TYPE default null
 ) return cr_revisions.revision_id%TYPE;
 
 function copy (
@@ -1031,7 +1034,8 @@ function new (
 			   default sysdate,
   creation_user	in acs_objects.creation_user%TYPE
 			   default null,
-  creation_ip	in acs_objects.creation_ip%TYPE default null
+  creation_ip	in acs_objects.creation_ip%TYPE default null,
+  package_id    in acs_objects.package_id%TYPE
 ) return cr_symlinks.symlink_id%TYPE;
 
 
@@ -1130,7 +1134,8 @@ function new (
 			   default sysdate,
   creation_user	in acs_objects.creation_user%TYPE
 			   default null,
-  creation_ip	in acs_objects.creation_ip%TYPE default null
+  creation_ip	in acs_objects.creation_ip%TYPE default null,
+  package_id    in acs_objects.package_id%TYPE
 ) return cr_extlinks.extlink_id%TYPE;
 
 
@@ -1180,6 +1185,7 @@ function new (
   --    @param creation_date As in <tt>acs_object.new</tt>
   --    @param creation_ip   As in <tt>acs_object.new</tt>
   --    @param creation_user As in <tt>acs_object.new</tt>
+  --    @param package_id  The package id.
   --    @return The id of the newly created folder
   --    @see {acs_object.new}, {content_item.new}
   --*/
@@ -1191,7 +1197,8 @@ function new (
   folder_id	in cr_folders.folder_id%TYPE default null,
   creation_date	in acs_objects.creation_date%TYPE default sysdate,
   creation_user	in acs_objects.creation_user%TYPE default null,
-  creation_ip	in acs_objects.creation_ip%TYPE default null
+  creation_ip	in acs_objects.creation_ip%TYPE default null,
+  package_id	in acs_objects.package_id%TYPE default null
 ) return cr_folders.folder_id%TYPE;
 
 procedure del (
@@ -1415,7 +1422,8 @@ function new (
 			   default sysdate,
   creation_user	in acs_objects.creation_user%TYPE
 			   default null,
-  creation_ip	in acs_objects.creation_ip%TYPE default null
+  creation_ip	in acs_objects.creation_ip%TYPE default null,
+  package_id    in acs_objects.package_id%TYPE
 ) return cr_templates.template_id%TYPE;
 
 procedure del (
@@ -1487,7 +1495,8 @@ function new (
   creation_user	in acs_objects.creation_user%TYPE
 			   default null,
   creation_ip	in acs_objects.creation_ip%TYPE default null,
-  object_type   in acs_object_types.object_type%TYPE default 'content_keyword'
+  object_type   in acs_object_types.object_type%TYPE default 'content_keyword',
+  package_id    in acs_objects.package_id%TYPE
 ) return cr_keywords.keyword_id%TYPE;
 
 procedure del (

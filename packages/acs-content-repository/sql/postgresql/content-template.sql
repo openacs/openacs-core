@@ -29,14 +29,11 @@ begin
                                      null,
                                      now(),
                                      null,
+                                     null,
                                      null
         );
 
 end;' language 'plpgsql';
-
--- function new
-
-select define_function_args('content_template__new','name,parent_id,template_id,creation_date,creation_user,creation_ip');
 
 create or replace function content_template__new (varchar,integer,integer,timestamptz,integer,varchar)
 returns integer as '
@@ -47,7 +44,34 @@ declare
   new__creation_date          alias for $4;  -- default now()
   new__creation_user          alias for $5;  -- default null
   new__creation_ip            alias for $6;  -- default null
+begin
+        return content_template__new(new__name,
+                                     new__parent_id,
+                                     new__template_id,
+                                     new__creation_date,
+                                     new__creation_user,
+                                     new__creation_ip,
+                                     null
+        );
+
+end;' language 'plpgsql';
+
+-- function new
+
+select define_function_args('content_template__new','name,parent_id,template_id,creation_date,creation_user,creation_ip');
+
+create or replace function content_template__new (varchar,integer,integer,timestamptz,integer,varchar,integer)
+returns integer as '
+declare
+  new__name                   alias for $1;  
+  new__parent_id              alias for $2;  -- default null  
+  new__template_id            alias for $3;  -- default null
+  new__creation_date          alias for $4;  -- default now()
+  new__creation_user          alias for $5;  -- default null
+  new__creation_ip            alias for $6;  -- default null
+  new__package_id             alias for $7;  -- default null
   v_template_id               cr_templates.template_id%TYPE;
+  v_package_id                acs_objects.package_id%TYPE;
   v_parent_id                 cr_items.parent_id%TYPE;
 begin
 
@@ -64,6 +88,12 @@ begin
     raise EXCEPTION ''-20000: This folder does not allow templates to be created'';
 
   else
+    if new__package_id is null then
+      v_package_id := acs_object__package_id(v_parent_id);
+    else
+      v_package_id := new__package_id;
+    end if;
+
     v_template_id := content_item__new (
         new__name, 
         v_parent_id,
@@ -80,7 +110,8 @@ begin
         ''text/plain'',
         null,
         null,
-        ''text''
+        ''text'',
+        v_package_id
     );
 
     insert into cr_templates ( 
@@ -93,6 +124,27 @@ begin
 
   end if;
  
+end;' language 'plpgsql';
+
+
+create or replace function content_template__new(varchar,text,bool,integer) returns integer as '
+declare
+        new__name       alias for $1;
+        new__text       alias for $2;
+        new__is_live    alias for $3;
+        new__package_id alias for $4;  -- default null
+begin
+        return content_template__new(new__name,
+                                     null,
+                                     null,
+                                     now(),
+                                     null,
+                                     null,
+                                     new__text,
+                                     new__is_live,
+                                     new__package_id
+        );
+
 end;' language 'plpgsql';
 
 
@@ -109,7 +161,8 @@ begin
                                      null,
                                      null,
                                      new__text,
-                                     new__is_live
+                                     new__is_live,
+                                     null
         );
 
 end;' language 'plpgsql';
@@ -126,7 +179,35 @@ declare
   new__creation_ip            alias for $6;  -- default null
   new__text                   alias for $7;  -- default null
   new__is_live                alias for $8;  -- default ''f''
+begin
+        return content_template__new(new__name,
+                                     new__parent_id,
+                                     new__template_id,
+                                     new__creation_date,
+                                     new__creation_user,
+                                     new__creation_ip,
+                                     new__text,
+                                     new__is_live,
+                                     null
+        );
+
+end;' language 'plpgsql';
+
+
+create or replace function content_template__new (varchar,integer,integer,timestamptz,integer,varchar,text,bool,integer)
+returns integer as '
+declare
+  new__name                   alias for $1;  
+  new__parent_id              alias for $2;  -- default null  
+  new__template_id            alias for $3;  -- default null
+  new__creation_date          alias for $4;  -- default now()
+  new__creation_user          alias for $5;  -- default null
+  new__creation_ip            alias for $6;  -- default null
+  new__text                   alias for $7;  -- default null
+  new__is_live                alias for $8;  -- default ''f''
+  new__package_id             alias for $7;  -- default null
   v_template_id               cr_templates.template_id%TYPE;
+  v_package_id                acs_objects.package_id%TYPE;
   v_parent_id                 cr_items.parent_id%TYPE;
 begin
 
@@ -143,6 +224,12 @@ begin
     raise EXCEPTION ''-20000: This folder does not allow templates to be created'';
 
   else
+    if new__package_id is null then
+      v_package_id := acs_object__package_id(v_parent_id);
+    else
+      v_package_id := new__package_id;
+    end if;
+
     v_template_id := content_item__new (
         new__template_id,     -- new__item_id
         new__name,            -- new__name
@@ -159,7 +246,8 @@ begin
         ''t'',                -- new__security_inherit_p
         ''CR_FILES'',         -- new__storage_area_key
         ''content_item'',     -- new__item_subtype
-        ''content_template''  -- new__content_type
+        ''content_template'', -- new__content_type
+        v_package_id          -- new__package_id
     );
 
     insert into cr_templates ( 
