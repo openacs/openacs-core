@@ -453,7 +453,7 @@ ad_proc -private apm_load_queries {
             } 
         }
     }
-    ns_log Notice "APM/QD = DONE looping through files to load queries from"
+    ns_log Notice "APM/QD = DONE looping through files from which to load queries"
 }
 
 ad_proc -private apm_subdirs { path } {
