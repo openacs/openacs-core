@@ -7,6 +7,7 @@
 
           select name, node_id
 	  from site_nodes
+          order by name
       
       </querytext>
 </fullquery>
