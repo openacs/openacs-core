@@ -1,111 +1,70 @@
 ------------------------------------------------------------
--- Set up an index with INSO filtering on the content column
+-- declare CR as a content provider for search/indexing interface
 ------------------------------------------------------------
 
--- DCW: oracle specific code that can't be directly ported to postgresql.
 
-/*
-set serveroutput on
+select acs_sc_impl__new(
+	   'FtsContentProvider',		-- impl_contract_name
+           'acs-content-repository',            -- impl_name
+	   'acs-content-repositorys'            -- impl_owner_name
+);
 
-declare
-  v_exists integer;
+select acs_sc_impl_alias__new(
+           'FtsContentProvider',		-- impl_contract_name
+           'acs-content-repository',            -- impl_name
+	   'datasource',			-- impl_operation_name
+	   'content_search__datasource',        -- impl_alias
+	   'TCL'				-- impl_pl
+);
+
+select acs_sc_impl_alias__new(
+           'FtsContentProvider',		-- impl_contract_name
+           'acs-content-repository',            -- impl_name
+	   'url',				-- impl_operation_name
+	   'content_search__url',               -- impl_alias
+	   'TCL'				-- impl_pl
+);
+
+-- triggers queue search interface to modify search index after content
+-- changes.
+
+create function content_search__itrg ()
+returns opaque as '
 begin
+    perform search_observer__enqueue(new.revision_id,''INSERT'');
+    return new;
+end;' language 'plpgsql';
 
-  -- Check whether the preference already exists
-  select decode(count(*),0,0,1) into v_exists from ctx_user_preferences
-    where pre_name = 'CONTENT_FILTER_PREF';
-
-  if v_exists = 0 then
-
-    dbms_output.put_line('Creating content filter preference...');
-
-    ctx_ddl.create_preference
-      (
-	preference_name => 'CONTENT_FILTER_PREF',
-	object_name     => 'INSO_FILTER'
-      );
-
-  end if;
-
-end;
-/
-
-create index cr_rev_content_index on cr_revisions ( content )
-  indextype is ctxsys.context
-  parameters ('FILTER content_filter_pref' );
-
-alter index cr_rev_content_index rebuild online parameters ('sync');
-*/
-------------------------------------------------------------
--- Set up an XML index for searching attributes
-------------------------------------------------------------
-
--- To find the word company in the title only:
-
--- select revision_id,score(1) 
--- from cr_revision_attributes
--- where contains(attributes, 'company WITHIN title', 1) > 0;
-
--- use a direct datastore rather than setting up a user datastore
--- this avoids having to generate an XML document for every
--- revision every time the index is rebuilt.  It also avoids the
--- cumbersome manual process of setting up a user datastore.
-/*
-create or replace package content_search is
-
-  procedure update_attribute_index;
-
-end content_search;
-/
-show errors
-
-create or replace package body content_search is
-
-procedure update_attribute_index is
+create function content_search__dtrg ()
+returns opaque as '
 begin
+    perform search_observer__enqueue(old.revision_id,''DELETE'');
+    return old;
+end;' language 'plpgsql';
 
-  for c1 in (select revision_id from cr_revisions r where not exists (
-    select 1 from cr_revision_attributes a 
-      where a.revision_id = r.revision_id)) loop
-
-    content_revision.index_attributes(c1.revision_id);
-    commit;
-
-  end loop;
-
-end update_attribute_index;
-
-end;
-/
-show errors
-
-declare
-  v_exists integer;
+create function content_search__utrg ()
+returns opaque as '
 begin
+    insert into search_observer_queue (
+        object_id,
+	event
+    ) values (
+        old.revision_id,
+        ''UPDATE''
+    );
+    return new;
+end;' language 'plpgsql';
 
-  -- Check whether the section group already exists
-  select decode(count(*),0,0,1) into v_exists from ctx_user_section_groups
-    where sgp_name = 'AUTO';
 
-  if v_exists = 0 then
+create trigger content_search__itrg after insert on cr_revisions
+for each row execute procedure content_search__itrg (); 
 
-    dbms_output.put_line('Creating auto section group for attribute index...');
+create trigger content_search__dtrg after delete on cr_revisions
+for each row execute procedure content_search__dtrg (); 
 
-    ctx_ddl.create_section_group('auto', 'AUTO_SECTION_GROUP');
+create trigger content_search__utrg after update on cr_revisions
+for each row execute procedure content_search__utrg (); 
 
-  end if;
-end;
-/
 
-create index cr_rev_attribute_index on cr_revision_attributes ( attributes )
-  indextype is ctxsys.context
-  parameters ('filter ctxsys.null_filter section group auto' );
 
-begin
-  content_search.update_attribute_index;
-end;
-/
-show errors
 
-alter index cr_rev_attribute_index rebuild online parameters ('sync');
-*/

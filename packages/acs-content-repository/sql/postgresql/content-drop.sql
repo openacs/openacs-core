@@ -114,6 +114,20 @@ end;
 --  ctx_ddl.drop_section_group('auto');
 --end;
 
+select acs_sc_impl__delete(
+	   'FtsContentProvider',		-- impl_contract_name
+           'acs-content-repository'             -- impl_name
+);
+
+drop trigger content_search__utrg on cr_revisions;
+drop trigger content_search__dtrg on cr_revisions;
+drop trigger content_search__itrg on cr_revisions;
+
+drop function content_search__utrg ();
+drop function content_search__dtrg ();
+drop function content_search__itrg ();
+
+
 
 --begin
 --  ctx_ddl.drop_preference('CONTENT_FILTER_PREF');
