@@ -13,11 +13,15 @@
 #
 # 3) Checks that the set of keys in non-en_US catalog files is present
 #    in the en_US catalog file of the package.
+#    Currently disabled as I'm not sure how to read the non-en_US files in the
+#    the right charset.
 #
 # 4) Checks that all keys in non-en_US catalog files are present in the en_US one.
+#    Currently disabled as I'm not sure how to read the non-en_US files in the
+#    the right charset.
 #
 # 5) Checks that the package version in every catalog file is consistent with what
-#    is in the corresponding info file.
+#    is in the corresponding info file. Currently only uses en_US files.
 #
 # The scripts assumes that message lookups in adp and info files are 
 # on the format #package_key.message_key#, and that message lookups 
@@ -33,11 +37,33 @@ get_catalog_keys() {
     echo $(${script_path}/mygrep '<msg key="([^"]+)"' $file_name)
 }
 
+get_date_time_key() {
+    full_key=$1
+
+    package_key=$(echo $full_key | ${script_path}/mygrep '^([^.]+)\.')
+    message_key=$(echo $full_key | ${script_path}/mygrep '\.([^.]+)$')
+    localization_msg_part=$(echo $message_key | ${script_path}/mygrep '^localization-(.*)$')
+
+    echo $localization_msg_part
+}
+
+check_one_key_in_catalog_file() {
+    message_key=$1
+
+    egrep -q "<msg[[:space:]]+key=\"$message_key\"" catalog/${package_key}.en_US.ISO-8859-1.xml \
+      || \
+    echo "$0: $package_key - Warning: key $message_key not in catalog file" 
+}
+
+get_message_key_pattern() {
+    echo '[a-zA-Z0-9_.-]+'
+}
+
 check_package_version_of_catalog_files() {
     
     info_file_package_version=$(cat ${package_key}.info | ${script_path}/mygrep '<version name="([^"]+)"')
 
-    for catalog_file in $(ls catalog/${package_key}*.xml)
+    for catalog_file in $(ls catalog/${package_key}*en_US*.xml)
     do
         catalog_package_version=$(cat $catalog_file | ${script_path}/mygrep '<message_catalog .*package_version="([^"]+)"')
 
@@ -66,7 +92,13 @@ check_catalog_keys_have_lookups() {
     # Check that all keys in the catalog file are either in tcl or adp or info files
     for catalog_key in `get_catalog_keys catalog/${package_key}.en_US.ISO-8859-1.xml` 
     do 
-        lookup_lines=$(find ../ -regex '.*\.\(info\|adp\|sql\|tcl\)' | xargs egrep "${package_key}\.$catalog_key")
+        date_time_key=$(get_date_time_key)
+        if [ -n "$date_time_key" ]; then
+            # Need special regexp for date time message keys
+            lookup_lines=$(find ../ -regex '.*\.\(info\|adp\|sql\|tcl\)' | xargs egrep "lc_get[^]]+$date_time_key")
+        else
+            lookup_lines=$(find ../ -regex '.*\.\(info\|adp\|sql\|tcl\)' | xargs egrep "${package_key}\.$catalog_key")
+        fi
         
         if [ -z "$lookup_lines" ]; then
             echo "$0: $package_key - Warning key $catalog_key in catalog file not found in any adp, info, sql, or tcl file"
@@ -77,12 +109,18 @@ check_catalog_keys_have_lookups() {
 check_tcl_file_lookups_are_in_catalog() {
 
     # Check that all message lookups in tcl files have entries in the message catalog
+    message_key_pattern=$(get_message_key_pattern)
     for tcl_message_key in $(find ../ -iname '*.tcl'|xargs ${script_path}/mygrep \
-                             "(?ms)\[_\s+(?:\[ad_conn locale\]\s+)?\"?${package_key}\.([a-zA-Z0-9_\-\.]+)\"?")
+                             "(?ms)\[_\s+(?:\[ad_conn locale\]\s+)?\"?${package_key}\.($message_key_pattern)\"?")
     do 
-        egrep -q "<msg[[:space:]]+key=\"$tcl_message_key\"" catalog/${package_key}.en_US.ISO-8859-1.xml \
-          || \
-        echo "$0: $package_key - Warning: key $tcl_message_key not in catalog file" 
+        check_one_key_in_catalog_file $tcl_message_key
+    done
+
+    # Date time message lookups are special cases as they use lc_get
+    for tcl_message_key in $(find ../ -iname '*.tcl'|xargs ${script_path}/mygrep \
+                             "(?ms)\[lc_get[^]]+?($message_key_pattern)\"?\]")
+    do 
+        check_one_key_in_catalog_file $tcl_message_key
     done
 }
 
@@ -91,12 +129,11 @@ check_adp_file_lookups_are_in_catalog() {
     catalog_file=catalog/${package_key}.en_US.ISO-8859-1.xml
 
     # Check that all message lookups in adp and info files are in the catalog file
+    message_key_pattern=$(get_message_key_pattern)
     for adp_message_key in $(find ../ -regex '.*\.\(info\|adp\)'|xargs ${script_path}/mygrep \
-                            "#${package_key}\.([a-zA-Z0-9_\-\.]+)#")
+                            "#${package_key}\.($message_key_pattern)#")
     do 
-        egrep -q "<msg[[:space:]]+key=\"$adp_message_key\"" $catalog_file \
-          || \
-        echo "$0: $package_key - Warning: key $adp_message_key not in catalog file"
+        check_one_key_in_catalog_file $adp_message_key
     done
 }
 ### Functions end
@@ -145,7 +182,7 @@ do
     echo "$0: $package_key - checking adp lookups are in en_US catalog file"
     check_adp_file_lookups_are_in_catalog
 
-    check_consistency_non_en_US_files
+    #check_consistency_non_en_US_files
 
     echo "$0: $package_key - checking that package version in each catalog file is consistent with package version in corresponding info file"
     check_package_version_of_catalog_files
