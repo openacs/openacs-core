@@ -21,6 +21,7 @@ template::list::create \
         }
         package_type_pretty {
             label "Type"
+            hide_p 1
         }
     } -filters {
         package_type {
