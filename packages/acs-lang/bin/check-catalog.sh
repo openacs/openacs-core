@@ -119,7 +119,8 @@ check_tcl_file_lookups_are_in_catalog() {
     message_key_pattern=$(get_message_key_pattern)
     # We are using the widest possible regexp here that could in rare cases lead to false alarms
     # However, that's better than risk removing keys used in tcl scripts
-    for tcl_message_key in $(find $packages_dir -iname '*.tcl'|xargs ${script_path}/mygrep "(?:\[_ .*|\[lang::message::lookup.*|\#)${package_key}\.($message_key_pattern)")
+    for tcl_message_key in $(find $packages_dir -iname '*.tcl'|xargs ${script_path}/mygrep \
+    "(?:\[_\s+[{\"]?${package_key}|\[lang::message::lookup.*${package_key}|\#${package_key})\.($message_key_pattern)")
     do        
         check_one_key_in_catalog_file $tcl_message_key $package_key
     done
