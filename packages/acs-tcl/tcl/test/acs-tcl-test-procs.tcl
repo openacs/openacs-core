@@ -717,7 +717,7 @@ aa_register_case -cats {smoke} acs_tcl__tcl_file_syntax_errors {
 }
 
 aa_register_case -cats {} -error_level notice acs_tcl__tcl_file_common_errors {
-    Test all known tcl files for successful parsing "(in the [info complete] sense at least)" and other common errors.
+    Check for some common error patterns 
 
     @author Jeff Davis davis@xarg.net
 } {
@@ -741,6 +741,25 @@ aa_register_case -cats {} -error_level notice acs_tcl__tcl_file_common_errors {
 	if {![regexp {/packages/acs-tcl/tcl/test/acs-tcl-test-procs\.tcl$} $file match]} {
 	    aa_true "$file should not contain '@returns'.  @returns is probably a typo of @return" [expr [string first @returns $data] == -1]
 	}
+    }
+}
+
+aa_register_case -cats {db smoke production_safe} acs-tcl__named_constraints {
+    Check that there are no tables with unnamed constraints
+
+    @author Jeff Davis davis@xarg.net
+} {
+    switch -exact -- [db_name] { 
+        PostgreSQL { 
+            db_foreach check_constraints {
+                select relname as table from pg_constraint r join (select relname,oid from pg_class) c on (c.oid = r.conrelid) where conname like '$%'
+            } {
+                aa_true "Table $table constraints named" [string is space $table]
+            }
+        } 
+        default { 
+            aa_log "Not run for [db_name]"
+        }
     }
 }
 
