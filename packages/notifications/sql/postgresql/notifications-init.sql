@@ -9,45 +9,53 @@
 --
 
 -- initialize some stuff
+create function inline_0 ()
+returns integer as '
 begin
-        select notification_interval__new (
-           NULL,
-	   'daily',
-           3600 * 24,
-           now(),
-	   NULL,
-	   NULL,
-	   NULL
-	);
 
-        select notification_interval__new (
-	   NULL,
-           'hourly',
-           3600,
-	   now(),
-           NULL,
-           NULL,
-	   NULL
-        );
+    perform notification_interval__new (
+        null,
+        ''daily'',
+        3600 * 24,
+        now(),
+        null,
+        null,
+        null
+    );
 
-        select notification_interval__new (
-	   NULL,
-           'instant',
-           0,
-	   now(),
-           NULL,
-           NULL,
-	   NULL
-        );
+    perform notification_interval__new (
+        null,
+        ''hourly'',
+        3600,
+        now(),
+        null,
+        null,
+        null
+    );
+
+    perform notification_interval__new (
+        null,
+        ''instant'',
+        0,
+        now(),
+        null,
+        null,
+        null
+    );
            
-        select notification_delivery_method__new (
-	   NULL,
-           'email',
-           'Email',
-	   now(),
-           NULL,
-           NULL,
-	   NULL
-        );
+    perform notification_delivery_method__new (
+        null,
+        ''email'',
+        ''Email'',
+        now(),
+        null,
+        null,
+        null
+    );
 
-end;
+    return null;
+
+end;' language 'plpgsql';
+
+select inline_0();
+drop function inline_0 ();
