@@ -10,21 +10,7 @@
 	   from notification_types
 	   where notification_types.type_id =
 	         notification_requests.type_id) as type, 
-	decode ((select short_name 
-	           from notification_types 
-                   where notification_types.type_id = 
-                         notification_requests.type_id), 
-                  'forums_forum_notif',  
-                   (select name 
-	            from forums_forums 
-		    where forum_id = 
-                    notification_requests.object_id),
-                   'forums_message_notif',
-                    (select subject 
-                     from forums_messages 
-                     where message_id = 
-                     notification_requests.object_id),  
-                   '') as object_name,
+	   acs_object.name(notification_requests.object_id) as object_name,
 	   (select name
 	   from notification_intervals
 	   where notification_intervals.interval_id =

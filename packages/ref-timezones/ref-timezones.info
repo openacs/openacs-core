@@ -19,7 +19,7 @@
         <description format="text/plain">This is the timezone data for the reference data package.
 </description>
 
-        <provides url="ref-timezones" version="0.1d"/>
+        <provides url="ref-timezones" version="0.2d"/>
         <requires url="acs-kernel" version="4.0"/>
         <requires url="acs-reference" version="0.2d"/>
 
