@@ -430,7 +430,6 @@ ad_proc subsite::add_section_row {
     } else {
         foreach pattern $info(selected_patterns) {
             set full_pattern [file join $info(folder) $pattern]
-            ns_log Notice "LARS: pattern = $pattern ; current_url = $current_url ; full_pattern = $full_pattern ; info(folder) = $info(folder)"
             if { [string match $full_pattern $current_url] } {
                 set selected_p 1
                 break

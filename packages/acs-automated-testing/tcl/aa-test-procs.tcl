@@ -20,9 +20,7 @@ ad_library {
 
 # LARS: We do this here, because if we do it in the -init file, then we cannot register 
 # test cases in -procs files of packages.
-ns_log Debug "Maybe initialize test stuff? [nsv_exists aa_test cases]"
 if { ![nsv_exists aa_test cases] } {
-    ns_log Debug "LARS: Initializing test stuff"
     nsv_set aa_test cases {}
     nsv_set aa_test components {}
     nsv_set aa_test init_classes {}
