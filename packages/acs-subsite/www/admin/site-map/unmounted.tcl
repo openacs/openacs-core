@@ -23,7 +23,7 @@ set user_id [ad_conn user_id]
 db_foreach packages_normal_select {} {
     doc_body_append "<li>$name \[<a href=\"instance-delete?[export_url_vars package_id]\" onclick=\"return confirm('Are you sure you want to delete package $name');\">delete</a>\]"
 } if_no_rows {
-    doc_body_append "<i>There are no unmounted packages</li>"
+    doc_body_append "<i>There are no unmounted packages</i>"
 }
 
 doc_body_append "</ul> <p />
