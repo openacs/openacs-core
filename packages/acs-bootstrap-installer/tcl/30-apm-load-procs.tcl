@@ -487,3 +487,29 @@ proc apm_bootstrap_load_queries { package_key } {
         } 
     }
 }
+
+ad_proc -private apm_load_install_xml_file {} {
+    Loads any install.xml file and returns the root node. Returns
+    the empty string if there is no install.xml file.
+
+    @author Peter Marklund
+} {
+    # Abort if there is no install.xml file
+    if { ![file exists [apm_install_xml_file_path]] } {
+        return ""
+    }
+
+    set file [open [apm_install_xml_file_path]]
+    set root_node [xml_doc_get_first_node [xml_parse -persist [read $file]]]
+    close $file
+
+    return $root_node
+}
+
+ad_proc -private apm_install_xml_file_path {} {
+    Get the path of the install.xml file.
+
+    @author Peter Marklund
+} {
+    return "[acs_root_dir]/install.xml"
+}
