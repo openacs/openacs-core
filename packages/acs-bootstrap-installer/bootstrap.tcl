@@ -127,14 +127,14 @@ set errno [catch {
     #
     # Check for the presence of the automated testing package.
     #
-    set load_tests_p [apm_package_enabled_p "acs-automated-testing"]
+    set load_tests_p [apm_load_tests_p]
 
     foreach package_key [db_list package_keys_select {
 	select package_key from apm_enabled_package_versions
     }] {
         nsv_set apm_enabled_package $package_key 1    
 
-        apm_load_package -load_tests_p $load_tests_p $package_key
+        apm_load_package -load_tests=$load_tests_p $package_key
     }
 
     if { ![nsv_exists rp_properties request_count] } {
