@@ -4,9 +4,10 @@
 <fullquery name="template::data::transform::party_search.search_persons">      
       <querytext>
         select (first_names || ' ' || last_name) as name, pe.person_id from persons pe, parties pa 
-        where pe.person_id=pa.party_id and
-        lower(pe.first_names || ' ' || pe.last_name) like '%' || lower(:search_string) || '%'
-        or lower(pa.email) like '%' || lower(:search_string) || '%'
+        where pe.person_id=pa.party_id and (
+          lower(pe.first_names || ' ' || pe.last_name) like '%' || lower(:search_string) || '%'
+          or lower(pa.email) like '%' || lower(:search_string) || '%'
+	)
         order by lower(first_names || ' ' || last_name)
       </querytext>
 </fullquery>
