@@ -18,10 +18,12 @@ ad_proc -public ad_form {
 
     <p>
 
-    We use the standard ATS form builder's form and element create procedures to generate forms,
-    and its state-tracking code to determine when to execute various code blocks.  Because of
-    this, you can use any form builder datatype or widget with this procedure, and extending its
-    functionality is a simple matter of implementing new ones.
+    We use the standard OpenACS Templating System (ATS) form builder's form and element create 
+    procedures to generate forms, and its state-tracking code to determine when to execute 
+    various code blocks.  Because of this, you can use any form builder datatype or widget 
+    with this procedure, and extending its functionality is a simple matter of implementing 
+    new ones. Because ad_form is just a wrapper for the ATS, you <b>must</b> familiarize
+    yourself with it to be able to use ad_form effectively.
 
     <p>
 
@@ -150,8 +152,37 @@ ad_proc -public ad_form {
         being served.  
     </dd>
 
+    <p><dt><b>-actions</b></dt><p>
+    <dd>A list of lists of actions (e.g. {{"  Delete  " delete} {"  Resolve " resolve}} ), which gets 
+        translated to buttons at the bottom of the form. You can find out what button was pressed 
+	with [template::form get_action form_id], usually in the -edit_request block to perform whatever
+	actions you deem appropriate. When the form is loaded the action will be empty.
+    </dd>
+    
+    <p><dt><b>-mode { display | edit }</b></dt><p>
+    <dd>If set to 'display', the form is shown in display-only mode, where the user cannot edit the fields. 
+        Each widget knows how to display its contents appropriately, e.g. a select widget will show 
+	the label, not the value. If set to 'edit', the form is displayed as normal, for editing. 
+	Defaults to 'edit'. Switching to edit mode when a button is clicked in display mode is handled 
+	automatically
+    </dd>
+    
+    <p><dt><b>-has_edit { 0 | 1 }</b></dt><p>
+    <dd>Set to 1 to suppress the Edit button automatically added by the form builder. Use this if you 
+        include your own.
+    </dd>
+
+    <p><dt><b>-form</b></dt><p>
+    <dd>Declare form elements (described in detail below)
+    </dd>
+
     <p><dt><b>-cancel_url</b></dt><p>
-    <dd>The URL the cancel button should take you to. If this is specified, a cancel button will show up.  
+    <dd>The URL the cancel button should take you to. If this is specified, a cancel button will show up.
+        during the edit phase.
+    </dd>
+
+    <p><dt><b>-cancel_label</b></dt><p>
+    <dd>The label for the cancel button.
     </dd>
 
     <p><dt><b>-html</b></dt><p>
@@ -166,17 +197,6 @@ ad_proc -public ad_form {
         similar flags are not allowed though it would be good to do so in the future.
     </dd>
         
-    <p><dt><b>-form</b></dt><p>
-    <dd>Declare form elements (described in detail below)
-    </dd>
-
-    <p><dt><b>-on_request</b></dt><p>
-    <dd>A code block which sets the values for each element of the form meant to be modifiable by
-        the user when the built-in key management feature is being used or to define options for
-        select lists etc. You just need to set the values as local
-        variables in the code block, and they'll get fetched and used as element values for you.
-    </dd>
-
     <p><dt><b>-select_query</b></dt><p>
     <dd>Defines a query that returns a single row containing values for each element of the form meant to be
         modifiable by the user.  Can only be used if an element of type key has been declared.
@@ -190,11 +210,25 @@ ad_proc -public ad_form {
         declared
     </dd>
 
+    <p><dt><b>-show_required_p { 0 | 1 }</b></dt><p>
+    <dd>Should the form template show which elements are required. Use 1 or t for true, 0 or f for false. 
+       Defaults to true.
+    </dd>
+
+    <p><dt><b>-on_request</b></dt><p>
+    <dd>A code block which sets the values for each element of the form meant to be modifiable by
+        the user when the built-in key management feature is being used or to define options for
+        select lists etc. Set the values as local variables in the code block, and they'll get 
+	fetched and used as element values for you. This block is executed <i>everytime</i> the
+	form is loaded <i>except</i> when the form is being submitted (in which case the -on_submit
+	block is executed.)
+    </dd>
+
     <p><dt><b>-edit_request</b></dt><p>
     <dd>A code block which sets the values for each element of the form meant to be modifiable by the user.  Use
         this when a single query to grab database values is insufficient.  Can only be used if an element of
         type key is defined.  This block is only executed if the page is called with a valid key, i.e. a
-        self-submit form to add or edit an item called to edit the data. You just need to set the values as local
+        self-submit form to add or edit an item called to edit the data. Set the values as local
         variables in the code block, and they'll get fetched and used as element values for you.
     </dd>
 
