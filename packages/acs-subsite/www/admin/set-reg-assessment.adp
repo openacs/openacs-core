@@ -5,6 +5,12 @@
 	#acs-subsite.no_assessment#
 </if>
 <else>
+<a href="@new_url@asm-admin/assessment-form" class="button">#acs-subsite.create_asm#</a>
+<if @assessment_id@ ne 0>
+<a href="@url@asm-admin/one-a?assessment_id=@assessment_id@" class="button">#acs-subsite.edit_asm#</a>
+</if>
+<br>
+<br>
 <formtemplate id="get_assessment"></formtemplate>
 </else>
 

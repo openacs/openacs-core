@@ -6,22 +6,28 @@ ad_page_contract {
     @cvs-id $Id: 
 }
 
+set value [parameter::get -parameter AsmForRegisterId]
+set assessment_id $value
 set install_p [apm_package_installed_p "assessment"]
 set mount_p [site_node::get_package_url -package_key assessment]
-
 if {$install_p == 0 || $mount_p == ""} {
     ad_return_complaint 1 "Assessment Package is not installed or mounted"
     ad_script_abort
 }
+set url ""
+if { ![string eq $assessment_id 0]} {
+set package_id [db_string package_id {}]
+set url [apm_package_url_from_id $package_id]
+}
 
+set instance_id [ db_list_of_lists get_instance_id {}]
+set new_url [apm_package_url_from_id [lindex $instance_id 0]]
 set page_title "[ad_conn instance_name] Set the assessment for registration"
 
 set context [list "Set the assessment for registration"]
 
 set subsite_id [ad_conn subsite_id]
 
-
-set value [parameter::get -parameter AsmForRegisterId]
 
 
 set assessments [db_list_of_lists get_all_assessments {}]
@@ -38,6 +44,7 @@ ad_form -name get_assessment  -form {
     {value $value}} 
 } -on_submit {
     parameter::set_value -package_id [ad_conn package_id] -parameter AsmForRegisterId -value $assessment_id
+    ad_returnredirect "set-reg-assessment"
 }
 
 ad_return_template
