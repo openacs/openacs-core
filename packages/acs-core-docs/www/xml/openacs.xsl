@@ -8,7 +8,7 @@
   <xsl:import href="/usr/share/sgml/docbook/xsl-stylesheets/html/chunk.xsl"/>
 -->
 <!-- Debian 3.0 use this path for chunk.xsl instead: -->
-  <xsl:import href="/usr/share/sgml/docbook/stylesheet/xsl/nwalsh/html/chunk.xsl"/>
+  <xsl:import href="/usr/share/sgml/docbook/xsl-stylesheets-1.62.0/html/chunk.xsl"/>
 
 <!-- override default cellspacing value -->
 

@@ -39,10 +39,6 @@ many people follow links from your site to sites that you recommend</para></list
 
 </itemizedlist>
 
-<para>
-See also: <ulink url="http://www.arsdigita.com/asj/collaboration">Adding collaboration to a
-Web Site</ulink> without buying or maintaining an RDBMS and <ulink url="http://www.greenspun.com">Free Services For Web
-Publishers</ulink> </para>
 </sect2>
 
 <sect2 id="acs-faq-infrastructure">
@@ -67,8 +63,7 @@ documented platform for OpenACS.</para>
 
 <sect2 id="acs-faq-architecture-install">
 <title>I have a machine with Unix/Linux, Oracle or PostgreSQL and AOLServer installed. How do
-I install the Open Architecture Community System and the ArsDigita Server
-Architecture?</title>
+I install the Open Architecture Community System?</title>
 
 <para>We strongly recommend that you thoroughly examine the <link linkend="unix-install">step-by-step OpenACS
 installation</link> guide, even if you already have a working Unix and Oracle
@@ -82,24 +77,25 @@ defaults are recommended only if you are an expert system administrator.</para>
 written by ArsDigita and the OpenACS community that can be installed
 to ensure that the server keeps running reliably.</para>
 
-<para>The <ulink url="http://www.arsdigita.com/asj/arsdigita-server-architecture">overview of
+<para>The <ulink url="http://philip.greenspun.com/wtr/arsdigita-server-architecture.html">overview of
 the ArsDigita Server Architecture</ulink> is a good starting point for the
 development of a reliable service. The following documents will also help you
 keep your system running properly:</para>
 
 <itemizedlist>
+
+<listitem><para><ulink url="http://uptime.openacs.org/uptime/about.adp">Uptime
+Installation</ulink>
+</para></listitem>
+ <!--
 <listitem><para><ulink url="http://www.arsdigita.com/free-tools/keepalive.html">Keepalive
 Installation</ulink></para></listitem>
 
-<listitem><para><ulink url="http://www.arsdigita.com/free-tools/uptime">Uptime
-Installation</ulink>
- <!--
   <li><a target=faq_example href=http://arsdigita.com/free-tools/watchdog>WatchDog 
     Installation</a> 
--->
-</para></listitem>
 
-<listitem><para><ulink url="http://arsdigita.com/free-tools/reporte">Reporte Installation</ulink> <!--
+<listitem><para><ulink url="http://arsdigita.com/free-tools/reporte">Reporte Installation</ulink>
+
   <li><ulink url="http://www.arsdigita.com/free-tools/cassandrix">Cassandrix</ulink> 
 -->
 </para></listitem>
@@ -170,18 +166,18 @@ ArsDigita offers a variety of free teaching material:
 <listitem><para><ulink url="http://philip.greenspun.com/panda/">Philip and Alex&#39;s Guide to
 Web Publishing</ulink></para></listitem>
 
-<listitem><para><ulink url="http://philip.greenspun.com/books/sql/">SQL for Web Nerds</ulink>
+<listitem><para><ulink url="http://philip.greenspun.com/sql/">SQL for Web Nerds</ulink>
 (tutorial for the SQL language; links into online Oracle docs for
 completeness)</para></listitem>
 
-<listitem><para><ulink url="http://philip.greenspun.com/books/tcl/">Tcl
+<listitem><para><ulink url="http://philip.greenspun.com/tcl/">Tcl
 for Web Nerds</ulink> (tutorial for the Tcl language; in rough shape right now
 and you might consider using the Welch book (below))</para></listitem>
 
-<listitem><para><ulink url="http://www.arsdigita.com/doc/common-errors">Common errors</ulink> made by
+<listitem><para><ulink url="http://philip.greenspun.com/doc/common-errors">Common errors</ulink> made by
 database backed web developers</para></listitem>
 
-<listitem><para><ulink url="http://www.arsdigita.com/asj/oracle-tips">Tips for using Oracle</ulink> 
+<listitem><para><ulink url="http://eveander.com/arsdigita/asj/oracle-tips">Tips for using Oracle</ulink> 
 
 
 </para></listitem>
@@ -205,8 +201,7 @@ and answer forum</ulink></para></listitem>
 
 <listitem><para><ulink url="http://philip.greenspun.com/teaching/psets/ps5/ps5">Problem Set
 5</ulink> (how to build collaborative authoring environment, Oracle full text
-indexing system) <ulink url="http://www.photo.net/bboard/q-and-a.tcl?topic_id=24&amp;topic=6916">Question
-and answer forum</ulink> 
+indexing system)
 
 
 </para></listitem>
@@ -214,9 +209,6 @@ and answer forum</ulink>
 
 <itemizedlist>
 <listitem><para><ulink url="http://www.aolserver.com/">AOLServer
-Documentation</ulink></para></listitem>
-
-<listitem><para><ulink url="http://hojohn.photo.net/ora8doc">Oracle
 Documentation</ulink></para></listitem>
 
 <listitem><para><ulink
@@ -234,12 +226,12 @@ Emacs)</para></listitem>
 <listitem><para><ulink url="http://www.amazon.com/exec/obidos/ISBN=007882396X/">Oracle 8:
 The Complete Reference</ulink> (more concise than the online Oracle docs)</para></listitem>
 
-<listitem><para><ulink url="http://www.amazon.com/exec/obidos/ISBN=0136168302/">Practical
+<listitem><para><ulink url="hhttp://www.amazon.com/exec/obidos/ISBN=0130385603">Practical
 Programming in Tcl and Tk</ulink> (Brent Welch 1997; Prentice-Hall;)</para></listitem>
 
 <listitem><para><ulink url="http://www.amazon.com/exec/obidos/ISBN=0961392126/">Visual
-Explanations : Images and Quantities, Evidence and Narrative</ulink> (Edward
-Tufte 1997; Graphics Press; order directly by calling (800) 822-2454) -
+Explanations : Images and Quantities, Evidence and Narrative</ulink> (<ulink url="http://www.edwardtufte.com/tufte/">Edward
+Tufte</ulink> 1997; Graphics Press; order directly by calling (800) 822-2454) -
 general design principles</para></listitem>
 </itemizedlist>
 
@@ -251,17 +243,9 @@ general design principles</para></listitem>
 <title>I am stuck. Where can a ask a question?</title>
 
 <itemizedlist>
-<listitem><para><ulink url="http://photo.net/bboard/q-and-a?topic=Problem%20Set%201">Problem set 1
-questions</ulink></para></listitem>
+<listitem><para><ulink url="http://openacs.org/forums/">OpenACS Forums</ulink></para></listitem>
+<listitem><para><ulink url="http://openacs.org/irc/">#openacs IRC</ulink></para></listitem>
 
-<listitem><para><ulink url="http://photo.net/bboard/q-and-a?topic=Problem%20Set%202">Problem set 2
-questions</ulink></para></listitem>
-
-<listitem><para><ulink url="http://photo.net/bboard/q-and-a?topic=Problem%20Set%203">Problem set 3
-questions</ulink></para></listitem>
-
-<listitem><para><ulink url="http://photo.net/bboard/q-and-a?topic=web/db">Database backed web
-site</ulink> discussion forum</para></listitem>
 </itemizedlist>
 
 
@@ -305,37 +289,12 @@ installation and initial questions.</para></listitem>
 development to suggest extensions, test new releases, write documentation and
 answer questions.</para></listitem>
 
-<listitem><para>Module creators: <ulink url="http://www.alexium.com">individuals</ulink> and <ulink url="http://www.ybos.net">firms</ulink> have created and publicized new
-modules.</para></listitem>
-
 <listitem><para>Teachers: Use our <link linkend="acs-faq-teaching">teaching materials</link>
 to teach your company, friends, or at a University.</para></listitem>
 </itemizedlist>
 
 </sect2>
 
-<sect2 id="acs-faq-company">
-<title>Where can I learn about ArsDigita, the company?</title>
-
-<para>
-See <ulink url="http://www.arsdigita.com">arsdigita.com</ulink>
-</para>
-
-
-
-</sect2>
-
-<sect2 id="acs-faq-jobs">
-<title>How can I work at ArsDigita?</title>
-
-<para>See <ulink url="http://www.arsdigita.com/pages/jobs/">Job Openings</ulink>.</para>
-
-
-
 <para><phrase role="cvstag">($Id$)</phrase></para>
-
-</sect2>
-
-
 
 </sect1>

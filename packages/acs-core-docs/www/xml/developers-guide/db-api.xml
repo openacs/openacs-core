@@ -8,9 +8,7 @@
   <title>The OpenACS Database Access API</title>
 
   <para>
-    By <ulink url="mailto:psu@arsdigita.com">Pete Su</ulink> and
-    <ulink url="mailto:jsalz@mit.edu">Jon Salz</ulink>. Modified
-    by Roberto Mello.
+    By Pete Su and Jon Salz. Modified by Roberto Mello.
   </para>
   
   <sect2 id="db-api-overview">

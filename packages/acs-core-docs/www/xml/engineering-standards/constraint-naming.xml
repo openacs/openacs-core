@@ -9,7 +9,7 @@
 
  
 <authorblurb>
-<para>By <ulink url="mailto:mbryzek@arsdigita.com">mbryzek@arsdigita.com</ulink></para>
+by Michael Bryzek
 </authorblurb>
 
 <sect2 id="eng-standards-constraint-naming-big-picture">
@@ -182,7 +182,10 @@ and know exactly which table oracle is using at each step?
 <title>Naming not null constraints is optional...</title>
 
 <para>
-ArsDigita is split on whether or not we should be naming not null constraints... So, if you want to name them, please do so and follow the above naming standard. But, naming not null constraints is not a requirement at ArsDigita.
+People disagree on whether or not we should be naming not null
+constraints.  So, if you want to name them, please do so and follow
+the above naming standard. But, naming not null constraints is not a
+requirement.
 </para>
 
 <para>

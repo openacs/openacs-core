@@ -127,7 +127,7 @@ $ tar xvf oracle81701.tar</programlisting>
     <para>
 
       For additional resources/documentation, please see this <ulink
-      url="http://openacs.org/bboard/q-and-a-fetch-msg.tcl?msg_id=0003o2&amp;topic_id=11&amp;topic=OpenACS">thread</ulink>
+      url="http://openacs.org/forums/message-view?message_id=28829">thread</ulink>
       and <ulink
       url="http://openacs.org/forums/message-view?message_id=67108">Andrew
       Piskorski's mini-guide</ulink>..
@@ -2015,7 +2015,7 @@ export nls_date_format = &#39;YYYY-MM-DD&#39;</programlisting>
       Log back in again. If adding the
       <computeroutput>nls_date_format</computeroutput> line doesn&#39;t
       help, you can ask for advice in our <ulink
-      url="http://www.openacs.org/bboard/">OpenACS forum</ulink>.
+      url="http://www.openacs.org/forums/">OpenACS forums</ulink>.
     </para>
   </sect2>
 

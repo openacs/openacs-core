@@ -8,12 +8,14 @@
 <title>OpenACS Installation Guide for Windows2000</title>
 
 <authorblurb>
-<para>By <ulink url="mailto:mburke@arsdigita.com">Matthew Burke</ulink> and <ulink url="mailto:curtisg@arsdigita.com">Curtis Galloway</ulink></para>
+by Matthew Burke and Curtis Galloway
 </authorblurb>
     
   <para><emphasis role="strong">NOTE:</emphasis> These instructions were
-    valid for ACS v4, but have not been tested with OpenACS. Currently
-    (8/2002), the best option to get OpenACS &version; running on Windows
+	valid for ACS v4, but have not been tested with OpenACS and the ArsDigita binary 
+	distributions are no longer available.	
+    Currently
+    (10/2003), the best option to get OpenACS &version; running on Windows
     is to use <ulink url="http://vmware.com">VMware</ulink> and John
     Sequeira's <ulink
     url="http://www.pobox.com/~johnseq/projects/oasisvm/">Oasis VM
@@ -22,11 +24,11 @@
 
 
     <itemizedlist>
-      <listitem><para>Source: <ulink url="http://software.arsdigita.com/dist">http://software.arsdigita.com/dist</ulink></para></listitem>
+      <listitem><para>Source: <ulink url="http://openacs.org/projects/openacs/download/">http://openacs.org/projects/openacs/download</ulink></para></listitem>
 
-      <listitem><para>Bug reports: <ulink url="mailto:acs-bugs@arsdigita.com">acs-bugs@arsdigita.com</ulink></para></listitem>
+      <listitem><para>Bug reports: <ulink url="http://openacs.org/bugtracker/openacs/">http://openacs.org/bugtracker/openacs</ulink></para></listitem>
 
-      <listitem><para>Philosophy: <ulink url="http://photo.net/wtr/thebook/community">http://photo.net/wtr/thebook/community</ulink>
+      <listitem><para>Philosophy: <ulink url="http://photo.net/wtr/thebook/community/">http://photo.net/wtr/thebook/community</ulink>
       (the community chapter of <emphasis>Philip and Alex&#39;s Guide to Web
       Publishing</emphasis>)</para></listitem>
 
@@ -76,7 +78,7 @@
 
       <listitem><para><ulink url="http://www.aolserver.com">AOLserver</ulink> (free)</para></listitem>
 
-      <listitem><para><ulink url="http://arsdigita.com/free-tools/oracle-driver">ArsDigita
+      <listitem><para><ulink url="http://prdownloads.sourceforge.net/aolserver/nsoracle-2.6.tar.gz?download">
       Oracle driver for AOLserver</ulink> (free)</para></listitem>
     </itemizedlist>
 
@@ -155,13 +157,7 @@
     </orderedlist>
 
     <para>For more information on Oracle configuration look at <ulink url="http://photo.net/wtr/oracle-tips">http://photo.net/wtr/oracle-tips</ulink>
-    or search the <ulink url="http://photo.net/bboard/q-and-a?topic=web/db">Web/db Q&amp;A
-    Forum</ulink>. One other note: the &quot;nuke a user&quot; admin page and
-    Intermedia won&#39;t run unless you set <computeroutput>open_cursors = 500</computeroutput>
-    for your database. For more information on Oracle configuration look at
-    <ulink url="http://photo.net/wtr/oracle-tips.html">http://photo.net/wtr/oracle-tips.html</ulink>
-    or search the <ulink url="http://photo.net/bboard/q-and-a.tcl?topic=web/db">Web/db Q&amp;A
-    Forum</ulink>. One other note: the &quot;nuke a user&quot; admin page and
+    or search the <ulink url="http://openacs.org/forums/">OpenACS forums</ulink>. One other note: the &quot;nuke a user&quot; admin page and
     Intermedia won&#39;t run unless you set <computeroutput>open_cursors = 500</computeroutput>
     for your database.</para>
 
@@ -383,7 +379,7 @@ bin\nsd -I -s yourdomain -t yourdomain.tcl
 <sect2 id="win2kinstall-add-yourself">
 <title>Adding Yourself as a User and Making Yourself a Sysadmin</title>
 <para>
-    The ArsDigita Community System will define two users: system and
+    OpenACS will define two users: system and
     anonymous. It will also define a user group of system administrators.
     You&#39;ll want to add yourself as a user (at /register/ ) and then add
     yourself as as member of the site-wide administration group. Start by

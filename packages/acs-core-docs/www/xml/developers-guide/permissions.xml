@@ -9,7 +9,7 @@
 
  
 <authorblurb>
-<para>By <ulink url="mailto:psu@arsdigita.com">Pete Su</ulink></para>
+By Pete Su
 </authorblurb>
 
 
@@ -326,7 +326,7 @@ field to <computeroutput>'f'</computeroutput> if you want to override the defaul
 permissions in a subtree of some context.
 </para>
 
-<para> A good example of how to use this hierarchy is in the bboard
+<para> A good example of how to use this hierarchy is in the forums
 application. With only row-level permissions it is not obvious how to
 reasonably initialize the access control list when creating a
 message. At best, we have to explicitly grant various read and write

@@ -9,7 +9,7 @@
 
 
 <authorblurb>
-by <ulink url="mailto:bquinn@arsdigita.com">Bryan Quinn</ulink> 
+by Bryan Quinn
 </authorblurb>
 
 
@@ -71,7 +71,7 @@ into one of two categories:
 <listitem><para><emphasis role="strong">OpenACS Applications:</emphasis> a &quot;program or group of programs
 designed for end users&quot; (the <ulink url="http://www.pcwebopaedia.com/TERM/a/application.html">Webopedia
 definition</ulink>); also known as <emphasis>modules</emphasis>, for historical reasons.
-Examples of applications include <ulink url="/doc/bboard">Bboard</ulink> and <ulink url="/doc/news">News</ulink>. 
+Examples of applications include <ulink url="/doc/forums">Forums</ulink> and <ulink url="/doc/news">News</ulink>. 
 
 
 </para></listitem>
@@ -91,11 +91,11 @@ and content customized to the particular subsite.</para>
 
 <para>This architecture supports the growth of collaborative commerce. For
 example, Jane User starts a forum focusing on the merits of View Cameras by
-creating an instance of the Bboard application for her personal subsite on an
+creating an instance of the Forum application for her personal subsite on an
 OpenACS Installation. Jack User discovers Jane&#39;s forum and includes a link to
 it in his subsite. As interest in Jane&#39;s forum grows, she creates a
 subsite specializing in providing information about View cameras. This
-subsite now includes several package instances beyond Bboard; it could
+subsite now includes several package instances beyond Forum; it could
 potentially include its own Ecommerce capabilities (ala <ulink url="http://shopping.yahoo.com">Yahoo! Shopping</ulink>). This could include a
 knowledge management application that allows users to spread expertise about
 view cameras and a portal application that links to reliable camera models
@@ -879,7 +879,7 @@ procedure set_value (
 <para>The central piece of the data model is the <computeroutput>apm_package_types</computeroutput>
 table where each package is registered. When a new application or service is
 installed on an OpenACS instance, a corresponding row in this table is inserted
-with information about the type of package, e.g. if the <ulink url="/doc/bboard">bboard package</ulink> is installed on your OpenACS server, a row
+with information about the type of package, e.g. if the <ulink url="/doc/forum">forum package</ulink> is installed on your OpenACS server, a row
 in <computeroutput>apm_package_types</computeroutput> will be created, noting that it&#39;s an
 application package type.</para>
 

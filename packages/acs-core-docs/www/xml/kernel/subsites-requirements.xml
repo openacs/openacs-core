@@ -8,7 +8,7 @@
 <title>OpenACS 4 Subsites Requirements</title>
 
 <authorblurb>
-by <ulink url="http://planitia.org">Rafael H. Schloming</ulink> and <ulink url="mailto:dennis@arsdigita.com">Dennis Gregorovic</ulink> 
+by <ulink url="http://planitia.org">Rafael H. Schloming</ulink> and Dennis Gregorovic
 </authorblurb>
 
 
@@ -83,26 +83,26 @@ subsites to provide tailored &quot;virtual websites&quot; to different
 subcommunities.</para></listitem>
 </orderedlist>
 
-<para>Joe Programmer is working on the bboard package and wants to make it
+<para>Joe Programmer is working on the forum package and wants to make it
 subsite-aware. Using [ad_conn package_id], Joe adds code that only displays
-bboard messages associated with the current package instance. Joe is happy to
+forum messages associated with the current package instance. Joe is happy to
 realize that ad_parameter is already smart enough to return configuration
 parameters for the current package instance, and so he has to do no extra
 work to tailor configuration parameters to the current subsite.</para>
 
 <para>Jane Admin maintains www.company.com. She learns of Joe&#39;s work and
-would like to set up individual bboards for the Boston and Austin offices of
+would like to set up individual forums for the Boston and Austin offices of
 her company. The first thing she does is use the APM to install the new
-bboard package.</para>
+forum package.</para>
 
 <para>Next, Jane uses the Subsite UI to create subsites for the Boston and
-Austin offices. Then Jane uses the Subsite UI to create bboards for each
+Austin offices. Then Jane uses the Subsite UI to create forums for each
 office.</para>
 
-<para>Now, the Boston office employees have their own bboard at
-http://www.company.com/offices/boston/bboard, and similarly for the Austin
+<para>Now, the Boston office employees have their own forum at
+http://www.company.com/offices/boston/forum, and similarly for the Austin
 office. At this point, the Boston and Austin office admins can customize the
-configurations for each of their bboards, or they can just use the
+configurations for each of their forums, or they can just use the
 defaults.</para>
 
 

@@ -8,9 +8,7 @@
   <title>OpenACS Documentation Guide</title>
 
   <para>
-    By <ulink
-    url="mailto:claus@arsdigita.com">claus@arsdigita.com</ulink>, with
-    additions by <ulink url="mailto:rmello@fslc.usu.edu">Roberto
+    By Claus Rasmussen, with additions by <ulink url="mailto:rmello@cc.usu.edu">Roberto
       Mello</ulink> and the OpenACS Community
   </para>
 
@@ -712,8 +710,7 @@ bash$  xsltproc /usr/share/sgml/docbook/stylesheet/xsl/nwalsh/html/chunk.xsl fil
       </listitem>
       
       <listitem><para>
-	  <ulink url="mailto:lutter@arsdigita.com">David
-	  Lutterkort</ulink>
+	  David Lutterkort
 	  wrote an <link linkend="psgml-mode">intro to the PSGML Mode in Emacs</link>
 	</para></listitem>
 
@@ -743,7 +740,7 @@ bash$  xsltproc /usr/share/sgml/docbook/stylesheet/xsl/nwalsh/html/chunk.xsl fil
 	  In the process of transforming your HTML into XML, 
 	  <ulink url="http://tidy.sourceforge.net/">HTML tidy</ulink>
 	  can be a a handy tool to make your HTML "regexp'able".
-	  <ulink url="mailto:bcalef@arsdigita.com">Brandoch Calef</ulink> has made a 
+	  Brandoch Calef has made a 
 	  <ulink url="http://developer.arsdigita.com/working-papers/bcalef/html-to-docbook.html#html2docbook">Perl script</ulink>
 	  that gets you most of the way.
 

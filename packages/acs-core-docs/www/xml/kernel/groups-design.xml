@@ -8,7 +8,7 @@
 <title>OpenACS 4 Groups Design</title>
 
 <authorblurb>
-by <ulink url="http://planitia.org">Rafael H. Schloming</ulink> and <ulink url="mailto:mthomas@arsdigita.com">Mark Thomas</ulink> 
+by <ulink url="http://planitia.org">Rafael H. Schloming</ulink> and Mark Thomas
 </authorblurb>
 
 
@@ -688,7 +688,7 @@ procedure membership_rel.delete (
 
 </term>
  
-<listitem><para><ulink url="mailto:mthomas@arsdigita.com">Mark Thomas</ulink></para></listitem>
+<listitem><para>Mark Thomas</para></listitem>
 </varlistentry>
 </variablelist>
 
@@ -721,7 +721,7 @@ procedure membership_rel.delete (
 <entry>Initial Revision</entry>
 <entry>08/30/2000</entry>
 <entry>
-<ulink url="mailto:mthomas@arsdigita.com">Mark Thomas</ulink>
+Mark Thomas
 </entry>
 </row>
 
@@ -730,7 +730,7 @@ procedure membership_rel.delete (
 <entry>Additional revisions; tried to clarify membership/compostion</entry>
 <entry>09/08/2000</entry>
 <entry>
-<ulink url="mailto:mthomas@arsdigita.com">Mark Thomas</ulink>
+Mark Thomas
 </entry>
 </row>
 </tbody></tgroup></informaltable>

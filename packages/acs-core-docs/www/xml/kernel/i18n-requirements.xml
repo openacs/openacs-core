@@ -214,8 +214,8 @@ OpenACS?</para>
 
 <listitem>
 <para>A developer needs to author a web site which operates in
-multiple languages simultaneously. For example, arsDigita.com with
-content and navigation in English, German, and Japanese.</para>
+multiple languages simultaneously. For example, www.un.org with
+content and navigation in multiple languages.</para>
 
 <para>The site would have an end-user visible UI to support these
 languages, and the content management system must allow articles to
@@ -313,7 +313,7 @@ country abbreviations.</para>
 
 <blockquote>
 <para>See
-<ulink url="http://acs40.arsdigita.com/doc/acs-content-repository/requirements.html">Content
+<ulink url="/doc/acs-content-repository/requirements.html#100-20">Content
 Repository Requirement 100.20</ulink></para>
 
 <para><emphasis>10.10</emphasis> Provide a consistent
@@ -380,7 +380,7 @@ identifier and a locale.</para>
 localizable nav-bar mechanism for a site? A navigation bar might be
 made up of a set of text strings and graphics, where the graphics
 themselves are locale-specific, such as images of English or
-Japanese text (as on www.arsdigita.com). It should be easy to
+Japanese text (as on www.un.org). It should be easy to
 specify alternate configurations of text and graphics to lay out
 the page for different locales.</para>
 

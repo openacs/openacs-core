@@ -312,7 +312,7 @@
               The <emphasis>OpenACS Core</emphasis>, which
 	      comprises all the other packages that ship with the
 	      kernel and are most frequently needed by users, such as
-	      templating, bboard, and user
+	      templating, forums, and user
 	      registration/management. The packages tend to be
 	      developed and distributed with the kernel.
 	    </para>
