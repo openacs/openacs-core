@@ -447,11 +447,14 @@ declare
   v_id_column                              acs_object_types.id_column%TYPE;
   cols                                     varchar default '''';
   vals                                     varchar default '''';
-  attr_cur                                 record;
+  attr_rec                                 record;
 begin
 
-  select table_name, id_column into v_table_name, v_id_column
-  from acs_object_types where 
+  select 
+    table_name, id_column into v_table_name, v_id_column
+  from 
+    acs_object_types 
+  where 
     object_type = trigger_insert_statement__content_type;
 
   for attr_rec in select
@@ -466,13 +469,25 @@ begin
   end LOOP;
 
   return ''insert into '' || v_table_name || 
-    '' ( '' || v_id_column || cols || '' ) values ( new_revision_id'' ||
+    '' ( '' || v_id_column || cols || '' ) values (new.revision_id'' ||
     vals || '')'';
   
 end;' language 'plpgsql';
 
 -- FIXME: need to look at this in more detail.  This probably can't be made 
--- to work reliably in postgresql.
+-- to work reliably in postgresql.  Currently we are using a rule to insert 
+-- into the input view when a new content revision is added.  Pg locks the 
+-- underlying table when the rule is dropped, so the dropping and recreating
+-- of the new content revisons seems like it would be reliable, but the 
+-- possiblity of a race condition exists for either the initial creation
+-- of dropping of a type.  I'm not sure if the possiblity of a race condition
+-- acually exists in practice.  The thing to do here might be to just create 
+-- a function that dynamically builds the insert strings and does the 
+-- each time an insert is done on the content_type view.  Trade-off being
+-- that the inserts would be slower due to the use of dynamic code in pl/psql.
+-- More digging required ...
+
+-- DCW, 2001-03-30.
 
 -- Create or replace a trigger on insert for simplifying addition of
 -- revisions for any content type
@@ -482,63 +497,39 @@ create function content_type__refresh_trigger (varchar)
 returns integer as '
 declare
   refresh_trigger__content_type           alias for $1;  
-  tr_text                                 text default '''';
+  rule_text                               text default '''';
   v_table_name                            acs_object_types.table_name%TYPE;
   type_rec                                record;
 begin
 
   -- get the table name for the content type (determines view name)
 
-  select table_name into v_table_name
-  from acs_object_types where object_type = refresh_trigger__content_type;
+  select table_name 
+    into v_table_name
+    from acs_object_types 
+   where object_type = refresh_trigger__content_type;
 
-  --=================== start building trigger code =====================
+  --=================== start building rule code =======================
 
-  tr_text := ''create function '' || v_table_name || ''t()  
-  returns opaque as \\\'
-  declare
-    new_revision_id integer;
-  begin
-
-    if new.item_id is null then
-      raise EXCEPTION \\\'\\\'-20000: item_id is required when inserting into %i \\\'\\\', v_table_name;
-    end if;
-
-    if new.text is not null then
-
-      new_revision_id := content_revision__new(
-                     new.title,
-                     new.description,
-                     now(),
-                     new.mime_type,
-                     new.nls_language,
-                     new.text,
-                     content_symlink__resolve(new.item_id),
-                     new.revision_id,
-                     now(),
-                     new.creation_user, 
-                     new.creation_ip
-      );
-
-    else
-
-      new_revision_id := content_revision__new(
-                     new.title,
-                     new.description,
-                     now(),
-                     new.mime_type,
-                     new.nls_language,
-                     new.data,
-                     content_symlink__resolve(new.item_id),
-                     new.revision_id,
-                     now(),
-                     new.creation_user, 
-                     new.creation_ip
-      );
-
-    end if;
-
-    '';
+  rule_text := ''create rule '' || v_table_name || ''_r as on insert to '' ||
+               v_table_name || ''i do instead (
+                select content_revision__new(
+                                     new.title,
+                                     new.description,
+                                     now(),
+                                     new.mime_type,
+                                     new.nls_language,
+                                     case when new.text is null 
+                                              then new.data 
+                                              else new.text
+                                           end,
+                                     content_symlink__resolve(new.item_id),
+                                     new.revision_id,
+                                     now(),
+                                     new.creation_user, 
+                                     new.creation_ip
+                );
+                '';
 
   -- add an insert statement for each subtype in the hierarchy for this type
 
@@ -559,35 +550,22 @@ begin
                   order by
                     level desc
   LOOP
-    tr_text := tr_text || '' '' || content_type__trigger_insert_statement(type_rec.object_type) || '';'';
+    rule_text := rule_text || '' '' || content_type__trigger_insert_statement(type_rec.object_type) || '';'';
   end loop;
 
-  -- end building the trigger code
+  -- end building the rule definition code
 
-  tr_text := tr_text || ''
+  rule_text := rule_text || '' );'';
 
-    return new;
+  --================== done building rule code =======================
 
-  end;\\\' language \\\'plpgsql\\\';'';
-
-  --================== done building trigger code =======================
-
-  -- drop the old trigger
-  if trigger_exists(v_table_name || ''t'', v_table_name || ''i'') then 
-     execute ''drop trigger '' || v_table_name || ''t on '' || v_table_name || ''i'';
+  -- drop the old rule
+  if rule_exists(v_table_name || ''_r'', v_table_name || ''i'') then 
+     execute ''drop rule '' || v_table_name || ''_r'';
   end if;
 
-  -- drop the old trigger function
-  if trigger_func_exists(v_table_name || ''t'') then
-     execute ''drop function '' || v_table_name || ''t()'';
-  end if;
-
-  -- create the new trigger function
-  raise notice ''trigger text = %'', tr_text;
-  execute tr_text;
-
-  -- create the new trigger
-  execute ''create trigger '' || v_table_name || ''t before insert on '' || v_table_name || ''i for each row execute procedure '' || v_table_name || ''t();'';
+  -- create the new rule for inserts on the content type
+  execute rule_text;
 
   return null; 
 

@@ -61,6 +61,18 @@ begin
 
 end;' language 'plpgsql';
 
+create function rule_exists (varchar,varchar) returns boolean as '
+declare
+        rule_name       alias for $1;
+        table_name      alias for $2;
+begin
+        return count(*) = 1
+          from pg_rules
+         where tablename::varchar = table_name
+           and rulename::varchar = rule_name;
+
+end;' language 'plpgsql';
+
 -- java stuff, deal with this later.
 
 /*
