@@ -67,7 +67,7 @@ ad_proc -public template::paginator::create { statement_name name query args } {
 
 # Initialize a paginated query.  Only called by create.
 
-ad_proc -public template::paginator::init { statement_name result_name query } {
+ad_proc -public template::paginator::init { statement_name name query } {
 
   get_reference
 
@@ -96,7 +96,7 @@ ad_proc -public template::paginator::init { statement_name result_name query } {
     }
     
     set properties(context_ids) $context_ids
-    cache set $result_name:$query:context_ids $context_ids $properties(timeout)
+    cache set $name:$query:context_ids $context_ids $properties(timeout)
 
 
     if { [template::util::is_nil row_ids] } {
@@ -104,7 +104,7 @@ ad_proc -public template::paginator::init { statement_name result_name query } {
     }
 
     set properties(row_ids) $row_ids
-    cache set $result_name:$query:row_ids $row_ids $properties(timeout)
+    cache set $name:$query:row_ids $row_ids $properties(timeout)
 
 
   } else {
@@ -113,7 +113,7 @@ ad_proc -public template::paginator::init { statement_name result_name query } {
     uplevel 3 "template::query $statement_name __paginator_ids onelist \"$query\""
 
     set properties(row_ids) $ids
-    cache set $result_name:$query:row_ids $ids $properties(timeout)
+    cache set $name:$query:row_ids $ids $properties(timeout)
   }
 }
 
@@ -436,6 +436,7 @@ ad_proc -public template::paginator::get_data { statement_name name datasource q
   template::util::list_to_lookup $ids row_order
 
   # substitute the current page set
+  set query [uplevel 2 "db_map ${statement_name}_partial"]
   set in_list [join $ids ","]
   if { ! [regsub CURRENT_PAGE_SET $query $in_list query] } {
     error "Token CURRENT_PAGE_SET not found in page data query: $query"
