@@ -10,7 +10,7 @@
 #---------------------------------------------------------------------
 # New Service Configuration
 # Values in this section will be written into the config.tcl of the
-# the new site if do_checkout=yes 
+# the new site if do_checkout=yes or do_checkout=up
 #---------------------------------------------------------------------
 
 #---------------------------------------------------------------------
@@ -74,7 +74,10 @@ set publisher_name            "An OpenACS Developer"
 # daemontools directories if appropriate
 # If not, you must have already unpacked a tar-ball or done a cvs checkout
 # of acs-core or more (not just the checkout of /install you used to get
-# this file) in the server root# directory specified above
+# this file) in the server root# directory specified above. A third option
+# is to set this parameter to "up" in which case a full cvs update of the
+# tree will be done instead of the checkout. The cvs update will fully update
+# existing packages without checkout out new ones.
 
 set do_checkout               "yes"
 
