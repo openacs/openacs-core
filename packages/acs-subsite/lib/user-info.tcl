@@ -22,9 +22,17 @@ acs_user::get -array user -include_bio
 
 ad_form -name user_info -cancel_url $return_url -action $action_url -mode display -form {
     {return_url:text(hidden),optional {value $return_url}}
-    {username:text(inform)
-        {label "Username"}
+}
+
+if { ![auth::UseEmailForLoginP] } {
+    ad_form -extend -name user_info -form {
+        {username:text(inform)
+            {label "Username"}
+        }
     }
+}
+
+ad_form -extend -name user_info -form {
     {first_names:text
         {label "First names"}
         {html {size 50}}

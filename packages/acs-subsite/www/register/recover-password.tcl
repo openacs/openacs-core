@@ -7,6 +7,7 @@ ad_page_contract {
 } {
     {authority_id:integer ""}
     {username ""}
+    {email ""}
 }
 
 set page_title [_ acs-subsite.Recover_Password]
@@ -21,35 +22,51 @@ set authority_options [auth::authority::get_authority_options]
 
 ad_form -name recover -edit_buttons [list [list [_ acs-kernel.common_continue] ok]] -form { {dummy:text(hidden),optional} }
     
-if { [llength $authority_options] > 1 } {
-    ad_form -extend -name recover -form {
-        {authority_id:integer(select) 
-            {label {[_ acs-kernel.authentication_authority]}} 
-            {options $authority_options}
+
+
+set username_widget text
+if { [parameter::get -parameter UsePasswordWidgetForUsername -package_id [ad_acs_kernel_id]] } {
+    set username_widget password
+}
+
+if { [auth::UseEmailForLoginP] } {
+    ad_form -extend -name recover -form [list [list email:text($username_widget) [list label "Email"]]]
+    set user_id_widget_name email
+} else {
+    if { [llength $authority_options] > 1 } {
+        ad_form -extend -name recover -form {
+            {authority_id:integer(select) 
+                {label {[_ acs-kernel.authentication_authority]}} 
+                {options $authority_options}
+            }
         }
     }
+    
+    ad_form -extend -name recover -form [list [list username:text($username_widget) [list label "Username"]]] -validate {
+        {username
+            { ![empty_string_p [acs_user::get_by_username -authority_id $authority_id -username $username]] }
+            { Could not find username at authority }
+        }
+    }
+
+    set user_id_widget_name username
 }
+
+
+
+
 
 set submission_p 0
 
-ad_form -extend -name recover -form { 
-    {username:text
-        {label "Username"}
-        {value $username}
-    }
-} -validate {
-    {username
-        { ![empty_string_p [acs_user::get_by_username -authority_id $authority_id -username $username]] }
-        { Could not find username at authority }
-    }
-}
+ad_form -extend -name recover -on_request {}
 
 # We handle form submission here, because otherwise we can't handle both the case where we use the form
 # and the case where we don't in one go
-if { [form is_valid recover] || (![form is_submission recover] && [exists_and_not_null username]) } {
+if { [form is_valid recover] || (![form is_submission recover] && ([exists_and_not_null username] || [exists_and_not_null email])) } {
     array set recover_info [auth::password::recover_password \
                                 -authority_id $authority_id \
-                                -username $username]
+                                -username $username \
+                                -email $email]
 
     set login_url [ad_get_login_url -authority_id $authority_id -username $username]
 }

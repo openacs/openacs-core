@@ -6,6 +6,7 @@
 # Optional:
 #   authority_id
 #   username
+#   email
 #
 
 if { ![exists_and_not_null package_id] } {
@@ -14,6 +15,10 @@ if { ![exists_and_not_null package_id] } {
 
 if { ![info exists username] } {
     set username {}
+}
+
+if { ![info exists email] } {
+    set email {}
 }
 
 # Persistent login
@@ -53,11 +58,11 @@ if { ![exists_and_not_null authority_id] } {
     set authority_id [lindex [lindex $authority_options 0] 1]
 }
 
-set forgotten_pwd_url [auth::password::get_forgotten_url -authority_id $authority_id -username $username]
+set forgotten_pwd_url [auth::password::get_forgotten_url -authority_id $authority_id -username $username -email $email]
 
 set register_url "[subsite::get_element -element url]register/user-new"
 if { [string equal $authority_id [auth::get_register_authority]] } {
-    set register_url [export_vars -no_empty -base $register_url { username }]
+    set register_url [export_vars -no_empty -base $register_url { username email }]
 }
 
 ad_form -name login -html { style "margin: 0px;" } -show_required_p 0 -edit_buttons { { "Login" ok } } -action "/register/" -form {
@@ -67,21 +72,27 @@ ad_form -name login -html { style "margin: 0px;" } -show_required_p 0 -edit_butt
     {hash:text(hidden)}
 } 
 
-if { [llength $authority_options] > 1 } {
-    ad_form -extend -name login -form {
-        {authority_id:integer(select) 
-            {label "Authority"} 
-            {options $authority_options}
-        }
-    }
-}
-
+set username_widget text
 if { [parameter::get -parameter UsePasswordWidgetForUsername -package_id [ad_acs_kernel_id]] } {
     set username_widget password
-} else {
-    set username_widget text
 }
-ad_form -extend -name login -form [list [list username:text($username_widget) [list label "Username"]]]
+
+if { [auth::UseEmailForLoginP] } {
+    ad_form -extend -name login -form [list [list email:text($username_widget) [list label "Email"]]]
+    set user_id_widget_name email
+} else {
+    if { [llength $authority_options] > 1 } {
+        ad_form -extend -name login -form {
+            {authority_id:integer(select) 
+                {label "Authority"} 
+                {options $authority_options}
+            }
+        }
+    }
+
+    ad_form -extend -name login -form [list [list username:text($username_widget) [list label "Username"]]]
+    set user_id_widget_name username
+}
 
 ad_form -extend -name login -form {
     {password:text(password) 
@@ -113,6 +124,7 @@ ad_form -extend -name login -on_request {
     
     array set auth_info [auth::authenticate \
                              -authority_id $authority_id \
+                             -email $email \
                              -username $username \
                              -password $password \
                              -persistent=[expr $allow_persistent_login_p && [template::util::is_true $persistent_p]]]
@@ -127,7 +139,7 @@ ad_form -extend -name login -on_request {
             break
         }
         default {
-            form set_error login username $auth_info(auth_message)
+            form set_error login $user_id_widget_name $auth_info(auth_message)
             break
         }
     }

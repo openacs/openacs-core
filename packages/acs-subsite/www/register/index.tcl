@@ -4,6 +4,8 @@ ad_page_contract {
 } {
     {authority_id ""}
     {username ""}
+    {email ""}
     {return_url ""}
 }
 
+set focus [auth::get_login_focus]
