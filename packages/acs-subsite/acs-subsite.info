@@ -20,7 +20,7 @@
         <requires url="acs-content-repository" version="5.2.0d1"/>
         <requires url="acs-kernel" version="5.2.0d3"/>
         <requires url="acs-tcl" version="5.2.0d1"/>
-
+        <requires url="acs-authentication" version="5.1.4"/>
         <callbacks>
             <callback type="after-install"  proc="subsite::package_install"/>
             <callback type="after-mount"  proc="subsite::after_mount"/>
