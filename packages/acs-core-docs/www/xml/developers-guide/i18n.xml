@@ -15,10 +15,10 @@
   </authorblurb>
 
   <sect1 id="i18n-overview">
-    <title>Internationalization and Localization</title>
+    <title>Internationalization and Localization Overview</title>
     <table id="i18n-l10n-process">
-      <title>Internationalization and Localization</title>
-      <tgroup cols="1">
+      <title>Internationalization and Localization Overview</title>
+      <tgroup cols="3">
         <colspec colname="step"/>
         <colspec colname="description"/>
         <colspec colname="who"/>
