@@ -361,7 +361,7 @@ ad_proc -private auth::local::registration::unregister_impl {} {
 ad_proc -private auth::local::registration::GetElements {
     {parameters ""}
 } {
-    Implements the GetElements operation of the auth_register
+    Implements the GetElements operation of the auth_registration
     service contract for the local account implementation.
 } {
     set result(required) {}
@@ -397,7 +397,7 @@ ad_proc -private auth::local::registration::Register {
     secret_question
     secret_answer
 } {
-    Implements the Register operation of the auth_register
+    Implements the Register operation of the auth_registration
     service contract for the local account implementation.
 } {
     array set result {
@@ -411,6 +411,7 @@ ad_proc -private auth::local::registration::Register {
     # We don't create anything here, so creation always succeeds
     # And we don't check local account, either
 
+    # LARS TODO: Move this out of the local driver and into the auth framework
     # Generate random password?
     set generated_pwd_p 0
     if { [empty_string_p $password] || [parameter::get -package_id [ad_conn subsite_id] -parameter RegistrationProvidesRandomPasswordP -default 0] } {
@@ -426,6 +427,7 @@ ad_proc -private auth::local::registration::Register {
     set system_name [ad_system_name]
     set system_url [ad_url]
 
+    # LARS TODO: Move this out of the local driver and into the auth framework
     # Send password confirmation email to user
     if { $generated_pwd_p || \
              [parameter::get -parameter RegistrationProvidesRandomPasswordP -package_id [ad_conn subsite_id] -default 0] || \
@@ -446,6 +448,7 @@ ad_proc -private auth::local::registration::Register {
 	}
     }
 
+    # LARS TODO: Move this out of the local driver and into the auth framework
     # Notify admin on new registration
     if { [ad_parameter NotifyAdminOfNewRegistrationsP "security" 0] } {
 	with_catch errmsg {

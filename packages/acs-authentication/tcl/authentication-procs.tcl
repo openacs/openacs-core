@@ -400,52 +400,54 @@ ad_proc -public auth::create_user {
             set user_info($elm) [set $elm]
         }
     }
-    array set creation_info [auth::create_local_account \
-                                 -user_id $user_id \
-                                 -authority_id $authority_id \
-                                 -username $username \
-                                 -array user_info]
 
-    # Returns: 
-    #   creation_info(creation_status)
-    #   creation_info(creation_message)  
-    #   creation_info(element_messages)  
-    #   creation_info(account_status)
-    #   creation_info(account_message)  
-    #   creation_info(user_id)
+    db_transaction {
+        array set creation_info [auth::create_local_account \
+                                     -user_id $user_id \
+                                     -authority_id $authority_id \
+                                     -username $username \
+                                     -array user_info]
 
-    # We don't do any fancy error checking here, because create_local_account is not a service contract
-    # so we control it 100%
+        # Returns: 
+        #   creation_info(creation_status)
+        #   creation_info(creation_message)  
+        #   creation_info(element_messages)  
+        #   creation_info(account_status)
+        #   creation_info(account_message)  
+        #   creation_info(user_id)
 
-    if { ![string equal $creation_info(creation_status) "ok"] } {
-        # Local account creation error
-        return [array get creation_info]
-    }
+        # We don't do any fancy error checking here, because create_local_account is not a service contract
+        # so we control it 100%
 
-    # Need to find out which username was set
-    set username $creation_info(username)
+        if { ![string equal $creation_info(creation_status) "ok"] } {
+            # Local account creation error
+            ad_abort_transaction
+            return
+        }
 
-    # Save the local account information for later
-    set local_account_status $creation_info(account_status)
-    set local_account_message $creation_info(account_message)
+        # Need to find out which username was set
+        set username $creation_info(username)
 
-    # Clear out remote creation_info array for reuse
-    array set creation_info {
-        creation_status {}
-        creation_message {}  
-        element_messages {}  
-        account_status {}
-        account_message {}  
-    }
+        # Save the local account information for later
+        set local_account_status $creation_info(account_status)
+        set local_account_message $creation_info(account_message)
+
+        # Clear out remote creation_info array for reuse
+        array set creation_info {
+            creation_status {}
+            creation_message {}  
+            element_messages {}  
+            account_status {}
+            account_message {}  
+        }
 
 
-    #####
-    #
-    # Create remote account
-    #
-    #####
+        #####
+        #
+        # Create remote account
+        #
+        #####
 
-    with_catch errmsg {
         array set creation_info [auth::registration::Register \
                                      -authority_id $authority_id \
                                      -username $username \
@@ -457,68 +459,71 @@ ad_proc -public auth::create_user {
                                      -url $url \
                                      -secret_question $secret_question \
                                      -secret_answer $secret_answer]
-    } {
-        set auth_info(auth_status) failed_to_connect
-        set auth_info(auth_message) $errmsg
+        
+        # Returns:
+        #   creation_info(creation_status) 
+        #   creation_info(creation_message) 
+        #   creation_info(element_messages) 
+        #   creation_info(account_status) 
+        #   creation_info(account_message) 
+
+        # Verify creation_info/creation_message return codes
+        array set default_creation_message {
+            data_error {Problem with user data}
+            reg_error {Unknown registration error}
+            failed_to_connect {Error communicating with account server}
+        }
+
+        switch $creation_info(creation_status) {
+            ok { 
+                # Continue below
+            }
+            data_error -
+            reg_error -
+            failed_to_connect {
+                if { ![exists_and_not_null creation_info(creation_message)] } {
+                    set creation_info(creation_message) $default_creation_message($creation_info(creation_status))
+                }
+                if { ![info exists creation_info(element_messages)] } {
+                    set creation_info(element_messages) {}
+                }
+                return [array get creation_info]
+            }
+            default {
+                set creation_info(creation_status) "failed_to_connect"
+                set creation_info(creation_message) "Illegal error code returned from account creation driver"
+                return [array get creation_info]
+            }
+        }
+
+        # Verify remote account_info/account_message return codes
+        switch $creation_info(account_status) {
+            ok { 
+                # Continue below
+                set creation_info(account_message) {}
+            }
+            closed {
+                if { ![exists_and_not_null creation_info(account_message)] } {
+                    set creation_info(account_message) "This account is not available at this time"
+                }
+            }
+            default {
+                set creation_info(account_status) "closed"
+                set creation_info(account_message) "Illegal error code returned from creationentication driver"
+            }
+        }
+
+    } on_error {
+        set creation_info(creation_status) failed_to_connect
+        set creation_info(creation_message) $errmsg
         global errorInfo
         ns_log Error "Error invoking account registration driver for authority_id = $authority_id: $errorInfo"
-    }
-    
-    
-    # Returns:
-    #   creation_info(creation_status) 
-    #   creation_info(creation_message) 
-    #   creation_info(element_messages) 
-    #   creation_info(account_status) 
-    #   creation_info(account_message) 
-
-    # Verify creation_info/creation_message return codes
-    array set default_creation_message {
-        data_error {Problem with user data}
-        reg_error {Unknown registration error}
-        failed_to_connect {Error communicating with account server}
+        db_abort_transaction
     }
 
-    switch $creation_info(creation_status) {
-        ok { 
-            # Continue below
-        }
-        data_error -
-        reg_error -
-        failed_to_connect {
-            if { ![exists_and_not_null creation_info(creation_message)] } {
-                set creation_info(creation_message) $default_creation_message($creation_info(creation_status))
-            }
-            if { ![info exists creation_info(element_messages)] } {
-                set creation_info(element_messages) {}
-            }
-            return [array get creation_info]
-        }
-        default {
-            set creation_info(creation_status) "failed_to_connect"
-            set creation_info(creation_message) "Illegal error code returned from account creation driver"
-            return [array get creation_info]
-        }
+    if { ![string equal $creation_info(creation_status) "ok"] } { 
+        return [array get creation_info]
     }
-
-    # Verify remote account_info/account_message return codes
-    switch $creation_info(account_status) {
-        ok { 
-            # Continue below
-            set creation_info(account_message) {}
-        }
-        closed {
-            if { ![exists_and_not_null creation_info(account_message)] } {
-                set creation_info(account_message) "This account is not available at this time"
-            }
-        }
-        default {
-            set creation_info(account_status) "closed"
-            set creation_info(account_message) "Illegal error code returned from creationentication driver"
-        }
-    }
-
-    
 
     #####
     # 
