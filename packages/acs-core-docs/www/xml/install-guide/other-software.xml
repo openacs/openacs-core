@@ -754,47 +754,6 @@ line, click
           be different for each server service, you won't need <link
           linkend="ssl-certificates">those instructions</link> until
       later. </para>
-      <sect2 id="install-nsopenssl-aolserver3">
-        <title>Install on AOLserver3</title>
-        <para> You will need the <link
-      linkend="install-aolserver-compile">unpacked Aolserver tarball</link> in
-      <computeroutput>/usr/local/src/aolserver</computeroutput> and
-      the <link
-          linkend="nsopenssl-download">nsopenssl tarball</link> in
-          <computeroutput>/var/tmp</computeroutput>.</para>
-      <para>Red Hat 9 note: see <ulink
-          url="http://openacs.org/forums/message-view?message_id=92882">this
-          thread</ulink> for details on compiling nsopenssl.)</para>
-
-      <screen>[root bin]#<userinput> cd /usr/local/src/aolserver</userinput>
-[root aolserver]# <userinput>wget --passive http://www.scottg.net/download/nsopenssl-2.1.tar.gz</userinput>
-[root aolserver]# <userinput>tar xzf nsopenssl-2.1.tar.gz </userinput>
-[root aolserver]# <userinput>cd nsopenssl-2.1</userinput>
-[root nsopenssl-2.1]# <userinput>make OPENSSL=/usr/local/ssl</userinput>
-gcc -I/usr/local/ssl/include -I../aolserver/include -D_REENTRANT=1 -DNDEBUG=1 -g -fPIC -Wall -Wno-unused -mcpu=i686 -DHAVE_CMMSG=1 -DUSE_FIONREAD=1 -DHAVE_COND_EINTR=1   -c -o nsopenssl.o nsopenssl.c
-<emphasis>(many lines omitted)</emphasis>
-gcc -shared -nostartfiles -o nsopenssl.so nsopenssl.o config.o init.o ssl.o thread.o tclcmds.o -L/usr/local/ssl/lib -lssl -lcrypto
-[root nsopenssl-2.1]# <userinput>cp nsopenssl.so /usr/local/aolserver/bin</userinput>
-[root nsopenssl-2.1]# <userinput>cp https.tcl /usr/local/aolserver/modules/tcl/</userinput>
-[root nsopenssl-2.1]#
-<action>cd /usr/local/src/aolserver
-wget --passive http://www.scottg.net/download/nsopenssl-2.1.tar.gz
-tar xzf nsopenssl-2.1.tar.gz 
-cd nsopenssl-2.1 
-make OPENSSL=/usr/local/ssl 
-cp nsopenssl.so /usr/local/aolserver/bin 
-cp https.tcl /usr/local/aolserver/modules/tcl/</action></screen>
-      <para>For Debian (<ulink
-      url="http://openacs.org/forums/message-view?message_id=93854">more
-      information</ulink>):</para>
-<screen><action>apt-get install libssl-dev
-cd /usr/local/src/aolserver
-tar xzf /var/tmp/nsopenssl-2.1.tar.gz
-cd nsopenssl-2.1
-make OPENSSL=/usr/lib/ssl
-cp nsopenssl.so /usr/local/aolserver/bin
-cp https.tcl /usr/local/aolserver/modules/tcl/</action></screen>
-      </sect2>
       <sect2 id="install-nsopenssl-aolserver4">
         <title>Install on AOLserver4</title>
         <para> You will need the AOLserver4 source in <computeroutput>/usr/local/src/aolserver/aolserver</computeroutput> and OpenSSL installed in <computeroutput>/usr/local/ssl</computeroutput> (or at least symlinked there).</para>
@@ -842,6 +801,47 @@ ln -s /usr/local/ssl/lib/libcrypto.so.0.9.7 libcrypto.so.0.9.7
       etc/config.tcl file has a section on "OpenSSL 3 with AOLserver4". If
       that section is not present, try looking at the README file in
       <computeroutput>/usr/local/src/aolserver/nsopenssl</computeroutput>.</para>
+      </sect2>
+      <sect2 id="install-nsopenssl-aolserver3">
+        <title>Install on AOLserver3</title>
+        <para> You will need the <link
+      linkend="install-aolserver-compile">unpacked Aolserver tarball</link> in
+      <computeroutput>/usr/local/src/aolserver</computeroutput> and
+      the <link
+          linkend="nsopenssl-download">nsopenssl tarball</link> in
+          <computeroutput>/var/tmp</computeroutput>.</para>
+      <para>Red Hat 9 note: see <ulink
+          url="http://openacs.org/forums/message-view?message_id=92882">this
+          thread</ulink> for details on compiling nsopenssl.)</para>
+
+      <screen>[root bin]#<userinput> cd /usr/local/src/aolserver</userinput>
+[root aolserver]# <userinput>wget --passive http://www.scottg.net/download/nsopenssl-2.1.tar.gz</userinput>
+[root aolserver]# <userinput>tar xzf nsopenssl-2.1.tar.gz </userinput>
+[root aolserver]# <userinput>cd nsopenssl-2.1</userinput>
+[root nsopenssl-2.1]# <userinput>make OPENSSL=/usr/local/ssl</userinput>
+gcc -I/usr/local/ssl/include -I../aolserver/include -D_REENTRANT=1 -DNDEBUG=1 -g -fPIC -Wall -Wno-unused -mcpu=i686 -DHAVE_CMMSG=1 -DUSE_FIONREAD=1 -DHAVE_COND_EINTR=1   -c -o nsopenssl.o nsopenssl.c
+<emphasis>(many lines omitted)</emphasis>
+gcc -shared -nostartfiles -o nsopenssl.so nsopenssl.o config.o init.o ssl.o thread.o tclcmds.o -L/usr/local/ssl/lib -lssl -lcrypto
+[root nsopenssl-2.1]# <userinput>cp nsopenssl.so /usr/local/aolserver/bin</userinput>
+[root nsopenssl-2.1]# <userinput>cp https.tcl /usr/local/aolserver/modules/tcl/</userinput>
+[root nsopenssl-2.1]#
+<action>cd /usr/local/src/aolserver
+wget --passive http://www.scottg.net/download/nsopenssl-2.1.tar.gz
+tar xzf nsopenssl-2.1.tar.gz 
+cd nsopenssl-2.1 
+make OPENSSL=/usr/local/ssl 
+cp nsopenssl.so /usr/local/aolserver/bin 
+cp https.tcl /usr/local/aolserver/modules/tcl/</action></screen>
+      <para>For Debian (<ulink
+      url="http://openacs.org/forums/message-view?message_id=93854">more
+      information</ulink>):</para>
+<screen><action>apt-get install libssl-dev
+cd /usr/local/src/aolserver
+tar xzf /var/tmp/nsopenssl-2.1.tar.gz
+cd nsopenssl-2.1
+make OPENSSL=/usr/lib/ssl
+cp nsopenssl.so /usr/local/aolserver/bin
+cp https.tcl /usr/local/aolserver/modules/tcl/</action></screen>
       </sect2>
 
     </sect1>
