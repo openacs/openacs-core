@@ -999,7 +999,7 @@ ad_proc -private api_tcl_to_html {proc_name} {
                 incr i $procl
 
                 # Hack for nasty regexp stuff
-                if {[string match $proc_name "regexp"] || [string match $proc_name "regsub"]} {
+                if {[string match "regexp" $proc_name] || [string match "regsub" $proc_name]} {
                     set regexpl [length_regexp [string range $data $i end]]
                     append html [string range $data [expr $i+1] [expr $i + $regexpl]]
                     incr i $regexpl
