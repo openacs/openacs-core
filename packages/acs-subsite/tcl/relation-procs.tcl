@@ -146,7 +146,7 @@ ad_proc -public relation_remove {
 	}
     }
 
-    db_dml relation_delete "begin ${package_name}.delete(:rel_id); end;"
+    db_exec_plsql relation_delete "begin ${package_name}.delete(:rel_id); end;"
 
     return 1
 }
