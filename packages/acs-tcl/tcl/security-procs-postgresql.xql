@@ -64,4 +64,15 @@
       </querytext>
 </fullquery>
 
+<fullquery name="ad_change_password.password_update">      
+      <querytext>
+        update users 
+        set    password = :new_password, 
+               salt = :salt,
+               password_changed_date = current_timestamp
+        where  user_id = :user_id
+      </querytext>
+</fullquery>
+
+ 
 </queryset>

@@ -18,13 +18,6 @@
 </fullquery>
 
  
-<fullquery name="ad_change_password.password_update">      
-      <querytext>
-      update users set password = :new_password, salt = :salt where user_id = :user_id
-      </querytext>
-</fullquery>
-
- 
 <fullquery name="sec_lookup_property.property_lookup_sec">      
       <querytext>
       
