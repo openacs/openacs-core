@@ -266,9 +266,9 @@ aa_register_case -cats {
 
 
     # -package_key
-    set nodes [site_node::get_children -all -element node_id -node_id $node_id -filter_element package_key -filter_value "acs-admin"]
+    set nodes [site_node::get_children -all -element node_id -node_id $node_id -filters { package_key "acs-admin" }]
 
-    aa_equals "package_key arg. identical to filter_element package_key" \
+    aa_equals "package_key arg. identical to -filters" \
         [site_node::get_children -all -element node_id -node_id $node_id -package_key "acs-admin"] \
         $nodes
     
@@ -276,7 +276,7 @@ aa_register_case -cats {
 
 
     # -package_type
-    set nodes [site_node::get_children -all -element node_id -node_id $node_id -filter_element package_type -filter_value "apm_service"]
+    set nodes [site_node::get_children -all -element node_id -node_id $node_id -filters { package_type "apm_service" }]
     aa_equals "package_type arg. identical to filter_element package_type" \
         [site_node::get_children -all -element node_id -node_id $node_id -package_type "apm_service"] \
         $nodes

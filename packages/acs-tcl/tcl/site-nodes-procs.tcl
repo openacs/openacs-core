@@ -411,8 +411,7 @@ ad_proc -public site_node::get_children {
     {-all:boolean}
     {-package_type {}}
     {-package_key {}}
-    {-filter_element {}}
-    {-filter_value {}}
+    {-filters {}}
     {-element {}}
     {-node_id:required}
 } {
@@ -441,21 +440,13 @@ ad_proc -public site_node::get_children {
     
     @author Lars Pind (lars@collaboraid.biz)
 } {
-    if { ![empty_string_p $filter_element] } {
-        if { ![empty_string_p $package_type] || ![empty_string_p $package_key] } {
-            error "You may specify either package_type, package_key, or filter_element, but not more than one."
-        }
-    } else {
-        if { ![empty_string_p $package_type] && ![empty_string_p $package_key] } {
-            error "You may specify either package_type, package_key, or filter_element, but not more than one."
-        }
-        if { ![empty_string_p $package_type] } {
-            set filter_element package_type
-            set filter_value $package_type
-        } elseif { ![empty_string_p $package_key] } {
-            set filter_element package_key
-            set filter_value $package_key
-        }
+    if { ![empty_string_p $package_type] && ![empty_string_p $package_key] } {
+        error "You may specify either package_type, package_key, or filter_element, but not more than one."
+    }
+    if { ![empty_string_p $package_type] } {
+        lappend filters package_type $package_type
+    } elseif { ![empty_string_p $package_key] } {
+        lappend filters package_key $package_key
     }
     
     set node_url [get_url -node_id $node_id]
@@ -472,14 +463,21 @@ ad_proc -public site_node::get_children {
         }
     }
 
-    if { ![empty_string_p $filter_element] } {
+    if { [llength $filters] > 0 } {
         set org_child_urls $child_urls
         set child_urls [list]
         foreach child_url $org_child_urls {
             array unset site_node
             array set site_node [get_from_url -exact -url $child_url]
 
-            if { [string equal $site_node($filter_element) $filter_value] } {
+            set passed_p 1
+            foreach { elm val } $filters {
+                if { ![string equal $site_node($elm) $val] } {
+                    set passed_p 0
+                    break
+                }
+            }
+            if { $passed_p } {
                 lappend child_urls $child_url
             }
         }
