@@ -1,10 +1,5 @@
 <master>
 <property name=title>@title@</property>
-
-<h2>@title@</h2>
-
-@context_bar@
-
-<hr>
+<property name=context_bar>@context_bar@</property>
 
 @script_documentation@
