@@ -326,7 +326,9 @@ ad_proc db_source_sql_file { {-callback apm_ns_write_callback} file } {
 
 } {
     
-    set fp [open "|[file join [db_get_pgbin] psql] [db_get_database] -f $file" "r"]
+    set file_name [file tail $file]
+    cd [file dirname $file]
+    set fp [open "|[file join [db_get_pgbin] psql] [db_get_database] -f $file_name" "r"]
 
     while { [gets $fp line] >= 0 } {
 	# Don't bother writing out lines which are purely whitespace.
