@@ -1,5 +1,5 @@
 
-ad_proc -private db_available_pools {{ -dbn "" }} {
+ad_proc -private db_available_pools {{} dbn } {
     Returns a list of the available pools for the given database name.
 
     <p>
@@ -31,7 +31,7 @@ ad_proc -private db_pool_to_dbn_init {{
     @see db_driverkey
 } {
     foreach dbn [nsv_array names {db_available_pools}] {
-        foreach pool [db_available_pools -dbn $dbn] {
+        foreach pool [db_available_pools $dbn] {
             nsv_set {db_pool_to_dbn} $pool $dbn
         }
     }
@@ -138,7 +138,7 @@ ad_proc db_bootstrap_set_db_type { errors } {
                 ns_log Notice "$proc_name: For database '$dbn', the following pools are available: $dbn_pools"
             }
 
-            if { [empty_string_p [db_available_pools -dbn $default_dbn]] } {
+            if { [empty_string_p [db_available_pools $default_dbn]] } {
                 ns_log Error "$proc_name: No pools specified for database '$default_dbn'." 
                 set old_availablepool_p 1
             }
@@ -166,7 +166,7 @@ ad_proc db_bootstrap_set_db_type { errors } {
         nsv_set {db_available_pools} $default_dbn $dbn_pools
     }
 
-    set pools [db_available_pools]
+    set pools [db_available_pools {}]
     if { [llength $pools] <= 0 } {
         nsv_set {db_available_pools} $default_dbn $all_pools
         set pools $all_pools

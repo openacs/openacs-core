@@ -429,7 +429,7 @@ ad_proc db_nth_pool_name {{ -dbn "" } n } {
 
     @param dbn The database name to use.  If empty_string, uses the default database.
 } {
-    set available_pools [db_available_pools -dbn $dbn]
+    set available_pools [db_available_pools $dbn]
 
     if { $n < [llength $available_pools] } {
         set pool [lindex $available_pools $n]
@@ -1963,7 +1963,7 @@ ad_proc db_get_username {{ -dbn "" }} {
 
     @param dbn The database name to use.  If empty_string, uses the default database.
 } {
-    set pool [lindex [db_available_pools -dbn $dbn] 0]
+    set pool [lindex [db_available_pools $dbn] 0]
     return [ns_config "ns/db/pool/$pool" User]    
 }
 
@@ -1973,7 +1973,7 @@ ad_proc db_get_password {{ -dbn "" }} {
 
     @param dbn The database name to use.  If empty_string, uses the default database.
 } {
-    set pool [lindex [db_available_pools -dbn $dbn] 0]
+    set pool [lindex [db_available_pools $dbn] 0]
     return [ns_config "ns/db/pool/$pool" Password]
 }
 
@@ -1990,7 +1990,7 @@ ad_proc db_get_sql_user {{ -dbn "" }} {
 
     @param dbn The database name to use.  If empty_string, uses the default database.
 } {
-    set pool [lindex [db_available_pools -dbn $dbn] 0]
+    set pool [lindex [db_available_pools $dbn] 0]
     set datasource [ns_config "ns/db/pool/$pool" DataSource]    
     if { ![empty_string_p $datasource] && ![string is space $datasource] } {
 	return "[ns_config ns/db/pool/$pool User]/[ns_config ns/db/pool/$pool Password]@$datasource"
@@ -2008,7 +2008,7 @@ ad_proc db_get_pgbin {{ -dbn "" }} {
 
     @param dbn The database name to use.  If empty_string, uses the default database.
 } {
-    set pool [lindex [db_available_pools -dbn $dbn] 0]
+    set pool [lindex [db_available_pools $dbn] 0]
     set driver [ns_config "ns/db/pool/$pool" Driver]    
     return [ns_config "ns/db/driver/$driver" pgbin]
 }
@@ -2025,7 +2025,7 @@ ad_proc db_get_port {{ -dbn "" }} {
 
     @param dbn The database name to use.  If empty_string, uses the default database.
 } {
-    set pool [lindex [db_available_pools -dbn $dbn] 0]
+    set pool [lindex [db_available_pools $dbn] 0]
     set datasource [ns_config "ns/db/pool/$pool" DataSource]
     set last_colon_pos [string last ":" $datasource]
     if { $last_colon_pos == -1 } {
@@ -2053,7 +2053,7 @@ ad_proc db_get_database {{ -dbn "" }} {
 
     @param dbn The database name to use.  If empty_string, uses the default database.
 } {
-    set pool [lindex [db_available_pools -dbn $dbn] 0]
+    set pool [lindex [db_available_pools $dbn] 0]
     set datasource [ns_config "ns/db/pool/$pool" DataSource]    
     set last_colon_pos [string last ":" $datasource]
     if { $last_colon_pos == -1 } {
@@ -2074,7 +2074,7 @@ ad_proc db_get_dbhost {{ -dbn "" }} {
 
     @param dbn The database name to use.  If empty_string, uses the default database.
 } {
-    set pool [lindex [db_available_pools -dbn $dbn] 0]
+    set pool [lindex [db_available_pools $dbn] 0]
     set datasource [ns_config "ns/db/pool/$pool" DataSource]    
     set first_colon_pos [string first ":" $datasource]
     if { $first_colon_pos == -1 } {
