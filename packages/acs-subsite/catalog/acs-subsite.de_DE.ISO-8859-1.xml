@@ -61,7 +61,7 @@
   <msg key="lt_Your_email_has_been_c">Ihre E-Mail-Adresse wurde bestätigt. Sie können sich nun bei %system_name% anmelden.</msg>
   <msg key="lt_Your_email_has_been_c_1">Ihre E-Mail-Adresse wurde bestätigt. Sie warten nun auf Freischaltung durch den Administrator von %system_name%.</msg>
   <msg key="lt_Your_email_is_confirm">Ihre E-Mail-Adresse wurde bestätigt.</msg>
-  <msg key="lt_Your_URL_doesnt_have_">Die von Ihnen eingegebene URL hat nicht die richtige Form. Eine gültige URL könnte etwa lauten: \%valid_url_example%\</msg>
+  <msg key="lt_Your_URL_doesnt_have_">Die von Ihnen eingegebene URL hat nicht die richtige Form. Eine gültige URL könnte etwa lauten: &quot;%valid_url_example%&quot;</msg>
   <msg key="Make_yourself_invisible_label">Onlinestatus verbergen</msg>
   <msg key="Make_yourself_visible_label">Onlinestatus anzeigen</msg>
   <msg key="Manage_your_notifications">Benachrichtigungsoptionen ändern</msg>
