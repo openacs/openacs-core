@@ -125,27 +125,20 @@ namespace eval notification::sweep {
                 set notif_html [ns_set get $notif notif_html]
 
                 if {[empty_string_p $notif_text]} {
-                    set notif_text [ad_html_text_convert -from html -to text $no
-tif_html]
+                    set notif_text [ad_html_text_convert -from html -to text $notif_html]
                 }
 
                 if {[empty_string_p $notif_html]} {
-                    set notif_html [ad_html_text_convert -from text -to html $no
-tif_text]
+                    set notif_html [ad_html_text_convert -from text -to html $notif_text]
                 } else {
                     set html_content_p 1
                 }
 
                 append summary_text "[ns_set get $notif notif_subject]\n"
-                append summary_html "<li><a href=#[ns_set get $notif notificatio
-n_id]>[ns_set get $notif notif_subject]</a></li>"
+                append summary_html "<li><a href=#[ns_set get $notif notification_id]>[ns_set get $notif notif_subject]</a></li>"
 
-                append batched_content_text "[_ notifications.SUBJECT] [ns_set get $notif notif_s
-ubject]\n[ns_set get $notif notif_text]\n=====================\n"
-                append batched_content_html "<a name=[ns_set get $notif notifica
-tion_id]>[_ notifications.SUBJECT]</a> [ns_set get $notif notif_subject]\n $notif_html <hr><p>"
-                lappend list_of_notification_ids [ns_set get $notif notification
-_id]
+                append batched_content_text "[_ notifications.SUBJECT] [ns_set get $notif notif_subject]\n[ns_set get $notif notif_text]\n=====================\n"
+                append batched_content_html "<a name=[ns_set get $notif notification_id]>[_ notifications.SUBJECT]</a> [ns_set get $notif notif_subject]\n $notif_html <hr><p>"
 
                 lappend list_of_notification_ids [ns_set get $notif notification_id]
 

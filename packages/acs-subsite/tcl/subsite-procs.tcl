@@ -289,6 +289,25 @@ ad_proc -public subsite::get_element {
     return $result
 }
 
+ad_proc -public subsite::upload_allowed {} {
+    Verifies SolicitPortraitP parameter to ensure upload portrait
+    security.
+
+    @author Hector Amado (hr_amado@galileo.edu)
+    @creation-date 2004-06-16
+} {
+
+    if { ![parameter::get_from_package_key -package_key acs-subsite -parameter SolicitPortraitP]  } {
+        if { ![acs_user::site_wide_admin_p] } {
+             ns_log notice "user is tried to see user/portrait/upload  without permission"
+        ad_return_forbidden \
+               "Permission Denied" \
+               "<blockquote>
+                You don't have permission to see this page.
+               </blockquote>"
+	}
+    }
+}
 
 ad_proc subsite::util::sub_type_exists_p {
     object_type

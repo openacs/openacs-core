@@ -12,6 +12,7 @@ ad_page_contract {
     {title ""}
 }
 
+subsite::upload_allowed
 set current_user_id [auth::require_login]
 
 if [empty_string_p $user_id] {

@@ -8,9 +8,8 @@
 
 <if @self_registration@ true>
 
-   <if @register_url@ not nil>
-      <a href="@register_url@">#acs-subsite.Register#</a>
-   </if>
-
+<if @register_url@ not nil>
+  <a href="@register_url@">#acs-subsite.Register#</a>
 </if>
 
+</if>

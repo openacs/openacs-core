@@ -63,7 +63,6 @@ if { [exists_and_not_null rel_group_id] } {
     }
 }
 
-
 ad_form -extend -name register -on_request {
     # Populate elements from local variables
 
@@ -91,7 +90,6 @@ ad_form -extend -name register -on_request {
                 -rel_type $rel_type
         }
     }
-
 
     # Handle registration problems
     
@@ -130,10 +128,6 @@ ad_form -extend -name register -on_request {
 
     if { ![empty_string_p $next_url] } {
         # Add user_id and account_message to the URL
-        
-        if { $creation_info(generated_pwd_p) } {
-            set password $creation_info(password)
-        }
         
         ad_returnredirect [export_vars -base $next_url {user_id password {account_message $creation_info(account_message)}}]
         ad_script_abort

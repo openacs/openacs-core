@@ -287,6 +287,11 @@ ad_proc -public lang::user::site_wide_locale {
         set user_id [ad_conn untrusted_user_id]
     }
 
+    # For all the users with a user_id of 0 don't cache.
+    if { $user_id == 0} {
+	return [lang::user::site_wide_locale_not_cached $user_id]
+    }
+
     # Cache for the lifetime of sessions (7 days)
     return [util_memoize [list lang::user::site_wide_locale_not_cached $user_id] [sec_session_timeout]]
 }

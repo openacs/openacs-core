@@ -74,12 +74,14 @@ ad_proc -public auth::refresh_login {} {
 }
 
 ad_proc -public auth::self_registration {} {
-   #Check AllowSelfRegister parameter
+    #Check AllowSelfRegister parameter
 
-    if { ![parameter::get_from_package_key -package_key acs-authentication  -parameter AllowS\elfRegister] } {
-         ad_maybe_redirect_for_registration
+    if { ![parameter::get_from_package_key \
+                      -package_key acs-authentication \
+	              -parameter AllowSelfRegister] } {
+          ad_maybe_redirect_for_registration
     }
-}
+}          
 
 
 ad_proc -public auth::get_user_id {
