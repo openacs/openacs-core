@@ -9,8 +9,6 @@ ad_library {
 
 aa_register_case auth_authenticate {
     Test the auth::authenticate proc.
-
-    @author Peter Marklund
 } {    
 
     # Initialize variables
@@ -126,8 +124,6 @@ aa_register_case auth_authenticate {
 
 aa_register_case auth_create_user {
     Test the auth::create_user proc.
-
-    @author Peter Marklund
 } {
 
     # create_user returns ok when trying to create a user 
@@ -251,8 +247,6 @@ aa_register_case auth_create_user {
 
 aa_register_case auth_confirm_email {
     Test the auth::set_email_verified proc.
-
-    @author Peter Marklund
 } {
     set user_id [ad_conn user_id]
 
@@ -271,8 +265,6 @@ aa_register_case auth_confirm_email {
 
 aa_register_case auth_get_registration_elements {
     Test the auth::get_registration_elements proc
-
-    @author Peter Marklund
 } {
     array set element_array [auth::get_registration_elements]
 
@@ -284,8 +276,6 @@ aa_register_case auth_get_registration_elements {
 
 aa_register_case auth_get_registration_form_elements {
     Test the auth::get_registration_form_elements proc
-
-    @auth Peter Marklund
 } {
     set form_elements [auth::get_registration_form_elements]
 
@@ -300,8 +290,6 @@ aa_register_case auth_get_registration_form_elements {
 
 aa_register_case auth_password_get_change_url {
     Test the auth::password::get_change_url proc.
-
-    @author Simon Carstensen
 } {
 
     # Test whether auth::password::get_change_url returns the correct URL to redirect when "change_pwd_url" is set. 
@@ -316,8 +304,6 @@ aa_register_case auth_password_get_change_url {
 
 aa_register_case auth_password_can_change_p {
     Test the auth::password::can_change_p proc.
-
-    @author Simon Carstensen
 } {
     auth::test::get_password_vars -array_name test_vars
     
@@ -328,8 +314,6 @@ aa_register_case auth_password_can_change_p {
 
 aa_register_case auth_password_change {
     Test the auth::password::change proc.
-
-    @author Simon Carstensen
 } {
     aa_run_with_teardown \
         -rollback \
@@ -355,8 +339,6 @@ aa_register_case auth_password_change {
 
 aa_register_case auth_password_recover {
     Test the auth::password::recover_password proc.
-
-    @author Simon Carstensen
 } {
     auth::test::get_password_vars -array_name test_vars
 
@@ -384,8 +366,6 @@ aa_register_case auth_password_recover {
 
 aa_register_case auth_password_get_forgotten_url {
     Test the auth::password::get_forgotten_url proc.
-
-    @author Simon Carstensen
 } {
     auth::test::get_password_vars -array_name test_vars    
 
@@ -406,8 +386,6 @@ aa_register_case auth_password_get_forgotten_url {
 
 aa_register_case auth_password_retrieve {
     Test the auth::password::retrieve proc.
-
-    @author Simon Carstensen
 } {
     auth::test::get_password_vars -array_name test_vars    
     array set result [auth::password::retrieve \
@@ -420,8 +398,6 @@ aa_register_case auth_password_retrieve {
 
 aa_register_case auth_password_reset {
     Test the auth::password::reset proc.
-
-    @author Simon Carstensen
 } {
     # We don't want email to go out
     aa_stub auth::password::email_password {
@@ -483,8 +459,6 @@ aa_register_case auth_password_reset {
 
 aa_register_case auth_authority_api {
     Test the auth::authority::create, auth::authority::edit, and auth::authority::delete procs.
-
-    @author Simon Carstensen
 } {
     aa_run_with_teardown \
         -rollback \
@@ -554,8 +528,6 @@ aa_register_case auth_authority_api {
 
 aa_register_case auth_driver_get_parameters {
     Test the auth::driver::get_parameters proc.
-
-    @author Simon Carstensen (simon@collaboraid.biz)
 } {
     aa_run_with_teardown \
         -rollback \
@@ -575,8 +547,6 @@ aa_register_case auth_driver_get_parameters {
 
 aa_register_case auth_driver_get_parameter_values {
     Test the auth::driver::set_parameter_values proc.
-
-    @author Simon Carstensen (simon@collaboraid.biz)
 } {
     aa_run_with_teardown \
         -rollback \
