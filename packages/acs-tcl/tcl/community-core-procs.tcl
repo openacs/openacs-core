@@ -78,7 +78,7 @@ ad_proc ad_user_new {email first_names last_name password password_question pass
         set password_answer [db_null]
     }
 
-    if { [empty_string_p url] } {
+    if { [empty_string_p $url] } {
         set url [db_null]
     }
 

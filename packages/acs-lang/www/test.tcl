@@ -26,7 +26,7 @@ if {[empty_string_p $lang]} {
 }
 
 db_1row lang_get_lang_name "SELECT nls_language as language FROM ad_locales WHERE language = :lang"
-if [empty_string_p language] {
+if [empty_string_p $language] {
     set language English
 }
 
