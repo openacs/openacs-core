@@ -115,7 +115,8 @@
              item_id       => :item_id,
              revision_id   => :revision_id,
              creation_user => :creation_user,
-             creation_ip   => :creation_ip
+             creation_ip   => :creation_ip,
+	     filename      => :ojbect_name
            );
          end;
       </querytext>

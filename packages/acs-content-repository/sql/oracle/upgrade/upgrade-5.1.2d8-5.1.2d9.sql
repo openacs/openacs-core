@@ -1,14 +1,200 @@
--- Data model to support content repository of the ArsDigita
--- Community System
 
--- Copyright (C) 1999-2000 ArsDigita Corporation
--- Author: Karl Goldstein (karlg@arsdigita.com)
+create or replace package content_revision
+as
 
--- $Id$
+function new (
+  --/** Create a new revision for an item. 
+  --    @author Karl Goldstein
+  --    @param title        The revised title for the item
+  --    @param description  A short description of this revision, 4000 characters maximum
+  --    @param publish_date Publication date.
+  --    @param mime_type    The revised mime type of the item, defaults to 'text/plain'
+  --    @param nls_language The revised language of the item, for use with Intermedia searching
+  --    @param data         The blob which contains the body of the revision
+  --    @param item_id      The id of the item being revised
+  --    @param revision_id  The id of the new revision. A new id will be allocated by default
+  --    @param creation_date As in <tt>acs_object.new</tt>
+  --    @param creation_ip   As in <tt>acs_object.new</tt>
+  --    @param creation_user As in <tt>acs_object.new</tt>
+  --    @return The id of the newly created revision
+  --    @see {acs_object.new}, {content_item.new}
+  --*/
+  title         in cr_revisions.title%TYPE,
+  description   in cr_revisions.description%TYPE default null,
+  publish_date  in cr_revisions.publish_date%TYPE default sysdate,
+  mime_type   	in cr_revisions.mime_type%TYPE default 'text/plain',
+  nls_language 	in cr_revisions.nls_language%TYPE default null,
+  data	        in cr_revisions.content%TYPE,
+  item_id       in cr_items.item_id%TYPE,
+  revision_id   in cr_revisions.revision_id%TYPE default null,
+  creation_date	in acs_objects.creation_date%TYPE
+			   default sysdate,
+  creation_user	in acs_objects.creation_user%TYPE
+			   default null,
+  creation_ip	in acs_objects.creation_ip%TYPE default null,
+  filename	in cr_revisions.filename%TYPE default null
+) return cr_revisions.revision_id%TYPE;
 
--- This is free software distributed under the terms of the GNU Public
--- License.  Full text of the license is available from the GNU Project:
--- http://www.fsf.org/copyleft/gpl.html
+function new (
+  title         in cr_revisions.title%TYPE,
+  description   in cr_revisions.description%TYPE default null,
+  publish_date  in cr_revisions.publish_date%TYPE default sysdate,
+  mime_type   	in cr_revisions.mime_type%TYPE default 'text/plain',
+  nls_language 	in cr_revisions.nls_language%TYPE default null,
+  text		in varchar2 default null,
+  item_id       in cr_items.item_id%TYPE,
+  revision_id   in cr_revisions.revision_id%TYPE default null,
+  creation_date	in acs_objects.creation_date%TYPE default sysdate,
+  creation_user	in acs_objects.creation_user%TYPE default null,
+  creation_ip	in acs_objects.creation_ip%TYPE default null,
+  filename	in cr_revisions.filename%TYPE default null
+) return cr_revisions.revision_id%TYPE;
+
+function copy (
+  --/** Creates a new copy of a revision, including all attributes and content
+  --    and content, returning the ID of the new revision
+  --    @author Karl Goldstein, Michael Pih
+  --    @param revision_id	The id of the revision to copy
+  --    @param copy_id		The id of the new copy (default null)
+  --    @param target_item_id	The id of the item which will own the copied revision. If null, the item that holds the original revision will own the copied revision. Defaults to null.
+  --    @param creation_user	The id of the creation user
+  --    @param creation_ip  The IP address of the creation user (default null)
+  --    @return		    The id of the new revision
+  --    @see {content_revision.new}
+  --*/
+  revision_id		in cr_revisions.revision_id%TYPE,
+  copy_id		in cr_revisions.revision_id%TYPE default null,
+  target_item_id	in cr_items.item_id%TYPE default null,
+  creation_user		in acs_objects.creation_user%TYPE default null,
+  creation_ip		in acs_objects.creation_ip%TYPE default null
+) return cr_revisions.revision_id%TYPE;
+
+procedure del (
+  --/** Deletes the revision.
+  --    @author Karl Goldstein
+  --    @param revision_id The id of the revision to delete
+  --    @see {content_revision.new}, {acs_object.delete}
+  --*/
+  revision_id	in cr_revisions.revision_id%TYPE
+);
+
+function get_number (
+  --/** Return the revision number of the specified revision, according to 
+  --    the chronological
+  --    order in which revisions have been added for this item.
+  --    @author Karl Goldstein
+  --    @param revision_id The id the revision
+  --    @return The number of the revision
+  --    @see {content_revision.new}
+  --*/
+  revision_id   in cr_revisions.revision_id%TYPE
+) return number;
+
+function revision_name (
+  --/** Return a pretty string 'revision x of y'
+  --*/
+  revision_id   in cr_revisions.revision_id%TYPE
+) return varchar2;
+
+procedure index_attributes(
+  --/** Generates an XML document for insertion into cr_revision_attributes,
+  --    which is indexed by Intermedia for searching attributes.
+  --    @author Karl Goldstein
+  --    @param revision_id The id of the revision to index
+  --    @see {content_revision.new}
+  --*/
+  revision_id IN cr_revisions.revision_id%TYPE
+);
+
+function export_xml (
+  revision_id IN cr_revisions.revision_id%TYPE
+) return cr_xml_docs.doc_id%TYPE;
+
+function write_xml (
+  revision_id IN number,
+  clob_loc IN clob
+) return number as language
+  java
+name
+  'com.arsdigita.content.XMLExchange.exportRevision(
+     java.lang.Integer, oracle.sql.CLOB
+  ) return int';
+
+function import_xml (
+  item_id IN cr_items.item_id%TYPE,
+  revision_id IN cr_revisions.revision_id%TYPE,
+  doc_id IN number
+) return cr_revisions.revision_id%TYPE;
+
+function read_xml (
+  item_id IN number,
+  revision_id IN number,
+  clob_loc IN clob
+) return number as language
+  java
+name
+  'com.arsdigita.content.XMLExchange.importRevision(
+     java.lang.Integer, java.lang.Integer, oracle.sql.CLOB
+  ) return int';
+
+procedure to_html (
+  --/** Converts a revision uploaded as a binary document to html
+  --    @author Karl Goldstein
+  --    @param revision_id The id of the revision to index
+  --*/
+  revision_id IN cr_revisions.revision_id%TYPE
+);
+
+procedure replace(
+  revision_id number, search varchar2, replace varchar2)
+as language 
+  java 
+name 
+  'com.arsdigita.content.Regexp.replace(
+    int, java.lang.String, java.lang.String
+   )';
+
+function is_live (
+  -- /** Determine if the revision is live
+  --   @author Karl Goldstein, Stanislav Freidin
+  --   @param revision_id The id of the revision to check
+  --   @return 't' if the revision is live, 'f' otherwise
+  --   @see {content_revision.is_latest}
+  --*/
+  revision_id in cr_revisions.revision_id%TYPE
+) return varchar2;
+
+function is_latest (
+  -- /** Determine if the revision is the latest revision
+  --   @author Karl Goldstein, Stanislav Freidin
+  --   @param revision_id The id of the revision to check
+  --   @return 't' if the revision is the latest revision for its item, 'f' otherwise
+  --   @see {content_revision.is_live}
+  --*/
+  revision_id in cr_revisions.revision_id%TYPE
+) return varchar2;
+
+procedure to_temporary_clob (
+  revision_id in cr_revisions.revision_id%TYPE
+);
+
+procedure content_copy (
+  -- /** Copies the content of the specified revision to the content
+  --   of another revision
+  --   @author Michael Pih
+  --   @param revision_id The id of the revision with the content to be copied
+  --   @param revision_id The id of the revision to be updated, defaults to the
+  --   latest revision of the item with which the source revision is 
+  --   associated.
+  --*/
+  revision_id	       in cr_revisions.revision_id%TYPE,
+  revision_id_dest     in cr_revisions.revision_id%TYPE default null
+);
+
+end content_revision;
+/
+show errors
+
 
 create or replace package body content_revision
 as
@@ -562,4 +748,5 @@ begin
 end cr_revision_latest_tr;
 /
 show errors
+
 
