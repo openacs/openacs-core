@@ -18,7 +18,6 @@
                    to_char(doc_end_time, 'YYYY-MM-DD HH24:MI:SS') as doc_end_time,
                    doc_status,
                    doc_message,
-                   document,
                    trunc(extract(epoch from (j.job_end_time - j.job_start_time))) as run_time_seconds,
                    (select count(e1.entry_id)
                     from   auth_batch_job_entries e1
