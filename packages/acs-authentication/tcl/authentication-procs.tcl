@@ -437,107 +437,107 @@ ad_proc -public auth::create_user {
         # We don't do any fancy error checking here, because create_local_account is not a service contract
         # so we control it 100%
 
-        if { ![string equal $creation_info(creation_status) "ok"] } {
-            # Local account creation error
-            db_abort_transaction
-            return
-        }
+        # Local account creation ok?
+        if { [string equal $creation_info(creation_status) "ok"] } {
 
-        # Need to find out which username was set
-        set username $creation_info(username)
+            # Need to find out which username was set
+            set username $creation_info(username)
 
-        # Save the local account information for later
-        set local_account_status $creation_info(account_status)
-        set local_account_message $creation_info(account_message)
+            # Save the local account information for later
+            set local_account_status $creation_info(account_status)
+            set local_account_message $creation_info(account_message)
 
-        # Clear out remote creation_info array for reuse
-        array set creation_info {
-            creation_status {}
-            creation_message {}  
-            element_messages {}  
-            account_status {}
-            account_message {}  
-        }
-
-
-        #####
-        #
-        # Create remote account
-        #
-        #####
-
-        array set creation_info [auth::registration::Register \
-                                     -authority_id $authority_id \
-                                     -username $username \
-                                     -password $password \
-                                     -first_names $first_names \
-                                     -last_name $last_name \
-                                     -screen_name $screen_name \
-                                     -email $email \
-                                     -url $url \
-                                     -secret_question $secret_question \
-                                     -secret_answer $secret_answer]
-        
-        # Returns:
-        #   creation_info(creation_status) 
-        #   creation_info(creation_message) 
-        #   creation_info(element_messages) 
-        #   creation_info(account_status) 
-        #   creation_info(account_message) 
-
-        # Verify creation_info/creation_message return codes
-        array set default_creation_message {
-            data_error {Problem with user data}
-            reg_error {Unknown registration error}
-            failed_to_connect {Error communicating with account server}
-        }
-
-        switch $creation_info(creation_status) {
-            ok { 
-                # Continue below
+            # Clear out remote creation_info array for reuse
+            array set creation_info {
+                creation_status {}
+                creation_message {}  
+                element_messages {}  
+                account_status {}
+                account_message {}  
             }
-            data_error -
-            reg_error -
-            failed_to_connect {
-                if { ![exists_and_not_null creation_info(creation_message)] } {
-                    set creation_info(creation_message) $default_creation_message($creation_info(creation_status))
+
+
+            #####
+            #
+            # Create remote account
+            #
+            #####
+
+            array set creation_info [auth::registration::Register \
+                                         -authority_id $authority_id \
+                                         -username $username \
+                                         -password $password \
+                                         -first_names $first_names \
+                                         -last_name $last_name \
+                                         -screen_name $screen_name \
+                                         -email $email \
+                                         -url $url \
+                                         -secret_question $secret_question \
+                                         -secret_answer $secret_answer]
+            
+            # Returns:
+            #   creation_info(creation_status) 
+            #   creation_info(creation_message) 
+            #   creation_info(element_messages) 
+            #   creation_info(account_status) 
+            #   creation_info(account_message) 
+
+            # Verify creation_info/creation_message return codes
+            array set default_creation_message {
+                data_error {Problem with user data}
+                reg_error {Unknown registration error}
+                failed_to_connect {Error communicating with account server}
+            }
+
+            switch $creation_info(creation_status) {
+                ok { 
+                    # Continue below
                 }
-                if { ![info exists creation_info(element_messages)] } {
-                    set creation_info(element_messages) {}
+                data_error -
+                reg_error -
+                failed_to_connect {
+                    if { ![exists_and_not_null creation_info(creation_message)] } {
+                        set creation_info(creation_message) $default_creation_message($creation_info(creation_status))
+                    }
+                    if { ![info exists creation_info(element_messages)] } {
+                        set creation_info(element_messages) {}
+                    }
+                    return [array get creation_info]
                 }
-                return [array get creation_info]
-            }
-            default {
-                set creation_info(creation_status) "failed_to_connect"
-                set creation_info(creation_message) "Illegal error code returned from account creation driver"
-                return [array get creation_info]
-            }
-        }
-
-        # Verify remote account_info/account_message return codes
-        switch $creation_info(account_status) {
-            ok { 
-                # Continue below
-                set creation_info(account_message) {}
-            }
-            closed {
-                if { ![exists_and_not_null creation_info(account_message)] } {
-                    set creation_info(account_message) "This account is not available at this time"
+                default {
+                    set creation_info(creation_status) "failed_to_connect"
+                    set creation_info(creation_message) "Illegal error code returned from account creation driver"
+                    return [array get creation_info]
                 }
             }
-            default {
-                set creation_info(account_status) "closed"
-                set creation_info(account_message) "Illegal error code returned from creationentication driver"
+
+            # Verify remote account_info/account_message return codes
+            switch $creation_info(account_status) {
+                ok { 
+                    # Continue below
+                    set creation_info(account_message) {}
+                }
+                closed {
+                    if { ![exists_and_not_null creation_info(account_message)] } {
+                        set creation_info(account_message) "This account is not available at this time"
+                    }
+                }
+                default {
+                    set creation_info(account_status) "closed"
+                    set creation_info(account_message) "Illegal error code returned from creationentication driver"
+                }
             }
         }
 
     } on_error {
+        
+        ns_log Notice "LARS: here again!"
         set creation_info(creation_status) failed_to_connect
         set creation_info(creation_message) $errmsg
         global errorInfo
         ns_log Error "auth::create_user: Error invoking account registration driver for authority_id = $authority_id: $errorInfo"
         db_abort_transaction
-    }
+    } 
 
     if { ![string equal $creation_info(creation_status) "ok"] } { 
         return [array get creation_info]
@@ -1418,7 +1418,8 @@ ad_proc -private auth::validate_account_info {
         set email_party_id [party::get_by_email -email $user(email)]
 
         if { ![empty_string_p $email_party_id] && (!$update_p || $email_party_id != $user(user_id)) } {
-            # We found a user with this email, and either we're not updating, or it's not the same user_id as the one we're updating
+            # We found a user with this email, and either we're not updating, 
+            # or it's not the same user_id as the one we're updating
             
             if { ![string equal [acs_object_type $email_party_id] "user"] } {
                 set element_messages(email) "We already have a group with this email"
