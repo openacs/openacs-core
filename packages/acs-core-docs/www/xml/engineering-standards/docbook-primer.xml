@@ -5,8 +5,7 @@
     By <ulink
     url="mailto:claus@arsdigita.com">claus@arsdigita.com</ulink>, with
     additions by <ulink url="mailto:rmello@fslc.usu.edu">Roberto
-      Mello</ulink>, Vinod Kurup, Talli Somekh and the OpenACS
-    Community
+      Mello</ulink> and the OpenACS Community
   </para>
 
   <sect2 id="dbprimer-overview" xreflabel="OpenACS Documentation Overview">
@@ -102,9 +101,70 @@
 	</para></listitem>
 
     </itemizedlist>
-
   </sect2>
 
+  <sect2 id="dbprimer-validation" xreflabel="Docbook Tools">
+    <title>Tools</title>
+
+    <para>
+      You are going to need the following to work with the OpenACS
+      Docbook XML documentation:
+    </para>
+
+    <itemizedlist>
+      <listitem>
+	<ulink url="http://docbook.org/xml/index.html">Docbook XML
+	DTD</ulink> - The document type definition for XML. You can
+	find an RPM or DEB package or you can download a zip file from
+	the site linked from here.
+      </listitem>
+
+      <listitem>
+	<ulink url="http://sourceforge.net/projects/docbook/">XSL
+	Stylesheets</ulink> (docbook-xsl) - The stylesheets to convert
+	to HTML. We have been using a stylesheet based upon
+	NWalsh's chunk.xsl.
+      </listitem>
+      
+      <listitem>
+	<computeroutput>xsltproc</computeroutput> - The processor that
+	will take an XML document and, given a xsl stylesheet, convert
+	it to HTML. It needs libxml2 and libxslt (available in RPM and
+	DEB formats or from <ulink
+	url="http://xmlsoft.org/">xmlsoft.org</ulink>.	
+      </listitem>
+
+      <listitem>
+	Some editing tool. A popular one is Emacs with the psgml
+	mode. We have a <link linkend="psgml-mode">intro to the PSGML
+	Mode in Emacs</link> as part of our documentation. You can
+	read about other editing tools in the <ulink
+	url="http://www.linuxdoc.org/LDP/LDP-Author-Guide/">LDP Author Guide</ulink>.
+      </listitem>
+    </itemizedlist>
+  </sect2>
+
+  <sect2 id="dbprimer-new-doc" xreflabel="Writing New Docs">
+    <title>Writing New Docs</title>
+    <para>
+      After you have the tools mentioned above, you need to define a
+      title for your document. Then start thinking about the possible
+      sections and subsections you will have in your document. Make
+      sure you coordinate with the OpenACS Gatekeepers to make sure
+      you're not writing something that someone else is already
+      writing. Also, if you desire to use the OpenACS CVS repository,
+      please e-mail the gatekeeper in charge of documentation.
+    </para>
+    <para>
+      You can look at some templates for documents (in Docbook XML) in
+      the <ulink
+      url="http://openacs.org/sdm/package-repository.tcl?current_entry=DIRECTORY%20%2fopenacs%2d4%2fpackages%2facs%2dcore%2ddocs%2fwww%20xml&amp;package_id=9">sources
+      for acs-core-docs</ulink>, especially the <emphasis>
+      Detailed Design Documentation Template</emphasis> and the
+      <emphasis>System/Application Requirements Template</emphasis>.
+    </para>
+  </sect2>
+	  
   <sect2 id="dbprimer-structure">
     <title>Document Structure</title>
 
@@ -138,12 +198,11 @@
       contains all the information above the line. This will be explained in more detail in a later document, 
       and we will provide a set of templates for documenting an entire package. </para>
 
-    <para>For now you can take a look at the <ulink url="http://cvs.arsdigita.com/cgi-bin/cvsweb.pl/acs/packages/acs-core-docs/www/xml/?hideattic=0&amp;only_with_tag=acs-4-0-1-R20001116#dirlist">sources of these DocBook documents</ulink>
+    <para>For now you can take a look at the
+      <ulink url="http://openacs.org/sdm/package-repository.tcl?current_entry=DIRECTORY%20%2fopenacs%2d4%2fpackages%2facs%2dcore%2ddocs%2fwww%20xml&amp;package_id=9">sources of these DocBook documents</ulink>
       to get an idea of how they are tied together.
     </para>
-
   </sect2>
-
 
   <sect2 id="dbprimer-sections">
     <title>Headlines, Sections</title>
@@ -578,44 +637,8 @@
       <ulink url="http://docbook.org/tdg/html/indexterm.html"><computeroutput>&lt;indexterm&gt;</computeroutput></ulink>,
       <ulink url="http://docbook.org/tdg/html/primary.html"><computeroutput>&lt;primary&gt;</computeroutput></ulink> and
       <ulink url="http://docbook.org/tdg/html/secondary.html"><computeroutput>&lt;secondary&gt;</computeroutput></ulink>
-      for this. See these links for an explanation and the 
-      <ulink url="http://cvs.arsdigita.com/cgi-bin/cvsweb.pl/acs/packages/acs-core-docs/www/xml/engineering-standards/docbook-primer.xml?rev=1.1.2.7&amp;content-type=text/x-cvsweb-markup&amp;hideattic=0&amp;only_with_tag=acs-4-0-1-R20001116">source of this document</ulink>
-      for examples.
+      for this. See these links for an explanation.
     </para>
-
-  </sect2>
-  
-  <sect2 id="dbprimer-validation" xreflabel="Docbook Tools">
-    <title>Tools</title>
-
-    <para>
-      You are going to need the following to work with the OpenACS XML
-      documentation:
-    </para>
-
-    <itemizedlist>
-      <listitem>
-	<ulink url="http://docbook.org/xml/index.html">Docbook XML
-	DTD</unlik> - The document type definition for XML. You can
-	find an RPM or DEB package or you can download a zip file from
-	the site linked from here.
-      </listitem>
-
-      <listitem>
-	<ulink url="http://sourceforge.net/projects/docbook/">XSL
-	Stylesheets</ulink> (docbook-xsl) - The stylesheets to convert
-	to HTML. We have been using a stylesheet based upon
-	NWalsh's chunk.xsl.
-      </listitem>
-      
-      <listitem>
-	<computeroutput>xsltproc</computeroutput> - The processor that
-	will take an XML document and, given a xsl stylesheet, convert
-	it to HTML. It needs libxml2 and libxslt (available in RPM and
-	DEB formats or from <ulink
-	url="http://xmlsoft.org/">xmlsoft.org</ulink>.	
-      </listitem>
-    </itemizedlist>
   </sect2>
 
   <sect2 id="dbprimer-converting" xreflabel="Converting to HTML">
@@ -626,7 +649,7 @@
     </note>
     
     <para>
-      Once you have the <xref linkend="dbprimer-tools"></xref>
+      Once you have the <xref linkend="dbprimer-validation"></xref>
       installed, you can convert your xml documents to HTML (or other
       formats. Let me know if you are able to convert to other
       formats).
