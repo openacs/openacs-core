@@ -10,6 +10,7 @@ ad_library {
 namespace eval apm {}
 namespace eval apm::package_version {}
 namespace eval apm::package_version::attributes {}
+namespace eval ::install::xml::action {}
 
 ad_proc apm_scan_packages { 
     {-callback apm_dummy_callback}
@@ -2001,7 +2002,38 @@ ad_proc -private apm_load_install_xml {filename binds} {
     return $root_node
 }
 
-ad_proc -public apm::process_install_xml {filename binds} {
+ad_proc -private ::install::xml::action::community-new { node } {
+    Include another install file to create a community.
+
+    see cop-base/lib/install.xml for an example.
+
+    @author Jeff Davis davis@xarg.net
+    @creation-date 2004-07-28
+
+} {
+    set src [apm_required_attribute_value $node src]
+
+    set base_url [apm_required_attribute_value $node base_url]
+    set name [apm_required_attribute_value $node name]
+    set Description [apm_attribute_value -default {} $node Description]
+    set DescriptionFormat [apm_attribute_value -default "text/plain" $node DescriptionFormat]
+
+    set binds [list \
+                   base_url $base_url \
+                   name $name \
+                   Description $Description \
+                   DescriptionFormat $DescriptionFormat \
+                   ]
+
+    set out [apm::process_install_xml -nested $src $binds]
+    return $out 
+}
+
+
+ad_proc -public apm::process_install_xml {
+    -nested:boolean
+    filename binds
+} {
     process an xml install definition file which is expected to contain 
     directives to install, mount and configure a series of packages.
 
@@ -2014,8 +2046,12 @@ ad_proc -public apm::process_install_xml {filename binds} {
     @creation-date 2003-10-30
 } {
     variable ::install::xml::ids
-    array unset ids 
-    array set ids [list]
+    # If it's not a nested call then initialize the ids array.
+    # If it is nested we will typically need id's from the parent
+    if {!$nested_p} {
+        array unset ids 
+        array set ids [list]
+    }
 
     set root_node [apm_load_install_xml $filename $binds] 
 
