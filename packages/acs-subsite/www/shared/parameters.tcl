@@ -20,7 +20,7 @@ db_1row select_instance_name {
 
 set package_url [site_node::get_url_from_object_id -object_id $package_id]
 
-set page_title "Parameters"
+set page_title "$instance_name Parameters"
 
 if { [string equal $package_url [subsite::get_element -element url]] } {
     set context [list [list "${package_url}admin/" "Administration"] $page_title]
