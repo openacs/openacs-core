@@ -360,10 +360,9 @@ begin
       if NOT FOUND then
          v_latest_revision := null;        
       end if;
-      if v_latest_revision != delete__revision_id then 
-            update cr_items set latest_revision = v_latest_revision
-            where item_id = v_item_id;
-      end if;
+      
+      update cr_items set latest_revision = v_latest_revision
+      where item_id = v_item_id;    
   end if; 
  
   -- Clear live revision

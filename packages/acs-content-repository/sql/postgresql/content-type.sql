@@ -274,7 +274,7 @@ begin
     a.attribute_name = drop_attribute__attribute_name;
     
   if NOT FOUND then
-    raise EXCEPTION ''-20000: Attribute %:% does not exist in content_type.drop_attribute'', content_type, attribute_name;
+    raise EXCEPTION ''-20000: Attribute %:% does not exist in content_type.drop_attribute'', drop_attribute__content_type, drop_attribute__attribute_name;
   end;
 
   -- Drop the attribute
