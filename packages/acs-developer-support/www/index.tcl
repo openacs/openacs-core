@@ -23,8 +23,8 @@ set context {}
 
 append body "
 <ul>
-<li><a href=\"shell\">OpenACS Shell</a>
-<li>Developer support information is currently
+<li><a href=\"shell.tcl\">OpenACS Shell</a>
+<li>Developer support toolbar is currently
 [ad_decode $enabled_p 1 \
     "on (<a href=\"set-enabled?enabled_p=0\">turn it off</a>)" \
     "off (<a href=\"set-enabled?enabled_p=1\">turn it on</a>)"]
