@@ -6,19 +6,37 @@
 
 <div id="body">
   <div id="navbar-body">
-    <div class="subsite-context-bar">
-      <div style="float: left">@context_bar;noquote@</div>
-      <div style="float: right">@subnavbar_link;noquote@</div>
+    <div id="context-bar">
+      <if @context_bar@ not nil>
+        <div id="breadcrumbs">@context_bar;noquote@</div>
+      </if>
+      <else>
+        <if @context:rowcount@ not nil>
+          <div id="breadcrumbs">
+            <ul>
+              <multiple name="context">
+                <if @context.url@ not nil>
+                  <li><a href="@context.url@">@context.label@</a> &#187;</li>
+                </if>
+                <else>
+                  <li>@context.label@</li>
+                </else>
+              </multiple>
+            </ul>
+          </div>
+        </if>
+      </else>
+      <div id="navlinks">@subnavbar_link;noquote@</div>
       <div style="clear: both;"></div>
     </div>
 
-      <div id="subsite-name">
-        <if @title@ not nil>
-          <h1 class="subsite-page-title">@title;noquote@</h1>
-        </if>
-      </div>
-      <slave>
-      <div style="clear: both;"></div>
+    <div id="subsite-name">
+      <if @title@ not nil>
+        <h1 class="subsite-page-title">@title;noquote@</h1>
+      </if>
+    </div>
+    <slave>
+    <div style="clear: both;"></div>
 
   </div>
 </div>

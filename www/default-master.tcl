@@ -23,17 +23,13 @@ if { [template::util::is_nil signatory] } {
     set signatory [ad_system_owner]
 }
 
-if { ![template::util::is_nil context] } {
-    set cmd [list ad_context_bar --]
-    foreach elem $context {
-        lappend cmd $elem
-    }
-    set context_bar [eval $cmd]
+if { [info exists context] } {
+    set context_tmp $context
+    unset context
+} else {
+    set context_tmp {}
 }
-
-if { [template::util::is_nil context_bar] } {
-    set context_bar [ad_context_bar]
-}
+ad_context_bar_multirow -- $context_tmp
 
 
 # Attributes
