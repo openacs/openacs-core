@@ -56,6 +56,7 @@ if { $admin_p || [parameter::get -parameter "MembersCanInviteMembersP" -default 
 }
 
 # TODO: Pagination
+set show_partial_email_p [expr $user_id == 0]
 
 list::create \
     -name "members" \
@@ -75,7 +76,12 @@ list::create \
             link_url_eval {mailto:$email}
             link_html { title "Send email to this user" }
             orderby "u.email"
-            hide_p {[ad_decode [ad_conn user_id] 0 1 0]}
+            hide_p {$show_partial_email_p}
+        }
+        email_partial {
+            label "Email"
+            orderby "u.email"
+            hide_p {[expr $show_partial_email_p == 0]}
         }
         rel_role {
             label "Role"
@@ -87,7 +93,7 @@ list::create \
 
 # Pull out all the relations of the specified type
 
-db_multirow members relations_query "
+db_multirow -extend { email_partial } members relations_query "
     select r.rel_id, 
            u.user_id,
            u.first_names || ' ' || u.last_name as name,
@@ -109,5 +115,7 @@ db_multirow members relations_query "
     [template::list::orderby_clause -orderby -name "members"]
 " {
     set rel_role_pretty [lang::util::localize $rel_role_pretty]
+    set email_partial [string replace $email \
+	    [expr [string first "@" $email]+3] end "..."]
 }
 
