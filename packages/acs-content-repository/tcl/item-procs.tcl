@@ -12,7 +12,7 @@
 
 namespace eval item {}
 
-ad_proc -public item::get_title { item_id } {
+ad_proc -public -deprecated item::get_title { item_id } {
 
   @public get_title
  
@@ -24,6 +24,7 @@ ad_proc -public item::get_title { item_id } {
   @return The title of the item
  
   @see proc item::get_best_revision
+  @see content::item::get_title
 
 } {
 
@@ -60,7 +61,7 @@ ad_proc -public item::get_publish_status { item_id } {
   return $publish_status
 }
 
-ad_proc -public item::is_publishable { item_id } {
+ad_proc -public -deprecated item::is_publishable { item_id } {
 
   @public is_publishable
  
@@ -73,6 +74,8 @@ ad_proc -public item::is_publishable { item_id } {
   </ul>
  
   @param  item_id   The item id
+
+  @see content::item::is_publishable
  
   @return    1 if the item is publishable, 0 otherwise
 
@@ -201,7 +204,7 @@ ad_proc -public item::content_methods_by_type { content_type args } {
 }
 
 
-ad_proc -public item::get_content_type { item_id } {
+ad_proc -public -deprecated item::get_content_type { item_id } {
 
   @public get_content_type
  
@@ -212,6 +215,8 @@ ad_proc -public item::get_content_type { item_id } {
  
   @return The content type of the item, or an empty string if no such
           item exists
+
+  @see content::item::get_content_type
 
 } {
 
@@ -243,7 +248,7 @@ ad_proc -public item::get_item_from_revision { revision_id } {
 }
 
 
-ad_proc -public item::get_id { url {root_folder ""}} {
+ad_proc -public -deprecated item::get_id { url {root_folder ""}} {
 
   @public get_id
  
@@ -256,6 +261,7 @@ ad_proc -public item::get_id { url {root_folder ""}} {
   @return The item ID of the item at that URL, or the empty string
     on failure
   @see proc item::get_url
+  @see content::item::get_id
 
 } {
 
@@ -299,7 +305,7 @@ ad_proc -public item::content_is_null { revision_id } {
 }
 
 
-ad_proc -public item::get_template_id { item_id {context public} } {
+ad_proc -public -deprecated item::get_template_id { item_id {context public} } {
 
   @public get_template_id
  
@@ -316,6 +322,7 @@ ad_proc -public item::get_template_id { item_id {context public} } {
     item, or an empty string on failure
  
   @see proc item::get_template_url
+  @see content::item::get_template
 
 } {
 
@@ -329,7 +336,7 @@ ad_proc -public item::get_template_id { item_id {context public} } {
 }
 
 
-ad_proc -public item::get_template_url { item_id {context public} } {
+ad_proc -public -deprecated item::get_template_url { item_id {context public} } {
 
   @public get_template_url
  
@@ -345,6 +352,7 @@ ad_proc -public item::get_template_url { item_id {context public} } {
     item, or an empty string on failure
  
   @see proc item::get_template_id
+  @see content::item::get_path
 
 } {
 
@@ -358,7 +366,7 @@ ad_proc -public item::get_template_url { item_id {context public} } {
 }
   
 
-ad_proc -public item::get_url {
+ad_proc -public -deprecated item::get_url {
     {-root_folder_id "null"}
     item_id
 } {
@@ -374,6 +382,7 @@ ad_proc -public item::get_url {
 
   @return The relative URL to the item, or an empty string on failure
   @see proc item::get_extended_url
+  @see content::item::get_virtual_path
 
 } {
 
@@ -388,7 +397,7 @@ ad_proc -public item::get_url {
 }
 
 
-ad_proc -public item::get_live_revision { item_id } {
+ad_proc -public -deprecated item::get_live_revision { item_id } {
 
   @public get_live_revision
  
@@ -401,6 +410,7 @@ ad_proc -public item::get_live_revision { item_id } {
           live revision exists
   @see proc item::get_best_revision 
   @see proc item::get_item_from_revision
+  @see proc content::item::get_live_revision
 
 } {
 
@@ -438,7 +448,7 @@ ad_proc -public item::get_mime_info { revision_id {datasource_ref mime_info} } {
 }
 
 
-ad_proc -public item::get_best_revision { item_id } {
+ad_proc -public -deprecated item::get_best_revision { item_id } {
 
   @public get_best_revision
  
@@ -452,6 +462,7 @@ ad_proc -public item::get_best_revision { item_id } {
           revisions exist
   @see proc item::get_live_revision 
   @see proc item::get_item_from_revision
+  @see content::item::get_best_revision
 
 } {
    
@@ -550,9 +561,11 @@ ad_proc -public item::get_extended_url { item_id args } {
   return $file_url
 } 
 
-ad_proc -public item::get_type { item_id } {
+ad_proc -public -deprecated item::get_type { item_id } {
   Returns the content type of the specified item, or empty string
   if the item_id is invalid
+  @see content::item::get_content_type
+
 } {
   if { [db_0or1row get_content_type ""] } {
     return $content_type
@@ -561,7 +574,7 @@ ad_proc -public item::get_type { item_id } {
   }
 }
 
-ad_proc item::copy {
+ad_proc -deprecated item::copy {
     -item_id:required
     -target_folder_id:required
 } {
@@ -570,6 +583,7 @@ ad_proc item::copy {
 
     @param item_id The content item to copy
     @param target_folder_id The folder which will hold the new copy
+    @see content::item::copy
 
 } {
 
@@ -580,7 +594,7 @@ ad_proc item::copy {
 
 }
 
-ad_proc -public item::get {
+ad_proc -public -deprecated item::get {
     {-item_id:required}
     {-array:required}
 } {
@@ -594,6 +608,7 @@ ad_proc -public item::get {
                  ARCHIVE_DATE, PACKAGE_ID
 
     @author Peter Marklund
+    @see content::item::get
 } {
     upvar $array row
 
@@ -666,7 +681,7 @@ ad_proc -public item::get_content {
     return [get_revision_content $revision_id $item_id]
 }
 
-ad_proc -public item::delete {
+ad_proc -public -deprecated item::delete {
     {-item_id:required}
 } {
     Delete a content item from the database. If the content item
@@ -674,6 +689,7 @@ ad_proc -public item::delete {
     via acs_objects.context_id then this proc will fail.
 
     @author Peter Marklund
+    @see content::item::delete
 } {
     db_exec_plsql delete_item {}    
 }
