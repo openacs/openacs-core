@@ -75,7 +75,7 @@ su - postgres</action></screen>
   <orderedlist>
     <listitem>
       <formalpara>
-        <title>Unpack PostgreSQL.</title>
+        <title>Unpack PostgreSQL 7.3.4.</title>
         <para>If you have not downloaded the postgresql tarball to
         <computeroutput>/tmp/postgresql-7.3.4.tar.gz</computeroutput>,
         <link linkend="source-postgresql">get it</link>.</para>
@@ -85,6 +85,32 @@ su - postgres</action></screen>
 [root src]# 
 <action>cd /usr/local/src
 tar xzf /tmp/postgresql-7.3.4.tar.gz</action></screen>
+    </listitem>
+    <listitem>
+      <formalpara>
+        <title>ALTERNATIVE: Unpack PostgreSQL 7.4.1</title>
+        <para>If you have not downloaded the postgresql tarball to
+        <computeroutput>/tmp/postgresql-7.4.1.tar.bz2</computeroutput>,
+        <link linkend="source-postgresql">get it</link>.</para>
+      </formalpara>
+      <screen>[root root]# <userinput>cd /usr/local/src</userinput>
+[root src]# <userinput>tar xfj /tmp/postgresql-7.4.1.tar.bz2</userinput>
+[root src]# 
+<action>cd /usr/local/src
+tar xfj /tmp/postgresql-7.4.1.tar.bz2</action></screen>
+    </listitem>
+    <listitem>
+      <formalpara>
+        <title>Install Bison</title>
+        <para>Only do this if <userinput>bison --version</userinput> is smaller than 1.875 and you install PostgreSQL 7.4.</para> 
+      </formalpara>
+      <screen>[root root]# <userinput>cd /usr/local/src</userinput>
+[root src]# <userinput>wget http://ftp.gnu.org/gnu/bison/bison-1.875.tar.gz</userinput>
+[root src]# <userinput>tar xfz bison-1.875.tar.gz</userinput>
+[root src]# <userinput>cd bison-1.875</userinput>
+[root src]# <userinput>./configure</userinput>
+[root src]# <userinput>make install</userinput>
+      </screen>
     </listitem>
     <listitem>
       <formalpara>
@@ -109,16 +135,26 @@ chown -R postgres.web /usr/local/pgsql /usr/local/src/postgresql-7.3.4
 chmod 750 /usr/local/pgsql</action></screen>
       <itemizedlist>
         <listitem>
-          <para>Mac OS X: Do instead:</para>
-          <screen><userinput>sudo niutil -create / /groups/web
-sudo niutil - list / /groups</userinput></screen>
-      <para>The second command returns a list of groups.  The last entry should include the gid of the group <computeroutput>web</computeroutput>, which you will need in the next sequence:</para>
-      <screen><userinput>sudo niutil -create / /users/postgres
-sudo niutil -createprop / /users/postgres gid <replaceable>web's gid_number</replaceable>
+          <formalpara>
+            <title>Mac OS X: Do instead:</title>
+          <para>First make sure the gids and uids below are available (change them if 
+they  are not).To list taken uids and gids:</para>
+          </formalpara>
+          <screen><userinput>nireport / /groups name gid | grep "[0123456789][0123456789]"
+nireport / /users name uid | grep "[0123456789][0123456789]"</userinput>
+          </screen>
+      <para>Now you can install the users</para>
+      <screen><userinput>sudo niutil -create / /groups/web
+sudo niutil -createprop / /groups/web gid <replaceable>201</replaceable>
+sudo niutil -create / /users/postgres
+sudo niutil -createprop / /users/postgres gid <replaceable>201</replaceable>
+sudo niutil -createprop / /users/postgres uid <replaceable>502</replaceable>
 sudo niutil -createprop / /users/postgres home /usr/local/pgsql
-sudo niutil -createprop / /users/postgres shell /bin/bash
+sudo niutil -create / /users/<replaceable>service0</replaceable>
+sudo niutil -createprop / /users/<replaceable>service0</replaceable> gid  <replaceable>201</replaceable>
+sudo niutil -createprop / /users/<replaceable>service0</replaceable> uid <replaceable>201</replaceable>
 mkdir -p /usr/local/pgsql
-chown -R postgres:web /usr/local/pgsql /usr/local/src/postgresql-7.4
+chown -R postgres:web /usr/local/pgsql /usr/local/src/postgresql-7.4.1
 chmod 750 /usr/local/pgsql</userinput></screen>
         </listitem>
       </itemizedlist>
@@ -131,8 +167,10 @@ chmod 750 /usr/local/pgsql</userinput></screen>
       </formalpara>
       <screen>[root src]# <userinput>su - postgres</userinput>
 [postgres ~] <userinput>emacs ~postgres/.bashrc</userinput></screen>
+      <para>Paste this line into <computeroutput>.bash_profile</computeroutput>:</para>
+<programlisting>source $HOME/.bashrc</programlisting>
       <para>Paste these lines into <computeroutput>.bashrc</computeroutput>:</para>
-<programlisting>export PATH=$PATH:/usr/local/pgsql/bin
+<programlisting>export PATH=/usr/local/bin/:$PATH:/usr/local/pgsql/bin
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/pgsql/lib</programlisting>
       <para>Test this by logging in as
 	<computeroutput>postgres</computeroutput> and checking the
@@ -157,7 +195,8 @@ PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:/usr/bin/X11:/
           <para>On debian woody (stable, 3.0), do <computeroutput>./configure --without-readline --without-zlib</computeroutput>.</para>
       <screen>[root src]# <userinput>su - postgres</userinput>
 [postgres pgsql]$<userinput> cd /usr/local/src/postgresql-7.3.4</userinput>
-[postgres postgresql-7.3.4]$ <userinput>./configure</userinput>
+[postgres postgresql-7.3.4]$ <userinput>./configure --with-includes=/sw/include/ --with-libraries=/sw/lib --enable-locale --enable-multibyte \
+  --enable-syslog --enable-unicode-conversion --enable-recode </userinput>
 creating cache ./config.cache
 checking host system type... i686-pc-linux-gnu
 (many lines omitted>
