@@ -12,6 +12,8 @@
         <summary>The canonical repository for OpenACS content.</summary>
         <release-date>2004-04-18</release-date>
         <vendor url="http://openacs.org">OpenACS</vendor>
+	<license url="http://www.gnu.org/copyleft/gpl.html">GPL</license>
+	<maturity>3</maturity>
         <description format="text/html">Provides the API for creating and managing user generated content including 
          full support for versioning, rendering content to the filesystem, folders and composite content items, and
          other CMS backing functionality.  Utilized by Bug Tracker, File Storage, and other packages.
