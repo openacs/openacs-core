@@ -11,3 +11,4 @@
 @@ attributes-drop
 @@ portraits-drop
 @@ host-node-map-drop
+@@ site-node-selection-drop
