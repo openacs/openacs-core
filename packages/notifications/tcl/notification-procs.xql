@@ -52,6 +52,26 @@
         </querytext>
     </fullquery>
 
+    <fullquery name="notification::new.select_notification_requests">
+        <querytext>
+            select user_id, interval_id, delivery_method_id, format
+            from   notification_requests
+            where  type_id = :type_id
+            and    object_id = :object_id
+        </querytext>
+    </fullquery>
+
+    <fullquery name="notification::new.select_notified">
+        <querytext>
+            select user_id, 
+                   interval_id, 
+                   delivery_method_id
+            from   notification_requests
+            where  type_id = :type_id
+            and    object_id = :object_id
+        </querytext>
+    </fullquery>
+
     <fullquery name="notification::delete.delete_mappings">
         <querytext>
             delete

@@ -10,7 +10,7 @@ ad_library {
 
 namespace eval notification::sweep {
 
-    ad_proc -public schedule_all {} {
+    ad_proc -deprecated -warn -public schedule_all {} {
         This schedules all the notification procs.
 	DEPRECATED.
     } {
@@ -19,14 +19,18 @@ namespace eval notification::sweep {
     ad_proc -public cleanup_notifications {} {
         Clean up the notifications that have been sent out (DRB: inefficiently...).
     } {
-        # Get the list of the ones to kill
+        # LARS:
+        # Also sweep the dynamic notification requests that have been sent out
+        db_dml delete_dynamic_requests {}
 
+        # Get the list of the ones to kill
         set notification_id_list [db_list select_notification_ids {}]
 
         # Kill them
         foreach notification_id $notification_id_list {
             notification::delete -notification_id $notification_id
         }
+
     }
     
     ad_proc -public sweep_notifications {
@@ -75,8 +79,11 @@ namespace eval notification::sweep {
                     if {![empty_string_p $batched_content]} {
                         ns_log Debug "NOTIF-BATCHED: content to send!"
                         db_transaction {
-                            ns_log Debug "NOTIF-BATCHED: sending content"
-                            notification::delivery::send -to_user_id $prev_user_id \
+                            ns_log Notice "NOTIF-BATCHED: sending content"
+                            # System name is used in the subject
+                            set system_name [ad_system_name]
+                            notification::delivery::send \
+                                    -to_user_id $prev_user_id \
                                     -notification_type_id $prev_type_id \
                                     -subject "\[[ad_system_name] - Batched Notification\]" \
                                     -content $batched_content \
@@ -120,7 +127,8 @@ namespace eval notification::sweep {
             foreach notif $notifications {
                 db_transaction {
                     # Send it
-                    notification::delivery::send -to_user_id [ns_set get $notif user_id] \
+                    notification::delivery::send \
+                            -to_user_id [ns_set get $notif user_id] \
                             -notification_type_id [ns_set get $notif type_id] \
                             -subject [ns_set get $notif notif_subject] \
                             -content [ns_set get $notif notif_text] \

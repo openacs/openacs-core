@@ -22,6 +22,7 @@ namespace eval notification::request {
         {-interval_id:required}
         {-delivery_method_id:required}
         {-format "text"}
+        {-dynamic_p "f"}
     } {
         create a new request for a given user, notification type, object, interval and delivery method.
     } {
@@ -30,7 +31,7 @@ namespace eval notification::request {
         if {[empty_string_p $request_id]} {
             # Set up the vars
             set extra_vars [ns_set create]
-            oacs_util::vars_to_ns_set -ns_set $extra_vars -var_list {request_id type_id user_id object_id interval_id delivery_method_id format}
+            oacs_util::vars_to_ns_set -ns_set $extra_vars -var_list {request_id type_id user_id object_id interval_id delivery_method_id format dynamic_p}
 
             # Create the request
             set request_id [package_instantiate_object -extra_vars $extra_vars notification_request]

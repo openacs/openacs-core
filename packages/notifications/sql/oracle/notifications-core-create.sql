@@ -67,9 +67,11 @@ create table notification_types (
 -- what's allowed for a given notification type?
 create table notification_types_intervals (
     type_id                         constraint notif_type_int_type_id_fk
-                                    references notification_types (type_id),
+                                    references notification_types (type_id)
+                                    on delete cascade,
     interval_id                     constraint notif_type_int_int_id_fk
-                                    references notification_intervals (interval_id),
+                                    references notification_intervals (interval_id)
+                                    on delete cascade,
     constraint notif_type_int_pk
     primary key (type_id, interval_id)
 );
@@ -77,9 +79,11 @@ create table notification_types_intervals (
 -- allowed delivery methods
 create table notification_types_del_methods (
     type_id                         constraint notif_type_del_type_id_fk
-                                    references notification_types (type_id),
+                                    references notification_types (type_id)
+                                    on delete cascade,
     delivery_method_id              constraint notif_type_del_meth_id_fk
-                                    references notification_delivery_methods (delivery_method_id),
+                                    references notification_delivery_methods (delivery_method_id)
+                                    on delete cascade,
     constraint notif_type_deliv_pk
     primary key (type_id, delivery_method_id)
 );
@@ -91,7 +95,8 @@ create table notification_requests (
                                     constraint notif_request_id_pk
                                     primary key,
     type_id                         constraint notif_request_type_id_fk
-                                    references notification_types (type_id),
+                                    references notification_types (type_id)
+                                    on delete cascade,
     user_id                         constraint notif_request_user_id_fk
                                     references users (user_id)
                                     on delete cascade,
@@ -117,7 +122,11 @@ create table notification_requests (
     format                          varchar(100)
                                     default 'text'
                                     constraint notif_request_format_ch
-                                    check (format in ('text', 'html'))
+                                    check (format in ('text', 'html')),
+    dynamic_p                       char(1)
+                                    default 'f'
+                                    constraint notif_request_dynamic_ch
+                                    check (dynamic_p in ('t', 'f'))
 );
 
 create index notification_requests_t_o_idx on notification_requests(type_id, object_id);

@@ -230,6 +230,7 @@ as
       interval_id                       in notification_requests.interval_id%TYPE,
       delivery_method_id                in notification_requests.delivery_method_id%TYPE,
       format                            in notification_requests.format%TYPE,
+      dynamic_p                         in notification_requests.dynamic_p%TYPE,
       creation_date                     in acs_objects.creation_date%TYPE default sysdate,
       creation_user                     in acs_objects.creation_user%TYPE,
       creation_ip                       in acs_objects.creation_ip%TYPE,
@@ -247,7 +248,6 @@ end notification_request;
 /
 show errors
 
-
 create or replace package body notification_request
 as
    function new (
@@ -259,6 +259,7 @@ as
       interval_id                       in notification_requests.interval_id%TYPE,
       delivery_method_id                in notification_requests.delivery_method_id%TYPE,
       format                            in notification_requests.format%TYPE,
+      dynamic_p                         in notification_requests.dynamic_p%TYPE,
       creation_date                     in acs_objects.creation_date%TYPE default sysdate,
       creation_user                     in acs_objects.creation_user%TYPE,
       creation_ip                       in acs_objects.creation_ip%TYPE,
@@ -277,8 +278,8 @@ as
                       );
 
       insert into notification_requests
-      (request_id, type_id, user_id, object_id, interval_id, delivery_method_id, format) values
-      (v_request_id, type_id, user_id, object_id, interval_id, delivery_method_id, format);
+      (request_id, type_id, user_id, object_id, interval_id, delivery_method_id, format, dynamic_p) values
+      (v_request_id, type_id, user_id, object_id, interval_id, delivery_method_id, format, dynamic_p);
 
       return v_request_id;                          
    end new;
@@ -314,6 +315,8 @@ as
 end notification_request;
 /
 show errors
+
+
 
 
 

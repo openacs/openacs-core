@@ -32,7 +32,9 @@ ad_form -name subscribe -export {type_id object_id return_url} -form {
     {interval_id:integer(select)           {label "Notification Interval"}
                                            {options $intervals}}
     {delivery_method_id:integer(select)    {label "Delivery Method"}
-                                           {options $delivery_methods}}
+                                           {options $delivery_methods}
+        {value {[lindex [lindex $delivery_methods 0] 1]}}
+    }
 } -on_submit {
 
     # Add the subscribe
@@ -45,6 +47,10 @@ ad_form -name subscribe -export {type_id object_id return_url} -form {
 
     ad_returnredirect $return_url
     ad_script_abort
+}
+
+if { [llength $delivery_methods] == 1 } {
+    element set_properties subscribe delivery_method_id -widget hidden
 }
 
 ad_return_template
