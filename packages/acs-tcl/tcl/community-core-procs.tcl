@@ -28,6 +28,8 @@ ad_proc cc_screen_name_user { screen_name } {
 }
 
 ad_proc -private cc_lookup_email_user { email } {
+    Return the user_id of a user given the email. Returns the empty string if no such user exists.
+} {
     return [db_string user_select {
         select user_id from cc_users where email = lower(:email)
     } -default ""]
@@ -117,6 +119,7 @@ ad_proc ad_user_new {
     set salt [sec_random_token]
     set hashed_password [ns_sha1 "$password$salt"]
 
+    set error_p 0
     db_transaction {
 
         set user_id [db_exec_plsql user_insert {}]
@@ -140,9 +143,14 @@ ad_proc ad_user_new {
 
     } on_error {
         # we got an error.  log it and signal failure.
-        ns_log Error "Problem creating a new user: $errmsg"
-        return 0
+        global errorInfo
+        ns_log Error "Problem creating a new user: $errorInfo"
+        set error_p 1
     }
+    
+    if { $error_p } {
+        return 0
+    } 
     # success.
     return $user_id
 }
@@ -382,7 +390,7 @@ ad_proc -public acs_user::get_by_username {
     {-authority_id ""}
     {-username:required}
 } {
-    Returns user_id from authority and username.
+    Returns user_id from authority and username. Returns the empty string if no user found.
     
     @param authority_id The authority. Defaults to local authority.
 
