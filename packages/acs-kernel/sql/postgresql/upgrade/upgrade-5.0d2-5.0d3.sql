@@ -251,8 +251,3 @@ where o.object_id = pa.party_id
   and m.rel_id = mr.rel_id
   and m.container_id = m.group_id;
 
-create view cc_users_of_package_id
-as
-SELECT u.*, au.package_id
-FROM application_users au, cc_users u
-WHERE (au.user_id = u.user_id);
