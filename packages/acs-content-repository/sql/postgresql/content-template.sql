@@ -36,7 +36,7 @@ end;' language 'plpgsql';
 
 -- function new
 
-select define_function_args('content_template__new','name,parent_id,template_id,creation_date,creation_user,creation_ip');
+select define_function_args('content_template__new','name,parent_id,template_id,creation_date;now,creation_user,creation_ip');
 
 create or replace function content_template__new (varchar,integer,integer,timestamptz,integer,varchar)
 returns integer as '

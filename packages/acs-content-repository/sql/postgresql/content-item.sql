@@ -1020,8 +1020,8 @@ end;' language 'plpgsql' stable;
  6) delete keyword associations
  7) delete all associated comments */
 
-select define_function_args('content_item__delete','item_id');
-create or replace function content_item__delete (integer)
+select define_function_args('content_item__del','item_id');
+create or replace function content_item__del (integer)
 returns integer as '
 declare
   delete__item_id                alias for $1;  
@@ -1142,6 +1142,16 @@ begin
   raise NOTICE ''Deleting content item...'';
   PERFORM acs_object__delete(delete__item_id);
 
+  return 0; 
+end;' language 'plpgsql';
+
+select define_function_args('content_item__delete','item_id');
+create or replace function content_item__delete (integer)
+returns integer as '
+declare
+  delete__item_id                alias for $1;  
+begin
+        PERFORM content_item__del (delete__item_id);
   return 0; 
 end;' language 'plpgsql';
 

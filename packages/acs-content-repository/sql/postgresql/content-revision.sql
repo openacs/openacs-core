@@ -329,7 +329,7 @@ end;' language 'plpgsql';
 
 
 -- procedure delete
-select define_function_args('content_revision__delete','revision_id');
+select define_function_args('content_revision__del','revision_id');
 create or replace function content_revision__delete (integer)
 returns integer as '
 declare
@@ -389,6 +389,17 @@ begin
   -- Delete the revision
   PERFORM acs_object__delete(delete__revision_id);
 
+  return 0; 
+end;' language 'plpgsql';
+
+select define_function_args('content_revision__delete','revision_id');
+
+create or replace function content_revision__delete (integer)
+returns integer as '
+declare
+  delete__revision_id    alias for $1;  
+begin
+        PERFORM content_revision__del(delete__revision_id);
   return 0; 
 end;' language 'plpgsql';
 
