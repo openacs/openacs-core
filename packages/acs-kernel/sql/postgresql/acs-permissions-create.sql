@@ -385,18 +385,18 @@ create index acs_permissions_privilege_idx on acs_permissions (privilege);
 --
 -- DanW (dcwickstrom@earthlink.net) 30 Jan, 2003
 
+-- DRB: I switched this to UNION form because the old view was incredibly
+-- slow and caused installation of packages to take exponentially increasing
+-- time.   No code should be querying against this view other than the
+-- trigger that recreates the denormalized map anyway ...
+
 create view acs_privilege_descendant_map_view
-as select p1.privilege, p2.privilege as descendant
-   from acs_privileges p1, acs_privileges p2
-   where exists (select h2.child_privilege
-                   from
-                     acs_privilege_hierarchy_index h1,
-                     acs_privilege_hierarchy_index h2
-                   where
-                     h1.privilege = p1.privilege
-                     and h2.privilege = p2.privilege
-                     and h2.tree_sortkey between h1.tree_sortkey and tree_right(h1.tree_sortkey)) or
-     p1.privilege = p2.privilege;
+as select distinct h1.privilege, h2.child_privilege as descendant
+   from acs_privilege_hierarchy_index h1, acs_privilege_hierarchy_index h2
+   where h2.tree_sortkey between h1.tree_sortkey and tree_right(h1.tree_sortkey)
+   union
+   select privilege, privilege
+   from acs_privileges;
 
 create view acs_permissions_all
 as select op.object_id, p.grantee_id, p.privilege

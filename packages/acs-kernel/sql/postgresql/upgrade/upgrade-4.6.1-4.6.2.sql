@@ -206,3 +206,90 @@ begin
 	return v_version_id;
    
 end;' language 'plpgsql';
+
+-- DRB: Fix the incredibly slow execution of acs_privilege__add_child()
+
+drop view acs_privilege_descendant_map_view;
+create view acs_privilege_descendant_map_view
+as select distinct h1.privilege, h2.child_privilege as descendant
+   from acs_privilege_hierarchy_index h1, acs_privilege_hierarchy_index h2
+   where h2.tree_sortkey between h1.tree_sortkey and tree_right(h1.tree_sortkey)
+   union
+   select privilege, privilege
+   from acs_privileges;
+
+drop trigger acs_priv_hier_ins_del_tr on acs_privilege_hierarchy;
+drop function acs_priv_hier_ins_del_tr ();
+create or replace function acs_priv_hier_ins_del_tr () returns opaque as '
+declare
+        new_value       integer;
+        new_key         varbit default null;
+        v_rec           record;
+        deleted_p       boolean;
+begin
+
+        -- if more than one node was deleted the second trigger call
+        -- will error out.  This check avoids that problem.
+
+        if TG_OP = ''DELETE'' then 
+            select count(*) = 0 into deleted_p
+              from acs_privilege_hierarchy_index 
+             where old.privilege = privilege
+               and old.child_privilege = child_privilege;     
+       
+            if deleted_p then
+
+                return new;
+
+            end if;
+        end if;
+
+        -- recalculate the table from scratch.
+
+        delete from acs_privilege_hierarchy_index;
+
+        -- first find the top nodes of the tree
+
+        for v_rec in select privilege, child_privilege
+                       from acs_privilege_hierarchy
+                      where privilege 
+                            NOT in (select distinct child_privilege
+                                      from acs_privilege_hierarchy)
+                                           
+        LOOP
+
+            -- top level node, so find the next key at this level.
+
+            select max(tree_leaf_key_to_int(tree_sortkey)) into new_value 
+              from acs_privilege_hierarchy_index
+             where tree_level(tree_sortkey) = 1;
+
+             -- insert the new node
+
+            insert into acs_privilege_hierarchy_index 
+                        (privilege, child_privilege, tree_sortkey)
+                        values
+                        (v_rec.privilege, v_rec.child_privilege, tree_next_key(null, new_value));
+
+            -- now recurse down from this node
+
+            PERFORM priv_recurse_subtree(tree_next_key(null, new_value), v_rec.child_privilege);
+
+        end LOOP;
+
+        -- materialize the map view to speed up queries
+        -- DanW (dcwickstrom@earthlink.net) 30 Jan, 2003
+        delete from acs_privilege_descendant_map;
+
+        insert into acs_privilege_descendant_map (privilege, descendant) 
+        select privilege, descendant from acs_privilege_descendant_map_view;
+
+        return new;
+
+end;' language 'plpgsql';
+
+create trigger acs_priv_hier_ins_del_tr after insert or delete
+on acs_privilege_hierarchy for each row
+execute procedure acs_priv_hier_ins_del_tr ();
+
+
