@@ -873,7 +873,7 @@ ln -s /usr/local/tclwebtest/tclwebtest /usr/local/bin
 [root src]# <userinput>tar xfz php-4.3.4.tar.gz</userinput>
 [root src]# <userinput>cd php-4.3.4</userinput>
 [root php-4.3.4]# <userinput>cd php-4.3.4</userinput>
-[root php-4.3.4]# <userinput> ./configure --with-aolserver=/usr/local/aolserver/ --with-pgsql=/usr/local/pg74 --without-mysql</userinput>
+[root php-4.3.4]# <userinput> ./configure --with-aolserver=/usr/local/aolserver/ --with-pgsql=/usr/local/pgsql --without-mysql</userinput>
 [root php-4.3.4]# <userinput>make install</userinput>
       </screen>
       <para>Once installed you can enable this by configuring your config file. Make sure your config file supports php (it should have a php section with it). Furthermore add <userinput>index.php</userinput> as the last element to your <computeroutput>directoryfile</computeroutput> directive.</para>
@@ -893,6 +893,77 @@ ln -s /usr/local/tclwebtest/tclwebtest /usr/local/bin
 [$OPENACS_SERVICE_NAME www]# <userinput>./conf.pl</userinput>
       </screen>
       <para>Now you are about to configure Squirrelmail. The configuration heavily depends on your setup, so no instructions are given here.</para>
+    </sect1>
+    <sect1 id="install-pam-radius">
+      <title>Install PAM Radius for use as external authentication</title>
+      <authorblurb>
+        <para>By <ulink url="mailto:openacs@sussdorff.de">Malte Sussdorff</ulink></para>
+      </authorblurb>
+      
+      <para>This step by step guide is derived from the installation instructions which you can find at <replaceable>yourdomain.com</replaceable>/doc/acs-authentication/ext-auth-pam-install.html. It is build upon PAM 0.77 (tested) and does not work on RedHat Linux Enterprise 3 (using PAM 0.75). It makes use of the ns_pam module written by Mat Kovach. The instructions given in here do work with PAM LDAP accordingly and differences will be shown at the end of the file.</para>
+      <orderedlist>
+        <listitem id="install-ns_pam">
+          <formalpara>
+            <title>Install ns_pam</title>
+            <para>Download and install ns_pam</para>
+          </formalpara>
+          <screen>[root aolserver]# <userinput>cd /usr/local/src/aolserver/</userinput>
+          [root aolserver]# <userinput>wget http://braindamage.alal.com/software/ns_pam-0.1.tar.gz</userinput>
+          [root aolserver]# <userinput>tar xvfz ns_pam-0.1.tar.gz</userinput>
+          [root aolserver]# <userinput>cd ns_pam-0.1</userinput>
+          [root ns_pam-0.1]# <userinput>make install INST=/usr/local/aolserver</userinput>
+          [root ns_pam-0.1]#
+<action>cd /usr/local/src/aolserver/
+wget http://braindamage.alal.com/software/ns_pam-0.1.tar.gz
+tar xvfz ns_pam-0.1.tar.gz
+cd ns_pam-0.1
+make install INST=/usr/local/aolserver
+</action>
+          </screen>
+        </listitem>
+        <listitem id="configure-ns_pam">
+          <formalpara>
+            <title>Configure ns_pam</title>
+        <para>Configure AOLserver for ns_pam</para>
+          </formalpara>
+          <para>To enable ns_pam in AOLServer you will first have to edit your config.tcl file and enable the loading of the ns_pam module and configure the aolservers pam configuration file.</para>
+          <itemizedlist>
+            <listitem>Change <emphasis>config.tcl</emphasis>. Remove the <emphasis>#</emphasis> in front of <computeroutput>ns_param nspam ${bindir}/nspam.so</computeroutput> to enable the loading of the ns_pam module.</listitem>
+            <listitem>Change <emphasis>config.tcl</emphasis>. Replace <computeroutput>pam_domain</computeroutput> in the section <computeroutput>ns/server/${server}/module/nspam</computeroutput> with <userinput>aolserver</userinput></listitem>
+            <listitem>Create <emphasis>/etc/pam.d/aolserver</emphasis>.
+            <screen>
+              [root ns_pam]#<userinput>cp /var/lib/aolserver/<replaceable>service0</replaceable>/packages/acs-core-docs/www/files/pam-aolserver.txt /etc/pam.d/aolserver</userinput>
+            </screen>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+        <listitem id="configure-pam-radius">
+          <formalpara>
+            <title>Configure PAM Radius</title>
+            <para>Configure and install PAM Radius</para>
+          </formalpara>
+          <para>You have to make sure that pam_radius v.1.3.16 or higher is installed, otherwise you will have to install it.</para>
+          <screen>[root ns_pam]# <userinput>cd /usr/local/src/</userinput>
+          [root src]# <userinput>wget ftp://ftp.freeradius.org/pub/radius/pam_radius-1.3.16.tar</userinput>
+          [root src]# <userinput>tar xvf pam_radius-1.3.16</userinput>
+          [root src]# <userinput>cd pam_radius</userinput>
+          [root pam_radius]# <userinput>make</userinput>
+          [root pam_radius]# <userinput>cp pam_radius_auth.so /lib/security/</userinput>
+          [root pam_radius]#
+<action>cd /usr/local/src
+wget ftp://ftp.freeradius.org/pub/radius/pam_radius-1.3.16.tar
+tar xvf pam_radius-1.3.16
+cd pam_radius
+make
+cp pam_radius_auth.so /lib/security/
+</action>
+          </screen>
+          <para>Next you have to add the configuration lines to your Radius configuration file (/etc/rddb/server). For AOLserver to be able to access this information you have to change the access rights to this file as well.</para>
+          <screen>[root pam_radius]# <userinput>echo "radius.<replaceable>yourdomain.com</replaceable>:1645 <replaceable>your_radius_password</replaceable> >>/etc/rddb/server</userinput>
+          [root src]# <userinput>chown <replaceable>service0</replaceable>:web /etc/rddb/server</userinput>
+          </screen>
+        </listitem>
+      </orderedlist>
     </sect1>
     <xi:include href="aolserver.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
       <xi:fallback>Section Missing</xi:fallback>
