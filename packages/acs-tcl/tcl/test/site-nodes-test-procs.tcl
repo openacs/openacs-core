@@ -7,7 +7,7 @@ ad_library {
 }
 
 aa_register_case -cats {
-    script
+    api
 } site_node_update_cache {
     Test site_node::update_cache
 } {
@@ -86,7 +86,7 @@ aa_register_case -cats {
 }
 
 aa_register_case -cats {
-    script
+   api 
 } site_node_closest_ancestor_package {
     Test site_node::closest_ancestor_package
 } {

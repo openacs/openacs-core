@@ -5,14 +5,12 @@ ad_library {
     @creation-date 22 January 2003
 }
 
-aa_register_case server_error_log {
+aa_register_case -cats {smoke} server_error_log {
     Examine server error log.
-} {
+    } {
     # Log error lines start with something like this:
     # [19/Nov/2003:00:54:45][10491.319494][-conn1-] Error: 
     
-    catch { exec grep {^[^ ]* Error: } /web/lars/log/error.log } errors
-
     set logfile [ns_info log]
 
     if { [string equal $logfile "STDOUT"] } {
