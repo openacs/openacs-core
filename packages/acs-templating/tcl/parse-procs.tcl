@@ -434,11 +434,9 @@ ad_proc -public template::adp_compile { source_type source } {
   while {[regsub -all [template::adp_variable_regexp] $code {\1[ad_quotehtml ${\2}]} code]} {}
   while {[regsub -all [template::adp_variable_regexp_noquote] $code {\1${\2}} code]} {}
 
-  # unescape protected @ references
-  set code [string map { \\@ @ } $code]
-
   # unescape protected # references
-  set code [string map { \\# # } $code]
+  # unescape protected @ references
+  set code [string map { \\@ @ \\# #} $code]
 
   return $code
 }
