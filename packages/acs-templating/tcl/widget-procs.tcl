@@ -383,3 +383,67 @@ ad_proc -public template::widget::comment { element_reference tag_attributes } {
 
   return $output
 }
+
+ad_proc -public template::widget::user { element_reference tag_attributes } {
+    This widget is used to allow users to pick a user from a
+    drop-down, and then, when the user can't be found in that list,
+    offers a text widget to enter a search string, the results of
+    which are then displayed on the next screen.
+    
+    You may optionally provide a query to use with a -search_sql "select ..." 
+    property on the element.
+} {
+
+  upvar $element_reference element
+
+  if { [info exists element(html)] } {
+    array set attributes $element(html)
+  }
+
+  array set attributes $tag_attributes
+
+  set output {}
+
+  if { [info exists element(value)] && [string equal $element(value) ":other:"] } {
+      # input widget to search for users
+
+      append output "<input name=\"$element(name)\""
+      foreach name [array names attributes] {
+          if { [string equal $attributes($name) {}] } {
+              append output " $name"
+          } else {
+              append output " $name=\"$attributes($name)\""
+          }
+      }
+      append output ">"
+  } elseif { [info exists element(value)] && ![regexp {^[0-9]*$} $element(value)] }  {
+      # it's not :other: and it's not a number -- it's a search
+
+      set query "%${element(value)}%"
+      if { [info exists element(search_sql)] } {
+          set sql $element(search_sql)
+      } else {
+          set sql {
+              select distinct
+                     u.first_names || ' ' || u.last_name as name,
+                     u.user_id
+              from   cc_users u
+              where  upper(coalesce(u.first_names || ' ', '')  || coalesce(u.last_name || ' ', '') || u.email || ' ' || coalesce(u.screen_name, '')) like upper(:query)
+              order  by name
+          }
+      }
+
+      set users_list [db_list_of_lists users $sql]
+      lappend users_list { "Search again..." ":other:" }
+
+      set output [template::widget::menu $element(name) $users_list "" attributes]
+  } else {
+      # select widget to pick a known user
+      set options $element(options)
+      lappend options { "Search for other user..." ":other:" }
+      set output [template::widget::menu $element(name) $options $element(values) attributes]
+  }
+
+  return $output
+}
+
