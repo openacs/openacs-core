@@ -46,6 +46,7 @@ ad_proc -public permission::revoke {
 
 # args to permission_p and permission_p_no_cache must match
 ad_proc -public permission::permission_p {
+    {-no_login:boolean}
     {-no_cache:boolean}
     {-party_id ""}
     {-object_id:required}
@@ -53,8 +54,17 @@ ad_proc -public permission::permission_p {
 } {
     does party X have privilege Y on object Z
     
-    @param nocache force loading from db even if cached (flushes cache as well)
+    @param no_cache force loading from db even if cached (flushes cache as well)
+    
+    @param no_login Don't bump to registration to refresh authentication, if the user's authentication is expired.
+                    This is specifically required in the case where you're calling this from the proc that gets
+                    the login page.
+    
     @param party_id if null then it is the current user_id
+
+    @param object_id The object you want to check permissions on.
+    
+    @param privilege The privilege you want to check for.
 } {
     if { [empty_string_p $party_id] } {
         set party_id [ad_conn user_id]
@@ -74,7 +84,8 @@ ad_proc -public permission::permission_p {
     }
 
     if { 
-        [ad_conn user_id] == 0 
+        !$no_login_p
+        && [ad_conn user_id] == 0 
         && $party_id == 0 
         && [ad_conn untrusted_user_id] != 0 
         && ![template::util::is_true $permission_p] 
