@@ -334,7 +334,7 @@ ad_proc -private template::form::template { id { style "" } } {
       }
       set name "formbutton:$name"
 
-      template::element create $id $name -widget submit -label $label
+      template::element create $id $name -widget submit -label $label -datatype text
   }
 
   #
