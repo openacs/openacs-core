@@ -69,6 +69,17 @@ install_do_packages_install
 
 ##############
 #
+# Load message catalogs
+#
+#############
+
+# Doing this before restart so that keys are available in init files on startup
+ns_write "<p>Loading message catalogs..."
+lang::catalog::import -initialize
+ns_write "  <p>Done.<p>"
+
+##############
+#
 # Secret tokens
 #
 #############
