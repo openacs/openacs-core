@@ -20,5 +20,9 @@ foreach interval [notification::get_all_intervals] {
         set batched_p 0
     } 
 
-    ad_schedule_proc -thread t $n_seconds notification::sweep::sweep_notifications -interval_id [lindex $interval 1] -batched_p $batched_p
+    if {$n_seconds > 0} {
+        ad_schedule_proc -thread t $n_seconds notification::sweep::sweep_notifications -interval_id [lindex $interval 1] -batched_p $batched_p
+    } else {
+        ad_schedule_proc -thread t 60 notification::sweep::sweep_notifications -interval_id [lindex $interval 1] -batched_p $batched_p
+    }        
 }
