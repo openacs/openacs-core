@@ -39,6 +39,7 @@ ad_proc -public template::list::create {
     {-page_groupsize 10}
     {-page_query ""}
     {-page_query_name ""}
+    {-page_flush_p 0}
     {-ulevel 1}
     {-elements:required}
     {-filters ""}
@@ -54,18 +55,18 @@ ad_proc -public template::list::create {
     Here's an example of a fairly simple standard list.
 
     <pre>
-    template::list::create \
-        -name order_lines \
-        -multirow order_lines \
-        -key item_id \
-        -actions [list "Add item" [export_vars -base item-add {order_id}] "Add item to this order"] \
+    template::list::create \ 
+        -name order_lines \ 
+        -multirow order_lines \ 
+        -key item_id \ 
+        -actions [list "Add item" [export_vars -base item-add {order_id}] "Add item to this order"] \ 
         -bulk_actions {
             "Remove" "item-remove" "Remove checked items"
-        } \
+        } \ 
         -bulk_action_export_vars {
             order_id
-        } \
-        -row_pretty_plural "order items" \
+        } \ 
+        -row_pretty_plural "order items" \ 
         -elements {
             quantity {
                 label "Quantity"
@@ -225,6 +226,7 @@ ad_proc -public template::list::create {
         page_groupsize {}
         page_query {}
         page_query_name {}
+        page_flush_p {}
         main_class {list}
         sub_class {}
         class {}
@@ -258,10 +260,6 @@ ad_proc -public template::list::create {
 
     # Set default for no_data
     set no_data [ad_decode $no_data "" "No $row_pretty_plural." $no_data]
-    if { [empty_string_p $page_query_name] } {
-        set page_query_name "--default-query-name-for-list-builder-paginators--"
-    }
-
     # Set ulevel to the level of the page, so we can access it later
     set list_properties(ulevel) "\#[expr [info level] - $ulevel]"
 
@@ -283,6 +281,7 @@ ad_proc -public template::list::create {
         page_groupsize
         page_query
         page_query_name
+        page_flush_p
     } {
         set list_properties($elm) [set $elm]
     }
@@ -388,6 +387,15 @@ ad_proc -public template::list::create {
 
     # Pagination
     if { ![empty_string_p $list_properties(page_size)] && $list_properties(page_size) != 0 } {
+        # Check that we have either page_query or page_query_name
+        if { [empty_string_p $list_properties(page_query)] && [empty_string_p $list_properties(page_query_name)] } {
+            error "When specifying a non-zero page_size, you must also provide either page_query or page_query_name"
+        }
+
+        if { [empty_string_p $list_properties(page_query_name)] } {
+            set list_properties(page_query_name) "--default-query-name-for-list-builder-paginators--"
+        }
+
         # We create the selected page as a filter, so we get the filter,page thing out
         template::list::filter::create \
             -list_name $name \
@@ -450,7 +458,7 @@ ad_proc -public template::list::prepare {
     if { ![empty_string_p $list_properties(page_size)] && $list_properties(page_size) != 0 } {
 
         # We need to uplevel subst it so we get the filters evaluated
-        set page_query [uplevel $list_properties(ulevel) [list subst -nobackslashes $list_properties(page_query)]]
+        set list_properties(page_query_substed) [uplevel $list_properties(ulevel) [list subst -nobackslashes $list_properties(page_query)]]
 
         # Generate a paginator name which includes all the fitler values, 
         # so the paginator cahing works properly
@@ -462,13 +470,19 @@ ad_proc -public template::list::prepare {
         }
         set list_properties(paginator_name) $paginator_name
 
+        set flush_p f
+        if { [template::util::is_true $list_properties(page_flush_p)] } {
+            set flush_p t
+        }
+
         # We need this uplevel so that the bind variables in the query will get bound at the caller's level
         uplevel $ulevel [list template::paginator create \
                              $list_properties(page_query_name) \
                              $list_properties(paginator_name) \
-                             $page_query \
+                             $list_properties(page_query_substed) \
                              -pagesize $list_properties(page_size) \
                              -groupsize $list_properties(page_groupsize) \
+                             -flush_p $flush_p \
                              -contextual]
 
         if { $list_properties(filter,page) > [template::paginator get_page_count $list_properties(paginator_name)] } {
@@ -624,8 +638,6 @@ ad_proc -public template::list::page_get_ids {
     @param  name     Name of the list builder list for which you want the IDs of the current page.
     @param  tcl_list Set this option if you want the IDs as a Tcl list. Otherwise, they'll be returned as a 
                      quoted SQL list, ready to be included in an "where foo_id in (...)" expression.
-    
-    @param  list 
 } {
     # Get an upvar'd reference to list_properties
     get_reference -name $name
