@@ -126,11 +126,11 @@ ad_proc -public tsearch2::search {
     set limit_clause ""
     set offset_clause ""
 
-    if {[string is integer $limit]} {
-	set limit_clause " limit :limit "
+    if {[string is integer -strict $limit]} {
+	set limit_clause " limit $limit "
     }
-    if {[string is integer $offset]} {
-	set offset_clause " offset :offset "
+    if {[string is integer -strict $offset]} {
+	set offset_clause " offset $offset "
     }
     set query_text "select object_id from txt where fti @@ to_tsquery('default',:query) and exists (select 1
                    from acs_object_party_privilege_map m
@@ -193,12 +193,28 @@ ad_proc tsearch2::build_query { -query } {
     @param string string to convert
     @return returns formatted query string for tsearch2 tsquery
 } {
-    # get rid of everything that isn't a letter or number
-    regsub -all {[^-/@.\d\w\s]+} $query { } query
+    # get rid of everything that isn't valid in a query
+    # letters, numbers, @ . - ( ) are all valid
+    regsub -all {[^-/@.\d\w\s\(\)]+} $query { } query
 
+    # match parens, if they don't match just throw them away
+    set p 0
+    for {set i 0} {$i < [string length $query]} {incr i} {
+	if {[string index $query $i] eq "("} {
+	    incr p
+	}
+	if {[string index $query $i] eq ")"} {
+	    incr p -1
+	}
+    }
+    if {$p != 0} {
+	regsub -all {\(|\)} $query {} query
+    }
+    
     # replace boolean words with boolean operators
-    set query [string map {" and " & " or " | " not " " ! "} " $query "]
-    # remove leading and trailing spaces so they aren't turned into |
+    regsub -nocase "^not " $query {!} query
+    set query [string map -nocase {" and " & " or " | " not " !} $query]
+    # remove leading and trailing spaces so they aren't turned into &
     set query [string trim $query]
     # remove any spaces between words and operators
     regsub -all {\s*([!&|])\s+} $query {\1} query
@@ -206,6 +222,9 @@ ad_proc tsearch2::build_query { -query } {
     regsub -all {\s+} $query {\&} query
     # if a ! is by itself then prepend &
     regsub {(\w)([!])} $query {\1\&!} query
-
+    # if there is )( then insert an & between them 
+    # or if there is )\w or \w( insert an & between them
+    regsub {(\))([\(\w])} $query {\1\&\2} query
+    regsub {([\)\w])(\()} $query {\1\&\2} query
     return $query
 }
