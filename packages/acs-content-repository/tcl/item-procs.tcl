@@ -298,3 +298,95 @@ ad_proc item::copy {
     db_exec_plsql copy_item {}
 
 }
+
+ad_proc -public item::get {
+    {-item_id:required}
+    {-array:required}
+} {
+    Get information about a content item.
+
+    @param item_id The id of the item to get info for
+    @param array The name of the array to populate with values.
+                 The keys are: ITEM_ID, PARENT_ID, NAME, LOCALE,
+                 LIVE_REVISION, LATEST_REVISION, PUBLISH_STATUS,
+                 CONTENT_TYPE, STORAGE_TYPE, STORAGE_AREA_KEY,
+                 ARCHIVE_DATE, PACKAGE_ID
+
+    @author Peter Marklund
+} {
+    upvar $array row
+
+    db_1row select_item_data {
+        select *
+        from cr_items
+        where item_id = :item_id
+    } -column_array row
+}
+
+ad_proc -public item::get_element {
+    {-item_id:required}
+    {-element:required}
+} {
+    Return the value of a single element (attribute) of a content
+    item.
+
+    @param item_id The id of the item to get element value for
+    @param element The name (column name) of the element. See
+                   item::get for valid element names.
+} {
+    get -item_id $item_id -array row
+    return $row($element)
+}
+
+ad_proc -public item::publish {
+    {-item_id:required}
+    {-revision_id ""}
+} {
+    Publish a content item. Updates the live_revision and publish_date attributes, and
+    sets publish_status to live.
+
+    @param item_id The id of the content item
+    @param revision_id The id of the revision to publish. Defaults to the latest revision.
+
+    @author Peter Marklund
+} {
+    if { [empty_string_p $revision_id] } {
+        set revision_id [item::get_element -item_id $object_id -element latest_revision]
+    }
+
+    db_exec_plsql set_live {
+        begin
+            content_item.set_live_revision(
+                revision_id => :revision_id,
+                publish_status => 'live'
+            );
+        end;
+    }
+}
+
+ad_proc -public item::unpublish {
+    {-item_id:required}
+    {-publish_status "production"}
+} {
+    Unpublish a content item.
+
+    @param item_id The id of the content item
+    @param publish_status The publish_status to put the item in after unpublishing it.
+
+    @author Peter Marklund
+} {
+
+    db_exec_plsql unset_live {
+        begin
+            content_item.unset_live_revision(
+                 item_id => :item_id
+            );
+        end;
+    }
+
+    db_dml update_publish_status {
+        update cr_items
+        set publish_status = :publish_status
+        where item_id = :item_id
+    }
+}
