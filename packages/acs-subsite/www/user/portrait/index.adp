@@ -25,7 +25,7 @@ Options:
 <li><a href="comment-edit?@export_edit_vars@">edit comment</a></li>
 <li><a href="upload?@export_edit_vars@">upload a replacement portrait</a></li>
 
-<li><a href="erase?@export_edit_vars@">erase portrait</a><li>
+<li><a href="erase?@export_edit_vars@">erase portrait</a></li>
 
 </ul>
 
