@@ -38,6 +38,12 @@
   <sect2 id="install-rpms">
     <title>Binaries and other shortcuts</title>
 
+    <para>You can try out OpenACS using some binary installers. In
+    general, they are not yet supported by the community, so they are
+    mostly for evaluation purposes. <ulink
+    href="http://openacs.org/faq/one-faq?faq_id=130897#130917">Installing
+    OpenACS</ulink></para>
+
     <orderedlist>
       <listitem>
         <para>The patched version of AOLserver we use is not currently
