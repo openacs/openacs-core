@@ -13,4 +13,48 @@ select distinct crftd.path, crftd.storage_area_key
       </querytext>
 </fullquery>
 
+<fullquery name="cr_after_install.get_template_id">
+      <querytext>
+
+		select live_revision as revision_id
+		from cr_items
+		where name = 'default_template'
+		and parent_id = -200
+
+      </querytext>
+</fullquery>
+
+<fullquery name="cr_after_install.update_default_template">
+      <querytext>
+
+		update cr_revisions
+		set content = empty_blob()
+		where revision_id = :revision_id
+		returning content into :1
+
+      </querytext>
+</fullquery>
+
+<fullquery name="cr_after_upgrade.get_template_id">
+      <querytext>
+
+		select live_revision as revision_id
+		from cr_items
+		where name = 'default_template'
+		and parent_id = -200
+
+      </querytext>
+</fullquery>
+
+<fullquery name="cr_after_upgrade.update_default_template">
+      <querytext>
+
+		update cr_revisions
+		set content = empty_blob()
+		where revision_id = :revision_id
+		returning content into :1
+
+      </querytext>
+</fullquery>
+
 </queryset>

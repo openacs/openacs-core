@@ -67,3 +67,35 @@ ad_proc -private cr_scan_mime_types {} {
         }
     }
 }
+
+ad_proc -private cr_after_install {} {
+    if {[db_type] == "oracle"} {
+	set default_template "<html><body><content></body></html>"
+
+	db_transaction {
+	    db_1row get_template_id {}
+	    db_dml update_default_template {} -blobs [list $default_template]
+	}
+    }
+}
+
+ad_proc -public cr_after_upgrade {
+    {-from_version_name:required}
+    {-to_version_name:required}
+} {
+    apm_upgrade_logic \
+        -from_version_name $from_version_name \
+        -to_version_name $to_version_name \
+        -spec {
+            5.1.5 5.1.6d1 {
+		if {[db_type] == "oracle"} {
+		    set default_template "<html><body><content></body></html>"
+
+		    db_transaction {
+			db_1row get_template_id {}
+			db_dml update_default_template {} -blobs [list $default_template]
+		    }
+		}
+	    }
+	}
+}

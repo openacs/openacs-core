@@ -7,7 +7,7 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>t</singleton-p>
     
-    <version name="5.1.5" url="http://openacs.org/repository/download/apm/acs-content-repository-5.1.5.apm">
+    <version name="5.1.6d1" url="http://openacs.org/repository/download/apm/acs-content-repository-5.1.6d1.apm">
         <owner url="mailto:dcwickstrom@earthlink.net">Dan Wickstrom</owner>
         <summary>The canonical repository for OpenACS content.</summary>
         <release-date>2005-02-28</release-date>
@@ -17,13 +17,16 @@
          other CMS backing functionality.  Utilized by Bug Tracker, File Storage, and other packages.
         </description>
 
-        <provides url="acs-content-repository" version="5.1.5"/>
+        <provides url="acs-content-repository" version="5.1.6d1"/>
         <requires url="acs-kernel" version="5.1.0"/>
         <requires url="acs-service-contract" version="5.1.0"/>
         <requires url="search" version="5.1.0"/>
 
         <callbacks>
+            <callback type="after-install"  proc="cr_after_install"/>
+            <callback type="after-upgrade"  proc="cr_after_upgrade"/>
         </callbacks>
+
         <parameters>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="TemplateRoot"  default="templates" description="The directory to which templates are published and from where they are retrieved when a page is served. If the value does not start with a '/', it is taken to be relative to [acs_root_dir]. Packages that use the content-repository can override this setting by defining their own TemplateRoot parameter." section_name="templates"/>
         </parameters>
