@@ -42,4 +42,3 @@ set img_path "[ad_conn package_url]images"
 
 set form_export_vars [export_vars -form {object_id return_url }]
 
-ad_return_template
