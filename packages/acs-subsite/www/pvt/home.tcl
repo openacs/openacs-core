@@ -29,6 +29,8 @@ acs_user::get -array user -include_bio
 
 set page_title [ad_pvt_home_name]
 
+set pvt_home_url [ad_pvt_home]
+
 set context [list $page_title]
 
 set ad_url [ad_url]
@@ -99,7 +101,13 @@ ad_form -name user_info -cancel_url [ad_conn url] -mode display -form {
 # LARS HACK: Make the URL and email elements real links
 if { ![form is_valid user_info] } {
     element set_properties user_info email -display_value "<a href=\"mailto:[element get_value user_info email]\">[element get_value user_info email]</a>"
-    element set_properties user_info url -display_value "<a href=\"[element get_value user_info url]\">[element get_value user_info url]</a>"
+    if {![string match -nocase "http://*" [element get_value user_info url]]} {
+	element set_properties user_info url -display_value \
+		"<a href=\"http://[element get_value user_info url]\">[element get_value user_info url]</a>"
+    } else {
+	element set_properties user_info url -display_value \
+		"<a href=\"[element get_value user_info url]\">[element get_value user_info url]</a>"
+    }
 }
 
 # The template needs to know if this is a request
