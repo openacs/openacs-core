@@ -10,7 +10,7 @@
     <version name="5.1.0d1" url="http://openacs.org/repository/download/apm/acs-admin-5.1.0d1.apm">
         <owner url="mailto:dhogaza@pacifier.com">Don Baccus</owner>
         <summary>An interface for Site-wide administration of an OpenACS Installation.</summary>
-        <release-date>2004-01-21</release-date>
+        <release-date>2004-03-10</release-date>
         <vendor url="http://openacs.org">OpenACS</vendor>
         <description format="text/html">Provides a UI for administering site-wide services
           (including package installation, cache, authentication, and user accounts) for an OpenACS system.

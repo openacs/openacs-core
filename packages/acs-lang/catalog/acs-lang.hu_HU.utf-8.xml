@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<message_catalog package_key="acs-lang" package_version="5.0.3" locale="hu_HU" charset="utf-8">
+<message_catalog package_key="acs-lang" package_version="5.0.4" locale="hu_HU" charset="utf-8">
 
   <msg key="localization-decimal_point">,</msg>
   <msg key="localization-grouping">3 3</msg>

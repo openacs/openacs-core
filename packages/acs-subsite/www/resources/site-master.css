@@ -431,6 +431,12 @@ ul.action-links li {
   margin-left: -16px;
 }
 
+div.subsite-context-bar {
+  font-size: 85%;
+  margin-bottom: 4px;
+  position: relative;
+}
+
 
 
 /* Text Styles */

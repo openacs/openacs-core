@@ -153,7 +153,11 @@ if { [form is_valid grant] } {
 
     # grant all selected privs
     foreach privilege $privileges {
-        permission::grant -party_id $party_id -object_id $object_id -privilege $privilege
+        # Lars: For some reason, selecting no privileges returns in a list 
+        # containing one element, which is the empty string
+        if { ![empty_string_p $privilege] } {
+            permission::grant -party_id $party_id -object_id $object_id -privilege $privilege
+        }
     }
     
     ad_returnredirect "one?[export_vars [list object_id application_url]]"

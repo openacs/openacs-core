@@ -338,6 +338,14 @@ createdb -E UNICODE <replaceable>service0</replaceable></action></screen>
                 <para>Add these lines to the file.  The vacuum command cleans up temporary structures within a PostGreSQL database, and can improve performance.  We vacuum gently every hour and completely every day.  The numbers and stars at the beginning are cron columns that specify when the program should be run - in this case, whenever the minute is 0 and the hour is 1, i.e., 1:00 am every day, and every (*) day of month, month, and day of week.  Type <computeroutput>man 5 crontab</computeroutput> for more information.</para>
                 <programlisting>0 1-23 * * * /usr/local/pgsql/bin/vacuumdb --analyze <replaceable>service0</replaceable>
 0 0 * * * /usr/local/pgsql/bin/vacuumdb --full --analyze <replaceable>service0</replaceable></programlisting>
+
+                <para>Depending on your distribution, you may receive
+                email when the crontab items are executed. If you
+                don't want to receive email for those crontab items,
+                you can add <computeroutput>&gt; /dev/null
+                2>&amp;1</computeroutput> to the end of each crontab
+                line</para>
+
               </listitem>
               <listitem>
                 <para><link linkend="install-openfts-postgres">Add Full Text Search Support</link> (OPTIONAL)</para>

@@ -61,6 +61,7 @@
             
             <screen>[service0 etc]$ <userinput>killall nsd</userinput>
 nsd: no process killed
+[service0 etc]$ <userinput>emacs /var/lib/aolserver/<replaceable>service0</replaceable>/etc/daemontools/run</userinput>
 [service0 etc]$ <userinput>exit</userinput>
 
 [root root]# <userinput>ln -s /var/lib/aolserver/<replaceable>service0</replaceable>/etc/daemontools/ /service/<replaceable>service0</replaceable></userinput></screen>
