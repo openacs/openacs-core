@@ -40,7 +40,7 @@ ad_proc -public ad_parse_template {
 } {
     Return a string containing the parsed and evaluated template to the caller.
 
-    @param params The parameters to pass to the template.
+    @param params The parameters to pass to the template. Note that pass-by-reference params must be in the page namespace, they cannot be in a local procedure, or any other namespace.
 
     @param template The template file name.
 
