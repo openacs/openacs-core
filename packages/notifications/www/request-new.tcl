@@ -12,7 +12,7 @@ ad_page_contract {
     return_url
 }
 
-set user_id [ad_conn user_id]
+set user_id [ad_maybe_redirect_for_registration]
 
 # Check that the object can be subcribed to
 notification::security::require_notify_object -object_id $object_id
