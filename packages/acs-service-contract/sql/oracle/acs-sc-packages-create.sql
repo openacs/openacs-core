@@ -565,7 +565,7 @@ as
 					v_contract_name ||
   					' to '		||
 					v_impl_name	||
-					' failed.');
+					' failed since certain operations are not implemented.');
        end if;
 
        insert into acs_sc_bindings (
