@@ -883,6 +883,9 @@ ad_proc -public ad_progress_bar_begin {
 
     @see ad_progress_bar_end
 } {
+    db_release_unused_handles
+    ad_http_cache_control
+    
     ReturnHeaders
     ns_write [ad_parse_template -params [list [list title $title] [list message_1 $message_1] [list message_2 $message_2]] $template]
 }
