@@ -95,7 +95,81 @@
         </mediaobject>
       </figure>
     </sect2>
-
+    <sect2>
+      <title>How do I diagnose a permissions problem?</title>
+      <itemizedlist>
+        <listitem>
+          <formalpara>
+            <title>Steps to Reproduce</title>
+            <para>The events package does not allow users to register for new events.</para>
+          </formalpara>
+      <orderedlist>
+        <listitem>
+          <para>Go to the http://yourserver.net/events as a visitor (ie, log out and, if necessary, clear cookies).  This in on a 4.6.3 site with events version 0.1d3.</para>
+        </listitem>
+        <listitem>
+          <para>Select an available event</para>
+        </listitem>
+        <listitem>
+          <para>A link such as <computeroutput>Registration: Deadline is 03/15/2004 10:00am. 
+» Login or sign up to register for this event.</computeroutput> is visible.  Clyick on "Login or sign up"
+          </para>
+        </listitem>
+        <listitem>
+          <para>Complete a new registration.  Afterwards, you should be redirected back to the same page.</para>
+        </listitem>
+      </orderedlist>
+      <para>Actual Results: The page says <computeroutput>"You do not have permission to register for this event."</computeroutput></para>
+      <para>Expected results: A link or form to sign up for the event is shown.</para>
+        </listitem>
+        <listitem>
+          <formalpara>
+            <title>Finding the problem</title>
+            <para>We start with the page that has the error.  In the URL it's <computeroutput>http://myserver.net/events/event-info.tcl</computeroutput>, so open the file <computeroutput>/var/lib/aolserver/service0/packages/events/www/event-info.tcl</computeroutput>.  It contains this line:</para>
+          </formalpara>
+          <programlisting>set can_register_p [events::security::can_register_for_event_p -event_id $event_id]</programlisting>
+          <para>We need to know what that procedure does, so go to <ulink url="/api-doc">/api-doc</ulink>, paste events::security::can_register_for_event_p into the ACS Tcl API Search box, and click Feeling Lucky.  The next pages shows the proc, and we click "show source" to see more information.  The body of the proc is simply</para>
+          <programlisting>return [permission::permission_p -party_id $user_id -object_id $event_id -privilege write]</programlisting>
+          <para>This means that a given user must have the write privilige on the event in order to register.  Let's assume that the priviliges inherit, so that if a user has the write privilige on the whole package, they will have the write privilege on the event.</para>
+        </listitem>
+        <listitem>
+          <formalpara>
+            <title>Setting Permissions</title>
+            <para>A permission has three parts: the privilige, the object of the privilige, and the subject being granted the privilige.  In this case the privilige is "write," the object is the Events package, and the subject is all Registered Users.</para>
+          </formalpara>
+          <orderedlist>
+            <listitem>
+              <para>To grant permissions on a package, start at the <ulink url="/admin/site-map">site map</ulink>.  Find the event package and click "Set permissions".  </para>
+            </listitem>
+            <listitem>
+              <para>Click "Grant Permission"</para>
+            </listitem>
+            <listitem>
+              <para>Grant the write permission to Registered Users.</para>
+      <figure>
+        <title>Granting Permissions</title>
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="images/grant-perm-463.png" format="PNG"/>
+          </imageobject>
+        </mediaobject>
+      </figure>
+      
+            </listitem>
+          </orderedlist>
+          <para>OpenACS 5.0 offers a prettier version at <ulink url="/admin/applications">/admin/applications</ulink>.</para>
+      <figure>
+        <title>Granting Permissions in 5.0</title>
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="images/grant-perm-50.png" format="PNG"/>
+          </imageobject>
+        </mediaobject>
+      </figure>
+        </listitem>
+      </itemizedlist>
+    </sect2>
   </sect1>
-</chapter>
 
+
+</chapter>
