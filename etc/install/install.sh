@@ -245,6 +245,7 @@ if [ $do_checkout == "yes" ]; then
     fi
 	
     echo "$0: Checking out OpenACS at $(date)"
+    chmod +x checkout.sh
     config_file=$config_file dotlrn=$dotlrn ./checkout.sh
 
     # The post_checkout script can copy back any files (AOLServer config files,
