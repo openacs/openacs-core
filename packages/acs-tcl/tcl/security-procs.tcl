@@ -1356,7 +1356,7 @@ ad_proc -public security::RestrictLoginToSSLP {} {
     return [parameter::get \
 		-boolean \
 		-parameter RestrictLoginToSSLP \
-		-package_id [acs_acs_kernel_id]]
+		-package_id [ad_acs_kernel_id]]
 }
 
 ad_proc -public security::require_secure_conn {} {
