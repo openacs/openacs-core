@@ -42,7 +42,7 @@ aa_register_case -cats {smoke production_safe} files__tcl_file_syntax_errors {
 }
 
 aa_register_case -cats {smoke production_safe} -error_level notice files__tcl_file_common_errors {
-    Check for some common error patterns 
+    Check for some common error patterns.
 
     @author Jeff Davis davis@xarg.net
 } {
@@ -70,7 +70,8 @@ aa_register_case -cats {smoke production_safe} -error_level notice files__tcl_fi
 }
 
 aa_register_case -cats {smoke production_safe} files__check_info_files {
-    Check that all the info files parse correctly
+    Check that all the info files parse correctly and are
+    internally consistent.
 
     @author Jeff Davis davis@xarg.net
 } {
@@ -177,7 +178,8 @@ aa_register_case -cats {smoke production_safe} files__check_upgrade_ordering {
 
 
 aa_register_case -cats {smoke} files__check_xql_files {
-    Check for some common errors in the xql files.
+    Check for some common errors in the xql files like 
+    missing rdbms, missing corresponding tcl files, etc.
 
     Not production safe since malformed xql can crass aolserver in the parse.
 
@@ -221,31 +223,32 @@ aa_register_case -cats {smoke} files__check_xql_files {
 
         regexp {(.*)[.]xql$} $file match base
 
-
         if {![file exists ${base}.tcl] && ![file exists ${base}.vuh]} {
             # the file did not exist so we must have a -db extension...
             regexp {(.*?)(-)?([A-Za-z_]*)[.]xql$} $file match base dummy db
             ns_log debug "JCD: acs_tcl__check_xql_files: $db $base from $file"
-            if { ![empty_string_p $db]
+            if { ![empty_string_p $db] 
+                 && ![empty_string_p $dummy]
                  && ![string match $db oracle]
                  && ![string match $db postgresql] } {
                 aa_log_result fail "bad db name \"$db\" file $file (or maybe .tcl or .vuh missing)"
             } elseif { ![empty_string_p $db]
+                       && ![empty_string_p $dummy]
                        && ![regexp $db $data] } {
                 aa_log_result fail "rdbms \"$db\" missing $file"
-            } elseif {[empty_string_p $db]
+            } elseif {[empty_string_p $dummy]
                       && [regexp {<rdbms>} $data] } {
                 aa_log_result fail "rdbms found in generic $file"
             }
 
-            if {[string equal $db postgresql] || [empty_string_p $db]} {
-                if {[regexp {(nvl[ ]*\(|decode[ ]*\()} $data]} {
-                    aa_log_result fail "postgres or generic with oracle code $file" 
+            if {[string equal $db postgresql] || [empty_string_p $dummy]} {
+                if {[regexp -nocase {(nvl[ ]*\(|decode[ ]*\(| connect by )} $data match]} {
+                    aa_log_result fail "postgres or generic with oracle code $file: $match" 
                 }
                 set allxql($base) $file
             } else {
-                if {[regexp {(now[ ]*\()} $data] || [empty_string_p $db]} {
-                    aa_log_result fail "oracle or generic with oracle code $file" 
+                if {[regexp -nocase {(now[ ]*\(| limit |outer join )} $data match ] || [empty_string_p $dummy]} {
+                    aa_log_result fail "oracle or generic with postgres code $file: $match" 
                 }
                 set allxql($base) $file
             }
@@ -258,7 +261,11 @@ aa_register_case -cats {smoke} files__check_xql_files {
         # check there is a corresponding .tcl file
         if {![file exists ${xql}.tcl]
             && ![file exists ${xql}.vuh]} {
-            aa_log_result fail "missing .tcl or .vuh file for $allxql($xql)" 
+            # JCD: Hack to exclude calendar/www/views which is the only current file which has 
+            # no associated tcl file.
+            if {[string first calendar/www/views $allxql($xql)] <  0} {
+                aa_log_result fail "missing .tcl or .vuh file for $allxql($xql)" 
+            }
         }
         if { 0 } { 
             # check that if there is a db specific version that the corresponding
