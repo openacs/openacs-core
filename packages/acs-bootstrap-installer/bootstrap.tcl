@@ -124,34 +124,17 @@ set errno [catch {
     # Load the Tcl package init files.
     apm_bootstrap_load_libraries -init acs-tcl
 
-    foreach package_key [db_list package_keys_select {
-	select package_key from apm_enabled_package_versions
-    }] {
-	nsv_set apm_enabled_package $package_key 1
-    }
-
     #
     # Check for the presence of the automated testing package.
     #
     set load_tests_p [apm_package_enabled_p "acs-automated-testing"]
 
-    # Load *-procs.tcl and *-init.tcl files for enabled packages.
-    apm_load_libraries -procs
+    foreach package_key [db_list package_keys_select {
+	select package_key from apm_enabled_package_versions
+    }] {
+        nsv_set apm_enabled_package $package_key 1    
 
-    # Load up the Queries (OpenACS, ben@mit.edu)
-    apm_load_queries
-
-    # Load up the Automated Tests and associated Queries if necessary
-    if {$load_tests_p} {
-      apm_load_libraries -test_procs
-      apm_load_queries -test_queries
-    }
-
-    apm_load_libraries -init
-
-    # Load up the Automated Tests initialisation scripts is necessary
-    if {$load_tests_p} {
-      apm_load_libraries -test_init
+        apm_load_package -load_tests_p $load_tests_p $package_key
     }
 
     if { ![nsv_exists rp_properties request_count] } {
