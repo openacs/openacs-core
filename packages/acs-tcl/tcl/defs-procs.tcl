@@ -804,19 +804,20 @@ ad_proc -public ad_return_url {
 
 } {
 
-    set query_list [ns_conn query]
+    set query_list [export_entire_form_as_url_vars]
 
     foreach {extra_arg} $extra_args {
         lappend query_list [join $extra_arg "="]
     }
 
     if { [llength $query_list] == 0 } {
-        return [ns_conn url]
+        set url [ns_conn url]
     } else {
-        if { $urlencode_p } {
-            return [ns_urlencode "[ns_conn url]?[join $query_list "&"]"]
-        } else {
-            return "[ns_conn url]?[join $query_list "&"]"
-        }
+        set url "[ns_conn url]?[join $query_list "&"]"
+    }
+    if { $urlencode_p } {
+        return [ns_urlencode $url]
+    } else {
+        return $url
     }
 }
