@@ -643,3 +643,27 @@ ad_proc ad_dispatch {
 } {
     return [apply ${method_name}__$type $args]
 }
+
+ad_proc -public ad_assert_arg_value_in_list {
+    arg_name
+    allowed_values_list
+} {
+    For use at the beginning of the body of a procedure to
+    check that an argument has one of a number of allowed values.
+
+    @arg_name The name of the argument to check
+    @allowed_values_list The list of values that are permissible for the argument
+
+    @return Returns 1 if the argument has a valid value, throws an informative
+                    error otherwise.
+
+    @author Peter Marklund
+} {
+    upvar $arg_name arg_value
+
+    if { [lsearch -exact $allowed_values_list $arg_value] == -1 } {
+        error "argument $arg_name has value $arg_value but must be in ([join $allowed_values_list ", "])"
+    }
+
+    return 1
+}
