@@ -171,10 +171,7 @@ ad_proc -public template::util::spellcheck::get_element_formtext {
 
     set spelling_wrapper [file join [acs_root_dir] bin webspell]
 
-    set spellchecker_path [parameter::get_from_package_key \
-			       -package_key acs-templating \
-			       -parameter SpellcheckerPath \
-			       -default /usr/bin/aspell]
+    set spellchecker_path [nsv_get spellchecker path]
 
     set language [parameter::get_from_package_key \
 			       -package_key acs-templating \
@@ -324,14 +321,23 @@ ad_proc -public template::util::spellcheck::spellcheck_properties {
 	# That's either because spell-checking is disabled for this element, or we're not dealing with a submit.
 	# Whichever it is, let's see if, and then how, we should render the spellcheck "sub widget".
 	
-	array set widget_info [string trim [parameter::get_from_package_key -package_key acs-templating \
-						-parameter SpellcheckFormWidgets \
-						-default ""]]
-	
-	set spellcheck_p [expr [array size widget_info] \
-			      && ![info exists element(nospell)] \
-			      && ([string equal $element(widget) "richtext"] || [string equal $element(widget) "text"] || [string equal $element(widget) "textarea"]) \
-			      && [lsearch -exact [array names widget_info] $element(widget)] != -1]
+	if { [empty_string_p [nsv_get spellchecker path]] } {
+
+	    # The aspell or ispell bibary was not found during server startup - turn spell-checking off.
+	    set spellcheck_p 0    
+
+	} else {
+
+	    array set widget_info [string trim [parameter::get_from_package_key -package_key acs-templating \
+						    -parameter SpellcheckFormWidgets \
+						    -default ""]]
+	    
+	    set spellcheck_p [expr [array size widget_info] \
+				  && ![info exists element(nospell)] \
+				  && ([string equal $element(widget) "richtext"] || [string equal $element(widget) "textarea"] || [string equal $element(widget) "text"]) \
+				  && [lsearch -exact [array names widget_info] $element(widget)] != -1]
+	    
+	}
 	
 	if { $spellcheck_p } {
 	    # This is not a submit; we are rendering the form element for the first time.
