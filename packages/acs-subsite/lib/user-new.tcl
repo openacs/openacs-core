@@ -98,11 +98,24 @@ ad_form -name register -export {next_url user_id} -form [auth::get_registration_
         set return_url [subsite::get_element -element url]
     }
 
+    # If the user is self registering, then try to set the preferred
+    # locale (assuming the user has set it as a anonymous visitor
+    # before registering).
+    if { $self_register_p } {
+	# We need to explicitly get the cookie and not use
+	# lang::user::locale, as we are now a registered user,
+	# but one without a valid locale setting.
+	set locale [ad_get_cookie "ad_locale"]
+	if { ![empty_string_p $locale] } {
+	    lang::user::set_locale $locale
+	    ad_set_cookie -replace t -max_age 0 "ad_locale" ""
+	}
+    }
+
     # Handle account_message
     if { ![empty_string_p $creation_info(account_message)] && $self_register_p } {
         # Only do this if user is self-registering
         # as opposed to creating an account for someone else
-
         ad_returnredirect [export_vars -base "[subsite::get_element -element url]register/account-message" { { message $creation_info(account_message) } return_url }]
         ad_script_abort
     } else {
