@@ -2,7 +2,8 @@
 #
 # Read the README file before executing this script.
 #
-# Checks out all source code needed for OpenACS and .LRN from CVS
+# Checks out all source code needed for .LRN and OpenACS from CVS and copies
+# the supervise run script that runs AOLServer to the server root directory.
 #
 # This script should be executed as root and requires the following
 # environment variables to be set:
@@ -25,18 +26,9 @@ source functions.sh
 # Fetch config parameters
 serverroot=`get_config_param serverroot`
 start_server_command=`get_config_param start_server_command`
-pre_checkout_script=`get_config_param pre_checkout_script`
-post_checkout_script=`get_config_param post_checkout_script`
 use_timesaver_files=`get_config_param use_timesaver_files`
 
 echo "$0: Starting checkout for server path $serverroot with config_file $config_file and dotlrn=$dotlrn"
-
-# The idea of this script is to move away any files or changes
-# to the source tree that we want to keep (for example an
-# edited AOLServer config file, see README)
-if [ -n "$pre_checkout_script" ]; then
-    source $pre_checkout_script
-fi
 
 # Move away the old sources
 if [ -d ${serverroot} ]; then
@@ -71,9 +63,9 @@ if [ $dotlrn == "yes" ]; then
     echo "$0: Checking out packages from branch $oacs_branch"
     cd ${serverroot}/packages
     cvs -q -z3 -d :pserver:anonymous@openacs.org:/cvsroot co -r $oacs_branch \
-      acs-datetime acs-developer-support acs-events acs-mail-lite \
-      attachments bulk-mail calendar faq file-storage forums general-comments \
-      news notifications ref-timezones user-preferences
+        acs-datetime acs-developer-support acs-events acs-mail-lite \
+        attachments bulk-mail calendar faq file-storage forums general-comments \
+        news notifications ref-timezones user-preferences survey
 
     # Copy short reference files to save time when installing datamodel
     if parameter_true "$use_timesaver_files"; then
@@ -90,23 +82,11 @@ if [ $dotlrn == "yes" ]; then
         dotlrn_branch="HEAD"
     fi
     echo "$0: Checking out .LRN from branch $dotlrn_branch"
-    cvs -q -d :pserver:anonymous:@dotlrn.openforce.net:/dotlrn-cvsroot login
-    cvs -q -z3 -d :pserver:anonymous@dotlrn.openforce.net:/dotlrn-cvsroot \
+    cvs -q -d :pserver:anonymous:@dotlrn.openacs.org:/dotlrn-cvsroot login
+    cvs -q -z3 -d :pserver:anonymous@dotlrn.openacs.org:/dotlrn-cvsroot \
         co -r $dotlrn_branch dotlrn-core
-
-    # Copy graphics files
-    echo "$0: Copying graphics files"
-    mkdir ${serverroot}/www/graphics
-    cp ${serverroot}/packages/dotlrn/www/graphics/* ${serverroot}/www/graphics
-fi
-
-# The idea of this script is to copy in any files (AOLServer config files,
-# log files etc.) under the new source tree, and apply any patches
-# that should be applied (see README).
-if [ -n "$post_checkout_script" ]; then
-    source $post_checkout_script
 fi
 
 # Set proper privileges
 chown -R nsadmin.web ${serverroot}
-chmod -R g+rwX ${serverroot}
+chmod -R go+rwX ${serverroot}
