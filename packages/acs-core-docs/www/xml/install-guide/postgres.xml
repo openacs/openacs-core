@@ -14,7 +14,7 @@
   
   <para>Skip this section if you will run only Oracle.</para>
 
-  <para>OpenACS &version; will run with <link linkend="source-postgresql">PostgreSQL</link> 7.3.2, 7.3.3, and 7.3.4.  7.3.4 is the recommended version of PostgreSQL.  PostgreSQL 7.4 has been verified.</para>
+  <para>OpenACS &version; will run with <link linkend="source-postgresql">PostgreSQL</link> 7.3.2, 7.3.3, and 7.3.4 and 7.4.x.  7.4.5 is the recommended version of PostgreSQL.</para>
 
   <itemizedlist>
     <listitem>
@@ -79,16 +79,16 @@ su - postgres</action></screen>
   <orderedlist>
     <listitem>
       <formalpara>
-        <title>Unpack PostgreSQL 7.3.4.</title>
+        <title>Unpack PostgreSQL 7.4.5.</title>
         <para>If you have not downloaded the postgresql tarball to
-        <computeroutput>/tmp/postgresql-7.3.4.tar.gz</computeroutput>,
+        <computeroutput>/tmp/postgresql-7.4.5.tar.gz</computeroutput>,
         <link linkend="source-postgresql">get it</link>.</para>
       </formalpara>
       <screen>[root root]# <userinput>cd /usr/local/src</userinput>
-[root src]# <userinput>tar xzf /tmp/postgresql-7.3.4.tar.gz</userinput>
+[root src]# <userinput>tar xzf /tmp/postgresql-7.4.5.tar.gz</userinput>
 [root src]# 
 <action>cd /usr/local/src
-tar xzf /tmp/postgresql-7.3.4.tar.gz</action></screen>
+tar xzf /tmp/postgresql-7.4.5.tar.gz</action></screen>
     </listitem>
     <listitem>
       <formalpara>
@@ -133,13 +133,13 @@ tar xfj /tmp/postgresql-7.4.1.tar.bz2</action></screen>
       <screen>[root src]# <userinput>groupadd web</userinput>
 [root src]# <userinput>useradd -g web -d /usr/local/pgsql postgres</userinput>
 [root src]# <userinput>mkdir -p /usr/local/pgsql</userinput>
-[root src]# <userinput>chown -R postgres.web /usr/local/pgsql /usr/local/src/postgresql-7.3.4</userinput>
+[root src]# <userinput>chown -R postgres.web /usr/local/pgsql /usr/local/src/postgresql-7.4.5</userinput>
 [root src]# <userinput>chmod 750 /usr/local/pgsql</userinput>
 [root src]#
 <action>groupadd web
 useradd -g web -d /usr/local/pgsql postgres
 mkdir -p /usr/local/pgsql
-chown -R postgres.web /usr/local/pgsql /usr/local/src/postgresql-7.3.4
+chown -R postgres.web /usr/local/pgsql /usr/local/src/postgresql-7.4.5
 chmod 750 /usr/local/pgsql</action></screen>
       <itemizedlist>
         <listitem>
@@ -206,28 +206,28 @@ PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:/usr/bin/X11:/
       </formalpara>
           <para>On debian woody (stable, 3.0), do <computeroutput>./configure --without-readline --without-zlib</computeroutput>.</para>
       <screen>[root src]# <userinput>su - postgres</userinput>
-[postgres pgsql]$<userinput> cd /usr/local/src/postgresql-7.3.4</userinput>
-[postgres postgresql-7.3.4]$ <userinput>./configure --with-includes=/sw/include/ --with-libraries=/sw/lib --enable-locale --enable-multibyte \
+[postgres pgsql]$<userinput> cd /usr/local/src/postgresql-7.4.5</userinput>
+[postgres postgresql-7.4.5]$ <userinput>./configure --with-includes=/sw/include/ --with-libraries=/sw/lib --enable-locale --enable-multibyte \
   --enable-syslog --enable-unicode-conversion --enable-recode </userinput>
 creating cache ./config.cache
 checking host system type... i686-pc-linux-gnu
 (many lines omitted>
 linking ./src/makefiles/Makefile.linux to src/Makefile.port
 linking ./src/backend/port/tas/dummy.s to src/backend/port/tas.s
-[postgres postgresql-7.3.4]$ <userinput>make all</userinput>
+[postgres postgresql-7.4.5]$ <userinput>make all</userinput>
 make -C doc all
-make[1]: Entering directory `/usr/local/src/postgresql-7.3.4/doc'
+make[1]: Entering directory `/usr/local/src/postgresql-7.4.5/doc'
 (many lines omitted)
-make[1]: Leaving directory `/usr/local/src/postgresql-7.3.4/src'
+make[1]: Leaving directory `/usr/local/src/postgresql-7.4.5/src'
 All of PostgreSQL successfully made. Ready to install.
-[postgres postgresql-7.3.4]$ <userinput>make install</userinput>
+[postgres postgresql-7.4.5]$ <userinput>make install</userinput>
 make -C doc install
-make[1]: Entering directory `/usr/local/src/postgresql-7.3.4/doc'
+make[1]: Entering directory `/usr/local/src/postgresql-7.4.5/doc'
 (many lines omitted)
 Thank you for choosing PostgreSQL, the most advanced open source database
 engine.
 <action>su - postgres
-cd /usr/local/src/postgresql-7.3.4
+cd /usr/local/src/postgresql-7.4.5
 ./configure
 make all
 make install</action></screen>
@@ -241,15 +241,15 @@ make install</action></screen>
 	  PostgreSQL.
 	</para>
       </formalpara>
-      <screen>[postgres postgresql-7.3.4]$ <userinput>/usr/local/pgsql/bin/initdb -D /usr/local/pgsql/data</userinput>
+      <screen>[postgres postgresql-7.4.5]$ <userinput>/usr/local/pgsql/bin/initdb -D /usr/local/pgsql/data</userinput>
 The files belonging to this database system will be owned by user "postgres".
 This user must also own the server process.
 (17 lines omitted)
 or
     /usr/local/pgsql/bin/pg_ctl -D /usr/local/pgsql/data -l logfile start
-[postgres postgresql-7.3.4]$ <userinput>/usr/local/pgsql/bin/pg_ctl -D /usr/local/pgsql/data -l /usr/local/pgsql/data/server.log start</userinput>
+[postgres postgresql-7.4.5]$ <userinput>/usr/local/pgsql/bin/pg_ctl -D /usr/local/pgsql/data -l /usr/local/pgsql/data/server.log start</userinput>
 postmaster successfully started
-[postgres postgresql-7.3.4]$
+[postgres postgresql-7.4.5]$
 <action>/usr/local/pgsql/bin/initdb -D /usr/local/pgsql/data
 /usr/local/pgsql/bin/pg_ctl -D /usr/local/pgsql/data -l /usr/local/pgsql/data/server.log start</action></screen>
 	<para>
@@ -266,7 +266,7 @@ postmaster successfully started
 	  databases are created.  We can verify that it was created
 	  with the createlang command in list mode.</para>
       </formalpara>
-      <screen>[postgres postgresql-7.3.4]$ <userinput>createlang plpgsql template1</userinput>
+      <screen>[postgres postgresql-7.4.5]$ <userinput>createlang plpgsql template1</userinput>
 [postgres pgsql]$ <userinput>createlang -l template1</userinput>
 Procedural languages
   Name   | Trusted?
@@ -274,7 +274,7 @@ Procedural languages
  plpgsql | t
 (1 row)
 
-[postgres pgsql-7.3.4]$
+[postgres pgsql-7.4.5]$
 <action>createlang plpgsql template1
 createlang -l template1</action></screen>
     </listitem>

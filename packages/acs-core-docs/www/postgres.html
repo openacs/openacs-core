@@ -1,7 +1,7 @@
 <html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Install PostgreSQL</title><meta name="generator" content="DocBook XSL Stylesheets V1.64.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="complete-install.html" title="Chapter 3. Complete Installation"><link rel="previous" href="oracle.html" title="Install Oracle 8.1.7"><link rel="next" href="aolserver4.html" title="Install AOLserver 4"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="oracle.html">Prev</a> </td><th width="60%" align="center">Chapter 3. Complete Installation</th><td width="20%" align="right"> <a accesskey="n" href="aolserver4.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="postgres"></a>Install PostgreSQL</h2></div></div><div></div></div><div class="authorblurb"><p>by <a href="mailto:vinod@kurup.com" target="_top">Vinod Kurup</a></p>
           OpenACS docs are written by the named authors, and may be edited
           by OpenACS documentation staff.
-        </div><p>Skip this section if you will run only Oracle.</p><p>OpenACS 5.1.1 will run with <a href="individual-programs.html#source-postgresql">PostgreSQL</a> 7.3.2, 7.3.3, and 7.3.4.  7.3.4 is the recommended version of PostgreSQL.  PostgreSQL 7.4 has been verified.</p><div class="itemizedlist"><ul type="disc"><li><p><a name="install-postgres-mac"></a><b>Special notes for Mac OS X. </b>If you are running Mac OS X prior to 10.3, you should be able to install and use PostGreSQL 7.3.x.  Mac OS X 10.3 requires PostGreSQL 7.4.</p></li><li><p><a name="install-postgres-debian"></a><b>Special Notes for Debian. </b></p><p>Debian users, especially Debian stable users, should
+        </div><p>Skip this section if you will run only Oracle.</p><p>OpenACS 5.1.1 will run with <a href="individual-programs.html#source-postgresql">PostgreSQL</a> 7.3.2, 7.3.3, and 7.3.4 and 7.4.x.  7.4.5 is the recommended version of PostgreSQL.</p><div class="itemizedlist"><ul type="disc"><li><p><a name="install-postgres-mac"></a><b>Special notes for Mac OS X. </b>If you are running Mac OS X prior to 10.3, you should be able to install and use PostGreSQL 7.3.x.  Mac OS X 10.3 requires PostGreSQL 7.4.</p></li><li><p><a name="install-postgres-debian"></a><b>Special Notes for Debian. </b></p><p>Debian users, especially Debian stable users, should
       install PostGreSQL from source as detailed below. Debian
       unstable users: the following process has been known to work
       (but you should double-check that the version of PostGreSQL is
@@ -35,13 +35,13 @@ service postgresql start
 echo "export LD_LIBRARY_PATH=/usr/local/pgsql/lib" &gt;&gt; ~postgres/.bash_profile
 echo "export PATH=$PATH:/usr/local/pgsql/bin" &gt;&gt; ~postgres/.bash_profile
 groupadd web
-su - postgres</span></span></pre><p>... and then skip to <a href="postgres.html#install-plpgsql" title="">8</a>.  Something similar may work for other binary packages as well.</p></li><li><p>Safe approach: install from source</p><div class="orderedlist"><ol type="1"><li><p><b>Unpack PostgreSQL 7.3.4. </b>If you have not downloaded the postgresql tarball to
-        <tt class="computeroutput">/tmp/postgresql-7.3.4.tar.gz</tt>,
+su - postgres</span></span></pre><p>... and then skip to <a href="postgres.html#install-plpgsql" title="">8</a>.  Something similar may work for other binary packages as well.</p></li><li><p>Safe approach: install from source</p><div class="orderedlist"><ol type="1"><li><p><b>Unpack PostgreSQL 7.4.5. </b>If you have not downloaded the postgresql tarball to
+        <tt class="computeroutput">/tmp/postgresql-7.4.5.tar.gz</tt>,
         <a href="individual-programs.html#source-postgresql">get it</a>.</p><pre class="screen">[root root]# <b class="userinput"><tt>cd /usr/local/src</tt></b>
-[root src]# <b class="userinput"><tt>tar xzf /tmp/postgresql-7.3.4.tar.gz</tt></b>
+[root src]# <b class="userinput"><tt>tar xzf /tmp/postgresql-7.4.5.tar.gz</tt></b>
 [root src]# 
 <span class="action"><span class="action">cd /usr/local/src
-tar xzf /tmp/postgresql-7.3.4.tar.gz</span></span></pre></li><li><p><b>ALTERNATIVE: Unpack PostgreSQL 7.4.1. </b>If you have not downloaded the postgresql tarball to
+tar xzf /tmp/postgresql-7.4.5.tar.gz</span></span></pre></li><li><p><b>ALTERNATIVE: Unpack PostgreSQL 7.4.1. </b>If you have not downloaded the postgresql tarball to
         <tt class="computeroutput">/tmp/postgresql-7.4.1.tar.bz2</tt>,
         <a href="individual-programs.html#source-postgresql">get it</a>.</p><pre class="screen">[root root]# <b class="userinput"><tt>cd /usr/local/src</tt></b>
 [root src]# <b class="userinput"><tt>tar xfj /tmp/postgresql-7.4.1.tar.bz2</tt></b>
@@ -64,13 +64,13 @@ tar xfj /tmp/postgresql-7.4.1.tar.bz2</span></span></pre></li><li><p><b>Install 
 	</p><pre class="screen">[root src]# <b class="userinput"><tt>groupadd web</tt></b>
 [root src]# <b class="userinput"><tt>useradd -g web -d /usr/local/pgsql postgres</tt></b>
 [root src]# <b class="userinput"><tt>mkdir -p /usr/local/pgsql</tt></b>
-[root src]# <b class="userinput"><tt>chown -R postgres.web /usr/local/pgsql /usr/local/src/postgresql-7.3.4</tt></b>
+[root src]# <b class="userinput"><tt>chown -R postgres.web /usr/local/pgsql /usr/local/src/postgresql-7.4.5</tt></b>
 [root src]# <b class="userinput"><tt>chmod 750 /usr/local/pgsql</tt></b>
 [root src]#
 <span class="action"><span class="action">groupadd web
 useradd -g web -d /usr/local/pgsql postgres
 mkdir -p /usr/local/pgsql
-chown -R postgres.web /usr/local/pgsql /usr/local/src/postgresql-7.3.4
+chown -R postgres.web /usr/local/pgsql /usr/local/src/postgresql-7.4.5
 chmod 750 /usr/local/pgsql</span></span></pre><div class="itemizedlist"><ul type="circle"><li><p><b>Mac OS X: Do instead: </b>First make sure the gids and uids below are available (change them if 
 they  are not).To list taken uids and gids:</p><pre class="screen"><b class="userinput"><tt>nireport / /groups name gid | grep "[0123456789][0123456789]"
 nireport / /users name uid | grep "[0123456789][0123456789]"</tt></b>
@@ -100,45 +100,45 @@ PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:/usr/bin/X11:/
 	  Change to the postgres user and run <tt class="computeroutput">./configure</tt> to set the compilation options automatically. This is the point at which you can
 	  configure PostgreSQL in various ways. For example, if you want to
 	  enable
-	  Unicode<a class="indexterm" name="id2508217"></a> support, add the flags <tt class="computeroutput">--enable-locale</tt> and <tt class="computeroutput">--enable-multibyte</tt>. If you want to see what the other possibilities are, run <tt class="computeroutput">./configure --help</tt>.
+	  Unicode<a class="indexterm" name="id2511813"></a> support, add the flags <tt class="computeroutput">--enable-locale</tt> and <tt class="computeroutput">--enable-multibyte</tt>. If you want to see what the other possibilities are, run <tt class="computeroutput">./configure --help</tt>.
 	</p><p>On debian woody (stable, 3.0), do <tt class="computeroutput">./configure --without-readline --without-zlib</tt>.</p><pre class="screen">[root src]# <b class="userinput"><tt>su - postgres</tt></b>
-[postgres pgsql]$<b class="userinput"><tt> cd /usr/local/src/postgresql-7.3.4</tt></b>
-[postgres postgresql-7.3.4]$ <b class="userinput"><tt>./configure --with-includes=/sw/include/ --with-libraries=/sw/lib --enable-locale --enable-multibyte \
+[postgres pgsql]$<b class="userinput"><tt> cd /usr/local/src/postgresql-7.4.5</tt></b>
+[postgres postgresql-7.4.5]$ <b class="userinput"><tt>./configure --with-includes=/sw/include/ --with-libraries=/sw/lib --enable-locale --enable-multibyte \
   --enable-syslog --enable-unicode-conversion --enable-recode </tt></b>
 creating cache ./config.cache
 checking host system type... i686-pc-linux-gnu
 (many lines omitted&gt;
 linking ./src/makefiles/Makefile.linux to src/Makefile.port
 linking ./src/backend/port/tas/dummy.s to src/backend/port/tas.s
-[postgres postgresql-7.3.4]$ <b class="userinput"><tt>make all</tt></b>
+[postgres postgresql-7.4.5]$ <b class="userinput"><tt>make all</tt></b>
 make -C doc all
-make[1]: Entering directory `/usr/local/src/postgresql-7.3.4/doc'
+make[1]: Entering directory `/usr/local/src/postgresql-7.4.5/doc'
 (many lines omitted)
-make[1]: Leaving directory `/usr/local/src/postgresql-7.3.4/src'
+make[1]: Leaving directory `/usr/local/src/postgresql-7.4.5/src'
 All of PostgreSQL successfully made. Ready to install.
-[postgres postgresql-7.3.4]$ <b class="userinput"><tt>make install</tt></b>
+[postgres postgresql-7.4.5]$ <b class="userinput"><tt>make install</tt></b>
 make -C doc install
-make[1]: Entering directory `/usr/local/src/postgresql-7.3.4/doc'
+make[1]: Entering directory `/usr/local/src/postgresql-7.4.5/doc'
 (many lines omitted)
 Thank you for choosing PostgreSQL, the most advanced open source database
 engine.
 <span class="action"><span class="action">su - postgres
-cd /usr/local/src/postgresql-7.3.4
+cd /usr/local/src/postgresql-7.4.5
 ./configure
 make all
 make install</span></span></pre></li><li><a name="install-postgres-startup"></a><p><b>Start PostgreSQL. </b>
 	  The <tt class="computeroutput">initdb</tt> command initializes the
 	  database. <tt class="computeroutput">pg_ctl</tt> is used to start up
 	  PostgreSQL.
-	</p><pre class="screen">[postgres postgresql-7.3.4]$ <b class="userinput"><tt>/usr/local/pgsql/bin/initdb -D /usr/local/pgsql/data</tt></b>
+	</p><pre class="screen">[postgres postgresql-7.4.5]$ <b class="userinput"><tt>/usr/local/pgsql/bin/initdb -D /usr/local/pgsql/data</tt></b>
 The files belonging to this database system will be owned by user "postgres".
 This user must also own the server process.
 (17 lines omitted)
 or
     /usr/local/pgsql/bin/pg_ctl -D /usr/local/pgsql/data -l logfile start
-[postgres postgresql-7.3.4]$ <b class="userinput"><tt>/usr/local/pgsql/bin/pg_ctl -D /usr/local/pgsql/data -l /usr/local/pgsql/data/server.log start</tt></b>
+[postgres postgresql-7.4.5]$ <b class="userinput"><tt>/usr/local/pgsql/bin/pg_ctl -D /usr/local/pgsql/data -l /usr/local/pgsql/data/server.log start</tt></b>
 postmaster successfully started
-[postgres postgresql-7.3.4]$
+[postgres postgresql-7.4.5]$
 <span class="action"><span class="action">/usr/local/pgsql/bin/initdb -D /usr/local/pgsql/data
 /usr/local/pgsql/bin/pg_ctl -D /usr/local/pgsql/data -l /usr/local/pgsql/data/server.log start</span></span></pre><p>
 	  PostgreSQL errors will be logged in
@@ -147,7 +147,7 @@ postmaster successfully started
 	  access. Plpgsql is a PL/SQL-like language.  We add it to
 	  template1, which is the template from which all new
 	  databases are created.  We can verify that it was created
-	  with the createlang command in list mode.</p><pre class="screen">[postgres postgresql-7.3.4]$ <b class="userinput"><tt>createlang plpgsql template1</tt></b>
+	  with the createlang command in list mode.</p><pre class="screen">[postgres postgresql-7.4.5]$ <b class="userinput"><tt>createlang plpgsql template1</tt></b>
 [postgres pgsql]$ <b class="userinput"><tt>createlang -l template1</tt></b>
 Procedural languages
   Name   | Trusted?
@@ -155,7 +155,7 @@ Procedural languages
  plpgsql | t
 (1 row)
 
-[postgres pgsql-7.3.4]$
+[postgres pgsql-7.4.5]$
 <span class="action"><span class="action">createlang plpgsql template1
 createlang -l template1</span></span></pre></li><li><a name="install-postgres-test"></a><p><b>Test PostgreSQL (OPTIONAL). </b>Create a database and try some simple commands. The output should be as shown.
 	</p><pre class="screen">[postgres pgsql]$ <b class="userinput"><tt>createdb mytestdb</tt></b>
