@@ -15,6 +15,8 @@ doc_body_append "[apm_header "Reload a Package"]
 # files in $files.
 apm_mark_version_for_reload $version_id files
 
+set file_id_list [list]
+
 if { [llength $files] == 0 } {
     doc_body_append "There are no changed files to reload in this package.<p>"
 } else {
@@ -29,7 +31,8 @@ if { [llength $files] == 0 } {
 	} else {
 	    # This file isn't being watched right now - provide a link setting a watch on it.
 	    set files_to_watch_p 1
-	    doc_body_append " (<a href=\"file-watch?file_id=$file_id\">watch this file</a>)"
+	    doc_body_append " (<a href=\"file-watch?[export_vars { file_id }]\">watch this file</a>)"
+            lappend file_id_list $file_id
 	}
 	doc_body_append "\n"
     }
@@ -40,6 +43,8 @@ if { [info exists files_to_watch_p] } {
     doc_body_append "If you know you're going to be modifying one of the above files frequently,
     select the \"watch this file\" link next to a filename to cause the interpreters to
     reload the file immediately whenever it is changed.<p>
+    (<a href=\"file-watch?[export_vars { { file_id:multiple $file_id_list } }]\">watch all above files</a>)
+    <p>
 "
 }
 
