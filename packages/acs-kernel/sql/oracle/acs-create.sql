@@ -175,7 +175,7 @@ as
 
 -- faster simpler view
 -- does not check for registered user/banned etc
-create view all_users
+create or replace view acs_users_all
 as
 select pa.*, pe.*, u.*
 from  parties pa, persons pe, users u
