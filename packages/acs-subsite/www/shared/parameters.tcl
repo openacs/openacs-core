@@ -7,6 +7,7 @@ ad_page_contract {
 } {
     {package_id {[ad_conn package_id]}}
     {return_url {[ad_conn url]}}
+    {section ""}
 }
 
 permission::require_permission -object_id $package_id -privilege admin
@@ -37,6 +38,12 @@ set form {
 set display_warning_p 0
 set counter 0
 set focus_elm {}
+if {![empty_string_p $section]} {
+    set section_where_clause [db_map section_where_clause]
+} else {
+    set section_where_clause ""
+}
+
 db_foreach select_params {} {
     if { [empty_string_p $section_name] } {
         set section_name "Main"
@@ -70,7 +77,7 @@ db_foreach select_params {} {
 set focus "parameters.$focus_elm"
 
 if { $counter > 0 } {
-    ad_form -name parameters -cancel_url $return_url -form $form -on_request {
+    ad_form -name parameters -export {section} -cancel_url $return_url -form $form -on_request {
         foreach name [array names param] {
             set $name $param($name)
         }
