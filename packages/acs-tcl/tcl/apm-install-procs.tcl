@@ -408,6 +408,9 @@ ad_proc -private apm_package_install {
     array set version [apm_read_package_info_file $spec_file_path]
     set package_key $version(package.key)
 
+    # Flush the installed_p cache
+    util_memoize_flush [list apm_package_installed_p_not_cached $package_key]
+
     if { $copy_files_p } {
 	if { [empty_string_p $install_path] } {
 	    set install_path [apm_workspace_install_dir]/$package_key

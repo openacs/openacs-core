@@ -654,9 +654,19 @@ ad_proc -public apm_package_installed_p {
     package_key
 } {
     Returns 1 if there is an installed package version corresponding to the package_key,
-    0 otherwise
+    0 otherwise. Uses a cached value for performance.
 } {
-    return [db_string apm_package_installed_p {} -default 0]
+    if { [util_memoize_initialized_p] } {
+        return [util_memoize [list apm_package_installed_p_not_cached $package_key]]
+    } else {
+        return [apm_package_installed_p_not_cached $package_key]
+    }
+}
+
+ad_proc -private apm_package_installed_p_not_cached {
+    package_key
+} {
+    return [db_string apm_package_installed_p {} -default 0]    
 }
 
 ad_proc -public apm_package_enabled_p {

@@ -136,6 +136,14 @@ ad_proc util_memoize_cached_p {script {max_age ""}} {
     }
 }
 
+ad_proc -public util_memoize_initialized_p {} {
+    Return 1 if the util_memoize cache has been initialized
+    and is ready to be used and 0 otherwise.
+    
+    @author Peter Marklund
+} {
+    return [ad_decode [catch {ns_cache set util_memoize __util_memoize_installed_p 1} error] 0 1 0]
+}
 
 ad_proc -public util_memoize_flush_regexp {
     -log:boolean

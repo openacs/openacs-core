@@ -92,7 +92,7 @@
     </querytext>
   </fullquery>
   
-  <fullquery name="apm_package_installed_p.apm_package_installed_p">      
+  <fullquery name="apm_package_installed_p_not_cached.apm_package_installed_p">      
     <querytext>
       select 1 from apm_package_versions
       where package_key = :package_key
