@@ -233,6 +233,7 @@ ad_proc -public template::util::date::get_property { what date } {
           append format $sql_form
           set space " "
 	}
+        set pad "00"
       }
       return "to_date('$value', '$format')"
     }
