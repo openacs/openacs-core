@@ -1,6 +1,6 @@
 ad_library {
 
-    Utility routines need by the bootstrapping process.
+    Utility routines needed by the bootstrapping process.
 
     @creation-date 4 Apr 2001
     @author Don Baccus (dhogaza@pacifier.com
