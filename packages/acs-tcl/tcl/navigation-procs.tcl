@@ -92,12 +92,6 @@ ad_proc -public ad_context_bar {
 
     set context [list]
 
-    if {[ad_conn user_id] != 0 && ![string match /pvt/home* [ad_conn url]]} {
-        # LARS: Removed for collaboraid.biz
-        #lappend context [list "[ad_pvt_home]" "[ad_pvt_home_name]"]
-    }
-
-
     set context [concat $context [ad_context_node_list $node_id]]
 
     if { [string match admin/* [ad_conn extra_url]] } {
