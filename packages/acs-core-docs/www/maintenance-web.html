@@ -1,7 +1,7 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Hosting Web Sites</title><meta name="generator" content="DocBook XSL Stylesheets V1.62.4"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="maintenance.html" title="Chapter 6. Maintenance"><link rel="previous" href="maintenance.html" title="Chapter 6. Maintenance"><link rel="next" href="database-management.html" title="Database Management"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="maintenance.html">Prev</a> </td><th width="60%" align="center">Chapter 6. Maintenance</th><td width="20%" align="right"> <a accesskey="n" href="database-management.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="maintenance-web"></a>Hosting Web Sites</h2></div></div><div></div></div><div class="authorblurb"><p>By <a href="mailto:joel@aufrecht.org" target="_top">Joel Aufrecht</a></p>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Hosting Web Sites</title><meta name="generator" content="DocBook XSL Stylesheets V1.62.0"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="maintenance.html" title="Chapter 6. Maintenance"><link rel="previous" href="maintenance.html" title="Chapter 6. Maintenance"><link rel="next" href="database-management.html" title="Database Management"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="maintenance.html">Prev</a> </td><th width="60%" align="center">Chapter 6. Maintenance</th><td width="20%" align="right"> <a accesskey="n" href="database-management.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="maintenance-web"></a>Hosting Web Sites</h2></div></div><div></div></div><div class="authorblurb"><p>By <a href="mailto:joel@aufrecht.org" target="_top">Joel Aufrecht</a></p>
           OpenACS docs are written by the named authors, and may be edited
           by OpenACS documentation staff.
-        </div><p>Maintenance tasks, optional software, and alternate configurations for AOLserver.</p><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="install-openacs-keepalive"></a>Keep AOLServer Alive</h3></div></div><div></div></div><p>Assuming AOLserver started cleanly in the previous step, we'll set it up so that it's always running, and automatically restarts whenever it dies or is stopped.  This step is strongly recommended, even for development sites, because it makes install and maintenance much simpler.  </p><p>The Reference Platform uses Daemontools to control AOLserver.  A simpler method, using <tt class="computeroutput">init</tt>, is <a href="maintenance-web.html#install-openacs-inittab" title="AOLserver keepalive with inittab">here</a>.</p><div class="orderedlist"><ol type="1"><li><p>Daemontools must already be installed.  If not, <a href="install-daemontools.html" title="Install Daemontools (OPTIONAL)">install it</a>.</p></li><li><p>Each service controlled by daemontools must have a
+        </div><p>Maintenance tasks, optional software, and alternate configurations for AOLserver.</p><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="install-openacs-keepalive"></a>Keep AOLserver Alive</h3></div></div><div></div></div><p>Assuming AOLserver started cleanly in the previous step, we'll set it up so that it's always running, and automatically restarts whenever it dies or is stopped.  This step is strongly recommended, even for development sites, because it makes install and maintenance much simpler.  </p><p>The Reference Platform uses Daemontools to control AOLserver.  A simpler method, using <tt class="computeroutput">init</tt>, is <a href="maintenance-web.html#install-openacs-inittab" title="AOLserver keepalive with inittab">here</a>.</p><div class="orderedlist"><ol type="1"><li><p>Daemontools must already be installed.  If not, <a href="install-daemontools.html" title="Install Daemontools (OPTIONAL)">install it</a>.</p></li><li><p>Each service controlled by daemontools must have a
         directory in <tt class="computeroutput">/service</tt>.  That
         directory must have a file called
         <tt class="computeroutput">run</tt>.  Daemontools then
@@ -43,7 +43,7 @@ root      5582  0.0  0.2  3276  628 pts/0    S    11:55   0:00 grep nsd
             this option.  This does not take the server out of keepalive mode, so it should still bounce back up immediately.
 
           </p></li></ul></div></li><li><p>Install a script to automate the stopping and starting
-          of aolserver services via daemontools.  You can then restart a service via <tt class="computeroutput">restart-aolserver <span class="replaceable"><span class="replaceable">service0</span></span></tt></p><pre class="screen">[root@yourserver root]# <b class="userinput"><tt>cp /var/lib/aolserver/<span class="replaceable"><span class="replaceable">service0</span></span>/packages/acs-core-docs/www/files/restart-aolserver-daemontools.txt /usr/local/bin/restart-aolserver</tt></b>
+          of AOLserver services via daemontools.  You can then restart a service via <tt class="computeroutput">restart-aolserver <span class="replaceable"><span class="replaceable">service0</span></span></tt></p><pre class="screen">[root@yourserver root]# <b class="userinput"><tt>cp /var/lib/aolserver/<span class="replaceable"><span class="replaceable">service0</span></span>/packages/acs-core-docs/www/files/restart-aolserver-daemontools.txt /usr/local/bin/restart-aolserver</tt></b>
 [root@yourserver root]# <b class="userinput"><tt>chmod 755 /usr/local/bin/restart-aolserver</tt></b>
 [root@yourserver root]#</pre></li><li><p>
         At this point, these commands will work only for the
@@ -51,10 +51,10 @@ root      5582  0.0  0.2  3276  628 pts/0    S    11:55   0:00 grep nsd
 [root@yourserver root]#</pre></li><li><p>Verify that the controls work.  You may want to <tt class="computeroutput">tail -f /var/lib/aolserver/<span class="replaceable"><span class="replaceable">service0</span></span>/log/<span class="replaceable"><span class="replaceable">service0</span></span>-error.log</tt> in another window, so you can see what happens when you type these commands.
       </p><p>
 
-        Most of this information comes from Tom Jackson's <a href="http://zmbh.com/daemontools-aolserver/aolserver+daemontools.html" target="_top">AOLServer+Daemontools
+        Most of this information comes from Tom Jackson's <a href="http://zmbh.com/daemontools-aolserver/aolserver+daemontools.html" target="_top">AOLserver+Daemontools
           Mini-HOWTO</a>.
 </p></li></ol></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="install-openacs-inittab"></a>AOLserver keepalive with inittab</h3></div></div><div></div></div><p>This is an alternative method for keeping the AOLserver
-		process running.  The recommended method is to <a href="maintenance-web.html#install-openacs-keepalive" title="Keep AOLServer Alive">run AOLserver
+		process running.  The recommended method is to <a href="maintenance-web.html#install-openacs-keepalive" title="Keep AOLserver Alive">run AOLserver
 		supervised</a>.</p><p>
 		This step should be completed as root. This can break every service
 		on your machine, so proceed with caution.
@@ -145,7 +145,7 @@ Killing 23750</pre></li></ul></div><p>
         automated for startup and shutdown. 
       </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="install-openacs-port80"></a>Running AOLserver on Port 80</h3></div></div><div></div></div><p>If you want your webserver to be <tt class="computeroutput">http://yourserver.com</tt>, it must run on port 80, the default HTTP port.  You set this in the <tt class="computeroutput">config.tcl</tt> file.  You will need to start the service as
       <tt class="computeroutput">root</tt>. If you follow the instructions
-      above for <a href="maintenance-web.html#install-openacs-keepalive" title="Keep AOLServer Alive">automating
+      above for <a href="maintenance-web.html#install-openacs-keepalive" title="Keep AOLserver Alive">automating
       startup</a>, this will be taken care of, but if you ever start the
       server from the command line, be sure to <tt class="computeroutput">su
       -</tt> first.
@@ -159,7 +159,7 @@ Killing 23750</pre></li></ul></div><p>
       able to exploit your web server to execute a command on your server,
       they would not be able to gain <tt class="computeroutput">root</tt>
       access.</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="install-next-add-server"></a>Running multiple services on one machine</h3></div></div><div></div></div><p><b>Services on different ports. </b>To run a different service on another port but the same
-        ip, simply repeat <a href="openacs.html">Install OpenACS 5.0.0b2</a> replacing
+        ip, simply repeat <a href="openacs.html">Install OpenACS 5.0.0b4</a> replacing
         <span class="replaceable"><span class="replaceable">service0</span></span>, and change the
 </p><pre class="programlisting">set httpport              8000
 set httpsport             8443 </pre><p>
@@ -175,7 +175,7 @@ set address                127.0.0.1 </pre><p>
     names sharing the same ip, you'll need nsvhr to redirect requests
     based on the contents of the tcp headers.  See <a href="http://borkware.com/rants/aolserver-vhosting/" target="_top">AOLserver
     Virtual Hosting with TCP</a> by <a href="mailto:markd@borkware.com" target="_top">markd</a>.
-</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="install-ssl"></a>Installing SSL Support</h3></div></div><div></div></div><p>nsopenssl is an open-sounce module for Aolserver which
+</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="install-ssl"></a>Installing SSL Support</h3></div></div><div></div></div><p>nsopenssl is an open-sounce module for AOLserver which
         adds support for the ssl encryption layer.  To use it, you
         must <a href="install-nsopenssl.html" title="Install nsopenssl">install</a> the software, create or purchase certificates,
         and configure your OpenACS instance to use it.</p><div class="orderedlist"><ol type="1"><li><p>Uncomment this line from <tt class="computeroutput">config.tcl</tt>.</p><pre class="programlisting">#ns_param   nsopenssl       ${bindir}/nsopenssl.so
