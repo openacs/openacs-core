@@ -25,26 +25,30 @@ create table auth_authorities (
                              constraint auth_authority_enabled_p_nn
                              not null,
     sort_order               integer not null,
-    -- Id of the authentication service contract implementation
-    -- Cannot reference acs_sc_impls table as it doesn't exist yet
+    -- auth_authentication implementation
+    -- (Cannot reference acs_sc_impls table as it doesn't exist yet)
     auth_impl_id             integer
                              constraint auth_authority_auth_impl_fk
                              references acs_objects(object_id),
-    -- Id of the password management service contact implementation
+    -- auth_password implementation
     pwd_impl_id              integer
                              constraint auth_authority_pwd_impl_fk
                              references acs_objects(object_id),
     forgotten_pwd_url        varchar(4000),
     change_pwd_url           varchar(4000),
-    -- Id of the registration service contract implementation
+    -- auth_registration implementation
     register_impl_id         integer
                              constraint auth_authority_reg_impl_fk
                              references acs_objects(object_id),
     register_url             varchar(4000),
+    -- auth_user_info implementation
+    user_info_impl_id        integer
+                             constraint auth_authority_userinf_impl_fk
+                             references acs_objects(object_id),
     -- batch sync
-    -- Id of service contract getting batch sync doc
+    -- auth_sync_retrieve implementation
     get_doc_impl_id          integer references acs_objects(object_id),
-    -- Id of service contract processing batch sync doc
+    -- auth_sync_process implementation
     process_doc_impl_id      integer references acs_objects(object_id),
     batch_sync_enabled_p     boolean default 'f'
                              constraint auth_authority_bs_enabled_p_nn
@@ -80,6 +84,24 @@ select acs_object_type__create_type (
     null,
     null
 );
+
+create table auth_driver_params(
+      authority_id    integer
+                      constraint auth_driver_params_aid_fk 
+                      references auth_authorities(authority_id)
+                      constraint auth_driver_params_aid_nn
+                      not null,
+      impl_id         integer
+                      constraint auth_driver_params_iid_fk
+                      -- Cannot reference acs_sc_impls table as it doesn't exist yet
+                      references acs_objects(object_id)
+                      constraint auth_driver_params_iid_nn
+                      not null,
+      key             varchar(200),
+      value           text,
+      unique (authority_id, impl_id)
+);
+
 
 -- Create PLSQL functions
 create or replace function authority__new (
