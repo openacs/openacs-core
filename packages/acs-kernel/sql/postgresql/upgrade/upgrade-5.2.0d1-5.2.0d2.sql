@@ -453,7 +453,7 @@ begin
        null,
        null,
        ''t'',
-       register_paramer__package_key || '': Parameter '' || register_parameter__parameter_name,
+       register_parameter__package_key || '': Parameter '' || register_parameter__parameter_name,
        null
     );
     
