@@ -731,6 +731,15 @@ ad_proc -public ad_html_to_text {
     for { set i [string first < $html] } { $i != -1 } { set i [string first < $html $i] } {
 	# append everything up to and not including the tag-opening <
 	ad_html_to_text_put_text output [string range $html $last_tag_end [expr {$i - 1}]]
+
+        # Check that tag doesn't start with whitespace, in which case it's just a lone < that
+        # was errorneously left unquoted
+        if { $i >= $length || ![regexp {^[^\s]$} [string index $html [expr $i + 1]]] } {
+            # Output the < and continue with next character
+            ad_html_to_text_put_text output "<"
+            set last_tag_end [incr i]
+            continue
+        }
     
 	# we're inside a tag now. Find the end of it
 
@@ -770,7 +779,7 @@ ad_proc -public ad_html_to_text {
 	    }
 	    set string_delimiter [string index $html $string_delimiter_idx]
 
-	    # If the greeater than sign appears before any of the string delimters, we've found the tag end.
+	    # If the greater than sign appears before any of the string delimters, we've found the tag end.
 	    if { $gt_idx < $string_delimiter_idx || $string_delimiter_idx == -1 } {
 		# we found the tag end
 		set i $gt_idx
@@ -789,7 +798,7 @@ ad_proc -public ad_html_to_text {
 	
 	set full_tag [string range $html $tag_start [expr { $i - 1 }]]
 
-	if { ![regexp {(/?)([^\s]+)[\s]*(\s.*)?} $full_tag match slash tagname attributes] } {
+	if { ![regexp {^(/?)([^\s]+)[\s]*(\s.*)?$} $full_tag match slash tagname attributes] } {
 	    # A malformed tag -- just delete it
 	} else {
 
