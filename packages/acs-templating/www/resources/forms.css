@@ -22,6 +22,7 @@ td.form-label-error {
 td.form-widget {
     padding-right: 12px;
     font-size: 90%;
+    text-align:left;
 }
 
 td.form-widget-error {
