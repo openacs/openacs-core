@@ -280,6 +280,7 @@ ad_proc -private apm_load_libraries {
     # Scan the package directory for files to source.    
     set files [list]    
     foreach package $packages {
+
 	set base "[acs_root_dir]/packages/$package/"
 	set base_len [string length $base]
 	set dirs [list \
@@ -290,9 +291,11 @@ ad_proc -private apm_load_libraries {
 	foreach dir $dirs {
 	    if {$procs_p} {
 		set paths [concat $paths [glob -nocomplain "$dir/*procs.tcl"]]
+                set paths [concat $paths [glob -nocomplain "$dir/*procs-[db_type].tcl"]]
 	    } 
 	    if {$init_p} {
 		set paths [concat $paths [glob -nocomplain "$dir/*init.tcl"]]
+                set paths [concat $paths [glob -nocomplain "$dir/*init-[db_type].tcl"]]
 	    }    
 	}
 	
