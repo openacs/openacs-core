@@ -1,5 +1,8 @@
 create view dual as select now() as sysdate;
 
+-- used to support anonymous plsql blocks in the db_plsql function call in tcl.
+create sequence anon_func_seq;
+
 create function instr(varchar,char,integer,integer) returns integer as '
 declare
         str             alias for $1;
@@ -114,7 +117,7 @@ begin
         end loop;
 
         if NOT FOUND then 
-          raise EXCEPTION ''PACKAGE: % NOT FOUND'', package_name;
+          raise NOTICE ''PACKAGE: % NOT FOUND'', package_name;
         else
           raise NOTICE ''PACKAGE: %: DROPPED'', package_name;
         end if;

@@ -100,6 +100,8 @@ declare
         from_id         alias for $1;
         to_id           alias for $2;
 begin
+        insert into lobs (lob_id,refcount) values (to_id,0);
+
         insert into lob_data
              select to_id as lob_id, segment, byte_len, data
                from lob_data
@@ -107,4 +109,11 @@ begin
 
         return null;
 
+end;' language 'plpgsql';
+
+create function lob_length(integer) returns integer as '
+declare
+        id  alias for $1;
+begin
+        return sum(byte_len) from lob_data where lob_id = id;
 end;' language 'plpgsql';

@@ -49,12 +49,12 @@ begin
 
   insert into cr_revisions (
     revision_id, title, description, mime_type, publish_date,
-    nls_language, lob, item_id, storage_type
+    nls_language, lob, item_id, storage_type, content_length
   ) values (
     v_revision_id, coalesce(new__title,''''), coalesce(new__description,''''),
     new__mime_type, 
     new__publish_date, coalesce(new__nls_language,''''), new__data, 
-    new__item_id, ''lob''     
+    new__item_id, ''lob'', 1     
   );
 
   return v_revision_id;
@@ -444,7 +444,7 @@ declare
   blob_loc                        integer;          
 begin
 
-  -- what is this? FIXME
+  -- FIXME
   -- ctx_doc.filter(''cr_doc_filter_index'', revision_id, tmp_clob);
 
   select 
@@ -581,10 +581,11 @@ begin
                lob = v_new_lob
          where revision_id = v_revision_id_dest;
     else 
+        -- FIXME: need to modify for file storage type.
         update cr_revisions
            set content = v_content,
                content_length = v_content_length,
-               storage_type = ''text'',
+               storage_type = v_storage_type,
                lob = null
          where revision_id = v_revision_id_dest;
     end if;
@@ -595,7 +596,7 @@ begin
 end;' language 'plpgsql';
 
 
--- procedure content_copy
+-- procedure content__get_content
 create function content_revision__get_content (integer)
 returns text as '
 declare

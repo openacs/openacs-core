@@ -392,16 +392,20 @@ create table cr_revisions (
 		  references cr_mime_types,
   nls_language    varchar(50) default '' not null,
   -- use Don's postgresql lob hack for now.
-  storage_type    varchar(10) default 'lob'
+  storage_type    varchar(10) default 'lob' not null
                   constraint cr_revisions_storage_type
                   check (storage_type in ('lob','text','file')),
+  -- lob_id if storage_type = lob.
   lob             integer,
+  -- content holds the file name if storage type = file
+  -- otherwise it holds the text data if storage_type = text.
   content	  text default '' not null,
   content_length  integer
 );
 
 create trigger cr_revisions_lob_trig before delete or update or insert
 on cr_revisions for each row execute procedure on_lob_ref();
+
 
 create index cr_revisions_by_mime_type on cr_revisions(mime_type);
 create index cr_revisions_title_idx on cr_revisions(title);

@@ -35,9 +35,148 @@ proc_doc db_exec_plsql { statement_name sql args } {
     }
 
     db_with_handle db {
-	set selection [db_exec 0or1row $db $full_statement_name $sql]
+        # plsql calls that are simple selects bypass the plpgsql 
+        # mechanism for creating anonymous functions (OpenACS - Dan).
+        set test_sql [db_fullquery_replace_sql $full_statement_name $sql]
+        if {[regexp -nocase -- {^\s*select} $test_sql match]} {
+            ns_log Notice "PLPGSQL: bypassed anon function"
+            set selection [db_exec 0or1row $db $full_statement_name $sql]
+        } else {
+            ns_log Notice "PLPGSQL: using anonymous function"
+            set selection [db_exec_plpgsql $db $full_statement_name $sql \
+                           $statement_name]
+        }
 	return [ns_set value $selection 0]
     }
+}
+
+ad_proc -private db_exec_plpgsql { db statement_name sql fname } {
+
+    A helper procedure to execute a SQL statement, potentially binding
+    depending on the value of the $bind variable in the calling environment
+    (if set).
+
+    Low level replacement for db_exec which replaces inline code with a proc.
+    db proc is dropped after execution.  This is a temporary fix until we can 
+    port all of the db_exec_plsql calls to simple selects of the inline code
+    wrapped in function calls.
+
+} {
+    set start_time [clock clicks]
+
+    ns_log Notice "PRE-QD: the SQL is $sql"
+
+    # Query Dispatcher (OpenACS - ben)
+    set sql [db_fullquery_replace_sql $statement_name $sql]
+
+    ns_log Notice "POST-QD: the SQL is $sql"
+
+    set unique_id [db_nextval "anon_func_seq"]
+
+    set function_name "__exec_${unique_id}_${fname}"
+
+    ns_log Notice "PLPGSQL: converted: $sql to: select $function_name ()"
+
+    # create a function definition statement for the inline code 
+    # binding is emulated in tcl. (OpenACS - Dan)
+
+    set errno [catch {
+	upvar bind bind
+	if { [info exists bind] && [llength $bind] != 0 } {
+	    if { [llength $bind] == 1 } {
+                set bind_vars [list]
+                set len [ns_set size $bind]
+                for {set i 0} {$i < $len} {incr i} {
+                    lappend bind_vars [ns_set key $bind $i] \
+                                      [ns_set value $bind $i]
+                }
+                set proc_sql [db_bind_var_substitution $sql $bind_vars]
+	    } else {
+                set proc_sql [db_bind_var_substitution $sql $bind]
+	    }
+	} else {
+            set proc_sql [uplevel 2 [list db_bind_var_substitution $sql]]
+	}
+
+        ns_db dml $db "create function $function_name () returns varchar as '
+                      [DoubleApos $proc_sql]
+                      ' language 'plpgsql'"
+
+        set ret_val [ns_db 0or1row $db "select $function_name ()"]
+
+        # drop the anonymous function (OpenACS - Dan)
+        ns_db dml $db "drop function $function_name ()"
+
+        return $ret_val
+
+    } error]
+
+    global errorInfo errorCode
+    set errinfo $errorInfo
+    set errcode $errorCode
+
+    ad_call_proc_if_exists ds_collect_db_call $db 0or1row $statement_name $sql $start_time $errno $error
+
+    if { $errno == 2 } {
+	return $error
+    }
+
+    return -code $errno -errorinfo $errinfo -errorcode $errcode $error
+}
+
+ad_proc -private db_bind_var_substitution { sql { bind "" } } {
+
+    This proc emulates the bind variable substitution in the postgresql driver.
+    Since this is a temporary hack, we do it in tcl instead of hacking up the 
+    driver to support plsql calls.  This is only used for the db_exec_plpgsql
+    function.
+
+} {
+    if {[string equal $bind ""]} {
+        upvar __db_sql lsql
+        set lsql $sql
+        uplevel {            
+            set __db_lst [regexp -inline -indices -all -- {:?:\w+} $__db_sql]
+            for {set i [expr [llength $__db_lst] - 1]} {$i >= 0} {incr i -1} {
+                set __db_ws [lindex [lindex $__db_lst $i] 0]
+                set __db_we [lindex [lindex $__db_lst $i] 1]
+                set __db_bind_var [string range $__db_sql $__db_ws $__db_we]
+                if {![string match "::*" $__db_bind_var]} {
+                    set __db_tcl_var [string range $__db_bind_var 1 end]
+                    set __db_tcl_var [set $__db_tcl_var]
+                    if {[string equal $__db_tcl_var ""]} {
+                        set __db_tcl_var null
+                    } else {
+                        set __db_tcl_var "'$__db_tcl_var'"
+                    }
+                    set __db_sql [string replace $__db_sql $__db_ws $__db_we $__db_tcl_var]
+                }                
+            }
+        }
+    } else {
+
+        array set bind_vars $bind
+
+        set lsql $sql
+        set lst [regexp -inline -indices -all -- {:?:\w+} $sql]
+        for {set i [expr [llength $lst] - 1]} {$i >= 0} {incr i -1} {
+            set ws [lindex [lindex $lst $i] 0]
+            set we [lindex [lindex $lst $i] 1]
+            set bind_var [string range $sql $ws $we]
+            if {![string match "::*" $bind_var]} {
+                set tcl_var [string range $bind_var 1 end]
+                set val $bind_vars($tcl_var)
+                if {[string equal $val ""]} {
+                    set val null
+                } else {
+                    set val "'$val'"
+                }
+                set lsql [string replace $lsql $ws $we $val]
+            }                
+        }
+    }
+
+    return $lsql
 }
 
 ad_proc -private db_exec { type db statement_name sql args } {

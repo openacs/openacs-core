@@ -148,13 +148,6 @@ begin
     null
     );
 
-  -- select user into schema_user from dual;
-
-  -- dbms_job.submit (
-  --   jobnum,
-  --  'dbms_stats.gather_schema_stats (''' || schema_user || ''', 10, cascade => true);',
-  --  trunc(sysdate+1) + 4/24,
-  --  'trunc(sysdate+1) + 4/24'
   );
 
 
