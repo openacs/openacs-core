@@ -8,12 +8,13 @@ ad_page_contract {
 }
 
 auth::sync::job::get_entry -entry_id $entry_id -array batch_action
+auth::sync::job::get -job_id $batch_action(job_id) -array batch_job
 
 set page_title "One batch action"
 
 set context [list [list "." "Authentication"] \
                   [list [export_vars -base authority { {authority_id $batch_action(authority_id)} }] \
-                        "$batch_action(authority_pretty_name)"] \
+                        "$batch_job(authority_pretty_name)"] \
                   [list [export_vars -base batch-job {{job_id $batch_action(job_id)}}] "One batch job"] \
                  $page_title]
 
