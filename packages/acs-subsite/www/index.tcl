@@ -40,7 +40,3 @@ set subsite_url [subsite::get_element -element url]
 set node_id [ad_conn node_id]
 
 db_multirow nodes site_nodes {}
-
-set login_url "register/?[export_vars { { return_url {[ad_conn url]}} }]"
-
-ad_return_template
