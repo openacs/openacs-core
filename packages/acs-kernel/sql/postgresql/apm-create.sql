@@ -79,16 +79,16 @@ returns integer as '
 begin
 -- Create a new object type for packages.
  PERFORM acs_object_type__create_type (
-   ''apm_package'',
-   ''Package'',
-   ''Packages'',
-   ''acs_object'',
-   ''APM_PACKAGES'',
-   ''package_id'',
-   ''apm_package'',
-   ''f'',
-   ''apm_package_types'',
-   ''apm_package.name''
+   ''apm_package'',         -- object_type
+   ''Package'',             -- pretty_name
+   ''Packages'',            -- pretty_plural
+   ''acs_object'',          -- supertype
+   ''APM_PACKAGES'',        -- table_name
+   ''package_id'',          -- id_column
+   ''apm_package'',         -- package_name
+   ''f'',                   -- abstract_p
+   ''apm_package_types'',   -- type_extension_table
+   ''apm_package.name''     -- name_method
    );
 
   return 0;
@@ -663,6 +663,31 @@ create index apm_pkg_owners_version_idx on apm_package_owners (version_id);
 comment on table apm_package_owners is '
  This table tracks all of the owners of a particular package, and their email information.  The sort_key column
  manages the order of the authors.
+';
+
+create table apm_package_callbacks (
+    version_id         integer 
+                       constraint apm_package_callbacks_vid_fk 
+                       references apm_package_versions(version_id)
+                       on delete cascade,
+    type               varchar(40),
+    proc               varchar(300),
+    constraint apm_package_callbacks_vt_un
+    unique (version_id, type)
+);
+
+comment on table apm_package_callbacks is '
+  This table holds names of Tcl procedures to invoke at the time (before or after) the package is
+  installed, instantiated, or mounted.        
+';
+
+comment on column apm_package_callbacks.proc is '
+  Name of the Tcl proc.
+';
+
+comment on column apm_package_callbacks.type is '
+  Indicates when the callback proc should be invoked, for example after-install. Valid
+  values are given by the Tcl proc apm_supported_callback_types.
 ';
 
 -- Ths view faciliates accessing information about package versions by joining
