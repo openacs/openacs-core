@@ -439,7 +439,7 @@ namespace eval lang::message {
         if { [empty_string_p $package_key] } {
             set package_where_clause ""
         } else {
-            set package_where_clause "where package_key = $package_key"
+            set package_where_clause "where package_key = :package_key"
         }
         
         set i 0 
