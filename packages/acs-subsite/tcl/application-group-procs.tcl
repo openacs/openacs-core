@@ -235,6 +235,14 @@ namespace eval application_group {
         Delete the given application group and all relational segments and constraints dependent
         on it (handled by the PL/[pg]SQL API
     } {
+        # LARS HACK:
+        # Delete permissions on:
+        # - the application group
+        # - any relational segment of this group
+        # - any relation with this gorup
+        # We really ought to have cascading deletes on acs_permissions.grantee_id (and object_id)
+        db_dml delete_perms {}
+
         db_exec_plsql delete {}
     }
 
