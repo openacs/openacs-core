@@ -418,3 +418,34 @@ aa_register_case ad_page_contract_filters {
         }
     }
 }
+
+aa_register_case export_vars {
+    Testing export_vars
+} {
+    set foo 1
+    set bar {}
+
+    aa_equals "{ foo bar }" \
+        [export_vars { foo bar }] \
+        "foo=1&bar="
+    
+    aa_equals "-no_empty { foo bar }" \
+        [export_vars -no_empty { foo bar }] \
+        "foo=1"
+    
+    aa_equals "-no_empty { foo bar { baz greble } }" \
+        [export_vars -no_empty { foo bar { baz greble } }] \
+        "foo=1&baz=greble"
+    
+    aa_equals "-no_empty -override { { bar \"\" } } { foo bar }" \
+        [export_vars -no_empty -override { { bar "" } } { foo bar }] \
+        "foo=1&bar=" \
+        
+    aa_equals "-no_empty -override { { baz greble } } { foo bar }" \
+        [export_vars -no_empty -override { baz } { foo bar }] \
+        "foo=1"
+    
+    aa_equals "-no_empty { foo { bar \"\" } }" \
+        [export_vars -no_empty { foo { bar "" } }] \
+        "foo=1&bar="
+}

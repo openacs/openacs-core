@@ -836,9 +836,8 @@ ad_proc -public export_vars {
 		    
 		    if { [llength $var_spec] > 1 } {
                         set value [uplevel subst \{[lindex $var_spec 1]\}]
-                        if { !$no_empty_p || ![empty_string_p $value] } {
-                            set exp_value($name) $value
-                        }
+                        set exp_value($name) $value
+                        # If the value is specified explicitly, we include it even if the value is empty
 		    } else {
 			upvar 1 $name upvar_variable
 			if { [info exists upvar_variable] } {
