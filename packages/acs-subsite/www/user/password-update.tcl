@@ -29,3 +29,4 @@ db_1row user_information {}
 set site_link [ad_site_home_link]
 
 ad_return_template
+                 
