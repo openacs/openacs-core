@@ -58,6 +58,12 @@ insert into ad_locales
 
 insert into ad_locales 
        (locale, label, language, country, nls_language, nls_territory, 
+        nls_charset, mime_charset, default_p) 
+  values ('en_GB', 'English (GB)', 'en', 'GB', 'ENGLISH', 
+          'GREAT BRITAIN', 'WE8ISO8859P1', 'ISO-8859-1', 'f');
+
+insert into ad_locales 
+       (locale, label, language, country, nls_language, nls_territory, 
         nls_charset, mime_charset, default_p)
  values ('de_DE', 'German (DE)', 'de', 'DE', 'GERMAN', 
          'GERMANY', 'WE8ISO8859P1', 'ISO-8859-1', 't');
