@@ -426,13 +426,21 @@ namespace eval lang::message {
     }     
 
 
-    ad_proc -private cache {} {
+    ad_proc -private cache {
+        {-package_key {}}
+    } {
         Loads the entire message catalog from the database into the cache.
     } {
         # We segregate messages by language. It might reduce contention
         # if we segregage instead by package. Check for problems with ns_info locks.
         global message_cache_loaded_p
         set message_cache_loaded_p 1
+
+        if { [empty_string_p $package_key] } {
+            set package_where_clause ""
+        } else {
+            set package_where_clause "where package_key = $package_key"
+        }
         
         set i 0 
         db_foreach select_locale_keys {} {
