@@ -138,7 +138,7 @@ if { [template::form is_valid add_group] } {
 
 	group::new -form_id add_group -variable_prefix group -group_id $group_id -context_id [ad_conn package_id]  $group_type 
 
-	relation_add -form_id add_party -variable_prefix rel -member_state $member_state $add_with_rel_type $add_to_group_id $group_id
+	relation_add -member_state $member_state $add_with_rel_type $add_to_group_id $group_id
 
     }
 
