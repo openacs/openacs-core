@@ -27,5 +27,34 @@
       </querytext>
 </fullquery>
 
+    <fullquery name="acs_user::change_state.member_approve">
+        <querytext>
+            select membership_rel__approve(:rel_id)
+        </querytext>
+    </fullquery>
+
+    <fullquery name="acs_user::change_state.member_ban">
+        <querytext>
+            select membership_rel__ban(:rel_id)
+        </querytext>
+    </fullquery>
+
+    <fullquery name="acs_user::change_state.member_reject">
+        <querytext>
+            select membership_rel__reject(:rel_id)
+        </querytext>
+    </fullquery>
+
+    <fullquery name="acs_user::change_state.member_delete">
+        <querytext>
+            select membership_rel__delete(:rel_id)
+        </querytext>
+    </fullquery>
+
+    <fullquery name="acs_user::change_state.member_unapprove">
+        <querytext>
+            select membership_rel__unapprove(:rel_id)
+        </querytext>
+    </fullquery>
  
 </queryset>

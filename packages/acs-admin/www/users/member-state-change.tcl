@@ -17,11 +17,17 @@ ad_page_contract {
     return_url:onevalue
 }
 
-if ![db_0or1row get_states "select email_verified_p email_verified_p_old, member_state member_state_old, first_names || ' ' || last_name as name, email, rel_id, rowid
-from cc_users
-where user_id = :user_id"] {
+if {![db_0or1row get_states {
+    select email_verified_p as email_verified_p_old,
+           member_state as member_state_old,
+           first_names || ' ' || last_name as name,
+           email,
+           rel_id,
+           rowid
+    from cc_users
+    where user_id = :user_id
+}]} {
     # The user is not in there
-
     ad_return_complaint "Invalid User" "The user is not in the system"
     return
 }
@@ -37,7 +43,7 @@ switch $member_state {
 	set action "Ban $name"
 	set email_message "You have been banned from [ad_system_name]."
     }
-    "reject" {
+    "rejected" {
 	set action "Reject $name"
 	set email_message "Your account have been rejected from [ad_system_name]."
     }
@@ -67,39 +73,20 @@ if [empty_string_p $action] {
     return
 }
 
-if [ catch {switch $member_state {
-               "approved" {
-                   db_exec_plsql member_approve "
-                        begin membership_rel.approve( rel_id => :rel_id ); end;"
-               }
-               "banned" {
-   	            db_exec_plsql member_ban "
-                       begin membership_rel.ban( rel_id => :rel_id ); end;"
-               }
-               "reject" {
-   	            db_exec_plsql member_reject "
-                       begin membership_rel.reject( rel_id => :rel_id ); end;"
-               }
-               "deleted" {
-   	            db_exec_plsql member_deleted "
-                       begin membership_rel.deleted( rel_id => :rel_id ); end;"
-               }
-               "needs approval" {
-   	            db_exec_plsql member_unapprove "
-                       begin membership_rel.unapprove( rel_id => :rel_id ); end;"
-               }
-            }
-            switch $email_verified_p {
-               "t" {
-                    db_exec_plsql approve_email "
-                       begin acs_user.approve_email ( user_id => :user_id ); end;"
-               }
-              "f" {
-	            db_exec_plsql unapprove_email "
-                       begin acs_user.unapprove_email ( user_id => :user_id ); end;"
-              }
-            }
-           } errmsg] {
+if {[catch {
+    acs_user::change_state -user_id $user_id -state $member_state
+
+    switch $email_verified_p {
+        "t" {
+            db_exec_plsql approve_email "
+                begin acs_user.approve_email ( user_id => :user_id ); end;"
+        }
+        "f" {
+            db_exec_plsql unapprove_email "
+                begin acs_user.unapprove_email ( user_id => :user_id ); end;"
+        }
+    }
+} errmsg]} {
     ad_return_error "Database Update Failed" "Database update failed with the following error:
     <pre>$errmsg</pre>"
 }
