@@ -74,6 +74,10 @@ ad_proc -public template::element::create { form_id element_id args } {
                       <tt>rows</tt>, or for JavaScript handlers.
 
 
+    @option maxlength The maximum allowable length in bytes. Will be checked using
+                      'string bytelength'. Will also cause 'input' widgets (text, integer, etc.)
+                      to get a maxlength="..." attribute.
+
     @option options   A list of options for select lists and button groups 
                       (check boxes or radio buttons).  The list contains 
                       two-element lists in the form 
