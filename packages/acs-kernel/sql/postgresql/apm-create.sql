@@ -239,12 +239,6 @@ might create one instance, "Boston Public Bboard" for managing public forums for
 and "Boston Private Bboard" for managing private forums for the Boston subsite.
 ';
 
-comment on column apm_packages.enabled_p is '
-  This indicates whether a package instance is enabled or not.  Enabling a package instance means that 
-if a user accesses a URL mapped to the object, the package content will display.
-Disabling a package prevents its content from ever being displayed. 
-';
-
 -----------------------------
 --   Operational  Level	   --
 -----------------------------
