@@ -74,7 +74,7 @@
             <file type="query_file" db_type="oracle" path="tcl/sweep-procs-oracle.xql"/>
             <file type="query_file" db_type="postgresql" path="tcl/sweep-procs-postgresql.xql"/>
             <file type="tcl_procs" path="tcl/sweep-procs.tcl"/>
-            <file type="content_page" path="www/master.adp"/>
+            <file type="content_page" path="www/index.tcl"/>
             <file type="content_page" path="www/request-delete.tcl"/>
             <file type="content_page" path="www/request-new-2.tcl"/>
             <file type="content_page" path="www/request-new.adp"/>

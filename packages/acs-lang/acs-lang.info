@@ -35,19 +35,15 @@ in that directory for details.</description>
             <file path="ACS4.1b-PATCHES/tag-init.patch"/>
             <file path="ACS4.1b-PATCHES/util-procs.patch"/>
             <file type="package_spec" path="acs-lang.info"/>
-            <file path="acs-lang.info.orig"/>
-            <file path="acs-lang.info.rej"/>
             <file path="catalog/test.iso-8859-1.cat"/>
             <file type="data_model_create" db_type="oracle" path="sql/oracle/acs-lang-create.sql"/>
             <file type="data_model" db_type="oracle" path="sql/oracle/ad-locales-drop.sql"/>
             <file type="data_model" db_type="oracle" path="sql/oracle/ad-locales.sql"/>
-            <file type="data_model" db_type="oracle" path="sql/oracle/currency.sql"/>
             <file type="data_model" db_type="oracle" path="sql/oracle/message-catalog-drop.sql"/>
             <file type="data_model" db_type="oracle" path="sql/oracle/message-catalog.sql"/>
             <file type="data_model_create" db_type="postgresql" path="sql/postgresql/acs-lang-create.sql"/>
             <file type="data_model" db_type="postgresql" path="sql/postgresql/ad-locales-drop.sql"/>
             <file type="data_model" db_type="postgresql" path="sql/postgresql/ad-locales.sql"/>
-            <file type="data_model" db_type="postgresql" path="sql/postgresql/currency.sql"/>
             <file type="data_model" db_type="postgresql" path="sql/postgresql/message-catalog-drop.sql"/>
             <file type="data_model" db_type="postgresql" path="sql/postgresql/message-catalog.sql"/>
             <file type="tcl_procs" path="tcl/acs-lang-procs.tcl"/>
