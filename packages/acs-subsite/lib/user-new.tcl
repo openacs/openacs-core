@@ -48,7 +48,7 @@ if { $exist_assessment != "" && $exist_assessment!=0} {
     set package_id [db_string package_id {select package_id from cr_folders where folder_id=(select context_id from acs_objects where object_id=:exist_assessment)}]
     set url [apm_package_url_from_id $package_id]
 
-    ad_returnredirect "${url}assessment?assessment_id=$exist_assessment"
+    ad_returnredirect "${url}assessment?assessment_id=$exist_assessment&return_url=$return_url"
 } else {
 
 # Pre-generate user_id for double-click protection
