@@ -189,7 +189,15 @@ ad_proc -public lang::system::get_locales {} {
 
     @author Peter Marklund
 } {
-    return [util_memoize [list lang::system::get_locales_not_cached]]
+    return [util_memoize lang::system::get_locales_not_cached]
+}
+
+ad_proc -public lang::system::get_locale_options {} {
+    Return all enabled locales in the system in a format suitable for the options argument of a form.
+
+    @author Lars Pind
+} {
+    return [util_memoize lang::system::get_locale_options_not_cached]
 }
 
 ad_proc -public lang::system::locale_set_enabled { 
@@ -207,6 +215,7 @@ ad_proc -public lang::system::locale_set_enabled {
     # Flush caches
     util_memoize_flush_regexp {^lang::util::default_locale_from_lang_not_cached}
     util_memoize_flush_regexp {^lang::system::get_locales}
+    util_memoize_flush_regexp {^lang::system::get_locale_options}
 }
 
 ad_proc -private lang::system::get_locales_not_cached {} {
@@ -220,6 +229,15 @@ ad_proc -private lang::system::get_locales_not_cached {} {
         where  enabled_p = 't'
     }]
 }
+
+ad_proc -public lang::system::get_locale_options_not_cached {} {
+    Return all enabled locales in the system in a format suitable for the options argument of a form.
+
+    @author Lars Pind
+} {
+    return [db_list_of_lists select_locales {}]
+}
+
 
 #####
 #
