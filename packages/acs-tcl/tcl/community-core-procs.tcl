@@ -104,37 +104,6 @@ ad_proc -deprecated ad_user_new {
         set url [db_null]
     }
 
-    if { [empty_string_p $authority_id] } {
-        set authority_id [auth::authority::local]
-    }
-
-    # Lars: This is a hack until we sort out the UsernameIsEmail situation
-    if { [auth::UseEmailForLoginP] && [empty_string_p $username] } {
-        # Generate a username that's guaranteed to be unique
-        # Rather much work, but that's the best I could think of
-
-        set username [string tolower $email]
-        set existing_user_id [acs_user::get_by_username -authority_id $authority_id -username $username]
-        if { ![empty_string_p $existing_user_id] } {
-            set match "$username-%"
-            set existing_usernames [db_list select_existing_usernames { 
-                select username 
-                from   users
-                where  authority_id = :authority_id
-                and    username like :match
-            }]
-            set number 2
-            foreach existing_username $existing_usernames {
-                if { [regexp "^${username}-(\\d+)\$" $url match n] } {
-                    # matches the foo-123 pattern
-                    if { $n >= $number } { set number [expr $n + 1] }
-                }
-            }
-            set username "$username-$number"
-            ns_log Notice "User's email was already used as someone else's username, setting username to $username"
-        }
-    }
-
     set creation_user ""
     set peeraddr ""
     

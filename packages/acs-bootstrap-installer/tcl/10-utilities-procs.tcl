@@ -64,24 +64,3 @@ ad_proc -public ad_find_all_files {
     }
     return $files
 }
-
-namespace eval auth {}
-namespace eval auth::authority {}
-
-ad_proc -public auth::authority::local {} {
-    Returns the authority_id of the local authority.
-} {
-    # LARS: This is a simply implemtation which we need for creating an administrator
-    # during bootstrap install.
-    # Even though bootstrap-installer loads the acs-authentication/tcl/authenticaion-procs.tcl, 
-    # where this is defined, it might get loaded in a different interpreter from the
-    # one serving the create-administrator-2 page.
-    return [db_string local_auth { select authority_id from auth_authorities where short_name = 'local' }]
-}
-
-ad_proc -public auth::UseEmailForLoginP {} {
-    Do we use email address for login? code wrapped in a catch, so the 
-    proc will not break regardless of what the parameter value is.
-} {
-    return 0
-}
