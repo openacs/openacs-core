@@ -3,17 +3,6 @@
 <queryset>
    <rdbms><type>oracle</type><version>8.1.6</version></rdbms>
 
-<fullquery name="new.add_group">      
-      <querytext>
-      
-	  begin
-	    :1 := ${group_type}.new (group_name => 'Editor');
-	  end;
-	
-      </querytext>
-</fullquery>
-
- 
 <fullquery name="delete.delete_group">      
       <querytext>
       

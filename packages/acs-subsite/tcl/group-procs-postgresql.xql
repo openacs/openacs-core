@@ -3,18 +3,6 @@
 <queryset>
    <rdbms><type>postgresql</type><version>7.1</version></rdbms>
 
-<fullquery name="new.add_group">      
-      <querytext>
-      FIX ME PLSQL
-
-	  begin
-	    :1 := ${group_type}.new (group_name => 'Editor');
-	  end;
-	
-      </querytext>
-</fullquery>
-
- 
 <fullquery name="group::delete.delete_group">      
       <querytext>
 	  DECLARE
