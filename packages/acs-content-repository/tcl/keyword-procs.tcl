@@ -88,19 +88,27 @@ ad_proc -public cr::keyword::item_assign {
     {-keyword_id:required}
     {-singular:boolean}
 } {
-    Assign a keyword to a content_item.
+    Assign one or more keywords to a content_item.
+    
+    @param singular   If singular is specified, then any keywords with the same parent_id as this keyword_id
+                      will first be unassigned.
 
-    If singular_p is specified, then any keywords with the same parent_id as this keyword_id
-    will first be unassigned.
+    @param keyword_id A list of keywords to assign.
 
-    Returns the supplied item_id for convenience.
+    @return the supplied item_id for convenience.
 } {
+    # First, unassign for the parents of each/all
     if {$singular_p} {
-        set parent_id [db_string get_parent_id {}]
-        item_unassign_children -item_id $item_id -parent_id $parent_id
+	foreach keyword $keyword_id {
+	    set parent_id [db_string get_parent_id {}]
+	    item_unassign_children -item_id $item_id -parent_id $parent_id
+	}
     }
 
-    db_exec_plsql keyword_assign {}
+    # Now assign for each/all
+    foreach keyword $keyword_id {
+	db_exec_plsql keyword_assign {}
+    }
 
     return $item_id
 }

@@ -49,7 +49,7 @@
             begin
               content_keyword.item_assign(
                 :item_id,
-                :keyword_id,
+                :keyword,
                 null,
                 null,
                 null
