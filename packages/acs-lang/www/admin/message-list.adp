@@ -27,7 +27,7 @@
 
   <if @site_wide_admin_p@>
     <p>
-      <b>&raquo;</b> <a href="@export_messages_url@">Export messages</a>
+      <b>&raquo;</b> <a href="@export_messages_url@">Export messages to catalog files</a>
     </p>
   </if>
 
