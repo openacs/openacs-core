@@ -351,6 +351,11 @@ done
 cvs commit: Rebuilding administrative file database</literallayout>
             </listitem>
           <listitem>
+            <para>Although you should add your package on HEAD, you should do package development on the latest release branch that your code is compatible with.  So, after completing the import, you may want to branch your package:</para>
+            <programlisting>cd /var/lib/aolserver/<replaceable>service0</replaceable>/packages/<replaceable>newpackage</replaceable>
+cvs tag -b <replaceable>oacs-5-1</replaceable></programlisting>
+          </listitem>
+          <listitem>
             <para>See <xref linkend="releasing-package"/></para>
           </listitem>
           </orderedlist>
@@ -364,7 +369,7 @@ cvs commit: Rebuilding administrative file database</literallayout>
               <para>Update the modules file as described above.</para>
             </listitem>
             <listitem>
-              <para>Remove the directory from cvs in the old location using <computeroutput>cvs remove</computeroutput>.</para>
+              <para>Remove the directory from cvs in the old location using <computeroutput>cvs rm</computeroutput>.  One approach <computeroutput>for file in `find | grep -v CVS`; do rm $file; cvs remove $file; done</computeroutput></para>
             </listitem>
           </orderedlist>
         </note>

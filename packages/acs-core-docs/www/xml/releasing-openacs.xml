@@ -308,7 +308,7 @@ fi</programlisting>
     <para>In this example, we are packaging and releasing <computeroutput>myfirstpackage</computeroutput> as version 1.0.0, which is compatible with OpenACS 5.0.x.</para>
     <orderedlist>
       <listitem>
-        <para>Update the version number of your package in the <ulink url="/acs-admin/apm/">APM</ulink>.</para>
+        <para>Update the version number, release date, and <ulink url="http://openacs.org/forums/message-view?message_id=161393">package maturity</ulink> of your package in the <ulink url="/acs-admin/apm/">APM</ulink>.</para>
       </listitem>
       <listitem>
         <para>Make sure all changes are committed.</para>
