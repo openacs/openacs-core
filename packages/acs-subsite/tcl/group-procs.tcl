@@ -21,7 +21,7 @@ namespace eval group {
 	{ -group_id "" } 
 	{ -context_id "" } 
 	{ -group_name "" }
-	group_type 
+	{group_type "group"}
     } {
 	Creates a group of this type by calling the .new function for
 	the package associated with the given group_type. This
@@ -79,7 +79,8 @@ namespace eval group {
 	there is a group_name attribute in the form specified by
 	<code>form_id</code>.
 
-	@param group_type The type of group we are creating
+	@param group_type The type of group we are creating. Defaults to group
+                          which is what you want in most cases.
 
 	@param group_name The name of this group. This is a required
 	variable, though it may be specified either explicitly or through
