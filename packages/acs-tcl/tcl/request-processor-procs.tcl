@@ -637,7 +637,7 @@ ad_proc -private rp_filter { why } {
     }
 
     # Who's online
-    whos_online::user_requested_page [ad_conn untrusted_user_id] [ad_conn peeraddr]
+    whos_online::user_requested_page [ad_conn untrusted_user_id]
 
     #####
     #

@@ -69,7 +69,7 @@ ad_proc -private whos_online::interval {} {
                 -default 600]
 }
 
-ad_proc -private whos_online::user_requested_page { user_id ip_address } {
+ad_proc -private whos_online::user_requested_page { user_id } {
     Records that the user with given id requested a page on the server
 
     @author Bjoern Kiesbye
@@ -80,7 +80,7 @@ ad_proc -private whos_online::user_requested_page { user_id ip_address } {
             nsv_set first_hit $user_id [ns_time]
         }
     } else {
-        # TODO: Record the IP address
+        # TODO: Record the IP address from [ad_conn peeraddr]
     }
 }
 
