@@ -19,15 +19,13 @@ ad_page_contract {
 array set this_node [site_node::get -url [ad_conn url]]
 set subsite_name $this_node(instance_name)
 
-set acs_admin_url "/acs-admin/"
+set acs_admin_url [apm_package_url_from_key "acs-admin"]
 array set acs_admin_node [site_node::get -url $acs_admin_url]
 set acs_admin_name $acs_admin_node(instance_name)
 
-# JA: temporary: should replace this with a real function
-set acs_automated_testing_url "/automated-test/" 
+set acs_automated_testing_url [apm_package_url_from_key "acs-automated-testing"]
 
-# JA: temporary: should replace this with a real function
-set acs_lang_admin_url "/acs-lang/admin/"
+set acs_lang_admin_url "[apm_package_url_from_key "acs-lang"]admin/"
 
 # Dirk: temporary fix for noquote hacking
 set acs_admin_available_p 1
