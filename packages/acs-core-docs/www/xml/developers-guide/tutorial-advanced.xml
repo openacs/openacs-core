@@ -1,4 +1,4 @@
-			<?xml version='1.0' ?>
+<?xml version='1.0' ?>
 <!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
                "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
 <!ENTITY % myvars SYSTEM "../variables.ent">
@@ -1171,6 +1171,7 @@ db_multirow \
       </listitem>
     </orderedlist>
   </sect1>
+
   <sect1 id="tutorial-schedule-procs">
     <title>Scheduled Procedures</title>
     <para>Put this proc in a file <computeroutput>/packages/<replaceable>myfirstpackage</replaceable>/tcl/scheduled-init.tcl</computeroutput>.  Files in /tcl with the -init.tcl ending are sourced on server startup.  This one executes my_proc every 60 seconds:</para>
@@ -1184,6 +1185,15 @@ db_multirow \
 </programlisting>
     <para>See <ulink url="/api-doc/proc-view?proc=ad%5fschedule%5fproc">ad_schedule_proc</ulink> for more information.</para>
   </sect1>
+
+  <sect1 id="tutorial-upgrades">
+    <title>Distributing upgrades of your package</title>
+    <authorblurb>
+      <para>by Jade Rubick</ulink>.</para>
+    </authorblurb>
+    <para>Not completed yet</para>
+  </sect1>
+
   <sect1 id="tutorial-wysiwyg-editor">
     <title>Enabling WYSIWYG</title>
     <authorblurb>
@@ -1320,6 +1330,34 @@ db_multirow \
 	&lt;a href=configure?&lt;%=[export_url_vars return_url]%&gt;&gt;Configure&lt;/a&gt;
 	</programlisting>
 	</sect1>
+
+  <sect1 id="tutorial-parameters">
+    <title>Adding in parameters for your package</title>
+    <para>Each instance of a package can have paramaters associated
+    with it. These are like preferences, and they can be set by the
+    administrator for each application to change the behavior of your
+    application. </para>
+
+    <para>To add parameters for your package, go to the Automatic
+    Package Manager (/acs-admin/apm)</para>
+
+    <para>Click on your package</para>
+
+    <para>Under the Manage section, click on Parameters</para>
+
+    <para>It's fairly self-explanatory at this point. Create the
+    parameters you want, and then access them in your code using the
+    parameter::get procedure.</para>
+
+  </sect1>
+
+  <sect1 id="tutorial-upgrades">
+    <title>Distributing upgrades of your package</title>
+    <authorblurb>
+      <para>by Jade Rubick</ulink>.</para>
+    </authorblurb>
+    <para>Not completed yet</para>
+  </sect1>
 
   <sect1 id="tutorial-future-topics">
   <title>Future Topics</title>
