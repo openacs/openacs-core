@@ -7,7 +7,7 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>t</singleton-p>
     
-    <version name="5.0d1" url="http://www.openacs.org/repository/download/apm/acs-templating-5.0d1.apm">
+    <version name="5.0d2" url="http://www.openacs.org/repository/download/apm/acs-templating-5.0d2.apm">
     <database-support>
     </database-support>
         <owner>Karl Goldstein</owner>
@@ -19,7 +19,7 @@
 template system provides a way to use a single layout
 specification for many physical pages, so the overall layout of a site can be more easily administered.</description>
 
-        <provides url="acs-templating" version="5.0d1"/>
+        <provides url="acs-templating" version="5.0d2"/>
         <requires url="acs-kernel" version="4.6.2"/>
 
         <callbacks>
@@ -32,6 +32,9 @@ specification for many physical pages, so the overall layout of a site can be mo
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="ShowDataDictionariesP"  default="0" description="Offer data dictionaries on .dat/.fmt URL."/>
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="ShowCompiledTemplatesP"  default="0" description="Show thecompiled template (for debugging) at .cmp URL"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="RefreshCache"  default="as needed" description="When to re-translate templates.  Speical values: "/>
+            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="SpellcheckFormWidgets"  default="text 0 textarea 1 richtext 1" description="The widgets that you specify here will be spellcheck enabled in all forms (that use ad_form / form builder). Adding a 'nospell' flag to a form element overrides this parameter and disables spellchecking of that element. The format of this parameter is such: 'widget 1 widget 0 ...', where 'widget' stands for one of the form widgets that are possible to spellcheck enable: text, textarea, richtext. '1' after 'widget' indicates that the default should be to spellcheck; '0' means the user has to manually state that spellchecking should be performed on the form element. If the parameter is left blank, spellchecking will be disabled altogether."/>
+            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="SpellcheckLang"  description="The country/language code of the language to use when spellchecking. Only works with aspell! Leave empty and change dictionary manually if you use ispell. Examples: en_US or da-DK or sv or sv_SE ..."/>
+            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="SpellcheckerPath"  default="/usr/bin/aspell" description="The path to the ispell/aspell executable. (aspell is highly recommended if it supports your language)."/>
         </parameters>
 
     </version>

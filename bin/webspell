@@ -1,0 +1,13 @@
+#!/bin/sh
+
+# Wrapper for aspell/ispell that sets the HOME environment variable.
+# Can't seem to do this from AOLserver Tcl.
+# Takes three arguments: file to spellcheck, dictionary file, language.
+#
+# Root must be able to execute this file if AOLserver runs as root
+# (which it does if it runs on a privileged port, e.g., port 80)
+
+#HOME=/usr/local/aolserver
+HOME=$4
+export HOME
+exec $3 $5 -a -p $2 < $1

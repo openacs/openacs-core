@@ -424,6 +424,19 @@ ad_proc -public ad_form {
     <p>
     </blockquote>
 
+    <blockquote><pre>
+    {email:text,nospell                      {label "Email Address"}
+                                              {html {size 40}}}
+    </pre><p>
+
+    Define an element of type text with spell-checking disabled. In case spell-checking is enabled globally
+    for the widget of this element ("text" in the example), the "nospell" flag will override that parameter
+    and disable spell-checking on this particular element. Currently, spell-checking can be enabled for
+    these widgets: text, textarea, and richtext.
+
+    <p>
+    </blockquote>
+
     @see ad_form_new_p
     @see ad_set_element_value
     @see ad_set_form_values
@@ -711,7 +724,8 @@ ad_proc -public ad_form {
                         }
                     }
 
-                    optional {
+                    nospell -
+		    optional {
                         if { ![empty_string_p $af_element_parameters($element_name:$flag)] } {
                             return -code error "element $element_name: $flag attribute can not have a parameter"
                         }
