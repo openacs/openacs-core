@@ -363,13 +363,16 @@ ad_proc -private util_close_html_tags {
     # we should now walk the stack and close any open tags.
 
     for {set i $tagptr} { $i > -1 } {incr i -1} { 
-        # append out "<!-- autoclose --> </$tagstack($i)>"
-        append out "</$tagstack($i)>"
+        set tag $tagstack($i)
+
+        # LARS: Only close tags which we aren't supposed to remove
+        if { ![string equal $syn($tag) "discard"] && ![string equal $syn($tag) "remove"] } {
+            append out "</$tagstack($i)>"
+        }
     }
     
     return $out
 }
-
 
 ad_proc ad_parse_html_attributes {
     -attribute_array
