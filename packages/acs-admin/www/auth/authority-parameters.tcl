@@ -30,13 +30,16 @@ set authority_url [export_vars -base authority { {authority_id $authority(author
 set context [list [list "." "Authentication"] [list $authority_url "$authority(pretty_name)"] $page_title]
 
 # Get the parameters that can be configured
-array set parameters [acs_sc::invoke \
-                      -impl_id $impl_id \
-                      -operation "GetParameters"]
+array set parameters [auth::driver::get_parameters -impl_id $impl_id]
 
 set has_parameters_p [expr [llength [array names parameters]] > 0]
 
+set first_param_name ""
 if { $has_parameters_p } {
+
+    # Set focus on first param name
+    set first_param_name [lindex [array names parameters] 0]
+
     set form_widgets [list]
     foreach parameter_name [array names parameters] {
         lappend form_widgets [list ${parameter_name}:text,optional [list label $parameter_name] [list help_text $parameters($parameter_name)] {html {size 50}}]
@@ -72,5 +75,8 @@ if { $has_parameters_p } {
                         -value [element get_property parameters $element_name value]
                 }
             }
+
+            ad_returnredirect $authority_url
+            ad_script_abort
         }
 }
