@@ -88,6 +88,8 @@ ad_after_server_initialization filters_register {
 
     set filter_index 0
     foreach filter_info $filters {
+       ns_log Debug "filters_register: Registering $filter_info" 
+
 	util_unlist $filter_info priority kind method path \
 		proc arg debug critical description script
 	
