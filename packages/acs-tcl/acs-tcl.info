@@ -7,7 +7,7 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>t</singleton-p>
 
-    <version name="4.7.2d" url="http://www.openacs.org/repository/download/apm/acs-tcl-4.7.2d.apm">
+    <version name="5.0d1" url="http://www.openacs.org/repository/download/apm/acs-tcl-5.0d1.apm">
     <database-support>
         <database>oracle</database>
         <database>postgresql</database>
@@ -17,9 +17,9 @@
         <release-date>2002-05-15</release-date>
         <vendor url="http://www.openacs.org/">OpenACS</vendor>
 
-        <provides url="acs-tcl" version="4.7.2d"/>
-        <requires url="acs-bootstrap-installer" version="4.2"/>
-        <requires url="acs-kernel" version="4.6.2"/>
+        <provides url="acs-tcl" version="5.0d1"/>
+        <requires url="acs-bootstrap-installer" version="5.0d1"/>
+        <requires url="acs-kernel" version="5.0d10"/>
 
         <parameters>
         <!-- No version parameters -->
