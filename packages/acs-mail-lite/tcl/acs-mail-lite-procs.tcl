@@ -441,6 +441,9 @@ namespace eval acs_mail_lite {
         # proc to ns_sendmail. So we simply call ns_sendmail instead
         # of the sendmail bin if the EmailDeliveryMode parameter is
         # set - JFR
+        # 
+        # I'm a little unsure if this handles multiple to addresses
+        # correctly.
         #-----------------------------------------------------
         set delivery_mode [ns_config ns/server/[ns_info server]/acs/acs-rollout-support EmailDeliveryMode] 
 
