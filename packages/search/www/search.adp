@@ -2,6 +2,8 @@
   <property name="title">@page_title@</property>
   <property name="context">@context;noquote@</property>
   <property name="in_search_p">t</property>
+  <property name="robots">noindex,nofollow</property>
+
   <property name="header_stuff">
     <style type="text/css">
     .hint {
