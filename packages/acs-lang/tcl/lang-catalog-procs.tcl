@@ -603,7 +603,7 @@ ad_proc -public lang::catalog::import_from_files_for_locale { locale } {
         if { ![file exists [package_catalog_dir $package_key]] } {
             continue
         }
-        
+
         import_from_files -restrict_to_locale $locale $package_key
     }
 }
@@ -625,6 +625,12 @@ ad_proc -public lang::catalog::import_from_files {
     # Check arguments
     if { [empty_string_p $package_key] } {
         error "lang::catalog::import_from_files - the package_key argument is the empty string"
+    }
+
+    # Skip the package if it has no catalog files at all
+    if { ![file exists [package_catalog_dir $package_key]] } {
+        ns_log Notice "lang::catalog::import_from_files - importing nothing as package $package_key has no catalog files"
+        return
     }
 
     # Get all catalog files for enabled locales
@@ -661,7 +667,7 @@ ad_proc -public lang::catalog::import_from_files {
                 if { [file exists $alternate_file_path] } {
                     lappend catalog_file_list $alternate_file_path
                 } else {
-                    set error_text "lang::catalog::import_from_files - No catalog file found for locale $locale and charset ${mime_charset} (defaulted to $charset as $mime_charset is unsupported). Attempted both path $file_path and $alternate_file_path"
+                    set error_text "lang::catalog::import_from_files - No catalog file found for locale $locale and charset ${mime_charset}. Attempted both path $file_path and $alternate_file_path"
                     if { ![string equal $charset $mime_charset] } {
                         append error_text " (defaulted to $charset as $mime_charset is unsupported)"
                     }               
