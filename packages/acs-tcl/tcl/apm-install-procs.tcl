@@ -80,15 +80,7 @@ ad_proc -public apm_dependency_provided_p {
     set old_version_p 0
     set found_p 0
     ns_log Debug "Scanning for $dependency_uri version $dependency_version"
-    db_foreach apm_dependency_check {
-	select apm_package_version.version_name_greater(service_version, :dependency_version) as version_p
-	from apm_package_dependencies d, apm_package_types a, apm_package_versions v
-	where d.dependency_type = 'provides'
-	and d.version_id = v.version_id
-	and d.service_uri = :dependency_uri
-	and v.installed_p = 't'
-	and a.package_key = v.package_key
-    } {
+    db_foreach apm_dependency_check {} {
 	if { $version_p >= 0 } {
 	    ns_log Debug "Dependency satisfied by previously installed package"
 	    set found_p 1
@@ -105,19 +97,17 @@ ad_proc -public apm_dependency_provided_p {
     if { ![empty_string_p $dependency_list] } {
 	# They provided a list of provisions.
 	foreach prov $dependency_list {
-	    if {![string compare $dependency_uri [lindex $prov 0]] } {
-		if { $dependency_version <= [lindex $prov 1] } {
+	    if { [string equal $dependency_uri [lindex $prov 0]] } {
+
+                set provided_version [lindex $prov 1]
+                set provided_p [db_string version_greater_p {}]
+
+                if { $provided_p >= 0 } {
 		    ns_log Debug "Dependency satisfied in list of provisions."
-		    return 1
-		} else {
-		    if [catch {
-			if { $dependency_version > [lindex $prov 1] } {
-			    set old_version_p 1
-			}
-		    } errmsg] {
-			ns_log Error "Error processing dependencies: $errmsg"
-		    }
-		}
+                    return 1
+                } else { 
+                    set old_version_p 1
+                }
 	    }
 	}
     }
