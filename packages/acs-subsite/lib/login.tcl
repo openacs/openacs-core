@@ -150,9 +150,8 @@ ad_form -extend -name login -on_request {
     
     if { [string compare $hash $computed_hash] != 0 || \
              $time < [ns_time] - [ad_parameter -package_id [ad_acs_kernel_id] LoginExpirationTime security 600] } {
-        form set_error login password "The login page has expired. Please log in again."
-        element set_value login password {}
-        break
+        ad_returnredirect [export_vars -base [ad_conn url] { { message "The login page has expired. Please log in again." } }]
+        ad_script_abort
     }
 
     if { ![exists_and_not_null authority_id] } {
