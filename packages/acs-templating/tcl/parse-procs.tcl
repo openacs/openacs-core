@@ -71,8 +71,20 @@ ad_proc -private template::adp_parse { __adp_stub __args } {
   set template_extension [get_mime_template_extension $mime_type]
 
   # generate ADP output if a template exists (otherwise assume plain Tcl page)
+  
+  
+  set templated_p 0
+  if { ![empty_string_p [ad_conn locale]] && \
+           [file exists "$__adp_stub.[ad_conn locale].$template_extension"]} { 
+    # it's a localized version of a templated page
+    set templated_p 1
+    append __adp_stub ".[ad_conn locale]"
+  } elseif {[file exists "$__adp_stub.$template_extension"]} { 
+    # it's a regular templated page
+    set templated_p 1
+  }
 
-  if {[file exists "$__adp_stub.$template_extension"]} { # it's a templated page
+  if { $templated_p } { # it's a templated page
 
     # ensure that template output procedure exists and is up-to-date
     template::adp_init $template_extension $__adp_stub
