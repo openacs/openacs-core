@@ -98,6 +98,10 @@ tar xzf /tmp/postgresql-7.3.4.tar.gz</action></screen>
 	  since it will not run as root.  Since nobody will log in
 	  directly as that user, we'll leave the password blank.
 	</para>
+        <para>
+	  Debian users should probably use adduser instead of
+	  useradd. Type <computeroutput>man adduser</computeroutput>
+	</para>
       </formalpara>
       <screen>[root src]# <userinput>groupadd web</userinput>
 [root src]# <userinput>useradd -g web -d /usr/local/pgsql postgres</userinput>
@@ -146,6 +150,10 @@ LD_LIBRARY_PATH=:/usr/local/pgsql/lib
 PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:/usr/bin/X11:/usr/X11R6/bin:/root/bin:/usr/local/pgsql/bin:/usr/local/pgsql/bin
 [postgres pgsql]$ <userinput>exit</userinput>
 </screen>
+
+      <para>Don't continue unless you see correct output from
+      <computeroutput>env | grep PATH</computeroutput></para>
+
     </listitem>
     <listitem id="install-postgres-compile">
       <formalpara>
