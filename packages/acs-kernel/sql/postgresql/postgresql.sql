@@ -554,7 +554,7 @@ declare
   v_elem		varchar;
   v_pos			integer;
 begin
-  delete from acs_function_args where function = p_function;
+  delete from acs_function_args where function = upper(p_function);
 
   v_elem = split(p_arg_list, '','', v_arg_seq);
   while v_elem is not null loop

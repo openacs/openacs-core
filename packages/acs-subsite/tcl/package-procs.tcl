@@ -824,7 +824,11 @@ ad_proc -public package_instantiate_object {
 	    }
 	}
     }	
-	
+
+    # Ben's temporary hack
+    lappend pieces object_type
+    ns_log Notice "BEN_ACS_SUBSITE: $object_type; $pieces"
+
     set object_id [db_exec_plsql create_object "
     BEGIN
       :1 := ${package_name}.new([plsql_utility::generate_attribute_parameter_call \

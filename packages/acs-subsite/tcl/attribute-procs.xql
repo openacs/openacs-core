@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <queryset>
 
-<fullquery name="add.select_table">      
+<fullquery name="attribute::add.select_table">      
       <querytext>
       
         select t.table_name
@@ -12,7 +12,7 @@
 </fullquery>
 
  
-<fullquery name="add.select_attribute_id">      
+<fullquery name="attribute::add.select_attribute_id">      
       <querytext>
       
         select a.attribute_id
@@ -24,7 +24,7 @@
 </fullquery>
 
  
-<fullquery name="delete.select_attr_info">      
+<fullquery name="attribute::delete.select_attr_info">      
       <querytext>
       
         select a.object_type, a.attribute_name, 
@@ -38,7 +38,7 @@
 </fullquery>
 
  
-<fullquery name="value_delete.select_last_sort_order">      
+<fullquery name="attribute::value_delete.select_last_sort_order">      
       <querytext>
       
         select v.sort_order as old_sort_order
@@ -50,7 +50,7 @@
 </fullquery>
 
  
-<fullquery name="value_delete.delete_enum_value">      
+<fullquery name="attribute::value_delete.delete_enum_value">      
       <querytext>
       
         delete from acs_enum_values v
@@ -61,7 +61,7 @@
 </fullquery>
 
  
-<fullquery name="value_delete.update_sort_order">      
+<fullquery name="attribute::value_delete.update_sort_order">      
       <querytext>
       
             update acs_enum_values v
@@ -73,7 +73,7 @@
 </fullquery>
 
  
-<fullquery name="multirow.object_type_query">      
+<fullquery name="attribute::multirow.object_type_query">      
       <querytext>
       
 	    select object_type from acs_objects where object_id = :object_id
@@ -82,7 +82,7 @@
 </fullquery>
 
  
-<fullquery name="multirow.attribute_select">      
+<fullquery name="attribute::multirow.attribute_select">      
       <querytext>
       
         select * 
@@ -93,7 +93,7 @@
 </fullquery>
 
  
-<fullquery name="add_form_elements.select_enum_values">      
+<fullquery name="attribute::add_form_elements.select_enum_values">      
       <querytext>
       
 		select enum.pretty_name, enum.enum_value

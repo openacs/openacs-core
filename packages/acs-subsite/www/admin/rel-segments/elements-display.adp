@@ -2,8 +2,6 @@
 ad_require_permission $segment_id "read"
 set write_p [ad_permission_p $segment_id "write"]
 
-# Expects segment_id, segment_name, group_id, role to be passed in 
-
 set package_url [ad_conn package_url]
 set user_id [ad_conn user_id]
 

@@ -5,8 +5,6 @@
 
 <fullquery name="rel_type_info">      
       <querytext>
-      FIX ME CONNECT BY
-
     select t.object_type_two, t.role_two as role, 
            acs_rel_type__role_pretty_name(t.role_two) as role_pretty_name,
            acs_object_type__pretty_name(t.object_type_two) as object_type_two_name,
@@ -17,52 +15,58 @@
        and t.rel_type = obj_types.object_type
        and ancestor_rel_types.supertype = 'relationship'
        and ancestor_rel_types.object_type in (
-               select object_type from acs_object_types
-               start with object_type = :rel_type
-               connect by object_type = prior supertype
-           )
+	      	select t2.object_type from 
+		acs_object_types t1, acs_object_types t2
+		where t1.object_type= :rel_type
+		and t2.tree_sortkey <= t1.tree_sortkey
+		and t1.tree_sortkey like (t2.tree_sortkey || '%')
+	)
 
       </querytext>
 </fullquery>
 
  
+<partialquery name="select_parties_scope_query">
+<querytext>
+cross join (select element_id from application_group_element_map
+   where package_id = :package_id) app_elements
+</querytext>
+</partialquery>
+
 <fullquery name="select_parties">      
       <querytext>
-      FIX ME DECODE (USE SQL92 CASE)
-FIX ME OUTER JOIN
-FIX ME CONNECT BY
-
             select DISTINCT
-                   decode(groups.group_id,
-                          null, case when persons.person_id = null then 'INVALID' else persons.first_names || ' ' || persons.last_name end,
-                          groups.group_name) as party_name,
+                   case when groups.group_id is null then
+                          case when persons.person_id is null then 'INVALID' 
+				else persons.first_names || ' ' || persons.last_name 
+			  end else
+                   groups.group_name end as party_name,
                    p.party_id
             from (select o.object_id as party_id
                   from acs_objects o,
                        (select object_type from acs_object_types
-                        start with $start_with
-                        connect by prior object_type = supertype) t
-                  where o.object_type = t.object_type) p,
+                        where tree_sortkey like (select tree_sortkey || '%'
+						from acs_object_types
+						where $start_with)) t
+                  where o.object_type = t.object_type) p left join
                  (select element_id
                   from group_element_map
                   where group_id = :group_id and rel_type = :rel_type
                   UNION ALL
-                  select to_number(:group_id) ) m,
+                  select :group_id::integer ) m on (p.party_id = m.element_id) cross join
                  (select object_id
                   from all_object_party_privilege_map
-                  where party_id = :user_id and privilege = 'read') perm,
+                  where party_id = :user_id and privilege = 'read') perm cross join
                  (select party_id
                   from rc_parties_in_required_segs
                   where group_id = :group_id 
-                    and rel_type = :rel_type) pirs $scope_query,
-                 groups,
-                 persons
-            where p.party_id = m.element_id(+)
-              and m.element_id is null
+                    and rel_type = :rel_type) pirs $scope_query left join
+                 groups on (p.party_id = groups.group_id) 
+		left join persons on (p.party_id = persons.person_id)
+            where 
+              m.element_id is null
               and p.party_id = perm.object_id
               and p.party_id = pirs.party_id $scope_clause
-              and p.party_id = groups.group_id(+)
-              and p.party_id = persons.person_id(+)
     
       </querytext>
 </fullquery>

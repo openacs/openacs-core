@@ -50,16 +50,13 @@
  
 <fullquery name="attribute">      
       <querytext>
-      FIX ME OUTER JOIN
 
 	select utc.column_name,
 	       utc.data_type,
                ucc.comments
-	  from user_tab_columns utc,
-               user_col_comments ucc
+	  from user_tab_columns utc left join
+               user_col_comments ucc on (utc.table_name= ucc.table_name and utc.column_name = ucc.column_name)
 	 where utc.table_name = '[string toupper $table_name]'
-           and utc.table_name = ucc.table_name(+)
-           and utc.column_name = ucc.column_name(+)
     
       </querytext>
 </fullquery>

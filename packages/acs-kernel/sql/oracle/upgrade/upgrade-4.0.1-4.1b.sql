@@ -1388,7 +1388,7 @@ show errors
 -- 1/5/2001
 --
 -- CHANGES
--- defined default and permissable relationship types for group 
+-- defined default and permissible relationship types for group 
 -- types and groups
 -- NEW TABLES: group_type_rels, group_rels with defaults set for existing groups
 -----------------------------
@@ -2374,7 +2374,7 @@ is
   values
    (v_group_id, group_name);
 
-  -- setup the permissable relationship types for this group
+  -- setup the permissible relationship types for this group
   insert into group_rels
   (group_rel_id, group_id, rel_type)
   select acs_object_id_seq.nextval, v_group_id, g.rel_type
@@ -3352,7 +3352,7 @@ is
   values
    (v_group_id, group_name);
 
-  -- setup the permissable relationship types for this group
+  -- setup the permissible relationship types for this group
   insert into group_rels
   (group_rel_id, group_id, rel_type)
   select acs_object_id_seq.nextval, v_group_id, g.rel_type

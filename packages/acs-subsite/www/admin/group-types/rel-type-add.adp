@@ -1,6 +1,6 @@
 <master src="../master">
 <property name="context_bar">@context_bar@</property>
-<property name="title">Add permissable relationship type</property>
+<property name="title">Add permissible relationship type</property>
 				   
 <if @primary_rels:rowcount@ eq "0">
   There are no other relationship types that you can add. You can

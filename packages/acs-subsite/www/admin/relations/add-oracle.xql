@@ -24,7 +24,13 @@
       </querytext>
 </fullquery>
 
- 
+<partialquery name="select_parties_scope_query">
+<querytext>
+, (select element_id from application_group_element_map
+   where package_id = :package_id) app_elements
+</querytext>
+</partialquery>
+
 <fullquery name="select_parties">      
       <querytext>
       

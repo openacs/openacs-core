@@ -104,6 +104,8 @@ ad_proc -public add {
     
 } {
     
+    set default_value $default
+
     # We always use type-specific storage. Grab the tablename from the
     # object_type
     if { ![db_0or1row select_table {
@@ -114,39 +116,38 @@ ad_proc -public add {
         error "Specified object type \"$object_type\" does not exist"
     }
     
+    # In OpenACS, where we care that SQL must be separate from code, we don't
+    # use these annoying formatting procs on our SQL. We write out the queries in full. (ben)
+
     # Attribute name returned from this function will be oracle
     # friendly and is thus used as the column name
     set attribute_name [plsql_utility::generate_oracle_name $pretty_name]
     
-    set attr_list [list]
-    lappend attr_list [list "object_type" '$object_type']
-    lappend attr_list [list "attribute_name" '$attribute_name']
-    lappend attr_list [list "min_n_values" '$min_n_values']
-    lappend attr_list [list "max_n_values" '$max_n_values']
-    lappend attr_list [list "default_value" '$default']
-    lappend attr_list [list "datatype" '$datatype']
-    lappend attr_list [list "pretty_name" '$pretty_name']
-    lappend attr_list [list "pretty_plural" '$pretty_plural']
+#      set attr_list [list]
+#      lappend attr_list [list "object_type" '$object_type']
+#      lappend attr_list [list "attribute_name" '$attribute_name']
+#      lappend attr_list [list "min_n_values" '$min_n_values']
+#      lappend attr_list [list "max_n_values" '$max_n_values']
+#      lappend attr_list [list "default_value" '$default']
+#      lappend attr_list [list "datatype" '$datatype']
+#      lappend attr_list [list "pretty_name" '$pretty_name']
+#      lappend attr_list [list "pretty_plural" '$pretty_plural']
+    
+    # A note (by ben)
+    # the queries are empty because they are pulled out later in db_exec_plsql
     
     set plsql [list]
-    lappend plsql_drop [list "drop_attribute" "begin acs_attribute.drop_attribute(:object_type, :attribute_name); end;"]
-    lappend plsql [list "create_attribute" "
-declare
-  attr_id     acs_attributes.attribute_id%TYPE;
-begin
-  attr_id := acs_attribute.create_attribute (
-      [plsql_utility::format_pieces -delim " => " $attr_list]
-  );
-end;"]
+    lappend plsql_drop [list "drop_attribute" "FOO" db_exec_plsql]
+    lappend plsql [list "create_attribute" "FOO" db_exec_plsql]
 
-    set sql_type [datatype_to_sql_type -default $default $table_name $attribute_name $datatype]
+    set sql_type [datatype_to_sql_type -default $default_value $table_name $attribute_name $datatype]
     
-    lappend plsql_drop [list "drop_attr_column" "alter table $table_name drop column $attribute_name"]
-    lappend plsql [list "add_column" "alter table $table_name add $attribute_name $sql_type"]
+    lappend plsql_drop [list "drop_attr_column" "FOO" db_dml]
+    lappend plsql [list "add_column" "FOO" db_dml]
     
     for { set i 0 } { $i < [llength $plsql] } { incr i } {
         set pair [lindex $plsql $i]
-        if { [catch {db_exec_plsql [lindex $pair 0] [lindex $pair 1]} err_msg] } {
+        if { [catch {eval [lindex $pair 2] [lindex $pair 0] [lindex $pair 1]} err_msg] } {
             # Rollback what we've done so far. The loop contitionals are:
             #  start at the end of the plsql_drop list (Drop things in reverse order of creation)
             # execute drop statements until we reach position $i+1
@@ -154,7 +155,7 @@ end;"]
             #  is not executed
             for { set inner [expr [llength $plsql_drop] - 1] } { $inner > [expr $i + 1] } { set inner [expr $inner - 1] } {
                 set drop_pair [lindex $plsql_drop $inner]
-                if { [catch {db_exec_plsql [lindex $drop_pair 0] [lindex $drop_pair 1]} err_msg_2] } {
+                if { [catch {eval [lindex $drop_pair 2] [lindex $drop_pair 0] [lindex $drop_pair 1]} err_msg_2] } {
                     append err_msg "\nAdditional error while trying to roll back: $err_msg_2"
                     return -code error $err_msg
                 }
@@ -194,16 +195,16 @@ ad_proc -private datatype_to_sql_type {
     set constraint ""
     
     switch $datatype {
-        "string" { set type "varchar2(1000)" }
+        "string" { set type "varchar(1000)" }
         "boolean" { set type "char(1)"
                     set constraint "[generate_constraint $table $column "ck"] check ($column in ('t','f'))" }
         "number" { set type "number" }
         "money" { set type "number (12,2)" }
         "date" { set type "date" }
-        "text" { set type "varchar2(4000)" }
+        "text" { set type "varchar(4000)" }
         "integer" { set type "integer" }
-        "enumeration" { set type "varchar2(100)" }
-        "keyword" { set type "varchar2(1000)" }
+        "enumeration" { set type "varchar(100)" }
+        "keyword" { set type "varchar(1000)" }
         default {error "Unsupported datatype. Datatype $datatype is not implemented at this time"}
     }
 
@@ -257,13 +258,13 @@ ad_proc -public delete { attribute_id } {
     }
 
     set plsql [list]
-    lappend plsql [list "drop_attribute" "begin acs_attribute.drop_attribute(:object_type, :attribute_name); end;"]
+    lappend plsql [list "drop_attribute" "FOO" "db_exec_plsql"]
     if { [db_column_exists $table_name $column_name] } {
-        lappend plsql [list "drop_attr_column" "alter table $table_name drop column $column_name"]
+        lappend plsql [list "drop_attr_column" "FOO" "db_dml"]
     }
 
     foreach pair $plsql {
-        db_exec_plsql [lindex $pair 0] [lindex $pair 1]
+        eval [lindex $pair 2] [lindex $pair 0] [lindex $pair 1]
     }
     
     return 1

@@ -2,7 +2,7 @@
 
 ad_page_contract {
 
-    Removes a mapping for a permissable rel_type between either a
+    Removes a mapping for a permissible rel_type between either a
     group or a group_type
 
     @author mbryzek@arsdigita.com

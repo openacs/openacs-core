@@ -2,7 +2,7 @@
 
 ad_page_contract {
 
-    Adds a relationship type to the list of permissable ones for this
+    Adds a relationship type to the list of permissible ones for this
     group
 
     @author mbryzek@arsdigita.com

@@ -63,7 +63,7 @@ allowed relationship types.
     </multiple>
   </else>
 
-  <p><li> <a href="rel-type-add?group_type=@group_type_enc@">Add a permissable relationship type</a> </li>
+  <p><li> <a href="rel-type-add?group_type=@group_type_enc@">Add a permissible relationship type</a> </li>
 </ul>
 
 

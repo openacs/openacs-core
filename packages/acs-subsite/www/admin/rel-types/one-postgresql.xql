@@ -23,9 +23,8 @@
  
 <fullquery name="rels_select">      
       <querytext>
-      FIX ME ROWNUM
 
-    select inner.* 
+    select v_inner.* 
       from (select r.rel_id, acs_object__name(r.object_id_one) || ' and ' || acs_object__name(r.object_id_two) as name
               from acs_rels r, acs_object_party_privilege_map perm,
                    app_group_distinct_rel_map m
@@ -35,8 +34,8 @@
                and r.rel_type = :rel_type
                and m.rel_id = r.rel_id
                and m.package_id = :package_id
-             order by lower(acs_object__name(r.object_id_one)), lower(acs_object__name(r.object_id_two))) inner
-    where rownum <= 26
+             order by lower(acs_object__name(r.object_id_one)), lower(acs_object__name(r.object_id_two))) v_inner
+	limit 26
 
       </querytext>
 </fullquery>
