@@ -476,7 +476,7 @@ ad_proc -private apm_package_install {
             # We are installing a new package
 
             # Load catalog files without the upgrade switch before package version is changed in db
-            apm_load_catalog_files -upgrade $package_key $message_catalog_files
+            apm_load_catalog_files $package_key $message_catalog_files
 
 	    set version_id [apm_package_install_version -callback $callback $package_key $version_name \
 				$version_uri $summary $description $description_format $vendor $vendor_uri $auto_mount $release_date]
