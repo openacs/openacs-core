@@ -177,7 +177,7 @@ ad_proc db_write_blob { statement_name sql args } {
     set full_statement_name [db_qd_get_fullname $statement_name]
 
     db_with_handle db { 
-	db_exec write_blob $db $full_statement_name $sql
+	db_exec_lob write_blob $db $full_statement_name $sql
     }
 }
 
@@ -245,9 +245,7 @@ ad_proc -private db_exec_lob { type db statement_name pre_sql {ulevel 2} args } 
             set content [ns_set value $selection 0]
             for {set i 0} {$i < [ns_set size $selection]} {incr i} {
                 set name [ns_set key $selection $i]
-                if {[string equal $name storage_type]} {
-                    set storage_type [ns_set value $selection $i]
-                } elseif {[string equal $name content]} {
+                if {[string equal $name content]} {
                     set content [ns_set value $selection $i]
                 }
             }
@@ -268,7 +266,7 @@ ad_proc -private db_exec_lob { type db statement_name pre_sql {ulevel 2} args } 
                     }
                  }
 
-                write_blob_lob {
+                write_blob {
 
                     if {[file exists $content]} {
                         set ofp [open $content r]
