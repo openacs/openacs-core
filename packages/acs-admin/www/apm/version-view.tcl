@@ -200,6 +200,11 @@ append body "
 <li><a href=\"version-callbacks?[export_vars { version_id }]\">Tcl Callbacks (install, instantiate, mount)</a>
 <li><a href=\"version-i18n-index?[export_vars { version_id }]\">Internationalization</a>
 </ul>
+<h4>Reload</h4>
+<ul>
+<li><a href=\"[export_vars -base version-reload { version_id {return_url [ad_return_url]}}]\">Reload this package</a>
+<li><a href=\"[export_vars -base package-watch { package_key {return_url [ad_return_url]}}]\">Watch all files in package</a>
+</ul>
 <h4>XML .info package specification file</h4>
 <ul>
 <li><a href=\"version-generate-info?[export_vars { version_id }]\">Display an XML package specification file for this version</a>
