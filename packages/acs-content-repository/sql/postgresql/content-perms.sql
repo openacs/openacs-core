@@ -59,7 +59,7 @@ returns integer as '
 declare
   inherit_permissions__parent_object_id       alias for $1;  
   inherit_permissions__child_object_id        alias for $2;  
-  inherit_permissions__child_creator_id       alias for $3;  
+  inherit_permissions__child_creator_id       alias for $3;  -- default null  
   v_dummy                                     integer;       
 begin
 
@@ -240,12 +240,12 @@ end;' language 'plpgsql';
 create function content_permission__grant_permission (integer,integer,varchar,integer,boolean,varchar)
 returns integer as '
 declare
-  grant_permission__object_id              alias for $1;  
-  grant_permission__holder_id              alias for $2;  
-  grant_permission__privilege              alias for $3;  
-  grant_permission__recepient_id           alias for $4;  
-  grant_permission__is_recursive           alias for $5;  
-  grant_permission__object_type            alias for $6;  
+  grant_permission__object_id      alias for $1;  
+  grant_permission__holder_id      alias for $2;  
+  grant_permission__privilege      alias for $3;  
+  grant_permission__recepient_id   alias for $4;  
+  grant_permission__is_recursive   alias for $5;  -- default ''f''  
+  grant_permission__object_type    alias for $6;  -- default ''content_item''
   v_object_id                              acs_objects.object_id%TYPE;
 begin
 --      select 
@@ -327,12 +327,12 @@ end;' language 'plpgsql';
 create function content_permission__revoke_permission (integer,integer,varchar,integer,boolean,varchar)
 returns integer as '
 declare
-  revoke_permission__object_id              alias for $1;  
-  revoke_permission__holder_id              alias for $2;  
-  revoke_permission__privilege              alias for $3;  
-  revoke_permission__revokee_id             alias for $4;  
-  revoke_permission__is_recursive           alias for $5;  
-  revoke_permission__object_type            alias for $6;  
+  revoke_permission__object_id    alias for $1;  
+  revoke_permission__holder_id    alias for $2;  
+  revoke_permission__privilege    alias for $3;  
+  revoke_permission__revokee_id   alias for $4;  
+  revoke_permission__is_recursive alias for $5;  -- default ''f''  
+  revoke_permission__object_type  alias for $6;  -- default ''content_item''
   v_rec                                     record;
 begin
 --                     select object_id, object_type from acs_objects 

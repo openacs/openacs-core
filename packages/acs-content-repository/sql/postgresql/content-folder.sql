@@ -17,8 +17,8 @@ returns integer as '
 declare
   new__name                   alias for $1;  
   new__label                  alias for $2;  
-  new__description            alias for $3;  
-  new__parent_id              alias for $4;  
+  new__description            alias for $3;  -- default null  
+  new__parent_id              alias for $4;  -- default null
 begin
         return content_folder__new(new__name,
                                    new__label,
@@ -38,13 +38,13 @@ returns integer as '
 declare
   new__name                   alias for $1;  
   new__label                  alias for $2;  
-  new__description            alias for $3;  
-  new__parent_id              alias for $4;  
-  new__context_id             alias for $5;  
-  new__folder_id              alias for $6;  
-  new__creation_date          alias for $7;  
-  new__creation_user          alias for $8;  
-  new__creation_ip            alias for $9;  
+  new__description            alias for $3;  -- default null
+  new__parent_id              alias for $4;  -- default null
+  new__context_id             alias for $5;  -- default null
+  new__folder_id              alias for $6;  -- default null
+  new__creation_date          alias for $7;  -- default now()
+  new__creation_user          alias for $8;  -- default null
+  new__creation_ip            alias for $9;  -- default null
   v_folder_id                 cr_folders.folder_id%TYPE;
   v_context_id                acs_objects.context_id%TYPE;
 begin
@@ -161,9 +161,9 @@ create function content_folder__rename (integer,varchar,varchar,varchar)
 returns integer as '
 declare
   rename__folder_id              alias for $1;  
-  rename__name                   alias for $2;  
-  rename__label                  alias for $3;  
-  rename__description            alias for $4;  
+  rename__name                   alias for $2;  -- default null  
+  rename__label                  alias for $3;  -- default null
+  rename__description            alias for $4;  -- default null
   v_name_already_exists_p        integer;
 begin
 
@@ -271,7 +271,7 @@ declare
   copy__folder_id              alias for $1;  
   copy__target_folder_id       alias for $2;  
   copy__creation_user          alias for $3;  
-  copy__creation_ip            alias for $4;  
+  copy__creation_ip            alias for $4;  -- default null  
   v_valid_folders_p            integer        
   v_current_folder_id          cr_folders.folder_id%TYPE;
   v_name                       cr_items.name%TYPE;
@@ -465,7 +465,7 @@ returns integer as '
 declare
   register_content_type__folder_id              alias for $1;  
   register_content_type__content_type           alias for $2;  
-  register_content_type__include_subtypes       alias for $3;  
+  register_content_type__include_subtypes       alias for $3;  -- default ''f''
   v_is_registered                               varchar;  
 begin
 
@@ -536,7 +536,7 @@ returns integer as '
 declare
   unregister_content_type__folder_id              alias for $1;  
   unregister_content_type__content_type           alias for $2;  
-  unregister_content_type__include_subtypes       alias for $3;  
+  unregister_content_type__include_subtypes       alias for $3; -- default ''f'' 
 begin
 
   if unregister_content_type__include_subtypes = ''f'' then
@@ -576,7 +576,7 @@ returns boolean as '
 declare
   is_registered__folder_id              alias for $1;  
   is_registered__content_type           alias for $2;  
-  is_registered__include_subtypes       alias for $3;  
+  is_registered__include_subtypes       alias for $3;  -- default ''f''  
   v_is_registered                       integer;
   v_subtype_val                         record;
 begin

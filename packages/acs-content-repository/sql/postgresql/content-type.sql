@@ -49,12 +49,12 @@ create function content_type__create_type (varchar,varchar,varchar,varchar,varch
 returns integer as '
 declare
   create_type__content_type           alias for $1;  
-  create_type__supertype              alias for $2;  
+  create_type__supertype              alias for $2;  -- default ''content_revision''  
   create_type__pretty_name            alias for $3;  
   create_type__pretty_plural          alias for $4;  
-  create_type__table_name             alias for $5;  
-  create_type__id_column              alias for $6;  
-  create_type__name_method            alias for $7;  
+  create_type__table_name             alias for $5;  -- default null  
+  create_type__id_column              alias for $6;  -- default ''XXX''
+  create_type__name_method            alias for $7;  -- default null
   table_exists                        boolean;       
   v_supertype_table                   acs_object_types.table_name%TYPE;
                                         
@@ -98,8 +98,8 @@ create function content_type__drop_type (varchar,boolean,boolean)
 returns integer as '
 declare
   drop_type__content_type           alias for $1;  
-  drop_type__drop_children_p        alias for $2;  
-  drop_type__drop_table_p           alias for $3;  
+  drop_type__drop_children_p        alias for $2;  -- default ''f''  
+  drop_type__drop_table_p           alias for $3;  -- default ''f''
   table_exists                      boolean;       
   v_table_name                      varchar;   
   is_subclassed_p                   boolean;      
@@ -183,10 +183,10 @@ declare
   create_attribute__attribute_name         alias for $2;  
   create_attribute__datatype               alias for $3;  
   create_attribute__pretty_name            alias for $4;  
-  create_attribute__pretty_plural          alias for $5;  
-  create_attribute__sort_order             alias for $6;  
-  create_attribute__default_value          alias for $7;  
-  create_attribute__column_spec            alias for $8;  
+  create_attribute__pretty_plural          alias for $5;  -- default null  
+  create_attribute__sort_order             alias for $6;  -- default null
+  create_attribute__default_value          alias for $7;  -- default null
+  create_attribute__column_spec            alias for $8;  -- default ''text''
   v_attr_id                                acs_attributes.attribute_id%TYPE;
   v_table_name                             acs_object_types.table_name%TYPE;
   v_column_exists                          boolean;       
@@ -242,7 +242,7 @@ returns integer as '
 declare
   drop_attribute__content_type           alias for $1;  
   drop_attribute__attribute_name         alias for $2;  
-  drop_attribute__drop_column            alias for $3;  
+  drop_attribute__drop_column            alias for $3;  -- default ''f''  
   v_attr_id                              acs_attributes.attribute_id%TYPE;
   v_table                                acs_object_types.table_name%TYPE;
 begin
@@ -293,7 +293,7 @@ declare
   register_template__content_type           alias for $1;  
   register_template__template_id            alias for $2;  
   register_template__use_context            alias for $3;  
-  register_template__is_default             alias for $4;  
+  register_template__is_default             alias for $4;  -- default ''f''  
   v_template_registered                     boolean;       
 begin
   select 
@@ -401,9 +401,9 @@ end;' language 'plpgsql';
 create function content_type__unregister_template (varchar,integer,varchar)
 returns integer as '
 declare
-  unregister_template__content_type           alias for $1;  
-  unregister_template__template_id            alias for $2;  
-  unregister_template__use_context            alias for $3;  
+  unregister_template__content_type           alias for $1;  -- default null  
+  unregister_template__template_id            alias for $2; 
+  unregister_template__use_context            alias for $3;  -- default null 
 begin
 
   if unregister_template__use_context is null and 
@@ -668,12 +668,12 @@ end;' language 'plpgsql';
 create function content_type__register_child_type (varchar,varchar,varchar,integer,integer)
 returns integer as '
 declare
-  register_child_type__parent_type            alias for $1;  
-  register_child_type__child_type             alias for $2;  
-  register_child_type__relation_tag           alias for $3;  
-  register_child_type__min_n                  alias for $4;  
-  register_child_type__max_n                  alias for $5;
-  v_exists                                    integer;
+  register_child_type__parent_type   alias for $1;  
+  register_child_type__child_type    alias for $2;  
+  register_child_type__relation_tag  alias for $3;  -- default ''generic''  
+  register_child_type__min_n         alias for $4;  -- default 0
+  register_child_type__max_n         alias for $5;  -- default null
+  v_exists                           integer;
 begin
 
   select count(*) into v_exists 
@@ -716,8 +716,7 @@ returns integer as '
 declare
   unregister_child_type__parent_type            alias for $1;  
   unregister_child_type__child_type             alias for $2;  
-  unregister_child_type__relation_tag           alias for $3;  
-                                        
+  unregister_child_type__relation_tag           alias for $3;  -- default null
 begin
 
   delete from 
@@ -737,12 +736,12 @@ end;' language 'plpgsql';
 create function content_type__register_relation_type (varchar,varchar,varchar,integer,integer)
 returns integer as '
 declare
-  register_relation_type__content_type           alias for $1;  
-  register_relation_type__target_type            alias for $2;  
-  register_relation_type__relation_tag           alias for $3;  
-  register_relation_type__min_n                  alias for $4;  
-  register_relation_type__max_n                  alias for $5;  
-  v_exists                                       integer;       
+  register_relation_type__content_type  alias for $1;  
+  register_relation_type__target_type   alias for $2;  
+  register_relation_type__relation_tag  alias for $3;  -- default ''generic''  
+  register_relation_type__min_n         alias for $4;  -- default 0
+  register_relation_type__max_n         alias for $5;  -- default null
+  v_exists                              integer;       
 begin
 
   -- check if the relation type exists
@@ -789,9 +788,9 @@ end;' language 'plpgsql';
 create function content_type__unregister_relation_type (varchar,varchar,varchar)
 returns integer as '
 declare
-  unregister_relation_type__content_type           alias for $1;  
-  unregister_relation_type__target_type            alias for $2;  
-  unregister_relation_type__relation_tag           alias for $3;  
+  unregister_relation_type__content_type  alias for $1;  
+  unregister_relation_type__target_type   alias for $2;  
+  unregister_relation_type__relation_tag  alias for $3;  -- default null  
                                         
 begin
 

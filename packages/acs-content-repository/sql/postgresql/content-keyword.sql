@@ -97,13 +97,13 @@ create function content_keyword__new (varchar,varchar,integer,integer,timestamp,
 returns integer as '
 declare
   new__heading                alias for $1;  
-  new__description            alias for $2;  
-  new__parent_id              alias for $3;  
-  new__keyword_id             alias for $4;  
-  new__creation_date          alias for $5;  
-  new__creation_user          alias for $6;  
-  new__creation_ip            alias for $7;  
-  new__object_type            alias for $8;  
+  new__description            alias for $2;  -- default null  
+  new__parent_id              alias for $3;  -- default null
+  new__keyword_id             alias for $4;  -- default null
+  new__creation_date          alias for $5;  -- default now()
+  new__creation_user          alias for $6;  -- default null
+  new__creation_ip            alias for $7;  -- default null
+  new__object_type            alias for $8;  -- default ''content_keyword''
   v_id                        integer;       
 begin
 
@@ -151,9 +151,9 @@ returns integer as '
 declare
   item_assign__item_id                alias for $1;  
   item_assign__keyword_id             alias for $2;  
-  item_assign__context_id             alias for $3;  
-  item_assign__creation_user          alias for $4;  
-  item_assign__creation_ip            alias for $5;  
+  item_assign__context_id             alias for $3;  -- default null  
+  item_assign__creation_user          alias for $4;  -- default null
+  item_assign__creation_ip            alias for $5;  -- default null
   exists_p                            boolean;
 begin
   
@@ -198,7 +198,7 @@ returns boolean as '
 declare
   is_assigned__item_id                alias for $1;  
   is_assigned__keyword_id             alias for $2;  
-  is_assigned__recurse                alias for $3;  
+  is_assigned__recurse                alias for $3;  -- default ''none''  
   v_ret                               boolean;    
 begin
 

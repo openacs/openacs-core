@@ -15,14 +15,14 @@
 create function content_symlink__new (varchar,varchar,integer,integer,integer,timestamp,integer,varchar)
 returns integer as '
 declare
-  new__name                   alias for $1;  
-  new__label                  alias for $2;  
+  new__name                   alias for $1;  -- default null  
+  new__label                  alias for $2;  -- default null
   new__target_id              alias for $3;  
   new__parent_id              alias for $4;  
-  new__symlink_id             alias for $5;  
-  new__creation_date          alias for $6;  
-  new__creation_user          alias for $7;  
-  new__creation_ip            alias for $8;  
+  new__symlink_id             alias for $5;  -- default null
+  new__creation_date          alias for $6;  -- default now()
+  new__creation_user          alias for $7;  -- default null
+  new__creation_ip            alias for $8;  -- default null
   v_symlink_id                cr_symlinks.symlink_id%TYPE;
   v_name                      cr_items.name%TYPE;
   v_label                     cr_symlinks.label%TYPE;
@@ -150,7 +150,7 @@ declare
   copy__symlink_id             alias for $1;  
   copy__target_folder_id       alias for $2;  
   copy__creation_user          alias for $3;  
-  copy__creation_ip            alias for $4;  
+  copy__creation_ip            alias for $4;  -- default null  
   v_current_folder_id          cr_folders.folder_id%TYPE;
   v_name                       cr_items.name%TYPE;
   v_target_id                  cr_items.item_id%TYPE;

@@ -39,11 +39,11 @@ create function content_template__new (varchar,integer,integer,timestamp,integer
 returns integer as '
 declare
   new__name                   alias for $1;  
-  new__parent_id              alias for $2;  
-  new__template_id            alias for $3;  
-  new__creation_date          alias for $4;  
-  new__creation_user          alias for $5;  
-  new__creation_ip            alias for $6;  
+  new__parent_id              alias for $2;  -- default null  
+  new__template_id            alias for $3;  -- default null
+  new__creation_date          alias for $4;  -- default now()
+  new__creation_user          alias for $5;  -- default null
+  new__creation_ip            alias for $6;  -- default null
   v_template_id               cr_templates.template_id%TYPE;
   v_parent_id                 cr_items.parent_id%TYPE;
 begin
@@ -133,7 +133,7 @@ create function content_template__get_path (integer,integer)
 returns varchar as '
 declare
   template_id            alias for $1;  
-  root_folder_id         alias for $2;  
+  root_folder_id         alias for $2; -- default content_template_globals.c_root_folder_id
                                         
 begin
 

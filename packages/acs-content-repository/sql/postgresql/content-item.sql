@@ -18,7 +18,7 @@ select -100 as c_root_folder_id;
 create function content_item__get_root_folder (integer)
 returns integer as '
 declare
-  get_root_folder__item_id                alias for $1;  
+  get_root_folder__item_id                alias for $1;  -- default null 
   v_folder_id                             cr_folders.folder_id%TYPE;
 begin
 
@@ -67,22 +67,22 @@ create function content_item__new (varchar,integer,integer,varchar,timestamp,int
 returns integer as '
 declare
   new__name                   alias for $1;  
-  new__parent_id              alias for $2;  
-  new__item_id                alias for $3;  
-  new__locale                 alias for $4;  
-  new__creation_date          alias for $5;  
-  new__creation_user          alias for $6;  
-  new__context_id             alias for $7;  
-  new__creation_ip            alias for $8;  
-  new__item_subtype           alias for $9;  
-  new__content_type           alias for $10; 
-  new__title                  alias for $11; 
-  new__description            alias for $12; 
-  new__mime_type              alias for $13; 
-  new__nls_language           alias for $14; 
-  new__text                   alias for $15; 
+  new__parent_id              alias for $2;  -- default null  
+  new__item_id                alias for $3;  -- default null
+  new__locale                 alias for $4;  -- default null
+  new__creation_date          alias for $5;  -- default now()
+  new__creation_user          alias for $6;  -- default null
+  new__context_id             alias for $7;  -- default null
+  new__creation_ip            alias for $8;  -- default null
+  new__item_subtype           alias for $9;  -- default ''content_item''
+  new__content_type           alias for $10; -- default ''content_revision''
+  new__title                  alias for $11; -- default null
+  new__description            alias for $12; -- default null
+  new__mime_type              alias for $13; -- default ''text/plain''
+  new__nls_language           alias for $14; -- default null
+  new__text                   alias for $15; -- default null
 -- changed to integer for blob_id
-  new__data                   alias for $16; 
+  new__data                   alias for $16; -- default null
 --  relation_tag                alias for $17; 
 --  is_live                     alias for $18; 
   new__relation_tag           varchar default null;
@@ -265,10 +265,10 @@ create function content_item__new(varchar,integer,varchar,text,text)
 returns integer as '
 declare
         new__name               alias for $1;
-        new__parent_id          alias for $2;
-        new__title              alias for $3;
-        new__description        alias for $4;
-        new__text               alias for $5;
+        new__parent_id          alias for $2;  -- default null
+        new__title              alias for $3;  -- default null
+        new__description        alias for $4;  -- default null
+        new__text               alias for $5;  -- default null
 begin
         return content_item__new(new__name,
                                  new__parent_id,
@@ -670,8 +670,8 @@ create function content_item__get_id (varchar,integer,boolean)
 returns integer as '
 declare
   get_id__item_path              alias for $1;  
-  get_id__root_folder_id         alias for $2;  
-  get_id__resolve_index          alias for $3;  
+  get_id__root_folder_id         alias for $2;  -- default null
+  get_id__resolve_index          alias for $3;  -- default ''f''
   v_item_path                    varchar; 
   v_root_folder_id               cr_items.item_id%TYPE;
   get_id__parent_id              integer;       
@@ -758,7 +758,7 @@ create function content_item__get_path (integer,integer)
 returns varchar as '
 declare
   get_path__item_id                alias for $1;  
-  get_path__root_folder_id         alias for $2;  
+  get_path__root_folder_id         alias for $2;  -- default null  
   v_count                          integer;       
   v_name                           varchar;  
   v_parent_id                      integer default 0;        
@@ -936,7 +936,7 @@ create function content_item__get_virtual_path (integer,integer)
 returns varchar as '
 declare
   get_virtual_path__item_id               alias for $1;  
-  get_virtual_path__root_folder_id        alias for $2;  
+  get_virtual_path__root_folder_id        alias for $2; -- default content_item_globals.c_root_folder_id
   v_path                                  varchar; 
   v_item_id                               cr_items.item_id%TYPE;
   v_is_folder                             boolean;       
@@ -1030,8 +1030,8 @@ create function content_item__unregister_template (integer,integer,varchar)
 returns integer as '
 declare
   unregister_template__item_id                alias for $1;  
-  unregister_template__template_id            alias for $2;  
-  unregister_template__use_context            alias for $3;  
+  unregister_template__template_id            alias for $2;  -- default null  
+  unregister_template__use_context            alias for $3;  -- default null
                                         
 begin
 
@@ -1163,11 +1163,11 @@ end;' language 'plpgsql';
 
 
 -- procedure set_live_revision
-create function content_item__set_live_revision (integer)
+create function content_item__set_live_revision (integer,varchar)
 returns integer as '
 declare
   set_live_revision__revision_id    alias for $1;  
-  set_live_revision__publish_status cr_items.publish_status%TYPE default ''ready'';  
+  set_live_revision__publish_status alias for $2; -- default ''ready''
 begin
 
   update
@@ -1227,8 +1227,8 @@ create function content_item__set_release_period (integer,timestamp,timestamp)
 returns integer as '
 declare
   set_release_period__item_id                alias for $1;  
-  set_release_period__start_when             alias for $2;
-  set_release_period__end_when               alias for $3;
+  set_release_period__start_when             alias for $2;  -- default null
+  set_release_period__end_when               alias for $3;  -- default null
   v_count                                    integer;       
 begin
 
@@ -1347,7 +1347,7 @@ declare
   item_id                alias for $1;  
   target_folder_id       alias for $2;  
   creation_user          alias for $3;  
-  creation_ip            alias for $4;  
+  creation_ip            alias for $4;  -- default null  
   copy_id                cr_items.item_id%TYPE;
 begin
 
@@ -1372,7 +1372,7 @@ declare
   copy2__item_id                alias for $1;  
   copy2__target_folder_id       alias for $2;  
   copy2__creation_user          alias for $3;  
-  copy2__creation_ip            alias for $4;  
+  copy2__creation_ip            alias for $4;  -- default null  
   v_current_folder_id           cr_folders.folder_id%TYPE;
   v_num_revisions               integer;       
   v_name                        cr_items.name%TYPE;
@@ -1547,7 +1547,7 @@ create function content_item__get_title (integer,boolean)
 returns varchar as '
 declare
   get_title__item_id                alias for $1;  
-  get_title__is_live                alias for $2;  
+  get_title__is_live                alias for $2;  -- default ''f''  
   v_title                           cr_revisions.title%TYPE;
   v_content_type                    cr_items.content_type%TYPE;
 begin
@@ -1593,7 +1593,7 @@ create function content_item__get_publish_date (integer,boolean)
 returns timestamp as '
 declare
   get_publish_date__item_id                alias for $1;  
-  get_publish_date__is_live                alias for $2;  
+  get_publish_date__is_live                alias for $2;  -- default ''f''  
   v_revision_id                            cr_revisions.revision_id%TYPE;
   v_publish_date                           cr_revisions.publish_date%TYPE;
 begin
@@ -1676,9 +1676,9 @@ returns integer as '
 declare
   relate__item_id                alias for $1;  
   relate__object_id              alias for $2;  
-  relate__relation_tag           alias for $3;  
-  relate__order_n                alias for $4;  
-  relate__relation_type          alias for $5;  
+  relate__relation_tag           alias for $3;  -- default ''generic''  
+  relate__order_n                alias for $4;  -- default null
+  relate__relation_type          alias for $5;  -- default ''cr_item_rel''
   v_content_type                 cr_items.content_type%TYPE;
   v_object_type                  acs_objects.object_type%TYPE;
   v_is_valid                     integer;       

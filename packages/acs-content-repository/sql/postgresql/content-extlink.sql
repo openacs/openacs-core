@@ -15,15 +15,15 @@
 create function content_extlink__new (varchar,varchar,varchar,varchar,integer,integer,timestamp,integer,varchar)
 returns integer as '
 declare
-  new__name                   alias for $1;  
+  new__name                   alias for $1;  -- default null  
   new__url                    alias for $2;  
-  new__label                  alias for $3;  
-  new__description            alias for $4;  
+  new__label                  alias for $3;  -- default null
+  new__description            alias for $4;  -- default null
   new__parent_id              alias for $5;  
-  new__extlink_id             alias for $6;  
-  new__creation_date          alias for $7;  
-  new__creation_user          alias for $8;  
-  new__creation_ip            alias for $9;  
+  new__extlink_id             alias for $6;  -- default null
+  new__creation_date          alias for $7;  -- default now()
+  new__creation_user          alias for $8;  -- default null
+  new__creation_ip            alias for $9;  -- default null
   v_extlink_id                cr_extlinks.extlink_id%TYPE;
   v_label                     cr_extlinks.label%TYPE;
   v_name                      cr_items.name%TYPE;

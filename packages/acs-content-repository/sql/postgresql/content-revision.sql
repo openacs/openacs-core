@@ -17,17 +17,17 @@ create function content_revision__new (varchar,varchar,timestamp,varchar,varchar
 returns integer as '
 declare
   new__title                  alias for $1;  
-  new__description            alias for $2;  
-  new__publish_date           alias for $3;  
-  new__mime_type              alias for $4;  
-  new__nls_language           alias for $5;  
+  new__description            alias for $2;  -- default null 
+  new__publish_date           alias for $3;  -- default now()
+  new__mime_type              alias for $4;  -- default ''text/plain''
+  new__nls_language           alias for $5;  -- default null
   -- blob id FIXME
   new__data                   alias for $6;  
   new__item_id                alias for $7;  
-  new__revision_id            alias for $8;  
-  new__creation_date          alias for $9;  
-  new__creation_user          alias for $10; 
-  new__creation_ip            alias for $11; 
+  new__revision_id            alias for $8;  -- default null
+  new__creation_date          alias for $9;  -- default now()
+  new__creation_user          alias for $10; -- default null
+  new__creation_ip            alias for $11; -- default null
   v_revision_id               integer;       
   v_content_type              acs_object_types.object_type%TYPE;
 begin
@@ -90,16 +90,16 @@ create function content_revision__new (varchar,varchar,timestamp,varchar,varchar
 returns integer as '
 declare
   new__title                  alias for $1;  
-  new__description            alias for $2;  
-  new__publish_date           alias for $3;  
-  new__mime_type              alias for $4;  
-  new__nls_language           alias for $5;  
-  new__text                   alias for $6;  
+  new__description            alias for $2;  -- default null  
+  new__publish_date           alias for $3;  -- default now()
+  new__mime_type              alias for $4;  -- default ''text/plain''
+  new__nls_language           alias for $5;  -- default null
+  new__text                   alias for $6;  -- default '' ''
   new__item_id                alias for $7;  
-  new__revision_id            alias for $8;  
-  new__creation_date          alias for $9;  
-  new__creation_user          alias for $10; 
-  new__creation_ip            alias for $11; 
+  new__revision_id            alias for $8;  -- default null
+  new__creation_date          alias for $9;  -- default now()
+  new__creation_user          alias for $10; -- default null
+  new__creation_ip            alias for $11; -- default null
   v_revision_id               integer;       
   v_content_type              acs_object_types.object_type%TYPE;
 begin
@@ -173,10 +173,10 @@ create function content_revision__copy (integer,integer,integer,integer,varchar)
 returns integer as '
 declare
   copy__revision_id            alias for $1;  
-  copy__copy_id                alias for $2;  
-  copy__target_item_id         alias for $3;  
-  copy__creation_user          alias for $4;  
-  copy__creation_ip            alias for $5;  
+  copy__copy_id                alias for $2;  -- default null  
+  copy__target_item_id         alias for $3;  -- default null
+  copy__creation_user          alias for $4;  -- default null
+  copy__creation_ip            alias for $5;  -- default null
   v_copy_id                    cr_revisions.revision_id%TYPE;
   v_target_item_id             cr_items.item_id%TYPE;
   type_rec                     record;
@@ -523,7 +523,7 @@ create function content_revision__content_copy (integer,integer)
 returns integer as '
 declare
   content_copy__revision_id            alias for $1;  
-  content_copy__revision_id_dest       alias for $2;  
+  content_copy__revision_id_dest       alias for $2;  -- default null  
   lobs                                 blob;          
   lobd                                 blob;          
   v_item_id                            cr_items.item_id%TYPE;
