@@ -104,7 +104,7 @@
                 </formerror>
               </noparse>
 
-              <if @elements.help_text@ not nil>
+              <if @elements.help_text@ not nil and @elements.mode@ ne "display">
                 <p style="margin-top: 4px; margin-bottom: 2px; color: #666666; font-family: tahoma,verdana,arial,helvetica,sans-serif; font-size: 75%;">
                   <img src="/shared/images/info.gif" width="12" height="9" alt="[i]" title="Help text" border="0">
                   <noparse><formhelp id="@elements.id@"></noparse>
