@@ -1243,7 +1243,8 @@ ad_proc -public ad_conn {args} {
                         return $ad_conn(vhost_subsite_url)
                     }
                     vhost_package_url {
-                        set ad_conn(vhost_package_url) "[subsite::get_url][ad_conn node_name]"
+                        set subsite_package_url [string range [ad_conn package_url] [llength [ad_conn subsite_url]] end]
+                        set ad_conn(vhost_package_url) "[ad_conn vhost_subsite_url]$subsite_package_url"
                         return $ad_conn(vhost_package_url)
                     }
                     default {
