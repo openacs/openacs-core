@@ -35,10 +35,19 @@ ad_proc -public lang::system::site_wide_locale {
 } {
     Get the site wide system locale setting.
 } {
-    return [parameter::get \
+    set parameter_locale [parameter::get \
                 -package_id [apm_package_id_from_key "acs-lang"] \
                 -parameter "SiteWideLocale" \
                 -default "en_US"]
+
+    # Check validity of parameter setting
+    set valid_locales [lang::system::get_locales]
+    if { [lsearch -exact $valid_locales $parameter_locale] == -1 } {
+        ns_log Error "The parameter setting acs-lang.SiteWideLocale=\"$parameter_locale\" is invalid. Valid locales are: \"$valid_locales\". Defaulting to en_US locale"
+        return en_US
+    }
+
+    return $parameter_locale
 }
 
 ad_proc -public lang::system::package_level_locale_not_cached {
