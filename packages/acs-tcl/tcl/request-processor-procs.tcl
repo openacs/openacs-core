@@ -838,14 +838,18 @@ ad_proc -private rp_serve_abstract_file {
   {-extension_pattern ".*"}
   path
 } {
+    Serves up a file given the abstract path. Raises the following
+    exceptions in the obvious cases:
+    <ul>
+    <li>notfound  (passes back an empty value)
+    <li>redirect  (passes back the url to which it wants to redirect)
+    <li>directory (passes back the path of the directory)
+    </ul>
 
-  Serves up a file given the abstract path. Raises the following
-  exceptions in the obvious cases:
+    Should not be used in .vuh files or elsewhere, instead 
+    use the public function rp_internal_redirect.
 
-    notfound  (passes back an empty value)
-    redirect  (passes back the url to which it wants to redirect)
-    directory (passes back the path of the directory)
-
+    @see rp_internal_redirect  
 } {
   if { [string equal [string index $path end] "/"] } {
     if { [file isdirectory $path] } {
