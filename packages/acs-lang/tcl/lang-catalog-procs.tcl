@@ -215,7 +215,7 @@ namespace eval lang::catalog {
    } {
        # Put the messages in an array so it's easier to access them
        array set messages_array $messages_list
-       set message_key_list [array names messages_array]
+       set message_key_list [lsort [array names messages_array]]
 
        # Extract package_key, locale, and charset from the file path
        if { ![regexp {(?i)([^/]+)\.([a-z]{2}_[a-z]{2})\.(.*)\.xml$} $file_path match package_key locale charset] } {
