@@ -965,7 +965,7 @@ cp pam_radius_auth.so /lib/security/
         </listitem>
       </orderedlist>
     </sect1>
-    <sect1 id="install-pam-radius">
+    <sect1 id="install-ldap-radius">
       <title>Install LDAP for use as external authentication</title>
       <authorblurb>
         <para>By <ulink url="mailto:openacs@sussdorff.de">Malte Sussdorff</ulink></para>

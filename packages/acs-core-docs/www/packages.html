@@ -1,7 +1,7 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>OpenACS Packages</title><meta name="generator" content="DocBook XSL Stylesheets V1.64.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="dev-guide.html" title="Chapter 11. Development Reference"><link rel="previous" href="dev-guide.html" title="Chapter 11. Development Reference"><link rel="next" href="objects.html" title="OpenACS Data Models and the Object System"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="dev-guide.html">Prev</a> </td><th width="60%" align="center">Chapter 11. Development Reference</th><td width="20%" align="right"> <a accesskey="n" href="objects.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="packages"></a>OpenACS Packages</h2></div></div><div></div></div><div class="authorblurb"><p>By Pete Su and Bryan Quinn</p>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>OpenACS Packages</title><meta name="generator" content="DocBook XSL Stylesheets V1.66.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="dev-guide.html" title="Chapter 11. Development Reference"><link rel="previous" href="dev-guide.html" title="Chapter 11. Development Reference"><link rel="next" href="objects.html" title="OpenACS Data Models and the Object System"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="dev-guide.html">Prev</a> </td><th width="60%" align="center">Chapter 11. Development Reference</th><td width="20%" align="right"> <a accesskey="n" href="objects.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="packages"></a>OpenACS Packages</h2></div></div></div><div class="authorblurb"><p>By Pete Su and Bryan Quinn</p>
           OpenACS docs are written by the named authors, and may be edited
           by OpenACS documentation staff.
-        </div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="packages-overview"></a>Overview</h3></div></div><div></div></div><p>
+        </div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="packages-overview"></a>Overview</h3></div></div></div><p>
       This document is a guide on how to write a software package for
       OpenACS. OpenACS packages are installed and maintained with the
       OpenACS Package Manager (APM) which is part of the acs-admin
@@ -9,10 +9,10 @@
       conventions for the file system and naming that must be
       followed, and step by step instructions for creating a new
       package for the "Notes" example package.
-    </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="server-file-layout"></a>Server file layout</h3></div></div><div></div></div><p>
+    </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="server-file-layout"></a>Server file layout</h3></div></div></div><p>
       Here is how an OpenACS 5 server is laid out
       starting from the Server root (ROOT):
-    </p><div class="figure"><a name="id2522305"></a><p class="title"><b>Figure 11.1. Server file layout diagram</b></p><pre class="programlisting">
+    </p><div class="figure"><a name="id2564236"></a><p class="title"><b>Figure 11.1. Server file layout diagram</b></p><pre class="programlisting">
 ROOT/
     bin/
         Various executables and scripts for server maintanence.
@@ -30,7 +30,7 @@ ROOT/
     tcl/
         bootstrap code
     www/
-        Pages not in packages (static content, customized pages)</pre></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="packages-looks"></a>What a Package Looks Like</h3></div></div><div></div></div><p>
+        Pages not in packages (static content, customized pages)</pre></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="packages-looks"></a>What a Package Looks Like</h3></div></div></div><p>
       Each package encapsulates all of its data model, library code,
       logic, adminstration pages and user pages in a single part of
       the file tree.  This means developers can track down
@@ -50,7 +50,7 @@ ROOT/
       <a class="indexterm" name="baby"></a>
       To illustrate the general structure of a package, let's see what the
       package for the "notes" application should look like.
-    </p><div class="figure"><a name="id2497842"></a><p class="title"><b>Figure 11.2. Package file layout diagram</b></p><pre class="programlisting">
+    </p><div class="figure"><a name="id2516310"></a><p class="title"><b>Figure 11.2. Package file layout diagram</b></p><pre class="programlisting">
 ROOT/
   +-- packages/    APM Root
         |
@@ -123,7 +123,7 @@ ROOT/
       directories.  This makes it suitable for storing icons, css
       files, javascript, and other static content which can be treated
       this way.
-    </p><div class="table"><a name="id2488102"></a><p class="title"><b>Table 11.1. Package files</b></p><table summary="Package files" cellspacing="0" border="1"><colgroup><col><col><col></colgroup><thead><tr><th>File Type</th><th>Its Use</th><th>Naming Convention</th></tr></thead><tbody><tr><td>Package Specification File</td><td>The package specification file is an XML file generated and
+    </p><div class="table"><a name="id2530113"></a><p class="title"><b>Table 11.1. Package files</b></p><table summary="Package files" cellspacing="0" border="1"><colgroup><col><col><col></colgroup><thead><tr><th>File Type</th><th>Its Use</th><th>Naming Convention</th></tr></thead><tbody><tr><td>Package Specification File</td><td>The package specification file is an XML file generated and
           maintained by the OpenACS Package Manager (APM).  It specifies
           information about the package including its parameters and its
           files.</td><td><tt class="computeroutput">notes.info</tt></td></tr><tr><td>Data Model Creation Script</td><td>
@@ -134,11 +134,15 @@ ROOT/
           the script must be under the appropriate directory for
           the database you are developing your package for
           (hopefully all OpenACS-supported databases :-))
-        </td><td><tt class="computeroutput">sql/&lt;database&gt;/notes-create.sql</tt></td></tr><tr><td>Data Model Drop Script</td><td>Contains the SQL that removes the data model and PL/SQL
+        </td><td>
+          <tt class="computeroutput">sql/&lt;database&gt;/notes-create.sql</tt>
+        </td></tr><tr><td>Data Model Drop Script</td><td>Contains the SQL that removes the data model and PL/SQL
           packages generated by the creation script.  The name must
           match the convention below or the package will not be
           installed correctly.
-        </td><td><tt class="computeroutput">sql/&lt;database&gt;/notes-drop.sql</tt></td></tr><tr><td>Data Model File</td><td>Any .sql file that does not match the naming convention above
+        </td><td>
+          <tt class="computeroutput">sql/&lt;database&gt;/notes-drop.sql</tt>
+        </td></tr><tr><td>Data Model File</td><td>Any .sql file that does not match the naming convention above
           is recognized as a data model file.  It is useful to separate
           the SQL in the creation and drop scripts into several
           files and then have the scripts source the other data model
@@ -147,36 +151,46 @@ ROOT/
           scripts. See the <a href="http://www.orafaq.com/faqplus.htm#AT" target="_top">
         Oracle FAQ</a> for examples. In
           PostgreSQL the same is acomplished by including <span class="emphasis"><em>\i filename</em></span>.
-        </td><td><tt class="computeroutput">sql/&lt;database&gt;/*.sql</tt></td></tr><tr><td>Data Model Upgrade Scripts</td><td>
+        </td><td>
+          <tt class="computeroutput">sql/&lt;database&gt;/*.sql</tt>
+        </td></tr><tr><td>Data Model Upgrade Scripts</td><td>
               Contain changes to the data model between versions. The APM
               can automatically load the appropriate upgrade scripts when
               upgrading to a new version of a package.
-            </td><td><tt class="computeroutput">sql/&lt;database&gt;/upgrade/upgrade-&lt;old&gt;-&lt;new&gt;.sql</tt></td></tr><tr><td>
+            </td><td>
+              <tt class="computeroutput">sql/&lt;database&gt;/upgrade/upgrade-&lt;old&gt;-&lt;new&gt;.sql</tt>
+            </td></tr><tr><td>
           SQL92 Query Files
         </td><td>
           Files with queries that are supported by all
           databases. These are usually SQL92 queries. Notice that
           the .xql filename must match the name of the .tcl file
           that uses those queries.
-        </td><td><tt class="computeroutput">
+        </td><td>
+          <tt class="computeroutput">
         *.xql
-          </tt></td></tr><tr><td>
+          </tt>
+        </td></tr><tr><td>
           Oracle-specific Query Files
         </td><td>
           Files with queries that are Oracle-specific. Notice that
           the .xql filename must match the name of the .tcl file
           that uses those queries.
-        </td><td><tt class="computeroutput">
+        </td><td>
+          <tt class="computeroutput">
         *-oracle.xql
-          </tt></td></tr><tr><td>
+          </tt>
+        </td></tr><tr><td>
           PostgreSQL-specific Query Files
         </td><td>
           Files with queries that are PostgreSQL-specific. Notice that
           the .xql filename must match the name of the .tcl file
           that uses those queries.
-        </td><td><tt class="computeroutput">
+        </td><td>
+          <tt class="computeroutput">
         *-postgresql.xql
-          </tt></td></tr><tr><td>Tcl Library Files</td><td>
+          </tt>
+        </td></tr><tr><td>Tcl Library Files</td><td>
           The Tcl library files include a set of procedures that provide
           an application programming interface (API) for the package to
           utilize.
@@ -185,7 +199,9 @@ ROOT/
           statements to put here are registered filters or procedures.
           Tcl initialization files are sourced once on server startup
           after all of the Tcl library files are sourced.
-        </td><td><tt class="computeroutput">tcl/notes-init.tcl</tt></td></tr><tr><td>Administration UI</td><td>The administration UI is used to administer the instances of
+        </td><td>
+          <tt class="computeroutput">tcl/notes-init.tcl</tt>
+        </td></tr><tr><td>Administration UI</td><td>The administration UI is used to administer the instances of
           the package.  For example, the forums administration UI is
           used to create new forums, moderate postings, and create new
           categories for forums postings.</td><td><tt class="computeroutput">www/admin/*</tt></td></tr><tr><td>Administration UI Index Page</td><td>Every package administration UI must have an index page.  In
@@ -208,7 +224,7 @@ ROOT/
           Templates receive a set of data sources from the logic scripts
           and prepare them for display to the browser.</td><td><tt class="computeroutput">www/*.adp</tt></td></tr><tr><td>UI Index Page</td><td>The UI must have an index page composed of a logic script
           called <tt class="computeroutput">index.tcl</tt> and a template called
-          <tt class="computeroutput">index.adp</tt>.</td><td><tt class="computeroutput">www/index.tcl</tt></td></tr></tbody></table></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="packages-apm"></a>The APM</h3></div></div><div></div></div><p>
+          <tt class="computeroutput">index.adp</tt>.</td><td><tt class="computeroutput">www/index.tcl</tt></td></tr></tbody></table></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="packages-apm"></a>The APM</h3></div></div></div><p>
       The APM is used to create, maintain, and install packages.  It takes
       care of copying all of the files and registering the package in the
       system.  The APM is responsible for:
@@ -236,7 +252,7 @@ ROOT/
     </p><p>
       We will also discuss how to organize your files and queries so
       they work with the OpenACS Query Dispatcher.
-    </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="packages-making-a-package"></a>Making a Package</h3></div></div><div></div></div><p>
+    </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="packages-making-a-package"></a>Making a Package</h3></div></div></div><p>
       Here is how you make a package.
     </p><div class="orderedlist"><ol type="1"><li><p>Login as a site-wide administrator on your web service.
     </p></li><li><p>Go to the package manager on your server.  The URL is <a href="/acs-admin/apm" target="_top">/acs-admin/apm</a>.
@@ -345,7 +361,7 @@ ROOT/
     </pre></li><li><p>
       Now you can start developing the package. In addition to writing code,
       you should also consider the tasks outlined in the <a href="tutorial-newpackage.html" title="Creating an Application Package">package development tutorial</a>.
-    </p></li></ol></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="packages-subsites"></a>The Site Map and Package Instances</h3></div></div><div></div></div><p>
+    </p></li></ol></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="packages-subsites"></a>The Site Map and Package Instances</h3></div></div></div><p>
       At this point, you are probably excited to see your new package in
       action. But, we haven't added any user visible pages yet. By
       convention, user visible pages go in the
@@ -395,7 +411,7 @@ ROOT/
       later document, we'll see how to write your application so that the
       code can detect from what URL it was invoked. This is the key
       to supporting <a href="subsites.html" title="Writing OpenACS Application Pages">subsites</a>.
-    </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="packages-summary"></a>Summary</h3></div></div><div></div></div><p>
+    </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="packages-summary"></a>Summary</h3></div></div></div><p>
       The APM performs the following tasks in an OpenACS site:
     </p><div class="itemizedlist"><ul type="disc"><li><p>
       Manages creation, installation, and removal of packages from the
@@ -410,4 +426,4 @@ ROOT/
     </p></li><li><p>
       Writes out package distribution files for other people to download and
       install. We'll cover this later.
-    </p></li></ul></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="packages-add-reading"></a>Additional Reading</h3></div></div><div></div></div><div class="itemizedlist"><ul type="disc"><li><p><a href="apm-design.html">Package Manager Design</a></p></li><li><p><a href="apm-requirements.html">Package Manager Requirements</a></p></li><li><p><a href="tutorial-newpackage.html" title="Creating an Application Package">package development tutorial</a></p></li></ul></div><div class="cvstag">($Id$)</div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="dev-guide.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="objects.html">Next</a></td></tr><tr><td width="40%" align="left">Chapter 11. Development Reference </td><td width="20%" align="center"><a accesskey="u" href="dev-guide.html">Up</a></td><td width="40%" align="right"> OpenACS Data Models and the Object System</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a><center><a href="http://openacs.org/doc/current/packages.html#comments">View comments on this page at openacs.org</a></center></body></html>
+    </p></li></ul></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="packages-add-reading"></a>Additional Reading</h3></div></div></div><div class="itemizedlist"><ul type="disc"><li><p><a href="apm-design.html">Package Manager Design</a></p></li><li><p><a href="apm-requirements.html">Package Manager Requirements</a></p></li><li><p><a href="tutorial-newpackage.html" title="Creating an Application Package">package development tutorial</a></p></li></ul></div><div class="cvstag">($Id$)</div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="dev-guide.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="objects.html">Next</a></td></tr><tr><td width="40%" align="left">Chapter 11. Development Reference </td><td width="20%" align="center"><a accesskey="u" href="dev-guide.html">Up</a></td><td width="40%" align="right"> OpenACS Data Models and the Object System</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a><center><a href="http://openacs.org/doc/current/packages.html#comments">View comments on this page at openacs.org</a></center></body></html>

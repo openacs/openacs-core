@@ -1,4 +1,4 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Install Oracle 8.1.7</title><meta name="generator" content="DocBook XSL Stylesheets V1.64.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="complete-install.html" title="Chapter 3. Complete Installation"><link rel="previous" href="unix-installation.html" title="Install a Unix-like system and supporting software"><link rel="next" href="postgres.html" title="Install PostgreSQL"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="unix-installation.html">Prev</a> </td><th width="60%" align="center">Chapter 3. Complete Installation</th><td width="20%" align="right"> <a accesskey="n" href="postgres.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="oracle"></a>Install Oracle 8.1.7</h2></div></div><div></div></div><div class="authorblurb"><p>By <a href="mailto:vinod@kurup.com" target="_top">Vinod Kurup</a></p>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Install Oracle 8.1.7</title><meta name="generator" content="DocBook XSL Stylesheets V1.66.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="complete-install.html" title="Chapter 3. Complete Installation"><link rel="previous" href="unix-installation.html" title="Install a Unix-like system and supporting software"><link rel="next" href="postgres.html" title="Install PostgreSQL"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="unix-installation.html">Prev</a> </td><th width="60%" align="center">Chapter 3. Complete Installation</th><td width="20%" align="right"> <a accesskey="n" href="postgres.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="oracle"></a>Install Oracle 8.1.7</h2></div></div></div><div class="authorblurb"><p>By <a href="mailto:vinod@kurup.com" target="_top">Vinod Kurup</a></p>
           OpenACS docs are written by the named authors, and may be edited
           by OpenACS documentation staff.
         </div><p>
@@ -16,7 +16,7 @@
     </p><p>
       
     Useful links to find help on how to set up Oracle under Linux are:</p><div class="itemizedlist"><ul type="disc"><li><p><a href="http://dizwell.com/html/oracle_on_linux.html" target="_top">Dizwell - Howard
-        Roger's company - on Oracle on Linux</a></p></li><li><p><a href="http://puschitz.com/" target="_top">Werner Puschitz - Oracle on Red Hat Linux</a></p></li><li><p><a href="http://www.suse.com/us/business/certifications/certified_software/oracle/" target="_top">SuSE/Oracle Support matrix</a></p></li></ul></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="install-oracle-getit"></a>Acquire Oracle</h3></div></div><div></div></div><p>
+        Roger's company - on Oracle on Linux</a></p></li><li><p><a href="http://puschitz.com/" target="_top">Werner Puschitz - Oracle on Red Hat Linux</a></p></li><li><p><a href="http://www.suse.com/us/business/certifications/certified_software/oracle/" target="_top">SuSE/Oracle Support matrix</a></p></li></ul></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="install-oracle-getit"></a>Acquire Oracle</h3></div></div></div><p>
       Production Oracle systems should run on certified platforms.  Follow the
       <a href="http://metalink.oracle.com/metalink/plsql/ml2_documents.showDocument?p_database_id=NOT&amp;p_id=223718.1" target="_top">metalink
       note 223718.1</a>to find certified platforms. If you don't have
@@ -46,7 +46,7 @@
       To be able to download a patchset, you need a (to-pay-for) account on <a href="metalink.oracle.com" target="_top">Metalink</a>. You may find the appropriate
       patchset by following <a href="http://openacs.org/forums/message-view?message_id=33004" target="_top">Andrew's
       suggestion</a>.
-    </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="install-oracle-keepinmind"></a>Things to Keep in Mind</h3></div></div><div></div></div><p>
+    </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="install-oracle-keepinmind"></a>Things to Keep in Mind</h3></div></div></div><p>
       Oracle is very well-documented software, the <a href="http://tahiti.oracle.com" target="_top">online documentation</a> comes with
       printable PDFs and full-text search. Altogether there is more than
       20.000 pages of documentation, so do not expect to understand Oracle
@@ -88,7 +88,7 @@ nls_date_format = "YYYY-MM-DD"</pre><p>
       and <a href="http://openacs.org/forums/message-view?message_id=67108" target="_top">Andrew
       Piskorski's mini-guide</a>.
 
-    </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="install-oracle-preinstall"></a>Pre-Installation Tasks</h3></div></div><div></div></div><p>
+    </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="install-oracle-preinstall"></a>Pre-Installation Tasks</h3></div></div></div><p>
 
       Though Oracle 8.1.7 has an automated installer, we still need to
       perform several manual, administrative tasks before we can launch
@@ -289,7 +289,7 @@ ORA_NLS33=/ora8/m01/app/oracle/product/8.1.7/ocommon/nls/admin/data</pre><p>
           PATH statement above to
           <tt class="computeroutput">PATH=$PATH:/usr/local/bin:$ORACLE_HOME/bin</tt>
 
-        </p></li></ul></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="install-oracle-install"></a>Installing Oracle 8.1.7 Server</h3></div></div><div></div></div><div class="itemizedlist"><ul type="disc"><li><p>
+        </p></li></ul></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="install-oracle-install"></a>Installing Oracle 8.1.7 Server</h3></div></div></div><div class="itemizedlist"><ul type="disc"><li><p>
           Log in as <tt class="computeroutput">oracle</tt> and
           start X if not already running. Start a new terminal:
         </p><pre class="programlisting">
@@ -649,7 +649,7 @@ IMPORTANT NOTE: Please delete any log and trace files previously
       Congratulations, you have just installed Oracle 8.1.7 Server!
       However, you still need to create a database which can take about an
       hour of non-interactive time, so don't quit yet.
-    </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="install-oracle-create"></a>Creating the First Database</h3></div></div><div></div></div><p>
+    </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="install-oracle-create"></a>Creating the First Database</h3></div></div></div><p>
       This step will take you through the steps of creating a customized
       database. Be warned that this process takes about an hour on a
       Pentium II with 128 MB of RAM.
@@ -814,7 +814,7 @@ oracle:/ora8/m01/app/oracle/product/8.1.7/assistants/dbca/jlib$ ./sqlora8.sh</pr
         </p><p>
           Eventually, you'll be returned to your shell prompt. In the
           meantime, relax, you've earned it.
-        </p></li></ul></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="istall-oracle-test"></a>Acceptance Test</h3></div></div><div></div></div><p>
+        </p></li></ul></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="istall-oracle-test"></a>Acceptance Test</h3></div></div></div><p>
       For this step, open up a terminal and
       <tt class="computeroutput">su</tt> to
       <tt class="computeroutput">oracle</tt> as usual. You should be
@@ -882,7 +882,7 @@ ORA-01450: maximum key length (758) exceeded</pre><p>
         </p><p>
           If there were no errors, then consider yourself fortunate. Your
           Oracle installation is working.
-        </p></li></ul></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="install-oracle-automating"></a>Automating Startup &amp; Shutdown</h3></div></div><div></div></div><p>
+        </p></li></ul></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="install-oracle-automating"></a>Automating Startup &amp; Shutdown</h3></div></div></div><p>
       You will want to automate the database startup and shutdown process.
       It's probably best to have Oracle spring to life when you boot up
       your machine.
@@ -1159,7 +1159,7 @@ listener8i      0:off   1:off   2:off   3:on    4:on    5:on    6:off</pre></li>
 SQL&gt; exit</pre></li></ul></div><p>
       Congratulations, your installation of Oracle 8.1.7 is
       complete.
-    </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="install-oracle-troubleshooting"></a>Troubleshooting Oracle Dates</h3></div></div><div></div></div><p>
+    </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="install-oracle-troubleshooting"></a>Troubleshooting Oracle Dates</h3></div></div></div><p>
       Oracle has an internal representation for storing the data based on
       the number of seconds elapsed since some date. However, for the
       purposes of inputing dates into Oracle and getting them back out,
@@ -1215,7 +1215,7 @@ export nls_date_format = 'YYYY-MM-DD'</pre><p>
       Log back in again. If adding the
       <tt class="computeroutput">nls_date_format</tt> line doesn't
       help, you can ask for advice in our <a href="http://www.openacs.org/forums/" target="_top">OpenACS forums</a>.
-    </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="install-oracle-procs"></a>Useful Procedures</h3></div></div><div></div></div><div class="itemizedlist"><ul type="disc"><li><p>
+    </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="install-oracle-procs"></a>Useful Procedures</h3></div></div></div><div class="itemizedlist"><ul type="disc"><li><p>
           Dropping a tablespace
         </p><div class="itemizedlist"><ul type="circle"><li><p>
               Run sqlplus as the dba: 
@@ -1232,7 +1232,7 @@ SQL&gt; drop user <span class="emphasis"><em>oracle_user_name</em></span> cascad
             </p><pre class="programlisting">
 SQL&gt; drop tablespace <span class="emphasis"><em>table_space_name</em></span> including contents cascade constraints;</pre></li></ul></div></li></ul></div><p>
       For more information on Oracle, please consult the <a href="http://oradoc.photo.net/" target="_top">documentation</a>.
-    </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="oracle-next-steps"></a>Oracle Next Steps</h3></div></div><div></div></div><p><a href="maint-performance.html#install-oracle-monitoring" title="Creating an appropriate tuning and monitoring environment">the section called &#8220;Creating an appropriate tuning and monitoring environment&#8221;</a></p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="install-oracle-defaults"></a>Defaults</h3></div></div><div></div></div><p>We used the following defaults while installing Oracle.</p><div class="informaltable"><table cellspacing="0" border="1"><colgroup><col><col><col></colgroup><thead><tr><th>Variable</th><th>Value</th><th>Reason</th></tr></thead><tbody><tr><td>ORACLE_HOME</td><td>/ora8/m01/app/oracle/product/8.1.7</td><td>This is the default Oracle installation directory.</td></tr><tr><td>ORACLE_SERVICE</td><td>ora8</td><td>The service name is a domain-qualified identifier for
+    </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="oracle-next-steps"></a>Oracle Next Steps</h3></div></div></div><p><a href="maint-performance.html#install-oracle-monitoring" title="Creating an appropriate tuning and monitoring environment">the section called &#8220;Creating an appropriate tuning and monitoring environment&#8221;</a></p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="install-oracle-defaults"></a>Defaults</h3></div></div></div><p>We used the following defaults while installing Oracle.</p><div class="informaltable"><table cellspacing="0" border="1"><colgroup><col><col><col></colgroup><thead><tr><th>Variable</th><th>Value</th><th>Reason</th></tr></thead><tbody><tr><td>ORACLE_HOME</td><td>/ora8/m01/app/oracle/product/8.1.7</td><td>This is the default Oracle installation directory.</td></tr><tr><td>ORACLE_SERVICE</td><td>ora8</td><td>The service name is a domain-qualified identifier for
               your Oracle server.</td></tr><tr><td>ORACLE_SID</td><td>ora8</td><td>This is an identifier for your Oracle server.</td></tr><tr><td>ORACLE_OWNER</td><td>oracle</td><td>The user who owns all of the oracle files.</td></tr><tr><td>ORACLE_GROUP</td><td>dba</td><td>The special oracle group. Users in the dba group are
               authorized to do a <tt class="computeroutput">connect
               internal</tt> within

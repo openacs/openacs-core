@@ -1,7 +1,7 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Database Access API</title><meta name="generator" content="DocBook XSL Stylesheets V1.64.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="kernel-doc.html" title="Chapter 15. Kernel Documentation"><link rel="previous" href="apm-design.html" title="Package Manager Design"><link rel="next" href="i18n-requirements.html" title="OpenACS Internationalization Requirements"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="apm-design.html">Prev</a> </td><th width="60%" align="center">Chapter 15. Kernel Documentation</th><td width="20%" align="right"> <a accesskey="n" href="i18n-requirements.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="db-api-detailed"></a>Database Access API</h2></div></div><div></div></div><div class="authorblurb"><p>By <a href="mailto:jsalz@mit.edu" target="_top">Jon Salz</a>. Revised and expanded by Roberto Mello (rmello at fslc dot usu dot edu), July 2002. </p>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Database Access API</title><meta name="generator" content="DocBook XSL Stylesheets V1.66.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="kernel-doc.html" title="Chapter 15. Kernel Documentation"><link rel="previous" href="apm-design.html" title="Package Manager Design"><link rel="next" href="i18n-requirements.html" title="OpenACS Internationalization Requirements"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="apm-design.html">Prev</a> </td><th width="60%" align="center">Chapter 15. Kernel Documentation</th><td width="20%" align="right"> <a accesskey="n" href="i18n-requirements.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="db-api-detailed"></a>Database Access API</h2></div></div></div><div class="authorblurb"><p>By <a href="mailto:jsalz@mit.edu" target="_top">Jon Salz</a>. Revised and expanded by Roberto Mello (rmello at fslc dot usu dot edu), July 2002. </p>
           OpenACS docs are written by the named authors, and may be edited
           by OpenACS documentation staff.
-        </div><div class="itemizedlist"><ul type="disc"><li><p>Tcl procedures: /packages/acs-kernel/10-database-procs.tcl</p></li><li><p>Tcl initialization: /packages/acs-kernel/database-init.tcl</p></li></ul></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="db-api-detailed-bigpicture"></a>The Big Picture</h3></div></div><div></div></div><p>
+        </div><div class="itemizedlist"><ul type="disc"><li><p>Tcl procedures: /packages/acs-kernel/10-database-procs.tcl</p></li><li><p>Tcl initialization: /packages/acs-kernel/database-init.tcl</p></li></ul></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="db-api-detailed-bigpicture"></a>The Big Picture</h3></div></div></div><p>
 One of OpenACS's great strengths is that code written for it is very close to
 the database. It is very easy to interact with the database from anywhere
 within OpenACS. Our goal is to develop a coherent API for database access which
@@ -77,7 +77,7 @@ statement a logical name will be required by the complete SQL abstraction
 design. Therefore, we know that the effort will not be wasted, and taking
 advantage of the new support for bind variables will already require code
 that uses 3.3.0 version of the API to be updated. 
-</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="db-api-detailed-set-var-aft-query"></a>The Bell Tolls for <tt class="computeroutput">set_variables_after_query</tt></h3></div></div><div></div></div><p>
+</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="db-api-detailed-set-var-aft-query"></a>The Bell Tolls for <tt class="computeroutput">set_variables_after_query</tt></h3></div></div></div><p>
 <tt class="computeroutput">set_variables_after_query</tt> is gone! (Well, it's still there,
 but you'll never need to use it.) The new API routines set local
 variables automatically. For instance: 
@@ -122,7 +122,7 @@ db_foreach select_names "select first_names, last_name from users where last_nam
      doc_body_append "There aren't any users with last names beginnings with S!"
 }
 
-</pre></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="db-api-detailed-handles"></a>Handle Management</h3></div></div><div></div></div><p>
+</pre></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="db-api-detailed-handles"></a>Handle Management</h3></div></div></div><p>
 The new API keeps track of which handles are in use, and automatically
 allocates new handles when they are necessary (e.g., to perform subqueries
 while a select is active). For example: 
@@ -151,7 +151,7 @@ of course - as a performance optimization, the API keeps old handles around
 until <tt class="computeroutput">db_release_unused_handles</tt> is invoked (or the script
 terminates). 
 </p><p>Note that there is no analogue to <tt class="computeroutput">ns_db gethandle</tt> - the
-handle is always automatically allocated the first time it's needed.</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="db-api-detailed-bindvars"></a>Bind Variables</h3></div></div><div></div></div><p><span class="strong">Introduction</span></p><p>
+handle is always automatically allocated the first time it's needed.</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="db-api-detailed-bindvars"></a>Bind Variables</h3></div></div></div><p><span class="strong">Introduction</span></p><p>
 Most SQL statements require that the code invoking the statement pass along
 data associated with that statement, usually obtained from the user. For
 instance, in order to delete a WimpyPoint presentation, a Tcl script might
@@ -336,13 +336,13 @@ db_dml foo_create "insert into foo(bar, baz) values(:bar, :baz)"
 #
 # sets the values for both the "bar" and "baz" columns to null
 
-</pre></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="db-api-detailed-sql-abstraction"></a>SQL Abstraction</h3></div></div><div></div></div><p>
+</pre></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="db-api-detailed-sql-abstraction"></a>SQL Abstraction</h3></div></div></div><p>
 We now require that each SQL statement be assigned a logical name for the
 statement that is unique to the procedure or page in which it is defined.
 This is so that (eventually) we can implement logically named statements with
 alternative SQL for non-Oracle databases (e.g., Postgres). More on this
 later. 
-</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="db-api-detailed-placing-values"></a>Placing Column Values in Arrays and Sets</h3></div></div><div></div></div><p>
+</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="db-api-detailed-placing-values"></a>Placing Column Values in Arrays and Sets</h3></div></div></div><p>
 Normally, <tt class="computeroutput">db_foreach</tt>, <tt class="computeroutput">db_0or1row</tt>, and
 <tt class="computeroutput">db_1row</tt> places the results of queries in Tcl variables, so you
 can say: 
@@ -373,7 +373,7 @@ db_foreach users_select "select first_names, last_name from users" -column_set c
 
 </pre><p>
 will write something like: 
-</p><div class="itemizedlist"><ul type="disc"><li><p>first_names is Jon. last_name is Salz.</p></li><li><p>first_names is Lars. last_name is Pind.</p></li><li><p>first_names is Michael. last_name is Yoon.</p></li></ul></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="dp-api-detailed-api"></a>API</h3></div></div><div></div></div><p>
+</p><div class="itemizedlist"><ul type="disc"><li><p>first_names is Jon. last_name is Salz.</p></li><li><p>first_names is Lars. last_name is Pind.</p></li><li><p>first_names is Michael. last_name is Yoon.</p></li></ul></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="dp-api-detailed-api"></a>API</h3></div></div></div><p>
 Note that you never have to use <tt class="computeroutput">ns_db</tt> anymore (including
 <tt class="computeroutput">ns_db gethandle</tt>)! Just start doing stuff, and (if you want) call
 <tt class="computeroutput">db_release_unused_handles</tt> when you're done as a hint to

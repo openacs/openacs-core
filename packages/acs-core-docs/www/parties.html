@@ -1,7 +1,7 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Parties in OpenACS</title><meta name="generator" content="DocBook XSL Stylesheets V1.64.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="dev-guide.html" title="Chapter 11. Development Reference"><link rel="previous" href="subsites.html" title="Writing OpenACS Application Pages"><link rel="next" href="permissions-tediously-explained.html" title="OpenACS Permissions Tediously Explained"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="subsites.html">Prev</a> </td><th width="60%" align="center">Chapter 11. Development Reference</th><td width="20%" align="right"> <a accesskey="n" href="permissions-tediously-explained.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="parties"></a>Parties in OpenACS</h2></div></div><div></div></div><div class="authorblurb"><p>By <a href="http://planitia.org" target="_top">Rafael H. Schloming</a></p>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Parties in OpenACS</title><meta name="generator" content="DocBook XSL Stylesheets V1.66.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="dev-guide.html" title="Chapter 11. Development Reference"><link rel="previous" href="subsites.html" title="Writing OpenACS Application Pages"><link rel="next" href="permissions-tediously-explained.html" title="OpenACS Permissions Tediously Explained"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="subsites.html">Prev</a> </td><th width="60%" align="center">Chapter 11. Development Reference</th><td width="20%" align="right"> <a accesskey="n" href="permissions-tediously-explained.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="parties"></a>Parties in OpenACS</h2></div></div></div><div class="authorblurb"><p>By <a href="http://planitia.org" target="_top">Rafael H. Schloming</a></p>
           OpenACS docs are written by the named authors, and may be edited
           by OpenACS documentation staff.
-        </div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="parties-intro"></a>Introduction</h3></div></div><div></div></div><p>While many applications must deal with individuals and many applications
+        </div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="parties-intro"></a>Introduction</h3></div></div></div><p>While many applications must deal with individuals and many applications
 must deal with groups, most applications must deal with individuals
 <span class="emphasis"><em>or</em></span> groups. It is often the case with such applications that in many
 respects both individuals and groups are treated in an identical manner. It
@@ -13,7 +13,7 @@ supertype is called a "party".</p><p>A classic example use of the "party" supert
 in a common address book. A typical person's address book might contain
 the address of his doctor, and his cable company. So what do we label the
 first field in an entry in his address book? It isn't a person, and it
-isn't a company. It is a "party".</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="parties-data-model"></a>The Data Model</h3></div></div><div></div></div><p>Most developers who do significant work with the OpenACS will become
+isn't a company. It is a "party".</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="parties-data-model"></a>The Data Model</h3></div></div></div><p>Most developers who do significant work with the OpenACS will become
 intimately familiar with the parties data model, and probably extend it on
 many occasions. For this reason the parties developer guide will begin with
 an introduction to the data model.</p><p><span class="strong">Parties</span></p><p>The central table in the parties data model is the parties table itself.
@@ -210,7 +210,7 @@ end composition_rel;
 show errors
 </tt>
 
-</pre></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="parties-views"></a>Views</h3></div></div><div></div></div><p>The data model described above does a reasonable job of representing many
+</pre></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="parties-views"></a>Views</h3></div></div></div><p>The data model described above does a reasonable job of representing many
 of the situations one is likely to encounter when modeling organizational
 structures, but we still need to be able to efficiently answer questions like
 "what members are in this group and all of its components?", and
@@ -282,7 +282,7 @@ as select party_id, member_id
 ...
 </tt>
 
-</pre></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="parties-extending-data-model"></a>Extending The Parties Data Model</h3></div></div><div></div></div><p>As is, the parties data model can represent some fairly sophisticated real
+</pre></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="parties-extending-data-model"></a>Extending The Parties Data Model</h3></div></div></div><p>As is, the parties data model can represent some fairly sophisticated real
 world situations, and a lot of work has been put into making this efficient,
 but it is foolish to assume that this data model is sufficient for every
 application. It therefore seems likely that developers will want to extend

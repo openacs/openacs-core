@@ -1,7 +1,7 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Programming with AOLserver</title><meta name="generator" content="DocBook XSL Stylesheets V1.64.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="dev-guide.html" title="Chapter 11. Development Reference"><link rel="previous" href="object-identity.html" title="Object Identity"><link rel="next" href="form-builder.html" title="Using HTML Forms"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="object-identity.html">Prev</a> </td><th width="60%" align="center">Chapter 11. Development Reference</th><td width="20%" align="right"> <a accesskey="n" href="form-builder.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="programming-with-aolserver"></a>Programming with AOLserver</h2></div></div><div></div></div><div class="authorblurb"><p>By Michael Yoon, Jon Salz and <a href="http://www.pinds.com/lars" target="_top">Lars Pind</a>.</p>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Programming with AOLserver</title><meta name="generator" content="DocBook XSL Stylesheets V1.66.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="dev-guide.html" title="Chapter 11. Development Reference"><link rel="previous" href="object-identity.html" title="Object Identity"><link rel="next" href="form-builder.html" title="Using HTML Forms"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="object-identity.html">Prev</a> </td><th width="60%" align="center">Chapter 11. Development Reference</th><td width="20%" align="right"> <a accesskey="n" href="form-builder.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="programming-with-aolserver"></a>Programming with AOLserver</h2></div></div></div><div class="authorblurb"><p>By Michael Yoon, Jon Salz and <a href="http://www.pinds.com/lars" target="_top">Lars Pind</a>.</p>
           OpenACS docs are written by the named authors, and may be edited
           by OpenACS documentation staff.
-        </div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="programming-aolserver-global"></a>The <tt class="computeroutput">global</tt> command</h3></div></div><div></div></div><p>
+        </div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="programming-aolserver-global"></a>The <tt class="computeroutput">global</tt> command</h3></div></div></div><p>
 When using AOLserver, remember that there are effectively <span class="emphasis"><em>two</em></span> types
 of global namespace, not one: 
 </p><div class="orderedlist"><ol type="1"><li><p><span class="emphasis"><em>Server</em></span>-global: As you'd expect, there is
@@ -24,7 +24,7 @@ interpreter) between HTTP requests. If it didn't, that would affect (and
 complicate) our use of script-global variables dramatically, which would then
 be better described as <span class="emphasis"><em>thread</em></span>-global variables. Given
 AOLserver's behaviour, however, "script-global" is a more
-appropriate term.</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="programming-aolserver-sched-procs"></a>Threads and Scheduled Procedures</h3></div></div><div></div></div><p>
+appropriate term.</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="programming-aolserver-sched-procs"></a>Threads and Scheduled Procedures</h3></div></div></div><p>
 <tt class="computeroutput">ns_schedule_proc</tt> and <tt class="computeroutput">ad_schedule_proc</tt> each take a
 <tt class="computeroutput">-thread</tt> flag to cause a scheduled procedure to run
 asychronously, in its own thread. It almost always seems like a good idea to
@@ -41,7 +41,7 @@ switch.</p><div class="blockquote"><blockquote class="blockquote"><p><span class
 installed during server startup, so if the procedure table have changed since
 startup (e.g. using the <a href="apm-design.html" title="Package Manager Design">APM</a> watch
 facility), that will not be reflected in the scheduled
-thread.</em></span></p></blockquote></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="programming-aolserver-return"></a>Using <tt class="computeroutput">return</tt></h3></div></div><div></div></div><p>
+thread.</em></span></p></blockquote></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="programming-aolserver-return"></a>Using <tt class="computeroutput">return</tt></h3></div></div></div><p>
 The <tt class="computeroutput">return</tt> command in Tcl returns control to the caller procedure.
 This definition allows nested procedures to work properly. However, this
 definition also means that nested procedures cannot use <tt class="computeroutput">return</tt> to
@@ -58,7 +58,7 @@ get a permission denied error -- but the DML statement would still be
 executed because the thread was not stopped. Note that <tt class="computeroutput">return -code
 return</tt> can be used in circumstances where the procedure will only be
 called from two levels deep. 
-</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="programming-aolserver-more-values"></a>Returning More Than One Value From a Function</h3></div></div><div></div></div><p>
+</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="programming-aolserver-more-values"></a>Returning More Than One Value From a Function</h3></div></div></div><p>
 Many functions have a single return value. For instance, <a href="/api-doc/proc-view?proc=empty%5fstring%5fp" target="_top"><tt class="computeroutput">empty_string_p</tt></a>
 returns a number: 1 or 0. Other functions need to return a composite value.
 For instance, consider a function that looks up a user's name and email

@@ -3,3 +3,4 @@
 <!ENTITY tarballpath "openacs-5.1.2">
 <!ENTITY cvsversiontag "openacs-5-1-2-final">
 <!ENTITY majorversion "5">
+<!ENTITY releasebranch "oacs-5-1">

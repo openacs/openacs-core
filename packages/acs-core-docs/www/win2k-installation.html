@@ -1,4 +1,4 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>OpenACS Installation Guide for Windows2000</title><meta name="generator" content="DocBook XSL Stylesheets V1.64.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="complete-install.html" title="Chapter 3. Complete Installation"><link rel="previous" href="openacs.html" title="Install OpenACS 5.1.2"><link rel="next" href="mac-installation.html" title="OpenACS Installation Guide for Mac OS X"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="openacs.html">Prev</a> </td><th width="60%" align="center">Chapter 3. Complete Installation</th><td width="20%" align="right"> <a accesskey="n" href="mac-installation.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="win2k-installation"></a>OpenACS Installation Guide for Windows2000</h2></div></div><div></div></div><div class="authorblurb"><p>by Matthew Burke and Curtis Galloway</p>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>OpenACS Installation Guide for Windows2000</title><meta name="generator" content="DocBook XSL Stylesheets V1.66.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="complete-install.html" title="Chapter 3. Complete Installation"><link rel="previous" href="openacs.html" title="Install OpenACS 5.1.2"><link rel="next" href="mac-installation.html" title="OpenACS Installation Guide for Mac OS X"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="openacs.html">Prev</a> </td><th width="60%" align="center">Chapter 3. Complete Installation</th><td width="20%" align="right"> <a accesskey="n" href="mac-installation.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="win2k-installation"></a>OpenACS Installation Guide for Windows2000</h2></div></div></div><div class="authorblurb"><p>by Matthew Burke and Curtis Galloway</p>
           OpenACS docs are written by the named authors, and may be edited
           by OpenACS documentation staff.
         </div><p><span class="strong">NOTE:</span> These instructions were
@@ -11,7 +11,7 @@
     distribution</a>
   </p><div class="itemizedlist"><ul type="disc"><li><p>Source: <a href="http://openacs.org/projects/openacs/download/" target="_top">http://openacs.org/projects/openacs/download</a></p></li><li><p>Bug reports: <a href="http://openacs.org/bugtracker/openacs/" target="_top">http://openacs.org/bugtracker/openacs</a></p></li><li><p>Philosophy: <a href="http://photo.net/wtr/thebook/community/" target="_top">http://photo.net/wtr/thebook/community</a>
       (the community chapter of <span class="emphasis"><em>Philip and Alex's Guide to Web
-      Publishing</em></span>)</p></li><li><p>Technical background: <a href="http://photo.net/wtr/thebook/" target="_top">http://photo.net/wtr/thebook/</a></p></li></ul></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="win2kinstall-overview"></a>Overview</h3></div></div><div></div></div><p>
+      Publishing</em></span>)</p></li><li><p>Technical background: <a href="http://photo.net/wtr/thebook/" target="_top">http://photo.net/wtr/thebook/</a></p></li></ul></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="win2kinstall-overview"></a>Overview</h3></div></div></div><p>
     With the recent release of a win32 version of AOLserver, it is now
     possible to run the OpenACS on Windows2000 and Windows98. This document
     explains the steps necessary to get the OpenACS installed and running on your
@@ -25,7 +25,7 @@
     details.</p><p>You can download the binary distribution from <a href="http://arsdigita.com/download" target="_top">the ArsDigita download page</a>
     under "ArsDigita AOLserver 3 Binary Distribution for Win32."
     Please read the release notes in the distribution for configuration notes
-    specific to the version you are downloading.</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="win2kinstall-prerequisites"></a>Prerequisites</h3></div></div><div></div></div><div class="itemizedlist"><ul type="disc"><li><p>Windows 2000 or Windows 98</p></li><li><p><a href="http://www.winzip.com" target="_top">WinZip</a> or any tool that can
+    specific to the version you are downloading.</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="win2kinstall-prerequisites"></a>Prerequisites</h3></div></div></div><div class="itemizedlist"><ul type="disc"><li><p>Windows 2000 or Windows 98</p></li><li><p><a href="http://www.winzip.com" target="_top">WinZip</a> or any tool that can
       extract gzipped/tarred archives.</p></li><li><p><a href="ftp://ftp.blarg.net/users/amol/zsh" target="_top">zsh</a> (free;
       included in the binary distribution). If this link is broken try <a href="http://www.zsh.org" target="_top">http://www.zsh.org</a>.</p></li><li><p><a href="http://www.oracle.com" target="_top">Oracle 8</a> relational database
       management system</p></li><li><p><a href="http://www.aolserver.com" target="_top">AOLserver</a> (free)</p></li><li><p><a href="http://prdownloads.sourceforge.net/aolserver/nsoracle-2.6.tar.gz?download" target="_top">
@@ -39,7 +39,7 @@
     This is a development library and set of tools that gives you a very
     UNIX-like environment under Windows. In particular, it includes
     <tt class="computeroutput">bash</tt>, <tt class="computeroutput">gzip</tt> and <tt class="computeroutput">tar</tt>, which you can
-    use to perform the OpenACS installation instead of WinZip and zsh.</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="win2kinstall-oracle"></a>Your Oracle installation</h3></div></div><div></div></div><p>
+    use to perform the OpenACS installation instead of WinZip and zsh.</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="win2kinstall-oracle"></a>Your Oracle installation</h3></div></div></div><p>
     When you install Oracle, a good rule of thumb is "every default
     setting is wrong." We will not discuss Oracle configuration here
     except to mention that the OpenACS requires Oracle's NLS_DATE_FORMAT
@@ -74,13 +74,13 @@
       dual;</tt></p></li></ol></div><p>For more information on Oracle configuration look at <a href="http://photo.net/wtr/oracle-tips" target="_top">http://photo.net/wtr/oracle-tips</a>
     or search the <a href="http://openacs.org/forums/" target="_top">OpenACS forums</a>. One other note: the "nuke a user" admin page and
     Intermedia won't run unless you set <tt class="computeroutput">open_cursors = 500</tt>
-    for your database.</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="win2kinstall-acs-binary"></a>The ArsDigita binary installation</h3></div></div><div></div></div><p>
+    for your database.</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="win2kinstall-acs-binary"></a>The ArsDigita binary installation</h3></div></div></div><p>
     Extract the ArsDigita AOLserver distribution onto the <tt class="computeroutput">C:</tt>
     drive into the default <tt class="computeroutput">aol30</tt> directory. You can install it
     on any drive, but it will make your life easier if you keep the AOLserver
     binary and your OpenACS instance on the same drive. For the rest of these
     instructions, we'll assume that you used drive <tt class="computeroutput">C:</tt>. 
-</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="win2kinstall-untar-acs"></a>Untar the OpenACS</h3></div></div><div></div></div><p>
+</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="win2kinstall-untar-acs"></a>Untar the OpenACS</h3></div></div></div><p>
     We recommend rooting webserver content in <tt class="computeroutput">c:\web</tt>. Since most
     servers these days are expected to run multiple services from multiple IP
     addresses, each server gets a subdirectory from <tt class="computeroutput">c:\web</tt>. For
@@ -99,7 +99,7 @@
  You'll now find that <tt class="computeroutput">c:\web\yourdomain\www</tt> contains the
     document root and <tt class="computeroutput">c:\web\yourdomain\tcl</tt> contains Tcl scripts
     that are loaded when the AOLserver starts up. 
-</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="win2kinstall-data-model"></a>Feeding Oracle the Data Model</h3></div></div><div></div></div><p>
+</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="win2kinstall-data-model"></a>Feeding Oracle the Data Model</h3></div></div></div><p>
     The entire server will behave in an unhappy manner if it connects to
     Oracle and finds that, for example, the users table does not exist. Thus
     you need to connect to Oracle as whatever user the AOLserver will connect
@@ -132,7 +132,7 @@ zsh load-site-wide-search foo foopassword ctxsys-password
         <tt class="computeroutput">foopassword</tt> here. The third argument,
         <tt class="computeroutput">ctxsys-password</tt>, is the password for interMedia
         Text's special ctxsys user.
-      </p></li></ul></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="win2kinstall-aolserver"></a>Configuring AOLserver</h3></div></div><div></div></div><p>You will need two configuration files. The first is a Tcl file with
+      </p></li></ul></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="win2kinstall-aolserver"></a>Configuring AOLserver</h3></div></div></div><p>You will need two configuration files. The first is a Tcl file with
     configuration information for AOLserver. This should be called
     <tt class="computeroutput">yourdomain</tt> and should be located in
     <tt class="computeroutput">c:\aolserve3_0</tt>. The second is an .ini file that configures
@@ -145,7 +145,7 @@ zsh load-site-wide-search foo foopassword ctxsys-password
     You can use <a href="/doc/files/winnsd.txt" target="_top">our template file</a> as a starting
     point (<span class="emphasis"><em>you'll need to save this file with a rather than .txt
     extension</em></span>). 
-</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="wint2install-configure-acs"></a>Configuring OpenACS itself</h3></div></div><div></div></div><p>
+</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="wint2install-configure-acs"></a>Configuring OpenACS itself</h3></div></div></div><p>
     If you want a system that works, go to
     <tt class="computeroutput">c:\web\yourdomain\parameters</tt> and copy <tt class="computeroutput">ad.ini</tt> to
     <tt class="computeroutput">yourdomain.ini</tt> (<span class="emphasis"><em>or any other name different from
@@ -165,7 +165,7 @@ zsh load-site-wide-search foo foopassword ctxsys-password
     If you want to see how some of these are used, a good place to look is
     <tt class="computeroutput">c:\web\yourdomain\tcl\ad-defs</tt>. The Tcl function,
     <tt class="computeroutput">ad_parameter</tt>, is used to grab parameter values from the .ini
-    file.</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="wi2kinstall-starting-service"></a>Starting the Service</h3></div></div><div></div></div><p>
+    file.</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="wi2kinstall-starting-service"></a>Starting the Service</h3></div></div></div><p>
     Now you're ready to start things up. Before installing as a Windows
     service, you might want to test the setup for configuration errors. Open
     up a console window and go to <tt class="computeroutput">c:\aol30</tt>. Then run 
@@ -183,14 +183,14 @@ bin\nsd -I -s yourdomain -t yourdomain.tcl
     service from the Services control panel. If you make further changes to
     <tt class="computeroutput">yourdomain</tt> or <tt class="computeroutput">yourdomain.ini</tt> you should stop
     and start the service from the Services control panel. 
-</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="win2kinstall-configure-permissions"></a>Configuring Permissions</h3></div></div><div></div></div><p>
+</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="win2kinstall-configure-permissions"></a>Configuring Permissions</h3></div></div></div><p>
     Now, you need to protect the proper administration directories of the
     OpenACS. You decide the policy although we recommend requiring the admin
     directories be accessible only via an SSL connection. Here are the
     directories to consider protecting: 
 </p><div class="itemizedlist"><ul type="disc"><li><p>/doc (or at least /doc/sql/ since some AOLserver configurations
       will allow a user to execute SQL files)</p></li><li><p>/admin</p></li><li><p>any private admin dirs for a module you might have written that are
-      not underneath the /admin directory</p></li></ul></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="win2kinstall-add-yourself"></a>Adding Yourself as a User and Making Yourself a Sysadmin</h3></div></div><div></div></div><p>
+      not underneath the /admin directory</p></li></ul></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="win2kinstall-add-yourself"></a>Adding Yourself as a User and Making Yourself a Sysadmin</h3></div></div></div><p>
     OpenACS will define two users: system and
     anonymous. It will also define a user group of system administrators.
     You'll want to add yourself as a user (at /register/ ) and then add
@@ -202,7 +202,7 @@ bin\nsd -I -s yourdomain -t yourdomain.tcl
 </p><p>If you do not know what the system user's password is connect to
     Oracle using SQL Plus and run the following query:</p><pre class="programlisting">
 select password from users where last_name = 'system';
-</pre></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="win2kinstall-closing-down-access"></a>Closing Down Access</h3></div></div><div></div></div><p>
+</pre></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="win2kinstall-closing-down-access"></a>Closing Down Access</h3></div></div></div><p>
     The OpenACS ships with a user named "anonymous" (email
     "anonymous") to serve as a content owner. If you're
     operating a restricted-access site, make sure to change the anonymous
@@ -213,14 +213,14 @@ select password from users where last_name = 'system';
     documentation for <a href="user-registration" target="_top">user registration and
     access control</a> and decide what the appropriate user state is for
     anonymous on your site. 
-</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="win2kinstall-where-is-what"></a>Where to Find What</h3></div></div><div></div></div><p>
+</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="win2kinstall-where-is-what"></a>Where to Find What</h3></div></div></div><p>
     A few pointers: 
 </p><div class="itemizedlist"><ul type="disc"><li><p>the /register directory contains the login and registration
       scripts. You can easily redirect someone to /register/index to have
       them login or register.</p></li><li><p>the /pvt directory is for user-specific pages. They can only be
-      accessed by people who have logged in.</p></li></ul></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="win2kinstall-make-sure-it-works"></a>Making sure that it works</h3></div></div><div></div></div><p>
+      accessed by people who have logged in.</p></li></ul></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="win2kinstall-make-sure-it-works"></a>Making sure that it works</h3></div></div></div><p>
     Run the acceptance tests in <a href="/doc/acceptance-test" target="_top">/doc/acceptance-test</a> 
-</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="win2kinstall-multiple-acs"></a>Running Multiple Instances of the OpenACS</h3></div></div><div></div></div><p>
+</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="win2kinstall-multiple-acs"></a>Running Multiple Instances of the OpenACS</h3></div></div></div><p>
     You can run multiple instances of the OpenACS on a physical machine but they
     must each be set up as a separate Windows service. Each instance of the
     OpenACS must have its own:

@@ -1,6 +1,6 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>The OpenACS Database Access API</title><meta name="generator" content="DocBook XSL Stylesheets V1.64.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="dev-guide.html" title="Chapter 11. Development Reference"><link rel="previous" href="request-processor.html" title="The Request Processor"><link rel="next" href="templates.html" title="Using Templates in OpenACS"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="request-processor.html">Prev</a> </td><th width="60%" align="center">Chapter 11. Development Reference</th><td width="20%" align="right"> <a accesskey="n" href="templates.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="db-api"></a>The OpenACS Database Access API</h2></div></div><div></div></div><p>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>The OpenACS Database Access API</title><meta name="generator" content="DocBook XSL Stylesheets V1.66.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="dev-guide.html" title="Chapter 11. Development Reference"><link rel="previous" href="request-processor.html" title="The Request Processor"><link rel="next" href="templates.html" title="Using Templates in OpenACS"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="request-processor.html">Prev</a> </td><th width="60%" align="center">Chapter 11. Development Reference</th><td width="20%" align="right"> <a accesskey="n" href="templates.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="db-api"></a>The OpenACS Database Access API</h2></div></div></div><p>
     By Pete Su and Jon Salz. Modified by Roberto Mello.
-  </p><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="db-api-overview"></a>Overview</h3></div></div><div></div></div><p>
+  </p><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="db-api-overview"></a>Overview</h3></div></div></div><p>
       One of OpenACS's great strengths is that code written for it is
       very close to the database. It is very easy to interact with the
       database from anywhere within OpenACS, and we have a
@@ -8,7 +8,7 @@
     </p><p>
       More detailed information about the DB api is available at
       <a href="db-api-detailed.html">Database Access API</a>.
-    </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="db-api-examples"></a>DB API Examples</h3></div></div><div></div></div><p>
+    </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="db-api-examples"></a>DB API Examples</h3></div></div></div><p>
       The OpenACS database API is meant to save developers from making
       common mistakes and to provide a more structured syntax for
       specifying database operations, including transactions.  Here's
@@ -57,7 +57,7 @@ db_transaction {
 	    Finally and most importantly, there API implements bind variables, which we will cover next.
 	  </p></li></ol></div><p>
 
-    </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="db-api-bindvariables"></a>Bind Variables</h3></div></div><div></div></div><p>
+    </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="db-api-bindvariables"></a>Bind Variables</h3></div></div></div><p>
       Bind variables are placeholders for literal values in an SQL
       query being sent to the server.  In the old way, data was
       generally passed to directly to the DB backend, via Tcl string
@@ -141,7 +141,7 @@ db_foreach my_query { select :table from some_table where :condition }
       Finally, the DB API has several different styles for passing bind
       variable values to queries. In general, use the style presented here
       because it is the most convenient. 
-    </p><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="db-api-bind-vars-usage"></a>Usage</h4></div></div><div></div></div><p>Every <tt class="computeroutput">db_*</tt> command accepting a SQL command as an argument
+    </p><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="db-api-bind-vars-usage"></a>Usage</h4></div></div></div><p>Every <tt class="computeroutput">db_*</tt> command accepting a SQL command as an argument
 	supports bind variables. You can either</p><div class="itemizedlist"><ul type="disc"><li><p>
 	    Specify the <tt class="computeroutput">-bind</tt> switch to provide a set with bind variable
 	    values, or
@@ -208,7 +208,7 @@ db_foreach user_group_memberships_by_role {
     # of "administrator"
 }
 
-      </pre></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="dbapi_nulls_and_bind_vars"></a>Nulls and Bind Variables</h4></div></div><div></div></div><p>
+      </pre></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="dbapi_nulls_and_bind_vars"></a>Nulls and Bind Variables</h4></div></div></div><p>
 	When processing a DML statement, Oracle coerces empty strings into
 	<tt class="computeroutput">null</tt>. (This coercion does <span class="emphasis"><em>not</em></span> occur in the
 	<tt class="computeroutput">WHERE</tt> clause of a query, i.e.
@@ -252,7 +252,7 @@ set baz [db_null]
 
 db_dml foo_create "insert into foo(bar, baz) values(:bar, :baz)"
 #
-# sets the values for both the "bar" and "baz" columns to null</pre></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="db-api-pooling"></a>Sequence Pooling</h3></div></div><div></div></div><p>
+# sets the values for both the "bar" and "baz" columns to null</pre></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="db-api-pooling"></a>Sequence Pooling</h3></div></div></div><p>
       The database library can transparently maintain pools of sequence values, so
       that each request for a new sequence value (using <tt class="computeroutput">db_nextval</tt>)
       does not incur a roundtrip to the server. For instance, this functionality is
@@ -283,7 +283,7 @@ PoolSequence.sec_id_seq=20
       <span class="emphasis"><em><tt class="computeroutput">yourservername</tt></em></span>
       <tt class="computeroutput">/acs/database]</tt> configuration
       section.) 
-    </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="db-api-basicapi"></a>Basic API</h3></div></div><div></div></div><p>
+    </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="db-api-basicapi"></a>Basic API</h3></div></div></div><p>
       The Database API has several functions that wrap familiar parts of the
       AOLserver database API. 
     </p><p>

@@ -1,7 +1,7 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Groups, Context, Permissions</title><meta name="generator" content="DocBook XSL Stylesheets V1.64.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="dev-guide.html" title="Chapter 11. Development Reference"><link rel="previous" href="templates.html" title="Using Templates in OpenACS"><link rel="next" href="subsites.html" title="Writing OpenACS Application Pages"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="templates.html">Prev</a> </td><th width="60%" align="center">Chapter 11. Development Reference</th><td width="20%" align="right"> <a accesskey="n" href="subsites.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="permissions"></a>Groups, Context, Permissions</h2></div></div><div></div></div><div class="authorblurb"><p>By Pete Su</p>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Groups, Context, Permissions</title><meta name="generator" content="DocBook XSL Stylesheets V1.66.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="dev-guide.html" title="Chapter 11. Development Reference"><link rel="previous" href="templates.html" title="Using Templates in OpenACS"><link rel="next" href="subsites.html" title="Writing OpenACS Application Pages"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="templates.html">Prev</a> </td><th width="60%" align="center">Chapter 11. Development Reference</th><td width="20%" align="right"> <a accesskey="n" href="subsites.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="permissions"></a>Groups, Context, Permissions</h2></div></div></div><div class="authorblurb"><p>By Pete Su</p>
           OpenACS docs are written by the named authors, and may be edited
           by OpenACS documentation staff.
-        </div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="permissions-overview"></a>Overview</h3></div></div><div></div></div><p>
+        </div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="permissions-overview"></a>Overview</h3></div></div></div><p>
 The OpenACS 5.1.2 Permissions system allows developers and administrators to
 set access control policies at the object level, that is, any
 application or system object represented by a row in the
@@ -20,7 +20,7 @@ in flexible ways. Second, the object model defines a notion of
 together into larger security domains.  The rest of this document will
 talk about each of these parts, and how they fit together with the
 permissions system.
-</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="permissions-groups"></a>Groups</h3></div></div><div></div></div><p>
+</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="permissions-groups"></a>Groups</h3></div></div></div><p>
 In OpenACS 3.x, the groups system allowed developers and administrators to
 define simple groupings of users. Each group had a human readable name
 and unique ID, and there was a single mapping table that mapped users
@@ -103,7 +103,7 @@ groups that were hard or impossible to model in 3.x.
 The full details of the groups data model is beyond the scope of this
 tutorial - I've just given you what you need to understand how
 permissions work. For further detail, you can look at <a href="parties.html">Parties in OpenACS 4</a> or <a href="groups-design.html">OpenACS 4 Groups Design</a>.
-</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="permissions-permissions"></a>Permissions</h3></div></div><div></div></div><p>
+</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="permissions-permissions"></a>Permissions</h3></div></div></div><p>
   NOTE: Much more detailed information about the permissions system
   and how to use it is available in the
   <a href="permissions-tediously-explained.html">OpenACS Permissions Tediously Explained</a> document.
@@ -163,12 +163,12 @@ in a system. But it would be tedious to explicitly attach permissions
 to every object individually: in many cases, we'd prefer controlling
 permissions to large groups of objects in the site, all at once. We
 use contexts to achieve this goal.
-</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="permissions-object-context"></a>Object Context</h3></div></div><div></div></div><p>
+</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="permissions-object-context"></a>Object Context</h3></div></div></div><p>
 In OpenACS 5.1.2, an object context is a generalization of the scoping
 mechanism introduced in OpenACS 3.x.  "Scoping" and "scope" are terms best
 explained by example: consider some hypothetical rows in the
 <tt class="computeroutput">address_book</tt> table:
-</p><div class="informaltable"><table cellspacing="0" border="1"><colgroup><col><col><col><col><col></colgroup><thead><tr><th>...</th><th><tt class="computeroutput">scope</tt></th><th><tt class="computeroutput">user_id</tt></th><th><tt class="computeroutput">group_id</tt></th><th>...</th></tr></thead><tbody><tr><td>...</td><td><tt class="computeroutput">user</tt></td><td><tt class="computeroutput">123</tt></td><td> </td><td>...</td></tr><tr><td>...</td><td><tt class="computeroutput">group</tt></td><td> </td><td><tt class="computeroutput">456</tt></td><td>...</td></tr><tr><td>...</td><td><tt class="computeroutput">public</tt></td><td> </td><td> </td><td>...</td></tr></tbody></table></div><p>
+</p><div class="informaltable"><table cellspacing="0" border="1"><colgroup><col><col><col><col><col></colgroup><thead><tr><th>...</th><th><tt class="computeroutput">scope</tt></th><th><tt class="computeroutput">user_id</tt></th><th><tt class="computeroutput">group_id</tt></th><th>...</th></tr></thead><tbody><tr><td>...</td><td><tt class="computeroutput">user</tt></td><td><tt class="computeroutput">123</tt></td><td> </td><td>...</td></tr><tr><td>...</td><td><tt class="computeroutput">group</tt></td><td> </td><td><tt class="computeroutput">456</tt></td><td>...</td></tr><tr><td>...</td><td><tt class="computeroutput">public</tt></td><td> </td><td> </td><td>...</td></tr></tbody></table></div><p>
 The first row represents an entry in User 123's personal address book,
 the second row represents an entry in User Group 456's shared address
 book, and the third row represents an entry in the site's public
@@ -210,7 +210,7 @@ This mechanism allows developers and administrators to define a
 hierarchy that matches the structure they need for access control in
 their application.  The following picture shows a typical context
 hierarchy for a hypothetical site:
-</p><div class="blockquote"><blockquote class="blockquote"><div><img src="images/context-hierarchy.gif"></div></blockquote></div><p>
+</p><div class="blockquote"><blockquote class="blockquote"><div><img src="developers-guide/images/context-hierarchy.gif"></div></blockquote></div><p>
 A few things to note here. First, the top two contexts in the picture
 are "magic" in some sense because they are created by default by OpenACS
 for a specific purpose. The object <tt class="computeroutput">default_context</tt>
@@ -223,7 +223,7 @@ which subsite they happen to live in. The object
 some object has no permissions attached to it, and its value for
 <tt class="computeroutput">security_inherit_p</tt> is <tt class="computeroutput">'f'</tt>, or
 <tt class="computeroutput">context_id</tt> is null, then we use this context by default.
-</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="permissions-example"></a>Example</h3></div></div><div></div></div><p>
+</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="permissions-example"></a>Example</h3></div></div></div><p>
 At this point, you should either go and download the Notes example
 code from the package repository, or check it out of the OpenACS CVS
 repository and add it to your server. The package is called
@@ -342,7 +342,7 @@ appropriately. In a more advanced version of the application, we could
 implement a user interface that allowed the user to explicitly attach
 permissions to notes that she wanted to make public or whatever. But
 that's beyond the scope of this example.
-</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="permissions-summary"></a>Summary</h3></div></div><div></div></div><p>
+</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="permissions-summary"></a>Summary</h3></div></div></div><p>
 OpenACS 5.1.2 defines three separate mechanisms for specifying access control
 in applications. The Groups data model allows you to define 
 hierarchical organizations of users and groups of users. The Permissions

@@ -1,7 +1,7 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Writing OpenACS Application Pages</title><meta name="generator" content="DocBook XSL Stylesheets V1.64.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="dev-guide.html" title="Chapter 11. Development Reference"><link rel="previous" href="permissions.html" title="Groups, Context, Permissions"><link rel="next" href="parties.html" title="Parties in OpenACS"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="permissions.html">Prev</a> </td><th width="60%" align="center">Chapter 11. Development Reference</th><td width="20%" align="right"> <a accesskey="n" href="parties.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="subsites"></a>Writing OpenACS Application Pages</h2></div></div><div></div></div><div class="authorblurb"><p>By Rafael H. Schloming and Pete Su</p>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Writing OpenACS Application Pages</title><meta name="generator" content="DocBook XSL Stylesheets V1.66.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="dev-guide.html" title="Chapter 11. Development Reference"><link rel="previous" href="permissions.html" title="Groups, Context, Permissions"><link rel="next" href="parties.html" title="Parties in OpenACS"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="permissions.html">Prev</a> </td><th width="60%" align="center">Chapter 11. Development Reference</th><td width="20%" align="right"> <a accesskey="n" href="parties.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="subsites"></a>Writing OpenACS Application Pages</h2></div></div></div><div class="authorblurb"><p>By Rafael H. Schloming and Pete Su</p>
           OpenACS docs are written by the named authors, and may be edited
           by OpenACS documentation staff.
-        </div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="subsites-overview"></a>Overview</h3></div></div><div></div></div><p>
+        </div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="subsites-overview"></a>Overview</h3></div></div></div><p>
 In this document, we'll examine the user interface pages of the Notes
 application in more detail, covering two separate aspects of page
 development in OpenACS. First, we'll talk about the code needed to make
@@ -10,7 +10,7 @@ in. Second, we'll talk about using the form builder to develop
 form-based user interfaces in OpenACS. While these seem like unrelated
 topics, they both come up in the example page that we are going to
 look at, so it makes sense to address them at the same time.
-</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="subsites-instances"></a>Application Instances and Subsites</h3></div></div><div></div></div><p>
+</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="subsites-instances"></a>Application Instances and Subsites</h3></div></div></div><p>
 As you will recall from the <a href="packages.html" title="OpenACS Packages">packages</a> tutorial, the Request
 Processor (RP) and Package Manager (APM) allow site
 administrators to define an arbitrary mapping from URLs in the site to
@@ -123,7 +123,7 @@ template system. This API allows you to write forms-based pages
 without generating a lot of duplicated HTML in your pages. It also
 encapsulates most of the common logic that we use in dealing with
 forms, which we'll discuss next.
-</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="subsites-using-forms"></a>Using Forms</h3></div></div><div></div></div><p>
+</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="subsites-using-forms"></a>Using Forms</h3></div></div></div><p>
 The forms API is pretty simple: You use calls in the
 <tt class="computeroutput">template::form</tt> namespace in your Tcl script to create
 form elements. The final template page then picks this stuff up and
@@ -242,7 +242,7 @@ thing about using this API is that the forms library handles all of
 the HTML rendering, input validation and database transaction logic on
 your behalf. This means that you can write pages without duplicating
 all of that code in every set of pages that uses forms.
-</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="subsites-how-it-all-fits"></a>How it All Fits</h3></div></div><div></div></div><p>
+</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="subsites-how-it-all-fits"></a>How it All Fits</h3></div></div></div><p>
 To watch all of this work, use the installer to update the Notes
 package with the new code that you grabbed out of CVS or the package
 repository, mount an instance of Notes somewhere in your server and
@@ -260,7 +260,7 @@ awareness. By adding a small amount of code, we have taken a small,
 simple, and special purpose application to something that has the
 potential to be a very useful, general-purpose tool, complete with
 multi-user features, access control, and centralized administration.
-</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="subsites-summary"></a>Summary</h3></div></div><div></div></div><p>
+</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="subsites-summary"></a>Summary</h3></div></div></div><p>
 In OpenACS 5.1.2, application pages and scripts can be aware of the package
 instance, or subsite in which they are executing. This is a powerful
 general purpose mechanism that can be used to structure web services
