@@ -628,11 +628,8 @@ ad_proc -private apm_load_catalog_files {
         lang::catalog::reset_upgrade_status_message_keys $package_key
     }
 
-    # Load message catalog files
-    lang::catalog::import_from_files $package_key
-
-    # Cache the messages
-    lang::message::cache -package_key $package_key
+    # Load and cache I18N messages
+    lang::catalog::import -cache -package_key $package_key
 }
 
 

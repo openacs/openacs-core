@@ -1,22 +1,7 @@
 <?xml version="1.0"?>
 <queryset>
 
-  <fullquery name="lang::catalog::import_from_all_files_and_cache.all_enabled_not_loaded_packages">
-    <querytext>
-      select package_key
-      from   apm_package_types
-      where  exists (select 1 
-                     from   apm_package_versions
-                     where  package_key = apm_package_types.package_key
-                        and installed_p = 't'
-                        and enabled_p = 't')
-       and not exists (select 1
-                       from lang_message_keys
-                       where package_key = apm_package_types.package_key)
-    </querytext>
-  </fullquery>
-
-  <fullquery name="lang::catalog::export_package_to_files.get_locales_for_package">
+  <fullquery name="lang::catalog::export.get_locales_for_package">
     <querytext>
         select distinct locale
         from lang_messages
@@ -62,7 +47,7 @@
     </querytext>
   </fullquery>
 
-  <fullquery name="lang::catalog::import_messages_from_file.reset_upgrade_status_messages">
+  <fullquery name="lang::catalog::import_from_file.reset_upgrade_status_messages">
     <querytext>
         update lang_messages
                 set upgrade_status = 'no_upgrade'
@@ -71,7 +56,7 @@
     </querytext>
   </fullquery>
 
-  <fullquery name="lang::catalog::import_messages_from_file.mark_message_as_deleted">
+  <fullquery name="lang::catalog::import_from_file.mark_message_as_deleted">
     <querytext>
         update lang_messages
            set upgrade_status = 'deleted'
@@ -81,7 +66,7 @@
     </querytext>
   </fullquery>
 
-  <fullquery name="lang::catalog::import_messages_from_file.mark_message_key_as_deleted">
+  <fullquery name="lang::catalog::import_from_file.mark_message_key_as_deleted">
     <querytext>
         update lang_message_keys
            set upgrade_status = 'deleted'
