@@ -12,6 +12,7 @@ namespace eval auth::password {}
 namespace eval auth::registration {}
 namespace eval auth::get_doc {}
 namespace eval auth::process_doc {}
+namespace eval auth::user_info {}
 
 
 ad_proc -private auth::package_install {} {} {
@@ -23,6 +24,7 @@ ad_proc -private auth::package_install {} {} {
         auth::registration::create_contract
         auth::get_doc::create_contract
         auth::process_doc::create_contract
+        auth::user_info::create_contract
 
         # Register local authentication implementations and update the local authority
         auth::local::install
@@ -54,6 +56,7 @@ ad_proc -private auth::package_uninstall {} {} {
         auth::registration::delete_contract
         auth::get_doc::delete_contract
         auth::process_doc::delete_contract
+        auth::user_info::delete_contract
     }
 }
 
@@ -418,6 +421,58 @@ ad_proc -private auth::process_doc::delete_contract {} {
     Delete service contract for account registration.
 } {
     acs_sc::contract::delete -name "auth_sync_process"
+}
+
+
+
+
+#####
+#
+# auth_user_info service contract
+#
+#####
+
+ad_proc -private auth::user_info::create_contract {} {
+    Create service contract for account registration.
+} {
+    set spec {
+        name "auth_user_info"
+        description "Get information about a user in real-time"
+        operations {
+            GetUserInfo {
+                description {
+                    Request information about a user. Returns info_status 'ok', 'no_account', 'info_error', or 'failed_to_connect'. 
+                    info_message is a human-readable explanation to the user. 
+                }
+                input {
+                    username:string
+                    parameters:string,multiple
+                }
+                output {
+                    info_status:string
+                    info_message:string
+                    user_info:string,multiple
+                }
+            }
+            GetParameters {
+                description {
+                    Get an array-list of the parameters required by this service contract implementation.
+                }
+                output {
+                    parameters:string,multiple
+                }
+            }
+        }
+    }
+
+    acs_sc::contract::new_from_spec -spec $spec
+}
+
+
+ad_proc -private auth::user_info::delete_contract {} {
+    Delete service contract for account registration.
+} {
+    acs_sc::contract::delete -name "auth_user_info"
 }
 
 
