@@ -26,17 +26,17 @@ ad_form -name application -cancel_url . -form {
     {package_key:text(select)
         {label "Application"}
         {options $packages}
-        {help_text "The type of application you want to add."}
+        {help_text "The type of application you want to add.  If the application is not in the list, you may need to <a href=\"/acs-admin/install/\">install</a> it on the server."}
         {mode {[ad_decode [ad_form_new_p -key node_id] 1 "" "display"]}}
     }
     {instance_name:text,optional
         {label "Application name"}
-        {help_text "The human-readable name of your application. If you leave this out, we'll use the name of the application (e.g. 'Forums')."}
+        {help_text "The human-readable name of your application. If blank, the name of the application is used (e.g. 'Forums')."}
         {html {size 50}}
     }
     {folder:text,optional
         {label "URL folder name"}
-        {help_text "This should be a short string, all lowercase, with hyphens instead of spaces, whicn will be used in the URL of the new application. If you leave this blank, we will generate one for you from name of the application."}
+        {help_text "The partial URL of the new application.  This should be a short string, all lowercase, with hyphens instead of spaces. If blank, the package name is used (e.g. '/forum')."}
         {html {size 30}}
     }
 } -new_request {
