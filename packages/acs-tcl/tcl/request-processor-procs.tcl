@@ -1177,21 +1177,40 @@ ad_proc -public ad_conn {args} {
         # own caching, so calling it instead of [ns_conn form]
         # is OK.
 
-        if { $var == "form" } {
-            return [ns_getform] 
-        }
-        if { $var == "all" } {
-            return [array get ad_conn]
-        }
-
-
-        if { [info exists ad_conn($var)] } {
-            return $ad_conn($var)
-        } else {
-            if { [string equal $var "locale"] } { 
-                return [parameter::get -parameter SiteWideLocale -package_id [apm_package_id_from_key "acs-lang"] -default {en_US}]
+        switch $var {
+            form {
+                return [ns_getform] 
             }
-            return [ns_conn $var]
+            all {
+                return [array get ad_conn]
+            }
+            default {
+                if { [info exists ad_conn($var)] } {
+                    return $ad_conn($var)
+                }
+
+                # Fallback 
+                switch $var {
+                    locale {
+                        set ad_conn(locale) [parameter::get \
+                                                 -parameter SiteWideLocale \
+                                                 -package_id [apm_package_id_from_key "acs-lang"] \
+                                                 -default {en_US}]
+                        return $ad_conn(locale)
+                    }
+                    subsite_id {
+                        set ad_conn(subsite_id) [site_node::closest_ancestor_package \
+                                                     -node_id [ad_conn node_id] \
+                                                     -package_key "acs-subsite" \
+                                                     -include_self \
+                                                     -element "package_id"]
+                        return $ad_conn(subsite_id)
+                    }
+                    default {
+                        return [ns_conn $var]
+                    }
+                }
+            }
         }
     }
 
