@@ -421,8 +421,8 @@ ad_proc -public lang::message::lookup {
                 incr message_key_num
             }
             
-            # LARS: Trying new translator more -- encode the key in the page
-            set message "$message\x002\[\x001$key\x001\]\x002"
+            # encode the key in the page
+            set message "$message\x002(\x001$key\x001)\x002"
         }
     }
 
