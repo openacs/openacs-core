@@ -1,10 +1,11 @@
 <master>
-<property name="title">ISO Codes Not Loaded</property>
-<property name="context">No ISO Codes</property>
+<property name="title">#acs-subsite.ISO_Codes_Not_Loaded#</property>
+<property name="context">#acs-subsite.No_ISO_Codes#</property>
  
-<H2>ISO Codes not loaded</H2>
+<H2>#acs-subsite.ISO_Codes_not_loaded#</H2>
 <hr>
 
-<p>The ISO codes were not loaded on this server.
-<p>If you need this functionality, please load acs-reference and ref-countries.
+<p>#acs-subsite.The_ISO_codes_were_not#
+<p>#acs-subsite.lt_If_you_need_this_func#
+
 

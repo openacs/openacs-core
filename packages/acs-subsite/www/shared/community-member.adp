@@ -9,19 +9,19 @@
 <else>
   <if @inline_portrait_state eq "link">
     <p>
-      <b>&raquo;</b> <a href="portrait?@portrait_export_vars@">Portrait</a>
+      <b>&raquo;</b> <a href="portrait?@portrait_export_vars@">#acs-subsite.Portrait#</a>
     </p>
   </if>
 </else>
 
 <p>
-  A member of the @system_name@ community since <b>@pretty_creation_date@</b>.
+  #acs-subsite.A_member_of_the_system# <b>@pretty_creation_date@</b>.
 </p>
 
 <if @member_state@ eq "deleted">
   <blockquote>
     <font color="red">
-      This user has left the community.
+      #acs-subsite.This_user_has_left_the#
     </font>
   </blockquote>
 </if>
@@ -29,31 +29,31 @@
   <if @member_state@ eq "banned">
     <blockquote>
       <font color="red">
-        This user is deleted and banned from the community.
+        #acs-subsite.lt_This_user_is_deleted#
        </font>
     </blockquote>
   </if>
 </else>
 
 <p>
-  <b>Name:</b> @first_names@ @last_name@
+  <b>#acs-subsite.Name#:</b> @first_names@ @last_name@
 </p>
 
 <if @show_email_p@ true>
   <p>
-    <b>E-mail:</b> <a href="mailto:@email@">@email@</a>
+    <b>#acs-subsite.E_mail#:</b> <a href="mailto:@email@">@email@</a>
   </p>
 </if>
 
 <if @url@ not nil>
   <p>
-    <b>Home page:</b> <a href="@url@">@url@</a>
+    <b>#acs-subsite.Home_page#:</b> <a href="@url@">@url@</a>
   </p>
 </if>
 
 <if @bio@ not nil>
   <p>
-    <b>Biography:</b>
+    <b>#acs-subsite.Biography#:</b>
    </p>
    <blockquote>
      @bio;noquote@
@@ -63,14 +63,15 @@
 
 <if @untrusted_user_id@ eq 0>
   <blockquote>
-    If you were to <a href="@subsite_url@register/index?@login_export_vars@">log in</a>, you'd be able to get more information on your fellow community member.
+    #acs-subsite.If_you_were_to# <a href="@subsite_url@register/index?@login_export_vars@">#acs-subsite.log_in#</a>#acs-subsite.lt__youd_be_able_to_get#
   </blockquote>
 </if>
 
 <if @site_wide_admin_p@>
-  <h3>For Site-Wide Administrators</h3>
+  <h3>#acs-subsite.lt_For_Site-Wide_Adminis#</h3>
   <p>
-    <b>&raquo;</b> <a href="@admin_user_url@">Administrative options for this user</a>
+    <b>&raquo;</b> <a href="@admin_user_url@">#acs-subsite.Administrative_options#</a>
   </p>
 </if>
+
 

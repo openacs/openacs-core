@@ -1,15 +1,14 @@
 <master>
-<property name="title">Complete List of ISO Codes</property>
-<property name="context">ISO Code List</property>
+<property name="title">#acs-subsite.lt_Complete_List_of_ISO_#</property>
+<property name="context">#acs-subsite.ISO_Code_List#</property>
  
-<h2>Complete List of ISO Codes</h2>
+<h2>#acs-subsite.lt_Complete_List_of_ISO_#</h2>
 
-Please locate your country's code among those listed below then use
-the "back" button on your browser to return to the previous form.
+#acs-subsite.lt_Please_locate_your_co#
 
 <hr>
 <table>
-<tr><th align=left>Country Name<th>ISO Code</tr>
+<tr><th align=left>#acs-subsite.Country_Name#<th>#acs-subsite.ISO_Code#</tr>
 
 <multiple name="ccodes">
 
@@ -18,4 +17,5 @@ the "back" button on your browser to return to the previous form.
 </multiple>
 
 </table>
+
 

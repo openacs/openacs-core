@@ -5,8 +5,9 @@
 <p>#acs-subsite.Account_reopened_message#</p>
 
 <p>
-  <b>&raquo;</b> <a href="@return_url@">Continue</a>
+  <b>&raquo;</b> <a href="@return_url@">#acs-subsite.Continue#</a>
 </p>
+
 
 
 

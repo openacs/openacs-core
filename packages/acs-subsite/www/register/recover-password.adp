@@ -4,11 +4,12 @@
   <property name="focus">@focus;noquote@</property>
 
 <if @recover_info.password_message@ nil>
-  <p> Enter your username to begin password recovery. </p>
+  <p> #acs-subsite.Enter_your_username_to# </p>
   <formtemplate id="recover"></formtemplate>
 </if>
 <else>
   @recover_info.password_message@
-  <p> To log in, visit the <a href="@login_url@">login page</a>. </p>
+  <p> #acs-subsite.To_log_in_visit_the# <a href="@login_url@">#acs-subsite.login_page#</a>. </p>
 </else>
+
 
