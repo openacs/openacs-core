@@ -1,6 +1,6 @@
 <master>
 <property name="title">@system_name;noquote@</property>
-<if @user_id@ eq 0><property name="focus">login.username</property></if>
+<if @user_id@ eq 0><property name="focus">@focus@</property></if>
 
 <table cellspacing="4" cellpadding="4" border="0">
   <tr>
