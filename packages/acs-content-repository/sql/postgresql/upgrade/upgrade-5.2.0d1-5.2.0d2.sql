@@ -1,3 +1,7 @@
+-- add package_id to defined args for content_folder__new
+select define_function_args('content_folder__new','name,label,description,parent_id,context_id,folder_id,creation_date;now,creation_user,creation_ip,security_inherit_p;t,package_id');
+
+
 -- this one had a rename__label as rename_label so replace it.
 create or replace function content_folder__rename (integer,varchar,varchar,varchar)
 returns integer as '
@@ -37,3 +41,4 @@ begin
 
   return 0; 
 end;' language 'plpgsql';
+
