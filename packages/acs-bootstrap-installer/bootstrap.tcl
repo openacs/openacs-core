@@ -142,7 +142,7 @@ set errno [catch {
             apm_parameter_values.package_id in
         (select package_id from apm_packages, site_nodes
          where package_key = 'acs-automated-testing' and
-               apm_packages.package_id = site_nodes.object_id);
+               apm_packages.package_id = site_nodes.object_id)
     }] {
 	    if {$enabled_p} {
         set load_tests_p 1
