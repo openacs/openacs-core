@@ -11,45 +11,32 @@ ad_page_contract {
 
 set page_title [_ acs-subsite.Recover_Password]
 set context [list $page_title]
-set focus ""
+
+if { ![exists_and_not_null authority_id] } {
+    set authority_id [auth::authority::local]
+}
 
 # Display form to collect username and authority
 set authority_options [auth::authority::get_authority_options]
 
+ad_form -name recover -edit_buttons [list [list [_ acs-kernel.common_continue] ok]] -form { {dummy:text(hidden),optional} }
+    
 if { [llength $authority_options] > 1 } {
-    ad_form -name recover_password -edit_buttons [list [list [_ acs-kernel.common_continue] ok]] -form {
+    ad_form -extend -name recover -form {
         {authority_id:integer(select) 
-            {label "[_ acs-kernel.authentication_authority]"} 
+            {label {[_ acs-kernel.authentication_authority]}} 
             {options $authority_options}
-            {value $authority_id}
-        }
-    }
-} else {
-    ad_form -name recover_password -edit_buttons [list [list [_ acs-kernel.common_continue] ok]] -form {
-        {authority_id:integer(hidden),optional 
-            {value $authority_id}
         }
     }
 }
 
-ad_form -extend -name recover_password -form { 
+set submission_p 0
+
+ad_form -extend -name recover -form { 
     {username:text
         {label "Username"}
         {value $username}
     }
-} -on_submit {
-
-    if { ![exists_and_not_null authority_id] } {
-        # Will be defaulted to local authority
-        set authority_id ""
-    }
-
-
-
-    array set recover_info [auth::password::recover_password \
-                                -authority_id $authority_id \
-                                -username $username]
-
 } -validate {
     {username
         { ![empty_string_p [acs_user::get_by_username -authority_id $authority_id -username $username]] }
@@ -57,20 +44,13 @@ ad_form -extend -name recover_password -form {
     }
 }
 
-if { [llength $authority_options] > 1 } {
-    set focus "recover_password.authority_id"
-} else {
-    set focus "recover_password.username"
-}
-
-set form_valid_p [form is_valid recover_password]
-set form_submitted_p [form is_submission recover_password]
-
-
-if { [exists_and_not_null username] && !$form_submitted_p } {
+# We handle form submission here, because otherwise we can't handle both the case where we use the form
+# and the case where we don't in one go
+if { [form is_valid recover] || (![form is_submission recover] && [exists_and_not_null username]) } {
     array set recover_info [auth::password::recover_password \
                                 -authority_id $authority_id \
                                 -username $username]
+
+    set login_url [ad_get_login_url -authority_id $authority_id -username $username]
 }
 
-set login_url [ad_get_login_url -authority_id $authority_id -username $username]
