@@ -1,8 +1,7 @@
 <master>
   <property name="title">@page_title@</property>
   <property name="context">@context@</property>
-
-
+  <property name="focus">@focus;noquote@</property>
 
 <if @counter@ gt 0>
   <formtemplate id="parameters"></formtemplate>
