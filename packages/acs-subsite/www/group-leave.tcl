@@ -5,13 +5,13 @@ ad_page_contract {
     @creation-date 2003-08-07
     @cvs-id $Id$
 } {
-    {return_url "."}
+    {group_id:integer {[application_group::group_id_from_package_id]}}
+    return_url:optional
 }
 
-ad_maybe_redirect_for_registration
+set user_id [auth::require_login]
 
-set user_id [ad_conn user_id]
-set group_id [application_group::group_id_from_package_id]
+group::get -group_id $group_id -array group_info
 
 set member_p [group::member_p -group_id $group_id -user_id $user_id]
 
@@ -30,4 +30,8 @@ if { $member_p } {
 
 }
 
-ad_returnredirect $return_url
+if { ![exists_and_not_null return_url] } {
+    set return_url "../"
+}
+
+ad_returnredirect -message "You have left the group \"$group_info(group_name)\"." $return_url
