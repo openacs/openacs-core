@@ -84,10 +84,9 @@ namespace eval site_node {
         {-package_key:required}
         {-package_id ""}
     } {
-        Instantiate and mount a package of given type.
+        Instantiate and mount a package of given type. Will use an existing site node if possible.
 
         @param node_id        The id of the node in the site map where the package should be mounted.
-                              If not specified a new node under the main site will be created.
         @param parent_node_id If no node_id is specified this will be the parent node under which the
                               new node is created. Defaults to the main site node id.
         @param node_name      If node_id is not specified then this will be the name of the
@@ -102,7 +101,7 @@ namespace eval site_node {
                           
         @author Peter Marklund
     } {
-        # Create a new node if none was provided
+        # Create a new node if none was provided and none exists
         if { [empty_string_p $node_id] } {
             # Default parent node to the main site
             if { [empty_string_p $parent_node_id ] } {
@@ -112,7 +111,22 @@ namespace eval site_node {
             # Default node_name to package_key
             set node_name [ad_decode $node_name "" $package_key $node_name]
 
-            set node_id [site_node::new -name $node_name -parent_id $parent_node_id]
+            # Create the node if it doesn't exists
+            set parent_url [get_url -notrailing -node_id $parent_node_id]
+            set url "${parent_url}/${node_name}"            
+
+            if { ![exists_p -url $url] } {
+                set node_id [site_node::new -name $node_name -parent_id $parent_node_id]
+            } else {
+                # Check that there isn't already a package mounted at the node
+                array set node [get -url $url]
+
+                if { [exists_and_not_null node(object_id)] } {
+                    error "Cannot mount package at url $url as package $node(object_id) is already mounted there"
+                }
+
+                set node_id $node(node_id)
+            }
         }
 
         # Default context id to the closest ancestor package_id
@@ -258,6 +272,17 @@ namespace eval site_node {
         error "site node not found at url \"$url\""
     }
 
+    ad_proc -public exists_p {
+        {-url:required}
+    } {
+        Returns 1 if a site node exists at the given url and 0 otherwise.
+
+        @author Peter Marklund
+    } {
+        set url_no_trailing [string trimright $url "/"]
+        return [nsv_exists site_nodes "$url_no_trailing/"]
+    }        
+
     ad_proc -public get_from_object_id {
         {-object_id:required}
     } {
@@ -286,12 +311,20 @@ namespace eval site_node {
 
     ad_proc -public get_url {
         {-node_id:required}
+        {-notrailing:boolean}
     } {
         return the url of this node_id
+
+        @notrailing If true then strip any
+        trailing slash ('/'). This means the empty string is returned for the root.
     } {
         set url ""
         if {[nsv_exists site_node_urls $node_id]} {
             set url [nsv_get site_node_urls $node_id]
+        }
+        
+        if { $notrailing_p } {
+            set url [string trimright $url "/"]
         }
 
         return $url
