@@ -683,14 +683,7 @@ ad_proc -public item::publish {
         set revision_id [item::get_element -item_id $item_id -element latest_revision]
     }
 
-    db_exec_plsql set_live {
-        begin
-            content_item.set_live_revision(
-                revision_id => :revision_id,
-                publish_status => 'live'
-            );
-        end;
-    }
+    db_exec_plsql set_live { }
 }
 
 ad_proc -public item::unpublish {
@@ -706,16 +699,8 @@ ad_proc -public item::unpublish {
 } {
 
     db_exec_plsql unset_live {
-        begin
-            content_item.unset_live_revision(
-                 item_id => :item_id
-            );
-        end;
     }
 
     db_dml update_publish_status {
-        update cr_items
-        set publish_status = :publish_status
-        where item_id = :item_id
     }
 }

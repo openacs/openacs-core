@@ -93,5 +93,27 @@
       )
     </querytext>
 </fullquery>
+
+
+<fullquery name="item::publish.set_live">
+    <querytext>
+        begin
+            content_item.set_live_revision(
+                revision_id => :revision_id,
+                publish_status => 'live'
+            );
+        end;
+    </querytext>
+</fullquery>
+
+<fullquery name="item::unpublish.unset_live">
+    <querytext>
+        begin
+            content_item__unset_live_revision(
+                 :item_id
+            );
+        end;
+    </querytext>
+</fullquery>
       
 </queryset>
