@@ -5,7 +5,7 @@
 
 <!-- vinodk: Imports chunk.xsl                   -->
 
-  <xsl:import href="/usr/share/sgml/docbook/stylesheet/xsl/nwalsh/html/chunk.xsl"/>
+  <xsl:import href="/usr/share/sgml/docbook/xsl-stylesheets-1.50.0-3/html/chunk.xsl"/>
 
 <!-- vinodk: Not sure if this is needed                   -->
   <xsl:output media-type="text/html" encoding="iso-8859-1"/>
@@ -288,5 +288,37 @@
       <xsl:apply-templates/>
     </div>
   </xsl:template>
+
+<!-- custom stuff to add better css hooks -->
+<xsl:template match="guibutton">
+  <span class="guibutton">
+    <xsl:call-template name="inline.charseq"/>
+  </span>	
+</xsl:template>
+
+<xsl:template match="guilabel">
+  <span class="guilabel">
+    <xsl:call-template name="inline.charseq"/>
+  </span>	
+</xsl:template>
+
+<xsl:template match="action">
+  <pre class="action">
+    <xsl:call-template name="inline.charseq"/>
+  </pre>	
+</xsl:template>
+
+<xsl:template match="replaceable">
+  <span class="replaceable">
+    <xsl:call-template name="inline.charseq"/>
+  </span>	
+</xsl:template>
+
+<xsl:template match="accel">
+  <u>
+    <xsl:call-template name="inline.charseq"/>
+  </u>	
+</xsl:template>
+
 
 </xsl:stylesheet>
