@@ -1753,7 +1753,7 @@ declare
   copy_id                cr_items.item_id%TYPE;
 begin
 
-  copy_id := copy2(item_id, target_folder_id, creation_user, creation_ip);
+  copy_id := content_item__copy2(item_id, target_folder_id, creation_user, creation_ip);
 
   return 0; 
 end;' language 'plpgsql';
