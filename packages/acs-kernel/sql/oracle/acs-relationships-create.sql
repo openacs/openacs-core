@@ -249,9 +249,9 @@ as
   begin
     -- XXX do cascade_p
     delete from acs_rel_types
-    where rel_type = drop_type.rel_type;
+    where acs_rel_types.rel_type = acs_rel_type.drop_type.rel_type;
 
-    acs_object_type.drop_type(drop_type.rel_type, drop_type.cascade_p);
+    acs_object_type.drop_type(acs_rel_type.drop_type.rel_type, acs_rel_type.drop_type.cascade_p);
   end;
 
 end acs_rel_type;
