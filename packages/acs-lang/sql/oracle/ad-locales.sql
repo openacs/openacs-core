@@ -102,6 +102,14 @@ insert into ad_locales (
   'DANISH', 'DENMARK', 'WE8ISO8859P1', 'ISO-8859-1', 't'
 );
 
+insert into ad_locales (
+  locale, label, language, country,
+  nls_language, nls_territory, nls_charset, mime_charset, default_p
+) values (
+  'sv_SE', 'Swedish', 'sv', 'SE',
+  'SWEDISH', 'SWEDEN', 'WE8ISO8859P1', 'ISO-8859-1', 't'
+);
+
 commit;
 
 create table ad_locale_user_prefs (
