@@ -20,18 +20,43 @@ namespace eval site_node_apm_integration {
     } {
         create site node, instantiate package, mount package at new site node
     } {
-        set node_id [site_node::new -name $name -parent_id $parent_id]
+        db_transaction {
+            set node_id [site_node::new -name $name -parent_id $parent_id]
 
-        set package_id [apm_package_create_instance $instance_name $context_id $package_key]
+            set package_id [apm_package_create_instance $instance_name $context_id $package_key]
 
-        site_node::mount -node_id $node_id -object_id $package_id
+            site_node::mount -node_id $node_id -object_id $package_id
 
-        site_node::update_cache -node_id $node_id
-
-        # call post instantiation proc for the package
-        apm_package_call_post_instantiation_proc $package_id $package_key
+            site_node::update_cache -node_id $node_id
+            
+            # call post instantiation proc for the package
+            apm_package_call_post_instantiation_proc $package_id $package_key
+        }
 
         return $package_id
+    }
+
+    ad_proc -public delete_site_nodes_and_package {
+        {-package_id:required}
+    } {
+        First deletes ALL the site nodes this instance is mapped to, then deletes the instance.
+
+    } {
+        db_transaction {
+            # should here be a pre-destruction proc like the post instantiation proc?
+            foreach site_node_info_list [site_node::get_all_from_object_id -object_id $package_id] {
+
+                ns_log notice "aks1: $site_node_info_list"
+                
+                array set site_node $site_node_info_list
+
+                site_node::unmount -node_id $site_node(node_id)
+                site_node::delete -node_id $site_node(node_id)
+                site_node::update_cache -node_id $site_node(node_id)
+            }
+            
+            apm_package_delete_instance $package_id
+        }
     }
 
     ad_proc -public get_child_package_id {
