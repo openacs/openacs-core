@@ -386,14 +386,6 @@ ad_proc -public pkg_home {package_key} {
     return "/packages/$package_key"
 }
 
-ad_proc -public pkg_widgets {package_key} {
-
-    @return A server-root relative path to the widgets available to a package.  Usually /packages/package-key/widgets
-
-} {
-    return "[pkg_home $package_key]/widgets"
-}
-
 ad_proc -public apm_version_file_list { 
     { 
 	-type "" -db_type ""
