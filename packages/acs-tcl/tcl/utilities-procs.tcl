@@ -2445,17 +2445,65 @@ ad_proc util_current_location {{}} {
    request in the form protocol://hostname[:port] but it looks at the
    Host header, that is, takes into account the host name the client
    used although it may be different from the host name from the server
-   configuration file.  If the Host header is missing or empty util_current_location
-   falls back to ad_conn location.
+   configuration file.  If the Host header is missing or empty 
+   util_current_location falls back to ad_conn location.
+
+   cro@ncacasi.org 2002-06-07
+   Patch this to support hosts on non-standard ports and IE.  IE
+    fouls up the Host header if a server is on a non-standard port; it
+    does not change the port number when redirecting to https.  So
+    we would get redirects from http://some-host:8000 to
+    https://some-host:8000
 } {
+
+   set useragent [ns_set iget [ad_conn headers] User-Agent]
    set host_from_header [ns_set iget [ad_conn headers] Host]
    # host_from_header now hopefully contains hostname[:port]
+
+   # Is this server running on a non-standard port?
+   set nonstandard 0
+   if { [ad_conn driver] == "nssock" } {
+       if { [ns_config -int "ns/server/[ns_info server]/module/nssock" Port 80] != 80 } {
+	   set nonstandard 1
+	   set port [ns_config -int "ns/server/[ns_info server]/module/nssock" Port 80]
+	   set proto http
+       }
+
+   }
+
+   if { [ad_conn driver] == "nsssl" || [ad_conn driver] == "nsssle" } {
+       if { [ns_config -int "ns/server/[ns_info server]/module/[ad_conn driver]" Port 443] != 443 } {
+	   set nonstandard 1
+	   set port [ns_config -int "ns/server/[ns_info server]/module/[ad_conn driver]" Port 443]
+	   set proto https
+       }
+   }
+
+   if { [ad_conn driver] == "nsopenssl" } {
+
+       if { [ns_config -int "ns/server/[ns_info server]/module/[ad_conn driver]" ServerPort 443] != 443 } {
+	   set nonstandard 1
+	   set port [ns_config -int "ns/server/[ns_info server]/module/[ad_conn driver]" ServerPort 443]
+	   set proto https
+       }
+   }
+
+#   ns_log notice "driver: [ad_conn driver], nonstandard: $nonstandard"
+
    set location_from_config_file [ad_conn location]
-   if {[empty_string_p $host_from_header]} {
+   if { [empty_string_p $host_from_header] } {
       # Hmm, there is no Host header.  This must be
       # an old browser such as MSIE 3.  All we can do is:
       return $location_from_config_file
-   } else {
+  } elseif { [regexp -nocase {MSIE } $useragent]  && $nonstandard } {
+      # construct redirect here
+      set location_from_host_header ""
+      regsub -nocase {(.*):.*} $host_from_header "$proto://\\1:$port" location_from_host_header
+
+#      ns_log notice "util_current_location: Creating loc from scratch: $location_from_host_header"
+      return $location_from_host_header
+  } else {
+      set location_from_host_header ""
       # Replace the hostname[:port] part of $location_from_config_file with $host_from_header:
       regsub -nocase {(^[a-z]+://).*} \
                 $location_from_config_file \\1$host_from_header location_from_host_header
