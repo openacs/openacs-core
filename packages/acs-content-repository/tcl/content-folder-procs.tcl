@@ -254,7 +254,7 @@ ad_proc -public content::folder::is_folder {
 } {
     @param item_id
 
-    @return CHAR
+    @return t or f
 } {
     return [package_exec_plsql -var_list [list \
         item_id $item_id \
