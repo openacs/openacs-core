@@ -20,7 +20,7 @@ comment on table acs_magic_objects is '
  objects like the site-wide organization, and the all users party.
 ';
 
-create function acs__add_user (integer,varchar,timestamp with time zone,integer,varchar,varchar,varchar,varchar,varchar,char,char,varchar,varchar,varchar,boolean,varchar)
+create function acs__add_user (integer,varchar,timestamptz,integer,varchar,varchar,varchar,varchar,varchar,char,char,varchar,varchar,varchar,boolean,varchar)
 returns integer as '
 declare
   user_id                alias for $1;  -- default null    
@@ -73,8 +73,6 @@ begin
    
 end;' language 'plpgsql';
 
-
--- procedure remove_user
 create function acs__remove_user (integer)
 returns integer as '
 declare
@@ -86,8 +84,6 @@ begin
     return 0; 
 end;' language 'plpgsql';
 
-
--- function magic_object_id
 create function acs__magic_object_id (varchar)
 returns integer as '
 declare
@@ -145,7 +141,7 @@ declare
 begin
   
   root_id := acs_object__new (
-    0,
+    -4,
     ''acs_object'',
     now(),
     null,
@@ -156,7 +152,7 @@ begin
   insert into acs_magic_objects
    (name, object_id)
   values
-   (''security_context_root'', 0);
+   (''security_context_root'', -4);
 
 
   return root_id;
@@ -193,8 +189,8 @@ begin;
 
 end;
 
-
--- show errors
+-- Now create our special groups and users.   We can not create the
+-- relationships between these entities yet.  This is done in acs-install.sql
 
 create function inline_2 ()
 returns integer as '
@@ -202,34 +198,75 @@ declare
   v_object_id integer;
 begin
 
- insert into acs_objects
-  (object_id, object_type)
- values
-  (-1, ''party'');
+  -- Make an "Unregistered Visitor" as object 0, which corresponds
+  -- with the user_id assigned throughout the toolkit Tcl code
 
- insert into parties
-  (party_id)
- values
-  (-1);
+  insert into acs_objects
+    (object_id, object_type)
+  values
+    (0, ''person'');
 
- insert into acs_magic_objects
-  (name, object_id)
- values
-  (''the_public'', -1);
+  insert into parties
+    (party_id)
+  values
+    (0);
+
+  insert into persons
+    (person_id, first_names, last_name)
+  values
+    (0, ''Unregistered'', ''Visitor'');
+
+  insert into acs_magic_objects
+    (name, object_id)
+  values
+    (''unregistered_visitor'', 0);
+
+  v_object_id := acs_group__new (
+    -1,
+    ''group'',
+    now(),
+    null,
+    null,
+    null,
+    null,
+    ''The Public'',
+    null,
+    null
+  );
+
+  insert into acs_magic_objects
+   (name, object_id)
+  values
+   (''the_public'', -1);
+
+  -- Add our only user, the Unregistered Visitor, to The Public
+  -- group.
+
+  perform membership_rel__new (
+    null,
+    ''membership_rel'',
+    acs__magic_object_id(''the_public''),      
+    acs__magic_object_id(''unregistered_visitor''),
+    ''approved'',
+    null,
+    null);
 
   return 0;
+
 end;' language 'plpgsql';
 
 select inline_2 ();
 
 drop function inline_2 ();
 
-
 create function inline_3 ()
 returns integer as '
 declare
   group_id integer;
 begin
+
+  -- We will create the registered users group with type group for the moment
+  -- because the application_group package has not yet been created.
 
   group_id := acs_group__new (
     -2,
@@ -244,10 +281,21 @@ begin
     null
   );
 
- insert into acs_magic_objects
-  (name, object_id)
- values
-  (''registered_users'', -2);
+  insert into acs_magic_objects
+   (name, object_id)
+  values
+   (''registered_users'', -2);
+
+  -- Now declare "The Public" to be composed of itself and the "Registered
+  -- Users" group
+
+  perform composition_rel__new (
+    null,
+    ''composition_rel'',
+    acs__magic_object_id(''the_public''),
+    acs__magic_object_id(''registered_users''),
+    null,
+    null);
 
   return 0;
 end;' language 'plpgsql';
@@ -256,7 +304,6 @@ select inline_3 ();
 
 drop function inline_3 ();
 
- 
 select acs_object__new (
     -3,
     'acs_object',
@@ -266,9 +313,7 @@ select acs_object__new (
     null
   );
 
- insert into acs_magic_objects
+insert into acs_magic_objects
   (name, object_id)
- values
+values
   ('default_context', -3);
-                  
-                  
