@@ -15,6 +15,31 @@ namespace eval template::wizard {}
 
 ad_proc -public template::wizard { command args } {
     alias proc to call the real template::wizard::proc
+
+    @see template::wizard::add
+    @see template::wizard::create
+    @see template::wizard::current_step
+    @see template::wizard::exists
+    @see template::wizard::forward
+
+    @see template::wizard::get_action_url
+    @see template::wizard::get_current_name
+    @see template::wizard::get_current_step
+    @see template::wizard::get_forward_url
+    @see template::wizard::get_param
+    @see template::wizard::get_reference
+    @see template::wizard::get_visited_step
+    @see template::wizard::get_wizards
+    @see template::wizard::get_wizards_levels
+
+    @see template::wizard::load_last_visited_step
+    @see template::wizard::save_last_visited_step
+
+    @see template::wizard::set_finish_url
+    @see template::wizard::set_param
+    @see template::wizard::set_visited_step
+
+    @see template::wizard::submit
 } {
     eval wizard::$command $args
 }
@@ -43,6 +68,8 @@ ad_proc -public template::wizard::create { args } {
     wizard</li>
     </ul>
     </li>
+
+    @see template::wizard
 } {
 
     set level [template::adp_level]
@@ -97,6 +124,8 @@ ad_proc -public template::wizard::get_param { name } {
     from the tcl var while ad_page_contract gets the value from the http var.
     So while processing in tcl that value may change.
     </p>
+
+    @see template::wizard
 } {
 
     set level [template::adp_level]
@@ -124,6 +153,8 @@ ad_proc -public template::wizard::set_param { name value } {
     (wizard.tcl).  Make sure to do it before "template::wizard get_current_step".
     So when "template::wizard get_current_step" redirects it will properly set
     the correct values of the param to the new value.</p>
+
+    @see template::wizard
 } {
 
     set level [template::adp_level]
@@ -137,6 +168,8 @@ ad_proc -public template::wizard::set_param { name value } {
 ad_proc -public template::wizard::set_finish_url { finish_url } { 
     <p>if the finish url is set, when a the finish button is pressed
     it will redirect to this url</p>
+
+    @see template::wizard
 } {
     get_reference
     set wizard_finish_url $finish_url
@@ -146,6 +179,8 @@ ad_proc -public template::wizard::set_finish_url { finish_url } {
 
 ad_proc -private template::wizard::add { step_id args } {
     Append a step to a wizard
+
+    @see template::wizard
 } {
     get_reference
 
@@ -179,6 +214,8 @@ ad_proc -public template::wizard::get_current_step {} {
     <p>The wizard will rewrite the url always.  Only self submitting forms
     are preserved.  Once the form is finished processing the wizard will take
     over and rewrite the url.</p>
+
+    @see template::wizard
 } {
     get_reference
 
@@ -234,6 +271,8 @@ ad_proc -public template::wizard::get_current_step {} {
 ad_proc -private template::wizard::current_step {} {
     convinience method to get the step for the http params or from the
     wizard step definition
+
+    @see template::wizard
 } {
 
     get_reference
@@ -244,6 +283,8 @@ ad_proc -private template::wizard::current_step {} {
 
 ad_proc -public template::wizard::get_visited_step {} {
     get the last visited step
+
+    @see template::wizard
 } {
 
     get_reference
@@ -263,6 +304,8 @@ ad_proc -public template::wizard::get_visited_step {} {
 
 ad_proc -public template::wizard::set_visited_step {step_id} { 
     set the last visited step
+
+    @see template::wizard
 } {
     
     get_reference
@@ -272,6 +315,8 @@ ad_proc -public template::wizard::set_visited_step {step_id} {
 
 ad_proc -public template::wizard::get_current_name {} {
     get the current wizard name
+
+    @see template::wizard
 } {
 
     get_reference
@@ -283,6 +328,8 @@ ad_proc -public template::wizard::get_current_name {} {
 ad_proc -private template::wizard::get_wizards_levels {} {
     internal helper proc to get the different levels of wizards
     from current to parent
+
+    @see template::wizard
 } {
     variable parse_level
     set level [expr $parse_level - 1]
@@ -304,6 +351,8 @@ ad_proc -private template::wizard::get_wizards_levels {} {
 
 ad_proc -private template::wizard::get_wizards {} {
     we will get all the wizards that we have passed through
+
+    @see template::wizard
 } {
 
     set wizards {}
@@ -335,6 +384,7 @@ ad_proc -public template::wizard::submit { form_id args } {
     buttons are not displayed if its the last step.  Finish can appear on any step
     and will finish the current wizard even if not all steps are done.</p>
 
+    @see template::wizard
 } {
 
     variable default_button_labels
@@ -440,6 +490,8 @@ ad_proc -public template::wizard::submit { form_id args } {
 
 ad_proc -private template::wizard::get_reference {} {
     Get a reference to the wizard steps (internal helper)
+
+    @see template::wizard
 } {
     
     uplevel {
@@ -457,6 +509,8 @@ ad_proc -private template::wizard::get_reference {} {
 
 ad_proc -public template::wizard::exists {} {
     @return 1 if a wizard is currently defined
+
+    @see template::wizard
 } {
     variable parse_level 
 
@@ -473,6 +527,8 @@ ad_proc -public template::wizard::exists {} {
 ad_proc -public template::wizard::forward { } {
     call when a step has been validated and completed.
     checks which submit button was pressed and proceeds accordingly.
+
+    @see template::wizard
 } {
     set cache_p "f"
     set persistent_p "f"
@@ -511,6 +567,8 @@ ad_proc -public template::wizard::forward { } {
 
 ad_proc -public template::wizard::get_forward_url { step_id } {
     Build the redirect URL for the next step
+
+    @see template::wizard
 } {
 
     variable parse_level
@@ -578,6 +636,8 @@ ad_proc -public template::wizard::get_forward_url { step_id } {
 
 ad_proc -public template::wizard::get_action_url {} {
     Retreive the URL to the action
+
+    @see template::wizard
 } {
 
 get_reference
@@ -598,6 +658,8 @@ ad_proc -public template::wizard::load_last_visited_step {
     is manipulating
 
     use this step before get_current_step
+
+    @see template::wizard
 } {
 
     get_reference
@@ -623,6 +685,8 @@ ad_proc -public template::wizard::save_last_visited_step {
     is manipulating
 
     use this step after get_current_step
+
+    @see template::wizard
 } {
 
     get_reference
