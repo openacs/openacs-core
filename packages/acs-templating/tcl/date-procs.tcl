@@ -239,6 +239,10 @@ ad_proc -public template::util::date::get_property { what date } {
       return 0
     }
     sql_date {
+      # LARS: Empty date results in NULL value
+      if { [empty_string_p $date] } {
+        return "NULL"
+      }
       set value ""
       set format ""
       set space ""
