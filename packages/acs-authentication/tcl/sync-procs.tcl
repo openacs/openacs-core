@@ -452,15 +452,13 @@ ad_proc -public auth::sync::purge_jobs {
 
 ad_proc -private auth::sync::sweeper {} {
     db_foreach select_authorities {
-        select authority_id,
-               snapshot_p
+        select authority_id
         from   auth_authorities
         where  enabled_p = 't'
         and    batch_sync_enabled_p = 't'
     } {
         auth::authority::batch_sync \
-            -authority_id $authority_id \
-            -snapshot=[template::util::is_true $snapshot_p]
+            -authority_id $authority_id
     }
 }
 
