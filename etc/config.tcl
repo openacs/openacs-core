@@ -342,7 +342,7 @@ ns_param   nslog           ${bindir}/nslog.so
 ns_param   nssha1          ${bindir}/nssha1.so 
 ns_param   nscache         ${bindir}/nscache.so 
 ns_param   nsrewrite       ${bindir}/nsrewrite.so 
-ns_param   libtdom         ${bindir}/libtdom0.7.7.so
+ns_param   libtdom         ${bindir}/libtdom.so
 
 # nsopenssl is commented out to prevent errors on load if all
 # the cert files are not present
