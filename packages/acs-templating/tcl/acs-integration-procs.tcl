@@ -15,9 +15,13 @@ ad_proc -public ad_return_template {
      -string:boolean
     {template ""}
 } {
-    This function is a wrapper for sundry template:: procs.
+    This function is a wrapper for sundry template:: procs. Will set the 
+    template for the current page to the file named in 'template'. 
 
-    @param string If set to 't' returns the page to the caller.
+    @param template Name of template file 
+
+    @param string If specified, will return the resulting page to the caller
+                  string instead sending it to the connection.
 } {
     if {![empty_string_p $template]} {
 	template::set_file \
@@ -30,28 +34,21 @@ ad_proc -public ad_return_template {
     }
 }
 
-
-ad_proc -public ad_template_return {{file_stub ""}} {
-    Alias proc (wrapper) for ad_return_template
-} {
-    uplevel 1 "ad_return_template $file_stub"
-}
-
-ad_proc -public ad_return_exception_template {
-    {-status 500}
+ad_proc -public ad_parse_template {
     {-params ""}
     template
 } {
-    Return an exception template and abort the current script.
+    Return a string containing the parsed and evaluated template to the caller.
 
-    @param status The HTTP status to return, by default HTTP 500 (Error)
     @param params The parameters to pass to the template.
-    @param template The template file.
+
+    @param template The template file name.
 
     Example:
 
-    <code>ad_return_exception_template -params {errmsg {custom_message "My Message"}}</code>
+    <code>set page [ad_parse_template -params {errmsg {custom_message "My Message"}} some-template]</code>
 
+    @param template Name of template file
 } {
     set template_params [list]
     foreach param $params {
@@ -65,7 +62,26 @@ ad_proc -public ad_return_exception_template {
             default { return -code error "Error in parameter list" }
         }
     }
-    ns_return $status text/html [template::adp_parse [template::util::url_to_file $template [ad_conn file]] $template_params]
+    return [uplevel [list template::adp_parse [template::util::url_to_file $template [ad_conn file]] $template_params]]
+}
+
+
+ad_proc -public ad_return_exception_template {
+    {-status 500}
+    {-params ""}
+    template
+} {
+    Return an exception template and abort the current script.
+
+    @param status The HTTP status to return, by default HTTP 500 (Error)
+    @param params The parameters to pass to the template.
+    @param template The template file name.
+
+    Example:
+
+    <code>ad_return_exception_template -params {errmsg {custom_message "My Message"}} some-template</code>
+} {
+    ns_return $status text/html [ad_parse_template -params $params $template]
     ad_script_abort
 }
 
@@ -94,3 +110,10 @@ ad_proc adp_parse_ad_conn_file {} {
         db_release_unused_handles
     }
 }
+
+ad_proc -public -default ad_template_return {{file_stub ""}} {
+    Alias proc (wrapper) for ad_return_template
+} {
+    uplevel 1 "ad_return_template $file_stub"
+}
+
