@@ -465,19 +465,19 @@ ad_library {
     @cvs-id $Id$
 }
 
-ad_proc empty_string_p {query_string} {
+ad_proc -public empty_string_p {query_string} {
     returns 1 if a string is empty; this is better than using == because it won't fail on long strings of numbers
 } -
 
-ad_proc acs_root_dir {} { 
+ad_proc -public acs_root_dir {} { 
     Returns the path root for the OpenACS installation. 
 } -
 
-ad_proc acs_package_root_dir { package } { 
+ad_proc -public acs_package_root_dir { package } { 
     Returns the path root for a particular package within the OpenACS installation. 
 } -
 
-ad_proc ad_make_relative_path { path } { 
+ad_proc -public ad_make_relative_path { path } { 
     Returns the relative path corresponding to absolute path $path. 
 } -
 
