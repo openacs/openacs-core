@@ -51,7 +51,7 @@ db_1row group_info {
        and g.group_id = :group_id
 }
 
-set context_bar [list [list "[ad_conn package_url]admin/groups/]" "Groups"] "One Group"]
+set context_bar [list [list "[ad_conn package_url]admin/groups/" "Groups"] "One Group"]
 
 attribute::multirow \
 	-start_with group \
