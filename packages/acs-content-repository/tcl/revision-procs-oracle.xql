@@ -149,4 +149,14 @@
       </querytext>
 </fullquery>
  
+<fullquery name="cr_import_content.set_file_content">
+      <querytext>
+          update cr_revisions
+          set filename = :filename,
+              mime_type = :mime_type,
+              content_length = :tmp_size
+          where revision_id = :revision_id
+      </querytext>
+</fullquery>
+
 </queryset>
