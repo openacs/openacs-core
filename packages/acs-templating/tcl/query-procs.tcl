@@ -646,6 +646,8 @@ ad_proc -public template::multirow {
     <dd> upvar the multirow, aliasing to new_name if provided</dd>
     <dt> <b>template::multirow sort datasource -lsort-switch -lsort-switch col1 col2</b></dt>
     <dd> Sort the multirow by the column(s) specified. The value sorted by will be the the values of the columns specified, separated by the space character. Any switches specified before the columns will be passed directly to the lsort command. </dd>
+    <dt> <b>template::multirow exists datasource</b></dt>
+    <dd> Return 1 if the multirow datasource exists, 0 if it doesn't.
     </dl>
    
     @param local If set, the multirow will be looked for in the scope the number 
