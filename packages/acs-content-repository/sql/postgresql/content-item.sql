@@ -101,7 +101,7 @@ begin
   -- context specified 
 
   if new__parent_id is null then
-    v_parent_id := content_item_globals__c_root_folder_id;
+    v_parent_id := content_item_globals.c_root_folder_id;
   else
     v_parent_id := new__parent_id;
   end if;
