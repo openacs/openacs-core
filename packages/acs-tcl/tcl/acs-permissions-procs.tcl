@@ -74,10 +74,10 @@ ad_proc -public permission::permission_p {
     }
 
     if { 
-        [ad_conn user_id] == 0 && 
-        $party_id == 0 && 
-        [ad_conn untrusted_user_id] != 0 && 
-        ![template::util::is_true $permission_p] 
+        [ad_conn user_id] == 0 
+        && $party_id == 0 
+        && [ad_conn untrusted_user_id] != 0 
+        && ![template::util::is_true $permission_p] 
     } {
         set untrusted_permission_p [permission_p_not_cached \
                                         -party_id [ad_conn untrusted_user_id] \
