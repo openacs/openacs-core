@@ -69,22 +69,6 @@ if { $untrusted_user_id == 0 } {
 
 
 
-# Context bar
-if { [template::util::is_nil no_context_p] } {
-    if { ![template::util::is_nil context] } {
-        set cmd [list ad_context_bar -from_node $subsite_node_id --]
-        foreach elem $context {
-            lappend cmd $elem
-        }
-        set context_bar [eval $cmd]
-    }
-    if [template::util::is_nil context_bar] { 
-        set context_bar [ad_context_bar -from_node $subsite_node_id]
-    }
-} else {
-    set context_bar {}
-}
-
 # change locale
 set num_of_locales [llength [lang::system::get_locales]]
 if { $num_of_locales > 1 } {
@@ -102,3 +86,8 @@ set num_users_online [lc_numeric [whos_online::num_users]]
 
 set whos_online_url "[subsite::get_element -element url]shared/whos-online"
 
+#----------------------------------------------------------------------
+# Display user messages
+#----------------------------------------------------------------------
+
+util_get_user_messages -multirow "user_messages"
