@@ -485,3 +485,65 @@ template_tag content { params } {
 
   template::adp_append_code "append __adp_output \[$command\]" 
 }
+
+# Include another template in the current template, but make 
+# some other chunk dependent on whether or not the included
+# template returned something.
+#
+# This is useful if, say, you want to wrap the template with some HTML,
+# for example, a frame in a portal, but if there's nothing to show,
+# you don't want to show the frame either.
+#
+# @author Lars Pind (lars@collaboraid.net)
+
+template_tag include-optional { chunk params } {
+
+  set src [ns_set iget $params src]
+
+  # pass additional arguments as key-value pairs
+
+  set command "template::adp_parse"
+  append command " \[template::util::url_to_file \"$src\" \"\$__adp_stub\"\]"
+  append command " \[list"
+
+  for { set i 0 } { $i < [ns_set size $params] } { incr i } {
+      set key [ns_set key $params $i]
+      if { [string equal $key src] } { 
+          continue 
+      }
+      set value [ns_set value $params $i]
+      append command " $key \"$value\"";	# is $value quoted sufficiently?
+  }
+  append command "\]"
+
+  # __adp_include_optional_output is a list that operates like a stack
+  # So first we execute the include template, and push the result onto this stack
+  # Then, if the output contained anything but whitespace, we also output the 
+  # chunk inside the include-optional tag.
+  # Finally, we pop the output off of the __adp_include_optional_output stack.
+
+  template::adp_append_code "
+    lappend __adp_include_optional_output \[$command\]
+    if { !\[string equal \[string trim \[lindex \$__adp_include_optional_output end\]\] \"\"] } {
+      "
+
+  template::adp_compile_chunk $chunk
+
+  template::adp_append_code "
+    }
+  template::util::lpop __adp_include_optional_output
+  "
+}
+
+# Insert the output from the include-optional tag
+#
+# @author Lars Pind (lars@collaboraid.net)
+
+template_tag include-output { params } {
+
+  template::adp_append_code "
+    if { \[info exists __adp_include_optional_output\] } {
+      append __adp_output \[lindex \$__adp_include_optional_output end\]
+    }
+  "
+}
