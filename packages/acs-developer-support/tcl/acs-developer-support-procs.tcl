@@ -32,7 +32,7 @@ ad_proc -public ds_require_permission {
       ad_maybe_redirect_for_registration
     } else {
       ns_log Notice "$user_id doesn't have $privilege on object $object_id"
-      ad_return_forbidden "Security Violation" "<blockquote>
+      ad_return_forbidden "Permission Denied" "<blockquote>
       <p>You don't have permission to $privilege [db_string name {select acs_object.name(:object_id) from dual}].</p>
       <p>This incident has been logged.</p>
       </blockquote>"
