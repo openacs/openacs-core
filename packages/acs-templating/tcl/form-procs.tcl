@@ -293,45 +293,6 @@ ad_proc -private template::form::template { id { style "" } } {
   get_reference 
 
   #
-  # Buttons
-  #
-
-  if { [exists_and_not_null form_properties(cancel_url)] && ![exists_and_not_null form_properties(cancel_label)] } {
-    set form_properties(cancel_label) "Cancel"
-  }
-
-  if { [exists_and_not_null form_properties(cancel_url)] } {
-    lappend form_properties(edit_buttons) [list $form_properties(cancel_label) cancel]
-  }
-
-  if { ![template::util::is_nil form_properties(has_submit)] && [template::util::is_true $form_properties(has_submit)] } {
-      set form_properties(edit_buttons) {}
-  }
-
-  if { ![template::util::is_nil form_properties(has_edit)] && [template::util::is_true $form_properties(has_edit)] } {
-      set form_properties(display_buttons) {}
-  }
-
-  if { ![template::util::is_nil form_properties(actions)] && [template::util::is_true $form_properties(actions)] } {
-      set form_properties(display_buttons) $form_properties(actions)
-  }
-
-  set buttons:rowcount 0
-
-  foreach button $form_properties(${form_properties(mode)}_buttons) {
-      set label [lindex $button 0]
-      set name [lindex $button 1]
-
-      if { [string equal $name "ok"] } {
-          # We hard-code the OK button to be wider than it otherwise would
-	  set label "       $label       "
-      }
-      set name "formbutton:$name"
-
-      template::element create $id $name -widget submit -label $label -datatype text
-  }
-
-  #
   # Elements
   # RAL: moved this below so we could take advantage of the template::element
   # API in the button loop above.  The buttons multirow in standard.adp is
@@ -444,6 +405,48 @@ ad_proc -private template::form::render { id tag_attributes } {
     @return A string containing the rendered tags.
 } {
   get_reference
+
+  #
+  # Buttons
+  #
+
+  if { [exists_and_not_null form_properties(cancel_url)] && ![exists_and_not_null form_properties(cancel_label)] } {
+    set form_properties(cancel_label) "Cancel"
+  }
+
+  if { [exists_and_not_null form_properties(cancel_url)] } {
+    lappend form_properties(edit_buttons) [list $form_properties(cancel_label) cancel]
+  }
+
+  if { ![template::util::is_nil form_properties(has_submit)] && [template::util::is_true $form_properties(has_submit)] } {
+      set form_properties(edit_buttons) {}
+  }
+
+  if { ![template::util::is_nil form_properties(has_edit)] && [template::util::is_true $form_properties(has_edit)] } {
+      set form_properties(display_buttons) {}
+  }
+
+  if { ![template::util::is_nil form_properties(actions)] && [template::util::is_true $form_properties(actions)] } {
+      set form_properties(display_buttons) $form_properties(actions)
+  }
+    
+  # We keep this, so if anyone has an old form template that still loops over this multirow, it won't break hard
+  # We should remove this later, maybe 6.0
+  set buttons:rowcount 0
+
+  foreach button $form_properties(${form_properties(mode)}_buttons) {
+      set label [lindex $button 0]
+      set name [lindex $button 1]
+
+      if { [string equal $name "ok"] } {
+          # We hard-code the OK button to be wider than it otherwise would
+	  set label "       $label       "
+      }
+      set name "formbutton:$name"
+
+      template::element create $id $name -widget submit -label $label -datatype text
+      ns_log Notice "LARS: template::element create $id $name -widget submit -label $label -datatype text"
+  }
 
   # make a reference to the formerror array with any validation messages
   upvar #$level $id:error $id:error
