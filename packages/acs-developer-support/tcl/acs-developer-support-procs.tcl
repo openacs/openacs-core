@@ -323,7 +323,7 @@ ad_proc -private ds_collect_db_call { db command statement_name sql start_time e
                 }
             } error]
             if { $errno } {
-                ns_log Warning "ds_collect_db_call: $error"
+                ns_log Warning "ds_collect_db_call: $error\nStatement: $statement_name\nSQL: $sql"
                 set bound_sql $sql
             }
         }
@@ -628,6 +628,9 @@ ad_proc -public ds_profile { command {tag {}} } {
     
     @param tag The name of the operation you're timing. Could be the name of a procedure, or some other unique identifier.
 } {
+    if {![ds_enabled_p]} { 
+        error "DS not enabled"
+    }
     global ds_profile__total_ms ds_profile__iterations ds_profile__start_clock
     switch $command {
         start {

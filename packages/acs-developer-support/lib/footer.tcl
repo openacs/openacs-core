@@ -93,6 +93,11 @@ if { $show_p } {
 
     multirow create profiling tag num_iterations total_ms ms_per_iteration file_links size
 
+    if {[ns_cache get ds_page_bits "$request:error" errors]} {
+        set errcount [llength $errors]
+    } else {
+        set errcount 0
+    }
     if { [info exists ds_profile__total_ms] } {
         foreach tag [lsort [array names ds_profile__iterations]] {
             if {[file exists $tag]} {

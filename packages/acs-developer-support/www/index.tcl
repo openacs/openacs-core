@@ -162,13 +162,17 @@ if { [llength $requests] == 0 } {
 	    } else {
 		set query ""
 	    }
-
+            if {[ns_cache get ds_page_bits $id:error dummy]} {
+                set elink " <a href=\"send?output=$id:error\" style=\"color: red\">Errors</span></a>"
+            } else { 
+                set elink {}
+            }
 	    append body "
 <tr bgcolor=[lindex $colors [expr { $counter % [llength $colors] }]]>
 <td align=center>&nbsp;$start&nbsp;</td>
 <td align=right>&nbsp;$duration&nbsp;</td>
 <td>&nbsp;$peeraddr&nbsp;</td>
-<td><a href=\"request-info?request=$id\">[ns_quotehtml "$method $url$query"]</a></td>
+<td><a href=\"request-info?request=$id\">[ns_quotehtml "$method $url$query"]</a>$elink</td>
 </tr>
 "
             incr counter

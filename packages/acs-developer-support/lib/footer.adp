@@ -1,5 +1,8 @@
 <if @show_p@ true>
   <div class="developer-support-footer">
+    <if @errcount@ gt 0>
+      <p style="color: red">errors: @errcount@ <a href="@ds_url@send?output=@request@:error">view</a></p>
+    </if>
     <if @comments:rowcount@ gt 0>
       <multiple name="comments">
         <b>Comment:</b> <pre style="display: inline;">@comments.text@</pre><br />
@@ -49,7 +52,7 @@
       </table>
       <if @page_fragment_cache_p@ true>
         <p>
-          <form name="searchfrags" action="/ds/search">
+          <form name="searchfrags" action="@ds_url@search">
             <input type="hidden" name="request" value="@request@"/>
             <input type="text" name="expression" value="" />
             <input type="submit" name="search" value="Search"/>
