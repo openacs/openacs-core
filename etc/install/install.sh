@@ -218,14 +218,29 @@ if ! [ "$pid" == "" ]; then
     exit
 fi
 	
-# Recreate the database user
-echo "$0: Recreating database user at $(date)"
+# Recreate the database user and database
+echo "$0: Recreating database user and database at $(date)"
 if [ $database == "postgres" ]; then
     # Postgres
     pg_bindir=`get_config_param pg_bindir`
     pg_port=`get_config_param pg_port`
     db_name=`get_config_param db_name`
-    su  `get_config_param pg_db_user` -c "export LD_LIBRARY_PATH=${pg_bindir}/../lib; ${pg_bindir}/dropdb -p $pg_port $db_name; ${pg_bindir}/createdb -p $pg_port $db_name;";
+    su  `get_config_param pg_db_admin` -c "export LD_LIBRARY_PATH=${pg_bindir}/../lib; ${pg_bindir}/dropuser -\
+p $pg_port $db_name"
+    su  `get_config_param pg_db_admin` -c "export LD_LIBRARY_PATH=${pg_bindir}/../lib; ${pg_bindir}/createuser\
+ -d -a -p $pg_port $db_name"
+    su  `get_config_param pg_db_admin` -c "export LD_LIBRARY_PATH=${pg_bindir}/../lib; ${pg_bindir}/dropdb -p \
+$pg_port $db_name"
+    su  `get_config_param pg_db_admin` -c "export LD_LIBRARY_PATH=${pg_bindir}/../lib; ${pg_bindir}/createdb -\
+p $pg_port $db_name"
+
+    su  `get_config_param pg_db_admin` -c "export LD_LIBRARY_PATH=${pg_bindir}/../lib; ${pg_bindir}/createuser \
+-d -a -p $pg_port $db_name"
+    su  `get_config_param pg_db_admin` -c "export LD_LIBRARY_PATH=${pg_bindir}/../lib; ${pg_bindir}/dropdb -p $\
+pg_port $db_name"
+    su  `get_config_param pg_db_admin` -c "export LD_LIBRARY_PATH=${pg_bindir}/../lib; ${pg_bindir}/createdb -p\
+ $pg_port $db_name"
+
     # createlang was part of this command but is not necessary (and causes an error) for 
     # newer installs
     # ${pg_bindir}/createlang -p $pg_port plpgsql $db_name";
