@@ -20,7 +20,6 @@ cd $script_path
 
 source functions.sh
 
-# Parse options
 export config_file="config.tcl"
 interactive="no"
 usage="$0 [OPTIONS]
@@ -61,6 +60,7 @@ dotlrn=`get_config_param dotlrn`
 crawl_links=`get_config_param crawl_links`
 do_checkout=`get_config_param do_checkout`
 use_daemontools=`get_config_param use_daemontools`
+do_install="yes"
 
 # command-line settings override config file settings
 while [ -n "$1" ] ; do
@@ -75,10 +75,8 @@ while [ -n "$1" ] ; do
       "--oacs-only")
         dotlrn="no"
       ;;
-      # For backward compatibility I am keeping the --postgresql switch 
-      # which overrides setting in config file
       "--postgresql")
-        database="postgresql"
+        database="postgres"
       ;;
       "--interactive")
         interactive="yes"
@@ -86,6 +84,9 @@ while [ -n "$1" ] ; do
       "--help"|"-h")
         echo "${usage}"
         exit 0
+      ;;
+      "--no-install")
+        do_install="no"
       ;;
       *)
         echo "$0: option not recognized: ${i}"
@@ -111,7 +112,7 @@ if [ -n "$post_checkout_script" ] && [ ! -x $post_checkout_script ]; then
 fi
 
 # Log some important parameters for the installation
-echo "$0: Starting installation with config_file $config_file. Using serverroot=$serverroot, server_url=$server_url, do_checkout=$do_checkout, dotlrn=$dotlrn, and database=$database."
+echo "$0: Starting installation with config_file $config_file. Using serverroot=$serverroot, server_url=$server_url, do_checkout=$do_checkout, do_install=${do_install}, dotlrn=$dotlrn, and database=$database."
 prompt_continue $interactive
 
 # See if a daemontools directory should exist.
@@ -144,7 +145,12 @@ else
     su oracle -c "cd $script_path; config_file=$config_file ./oracle/recreate-user.sh";
 fi
 
-prompt_continue $interactive
+# The idea of this script is to move away any files or changes
+# to the source tree that we want to keep (for example an
+# edited AOLServer config file, see README)
+if [ -n "$pre_checkout_script" ]; then
+    source $pre_checkout_script
+fi
 
 # Move away the old sources and checkout new ones check do_checkout
 if [ $do_checkout == "yes" ]; then
@@ -164,6 +170,13 @@ if [ $do_checkout == "yes" ]; then
     fi
 fi
 
+# The idea of this script is to copy in any files (AOLServer config files,
+# log files etc.) under the new source tree, and apply any patches
+# that should be applied (see README).
+if [ -n "$post_checkout_script" ]; then
+    source $post_checkout_script
+fi
+
 # Bring up the server again
 echo "$0: Bringing the server $serverroot back up at $(date)"
 $start_server_command
@@ -171,74 +184,75 @@ $start_server_command
 echo "$0: Waiting for $startup_seconds seconds for server to come up at $(date)"
 sleep $startup_seconds
 
-# Save the time we started installation
-installation_start_time=$(date +%s)
-# TODO - write this into a file somewhere
-
-# Install OpenACS
-echo "$0: Starting installation of OpenACS at $(date)"
-${tclwebtest_dir}/tclwebtest -config_file $config_file openacs-install.test
-
-# Restart the server
-echo "$0: Restarting server at $(date)"
-$restart_server_command
-echo "$0: Waiting for $restart_seconds seconds for server to come up at $(date)"
-sleep $restart_seconds
-
-if [ $database == "postgres" ]; then
-    # Run vacuum analyze
-    echo "$0: Beginning 'vacuum analyze' at $(date)"
-    su  `get_config_param pg_db_user` -c "export LD_LIBRARY_PATH=${pg_bindir}/../lib; ${pg_bindir}/vacuumdb -p $pg_port -z `get_config_param pg_db_name`"
-fi
-
-if [ $dotlrn == "yes" ]; then
-    # Install .LRN
-    echo "$0: Starting install of .LRN at $(date)"
-    ${tclwebtest_dir}/tclwebtest -config_file $config_file dotlrn-install.test
-
-    # Restart the server
-    echo "$0: Restarting server at $(date)"
-    $restart_server_command
-    echo "$0: Waiting for $restart_seconds seconds for server to come up at $(date)"
-    sleep $restart_seconds
-    extra_seconds_wait=300
-    echo "$0: Waiting an extra $extra_seconds_wait seconds here as much initialization of dotLRN and message catalog usually happens at this point"
-    sleep $extra_seconds_wait
-
-    if parameter_true "$dotlrn_demo_data"; then
-        # Do .LRN demo data setup
-        echo "$0: Starting basic setup of .LRN at $(date)"
-        ${tclwebtest_dir}/tclwebtest -config_file $config_file dotlrn-basic-setup.test
-    fi
-fi
-
-if parameter_true $crawl_links; then
-    # Search for broken pages
-    echo "$0: Starting to crawl links to search for broken pages at $(date)"
-    ${tclwebtest_dir}/tclwebtest -config_file $config_file dotlrn-links-check.test
-fi
-
-# Report the time at which we were done
-echo "$0: Finished (re)installing $serverroot at $(date)"
-
-# Check errors in the log file
-if [ -r ${error_log_file} ]; then
-    seconds_since_installation_start=$(expr $(date +%s) - $installation_start_time)
-    minutes_since_installation_start=$(expr $seconds_since_installation_start / 60 + 1)
-    log_error_file=server-output/${server}/log-file-errors
-    ./aolserver-errors.pl -${minutes_since_installation_start}m ${error_log_file} > $log_error_file
-    error_line_count=$(wc -l $log_error_file | awk '{print $1}')
-    if expr $error_line_count \> 1 &> /dev/null; then
-       alert_keyword=`get_config_param alert_keyword`
-       echo "$0: ${alert_keyword} - There are error messages in the log file, they are stored in $log_error_file"
-    fi
-else
-    echo "$0: Log file ${error_log_file} not readable - cannot check for errors"
-fi
-
-# Warn about errors in the HTML returned from the server
-./warn-if-installation-errors.sh `get_config_param openacs_output_file`
-./warn-if-installation-errors.sh `get_config_param openacs_packages_output_file`
-if [ $dotlrn == "yes" ]; then
-    ./warn-if-installation-errors.sh `get_config_param apm_output_file`
+if parameter_true $do_install; then
+  # Save the time we started installation
+  installation_start_time=$(date +%s)
+    
+  # Install OpenACS
+  echo "$0: Starting installation of OpenACS at $(date)"
+  ${tclwebtest_dir}/tclwebtest -config_file $config_file openacs-install.test
+  
+  # Restart the server
+  echo "$0: Restarting server at $(date)"
+  $restart_server_command
+  echo "$0: Waiting for $restart_seconds seconds for server to come up at $(date)"
+  sleep $restart_seconds
+  
+  if [ $database == "postgres" ]; then
+      # Run vacuum analyze
+      echo "$0: Beginning 'vacuum analyze' at $(date)"
+      su  `get_config_param pg_db_user` -c "export LD_LIBRARY_PATH=${pg_bindir}/../lib; ${pg_bindir}/vacuumdb -p $pg_port -z `get_config_param pg_db_name`"
+  fi
+  
+  if [ $dotlrn == "yes" ]; then
+      # Install .LRN
+      echo "$0: Starting install of .LRN at $(date)"
+      ${tclwebtest_dir}/tclwebtest -config_file $config_file dotlrn-install.test
+  
+      # Restart the server
+      echo "$0: Restarting server at $(date)"
+      $restart_server_command
+      echo "$0: Waiting for $restart_seconds seconds for server to come up at $(date)"
+      sleep $restart_seconds
+      extra_seconds_wait=300
+      echo "$0: Waiting an extra $extra_seconds_wait seconds here as much initialization of dotLRN and message catalog usually happens at this point"
+      sleep $extra_seconds_wait
+  
+      if parameter_true "$dotlrn_demo_data"; then
+          # Do .LRN demo data setup
+          echo "$0: Starting basic setup of .LRN at $(date)"
+          ${tclwebtest_dir}/tclwebtest -config_file $config_file dotlrn-basic-setup.test
+      fi
+  fi
+  
+  if parameter_true $crawl_links; then
+      # Search for broken pages
+      echo "$0: Starting to crawl links to search for broken pages at $(date)"
+      ${tclwebtest_dir}/tclwebtest -config_file $config_file dotlrn-links-check.test
+  fi
+  
+  # Report the time at which we were done
+  echo "$0: Finished (re)installing $serverroot at $(date)"
+  
+  # Check errors in the log file
+  if [ -r ${error_log_file} ]; then
+      seconds_since_installation_start=$(expr $(date +%s) - $installation_start_time)
+      minutes_since_installation_start=$(expr $seconds_since_installation_start / 60 + 1)
+      log_error_file=server-output/${server}/log-file-errors
+      ./aolserver-errors.pl -${minutes_since_installation_start}m ${error_log_file} > $log_error_file
+      error_line_count=$(wc -l $log_error_file | awk '{print $1}')
+      if expr $error_line_count \> 1 &> /dev/null; then
+         alert_keyword=`get_config_param alert_keyword`
+         echo "$0: ${alert_keyword} - There are error messages in the log file, they are stored in $log_error_file"
+      fi
+  else
+      echo "$0: Log file ${error_log_file} not readable - cannot check for errors"
+  fi
+  
+  # Warn about errors in the HTML returned from the server
+  ./warn-if-installation-errors.sh `get_config_param openacs_output_file`
+  ./warn-if-installation-errors.sh `get_config_param openacs_packages_output_file`
+  if [ $dotlrn == "yes" ]; then
+      ./warn-if-installation-errors.sh `get_config_param apm_output_file`
+  fi
 fi

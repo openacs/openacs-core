@@ -77,11 +77,9 @@ set crawl_links "no"
 set oacs_branch "HEAD"
 set dotlrn_branch "HEAD"
 set do_checkout "yes"
-# To use if you have your AOLServer config file under server_root (see README)
-# Only executes if checkout is done
+# To use for example for moving away (saving) certain files under serverroot (see README)
 set pre_checkout_script ""
-# To use if you have your AOLServer config file under server_root (see README)
-# Only executes if checkout is done
+# To use for example for moving back certain (saved) files under serverroot (see README)
 set post_checkout_script "" 
 
 # The keyword outputed by the install script to indicate
