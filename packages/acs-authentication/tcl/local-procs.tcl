@@ -243,6 +243,10 @@ ad_proc -private auth::local::password::ChangePassword {
         return [array get result]
     }
 
+    # Invalidate existing login tokens
+    # TODO: We probably need to re-cookie the user, then ...
+    # sec_change_user_auth_token $user_id
+
     set result(password_status) "ok"
 
     if { [parameter::get -parameter EmailAccountOwnerOnPasswordChangeP -package_id [ad_acs_kernel_id] -default 1] } {
@@ -423,7 +427,6 @@ ad_proc -private auth::local::registration::Register {
 
     # Set user's password
     set user_id [acs_user::get_by_username -username $username]
-    ns_log Notice "LARS: Setting user_id $user_id's password to $password -- username = $username"
     ad_change_password $user_id $password
 
     # Used in messages below
