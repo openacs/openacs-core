@@ -1197,6 +1197,7 @@ ad_proc wrap_string {input {threshold 80}} {
 ad_proc -public ad_html_text_convert {
     {-from text/plain}
     {-to text/html}
+    {-maxlen 70}
     text
 } {
     Converts a chunk of text from text/html to text/html.
@@ -1217,12 +1218,12 @@ ad_proc -public ad_html_text_convert {
     set valid_tos { text/plain text/html }
     
     # Validate procedure input
-    set from [ad_decode $from "html" "text/html" "text" "text/plain" $from]
+    set from [ad_decode $from "html" "text/html" "text" "text/plain" "plain" "text/plain" $from]
     if { [lsearch $valid_froms $from] == -1 } {
         error "Unknown text input format, '$from'. Valid formats are $valid_froms."
     }
     
-    set to [ad_decode $to "html" "text/html" "text" "text/plain" $to]
+    set to [ad_decode $to "html" "text/html" "text" "text/plain" "plain" "text/plain" $to]
     if { [lsearch $valid_tos $to] == -1 } {
         error "Unknown text input format, '$to'. Valid formats are $valid_tos."
     }
@@ -1245,7 +1246,7 @@ ad_proc -public ad_html_text_convert {
 		    set text [ad_text_to_html -- $text]
 		}
                 text/plain {
-		    set text [wrap_string $text 70]
+		    set text [wrap_string $text $maxlen]
 		}
 	    }
         }
@@ -1255,7 +1256,7 @@ ad_proc -public ad_html_text_convert {
 		    set text "<pre>[ad_text_to_html -no_lines -- $text]</pre>"
 		}
                 text/plain {
-		    set text [wrap_string $text 70]
+		    set text [wrap_string $text $maxlen]
 		}
 	    }
 	} 
@@ -1265,7 +1266,7 @@ ad_proc -public ad_html_text_convert {
                     set text [util_close_html_tags $text]
 		}
                 text/plain {
-		    set text [ad_html_to_text -- $text]
+		    set text [ad_html_to_text -maxlen $maxlen -- $text]
 		}
 	    }
 	} 
@@ -1285,6 +1286,7 @@ ad_proc -public ad_enhanced_text_to_html {
 }
 
 ad_proc -public ad_enhanced_text_to_plain_text {
+    {-maxlen 70}
     text
 } {
     Converts enhanced text format to normal plaintext format.
@@ -1292,7 +1294,7 @@ ad_proc -public ad_enhanced_text_to_plain_text {
     @creation-date 2003-01-27
 } {
     # Convert the HTML version to plaintext.
-    return [ad_html_to_text -- [ad_enhanced_text_to_html $text]]
+    return [ad_html_to_text -maxlen $maxlen -- [ad_enhanced_text_to_html $text]]
 }
 
 
