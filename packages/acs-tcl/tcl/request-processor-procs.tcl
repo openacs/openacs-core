@@ -1061,11 +1061,23 @@ ad_proc -public ad_conn {args} {
     }
 
     -get {
-      if { [info exists ad_conn($var)] } {
-	return $ad_conn($var)
-      } else {
-	return [ns_conn $var]
-      }
+        # Special handling for the form, because "ns_conn form" can
+        # cause the server to hang until the socket times out.  This
+        # happens on pages handling multipart form data, where
+        # ad_page_contract already has called ns_getform and has
+        # retrieved all data from the client. ns_getform has its
+        # own caching, so calling it instead of [ns_conn form]
+        # is OK.
+
+        if { $var == "form" } {
+            return [ns_getform] 
+        }
+
+        if { [info exists ad_conn($var)] } {
+            return $ad_conn($var)
+        } else {
+            return [ns_conn $var]
+        }
     }
 
     default {
