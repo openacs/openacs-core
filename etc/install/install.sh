@@ -4,9 +4,8 @@
 #
 # This script recreates an OpenACS server from scratch by:
 #
-
-# - dropping and adding the database
-# - Re-checking out the source code from CVS
+# - dropping and creating the database
+# - Re-checking out the source code from CVS (optional)
 # - Doing necessary installation and configuration of OpenACS and
 #   .LRN over HTTP that is normally done manually in a browser.
 #
@@ -149,7 +148,6 @@ fi
 
 prompt_continue $interactive
 
-echo $do_checkout
 # Move away the old sources and checkout new ones check do_checkout
 if [ $dotlrn == "yes" ]; then
     echo "$0: Checking out .LRN at $(date)"
