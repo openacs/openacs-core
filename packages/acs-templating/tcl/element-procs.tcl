@@ -428,10 +428,7 @@ ad_proc -public template::element::exists { form_id element_id } {
   return [info exists element_properties]
 }
 
-# @private get_reference
-
-
-ad_proc -public template::element::get_reference {} {
+ad_proc -private template::element::get_reference {} {
     Gets a reference to the array containing the properties of an
     element, and throws and error if the element does not exist.  Called
     at the beginning of several of the element commands.
