@@ -1769,7 +1769,7 @@ ad_proc -public db_dml {{ -dbn "" } statement_name sql args } {
 
     } elseif { [string equal $command "blob_dml_file"] } {
         # PostgreSQL:
-        db_with_handle db {
+        db_with_handle -dbn $dbn db {
             # another ugly hack to avoid munging tcl files.
             # __lob_id needs to be set inside of a query (.xql) file for this
             # to work.  Say for example that you need to create a lob. In 
@@ -1798,7 +1798,7 @@ ad_proc -public db_dml {{ -dbn "" } statement_name sql args } {
 
     } else {
         # PostgreSQL:
-        db_with_handle db {
+        db_with_handle -dbn $dbn db {
             db_exec dml $db $full_statement_name $sql
         }
     }
