@@ -6,7 +6,7 @@ ad_library {
     @cvs-id $Id$
 }
 
-aa_register_case acs_content_repository_trivial_smoke_test {
+aa_register_case -cats {smoke api} acs_content_repository_trivial_smoke_test {
     Minimal smoke test.
 } {    
 
