@@ -21,8 +21,6 @@
           <span style="color: #cccccc;">|</span></li>
           <li><a href="/acs-admin/apm/" title="Modify/reload packages">APM</a>
           <span style="color: #cccccc;">|</span></li>
-          <li><a href="/admin/site-map/" title="Manage your package instances">Site Map</a>
-          <span style="color: #cccccc;">|</span></li>
           <li><a href="/acs-admin/apm/?reload_links_p=1" title="Scan for changed library files">Changed</a>
           <span style="color: #cccccc;">|</span></li>
           <li><a href="@flush_url@" title="Flush entire util_memoize cache">Flush</a>

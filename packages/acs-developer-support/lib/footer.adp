@@ -1,6 +1,6 @@
 <if @show_p@ true>
   <if @comments:rowcount@ gt 0>
-    <div class="developer-support-footer">
+    <div id="developer-support-footer">
       <multiple name="comments">
         <b>Comment:</b> <pre style="display: inline;">@comments.text@</pre><br />
       </multiple>
@@ -9,7 +9,7 @@
   <if @user_switching_p@ true>
     <form action="@set_user_url@">
       @export_vars;noquote@
-      <div class="developer-support-footer">
+      <div id="developer-support-footer">
         Real user: @real_user_name@ (@real_user_email@) [user_id #@real_user_id@]<br />
         <if @real_user_id@ ne @fake_user_id@>      
           Faked user: @fake_user_name@ <if @fake_user_email@ not nil>(@fake_user_email@)</if> [user_id #@fake_user_id@] <a href="@unfake_url@">(Unfake)</a><br />
@@ -27,7 +27,7 @@
     </form>
   </if>
   <if @profiling:rowcount@ gt 0>
-    <div class="developer-support-footer">
+    <div id="developer-support-footer">
       <h3>Profiling Information</h3>
       <table>
         <tr>

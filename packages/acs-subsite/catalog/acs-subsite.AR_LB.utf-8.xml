@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<message_catalog package_key="acs-subsite" package_version="5.0.4" locale="AR_LB" charset="utf-8">
+
+  <msg key="About_You">عَنك</msg>
+  <msg key="Account_closed">&lt;p&gt;حسابك مغلق حالياً.&lt;/p&gt; &lt;p&gt;إذا ترغب، نحن يمكننا &lt;a href=&quot;%restore_url%&quot;&gt; إعادة فتح حسابك&lt;/a&gt;.&lt;/p&gt;  </msg>
+  <msg key="Answer">الجواب:</msg>
+  <msg key="at">عِنْدَ</msg>
+  <msg key="Bad_Password">كلمةُ السر سيئةُ</msg>
+  <msg key="Basic_Information">المعلومات الأساسية</msg>
+  <msg key="cannot_retrieve_password">استعادة كلمة سرّ من السّلطة المحلّيّة غير متوفرة.</msg>
+  <msg key="Change_my_Password">غيّرْ كلمةَ سري</msg>
+  <msg key="Check_Your_Inbox">إفحصْ صندوقَ إستلامكَ</msg>
+  <msg key="Children">الأولاد</msg>
+  <msg key="Confirm">أَكّدْ:</msg>
+  <msg key="Current_Password">كلمةُ السر الحالية:</msg>
+  <msg key="Customize_Question">فصّلْ سؤالاً</msg>
+  <msg key="Direct_Permissions">الأذون المباشرة</msg>
+  <msg key="Email">البريد الإلكتروني</msg>
+  <msg key="Email_Confirmation">تأكيدُ بريد إلكتروني</msg>
+  <msg key="Email_not_Requested">البريد الإلكتروني غير مطلوب</msg>
+  <msg key="Error_sending_mail">حصلَ خطأً في إرسال البريد إلكتروني </msg>
+  <msg key="First_names">الإسم</msg>
+  <msg key="Grant">وافق</msg>
+  <msg key="Grant_Permission">وافق على الإذْن</msg>
+  <msg key="Join_group_name">إنضَمَّ إلى %group_name%</msg>
+  <msg key="Last_name">الشهرة</msg>
+  <msg key="Log_In">دخول</msg>
+  <msg key="lt_Cannot_join_this_grou">لا يُمكن الإنضمام إلى هذه المجموعة.</msg>
+  <msg key="lt_first_names_last_name">(%first_names% %last_name%(%email% مسجّل كمستخدم في %system_url%</msg>
+  <msg key="lt_Grant_Permission_on_n">إمنح الإذن على %name%</msg>
+  <msg key="lt_Inherited_Permissions">الرُخصُ المَوْرُوثةُ</msg>
+  <msg key="lt_It_would_be_a_very_ba">هي ستكون فكرة سيئّة جدا لإختيار هذا الخيار إذا أنت تستعمل كمبيوتر مشترك في مكتبة أو مدرسة. أيّ مستعمل لاحق لهذا الكمبيوتر سيكون قادر على التنكّر كك على خدمتنا.</msg>
+  <msg key="lt_New_registration_at_s">التسجيلُ الجديدُ في %system_url%</msg>
+  <msg key="lt_Note_that_you_can_era">لاحظ أنّك يمكن أن تمسح عنوان بريد إلكترونيّ و كلمة السّرّ المحفوظان باختيار خيار&quot;خروج&quot; من مساحة عملك.</msg>
+  <msg key="lt_num_children_Children">أطفال مخفية %num_children%</msg>
+  <msg key="lt_On_portrait_publish_d">في %portrait_publish_date%، لقد أرسلت، &lt;a href=&quot;/user/portrait/&quot;&gt;%portrait_title%&lt;/a&gt;</msg>
+  <msg key="lt_Our_server_can_tell_y">خادمنا يستطيع إخبار متصفّحك لتذكير بعض الأشياء، مثل عنوان بريدك الإلكتروني وكلمة سرك. هذا ملائم لك لأن، إذا أنت الشخص الوحيد الذي يستعمل حاسوبك، أنت لا يجب أن تستمرّ بإخبارنا عنوان بريدك الإلكتروني وكلمة سرك.</msg>
+  <msg key="lt_Password_Confirmation">تأكيدُ كلمةِ سر:</msg>
+  <msg key="lt_Personal_Home_Page_UR">موقع الصفحة الرئيسيةُ الشخصيةُ:</msg>
+  <msg key="lt_Please_read_and_follo">من فضلك اقرأ و اتّبع التّوجيهات في هذا البريد الإلكترونيّ.</msg>
+  <msg key="lt_Please_try_to_a_hrefi">من فضلك حاول &lt;a href=&quot;index&quot;&gt;الدخول&lt;/a&gt; مجدداً</msg>
+  <msg key="lt_Problem_with_authenti">المشكلة بالتّوثيق</msg>
+  <msg key="lt_Registration_informat">معلوماتُ تسجيلِ لهذه الخدمةِ قَدْ أُرسلتْ إلى %email%.</msg>
+  <msg key="lt_Registration_informat_1">معلوماتُ تسجيلِ لهذه الخدمةِ قَدْ أُرسلتْ إلى  %email%.</msg>
+  <msg key="lt_registration_request_submitted">طلب تسجيلك قد عُرِضَ إلى مدير %system_name%. مازال ينتظر الموافقة</msg>
+  <msg key="lt_Saving_email_address_">تذكّر هذا العنوان و كلمة السر؟</msg>
+  <msg key="lt_Show_everyone_else_at">أظهر لكلّ الآخرين في %system_name% كم أنت وسيم</msg>
+  <msg key="lt_Sorry_but_it_seems_th">آسف لكنّه يبدو أنّك قد حُظِرْتَ من %system_name%.</msg>
+  <msg key="lt_There_was_a_problem_w">كان هناك مشكلةَ بالتّصديق حسابك</msg>
+  <msg key="lt_To_confirm_your_regis">لتَأكيد تسجيلِكَ، رجاءً إذهبْ %confirmation_url%</msg>
+  <msg key="lt_We_were_not_awaiting_">نحن لم كنّا ننتظر بريدك الإلكتروني. يجب أن يكون هناك بعض الخطأ.</msg>
+  <msg key="lt_Welcome_to_system_nam">أهلاً في %system_name%</msg>
+  <msg key="lt_You_cant_have_a_lt_in">أنت لا يمكن أن تختار &amp;lt; في اسمك الأول لأنه سيبدو مثل بطاقة إتش تي إم إل ويشوّش مستخدمين آخرين.</msg>
+  <msg key="lt_You_cant_have_a_lt_in_1">أنت لا يمكن أن تختار &amp;lt; في شهرتك لأنه سيبدو مثل بطاقة إتش تي إم إل ويشوّش مستخدمين آخرين. </msg>
+  <msg key="lt_Your_email_has_been_c">بريدكَ الإلكتروني أُكّد.أنت يُمكنك أنّ تُسجّلُ الآن في %system_name%.</msg>
+  <msg key="lt_Your_email_has_been_c_1">بريدكَ الإلكتروني أُكّد.أنت الآن في الإنتطار الموافقة من مدير %system_name%. </msg>
+  <msg key="lt_Your_email_is_confirm">بريدك الإلكتروني أكّدْ</msg>
+  <msg key="lt_Your_URL_doesnt_have_">موقعك ليس لديه الشكل الصحيح. الموقع الصحيح سيكون شيء مثل \&quot;%valid_url_example%\&quot;.&quot;</msg>
+  <msg key="Name">إسم:</msg>
+  <msg key="New_Password">كلمة السر الجديدة:</msg>
+  <msg key="no_portrait_title_message">صورتكَ</msg>
+  <msg key="none">لا أحد</msg>
+  <msg key="Password">كلمة السّرّ:</msg>
+  <msg key="Password_changed_body">معلومات دخولك الى %system_name%: %account_id_label%:  %account_id% كلمة سرك لهذا الحساب تغيرت حديثًا. غير متوجب عليك أن تفعل شيئاً، هذه الرسالة بشكل بسيط تبليغاً لي حماية أمن حسابك. --------------- أنت دائماً يمكنك تغيير كلمة سرك بفعل الخطوات التالية: 1- إدخلْ الى %system_name%  2- إنقرْ على &quot;%pvt_home_name%&quot;  3- إخترْ &quot;%password_update_link_text%&quot;</msg>
+  <msg key="Password_changed_subject">كلمة السر تغيرت</msg>
+  <msg key="Permissions">الأذون</msg>
+  <msg key="Permissions_for_name">الأذون لي %name%</msg>
+  <msg key="Question">السؤالُ:</msg>
+  <msg key="Recover_Password">إسترجع كلمة السر</msg>
+  <msg key="Register">سجلْ</msg>
+  <msg key="Revoke_Checked">الإلغاء المختارين</msg>
+  <msg key="Screen_name">إسم الشاشة</msg>
+  <msg key="Show">عَرْض</msg>
+  <msg key="sorry_forgotten_pwd">للأسف، لنّ نستطيع مساعدتك في كلمة سرك المنسية.</msg>
+  <msg key="Thank_you">.شكرًا</msg>
+  <msg key="up_to_context_name">إلى حدّ %context_name%</msg>
+  <msg key="Update">تّحديث</msg>
+  <msg key="Update_Password">تجديدِ كلمة السر</msg>
+  <msg key="upload_a_portrait">أرسلْ صورةً</msg>
+  <msg key="Username">إسم المستخدم</msg>
+  <msg key="Your_Portrait">صورتك</msg>
+</message_catalog>

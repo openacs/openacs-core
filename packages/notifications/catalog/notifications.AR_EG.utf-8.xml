@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<message_catalog package_key="notifications" package_version="5.0.0b4" locale="AR_EG" charset="utf-8">
+
+  <msg key="Action">إجراء</msg>
+  <msg key="Change">بدل</msg>
+  <msg key="Frequency">الترددُ</msg>
+  <msg key="Item">بند</msg>
+  <msg key="lt_Getting_too_much_emai">%manage_notifications_url% : تَحْصلُ أكثر من الازم على بريد الإلكتروني؟ تدبر تبليغاتُكَ في</msg>
+  <msg key="lt_You_have_no_notificat">.لَيْسَ لَكَ تبليغات</msg>
+  <msg key="lt_You_may_a_hrefsub_url">.%pretty_name% أنت يمكن أنّ  &lt;a href=&quot;%sub_url%&quot;&gt; تطلب تبليغً&lt;/a&gt; لِ</msg>
+  <msg key="Manage_Notifications">أّّّدّر التبليغات</msg>
+  <msg key="Notification_type">نوع التبليغ</msg>
+  <msg key="Request_Notification">اطلّب تبليغ</msg>
+</message_catalog>
