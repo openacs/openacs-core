@@ -375,7 +375,7 @@ begin
 			NULL
 			);
 	return v_new_folder_id;
-end;' languagse 'plpgsql';
+end;' language 'plpgsql';
 
 create function content_folder__copy (integer,integer,integer,varchar,varchar)
 returns integer as '

@@ -144,7 +144,7 @@ end;' language 'plpgsql';
 
 
 -- procedure copy
-create or replace functions content_symlink__copy (
+create or replace function content_symlink__copy (
 	integer,
 	integer,
 	integer,
