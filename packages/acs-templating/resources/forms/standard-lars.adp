@@ -100,7 +100,7 @@
 
 <if @form_properties.has_submit@ nil>
   <tr bgcolor=white>
-    <td align=right>
+    <td>
       <input type=submit name="ok" value="     OK     ">
       <input type=submit name="cancel" value="Cancel">
     </td>
