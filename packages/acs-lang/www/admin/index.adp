@@ -46,10 +46,10 @@
       <td align="right"><if @locales.num_untranslated_pretty@ ne 0>@locales.num_untranslated_pretty@</if></td>
       <td align="center">
         <if @locales.enabled_p@ true>
-          <a href="@locales.locale_enabled_p_url@" title="Disable this locale"><img src="/shared/images/checkboxchecked" height="13" width="13" border="0"></a>
+          <a href="@locales.locale_enabled_p_url@" title="Disable this locale"><img src="/shared/images/checkboxchecked" height="13" width="13" border="0" style="background-color: white;"></a>
         </if>
         <else>
-          <a href="@locales.locale_enabled_p_url@" title="Enable this locale"><img src="/shared/images/checkbox" height="13" width="13" border="0"></a>
+          <a href="@locales.locale_enabled_p_url@" title="Enable this locale"><img src="/shared/images/checkbox" height="13" width="13" border="0" style="background-color: white;"></a>
         </else>
       </td>
       <td align="center">
