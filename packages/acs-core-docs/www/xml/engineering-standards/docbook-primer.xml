@@ -1,6 +1,5 @@
-<sect1 id="docbook-primer" xreflabel="OpenACS Documentation Guide">
-  <title>OpenACS Documentation Guide</title>
-
+<sect1 id="docbook-primer">
+  <title>DocBook and Documentation</title>
   <para>
     By <ulink
     url="mailto:claus@arsdigita.com">claus@arsdigita.com</ulink>, with

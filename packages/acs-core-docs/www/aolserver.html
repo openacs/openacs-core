@@ -1,11 +1,11 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Install AOLserver 3.3+ad13</title><meta name="generator" content="DocBook XSL Stylesheets V1.58.1"><link rel="home" href="index.html" title="OpenACS Documentation"><link rel="up" href="unix-install.html" title="Chapter 3. Installing on Unix/Linux"><link rel="previous" href="postgres.html" title="Install PostgreSQL 7.2.3"><link rel="next" href="openacs.html" title="Install OpenACS 4.6.2"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="images/alex.jpg" border="0"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="postgres.html">Prev</a> </td><th width="60%" align="center">Chapter 3. Installing on Unix/Linux</th><td width="20%" align="right"> <a accesskey="n" href="openacs.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><h2 class="title" style="clear: both"><a name="aolserver"></a>Install AOLserver 3.3+ad13</h2></div></div><div class="authorblurb"><p>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Install AOLserver 3.3oacs1</title><meta name="generator" content="DocBook XSL Stylesheets V1.58.1"><link rel="home" href="index.html" title="OpenACS Documentation"><link rel="up" href="unix-install.html" title="Chapter 3. Installing on Unix/Linux"><link rel="previous" href="postgres.html" title="Install PostgreSQL 7.2.3"><link rel="next" href="openacs.html" title="Install OpenACS 4.6.3"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="images/alex.jpg" border="0"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="postgres.html">Prev</a> </td><th width="60%" align="center">Chapter 3. Installing on Unix/Linux</th><td width="20%" align="right"> <a accesskey="n" href="openacs.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><h2 class="title" style="clear: both"><a name="aolserver"></a>Install AOLserver 3.3oacs1</h2></div></div><div class="authorblurb"><p>
     by <a href="mailto:vinod@kurup.com" target="_top">Vinod Kurup</a><br>
-          OpenACS docs are written by the named authors, but may be edited
+          OpenACS docs are written by the named authors, and may be edited
           by OpenACS documentation staff.
         </p></div><p>This page assumes you have downloaded aolserver to  to 
 <tt>/tmp/aolserver3.3oacs1.tar.gz</tt>.  If not,
-<a href="individual-programs.html#source-aolserver">get it</a>.  It also assumes you are following the 4.6.2-P or 4.6.2-O Reference Platform installation, using Red Hat 8.0.  Places where other systems are different are noted.</p><div class="orderedlist"><ol type="1"><li><p>
+<a href="individual-programs.html#source-aolserver">get it</a>.  It also assumes you are following the 4.6.3-P or 4.6.3-O Reference Platform installation, using Red Hat 8.0.  Places where other systems are different are noted.</p><div class="orderedlist"><ol type="1"><li><p>
       As <tt>root</tt>, untar
       <tt>aolserver3.3oacs1.tar.gz</tt>
       into <tt>/usr/local/src</tt>.
@@ -67,9 +67,7 @@ Creating  ...
 ==================================================================
 Done Building Sat Mar  8 10:31:35 PST 2003
 [root@yourserver aolserver]# </pre><p>
-          This takes about 5 minutes. All of the results are logged to
-          files in
-          <tt>/usr/local/src/aolserver/log</tt>.  If you run into problems running AOLserver, check these files for build errors.</p></li><li><p>Add a database-specific wrapper script.  This script
+          This takes about 5 minutes. It builds aolserver, several modules, and the database driver.  (Upgraders, note that the postgres database driver has changed from postgres.so to nspostgres.so).  All of the results are logged to files in <tt>/usr/local/src/aolserver/log</tt>.  If you run into problems running AOLserver, check these files for build errors.</p></li><li><p>Add a database-specific wrapper script.  This script
 	  sets database environment variables before starting
 	  AOLserver; this allows the AOLserver instance can
 	  communicate with the database.  There is one script each for
@@ -276,7 +274,8 @@ set address 0.0.0.0</pre></li><li><p><a name="analog-install"></a>OPTIONAL - ins
 have the <a href="individual-programs.html#analog-download">source tarball</a> in
 <tt>/tmp</tt>.  Unpack, compile, and install analog.</p><pre class="screen">[root@yourserver aolserver]# <b><tt>cd /usr/local/src</tt></b>
 [root@yourserver src]# <b><tt>tar xzf /tmp/analog-5.31.tar.gz</tt></b>
-root@yourserver analog-5.31]# <b><tt>make</tt></b>
+[root@yourserver src]# <b><tt>cd analog-5.31</tt></b>
+[root@yourserver analog-5.31]# <b><tt>make</tt></b>
 cd src &amp;&amp; make
 make[1]: Entering directory `/usr/local/src/analog-5.31/src'
 <span class="emphasis"><em>(many lines omitted)</em></span>
@@ -291,4 +290,4 @@ tar xzf /tmp/analog-5.31.tar.gz
 cd analog-5.31
 make
 cd ..
-mv analog-5.31 /usr/share/</pre></pre></li></ol></div><div class="cvstag">($Id$)</div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="postgres.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="openacs.html">Next</a></td></tr><tr><td width="40%" align="left">Install PostgreSQL 7.2.3 </td><td width="20%" align="center"><a accesskey="u" href="unix-install.html">Up</a></td><td width="40%" align="right"> Install OpenACS 4.6.2</td></tr></table><hr><address>rmello at fslc.usu.edu</address><address><a href="mailto:vinod@kurup.com">vinod@kurup.com</a></address></div><a name="comments"></a><center><a href="http://openacs.org/doc/openacs-4/aolserver.html#comments">View comments on this page at openacs.org</a></center></body></html>
+mv analog-5.31 /usr/share/</pre></pre></li></ol></div><div class="cvstag">($Id$)</div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="postgres.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="openacs.html">Next</a></td></tr><tr><td width="40%" align="left">Install PostgreSQL 7.2.3 </td><td width="20%" align="center"><a accesskey="u" href="unix-install.html">Up</a></td><td width="40%" align="right"> Install OpenACS 4.6.3</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a><center><a href="http://openacs.org/doc/openacs-4-6-3/aolserver.html#comments">View comments on this page at openacs.org</a></center></body></html>
