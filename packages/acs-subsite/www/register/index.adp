@@ -3,9 +3,4 @@
 <property name="focus">login.username</property>
 <property name="context">{#acs-subsite.Log_In#}</property>
 
-<formtemplate id="login" style="standard-lars"></formtemplate>
-
-<if @forgotten_pwd_url@ not nil>
-  <a href="@forgotten_pwd_url@">Forgot your password?</a>
-</if>
-
+<include src="login-include" return_url="@return_url;noquote@" no_frame_p="1">
