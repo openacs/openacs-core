@@ -21,7 +21,7 @@ declare
   new__publish_date           alias for $3;  -- default now()
   new__mime_type              alias for $4;  -- default ''text/plain''
   new__nls_language           alias for $5;  -- default null
-  -- blob id FIXME
+  -- lob id 
   new__data                   alias for $6;  
   new__item_id                alias for $7;  
   new__revision_id            alias for $8;  -- default null
@@ -580,7 +580,7 @@ declare
   v_new_lob                            cr_revisions.lob%TYPE;
   v_content_type                       cr_revisions.content_type%TYPE;
 begin
-  -- FIXME
+
   select
     content_length, item_id
   into
