@@ -23,6 +23,8 @@ begin
     return 0;
 end;' language 'plpgsql';
 
+select inline_0 ();
+drop function inline_0 ();
 
 -- Create the basic object type used to represent a reference database
 select acs_object_type__create_type (
@@ -73,8 +75,38 @@ create table acs_reference_repositories (
 
 -- API
 
-create or replace package acs_reference
-as
+-- made initially for PG 
+create function acs_reference__new (varchar,timestamp,
+varchar,varchar,timestamp)
+returns integer as '
+declare
+    table_name      alias for $1; -- 
+    last_update     alias for $2; -- default sysdate
+    source          alias for $3; -- default null
+    source_url      alias for $4; -- default null
+    effective_date  alias for $5; -- default sysdate
+)
+    v_repository_id := acs_object__new (
+         object_id,    
+         sysdate(),
+         null,
+         null,
+         'acs_reference_repository'  
+    );
+
+        insert into acs_reference_repositories
+            (repository_id,table_name,
+             last_update,source, 
+             source_url,effective_date)
+        values 
+            (v_repository_id,table_name,
+             last_update,source,source_url,
+             effective_date);
+        return v_repository_id;    
+end;
+' language 'plpgsql';
+
+-- default for Oracle
 create function acs_reference__new (integer,varchar,char,varchar,timestamp,
 varchar,varchar,timestamp,timestamp,integer,blob,timestamp,
 integer,varchar,integer)
