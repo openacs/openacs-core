@@ -28,11 +28,12 @@
 
 <tr><td valign="top">
 <pre><strong>Getting Started</strong>
-        - <a href="release-notes.html">OpenACS 4.6.2 Release Notes</a>
+        - <a href="release-notes.html">OpenACS 4.6.3 Release Notes</a>
 	- <a href="individual-programs.html">Required Software</a>
 	- <a href="unix-install.html">Unix Installation Guide</a>
         - <a href="win2k-installation.html">Windows Installation Guide</a>
 	- <a href="mac-installation.html">Mac OS X Installation Guide</a>
+	- <a href="upgrade.html">Upgrading</a>
 	- <a href="tutorial.html">Developer Tutorial</a>
         - <a href="/api-doc/">API Browser</a> for this OpenACS instance
 
