@@ -14,10 +14,15 @@
   
   <para>Skip this section if you will run only Oracle.</para>
 
-  <para>OpenACS &version; will run with <link linkend="source-postgresql">PostgreSQL</link> 7.2.x, 7.3.2,
-  7.3.3, and 7.3.4.  7.3.4 is the recommended version of PostgreSQL.</para>
+  <para>OpenACS &version; will run with <link linkend="source-postgresql">PostgreSQL</link> 7.2.x, 7.3.2, 7.3.3, and 7.3.4.  7.3.4 is the recommended version of PostgreSQL.  PostgreSQL 7.4 has been verified.</para>
 
   <itemizedlist>
+    <listitem>
+      <formalpara id="install-postgres-mac">
+        <title>Mac OS X</title>
+        <para>If you are running Mac OS X prior to 10.3, you should be able to install and use PostGreSQL 7.2.x or 7.3.x.  Mac OS X 10.3 requires PostGreSQL 7.4.</para>
+      </formalpara>
+    </listitem>
     <listitem>
       <formalpara id="install-postgres-debian">
         <title>Debian</title>
@@ -99,18 +104,33 @@ useradd -g web -d /usr/local/pgsql postgres
 mkdir -p /usr/local/pgsql
 chown -R postgres.web /usr/local/pgsql /usr/local/src/postgresql-7.3.4
 chmod 750 /usr/local/pgsql</action></screen>
-    </listitem>
+      <itemizedlist>
+        <listitem>
+          <para>Mac OS X: Do instead:</para>
+          <screen><userinput>sudo niutil -create / /groups/web
+sudo niutil - list / /groups</userinput></screen>
+      <para>The second command returns a list of groups.  The last entry should include the gid of the group <computeroutput>web</computeroutput>, which you will need in the next sequence:</para>
+      <screen><userinput>sudo niutil -create / /users/postgres
+sudo niutil -createprop / /users/postgres gid <replaceable>web's gid_number</replaceable>
+sudo niutil -createprop / /users/postgres home /usr/local/pgsql
+sudo niutil -createprop / /users/postgres shell /bin/bash
+mkdir -p /usr/local/pgsql
+chown -R postgres:web /usr/local/pgsql /usr/local/src/postgresql-7.4
+chmod 750 /usr/local/pgsql</userinput></screen>
+        </listitem>
+      </itemizedlist>
+</listitem>
     <listitem id="install-postgres-env">
       <formalpara>
         <title>Set up postgres's environment variables</title>
       <para>They are necessary for the executable to find its supporting
-	libraries.  For convenience, we'll simply append the necessary
-	lines to the postgres shell config file.</para>
+	libraries.  Put the following lines into the postgres user's environment.</para>
       </formalpara>
-      <screen>[root src]# <userinput>echo "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/pgsql/lib" &gt;&gt; ~postgres/.bashrc</userinput>
-[root src]# <userinput>echo "export PATH=$PATH:/usr/local/pgsql/bin" &gt;&gt; ~postgres/.bashrc</userinput>
-<action>echo "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/pgsql/lib" &gt;&gt; ~postgres/.bashrc
-echo "export PATH=$PATH:/usr/local/pgsql/bin" &gt;&gt; ~postgres/.bashrc</action></screen>
+      <screen>[root src]# <userinput>su - postgres</userinput>
+[postgres ~] <userinput>emacs ~postgres/.bashrc</userinput></screen>
+      <para>Paste these lines into <computeroutput>.bashrc</computeroutput>:</para>
+<programlisting>export PATH=$PATH:/usr/local/pgsql/bin
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/pgsql/lib</programlisting>
       <para>Test this by logging in as
 	<computeroutput>postgres</computeroutput> and checking the
 	paths; you should see <computeroutput>/usr/local/pgsql/bin</computeroutput></para>
@@ -388,6 +408,18 @@ root:~ # <userinput>/etc/rc.d/init.d/rc2.d/S20postgresql start</userinput>
 Starting PostgreSQL: ok
 root:~ # </screen>
         </listitem>
+        <listitem>
+          <para>Mac OS X:</para>
+          <orderedlist>
+            <listitem>
+              <para>Install the startup script:</para>
+              <screen><userinput>cd /Library/StartupItems/</userinput>
+<userinput>tar xfz /var/lib/aolserver/<replaceable>service0</replaceable>/packages/acs-core-docs/www/files/osx-postgres-startup-item.tgz</userinput>
+</screen>
+            </listitem>
+          </orderedlist>
+        </listitem>
+
       </itemizedlist>
       
       <para>

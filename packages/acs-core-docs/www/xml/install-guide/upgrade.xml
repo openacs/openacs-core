@@ -166,7 +166,55 @@
       <title>Upgrading OpenACS 4.6.3 to 5.0</title>
         <orderedlist>
           <listitem>
-            <para>Current working notes in <ulink url="http://openacs.org/forums/message-view?message_id=143497">Forum OpenACS Development: 4.6.3 upgrade to 5-HEAD: final results</ulink>.</para>
+<programlisting>
+pg_dump mydb > mydb.dmp
+
+If you are also upgrading from postgresql 7.2 to postgresql 7.3:
+From openacs 5.0
+
+/openacs-5/bin/pg_7.2to7.3_upgrade_helper.pl mydb.dmp mydb-new.dmp /path/to/openacs-4-install
+
+    * Reload mydb-new.dmp into postgresql 7.3.
+    * psql -f /openacs-5/packages/acs-kernel/sql/postgresql/postgresql.sql mydb
+    * Load acs-kernel sql upgrade scripts from the previous openacs version. Be sure to load 5.0d* scripts before 5.0.0b* scripts.
+    * Load acs-service-contract sql upgrade scripts
+    * Load acs-authentication data model
+      psql -f openacs-5/packages/acs-authentication/sql/postgresql/acs-authentication-create.sql mydb
+    * Load acs-lang data model
+      psql -f openacs-5/packages/acs-lang/sql/postgresql/acs-lang-create.sql mydb 
+
+Next create in openacs-5/tcl/ zzz-postload.tcl containing
+
+if {![apm_package_installed_p acs-lang]} {
+
+    apm_package_install -enable -mount_path acs-lang [acs_root_dir]/packages/acs-lang/acs-lang.info
+    
+     lang::catalog::import -locales [list "en_US"]
+
+}
+
+
+if {![apm_package_installed_p acs-authentication]} {
+
+    apm_package_install -enable [acs_root_dir]/packages/acs-authentication/acs-authentication.info
+
+     apm_parameter_register "UsePasswordWidgetForUsername" \
+     "Should we hide what the user types in the username
+      field, the way we do with the password field? Set
+      this to 1 if you are us ing sensitive information
+      such as social security number for username." \
+     acs-kernel 0 number \
+     security 1 1
+     parameter::set_value -package_id [ad_acs_kernel_id] -parameter UsePasswordWidgetForUsername -value 0
+
+}
+
+Cross fingers.
+
+If you can login, visit /acs-admin/apm and upgrade acs-kernel, acs-service-contract and uncheck the data model scripts. Restart. If everything is still working, make another backup of the database. Then upgrade the rest of your packages through the APM. 
+</programlisting>
+<para>
+See also this forum post: <ulink url="http://openacs.org/forums/message-view?message_id=143497">Forum OpenACS Development: 4.6.3 upgrade to 5-HEAD: final results</ulink>.</para>
           </listitem>
       </orderedlist>
     </sect2>
@@ -174,11 +222,11 @@
   <sect1 id="upgrade-openacs-files">
   <title>Upgrading the OpenACS files</title>
   <para>OpenACS is distributed as a collection of files, available as one big tarball, via CVS, and via automatic download from within the APM.  Upgrades work by first changing the file system (via any of the previous methods), and then using the APM to scan the file system, find upgrade scripts, and execute them.  This section describes how to upgrade the file system.  Starting with OpenACS 5.0, this section can generally be skipped because the OpenACS APM can directly download new files from the openacs.org repository.</para>
-  <para>If you are using CVS, you will unpack the OpenACS 4.6 tarball into a working directory and then import that directory into cvs.  If you have changed files in the core packages, cvs will attempt to merge your changes.  You may have to manually merge some conflicts.  When that's finished, you can update your normal development checkout directory and the new files will appear.  If you aren't using CVS, you can unpack the tarball on top of your existing tree, but any customizations you've made to the kernel or core packages will be erased.</para>
+  <para>Many OpenACS site developers operate their own CVS repository to keep track of changes from the release OpenACS code.  This part describes how to import the latest OpenACS version into your own repository.  If you are using CVS, you will unpack the OpenACS 4.6 tarball into a working directory and then import that directory into cvs.  If you have changed files in the core packages, cvs will attempt to merge your changes.  You may have to manually merge some conflicts.  When that's finished, you can update your normal development checkout directory and the new files will appear.  If you aren't using CVS, you can unpack the tarball on top of your existing tree, but any customizations you've made to the kernel or core packages will be erased.</para>
   <itemizedlist>
     <listitem>
       <formalpara>
-        <title>Upgrading files without CVS</title>
+        <title>Upgrading files for a site which is not in a CVS repository</title>
         <para>Unpack the tarball into a new directory and copy its contents on top of your working directory.</para>
       </formalpara>
       <screen>[root root]# <userinput>su - <replaceable>service0</replaceable></userinput>
@@ -195,7 +243,7 @@ exit</action></screen>
     </listitem>
     <listitem>
       <para>
-        <emphasis role="strong">Upgrading files with CVS</emphasis>
+        <emphasis role="strong">Upgrading files for a site which is in a CVS repository</emphasis>
       </para>
       <orderedlist>
         <listitem>
