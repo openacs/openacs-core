@@ -183,7 +183,7 @@
                v.summary,
                v.description_format,
                v.description,
-               v.to_char(release_date, 'YYYY-MM-DD') as release_date,
+               to_char(v.release_date, 'YYYY-MM-DD') as release_date,
                v.vendor,
                v.vendor_uri,
                v.enabled_p,
