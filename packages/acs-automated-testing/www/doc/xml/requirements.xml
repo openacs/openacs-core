@@ -76,7 +76,18 @@ Severity (derives from ns_log values)
   Test Validity Bug (use this for problems that suggest the test itself in invalid or broken)
 Test Data
   Self-contained  Requires no test data, leaves no test data.
-  Populate  Generates and leaves test data, for other tests or for end users.</programlisting></entry>
+  Populate  Generates and leaves test data, for other tests or for end users.
+Package Version
+  5.0.0
+  etc
+</programlisting></entry>
+            </row>
+
+            <row>
+              <entry>2.1</entry>
+              <entry></entry>
+              <entry>A</entry>
+              <entry>Each test can be associated with a single OpenACS.org bug (ie, store bug id as in integer, or store full url so that this can point to other bugs)</entry>
             </row>
 
             <row>
@@ -89,7 +100,7 @@ Test Data
             <row>
               <entry>4</entry>
               <entry></entry>
-              <entry>B</entry>
+              <entry>C</entry>
               <entry><emphasis role="strong">Test scripts can be imported and exported</emphasis>.  It should be possible to import a test into the database from a file, and to export it to a file.  These files should be sharable by different OpenACS installations.  It should be possible to import/export directly between running OpenACS sites.  (We should look at what did and didn't work in acs-lang catalog files and work from there.)</entry>
             </row>
 
@@ -102,6 +113,12 @@ Test Data
   		      	  <para>2) basic recording: when you fill out a form while macro mode is on, the submit is caught and displayed as tclwebtest code, and then executed.</para>
 		      	  <para>3) UI for creating aa_true tests automatically, based on the content of the page.  (For example, a form that says "the returned page must contain [ type regexp here] that spits out aa_true "test X" [string regexp blah blah]</para>
                         </entry>
+            </row>
+            <row>
+              <entry>6</entry>
+              <entry></entry>
+              <entry>A</entry>
+              <entry>Notification subscriptions are available for "email me whenever this test fails" and "notify me whenever a test in this category fails"</entry>
             </row>
           </tbody>
         </tgroup>
@@ -132,6 +149,12 @@ Test Data
               <entry>1</entry>
               <entry>Creation</entry>
               <entry>17 Jan 2004</entry>
+              <entry>Joel Aufrecht</entry>
+            </row>
+            <row>
+              <entry>2</entry>
+              <entry>Updated with notes from chat meeting</entry>
+              <entry>21 Jan 2004</entry>
               <entry>Joel Aufrecht</entry>
             </row>
           </tbody>
