@@ -20,6 +20,23 @@ ad_proc -private db_available_pools {{ -dbn "" }} {
     return [nsv_get {db_available_pools} $dbn]
 }
 
+ad_proc -private db_pool_to_dbn_init {{
+}} {
+    Simply initializes the <code>db_pool_to_dbn</code> nsv, which is
+    used by "<code>db_driverkey -handle</code>".
+
+    @author Andrew Piskorski (atp@piskorski.com)
+    @creation-date 2003/04/09
+
+    @see db_driverkey
+} {
+    foreach dbn [nsv_array names {db_available_pools}] {
+        foreach pool [db_available_pools -dbn $dbn] {
+            nsv_set {db_pool_to_dbn} $pool $dbn
+        }
+    }
+}
+
 
 ad_proc db_bootstrap_set_db_type { errors } {
 
@@ -155,6 +172,7 @@ ad_proc db_bootstrap_set_db_type { errors } {
         set pools $all_pools
         ns_log Notice "$proc_name: Using ALL database pools for OpenACS."
     }
+    db_pool_to_dbn_init
     ns_log Notice "$proc_name: The following pools are available for OpenACS: $pools"
 
     # DRB: if the user hasn't given us enough database pools might as well tell
