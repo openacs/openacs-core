@@ -348,6 +348,10 @@ ad_proc -public ad_page_contract {
     <dd>This syntax will check to see if a value is being passed in for this variable.  If it is not, it will then look in
     cache for this variable in the package that this page is located, and get this value if it exists.
 
+    <dt><b>cached</b>
+    <dd>This syntax will check to see if a value is being passed in for this variable.  If it is not, it will then look in
+    cache for this variable in the package that this page is located, and get this value if it exists.
+
     <dt><a href="proc-view?proc=ad_page_contract_filter_proc_date"><b>date</b></a>
     <dd>Pluggable filter, installed by default, that makes sure the array validates as a date.
     Use this filter with :array to do automatic date filtering.  To use it, set up in your HTML form
@@ -957,6 +961,28 @@ ad_proc -public ad_page_contract {
     }
     
 
+	if { [info exists apc_internal_filter($formal_name:cached)] } {
+	    if { ![ad_page_contract_get_validation_passed_p $formal_name] && ![info exists apc_internal_filter($formal_name:notnull)] && (![info exists apc_default_value($formal_name)] || [empty_string_p $apc_default_value($formal_name)]) } {
+		if { [info exists apc_internal_filter($formal_name:array)] } {
+		    # This is an array variable, so we need to loop through each name.* variable for this package we have ...
+		    set array_list ""
+		    foreach arrayvar [ns_cache names util_memoize] {
+			if [regexp [list [ad_conn session_id] [ad_conn package_id] "$formal_name."] $arrayvar] {
+			    set arrayvar [lindex $arrayvar [expr [llength $arrayvar] - 1]]
+			    if { ![empty_string_p $array_list] } {
+				append array_list " "
+			    }
+			    set arrayvar_formal [string range $arrayvar [expr [string first "." $arrayvar] + 1] [string length $arrayvar]]
+			    append array_list "{$arrayvar_formal} {[ad_get_client_property [ad_conn package_id] $arrayvar]}"
+			}
+		    }
+		    set apc_default_value($formal_name) $array_list
+		} else {
+		    set apc_default_value($formal_name) [ad_get_client_property [ad_conn package_id] $formal_name]
+		}
+	    }
+	}
+
     ####################
     # 
     # Step 3: Pass over each formal argument to make sure all the required
@@ -1124,6 +1150,7 @@ ad_proc -public ad_page_contract {
     }
 }
 
+	cached    {internal}
 ad_proc -public ad_page_contract_get_variables { } {
     Returns a list of all the formal variables specified in
     ad_page_contract. If no variables have been specified, returns an
