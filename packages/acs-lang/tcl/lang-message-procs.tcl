@@ -95,7 +95,10 @@ ad_proc -public lang::message::register {
     }
 
     # Check that non-en_US messages don't have invalid embedded variables
-    if { ![string equal $locale "en_US"] } {
+    # Exclude the special case of datetime configuration messages in acs-lang. An alternative
+    # to treating those messages as a special case here would be to have those messages use
+    # quoted percentage signs (double percentage signs).
+    if { ![string equal $locale "en_US"] && ![regexp {^acs-lang\.localization-} $key] } {
         set embedded_vars [get_embedded_vars $message]
         set embedded_vars_en_us [get_embedded_vars [lang::message::lookup en_US $key {} {} 0]]
         set missing_vars [util_get_subset_missing $embedded_vars $embedded_vars_en_us]
