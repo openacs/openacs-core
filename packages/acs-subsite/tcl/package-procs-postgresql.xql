@@ -157,6 +157,14 @@
       </querytext>
 </fullquery>
 
+
+<fullquery name="package_plsql_args.select_object_type_param_list">      
+      <querytext>
+	select args.arg_name
+        from acs_function_args args
+        where args.function = upper(:package_name) || '__' || upper(:function_name)
+      </querytext>
+</fullquery>
  
 <fullquery name="package_create.package_valid_p">      
       <querytext>
