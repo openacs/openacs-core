@@ -134,7 +134,7 @@ ad_proc -private sec_handler {} {
         ad_conn -set auth_level $auth_level
         ad_conn -set account_status $account_status
 
-
+        
 	# reissue session cookie so session doesn't expire if the
 	# renewal period has passed. this is a little tricky because
 	# the cookie doesn't know about sec_session_renew; it only
@@ -197,8 +197,6 @@ ad_proc -private sec_login_handler {} {
     
         # Check account status
         set account_status [auth::get_local_account_status -user_id $untrusted_user_id]
-
-        ns_log Notice "LARS: account_status for user_id $untrusted_user_id is $account_status"
 
         if { [string equal $account_status "no_account"] } {
             set untrusted_user_id 0
