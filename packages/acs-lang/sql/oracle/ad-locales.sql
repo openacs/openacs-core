@@ -235,3 +235,18 @@ insert into ad_locales
        (locale, label, language, country, nls_language, nls_territory, 
         nls_charset, mime_charset, default_p, enabled_p)
  values ('zh_TW', 'Chinese (TW)', 'zh ', 'TW', 'TRADITIONAL CHINESE', 'TAIWAN', 'ZHT16BIG5', 'Big5', 't', 'f');
+
+insert into ad_locales 
+       (locale, label, language, country, nls_language, nls_territory, 
+        nls_charset, mime_charset, default_p, enabled_p)
+ values ('hu_HU', 'Hungarian (HU)', 'hu ', 'HU', 'HUNGARIAN', 'HUNGARY', 'EE8ISO8859P2', 'ISO-8859-2', 't', 'f');
+
+insert into ad_locales 
+       (locale, label, language, country, nls_language, nls_territory, 
+        nls_charset, mime_charset, default_p, enabled_p)
+ values ('FA_IR', 'Farsi', 'FA ', 'IR', 'AMERICAN', 'ALGERIAN', 'AL24UTFFSS', 'windows-1256', 't', 'f');
+
+insert into ad_locales 
+       (locale, label, language, country, nls_language, nls_territory, 
+        nls_charset, mime_charset, default_p, enabled_p)
+ values ('RO_RO', 'Romainian', 'RO ', 'RO', 'ROMAINIAN', 'ROMAINIA', 'EE8ISO8859P2', 'UTF-8', 't', 'f');
