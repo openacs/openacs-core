@@ -1278,6 +1278,11 @@ begin
     ''t''
   );
 
+  -- add the root content folder to acs_magic_objects
+  insert into acs_magic_objects (name, object_id)
+  select ''cr_item_root'',
+         content_item__get_root_folder(null);
+
   v_id := content_folder__new (
     ''templates'',
     ''Templates'', 
@@ -1307,6 +1312,11 @@ begin
     ''content_template'',
     ''t''
   );
+
+  -- add to acs_magic_objects
+  insert into acs_magic_objects (name, object_id)
+  select ''cr_template_root'',
+         content_template__get_root_folder();
 
   return 0;
 end;' language 'plpgsql';

@@ -857,6 +857,12 @@ begin
     include_subtypes => 't'
   );
 
+  -- add the root content folder to acs_magic_objects
+  insert into acs_magic_objects (name, object_id)
+  select 'cr_item_root',
+         content_item.get_root_folder
+    from dual;
+
   v_id := content_folder.new (
     name        => 'templates',
     label       => 'Templates', 
@@ -882,6 +888,12 @@ begin
     content_type     => 'content_template',
     include_subtypes => 't'
   );
+
+  -- add to acs_magic_objects
+  insert into acs_magic_objects (name, object_id)
+  select 'cr_template_root',
+         content_template.get_root_folder
+    from dual;
 
 end;
 /
