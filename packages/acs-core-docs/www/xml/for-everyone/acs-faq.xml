@@ -132,13 +132,14 @@ Server Architecture Audit</ulink> (mainly for OpenACS 3.x)</para></listitem>
 	  now you'll probably have to pay for some training from one
 	  of the companies that do OpenACS work: <ulink
 	    url="http://openacs.org/community/">http://openacs.org/community/</ulink>
+            </para>
 </listitem>
 <listitem>
 	<para>See also: <ulink
 	url="http://philip.greenspun.com/teaching">Teaching</ulink>
 	</para>
 </listitem>
-
+</itemizedlist>
 </sect2>
 
 <sect2 id="acs-faq-resources">
