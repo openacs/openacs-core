@@ -31,21 +31,13 @@ set subsite_name $subsite_sitenode(instance_name)
 set css_url "/resources/acs-subsite/group-master.css"
 
 # Context bar
-if { [template::util::is_nil no_context_p] } {
-    if { ![template::util::is_nil context] } {
-        set cmd [list ad_context_bar --]
-        foreach elem $context {
-            lappend cmd $elem
-        }
-        set context_bar [eval $cmd]
-    }
-
-    if [template::util::is_nil context_bar] { 
-        set context_bar [ad_context_bar]
-    }
+if { [info exists context] } {
+    set context_tmp $context
+    unset context
 } else {
-    set context_bar {}
+    set context_tmp {}
 }
+ad_context_bar_multirow -- $context_tmp
 
 if { [string equal [ad_conn url] $subsite_url] } {
     set subsite_url {}
