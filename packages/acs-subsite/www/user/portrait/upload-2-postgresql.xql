@@ -63,8 +63,8 @@
                                        null,
                                        now(),
                                        :user_id,
-                                       :creation_ip
-                                       );
+                                       :creation_ip,
+                                       :n_bytes);
 
   update cr_items
   set live_revision = v_revision_id
@@ -94,7 +94,7 @@
 	set description = :portrait_comment,
 	    publish_date = now(),
 	    mime_type = :guessed_file_type,
-            content_length = :n_bytes,
+           content_length = :n_bytes,
 	    title = :title
 	where revision_id = :revision_id
  

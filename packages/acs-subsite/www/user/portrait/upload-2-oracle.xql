@@ -38,7 +38,8 @@
              mime_type => :guessed_file_type,
              item_id => :item_id,
              creation_user => :user_id,
-             creation_ip => :creation_ip
+             creation_ip => :creation_ip,
+             content_length => :n_bytes
           );
 
           update cr_items
