@@ -4,7 +4,7 @@
 
 <p> Done installing packages. </p>
 
-<if @error_p@ true>
+<if @success_p@ false>
   <p> Unfortunately, we had some errors. Please check your server error log or contact your system administrator. </p>
 </if>
 <else>

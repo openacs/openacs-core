@@ -1,7 +1,7 @@
 ad_page_contract {
     Install from local file system
 } {
-    {error_p 0}
+    {success_p 0}
 }
 
 set page_title "Installation Complete"
