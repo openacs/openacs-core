@@ -1057,10 +1057,11 @@ ad_proc -public -deprecated -warn apm_package_create_instance {
 
     @see apm_package_instance_new
 } {    
-    return [apm_package_instance_new -package_id $package_id \
-                                     $instance_name \
-                                     $context_id \
-                                     $package_key]
+    return [apm_package_instance_new \
+            -package_key $package_key \
+            -instance_name $instance_name \
+            -package_id $package_id \
+            -context_id $context_id]
 }
 
 ad_proc -public apm_set_callback_proc {
