@@ -109,8 +109,7 @@ ad_proc -private search::indexer {} {
                     acs_sc_call FtsEngineDriver unindex [list $object_id] $driver
                     db_dml nuke_syn {delete from syndication where object_id = :object_id}
                 } errMsg]} {
-                            ns_log Error "search::indexer: error getting datasource for $object_id $object_type: $errMsg\n[ad_print_stack_trace]\n"
-                    ns_log Error "search::indexer: error getting datasource for $object_id $object_type: $errMsg"
+                    ns_log Error "search::indexer: error getting datasource for $object_id $object_type: $errMsg\n[ad_print_stack_trace]\n"
                 } else {
                     search::dequeue -object_id $object_id -event_date $event_date -event $event
                 }
