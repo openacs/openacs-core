@@ -894,6 +894,12 @@ db_multirow \
     }
 </programlisting>
 
+    <para>You may also need to change some of the links in your
+    package. Commonly, you would use ad_conn package_url to build the
+    URL. Otherwise, some of your links may be relative to the virtual
+    directory (note/) instead of the actual directory that the note is
+    being served from</para>
+
   </sect1>
   <sect1 id="tutorial-future-topics">
   <para>Future Topics:</para>
