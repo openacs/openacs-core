@@ -381,6 +381,8 @@ as
    )
    is
    begin
+      delete from notifications where notification_id = notification.delete.notification_id;
+
       acs_object.delete (notification_id);
    end delete;
 
