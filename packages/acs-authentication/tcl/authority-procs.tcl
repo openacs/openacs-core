@@ -272,3 +272,11 @@ ad_proc -public auth::authority::delete {
 } {
     db_exec_plsql delete_authority {}
 }
+
+ad_proc -public auth::authority::get_authority_options {} {
+    Returns options (value label pairs) for building the authority HTML select box.
+
+    @author Simon Carstensen
+} {
+    return [db_list_of_lists select_authorities {}]
+}
