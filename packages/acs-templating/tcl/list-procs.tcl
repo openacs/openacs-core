@@ -2302,6 +2302,8 @@ ad_proc -public template::list::orderby::create {
       </li>
     </ul>
 
+    It is difficult, but you can <a href="http://openacs.org/forums/message-view?message_id=213344">sort hierarchical queries</a>.
+
     @param list_name     Name of list.
 
     @param orderby_name  Name of the orderby.
