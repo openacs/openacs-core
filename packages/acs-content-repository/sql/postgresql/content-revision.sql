@@ -205,7 +205,7 @@ begin
     cols := cols || '', '' || attr_rec.attribute_name;
   end loop;
 
-  execute ''insert into '' || v_table_name || '' select '' || copy_id || 
+  execute ''insert into '' || v_table_name || '' select '' || copy_attributes__copy_id || 
           '' as '' || v_id_column || cols || '' from '' || 
           v_table_name || '' where '' || v_id_column || '' = '' || 
           copy_attributes__revision_id;
@@ -265,10 +265,16 @@ begin
   -- create the basic revision (using v_target_item_id)
   insert into cr_revisions 
       select 
-        v_copy_id as revision_id, v_target_item_id as item_id, title, 
-        description, publish_date, 
-        mime_type, nls_language, 
-	content
+        v_copy_id as revision_id, 
+        v_target_item_id as item_id, 
+        title, 
+        description, 
+        publish_date, 
+        mime_type, 
+        nls_language, 
+        lob,
+	content,
+        content_length
       from 
         cr_revisions 
       where
