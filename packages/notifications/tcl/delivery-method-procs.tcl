@@ -40,7 +40,7 @@ ad_proc -public notification::delivery::send {
 } {
     #need to check if its ok to notify this user in this way.  For now just checks if they are an approved user.
     if { ![notification::security::can_notify_user -user_id $to_user_id -delivery_method_id $delivery_method_id] } {
-        ns_log notice "Blocked notification to $to_user_id subject:$subject"
+        ns_log debug "Blocked notification to $to_user_id subject:$subject"
         return "Blocked"
     }
 
