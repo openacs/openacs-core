@@ -8,7 +8,7 @@ proc cr_revision_upload { title item_id path } {
                                v_content => null);
      end;"]
 
-    dml_file dml_revision_from_file "update 
+    db_dml dml_revision_from_file "update 
                             cr_revisions 
                           set
                             content = empty_blob()

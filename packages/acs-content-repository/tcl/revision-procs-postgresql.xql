@@ -19,14 +19,12 @@
 <fullquery name="cr_revision_upload.dml_revision_from_file">      
       <querytext>
 
-                         FIXME: need to handle this blob
                          update 
                             cr_revisions 
                           set
-                            content = empty_lob()
+                            content = '[cr_create_content_file $item_id $revision_id $path]'
                           where
                             revision_id = :revision_id
-                          returning content into :1
 
       </querytext>
 </fullquery>

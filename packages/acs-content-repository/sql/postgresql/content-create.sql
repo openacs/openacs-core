@@ -397,7 +397,7 @@ create table cr_revisions (
   nls_language    varchar(50),
   storage_type    varchar(10) not null,
   -- lob_id if storage_type = lob.
-  lob             integer,
+  lob             integer references lobs,
   -- content holds the file name if storage type = file
   -- otherwise it holds the text data if storage_type = text.
   content	  text,
@@ -415,10 +415,7 @@ begin
         from cr_items
         where item_id = new.item_id;
 
-        if (v_storage_type <> new.storage_type) or
-           (v_storage_type = ''lob'' and new.lob is null) or
-           ((v_storage_type = ''text'' or v_storage_type = ''file'') and
-            new.content is null) then
+        if v_storage_type <> new.storage_type then
 
            raise EXCEPTION ''Invalid storage type: % for revision_id = %'', new.storage_type, new.revision_id;
            
