@@ -266,6 +266,29 @@ ad_proc -public template::util::date::get_property { what date } {
       }
       return "to_date('$value', '$format')"
     }
+    ansi {
+      # LARS: Empty date results in NULL value
+      if { [empty_string_p $date] } {
+          return {}
+      }
+      set value ""
+      set pad "0000"
+      set prepend ""
+      set clipped_date [lrange $date 0 2]
+      foreach fragment $clipped_date {
+          append value "$prepend[string range $pad [string length $fragment] end]$fragment"
+          set pad "00"
+          set prepend "-"
+      }
+      append value " "
+      set prepend ""
+      set clipped_time [lrange $date 3 5]
+      foreach fragment $clipped_time {
+          append value "$prepend[string range $pad [string length $fragment] end]$fragment"
+          set prepend ":"
+      }
+      return $value
+    }
     linear_date {
       # Return a date in format "YYYY MM DD HH24 MI SS"
       # For use with karl's non-working form builder API
@@ -419,7 +442,7 @@ ad_proc -public template::util::date::set_property { what date value } {
                 set ansi_minutes 0
                 set ansi_seconds 0
             } else {
-                error "Invalid date: $datetime"
+                error "Invalid date: $value"
             }
         }
         # Return new date, but use old format
