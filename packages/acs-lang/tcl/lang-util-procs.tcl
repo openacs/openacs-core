@@ -189,6 +189,7 @@ namespace eval lang::util {
     
             # Read the contents of the file
             set file_contents [template::util::read_file $full_file_path]
+
             set modified_file_contents $file_contents
     
             # Loop over each message tag in the file
@@ -285,7 +286,7 @@ namespace eval lang::util {
     
             # Update the file with the replaced message keys
             set file_id [open "${full_file_path}" w]
-            puts $file_id "$modified_file_contents"
+            puts -nonewline $file_id $modified_file_contents
             close $file_id
         }
     
@@ -473,15 +474,21 @@ namespace eval lang::util {
 
                 regsub -all {@[a-zA-Z0-9_\.]+@} $text "" text_wo_variables
     
-                # make sure the string is non empty and contains at least one letter.
+                # make sure the string is not empty, doesn't contain all spaces, is at least one character long,
+                # contains alphabetical characters, doesn't contain all &nbsp; 
                 if {![empty_string_p $text] 
                     && ![string is space $text_wo_variables] 
-                    && [string match -nocase {*[A-Z]*} $text]
-                    && ![string match {*\#*} $text]
-                    && ![string match {*\{*} $text]
-                    && ![string match {*\}*} $text]
                     && [string length $text] > 1
+                    && [string match -nocase {*[A-Z]*} $text]
+                    && ![regexp {(?:\s*&nbsp;\s*)+} $text_wo_variables match]
                 } {
+                    # Peter: texts with a hash or curly brace used to be excluded, my thinking
+                    # is it's better to include those texts and let the user say if they should
+                    # be included or not now that this script is used interactively in the APM.
+                    #&& ![string match {*\#*} $text]
+                    #&& ![string match {*\{*} $text]
+                    #&& ![string match {*\}*} $text]                    
+
                     regexp {^(\s*)(.*?)(\s*)$} $text match lead text lag
 
                     set text_w_percentages [convert_adp_variables_to_percentage_signs $text]
@@ -493,7 +500,7 @@ namespace eval lang::util {
                         
                         set key [suggest_key $text]
 
-                        lappend report [list $key "<code>[string range [remove_gt_lt $out$lead] end-20 end]<b><span style=background:#ffffc0>$text</span></b>[string range [remove_gt_lt $lag$s] 0 20]</code>" ]
+                        lappend report [list $key "<code>[string range [remove_gt_lt $out$lead] end-20 end]<b><span style=\"background:yellow\">$text</span></b>[string range [remove_gt_lt $lag$s] 0 20]</code>" ]
                     } else {    
                         # Write mode
                         if { [llength $keys] != 0} {
@@ -512,12 +519,12 @@ namespace eval lang::util {
 
                         if { ![empty_string_p $write_key] } {
                             # Write tag to file
-                            lappend report [list ${write_key} "<code>[string range [remove_gt_lt $out$lead] end-20 end]<b><span style=background:#ffffc0>$text</span></b>[string range [remove_gt_lt $lag$s] 0 20]</code>" ]
+                            lappend report [list ${write_key} "<code>[string range [remove_gt_lt $out$lead] end-20 end]<b><span style=\"background:yellow\">$text</span></b>[string range [remove_gt_lt $lag$s] 0 20]</code>" ]
 
                             append out "$lead<\#${write_key} $text_w_percentages\#>$lag"
                         } else {
                             # Leave the text untouched
-                            lappend garbage "<code>[string range [remove_gt_lt $out$lead] end-20 end]<b><span style=background:#ffffc0>$text </span></b>[string range [remove_gt_lt $lag$s] 0 20]</code>"
+                            lappend garbage "<code>[string range [remove_gt_lt $out$lead] end-20 end]<b><span style=\"background:yellow\">$text </span></b>[string range [remove_gt_lt $lag$s] 0 20]</code>"
                             append out "$lead$text$lag"
                         }                        
                     }
