@@ -239,7 +239,7 @@ declare
     v_message_id acs_messages.message_id%TYPE;
     v_ancestor_sk varbit;
 begin
-    select tree_root_key(tree_sortkey) into v_ancestor_sk
+    select tree_ancestor_key(tree_sortkey, 1) into v_ancestor_sk
       from acs_messages
      where message_id = p_message_id;
 

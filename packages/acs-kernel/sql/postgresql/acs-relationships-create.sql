@@ -362,36 +362,28 @@ declare
   actual_object_type_one acs_object_types.object_type%TYPE;
   actual_object_type_two acs_object_types.object_type%TYPE;
 begin
-    select 1 into dummy
-    from acs_rel_types rt,
-         acs_objects o1, 
-         acs_objects o2
-    where exists (select 1 
-                    from acs_object_types t, acs_object_types o
-                   where t.object_type = o1.object_type
-                     and o.object_type = rt.object_type_one
-                     and t.tree_sortkey between o.tree_sortkey and tree_right(o.tree_sortkey))
-      and exists (select 1 
-                    from acs_object_types t, acs_object_types o
-                   where t.object_type = o2.object_type
-                     and o.object_type = rt.object_type_two
-                     and t.tree_sortkey between o.tree_sortkey and tree_right(o.tree_sortkey))
-      and rt.rel_type = new.rel_type
+
+    -- DRB: The obvious rewrite using exists kills Postgres!!!  Argh!!!  This is faster, so there ...
+    -- Get all the object type
+    select rt.object_type_one, rt.object_type_two,
+           o1.object_type, o2.object_type
+    into target_object_type_one, target_object_type_two,
+         actual_object_type_one, actual_object_type_two
+    from acs_rel_types rt, acs_objects o1, acs_objects o2
+    where rt.rel_type = new.rel_type
       and o1.object_id = new.object_id_one
       and o2.object_id = new.object_id_two;
 
+    select count(*) into dummy
+    from (select tree_ancestor_keys(acs_object_type_get_tree_sortkey(actual_object_type_one)) as tree_sortkey) parents1,
+      (select tree_ancestor_keys(acs_object_type_get_tree_sortkey(actual_object_type_two)) as tree_sortkey) parents2,
+      (select tree_sortkey from acs_object_types where object_type = target_object_type_one) root1,
+      (select tree_sortkey from acs_object_types where object_type = target_object_type_two) root2
+    where tree_ancestor_p(root1.tree_sortkey, parents1.tree_sortkey)
+      and tree_ancestor_p(root2.tree_sortkey, parents2.tree_sortkey);
+
     if NOT FOUND then
 
-      -- At least one of the object types must have been wrong.
-      -- Get all the object type information and print it out.
-      select rt.object_type_one, rt.object_type_two,
-             o1.object_type, o2.object_type
-      into target_object_type_one, target_object_type_two,
-           actual_object_type_one, actual_object_type_two
-      from acs_rel_types rt, acs_objects o1, acs_objects o2
-      where rt.rel_type = new.rel_type
-        and o1.object_id = new.object_id_one
-        and o2.object_id = new.object_id_two;
 
       raise EXCEPTION ''-20001: %  violation: Invalid object types. Object % (%) must be of type % Object % (%) must be of type %'', new.rel_type, 
                                          new.object_id_one,

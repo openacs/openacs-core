@@ -8,8 +8,6 @@
 -- License.  Full text of the license is available from the GNU Project:
 -- http://www.fsf.org/copyleft/gpl.html
 
--- create or replace package body content_keyword
--- function get_heading
 create function content_keyword__get_heading (integer)
 returns text as '
 declare

@@ -228,6 +228,15 @@ end;' language 'plpgsql';
 create trigger acs_objects_last_mod_update_tr before update on acs_objects
 for each row execute procedure acs_objects_last_mod_update_tr ();
 
+-- tree query support for acs_objects
+
+create function acs_objects_get_tree_sortkey(integer) returns varbit as '
+declare
+  p_object_id    alias for $1;
+begin
+  return tree_sortkey from acs_objects where object_id = p_object_id;
+end;' language 'plpgsql';
+
 create function acs_objects_insert_tr () returns opaque as '
 declare
         v_parent_sk     varbit default null;
@@ -534,69 +543,6 @@ comment on table acs_static_attr_values is '
 -- ACS_OBJECT PACKAGE --
 ------------------------
 
--- create or replace package acs_object
--- as
--- 
---  function new (
---   object_id	in acs_objects.object_id%TYPE default null,
---   object_type	in acs_objects.object_type%TYPE
--- 			   default 'acs_object',
---   creation_date	in acs_objects.creation_date%TYPE
--- 			   default sysdate,
---   creation_user	in acs_objects.creation_user%TYPE
--- 			   default null,
---   creation_ip	in acs_objects.creation_ip%TYPE default null,
---   context_id    in acs_objects.context_id%TYPE default null
---  ) return acs_objects.object_id%TYPE;
--- 
---  procedure delete (
---   object_id	in acs_objects.object_id%TYPE
---  );
--- 
---  function name (
---   object_id	in acs_objects.object_id%TYPE
---  ) return varchar2;
--- 
---  -- The acs_object_types.name_method for "acs_object"
---  --
---  function default_name (
---   object_id	in acs_objects.object_id%TYPE
---  ) return varchar2;
--- 
---  -- Determine where the attribute is stored and what sql needs to be
---  -- in the where clause to retreive it
---  -- Used in get_attribute and set_attribute
---  procedure get_attribute_storage ( 
---    object_id_in      in  acs_objects.object_id%TYPE,
---    attribute_name_in in  acs_attributes.attribute_name%TYPE,
---    v_column          out varchar2,
---    v_table_name      out varchar2,
---    v_key_sql         out varchar2
---  );
--- 
---  -- Get/set the value of an object attribute, as long as
---  -- the type can be cast to varchar2
---  function get_attribute (
---    object_id_in      in  acs_objects.object_id%TYPE,
---    attribute_name_in in  acs_attributes.attribute_name%TYPE
---  ) return varchar2;
--- 
---  procedure set_attribute (
---    object_id_in      in  acs_objects.object_id%TYPE,
---    attribute_name_in in  acs_attributes.attribute_name%TYPE,
---    value_in          in  varchar2
---  );
--- 
---  function check_representation (
---    object_id		in acs_objects.object_id%TYPE
---  ) return char;
--- 
--- end acs_object;
-
--- show errors
-
--- create or replace package body acs_object
--- procedure initialize_attributes
 create function acs_object__initialize_attributes (integer)
 returns integer as '
 declare

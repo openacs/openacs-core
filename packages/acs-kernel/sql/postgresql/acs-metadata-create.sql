@@ -57,6 +57,13 @@ create index acs_obj_types_tree_skey_idx on acs_object_types (tree_sortkey);
 
 -- support for tree queries on acs_object_types
 
+create function acs_object_type_get_tree_sortkey(varchar) returns varbit as '
+declare
+  p_object_type    alias for $1;
+begin
+  return tree_sortkey from acs_object_types where object_type = p_object_type;
+end;' language 'plpgsql';
+
 create function acs_object_type_insert_tr () returns opaque as '
 declare
         v_parent_sk     varbit default null;
@@ -499,93 +506,6 @@ where attr.object_type = all_types.ancestor_type;
 -- METADATA PACKAGES --
 -----------------------
 
--- create or replace package acs_object_type
--- is
---   -- define an object type
---   procedure create_type (
---     object_type		in acs_object_types.object_type%TYPE,
---     pretty_name		in acs_object_types.pretty_name%TYPE,
---     pretty_plural	in acs_object_types.pretty_plural%TYPE,
---     supertype		in acs_object_types.supertype%TYPE
--- 			   default 'acs_object',
---     table_name		in acs_object_types.table_name%TYPE,
---     id_column		in acs_object_types.id_column%TYPE default 'XXX',
---     package_name	in acs_object_types.package_name%TYPE default null,
---     abstract_p		in acs_object_types.abstract_p%TYPE default 'f',
---     type_extension_table in acs_object_types.type_extension_table%TYPE
--- 			    default null,
---     name_method		in acs_object_types.name_method%TYPE default null
---   );
--- 
---   -- delete an object type definition
---   procedure drop_type (
---     object_type		in acs_object_types.object_type%TYPE,
---     cascade_p		in char default 'f'
---   );
--- 
---   -- look up an object type's pretty_name
---   function pretty_name (
---     object_type 	in acs_object_types.object_type%TYPE
---   ) return acs_object_types.pretty_name%TYPE;
--- 
---   -- Returns 't' if object_type_2 is a subtype of object_type_1. Note
---   -- that this function will return 'f' if object_type_1 =
---   -- object_type_2
---   function is_subtype_p (
---     object_type_1 	in acs_object_types.object_type%TYPE,
---     object_type_2 	in acs_object_types.object_type%TYPE
---   ) return char;
--- 
--- end acs_object_type;
-
--- show errors
-
-
--- create or replace package acs_attribute
--- is
--- 
---   -- define an object attribute
---   function create_attribute (
---     object_type		in acs_attributes.object_type%TYPE,
---     attribute_name	in acs_attributes.attribute_name%TYPE,
---     datatype		in acs_attributes.datatype%TYPE,
---     pretty_name		in acs_attributes.pretty_name%TYPE,
---     pretty_plural	in acs_attributes.pretty_plural%TYPE default null,
---     table_name		in acs_attributes.table_name%TYPE default null,
---     column_name		in acs_attributes.column_name%TYPE default null,
---     default_value	in acs_attributes.default_value%TYPE default null,
---     min_n_values	in acs_attributes.min_n_values%TYPE default 1,
---     max_n_values	in acs_attributes.max_n_values%TYPE default 1,
---     sort_order		in acs_attributes.sort_order%TYPE default null,
---     storage		in acs_attributes.storage%TYPE default 'type_specific',
---     static_p		in acs_attributes.static_p%TYPE default 'f'
---   ) return acs_attributes.attribute_id%TYPE;
--- 
---   procedure drop_attribute (
---     object_type in varchar2,
---     attribute_name in varchar2
---   );
--- 
---   procedure add_description (
---     object_type		in acs_attribute_descriptions.object_type%TYPE,
---     attribute_name	in acs_attribute_descriptions.attribute_name%TYPE,
---     description_key	in acs_attribute_descriptions.description_key%TYPE,
---     description		in acs_attribute_descriptions.description%TYPE
---   );
--- 
---   procedure drop_description (
---     object_type		in acs_attribute_descriptions.object_type%TYPE,
---     attribute_name	in acs_attribute_descriptions.attribute_name%TYPE,
---     description_key	in acs_attribute_descriptions.description_key%TYPE
---   );
--- 
--- end acs_attribute;
-
--- show errors
-
-
--- create or replace package body acs_object_type
--- procedure create_type
 create function acs_object_type__create_type (varchar,varchar,varchar,varchar,varchar,varchar,varchar,boolean,varchar,varchar)
 returns integer as '
 declare

@@ -13,8 +13,6 @@
 create view content_item_globals as 
 select -100 as c_root_folder_id;
 
--- create or replace package body content_item
--- function get_root_folder
 create function content_item__get_root_folder (integer)
 returns integer as '
 declare

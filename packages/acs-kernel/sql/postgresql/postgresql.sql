@@ -359,10 +359,39 @@ begin
 
 end;' language 'plpgsql' with (isstrict, iscachable);
 
+create function tree_ancestor_key(varbit, integer) returns varbit as '
+
+-- Returns a key for the ancestor at the given level.  The root is level
+-- one.
+
+declare
+  p_tree_key      alias for $1;
+  p_level         alias for $2;
+  v_level         integer default 0;
+  v_pos           integer default 1;
+begin
+
+  if tree_level(p_tree_key) < p_level then
+    raise exception ''tree_ancestor_key: key is at a level less than %'', p_level;
+  end if;
+
+  while v_level < p_level loop
+    v_level := v_level + 1;
+    if substring(p_tree_key, v_pos, 1) = ''1'' then
+      v_pos := v_pos + 16;
+    else
+      v_pos := v_pos + 8;
+    end if;
+  end loop;
+
+  return substring(p_tree_key, 1, v_pos - 1);
+
+end;' language 'plpgsql' with (isstrict, iscachable);
+
 create function tree_root_key(varbit) returns varbit as '
 
 -- Return the tree_sortkey for the root node of the node with the 
--- given tree_sortkey.
+-- given tree_sortkey.  
 
 declare
   p_tree_key      alias for $1;
@@ -501,6 +530,103 @@ begin
   return position(p_potential_ancestor in p_potential_child) = 1;
 end;' language 'plpgsql';
 
+create function create_tree_ancestor_keys() returns boolean as '
+
+-- PG 7.1 does not allow recursive SQL functions, but David Walker figured out how to
+-- get around this with a truly inspired hack he posted to the OpenACS 4 Design Forum.
+
+-- His solution involves a general "create and replace function" function written in
+-- Tcl.
+
+-- Rather than use the general solution I have just hacked up a PL/pgSQL function to
+-- create the one recursive function we need: tree_ancestor_keys(varbit, integer).
+
+-- This function should probably only be called from its overloaded cousin
+-- tree_ancestor_keys(varbit).
+
+begin
+
+  -- create tree_ancestor_keys with a dummy body
+
+  execute ''create function tree_ancestor_keys(varbit, integer) returns setof varbit as ''''
+             select $1
+           '''' language ''''sql'''' '';
+
+  -- create another function with the body we want
+
+  execute ''create function __tree_ancestor_keys(varbit, integer) returns setof varbit as ''''
+              select tree_ancestor_key($1, $2)
+              union
+              select tree_ancestor_keys($1, $2 + 1)
+              where $2 < tree_level($1)
+           '''' language ''''sql'''' with (isstrict) '';
+
+  -- replace the body for tree_ancestor_keys with the body we want.  Slick, eh?
+
+  update pg_proc
+  set prosrc = hack.prosrc, probin = hack.probin
+  from (select prosrc, probin
+        from pg_proc
+        where proname = ''__tree_ancestor_keys'') hack
+  where proname = ''tree_ancestor_keys'';
+
+  execute ''drop function __tree_ancestor_keys(varbit, integer)'';
+
+  return true;
+end;' language 'plpgsql';
+
+select create_tree_ancestor_keys();
+
+create function tree_ancestor_keys(varbit) returns setof varbit as '
+
+-- tree_ancestor_keys returns the set of ancestor keys starting at the level passed
+-- in as the second parameter down to the key passed in as the first parameter.  Normally
+-- this will be one - its intended use is to drive the recursive building of the set of
+-- ancestor keys.
+
+-- Here is an example on acs_objects:
+
+-- select o.*
+-- from acs_objects o,
+--   (select tree_ancestor_keys(acs_objects_get_tree_sortkey(:object_id), 1) as tree_sortkey) parents
+-- where o.tree_sortkey = parents.tree_sortkey;
+
+-- This query will use the index on tree_sortkey to scan acs_objects.  The function to grab
+-- the tree_sortkey for the node is necessary (and must be defined for each table that uses
+-- our hierarchical query scheme) to avoid restrictions on the use of SQL functions that
+-- return sets.
+
+-- if you only want the ancestors for a node within a given subtree, do something like this and
+-- cross your fingers that Postgres will figure out whether the join on parent or the root is
+-- more restrictive and do the right one first:
+
+-- select o.*
+-- from acs_objects o,
+--     (select tree_sortkey from acs_objects where object_id = :root_id) as root
+--   (select tree_ancestor_keys(acs_objects_get_tree_sortkey(:object_id), 1) as tree_sortkey) parents
+-- where o.tree_sortkey = parents.tree_sortkey
+--   and o.tree_sortkey >= root.tree_sortkey;
+
+-- DO NOT BE TEMPTED TO REWRITE THE ABOVE QUERIES LIKE THIS:
+
+-- select *
+-- from acs_objects
+-- where object_id in (select tree_ancestor_keys(object_id)
+--                     from acs_objects
+--                     where object_id = :object_id);
+
+-- This is more readable and is certainly cleaner BUT WILL NOT USE THE INDEX ON TREE_SORTKEY
+-- when scanning the acs_objects instance referred to by the left operand of the "in" operator.  Given
+-- that acs_objects will become HUGE on real systems the resulting sequential scan would cripple
+-- performance.   
+
+-- WARNING: subselects in where clauses that call this function and join on an outer table appear
+-- to reliably kill PG 7.1.2.   Not tested for PG 7.2.  If it fails there a bug report will be
+-- filed.
+
+  select tree_ancestor_keys($1, 1)
+
+' language 'sql' with (isstrict);
 
 ----------------------------------------------------------------------------
 
