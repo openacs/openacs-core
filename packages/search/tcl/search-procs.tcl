@@ -98,11 +98,11 @@ ad_proc search_content_filter {
     upvar $_txt txt
     upvar $_data data
 
-    switch $mime {
-        {text/plain} {
+    switch -glob -- $mime {
+        {text/plain*} {
             set txt $data
         }
-        {text/html} {
+        {text/html*} {
             set txt $data
         }
     }
