@@ -35,32 +35,32 @@
 <!-- Top level navigation -->
 
   <div id="navbar-div">
-  <div id="navbar-container">
-  <div id="navbar"> 
-    <multiple name="sections">
-      <if @sections.selected_p@ true>
-        <div class="tab" id="navbar-here">
-          <if @sections.link_p@ true>
-            <a href="@sections.url@" title="@sections.title@">@sections.label@</a>
+    <div id="navbar-container">
+      <div id="navbar"> 
+        <multiple name="sections">
+          <if @sections.selected_p@ true>
+            <div class="tab" id="navbar-here">
+              <if @sections.link_p@ true>
+                <a href="@sections.url@" title="@sections.title@">@sections.label@</a>
+              </if>
+              <else>        
+                @sections.label@
+              </else>
+            </div>
           </if>
-          <else>        
-            @sections.label@
+          <else>
+            <div class="tab">
+              <if @sections.link_p@ true>
+                <a href="@sections.url@" title="@sections.title@">@sections.label@</a>
+              </if>
+              <else>        
+                @sections.label@
+              </else>
+            </div>
           </else>
-        </div>
-      </if>
-      <else>
-        <div class="tab">
-          <if @sections.link_p@ true>
-            <a href="@sections.url@" title="@sections.title@">@sections.label@</a>
-          </if>
-          <else>        
-            @sections.label@
-          </else>
-        </div>
-      </else>
-    </multiple>
-  </div>
-  </div>
+        </multiple>
+      </div>
+    </div>
   </div>
   <div id="navbar-body">
 
@@ -69,38 +69,37 @@
     <if @subsections:rowcount@ gt 0>
 
       <div id="subnavbar-div">
-      <div id="subnavbar-container">
-      <div id="subnavbar">
-        <multiple name="subsections">
-          <if @subsections.selected_p@ true>
-            <div class="tab" id="subnavbar-here">
-              <if @subsections.link_p@ true>
-                <a href="@subsections.url@" title="@subsections.title@">@subsections.label@</a>
+        <div id="subnavbar-container">
+          <div id="subnavbar">
+            <multiple name="subsections">
+              <if @subsections.selected_p@ true>
+                <div class="tab" id="subnavbar-here">
+                  <if @subsections.link_p@ true>
+                    <a href="@subsections.url@" title="@subsections.title@">@subsections.label@</a>
+                  </if>
+                  <else>        
+                    @subsections.label@
+                  </else>
+                </div>
               </if>
-              <else>        
-                @subsections.label@
+              <else>
+                <div class="tab">
+                  <if @subsections.link_p@ true>
+                    <a href="@subsections.url@" title="@subsections.title@">@subsections.label@</a>
+                  </if>
+                  <else>        
+                    @subsections.label@
+                  </else>
+                </div>
               </else>
-            </div>
-          </if>
-          <else>
-            <div class="tab">
-              <if @subsections.link_p@ true>
-                <a href="@subsections.url@" title="@subsections.title@">@subsections.label@</a>
-              </if>
-              <else>        
-                @subsections.label@
-              </else>
-            </div>
-          </else>
-        </multiple>
+            </multiple>
+          </div>
+        </div>
       </div>
-      </div>
-      </div>
+      <div id="subnavbar-body">
     </if>
     <else>
-      <div id="subnavbar-div"></div>
     </else>
-    <div id="subnavbar-body">
 
 <!-- Page Title -->
 
@@ -113,7 +112,9 @@
       <slave>
       <div style="clear: both;"></div>
 
-    </div>
+    <if @subsections:rowcount@ gt 0>
+      </div>
+    </if>
   </div>
 </div>
 
