@@ -448,4 +448,19 @@ aa_register_case export_vars {
     aa_equals "-no_empty { foo { bar \"\" } }" \
         [export_vars -no_empty { foo { bar "" } }] \
         "foo=1&bar="
+
+    # Test base with query vars
+    set var1 a
+    set var2 {}
+    set base [export_vars -base test-page { foo bar }]
+    set export_no_base [export_vars {var1 var2}]
+    aa_equals "base with query vars" \
+        [export_vars -base $base {var1 var2}] \
+        "$base&$export_no_base"        
+
+    # Test base without query vars
+    set base test-page
+    aa_equals "base without query vars" \
+        [export_vars -base $base {var1 var2}] \
+        "$base?$export_no_base"            
 }
