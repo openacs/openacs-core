@@ -685,6 +685,10 @@ ad_proc -public template::list::orderby_clause {
     -orderby:boolean
 } {
     @param  boolean     Set this flag if you want the result to start with an 'order by' if the orderby clause returned is non-empty.
+    
+    @param  orderby     If this is specified, this proc will also spit out the "order by" part, so it can be used directly 
+                        in the query without saying 'order by' yourself.
+                 
 } {
     # Get an upvar'd reference to list_properties
     get_reference -name $name
