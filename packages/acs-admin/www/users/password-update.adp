@@ -1,9 +1,6 @@
 <master>
-  <property name="title">#acs-subsite.Update_Password#</property>
-  <property name="context">@context;noquote@</property>
+<property name="title">#dotlrn.Update_Password#</property>
+<property name="context_bar">@context_bar@</property>
 
-<if @message@ not nil>
-  <div class="general-message">@message@</div>
-</if>
+<include src="/packages/acs-admin/lib/password-update" return_url=@return_url@ user_id=@user_id@ >
 
-<formtemplate id="update"></formtemplate>
