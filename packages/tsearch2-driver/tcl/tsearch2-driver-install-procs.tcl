@@ -12,6 +12,64 @@ ad_library {
 
 namespace eval tsearch2_driver::install {}
 
+
+ad_proc -public tsearch2_driver::install::preinstall_checks {
+
+} {
+    
+    Make sure postgresql_contrib and tsearch are installed
+    before allowing the installation of tsearch2_package
+    
+    @author Hamilton Chua (hchua@8tons.dyndns.biz)
+    @creation-date 2004-07-02
+    
+} {
+
+	ns_log Notice " ********** STARTING BEFORE-INSTALL CALLBACK ****************"
+
+	# check if tsearch2 is installed
+	# in psql we do this by checking the presense of a data type tsvector
+	# select typname from pg_type where typename='tsvector';
+		
+	if { [db_0or1row "tsearch_compile_check" "select typname from pg_type where typname='tsvector'"] } {
+	
+		# if tsearch is installed
+		ns_log Notice "******* Tsearch2 is compiled and installed. ***********"
+		# continue with installation
+			
+	} else {
+	
+		# tsearch not installed
+		ns_log Notice "******* Tsearch2 is not installed. ***********"
+
+                # RPM, Debian, source default locations
+                set locs [list "/usr/share/pgsql/contrib/tsearch2.sql" \
+                              "/usr/local/pgsql/contrib/tsearch2.sql" \
+                              "/usr/share/postgresql/contrib/tsearch2.sql"]
+                foreach loc $locs {
+                    if { [file exists $loc] } {
+                        set sql_file_loc $loc
+                        break
+                    }
+                }
+		# Check if we've found it, run the sql file		
+		if { [exists_and_not_null sql_file_loc] } {
+			# we found tsearch2.sql let's run it
+			db_source_sql_file $sql_file_loc
+		} else {
+			# we could not find tserach2.sql, abort the install
+			ns_log Notice "************************************************"
+			ns_log Notice "********* Can't locate tsearch2.sql. ***********"
+			ns_log Notice "********* Install tsearch2.sql manually ********"
+			ns_log Notice "************************************************"
+			ad_script_abort
+		}
+		
+	}
+	ns_log Notice " ********** ENDING BEFORE-INSTALL CALLBACK ****************"
+	     
+}
+
 ad_proc -public tsearch2_driver::install::package_install {
 } {
     
