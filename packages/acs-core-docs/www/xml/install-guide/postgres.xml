@@ -1,5 +1,5 @@
 <?xml version='1.0' ?>
-<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+<!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
                "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
 <!ENTITY % myvars SYSTEM "../variables.ent">
 %myvars;
@@ -14,18 +14,18 @@
   
   <para>Skip this section if you will run only Oracle.</para>
 
-  <para>OpenACS &version; will run with <link linkend="source-postgresql">PostgreSQL</link> 7.2.x, 7.3.2, 7.3.3, and 7.3.4.  7.3.4 is the recommended version of PostgreSQL.  PostgreSQL 7.4 has been verified.</para>
+  <para>See <xref linkend="compatibility-matrix"/> for version compatibility.</para>
 
   <itemizedlist>
     <listitem>
       <formalpara id="install-postgres-mac">
-        <title>Mac OS X</title>
-        <para>If you are running Mac OS X prior to 10.3, you should be able to install and use PostGreSQL 7.2.x or 7.3.x.  Mac OS X 10.3 requires PostGreSQL 7.4.</para>
+        <title>Special notes for Mac OS X</title>
+        <para>If you are running Mac OS X prior to 10.3, you should be able to install and use PostGreSQL 7.3.x.  Mac OS X 10.3 requires PostGreSQL 7.4.</para>
       </formalpara>
     </listitem>
     <listitem>
       <formalpara id="install-postgres-debian">
-        <title>Debian</title>
+        <title>Special Notes for Debian</title>
         <para></para>
       </formalpara>
       <para>Debian users, especially Debian stable users, should install PostGreSQL from source as detailed below.  Debian unstable users: the following process has been known to work:</para>
@@ -39,7 +39,7 @@ su postgres -c "/usr/lib/postgresql/bin/createlang plpgsql template1"</userinput
     </listitem>
     <listitem>
         <formalpara id="install-postgres-rpm">
-        <title>Using the Red Hat RPM</title>
+        <title>Special Notes for Red Hat</title>
        <para>Red Hat users: If you install PostgreSQL 7.3.2 from the Red Hat 9 RPM, you
   can skip a few steps.  These shell commands add some links for compatibility with the directories from a source-based install; start the service; create a new group for web service
   users, and modify the postgres user's
@@ -70,7 +70,8 @@ groupadd web
 su - postgres</action></screen>
   <para>... and then skip to <xref linkend="install-plpgsql"/>.  Something similar may work for other binary packages as well.</para>
     </listitem>
-  </itemizedlist>
+    <listitem>
+      <para>Safe approach: install from source</para>
   <orderedlist>
     <listitem>
       <formalpara>
@@ -153,6 +154,7 @@ PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:/usr/bin/X11:/
 	  Unicode<indexterm><primary>Unicode</primary><secondary>in PostgreSQL</secondary></indexterm> support, add the flags <computeroutput>--enable-locale</computeroutput> and <computeroutput>--enable-multibyte</computeroutput>. If you want to see what the other possibilities are, run <computeroutput>./configure --help</computeroutput>.
 	</para>
       </formalpara>
+          <para>On debian woody (stable, 3.0), do <computeroutput>./configure --without-readline --without-zlib</computeroutput>.</para>
       <screen>[root src]# <userinput>su - postgres</userinput>
 [postgres pgsql]$<userinput> cd /usr/local/src/postgresql-7.3.4</userinput>
 [postgres postgresql-7.3.4]$ <userinput>./configure</userinput>
@@ -188,15 +190,15 @@ make install</action></screen>
 	  PostgreSQL.
 	</para>
       </formalpara>
-      <screen>[postgres tsearch]$ <userinput>/usr/local/pgsql/bin/initdb -D /usr/local/pgsql/data</userinput>
+      <screen>[postgres postgresql-7.3.4]$ <userinput>/usr/local/pgsql/bin/initdb -D /usr/local/pgsql/data</userinput>
 The files belonging to this database system will be owned by user "postgres".
 This user must also own the server process.
 (17 lines omitted)
 or
     /usr/local/pgsql/bin/pg_ctl -D /usr/local/pgsql/data -l logfile start
-[postgres tsearch]$ <userinput>/usr/local/pgsql/bin/pg_ctl -D /usr/local/pgsql/data -l /usr/local/pgsql/data/server.log start</userinput>
+[postgres postgresql-7.3.4]$ <userinput>/usr/local/pgsql/bin/pg_ctl -D /usr/local/pgsql/data -l /usr/local/pgsql/data/server.log start</userinput>
 postmaster successfully started
-[postgres tsearch]$
+[postgres postgresql-7.3.4]$
 <action>/usr/local/pgsql/bin/initdb -D /usr/local/pgsql/data
 /usr/local/pgsql/bin/pg_ctl -D /usr/local/pgsql/data -l /usr/local/pgsql/data/server.log start</action></screen>
 	<para>
@@ -213,7 +215,7 @@ postmaster successfully started
 	  databases are created.  We can verify that it was created
 	  with the createlang command in list mode.</para>
       </formalpara>
-      <screen>[postgres pgsql]$ <userinput>createlang plpgsql template1</userinput>
+      <screen>[postgres postgresql-7.3.4]$ <userinput>createlang plpgsql template1</userinput>
 [postgres pgsql]$ <userinput>createlang -l template1</userinput>
 Procedural languages
   Name   | Trusted?
@@ -221,7 +223,7 @@ Procedural languages
  plpgsql | t
 (1 row)
 
-[postgres pgsql]$
+[postgres pgsql-7.3.4]$
 <action>createlang plpgsql template1
 createlang -l template1</action></screen>
     </listitem>
@@ -272,7 +274,7 @@ logout
         bunch of symlinks that ensure that, when the operating system
         changes runlevels, postgresql goes to the appropriate
         state. Red Hat and Debian and SuSE each work a little
-        differently.
+        differently.  If you haven't <link linkend="install-from-tarball"> untarred the OpenACS tarball</link>, you will need to do so now to access the postgresql.txt file.
 	</para>
       <itemizedlist>
         <listitem><para>Red Hat RPM:</para>
@@ -316,7 +318,7 @@ chkconfig --list postgresql
 service postgresql start</action></screen>
         </listitem>
         <listitem><para>Debian:</para>
-          <screen>[root ~]# <userinput>cp /tmp/&tarballpath;/packages/acs-core-docs/www/files/postgresql.txt /etc/init.d/postgresql</userinput>
+          <screen>[root ~]# <userinput>cp /tmp/packages/acs-core-docs/www/files/postgresql.txt /etc/init.d/postgresql</userinput>
 [root ~]# <userinput>chown root.root /etc/init.d/postgresql</userinput>
 [root ~]# <userinput>chmod 755 /etc/init.d/postgresql</userinput>
 [root ~]# <action>
@@ -467,12 +469,13 @@ sort_mem = 32168            # min 32
 #
 checkpoint_segments = 3     # in logfile segments (16MB each), min 1
 </programlisting>
-          <para>Restart postgres (<computeroutput>service postgresql restart</computeroutput>) so that the changes take effect.</para>
+          <para>Restart postgres (Redhat: <computeroutput>service postgresql restart</computeroutput>.  Many other systems: <computertext>/etc/init.d/postgresql restart</computertext>) so that the changes take effect.</para>
+        </listitem>
+      </orderedlist>
         </listitem>
       </orderedlist>
     </listitem>
-
-  </orderedlist>
+  </itemizedlist>
   
   <sect2 id="install-postgres-moreinfo">
     <title>more information about PostgreSQL</title>
@@ -508,7 +511,10 @@ checkpoint_segments = 3     # in logfile segments (16MB each), min 1
         Performance Tuning</ulink>
 
         </para></listitem>
-      
+
+        <listitem><para>
+        <ulink url="http://www.varlena.com/varlena/GeneralBits/Tidbits/perf.html">Tuning PostgreSQL for performance</ulink></para>
+      </listitem>
     </itemizedlist>
   <para><phrase role="cvstag">($Id$)</phrase></para>
   </sect2>
