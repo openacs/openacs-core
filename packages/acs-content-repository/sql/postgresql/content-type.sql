@@ -615,7 +615,7 @@ begin
 
     -- different syntax for dropping a rule in 7.2 and 7.3 so check which
     -- version is being used (olah).
-    if version() like ''%7.2%'' then
+    if version() like ''%PostgreSQL 7.2%'' then
       execute ''drop rule '' || v_table_name || ''_r'';
     else
       -- 7.3 syntax
