@@ -47,7 +47,7 @@
                 <font face="tahoma,verdana,arial,helvetica,sans-serif" size="-1">
                   @elements.label@
                   <if @form_properties.show_required_p@ true>
-                    <if @elements.optional@ nil and @elements.mode@ ne "display" and @elements.widget@ ne "inform"><font color="red">*</font></if>
+                    <if @elements.optional@ nil and @elements.mode@ ne "display" and @elements.widget@ ne "inform" and @elements.widget@ ne "select"><font color="red">*</font></if>
                   </if>
                 </font>
               </td>
