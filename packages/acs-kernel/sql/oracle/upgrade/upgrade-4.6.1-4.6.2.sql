@@ -674,3 +674,214 @@ as
 end apm_package_version;
 /
 show errors
+
+------------------------------------------------------------------------------------------------
+-- DRB: composition_rel triggers for permission expansion failed to find its way into 4.6.1.
+-- I'm not providing code to correct party_approved_member_map because this trigger's only 
+-- important when a composition_rel is added to groups which already have members, something
+-- existing code doesn't do.
+
+create or replace trigger composition_rels_in_tr
+after insert on composition_rels
+for each row
+declare
+  v_object_id_one acs_rels.object_id_one%TYPE;
+  v_object_id_two acs_rels.object_id_two%TYPE;
+  v_rel_type      acs_rels.rel_type%TYPE;
+  v_error varchar2(4000);
+begin
+  
+  -- First check if added this relation violated any relational constraints
+  v_error := rel_constraint.violation(:new.rel_id);
+  if v_error is not null then
+      raise_application_error(-20000,v_error);
+  end if;
+
+  select object_id_one, object_id_two, rel_type
+  into v_object_id_one, v_object_id_two, v_rel_type
+  from acs_rels
+  where rel_id = :new.rel_id;
+
+  -- Insert a row for me in group_element_index
+  insert into group_element_index
+   (group_id, element_id, rel_id, container_id,
+    rel_type, ancestor_rel_type)
+  values
+   (v_object_id_one, v_object_id_two, :new.rel_id, v_object_id_one,
+    v_rel_type, 'composition_rel');
+
+  for members in (select distinct member_id, rel_type
+               from group_approved_member_map m
+               where group_id = v_object_id_two
+                 and not exists (select 1
+		                 from group_element_map
+		                 where group_id = v_object_id_one
+		                   and element_id = m.member_id
+		                   and rel_id = m.rel_id))
+  loop
+    party_approved_member.add(v_object_id_one, members.member_id, members.rel_type);
+  end loop;
+
+  -- Make my elements be elements of my new composite group
+  insert into group_element_index
+   (group_id, element_id, rel_id, container_id,
+    rel_type, ancestor_rel_type)
+  select distinct
+   v_object_id_one, element_id, rel_id, container_id,
+   rel_type, ancestor_rel_type
+  from group_element_map m
+  where group_id = v_object_id_two
+  and not exists (select 1
+		  from group_element_map
+		  where group_id = v_object_id_one
+		  and element_id = m.element_id
+		  and rel_id = m.rel_id);
+
+  -- For all direct or indirect containers of my new composite group, 
+  -- add me and add my elements
+  for map in (select distinct group_id
+	      from group_component_map
+	      where component_id = v_object_id_one) loop
+
+    -- Add a row for me
+    insert into group_element_index
+     (group_id, element_id, rel_id, container_id,
+      rel_type, ancestor_rel_type)
+    values
+     (map.group_id, v_object_id_two, :new.rel_id, v_object_id_one,
+      v_rel_type, 'composition_rel');
+
+    -- Add rows for my elements
+
+    for members in (select distinct member_id, rel_type
+                    from group_approved_member_map m
+                    where group_id = v_object_id_two
+                      and not exists (select 1
+		                      from group_element_map
+		                      where group_id = map.group_id
+		                        and element_id = m.member_id
+		                        and rel_id = m.rel_id))
+    loop
+      party_approved_member.add(map.group_id, members.member_id, members.rel_type);
+    end loop;
+
+    insert into group_element_index
+     (group_id, element_id, rel_id, container_id,
+      rel_type, ancestor_rel_type)
+    select distinct
+     map.group_id, element_id, rel_id, container_id,
+     rel_type, ancestor_rel_type
+    from group_element_map m
+    where group_id = v_object_id_two
+    and not exists (select 1
+		    from group_element_map
+		    where group_id = map.group_id
+		    and element_id = m.element_id
+		    and rel_id = m.rel_id);
+  end loop;
+
+end;
+/
+show errors
+
+--
+-- TO DO: See if this can be optimized now that the member and component
+-- mapping tables have been combined
+--
+create or replace trigger composition_rels_del_tr
+before delete on composition_rels
+for each row
+declare
+  v_object_id_one acs_rels.object_id_one%TYPE;
+  v_object_id_two acs_rels.object_id_two%TYPE;
+  n_rows integer;
+  v_error varchar2(4000);
+begin
+  -- First check if removing this relation would violate any relational constraints
+  v_error := rel_constraint.violation_if_removed(:old.rel_id);
+  if v_error is not null then
+      raise_application_error(-20000,v_error);
+  end if;
+
+  select object_id_one, object_id_two into v_object_id_one, v_object_id_two
+  from acs_rels
+  where rel_id = :old.rel_id;
+
+  for map in (select *
+	      from group_component_map
+	      where rel_id = :old.rel_id) loop
+
+    delete from group_element_index
+    where rel_id = :old.rel_id;
+
+    select count(*) into n_rows
+    from group_component_map
+    where group_id = map.group_id
+    and component_id = map.component_id;
+
+    if n_rows = 0 then
+
+      for members in (select member_id, rel_type
+                      from group_approved_member_map
+                      where group_id = map.group_id
+                        and container_id = map.component_id)
+      loop
+        party_approved_member.remove(map.group_id, members.member_id, members.rel_type);
+      end loop;
+
+      delete from group_element_index
+      where group_id = map.group_id
+      and container_id = map.component_id
+      and ancestor_rel_type = 'membership_rel';
+    end if;
+
+  end loop;
+
+  for map in (select *
+              from group_component_map
+	      where group_id in (select group_id
+		               from group_component_map
+		               where component_id = v_object_id_one
+			       union
+			       select v_object_id_one
+			       from dual)
+              and component_id in (select component_id
+			           from group_component_map
+			           where group_id = v_object_id_two
+				   union
+				   select v_object_id_two
+				   from dual)
+              and group_contains_p(group_id, component_id, rel_id) = 'f') loop
+
+    delete from group_element_index
+    where group_id = map.group_id
+    and element_id = map.component_id
+    and rel_id = map.rel_id;
+
+    select count(*) into n_rows
+    from group_component_map
+    where group_id = map.group_id
+    and component_id = map.component_id;
+
+    if n_rows = 0 then
+
+      for members in (select member_id, rel_type
+                      from group_approved_member_map
+                      where group_id = map.group_id
+                        and container_id = map.component_id)
+      loop
+        party_approved_member.remove(map.group_id, members.member_id, members.rel_type);
+      end loop;
+
+      delete from group_element_index
+      where group_id = map.group_id
+      and container_id = map.component_id
+      and ancestor_rel_type = 'membership_rel';
+
+    end if;
+
+  end loop;
+end;
+/
+show errors
+

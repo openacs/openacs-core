@@ -172,6 +172,17 @@ begin
    (v_object_id_one, v_object_id_two, new.rel_id, v_object_id_one,
     v_rel_type, ''composition_rel'');
 
+  -- Add to the denormalized party_approved_member_map
+
+  perform party_approved_member__add(v_object_id_one, member_id, rel_id, rel_type)
+  from group_approved_member_map m
+  where group_id = v_object_id_two
+  and not exists (select 1
+		  from group_element_map
+		  where group_id = v_object_id_one
+		  and element_id = m.member_id
+		  and rel_id = m.rel_id);
+
   -- Make my elements be elements of my new composite group
   insert into group_element_index
    (group_id, element_id, rel_id, container_id,
@@ -195,6 +206,7 @@ begin
   LOOP
 
     -- Add a row for me
+
     insert into group_element_index
      (group_id, element_id, rel_id, container_id,
       rel_type, ancestor_rel_type)
@@ -202,7 +214,19 @@ begin
      (map.group_id, v_object_id_two, new.rel_id, v_object_id_one,
       v_rel_type, ''composition_rel'');
 
+    -- Add to party_approved_member_map
+
+    perform party_approved_member__add(map.group_id, member_id, rel_id, rel_type)
+    from group_approved_member_map m
+    where group_id = v_object_id_two
+    and not exists (select 1
+		    from group_element_map
+		    where group_id = map.group_id
+		    and element_id = m.member_id
+		    and rel_id = m.rel_id);
+
     -- Add rows for my elements
+
     insert into group_element_index
      (group_id, element_id, rel_id, container_id,
       rel_type, ancestor_rel_type)
@@ -229,6 +253,7 @@ for each row execute procedure composition_rels_in_tr ();
 -- TO DO: See if this can be optimized now that the member and component
 -- mapping tables have been combined
 --
+
 create or replace function composition_rels_del_tr () returns opaque as '
 declare
   v_object_id_one acs_rels.object_id_one%TYPE;
@@ -261,6 +286,12 @@ begin
     and component_id = map.component_id;
 
     if n_rows = 0 then
+
+      perform party_approved_member__remove(map.group_id, member_id, rel_id, rel_type)
+      from group_approved_member_map
+      where group_id = map.group_id
+      and container_id = map.component_id;
+
       delete from group_element_index
       where group_id = map.group_id
       and container_id = map.component_id
@@ -298,11 +329,17 @@ begin
     and component_id = map.component_id;
 
     if n_rows = 0 then
+    end if;
+
+      perform party_approved_member__remove(map.group_id, member_id, rel_id, rel_type)
+      from group_approved_member_map
+      where group_id = map.group_id
+      and container_id = map.component_id;
+
       delete from group_element_index
       where group_id = map.group_id
       and container_id = map.component_id
       and ancestor_rel_type = ''membership_rel'';
-    end if;
 
   end loop;
 
@@ -312,9 +349,6 @@ end;' language 'plpgsql';
 
 create trigger composition_rels_del_tr before delete on composition_rels
 for each row execute procedure composition_rels_del_tr ();
-
--- show errors
-
 
 --------------------
 -- PACKAGE BODIES --
