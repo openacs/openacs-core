@@ -80,8 +80,12 @@ ad_proc -public template::data::transform::richtext { element_ref } {
     set format [ns_queryget $element_id.format]
 
     set richtext_list [list $contents $format]
-    
-    return [list $richtext_list]
+
+    if { [empty_string_p $contents] } {
+        return [list]
+    } else {
+        return [list $richtext_list]
+    }
 }
 
 ad_proc -public template::util::richtext::set_property { what richtext_list value } {
@@ -156,11 +160,10 @@ function insertLink () {
 }
 
 if (document.selection) {
-    document.write('<table border="0" cellspacing="0" cellpadding="0" width="107">');
+    document.write('<table border="0" cellspacing="0" cellpadding="0" width="80">');
     document.write('<tr>');
     document.write('<td width="24"><a href="javascript:formatStr(\'b\')" tabIndex="-1"><img src="/shared/bold-button.gif" alt="bold" width="24" height="18" border="0"></a></td>');
     document.write('<td width="24"><a href="javascript:formatStr(\'i\')" tabIndex="-1"><img src="/shared/italic-button.gif" alt="italic" width="24" height="18" border="0"></a></td>');
-    document.write('<td width="24"><a href="javascript:formatStr(\'u\')" tabIndex="-1"><img src="/shared/underline-button.gif" alt="underline" width="24" height="18" border="0"></a></td>');
     document.write('<td width="26"><a href="javascript:insertLink()" tabIndex="-1"><img src="/shared/url-button.gif" alt="link" width="26" height="18" border="0"></a></td>');
     document.write('</tr>');
     document.write('</table>');
