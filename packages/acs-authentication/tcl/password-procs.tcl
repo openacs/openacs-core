@@ -117,11 +117,15 @@ ad_proc -public auth::password::change {
     switch $result(password_status) {
         ok {
             # Invalidate existing login tokens sitting on random other browsers out there
+            set connection_user_id [ad_conn user_id]
+
             sec_change_user_auth_token $user_id
-            
-            # Refresh the current user's cookies, so he doesn't get logged out
-            ad_user_login -account_status [ad_conn account_status] $user_id
-            
+
+            # Refresh the current user's cookies, so he doesn't get logged out, 
+            # if this user was logged in before changing password
+            if { [ad_conn isconnected] && $user_id == $connection_user_id } {
+                ad_user_login -account_status [ad_conn account_status] $user_id
+            }
         } 
         no_account - not_supported - old_password_bad - new_password_bad - change_error - failed_to_connect {
             if { ![exists_and_not_null result(password_message)] } {
