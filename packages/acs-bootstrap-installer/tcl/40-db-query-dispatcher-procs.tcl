@@ -35,8 +35,8 @@ proc db_rdbms_get_version {rdbms} {
 }
 
 proc db_rdbms_compatible_p {rdbms_test rdbms_pattern} {
-    ns_log Notice "QD/COMPATIBILITY = The RDBMS_TEST is [db_rdbms_get_type $rdbms_test] - [db_rdbms_get_version $rdbms_test]"
-    ns_log Notice "QD/COMPATIBILITY = The RDBMS_PATTERN is [db_rdbms_get_type $rdbms_pattern] - [db_rdbms_get_version $rdbms_pattern]"
+    db_qd_log Notice "The RDBMS_TEST is [db_rdbms_get_type $rdbms_test] - [db_rdbms_get_version $rdbms_test]"
+    db_qd_log Notice "The RDBMS_PATTERN is [db_rdbms_get_type $rdbms_pattern] - [db_rdbms_get_version $rdbms_pattern]"
 
     # If the pattern is for all RDBMS, then yeah, compatible
     if {[empty_string_p [db_rdbms_get_type $rdbms_test]]} {
@@ -45,7 +45,7 @@ proc db_rdbms_compatible_p {rdbms_test rdbms_pattern} {
 
     # If the RDBMS types are not the same, we have a problem
     if {[db_rdbms_get_type $rdbms_test] != [db_rdbms_get_type $rdbms_pattern]} {
-	ns_log Notice "QD - compatibility - RDBMS types are different!"
+	db_qd_log Notice "compatibility - RDBMS types are different!"
 	return 0
     }
 
@@ -60,7 +60,7 @@ proc db_rdbms_compatible_p {rdbms_test rdbms_pattern} {
 	return 1
     }
 
-    ns_log Notice "QD - compatibility - version numbers are bad!"
+    db_qd_log Notice "compatibility - version numbers are bad!"
     return 0
 }
 
@@ -168,7 +168,7 @@ proc db_qd_get_fullname {local_name {added_stack_num 1}} {
 
     # If util_memoize, we have to go back up one in the stack
     if {[lindex $proc_name 0] == "util_memoize"} {
-	ns_log Notice "QD= util_memoize! going up one level"
+	db_qd_log Notice "util_memoize! going up one level"
 	set proc_name [info level [expr "-2 - $added_stack_num"]]
     }
 
@@ -182,12 +182,12 @@ proc db_qd_get_fullname {local_name {added_stack_num 1}} {
 
 	# TEST
 	for {set i 0} {$i < 6} {incr i} {
-	    if {[catch {ns_log Notice "QD=LEVEL=$i= [info level [expr "-1 - $i"]]"} errmsg]} {}
+	    if {[catch {db_qd_log Notice "LEVEL=$i= [info level [expr "-1 - $i"]]"} errmsg]} {}
 	}
 
 	# Check the ad_conn stuff
 	if {[ns_conn isconnected]} {
-	    if {[catch {ns_log Notice "QD= the ad_conn file is [ad_conn file]"} errmsg]} {}
+	    if {[catch {db_qd_log Notice "the ad_conn file is [ad_conn file]"} errmsg]} {}
 	}
 
 	# Now we do a check to see if this is a directly accessed URL or a 
@@ -201,13 +201,13 @@ proc db_qd_get_fullname {local_name {added_stack_num 1}} {
         switch $proc_name {
 
             ns_sourceproc {
-                ns_log Notice "QD= We are in a WWW page, woohoo!"
+                db_qd_log Notice "We are in a WWW page, woohoo!"
                 set real_url_p 1
                 set url [ns_conn url]
             }
 
             rp_handle_tcl_request {
-                ns_log Notice "QD= We are in a VUH page sourced by rp_handle_tcl_request, woohoo!"
+                db_qd_log Notice "We are in a VUH page sourced by rp_handle_tcl_request, woohoo!"
                 set real_url_p 0
                 regsub {\.vuh} [ad_conn file] {} url
                 set url [ad_make_relative_path $url]
@@ -215,7 +215,7 @@ proc db_qd_get_fullname {local_name {added_stack_num 1}} {
             }
 
             default {
-                ns_log Notice "QD= We are in a WWW page sourced by apm_source, woohoo!"
+                db_qd_log Notice "We are in a WWW page sourced by apm_source, woohoo!"
                 set real_url_p 0
                 set url [lindex $proc_name 1]
                 set url [ad_make_relative_path $url]
@@ -235,7 +235,7 @@ proc db_qd_get_fullname {local_name {added_stack_num 1}} {
 	# We insert the "www" after the package key
 	regexp {^([^\.]*)(.*)} $url all package_key rest
 
-	ns_log Notice "QD = package key is $package_key and rest is $rest"
+	db_qd_log Notice "package key is $package_key and rest is $rest"
 
 	if {$real_url_p} {
 	    set full_name [db_qd_make_absolute_path "${package_key}.www${rest}." $local_name]
@@ -255,14 +255,14 @@ proc db_qd_get_fullname {local_name {added_stack_num 1}} {
         # (Openacs - DanW)
 
         set calling_namespace [string range [uplevel [expr 1 + $added_stack_num] {namespace current}] 2 end]
-        ns_log Notice "QD= calling namespace = $calling_namespace"
+        db_qd_log Notice "calling namespace = $calling_namespace"
 
         if {![string equal $calling_namespace ""] && 
             ![regexp {::} $proc_name all]} {
 
             set proc_name ${calling_namespace}::${proc_name}
         }
-	ns_log Notice "QD = proc_name is -$proc_name-"
+	db_qd_log Notice "proc_name is -$proc_name-"
 
 	# We use the ad_proc construct!! 
 	# (woohoo, can't believe that was actually useful!)
@@ -271,14 +271,14 @@ proc db_qd_get_fullname {local_name {added_stack_num 1}} {
 	# probably dealing with one of the bootstrap procs, and so we just
 	# return a bogus proc name
 	if {![nsv_exists api_proc_doc $proc_name]} {
-	    ns_log Notice "QD: there is no documented proc with name $proc_name -- we used default SQL"
+	    db_qd_log Notice "there is no documented proc with name $proc_name -- we used default SQL"
 	    return [db_qd_null_path]
 	}
 
 	array set doc_elements [nsv_get api_proc_doc $proc_name]
 	set url $doc_elements(script)
 
-	# ns_log Notice "QD = tcl file is $url"
+	db_qd_log Notice "tcl file is $url"
 
 	regsub {.tcl$} $url {} url
 
@@ -290,14 +290,14 @@ proc db_qd_get_fullname {local_name {added_stack_num 1}} {
 	# We need to remove packages.
 	regexp {^packages\.(.*)} $url all rest
 
-	ns_log Notice "TEMP - QD: proc_name is $proc_name"
-	ns_log Notice "TEMP - QD: local_name is $local_name"
+	db_qd_log Notice "TEMP - QD: proc_name is $proc_name"
+	db_qd_log Notice "TEMP - QD: local_name is $local_name"
 
 	# set full_name "acs.$rest.${proc_name}.${local_name}"
 	set full_name [db_qd_make_absolute_path "${rest}.${proc_name}." $local_name]
     }
 
-    ns_log Notice "QD= generated fullname of $full_name"
+    db_qd_log Notice "generated fullname of $full_name"
     return $full_name
 }
 
@@ -319,7 +319,7 @@ proc db_qd_replace_sql {statement_name sql} {
     if {![empty_string_p $fullquery]} {
 	set sql [db_fullquery_get_querytext $fullquery]
     } else {
-	ns_log Notice "QD = NO FULLQUERY FOR $statement_name --> using default SQL"
+	db_qd_log Notice "NO FULLQUERY FOR $statement_name --> using default SQL"
     }
 
     return $sql
@@ -332,7 +332,7 @@ proc db_map {snippet_name} {
     set fullquery [db_qd_fetch $fullname]
     set sql [db_fullquery_get_querytext $fullquery]
 
-    ns_log Notice "QD=PARTIALQUERY FOR $fullname: $sql"
+    db_qd_log Notice "PARTIALQUERY FOR $fullname: $sql"
     return [uplevel 1 [list subst -nobackslashes $sql]]
 }
 
@@ -373,7 +373,7 @@ proc db_qd_internal_load_queries {file_pointer file_tag} {
     # we're going to assume smaller files for now. Plus, this doesn't happen
     # often.
 
-    ns_log Notice "QD = Loading $file_tag"
+    db_qd_log Notice "Loading $file_tag"
 
     # Read entire contents
     set whole_file [read $file_pointer]
@@ -384,18 +384,18 @@ proc db_qd_internal_load_queries {file_pointer file_tag} {
     # Iterate and parse out each query
     set parsing_state [db_qd_internal_parse_init $whole_file $file_tag]
     
-    ns_log Notice "QD = parsing state - $parsing_state"
+    db_qd_log Notice "parsing state - $parsing_state"
 
     # We need this for queries with relative paths
     set acs_file_path [ad_make_relative_path $file_tag]
     set queryname_root [db_qd_internal_get_queryname_root $acs_file_path]
 
-    ns_log Notice "QD = queryname root is $queryname_root"
+    db_qd_log Notice "queryname root is $queryname_root"
 
     while {1} {
 	set result [db_qd_internal_parse_one_query $parsing_state]
 	
-	ns_log Notice "QD = one parse result -$result-"
+	db_qd_log Notice "one parse result -$result-"
 
 	# If we get the empty string, we are done parsing
 	if {$result == ""} {
@@ -405,7 +405,7 @@ proc db_qd_internal_load_queries {file_pointer file_tag} {
 	set one_query [lindex $result 0]
 	set parsing_state [lindex $result 1]
 
-	ns_log Notice "QD = loaded one query - [db_fullquery_get_name $one_query]"
+	db_qd_log Notice "loaded one query - [db_fullquery_get_name $one_query]"
 
 	# Relative Path for the Query
 	if {[db_qd_relative_path_p [db_fullquery_get_name $one_query]]} {
@@ -421,7 +421,7 @@ proc db_qd_internal_load_queries {file_pointer file_tag} {
 
 	    set one_query $new_fullquery
 
-	    ns_log Notice "QD = relative path, replaced name with $new_name"
+	    db_qd_log Notice "relative path, replaced name with $new_name"
 	}
 
 	# Store the query
@@ -451,7 +451,7 @@ proc db_qd_internal_get_cache {fullquery_name} {
     }
 
     # See if we have the correct location for this query
-    ns_log Notice "QD= query $fullquery_name from [db_fullquery_get_load_location $fullquery_array]"
+    db_qd_log Notice "query $fullquery_name from [db_fullquery_get_load_location $fullquery_array]"
 
     # reload the fullquery
     set fullquery_array [nsv_get OACS_FULLQUERIES $fullquery_name]
@@ -467,13 +467,13 @@ proc db_qd_internal_store_cache {fullquery} {
 
     # Check if it's compatible at all!
     if {![db_rdbms_compatible_p [db_fullquery_get_rdbms $fullquery] [db_current_rdbms]]} {
-	ns_log Notice "QD = Query [db_fullquery_get_name $fullquery] is *NOT* compatible"
+	db_qd_log Notice "Query [db_fullquery_get_name $fullquery] is *NOT* compatible"
 	return
     }
 
     set name [db_fullquery_get_name $fullquery]
 
-    ns_log Notice "QD = Query $name is compatible! fullquery = $fullquery, name = $name"
+    db_qd_log Notice "Query $name is compatible! fullquery = $fullquery, name = $name"
 
     # If we already have a query for that name, we need to
     # figure out which one is *most* compatible.
@@ -554,7 +554,7 @@ proc db_qd_internal_parse_init {stuff_to_parse file_path} {
     set rdbms_nodes [xml_find_child_nodes $root_node rdbms]
     if {[llength $rdbms_nodes] > 0} {
 	set default_rdbms [db_rdbms_parse_from_xml_node [lindex $rdbms_nodes 0]]
-	ns_log Notice "QD = Detected DEFAULT RDBMS for whole queryset: $default_rdbms"
+	db_qd_log Notice "Detected DEFAULT RDBMS for whole queryset: $default_rdbms"
     } else {
 	set default_rdbms ""
     }
@@ -580,16 +580,16 @@ proc db_qd_internal_parse_one_query {parsing_state} {
     set default_rdbms [lindex $parsing_state 3]
     set file_path [lindex $parsing_state 4]
 
-    ns_log Notice "QD = default_rdbms is $default_rdbms"
+    db_qd_log Notice "default_rdbms is $default_rdbms"
 
-    ns_log Notice "QD = node_list is $node_list with length [llength $node_list] and index $index"
+    db_qd_log Notice "node_list is $node_list with length [llength $node_list] and index $index"
 
     # BASE CASE
     if {[llength $node_list] <= $index} {
 	# Clean up
 	ns_xml doc free $parsed_doc
 
-	ns_log Notice "QD = Cleaning up, done parsing"
+	db_qd_log Notice "Cleaning up, done parsing"
 
 	# return nothing
 	return ""
@@ -616,7 +616,7 @@ proc db_qd_internal_parse_one_query {parsing_state} {
 
 # Parse one query from an XML node
 proc db_qd_internal_parse_one_query_from_xml_node {one_query_node {default_rdbms {}} {file_path {}}} {
-    ns_log Notice "QD = parsing one query node in XML with name -[ns_xml node name $one_query_node]-"
+    db_qd_log Notice "parsing one query node in XML with name -[ns_xml node name $one_query_node]-"
 
     # Check that this is a fullquery
     if {[ns_xml node name $one_query_node] != "fullquery"} {
@@ -633,7 +633,7 @@ proc db_qd_internal_parse_one_query_from_xml_node {one_query_node {default_rdbms
     
     # If we have no RDBMS specified, use the default
     if {[llength $rdbms_nodes] == 0} {
-	ns_log Notice "QD = Wow, Nelly, no RDBMS for this query, using default rdbms $default_rdbms"
+	db_qd_log Notice "Wow, Nelly, no RDBMS for this query, using default rdbms $default_rdbms"
 	set rdbms $default_rdbms
     } else {
 	set rdbms_node [lindex $rdbms_nodes 0]
@@ -647,7 +647,7 @@ proc db_qd_internal_parse_one_query_from_xml_node {one_query_node {default_rdbms
 proc db_rdbms_parse_from_xml_node {rdbms_node} {
     # Check that it's RDBMS
     if {[ns_xml node name $rdbms_node] != "rdbms"} {
-	ns_log Notice "QD/PARSER = BAD RDBMS NODE!"
+	db_qd_log Notice "PARSER = BAD RDBMS NODE!"
 	return ""
     }
 
@@ -655,7 +655,7 @@ proc db_rdbms_parse_from_xml_node {rdbms_node} {
     set type [ns_xml node getcontent [lindex [xml_find_child_nodes $rdbms_node type] 0]]
     set version [ns_xml node getcontent [lindex [xml_find_child_nodes $rdbms_node version] 0]]
 
-    ns_log Notice "QD/PARSER = RDBMS parser - $type - $version"
+    db_qd_log Notice "PARSER = RDBMS parser - $type - $version"
 
     return [db_rdbms_create $type $version]
 }
@@ -716,12 +716,8 @@ proc db_qd_internal_prepare_queryfile_content {file_content} {
     # We're going to ns_quotehtml the querytext,
     # because ns_xml will choke otherwise
     while {1} {
-	# ns_log Notice "QD=temp=rest_of_file \n $rest_of_file_content \n"
-
 	set first_querytext_open [string first $querytext_open $rest_of_file_content]
 	set first_querytext_close [string first $querytext_close $rest_of_file_content]
-
-	# ns_log Notice "QD=TEMP=massage= $first_querytext_open,$first_querytext_close"
 
 	# We have no more querytext to process
 	if {$first_querytext_open == -1} {
@@ -742,7 +738,18 @@ proc db_qd_internal_prepare_queryfile_content {file_content} {
 	set rest_of_file_content [string range $rest_of_file_content [expr "$first_querytext_close + $querytext_close_len"] end]
     }
 
-    # ns_log Notice "QD=TEMP= new massaged file content: \n $new_file_content \n"
+    db_qd_log Notice "new massaged file content: \n $new_file_content \n"
 
     return $new_file_content
+}
+
+
+##
+## Logging
+##
+
+proc db_qd_log {level msg} {
+    # Centralized DB QD logging
+    # We switch everything to debug for now
+    ns_log Debug "QD_LOGGER = $msg"
 }

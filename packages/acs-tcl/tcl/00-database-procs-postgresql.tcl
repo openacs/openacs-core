@@ -39,10 +39,10 @@ proc_doc db_exec_plsql { statement_name sql args } {
         # mechanism for creating anonymous functions (OpenACS - Dan).
         set test_sql [db_qd_replace_sql $full_statement_name $sql]
         if {[regexp -nocase -- {^\s*select} $test_sql match]} {
-            ns_log Notice "PLPGSQL: bypassed anon function"
+            db_qd_log Notice "PLPGSQL: bypassed anon function"
             set selection [db_exec 0or1row $db $full_statement_name $sql]
         } else {
-            ns_log Notice "PLPGSQL: using anonymous function"
+            db_qd_log Notice "PLPGSQL: using anonymous function"
             set selection [db_exec_plpgsql $db $full_statement_name $sql \
                            $statement_name]
         }
@@ -69,12 +69,12 @@ ad_proc -private db_exec_plpgsql { db statement_name pre_sql fname } {
 } {
     set start_time [clock clicks]
 
-    ns_log Notice "PRE-QD: the SQL is $pre_sql"
+    db_qd_log Notice "PRE-QD: the SQL is $pre_sql"
 
     # Query Dispatcher (OpenACS - ben)
     set sql [db_qd_replace_sql $statement_name $pre_sql]
 
-    ns_log Notice "POST-QD: the SQL is $sql"
+    db_qd_log Notice "POST-QD: the SQL is $sql"
 
     set unique_id [db_nextval "anon_func_seq"]
 
@@ -84,7 +84,7 @@ ad_proc -private db_exec_plpgsql { db statement_name pre_sql fname } {
     if {![string equal $sql $pre_sql]} {
         set sql [uplevel 2 [list subst -nobackslashes $sql]]
     }
-    ns_log Notice "PLPGSQL: converted: $sql to: select $function_name ()"
+    db_qd_log Notice "PLPGSQL: converted: $sql to: select $function_name ()"
 
     # create a function definition statement for the inline code 
     # binding is emulated in tcl. (OpenACS - Dan)
@@ -198,7 +198,7 @@ ad_proc -private db_exec { type db statement_name pre_sql {ulevel 2} } {
 } {
     set start_time [clock clicks]
 
-    ns_log Notice "PRE-QD: the SQL is $pre_sql for $statement_name"
+    db_qd_log Notice "PRE-QD: the SQL is $pre_sql for $statement_name"
 
     # Query Dispatcher (OpenACS - ben)
     set sql [db_qd_replace_sql $statement_name $pre_sql]
@@ -208,7 +208,7 @@ ad_proc -private db_exec { type db statement_name pre_sql {ulevel 2} } {
         set sql [uplevel $ulevel [list subst -nobackslashes $sql]]
     }
 
-    ns_log Notice "POST-QD: the SQL is $sql"
+    db_qd_log Notice "POST-QD: the SQL is $sql"
 
     set errno [catch {
 	upvar bind bind
@@ -342,7 +342,7 @@ ad_proc -private db_exec_lob { type db statement_name pre_sql { file "" } } {
 } {
     set start_time [clock clicks]
 
-    ns_log Notice "PRE-QD: the SQL is $pre_sql"
+    db_qd_log Notice "PRE-QD: the SQL is $pre_sql"
 
     # Query Dispatcher (OpenACS - ben)
     set sql [db_qd_replace_sql $statement_name $pre_sql]
@@ -352,7 +352,7 @@ ad_proc -private db_exec_lob { type db statement_name pre_sql { file "" } } {
         set sql [uplevel 2 [list subst -nobackslashes $sql]]
     }
 
-    ns_log Notice "POST-QD: the SQL is $sql"
+    db_qd_log Notice "POST-QD: the SQL is $sql"
 
     # create a function definition statement for the inline code 
     # binding is emulated in tcl. (OpenACS - Dan)
