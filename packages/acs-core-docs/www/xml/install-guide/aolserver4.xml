@@ -47,7 +47,6 @@ make install</action>
 [root aolserver]# <userinput>cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver login</userinput>
 [root aolserver]# <userinput>cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co  -r aolserver_v40_r2 aolserver</userinput>
 [root aolserver]# <userinput>cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co nscache</userinput>
-[root aolserver]# <userinput>cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co nsrewrite</userinput>
 [root aolserver]# <userinput>cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co nspostgres</userinput>
 [root aolserver]# <userinput>cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co nssha1</userinput>
 [root aolserver]# <userinput>cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co nsoracle</userinput>
@@ -60,7 +59,6 @@ mkdir aolserver40r2
 cd aolserver40r2
 cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co -r aolserver_v40_r2 aolserver
 cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co nscache
-cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co nsrewrite
 cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co nspostgres
 cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co nssha1
 cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co nsoracle
@@ -92,11 +90,6 @@ ln -s /usr/local/aolserver40r2 /usr/local/aolserver</action></screen>
               <para>Install nscache</para>
               <screen>[root aolserver]# <userinput>cd /usr/local/src/aolserver40r2/nscache</userinput>
 [root nscache]# <userinput>make install</userinput></screen>
-            </listitem>
-            <listitem id="aolserver4-nsrewrite-install">
-              <para>Install nsrewrite</para>
-              <screen>[root nscache]# <userinput>cd ../nsrewrite</userinput>
-[root nsrewrite]# <userinput>make install</userinput></screen>
             </listitem>
             <listitem id="aolserver4-nsoracle-install">
               <para>Install nsoracle (if you want to use Oracle)</para>
