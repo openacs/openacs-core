@@ -1475,6 +1475,9 @@ begin
   elsif v_content_type = 'content_symlink' then
     select label into v_title from cr_symlinks 
       where symlink_id = get_title.item_id;
+  elsif v_content_type = 'content_extlink' then
+    select label into v_title from cr_extlinks
+      where extlink_id = get_title.item_id;
   else
     if is_live ^= 'f' then
       select

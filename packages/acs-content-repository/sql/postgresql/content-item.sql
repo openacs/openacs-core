@@ -2306,6 +2306,9 @@ begin
   else if v_content_type = ''content_symlink'' then
     select label into v_title from cr_symlinks 
       where symlink_id = get_title__item_id;
+  else if v_content_type = ''content_extlink'' then
+    select label into v_title from cr_extlinks
+      where extlink_id = get_title__item_id;            
   else
     if get_title__is_live then
       select
@@ -2326,7 +2329,7 @@ begin
       and
         r.revision_id = i.latest_revision;
     end if;
-  end if; end if;
+  end if; end if; end if;
 
   return v_title;
 
