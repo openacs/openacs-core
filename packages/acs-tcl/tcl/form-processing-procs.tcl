@@ -677,34 +677,7 @@ ad_proc -public ad_form {
               
             foreach extra_arg $af_extra_args($element_name) {
                 lappend form_command "-[lindex $extra_arg 0]"
-                switch [lindex $extra_arg 0] {
-                    html -
-                    values -
-                    validate -
-                    options {
-                        lappend form_command [uplevel [list subst [lindex $extra_arg 1]]]
-                    }
-                    help_text -
-                    label -
-                    format -
-                    mode -
-                    value -
-                    display_value - 
-		    section -
-                    before_html -
-                    after_html -
-                    result_datatype -
-                    search_query -
-                    maxlength {
-                        if { [llength $extra_arg] > 2 || [llength $extra_arg] == 1 } {
-                            return -code error "element $element_name: \"$extra_arg\" requires exactly one argument"
-                        }
-                        lappend form_command [uplevel [list subst [lindex $extra_arg 1]]]
-                    }
-                    default {
-                        ns_log Error "Unknown switch '[lindex $extra_arg 0]' to ad_form on url [ad_return_url]"
-                    }
-                }
+                lappend form_command [uplevel [list subst [lindex $extra_arg 1]]]
             }
             eval $form_command
 
